@@ -456,7 +456,7 @@
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
 		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
-		if(prob(75) || (mob && mob.reagents.get_sportiness()>=5))
+		if(prob(75) || (mob?.reagents?.get_sportiness()>=5))
 			I.forceMove(src)
 			for(var/mob/M in viewers(src))
 				M.show_message("\the [I] lands in \the [src].", 1)

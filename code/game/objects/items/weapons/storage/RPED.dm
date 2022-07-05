@@ -28,7 +28,7 @@
 //Sorts items by their rating. Currently used by the RPED (did that need mentioning since this proc is in RPED.dm?)
 //Only use /obj/item with this sort proc!
 /proc/cmp_rped_sort(var/obj/item/A, var/obj/item/B)
-	return B.rped_rating() - A.rped_rating()
+	return B.get_rating() - A.get_rating()
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/weapon/storage/bag/gadgets)) //I guess this allows for moving stuff between RPEDs, honk.

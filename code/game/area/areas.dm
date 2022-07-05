@@ -8,6 +8,7 @@ var/area/space_area
 	var/global/global_uid = 0
 	var/uid
 	var/obj/machinery/power/apc/areaapc = null
+	var/list/obj/machinery/alarm/air_alarms = list()
 	var/list/area_turfs
 	plane = ABOVE_LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
@@ -187,7 +188,7 @@ var/area/space_area
 	var/danger_level = 0
 
 	// Determine what the highest DL reported by air alarms is
-	for(var/obj/machinery/alarm/AA in src)
+	for(var/obj/machinery/alarm/AA in air_alarms)
 		if((AA.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
 			continue
 		var/reported_danger_level=AA.local_danger_level

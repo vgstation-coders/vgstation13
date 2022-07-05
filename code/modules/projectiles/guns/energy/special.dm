@@ -213,11 +213,6 @@
 		P.status=setting
 	return 1
 
-#define RAISE_TYPE_ZOMBIE 0
-#define RAISE_TYPE_SKELETON 1
-#define RAISE_HUMAN 1
-#define RAISE_ANIMAL 2
-#define RAISE_MEAT 3
 /obj/item/weapon/gun/energy/staff/necro
 	name = "staff of necromancy"
 	desc = "A wicked looking staff that pulses with evil energy."
@@ -255,100 +250,62 @@
 		return
 	raisetype = !raisetype
 
-	to_chat(user, "<span class='notice'>You will now raise [raisetype < 2 ? (raisetype ? "skeletal" : "zombified") : "unknown"] minions from corpses.</span>")
+	to_chat(user, "<span class='notice'>You will now raise [raisetype ? "skeletal" : "zombified"] minions from corpses.</span>")
 	next_change = world.timeofday + 30
 
-/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user, flag, params, struggle = 0)
-	if(!charges || istype(target, /mob/living/simple_animal/hostile/necro) || get_dist(target, user) > 7)
+/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user = usr, flag, params, struggle = 0)
+	if(!charges || get_dist(target, user) > 7)
 		return 0
-	var/toRaise = canRaise(target, user)
-	if(!toRaise)
-		return
-	switch(toRaise)
-		if(RAISE_HUMAN)
-			humanRaise(target, user)
-		if(RAISE_ANIMAL)
-			var/mob/living/L = target
-			if(L.stat == DEAD)
-				simpleRaise(target, user)
-			else
-				to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
-		if(RAISE_MEAT)
-			meatRaise(target, user)
+	var/success = FALSE
 
-
-/obj/item/weapon/gun/energy/staff/necro/proc/canRaise(atom/target, mob/living/user)
 	if(ishuman(target))
+		success = TRUE
 		var/mob/living/carbon/human/H = target
-		if(H.stat != DEAD && !H.InCritical())
-			to_chat(user, "<span class = 'warning'>[!H.stat?"\The [target] needs to be dead or in a critical state first.":H.health>config.health_threshold_crit?"\The [target] has not received enough damage.":"Something went wrong with the conversion process."]</span>")
-			return 0
-		return RAISE_HUMAN
-	if(isanimal(target) || ismonkey(target))
-		return RAISE_ANIMAL
-	if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		return RAISE_MEAT
-
-	return 0
-
-
-
-/obj/item/weapon/gun/energy/staff/necro/proc/meatRaise(var/obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
-	var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(M), user)
-	make_tracker_effects(get_turf(M), user)
-	mG.ghoulifyMeat(M)
-	mG.faction = "\ref[user]"
-	qdel(M)
-	charges--
-
-/obj/item/weapon/gun/energy/staff/necro/proc/simpleRaise(var/mob/living/S, mob/living/user)
-	var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(S), user, S)
-	make_tracker_effects(get_turf(S), user)
-	aG.ghoulifyAnimal(S)
-	aG.faction = "\ref[user]"
-	S.gib()
-	charges--
-
-/obj/item/weapon/gun/energy/staff/necro/proc/humanRaise(mob/target, mob/user)
-	var/mob/living/carbon/human/H = target
-	make_tracker_effects(get_turf(H), user)
-	if(iswizard(user) || isapprentice(user))
-		user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
-		"BOW BEFORE [pick("MY POWER","ME, [uppertext(H.real_name)]")].",\
-		"G'T T'FUK UP.",\
-		"IF YOU DIE, YOU DIE FOR ME.",\
-		"EVEN IN DEATH YOU MAY SERVE.",\
-		"YOUR SUFFERING IS MY ENJOYMENT.",\
-		"A NEW PLAYTHING FOR MY COLLECTION.",\
-		"YOUR TIME HAS NOT COME, YET.",\
-		"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
-	playsound(src, get_sfx("soulstone"), 50,1)
-	H.dropBorers()
-	switch(raisetype)
-		if(RAISE_TYPE_ZOMBIE)
-			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(H), user, H)
-			T.get_clothes(H, T)
-			T.name = H.real_name
-			T.host = H
-			H.loc = null
-			T.faction = "\ref[user]"
-		if(RAISE_TYPE_SKELETON)
+		if(raisetype)
+			H.dropBorers()
 			var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
 			H.gib()
 			spooky.faction = "\ref[user]"
-	charges--
+		else
+			H.zombify(user)
+	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/))
+		success = TRUE
+		var/mob/living/simple_animal/S = target
+		S.faction = "\ref[user]"
+	else if(isanimal(target) || ismonkey(target))
+		var/mob/living/L = target
+		if(L.stat == DEAD)
+			success = TRUE
+			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user)
+			mG.ghoulifyMeat(L)
+			mG.faction = "\ref[user]"
+			L.gib()
+		else
+			to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
+	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat))
+		var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user, target)
+		success = TRUE
+		aG.ghoulifyAnimal(target)
+		aG.faction = "\ref[user]"
+		qdel(target)
 
-
+	if(success)
+		make_tracker_effects(get_turf(target), user)
+		if(iswizard(user) || isapprentice(user))
+			user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
+			"BOW BEFORE [pick("MY POWER","ME, [uppertext(target.name)]")].",\
+			"G'T T'FUK UP.",\
+			"IF YOU DIE, YOU DIE FOR ME.",\
+			"EVEN IN DEATH YOU MAY SERVE.",\
+			"YOUR SUFFERING IS MY ENJOYMENT.",\
+			"A NEW PLAYTHING FOR MY COLLECTION.",\
+			"YOUR TIME HAS NOT COME, YET.",\
+			"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
+		playsound(src, get_sfx("soulstone"), 50,1)
+		charges--
 
 /obj/item/weapon/gun/energy/staff/necro/attack(mob/living/target as mob, mob/living/user as mob)
 	afterattack(target,user,1)
-
-#undef RAISE_TYPE_ZOMBIE
-#undef RAISE_TYPE_SKELETON
-#undef RAISE_HUMAN
-#undef RAISE_ANIMAL
-#undef RAISE_MEAT
-
 
 /obj/item/weapon/gun/energy/staff/destruction_wand
 	name = "wand of destruction"

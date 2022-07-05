@@ -535,8 +535,9 @@
 			to_chat(usr,"<span class='warning'>Mob is in nullspace!</span>")
 			return
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/U = usr
+			U.ghost()
 		sleep(2)
 		if(!isobserver(C.mob))
 			return
@@ -567,8 +568,9 @@
 			to_chat(usr,"<span class='warning'>Item is in nullspace!</span>")
 			return
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/L = usr
+			L.ghost()
 		sleep(2)
 		if(!isobserver(C.mob))
 			return
@@ -599,8 +601,9 @@
 			to_chat(usr,"<span class='warning'>Dish is in nullspace!</span>")
 			return
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/L = usr
+			L.ghost()
 		sleep(2)
 		if(!isobserver(C.mob))
 			return
@@ -616,8 +619,9 @@
 		var/turf/T = locate(href_list["artifactpanel_jumpto"])
 
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/L = usr
+			L.ghost()
 		sleep(2)
 		if(!isobserver(C.mob))
 			return
@@ -2353,7 +2357,7 @@
 		message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Observer.)", 1)
 
 	else if(href_list["revive"])
-		if(!check_rights(R_REJUVINATE))
+		if(!check_rights(R_REJUVENATE))
 			return
 
 		var/mob/living/L = locate(href_list["revive"])
@@ -2366,7 +2370,7 @@
 			message_admins("<span class='warning'>Admin [key_name_admin(usr)] healed / revived [key_name_admin(L)]!</span>", 1)
 			log_admin("[key_name(usr)] healed / revived [key_name(L)]")
 		else
-			to_chat(usr, "Admin Rejuvinates have been disabled")
+			to_chat(usr, "Admin Rejuvenates have been disabled")
 
 	else if(href_list["makeai"])
 		if(!check_rights(R_SPAWN))
@@ -2593,8 +2597,9 @@
 		var/mob/M = locate(href_list["adminplayerobservejump"])
 
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/L = usr
+			L.ghost()
 		sleep(2)
 		if(!isobserver(usr))
 			return
@@ -2654,8 +2659,9 @@
 		var/z = text2num(href_list["Z"])
 
 		var/client/C = usr.client
-		if(!isobserver(usr))
-			C.admin_ghost()
+		if(!isobserver(usr) && isliving(usr))
+			var/mob/living/L = usr
+			L.ghost()
 		sleep(2)
 		C.jumptocoord(x,y,z)
 
@@ -3589,6 +3595,10 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PDA")
 				new /datum/event/pda_spam
+			if("money_lotto")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","PDA")
+				new /datum/event/money_lotto
 
 			if("carp")
 				feedback_inc("admin_secrets_fun_used",1)

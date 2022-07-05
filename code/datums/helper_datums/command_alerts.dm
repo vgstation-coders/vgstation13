@@ -433,7 +433,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	theme = "malfdelta"
 	alertlevel = "delta"
 
-/datum/command_alert/malf_win 
+/datum/command_alert/malf_win
 	name = "AI Malfunctioning Win"
 	alert = 'sound/effects/static/static4.ogg'
 
@@ -777,3 +777,11 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/old_vendotron_teleport/announce()
 	message = "A bluespace tear of unknown origin is formi!g w£thi$ !$@ cu&ic met£#s o£ [station_name()] plea$e-BZZZZZZZT Come on down for fabulous, splendiferous, one of a kind goods at reasona#le pri$es! We'%e prac@ic£all% giving #$e@ away! All $ales a#$ fi@%l-BZZZT excercise caution and report any anomalous activity."
 	..()
+
+/datum/command_alert/lotto_announce
+	alert_title = "Central Command Grand Slam -Stellar- Lottery"
+	message = "A lotto number draw is scheduled to happen within the next 5 minutes. All nearby entertainment monitors will be broadcasting the results."
+
+/datum/command_alert/lotto_winner
+	alert_title = "Grand Slam -Stellar- Lottery Winner!"
+	message = "Congratulations to John Nanotrasen for winning the Central Command Grand Slam -Stellar- Lottery Fund! He walks home with a million credits!"

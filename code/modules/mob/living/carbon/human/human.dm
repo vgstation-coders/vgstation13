@@ -366,8 +366,7 @@
 		return get_worn_id_name("Unknown")
 	if( head && head.is_hidden_identity())
 		return get_worn_id_name("Unknown")	//Likewise for hats
-	var/datum/role/vampire/V = isvampire(src)
-	if(V && (locate(/datum/power/vampire/shadow) in V.current_powers) && V.ismenacing)
+	if(istruevampire(src))
 		return get_worn_id_name("Unknown")
 	var/face_name = get_face_name()
 	var/id_name = get_worn_id_name("")
@@ -1924,8 +1923,8 @@
 	return TRUE
 
 /mob/living/carbon/human/proc/zombify(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
-	dropBorers()
 	if(crabzombie)
+		dropBorers()
 		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))
 		T.virus2 = virus_copylist(virus2)
 		T.get_clothes(src, T)
@@ -1933,8 +1932,11 @@
 		T.host = src
 		forceMove(null)
 		return T
-	else
+	else if(stat == DEAD || InCritical())
+		dropBorers()
 		var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
+		if(master && master.faction)
+			T.faction = "\ref[master]"
 		T.add_spell(/spell/aoe_turf/necro/zombie/evolve)
 		if(isgrey(src))
 			T.icon_state = "mauled_laborer"
@@ -1954,6 +1956,8 @@
 		T.host = src
 		forceMove(null)
 		return T
+	else
+		become_zombie = TRUE
 
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()

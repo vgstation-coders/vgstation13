@@ -3746,6 +3746,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/lotto_ticket/supermatter_surprise = 5
 		)
 	prices = list(
+		/obj/item/weapon/paper/lotto_numbers = 1,
 		/obj/item/toy/lotto_ticket/gold_rush = 5,
 		/obj/item/toy/lotto_ticket/diamond_hands = 10,
 		/obj/item/toy/lotto_ticket/phazon_fortune = 20,
@@ -3753,7 +3754,44 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/lotto
+	var/list/winning_numbers = list()
 
+var/station_jackpot = 1000000
+
+/obj/machinery/vending/lotto/examine(mob/user)
+	..()
+	to_chat(user,"<span class='notice'>Today's winning jackpot is [station_jackpot >= 1000000 ? "[round(station_jackpot/1000000,0.1)]m" : station_jackpot] credits!</span>")
+	if(winning_numbers && winning_numbers.len)
+		to_chat(user,"<span class='notice'>The winning numbers are [english_list(winning_numbers)]</span>")
+
+#define LOTTO_SAMPLE 6
+#define LOTTO_BALLCOUNT 32 //lottery is a topdefine/bottomdefine system
+#if LOTTO_BALLCOUNT < LOTTO_SAMPLE
+#define LOTTO_BALLCOUNT LOTTO_SAMPLE
+#endif
+
+/obj/item/weapon/paper/lotto_numbers
+	name = "Lotto numbers"
+	desc = "A piece of papers with numbers that can be cashed out at randomly announced draws. Rarely wins."
+	info = "The numbers on this paper are:<br>"
+	var/list/winning_numbers = list()
+
+var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
+
+/obj/item/weapon/paper/lotto_numbers/New()
+	..()
+	lotto_papers += src
+	for(var/i in 1 to LOTTO_SAMPLE)
+		var/newnumber = 0
+		do
+			newnumber = rand(1,LOTTO_BALLCOUNT)
+		while(newnumber in winning_numbers)
+		winning_numbers.Add(newnumber)
+		info += "[i == LOTTO_SAMPLE ? ": " : ""][newnumber][i < LOTTO_SAMPLE ? " " : ""]"
+
+/obj/item/weapon/paper/lotto_numbers/Destroy()
+	lotto_papers -= src
+	..()
 
 /obj/machinery/vending/lotto/proc/AnnounceWinner(var/obj/machinery/vending/lotto/lottovend, var/mob/living/carbon/human/character, var/winnings)
 		var/rank = character.mind.role_alt_title
@@ -3774,20 +3812,79 @@ var/global/num_vending_terminals = 1
 		if(!T.revealed)
 			playsound(src, "buzz-sigh", 50, 1)
 			visible_message("<b>[src]</b>'s monitor flashes, \"This ticket cannot be read until the film is scratched off.\"")
-			return
-		if(!T.iswinner)
+		else if(!T.iswinner)
 			playsound(src, "buzz-sigh", 50, 1)
 			visible_message("<b>[src]</b>'s monitor flashes, \"This ticket is not a winning ticket.\"")
 		else
-			visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [T.winnings] credits from the Central Command Lottery Fund!\"")
-			dispense_cash(T.winnings, get_turf(src))
-			playsound(src, "polaroid", 50, 1)
+			dispense_funds(T.winnings)
 			if(T.winnings >= 10000)
 				AnnounceWinner(src,user,T.winnings)
 				log_admin("([user.ckey]/[user]) won a large lottery prize of [T.winnings] credits.")
 			qdel(T)
+	if(istype(I, /obj/item/weapon/paper/lotto_numbers))
+		if(!winning_numbers.len)
+			playsound(src, "buzz-sigh", 50, 1)
+			visible_message("<b>[src]</b>'s monitor flashes, \"These numbers cannot be redeemed until the lotto draw.\"")
+			return
+		var/obj/item/weapon/paper/lotto_numbers/LN = I
+		if(winning_numbers.len != LN.winning_numbers.len || LN.winning_numbers.len != LOTTO_SAMPLE)
+			CRASH("Someone didn't make the lotto ticket winning numbers the right length or same length as the event's.")
+		var/bonusmatch = winning_numbers[LOTTO_SAMPLE] == LN.winning_numbers[LOTTO_SAMPLE]
+		var/matches = 0
+		for(var/i in 1 to (winning_numbers.len - 1))
+			if(winning_numbers[i] == LN.winning_numbers[i])
+				matches++
+		if(!bonusmatch || matches < (LOTTO_SAMPLE - 4))
+			playsound(src, "buzz-sigh", 50, 1)
+			visible_message("<b>[src]</b>'s monitor flashes, \"These numbers have no win. [bonusmatch ? "(Not enough matches, [matches+1] of at least [LOTTO_SAMPLE - 3])" : "(Bonus number not matched)"]\"")
+			return
+		else
+			var/final_jackpot = station_jackpot / (10 ** ((LOTTO_SAMPLE-1)-matches)) //n-3 total (including bonus) matches divides by 1000, n-2 by 100, n-1 by 10 and n by 1
+			if(matches >= (LOTTO_SAMPLE - 1))
+				var/datum/command_alert/lotto_winner/LW = new
+				LW.message = "Congratulations to [user] for winning the Central Command Grand Slam -Stellar- Lottery Fund and walking home with [final_jackpot] credits!"
+				command_alert(LW)
+				winning_numbers.Cut() // Reset this, we had a winner
+				var/datum/feed_message/newMsg = new /datum/feed_message
+				newMsg.author = "Nanotrasen Editor"
+				newMsg.is_admin_message = 1
+
+				newMsg.body = "TC Daily wishes to congratulate <b>[user]</b> for recieving the Tau Ceti-Nanotrasen Stellar Slam Lottery, and receiving the out of this world sum of [final_jackpot] credits!"
+
+				for(var/datum/feed_channel/FC in news_network.network_channels)
+					if(FC.channel_name == "Tau Ceti Daily")
+						FC.messages += newMsg
+						break
+
+				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
+					NEWSCASTER.newsAlert("Tau Ceti Daily")
+
+				for(var/obj/item/device/pda/PDA in PDAs)
+					var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+					if(reader)
+						reader.newsAlert("Tau Ceti Daily")
+			else
+				AnnounceWinner(src,user,final_jackpot)
+			dispense_funds(final_jackpot)
+			log_admin("([user.ckey]/[user]) won [final_jackpot] credits from the lottery!")
+			qdel(LN)
 	else
 		..()
+
+/obj/machinery/vending/lotto/proc/dispense_funds(var/amount)
+	if(station_jackpot <= 0)
+		playsound(src, "buzz-sigh", 50, 1)
+		visible_message("<b>[src]</b>'s monitor flashes, \"The Central Command Lottery Fund is empty, and cannot dispense money.\"")
+		return
+	visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [amount] credits from the Central Command Lottery Fund!\"")
+	dispense_cash(amount, get_turf(src))
+	playsound(src, "polaroid", 50, 1)
+	station_jackpot -= (min(station_jackpot,amount))
+
+
+/obj/machinery/vending/lotto/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
+	..()
+	station_jackpot = min(200000000, station_jackpot + (R.price * 10000)) //Up to 200 million
 
 /obj/machinery/vending/lotto/throw_item()
 	var/mob/living/target = locate() in view(7, src)

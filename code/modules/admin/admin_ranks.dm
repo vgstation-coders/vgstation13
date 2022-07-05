@@ -52,8 +52,8 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 					rights |= R_POSSESS
 				if("stealth")
 					rights |= R_STEALTH
-				if("rejuv","rejuvinate")
-					rights |= R_REJUVINATE
+				if("rejuv","rejuvenate")
+					rights |= R_REJUVENATE
 				if("varedit")
 					rights |= R_VAREDIT
 				if("everything","host","all")

@@ -1637,23 +1637,6 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Firing Range"
 	icon_state = "firingrange"
 
-/*
-/area/security/range/New()
-	..()
-
-	spawn(10) //let objects set up first
-		for(var/turf/turfToGrayscale in src)
-			if(turfToGrayscale.icon)
-				var/icon/newIcon = icon(turfToGrayscale.icon)
-				newIcon.GrayScale()
-				turfToGrayscale.icon = newIcon
-			for(var/obj/objectToGrayscale in turfToGrayscale) //1 level deep, means tables, apcs, locker, etc, but not locker contents
-				if(objectToGrayscale.icon)
-					var/icon/newIcon = icon(objectToGrayscale.icon)
-					newIcon.GrayScale()
-					objectToGrayscale.icon = newIcon
-*/
-
 /area/security/checkpoint
 	name = "\improper Security Checkpoint"
 	icon_state = "checkpoint1"
@@ -2671,9 +2654,6 @@ var/list/the_station_areas = list (
 	/area/derelictparts,
 )
 
-
-
-
 /area/beach/
 	name = "The metaclub's private beach"
 	icon_state = "null"
@@ -2682,35 +2662,9 @@ var/list/the_station_areas = list (
 	var/sound/mysound = null
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
+	music = 'sound/ambience/shore.ogg'
 
-/* We have a jukebox now, fuck that
-/area/beach/New()
-	..()
-	var/sound/S = new/sound()
-	mysound = S
-	S.file = 'sound/ambience/shore.ogg'
-	S.repeat = 1
-	S.wait = 0
-	S.channel = 123
-	S.volume = 100
-	S.priority = 255
-	S.status = SOUND_UPDATE
-	process()
-
-/area/beach/Entered(atom/movable/Obj,atom/OldLoc)
-	if(ismob(Obj))
-		if(Obj:client)
-			mysound.status = SOUND_UPDATE
-			Obj << mysound
-	return
-
-//This only works when using Move() to exit the area
-/area/beach/Exited(atom/movable/Obj)
-	if(ismob(Obj))
-		if(Obj:client)
-			mysound.status = SOUND_PAUSED | SOUND_UPDATE
-			Obj << mysound
-
+/*
 /area/beach/proc/process()
 	//set background = 1
 
@@ -2719,20 +2673,6 @@ var/list/the_station_areas = list (
 	if(prob(25))
 		S = sound(file=pick('sound/ambience/seag1.ogg','sound/ambience/seag2.ogg','sound/ambience/seag3.ogg'), volume=50)
 		sound_delay = rand(0, 50)
-
-	for(var/mob/living/carbon/human/H in src)
-//			if(H.my_appearance.s_tone > -55)	//ugh...nice/novel idea but please no.
-//				H.my_appearance.s_tone--
-//				H.update_body()
-		if(H.client)
-			mysound.status = SOUND_UPDATE
-			H << mysound
-			if(S)
-				spawn(sound_delay)
-					H << S
-
-	spawn(60) .()
-
 */
 
 /* Asteroid station areas */
