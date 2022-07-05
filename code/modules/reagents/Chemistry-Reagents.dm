@@ -583,7 +583,7 @@
 					for(var/datum/data/record/R in sortRecord(data_core.medical))
 						if(R.fields["b_dna"] == self.data["blood_DNA"])
 							for(var/mob/living/carbon/human/other in player_list)
-								if(other.name == R.fields["name"])
+								if(other != M && other.name == R.fields["name"])
 									foundmob = other
 									break
 							if(foundmob)
