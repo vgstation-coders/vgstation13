@@ -837,7 +837,7 @@
 	if(holder.has_reagent(CHLORALHYDRATE))
 		holder.remove_reagent(CHLORALHYDRATE, 5 * REM)
 	if(holder.has_reagent(SUX))
-		holder.remove_reagent(SUX, REM)
+		holder.remove_reagent(SUX, 25 * REM)
 	if(holder.has_reagent(CARPOTOXIN))
 		holder.remove_reagent(CARPOTOXIN, REM)
 	if(holder.has_reagent(ZOMBIEPOWDER))
@@ -4392,14 +4392,21 @@ var/procizine_tolerance = 0
 	color = "#CFC5E9" //rgb: 207, 197, 223
 	flags = CHEMFLAG_DISHONORABLE
 	overdose_am = 21
-	custom_metabolism = 1
 
 /datum/reagent/suxameth/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
+	//slows running by 60%, in carbon.dm
+	//acts as painkiller for surgery, in shock.dm
+	M.slurring = 2
+	if(iscarbon(M))
+		M.pain_numb = max(5, M.pain_numb)
+		M.pain_shock_stage = 0
+		
 	if(tick >= 2)
-		M.SetStunned(2)
 		M.SetKnockdown(2)
+	if(tick >= 10)
+		M.SetStunned(2)
 
 /datum/reagent/suxameth/on_overdose(var/mob/living/M)
 	M.adjustOxyLoss(6) //Paralyzes the diaphragm if they go over 20 units
