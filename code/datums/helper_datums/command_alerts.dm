@@ -162,6 +162,15 @@
 	message = "The emergency shuttle has been recalled."
 	..()
 
+/datum/command_alert/emergency_shuttle_norecall
+	name = "Emergency Shuttle Inbound"
+	alert_title = "Priority Announcement"
+	force_report = 1
+
+/datum/command_alert/emergency_shuttle_norecall/announce()
+	message = "The Emergency Shuttle is now inbound and can no longer be recalled. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes."
+	..()
+
 /datum/command_alert/emergency_shuttle_docked
 	name = "Emergency Shuttle Docked"
 	alert_title = "Priority Announcement"

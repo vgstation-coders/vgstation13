@@ -217,6 +217,12 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 /datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 	switch (phase)
+		if ("inbound")
+			send2mainirc("The Emergency Shuttle is inbound to the station.")
+			send2maindiscord("The **Emergency Shuttle** is inbound to the station.")
+			send2ickdiscord("The **Emergency Shuttle** is inbound to the station.")
+			command_alert(/datum/command_alert/emergency_shuttle_norecall)
+
 		if ("station")
 			location = 1
 
@@ -230,9 +236,6 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 			if (!casual)
 				settimeleft(SHUTTLELEAVETIME)
-				send2mainirc("The Emergency Shuttle has docked with the station.")
-				send2maindiscord("The **Emergency Shuttle** has docked with the station.")
-				send2ickdiscord("The **Emergency Shuttle** has docked with the station.")
 				command_alert(/datum/command_alert/emergency_shuttle_docked)
 				world << sound('sound/AI/shuttledock.ogg')
 			if(ticker)
@@ -381,6 +384,9 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				recall()
 				fake_recall = 0
 				return 0
+
+			else if(timeleft <= 300 && can_recall)
+				shuttle_phase("inbound")
 
 			/* --- Shuttle has docked with the station - begin countdown to transit --- */
 			else if(timeleft <= 0)
