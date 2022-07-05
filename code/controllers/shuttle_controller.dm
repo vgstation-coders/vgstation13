@@ -30,6 +30,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	var/always_fake_recall = 0
 	var/deny_shuttle = 0 //for admins not allowing it to be called.
 	var/departed = 0
+	var/departed_centcomm = 0
 
 	var/shutdown = 0 // Completely shut down.
 
@@ -218,6 +219,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 /datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 	switch (phase)
 		if ("inbound")
+			departed_centcomm = 1
 			send2mainirc("The Emergency Shuttle is inbound to the station.")
 			send2maindiscord("The **Emergency Shuttle** is inbound to the station.")
 			send2ickdiscord("The **Emergency Shuttle** is inbound to the station.")
@@ -385,7 +387,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				fake_recall = 0
 				return 0
 
-			else if(timeleft == 300)
+			else if(timeleft <= 300 && !departed_centcomm)
 				shuttle_phase("inbound")
 
 			/* --- Shuttle has docked with the station - begin countdown to transit --- */
