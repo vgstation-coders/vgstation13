@@ -18,7 +18,7 @@
 	if(!block)
 		for(var/obj/effect/smoke/chem/smoke in view(1, src))
 			if(smoke.reagents.total_volume)
-				smoke.reagents.reaction(src, INGEST, amount_override = min(reagents.total_volume,10)/(reagents.reagent_list.len))
+				smoke.reagents.reaction(src, INGEST, amount_override = min(smoke.reagents.total_volume,10)/(smoke.reagents.reagent_list.len))
 				spawn(5)
 					if(smoke)
 						smoke.reagents.copy_to(src, 10) // I dunno, maybe the reagents enter the blood stream through the lungs?
