@@ -592,16 +592,16 @@
 						var/targetref = "/ref[foundmob]"
 						var/blood_total_before = V.blood_total
 						var/blood_usable_before = V.blood_usable
-						var/divisor = (locate(/datum/power/vampire/mature) in V.current_powers) ? min(2,foundmob.stat + 1) : (min(2,foundmob.stat + 1)*2)
+						var/divisor = (locate(/datum/power/vampire/mature) in V.current_powers) ? (min(2,foundmob.stat + 1)/2) : min(2,foundmob.stat + 1)
 						if (!(targetref in V.feeders))
 							V.feeders[targetref] = 0
 						if (V.feeders[targetref] < MAX_BLOOD_PER_TARGET)
-							V.blood_total += 5/divisor
+							V.blood_total += min(volume,1)/divisor
 						else
 							to_chat(H, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
 						if(foundmob.stat < DEAD) //alive
-							V.blood_usable += 5/divisor
-						V.feeders[targetref] += 5/divisor
+							V.blood_usable += min(volume,1)/divisor
+						V.feeders[targetref] += min(volume,1)/divisor
 						if(blood_total_before != V.blood_total)
 							to_chat(H, "<span class='notice'>You have accumulated [V.blood_total] unit[V.blood_total > 1 ? "s" : ""] of blood[blood_usable_before != V.blood_usable ?", and have [V.blood_usable] left to use." : "."]</span>")
 						V.check_vampire_upgrade()
