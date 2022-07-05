@@ -583,7 +583,7 @@
 					for(var/datum/data/record/R in sortRecord(data_core.medical))
 						if(R.fields["b_dna"] == self.data["blood_DNA"])
 							for(var/mob/living/carbon/human/other in player_list)
-								if(other != M && other.name == R.fields["name"])
+								if(other.name == R.fields["name"] && other != M)
 									foundmob = other
 									break
 							if(foundmob)
@@ -595,17 +595,17 @@
 						var/divisor = (locate(/datum/power/vampire/mature) in V.current_powers) ? min(2,foundmob.stat + 1) : (min(2,foundmob.stat + 1)*2)
 						if (!(targetref in V.feeders))
 							V.feeders[targetref] = 0
-							if (V.feeders[targetref] < MAX_BLOOD_PER_TARGET)
-								V.blood_total += volume/divisor
-							else
-								to_chat(H, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
-							if(foundmob.stat < DEAD) //alive
-								V.blood_usable += volume
-							V.feeders[targetref] += volume/divisor
-							if(blood_total_before != V.blood_total)
-								to_chat(H, "<span class='notice'>You have accumulated [V.blood_total] unit[V.blood_total > 1 ? "s" : ""] of blood[blood_usable_before != V.blood_usable ?", and have [V.blood_usable] left to use." : "."]</span>")
-							V.check_vampire_upgrade()
-							V.update_vamp_hud()
+						if (V.feeders[targetref] < MAX_BLOOD_PER_TARGET)
+							V.blood_total += volume/divisor
+						else
+							to_chat(H, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
+						if(foundmob.stat < DEAD) //alive
+							V.blood_usable += volume
+						V.feeders[targetref] += volume/divisor
+						if(blood_total_before != V.blood_total)
+							to_chat(H, "<span class='notice'>You have accumulated [V.blood_total] unit[V.blood_total > 1 ? "s" : ""] of blood[blood_usable_before != V.blood_usable ?", and have [V.blood_usable] left to use." : "."]</span>")
+						V.check_vampire_upgrade()
+						V.update_vamp_hud()
 					else
 						to_chat(H, "<span class='warning'>This blood is lifeless and has no power.</span>")
 
