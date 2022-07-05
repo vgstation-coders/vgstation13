@@ -168,7 +168,7 @@
 	force_report = 1
 
 /datum/command_alert/emergency_shuttle_norecall/announce()
-	message = "The Emergency Shuttle is now inbound and can no longer be recalled. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes."
+	message = "The Emergency Shuttle has now left for the station and can no longer be recalled. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes."
 	..()
 
 /datum/command_alert/emergency_shuttle_docked
