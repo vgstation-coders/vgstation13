@@ -53,4 +53,6 @@
 		return TRUE
 	if(reagents.has_reagent(OXYCODONE))
 		return TRUE
+	if(reagents.has_reagent(SUX))
+		return TRUE
 	return FALSE
