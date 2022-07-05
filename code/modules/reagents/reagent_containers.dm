@@ -344,7 +344,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.reaction(user, TOUCH)
 		return 1
 	if(reagents.total_volume)
-		reagents.reaction(user, INGEST)
+		reagents.reaction(user, INGEST, amount_override = min(reagents.total_volume,amount_per_imbibe)/(reagents.reagent_list.len))
 		spawn(5)
 			if(reagents)
 				reagents.trans_to(user, amount_per_imbibe)

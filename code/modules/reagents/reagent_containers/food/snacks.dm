@@ -312,14 +312,11 @@
 				var/datum/disease2/disease/D = virus2[ID]
 				eater.infect_disease2(D, 1, notes="(Ate an infected [src])")//eating infected food means 100% chance of infection.
 		if(reagentreference.total_volume)
-			reagentreference.reaction(eater, INGEST)
+			reagentreference.reaction(eater, INGEST, amount_override = min(reagentreference.total_volume,bitesize*bitesizemod)/(reagentreference.reagent_list.len))
 			spawn() //WHY IS THIS SPAWN() HERE
 				if(gcDestroyed)
 					return
-				if(reagentreference.total_volume > bitesize*bitesizemod)
-					reagentreference.trans_to(eater, bitesize*bitesizemod)
-				else
-					reagentreference.trans_to(eater, reagentreference.total_volume)
+				reagentreference.trans_to(eater, min(reagentreference.total_volume,bitesize*bitesizemod))
 				bitecount++
 				after_consume(eater, reagentreference)
 		return 1
