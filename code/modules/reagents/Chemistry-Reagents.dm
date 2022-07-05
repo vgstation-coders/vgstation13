@@ -608,6 +608,8 @@
 							V.update_vamp_hud()
 					else
 						to_chat(H, "<span class='warning'>This blood is lifeless and has no power.</span>")
+				else
+					to_chat(H, "<span class='warning'>This blood is lifeless and has no power.</span>")
 
 /datum/reagent/blood/reaction_animal(var/mob/living/simple_animal/M, var/method = TOUCH, var/volume)
 
