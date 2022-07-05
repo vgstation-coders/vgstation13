@@ -173,7 +173,8 @@
 			if(M.reagents.has_any_reagents(LEXORINS) || (M_NO_BREATH in M.mutations) || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
-				reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,1)/(reagents.reagent_list.len))
+				if(prob(25)) //So it's not an instarape in case of acid
+					reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,1)/(reagents.reagent_list.len))
 				reagents.trans_to(M, 1)
 		else //Else just remove some of the reagents
 			reagents.remove_any(REAGENTS_METABOLISM)
