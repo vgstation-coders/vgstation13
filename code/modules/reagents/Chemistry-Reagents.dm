@@ -606,6 +606,8 @@
 								to_chat(H, "<span class='notice'>You have accumulated [V.blood_total] unit[V.blood_total > 1 ? "s" : ""] of blood[blood_usable_before != V.blood_usable ?", and have [V.blood_usable] left to use." : "."]</span>")
 							V.check_vampire_upgrade()
 							V.update_vamp_hud()
+					else
+						to_chat(H, "<span class='warning'>This blood is lifeless and has no power.</span>")
 
 /datum/reagent/blood/reaction_animal(var/mob/living/simple_animal/M, var/method = TOUCH, var/volume)
 
