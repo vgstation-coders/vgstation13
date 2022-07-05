@@ -218,6 +218,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 /datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 	switch (phase)
 		if ("inbound")
+			can_recall = 0
 			send2mainirc("The Emergency Shuttle is inbound to the station.")
 			send2maindiscord("The **Emergency Shuttle** is inbound to the station.")
 			send2ickdiscord("The **Emergency Shuttle** is inbound to the station.")
