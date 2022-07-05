@@ -231,7 +231,7 @@
 
 /obj/item/biomasspacket/examine(mob/user, size, show_name)
 	. = ..()
-	to_chat(user, "For when regular gunk just ain't enough anymore. Carries a cryo-stabilized sample of biomass tissue.")
-	to_chat(user, "It reads:\nStep 1: Shake to active.\nStep 2: Throw.\nStep 3: Enjoy")
+	to_chat(user, "Derek Baum VII's latest innovation. Carries a cryo-stabilized sample of biomass tissue.")
+	to_chat(user, "It reads:\nStep 1: Shake to active.\nStep 2: Throw.\nStep 3: Enjoy.")
 	if(activated)
 		to_chat(user, "<span class='danger'>It's bubbling weirdly!</span>")
