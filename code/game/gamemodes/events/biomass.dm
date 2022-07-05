@@ -205,3 +205,33 @@
 		new/obj/effect/biomass_controller(Floor) // spawn a controller at floor
 		log_admin("Event: Biomass spawned at [Floor.loc] ([Floor.x],[Floor.y],[Floor.z]).")
 		message_admins("<span class='notice'>Event: Biomass spawned at [Floor.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Floor.x];Y=[Floor.y];Z=[Floor.z]'>(JMP)</a></span>")
+
+//biomass tator item, code "borrowed" from powercreeper_packet.dm
+
+/obj/item/biomasspacket
+	name = "biomass packet"
+	desc = ""
+	icon = 'icons/obj/biomass.dmi'
+	icon_state = "packet"
+	var/activated = 0
+	
+/obj/item/biomasspacket/attack_self(mob/user)
+	if(!istype(user))
+		return
+	if(activated)
+		return
+
+	to_chat(user, "<span class='warning'>You shake \the [src].</span>")
+	to_chat(user, "<span class='danger'>It starts bubbling weirdly!</span>")
+	activated = 1
+	
+	spawn(3 SECONDS)
+		new /obj/effect/biomass_controller(get_turf(src))
+		qdel(src)
+
+/obj/item/biomasspacket/examine(mob/user, size, show_name)
+	. = ..()
+	to_chat(user, "For when regular gunk just ain't enough anymore. Carries a cryo-stabilized sample of biomass tissue.")
+	to_chat(user, "It reads:\nStep 1: Shake to active.\nStep 2: Throw.\nStep 3: Enjoy")
+	if(activated)
+		to_chat(user, "<span class='danger'>It's bubbling weirdly!</span>")
