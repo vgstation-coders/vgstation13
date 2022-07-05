@@ -213,6 +213,7 @@
 	desc = ""
 	icon = 'icons/obj/biomass.dmi'
 	icon_state = "packet"
+	w_class = W_CLASS_TINY
 	var/activated = 0
 	
 /obj/item/biomasspacket/attack_self(mob/user)
