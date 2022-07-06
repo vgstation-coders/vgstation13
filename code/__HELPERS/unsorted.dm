@@ -3,111 +3,6 @@
 /*
  * A large number of misc global procs.
  */
-
-/proc/SAFE_CRASH(var/msg)
-	CRASH(msg)
-
-//Returns location. Returns null if no location was found.
-/proc/get_teleport_loc(turf/location,mob/target,distance = 1, density = 0, errorx = 0, errory = 0, eoffsetx = 0, eoffsety = 0)
-/*
-Location where the teleport begins, target that will teleport, distance to go, density checking 0/1(yes/no).
-Random error in tile placement x, error in tile placement y, and block offset.
-Block offset tells the proc how to place the box. Behind teleport location, relative to starting location, forward, etc.
-Negative values for offset are accepted, think of it in relation to North, -x is west, -y is south. Error defaults to positive.
-Turf and target are seperate in case you want to teleport some distance from a turf the target is not standing on or something.
-*/
-
-	var/dirx = 0//Generic location finding variable.
-	var/diry = 0
-
-	var/xoffset = 0//Generic counter for offset location.
-	var/yoffset = 0
-
-	var/b1xerror = 0//Generic placing for point A in box. The lower left.
-	var/b1yerror = 0
-	var/b2xerror = 0//Generic placing for point B in box. The upper right.
-	var/b2yerror = 0
-
-	errorx = abs(errorx)//Error should never be negative.
-	errory = abs(errory)
-	//var/errorxy = round((errorx+errory)/2)//Used for diagonal boxes.
-
-	switch(target.dir)//This can be done through equations but switch is the simpler method. And works fast to boot.
-	//Directs on what values need modifying.
-		if(1)//North
-			diry+=distance
-			yoffset+=eoffsety
-			xoffset+=eoffsetx
-			b1xerror-=errorx
-			b1yerror-=errory
-			b2xerror+=errorx
-			b2yerror+=errory
-		if(2)//South
-			diry-=distance
-			yoffset-=eoffsety
-			xoffset+=eoffsetx
-			b1xerror-=errorx
-			b1yerror-=errory
-			b2xerror+=errorx
-			b2yerror+=errory
-		if(4)//East
-			dirx+=distance
-			yoffset+=eoffsetx//Flipped.
-			xoffset+=eoffsety
-			b1xerror-=errory//Flipped.
-			b1yerror-=errorx
-			b2xerror+=errory
-			b2yerror+=errorx
-		if(8)//West
-			dirx-=distance
-			yoffset-=eoffsetx//Flipped.
-			xoffset+=eoffsety
-			b1xerror-=errory//Flipped.
-			b1yerror-=errorx
-			b2xerror+=errory
-			b2yerror+=errorx
-
-	var/turf/destination=locate(location.x+dirx,location.y+diry,location.z)
-
-	if(destination)//If there is a destination.
-		if(errorx||errory)//If errorx or y were specified.
-			var/destination_list[] = list()//To add turfs to list.
-			//destination_list = new()
-			/*This will draw a block around the target turf, given what the error is.
-			Specifying the values above will basically draw a different sort of block.
-			If the values are the same, it will be a square. If they are different, it will be a rectengle.
-			In either case, it will center based on offset. Offset is position from center.
-			Offset always calculates in relation to direction faced. In other words, depending on the direction of the teleport,
-			the offset should remain positioned in relation to destination.*/
-
-			var/turf/center = locate((destination.x+xoffset),(destination.y+yoffset),location.z)//So now, find the new center.
-
-			//Now to find a box from center location and make that our destination.
-			for(var/turf/T in block(locate(center.x+b1xerror,center.y+b1yerror,location.z), locate(center.x+b2xerror,center.y+b2yerror,location.z) ))
-				if(density&&T.density)
-					continue//If density was specified.
-				if(T.x>world.maxx || T.x<1)
-					continue//Don't want them to teleport off the map.
-				if(T.y>world.maxy || T.y<1)
-					continue
-				destination_list += T
-			if(destination_list.len)
-				destination = pick(destination_list)
-			else
-				return
-
-		else//Same deal here.
-			if(density&&destination.density)
-				return
-			if(destination.x>world.maxx || destination.x<1)
-				return
-			if(destination.y>world.maxy || destination.y<1)
-				return
-	else
-		return
-
-	return destination
-
 /proc/sign(x)
 	return x!=0?x/abs(x):0
 
@@ -229,22 +124,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 						break
 
 					search_pda = FALSE
-
-		/*for (var/datum/mind/themind in ticker.minds)
-			if (themind)
-				var/found = 0
-				for (var/datum/objective/objective in themind.objectives)
-					if (objective && objective.target == mind)
-						found = 1
-						objective.explanation_text = replacetext(objective.explanation_text, oldname, newname)
-						themind.memory = replacetext(themind.memory, oldname, newname)
-				if(themind.current && found)
-					var/obj_count = 1
-					to_chat(themind.current, "<span class='danger'>Objectives Updated</span>")
-					to_chat(themind.current, "<span class='notice'>Your current objectives:</span>")
-					for(var/datum/objective/objective in themind.objectives)
-						to_chat(themind.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
-						obj_count++*/
 	return 1
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
@@ -346,34 +225,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 			. = pick(ais)
 	return .
 
-/proc/get_sorted_mobs()
-	var/list/old_list = getmobs()
-	var/list/AI_list = list()
-	var/list/Dead_list = list()
-	var/list/keyclient_list = list()
-	var/list/key_list = list()
-	var/list/logged_list = list()
-	for(var/named in old_list)
-		var/mob/M = old_list[named]
-		if(issilicon(M))
-			AI_list |= M
-		else if(isobserver(M) || M.stat == 2)
-			Dead_list |= M
-		else if(M.key && M.client)
-			keyclient_list |= M
-		else if(M.key)
-			key_list |= M
-		else
-			logged_list |= M
-		old_list.Remove(named)
-	var/list/new_list = list()
-	new_list += AI_list
-	new_list += keyclient_list
-	new_list += key_list
-	new_list += logged_list
-	new_list += Dead_list
-	return new_list
-
 //Returns a list of all mobs with their name
 /proc/getmobs()
 
@@ -449,18 +300,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 				continue
 			if(get_turf(M) in can_see) //Checking the mob's turf now, since those are it's "true" coordinates (plus dview() did pick up on turfs, so we can check using that).
 				. += M
-
-// Finds ALL mobs in range, including those within something's contents (e.g. inside a locker or such)
-/proc/get_all_mobs_in_range(var/turf/T, var/range = world.view, var/list/ignore_types = list())
-	. = list()
-	for(var/mob/M in mob_list)
-		if(is_type_in_list(M, ignore_types))
-			continue
-		var/turf/mob_turf = get_turf(M)
-		if(!mob_turf || mob_turf.z != T.z) //because get_dist doesn't account for z levels
-			continue
-		if(get_dist(T, mob_turf) <= range) //here we are checking the distance on the mob's turf and not the mob itself, since mobs in a locker or such will have XYZ = 0,0,0
-			. += M
 
 //E = MC^2
 /proc/convert2energy(var/M)
@@ -656,37 +495,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 			cant_pass = 1
 	return cant_pass
 
-/proc/get_step_towards2(var/atom/ref , var/atom/trg)
-	var/base_dir = get_dir(ref, get_step_towards(ref,trg))
-	var/turf/temp = get_step_towards(ref,trg)
-
-	if(is_blocked_turf(temp))
-		var/dir_alt1 = turn(base_dir, 90)
-		var/dir_alt2 = turn(base_dir, -90)
-		var/turf/turf_last1 = temp
-		var/turf/turf_last2 = temp
-		var/free_tile = null
-		var/breakpoint = 0
-
-		while(!free_tile && breakpoint < 10)
-			if(!is_blocked_turf(turf_last1))
-				free_tile = turf_last1
-				break
-			if(!is_blocked_turf(turf_last2))
-				free_tile = turf_last2
-				break
-			turf_last1 = get_step(turf_last1,dir_alt1)
-			turf_last2 = get_step(turf_last2,dir_alt2)
-			breakpoint++
-
-		if(!free_tile)
-			return get_step(ref, base_dir)
-		else
-			return get_step_towards(ref,free_tile)
-
-	else
-		return get_step(ref, base_dir)
-
 //if needs_item is 0 it won't need any item that existed in "holding" to finish
 /proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10, var/needs_item = 1) //This is quite an ugly solution but i refuse to use the old request system.
 	if(!user || !target)
@@ -735,27 +543,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	if(progbar)
 		progbar.loc = null
 	return 1
-
-// Creates a progress bar locked on `target` and returns it
-/proc/create_progress_bar_on(var/atom/target)
-	var/image/progress_bar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-	progress_bar.pixel_z = WORLD_ICON_SIZE
-	progress_bar.plane = HUD_PLANE
-	progress_bar.layer = HUD_ABOVE_ITEM_LAYER
-	progress_bar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
-	return progress_bar
-
-/proc/remove_progress_bar(var/mob/user, var/image/progress_bar)
-	if(user && user.client)
-		user.client.images -= progress_bar
-	if(progress_bar)
-		progress_bar.loc = null
-
-/proc/stop_progress_bar(var/mob/user, var/image/progress_bar)
-	progress_bar.icon_state = "prog_bar_stopped"
-	spawn(0.2 SECONDS)
-		remove_progress_bar(user, progress_bar)
-
 
 /proc/do_after_many(var/mob/user, var/list/targets, var/delay, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
 	if(!user || numticks == 0 || !targets || !targets.len)
@@ -941,24 +728,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		turfs += N.area_turfs
 	return turfs
 
-//Takes: Area type as text string or as typepath OR an instance of the area.
-//Returns: A list of all atoms	(objs, turfs, mobs) in areas of that type of that type in the world.
-/proc/get_area_all_atoms(var/areatype)
-	if(!areatype)
-		return null
-	if(istext(areatype))
-		areatype = text2path(areatype)
-	if(isarea(areatype))
-		var/area/areatemp = areatype
-		areatype = areatemp.type
-
-	var/list/atoms = new/list()
-	for(var/area/N in areas)
-		if(istype(N, areatype))
-			for(var/atom/A in N)
-				atoms += A
-	return atoms
-
 /datum/coords //Simple datum for storing coordinates.
 	var/x_pos = null
 	var/y_pos = null
@@ -997,7 +766,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	duplicate.pixel_w = pixel_w
 	duplicate.pixel_z = pixel_z
 	return duplicate
-
 
 /area/proc/copy_contents_to(area/A , platingRequired = FALSE)
 	//Takes: Area. Optional: If it should copy to areas that don't have plating
@@ -1086,10 +854,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 	return copiedobjs
 
-//chances are 1:value. anyprob(1) will always return true
-/proc/anyprob(value)
-	return (rand(1,value)==value)
-
 /proc/view_or_range(distance = world.view , center = usr , type)
 	switch(type)
 		if("view")
@@ -1105,14 +869,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		if("range")
 			. = orange(distance,center)
 	return
-
-/proc/get_mob_with_client_list()
-	var/list/mobs = list()
-	for(var/mob/M in mob_list)
-		if (M.client)
-			mobs += M
-	return mobs
-
 
 /proc/parse_zone(zone)
 	switch(zone)
@@ -1209,26 +965,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 			return 1
 		O = O.loc
 	return null
-
-//Quick type checks for some tools
-var/global/list/common_tools = list(
-/obj/item/stack/cable_coil,
-/obj/item/tool/wrench,
-/obj/item/tool/weldingtool,
-/obj/item/tool/screwdriver,
-/obj/item/tool/wirecutters,
-/obj/item/device/multitool,
-/obj/item/tool/crowbar)
-
-/proc/is_surgery_tool(obj/item/W as obj)
-	return (	\
-	istype(W, /obj/item/tool/scalpel)			||	\
-	istype(W, /obj/item/tool/hemostat)		||	\
-	istype(W, /obj/item/tool/retractor)		||	\
-	istype(W, /obj/item/tool/cautery)			||	\
-	istype(W, /obj/item/tool/bonegel)			||	\
-	istype(W, /obj/item/tool/bonesetter)
-	)
 
 //check if mob is lying down on something we can operate him on.
 /proc/can_operate(mob/living/carbon/M, mob/U, var/obj/item/tool) // tool arg only needed if you actually intend to perform surgery (and not for instance, just do an autopsy)
@@ -1416,9 +1152,6 @@ var/mob/dview/tview/tview_mob = new()
 		z = A.z
 
 	. = map.zLevels[z]
-
-/proc/print_runtime(exception/e)
-	world.log << "[time_stamp()] Runtime detected\n[e] at [e.file]:[e.line]\n [e.desc]"
 
 /proc/transfer_fingerprints(atom/A,atom/B)//synchronizes the fingerprints between two atoms. Useful when you have two different atoms actually being different states of a same object.
 	if(!A || !B)
