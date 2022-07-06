@@ -587,6 +587,24 @@
 
 	return TRUE
 
+/proc/create_progress_bar_on(var/atom/target)
+	var/image/progress_bar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+	progress_bar.pixel_z = WORLD_ICON_SIZE
+	progress_bar.plane = HUD_PLANE
+	progress_bar.layer = HUD_ABOVE_ITEM_LAYER
+	progress_bar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
+	return progress_bar
+
+/proc/remove_progress_bar(var/mob/user, var/image/progress_bar)
+	if(user && user.client)
+		user.client.images -= progress_bar
+	if(progress_bar)
+		progress_bar.loc = null
+
+/proc/stop_progress_bar(var/mob/user, var/image/progress_bar)
+	progress_bar.icon_state = "prog_bar_stopped"
+	spawn(0.2 SECONDS)
+		remove_progress_bar(user, progress_bar)
 
 // Returns TRUE if the checks passed
 /proc/do_after_default_checks(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
