@@ -40,10 +40,10 @@ function update_mode(newMode, newQuestion, newTimeleft, vmap, vmethod){
 	$("#vote_main").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=crew_transfer'>Call Crew Transfer Vote</a>")));
 	$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=custom'>Call Custom Vote</a>")));
 	$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=map'>Call Map Vote</a>" + (admin == 2 ? "(<a href='?src=" + hSrc + ";vote=toggle_map'>" + (toggle_map?"All Compiled":"Votable") + "</a>)" : ""))));
-	if(admin > 0)
+	if(admin > 0) {
 		var a = ((toggle_vote_method == 1) ? "Weighted" : (toggle_vote_method == 2) ? "Majority" : (toggle_vote_method == 3) ? "Persistent" : (toggle_vote_method == 4) ? "Random" : "Null");
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=toggle_vote_method'>" + a + "</a>")));
-
+	}
 	if(mode != null && mode != ""){
 		$("#vote_main").hide();
 		if(admin > 0){
