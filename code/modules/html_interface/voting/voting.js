@@ -44,14 +44,6 @@ function update_mode(newMode, newQuestion, newTimeleft, vmap, vmethod){
 		var a = ((toggle_vote_method == 1) ? "Weighted" : (toggle_vote_method == 2) ? "Majority" : (toggle_vote_method == 3) ? "Persistent" : (toggle_vote_method == 4) ? "Random" : "Null");
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=toggle_vote_method'>" + a + "</a>")));
 
-	/*else{
-		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Call Restart Vote</font>")));
-		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Call Gamemode Vote</font>")));
-		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Call Crew Transfer Vote</font>")));
-		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Call Custom Vote</font>")));
-		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Call Map Vote</font>")));
-	}*/
-
 	if(mode != null && mode != ""){
 		$("#vote_main").hide();
 		if(admin > 0){
