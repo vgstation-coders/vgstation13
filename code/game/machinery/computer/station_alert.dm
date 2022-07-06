@@ -1,4 +1,3 @@
-
 /obj/machinery/computer/station_alert
 	name = "Station Alert Computer"
 	desc = "Used to access the station's automated alert system."
@@ -28,20 +27,18 @@
 
 		for(var/areatype in typesof(A.general_area))
 			var/area/B = locate(areatype)
-
 			covered_areas += B
 
 	else//very ugly fix until all the main station's areas inherit from /area/station/
 		var/blockedtypes = typesof(/area/research_outpost,/area/mine,/area/derelict,/area/djstation,/area/vox_trading_post,/area/tcommsat)
 		for(var/atype in (typesof(/area) - blockedtypes))
 			var/area/B = locate(atype)
-
 			covered_areas += B
 
-	for(var/area/A in covered_areas)
-		A.sendDangerLevel(src)
-		A.send_firealert(src)
-		A.send_poweralert(src)
+		for(var/area/A in covered_areas)
+			A.sendDangerLevel(src)
+			A.send_firealert(src)
+			A.send_poweralert(src)
 
 /obj/machinery/computer/station_alert/attack_hand(mob/user)
 	add_fingerprint(user)

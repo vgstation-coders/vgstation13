@@ -133,11 +133,8 @@ Class Procs:
 	set background = 1 //The for loop later is sufficiently long to trip BYOND's infinite loop detection.
 	#endif
 
-	to_chat(world, "<span class='danger'>Processing Geometry...</span>")
-	sleep(-1)
-
+	log_startup_progress("Processing Geometry...")
 	var/simulated_turf_count = 0
-
 	for(var/turf/simulated/S in world)
 		simulated_turf_count++
 		S.update_air_properties()
