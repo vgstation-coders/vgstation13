@@ -633,7 +633,7 @@ var/global/datum/controller/vote/vote = new()
 				update()
 		if("toggle_vote_method")
 			if(user.client.holder)
-				config.toggle_vote_method = config.toggle_vote_method % 4 + 1
+				config.toggle_vote_method = config.toggle_vote_method % 5 + 1
 
 				update()
 		else
