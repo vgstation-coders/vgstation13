@@ -223,8 +223,9 @@ var/global/datum/controller/vote/vote = new()
 		var/maxvotes = 0
 		var/greatest_votes = 0
 		for(var/a in tally)
-			if(tally[a].len > maxvotes)
-				maxvotes = tally[a].len
+			var/list/talnums = tally[a]
+			if(talnums.len > maxvotes)
+				maxvotes = talnums.len
 		for(var/i in 1 to maxvotes)
 			for(var/c in tally)
 				if(!(c in discarded_choices))
@@ -354,7 +355,11 @@ var/global/datum/controller/vote/vote = new()
 	if(mob_ckey)
 		if(voters[mob_ckey])
 			if(num)
-				return choices.Find(voters[mob_ckey])
+				var/list/nums = list()
+				var/list/ourchoices = voters[mob_ckey]
+				for(var/item in ourchoices)
+					nums.Add(list(choices.Find(item)))
+				return json_encode(nums)
 			else
 				return voters[mob_ckey]
 	return 0
@@ -365,7 +370,8 @@ var/global/datum/controller/vote/vote = new()
 	if(choices[vote] in voters[mob_ckey])
 		cancel_vote(user,vote)
 	voters[mob_ckey] += list(choices[vote])
-	tally[choices[vote]][voters[mob_ckey].Find(choices[vote])]++
+	var/list/mobvotes = voters[mob_ckey]
+	tally[choices[vote]][mobvotes.Find(choices[vote])]++
 
 /datum/controller/vote/proc/cancel_vote(var/mob/user, var/vote)
 	var/mob_ckey = user.ckey

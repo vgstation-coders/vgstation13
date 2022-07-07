@@ -5,7 +5,7 @@ var allow_restart = 0;
 var allow_mode = 0 ;
 var toggle_map = 0;
 var toggle_vote_method = 1;
-var selected_vote = 0;
+var selected_votes = 0;
 var admin = 0;
 var updates = 0;
 var clearallup = 0;
@@ -25,7 +25,7 @@ function fuck(){
 }
 function client_data(selection, privs){
 	updates += 1;
-	selected_vote = parseInt(selection) || 0;
+	selected_votes = JSON.parse(selection) || 0;
 	admin = parseInt(privs) || 0;
 }
 
@@ -89,7 +89,7 @@ function update_choices(ID, choice, votes){
 	try{ID = parseInt(ID);
 		votes = parseInt(votes);}
 	catch(ex){alert("Failed to parse something " + ID + " " + votes); return;}
-	$("#vote_choices").append($("<div class='item'></div>").append($("<div id='choice_"+ID +"'></div>").html("<a " + (selected_vote == ID ? "class='linkOn' " : "")  +  "href='?src=" + hSrc + ";vote=" + ID + "'>"+choice+" (" + votes + " votes)</a>")));
+	$("#vote_choices").append($("<div class='item'></div>").append($("<div id='choice_"+ID +"'></div>").html("<a " + (selected_votes == ID ? "class='linkOn' " : "")  +  "href='?src=" + hSrc + ";vote=" + ID + "'>"+choice+" (" + votes + " votes)</a>")));
 }
 function displayBar(value, rangeMin, rangeMax, styleClass, showText) {
 
