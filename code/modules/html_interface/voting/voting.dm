@@ -376,7 +376,8 @@ var/global/datum/controller/vote/vote = new()
 /datum/controller/vote/proc/cancel_vote(var/mob/user, var/vote)
 	var/mob_ckey = user.ckey
 	if ((vote && (choices[vote] in voters[mob_ckey])) || (!vote && voters[mob_ckey]))
-		tally[voters[mob_ckey]]--
+		var/list/choicevotes = choices[vote]
+		tally[voters[mob_ckey]][choicevotes.Find(voters[mob_ckey])]--
 		if(vote)
 			voters[mob_ckey] -= list(choices[vote])
 		else
@@ -518,7 +519,7 @@ var/global/datum/controller/vote/vote = new()
 	interface.callJavaScript("update_mode", status_data, hclient_or_mob)
 	if(tally.len)
 		for (var/i = 1; i <= tally.len; i++)
-			var/list/L = list(i, tally[i], tally[tally[i][1]])
+			var/list/L = list(i, tally[i], tally[tally[i]][1])
 			interface.callJavaScript("update_choices", L, hclient_or_mob)
 
 /datum/controller/vote/proc/interact(client/user)
