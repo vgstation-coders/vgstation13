@@ -895,9 +895,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 //Returns sortedAreas list if populated
 //else populates the list first before returning it
 /proc/SortAreas()
-	for(var/area/A in areas)
-		sortedAreas.Add(A)
-
+	sortedAreas = areas.Copy()
 	sortTim(sortedAreas, /proc/cmp_name_asc)
 
 /area/proc/addSorted()
