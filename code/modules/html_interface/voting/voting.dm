@@ -518,7 +518,7 @@ var/global/datum/controller/vote/vote = new()
 	interface.callJavaScript("update_mode", status_data, hclient_or_mob)
 	if(tally.len)
 		for (var/i = 1; i <= tally.len; i++)
-			var/list/L = list(i, tally[i], tally[tally[i]])
+			var/list/L = list(i, tally[i], tally[tally[i][1]])
 			interface.callJavaScript("update_choices", L, hclient_or_mob)
 
 /datum/controller/vote/proc/interact(client/user)
