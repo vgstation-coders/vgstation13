@@ -60,7 +60,7 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode, vmap, v
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=map'>Map</a>" + (admin == 2 ? "(<a href='?src=" + hSrc + ";vote=toggle_map'>" + (toggle_map?"All Compiled":"Votable") + "</a>)" : ""))));
 	}
 	if(admin > 0){
-		var a = ((toggle_vote_method == 1) ? "Weighted" : (toggle_vote_method == 2) ? "Majority" : (toggle_vote_method == 3) ? "Persistent" : (toggle_vote_method == 4) ? "Random" : "Null");
+		var a = ((toggle_vote_method == 1) ? "Weighted" : (toggle_vote_method == 2) ? "Majority" : (toggle_vote_method == 3) ? "Persistent" : (toggle_vote_method == 4) ? "Random" : (toggle_vote_method == 5) ? "Instant runoff" : "Null");
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=toggle_vote_method'>" + a + "</a>")));
 
 	}
