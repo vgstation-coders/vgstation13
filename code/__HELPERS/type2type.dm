@@ -128,8 +128,23 @@
 	return
 
 //Converts an angle (degrees) into an ss13 direction
-/proc/angle2dir(X)
-	return alldirs[round((((X%360)+382.5)%360)/45)+1]
+/proc/angle2dir(var/degree)
+	degree = ((degree+22.5)%360)
+	if(degree < 45)
+		return NORTH
+	if(degree < 90)
+		return NORTHEAST
+	if(degree < 135)
+		return EAST
+	if(degree < 180)
+		return SOUTHEAST
+	if(degree < 225)
+		return SOUTH
+	if(degree < 270)
+		return SOUTHWEST
+	if(degree < 315)
+		return WEST
+	return NORTHWEST
 
 //returns the north-zero clockwise angle in degrees, given a direction
 /proc/dir2angle(var/D)
