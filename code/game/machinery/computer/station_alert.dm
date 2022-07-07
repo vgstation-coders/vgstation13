@@ -18,7 +18,7 @@
 
 /obj/machinery/computer/station_alert/initialize()
 	..()
-	spawn(30 SECONDS) //defer init
+	spawn(30 SECONDS) //defer init because of slowness
 		if(src.z != map.zMainStation)
 			var/area/A = get_area(src)
 			if(!A)
