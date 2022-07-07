@@ -134,6 +134,7 @@ Class Procs:
 	#endif
 
 	log_startup_progress("Processing Geometry...")
+	sleep(-1)
 	var/simulated_turf_count = 0
 	for(var/turf/simulated/S in world)
 		simulated_turf_count++
