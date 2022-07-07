@@ -19,18 +19,20 @@ var/list/processing_objects = list()
 
 
 /datum/subsystem/obj/Initialize()
-	for(var/atom/object in world)
-		if(!(object.flags & ATOM_INITIALIZED))
-			var/time_start = world.timeofday
-			object.initialize()
-			var/time = (world.timeofday - time_start)
-			if(time > 1)
-				var/turf/T = get_turf(object)
-				log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time/10] seconds to initialize.")
-				log_startup_progress("Initialized [object] in [time/10] seconds")
-		else
-			bad_inits[object.type] = bad_inits[object.type]+1
-		CHECK_TICK
+	spawn()
+		sleep(-1)
+		for(var/atom/object in world)
+			if(!(object.flags & ATOM_INITIALIZED))
+				var/time_start = world.timeofday
+				object.initialize()
+				var/time = (world.timeofday - time_start)
+				if(time > 1)
+					var/turf/T = get_turf(object)
+					log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time/10] seconds to initialize.")
+					log_startup_progress("Initialized [object] in [time/10] seconds")
+			else
+				bad_inits[object.type] = bad_inits[object.type]+1
+			CHECK_TICK
 	for(var/area/place in areas)
 		var/obj/machinery/power/apc/place_apc = place.areaapc
 		if(place_apc)
