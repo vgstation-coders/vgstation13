@@ -194,7 +194,7 @@
 			continue
 		var/sanity = 0
 		var/turf/new_spawn_point
-		var/filter_counter = 0
+		//var/filter_counter = 0
 		do
 			sanity++
 			new_spawn_point = pick(valid_spawn_points)
@@ -207,7 +207,7 @@
 					break
 			if(inbounds || (filter_function && !call(filter_function)(ME, new_spawn_point)))
 				new_spawn_point = null
-				filter_counter++
+				//filter_counter++
 				continue
 			break
 		while(sanity < 100)
