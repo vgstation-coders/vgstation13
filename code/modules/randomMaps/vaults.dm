@@ -211,7 +211,7 @@
 				continue
 			break
 		while(sanity < 100)
-		message_admins("TESTING: Filtered [filter_counter] turfs.")
+		//message_admins("TESTING: Filtered [filter_counter] turfs.")
 		if(!new_spawn_point)
 			continue
 		var/vault_x = new_spawn_point.x
