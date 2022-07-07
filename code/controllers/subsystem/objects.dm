@@ -28,6 +28,7 @@ var/list/processing_objects = list()
 				var/turf/T = get_turf(object)
 				log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time/10] seconds to initialize.")
 				log_startup_progress("Initialized [object] in [time/10] seconds")
+				TICK_CHECK
 		else
 			bad_inits[object.type] = bad_inits[object.type]+1
 	TICK_CHECK
