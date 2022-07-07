@@ -35,9 +35,7 @@ var/list/processing_objects = list()
 		var/obj/machinery/power/apc/place_apc = place.areaapc
 		if(place_apc)
 			place_apc.update()
-	
 	..()
-
 
 /datum/subsystem/obj/stat_entry()
 	..("P:[processing_objects.len]")
