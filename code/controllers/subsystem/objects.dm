@@ -24,7 +24,7 @@ var/list/processing_objects = list()
 			var/time_start = world.timeofday
 			object.initialize()
 			var/time = (world.timeofday - time_start)
-			if(time > 1)
+			if(time > 2) //0.2 seconds
 				var/turf/T = get_turf(object)
 				log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time/10] seconds to initialize.")
 				log_startup_progress("Initialized [object] in [time/10] seconds")
