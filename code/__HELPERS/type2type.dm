@@ -129,6 +129,7 @@
 
 //Converts an angle (degrees) into an ss13 direction
 /proc/angle2dir(var/degree)
+	//shifted 22.5 degrees to account for >337.5
 	degree = ((degree+22.5)%360)
 	if(degree < 45)
 		return NORTH
