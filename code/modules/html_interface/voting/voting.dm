@@ -461,14 +461,14 @@ var/global/datum/controller/vote/vote = new()
 			for(var/i = 1; i <= choices.len; i++)
 				if(isnull(task.data[choices[i]]))
 					tally += choices[i]
-					tally[choices[i]] = 0
+					tally[choices[i]] = list(0)
 				else
 					tally += choices[i]
 					tally[choices[i]] = task.data[choices[i]]
 		else
 			for (var/c in choices)
 				tally += c
-				tally[c] = 0
+				tally[c] = list(0)
 		if(mode == "custom")
 			text += "<br>[question]"
 
