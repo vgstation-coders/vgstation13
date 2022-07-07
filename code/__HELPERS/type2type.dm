@@ -94,7 +94,7 @@
 			return "east"
 		if(WEST)
 			return "west"
-		if(NORTHWEST)
+		if(NORTHEAST)
 			return "northeast"
 		if(SOUTHEAST)
 			return "southeast"
