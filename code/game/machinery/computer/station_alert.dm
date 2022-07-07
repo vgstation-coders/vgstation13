@@ -35,10 +35,10 @@
 			var/area/B = locate(atype)
 			covered_areas += B
 
-		for(var/area/A in covered_areas)
-			A.sendDangerLevel(src)
-			A.send_firealert(src)
-			A.send_poweralert(src)
+	for(var/area/A in covered_areas)
+		A.sendDangerLevel(src)
+		A.send_firealert(src)
+		A.send_poweralert(src)
 
 /obj/machinery/computer/station_alert/attack_hand(mob/user)
 	add_fingerprint(user)
