@@ -458,7 +458,7 @@ var/global/datum/controller/vote/vote = new()
 		if(config.toggle_vote_method == INSTANTRUNOFF)
 			multiples = TRUE
 		var/list/blankslist = list()
-		for(var/n in 1 to choices)
+		for(var/n in 1 to choices.len)
 			blankslist.Add(list(0))
 		if(config.toggle_vote_method == PERSISTENT && mode == "map")
 			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
