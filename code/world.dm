@@ -97,8 +97,6 @@ var/auxtools_path
 	LoadBans()
 	SetupHooks() // /vg/
 
-	library_catalog.initialize()
-
 	spawn() copy_logs() // Just copy the logs.
 	if(config && config.log_runtimes)
 		log = file("data/logs/runtime/[time2text(world.realtime,"YYYY-MM-DD")]-runtime.log")
@@ -106,17 +104,9 @@ var/auxtools_path
 		// dumb and hardcoded but I don't care~
 		config.server_name += " #[(world.port % 1000) / 100]"
 
-	Get_Holiday()	//~Carn, needs to be here when the station is named so :P
-
-	src.update_status()
-
-	initialize_rune_words()
-
-	initialize_beespecies()
-	generate_radio_frequencies()
-
 	data_core = new /obj/effect/datacore()
 	paiController = new /datum/paiController()
+	Holiday = Get_Holiday()
 
 	src.update_status()
 
