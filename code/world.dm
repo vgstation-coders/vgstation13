@@ -75,8 +75,6 @@ var/auxtools_path
 
 	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
 
-	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
-
 	load_configuration()
 	SSdbcore.Initialize(world.timeofday) // Get a database running, first thing
 
@@ -95,7 +93,6 @@ var/auxtools_path
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()
-	SetupHooks() // /vg/
 
 	spawn() copy_logs() // Just copy the logs.
 	if(config && config.log_runtimes)
@@ -108,8 +105,6 @@ var/auxtools_path
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
 	Master.Setup()
-
-	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
 	return ..()
 

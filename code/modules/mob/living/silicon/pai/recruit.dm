@@ -4,6 +4,10 @@
 
 var/datum/paiController/paiController			// Global handler for pAI candidates
 
+/proc/createPaiController()
+	paiController = new /datum/paiController()
+	return 1
+
 /datum/paiCandidate
 	var/name
 	var/key
