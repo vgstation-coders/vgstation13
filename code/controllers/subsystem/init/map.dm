@@ -17,6 +17,7 @@ var/datum/subsystem/map/SSmap
 
 	if (!config.skip_vault_generation)
 		var/watch = start_watch()
+		log_startup_progress("Placing vaults and secrets...")"
 		generate_vaults()
 		generate_asteroid_secrets()
 		log_startup_progress("Placed vaults and secrets in [stop_watch(watch)]s.")

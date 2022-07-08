@@ -11,15 +11,18 @@ var/datum/subsystem/more_init/SSmore_init
 /datum/subsystem/more_init/Initialize(timeofday)
 	setup_news()
 	var/watch=start_watch()
+	log_startup_progress("Caching damage icons...")
 	cachedamageicons()
 	log_startup_progress("Finished caching damage icons in [stop_watch(watch)]s.")
 
 	watch=start_watch()
+	log_startup_progress("Caching space parallax simulation...")
 	create_global_parallax_icons()
 	log_startup_progress("  Finished caching space parallax simulation in [stop_watch(watch)]s.")
 
 	if (!config.skip_minimap_generation)
 		watch=start_watch()
+		log_startup_progress("Generating holominimaps...")
 		generateHoloMinimaps()
 		log_startup_progress("Finished holominimaps in [stop_watch(watch)]s.")
 	else
@@ -29,11 +32,13 @@ var/datum/subsystem/more_init/SSmore_init
 
 	if(config.media_base_url)
 		watch = start_watch()
+		log_startup_progress("Caching jukebox playlists...")
 		load_juke_playlists()
 		log_startup_progress("  Finished caching jukebox playlists in [stop_watch(watch)]s.")
 	..()
 
 	watch=start_watch()
+	log_startup_progress("Doing the other misc. initializations...")
 	process_teleport_locs()				//Sets up the wizard teleport locations
 	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
 	process_adminbus_teleport_locs()	//Sets up adminbus teleport locations.
