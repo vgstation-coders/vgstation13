@@ -457,19 +457,22 @@ var/global/datum/controller/vote/vote = new()
 		//initialize tally
 		if(config.toggle_vote_method == INSTANTRUNOFF)
 			multiples = TRUE
+		var/list/blankslist = list()
+		for(var/n in 1 to choices)
+			blankslist.Add(list(0))
 		if(config.toggle_vote_method == PERSISTENT && mode == "map")
 			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
 			for(var/i = 1; i <= choices.len; i++)
 				if(isnull(task.data[choices[i]]))
 					tally += choices[i]
-					tally[choices[i]] = list(0)
+					tally[choices[i]] = blankslist.Copy()
 				else
 					tally += choices[i]
 					tally[choices[i]] = task.data[choices[i]]
 		else
 			for (var/c in choices)
 				tally += c
-				tally[c] = list(0)
+				tally[c] = blankslist.Copy()
 		if(mode == "custom")
 			text += "<br>[question]"
 
