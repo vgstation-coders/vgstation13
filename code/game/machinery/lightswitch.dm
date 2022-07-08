@@ -14,9 +14,6 @@
 /obj/machinery/light_switch/supports_holomap()
 	return TRUE
 
-/obj/machinery/light_switch/initialize()
-	add_self_to_holomap()
-
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	..()
 	var/area/this_area = get_area(src)
@@ -28,6 +25,7 @@
 		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir = ndir
 	updateicon()
+	add_self_to_holomap()
 
 /obj/machinery/light_switch/proc/updateicon()
 	if(!overlay)
