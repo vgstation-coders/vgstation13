@@ -65,7 +65,6 @@
 			if(!area_object)
 				area_object = new area_type
 				area_object.tag = "[area_type]/\ref[src]"
-				area_object.addSorted()
 
 			area_object.contents.Add(T)
 			T.change_area(old_area, area_object)

@@ -960,7 +960,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		A.power_environ = 0
 		A.always_unpowered = 0
 		A.jammed = SUPER_JAMMED	//lol telesci
-		A.addSorted()
 		arena = A
 
 		spawn(0)

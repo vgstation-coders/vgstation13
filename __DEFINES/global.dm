@@ -239,9 +239,6 @@ var/global/datum/gas_mixture/space_gas = new
 //Announcement intercom
 var/global/obj/item/device/radio/intercom/universe/announcement_intercom = new
 
-//used by jump-to-area etc. Updated by area/updateName()
-var/list/sortedAreas = list()
-
 var/global/bomberman_mode = 0
 var/global/bomberman_hurt = 0
 var/global/bomberman_destroy = 0

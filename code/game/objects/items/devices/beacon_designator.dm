@@ -75,4 +75,3 @@
 		T.change_area(oldarea,newarea)
 		for(var/atom/allthings in T.contents)
 			allthings.change_area(oldarea,newarea)
-	newarea.addSorted()

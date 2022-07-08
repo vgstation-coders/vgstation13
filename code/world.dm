@@ -125,8 +125,6 @@ var/auxtools_path
 
 	Master.Setup()
 
-	SortAreas()							//Build the list of all existing areas and sort it alphabetically
-
 	return ..()
 
 /world/Topic(T, addr, master, key)
