@@ -33,7 +33,9 @@ var/datum/subsystem/map/SSmap
 		generate_hoboshack()
 		
 	var/watch_prim = start_watch()
+	log_startup_progress("Calling post on zLevels...)
 	for(var/datum/zLevel/z in map.zLevels)
+		log_startup_progress("Generating zLevel [z.z].")
 		z.post_mapload()
 	log_startup_progress("Finished calling post on [map.zLevels.len] zLevels in [stop_watch(watch_prim)]s.")
 
