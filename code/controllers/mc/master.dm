@@ -125,7 +125,6 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 /datum/controller/master/proc/Setup()
 	set waitfor = FALSE
 	sleep(-1)
-	CURRENT_TICKLIMIT = TICK_LIMIT_MC_INIT
 	//moving this random bullshit into here, because it didn't belong in world/New()
 	//SetupHooks() // /N3X15 project from 8 years ago (WIP)
 	createDatacore()
@@ -137,8 +136,9 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	
 	// Initialize subsystems.
 	// Sort subsystems by init_order, so they initialize in the correct order.
-	sortTim(subsystems, /proc/cmp_subsystem_init)
+	CURRENT_TICKLIMIT = TICK_LIMIT_MC_INIT
 	var/time_to_init = world.timeofday
+	sortTim(subsystems, /proc/cmp_subsystem_init)
 	to_chat(world, "<span class='boldannounce'>Initializing subsystems...</span>")
 	for (var/datum/subsystem/SS in subsystems)
 		if (SS.flags & SS_NO_INIT)
