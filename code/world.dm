@@ -45,7 +45,7 @@ var/auxtools_path
 
 /world/New()
 	world_startup_time = world.timeofday
-	// Honk honk, fuck you science
+
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
@@ -103,12 +103,6 @@ var/auxtools_path
 	if(config && config.server_name != null && config.server_suffix && world.port > 0)
 		// dumb and hardcoded but I don't care~
 		config.server_name += " #[(world.port % 1000) / 100]"
-
-	data_core = new /obj/effect/datacore()
-	paiController = new /datum/paiController()
-	Holiday = Get_Holiday()
-
-	src.update_status()
 
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")

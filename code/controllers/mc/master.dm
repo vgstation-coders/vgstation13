@@ -124,7 +124,13 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 // 	Make a subsystem, give it the SS_NO_FIRE flag, and do your work in it's Initialize()
 /datum/controller/master/proc/Setup()
 	set waitfor = FALSE
-	sleep(1 SECONDS)
+	sleep(-1)
+	//moving this random bullshit into here, because it didn't belong in world/New()
+	data_core = new /obj/effect/datacore()
+	paiController = new /datum/paiController()
+	Holiday = Get_Holiday()
+	world.update_status()
+
 	to_chat(world, "<span class='boldannounce'>Initializing subsystems...</span>")
 
 	// Sort subsystems by init_order, so they initialize in the correct order.
