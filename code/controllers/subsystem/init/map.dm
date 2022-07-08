@@ -17,7 +17,7 @@ var/datum/subsystem/map/SSmap
 
 	if (!config.skip_vault_generation)
 		var/watch = start_watch()
-		log_startup_progress("Placing vaults and secrets...")"
+		log_startup_progress("Placing vaults and secrets...")
 		generate_vaults()
 		generate_asteroid_secrets()
 		log_startup_progress("Placed vaults and secrets in [stop_watch(watch)]s.")
@@ -33,7 +33,7 @@ var/datum/subsystem/map/SSmap
 		generate_hoboshack()
 		
 	var/watch_prim = start_watch()
-	log_startup_progress("Calling post on zLevels...)
+	log_startup_progress("Calling post on zLevels..."")
 	for(var/datum/zLevel/z in map.zLevels)
 		log_startup_progress("Generating zLevel [z.z].")
 		z.post_mapload()
