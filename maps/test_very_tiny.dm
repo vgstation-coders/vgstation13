@@ -5,7 +5,6 @@
 	zLevels = list(/datum/zLevel/station)
 	enabled_jobs = list(/datum/job/trader)
 	zCentcomm = 1
-	lights_always_ok = TRUE
 
 ////////////////////////////////////////////////////////////////
 #include "test_very_tiny.dmm"

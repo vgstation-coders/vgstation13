@@ -643,18 +643,21 @@ var/datum/controller/gameticker/ticker
 		var/area/A = get_area(H)
 		if(!(A in discrete_areas)) //We've already added their department
 			discrete_areas += get_department_areas(H)
+	CHECK_TICK
 	for(var/area/DA in discrete_areas)
 		for(var/obj/machinery/light_switch/LS in DA)
 			LS.toggle_switch(1)
 			break
 		for(var/obj/item/device/flashlight/lamp/L in DA)
 			L.toggle_onoff(1)
+	CHECK_TICK
 	//Toggle lights without lightswitches
 	//with better area organization, a lot of this headache can be limited
 	for(var/area/A in areas - discrete_areas)
 		if(!A.requires_power || !A.haslightswitch)
 			for(var/obj/machinery/light/L in A)
 				L.seton(1)
+	CHECK_TICK
 
 // -- Tag mode!
 
