@@ -509,6 +509,7 @@ var/global/datum/controller/vote/vote = new()
 	for(var/client/C in clients)
 		if(C && C.mob && C.mob.stat == CONSCIOUS)
 			living_players++
+			break
 	switch(href_list["vote"])
 		if ("cancel_vote")
 			cancel_vote(user)
