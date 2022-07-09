@@ -1113,7 +1113,7 @@ var/list/uplink_items = list()
 	name = "Biomass Sample Packet"
 	desc = "A packet containing cryo-stabilized biomass tissue, shake and throw for your very own interdimensional space barf."
 	item = /obj/item/biomasspacket
-	cost = 10
+	cost = 8
 	discounted_cost = 5
 	jobs_with_discount = list("Assistant", "Janitor") //There originally was a discount for mechanics too due to them being Assistant+, but it felt like a cheap joke
 
