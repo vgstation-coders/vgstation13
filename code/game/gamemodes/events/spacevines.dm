@@ -22,7 +22,7 @@
 			if (strength > 50)
 				seed.chems[FORMIC_ACID] = list(rand(1,5),rand(5,10))//let's burn entangled individuals
 			if (strength > 70)
-				seed.carnivorous = 2//brutalize entangled individuals
+				seed.voracious = 2//brutalize entangled individuals
 			if (strength > 80)
 				seed.ligneous = 1//and on top of that we're hard to cut
 			if (strength > 90)
