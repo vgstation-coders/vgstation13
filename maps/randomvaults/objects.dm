@@ -37,7 +37,6 @@
 			allthings.change_area(src, new_area)
 
 	new_area.tag = "[new_area.type]/\ref[ME]"
-	new_area.addSorted()
 
 /area/vault/powered
 	requires_power = 1

@@ -320,8 +320,6 @@ var/list/map_dimension_cache = list()
 
 		if(istype(A))
 			areas.Add(instance)
-			A.addSorted()
-
 
 	members.Remove(members[index])
 

@@ -892,18 +892,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	sleep(time)
 	return 1
 
-//Returns sortedAreas list if populated
-//else populates the list first before returning it
-/proc/SortAreas()
-	for(var/area/A in areas)
-		sortedAreas.Add(A)
-
-	sortTim(sortedAreas, /proc/cmp_name_asc)
-
-/area/proc/addSorted()
-	sortedAreas.Add(src)
-	sortTim(sortedAreas, /proc/cmp_name_asc)
-
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all areas of that type in the world.
 /proc/get_areas(var/areatype)
