@@ -260,6 +260,10 @@
 	name = "box (E)"
 	items_to_spawn = list(/obj/item/weapon/implanter/explosive)
 
+/obj/item/weapon/storage/box/syndie_kit/imp_vocal
+	name = "box (V)"
+	items_to_spawn = list(/obj/item/weapon/implanter/vocal)
+
 /obj/item/weapon/storage/box/syndie_kit/imp_uplink
 	name = "Uplink Implant (with injector)"
 	items_to_spawn = list(/obj/item/weapon/implanter/uplink)

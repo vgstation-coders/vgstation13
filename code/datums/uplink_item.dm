@@ -860,6 +860,15 @@ var/list/uplink_items = list()
 	discounted_cost = 6
 	jobs_with_discount = list("Mechanic")
 
+// A telecomms technician traitor item
+/datum/uplink_item/jobspecific/engineering/vocal
+	name = "Vocal Implant"
+	desc = "An implant usable after being injected into one's body. Settings can be input to modify speech patterns in the affected's voice once implanted."
+	item = /obj/item/weapon/storage/box/syndie_kit/imp_vocal
+	cost = 8
+	discounted_cost = 6
+	jobs_with_discount = list("Mechanic", "Chief Engineer")
+
 /datum/uplink_item/jobspecific/cargo
 	category = "Cargo and Mining Specials"
 
