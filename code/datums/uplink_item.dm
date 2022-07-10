@@ -815,7 +815,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/engineering/powercreeper_packet
 	name = "Powercreep Packet"
 	desc = "A packet that creates a dangerous mutated version of kudzu vines. The vines will repeatedly shock people and connect themselves to any cables near them, rapidly growing and spreading out of control if left unchecked."
-	item = /obj/item/powercreeper_packet
+	item = /obj/item/deployable_packet/powercreeper
 	cost = 16
 	discounted_cost = 10
 	jobs_with_discount = list("Botanist", "Station Engineer", "Chief Engineer")
@@ -1110,9 +1110,9 @@ var/list/uplink_items = list()
 	jobs_with_discount = list("Assistant")
 
 /datum/uplink_item/jobspecific/assistant/biomasspacket
-	name = "Biomass Sample Packet"
-	desc = "A packet containing cryo-stabilized biomass tissue, shake and throw for your very own interdimensional space barf."
-	item = /obj/item/biomasspacket
+	name = "Biomass Packet"
+	desc = "A packet containing cryo-stabilized biomass tissue. Shake and throw for your very own interdimensional space barf."
+	item = /obj/item/deployable_packet/biomass
 	cost = 8
 	discounted_cost = 5
 	jobs_with_discount = list("Assistant", "Janitor") //There originally was a discount for mechanics too due to them being Assistant+, but it felt like a cheap joke
