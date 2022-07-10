@@ -132,7 +132,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 
 	var/time_to_init = world.timeofday
 	// Initialize subsystems.
-	CURRENT_TICKLIMIT = TICK_LIMIT_MC_INIT
+	CURRENT_TICKLIMIT = TICK_LIMIT_MC_INIT_DEFAULT
 	for (var/datum/subsystem/SS in subsystems)
 		if (SS.flags & SS_NO_INIT)
 			continue

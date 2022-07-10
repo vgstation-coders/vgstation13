@@ -7,7 +7,6 @@ var/list/poddoors = list()
 	layer = ABOVE_DOOR_LAYER
 	open_layer = BELOW_TABLE_LAYER
 	closed_layer = ABOVE_DOOR_LAYER
-	explosion_resistance = 25//used by the old deprecated explosion_recursive.dm
 
 	explosion_block = 3
 	penetration_dampening = 20

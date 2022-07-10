@@ -6,7 +6,6 @@
 	density = 0
 	anchored = 1
 	plane = ABOVE_HUMAN_PLANE
-	explosion_resistance = 5
 	pass_flags_self = PASSGLASS
 	var/airtight = 0
 
