@@ -151,7 +151,6 @@ var/auxtools_path
 		s["mode"] = master_mode
 		s["respawn"] = config ? abandon_allowed : 0
 		s["enter"] = enter_allowed
-		s["vote"] = config.allow_vote_mode
 		s["ai"] = config.allow_ai
 		s["host"] = host ? host : null
 		s["players"] = list()
@@ -329,9 +328,6 @@ var/auxtools_path
 		features += "closed"
 
 	features += abandon_allowed ? "respawn" : "no respawn"
-
-	if (config && config.allow_vote_mode)
-		features += "vote"
 
 	if (config && config.allow_ai)
 		features += "AI allowed"
