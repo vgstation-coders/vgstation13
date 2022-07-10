@@ -14,11 +14,6 @@
 
 /obj/machinery/computer/station_alert/New()
 	..()
-	if(world.has_round_started())
-		initialize()
-
-/obj/machinery/computer/station_alert/initialize()
-	..()
 	spawn(30 SECONDS) //defer init because of slowness
 		if(src.z != map.zMainStation)
 			var/area/A = get_area(src)
