@@ -1,4 +1,3 @@
-// So you can be all 10 SECONDS
 #define SECONDS * 10
 #define MINUTES * 600
 #define HOURS   * 36000
@@ -6,7 +5,10 @@
 #define TimeOfGame (get_game_time())
 #define TimeOfTick (world.tick_usage*0.01*world.tick_lag)
 
-//#define REALTIMEOFDAY (world.timeofday + (MIDNIGHT_ROLLOVER * MIDNIGHT_ROLLOVER_CHECK))
+#define DS2TICKS(DS) ((DS)/world.tick_lag)
+#define TICKS2DS(T) ((T) TICKS)
+#define MS2DS(T) ((T) MILLISECONDS)
+#define DS2MS(T) ((T) * 100)
 
 /proc/get_game_time()
 	var/global/time_offset = 0
