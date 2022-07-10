@@ -4225,16 +4225,6 @@
 					equipped_count++
 				to_chat(usr, "<span class='notice'>Equipped [equipped_count] mechanics with cool necklaces.</span>")
 				log_admin("[key_name(usr)] equipped [equipped_count] Mechanics with cool necklaces.")
-			if("togglebombmethod")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","BM")
-				var/choice = input("Do you wish for explosions to take walls and obstacles into account?") in list("Yes, let's have realistic explosions", "No, let's have perfectly circular explosions")
-				if(choice == "Yes, let's have realistic explosions")
-					message_admins("[key_name_admin(usr)] has set explosions to take walls and obstacles into account.")
-					explosion_newmethod = 1
-				if(choice == "No, let's have perfectly circular explosions")
-					message_admins("[key_name_admin(usr)] has set explosions to completely pass through walls and obstacles.")
-					explosion_newmethod = 0
 			if("placeturret")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TUR")

@@ -27,7 +27,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	icon_state = "unknown"
 	mouse_opacity = 0
 	luminosity = 0
-	var/lightswitch = 1
+	var/haslightswitch = FALSE
 	var/list/ambient_sounds = list(
 		/datum/ambience/generic1,
 		/datum/ambience/generic2,

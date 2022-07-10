@@ -308,8 +308,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 		edit_area(user)
 
-	newarea.addSorted()
-
 	ghostteleportlocs[newarea.name] = newarea
 
 	sleep(5)

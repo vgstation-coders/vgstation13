@@ -20,6 +20,10 @@
 	cost = 0
 	spellpath = /spell/shapeshift
 
+/datum/power/vampire/silentbite
+	cost = 0
+	spellpath = /spell/silentbite
+
 /datum/power/vampire/vision
 	cost = 100
 	spellpath = null // No spell for night vision.

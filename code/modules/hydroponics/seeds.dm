@@ -1811,7 +1811,7 @@
 	ideal_heat = 310
 	pest_tolerance = 100
 	endurance = 25 //Fragile...
-	carnivorous = 1 //Eats pests!
+	voracious = 1 //Eats pests!
 	juicy = 2 //And here's where the slipperiness comes in
 
 /datum/seed/aloe

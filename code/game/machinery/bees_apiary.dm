@@ -134,17 +134,9 @@ var/list/apiaries_list = list()
 	else
 		return 0
 
-/obj/machinery/apiary/bullet_act(var/obj/item/projectile/Proj) //Works with the Somatoray to modify plant variables.
-	if(istype(Proj ,/obj/item/projectile/energy/floramut))
-		damage = round(rand(0,3))//0, 1, or 2 brute damage per stings...per bee in a swarm
-	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
-		if(!yieldmod)
-			yieldmod += 1
-		else if (prob(1/(yieldmod * yieldmod) *100))//This formula gives you diminishing returns based on yield. 100% with 1 yield, decreasing to 25%, 11%, 6, 4, 2...
-			yieldmod += 1
-	else
-		if(src)
-			angry_swarm()
+/obj/machinery/apiary/bullet_act(var/obj/item/projectile/Proj)
+	if(src)
+		angry_swarm()
 	return ..()
 
 /obj/machinery/apiary/hitby(var/atom/movable/AM)
