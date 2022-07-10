@@ -563,18 +563,51 @@
 					else
 						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
 
-		if(ishuman(L) && (method == TOUCH))
+		if(ishuman(L))
 			var/mob/living/carbon/human/H = L
-			H.bloody_body_from_data(data,0,src)
-			if((LIMB_RIGHT_HAND in zone_sels) || (LIMB_LEFT_HAND in zone_sels))
-				H.bloody_hands_from_data(data,2,src)
-			spawn() //Bloody feet, result of the blood that fell on the floor
-				var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
+			if(method == TOUCH)
+				H.bloody_body_from_data(data,0,src)
+				if((LIMB_RIGHT_HAND in zone_sels) || (LIMB_LEFT_HAND in zone_sels))
+					H.bloody_hands_from_data(data,2,src)
+				spawn() //Bloody feet, result of the blood that fell on the floor
+					var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
 
-				if(B)
-					B.Crossed(H)
+					if(B)
+						B.Crossed(H)
 
-			H.update_icons()
+				H.update_icons()
+			else if(self.data["blood_DNA"])
+				var/datum/role/vampire/V = isvampire(H)
+				if(V)
+					var/mob/living/carbon/human/foundmob
+					for(var/datum/data/record/R in sortRecord(data_core.medical))
+						if(R.fields["b_dna"] == self.data["blood_DNA"])
+							for(var/mob/living/carbon/human/other in player_list)
+								if(other.name == R.fields["name"] && other != M)
+									foundmob = other
+									break
+							if(foundmob)
+								break
+					if(foundmob)
+						var/targetref = "/ref[foundmob]"
+						var/blood_total_before = V.blood_total
+						var/blood_usable_before = V.blood_usable
+						var/divisor = (locate(/datum/power/vampire/mature) in V.current_powers) ? (min(2,foundmob.stat + 1)/2) : min(2,foundmob.stat + 1)
+						if (!(targetref in V.feeders))
+							V.feeders[targetref] = 0
+						if (V.feeders[targetref] < MAX_BLOOD_PER_TARGET)
+							V.blood_total += min(volume,1)/divisor
+						else
+							to_chat(H, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
+						if(foundmob.stat < DEAD) //alive
+							V.blood_usable += min(volume,1)/divisor
+						V.feeders[targetref] += min(volume,1)/divisor
+						if(blood_total_before != V.blood_total)
+							to_chat(H, "<span class='notice'>You have accumulated [V.blood_total] unit[V.blood_total > 1 ? "s" : ""] of blood[blood_usable_before != V.blood_usable ?", and have [V.blood_usable] left to use." : "."]</span>")
+						V.check_vampire_upgrade()
+						V.update_vamp_hud()
+					else
+						to_chat(H, "<span class='warning'>This blood is lifeless and has no power.</span>")
 
 /datum/reagent/blood/reaction_animal(var/mob/living/simple_animal/M, var/method = TOUCH, var/volume)
 
