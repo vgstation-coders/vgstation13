@@ -27,6 +27,7 @@ var/list/processing_objects = list()
 			if(time > 1) // At this point very few items (such as corpse landmarks) take longer than a tick to init, with the main bulk of items taking around 1 tick being things that use relativewall()
 				CHECK_TICK
 				var/turf/T = get_turf(object)
+				log_startup_progress("[object] took [time/10] to initialize.")
 				log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time/10] seconds to initialize.")
 		else
 			bad_inits[object.type] = bad_inits[object.type]+1
