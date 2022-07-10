@@ -17,7 +17,7 @@
 	activated = 1
 
 	spawn(POWERCREEP_PACKET_ACTIVATION_TIME_IN_SECONDS SECONDS)
-		new deployeditem(get_turf(src))
+		new deployeditem(get_turf(src), packet_override = 1) //override for powercreep fast spawn 
 		qdel(src)
 
 /obj/item/deployable_packet/biomass
