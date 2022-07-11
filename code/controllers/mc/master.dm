@@ -124,23 +124,21 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 // 	Make a subsystem, give it the SS_NO_FIRE flag, and do your work in it's Initialize()
 /datum/controller/master/proc/Setup()
 	set waitfor = FALSE
-	sleep(1 SECONDS)
+	sleep(-1)
 	//moving this random bullshit into here, because it didn't belong in world/New()
 	//SetupHooks() // /N3X15 project from 8 years ago (WIP)
 	createDatacore()
 	createPaiController()
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
-	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 	Holiday = Get_Holiday()
 	world.update_status()
 	
 	// Initialize subsystems.
 	// Sort subsystems by init_order, so they initialize in the correct order.
 	CURRENT_TICKLIMIT = TICK_LIMIT_MC_INIT_DEFAULT
-	var/time_to_init = world.timeofday
 	sortTim(subsystems, /proc/cmp_subsystem_init)
+	var/time_to_init = world.timeofday
 	to_chat(world, "<span class='boldannounce'>Initializing subsystems...</span>")
-
 	for (var/datum/subsystem/SS in subsystems)
 		if (SS.flags & SS_NO_INIT)
 			continue
@@ -154,7 +152,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 
 	// Sort subsystems by display setting for easy access.
 	sortTim(subsystems, /proc/cmp_subsystem_display)
-
+	sleep(1)
 	// Loop.
 	Master.StartProcessing()
 
