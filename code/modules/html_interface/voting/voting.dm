@@ -71,6 +71,7 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/reset()
 	currently_voting = FALSE
+	lock = FALSE
 	initiator = null
 	time_remaining = 0
 	mode = null
@@ -326,13 +327,12 @@ var/global/datum/controller/vote/vote = new()
 	if(currently_voting)
 		message_admins("<span class='info'>[initiator_key] attempted to begin a vote, however a vote is already in progress.</span>")
 		return
-	currently_voting = TRUE
 	if(!mode)
 		if(started_time != null && !check_rights(R_ADMIN))
 			var/next_allowed_time = (started_time + config.vote_delay)
 			if(next_allowed_time > world.time)
+				to_chat(user, "You must wait [(next_allowed_time - world.time)/10] seconds to call another vote.")
 				return 0
-
 		reset()
 		switch(vote_type)
 			if("restart")
@@ -377,6 +377,7 @@ var/global/datum/controller/vote/vote = new()
 			else
 				return 0
 
+		currently_voting = TRUE
 		mode = vote_type
 		initiator = initiator_key
 		started_time = world.time
@@ -490,14 +491,6 @@ var/global/datum/controller/vote/vote = new()
 	status_data += list(mode)
 	status_data += list(question)
 	status_data += list(time_remaining)
-	if(config.allow_vote_restart)
-		status_data += list(1)
-	else
-		status_data += list(0)
-	if(config.allow_vote_mode)
-		status_data += list(1)
-	else
-		status_data += list(0)
 	if(config.toggle_maps)
 		status_data += list(1)
 	else
@@ -511,6 +504,12 @@ var/global/datum/controller/vote/vote = new()
 	var/mob/user = usr
 	if(!user || !user.client)
 		return	//not necessary but meh...just in-case somebody does something stupid
+
+	var/living_players = 0
+	for(var/client/C in clients)
+		if(C && C.mob && C.mob.stat == CONSCIOUS)
+			living_players++
+			break
 	switch(href_list["vote"])
 		if ("cancel_vote")
 			cancel_vote(user)
@@ -524,46 +523,56 @@ var/global/datum/controller/vote/vote = new()
 				log_admin("[user] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				message_admins("[user] has cancelled a vote currently taking place. Vote type: [mode], question, [question].")
 				reset()
-				update()
+			else
+				to_chat(user, "<span class='notice'> You can't do that!")
 		if("rig")
 			if(user.client.holder)
 				rigvote()
-				update()
-		if("toggle_restart")
-			if(user.client.holder)
-				config.allow_vote_restart = !config.allow_vote_restart
-				update()
-		if("toggle_gamemode")
-			if(user.client.holder)
-				config.allow_vote_mode = !config.allow_vote_mode
-				update()
+			else
+				to_chat(user, "<span class='notice'> You can't do that!")
 		if("restart")
-			if(config.allow_vote_restart || user.client.holder)
+			if(user.client.holder)
 				initiate_vote("restart",user)
+			else if(!length(admins) && !living_players)
+				initiate_vote("restart",user)
+			else
+				to_chat(user, "<span class='notice'> An admin is currently online. Ask them for a restart.")
 		if("gamemode")
-			if(config.allow_vote_mode || user.client.holder)
+			if(user.client.holder)
 				initiate_vote("gamemode",user)
+			else
+				to_chat(user, "<span class='notice'> You can't do that! This doesn't work anyway.")
 		if("crew_transfer")
-			if(config.allow_vote_restart || user.client.holder)
+			if(user.client.holder)
 				initiate_vote("crew_transfer",user)
+			else
+				to_chat(user, "<span class='notice'> You can't do that!")
 		if("custom")
 			if(user.client.holder)
 				initiate_vote("custom",user)
+			else
+				to_chat(user, "<span class='notice'> You can't do that!")
 		if("map")
 			if(user.client.holder)
 				initiate_vote("map",user)
-				update()
+			else if(!length(admins) && !living_players)
+				initiate_vote("restart",user)
+			else
+				to_chat(user, "<span class='notice'> An admin is currently online. Ask them for a map vote.")
 		if("toggle_map")
 			if(user.client.holder)
 				config.toggle_maps = !config.toggle_maps
-				update()
+			else
+				to_chat(user, "<span class='notice'> You can't do that!")
 		if("toggle_vote_method")
 			if(user.client.holder)
 				config.toggle_vote_method = config.toggle_vote_method % 4 + 1
-
-				update()
+			else
+				to_chat(user, "<span class='notice'> You can't do that!")
+		//If not calling a vote, submit a vote		
 		else
 			submit_vote(user, round(text2num(href_list["vote"])))
+	update()
 	user.vote()
 
 /mob/verb/vote()

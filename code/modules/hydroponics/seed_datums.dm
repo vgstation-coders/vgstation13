@@ -19,7 +19,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	// Output.
 	var/list/products              // Possible fruit/other product paths.
 	var/list/mutants               // Possible predefined mutant varieties, if any.
-	var/list/chems                 // Chemicals that plant produces in products/injects into victim. Total units of chemical in products: First value + (Potency/Second value)
+	var/list/chems                 // Chemicals that plant produces in products/injects into victim in (Total units, Potency)
 	var/list/consume_gasses=list() // The plant will absorb these gasses during its life.
 	var/list/exude_gasses=list()   // The plant will exude these gasses during its life.
 
@@ -48,8 +48,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/spread = 0                  // 0 limits plant to tray, 1 = creepers, 2 = vines.
 	var/immutable = 0               // If set, plant will never mutate. If -1, plant is  highly mutable.
 	var/alter_temp = 0              // If set, the plant will periodically alter local temp by this amount.
-	var/carnivorous = 0             // 0 = none, 1 = eat pests in tray, 2 = eat living things.
-	var/parasite = 0                // 0 = no, 1 = gain health from weed level. //Todo: Some more interactions with this.
+	var/voracious = 0             	// 0 = none, 1 = eat weeds and eat pests in tray, 2 = eat living things.
 	var/hematophage = 0				// 0 = no, 1 = plant only gains nutriment from blood.
 	var/thorny = 0					// If 1, does brute damage when touched without protection. Can't be held or harvested without gloves. Short for the Thorned Reaper.
 	var/stinging = 0				// If 1, injects reagents when touched without protection.
@@ -76,8 +75,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 //Creates a random seed. MAKE SURE THE LINE HAS DIVERGED BEFORE THIS IS CALLED.
 /datum/seed/proc/randomize()
-
-
 	roundstart = 0
 	seed_name = "strange plant"     // TODO: name generator.
 	display_name = "strange plants" // TODO: name generator.
@@ -126,45 +123,28 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	if(prob(5))
 		alter_temp = 1
-
-	/*if(prob(1))
-		immutable = -1*/ //todo this
-
-	var/carnivore_prob = rand(100)
-	if(carnivore_prob < 5)
-		carnivorous = 2
-	else if(carnivore_prob < 10)
-		carnivorous = 1
-
 	if(prob(5))
-		parasite = 1
-
-	var/vine_prob = rand(100)
-	if(vine_prob < 5)
+		voracious = 2
+	else if(prob(5))
+		voracious = 1
+	if(prob(5))
 		spread = 2
-	else if(vine_prob < 10)
+	else if(prob(5))
 		spread = 1
-
 	if(prob(10))
 		biolum = 1
 		biolum_colour = "#[get_random_colour(1)]"
-
 	if(prob(5))
 		hematophage = 1
-
 	if(prob(5))
 		thorny = 1
-
 	if(prob(5))
 		stinging = 1
-
 	if(prob(5))
 		ligneous = 1
-
-	var/juicy_prob = rand(100)
-	if(juicy_prob < 5)
+	if(prob(5))
 		juicy = 2
-	else if(juicy_prob < 10)
+	else if(prob(5))
 		juicy = 1
 
 	if(prob(5))
@@ -177,7 +157,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	lifespan = rand(4,15)*5
 
 //Gives the plant a new, random icon from a list, with matching growth stages number.
-/datum/seed/proc/add_random_chemical(var/severity = 15)
+/datum/seed/proc/add_random_chemical()
 	var/list/possible_chems = list(
 		// Important Medicines
 		REZADONE = 200,
@@ -235,8 +215,14 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	if(!possible_chems.len)
 		return 0
 	var/new_chem = pickweight(possible_chems)
-	chems[new_chem] = list(rand(1,severity/3),rand(10-Ceiling(severity/3),15))
+	chems[new_chem] = list(rand(1,5),rand(10,15))
 	return 1
+
+/datum/seed/proc/remove_random_chemical()
+	if(length(chems))
+		chems -= pick(chems)
+		return TRUE
+	return FALSE
 
 /datum/seed/proc/randomize_icon()
 	var/random = rand(1, SSplant.roundstart_seeds)
@@ -253,42 +239,45 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 //Mutates a specific trait/set of traits. Used by the Bioballistic Delivery System.
 /datum/seed/proc/apply_gene(var/datum/plantgene/gene, var/mode, var/mob/user)
-
-	if(!gene || !gene.values || immutable > 0)
+	if(!gene)
+		return
+	if(!gene.values)
+		return
+	if(immutable > 0)
 		return
 
 	switch(gene.genetype)
 		if(GENE_PHYTOCHEMISTRY)
 			if(!chems || mode == GENEGUN_MODE_PURGE)
 				chems = list()
+			var/list/chems_to_splice = gene.values[1]
+			for(var/chem in chems_to_splice)
+				chems[chem] = chems_to_splice[chem]
 
+
+/*
 			var/list/gene_value = gene.values[1]
 			for(var/rid in gene_value)
 				var/list/gene_chem = gene_value[rid]
-
 				if(!(rid in chems) || !chems[rid])
 					chems[rid] = gene_chem.Copy()
 					continue
-
 				for(var/i=1 to gene_chem.len)
 					if(isnull(gene_chem[i]))
 						chems[rid][i] = 0
 						gene_chem[i] = 0
 					if(!chems[rid][i])
 						continue
-
 					if(chems[rid][i])
 						chems[rid][i] = max(1,round((gene_chem[i] + chems[rid][i])/2))
 					else
 						chems[rid][i] = gene_chem[i]
-
+*/
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
 					potency 			= gene.values[2]
-					teleporting 		= gene.values[3]
 				if(GENEGUN_MODE_SPLICE)
 					potency 			= round(mix(gene.values[2], potency, rand(40, 60)/100), 0.1)
-					teleporting 		= max(gene.values[3], teleporting)
 
 		if(GENE_MORPHOLOGY)
 			if(gene.values[1])
@@ -306,7 +295,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					stinging 			= max(gene.values[3], stinging)
 					ligneous 			= max(gene.values[4], ligneous)
 					juicy 				= max(gene.values[5], juicy)
-					noreact 			= max(gene.values[6], noreact)
 
 		if(GENE_BIOLUMINESCENCE)
 			switch(mode)
@@ -354,33 +342,14 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				if(GENEGUN_MODE_PURGE)
 					nutrient_consumption	= gene.values[1]
 					fluid_consumption 		= gene.values[2]
-					alter_temp 				= gene.values[3]
+					voracious				= gene.values[4]
+					hematophage 			= gene.values[5]
 				if(GENEGUN_MODE_SPLICE)
 					nutrient_consumption	= mix(gene.values[1], nutrient_consumption,	rand(40, 60)/100)
 					fluid_consumption 		= mix(gene.values[2], fluid_consumption,	rand(40, 60)/100)
-					alter_temp 				= max(gene.values[3], alter_temp)
-			var/list/new_gasses = gene.values[4]
-			if(islist(new_gasses))
-				if(!exude_gasses || mode == GENEGUN_MODE_PURGE)
-					exude_gasses = list()
-				exude_gasses |= new_gasses
-
-		if(GENE_NUTRITION)
-			switch(mode)
-				if(GENEGUN_MODE_PURGE)
-					carnivorous 		= gene.values[1]
-					parasite 			= gene.values[2]
-					hematophage 		= gene.values[3]
-				if(GENEGUN_MODE_SPLICE)
-					carnivorous 		= max(gene.values[1], carnivorous)
-					parasite 			= max(gene.values[2], parasite)
-					hematophage 		= max(gene.values[3], hematophage)
-			var/list/new_gasses = gene.values[4]
-			if(islist(new_gasses))
-				if(!consume_gasses || mode == GENEGUN_MODE_PURGE)
-					consume_gasses = list()
-				consume_gasses |= new_gasses
-
+					voracious 				= max(gene.values[4], voracious)
+					hematophage 			= max(gene.values[5], hematophage)
+          
 		if(GENE_DEVELOPMENT)
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
@@ -395,9 +364,29 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					spread 				= max(gene.values[3], spread)
 					harvest_repeat 		= max(gene.values[4], harvest_repeat)
 					yield				= round(mix(gene.values[5], yield,		rand(40, 60)/100), 0.1)
+		if(GENE_XENOPHYSIOLOGY)
+			switch(mode)
+				if(GENEGUN_MODE_PURGE)
+					teleporting 		= gene.values[1]
+					alter_temp 			= gene.values[2]
+					noreact 			= gene.values[3]
+				if(GENEGUN_MODE_SPLICE)
+					teleporting 		= max(gene.values[1], teleporting)
+					alter_temp 			= max(gene.values[2], alter_temp)
+					noreact 			= max(gene.values[3], noreact)
+			var/list/new_gasses = gene.values[4]
+			if(islist(new_gasses))
+				if(!exude_gasses || mode == GENEGUN_MODE_PURGE)
+					exude_gasses = list()
+				exude_gasses |= new_gasses
+			new_gasses = gene.values[5]
+			if(islist(new_gasses))
+				if(!consume_gasses || mode == GENEGUN_MODE_PURGE)
+					consume_gasses = list()
+				consume_gasses |= new_gasses
 
 	var/text = "([timestamp()]) Plant engineered by [key_name(usr)], mode: [mode] (cf __DEFINES/hydroponics.dm). |"
-	text += " Plant is now [carnivorous ? "carnivorous" : "NO LONGER carnivorous."] |"
+	text += " Plant is now [voracious ? "voracious" : "NO LONGER carnivorous."] |"
 	text += " Plant is now [thorny ? "thorny" : "NO LONGER thorny."] |"
 	text += " Plant chems: "
 	for (var/chemical in chems)
@@ -418,7 +407,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			P.values = list(
 				(chems                	? chems                	: 0),
 				(potency				? potency 				: 0),
-				(teleporting          	? teleporting          	: 0) // Yes, bluespace anomalies are caused by a mystery chemical, I don't have to explain shit
 			)
 		if(GENE_MORPHOLOGY)
 			P.values = list(
@@ -426,8 +414,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(thorny           	 	? thorny           		: 0),
 				(stinging            	? stinging            	: 0),
 				(ligneous             	? ligneous            	: 0),
-				(juicy             		? juicy             	: 0),
-				(noreact             	? noreact             	: 0)
+				(juicy             		? juicy             	: 0)
 			)
 		if(GENE_BIOLUMINESCENCE)
 			P.values = list(
@@ -455,15 +442,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			P.values = list(
 				(nutrient_consumption 	? nutrient_consumption	: 0),
 				(fluid_consumption    	? fluid_consumption   	: 0),
-				(alter_temp    			? alter_temp    		: 0),
-				(exude_gasses    		? exude_gasses    		: 0)
-			)
-		if(GENE_NUTRITION)
-			P.values = list(
-				(carnivorous 			? carnivorous			: 0),
-				(parasite    			? parasite   			: 0),
-				(hematophage    		? hematophage    		: 0),
-				(consume_gasses    		? consume_gasses    	: 0)
+				(voracious				? voracious 			: 0),
+				(hematophage    		? hematophage    		: 0)
 			)
 		if(GENE_DEVELOPMENT)
 			P.values = list(
@@ -472,6 +452,14 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(spread         		? spread         		: 0),
 				(harvest_repeat       	? harvest_repeat      	: 0),
 				(yield              	? yield              	: 0)
+			)
+		if(GENE_XENOPHYSIOLOGY)
+			P.values = list(
+				(teleporting          	? teleporting          	: 0),
+				(alter_temp    			? alter_temp    		: 0),
+				(exude_gasses    		? exude_gasses    		: 0),
+				(consume_gasses    		? consume_gasses    	: 0),
+				(noreact				? noreact				: 0)
 			)
 	return (P ? P : 0)
 
@@ -483,27 +471,24 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		SSplant.seeds[name] = src
 
 //Place the plant products at the feet of the user.
-/datum/seed/proc/harvest(var/mob/user, var/yield_mod = 1)
+/datum/seed/proc/harvest(var/mob/user)
 	if(!user)
 		return
 	if(isnull(products) || !products.len || yield <= 0)
 		to_chat(user, "<span class='warning'>You fail to harvest anything useful.</span>")
 	else
 		to_chat(user, "You harvest from the [display_name].")
-		generate_product(get_turf(user), yield_mod, user)
+		generate_product(get_turf(user), user)
 
-/datum/seed/proc/generate_product(var/turf/T, yield_mod, mob/harvester)
+/datum/seed/proc/generate_product(var/turf/T, mob/harvester)
 	add_newline_to_controller()
 
-	var/total_yield = 0
-	total_yield = round(yield*yield_mod)
+	if(yield < 1)
+		return
 
 	currently_querying = list()
-
-	for(var/i = 0;i<total_yield;i++)
-
+	for(var/i = 0;i<yield;i++)
 		var/product_type = pick(products)
-
 		var/obj/item/product
 
 		if(ispath(product_type, /obj/item/stack))
@@ -529,7 +514,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 		//Handle spawning in living, mobile products (like dionaea).
 		if(istype(product,/mob/living))
-
 			product.visible_message("<span class='notice'>The pod disgorges [product]!</span>")
 			handle_living_product(product)
 
@@ -562,11 +546,11 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					if(affecting && affecting.is_existing() && affecting.is_usable() && affecting.is_organic())
 						stung = 1
 						if(thorny)
-							if(affecting.take_damage(5+carnivorous*5, 0))
+							if(affecting.take_damage(5+voracious*5, 0))
 								H.UpdateDamageIcon()
 								H.updatehealth()
 							else
-								H.adjustBruteLoss(5+carnivorous*5)
+								H.adjustBruteLoss(5+voracious*5)
 							to_chat(H, "<span class='danger'>You are prickled by the sharp thorns on \the [seed_name]!</span>")
 							if(H.feels_pain())
 								success = 0
@@ -636,40 +620,38 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		new_seed.display_name = "[display_name]"
 
 	new_seed.nutrient_consumption = nutrient_consumption
-	new_seed.fluid_consumption =    fluid_consumption
-	new_seed.ideal_heat =           ideal_heat
-	new_seed.heat_tolerance =       heat_tolerance
-	new_seed.ideal_light =          ideal_light
-	new_seed.light_tolerance =      light_tolerance
+	new_seed.fluid_consumption =	fluid_consumption
+	new_seed.ideal_heat =			ideal_heat
+	new_seed.heat_tolerance =		heat_tolerance
+	new_seed.ideal_light =			ideal_light
+	new_seed.light_tolerance =		light_tolerance
 	new_seed.toxin_affinity =		toxin_affinity
-	new_seed.lowkpa_tolerance =     lowkpa_tolerance
-	new_seed.highkpa_tolerance =    highkpa_tolerance
-	new_seed.pest_tolerance =       pest_tolerance
-	new_seed.weed_tolerance =       weed_tolerance
-	new_seed.endurance =            endurance
-	new_seed.yield =                yield
-	new_seed.lifespan =             lifespan
-	new_seed.maturation =           maturation
-	new_seed.production =           production
-	new_seed.growth_stages =        growth_stages
-	new_seed.harvest_repeat =       harvest_repeat
-	new_seed.potency =              potency
-	new_seed.spread =               spread
-	new_seed.carnivorous =          carnivorous
-	new_seed.parasite =             parasite
-	new_seed.hematophage =          hematophage
-	new_seed.thorny =               thorny
-	new_seed.stinging =             stinging
-	new_seed.ligneous =             ligneous
-	new_seed.teleporting =          teleporting
-	new_seed.juicy =        	    juicy
-	new_seed.noreact =        	    noreact
-	new_seed.plant_icon_state =     plant_icon_state
-	new_seed.splat_type =           splat_type
-	new_seed.packet_icon =          packet_icon
-	new_seed.biolum =               biolum
-	new_seed.biolum_colour =        biolum_colour
-	new_seed.alter_temp = 			alter_temp
+	new_seed.lowkpa_tolerance =		lowkpa_tolerance
+	new_seed.highkpa_tolerance =	highkpa_tolerance
+	new_seed.pest_tolerance =		pest_tolerance
+	new_seed.weed_tolerance =		weed_tolerance
+	new_seed.endurance =			endurance
+	new_seed.yield =				yield
+	new_seed.lifespan =				lifespan
+	new_seed.maturation =			maturation
+	new_seed.production =			production
+	new_seed.growth_stages =		growth_stages
+	new_seed.harvest_repeat =		harvest_repeat
+	new_seed.potency =				potency
+	new_seed.spread =				spread
+	new_seed.voracious =			voracious
+	new_seed.hematophage =			hematophage
+	new_seed.thorny =				thorny
+	new_seed.stinging =				stinging
+	new_seed.ligneous =				ligneous
+	new_seed.teleporting =			teleporting
+	new_seed.juicy =				juicy
+	new_seed.plant_icon_state =		plant_icon_state
+	new_seed.splat_type =			splat_type
+	new_seed.packet_icon =			packet_icon
+	new_seed.biolum =				biolum
+	new_seed.biolum_colour =		biolum_colour
+	new_seed.alter_temp =			alter_temp
 	new_seed.plant_dmi =			plant_dmi
 	new_seed.mutation_log =			mutation_log
 	new_seed.mutation_log += "([timestamp()]) Diverged from seed with uid: [uid]."
@@ -679,6 +661,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 /datum/seed/proc/get_reagent_names()
 	var/list/reagent_names = list()
+
 	var/datum/reagent/R
 	for (var/rid in chems)
 		R = chemical_reagents_list[rid]

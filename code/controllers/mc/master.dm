@@ -136,10 +136,11 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	
 	// Initialize subsystems.
 	// Sort subsystems by init_order, so they initialize in the correct order.
-	CURRENT_TICKLIMIT = TICK_LIMIT_MC_INIT
+	CURRENT_TICKLIMIT = TICK_LIMIT_MC_INIT_DEFAULT
 	var/time_to_init = world.timeofday
 	sortTim(subsystems, /proc/cmp_subsystem_init)
 	to_chat(world, "<span class='boldannounce'>Initializing subsystems...</span>")
+
 	for (var/datum/subsystem/SS in subsystems)
 		if (SS.flags & SS_NO_INIT)
 			continue

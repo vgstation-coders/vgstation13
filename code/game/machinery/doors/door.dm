@@ -288,7 +288,6 @@ var/list/all_doors = list()
 	layer = open_layer
 	setDensity(FALSE)
 	update_nearby_tiles()
-	explosion_resistance = 0
 	if (animation_delay_predensity_opening)
 		sleep(animation_delay - animation_delay_predensity_opening)
 	update_icon()
@@ -361,12 +360,9 @@ var/list/all_doors = list()
 		// above most items if closed
 		plane = closed_plane
 		layer = closed_layer
-		explosion_resistance = initial(explosion_resistance)
 	else
 		plane = open_plane
 		layer = open_layer
-
-		explosion_resistance = 0
 
 	if(width > 1)
 		if(dir in list(EAST, WEST))

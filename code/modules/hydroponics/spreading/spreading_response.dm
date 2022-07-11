@@ -73,7 +73,7 @@
 
 /obj/effect/plantsegment/proc/do_carnivorous_bite(var/mob/living/carbon/human/victim, var/chance)
 	// http://i.imgur.com/Xt6rM4P.png
-	if(!seed || !seed.carnivorous || !prob(chance))
+	if(!seed || !seed.voracious || !prob(chance))
 		return
 	if(victim.vine_protected())
 		return
