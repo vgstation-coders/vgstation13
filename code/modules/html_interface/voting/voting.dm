@@ -324,7 +324,7 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0)
 	var/mob/user = usr
-	if(!world.has_round_started())
+	if(!world.has_round_started() && !user.client.holder)
 		return
 	if(currently_voting)
 		message_admins("<span class='info'>[initiator_key] attempted to begin a vote, however a vote is already in progress.</span>")
