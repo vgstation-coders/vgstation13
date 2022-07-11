@@ -124,7 +124,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 // 	Make a subsystem, give it the SS_NO_FIRE flag, and do your work in it's Initialize()
 /datum/controller/master/proc/Setup()
 	set waitfor = FALSE
-	stoplag()
+	sleep(1 SECONDS)
 	//moving this random bullshit into here, because it didn't belong in world/New()
 	//SetupHooks() // /N3X15 project from 8 years ago (WIP)
 	createDatacore()
@@ -153,9 +153,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 
 	// Sort subsystems by display setting for easy access.
 	sortTim(subsystems, /proc/cmp_subsystem_display)
-	// Set world options.
-	world.tick_lag = config.Ticklag
-	stoplag()
+
 	// Loop.
 	Master.StartProcessing()
 
