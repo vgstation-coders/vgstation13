@@ -2582,10 +2582,11 @@
 	T.add_nutrientlevel(1)
 	if(prob(3))
 		T.add_weedlevel(10)
-	if(T.seed && !T.dead && prob(3))
+	if(T.seed && !T.dead)
 		if(prob(3))
 			T.add_pestlevel(10)
-		if(!T.seed.immutable && prob(35))
+		var/chance = unmix(T.seed.potency, 15, 150)*35
+		if(!T.seed.immutable && prob(chance))
 			T.check_for_divergence(1)
 			T.seed.potency++
 
