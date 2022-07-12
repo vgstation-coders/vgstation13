@@ -18,7 +18,7 @@
 	spawn()
 		while(loc)
 			if(timestopped)
-				sleep(world.tick_lag)
+				stoplag()
 				continue
 			step_towards(src,target)
 			sleep(MISSILE_SPEED)

@@ -143,7 +143,7 @@
 	L.xo = U.x - T.x
 	L.process()
 	while(!src.lastbumped)
-		sleep(world.tick_lag)
+		stoplag()
 	target = lastbumped
 	if(!istype(target)) //hit something
 //		to_chat(world, "we hit a [formatJumpTo(target)] (<a href='?_src_=vars;Vars=\ref[target]'>VV</a>) instead of a mob")

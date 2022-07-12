@@ -63,7 +63,7 @@
 	mloop = 1
 	src.Move(mob.loc,true_dir)
 	while(src.true_dir)
-		sleep(world.tick_lag)
+		stoplag()
 		if(src.true_dir)
 			src.Move(mob.loc,true_dir)
 	mloop = 0
