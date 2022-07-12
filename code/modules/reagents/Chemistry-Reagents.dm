@@ -1161,7 +1161,7 @@
 /datum/reagent/srejuvenate
 	name = "Soporific Rejuvenant"
 	id = STOXIN2
-	description = "Put people to sleep, and heals them."
+	description = "Puts people to sleep, and heals them."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
