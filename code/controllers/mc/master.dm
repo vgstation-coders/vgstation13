@@ -240,7 +240,6 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 			sleep(10)
 			continue
 
-		//Anti-tick-contention heuristics:
 		//if there are mutiple sleeping procs running before us hogging the cpu, we have to run later.
 		//	(because sleeps are processed in the order received, longer sleeps are more likely to run first)
 		if (starting_tick_usage > TICK_LIMIT_MC) //if there isn't enough time to bother doing anything this tick, sleep a bit.
