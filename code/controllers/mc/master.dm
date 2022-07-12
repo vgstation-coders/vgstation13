@@ -242,7 +242,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 
 		//if there are mutiple sleeping procs running before us hogging the cpu, we have to run later.
 		//	(because sleeps are processed in the order received, longer sleeps are more likely to run first)
-		if (starting_tick_usage > TICK_LIMIT_MC) //if there isn't enough time to bother doing anything this tick, sleep a bit.
+		if (starting_tick_usage > TICK_LIMIT_MC)
 			sleep_delta *= 2
 			CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING * 0.5
 			sleep(world.tick_lag * (processing * sleep_delta))
@@ -298,7 +298,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		src.sleep_delta = MC_AVERAGE_FAST(src.sleep_delta, sleep_delta)
 		CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		if (processing * sleep_delta <= world.tick_lag)
-			CURRENT_TICKLIMIT -= (TICK_LIMIT_RUNNING * 0.25) //reserve the tail 1/4 of the next tick for the mc if we plan on running next tick
+			CURRENT_TICKLIMIT -= (TICK_LIMIT_RUNNING * 0.25)
 		sleep(world.tick_lag * (processing * sleep_delta))
 
 // This is what decides if something should run.
