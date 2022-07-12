@@ -40,7 +40,7 @@
 
 		to_chat(M, "<span class='notice'>You swallow some of the contents of \the [src].</span>")
 		if(reagents.total_volume) //Deal with the reagents in the food
-			reagents.reaction(M, INGEST)
+			reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,amount_per_transfer_from_this)/(reagents.reagent_list.len))
 			spawn(5)
 				reagents.trans_to(M, amount_per_transfer_from_this)
 
@@ -70,7 +70,7 @@
 			M.assaulted_by(user)
 
 		if(reagents.total_volume) //Deal with the reagents in the food
-			reagents.reaction(M, INGEST)
+			reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,amount_per_transfer_from_this)/(reagents.reagent_list.len))
 			spawn(5)
 				reagents.trans_to(M, amount_per_transfer_from_this)
 

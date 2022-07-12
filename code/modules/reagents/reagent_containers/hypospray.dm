@@ -54,7 +54,7 @@
 		to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
 		playsound(src, 'sound/items/hypospray.ogg', 50, 1)
 
-		src.reagents.reaction(M, INGEST)
+		src.reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,amount_per_transfer_from_this)/(reagents.reagent_list.len))
 		if(M.reagents)
 
 			var/list/injected = list()

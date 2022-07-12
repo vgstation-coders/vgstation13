@@ -217,7 +217,7 @@
 
 	to_chat(M, "<span class='warning'>The blade's coating seeps into your wound!</span>")
 
-	B.reagents.reaction(M, INGEST)
+	B.reagents.reaction(M, INGEST, amount_override = min(B.reagents.total_volume,inject_amount)/(B.reagents.reagent_list.len))
 
 	if(M.reagents)
 		var/list/injected = list()

@@ -174,7 +174,7 @@
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				if(prob(25)) //So it's not an instarape in case of acid
-					reagents.reaction(M, INGEST)
+					reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,1)/(reagents.reagent_list.len))
 				reagents.trans_to(M, 1)
 		else //Else just remove some of the reagents
 			reagents.remove_any(REAGENTS_METABOLISM)
