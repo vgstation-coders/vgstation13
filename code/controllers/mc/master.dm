@@ -236,7 +236,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		tickdrift = max(0, MC_AVERAGE_FAST(tickdrift, (((world.timeofday - init_timeofday) - (world.time - init_time)) / world.tick_lag)))
 		var/starting_tick_usage = world.tick_usage
 		if (processing <= 0)
-			current_ticklimit = TICK_LIMIT_RUNNING
+			CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 			sleep(10)
 			continue
 
@@ -245,7 +245,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		//	(because sleeps are processed in the order received, longer sleeps are more likely to run first)
 		if (starting_tick_usage > TICK_LIMIT_MC) //if there isn't enough time to bother doing anything this tick, sleep a bit.
 			sleep_delta *= 2
-			current_ticklimit = TICK_LIMIT_RUNNING * 0.5
+			CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING * 0.5
 			sleep(world.tick_lag * (processing * sleep_delta))
 			continue
 
@@ -299,7 +299,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		src.sleep_delta = MC_AVERAGE_FAST(src.sleep_delta, sleep_delta)
 		CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		if (processing * sleep_delta <= world.tick_lag)
-			current_ticklimit -= (TICK_LIMIT_RUNNING * 0.25) //reserve the tail 1/4 of the next tick for the mc if we plan on running next tick
+			CURRENT_TICKLIMIT -= (TICK_LIMIT_RUNNING * 0.25) //reserve the tail 1/4 of the next tick for the mc if we plan on running next tick
 		sleep(world.tick_lag * (processing * sleep_delta))
 
 // This is what decides if something should run.
