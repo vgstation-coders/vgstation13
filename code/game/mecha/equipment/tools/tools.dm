@@ -1250,7 +1250,7 @@
 		EG.log_message("Deactivated - no fuel.")
 		EG.set_ready_state(1)
 		return 0
-	if(anyprob(EG.reliability))
+	if(prob(EG.reliability))
 		EG.critfail()
 		stop()
 		return 0
