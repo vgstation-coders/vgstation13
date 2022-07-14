@@ -234,7 +234,6 @@
 						return
 					var/hardcap = 16
 					seed.yield += round(min(hardcap - hardcap/2*round(log(10,seed.yield/hardcap*100),0.01),0.15*hardcap),0.1)
-
 		if(GENE_XENOPHYSIOLOGY)
 			var/mutation_type = pick(PLANT_TELEPORT, PLANT_GAS, PLANT_ROOMTEMP, PLANT_NOREACT)
 			switch(mutation_type)
