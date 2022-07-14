@@ -1623,7 +1623,8 @@
 /datum/reagent/sugar/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_nutrientlevel(1)
-	T.add_pestlevel(1)
+	T.add_pestlevel(20)
+	T.add_weedlevel(20)
 
 /datum/reagent/sugar/cornsyrup
 	name = "High-Fructose Corn Syrup"
