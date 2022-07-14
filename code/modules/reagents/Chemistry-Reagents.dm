@@ -1341,9 +1341,13 @@
 
 /datum/reagent/holysalts/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_waterlevel(-4)
-	T.add_nutrientlevel(-5)
-	T.add_toxinlevel(2)
+	T.add_waterlevel(-5)
+	T.add_nutrientlevel(5)
+	T.add_toxinlevel(8)
+	T.add_weedlevel(-20)
+	T.add_pestlevel(-10)
+	if(T.seed && !T.dead)
+		T.add_planthealth(20)
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -5041,7 +5045,7 @@ var/procizine_tolerance = 0
 	T.add_weedlevel(-20)
 	T.add_pestlevel(-10)
 	if(T.seed && !T.dead)
-		T.add_health(-2)
+		T.add_planthealth(-2)
 
 /datum/reagent/creatine
 	name = "Creatine"
