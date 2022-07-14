@@ -1347,7 +1347,7 @@
 	T.add_weedlevel(-20)
 	T.add_pestlevel(-10)
 	if(T.seed && !T.dead)
-		T.add_planthealth(20)
+		T.add_planthealth(-2)
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
