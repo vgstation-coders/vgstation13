@@ -4406,11 +4406,11 @@ var/procizine_tolerance = 0
 			T.affect_growth(1)
 		if(!T.seed.immutable)
 			var/chance
-			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
+			chance = unmix(T.seed.lifespan, 15, 125)*20
 			if(prob(chance))
 				T.check_for_divergence(1)
 				T.seed.lifespan++
-			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
+			chance = unmix(T.seed.lifespan, 15, 125)*20
 			if(prob(chance))
 				T.check_for_divergence(1)
 				T.seed.endurance++
