@@ -17,6 +17,7 @@
 			else if(bloody)
 				return
 			nutrientlevel = round(min(nutrientlevel + amount, NUTRIENTLEVEL_MAX))
+	update_icon_after_process = 1
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_nutrientlevel()
 	return nutrientlevel
@@ -31,6 +32,7 @@
 		if(waterlevel < 1)
 			add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
 			affect_growth(-1)
+	update_icon_after_process = 1
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_waterlevel()
 	return waterlevel
@@ -82,5 +84,6 @@
 		plant_health = round(max(0, plant_health + amount))
 		if(get_planthealth() < 1)
 			die()
+			
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_planthealth()
 	return plant_health
