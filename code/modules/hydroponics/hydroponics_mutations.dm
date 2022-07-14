@@ -158,7 +158,7 @@
 					else
 						//Lower better
 						var/hardcap = 0.01
-						var/max_change = 0.15 //percent
+						var/max_change = 0.18 //percent
 						seed.nutrient_consumption -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.nutrient_consumption*100),0.01),max_change*seed.nutrient_consumption),0.1)
 					generic_mutation_message("rustles!")
 				if(PLANT_FLUID_CONSUMPTION)
@@ -167,7 +167,7 @@
 					else
 						//Lower better
 						var/hardcap = 0.01
-						var/max_change = 0.15 //percent
+						var/max_change = 0.18 //percent
 						seed.fluid_consumption -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.fluid_consumption*100),0.01),max_change*seed.fluid_consumption),0.1)
 					generic_mutation_message("rustles!")
 				if(PLANT_VORACIOUS)
