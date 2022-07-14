@@ -5037,6 +5037,11 @@ var/procizine_tolerance = 0
 	..()
 	T.add_waterlevel(-5)
 	T.add_nutrientlevel(5)
+	T.add_toxinlevel(8)
+	T.add_weedlevel(-20)
+	T.add_pestlevel(-10)
+	if(T.seed && !T.dead)
+		T.add_health(-2)
 
 /datum/reagent/creatine
 	name = "Creatine"
