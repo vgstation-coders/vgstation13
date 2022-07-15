@@ -68,6 +68,6 @@ it creates. All the menus and other manipulation commands are in the R&D console
 	return
 
 /obj/machinery/r_n_d/fabricator/protolathe/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	..()
-	if (O.is_open_container())
+	if (..() || O.is_open_container())
 		return 1
+	return 0
