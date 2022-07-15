@@ -4019,7 +4019,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 	..()
 	if(hasmouse && prob(chanceofejectingmouse))
 		spawn(vend_delay)
-			dispensemouse(vend_delay)
+			dispensemouse()
 
 /obj/machinery/vending/meat/spillContents(var/destroy_chance = 0)
 	..()
