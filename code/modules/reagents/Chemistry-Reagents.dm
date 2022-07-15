@@ -1520,6 +1520,7 @@
 /datum/reagent/chlorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_toxinlevel(8)
+	T.add_weedlevel(-2)
 
 /datum/reagent/fluorine
 	name = "Fluorine"
@@ -1593,6 +1594,7 @@
 /datum/reagent/phosphorus/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_nutrientlevel(1)
+	T.add_weedlevel(3)
 
 /datum/reagent/lithium
 	name = "Lithium"
