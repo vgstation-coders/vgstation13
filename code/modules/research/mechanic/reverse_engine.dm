@@ -135,6 +135,10 @@
 		techdifference = 0
 	return techdifference
 
+/obj/machinery/r_n_d/fabricator/kick_act(mob/living/H)
+	..()
+	researchQueue()
+
 /obj/machinery/r_n_d/reverse_engine/proc/researchQueue()
 	if(!research_queue.len)
 		return
