@@ -11,7 +11,7 @@
 			add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
 			affect_growth(-1)
 	else
-		if(seed.hematophage != bloody)
+		if(seed && seed.hematophage != bloody)
 			return
 		else if(bloody)
 			return
