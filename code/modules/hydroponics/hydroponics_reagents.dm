@@ -5,18 +5,17 @@
 	reagents.update_total()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/add_nutrientlevel(var/amount, var/bloody = FALSE)
-	if(seed)
-		if(amount < 0)
-			nutrientlevel = round(max(0, nutrientlevel + amount))
-			if(nutrientlevel < 1)
-				add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
-				affect_growth(-1)
-		else
-			if(seed.hematophage != bloody)
-				return
-			else if(bloody)
-				return
-			nutrientlevel = round(min(nutrientlevel + amount, NUTRIENTLEVEL_MAX))
+	if(amount < 0)
+		nutrientlevel = round(max(0, nutrientlevel + amount))
+		if(nutrientlevel < 1)
+			add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
+			affect_growth(-1)
+	else
+		if(seed.hematophage != bloody)
+			return
+		else if(bloody)
+			return
+		nutrientlevel = round(min(nutrientlevel + amount, NUTRIENTLEVEL_MAX))
 	update_icon_after_process = 1
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_nutrientlevel()
