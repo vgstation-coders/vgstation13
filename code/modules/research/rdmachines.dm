@@ -297,7 +297,7 @@ var/global/list/rnd_machines = list()
 	if(O.materials && (research_flags & FAB_RECYCLER))
 		if(O.materials.getVolume() + src.materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [O].")
-			return 0
+			return 1
 
 
 		if(allowed_materials && allowed_materials.len)
@@ -311,27 +311,27 @@ var/global/list/rnd_machines = list()
 				for(var/mat_id in allowed_materials)
 					output += (material_list[mat_id].processed_name + " ")
 				to_chat(user, output)
-				return 0
+				return 1
 
 		if(isrobot(user))
 			if(isMoMMI(user))
 				var/mob/living/silicon/robot/mommi/M = user
 				if(M.is_in_modules(O))
 					to_chat(user, "You cannot recycle your built in tools.")
-					return 0
+					return 1
 			else
 				to_chat(user, "You cannot recycle your built in tools.")
-				return 0
+				return 1
 		if(!O.recyclable(src))
 			to_chat(user, "<span class = 'notice'>You can not recycle \the [O] at this time.</span>")
-			return 0
+			return 1
 
 		if(user.drop_item(O, src))
 			materials.removeFrom(O.materials)
 			user.visible_message("[user] puts \the [O] into \the [src]'s recycling unit.",
 								"You put \the [O] in \the [src]'s recycling unit.")
 			qdel(O)
-			return 1
+			return 0
 	src.updateUsrDialog()
 	return 0
 
