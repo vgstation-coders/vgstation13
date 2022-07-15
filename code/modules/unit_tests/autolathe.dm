@@ -11,4 +11,5 @@
     var/obj/item/weapon/pickaxe/diamond/test_object = new(centre)
     assert_eq(autolathe.attackby(test_object, test_subject), 1)
     assert_eq(protolathe.attackby(test_object, test_subject), 0)
+	test_object = new(centre)
     assert_eq(ammolathe.attackby(test_object, test_subject), 0)
