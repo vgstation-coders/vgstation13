@@ -136,15 +136,15 @@ var/global/list/obj/machinery/light/alllights = list()
 	else
 		update(0)
 	alllights += src
-
-	if(map.broken_lights)
-		switch(fitting)
-			if("tube")
-				if(prob(2))
-					broken(1)
-			if("bulb")
-				if(prob(5))
-					broken(1)
+	spawn()
+		if(map.broken_lights)
+			switch(fitting)
+				if("tube")
+					if(prob(2))
+						broken(1)
+				if("bulb")
+					if(prob(5))
+						broken(1)
 
 /obj/machinery/light/supports_holomap()
 	return TRUE
