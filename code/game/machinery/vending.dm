@@ -4018,9 +4018,10 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 /obj/machinery/vending/meat/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	..()
 	if(hasmouse && prob(chanceofejectingmouse))
-		dispensemouse(vend_delay)
+		spawn(vend_delay)
+			dispensemouse()
 
-/obj/machinery/vending/meat/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
+/obj/machinery/vending/meat/spillContents(var/destroy_chance = 0)
 	..()
 	if(hasmouse)
 		dispensemouse()
@@ -4037,12 +4038,11 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 			else
 				to_chat(user, "<SPAN CLASS='notice'>You can only hear the hum of the motor.</SPAN>")
 
-/obj/machinery/vending/meat/proc/dispensemouse(var/delay = 0)
+/obj/machinery/vending/meat/proc/dispensemouse()
 	hasmouse = FALSE
-	spawn(delay)
-		visible_message("\The [src.name] makes an unusual sound as some sort of [initial(hiddenmouse.name)] pops out of the slot!", "You hear a squeak.")
-		if(hiddenmousesound)
-			playsound(loc, hiddenmousesound, 50, 1)
-		new hiddenmouse(get_turf(src))
+	visible_message("\The [src.name] makes an unusual sound as some sort of [initial(hiddenmouse.name)] pops out of the slot!", "You hear a squeak.")
+	if(hiddenmousesound)
+		playsound(loc, hiddenmousesound, 50, 1)
+	new hiddenmouse(get_turf(src))
 
 
