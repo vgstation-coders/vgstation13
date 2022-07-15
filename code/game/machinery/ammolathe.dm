@@ -13,6 +13,7 @@
 	//build_time = 0.5
 	light_color = LIGHT_COLOR_RED
 
+	allowed_materials = list()
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT //| EMAGGABLE
 	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER | LOCKBOXES | FAB_RECYCLER
 
