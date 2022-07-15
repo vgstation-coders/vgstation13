@@ -19,6 +19,7 @@ var/list/processing_objects = list()
 
 
 /datum/subsystem/obj/Initialize()
+	set background = 1
 	for(var/atom/object in world)
 		if(!(object.flags & ATOM_INITIALIZED))
 			var/time_start = world.timeofday
