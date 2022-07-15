@@ -653,11 +653,13 @@ var/datum/controller/gameticker/ticker
 	CHECK_TICK
 	//Toggle lights without lightswitches
 	//with better area organization, a lot of this headache can be limited
-	for(var/area/A in areas - discrete_areas)
+	for(var/area/A in areas)
+		var/obj/machinery/power/apc/place_apc = A.areaapc
+		if(place_apc)
+			place_apc.update()
 		if(!A.requires_power || !A.haslightswitch)
 			for(var/obj/machinery/light/L in A)
 				L.seton(1)
-	CHECK_TICK
 
 // -- Tag mode!
 

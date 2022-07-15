@@ -30,11 +30,7 @@ var/list/processing_objects = list()
 				log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time/10] seconds to initialize.")
 		else
 			bad_inits[object.type] = bad_inits[object.type]+1
-	CHECK_TICK
-	for(var/area/place in areas)
-		var/obj/machinery/power/apc/place_apc = place.areaapc
-		if(place_apc)
-			place_apc.update()
+
 	..()
 
 
