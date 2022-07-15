@@ -173,7 +173,7 @@ var/global/list/rnd_machines = list()
 				found = matID
 		if(!user.Adjacent(src) || !stack || !stack.loc || (stack.loc != user && !isgripper(stack.loc)))
 			return 1
-		var/amount = 0 
+		var/amount = 0
 		amount = min(stack.amount, round((max_material_storage-TotalMaterials())/stack.perunit))
 
 		if (!(amount > 0))
@@ -294,6 +294,44 @@ var/global/list/rnd_machines = list()
 		spawn(ANIM_LENGTH)
 			busy = FALSE
 		return 1
+	if(O.materials && (research_flags & FAB_RECYCLER))
+		if(O.materials.getVolume() + src.materials.getVolume() > max_material_storage)
+			to_chat(user, "\The [src]'s material bin is too full to recycle \the [O].")
+			return 0
+
+
+		if(allowed_materials && allowed_materials.len)
+
+			var/allowed_materials_volume = 0
+			for(var/mat_id in allowed_materials)
+				allowed_materials_volume += O.materials.storage[mat_id]
+
+			if (allowed_materials_volume != O.materials.getVolume())
+				var/output = "\The [src] can only accept objects made out of these: "
+				for(var/mat_id in allowed_materials)
+					output += (material_list[mat_id].processed_name + " ")
+				to_chat(user, output)
+				return 0
+
+		if(isrobot(user))
+			if(isMoMMI(user))
+				var/mob/living/silicon/robot/mommi/M = user
+				if(M.is_in_modules(O))
+					to_chat(user, "You cannot recycle your built in tools.")
+					return 0
+			else
+				to_chat(user, "You cannot recycle your built in tools.")
+				return 0
+		if(!O.recyclable(src))
+			to_chat(user, "<span class = 'notice'>You can not recycle \the [O] at this time.</span>")
+			return 0
+
+		if(user.drop_item(O, src))
+			materials.removeFrom(O.materials)
+			user.visible_message("[user] puts \the [O] into \the [src]'s recycling unit.",
+								"You put \the [O] in \the [src]'s recycling unit.")
+			qdel(O)
+			return 1
 	src.updateUsrDialog()
 	return 0
 

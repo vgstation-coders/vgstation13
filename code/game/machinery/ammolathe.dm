@@ -11,7 +11,6 @@
 
 	default_mat_overlays = TRUE
 	//build_time = 0.5
-	allowed_materials = 0 //A 0 or FALSE Allows all materials.
 	light_color = LIGHT_COLOR_RED
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT //| EMAGGABLE
