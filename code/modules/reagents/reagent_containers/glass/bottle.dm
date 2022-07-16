@@ -635,9 +635,9 @@ var/datum/disease2/disease/wizarditis = null
 	reagents.add_reagent(ROBUSTHARVEST, 30)
 
 /obj/item/weapon/reagent_containers/glass/bottle/insecticide
-	name = "insecticide bottle"
+	name = "Insecticide Bottle"
 	icon = 'icons/obj/chemical.dmi'
-	desc = "A bottle of highly toxic insecticide. There's a small, almost unreadable label warning against consumption."
+	desc = "A bottle of highly toxic Insecticide. There's a small, almost unreadable label warning against consumption."
 
 /obj/item/weapon/reagent_containers/glass/bottle/insecticide/New()
 	..()
