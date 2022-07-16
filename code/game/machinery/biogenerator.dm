@@ -33,6 +33,13 @@
 	amount_per_unit=10
 	other_amounts=list(5)
 
+/datum/biogen_recipe/food/cheese
+	id="cheese"
+	name="Cheese Wheel"
+	cost=100 //Making milk and catalyzing it into cheese costs 80, so this is 25% more expensive
+	other_amounts=list(5)
+	result=/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
+
 /datum/biogen_recipe/food/meat
 	id="meat"
 	name="Slab of meat"
