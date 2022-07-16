@@ -36,7 +36,7 @@
 /datum/biogen_recipe/food/cheese
 	id="cheese"
 	name="Cheese Wheel"
-	cost=100 //Making milk and reacting it with enzyme to make costs 80, so this is 25% more expensive
+	cost=100 //Making milk and reacting it with enzyme costs 80, so this is 25% more expensive
 	other_amounts=list(5)
 	result=/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
 
