@@ -4411,16 +4411,8 @@ var/procizine_tolerance = 0
 	if(T.seed && !T.dead)
 		if(prob(20))
 			T.affect_growth(1)
-		if(!T.seed.immutable)
-			var/chance
-			chance = unmix(T.seed.lifespan, 15, 125)*20
-			if(prob(chance))
-				T.check_for_divergence(1)
-				T.seed.lifespan++
-			chance = unmix(T.seed.lifespan, 15, 125)*20
-			if(prob(chance))
-				T.check_for_divergence(1)
-				T.seed.endurance++
+		if(prob(25))
+			T.mutate(GENE_ECOPHYSIOLOGY)
 
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
