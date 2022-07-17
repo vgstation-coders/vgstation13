@@ -1,4 +1,3 @@
-// So you can be all 10 SECONDS
 #define SECONDS * 10
 #define MINUTES * 600
 #define HOURS   * 36000
@@ -6,7 +5,10 @@
 #define TimeOfGame (get_game_time())
 #define TimeOfTick (world.tick_usage*0.01*world.tick_lag)
 
-//#define REALTIMEOFDAY (world.timeofday + (MIDNIGHT_ROLLOVER * MIDNIGHT_ROLLOVER_CHECK))
+#define DS2TICKS(DS) ((DS)/world.tick_lag)
+#define TICKS2DS(T) ((T) TICKS)
+#define MS2DS(T) ((T) MILLISECONDS)
+#define DS2MS(T) ((T) * 100)
 
 /proc/get_game_time()
 	var/global/time_offset = 0
@@ -26,7 +28,10 @@
 
 //Returns the world time in english
 /proc/worldtime2text(timestamp = world.time, give_seconds = FALSE)
-	return "[(round(timestamp / 36000) + 12) % 24]:[(timestamp / 600 % 60) < 10 ? add_zero(timestamp / 600 % 60, 1) : timestamp / 600 % 60]\
+	if(timestamp == world.time)
+		timestamp -= Master.time_taken_to_init
+	return "[(round(((timestamp / 600) + 55) / 60) + 11) % 24]:\
+	[(((timestamp / 600) + 55) % 60) < 10 ? add_zero(((timestamp / 600) + 55) % 60, 1) : ((timestamp / 600) + 55) % 60]\
 	[give_seconds ? ":[(timestamp / 10 % 60) < 10 ? add_zero(timestamp / 10 % 60, 1) : timestamp / 10 % 60]" : ""]"
 
 

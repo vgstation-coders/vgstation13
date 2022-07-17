@@ -6,12 +6,19 @@
 	var/area/territory = null
 
 /datum/component/ai/area_territorial/proc/SetArea(var/area/new_area)
-	if(territory)
-		territory.unregister_event(/event/area_entered, src, .proc/area_enter)
-		territory.unregister_event(/event/area_exited, src, .proc/area_exit)
+	unset_area()
 	territory = new_area
 	territory.register_event(/event/area_entered, src, .proc/area_enter)
 	territory.register_event(/event/area_exited, src, .proc/area_exit)
+
+/datum/component/ai/area_territorial/proc/unset_area()
+	if(territory)
+		territory.unregister_event(/event/area_entered, src, .proc/area_enter)
+		territory.unregister_event(/event/area_exited, src, .proc/area_exit)
+
+/datum/component/ai/area_territorial/Destroy()
+	unset_area()
+	..()
 
 /datum/component/ai/area_territorial/proc/area_enter(atom/movable/enterer)
 	if(isliving(enterer)) // No ghosts

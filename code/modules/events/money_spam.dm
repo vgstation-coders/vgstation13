@@ -27,12 +27,7 @@
 		if(prob(2))
 			// /obj/machinery/message_server/proc/send_pda_message(var/recipient = "",var/sender = "",var/message = "")
 			var/obj/item/device/pda/P
-			var/list/viables = list()
-			for(var/obj/item/device/pda/check_pda in sortNames(PDAs))
-				if(!check_pda.owner||check_pda.toff||check_pda == src||check_pda.hidden)
-					continue
-				viables.Add(check_pda)
-
+			var/list/viables = get_viewable_pdas()
 			if(!viables.len)
 				return
 			P = pick(viables)
@@ -109,15 +104,17 @@
 					if(ai.aiPDA != P && ai.aiPDA != src)
 						ai.show_message("<i>Intercepted message from <b>[sender]</b></i> (Unknown) <i>to <b>[P:owner]</b>: [message]</i>")
 
-			P.tnote["msg_id"] = "<i><b>&larr; From [sender] (Unknown):</b></i><br>[message]<br>"
-			msg_id++
+			var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in P.applications
+			if(message_app) //If no messenger app these get ignored, lucky
+				message_app.tnote["msg_id"] = "<i><b>&larr; From [sender] (Unknown):</b></i><br>[message]<br>"
+				msg_id++
 
 			if(!filter_app || (filter_app.function == 0)) //Checking if the PDA has the spam filtering app installed
-				if(!P.silent)
+				if(message_app && !message_app.silent)
 					playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
 				for(var/mob/O in hearers(3, P.loc))
-					if(!P.silent)
-						O.show_message(text("[bicon(P)] *[P.ttone]*"))
+					if(message_app && !message_app.silent)
+						O.show_message(text("[bicon(P)] *[message_app.ttone]*"))
 			//Search for holder of the PDA.
 			var/mob/living/L = null
 			if(P.loc && isliving(P.loc))

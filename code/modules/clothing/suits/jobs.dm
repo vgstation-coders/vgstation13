@@ -84,7 +84,7 @@
 	permeability_coefficient = 0.50
 	body_parts_covered = FULL_TORSO|ARMS
 	allowed = list (/obj/item/weapon/kitchen/utensil/knife/large,/obj/item/weapon/kitchen/utensil/knife/large/butch)
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 
 //Chef
@@ -95,7 +95,7 @@
 	item_state = "apronchef"
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 
 //Detective
 /obj/item/clothing/suit/storage/det_suit

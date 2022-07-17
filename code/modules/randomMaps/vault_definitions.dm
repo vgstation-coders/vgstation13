@@ -66,6 +66,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/hivebot_factory
 	file_path = "maps/randomvaults/hivebot_factory.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/pretty_rad_clubhouse
 	file_path = "maps/randomvaults/pretty_rad_clubhouse.dmm"
@@ -73,6 +74,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/clown_base
 	file_path = "maps/randomvaults/clown_base.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/rust
 	file_path = "maps/randomvaults/rust.dmm"
@@ -141,10 +143,6 @@ var/list/existing_vaults = list()
 	file_path = "maps/randomvaults/hivebot_crash.dmm"
 	can_rotate = TRUE
 
-/datum/map_element/vault/brokeufo
-	file_path = "maps/randomvaults/brokeufo.dmm"
-	can_rotate = TRUE
-
 /datum/map_element/vault/prison
 	file_path = "maps/randomvaults/prison_ship.dmm"
 
@@ -186,6 +184,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/zoo_truck
 	file_path = "maps/randomvaults/zoo_truck.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/syndiecargo
 	file_path = "maps/randomvaults/syndiecargo.dmm"
@@ -235,3 +234,9 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/mini_station
 	file_path = "maps/randomvaults/mini_station.dmm"
+
+/datum/map_element/dungeon/habitation
+	file_path = "maps/randomvaults/dungeons/habitation.dmm"
+
+/datum/map_element/dungeon/research
+	file_path = "maps/randomvaults/dungeons/research.dmm"

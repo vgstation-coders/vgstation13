@@ -24,14 +24,14 @@
 	layer = MOB_LAYER
 	plane = MOB_PLANE
 	luminosity = 3
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	pAImovement_delay = 1
 	var/icon_initial //To get around all that pesky hardcoding of icon states, don't put modifiers on this one
 	var/obj/item/weapon/card/id/botcard			// the ID card that the bot "holds"
 	var/mob/living/simple_animal/hostile/pulse_demon/PD_occupant // for when they take over them
 	var/on = 1
-	var/health = 0 //do not forget to set health for your bot!
-	var/maxhealth = 0
+	health = 0 //do not forget to set health for your bot!
+	maxHealth = 0
 	var/fire_dam_coeff = 1.0
 	var/brute_dam_coeff = 1.0
 	var/open = 0//Maint panel
@@ -75,6 +75,12 @@
 	var/summoned = FALSE // Were they summoned?
 
 	var/commanding_radio = /obj/item/radio/integrated/signal/bot
+
+	// Queue of directions. Just like shift-clicking on age of empires 2. It'll go to the next direction after it's finished with this one
+	// It's a list of lists. These lists are coordinates
+	// Mulebots contain an extra fourth parameter used to load/unload at that position.
+	var/list/destinations_queue = list()
+	var/MAX_QUEUE_LENGTH = 15 // Maximum length of our queue
 
 // Adding the bots to global lists; initialize if not.
 /obj/machinery/bot/New()
@@ -497,6 +503,39 @@
 			else
 				turn_on()
 			return 1
+		if ("go_to")
+			handle_goto_command(signal)
+			return TRUE
+
+/datum/bot/order
+	var/turf/destination
+
+/datum/bot/order/New(var/turf/place_to_go)
+	destination = place_to_go
+
+/datum/bot/order/mule
+	var/atom/thing_to_load
+	var/unload_here = FALSE
+
+/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing, _unload_here = FALSE)
+	destination = place_to_go
+	thing_to_load = thing
+	unload_here = _unload_here
+
+/datum/bot/order/mule/unload
+
+/obj/machinery/bot/proc/handle_goto_command(var/datum/signal/signal)
+	var/turf/location = locate(text2num(signal.data["x"]), text2num(signal.data["y"]), text2num(signal.data["z"]))
+	if(!location)
+		return FALSE
+	var/datum/bot/order/order = new /datum/bot/order(location)
+	queue_destination(order)
+
+/obj/machinery/bot/proc/queue_destination(coordinates)
+	if(destinations_queue.len > MAX_QUEUE_LENGTH)
+		return FALSE
+	destinations_queue += coordinates
+	return TRUE
 
 /obj/machinery/bot/proc/return_status()
 	return "Idle"
@@ -574,7 +613,7 @@
 	if (src.health <= 0)
 		src.explode()
 
-/obj/machinery/bot/proc/Emag(mob/user)
+/obj/machinery/bot/emag_act(mob/user)
 	if(locked)
 		locked = 0
 		emagged = 1
@@ -585,6 +624,11 @@
 		if(user)
 			to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
 
+/obj/machinery/bot/emag_ai(mob/living/silicon/ai/A)
+	locked = 0
+	open = 1
+	emag_act(A)
+
 /obj/machinery/bot/npc_tamper_act(mob/living/L)
 	if(on)
 		turn_off()
@@ -593,8 +637,8 @@
 
 /obj/machinery/bot/examine(mob/user)
 	..()
-	if (src.health < maxhealth)
-		if (src.health > maxhealth/3)
+	if (src.health < maxHealth)
+		if (src.health > maxHealth/3)
 			to_chat(user, "<span class='warning'>[src]'s parts look loose.</span>")
 		else
 			to_chat(user, "<span class='danger'>[src]'s parts look very loose!</span>")
@@ -654,18 +698,18 @@
 			to_chat(user, "<span class='notice'>Maintenance panel is now [open ? "opened" : "closed"].</span>")
 			updateUsrDialog()
 	else if(iswelder(W) && user.a_intent != I_HURT)
-		if(health < maxhealth)
+		if(health < maxHealth)
 			if(open)
 				var/obj/item/tool/weldingtool/WT = W
 				if(WT.remove_fuel(0))
-					health = min(maxhealth, health+10)
+					health = min(maxHealth, health+10)
 					user.visible_message("<span class='danger'>[user] repairs [src]!</span>","<span class='notice'>You repair [src]!</span>")
 			else
 				to_chat(user, "<span class='notice'>Unable to repair with the maintenance panel closed.</span>")
 		else
 			to_chat(user, "<span class='notice'>[src] does not need a repair.</span>")
 	else if (istype(W, /obj/item/weapon/card/emag) && emagged < 2)
-		Emag(user)
+		emag_act(user)
 	else
 		if(isobj(W))
 			W.on_attack(src, user)
@@ -747,10 +791,6 @@
 		if (was_on)
 			turn_on()
 
-
-/obj/machinery/bot/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	src.attack_hand(user)
 
 
 /obj/machinery/bot/cultify()

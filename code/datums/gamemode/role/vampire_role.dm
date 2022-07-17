@@ -1,7 +1,3 @@
-/*
- -- Vampires --
- */
-
 #define MAX_BLOOD_PER_TARGET 200
 
 /datum/role/vampire
@@ -17,14 +13,12 @@
 	default_admin_voice = "Vampire Overlord"
 	admin_voice_style = "danger"
 
-	var/ismenacing = FALSE
 	var/iscloaking = FALSE
-
+	var/silentbite = FALSE
+	var/deadchat_timer = 0
+	var/deadchat = TRUE
 	var/nullified = 0
 	var/smitecounter = 0
-
-	var/list/saved_appearances = list()
-	var/datum/human_appearance/initial_appearance
 
 	var/reviving = FALSE
 	var/draining = FALSE
@@ -33,7 +27,7 @@
 
 	var/list/feeders = list()
 
-	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
+	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate,  /datum/power/vampire/silentbite)
 
 	var/list/image/cached_images = list()
 
@@ -82,10 +76,6 @@
 		var/datum/faction/vampire/V = faction
 		V.name_clan(src)
 
-	var/mob/living/carbon/human/H = antag.current
-	initial_appearance = H.my_appearance.Copy()
-	initial_appearance.name = H.real_name
-
 /datum/role/vampire/RemoveFromRole(var/datum/mind/M)
 	var/list/vamp_spells = getAllVampSpells()
 	for(var/spell/spell in antag.current.spell_list)
@@ -117,8 +107,6 @@
 	check_vampire_upgrade()
 	update_vamp_hud()
 
-// -- Not sure if this is meant to work like that.
-// I just put what I expect to see in the "The vampires were..."
 /datum/role/vampire/GetScoreboard()
 	. = "Total blood collected: <b>[blood_total]</b><br/>"
 	. += ..() // Who he was, his objectives...
@@ -134,17 +122,15 @@
 
 	AppendObjective(/datum/objective/target/steal)
 
-	switch(rand(1,100))
-		if(1 to 80)
-			if (!(locate(/datum/objective/escape) in objectives.objectives)) // Objectives (the objective holder).objectives (the objective list)
-				AppendObjective(/datum/objective/escape)
-		else
-			if (!(locate(/datum/objective/survive) in objectives.objectives))
-				AppendObjective(/datum/objective/survive)
+	if(prob(80))
+		if (!(locate(/datum/objective/escape) in objectives.objectives)) // Objectives (the objective holder).objectives (the objective list)
+			AppendObjective(/datum/objective/escape)
+	else
+		if (!(locate(/datum/objective/survive) in objectives.objectives))
+			AppendObjective(/datum/objective/survive)
 	return
 
 // -- Vampire mechanics --
-
 /datum/role/vampire/proc/can_suck(var/mob/living/carbon/human/H)
 	var/mob/living/M = antag.current
 	var/datum/butchering_product/teeth/vampire_teeth = locate(/datum/butchering_product/teeth) in M.butchering_drops
@@ -154,8 +140,9 @@
 		return FALSE
 
 	if(H.check_body_part_coverage(MOUTH))
-		to_chat(M, "<span class='warning'>Remove their mask!</span>")
-		return FALSE
+		if(!locate(/datum/power/vampire/mature) in current_powers)
+			to_chat(M, "<span class='warning'>Remove their mask!</span>")
+			return FALSE
 
 	if(vampire_teeth?.amount == 0)
 		to_chat(M, "<span class='warning'>You cannot suck blood with no teeth!</span>")
@@ -163,14 +150,15 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/vamp_H = M
-		if(H.check_body_part_coverage(MOUTH))
-			if(vamp_H.species.breath_type == GAS_OXYGEN)
-				to_chat(H, "<span class='warning'>Remove your mask!</span>")
-				return FALSE
-			else
-				to_chat(H, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
-	return TRUE
 
+		if(vamp_H.is_muzzled())
+			to_chat(M, "<span class='warning'> The [vamp_H.wear_mask] prevents you from biting!</span>")
+			return FALSE
+
+		if(vamp_H.check_body_part_coverage(MOUTH))
+			to_chat(M, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
+
+	return TRUE
 
 /datum/role/vampire/proc/handle_bloodsucking(var/mob/living/carbon/human/target)
 	draining = target
@@ -192,7 +180,7 @@
 	else
 		target.LAssailant = assailant
 		target.assaulted_by(assailant)
-	while(do_mob(assailant, target, 5 SECONDS))
+	while(do_mob(assailant, target, (5 SECONDS) * (silentbite + 1)))
 		if(!isvampire(assailant))
 			to_chat(assailant, "<span class='warning'>Your fangs have disappeared!</span>")
 			draining = null
@@ -210,8 +198,9 @@
 			break
 		if (!(targetref in feeders))
 			feeders[targetref] = 0
+		var/mature = locate(/datum/power/vampire/mature) in current_powers
 		if(target.stat < DEAD) //alive
-			blood = min(20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
+			blood = min(mature ? 40 : 20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
 			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
@@ -221,7 +210,7 @@
 			var/datum/organ/external/head/head_organ = target.get_organ(LIMB_HEAD)
 			head_organ.add_autopsy_data("sharp teeth", 1)
 		else
-			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
+			blood = min(mature ? 20 : 10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
 			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
@@ -252,10 +241,11 @@
 	// Vision-related changes.
 	if (locate(/datum/power/vampire/vision) in current_powers)
 		H.change_sight(adding = SEE_MOBS)
+		H.update_perception()
 
 	if (locate(/datum/power/vampire/mature) in current_powers)
 		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
-		H.see_in_dark = 8
+		H.update_perception()
 
 /datum/role/vampire/proc/is_mature_or_has_vision()
 	return (locate(/datum/power/vampire/vision) in current_powers) || (locate(/datum/power/vampire/mature) in current_powers)
@@ -264,10 +254,8 @@
 	if (!istype(enthralled))
 		return FALSE
 	return new/datum/role/thrall(M = enthralled, fac = src.faction, master = src) // Creating a new thrall
-/*
--- Life() related procs --
-*/
 
+//-- Life() related procs --
 /datum/role/vampire/process()
 	..()
 	var/mob/living/carbon/human/H = antag?.current
@@ -276,6 +264,7 @@
 	handle_cloak(H)
 	handle_menace(H)
 	handle_smite(H)
+	handle_deadspeak(H)
 	if(istype(H.loc, /turf/space))
 		H.check_sun()
 	if(istype(H.loc, /obj/structure/closet/coffin))
@@ -300,40 +289,37 @@
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)
-	if(H.stat != DEAD)
+	if(H.stat == DEAD)
 		iscloaking = FALSE
 	if(!iscloaking)
-		H.alphas["vampire_cloak"] = 255
+		H.make_visible(VAMPIRECLOAK,TRUE)
 		H.color = "#FFFFFF"
 		return FALSE
 
 	if((T.get_lumcount() * 10) <= 2)
-		H.alphas["vampire_cloak"] = round((255 * 0.15))
-		if(locate(/datum/power/vampire/shadow) in current_powers)
-			H.color = "#000000"
+		if(locate(/datum/power/vampire/mature) in current_powers)
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.3), INVISIBILITY_LEVEL_TWO)
+		else
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.3))
 		return TRUE
 	else
-		if(locate(/datum/power/vampire/shadow) in current_powers)
-			H.alphas["vampire_cloak"] = round((255 * 0.15))
+		if(H.invisibility > 0)
+			H.make_visible(VAMPIRECLOAK)
+		if(locate(/datum/power/vampire/mature) in current_powers)
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.3))
 		else
-			H.alphas["vampire_cloak"] = round((255 * 0.80))
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.8))
 
 /datum/role/vampire/proc/handle_menace(var/mob/living/carbon/human/H)
+	if(!istruevampire(H))
+		return
 	if(H.stat == DEAD)
-		ismenacing = FALSE
-	if(!ismenacing)
-		return FALSE
-
+		return
 	var/turf/T = get_turf(H)
-
 	if(T.get_lumcount() > 2)
-		ismenacing = 0
-		return FALSE
+		return
 
-	var/mob/M = antag.current
-	var/radius = 6
-
-	for(var/mob/living/carbon/C in oviewers(radius, M))
+	for(var/mob/living/carbon/C in oviewers(6, antag.current))
 		if(prob(35))
 			continue //to prevent fearspam
 		var/datum/role/thrall/role_thrall = isthrall(C)
@@ -345,6 +331,21 @@
 		C.Jitter(20)
 		C.Dizzy(20)
 		to_chat(C, "<span class='sinister'>Your heart is filled with dread, and you shake uncontrollably.</span>")
+
+/datum/role/vampire/proc/handle_deadspeak(var/mob/living/carbon/human/H)
+	if(!deadchat)
+		return
+	if(H.stat == DEAD)
+		return
+	if(locate(/datum/power/vampire/charisma) in current_powers && world.time > deadchat_timer)
+		deadchat = FALSE
+		H.client.prefs.toggles |= CHAT_DEAD
+		//have deadchat for 30 seconds every five minutes
+		spawn(rand(200, 400))
+			if(H.stat != DEAD)
+				deadchat_timer = world.time + 1800 + rand(300, 1200)
+				H.client.prefs.toggles &= ~CHAT_DEAD
+				deadchat = TRUE
 
 /datum/role/vampire/proc/handle_smite(var/mob/living/carbon/human/H)
 	var/smitetemp = 0
@@ -358,31 +359,18 @@
 		nullified = max(5, nullified + 2)
 		if(prob(35))
 			to_chat(H, "<span class='sinister'>You feel yourself growing weaker.</span>")
-		/*smitetemp += (vampcoat ? 5 : 15)
-		if(prob(35))
-			to_chat(src, "<span class='sinister'>Burn, wretch.</span>")
-		*/
 
 	if(!nullified) //Checks to see if you can benefit from your vamp current_powers here
 		if(!(locate(/datum/power/vampire/mature) in current_powers))
 			smitetemp -= 1
-		if(!(locate(/datum/power/vampire/shadow) in current_powers))
-			var/turf/T = get_turf(H)
-			if((T.get_lumcount() * 10) < 2)
-				smitetemp -= 1
 
 		if(!(locate(/datum/power/vampire/undying) in current_powers))
-			smitetemp -= 1
+			smitetemp -= 2
 
 	if(smitetemp <= 0) //if you weren't smote by the tile you're on, remove a little holy
 		smitetemp = -1
 
 	smitecounter = max(0, (smitecounter + smitetemp))
-
-	// At any rate
-	if (smitecounter && H.real_name != initial_appearance.name)
-		H.switch_appearance(initial_appearance) // Reveal us as who we are
-		H.real_name = initial_appearance.name
 
 	switch(smitecounter)
 		if(1 to 30) //just dizziness
@@ -613,3 +601,90 @@
 				return
 			if (prob(35)) // 35% chance of dethralling
 				Drop(TRUE)
+
+/mob/proc/vampire_power(var/required_blood = 0, var/max_stat = 0)
+	var/datum/role/vampire/vampire = isvampire(src)
+
+	if(!vampire)
+		world.log << "[src] has vampire spells but isn't a vampire."
+		return 0
+
+	var/fullpower = (locate(/datum/power/vampire/jaunt) in vampire.current_powers)
+
+	if(src.stat > max_stat)
+		to_chat(src, "<span class='warning'>You are incapacitated.</span>")
+		return 0
+
+	if(vampire.nullified)
+		if(!fullpower)
+			to_chat(src, "<span class='warning'>Something is blocking your powers!</span>")
+			return 0
+	if(vampire.blood_usable < required_blood)
+		to_chat(src, "<span class='warning'>You require at least [required_blood] units of usable blood to do that!</span>")
+		return 0
+	//chapel check
+	if(istype(get_area(src), /area/chapel))
+		to_chat(src, "<span class='warning'>Your powers are useless on this holy ground.</span>")
+		return 0
+	if(check_holy(src))
+		var/turf/T = get_turf(src)
+		if((T.get_lumcount() * 10) > 2)
+			to_chat(src, "<span class='warning'>This ground has been blessed and illuminated, suppressing your abilities.</span>")
+			return 0
+		if (fullpower)
+			to_chat(src, "<span class='warning'>Our awakened powers are suppressed on this holy ground.</span>")
+			return 0
+	return 1
+
+/mob/proc/can_enthrall(var/mob/living/carbon/human/H)
+	var/datum/role/vampire/V = isvampire(src)
+	if(restrained())
+		to_chat(src, "<span class ='warning'> You cannot do this while restrained! </span>")
+		return 0
+	if(!istype(H))
+		to_chat(src, "<span class='warning'>You can only enthrall humanoids!</span>")
+		return 0
+	if(!H)
+		message_admins("Error during enthralling: no target. Mob is [src], (<A HREF='?_src_=holder;adminplayerobservejump=\ref[src]&mob=\ref[src]'>JMP</A>)")
+		return FALSE
+	if(!H.mind)
+		to_chat(src, "<span class='warning'>[H]'s mind is not there for you to enthrall.</span>")
+		return FALSE
+	if(isvampire(H) || isthrall(H))
+		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>You feel a familiar sensation in your skull that quickly dissipates.</span>")
+		return FALSE
+	//Charisma allows implanted targets to be enthralled.
+	if(!(locate(/datum/power/vampire/charisma) in V.current_powers) && H.is_loyalty_implanted())
+		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>You feel a strange sensation in your skull that quickly dissipates.</span>")
+		return FALSE
+	if(H.vampire_affected(mind) <= 0)
+		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil!</span>")
+	return TRUE
+
+/mob/proc/vampire_affected(var/datum/mind/M) // M is the attacker, src is the target.
+	//Other vampires aren't affected
+	var/success = TRUE
+	if(mind && mind.GetRole(VAMPIRE))
+		return 0
+
+	// Non-mature vampires are not stopped by holy things.
+	if(M)
+		//Chaplains are ALWAYS resistant to vampire powers
+		if(isReligiousLeader(src))
+			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
+			success = FALSE
+		// Null rod nullifies vampire powers, unless we're a young vamp.
+		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
+		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
+		if (N)
+			if (locate(/datum/power/vampire/undying) in V.current_powers)
+				to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
+				success = VAMP_FAILURE
+			else if (locate(/datum/power/vampire/jaunt) in V.current_powers)
+				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
+				success = FALSE
+	return success
+
+// If the target is weakened, the spells take less time to complete.
+/mob/living/carbon/proc/get_vamp_enhancements()
+	return ((knockdown ? 2 : 0) + (stunned ? 1 : 0) + (sleeping || paralysis ? 3 : 0))

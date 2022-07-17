@@ -68,7 +68,9 @@
 	var/lastAnemia = 0 //Anemia rest cooldown
 	var/last_emote_sound = 0 // Prevent scream spam in some situations
 
-	var/obj/item/organ/external/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
+	/// To keep track of a decapitated head, for debug and soulstone purposes.
+	/// (obj/item/organ/external/head)
+	var/datum/weakref/decapitated
 
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"
@@ -76,7 +78,7 @@
 
 	var/show_client_status_on_examine = TRUE //If false, don't display catatonic/braindead messages to non-admins
 
-	var/become_zombie_after_death = FALSE
+	var/become_zombie = FALSE
 	var/calorie_burn_rate = HUNGER_FACTOR
 	var/time_last_speech = 0 //When was the last time we talked?
 	var/manual_emote_sound_override = 0 //If toggled on, allows humans to make audible emotes

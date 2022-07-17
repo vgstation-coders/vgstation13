@@ -27,19 +27,19 @@
 		return
 
 	var/area/A = loc
-	if (A.dynamic_lighting)
-		if (!lighting_corners_initialised)
-			generate_missing_corners()
+	if (!A.dynamic_lighting)
+		return
+	if (!lighting_corners_initialised)
+		generate_missing_corners()
 
-		new /atom/movable/lighting_overlay(src)
+	new /atom/movable/lighting_overlay(src)
 
-		for (var/datum/lighting_corner/C in corners)
-			if (!C.active) // We would activate the corner, calculate the lighting for it.
-				for (var/L in C.affecting)
-					var/datum/light_source/S = L
-					S.recalc_corner(C)
-
-				C.active = TRUE
+	for (var/datum/lighting_corner/C in corners)
+		if (!C.active) // We would activate the corner, calculate the lighting for it.
+			for (var/L in C.affecting)
+				var/datum/light_source/S = L
+				S.recalc_corner(C)
+			C.active = TRUE
 
 // Used to get a scaled lumcount.
 /turf/proc/get_lumcount(var/minlum = 0, var/maxlum = 1)
@@ -51,17 +51,18 @@
 		totallums += L.lum_r + L.lum_b + L.lum_g
 
 	totallums /= 12 // 4 corners, each with 3 channels, get the average.
-
 	totallums = (totallums - minlum) / (maxlum - minlum)
 
 	return CLAMP01(totallums)
 
 // Can't think of a good name, this proc will recalculate the has_opaque_atom variable.
 /turf/proc/recalc_atom_opacity()
-	has_opaque_atom = FALSE
-	for (var/atom/A in src.contents + src) // Loop through every movable atom on our tile PLUS ourselves (we matter too...)
-		if (A.opacity)
-			has_opaque_atom = TRUE
+	has_opaque_atom = opacity
+	if (!has_opaque_atom)
+		for (var/atom/A in src.contents) // Loop through every movable atom on our tile PLUS ourselves (we matter too...)
+			if (A.opacity)
+				has_opaque_atom = TRUE
+				break
 
 /turf/Exited(var/atom/movable/Obj, var/atom/newloc)
 	. = ..()

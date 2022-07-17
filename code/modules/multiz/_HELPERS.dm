@@ -97,43 +97,19 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 
 	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((get_zs_away(a,b))**2)
 
-/proc/multi_z_spiral_block(var/turf/epicenter,var/max_range,var/inward=0,var/draw_red=0,var/cube=1)
-	var/list/spiraled_turfs = list()
+/proc/multi_z_spiral_block(var/turf/epicenter,var/max_range,var/draw_red=0,var/cube=1)
 	var/turf/upturf = epicenter
 	var/turf/downturf = epicenter
-	if(inward)
-		var/upcount = 1
-		var/downcount = 1
-		for(var/i = 1, i < max_range, i++)
-			if(HasAbove(upturf.z))
-				upturf = GetAbove(upturf)
-				upcount++
-			if(HasBelow(downturf.z))
-				downturf = GetBelow(downturf)
-				downcount++
-		for(var/i = 1, i < max_range, i++)
-			if(GetBelow(upturf) != epicenter)
-				upturf = GetBelow(upturf)
-				spiraled_turfs += spiral_block(upturf, cube ? max_range : i + (max_range - upcount), inward, draw_red)
-				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - upcount)] in [upturf.loc.name] ([upturf.x],[upturf.y],[upturf.z])")
-			if(GetAbove(upturf) != epicenter)
-				downturf = GetAbove(downturf)
-				spiraled_turfs += spiral_block(downturf, cube ? max_range : i + (max_range - downcount), inward, draw_red)
-				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - downcount)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
-		spiraled_turfs += spiral_block(epicenter,max_range,inward,draw_red)
-	else
-		spiraled_turfs += spiral_block(epicenter,max_range,inward,draw_red)
-		for(var/i = 1, i < max_range, i++)
-			if(HasAbove(upturf.z))
-				upturf = GetAbove(upturf)
-				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [upturf.loc.name] ([upturf.x],[upturf.y],[upturf.z])")
-				spiraled_turfs += spiral_block(upturf, cube ? max_range : max_range - i, inward, draw_red)
-			if(HasBelow(downturf.z))
-				downturf = GetBelow(downturf)
-				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
-				spiraled_turfs += spiral_block(downturf, cube ? max_range : max_range - i, inward, draw_red)
-
-	return spiraled_turfs
+	. = spiral_block(epicenter,max_range,draw_red)
+	for(var/i = 1, i < max_range, i++)
+		if(HasAbove(upturf.z))
+			upturf = GetAbove(upturf)
+			log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [upturf.loc.name] ([upturf.x],[upturf.y],[upturf.z])")
+			. += spiral_block(upturf, cube ? max_range : max_range - i, draw_red)
+		if(HasBelow(downturf.z))
+			downturf = GetBelow(downturf)
+			log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
+			. += spiral_block(downturf, cube ? max_range : max_range - i, draw_red)
 
 /client/proc/check_multi_z_spiral()
 	set name = "Check Multi-Z Spiral Block"
@@ -141,11 +117,9 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 
 	var/turf/epicenter = get_turf(usr)
 	var/max_range = input("Set the max range") as num
-	var/inward_txt = alert("Which way?","Spiral Block", "Inward","Outward")
-	var/inward = inward_txt == "Inward" ? 1 : 0
 	var/shape_txt = alert("What shape?","Spiral Block", "Cube","Octahedron")
 	var/shape = shape_txt == "Cube" ? 1 : 0
-	multi_z_spiral_block(epicenter,max_range,inward,1,shape)
+	multi_z_spiral_block(epicenter,max_range,shape)
 
 // Halves above and below, as per suggestion by deity on how to handle multi-z explosions
 /proc/explosion_destroy_multi_z(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit)

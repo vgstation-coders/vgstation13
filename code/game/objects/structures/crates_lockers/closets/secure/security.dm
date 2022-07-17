@@ -32,6 +32,7 @@
 		/obj/item/clothing/under/dress/dress_cap,
 		/obj/item/device/gps/secure/command,
 		/obj/item/weapon/card/debit/preferred/department/elite/command,
+		/obj/item/mulebot_laser,
 	)
 
 
@@ -57,6 +58,7 @@
 		/obj/item/device/flash,
 		/obj/item/device/gps/secure/command,
 		/obj/item/weapon/card/debit/preferred/department/civilian,
+		/obj/item/mulebot_laser,
 	)
 
 /obj/structure/closet/secure_closet/hop2

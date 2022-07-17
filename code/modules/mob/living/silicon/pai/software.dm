@@ -188,16 +188,18 @@
 
 		if("pdamessage")
 			if(!isnull(pda))
-				if(href_list["toggler"])
-					pda.toff = !pda.toff
-				else if(href_list["ringer"])
-					pda.silent = !pda.silent
-				else if(href_list["target"])
-					if(silence_time)
-						return alert("Communications circuits remain unitialized.")
+				var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in pda.applications
+				if(app)
+					if(href_list["toggler"])
+						app.toff = !app.toff
+					else if(href_list["ringer"])
+						app.silent = !app.silent
+					else if(href_list["target"])
+						if(silence_time)
+							return alert("Communications circuits remain unitialized.")
 
-					var/target = locate(href_list["target"])
-					pda.create_message(src, target)
+						var/target = locate(href_list["target"])
+						app.create_message(src, target)
 
 		// Accessing medical records
 		if("medicalsupplement")
@@ -660,24 +662,25 @@ Target Machine: "}
 
 
 	var/dat = "<h3>Digital Messenger</h3>"
+	var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in pda.applications
+	if(!message_app)
+		dat += "<b>The pAI has no PDA messenger initialised, please report this as an issue. You should not see this.</b>"
+		return
 	dat += {"<b>Signal/Receiver Status:</b> <A href='byond://?src=\ref[src];software=pdamessage;toggler=1'>
-	[(pda.toff) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br>
+	[(message_app.toff) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br>
 	<b>Ringer Status:</b> <A href='byond://?src=\ref[src];software=pdamessage;ringer=1'>
-	[(pda.silent) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br><br>"}
+	[(message_app.silent) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br><br>"}
 	dat += "<ul>"
-	if(!pda.toff)
-		for (var/obj/item/device/pda/P in sortNames(PDAs))
-			if (!P.owner||P.toff||P == pda||P.hidden)
-				continue
-
+	if(!message_app.toff)
+		for (var/obj/item/device/pda/P in get_viewable_pdas())
 			dat += {"<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>
 				</li>"}
 	dat += {"</ul>
 		<br><br>
 		Messages: <hr>"}
-	for(var/note in pda.tnote)
-		dat += pda.tnote[note]
-		var/icon/img = pda.imglist[note]
+	for(var/note in message_app.tnote)
+		dat += message_app.tnote[note]
+		var/icon/img = message_app.imglist[note]
 		if(img)
 			usr << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
 			dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"

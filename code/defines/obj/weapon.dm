@@ -40,6 +40,7 @@
 	throw_speed = 4
 	throw_range = 20
 	var/potency = 20
+	var/slip_override = 0
 
 /obj/item/weapon/bananapeel/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
@@ -175,23 +176,18 @@
 			H.drop_item(src)
 			return
 	var/turf/target = get_turf(A)
-	var/atom/movable/adjtarget = new /atom/movable
-	var/xadjust = 0
-	var/yadjust = 0
-	var/scaler = 0 //used to changed the normalised vector to the proper size
+	var/new_x = src.x
+	var/new_y = src.y
+	var/scaler //used to changed the normalised vector to the proper size
 	scaler = throw_range / max(abs(target.x - src.x), abs(target.y - src.y),1) //whichever is larger magnitude is what we normalise to
 	if (target.x - src.x != 0) //just to avoid fucking with math for no reason
-		xadjust = round((target.x - src.x) * scaler) //normalised vector is now scaled up to throw_range
-		adjtarget.x = src.x + xadjust //the new target at max range
-	else
-		adjtarget.x = src.x
+		var/xadjust = round((target.x - src.x) * scaler) //normalised vector is now scaled up to throw_range
+		new_x = src.x + xadjust //the new target at max range
 	if (target.y - src.y != 0)
-		yadjust = round((target.y - src.y) * scaler)
-		adjtarget.y = src.y + yadjust
-	else
-		adjtarget.y = src.y
+		var/yadjust = round((target.y - src.y) * scaler)
+		new_y = src.y + yadjust
 	// log_admin("Adjusted target of [adjtarget.x] and [adjtarget.y], adjusted with [xadjust] and [yadjust] from [scaler]")
-	..(get_turf(adjtarget), throw_range, throw_speed)
+	..(locate(new_x, new_y, src.z), throw_range, throw_speed)
 
 /obj/item/weapon/legcuffs/bolas/throw_impact(atom/hit_atom) //Pomf was right, I was wrong - Comic
 	if(isliving(hit_atom) && hit_atom != usr) //if the target is a live creature other than the thrower
@@ -780,7 +776,7 @@
 	. = do_after_default_checks(arglist(args))
 	if(.)
 		playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
-		target.shake_animation()
+		target.shake_animation(3, 3, 0.2, 15)
 
 /obj/item/weapon/caution
 	desc = "Caution! Wet Floor!"

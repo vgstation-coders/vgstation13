@@ -262,7 +262,7 @@ var/list/all_GPS_list = list()
 	. = ..()
 	send_signal(wearer, src, "SPS [gpstag]: Code Yellow", FALSE, view_all)
 
-/obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead, var/iscommand = FALSE)
+/obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead, var/iscommand = FALSE, var/stfu)
 	var/turf/pos = get_turf(SPS)
 	var/x0 = pos.x-WORLD_X_OFFSET[pos.z]
 	var/y0 = pos.x-WORLD_Y_OFFSET[pos.z]
@@ -283,7 +283,7 @@ var/list/all_GPS_list = list()
 				otherSPS.say("Alert. [alerttype]")
 				playsound(otherSPS,'sound/machines/radioboop.ogg',40,1)
 
-	if(boop)
+	if(boop && !stfu)
 		deathsound(isdead)
 
 /obj/item/device/gps/secure/proc/deathsound(var/dead=FALSE)

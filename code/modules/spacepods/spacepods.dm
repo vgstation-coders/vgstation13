@@ -39,8 +39,8 @@
 	var/locked = FALSE
 	var/next_firetime = 0
 	var/list/pod_overlays
-	var/health = 400
-	var/maxHealth = 400
+	health = 400
+	maxHealth = 400
 	var/lights_enabled = FALSE
 	light_power = 2
 	light_range = SPACEPOD_LIGHTS_RANGE_OFF

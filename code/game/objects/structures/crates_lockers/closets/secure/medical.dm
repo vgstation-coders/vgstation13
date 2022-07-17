@@ -131,6 +131,7 @@
 		/obj/item/clothing/gloves/latex,
 		/obj/item/clothing/shoes/brown,
 		/obj/item/device/radio/headset/heads/cmo,
+		/obj/item/clothing/glasses/hud/health/cmo,
 		/obj/item/weapon/storage/belt/medical,
 		/obj/item/device/flash,
 		/obj/item/weapon/reagent_containers/hypospray,

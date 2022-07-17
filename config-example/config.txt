@@ -28,6 +28,12 @@ JOBS_HAVE_MINIMAL_ACCESS
 ## Unhash this to use recursive explosions, keep it hashed to use circle explosions. Recursive explosions react to walls, airlocks and blast doors, making them look a lot cooler than the boring old circular explosions. They require more CPU and are (as of january 2013) experimental
 #USE_RECURSIVE_EXPLOSIONS
 
+## Remove # here if you wish to have cargo forwarding on by default at roundstart
+#CARGO_FORWARDING_ON_ROUNDSTART
+
+## Remove # here if you wish to have cargo forwards sent always be a set amount (for debugging)
+#CARGO_FORWARDING_AMOUNT_OVERRIDE 5
+
 ## (SECURITY RISK ON PUBLIC SERVERS) Automatically give localhost clients +HOST access.
 LOCALHOST_AUTOADMIN
 
@@ -366,9 +372,3 @@ BSQL_THREAD_LIMIT 50
 
 ## Uncomment to enable verbose BSQL communication logs
 #BSQL_DEBUG
-
-## The maximum number of z-levels rendered above or below in multi-z
-MULTIZ_RENDER_CAP 8
-
-## The maximum number of z-levels checked below in multi-z
-MULTIZ_BOTTOM_CAP 16

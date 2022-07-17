@@ -45,7 +45,7 @@ jobs:
         #TODO: Cache Dreamchecker install
       - name: Run dreamchecker
         run: |
-          SPACEMAN_DMM_GIT_TAG="suite-1.7" tools/travis/install_spaceman_dmm.sh dreamchecker
+          SPACEMAN_DMM_GIT_TAG="suite-1.7.2" tools/travis/install_spaceman_dmm.sh dreamchecker
           ~/dreamchecker
       - name: Run map checker
         run: python tools/travis/check_map_files.py maps/

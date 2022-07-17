@@ -13,6 +13,7 @@
 	name = "ground floor"
 	movementJammed = 1
 	z_above = 3
+	z_below = 5
 
 /datum/zLevel/second
 	name = "second floor"
@@ -23,6 +24,7 @@
 /datum/zLevel/third
 	name = "third floor"
 	movementJammed = 1
+	z_above = 2
 	z_below = 4
 
 /datum/map/active
@@ -32,7 +34,6 @@
 	tDomeX = 50
 	tDomeY = 50
 	tDomeZ = 1
-	multiz = TRUE
 	zLevels = list(
 		/datum/zLevel/centcomm,
 		/datum/zLevel/ground,

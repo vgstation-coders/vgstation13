@@ -358,6 +358,7 @@ var/list/arcane_tomes = list()
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
 	mech_flags = MECH_SCAN_FAIL
+	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/linked_ui
 	var/blood_text = ""
 	var/obj/effect/rune/attuned_rune = null
 	var/spell_type = null
@@ -466,6 +467,8 @@ var/list/arcane_tomes = list()
 	if (istype(loc,/obj/item/weapon/tome))
 		var/obj/item/weapon/tome/T = loc
 		T.talismans.Remove(src)
+	if (linked_ui)
+		linked_ui.talisman = null
 	qdel(src)
 
 /obj/item/weapon/talisman/proc/imbue(var/mob/user, var/obj/effect/rune/R)
@@ -473,7 +476,7 @@ var/list/arcane_tomes = list()
 		return
 
 	if (blood_text)
-		to_chat(user, "<span class='warning'>Cannot imbue a talisman that has been written on.</span>")
+		to_chat(user, "<span class='warning'>You can't imbue a talisman that has been written on.</span>")
 		return
 
 	var/datum/rune_spell/spell = get_rune_spell(user,null,"examine",R.word1, R.word2, R.word3)
@@ -482,9 +485,6 @@ var/list/arcane_tomes = list()
 		src.forceMove(get_turf(R))
 		R.attack_hand(user)
 	else
-		if (attuned_rune)
-			to_chat(user, "<span class='warning'>\The [src] is already linked to a rune.</span>")
-			return
 		if (attuned_rune)
 			to_chat(user, "<span class='warning'>\The [src] is already imbued with the power of a rune.</span>")
 			return
@@ -689,7 +689,7 @@ var/list/arcane_tomes = list()
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
 	health = 40
-	var/maxHealth = 40
+	maxHealth = 40
 	var/reflector = FALSE
 	var/mob/living/linked_cultist = null
 
@@ -1053,10 +1053,16 @@ var/list/arcane_tomes = list()
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	mech_flags = MECH_SCAN_FAIL//not that you should be able to drop it in the first place BUT just in case
 	var/mob/originator = null
+	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger/linked_ui
 	var/stacks = 0
 	var/absorbed = 0
+	surgerysound = 'sound/items/scalpel.ogg'
 
 /obj/item/weapon/melee/blood_dagger/Destroy()
+	if(linked_ui)
+		linked_ui.dagger = null
+		linked_ui.UpdateIcon()
+		linked_ui = null
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/effects/forge_over.ogg', 100, 0, -2)
 	if (!absorbed && !locate(/obj/effect/decal/cleanable/blood/splatter) in T)
@@ -1555,19 +1561,34 @@ var/list/arcane_tomes = list()
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
 
+	for(var/datum/reagent/R in reagents.reagent_list)
+		if(R.id == BLOOD)
+			var/datum/reagent/blood/B = R
+			var/datum/disease2/disease/cultvirus = global_diseases[DISEASE_CULT]
+			B.data["virus2"]["[cultvirus.uniqueID]-[cultvirus.subID]"] += cultvirus.getcopy()
+
 /obj/item/weapon/reagent_containers/food/drinks/cult/throw_impact(var/atom/hit_atom)
 	if(reagents.total_volume)
 		if (ishuman(hit_atom))
 			var/mob/living/carbon/human/H = hit_atom
 			if(!(H.species.chem_flags & NO_DRINK) && !(H.get_body_part_coverage(MOUTH)))
 				H.visible_message("<span class='warning'>Some of \the [src]'s content spills into \the [H]'s mouth.</span>","<span class='danger'>Some of \the [src]'s content spills into your mouth.</span>")
-				reagents.reaction(H, INGEST)
+				reagents.reaction(H, INGEST, amount_override = min(reagents.total_volume,gulp_size)/(reagents.reagent_list.len))
 				reagents.trans_to(H, gulp_size)
 	transfer(get_turf(hit_atom), null, splashable_units = -1)
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/gamer
 	name = "gamer goblet"
 	desc = "A plastic cup in the shape of a skull. Typically full of Geometer-Fuel."
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/gamer/on_reagent_change()
+	..()
+	overlays.len = 0
+	if (reagents.reagent_list.len > 0)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "cult")
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		overlays += filling
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/cultify()
 	return

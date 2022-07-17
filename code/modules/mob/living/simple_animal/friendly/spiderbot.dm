@@ -75,9 +75,7 @@
 			to_chat(user, "<span class='warning'>[O] is dead. Sticking it into the frame would sort of defeat the purpose.</span>")
 			return
 
-		if(jobban_isbanned(B.brainmob, "Cyborg"))
-			to_chat(user, "<span class='warning'>[O] does not seem to fit.</span>")
-			return
+		
 		if(!user.drop_item(O, src))
 			user << "<span class='warning'>You can't let go of \the [O].</span>"
 

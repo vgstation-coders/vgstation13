@@ -21,6 +21,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 		/obj/transmog_body_container,
 		/obj/item/verbs,
 		/obj/item/weapon/gun/hookshot/flesh,
+		/obj/item/device/camera_bug,
 	)
 	return allowed_items
 
@@ -111,7 +112,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 /mob/living/simple_animal/hostile/lizard/can_ventcrawl()
 	return TRUE
 
-/mob/living/simple_animal/hostile/necromorph/leaper/can_ventcrawl()
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/can_ventcrawl()
 	return TRUE
 
 /mob/living/simple_animal/shade/can_ventcrawl()

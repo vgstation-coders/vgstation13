@@ -1,101 +1,1169 @@
-"aa" = (/turf/space,/area/vault/meteorlogical)
-"ab" = (/turf/space,/area)
-"ac" = (/turf/unsimulated/mineral/random,/area/vault/meteorlogical)
-"ad" = (/obj/item/stack/sheet/animalhide/xeno,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"ae" = (/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"af" = (/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"ag" = (/obj/item/stack/ore/glass,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"ah" = (/obj/item/stack/teeth,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"aj" = (/obj/structure/hanging_lantern,/obj/item/stack/teeth,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"ak" = (/obj/structure/hanging_lantern,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"al" = (/turf/simulated/wall/invulnerable,/area/vault/meteorlogical)
-"am" = (/obj/structure/table,/obj/machinery/microwave,/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"an" = (/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"ao" = (/obj/structure/closet/syndicate/personal,/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"ap" = (/obj/structure/table,/obj/machinery/cell_charger,/obj/machinery/light{dir = 1},/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"aq" = (/obj/structure/table,/obj/item/clothing/glasses/scanner/night{pixel_y = -4},/obj/item/clothing/glasses/scanner/night{pixel_y = -2},/obj/item/clothing/glasses/scanner/night{pixel_y = 2},/obj/item/clothing/glasses/scanner/night{pixel_y = 6},/obj/item/clothing/glasses/scanner/night{pixel_y = 10},/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"ar" = (/obj/structure/table,/obj/item/device/assembly/prox_sensor{pixel_x = -8; pixel_y = 6},/obj/item/device/assembly/prox_sensor{pixel_x = -4; pixel_y = 6},/obj/item/device/assembly/signaler{pixel_x = -8},/obj/item/device/assembly/signaler{pixel_x = -4; pixel_y = 0},/obj/item/device/assembly/prox_sensor{pixel_x = 0; pixel_y = 6},/obj/item/device/assembly/signaler{pixel_x = 0; pixel_y = 0},/obj/item/device/assembly/signaler{pixel_x = 4; pixel_y = 0},/obj/item/stack/cable_coil,/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"as" = (/obj/machinery/mech_bay_recharge_port,/obj/structure/cable{icon_state = "0-2"; d2 = 2},/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"at" = (/obj/machinery/mech_bay_recharge_floor,/obj/machinery/light{dir = 1},/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"au" = (/obj/machinery/computer/mech_bay_power_console,/obj/structure/cable{icon_state = "0-2"; d2 = 2},/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"av" = (/obj/structure/table/glass,/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"aw" = (/obj/machinery/computer/security,/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"ax" = (/obj/machinery/computer/crew{name = "Syndie crew monitoring computer"; holomap_filter = HOLOMAP_FILTER_NUKEOPS},/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"ay" = (/obj/structure/table,/obj/item/weapon/storage/box/donkpockets{pixel_x = 3; pixel_y = 3},/obj/machinery/light{dir = 8},/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"az" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/syndicate,/obj/item/weapon/storage/belt/slim,/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"aA" = (/obj/effect/decal/mecha_wreckage/phazon,/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"aB" = (/obj/structure/bed/chair/comfy/black,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
-"aC" = (/obj/structure/bed/chair/office/light{dir = 1},/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"aD" = (/obj/structure/bed/chair/comfy/black{dir = 4},/turf/simulated/floor/carpet,/area/vault/meteorlogical)
-"aE" = (/obj/structure/table/reinforced,/obj/machinery/station_map/strategic,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
-"aF" = (/obj/structure/bed/chair/comfy/black{dir = 8},/turf/simulated/floor/carpet,/area/vault/meteorlogical)
-"aG" = (/obj/machinery/vending/snack,/obj/machinery/light{dir = 4},/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"aH" = (/obj/machinery/light,/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"aI" = (/turf/simulated/floor/carpet,/area/vault/meteorlogical)
-"aJ" = (/obj/item/stack/ore/phazon,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"aK" = (/obj/machinery/door/airlock/external{req_access_txt = "150"},/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"aL" = (/obj/structure/bed,/obj/structure/curtain/open/bed,/obj/item/weapon/bedsheet/red,/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"aM" = (/obj/item/weapon/beartrap{armed = 1},/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"aN" = (/turf/simulated/wall/r_wall,/area/vault/meteorlogical)
-"aO" = (/turf/unsimulated/mineral/random,/area)
-"aP" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
-"aQ" = (/obj/structure/rack,/obj/item/clothing/mask/breath,/obj/item/clothing/shoes/magboots,/obj/item/weapon/storage/belt/archaeology,/obj/machinery/light/small{dir = 1},/obj/item/clothing/suit/space/syndicate/orange,/obj/item/clothing/head/helmet/space/syndicate/orange,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
-"aR" = (/obj/structure/table/woodentable,/obj/item/weapon/paper_bin{pixel_x = -4; pixel_y = 1},/obj/item/weapon/pen/sleepypen{pixel_x = 6; pixel_y = 8},/obj/item/weapon/pen/red{pixel_x = 8; pixel_y = 8},/turf/simulated/floor/carpet,/area/vault/meteorlogical)
-"aS" = (/obj/structure/table/woodentable,/obj/item/weapon/folder/yellow{pixel_x = -5},/obj/item/weapon/folder/red{pixel_x = -7; pixel_y = 7},/obj/item/weapon/reagent_containers/food/drinks/plastic/cola{pixel_x = 5; pixel_y = 10},/obj/item/device/core_sampler,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
-"aT" = (/obj/structure/filingcabinet/filingcabinet,/obj/item/voucher/free_item/hot_drink,/obj/item/weapon/book/manual/excavation,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
-"aU" = (/obj/item/weapon/gun/energy/gun/nuclear,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
-"aV" = (/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
-"aW" = (/obj/machinery/computer/bhangmeter,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
-"aX" = (/obj/structure/bed/chair/office/light{dir = 1},/turf/simulated/floor/carpet,/area/vault/meteorlogical)
-"aY" = (/obj/machinery/vending/discount,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
-"aZ" = (/obj/item/trash/oldempirebar,/obj/machinery/light/small{dir = 8; flickering = 1},/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
-"ba" = (/obj/machinery/light/small,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
-"bb" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/wood,/area/vault/meteorlogical)
-"bc" = (/obj/structure/falserwall,/turf/simulated/floor/plating,/area/vault/meteorlogical)
-"bd" = (/obj/machinery/door/airlock/external,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
-"be" = (/obj/structure/grille,/obj/structure/window/full,/obj/structure/window,/obj/structure/window{dir = 8},/obj/structure/window{dir = 1},/obj/structure/window{dir = 4},/turf/simulated/floor/plating,/area/vault/meteorlogical)
-"bf" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/meteorlogical)
-"bg" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/meteorlogical)
-"bh" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/meteorlogical)
-"bi" = (/turf/simulated/floor/wood,/area/vault/meteorlogical)
-"bj" = (/obj/structure/table/woodentable,/obj/item/clothing/head/collectable/paper,/obj/item/device/flashlight/lamp{pixel_x = -5; pixel_y = 12},/turf/simulated/floor/wood,/area/vault/meteorlogical)
-"bk" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor/shuttle/brig,/area/vault/meteorlogical)
-"bl" = (/turf/simulated/floor/plating,/area/vault/meteorlogical)
-"bm" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/plating,/area/vault/meteorlogical)
-"bn" = (/turf/unsimulated/floor/asteroid/plating,/area/vault/meteorlogical)
-"bo" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/full/reinforced,/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/meteorlogical)
-"bp" = (/obj/structure/bed,/obj/structure/curtain/open/bed,/obj/item/weapon/bedsheet/rd,/turf/simulated/floor/wood,/area/vault/meteorlogical)
-"bq" = (/obj/structure/closet/cabinet,/obj/item/weapon/reagent_containers/food/drinks/groans,/obj/item/weapon/reagent_containers/food/drinks/groans,/obj/item/weapon/reagent_containers/food/drinks/groans,/obj/item/weapon/storage/toolbox/syndicate,/obj/item/clothing/under/dress/dress_yellow,/turf/simulated/floor/wood,/area/vault/meteorlogical)
-"br" = (/obj/structure/hanging_lantern{dir = 8},/turf/unsimulated/floor/asteroid/plating,/area/vault/meteorlogical)
-"bs" = (/obj/machinery/floodlight,/turf/unsimulated/floor/asteroid/plating,/area/vault/meteorlogical)
-"bt" = (/obj/item/weapon/pickaxe/excavationdrill,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"bu" = (/obj/item/weapon/beartrap,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"bv" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/space,
+/area/vault/meteorlogical)
+"ab" = (
+/turf/space,
+/area)
+"ac" = (
+/turf/unsimulated/mineral/random,
+/area/vault/meteorlogical)
+"ad" = (
+/obj/item/stack/sheet/animalhide/xeno,
+/turf/unsimulated/floor/asteroid,
+/area/vault/meteorlogical)
+"ae" = (
+/obj/item/stack/ore/phazon,
+/obj/item/stack/ore/phazon,
+/obj/item/stack/ore/phazon,
+/turf/unsimulated/floor/asteroid,
+/area/vault/meteorlogical)
+"af" = (
+/turf/unsimulated/floor/asteroid,
+/area/vault/meteorlogical)
+"ag" = (
+/obj/item/stack/ore/glass,
+/turf/unsimulated/floor/asteroid,
+/area/vault/meteorlogical)
+"ah" = (
+/obj/item/stack/teeth,
+/turf/unsimulated/floor/asteroid,
+/area/vault/meteorlogical)
+"aj" = (
+/obj/structure/hanging_lantern,
+/obj/item/stack/teeth,
+/turf/unsimulated/floor/asteroid,
+/area/vault/meteorlogical)
+"ak" = (
+/obj/structure/hanging_lantern,
+/turf/unsimulated/floor/asteroid,
+/area/vault/meteorlogical)
+"al" = (
+/turf/simulated/wall/invulnerable,
+/area/vault/meteorlogical)
+"am" = (
+/obj/structure/table,
+/obj/machinery/microwave,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"an" = (
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"ao" = (
+/obj/structure/closet/syndicate/personal,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"ap" = (
+/obj/structure/table,
+/obj/machinery/cell_charger,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"aq" = (
+/obj/structure/table,
+/obj/item/clothing/glasses/scanner/night{
+	pixel_y = -4
+	},
+/obj/item/clothing/glasses/scanner/night{
+	pixel_y = -2
+	},
+/obj/item/clothing/glasses/scanner/night{
+	pixel_y = 2
+	},
+/obj/item/clothing/glasses/scanner/night{
+	pixel_y = 6
+	},
+/obj/item/clothing/glasses/scanner/night{
+	pixel_y = 10
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"ar" = (
+/obj/structure/table,
+/obj/item/device/assembly/prox_sensor{
+	pixel_x = -8;
+	pixel_y = 6
+	},
+/obj/item/device/assembly/prox_sensor{
+	pixel_x = -4;
+	pixel_y = 6
+	},
+/obj/item/device/assembly/signaler{
+	pixel_x = -8
+	},
+/obj/item/device/assembly/signaler{
+	pixel_x = -4;
+	pixel_y = 0
+	},
+/obj/item/device/assembly/prox_sensor{
+	pixel_x = 0;
+	pixel_y = 6
+	},
+/obj/item/device/assembly/signaler{
+	pixel_x = 0;
+	pixel_y = 0
+	},
+/obj/item/device/assembly/signaler{
+	pixel_x = 4;
+	pixel_y = 0
+	},
+/obj/item/stack/cable_coil,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"as" = (
+/obj/machinery/mech_bay_recharge_port,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"at" = (
+/obj/machinery/mech_bay_recharge_floor,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"au" = (
+/obj/machinery/computer/mech_bay_power_console,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"av" = (
+/obj/structure/table/glass,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"aw" = (
+/obj/machinery/computer/security,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"ax" = (
+/obj/machinery/computer/crew{
+	holomap_filter = HOLOMAP_FILTER_NUKEOPS;
+	name = "Syndie crew monitoring computer"
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"ay" = (
+/obj/structure/table,
+/obj/item/weapon/storage/box/donkpockets{
+	pixel_x = 3;
+	pixel_y = 3
+	},
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"az" = (
+/obj/structure/table,
+/obj/item/weapon/storage/toolbox/syndicate,
+/obj/item/weapon/storage/belt/slim,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"aA" = (
+/obj/effect/decal/mecha_wreckage/phazon,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"aB" = (
+/obj/structure/bed/chair/comfy/black,
+/turf/simulated/floor/carpet,
+/area/vault/meteorlogical)
+"aC" = (
+/obj/structure/bed/chair/office/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"aD" = (
+/obj/structure/bed/chair/comfy/black{
+	dir = 4
+	},
+/turf/simulated/floor/carpet,
+/area/vault/meteorlogical)
+"aE" = (
+/obj/structure/table/reinforced,
+/obj/machinery/station_map/strategic,
+/turf/simulated/floor/carpet,
+/area/vault/meteorlogical)
+"aF" = (
+/obj/structure/bed/chair/comfy/black{
+	dir = 8
+	},
+/turf/simulated/floor/carpet,
+/area/vault/meteorlogical)
+"aG" = (
+/obj/machinery/vending/snack,
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"aH" = (
+/obj/machinery/light,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"aI" = (
+/turf/simulated/floor/carpet,
+/area/vault/meteorlogical)
+"aJ" = (
+/obj/item/stack/ore/phazon,
+/turf/unsimulated/floor/asteroid,
+/area/vault/meteorlogical)
+"aK" = (
+/obj/machinery/door/airlock/external{
+	req_access_txt = "150"
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"aL" = (
+/obj/structure/bed,
+/obj/structure/curtain/open/bed,
+/obj/item/weapon/bedsheet/red,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"aM" = (
+/obj/item/weapon/beartrap{
+	armed = 1
+	},
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"aN" = (
+/turf/simulated/wall/r_wall,
+/area/vault/meteorlogical)
+"aO" = (
+/turf/unsimulated/mineral/random,
+/area)
+"aP" = (
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "dark"
+	},
+/area/vault/meteorlogical)
+"aQ" = (
+/obj/structure/rack,
+/obj/item/clothing/mask/breath,
+/obj/item/clothing/shoes/magboots,
+/obj/item/weapon/storage/belt/archaeology,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/item/clothing/suit/space/syndicate/orange,
+/obj/item/clothing/head/helmet/space/syndicate/orange,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "dark"
+	},
+/area/vault/meteorlogical)
+"aR" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/paper_bin{
+	pixel_x = -4;
+	pixel_y = 1
+	},
+/obj/item/weapon/pen/sleepypen{
+	pixel_x = 6;
+	pixel_y = 8
+	},
+/obj/item/weapon/pen/red{
+	pixel_x = 8;
+	pixel_y = 8
+	},
+/turf/simulated/floor/carpet,
+/area/vault/meteorlogical)
+"aS" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/folder/yellow{
+	pixel_x = -5
+	},
+/obj/item/weapon/folder/red{
+	pixel_x = -7;
+	pixel_y = 7
+	},
+/obj/item/weapon/reagent_containers/food/drinks/plastic/cola{
+	pixel_x = 5;
+	pixel_y = 10
+	},
+/obj/item/device/core_sampler,
+/turf/simulated/floor/carpet,
+/area/vault/meteorlogical)
+"aT" = (
+/obj/structure/filingcabinet/filingcabinet,
+/obj/item/voucher/free_item/hot_drink,
+/obj/item/weapon/book/manual/excavation,
+/turf/simulated/floor/carpet,
+/area/vault/meteorlogical)
+"aU" = (
+/obj/item/weapon/gun/energy/gun/nuclear,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "dark"
+	},
+/area/vault/meteorlogical)
+"aV" = (
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "dark"
+	},
+/area/vault/meteorlogical)
+"aW" = (
+/obj/machinery/computer/bhangmeter,
+/turf/simulated/floor/carpet,
+/area/vault/meteorlogical)
+"aX" = (
+/obj/structure/bed/chair/office/light{
+	dir = 1
+	},
+/turf/simulated/floor/carpet,
+/area/vault/meteorlogical)
+"aY" = (
+/obj/machinery/vending/discount,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "dark"
+	},
+/area/vault/meteorlogical)
+"aZ" = (
+/obj/item/trash/oldempirebar,
+/obj/machinery/light/small{
+	dir = 8;
+	flickering = 1
+	},
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "dark"
+	},
+/area/vault/meteorlogical)
+"ba" = (
+/obj/machinery/light/small,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "dark"
+	},
+/area/vault/meteorlogical)
+"bb" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/wood,
+/area/vault/meteorlogical)
+"bc" = (
+/obj/structure/falserwall,
+/turf/simulated/floor/plating,
+/area/vault/meteorlogical)
+"bd" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "dark"
+	},
+/area/vault/meteorlogical)
+"be" = (
+/obj/structure/grille,
+/obj/structure/window/full,
+/obj/structure/window,
+/obj/structure/window{
+	dir = 8
+	},
+/obj/structure/window{
+	dir = 1
+	},
+/obj/structure/window{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/meteorlogical)
+"bf" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/meteorlogical)
+"bg" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/meteorlogical)
+"bh" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/meteorlogical)
+"bi" = (
+/turf/simulated/floor/wood,
+/area/vault/meteorlogical)
+"bj" = (
+/obj/structure/table/woodentable,
+/obj/item/clothing/head/collectable/paper,
+/obj/item/device/flashlight/lamp{
+	pixel_x = -5;
+	pixel_y = 12
+	},
+/turf/simulated/floor/wood,
+/area/vault/meteorlogical)
+"bk" = (
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor/shuttle/brig,
+/area/vault/meteorlogical)
+"bl" = (
+/turf/simulated/floor/plating,
+/area/vault/meteorlogical)
+"bm" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor/plating,
+/area/vault/meteorlogical)
+"bn" = (
+/turf/unsimulated/floor/asteroid/plating,
+/area/vault/meteorlogical)
+"bo" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/meteorlogical)
+"bp" = (
+/obj/structure/bed,
+/obj/structure/curtain/open/bed,
+/obj/item/weapon/bedsheet/rd,
+/turf/simulated/floor/wood,
+/area/vault/meteorlogical)
+"bq" = (
+/obj/structure/closet/cabinet,
+/obj/item/weapon/reagent_containers/food/drinks/groans,
+/obj/item/weapon/reagent_containers/food/drinks/groans,
+/obj/item/weapon/reagent_containers/food/drinks/groans,
+/obj/item/weapon/storage/toolbox/syndicate,
+/obj/item/clothing/under/dress/dress_yellow,
+/turf/simulated/floor/wood,
+/area/vault/meteorlogical)
+"br" = (
+/obj/structure/hanging_lantern{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/plating,
+/area/vault/meteorlogical)
+"bs" = (
+/obj/machinery/floodlight,
+/turf/unsimulated/floor/asteroid/plating,
+/area/vault/meteorlogical)
+"bt" = (
+/obj/item/weapon/pickaxe/excavationdrill,
+/turf/unsimulated/floor/asteroid,
+/area/vault/meteorlogical)
+"bu" = (
+/obj/item/weapon/beartrap,
+/turf/unsimulated/floor/asteroid,
+/area/vault/meteorlogical)
+"bv" = (
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid,
+/area/vault/meteorlogical)
 
 (1,1,1) = {"
-aaaaaaaaababaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaaababab
-aaaaabababababacacaaaaaaacacacacacacacacacabababaa
-aaaaaaacacacabacacacacacacacacacacacacacacaaacabaa
-aaaaabacacacacacacacadaeaeafagafagacacacacaaacabaa
-aaababacacacacacacacahafafafafagafacacacacacababaa
-abafafacacacacacacahajafafafafakafacacacacacababaa
-abafacacacalalalalalalalalalalalalalalacacacacabaa
-aaafafacacalamanaoapaqarasatauavawaxalacacacacabab
-ababafacacalayananananazaAaBanananaCalacacacacacac
-ababafacacalanananananazaDaEaFananaGalacacacacafaf
-aaabacacacalanananananaHanaIananananalacacaJacabab
-aaabacacacalaKalalalalalalalalalalaLalacacafafabaa
-aaaaafacacalaMalaNaNaNaNaNaNaNaNaNalalacacacababaa
-aaaOafafacalanalaNaPaQaRaSaTaNaNaNaUalacacacaaaaaa
-afabafacacalanalaNaVaVaWaXaIaYaNaNaNalacacacabaaab
-ababacacacalanalaNaZaVaVaVaVaVbabbaNaNacacacababab
-ababacacacalananbcbdbeaNbfbgbhaNbibjaNacacacacabab
-abaaafacacalbkalaNblblbmbnbnbnbobpbqaNacacacaaaaab
-aaacafacacalalalaNaNaNaNbrbnbsaNaNaNaNacacacaaaaaa
-abafacafacacacacacacacacbtbnbuacacacacacacacaaaaaa
-ababafafacacacacacacacacacafafacacacacacacacaaaaaa
-ababacacafacacbvacacacacacababacacacababacaaacabab
-aaaaafacabacacafafafafacacababababacacabababacabab
-aaabaaaaabafaaaaafafabafacababacacacacabacabacacaa
-ababaaabababaaabababaaaaabababafababababaaaaacafaa
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+aa
+ab
+ab
+aa
+aa
+aa
+aa
+af
+ab
+ab
+ab
+aa
+ab
+ab
+ab
+aa
+aa
+ab
+"}
+(2,1,1) = {"
+aa
+aa
+aa
+aa
+ab
+af
+af
+af
+ab
+ab
+ab
+ab
+aa
+aO
+ab
+ab
+ab
+aa
+ac
+af
+ab
+ab
+aa
+ab
+ab
+"}
+(3,1,1) = {"
+aa
+ab
+aa
+ab
+ab
+af
+ac
+af
+af
+af
+ac
+ac
+af
+af
+af
+ac
+ac
+af
+af
+ac
+af
+ac
+af
+aa
+aa
+"}
+(4,1,1) = {"
+aa
+ab
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+af
+ac
+ac
+ac
+ac
+ac
+af
+af
+ac
+ac
+aa
+ab
+"}
+(5,1,1) = {"
+ab
+ab
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+af
+ab
+ab
+ab
+"}
+(6,1,1) = {"
+ab
+ab
+ac
+ac
+ac
+ac
+al
+al
+al
+al
+al
+al
+al
+al
+al
+al
+al
+al
+al
+ac
+ac
+ac
+ac
+af
+ab
+"}
+(7,1,1) = {"
+aa
+ab
+ab
+ac
+ac
+ac
+al
+am
+ay
+an
+an
+aK
+aM
+an
+an
+an
+an
+bk
+al
+ac
+ac
+ac
+ac
+aa
+aa
+"}
+(8,1,1) = {"
+aa
+ac
+ac
+ac
+ac
+ac
+al
+an
+an
+an
+an
+al
+al
+al
+al
+al
+an
+al
+al
+ac
+ac
+bv
+af
+aa
+ab
+"}
+(9,1,1) = {"
+ac
+ac
+ac
+ac
+ac
+ac
+al
+ao
+an
+an
+an
+al
+aN
+aN
+aN
+aN
+bc
+aN
+aN
+ac
+ac
+ac
+af
+af
+ab
+"}
+(10,1,1) = {"
+aa
+aa
+ac
+ac
+ac
+ah
+al
+ap
+an
+an
+an
+al
+aN
+aP
+aV
+aZ
+bd
+bl
+aN
+ac
+ac
+ac
+af
+af
+ab
+"}
+(11,1,1) = {"
+aa
+aa
+ac
+ad
+ah
+aj
+al
+aq
+an
+an
+an
+al
+aN
+aQ
+aV
+aV
+be
+bl
+aN
+ac
+ac
+ac
+af
+ab
+aa
+"}
+(12,1,1) = {"
+aa
+aa
+ac
+ae
+af
+af
+al
+ar
+az
+az
+aH
+al
+aN
+aR
+aW
+aV
+aN
+bm
+aN
+ac
+ac
+ac
+ac
+af
+aa
+"}
+(13,1,1) = {"
+aa
+ac
+ac
+ae
+af
+af
+al
+as
+aA
+aD
+an
+al
+aN
+aS
+aX
+aV
+bf
+bn
+br
+bt
+ac
+ac
+ac
+ac
+ab
+"}
+(14,1,1) = {"
+aa
+ac
+ac
+af
+af
+af
+al
+at
+aB
+aE
+aI
+al
+aN
+aT
+aI
+aV
+bg
+bn
+bn
+bn
+af
+ab
+ab
+ab
+ab
+"}
+(15,1,1) = {"
+aa
+ac
+ac
+ag
+af
+af
+al
+au
+an
+aF
+an
+al
+aN
+aN
+aY
+aV
+bh
+bn
+bs
+bu
+af
+ab
+ab
+ab
+ab
+"}
+(16,1,1) = {"
+aa
+ac
+ac
+af
+ag
+ak
+al
+av
+an
+an
+an
+al
+aN
+aN
+aN
+ba
+aN
+bo
+aN
+ac
+ac
+ac
+ab
+ac
+af
+"}
+(17,1,1) = {"
+aa
+ac
+ac
+ag
+af
+af
+al
+aw
+an
+an
+an
+al
+aN
+aN
+aN
+bb
+bi
+bp
+aN
+ac
+ac
+ac
+ab
+ac
+ab
+"}
+(18,1,1) = {"
+aa
+ac
+ac
+ac
+ac
+ac
+al
+ax
+aC
+aG
+an
+aL
+al
+aU
+aN
+aN
+bj
+bq
+aN
+ac
+ac
+ac
+ac
+ac
+ab
+"}
+(19,1,1) = {"
+aa
+ac
+ac
+ac
+ac
+ac
+al
+al
+al
+al
+al
+al
+al
+al
+al
+aN
+aN
+aN
+aN
+ac
+ac
+ab
+ac
+ac
+ab
+"}
+(20,1,1) = {"
+aa
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ab
+ab
+ab
+ab
+"}
+(21,1,1) = {"
+aa
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ab
+ac
+aa
+"}
+(22,1,1) = {"
+aa
+ab
+aa
+aa
+ac
+ac
+ac
+ac
+ac
+ac
+aJ
+af
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+aa
+ab
+ab
+aa
+"}
+(23,1,1) = {"
+ab
+ab
+ac
+ac
+ab
+ab
+ac
+ac
+ac
+ac
+ac
+af
+ab
+aa
+ab
+ab
+ac
+aa
+aa
+aa
+aa
+ac
+ac
+ac
+ac
+"}
+(24,1,1) = {"
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ac
+af
+ab
+ab
+ab
+aa
+aa
+ab
+ab
+aa
+aa
+aa
+aa
+ab
+ab
+ac
+af
+"}
+(25,1,1) = {"
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+ac
+af
+ab
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+aa
+aa
+aa
+ab
+ab
+aa
+aa
 "}

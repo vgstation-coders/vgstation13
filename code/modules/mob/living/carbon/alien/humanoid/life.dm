@@ -127,7 +127,7 @@
 				// Handle chem smoke effect  -- Doohl
 				for(var/obj/effect/smoke/chem/smoke in view(1, src))
 					if(smoke.reagents.total_volume)
-						smoke.reagents.reaction(src, INGEST)
+						smoke.reagents.reaction(src, INGEST, amount_override = min(smoke.reagents.total_volume,10)/(smoke.reagents.reagent_list.len))
 						spawn(5)
 							if(smoke)
 								smoke.reagents.copy_to(src, 10) // I dunno, maybe the reagents enter the blood stream through the lungs?
@@ -381,21 +381,29 @@
 
 /mob/living/carbon/alien/humanoid/handle_regular_hud_updates()
 
+	if(isDead() || (M_XRAY in mutations))
+		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		see_in_dark = 8
+		see_invisible = SEE_INVISIBLE_MINIMUM
+	else if(!isDead())
+		change_sight(adding = SEE_MOBS, removing = SEE_TURFS|SEE_OBJS)
+		see_in_dark = 4
+		see_invisible = SEE_INVISIBLE_MINIMUM
+
 	if(healths)
 		if(!isDead())
-			switch(health)
-				if(100 to INFINITY)
-					healths.icon_state = "health0"
-				if(75 to 100)
-					healths.icon_state = "health1"
-				if(50 to 75)
-					healths.icon_state = "health2"
-				if(25 to 50)
-					healths.icon_state = "health3"
-				if(0 to 25)
-					healths.icon_state = "health4"
-				else
-					healths.icon_state = "health5"
+			if(health >= maxHealth)
+				healths.icon_state = "health0"
+			else if(health > 0.75*maxHealth)
+				healths.icon_state = "health1"
+			else if(health > 0.5*maxHealth)
+				healths.icon_state = "health2"
+			else if(health > 0.25*maxHealth)
+				healths.icon_state = "health3"
+			else if(health > 0)
+				healths.icon_state = "health4"
+			else
+				healths.icon_state = "health5"
 		else
 			healths.icon_state = "health6"
 

@@ -164,11 +164,12 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 					var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
 					if(app && app.linked_db && account == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
 						var/turf/U = get_turf(PDA)
-						if(!PDA.silent)
+						var/datum/pda_app/messenger/app2 = locate(/datum/pda_app/messenger) in PDA.applications
+						if(app2 && !app2.silent)
 							playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
 						for (var/mob/O in hearers(3, U))
-							if(!PDA.silent)
-								O.show_message(text("[bicon(PDA)] *[PDA.ttone]*"))
+							if(app2 && !app2.silent)
+								O.show_message(text("[bicon(PDA)] *[app2.ttone]*"))
 						var/mob/living/L = null
 						if(PDA.loc && isliving(PDA.loc))
 							L = PDA.loc
@@ -234,12 +235,12 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	. = ..()
 	if(.)
 		return
-	if(isAdminGhost(user) || (ishuman(user) && !user.stat && get_dist(src,user) <= 1))
+	if(isAdminGhost(user) || is_malf_owner(user) || (ishuman(user) && !user.stat && get_dist(src,user) <= 1))
 		var/dat = "<b>Accounts Database</b><br>"
 
 		dat += {"<i>[machine_id]</i><br>
 			Confirm identity: <a href='?src=\ref[src];choice=insert_card'>[held_card ? held_card : "-----"]</a><br>"}
-		if(access_level > 0 || isAdminGhost(user))
+		if(access_level > 0 || isAdminGhost(user) || is_malf_owner(user))
 
 			dat += {"<a href='?src=\ref[src];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>
 				Combined department and personnel budget is currently [station_allowance] credits. A total of [global.requested_payroll_amount] credits were requested during the last payroll cycle.<br>"}
@@ -333,7 +334,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 				else if((access_hop in idcard.access) || (access_captain in idcard.access))
 					access_level = 1
 
-/obj/machinery/account_database/emag(mob/user)
+/obj/machinery/account_database/emag_act(mob/user)
 	if(emagged)
 		emagged = 0
 		access_level = 0
@@ -383,7 +384,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 				else
 					var/obj/item/I = usr.get_active_hand()
 					if(isEmag(I))
-						emag(usr)
+						emag_act(usr)
 						return
 					if (istype(I, /obj/item/weapon/card/id))
 						var/obj/item/weapon/card/id/C = I

@@ -35,6 +35,7 @@
 // Take damage from falling and hitting the ground
 /mob/living/fall_impact(var/turf/landing)
 	var/gravity = get_gravity()
+	var/total_brute_loss = 0
 	if(gravity > 0.5)
 		visible_message("<span class='warning'>\The [src] falls from above and slams into \the [landing]!</span>", \
 			"<span class='danger'>You fall off and hit \the [landing]!</span>", \
@@ -46,13 +47,18 @@
 			// Bases at ten and scales with the number of Z levels fallen
 			// Because wounds heal rather quickly, 10 should be enough to discourage jumping off 1 ledge but not be enough to ruin you, at least for the first time.
 			var/damage = ((10 * min(zs_fallen,5)) * gravity)
+			var/old_brute_loss = getBruteLoss()
 			apply_damage(rand(0, damage), BRUTE, LIMB_HEAD)
 			apply_damage(rand(0, damage), BRUTE, LIMB_CHEST)
 			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_LEG)
 			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_LEG)
 			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_ARM)
 			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_ARM)
-			log_debug("[src] has taken [src.getBruteLoss()] damage after falling [zs_fallen] z levels with a gravity of [gravity] Gs!")
+			total_brute_loss = getBruteLoss() - old_brute_loss
+			if(mind && mind.suiciding)
+				adjustBruteLoss(max(0,175 - total_brute_loss)) // Makes the act look real
+				total_brute_loss = getBruteLoss() - old_brute_loss
+			log_debug("[src] has taken [total_brute_loss] damage after falling [zs_fallen] z levels with a gravity of [gravity] Gs!")
 		AdjustKnockdown((3 * min(zs_fallen,10)) * gravity)
 	else
 		visible_message("\The [src] drops from above and onto \the [landing].", \

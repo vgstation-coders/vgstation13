@@ -12,9 +12,11 @@
 	var/one_per_turf = 0
 	var/on_floor = 0
 	var/start_unanchored = 0
+	var/z_up_required = 0
+	var/z_down_required = 0
 	var/list/other_reqs = list()
 
-/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list())
+/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), z_up_required = 0, z_down_required = 0)
 	src.title = title
 	src.result_type = result_type
 	src.req_amount = req_amount
@@ -25,6 +27,8 @@
 	src.on_floor = on_floor
 	src.start_unanchored = start_unanchored
 	src.other_reqs = other_reqs
+	src.z_up_required = z_up_required
+	src.z_down_required = z_down_required
 
 /datum/stack_recipe/proc/can_build_here(var/mob/usr, var/turf/T)
 	if(one_per_turf && locate(result_type) in T)
@@ -261,6 +265,8 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	null,
 	new/datum/stack_recipe("computer frame", /obj/structure/computerframe,                      5, time = 25, one_per_turf = 1			    ),
 	new/datum/stack_recipe("wall girders",   /obj/structure/girder,                             2, time = 50, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("multi-floor stairs",   /obj/structure/stairs_frame, 4, time = 100, one_per_turf = 1, on_floor = 1, z_up_required = 1),
+	new/datum/stack_recipe("railings",   /obj/structure/railing/loose,             				2, time = 25, on_floor = 1),
 	new/datum/stack_recipe("firelock frame", /obj/item/firedoor_frame,                          5, time = 50),
 	new/datum/stack_recipe("machine frame",  /obj/machinery/constructable_frame/machine_frame,  5, time = 25, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("mirror frame",   /obj/structure/mirror_frame,                       5, time = 25, one_per_turf = 1, on_floor = 1),
@@ -399,6 +405,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 ======================================================================== */
 var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("reinforced floor tile", /obj/item/stack/tile/metal/plasteel, 1, 4, 60),
+	new/datum/stack_recipe("railings",   					/obj/structure/railing/plasteel/loose,             	2, time = 50, on_floor = 1),
 	new/datum/stack_recipe("AI core",						/obj/structure/AIcore,								4,	time = 50,	one_per_turf = 1				),
 	new/datum/stack_recipe("Cage",							/obj/structure/cage,								6,  time = 100, one_per_turf = 1				),
 	new/datum/stack_recipe("Small Cage",					/obj/item/critter_cage,								2,  time = 50,	one_per_turf = 0				),
@@ -428,6 +435,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("wall girders",		/obj/structure/girder/wood,				2, 		time = 25, 	one_per_turf = 1, 	on_floor = 1),
 	new/datum/stack_recipe("wooden door",		/obj/machinery/door/mineral/wood,		10,		time = 20,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("barricade kit",		/obj/item/weapon/barricade_kit,			5													),
+	new/datum/stack_recipe("railings",   		/obj/structure/railing/wood/loose,      2,		time = 25, on_floor = 1),
 	null,
 	new/datum/stack_recipe("barrel",            /obj/structure/reagent_dispensers/cauldron/barrel/wood, 20, time = 5 SECONDS, one_per_turf = 1   ),
 	new/datum/stack_recipe("table parts",		/obj/item/weapon/table_parts/wood,		2													),

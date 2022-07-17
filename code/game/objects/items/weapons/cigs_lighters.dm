@@ -181,6 +181,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	slot_flags = SLOT_MASK|SLOT_EARS
+	goes_in_mouth = TRUE
 	var/lit = 0
 	var/overlay_on = "ciglit" //Apparently not used
 	var/type_butt = /obj/item/trash/cigbutt
@@ -193,6 +194,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/base_name = "cigarette"
 	var/base_icon = "cig"
 	var/burn_on_end = FALSE
+	surgerysound = 'sound/items/cautery.ogg'
 
 /obj/item/clothing/mask/cigarette/New()
 	..()
@@ -359,7 +361,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 
 	lit = 1 //All checks that could have stopped the cigarette are done, let us begin
-	score["tobacco"]++
+	score.tobacco++
 
 	flags &= ~NOREACT //Allow reagents to react after being lit
 	clothing_flags |= (MASKINTERNALS | BLOCK_GAS_SMOKE_EFFECT)
@@ -429,7 +431,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				if(prob(25)) //So it's not an instarape in case of acid
-					reagents.reaction(M, INGEST)
+					reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,1)/(reagents.reagent_list.len))
 				reagents.trans_to(M, 1)
 		else //Else just remove some of the reagents
 			reagents.remove_any(REAGENTS_METABOLISM)
@@ -529,18 +531,33 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/spaceportbutt
 
+/obj/item/clothing/mask/cigarette/bugged //transmits voice to the detective's cigarette pack when turned into a butt
+	var/cig_tag = ""
 
+/obj/item/clothing/mask/cigarette/bugged/examine(mob/user)
+	..()
+	if(is_holder_of(user, src))
+		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the [src] feels heavier than normal and has wires in the filter.</span>")
+		return
+
+/obj/item/clothing/mask/cigarette/bugged/attack_self(mob/user as mob)
+	if(lit)
+		user.visible_message("<span class='notice'>[user] calmly drops and treads on the lit [name], putting it out.</span>")
+		var/turf/T = get_turf(src)
+		var/obj/item/trash/cigbutt/bugged/new_butt = new /obj/item/trash/cigbutt/bugged(T)
+		new_butt.cigbug.radio_tag = cig_tag
+		transfer_fingerprints_to(new_butt)
+		lit = 0 //Needed for proper update
+		update_brightness()
+		qdel(src)
+	else
+		var/newtag = sanitize(input(user, "Choose a unique ID tag:", name, cig_tag) as null|text)
+		if(newtag)
+			cig_tag = newtag
 
 ////////////
 // CIGARS //
 ////////////
-
-/obj/item/clothing/mask/cigarette/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
-	var/mob/living/carbon/C = M
-	if(!istype(C) || !C.hasmouth())
-		to_chat(C, "<span class='warning'>You have no mouth.</span>")
-		return CANNOT_EQUIP
-	. = ..()
 
 /obj/item/clothing/mask/cigarette/cigar
 	name = "Premium Cigar"
@@ -627,6 +644,19 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A manky old cigar butt."
 	icon_state = "cigarbutt"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/trash/cigbutt/bugged
+	var/obj/item/device/radio/bug/cigbug
+
+/obj/item/trash/cigbutt/bugged/New()
+	cigbug = new /obj/item/device/radio/bug(src)
+	cigbug.frequency = BUG_FREQ
+
+/obj/item/trash/cigbutt/bugged/examine(mob/user)
+	..()
+	if(is_holder_of(user, src))
+		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the [src] feels heavier than normal and has wires in the filter.</span>")
+		return
 
 /*
 //I'll light my cigar with an energy sword if I want to, thanks
@@ -716,7 +746,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
 	if(!src.lit)
 		lit = 1
-		score["tobacco"]++
+		score.tobacco++
 		damtype = BURN
 		update_brightness()
 		var/turf/T = get_turf(src)
@@ -807,6 +837,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	light_color = LIGHT_COLOR_FIRE
 	var/lit = 0
 	var/base_icon = "lighter"
+	surgerysound = 'sound/items/cautery.ogg'
 
 /obj/item/weapon/lighter/New()
 	..()

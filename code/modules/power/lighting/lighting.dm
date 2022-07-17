@@ -110,7 +110,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	anchored = 1
 	plane = OBJ_PLANE
 	layer = ABOVE_DOOR_LAYER
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	idle_power_usage = 2
 	active_power_usage = 20
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list
@@ -137,21 +137,14 @@ var/global/list/obj/machinery/light/alllights = list()
 		update(0)
 	alllights += src
 
-	spawn(2)
-		var/area/A = get_area(src)
-		if(A && !A.requires_power)
-			on = 1
-
-		if (!map.lights_always_ok)
-			switch(fitting)
-				if("tube")
-					if(prob(2))
-						broken(1)
-				if("bulb")
-					if(prob(5))
-						broken(1)
-		spawn(1)
-			update(0)
+	if(map.broken_lights)
+		switch(fitting)
+			if("tube")
+				if(prob(2))
+					broken(1)
+			if("bulb")
+				if(prob(5))
+					broken(1)
 
 /obj/machinery/light/supports_holomap()
 	return TRUE
@@ -163,7 +156,7 @@ var/global/list/obj/machinery/light/alllights = list()
 // the smaller bulb light fixture
 
 /obj/machinery/light/cultify()
-	new /obj/structure/cult_legacy/pylon(loc)
+	new /obj/structure/cult/pylon(loc)
 	qdel(src)
 
 /obj/machinery/light/bullet_act(var/obj/item/projectile/Proj)
@@ -249,7 +242,6 @@ var/global/list/obj/machinery/light/alllights = list()
 // update the icon_state and luminosity of the light depending on its state
 /obj/machinery/light/proc/update(var/trigger = 1)
 
-
 	update_icon()
 	if(on)
 		if(light_range != current_bulb.brightness_range || light_power != current_bulb.brightness_power || light_color != current_bulb.brightness_color)
@@ -268,10 +260,10 @@ var/global/list/obj/machinery/light/alllights = list()
 					on = 0
 					set_light(0)
 			else
-				use_power = 2
+				use_power = MACHINE_POWER_USE_ACTIVE
 				set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		set_light(0)
 
 	if(current_bulb)
@@ -407,7 +399,16 @@ var/global/list/obj/machinery/light/alllights = list()
  */
 /obj/machinery/light/proc/has_power()
 	var/area/this_area = get_area(src)
-	return this_area.lightswitch && this_area.power_light
+	var/success = FALSE
+	if(!this_area || !this_area.power_light)
+		return FALSE
+	if(!this_area.haslightswitch || !this_area.requires_power)
+		return TRUE
+	for(var/obj/machinery/light_switch/L in this_area)
+		if(L.on)
+			success = TRUE
+		break
+	return success
 
 /obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
 	if(flickering)
@@ -571,8 +572,7 @@ var/global/list/obj/machinery/light/alllights = list()
  */
 /obj/machinery/light/power_change()
 	spawn(10)
-		var/area/this_area = get_area(src)
-		seton(this_area.lightswitch && this_area.power_light)
+		seton(has_power())
 
 // called when on fire
 

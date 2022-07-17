@@ -2277,13 +2277,13 @@
 /area/research_outpost/maint)
 "aeL" = (
 /obj/structure/stairs/west,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
 /area/hydroponics)
 "aeM" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -2378,7 +2378,10 @@
 /area/maintenance/port)
 "afc" = (
 /obj/structure/stairs/north,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/structure/railing{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -2461,7 +2464,7 @@
 	},
 /area/research_outpost/xenobot)
 "afp" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -12278,6 +12281,11 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
 /turf/simulated/floor,
 /area/mine/production)
 "aCw" = (
@@ -12289,6 +12297,11 @@
 "aCx" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
 	},
 /turf/simulated/floor,
 /area/mine/production)
@@ -12349,11 +12362,21 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
 /turf/simulated/floor,
 /area/research_outpost/entry)
 "aCG" = (
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/zpipe/up/supply,
+/obj/structure/cable{
+	d1 = 8;
+	d2 = 16;
+	icon_state = "8-16"
+	},
 /turf/simulated/floor,
 /area/research_outpost/entry)
 "aCI" = (
@@ -12923,6 +12946,11 @@
 /obj/machinery/atmospherics/pipe/zpipe/up/supply/hidden{
 	dir = 1
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 16;
+	icon_state = "1-16"
+	},
 /turf/simulated/floor,
 /area/mine/production)
 "aEP" = (
@@ -13005,7 +13033,7 @@
 /area/research_outpost/entry)
 "aEW" = (
 /obj/structure/stairs/west,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -13016,10 +13044,10 @@
 	pixel_y = -25
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/window/reinforced{
+/obj/machinery/light,
+/obj/structure/railing/glass{
 	dir = 1
 	},
-/obj/machinery/light,
 /turf/simulated/floor,
 /area/research_outpost/entry)
 "aEY" = (
@@ -15209,13 +15237,13 @@
 "aJk" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/stairs/west,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
 /area/mine/production)
 "aJl" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -16213,16 +16241,23 @@
 	},
 /area/medical/virology_break)
 "aLy" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 8
 	},
-/obj/structure/z_ladder/up,
-/turf/simulated/floor{
-	icon_state = "white"
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
-/area/medical/virology)
+/turf/simulated/floor,
+/area/mine/production)
 "aLz" = (
 /obj/machinery/atmospherics/pipe/zpipe/up/supply/hidden,
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 16;
+	icon_state = "2-16"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16307,6 +16342,11 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16366,6 +16406,11 @@
 /area/medical/virology_break)
 "aLQ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16376,6 +16421,16 @@
 	name = "Emergency NanoMed";
 	pixel_y = -32;
 	req_access_txt = "0"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -16391,6 +16446,11 @@
 	pixel_x = 2;
 	pixel_y = 6
 	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16401,6 +16461,11 @@
 	pixel_x = -1;
 	pixel_y = 12
 	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16409,6 +16474,11 @@
 /obj/machinery/light_switch{
 	pixel_y = -30
 	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16416,6 +16486,14 @@
 "aLV" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/green,
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 27
+	},
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16436,6 +16514,11 @@
 	locked = 1;
 	name = "Virology Interior Airlock";
 	req_access_txt = "39"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -16500,6 +16583,11 @@
 "aMg" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -16681,6 +16769,11 @@
 	dir = 2;
 	pixel_y = 0
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16843,6 +16936,11 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -16920,14 +17018,6 @@
 /turf/simulated/floor/plating,
 /area/maintenance/virology_maint)
 "aNg" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/machinery/power/apc{
-	dir = 8;
-	pixel_x = -24
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
 	},
@@ -17023,11 +17113,6 @@
 	},
 /area/mine/explored)
 "aNt" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/binary/valve{
 	dir = 4
 	},
@@ -17164,13 +17249,13 @@
 	},
 /area/medical/virology)
 "aNF" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
 	},
 /turf/simulated/floor/plating,
 /area/medical/virology_break)
@@ -17239,11 +17324,6 @@
 	},
 /area/medical/virology)
 "aNL" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 8;
@@ -17783,8 +17863,8 @@
 	},
 /area/science/xenobiology)
 "aOI" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass,
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -17793,8 +17873,11 @@
 /area/science/xenobiology)
 "aOJ" = (
 /obj/structure/stairs/east,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass,
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -19514,7 +19597,7 @@
 	name = "Nitrogen Supply Control";
 	output_tag = "vox_out";
 	pressure_setting = 600;
-	sensors = list("vox_sensor" = "Tank")
+	sensors = list("vox_sensor"="Tank")
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -19845,7 +19928,7 @@
 /area/vox_trading_post/atmos)
 "aVP" = (
 /obj/machinery/vending/tool{
-	contraband = list(/obj/item/tool/weldingtool/hugetank = 2, /obj/item/clothing/gloves/yellow/vox = 2);
+	contraband = list(/obj/item/tool/weldingtool/hugetank=2,/obj/item/clothing/gloves/yellow/vox=2);
 	name = "Outpost YouTool"
 	},
 /turf/simulated/floor/vox{
@@ -21474,7 +21557,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "green"
@@ -21882,7 +21965,7 @@
 /area/crew_quarters/kitchen)
 "bfL" = (
 /obj/machinery/portable_atmospherics/hydroponics,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -22660,7 +22743,7 @@
 	input_tag = "o2_in";
 	name = "Oxygen Supply Control";
 	output_tag = "o2_out";
-	sensors = list("o2_sensor" = "Tank")
+	sensors = list("o2_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/cyan/visible,
 /obj/machinery/atmospherics/pipe/simple/filtering/visible{
@@ -26007,7 +26090,7 @@
 /area/hydroponics)
 "bCJ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 8
 	},
 /turf/simulated/floor{
@@ -28404,7 +28487,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing/glass,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -32358,11 +32441,9 @@
 	master_tag = "vox_trading_airlock_control";
 	pixel_x = -24
 	},
-/obj/structure/window/reinforced,
 /turf/simulated/open,
 /area/mine/explored)
 "caW" = (
-/obj/structure/window/reinforced,
 /turf/simulated/open,
 /area/mine/explored)
 "caX" = (
@@ -32555,8 +32636,18 @@
 /turf/simulated/floor,
 /area/supply/storage)
 "cbr" = (
-/obj/machinery/light/small,
-/turf/simulated/floor/plating,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
 /area/medical/virology)
 "cbs" = (
 /obj/effect/decal/warning_stripes{
@@ -33371,6 +33462,11 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "whitehall"
@@ -36356,7 +36452,7 @@
 /area/science/hallway)
 "cqH" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -37359,17 +37455,15 @@
 "cub" = (
 /turf/simulated/open,
 /area/science/hallway)
-"cuc" = (
-/obj/structure/catwalk,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/open,
-/area/science/hallway)
 "cud" = (
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/zpipe/down/supply{
 	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 32;
+	icon_state = "4-32"
 	},
 /turf/simulated/open,
 /area/science/hallway)
@@ -38491,7 +38585,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -38512,7 +38606,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -40575,7 +40669,7 @@
 	frequency = 1443;
 	level = 3;
 	name = "Distribution and Waste Monitor";
-	sensors = list("mair_in_meter" = "Mixed Air In", "air_sensor" = "Mixed Air Supply Tank", "mair_out_meter" = "Mixed Air Out", "dloop_atm_meter" = "Distribution Loop", "wloop_atm_meter" = "Waste Loop")
+	sensors = list("mair_in_meter"="Mixed Air In","air_sensor"="Mixed Air Supply Tank","mair_out_meter"="Mixed Air Out","dloop_atm_meter"="Distribution Loop","wloop_atm_meter"="Waste Loop")
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
@@ -40916,7 +41010,7 @@
 /turf/simulated/floor,
 /area/supply/miningdock)
 "cJq" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 8
 	},
 /turf/simulated/floor,
@@ -43314,7 +43408,7 @@
 /obj/machinery/computer/general_air_control{
 	frequency = 1441;
 	name = "Tank Monitor";
-	sensors = list("n2_sensor" = "Nitrogen", "o2_sensor" = "Oxygen", "co2_sensor" = "Carbon Dioxide", "tox_sensor" = "Toxins", "n2o_sensor" = "Nitrous Oxide", "waste_sensor" = "Gas Mix Tank")
+	sensors = list("n2_sensor"="Nitrogen","o2_sensor"="Oxygen","co2_sensor"="Carbon Dioxide","tox_sensor"="Toxins","n2o_sensor"="Nitrous Oxide","waste_sensor"="Gas Mix Tank")
 	},
 /obj/machinery/requests_console{
 	department = "Atmospherics";
@@ -43934,7 +44028,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 8
 	},
 /turf/simulated/floor,
@@ -54753,7 +54847,7 @@
 	input_tag = "waste_in";
 	name = "Gas Mix Tank Control";
 	output_tag = "waste_out";
-	sensors = list("waste_sensor" = "Tank")
+	sensors = list("waste_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible{
 	dir = 4
@@ -56207,7 +56301,7 @@
 	input_tag = "coolant_in";
 	name = "Coolant Control";
 	output_tag = "coolant_out";
-	sensors = list("sme_sensor" = "Engine")
+	sensors = list("sme_sensor"="Engine")
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
@@ -56470,16 +56564,14 @@
 	},
 /area/security/prison)
 "eax" = (
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+/obj/structure/railing/plasteel{
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/security/prison)
 "eaH" = (
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
+/obj/structure/railing/plasteel{
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -56491,7 +56583,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel{
 	dir = 8
 	},
 /turf/simulated/floor/glass/plasma,
@@ -58683,7 +58775,7 @@
 	input_tag = "n2o_in";
 	name = "Nitrous Oxide Supply Control";
 	output_tag = "n2o_out";
-	sensors = list("n2o_sensor" = "Tank")
+	sensors = list("n2o_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible,
 /turf/simulated/floor{
@@ -61800,7 +61892,7 @@
 	},
 /obj/machinery/computer/general_air_control/large_tank_control{
 	name = "Telecomms Room Monitoring";
-	sensors = list("tcomms_sensor" = "Server Room")
+	sensors = list("tcomms_sensor"="Server Room")
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -68065,7 +68157,7 @@
 	input_tag = "tox_in";
 	name = "Toxin Supply Control";
 	output_tag = "tox_out";
-	sensors = list("tox_sensor" = "Tank")
+	sensors = list("tox_sensor"="Tank")
 	},
 /obj/structure/catwalk,
 /turf/unsimulated/floor/snow,
@@ -68811,7 +68903,7 @@
 	input_tag = "n2_in";
 	name = "Nitrogen Supply Control";
 	output_tag = "n2_out";
-	sensors = list("n2_sensor" = "Tank")
+	sensors = list("n2_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible{
 	dir = 4
@@ -69550,7 +69642,7 @@
 	input_tag = "tox_in";
 	name = "Toxin Supply Control";
 	output_tag = "tox_out";
-	sensors = list("tox_sensor" = "Tank")
+	sensors = list("tox_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible,
 /obj/machinery/light{
@@ -70972,11 +71064,11 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "gVy" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1
+	},
+/obj/structure/railing/glass{
+	dir = 8
 	},
 /turf/simulated/floor,
 /area/supply/miningdock)
@@ -73152,6 +73244,7 @@
 /obj/machinery/light_switch{
 	pixel_x = 27
 	},
+/obj/machinery/crate_weigher,
 /turf/simulated/floor,
 /area/supply/storage)
 "hFJ" = (
@@ -73892,7 +73985,7 @@
 /turf/simulated/floor,
 /area/derelict/arrival)
 "hSo" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor,
@@ -75120,17 +75213,11 @@
 	pixel_y = 32
 	},
 /obj/structure/table/reinforced,
-/obj/item/stack/rcd_ammo,
-/obj/item/stack/rcd_ammo,
-/obj/item/stack/rcd_ammo,
-/obj/item/stack/rcd_ammo,
-/obj/item/stack/rcd_ammo,
-/obj/item/stack/rcd_ammo,
-/obj/item/device/rcd/matter/engineering{
-	pixel_x = 4;
-	pixel_y = 3
-	},
 /obj/item/device/rcd/rpd,
+/obj/item/stack/rcd_ammo/ce,
+/obj/item/device/rcd/matter/engineering/pre_loaded/adv{
+	pixel_y = 8
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "neutralfull"
@@ -76224,13 +76311,6 @@
 	icon_state = "yellow"
 	},
 /area/engineering/engine)
-"iJt" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/open,
-/area/science/xenobiology)
 "iJu" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -78181,7 +78261,7 @@
 	frequency = 1449;
 	input_tag = "inc_in";
 	output_tag = "inc_out";
-	sensors = list("inc_sensor" = "Tank")
+	sensors = list("inc_sensor"="Tank")
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -79760,7 +79840,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 8
 	},
 /turf/simulated/floor,
@@ -80649,7 +80729,7 @@
 	name = "Mixed Air Supply Control";
 	output_tag = "air_out";
 	pressure_setting = 2000;
-	sensors = list("air_sensor" = "Tank")
+	sensors = list("air_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible{
 	dir = 4
@@ -81411,8 +81491,15 @@
 /turf/simulated/floor,
 /area/crew_quarters/fitness)
 "kzf" = (
-/obj/structure/z_ladder,
-/turf/simulated/floor/plating,
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
 /area/medical/virology)
 "kzu" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
@@ -81760,7 +81847,7 @@
 /area/derelict/medical/chapel)
 "kEm" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 8
 	},
 /turf/simulated/floor{
@@ -82854,6 +82941,11 @@
 /obj/machinery/atmospherics/pipe/zpipe/down/supply/hidden{
 	dir = 1
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 32;
+	icon_state = "1-32"
+	},
 /turf/simulated/open,
 /area/medical/virology_break)
 "kXo" = (
@@ -83066,7 +83158,7 @@
 	dir = 1;
 	on = 1
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing/glass,
 /turf/simulated/floor,
 /area/supply/miningdock)
 "lck" = (
@@ -83960,19 +84052,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/solar_control)
 "ltZ" = (
-/obj/machinery/gateway{
-	dir = 9
-	},
 /turf/simulated/floor{
-	icon_state = "dark-markings"
-	},
-/area/gateway)
-"luf" = (
-/obj/machinery/gateway{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 8;
 	icon_state = "dark-markings"
 	},
 /area/gateway)
@@ -84006,15 +84086,6 @@
 	icon_state = "wood"
 	},
 /area/wizard_station)
-"luF" = (
-/obj/machinery/gateway{
-	dir = 5
-	},
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "dark-markings"
-	},
-/area/gateway)
 "luR" = (
 /turf/simulated/wall,
 /area/science/lab)
@@ -85699,16 +85770,13 @@
 	},
 /area/hallway/secondary/exit)
 "lYc" = (
-/obj/machinery/gateway{
-	dir = 8
-	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
 	},
 /area/gateway)
 "lYd" = (
-/obj/machinery/gateway/centerstation,
+/obj/machinery/gateway/center,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -85724,15 +85792,6 @@
 	icon_state = "white"
 	},
 /area/medical/medbay)
-"lYn" = (
-/obj/machinery/gateway{
-	dir = 4
-	},
-/turf/simulated/floor{
-	dir = 8;
-	icon_state = "dark-markings"
-	},
-/area/gateway)
 "lYv" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/storage/toolbox/mechanical,
@@ -86369,9 +86428,6 @@
 /turf/simulated/floor/engine/concrete,
 /area/station/garage)
 "mmE" = (
-/obj/machinery/gateway{
-	dir = 10
-	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "dark-markings"
@@ -86434,14 +86490,6 @@
 	icon_state = "whiteblue"
 	},
 /area/medical/medbay)
-"mnW" = (
-/obj/machinery/gateway{
-	dir = 6
-	},
-/turf/simulated/floor{
-	icon_state = "dark-markings"
-	},
-/area/gateway)
 "mnZ" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -86833,6 +86881,11 @@
 	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor,
 /area/supply/miningdock)
@@ -89476,11 +89529,6 @@
 /turf/simulated/floor/plating,
 /area/security/checkpoint2)
 "nsp" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/machinery/light/small{
 	dir = 8
 	},
@@ -90738,7 +90786,7 @@
 	input_tag = "o2_in";
 	name = "Oxygen Supply Control";
 	output_tag = "o2_out";
-	sensors = list("o2_sensor" = "Tank")
+	sensors = list("o2_sensor"="Tank")
 	},
 /turf/simulated/floor/plating/airless,
 /area/derelict/atmos)
@@ -90886,7 +90934,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -91284,7 +91332,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -95707,18 +95755,20 @@
 /turf/simulated/floor,
 /area/supply/miningdock)
 "pvS" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
+/obj/machinery/power/apc{
+	dir = 1;
+	pixel_y = 24
 	},
-/turf/simulated/floor/plating,
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
 /area/medical/virology)
 "pvX" = (
 /obj/structure/closet/secure_closet/exile,
@@ -96016,7 +96066,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing/glass,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -96364,7 +96414,7 @@
 	input_tag = "co2_in";
 	name = "Carbon Dioxide Supply Control";
 	output_tag = "co2_out";
-	sensors = list("co2_sensor" = "Tank")
+	sensors = list("co2_sensor"="Tank")
 	},
 /obj/machinery/atmospherics/pipe/simple/filtering/visible,
 /turf/simulated/floor{
@@ -97197,7 +97247,7 @@
 	input_tag = "n2_in";
 	name = "Nitrogen Supply Control";
 	output_tag = "n2_out";
-	sensors = list("n2_sensor" = "Tank")
+	sensors = list("n2_sensor"="Tank")
 	},
 /turf/simulated/floor/plating/airless,
 /area/derelict/atmos)
@@ -99609,7 +99659,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing/glass,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -100994,7 +101044,7 @@
 "rtK" = (
 /obj/machinery/hologram/holopad,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -103069,7 +103119,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -103352,7 +103402,7 @@
 /obj/effect/landmark/start{
 	name = "Shaft Miner"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor,
@@ -103473,14 +103523,6 @@
 	},
 /turf/simulated/floor/airless,
 /area/derelict/hallway/primary)
-"ssK" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor/plating,
-/area/medical/virology)
 "ssL" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -107138,7 +107180,7 @@
 /turf/simulated/floor/plating,
 /area/hallway/primary/central)
 "tEb" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -107290,7 +107332,7 @@
 	dir = 8;
 	on = 1
 	},
-/obj/structure/window/reinforced,
+/obj/structure/railing,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "green"
@@ -107303,7 +107345,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "tHj" = (
-/obj/structure/window/reinforced,
+/obj/structure/railing,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "green"
@@ -107354,11 +107396,6 @@
 	},
 /obj/structure/window/reinforced{
 	dir = 8
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/virology_maint)
@@ -107922,9 +107959,11 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "tRB" = (
-/obj/structure/window/reinforced,
-/turf/simulated/open,
-/area/science/xenobiology)
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/snow,
+/area/surface/snow)
 "tRN" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -109070,22 +109109,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/hallway/primary/central)
-"ush" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating,
-/area/medical/virology)
 "usl" = (
 /obj/machinery/computer/prisoner,
 /obj/machinery/light{
@@ -109287,7 +109310,7 @@
 	frequency = 1443;
 	level = 3;
 	name = "Distribution and Waste Monitor";
-	sensors = list("mair_in_meter" = "Mixed Air In", "air_sensor" = "Mixed Air Supply Tank", "mair_out_meter" = "Mixed Air Out", "dloop_atm_meter" = "Distribution Loop", "wloop_atm_meter" = "Waste Loop")
+	sensors = list("mair_in_meter"="Mixed Air In","air_sensor"="Mixed Air Supply Tank","mair_out_meter"="Mixed Air Out","dloop_atm_meter"="Distribution Loop","wloop_atm_meter"="Waste Loop")
 	},
 /obj/machinery/light{
 	dir = 4
@@ -109451,7 +109474,7 @@
 /area/science/robotics)
 "uzu" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -110291,7 +110314,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -116232,17 +116255,6 @@
 	},
 /turf/simulated/floor,
 /area/hallway/primary/central)
-"wPK" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/machinery/power/apc{
-	dir = 8;
-	pixel_x = -24
-	},
-/turf/simulated/floor/plating,
-/area/medical/virology)
 "wPQ" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -117811,7 +117823,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 8
 	},
 /turf/simulated/floor,
@@ -118398,7 +118410,7 @@
 	dir = 4
 	},
 /obj/item/clothing/mask/gas,
-/obj/structure/window/reinforced{
+/obj/structure/railing{
 	dir = 1
 	},
 /turf/simulated/floor/plating,
@@ -118466,10 +118478,10 @@
 	},
 /area/maintenance/aft)
 "xGH" = (
-/obj/structure/window/reinforced{
+/obj/structure/catwalk,
+/obj/structure/railing/glass{
 	dir = 8
 	},
-/obj/structure/catwalk,
 /turf/simulated/open,
 /area/science/hallway)
 "xGI" = (
@@ -119241,11 +119253,16 @@
 /turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "xQa" = (
-/obj/structure/window/reinforced,
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/zpipe/down/supply/hidden{
 	dir = 1
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 32;
+	icon_state = "1-32"
+	},
+/obj/structure/railing/glass,
 /turf/simulated/open,
 /area/supply/miningdock)
 "xQb" = (
@@ -149333,7 +149350,7 @@ atK
 awj
 axr
 azz
-aCw
+aLy
 aEN
 azz
 azz
@@ -169607,9 +169624,9 @@ aLI
 aLQ
 aLX
 aMg
-aNj
+cbr
 aMD
-aMY
+kzf
 aNl
 aNx
 aMk
@@ -170213,7 +170230,7 @@ aLq
 aMi
 aMi
 aMi
-aMW
+pvS
 aNk
 aNz
 aNI
@@ -170515,7 +170532,7 @@ aLq
 aMk
 aMl
 aMF
-aLy
+aMW
 aNk
 aNA
 aNJ
@@ -241404,7 +241421,7 @@ gnF
 jWg
 koS
 kOC
-luf
+lYc
 lYd
 mng
 mVl
@@ -241706,9 +241723,9 @@ gnF
 jWg
 koS
 kOC
-luF
-lYn
-mnW
+mmE
+lYc
+ltZ
 mVF
 nKp
 ojY
@@ -260508,13 +260525,13 @@ aNF
 kXn
 lBW
 aLq
-qIF
-qIF
-aLZ
-aLZ
-aLZ
-aLZ
-aLZ
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
 bZp
 bZp
 bZp
@@ -260810,13 +260827,13 @@ aMA
 aLq
 aLq
 aLq
-qIF
-qIF
-aLZ
-wPK
-aMt
-aMt
-aLZ
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
 bZp
 bZp
 bZp
@@ -261110,15 +261127,15 @@ aMP
 aMP
 aNL
 nsp
-aMP
+aMS
 tIt
-usu
-usu
-ush
-ssK
-kzf
-cbr
-aLZ
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
 bZp
 bZp
 bZp
@@ -261414,13 +261431,13 @@ aNT
 xkE
 hCQ
 jIC
-qIF
-qIF
-aML
-aMt
-aMt
-aMt
-aLZ
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
 bZp
 bZp
 bZp
@@ -261716,13 +261733,13 @@ aOk
 aMq
 aMq
 aMq
-qIF
-qIF
-aLZ
-aLZ
-pvS
-aLZ
-aLZ
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
+bZp
 bZp
 bZp
 bZp
@@ -268924,10 +268941,10 @@ bIX
 bKV
 bOp
 xGH
-cuc
-cuc
-cuc
-cuc
+xGH
+xGH
+xGH
+xGH
 bWj
 bYm
 caj
@@ -268976,7 +268993,7 @@ kDx
 qQV
 woY
 pBO
-iJt
+pnm
 pnm
 pnm
 pnm
@@ -269278,7 +269295,7 @@ onJ
 eBZ
 vkM
 qPk
-tRB
+pnm
 pnm
 pnm
 pnm
@@ -290586,7 +290603,7 @@ bQF
 bSZ
 bXb
 caV
-bZp
+tRB
 bZp
 bZp
 bZp
@@ -290888,7 +290905,7 @@ byS
 byS
 bXc
 caW
-bZp
+tRB
 bZp
 bMb
 bZp

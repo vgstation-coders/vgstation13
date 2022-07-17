@@ -25,7 +25,7 @@
 	var/y_co = 1         // Y coordinate
 	var/z_co = 1         // Z coordinate
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 300
 	power_channel = EQUIP
@@ -104,7 +104,7 @@
 		return 1
 
 /obj/machinery/computer/telescience/process()
-	if(!cell || (stat & (BROKEN|NOPOWER)) || !anchored)
+	if(!cell || (stat & (BROKEN|NOPOWER|FORCEDISABLE)) || !anchored)
 		return
 
 	var/used = cell.give(100)
@@ -136,14 +136,14 @@
 		icon_state = "teleportb"
 		return
 
-	if(stat & NOPOWER)
+	if(stat & (NOPOWER|FORCEDISABLE))
 		src.icon_state = "teleport0"
 
 	else
 		icon_state = initial(icon_state)
 
 /obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(!isAdminGhost(user) && (user.stat || user.restrained()))
 		return
@@ -187,9 +187,6 @@
 
 /obj/machinery/computer/telescience/attack_paw(mob/user)
 	to_chat(user, "You are too primitive to use this computer.")
-
-/obj/machinery/computer/telescience/attack_ai(mob/user)
-	return src.attack_hand(user)
 
 /obj/machinery/computer/telescience/attack_hand(mob/user)
 	ui_interact(user)

@@ -125,7 +125,6 @@ For an exhaustive list please visit http://ss13.moe/wiki/index.php/Shortcuts
 
 	var/admin = {"<font color='purple'>
 Admin:
-\tF5 = Aghost (admin-ghost)
 \tF6 = player-panel-new
 \tF7 = admin-pm
 \tF8 = Invisimin

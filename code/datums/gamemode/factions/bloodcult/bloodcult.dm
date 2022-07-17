@@ -26,19 +26,45 @@
 
 	var/list/cultist_cap = 1	//clamped between 5 and 9 depending on crew size. once the cap goes up it cannot go down.
 
-	var/mentor_count = 0 //so we don't loop through the member list if we already know there are no mentors in there
+	var/mentor_count = 0 	//so we don't loop through the member list if we already know there are no mentors in there
+
+	var/list/arch_cultists = list()
+	var/list/departments_left = list("Security", "Medical", "Engineering", "Science", "Cargo")
+
+	var/mob/living/sacrifice_target = null
+	var/datum/mind/sacrifice_mind = null
+	var/target_sacrificed = FALSE
+
+
 
 /datum/faction/bloodcult/check_win()
-	return cult_win
+	if(stage <= FACTION_DEFEATED)
+		return FALSE
+	if(stage < FACTION_ENDGAME)
+		if(departments_left.len < 5)
+			stage(FACTION_ENDGAME)
+			//command_alert(/datum/command_alert/cult_eclipse_start)
+			return FALSE
+	if(stage == FACTION_ENDGAME)
+		if(departments_left.len == 0)
+			stage(FACTION_VICTORY)
+			cult_win = TRUE
+			return TRUE
 
 /datum/faction/bloodcult/IsSuccessful()
 	return cult_win
+
+
+/datum/faction/bloodcult/GetScoreboard()
+	. = ..()
+	. += "<BR>Total Veil Weakness:[veil_weakness]<BR>"
 
 
 /datum/faction/bloodcult/process()
 	..()
 	if (cultist_cap > 1) //The first call occurs in OnPostSetup()
 		UpdateCap()
+
 
 /datum/faction/bloodcult/proc/UpdateCap()
 	var/living_players = 0
@@ -78,12 +104,25 @@
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
-	// TODO UPHEAVAL PART 2, admin debug buttons
+	
+	dat += "<br>"
+	dat += "<a href='?src=\ref[src];unlockRitual=1'>\[Unlock Ritual\]</A><br>"
+	dat += "<br>"
+
 	return dat
 
 /datum/faction/bloodcult/Topic(href, href_list)
 	..()
-	// TODO UPHEAVAL PART 2, admin debug buttons
+
+	if(!usr.check_rights(R_ADMIN))
+		message_admins("[usr] tried to access bloodcult faction Topic() without permissions.")
+		return
+
+	if(href_list["unlockRitual"])
+		var/datum/bloodcult_ritual/R = input(usr,"Select a ritual to unlock.", "Unlock", null) as null|anything in locked_rituals
+		if(R)
+			R.Unlock(TRUE)
+			
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	..()
@@ -92,6 +131,7 @@
 /datum/faction/bloodcult/OnPostSetup()
 	initialize_rune_words()
 	AppendObjective(/datum/objective/bloodcult)
+	initialize_rituals()
 	for (var/datum/role/R in members)
 		var/mob/M = R.antag.current
 		to_chat(M, "<span class='sinister'>Our communion must remain small and secretive.</span>")
@@ -100,4 +140,52 @@
 		for (var/datum/role/R in members)
 			var/mob/M = R.antag.current
 			to_chat(M, "<span class='sinister'>This number might rise up to 9 as more people arrive aboard the station.</span>")
+	AnnounceObjectives()
 	..()
+
+
+/datum/faction/bloodcult/proc/add_bloody_floor(var/turf/T)
+	if (!istype(T))
+		return
+	if(T && (T.z == map.zMainStation))//F I V E   T I L E S
+		if(!(locate("\ref[T]") in bloody_floors))
+			bloody_floors[T] = T
+			for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
+				B.update_icon()
+			TriggerCultRitual(/datum/bloodcult_ritual/spill_blood)
+
+
+/datum/faction/bloodcult/proc/remove_bloody_floor(var/turf/T)
+	if (!istype(T))
+		return
+	for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
+		B.update_icon()
+	bloody_floors -= T
+
+
+/datum/faction/bloodcult/proc/FindSacrificeTarget()
+	var/list/possible_targets = list()
+	var/list/backup_targets = list()
+	for(var/mob/living/carbon/human/player in player_list)
+		if(iscultist(player))
+			continue
+		//They may be dead, but we only need their flesh
+		var/turf/player_turf = get_turf(player)
+		if(player_turf.z != map.zMainStation)//We only look for people currently aboard the station
+			continue
+		var/is_implanted = player.is_loyalty_implanted()
+		if(is_implanted || isReligiousLeader(player))
+			possible_targets += player
+		else
+			backup_targets += player
+
+	if(possible_targets.len <= 0) // If there are only non-implanted players left on the station, we'll have to sacrifice one of them
+		if (backup_targets.len <= 0)
+			message_admins("Blood Cult: Could not find a suitable sacrifice target.")
+			log_admin("Blood Cult: Could not find a suitable sacrifice target.")
+			return null
+		else
+			sacrifice_target = pick(backup_targets)
+	else
+		sacrifice_target = pick(possible_targets)
+	return sacrifice_target

@@ -21,8 +21,8 @@
 /turf/portal/initialize()
 	..()
 	update_icon()
-	
-/turf/portal/shuttle_rotate(angle)
+
+/turf/portal/map_element_rotate(angle)
 	..()
 	if(angle == 180 || angle == 270)
 		teleport_x *= -1

@@ -33,7 +33,6 @@
 
 /mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
-
 	if(.)
 		if(nutrition && stat != DEAD)
 			burn_calories(HUNGER_FACTOR / 20)
@@ -47,20 +46,6 @@
 
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
 	M.unarmed_attack_mob(src)
-
-/* Old Station Map Stuff
-/mob/living/carbon/proc/update_minimap()
-	var/obj/item/device/pda/pda_device = machine
-	if(machine && istype(pda_device))
-		var/turf/user_loc = get_turf(src)
-		var/turf/pda_loc = get_turf(pda_device)
-		if(get_dist(user_loc,pda_loc) <= 1)
-			if(pda_device.mode == PDA_APP_STATIONMAP)
-				pda_device.attack_self(src)
-		else
-			unset_machine()
-			src << browse(null, "window=pda")
-*/
 
 /mob/living/carbon/relaymove(var/mob/user, direction)
 	if(user in src.stomach_contents)
@@ -136,7 +121,7 @@
 		Knockdown(incapacitation_duration)
 
 	visible_message( \
-		"<span class='warning'>[src] was shocked by the [source]!</span>", \
+		"<span class='warning'>[src] was shocked by \the [source]!</span>", \
 		"<span class='danger'>You feel a powerful shock course through your body!</span>", \
 		"<span class='warning'>You hear a heavy electrical crack.</span>", \
 		"<span class='notice'>[src] starts raving!</span>", \
@@ -159,6 +144,9 @@
 /mob/living/carbon/activate_hand(var/selhand)
 	active_hand = selhand
 	update_hands_icons()
+
+/mob/living/carbon/proc/update_inv_by_slot(var/slot_flags)
+	return
 
 /mob/living/carbon/proc/update_hands_icons()
 	if(!hud_used)
@@ -263,10 +251,17 @@
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
 			if(M.zone_sel.selecting == "head" && !(!S || S.status & ORGAN_DESTROYED))
-				M.visible_message( \
-					"<span class='notice'>[M] pats [src]'s head.</span>", \
-					"<span class='notice'>You pat [src]'s head.</span>", \
-					)
+				if(isgrey(M)) // Ayys give a unique little flavor headpoke emote that also synthesizes a little more paracetamol
+					M.visible_message( \
+						"<span class='notice'>[M] reaches out and pokes [src] on the forehead.</span>", \
+						"<span class='notice'>You reach out and poke [src]'s forehead.</span>", \
+						)
+					reagents.add_reagent(PARACETAMOL, 1)
+				else
+					M.visible_message( \
+						"<span class='notice'>[M] pats [src]'s head.</span>", \
+						"<span class='notice'>You pat [src]'s head.</span>", \
+						)
 			else if((M.zone_sel.selecting == "l_hand" && !(!S || S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(!S || S.status & ORGAN_DESTROYED)))
 				var/shock_damage = 5
 				var/shock_time = 0
@@ -466,8 +461,8 @@
 	return borers_in_mob
 
 /mob/living/carbon/is_muzzled()
-	return(istype(get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/muzzle))
-
+	var/obj/item/M = get_item_by_slot(slot_wear_mask)
+	return M?.is_muzzle
 
 /mob/living/carbon/proc/isInCrit()
 	// Health is in deep shit and we're not already dead
@@ -496,16 +491,41 @@
 	forceMove(get_turf(A))
 	src.unslippable = last_slip_value
 
-/mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_on_magbooties = 0)
-	if ((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
+/mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0, overlay_type, slip_on_magbooties = 0, obj/slipped_on, onwhat, otherscansee, message, self_message, drugged_message, self_drugged_message, blind_drugged_message, spanclass = "info")
+	if((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
 		return 0
+
+	slip_message(slipped_on, onwhat, otherscansee, message, self_message, drugged_message, self_drugged_message, blind_drugged_message, spanclass)
 
 	for(var/obj/item/I in held_items)
 		I.SlipDropped(src,dir,overlay_type) // can be set to trigger specific behaviours when items are dropped by slipping
 
 	if(..())
+
 		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
+
 		return 1
+
+/mob/living/carbon/proc/slip_message(obj/slipped_on, onwhat, otherscansee = FALSE, message, self_message, drugged_message, self_drugged_message, blind_drugged_message, spanclass = "info")
+	var/onwhatmsg
+	if(onwhat)
+		onwhatmsg = " on [onwhat]!"
+	else if(slipped_on)
+		onwhatmsg = " on \the [slipped_on]!"
+	else
+		onwhatmsg = "!"
+	if(otherscansee)
+		visible_message("<span class='[spanclass]'>\The [src] slips[onwhatmsg]</span>",\
+						"<span class='[spanclass]'>You slip[onwhatmsg]</span>",\
+						"<span class='[spanclass]'>You slip on something!</span>",\
+						drugged_message,\
+						self_drugged_message,\
+						blind_drugged_message)
+	else
+		if(blinded)
+			onwhatmsg = "on something!"
+		simple_message("<span class='[spanclass]'>You slip[onwhatmsg]</span>",\
+						drugged_message)
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
@@ -656,50 +676,56 @@
 		if(health_deficiency >= (maxHealth * 0.4))
 			. += (health_deficiency / (maxHealth * 0.25))
 
-/mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing)
+/mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
+	//INVISIBILITY_LEVEL_ONE to INVISIBILITY_MAXIMUM for invisibility
+	if(include_clothing)
+		..()
 	if(invisibility || alpha <= 1 || !source_define)
 		return
-	if(include_clothing)
-		return ..()
-	body_alphas[source_define] = 1
+	body_alphas[source_define] = alpha_value
 	regenerate_icons()
 	if(time > 0)
 		spawn(time)
-			if(src)
-				body_alphas.Remove(source_define)
-				regenerate_icons()
+			make_visible(source_define)
 
+/mob/living/carbon/make_visible(var/source_define)	
+	if(!source_define)
+		return
+	if(src && body_alphas[source_define])
+		body_alphas.Remove(source_define)
+		regenerate_icons()
+	..()
 
 /mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
-	if (!..())
+	if(!..())
 		return FALSE
 
-	if (unslippable) //if unslippable, don't even bother making checks
+	if(unslippable) //if unslippable, don't even bother making checks
 		return FALSE
 
 	switch(P.wet)
 		if(TURF_WET_WATER)
-			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER))
+			if(Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, onwhat = "the wet floor", otherscansee = TRUE, spanclass = "warning"))
+				step(src, dir)
+			else
 				return FALSE
-			step(src, dir)
-			visible_message("<span class='warning'>[src] slips on the wet floor!</span>", \
-			"<span class='warning'>You slip on the wet floor!</span>")
 
 		if(TURF_WET_LUBE)
 			step(src, dir)
-			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+			if(Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE, onwhat = "the floor", otherscansee = TRUE, spanclass = "warning"))
+				for(var/i = 1 to 4)
+					spawn(i)
+						if(!locked_to)
+							step(src, dir)
+				take_organ_damage(2) // Was 5 -- TLE
+			else
 				return FALSE
-			for (var/i = 1 to 4)
-				spawn(i)
-					if(!locked_to)
-						step(src, dir)
-			take_organ_damage(2) // Was 5 -- TLE
-			visible_message("<span class='warning'>[src] slips on the floor!</span>", \
-			"<span class='warning'>You slip on the floor!</span>")
+
 
 		if(TURF_WET_ICE)
-			if(prob(30) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE))
+			if(prob(30) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE, onwhat = "the icy floor", otherscansee = TRUE, spanclass = "warning"))
 				step(src, dir)
-				visible_message("<span class='warning'>[src] slips on the icy floor!</span>", \
-				"<span class='warning'>You slip on the icy floor!</span>")
+			else
+				return FALSE
+
 	return TRUE

@@ -2,9 +2,7 @@
 /proc/spacevine_infestation(var/potency_min=70, var/potency_max=100, var/maturation_min=2, var/maturation_max=6)
 	spawn() //to stop the secrets panel hanging
 		var/list/turf/simulated/floor/turfs = list() //list of all the empty floor turfs in the hallway areas
-		for(var/areapath in typesof(/area/hallway))
-			if(ispath(areapath,/area/hallway/secondary/entry)) //no spawn in arrivals, make it less annoying for latejoiners
-				continue
+		for(var/areapath in typesof(/area/maintenance))
 			var/area/A = locate(areapath)
 			for(var/turf/simulated/floor/F in A.contents)
 				if(!is_blocked_turf(F) && !(locate(/obj/effect/plantsegment) in F))
@@ -24,7 +22,7 @@
 			if (strength > 50)
 				seed.chems[FORMIC_ACID] = list(rand(1,5),rand(5,10))//let's burn entangled individuals
 			if (strength > 70)
-				seed.carnivorous = 2//brutalize entangled individuals
+				seed.voracious = 2//brutalize entangled individuals
 			if (strength > 80)
 				seed.ligneous = 1//and on top of that we're hard to cut
 			if (strength > 90)

@@ -31,7 +31,8 @@
 						matches_both = TRUE
 					matches += "ID ([client.computer_id])"
 #if WARN_FOR_CLIENTS_SHARING_IP
-					spawn() alert("You have logged in already with another key this round, please log out of this one NOW or risk being banned!")
+					if(!client.holder)
+						spawn() alert("You have logged in already with another key this round, please log out of this one NOW or risk being banned!")
 #endif
 				if(matches)
 					message_admins("<font color='red'><B>Notice: </B><span class='notice'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as <A href='?src=\ref[usr];priv_msg=\ref[M]'>[key_name_admin(M)]</A>[M.client ? "" : " (no longer logged in)"].</span>", 1)
@@ -69,6 +70,7 @@
 	client.screen += clickmaster_dummy // honestly fuck you lummox
 	client.initialize_ghost_planemaster() //We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
 	client.initialize_darkness_planemaster()
+	client.initialize_fakecamera_planemaster()
 	update_perception()
 
 	regular_hud_updates()

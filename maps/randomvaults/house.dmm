@@ -1,149 +1,1794 @@
-"aa" = (/turf/space,/area)
-"ab" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/turf/simulated/floor/grass{color = "#8A7C8A"},/area/vault/zathura/surroundings)
-"ae" = (/obj/structure/lattice,/turf/space,/area)
-"ag" = (/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"ah" = (/turf/simulated/floor/grass{color = "#8A7C8A"},/area/vault/zathura/surroundings)
-"ai" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"aj" = (/obj/structure/flora/tree/dead,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"ak" = (/obj/structure/window/barricade{tag = "icon-barricade (WEST)"; icon_state = "barricade"; dir = 8},/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"al" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"am" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/obj/effect/decal/cleanable/soot,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"an" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"ao" = (/obj/structure/window/barricade{tag = "icon-barricade (WEST)"; icon_state = "barricade"; dir = 8},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"ap" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"aq" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"ar" = (/obj/structure/bed/chair/comfy/couch/right/red,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"as" = (/obj/structure/bed/chair/comfy/couch/mid/red,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"at" = (/obj/structure/bed/chair/comfy/couch/left/red,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"au" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/obj/item/trash/cigbutt,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"av" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/obj/structure/window/barricade{tag = "icon-barricade (EAST)"; icon_state = "barricade"; dir = 4},/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"aw" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"ax" = (/obj/effect/landmark/corpse/engineer/rig{dir = 1; name = "Walter"},/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"ay" = (/obj/item/weapon/storage/fancy/matchbox/empty,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"az" = (/obj/item/weapon/match,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"aA" = (/turf/simulated/wall/mineral/wood,/area/vault/zathura)
-"aB" = (/obj/structure/grille/broken,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/plating,/area/vault/zathura)
-"aC" = (/obj/structure/grille,/obj/structure/window/reinforced{tag = "icon-rwindow (EAST)"; icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced,/obj/structure/window/reinforced{tag = "icon-rwindow (NORTH)"; icon_state = "rwindow"; dir = 1},/obj/structure/window/reinforced{tag = "icon-rwindow (WEST)"; icon_state = "rwindow"; dir = 8},/turf/simulated/floor/plating,/area/vault/zathura)
-"aD" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/wood,/area/vault/zathura)
-"aE" = (/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/ash,/turf/simulated/floor/wood{tag = "icon-wood-broken"; icon_state = "wood-broken"},/area/vault/zathura)
-"aF" = (/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/ash,/turf/simulated/floor/wood,/area/vault/zathura)
-"aG" = (/obj/item/weapon/shard,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"aH" = (/obj/item/toy/gasha/wraith,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"aI" = (/turf/simulated/floor/wood,/area/vault/zathura)
-"aJ" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor/wood,/area/vault/zathura)
-"aK" = (/obj/machinery/computer/fluff/terminal/old,/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area/vault/zathura)
-"aL" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/wood,/area/vault/zathura)
-"aM" = (/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/ash,/obj/machinery/light/built{tag = "icon-ltube1 (WEST)"; icon_state = "ltube1"; dir = 8},/turf/simulated/floor/wood,/area/vault/zathura)
-"aN" = (/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"aO" = (/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"aP" = (/obj/item/trash/candle,/turf/simulated/floor/wood,/area/vault/zathura)
-"aQ" = (/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor/wood,/area/vault/zathura)
-"aR" = (/obj/structure/coatrack,/obj/machinery/light/built{tag = "icon-ltube1 (EAST)"; icon_state = "ltube1"; dir = 4},/turf/simulated/floor/wood,/area/vault/zathura)
-"aS" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/zathura)
-"aT" = (/obj/effect/landmark/corpse/skellington{dir = 4; name = "Danny"},/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/plating,/area/vault/zathura)
-"aU" = (/turf/simulated/floor/plating,/area/vault/zathura)
-"aV" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/obj/machinery/light/built{tag = "icon-ltube1 (EAST)"; icon_state = "ltube1"; dir = 4},/turf/simulated/floor/wood,/area/vault/zathura)
-"aW" = (/obj/item/toy/gasha/alium,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"aX" = (/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"aY" = (/obj/effect/decal/cleanable/soot{alpha = 120},/obj/effect/decal/cleanable/soot{alpha = 120},/turf/simulated/floor/wood,/area/vault/zathura)
-"aZ" = (/obj/item/toy/crossbow,/turf/simulated/floor/wood,/area/vault/zathura)
-"ba" = (/turf/simulated/floor/wood{tag = "icon-wood-broken6"; icon_state = "wood-broken6"},/area/vault/zathura)
-"bb" = (/obj/effect/decal/cleanable/ash,/obj/effect/decal/cleanable/soot{alpha = 120},/turf/simulated/floor/wood,/area/vault/zathura)
-"bc" = (/obj/item/weapon/table_parts/wood,/obj/item/weapon/phone,/turf/simulated/floor/wood,/area/vault/zathura)
-"bd" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/wood{tag = "icon-wood-broken7"; icon_state = "wood-broken7"},/area/vault/zathura)
-"be" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/soot,/obj/item/weapon/coin/clown,/turf/simulated/floor/wood,/area/vault/zathura)
-"bf" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/plating,/area/vault/zathura)
-"bg" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/zathura)
-"bh" = (/obj/machinery/light/built{tag = "icon-ltube1 (WEST)"; icon_state = "ltube1"; dir = 8},/turf/simulated/floor/wood,/area/vault/zathura)
-"bi" = (/obj/item/weapon/shard,/turf/simulated/floor/wood,/area/vault/zathura)
-"bj" = (/obj/item/toy/gasha/carptoy,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"bk" = (/obj/effect/decal/cleanable/soot{alpha = 120},/obj/effect/decal/cleanable/soot{alpha = 120},/turf/simulated/floor/wood{tag = "icon-wood-broken2"; icon_state = "wood-broken2"},/area/vault/zathura)
-"bl" = (/obj/effect/decal/cleanable/dirt,/obj/item/stack/sheet/wood,/turf/simulated/floor/wood,/area/vault/zathura)
-"bm" = (/obj/effect/decal/cleanable/dirt,/obj/item/tool/crowbar,/turf/simulated/floor/wood,/area/vault/zathura)
-"bn" = (/obj/effect/decal/cleanable/dirt,/obj/structure/bed/chair/office/dark,/turf/simulated/floor/plating,/area/vault/zathura)
-"bo" = (/obj/machinery/light/built{tag = "icon-ltube1 (EAST)"; icon_state = "ltube1"; dir = 4},/turf/simulated/floor/wood,/area/vault/zathura)
-"bp" = (/obj/structure/grille,/obj/structure/window/reinforced{tag = "icon-rwindow (EAST)"; icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced{tag = "icon-rwindow (NORTH)"; icon_state = "rwindow"; dir = 1},/obj/structure/window/reinforced{tag = "icon-rwindow (WEST)"; icon_state = "rwindow"; dir = 8},/turf/simulated/floor/plating,/area/vault/zathura)
-"bq" = (/obj/effect/decal/cleanable/soot{alpha = 120},/turf/simulated/floor/wood{tag = "icon-wood-broken7"; icon_state = "wood-broken7"},/area/vault/zathura)
-"br" = (/obj/item/toy/foamblade,/obj/effect/decal/cleanable/soot{alpha = 120},/obj/effect/decal/cleanable/soot{alpha = 120},/turf/simulated/floor/wood,/area/vault/zathura)
-"bs" = (/obj/item/stack/sheet/wood,/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"bt" = (/turf/simulated/floor/wood{tag = "icon-wood-broken"; icon_state = "wood-broken"},/area/vault/zathura)
-"bu" = (/obj/structure/grille,/obj/structure/window/reinforced{tag = "icon-rwindow (EAST)"; icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced{tag = "icon-rwindow (NORTH)"; icon_state = "rwindow"; dir = 1},/turf/simulated/floor/plating,/area/vault/zathura)
-"bv" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/grass{color = "#8A7C8A"},/area/vault/zathura/surroundings)
-"bw" = (/obj/structure/flora/rock/pile,/turf/simulated/floor/grass{color = "#8A7C8A"},/area/vault/zathura/surroundings)
-"bx" = (/obj/structure/grille,/obj/structure/window/reinforced{tag = "icon-rwindow (EAST)"; icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced,/obj/structure/window/reinforced{tag = "icon-rwindow (WEST)"; icon_state = "rwindow"; dir = 8},/turf/simulated/floor/plating,/area/vault/zathura)
-"by" = (/obj/effect/decal/cleanable/soot{alpha = 120},/turf/simulated/floor/wood,/area/vault/zathura)
-"bz" = (/obj/effect/decal/cleanable/ash,/obj/effect/decal/cleanable/soot{alpha = 120},/obj/effect/decal/cleanable/soot{alpha = 120},/turf/simulated/floor/wood,/area/vault/zathura)
-"bA" = (/obj/effect/landmark/corpse/skellington{name = "Walter"},/obj/item/weapon/paper{info = "<i>I really should've wished for Zorgons to go away instead.</i>"},/obj/item/weapon/gun/siren/supersoaker{name = "WetCo. Premium Super Soaker"},/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"bB" = (/obj/effect/decal/cleanable/soot,/obj/structure/girder/wood,/turf/simulated/floor/plating,/area/vault/zathura)
-"bC" = (/turf/simulated/floor/wood{tag = "icon-wood-broken7"; icon_state = "wood-broken7"},/area/vault/zathura)
-"bD" = (/obj/effect/decal/cleanable/ash,/turf/simulated/floor/wood,/area/vault/zathura)
-"bE" = (/obj/machinery/door/mineral/wood,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"bF" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{color = "#666666"; dir = 1; icon_state = "rampbottom"; name = "broken staircase"},/area/vault/zathura)
-"bG" = (/obj/item/weapon/table_parts/wood,/turf/simulated/floor/wood,/area/vault/zathura)
-"bH" = (/obj/effect/decal/cleanable/ash,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"bI" = (/obj/effect/decal/cleanable/ash,/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
-"bJ" = (/obj/structure/closet,/turf/simulated/floor/wood,/area/vault/zathura)
-"bK" = (/obj/structure/girder/wood,/turf/simulated/floor/wood,/area/vault/zathura)
-"bL" = (/obj/effect/decal/cleanable/ash,/obj/effect/decal/cleanable/soot,/obj/machinery/light/built{tag = "icon-ltube1 (WEST)"; icon_state = "ltube1"; dir = 8},/turf/simulated/floor/wood,/area/vault/zathura)
-"bM" = (/obj/structure/closet,/obj/item/clothing/mask/joy,/turf/simulated/floor/wood,/area/vault/zathura)
-"bN" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor/wood{tag = "icon-wood-broken6"; icon_state = "wood-broken6"},/area/vault/zathura)
-"bO" = (/obj/structure/bed/chair/holowood/normal,/turf/simulated/floor/wood,/area/vault/zathura)
-"bP" = (/obj/structure/flora/tree/dead,/turf/simulated/floor/grass{color = "#8A7C8A"},/area/vault/zathura/surroundings)
-"bQ" = (/obj/structure/grille,/obj/structure/window/reinforced{tag = "icon-rwindow (NORTH)"; icon_state = "rwindow"; dir = 1},/obj/structure/window/reinforced{tag = "icon-rwindow (WEST)"; icon_state = "rwindow"; dir = 8},/turf/simulated/floor/plating,/area/vault/zathura)
-"bR" = (/turf/simulated/floor/wood{tag = "icon-wood-broken2"; icon_state = "wood-broken2"},/area/vault/zathura)
-"bS" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{density = 1; dir = 1; icon_state = "rampbottom"; name = "broken staircase"},/area/vault/zathura)
-"bT" = (/obj/structure/table/woodentable,/obj/item/weapon/kitchen/utensil/knife,/obj/item/weapon/kitchen/utensil/fork,/turf/simulated/floor/wood,/area/vault/zathura)
-"bU" = (/obj/item/weapon/bedsheet,/obj/structure/bed,/turf/simulated/floor/wood,/area/vault/zathura)
-"bV" = (/obj/item/weapon/boomerang/toy,/turf/simulated/floor/wood,/area/vault/zathura)
-"bW" = (/obj/effect/decal/cleanable/soot,/obj/structure/table/woodentable,/obj/item/weapon/kitchen/utensil/spoon,/obj/item/weapon/kitchen/utensil/fork,/obj/item/weapon/kitchen/utensil/knife,/turf/simulated/floor/wood,/area/vault/zathura)
-"bX" = (/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor/wood{tag = "icon-wood-broken4"; icon_state = "wood-broken4"},/area/vault/zathura)
-"bY" = (/obj/structure/bed/chair/holowood/normal{tag = "icon-wooden_chair (EAST)"; icon_state = "wooden_chair"; dir = 4},/turf/simulated/floor/wood,/area/vault/zathura)
-"bZ" = (/obj/structure/table/woodentable,/obj/item/weapon/kitchen/utensil/fork,/obj/item/weapon/kitchen/utensil/knife,/obj/item/weapon/kitchen/utensil/spoon,/turf/simulated/floor/wood,/area/vault/zathura)
-"ca" = (/obj/structure/table/reinforced,/turf/simulated/floor{tag = "icon-checker"; icon_state = "checker"},/area/vault/zathura)
-"cb" = (/obj/machinery/cooking/grill,/turf/simulated/floor{tag = "icon-checker"; icon_state = "checker"},/area/vault/zathura)
-"cc" = (/obj/machinery/cooking,/turf/simulated/floor{tag = "icon-checker"; icon_state = "checker"},/area/vault/zathura)
-"cd" = (/obj/item/stack/sheet/wood,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"ce" = (/obj/effect/landmark/corpse/skellington{corpsegender = 1; name = "Lisa"},/obj/machinery/shower{tag = "icon-shower (EAST)"; icon_state = "shower"; dir = 4},/obj/structure/curtain/black,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/kitchen/utensil/spoon,/turf/simulated/floor{tag = "icon-cmo"; icon_state = "cmo"},/area/vault/zathura)
-"cf" = (/obj/structure/sink{pixel_y = 16},/obj/structure/mirror{pixel_y = 32},/obj/item/weapon/lighter/cyan,/turf/simulated/floor{tag = "icon-cmo"; icon_state = "cmo"},/area/vault/zathura)
-"cg" = (/obj/structure/toilet{pixel_y = 10},/turf/simulated/floor{tag = "icon-cmo"; icon_state = "cmo"},/area/vault/zathura)
-"ch" = (/turf/simulated/floor{tag = "icon-cmo"; icon_state = "cmo"},/area/vault/zathura)
-"ci" = (/turf/simulated/floor{tag = "icon-checker"; icon_state = "checker"},/area/vault/zathura)
-"cj" = (/obj/structure/girder/wood,/turf/simulated/floor/plating,/area/vault/zathura)
-"ck" = (/obj/machinery/washing_machine,/turf/simulated/floor{tag = "icon-cmo"; icon_state = "cmo"},/area/vault/zathura)
-"cl" = (/obj/machinery/light/small,/turf/simulated/floor{tag = "icon-cmo"; icon_state = "cmo"},/area/vault/zathura)
-"cm" = (/obj/machinery/space_heater,/turf/simulated/floor/wood{tag = "icon-wood-broken6"; icon_state = "wood-broken6"},/area/vault/zathura)
-"cn" = (/obj/machinery/space_heater,/turf/simulated/floor/wood,/area/vault/zathura)
-"co" = (/obj/item/stack/sheet/wood,/turf/simulated/floor/grass{color = "#8A7C8A"},/area/vault/zathura/surroundings)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/space,
+/area)
+"ab" = (
+/obj/structure/window/barricade{
+	dir = 1;
+	icon_state = "barricade";
+	tag = "icon-barricade (NORTH)"
+	},
+/turf/simulated/floor/grass{
+	color = "#8A7C8A"
+	},
+/area/vault/zathura/surroundings)
+"ae" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"ag" = (
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"ah" = (
+/turf/simulated/floor/grass{
+	color = "#8A7C8A"
+	},
+/area/vault/zathura/surroundings)
+"ai" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"aj" = (
+/obj/structure/flora/tree/dead,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"ak" = (
+/obj/structure/window/barricade{
+	dir = 8;
+	icon_state = "barricade";
+	tag = "icon-barricade (WEST)"
+	},
+/obj/structure/window/barricade{
+	dir = 1;
+	icon_state = "barricade";
+	tag = "icon-barricade (NORTH)"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"al" = (
+/obj/structure/window/barricade{
+	dir = 1;
+	icon_state = "barricade";
+	tag = "icon-barricade (NORTH)"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"am" = (
+/obj/structure/window/barricade{
+	dir = 1;
+	icon_state = "barricade";
+	tag = "icon-barricade (NORTH)"
+	},
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"an" = (
+/obj/structure/window/barricade{
+	dir = 1;
+	icon_state = "barricade";
+	tag = "icon-barricade (NORTH)"
+	},
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"ao" = (
+/obj/structure/window/barricade{
+	dir = 8;
+	icon_state = "barricade";
+	tag = "icon-barricade (WEST)"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"ap" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"aq" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"ar" = (
+/obj/structure/bed/chair/comfy/couch/right/red,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"as" = (
+/obj/structure/bed/chair/comfy/couch/mid/red,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"at" = (
+/obj/structure/bed/chair/comfy/couch/left/red,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"au" = (
+/obj/structure/window/barricade{
+	dir = 1;
+	icon_state = "barricade";
+	tag = "icon-barricade (NORTH)"
+	},
+/obj/item/trash/cigbutt,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"av" = (
+/obj/structure/window/barricade{
+	dir = 1;
+	icon_state = "barricade";
+	tag = "icon-barricade (NORTH)"
+	},
+/obj/structure/window/barricade{
+	dir = 4;
+	icon_state = "barricade";
+	tag = "icon-barricade (EAST)"
+	},
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"aw" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"ax" = (
+/obj/effect/landmark/corpse/engineer/rig{
+	dir = 1;
+	name = "Walter"
+	},
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"ay" = (
+/obj/item/weapon/storage/fancy/matchbox/empty,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"az" = (
+/obj/item/weapon/match,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"aA" = (
+/turf/simulated/wall/mineral/wood,
+/area/vault/zathura)
+"aB" = (
+/obj/structure/grille/broken,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"aC" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (EAST)"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (NORTH)"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (WEST)"
+	},
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"aD" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aE" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/ash,
+/turf/simulated/floor/wood{
+	icon_state = "wood-broken";
+	tag = "icon-wood-broken"
+	},
+/area/vault/zathura)
+"aF" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/ash,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aG" = (
+/obj/item/weapon/shard,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aH" = (
+/obj/item/toy/gasha/wraith,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aI" = (
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aJ" = (
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aK" = (
+/obj/machinery/computer/fluff/terminal/old,
+/obj/structure/table/woodentable,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aL" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aM" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/ash,
+/obj/machinery/light/built{
+	dir = 8;
+	icon_state = "ltube1";
+	tag = "icon-ltube1 (WEST)"
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aN" = (
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aO" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aP" = (
+/obj/item/trash/candle,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aQ" = (
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aR" = (
+/obj/structure/coatrack,
+/obj/machinery/light/built{
+	dir = 4;
+	icon_state = "ltube1";
+	tag = "icon-ltube1 (EAST)"
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aS" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"aT" = (
+/obj/effect/landmark/corpse/skellington{
+	dir = 4;
+	name = "Danny"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"aU" = (
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"aV" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/built{
+	dir = 4;
+	icon_state = "ltube1";
+	tag = "icon-ltube1 (EAST)"
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aW" = (
+/obj/item/toy/gasha/alium,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aX" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aY" = (
+/obj/effect/decal/cleanable/soot{
+	alpha = 120
+	},
+/obj/effect/decal/cleanable/soot{
+	alpha = 120
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"aZ" = (
+/obj/item/toy/crossbow,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"ba" = (
+/turf/simulated/floor/wood{
+	icon_state = "wood-broken6";
+	tag = "icon-wood-broken6"
+	},
+/area/vault/zathura)
+"bb" = (
+/obj/effect/decal/cleanable/ash,
+/obj/effect/decal/cleanable/soot{
+	alpha = 120
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bc" = (
+/obj/item/weapon/table_parts/wood,
+/obj/item/weapon/phone,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bd" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/wood{
+	icon_state = "wood-broken7";
+	tag = "icon-wood-broken7"
+	},
+/area/vault/zathura)
+"be" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/item/weapon/coin/clown,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bf" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"bg" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"bh" = (
+/obj/machinery/light/built{
+	dir = 8;
+	icon_state = "ltube1";
+	tag = "icon-ltube1 (WEST)"
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bi" = (
+/obj/item/weapon/shard,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bj" = (
+/obj/item/toy/gasha/carptoy,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bk" = (
+/obj/effect/decal/cleanable/soot{
+	alpha = 120
+	},
+/obj/effect/decal/cleanable/soot{
+	alpha = 120
+	},
+/turf/simulated/floor/wood{
+	icon_state = "wood-broken2";
+	tag = "icon-wood-broken2"
+	},
+/area/vault/zathura)
+"bl" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/sheet/wood,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bm" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/tool/crowbar,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bn" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/bed/chair/office/dark,
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"bo" = (
+/obj/machinery/light/built{
+	dir = 4;
+	icon_state = "ltube1";
+	tag = "icon-ltube1 (EAST)"
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bp" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (EAST)"
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (NORTH)"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (WEST)"
+	},
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"bq" = (
+/obj/effect/decal/cleanable/soot{
+	alpha = 120
+	},
+/turf/simulated/floor/wood{
+	icon_state = "wood-broken7";
+	tag = "icon-wood-broken7"
+	},
+/area/vault/zathura)
+"br" = (
+/obj/item/toy/foamblade,
+/obj/effect/decal/cleanable/soot{
+	alpha = 120
+	},
+/obj/effect/decal/cleanable/soot{
+	alpha = 120
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bs" = (
+/obj/item/stack/sheet/wood,
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bt" = (
+/turf/simulated/floor/wood{
+	icon_state = "wood-broken";
+	tag = "icon-wood-broken"
+	},
+/area/vault/zathura)
+"bu" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (EAST)"
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (NORTH)"
+	},
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"bv" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/grass{
+	color = "#8A7C8A"
+	},
+/area/vault/zathura/surroundings)
+"bw" = (
+/obj/structure/flora/rock/pile,
+/turf/simulated/floor/grass{
+	color = "#8A7C8A"
+	},
+/area/vault/zathura/surroundings)
+"bx" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (EAST)"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (WEST)"
+	},
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"by" = (
+/obj/effect/decal/cleanable/soot{
+	alpha = 120
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bz" = (
+/obj/effect/decal/cleanable/ash,
+/obj/effect/decal/cleanable/soot{
+	alpha = 120
+	},
+/obj/effect/decal/cleanable/soot{
+	alpha = 120
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bA" = (
+/obj/effect/landmark/corpse/skellington{
+	name = "Walter"
+	},
+/obj/item/weapon/paper{
+	info = "<i>I really should've wished for Zorgons to go away instead.</i>"
+	},
+/obj/item/weapon/gun/siren/supersoaker{
+	name = "WetCo. Premium Super Soaker"
+	},
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bB" = (
+/obj/effect/decal/cleanable/soot,
+/obj/structure/girder/wood,
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"bC" = (
+/turf/simulated/floor/wood{
+	icon_state = "wood-broken7";
+	tag = "icon-wood-broken7"
+	},
+/area/vault/zathura)
+"bD" = (
+/obj/effect/decal/cleanable/ash,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bE" = (
+/obj/machinery/door/mineral/wood,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bF" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	color = "#666666";
+	dir = 1;
+	icon_state = "rampbottom";
+	name = "broken staircase"
+	},
+/area/vault/zathura)
+"bG" = (
+/obj/item/weapon/table_parts/wood,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bH" = (
+/obj/effect/decal/cleanable/ash,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bI" = (
+/obj/effect/decal/cleanable/ash,
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bJ" = (
+/obj/structure/closet,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bK" = (
+/obj/structure/girder/wood,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bL" = (
+/obj/effect/decal/cleanable/ash,
+/obj/effect/decal/cleanable/soot,
+/obj/machinery/light/built{
+	dir = 8;
+	icon_state = "ltube1";
+	tag = "icon-ltube1 (WEST)"
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bM" = (
+/obj/structure/closet,
+/obj/item/clothing/mask/joy,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bN" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor/wood{
+	icon_state = "wood-broken6";
+	tag = "icon-wood-broken6"
+	},
+/area/vault/zathura)
+"bO" = (
+/obj/structure/bed/chair/holowood/normal,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bP" = (
+/obj/structure/flora/tree/dead,
+/turf/simulated/floor/grass{
+	color = "#8A7C8A"
+	},
+/area/vault/zathura/surroundings)
+"bQ" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (NORTH)"
+	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow";
+	tag = "icon-rwindow (WEST)"
+	},
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"bR" = (
+/turf/simulated/floor/wood{
+	icon_state = "wood-broken2";
+	tag = "icon-wood-broken2"
+	},
+/area/vault/zathura)
+"bS" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	density = 1;
+	dir = 1;
+	icon_state = "rampbottom";
+	name = "broken staircase"
+	},
+/area/vault/zathura)
+"bT" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/kitchen/utensil/knife,
+/obj/item/weapon/kitchen/utensil/fork,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bU" = (
+/obj/item/weapon/bedsheet,
+/obj/structure/bed,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bV" = (
+/obj/item/weapon/boomerang/toy,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bW" = (
+/obj/effect/decal/cleanable/soot,
+/obj/structure/table/woodentable,
+/obj/item/weapon/kitchen/utensil/spoon,
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/weapon/kitchen/utensil/knife,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bX" = (
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor/wood{
+	icon_state = "wood-broken4";
+	tag = "icon-wood-broken4"
+	},
+/area/vault/zathura)
+"bY" = (
+/obj/structure/bed/chair/holowood/normal{
+	dir = 4;
+	icon_state = "wooden_chair";
+	tag = "icon-wooden_chair (EAST)"
+	},
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"bZ" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/weapon/kitchen/utensil/knife,
+/obj/item/weapon/kitchen/utensil/spoon,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"ca" = (
+/obj/structure/table/reinforced,
+/turf/simulated/floor{
+	icon_state = "checker";
+	tag = "icon-checker"
+	},
+/area/vault/zathura)
+"cb" = (
+/obj/machinery/cooking/grill,
+/turf/simulated/floor{
+	icon_state = "checker";
+	tag = "icon-checker"
+	},
+/area/vault/zathura)
+"cc" = (
+/obj/machinery/cooking,
+/turf/simulated/floor{
+	icon_state = "checker";
+	tag = "icon-checker"
+	},
+/area/vault/zathura)
+"cd" = (
+/obj/item/stack/sheet/wood,
+/turf/simulated/floor/grass{
+	color = "#886688"
+	},
+/area/vault/zathura/surroundings)
+"ce" = (
+/obj/effect/landmark/corpse/skellington{
+	corpsegender = 1;
+	name = "Lisa"
+	},
+/obj/machinery/shower{
+	dir = 4;
+	icon_state = "shower";
+	tag = "icon-shower (EAST)"
+	},
+/obj/structure/curtain/black,
+/obj/item/weapon/reagent_containers/syringe,
+/obj/item/weapon/kitchen/utensil/spoon,
+/turf/simulated/floor{
+	icon_state = "cmo";
+	tag = "icon-cmo"
+	},
+/area/vault/zathura)
+"cf" = (
+/obj/structure/sink{
+	pixel_y = 16
+	},
+/obj/structure/mirror{
+	pixel_y = 32
+	},
+/obj/item/weapon/lighter/cyan,
+/turf/simulated/floor{
+	icon_state = "cmo";
+	tag = "icon-cmo"
+	},
+/area/vault/zathura)
+"cg" = (
+/obj/structure/toilet{
+	pixel_y = 10
+	},
+/turf/simulated/floor{
+	icon_state = "cmo";
+	tag = "icon-cmo"
+	},
+/area/vault/zathura)
+"ch" = (
+/turf/simulated/floor{
+	icon_state = "cmo";
+	tag = "icon-cmo"
+	},
+/area/vault/zathura)
+"ci" = (
+/turf/simulated/floor{
+	icon_state = "checker";
+	tag = "icon-checker"
+	},
+/area/vault/zathura)
+"cj" = (
+/obj/structure/girder/wood,
+/turf/simulated/floor/plating,
+/area/vault/zathura)
+"ck" = (
+/obj/machinery/washing_machine,
+/turf/simulated/floor{
+	icon_state = "cmo";
+	tag = "icon-cmo"
+	},
+/area/vault/zathura)
+"cl" = (
+/obj/machinery/light/small,
+/turf/simulated/floor{
+	icon_state = "cmo";
+	tag = "icon-cmo"
+	},
+/area/vault/zathura)
+"cm" = (
+/obj/machinery/space_heater,
+/turf/simulated/floor/wood{
+	icon_state = "wood-broken6";
+	tag = "icon-wood-broken6"
+	},
+/area/vault/zathura)
+"cn" = (
+/obj/machinery/space_heater,
+/turf/simulated/floor/wood,
+/area/vault/zathura)
+"co" = (
+/obj/item/stack/sheet/wood,
+/turf/simulated/floor/grass{
+	color = "#8A7C8A"
+	},
+/area/vault/zathura/surroundings)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababanaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaeaaaaaaaaaeaeaeahagaeaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaeaaaeaaagagagagaaaaaaaeaaahaeaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaagahagagagaiaiaiajagaaaaaeaaaaaeaaaaaaaaaaaaaaaaaaaaaaaaaa
-aeahagakalalamamanagagagagaeaaaaaeaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaahagaoaiaiaiapaiaqaqaiagarasatagagagananauavaaaaaaaaaaaaaa
-aeagagagagaiaiawagaiaiaiagaxayagazaiaiaiaiaiaiaiagaiagaeaaaa
-aaahahahaAaAaAaBaAaCaAaCaAaAaDaDaAaAaCaAaCaAaCaAaAaAahaaaaaa
-aaaaagahaAaEaFaGaFaFaHaIaAaJaIaIaJaAaIaIaIaKaIaLaLaAagagaaaa
-aaaaagahaAaMaNaOaGaNaIaIaAaPaQaIaRaAaIaIaIaSaTaUaVaAagagaeae
-aaaaagahaAaIaWaNaXaYaZaIaAaIbabbaIaAbcbdbebfbgaUaIaAahaaaaaa
-aaagagagaAbhbibjaYaXbkaIblbmaIaQaIaIaNbfbgbgbnaUboaAahaaaaaa
-aaagahaibpaIaIbqaIbrbsaNaAaIaIaIaIaAaIbgbgbgbgbtbibubvaaaaaa
-aaagbwaibxbybybzbyaIaNbAbBaIbbaQboaAaNbCaIaIbDaIaIbxbvaeaaaa
-aaaaagaiaAaAaAaAbEaAaAbBbBbybyaIbFaAaFbGaIaIaIaIaIaAbvahaaaa
-aaagagaiaAbHbHbIaObHbHbJaAbybbaIaSaAaNaNbKaAaAaAaAaAaiahaaaa
-aaagagagaAbLbHaIaIaIaNbMaAaIbybNbgaAaFaNbObCaIaIboaAaibPagaa
-aaahagagbQbiaIaIaIbRaIaIaAaIaIbgbSaAaNaIbTaIaIaIaIbpaiagagaa
-aaahagagbxaIbUaIbVaIbiaIaAaNaIaIbKaAaFbWbGaIaIaIaIbxagagagaa
-aaagagagaAaAaAaAaAaAaAaNaAaNaIbXbKaAbYbZaIaIcacbccaAagagagaa
-aaagahcdaAcecfcgchaDaIaNaNaNaNaIaQbEaIaIaIaIciciciaAagagagae
-aaagahagcjckclchchaAcmcnbKbHbHbHboaAaIaIaIaIcacacaaAagahahaa
-aeaeahahaAaAaAaAaAaAaAaAaAaAaAaAaAaAaAaAaAaAaAaAaAaAagahahaa
-aaaacoahahagagagagagagagagagagagagagagagagagagagahagagahagaa
-aaaaaaaeaaagagagagagagagagagahahahbwahagagagahahahagagahaaaa
-aaaaaaaeaaaaagagagahagagagagagahahahahahahahagagahagagagaaaa
-aaaaaaaeaaaaaeaaaaagagagagagagagagagagahahahahagagagagaeaaaa
-aaaaaaaaaaaaaeaaaaaaaaaaaaaaaaaaaeaaaaaaaaaaaaaaaaaaaaaeaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aa
+aa
+aa
+aa
+aa
+ae
+aa
+ae
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ae
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(2,1,1) = {"
+aa
+aa
+aa
+aa
+ag
+ah
+ah
+ag
+ah
+aa
+aa
+aa
+ag
+ag
+ag
+aa
+ag
+ag
+ah
+ah
+ag
+ag
+ag
+ae
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(3,1,1) = {"
+aa
+aa
+aa
+ae
+ah
+ag
+ag
+ag
+ah
+ag
+ag
+ag
+ag
+ah
+bw
+ag
+ag
+ag
+ag
+ag
+ag
+ah
+ah
+ah
+co
+aa
+aa
+aa
+aa
+aa
+"}
+(4,1,1) = {"
+aa
+aa
+aa
+aa
+ag
+ak
+ao
+ag
+ah
+ah
+ah
+ah
+ag
+ai
+ai
+ai
+ai
+ag
+ag
+ag
+ag
+cd
+ag
+ah
+ah
+ae
+ae
+ae
+aa
+aa
+"}
+(5,1,1) = {"
+aa
+aa
+aa
+ae
+ag
+al
+ai
+ag
+aA
+aA
+aA
+aA
+aA
+bp
+bx
+aA
+aA
+aA
+bQ
+bx
+aA
+aA
+cj
+aA
+ah
+aa
+aa
+aa
+aa
+aa
+"}
+(6,1,1) = {"
+aa
+aa
+aa
+aa
+ag
+al
+ai
+ai
+aA
+aE
+aM
+aI
+bh
+aI
+by
+aA
+bH
+bL
+bi
+aI
+aA
+ce
+ck
+aA
+ag
+ag
+aa
+aa
+aa
+aa
+"}
+(7,1,1) = {"
+aa
+aa
+aa
+ag
+ai
+am
+ai
+ai
+aA
+aF
+aN
+aW
+bi
+aI
+by
+aA
+bH
+bH
+aI
+bU
+aA
+cf
+cl
+aA
+ag
+ag
+ag
+ae
+ae
+aa
+"}
+(8,1,1) = {"
+aa
+aa
+ae
+ag
+ai
+am
+ap
+aw
+aB
+aG
+aO
+aN
+bj
+bq
+bz
+aA
+bI
+aI
+aI
+aI
+aA
+cg
+ch
+aA
+ag
+ag
+ag
+aa
+aa
+aa
+"}
+(9,1,1) = {"
+aa
+aa
+aa
+ag
+ai
+an
+ai
+ag
+aA
+aF
+aG
+aX
+aY
+aI
+by
+bE
+aO
+aI
+aI
+bV
+aA
+ch
+ch
+aA
+ag
+ag
+ag
+aa
+aa
+aa
+"}
+(10,1,1) = {"
+aa
+aa
+aa
+ag
+aj
+ag
+aq
+ai
+aC
+aF
+aN
+aY
+aX
+br
+aI
+aA
+bH
+aI
+bR
+aI
+aA
+aD
+aA
+aA
+ag
+ag
+ah
+ag
+aa
+aa
+"}
+(11,1,1) = {"
+aa
+aa
+aa
+aa
+ag
+ag
+aq
+ai
+aA
+aH
+aI
+aZ
+bk
+bs
+aN
+aA
+bH
+aN
+aI
+bi
+aA
+aI
+cm
+aA
+ag
+ag
+ag
+ag
+aa
+aa
+"}
+(12,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ag
+ai
+ai
+aC
+aI
+aI
+aI
+aI
+aN
+bA
+bB
+bJ
+bM
+aI
+aI
+aN
+aN
+cn
+aA
+ag
+ag
+ag
+ag
+aa
+aa
+"}
+(13,1,1) = {"
+aa
+aa
+ae
+aa
+aa
+ag
+ag
+ag
+aA
+aA
+aA
+aA
+bl
+aA
+bB
+bB
+aA
+aA
+aA
+aA
+aA
+aN
+bK
+aA
+ag
+ag
+ag
+ag
+aa
+aa
+"}
+(14,1,1) = {"
+aa
+aa
+ae
+ae
+ae
+ae
+ar
+ax
+aA
+aJ
+aP
+aI
+bm
+aI
+aI
+by
+by
+aI
+aI
+aN
+aN
+aN
+bH
+aA
+ag
+ag
+ag
+ag
+aa
+aa
+"}
+(15,1,1) = {"
+aa
+aa
+ae
+aa
+aa
+aa
+as
+ay
+aD
+aI
+aQ
+ba
+aI
+aI
+bb
+by
+bb
+by
+aI
+aI
+aI
+aN
+bH
+aA
+ag
+ah
+ag
+ag
+aa
+aa
+"}
+(16,1,1) = {"
+aa
+ab
+ah
+ah
+aa
+aa
+at
+ag
+aD
+aI
+aI
+bb
+aQ
+aI
+aQ
+aI
+aI
+bN
+bg
+aI
+bX
+aI
+bH
+aA
+ag
+ah
+ah
+ag
+aa
+aa
+"}
+(17,1,1) = {"
+ag
+ab
+ag
+ae
+ae
+ae
+ag
+az
+aA
+aJ
+aR
+aI
+aI
+aI
+bo
+bF
+aS
+bg
+bS
+bK
+bK
+aQ
+bo
+aA
+ag
+ah
+ah
+ag
+ae
+aa
+"}
+(18,1,1) = {"
+aa
+an
+ae
+aa
+aa
+aa
+ag
+ai
+aA
+aA
+aA
+aA
+aI
+aA
+aA
+aA
+aA
+aA
+aA
+aA
+aA
+bE
+aA
+aA
+ag
+bw
+ah
+ag
+aa
+aa
+"}
+(19,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ag
+ai
+aC
+aI
+aI
+bc
+aN
+aI
+aN
+aF
+aN
+aF
+aN
+aF
+bY
+aI
+aI
+aA
+ag
+ah
+ah
+ag
+aa
+aa
+"}
+(20,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+an
+ai
+aA
+aI
+aI
+bd
+bf
+bg
+bC
+bG
+aN
+aN
+aI
+bW
+bZ
+aI
+aI
+aA
+ag
+ag
+ah
+ah
+aa
+aa
+"}
+(21,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+an
+ai
+aC
+aI
+aI
+be
+bg
+bg
+aI
+aI
+bK
+bO
+bT
+bG
+aI
+aI
+aI
+aA
+ag
+ag
+ah
+ah
+aa
+aa
+"}
+(22,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+au
+ai
+aA
+aK
+aS
+bf
+bg
+bg
+aI
+aI
+aA
+bC
+aI
+aI
+aI
+aI
+aI
+aA
+ag
+ag
+ah
+ah
+aa
+aa
+"}
+(23,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+av
+ai
+aC
+aI
+aT
+bg
+bn
+bg
+bD
+aI
+aA
+aI
+aI
+aI
+ca
+ci
+ca
+aA
+ag
+ah
+ag
+ah
+aa
+aa
+"}
+(24,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ai
+aA
+aL
+aU
+aU
+aU
+bt
+aI
+aI
+aA
+aI
+aI
+aI
+cb
+ci
+ca
+aA
+ag
+ah
+ag
+ag
+aa
+aa
+"}
+(25,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ag
+aA
+aL
+aV
+aI
+bo
+bi
+aI
+aI
+aA
+bo
+aI
+aI
+cc
+ci
+ca
+aA
+ah
+ah
+ah
+ag
+aa
+aa
+"}
+(26,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ai
+aA
+aA
+aA
+aA
+aA
+bu
+bx
+aA
+aA
+aA
+bp
+bx
+aA
+aA
+aA
+aA
+ag
+ag
+ag
+ag
+aa
+aa
+"}
+(27,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ag
+ah
+ag
+ag
+ah
+ah
+bv
+bv
+bv
+ai
+ai
+ai
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+aa
+aa
+"}
+(28,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ae
+aa
+ag
+ag
+aa
+aa
+aa
+ae
+ah
+ah
+bP
+ag
+ag
+ag
+ag
+ah
+ah
+ah
+ah
+ag
+ae
+ae
+aa
+"}
+(29,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ae
+aa
+aa
+aa
+aa
+aa
+aa
+ag
+ag
+ag
+ag
+ag
+ah
+ah
+ag
+aa
+aa
+aa
+aa
+aa
+"}
+(30,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ae
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ae
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 "}

@@ -29,7 +29,13 @@
 	var/image/openimage
 	var/image/closeimage
 
-	machine_flags = SCREWTOGGLE
+	machine_flags = SCREWTOGGLE | EMAGGABLE
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
 
 
 //The units themselves/////////////////
@@ -62,7 +68,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/engineer
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 
 /obj/machinery/suit_storage_unit/engie/empty
 	isopen = 1
@@ -163,7 +169,7 @@
 
 /obj/machinery/suit_storage_unit/update_icon()
 	overlays.len = 0
-	if((stat & NOPOWER) || (stat & BROKEN))
+	if((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
 		icon_state = "suitstorage-off"
 		if(department != "null")
 			overlays += openimage
@@ -207,8 +213,7 @@
 
 /obj/machinery/suit_storage_unit/emag_act(var/mob/user)
 	emagged = TRUE
-	new/obj/effect/sparks(get_turf(src))
-	playsound(loc,"sparks",50,1)
+	spark(src)
 	to_chat(user, "<span class='danger'>You short out the locking mechanism, dumping the contents</span>")
 	dump_everything()
 
@@ -216,7 +221,7 @@
 	var/dat
 	if(..())
 		return
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	if(emagged)
 
@@ -603,7 +608,7 @@
 	if (!isopen)
 		to_chat(usr, "<span class='red'>The unit's doors are shut.</span>")
 		return
-	if ((stat & NOPOWER) || (stat & BROKEN))
+	if ((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
 		to_chat(usr, "<span class='red'>The unit is not operational.</span>")
 		return
 	if ( (occupant) || (helmet) || (suit) || boots )
@@ -641,13 +646,13 @@
 			stat &= !BROKEN
 			emagged = FALSE
 			to_chat(user, "<span class='notice'>You repair the blown out electronics in the suit storage unit.</span>")
-	if((stat & NOPOWER) && iscrowbar(I) && !islocked)
+	if((stat & (FORCEDISABLE|NOPOWER)) && iscrowbar(I) && !islocked)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>You begin prying the equipment out of the suit storage unit</span>")
 		if(do_after(user, src,20))
 			dump_everything()
 			update_icon()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	if(..())
 		return 1
@@ -658,7 +663,7 @@
 		if (!isopen)
 			to_chat(usr, "<span class='red'>The unit's doors are shut.</span>")
 			return
-		if ((stat & NOPOWER) || (stat & BROKEN))
+		if ((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
 			to_chat(usr, "<span class='red'>The unit is not operational.</span>")
 			return
 		if ( (occupant) || (helmet) || (suit) || boots) //Unit needs to be absolutely empty
@@ -740,12 +745,6 @@
 	update_icon()
 	updateUsrDialog()
 	return
-
-
-/obj/machinery/suit_storage_unit/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 
 /obj/machinery/suit_storage_unit/attack_paw(mob/user as mob)
 	to_chat(user, "<span class='notice'>The console controls are far too complicated for your tiny brain!</span>")

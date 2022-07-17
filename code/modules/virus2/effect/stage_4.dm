@@ -83,8 +83,9 @@
 
 /datum/disease2/effect/zombie/activate(var/mob/living/mob)
 	if(ishuman(mob))
-		var/mob/living/carbon/human/h = mob
-		h.become_zombie_after_death = 2
+		var/mob/living/carbon/human/H = mob
+		H.zombify()
+	to_chat(mob, "<span class = 'notice'>You hunger...</span>")
 
 /datum/disease2/effect/suicide
 	name = "Suicidal Syndrome"
@@ -556,7 +557,7 @@
 				spawn_turfs.Add(get_turf(H))
 			var/mob/living/simple_animal/hostile/heart_attack/HA = new(pick(spawn_turfs))
 			HA.update_heart(blown_heart,H.dna,virus_copylist(H.virus2))
-			score["heartattacks"]++
+			score.heartattacks++
 			qdel(blown_heart)
 
 /datum/disease2/effect/wizarditis
@@ -1150,3 +1151,47 @@
 		var/mob/living/carbon/human/H = mob
 		H.set_species("Unathi")
 		H.regenerate_icons()
+
+
+/datum/disease2/effect/faithless
+	name = "Curse of the Faithless"
+	desc = "UNKNOWN"
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY
+	restricted = 2
+	max_multiplier = 2
+
+/datum/disease2/effect/faithless/activate(var/mob/living/carbon/human/H)
+	if(!istype(H) || iscultist(H))
+		return
+	if(istype(get_area(H), /area/chapel))
+		return
+
+	if(multiplier >= 2)
+		var/atom/movable/overlay/landing_animation = anim(target = H, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+		playsound(H, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
+		spawn(10)
+			H.dropBorers()
+			playsound(H, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
+			to_chat(H, "<span class='danger'>Your soul is ripped apart!</span>")
+			var/mob/living/simple_animal/hostile/faithless/F = new(get_turf(H))
+			F.health = 100
+			F.maxHealth = 100
+			F.harm_intent_damage = 15
+			F.melee_damage_lower = 20
+			F.melee_damage_upper = 20
+			F.name = H.name
+			qdel(H)		
+			flick("cult_jaunt_land",landing_animation)
+			return
+
+	to_chat(H, "<span class='sinister'>You feel your connection to this world weakening...</span>")
+	multiplier += 0.1
+	if(H.dna && H.dna.mutantrace != "shadow")
+		H.mutations |= M_NOCLONE
+		H.dna.mutantrace = "shadow"
+		H.update_mutantrace()
+		H.update_body()
+		H.handle_regular_hud_updates()
+	
+

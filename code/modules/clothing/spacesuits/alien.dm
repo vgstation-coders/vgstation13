@@ -118,6 +118,7 @@
 	species_restricted = list(VOX_SHAPED)
 	species_fit = list(VOX_SHAPED)
 	body_parts_visible_override = 0
+	hides_identity = HIDES_IDENTITY_NEVER
 
 /obj/item/clothing/head/helmet/space/vox/pressure
 	name = "alien helmet"

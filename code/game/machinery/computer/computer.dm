@@ -3,7 +3,7 @@
 	icon = 'icons/obj/computer.dmi'
 	density = 1
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 300
 	active_power_usage = 300
 	var/obj/item/weapon/circuitboard/circuit = null //if circuit==null, computer can't disassembly
@@ -34,7 +34,7 @@
 	power_change()
 
 /obj/machinery/computer/process()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return 0
 	return 1
 
@@ -96,7 +96,7 @@
 		icon_state = "[initial(icon_state)]b"
 
 	// Powered
-	else if(stat & NOPOWER)
+	else if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "[initial(icon_state)]0"
 
 /obj/machinery/computer/power_change()

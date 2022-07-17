@@ -7,7 +7,7 @@ For vending packs, see vending_packs.dm*/
 
 // returns an associate list of information needed for cargo consoles.  returns 0 if ID or account is missing
 
-#define ACCOUNT_DB_OFFLINE (!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER))
+#define ACCOUNT_DB_OFFLINE (!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER|FORCEDISABLE))
 #define MENTION_DB_OFFLINE to_chat(user, "<span class='warning'>Account database connection lost. Please retry.</span>")
 #define USE_ACCOUNT_ON_ID acc_info["account"] = user.get_worn_id_account(0, user)
 #define USE_CARGO_ACCOUNT acc_info["account"] = department_accounts["Cargo"]
@@ -108,6 +108,7 @@ For vending packs, see vending_packs.dm*/
 
 #define SCR_MAIN 1
 #define SCR_CENTCOM 2
+#define SCR_FORWARD 3
 
 /obj/machinery/computer/supplycomp
 	name = "Supply shuttle console"
@@ -121,8 +122,16 @@ For vending packs, see vending_packs.dm*/
 	var/permissions_screen = FALSE
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/list/current_acct
+	var/list/current_acct_override
 	var/screen = SCR_MAIN
 	light_color = LIGHT_COLOR_BROWN
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/account_hijack,
+		/datum/malfhack_ability/oneuse/emag,
+	)
 
 /obj/machinery/computer/supplycomp/New()
 	..()
@@ -137,9 +146,6 @@ For vending packs, see vending_packs.dm*/
 	..()
 
 
-/obj/machinery/computer/supplycomp/attack_ai(var/mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/computer/supplycomp/proc/check_restriction(mob/user)
 	if(!user)
@@ -178,7 +184,10 @@ For vending packs, see vending_packs.dm*/
 	if(..())
 		return
 
-	current_acct = get_account_info(user, linked_db)
+	if(current_acct_override)
+		current_acct = current_acct_override
+	else
+		current_acct = get_account_info(user, linked_db)
 
 	user.set_machine(src)
 	post_signal("supply")
@@ -230,6 +239,12 @@ For vending packs, see vending_packs.dm*/
 	else
 		return ..()
 
+/obj/machinery/computer/supplycomp/emag_ai(mob/living/silicon/ai/A)
+	to_chat(A, "<span class='warning'>Special supplies unlocked.</span>")
+	hacked = 1
+	can_order_contraband = 1
+
+
 /obj/machinery/computer/supplycomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(!current_acct)
 		return
@@ -278,11 +293,27 @@ For vending packs, see vending_packs.dm*/
 		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "extra" = O.extra_requirements, "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = displayworth, "to" = O.acct_by_string)))
 	data["centcomm_orders"] = centcomm_list
 
+	data["forwarding"] = SSsupply_shuttle.forwarding_on
+	var/forward_list[0]
+	for(var/datum/cargo_forwarding/CF in SSsupply_shuttle.cargo_forwards)
+		var/displayworth = CF.worth
+		if (isnum(CF.worth))
+			displayworth = "[CF.worth]$"
+		var/timeleft = CF.time_created && CF.time_limit ? ((CF.time_created + (CF.time_limit MINUTES)) - world.time) : 0 // Should never see 0 but just in case
+		var/mm = text2num(time2text(timeleft, "mm")) // Set the minute
+		var/ss = text2num(time2text(timeleft, "ss")) // Set the second
+		var/weighedtext = CF.weighed ? "Yes" : "No"
+		var/stampedtext = CF.associated_manifest.stamped && CF.associated_manifest.stamped.len ? "Yes" : "No"
+		forward_list.Add(list(list("name" = CF.name, "origin_station_name" = CF.origin_station_name, "origin_sender_name" = CF.origin_sender_name, "worth" = displayworth, "mm" = mm, "ss" = ss, "weighed" = weighedtext, "stamped" = stampedtext)))
+	data["forwards"] = forward_list
+	data["are_forwards"] = SSsupply_shuttle.cargo_forwards.len
+
 	var/datum/money_account/account = current_acct["account"]
 	data["name_of_source_account"] = account.owner_name
 	data["authorized_name"] = current_acct["authorized_name"]
 	data["money"] = account.fmtBalance()
 	data["send"] = list("send" = 1)
+	data["forward"] = list("forward" = 1)
 	data["moving"] = SSsupply_shuttle.moving
 	data["at_station"] = SSsupply_shuttle.at_station
 	data["show_permissions"] = permissions_screen
@@ -302,7 +333,10 @@ For vending packs, see vending_packs.dm*/
 	if(..())
 		return 1
 	add_fingerprint(usr)
-	current_acct = get_account_info(usr, linked_db)
+	if(current_acct_override)
+		current_acct = current_acct_override
+	else
+		current_acct = get_account_info(usr, linked_db)
 	var/idname
 	var/datum/money_account/account
 	if(!current_acct && !href_list["close"])
@@ -317,12 +351,16 @@ For vending packs, see vending_packs.dm*/
 		else
 			permissions_screen = FALSE
 		return 1
+	//Handle cargo crate forwarding
+	if(href_list["forward"])
+		SSsupply_shuttle.forwarding_on = !SSsupply_shuttle.forwarding_on
+		return 1
 	//Calling the shuttle
 	else if(href_list["send"])
 		if(!map.linked_to_centcomm)
 			to_chat(usr, "<span class='warning'>You aren't able to establish contact with central command, so the shuttle won't move.</span>")
 		else if(!SSsupply_shuttle.can_move())
-			to_chat(usr, "<span class='warning'>For safety reasons the automated supply shuttle cannot transport live organisms, classified nuclear weaponry or homing beacons.</span>")
+			to_chat(usr, "<span class='warning'>For safety reasons the automated supply shuttle cannot transport sapient organisms, classified nuclear weaponry or homing beacons.</span>")
 		else if(!check_restriction(usr))
 			to_chat(usr, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
 
@@ -374,7 +412,7 @@ For vending packs, see vending_packs.dm*/
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
 		var/timeout = world.time + 600
-		var/reason = stripped_input(usr,"Reason:","Why do you require this item?","",REASON_LEN)
+		var/reason = stripped_input(usr,"Why do you want this crate and where/to whom would you like it sent?","Reason/Destination:","",REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)
@@ -434,17 +472,21 @@ For vending packs, see vending_packs.dm*/
 		if(!check_restriction(usr))
 			return
 		SSsupply_shuttle.requisition = text2num(href_list["requisition_status"])
-		current_acct = get_account_info(usr, linked_db)
+		if(current_acct_override)
+			current_acct = current_acct_override
+		else
+			current_acct = get_account_info(usr, linked_db)
 		return 1
 	else if (href_list["screen"])
 		if(!check_restriction(usr))
 			return
 		var/result = text2num(href_list["screen"])
-		if(result == SCR_MAIN || result == SCR_CENTCOM)
+		if(result == SCR_MAIN || result == SCR_CENTCOM || result == SCR_FORWARD)
 			screen = result
 		return 1
 	else if (href_list["close"])
 		current_acct = null
+		current_acct_override = null
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
@@ -472,7 +514,14 @@ For vending packs, see vending_packs.dm*/
 	var/reqtime = 0 //Cooldown for requisitions - Quarxink
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/list/current_acct
+	var/list/current_acct_override
 	light_color = LIGHT_COLOR_BROWN
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/account_hijack,
+	)
 
 /obj/machinery/computer/ordercomp/New()
 	. = ..()
@@ -481,15 +530,13 @@ For vending packs, see vending_packs.dm*/
 /obj/machinery/computer/ordercomp/initialize()
 	reconnect_database()
 
-/obj/machinery/computer/ordercomp/attack_ai(var/mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/ordercomp/attack_hand(var/mob/user as mob)
 	if(..())
 		return
-	current_acct = get_account_info(user, linked_db)
-
+	if(current_acct_override)
+		current_acct = current_acct_override
+	else
+		current_acct = get_account_info(user, linked_db)
 	user.set_machine(src)
 	ui_interact(user)
 	onclose(user, "computer")
@@ -551,7 +598,10 @@ For vending packs, see vending_packs.dm*/
 	if(..())
 		return 1
 	add_fingerprint(usr)
-	current_acct = get_account_info(usr, linked_db)
+	if(current_acct_override)
+		current_acct = current_acct_override
+	else
+		current_acct = get_account_info(usr, linked_db)
 	var/idname
 	var/datum/money_account/account
 	if(!current_acct && !href_list["close"])
@@ -600,7 +650,7 @@ For vending packs, see vending_packs.dm*/
 			var/max_crates = round((account.money - total_money_req) / P.cost)
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
-		var/reason = stripped_input(usr,"Reason:","Why do you require this item?","",REASON_LEN)
+		var/reason = stripped_input(usr,"Why do you want this crate and where/to whom would you like it sent?","Reason/Destination:","",REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)
@@ -638,6 +688,7 @@ For vending packs, see vending_packs.dm*/
 		return 1
 	else if (href_list["close"])
 		current_acct = null
+		current_acct_override = null
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1

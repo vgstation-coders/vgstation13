@@ -91,6 +91,7 @@ var/auxtools_path
 		load_alienwhitelist()
 	jobban_loadbanfile()
 	oocban_loadbanfile()
+	paxban_loadbanfile()
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()
@@ -124,8 +125,6 @@ var/auxtools_path
 
 	Master.Setup()
 
-	SortAreas()							//Build the list of all existing areas and sort it alphabetically
-
 	return ..()
 
 /world/Topic(T, addr, master, key)
@@ -150,7 +149,6 @@ var/auxtools_path
 		s["mode"] = master_mode
 		s["respawn"] = config ? abandon_allowed : 0
 		s["enter"] = enter_allowed
-		s["vote"] = config.allow_vote_mode
 		s["ai"] = config.allow_ai
 		s["host"] = host ? host : null
 		s["players"] = list()
@@ -189,7 +187,6 @@ var/auxtools_path
 
 
 /world/Reboot(reason)
-	testing("[time_stamp()] - World is rebooting. Reason: [reason]")
 	if(reason == REBOOT_HOST)
 		if(usr)
 			if (!check_rights(R_SERVER))
@@ -206,30 +203,17 @@ var/auxtools_path
 		..()
 		return
 
-	if(config.map_voting)
-		//testing("we have done a map vote")
-		if(fexists(vote.chosen_map))
-			//testing("[vote.chosen_map] exists")
-			var/start = 1
-			var/pos = findtext(vote.chosen_map, "/", start)
-			var/lastpos = pos
-			//testing("First slash [lastpos]")
-			while(pos > 0)
-				lastpos = pos
-				pos = findtext(vote.chosen_map, "/", start)
-				start = pos + 1
-				//testing("Next slash [pos]")
-			var/filename = copytext(vote.chosen_map, lastpos + 1, 0)
-			//testing("Found [filename]")
-
-			if(!fcopy(vote.chosen_map, filename))
-				//testing("Fcopy failed, deleting and copying")
+	if(vote.winner && vote.map_paths)
+		//get filename
+		var/filename = "vgstation13.dmb"
+		var/map_path = "maps/voting/" + vote.map_paths[vote.winner] + "/" + filename
+		if(fexists(map_path))
+			//copy file to main folder
+			if(!fcopy(map_path, filename))
 				fdel(filename)
-				fcopy(vote.chosen_map, filename)
-			sleep(60)
+				fcopy(map_path, filename)
 
 	pre_shutdown()
-
 	..()
 
 /world/proc/pre_shutdown()
@@ -342,9 +326,6 @@ var/auxtools_path
 		features += "closed"
 
 	features += abandon_allowed ? "respawn" : "no respawn"
-
-	if (config && config.allow_vote_mode)
-		features += "vote"
 
 	if (config && config.allow_ai)
 		features += "AI allowed"

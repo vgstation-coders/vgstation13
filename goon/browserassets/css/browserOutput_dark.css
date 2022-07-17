@@ -23,10 +23,9 @@ a:visited {color: #b76ff5;}
 .motd a, .motd a:link, .motd a:visited, .motd a:active, .motd a:hover {color: #98971a;}
 
 .ooc {color: #cca300;}
-.adminooc {color: #3d5bc3;}
-.admin {color: #5975da;}
 .adminmod {color: #8f5e2e;}
 .modooc {color: #ffffff;}
+.looc {color: #FFC700;}
 .maroon {color: #c52943;}
 
 .deadsay {color: #e2c1ff;}
@@ -34,11 +33,13 @@ a:visited {color: #b76ff5;}
 .sinister {color: #9662b1;}
 .grey, .skeleton {color: #817e7e;}
 .mushroom {color: #ab62b1;}
+.gutter	{color: #ab62b1; font-style: italic;}
 .alien {color: #b162a9;}
-.solcom	{color: #256194;}
+.solcom	{color: #257c94;}
 .clown {color: #FBFF35; font-family: Comic Sans MS, Comic Sans, cursive;}
 .borer {color: #B300B3; font-weight: bold;}
 .grue {color: #D8D8D7; font-weight: bold;}
+.valentines	{color: #db5b8c; font-weight: bold; font-family: 'Comic Sans';}
 
 .radio {color: #1ecc43;}
 .comradio {color: #5177ff;}

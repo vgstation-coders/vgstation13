@@ -36,6 +36,12 @@
 	center_x = 226
 	center_y = 254
 
+/datum/map/active/New()
+	.=..()
+
+	research_shuttle.name = "Asteroid Shuttle" //There is only one shuttle on nervestation - the asteroid shuttle
+	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
+
 ////////////////////////////////////////////////////////////////
 #include "nervestation.dmm"
 #endif

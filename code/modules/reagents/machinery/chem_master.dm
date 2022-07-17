@@ -11,7 +11,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	anchored = 1
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "mixer"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	var/obj/item/weapon/reagent_containers/container = null
 	var/list/accepted_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks)
@@ -490,14 +490,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		updateUsrDialog()
 
 /obj/machinery/chem_master/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (FORCEDISABLE|NOPOWER|BROKEN) && usr.dexterity_check()))
 		detach()
 		return
 	return ..()
-
-/obj/machinery/chem_master/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/chem_master/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -730,7 +726,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		container.update_icon() //Forcefully update the beaker
 		overlays += container //Set it as an overlay
 
-	if(reagents.total_volume && !(stat & (BROKEN|NOPOWER))) //If we have reagents in here, and the machine is powered and functional
+	if(reagents.total_volume && !(stat & (FORCEDISABLE|BROKEN|NOPOWER))) //If we have reagents in here, and the machine is powered and functional
 		var/image/overlay = image('icons/obj/chemical.dmi', src, "mixer_overlay")
 		overlay.icon += mix_color_from_reagents(reagents.reagent_list)
 		overlays += overlay

@@ -95,6 +95,7 @@
 	var/cooldown = FALSE
 
 /obj/item/device/multitool/ai_detect/New()
+	..()
 	spawn() src.ticker()
 
 /obj/item/device/multitool/ai_detect/proc/ticker()
@@ -107,14 +108,24 @@
 		our_turf = get_turf(src)
 		range = range(8,our_turf)
 
-		//Search for AIs and people looking through sec cams
-		if(cameranet.chunkGenerated(our_turf.x, our_turf.y, our_turf.z))
-			var/datum/camerachunk/chunk = cameranet.getCameraChunk(our_turf.x, our_turf.y, our_turf.z)
-			if(chunk && chunk.seenby.len)
-				for(M in chunk.seenby)
-					if(get_dist(src,M) < 8)
-						src.detected |= DETECT_AI
-						break
+		// Search for people looking at camera monitors
+		for(var/obj/machinery/computer/security/monitor in tv_monitors)
+			// This is greater than 0 if someone is looking at this console
+			if(length(SStgui.open_uis_by_src[ref(monitor)]))
+				// cam_screen.vis_contents contains all turfs the selected camera is currently looking at
+				if(our_turf in monitor.cam_screen.vis_contents)
+					src.detected |= DETECT_AI
+					break
+
+		//Search for AIs
+		if(!(detected & DETECT_AI))
+			if(cameranet.chunkGenerated(our_turf.x, our_turf.y, our_turf.z))
+				var/datum/camerachunk/chunk = cameranet.getCameraChunk(our_turf.x, our_turf.y, our_turf.z)
+				if(chunk && chunk.seenby.len)
+					for(M in chunk.seenby)
+						if(get_dist(src,M) < 8)
+							src.detected |= DETECT_AI
+							break
 
 		for(T in range) //Search for pAIs
 			if(src.findItem(/mob/living/silicon/pai,T))

@@ -8,6 +8,7 @@
 	var/telecrystals = 20
 	var/selected_category
 	var/job
+	var/species
 	var/nuke_ops_inventory = FALSE
 
 /datum/component/uplink/initialize()
@@ -60,13 +61,13 @@
 			"items" = list()
 		)
 		for(var/datum/uplink_item/I in uplink_items[category])
-			if(!I.available_for_job(job) || (!I.available_for_nuke_ops && nuke_ops_inventory))
+			if((!I.available_for_job(job) && !I.available_for_job(species)) || (!I.available_for_nuke_ops && nuke_ops_inventory))
 				continue
 			cat["items"] += list(list(
 				"name" = I.name,
-				"cost" = I.get_cost(job),
+				"cost" = I.get_cost(job, species),
 				"desc" = I.desc,
-				"discounted" = I.gives_discount(job) || length(I.jobs_exclusive),
+				"discounted" = I.gives_discount(job) || I.gives_discount(species) || length(I.jobs_exclusive),
 				"refundable" = I.refundable,
 			))
 		if(!length(cat["items"]))

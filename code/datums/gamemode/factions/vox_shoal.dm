@@ -315,6 +315,9 @@ var/list/potential_bonus_items = list(
 	name = "Vox equipment box"
 	desc = "A Vox Box for short."
 
+/obj/item/weapon/storage/box/large/vox_equipment/raider
+	name = "Vox hunter box"
+
 /obj/item/weapon/storage/box/large/vox_equipment/raider/New()
 	..()
 	new /obj/item/clothing/suit/space/vox/carapace(src)
@@ -328,6 +331,9 @@ var/list/potential_bonus_items = list(
 	var/obj/item/stack/rods/A = new(src)
 	A.amount = 20
 
+/obj/item/weapon/storage/box/large/vox_equipment/engineer
+	name = "Vox engineer box"
+
 /obj/item/weapon/storage/box/large/vox_equipment/engineer/New()
 	..()
 	new /obj/item/clothing/suit/space/vox/pressure(src)
@@ -339,6 +345,9 @@ var/list/potential_bonus_items = list(
 	var/obj/item/weapon/paper/vox_paper/VP = new(src)
 	VP.initialize()
 
+/obj/item/weapon/storage/box/large/vox_equipment/saboteur
+	name = "Vox hacker box"
+
 /obj/item/weapon/storage/box/large/vox_equipment/saboteur/New()
 	..()
 	new /obj/item/clothing/suit/space/vox/carapace(src)
@@ -348,6 +357,9 @@ var/list/potential_bonus_items = list(
 	new /obj/item/weapon/card/emag(src)
 	new /obj/item/weapon/gun/dartgun/vox/raider(src)
 	new /obj/item/device/multitool(src)
+
+/obj/item/weapon/storage/box/large/vox_equipment/medic
+	name = "Vox medic box"
 
 /obj/item/weapon/storage/box/large/vox_equipment/medic/New()
 	..()

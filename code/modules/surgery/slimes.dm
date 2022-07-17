@@ -33,6 +33,7 @@
 	return ..() && istype(target) && target.core_removal_stage == 0
 
 /datum/surgery_step/slime/cut_flesh/begin_step(mob/user, mob/living/carbon/slime/target, target_zone, obj/item/tool)
+	playsound(target, 'sound/items/scalpel.ogg', 75, 1)
 	user.visible_message("[user] starts cutting through [target]'s flesh with \the [tool].", \
 	"You start cutting through [target]'s flesh with \the [tool].")
 

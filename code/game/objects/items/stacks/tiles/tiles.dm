@@ -14,9 +14,8 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
-	var/active
-
 	material = "metal"
+	var/active
 
 /obj/item/stack/tile/metal/New(var/loc, var/amount=null)
 	. = ..()
@@ -81,11 +80,11 @@
 			return
 
 		if(WT.remove_fuel(0,user))
-			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
+			var/obj/item/stack/sheet/metal/M = new sheet_type
 			M.amount = 1
 			M.forceMove(get_turf(usr)) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
-			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
-			"<span class='warning'>You shape the [src] into metal with the welding tool.</span>", \
+			user.visible_message("<span class='warning'>[src] is shaped into [M.name] sheets by [user.name] with the welding tool.</span>", \
+			"<span class='warning'>You shape the [src] into [M.name] sheets with the welding tool.</span>", \
 			"<span class='warning'>You hear welding.</span>")
 			var/obj/item/stack/tile/metal/R = src
 			src = null
@@ -178,5 +177,5 @@
 	starting_materials = list(MAT_IRON = 937.5, MAT_PLASMA = 937.5)
 	melt_temperature = MELTPOINT_PLASMA
 	throwforce = 15
-
+	sheet_type = /obj/item/stack/sheet/plasteel
 	material = "plasteel"

@@ -9,7 +9,7 @@
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
 
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 
 	var/list/conf_access = null
 	var/one_access = 0 //if set to 1, door would receive req_one_access instead of req_access

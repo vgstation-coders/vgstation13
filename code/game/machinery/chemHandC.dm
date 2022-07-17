@@ -11,7 +11,7 @@
 	anchored = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 	pass_flags = PASSTABLE
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 25
 	active_power_usage = 5000
 
@@ -60,7 +60,7 @@
 			icon_state = "[initial(icon_state)]_off"
 
 /obj/machinery/chemheater/process()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(held_container && heating)
 		held_container.reagents.heating(thermal_energy_transfer, max_temperature)
@@ -121,24 +121,10 @@
 			to_chat(usr, "<span class='notice'>\The [src] doesn't have anything to heat right now.</span>")
 
 /obj/machinery/chemheater/AltClick(mob/user)
-	if(!user.incapacitated() && Adjacent(user) && !(stat & (NOPOWER) && user.dexterity_check()))
+	if(!user.incapacitated() && Adjacent(user) && !(stat & (FORCEDISABLE|NOPOWER) && user.dexterity_check()))
 		toggle()
 		return
 	return ..()
-
-/*
-//Unused desired temp setting. Maybe useful in the future? Not likely since who doesn't want their coffee as hot as the sun?
-/obj/machinery/chemheater/verb/settemp(mob/user as mob)
-	set src in view(1)
-	set name = "Set temperature"
-	set category = "Object"
-
-	var/set_temp = input("Input desired temperature (20 to [TEMPERATURE_LASER] Celsius).", "Set Temperature") as num
-	if(set_temp>[TEMPERATURE_LASER] || set_temp<20)
-		to_chat(user, "<span class='notice'>Invalid temperature.</span>")
-		return
-	max_temperature = set_temp+273.15
-*/
 
 //Cooler
 
@@ -152,7 +138,7 @@
 	anchored = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 	pass_flags = PASSTABLE
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 25
 	active_power_usage = 5000
 
@@ -201,7 +187,7 @@
 			icon_state = "[initial(icon_state)]_off"
 
 /obj/machinery/chemcooler/process()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(held_container && cooling)
 		held_container.reagents.heating(thermal_energy_transfer, max_temperature)
@@ -265,7 +251,7 @@
 			to_chat(usr, "<span class='notice'>\The [src] doesn't have anything to cool right now.</span>")
 
 /obj/machinery/chemcooler/AltClick(mob/user)
-	if(!user.incapacitated() && Adjacent(user) && !(stat & (NOPOWER) && user.dexterity_check()))
+	if(!user.incapacitated() && Adjacent(user) && !(stat & (NOPOWER|FORCEDISABLE) && user.dexterity_check()))
 		toggle()
 		return
 	return ..()

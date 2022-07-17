@@ -302,7 +302,7 @@
 /obj/item/projectile/rocket/clown/pizza
 	name = "pizza rocket"
 	icon_state = "rpground_pizza"
-	payload_type = /obj/item/weapon/reagent_containers/food/snacks/margheritaslice
+	payload_type = /obj/item/weapon/reagent_containers/food/snacks/margheritaslice/rocket
 
 /obj/item/projectile/rocket/clown/pie
 	name = "pie rocket"

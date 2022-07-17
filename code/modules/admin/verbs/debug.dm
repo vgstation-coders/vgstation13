@@ -649,7 +649,7 @@ Pressure: [env.pressure]"}
 		var/obj/machinery/power/battery/smes/infinite/magic = new(T)
 		// Manually set up our powernets since stupid seems to reign in the powernet code.
 		magic.connect_to_network()
-		magic.output=200000 // AKA rape
+		magic.outputlevel=200000 // AKA rape
 		magic.online=1
 
 //	to_chat(world, "<b>LET THERE BE JUICE</b>")
@@ -1319,11 +1319,7 @@ var/global/blood_virus_spreading_disabled = 0
 
 	var/turf/epicenter = get_turf(usr)
 	var/max_range = input("Set the max range") as num
-	var/inward = alert("Which way?","Spiral Block", "Inward","Outward")
-	if(inward == "Inward")
-		spiral_block(epicenter,max_range,1,1)
-	else
-		spiral_block(epicenter,max_range,0,1)
+	spiral_block(epicenter,max_range,1)
 
 /client/proc/check_striketeams()
 	set name = "Check StrikeTeams"

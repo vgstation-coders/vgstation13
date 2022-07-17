@@ -30,7 +30,7 @@
 /datum/disease2/effect/telepathic/activate(var/mob/living/mob)
 	if (mob.dna)
 		mob.dna.check_integrity()
-		mob.dna.SetSEState(REMOTETALKBLOCK,1)
+		mob.dna.SetSEState(TELEPATHYBLOCK,1)
 		domutcheck(mob, null)
 
 /datum/disease2/effect/mind
@@ -67,7 +67,6 @@
 /datum/disease2/effect/giggle/activate(var/mob/living/mob)
 	mob.emote("giggle")
 
-
 /datum/disease2/effect/chickenpox
 	name = "Chicken Pox"
 	desc = "Causes the infected to begin coughing up eggs of the poultry variety."
@@ -76,8 +75,7 @@
 	var/eggspawn = /obj/item/weapon/reagent_containers/food/snacks/egg
 
 /datum/disease2/effect/chickenpox/activate(var/mob/living/mob)
-	var/mob/living/carbon/human/H = mob
-	if(H.species.name == "Vox")
+	if(isvox(mob))
 		eggspawn = /obj/item/weapon/reagent_containers/food/snacks/egg/vox
 	if (prob(30))
 		mob.say(pick("BAWWWK!", "BAAAWWK!", "CLUCK!", "CLUUUCK!", "BAAAAWWWK!"))
@@ -85,7 +83,6 @@
 		mob.emote("me",1,"vomits up a chicken egg!")
 		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
 		new eggspawn(get_turf(mob))
-
 
 /datum/disease2/effect/confusion
 	name = "Topographical Cretinism"
@@ -830,3 +827,84 @@
 
 /datum/disease2/effect/toothdecay/affect_mob_voice(var/datum/speech/speech)
 	speech.message = piratespeech(speech.message)
+
+
+/datum/disease2/effect/cult_teleport
+	name = "Temporal Displacement"
+	desc = "UNKNOWN"
+	stage = 3
+	badness = EFFECT_DANGER_HINDRANCE
+	restricted = 2
+	chance = 2
+	max_chance = 4
+	var/list/allowed_areas = list(
+		/area/hallway,
+		/area/maintenance,
+		/area/bridge,
+		/area/crew_quarters,
+		/area/medical,
+		/area/engineering/,
+		/area/security,
+		/area/lawoffice,
+		/area/supply,
+		/area/science,
+		/area/hydroponics,
+		/area/janitor,
+	)
+	// Getting sent to one of these areas would probably kill the person, so let's exclude them.
+	var/list/blacklisted_areas = list(
+		/area/engineering/engine_smes,		
+		/area/engineering/engine,
+		/area/science/xenobiology,
+	)
+	var/list/valid_areas = list()
+	var/active = 0 
+
+/datum/disease2/effect/cult_teleport/activate(mob/living/carbon/mob)
+	if(valid_areas.len == 0)
+		GenerateValidAreas()
+	if(valid_areas.len == 0) // this shouldn't happen, but sanity is good
+		return
+	if(iscultist(mob))
+		return
+	if(mob.locked_to)
+		return
+	// if another jaunt happens mid-flight things get wierd
+	if(active || !istype(mob.loc, /turf/simulated/floor))
+		return
+	// the chapel is safe!
+	if(istype(get_area(mob), /area/chapel))
+		return
+
+
+	active = 1
+	var/area/A = pick(valid_areas)
+	var/list/possible_floors = list()
+	for(var/turf/simulated/floor/F in A.contents)
+		possible_floors += F
+	if(possible_floors.len == 0)
+		active = 0
+		return
+	var/turf/selected_floor = pick(possible_floors)
+	var/turf/T = get_turf(mob)
+
+	// We have our destination, now let's send them on their way!
+	var/atom/movable/overlay/landing_animation = anim(target = mob, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+	playsound(mob, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
+	spawn(10)
+		to_chat(mob, "<span class='warning'>A dark force grabs on to you and pulls you beyond the veil!</span>")
+		new /obj/effect/bloodcult_jaunt(T,mob,selected_floor)  // goodbye!
+		playsound(mob, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
+		flick("cult_jaunt_land",landing_animation)
+		active = 0
+
+
+/datum/disease2/effect/cult_teleport/proc/GenerateValidAreas()
+	for(var/area/A in areas)
+		if(A.z != map.zMainStation)
+			continue
+		if(!(is_type_in_list(A, allowed_areas)))
+			continue
+		if(is_type_in_list(A, blacklisted_areas))
+			continue
+		valid_areas += A

@@ -143,7 +143,7 @@
 	..()
 	color = rgb(rand(0,255),rand(0,255),rand(0,255))
 	//Remove cockatrices because they're somewhat OP when player controlled
-	target_type = pick(existing_typesof(/mob/living/simple_animal) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs) + /mob/living/simple_animal/scp_173 + existing_typesof(/mob/living/component)))
+	target_type = pick(existing_typesof(/mob/living/simple_animal) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs) + /mob/living/simple_animal/scp_173 + existing_typesof(/mob/living/component) + /mob/living/simple_animal/pollywog))
 /obj/item/clothing/mask/morphing/ghost
 	name = "mask of the phantom"
 	desc = "It appears to be modeled after a ghost. It looks as though it might disappear at any moment."

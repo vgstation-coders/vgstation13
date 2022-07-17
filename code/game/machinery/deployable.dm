@@ -12,10 +12,15 @@
 	density = TRUE
 	icon_state = "barrier0"
 	pass_flags_self = PASSTABLE
-	var/health = 140
-	var/maxhealth = 140
+	health = 140
+	maxHealth = 140
 
 	machine_flags = EMAGGABLE
+
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
 
 /obj/machinery/deployable/barrier/New()
 	..()
@@ -24,7 +29,7 @@
 /obj/machinery/deployable/barrier/update_icon()
 	icon_state = "barrier[anchored]"
 
-/obj/machinery/deployable/barrier/emag(var/mob/user)
+/obj/machinery/deployable/barrier/emag_act(var/mob/user)
 	if (!emagged)
 		emagged = TRUE
 		req_access = 0
@@ -56,12 +61,12 @@
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 		user.delayNextAttack(1 SECONDS)
 		user.do_attack_animation(src, user)
-		take_damage(W.force, W.damtype)
+		take_damage(W.force, damage_type = W.damtype)
 
 /obj/machinery/deployable/barrier/bullet_act(var/obj/item/projectile/Proj)
 	. = ..()
 	if(Proj.damage)
-		take_damage(Proj.damage, Proj.damage_type)
+		take_damage(Proj.damage, damage_type = Proj.damage_type)
 
 /obj/machinery/deployable/barrier/ex_act(var/severity)
 	switch(severity)
@@ -71,7 +76,7 @@
 			take_damage(25)
 
 /obj/machinery/deployable/barrier/emp_act(var/severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(prob(50/severity))
 		anchored = !anchored
@@ -94,10 +99,13 @@
 	explosion(loc,-1,-1,0)
 	qdel(src)
 
-/obj/machinery/deployable/barrier/proc/take_damage(var/amount, var/kind = BRUTE)
+/obj/machinery/deployable/barrier/take_damage(incoming_damage, damage_type = BRUTE, skip_break, mute) //Custom take_damage() proc because of unimplemented general object damage resistances.
 	var/modifier = 1
-	if(kind == BRUTE)
+	if(damage_type == BRUTE)
 		modifier = 0.75
-	health -= amount * modifier
+	health -= incoming_damage * modifier
+	try_break()
+
+/obj/machinery/deployable/barrier/try_break()
 	if(health <= 0)
 		explode()

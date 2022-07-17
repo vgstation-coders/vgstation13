@@ -33,7 +33,7 @@
 	is_enabled = FALSE
 
 /datum/next_map/bagel/is_votable()
-	if(score["bagelscooked"] < bagel_requirement)
+	if(score.bagelscooked < bagel_requirement)
 		var/msg = "Skipping map [name], fewer than [bagel_requirement] bagels made."
 		message_admins(msg)
 		warning(msg)
@@ -100,9 +100,8 @@
 	is_enabled = FALSE
 
 /datum/next_map/lamprey/is_votable()
-	var/crew_score = score["crewscore"] // So that we can use this in the admin messaging
-	if(crew_score > -20000)
-		var/msg = "Skipping map [name], station requires lower than -20000 score (is [crew_score])."
+	if(score.crewscore > -20000)
+		var/msg = "Skipping map [name], station requires lower than -20000 score (is [score.crewscore])."
 		message_admins(msg)
 		warning(msg)
 		return FALSE
@@ -189,21 +188,13 @@
 		if(candidate.is_enabled && candidate.is_votable())
 			votable_maps += candidate.name
 			votable_maps[candidate.name] = candidate.path
-
-	var/list/maplist = get_list_of_keys(votable_maps)
-	var/msg = "A map vote was initiated with these options: [english_list(maplist)]."
-	send2maindiscord(msg)
-	send2mainirc(msg)
-	send2ickdiscord(config.kill_phrase) // This the magic kill phrase
-
 	return votable_maps
 
 /proc/get_all_maps()
 	var/list/all_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))
 		var/datum/next_map/map = new map_path
-		if(!map.is_compiled())
-			continue
-		all_maps += map.name
-		all_maps[map.name] = map.path
+		if(map.is_compiled())
+			all_maps += map.name
+			all_maps[map.name] = map.path
 	return all_maps

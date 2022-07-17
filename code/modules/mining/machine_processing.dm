@@ -36,14 +36,10 @@
 /obj/machinery/computer/smelting/process()
 	updateUsrDialog()
 
-/obj/machinery/computer/smelting/attack_ai(mob/user)
-	add_hiddenprint(user)
-	interact(user)
-
 /obj/machinery/computer/smelting/attack_hand(mob/user)
 	add_fingerprint(user)
 
-	if(stat & (NOPOWER | BROKEN) && id) //Power out/this thing is broken, but at least allow the guy to take his ID out if it's still in there.
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) && id) //Power out/this thing is broken, but at least allow the guy to take his ID out if it's still in there.
 		id.forceMove(get_turf(src))
 		user.put_in_hands(id)
 
@@ -53,7 +49,7 @@
 	interact(user)
 
 /obj/machinery/computer/smelting/interact(mob/user)
-	if(stat & (NOPOWER | BROKEN)) //It's broken ya derp.
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN)) //It's broken ya derp.
 		if(user.machine == src)
 			user.unset_machine(src)
 		return
@@ -238,7 +234,7 @@
 	radio_connection.post_signal(src, signal)
 
 /obj/machinery/computer/smelting/receive_signal(datum/signal/signal)
-	if(stat & (NOPOWER | BROKEN) || !signal || !signal.data["tag"] || signal.data["tag"] != smelter_tag)
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) || !signal || !signal.data["tag"] || signal.data["tag"] != smelter_tag)
 		return
 
 	if(signal.data["type"] != "smelter") //So I can forgo sanity, henk.
@@ -291,7 +287,7 @@
 	update_icon()
 
 /obj/machinery/mineral/processing_unit/update_icon()
-	if(stat & (NOPOWER | BROKEN) || !on)
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) || !on)
 		icon_state = "furnace_o"
 		set_light(0)
 	else if(on)
@@ -394,7 +390,7 @@
 		qdel(A)
 
 /obj/machinery/mineral/processing_unit/process()
-	if(stat & (NOPOWER | BROKEN))
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		return
 
 	var/turf/in_T = get_step(src, in_dir)
@@ -406,7 +402,7 @@
 	grab_ores() //Grab some more ore to process this tick.
 
 	if(!on)
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		broadcast_status()
 		return
 
@@ -416,7 +412,7 @@
 		while(R.checkIngredients(ore)) //While we have materials for this
 			for(var/ore_id in R.ingredients)
 				ore.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
-				score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
+				score.oremined += 1 //Count this ore piece as processed for the scoreboard
 
 			drop_stack(R.yieldtype, out_T)
 
@@ -428,14 +424,14 @@
 			break
 
 	if(sheets_this_tick) //We produced something this tick, make it take more power.
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 	broadcast_status()
 
 /obj/machinery/mineral/processing_unit/receive_signal(datum/signal/signal)
-	if(stat & (NOPOWER | BROKEN) || !signal.data["tag"] || signal.data["tag"] != id_tag)
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) || !signal.data["tag"] || signal.data["tag"] != id_tag)
 		return
 
 	if(signal.data["sigtype"] == "status")

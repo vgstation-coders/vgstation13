@@ -11,9 +11,7 @@
 	tDomeZ = 1
 	zLevels = list(/datum/zLevel/station)
 	enabled_jobs = list(/datum/job/trader)
-	load_map_elements = list(/datum/map_element/dungeon/holodeck)
 	zCentcomm = 1
-	lights_always_ok = TRUE
 
 /datum/subsystem/supply_shuttle
 	movetime = 5 SECONDS

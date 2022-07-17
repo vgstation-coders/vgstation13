@@ -160,7 +160,8 @@
 
 	var/trans = container.reagents.trans_to(target, container.amount_per_transfer_from_this)
 	if (trans > 0)
-		container.reagents.reaction(target, INGEST)	//technically it's contact, but the reagents are being applied to internal tissue
+		//technically it's contact, but the reagents are being applied to internal tissue
+		container.reagents.reaction(target, INGEST, amount_override = min(container.reagents.total_volume,container.amount_per_transfer_from_this)/(container.reagents.reagent_list.len))
 
 		if(container.reagents.has_reagent(PERIDAXON))
 			affected.status &= ~ORGAN_DEAD
@@ -177,7 +178,8 @@
 	var/obj/item/weapon/reagent_containers/container = tool
 
 	var/trans = container.reagents.trans_to(target, container.amount_per_transfer_from_this)
-	container.reagents.reaction(target, INGEST)	//technically it's contact, but the reagents are being applied to internal tissue
+	//technically it's contact, but the reagents are being applied to internal tissue
+	container.reagents.reaction(target, INGEST, amount_override = min(container.reagents.total_volume,container.amount_per_transfer_from_this)/(container.reagents.reagent_list.len))
 
 	user.visible_message("<span class='warning'>[user]'s hand slips, applying [trans] units of the solution to the wrong place in [target]'s [affected.display_name] with the [tool]!</span>" , \
 	"<span class='warning'>Your hand slips, applying [trans] units of the solution to the wrong place in [target]'s [affected.display_name] with the [tool]!</span>")

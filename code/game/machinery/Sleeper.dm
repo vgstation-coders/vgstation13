@@ -8,6 +8,7 @@
 	icon_state = "sleeper_0"
 	density = TRUE
 	anchored = TRUE
+	var/sleeptime = 6 SECONDS
 	var/base_icon = "sleeper"
 	var/mob/living/occupant = null
 	var/available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
@@ -32,9 +33,15 @@
 	var/cools = 0
 	var/works_in_crit = FALSE //Will it let you inject chemicals into people in critical condition
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 /obj/machinery/sleeper/power_change()
 	..()
-	if(!(stat & (BROKEN|NOPOWER)) && occupant)
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)) && occupant)
 		set_light(light_range_on, light_power_on)
 	else
 		set_light(0)
@@ -63,12 +70,15 @@
 	switch(T)
 		if(0 to 5)
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", KELOTANE = "Kelotane", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
+			sleeptime = 6 SECONDS
 		if(6 to 8)
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine")
+			sleeptime = 4 SECONDS
 		else
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
+			sleeptime = 2 SECONDS
 
-/obj/machinery/sleeper/emag(mob/user)
+/obj/machinery/sleeper/emag_act(mob/user)
 	if(!emagged)
 		to_chat(user, "<span class='warning'>You short out the overdose prevention system on \the [src].</span>")
 		emagged = 1
@@ -78,7 +88,8 @@
 /obj/machinery/sleeper/interact(var/mob/user)
 	var/dat = list()
 	if(on)
-		dat += "<B>Performing anaesthesic emergence...</B>" //Best I could come up with
+		dat += "<B>Performing anaesthesic emergence...</B><BR>" //Best I could come up with
+		dat += "<B>Purging sleep-inducing chemicals...</B>" //Same
 		dat += "<HR><A href='?src=\ref[src];toggle_autoeject=1'>Auto-eject occupant: [auto_eject_after ? "Yes" : "No"]</A><BR>"
 	else
 		dat += "<b>Occupant statistics:</b><BR>"
@@ -104,8 +115,8 @@
 			var/fireloss = occupant.getFireLoss()
 			dat += "<span class='[fireloss < 60 ? "" : "average"]'>\t-Burn severity: [round(fireloss, 0.1)]</span><br>"
 
-			var/sleepytime = max(occupant.paralysis, occupant.sleeping)
-			dat += "<hr>Paralysis summary: [sleepytime] ([round(sleepytime * 2)] seconds left!)<br>"
+			var/paralysissum = max(occupant.paralysis, occupant.sleeping)
+			dat += "<hr>Paralysis summary: [paralysissum] ([round(paralysissum * 2)] seconds left!)<br>"
 			dat += "<a href='?src=\ref[src];wakeup=1'>Begin wake-up cycle</a><br>"
 			if(occupant.reagents)
 				for(var/chemical in available_options)
@@ -214,7 +225,7 @@
 	for(var/obj/OO in src)
 		OO.forceMove(loc)
 	add_fingerprint(user)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
 	update_icon()
 
@@ -359,7 +370,7 @@
 	return
 
 /obj/machinery/sleeper/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	if(occupant)
@@ -391,11 +402,12 @@
 	. = TRUE //Returning TRUE means we successfully began the wake-up cycle. We will return immediately as the spawn() begins, not at the end.
 	on = TRUE
 	process()
-	var/sleeptime = min(5 SECONDS, 4*max(occupant.sleeping, occupant.paralysis))
+
 	spawn(sleeptime)
 		if(!src || !on) //the !src check is redundant from the nature of spawn() if I understand correctly, but better be safe than sorry
 			return
 		if(occupant)
+			occupant.reagents.remove_reagents(list(STOXIN, STOXIN2, VALERENIC_ACID, CHLORALHYDRATE),1000)
 			occupant.sleeping = 0
 			occupant.paralysis = 0
 			occupant.resting = 0
@@ -426,6 +438,7 @@
 				B.buckle_mob(old_occupant, ejector)
 				ejector.start_pulling(B)
 	update_icon()
+	playsound(src, 'sound/machines/pressurehiss.ogg', 40, 1)
 	return TRUE
 
 /obj/machinery/sleeper/proc/inject_chemical(mob/living/user as mob, chemical, amount)
@@ -494,7 +507,7 @@
 		for(var/obj/O in src)
 			qdel(O)
 		add_fingerprint(usr)
-		if(!(stat & (BROKEN|NOPOWER)))
+		if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 			set_light(light_range_on, light_power_on)
 		update_icon()
 		return
@@ -502,12 +515,12 @@
 
 
 /obj/machinery/sleeper/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+	if(!usr.incapacitated() && Adjacent(usr) && !(stat & (FORCEDISABLE|NOPOWER|BROKEN) && usr.dexterity_check()))
 		if(wakeup(usr))
 			visible_message("<span class='notice'>\The [src] pings softly: 'Initiating wake-up cycle...' </span>")
 
 /obj/machinery/sleeper/process()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	updateUsrDialog()
 	return
@@ -580,7 +593,7 @@
 	else
 		set_light(0)
 
-/obj/machinery/sleeper/mancrowave/emag(mob/user)
+/obj/machinery/sleeper/mancrowave/emag_act(mob/user)
 	if(!emagged)
 		emagged = TRUE
 		if(user)

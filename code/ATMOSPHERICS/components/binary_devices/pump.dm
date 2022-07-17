@@ -42,13 +42,15 @@ air2.volume
 /obj/machinery/atmospherics/binary/pump/update_icon()
 	if(stat & NOPOWER)
 		icon_state = "intact_off"
+	else if(stat & FORCEDISABLE)
+		icon_state = "intact_FORCEDISABLE"
 	else if(node1 && node2)
 		icon_state = "intact_[on?("on"):("off")]"
 	..()
 
 /obj/machinery/atmospherics/binary/pump/process()
 	. = ..()
-	if((stat & (NOPOWER|BROKEN)) || !on)
+	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || !on)
 		return
 
 	var/output_starting_pressure = air2.return_pressure()

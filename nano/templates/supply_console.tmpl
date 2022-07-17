@@ -10,8 +10,13 @@ Used In File(s): \code\game\supplyshuttle.dm
 		float:left;
 	}
 </style>
-<div style="float: right; width: 32%; margin-top: 3px;">
+<div style="float: right; margin-top: 3px;">
 	<div class="line">
+		{{if !data.forwarding}}
+			{{:helper.link('Enable Crate Forwarding', 'circle-triangle-e', data.forward, null)}}
+		{{else}}
+			{{:helper.link('Disable Crate Fowarding', 'circle-triangle-w', data.forward, null)}}
+		{{/if}}
 		{{:helper.link('Permissions', 'key', {'permissions' : 1})}}
 		{{if data.hacked}}
 			<span class='bad'>ACCESS OVERRIDDEN</span>
@@ -102,6 +107,9 @@ Used In File(s): \code\game\supplyshuttle.dm
 	<div style="float:right;" class="itemContents">
 		{{:helper.link('Main',      'gear',{'screen':1},(data.screen==1)?'linkOn':'')}}
 		{{:helper.link('Central Command Requests',     'gear',{'screen':2},(data.screen==2)?'linkOn':'')}}
+		{{if data.are_forwards}}
+			{{:helper.link('Cargo Crates to Forward',     'gear',{'screen':3},(data.screen==3)?'linkOn':'')}}
+		{{/if}}
 	</div>
 </div>
 {{if data.screen == 1}}
@@ -171,6 +179,33 @@ Used In File(s): \code\game\supplyshuttle.dm
 						</div>
 					{{empty}}
 						No active requests.
+					{{/for}}
+					<br><br>
+				</div>
+			</div>
+		</div>
+	</div>
+{{else data.screen == 3}}
+	<div class="item">
+		<div class="itemLabel">
+			Cargo Crates to Forward
+		</div>
+		<div class="itemContentWide">
+			<div class="statusDisplay">
+				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 220px;">
+					<u><b>Crates</b></u>
+					<br>
+					{{for data.forwards}}
+						<div class="line">
+							{{:value.name}}<br>
+							From {{:value.origin_station_name}}, belonging to {{:value.origin_sender_name}}.<br>
+							Worth {{:value.worth}} on forwarding.<br>
+							WEIGHED: {{:value.weighed}}<br>
+							STAMPED: {{:value.stamped}}<br>
+							{{:value.mm}} minutes and {{:value.ss}} seconds remaining.<br><br>
+						</div>
+					{{empty}}
+						No active forwards.
 					{{/for}}
 					<br><br>
 				</div>

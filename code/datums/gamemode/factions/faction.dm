@@ -258,7 +258,7 @@ var/list/factions_with_hud_icons = list()
 
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'><br>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'>"}
 	return header
 
 /datum/faction/proc/AdminPanelEntry(var/datum/admins/A)

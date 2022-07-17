@@ -43,10 +43,6 @@ var/list/labor_console_categories = list(
 	job_master.labor_consoles -= src
 	..()
 
-/obj/machinery/computer/labor/attack_ai(var/mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/labor/attack_hand(var/mob/user as mob)
 	if(..())
 		return
@@ -212,7 +208,7 @@ var/list/labor_console_categories = list(
 /obj/machinery/computer/labor/update_icon()
 	..()
 	overlays = 0
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(awaiting_swipe || verifying)
 		overlays += awaiting_overlay

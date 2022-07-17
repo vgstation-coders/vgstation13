@@ -2,8 +2,8 @@
 	icon_state = "sp_base"
 	id_tag = 0
 	penetration_dampening = 1 // Fragile
-	var/health = 15 //Fragile shit, even with state-of-the-art reinforced glass
-	var/maxhealth = 15 //If ANYONE ever makes it so that solars can be directly repaired without glass, also used for fancy calculations
+	health = 15 //Fragile shit, even with state-of-the-art reinforced glass
+	maxHealth = 15 //If ANYONE ever makes it so that solars can be directly repaired without glass, also used for fancy calculations
 	var/obscured = 0
 	var/sunfrac = 0
 	var/adir = SOUTH
@@ -28,7 +28,7 @@
 		solar_assembly = S
 		var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type //This is how you call up variables from an object without making one
 		src.glass_quality_factor = initial(G.glass_quality) //Don't use istype checks kids
-		src.maxhealth = initial(G.shealth)
+		src.maxHealth = initial(G.shealth)
 		src.health = initial(G.shealth)
 	solar_assembly.forceMove(src)
 	update_icon()
@@ -70,7 +70,7 @@
 
 /obj/machinery/power/solar/panel/proc/healthcheck()
 	if(health <= 0)
-		if(!(stat & BROKEN) && health > -maxhealth)
+		if(!(stat & BROKEN) && health > -maxHealth)
 			broken()
 		else
 			var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type
@@ -124,7 +124,7 @@
 	if(obscured)
 		return
 
-	var/sgen = SOLARGENRATE * sunfrac * glass_quality_factor * (health / maxhealth) //Raw generating power * Sun angle effect * Glass quality * Current panel health. Simple but thorough
+	var/sgen = SOLARGENRATE * sunfrac * glass_quality_factor * (health / maxHealth) //Raw generating power * Sun angle effect * Glass quality * Current panel health. Simple but thorough
 
 	add_avail(sgen)
 

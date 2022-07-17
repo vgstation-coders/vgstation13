@@ -2,6 +2,7 @@
 #define IRC_FLAG_ADMINHELP "ahelps"
 
 /proc/send2irc(var/flag, var/msg)
+	set waitfor = FALSE
 	if(config.use_irc_bot)
 		var/a=" --key=\"[config.comms_password]\""
 		a += " --id=\"[config.irc_bot_server_id]\""
@@ -12,7 +13,6 @@
 			a+=" --port=\"[config.irc_bot_port]\""
 			msg=replacetext(msg,"\"","\\\"")
 		ext_python("ircbot_message.py", "[a] [escape_shell_arg(msg)]")
-	return
 
 /proc/send2mainirc(var/msg)
 	send2irc(IRC_FLAG_GENERAL,msg)

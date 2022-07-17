@@ -3,7 +3,7 @@
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "server"
 	var/datum/research/files
-	var/health = 100
+	health = 100
 	var/list/id_with_upload = list()		//List of R&D consoles with upload to server access.
 	var/list/id_with_download = list()	//List of R&D consoles with download from server access.
 	var/id_with_upload_string = ""		//String versions for easy editing in map editor.
@@ -110,7 +110,7 @@
 		C.files.RefreshResearch()
 
 /obj/machinery/r_n_d/server/proc/produce_heat(heat_amt)
-	if(!(stat & (NOPOWER|BROKEN))) //Blatently stolen from space heater.
+	if(!(stat & (NOPOWER|BROKEN|FORCEDISABLE))) //Blatently stolen from space heater.
 		var/turf/simulated/L = loc
 		if(istype(L))
 			var/datum/gas_mixture/env = L.return_air()
@@ -235,7 +235,7 @@
 	return
 
 /obj/machinery/computer/rdservercontrol/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	user.set_machine(src)
 	var/dat = ""

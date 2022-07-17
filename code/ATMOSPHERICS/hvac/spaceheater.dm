@@ -125,7 +125,7 @@
 			to_chat(user, "<span class='info'>The charge meter reads [cell ? round(cell.percent(),1) : 0]%</span>")
 
 /obj/machinery/space_heater/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	if((cell) && (!nocell))
@@ -321,7 +321,7 @@
 
 /obj/machinery/space_heater/process()
 	if(on)
-		if(ispowered())
+		if(ispowered() && !(stat & FORCEDISABLE))
 			var/turf/simulated/L = loc
 			if(istype(L))
 				var/datum/gas_mixture/env = L.return_air()

@@ -37,7 +37,7 @@ var/list/datum/map_element/map_elements = list()
 	for(var/atom/A in objects)
 		A.spawned_by_map_element(src, objects)
 
-/datum/map_element/proc/load(x, y, z, rotate=0, override_can_rotate = FALSE)
+/datum/map_element/proc/load(x, y, z, rotate=0, overwrite = FALSE, override_can_rotate = FALSE)
 	//Location is always lower left corner.
 	//In some cases, location is set to null (when creating a new z-level, for example)
 	//To account for that, location is set again in maploader's load_map() proc
@@ -53,7 +53,7 @@ var/list/datum/map_element/map_elements = list()
 	if(file_path)
 		var/file = file(file_path)
 		if(isfile(file))
-			var/list/L = maploader.load_map(file, z, x, y, src, rotation)
+			var/list/L = maploader.load_map(file, z, x, y, src, rotation, overwrite)
 			initialize(L)
 			return L
 	else //No file specified - empty map element

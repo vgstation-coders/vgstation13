@@ -8,6 +8,7 @@ var/area/space_area
 	var/global/global_uid = 0
 	var/uid
 	var/obj/machinery/power/apc/areaapc = null
+	var/list/obj/machinery/alarm/air_alarms = list()
 	var/list/area_turfs
 	plane = ABOVE_LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
@@ -138,7 +139,7 @@ var/area/space_area
 
 	// Determine what the highest DL reported by air alarms is
 	for(var/obj/machinery/alarm/AA in src)
-		if((AA.stat & (NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
+		if((AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) || AA.shorted || AA.buildstage != 2)
 			continue
 		var/reported_danger_level=AA.local_danger_level
 		if(AA.alarmActivated)
@@ -178,7 +179,7 @@ var/area/space_area
 			UpdateFirelocks()
 		atmosalm = danger_level
 		for (var/obj/machinery/alarm/AA in src)
-			if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+			if ( !(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
 				AA.update_icon()
 		return 1
 	return 0
@@ -187,8 +188,8 @@ var/area/space_area
 	var/danger_level = 0
 
 	// Determine what the highest DL reported by air alarms is
-	for(var/obj/machinery/alarm/AA in src)
-		if((AA.stat & (NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
+	for(var/obj/machinery/alarm/AA in air_alarms)
+		if((AA.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
 			continue
 		var/reported_danger_level=AA.local_danger_level
 		if(AA.alarmActivated)

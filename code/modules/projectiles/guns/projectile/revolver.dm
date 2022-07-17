@@ -131,8 +131,21 @@
 	Spin() //randomize where the first round is located
 	update_icon()
 
-/obj/item/weapon/gun/projectile/russian/proc/Spin()
+/obj/item/weapon/gun/projectile/russian/proc/Spin(mob/spinner)
 	loaded = shuffle(loaded)
+
+	if(spinner) //Take luck into account.
+		var/spinnerluck = spinner.luck()
+		var/rollpower = rand(25,75)
+		var/rerolls = min(round(abs(spinnerluck), rollpower) / rollpower, 100)
+		while(rerolls)
+			if(loaded[1] && spinnerluck > 0)		//Lucky people get rerolls if they were going to get a bullet.
+				loaded = shuffle(loaded)
+			else if(!loaded[1] && spinnerluck < 0)	//Unlucky people get rerolls if they were going to get an empty chamber.
+				loaded = shuffle(loaded)
+			else
+				break
+			rerolls -= 1
 
 /obj/item/weapon/gun/projectile/russian/attackby(var/obj/item/A as obj, mob/user as mob)
 
@@ -174,7 +187,7 @@
 
 
 	if(getAmmo() > 0)
-		Spin()
+		Spin(user)
 	playsound(user, 'sound/weapons/revolver_spin.ogg', 50, 1)
 	update_icon()
 	return
@@ -184,7 +197,7 @@
 	user.visible_message("<span class='warning'>[user] spins the chamber of the revolver.</span>", "<span class='warning'>You spin the revolver's chamber.</span>")
 	playsound(user, 'sound/weapons/revolver_spin.ogg', 50, 1)
 	if(getAmmo() > 0)
-		Spin()
+		Spin(user)
 
 /obj/item/weapon/gun/projectile/russian/attack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
 

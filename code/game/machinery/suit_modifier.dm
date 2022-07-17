@@ -203,7 +203,7 @@
 	var/obj/item/clothing/suit/space/chosen_suit = suit_list[chosen_job][SUIT_INDEX]
 	var/obj/item/clothing/head/helmet/space/plasmaman/chosen_helmet = suit_list[chosen_job][HELMET_INDEX]
 	activated = TRUE
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	activation_animation()
 	working_animation()
 	var/obj/item/clothing/suit/space/suit = guy.get_item_by_slot(slot_wear_suit)
@@ -220,7 +220,7 @@
 		guy.update_inv_head()
 	finished_animation()
 	unlock_atom(guy)
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	activated = FALSE
 
 /obj/machinery/suit_modifier/proc/process_module_installation(var/mob/living/carbon/human/H)
@@ -228,7 +228,7 @@
 		return
 	lock_atom(H)
 	activated = TRUE
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	activation_animation()
 	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
 	R.deactivate_suit()
@@ -254,7 +254,7 @@
 	finished_animation()
 	unlock_atom(H)
 	R.initialize_suit()
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	activated = FALSE
 
 /obj/machinery/suit_modifier/proc/process_module_removal(var/mob/living/carbon/human/H)
@@ -262,7 +262,7 @@
 		return
 	lock_atom(H)
 	activated = TRUE
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	activation_animation()
 	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
 	R.deactivate_suit()
@@ -282,7 +282,7 @@
 		finished_animation()
 	unlock_atom(H)
 	R.initialize_suit()
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	activated = FALSE
 
 /obj/machinery/suit_modifier/get_cell()

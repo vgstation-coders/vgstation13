@@ -25,6 +25,7 @@
 		return
 	if(find_empty_hand_index())
 		give_check = TRUE
+		to_chat(user, "<span class='notice'>You offer \the [I] to \the [src].</span>")
 		switch(alert(src, "[user] wants to give you \a [I]?", , "Yes", "No"))
 			if("Yes")
 				give_check = FALSE

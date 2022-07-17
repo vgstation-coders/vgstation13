@@ -59,7 +59,6 @@
 /area/research_outpost/spectro
 	name = "Mass Spectrometry Lab"
 	icon_state = "anospectro"
-	lightswitch = FALSE
 	ambient_sounds = list(
 		/datum/ambience/ded2)
 

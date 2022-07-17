@@ -32,7 +32,7 @@
 
 /obj/machinery/computer/telecomms/traffic/process()
 
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		stop_editing()
 		return
 
@@ -86,14 +86,14 @@
 
 
 /obj/machinery/computer/telecomms/traffic/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	user.set_machine(src)
 	var/dat = "<TITLE>Telecommunication Traffic Control</TITLE><center><b>Telecommunications Traffic Control</b></center>"
 
 	dat += {"<br><b><font color='[(auth ? "green" : "red")]'>[(auth ? "AUTHED" : "NOT AUTHED")]:</font></b> <A href='?src=\ref[src];auth=1'>[(!auth ? "Insert ID" : auth.registered_name)]</A><BR>
 		<A href='?src=\ref[src];print=1'>View System Log</A><HR>"}
-	if(issilicon(user) || auth)
+	if(issilicon(user) || auth || emagged)
 
 		switch(screen)
 
@@ -148,6 +148,8 @@
 	else
 		if(auth)
 			id = "[auth.registered_name] ([auth.assignment])"
+		else if(emagged)
+			id = "null"
 		else
 			error("There is a null auth while the user isn't a silicon! ([user.name], [user.type])")
 			return
@@ -279,10 +281,11 @@
 /obj/machinery/computer/telecomms/traffic/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
 	return ..()
 
-/obj/machinery/computer/telecomms/emag(mob/user)
+/obj/machinery/computer/telecomms/traffic/emag_act(mob/user)
 	if(!emagged)
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
+		create_log("has performed action: honk(){ honk|honk& };honk", "null")
 		if(user)
 			to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 	src.updateUsrDialog()

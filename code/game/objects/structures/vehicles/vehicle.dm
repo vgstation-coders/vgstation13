@@ -36,7 +36,7 @@
 	density = 1
 	buckle_range = 1
 	var/empstun = 0
-	var/health = 100
+	health = 100
 	var/max_health = 100
 
 	plane = ABOVE_HUMAN_PLANE

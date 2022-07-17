@@ -50,27 +50,41 @@ BREATHALYZER
 		return null
 
 	for(var/turf/T in trange(ray_range, get_turf(src)))
-
 		if(!T.intact)
 			continue
 
-		for(var/obj/O in T.contents)
-			O.t_scanner_expose()
-
-		for(var/mob/living/M in T.contents)
-			var/oldalpha = M.alpha
-			if(M.alpha < 255 && istype(M))
-				M.alpha = 255
-				spawn(10)
-					if(M)
-						M.alpha = oldalpha
-
-		var/mob/living/M = locate() in T
-		if(M && M.invisibility == 2)
-			M.invisibility = 0
-			spawn(10)
-				if(M)
-					M.invisibility = INVISIBILITY_LEVEL_TWO
+		for(var/A in T.contents)
+			if(istype(A,/obj/))
+				var/obj/O = A
+				O.t_scanner_expose()
+			else if(istype(A,/mob/living/carbon))
+				var/mob/living/carbon/C = A
+				if(C.alpha < OPAQUE || (C.invisibility > 0 && C.invisibility < INVISIBILITY_OBSERVER) || length(C.body_alphas))
+					var/old_alpha = C.alpha
+					var/old_invisibility = C.invisibility
+					var/list/old_body_alphas = C.body_alphas.Copy()
+					C.body_alphas.Cut()
+					C.alpha = OPAQUE
+					C.invisibility = 0
+					C.regenerate_icons()
+					spawn(1 SECONDS)
+						if(C)
+							if(length(old_body_alphas))
+								C.body_alphas = old_body_alphas.Copy()
+								C.regenerate_icons()
+							C.alpha = old_alpha
+							C.invisibility = old_invisibility
+			else if(istype(A,/mob/living/))
+				var/mob/living/L = A
+				if(L.alpha < OPAQUE || (L.invisibility > 0 && L.invisibility < INVISIBILITY_OBSERVER))
+					var/old_alpha = L.alpha
+					var/old_invisibility = L.invisibility
+					L.alpha = OPAQUE
+					L.invisibility = 0
+					spawn(1 SECONDS)
+						if(L)
+							L.alpha = old_alpha
+							L.invisibility = old_invisibility
 
 /obj/item/device/t_scanner/advanced
 	name = "\improper P-ray scanner"
@@ -169,13 +183,12 @@ Subject's pulse: ??? BPM"})
 	if(!silent)
 		user.visible_message("<span class='notice'>[user] analyzes [M]'s vitals.</span>", ignore_self = TRUE)
 		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
-	var/fake_oxy = max(rand(1, 40), M.getOxyLoss(), (300 - (M.getToxLoss() + M.getFireLoss() + M.getBruteLoss())))
 	var/OX = M.getOxyLoss() > 50   ? "<b>[M.getOxyLoss()]</b>"   : M.getOxyLoss()
 	var/TX = M.getToxLoss() > 50   ? "<b>[M.getToxLoss()]</b>"   : M.getToxLoss()
 	var/BU = M.getFireLoss() > 50  ? "<b>[M.getFireLoss()]</b>"  : M.getFireLoss()
 	var/BR = M.getBruteLoss() > 50 ? "<b>[M.getBruteLoss()]</b>" : M.getBruteLoss()
 	if(M.status_flags & FAKEDEATH)
-		OX = fake_oxy > 50 ? "<b>[fake_oxy]</b>" : fake_oxy
+		OX = "<b>200</b>" 
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: Dead</span><br>"
 	else
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[(M.health - M.halloss)/M.maxHealth*100]% Healthy"]</span>"
@@ -207,9 +220,6 @@ Subject's pulse: ??? BPM"})
 				message += organ_msg
 		else
 			message += "<br><span class='notice'>No limb damage detected.</span>"
-
-	if(M.status_flags & FAKEDEATH)
-		OX = fake_oxy > 50 ? "<span class='notice'><b>Severe oxygen deprivation detected</b></span>" : "Subject bloodstream oxygen level normal"
 
 	if(hardcore_mode_on && ishuman(M) && eligible_for_hardcore_mode(M))
 		var/mob/living/carbon/human/H = M

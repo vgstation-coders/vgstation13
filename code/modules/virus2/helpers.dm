@@ -205,7 +205,7 @@ var/list/infected_contact_mobs = list()
 		//----------------
 
 		for (var/obj/item/device/pda/p in contents)
-			if (p.scanmode == (SCANMODE_MEDICAL))
+			if (istype(p.scanning_app,/datum/pda_app/cart/scanner/medical))
 				playsound(loc, 'sound/machines/twobeep.ogg', 50, 1)
 				if("[disease.uniqueID]-[disease.subID]" in virusDB)
 					var/datum/data/record/V = virusDB["[disease.uniqueID]-[disease.subID]"]

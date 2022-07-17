@@ -381,7 +381,7 @@ var/bee_mobs_count = 0
 			if (pollinating == 0)
 				for (var/datum/bee/B in bees)
 					B.pollens += target_plant.seed
-					B.toxins += target_plant.toxins
+					B.toxins += target_plant.get_toxinlevel()
 					B.fatigue += FATIGUE_PER_POLLINATIONS
 					if (B.fatigue > FATIGUE_TO_RETURN)
 						B.homeCall()

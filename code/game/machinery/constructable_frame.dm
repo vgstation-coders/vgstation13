@@ -7,7 +7,7 @@
 	icon_state = "box_0"
 	density = 1
 	anchored = 1
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	var/obj/item/weapon/circuitboard/circuit = null
 	var/list/components = null
 	var/list/req_components = null
@@ -914,8 +914,8 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/capacitor = 2)
 
 /obj/item/weapon/circuitboard/monkey_recycler
-	name = "Circuit Board (Monkey Recycler)"
-	desc = "A circuit board used to run a machine that turns dead monkeys into monkey cubes."
+	name = "Circuit Board (Animal Recycler)"
+	desc = "A circuit board used to run a machine that turns dead animals into animal cubes."
 	build_path = /obj/machinery/monkey_recycler
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
@@ -1294,6 +1294,23 @@ to destroy them and players will be able to make replacements.
 	name = "Circuit Board (Destinations Sorting Machine)"
 	desc = "A circuit board used to run a machine that sorts input into two outputs from pre-programmed settings. This one is programmed for mail."
 	build_path = /obj/machinery/sorting_machine/destination
+
+/obj/item/weapon/circuitboard/sorting_machine/item
+	name = "Circuit Design (Item Sorting Machine)"
+	desc = "A circuit board used to run a machine that sorts input into two outputs from pre-programmed settings. This one is programmed for items."
+	build_path = /obj/machinery/sorting_machine/item
+
+/obj/item/weapon/circuitboard/wrapping_machine
+	name = "Circuit Board (Wrapping Machine)"
+	desc = "A circuit board used to run a machine that wraps packages."
+	build_path = /obj/machinery/wrapping_machine
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=2"
+	req_components = list(
+		/obj/item/weapon/stock_parts/scanning_module = 1,
+		/obj/item/weapon/stock_parts/manipulator = 1,
+		/obj/item/weapon/stock_parts/matter_bin = 2,
+	)
 
 /obj/item/weapon/circuitboard/processing_unit
 	name = "Circuit Board (Ore Processor)"

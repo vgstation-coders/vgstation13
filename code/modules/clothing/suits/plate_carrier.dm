@@ -99,13 +99,12 @@
 
 /obj/item/weapon/armor_plate/examine(var/mob/user)
 	..()
-	switch(health)
-		if(initial(health) to initial(health)/2)
-			to_chat(user, "<span class = 'notice'>\The [src] is hard.</span>")
-		if(initial(health)/2-1 to initial(health)/4)
-			to_chat(user, "<span class = 'warning'>\The [src] is brittle.</span>")
-		if(initial(health)/4-1 to 0)
-			to_chat(user, "<span class = 'warning'>\The [src] is falling apart!</span>")
+	if(health in initial(health) to initial(health)/2)
+		to_chat(user, "<span class = 'notice'>\The [src] is hard.</span>")
+	else if(health in initial(health)/2-1 to initial(health)/4)
+		to_chat(user, "<span class = 'warning'>\The [src] is brittle.</span>")
+	else if(health in initial(health)/4-1 to 0)
+		to_chat(user, "<span class = 'warning'>\The [src] is falling apart!</span>")
 
 /obj/item/weapon/armor_plate/bullet_resistant
 	name = "plasteel armor plate"

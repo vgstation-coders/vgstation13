@@ -5,7 +5,7 @@
 	density = 1
 	anchored = 0
 
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 100 //Watts, I hope.  Just enough to do the computer and display things.
 
 	var/thermal_efficiency = 0.65
@@ -97,7 +97,7 @@
 	reconnect()
 
 /obj/machinery/power/generator/proc/operable()
-	return circ1 && circ2 && anchored && !(stat & (BROKEN|NOPOWER))
+	return circ1 && circ2 && anchored && !(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 
 /obj/machinery/power/generator/update_icon()
 	overlays = 0
@@ -166,8 +166,6 @@
 	if (operable())
 		add_avail(last_gen)
 
-/obj/machinery/power/generator/attack_ai(mob/user)
-	return attack_hand(user)
 
 /obj/machinery/power/generator/attack_hand(mob/user)
 	. = ..()

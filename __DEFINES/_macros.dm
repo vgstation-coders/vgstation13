@@ -42,7 +42,7 @@
 
 #define ishorrorform(A) (ishuman(A) && istype(A:species, /datum/species/horror))
 
-#define isumbra(A) (ishuman(A) && istype(A:species, /datum/species/umbra))
+#define istruevampire(A)  (ishuman(A) && isvampire(A) && istype(A:species, /datum/species/vampire))
 
 #define ismushroom(A) ((ishuman(A) && istype(A:species, /datum/species/mushroom)) || (istype(A, /mob/living/carbon/monkey/mushroom)))
 
@@ -148,7 +148,7 @@
 
 #define isEmag(A) istype(A, /obj/item/weapon/card/emag)
 
-#define istool(A) is_type_in_list(A, common_tools)
+#define istool(A) iswrench(A) || iswelder(A) || isshovel(A) || ishammer(A) || iscablecoil(A) || iswiretool(A) || iscrowbar(A)
 
 #define iswelder(A) istype(A, /obj/item/tool/weldingtool)
 
@@ -158,7 +158,9 @@
 
 #define iscablecoil(A) istype(A, /obj/item/stack/cable_coil)
 
-#define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
+#define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin))
+
+#define isfood(A) istype(A, /obj/item/weapon/reagent_containers/food)
 
 #define iswirecutter(A) istype(A, /obj/item/tool/wirecutters)
 
@@ -178,7 +180,7 @@
 
 #define issolder(A) istype(A, /obj/item/tool/solder)
 
-#define issocketwrench(A) istype(A, /obj/item/tool/wrench/socket)
+#define iswrench(A) istype(A, /obj/item/tool/wrench)
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
@@ -401,8 +403,6 @@
 
 
 #define subtypesof(A) (typesof(A) - A)
-
-#define LIBVG(function, arguments...) call("./libvg.[world.system_type == UNIX ? "so" : "dll"]", function)(arguments)
 
 // For areas that are on the map, `x` is the coordinate of the turf with the lowest z, y, and x coordinate (in that order) that is contained by the area.
 #define is_area_in_map(A) (A.x)

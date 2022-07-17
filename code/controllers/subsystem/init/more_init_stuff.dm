@@ -78,8 +78,8 @@ var/datum/subsystem/more_init/SSmore_init
 //		testing("Generating [S], Blood([species_blood])")
 		for(var/datum/organ/external/O in H.organs)
 			//testing("[O] part")
-			for(var/brute = 1 to 3)
-				for(var/burn = 1 to 3)
+			for(var/brute = 0 to 3)
+				for(var/burn = 0 to 3)
 					var/damage_state = "[brute][burn]"
 					if(species_blood)
 						DI = icon('icons/mob/dam_human.dmi', "[brute]0-color")

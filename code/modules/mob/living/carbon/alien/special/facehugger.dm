@@ -192,8 +192,9 @@
 	Attach(M)
 
 /obj/item/clothing/mask/facehugger/Crossed(atom/target) // Instead of HasEntered. Probably the right proc, probably.
+	if(..())
+		return 1
 	HasProximity(target)
-	return
 
 /obj/item/clothing/mask/facehugger/on_found(wearer, mob/finder as mob)
 	if(stat == CONSCIOUS)
@@ -649,7 +650,7 @@
 			target.death(0)
 			visible_message("<span class='danger'>[target.real_name]'s flesh is violently torn apart!</span>")
 			hgibs(target.loc, target.virus2, target.dna)
-			var/mob/living/simple_animal/hostile/necro/zombie/headcrab/Z = target.make_zombie(retain_mind = 1, crabzombie = 1)
+			var/mob/living/simple_animal/hostile/necro/zombie/headcrab/Z = target.zombify(retain_mind = 1, crabzombie = 1)
 			Z.crab = src
 
 

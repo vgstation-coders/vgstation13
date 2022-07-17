@@ -12,7 +12,7 @@
 
 	dir = SOUTH
 	initialize_directions = SOUTH
-	
+
 	var/obj/machinery/atmospherics/node1
 	var/obj/machinery/atmospherics/node2
 
@@ -28,6 +28,9 @@
 
 /obj/machinery/atmospherics/pipe/zpipe/New()
 	..()
+	update_dir()
+
+/obj/machinery/atmospherics/pipe/zpipe/update_dir()
 	switch(dir)
 		if(SOUTH)
 			initialize_directions = SOUTH
@@ -45,6 +48,7 @@
 			initialize_directions = EAST
 		if(SOUTHWEST)
 			initialize_directions = SOUTH
+	..()
 
 /obj/machinery/atmospherics/pipe/zpipe/hide(var/i)
 	if(istype(loc, /turf/simulated))

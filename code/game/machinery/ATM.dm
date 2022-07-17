@@ -21,7 +21,7 @@ log transactions
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "atm"
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	var/datum/money_account/authenticated_account
 	var/number_incorrect_tries = 0
@@ -50,10 +50,10 @@ log transactions
 	..()
 
 /obj/machinery/atm/process()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 
-	if(linked_db && ( (linked_db.stat & NOPOWER) || !linked_db.activated ) )
+	if(linked_db && ( (linked_db.stat & (NOPOWER|FORCEDISABLE)) || !linked_db.activated ) )
 		linked_db = null
 		authenticated_account = null
 		src.visible_message("<span class='warning'>[bicon(src)] [src] buzzes rudely, \"Connection to remote database lost.\"</span>")

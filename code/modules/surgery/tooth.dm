@@ -30,9 +30,9 @@
 
 
 /datum/surgery_step/tooth_replace/mend_roots/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		user.visible_message("[user] starts mending the blood vessels and nerves in the empty sockets of [target]'s jaw with \the [tool].", \
-		"You start mending the blood vessels and nerves in the sockets of [target]'s jaw with \the [tool].")
-		..()
+	user.visible_message("[user] starts mending the blood vessels and nerves in the empty sockets of [target]'s jaw with \the [tool].", \
+	"You start mending the blood vessels and nerves in the sockets of [target]'s jaw with \the [tool].")
+	..()
 
 /datum/surgery_step/tooth_replace/mend_roots/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='notice'>[user] mends the sockets of [target]'s jaw with \the [tool].</span>", \
@@ -124,9 +124,9 @@
 
 
 /datum/surgery_step/tooth_extract/set_jaws/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		user.visible_message("[user] starts setting [target]'s jaw in place with \the [tool] to prepare for tooth extraction", \
-		"You start setting [target]'s jaw in place with \the [tool] to prepare for tooth extraction.")
-		..()
+	user.visible_message("[user] starts setting [target]'s jaw in place with \the [tool] to prepare for tooth extraction", \
+	"You start setting [target]'s jaw in place with \the [tool] to prepare for tooth extraction.")
+	..()
 
 /datum/surgery_step/tooth_extract/set_jaws/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='notice'>[user] locks [target]'s jaw in place with \the [tool].</span>", \
@@ -138,6 +138,7 @@
 	user.visible_message("<span class='warning'>[user]'s hand slips, painfully popping [target]'s jaw with \the [tool]!</span>", \
 	"<span class='warning'>Your hand slips, painfully popping [user]'s jaw with \the [tool]!</span>")
 	target.apply_damage(5, BRUTE, affected)
+
 
 
 
@@ -168,9 +169,9 @@
 
 
 /datum/surgery_step/tooth_extract/pull_tooth/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		user.visible_message("[user] starts pulling one of [target]'s teeth out with \the [tool].", \
-		"You start pulling one of [target]'s teeth out with \the [tool].")
-		..()
+	user.visible_message("[user] starts pulling one of [target]'s teeth out with \the [tool].", \
+	"You start pulling one of [target]'s teeth out with \the [tool].")
+	..()
 
 /datum/surgery_step/tooth_extract/pull_tooth/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='notice'>[user] pulls out one of [target]'s teeth with \the [tool].</span>", \
@@ -188,6 +189,9 @@
 	"<span class='warning'>Your hand slips, dropping the tooth and scraping the gums of [user] with \the [tool]!</span>")
 	target.apply_damage(5, BRUTE, affected)
 
+
+
+
 ///////RESET JAWS///////
 /datum/surgery_step/tooth_extract/reset
 	allowed_tools = list(
@@ -202,9 +206,9 @@
 
 
 /datum/surgery_step/tooth_extract/reset/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		user.visible_message("[user] starts putting [target]'s jaw back into place with \the [tool].", \
-		"You start putting [target]'s jaw back into place with \the [tool].")
-		..()
+	user.visible_message("[user] starts putting [target]'s jaw back into place with \the [tool].", \
+	"You start putting [target]'s jaw back into place with \the [tool].")
+	..()
 
 /datum/surgery_step/tooth_extract/reset/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='notice'>[user] unlocks [target]'s jaw with \the [tool].</span>", \

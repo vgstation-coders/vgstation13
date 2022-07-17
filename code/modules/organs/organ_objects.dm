@@ -3,6 +3,7 @@
 	desc = "It looks like it probably just plopped out."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "appendix"
+	w_class = W_CLASS_SMALL
 
 	health = 100                              // Process() ticks before death.
 
@@ -66,10 +67,6 @@
 	else
 		user.simple_message("<span class='info'>This organ has no barcode and looks natural.</span>","<span class='info'>Looks all-natural and organically-grown! Sweet.</span>")
 
-	if(!had_mind)
-		user.simple_message("<span class='warning'>The organ seems limp and lifeless.  Perhaps it never was controlled by an intelligent mind?</span>","<span class='warning'>This thing is bummed.</span>")
-	else
-		user.simple_message("<span class='info'>The organ seems [health ? "to be full of life!" : "like it was full of life once."]</span>","<span class='info'>It's making [health ? "happy" : "spooky"] little cooing noises at you. Aw.</span>")
 
 /obj/item/organ/internal/process()
 
@@ -255,6 +252,7 @@
 	prosthetic_icon = "eyes-prosthetic"
 	organ_tag = "eyes"
 	organ_type = /datum/organ/internal/eyes
+	w_class = W_CLASS_TINY
 	var/eye_colour
 	var/emitter = FALSE
 
@@ -290,11 +288,11 @@
 	prosthetic_name = "vox visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/vox
 
-/obj/item/organ/internal/eyes/umbra
-	name = "umbra eyeballs"
+/obj/item/organ/internal/eyes/monstrous
+	name = "monstrous eyeballs"
 //	icon_state = "eyes"
-	prosthetic_name = "umbra visual prosthesis"
-	organ_type = /datum/organ/internal/eyes/umbra
+	prosthetic_name = "monstrous visual prosthesis"
+	organ_type = /datum/organ/internal/eyes/monstrous
 
 /obj/item/organ/internal/eyes/mushroom
 	name = "mushroom eyeballs"
@@ -327,6 +325,7 @@
 	name = "appendix"
 	icon_state = "appendix"
 	organ_tag = "appendix"
+	w_class = W_CLASS_TINY
 
 //These are here so they can be printed out via the fabricator.
 /obj/item/organ/internal/heart/prosthetic

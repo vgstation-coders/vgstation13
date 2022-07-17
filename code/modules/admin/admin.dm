@@ -69,6 +69,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];newban=\ref[M]'>Ban</A> |
 		<A href='?src=\ref[src];jobban2=\ref[M]'>Jobban</A> |
 		<A href='?src=\ref[src];oocban=\ref[M]'>OOC Ban</A> |
+		<A href='?src=\ref[src];paxban=\ref[M]'>Pax Ban</A> |
 		<A href='?_src_=holder;appearanceban=\ref[M]'>Identity Ban</A> |
 		<A href='?src=\ref[src];notes=show;mob=\ref[M]'>Notes</A>
 	"}
@@ -859,6 +860,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
+			<A href='?src=\ref[src];secretsfun=money_lotto'>Start a lotto draw</A><BR>
 			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a random event from all possible random events (WARNING, NOT ALL ARE GUARANTEED TO WORK).</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
@@ -882,7 +884,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
-			<A href='?src=\ref[src];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
+			<A href='?src=\ref[src];secretsfun=fakebooms'>Create fake explosions around the station</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
 			<A href='?src=\ref[src];secretsfun=virusdish'>Create a new virus in a dish</A><BR>

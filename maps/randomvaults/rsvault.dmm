@@ -1,95 +1,738 @@
-"aa" = (/obj/structure/softwall,/obj/structure/softwall,/turf/unsimulated/floor/asteroid,/area)
-"ab" = (/obj/structure/softwall,/turf/unsimulated/floor/asteroid,/area)
-"ac" = (/turf/unsimulated/mineral/iron,/area)
-"ad" = (/turf/unsimulated/mineral/mythril,/area)
-"ae" = (/obj/item/clothing/head/helmet/rune,/obj/item/clothing/suit/armor/rune,/obj/item/weapon/shield/riot/rune,/obj/item/weapon/rsscimmy,/mob/living/simple_animal/hostile/mimic/crate/chest,/turf/unsimulated/floor/evil,/area)
-"af" = (/obj/effect/decal/remains/human,/turf/unsimulated/floor/evil,/area)
-"ag" = (/obj/structure/closet/coffin,/turf/unsimulated/floor/evil,/area)
-"ah" = (/mob/living/simple_animal/hostile/necro/zombie/putrid,/turf/unsimulated/floor/evil,/area)
-"ai" = (/turf/unsimulated/floor/evil,/area)
-"aj" = (/obj/structure/wizard/altar,/turf/simulated/floor/wood,/area)
-"ak" = (/obj/structure/wizard/scrying,/turf/simulated/floor/wood,/area)
-"al" = (/turf/simulated/floor/wood,/area)
-"am" = (/obj/structure/softwall,/turf/simulated/floor/wood,/area)
-"an" = (/obj/effect/decal/remains/human,/turf/unsimulated/floor/asteroid,/area)
-"ao" = (/obj/item/weapon/pickaxe,/turf/unsimulated/floor/asteroid,/area)
-"ap" = (/obj/item/clothing/suit/armor/rune,/turf/unsimulated/floor/asteroid,/area)
-"ar" = (/mob/living/simple_animal/hostile/humanoid/wizard,/turf/simulated/floor/wood,/area)
-"as" = (/obj/item/clothing/head/wizard,/turf/simulated/floor/wood,/area)
-"at" = (/obj/effect/spider/stickyweb,/turf/unsimulated/floor/asteroid,/area)
-"au" = (/obj/item/clothing/suit/wizrobe,/turf/simulated/floor/wood,/area)
-"av" = (/turf/unsimulated/mineral/gold,/area)
-"aw" = (/obj/machinery/door/mineral/transparent/plasma,/turf/unsimulated/floor/evil,/area)
-"ax" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/wood,/area)
-"ay" = (/turf/unsimulated/floor/asteroid,/area)
-"az" = (/turf/simulated/floor/grass,/area)
-"aA" = (/obj/structure/closet/coffin,/turf/simulated/floor/wood,/area)
-"aB" = (/obj/item/weapon/storage/fancy/candle_box,/turf/simulated/floor/wood,/area)
-"aC" = (/obj/item/clothing/head/helmet/rune,/turf/simulated/floor/wood,/area)
-"aD" = (/mob/living/simple_animal/hostile/mimic/crate/chest,/turf/simulated/floor/wood,/area)
-"aE" = (/mob/living/simple_animal/hostile/giant_spider,/turf/unsimulated/floor/asteroid,/area)
-"aF" = (/obj/effect/spider/stickyweb,/obj/item/weapon/hammer,/turf/unsimulated/floor/asteroid,/area)
-"aG" = (/mob/living/simple_animal/hostile/giant_spider/hunter,/turf/unsimulated/floor/asteroid,/area)
-"aH" = (/mob/living/simple_animal/hostile/humanoid/vampire,/turf/simulated/floor/wood,/area)
-"aI" = (/obj/effect/decal/remains/human/noskull,/turf/simulated/floor/wood,/area)
-"aJ" = (/mob/living/simple_animal/hostile/giant_spider/nurse,/turf/unsimulated/floor/asteroid,/area)
-"aK" = (/obj/item/anvil,/turf/unsimulated/floor/asteroid,/area)
-"aL" = (/obj/structure/flora/ausbushes/ywflowers,/turf/simulated/floor/grass,/area)
-"aM" = (/obj/structure/coatrack,/turf/simulated/floor/wood,/area)
-"aN" = (/obj/machinery/door/mineral/wood,/turf/unsimulated/floor/asteroid,/area)
-"aO" = (/obj/item/stack/sheet/wood/bigstack,/turf/simulated/floor/grass,/area)
-"aP" = (/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,/turf/simulated/floor/grass,/area)
-"aQ" = (/obj/structure/flora/ausbushes/pointybush,/turf/simulated/floor/grass,/area)
-"aR" = (/obj/structure/flora/ausbushes/ywflowers,/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,/turf/simulated/floor/grass,/area)
-"aS" = (/obj/structure/signpost,/turf/simulated/floor/grass,/area)
-"aT" = (/obj/structure/flora/ausbushes/lavendergrass,/mob/living/simple_animal/cow,/turf/simulated/floor/grass,/area)
-"aU" = (/obj/structure/flora/ausbushes/lavendergrass,/obj/item/weapon/reagent_containers/food/snacks/grown/deathberries,/turf/simulated/floor/grass,/area)
-"aV" = (/obj/structure/flora/ausbushes/lavendergrass,/turf/simulated/floor/grass,/area)
-"aW" = (/obj/item/weapon/storage/fancy/matchbox,/turf/simulated/floor/grass,/area)
-"aX" = (/mob/living/simple_animal/cow,/turf/simulated/floor/grass,/area)
-"aY" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor,/area)
-"aZ" = (/obj/machinery/door/mineral/transparent/diamond,/turf/simulated/floor/plating/snow,/area)
-"ba" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/cake,/turf/simulated/floor,/area)
-"bb" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/tea,/turf/simulated/floor,/area)
-"bc" = (/turf/simulated/floor,/area)
-"bd" = (/obj/item/weapon/storage/box,/obj/item/weapon/kitchen/utensil/knife,/turf/simulated/floor,/area)
-"be" = (/turf/simulated/floor/plating/snow,/area)
-"bf" = (/mob/living/simple_animal/hostile/humanoid/chef,/turf/simulated/floor,/area)
-"bg" = (/mob/living/simple_animal/hostile/humanoid/frostgolem/knight,/turf/simulated/floor/plating/snow,/area)
-"bh" = (/obj/structure/rack,/obj/item/weapon/kitchen/utensil/knife/large/butch,/turf/simulated/floor,/area)
-"bi" = (/obj/item/weapon/stool/piano,/turf/simulated/floor,/area)
-"bj" = (/obj/structure/table/woodentable,/obj/structure/flora/pottedplant/claypot,/turf/simulated/floor,/area)
-"bk" = (/obj/structure/table/woodentable,/obj/item/trash/bowl,/turf/simulated/floor,/area)
-"bl" = (/obj/structure/flora/tree/pine,/turf/simulated/floor/plating/snow,/area)
-"bm" = (/obj/machinery/cooking/grill,/turf/simulated/floor,/area)
-"bn" = (/obj/structure/sink/kitchen{dir = 8},/turf/simulated/floor,/area)
-"bo" = (/mob/living/simple_animal/hostile/tree,/turf/simulated/floor/plating/snow,/area)
-"bp" = (/obj/effect/decal/remains/human/noskull,/turf/simulated/floor/plating/snow,/area)
-"bq" = (/obj/item/weapon/storage/box,/turf/simulated/floor,/area)
-"br" = (/obj/item/weapon/rsscimmy,/turf/simulated/floor/plating/snow,/area)
-"bs" = (/obj/item/weapon/shield/riot/rune,/turf/simulated/floor/plating/snow,/area)
-"bt" = (/obj/machinery/media/jukebox/superjuke,/turf/simulated/floor,/area)
-"bu" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/grass,/area)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/obj/structure/softwall,
+/obj/structure/softwall,
+/turf/unsimulated/floor/asteroid,
+/area)
+"ab" = (
+/obj/structure/softwall,
+/turf/unsimulated/floor/asteroid,
+/area)
+"ac" = (
+/turf/unsimulated/mineral/iron,
+/area)
+"ad" = (
+/turf/unsimulated/mineral/mythril,
+/area)
+"ae" = (
+/obj/item/clothing/head/helmet/rune,
+/obj/item/clothing/suit/armor/rune,
+/obj/item/weapon/shield/riot/rune,
+/obj/item/weapon/rsscimmy,
+/mob/living/simple_animal/hostile/mimic/crate/chest,
+/turf/unsimulated/floor/evil,
+/area)
+"af" = (
+/obj/effect/decal/remains/human,
+/turf/unsimulated/floor/evil,
+/area)
+"ag" = (
+/obj/structure/closet/coffin,
+/turf/unsimulated/floor/evil,
+/area)
+"ah" = (
+/mob/living/simple_animal/hostile/necro/zombie/putrid,
+/turf/unsimulated/floor/evil,
+/area)
+"ai" = (
+/turf/unsimulated/floor/evil,
+/area)
+"aj" = (
+/obj/structure/wizard/altar,
+/turf/simulated/floor/wood,
+/area)
+"ak" = (
+/obj/structure/wizard/scrying,
+/turf/simulated/floor/wood,
+/area)
+"al" = (
+/turf/simulated/floor/wood,
+/area)
+"am" = (
+/obj/structure/softwall,
+/turf/simulated/floor/wood,
+/area)
+"an" = (
+/obj/effect/decal/remains/human,
+/turf/unsimulated/floor/asteroid,
+/area)
+"ao" = (
+/obj/item/weapon/pickaxe,
+/turf/unsimulated/floor/asteroid,
+/area)
+"ap" = (
+/obj/item/clothing/suit/armor/rune,
+/turf/unsimulated/floor/asteroid,
+/area)
+"ar" = (
+/mob/living/simple_animal/hostile/humanoid/wizard,
+/turf/simulated/floor/wood,
+/area)
+"as" = (
+/obj/item/clothing/head/wizard,
+/turf/simulated/floor/wood,
+/area)
+"at" = (
+/obj/effect/spider/stickyweb,
+/turf/unsimulated/floor/asteroid,
+/area)
+"au" = (
+/obj/item/clothing/suit/wizrobe,
+/turf/simulated/floor/wood,
+/area)
+"av" = (
+/turf/unsimulated/mineral/gold,
+/area)
+"aw" = (
+/obj/machinery/door/mineral/transparent/plasma,
+/turf/unsimulated/floor/evil,
+/area)
+"ax" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/wood,
+/area)
+"ay" = (
+/turf/unsimulated/floor/asteroid,
+/area)
+"az" = (
+/turf/simulated/floor/grass,
+/area)
+"aA" = (
+/obj/structure/closet/coffin,
+/turf/simulated/floor/wood,
+/area)
+"aB" = (
+/obj/item/weapon/storage/fancy/candle_box,
+/turf/simulated/floor/wood,
+/area)
+"aC" = (
+/obj/item/clothing/head/helmet/rune,
+/turf/simulated/floor/wood,
+/area)
+"aD" = (
+/mob/living/simple_animal/hostile/mimic/crate/chest,
+/turf/simulated/floor/wood,
+/area)
+"aE" = (
+/mob/living/simple_animal/hostile/giant_spider,
+/turf/unsimulated/floor/asteroid,
+/area)
+"aF" = (
+/obj/effect/spider/stickyweb,
+/obj/item/weapon/hammer,
+/turf/unsimulated/floor/asteroid,
+/area)
+"aG" = (
+/mob/living/simple_animal/hostile/giant_spider/hunter,
+/turf/unsimulated/floor/asteroid,
+/area)
+"aH" = (
+/mob/living/simple_animal/hostile/humanoid/vampire,
+/turf/simulated/floor/wood,
+/area)
+"aI" = (
+/obj/effect/decal/remains/human/noskull,
+/turf/simulated/floor/wood,
+/area)
+"aJ" = (
+/mob/living/simple_animal/hostile/giant_spider/nurse,
+/turf/unsimulated/floor/asteroid,
+/area)
+"aK" = (
+/obj/item/anvil,
+/turf/unsimulated/floor/asteroid,
+/area)
+"aL" = (
+/obj/structure/flora/ausbushes/ywflowers,
+/turf/simulated/floor/grass,
+/area)
+"aM" = (
+/obj/structure/coatrack,
+/turf/simulated/floor/wood,
+/area)
+"aN" = (
+/obj/machinery/door/mineral/wood,
+/turf/unsimulated/floor/asteroid,
+/area)
+"aO" = (
+/obj/item/stack/sheet/wood/bigstack,
+/turf/simulated/floor/grass,
+/area)
+"aP" = (
+/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,
+/turf/simulated/floor/grass,
+/area)
+"aQ" = (
+/obj/structure/flora/ausbushes/pointybush,
+/turf/simulated/floor/grass,
+/area)
+"aR" = (
+/obj/structure/flora/ausbushes/ywflowers,
+/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,
+/turf/simulated/floor/grass,
+/area)
+"aS" = (
+/obj/structure/signpost,
+/turf/simulated/floor/grass,
+/area)
+"aT" = (
+/obj/structure/flora/ausbushes/lavendergrass,
+/mob/living/simple_animal/cow,
+/turf/simulated/floor/grass,
+/area)
+"aU" = (
+/obj/structure/flora/ausbushes/lavendergrass,
+/obj/item/weapon/reagent_containers/food/snacks/grown/deathberries,
+/turf/simulated/floor/grass,
+/area)
+"aV" = (
+/obj/structure/flora/ausbushes/lavendergrass,
+/turf/simulated/floor/grass,
+/area)
+"aW" = (
+/obj/item/weapon/storage/fancy/matchbox,
+/turf/simulated/floor/grass,
+/area)
+"aX" = (
+/mob/living/simple_animal/cow,
+/turf/simulated/floor/grass,
+/area)
+"aY" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor,
+/area)
+"aZ" = (
+/obj/machinery/door/mineral/transparent/diamond,
+/turf/simulated/floor/plating/snow,
+/area)
+"ba" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/cake,
+/turf/simulated/floor,
+/area)
+"bb" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/tea,
+/turf/simulated/floor,
+/area)
+"bc" = (
+/turf/simulated/floor,
+/area)
+"bd" = (
+/obj/item/weapon/storage/box,
+/obj/item/weapon/kitchen/utensil/knife,
+/turf/simulated/floor,
+/area)
+"be" = (
+/turf/simulated/floor/plating/snow,
+/area)
+"bf" = (
+/mob/living/simple_animal/hostile/humanoid/chef,
+/turf/simulated/floor,
+/area)
+"bg" = (
+/mob/living/simple_animal/hostile/humanoid/frostgolem/knight,
+/turf/simulated/floor/plating/snow,
+/area)
+"bh" = (
+/obj/structure/rack,
+/obj/item/weapon/kitchen/utensil/knife/large/butch,
+/turf/simulated/floor,
+/area)
+"bi" = (
+/obj/item/weapon/stool/piano,
+/turf/simulated/floor,
+/area)
+"bj" = (
+/obj/structure/table/woodentable,
+/obj/structure/flora/pottedplant/claypot,
+/turf/simulated/floor,
+/area)
+"bk" = (
+/obj/structure/table/woodentable,
+/obj/item/trash/bowl,
+/turf/simulated/floor,
+/area)
+"bl" = (
+/obj/structure/flora/tree/pine,
+/turf/simulated/floor/plating/snow,
+/area)
+"bm" = (
+/obj/machinery/cooking/grill,
+/turf/simulated/floor,
+/area)
+"bn" = (
+/obj/structure/sink/kitchen{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area)
+"bo" = (
+/mob/living/simple_animal/hostile/tree,
+/turf/simulated/floor/plating/snow,
+/area)
+"bp" = (
+/obj/effect/decal/remains/human/noskull,
+/turf/simulated/floor/plating/snow,
+/area)
+"bq" = (
+/obj/item/weapon/storage/box,
+/turf/simulated/floor,
+/area)
+"br" = (
+/obj/item/weapon/rsscimmy,
+/turf/simulated/floor/plating/snow,
+/area)
+"bs" = (
+/obj/item/weapon/shield/riot/rune,
+/turf/simulated/floor/plating/snow,
+/area)
+"bt" = (
+/obj/machinery/media/jukebox/superjuke,
+/turf/simulated/floor,
+/area)
+"bu" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/grass,
+/area)
 
 (1,1,1) = {"
-aaababababababababababababababababababaa
-ababacacadadabaeafagahaiaeabajakalalamab
-abadanaoapadabaiaiahaiafaiabaralalalasab
-abadadatacadabafaiaiahaiaiabalalalalauab
-abadadatacavabababawawabababamaxamamamab
-abadadayacavavavabazazabaAaBamalamaCaDab
-abaEaFayayaGavavabazazabaAaHamalamaIalab
-abacaJayayaKavavabazaLabaMalaxalaxalalab
-ababababaNababababazazababababaxabababab
-abaOazazazaPaQaRazaSazazaTaUaVazazazazab
-abaWabazazaLaPaXazazazazaVaVaVazazabazab
-ababababaYababababazaXababababaZabababab
-abbabbbcbcbcbcbdabaLazabbebebebebebebeab
-abbcbcbfbcbcbcbcabazazabbebebgbebebebeab
-abbhbibjbkbcbcbcaNazazabbeblbebebebebeab
-abbmbcbcbcbcbibnabazaLabbebebebebobebeab
-abbcbcalbcbcbcbnabazazabbebebebebpbgbeab
-abbcbqbcbcbcbcbcabaLazabbebeblbebrbsbeab
-ababbcbcbcbcbcbtabazazabbebebebgbebeabab
-abababababababababbubuababababababababab
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+"}
+(2,1,1) = {"
+ab
+ab
+ad
+ad
+ad
+ad
+aE
+ac
+ab
+aO
+aW
+ab
+ba
+bc
+bh
+bm
+bc
+bc
+ab
+ab
+"}
+(3,1,1) = {"
+ab
+ac
+an
+ad
+ad
+ad
+aF
+aJ
+ab
+az
+ab
+ab
+bb
+bc
+bi
+bc
+bc
+bq
+bc
+ab
+"}
+(4,1,1) = {"
+ab
+ac
+ao
+at
+at
+ay
+ay
+ay
+ab
+az
+az
+ab
+bc
+bf
+bj
+bc
+al
+bc
+bc
+ab
+"}
+(5,1,1) = {"
+ab
+ad
+ap
+ac
+ac
+ac
+ay
+ay
+aN
+az
+az
+aY
+bc
+bc
+bk
+bc
+bc
+bc
+bc
+ab
+"}
+(6,1,1) = {"
+ab
+ad
+ad
+ad
+av
+av
+aG
+aK
+ab
+aP
+aL
+ab
+bc
+bc
+bc
+bc
+bc
+bc
+bc
+ab
+"}
+(7,1,1) = {"
+ab
+ab
+ab
+ab
+ab
+av
+av
+av
+ab
+aQ
+aP
+ab
+bc
+bc
+bc
+bi
+bc
+bc
+bc
+ab
+"}
+(8,1,1) = {"
+ab
+ae
+ai
+af
+ab
+av
+av
+av
+ab
+aR
+aX
+ab
+bd
+bc
+bc
+bn
+bn
+bc
+bt
+ab
+"}
+(9,1,1) = {"
+ab
+af
+ai
+ai
+ab
+ab
+ab
+ab
+ab
+az
+az
+ab
+ab
+ab
+aN
+ab
+ab
+ab
+ab
+ab
+"}
+(10,1,1) = {"
+ab
+ag
+ah
+ai
+aw
+az
+az
+az
+az
+aS
+az
+az
+aL
+az
+az
+az
+az
+aL
+az
+bu
+"}
+(11,1,1) = {"
+ab
+ah
+ai
+ah
+aw
+az
+az
+aL
+az
+az
+az
+aX
+az
+az
+az
+aL
+az
+az
+az
+bu
+"}
+(12,1,1) = {"
+ab
+ai
+af
+ai
+ab
+ab
+ab
+ab
+ab
+az
+az
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+"}
+(13,1,1) = {"
+ab
+ae
+ai
+ai
+ab
+aA
+aA
+aM
+ab
+aT
+aV
+ab
+be
+be
+be
+be
+be
+be
+be
+ab
+"}
+(14,1,1) = {"
+ab
+ab
+ab
+ab
+ab
+aB
+aH
+al
+ab
+aU
+aV
+ab
+be
+be
+bl
+be
+be
+be
+be
+ab
+"}
+(15,1,1) = {"
+ab
+aj
+ar
+al
+am
+am
+am
+ax
+ab
+aV
+aV
+ab
+be
+bg
+be
+be
+be
+bl
+be
+ab
+"}
+(16,1,1) = {"
+ab
+ak
+al
+al
+ax
+al
+al
+al
+ax
+az
+az
+aZ
+be
+be
+be
+be
+be
+be
+bg
+ab
+"}
+(17,1,1) = {"
+ab
+al
+al
+al
+am
+am
+am
+ax
+ab
+az
+az
+ab
+be
+be
+be
+bo
+bp
+br
+be
+ab
+"}
+(18,1,1) = {"
+ab
+al
+al
+al
+am
+aC
+aI
+al
+ab
+az
+ab
+ab
+be
+be
+be
+be
+bg
+bs
+be
+ab
+"}
+(19,1,1) = {"
+ab
+am
+as
+au
+am
+aD
+al
+al
+ab
+az
+az
+ab
+be
+be
+be
+be
+be
+be
+ab
+ab
+"}
+(20,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
 "}

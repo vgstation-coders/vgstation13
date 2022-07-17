@@ -49,7 +49,7 @@
 		return
 	else if(!operable)
 		operating = 0
-	else if(stat & NOPOWER)
+	else if(stat & (FORCEDISABLE|NOPOWER))
 		operating = 0
 	else
 		operating = 1
@@ -225,7 +225,7 @@
 		return
 	if(!operable)
 		operating = 0
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		operating = 0
 	var/disp_op = operating
 	if(in_reverse && disp_op!=0)
@@ -235,7 +235,7 @@
 	// machine process
 	// move items to the target location
 /obj/machinery/conveyor/process()
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 	if(!operating)
 		return
@@ -317,7 +317,6 @@
 		<li>To quickly copy configuration: Add a Conveyor or a Conveyor Switch into buffer, activate the Multitool in your hand to enable Cloning Mode, then use it on another Conveyor.</li>
 		<li>To make counter-clockwise corners: Use the Reverse Direction button in this menu. Diagonals will attempt to auto set direction based on connected straight line segments.</li>
 	</ul>"}
-
 
 /obj/machinery/conveyor/DuplicateObject(var/location)
 	var/obj/machinery/conveyor/duplicate = ..()

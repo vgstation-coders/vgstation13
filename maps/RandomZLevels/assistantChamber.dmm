@@ -1,63 +1,1154 @@
-"a" = (/turf/space,/area)
-"b" = (/turf/unsimulated/wall,/area/awaymission)
-"c" = (/obj/machinery/shield,/turf/simulated/wall/cult,/area/awaymission)
-"d" = (/obj/machinery/turret/angry{dir = 8},/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"e" = (/obj/machinery/light{icon_state = "tube1"; dir = 8},/obj/machinery/turret/angry{dir = 8},/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"f" = (/obj/item/weapon/gift,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"g" = (/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"h" = (/obj/item/weapon/gun/energy/gun/nuclear,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"i" = (/obj/item/soulstone,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"j" = (/obj/item/ammo_storage/box/a357,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"k" = (/obj/effect/rune,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"l" = (/obj/machinery/turret/angry{dir = 8},/obj/machinery/light{icon_state = "tube1"; dir = 4},/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"m" = (/obj/item/device/assembly/mousetrap/armed,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"n" = (/obj/item/weapon/nullrod,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"o" = (/obj/item/weapon/card/id/captains_spare,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"p" = (/obj/item/weapon/gun/energy/pulse_rifle/M1911,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"q" = (/obj/item/weapon/card/emag,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"r" = (/obj/item/device/powersink,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"s" = (/obj/item/beacon,/obj/item/weapon/caution,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"t" = (/obj/item/organ/internal/brain,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"u" = (/obj/item/weapon/gun/energy/laser/captain,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"v" = (/obj/item/weapon/gun/energy/laser/cannon,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"w" = (/obj/item/weapon/gun/projectile/deagle/gold,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"x" = (/obj/item/weapon/sord,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"y" = (/obj/item/weapon/gun/energy/crossbow/largecrossbow,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"z" = (/obj/item/weapon/gun/energy/pulse_rifle/destroyer,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"A" = (/obj/item/toy/spinningtoy,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"B" = (/obj/item/weapon/card/id/centcom,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"C" = (/obj/item/weapon/gun/grenadelauncher,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"D" = (/obj/machinery/turret/angry{dir = 8},/obj/machinery/light,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/space,
+/area)
+"b" = (
+/turf/unsimulated/wall,
+/area/awaymission)
+"c" = (
+/obj/machinery/shield,
+/turf/simulated/wall/cult,
+/area/awaymission)
+"d" = (
+/obj/machinery/turret/angry{
+	dir = 8
+	},
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"e" = (
+/obj/machinery/light{
+	dir = 8;
+	icon_state = "tube1"
+	},
+/obj/machinery/turret/angry{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"f" = (
+/obj/item/weapon/gift,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"g" = (
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"h" = (
+/obj/item/weapon/gun/energy/gun/nuclear,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"i" = (
+/obj/item/soulstone,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"j" = (
+/obj/item/ammo_storage/box/a357,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"k" = (
+/obj/effect/rune,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"l" = (
+/obj/machinery/turret/angry{
+	dir = 8
+	},
+/obj/machinery/light{
+	dir = 4;
+	icon_state = "tube1"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"m" = (
+/obj/item/device/assembly/mousetrap/armed,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"n" = (
+/obj/item/weapon/nullrod,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"o" = (
+/obj/item/weapon/card/id/captains_spare,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"p" = (
+/obj/item/weapon/gun/energy/pulse_rifle/M1911,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"q" = (
+/obj/item/weapon/card/emag,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"r" = (
+/obj/item/device/powersink,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"s" = (
+/obj/item/beacon,
+/obj/item/weapon/caution,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"t" = (
+/obj/item/organ/internal/brain,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"u" = (
+/obj/item/weapon/gun/energy/laser/captain,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"v" = (
+/obj/item/weapon/gun/energy/laser/cannon,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"w" = (
+/obj/item/weapon/gun/projectile/deagle/gold,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"x" = (
+/obj/item/weapon/sord,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"y" = (
+/obj/item/weapon/gun/energy/crossbow/largecrossbow,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"z" = (
+/obj/item/weapon/gun/energy/pulse_rifle/destroyer,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"A" = (
+/obj/item/toy/spinningtoy,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"B" = (
+/obj/item/weapon/card/id/centcom,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"C" = (
+/obj/item/weapon/gun/grenadelauncher,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
+"D" = (
+/obj/machinery/turret/angry{
+	dir = 8
+	},
+/obj/machinery/light,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/awaymission)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaabbbbbbbbbbbbaaaaaaaaa
-aaaaaaaaabccccccccccbaaaaaaaaa
-aaaaaaaaabccddddddccbaaaaaaaaa
-aaaaaaaaabcefghijklcbaaaaaaaaa
-aaaaaaaaabcemnopgqlcbaaaaaaaaa
-aaaaaaaaabcegrgstglcbaaaaaaaaa
-aaaaaaaaabceugvwgxlcbaaaaaaaaa
-aaaaaaaaabceggygzglcbaaaaaaaaa
-aaaaaaaaabceAgBgCglcbaaaaaaaaa
-aaaaaaaaabccDDDDDDccbaaaaaaaaa
-aaaaaaaaabccccccccccbaaaaaaaaa
-aaaaaaaaabbbbbbbbbbbbaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(3,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(4,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(5,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(6,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(7,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(8,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(9,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(10,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(11,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(12,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+c
+c
+e
+e
+e
+e
+e
+e
+c
+c
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(13,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+c
+d
+f
+m
+g
+u
+g
+A
+D
+c
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(14,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+c
+d
+g
+n
+r
+g
+g
+g
+D
+c
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(15,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+c
+d
+h
+o
+g
+v
+y
+B
+D
+c
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(16,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+c
+d
+i
+p
+s
+w
+g
+g
+D
+c
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(17,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+c
+d
+j
+g
+t
+g
+z
+C
+D
+c
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(18,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+c
+d
+k
+q
+g
+x
+g
+g
+D
+c
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(19,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+c
+c
+l
+l
+l
+l
+l
+l
+c
+c
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(20,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+c
+c
+c
+c
+c
+c
+c
+c
+c
+c
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(21,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+b
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(22,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(23,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(24,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(25,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(26,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(27,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(28,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(29,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(30,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
 "}

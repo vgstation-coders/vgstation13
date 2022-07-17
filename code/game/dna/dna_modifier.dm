@@ -59,7 +59,7 @@
 	icon_state = "scanner_0"
 	density = 1
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 50
 	active_power_usage = 300
 	var/locked = 0
@@ -90,7 +90,9 @@
 
 /obj/machinery/dna_scannernew/RefreshParts()
 	var/efficiency = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts) efficiency += SP.rating-1
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		if(!istype(SP,/obj/item/weapon/stock_parts/console_screen))
+			efficiency += SP.rating-1
 	injector_cooldown = initial(injector_cooldown) - 15*(efficiency)
 
 /obj/machinery/dna_scannernew/allow_drop()
@@ -529,9 +531,9 @@
 
 /obj/machinery/computer/scan_consolenew/process()
 	if (connected && connected.occupant)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 /obj/machinery/computer/scan_consolenew/attack_hand(user as mob)
 	if(!..())
@@ -911,12 +913,12 @@
 		var/which = text2num(href_list["changeBlockLabel"])
 		var/datum/block_label/label = labels[which]
 		var/text = copytext(sanitize(input(usr, "New Label:", "Edit Label", label.name) as text|null),1,MAX_NAME_LEN)
-		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (FORCEDISABLE | BROKEN | NOPOWER | EMPED)))
 			return
 		if(text) //you can color the tab without a label, sure why not
 			label.name = text
 		var/newcolor = input("Select Tab Color", "Edit Label", label.color) as color
-		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (FORCEDISABLE | BROKEN | NOPOWER | EMPED)))
 			return
 		if(newcolor)
 			label.color = newcolor

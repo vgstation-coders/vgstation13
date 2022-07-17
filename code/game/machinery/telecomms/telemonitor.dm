@@ -28,7 +28,7 @@
 	light_color = LIGHT_COLOR_GREEN
 
 /obj/machinery/computer/telecomms/monitor/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	user.set_machine(src)
 	var/dat = "<TITLE>Telecommunications Monitor</TITLE><center><b>Telecommunications Monitor</b></center>"
@@ -215,7 +215,7 @@
 		return 1
 	updateUsrDialog()
 
-/obj/machinery/computer/telecomms/monitor/emag(mob/user)
+/obj/machinery/computer/telecomms/monitor/emag_act(mob/user)
 	if(!emagged)
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1

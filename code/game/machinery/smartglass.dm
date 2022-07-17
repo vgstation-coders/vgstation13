@@ -12,7 +12,7 @@
 	icon_state = "access_control_standby"
 	anchored = 0
 	density = FALSE
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 1
 	active_power_usage = 50
 	power_channel = ENVIRON
@@ -49,10 +49,10 @@
 /obj/machinery/smartglass_electronics/proc/toggle_smart_transparency()
 	smart_transparency = !smart_transparency
 	Ourwindow.smart_toggle()
-	if (use_power == 1)
-		use_power = 2
+	if (use_power == MACHINE_POWER_USE_IDLE)
+		use_power = MACHINE_POWER_USE_ACTIVE
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 	return smart_transparency
 
 
@@ -70,7 +70,7 @@
 
 // Overwrite standard behavior else it'll never work
 /obj/machinery/smartglass_electronics/Topic(href, href_list)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		to_chat(usr, "<span class='warning'>WARNING: Device is not powered.</span>")
 		return 1
 	if(href_list["close"])

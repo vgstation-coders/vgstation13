@@ -65,12 +65,18 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 	..()
 
 /proc/stationAllowance()//grants the station the allowance it'll need to pay the next salary
+	if(!station_account)
+		message_admins("Station allowance skipped, no station account found.")
+		return
 	station_account.money += station_allowance + WageBonuses()
 
 	new /datum/transaction(station_account,"Nanotrasen station allowance","[station_allowance]","Nanotrasen Payroll Server",send2PDAs=FALSE)
 
 
 /proc/wagePayout()
+	if(!station_account)
+		message_admins("Wage payout skipped, no station account found.")
+		return
 	//adding extra allowance due to latejoiners
 	if (latejoiner_allowance > 0)
 		station_allowance += latejoiner_allowance
@@ -124,7 +130,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 	var/bonus = 0
 
 	//1000 bonus per prisoner
-	for(var/mob/living/carbon/human/H in current_prisoners) 
+	for(var/mob/living/carbon/human/H in current_prisoners)
 		if(H.z == map.zMainStation && !isspace(get_area(H)) && !H.isDead())
 			bonus += 1000
 

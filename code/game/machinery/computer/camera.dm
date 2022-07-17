@@ -26,6 +26,12 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/list/cam_plane_masters
 	var/obj/abstract/screen/background/cam_background
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/apcfaker,
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet
+	)
+
 /obj/machinery/computer/security/initialize()
 	tv_monitors += src
 	// Map name has to start and end with an A-Z character,

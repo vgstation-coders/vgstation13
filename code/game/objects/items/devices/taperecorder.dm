@@ -25,7 +25,7 @@
 /obj/item/device/taperecorder/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(recording && speech.speaker != src)
 		timestamp += timerecorded
-		storedinfo += "\[[time2text(timerecorded*10,"mm:ss")]\] [speech.speaker]:  \"[html_encode(speech.message)]\""
+		storedinfo += "\[[time2text(timerecorded*10,"mm:ss")]\] [speech.name]:  \"[html_encode(speech.message)]\""
 
 /obj/item/device/taperecorder/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()

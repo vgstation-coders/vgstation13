@@ -541,6 +541,7 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
+			slot_l_store_str = /obj/item/weapon/storage/bag/bookbag,
 			slot_head_str = list(
 				"Curator" = /obj/item/clothing/head/beret,
 			),

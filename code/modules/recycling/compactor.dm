@@ -7,10 +7,14 @@
 	req_access = list(access_janitor)
 	template_path = "disposalsbincompactor.tmpl"
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 /obj/machinery/disposal/compactor/proc/compact()
-	if(stat & NOPOWER)
-		return
-	if(stat & BROKEN)
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	playsound(src,'sound/machines/compactor.ogg', 30, 1) //Placeholder
 	flush = 1
@@ -86,7 +90,7 @@
 /obj/machinery/disposal/compactor/process()
 	updateDialog()
 	update_icon()
-	if(stat & NOPOWER || stat & BROKEN)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(!anchored)
 		return
@@ -107,6 +111,11 @@
 		to_chat(user, "<span class='notice'>You disable the safety features.</span>")
 		return
 	..()
+
+/obj/machinery/disposal/compactor/emag_ai(mob/living/silicon/ai/A)
+	emagged = 1
+	to_chat(A, "<span class='notice'>You disable the safety features.</span>")
+	
 
 /obj/machinery/disposal/compactor/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()

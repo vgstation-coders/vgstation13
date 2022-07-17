@@ -75,8 +75,12 @@
 
 	var/obj/machinery/hologram/holopad/T = current
 	if(istype(T) && T.holo && T.master == src)//If there is a hologram and its master is the user.
-		T.send_speech(speech, 7, "R")
-		to_chat(src, "<i><span class='[speech.render_wrapper_classes()]'>Holopad transmitted, <span class='name'>[real_name]</span> [speech.render_message()]</span></i>")//The AI can "hear" its own message.
+		if(T.advancedholo)	//send the speech from the hologram itself if its an 'advanced' hologram
+			speech.name = T.holo.name
+			T.holo.send_speech(speech, 7)
+		else
+			T.send_speech(speech, 7, "R")
+		to_chat(src, "<i><span class='[speech.render_wrapper_classes()]'>Holopad transmitted, <span class='name'>[speech.name]</span> [speech.render_message()]</span></i>")//The AI can "hear" its own message.
 
 	else
 		to_chat(src, "No holopad connected.")

@@ -25,6 +25,14 @@
 	var/mob/pointer
 	var/atom/target
 
+/obj/effect/decal/point/cargo_load
+	icon_state = "load_this"
+
+/obj/effect/decal/point/cargo_unload
+	icon_state = "unload_here"
+
+/obj/effect/decal/point/go_here
+	icon_state = "goto_cross"
 /obj/effect/decal/snow
 	name = "snow"
 	density = 0

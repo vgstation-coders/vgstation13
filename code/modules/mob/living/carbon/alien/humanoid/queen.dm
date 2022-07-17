@@ -40,27 +40,6 @@
 	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
 	verbs -= /mob/living/carbon/alien/verb/ventcrawl
 
-/mob/living/carbon/alien/humanoid/queen/handle_regular_hud_updates()
-	..() //-Yvarov
-
-	if(src.healths)
-		if(src.stat != 2)
-			switch(health)
-				if(300 to INFINITY)
-					src.healths.icon_state = "health0"
-				if(200 to 300)
-					src.healths.icon_state = "health1"
-				if(125 to 200)
-					src.healths.icon_state = "health2"
-				if(75 to 125)
-					src.healths.icon_state = "health3"
-				if(0 to 75)
-					src.healths.icon_state = "health4"
-				else
-					src.healths.icon_state = "health5"
-		else
-			src.healths.icon_state = "health6"
-
 /mob/living/carbon/alien/humanoid/queen/large
 	icon = 'icons/mob/giantmobs.dmi'
 	icon_state = "queen_s"

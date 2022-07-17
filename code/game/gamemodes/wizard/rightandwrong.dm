@@ -1,5 +1,3 @@
-
-
 /mob/proc/rightandwrong(var/summon_type) //0 = Summon Guns, 1 = Summon Magic, 2 = Summon Swords
 	to_chat(usr, "<B>You summoned [summon_type]!</B>")
 	message_admins("[key_name_admin(usr, 1)] summoned [summon_type]!")
@@ -183,7 +181,7 @@
 	if(istype(S))
 		S.summons_received = randomizeguns
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
-	score["gunsspawned"]++
+	score.gunsspawned++
 
 /mob/living/carbon/human/proc/equip_swords(var/datum/role/R)
 	var/randomizeswords = pick("unlucky", "misc", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "medieval", "katana", "axe", "boot", "saw", "scalpel", "switchtool", "shitcurity", "whip")

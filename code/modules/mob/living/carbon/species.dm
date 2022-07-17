@@ -88,7 +88,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint the species leaves if they are not wearing shoes. If we ever get any other than human and vox, maybe this should be explicitly defined for each species.
 
 	// For grays
-	var/max_hurt_damage = 5 // Max melee damage dealt
+	var/max_hurt_damage = 5 // Max unarmed damage
+	var/power_multiplier = 1 //A melee damage modifier
 	var/list/default_mutations = list()
 	var/list/default_blocks = list() // Don't touch.
 	var/list/default_block_names = list() // Use this instead, using the names from setupgame.dm
@@ -603,6 +604,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	max_hurt_damage = 3 // From 5 (for humans)
 	tacklePower = 25
+	power_multiplier = 0.8
 
 	blood_color = "#CFAAAA"
 	flesh_color = "#B5B5B5"
@@ -613,9 +615,7 @@ var/global/list/whitelisted_species = list("Human")
 	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | ACID4WATER
 
-	// Both must be set or it's only a 45% chance of manifesting.
-	default_mutations=list(M_REMOTE_TALK)
-	default_block_names=list("REMOTETALK")
+	spells = list(/spell/targeted/telepathy)
 
 	//PLEASE IF YOU MAKE A NEW RACE, KEEP IN MIND PEOPLE WILL PROBABLY MAKE UNIFORM SPRITES.
 	uniform_icons = 'icons/mob/species/grey/uniform.dmi'
@@ -644,7 +644,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	species_intro = "You are a Grey.<br>\
 					You are particularly allergic to water, which acts like acid to you, but the inverse is so for acid, so you're fun at parties.<br>\
-					You're not as good in a fist fight as a regular baseline human, but you make up for this by bullying them from afar by talking directly into peoples minds."
+					You're not as good at swinging a toolbox or throwing a punch as a baseline human, but you make up for this by bullying them from afar by talking directly into peoples minds."
 
 /datum/species/grey/handle_post_spawn(var/mob/living/carbon/human/H)
 	if(myhuman != H)
@@ -1024,24 +1024,18 @@ var/list/has_died_as_golem = list()
 		else
 			to_chat(user, "<span class='warning'>The used extract doesn't have any effect on \the [src].</span>")
 
-/datum/species/umbra
-	name = "Umbra"
+/datum/species/vampire
+	name = "Vampire"
 	icobase = 'icons/mob/human_races/r_grue.dmi'		// Normal icon set.
 	deform = 'icons/mob/human_races/r_def_grue.dmi'	// Mutated icon set.
-	eyes = "grue_eyes_s"
 	attack_verb = "claws"
-	flags = NO_PAIN | IS_WHITELISTED | HYPOTHERMIA_IMMUNE
+	flags = IS_WHITELISTED | HYPOTHERMIA_IMMUNE
 	anatomy_flags = HAS_LIPS
 	punch_damage = 7
-	default_mutations=list(M_HULK,M_CLAWS,M_TALONS)
-	burn_mod = 2
-	brute_mod = 2
-	move_speed_multiplier = 2
+	default_mutations=list(M_CLAWS,M_TALONS, M_JAMSIGNALS)
 	has_mutant_race = 0
 
 	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
-
-	spells = list(/spell/swallow_light,/spell/shatter_lights)
 
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
@@ -1050,13 +1044,13 @@ var/list/has_died_as_golem = list()
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/umbra
+		"eyes" =     /datum/organ/internal/eyes/monstrous
 	)
 
-/datum/species/umbra/makeName()
-	return "umbra"
+/datum/species/vampire/makeName()
+	return "vampire"
 
-/datum/species/umbra/gib(mob/living/carbon/human/H)
+/datum/species/vampire/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
 
@@ -1197,7 +1191,6 @@ var/list/has_died_as_golem = list()
 					O.organ_data.transplant_data["blood_type"] = slime_person.dna.b_type
 					O.organ_data.transplant_data["blood_DNA"] =  slime_person.dna.unique_enzymes
 
-					O.organ_data.organ_holder = null
 					O.organ_data.owner = slime_person
 					slime_person.internal_organs |= O.organ_data
 					head.internal_organs |= O.organ_data
@@ -1271,8 +1264,6 @@ var/list/has_died_as_golem = list()
 /datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
 	H.default_gib()
 
-
-
 /datum/species/mushroom
 	name = "Mushroom"
 	icobase = 'icons/mob/human_races/r_mushman.dmi'
@@ -1292,7 +1283,7 @@ var/list/has_died_as_golem = list()
 
 	primitive = /mob/living/carbon/monkey/mushroom
 
-	spells = list(/spell/targeted/genetic/invert_eyes, /spell/targeted/genetic/fungaltelepathy)
+	spells = list(/spell/targeted/genetic/invert_eyes, /spell/targeted/telepathy)
 
 
 	default_mutations=list() //exoskeleton someday...
@@ -1333,7 +1324,7 @@ var/list/has_died_as_golem = list()
 					You have a resistance to burn and toxin, but you are vulnerable to brute attacks.<br>\
 					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
-	var/mob/living/telepathic_target
+	var/mob/living/telepathic_target[] = list()
 
 /datum/species/mushroom/makeName()
 	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
@@ -1343,16 +1334,33 @@ var/list/has_died_as_golem = list()
 	H.default_gib()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
-	if(istype(telepathic_target) && M.can_mind_interact(telepathic_target))
-		for(var/mob/dead/observer/G in dead_mob_list)
-			G.show_message("<i>Fungal Telepathy, <b>[M]</b> to <b>[telepathic_target]</b>: [message]</i>")
-		log_admin("[key_name(M)] mushroom projects his mind towards (believed:[telepathic_target]/actual:[key_name(telepathic_target)]: [message]</span>")
-		if(telepathic_target == M) //Talking to ourselves
-			to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
-			return
-		to_chat(telepathic_target,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: [message]</span>.")
-		to_chat(M,"<span class='mushroom'>Projected to <b>[telepathic_target]</b>: [message]</span>")
+	if(!message)
+		return
+	if(M.stat == DEAD)
+		to_chat(M, "<span class='warning'>You must be alive to do this!</span>")
+		return
+	if (M.stat == UNCONSCIOUS)
+		to_chat(M, "<span class='warning'>You must be conscious to do this!</span>")
+		return
 
+	if(!telepathic_target.len)
+		var/mob/living/L = M
+		telepathic_target += L
+
+	var/all_switch = TRUE
+	for(var/mob/living/T in telepathic_target)
+		if(istype(T) && can_mind_interact(T.mind))
+			to_chat(T,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: [message]</span>")
+		else
+			to_chat(M,"<span class='notice'>[T] cannot sense your telepathy.</span>")
+			continue
+		if(all_switch)
+			all_switch = FALSE
+			if(T != M)
+				to_chat(M,"<span class='mushroom'>Projected to <b>[english_list(telepathic_target)]</b>: [message]</span>")
+			for(var/mob/dead/observer/G in dead_mob_list)
+				G.show_message("<i>Telepathy, <b>[M]</b> to <b>[english_list(telepathic_target)]</b>: [message]</i>")
+			log_admin("[key_name(M)] projects his mind towards [english_list(telepathic_target)]: [message]")
 
 /datum/species/lich
 	name = "Undead"

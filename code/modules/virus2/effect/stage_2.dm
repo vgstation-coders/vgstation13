@@ -552,22 +552,18 @@
 				H.adjustCloneLoss(5 * multiplier)
 
 	for(var/obj/machinery/portable_atmospherics/hydroponics/H in range(3*multiplier,mob))
-		if(H.seed && !H.dead) // Get your xenobotanist/vox trader/hydroponist mad with you in less than 1 minute with this simple trick.
-			switch(rand(1,3))
-				if(1)
-					if(H.waterlevel >= 10)
-						H.waterlevel -= rand(1,10)
-					if(H.nutrilevel >= 5)
-						H.nutrilevel -= rand(1,5)
-				if(2)
-					if(H.toxins <= 50)
-						H.toxins += rand(1,50)
-				if(3)
-					H.weed_coefficient++
-					H.weedlevel++
-					H.pestlevel++
-					if(prob(5))
-						H.dead = 1
+		switch(rand(1,3))
+			if(1)
+				H.add_waterlevel(-rand(1,10))
+				H.add_nutrientlevel(-rand(1,5))
+			if(2)
+				H.add_toxinlevel(rand(1,50))
+			if(3)
+				H.weed_coefficient++
+				H.add_weedlevel(10)
+				H.add_pestlevel(10)
+				if(prob(5))
+					H.die()
 
 
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in range(2*multiplier,mob))
@@ -762,3 +758,33 @@
 	to_chat(mob, "<span class = 'notice'>You feel your toxins being purged!</span>")
 	if (mob.reagents.get_reagent_amount(ANTI_TOXIN) < 1)
 		mob.reagents.add_reagent(ANTI_TOXIN, 1)
+
+/datum/disease2/effect/cult_vomit
+	name = "Hemoptysis"
+	desc = "Causes the infected to cough up blood."
+	stage = 2
+	restricted = 2
+	badness = EFFECT_DANGER_HINDRANCE
+	var/active = 0
+
+/datum/disease2/effect/cult_vomit/activate(mob/living/carbon/M)
+	if(!ishuman(M) || active)
+		return
+	if(istype(get_area(M), /area/chapel))
+		return
+	if(iscultist(M))
+		return
+
+	var/mob/living/carbon/human/mob = M
+	active = 1
+	to_chat(mob, "<span class='warning'>You feel a burning sensation in your throat.</span>")
+	sleep(10 SECONDS)
+	to_chat(mob, "<span class='danger'>You feel an agonizing pain in your throat!</span>")
+	sleep(10 SECONDS)
+	mob.visible_message("<span class='danger'>[mob] vomits up blood!</span>", "<span class='danger'>You vomit up blood!</span>")
+	var/obj/effect/decal/cleanable/blood/splatter/S = new(loc = get_turf(mob), color = mob.species.blood_color)
+	S.amount = 1
+	playsound(mob, 'sound/effects/splat.ogg', 50, 1)
+	mob.Stun(5)
+	mob.vessel.remove_reagent(BLOOD,8)
+	active = 0

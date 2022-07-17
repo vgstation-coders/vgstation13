@@ -298,7 +298,7 @@
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/melee/bone_hammer/afterattack(null, mob/living/user as mob|obj, null, null, null)
+/obj/item/weapon/melee/bone_hammer/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	user.delayNextAttack(50) //five times the regular attack delay
 
 /obj/item/weapon/melee/bone_hammer/New(atom/A, var/p_borer = null)
@@ -507,11 +507,24 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "pitchspoon"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	flags = TWOHANDABLE
 	force = 8
-	sharpness = 2
+	sharpness = 1.4
 	sharpness = SHARP_TIP
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	w_type = RECYK_METAL
+	var/base_force = 8
+
+/obj/item/weapon/pitchfork/update_wield(mob/user)
+	item_state = "pitchspoon[wielded ? 1 : 0]"
+
+	force = base_force
+	if(wielded)
+		force += 6
+
+	if(user)
+		user.update_inv_hands()
+	return
 
 /obj/item/weapon/baseball_bat
 	name = "baseball bat"

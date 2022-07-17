@@ -1,10 +1,11 @@
 /obj/machinery/recharge_station
 	name = "cyborg recharging station"
+	desc = "A large metallic machine for charging cyborgs."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "borgcharger0"
 	density = 1
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 5
 	active_power_usage = 1000
 	var/mob/living/occupant = null
@@ -17,6 +18,16 @@
 	var/capacitor_stored = 0 //power stored in capacitors, to be instantly transferred to robots when they enter the charger
 	var/capacitor_max = 0 //combined max power the capacitors can hold
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
+
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/make_autoborger,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+	)
+	
+	var/autoborger = FALSE
+	var/make_mommis = FALSE
+	var/is_borging = FALSE
+	var/mob/living/silicon/ai/aiowner
 
 /obj/machinery/recharge_station/New()
 	. = ..()
@@ -70,7 +81,7 @@
 
 /obj/machinery/recharge_station/process()
 	process_upgrade()
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		return
 
 	if(src.occupant)
@@ -90,7 +101,7 @@
 		upgrade_finished = -1
 		return
 	var/mob/living/silicon/robot/R = occupant
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		to_chat(R, "<span class='warning'>Upgrade interrupted due to power failure, movement lock is released.</span>")
 		upgrading = 0
 		upgrade_finished = -1
@@ -125,9 +136,6 @@
 
 /obj/machinery/recharge_station/attack_ghost(var/mob/user) //why would they
 	return 0
-
-/obj/machinery/recharge_station/attack_ai(var/mob/user)
-	attack_hand(user)
 
 /obj/machinery/recharge_station/attack_hand(var/mob/user)
 	if(occupant == user)
@@ -189,7 +197,7 @@
 	return
 
 /obj/machinery/recharge_station/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	if(occupant)
@@ -198,14 +206,17 @@
 	..(severity)
 
 /obj/machinery/recharge_station/proc/build_icon()
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	overlays = 0
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		icon_state = "borgcharger"
 	else
 		if(src.occupant)
-			icon_state = "borgcharger1"
+			if(isrobot(occupant) || !autoborger)
+				icon_state = "borgcharger1"
+			else
+				icon_state = "borgchargerfuck"
 		else
 			icon_state = "borgcharger0"
-
 /obj/machinery/recharge_station/proc/process_occupant()
 	if(src.occupant)
 		if(isrobot(occupant))
@@ -214,6 +225,9 @@
 				go_out()
 				return
 			restock_modules()
+		else if(ishuman(occupant) && autoborger && !is_borging)
+			do_autoborg()
+			return
 		charge_cell(occupant.get_cell())
 
 /obj/machinery/recharge_station/proc/charge_cell(var/obj/item/weapon/cell/C)
@@ -233,9 +247,13 @@
 	capacitor_stored = min(capacitor_stored + (20 * transfer_rate_coeff), capacitor_max)
 	return 1
 
-/obj/machinery/recharge_station/proc/go_out()
+/obj/machinery/recharge_station/proc/go_out(var/turf/T)
+	if(!T)
+		T = get_turf(src)
 	if(!( src.occupant ))
 		return
+	if(ishuman(occupant) && is_borging) // No escaping!
+		return 
 	if(upgrading)
 		to_chat(occupant, "<span class='notice'>The upgrade hasn't completed yet, interface with \the [src] again to halt the process.</span>")
 		return
@@ -245,10 +263,10 @@
 		if (occupant.client)
 			occupant.client.eye = occupant.client.mob
 			occupant.client.perspective = MOB_PERSPECTIVE
-		occupant.forceMove(src.loc)
+		occupant.forceMove(T)
 	occupant = null
 	build_icon()
-	src.use_power = 1
+	src.use_power = MACHINE_POWER_USE_IDLE
 	// Removes dropped items/magically appearing mobs from the charger too
 	for (var/atom/movable/x in src.contents)
 		if(!(x in upgrade_holder | component_parts))
@@ -283,9 +301,9 @@
 	return
 
 /obj/machinery/recharge_station/proc/mob_enter(mob/living/R)
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		return
-	if (R.stat == 2 || !R.canmove)
+	if (R.stat == 2)
 		//Whoever had it so that a borg with a dead cell can't enter this thing should be shot. --NEO
 		return
 	if (src.occupant)
@@ -299,7 +317,7 @@
 	src.occupant = R
 	src.add_fingerprint(R)
 	build_icon()
-	src.use_power = 2
+	src.use_power = MACHINE_POWER_USE_ACTIVE
 	if(isrobot(R))
 		var/mob/living/silicon/robot/RR = R
 		for(var/obj/O in upgrade_holder)
@@ -310,6 +328,9 @@
 				else
 					if(some_cell.maxcharge > RR.cell.maxcharge)
 						to_chat(usr, "<span class='notice'>Power Cell upgrade available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
+	else if(ishuman(R) && autoborger && !is_borging)
+		do_autoborg()
+
 
 /obj/machinery/recharge_station/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(occupant)
@@ -324,7 +345,7 @@
 	return ..()
 
 /obj/machinery/recharge_station/Bumped(atom/AM as mob|obj)
-	if(!isliving(AM) || isAI(AM) || !AM.get_cell())
+	if(!isliving(AM) || isAI(AM))
 		return
 	mob_enter(AM)
 
@@ -332,3 +353,118 @@
 	if(occupant)
 		return occupant.get_cell()
 	return locate(/obj/item/weapon/cell) in upgrade_holder
+
+/obj/machinery/recharge_station/proc/do_autoborg()
+	if(!ishuman(occupant))
+		return
+	var/mob/living/carbon/human/H = occupant
+	if(is_borging)
+		return
+	is_borging = TRUE
+
+	var/limbs_to_ignore = list(/datum/organ/external/head, /datum/organ/external/chest, /datum/organ/external/groin)
+	var/list/limbs = list()
+	for(var/datum/organ/external/E in H.organs)
+		if(!E.is_robotic() && !is_type_in_list(E, limbs_to_ignore)) 
+			limbs += E
+	
+	build_icon()
+	flick("borgchargerfuckstart", src)
+	H.AdjustKnockdown(10)
+	playsound(src, 'sound/machines/juicer.ogg', 80, 1)
+
+	// Mangle their limbs!
+	for(var/datum/organ/external/E in limbs)
+		if(!src)
+			return
+		if(prob(25))
+			spark(src)
+		if(prob(50))
+			H.audible_scream()
+		shake(1, 3)
+		E.explode()
+		H.handle_regular_hud_updates()
+		sleep(10)
+	
+	if(!src)
+		return
+	
+	var/mob/living/silicon/robot/R
+	if(make_mommis)
+		R = H.MoMMIfy(TRUE, TRUE, aiowner)
+	else 
+		R = H.Robotize(TRUE , TRUE , aiowner)
+	
+	occupant = R
+
+	if(!R)
+		visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
+		if (aiowner)
+			var/datum/role/malfAI/my_malf = aiowner.mind?.GetRole(MALF)
+			if (my_malf)
+				my_malf.add_power(50)
+				to_chat(aiowner, "<span class='good'>Incompatible lifeform biomass reprocessed into computing power.</span>")
+		is_borging = FALSE
+		return
+
+	R.cell.maxcharge = 5000	
+	R.cell.charge = 5000
+	R.SetKnockdown(3)
+
+	R.custom_name = pick(autoborg_silly_names) 
+	R.namepick_uses = 1
+	R.updateicon()
+	R.updatename()
+	flick("borgchargerfuckend", src)
+	playsound(src, 'sound/machines/ding.ogg', 50, 0)
+	spawn(5)
+		build_icon()
+		is_borging = FALSE
+		go_out()
+
+
+/obj/machinery/recharge_station/MouseDropFrom(atom/over_object, src_location, var/atom/over_location, src_control, over_control, params)
+	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
+		return
+	if(!occupant)
+		to_chat(usr, "<span class='warning'>\The [src] is unoccupied!</span>")
+		return
+	if(is_borging)
+		to_chat(usr, "<span class='warning'>\The [src] won't budge!</span>")
+		return
+	var/turf/T = get_turf(over_location)
+	if(!istype(T) || T.density)
+		return
+	if(!Adjacent(T) || !Adjacent(usr) || !usr.Adjacent(T))
+		return
+	for(var/atom/movable/A in T.contents)
+		if(A.density)
+			if((A == src) || istype(A, /mob))
+				continue
+			return
+	go_out(T)
+	
+
+/obj/machinery/recharge_station/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+	if(!isliving(O) || !isliving(user))
+		return
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) 
+		return
+	if(user.incapacitated() || user.lying) 
+		return
+	if(!Adjacent(user) || !user.Adjacent(src)) 
+		return
+	if(O.locked_to)
+		return
+	if(O.anchored)
+		return
+	if(!isrobot(O) && !ishuman(O)) 
+		return
+	if(!isrobot(user) && !ishuman(user))
+		return
+	var/mob/living/L = O
+	if(L.stat == DEAD)
+		to_chat(user, "<span class='warning'>[O] is already dead!</span>")
+		return
+	if(do_after(user, src, 20))
+		mob_enter(O)

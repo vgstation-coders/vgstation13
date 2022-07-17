@@ -215,11 +215,6 @@
 	update_icon()
 	return
 
-// ai as human but can't flush
-/obj/machinery/disposal/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	ui_interact(user)
-
 // human interact with machine
 /obj/machinery/disposal/attack_hand(mob/user as mob)
 	if(user && user.loc == src)
@@ -318,7 +313,7 @@
 		overlays += image('icons/obj/pipes/disposal.dmi', "dispover-handle")
 
 	// only handle is shown if no power
-	if(stat & NOPOWER || mode == -1)
+	if(stat & (FORCEDISABLE|NOPOWER) || mode == -1)
 		return
 
 	// 	check for items in disposal - occupied light
@@ -355,7 +350,7 @@
 		spawn(0)
 			flush()
 
-	if(stat & NOPOWER)			// won't charge if no power
+	if(stat & (FORCEDISABLE|NOPOWER))			// won't charge if no power
 		return
 
 	use_power(100)		// base power usage
@@ -461,7 +456,7 @@
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
 		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
-		if(prob(75) || (mob && mob.reagents.get_sportiness()>=5))
+		if(prob(75) || (mob?.reagents?.get_sportiness()>=5))
 			I.forceMove(src)
 			for(var/mob/M in viewers(src))
 				M.show_message("\the [I] lands in \the [src].", 1)
@@ -742,7 +737,7 @@
 	level = LEVEL_BELOW_FLOOR			// underfloor only
 	var/dpdir = 0		// bitmask of pipe directions
 	dir = 0				// dir will contain dominant direction for junction pipes
-	var/health = 10 	// health points 0-10
+	health = 10 	// health points 0-10
 	layer = DISPOSALS_PIPE_LAYER
 	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in New()
 	var/base_icon_state	// initial icon state on map
@@ -760,7 +755,8 @@
 	..()
 	plane = ABOVE_PLATING_PLANE //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
 	base_icon_state = icon_state
-
+	update_dir()
+	update()
 
 // pipe is deleted
 // ensure if holder is present, it is expelled
@@ -838,14 +834,14 @@
 /obj/structure/disposalpipe/t_scanner_expose()
 	if (level != LEVEL_BELOW_FLOOR)
 		return
-
+	var/old_invisibility = invisibility
 	invisibility = 0
 	plane = ABOVE_TURF_PLANE
 
 	spawn(1 SECONDS)
 		var/turf/U = loc
 		if(istype(U) && U.intact)
-			invisibility = 101
+			invisibility = old_invisibility
 			plane = initial(plane)
 
 // expel the held objects into a turf
@@ -1032,14 +1028,12 @@
 /obj/structure/disposalpipe/segment/no_deconstruct
 	deconstructable = FALSE
 
-/obj/structure/disposalpipe/segment/New()
-	..()
-	if(icon_state == "pipe-s")
+/obj/structure/disposalpipe/segment/update_dir()
+	if(base_icon_state == "pipe-s")
 		dpdir = dir | turn(dir, 180)
 	else
 		dpdir = dir | turn(dir, -90)
-
-	update()
+	..()
 
 //a three-way junction with dir being the dominant direction
 /obj/structure/disposalpipe/junction
@@ -1048,16 +1042,14 @@
 /obj/structure/disposalpipe/junction/no_deconstruct
 	deconstructable = FALSE
 
-/obj/structure/disposalpipe/junction/New()
-	..()
-	if(icon_state == "pipe-j1")
+/obj/structure/disposalpipe/junction/update_dir()
+	if(base_icon_state == "pipe-j1")
 		dpdir = dir | turn(dir, -90) | turn(dir,180)
-	else if(icon_state == "pipe-j2")
+	else if(base_icon_state == "pipe-j2")
 		dpdir = dir | turn(dir, 90) | turn(dir,180)
 	else // pipe-y
 		dpdir = dir | turn(dir,90) | turn(dir, -90)
-	update()
-	return
+	..()
 
 // next direction to move
 // if coming in from secondary dirs, then next is primary dir
@@ -1102,17 +1094,20 @@
 	if(sort_tag)
 		desc += "\nIt's tagged with [sort_tag]."
 
-/obj/structure/disposalpipe/sortjunction/proc/updatedir()
+/obj/structure/disposalpipe/sortjunction/update_dir()
 	posdir = dir
 	negdir = turn(posdir, 180)
 
-	if(icon_state == "pipe-j1s")
+	if(base_icon_state == "pipe-j1s")
 		sortdir = turn(posdir, -90)
 	else
 		icon_state = "pipe-j2s"
+		base_icon_state = "pipe-j2s"
 		sortdir = turn(posdir, 90)
 
 	dpdir = sortdir | posdir | negdir
+
+	..()
 
 /obj/structure/disposalpipe/sortjunction/New()
 	. = ..()
@@ -1122,7 +1117,7 @@
 	else if(sort_tag)
 		sort_tag = uppertext(sort_tag)
 
-	updatedir()
+	update_dir()
 	updatedesc()
 	update()
 
@@ -1355,14 +1350,15 @@
 	posdir = dir
 	negdir = turn(posdir, 180)
 
-	if(icon_state == "pipe-j1ms")
+	if(base_icon_state == "pipe-j1ms")
 		sortdir = turn(posdir, -90)
 	else
 		icon_state = "pipe-j2ms"
+		base_icon_state = "pipe-j2ms"
 		sortdir = turn(posdir, 90)
 	dpdir = sortdir | posdir | negdir
 
-	. = ..()
+	..()
 
 // next direction to move
 // if coming in from negdir, then next is primary dir or sortdir
@@ -1412,12 +1408,16 @@
 
 /obj/structure/disposalpipe/trunk/New()
 	. = ..()
-	dpdir = dir
+	update_dir()
 
 	spawn(1)
 		getlinked()
 
 	update()
+
+/obj/structure/disposalpipe/trunk/update_dir()
+	dpdir = dir
+	..()
 
 /obj/structure/disposalpipe/trunk/proc/getlinked()
 	disposal = locate() in loc

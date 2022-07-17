@@ -114,22 +114,52 @@
 
 	items_to_spawn = list(
 		"Default" = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_cargo,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/cargotech,
-			slot_shoes_str = /obj/item/clothing/shoes/black,
+			slot_ears_str = list(
+				"Mailman" = /obj/item/device/radio/headset/headset_cargo,
+				"Cargo Technician" = /obj/item/device/radio/headset/headset_cargo,
+			),
+			slot_w_uniform_str = list(
+				"Mailman" = /obj/item/clothing/under/rank/mailman,
+				"Cargo Technician" = /obj/item/clothing/under/rank/cargotech,
+			),
+			slot_shoes_str = list(
+				"Mailman" = /obj/item/clothing/shoes/brown,
+				"Cargo Technician" = /obj/item/clothing/shoes/black,
+			),
+			slot_head_str = list(
+				"Mailman" = /obj/item/clothing/head/mailman,
+			),
 		),
 		/datum/species/plasmaman = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_cargo,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/cargotech,
-			slot_shoes_str = /obj/item/clothing/shoes/black,
+			slot_ears_str = list(
+				"Mailman" = /obj/item/device/radio/headset/headset_cargo,
+				"Cargo Technician" = /obj/item/device/radio/headset/headset_cargo,
+			),
+			slot_w_uniform_str = list(
+				"Mailman" = /obj/item/clothing/under/rank/mailman,
+				"Cargo Technician" = /obj/item/clothing/under/rank/cargotech,
+			),
+			slot_shoes_str = list(
+				"Mailman" = /obj/item/clothing/shoes/brown,
+				"Cargo Technician" = /obj/item/clothing/shoes/black,
+			),
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/cargo,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/cargo,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
 		),
 		/datum/species/vox = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_cargo,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/cargotech,
-			slot_shoes_str = /obj/item/clothing/shoes/black,
+			slot_ears_str = list(
+				"Mailman" = /obj/item/device/radio/headset/headset_cargo,
+				"Cargo Technician" = /obj/item/device/radio/headset/headset_cargo,
+			),
+			slot_w_uniform_str = list(
+				"Mailman" = /obj/item/clothing/under/rank/mailman,
+				"Cargo Technician" = /obj/item/clothing/under/rank/cargotech,
+			),
+			slot_shoes_str = list(
+				"Mailman" = /obj/item/clothing/shoes/brown,
+				"Cargo Technician" = /obj/item/clothing/shoes/black,
+			),
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/cargo,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/cargo,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,

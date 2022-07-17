@@ -38,10 +38,6 @@
 	// If no scanner was found, it will return null
 	return optablef
 
-/obj/machinery/computer/operating/attack_ai(user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/computer/operating/attack_paw(user as mob)
 	return attack_hand(user)
 
@@ -50,7 +46,7 @@
 		return
 	add_fingerprint(user)
 
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		return
 
 	updatemodules()
@@ -99,7 +95,7 @@
 
 /obj/machinery/computer/operating/update_icon()
 	..()
-	if(!(stat & (BROKEN | NOPOWER)))
+	if(!(stat & (FORCEDISABLE |BROKEN | NOPOWER)))
 		updatemodules()
 		if(!isnull(src.optable) && (src.optable.check_victim()))
 			src.victim = src.optable.victim

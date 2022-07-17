@@ -25,7 +25,7 @@
 	anchored = 0
 	//weight = 1.0E7
 	health = 25
-	maxhealth = 25
+	maxHealth = 25
 	var/cleaning = 0
 	var/screwloose = 0
 	var/oddbutton = 0
@@ -158,7 +158,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	else
 		return ..()
 
-/obj/machinery/bot/cleanbot/Emag(mob/user)
+/obj/machinery/bot/cleanbot/emag_act(mob/user)
 	..()
 	if(open && !locked)
 		if(user)

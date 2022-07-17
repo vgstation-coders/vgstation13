@@ -51,6 +51,9 @@
 	update_icon()
 
 /obj/item/toy/cards/proc/generate_cards()
+	cards += new/obj/item/toy/singlecard(src, src, "Red Joker")
+	cards += new/obj/item/toy/singlecard(src, src, "Black Joker")
+
 	for(var/i = 2; i <= 10; i++)
 		cards += new/obj/item/toy/singlecard(src, src, "[i] of Hearts")
 		cards += new/obj/item/toy/singlecard(src, src, "[i] of Spades")
@@ -73,6 +76,7 @@
 	cards += new/obj/item/toy/singlecard(src, src, "Ace of Spades")
 	cards += new/obj/item/toy/singlecard(src, src, "Ace of Clubs")
 	cards += new/obj/item/toy/singlecard(src, src, "Ace of Diamonds")
+
 
 /obj/item/toy/cards/examine(mob/user)
 	..()

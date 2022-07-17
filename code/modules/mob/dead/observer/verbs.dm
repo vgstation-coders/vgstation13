@@ -1,15 +1,22 @@
+/mob/dead/observer/verb/ghost()
+	set category = "OOC"
+	set name = "Ghost"
+
+	reenter_corpse()
+
 /mob/dead/observer/verb/reenter_corpse()
 	set category = "Ghost"
 	set name = "Re-enter Corpse"
 
 	var/mob/M = get_top_transmogrification()
+	if(check_rights(R_ADMIN)) // admins
+		can_reenter_corpse = 1			//just in-case.
 	if(!M.client)
 		return
 	if(!(mind && mind.current && can_reenter_corpse))
 		to_chat(src, "<span class='warning'>You have no body.</span>")
 		return
 	if(mind.current.key && copytext(mind.current.key,1,2)!="@")	//makes sure we don't accidentally kick any clients
-		to_chat(usr, "<span class='warning'>Another consciousness is in your body...It is resisting you.</span>")
 		return
 	if(mind.current.ajourn && istype(mind.current.ajourn,/obj/effect/rune_legacy) && mind.current.stat != DEAD) 	//check if the corpse is astral-journeying (it's client ghosted using a cultist rune).
 		var/obj/effect/rune_legacy/R = mind.current.ajourn	//whilst corpse is alive, we can only reenter the body if it's on the rune
@@ -140,6 +147,9 @@
 		var/timedifference_text
 		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
 		to_chat(src, "<span class='warning'>You may only spawn again as a mouse more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>")
+		return
+	if(!world.has_round_started())
+		to_chat(src, "<span class='warning'>The game has not started yet.</span>")
 		return
 
 	var/response = alert(src, "Are you -sure- you want to become a mouse?","Are you sure you want to squeek?","Squeek!","Nope!")
@@ -498,6 +508,9 @@
 		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
 		to_chat(src, "<span class='warning'>You may only spawn again as a mouse or MoMMI more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>")
 		return
+	if(!world.has_round_started())
+		to_chat(src, "<span class='warning'>The game has not started yet.</span>")
+		return
 
 	//find a viable mouse candidate
 	var/list/found_spawners = list()
@@ -542,7 +555,7 @@
 	var/response = alert(src, "Are you -sure- you want to become a space hobo?","Are you sure you want to ramble?","Yeah!","Nope!")
 	if(response != "Yeah!" || !src.key)
 		return  //Hit the wrong key...again.
-	
+
 	var/mob/living/carbon/human/hobo = new(pick(hobostart))
 	hobo.key = src.key
 	hobo.set_species(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))

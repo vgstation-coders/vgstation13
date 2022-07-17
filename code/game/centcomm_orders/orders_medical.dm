@@ -94,6 +94,11 @@
 				return 1
 	return 0
 
+/datum/centcomm_order/department/medical/vaccine/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
+	if (istype(V))
+		var/list/vac_data = list("antigen" = list(required_vac))
+		V.reagents.add_reagent(VACCINE,V.reagents.maximum_volume,vac_data)
+
 //Dangerous Disease Vial
 /datum/centcomm_order/department/medical/harmful_disease/New()
 	..()
@@ -122,8 +127,41 @@
 			if (D.strength >= 80)
 				if (D.get_total_badness() >= 13)
 					return 1
-
 	return 0
+
+/datum/centcomm_order/department/medical/harmful_disease/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
+	if (istype(V))
+		var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
+		var/datum/disease2/disease/new_virus = new virus_choice
+
+		var/list/anti = list(
+			ANTIGEN_BLOOD	= 0,
+			ANTIGEN_COMMON	= 2,
+			ANTIGEN_RARE	= 1,
+			ANTIGEN_ALIEN	= 0,
+			)
+		var/list/bad = list(
+			EFFECT_DANGER_HELPFUL	= 0,
+			EFFECT_DANGER_FLAVOR	= 0,
+			EFFECT_DANGER_ANNOYING	= 1,
+			EFFECT_DANGER_HINDRANCE	= 2,
+			EFFECT_DANGER_HARMFUL	= 4,
+			EFFECT_DANGER_DEADLY	= 2,
+			)
+
+		while(new_virus.get_total_badness() < 13)
+			new_virus.makerandom(list(80,90),list(20,90),anti,bad,src)
+
+		var/list/blood_data = list(
+			"viruses" = null,
+			"blood_DNA" = null,
+			"blood_type" = "O-",
+			"resistances" = null,
+			"trace_chem" = null,
+			"virus2" = list()
+		)
+		blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
+		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume,blood_data)
 
 //Beneficial Disease Vial
 /datum/centcomm_order/department/medical/beneficial_disease/New()
@@ -155,9 +193,44 @@
 
 	return 0
 
+/datum/centcomm_order/department/medical/beneficial_disease/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
+	if (istype(V))
+		var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
+		var/datum/disease2/disease/new_virus = new virus_choice
+
+		var/list/anti = list(
+			ANTIGEN_BLOOD	= 0,
+			ANTIGEN_COMMON	= 2,
+			ANTIGEN_RARE	= 1,
+			ANTIGEN_ALIEN	= 0,
+			)
+		var/list/bad = list(
+			EFFECT_DANGER_HELPFUL	= 2,
+			EFFECT_DANGER_FLAVOR	= 1,
+			EFFECT_DANGER_ANNOYING	= 0,
+			EFFECT_DANGER_HINDRANCE	= 0,
+			EFFECT_DANGER_HARMFUL	= 0,
+			EFFECT_DANGER_DEADLY	= 0,
+			)
+
+		while(new_virus.get_total_badness() > 2)
+			new_virus.makerandom(list(80,90),list(20,90),anti,bad,src)
+
+		var/list/blood_data = list(
+			"viruses" = null,
+			"blood_DNA" = null,
+			"blood_type" = "O-",
+			"resistances" = null,
+			"trace_chem" = null,
+			"virus2" = list()
+		)
+		blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
+		V.reagents.add_reagent(BLOOD,V.reagents.maximum_volume,blood_data)
+
 //Specific GNA Disks
 /datum/centcomm_order/department/medical/gna_disk
 	var/already_goten = list()
+	var/already_generated = list()
 	var/req_stage
 	request_consoles_to_notify = list(
 		"Chief Medical Officer's Desk",
@@ -184,6 +257,16 @@
 		already_goten += Disk.effect.type
 		return 1
 	return 0
+
+/datum/centcomm_order/department/medical/gna_disk/BuildToExtraChecks(var/obj/item/weapon/disk/disease/Disk)
+	if (istype(Disk))
+		Disk.stage = req_stage
+		if(!Disk.effect)
+			var/effect_type = null
+			while(!effect_type || (effect_type in already_generated))
+				effect_type = pick(subtypesof(/datum/disease2/effect))
+			Disk.effect = new effect_type
+			already_generated += effect_type
 
 //----------------------------------------------Genetics----------------------------------------------------
 
@@ -214,6 +297,13 @@
 		return 1
 	return 0
 
+/datum/centcomm_order/department/medical/clean_se/BuildToExtraChecks(var/obj/item/weapon/dnainjector/I)
+	if (istype(I))
+		I.buf=new
+		I.buf.dna=new
+		I.buf.types = DNA2_BUF_SE
+		I.buf.dna.ResetSE()
+
 //Specific Superpowers
 /datum/centcomm_order/department/medical/xray/New()
 	..()
@@ -239,6 +329,14 @@
 			return bstate
 	return 0
 
+/datum/centcomm_order/department/medical/xray/BuildToExtraChecks(var/obj/item/weapon/dnainjector/I)
+	if (istype(I))
+		I.buf=new
+		I.buf.dna=new
+		I.buf.types = DNA2_BUF_SE
+		I.buf.dna.ResetSE()
+		I.SetValue(0xFFF,XRAYBLOCK)
+
 /datum/centcomm_order/department/medical/hulk/New()
 	..()
 	request_consoles_to_notify = list(
@@ -263,6 +361,14 @@
 			return bstate
 	return 0
 
+/datum/centcomm_order/department/medical/hulk/BuildToExtraChecks(var/obj/item/weapon/dnainjector/I)
+	if (istype(I))
+		I.buf=new
+		I.buf.dna=new
+		I.buf.types = DNA2_BUF_SE
+		I.buf.dna.ResetSE()
+		I.SetValue(0xFFF,HULKBLOCK)
+
 /datum/centcomm_order/department/medical/telepathy/New()
 	..()
 	request_consoles_to_notify = list(
@@ -280,12 +386,20 @@
 /datum/centcomm_order/department/medical/telepathy/ExtraChecks(var/obj/item/weapon/dnainjector/I)
 	if (!istype(I))
 		return 0
-	if (I.block == REMOTETALKBLOCK && I.buf)//Block Injector
+	if (I.block == TELEPATHYBLOCK && I.buf)//Block Injector
 		var/datum/dna2/record/R = I.buf
 		if (R.types & 4)//SE Injector
-			var/bstate = R.dna.GetSEState(REMOTETALKBLOCK)
+			var/bstate = R.dna.GetSEState(TELEPATHYBLOCK)
 			return bstate
 	return 0
+
+/datum/centcomm_order/department/medical/telepathy/BuildToExtraChecks(var/obj/item/weapon/dnainjector/I)
+	if (istype(I))
+		I.buf=new
+		I.buf.dna=new
+		I.buf.types = DNA2_BUF_SE
+		I.buf.dna.ResetSE()
+		I.SetValue(0xFFF,TELEPATHYBLOCK)
 
 /datum/centcomm_order/department/medical/remoteview/New()
 	..()
@@ -310,4 +424,12 @@
 			var/bstate = R.dna.GetSEState(REMOTEVIEWBLOCK)
 			return bstate
 	return 0
+
+/datum/centcomm_order/department/medical/remoteview/BuildToExtraChecks(var/obj/item/weapon/dnainjector/I)
+	if (istype(I))
+		I.buf=new
+		I.buf.dna=new
+		I.buf.types = DNA2_BUF_SE
+		I.buf.dna.ResetSE()
+		I.SetValue(0xFFF,REMOTEVIEWBLOCK)
 

@@ -9,7 +9,7 @@
 	density = 1
 	opacity = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 5
 	active_power_usage = 100
 	flags = NOREACT
@@ -110,7 +110,7 @@
 	return -75 //slow
 
 /obj/machinery/smartfridge/process()
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN) || !anchored)
 		return
 
 	for(var/obj/item/I in contents)
@@ -295,13 +295,14 @@
 /obj/machinery/smartfridge/bloodbank/filled/New()
 	. = ..()
 
-	for(var/i = 0 to 4)
+	for(var/i = 0 to 2)
 		insert_item(new /obj/item/weapon/reagent_containers/blood/APlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/BPlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/BMinus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
+	for(var/i = 0 to 5)
 		insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 
 /obj/machinery/smartfridge/bloodbank/power_change()
@@ -376,7 +377,7 @@
 		update_nearby_tiles()
 
 /obj/machinery/smartfridge/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	if((stat & NOPOWER) || (contents.len >= MAX_N_OF_ITEMS))
+	if((stat & (FORCEDISABLE|NOPOWER)) || (contents.len >= MAX_N_OF_ITEMS))
 		return FALSE
 	if(accept_check(AM))
 		piles = sortList(piles)
@@ -394,13 +395,13 @@
 			insert_item(G)
 			objects_loaded++
 		if(objects_loaded)
-			return TRUE			
+			return TRUE
 	return FALSE
 
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())
 		return 1
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		to_chat(user, "<span class='notice'>\The [src] is unpowered and useless.</span>")
 		return 1
 	if(contents.len >= MAX_N_OF_ITEMS)
@@ -423,16 +424,12 @@
 /obj/machinery/smartfridge/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/machinery/smartfridge/attack_ai(mob/user as mob)
-	return src.attack_hand(user)
-
 /obj/machinery/smartfridge/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	interact(user)
 
-/obj/machinery/smartfridge/emag(mob/user)
-	new/obj/effect/sparks(get_turf(src))
-	playsound(loc,"sparks",50,1)
+/obj/machinery/smartfridge/emag_act(mob/user)
+	spark(src)
 	emagged = !emagged
 	if(emagged)
 		to_chat(user, "<span class='warning'>You disable the security protocols.</span>")
@@ -444,7 +441,7 @@
 ********************/
 
 /obj/machinery/smartfridge/interact(mob/user as mob)
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 
 	var/dat = list()

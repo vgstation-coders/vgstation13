@@ -35,6 +35,10 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	var/hide = 0				// Is it a hidden machine?
 	var/listening_level = 0	// 0 = auto set in New() - this is the z level that the machine is listening to.
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+	)
 
 /obj/machinery/telecomms/proc/relay_information(datum/signal/signal, filter, copysig, amount = 20)
 	// relay signal to all linked machinery that are of type [filter]. If signal has been sent [amount] times, stop sending
@@ -192,7 +196,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/proc/update_power()
 	if(toggled)
-		if(stat & (BROKEN|NOPOWER|EMPED) || get_integrity() <= 0) // if powered, on. if not powered, off. if too damaged, off
+		if(stat & (BROKEN|NOPOWER|EMPED|FORCEDISABLE) || get_integrity() <= 0) // if powered, on. if not powered, off. if too damaged, off
 			on = FALSE
 		else
 			on = TRUE
@@ -260,7 +264,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 /obj/machinery/telecomms/proc/produce_heat()
 	if(!heating_power)
 		return
-	if(!(stat & (NOPOWER|BROKEN))) //Blatently stolen from space heater.
+	if(!(stat & (NOPOWER|BROKEN|FORCEDISABLE))) //Blatently stolen from space heater.
 		var/turf/simulated/L = loc
 		if(istype(L))
 			var/datum/gas_mixture/env = L.return_air()
@@ -281,9 +285,17 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	desc = "This machine has a dish-like shape and green lights. It is designed to detect and process subspace radio activity."
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 30
 	machinetype = 1
+
+	var/blackout_active = FALSE
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/toggle/radio_blackout
+	)
+
 
 /obj/machinery/telecomms/receiver/New()
 	..()
@@ -298,6 +310,11 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	)
 
 	RefreshParts()
+
+/obj/machinery/telecomms/receiver/Destroy()
+	if(blackout_active)
+		malf_radio_blackout = FALSE
+	..()
 
 /obj/machinery/telecomms/receiver/receive_signal(datum/signal/signal)
 #ifdef SAY_DEBUG
@@ -370,7 +387,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	desc = "A mighty piece of hardware used to send/receive massive amounts of data."
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 80
 	machinetype = 7
 	long_range_link = 1
@@ -422,7 +439,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	desc = "A mighty piece of hardware used to send massive amounts of data far away."
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 30
 	machinetype = 8
 	heating_power = 0
@@ -488,7 +505,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	desc = "A mighty piece of hardware used to send massive amounts of data quickly."
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 50
 	machinetype = 2
 	netspeed = 40
@@ -557,7 +574,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	desc = "This machine is used to process large quantities of information."
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 30
 	machinetype = 3
 	delay = 5
@@ -614,7 +631,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	desc = "A machine used to store data and network statistics."
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 15
 	machinetype = 4
 	var/list/log_entries = list()
@@ -625,7 +642,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 	var/list/memory = list()	// stored memory
 	var/rawcode = ""	// the code to compile (raw text)
-	var/datum/TCS_Compiler/Compiler	// the compiler that compiles and runs the code
+	var/datum/n_Compiler/TCS_Compiler/Compiler	// the compiler that compiles and runs the code
 	var/autoruncode = 0		// 1 if the code is set to run every time a signal is picked up
 
 	var/encryption = "null" // encryption key: ie "password"

@@ -50,7 +50,7 @@
 
 /obj/machinery/bodyscanner/power_change()
 	..()
-	if(!(stat & (BROKEN|NOPOWER)) && occupant)
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)) && occupant)
 		set_light(light_range_on, light_power_on)
 	else
 		set_light(0)
@@ -104,7 +104,7 @@
 	for(var/obj/OO in src)
 		OO.forceMove(loc)
 	add_fingerprint(user)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
 	return
 
@@ -174,7 +174,7 @@
 	for(var/obj/O in src)
 		qdel(O)
 	src.add_fingerprint(usr)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
 	return
 
@@ -198,7 +198,7 @@
 	update_icon()
 	set_light(0)
 
-/obj/machinery/bodyscanner/emag(mob/user)
+/obj/machinery/bodyscanner/emag_act(mob/user)
 	if(!emagged)
 		to_chat(user, "<span class='warning'>You disable the X-ray dosage limiter on \the [src].</span>")
 		to_chat(user, "<span class='notice'>\The [src] emits an ominous hum.</span>")
@@ -209,6 +209,10 @@
 		to_chat(user, "<span class='notice'>\The [src] emits a quiet whine.</span>")
 		emagged = 0
 		return 0
+
+/obj/machinery/bodyscanner/emag_ai(mob/living/silicon/ai/A)
+	to_chat(A, "<span class='warning'>You disable the X-ray dosage limiter on \the [src].</span>")
+	emagged = 1
 
 /obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
@@ -238,7 +242,7 @@
 	update_icon()
 	src.add_fingerprint(user)
 	qdel(G)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
 	return
 
@@ -275,22 +279,18 @@
 
 
 /obj/machinery/bodyscanner/process()
-	if (stat & (BROKEN | NOPOWER | MAINT | EMPED))
-		use_power = 0
+	if (stat & (BROKEN | NOPOWER | MAINT | EMPED | FORCEDISABLE))
+		use_power = MACHINE_POWER_USE_NONE
 		return
 	if (occupant)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 		if (emagged)
 			occupant.apply_radiation(12,RAD_EXTERNAL)
 
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 /obj/machinery/bodyscanner/attack_paw(mob/user)
-	return attack_hand(user)
-
-/obj/machinery/bodyscanner/attack_ai(mob/user)
-	add_hiddenprint(user)
 	return attack_hand(user)
 
 /obj/machinery/bodyscanner/attack_hand(mob/user)
@@ -381,6 +381,10 @@
 		"external_organs" = H.organs.Copy(),
 		"internal_organs" = H.internal_organs.Copy()
 		)
+	if (H.status_flags & FAKEDEATH)
+		health_data["stat"] = 2
+		health_data["oxyloss"] = 200
+		health_data["health"] = 0
 	return health_data
 
 

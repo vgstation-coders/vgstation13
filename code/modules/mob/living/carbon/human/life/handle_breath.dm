@@ -58,10 +58,10 @@
 				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 				if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
-					if(prob(15)) // 15% chance for lung damage if air intake is less of a fifth, or more than five times the threshold
+					if(prob(20))
 						L.damage += 1
-					if(!is_lung_ruptured())
-						var/chance_break = (L.damage / L.min_bruised_damage)*50 // Chance to rupture: 1/15 = 3%, 2/15 = 7%, etc...
+					if(!is_lung_ruptured() && L.damage > 2)
+						var/chance_break = (L.damage / L.min_broken_damage)*100
 						if(prob(chance_break))
 							rupture_lung()
 
@@ -80,7 +80,7 @@
 				if(!block)
 					for(var/obj/effect/smoke/chem/smoke in view(1, src)) //If there is smoke within one tile
 						if(smoke.reagents.total_volume)
-							smoke.reagents.reaction(src, INGEST)
+							smoke.reagents.reaction(src, INGEST, amount_override = min(smoke.reagents.total_volume,10)/(smoke.reagents.reagent_list.len))
 							spawn(5)
 								if(smoke)
 									smoke.reagents.copy_to(src, 10) //I dunno, maybe the reagents enter the blood stream through the lungs?

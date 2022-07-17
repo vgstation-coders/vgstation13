@@ -10,7 +10,7 @@
 	var/const/metalPerMoMMI = 10
 	var/const/metalPerTick = 1
 	var/mommi_type = /mob/living/silicon/robot/mommi/soviet
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	active_power_usage = 5000
 	var/recharge_time = 60 SECONDS
@@ -50,10 +50,10 @@
 	update_icon()
 
 /obj/machinery/mommi_spawner/proc/canSpawn()
-	return !(stat & NOPOWER) && !building && metal >= metalPerMoMMI
+	return !(stat & (FORCEDISABLE|NOPOWER)) && !building && metal >= metalPerMoMMI
 
 /obj/machinery/mommi_spawner/process()
-	if(stat & NOPOWER || building || metal >= metalPerMoMMI)
+	if(stat & (FORCEDISABLE|NOPOWER) || building || metal >= metalPerMoMMI)
 		return
 	metal += metalPerTick
 	if(metal >= metalPerMoMMI)
@@ -168,7 +168,7 @@
 		M.Namepick()
 
 /obj/machinery/mommi_spawner/update_icon()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state="mommispawner-nopower"
 	else if(metal < metalPerMoMMI)
 		icon_state="mommispawner-recharging"

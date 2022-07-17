@@ -42,11 +42,13 @@
 		callshuttle = 0
 
 	if(callshuttle == 3) //if all three conditions are met
-		shuttle_autocall()
+		shuttle_autocall("All the AIs, comm consoles and boards are destroyed")
 
 	if(explosive && !gibbed && !istype(loc, /obj/machinery/power/apc))
 		visible_message("<span class='danger'>[name] begins to spark violently!</span>")
-		playsound(src, 'sound/machines/Alarm_short.ogg', 75, FALSE)
+		shake_animation(5, 5, 0.2, 15)
+		spark(src)
+		playsound(src, 'sound/machines/Alarm_short.ogg', 100, FALSE)
 		spawn(30)
 			explosion(src.loc, 2, 5, 8, 10, whodunnit = src)
 			gibbed = TRUE
@@ -66,6 +68,6 @@
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
 		if(!mind.suiciding) //Cowards don't count
-			score["deadaipenalty"] += 1
+			score.deadaipenalty += 1
 
 	return ..(gibbed)

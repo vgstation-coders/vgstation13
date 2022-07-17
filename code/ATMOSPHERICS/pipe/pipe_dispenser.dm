@@ -34,11 +34,11 @@
 	interact(user)
 
 /obj/machinery/pipedispenser/interact(mob/user)
-	var/multi_z_dat = map.multiz ? {"
+	var/multi_z_dat = HasAbove(z) || HasBelow(z) ? {"
 <b>Multi-floor pipes:</b>
 <ul>
-	<li><a href='?src=\ref[src];make=[PIPE_Z_UP];dir=1'>Up Pipe</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_Z_DOWN];dir=1'>Down Pipe</a></li>
+	[HasAbove(z) ? "<li><a href='?src=\ref[src];make=[PIPE_Z_UP];dir=1'>Up Pipe</a></li>" : ""]
+	[HasBelow(z) ? "<li><a href='?src=\ref[src];make=[PIPE_Z_DOWN];dir=1'>Down Pipe</a></li>" : ""]
 </ul>"} : ""
 	var/dat = {"
 <b>Regular pipes:</b>

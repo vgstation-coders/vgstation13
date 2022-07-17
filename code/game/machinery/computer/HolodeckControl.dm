@@ -94,9 +94,6 @@
 	alpha_area = /area/holodeck/dungeon_holodeck_alpha
 	map_element_type = /datum/map_element/dungeon/holodeck/olympics
 
-/obj/machinery/computer/HolodeckControl/attack_ai(mob/user)
-	add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/computer/HolodeckControl/attack_paw(mob/user)
 	return
@@ -104,7 +101,7 @@
 /obj/machinery/computer/HolodeckControl/proc/spawn_holoperson(mob/dead/observer/user)
 	if (!istype(user) || user.stat != DEAD )
 		return
-	if(stat & (NOPOWER|BROKEN|MAINT))
+	if(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
 		return
 	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
 		to_chat(user, "<span class='notice'>You can't do this until the game has started.</span>")
@@ -234,7 +231,7 @@
 /obj/machinery/computer/HolodeckControl/attackby(obj/item/weapon/W, mob/user)
 	..() //This still allows items to unrez even if the computer is deconstructed
 
-/obj/machinery/computer/HolodeckControl/emag(mob/user as mob)
+/obj/machinery/computer/HolodeckControl/emag_act(mob/user as mob)
 	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 	if(emagged)
 		return //No spamming
@@ -614,7 +611,7 @@
 	var/eventstarted = 0
 
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 6
 	power_channel = ENVIRON

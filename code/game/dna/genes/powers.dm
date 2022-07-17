@@ -43,11 +43,19 @@
 	invocation_type = SpI_NONE
 	range = GLOBALCAST
 	max_targets = 1
-	spell_flags = SELECTABLE | INCLUDEUSER | TALKED_BEFORE
+	spell_flags = SELECTABLE | TALKED_BEFORE
 
 	override_base = "genetic"
 	hud_state = "gen_rmind"
 	mind_affecting = 1
+
+
+/// Resets the view when the Cancel button is pressed or there are no suitable targets.
+/spell/targeted/remoteobserve/choose_targets(mob/living/carbon/human/user)
+	. = ..()
+	if(!length(.))
+		user.remoteview_target = null
+		user.reset_view(0)
 
 /spell/targeted/remoteobserve/cast(var/list/targets, mob/living/carbon/human/user)
 	if(!targets || !targets.len || !user || !istype(user))
@@ -64,24 +72,10 @@
 		user.reset_view(0)
 		return
 
-	if(user.client.eye != user.client.mob)
-		user.remoteview_target = null
-		user.reset_view(0)
-		return
-
-	for(var/T in targets)
-		var/mob/living/target
-		if (isliving(T))
-			target = T
-		if (istype (T, /datum/mind))
-			target = user.can_mind_interact(T)
-		if(target)
-			if(target == user)
-				user.remoteview_target = null
-				user.reset_view(0)
-			else
-				user.remoteview_target = target
-				user.reset_view(target)
+	for(var/mob/living/target in targets)
+		if (can_mind_interact(target.mind))
+			user.remoteview_target = target
+			user.reset_view(target)
 			break
 		else// can_mind_interact returned null
 			user.remoteview_target = null
@@ -105,7 +99,7 @@
 /datum/dna/gene/basic/increaserun/New()
 	block = INCREASERUNBLOCK
 
-/datum/dna/gene/basic/grant_spell/remotetalk
+/datum/dna/gene/basic/grant_spell/telepathy
 	name = "Telepathy"
 	activation_messages = list("You feel your voice can penetrate other minds.")
 	deactivation_messages = list("Your mind can no longer project your voice onto others.")
@@ -113,66 +107,69 @@
 	drug_activation_messages = list("You feel your voice can reach the astral plane now.")
 	drug_deactivation_messages = list("Your voice can no longer reach the astral plane.")
 
-	mutation = M_REMOTE_TALK
+	mutation = M_TELEPATHY
 
-	spelltype = /spell/targeted/remotesay
+	spelltype = /spell/targeted/telepathy
 
-/datum/dna/gene/basic/grant_spell/remotetalk/New()
+/datum/dna/gene/basic/grant_spell/telepathy/New()
 	..()
-	block = REMOTETALKBLOCK
+	block = TELEPATHYBLOCK
 
-/spell/targeted/remotesay
-	name = "Project Mind"
+/spell/targeted/telepathy
+	name = "Telepathy"
 	desc = "Speak into the minds of others. You must either hear them speak or examine them to make contact."
 	panel = "Mutant Powers"
-
 	charge_type = Sp_RECHARGE
-	charge_max = 50
-
+	charge_max = 0
 	invocation_type = SpI_NONE
 	range = GLOBALCAST //the world
 	max_targets = 1
 	selection_type = "view"
 	spell_flags = SELECTABLE|TALKED_BEFORE
-
 	override_base = "genetic"
 	hud_state = "gen_project"
-
 	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)
 	mind_affecting = 1
-
-/spell/targeted/remotesay/cast(var/list/targets, mob/living/carbon/human/user)
+/spell/targeted/telepathy/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.)
+		return FALSE
 	if(!user || !istype(user))
 		return
-
 	if(user.mind.miming)
 		to_chat(user, "<span class = 'warning'>You find yourself unable to convey your thoughts outside of gestures.</span>")
 		return
+/spell/targeted/telepathy/cast(var/list/targets, mob/living/carbon/human/user)
+	var/datum/species/mushroom/M = user.species
+	var/message
+	if(!istype(M))
+		message = stripped_input(user, "What do you wish to say?", "Telepathy")
+		if(!message)
+			return 1
+	else
+		M.telepathic_target.len = 0
 
-	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
-
-	if(!say)
-		return 1
-
-	for(var/T in targets)
-		var/mob/living/target
-		if (isliving(T))
-			target = T
-		if (istype (T, /datum/mind))
-			target = user.can_mind_interact(T)
-		if(!T || !istype(target) || tinfoil_check(target) || !user.can_mind_interact(target))
-			user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
+	var/all_switch = TRUE
+	for(var/mob/living/T in targets)
+		if(!istype(T) && !can_mind_interact(T.mind))
+			to_chat(M,"<span class='notice'>[T] cannot sense your telepathy.</span>")
+			continue
+		if(istype(M))
+			M.telepathic_target += T
+			continue
+		if(T == user) //Talking to ourselves
+			to_chat(user,"<span class='notice'>Projected to self: [message]</span>")
 			return
-
-		if(M_REMOTE_TALK in target.mutations)
-			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: [say]</span>")
+		if(M_TELEPATHY in T.mutations)
+			to_chat(T, "<span class='notice'>You hear [user.real_name]'s voice: [message]</span>")
 		else
-			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: [say]</span>")
-		user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
-		log_admin("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
-		message_admins("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
-		for(var/mob/dead/observer/G in dead_mob_list)
-			G.show_message("<i>Telepathic message from <b>[user]</b> to <b>[target]</b>: [say]</i>")
+			to_chat(T,"<span class='notice'>You hear a voice inside your head: [message] </span>")
+		if(all_switch)
+			all_switch = FALSE
+			to_chat(user,"<span class='notice'>Projected to <b>[english_list(targets)]</b>: [message]</span>")
+			for(var/mob/dead/observer/G in dead_mob_list)
+				G.show_message("<i>Telepathy, <b>[user]</b> to [english_list(targets)]</b>: [message]</i>")
+			log_admin("[key_name(user)] projects his mind towards to [english_list(targets)]: [message]")
 
 /datum/dna/gene/basic/morph
 	name = "Morph"

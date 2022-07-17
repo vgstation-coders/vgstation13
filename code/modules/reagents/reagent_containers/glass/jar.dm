@@ -121,7 +121,7 @@
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		reagents.reaction(loc, TOUCH)
 		if(hit_atom != get_turf(src))
-			reagents.reaction(hit_atom, TOUCH)
+			reagents.reaction(hit_atom, TOUCH, zone_sels = list(user.zone_sel.selecting))
 		if(held_item)
 			held_item.forceMove(loc)
 			held_item = null

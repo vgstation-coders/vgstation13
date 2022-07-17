@@ -16,21 +16,23 @@
 	var/stop = 0.0
 	var/screen = 0 // 0 - Main Menu, 1 - Cyborg Status, 2 - Kill 'em All! -- In text
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/explosive_borgs,
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet
+	)
+
 	light_color = LIGHT_COLOR_PINK
 
 /obj/machinery/computer/robotics/say_quote(text)
 	return "beeps, [text]"
 
 /obj/machinery/computer/robotics/proc/speak(var/message)
-	if(stat & NOPOWER)	//sanity
+	if(stat & (NOPOWER|FORCEDISABLE))	//sanity
 		return
 	if (!message)
 		return
 	say(message)
-
-/obj/machinery/computer/robotics/attack_ai(var/mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/computer/robotics/attack_paw(var/mob/user as mob)
 	return attack_hand(user)
@@ -123,7 +125,7 @@
 					if(R.lockdown)
 						to_chat(R.connected_ai, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Slaved Cyborg [R.name] locked down. Signal traced to [get_area(src).name]</b></span>")
 						R.connected_ai << 'sound/machines/twobeep.ogg'
-					else 
+					else
 						to_chat(R.connected_ai, "<span style=\"font-family:Courier\"><b>\[<span class='notice'>INFO</span>\] The lockdown on cyborg [R.name] has been lifted. Signal traced to [get_area(src).name]</b></span>")
 						R.connected_ai << 'sound/misc/notice2.ogg'
 			else
@@ -197,7 +199,7 @@
 			to_chat(R, "<span style=\"font-family:Courier\"><b>\[<span class='notice'>INFO</span>\] Emergency Self-Destruct Sequence Halted.</b></span>")
 			R << 'sound/misc/notice2.ogg'
 
-/obj/machinery/computer/robotics/emag(mob/user)
+/obj/machinery/computer/robotics/emag_act(mob/user)
 	..()
 	req_access = list()
 	if(user)
@@ -206,7 +208,7 @@
 /obj/machinery/computer/robotics/update_icon()
 	..()
 
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 
 	if (cyborg_detonation_time != 0 && cyborg_detonation_time > world.time)

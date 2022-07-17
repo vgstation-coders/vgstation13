@@ -18,7 +18,7 @@
 	hud_state = "wiz_disint"
 
 	spell_flags = 0
-
+	var/inuse = FALSE
 	var/chemcost = 0
 	var/max_genedamage = 100
 	var/horrorallowed = 1
@@ -32,6 +32,9 @@
 	if (!C)     //only changelings allowed
 		message_admins("[user.real_name] has a changeling spell... and they aren't a changeling!")
 		return FALSE
+	if (issilicon(user))
+		to_chat(C.antag.current, "<span class='warning'>You must be an organic lifeform.</span>")
+		return FALSE
 	if (C.chem_charges < chemcost)
 		to_chat(C.antag.current, "<span class='warning'>We do not have enough chemicals stored! We require at least [chemcost] units of chemicals.</span>")
 		return FALSE
@@ -39,7 +42,7 @@
 		to_chat(C.antag.current, "<span class='warning'>Our genomes are still reassembling. We need time to recover first.</span>")
 		return FALSE
 	if(C.absorbedcount < required_dna)
-		to_chat(C.antag.current, "<span class='warning'>We require at least [required_dna] samples of compatible DNA.</span>")
+		to_chat(C.antag.current, "<span class='warning'>We require at least [required_dna] sample of compatible DNA.</span>")
 		return FALSE
 		
 	if(!horrorallowed && ishorrorform(C.antag.current))
@@ -52,6 +55,3 @@
 
 /spell/changeling/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast
-
-
-	

@@ -48,10 +48,6 @@
 				F.custom_forgery[1] = customprints ? customprints.Copy() : null
 	..()
 
-/obj/machinery/computer/secure_data/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/secure_data/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
@@ -561,7 +557,7 @@ What a mess.*/
 	return
 
 /obj/machinery/computer/secure_data/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 

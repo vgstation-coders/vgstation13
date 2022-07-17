@@ -24,9 +24,28 @@ emp_act
 
 				return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
 
+	if(wear_suit && istype(wear_suit, /obj/item/clothing/suit/space/rig/grey/leader))
+		if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
+			var/reflectchance = 50 - round(P.damage/3)
+			if(prob(reflectchance))
+				visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s [wear_suit.name]!</span>")
+
+				if(!istype(P, /obj/item/projectile/beam)) //beam has its own rebound-call-logic
+					P.reflected = 1
+					P.rebound(src)
+
+				return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
+
 	if(check_shields(P.damage, P))
 		P.on_hit(src, 100)
 		return PROJECTILE_COLLISION_BLOCKED
+
+	var/obj/structure/railing/R = locate(/obj/structure/railing) in get_turf(src)
+	if(R)
+		var/turf/T = get_step(R,R.dir)
+		if(isopenspace(T) && P.get_damage())
+			R.hurdle(src) // Railing kill!
+
 	return (..(P , def_zone))
 
 
@@ -37,7 +56,7 @@ emp_act
 	if(def_zone)
 		if(isorgan(def_zone))
 			return checkarmor(def_zone, type)
-		var/datum/organ/external/affecting = get_organ(ran_zone(def_zone))
+		var/datum/organ/external/affecting = get_organ(check_zone(def_zone))
 		return checkarmor(affecting, type)
 		//If a specific bodypart is targetted, check how that bodypart is protected and return the value.
 
@@ -71,7 +90,7 @@ emp_act
 	var/siemens_coefficient = 1.0
 	var/list/clothing_items = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes) // What all are we checking?
 
-	for(var/obj/item/clothing/C in clothing_items)
+	for(var/obj/item/C in clothing_items)
 		if(istype(C) && (C.body_parts_covered & def_zone.body_part)) // Is that body part being targeted covered?
 			siemens_coefficient *= C.siemens_coefficient
 
@@ -85,13 +104,15 @@ emp_act
 	for(var/bp in body_parts)
 		if(!bp)
 			continue
-		if(bp && istype(bp ,/obj/item/clothing))
-			var/obj/item/clothing/C = bp
+		if(isitem(bp))
+			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor(type)
-			for(var/obj/item/clothing/accessory/A in C.accessories)
-				if(A.body_parts_covered & def_zone.body_part)
-					protection += A.get_armor(type)
+			if(istype(C, /obj/item/clothing))
+				var/obj/item/clothing/CC = C
+				for(var/obj/item/clothing/accessory/A in CC.accessories)
+					if(A.body_parts_covered & def_zone.body_part)
+						protection += A.get_armor(type)
 	if(istype(loc, /obj/mecha))
 		var/obj/mecha/M = loc
 		protection += M.rad_protection
@@ -103,13 +124,15 @@ emp_act
 	var/protection = 0
 	var/list/body_parts = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
 	for(var/bp in body_parts)
-		if(istype(bp, /obj/item/clothing))
-			var/obj/item/clothing/C = bp
+		if(isitem(bp))
+			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor_absorb(type)
-			for(var/obj/item/clothing/accessory/A in C.accessories)
-				if(A.body_parts_covered & def_zone.body_part)
-					protection += A.get_armor_absorb(type)
+			if(istype(C, /obj/item/clothing))
+				var/obj/item/clothing/CC = C
+				for(var/obj/item/clothing/accessory/A in CC.accessories)
+					if(A.body_parts_covered & def_zone.body_part)
+						protection += A.get_armor_absorb(type)
 	return protection
 
 
@@ -117,7 +140,7 @@ emp_act
 	if(!body_part_flags)
 		return 0
 	var/parts_to_check = body_part_flags
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		if(ignored && C == ignored)
@@ -132,7 +155,7 @@ emp_act
 /mob/living/carbon/human/proc/get_body_part_coverage(var/body_part_flags=0)
 	if(!body_part_flags)
 		return null
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		 //Check if this piece of clothing contains ALL of the flags we want to check.
@@ -144,7 +167,7 @@ emp_act
 	//Because get_body_part_coverage(FULL_BODY) would only return true if the human has one piece of clothing that covers their whole body by itself.
 	var/body_coverage = FULL_BODY | FULL_HEAD
 
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		body_coverage &= ~(C.body_parts_covered)
@@ -184,15 +207,18 @@ emp_act
 	..()
 
 
-/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
+/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!..())
 		return
-
 	var/power = I.force
 	if (crit)
 		power *= CRIT_MULTIPLIER
 
+	if(def_zone)
+		target_zone = def_zone
+
 	var/datum/organ/external/affecting = get_organ(target_zone)
+
 	if (!affecting)
 		return FALSE
 	if(affecting.status & ORGAN_DESTROYED)
@@ -204,11 +230,11 @@ emp_act
 	var/hit_area = affecting.display_name
 
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
-		visible_message("<span class='danger'>\The [user] [pick(I.attack_verb)] \the [src] in \the [hit_area] with \the [I]!</span>", \
-			"<span class='userdanger'>\The [user] [pick(I.attack_verb)] you in \the [hit_area] with \the [I]!</span>")
+		visible_message("<span class='danger'>\The [user] [flavor ? "[flavor] " : ""][pick(I.attack_verb)] [user == src ? "[get_reflexive_pronoun(user.gender)]" : "\the [src]"] in \the [hit_area] with \the [I]!</span>", \
+			"<span class='userdanger'>[user == src ? "You" : "\The [user]"] [flavor ? "[flavor] " : ""][user == src ? "[shift_verb_tense(pick(I.attack_verb))] yourself": "[pick(I.attack_verb)] you"] in \the [hit_area] with \the [I]!</span>")
 	else if(!(I.flags & NO_ATTACK_MSG))
-		visible_message("<span class='danger'>\The [user] attacks \the [src] in \the [hit_area] with \the [I.name]!</span>", \
-			"<span class='userdanger'>\The [user] attacks you in \the [hit_area] with \the [I.name]!</span>")
+		visible_message("<span class='danger'>\The [user] [flavor ? "[flavor] " : ""]attacks [user == src ? "[get_reflexive_pronoun(user.gender)]" : "\the [src]"] in \the [hit_area] with \the [I.name]!</span>", \
+			"<span class='userdanger'>[user == src ? "You" : "\The [user]"] [flavor ? "[flavor] " : ""]attack[user == src ? " yourself" : "s you"] in \the [hit_area] with \the [I.name]!</span>")
 
 	//Contact diseases on the weapon?
 	I.disease_contact(src,get_part_from_limb(target_zone))
@@ -312,15 +338,15 @@ emp_act
 			drugged_message = "<span class='info'>The tooth fairy takes some of \the [src]'s teeth out!</span>",\
 			self_drugged_message = "<span class='info'>The tooth fairy takes some of your teeth out, and gives you a dollar.</span>")
 
-/mob/living/carbon/human/proc/foot_impact(var/atom/source, var/damage) //When our foot is hurt, for example by kicking something stationary
+/mob/living/carbon/human/proc/foot_impact(var/atom/source, var/damage, var/datum/organ/external/ourfoot) //When our foot is hurt, for example by kicking something stationary
 	//note: as per can_kick() in human.dm, kicking requires both feet intact
 	if(shoes && istype(shoes, /obj/item/clothing/shoes))
 		var/obj/item/clothing/shoes/S = shoes
 		damage = S.impact_dampen(source, damage)
 	if(!damage)
 		return FALSE
-	var/chosen_foot = pick(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
-	var/datum/organ/external/ourfoot = get_organ(chosen_foot)
+	if(!ourfoot)
+		ourfoot = get_organ(pick(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT))
 	apply_damage(damage, BRUTE, ourfoot)
 	return TRUE
 
@@ -419,12 +445,13 @@ emp_act
 	var/b_loss = null
 	var/f_loss = null
 	var/gotarmor = clamp(getarmor(null, "bomb"),0,100)
+	var/msg_admin = (src.key || src.ckey || (src.mind && src.mind.key)) && whodunnit
 	switch (severity)
 		if (BLOB_ACT_STRONG)
 			b_loss += 300
 			if(!prob(gotarmor)) //Percent chance equal to their armor resist to not gib instantly.
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], Gibbed", admin_warn = msg_admin)
 				gib()
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 				return
 			else
 				var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
@@ -441,13 +468,13 @@ emp_act
 
 		if (BLOB_ACT_MEDIUM)
 			if (stat == 2 && client)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], Gibbed", admin_warn = msg_admin)
 				gib()
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 				return
 
 			else if (stat == 2 && !client)
 				gibs(loc, virus2)
-				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], Gibbed", admin_warn = msg_admin)
 				qdel(src)
 				return
 
@@ -529,7 +556,7 @@ emp_act
 			if(LIMB_LEFT_ARM)
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
 	if(update)
-		add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity]", admin_warn = TRUE)
+		add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity]", admin_warn = msg_admin)
 		UpdateDamageIcon()
 
 

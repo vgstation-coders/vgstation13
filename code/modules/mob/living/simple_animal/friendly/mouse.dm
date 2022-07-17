@@ -264,11 +264,9 @@
 
 /mob/living/simple_animal/mouse/unarmed_attack_mob(var/mob/living/target)
 	..()
-	if(isUnconscious())
+	if(isUnconscious() || !can_be_infected() || issilicon(target))
 		return
 
-	if(!can_be_infected())
-		return
 	var/block = 0
 	var/bleeding = 0
 
@@ -441,6 +439,12 @@
 /*
  * Special mouse types
  */
+/mob/living/simple_animal/mouse/common/dan
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan
+
+/mob/living/simple_animal/mouse/common/dan/New()
+	..()
+	desc = "It's a small [_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself. It looks well fed..."
 
 /mob/living/simple_animal/mouse/balbc
 	name = "laboratory mouse"

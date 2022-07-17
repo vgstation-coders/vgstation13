@@ -97,10 +97,7 @@
 
 /obj/machinery/bunsen_burner/proc/load_item(obj/item/weapon/W)
 	held_container = W
-	var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_x" = 2 * PIXEL_MULTIPLIER, "pixel_y" = 22 * PIXEL_MULTIPLIER - empty_Y_space(new /icon(W.icon, W.icon_state)))
-	var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
-	overlays += I
-	overlays += I2
+	update_icon()
 
 /obj/machinery/bunsen_burner/process()
 	if(heating == BUNSEN_ON)
@@ -134,6 +131,7 @@
 				reagents.remove_reagent(possible_fuel, consumption_rate)
 				if(held_container)
 					held_container.reagents.heating(thermal_energy_transfer, max_temperature)
+					update_icon()
 				G.adjust_multi(
 					GAS_OXYGEN, -o2_consumption,
 					GAS_CARBON, -co2_consumption)
@@ -162,18 +160,24 @@
 
 /obj/machinery/bunsen_burner/update_icon()
 	icon_state = "bunsen[heating]"
+	overlays.Cut()
+	if(held_container)
+		var/image/I = image("icon"=held_container, "layer"=FLOAT_LAYER, "pixel_x" = 2 * PIXEL_MULTIPLIER, "pixel_y" = 22 * PIXEL_MULTIPLIER - empty_Y_space(new /icon(held_container.icon, held_container.icon_state)))
+		var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
+		overlays += I
+		overlays += I2
 
 /obj/machinery/bunsen_burner/attack_ghost()
 	return
 
 /obj/machinery/bunsen_burner/attack_hand(mob/user)
 	if(held_container)
-		overlays = null
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
 		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)
 		held_container = null
 		add_fingerprint(user)
+		update_icon()
 	else
 		toggle()
 

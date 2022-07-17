@@ -25,6 +25,88 @@
 		process_med_hud(M)
 
 
+/obj/item/clothing/glasses/hud/health/cmo
+	name = "Advanced Health Scanner HUD"
+	prescription = 1
+	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status as well as reveals pathogens in sight. The tinted glass protects the wearer from bright flashes of light."
+	icon_state = "cmohud"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	eyeprot = 1
+	mech_flags = MECH_SCAN_ILLEGAL
+	actions_types = list(/datum/action/item_action/toggle_goggles)
+	var/on = FALSE
+
+/obj/item/clothing/glasses/hud/health/cmo/attack_self(mob/user)
+	toggle(user)
+
+/obj/item/clothing/glasses/hud/health/cmo/proc/toggle(mob/user)
+	if (user.incapacitated())
+		return
+	if (on)
+		on = FALSE
+		to_chat(user, "You turn the pathogen scanner off.")
+		disable(user)
+	else
+		on = TRUE
+		to_chat(user, "You turn the pathogen scanner on.")
+		enable(user)
+	user.handle_regular_hud_updates()
+
+/obj/item/clothing/glasses/hud/health/cmo/equipped(mob/M, slot)
+	..()
+	if (!M.client)
+		return
+	if(slot == slot_glasses)
+		if (on)
+			enable(M)
+
+/obj/item/clothing/glasses/hud/health/cmo/unequipped(mob/M, from_slot)
+	..()
+	if (!M.client)
+		return
+	if(from_slot == slot_glasses)
+		disable(M)
+
+/obj/item/clothing/glasses/hud/health/cmo/proc/enable(mob/M)
+	var/toggle = 0
+	if (ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if (H.glasses == src)
+			toggle = 1
+	if (ismonkey(M))
+		var/mob/living/carbon/monkey/H = M
+		if (H.glasses == src)
+			toggle = 1
+	if (toggle)
+		playsound(M,'sound/misc/click.ogg',30,0,-5)
+		science_goggles_wearers.Add(M)
+		for (var/obj/item/I in infected_items)
+			if (I.pathogen)
+				M.client.images |= I.pathogen
+		for (var/mob/living/L in infected_contact_mobs)
+			if (L.pathogen)
+				M.client.images |= L.pathogen
+		for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
+			if (C.pathogen)
+				M.client.images |= C.pathogen
+		for (var/obj/effect/decal/cleanable/C in infected_cleanables)
+			if (C.pathogen)
+				M.client.images |= C.pathogen
+
+/obj/item/clothing/glasses/hud/health/cmo/proc/disable(mob/M)
+	playsound(M,'sound/misc/click.ogg',30,0,-5)
+	science_goggles_wearers.Remove(M)
+	for (var/obj/item/I in infected_items)
+		M.client.images -= I.pathogen
+	for (var/mob/living/L in infected_contact_mobs)
+		M.client.images -= L.pathogen
+	for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
+		M.client.images -= C.pathogen
+	for (var/obj/effect/decal/cleanable/C in infected_cleanables)
+		M.client.images -= C.pathogen
+
+
+
 /obj/item/clothing/glasses/hud/security
 	name = "Security HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."

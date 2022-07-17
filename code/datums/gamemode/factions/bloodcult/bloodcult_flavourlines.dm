@@ -1,5 +1,7 @@
 
+
 /*
+DEITYLINK ~ 2021: 
 
 Disabling those for now.
 On one hand I'd rather keep Nar-Sie talking as an admin-only thing
@@ -8,6 +10,9 @@ On the other hand those don't quite portray the love of blood and chaos that Nar
 As for Conversion Failure lines, they're pretty much deprecated since conversion failures no longer kill their victims
 Also since we might want to try converting them again later no need for Nar-Sie to be this petty, that's not a good image
 
+April 2021:
+Success Lines re-enabled. 
+*/
 
 /* -- Flavour text for refusing/accepting conversion.
    -- Possible context (static) :
@@ -218,7 +223,7 @@ var/list/all_depts_list = list(
 
 
 
-
+/*
 
 var/list/failure_lines_by_dept = list(
 	COMMAND_POSITIONS = list(
@@ -290,6 +295,7 @@ var/list/failure_lines_numerous_cultists = list(
 	"You betrayed your friend." = 5, \
 	"Your arrogance must have disappointed your friend." = 5, \
 )
+
 
 
 /datum/faction/bloodcult/proc/send_flavour_text_refuse(var/mob/victim, var/mob/converter)

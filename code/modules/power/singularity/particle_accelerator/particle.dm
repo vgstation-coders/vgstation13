@@ -75,16 +75,19 @@
 	if (A)
 		if(ismob(A))
 			toxmob(A)
+			return
 		if(istype(A,/obj/machinery/the_singularitygen))
 			var/obj/machinery/the_singularitygen/TSG = A
 			TSG.energy += energy
-		else if( istype(A,/obj/effect/rust_particle_catcher) )
+			return
+		if( istype(A,/obj/effect/rust_particle_catcher) )
 			var/obj/effect/rust_particle_catcher/collided_catcher = A
 			if(particle_type && particle_type != "neutron")
 				if(collided_catcher.AddParticles(particle_type, 1 + additional_particles))
 					collided_catcher.parent.AddEnergy(energy,mega_energy)
 					loc = null
-		else if( istype(A,/obj/machinery/power/rust_core) )
+			return
+		if( istype(A,/obj/machinery/power/rust_core) )
 			var/obj/machinery/power/rust_core/collided_core = A
 			if(particle_type && particle_type != "neutron")
 				if(collided_core.AddParticles(particle_type, 1 + additional_particles))
@@ -92,6 +95,11 @@
 					collided_core.owned_field.mega_energy += mega_energy - mega_energy * energy_loss_ratio
 					collided_core.owned_field.energy += energy - energy * energy_loss_ratio
 					loc = null
+			return
+		if (istype(A,/obj/machinery/power/supermatter/))
+			var/obj/machinery/power/supermatter/collided_SM = A
+			collided_SM.power += energy * 4 //multiplier to make comparable to emitters
+			return
 	return
 
 
@@ -114,7 +122,6 @@
 			radiation = round(radiation/2,1)*/
 	M.apply_radiation((radiation*3),RAD_EXTERNAL)
 	M.updatehealth()
-//	to_chat(M, "<span class='warning'>You feel odd.</span>")
 	return
 
 

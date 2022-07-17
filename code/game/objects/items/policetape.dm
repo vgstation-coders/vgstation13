@@ -46,7 +46,7 @@
 /obj/item/tape/engineering
 	name = "engineering tape"
 	desc = "A length of engineering tape. Better not cross it."
-	req_one_access = list(access_engine,access_atmospherics)
+	req_one_access = list(access_engine_minor,access_atmospherics)
 	icon_base = "engineering"
 	robot_compatibility = MODULE_CAN_LIFT_ENGITAPE
 
@@ -60,7 +60,7 @@
 /obj/item/tape/atmos
 	name = "atmospherics tape"
 	desc = "A length of atmospherics tape. Better not cross it."
-	req_one_access = list(access_engine,access_atmospherics)
+	req_one_access = list(access_engine_major,access_atmospherics)
 	icon_base = "atmos"
 	robot_compatibility = MODULE_CAN_LIFT_ENGITAPE
 

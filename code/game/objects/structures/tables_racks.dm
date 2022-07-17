@@ -23,7 +23,7 @@
 	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
-	var/health = 100
+	health = 100
 
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in alldirs)
@@ -363,7 +363,7 @@
 
 /obj/structure/table/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
 	for (var/atom/A in loc)
-		if (A == src)
+		if (A == src || A == victim || A == user)
 			continue
 		if (!A.Cross(victim,get_turf(victim)))
 			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")
@@ -720,7 +720,7 @@
 	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/rack_parts
 	var/offset_step = 0
-	var/health = 20
+	health = 20
 
 /obj/structure/rack/proc/destroy(var/dropParts = TRUE)
 	if(parts && dropParts)

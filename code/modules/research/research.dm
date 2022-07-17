@@ -55,6 +55,7 @@ var/global/list/hidden_tech = list(
 /datum/research								//Holder for all the existing, archived, and known tech. Individual to console.
 	var/list/known_tech = list()			//List of locally known tech.
 	var/list/known_designs = list()			//List of available designs (at base reliability).
+	var/alphabetsort = FALSE				//Is it sorted alphabetically?
 
 /datum/research/New()		//Insert techs into possible_tech here. Known_tech automatically updated.
 	if(!tech_list.len)
@@ -144,6 +145,8 @@ var/global/list/hidden_tech = list(
 		T.level = clamp(T.level, 1, 20)
 	for(var/datum/design/D in known_designs)
 		D.CalcReliability(known_tech)
+	if(alphabetsort)
+		sortTim(known_designs, /proc/cmp_name_asc)
 	return
 
 //Refreshes the levels of a given tech.

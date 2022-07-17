@@ -5,6 +5,20 @@
 #define MAT_COST_MEDIUM		5
 #define MAT_COST_RARE		15
 
+var/static/list/mat2type = list(
+	MAT_IRON = /obj/item/stack/sheet/metal,
+	MAT_GLASS = /obj/item/stack/sheet/glass/glass,
+	MAT_SILVER = /obj/item/stack/sheet/mineral/silver,
+	MAT_GOLD = /obj/item/stack/sheet/mineral/gold,
+	MAT_DIAMOND = /obj/item/stack/sheet/mineral/diamond,
+	MAT_PLASMA = /obj/item/stack/sheet/mineral/plasma,
+	MAT_URANIUM = /obj/item/stack/sheet/mineral/uranium,
+	MAT_PLASTIC = /obj/item/stack/sheet/mineral/plastic,
+	MAT_MYTHRIL = /obj/item/stack/sheet/mineral/mythril,
+	MAT_CLOWN = /obj/item/stack/sheet/mineral/clown,
+	MAT_PHAZON = /obj/item/stack/sheet/mineral/phazon,
+)
+
 /obj/item/device/material_synth
 	name = "material synthesizer"
 	desc = "A device capable of producing very little material with a great deal of investment. Use wisely."
@@ -202,6 +216,19 @@
 /obj/item/device/material_synth/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return 0 // not adjacent
+	if(istype(target,/obj/machinery/r_n_d/fabricator))
+		var/obj/machinery/r_n_d/fabricator/F = target
+		for(var/mat in F.materials.storage)
+			if((mat in mat2type) && F.materials.storage[mat])
+				var/obj/item/stack/sheet/S = mat2type[mat]
+				if(S in cant_scan)
+					to_chat(user, "<span class='warning'>Your [src.name] does not contain this functionality to scan [initial(S.name)].</span>")
+				else if(initial(S.name) in materials_scanned)
+					to_chat(user, "<span class='warning'>You have already scanned [initial(S.name)].</span>")
+				else
+					materials_scanned["[initial(S.name)]"] = S
+					to_chat(user, "<span class='notice'>You successfully scan [initial(S.name)] into \the [src]'s material banks.</span>")
+		return 1
 	if(is_type_in_list(target, can_scan) && !is_type_in_list(target, cant_scan))
 		for(var/matID in materials_scanned)
 			if(materials_scanned[matID] == target.type)

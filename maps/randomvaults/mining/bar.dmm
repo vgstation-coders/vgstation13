@@ -1,122 +1,1063 @@
-"ab" = (/turf/simulated/wall/mineral/wood,/area/mining_bar)
-"ac" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = 4; pixel_y = 15},/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey{pixel_x = -8; pixel_y = 15},/obj/item/weapon/reagent_containers/food/drinks/bottle/rum{pixel_x = 13; pixel_y = 12},/obj/item/weapon/reagent_containers/food/drinks/drinkingglass{pixel_x = 2; pixel_y = 4},/turf/simulated/floor/wood,/area/mining_bar)
-"ad" = (/obj/structure/table/woodentable,/obj/machinery/chem_dispenser/booze_dispenser{pixel_y = 18},/turf/simulated/floor/wood,/area/mining_bar)
-"ae" = (/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area/mining_bar)
-"af" = (/obj/structure/closet/secure_closet/freezer/fridge,/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"ag" = (/obj/structure/table,/obj/machinery/reagentgrinder,/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"ah" = (/obj/structure/sink{dir = 8; pixel_x = -11},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"aj" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"ak" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 10},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"al" = (/obj/structure/closet/secure_closet/freezer/meat,/obj/structure/hanging_lantern{dir = 1},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"am" = (/obj/structure/closet/secure_closet/freezer/kitchen/mining,/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"an" = (/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{dir = 1},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"ao" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/wall/mineral/wood,/area/mining_bar)
-"ap" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor/carpet,/area/mining_bar)
-"aq" = (/obj/structure/table/woodentable,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 9},/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,/turf/simulated/floor/wood,/area/mining_bar)
-"as" = (/obj/machinery/alarm,/turf/simulated/wall/mineral/wood,/area/mining_bar)
-"at" = (/obj/structure/table/woodentable,/obj/structure/hanging_lantern{dir = 1},/turf/simulated/floor/wood,/area/mining_bar)
-"au" = (/obj/structure/table/woodentable,/obj/machinery/chem_dispenser/soda_dispenser{pixel_x = 0; pixel_y = 14},/turf/simulated/floor/wood,/area/mining_bar)
-"av" = (/obj/structure/table/woodentable,/obj/machinery/chem_dispenser/brewer{pixel_y = 11},/turf/simulated/floor/wood,/area/mining_bar)
-"aw" = (/turf/simulated/floor/plating{icon_state = "platingdmg2"},/area/mining_bar)
-"ax" = (/obj/item/weapon/stool,/turf/simulated/floor/wood,/area/mining_bar)
-"ay" = (/obj/structure/table,/obj/item/weapon/kitchen/rollingpin,/obj/structure/hanging_lantern{dir = 1},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"az" = (/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"aA" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 10},/turf/simulated/floor/carpet,/area/mining_bar)
-"aB" = (/obj/structure/table,/obj/machinery/microwave,/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"aC" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 6},/turf/simulated/floor/plating,/area/mining_bar)
-"aE" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; external_pressure_bound = 101.325; on = 1},/turf/simulated/floor/carpet,/area/mining_bar)
-"aG" = (/obj/structure/table/woodentable,/obj/item/weapon/storage/box/drinkingglasses{pixel_x = -4; pixel_y = 13},/obj/item/weapon/storage/box/mugs{pixel_x = 10; pixel_y = 12},/obj/item/weapon/storage/box/condimentbottles{pixel_x = -3; pixel_y = -1},/obj/item/weapon/storage/box/donkpockets/random_amount{pixel_x = 10; pixel_y = -1},/turf/simulated/floor/wood,/area/mining_bar)
-"aJ" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 6},/obj/structure/reagent_dispensers/beerkeg,/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"aK" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/wall/mineral/wood,/area/mining_bar)
-"aL" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 1},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"aN" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/floor/plating,/area/mining_bar)
-"aO" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 4},/turf/simulated/floor/carpet,/area/mining_bar)
-"aP" = (/obj/machinery/atmospherics/unary/vent_scrubber{dir = 4; on = 0; scrub_CO2 = 0; scrub_Toxins = 0},/turf/simulated/floor/carpet,/area/mining_bar)
-"aQ" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/mob/living/simple_animal/robot/NPC/dusky,/turf/simulated/floor/carpet,/area/mining_bar)
-"aR" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"aS" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor/carpet,/area/mining_bar)
-"aT" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; external_pressure_bound = 101.325; on = 1},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"aU" = (/obj/machinery/atmospherics/unary/vent_scrubber{dir = 4; on = 0; scrub_CO2 = 0; scrub_Toxins = 0},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"aV" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"aW" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 9},/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"aX" = (/turf/simulated/floor/plating{icon_state = "platingdmg3"},/area/mining_bar)
-"aY" = (/obj/structure/table/woodentable,/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/wood,/area/mining_bar)
-"aZ" = (/obj/item/weapon/stool,/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/wood,/area/mining_bar)
-"ba" = (/obj/item/trash/cigbutt,/turf/simulated/floor/plating,/area/mining_bar)
-"bb" = (/turf/simulated/wall/invulnerable/r_wall,/area/mining_bar)
-"bc" = (/turf/simulated/floor/plating,/area/mining_bar)
-"bd" = (/obj/machinery/vaporizer,/turf/simulated/floor/engine,/area/mining_bar)
-"be" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/machinery/smartfridge/drinks,/turf/simulated/wall/mineral/wood,/area/mining_bar)
-"bf" = (/obj/machinery/atmospherics/unary/tank/oxygen{starting_volume = 3200},/turf/simulated/floor/engine,/area/mining_bar)
-"bg" = (/obj/abstract/map/spawner/maint,/obj/structure/rack,/obj/abstract/map/spawner/maint,/turf/simulated/floor/engine,/area/mining_bar)
-"bh" = (/obj/machinery/power/terminal{dir = 8},/obj/structure/cable{d2 = 4; icon_state = "0-4"},/turf/simulated/floor/engine,/area/mining_bar)
-"bi" = (/obj/structure/bed/chair/comfy/couch/left/teal{dir = 4; icon_state = "couch_left"},/turf/simulated/floor/carpet,/area/mining_bar)
-"bj" = (/obj/structure/bed/chair/comfy/couch/right/teal{dir = 8},/turf/simulated/floor/carpet,/area/mining_bar)
-"bk" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 1},/turf/simulated/floor/plating,/area/mining_bar)
-"bl" = (/obj/abstract/map/spawner/robot/clean,/turf/simulated/floor/wood,/area/mining_bar)
-"bm" = (/obj/machinery/power/terminal{dir = 1},/obj/structure/cable{d2 = 4; icon_state = "0-4"},/obj/machinery/power/apc{dir = 1; environ = 1; equipment = 1; lighting = 1; locked = 0; name = "apc"; pixel_y = 24},/turf/simulated/floor/engine,/area/mining_bar)
-"bn" = (/obj/machinery/power/battery/smes,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/engine,/area/mining_bar)
-"bo" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/machinery/power/port_gen/pacman,/turf/simulated/floor/engine,/area/mining_bar)
-"bp" = (/turf/simulated/floor{dir = 8; icon_state = "barber"},/area/mining_bar)
-"br" = (/turf/simulated/floor/carpet,/area/mining_bar)
-"bs" = (/obj/machinery/atmospherics/pipe/manifold/supply/visible{color = "#0000B7"; dir = 8; name = "Mix pipe"},/turf/simulated/floor/engine,/area/mining_bar)
-"bv" = (/obj/machinery/atmospherics/trinary/mixer{dir = 4; icon_state = "intact_on"; name = "Gas mixer (N2/O2)"; node1_concentration = 0.2; node2_concentration = 0.8; on = 1; target_pressure = 4500},/turf/simulated/floor/engine,/area/mining_bar)
-"bw" = (/obj/machinery/atmospherics/pipe/simple/supply/visible{dir = 4},/turf/simulated/floor/engine,/area/mining_bar)
-"bx" = (/obj/structure/bed/chair/comfy/couch/right/teal{dir = 4; icon_state = "couch_right"},/turf/simulated/floor/carpet,/area/mining_bar)
-"by" = (/obj/structure/bed/chair/comfy/couch/left/teal{dir = 8},/turf/simulated/floor/carpet,/area/mining_bar)
-"bz" = (/obj/machinery/door/airlock/maintenance{name = "Bar Storage"; req_access_txt = 0; req_one_access_txt = "25;28"},/turf/simulated/floor/plating,/area/mining_bar)
-"bA" = (/obj/machinery/atmospherics/pipe/simple/supply/visible,/turf/simulated/floor/engine,/area/mining_bar)
-"bC" = (/obj/structure/hanging_lantern{dir = 8},/turf/simulated/floor/engine,/area/mining_bar)
-"bD" = (/obj/machinery/atmospherics/trinary/filter/mirrored{dir = 8; filter_type = 1; icon_state = "hintactm_off"; on = 1},/turf/simulated/floor/engine,/area/mining_bar)
-"bE" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{dir = 5; icon_state = "intact"},/turf/simulated/floor/engine,/area/mining_bar)
-"bF" = (/obj/machinery/atmospherics/pipe/manifold/supply/visible,/turf/simulated/floor/engine,/area/mining_bar)
-"bH" = (/turf/simulated/floor/engine,/area/mining_bar)
-"bI" = (/obj/machinery/atmospherics/trinary/filter/mirrored{dir = 1; filter_type = 2; icon_state = "hintactm_off"; on = 1},/turf/simulated/floor/engine,/area/mining_bar)
-"bJ" = (/obj/machinery/atmospherics/unary/tank/nitrogen{dir = 8},/turf/simulated/floor/engine,/area/mining_bar)
-"bK" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{dir = 4},/turf/simulated/floor/engine,/area/mining_bar)
-"bL" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible,/turf/simulated/floor/engine,/area/mining_bar)
-"bN" = (/obj/structure/piano/random{dir = 4; icon_state = "piano"},/turf/simulated/floor/wood,/area/mining_bar)
-"bP" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{dir = 10; icon_state = "intact"},/turf/simulated/floor/engine,/area/mining_bar)
-"bR" = (/turf/simulated/floor/plating{icon_state = "panelscorched"; tag = "icon-panelscorched"},/area/mining_bar)
-"bS" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/plating,/area/mining_bar)
-"bT" = (/turf/simulated/floor/wood,/area/mining_bar)
-"bU" = (/obj/machinery/atmospherics/unary/vent{dir = 1},/turf/unsimulated/floor/asteroid,/area/mine/explored)
-"bV" = (/obj/structure/sign/double/barsign/mining,/turf/simulated/wall/invulnerable/r_wall,/area/mining_bar)
-"bW" = (/turf/unsimulated/floor/asteroid,/area/mine/explored)
-"bX" = (/turf/unsimulated/mineral/random,/area/mine/explored)
-"bY" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 9; pixel_y = 0},/turf/simulated/floor/plating,/area/mining_bar)
-"bZ" = (/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/grille,/turf/simulated/floor/plating,/area/mining_bar)
-"ca" = (/turf/simulated/wall/mineral/wood,/area/mine/explored)
-"cb" = (/obj/machinery/door/airlock/external,/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/plating,/area/mining_bar)
-"gm" = (/obj/structure/table/woodentable,/obj/item/ashtray/bronze,/obj/item/weapon/storage/fancy/matchbox,/obj/item/trash/cigbutt/cigarbutt,/turf/simulated/floor/carpet,/area/mining_bar)
-"gX" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/asteroid,/area/mine/explored)
-"mx" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/robotics,/obj/item/weapon/book/manual/robotics_cyborgs,/turf/simulated/floor/engine,/area/mining_bar)
-"qv" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{dir = 1; icon_state = "intact"},/turf/simulated/wall/invulnerable/r_wall,/area/mining_bar)
-"qC" = (/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/grille,/turf/simulated/floor/plating,/area/mining_bar)
-"tr" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; external_pressure_bound = 101.325; on = 1},/turf/simulated/floor/plating,/area/mine/explored)
-"Da" = (/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/grille,/turf/simulated/floor/plating,/area/mining_bar)
-"Iz" = (/obj/structure/table,/obj/abstract/map/spawner/engi/materials,/obj/abstract/map/spawner/engi/materials,/turf/simulated/floor/engine,/area/mining_bar)
-"KG" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{dir = 1; icon_state = "intact"},/turf/simulated/floor/engine,/area/mining_bar)
-"MH" = (/obj/machinery/recharge_station,/turf/simulated/floor/engine,/area/mining_bar)
-"PG" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor/engine,/area/mining_bar)
-"Rq" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/plating,/area/mine/explored)
-"TO" = (/obj/effect/glowshroom,/turf/unsimulated/floor/asteroid,/area/mine/explored)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ab" = (
+/turf/simulated/wall/mineral/wood,
+/area/mining_bar)
+"ac" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{
+	pixel_x = 4;
+	pixel_y = 15
+	},
+/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey{
+	pixel_x = -8;
+	pixel_y = 15
+	},
+/obj/item/weapon/reagent_containers/food/drinks/bottle/rum{
+	pixel_x = 13;
+	pixel_y = 12
+	},
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass{
+	pixel_x = 2;
+	pixel_y = 4
+	},
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"ad" = (
+/obj/structure/table/woodentable,
+/obj/machinery/chem_dispenser/booze_dispenser{
+	pixel_y = 18
+	},
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"ae" = (
+/obj/structure/table/woodentable,
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"af" = (
+/obj/structure/closet/secure_closet/freezer/fridge,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"ag" = (
+/obj/structure/table,
+/obj/machinery/reagentgrinder,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"ah" = (
+/obj/structure/sink{
+	dir = 8;
+	pixel_x = -11
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"aj" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"ak" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"al" = (
+/obj/structure/closet/secure_closet/freezer/meat,
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"am" = (
+/obj/structure/closet/secure_closet/freezer/kitchen/mining,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"an" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"ao" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/wall/mineral/wood,
+/area/mining_bar)
+"ap" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"aq" = (
+/obj/structure/table/woodentable,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 9
+	},
+/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"as" = (
+/obj/machinery/alarm,
+/turf/simulated/wall/mineral/wood,
+/area/mining_bar)
+"at" = (
+/obj/structure/table/woodentable,
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"au" = (
+/obj/structure/table/woodentable,
+/obj/machinery/chem_dispenser/soda_dispenser{
+	pixel_x = 0;
+	pixel_y = 14
+	},
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"av" = (
+/obj/structure/table/woodentable,
+/obj/machinery/chem_dispenser/brewer{
+	pixel_y = 11
+	},
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"aw" = (
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg2"
+	},
+/area/mining_bar)
+"ax" = (
+/obj/item/weapon/stool,
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"ay" = (
+/obj/structure/table,
+/obj/item/weapon/kitchen/rollingpin,
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"az" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"aA" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 10
+	},
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"aB" = (
+/obj/structure/table,
+/obj/machinery/microwave,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"aC" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
+	},
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"aE" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	external_pressure_bound = 101.325;
+	on = 1
+	},
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"aG" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/storage/box/drinkingglasses{
+	pixel_x = -4;
+	pixel_y = 13
+	},
+/obj/item/weapon/storage/box/mugs{
+	pixel_x = 10;
+	pixel_y = 12
+	},
+/obj/item/weapon/storage/box/condimentbottles{
+	pixel_x = -3;
+	pixel_y = -1
+	},
+/obj/item/weapon/storage/box/donkpockets/random_amount{
+	pixel_x = 10;
+	pixel_y = -1
+	},
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"aJ" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
+	},
+/obj/structure/reagent_dispensers/beerkeg,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"aK" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/wall/mineral/wood,
+/area/mining_bar)
+"aL" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"aN" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"aO" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"aP" = (
+/obj/machinery/atmospherics/unary/vent_scrubber{
+	dir = 4;
+	on = 0;
+	scrub_CO2 = 0;
+	scrub_Toxins = 0
+	},
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"aQ" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/mob/living/simple_animal/robot/NPC/dusky,
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"aR" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"aS" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"aT" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	external_pressure_bound = 101.325;
+	on = 1
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"aU" = (
+/obj/machinery/atmospherics/unary/vent_scrubber{
+	dir = 4;
+	on = 0;
+	scrub_CO2 = 0;
+	scrub_Toxins = 0
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"aV" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"aW" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 9
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"aX" = (
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg3"
+	},
+/area/mining_bar)
+"aY" = (
+/obj/structure/table/woodentable,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"aZ" = (
+/obj/item/weapon/stool,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"ba" = (
+/obj/item/trash/cigbutt,
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"bb" = (
+/turf/simulated/wall/invulnerable/r_wall,
+/area/mining_bar)
+"bc" = (
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"bd" = (
+/obj/machinery/vaporizer,
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"be" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/smartfridge/drinks,
+/turf/simulated/wall/mineral/wood,
+/area/mining_bar)
+"bf" = (
+/obj/machinery/atmospherics/unary/tank/oxygen{
+	starting_volume = 3200
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bg" = (
+/obj/abstract/map/spawner/maint,
+/obj/structure/rack,
+/obj/abstract/map/spawner/maint,
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bh" = (
+/obj/machinery/power/terminal{
+	dir = 8
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bi" = (
+/obj/structure/bed/chair/comfy/couch/left/teal{
+	dir = 4;
+	icon_state = "couch_left"
+	},
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"bj" = (
+/obj/structure/bed/chair/comfy/couch/right/teal{
+	dir = 8
+	},
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"bk" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"bl" = (
+/obj/abstract/map/spawner/robot/clean,
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"bm" = (
+/obj/machinery/power/terminal{
+	dir = 1
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/power/apc{
+	dir = 1;
+	environ = 1;
+	equipment = 1;
+	lighting = 1;
+	locked = 0;
+	name = "apc";
+	pixel_y = 24
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bn" = (
+/obj/machinery/power/battery/smes,
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bo" = (
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/port_gen/pacman,
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bp" = (
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "barber"
+	},
+/area/mining_bar)
+"br" = (
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"bs" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/visible{
+	color = "#0000B7";
+	dir = 8;
+	name = "Mix pipe"
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bv" = (
+/obj/machinery/atmospherics/trinary/mixer{
+	dir = 4;
+	icon_state = "intact_on";
+	name = "Gas mixer (N2/O2)";
+	node1_concentration = 0.2;
+	node2_concentration = 0.8;
+	on = 1;
+	target_pressure = 4500
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bw" = (
+/obj/machinery/atmospherics/pipe/simple/supply/visible{
+	dir = 4
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bx" = (
+/obj/structure/bed/chair/comfy/couch/right/teal{
+	dir = 4;
+	icon_state = "couch_right"
+	},
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"by" = (
+/obj/structure/bed/chair/comfy/couch/left/teal{
+	dir = 8
+	},
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"bz" = (
+/obj/machinery/door/airlock/maintenance{
+	name = "Bar Storage";
+	req_access_txt = 0;
+	req_one_access_txt = "25;28"
+	},
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"bA" = (
+/obj/machinery/atmospherics/pipe/simple/supply/visible,
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bC" = (
+/obj/structure/hanging_lantern{
+	dir = 8
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bD" = (
+/obj/machinery/atmospherics/trinary/filter/mirrored{
+	dir = 8;
+	filter_type = 1;
+	icon_state = "hintactm_off";
+	on = 1
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bE" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{
+	dir = 5;
+	icon_state = "intact"
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bF" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/visible,
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bH" = (
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bI" = (
+/obj/machinery/atmospherics/trinary/filter/mirrored{
+	dir = 1;
+	filter_type = 2;
+	icon_state = "hintactm_off";
+	on = 1
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bJ" = (
+/obj/machinery/atmospherics/unary/tank/nitrogen{
+	dir = 8
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bK" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{
+	dir = 4
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bL" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/visible,
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bN" = (
+/obj/structure/piano/random{
+	dir = 4;
+	icon_state = "piano"
+	},
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"bP" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{
+	dir = 10;
+	icon_state = "intact"
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"bR" = (
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/mining_bar)
+"bS" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"bT" = (
+/turf/simulated/floor/wood,
+/area/mining_bar)
+"bU" = (
+/obj/machinery/atmospherics/unary/vent{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid,
+/area/mine/explored)
+"bV" = (
+/obj/structure/sign/double/barsign/mining,
+/turf/simulated/wall/invulnerable/r_wall,
+/area/mining_bar)
+"bW" = (
+/turf/unsimulated/floor/asteroid,
+/area/mine/explored)
+"bX" = (
+/turf/unsimulated/mineral/random,
+/area/mine/explored)
+"bY" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 9;
+	pixel_y = 0
+	},
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"bZ" = (
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"ca" = (
+/turf/simulated/wall/mineral/wood,
+/area/mine/explored)
+"cb" = (
+/obj/machinery/door/airlock/external,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"gm" = (
+/obj/structure/table/woodentable,
+/obj/item/ashtray/bronze,
+/obj/item/weapon/storage/fancy/matchbox,
+/obj/item/trash/cigbutt/cigarbutt,
+/turf/simulated/floor/carpet,
+/area/mining_bar)
+"gX" = (
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid,
+/area/mine/explored)
+"mx" = (
+/obj/structure/table,
+/obj/item/weapon/storage/toolbox/robotics,
+/obj/item/weapon/book/manual/robotics_cyborgs,
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"qv" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{
+	dir = 1;
+	icon_state = "intact"
+	},
+/turf/simulated/wall/invulnerable/r_wall,
+/area/mining_bar)
+"qC" = (
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"tr" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	external_pressure_bound = 101.325;
+	on = 1
+	},
+/turf/simulated/floor/plating,
+/area/mine/explored)
+"Da" = (
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/mining_bar)
+"Iz" = (
+/obj/structure/table,
+/obj/abstract/map/spawner/engi/materials,
+/obj/abstract/map/spawner/engi/materials,
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"KG" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{
+	dir = 1;
+	icon_state = "intact"
+	},
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"MH" = (
+/obj/machinery/recharge_station,
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"PG" = (
+/obj/structure/table,
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/simulated/floor/engine,
+/area/mining_bar)
+"Rq" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor/plating,
+/area/mine/explored)
+"TO" = (
+/obj/effect/glowshroom,
+/turf/unsimulated/floor/asteroid,
+/area/mine/explored)
 
 (1,1,1) = {"
-bXabababbXbXbXabababababababababbXbXbX
-ababalababababababacadauavatbTabasabbX
-abafbpamabaBayagabbcaCaAbraGbcaxbNabab
-abahbpaJaKajajaLaNaNaOaEaPbTbcaXbcbTab
-abaUakaTabaUanaVaoapaSaQaqbTbTbcawbTab
-abbpazaRaRaRaWaTabaeaYaeaebcbTaXaXbcab
-ababbzababababababaxaZaxaxbcbabTblbTab
-bbbgbLbfbmbnbhboabbcbSbcbRbcbcbibrbjab
-bbbgbLbsbwbwbvbwbebkbYbcbTbRbTbxbrbyab
-bbbCbEbDbKbPbAbHbbcbabbZDaqCabgmbcabab
-bbMHbHbHbHbIbFbJbbtrcabWbWbWababababbX
-bbbbPGmxIzKGbdbbbbRqcabWbWbWbXbXbXbXbX
-bXbbbbbbbbqvbVbbbWbWgXbWbWbWbWbXbXbXbX
-bXbXbXbXbXbUbWbWbWbWbWbWTObWbWbWbWTObX
-bXbXbXbXTObWbXbWbWbWbWbWbWTObWbXbWbWbX
-bXbXbXbWbWbXbXbXbXbWbWbWbWbXbXbXbWbWbX
+bX
+ab
+ab
+ab
+ab
+ab
+ab
+bb
+bb
+bb
+bb
+bb
+bX
+bX
+bX
+bX
+"}
+(2,1,1) = {"
+ab
+ab
+af
+ah
+aU
+bp
+ab
+bg
+bg
+bC
+MH
+bb
+bb
+bX
+bX
+bX
+"}
+(3,1,1) = {"
+ab
+al
+bp
+bp
+ak
+az
+bz
+bL
+bL
+bE
+bH
+PG
+bb
+bX
+bX
+bX
+"}
+(4,1,1) = {"
+ab
+ab
+am
+aJ
+aT
+aR
+ab
+bf
+bs
+bD
+bH
+mx
+bb
+bX
+bX
+bW
+"}
+(5,1,1) = {"
+bX
+ab
+ab
+aK
+ab
+aR
+ab
+bm
+bw
+bK
+bH
+Iz
+bb
+bX
+TO
+bW
+"}
+(6,1,1) = {"
+bX
+ab
+aB
+aj
+aU
+aR
+ab
+bn
+bw
+bP
+bI
+KG
+qv
+bU
+bW
+bX
+"}
+(7,1,1) = {"
+bX
+ab
+ay
+aj
+an
+aW
+ab
+bh
+bv
+bA
+bF
+bd
+bV
+bW
+bX
+bX
+"}
+(8,1,1) = {"
+ab
+ab
+ag
+aL
+aV
+aT
+ab
+bo
+bw
+bH
+bJ
+bb
+bb
+bW
+bW
+bX
+"}
+(9,1,1) = {"
+ab
+ab
+ab
+aN
+ao
+ab
+ab
+ab
+be
+bb
+bb
+bb
+bW
+bW
+bW
+bX
+"}
+(10,1,1) = {"
+ab
+ac
+bc
+aN
+ap
+ae
+ax
+bc
+bk
+cb
+tr
+Rq
+bW
+bW
+bW
+bW
+"}
+(11,1,1) = {"
+ab
+ad
+aC
+aO
+aS
+aY
+aZ
+bS
+bY
+ab
+ca
+ca
+gX
+bW
+bW
+bW
+"}
+(12,1,1) = {"
+ab
+au
+aA
+aE
+aQ
+ae
+ax
+bc
+bc
+bZ
+bW
+bW
+bW
+bW
+bW
+bW
+"}
+(13,1,1) = {"
+ab
+av
+br
+aP
+aq
+ae
+ax
+bR
+bT
+Da
+bW
+bW
+bW
+TO
+bW
+bW
+"}
+(14,1,1) = {"
+ab
+at
+aG
+bT
+bT
+bc
+bc
+bc
+bR
+qC
+bW
+bW
+bW
+bW
+TO
+bX
+"}
+(15,1,1) = {"
+ab
+bT
+bc
+bc
+bT
+bT
+ba
+bc
+bT
+ab
+ab
+bX
+bW
+bW
+bW
+bX
+"}
+(16,1,1) = {"
+ab
+ab
+ax
+aX
+bc
+aX
+bT
+bi
+bx
+gm
+ab
+bX
+bX
+bW
+bX
+bX
+"}
+(17,1,1) = {"
+bX
+as
+bN
+bc
+aw
+aX
+bl
+br
+br
+bc
+ab
+bX
+bX
+bW
+bW
+bW
+"}
+(18,1,1) = {"
+bX
+ab
+ab
+bT
+bT
+bc
+bT
+bj
+by
+ab
+ab
+bX
+bX
+TO
+bW
+bW
+"}
+(19,1,1) = {"
+bX
+bX
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bX
+bX
+bX
+bX
+bX
+bX
 "}

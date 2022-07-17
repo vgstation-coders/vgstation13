@@ -13,7 +13,7 @@
 	mouse_opacity = 1
 	var/energy = 0
 	var/obj/effect/biomass_controller/master = null
-	var/health = 15
+	health = 15
 
 /obj/effect/biomass/Destroy()
 	unreferenceMaster()
@@ -193,9 +193,7 @@
 	// list of all the empty floor turfs in the hallway areas
 	var/list/turf/simulated/floor/Floors = new
 
-	for(var/type in typesof(/area/hallway))
-		if(ispath(type,/area/hallway/secondary/entry)) // no spawn in arrivals, make it less annoying for latejoiners
-			continue
+	for(var/type in typesof(/area/crew_quarters))
 		var/area/Hallway = locate(type)
 
 		for(var/turf/simulated/floor/Floor in Hallway.contents)

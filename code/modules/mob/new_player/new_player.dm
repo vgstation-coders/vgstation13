@@ -204,7 +204,7 @@
 			return
 		to_chat(src, "<span class='bnotice'>You have requested for heads of staff to open priority roles. Please stand by.</span>")
 		for(var/obj/item/device/pda/pingme in PDAs)
-			if(pingme.cartridge && pingme.cartridge.fax_pings && pingme.cartridge.access_status_display)
+			if(pingme.cartridge && pingme.cartridge.fax_pings && (locate(/datum/pda_app/cart/status_display) in pingme.applications))
 				//This may seem like a strange check, but it's excluding the IAA for only HOP/Cap
 				playsound(pingme, "sound/effects/kirakrik.ogg", 50, 1)
 				var/mob/living/L = get_holder_of_type(pingme,/mob/living)
@@ -217,11 +217,9 @@
 		message_admins("[src] ([src.key]) requested high priority jobs. [count_pings ? "[count_pings]" : "<span class='danger'>No</span>"] players heard the request.")
 		return
 
-	if(!ready && href_list["preference"])
+	if(href_list["preference"])
 		if(client)
 			client.prefs.process_link(src, href_list)
-	else if(!href_list["late_join"])
-		new_player_panel()
 
 	if(href_list["showpoll"])
 

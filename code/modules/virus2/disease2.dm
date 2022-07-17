@@ -583,6 +583,8 @@ var/global/list/disease2_list = list()
 	var/mob/living/body = null
 	var/obj/item/weapon/virusdish/dish = null
 	var/obj/machinery/disease2/incubator/machine = null
+	var/can_focus_effect = 0 //So we do not copypaste the entire check everywhere
+	var/effect_being_focused = 0 //What effect is being focused on
 
 	if (isliving(incubator))
 		body = incubator
@@ -590,6 +592,11 @@ var/global/list/disease2_list = list()
 		dish = incubator
 		if (istype(dish.loc,/obj/machinery/disease2/incubator))
 			machine = dish.loc
+			if(machine.can_focus) //If it can focus
+				can_focus_effect = 1
+				effect_being_focused = clamp(machine.effect_focus, 0, max_stage) //Do not let the machine focus on the wrong things
+				if(effect_being_focused == 0) //Toggle it off
+					can_focus_effect = 0
 
 	if (mutatechance > 0 && (body || dish) && incubator.reagents)
 		//MUTAGEN + CREATINE = Robustness Up, Effect Strength Up, Effect Chance randomized
@@ -599,6 +606,8 @@ var/global/list/disease2_list = list()
 				var/change = rand(1,5)
 				robustness = min(100,robustness + change)
 				for(var/datum/disease2/effect/e in effects)
+					if(can_focus_effect && !e.stage == effect_being_focused)
+						continue
 					e.multiplier_tweak(0.1)//all effects get their strength increased
 					minormutate()// a random effect has a 20% chance of getting its chance re-rolled between its initial value and max chance.
 							// and the disease's infection chance is rerolled to more or less 10% of the base infection chance for that disease type.
@@ -612,6 +621,8 @@ var/global/list/disease2_list = list()
 				var/change = rand(1,5)
 				robustness = max(0,robustness - change)
 				for(var/datum/disease2/effect/e in effects)
+					if(can_focus_effect && !e.stage == effect_being_focused)
+						continue
 					e.multiplier_tweak(-0.1)//all effects get their strength reduced
 					minormutate()// a random effect has a 20% chance of getting its chance re-rolled between its initial value and max chance.
 							// and the disease's infection chance is rerolled to more or less 10% of the base infection chance for that disease type.
@@ -622,7 +633,8 @@ var/global/list/disease2_list = list()
 			//MUTAGEN (with no creatine or spaceacillin) = New Effect
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.05) && prob(mutatechance))
 				log += "<br />[timestamp()] Effect Mutation (Mutagen in [incubator])"
-				effectmutate(body != null)
+				var/focused_effect = (can_focus_effect && effect_being_focused)
+				effectmutate(body != null, focused_effect)
 				if (dish)
 					if(dish.info && dish.analysed)
 						dish.info = "OUTDATED : [dish.info]"
@@ -711,8 +723,8 @@ var/global/list/disease2_list = list()
 
 /datum/disease2/disease/proc/roll_antigen(var/list/factors = list())
 	if (factors.len <= 0)
-		antigen = list(pick(all_antigens))
-		antigen |= pick(all_antigens)
+		antigen = list(pick(all_antigens - special_antigens))
+		antigen |= pick(all_antigens - special_antigens)
 	else
 		var/selected_first_antigen = pick(
 			factors[ANTIGEN_BLOOD];ANTIGEN_BLOOD,
@@ -734,13 +746,15 @@ var/global/list/disease2_list = list()
 
 
 //Major Mutations
-/datum/disease2/disease/proc/effectmutate(var/inBody=FALSE)
+/datum/disease2/disease/proc/effectmutate(var/inBody=FALSE, var/specific_effect)
 	clean_global_log()
 	subID = rand(0,9999)
 	var/list/randomhexes = list("7","8","9","a","b","c","d","e")
 	var/colormix = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	color = BlendRGB(color,colormix,0.25)
 	var/i = rand(1, effects.len)
+	if(specific_effect)
+		i = specific_effect
 	var/datum/disease2/effect/e = effects[i]
 	var/datum/disease2/effect/f
 	if (inBody)//mutations that occur directly in a body don't cause helpful symptoms to become deadly instantly.
@@ -786,7 +800,7 @@ var/global/list/disease2_list = list()
 
 
 /datum/disease2/disease/proc/getcopy()
-	var/datum/disease2/disease/disease = new /datum/disease2/disease("")
+	var/datum/disease2/disease/disease = new src.type("")
 	disease.form=form
 	disease.log=log
 	disease.origin=origin
@@ -908,3 +922,7 @@ var/global/list/virusDB = list()
 	v.fields["danger"] = "Undetermined"
 	virusDB["[uniqueID]-[subID]"] = v
 	return 1
+
+// Override with additional checks if needed.
+/datum/disease2/disease/proc/CanInfect(var/mob/living/body)
+	return TRUE

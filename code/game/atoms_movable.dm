@@ -410,7 +410,7 @@
 		airflow_speed = 0
 		airflow_time = 0
 		if(src.throwing)
-			src.throw_impact(Obstacle)
+			src.throw_impact(Obstacle, null, usr) // TODO: Find a way to pass the speed. Or remove the speed parameter.
 			src.throwing = 0
 		if(Obstacle)
 			Obstacle.Bumped(src)
@@ -567,7 +567,7 @@
 					throwing = 0
 					. = 0
 
-/atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
+/atom/movable/proc/throw_at(atom/target, range, speed, override = TRUE, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
 	set waitfor = FALSE
 	if(!target || !src)
 		return 0
@@ -1100,9 +1100,6 @@
 			sleep(3)
 			for(var/client/C in clients)
 				C.images -= hitmarker
-
-/atom/movable/proc/make_invisible(var/source_define, var/time, var/include_clothing)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
-	return invisibility || alpha <= 1	//already invisible
 
 /atom/movable/proc/break_all_tethers()	//Breaks all tethers
 	if(current_tethers)

@@ -130,7 +130,7 @@
 				M.visible_message("<b>[M]</b> busts out some [dancemoves] moves!")
 		if(2)
 			if(prob(15))
-				M.visible_message("<b>[M]</b> [pick("jiggles their hips", "rotates their hips", "gyrates their hips", "taps their foot", "dances to an imaginary song", "jiggles their legs", "snaps their fingers")]")
+				M.visible_message("<b>[M]</b> [pick("jiggles their hips.", "rotates their hips.", "gyrates their hips.", "taps their foot.", "dances to an imaginary song.", "jiggles their legs.", "snaps their fingers.")]")
 
 
 // WAS: /datum/bioEffect/chav
@@ -157,6 +157,7 @@
 /datum/dna/gene/disability/swedish/New()
 	..()
 	block=SWEDEBLOCK
+	speech_filter = new /datum/speech_filter/swedish
 
 /datum/dna/gene/disability/swedish/OnSay(var/mob/M, var/datum/speech/speech)
 	// svedish!

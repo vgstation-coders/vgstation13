@@ -276,7 +276,7 @@
 
 /datum/rune_spell/raisestructure/proc/proximity_check()
 	var/obj/effect/rune/R = spell_holder
-	if (locate(/obj/structure/cult) in range(R.loc,1))
+	if (locate(/obj/structure/cult) in range(R.loc,0))
 		abort(RITUALABORT_BLOCKED)
 		return FALSE
 
@@ -297,7 +297,8 @@
 	var/list/choices = list(
 		list("Altar", "radial_altar", "The nexus of a cult base. Lets you commune with Nar-Sie, conjure soul gems, and keep tabs on the cult's members and activities over the station."),
 		list("Spire", "radial_spire", "Allows all cultists in the level to communicate with each others using :x"),
-		list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience.")
+		list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience."),
+		list("Pylon", "radial_pylon", "Provides some light in the surrounding area, and has some use in rituals.")
 	)
 	var/structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
 
@@ -317,7 +318,11 @@
 			spawntype = /obj/structure/cult/spire
 		if("Forge")
 			spawntype = /obj/structure/cult/forge
+		if("Pylon")
+			spawntype = /obj/structure/cult/pylon
 
+	if(!spell_holder)
+		return
 	loc_memory = spell_holder.loc
 	contributors.Add(user)
 	update_progbar()
@@ -986,7 +991,7 @@ var/list/converted_minds = list()
 			if ("Always","Yes")
 				conversion.icon_state = "rune_convert_good"
 				to_chat(activator, "<span class='sinister'>The ritual immediately stabilizes, \the [victim] appears eager help prepare the festivities.</span>")
-				to_chat(victim, "<span class='sinister'>YOU HAVE BEEN WAITING FOR US. OUR CULT WELCOMES YOU</span>")
+				cult.send_flavour_text_accept(victim, activator)
 				success = CONVERSION_ACCEPT
 				conversion_delay = 30
 			if ("No","???","Never")
@@ -1026,7 +1031,7 @@ var/list/converted_minds = list()
 				to_chat(activator, "<span class='sinister'>This mindless creature will be sacrificed.</span>")
 				success = CONVERSION_MINDLESS
 			if ("Overcrowded")
-				to_chat(victim, "<span class='sinister'>EXCEPT...THERE ARE NO VACANT SEATS LEFT.</span>")
+				to_chat(victim, "<span class='sinister'>EXCEPT...THERE ARE NO VACANT SEATS LEFT!</span>")
 				success = CONVERSION_OVERCROWDED
 				conversion_delay = 30
 
@@ -1081,6 +1086,7 @@ var/list/converted_minds = list()
 					qdel(H)
 				convert(convertee, converter)
 				conversion.icon_state = ""
+				TriggerCultRitual(/datum/bloodcult_ritual/conversion, converter, list("victim" = convertee))
 				flick("rune_convert_success",conversion)
 				message_admins("BLOODCULT: [key_name(convertee)] has been converted by [key_name(converter)].")
 				log_admin("BLOODCULT: [key_name(convertee)] has been converted by [key_name(converter)].")
@@ -1374,7 +1380,7 @@ var/list/confusion_victims = list()
 	var/hallucination_radius=25
 
 /datum/rune_spell/confusion/cast(var/duration = rune_duration)
-	new /obj/effect/cult_ritual/confusion(spell_holder,duration,hallucination_radius)
+	new /obj/effect/cult_ritual/confusion(spell_holder,duration,hallucination_radius, null, activator)
 	qdel(spell_holder)
 
 /datum/rune_spell/confusion/cast_talisman()//talismans have the same range, but the effect lasts shorter.
@@ -1392,7 +1398,7 @@ var/list/confusion_victims = list()
 	var/duration = 5
 	var/hallucination_radius=25
 
-/obj/effect/cult_ritual/confusion/New(turf/loc,var/duration=300,var/radius=25,var/mob/specific_victim=null)
+/obj/effect/cult_ritual/confusion/New(turf/loc,var/duration=300,var/radius=25,var/mob/specific_victim=null, var/culprit)
 	..()
 	//Alright, this is a pretty interesting rune, first of all we prepare the fake cult floors & walls that the victims will see.
 	var/turf/T = get_turf(src)
@@ -1461,10 +1467,14 @@ var/list/confusion_victims = list()
 			C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
 
 	spawn(10)
+		var/ritual_victim_count
 		for(var/mob/living/carbon/C in victims)
 			var/new_victim = 0
 			if (!(C in confusion_victims))
 				new_victim = 1
+				//if(C.client && C.stat == CONSCIOUS)
+				if(C.stat == CONSCIOUS)
+					ritual_victim_count++
 				C.overlay_fullscreen("blindblind", /obj/abstract/screen/fullscreen/blind)
 			C.update_fullscreen_alpha("blindblind", 255, 0)
 			C.update_fullscreen_alpha("blindblack", 0, 10)
@@ -1473,9 +1483,11 @@ var/list/confusion_victims = list()
 			if (C.client)
 				var/list/my_hallucinated_stuff = hallucinated_turfs.Copy()
 				for(var/mob/living/L in range(T,25))//All mobs in a large radius will look like monsters to the victims.
-					if (L == C || !("cult" in L.static_overlays))
+					if (L == C)
 						continue//the victims still see themselves as humans (or whatever they are)
-					my_hallucinated_stuff.Add(L.static_overlays["cult"])
+					var/image/override_overlay = image(icon = 'icons/mob/animal.dmi', loc = L, icon_state = pick("faithless","forgotten","otherthing"))
+					override_overlay.override = TRUE
+					my_hallucinated_stuff.Add(override_overlay)
 				if (!new_victim)
 					my_hallucinated_stuff.Add(confusion_victims[C])
 					C.client.images.Remove(confusion_victims[C])//removing the images from client.images after adding them to my_hallucinated_stuff
@@ -1500,6 +1512,8 @@ var/list/confusion_victims = list()
 							C.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
 							sleep(15)
 							C.clear_fullscreen("blindwhite", animate = 0)
+		if(culprit && ritual_victim_count > 0)
+			TriggerCultRitual(/datum/bloodcult_ritual/sow_confusion, culprit, list("victimcount" = ritual_victim_count))
 		while (confusion_victims.len > 0)//if the ritual atom stops existing while people are still confused, weird shit can occurs such as people remaining blinded forever.
 			sleep(10 SECONDS)
 		qdel(src)
@@ -1529,9 +1543,11 @@ var/list/confusion_victims = list()
 	var/effect_range=7
 
 /datum/rune_spell/deafmute/cast(var/deaf_duration = deaf_rune_duration, var/mute_duration = mute_rune_duration)
+	var/ritual_victim_count = 0
 	for(var/mob/living/M in range(effect_range,get_turf(spell_holder)))
 		if (iscultist(M))
 			continue
+		ritual_victim_count += 1
 		M.overlay_fullscreen("deafborder", /obj/abstract/screen/fullscreen/deafmute_border)//victims see a red overlay fade in-out for a second
 		M.update_fullscreen_alpha("deafborder", 100, 5)
 		M.Deafen(deaf_duration)
@@ -1547,7 +1563,8 @@ var/list/confusion_victims = list()
 			M.update_fullscreen_alpha("deafborder", 0, 5)
 			sleep(8)
 			M.clear_fullscreen("deafborder", animate = 0)
-
+	if(activator && ritual_victim_count > 0)	
+		TriggerCultRitual(/datum/bloodcult_ritual/silence_lambs, activator, list("victimcount" = ritual_victim_count))
 	qdel(spell_holder)
 
 /datum/rune_spell/deafmute/cast_talisman()
@@ -1684,7 +1701,8 @@ var/list/confusion_victims = list()
 
 	for(var/mob/living/L in shocked)
 		new /obj/effect/cult_ritual/reveal(L.loc, L, shocked[L])
-		to_chat(L, "<span class='danger'>The shock of having occult symbols suddenly revealed to you leaves you temporarily unable to move or talk.</span>")
+		TriggerCultRitual(/datum/bloodcult_ritual/reveal_truth, activator, list("shocked" = shocked))
+		to_chat(L, "<span class='danger'>You feel a terrifying shock resonate within your body as the hidden runes are revealed!</span>")
 		L.update_fullscreen_alpha("shockborder", 100, 5)
 		spawn(8)
 			L.update_fullscreen_alpha("shockborder", 0, 5)
@@ -1851,7 +1869,7 @@ var/list/confusion_victims = list()
 
 	M.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	M.apply_vision_overrides()
-	anim(target = M, a_icon = 'icons/effects/160x160.dmi', a_icon_state = "rune_seer", lay = ABOVE_OBJ_LAYER, offX = -WORLD_ICON_SIZE*2, offY = -WORLD_ICON_SIZE*2, plane = OBJ_PLANE, invis = INVISIBILITY_OBSERVER, alph = 200, sleeptime = talisman_duration)
+	anim(target = M, a_icon = 'icons/effects/160x160.dmi', a_icon_state = "rune_seer", lay = ABOVE_OBJ_LAYER, offX = -WORLD_ICON_SIZE*2, offY = -WORLD_ICON_SIZE*2, plane = OBJ_PLANE, invis = INVISIBILITY_OBSERVER, alph = 200, sleeptime = talisman_duration, animate_movement = TRUE)
 	new /obj/effect/cult_ritual/seer(activator,activator,null,TRUE, talisman_duration)
 	qdel(src)
 
@@ -2036,7 +2054,7 @@ var/list/seer_rituals = list()
 	activator.put_in_hands(BT)
 	if(iscultist(target))
 		to_chat(target, "<span class='notice'>Robes and gear of the followers of Nar-Sie manifests around your body. You feel empowered.</span>")
-	else 
+	else
 		to_chat(target, "<span class='warning'>Robes and gear of the followers of Nar-Sie manifests around your body. You feel sickened.</span>")
 	to_chat(activator, "<span class='notice'>A [BT] materializes in your hand, you may use it to instantly swap back into your stored clothing.</span>")
 	qdel(src)
@@ -2495,7 +2513,7 @@ var/list/seer_rituals = list()
 	playsound(T, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
 	spawn(10)
 		playsound(T, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
-		new /obj/effect/bloodcult_jaunt(T,null,destination,T)
+		new /obj/effect/bloodcult_jaunt(T,null,destination,T, activator = activator)
 		flick("cult_jaunt_land",landing_animation)
 
 /datum/rune_spell/portalentrance/midcast_talisman(var/mob/add_cultist)

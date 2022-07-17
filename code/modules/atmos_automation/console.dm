@@ -54,7 +54,7 @@
 		icon_state += "b"
 
 	// Powered
-	else if(stat & NOPOWER)
+	else if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = initial(icon_state)
 		icon_state += "0"
 	else if(on)

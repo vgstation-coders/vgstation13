@@ -5,7 +5,7 @@
 	icon_state = "hoff"
 	name = "Air Scrubber"
 	desc = "Has a valve and pump attached to it."
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 
 	level				= 1
 
@@ -77,7 +77,7 @@
 
 	icon_state = prefix + "off"
 
-	if (node1 && on && !(stat & (NOPOWER|BROKEN)))
+	if (node1 && on && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 		var/state = ""
 		if (scrubbing)
 			state = "on"
@@ -157,7 +157,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/process()
 	. = ..()
 	CHECK_DISABLED(scrubbers)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if (!node1)
 		return // Let's not shut it off, for now.
@@ -280,7 +280,7 @@
 
 
 /obj/machinery/atmospherics/unary/vent_scrubber/receive_signal(datum/signal/signal)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command") || (signal.data["type"] && signal.data["type"] != "scrubber"))
 		return 0

@@ -41,6 +41,7 @@ var/datum/controller/gameticker/ticker
 
 	var/explosion_in_progress
 	var/station_was_nuked
+	var/no_life_on_station
 	var/revolutionary_victory //If on, Castle can be voted if the conditions are right
 
 	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1) //Seems to be totally unused?
@@ -60,6 +61,8 @@ var/datum/controller/gameticker/ticker
 		path = "sound/music/aprilfools/"
 	else if(SNOW_THEME)
 		path = "sound/music/xmas/"
+	else if(map.nameShort == "castle")
+		path = "sound/music/castle/"
 	var/list/filenames = flist(path)
 	for(var/filename in filenames)
 		if(copytext(filename, length(filename)) == "/")
@@ -122,6 +125,8 @@ var/datum/controller/gameticker/ticker
 	theme.update_icon()
 
 /datum/controller/gameticker/proc/StopThematic()
+	if(!theme)
+		return
 	theme.playing=0
 	theme.update_music()
 	theme.update_icon()
@@ -302,25 +307,12 @@ var/datum/controller/gameticker/ticker
 	cinematic.mouse_opacity = 0
 	cinematic.screen_loc = "1,0"
 
-	var/obj/structure/bed/temp_buckle = new(src)
-	//Incredibly hackish. It creates a bed within the gameticker (lol) to stop mobs running around
-	if(station_missed)
-		for(var/mob/living/M in living_mob_list)
-			M.locked_to = temp_buckle				//buckles the mob so it can't do anything
-			if(M.client)
-				M.client.screen += cinematic	//show every client the cinematic
-	else	//nuke kills everyone on the station to prevent "hurr-durr I survived"
-		for(var/mob/living/M in living_mob_list)
-			M.locked_to = temp_buckle
-			if(M.client)
-				M.client.screen += cinematic
-
-			if(!(M.z))	//inside a crate or something
-				var/turf/T = get_turf(M)
-				if(T && T.z==map.zMainStation)	//we don't use M.death(0) because it calls a for(/mob) loop and
-					M.nuke_act()
-			else if(M.z == map.zMainStation) //on the station.
-				M.nuke_act()
+	for(var/mob/M in player_list)
+		if(M.client)
+			M.client.screen += cinematic	//show every client the cinematic
+		if (istype(M,/mob/living/carbon/human))
+			var/mob/living/carbon/human/C = M
+			C.apply_radiation(rand(50, 250),RAD_EXTERNAL)
 
 	//Now animate the cinematic
 	switch(station_missed)
@@ -342,10 +334,7 @@ var/datum/controller/gameticker/ticker
 
 
 		if(2)	//nuke was nowhere nearby	//TODO: a really distant explosion animation
-			sleep(50)
 			world << sound('sound/effects/explosionfar.ogg')
-
-
 		else	//station was destroyed
 			if( mode && !override )
 				override = mode.name
@@ -369,16 +358,35 @@ var/datum/controller/gameticker/ticker
 					world << sound('sound/effects/explosionfar.ogg')
 					cinematic.icon_state = "summary_selfdes"
 
+	if(cinematic)
+		qdel(cinematic)		//end the cinematic
+
+/datum/controller/gameticker/proc/station_nolife_cinematic(var/override = null)
+	if( cinematic )
+		return	//already a cinematic in progress!
+
+	for (var/datum/html_interface/hi in html_interfaces)
+		hi.closeAll()
+
+	//initialise our cinematic screen object
+	cinematic = new(src)
+	cinematic.icon = 'icons/effects/station_explosion.dmi'
+	cinematic.icon_state = "station_nolife"
+	cinematic.plane = HUD_PLANE
+	cinematic.mouse_opacity = 0
+	cinematic.screen_loc = "1,0"
+
+	//actually turn everything off
+	power_failure(0)
+
 	//If its actually the end of the round, wait for it to end.
 	//Otherwise if its a verb it will continue on afterwards.
 	sleep(300)
 
 	if(cinematic)
 		qdel(cinematic)		//end the cinematic
-	if(temp_buckle)
-		qdel(temp_buckle)	//release everybody
-	return
 
+	no_life_on_station = TRUE
 
 /datum/controller/gameticker/proc/create_characters()
 	for(var/mob/new_player/player in player_list)
@@ -449,26 +457,12 @@ var/datum/controller/gameticker/ticker
 
 		spawn
 			declare_completion()
-
 			gameend_time = world.time / 10
-			if(config.map_voting)
-				//testing("Vote picked [chosen_map]")
-				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)
+			if(!vote.map_paths)
+				vote.initiate_vote("map","The Server", popup = 1)
 				var/options = jointext(vote.choices, " ")
 				feedback_set("map vote choices", options)
 
-			else
-				var/list/maps = get_votable_maps()
-				var/list/choices=list()
-				for(var/key in maps)
-					choices.Add(key)
-				var/mapname=pick(choices)
-				vote.chosen_map = maps[mapname] // Hack, but at this point I could not give a shit.
-				watchdog.chosen_map = mapname
-				log_game("Server chose [watchdog.chosen_map]!")
-
-
-		spawn(50)
 			if (station_was_nuked)
 				feedback_set_details("end_proper","nuke")
 				if(!delay_end && !watchdog.waiting)
@@ -481,7 +475,7 @@ var/datum/controller/gameticker/ticker
 			end_credits.on_round_end()
 
 			if(blackbox)
-				if(config.map_voting)
+				if(player_list.len)
 					spawn(restart_timeout + 1)
 						blackbox.save_all_data_to_sql()
 				else
@@ -490,8 +484,8 @@ var/datum/controller/gameticker/ticker
 			stat_collection.Process()
 
 			if (watchdog.waiting)
-				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [config.map_voting ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
-				if(config.map_voting)
+				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [player_list.len ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
+				if(player_list.len)
 					sleep(restart_timeout) //waiting for a mapvote to end
 				if(!delay_end)
 					watchdog.signal_ready()
@@ -509,7 +503,6 @@ var/datum/controller/gameticker/ticker
 			else
 				to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")
 				delay_end = 2
-
 	return 1
 
 /datum/controller/gameticker/proc/init_PDAgames_leaderboard()
@@ -542,7 +535,7 @@ var/datum/controller/gameticker/ticker
 	if(!ooc_allowed)
 		to_chat(world, "<B>The OOC channel has been automatically re-enabled!</B>")
 		ooc_allowed = TRUE
-	scoreboard()
+	score.main()
 	return 1
 
 /datum/controller/gameticker/proc/bomberman_declare_completion()
@@ -644,15 +637,27 @@ var/datum/controller/gameticker/ticker
 				to_chat(R, R.connected_ai?"<b>You have synchronized with an AI. Their name will be stated shortly. Other AIs can be ignored.</b>":"<b>You are not synchronized with an AI, and therefore are not required to heed the instructions of any unless you are synced to them.</b>")
 			R.lawsync()
 
-	//Toggle lightswitches on in occupied departments
+	//Toggle lightswitches and lamps on in occupied departments
 	var/discrete_areas = list()
 	for(var/mob/living/carbon/human/H in player_list)
 		var/area/A = get_area(H)
 		if(!(A in discrete_areas)) //We've already added their department
 			discrete_areas += get_department_areas(H)
+	CHECK_TICK
 	for(var/area/DA in discrete_areas)
 		for(var/obj/machinery/light_switch/LS in DA)
 			LS.toggle_switch(1)
+			break
+		for(var/obj/item/device/flashlight/lamp/L in DA)
+			L.toggle_onoff(1)
+	CHECK_TICK
+	//Toggle lights without lightswitches
+	//with better area organization, a lot of this headache can be limited
+	for(var/area/A in areas - discrete_areas)
+		if(!A.requires_power || !A.haslightswitch)
+			for(var/obj/machinery/light/L in A)
+				L.seton(1)
+	CHECK_TICK
 
 // -- Tag mode!
 

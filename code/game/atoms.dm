@@ -95,14 +95,34 @@ var/global/list/ghdel_profiling = list()
 					contents.Add(new_value)
 					return 1
 
-/atom/proc/shake_animation(pixelshiftx = 3, pixelshifty = 3, duration = 0.2 SECONDS)
+
+//pixelshift - max pixels to shift on each shake
+//speed - The speed of each shake
+//loop - How many shakes to perform
+//Total shaking time is equal to speed * loops
+/atom/proc/shake_animation(pixelshiftx = 3, pixelshifty = 3, speed = 0.2 SECONDS, loops = 3)
+	set waitfor = 0
 	var/initialpixelx = pixel_x
 	var/initialpixely = pixel_y
-	var/shiftx = rand(-pixelshiftx,pixelshiftx)
-	var/shifty = rand(-pixelshifty,pixelshifty)
-	animate(src, pixel_x = pixel_x + shiftx, pixel_y = pixel_y + shifty, time = 0.2, loop = duration)
-	pixel_x = initialpixelx
-	pixel_y = initialpixely
+	var/shakedirections = 0
+	while(shakedirections < loops)
+		if(!src)
+			return
+
+		//pick random values to shift to, exclude the initial position
+		var/shiftx = rand(1,pixelshiftx)
+		var/shifty = rand(1,pixelshifty)
+		if(prob(50))
+			shiftx = -shiftx
+		if(prob(50))
+			shifty = -shifty
+
+		animate(src, pixel_x = pixel_x + shiftx, pixel_y = pixel_y + shifty, time = speed)
+		shakedirections = shakedirections + 1
+		sleep(speed)
+		pixel_x = initialpixelx
+		pixel_y = initialpixely
+
 
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x
@@ -147,6 +167,7 @@ var/global/list/ghdel_profiling = list()
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
 				M.take_organ_damage(10)
+	INVOKE_EVENT(src, /event/throw_impact, "user" = user)
 
 /atom/Destroy()
 	if(reagents)
@@ -456,6 +477,7 @@ its easier to just keep the beam vertical.
 			to_chat(user, "<a href='?src=\ref[src];bug=\ref[bug]'>There's something hidden in there.</a>")
 		else if(isobserver(user) || prob(100 / (distance + 2)))
 			to_chat(user, "There's something hidden in there.")
+	INVOKE_EVENT(src, /event/examined, "user" = user)
 
 /atom/Topic(href, href_list)
 	. = ..()
@@ -515,7 +537,7 @@ its easier to just keep the beam vertical.
 	return
 
 //Called on every object in a shuttle which rotates
-/atom/proc/shuttle_rotate(var/angle)
+/atom/proc/map_element_rotate(var/angle)
 	change_dir(turn(src.dir, -angle))
 
 	if(canSmoothWith()) //Smooth the smoothable
@@ -535,7 +557,7 @@ its easier to just keep the beam vertical.
 /atom/proc/singularity_pull()
 	return
 
-/atom/proc/emag_act()
+/atom/proc/emag_act(var/mob/user)
 	return
 
 /atom/proc/slime_act()
@@ -544,6 +566,16 @@ its easier to just keep the beam vertical.
 /atom/proc/supermatter_act(atom/source, severity)
 	qdel(src)
 	return 1
+
+//user: The mob that is suiciding
+//damagetype: The type of damage the item will inflict on the user
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
+//Output a creative message and then return the damagetype done
+/atom/proc/suicide_act(var/mob/living/user)
+	return
 
 // Returns TRUE if it's been handled, children should return if parent has already handled
 /atom/proc/hitby(var/atom/movable/AM)

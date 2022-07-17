@@ -21,6 +21,7 @@
 	mech_flags = MECH_SCAN_FAIL
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=4"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	surgerysound = 'sound/items/scalpel.ogg'
 
 	var/mob/living/simple_animal/shade/shade = null
 
@@ -68,6 +69,9 @@
 			if(old_cult?.is_sacrifice_target(M.mind))
 				to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 				return
+
+
+
 
 			var/datum/soul_capture/capture_datum = new()
 			capture_datum.init_datum(user, M, src)
@@ -169,6 +173,7 @@
 	item_state = "shard-soulstone"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shards.dmi', "right_hand" = 'icons/mob/in-hand/right/shards.dmi')
 	sharpness_flags = 0
+	surgerysound = 'sound/items/scalpel.ogg'
 
 /obj/item/soulstone/gem/throw_impact(var/atom/hit_atom, var/speed, var/mob/user)
 	..()
@@ -286,22 +291,18 @@
 					capture_soul(user,new_target.client,target)
 		else if(humanTarget)
 			//aw shit, our target is a brain/headless human, let's try and locate the head.
-			if(!humanTarget.decapitated || (humanTarget.decapitated.loc == null))
+			var/obj/item/organ/external/head/target_head = humanTarget.decapitated?.get()
+			if(!target_head)
 				if (!blade)
 					to_chat(user, "<span class='warning'>\The [receptacle] isn't reacting, looks like their brain has been removed or head has been destroyed.</span>")
 				return
-			else if(istype(humanTarget.decapitated.loc,/mob/living/carbon/human))
-				if (!blade)
-					to_chat(user, "<span class='warning'>\The [receptacle] isn't reacting, looks like their head has been grafted on another body.</span>")
-				return
 			else
-				var/obj/item/organ/external/head/humanHead = humanTarget.decapitated
-				if((humanHead.z != humanTarget.z) || (get_dist(humanTarget,humanHead) > 5))//F I V E   T I L E S
+				if(target_head.z != humanTarget.z || get_dist(humanTarget, target_head) > 5)//F I V E   T I L E S
 					if (!blade)
 						to_chat(user, "<span class='warning'>\The [receptacle] isn't reacting, the head needs to be closer from the body.</span>")
 					return
 				else
-					init_head(receptacle, humanHead, user)
+					init_head(receptacle, target_head, user)
 					return
 
 	else
@@ -343,11 +344,11 @@
 			else
 				to_chat(new_target, "<span class='danger'>You feel your soul getting sucked into \the [receptacle].</span>")
 				to_chat(user, "<span class='rose'>\The [receptacle] reacts to the corpse and starts glowing.</span>")
-				capture_soul(user,new_target.client,humanHead,humanHead.origin_body)
+				capture_soul(user,new_target.client,humanHead,humanHead.origin_body?.get())
 	else
 		to_chat(humanBrainMob, "<span class='danger'>You feel your soul getting sucked into \the [receptacle].</span>")
 		to_chat(user, "<span class='rose'>\The [receptacle] reacts to the corpse and starts glowing.</span>")
-		capture_soul(user,humanBrainMob.client,humanHead,humanHead.origin_body)
+		capture_soul(user, humanBrainMob.client, humanHead, humanHead.origin_body?.get())
 
 /datum/soul_capture/proc/capture_soul(var/mob/living/carbon/user, var/client/targetClient, var/atom/movable/target, var/atom/movable/add_target = null)
 	//user is the guy using the soulstone
@@ -402,7 +403,7 @@
 			else
 				anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 26)
 
-		if(!gem && body.decapitated && (body.decapitated == target))//just making sure we're dealing with the right head
+		if(!gem && body.decapitated?.get() == target)//just making sure we're dealing with the right head
 			new /obj/item/weapon/skull(get_turf(target))
 
 	target.invisibility = 101 //It's not possible to interact with the body normally now, but we don't want to delete it just yet
@@ -642,6 +643,9 @@
 
 	new_construct.real_name = soul.real_name
 	new_construct.name = "[new_construct.real_name] the [construct_class]"
+
+	if(iscultist(user))
+		TriggerCultRitual(ritualtype = /datum/bloodcult_ritual/build_construct, extrainfo = list("perfect" = perfect))
 
 	for(var/atom/A in stone)//we get rid of the empty shade once we've transferred its mind to the construct, so it isn't dropped on the floor when the soulstone is destroyed.
 		qdel(A)

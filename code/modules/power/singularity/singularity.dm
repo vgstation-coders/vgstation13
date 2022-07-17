@@ -1,4 +1,5 @@
-var/list/global_singularity_pool
+var/list/obj/machinery/singularity/global_singularity_pool
+var/list/obj/machinery/singularity/white_hole_candidates
 
 /obj/machinery/singularity
 	name = "gravitational singularity" //Lower case
@@ -10,8 +11,10 @@ var/list/global_singularity_pool
 	layer = SINGULARITY_LAYER
 	plane = EFFECTS_PLANE
 	luminosity = 6
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 
+	var/obj/machinery/singularity/wormhole_out = null
+	var/obj/machinery/singularity/wormhole_in = null
 	var/current_size = 1
 	var/allowed_size = 1
 	var/contained = 1 //Are we going to move around?
@@ -31,6 +34,8 @@ var/list/global_singularity_pool
 	appearance_flags = LONG_GLIDE|TILE_MOVER
 	var/chained = 0 //Adminbus chain-grab
 	var/modifier = "" //for memes
+	var/repels = FALSE //For pushing stuff out the other end
+	var/list/speech_messages = list() //Time is occuring in random pockets. The laws of causality no longer apply.
 
 /obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
 	//CARN: admin-alert for chuckle-fuckery.
@@ -52,6 +57,59 @@ var/list/global_singularity_pool
 	if(!global_singularity_pool)
 		global_singularity_pool = list()
 	global_singularity_pool += src
+	if(!white_hole_candidates)
+		white_hole_candidates = list()
+	if(!repels && !(src in white_hole_candidates))
+		white_hole_candidates += src
+	if(prob(1) && white_hole_candidates.len > 1)
+		link_a_wormhole()
+
+/obj/machinery/singularity/proc/link_a_wormhole()
+	var/obj/machinery/singularity/other = null
+	do
+		other = pick(white_hole_candidates)
+	while(white_hole_candidates.len > 1 && other == src)
+	if(other && other != src)
+		if(prob(50))
+			link_wormhole(other)
+		else
+			other.link_wormhole(src)
+
+/obj/machinery/singularity/proc/link_wormhole(var/obj/machinery/singularity/other)
+	if(other)
+		visible_message("<span class='notice'>[src] pulsates as a distinctive [get_area(other) ? "[get_area(other)]": "place"] becomes visible.</span>")
+		other.visible_message("<span class='notice'>[other] pulsates as a distinctive [get_area(src) ? "[get_area(src)]": "place"] becomes visible.</span>")
+		other.name = "white hole"
+		other.desc = "Every action has an equal and opposite reaction. A black hole sucks time and matter out of the universe, a white hole returns it."
+		other.repels = TRUE
+		other.energy = src.energy
+		other.color= list(-1,0,0,
+					0,-1,0,
+					0,0,-1,
+					1,1,1) //Invert it
+		wormhole_out = other
+		other.wormhole_in = src
+		if(other in white_hole_candidates)
+			white_hole_candidates -= other
+
+/obj/machinery/singularity/proc/unlink_wormholes()
+	if(wormhole_out)
+		visible_message("<span class='warning'>[get_area(wormhole_out) ? "[get_area(wormhole_out)]": "The strange place"] is no longer visible as [src] closes its path to it.</span>")
+		wormhole_out.name = initial(wormhole_out.name)
+		wormhole_out.desc = initial(wormhole_out.desc)
+		wormhole_out.repels = FALSE
+		wormhole_out.color= initial(wormhole_out.color)
+		if(!(wormhole_out in white_hole_candidates))
+			white_hole_candidates += wormhole_out
+		wormhole_out = null
+	if(wormhole_in)
+		visible_message("<span class='warning'>[get_area(wormhole_in) ? "[get_area(wormhole_in)]": "The strange place"] is no longer visible as [src] closes its path to it.</span>")
+		name = initial(name)
+		repels = FALSE
+		color = initial(color)
+		if(!(src in white_hole_candidates))
+			white_hole_candidates += src
+		wormhole_in = null
 
 /obj/machinery/singularity/attack_hand(mob/user as mob)
 	consume(user)
@@ -119,6 +177,12 @@ var/list/global_singularity_pool
 					L.forceMove(get_turf(user))
 					animate(L, alpha = 255, time = 3 SECONDS)
 
+/obj/machinery/singularity/Hear(var/datum/speech/speech, var/rendered_message="")
+	if(repels && ismob(speech.speaker))
+		var/mob/M = speech.speaker
+		if(M.dna) // Wait a minute... I missed a discussion!
+			speech_messages[M.dna] = speech.message // We all did
+
 /obj/machinery/singularity/process()
 	dissipate()
 	check_energy()
@@ -129,6 +193,13 @@ var/list/global_singularity_pool
 		if(prob(event_chance)) //Chance for it to run a special event TODO: Come up with one or two more that fit.
 			event()
 	eat()
+	if(repels && speech_messages.len) // I've never seen one before, no one has, but I'm guessing it's a white hole.
+		for(var/mob/M in viewers(src)) // A white hole?
+			if((M.dna in speech_messages) && prob(10))
+				if(prob(90)) // So that thing's spewing time? Back into the universe?
+					M.say(speech_messages[M.dna])
+				else
+					M.say("So what is it?") //Only joking
 
 /obj/machinery/singularity/attack_ai() //To prevent AIs from gibbing themselves when they click on one.
 	return
@@ -339,35 +410,23 @@ var/list/global_singularity_pool
 	return 1
 
 /obj/machinery/singularity/proc/eat()
-	// This is causing issues. Do not renable - N3X
-	// Specifically, eat() builds up in the background from taking too long and eventually crashes the singo.
-	//set background = BACKGROUND_ENABLED
-	//var/ngrabbed=0
-	//Note on June 27, 2019. Apparently it IS being used, so... go wild!
+	var/ngrabbed=0
 	var/turf/T = get_turf(src)
 	for(var/z0 in GetOpenConnectedZlevels(T))
 		var/z_dist = abs(z0 - T.z)
 		if(z_dist <= grav_pull)
-			for(var/atom/X in orange(grav_pull - z_dist, locate(T.x,T.y,z0)))
+			for(var/atom/X in orange(grav_pull - z_dist, z0 == T.z ? src : locate(T.x,T.y,z0)))
 				if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 					continue
 				if (current_size > 11 && X.type == /turf/unsimulated/wall/supermatter) // galaxy end ongoing
 					continue
-				// Caps grabbing shit at 100 items.
-				//if(ngrabbed==100)
-					//warning("Singularity eat() capped at [ngrabbed]")
-					//return
-				//if(!isturf(X))//a stage five singularity has a grav pull of 10, that means it covers 441 turfs (21x21) at every ticks.
-					//ngrabbed++
 				try
-					var/dist = get_dist(X, src)
-					var/obj/machinery/singularity/S = src
-					if(!istype(src))
-						return
-					if(dist > consume_range)
-						X.singularity_pull(S, current_size)
+					var/dist = get_z_dist(X, src)
+					if(dist > consume_range || repels)
+						X.singularity_pull(src, current_size, repels)
 					else if(dist <= consume_range)
-						consume(X)
+						if(consume(X))
+							ngrabbed++
 				catch(var/exception/e)
 					error("Singularity eat() caught exception:")
 					error(e)
@@ -376,12 +435,9 @@ var/list/global_singularity_pool
 						throw e //So ALL debug information is sent to the runtime log
 
 					continue
+	if(ngrabbed)
+		investigation_log(I_SINGULO, "at ([src.x],[src.y],[src.z]) ([get_area(src)]) eat() ate [ngrabbed] item[ngrabbed != 1 ? "s" : ""].")
 
-	//for(var/turf/T in trange(grav_pull, src)) // TODO: Create a similar trange for orange to prevent snowflake of self check.
-	//	consume(T)
-
-	//testing("Singularity eat() ate [ngrabbed] items.")
-	return
 /*
  * Singulo optimization.
  * Jump out whenever we've made a decision.
@@ -405,9 +461,15 @@ var/list/global_singularity_pool
 			newsea.ChangeTurf(/turf/unsimulated/wall/supermatter)
 
 /obj/machinery/singularity/proc/consume(const/atom/A)
-	var/gain = A.singularity_act(current_size,src)
-	src.energy += gain
-	return
+	if(repels && !(istype(A,/obj/item/bluespace_crystal)))
+		return
+	if(wormhole_out && !(istype(A,/obj/item/bluespace_crystal)))
+		var/turf/T = get_turf(wormhole_out)
+		do_teleport(A, T)
+	else
+		var/gain = A.singularity_act(current_size,src)
+		src.energy += gain
+		return gain
 
 /*
  * Some modifications have been done in here. The Singularity's movement is now biased instead of truly random
@@ -656,9 +718,11 @@ var/list/global_singularity_pool
 */ //Fuck you centcomm
 
 /obj/machinery/singularity/Destroy()
+	unlink_wormholes()
 	..()
 	power_machines -= src
 	global_singularity_pool -= src
+	white_hole_candidates -= src
 
 /obj/machinery/singularity/bite_act(mob/user)
 	consume(user)
@@ -935,3 +999,12 @@ var/list/global_singularity_pool
 /obj/machinery/singularity/scrungulartiy
 	name = "grabibational scrungulartiy"
 	modifier = "scrung_"
+
+/obj/machinery/singularity/soutgularity
+	name = "white hole"
+	desc = "Every action has an equal and opposite reaction. A black hole sucks time and space out of the universe, a white hole returns it."
+	repels = TRUE
+	color= list(-1,0,0,
+				0,-1,0,
+				0,0,-1,
+				1,1,1) //Invert it

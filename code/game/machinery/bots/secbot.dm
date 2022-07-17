@@ -9,7 +9,7 @@
 	density = 0
 	anchored = 0
 	health = 25
-	maxhealth = 25
+	maxHealth = 25
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 //	weight = 1.0E7
@@ -49,6 +49,11 @@
 	var/secbot_assembly_type = /obj/item/weapon/secbot_assembly/
 
 	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
+
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/emag,
+		/datum/malfhack_ability/oneuse/overload_quiet
+	)
 
 /obj/machinery/bot/secbot/power_change()
 	..()
@@ -209,7 +214,7 @@ Auto Patrol: []"},
 	if(threatlevel > 0)
 		set_target(H)
 
-/obj/machinery/bot/secbot/Emag(mob/user)
+/obj/machinery/bot/secbot/emag_act(mob/user)
 	..()
 	if(open && !locked)
 		if(user)
@@ -567,7 +572,7 @@ Auto Patrol: []"},
 	icon_state = "cheapsky0"
 	icon_initial = "cheapsky"
 	health = 15
-	maxhealth = 15
+	maxHealth = 15
 //Cheapsky Construction
 
 /obj/item/weapon/secbot_assembly/cheapsky

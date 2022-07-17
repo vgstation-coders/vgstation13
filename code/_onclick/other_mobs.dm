@@ -6,38 +6,9 @@
 */
 /mob/living/carbon/human/UnarmedAttack(var/atom/A, var/proximity, var/params)
 	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
-
 	if(a_intent == "hurt" && !is_pacified() && A.loc != src)
-		var/special_attack_result = SPECIAL_ATTACK_SUCCESS
-		switch(attack_type) //Special attacks - kicks, bites
-			if(ATTACK_KICK)
-				if(can_kick(A))
-
-					delayNextAttack(10)
-
-					special_attack_result = A.kick_act(src)
-					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //kick_act returns that value if there's no interaction specified
-						after_special_attack(A, attack_type, special_attack_result)
-						return
-
-					delayNextAttack(-10) //This is only called when the kick fails
-				else
-					set_attack_type() //Reset attack type
-
-			if(ATTACK_BITE)
-				if(can_bite(A))
-
-					delayNextAttack(10)
-
-					special_attack_result = A.bite_act(src)
-					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //bite_act returns that value if there's no interaction specified
-						after_special_attack(A, attack_type, special_attack_result)
-						return
-
-					delayNextAttack(-10) //This is only called when the bite fails
-				else
-					set_attack_type() //Reset attack type
-
+		if(handleSpecialAttack(A))
+			return
 	// Special glove functions:
 	// If the gloves do anything, have them return 1 to stop
 	// normal attack_hand() here.
@@ -48,8 +19,9 @@
 		delayNextAttack(10)
 
 	if(!can_use_hand_or_stump())
-		to_chat(src, "You try to move your arm but nothing happens. Need a hand?")
+		to_chat(src, "<span class = 'notice'>You try to move your arm but nothing happens. Need a hand?</span>")
 		return
+
 	if(src.can_use_hand())
 		A.attack_hand(src, params, proximity)
 	else
@@ -59,6 +31,32 @@
 		var/obj/O = A
 		if(O.material_type)
 			O.material_type.on_use(O, src, null)
+
+/mob/living/carbon/human/proc/handleSpecialAttack(var/atom/A)
+	var/special_attack_result = SPECIAL_ATTACK_SUCCESS
+	switch(attack_type) //Special attacks - kicks, bites
+		if(ATTACK_KICK)
+			if(can_kick(A))
+				delayNextAttack(10)
+				special_attack_result = A.kick_act(src)
+				if(special_attack_result != SPECIAL_ATTACK_CANCEL) //kick_act returns that value if there's no interaction specified
+					after_special_attack(A, attack_type, special_attack_result)
+					return TRUE
+				delayNextAttack(-10) //This is only called when the kick fails
+			else
+				set_attack_type() //Reset attack type
+
+		if(ATTACK_BITE)
+			if(can_bite(A))
+				delayNextAttack(10)
+				special_attack_result = A.bite_act(src)
+				if(special_attack_result != SPECIAL_ATTACK_CANCEL) //bite_act returns that value if there's no interaction specified
+					after_special_attack(A, attack_type, special_attack_result)
+					return TRUE
+				delayNextAttack(-10) //This is only called when the bite fails
+			else
+				set_attack_type() //Reset attack type
+	return FALSE
 
 /atom/proc/attack_hand(mob/user as mob, params, var/proximity)
 	return
@@ -150,6 +148,26 @@
 	else
 		for(var/mob/O in viewers(ML, null))
 			O.show_message("<span class='danger'>[src] has attempted to bite [ML]!</span>", 1)
+
+//Humans being able to bite and kick while restrained, either generally or only when not being pulled or grabbed, according to config.human_captive_kickbite.
+/mob/living/carbon/human/RestrainedClickOn(var/atom/A)
+	if(a_intent != I_HURT || !attack_type || A.loc == src || !Adjacent(A))
+		return
+	if(is_pacified())
+		to_chat(src, "<span class = 'notice'>Violence is not the answer, you remind yourself.</span>")
+		return
+	if(!config.human_captive_kickbite)
+		if(pulledby || grabbed_by.len || locked_to)
+			var/restrained_message = "<span class = 'notice'>You're [locked_to ? "buckled to [locked_to]" : "being restrained"]!"
+			switch(attack_type)
+				if(ATTACK_KICK)
+					restrained_message += " Need a leg up?"
+				if(ATTACK_BITE)
+					restrained_message += " Bitten off more than you can chew?"
+			restrained_message += "</span>"
+			to_chat(src, restrained_message)
+			return
+	handleSpecialAttack(A)
 
 /*
 	Aliens

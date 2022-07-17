@@ -7,7 +7,7 @@
 	desc = "A display case for prized possessions. It tempts you to kick it."
 	density = 1
 	anchored = 1
-	var/health = 30
+	health = 30
 	var/obj/item/occupant = null
 	var/destroyed = 0
 	var/locked = 0

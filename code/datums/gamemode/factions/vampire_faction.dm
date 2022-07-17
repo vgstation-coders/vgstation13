@@ -23,7 +23,7 @@
 	if(newname)
 		if (newname == "Unknown" || newname == "floor" || newname == "wall" || newname == "rwall" || newname == "_")
 			to_chat(V.antag.current, "That name is reserved.")
-		name = "The [newname] Vampire Clan."
+		name = "The [newname] Vampire Clan"
 
 
 /datum/faction/vampire/OnPostSetup()

@@ -24,10 +24,6 @@
 
 	light_color = LIGHT_COLOR_BLUE
 
-/obj/machinery/computer/med_data/attack_ai(user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/med_data/attack_paw(user as mob)
 	return attack_hand(user)
 
@@ -569,7 +565,7 @@
 	return
 
 /obj/machinery/computer/med_data/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 

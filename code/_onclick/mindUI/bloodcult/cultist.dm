@@ -10,6 +10,7 @@
 	sub_uis_to_spawn = list(
 		/datum/mind_ui/bloodcult_cultist_panel,
 		/datum/mind_ui/bloodcult_left_panel,
+		/datum/mind_ui/bloodcult_right_panel,
 		)
 	display_with_parent = TRUE
 	y = "BOTTOM"
@@ -144,6 +145,239 @@
 
 	move_whole_ui = TRUE
 
+
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//					BLOODCULT - RIGHT PANEL						  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/bloodcult_right_panel
+	uniqueID = "Cultist Right Panel"
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman,
+		)
+
+	display_with_parent = TRUE
+	x = "RIGHT"
+
+//////////////////////
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "rune_back"
+	offset_x = -4
+	invisibility = 101 	// Invisible by default
+
+	var/allow_alien = FALSE
+	var/hovering = FALSE
+	var/required_tattoo
+	var/image/spell_overlay
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/proc/CanAppear()
+	if(!required_tattoo)
+		return TRUE
+	var/mob/living/M = GetUser()
+	if(isalien(M) && !allow_alien)
+		return FALSE
+	if(M.checkTattoo(required_tattoo))
+		return TRUE
+	return FALSE
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/Appear()
+	if(!CanAppear())
+		Hide()
+		return
+	invisibility = 0
+	UpdateIcon(1)
+	if(!mouse_opacity)
+		mouse_opacity = 1
+		flick("rune_appear",src)
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/Hide()
+	if (mouse_opacity)
+		mouse_opacity = 0
+		overlays.len = 0
+		if (spell_overlay)
+			animate(spell_overlay, alpha = 0, time = 2)
+			overlays += spell_overlay
+		icon_state = "blank"	
+		flick("rune_hide",src)
+	spawn(10)
+		invisibility = 101
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/UpdateIcon()
+	icon_state = "rune_back"
+	overlays.len = 0
+
+	if (hovering)
+		overlays += "select"
+
+	overlays += spell_overlay
+
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/StartHovering()
+	hovering = TRUE
+	UpdateIcon()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/StopHovering()
+	hovering = FALSE
+	UpdateIcon()
+
+/////////////////////////////////////////
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman
+	name = "Skin Talisman"
+	offset_y = -76
+	required_tattoo = TATTOO_RUNESTORE
+
+	var/obj/item/weapon/talisman/talisman
+
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/UpdateIcon(var/appear = FALSE)
+	icon_state = "rune_back"
+	overlays.len = 0
+
+	if (hovering)
+		overlays += "select"
+
+	if(talisman)  
+		spell_overlay = image(talisman.icon,src,"dagger")
+		spell_overlay.appearance = talisman.appearance
+		overlays += spell_overlay
+	else	
+		spell_overlay = image('icons/ui/bloodcult/32x32.dmi',src,"talisman_empty")
+		
+	if (appear && spell_overlay)
+		spell_overlay.alpha = 0
+		animate(spell_overlay, alpha = 255, time = 5)
+	overlays += spell_overlay
+
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/Click()
+	var/mob/living/M = GetUser()
+
+	if(talisman)
+		talisman.trigger(M)
+	else if(istype(M.held_items[M.active_hand], /obj/item/weapon/talisman))
+		var/obj/item/weapon/talisman/T = M.held_items[M.active_hand]
+		if(T.spell_type)
+			M.drop_item(T, force_drop = 1)
+			T.linked_ui = src
+			T.forceMove(M)
+			talisman = T
+	UpdateIcon()
+
+
+/////////////////////////////////////////
+
+
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger
+	name = "Blood Dagger"
+	offset_y = -112
+	required_tattoo = TATTOO_DAGGER
+
+	allow_alien = TRUE
+	var/obj/item/weapon/melee/blood_dagger/dagger 
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger/UpdateIcon(var/appear = FALSE)
+	icon_state = "rune_back"
+	overlays.len = 0
+
+	if (hovering)
+		overlays += "select"
+
+	var/mob/living/L = GetUser()
+	if(isalien(L))
+		offset_y = -105
+
+	if(!dagger)  // Dagger not pulled out by cultist.
+		var/blood_color = DEFAULT_BLOOD
+		if (isalien(L))
+			blood_color = ALIEN_BLOOD
+		else if (ishuman(L))
+			var/mob/living/carbon/human/H = L
+			if (H.species)
+				blood_color = H.species.blood_color
+		spell_overlay = image('icons/ui/bloodcult/32x32.dmi',src,"dagger")
+		spell_overlay.color = blood_color
+	else	// Dagger has been drawn
+		spell_overlay = image('icons/ui/bloodcult/32x32.dmi',src,"dagger_gone")
+
+	if (appear && spell_overlay)
+		spell_overlay.alpha = 0
+		animate(spell_overlay, alpha = 255, time = 5)
+	overlays += spell_overlay
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger/Click()
+
+	var/mob/living/carbon/user = GetUser()
+
+	if(!dagger)  // dagger not pulled out
+
+		if (user.occult_muted())
+			to_chat(user, "<span class='warning'>You try grasping your blood but you can't quite will it into the shape of a dagger.</span>")
+			return
+		var/list/data = use_available_blood(user, 5)
+		if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
+			return 0
+		var/dagger_color = DEFAULT_BLOOD
+		var/datum/reagent/blood/source = data["blood"]
+		if (source.data["blood_colour"])
+			dagger_color = source.data["blood_colour"]
+		
+		var/good_hand
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+		
+			
+			if(H.can_use_hand(H.active_hand))
+				good_hand = H.active_hand
+			else
+				for(var/i = 1 to H.held_items.len)
+					if(H.can_use_hand(i))
+						good_hand = i
+						break
+		else   // cultist is a monkey or alien
+			if(user.can_use_hands())
+				good_hand = user.active_hand
+
+		if(good_hand)
+			user.drop_item(user.held_items[good_hand], force_drop = 1)
+			var/obj/item/weapon/melee/blood_dagger/BD = new (user)
+			BD.originator = user
+			BD.linked_ui = src
+			dagger = BD
+			if (dagger_color != DEFAULT_BLOOD)
+				BD.icon_state += "-color"
+				BD.item_state += "-color"
+				BD.color = dagger_color
+			user.put_in_hand(good_hand, BD)
+			user.visible_message("<span class='warning'>\The [user] squeezes the blood in their hand, and it takes the shape of a dagger!</span>",
+				"<span class='warning'>You squeeze the blood in your hand, and it takes the shape of a dagger.</span>")
+			playsound(user, 'sound/weapons/bloodyslice.ogg', 30, 0,-2)
+
+	else
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			var/datum/reagent/blood/B = get_blood(H.vessel)
+			if (B && !(H.species.flags & NO_BLOOD))
+				to_chat(user, "<span class='notice'>You sheath \the [dagger] back inside your body[dagger.stacks ? ", along with the stolen blood" : ""].</span>")
+				H.vessel.add_reagent(BLOOD, 5 + dagger.stacks * 5)
+				H.vessel.update_total()
+			else
+				to_chat(user, "<span class='notice'>You sheath \the [dagger] inside your body, but the blood fails to find vessels to occupy.</span>")
+		else 
+			to_chat(user, "<span class='notice'>You sheath \the [dagger] inside your body.</span>")
+		dagger.absorbed = 1
+		playsound(user, 'sound/weapons/bloodyslice.ogg', 30, 0, -2)
+		qdel(dagger)
+
+	UpdateIcon()
+
 ////////////////////////////////////////////////////////////////////
 //																  //
 //					BLOODCULT - LEFT PANEL						  //
@@ -153,6 +387,7 @@
 /datum/mind_ui/bloodcult_left_panel
 	uniqueID = "Cultist Left Panel"
 	element_types_to_spawn = list(
+	//	/obj/abstract/mind_ui_element/bloodcult_veil_weakness,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_role,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_help,
 		)
@@ -286,6 +521,31 @@
 	var/datum/mind_ui/bloodcult_help/tooltip = locate() in parent.subUIs
 	if(tooltip)
 		tooltip.Display()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/bloodcult_veil_weakness
+	name = "Veil Weakness"
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "veil_gauge"
+	offset_x = 6
+	offset_y = 16
+
+/obj/abstract/mind_ui_element/bloodcult_veil_weakness/UpdateIcon()
+	var/mob/M = GetUser()
+	var/datum/role/cultist/C = iscultist(M)
+	if(!istype(C))
+		return
+	overlays.len = 0
+	overlays += String2Image("[veil_weakness]")
+	if(veil_weakness >= 100)
+		offset_x = 0
+	else if(veil_weakness >= 10)
+		offset_x = 3
+	else
+		offset_x = 6
+	UpdateUIScreenLoc()
+
 
 
 ////////////////////////////////////////////////////////////////////
@@ -476,6 +736,8 @@
 	mouse_opacity = 1
 
 	move_whole_ui = TRUE
+
+
 
 ////////////////////////////////////////////////////////////////////
 //																  //

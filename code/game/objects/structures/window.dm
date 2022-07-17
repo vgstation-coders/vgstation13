@@ -18,7 +18,7 @@ var/list/one_way_windows
 	layer = SIDE_WINDOW_LAYER
 	pressure_resistance = 4*ONE_ATMOSPHERE
 	anchored = 1
-	var/health = 10 //This window is so bad blowing on it would break it, sucks for it
+	health = 10 //This window is so bad blowing on it would break it, sucks for it
 	var/d_state = WINDOWLOOSEFRAME //Normal windows have one step (unanchor), reinforced windows have three
 	var/shardtype = /obj/item/weapon/shard
 	var/reinforcetype = /obj/item/stack/rods
@@ -39,8 +39,8 @@ var/list/one_way_windows
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
 	var/disperse_coeff = 0.95
 	var/is_fulltile = FALSE
-/obj/structure/window/New(loc)
 
+/obj/structure/window/New(loc)
 	..(loc)
 	flow_flags |= ON_BORDER | KEEP_DIR
 	setup_border_dummy()
@@ -52,6 +52,7 @@ var/list/one_way_windows
 	if(one_way)
 		one_way = !one_way
 		toggle_one_way()
+
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)

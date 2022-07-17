@@ -102,33 +102,3 @@
 			feedback_add_details("admin_verb","DprocessVote")
 
 	message_admins("Admin [key_name_admin(usr)] is debugging the [controller] controller.")
-
-/client/proc/rigvote()
-	set category = "Debug"
-	set name = "Rig Vote"
-	set desc = "easily rig an ongoing vote"
-
-	if(!vote)
-		return
-	var/winner
-	if(vote.choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")
-		winner = input(usr,"Choose a result.","Choose a result.", vote.choices[1]) as null|anything in vote.choices
-		if(!winner)
-			return
-		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
-	else
-		if(vote.ismapvote)
-			var/all_maps = get_all_maps()
-			winner = input(usr, "Pick a map.") as null|anything in all_maps
-			if(!winner)
-				return
-			var/path = all_maps[winner]
-			vote.ismapvote[winner] = path
-			to_chat(usr,"<span class='info'>Set path as [path]. Hope that's right...</span>")
-		else
-			winner = input(usr,"Add a result.","Add a result","") as text|null
-		if(!winner)
-			return
-		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
-	message_admins("Admin [key_name_admin(usr)] rigged the vote for [winner].")
-	log_admin("Admin [key_name(usr)] rigged the vote for [winner]. Choices were [vote.choices.Join(", ")]")

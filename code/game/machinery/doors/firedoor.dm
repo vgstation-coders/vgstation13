@@ -61,12 +61,16 @@ var/global/list/alert_overlays_global = list()
 	desc = "Emergency air-tight shutter, capable of sealing off breached areas."
 	icon = 'icons/obj/doors/DoorHazard.dmi'
 	icon_state = "door_open"
-	req_one_access = list(access_atmospherics, access_engine_equip, access_paramedic)
+	req_one_access = list(access_atmospherics, access_engine_minor, access_paramedic)
 	opacity = 0
 	density = 0
 	layer = BELOW_TABLE_LAYER
+
+	open_plane = OBJ_PLANE
 	open_layer = BELOW_TABLE_LAYER
-	closed_layer = ABOVE_DOOR_LAYER
+
+	closed_plane = ABOVE_HUMAN_PLANE
+	closed_layer = CLOSED_FIREDOOR_LAYER
 
 	dir = 2
 
@@ -92,6 +96,12 @@ var/global/list/alert_overlays_global = list()
 		"hot",
 		"cold"
 	)
+
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 
 /obj/machinery/door/firedoor/New(loc, new_dir)
 	. = ..()
@@ -354,12 +364,19 @@ var/global/list/alert_overlays_global = list()
 			flick("door_spark", src)
 			sleep(6)
 			force_open(user, C)
-			sleep(8)
 		blocked = TRUE
 		update_icon()
 		return
 
 	do_interaction(user, C)
+
+/obj/machinery/door/firedoor/emag_ai(mob/living/silicon/ai/A)
+	if(density)
+		flick("door_spark", src)
+		sleep(6)
+		open()
+	blocked = TRUE
+	update_icon()
 
 /obj/machinery/door/firedoor/attack_animal(var/mob/living/simple_animal/M as mob)
 	M.delayNextAttack(8)
@@ -451,6 +468,7 @@ var/global/list/alert_overlays_global = list()
 		return
 	..()
 	latetoggle()
+	plane = open_plane
 	layer = open_layer
 	var/area/A = get_area(src)
 	ASSERT(istype(A)) // This worries me.
@@ -494,6 +512,7 @@ var/global/list/alert_overlays_global = list()
 		return
 	..()
 	latetoggle()
+	plane = closed_plane
 	layer = closed_layer
 
 /obj/machinery/door/firedoor/update_icon()
@@ -580,7 +599,7 @@ var/global/list/alert_overlays_global = list()
 			update_icon()
 
 /obj/machinery/door/firedoor/proc/latetoggle()
-	if(operating || stat & NOPOWER || !nextstate)
+	if(operating || stat & (FORCEDISABLE|NOPOWER) || !nextstate)
 		return
 
 	switch(nextstate)

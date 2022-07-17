@@ -70,32 +70,32 @@
 				H.adjustToxLoss(round(H.species.cold_level_1 - breath.temperature))
 				H.fire_alert = max(H.fire_alert, 1)
 		else
-			switch(breath.temperature)
-				if(H.species.cold_level_1 to H.species.heat_level_1)
-					return
-				if(-INFINITY to H.species.cold_level_3)
-					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_3, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
-					H.fire_alert = max(H.fire_alert, 1)
+			if(breath.temperature in H.species.cold_level_1 to H.species.heat_level_1)
+				return
 
-				if(H.species.cold_level_3 to H.species.cold_level_2)
-					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_2, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
-					H.fire_alert = max(H.fire_alert, 1)
+			else if(breath.temperature <= H.species.cold_level_3)
+				H.apply_damage(COLD_GAS_DAMAGE_LEVEL_3, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
+				H.fire_alert = max(H.fire_alert, 1)
 
-				if(H.species.cold_level_2 to H.species.cold_level_1)
-					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_1, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
-					H.fire_alert = max(H.fire_alert, 1)
+			else if(breath.temperature <= H.species.cold_level_2)
+				H.apply_damage(COLD_GAS_DAMAGE_LEVEL_2, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
+				H.fire_alert = max(H.fire_alert, 1)
 
-				if(H.species.heat_level_1 to H.species.heat_level_2)
-					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_1, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
-					H.fire_alert = max(H.fire_alert, 2)
+			else if(breath.temperature <= H.species.cold_level_1)
+				H.apply_damage(COLD_GAS_DAMAGE_LEVEL_1, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
+				H.fire_alert = max(H.fire_alert, 1)
 
-				if(H.species.heat_level_2 to H.species.heat_level_3)
-					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_2, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
-					H.fire_alert = max(H.fire_alert, 2)
+			else if(breath.temperature >= H.species.heat_level_3)
+				H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_3, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
+				H.fire_alert = max(H.fire_alert, 2)
 
-				if(H.species.heat_level_3 to INFINITY)
-					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_3, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
-					H.fire_alert = max(H.fire_alert, 2)
+			else if(breath.temperature >= H.species.heat_level_2)
+				H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_2, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
+				H.fire_alert = max(H.fire_alert, 2)
+
+			else if(breath.temperature >= H.species.heat_level_1)
+				H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_1, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
+				H.fire_alert = max(H.fire_alert, 2)
 
 /datum/organ/internal/lungs/process()
 	..()

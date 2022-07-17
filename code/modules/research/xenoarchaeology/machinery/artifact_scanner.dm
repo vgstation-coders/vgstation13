@@ -15,7 +15,9 @@
 	update_icon()
 
 /obj/machinery/artifact_scanpad/Destroy()
+	analyser_console.owned_scanner = null
 	analyser_console = null
+	harvester_console.owned_scanner = null
 	harvester_console = null
 	..()
 
@@ -25,7 +27,7 @@
 
 /obj/machinery/artifact_scanpad/update_icon()
 	icon_state = "xenoarch_scanner0"
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	if (analyser_console?.scan_in_progress)

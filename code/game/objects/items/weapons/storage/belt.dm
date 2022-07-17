@@ -264,7 +264,7 @@
 		"/obj/item/weapon/storage/evidencebag",
 		"/obj/item/device/detective_scanner",
 		"/obj/item/binoculars",
-		"/obj/item/weapon/storage/box/surveillance",
+		"/obj/item/device/radio/phone/surveillance",
 		"/obj/item/device/handtv",
 		"/obj/item/device/camera_film",
 		"/obj/item/weapon/photo",
@@ -487,8 +487,9 @@
 	desc = "A belt used to hold most janitorial supplies."
 	icon_state = "janibelt"
 	item_state = "janibelt"
-	storage_slots = 8
+	storage_slots = 14
 	fits_max_w_class = 5
+	max_combined_w_class = 35
 	can_only_hold = list(
 		"/obj/item/weapon/grenade/chem_grenade",
 		"/obj/item/device/lightreplacer",
@@ -513,7 +514,14 @@
 		"/obj/item/weapon/reagent_containers/glass/bottle",
 		"/obj/item/weapon/reagent_containers/syringe",
 		"/obj/item/weapon/reagent_containers/dropper",
+		"/obj/item/weapon/reagent_containers/spray",
+		"/obj/item/weapon/reagent_containers/glass/bucket",
 		"/obj/item/device/analyzer/plant_analyzer",
+		"/obj/item/tool/wirecutters/clippers",
+		"/obj/item/weapon/reagent_containers/spray/plantbgone",
+		"/obj/item/weapon/reagent_containers/spray/bugzapper",
+		"/obj/item/weapon/scythe",
+		"/obj/item/weapon/pickaxe/shovel/spade",
 		"/obj/item/weapon/minihoe",
 		"/obj/item/weapon/hatchet",
 		"/obj/item/weapon/bee_net",

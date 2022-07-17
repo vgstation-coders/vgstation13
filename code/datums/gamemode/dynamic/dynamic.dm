@@ -46,6 +46,8 @@ var/stacking_limit = 90
 	var/list/living_antags = list()
 	var/list/dead_players = list()
 	var/list/list_observers = list()
+	var/last_time_of_population = 0
+	var/last_time_of_late_shuttle_call = 0
 
 	var/latejoin_injection_cooldown = 0
 	var/midround_injection_cooldown = 0
@@ -147,8 +149,7 @@ var/stacking_limit = 90
 
 /datum/gamemode/dynamic/GetScoreboard()
 
-	dat += "<h2>Dynamic Mode - Roundstart Threat = <font color='red'>[threat_level]%</font>, Midround Threat = <font color='red'>[midround_threat_level]%</font></h2><a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
-
+	dat += "<h2>Dynamic Mode - Roundstart Threat = <font color='red'>[threat_level]%</font>, Midround Threat = <font color='red'>[midround_threat_level]%</font></h2>"
 	if (executed_rules.len > 0)
 		for (var/datum/dynamic_ruleset/DR in executed_rules)
 			var/ruletype = ""
@@ -160,6 +161,7 @@ var/stacking_limit = 90
 				ruletype = "midround"
 			dat += "([ruletype]) - <b>[DR.name]</b>[DR.calledBy ? " (called by [DR.calledBy])" : ""]<br>"
 			rules_text += "[ruletype] - **[DR.name]** [DR.calledBy ? " (called by [DR.calledBy])" : ""]"
+		dat += "<a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
 	else
 		dat += "(extended)"
 		rules_text += "None"
@@ -167,8 +169,8 @@ var/stacking_limit = 90
 	. = ..()
 
 /datum/gamemode/dynamic/send2servers()
-	send2mainirc("A round of [name] has ended - [living_players.len] survivors, [dead_players.len] ghosts. Final crew score: [score["crewscore"]]. ([score["rating"]])")
-	send2maindiscord("A round of **[name]** has ended - **[living_players.len]** survivors, **[dead_players.len]** ghosts. Final crew score: **[score["crewscore"]]**. ([score["rating"]])")
+	send2mainirc("A round of [name] has ended - [living_players.len] survivors, [dead_players.len] ghosts. Final crew score: [score.crewscore]. ([score.rating])")
+	send2maindiscord("A round of **[name]** has ended - **[living_players.len]** survivors, **[dead_players.len]** ghosts. Final crew score: **[score.crewscore]**. ([score.rating])")
 	send2mainirc("Dynamic mode Roundstart Threat: [starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""], Midround Threat: [midround_starting_threat][(midround_starting_threat!=midround_threat_level)?" ([midround_threat_level])":""], rulesets: [jointext(rules_text, ", ")].")
 	send2maindiscord("Dynamic mode Roundstart Threat: **[starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""]**, Midround Threat: **[midround_starting_threat][(midround_starting_threat!=midround_threat_level)?" ([midround_threat_level])":""]**, rulesets: [jointext(rules_text, ", ")]")
 
@@ -499,7 +501,7 @@ var/stacking_limit = 90
 			if (latejoin_rule.persistent)
 				current_rules += latejoin_rule
 			. = TRUE
-	for (var/datum/dynamic_ruleset/latejoin/non_executed in drafted_rules) 
+	for (var/datum/dynamic_ruleset/latejoin/non_executed in drafted_rules)
 		non_executed.assigned.Cut()
 
 
@@ -657,6 +659,14 @@ var/stacking_limit = 90
 					living_players.Add(M)//yes we're adding a ghost to "living_players", so make sure to properly check for type when testing midround rules
 					continue
 			dead_players.Add(M)//Players who actually died (and admins who ghosted, would be nice to avoid counting them somehow)
+
+	if(living_players.len) //if anybody is around and alive in the current round
+		last_time_of_population = world.time
+	else if(last_time_of_population && world.time - last_time_of_population > 1 HOURS) //if enough time has passed without it
+		ticker.station_nolife_cinematic()
+	if(world.time > (7 HOURS + 40 MINUTES) && world.time - last_time_of_late_shuttle_call > 1 HOURS && emergency_shuttle.direction == 0) // 8 hour work shift, with time for shuttle to arrive and leave. If recalled, do every hour
+		shuttle_autocall("Shift due to end")
+		last_time_of_late_shuttle_call = world.time
 
 /datum/gamemode/dynamic/proc/GetInjectionChance()
 	var/chance = 0

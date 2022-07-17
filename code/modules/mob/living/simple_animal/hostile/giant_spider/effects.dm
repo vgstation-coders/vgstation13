@@ -6,7 +6,7 @@
 	desc = "It's stringy and sticky."
 	anchored = 1
 	density = 0
-	var/health = 15
+	health = 15
 	gender = NEUTER
 	w_type=NOT_RECYCLABLE
 	mouse_opacity = 1

@@ -5,7 +5,7 @@ var/global/datum/watchdog/watchdog = new
 	var/const/update_signal_file="data/UPDATE_READY.txt"
 	var/const/server_signal_file="data/SERVER_READY.txt"
 	var/const/restart_signal_file="data/FORCE_RESTART.txt"
-	var/chosen_map
+	var/map_path
 
 /datum/watchdog/proc/check_for_update()
 	if(waiting)
@@ -22,7 +22,7 @@ var/global/datum/watchdog/watchdog = new
 	testing("[time_stamp()] - Watchdog has sent the 'ready' signal. Bye!")
 	var/signal = file(server_signal_file)
 	fdel(signal)
-	signal << chosen_map
+	signal << map_path
 
 /client/proc/watchdog_force_restart()
 	set name = "Panic Restart"

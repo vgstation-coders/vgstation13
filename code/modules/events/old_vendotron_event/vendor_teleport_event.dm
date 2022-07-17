@@ -15,44 +15,45 @@
 	teleportVendor()
 
 /datum/event/old_vendotron_teleport/proc/teleportVendor()
-	var/turf/vendT = vendSpawnDecide()
-	fancyEntrance(vendT)
+	var/atom/chosenVend = vendSpawnDecide()
+	fancyEntrance(chosenVend)
 
 /datum/event/old_vendotron_teleport/proc/vendSpawnDecide()
-	var/list/dontSpawnHere = list(
-		/area/derelictparts,
-		/area/solar,
-		/area/assembly,	//Because I don't know what that is
-		/area/shuttle/administration/station,
-		/area/ai_monitored/storage/emergency,
-		/area/arrival,
-		/area/shuttle/escape_pod1,
-		/area/shuttle/escape_pod2,
-		/area/shuttle/escape_pod3,
-		/area/shuttle/escape_pod4,
-		/area/shuttle/escape_pod5,
-		/area/shuttle/prison/,
+	var/static/list/canReplace = list(
+		/obj/machinery/vending/coffee,
+		/obj/machinery/vending/snack,
+		/obj/machinery/vending/cola,
+		/obj/machinery/vending/cigarette,
+		/obj/machinery/vending/discount,
+		/obj/machinery/vending/groans,
+		/obj/machinery/vending/nuka,
+		/obj/machinery/vending/sovietsoda,
+		/obj/machinery/vending/zamsnax,
 	)
-	var/list/vendSpawnAreas = the_station_areas - dontSpawnHere
-	var/area/toSpawn = pick(vendSpawnAreas)
-	toSpawn = locate(toSpawn)
-	var/list/turf/simulated/floor/vendSpawn = list()
-	for(var/turf/simulated/floor/F in toSpawn)
-		if(!F.has_dense_content())
-			vendSpawn.Add(F)
-	if(!vendSpawn.len)	//Copy paste from infestation
-		message_admins("Old Vendotron event has failed! Could not find any viable turfs in [toSpawn].")
+	var/list/possibleVends = list()
+	for(var/obj/machinery/vending/aVendor in all_machines)
+		if(!is_type_in_list(aVendor, canReplace))
+			continue
+		if(aVendor.loc.z != map.zMainStation)
+			continue
+		possibleVends.Add(aVendor)
+	if(!possibleVends.len)	//Copy paste from infestation
+		message_admins("Old Vendotron event has failed! Could not find any appropriate vending machines to replace.")
 		announceWhen = -1
 		endWhen = 0
 		return
-	return pick(vendSpawn)
+	var/toSpawn = pick(possibleVends)
+	return toSpawn
 
-/datum/event/old_vendotron_teleport/proc/fancyEntrance(var/turf/vendT)
-	var/obj/effect/old_vendotron_entrance/E = new /obj/effect/old_vendotron_entrance(vendT)
-	E.aestheticEntrance()
+/datum/event/old_vendotron_teleport/proc/fancyEntrance(var/obj/machinery/vending/vendToReplace)
+	var/obj/effect/old_vendotron_entrance/vendPortal = new /obj/effect/old_vendotron_entrance(vendToReplace.loc)
+	vendPortal.aestheticEntrance()
 	playsound(E, 'sound/effects/eleczap.ogg', 100, 1)
-	spawn(4 SECONDS)
-		var/obj/machinery/vending/old_vendotron/OV = new /obj/machinery/vending/old_vendotron(vendT)
+	spawn(3 SECONDS)
+		var/obj/machinery/vending/old_vendotron/OV = new /obj/machinery/vending/old_vendotron(vendToReplace.loc)
+		if(!vendToReplace.gcDestroyed)
+			vendToReplace.coinbox = null
+			qdel(vendToReplace)
 		playsound(OV, 'sound/effects/coins.ogg', 100, 1)
 
 /obj/effect/old_vendotron_entrance
@@ -70,4 +71,4 @@
 	spawn(3 SECONDS)
 		animate(src, icon_state = "bhole3", transform = matrix()*0.1, time = 3 SECONDS)
 	spawn(35)
-		qdel(E)
+		qdel(src)

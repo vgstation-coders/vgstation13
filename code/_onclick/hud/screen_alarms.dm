@@ -359,16 +359,16 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/robot/apc_hacking
 	icon_state = "hacking"
 	name = "Overriding APC"
-	desc = "You are currently overriding an APC's programming. Click this alert to jump to the APC."
+	desc = "You are currently hacking an APC. Click this alert to jump to the APC."
+	var/obj/machinery/power/apc/apc = null
 
 /obj/abstract/screen/alert/robot/apc_hacking/Click()
 	..()
 	if(!isAI(usr))
 		return
 	var/mob/living/silicon/ai/A = usr
-	if(A.alerts[SCREEN_ALARM_APC_HACKING] == src)
-		if(A.eyeobj && A.malfhacking && A.malfhack)
-			A.eyeobj.forceMove(A.malfhack.loc)
+	if(A.eyeobj)
+		A.eyeobj.forceMove(apc.loc)
 
 /obj/abstract/screen/alert/robot/hacked
 	name = "Hacked"

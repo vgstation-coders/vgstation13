@@ -40,7 +40,7 @@ var/global/list/floorbot_targets=list()
 	density = 0
 	anchored = 0
 	health = 25
-	maxhealth = 25
+	maxHealth = 25
 	auto_patrol = 0		// set to make bot automatically patrol
 	bot_flags = BOT_PATROL|BOT_BEACON|BOT_NOT_CHASING|BOT_SPACEWORTHY|BOT_CONTROL
 	var/amount = 10
@@ -130,7 +130,7 @@ var/global/list/floorbot_targets=list()
 	else
 		. = ..()
 
-/obj/machinery/bot/floorbot/Emag(mob/user as mob)
+/obj/machinery/bot/floorbot/emag_act(mob/user as mob)
 	..()
 	if(open && !locked)
 		if(user)
@@ -327,7 +327,7 @@ var/global/list/floorbot_targets=list()
 			visible_message("<span class='warning'>[src] begins to improve the floor.</span>")
 			repairing = 1
 			spawn(50)
-				F.make_metal_floor(new /obj/item/stack/tile/metal)
+				F.make_tiled_floor(new /obj/item/stack/tile/metal)
 				repairing = 0
 				amount -= 1
 				update_icon()

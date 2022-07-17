@@ -15,10 +15,6 @@
 
 	light_color = LIGHT_COLOR_RED
 
-/obj/machinery/computer/prisoner/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/computer/prisoner/attack_paw(var/mob/user as mob)
 	return
 

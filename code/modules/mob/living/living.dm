@@ -1,15 +1,5 @@
 /mob/living/New()
-	. = ..()
-	generate_static_overlay()
-	if(istype(static_overlays,/list) && static_overlays.len)
-		for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
-			if(MoMMI.can_see_static())
-				if(MoMMI.static_choice in static_overlays)
-					MoMMI.static_overlays.Add(static_overlays[MoMMI.static_choice])
-					MoMMI.client.images.Add(static_overlays[MoMMI.static_choice])
-				else
-					MoMMI.static_overlays.Add(static_overlays["static"])
-					MoMMI.client.images.Add(static_overlays["static"])
+	..()
 
 	if(!species_type)
 		species_type = src.type
@@ -17,17 +7,15 @@
 		meat_amount = size
 
 	immune_system = new (src)
+	oxy_damage_modifier *= (maxHealth / 100) //Scale oxy damage based on the max health of the mob.
+
+/mob/living/create_reagents(const/max_vol)
+	..(max_vol)
+	addicted_chems = new /datum/reagents(max_vol)
+	addicted_chems.my_atom = src
+	tolerated_chems = list()
 
 /mob/living/Destroy()
-	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
-		for(var/image/I in static_overlays)
-			MoMMI.static_overlays.Remove(I) //no checks, since it's either there or its not
-			MoMMI.client.images.Remove(I)
-			qdel(I)
-			I = null
-	if(static_overlays)
-		static_overlays = null
-
 	if(butchering_drops)
 		for(var/datum/butchering_product/B in butchering_drops)
 			butchering_drops -= B
@@ -38,6 +26,9 @@
 		qdel(immune_system)
 		immune_system = null
 
+	if(addicted_chems)
+		qdel(addicted_chems)
+		addicted_chems = null
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -54,12 +45,13 @@
 			size = "huge"
 
 	var/pronoun = "it is"
-	if(src.gender == FEMALE)
-		pronoun = "she is"
-	else if(src.gender == MALE)
-		pronoun = "he is"
-	else if(src.gender == PLURAL)
-		pronoun = "they are"
+	switch(gender)
+		if(FEMALE)
+			pronoun = "she is"
+		if(MALE)
+			pronoun = "he is"
+		if(PLURAL)
+			pronoun = "they are"
 
 	..(user, " [capitalize(pronoun)] [size].", show_name, FALSE)
 	if(meat_taken > 0)
@@ -524,7 +516,7 @@ Thanks.
 /mob/living/proc/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)
 	if(animation)
-		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
+		T.turf_animation('icons/effects/64x64.dmi',"rejuvenate",-16,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = EFFECTS_PLANE)
 
 	// shut down various types of badness
 	toxloss = 0
@@ -566,6 +558,11 @@ Thanks.
 		locked_to.unbuckle()
 	locked_to = initial(src.locked_to)
 	*/
+	if(istype(src, /mob/living/carbon))
+		var/mob/living/carbon/C = src
+		dead_mob_list -= C
+		living_mob_list |= list(C)
+
 	if(istype(src, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = src
 		H.timeofdeath = 0
@@ -1143,42 +1140,36 @@ Thanks.
 		return
 	var/is_hulk = isalienadult(src) || (M_HULK in mutations)
 	var/obj/item/cuffs
-	var/resist_time
+	var/resist_time = 2 MINUTES
 	var/var_to_check // TOOD: Improve this once Lummox releases pointers?
 	var/do_after_callback
 	if(handcuffed)
 		cuffs = handcuffed
-		resist_time = is_hulk ? 5 SECONDS : cuffs.restraint_resist_time
-		if(!resist_time)
-			resist_time = 2 MINUTES //Default
+		resist_time = cuffs.restraint_resist_time
 		var_to_check = "handcuffed"
 	else if(legcuffed)
 		cuffs = legcuffed
 		var/obj/item/weapon/legcuffs/legcuffs = cuffs
-		resist_time = is_hulk ? 5 SECONDS : legcuffs.breakouttime
-		if(!resist_time)
-			resist_time = 2 MINUTES // Default
+		resist_time = legcuffs.breakouttime
 		var_to_check = "legcuffed"
 	else if(mutual_handcuffs)
 		cuffs = mutual_handcuffs
-		resist_time = is_hulk ? 5 SECONDS : 1 MINUTES // 1 minute since it's only one cuff
+		resist_time = cuffs.restraint_resist_time/2 //it's only one cuff
 		var_to_check = "mutual_handcuffs"
 	else if(is_wearing_item(/obj/item/clothing/suit/strait_jacket, slot_wear_suit))
 		cuffs = get_item_by_slot(slot_wear_suit)
-		if(is_hulk)
-			resist_time = 5 SECONDS
-		else
+		if(!is_hulk)
 			do_after_callback = new /callback(GLOBAL_PROC, /proc/strait_jacket_resist_do_after)
-			resist_time = 2 MINUTES // Default
 			var/left_arm = get_organ(LIMB_LEFT_ARM)
 			var/right_arm = get_organ(LIMB_RIGHT_ARM)
 			for(var/datum/organ/external/arm in list(left_arm, right_arm))
 				if(!arm.is_existing() || arm.is_broken())
-					resist_time -= 30 SECONDS
+					resist_time = max(0, resist_time - 30 SECONDS)
 		var_to_check = "wear_suit"
 	else
 		return
-
+	if(is_hulk)
+		resist_time = 5 SECONDS
 	visible_message("<span class='danger'>[src] attempts to [is_hulk ? "break" : "remove"] \the [cuffs]!</span>",
 					"<span class='warning'>You attempt to [is_hulk ? "break" : "remove"] \the [cuffs] (this will take around [resist_time / 10] seconds and you need to stand still).</span>",
 					self_drugged_message="<span class='warning'>You attempt to regain control of your hands (this will take a while).</span>")
@@ -1243,9 +1234,12 @@ Thanks.
 		gib()
 		return(gain)
 
-/mob/living/singularity_pull(S)
+/mob/living/singularity_pull(S, current_size, repel = FALSE)
 	if(!(src.flags & INVULNERABLE))
-		step_towards(src, S)
+		if(!repel)
+			step_towards(src, S)
+		else
+			step_away(src, S)
 
 //shuttle_act is called when a shuttle collides with the mob
 /mob/living/shuttle_act(datum/shuttle/S)
@@ -1275,26 +1269,6 @@ Thanks.
 
 /mob/living/proc/pointToMessage(var/pointer, var/pointed_at)
 	return "<b>\The [pointer]</b> points at <b>\the [pointed_at]</b>."
-
-/mob/living/proc/generate_static_overlay()
-	if(!istype(static_overlays,/list))
-		static_overlays = list()
-	static_overlays.Add(list("static", "blank", "letter", "cult"))
-	var/image/static_overlay = image(getStaticIcon(new/icon(src.icon, src.icon_state)), loc = src)
-	static_overlay.override = 1
-	static_overlays["static"] = static_overlay
-
-	static_overlay = image(getBlankIcon(new/icon(src.icon, src.icon_state)), loc = src)
-	static_overlay.override = 1
-	static_overlays["blank"] = static_overlay
-
-	static_overlay = getLetterImage(src)
-	static_overlay.override = 1
-	static_overlays["letter"] = static_overlay
-
-	static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
-	static_overlay.override = 1
-	static_overlays["cult"] = static_overlay
 
 /mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
@@ -1424,8 +1398,7 @@ Thanks.
 	return 0
 
 /mob/living/nuke_act() //Called when caught in a nuclear blast
-	health = 0
-	stat = DEAD
+	return
 
 /mob/living/proc/turn_into_statue(forever = 0, force)
 	if(!force)
@@ -1732,7 +1705,7 @@ Thanks.
 	stop_pulling()
 	Stun(stun_amount)
 	Knockdown(weaken_amount)
-	score["slips"]++
+	score.slips++
 	return 1
 
 ///////////////////////DISEASE STUFF///////////////////////////////////////////////////////////////////

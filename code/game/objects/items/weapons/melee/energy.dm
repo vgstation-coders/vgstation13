@@ -316,11 +316,11 @@
 			sleep(1)
 
 /obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
+	if(..())
+		return 1
+	if(iscarbon(AM))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(2, 2, 1))
-			M.simple_message("<span class='notice'>You slipped on [src]!</span>",
-				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+		M.Slip(2, 2, 1, slipped_on = src, drugged_message = "<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
 /obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/clumsy_check(mob/living/user)
 	return 0

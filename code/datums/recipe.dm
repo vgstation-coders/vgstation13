@@ -38,7 +38,7 @@
 	var/list/items //List of items needed, items = list(/obj/item/tool/crowbar, /obj/item/weapon/welder)
 	var/result //Result of a complete recipe. result = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 	var/time = 10 SECONDS //Length of time it takes to complete the recipe. In 10ths of a second
-
+	var/priority = 0 //To check which recipe takes priority if they share ingredients
 /*
 	check_reagents function
 	Looks for reagents in the reagent container passed to it, and if this matches what we require.
@@ -120,7 +120,7 @@
 	return:
 		obj: Resulting object.
 */
-/datum/recipe/proc/make_food(var/obj/container)
+/datum/recipe/proc/make_food(var/obj/container, var/mob/user)
 	var/obj/result_obj = new result(container)
 	for(var/obj/O in (container.contents - result_obj))
 		if(O.reagents)
@@ -135,7 +135,7 @@
 			O.reagents.trans_to(result_obj, O.reagents.total_volume)
 		qdel(O)
 	container.reagents.clear_reagents() //Clear all the reagents we haven't transfered, for instance if we need to cook in water
-	score["meals"]++
+	score.meals++
 	return result_obj
 
 

@@ -14,7 +14,7 @@
 	flow_flags = ON_BORDER
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | EMAGGABLE
 	anchored = 1
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
 	pass_flags_self = PASSGLASS
 	var/count_power = 0 //How much power have we produced SO FAR this count?
@@ -27,6 +27,11 @@
 		/obj/item/weapon/stock_parts/capacitor,
 		/obj/item/weapon/stock_parts/capacitor,
 		/obj/item/weapon/stock_parts/console_screen
+	)
+
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
 	)
 
 /obj/machinery/power/treadmill/New()
@@ -80,6 +85,8 @@
 						to_chat(runner,"<span class='warning'>Your legs really hurt!</span>")
 						runner.apply_damage(5, BRUTE, LIMB_LEFT_LEG)
 						runner.apply_damage(5, BRUTE, LIMB_RIGHT_LEG)
+					else
+						//do nothing
 				runner.bodytemperature = max(T0C + 100,cached_temp)
 	else
 		to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")
@@ -110,7 +117,7 @@
 	else
 		disconnect_from_network()
 
-/obj/machinery/power/treadmill/emag()
+/obj/machinery/power/treadmill/emag_act()
 	..()
 	emagged = 1
 	name = "\improper DREADMILL"

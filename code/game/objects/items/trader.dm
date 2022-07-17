@@ -381,7 +381,7 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/clothing/head/helmet/donutgiver/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	if(!..())
 		return CANNOT_EQUIP
-	if(!isjusthuman(M))
+	if(!ishuman(M))
 		to_chat(usr, "<span class='warning'>Your nonhuman DNA is rejected by \the [src].</span>")
 		return CANNOT_EQUIP
 	if(!dna_profile)
@@ -559,7 +559,7 @@ var/global/list/alcatraz_stuff = list(
 /obj/structure/largecrate/secure/magmaw
 	name = "engineering livestock crate"
 	desc = "An access-locked crate containing a magmaw. Handlers are advised to stand back when administering plasma to the animal."
-	req_access = list(access_engine)
+	req_access = list(access_engine_minor)
 	mob_path = /mob/living/simple_animal/hostile/asteroid/magmaw
 	bonus_path = null //originally was /obj/item/stack/sheet/mineral/plasma resulting in immediate FIRE
 
@@ -1373,7 +1373,7 @@ var/global/list/cloudnine_stuff = list(
 	/obj/structure/largecrate/secure/magmaw,
 	/obj/item/wasteos,
 	/obj/item/weapon/storage/toolbox/master,
-	/obj/item/weapon/antiaxe_kit,
+	/obj/item/device/modkit/antiaxe_kit,
 	)
 
 /obj/structure/closet/crate/internals/cloudnine/New()
@@ -1538,7 +1538,7 @@ var/list/decelerators = list()
 	origin_tech = Tc_ENGINEERING + "=4"
 	sharpness = 1
 	force = 6
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 	var/mode = OMNIMODE_TOOL
 
 /obj/item/device/multitool/omnitool/attack_self(mob/user)
@@ -1637,16 +1637,6 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	cant_drop = !cant_drop
 	to_chat(user,"<span class='notice'>You [cant_drop ? "engage" : "disengage"] the safety grip.</span>")
 
-/obj/item/weapon/antiaxe_kit
-	name = "antimatter axe kit"
-	desc = "A matter inverter from the secret labs of the Cloud IX engineering facility. It will turn your ordinary axe into an antimatter axe."
-	icon = 'icons/obj/device.dmi'
-	icon_state = "modkit"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
-	flags = FPRINT
-	siemens_coefficient = 0
-	w_class = W_CLASS_SMALL
-
 /obj/item/weapon/fireaxe/antimatter
 	name = "antimatter fireaxe"
 	desc = "Whatever exotic, entropic material this is made out of, it's definitely not antimatter. Use to inhale gasses and cool them, use again to release and exhale them. It seems to take up curiously little space."
@@ -1742,6 +1732,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	mech_flags = MECH_SCAN_FAIL	//Nip that in the bud
 	var/static/list/illegalChems = list(	//Just a bad idea
 		ADMINORDRAZINE,
+		PROCIZINE,
 		BLOCKIZINE,
 		AUTISTNANITES,
 		XENOMICROBES,

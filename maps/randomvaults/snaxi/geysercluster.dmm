@@ -1,13 +1,65 @@
-"a" = (/obj/structure/geyser/unstable,/turf/unsimulated/floor/snow,/area)
-"e" = (/obj/structure/geyser,/turf/unsimulated/floor/snow,/area)
-"U" = (/obj/structure/geyser/critical,/turf/unsimulated/floor/snow,/area)
-"Y" = (/turf/unsimulated/floor/snow,/area)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/structure/geyser/unstable,
+/turf/unsimulated/floor/snow,
+/area)
+"e" = (
+/obj/structure/geyser,
+/turf/unsimulated/floor/snow,
+/area)
+"U" = (
+/obj/structure/geyser/critical,
+/turf/unsimulated/floor/snow,
+/area)
+"Y" = (
+/turf/unsimulated/floor/snow,
+/area)
 
 (1,1,1) = {"
-aYYYYe
-YYaYYY
-YaUYaY
-YYYYYY
-YYYUYa
-aaYaYY
+a
+Y
+Y
+Y
+Y
+a
+"}
+(2,1,1) = {"
+Y
+Y
+a
+Y
+Y
+a
+"}
+(3,1,1) = {"
+Y
+a
+U
+Y
+Y
+Y
+"}
+(4,1,1) = {"
+Y
+Y
+Y
+Y
+U
+a
+"}
+(5,1,1) = {"
+Y
+Y
+a
+Y
+Y
+Y
+"}
+(6,1,1) = {"
+e
+Y
+Y
+Y
+a
+Y
 "}

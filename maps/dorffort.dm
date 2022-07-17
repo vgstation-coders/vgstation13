@@ -113,7 +113,7 @@
 
 /obj/structure/closet/crate/secure/engisec/PA
 	name = "Particle Accelerator crate"
-	req_access = list(access_engine)
+	req_access = list(access_engine_major)
 /obj/structure/closet/crate/secure/engisec/PA/New()
 	new /obj/structure/particle_accelerator/fuel_chamber(src)
 	new /obj/machinery/particle_accelerator/control_box(src)

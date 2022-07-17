@@ -206,7 +206,7 @@
 			else // More abstract thing
 				new item_type(H.back)
 		// -- Special surival gear for that species
-		if (equip_survival_gear.len)
+		if (islist(equip_survival_gear) && equip_survival_gear.len)
 			if (ispath(equip_survival_gear[my_species]))
 				var/path = equip_survival_gear[my_species]
 				H.equip_or_collect(new path(H.back), slot_in_backpack)
@@ -228,7 +228,7 @@
 
 	else
 		var/obj/item/weapon/storage/box/survival/pack
-		if (equip_survival_gear.len)
+		if (islist(equip_survival_gear) && equip_survival_gear.len)
 			if (ispath(equip_survival_gear[species]))
 				pack = new equip_survival_gear(H)
 				H.put_in_hand(GRASP_RIGHT_HAND, pack)

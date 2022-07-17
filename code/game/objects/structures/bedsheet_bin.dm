@@ -27,11 +27,11 @@ LINEN BINS
 	if(I.is_sharp())
 		cut_time = 60 / I.sharpness
 	if(cut_time)
-		to_chat(user, "<span  class='notice'>You begin cutting the [src].</span>")
+		to_chat(user, "<span  class='notice'>You begin cutting up \the [src].</span>")
 		if(do_after(user, src, cut_time))
 			if(!src)
 				return
-			to_chat(user, "<span  class='notice'>You have cut the [src] into rags.</span>")
+			to_chat(user, "<span  class='notice'>You finish cutting \the [src] into rags.</span>")
 			var/turf/location = get_turf(src)
 			for(var/x=0; x<=8; x++)
 				var/obj/item/weapon/reagent_containers/glass/rag/S = new/obj/item/weapon/reagent_containers/glass/rag/(location)
@@ -44,7 +44,6 @@ LINEN BINS
 //todo: finger prints?
 //todo: more cutting tools?
 //todo: sharp thing code/game/objects/objs.dm
-
 
 /obj/item/weapon/bedsheet/blue
 	icon_state = "sheetblue"
@@ -151,12 +150,12 @@ LINEN BINS
 
 
 /obj/structure/bedsheetbin/update_icon()
-	switch(amount)
-		if(0)
-			icon_state = "linenbin-empty"
-		if(1 to amount / 2)
-			icon_state = "linenbin-half"
-		else				icon_state = "linenbin-full"
+	if(amount == 0)
+		icon_state = "linenbin-empty"
+	else if(amount <= initial(amount) / 2)
+		icon_state = "linenbin-half"
+	else
+		icon_state = "linenbin-full"
 
 
 /obj/structure/bedsheetbin/attackby(obj/item/I as obj, mob/user as mob)

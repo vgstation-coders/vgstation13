@@ -174,6 +174,8 @@
 	usr?.client?.show_popup_menus = FALSE
 
 /obj/abstract/screen/nocontext/MouseExited(location, control, params)
+	if(ismalf(usr))
+		return
 	usr?.client?.show_popup_menus = TRUE
 
 /obj/abstract/screen/gun
@@ -330,8 +332,8 @@
 		if("equip")
 			if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 				return 1
-			if(ishuman(usr))
-				var/mob/living/carbon/human/H = usr
+			if(iscarbon(usr))
+				var/mob/living/carbon/H = usr
 				H.quick_equip()
 
 		if("resist")

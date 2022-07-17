@@ -404,7 +404,7 @@ var/const/POS_HEADER = {"<html>
 
 /obj/machinery/pos/update_icon()
 	overlays = 0
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(logged_in)
 		overlays += image(icon = icon, icon_state = "pos-working")

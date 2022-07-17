@@ -58,6 +58,7 @@
 	name = "cryptographic sequencer"
 	icon_state = "emag"
 	item_state = "card-id"
+	slot_flags = SLOT_ID
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=2"
 
 	/**
@@ -178,7 +179,12 @@
 		var/datum/organ/external/organ = target_living.get_organ(zone)
 		target_living.emag_act(user, organ, src)
 		return
+	if(istype(target,/obj/machinery))
+		return // Handled in machine attackby()
 	target.emag_act(user)
+
+
+var/list/global/id_cards = list()
 
 /obj/item/weapon/card/id
 	name = "identification card"
@@ -206,10 +212,16 @@
 /obj/item/weapon/card/id/New()
 	..()
 
+	id_cards += src
+
 	if(virtual_wallet)
 		update_virtual_wallet()
 	if(ishuman(loc))
 		SetOwnerDNAInfo(loc)
+
+/obj/item/weapon/card/id/Destroy()
+	id_cards -= src
+	..()
 
 /obj/item/weapon/card/id/examine(mob/user)
 	..()
@@ -679,14 +691,14 @@
 	registered_name = "Engineer"
 	icon_state = "engineering"
 	desc = "Shame it's going to be lost in the void of a black hole."
-	access = list(access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_atmospherics, access_emergency_storage, access_eva, access_construction)
+	access = list(access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_atmospherics, access_emergency_storage, access_eva, access_construction)
 
 /obj/item/weapon/card/id/hos
 	name = "Head of Security ID"
 	registered_name = "HoS"
 	icon_state = "HoS"
 	desc = "An ID awarded to only the most robust shits in the business."
-	access = list(access_security, access_sec_doors, access_brig, access_armory, access_court, access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers, access_science, access_engine, access_mining, access_medical, access_construction, access_mailsorting, access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
+	access = list(access_security, access_sec_doors, access_brig, access_armory, access_court, access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers, access_science, access_engine_major, access_mining, access_medical, access_construction, access_mailsorting, access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
 
 /obj/item/weapon/card/id/cmo
 	name = "Chief Medical Officer ID"
@@ -707,7 +719,7 @@
 	registered_name = "CE"
 	icon_state = "CE"
 	desc = "The card has a faint aroma of autism."
-	access = list(access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_teleporter, access_external_airlocks, access_atmospherics, access_emergency_storage, access_eva, access_heads, access_construction, access_sec_doors, access_ce, access_RC_announce, access_keycard_auth, access_tcomsat, access_ai_upload)
+	access = list(access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_teleporter, access_external_airlocks, access_atmospherics, access_emergency_storage, access_eva, access_heads, access_construction, access_sec_doors, access_ce, access_RC_announce, access_keycard_auth, access_tcomsat, access_ai_upload)
 
 /obj/item/weapon/card/id/clown
 	name = "Pink ID"

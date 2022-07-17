@@ -34,7 +34,7 @@ var/list/firstaid_exceptions = list(
 	density = 0
 	anchored = 0
 	health = 20
-	maxhealth = 20
+	maxHealth = 20
 	req_access =list(access_medical)
 	bot_flags = BOT_NOT_CHASING|BOT_CONTROL
 	can_take_pai = TRUE
@@ -286,7 +286,7 @@ var/list/firstaid_exceptions = list(
 		if (. && isturf(loc))
 			step_away(src,user)
 
-/obj/machinery/bot/medbot/Emag(mob/user)
+/obj/machinery/bot/medbot/emag_act(mob/user)
 	..()
 	if(open && !locked)
 		declare_crit = 0

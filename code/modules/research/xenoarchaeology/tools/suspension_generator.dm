@@ -370,7 +370,7 @@
 	var/field_type = "chlorine"
 
 /obj/effect/suspension_field/Destroy()
-	for(var/obj/I in src)
+	for(var/atom/movable/I in src)
 		I.forceMove(src.loc)
 	..()
 

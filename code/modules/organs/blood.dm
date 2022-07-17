@@ -131,15 +131,15 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 						var/word = pick("dizzy","woosey","faint")
 						to_chat(src, "<span class='danger'>You feel very [word].</span>")
 				if(oxyloss < 20)
-					oxyloss += 2
+					adjustOxyLoss(2)
 			if(BLOOD_VOLUME_BAD to BLOOD_VOLUME_OKAY)
 				if(!pale)
 					pale = 1
 					//update_body()
 				eye_blurry = max(eye_blurry,2)
 				if(oxyloss < 40)
-					oxyloss += 3
-				oxyloss += 3
+					adjustOxyLoss(3)
+				adjustOxyLoss(3)
 				if(prob(15))
 					Paralyse(1)
 					var/word = pick("dizzy","woosey","faint")
@@ -150,9 +150,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 					//update_body()
 				eye_blurry = max(eye_blurry,4)
 				if(oxyloss < 60)
-					oxyloss += 5
-				oxyloss += 5
-				toxloss += 1
+					adjustOxyLoss(5)
+				adjustOxyLoss(5)
+				adjustToxLoss(1)
 				if(prob(15))
 					Paralyse(rand(1,3))
 					var/word = pick("dizzy","woosey","faint")
@@ -163,8 +163,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				if(!pale) //Somehow
 					pale = 1
 					//update_body()
-				oxyloss += 8
-				toxloss += 2
+				adjustOxyLoss(8)
+				adjustToxLoss(2)
 				//cloneloss += 1
 				Paralyse(5) //Keep them on the ground, that'll teach them
 
@@ -181,7 +181,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 		//Bleeding out
 		var/blood_max = 0
-		var/blood_factor = 1
 		for(var/datum/organ/external/temp in organs)
 			if(!(temp.status & ORGAN_BLEEDING) || temp.status & (ORGAN_ROBOT|ORGAN_PEG))
 				continue
@@ -196,29 +195,47 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 			if (temp.open)
 				blood_max += 2 //Yer stomach is cut open
 
-		blood_max = blood_max * BLOODLOSS_SPEED_MULTIPLIER
+		blood_max = blood_max * BLOODLOSS_SPEED_MULTIPLIER //determines the maximum amount of blood to drip
 
-		if(lying)
-			blood_factor -= 0.3
+		drip(blood_max)
 
-		if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
-			blood_factor += 0.3
+//Calculates the percentage of blood to lose, 1 being 100%, 0 being 0%
+//Called by both internal and external bleeding factors. Keep common-to-both increases/descreases here.
+/mob/living/carbon/human/proc/calcbloodloss()
+	var/blood_factor = 1
+	if(species && species.anatomy_flags & NO_BLOOD) //Things that do not bleed do not bleed
+		return 0
+		
+	if(lying) //Lying down slows blood loss
+		blood_factor -= 0.3
 
-		if(reagents.has_reagent(INAPROVALINE))
-			blood_factor -= 0.3
+	if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
+		blood_factor += 0.3
 
-		drip(blood_max * max(0, blood_factor))
+	if(reagents.has_reagent(INAPROVALINE)) //Inaprov and Bicard slow bleeding, and stack
+		blood_factor -= 0.3
+		
+	if(reagents.has_reagent(BICARIDINE))
+		blood_factor -= 0.3
+		
+	if(reagents.has_reagent(CLOTTING_AGENT) || reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely
+		blood_factor = 0
+	
+	if(bodytemperature < 170) //Cryo stops bleeding entirely
+		blood_factor = 0
+		
+	return max(0, blood_factor) //Do not return a negative percent, we don't want free blood healing!
 
 //Makes a blood drop, leaking amt units of blood from the mob
 /mob/living/carbon/human/proc/drip(var/amt as num)
-
-
 	if(species && species.anatomy_flags & NO_BLOOD) //TODO: Make drips come from the reagents instead.
 		return 0
 
+	amt = max(0, amt * calcbloodloss()) //determines how much blood to lose based on human's situation
+	
 	if(!amt)
 		return 0
-
+	
 	vessel.remove_reagent(BLOOD,amt)
 	blood_splatter(src,src)
 	stat_collection.blood_spilled += amt

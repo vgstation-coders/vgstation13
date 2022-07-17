@@ -13,8 +13,8 @@
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
 	mouse_opacity = 1
 
-	var/health = 10
-	var/max_health = 100
+	health = 10
+	maxHealth = 100
 	var/list/turf/simulated/floor/neighbors = list()
 	var/turf/epicenter
 	var/datum/seed/seed
@@ -77,7 +77,7 @@
 		return
 
 	name = "[seed.seed_name] vines"
-	max_health = round(seed.endurance/2)
+	maxHealth = round(seed.endurance/2)
 	if(seed.spread == 1)
 		limited_growth = 1
 		layer = CREEPER_LAYER
@@ -88,7 +88,7 @@
 	update_icon()
 
 	if(start_fully_mature)
-		health = max_health
+		health = maxHealth
 		mature_time = 0
 
 	register_event(/event/before_move, src, /obj/effect/plantsegment/proc/before_moving)
@@ -97,7 +97,7 @@
 
 	spawn(1) // Plants will sometimes be spawned in the turf adjacent to the one they need to end up in, for the sake of correct dir/etc being set.
 		SSplant.add_plant(src)
-		score["kudzugrowth"]++
+		score.kudzugrowth++
 		// Some plants eat through plating.
 		if(seed.chems && !isnull(seed.chems[PHENOL]))
 			var/turf/T = get_turf(src)
@@ -108,7 +108,7 @@
 	if(!seed)
 		return
 	var/traits = ""
-	if(seed.carnivorous == 2)
+	if(seed.voracious == 2)
 		traits += "<span class='alert'>It's quivering viciously.</span> "
 	if(seed.stinging)
 		traits += "<span class='alert'>It's covered in tiny stingers.</span> "
@@ -143,8 +143,8 @@
 		if(at_fringe >= round(spread_distance_limit*0.7))
 			arbitrary_measurement_of_how_lush_I_am_right_now--
 
-	if(health < max_health)
-		arbitrary_measurement_of_how_lush_I_am_right_now -= round(-(health - max_health)/(max_health/3))
+	if(health < maxHealth)
+		arbitrary_measurement_of_how_lush_I_am_right_now -= round(-(health - maxHealth)/(maxHealth/3))
 
 	arbitrary_measurement_of_how_lush_I_am_right_now = max(1, arbitrary_measurement_of_how_lush_I_am_right_now)
 
@@ -208,18 +208,11 @@
 			S.handle_item_insertion(G, 1)
 	else
 		..()
-		take_damage(W)
+		if(W.is_hot() || (W.is_sharp() && !seed.ligneous))
+			take_damage(W.force * 4)
+		else
+			take_damage(W.force)
 		user.delayNextAttack(10)
-
-/obj/effect/plantsegment/proc/take_damage(var/obj/item/weapon/W)
-	if(!W.force)
-		return 0
-	var/dmg = W.force
-	if(W.is_hot() || (W.is_sharp() && !seed.ligneous))
-		dmg = dmg*4
-	health -= dmg
-	check_health()
-	update_icon()
 
 /obj/effect/plantsegment/ex_act(severity)
 	switch(severity)
@@ -241,11 +234,14 @@
 /obj/effect/plantsegment/fire_act(null, temp, volume)
 	die_off()
 
-/obj/effect/plantsegment/proc/check_health()
+/obj/effect/plantsegment/damaged_updates()
+	update_icon()
+
+/obj/effect/plantsegment/try_break()
 	if(health <= 0)
 		die_off()
 
 /obj/effect/plantsegment/proc/is_mature()
-	return (health >= (max_health/2) && age > mature_time)
+	return (health >= (maxHealth/2) && age > mature_time)
 
 #undef CREEPER_GROWTH_DISTANCE

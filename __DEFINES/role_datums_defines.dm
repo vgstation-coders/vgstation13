@@ -75,6 +75,7 @@
 #define GIANTSPIDER "giant spider"
 #define PULSEDEMON "Pulse Demon"
 #define STREAMER "streamer"
+#define JECTIE_COOKER "chef that cooked jecties"
 #define XENOMORPH "alien"
 #define PRISONER "prisoner"
 #define CLOWN_LING "clown ling"
@@ -165,6 +166,7 @@
 #define TATTOO_CHAT		"Dark Communication"
 #define TATTOO_MANIFEST	"Pale Body"
 #define TATTOO_MEMORIZE	"Arcane Dimension"
+#define TATTOO_RUNESTORE "Runic Skin"
 #define TATTOO_SHORTCUT	"Shortcut Tracer"
 
 #define	TOME_CLOSED	1

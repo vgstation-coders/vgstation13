@@ -64,7 +64,7 @@ var/list/obj/machinery/power/photocollector/photocollector_list = list()
 
 /obj/machinery/power/photocollector/proc/update_icons()
 	overlays.len = 0
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE | NOPOWER|BROKEN))
 		return
 	if(anchored && beams.len>0)
 		overlays += image(icon = icon, icon_state = "lasergen-on")
