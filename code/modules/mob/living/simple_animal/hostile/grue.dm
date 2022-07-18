@@ -226,7 +226,7 @@
 			handle_feed(pick(feed_targets))
 
 	//Egglaying
-	if(lifestage==GRUE_ADULT && eatencharge>0 && lightparams.dark_dim_light==GRUE_DARK)
+	if(lifestage==GRUE_ADULT && eatencharge>1 && lightparams.dark_dim_light==GRUE_DARK)
 		reproduce()
 
 	//Movement
