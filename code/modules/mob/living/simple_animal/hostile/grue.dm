@@ -474,7 +474,7 @@
 /mob/living/simple_animal/hostile/grue/proc/reproduce()
 
 	if (lifestage==GRUE_ADULT) //must be adult
-		if (eatencharge<=0)
+		if (eatencharge<2)
 			to_chat(src, "<span class='notice'>You need to feed more first.</span>")
 			return
 		else if (!isturf(loc))
@@ -499,7 +499,7 @@
 		visible_message("<span class='warning'>\The [src] tightens up...</span>","<span class='notice'>You start to push out an egg...</span>")
 		if(do_after(src, src, 5 SECONDS))
 			visible_message("<span class='warning'>\The [src] pushes out an egg!</span>","<span class='notice'>You lay an egg.</span>")
-			eatencharge--
+			eatencharge = eatencharge - 2
 			var/mob/living/simple_animal/grue_egg/E = new /mob/living/simple_animal/grue_egg(get_turf(src))
 			E.parent_grue=src //mark this grue as the parent of the egg
 		busy=FALSE
@@ -551,7 +551,7 @@
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
 		digest+=10 //add 10 life ticks (20 seconds) of increased healing + nutrition gain
-		
+
 		//Transfer any reagents inside the creature to the grue
 		E.reagents.trans_to(src, E.reagents.total_volume)
 
