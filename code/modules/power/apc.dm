@@ -923,9 +923,10 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	if((!aidisabled) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
-		to_chat(usr, "Access refused.")
-		return 0
+	if(!isobserver(usr))
+		if((!aidisabled) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
+			to_chat(usr, "Access refused.")
+			return 0
 	if(!can_use(usr, 1))
 		return 0
 	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr) || OMNI_LINK(usr, src)) && locked)
