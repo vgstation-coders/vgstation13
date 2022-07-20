@@ -187,7 +187,7 @@ var/list/false_wall_images = list()
 		icon_state = "[mineral]fwall_open"
 		flick("[mineral]fwall_opening", src)
 		loc.mouse_opacity = 1
-		sleep(15)
+		sleep(6)
 		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
@@ -197,7 +197,7 @@ var/list/false_wall_images = list()
 		flick("[mineral]fwall_closing", src)
 		icon_state = "[mineral]0"
 		setDensity(TRUE)
-		sleep(15)
+		sleep(6)
 		set_opacity(1)
 		src.relativewall()
 		opening = 0
@@ -375,7 +375,7 @@ var/list/false_wall_images = list()
 		icon_state = "frwall_open"
 		flick("frwall_opening", src)
 		loc.mouse_opacity = 1
-		sleep(15)
+		sleep(6)
 		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
@@ -385,7 +385,7 @@ var/list/false_wall_images = list()
 		icon_state = "r_wall"
 		flick("frwall_closing", src)
 		setDensity(TRUE)
-		sleep(15)
+		sleep(6)
 		set_opacity(1)
 		relativewall()
 		opening = 0
