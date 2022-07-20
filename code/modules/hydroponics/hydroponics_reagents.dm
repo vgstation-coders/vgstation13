@@ -11,9 +11,9 @@
 			add_planthealth(-rand(1,3) * HYDRO_SPEED_MULTIPLIER)
 			affect_growth(-1)
 	else
-		if(seed && seed.hematophage != bloody)
+		if(seed && !seed.hematophage && bloody)
 			return
-		else if(bloody)
+		if(seed && seed.hematophage && !bloody)
 			return
 		nutrientlevel = round(min(nutrientlevel + amount, NUTRIENTLEVEL_MAX))
 	update_icon_after_process = 1
