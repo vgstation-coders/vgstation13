@@ -268,7 +268,7 @@
 			"<span class='warning'>You hear welding noises.</span>")
 			playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
-			if(W.do_weld(user, src, 100, 0))
+			if(WT.do_weld(user, src, 100, 0))
 				if(!istype(src))
 					return
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
