@@ -8,6 +8,7 @@
 	var/list/apcs = list()
 	var/list/currently_hacking_apcs = list()		//any apc's currently being hacked
 	var/apc_hacklimit = 1							//how many apc's can be hacked at a time
+	var/list/apc_checkpoints = list() //Sanity, keeps track of the number of APCs the AI once possessed
 	var/list/currently_hacking_machines = list()	//any non-apc machines currently being hacked
 	var/processing_power = 50
 	var/max_processing_power = 200
@@ -64,7 +65,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	if(apcs.len != 0)
 		var/count = 0
 		for(var/obj/machinery/power/apc/A in apcs)
-			if(!A.malf_disrupted)	
+			if(!A.malf_disrupted)
 				count++
 		add_power(count * 0.03)
 
@@ -102,7 +103,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	if(!ui)
 		ui = new(user, src, "MalfModules")
 		ui.open()
-	
+
 /datum/role/malfAI/ui_state(mob/user)
 	return global.always_state
 
