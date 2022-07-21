@@ -13,7 +13,7 @@
 		return
 	if(seed.immutable)
 		return
-	if(age < 3 && length(seed.mutants))
+	if(age < 3 && length(seed.mutants) && gene)
 		mutate_species()
 	if(!gene)
 		gene = pick(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
@@ -150,25 +150,23 @@
 			generic_mutation_message("quivers!")
 
 		if(GENE_METABOLISM)
-			var/mutation_type = pick(PLANT_NUTRIENT_CONSUMPTION, PLANT_FLUID_CONSUMPTION, PLANT_VORACIOUS, PLANT_HEMATOPHAGE)
+			var/mutation_type = pick(30; PLANT_NUTRIENT_CONSUMPTION, 30; PLANT_FLUID_CONSUMPTION, 20; PLANT_VORACIOUS, 20; PLANT_HEMATOPHAGE)
 			switch(mutation_type)
 				if(PLANT_NUTRIENT_CONSUMPTION)
 					if(seed.nutrient_consumption < 0.1)
 						seed.nutrient_consumption = 0
 					else
-						//Lower better
-						var/hardcap = 0.01
-						var/max_change = 0.15 //percent
-						seed.nutrient_consumption -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.nutrient_consumption*100),0.01),max_change*seed.nutrient_consumption),0.1)
+						//Lower better. Using simple linear function as values too small for log base 10
+						var/change = 0.16 //percent
+						seed.nutrient_consumption -= change*seed.nutrient_consumption
 					generic_mutation_message("rustles!")
 				if(PLANT_FLUID_CONSUMPTION)
 					if(seed.fluid_consumption < 0.1)
 						seed.fluid_consumption = 0
 					else
-						//Lower better
-						var/hardcap = 0.01
-						var/max_change = 0.15 //percent
-						seed.fluid_consumption -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.fluid_consumption*100),0.01),max_change*seed.fluid_consumption),0.1)
+						//Lower better. Using simple linear function as values too small for log base 10
+						var/change = 0.16 //percent
+						seed.fluid_consumption -= change*seed.fluid_consumption
 					generic_mutation_message("rustles!")
 				if(PLANT_VORACIOUS)
 					//clever way of going from 0 to 1 to 2. Flips between 1 and 2.
@@ -236,7 +234,6 @@
 						return
 					var/hardcap = 16
 					seed.yield += round(min(hardcap - hardcap/2*round(log(10,seed.yield/hardcap*100),0.01),0.15*hardcap),0.1)
-
 		if(GENE_XENOPHYSIOLOGY)
 			var/mutation_type = pick(PLANT_TELEPORT, PLANT_GAS, PLANT_ROOMTEMP, PLANT_NOREACT)
 			switch(mutation_type)
