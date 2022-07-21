@@ -219,7 +219,7 @@
 		if(blood_total_before != blood_total)
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
-		target.vessel.remove_reagent(BLOOD,30)
+		target.vessel.remove_reagent(BLOOD,blood)
 		update_vamp_hud()
 
 	draining = null
