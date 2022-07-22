@@ -133,12 +133,11 @@
 		spawn(40)
 			var/cap = 0
 			var/uncapped = result
-			if(result > 19) //Roll a nat 20, screw the bombcap
+			if(result > 19) //Roll a nat 20
 				result = 24
 				sleep(40)
 			else
 				cap = 1
-				result = min(result, MAX_EXPLOSION_RANGE) //Apply the bombcap
 				if(result > 14)
 					sleep(20)
 
