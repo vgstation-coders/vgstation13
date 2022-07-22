@@ -199,7 +199,7 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
 	equip_characters()
-
+	var/discrete_areas = list()
 	for(var/mob/living/carbon/human/player in player_list)
 		switch(player.mind.assigned_role)
 			if("MODE","Mobile MMI","Trader")
@@ -207,6 +207,17 @@ var/datum/controller/gameticker/ticker
 			else
 				player.update_icons()
 				data_core.manifest_inject(player)
+		//Get populated departments
+		var/area/A = get_area(player)
+		if(!(A in discrete_areas)) //We've already added their department
+			discrete_areas += get_department_areas(player)
+
+	for(var/area/DA in discrete_areas)
+		for(var/obj/machinery/light_switch/LS in DA)
+			LS.toggle_switch(1)
+			break
+		for(var/obj/item/device/flashlight/lamp/L in DA)
+			L.toggle_onoff(1)
 
 	current_state = GAME_STATE_PLAYING
 
@@ -274,14 +285,12 @@ var/datum/controller/gameticker/ticker
 		send2adminirc("Round has started with no admins online.")
 		send2admindiscord("**Round has started with no admins online.**", TRUE)
 
-	Master.RoundStart()
-
 	if(config.sql_enabled)
 		spawn(3000)
 		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
 
 	stat_collection.round_start_time = world.realtime
-
+	Master.round_started = 1
 	wageSetup()
 	post_roundstart()
 	return 1
