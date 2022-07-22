@@ -40,6 +40,13 @@
 	other_amounts=list(5)
 	result=/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
 
+/datum/biogen_recipe/food/butter
+	id="butter"
+	name="Butter"
+	cost=150 //The 40u milk for 20u cream costs 80, so this is about 87% more expensive
+	other_amounts=list(5)
+	result=/obj/item/weapon/reagent_containers/food/snacks/butter
+
 /datum/biogen_recipe/food/meat
 	id="meat"
 	name="Slab of meat"
