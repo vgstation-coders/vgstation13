@@ -123,8 +123,7 @@ var/global/disable_vents     = 0
 var/turf/space/Space_Tile = locate(/turf/space) // A space tile to reference when atmos wants to remove excess heat.
 
 //This was a define, but I changed it to a variable so it can be changed in-game.(kept the all-caps definition because... code...) -Errorage
-var/MAX_EXPLOSION_RANGE = 14
-//#define MAX_EXPLOSION_RANGE		14					// Defaults to 12 (was 8) -- TLE
+var/MAX_EXPLOSION_RANGE = 50
 
 #define HUMAN_STRIP_DELAY 40 //takes 40ds = 4s to strip someone.
 #define HUMAN_REVERSESTRIP_DELAY 20

@@ -284,7 +284,7 @@ var/list/nuclear_bombs = list()
 /obj/machinery/nuclearbomb/blob_act()
 	return
 
-#define NUKERANGE 80
+#define NUKERANGE 120
 /obj/machinery/nuclearbomb/proc/explode()
 	if (src.safety)
 		src.timing = 0
