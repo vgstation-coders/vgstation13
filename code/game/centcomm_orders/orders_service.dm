@@ -24,7 +24,7 @@
 
 /datum/centcomm_order/department/civilian/food/New()
 	..()
-	var/chosen_food = rand(1,7)
+	var/chosen_food = rand(1,8)
 	switch(chosen_food)
 		if (1)
 			requested = list(
