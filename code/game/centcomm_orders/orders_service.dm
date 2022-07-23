@@ -67,6 +67,12 @@
 			)
 			worth = 700*requested[requested[1]]
 			sauce = 2
+		if (8)
+			requested = list(
+				/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/blingpizza = rand(2,5)
+			)
+			name = "Central Command's Executive Suite" 
+			worth = 800*requested[requested[1]]
 	if (sauce && prob(60))
 		worth += 100
 		switch (sauce)
