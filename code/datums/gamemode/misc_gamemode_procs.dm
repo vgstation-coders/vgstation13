@@ -130,10 +130,10 @@
 		if(66 to 79)
 			intercepttext += "<b>Uncharted Space</b></center><BR>"
 			intercepttext += "Congratulations and thank you for participating in the NT 'Frontier' space program! Your station is actively orbiting a high value system far from the nearest support stations. Little is known about your region of space, and the opportunity to encounter the unknown invites greater glory. You are encouraged to elevate security as necessary to protect Nanotrasen assets."
-		if(80 to 99)
+		if(80 to 94)
 			intercepttext += "<b>Black Orbit</b></center><BR>"
 			intercepttext += "As part of a mandatory security protocol, we are required to inform you that as a result of your orbital pattern directly behind an astrological body (oriented from our nearest observatory), your station will be under decreased monitoring and support. It is anticipated that your extreme location and decreased surveillance could pose security risks. Avoid unnecessary risks and attempt to keep your station in one piece."
-		if(100)
+		if(95 to 100)
 			intercepttext += "<b>Impending Doom</b></center><BR>"
 			intercepttext += "Your station is somehow in the middle of hostile territory, in clear view of any enemy of the corporation. Your likelihood to survive is low, and station destruction is expected and almost inevitable. Secure any sensitive material and neutralize any enemy you will come across. It is important that you at least try to maintain the station.<BR>"
 			intercepttext += "Good luck."
