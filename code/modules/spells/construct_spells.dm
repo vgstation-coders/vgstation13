@@ -21,6 +21,7 @@
 	override_base = "cult"
 	charge_max = 150
 	spell_flags = 0
+	range = 4
 	var/dash_range = 4
 
 /spell/juggerdash/choose_targets(var/mob/user = usr)
