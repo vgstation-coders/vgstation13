@@ -133,16 +133,7 @@ var/list/false_wall_images = list()
 	..()
 	relativewall()
 	relativewall_neighbours()
-	var/junction=findSmoothingNeighbors()
-	var/closed_state = "[mineral][junction]"
-	meson_image = image('icons/turf/walls.dmi',loc,closed_state)
-	meson_image.plane = plane
-	meson_image.layer = layer
-	false_wall_images |= meson_image
-
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images |= meson_image
+	update_meson_image()
 
 /obj/structure/falsewall/Destroy()
 	for (var/mob/L in meson_wearers)
@@ -185,13 +176,13 @@ var/list/false_wall_images = list()
 	if(density)
 		opening = 1
 		icon_state = "[mineral]fwall_open"
+		update_meson_image()
 		flick("[mineral]fwall_opening", src)
 		loc.mouse_opacity = 1
 		sleep(5)
 		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
-		update_meson_image()
 	else
 		opening = 1
 		flick("[mineral]fwall_closing", src)
@@ -315,14 +306,7 @@ var/list/false_wall_images = list()
 	..()
 	relativewall()
 	relativewall_neighbours()
-	var/junction=findSmoothingNeighbors()
-	var/closed_state = "[mineral][junction]"
-	meson_image = image('icons/turf/walls.dmi',src,closed_state)
-	false_wall_images += meson_image
-
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images |= meson_image
+	update_meson_image()
 
 /obj/structure/falserwall/Destroy()
 	var/temploc = src.loc
@@ -373,13 +357,13 @@ var/list/false_wall_images = list()
 		opening = 1
 		// Open wall
 		icon_state = "frwall_open"
+		update_meson_image()
 		flick("frwall_opening", src)
 		loc.mouse_opacity = 1
 		sleep(5)
 		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
-		update_meson_image()
 	else
 		opening = 1
 		icon_state = "r_wall"
