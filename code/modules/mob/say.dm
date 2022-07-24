@@ -93,7 +93,9 @@ var/list/global_deadchat_listeners = list()
 			var/mob/living/carbon/brain/B = M
 			if(B.brain_dead_chat())
 				to_chat(M, rendered)
-		else if(isvampire(M))
+
+		var/datum/role/vampire/V = isvampire(M)
+		if(V && V.deadchat)
 			rendered = "<span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
 			to_chat(M, rendered)
 
