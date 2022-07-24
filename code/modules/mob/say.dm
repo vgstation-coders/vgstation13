@@ -96,7 +96,7 @@ var/list/global_deadchat_listeners = list()
 
 		var/datum/role/vampire/V = isvampire(M)
 		if(V && V.deadchat)
-			rendered = "<b><span class='sinister'>[name]</span></b>[alt_name] <span class='sinister'>...[copytext(message,3,3)]...</span>"
+			rendered = "<span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
 			to_chat(M, rendered)
 
 /mob/proc/get_ear()
