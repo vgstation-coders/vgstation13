@@ -220,6 +220,10 @@
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
 		target.vessel.remove_reagent(BLOOD,blood)
+		var/mob/living/carbon/V = assailant
+		if(V)
+			if(V.nutrition < OVEREAT_THRESHOLD) //Gives the vampire a little bit of food, at a rate of 1/4 the blood sucked.
+				V.nutrition = round(min(V.nutrition + blood/4, OVEREAT_THRESHOLD), 1)
 		update_vamp_hud()
 
 	draining = null
