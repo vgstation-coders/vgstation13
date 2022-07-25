@@ -2593,18 +2593,17 @@
 		return
 	if(T.reagents.get_reagent_amount(id) > 0)
 		T.reagents.remove_reagent(id, 1)
-	else
-		return
-	T.add_nutrientlevel(1)
-	if(prob(3))
-		T.add_weedlevel(10)
-	if(T.seed && !T.dead)
+		T.add_nutrientlevel(1)
 		if(prob(3))
-			T.add_pestlevel(10)
-		var/chance = unmix(T.seed.potency, 15, 150)*3.5
-		if(!T.seed.immutable && prob(chance))
-			T.check_for_divergence(1)
-			T.seed.potency += 10
+			T.add_weedlevel(10)
+		if(T.seed && !T.dead)
+			if(prob(3))
+				T.add_pestlevel(10)
+			var/chance = unmix(T.seed.potency, 15, 150)*3.5
+			if(!T.seed.immutable && prob(chance))
+				T.check_for_divergence(1)
+				T.seed.potency += 10
+				T.reagents.remove_reagent(id, 1)
 
 /datum/reagent/toxin/plantbgone
 	name = "Plant-B-Gone"
@@ -4419,26 +4418,25 @@ var/procizine_tolerance = 0
 	if(!istype(T)) //Still can't find it, abort
 		return
 	if(T.reagents.get_reagent_amount(id) > 0)
-		T.reagents.remove_reagent(id, 1)
-	else
-		return
-	T.add_nutrientlevel(1)
-	T.add_planthealth(1)
-	if(prob(10))
-		T.add_pestlevel(-1)
-	if(T.seed && !T.dead)
-		if(prob(20))
-			T.affect_growth(1)
-		if(!T.seed.immutable)
-			var/chance
-			chance = unmix(T.seed.lifespan, 15, 125)*2
-			if(prob(chance))
-				T.check_for_divergence(1)
-				T.seed.lifespan += 10
-			chance = unmix(T.seed.lifespan, 15, 125)*2
-			if(prob(chance))
-				T.check_for_divergence(1)
-				T.seed.endurance += 10
+		T.add_nutrientlevel(1)
+		T.add_planthealth(1)
+		if(prob(10))
+			T.add_pestlevel(-1)
+		if(T.seed && !T.dead)
+			if(prob(20))
+				T.affect_growth(1)
+			if(!T.seed.immutable)
+				var/chance
+				chance = unmix(T.seed.lifespan, 15, 125)*2
+				if(prob(chance))
+					T.check_for_divergence(1)
+					T.seed.lifespan += 10
+				chance = unmix(T.seed.lifespan, 15, 125)*2
+				if(prob(chance))
+					T.check_for_divergence(1)
+					T.seed.endurance += 10
+				if(prob(2))
+					T.reagents.remove_reagent(id, 1)
 
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
