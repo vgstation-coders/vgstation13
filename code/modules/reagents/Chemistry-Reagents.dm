@@ -2595,7 +2595,7 @@
 		var/chance = unmix(T.seed.potency, 15, 150)*35
 		if(!T.seed.immutable && prob(chance))
 			T.check_for_divergence(1)
-			T.seed.potency++
+			T.seed.potency += 10
 
 /datum/reagent/toxin/plantbgone
 	name = "Plant-B-Gone"
@@ -4416,11 +4416,11 @@ var/procizine_tolerance = 0
 			chance = unmix(T.seed.lifespan, 15, 125)*20
 			if(prob(chance))
 				T.check_for_divergence(1)
-				T.seed.lifespan++
+				T.seed.lifespan += 10
 			chance = unmix(T.seed.lifespan, 15, 125)*20
 			if(prob(chance))
 				T.check_for_divergence(1)
-				T.seed.endurance++
+				T.seed.endurance += 10
 
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
