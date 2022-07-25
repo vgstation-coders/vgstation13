@@ -2591,6 +2591,7 @@
 		T = holder.my_atom //Try to find the mob through the holder
 	if(!istype(T)) //Still can't find it, abort
 		return
+	T.reagents.remove_reagent(id, 0.1)
 	if(T.reagents.get_reagent_amount(id) > 0)
 		T.add_nutrientlevel(1)
 		if(prob(3))
@@ -2602,7 +2603,7 @@
 			if(!T.seed.immutable && prob(chance))
 				T.check_for_divergence(1)
 				T.seed.potency += 10
-				T.reagents.remove_reagent(id, 1)
+				
 
 /datum/reagent/toxin/plantbgone
 	name = "Plant-B-Gone"
@@ -4416,6 +4417,7 @@ var/procizine_tolerance = 0
 		T = holder.my_atom //Try to find the mob through the holder
 	if(!istype(T)) //Still can't find it, abort
 		return
+	T.reagents.remove_reagent(id, 0.1)
 	if(T.reagents.get_reagent_amount(id) > 0)
 		T.add_nutrientlevel(1)
 		T.add_planthealth(1)
@@ -4433,9 +4435,7 @@ var/procizine_tolerance = 0
 				chance = unmix(T.seed.lifespan, 15, 125)*2
 				if(prob(chance))
 					T.check_for_divergence(1)
-					T.seed.endurance += 10
-				if(prob(2))
-					T.reagents.remove_reagent(id, 1)
+					T.seed.endurance += 10					
 
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
