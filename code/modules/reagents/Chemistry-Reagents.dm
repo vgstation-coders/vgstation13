@@ -2599,10 +2599,10 @@
 		if(T.seed && !T.dead)
 			if(prob(3))
 				T.add_pestlevel(10)
-			var/chance = unmix(T.seed.potency, 15, 150)*3.5
+			var/chance = unmix(T.seed.potency, 15, 150)*35
 			if(!T.seed.immutable && prob(chance))
 				T.check_for_divergence(1)
-				T.seed.potency += 10
+				T.seed.potency++
 				
 
 /datum/reagent/toxin/plantbgone
@@ -4428,14 +4428,14 @@ var/procizine_tolerance = 0
 				T.affect_growth(1)
 			if(!T.seed.immutable)
 				var/chance
-				chance = unmix(T.seed.lifespan, 15, 125)*2
+				chance = unmix(T.seed.lifespan, 15, 125)*20
 				if(prob(chance))
 					T.check_for_divergence(1)
-					T.seed.lifespan += 10
-				chance = unmix(T.seed.lifespan, 15, 125)*2
+					T.seed.lifespan ++
+				chance = unmix(T.seed.lifespan, 15, 125)*20
 				if(prob(chance))
 					T.check_for_divergence(1)
-					T.seed.endurance += 10					
+					T.seed.endurance++					
 
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
