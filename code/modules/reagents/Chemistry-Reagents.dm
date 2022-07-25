@@ -2585,14 +2585,23 @@
 	specheatcap = 0.60
 
 /datum/reagent/fertilizer/robustharvest/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	if(T.reagents.get_reagent_amount(id) > 0)
+		T.reagents.remove_reagent(id, 1)
+	else
+		return
 	T.add_nutrientlevel(1)
 	if(prob(3))
 		T.add_weedlevel(10)
 	if(T.seed && !T.dead)
 		if(prob(3))
 			T.add_pestlevel(10)
-		var/chance = unmix(T.seed.potency, 15, 150)*35
+		var/chance = unmix(T.seed.potency, 15, 150)*3.5
 		if(!T.seed.immutable && prob(chance))
 			T.check_for_divergence(1)
 			T.seed.potency += 10
@@ -4403,7 +4412,16 @@ var/procizine_tolerance = 0
 	specheatcap = 35.37
 
 /datum/reagent/diethylamine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	if(T.reagents.get_reagent_amount(id) > 0)
+		T.reagents.remove_reagent(id, 1)
+	else
+		return
 	T.add_nutrientlevel(1)
 	T.add_planthealth(1)
 	if(prob(10))
@@ -4413,11 +4431,11 @@ var/procizine_tolerance = 0
 			T.affect_growth(1)
 		if(!T.seed.immutable)
 			var/chance
-			chance = unmix(T.seed.lifespan, 15, 125)*20
+			chance = unmix(T.seed.lifespan, 15, 125)*2
 			if(prob(chance))
 				T.check_for_divergence(1)
 				T.seed.lifespan += 10
-			chance = unmix(T.seed.lifespan, 15, 125)*20
+			chance = unmix(T.seed.lifespan, 15, 125)*2
 			if(prob(chance))
 				T.check_for_divergence(1)
 				T.seed.endurance += 10
