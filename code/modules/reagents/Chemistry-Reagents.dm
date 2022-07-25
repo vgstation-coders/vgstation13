@@ -2592,7 +2592,6 @@
 	if(!istype(T)) //Still can't find it, abort
 		return
 	if(T.reagents.get_reagent_amount(id) > 0)
-		T.reagents.remove_reagent(id, 1)
 		T.add_nutrientlevel(1)
 		if(prob(3))
 			T.add_weedlevel(10)
