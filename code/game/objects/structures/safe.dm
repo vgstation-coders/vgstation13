@@ -134,8 +134,7 @@ FLOOR SAFES
 
 	switch (task)
 		if ("Rotate Clockwise")
-			if(canhear)
-				user.playsound_local(loc, 'sound/machines/dial_tick.ogg', 25, 1)
+			user.playsound_local(loc, 'sound/machines/dial_tick.ogg', 25, 1)
 			dial = increment(dial)
 			feedback = "<span class='notice'>You turn the dial up to [dial * 5].</span>"
 			if(dial == tumbler_1_pos)
@@ -158,8 +157,7 @@ FLOOR SAFES
 			to_chat(user, feedback)
 
 		if ("Rotate Counter-Clockwise")
-			if(canhear)
-				user.playsound_local(loc, 'sound/machines/dial_tick.ogg', 25, 1)
+			user.playsound_local(loc, 'sound/machines/dial_tick.ogg', 25, 1)
 			dial = decrement(dial)
 			feedback = "<span class='notice'>You turn the dial down to [dial * 5].</span>"
 			if(dial == tumbler_1_pos)
