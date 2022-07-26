@@ -128,8 +128,11 @@
 		src.code = max(1, src.code)
 
 	if(href_list["send"])
-		spawn( 0 )
-			activate()
+		spawn(0)
+			if(!cooldown)
+				activate()
+			else
+				to_chat(usr, "<span class='warning'>You must wait a little before sending out a signal again!</span>")
 
 	if(usr)
 		attack_self(usr)
