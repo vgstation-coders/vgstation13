@@ -317,7 +317,7 @@
 		if(status)
 			force += 10 + 2*(dial-1) //send someone into the shadow realm with 10
 			throwforce += 10 + 2*(dial-1) //it doesn't deal damage on throw, this is just a constistency thing, I guess
-			hitcost = 100 * (dial * dial) // 100 cost on 1, 10000 cost on 10, change power cell
+			hitcost = 1000 * dial * 2 // 1000 cost on 1, 20000 cost on 10, change power cell
 			stunforce = 10 * dial //welcome to the world of pain
 		else
 			depower()
@@ -341,7 +341,7 @@
 		to_chat(user, "<span class = 'notice'>Your lust for inflicting pain is admirable, but 10 is maximum.</span>")
 		new_dial = 10
 	dial = new_dial
-	hitcost = 100 * (dial * dial)
+	hitcost = 1000 * dial * 2
 	to_chat(user, "<span class = 'notice'>The dial is set to [dial].</span>")
 	add_fingerprint(user)
 	return
