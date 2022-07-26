@@ -50,7 +50,7 @@
 			I.frequency = src.frequency
 			user.u_equip(src,0)
 			qdel(src)
-	
+
 	if(issignaler(W))
 		var/obj/item/device/assembly/signaler/signaler2 = W
 		if(secured && signaler2.secured)
@@ -172,6 +172,8 @@
 	if(signal.encryption != code)
 		return 0
 	if(!(src.wires & WIRE_RADIO_RECEIVE))
+		return 0
+	if(signal.source == src) //Avoid pinging itself
 		return 0
 	pulse(1)
 
