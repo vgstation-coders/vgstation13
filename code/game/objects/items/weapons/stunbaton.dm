@@ -13,8 +13,8 @@
 	attack_verb = list("beats")
 	var/stunforce = 10
 	var/status = 0
-	var/obj/item/weapon/cell/bcell = null
-	var/hitcost = 100 // 10 hits on crap cell
+	var/obj/item/weapon/cell/high/bcell = null
+	var/hitcost = 1000 // 10 hits on crap cell
 	var/stunsound = 'sound/weapons/Egloves.ogg'
 	var/swingsound = "swing_hit"
 
