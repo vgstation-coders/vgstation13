@@ -14,7 +14,7 @@
 	var/stunforce = 10
 	var/status = 0
 	var/obj/item/weapon/cell/high/bcell = null
-	var/hitcost = 1000 // 10 hits on crap cell
+	var/hitcost = 1000 // 10 hits on high-capacity cell
 	var/stunsound = 'sound/weapons/Egloves.ogg'
 	var/swingsound = "swing_hit"
 
