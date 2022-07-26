@@ -229,10 +229,10 @@
 		else if(istype(charging, /obj/item/weapon/melee/baton)) //25e power loss is so minor that the game shouldn't bother calculating the efficiency of better parts for it
 			var/obj/item/weapon/melee/baton/B = charging
 			if(B.bcell)
-				if(B.bcell.give(175*charging_speed_modifier))
+				if(B.bcell.give(1750*charging_speed_modifier))
 					icon_state = "recharger1"
 					if(!self_powered)
-						use_power(200*charging_speed_modifier)
+						use_power(2000*charging_speed_modifier)
 				else
 					icon_state = "recharger2"
 					if(!has_beeped)
@@ -243,10 +243,10 @@
 		else if(istype(charging, /obj/item/weapon/melee/stunprobe)) //25e power loss is so minor that the game shouldn't bother calculating the efficiency of better parts for it
 			var/obj/item/weapon/melee/stunprobe/B = charging
 			if(B.bcell)
-				if(B.bcell.give(175*charging_speed_modifier))
+				if(B.bcell.give(1750*charging_speed_modifier))
 					icon_state = "recharger1"
 					if(!self_powered)
-						use_power(200*charging_speed_modifier)
+						use_power(2000*charging_speed_modifier)
 				else
 					icon_state = "recharger2"
 					if(!has_beeped)

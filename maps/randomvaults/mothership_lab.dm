@@ -551,8 +551,8 @@
 	origin_tech = Tc_COMBAT + "=3" + Tc_POWERSTORAGE + "=2"
 	attack_verb = list("beats")
 	var/status = 0
-	var/obj/item/weapon/cell/bcell = null
-	var/hitcost = 50 // 20 stuns with integrated cell, but can't upgrade or remove it. Doesn't have a normal baton's vulnerability to emp blasts. Compatible with rechargers
+	var/obj/item/weapon/cell/high/bcell = null
+	var/hitcost = 500 // 20 stuns with integrated cell, but can't upgrade or remove it. Doesn't have a normal baton's vulnerability to emp blasts. Compatible with rechargers
 	var/stunsound = 'sound/weapons/electriczap.ogg'
 	var/swingsound = "swing_hit"
 
