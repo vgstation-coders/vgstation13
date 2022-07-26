@@ -271,7 +271,7 @@
 						to_chat(H, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
 						H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
 						explosion(get_turf(H),-1,-1,1,5, whodunnit = H) //Tiny explosion with flash
-						H.dust()
+						H.dust(TRUE)
 //Ayy lmao
 
 
