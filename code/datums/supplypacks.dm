@@ -464,6 +464,56 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 //////CLOTHING//////
 
+/datum/supply_packs/disguisekit
+	name = "Disguise kit"
+	var/list/engineer = list(
+		/obj/item/clothing/under/rank/engineer,
+		/obj/item/weapon/storage/backpack/industrial,
+		/obj/item/clothing/shoes/workboots,
+		/obj/item/clothing/gloves/black,
+		/obj/item/device/radio/headset/headset_eng,
+		/obj/item/clothing/suit/storage/hazardvest,
+		/obj/item/clothing/mask/gas,
+	)
+	var/scientist = list(/obj/item/clothing/under/rank/scientist,
+		/obj/item/weapon/storage/backpack/satchel_tox,
+		/obj/item/clothing/suit/storage/labcoat/science,
+		/obj/item/clothing/shoes/white,
+		/obj/item/device/radio/headset/headset_sci,
+		/obj/item/clothing/mask/gas,
+	)
+	var/atmos = list(/obj/item/clothing/under/rank/atmospheric_technician,
+		/obj/item/weapon/storage/backpack/industrial,
+		/obj/item/clothing/shoes/workboots,
+		/obj/item/clothing/gloves/black,
+		/obj/item/device/radio/headset/headset_eng,
+		/obj/item/clothing/suit/storage/hazardvest,
+		/obj/item/clothing/mask/gas,
+	)
+	var/doctor = list(/obj/item/clothing/under/rank/medical,
+		/obj/item/weapon/storage/backpack/medic,
+		/obj/item/clothing/shoes/white,
+		/obj/item/device/radio/headset/headset_med,
+		/obj/item/clothing/mask/surgical,
+		/obj/item/weapon/storage/belt/medical,
+		/obj/item/clothing/glasses/hud/health,
+		/obj/item/clothing/gloves/latex,
+	)
+	var/janitor = list(/obj/item/clothing/under/rank/janitor,
+		/obj/item/weapon/storage/backpack,
+		/obj/item/clothing/shoes/galoshes,
+		/obj/item/clothing/gloves/black,
+		/obj/item/clothing/suit/apron/overalls,
+		/obj/item/weapon/storage/belt/janitor,
+		/obj/item/clothing/head/soft/purple)
+	contains = list(/obj/item/weapon/hair_dye,
+					/obj/item/weapon/pocket_mirror)
+	cost = 40
+	containertype = /obj/structure/closet/basic
+	containername = "formalwear crate"
+	group = "Clothing"
+	hidden = 1
+
 /datum/supply_packs/costume
 	name = "Standard costumes"
 	contains = list(/obj/item/weapon/storage/backpack/clown,
@@ -733,6 +783,45 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "plasmaman suit crate"
 	group = "Clothing"
 
+/datum/supply_packs/amogus
+	name = "Theatric Space Suits"
+	var/list/colored = list(
+		/obj/item/clothing/head/helmet/space,
+		/obj/item/clothing/suit/space,
+		/obj/item/clothing/head/helmet/space/syndicate,
+		/obj/item/clothing/suit/space/syndicate,
+		/obj/item/clothing/head/helmet/space/syndicate/green,
+		/obj/item/clothing/suit/space/syndicate/green,
+		/obj/item/clothing/head/helmet/space/syndicate/green/dark,
+		/obj/item/clothing/suit/space/syndicate/green/dark,
+		/obj/item/clothing/head/helmet/space/syndicate/orange,
+		/obj/item/clothing/suit/space/syndicate/orange,
+		/obj/item/clothing/head/helmet/space/syndicate/blue,
+		/obj/item/clothing/suit/space/syndicate/blue,
+	)
+	var/black = list(/obj/item/clothing/head/helmet/space/syndicate/black,
+					/obj/item/clothing/suit/space/syndicate/black,
+					/obj/item/clothing/head/helmet/space/syndicate/black/green,
+					/obj/item/clothing/suit/space/syndicate/black/green,
+					/obj/item/clothing/head/helmet/space/syndicate/black/blue,
+					/obj/item/clothing/suit/space/syndicate/black/blue,
+					/obj/item/clothing/head/helmet/space/syndicate/black/med,
+					/obj/item/clothing/suit/space/syndicate/black/med,
+					/obj/item/clothing/head/helmet/space/syndicate/black/orange,
+					/obj/item/clothing/suit/space/syndicate/black/orange,
+					/obj/item/clothing/head/helmet/space/syndicate/black/red,
+					/obj/item/clothing/suit/space/syndicate/black/red,
+					/obj/item/clothing/head/helmet/space/syndicate/black/engie,
+					/obj/item/clothing/suit/space/syndicate/black/engie)
+	cost = 300
+	containertype = /obj/structure/closet/crate/radiation
+	containername = "theatrical space suit crate"
+	group = "Clothing"
+	hidden = 1
+	
+/datum/supply_packs/amogus/New()
+	selection_from = list(colored, black)
+
 /datum/supply_packs/grey_supply
 	name = "Grey Space-Ex"
 	var/list/basic = list(
@@ -964,6 +1053,75 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "special ops crate"
 	group = "Security"
 	hidden = 1
+	
+/datum/supply_packs/covertops
+	name = "Covert Ops supplies"
+	/var/list/uzi = list(/obj/item/weapon/gun/projectile/automatic/uzi,
+					/obj/item/ammo_storage/magazine/uzi45)
+	var/biguzi = list(/obj/item/weapon/gun/projectile/automatic/uzi/bigmag,
+					/obj/item/ammo_storage/magazine/uzi45/extended)
+	var/microuzi = list(/obj/item/weapon/gun/projectile/automatic/microuzi,
+					/obj/item/ammo_storage/magazine/microuzi9)
+	var/silentmicrouzi = list(/obj/item/weapon/gun/projectile/automatic/microuzi,
+					/obj/item/gun_part/silencer,
+					/obj/item/ammo_storage/magazine/microuzi9)
+	var/stechkin = list(/obj/item/weapon/gun/projectile/pistol,
+					/obj/item/ammo_storage/magazine/mc9mm)
+	var/silentstechkin = list(/obj/item/weapon/gun/projectile/pistol,
+					/obj/item/gun_part/silencer,
+					/obj/item/ammo_storage/magazine/mc9mm)
+	var/nt22 = list(/obj/item/weapon/gun/projectile/pistol/NT22,
+					/obj/item/ammo_storage/magazine/lr22)
+	var/silentnt22 = list(/obj/item/weapon/gun/projectile/pistol/NT22,
+					/obj/item/gun_part/silencer,
+					/obj/item/ammo_storage/magazine/lr22)
+	var/luger = list(/obj/item/weapon/gun/projectile/luger,
+					/obj/item/ammo_storage/magazine/mc9mm)
+	var/smallluger = list(/obj/item/weapon/gun/projectile/luger/small,
+					/obj/item/ammo_storage/magazine/mc9mm)
+	var/colt = list(/obj/item/weapon/gun/projectile/colt,
+					/obj/item/ammo_storage/speedloader/a357)
+	var/eagle = list(/obj/item/weapon/gun/projectile/deagle,
+					/obj/item/ammo_storage/magazine/a50)
+	var/goldeagle = list(/obj/item/weapon/gun/projectile/deagle/gold,
+					/obj/item/ammo_storage/magazine/a50)
+	var/camoeagle = list(/obj/item/weapon/gun/projectile/deagle/camo,
+					/obj/item/ammo_storage/magazine/a50)
+	var/gyrojet = list(/obj/item/weapon/gun/projectile/gyropistol,
+					/obj/item/ammo_storage/magazine/a75)
+	var/beretta = list(/obj/item/weapon/gun/projectile/beretta,
+					/obj/item/ammo_storage/magazine/beretta)
+	var/silentpistol = list(/obj/item/weapon/gun/projectile/silenced,
+					/obj/item/ammo_storage/magazine/c45)
+	contains = list(/obj/item/clothing/accessory/holster/handgun,
+					/obj/item/clothing/accessory/storage/webbing,
+					/obj/item/clothing/accessory/holster/knife/boot,
+					/obj/item/clothing/accessory/holomap_chip)
+	cost = 300
+	containertype = /obj/structure/closet/crate/basic
+	containername = "covert ops crate"
+	group = "Security"
+	hidden = 1
+	
+/datum/supply_packs/covertops/New()
+	selection_from = list(uzi, biguzi, microuzi, silentmicrouzi, stechkin, silentstechkin, nt22, silentnt22, luger, smallluger, colt, eagle, goldeagle, camoeagle, gyrojet, beretta, silentpistol)
+
+/datum/supply_packs/overtops
+	name = "Overt Ops supplies"
+	var/list/exploder = list(/obj/item/clothing/accessory/storage/bandolier/chaos)
+	var/rocket = list(/obj/item/weapon/gun/projectile/rocketlauncher,
+					/obj/item/ammo_casing/rocket_rpg)
+	var/luber = list(/obj/item/weapon/reagent_containers/spray/rev,
+					/obj/item/weapon/reagent_containers/spray/antilube)
+	var/martyrdom = list(/obj/item/clothing/suit/bomber_vest)
+	cost = 750
+	containertype = /obj/structure/closet/crate/basic
+	containername = "overt ops crate"
+	group = "Security"
+	hidden = 1
+	
+/datum/supply_packs/overtops/New()
+	selection_from = list(exploder, rocket, luber, martyrdom)
 
 /datum/supply_packs/randomised/russianguns
 	name = "Russian weapons"
@@ -1250,6 +1408,26 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = ".380 pistols crate"
 	access = list(access_armory)
 	group = "Security"
+	
+/datum/supply_packs/auto380/automatic
+	name = "NT Glock PDW modification"
+	contains = list(/obj/item/gun_part/glock_auto_conversion_kit)
+	cost = 100
+	containertype = /obj/structure/closet/crate/secure/weapon
+	containername = ".380 machine pistols crate"
+	access = list(access_armory)
+	group = "Security"
+	contraband = 1
+	
+/datum/supply_packs/auto380/magazine
+	name = "NT Glock heavy duty modification"
+	contains = list(/obj/item/gun_part/universal_magwell_expansion_kit)
+	cost = 100
+	containertype = /obj/structure/closet/crate/secure/weapon
+	containername = ".380 machine pistols crate"
+	access = list(access_armory)
+	group = "Security"
+	contraband = 1
 
 /datum/supply_packs/auto380/lethals
 	name = "NT Glock lethal ammo"
@@ -2051,6 +2229,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = "/obj/structure/closet/crate/medical"
 	containername = "sterile equipment crate"
 	group = "Medical"
+
+/datum/supply_packs/poisons
+	name = "Discount Dan's Banned food additives"
+	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/cyanide,
+					/obj/item/weapon/reagent_containers/glass/bottle/stoxin,
+					/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+					/obj/item/weapon/reagent_containers/glass/bottle/mutagen,
+					/obj/item/weapon/reagent_containers/glass/bottle/mindbreaker,
+					/obj/item/weapon/reagent_containers/dropper,
+					/obj/item/weapon/reagent_containers/glass/beaker,
+					/obj/item/weapon/reagent_containers/syringe)
+	cost = 100
+	containertype = "/obj/structure/closet/crate/medical"
+	containername = "basic chemistry crate"
+	group = "Medical"
+	hidden = 1
 
 /datum/supply_packs/bloodbags
 	name = "Bloodbags"
