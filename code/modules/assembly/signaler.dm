@@ -129,7 +129,7 @@
 
 	if(href_list["send"])
 		spawn( 0 )
-			signal()
+			activate()
 
 	if(usr)
 		attack_self(usr)
@@ -173,8 +173,6 @@
 		return 0
 	if(!(src.wires & WIRE_RADIO_RECEIVE))
 		return 0
-	if(signal.source == src) //Avoid pinging itself
-		return 0
 	pulse(1)
 
 	if(!holder)
@@ -210,7 +208,7 @@
 
 	if(!M || !ismob(M))
 		if(prob(5))
-			signal()
+			activate()
 		deadman = 0
 		processing_objects.Remove(src)
 	else if(prob(5))
