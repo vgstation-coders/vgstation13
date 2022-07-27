@@ -1530,7 +1530,6 @@
 	products = list(/obj/item/weapon/shard)
 	mutants = list("purpleshardlime")
 	harvest_repeat = 1
-	mutants = null
 
 	lifespan = 70
 	maturation = 4
