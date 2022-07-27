@@ -1073,11 +1073,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	var/silentstechkin = list(/obj/item/weapon/gun/projectile/pistol,
 					/obj/item/gun_part/silencer,
 					/obj/item/ammo_storage/magazine/mc9mm)
-	var/nt22 = list(/obj/item/weapon/gun/projectile/pistol/NT22,
-					/obj/item/ammo_storage/magazine/lr22)
-	var/silentnt22 = list(/obj/item/weapon/gun/projectile/pistol/NT22,
-					/obj/item/gun_part/silencer,
-					/obj/item/ammo_storage/magazine/lr22)
 	var/luger = list(/obj/item/weapon/gun/projectile/luger,
 					/obj/item/ammo_storage/magazine/mc9mm)
 	var/smallluger = list(/obj/item/weapon/gun/projectile/luger/small,
@@ -1107,7 +1102,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	hidden = 1
 	
 /datum/supply_packs/covertops/New()
-	selection_from = list(uzi, biguzi, microuzi, silentmicrouzi, stechkin, silentstechkin, nt22, silentnt22, luger, smallluger, colt, eagle, goldeagle, camoeagle, gyrojet, beretta, silentpistol)
+	selection_from = list(uzi, biguzi, microuzi, silentmicrouzi, stechkin, silentstechkin, luger, smallluger, colt, eagle, goldeagle, camoeagle, gyrojet, beretta, silentpistol)
 
 /datum/supply_packs/randomised/russianguns
 	name = "Russian weapons"
