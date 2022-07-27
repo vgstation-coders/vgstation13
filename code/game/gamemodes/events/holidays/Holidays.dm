@@ -1,4 +1,5 @@
 //Uncommenting ALLOW_HOLIDAYS in config.txt will enable Holidays
+//Get_Holiday() returns a holiday. If multiple holidays are on the same day, the choice is randomized, unless returned immediately, see VG_BIRTHDAY
 //Please, Don't spam stuff up with easter eggs, I'd rather somebody just delete this than people cause
 //the game to lag even more in the name of one-day content.
 
