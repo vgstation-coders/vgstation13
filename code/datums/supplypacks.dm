@@ -1055,7 +1055,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	hidden = 1
 	
 /datum/supply_packs/covertops
-	name = "Covert Ops supplies"
+	name = "Holdout supplies"
 	/var/list/uzi = list(/obj/item/weapon/gun/projectile/automatic/uzi,
 					/obj/item/ammo_storage/magazine/uzi45)
 	var/biguzi = list(/obj/item/weapon/gun/projectile/automatic/uzi/bigmag,
@@ -1099,29 +1099,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/accessory/holomap_chip)
 	cost = 300
 	containertype = /obj/structure/closet/crate/basic
-	containername = "covert ops crate"
+	containername = "holdout equipment crate"
 	group = "Security"
 	hidden = 1
 	
 /datum/supply_packs/covertops/New()
 	selection_from = list(uzi, biguzi, microuzi, silentmicrouzi, stechkin, silentstechkin, nt22, silentnt22, luger, smallluger, colt, eagle, goldeagle, camoeagle, gyrojet, beretta, silentpistol)
-
-/datum/supply_packs/overtops
-	name = "Overt Ops supplies"
-	var/list/exploder = list(/obj/item/clothing/accessory/storage/bandolier/chaos)
-	var/rocket = list(/obj/item/weapon/gun/projectile/rocketlauncher,
-					/obj/item/ammo_casing/rocket_rpg)
-	var/luber = list(/obj/item/weapon/reagent_containers/spray/rev,
-					/obj/item/weapon/reagent_containers/spray/antilube)
-	var/martyrdom = list(/obj/item/clothing/suit/bomber_vest)
-	cost = 750
-	containertype = /obj/structure/closet/crate/basic
-	containername = "overt ops crate"
-	group = "Security"
-	hidden = 1
-	
-/datum/supply_packs/overtops/New()
-	selection_from = list(exploder, rocket, luber, martyrdom)
 
 /datum/supply_packs/randomised/russianguns
 	name = "Russian weapons"
@@ -1408,26 +1391,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = ".380 pistols crate"
 	access = list(access_armory)
 	group = "Security"
-	
-/datum/supply_packs/auto380/automatic
-	name = "NT Glock PDW modification"
-	contains = list(/obj/item/gun_part/glock_auto_conversion_kit)
-	cost = 100
-	containertype = /obj/structure/closet/crate/secure/weapon
-	containername = ".380 machine pistols crate"
-	access = list(access_armory)
-	group = "Security"
-	contraband = 1
-	
-/datum/supply_packs/auto380/magazine
-	name = "NT Glock heavy duty modification"
-	contains = list(/obj/item/gun_part/universal_magwell_expansion_kit)
-	cost = 100
-	containertype = /obj/structure/closet/crate/secure/weapon
-	containername = ".380 machine pistols crate"
-	access = list(access_armory)
-	group = "Security"
-	contraband = 1
 
 /datum/supply_packs/auto380/lethals
 	name = "NT Glock lethal ammo"
@@ -2067,6 +2030,43 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 //////CARGO//////
 
+/datum/supply_packs/cargobundle
+	name = "Lesser Syndicate bundle"
+	var/list/poisons = list(/obj/item/weapon/reagent_containers/glass/bottle/cyanide,
+					/obj/item/weapon/reagent_containers/glass/bottle/stoxin,
+					/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+					/obj/item/weapon/reagent_containers/glass/bottle/mutagen,
+					/obj/item/weapon/reagent_containers/glass/bottle/mindbreaker,
+					/obj/item/weapon/reagent_containers/dropper,
+					/obj/item/weapon/reagent_containers/glass/beaker,
+					/obj/item/weapon/reagent_containers/syringe)
+	var/exploder = list(/obj/item/clothing/accessory/storage/bandolier/chaos)
+	var/rocketlauncher = list(/obj/item/weapon/gun/projectile/rocketlauncher,
+					/obj/item/ammo_casing/rocket_rpg)
+	var/luber = list(/obj/item/weapon/reagent_containers/spray/rev,
+					/obj/item/weapon/reagent_containers/spray/antilube)
+	var/martyrdom = list(/obj/item/clothing/suit/bomber_vest)
+	var/machineglock = list(/obj/item/weapon/gun/projectile/glock,
+					/obj/item/gun_part/glock_auto_conversion_kit,
+					/obj/item/gun_part/universal_magwell_expansion_kit,
+					/obj/item/ammo_storage/magazine/m380auto/extended)
+	var/fakenews = list(/obj/item/device/reportintercom)
+	var/neighborhoodsniper = list(/obj/item/clothing/glasses/thermal/syndi,
+					/obj/item/binoculars,
+					/obj/item/weapon/gun/projectile/mosin,
+					/obj/item/ammo_storage/box/b762x55)
+	var/radcell = list(/obj/item/weapon/cell/rad,
+					/obj/item/weapon/cell/rad,
+					/obj/item/weapon/cell/rad,
+					/obj/item/weapon/cell/rad)
+	var/wiretap = list(/obj/item/device/encryptionkey/syndicate/hacked,
+					/obj/item/device/encryptionkey/binary)
+	var/forbiddengum = list(/obj/item/gum/explosive,
+					/obj/item/gum/explosive,
+					/obj/item/gum/explosive)
+	var/pocketsat = list(/obj/item/weapon/grenade/station)
+	var/adrenals = list(/obj/item/weapon/implanter/adrenalin)
+
 /datum/supply_packs/mule
 	name = "MULEbot"
 	contains = list(/obj/machinery/bot/mulebot)
@@ -2229,22 +2229,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = "/obj/structure/closet/crate/medical"
 	containername = "sterile equipment crate"
 	group = "Medical"
-
-/datum/supply_packs/poisons
-	name = "Discount Dan's Banned food additives"
-	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/cyanide,
-					/obj/item/weapon/reagent_containers/glass/bottle/stoxin,
-					/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
-					/obj/item/weapon/reagent_containers/glass/bottle/mutagen,
-					/obj/item/weapon/reagent_containers/glass/bottle/mindbreaker,
-					/obj/item/weapon/reagent_containers/dropper,
-					/obj/item/weapon/reagent_containers/glass/beaker,
-					/obj/item/weapon/reagent_containers/syringe)
-	cost = 100
-	containertype = "/obj/structure/closet/crate/medical"
-	containername = "basic chemistry crate"
-	group = "Medical"
-	hidden = 1
 
 /datum/supply_packs/bloodbags
 	name = "Bloodbags"
