@@ -124,7 +124,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 // 	Make a subsystem, give it the SS_NO_FIRE flag, and do your work in it's Initialize()
 /datum/controller/master/proc/Setup()
 	set waitfor = FALSE
-	sleep(ONE SECONDS)
+	sleep(1 SECONDS)
 	//moving this random bullshit into here, because it didn't belong in world/New()
 	//SetupHooks() // /N3X15 project from 8 years ago (WIP)
 	createDatacore()
