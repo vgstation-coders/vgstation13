@@ -513,6 +513,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "formalwear crate"
 	group = "Clothing"
 	hidden = 1
+	
+/datum/supply_packs/disguisekit/New()
+	selection_from = list(engineer, scientist, atmos, doctor, janitor)
 
 /datum/supply_packs/costume
 	name = "Standard costumes"
@@ -2066,6 +2069,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/gum/explosive)
 	var/pocketsat = list(/obj/item/weapon/grenade/station)
 	var/adrenals = list(/obj/item/weapon/implanter/adrenalin)
+	cost = 750
+	containertype = /obj/structure/closet/crate/basic
+	containername = "mining equipment crate"
+	group = "Cargo"
+	
+/datum/supply_packs/cargobundle/New()
+	selection_from = list(poisons, exploder, rocketlauncher, luber, martyrdom, machineglock, fakenews, neighborhoodsniper, radcell, wiretap, forbiddengum, pocketsat, adrenals)
 
 /datum/supply_packs/mule
 	name = "MULEbot"
