@@ -342,13 +342,13 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				if(GENEGUN_MODE_PURGE)
 					nutrient_consumption	= gene.values[1]
 					fluid_consumption 		= gene.values[2]
-					voracious				= gene.values[4]
-					hematophage 			= gene.values[5]
+					voracious				= gene.values[3]
+					hematophage 			= gene.values[4]
 				if(GENEGUN_MODE_SPLICE)
 					nutrient_consumption	= mix(gene.values[1], nutrient_consumption,	rand(40, 60)/100)
 					fluid_consumption 		= mix(gene.values[2], fluid_consumption,	rand(40, 60)/100)
-					voracious 				= max(gene.values[4], voracious)
-					hematophage 			= max(gene.values[5], hematophage)
+					voracious 				= max(gene.values[3], voracious)
+					hematophage 			= max(gene.values[4], hematophage)
           
 		if(GENE_DEVELOPMENT)
 			switch(mode)
@@ -379,6 +379,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				if(!exude_gasses || mode == GENEGUN_MODE_PURGE)
 					exude_gasses = list()
 				exude_gasses |= new_gasses
+			new_gasses.len = 0
 			new_gasses = gene.values[5]
 			if(islist(new_gasses))
 				if(!consume_gasses || mode == GENEGUN_MODE_PURGE)
@@ -457,9 +458,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			P.values = list(
 				(teleporting          	? teleporting          	: 0),
 				(alter_temp    			? alter_temp    		: 0),
+				(noreact				? noreact				: 0),
 				(exude_gasses    		? exude_gasses    		: 0),
-				(consume_gasses    		? consume_gasses    	: 0),
-				(noreact				? noreact				: 0)
+				(consume_gasses    		? consume_gasses    	: 0)
 			)
 	return (P ? P : 0)
 

@@ -16,7 +16,7 @@
 	var/iscloaking = FALSE
 	var/silentbite = FALSE
 	var/deadchat_timer = 0
-	var/deadchat = TRUE
+	var/deadchat = FALSE
 	var/nullified = 0
 	var/smitecounter = 0
 
@@ -219,7 +219,7 @@
 		if(blood_total_before != blood_total)
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
-		target.vessel.remove_reagent(BLOOD,30)
+		target.vessel.remove_reagent(BLOOD,blood)
 		update_vamp_hud()
 
 	draining = null
@@ -333,19 +333,17 @@
 		to_chat(C, "<span class='sinister'>Your heart is filled with dread, and you shake uncontrollably.</span>")
 
 /datum/role/vampire/proc/handle_deadspeak(var/mob/living/carbon/human/H)
-	if(!deadchat)
+	if(deadchat)
 		return
 	if(H.stat == DEAD)
 		return
 	if(locate(/datum/power/vampire/charisma) in current_powers && world.time > deadchat_timer)
-		deadchat = FALSE
-		H.client.prefs.toggles |= CHAT_DEAD
+		deadchat = TRUE
 		//have deadchat for 30 seconds every five minutes
 		spawn(rand(200, 400))
 			if(H.stat != DEAD)
 				deadchat_timer = world.time + 1800 + rand(300, 1200)
-				H.client.prefs.toggles &= ~CHAT_DEAD
-				deadchat = TRUE
+				deadchat = FALSE
 
 /datum/role/vampire/proc/handle_smite(var/mob/living/carbon/human/H)
 	var/smitetemp = 0

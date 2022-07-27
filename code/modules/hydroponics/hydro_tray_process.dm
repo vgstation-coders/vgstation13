@@ -19,9 +19,11 @@
 
 	// Weeds like water and nutrients, there's a chance the weed population will increase.
 	// This process is up here because it still happens even when the tray is empty.
-	if(get_waterlevel() > WATERLEVEL_MAX/5 && get_nutrientlevel() > NUTRIENTLEVEL_MAX/5 && prob(2))
-		add_weedlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient)
-
+	if(get_waterlevel() > WATERLEVEL_MAX/5 && get_nutrientlevel() > NUTRIENTLEVEL_MAX/5)
+		if(isnull(seed) && prob(5))
+			add_weedlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient)
+		else if(prob(2))
+			add_weedlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 	// There's a chance for a weed explosion to happen if the weeds take over.
 	// Plants that are themselves weeds (weed_tolerance > 80) are unaffected.
 	if (get_weedlevel() == WEEDLEVEL_MAX && prob(10))

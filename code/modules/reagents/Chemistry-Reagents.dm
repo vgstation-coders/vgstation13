@@ -591,16 +591,16 @@
 						var/targetref = "/ref[foundmob]"
 						var/blood_total_before = V.blood_total
 						var/blood_usable_before = V.blood_usable
-						var/divisor = (locate(/datum/power/vampire/mature) in V.current_powers) ? (min(2,foundmob.stat + 1)/2) : min(2,foundmob.stat + 1)
+						var/divisor = (locate(/datum/power/vampire/mature) in V.current_powers) ? min(2,foundmob.stat + 1) : (min(2,foundmob.stat + 1)*2)
 						if (!(targetref in V.feeders))
 							V.feeders[targetref] = 0
 						if (V.feeders[targetref] < MAX_BLOOD_PER_TARGET)
-							V.blood_total += min(volume,1)/divisor
+							V.blood_total += volume/divisor
 						else
 							to_chat(H, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
 						if(foundmob.stat < DEAD) //alive
-							V.blood_usable += min(volume,1)/divisor
-						V.feeders[targetref] += min(volume,1)/divisor
+							V.blood_usable += volume/divisor
+						V.feeders[targetref] += volume/divisor
 						if(blood_total_before != V.blood_total)
 							to_chat(H, "<span class='notice'>You have accumulated [V.blood_total] unit[V.blood_total > 1 ? "s" : ""] of blood[blood_usable_before != V.blood_usable ?", and have [V.blood_usable] left to use." : "."]</span>")
 						V.check_vampire_upgrade()
@@ -1341,9 +1341,13 @@
 
 /datum/reagent/holysalts/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_waterlevel(-4)
-	T.add_nutrientlevel(-5)
-	T.add_toxinlevel(2)
+	T.add_waterlevel(-5)
+	T.add_nutrientlevel(5)
+	T.add_toxinlevel(8)
+	T.add_weedlevel(-20)
+	T.add_pestlevel(-10)
+	if(T.seed && !T.dead)
+		T.add_planthealth(-2)
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -1516,6 +1520,7 @@
 /datum/reagent/chlorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_toxinlevel(8)
+	T.add_weedlevel(-2)
 
 /datum/reagent/fluorine
 	name = "Fluorine"
@@ -1589,6 +1594,7 @@
 /datum/reagent/phosphorus/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_nutrientlevel(1)
+	T.add_weedlevel(3)
 
 /datum/reagent/lithium
 	name = "Lithium"
@@ -1623,7 +1629,8 @@
 /datum/reagent/sugar/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_nutrientlevel(1)
-	T.add_pestlevel(1)
+	T.add_pestlevel(20)
+	T.add_weedlevel(20)
 
 /datum/reagent/sugar/cornsyrup
 	name = "High-Fructose Corn Syrup"
@@ -2550,23 +2557,23 @@
 		return
 	T.add_nutrientlevel(10)
 	if(T.reagents.get_reagent_amount(id) >= 1)
-		if(prob(0.2))
-			T.mutate(GENE_PHYTOCHEMISTRY)
-		if(prob(0.2))
-			T.mutate(GENE_MORPHOLOGY)
-		if(prob(0.2))
-			T.mutate(GENE_BIOLUMINESCENCE)
-		if(prob(0.2))
-			T.mutate(GENE_ECOLOGY)
-		if(prob(0.2))
-			T.mutate(GENE_ECOPHYSIOLOGY)
-		if(prob(0.2))
-			T.mutate(GENE_METABOLISM)
-		if(prob(0.2))
-			T.mutate(GENE_DEVELOPMENT)
-		if(prob(0.2))
-			T.mutate(GENE_XENOPHYSIOLOGY)
 		if(prob(1))
+			T.mutate(GENE_PHYTOCHEMISTRY)
+		if(prob(1))
+			T.mutate(GENE_MORPHOLOGY)
+		if(prob(1))
+			T.mutate(GENE_BIOLUMINESCENCE)
+		if(prob(1))
+			T.mutate(GENE_ECOLOGY)
+		if(prob(1))
+			T.mutate(GENE_ECOPHYSIOLOGY)
+		if(prob(1))
+			T.mutate(GENE_METABOLISM)
+		if(prob(1))
+			T.mutate(GENE_DEVELOPMENT)
+		if(prob(1))
+			T.mutate(GENE_XENOPHYSIOLOGY)
+		if(prob(5))
 			T.reagents.remove_reagent(id, 1)
 
 /datum/reagent/fertilizer/robustharvest
@@ -4404,8 +4411,16 @@ var/procizine_tolerance = 0
 	if(T.seed && !T.dead)
 		if(prob(20))
 			T.affect_growth(1)
-		if(prob(25))
-			T.mutate(GENE_ECOPHYSIOLOGY)
+		if(!T.seed.immutable)
+			var/chance
+			chance = unmix(T.seed.lifespan, 15, 125)*20
+			if(prob(chance))
+				T.check_for_divergence(1)
+				T.seed.lifespan++
+			chance = unmix(T.seed.lifespan, 15, 125)*20
+			if(prob(chance))
+				T.check_for_divergence(1)
+				T.seed.endurance++
 
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
@@ -5028,6 +5043,11 @@ var/procizine_tolerance = 0
 	..()
 	T.add_waterlevel(-5)
 	T.add_nutrientlevel(5)
+	T.add_toxinlevel(8)
+	T.add_weedlevel(-20)
+	T.add_pestlevel(-10)
+	if(T.seed && !T.dead)
+		T.add_planthealth(-2)
 
 /datum/reagent/creatine
 	name = "Creatine"

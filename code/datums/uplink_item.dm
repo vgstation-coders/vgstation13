@@ -816,8 +816,8 @@ var/list/uplink_items = list()
 	name = "Powercreep Packet"
 	desc = "A packet that creates a dangerous mutated version of kudzu vines. The vines will repeatedly shock people and connect themselves to any cables near them, rapidly growing and spreading out of control if left unchecked."
 	item = /obj/item/deployable_packet/powercreeper
-	cost = 16
-	discounted_cost = 10
+	cost = 10
+	discounted_cost = 5
 	jobs_with_discount = list("Botanist", "Station Engineer", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/engineering/syndietape_engineering
