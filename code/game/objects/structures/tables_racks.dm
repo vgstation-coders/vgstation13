@@ -355,20 +355,20 @@
 		if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
 			return
 		var/mob/living/carbon/M = user
-		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = name)
+		if(M.brainloss < 150)
+			M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = name)
+		else
+			//unable to hold back the strength
+			M.apply_damage(10, BRUTE, LIMB_HEAD, used_weapon = name)
 		M.adjustBrainLoss(5)
 		playsound(M, "trayhit", 50, 1)
-		if(prob(table_climb_chance))
-			M.visible_message("<span class='danger'>[user] bangs \his head on \the [src]. But, \he refuses to give up, reaching up for \the [src]!</span>", "<span class='danger'>You bang your head on \the [src], but you refuse to give up! You reach for \the [src]...</span>", "You hear a bang.")
-			if(do_after(user, src, 50))
-				M.forceMove(get_turf(src))
-				M.visible_message("<span class='danger'>[user] manages to climb \the [src]!</span>", "<span class='danger'>You successfully climb \the [src]!</span>")
-			else
-				M.visible_message("<span class='danger'>[user] fails to climb \the [src].</span>", "<span class='danger'>You fail to climb \the [src], losing your burst of motivation.</span>")
+		M.Stun(1)
+		M.Knockdown(1)
+		if(prob(table_climb_chance) && !M.locked_to && M.brainloss < 100)
+			M.visible_message("<span class='danger'>[user] bangs \his head on \the [src]. But, \he refuses to give up! Reaching for \the [src], \he manages to pull \himself on top of it!</span>", "<span class='danger'>You bang your head on \the [src], but you refuse to give up! You reach for \the [src]... and pull yourself up!</span>", "You hear a bang.")
+			M.forceMove(get_turf(src))
 		else
 			M.visible_message("<span class='danger'>[user] bangs \his head on \the [src].</span>", "<span class='danger'>You bang your head on \the [src].</span>", "You hear a bang.")
-			M.Stun(1)
-			M.Knockdown(1)
 		return
 	return ..()
 
