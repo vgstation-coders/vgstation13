@@ -290,7 +290,7 @@ var/datum/controller/gameticker/ticker
 		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
 
 	stat_collection.round_start_time = world.realtime
-	Master.round_started = 1
+	Master.RoundStart()
 	wageSetup()
 	post_roundstart()
 	return 1
