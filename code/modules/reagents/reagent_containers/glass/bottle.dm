@@ -692,7 +692,7 @@ var/datum/disease2/disease/wizarditis = null
 
 /obj/item/weapon/reagent_containers/glass/bottle/mindbreaker
 	name = "Mindbreaker Toxin Bottle"
-	desc = "A bottle filled with a strangely low-viscosity fluid. A small label displays its contents something that will cauase a fun time..."
+	desc = "A bottle filled with a strangely low-viscosity fluid. A small decal shows a starburst symbol."
 	icon = 'icons/obj/chemical.dmi'
 	
 /obj/item/weapon/reagent_containers/glass/bottle/mindbreaker/New()
