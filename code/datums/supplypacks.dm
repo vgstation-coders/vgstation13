@@ -2073,6 +2073,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "mining equipment crate"
 	group = "Cargo"
+	hidden = 1
 	
 /datum/supply_packs/cargobundle/New()
 	selection_from = list(poisons, exploder, rocketlauncher, luber, martyrdom, machineglock, fakenews, neighborhoodsniper, radcell, wiretap, forbiddengum, pocketsat, adrenals)
