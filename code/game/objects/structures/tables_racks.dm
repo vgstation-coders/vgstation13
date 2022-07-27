@@ -364,7 +364,7 @@
 				M.forceMove(get_turf(src))
 				M.visible_message("<span class='danger'>[user] manages to climb \the [src]!</span>", "<span class='danger'>You successfully climb \the [src]!</span>")
 			else
-				M.visible_message("<span class='danger'>[user] fail to climb \the [src].</span>", "<span class='danger'>You fail to climb \the [src], losing your burst of motivation.</span>")
+				M.visible_message("<span class='danger'>[user] fails to climb \the [src].</span>", "<span class='danger'>You fail to climb \the [src], losing your burst of motivation.</span>")
 		else
 			M.visible_message("<span class='danger'>[user] bangs \his head on \the [src].</span>", "<span class='danger'>You bang your head on \the [src].</span>", "You hear a bang.")
 			M.Stun(1)
