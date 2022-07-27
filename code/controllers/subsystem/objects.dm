@@ -19,7 +19,6 @@ var/list/processing_objects = list()
 
 
 /datum/subsystem/obj/Initialize()
-	var/count_objects = 0
 	for(var/atom/object in world)
 		if(!(object.flags & ATOM_INITIALIZED))
 			var/time_start = world.timeofday
@@ -41,8 +40,6 @@ var/list/processing_objects = list()
 			if(!A.requires_power || !A.haslightswitch)
 				for(var/obj/machinery/light/L in A)
 					L.seton(1)
-
-
 
 /datum/subsystem/obj/stat_entry()
 	..("P:[processing_objects.len]")
