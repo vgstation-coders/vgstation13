@@ -378,6 +378,14 @@
 	seed_type = "silicatecitrus"
 	vending_cat = "fruits"
 
+/obj/item/seeds/shardlime
+	name = "packet of shardlime seeds"
+	seed_type = "shardlime"
+
+/obj/item/seeds/purpleshardlime
+	name = "packet of purple shardlime seeds"
+	seed_type = "purpleshardlime"
+
 /obj/item/seeds/poisonberryseed
 	name = "packet of poison berry seeds"
 	seed_type = "poisonberries"
@@ -1506,12 +1514,41 @@
 	plant_dmi = 'icons/obj/hydroponics/silicatecitrus.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus)
 	harvest_repeat = 1
-	mutants = null
+	mutants = list("shardlime")
 	chems = list(SILICATE = list(3,5))
 
 	lifespan = 55
 	maturation = 6
 	production = 6
+	yield = 5
+
+/datum/seed/shardlime
+	name = "shardlime"
+	seed_name = "shardlime"
+	display_name = "shardlime"
+	plant_dmi = 'icons/obj/hydroponics/shardlime.dmi'
+	products = list(/obj/item/weapon/shard)
+	mutants = list("purpleshardlime")
+	harvest_repeat = 1
+	mutants = null
+
+	lifespan = 70
+	maturation = 4
+	production = 5
+	yield = 5
+
+/datum/seed/purpleshardlime
+	name = "purpleshardlime"
+	seed_name = "purple shardlime"
+	display_name = "purple shardlime"
+	plant_dmi = 'icons/obj/hydroponics/purpleshardlime.dmi'
+	products = list(/obj/item/weapon/shard/plasma)
+	harvest_repeat = 1
+	mutants = null
+
+	lifespan = 70
+	maturation = 4
+	production = 5
 	yield = 5
 
 /datum/seed/grass
