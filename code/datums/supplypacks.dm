@@ -1057,51 +1057,67 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 	hidden = 1
 	
-/datum/supply_packs/covertops
+/datum/supply_packs/holdout
 	name = "Holdout supplies"
-	/var/list/uzi = list(/obj/item/weapon/gun/projectile/automatic/uzi,
-					/obj/item/ammo_storage/magazine/uzi45)
+	/var/uzi = list(/obj/item/weapon/gun/projectile/automatic/uzi,
+					/obj/item/ammo_storage/magazine/uzi45,
+	)
 	var/biguzi = list(/obj/item/weapon/gun/projectile/automatic/uzi/bigmag,
-					/obj/item/ammo_storage/magazine/uzi45/extended)
+					/obj/item/ammo_storage/magazine/uzi45/extended,
+	)
 	var/microuzi = list(/obj/item/weapon/gun/projectile/automatic/microuzi,
-					/obj/item/ammo_storage/magazine/microuzi9)
+					/obj/item/ammo_storage/magazine/microuzi9,
+	)
 	var/silentmicrouzi = list(/obj/item/weapon/gun/projectile/automatic/microuzi,
 					/obj/item/gun_part/silencer,
-					/obj/item/ammo_storage/magazine/microuzi9)
+					/obj/item/ammo_storage/magazine/microuzi9,
+	)
 	var/stechkin = list(/obj/item/weapon/gun/projectile/pistol,
-					/obj/item/ammo_storage/magazine/mc9mm)
+					/obj/item/ammo_storage/magazine/mc9mm,
+	)
 	var/silentstechkin = list(/obj/item/weapon/gun/projectile/pistol,
 					/obj/item/gun_part/silencer,
-					/obj/item/ammo_storage/magazine/mc9mm)
+					/obj/item/ammo_storage/magazine/mc9mm,
+	)
 	var/luger = list(/obj/item/weapon/gun/projectile/luger,
-					/obj/item/ammo_storage/magazine/mc9mm)
+					/obj/item/ammo_storage/magazine/mc9mm,
+	)
 	var/smallluger = list(/obj/item/weapon/gun/projectile/luger/small,
-					/obj/item/ammo_storage/magazine/mc9mm)
+					/obj/item/ammo_storage/magazine/mc9mm,
+	)
 	var/colt = list(/obj/item/weapon/gun/projectile/colt,
-					/obj/item/ammo_storage/speedloader/a357)
+					/obj/item/ammo_storage/speedloader/a357,
+	)
 	var/eagle = list(/obj/item/weapon/gun/projectile/deagle,
-					/obj/item/ammo_storage/magazine/a50)
+					/obj/item/ammo_storage/magazine/a50,
+	)
 	var/goldeagle = list(/obj/item/weapon/gun/projectile/deagle/gold,
-					/obj/item/ammo_storage/magazine/a50)
+					/obj/item/ammo_storage/magazine/a50,
+	)
 	var/camoeagle = list(/obj/item/weapon/gun/projectile/deagle/camo,
-					/obj/item/ammo_storage/magazine/a50)
+					/obj/item/ammo_storage/magazine/a50,
+	)
 	var/gyrojet = list(/obj/item/weapon/gun/projectile/gyropistol,
-					/obj/item/ammo_storage/magazine/a75)
+					/obj/item/ammo_storage/magazine/a75,
+	)
 	var/beretta = list(/obj/item/weapon/gun/projectile/beretta,
-					/obj/item/ammo_storage/magazine/beretta)
+					/obj/item/ammo_storage/magazine/beretta,
+	)
 	var/silentpistol = list(/obj/item/weapon/gun/projectile/silenced,
-					/obj/item/ammo_storage/magazine/c45)
+					/obj/item/ammo_storage/magazine/c45,
+	)
 	contains = list(/obj/item/clothing/accessory/holster/handgun,
 					/obj/item/clothing/accessory/storage/webbing,
 					/obj/item/clothing/accessory/holster/knife/boot,
-					/obj/item/clothing/accessory/holomap_chip)
+					/obj/item/clothing/accessory/holomap_chip,
+	)
 	cost = 300
 	containertype = /obj/structure/closet/crate/basic
 	containername = "holdout equipment crate"
 	group = "Security"
 	hidden = 1
 	
-/datum/supply_packs/covertops/New()
+/datum/supply_packs/holdout/New()
 	selection_from = list(uzi, biguzi, microuzi, silentmicrouzi, stechkin, silentstechkin, luger, smallluger, colt, eagle, goldeagle, camoeagle, gyrojet, beretta, silentpistol)
 
 /datum/supply_packs/randomised/russianguns
