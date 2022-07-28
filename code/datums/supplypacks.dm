@@ -1109,7 +1109,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/accessory/holster/handgun,
 					/obj/item/clothing/accessory/storage/webbing,
 					/obj/item/clothing/accessory/holster/knife/boot,
-					/obj/item/clothing/accessory/holomap_chip,
+					/obj/item/clothing/accessory/holomap_chip/operative,
 	)
 	cost = 300
 	containertype = /obj/structure/closet/crate/basic
