@@ -1065,6 +1065,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		//Transfer any internal_organs from the organ item to the body
 		for(var/datum/organ/internal/transfer in organ.internal_organs)
+			if(transfer.name == "eyes" || "brain")
+				owner.organs_by_name["head"].internal_organs += transfer
 			owner.internal_organs += transfer
 			owner.internal_organs_by_name[transfer.organ_type] = transfer
 			owner.internal_organs_by_name[transfer.organ_type].owner = owner
