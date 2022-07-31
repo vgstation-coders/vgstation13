@@ -1552,7 +1552,7 @@
 	production = 5
 	yield = 5
 	biolum = 1
-	biolum_colour = "#D30EB0"
+	biolum_colour = "#DBBEF0"
 
 /datum/seed/grass
 	name = "grass"
