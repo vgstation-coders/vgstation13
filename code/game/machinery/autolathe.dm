@@ -47,6 +47,7 @@
 		new /obj/item/weapon/minihoe(),\
 		new /obj/item/device/analyzer(), \
 		new /obj/item/weapon/pickaxe/shovel/spade(), \
+		new /obj/item/weapon/hatchet/metalhandle() \
 		new /obj/item/device/silicate_sprayer/empty(), \
 		),
 		"Containers"=list(
