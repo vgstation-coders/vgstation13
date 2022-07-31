@@ -476,7 +476,10 @@
 		to_chat(user, "[logo] <span class='notice'>This allows you to search for the jump charge and the time anomaly when set.</span>")
 
 /obj/item/weapon/pinpointer/advpinpointer/time_agent/New()
-	item_paths = list() //Clear out the list
 	item_paths["Jump Charge"] = /obj/item/device/jump_charge
 	item_paths["Time Anomaly"] = /obj/effect/time_anomaly
 	target = locate(/obj/item/device/jump_charge)
+	for(var/path in potential_locate_objects)
+		var/obj/dpath = new path
+		item_paths[dpath.name] = path
+		qdel(dpath)
