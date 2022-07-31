@@ -363,7 +363,7 @@
 	icon_state = "jump_charge"
 	w_class = W_CLASS_SMALL
 	var/in_process = FALSE
-	var/charge = 5 //Will set to 0 and gradually increment to from 1 to 5 (10 seconds total), after which it can be used again
+	var/charge = 5 //Will set to 0 and gradually increment to from 0 to 5 (10 seconds total), after which it can be used again
 	var/logo
 
 /obj/item/device/timeline_eraser/examine(mob/user, size, show_name)
