@@ -643,11 +643,11 @@
 				if(!can_mind_interact(H.mind))
 					continue
 				to_chat(H, "<span class = 'warning'>You feel [diceroll>15 ? "incredibly" : ""] disorientated.</span>")
-				H.hallucination = clamp(rand(10,20)*diceroll, hallucination, 60)
+				H.hallucination = clamp(rand(10,20)*diceroll, hallucination, 60) //Maximum of 120 seconds
 				if(diceroll > 15)
-					H.confused = clamp(rand(15,35)*diceroll, confused, 60)
+					H.confused = clamp(rand(15,35)*diceroll, confused, 60) //Maximum of 120 seconds
 				if(diceroll >= 20)
-					H.dizziness = clamp(rand(5,25), dizziness, 30)
+					H.dizziness = clamp(rand(5,25), dizziness, 30) //Maximum of 60 seconds
 		if(2) //Disarm
 			var/number_of_disarmed = min(3, victims.len)
 			for(var/i = 0 to number_of_disarmed)
