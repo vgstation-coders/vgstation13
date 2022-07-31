@@ -1106,6 +1106,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	var/silentpistol = list(/obj/item/weapon/gun/projectile/silenced,
 					/obj/item/ammo_storage/magazine/c45,
 	)
+	var/revolver = list(/obj/item/weapon/gun/projectile/revolver,
+					/obj/item/ammo_storage/speedloader/a357,
+	)
+	var/mateba = list(/obj/item/weapon/gun/projectile/mateba,
+					/obj/item/ammo_storage/speedloader/a357,
+	)
+	var/nagant = list(/obj/item/weapon/gun/projectile/nagant,
+					/obj/item/ammo_storage/speedloader/a762x55,
+	)
+	var/silentnagant = list(/obj/item/weapon/gun/projectile/nagant,
+					/obj/item/gun_part/silencer,
+					/obj/item/ammo_storage/speedloader/a762x55,
+	)
 	contains = list(/obj/item/clothing/accessory/holster/handgun,
 					/obj/item/clothing/accessory/storage/brown_vest,
 					/obj/item/clothing/accessory/holster/knife/boot,
@@ -1118,7 +1131,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	hidden = 1
 	
 /datum/supply_packs/holdout/New()
-	selection_from = list(uzi, biguzi, microuzi, silentmicrouzi, stechkin, silentstechkin, luger, smallluger, colt, eagle, goldeagle, camoeagle, gyrojet, beretta, silentpistol)
+	selection_from = list(uzi, biguzi, microuzi, silentmicrouzi, stechkin, silentstechkin, luger, smallluger, colt, eagle, goldeagle, camoeagle, gyrojet, beretta, silentpistol, revolver, mateba, nagant, silentnagant)
 
 /datum/supply_packs/randomised/russianguns
 	name = "Russian weapons"
