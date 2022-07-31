@@ -1535,6 +1535,8 @@
 	maturation = 4
 	production = 5
 	yield = 5
+	biolum = 1
+	biolum_colour = "#FFFFFF"
 
 /datum/seed/purpleshardlime
 	name = "purpleshardlime"
@@ -1549,6 +1551,8 @@
 	maturation = 4
 	production = 5
 	yield = 5
+	biolum = 1
+	biolum_colour = "#D30EB0"
 
 /datum/seed/grass
 	name = "grass"
