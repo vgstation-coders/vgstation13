@@ -580,7 +580,7 @@
 		return
 	threat_decreased += amount
 	D.spend_midround_threat(amount)
-	D.threat_log += "[worldtime2text()]: [name] has decreased the threat level."
+	D.threat_log += "[worldtime2text()]: [name] has decreased the threat amount."
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
