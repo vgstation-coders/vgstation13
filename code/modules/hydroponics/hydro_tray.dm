@@ -43,7 +43,7 @@
 	var/bees = 0			   //Are the trays currently affected by the bees' pollination?
 
 	//var/decay_reduction = 0     //How much is mutation decay reduced by?
-	var/weed_coefficient = 1    //Coefficient to the chance of weeds appearing
+	var/weed_coefficient = 10    //Coefficient to the chance of weeds appearing
 	var/internal_light = 1
 	var/light_on = 0
 
