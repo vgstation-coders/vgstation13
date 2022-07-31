@@ -254,7 +254,7 @@
 /obj/item/device/jump_charge/examine(mob/user, size, show_name)
 	..()
 	if(istimeagent(user))
-		to_chat(user, "[logo] <span class='notice'>As a time agent, you know that you need this in order to go back through the time anomaly. Its extremely advanced technology allows it to regenerate in case of time erasure, and in a pinch you can use it to send anything into the future after 3 seconds.</span>")
+		to_chat(user, "[logo] <span class='notice'>As a time agent, you know that you need this in order to go back through the time anomaly. Its extremely advanced technology allows it to regenerate in case of destruction, and in a pinch you can use it to send anything into the future after 3 seconds.</span>")
 		if(triggered)
 			to_chat(user, "<span class='warning'>It is still recharging.</span>")
 		switch(times_respawned)
