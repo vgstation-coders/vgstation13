@@ -362,6 +362,7 @@
 	desc = "A strange button."
 	icon_state = "jump_charge"
 	w_class = W_CLASS_SMALL
+	flags = TIMELESS
 	var/in_process = FALSE
 	var/charge = 5 //Will set to 0 and gradually increment to from 0 to 5 (10 seconds total), after which it can be used again
 	var/logo
