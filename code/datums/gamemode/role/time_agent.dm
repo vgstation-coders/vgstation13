@@ -325,6 +325,8 @@
 				disarmed = TRUE
 				qdel(src)
 				qdel(target)
+			else
+				to_chat(user, "<span class='warning'>Your work is not over yet!</span>")
 		return
 	if(triggered)
 		to_chat(user, "<span class='warning'>It is still recharging!</span>")
