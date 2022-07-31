@@ -222,7 +222,9 @@
 		target.vessel.remove_reagent(BLOOD,blood)
 		var/mob/living/carbon/V = assailant
 		if(V)
-			if(V.nutrition < OVEREAT_THRESHOLD) //Gives the vampire a little bit of food, at a rate of 1/4 the blood sucked.
+			var/fatty_chemicals = target.has_reagent_in_blood(CHEESYGLOOP) || target.has_reagent_in_blood(CORNOIL) //If the target has these chemicals in his blood the vampire can get fat from sucking blood.
+			var/eating_threshold = fatty_chemicals ? OVEREAT_THRESHOLD * 2 : OVEREAT_THRESHOLD
+			if(V.nutrition < eating_threshold) //Gives the vampire a little bit of food, at a rate of 1/4 the blood sucked.
 				V.nutrition = round(min(V.nutrition + blood/4, OVEREAT_THRESHOLD), 1)
 		update_vamp_hud()
 
