@@ -1618,7 +1618,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	wounds = source.wounds.Copy()
 	burn_dam = source.burn_dam
 	brute_dam = source.brute_dam
-	internal_organs = source.internal_organs.Copy()
+	if(!isnull(source.internal_organs)) //DM throughs an error since Copy() can't run on a null object; some limbs don't have this var currently
+		internal_organs = source.internal_organs.Copy()
 
 	//Copy status flags except for ORGAN_CUT_AWAY and ORGAN_DESTROYED
 	status = source.status & ~(ORGAN_CUT_AWAY | ORGAN_DESTROYED)
