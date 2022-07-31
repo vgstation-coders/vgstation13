@@ -905,7 +905,7 @@ SEE_PIXELS	256
 #define ROLE_PRISONER		"prisoner"
 #define ROLE_GRUE			"grue"
 
-#define AGE_MIN 17			//youngest a character can be
+#define AGE_MIN 21			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
 
 /*//Languages!
