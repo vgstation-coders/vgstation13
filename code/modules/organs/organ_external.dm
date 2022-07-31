@@ -1512,8 +1512,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(E)
 		owner.internal_organs_by_name.Remove("eyes")
 		owner.internal_organs.Remove(E)
-
-	return
+		src.internal_organs.Remove(E)
+	return E
 
 /datum/organ/external/head/explode()
 	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
@@ -1616,7 +1616,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	wounds = source.wounds.Copy()
 	burn_dam = source.burn_dam
 	brute_dam = source.brute_dam
-	internal_organs = source.internal_organs
+	internal_organs = source.internal_organs.Copy()
 
 	//Copy status flags except for ORGAN_CUT_AWAY and ORGAN_DESTROYED
 	status = source.status & ~(ORGAN_CUT_AWAY | ORGAN_DESTROYED)
