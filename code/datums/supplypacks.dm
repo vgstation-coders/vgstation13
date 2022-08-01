@@ -1121,7 +1121,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	)
 	contains = list(/obj/item/clothing/accessory/holster/handgun,
 					/obj/item/clothing/accessory/storage/brown_vest,
-					/obj/item/clothing/accessory/holster/knife/boot,
+					/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical,
 					/obj/item/clothing/accessory/holomap_chip,
 	)
 	cost = 300
