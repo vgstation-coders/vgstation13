@@ -1,5 +1,0 @@
-"a" = (/obj/effect/landmark/start,/obj/effect/landmark{name = "Observer-Start"},/turf/space,/area)
-
-(1,1,1) = {"
-a
-"}
