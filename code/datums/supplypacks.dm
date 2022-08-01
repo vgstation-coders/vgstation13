@@ -2077,7 +2077,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/gun_part/glock_auto_conversion_kit,
 					/obj/item/gun_part/universal_magwell_expansion_kit,
 					/obj/item/ammo_storage/magazine/m380auto/extended)
-	var/fakenews = list(/obj/item/device/reportintercom)
+	var/fakenews = list(/obj/item/device/reportintercom,
+					/obj/item/device/reportintercom,
+					/obj/item/device/reportintercom)
 	var/neighborhoodsniper = list(/obj/item/clothing/glasses/thermal/syndi,
 					/obj/item/binoculars,
 					/obj/item/weapon/gun/projectile/mosin,
