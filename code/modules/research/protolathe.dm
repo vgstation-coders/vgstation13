@@ -19,8 +19,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 	build_number = 2
 
 	light_color = LIGHT_COLOR_CYAN
-
-	research_flags = CONSOLECONTROL | HASOUTPUT | TAKESMATIN | HASMAT_OVER | LOCKBOXES | MULTIOUTPUT
+	research_flags = CONSOLECONTROL | HASOUTPUT | TAKESMATIN | HASMAT_OVER | LOCKBOXES | MULTIOUTPUT | FAB_RECYCLER
 
 	part_sets = list(
 		"Stock Parts" = list(),
@@ -69,6 +68,6 @@ it creates. All the menus and other manipulation commands are in the R&D console
 	return
 
 /obj/machinery/r_n_d/fabricator/protolathe/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	..()
-	if (O.is_open_container())
+	if (..() || O.is_open_container())
 		return 1
+	return 0

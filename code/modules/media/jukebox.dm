@@ -462,6 +462,10 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/attackby(obj/item/W, mob/user)
 	. = ..()
+	if(ismultitool(W)) //The parent has a multi-tool call that prevents opening the wire panel using a multi-tool. This fixes it.
+		if(panel_open)
+			wires.Interact(user)
+			return
 	if(.)
 		return .
 	if(iswiretool(W))

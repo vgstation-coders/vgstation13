@@ -11,9 +11,9 @@
 
 	default_mat_overlays = TRUE
 	//build_time = 0.5
-	allowed_materials = 0 //A 0 or FALSE Allows all materials.
 	light_color = LIGHT_COLOR_RED
 
+	allowed_materials = list()
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT //| EMAGGABLE
 	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER | LOCKBOXES | FAB_RECYCLER
 

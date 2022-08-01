@@ -440,7 +440,7 @@
 				return 1
 			if(iscrowbar(P) && circuit)
 				P.playtoolsound(src, 50)
-				user.visible_message("[user] removes the circuit board.", "You remove the circuit board", "You hear metallic sounds.")
+				user.visible_message("[user] removes the circuit board.", "You remove the circuit board.", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "0"
 				circuit.forceMove(src.loc)
