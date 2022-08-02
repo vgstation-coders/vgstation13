@@ -25,6 +25,9 @@
 /mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!I || !user)
 		return FALSE
+	if(src.rps_in_combat)
+		visible_message("<span class='borange'>[user] notices [src] is concentrating on the battle, and decides not to attack [src].</span>")
+		return FALSE
 	target_zone = null
 	var/power = I.force
 	if (ishuman(user))
@@ -74,8 +77,58 @@
 			add_logs(user, src, "ineffectively attacked", admin=1, object=I, addition="weapon force: [power]")
 			return TRUE
 	var/damage = run_armor_absorb(target_zone, I.damtype, power)
+	//if(user.ckey || src.ckey) for later
+	visible_message("<span class='borange'>[user.rps_curse]</span>")
+	visible_message("<span class='borange'>[src.rps_curse]</span>")
+	var/actual_damage_done
+	var/did_rps=0
+	if((user.rps_curse || src.rps_curse) && !(user == src))
+		did_rps=1
+		src.rps_in_combat = 1
+		user.rps_in_combat = 1
+		visible_message("<span class='borange'>curse check success</span>")
+		var/attacker_wins = 0
+		var/defender_wins = 0
+		user.DisplayUI("Rock Paper Scissors Cards")
+		src.DisplayUI("Rock Paper Scissors Cards")
+		var/i
+		for(i=0, i<3, i=i)
+			visible_message("<span class='borange'>for check [i]</span>")
+			sleep(70)
+			switch(rps_win_check(user, src))
+				if(0)
+					attacker_wins++
+					visible_message("<span class='borange'>[user] wins this round!</span>")
+					i++
+				if(1)
+					defender_wins++
+					visible_message("<span class='borange'>[src] wins this round!</span>")
+					i++
+				if(2)
+					visible_message("<span class='borange'>[user] and [src] both picked [src.rps_intent]. Stalemate!</span>")
+		if(attacker_wins == 0)
+			attacker_wins = 1
+		if(defender_wins == 0)
+			defender_wins = 1
+		visible_message("<span class='borange'>damage before: [damage]!</span>")
+		switch(attacker_wins > defender_wins)
+			if(1)
+				visible_message("<span class='borange'>[user] wins!</span>")
+				visible_message("<span class='borange'>[attacker_wins/defender_wins] percentage!</span>")
+				damage = damage * (attacker_wins/defender_wins)
+				actual_damage_done = src.apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+			if(0)
+				visible_message("<span class='borange'>[src] wins!</span>")
+				visible_message("<span class='borange'>[defender_wins/attacker_wins] percentage!</span>")
+				damage = damage * (defender_wins/attacker_wins)
+				actual_damage_done = user.apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+		user.HideUI("Rock Paper Scissors Cards")
 
-	var/actual_damage_done = apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+	visible_message("<span class='borange'>[user.rps_intent] attacker intent</span>")
+	visible_message("<span class='borange'>[src.rps_intent] defender intent</span>")
+	visible_message("<span class='borange'>damage after: [damage]!</span>")
+	if(!did_rps)
+		actual_damage_done = apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
 
 	if(originator)
 		add_logs(originator, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]")
@@ -83,6 +136,16 @@
 		add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]")
 	INVOKE_EVENT(src, /event/attacked_by, "attacked" = src, "attacker" = user, "item" = I)
 	return TRUE
+
+/mob/living/carbon/proc/rps_win_check(var/mob/living/attacker, var/mob/living/defender)
+	if((attacker.rps_intent=="rock" && defender.rps_intent=="scissors") || (attacker.rps_intent=="scissors" && defender.rps_intent=="paper") || (attacker.rps_intent=="paper" && defender.rps_intent=="rock"))
+		return 0
+	else if((defender.rps_intent=="rock" && attacker.rps_intent=="scissors") || (defender.rps_intent=="scissors" && attacker.rps_intent=="paper") || (defender.rps_intent=="paper" && attacker.rps_intent=="rock"))
+		return 1
+	else if(defender.rps_intent == attacker.rps_intent)
+		return 2
+	else
+		return 3
 
 /mob/living/carbon/proc/check_shields(var/damage = 0, var/atom/A)
 	if(!incapacitated())

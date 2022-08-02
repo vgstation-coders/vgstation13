@@ -147,6 +147,11 @@
 	var/m_intent = "run"//Living
 	var/lastKnownIP = null
 
+	//Rock Paper Scissors defines
+	var/rps_intent = "rock"//Rock Paper Scissors
+	var/rps_curse = 1//If 1 forces them to RPS before attacking someone or being attacked
+	var/rps_in_combat = 0//Used for preventing someone in combat from attacking others, moving, or being attacked themselves
+
 	//Tank used as internals
 	var/obj/item/weapon/tank/internal = null
 
