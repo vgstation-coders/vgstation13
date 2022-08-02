@@ -118,7 +118,6 @@
 	if(attack_sound)
 		playsound(loc, attack_sound, 25, 1, -1)
 
-	visible_message(get_attack_message(target, attack_verb))
 	do_attack_animation(target, src)
 	var/damage_done
 	var/rps_percentage
@@ -133,9 +132,11 @@
 			if(rps_percentage > 0)
 				damage = damage * rps_percentage
 				damage_done = src.apply_damage(damage, damage_type, affecting, armor_block, sharpness)
+				visible_message(target.get_attack_message(src, attack_verb))
 			else if(rps_percentage < 0)
 				damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
 				damage_done = target.apply_damage(damage, damage_type, affecting, armor_block, sharpness)
+				visible_message(get_attack_message(target, attack_verb))
 		else
 			damage_done = target.apply_damage(damage, damage_type, affecting, armor_block, sharpness)
 	else
@@ -149,11 +150,14 @@
 			if(rps_percentage > 0)
 				damage = damage * rps_percentage
 				damage_done = src.apply_damage(damage, damage_type, affecting, armor_block)
+				visible_message(target.get_attack_message(src, attack_verb))
 			else if(rps_percentage < 0)
 				damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
 				damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
+				visible_message(get_attack_message(target, attack_verb))
 		else
 			damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
+				visible_message(get_attack_message(target, attack_verb))
 
 	target.unarmed_attacked(src, damage, damage_type, zone)
 	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
