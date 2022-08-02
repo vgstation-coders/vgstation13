@@ -96,6 +96,9 @@
 /mob/living/proc/unarmed_attack_mob(mob/living/target)
 	if(is_pacified(VIOLENCE_DEFAULT,target))
 		return
+	if(src.rps_in_combat)
+		visible_message("<span class='borange'>[src] notices [target] is concentrating on the battle, and decides not to attack [target].</span>")
+		return
 
 	var/damage = get_unarmed_damage(target)
 
@@ -117,13 +120,40 @@
 
 	visible_message(get_attack_message(target, attack_verb))
 	do_attack_animation(target, src)
-
 	var/damage_done
+	var/rps_percentage
 	if(ishuman(target))
-		damage_done = target.apply_damage(damage, damage_type, affecting, armor_block, sharpness)
+		//if(target.ckey || src.ckey) for later
+		if((target.rps_curse || src.rps_curse) && !(target == src)) //Rock Paper Scissors battle is here
+			src.rps_in_combat = 1
+			target.rps_in_combat = 1
+			rps_percentage = rps_battle(target, src)
+			src.rps_in_combat = 0
+			target.rps_in_combat = 0
+			if(rps_percentage > 0)
+				damage = damage * rps_percentage
+				damage_done = src.apply_damage(damage, damage_type, affecting, armor_block, sharpness)
+			else if(rps_percentage < 0)
+				damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
+				damage_done = target.apply_damage(damage, damage_type, affecting, armor_block, sharpness)
+		else
+			damage_done = target.apply_damage(damage, damage_type, affecting, armor_block, sharpness)
 	else
 		damage += sharpness
-		damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
+		if((target.rps_curse || src.rps_curse) && !(target == src)) //Rock Paper Scissors battle is here
+			src.rps_in_combat = 1
+			target.rps_in_combat = 1
+			rps_percentage = rps_battle(target, src)
+			src.rps_in_combat = 0
+			target.rps_in_combat = 0
+			if(rps_percentage > 0)
+				damage = damage * rps_percentage
+				damage_done = src.apply_damage(damage, damage_type, affecting, armor_block)
+			else if(rps_percentage < 0)
+				damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
+				damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
+		else
+			damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
 
 	target.unarmed_attacked(src, damage, damage_type, zone)
 	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
@@ -132,6 +162,56 @@
 
 	add_logs(src, target, "attacked ([damage_done]dmg)", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 	return damage_done
+
+
+/mob/living/proc/rps_battle(var/mob/living/attacker, var/mob/living/defender)
+	visible_message("<span class='borange'>curse check success</span>")
+	var/attacker_wins = 0
+	var/defender_wins = 0
+	attacker.DisplayUI("Rock Paper Scissors Cards")
+	defender.DisplayUI("Rock Paper Scissors Cards")
+	var/i
+	for(i=0, i<3, i=i)
+		visible_message("<span class='borange'>for check [i]</span>")
+		sleep(70)
+		switch(rps_win_check(attacker, defender))
+			if(0)
+				attacker_wins++
+				visible_message("<span class='borange'>[attacker] wins this round!</span>")
+				i++
+			if(1)
+				defender_wins++
+				visible_message("<span class='borange'>[defender] wins this round!</span>")
+				i++
+			if(2)
+				visible_message("<span class='borange'>[attacker] and [defender] both picked [defender.rps_intent]. Stalemate!</span>")
+	if(attacker_wins == 0)
+		attacker_wins = 1
+	if(defender_wins == 0)
+		defender_wins = 1
+	switch(attacker_wins > defender_wins)
+		if(1)
+			visible_message("<span class='borange'>[attacker] wins!</span>")
+			visible_message("<span class='borange'>[attacker_wins/defender_wins] percentage!</span>")
+			attacker.HideUI("Rock Paper Scissors Cards")
+			defender.HideUI("Rock Paper Scissors Cards")
+			return attacker_wins/defender_wins
+		if(0)
+			visible_message("<span class='borange'>[defender] wins!</span>")
+			visible_message("<span class='borange'>[defender_wins/attacker_wins] percentage!</span>")
+			attacker.HideUI("Rock Paper Scissors Cards")
+			defender.HideUI("Rock Paper Scissors Cards")
+			return (defender_wins/attacker_wins) * -1
+
+/mob/living/proc/rps_win_check(var/mob/living/attacker, var/mob/living/defender)
+	if((attacker.rps_intent=="rock" && defender.rps_intent=="scissors") || (attacker.rps_intent=="scissors" && defender.rps_intent=="paper") || (attacker.rps_intent=="paper" && defender.rps_intent=="rock"))
+		return 0
+	else if((defender.rps_intent=="rock" && attacker.rps_intent=="scissors") || (defender.rps_intent=="scissors" && attacker.rps_intent=="paper") || (defender.rps_intent=="paper" && attacker.rps_intent=="rock"))
+		return 1
+	else if(defender.rps_intent == attacker.rps_intent)
+		return 2
+	else
+		return 3
 
 /mob/living/proc/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
 	return

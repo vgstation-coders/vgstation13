@@ -39,8 +39,8 @@
 //------------------------------------------------------------
 
 /obj/abstract/mind_ui_element/hoverable/rock
-	name = "Trace Runes Manually"
-	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
+	name = "Rock"
+	desc = "lol"
 	icon = 'icons/ui/rockpaperscissors/152x192.dmi'
 	icon_state = "rock"
 	layer = MIND_UI_BUTTON
@@ -72,8 +72,8 @@
 //------------------------------------------------------------
 
 /obj/abstract/mind_ui_element/hoverable/paper
-	name = "Trace Runes Manually"
-	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
+	name = "Paper"
+	desc = "lol..."
 	icon = 'icons/ui/rockpaperscissors/152x192.dmi'
 	icon_state = "paper"
 	layer = MIND_UI_BUTTON
@@ -95,8 +95,8 @@
 //------------------------------------------------------------
 
 /obj/abstract/mind_ui_element/hoverable/scissors
-	name = "Trace Runes Manually"
-	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
+	name = "Scissors"
+	desc = "lol!"
 	icon = 'icons/ui/rockpaperscissors/152x192.dmi'
 	icon_state = "scissors"
 	layer = MIND_UI_BUTTON

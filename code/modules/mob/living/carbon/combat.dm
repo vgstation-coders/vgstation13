@@ -100,68 +100,24 @@
 	visible_message("<span class='borange'>damage after: [damage]!</span>")
 	if(!did_rps)
 		actual_damage_done = apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+		if(originator)
+			add_logs(originator, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]")
+		else
+			add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]")
+		INVOKE_EVENT(src, /event/attacked_by, "attacked" = src, "attacker" = user, "item" = I)
 	else
 		if(rps_percentage > 0)
 			actual_damage_done = src.apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+			add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]") //not changing the logs, even if the defender wins, since that would mess with admin investigations. Will add more detail for rock paper scissors if need be.
+			INVOKE_EVENT(src, /event/attacked_by, "attacked" = src, "attacker" = user, "item" = I)
 		else if(rps_percentage < 0)
 			actual_damage_done = user.apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+			add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]")
+			INVOKE_EVENT(user, /event/attacked_by, "attacked" = user, "attacker" = src, "item" = I) //TODO change this back.
 
-	if(originator)
-		add_logs(originator, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]")
-	else
-		add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]")
-	INVOKE_EVENT(src, /event/attacked_by, "attacked" = src, "attacker" = user, "item" = I)
+
 	return TRUE
 
-
-/mob/living/carbon/proc/rps_battle(var/mob/living/attacker, var/mob/living/defender)
-	visible_message("<span class='borange'>curse check success</span>")
-	var/attacker_wins = 0
-	var/defender_wins = 0
-	attacker.DisplayUI("Rock Paper Scissors Cards")
-	defender.DisplayUI("Rock Paper Scissors Cards")
-	var/i
-	for(i=0, i<3, i=i)
-		visible_message("<span class='borange'>for check [i]</span>")
-		sleep(70)
-		switch(rps_win_check(attacker, defender))
-			if(0)
-				attacker_wins++
-				visible_message("<span class='borange'>[attacker] wins this round!</span>")
-				i++
-			if(1)
-				defender_wins++
-				visible_message("<span class='borange'>[defender] wins this round!</span>")
-				i++
-			if(2)
-				visible_message("<span class='borange'>[attacker] and [defender] both picked [defender.rps_intent]. Stalemate!</span>")
-	if(attacker_wins == 0)
-		attacker_wins = 1
-	if(defender_wins == 0)
-		defender_wins = 1
-	switch(attacker_wins > defender_wins)
-		if(1)
-			visible_message("<span class='borange'>[attacker] wins!</span>")
-			visible_message("<span class='borange'>[attacker_wins/defender_wins] percentage!</span>")
-			attacker.HideUI("Rock Paper Scissors Cards")
-			defender.HideUI("Rock Paper Scissors Cards")
-			return attacker_wins/defender_wins
-		if(0)
-			visible_message("<span class='borange'>[defender] wins!</span>")
-			visible_message("<span class='borange'>[defender_wins/attacker_wins] percentage!</span>")
-			attacker.HideUI("Rock Paper Scissors Cards")
-			defender.HideUI("Rock Paper Scissors Cards")
-			return (defender_wins/attacker_wins) * -1
-
-/mob/living/carbon/proc/rps_win_check(var/mob/living/attacker, var/mob/living/defender)
-	if((attacker.rps_intent=="rock" && defender.rps_intent=="scissors") || (attacker.rps_intent=="scissors" && defender.rps_intent=="paper") || (attacker.rps_intent=="paper" && defender.rps_intent=="rock"))
-		return 0
-	else if((defender.rps_intent=="rock" && attacker.rps_intent=="scissors") || (defender.rps_intent=="scissors" && attacker.rps_intent=="paper") || (defender.rps_intent=="paper" && attacker.rps_intent=="rock"))
-		return 1
-	else if(defender.rps_intent == attacker.rps_intent)
-		return 2
-	else
-		return 3
 
 /mob/living/carbon/proc/check_shields(var/damage = 0, var/atom/A)
 	if(!incapacitated())
