@@ -120,23 +120,23 @@
 
 	do_attack_animation(target, src)
 	var/damage_done
-	var/rps_percentage
+	var/rps_percentage = 0
 	if(ishuman(target))
 		//if(target.ckey || src.ckey) for later
 		if((target.rps_curse || src.rps_curse) && !(target == src)) //Rock Paper Scissors battle is here
 			src.rps_in_combat = 1
 			target.rps_in_combat = 1
-			rps_percentage = rps_battle(target, src)
+			rps_percentage = rps_battle(src, target)//this is seriously the most fucked up thing ever, I have NO idea why i need to set target to the defender input, it works perfectly fine on the item attack section. I'm going to tear my nuts off if I don't figure this out.
 			src.rps_in_combat = 0
 			target.rps_in_combat = 0
 			if(rps_percentage > 0)
 				damage = damage * rps_percentage
-				damage_done = src.apply_damage(damage, damage_type, affecting, armor_block, sharpness)
-				visible_message(target.get_attack_message(src, attack_verb))
+				damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
+				visible_message(get_attack_message(target, attack_verb))
 			else if(rps_percentage < 0)
 				damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
-				damage_done = target.apply_damage(damage, damage_type, affecting, armor_block, sharpness)
-				visible_message(get_attack_message(target, attack_verb))
+				damage_done = src.apply_damage(damage, damage_type, affecting, armor_block)
+				visible_message(target.get_attack_message(src, attack_verb))
 		else
 			damage_done = target.apply_damage(damage, damage_type, affecting, armor_block, sharpness)
 	else
@@ -144,23 +144,23 @@
 		if((target.rps_curse || src.rps_curse) && !(target == src)) //Rock Paper Scissors battle is here
 			src.rps_in_combat = 1
 			target.rps_in_combat = 1
-			rps_percentage = rps_battle(target, src)
+			rps_percentage = rps_battle(src, target)
 			src.rps_in_combat = 0
 			target.rps_in_combat = 0
 			if(rps_percentage > 0)
 				damage = damage * rps_percentage
-				damage_done = src.apply_damage(damage, damage_type, affecting, armor_block)
-				visible_message(target.get_attack_message(src, attack_verb))
-			else if(rps_percentage < 0)
-				damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
 				damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
 				visible_message(get_attack_message(target, attack_verb))
+			else if(rps_percentage < 0)
+				damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
+				damage_done = src.apply_damage(damage, damage_type, affecting, armor_block)
+				visible_message(target.get_attack_message(src, attack_verb))
 		else
 			damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
-				visible_message(get_attack_message(target, attack_verb))
+			visible_message(get_attack_message(target, attack_verb))
 
-	target.unarmed_attacked(src, damage, damage_type, zone)
-	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
+	unarmed_attacked(target, damage, damage_type, zone)
+	after_unarmed_attack(target, damage, damage_type, affecting, armor_block, rps_percentage)
 
 	INVOKE_EVENT(src, /event/unarmed_attack, "attacker" = target, "attacked" = src)
 
@@ -177,7 +177,7 @@
 	var/i
 	for(i=0, i<3, i=i)
 		visible_message("<span class='borange'>for check [i]</span>")
-		sleep(70)
+		sleep(30)
 		switch(rps_win_check(attacker, defender))
 			if(0)
 				attacker_wins++
@@ -202,7 +202,7 @@
 			return attacker_wins/defender_wins
 		if(0)
 			visible_message("<span class='borange'>[defender] wins!</span>")
-			visible_message("<span class='borange'>[defender_wins/attacker_wins] percentage!</span>")
+			visible_message("<span class='borange'>[(defender_wins/attacker_wins) * -1] percentage!</span>")
 			attacker.HideUI("Rock Paper Scissors Cards")
 			defender.HideUI("Rock Paper Scissors Cards")
 			return (defender_wins/attacker_wins) * -1

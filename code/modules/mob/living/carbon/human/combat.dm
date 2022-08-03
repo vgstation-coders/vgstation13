@@ -173,7 +173,7 @@
 /mob/living/carbon/human/knockout_chance_modifier()
 	return 1
 
-/mob/living/carbon/human/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
+/mob/living/carbon/human/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor, rps_percentage)
 	if (ishuman(target))
 		var/mob/living/carbon/human/H = target
 		H.attack_hand_contact_diseases(src,organ)
@@ -190,9 +190,15 @@
 	var/knockout_chance = get_knockout_chance(target)
 
 	show_combat_stat("Knockout chance: [knockout_chance]")
-	if(prob(knockout_chance))
-		visible_message("<span class='danger'>[src] has knocked down \the [target]!</span>")
-		target.apply_effect(2, WEAKEN, armor)
+	if(prob(100))
+	//if(prob(knockout_chance))
+		visible_message("<span class='danger'>[rps_percentage] awoooga!</span>")
+		if(rps_percentage < 0) //Rock Paper Scissors knockout chance
+			visible_message("<span class='danger'>[target] has knocked down \the [src]!</span>")
+			src.apply_effect(2, WEAKEN, armor)
+		else
+			visible_message("<span class='danger'>[src] has knocked down \the [target]!</span>")
+			target.apply_effect(2, WEAKEN, armor)
 
 	//Hand transplants increase punch damage
 	//However, arm transplants are needed to send people flying through punches

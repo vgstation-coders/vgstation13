@@ -107,7 +107,7 @@
 		INVOKE_EVENT(src, /event/attacked_by, "attacked" = src, "attacker" = user, "item" = I)
 	else
 		if(rps_percentage > 0)
-			actual_damage_done = src.apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+			actual_damage_done = apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
 			add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]") //not changing the logs, even if the defender wins, since that would mess with admin investigations. Will add more detail for rock paper scissors if need be.
 			INVOKE_EVENT(src, /event/attacked_by, "attacked" = src, "attacker" = user, "item" = I)
 		else if(rps_percentage < 0)
