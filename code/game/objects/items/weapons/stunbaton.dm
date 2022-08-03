@@ -276,6 +276,9 @@
 /obj/item/weapon/melee/baton/cattleprod/canbehonkified()
 	return 0
 
+/obj/item/weapon/melee/baton/loaded/borg
+	hitcost = 100 //So the borg doesn't drain most of its battery with just a few hits, in line with other borg-based equipment
+
 // Yes, loaded, this is so attack_self() works.
 // In the unlikely event somebody manages to get a hold of this item, don't allow them to fuck with the nonexistant cell.
 /obj/item/weapon/melee/baton/loaded/borg/attackby(var/obj/item/W, var/mob/user)
