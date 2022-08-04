@@ -172,40 +172,77 @@
 	visible_message("<span class='borange'>curse check success</span>")
 	var/attacker_wins = 0
 	var/defender_wins = 0
-	attacker.DisplayUI("Rock Paper Scissors Cards")
-	defender.DisplayUI("Rock Paper Scissors Cards")
 	var/i
-	for(i=0, i<3, i=i)
-		visible_message("<span class='borange'>for check [i]</span>")
-		sleep(30)
-		switch(rps_win_check(attacker, defender))
-			if(0)
-				attacker_wins++
-				visible_message("<span class='borange'>[attacker] wins this round!</span>")
-				i++
+	var/j
+	var/b = 3
+	var/returner
+	var/chance_mercy = 0
+	var/winner_beg_stance
+	var/loser_beg_stance
+	for(j=0, j<1, j=j)
+		attacker.DisplayUI("Rock Paper Scissors Cards")
+		defender.DisplayUI("Rock Paper Scissors Cards")
+		for(i=0, i < b, i=i)
+			visible_message("<span class='borange'>for check [i]</span>")
+			sleep(30)
+			switch(rps_win_check(attacker, defender))
+				if(0)
+					attacker_wins++
+					visible_message("<span class='borange'>[attacker] wins this round!</span>")
+					i++
+				if(1)
+					defender_wins++
+					visible_message("<span class='borange'>[defender] wins this round!</span>")
+					i++
+				if(2)
+					visible_message("<span class='borange'>[attacker] and [defender] both picked [defender.rps_intent]. Stalemate!</span>")
+		if(attacker_wins == 0)
+			attacker_wins = 1
+		if(defender_wins == 0)
+			defender_wins = 1
+		attacker.HideUI("Rock Paper Scissors Cards")
+		defender.HideUI("Rock Paper Scissors Cards")
+		switch(attacker_wins > defender_wins)
 			if(1)
-				defender_wins++
-				visible_message("<span class='borange'>[defender] wins this round!</span>")
-				i++
-			if(2)
-				visible_message("<span class='borange'>[attacker] and [defender] both picked [defender.rps_intent]. Stalemate!</span>")
-	if(attacker_wins == 0)
-		attacker_wins = 1
-	if(defender_wins == 0)
-		defender_wins = 1
-	switch(attacker_wins > defender_wins)
-		if(1)
-			visible_message("<span class='borange'>[attacker] wins!</span>")
-			visible_message("<span class='borange'>[attacker_wins/defender_wins] percentage!</span>")
-			attacker.HideUI("Rock Paper Scissors Cards")
-			defender.HideUI("Rock Paper Scissors Cards")
-			return attacker_wins/defender_wins
-		if(0)
-			visible_message("<span class='borange'>[defender] wins!</span>")
-			visible_message("<span class='borange'>[(defender_wins/attacker_wins) * -1] percentage!</span>")
-			attacker.HideUI("Rock Paper Scissors Cards")
-			defender.HideUI("Rock Paper Scissors Cards")
-			return (defender_wins/attacker_wins) * -1
+				visible_message("<span class='borange'>[attacker] wins!</span>")
+				visible_message("<span class='borange'>[attacker_wins/defender_wins] percentage!</span>")
+				returner = attacker_wins/defender_wins
+
+				attacker.DisplayUI("RPS Winner Beg Cards")
+				defender.DisplayUI("RPS Loser Beg Cards")
+				sleep(30)
+				attacker.HideUI("RPS Winner Beg Cards")
+				defender.HideUI("RPS Loser Beg Cards")
+				winner_beg_stance = attacker.rps_mercy_or_more
+				loser_beg_stance = defender.rps_mercy_or_more
+			if(0)
+				visible_message("<span class='borange'>[defender] wins!</span>")
+				visible_message("<span class='borange'>[(defender_wins/attacker_wins) * -1] percentage!</span>")
+				returner = (defender_wins/attacker_wins) * -1
+				defender.DisplayUI("RPS Winner Beg Cards")
+				attacker.DisplayUI("RPS Loser Beg Cards")
+				sleep(30)
+				defender.HideUI("RPS Winner Beg Cards")
+				attacker.HideUI("RPS Loser Beg Cards")
+				winner_beg_stance = defender.rps_mercy_or_more
+				loser_beg_stance = attacker.rps_mercy_or_more
+		if(winner_beg_stance == loser_beg_stance)//There must be a better way, but code optimization is for LATER
+			if(winner_beg_stance == "mercy")
+				return returner
+			if(winner_beg_stance == "more")
+				chance_mercy = 100
+		else
+			if((winner_beg_stance == "more") && (loser_beg_stance == "mercy"))
+				chance_mercy = 77
+			if((winner_beg_stance == "mercy") && (loser_beg_stance == "more"))
+				chance_mercy = 33
+		if(prob(chance_mercy))
+			if(b % 2)//Hopefully makes sure that the total round ammount is always odd
+				b = 2
+			else
+				b = 3
+		else
+			return returner
 
 /mob/living/proc/rps_win_check(var/mob/living/attacker, var/mob/living/defender)
 	if((attacker.rps_intent=="rock" && defender.rps_intent=="scissors") || (attacker.rps_intent=="scissors" && defender.rps_intent=="paper") || (attacker.rps_intent=="paper" && defender.rps_intent=="rock"))

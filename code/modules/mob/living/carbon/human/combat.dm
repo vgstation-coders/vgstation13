@@ -190,8 +190,7 @@
 	var/knockout_chance = get_knockout_chance(target)
 
 	show_combat_stat("Knockout chance: [knockout_chance]")
-	if(prob(100))
-	//if(prob(knockout_chance))
+	if(prob(knockout_chance))
 		visible_message("<span class='danger'>[rps_percentage] awoooga!</span>")
 		if(rps_percentage < 0) //Rock Paper Scissors knockout chance
 			visible_message("<span class='danger'>[target] has knocked down \the [src]!</span>")
