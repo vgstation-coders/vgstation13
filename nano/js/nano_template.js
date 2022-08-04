@@ -43,7 +43,7 @@ var NanoTemplate = function () {
 					// Disabling caching using jQuery's hack seems to break Nano in some obscure cases on BYOND 512.
 					// Oh well.
 					//cache: false,
-					dataType: 'text',
+					dataType: 'html',
 					timeout: 1000
 				}))
 				.done(function(templateMarkup) {
