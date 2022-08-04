@@ -1537,6 +1537,7 @@
 	yield = 5
 	biolum = 1
 	biolum_colour = "#FFFFFF"
+	thorny = 1
 
 /datum/seed/purpleshardlime
 	name = "purpleshardlime"
@@ -1553,6 +1554,7 @@
 	yield = 5
 	biolum = 1
 	biolum_colour = "#DBBEF0"
+	thorny = 1
 
 /datum/seed/grass
 	name = "grass"
