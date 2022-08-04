@@ -440,11 +440,20 @@
  * Special mouse types
  */
 /mob/living/simple_animal/mouse/common/dan
+	name = "Discount Mouse" //full name is discount mouse, so it's correctly capitalized
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan
 
 /mob/living/simple_animal/mouse/common/dan/New()
 	..()
 	desc = "It's a small [_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself. It looks well fed..."
+	name = pick(
+		"Lil' Dan",
+		"Discount Mouse",
+		"Overfed Mouse",
+		"Meat Mouse",
+		"Dan Jr.",
+		)
+	real_name = name
 
 /mob/living/simple_animal/mouse/balbc
 	name = "laboratory mouse"
