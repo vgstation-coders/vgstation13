@@ -332,8 +332,8 @@
 		return
 	..()
 
-/obj/item/tool/weldingtool/proc/do_weld(var/mob/user, var/atom/thing, var/time, var/fuel_cost)
-	if(!remove_fuel(fuel_cost, user))
+/obj/item/tool/weldingtool/proc/do_weld(var/mob/user, var/atom/thing, var/time, var/fuel_cost, var/eyecheck = 1)
+	if(!remove_fuel(fuel_cost, user, eyecheck))
 		return 0
 	playtoolsound(src, 50)
 	return isOn() && do_after(user, thing, time/weld_speed) && isOn() //Checks if it's on, then does the do_after, then checks if it's still on after.
@@ -439,7 +439,7 @@
 
 
 //Removes fuel from the welding tool. If a mob is passed, it will perform an eyecheck on the mob. This should probably be renamed to use()
-/obj/item/tool/weldingtool/proc/remove_fuel(var/amount = 1, var/mob/M = null)
+/obj/item/tool/weldingtool/proc/remove_fuel(var/amount = 1, var/mob/M = null, var/eyecheck = 1)
 	if(!get_fuel())
 		if(M) //First and foremost make sure there is enough fuel
 			to_chat(M, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -451,7 +451,7 @@
 	if(get_fuel() >= amount)
 		reagents.remove_reagent(FUEL, amount)
 		check_fuel()
-		if(M)
+		if(M && eyecheck)
 			eyecheck(M)
 		return 1
 
