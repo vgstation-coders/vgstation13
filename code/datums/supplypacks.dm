@@ -1401,7 +1401,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/pizzabox/margherita,
 					/obj/item/pizzabox/mushroom,
 					/obj/item/pizzabox/meat,
-					/obj/item/pizzabox/vegetable)
+					/obj/item/pizzabox/vegetable,
+					/obj/item/pizzabox/blingpizza)
 	name = "Surprise pack of five pizzas"
 	cost = 75
 	containertype = /obj/structure/closet/crate/freezer
