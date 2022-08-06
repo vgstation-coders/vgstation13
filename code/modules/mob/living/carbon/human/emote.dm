@@ -135,6 +135,7 @@
 /datum/emote/living/carbon/human/fart
 	key = "fart"
 	key_third_person = "farts"
+	stat_allowed = UNCONSCIOUS
 
 /datum/emote/living/carbon/human/fart/run_emote(mob/user, params, type_override, ignore_status = FALSE)
 	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
@@ -143,7 +144,7 @@
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
 
-	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? 20 SECONDS : 40 SECONDS))
+	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? 20 SECONDS : 40 SECONDS) && H.stat == CONSCIOUS)
 		message = "strains, and nothing happens."
 		emote_type = EMOTE_VISIBLE
 		return ..()
@@ -200,7 +201,7 @@
 					if(M.reagents)
 						M.reagents.add_reagent(SPACE_DRUGS,rand(1,50))
 
-	if(M_SUPER_FART in H.mutations)
+	if(M_SUPER_FART in H.mutations && H.stat == CONSCIOUS) //No super farting while unconscious
 		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
 		H.visible_message("<span class = 'warning'><b>[H]</b> hunches down and grits their teeth!</span>")
 		has_farted = TRUE
@@ -246,6 +247,9 @@
 				playsound(H, pick('sound/items/bikehorn.ogg','sound/items/AirHorn.ogg'), 50, 1)
 			else
 				playsound(H, 'sound/misc/fart.ogg', 50, 1)
+		if(H.stat == UNCONSCIOUS && !params)
+			H.succumb_proc()
+			return ..()
 		. =..()
 
 
