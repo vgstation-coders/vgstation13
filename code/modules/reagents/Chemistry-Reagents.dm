@@ -9677,26 +9677,46 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/ectoplasm
 	name = "Ectoplasm"
 	id = ECTOPLASM
-	description = "Pure, distilled spooky"
+	description = "Pure, distilled spooky."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#21d389b4"
 	density = 0.05
-
+	custom_metabolism = 0.05
+	
 /datum/reagent/ectoplasm/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
+
+	if(tick >= 60 && volume >= 1 && !spookvision) //ghostsight after 1m and having more than 1u inside
+		spookvision = TRUE
+		to_chat(M, "<span class='notice'>You start seeing through the veil! There's an otherworldly figure pointing and laughing at you.</span>")
+		M.see_invisible = INVISIBILITY_MAXIMUM
+		M.see_invisible_override = INVISIBILITY_MAXIMUM
+
+	if(spookvision && volume < 1)
+		spookvision = FALSE
+		to_chat(M, "<span class='notice'>Your otherworldly sight suddenly vanishes!</span>")
+		M.see_invisible = initial(M.see_invisible)
+		M.see_invisible_override = 0
+
 	if(isskellington(M) || isskelevox(M) || islich(M))	//Slightly better than DD for spooks
 		playsound(M, 'sound/effects/rattling_bones.ogg', 100, 1)
 		if(M.getOxyLoss())
 			M.adjustOxyLoss(-3)
+			holder.remove_reagent(ECTOPLASM, 0.2)
 		if(M.getBruteLoss())
 			M.heal_organ_damage(3, 0)
+			holder.remove_reagent(ECTOPLASM, 0.2)
 		if(M.getFireLoss())
 			M.heal_organ_damage(0, 3)
+			holder.remove_reagent(ECTOPLASM, 0.2)
 		if(M.getToxLoss())
 			M.adjustToxLoss(-3)
+			holder.remove_reagent(ECTOPLASM, 0.2)
 	else
-		M.hallucination += 5	//50% mindbreaker
+		return
+
+
 
 /datum/reagent/self_replicating
 	id = EXPLICITLY_INVALID_REAGENT_ID
