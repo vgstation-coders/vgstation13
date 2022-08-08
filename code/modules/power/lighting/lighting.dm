@@ -432,7 +432,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	if(!can_spook())
 		return
 	src.add_hiddenprint(user)
-	if(prob(99)
+	if(prob(99))
 		src.flicker(1)
 		investigation_log(I_GHOST, "|| was made to flicker by [key_name(user)][user.locked_to ? ", who was haunting [user.locked_to]" : ""]")
 	else //1% chance for lights to break when manually haunted
