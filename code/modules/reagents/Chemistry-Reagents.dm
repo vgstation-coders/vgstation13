@@ -9688,7 +9688,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	if(tick >= 60 && volume >= 1 && !spookvision) //ghostsight after 1m and having more than 1u inside
+	if(tick >= 30 && volume >= 1 && !spookvision) //ghostsight after 1m and having more than 1u inside
 		spookvision = TRUE
 		to_chat(M, "<span class='notice'>You start seeing through the veil!</span>")
 		M.see_invisible = INVISIBILITY_MAXIMUM
