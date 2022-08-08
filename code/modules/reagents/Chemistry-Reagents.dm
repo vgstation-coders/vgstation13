@@ -9681,7 +9681,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#21d389b4"
 	density = 0.05
-	custom_metabolism = 0.05
+	custom_metabolism = 0.01
 	var/spookvision = FALSE
 	
 /datum/reagent/ectoplasm/on_mob_life(var/mob/living/M)
