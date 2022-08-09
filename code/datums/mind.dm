@@ -79,7 +79,7 @@
 /datum/mind/New(var/key)
 	src.key = key
 
-/datum/mind/proc/transfer_to(var/mob/new_character)
+/datum/mind/proc/transfer_to(mob/new_character)
 	if (!current)
 		transfer_to_without_current(new_character)
 		return
