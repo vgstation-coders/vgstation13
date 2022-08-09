@@ -362,7 +362,7 @@
 
 // ZAP
 /mob/living/simple_animal/hostile/pulse_demon/unarmed_attack_mob(mob/living/target)
-	if(!is_under_tile())
+	if(!is_under_tile() && targer != src)
 		do_attack_animation(target, src)
 		shockMob(target)
 		INVOKE_EVENT(src, /event/unarmed_attack, "attacker" = target, "attacked" = src)
