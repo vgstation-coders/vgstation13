@@ -40,6 +40,7 @@ var/list/ai_list = list()
 	var/datum/intercom_settings/intercom_clipboard = null //Clipboard for copy/pasting intercom settings
 	var/mentions_on = FALSE
 	var/list/holopadoverlays = list()
+	var/upgraded = FALSE
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
@@ -879,8 +880,13 @@ var/list/ai_list = list()
 		C.set_light(AI_CAMERA_LUMINOSITY)
 		lit_cameras |= C
 
+/obj/item/mecha_parts/AI_upgrade
+	name = "AI Upgrade"
+	desc = "This device upgrades the AI to ultra-HD vision."
+	icon = 'icons/obj/module.dmi'
+	icon_state = "cyborg_upgrade"
 
-/mob/living/silicon/ai/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/mob/living/silicon/ai/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_wrench(user))
 		if(anchored)
 			user.visible_message("<span class='notice'>\The [user] starts to unbolt \the [src] from the plating...</span>")
@@ -898,6 +904,11 @@ var/list/ai_list = list()
 			user.visible_message("<span class='notice'>\The [user] finishes fastening down \the [src]!</span>")
 			anchored = TRUE
 			return
+	else if(istype(W, /obj/item/mecha_parts/AI_upgrade) && !upgraded)
+		if(user.drop_item(W))
+			qdel(W)
+			to_chat(user, "<span class='notice'>You upgrade \the AI.</span>")
+			upgraded = 1
 	else
 		return ..()
 
