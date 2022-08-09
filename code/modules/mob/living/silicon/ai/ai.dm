@@ -907,7 +907,7 @@ var/list/ai_list = list()
 	else if(istype(W, /obj/item/mecha_parts/AI_upgrade) && !upgraded)
 		if(user.drop_item(W))
 			qdel(W)
-			to_chat(user, "<span class='notice'>You upgrade \the AI.</span>")
+			to_chat(user, "<span class='notice'>You upgrade the AI.</span>")
 			upgraded = 1
 	else
 		return ..()
