@@ -145,6 +145,8 @@
 		return 0
 
 	antag = M
+	antag.key = M.current.client.ckey
+	antag.active = TRUE
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
 	objectives.owner = M
