@@ -1,4 +1,4 @@
-var/list/forced_roundstart_ruleset = list()
+rvar/list/forced_roundstart_ruleset = list()
 
 // -- Distribution parameters chosen prior to roundstart --
 var/dynamic_curve_centre = 0
@@ -772,7 +772,7 @@ var/stacking_limit = 90
 
 // Same as above, but for midround
 /datum/gamemode/dynamic/proc/refund_midround_threat(var/regain)
-	threat = min(midround_threat_level,midround_threat+regain)
+	midround_threat = min(midround_threat_level,midround_threat+regain)
 
 /datum/gamemode/dynamic/proc/create_midround_threat(var/gain)
 	midround_threat = min(100, midround_threat+gain)
