@@ -898,14 +898,6 @@ var/list/ai_list = list()
 			user.visible_message("<span class='notice'>\The [user] finishes fastening down \the [src]!</span>")
 			anchored = TRUE
 			return
-<<<<<<< HEAD
-	else if(istype(W, /obj/item/mecha_parts/AI_upgrade) && !upgraded)
-		if(user.drop_item(W))
-			qdel(W)
-			to_chat(user, "<span class='notice'>You upgrade the AI.</span>")
-			upgraded = 1
-=======
->>>>>>> parent of edf6849782 (upgrade vision)
 	else
 		return ..()
 
