@@ -25,7 +25,7 @@
 	build_type = PROTOLATHE | MECHFAB
 	build_path = /obj/item/mecha_parts/AI_upgrade
 	req_tech = list(Tc_ENGINEERING = 1, Tc_MATERIALS = 1)
-	materials = list(MAT_PHAZON = 5)
+	materials = list(MAT_DIAMOND = 500)
 	category = "Misc"
 
 /datum/design/chempack
