@@ -1,4 +1,4 @@
-rvar/list/forced_roundstart_ruleset = list()
+var/list/forced_roundstart_ruleset = list()
 
 // -- Distribution parameters chosen prior to roundstart --
 var/dynamic_curve_centre = 0
