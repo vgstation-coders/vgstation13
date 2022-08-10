@@ -85,12 +85,8 @@
 	var/rps_percentage
 	var/did_rps=0
 	if((user.rps_curse || src.rps_curse) && !(user == src)) //Rock Paper Scissors battle is here
-		src.rps_in_combat = 1
-		user.rps_in_combat = 1
 		did_rps=1
 		rps_percentage = rps_battle(user, src)
-		src.rps_in_combat = 0
-		user.rps_in_combat = 0
 		if(rps_percentage > 0)
 			damage = damage * rps_percentage
 		else if(rps_percentage < 0)

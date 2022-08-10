@@ -1546,7 +1546,7 @@ Use this proc preferably at the end of an equipment loadout
 		stop_pulling()
 		lying = 1
 		canmove = 0
-	else if(isJustStunned())
+	else if(isJustStunned() || rps_in_combat)
 //		lying = 0
 		canmove = 0
 	else if(captured)

@@ -96,7 +96,7 @@
 /mob/living/proc/unarmed_attack_mob(mob/living/target)
 	if(is_pacified(VIOLENCE_DEFAULT,target))
 		return
-	if(src.rps_in_combat)
+	if(target.rps_in_combat)
 		visible_message("<span class='borange'>[src] notices [target] is concentrating on the battle, and decides not to attack [target].</span>")
 		return
 
@@ -124,8 +124,6 @@
 	if(ishuman(target))
 		//if(target.ckey || src.ckey) for later
 		if((target.rps_curse || src.rps_curse) && !(target == src)) //Rock Paper Scissors battle is here
-			src.rps_in_combat = 1
-			target.rps_in_combat = 1
 			rps_percentage = rps_battle(src, target)//this is seriously the most fucked up thing ever, I have NO idea why i need to set target to the defender input, it works perfectly fine on the item attack section. I'm going to tear my nuts off if I don't figure this out.
 			src.rps_in_combat = 0
 			target.rps_in_combat = 0
@@ -179,11 +177,20 @@
 	var/chance_mercy = 0
 	var/winner_beg_stance
 	var/loser_beg_stance
+	attacker.rps_in_combat = 1
+	defender.rps_in_combat = 1
+	attacker.anchored = 1//to keep players from moving during a battle
+	attacker.canmove = 0
+	defender.anchored = 1
+	defender.canmove = 0
+	update_canmove(defender)
+	update_canmove(defender)
 	for(j=0, j<1, j=j)
 		attacker.DisplayUI("Rock Paper Scissors Cards")
 		defender.DisplayUI("Rock Paper Scissors Cards")
 		for(i=0, i < b, i=i)
-			visible_message("<span class='borange'>for check [i]</span>")
+			visible_message("<span class='borange'>attacker rps check [attacker] [attacker.rps_in_combat]</span>")
+			visible_message("<span class='borange'>defender rps check [defender] [defender.rps_in_combat]</span>")
 			sleep(30)
 			switch(rps_win_check(attacker, defender))
 				if(0)
@@ -228,6 +235,12 @@
 				loser_beg_stance = attacker.rps_mercy_or_more
 		if(winner_beg_stance == loser_beg_stance)//There must be a better way, but code optimization is for LATER
 			if(winner_beg_stance == "mercy")
+				attacker.rps_in_combat = 0
+				defender.rps_in_combat = 0
+				attacker.anchored = 0
+				attacker.canmove = 1
+				defender.anchored = 0
+				defender.canmove = 1
 				return returner
 			if(winner_beg_stance == "more")
 				chance_mercy = 100
@@ -242,6 +255,10 @@
 			else
 				b = 3
 		else
+			attacker.anchored = 0
+			attacker.canmove = 1
+			defender.anchored = 0
+			defender.canmove = 1
 			return returner
 
 /mob/living/proc/rps_win_check(var/mob/living/attacker, var/mob/living/defender)
