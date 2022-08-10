@@ -18,6 +18,7 @@
 	materials = list(MAT_IRON=10000)
 	category = "Misc"
 
+<<<<<<< HEAD
 /datum/design/AI_upgrade
 	name = "AI Upgrade Module"
 	desc = "Used to allow the AI ultra-HD vision"
@@ -28,6 +29,8 @@
 	materials = list(MAT_DIAMOND = 500)
 	category = "Misc"
 
+=======
+>>>>>>> parent of edf6849782 (upgrade vision)
 /datum/design/chempack
 	name = "Chemical Pack"
 	desc = "Useful for the storage and transport of large volumes of chemicals. Can be used in conjunction with a wide range of chemical-dispensing devices."
