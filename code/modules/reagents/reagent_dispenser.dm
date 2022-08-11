@@ -480,6 +480,18 @@
 
 		overlays += filling
 
+/obj/structure/reagent_dispensers/cauldron/attackby(obj/item/weapon/W, mob/user)
+
+	if(iswelder(W))
+		var/obj/item/tool/weldingtool/WT = W
+		to_chat(user, "<span class='notice'>You begin deconstructing the cauldron.</span>")
+		if(WT.do_weld(user, src, 40, 1))
+			to_chat(user, "<span class='notice'>You finish deconstructing the cauldron.</span>")
+			var/obj/item/stack/sheet/metal/M = new(src.loc, 20)
+			M.forceMove(src.loc)
+			qdel(src)
+	..()
+
 /obj/structure/reagent_dispensers/cauldron/on_reagent_change()
 	update_icon()
 
