@@ -883,14 +883,6 @@
 				nanomanager.close_user_uis(user, src)
 
 			return 0
-/*
-	else if(isobserver(user))
-		if(malfhack && istype(malfai) && !isAdminGhost(user))
-			if(!loud)
-				to_chat(user, "<span class='warning'>\The [src] have AI control disabled!</span>")
-				nanomanager.close_user_uis(user, src)
-			return 0
-*/
 	else
 		if ((!is_in_range(user) || !istype(src.loc, /turf)))
 			nanomanager.close_user_uis(user, src)
