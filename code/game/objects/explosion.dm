@@ -142,7 +142,7 @@ var/explosion_shake_message_cooldown = 0
 	var/y0 = offcenter.y
 	//var/z0 = offcenter.z
 
-	var/list/affected_turfs = spiral_block(offcenter,max_range)	
+	var/list/affected_turfs = spiral_block(offcenter,max_range)
 	var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs)
 
 	for(var/turf/T in affected_turfs)
@@ -170,7 +170,7 @@ var/explosion_shake_message_cooldown = 0
 		for(var/atom/movable/A in T)
 			if(T != offcenter && !A.anchored && A.last_explosion_push != explosion_time)
 				A.last_explosion_push = explosion_time
-				
+
 				var/max_dist = _dist+(pushback)
 				var/max_count = pushback
 				var/turf/throwT = get_step_away(A,offcenter,max_dist)
@@ -185,7 +185,7 @@ var/explosion_shake_message_cooldown = 0
 				if(ismob(A))
 					to_chat(A, "<span class='warning'>You are blown away by the explosion!</span>")
 
-				A.throw_at(throwT,pushback+2,500)
+				A.throw_at(throwT,pushback+2,10)
 			A.ex_act(dist,null,whodunnit)
 
 		T.ex_act(dist,null,whodunnit)
