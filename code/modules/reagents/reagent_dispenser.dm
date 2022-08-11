@@ -485,7 +485,7 @@
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>You begin deconstructing the cauldron.</span>")
-		if(WT.do_weld(user, src, 40, 1))
+		if(WT.do_weld(user, src, 50, 1))
 			to_chat(user, "<span class='notice'>You finish deconstructing the cauldron.</span>")
 			var/obj/item/stack/sheet/metal/M = new(src.loc, 20)
 			M.forceMove(src.loc)
@@ -524,6 +524,17 @@
 	icon_state = "woodenbarrel"
 	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of wood."
 	health = 30
+
+/obj/structure/reagent_dispensers/cauldron/barrel/wood/attackby(obj/item/weapon/W, mob/user)
+	if (iscrowbar(W))
+		var/obj/item/tool/crowbar/C = W
+		to_chat(user, "<span class='notice'>Now disassembling table...</span>")
+		C.playtoolsound(src, 50)
+		if(do_after(user, src,50))
+			var/obj/item/stack/sheet/wood/WS = new(src.loc, 20)
+			WS.forceMove(src.loc)
+			qdel(src)
+		return
 
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
 	return
