@@ -201,12 +201,16 @@
 					if(M.reagents)
 						M.reagents.add_reagent(SPACE_DRUGS,rand(1,50))
 
-	if(M_SUPER_FART in H.mutations && H.stat == CONSCIOUS) //No super farting while unconscious
-		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
-		H.visible_message("<span class = 'warning'><b>[H]</b> hunches down and grits their teeth!</span>")
+	if(M_SUPER_FART in H.mutations)
+		var/is_unconscious = H.InCritical() //If you're in crit you do a stronger instant superfart at the cost of being gibbed.
+		if(!is_unconscious)
+			playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
+			H.visible_message("<span class = 'warning'><b>[H]</b> hunches down and grits their teeth!</span>")
 		has_farted = TRUE
-		if(do_after(H,H,30))
-			H.visible_message("<span class = 'warning'><b>[H]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>","<span class = 'warning'>You hear a [pick("tremendous","gigantic","colossal")] fart.</span>")
+		if(do_after(H,H,30) || is_unconscious)
+			H.visible_message("<span class = 'warning'><b>[H]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>", blind_message = "<span class = 'warning'>You hear a [pick("tremendous","gigantic","colossal")] fart.</span>")
+			if(is_unconscious)
+				H.visible_message("<span class='warning'><b>[H]</b>Explodes in a shower of gore! Damn, what a madman!", "<span class='warning'>The super-fart made you explode!</span>")
 			playsound(location, 'sound/effects/superfart.ogg', 50, 0)
 			for(var/mob/living/V in oviewers(aoe_range, get_turf(H)))
 				if(!airborne_can_reach(location,get_turf(V),aoe_range))
@@ -215,15 +219,17 @@
 				if (V == H)
 					continue
 				to_chat(V, "<span class = 'danger'>You're sent flying!</span>")
-				V.Knockdown(5) // why the hell was this set to 12 christ
-				V.Stun(5)
-				step_away(V,location,15)
-				step_away(V,location,15)
-				step_away(V,location,15)
+				is_unconscious ? V.Knockdown(7) : V.Knockdown(5) // why the hell was this set to 12 christ
+				is_unconscious ? V.Stun(7) : V.Stun(5)
+				var/iterations = is_unconscious ? 5 : 3
+				for(var/i = 0, i < iterations, i++)
+					step_away(V,location,15)
 				var/turf/T = get_turf(H)
 				if (!T.has_gravity(H))
 					to_chat(H, "<span class = 'notice'>The gastrointestinal blast sends you careening through space!</span>")
 					H.throw_at(get_edge_target_turf(H, H.dir), 5, 5)
+			if(is_unconscious)
+				H.gib()
 		else
 			to_chat(H, "<span class = 'notice'>You were interrupted and couldn't fart! Rude!</span>")
 			return
@@ -247,7 +253,7 @@
 				playsound(H, pick('sound/items/bikehorn.ogg','sound/items/AirHorn.ogg'), 50, 1)
 			else
 				playsound(H, 'sound/misc/fart.ogg', 50, 1)
-		if(H.stat == UNCONSCIOUS && !params)
+		if(H.InCritical() && !params)
 			H.succumb_proc()
 			return ..()
 		. =..()
