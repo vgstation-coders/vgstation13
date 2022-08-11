@@ -185,7 +185,7 @@ var/explosion_shake_message_cooldown = 0
 				if(ismob(A))
 					to_chat(A, "<span class='warning'>You are blown away by the explosion!</span>")
 
-				A.throw_at(throwT,pushback+2,10)
+				A.throw_at(throwT,pushback+2,5 * pushback) //1x damage at light range, 3x damage at heavy range, 5x damage at dev range
 			A.ex_act(dist,null,whodunnit)
 
 		T.ex_act(dist,null,whodunnit)
