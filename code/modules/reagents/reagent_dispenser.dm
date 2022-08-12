@@ -538,6 +538,7 @@
 		to_chat(user, "<span class='notice'>You begin deconstructing the [src].</span>")
 		C.playtoolsound(src, 50)
 		if(do_after(user, src,50))
+			to_chat(user, "<span class='notice'>You finish deconstructing the [src].</span>")
 			dump_reagents()
 			new /obj/item/stack/sheet/wood(loc, 20)
 			qdel(src)
