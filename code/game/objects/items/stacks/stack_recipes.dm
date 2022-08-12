@@ -396,9 +396,9 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("spring", /obj/item/spring, 					1, time = 25, one_per_turf = 0, on_floor = 0),
 	new/datum/stack_recipe("cannonball", /obj/item/cannonball/iron, 20, time = 4 SECONDS, one_per_turf = 0, on_floor = 1),
 	null,
-	new/datum/stack_recipe("multi-floor stairs",   /obj/structure/stairs_frame, 4, time = 100, one_per_turf = 1, on_floor = 1, z_up_required = 1),
-	null,
 	blacksmithing_recipes,
+	null,
+	new/datum/stack_recipe("multi-floor stairs",   /obj/structure/stairs_frame, 4, time = 100, one_per_turf = 1, on_floor = 1, z_up_required = 1),
 	)
 
 /* ========================================================================
