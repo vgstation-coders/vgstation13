@@ -485,7 +485,7 @@
 		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>You begin deconstructing the cauldron.</span>")
 		if(WT.do_weld(user, src, 50, 1))
-			empty_reagents()
+			dump_reagents()
 			to_chat(user, "<span class='notice'>You finish deconstructing the cauldron.</span>")
 			new /obj/item/stack/sheet/metal/(loc, 20)
 			qdel(src)
@@ -508,13 +508,12 @@
 		return TRUE
 	return FALSE
 
-/obj/structure/reagent_dispensers/cauldron/proc/empty_reagents()
+/obj/structure/reagent_dispensers/cauldron/proc/dump_reagents()
 	if(reagents?.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
 		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 	usr.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
 	reagents.reaction(usr.loc)
 	src.reagents.clear_reagents()
-	..()
 
 
 // BARRELS AND BARREL ACCESSORIES //
@@ -539,7 +538,7 @@
 		to_chat(user, "<span class='notice'>You begin deconstructing the cauldron.</span>")
 		C.playtoolsound(src, 50)
 		if(do_after(user, src,50))
-			empty_reagents()
+			dump_reagents()
 			new /obj/item/stack/sheet/wood(loc, 20)
 			qdel(src)
 		return
@@ -564,7 +563,7 @@
 
 /obj/structure/reagent_dispensers/cauldron/barrel/kick_act(mob/living/carbon/human/H)
 	..()
-	empty_reagents()
+	dump_reagents()
 	H.visible_message("<span class='warning'>[usr] kicks \the [src]!</span>", "<span class='notice'>You kick \the [src].</span>")
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
