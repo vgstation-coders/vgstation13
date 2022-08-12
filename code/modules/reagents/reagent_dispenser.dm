@@ -483,10 +483,10 @@
 /obj/structure/reagent_dispensers/cauldron/attackby(obj/item/weapon/W, mob/user)
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
-		to_chat(user, "<span class='notice'>You begin deconstructing the cauldron.</span>")
+		to_chat(user, "<span class='notice'>You begin deconstructing the [src].</span>")
 		if(WT.do_weld(user, src, 50, 1))
 			dump_reagents()
-			to_chat(user, "<span class='notice'>You finish deconstructing the cauldron.</span>")
+			to_chat(user, "<span class='notice'>You finish deconstructing the [src].</span>")
 			new /obj/item/stack/sheet/metal/(loc, 20)
 			qdel(src)
 	..()
@@ -535,7 +535,7 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/wood/attackby(obj/item/weapon/W, mob/user)
 	if (iscrowbar(W))
 		var/obj/item/tool/crowbar/C = W
-		to_chat(user, "<span class='notice'>You begin deconstructing the cauldron.</span>")
+		to_chat(user, "<span class='notice'>You begin deconstructing the [src].</span>")
 		C.playtoolsound(src, 50)
 		if(do_after(user, src,50))
 			dump_reagents()
