@@ -481,14 +481,13 @@
 		overlays += filling
 
 /obj/structure/reagent_dispensers/cauldron/attackby(obj/item/weapon/W, mob/user)
-
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>You begin deconstructing the cauldron.</span>")
 		if(WT.do_weld(user, src, 50, 1))
+			empty_reagents()
 			to_chat(user, "<span class='notice'>You finish deconstructing the cauldron.</span>")
-			var/obj/item/stack/sheet/metal/M = new(src.loc, 20)
-			M.forceMove(src.loc)
+			new /obj/item/stack/sheet/metal/(loc, 20)
 			qdel(src)
 	..()
 
@@ -509,6 +508,15 @@
 		return TRUE
 	return FALSE
 
+/obj/structure/reagent_dispensers/cauldron/proc/empty_reagents()
+	if(reagents?.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+	usr.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
+	reagents.reaction(usr.loc)
+	src.reagents.clear_reagents()
+	..()
+
+
 // BARRELS AND BARREL ACCESSORIES //
 /obj/structure/reagent_dispensers/cauldron/barrel
 	name = "metal barrel"
@@ -528,13 +536,14 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/wood/attackby(obj/item/weapon/W, mob/user)
 	if (iscrowbar(W))
 		var/obj/item/tool/crowbar/C = W
-		to_chat(user, "<span class='notice'>Now disassembling table...</span>")
+		to_chat(user, "<span class='notice'>You begin deconstructing the cauldron.</span>")
 		C.playtoolsound(src, 50)
 		if(do_after(user, src,50))
-			var/obj/item/stack/sheet/wood/WS = new(src.loc, 20)
-			WS.forceMove(src.loc)
+			empty_reagents()
+			new /obj/item/stack/sheet/wood(loc, 20)
 			qdel(src)
 		return
+	..()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
 	return
@@ -555,19 +564,13 @@
 
 /obj/structure/reagent_dispensers/cauldron/barrel/kick_act(mob/living/carbon/human/H)
 	..()
-	if (!reagents)
-		return 1
-	if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
-		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-	H.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
-	reagents.reaction(usr.loc)
-	src.reagents.clear_reagents()
+	empty_reagents()
 	H.visible_message("<span class='warning'>[usr] kicks \the [src]!</span>", "<span class='notice'>You kick \the [src].</span>")
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_wrench(user) || istype(W,/obj/item/weapon/reagent_containers))
+	if(W.is_wrench(user) || istype(W,/obj/item/weapon/reagent_containers)) //what did irradiation mean by this
 		return
 	if(istype(W,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
