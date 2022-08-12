@@ -96,6 +96,9 @@
 
 	face_atom(A) // change direction to face what you clicked on
 
+	if(src.rps_in_combat)
+		return
+
 	if(attack_delayer.blocked()) // This was next_move.  next_attack makes more sense.
 		return
 //	to_chat(world, "next_attack is [next_attack] and world.time is [world.time]")

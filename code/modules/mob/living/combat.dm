@@ -189,8 +189,6 @@
 		attacker.DisplayUI("Rock Paper Scissors Cards")
 		defender.DisplayUI("Rock Paper Scissors Cards")
 		for(i=0, i < b, i=i)
-			visible_message("<span class='borange'>attacker rps check [attacker] [attacker.rps_in_combat]</span>")
-			visible_message("<span class='borange'>defender rps check [defender] [defender.rps_in_combat]</span>")
 			sleep(30)
 			switch(rps_win_check(attacker, defender))
 				if(0)
