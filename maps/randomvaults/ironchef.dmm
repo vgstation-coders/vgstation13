@@ -597,6 +597,7 @@
 "bD" = (
 /obj/structure/window/reinforced,
 /obj/structure/table/reinforced,
+/obj/item/trash/plate/clean/stack,
 /turf/simulated/floor{
 	blocks_air = 0;
 	icon_state = "dark"
