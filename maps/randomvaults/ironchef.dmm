@@ -160,6 +160,7 @@
 /obj/structure/table,
 /obj/item/device/crank_charger,
 /obj/item/weapon/cell,
+/obj/item/clothing/accessory/stethoscope,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -862,6 +863,14 @@
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
+"Za" = (
+/obj/machinery/vending/wallmed2{
+	pixel_x = 30
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/ironchef)
 
 (1,1,1) = {"
 aa
@@ -1335,7 +1344,7 @@ aL
 aM
 ax
 bp
-as
+Za
 bl
 aM
 bc
