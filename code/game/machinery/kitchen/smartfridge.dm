@@ -207,7 +207,7 @@
 
 	RefreshParts()
 
-/obj/machinery/smartfridge/filled/New()
+/obj/machinery/smartfridge/condiments/New()
 	. = ..()
 
 	for(var/i = 0 to 2)

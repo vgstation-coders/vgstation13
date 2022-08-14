@@ -877,7 +877,7 @@
 /turf/simulated/floor/plating,
 /area/vault/ironchef)
 "Rr" = (
-/obj/machinery/smartfridge/filled,
+/obj/machinery/smartfridge/condiments,
 /turf/simulated/floor{
 	blocks_air = 0;
 	icon_state = "dark"
