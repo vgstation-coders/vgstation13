@@ -271,13 +271,6 @@
 "aM" = (
 /turf/simulated/wall,
 /area/vault/ironchef)
-"aN" = (
-/obj/machinery/smartfridge,
-/turf/simulated/floor{
-	blocks_air = 0;
-	icon_state = "dark"
-	},
-/area/vault/ironchef)
 "aO" = (
 /obj/machinery/door/airlock/glass{
 	name = "Storage"
@@ -884,7 +877,7 @@
 /turf/simulated/floor/plating,
 /area/vault/ironchef)
 "Rr" = (
-/obj/machinery/smartfridge/drinks/filled,
+/obj/machinery/smartfridge/filled,
 /turf/simulated/floor{
 	blocks_air = 0;
 	icon_state = "dark"
@@ -1085,7 +1078,7 @@ ay
 at
 at
 cg
-Rr
+bC
 aW
 aW
 aW
@@ -1107,7 +1100,7 @@ bQ
 at
 at
 ah
-aN
+Rr
 aW
 aW
 aW

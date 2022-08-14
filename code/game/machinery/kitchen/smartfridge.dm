@@ -26,6 +26,9 @@
 									/obj/item/weapon/reagent_containers/food/snacks/meat,
 									/obj/item/weapon/reagent_containers/food/snacks/honeycomb,
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
+									/obj/item/weapon/reagent_containers/food/condiment
+									/obj/item/weapon/reagent_containers/glass,
+									/obj/item/weapon/reagent_containers/food/drinks,
 									/obj/item/weapon/reagent_containers/food/condiment)
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK | EMAGGABLE
@@ -204,33 +207,7 @@
 
 	RefreshParts()
 
-/obj/machinery/smartfridge/drinks
-	name = "\improper Drink Showcase"
-	desc = "A refrigerated storage unit for tasty tasty alcohol."
-
-	accepted_types = list(	/obj/item/weapon/reagent_containers/glass,
-							/obj/item/weapon/reagent_containers/food/drinks,
-							/obj/item/weapon/reagent_containers/food/condiment)
-
-/obj/machinery/smartfridge/drinks/New()
-	. = ..()
-
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smartfridge/drinks,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
-	)
-
-	RefreshParts()
-
-/obj/machinery/smartfridge/drinks/filled/New()
+/obj/machinery/smartfridge/filled/New()
 	. = ..()
 
 	for(var/i = 0 to 2)
