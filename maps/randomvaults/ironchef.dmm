@@ -856,6 +856,33 @@
 	},
 /turf/simulated/floor/carpet,
 /area/vault/ironchef)
+"dt" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/ironchef)
+"jl" = (
+/obj/machinery/vending/wallmed2{
+	pixel_x = 30
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/ironchef)
+"mN" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/ironchef)
 "Rr" = (
 /obj/machinery/smartfridge/drinks/filled,
 /turf/simulated/floor{
@@ -863,13 +890,16 @@
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
-"Za" = (
-/obj/machinery/vending/wallmed2{
-	pixel_x = 30
+"Zp" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
 	},
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
+/obj/structure/window/reinforced{
+	dir = 1
 	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating,
 /area/vault/ironchef)
 
 (1,1,1) = {"
@@ -1020,7 +1050,7 @@ aW
 bD
 bT
 ar
-ab
+Zp
 aa
 aa
 aa
@@ -1042,7 +1072,7 @@ aW
 bE
 bR
 ar
-ab
+dt
 aa
 aa
 aa
@@ -1064,7 +1094,7 @@ bi
 bE
 bR
 ar
-ab
+dt
 aa
 aa
 aa
@@ -1086,7 +1116,7 @@ aW
 bE
 bR
 ar
-ab
+dt
 aa
 aa
 aa
@@ -1108,7 +1138,7 @@ aW
 bK
 bR
 ar
-ab
+mN
 aa
 aa
 aa
@@ -1152,7 +1182,7 @@ aW
 bG
 bR
 ar
-ab
+Zp
 aa
 aa
 aa
@@ -1174,7 +1204,7 @@ aW
 bE
 bR
 ar
-ab
+dt
 aa
 aa
 aa
@@ -1196,7 +1226,7 @@ bI
 bE
 bR
 ar
-ab
+dt
 aa
 aa
 aa
@@ -1218,7 +1248,7 @@ aW
 bE
 bR
 ar
-ab
+dt
 aa
 aa
 aa
@@ -1240,7 +1270,7 @@ bf
 bD
 aZ
 ar
-ab
+mN
 aa
 aa
 aa
@@ -1344,7 +1374,7 @@ aL
 aM
 ax
 bp
-Za
+jl
 bl
 aM
 bc
