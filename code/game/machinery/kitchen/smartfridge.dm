@@ -230,6 +230,21 @@
 
 	RefreshParts()
 
+/obj/machinery/smartfridge/drinks/filled/New()
+	. = ..()
+
+	for(var/i = 0 to 2)
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/honey(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/hotsauce(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/coldsauce(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/ketchup(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/cinnamon(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/soysauce(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/vinegar(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/drinks/ice(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/drinks/discount_sauce(src))
+
 /obj/machinery/smartfridge/extract
 	name = "\improper Slime Extract Storage"
 	desc = "A refrigerated storage unit for slime extracts."
@@ -269,7 +284,7 @@
 	icon_state = "bloodbank"
 	icon_on = "bloodbank"
 
-	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
+	accepted_types = list(/obj/item/weapon/reagent_containers/blood)	
 
 /obj/machinery/smartfridge/bloodbank/New()
 	. = ..()
