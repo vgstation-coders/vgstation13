@@ -26,7 +26,7 @@
 									/obj/item/weapon/reagent_containers/food/snacks/meat,
 									/obj/item/weapon/reagent_containers/food/snacks/honeycomb,
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
-									/obj/item/weapon/reagent_containers/food/condiment
+									/obj/item/weapon/reagent_containers/food/condiment,
 									/obj/item/weapon/reagent_containers/glass,
 									/obj/item/weapon/reagent_containers/food/drinks,
 									/obj/item/weapon/reagent_containers/food/condiment)
