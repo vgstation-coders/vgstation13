@@ -15,12 +15,35 @@
 	},
 /area/vault/ironchef)
 "ae" = (
-/obj/machinery/vending/hydroseeds,
-/obj/machinery/light/he{
-	dir = 1
-	},
+/obj/item/clothing/accessory/armband/cargo,
+/obj/item/clothing/gloves/brown/cargo,
+/obj/item/device/pda/cargo,
+/obj/structure/table,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
+	},
+/area/vault/ironchef)
+"af" = (
+/obj/structure/kitchenspike,
+/turf/simulated/floor/grass,
+/area/vault/ironchef)
+"ag" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig{
+	pixel_x = -9
+	},
+/obj/item/weapon/reagent_containers/food/condiment/cornoil{
+	pixel_x = -3
+	},
+/obj/item/weapon/reagent_containers/food/condiment/cinnamon{
+	pixel_x = 3
+	},
+/obj/item/weapon/reagent_containers/food/condiment/soysauce{
+	pixel_x = 9
+	},
+/turf/simulated/floor{
+	blocks_air = 0;
+	icon_state = "dark"
 	},
 /area/vault/ironchef)
 "ah" = (
@@ -34,41 +57,56 @@
 	},
 /area/vault/ironchef)
 "ai" = (
-/obj/structure/rack,
-/obj/item/weapon/fishtools/fish_egg_scoop,
-/obj/item/weapon/fishtools/fish_food,
-/obj/item/weapon/fishtools/fish_net,
-/obj/item/weapon/fishtools/fish_tank_brush,
-/obj/item/tool/crowbar,
-/obj/item/weapon/hatchet,
-/obj/item/weapon/extinguisher,
-/turf/simulated/floor/grass,
+/obj/machinery/vending/voxseeds,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
 /area/vault/ironchef)
 "aj" = (
-/obj/structure/safe,
+/obj/structure/table/woodentable,
+/obj/item/clothing/gloves/ironchefgauntlets,
+/obj/item/weapon/reagent_containers/glass/beaker/vial/flavor,
+/obj/machinery/light/small{
+	dir = 8
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker"
 	},
 /area/vault/ironchef)
 "ak" = (
-/obj/structure/table/reinforced,
-/obj/machinery/chem_dispenser/brewer/mapping,
+/obj/structure/rack,
+/obj/item/clothing/head/wizard,
+/obj/item/slime_extract/purple,
+/obj/item/slime_extract/purple,
+/obj/item/weapon/ectoplasm,
+/obj/item/weapon/ectoplasm,
+/obj/item/weapon/ectoplasm,
+/obj/item/clothing/mask/fakemoustache,
+/obj/item/slime_extract/grey,
+/obj/item/slime_extract/grey,
+/obj/item/stack/sheet/snow{
+	amount = 5
+	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
 "al" = (
-/obj/structure/reagent_dispensers/sacid,
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/shaker,
+/obj/machinery/chem_dispenser/soda_dispenser/mapping,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
 "am" = (
-/obj/machinery/vending/meat,
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
+/obj/machinery/power/apc{
+	dir = 8;
+	pixel_x = -24
 	},
+/obj/structure/closet/crate/freezer,
+/turf/simulated/floor/plating,
 /area/vault/ironchef)
 "an" = (
 /obj/effect/decal/warning_stripes{
@@ -113,12 +151,15 @@
 /turf/simulated/floor/grass,
 /area/vault/ironchef)
 "av" = (
-/obj/structure/closet/secure_closet/freezer/fridge,
-/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
-/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
+/obj/structure/rack,
+/obj/item/weapon/fishtools/fish_egg_scoop,
+/obj/item/weapon/fishtools/fish_food,
+/obj/item/weapon/fishtools/fish_net,
+/obj/item/weapon/fishtools/fish_tank_brush,
+/obj/item/tool/crowbar,
+/obj/item/weapon/hatchet,
+/obj/item/weapon/extinguisher,
+/turf/simulated/floor/grass,
 /area/vault/ironchef)
 "aw" = (
 /obj/machinery/door/airlock/vault{
@@ -131,38 +172,14 @@
 	},
 /area/vault/ironchef)
 "ax" = (
-/obj/machinery/bot/farmbot,
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/vault/ironchef)
-"ay" = (
-/obj/item/weapon/reagent_containers/food/snacks/beezeez,
-/obj/item/queen_bee/chill,
-/obj/item/queen_bee,
-/turf/simulated/floor/grass,
-/area/vault/ironchef)
-"az" = (
-/obj/structure/windoor_assembly/secure{
-	dir = 2
-	},
-/obj/structure/windoor_assembly/secure,
+/obj/machinery/gibber,
+/obj/machinery/light/he,
 /turf/simulated/floor{
 	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
-"aA" = (
-/obj/structure/kitchenspike,
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/vault/ironchef)
-"aB" = (
-/obj/structure/sink/puddle,
-/turf/simulated/floor/grass,
-/area/vault/ironchef)
-"aC" = (
+"ay" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/reagent_containers/food/condiment/vinegar{
 	pixel_x = -9
@@ -176,30 +193,52 @@
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
-"aD" = (
-/obj/machinery/cooking/grill,
-/obj/machinery/light/he{
-	dir = 8
+"az" = (
+/obj/machinery/computer/security/telescreen/entertainment{
+	pixel_x = -32
 	},
-/obj/machinery/camera{
-	name = "Iron Chef 1"
+/obj/structure/bed/chair/comfy/brown{
+	dir = 1
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
-	icon_state = "dark"
+	dir = 5;
+	icon_state = "checker"
 	},
 /area/vault/ironchef)
-"aE" = (
+"aA" = (
+/obj/machinery/vending/meat,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/ironchef)
+"aB" = (
+/obj/structure/sink/puddle,
+/turf/simulated/floor/grass,
+/area/vault/ironchef)
+"aC" = (
 /mob/living/carbon/monkey,
 /turf/simulated/floor/grass,
 /area/vault/ironchef)
-"aF" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "1"
+"aD" = (
+/obj/machinery/vending/zamsnax,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/ironchef)
+"aE" = (
+/obj/machinery/door/airlock/glass{
+	name = "Audience"
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
-	icon_state = "dark"
+	icon_state = "showroomfloor"
+	},
+/area/vault/ironchef)
+"aF" = (
+/obj/structure/table,
+/obj/machinery/cell_charger,
+/obj/item/weapon/disk/shuttle_coords/vault/ironchef,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
 "aG" = (
@@ -219,11 +258,14 @@
 /turf/simulated/floor/grass,
 /area/vault/ironchef)
 "aJ" = (
-/obj/structure/table,
-/obj/machinery/cell_charger,
-/obj/item/weapon/disk/shuttle_coords/vault/ironchef,
+/obj/structure/table/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
 /turf/simulated/floor{
-	icon_state = "showroomfloor"
+	blocks_air = 0;
+	icon_state = "dark"
 	},
 /area/vault/ironchef)
 "aK" = (
@@ -265,22 +307,20 @@
 /turf/simulated/wall,
 /area/vault/ironchef)
 "aQ" = (
-/obj/structure/table/reinforced,
-/obj/machinery/chem_dispenser/booze_dispenser/mapping,
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/vault/ironchef)
-"aR" = (
-/obj/machinery/computer/security/telescreen/entertainment{
-	pixel_x = 32
-	},
-/obj/structure/bed/chair/comfy/brown{
-	dir = 1
-	},
+/obj/machinery/light/he,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker"
+	},
+/area/vault/ironchef)
+"aR" = (
+/obj/structure/rack,
+/obj/item/organ/internal/brain,
+/obj/item/clothing/head/butt,
+/obj/item/organ/internal/appendix,
+/obj/item/organ/internal/heart,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
 "aS" = (
@@ -292,18 +332,13 @@
 	},
 /area/vault/ironchef)
 "aT" = (
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning"
-	},
-/obj/structure/table/reinforced,
-/obj/machinery/reagentgrinder,
+/obj/machinery/vending/dinnerware,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
 "aU" = (
-/obj/machinery/processor,
+/obj/machinery/cooking/deepfryer,
 /turf/simulated/floor{
 	blocks_air = 0;
 	icon_state = "dark"
@@ -325,34 +360,31 @@
 	},
 /area/vault/ironchef)
 "aX" = (
-/obj/machinery/cooking/cerealmaker,
-/obj/machinery/light/he,
-/turf/simulated/floor{
-	blocks_air = 0;
-	icon_state = "dark"
-	},
-/area/vault/ironchef)
-"aY" = (
-/obj/structure/closet/crate/hydroponics,
-/obj/item/weapon/reagent_containers/glass/bucket,
-/obj/item/weapon/minihoe,
-/obj/item/weapon/storage/bag/plants,
-/obj/item/tool/wirecutters/clippers,
-/obj/machinery/light/he,
+/obj/structure/reagent_dispensers/sacid,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
-"aZ" = (
-/obj/structure/closet/secure_closet/freezer/fridge,
-/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
-/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
-/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
-/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
-/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
-/obj/machinery/light/he{
-	dir = 1
+"aY" = (
+/obj/structure/rack,
+/obj/item/robot_parts/head,
+/obj/item/weapon/handcuffs,
+/obj/item/weapon/paper,
+/obj/item/stack/rods,
+/obj/item/pipe,
+/obj/item/stack/sheet/mineral/plasma,
+/obj/item/toy/crayon/blue,
+/obj/item/toy/crayon/blue,
+/obj/item/toy/crayon/blue,
+/obj/item/stack/sheet/cardboard{
+	amount = 10
 	},
+/obj/item/weapon/aiModule/core/asimov,
+/obj/item/stack/sheet/metal,
+/obj/item/weapon/cell,
+/obj/item/stack/cable_coil/yellow,
+/obj/item/stack/ore/glass,
+/obj/item/stack/ore/glass,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -371,11 +403,11 @@
 	},
 /area/vault/ironchef)
 "bb" = (
-/obj/machinery/door/airlock/glass{
-	name = "Audience"
-	},
+/obj/machinery/cooking/cerealmaker,
+/obj/machinery/light/he,
 /turf/simulated/floor{
-	icon_state = "showroomfloor"
+	blocks_air = 0;
+	icon_state = "dark"
 	},
 /area/vault/ironchef)
 "bc" = (
@@ -416,139 +448,55 @@
 	},
 /area/vault/ironchef)
 "bg" = (
-/obj/structure/table/reinforced,
-/obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig{
-	pixel_x = -9
-	},
-/obj/item/weapon/reagent_containers/food/condiment/cornoil{
-	pixel_x = -3
-	},
-/obj/item/weapon/reagent_containers/food/condiment/cinnamon{
-	pixel_x = 3
-	},
-/obj/item/weapon/reagent_containers/food/condiment/soysauce{
-	pixel_x = 9
+/obj/machinery/vending/hydroseeds,
+/obj/machinery/light/he{
+	dir = 1
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
-	icon_state = "dark"
+	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
 "bh" = (
+/obj/structure/closet/secure_closet/freezer/fridge,
+/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/ironchef)
+"bi" = (
 /obj/machinery/light/he,
+/obj/machinery/bot/farmbot,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/ironchef)
+"bj" = (
+/obj/machinery/computer/security/telescreen/entertainment{
+	pixel_x = 32
+	},
+/obj/structure/bed/chair/comfy/brown{
+	dir = 1
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker"
 	},
 /area/vault/ironchef)
-"bi" = (
-/obj/structure/table/reinforced,
-/obj/item/weapon/reagent_containers/food/drinks/shaker,
-/obj/machinery/chem_dispenser/soda_dispenser/mapping,
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/vault/ironchef)
 "bk" = (
-/obj/machinery/apiary,
-/turf/simulated/floor/grass,
-/area/vault/ironchef)
-"bl" = (
-/obj/structure/rack,
-/obj/item/clothing/head/wizard,
-/obj/item/slime_extract/purple,
-/obj/item/slime_extract/purple,
-/obj/item/weapon/ectoplasm,
-/obj/item/weapon/ectoplasm,
-/obj/item/weapon/ectoplasm,
-/obj/item/clothing/mask/fakemoustache,
-/obj/item/slime_extract/grey,
-/obj/item/slime_extract/grey,
-/obj/item/stack/sheet/snow{
-	amount = 5
-	},
+/obj/machinery/chem_master,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
 "bm" = (
-/obj/structure/table/reinforced,
-/obj/item/weapon/reagent_containers/food/dipping_sauce/queso{
-	pixel_y = 18
-	},
-/obj/item/weapon/reagent_containers/food/dipping_sauce/salsa{
-	pixel_y = 13
-	},
-/obj/item/weapon/reagent_containers/food/dipping_sauce/hummus{
-	pixel_y = 8
-	},
-/obj/item/weapon/reagent_containers/food/dipping_sauce/guacamole,
+/obj/structure/safe,
 /turf/simulated/floor{
-	blocks_air = 0;
-	icon_state = "dark"
+	dir = 5;
+	icon_state = "checker"
 	},
 /area/vault/ironchef)
-"bo" = (
-/obj/structure/rack,
-/obj/item/stack/teeth/shark,
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube,
-/obj/item/weapon/reagent_containers/food/snacks/meat/diona,
-/obj/item/weapon/reagent_containers/food/snacks/meat/hive,
-/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat,
-/obj/item/weapon/reagent_containers/food/snacks/meat/box,
-/obj/item/weapon/reagent_containers/food/snacks/meat/box,
-/obj/item/weapon/reagent_containers/food/snacks/meat/box,
-/obj/item/weapon/reagent_containers/food/snacks/meat/box,
-/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig,
-/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig,
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/vault/ironchef)
-"bp" = (
-/obj/machinery/light/small{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/vault/ironchef)
-"bq" = (
-/obj/machinery/cooking/deepfryer,
-/turf/simulated/floor{
-	blocks_air = 0;
-	icon_state = "dark"
-	},
-/area/vault/ironchef)
-"br" = (
-/obj/structure/rack,
-/obj/item/organ/internal/brain,
-/obj/item/clothing/head/butt,
-/obj/item/organ/internal/appendix,
-/obj/item/organ/internal/heart,
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/vault/ironchef)
-"bs" = (
-/obj/structure/table/reinforced,
-/obj/item/clothing/head/chefhat,
-/obj/item/clothing/under/rank/chef,
-/obj/item/clothing/suit/chef,
-/turf/simulated/floor{
-	blocks_air = 0;
-	icon_state = "dark"
-	},
-/area/vault/ironchef)
-"bt" = (
-/obj/machinery/gibber,
-/obj/machinery/light/he,
-/turf/simulated/floor{
-	blocks_air = 0;
-	icon_state = "dark"
-	},
-/area/vault/ironchef)
-"bu" = (
+"bn" = (
 /obj/structure/rack,
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vodka,
 /obj/item/weapon/reagent_containers/food/snacks/pimiento,
@@ -565,13 +513,68 @@
 	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
-"bv" = (
-/obj/machinery/power/apc{
-	dir = 8;
-	pixel_x = -24
+"bo" = (
+/obj/structure/table/reinforced,
+/obj/machinery/chem_dispenser/booze_dispenser/mapping,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
 	},
-/obj/structure/closet/crate/freezer,
-/turf/simulated/floor/plating,
+/area/vault/ironchef)
+"bp" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/ironchef)
+"br" = (
+/obj/machinery/apiary,
+/turf/simulated/floor/grass,
+/area/vault/ironchef)
+"bs" = (
+/obj/structure/table/reinforced,
+/obj/item/clothing/head/chefhat,
+/obj/item/clothing/under/rank/chef,
+/obj/item/clothing/suit/chef,
+/turf/simulated/floor{
+	blocks_air = 0;
+	icon_state = "dark"
+	},
+/area/vault/ironchef)
+"bt" = (
+/obj/item/weapon/reagent_containers/food/snacks/beezeez,
+/obj/item/queen_bee/chill,
+/obj/item/queen_bee,
+/turf/simulated/floor/grass,
+/area/vault/ironchef)
+"bu" = (
+/obj/machinery/cooking/grill,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/obj/machinery/camera{
+	name = "Iron Chef 1"
+	},
+/turf/simulated/floor{
+	blocks_air = 0;
+	icon_state = "dark"
+	},
+/area/vault/ironchef)
+"bv" = (
+/obj/structure/closet/secure_closet/freezer/fridge,
+/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
+/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
+/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
+/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning"
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
 /area/vault/ironchef)
 "bw" = (
 /obj/machinery/cooking/candy,
@@ -636,7 +639,8 @@
 	},
 /area/vault/ironchef)
 "bC" = (
-/obj/machinery/vending/dinnerware,
+/obj/structure/table/reinforced,
+/obj/machinery/chem_dispenser/brewer/mapping,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -676,16 +680,7 @@
 	},
 /area/vault/ironchef)
 "bH" = (
-/obj/structure/closet/secure_closet/freezer/fridge,
-/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
-/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
-/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
-/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
-/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning"
-	},
+/obj/structure/reagent_dispensers/corn_oil_tank,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -700,21 +695,19 @@
 	},
 /area/vault/ironchef)
 "bJ" = (
-/obj/machinery/computer/security/telescreen/entertainment{
-	pixel_x = -32
-	},
-/obj/structure/bed/chair/comfy/brown{
-	dir = 1
-	},
+/obj/machinery/processor,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker"
+	blocks_air = 0;
+	icon_state = "dark"
 	},
 /area/vault/ironchef)
 "bK" = (
-/obj/machinery/chem_master/condimaster,
+/obj/effect/decal/warning_stripes{
+	icon_state = "1"
+	},
 /turf/simulated/floor{
-	icon_state = "showroomfloor"
+	blocks_air = 0;
+	icon_state = "dark"
 	},
 /area/vault/ironchef)
 "bL" = (
@@ -746,12 +739,6 @@
 /obj/item/device/camera,
 /turf/simulated/floor/carpet,
 /area/vault/ironchef)
-"bQ" = (
-/obj/machinery/vending/zamsnax,
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/vault/ironchef)
 "bR" = (
 /obj/structure/bed/chair/comfy/brown{
 	dir = 1
@@ -768,26 +755,48 @@
 /turf/simulated/floor/plating,
 /area/vault/ironchef)
 "bT" = (
-/obj/structure/reagent_dispensers/corn_oil_tank,
+/obj/structure/closet/secure_closet/freezer/fridge,
+/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
+/obj/machinery/light/he{
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
 "bU" = (
-/obj/item/clothing/accessory/armband/cargo,
-/obj/item/clothing/gloves/brown/cargo,
-/obj/item/device/pda/cargo,
-/obj/structure/table,
+/obj/structure/rack,
+/obj/item/stack/teeth/shark,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube,
+/obj/item/weapon/reagent_containers/food/snacks/meat/diona,
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive,
+/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/box,
+/obj/item/weapon/reagent_containers/food/snacks/meat/box,
+/obj/item/weapon/reagent_containers/food/snacks/meat/box,
+/obj/item/weapon/reagent_containers/food/snacks/meat/box,
+/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig,
+/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
 "bV" = (
 /obj/structure/table/reinforced,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
+/obj/item/weapon/reagent_containers/food/dipping_sauce/queso{
+	pixel_y = 18
 	},
+/obj/item/weapon/reagent_containers/food/dipping_sauce/salsa{
+	pixel_y = 13
+	},
+/obj/item/weapon/reagent_containers/food/dipping_sauce/hummus{
+	pixel_y = 8
+	},
+/obj/item/weapon/reagent_containers/food/dipping_sauce/guacamole,
 /turf/simulated/floor{
 	blocks_air = 0;
 	icon_state = "dark"
@@ -814,27 +823,13 @@
 /turf/simulated/floor/carpet,
 /area/vault/ironchef)
 "ca" = (
-/obj/structure/rack,
-/obj/item/robot_parts/head,
-/obj/item/weapon/handcuffs,
-/obj/item/weapon/paper,
-/obj/item/stack/rods,
-/obj/item/pipe,
-/obj/item/stack/sheet/mineral/plasma,
-/obj/item/toy/crayon/blue,
-/obj/item/toy/crayon/blue,
-/obj/item/toy/crayon/blue,
-/obj/item/stack/sheet/cardboard{
-	amount = 10
+/obj/structure/windoor_assembly/secure{
+	dir = 2
 	},
-/obj/item/weapon/aiModule/core/asimov,
-/obj/item/stack/sheet/metal,
-/obj/item/weapon/cell,
-/obj/item/stack/cable_coil/yellow,
-/obj/item/stack/ore/glass,
-/obj/item/stack/ore/glass,
+/obj/structure/windoor_assembly/secure,
 /turf/simulated/floor{
-	icon_state = "showroomfloor"
+	blocks_air = 0;
+	icon_state = "dark"
 	},
 /area/vault/ironchef)
 "cb" = (
@@ -861,15 +856,9 @@
 /turf/simulated/floor/engine,
 /area/vault/ironchef)
 "ce" = (
-/obj/structure/table/woodentable,
-/obj/item/clothing/gloves/ironchefgauntlets,
-/obj/item/weapon/reagent_containers/glass/beaker/vial/flavor,
-/obj/machinery/light/small{
-	dir = 8
-	},
+/obj/machinery/chem_master/condimaster,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker"
+	icon_state = "showroomfloor"
 	},
 /area/vault/ironchef)
 "cf" = (
@@ -877,13 +866,12 @@
 /turf/simulated/floor/plating,
 /area/vault/ironchef)
 "cg" = (
-/obj/machinery/chem_master,
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning"
 	},
-/area/vault/ironchef)
-"ch" = (
-/obj/machinery/vending/voxseeds,
+/obj/structure/table/reinforced,
+/obj/machinery/reagentgrinder,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -966,11 +954,11 @@ ac
 ac
 ac
 aM
-ca
-bu
-br
-bo
-bl
+aY
+bn
+aR
+bU
+ak
 aM
 bN
 bW
@@ -984,8 +972,8 @@ aa
 aa
 ab
 ac
-ce
 aj
+bm
 ac
 aM
 aS
@@ -1032,11 +1020,11 @@ aw
 ac
 ac
 aM
-aD
+bu
 aW
-bq
+aU
 bw
-aX
+bb
 aM
 aM
 bZ
@@ -1051,7 +1039,7 @@ aa
 ab
 ad
 as
-aA
+as
 aG
 bL
 aV
@@ -1060,7 +1048,7 @@ aW
 aW
 aW
 bD
-bJ
+az
 ar
 ab
 aa
@@ -1071,10 +1059,10 @@ aa
 (8,1,1) = {"
 aa
 ab
-ae
+bg
 at
 at
-bT
+bH
 bL
 aV
 aW
@@ -1093,16 +1081,16 @@ aa
 (9,1,1) = {"
 aa
 ab
-ch
+ai
 at
 at
-al
+aX
 bL
 aW
 aW
 aW
 bx
-aF
+bK
 bE
 bR
 ar
@@ -1115,10 +1103,10 @@ aa
 (10,1,1) = {"
 aa
 ab
-ak
+bC
 at
 at
-as
+ah
 aN
 aW
 be
@@ -1137,7 +1125,7 @@ aa
 (11,1,1) = {"
 aa
 ab
-aQ
+bo
 as
 as
 as
@@ -1147,7 +1135,7 @@ be
 aW
 bs
 aW
-bV
+aJ
 bR
 ar
 ab
@@ -1159,19 +1147,19 @@ aa
 (12,1,1) = {"
 aa
 ab
+al
+as
+as
 bi
-ax
-ah
-aY
 aP
 aW
-bg
+ag
 aW
 aW
 aW
-az
+ca
 ar
-bh
+aQ
 ab
 aa
 aa
@@ -1181,13 +1169,13 @@ aa
 (13,1,1) = {"
 aa
 ab
-am
+aA
 as
 as
 as
 aO
 bF
-aC
+ay
 aW
 bs
 aW
@@ -1203,13 +1191,13 @@ aa
 (14,1,1) = {"
 aa
 ab
-bC
+aT
 at
 at
-as
+ah
 bL
 aW
-bm
+bV
 aW
 by
 aW
@@ -1225,10 +1213,10 @@ aa
 (15,1,1) = {"
 aa
 ab
-bQ
+aD
 at
 at
-bK
+ce
 bL
 aW
 aW
@@ -1247,10 +1235,10 @@ aa
 (16,1,1) = {"
 aa
 ab
-av
+bh
 at
 at
-cg
+bk
 bL
 aV
 aW
@@ -1269,7 +1257,7 @@ aa
 (17,1,1) = {"
 aa
 ab
-aZ
+bT
 as
 as
 aH
@@ -1280,7 +1268,7 @@ aW
 aW
 bf
 bD
-aR
+bj
 ar
 ab
 aa
@@ -1291,16 +1279,16 @@ aa
 (18,1,1) = {"
 aa
 ab
-bH
+bv
 an
 an
-aT
+cg
 bL
 ba
 aW
-aU
+bJ
 bB
-bt
+ax
 aM
 aM
 bS
@@ -1313,13 +1301,13 @@ aa
 (19,1,1) = {"
 aa
 ab
-ao
+af
 ao
 ao
 aI
 aK
 bL
-bb
+aE
 aM
 aM
 aM
@@ -1335,16 +1323,16 @@ aa
 (20,1,1) = {"
 aa
 ab
-ay
+bt
 aB
-aE
+aC
 ao
 ao
 bL
 as
-bU
+ae
 aM
-bv
+am
 bM
 bc
 bc
@@ -1357,14 +1345,14 @@ aa
 (21,1,1) = {"
 aa
 ab
-bk
+br
 ao
 ap
 ao
 aq
 bL
 as
-aJ
+aF
 aM
 cf
 bc
@@ -1379,8 +1367,8 @@ aa
 (22,1,1) = {"
 aa
 ab
-ai
-aE
+av
+aC
 ao
 aL
 au
