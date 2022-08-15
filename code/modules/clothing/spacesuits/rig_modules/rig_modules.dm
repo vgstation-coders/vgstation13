@@ -257,7 +257,10 @@
 		rig.H.armor["rad"] = initial_helmet
 	rig?.armor["rad"] = initial_suit
 
-	say_to_wearer("[src] disabled.")
+	if(capacity >= max_capacity)
+		say_to_wearer("[src] disabled. Please cleanse it by sterilizing the suit in a suit storage unit.")
+	else
+		say_to_wearer("[src] disabled.")
 	rig.wearer?.unregister_event(/event/irradiate, src, .proc/absorb_rads)
 	..()
 
