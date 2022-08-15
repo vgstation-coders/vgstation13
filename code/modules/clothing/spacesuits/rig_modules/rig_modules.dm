@@ -45,6 +45,9 @@
 		return
 	to_chat(rig.wearer, "\The [src] reports: <span class = 'binaryradio'>[string]</span>")
 
+//This gets called when the suit storage cleans a suit containing the module. Hardcode in the suit storage file begone.
+/obj/item/rig_module/proc/suit_storage_act()
+	return
 
 //Speed boost module
 /obj/item/rig_module/speed_boost
@@ -209,12 +212,23 @@
 	var/event_key
 	var/initial_suit = 0
 	var/initial_helmet = 0
-	var/max_capacity = 250 //Just barely over 1 "item touch" worth of rads when standing right next to the shard with a suit with only 10 rad resist. About 5-6 items at 50. Based on in-game tests on Aug. 2020.
+	var/max_capacity = 500 //Just barely over 2 "item touch" worth of rads when standing right next to the shard with a suit with only 10 rad resist. About 5-6 items at 50. Based on in-game tests on Aug. 2020.
 	var/current_capacity = 0
+	//Warning thresholds, will announce to the user when these thresholds have been surpassed. The compiler shits itself if I put numbers in the variable names and calculations in the variable values, so it's done this way instead.
+	var/first_threshold //50% capacity
+	var/second_threshold //75% capacity
+	var/third_threshold //90% capacity
+	var/threshold_announced = 0 //Will record the last threshold surpassed to avoid spam messages. This resets when the RAD is recharged.
+
+/obj/item/rig_module/rad_shield/New()
+	..()
+	first_threshold = max_capacity/2
+	second_threshold = max_capacity/4
+	third_threshold = max_capacity/10
 
 /obj/item/rig_module/rad_shield/examine_addition(mob/user)
 	var/current_status = round((current_capacity/max_capacity) * 100)
-	to_chat(user, "<span class = 'notice'>The embedded [name] capacity readout reads: <font color='[current_status <= 50 ? "green" : (current_status >= 85 ? "red" : "yellow")]'>[current_status]%</font></span>")
+	to_chat(user, "<span class = 'notice'>The embedded [name] capacity readout reads: <font color='[current_status <= 50 ? "green" : (current_status >= 85 ? "red" : "yellow")]'>[current_status]%</font>.</span>")
 
 /obj/item/rig_module/rad_shield/check_activate(requires_human=FALSE)
 	if(current_capacity >= max_capacity)
@@ -247,6 +261,10 @@
 	rig.wearer?.unregister_event(/event/irradiate, src, .proc/absorb_rads)
 	..()
 
+/obj/item/rig_module/rad_shield/suit_storage_act()
+	current_capacity = initial(current_capacity)
+	threshold_announced = initial(threshold_announced)
+
 /obj/item/rig_module/rad_shield/proc/absorb_rads(mob/living/carbon/human/user, rads)
 	if(rig?.wearer != user) //Well lad.
 		user.unregister_event(/event/irradiate, src, .proc/absorb_rads)
@@ -256,10 +274,20 @@
 		current_capacity += min(max_capacity, (rads * ((100 - initial_helmet) / 100)))
 	current_capacity += min(max_capacity, (rads * ((100 - initial_suit) / 100)))
 
+	if(current_capacity > third_threshold && threshold_announced < third_threshold)
+		say_to_wearer("\The [src] is at 90% capacity. Take precaution.")
+		threshold_announced = third_threshold
+	if(current_capacity > second_threshold && threshold_announced < second_threshold)
+		say_to_wearer("\The [src] is at 75% capacity.")
+		threshold_announced = second_threshold
+	if(current_capacity > first_threshold && threshold_announced < first_threshold)
+		say_to_wearer("\The [src] is at 50% capacity.")
+		threshold_announced = first_threshold
+
 	if(current_capacity >= max_capacity)
 		deactivate()
 
 /obj/item/rig_module/rad_shield/adv
 	name = "high capacity radiation absorption device"
 	desc = "Its acronym, R.A.D., and full name both convey the application of this module. By using similar technology as radiation collectors, it protects the suit wearer from incoming radiation until its collectors are full. This model features a higher capacity than the basic version. It can be reset by using a suit storage unit's cleaning operation."
-	max_capacity = 800 //About 3-4 "item touches" worth based on the same conditions as the above testing.
+	max_capacity = 1600 //About 7-8 "item touches" worth based on the same conditions as the above testing.
