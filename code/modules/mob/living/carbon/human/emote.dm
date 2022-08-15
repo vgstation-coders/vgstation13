@@ -254,8 +254,10 @@
 			else
 				playsound(H, 'sound/misc/fart.ogg', 50, 1)
 		if(H.InCritical() && !params)
+			message = "farts one last time before succumbing."
+			to_chat(user, "<span class='notice'You fart one last time before succumbing.</span>")
 			H.succumb_proc()
-			return ..()
+			return ..(ignore_status = TRUE) //This is so that it doesn't say the user is unconscious after farting.
 		. =..()
 
 
