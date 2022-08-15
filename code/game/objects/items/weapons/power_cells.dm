@@ -253,9 +253,9 @@
 		return 0
 	var/power_used = min(maxcharge-charge,charge_rate)
 	charge += power_used
-	if(prob(5))
-		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
-			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
+//	if(prob(5))
+//		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
+//			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
 	if(charge_rate < (initial(charge_rate)/10))	//turns into a broken cell with no charge rate, 0 max charge and a 5% chance to explode every 2s
 		name = "broken cell"
 		icon_state = "cell"
