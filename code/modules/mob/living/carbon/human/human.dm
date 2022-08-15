@@ -1376,7 +1376,6 @@
 	return id
 
 /mob/living/carbon/human/update_perception()
-	if(client && client.darkness_planemaster)
 	if (dark_plane)
 		dark_plane.alphas = list()
 		dark_plane.colours = null
@@ -1393,8 +1392,6 @@
 		for(var/ID in virus2)
 			var/datum/disease2/disease/D = virus2[ID]
 			for (var/datum/disease2/effect/catvision/catvision in D.effects)
-				if (catvision.count)//if catulism has activated at least once, we can see much better in the dark.
-					client.darkness_planemaster.alpha = min(100, client.darkness_planemaster.alpha)
 				if (catvision.count)
 					dark_plane.alphas["cattulism"] = clamp(15 + (catvision.count * 20),15,155) // The more it activates, the better we see, until we see as well as a tajaran would.
 					break

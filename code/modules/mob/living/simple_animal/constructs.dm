@@ -66,7 +66,7 @@
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
-mob/living/simple_animal/construct/update_perception()
+/mob/living/simple_animal/construct/update_perception()
 	if(dark_plane)
 		dark_plane.alphas["construct"] = 75
 		client.color = list(

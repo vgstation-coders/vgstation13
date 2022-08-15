@@ -99,7 +99,7 @@
 
 /mob/living/simple_animal/hostile/giant_spider/Login()
 	..()
-	client.images += light_source_images
+	//client.images += light_source_images
 	client.screen |= overdark_planemaster
 	client.screen |= overdark_target
 

@@ -213,6 +213,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 #define FAKE_CAMERA_PLANE		(13)
 
 #define LIGHTING_PLANE 			(14)	// Don't put anything other than lighting_overlays in there please
+	#define SELF_VISION_LAYER 		   -1
 	#define LIGHTING_LAYER 				0
 
 #define ABOVE_LIGHTING_PLANE	(15)

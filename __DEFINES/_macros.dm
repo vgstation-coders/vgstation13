@@ -380,11 +380,6 @@
 #define calculateticks(x)	x * world.tick_lag // Converts your ticks to proper tenths.
 #define tcheck(CPU,TOSLEEP)	if(world.cpu > CPU) sleep(calculateticks(TOSLEEP)) //Shorthand of checking and then sleeping a process based on world CPU
 
-#define FOR_DVIEW(type, range, center, invis_flags) \
-	dview_mob.loc = center;           \
-	dview_mob.see_invisible = invis_flags; \
-	for(type in view(range, dview_mob))
-
 //get_turf(): Returns the turf that contains the atom.
 //Example: A fork inside a box inside a locker will return the turf the locker is standing on.
 //Yes, this is the fastest known way to do it.

@@ -73,3 +73,19 @@
 #define LIGHT_EMPTY  1
 #define LIGHT_BROKEN 2
 #define LIGHT_BURNED 3
+
+#define FOR_DVIEW(type, range, center, invis_flags) \
+	dview_mob.loc = center; \
+	dview_mob.see_invisible = invis_flags; \
+	for(type in view(range, dview_mob))
+
+#define END_FOR_DVIEW dview_mob.loc = null
+
+// Alpha levels
+
+#define MINIMUM_ALPHA_DARK_PLANE 255
+#define HUMAN_TARGET_ALPHA 20
+
+#define SUNGLASSES_TARGET_ALPHA 5
+
+#define LIGHTING_PLANEMASTER_COLOR list(null,null,null,"#0000","#000F")
