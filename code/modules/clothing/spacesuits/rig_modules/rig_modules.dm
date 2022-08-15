@@ -257,7 +257,7 @@
 		rig.H.armor["rad"] = initial_helmet
 	rig?.armor["rad"] = initial_suit
 
-	if(capacity >= max_capacity)
+	if(current_capacity >= max_capacity)
 		say_to_wearer("[src] disabled. Please cleanse it by sterilizing the suit in a suit storage unit.")
 	else
 		say_to_wearer("[src] disabled.")
