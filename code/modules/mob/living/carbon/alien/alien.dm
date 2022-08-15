@@ -44,7 +44,7 @@
 	. = ..()
 	change_sight(adding = SEE_MOBS)
 
-/*
+
 /mob/living/carbon/alien/update_perception()
 	if(dark_plane)
 		dark_plane.alphas["alien"] = 200
@@ -57,7 +57,6 @@
 		 			0,0,0,0)
 
 	check_dark_vision()
-*/
 
 /mob/living/carbon/alien/AdjustPlasma(amount)
 	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0

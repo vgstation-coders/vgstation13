@@ -1693,6 +1693,8 @@
 #include "code\modules\lighting\lighting_source.dm"
 #include "code\modules\lighting\lighting_turf.dm"
 #include "code\modules\lighting\~lighting_undefs.dm"
+#include "code\modules\lighting\light_mob.dm"
+#include "code\modules\lighting\light_planes.dm"
 #include "code\modules\liquid\splash_simulation.dm"
 #include "code\modules\luck\luck.dm"
 #include "code\modules\luck\luck_blesscurse.dm"

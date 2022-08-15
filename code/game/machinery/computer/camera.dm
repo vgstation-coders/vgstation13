@@ -44,7 +44,12 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	cam_screen.screen_loc = "[map_name]:1,1"
 	cam_screen.del_on_map_removal = FALSE
 	cam_plane_masters = list()
-	for(var/plane in subtypesof(/obj/abstract/screen/plane_master))
+	var/static/list/darkness_plane_things = list(
+		/obj/abstract/screen/plane/master,
+		/obj/abstract/screen/backdrop,
+		/obj/abstract/screen/plane/dark
+	)
+	for(var/plane in subtypesof(/obj/abstract/screen/plane_master) + darkness_plane_things)
 		var/obj/abstract/screen/instance = new plane()
 		instance.assigned_map = map_name
 		instance.screen_loc = "[map_name]:CENTER"

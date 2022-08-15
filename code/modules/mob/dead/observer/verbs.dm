@@ -247,9 +247,12 @@
 
 	if (see_invisible == SEE_INVISIBLE_OBSERVER_NOLIGHTING)
 		see_invisible = SEE_INVISIBLE_OBSERVER
+		dark_plane.alphas -= "toggle_darkness"
 	else
 		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 
+		dark_plane.alphas["toggle_darkness"] = 255
+	check_dark_vision()
 
 /mob/dead/observer/verb/analyze_air()
 	set name = "Analyze Air"
