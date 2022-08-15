@@ -166,7 +166,7 @@
 	return damage_done
 
 
-/mob/living/proc/rps_battle(var/mob/living/attacker, var/mob/living/defender)
+/mob/proc/rps_battle(var/mob/living/attacker, var/mob/living/defender)
 	visible_message("<span class='borange'>curse check success</span>")
 	var/attacker_wins = 0
 	var/defender_wins = 0
@@ -253,13 +253,15 @@
 			else
 				b = 3
 		else
+			attacker.rps_in_combat = 0
+			defender.rps_in_combat = 0
 			attacker.anchored = 0
 			attacker.canmove = 1
 			defender.anchored = 0
 			defender.canmove = 1
 			return returner
 
-/mob/living/proc/rps_win_check(var/mob/living/attacker, var/mob/living/defender)
+/mob/proc/rps_win_check(var/mob/living/attacker, var/mob/living/defender)
 	if((attacker.rps_intent=="rock" && defender.rps_intent=="scissors") || (attacker.rps_intent=="scissors" && defender.rps_intent=="paper") || (attacker.rps_intent=="paper" && defender.rps_intent=="rock"))
 		return 0
 	else if((defender.rps_intent=="rock" && attacker.rps_intent=="scissors") || (defender.rps_intent=="scissors" && attacker.rps_intent=="paper") || (defender.rps_intent=="paper" && attacker.rps_intent=="rock"))

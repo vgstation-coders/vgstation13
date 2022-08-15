@@ -82,15 +82,19 @@
 	visible_message("<span class='borange'>[user.rps_curse]</span>")
 	visible_message("<span class='borange'>[src.rps_curse]</span>")
 	var/actual_damage_done
-	var/rps_percentage
+	var/rps_percentage = 1
 	var/did_rps=0
-	if((user.rps_curse || src.rps_curse) && !(user == src)) //Rock Paper Scissors battle is here
+	if(((user.rps_curse || src.rps_curse) && !(user == src)) && !(user.rps_special || src.rps_special)) //Rock Paper Scissors battle is here
 		did_rps=1
 		rps_percentage = rps_battle(user, src)
-		if(rps_percentage > 0)
-			damage = damage * rps_percentage
-		else if(rps_percentage < 0)
-			damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
+	if(user.rps_special != 0)
+		rps_percentage = user.rps_special
+	if(rps_percentage > 0)
+		damage = damage * rps_percentage
+	else if(rps_percentage < 0)
+		damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
+	user.rps_special = 0
+	src.rps_special = 0
 	visible_message("<span class='borange'>[user.rps_intent] attacker intent</span>")
 	visible_message("<span class='borange'>[src.rps_intent] defender intent</span>")
 	visible_message("<span class='borange'>damage after: [damage]!</span>")

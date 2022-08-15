@@ -176,9 +176,17 @@
 		return
 
 	var/mob/living/L = M
+	var/rps_results = 0
+	if((user.rps_curse || M.rps_curse) && !(user == src))
+		rps_results = user.rps_battle(user, M)
+		user.rps_special = rps_results
+		M.rps_special = rps_results
 
 	if(user.a_intent == I_HURT) // Harm intent : possibility to miss (in exchange for doing actual damage)
-		. = ..() // Does the actual damage and missing chance. Returns null on sucess ; 0 on failure (blame oldcoders)
+		if(rps_results < 0)
+			. = ..(user, M)
+		else
+			. = ..() // Does the actual damage and missing chance. Returns null on sucess ; 0 on failure (blame oldcoders)
 		playsound(loc, swingsound, 50, 1, -1)
 
 	else
@@ -193,28 +201,52 @@
 			return FALSE //That way during a harmbaton it will not check for the shield twice
 
 	if(status && . != FALSE) // This is charged : we stun
-		user.lastattacked = L
-		L.lastattacker = user
+		if(rps_results >= 0)
+			user.lastattacked = L
+			L.lastattacker = user
 
-		apply_baton_effect(L)
+			apply_baton_effect(L)
 
-		L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
-			"<span class='userdanger'>You have been stunned with \the [src] by \the [user]!</span>",\
-			self_drugged_message="<span class='userdanger'>\The [user]'s [src] sucks the life right out of you!</span>")
-		playsound(loc, stunsound, 50, 1, -1)
+			L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
+				"<span class='userdanger'>You have been stunned with \the [src] by \the [user]!</span>",\
+				self_drugged_message="<span class='userdanger'>\The [user]'s [src] sucks the life right out of you!</span>")
+			playsound(loc, stunsound, 50, 1, -1)
 
-		deductcharge(hitcost)
+			deductcharge(hitcost)
 
-		L.forcesay(hit_appends)
+			L.forcesay(hit_appends)
 
-		user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
-		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
-		log_attack("<font color='red'>[user.name] ([user.ckey]) stunned [L.name] ([L.ckey]) with [name]</font>" )
-		if(!iscarbon(user))
-			M.LAssailant = null
+			user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
+			L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
+			log_attack("<font color='red'>[user.name] ([user.ckey]) stunned [L.name] ([L.ckey]) with [name]</font>" )
+			if(!iscarbon(user))
+				M.LAssailant = null
+			else
+				M.LAssailant = user
+				M.assaulted_by(user)
 		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+			L.lastattacked = user
+			user.lastattacker = L
+
+			apply_baton_effect(user)
+
+			user.visible_message("<span class='danger'>\The [user] has been stunned with \the [src] by [L]!</span>",\
+				"<span class='userdanger'>You have been stunned with \the [src] by \the [L]!</span>",\
+				self_drugged_message="<span class='userdanger'>\The [L]'s [src] sucks the life right out of you!</span>")
+			playsound(loc, stunsound, 50, 1, -1)
+
+			deductcharge(hitcost)
+
+			user.forcesay(hit_appends)
+
+			user.attack_log += "\[[time_stamp()]\]<font color='red'> Was almost stunned [L.name] ([L.ckey]) with [name], but it was reversed, attacking [user]</font>"
+			L.attack_log += "\[[time_stamp()]\]<font color='orange'> Was almost stunned by [user.name] ([user.ckey]) with [name], but it was reversed, stunning [user]</font>"
+			log_attack("<font color='red'>[user.name] ([user.ckey]) almost stunned [L.name] ([L.ckey]) with [name], but it was reversed</font>" )
+			if(!iscarbon(user))
+				user.LAssailant = null
+			else
+				user.LAssailant = M
+				user.assaulted_by(M)
 
 /obj/item/weapon/melee/baton/throw_impact(atom/hit_atom)
 	if(prob(50))

@@ -152,6 +152,7 @@
 	var/rps_mercy_or_more = "more"
 	var/rps_curse = 1//If 1 forces them to RPS before attacking someone or being attacked
 	var/rps_in_combat = 0//Used for preventing someone in combat from attacking others, moving, or being attacked themselves
+	var/rps_special = 0 //for handling batons
 
 	//Tank used as internals
 	var/obj/item/weapon/tank/internal = null
