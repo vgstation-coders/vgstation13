@@ -207,7 +207,7 @@
 			playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
 			H.visible_message("<span class = 'warning'><b>[H]</b> hunches down and grits their teeth!</span>")
 		has_farted = TRUE
-		if(do_after(H,H,30) || is_unconscious)
+		if(!is_unconscious ? do_after(H,H,30) : TRUE)
 			H.visible_message("<span class = 'warning'><b>[H]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>", blind_message = "<span class = 'warning'>You hear a [pick("tremendous","gigantic","colossal")] fart.</span>")
 			if(is_unconscious)
 				H.visible_message("<span class='warning'><b>[H]</b>Explodes in a shower of gore! Damn, what a madman!", "<span class='warning'>The super-fart made you explode!</span>")
