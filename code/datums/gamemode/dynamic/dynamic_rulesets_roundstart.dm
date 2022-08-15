@@ -62,6 +62,7 @@
 	cost = 15
 	var/traitor_threshold = 4
 	var/additional_cost = 5
+	requirements = list(101,101,101,101,10,10,10,10,10,10)
 	high_population_requirement = 15
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
@@ -531,7 +532,7 @@ Assign your candidates in choose_candidates() instead.
 	return 1
 
 /datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/displaced)
-	var/mob/new_player/old_AI = new 
+	var/mob/new_player/old_AI = new
 	old_AI.ckey = displaced.ckey
 	old_AI.name = displaced.ckey
 	qdel(displaced)
@@ -553,7 +554,7 @@ Assign your candidates in choose_candidates() instead.
 		log_admin("([old_AI.ckey]) was displaced by a malf AI and sent back to lobby.")
 		message_admins("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
 		old_AI.ready = 0
-		return 
+		return
 
 	if(old_AI.mind.assigned_role=="AI" || old_AI.mind.assigned_role=="Cyborg" || old_AI.mind.assigned_role=="Mobile MMI")
 		old_AI.create_roundstart_silicon(old_AI.mind.assigned_role)
