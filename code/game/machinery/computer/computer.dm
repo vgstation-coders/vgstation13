@@ -22,7 +22,10 @@
 /obj/machinery/computer/New()
 	..()
 	if(world.has_round_started())
+		anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
 		initialize()
+	else 
+		icon_state = "[initial(icon_state)]0"
 
 /obj/machinery/computer/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(pass_flags_self))
@@ -88,16 +91,33 @@
 		set_broken()
 		setDensity(FALSE)
 
+
+
 /obj/machinery/computer/update_icon()
 	..()
-	icon_state = initial(icon_state)
+
 	// Broken
 	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]b"
 
-	// Powered
+	// Unpowered/Disabled
 	else if(stat & (FORCEDISABLE|NOPOWER))
-		icon_state = "[initial(icon_state)]0"
+		if(icon_state != "[initial(icon_state)]0")
+			spawn(2,14)
+				anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "off")
+				icon_state = "[initial(icon_state)]0"
+		else 
+			icon_state = "[initial(icon_state)]0"
+
+	// Functional
+	else
+		if(icon_state != initial(icon_state))
+			spawn(2,14)
+				anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
+				icon_state = initial(icon_state)
+		else 
+			icon_state = initial(icon_state)
+
 
 /obj/machinery/computer/power_change()
 	. = ..()
