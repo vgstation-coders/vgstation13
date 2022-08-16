@@ -24,8 +24,6 @@
 	if(world.has_round_started())
 		anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
 		initialize()
-	else 
-		icon_state = "[initial(icon_state)]0"
 
 /obj/machinery/computer/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(pass_flags_self))
@@ -34,7 +32,7 @@
 
 /obj/machinery/computer/initialize()
 	..()
-	power_change()
+	power_change(TRUE)
 
 /obj/machinery/computer/process()
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
@@ -103,25 +101,25 @@
 	// Unpowered/Disabled
 	else if(stat & (FORCEDISABLE|NOPOWER))
 		if(icon_state != "[initial(icon_state)]0")
-			spawn(2,14)
-				anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "off")
-				icon_state = "[initial(icon_state)]0"
-		else 
-			icon_state = "[initial(icon_state)]0"
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "off")
+		icon_state = "[initial(icon_state)]0"
 
 	// Functional
 	else
 		if(icon_state != initial(icon_state))
-			spawn(2,14)
-				anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
-				icon_state = initial(icon_state)
-		else 
-			icon_state = initial(icon_state)
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
+		icon_state = initial(icon_state)
 
 
-/obj/machinery/computer/power_change()
-	. = ..()
-	update_icon()
+/obj/machinery/computer/power_change(var/nodelay = 0)
+	
+	if(nodelay)	
+		..()
+		update_icon()
+	else
+		spawn(rand(0,16))
+			..()
+			update_icon()
 
 /obj/machinery/computer/proc/set_broken()
 	if(empproof && prob(50)) // Halves chance if reinforced with plasma glass
@@ -144,6 +142,7 @@
 							"You begin to unscrew the monitor...")
 	if (do_after(user, src, 20) && (circuit || CC))
 		var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+		anim(target = A, a_icon = 'icons/obj/computer.dmi', flick_anim = "off")
 		src.transfer_fingerprints_to(A)
 		if(!CC)
 			CC = new circuit( A )
