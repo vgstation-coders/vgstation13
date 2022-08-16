@@ -106,20 +106,30 @@
 
 	// Functional
 	else
-		if(icon_state != initial(icon_state))
+		if(icon_state == "[initial(icon_state)]0")
 			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
 		icon_state = initial(icon_state)
 
 
 /obj/machinery/computer/power_change(var/nodelay = 0)
 	
-	if(nodelay)	
+	if(nodelay)		
 		..()
 		update_icon()
 	else
 		spawn(rand(0,16))
 			..()
 			update_icon()
+
+// This is a wierd workaround.
+// power_change(TRUE) should be called on wrench move but I want to avoid overriding /obj/machinery/attackby() 
+/obj/machinery/computer/wrenchAnchor()
+	. = ..()
+	if(. == TRUE)
+		state = anchored
+		power_change(TRUE)
+	return FALSE // dont execute duplicate code in parent proc
+
 
 /obj/machinery/computer/proc/set_broken()
 	if(empproof && prob(50)) // Halves chance if reinforced with plasma glass
