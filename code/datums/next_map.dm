@@ -30,7 +30,6 @@
 	name = "Bagelstation"
 	path = "Bagelstation"
 	var/bagel_requirement = 17
-	is_enabled = FALSE
 
 /datum/next_map/bagel/is_votable()
 	if(score.bagelscooked < bagel_requirement)
@@ -97,7 +96,6 @@
 /datum/next_map/lamprey
 	name = "Lamprey Station"
 	path = "Lamprey"
-	is_enabled = FALSE
 
 /datum/next_map/lamprey/is_votable()
 	if(score.crewscore > -20000)
