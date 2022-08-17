@@ -212,6 +212,7 @@ var/list/meson_wearers = list()
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
 	my_dark_plane_alpha_override_value = 0
 	seedarkness = TRUE
+	C.update_perception()
 
 /obj/item/clothing/glasses/scanner/meson/unequipped(mob/user, from_slot)
 	. = ..()
@@ -219,6 +220,7 @@ var/list/meson_wearers = list()
 		user.dark_plane?.alphas -= "mesons"
 		user.update_darkness()
 		user.check_dark_vision()
+		user.update_perception()
 
 /obj/item/clothing/glasses/scanner/meson/area_entered(area/A)
 	if(A.flags & NO_MESONS && on)
