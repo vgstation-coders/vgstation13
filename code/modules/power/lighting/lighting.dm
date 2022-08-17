@@ -99,8 +99,6 @@
 	fixture_type = "bulb"
 	sheets_refunded = 1
 
-var/global/list/obj/machinery/light/alllights = list()
-
 // the standard tube light fixture
 /obj/machinery/light
 	name = "light fixture"
@@ -135,7 +133,6 @@ var/global/list/obj/machinery/light/alllights = list()
 		current_bulb = new spawn_with_bulb()
 	else
 		update(0)
-	alllights += src
 
 	if(map.broken_lights)
 		switch(fitting)
@@ -221,7 +218,6 @@ var/global/list/obj/machinery/light/alllights = list()
 /obj/machinery/light/Destroy()
 	seton(0)
 	..()
-	alllights -= src
 
 /obj/machinery/light/update_icon()
 
