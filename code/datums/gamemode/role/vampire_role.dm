@@ -248,10 +248,7 @@
 		H.update_perception()
 
 /datum/role/vampire/update_perception()
-	var/mob/living/carbon/human/H = antag.current
-	if (locate(/datum/power/vampire/mature) in current_powers)
-		H.dark_plane.alphas["vampire_vision"] = 150
-		H.see_in_dark = 8
+	return
 
 /datum/role/vampire/proc/is_mature_or_has_vision()
 	return (locate(/datum/power/vampire/vision) in current_powers) || (locate(/datum/power/vampire/mature) in current_powers)

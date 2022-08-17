@@ -1,4 +1,3 @@
-
 /datum/organ/internal/eyes
 	name = "eyes"
 	parent_organ = LIMB_HEAD
@@ -55,7 +54,7 @@
 	removed_type = /obj/item/organ/internal/eyes/monstrous
 
 /datum/organ/internal/eyes/monstrous/update_perception(var/mob/living/carbon/human/M)
-	M.client.darkness_planemaster.alpha = 100
+	M.dark_plane.alphas["monstrous_vision"] = 150
 
 /datum/organ/internal/eyes/mushroom
 	name = "mushroom eyes"
