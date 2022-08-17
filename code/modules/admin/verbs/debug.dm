@@ -518,19 +518,16 @@ Pressure: [env.pressure]"}
 		var/area/A = get_area(L)
 		if(A && !(A.type in areas_with_light))
 			areas_with_light.Add(A.type)
-			break
 
 	for(var/obj/machinery/light_switch/LS in world)
 		var/area/A = get_area(LS)
 		if(A && !(A.type in areas_with_LS))
 			areas_with_LS.Add(A.type)
-			break
 
 	for(var/obj/item/device/radio/intercom/I in world)
 		var/area/A = get_area(I)
 		if(A && !(A.type in areas_with_intercom))
 			areas_with_intercom.Add(A.type)
-			break
 
 	for(var/obj/machinery/camera/C in cameranet.cameras)
 		var/area/A = get_area(C)
