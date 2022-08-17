@@ -56,6 +56,8 @@
 	stop_automated_movement = TRUE //has custom light-related wander movement
 	wander = FALSE
 
+	var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
+	var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_target
 
 /datum/grue_calc //used for light-related calculations
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
@@ -265,6 +267,17 @@
 	init_language = default_language
 	lifestage_updates() //update the grue's sprite and stats according to the current lifestage
 
+	overdark_planemaster = new
+	overdark_planemaster.render_target = "night vision goggles (\ref[src])"
+	overdark_target = new
+	overdark_target.render_source = "night vision goggles (\ref[src])"
+
+/mob/living/simple_animal/hostile/giant_spider/Login()
+	..()
+	//client.images += light_source_images
+	client.screen |= overdark_planemaster
+	client.screen |= overdark_target
+
 /mob/living/simple_animal/hostile/grue/proc/get_ddl(var/turf/thisturf) //get the dark_dim_light status of a given turf
 	var/thisturf_brightness=10*thisturf.get_lumcount()
 	if(thisturf_brightness<=lightparams.bright_limit_gain)
@@ -352,24 +365,20 @@
 
 //Grue vision
 /mob/living/simple_animal/hostile/grue/update_perception()
-
-	if(client)
-		if(client.darkness_planemaster)
-			client.darkness_planemaster.blend_mode = BLEND_ADD
-			client.darkness_planemaster.alpha = 255
-			client.darkness_planemaster.color = list(
-						1,0,0,0.5,
-						0,1,0,0.5,
-	 					0,0,1,0.5,
-		 				0,0,0,1,
-		 				0,0,0,1)
-
+	if(dark_plane)
+		if (master_plane)
+			master_plane.blend_mode = BLEND_ADD
+		dark_plane.alphas["grue"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
 		client.color = list(
-					1,0,0,0,
-					-1,0.2,0.2,0,
-	 				-1,0.2,0.2,0,
-		 			0,0,0,1,
-		 			0,0,0,0)
+				1,0,0,0,
+				-1,0.2,0.2,0,
+				-1,0.2,0.2,0,
+				0,0,0,1,
+				0,0,0,0)
+		/*
+
+				*/
+	check_dark_vision()
 
 /mob/living/simple_animal/hostile/grue/Stat()
 	..()
