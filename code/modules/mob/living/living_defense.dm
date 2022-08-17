@@ -68,7 +68,15 @@
 		P.on_hit(src,2)
 		return PROJECTILE_COLLISION_BLOCKED
 	if(!P.nodamage)
+		var/rps_percentage = 1
 		var/damage = run_armor_absorb(def_zone, P.flag, P.damage)
+		if(src.rps_special != 0)
+			rps_percentage = src.rps_special
+			if(rps_percentage > 0)
+				damage = damage * rps_percentage
+			else if(rps_percentage < 0)
+				damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
+			src.rps_special = 0
 		apply_damage(damage, P.damage_type, def_zone, absorb, P.is_sharp(), used_weapon = P)
 		regenerate_icons()
 	P.on_hit(src, absorb)

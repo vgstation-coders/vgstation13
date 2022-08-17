@@ -255,7 +255,10 @@ var/list/impact_master = list()
 		if(!istype(A, /mob/living))
 			loc = A.loc
 			return 0// nope.avi
-
+		var/mob/living/V = A
+		if(V.rps_in_combat)
+			visible_message("<span class='notice'>\The [src] reflects off of [M], seemingly protected by a thin film.</span>") // no cheating
+			return 0
 		//Lower accurancy/longer range tradeoff. Distance matters a lot here, so at
 		// close distance, actually RAISE the chance to hit.
 		var/distance = get_dist(starting,loc)
@@ -317,7 +320,18 @@ var/list/impact_master = list()
 	var/turf/A_turf = get_turf(A) //Store the location of A for later use in case it is destroyed in bullet_act()
 
 	if (special_collision != PROJECTILE_COLLISION_MISS)
-		special_collision = A.bullet_act(src, def_zone) // searches for return value
+		if(istype(firer, /mob/living) && istype(A, /mob/living))
+			var/mob/living/O = A
+			if(firer.rps_curse || O.rps_curse)
+				var/rps_results = O.rps_battle(firer, A)
+				O.rps_special = rps_results
+				firer.rps_special = rps_results
+				if(rps_results > 0)
+					special_collision = O.bullet_act(src, def_zone)
+				else if(rps_results < 0)
+					special_collision = firer.bullet_act(src, def_zone)
+		else
+			special_collision = A.bullet_act(src, def_zone) // searches for return value
 		if (A.gcDestroyed) // We killed the poor thing
 			A = A_turf
 	if(special_collision != PROJECTILE_COLLISION_DEFAULT && special_collision != PROJECTILE_COLLISION_BLOCKED) // the bullet is still flying, either from missing its target, bouncing off it, or going through a portal
