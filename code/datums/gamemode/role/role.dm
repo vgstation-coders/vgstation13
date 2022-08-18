@@ -100,7 +100,6 @@
 
 	var/wikiroute
 	var/threat_generated = 0
-	var/threat_decreased = 0
 	var/threat_level_inflated = 0
 
 	var/list/current_powers = list()
@@ -578,9 +577,8 @@
 	var/datum/gamemode/dynamic/D = ticker.mode
 	if(!istype(D))
 		return
-	threat_decreased += amount
 	D.spend_midround_threat(amount)
-	D.threat_log += "[worldtime2text()]: [name] has decreased the threat amount."
+	D.threat_log += "[worldtime2text()]: [name] has decreased the threat amount by [amount]."
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

@@ -221,7 +221,7 @@
 /obj/item/weapon/gun/projectile/automatic/rewind/examine(mob/user)
 	..()
 	if(istimeagent(user))
-		to_chat(user, "[logo] <span class='notice'>This state-of-the-art rewind rifle engages its rewind mechanism only when firing, which takes between 10 and 15 seconds to finalize. When it rewinds it will end up in your possession if you held it at the time of firing.")
+		to_chat(user, "[logo] <span class='info'>This state-of-the-art rewind rifle engages its rewind mechanism only when firing, which takes between 10 and 15 seconds to finalize. When it rewinds it will end up in your possession if you held it at the time of firing.")
 
 /obj/item/weapon/gun/projectile/automatic/rewind/send_to_past(var/duration)
 	..()
@@ -254,22 +254,22 @@
 /obj/item/device/jump_charge/examine(mob/user, size, show_name)
 	..()
 	if(istimeagent(user))
-		to_chat(user, "[logo] <span class='notice'>As a time agent, you know that you need this in order to go back through the time anomaly. Its extremely advanced technology allows it to regenerate in case of destruction, and in a pinch you can use it to send anything into the future after 3 seconds.</span>")
+		to_chat(user, "[logo] <span class='info'>As a time agent, you know that you need this in order to go back through the time anomaly. Its extremely advanced technology allows it to regenerate in case of destruction, and in a pinch you can use it to send anything into the future after 3 seconds.</span>")
 		if(triggered)
 			to_chat(user, "<span class='warning'>It is still recharging.</span>")
 		switch(times_respawned)
 			if(-INFINITY to -1) //Not that it would happen outside of bus shenanigans, but who knows?
 				to_chat(user, "<span class='sinister'>Somehow this device feels off, likely due to the tamperings of Bluespace Technicians.</span>")
 			if(0)
-				to_chat(user, "<span class='notice'>This device is as pristine as it was in the day it was made.</span>")
+				to_chat(user, "<span class='info'>This device is as pristine as it was in the day it was made.</span>")
 			if(1)
-				to_chat(user, "<span class='notice'>This device looks a bit roughed up, likely as a result of undergoing temporal regeneration. You might want to keep it more safe.</span>")
+				to_chat(user, "<span class='info'>This device looks a bit roughed up, likely as a result of undergoing temporal regeneration. You might want to keep it more safe.</span>")
 			if(2 to 4)
-				to_chat(user, "<span class='notice'>This device has seen some better days. It has already undergone temporal regeneration several times, likely as a result of careless destruction. The Time Agency might make you go through Jump Charge Usage Orientation again...</span>")
+				to_chat(user, "<span class='info'>This device has seen some better days. It has already undergone temporal regeneration several times, likely as a result of careless destruction. The Time Agency might make you go through Jump Charge Usage Orientation again...</span>")
 			if(5 to 10)
-				to_chat(user, "<span class='notice'>This device is in a seriously rough shape. It has been destroyed enough times that the button feels sticky and you're worried about its internal components. At this point it is more likely that it was deliberately destroyed repeatedly rather than out of accident. The Time Agency might ask you a few questions about this.</span>")
+				to_chat(user, "<span class='info'>This device is in a seriously rough shape. It has been destroyed enough times that the button feels sticky and you're worried about its internal components. At this point it is more likely that it was deliberately destroyed repeatedly rather than out of accident. The Time Agency might ask you a few questions about this.</span>")
 			if(11 to INFINITY)
-				to_chat(user, "<span class='notice'>This device has been destroyed many, many times and it shows. Through sheer luck or just extremely advanced technology it still thankfully works as intended, but such damage will raise a brow or two, or three, or the entirety of the Time Agency's.</span>")
+				to_chat(user, "<span class='info'>This device has been destroyed many, many times and it shows. Through sheer luck or just extremely advanced technology it still thankfully works as intended, but such damage will raise a brow or two, or three, or the entirety of the Time Agency's.</span>")
 //Behavior shamelessly stolen from nuclear disks
 
 /obj/item/device/jump_charge/New()
@@ -370,7 +370,7 @@
 /obj/item/device/timeline_eraser/examine(mob/user, size, show_name)
 	..()
 	if(istimeagent(user))
-		to_chat(user, "[logo] <span class='notice'>As a time agent, you know that this device can erase nearly anything from reality. Erasing entities will take 10 seconds, erasing objects will take 5 seconds and erasing other time agents will take no time at all. People with temporal suits are protected from its effects.</span>")
+		to_chat(user, "[logo] <span class='info'>As a time agent, you know that this device can erase nearly anything from reality. Erasing entities will take 10 seconds, erasing objects will take 5 seconds and erasing other time agents will take no time at all. People with temporal suits are protected from its effects.</span>")
 		if(charge < 5)
 			to_chat(user, "<span class='warning'>It is still recharging.</span>")
 
@@ -399,22 +399,21 @@
 	if(charge < 5)
 		to_chat(user, "<span class='warning'>\The [src] is still recharging!</span>")
 		return
+	if(istype(target, /obj/item/device/jump_charge)) //It is already unaffected but leaving a message here for trying to soft-lock is funny
+		to_chat(user, "<span class='warning'>Are you insane? You can't just erase such an important device!</span>")
+		return
+	if(target.flags & TIMELESS)
+		to_chat(user, "<span class = 'warning'>The target is currently immune to temporal meddling.</span>")
+		return
 	. = 1
-	var/duration = 100 //10 seconds
+	var/duration = 10 SECONDS
 	// TODO: Make the timestop, properly stop when the process is done
 	if(istype(target, /mob))
 		var/mob/M = target
 		if(istimeagent(M))
 			duration = 0
 	if(istype(target, /obj))
-		duration = 50 //5 seconds
-
-	if(istype(target, /obj/item/device/jump_charge)) //It is already unaffected but leaving a message here for trying to soft-lock is funny
-		to_chat(user, "<span class='warning'>Are you insane?</span>")
-		return
-	if(target.flags & TIMELESS)
-		to_chat(user, "<span class = 'warning'>The target is currently immune to temporal meddling.</span>")
-		return
+		duration = 5 SECONDS
 	to_chat(user, "<span class='warning'>You start erasing \the [target] from existence...</span>")
 	in_process = TRUE
 	icon_state = "jump_charge_firing"
@@ -474,7 +473,7 @@
 /obj/item/weapon/pinpointer/advpinpointer/time_agent/examine(mob/user)
 	..()
 	if(istimeagent(user))
-		to_chat(user, "[logo] <span class='notice'>This allows you to search for the jump charge and the time anomaly when set.</span>")
+		to_chat(user, "[logo] <span class='info'>This allows you to search for the jump charge and the time anomaly when set.</span>")
 
 /obj/item/weapon/pinpointer/advpinpointer/time_agent/New()
 	item_paths["Jump Charge"] = /obj/item/device/jump_charge
