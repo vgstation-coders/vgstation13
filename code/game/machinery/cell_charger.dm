@@ -114,11 +114,11 @@
 
 /obj/machinery/cell_charger/attack_hand(mob/user)
 	if(charging)
-		if(emagged) //Aw shucks, you silly basketball player! What are you doing?
+		if(emagged)
 			spark(src, 5)
 			spawn(15)
 				explosion(src.loc, -1, 1, 3, adminlog = 0, whodunnit = user) //Overload
-				qdel(src) //It exploded, rip
+				qdel(src)
 			return
 		usr.put_in_hands(charging)
 		charging.add_fingerprint(user)

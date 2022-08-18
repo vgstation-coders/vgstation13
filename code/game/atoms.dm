@@ -807,7 +807,7 @@ its easier to just keep the beam vertical.
 
 /datum/proc/setGender(gend = FEMALE)
 	if(!("gender" in vars))
-		CRASH("Aw shucks, you silly basketball player! The [src] doesn't have a gender variable.")
+		CRASH("[src] doesn't have a gender variable.")
 	if(ishuman(src))
 		ASSERT(gend != PLURAL && gend != NEUTER)
 	src:gender = gend

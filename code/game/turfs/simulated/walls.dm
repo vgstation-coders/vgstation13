@@ -324,7 +324,7 @@
 		var/obj/item/weapon/pickaxe/PK = W
 		if(!(PK.diggables & DIG_WALLS))
 			return
-		if(mineral == "diamond") //Basketball player, it's a one meter thick wall made out of diamonds
+		if(mineral == "diamond")
 			return
 
 		user.visible_message("<span class='warning'>[user] begins [PK.drill_verb] straight into \the [src].</span>", \

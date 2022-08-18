@@ -3,7 +3,7 @@
 	desc = "There seems to be six slots capable of holding small crystals placed along its side."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "communication"
-	stat = NOPOWER //Our basketball playing friends, you will wrench this shit down or else
+	stat = NOPOWER
 	density = 1
 	use_power = MACHINE_POWER_USE_IDLE
 	active_power_usage = 4000
