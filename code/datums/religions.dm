@@ -695,9 +695,6 @@ var/list/all_bible_styles = list(
 	female_adept = "Chief Assistant"
 	keys = list("toolboxia", "toolbox")
 
-/datum/religion/retard/equip_chaplain(var/mob/living/carbon/human/H)
-	H.setBrainLoss(100) //Starts off retarded as fuck, that'll teach him
-
 /datum/religion/retard/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
 	var/obj/structure/table/T = locate(/obj/structure/table/, oview(1, preacher)) // is there a table near us !
 	if (!T)
