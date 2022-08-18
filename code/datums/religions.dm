@@ -1546,6 +1546,6 @@ var/list/all_bible_styles = list(
 	keys = list("diversity", "inclusion", "ally", "safe space", "love is love", "poc", "queer", "rest in power")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
-	/datum/religion/lgbtq/equip_chaplain(var/mob/living/carbon/human/H)
-		H.equip_or_collect(new /obj/item/clothing/under/darkholme(H), slot_w_uniform)
-		H.setBrainLoss(100)
+/datum/religion/lgbtq/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/under/darkholme(H), slot_w_uniform)
+	H.setBrainLoss(100)
