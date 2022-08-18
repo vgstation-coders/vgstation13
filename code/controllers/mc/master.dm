@@ -131,6 +131,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	createPaiController()
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 	Holiday = Get_Holiday()
+	generate_radio_frequencies()
 	world.update_status()
 	
 	// Initialize subsystems.
