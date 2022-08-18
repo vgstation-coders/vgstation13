@@ -1,4 +1,4 @@
-/hook/startup/proc/createDatacore()
+/proc/createDatacore()
 	data_core = new /obj/effect/datacore()
 	return 1
 

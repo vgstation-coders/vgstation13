@@ -176,7 +176,7 @@ var/datum/controller/gameticker/ticker
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them
 	collect_minds()
-
+	CHECK_TICK
 	var/can_continue = src.mode.Setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
@@ -199,7 +199,7 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
 	equip_characters()
-
+	var/discrete_areas = areas.Copy()
 	for(var/mob/living/carbon/human/player in player_list)
 		switch(player.mind.assigned_role)
 			if("MODE","Mobile MMI","Trader")
@@ -207,7 +207,19 @@ var/datum/controller/gameticker/ticker
 			else
 				player.update_icons()
 				data_core.manifest_inject(player)
-
+		//Get populated departments
+		var/area/A = get_area(player)
+		if(A in discrete_areas) //We've already added their department
+			discrete_areas -= get_department_areas(player)
+	CHECK_TICK
+	//Toggle lightswitches and lamps on in occupied departments
+	for(var/area/DA in discrete_areas)
+		for(var/obj/machinery/light_switch/LS in DA)
+			LS.toggle_switch(0)
+			break
+		for(var/obj/item/device/flashlight/lamp/L in DA)
+			L.toggle_onoff(0)
+	CHECK_TICK
 	current_state = GAME_STATE_PLAYING
 
 	// Update new player panels so they say join instead of ready up.
@@ -274,14 +286,12 @@ var/datum/controller/gameticker/ticker
 		send2adminirc("Round has started with no admins online.")
 		send2admindiscord("**Round has started with no admins online.**", TRUE)
 
-	Master.RoundStart()
-
 	if(config.sql_enabled)
 		spawn(3000)
 		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
 
 	stat_collection.round_start_time = world.realtime
-
+	Master.RoundStart()
 	wageSetup()
 	post_roundstart()
 	return 1
@@ -637,30 +647,7 @@ var/datum/controller/gameticker/ticker
 				to_chat(R, R.connected_ai?"<b>You have synchronized with an AI. Their name will be stated shortly. Other AIs can be ignored.</b>":"<b>You are not synchronized with an AI, and therefore are not required to heed the instructions of any unless you are synced to them.</b>")
 			R.lawsync()
 
-	//Toggle lightswitches and lamps on in occupied departments
-	var/discrete_areas = list()
-	for(var/mob/living/carbon/human/H in player_list)
-		var/area/A = get_area(H)
-		if(!(A in discrete_areas)) //We've already added their department
-			discrete_areas += get_department_areas(H)
-	CHECK_TICK
-	for(var/area/DA in discrete_areas)
-		for(var/obj/machinery/light_switch/LS in DA)
-			LS.toggle_switch(1)
-			break
-		for(var/obj/item/device/flashlight/lamp/L in DA)
-			L.toggle_onoff(1)
-	CHECK_TICK
-	//Toggle lights without lightswitches
-	//with better area organization, a lot of this headache can be limited
-	for(var/area/A in areas - discrete_areas)
-		if(!A.requires_power || !A.haslightswitch)
-			for(var/obj/machinery/light/L in A)
-				L.seton(1)
-	CHECK_TICK
-
 // -- Tag mode!
-
 /datum/controller/gameticker/proc/tag_mode(var/mob/user)
 	tag_mode_enabled = TRUE
 	to_chat(world, "<h1>Tag mode enabled!<h1>")
