@@ -68,10 +68,14 @@
 			Jitter(10)
 
 	if(getBrainLoss() >= 60 && prob(3))
-		say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
+		say(pick( \
+		"ZAMN", \
+		"I CAN'T BREET", \
+		"ON GOD", \
+		"IM A PONY NEEEEEEIIIIIIIIIGH", \
 		"without oxigen blob don't evoluate?", \
 		"CAPTAINS A COMDOM", \
-		"[pick("", "that faggot traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
+		"[pick("", "that dispicable traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
 		"can u give me [pick("telikesis","halk","eppilapse")]?", \
 		"THe saiyans screwed", \
 		"Bi is THE BEST OF BOTH WORLDS>", \

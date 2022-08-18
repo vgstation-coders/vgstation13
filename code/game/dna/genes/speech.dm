@@ -92,7 +92,7 @@
 	// Combining all the worst shit the world has ever offered.
 
 	// Note: Comes BEFORE other stuff.
-	// Trying to remember all the stupid fucking furry memes is hard
+	//Remembering cute cat memes is hard
 	addPickReplacement(GENERIC_INSULT_WORDS,
 		list(
 			"silly rabbit",
