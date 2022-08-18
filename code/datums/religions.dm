@@ -695,30 +695,6 @@ var/list/all_bible_styles = list(
 	female_adept = "Chief Assistant"
 	keys = list("toolboxia", "toolbox")
 
-/datum/religion/homosexuality
-	name = "Homosexuality"
-	deity_name = "Steve Rambo" //Pushing Gaywards
-	bible_names = list("Guys Gone Wild", "Hunk Rump", "It's Okay to be Gay", "Daddy Gave You Good Advice")
-	bible_type = /obj/item/weapon/storage/bible/booze
-	male_adept = "LGBT Advocate"
-	female_adept = "LGBT Advocate"
-	keys = list("homosexuality", "faggotry", "gayness", "gay", "penis", "faggot", "cock", "cocks", "dick", "dicks")
-	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
-
-/datum/religion/homosexuality/equip_chaplain(var/mob/living/carbon/human/H)
-	H.equip_or_collect(new /obj/item/clothing/under/darkholme(H), slot_w_uniform)
-
-/datum/religion/retard
-	name = "Retardation"
-	deity_name = "Brian Damag" //Ha
-	bible_names = list("Woody's Got Wood: The Aftermath", "War of the Cocks", "Sweet Bro and Hella Jef: Expanded Edition", "The Book of Pomf")
-	bible_type = /obj/item/weapon/storage/bible/booze
-	male_adept = "Retard"
-	female_adept = "Retard"
-	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damag")
-	convert_method = "standing both next to a table."
-	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
-
 /datum/religion/retard/equip_chaplain(var/mob/living/carbon/human/H)
 	H.setBrainLoss(100) //Starts off retarded as fuck, that'll teach him
 
