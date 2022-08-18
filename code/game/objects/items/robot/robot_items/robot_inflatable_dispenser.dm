@@ -10,8 +10,8 @@
 
 	var/list/stored_walls = list()
 	var/list/stored_doors = list()
-	var/max_walls = 4
-	var/max_doors = 3
+	var/max_walls = 18
+	var/max_doors = 15
 	var/list/allowed_types = list(/obj/item/inflatable/wall, /obj/item/inflatable/door)
 	var/mode = MODE_WALL
 
@@ -30,8 +30,6 @@
 
 /obj/item/weapon/inflatable_dispenser/robot
 	w_class = W_CLASS_HUGE
-	max_walls = 10
-	max_doors = 5
 
 /obj/item/weapon/inflatable_dispenser/examine(mob/user)
 	..()
