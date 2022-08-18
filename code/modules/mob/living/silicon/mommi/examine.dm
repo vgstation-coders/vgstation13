@@ -45,7 +45,7 @@
 
 	to_chat(user, msg)
 
-	if(laws && isobserver(user) && !istype(user,/mob/dead/observer/deafmute)) //As a bastard child of robots, we don't call our parent's examine()
+	if(laws && isobserver(user) && !istype(user,/mob/dead/observer/deafmute)) //As a child of robots, we don't call our parent's examine()
 		var/mob/dead/observer/fag = user
 		if(!isAdminGhost(fag) && fag.mind && fag.mind.current)
 			if(fag.mind.isScrying || fag.mind.current.ajourn)// Scrying or astral travel, fuck them.

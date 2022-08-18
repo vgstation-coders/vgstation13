@@ -376,7 +376,7 @@
 
 #define CLAMP01(x) 		(clamp(x, 0, 1))
 
-//CPU lag shit
+//CPU lag
 #define calculateticks(x)	x * world.tick_lag // Converts your ticks to proper tenths.
 #define tcheck(CPU,TOSLEEP)	if(world.cpu > CPU) sleep(calculateticks(TOSLEEP)) //Shorthand of checking and then sleeping a process based on world CPU
 

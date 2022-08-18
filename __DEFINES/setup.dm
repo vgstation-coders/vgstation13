@@ -1093,10 +1093,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define USE_BROKEN_RECURSIVE_MOBCHECK
 
 
-//////////////////
-// RECYCLING SHIT
-//////////////////
-
+// RECYCLING
 // Sorting categories
 #define NOT_RECYCLABLE   0
 #define RECYK_MISC       1

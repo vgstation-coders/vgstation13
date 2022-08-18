@@ -66,7 +66,7 @@
 
 /obj/abstract/screen/draggable/MouseDown(turf/location,control,params)
 	mouse_opacity = 0 //Because dragging wont occur when you are inside of your own src, we hide the src to mouses
-	fuckbyond.mouse_opacity = 2 //It is now this little bastards responsibility to tell us if someone finishes a single click
+	fuckbyond.mouse_opacity = 2 //It is now its responsibility to tell us if someone finishes a single click
 
 	var/list/modifiers = params2list(params)
 	var/turf/origin = screen_loc2turf(modifiers["screen-loc"], get_turf(attachedmob), attachedmob)
