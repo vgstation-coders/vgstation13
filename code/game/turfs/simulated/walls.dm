@@ -263,7 +263,7 @@
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 				overlays.Cut()
 				return
-		if(WT.get_fuel())
+		if(WT.get_fuel() && WT.isOn())
 			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s outer plating.</span>", \
 			"<span class='notice'>You begin slicing through \the [src]'s outer plating.</span>", \
 			"<span class='warning'>You hear welding noises.</span>")
