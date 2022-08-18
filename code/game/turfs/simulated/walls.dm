@@ -268,6 +268,7 @@
 			"<span class='notice'>You begin slicing through \the [src]'s outer plating.</span>", \
 			"<span class='warning'>You hear welding noises.</span>")
 			playsound(src, 'sound/items/Welder.ogg', 100, 1)
+
 			if(WT.do_weld(user, src, 100, 1))
 				if(!istype(src))
 					return
