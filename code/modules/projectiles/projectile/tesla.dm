@@ -1,7 +1,7 @@
 #define MAX_LIGHTNING_PER_PULSE 3
 #define LIGHTNING_RANGE 3
 #define PULSE_SHOCK_CHANCE 50
-#define MIN_LIGHTNING_DAMAGE 10
+#define MIN_LIGHTNING_DAMAGE 30
 
 /obj/item/projectile/teslaball
 	name = "tesla ball"
@@ -20,8 +20,7 @@
 
 /obj/item/projectile/teslaball/New()
 	..()
-	spawn(1 SECONDS)  
-		Pulse()
+	Pulse()
 
 /obj/item/projectile/teslaball/to_bump(atom/A)
 	..()
@@ -39,7 +38,8 @@
 	var/list/possible_turfs = list()
 
 	for(var/mob/living/M in view(LIGHTNING_RANGE,src))
-		victims += M
+		if(!firer || M != firer)
+			victims += M
 
 	while(victims.len > 0)
 		var/mob/living/victim = pick(victims)
@@ -101,7 +101,7 @@
 
 /obj/item/projectile/teslaball/proc/Zap(var/atom/target, var/bolt = TRUE)
 	var/energy_force = CalculateDamage()
-	var/knockdown_time = min(energy_force / 2, 15)
+	var/knockdown_time = min(energy_force / 3, 15)
 	if(ishuman(target))
 		var/mob/living/carbon/human/H = target
 		H.electrocute_act(shock_damage = energy_force, source = src, incapacitation_duration = knockdown_time SECONDS, def_zone = LIMB_CHEST)
