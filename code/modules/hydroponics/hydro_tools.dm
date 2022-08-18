@@ -267,7 +267,7 @@
 
 /obj/item/weapon/hatchet
 	name = "hatchet"
-	desc = "A very sharp axe blade upon a short fibremetal handle. It has a long history of chopping things, but now it is used for chopping wood."
+	desc = "A very sharp axe blade upon a short wooden handle. It has a long history of chopping things, but now it is used for chopping wood."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "hatchet"
 	flags = FPRINT
@@ -295,6 +295,12 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "unathiknife"
 	attack_verb = list("rips", "tears", "cuts")
+
+/obj/item/weapon/hatchet/metalhandle
+	name = "hatchet"
+	desc = "A soulless attempt at upgrading the traditional hatchet, clearly a mass produced inferior tool compared to the ones made by elder botanist master-crafstmen."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "lamehatchet"
 
 /obj/item/weapon/scythe
 	icon_state = "scythe0"

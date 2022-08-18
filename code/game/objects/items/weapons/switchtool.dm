@@ -333,7 +333,7 @@
 						"/obj/item/tool/wirecutters:wirecutters" = null,
 						"/obj/item/weapon/kitchen/utensil/knife/large:knife" = null,
 						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
-						"/obj/item/weapon/hatchet:hatchet" = null,
+						"/obj/item/weapon/hatchet/metalhandle:hatchet" = null,
 						"/obj/item/weapon/lighter/zippo:Zippo lighter" = null,
 						"/obj/item/weapon/match/strike_anywhere:strike-anywhere match" = null,
 						"/obj/item/weapon/pen:pen" = null)
