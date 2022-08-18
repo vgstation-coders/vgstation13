@@ -273,9 +273,9 @@
 		for(var/mob/living/L in view(get_turf(src), 7)) //Oh, and irradiate everyone nearby in a bigger burst of radiation.
 			L.apply_radiation(initial(charge_rate)/5, RAD_EXTERNAL)
 		if(!isturf(loc))
-			visible_message("<span class='warning'>\The [loc] starts sparking and sizzling, emitting a foul faint smoke!")
+			loc.visible_message("<span class='warning'>\The [loc] starts sparking and sizzling, emitting a foul faint smoke!")
 		else
-			visible_message("<span class='warning'>\The [src] breaks, and has started leaking radioactive material!</span>")
+			visible_message("<span class='warning'>\The [src] breaks and starts leaking radioactive material!</span>")
 		if(prob(25))
 			spark(get_turf(src), 1)
 
