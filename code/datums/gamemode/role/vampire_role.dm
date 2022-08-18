@@ -220,6 +220,12 @@
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
 		target.vessel.remove_reagent(BLOOD,blood)
+		var/mob/living/carbon/V = assailant
+		if(V)
+			var/fatty_chemicals = target.reagents.has_any_reagents(list(CHEESYGLOOP, CORNOIL)) //If the target has these chemicals in his blood the vampire can get fat from sucking blood.
+			var/eating_threshold = fatty_chemicals ? OVEREAT_THRESHOLD * 2 : OVEREAT_THRESHOLD
+			if(V.nutrition < eating_threshold) //Gives the vampire a little bit of food, at a rate of 1/4 the blood sucked.
+				V.nutrition = round(min(V.nutrition + blood/4, OVEREAT_THRESHOLD), 1)
 		update_vamp_hud()
 
 	draining = null
