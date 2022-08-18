@@ -263,23 +263,23 @@
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 				overlays.Cut()
 				return
-		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s outer plating.</span>", \
-		"<span class='notice'>You begin slicing through \the [src]'s outer plating.</span>", \
-		"<span class='warning'>You hear welding noises.</span>")
-		playsound(src, 'sound/items/Welder.ogg', 100, 1)
-
-		if(WT.do_weld(user, src, 100, 1))
-			if(!istype(src))
-				return
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
-			user.visible_message("<span class='warning'>[user] slices through \the [src]'s outer plating.</span>", \
-			"<span class='notice'>You slice through \the [src]'s outer plating.</span>", \
+		if(WT.get_fuel())
+			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s outer plating.</span>", \
+			"<span class='notice'>You begin slicing through \the [src]'s outer plating.</span>", \
 			"<span class='warning'>You hear welding noises.</span>")
-			var/pdiff = performWallPressureCheck(src)
-			if(pdiff)
-				investigation_log(I_ATMOS, "with a pdiff of [pdiff] dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
-				message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
-			dismantle_wall()
+			playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			if(WT.do_weld(user, src, 100, 1))
+				if(!istype(src))
+					return
+				playsound(src, 'sound/items/Welder.ogg', 100, 1)
+				user.visible_message("<span class='warning'>[user] slices through \the [src]'s outer plating.</span>", \
+				"<span class='notice'>You slice through \the [src]'s outer plating.</span>", \
+				"<span class='warning'>You hear welding noises.</span>")
+				var/pdiff = performWallPressureCheck(src)
+				if(pdiff)
+					investigation_log(I_ATMOS, "with a pdiff of [pdiff] dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
+					message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
+				dismantle_wall()
 		else
 			return
 
