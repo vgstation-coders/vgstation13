@@ -261,7 +261,7 @@
 //	if(prob(5))
 //		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
 //			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
-	if(charge_rate < (initial(charge_rate)/10))	//turns into a broken cell with no charge rate, 0 max charge, a 5% chance to explode every 2s and 25% chance to leak radiation equal to 1/10th of its charge rate
+	if(charge_rate && charge_rate < (initial(charge_rate)/10))	//turns into a broken cell with no charge rate, 0 max charge, a 5% chance to explode every 2s and 25% chance to leak radiation equal to 1/10th of its charge rate
 		name = "broken cell"
 		icon_state = "cell"
 		starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30)
@@ -272,7 +272,12 @@
 		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
 		for(var/mob/living/L in view(get_turf(src), 7)) //Oh, and irradiate everyone nearby in a bigger burst of radiation.
 			L.apply_radiation(initial(charge_rate)/5, RAD_EXTERNAL)
-		visible_message("<span class='warning'>\The [src] breaks, and has started leaking radioactive material!</span>")
+		if(!isturf(loc))
+			visible_message("<span class='warning'>\The [loc] starts sparking and sizzling, emitting a foul faint smoke!")
+		else
+			visible_message("<span class='warning'>\The [src] breaks, and has started leaking radioactive material!</span>")
+		if(prob(25))
+			spark(get_turf(src), 1)
 
 
 /obj/item/weapon/cell/rad/emp_act(severity)
