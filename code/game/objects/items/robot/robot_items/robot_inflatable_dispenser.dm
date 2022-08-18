@@ -30,8 +30,6 @@
 
 /obj/item/weapon/inflatable_dispenser/robot
 	w_class = W_CLASS_HUGE
-	max_walls = 18
-	max_doors = 15
 
 /obj/item/weapon/inflatable_dispenser/examine(mob/user)
 	..()
