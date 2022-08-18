@@ -48,8 +48,8 @@
 
 /proc/stoplag(initial_delay)
 	. = 0
-	var/i = 1
-    if(!initial_delay)
+	var/i = 1var/i = 1
+	if(!initial_delay)
 		initial_delay = world.tick_lag
 	do
 		. += Ceiling(i*DELTA_CALC)
