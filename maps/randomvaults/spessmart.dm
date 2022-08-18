@@ -557,7 +557,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	var/spawn_sample_on_creation = 1
 	var/obj/item/weapon/reagent_containers/food/snacks/food_type = /obj/item/weapon/reagent_containers/food/snacks/faggot //Type of the food
 	var/food_vars = list( //Modified vars
-		name = "Faggot's Delight",
+		name = "Faggot Delight",
 	)
 
 	var/last_spawned_sample = 0
