@@ -358,7 +358,7 @@
 	armor = list(melee = 10, bullet = 0, laser = 15,energy = 5, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.8
 
-/obj/item/clothing/under/grey/grey_leader/acidable() // It'll take more than acid to ruin a uniform this sharp
+/obj/item/clothing/under/grey/grey_leader/dissolvable() // It'll take more than acid to ruin a uniform this sharp
 	return 0
 
 //Ayy lmao labcoat (Same as a normal labcoat in stats, but slightly altered spritewise to look better when paired with the uniform)
@@ -383,7 +383,7 @@
 	clothing_flags = NOSLIP
 	sterility = 100
 
-/obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior/acidable() // It'll take more than acid to ruin a fine pair of boots like these
+/obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior/dissolvable() // It'll take more than acid to ruin a fine pair of boots like these
 	return 0
 
 //////////////////////////////
@@ -431,7 +431,7 @@
 	access = list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
 	base_access = list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
 
-/obj/item/weapon/card/id/mothership_leader/acidable() // ID nanobots or something. This is mostly to prevent it being melted by a stray grenade in the vault crossfire
+/obj/item/weapon/card/id/mothership_leader/dissolvable() // ID nanobots or something. This is mostly to prevent it being melted by a stray grenade in the vault crossfire
 	return 0
 
 //////////////////////////////

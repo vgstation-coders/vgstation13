@@ -1717,7 +1717,7 @@
 	if(..())
 		return 1
 
-	if(M.acidable())
+	if(M.dissolvable())
 		M.adjustFireLoss(REM)
 		M.take_organ_damage(0, REM)
 
@@ -1738,14 +1738,14 @@
 						targeted_zones.Remove(part)
 						break
 				if(covered)
-					if(C.acidable() && prob(15))
+					if(C.dissolvable() && prob(15))
 						to_chat(H, "<span class='warning'>Your [C.name] melts away but protects you from the acid!</span>")
 						H.u_equip(C,0)
 						qdel(C)
 					else
 						to_chat(H, "<span class='warning'>Your [C.name] protects you from the acid!</span>")
 
-	if(M.acidable() && targeted_zones.len)
+	if(M.dissolvable() && targeted_zones.len)
 		if(prob(15) && ishuman(M) && volume >= 30)
 			var/mob/living/carbon/human/H = M
 			var/screamed = FALSE
@@ -1768,7 +1768,7 @@
 	if(..())
 		return 1
 
-	if(!O.acidable())
+	if(!O.dissolvable())
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)) && prob(10))
@@ -1818,14 +1818,14 @@
 						targeted_zones.Remove(part)
 						break
 				if(covered)
-					if(C.acidable() && prob(15))
+					if(C.dissolvable() && prob(15))
 						to_chat(H, "<span class='warning'>Your [C.name] melts away but protects you from the acid!</span>")
 						H.u_equip(C,0)
 						qdel(C)
 					else
 						to_chat(H, "<span class='warning'>Your [C.name] protects you from the acid!</span>")
 
-	if(M.acidable() && targeted_zones.len) //I think someone doesn't know what this does
+	if(M.dissolvable() && targeted_zones.len) //I think someone doesn't know what this does
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			var/screamed = FALSE
@@ -1848,7 +1848,7 @@
 	if(..())
 		return 1
 
-	if(!O.acidable())
+	if(!O.dissolvable())
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)))
@@ -9176,7 +9176,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(volume >= min_to_start && !is_being_petrified)
 		is_being_petrified = TRUE
 	if(is_being_petrified)
-		if(holder.has_any_reagents(PETRITRICINCURES))
+		if(holder.has_any_reagents(ACIDS))
 			to_chat(M, "<span class='notice'>You feel a wave of relief as your muscles loosen up.</span>")
 			C.pain_shock_stage = max(0, C.pain_shock_stage - 300)
 			is_being_petrified = FALSE
@@ -9458,7 +9458,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	if(!O.acidable())
+	if(!O.dissolvable())
 		return
 
 	if(istype(O,/obj/structure/table))

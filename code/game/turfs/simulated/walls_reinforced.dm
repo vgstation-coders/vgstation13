@@ -399,7 +399,7 @@
 				update_icon()
 	return
 
-/turf/simulated/wall/r_wall/acidable()
+/turf/simulated/wall/r_wall/dissolvable()
 	return 0
 
 #undef WALLCOMPLETED

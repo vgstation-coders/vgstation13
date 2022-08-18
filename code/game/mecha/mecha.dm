@@ -2078,7 +2078,7 @@
 		return 1
 	return 0
 
-/obj/mecha/acidable()
+/obj/mecha/dissolvable()
 	return 0
 
 /obj/mecha/beam_connect(var/obj/effect/beam/B)

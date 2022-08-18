@@ -204,7 +204,7 @@
 
 	species_restricted = null
 
-/obj/item/clothing/head/helmet/space/rig/wizard/acidable()
+/obj/item/clothing/head/helmet/space/rig/wizard/dissolvable()
 	return 0
 
 /obj/item/clothing/suit/space/rig/wizard
@@ -224,7 +224,7 @@
 	head_type = /obj/item/clothing/head/helmet/space/rig/wizard
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
 
-/obj/item/clothing/suit/space/rig/wizard/acidable()
+/obj/item/clothing/suit/space/rig/wizard/dissolvable()
 	return 0
 
 /obj/item/clothing/head/helmet/space/rig/wizard/lich_king

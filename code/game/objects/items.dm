@@ -121,7 +121,7 @@
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
 /obj/item/acid_melt()
-	if (acidable())
+	if (dissolvable())
 		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
 		I.desc = "Looks like this was \a [src] some time ago."
 		qdel(src)

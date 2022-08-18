@@ -72,8 +72,8 @@
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey/leader
 	clothing_flags = PLASMAGUARD
 
-/obj/item/clothing/suit/space/rig/grey/leader/acidable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
-	return 0
+/obj/item/clothing/suit/space/rig/grey/leader/dissolvable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
+	return WATER
 
 /obj/item/clothing/head/helmet/space/rig/grey/leader
 	name = "Administrator Pressure Helmet"
@@ -84,5 +84,5 @@
 	armor = list(melee = 50, bullet = 25, laser = 70, energy = 25, bomb = 40, bio = 100, rad = 50)
 	clothing_flags = PLASMAGUARD
 
-/obj/item/clothing/head/helmet/space/rig/grey/leader/acidable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
-	return 0
+/obj/item/clothing/head/helmet/space/rig/grey/leader/dissolvable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
+	return WATER

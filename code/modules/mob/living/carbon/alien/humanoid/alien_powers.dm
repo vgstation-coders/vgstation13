@@ -214,18 +214,11 @@ Doesn't work on other aliens/AI.*/
 	range = 1
 
 /spell/alienacid/is_valid_target(var/atom/target, mob/user)
-	return is_valid_target_to_acid(target,user,range)
-
-/proc/is_valid_target_to_acid(var/atom/target, mob/user,var/range=1)
+	var/range = 1
 	if(get_dist(user, target) > range)
 		to_chat(user, "<span class='alien'>Target is too far away!</span>")
 		return FALSE
-	if(target.isacidhardened())
-		if(!do_after(user,target,3 SECONDS))
-			to_chat(user, "<span class='alien'>You have to stay next to the object to acid it!</span>")
-			return FALSE
-		return TRUE
-	if(!ismob(target) && target.acidable())
+	if(!ismob(target) && target.dissolvable())
 		return TRUE
 	to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
 	return FALSE

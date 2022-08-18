@@ -597,7 +597,7 @@ a {
 /obj/proc/give_tech_list()
 	return null
 
-/obj/acidable()
+/obj/dissolvable()
 	return !(flags & INVULNERABLE)
 
 /obj/proc/t_scanner_expose()

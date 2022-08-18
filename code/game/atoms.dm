@@ -512,7 +512,7 @@ its easier to just keep the beam vertical.
 	return ex_act(severity, child)
 
 /atom/proc/can_mech_drill()
-	return acidable()
+	return dissolvable()
 
 /atom/proc/blob_act(destroy = 0, var/obj/effect/blob/source = null)
 	if(flags & INVULNERABLE)
@@ -854,11 +854,8 @@ its easier to just keep the beam vertical.
 
 /atom/proc/update_icon()
 
-/atom/proc/acidable()
+/atom/proc/dissolvable()
 	return 0
-
-/atom/proc/isacidhardened()
-	return FALSE
 
 /atom/proc/salt_act()
 	return
