@@ -877,6 +877,20 @@
 	},
 /turf/simulated/floor/plating,
 /area/vault/ironchef)
+"vi" = (
+/obj/structure/closet/crate/hydroponics,
+/obj/item/weapon/reagent_containers/glass/bucket,
+/obj/item/weapon/minihoe,
+/obj/item/weapon/storage/bag/plants,
+/obj/item/tool/wirecutters/clippers,
+/obj/item/weapon/fishtools/fish_egg_scoop,
+/obj/item/weapon/fishtools/fish_food,
+/obj/item/weapon/fishtools/fish_net,
+/obj/item/weapon/fishtools/fishtank_helper,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/ironchef)
 "Rr" = (
 /obj/machinery/smartfridge/condiments,
 /turf/simulated/floor{
@@ -1188,7 +1202,7 @@ ab
 bu
 at
 at
-ah
+vi
 aK
 aW
 aW
