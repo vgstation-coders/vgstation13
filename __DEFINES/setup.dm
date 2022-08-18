@@ -693,10 +693,10 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LIVING 25		//This what players have by default.
 
 #define SEE_INVISIBLE_LEVEL_ONE 35	//Used by mobs under certain conditions.
-#define INVISIBILITY_LEVEL_ONE 35	//Used by infrared beams
+#define INVISIBILITY_LEVEL_ONE 35	//Used by infrared beams and turrets inside their covers
 
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
-#define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers and objects/spells
+#define INVISIBILITY_LEVEL_TWO 45	//Used objects/spells
 
 #define INVISIBILITY_OBSERVER 60	//Used by Ghosts.
 #define SEE_INVISIBLE_OBSERVER 60	//Used by Ghosts.

@@ -6,7 +6,7 @@
 	var/enabled = 1
 	var/obj/item/weapon/gun/installed = null	// the type of weapon installed
 	anchored = 1
-	invisibility = INVISIBILITY_LEVEL_TWO		// the turret is invisible if it's inside its cover
+	invisibility = INVISIBILITY_LEVEL_ONE		// the turret is invisible if it's inside its cover
 	density = 1
 	var/faction = null 							//No shooting our buddies!
 	var/shootsilicons = 0						//You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
@@ -272,7 +272,7 @@
 	raising=0
 	cover.icon_state="turretCover"
 	raised=0
-	invisibility = INVISIBILITY_LEVEL_TWO
+	invisibility = INVISIBILITY_LEVEL_ONE
 
 /obj/machinery/turret/bullet_act(var/obj/item/projectile/Proj)
 	src.health -= Proj.damage
