@@ -9688,7 +9688,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	if(tick >= 30 && volume >= 1 && !spookvision) //ghostsight after 1m and having more than 1u inside
+	if(!spookvision && tick >= 30 && volume >= 1) //ghostsight after 1m and having more than 1u inside
 		spookvision = TRUE
 		to_chat(M, "<span class='notice'>You start seeing through the veil!</span>")
 		M.see_invisible = SEE_INVISIBLE_OBSERVER
@@ -9714,10 +9714,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		if(M.getToxLoss())
 			M.adjustToxLoss(-3)
 			holder.remove_reagent(ECTOPLASM, 0.1)
-	else
-		return
-
-
 
 /datum/reagent/self_replicating
 	id = EXPLICITLY_INVALID_REAGENT_ID
