@@ -921,6 +921,26 @@
 /datum/chemical_reaction/solidification/phazon/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/phazon
 
+/datum/chemical_reaction/solidification/glass
+	name = "Solid Glass"
+	id = "solidglass"
+	result = null
+	required_reagents = list(SILICATE = 20, CAPSAICIN = 10) //You melt the silicate to make glass
+	result_amount = 1 //amount of sheets created per the above reagents 
+
+/datum/chemical_reaction/solidification/glass/product_to_spawn()
+	return /obj/item/stack/sheet/glass/glass
+
+/datum/chemical_reaction/solidification/plasmaglass
+	name = "Solid Plasma Glass"
+	id = "solidplasmaglass"
+	result = null
+	required_reagents = list(SILICATE = 20, CONDENSEDCAPSAICIN = 10, PLASMA = 20) //You need even stronger heat to make plasmaglass
+	result_amount = 1 //amount of sheets created per the above reagents 
+
+/datum/chemical_reaction/solidification/plasmaglass/product_to_spawn()
+	return /obj/item/stack/sheet/glass/plasmaglass
+
 /datum/chemical_reaction/solidification/plasteel
 	name = "Solid Plasteel"
 	id = "solidplasteel"
