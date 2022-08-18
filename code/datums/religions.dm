@@ -1543,7 +1543,7 @@ var/list/all_bible_styles = list(
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "LGBT Advocate"
 	female_adept = "LGBT Advocate"
-	keys = list("diversity", "inclusion", "ally", "safe space", "love is love")
+	keys = list("diversity", "inclusion", "ally", "safe space", "love is love", "poc", "queer")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
 	/datum/religion/lbtq/equip_chaplain(var/mob/living/carbon/human/H)
