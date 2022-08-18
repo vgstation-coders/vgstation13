@@ -22,6 +22,7 @@
 /obj/machinery/computer/New()
 	..()
 	if(world.has_round_started())
+		anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
 		initialize()
 
 /obj/machinery/computer/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
@@ -31,7 +32,7 @@
 
 /obj/machinery/computer/initialize()
 	..()
-	power_change()
+	power_change(TRUE)
 
 /obj/machinery/computer/process()
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
@@ -88,20 +89,47 @@
 		set_broken()
 		setDensity(FALSE)
 
+
+
 /obj/machinery/computer/update_icon()
 	..()
-	icon_state = initial(icon_state)
+
 	// Broken
 	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]b"
 
-	// Powered
+	// Unpowered/Disabled
 	else if(stat & (FORCEDISABLE|NOPOWER))
+		if(icon_state != "[initial(icon_state)]0")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "off")
 		icon_state = "[initial(icon_state)]0"
 
-/obj/machinery/computer/power_change()
+	// Functional
+	else
+		if(icon_state == "[initial(icon_state)]0")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
+		icon_state = initial(icon_state)
+
+
+/obj/machinery/computer/power_change(var/nodelay = 0)
+	
+	if(nodelay)		
+		..()
+		update_icon()
+	else
+		spawn(rand(0,16))
+			..()
+			update_icon()
+
+// This is a wierd workaround.
+// power_change(TRUE) should be called on wrench move but I want to avoid overriding /obj/machinery/attackby() 
+/obj/machinery/computer/wrenchAnchor()
 	. = ..()
-	update_icon()
+	if(. == TRUE)
+		state = anchored
+		power_change(TRUE)
+	return FALSE // dont execute duplicate code in parent proc
+
 
 /obj/machinery/computer/proc/set_broken()
 	if(empproof && prob(50)) // Halves chance if reinforced with plasma glass
@@ -124,6 +152,7 @@
 							"You begin to unscrew the monitor...")
 	if (do_after(user, src, 20) && (circuit || CC))
 		var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+		anim(target = A, a_icon = 'icons/obj/computer.dmi', flick_anim = "off")
 		src.transfer_fingerprints_to(A)
 		if(!CC)
 			CC = new circuit( A )

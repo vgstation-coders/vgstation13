@@ -219,16 +219,8 @@
 				demand.Cut(1, 2)
 
 /obj/machinery/computer/powermonitor/power_change()
-	..()
 	search()
-	if(stat & BROKEN)
-		icon_state = "broken"
-	else
-		if (stat & (FORCEDISABLE|NOPOWER))
-			spawn(rand(0, 15))
-				icon_state = "c_unpowered"
-		else
-			icon_state = initial(icon_state)
+	..()
 
 /obj/machinery/computer/powermonitor/process()
 	record()
