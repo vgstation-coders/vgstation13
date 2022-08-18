@@ -75,7 +75,7 @@
 		"IM A PONY NEEEEEEIIIIIIIIIGH", \
 		"without oxigen blob don't evoluate?", \
 		"CAPTAINS A COMDOM", \
-		"[pick("", "that dispicable traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
+		"[pick("", "that despicable traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
 		"can u give me [pick("telikesis","halk","eppilapse")]?", \
 		"THe saiyans screwed", \
 		"Bi is THE BEST OF BOTH WORLDS>", \
