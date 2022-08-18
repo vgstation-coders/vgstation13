@@ -1535,3 +1535,17 @@ var/list/all_bible_styles = list(
 /datum/religion/loop/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/timefake(H), slot_wear_suit)
 	H.equip_or_collect(new /obj/item/clothing/head/timefake(H), slot_head)
+
+/datum/religion/lbtq
+	name = "Diversity and Inclusion"
+	deity_name = "Steve Rambo" //Pushing Gaywards
+	bible_names = list("We Are Everywhere: Protest, Power, and Pride in the History of Queer Liberation", "Hunk Rump", "It's Okay to be Gay", "Gay, Straight, and In-Between: The Sexology of Erotic Orientation.")
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "LGBT Advocate"
+	female_adept = "LGBT Advocate"
+	keys = list("diversity", "inclusion", "ally", "safe space", "love is love")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
+
+	/datum/religion/homosexuality/equip_chaplain(var/mob/living/carbon/human/H)
+		H.equip_or_collect(new /obj/item/clothing/under/darkholme(H), slot_w_uniform)
+		H.setBrainLoss(100)
