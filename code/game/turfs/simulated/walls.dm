@@ -255,31 +255,31 @@
 	//Deconstruction
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
-		if(WT.remove_fuel(1, user))
-			if(engraving)
+		if(engraving)
+			if(WT.remove_fuel(1, user))
 				to_chat(user, "<span class='notice'>You deform the wall back into its original shape")
 				engraving = null
 				engraving_quality = null
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 				overlays.Cut()
 				return
-			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s outer plating.</span>", \
-			"<span class='notice'>You begin slicing through \the [src]'s outer plating.</span>", \
-			"<span class='warning'>You hear welding noises.</span>")
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
+		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s outer plating.</span>", \
+		"<span class='notice'>You begin slicing through \the [src]'s outer plating.</span>", \
+		"<span class='warning'>You hear welding noises.</span>")
+		playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
-			if(WT.do_weld(user, src, 100, 0, 0))
-				if(!istype(src))
-					return
-				playsound(src, 'sound/items/Welder.ogg', 100, 1)
-				user.visible_message("<span class='warning'>[user] slices through \the [src]'s outer plating.</span>", \
-				"<span class='notice'>You slice through \the [src]'s outer plating.</span>", \
-				"<span class='warning'>You hear welding noises.</span>")
-				var/pdiff = performWallPressureCheck(src)
-				if(pdiff)
-					investigation_log(I_ATMOS, "with a pdiff of [pdiff] dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
-					message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
-				dismantle_wall()
+		if(WT.do_weld(user, src, 100, 1))
+			if(!istype(src))
+				return
+			playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			user.visible_message("<span class='warning'>[user] slices through \the [src]'s outer plating.</span>", \
+			"<span class='notice'>You slice through \the [src]'s outer plating.</span>", \
+			"<span class='warning'>You hear welding noises.</span>")
+			var/pdiff = performWallPressureCheck(src)
+			if(pdiff)
+				investigation_log(I_ATMOS, "with a pdiff of [pdiff] dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
+				message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
+			dismantle_wall()
 		else
 			return
 
