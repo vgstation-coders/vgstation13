@@ -1538,7 +1538,7 @@ var/list/all_bible_styles = list(
 
 /datum/religion/lbtq
 	name = "Diversity and Inclusion"
-	deity_name = "Steve Rambo" //Pushing Gaywards
+	deity_name = "Steve Rambo"
 	bible_names = list("We Are Everywhere: Protest, Power, and Pride in the History of Queer Liberation", "Hunk Rump", "It's Okay to be Gay", "Gay, Straight, and In-Between: The Sexology of Erotic Orientation.")
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "LGBT Advocate"
