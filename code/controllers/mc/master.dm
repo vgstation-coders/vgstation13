@@ -127,11 +127,11 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	sleep(1 SECONDS)
 	//moving this random bullshit into here, because it didn't belong in world/New()
 	//SetupHooks() // /N3X15 project from 8 years ago (WIP)
+	generate_radio_frequencies()
 	createDatacore()
 	createPaiController()
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 	Holiday = Get_Holiday()
-	generate_radio_frequencies()
 	world.update_status()
 	
 	// Initialize subsystems.
