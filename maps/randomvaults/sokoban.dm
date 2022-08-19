@@ -244,8 +244,6 @@ This ladder stuff looks confusing, so here's an illustration!!!
 		var/turf/jail = get_turf(locate(/obj/effect/landmark/sokoban_jail) in landmarks_list)
 		if(jail)
 			AM.forceMove(jail)
-		//Teleport this bitch to jail
-
 
 /obj/structure/ladder/sokoban
 	id = "sokoban-1" //Don't change this!

@@ -129,7 +129,7 @@
 	return !density || (dir != to_dir) || check_access(ID)
 
 /obj/machinery/door/window/open()
-	if(!density) //it's already open you silly cunt
+	if(!density)
 		return FALSE
 	if(operating == 1) //doors can still open when emag-disabled
 		return FALSE

@@ -1438,12 +1438,9 @@ Game Mode config tags:
 /proc/block_borders(turf/Start, turf/End)
 	ASSERT(istype(Start))
 	ASSERT(istype(End))
-
-	//i'm a lazy cunt and I don't feel like making this work
 	ASSERT(Start.x < End.x && Start.y < End.y)
 
 	return block(Start, End) - block(locate(Start.x + 1, Start.y + 1, Start.z), locate(End.x - 1, End.y - 1, End.z))
-
 
 /proc/pick_rand_tele_turf(atom/hit_atom, var/inner_teleport_radius, var/outer_teleport_radius)
 	if((inner_teleport_radius < 1) || (outer_teleport_radius < inner_teleport_radius))
