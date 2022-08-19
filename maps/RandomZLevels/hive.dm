@@ -310,7 +310,7 @@
 	<i>Dan</i>"}
 
 /obj/item/weapon/paper/hive/nikita
-	name = "paper- 'Is Nikita a male or female name?'"
+	name = "paper- 'Who is Nikita?'"
 	info = {"Just got an email from ChanDE saying that apparently I ordered a \"Nikita\" 2 weeks ago (on New Years when we got shitfaced) and the shuttle is arriving tomorrow. The Consensus gives me mixed results and I really want to know the size of this mailorder bride before it arrives<br>
 	<i>Yi Cheng</i> <b>ID: 12C/3"}
 
