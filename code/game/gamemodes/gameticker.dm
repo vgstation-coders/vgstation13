@@ -414,6 +414,7 @@ var/datum/controller/gameticker/ticker
 				job_master.EquipRank(player, player.mind.assigned_role, 0)
 				EquipCustomItems(player)
 			player.apeify()
+		stoplag()
 	if(captainless)
 		for(var/mob/M in player_list)
 			if(!istype(M,/mob/new_player))
