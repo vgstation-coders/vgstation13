@@ -92,7 +92,7 @@
 		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin))
 			mattercount += SP.rating
 	//decay_reduction = scancount
-	weed_coefficient = 2/mattercount
+	weed_coefficient = WEEDLEVEL_MAX/mattercount/5
 	internal_light = capcount
 
 //Makes the plant not-alive, with proper sanity.
