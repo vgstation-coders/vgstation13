@@ -157,7 +157,7 @@ Refactored AI modules by N3X15
 	..()
 	target:keeper=1
 
-	// Purge, as some essential functions being disabled will cause problems with added laws. (CAN'T SAY GAY EVERY 30 SECONDS IF YOU CAN'T SPEAK.)
+	// Purge, as some essential functions being disabled will cause problems with added laws.
 	if(!laws.zeroth_lock)
 		laws.set_zeroth_law("")
 	laws.clear_supplied_laws()

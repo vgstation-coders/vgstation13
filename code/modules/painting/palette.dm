@@ -30,8 +30,8 @@ UI:
 		two slots reserved for:
 			- one brush
 			- one paint cleaner:
-				- small reagent container: water/paint cleaner to clean brush, no powergaymin issues
-				- rag: use brush on rag, cleans brush, use rag on slots, cleans color, might be powergaymin issue?
+				- small reagent container: water/paint cleaner to clean brush
+				- rag: use brush on rag, cleans brush, use rag on slots, cleans color
 						legitimizes rags outside bartender, but no idea how bad that might be if at all
 						sounds most immersive
 				- soap?: sounds a bit weird, also soap "hidden" in palette sounds terrible
