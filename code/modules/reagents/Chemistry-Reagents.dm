@@ -789,7 +789,6 @@
 		O.molten=0
 		O.solidify()
 	else if(O.dissolvable() == WATER)
-		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		O.acid_melt()
 
 /datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
@@ -1852,7 +1851,6 @@
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)))
-		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		O.acid_melt()
 	else if(istype(O,/obj/effect/plantsegment))
 		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(get_turf(O))
