@@ -166,7 +166,7 @@
 			suffix = "_mob"
 			fed++
 			visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and secretes a digestive enzyme.</span>")
-			M.adjustToxLoss(80)
+			M.adjustToxLoss(85)
 			M.forceMove(C)
 			C.pixel_x = M.pixel_x
 			C.pixel_y = M.pixel_y
