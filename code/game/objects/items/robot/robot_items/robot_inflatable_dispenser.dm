@@ -1,4 +1,3 @@
- 163 lines (144 sloc) 4.45 KB
 #define MODE_WALL "wall"
 #define MODE_DOOR "door"
 #define MODE_SHELTER "shelter"
