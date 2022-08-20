@@ -196,7 +196,7 @@ Doesn't work on other aliens/AI.*/
 	spell_flags = IGNORESPACE|IGNOREDENSE|NODUPLICATE
 	full_list = list("Resin Door" = /obj/machinery/door/mineral/resin,"Resin Wall" = /obj/effect/alien/resin/wall,"Resin Membrane" = /obj/effect/alien/resin/membrane,"Resin Nest" = /obj/structure/bed/nest)
 
-/spell/alienacid
+/spell/corrosive_acid
 	name = "Corrosive Acid"
 	desc = "Drench an object in acid, destroying it over time."
 	user_type = USER_TYPE_XENOMORPH
@@ -213,7 +213,7 @@ Doesn't work on other aliens/AI.*/
 
 	range = 1
 
-/spell/alienacid/is_valid_target(var/atom/target, mob/user)
+/spell/corrosive_acid/is_valid_target(var/atom/target, mob/user)
 	var/range = 1
 	if(get_dist(user, target) > range)
 		to_chat(user, "<span class='alien'>Target is too far away!</span>")
@@ -223,25 +223,9 @@ Doesn't work on other aliens/AI.*/
 	to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
 	return FALSE
 
-/spell/alienacid/cast(list/targets, mob/user)
-	acidify(targets[1], user)
-
-/mob/living/carbon/alien/humanoid/proc/corrosive_acid(obj/O in oview(1)) //If they right click to corrode, an error will flash if its an invalid target./N
-	set name = "Corrosive Acid (200)"
-	set desc = "Drench an object in acid, destroying it over time."
-	set category = null
-
-	if(!istype(O))
-		return
-
-	if(powerc(200))
-		if(O.dissolvable() == PACID)
-			acidify(O, usr)
-			AdjustPlasma(-200)
-
-/proc/acidify(atom/O, mob/user)
-	new /obj/effect/alien/acid(get_turf(O), O)
-	user.visible_message("<span class='alien'>\The [user] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
+/spell/corrosive_acid/cast(list/targets, mob/user)
+	user.visible_message("<span class='alien'>\The [user] vomits globs of vile stuff all over [targets[1]]! It begins to sizzle and melt under the bubbling mess of acid!</span>")
+	new /obj/effect/alien/acid(get_turf(targets[1]), targets[1])
 
 /spell/aoe_turf/alienregurgitate
 	name = "Regurgitate"
