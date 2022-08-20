@@ -397,6 +397,9 @@
 	desc = "Issued, recalled post-mortem, and reissued countless times to many mothership denizens. Despite that, the boots still shine impeccably."
 	sterility = 75
 
+/obj/item/clothing/shoes/jackboots/mothership/dissolvable() // It'll take more than acid to ruin a fine pair of boots like these
+	return WATER
+
 /obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior // Meant to be worn by ayy VIPs, like leaders and such
 	name = "Superior Mothership Boots"
 	desc = "A spotless pair of boots freshly synthesized by a mothership vat. This pair is very durable and has an exceptionally strong grip."
@@ -453,7 +456,7 @@
 	base_access = list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
 
 /obj/item/weapon/card/id/mothership_leader/dissolvable() // ID nanobots or something. This is mostly to prevent it being melted by a stray grenade in the vault crossfire
-	return WATER
+	return FALSE
 
 //////////////////////////////
 // GREY GOO (Pill and pill bottle items for an experimental grey brain medication. More info on Chemistry-Reagents.dm)
