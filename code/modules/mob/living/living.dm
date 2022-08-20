@@ -782,11 +782,7 @@ Thanks.
 	set name = "Resist"
 	set category = "IC"
 
-	if(!isliving(usr))
-		return
-	if(usr.special_delayer.blocked())
-		return
-	if(!usr.stat)
+	if(!isliving(usr) || usr.special_delayer.blocked())
 		return
 
 	var/turf/T = get_turf(src)
