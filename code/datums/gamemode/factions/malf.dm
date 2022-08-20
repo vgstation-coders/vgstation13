@@ -81,7 +81,7 @@
 
 	for(var/datum/role/malfAI/M in members)
 		to_chat(M.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
-You may now choose to destroy all station machinery or detonate the nuclear device!</span>"})
+You may now choose to detonate the nuclear device!</span>"})
 		M.takeover = TRUE
 		M.antag.DisplayUI("Malf")
 
