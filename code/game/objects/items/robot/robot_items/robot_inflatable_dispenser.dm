@@ -14,7 +14,7 @@
 	var/list/stored_shelters = list()
 	var/max_walls = 18
 	var/max_doors = 15
-	var/max_shelters = 1
+	var/max_shelters = 5
 	var/list/allowed_types = list(/obj/item/inflatable/wall, /obj/item/inflatable/door, /obj/item/inflatable/shelter)
 	var/mode = MODE_WALL
 
@@ -36,7 +36,6 @@
 
 /obj/item/weapon/inflatable_dispenser/robot
 	w_class = W_CLASS_HUGE
-	max_shelters = 2 //one extra cause borgs can't take em off the fire alarms
 
 /obj/item/weapon/inflatable_dispenser/examine(mob/user)
 	..()
