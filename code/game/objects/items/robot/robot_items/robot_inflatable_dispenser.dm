@@ -17,6 +17,7 @@
 	var/max_shelters = 5
 	var/list/allowed_types = list(/obj/item/inflatable/wall, /obj/item/inflatable/door, /obj/item/inflatable/shelter)
 	var/mode = MODE_WALL
+	var/borgdisp = 0
 
 /obj/item/weapon/inflatable_dispenser/New()
 	..()
@@ -26,7 +27,8 @@
 		if(stored_doors.len < max_doors)
 			stored_doors += new /obj/item/inflatable/door(src)
 		if(stored_shelters.len < max_shelters)
-			stored_shelters += new /obj/item/inflatable/shelter(src)
+			if(!borgdisp) //breaks in some unfathomable ways if done any other way, such as dispensers having half the stored inflatables, not being able to pick up shelters, spawning with only 1 of each, etc	
+				stored_shelters += new /obj/item/inflatable/shelter(src)
 
 /obj/item/weapon/inflatable_dispenser/Destroy()
 	stored_walls = null
@@ -35,7 +37,7 @@
 	..()
 
 /obj/item/weapon/inflatable_dispenser/robot
-	w_class = W_CLASS_HUGE
+	borgdisp = 1
 
 /obj/item/weapon/inflatable_dispenser/examine(mob/user)
 	..()
