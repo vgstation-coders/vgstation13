@@ -838,6 +838,14 @@ Thanks.
 			qdel(package)
 			playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		return
+	else if(src.loc, /obj/effect/spider/cocoon)
+		var/obj/effect/spider/cocoon/cocoon = src.loc
+		to_chat(L, "<span class='warning'>You attempt to untangle yourself, the webs are tight and will take some time.</span>")
+		if(do_after(src, src, 2 MINUTES))
+			L.visible_message("<span class='danger'>[L] successfully breaks out of [cocoon]!</span>",\
+							  "<span class='notice'>You successfully break out!</span>")
+			forceMove(T)
+			qdel(cocoon)
 
 	//Detaching yourself from a tether
 	if(L.tether)
