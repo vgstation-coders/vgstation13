@@ -2223,6 +2223,13 @@
 	color = "#D0D0D0" //rgb: 208, 208, 208
 	specheatcap = 0.24
 	density = 10.49
+	
+/datum/reagent/silver/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(prob(5)) //so you need lots to go blue	
+		M.color = "#12A7C9"
+		return
 
 /datum/reagent/uranium
 	name ="Uranium salt"
