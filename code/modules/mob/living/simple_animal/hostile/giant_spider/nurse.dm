@@ -165,8 +165,8 @@
 				M.locked_to.unlock_atom(M)
 			suffix = "_mob"
 			fed++
-			visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and sucks a viscous substance out.</span>")
-			M.adjustCloneLoss(80)
+			visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and secretes a digestive enzyme.</span>")
+			M.adjustToxLoss(80)
 			M.forceMove(C)
 			C.pixel_x = M.pixel_x
 			C.pixel_y = M.pixel_y
