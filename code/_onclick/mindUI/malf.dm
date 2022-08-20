@@ -216,5 +216,5 @@
 		var/datum/faction/malf/MF = find_active_faction_by_member(M)
 		MF.stage(FACTION_VICTORY)
 		return
-	to_chat(A, "<span class='warning'>There is no nuclear bomb aboard the station! Try overloading station machinery instead.</span>")
+	to_chat(A, "<span class='warning'>There is no nuclear bomb aboard the station!</span>")
 	A.DisplayUI("Malf")
