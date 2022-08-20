@@ -788,7 +788,7 @@
 	else if(O.molten) // Molten shit.
 		O.molten=0
 		O.solidify()
-	else if(O.dissolvable() == WATER)
+	else if(O.dissolvable() == WATER &&  prob(15))
 		O.acid_melt()
 
 /datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
