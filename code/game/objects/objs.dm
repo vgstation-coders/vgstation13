@@ -598,7 +598,10 @@ a {
 	return null
 
 /obj/dissolvable()
-	return !(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
+		return FALSE
+	else
+		return PACID
 
 /obj/proc/t_scanner_expose()
 	//don't reveal docking ports or spawns

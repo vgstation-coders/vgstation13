@@ -218,7 +218,7 @@ Doesn't work on other aliens/AI.*/
 	if(get_dist(user, target) > range)
 		to_chat(user, "<span class='alien'>Target is too far away!</span>")
 		return FALSE
-	if(!ismob(target) && target.dissolvable())
+	if(!ismob(target) && target.dissolvable() == PACID)
 		return TRUE
 	to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
 	return FALSE
@@ -226,16 +226,16 @@ Doesn't work on other aliens/AI.*/
 /spell/alienacid/cast(list/targets, mob/user)
 	acidify(targets[1], user)
 
-/mob/living/carbon/alien/humanoid/proc/corrosive_acid(atom/O as obj|turf in oview(1)) //If they right click to corrode, an error will flash if its an invalid target./N
+/mob/living/carbon/alien/humanoid/proc/corrosive_acid(obj/O in oview(1)) //If they right click to corrode, an error will flash if its an invalid target./N
 	set name = "Corrosive Acid (200)"
 	set desc = "Drench an object in acid, destroying it over time."
 	set category = null
 
-	if(ismob(O)) //This sort of thing may be possible by manually calling the verb, not sure
+	if(!istype(O))
 		return
 
 	if(powerc(200))
-		if(is_valid_target_to_acid(O, usr))
+		if(O.dissolvable() == PACID)
 			acidify(O, usr)
 			AdjustPlasma(-200)
 

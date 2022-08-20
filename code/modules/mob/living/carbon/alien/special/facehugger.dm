@@ -430,7 +430,10 @@
 	return TRUE
 
 /obj/item/clothing/mask/facehugger/dissolvable()
-	return sterile
+	if(sterile)
+		return PACID
+	else
+		return FALSE
 
 
 
