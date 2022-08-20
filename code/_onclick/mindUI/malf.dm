@@ -111,8 +111,8 @@
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(M) || !istype(A))
 		return FALSE			
-//	if(!M.takeover)
-//		return FALSE			
+	if(!M.takeover)
+		return FALSE			
 	return TRUE
 
 //------------------------------------------------------------
@@ -129,8 +129,8 @@
 		color = grayscale
 	if(!istype(M) || !istype(A))
 		Hide()
-//	if(!M.takeover)
-//		Hide()
+	if(!M.takeover)
+		Hide()
 
 /obj/abstract/mind_ui_element/hoverable/malf_win/StartHovering()
 	if (color == null)
@@ -142,8 +142,8 @@
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(M) || !istype(A))
 		return FALSE			// HAHA NOPE
-//	if(!M.takeover || M.destroyed_station == TRUE)
-//		return FALSE			// NO WAY
+	if(!M.takeover || M.destroyed_station == TRUE)
+		return FALSE			// NO WAY
 	return TRUE
 
 
