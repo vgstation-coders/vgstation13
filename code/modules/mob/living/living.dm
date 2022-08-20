@@ -838,7 +838,7 @@ Thanks.
 			qdel(package)
 			playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		return
-	else if(src.loc, /obj/effect/spider/cocoon)
+	else if(istype(src.loc, /obj/effect/spider/cocoon))
 		var/obj/effect/spider/cocoon/cocoon = src.loc
 		to_chat(L, "<span class='warning'>You attempt to untangle yourself, the webs are tight and will take some time.</span>")
 		if(do_after(src, src, 2 MINUTES))
