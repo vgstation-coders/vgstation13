@@ -5,6 +5,7 @@
 	sub_uis_to_spawn = list(
 	//	/datum/mind_ui/malf_top_panel,
 		/datum/mind_ui/malf_left_panel,
+		/datum/mind_ui/malf_win_panel
 		)
 
 /datum/mind_ui/malf/Valid()
@@ -88,8 +89,132 @@
 
 
 
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//						   WIN PANEL							  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/malf_win_panel
+	uniqueID = "Malf Left Panel"
+	x = "LEFT"
+	element_types_to_spawn = list(
+//		/obj/abstract/mind_ui_element/hoverable/malf_win/overload,
+		/obj/abstract/mind_ui_element/hoverable/malf_win/nuke
+		)
+	display_with_parent = TRUE
+	
+
+/datum/mind_ui/malf_win_panel/Valid()
+	var/mob/living/silicon/ai/A = GetUser()
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	if(!istype(M) || !istype(A))
+		return FALSE			
+//	if(!M.takeover)
+//		return FALSE			
+	return TRUE
+
 //------------------------------------------------------------
 
+/obj/abstract/mind_ui_element/hoverable/malf_win
+	icon = 'icons/ui/malf/48x32.dmi'
+	icon_state = ""
+	layer = MIND_UI_FRONT+1
+	
+/obj/abstract/mind_ui_element/hoverable/malf_win/UpdateIcon()
+	var/mob/living/silicon/ai/A = GetUser()
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	if(M.destroyed_station)
+		color = grayscale
+	if(!istype(M) || !istype(A))
+		Hide()
+//	if(!M.takeover)
+//		Hide()
+
+/obj/abstract/mind_ui_element/hoverable/malf_win/StartHovering()
+	if (color == null)
+		..()
+
+
+/obj/abstract/mind_ui_element/hoverable/malf_win/Click()
+	var/mob/living/silicon/ai/A = GetUser()
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	if(!istype(M) || !istype(A))
+		return FALSE			// HAHA NOPE
+//	if(!M.takeover || M.destroyed_station == TRUE)
+//		return FALSE			// NO WAY
+	return TRUE
 
 
 
+// The idea was to overload just about every machine on station but explosions are super slow 
+// I'm leaving this as a comment in case anyone wants to optimize this
+
+/*
+
+/obj/abstract/mind_ui_element/hoverable/malf_win/overload
+	name = "Overload Everything"
+	icon_state = "overload"
+	offset_y = 100
+
+/obj/abstract/mind_ui_element/hoverable/malf_win/overload/Click()
+	set background = 1
+	if(!..())
+		return
+	var/mob/living/silicon/ai/A = GetUser()
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	M.destroyed_station = TRUE
+	A.DisplayUI("Malf")
+
+	to_chat(world, "<span class='big danger'>BZZZZT!</span>")
+	world << sound('sound/machines/Alarm.ogg')
+	for(var/obj/machinery/machine in all_machines)
+		if(machine.z != map.zMainStation)
+			continue
+
+		if(istype(machine, /obj/machinery/atmospherics))
+			continue
+
+		if(prob(50))
+			continue
+
+		spawn(rand(0, 300))
+			machine.shake_animation(4, 4, 0.2 SECONDS, 20)
+			spawn(4 SECONDS)
+				if(machine)
+					explosion(get_turf(machine), 1, 3, 5, 5) 
+					qdel(machine)
+		CHECK_TICK
+
+*/
+
+/obj/abstract/mind_ui_element/hoverable/malf_win/nuke
+	name = "Activate the Nuclear Device"
+	icon_state = "nuke"
+	offset_y = 140
+
+/obj/abstract/mind_ui_element/hoverable/malf_win/nuke/Click()
+	if(!..())
+		return
+	var/mob/living/silicon/ai/A = GetUser()
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	
+	for(var/obj/machinery/nuclearbomb/N in nuclear_bombs)
+		if(N.z != map.zMainStation)
+			continue
+		M.destroyed_station = TRUE
+		A.DisplayUI("Malf")
+		to_chat(world, "<span class='big danger'>Self-destruction signal received. Self-destructing in 10...</span>")
+		world << sound('sound/machines/Alarm.ogg')
+		N.icon_state = "nuclearbomb3"
+		for (var/i=9 to 1 step -1)
+			sleep(10)
+			to_chat(world, "<span class='danger'>[i]...</span>")
+		N.safety = 0
+		N.explode(FALSE)
+		var/datum/faction/malf/MF = find_active_faction_by_member(M)
+		MF.stage(FACTION_VICTORY)
+		return
+	to_chat(A, "<span class='warning'>There is no nuclear bomb aboard the station! Try overloading station machinery instead.</span>")
+	A.DisplayUI("Malf")

@@ -23,7 +23,7 @@
 	return header
 
 /datum/faction/malf/forgeObjectives()
-	AppendObjective(/datum/objective/nuclear)
+	AppendObjective(/datum/objective/takeover)
 
 /datum/faction/malf/stage(var/value)
 	if(value == FACTION_ENDGAME)
@@ -81,8 +81,10 @@
 
 	for(var/datum/role/malfAI/M in members)
 		to_chat(M.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
-You should now be able to interface with the nuclear fission device and detonate it.</span>"})
+You may now choose to destroy all station machinery or detonate the nuclear device!</span>"})
 		M.takeover = TRUE
+		M.antag.DisplayUI("Malf")
+
 
 	return
 
