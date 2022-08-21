@@ -8,7 +8,7 @@
 	default_admin_voice = "Union Boss"
 	admin_voice_style = "secradio"
 
-// The ticker current state check is because revs are created, at roundstart, in the cuck cube.
+// The ticker current state check is because revs are created, at roundstart
 // Which is outside the z-level of the main station.
 
 /datum/role/revolutionary/AssignToRole(var/datum/mind/M, var/override = 0, var/roundstart = 0)
