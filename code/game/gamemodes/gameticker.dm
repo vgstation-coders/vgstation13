@@ -199,7 +199,7 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
 	equip_characters()
-	var/discrete_areas = areas.Copy()
+	CHECK_TICK
 	for(var/mob/living/carbon/human/player in player_list)
 		switch(player.mind.assigned_role)
 			if("MODE","Mobile MMI","Trader")
@@ -207,25 +207,12 @@ var/datum/controller/gameticker/ticker
 			else
 				player.update_icons()
 				data_core.manifest_inject(player)
-		//Get populated departments
-		var/area/A = get_area(player)
-		if(A in discrete_areas) //We've already added their department
-			discrete_areas -= get_department_areas(player)
-	CHECK_TICK
-	//Toggle lightswitches and lamps on in occupied departments
-	for(var/area/DA in discrete_areas)
-		for(var/obj/machinery/light_switch/LS in DA)
-			LS.toggle_switch(0)
-			break
-		for(var/obj/item/device/flashlight/lamp/L in DA)
-			L.toggle_onoff(0)
-	CHECK_TICK
+
 	current_state = GAME_STATE_PLAYING
 
 	// Update new player panels so they say join instead of ready up.
 	for(var/mob/new_player/player in player_list)
 		player.new_player_panel_proc()
-
 
 #if UNIT_TESTS_AUTORUN
 	run_unit_tests()
@@ -427,6 +414,7 @@ var/datum/controller/gameticker/ticker
 				job_master.EquipRank(player, player.mind.assigned_role, 0)
 				EquipCustomItems(player)
 			player.apeify()
+		stoplag()
 	if(captainless)
 		for(var/mob/M in player_list)
 			if(!istype(M,/mob/new_player))
@@ -646,6 +634,21 @@ var/datum/controller/gameticker/ticker
 				R.connect_AI(select_active_ai_with_fewest_borgs())
 				to_chat(R, R.connected_ai?"<b>You have synchronized with an AI. Their name will be stated shortly. Other AIs can be ignored.</b>":"<b>You are not synchronized with an AI, and therefore are not required to heed the instructions of any unless you are synced to them.</b>")
 			R.lawsync()
+
+	spawn()
+		var/discrete_areas = areas.Copy()
+		//Get unpopulated departments
+		for(var/mob/living/carbon/human/player in player_list)
+			var/area/A = get_area(player)
+			if(A in discrete_areas) //We've already added their department
+				discrete_areas -= get_department_areas(player)
+		//Toggle lightswitches and lamps on in occupied departments
+		for(var/area/DA in discrete_areas)
+			for(var/obj/machinery/light_switch/LS in DA)
+				LS.toggle_switch(0)
+				break
+			for(var/obj/item/device/flashlight/lamp/L in DA)
+				L.toggle_onoff(0)
 
 // -- Tag mode!
 /datum/controller/gameticker/proc/tag_mode(var/mob/user)
