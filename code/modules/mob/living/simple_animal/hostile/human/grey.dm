@@ -928,3 +928,6 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/GetAccess()
 	return list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
+
+/mob/living/simple_animal/hostile/humanoid/grey/leader/Process_Spacemove(var/check_drift = 0) // The ayy leader can follow enemies into space, and won't just drift off
+	return 1
