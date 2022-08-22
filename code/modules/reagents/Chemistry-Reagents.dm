@@ -2276,9 +2276,23 @@
 	if(..())
 		return 1
 
-	M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
-	if(prob(30))
-		M.audible_scream()
+	if(isgolem(M)) //golems metabolize the diamond into very expensive doctor's delight
+		if(M.getOxyLoss())
+			M.adjustOxyLoss(-2)
+		if(M.getBruteLoss())
+			M.heal_organ_damage(2, 0)
+		if(M.getFireLoss())
+			M.heal_organ_damage(0, 2)
+		if(M.getToxLoss())
+			M.adjustToxLoss(-2)
+		if(M.dizziness != 0)
+			M.dizziness = max(0, M.dizziness - 15)
+		if(M.confused != 0)
+			M.remove_confused(5)
+	else
+		M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
+		if(prob(30))
+			M.audible_scream()
 
 /datum/reagent/phazon
 	name = "Phazon Salt"
