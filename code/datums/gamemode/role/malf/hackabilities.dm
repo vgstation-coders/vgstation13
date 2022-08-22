@@ -725,6 +725,8 @@
 	N.extended = 1
 
 
+/*
+
 /datum/malfhack_ability/oneuse/nuke_detonate
 	name = "Detonate"
 	desc = "Destroy the station."
@@ -782,6 +784,9 @@
 	if(!M.takeover)
 		return FALSE
 	return TRUE
+
+*/
+
 
 //--------------------------------------------------------
 
