@@ -413,10 +413,6 @@ var/datum/controller/gameticker/ticker
 			player.apeify()
 		stoplag()
 
-	for(var/mob/M in player_list)
-		if(!istype(M,/mob/new_player))
-			M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
-
 /datum/controller/gameticker/proc/process()
 	if(current_state != GAME_STATE_PLAYING)
 		return 0
