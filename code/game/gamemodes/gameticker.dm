@@ -169,13 +169,16 @@ var/datum/controller/gameticker/ticker
 
 	//Configure mode and assign player to special mode stuff
 	job_master.DivideOccupations() //Distribute jobs
-
-	gamestart_time = world.time / 10
-
 	init_mind_ui()
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them
-	CHECK_TICK
+
+	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly
+		for(var/mob/living/carbon/human/player in player_list)
+			player.apeify()
+
+	gamestart_time = world.time / 10
+
 	var/can_continue = mode.Setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
@@ -353,7 +356,6 @@ var/datum/controller/gameticker/ticker
 			if(new_character.mind.assigned_role != "MODE")
 				job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
 				EquipCustomItems(new_character)
-			new_character.apeify()
 
 /datum/controller/gameticker/proc/process()
 	if(current_state != GAME_STATE_PLAYING)
