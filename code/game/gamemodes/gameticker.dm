@@ -175,7 +175,6 @@ var/datum/controller/gameticker/ticker
 	init_mind_ui()
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them
-	collect_minds()
 	CHECK_TICK
 	var/can_continue = mode.Setup()//Setup special modes
 	if(!can_continue)
@@ -200,8 +199,6 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
-	equip_characters()
-	CHECK_TICK
 	for(var/mob/living/carbon/human/player in player_list)
 		switch(player.mind.assigned_role)
 			if("MODE","Mobile MMI","Trader")
@@ -219,27 +216,6 @@ var/datum/controller/gameticker/ticker
 #if UNIT_TESTS_AUTORUN
 	run_unit_tests()
 #endif
-
-	spawn(0)//Forking here so we dont have to wait for this to finish
-		//Cleanup some stuff
-		for(var/obj/effect/landmark/start/S in landmarks_list)
-			//Deleting Startpoints but we need the ai point to AI-ize people later and the Trader point to throw new ones
-			if (S.name != "AI" && S.name != "Trader")
-				qdel(S)
-		var/list/obj/effect/landmark/spacepod/random/L = list()
-		for(var/obj/effect/landmark/spacepod/random/SS in landmarks_list)
-			if(istype(SS))
-				L += SS
-		if(L.len)
-			var/obj/effect/landmark/spacepod/random/S = pick(L)
-			new /obj/spacepod/random(S.loc)
-			for(var/obj in L)
-				if(istype(obj, /obj/effect/landmark/spacepod/random))
-					qdel(obj)
-
-		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
-
-		send2maindiscord("**The game has started**")
 
 //		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
 
@@ -388,30 +364,25 @@ var/datum/controller/gameticker/ticker
 
 /datum/controller/gameticker/proc/create_characters()
 	for(var/mob/new_player/player in player_list)
+		if(!player.mind)
+			continue
+		var/mob/living/L = player
+		ticker.minds += L.mind
 		if(!player.mind.assigned_role)
 			continue
-		if(player.ready && player.mind)
-			if(player.mind.assigned_role=="AI" || player.mind.assigned_role=="Cyborg" || player.mind.assigned_role=="Mobile MMI")
-				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-				player.create_roundstart_silicon(player.mind.assigned_role)
-			else
-				var/mob/living/carbon/human/new_character = player.create_character(0)
-				new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
-				qdel(player)
-
-/datum/controller/gameticker/proc/collect_minds()
-	for(var/mob/living/player in player_list)
-		if(player.mind)
-			ticker.minds += player.mind
-
-/datum/controller/gameticker/proc/equip_characters()
-	for(var/mob/living/carbon/human/player in player_list)
-		if(player && player.mind && player.mind.assigned_role)
-			if(player.mind.assigned_role != "MODE")
-				job_master.EquipRank(player, player.mind.assigned_role, 0)
-				EquipCustomItems(player)
-			player.apeify()
-		stoplag()
+		if(!player.ready)
+			continue
+		if(player.mind.assigned_role=="AI" || player.mind.assigned_role=="Cyborg" || player.mind.assigned_role=="Mobile MMI")
+			log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
+			player.create_roundstart_silicon(player.mind.assigned_role)
+		else
+			var/mob/living/carbon/human/new_character = player.create_character(0)
+			new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+			qdel(player)
+			if(new_character.mind.assigned_role != "MODE")
+				job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
+				EquipCustomItems(new_character)
+			new_character.apeify()
 
 /datum/controller/gameticker/proc/process()
 	if(current_state != GAME_STATE_PLAYING)
@@ -624,6 +595,12 @@ var/datum/controller/gameticker/ticker
 				to_chat(R, R.connected_ai?"<b>You have synchronized with an AI. Their name will be stated shortly. Other AIs can be ignored.</b>":"<b>You are not synchronized with an AI, and therefore are not required to heed the instructions of any unless you are synced to them.</b>")
 			R.lawsync()
 
+	spawn (ROUNDSTART_LOGOUT_REPORT_TIME)
+		display_roundstart_logout_report()
+
+	spawn (rand(INTERCEPT_TIME_LOW , INTERCEPT_TIME_HIGH))
+		mode.send_intercept()
+
 	spawn()
 		var/discrete_areas = areas.Copy()
 		var/captain = FALSE
@@ -648,17 +625,29 @@ var/datum/controller/gameticker/ticker
 					to_chat(M, "Captainship not forced on anyone.")
 				M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
 
-	spawn()
 		feedback_set_details("round_start","[time2text(world.realtime)]")
 		if(ticker && ticker.mode)
 			feedback_set_details("game_mode","[ticker.mode]")
 		feedback_set_details("server_ip","[world.internet_address]:[world.port]")
-		
-	spawn (ROUNDSTART_LOGOUT_REPORT_TIME)
-		display_roundstart_logout_report()
 
-	spawn (rand(INTERCEPT_TIME_LOW , INTERCEPT_TIME_HIGH))
-		mode.send_intercept()
+		//Cleanup some stuff
+		for(var/obj/effect/landmark/start/S in landmarks_list)
+			//Deleting Startpoints but we need the ai point to AI-ize people later and the Trader point to throw new ones
+			if (S.name != "AI" && S.name != "Trader")
+				qdel(S)
+		var/list/obj/effect/landmark/spacepod/random/L = list()
+		for(var/obj/effect/landmark/spacepod/random/SS in landmarks_list)
+			if(istype(SS))
+				L += SS
+		if(L.len)
+			var/obj/effect/landmark/spacepod/random/S = pick(L)
+			new /obj/spacepod/random(S.loc)
+			for(var/obj in L)
+				if(istype(obj, /obj/effect/landmark/spacepod/random))
+					qdel(obj)
+
+		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
+		send2maindiscord("**The game has started**")
 
 // -- Tag mode!
 /datum/controller/gameticker/proc/tag_mode(var/mob/user)
