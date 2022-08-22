@@ -751,9 +751,6 @@
 				S = sloc
 				stack_trace("not enough spawn points for [rank]")
 				break
-		if(!S)
-			// Find a spawn point that's using the ancient landmarks. Do we even have these anymore?
-			S = locate("start*[rank]")
 		if(S)
 			// Use the given spawn point
 			new_character.forceMove(S.loc)

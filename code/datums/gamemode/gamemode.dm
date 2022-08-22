@@ -184,17 +184,6 @@
 		F.HandleRecruitedMind(mob.mind)
 
 /datum/gamemode/proc/PostSetup()
-	spawn (ROUNDSTART_LOGOUT_REPORT_TIME)
-		display_roundstart_logout_report()
-
-	spawn (rand(INTERCEPT_TIME_LOW , INTERCEPT_TIME_HIGH))
-		send_intercept()
-
-	feedback_set_details("round_start","[time2text(world.realtime)]")
-	if(ticker && ticker.mode)
-		feedback_set_details("game_mode","[ticker.mode]")
-	feedback_set_details("server_ip","[world.internet_address]:[world.port]")
-
 	for(var/datum/faction/F in factions)
 		F.forgeObjectives()
 		F.OnPostSetup()
@@ -202,6 +191,10 @@
 		R.ForgeObjectives()
 		R.AnnounceObjectives()
 		R.OnPostSetup()
+	feedback_set_details("round_start","[time2text(world.realtime)]")
+	if(ticker && ticker.mode)
+		feedback_set_details("game_mode","[ticker.mode]")
+	feedback_set_details("server_ip","[world.internet_address]:[world.port]")
 	return 1
 
 /datum/gamemode/proc/TearDown()

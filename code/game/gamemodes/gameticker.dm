@@ -387,17 +387,16 @@ var/datum/controller/gameticker/ticker
 
 /datum/controller/gameticker/proc/create_characters()
 	for(var/mob/new_player/player in player_list)
+		if(!player.mind.assigned_role)
+			continue
 		if(player.ready && player.mind)
 			if(player.mind.assigned_role=="AI" || player.mind.assigned_role=="Cyborg" || player.mind.assigned_role=="Mobile MMI")
 				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				player.create_roundstart_silicon(player.mind.assigned_role)
-			else if(!player.mind.assigned_role)
-				continue
 			else
 				var/mob/living/carbon/human/new_character = player.create_character(0)
 				new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 				qdel(player)
-
 
 /datum/controller/gameticker/proc/collect_minds()
 	for(var/mob/living/player in player_list)
@@ -405,20 +404,13 @@ var/datum/controller/gameticker/ticker
 			ticker.minds += player.mind
 
 /datum/controller/gameticker/proc/equip_characters()
-	var/captainless=1
 	for(var/mob/living/carbon/human/player in player_list)
 		if(player && player.mind && player.mind.assigned_role)
-			if(player.mind.assigned_role == "Captain")
-				captainless=0
 			if(player.mind.assigned_role != "MODE")
 				job_master.EquipRank(player, player.mind.assigned_role, 0)
 				EquipCustomItems(player)
 			player.apeify()
 		stoplag()
-	if(captainless)
-		for(var/mob/M in player_list)
-			if(!istype(M,/mob/new_player))
-				to_chat(M, "Captainship not forced on anyone.")
 
 	for(var/mob/M in player_list)
 		if(!istype(M,/mob/new_player))
@@ -637,11 +629,14 @@ var/datum/controller/gameticker/ticker
 
 	spawn()
 		var/discrete_areas = areas.Copy()
+		var/captain = FALSE
 		//Get unpopulated departments
 		for(var/mob/living/carbon/human/player in player_list)
 			var/area/A = get_area(player)
 			if(A in discrete_areas) //We've already added their department
 				discrete_areas -= get_department_areas(player)
+			if(player && player.mind && player.mind.assigned_role && player.mind.assigned_role == "Captain")
+				captain = TRUE
 		//Toggle lightswitches and lamps on in occupied departments
 		for(var/area/DA in discrete_areas)
 			for(var/obj/machinery/light_switch/LS in DA)
@@ -649,6 +644,18 @@ var/datum/controller/gameticker/ticker
 				break
 			for(var/obj/item/device/flashlight/lamp/L in DA)
 				L.toggle_onoff(0)
+		//send message that no one is a captain and store positions for some reason
+		for(var/mob/M in player_list)
+			if(!istype(M,/mob/new_player))
+				if(!captain)
+					to_chat(M, "Captainship not forced on anyone.")
+				M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
+		
+	spawn (ROUNDSTART_LOGOUT_REPORT_TIME)
+		display_roundstart_logout_report()
+
+	spawn (rand(INTERCEPT_TIME_LOW , INTERCEPT_TIME_HIGH))
+		mode.send_intercept()
 
 // -- Tag mode!
 /datum/controller/gameticker/proc/tag_mode(var/mob/user)
