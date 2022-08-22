@@ -60,6 +60,9 @@
 	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8
 
+/obj/item/clothing/head/HoS/NoiseDampening()
+	return TRUE
+
 /obj/item/clothing/head/HoS/surveyor
 	name = "surveyor cap"
 	desc = "You bring me the man, I'll find you the crime."
@@ -74,17 +77,17 @@
 	item_state = "dermal"
 	siemens_coefficient = 0.6
 
-/obj/item/clothing/head/beret/headofsecurity
-	name = "formal Head of Security beret"
-	desc = "A navy beret with a Head of Security rank insignia on it. For formal occasions."
-	icon_state = "hosberet"
-	species_fit = list(INSECT_SHAPED)
-
 /obj/item/clothing/head/HoS/cowboy
 	name = "sheriff's hat"
 	desc = "A stalwart white stetson adorned with a sheriff's badge. For especially old-school heads of security."
 	icon_state = "cowboyhos"
 	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
+
+/obj/item/clothing/head/beret/headofsecurity
+	name = "formal Head of Security beret"
+	desc = "A navy beret with a Head of Security rank insignia on it. For formal occasions."
+	icon_state = "hosberet"
+	species_fit = list(INSECT_SHAPED)
 
 //Warden
 /obj/item/clothing/head/warden
@@ -97,17 +100,20 @@
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
 
-/obj/item/clothing/head/beret/warden
-	name = "formal warden beret"
-	desc = "A navy beret with a Warden rank insignia on it. For formal occasions."
-	icon_state = "wardenberet"
-	species_fit = list(INSECT_SHAPED)
+/obj/item/clothing/head/warden/NoiseDampening()
+	return TRUE
 
 /obj/item/clothing/head/warden/cowboy
 	name = "jailor's hat"
 	desc = "A menacing black stetson adorned with a jailor's badge. For especially old-school wardens."
 	icon_state = "cowboywarden"
 	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
+
+/obj/item/clothing/head/beret/warden
+	name = "formal warden beret"
+	desc = "A navy beret with a Warden rank insignia on it. For formal occasions."
+	icon_state = "wardenberet"
+	species_fit = list(INSECT_SHAPED)
 
 //Head of Personnel
 /obj/item/clothing/head/hopcap
