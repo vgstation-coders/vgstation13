@@ -71,5 +71,5 @@
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 40, bullet = 25, laser = 30, energy = 25, bomb = 15, bio = 20, rad = 20)
 
-/obj/item/clothing/head/leather/xeno/acidable()
+/obj/item/clothing/head/leather/xeno/dissolvable()
 	return 0

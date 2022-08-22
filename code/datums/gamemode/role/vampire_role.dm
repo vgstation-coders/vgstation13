@@ -462,7 +462,7 @@
 						to_chat(H, "<span class='warning'>Your helmet protects you from the holy water!</span>")
 						return
 
-					if(H.acidable())
+					if(H.dissolvable())
 						if(prob(15) && volume >= 30)
 							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 							if(head_organ)
@@ -486,7 +486,7 @@
 								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric current powers protect you!</span>")
 								smitecounter += volume * 0.4
 				else
-					if(H.acidable())
+					if(H.dissolvable())
 						H.take_organ_damage(min(15, volume * 2))
 						smitecounter += 5
 

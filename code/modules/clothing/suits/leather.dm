@@ -50,5 +50,5 @@
 	item_state = "suit_leather_xeno"
 	armor = list(melee = 40, bullet = 25, laser = 30, energy = 25, bomb = 15, bio = 20, rad = 20)
 
-/obj/item/clothing/suit/leather/xeno/acidable()
+/obj/item/clothing/suit/leather/xeno/dissolvable()
 	return 0

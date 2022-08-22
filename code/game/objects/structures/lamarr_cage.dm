@@ -86,7 +86,7 @@
 	update_icon()
 	return
 
-/obj/structure/lamarr/acidable()
+/obj/structure/lamarr/dissolvable()
 	return 0
 
 /obj/item/clothing/mask/facehugger/lamarr
