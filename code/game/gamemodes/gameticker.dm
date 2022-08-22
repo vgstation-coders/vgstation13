@@ -135,7 +135,7 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker/proc/setup()
 	//Create and announce mode
 	if(master_mode=="secret")
-		src.hide_mode = 1
+		hide_mode = 1
 	var/list/datum/gamemode/runnable_modes
 	if((master_mode=="random"))
 		runnable_modes = config.get_runnable_modes()
@@ -146,21 +146,21 @@ var/datum/controller/gameticker/ticker
 		if(secret_force_mode != "secret")
 			var/datum/gamemode/M = config.pick_mode(secret_force_mode)
 			if(M.can_start())
-				src.mode = config.pick_mode(secret_force_mode)
+				mode = config.pick_mode(secret_force_mode)
 		job_master.ResetOccupations()
-		if(!src.mode)
-			src.mode = pickweight(runnable_modes)
-		if(src.mode)
-			var/mtype = src.mode.type
-			src.mode = new mtype
+		if(!mode)
+			mode = pickweight(runnable_modes)
+		if(mode)
+			var/mtype = mode.type
+			mode = new mtype
 	else if (master_mode=="secret")
 		mode = config.pick_mode("Dynamic Mode") //Huzzah
 	else
-		src.mode = config.pick_mode(master_mode)
+		mode = config.pick_mode(master_mode)
 
 	//log_startup_progress("gameticker.mode is [src.mode.name].")
-	src.mode = new mode.type
-	if (!src.mode.can_start())
+	mode = new mode.type
+	if (!mode.can_start())
 		to_chat(world, "<B>Unable to start [mode.name].</B> Not enough players, [mode.minimum_player_count] players needed. Reverting to pre-game lobby.")
 		del(mode)
 		current_state = GAME_STATE_PREGAME
@@ -177,7 +177,7 @@ var/datum/controller/gameticker/ticker
 	create_characters() //Create player characters and transfer them
 	collect_minds()
 	CHECK_TICK
-	var/can_continue = src.mode.Setup()//Setup special modes
+	var/can_continue = mode.Setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
 		to_chat(world, "<B>Error setting up [master_mode].</B> Reverting to pre-game lobby.")
@@ -186,6 +186,8 @@ var/datum/controller/gameticker/ticker
 		del(mode)
 		job_master.ResetOccupations()
 		return 0
+	
+	mode.PostSetup()
 
 	if(hide_mode)
 		var/list/modes = new
@@ -219,7 +221,6 @@ var/datum/controller/gameticker/ticker
 #endif
 
 	spawn(0)//Forking here so we dont have to wait for this to finish
-		mode.PostSetup()
 		//Cleanup some stuff
 		for(var/obj/effect/landmark/start/S in landmarks_list)
 			//Deleting Startpoints but we need the ai point to AI-ize people later and the Trader point to throw new ones
@@ -650,6 +651,12 @@ var/datum/controller/gameticker/ticker
 				if(!captain)
 					to_chat(M, "Captainship not forced on anyone.")
 				M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
+
+	spawn()
+		feedback_set_details("round_start","[time2text(world.realtime)]")
+		if(ticker && ticker.mode)
+			feedback_set_details("game_mode","[ticker.mode]")
+		feedback_set_details("server_ip","[world.internet_address]:[world.port]")
 		
 	spawn (ROUNDSTART_LOGOUT_REPORT_TIME)
 		display_roundstart_logout_report()
