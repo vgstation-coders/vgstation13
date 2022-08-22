@@ -337,10 +337,11 @@ var/area/space_area
 		return ambience_list
 
 /area/proc/updateicon()
-	if (!areaapc)
+	if (!areaapc && !radalert)
 		icon_state = null
 		return
-	if ((fire || eject || party || radalert) && ((!requires_power)?(!requires_power):power_environ))//If it doesn't require power, can still activate this proc.
+	//If the area doesn't require power, it can still activate this proc. Radiation alerts don't check for power
+	if (((fire || eject || party) && ((!requires_power)?(!requires_power):power_environ)) || radalert)
 		// Highest priority at the top.
 		if(radalert && !fire)
 			icon_state = "radiation"
