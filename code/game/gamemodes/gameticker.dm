@@ -171,7 +171,8 @@ var/datum/controller/gameticker/ticker
 	job_master.DivideOccupations() //Distribute jobs
 	init_mind_ui()
 	init_PDAgames_leaderboard()
-	create_characters() //Create player characters and transfer them
+	for(var/mob/new_player/player in player_list)
+		create_characters(player) //Create player characters and transfer them
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly
 		for(var/mob/living/carbon/human/player in player_list)
@@ -214,6 +215,8 @@ var/datum/controller/gameticker/ticker
 
 	// Update new player panels so they say join instead of ready up.
 	for(var/mob/new_player/player in player_list)
+		if(player.ready)
+			qdel(player)
 		player.new_player_panel_proc()
 
 #if UNIT_TESTS_AUTORUN
@@ -337,25 +340,25 @@ var/datum/controller/gameticker/ticker
 	no_life_on_station = TRUE
 
 /datum/controller/gameticker/proc/create_characters(var/mob/new_player/player)
-	for(var/mob/new_player/player in player_list)
-		if(!player.mind)
-			continue
-		var/mob/living/L = player
-		ticker.minds += L.mind
-		if(!player.mind.assigned_role)
-			continue
-		if(!player.ready)
-			continue
-		if(player.mind.assigned_role=="AI" || player.mind.assigned_role=="Cyborg" || player.mind.assigned_role=="Mobile MMI")
-			log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-			player.create_roundstart_silicon(player.mind.assigned_role)
-		else
-			var/mob/living/carbon/human/new_character = player.create_character(0)
-			new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
-			qdel(player)
-			if(new_character.mind.assigned_role != "MODE")
-				job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
-				EquipCustomItems(new_character)
+	if(!player)
+		return
+	if(!player.mind)
+		return
+	var/mob/living/L = player
+	ticker.minds += L.mind
+	if(!player.mind.assigned_role)
+		return
+	if(!player.ready)
+		return
+	if(player.mind.assigned_role=="AI" || player.mind.assigned_role=="Cyborg" || player.mind.assigned_role=="Mobile MMI")
+		log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
+		player.create_roundstart_silicon(player.mind.assigned_role)
+	else
+		var/mob/living/carbon/human/new_character = player.create_character(0)
+		new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+		if(new_character.mind.assigned_role != "MODE")
+			job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
+			EquipCustomItems(new_character)
 
 /datum/controller/gameticker/proc/process()
 	if(current_state != GAME_STATE_PLAYING)
