@@ -464,7 +464,7 @@ Assign your candidates in choose_candidates() instead.
 		if(spawnpos > synd_spawn.len)
 			spawnpos = 1
 		M.forceMove(synd_spawn[spawnpos])
-		if(!isjusthuman(M))
+		if(!ishuman(M))
 			M = M.Humanize("Human")
 		if(leader)
 			leader = 0
