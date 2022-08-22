@@ -336,7 +336,7 @@ var/datum/controller/gameticker/ticker
 
 	no_life_on_station = TRUE
 
-/datum/controller/gameticker/proc/create_characters()
+/datum/controller/gameticker/proc/create_characters(var/mob/new_player/player)
 	for(var/mob/new_player/player in player_list)
 		if(!player.mind)
 			continue
