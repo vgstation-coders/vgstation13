@@ -217,42 +217,13 @@ var/datum/controller/gameticker/ticker
 	run_unit_tests()
 #endif
 
-//		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
-
-		if(!config.shut_up_automatic_diagnostic_and_announcement_system)
-			var/welcome_sentence=list('sound/AI/vox_login.ogg')
-			welcome_sentence += pick(
-				'sound/AI/vox_reminder1.ogg',
-				'sound/AI/vox_reminder2.ogg',
-				'sound/AI/vox_reminder3.ogg',
-				'sound/AI/vox_reminder4.ogg',
-				'sound/AI/vox_reminder5.ogg',
-				'sound/AI/vox_reminder6.ogg',
-				'sound/AI/vox_reminder7.ogg',
-				'sound/AI/vox_reminder8.ogg',
-				'sound/AI/vox_reminder9.ogg',
-				'sound/AI/vox_reminder10.ogg',
-				'sound/AI/vox_reminder11.ogg',
-				'sound/AI/vox_reminder12.ogg',
-				'sound/AI/vox_reminder13.ogg',
-				'sound/AI/vox_reminder14.ogg',
-				'sound/AI/vox_reminder15.ogg')
-			for(var/sound in welcome_sentence)
-				play_vox_sound(sound,map.zMainStation,null)
-		//Holiday Round-start stuff	~Carn
-		Holiday_Game_Start()
-		//mode.Clean_Antags()
-		create_random_orders(3) //Populate the order system so cargo has something to do
-	//start_events() //handles random events and space dust.
-	//new random event system is handled from the MC.
-
-	if(0 == admins.len)
-		send2adminirc("Round has started with no admins online.")
-		send2admindiscord("**Round has started with no admins online.**", TRUE)
-
 	if(config.sql_enabled)
 		spawn(3000)
 		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
+
+	//mode.Clean_Antags()
+	//start_events() //handles random events and space dust.
+	//new random event system is handled from the MC.
 
 	stat_collection.round_start_time = world.realtime
 	Master.RoundStart()
@@ -647,7 +618,38 @@ var/datum/controller/gameticker/ticker
 					qdel(obj)
 
 		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
+		//Holiday Round-start stuff	~Carn
+		Holiday_Game_Start()
+		
+		if(0 == admins.len)
+			send2adminirc("Round has started with no admins online.")
+			send2admindiscord("**Round has started with no admins online.**", TRUE)
 		send2maindiscord("**The game has started**")
+
+		//		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
+
+	if(!config.shut_up_automatic_diagnostic_and_announcement_system)
+		var/welcome_sentence=list('sound/AI/vox_login.ogg')
+		welcome_sentence += pick(
+			'sound/AI/vox_reminder1.ogg',
+			'sound/AI/vox_reminder2.ogg',
+			'sound/AI/vox_reminder3.ogg',
+			'sound/AI/vox_reminder4.ogg',
+			'sound/AI/vox_reminder5.ogg',
+			'sound/AI/vox_reminder6.ogg',
+			'sound/AI/vox_reminder7.ogg',
+			'sound/AI/vox_reminder8.ogg',
+			'sound/AI/vox_reminder9.ogg',
+			'sound/AI/vox_reminder10.ogg',
+			'sound/AI/vox_reminder11.ogg',
+			'sound/AI/vox_reminder12.ogg',
+			'sound/AI/vox_reminder13.ogg',
+			'sound/AI/vox_reminder14.ogg',
+			'sound/AI/vox_reminder15.ogg')
+		for(var/sound in welcome_sentence)
+			play_vox_sound(sound,map.zMainStation,null)
+	
+	create_random_orders(3) //Populate the order system so cargo has something to do
 
 // -- Tag mode!
 /datum/controller/gameticker/proc/tag_mode(var/mob/user)
