@@ -172,13 +172,19 @@ var/datum/controller/gameticker/ticker
 	init_mind_ui()
 	init_PDAgames_leaderboard()
 	for(var/mob/new_player/player in player_list)
-		create_characters(player) //Create player characters and transfer them
+		var/datum/mind/mind = create_characters(player) //Create player characters and transfer them
+		if(!mind)
+			continue
+		switch(mind.assigned_role)
+			if("MODE","Mobile MMI","Trader", "Cyborg", "AI")
+				//silicons already on manifest
+			else
+				player.update_icons()
+				data_core.manifest_inject(player)
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly
 		for(var/mob/living/carbon/human/player in player_list)
 			player.apeify()
-
-	gamestart_time = world.time / 10
 
 	var/can_continue = mode.Setup()//Setup special modes
 	if(!can_continue)
@@ -192,6 +198,12 @@ var/datum/controller/gameticker/ticker
 	
 	mode.PostSetup()
 
+	//antags spawn with PDAs or other crew specific items on the ground, this is a solution (not a good one)
+	for(var/mob/living/carbon/human/player in player_list)
+		var/turf/T = get_turf(player)
+		for(var/obj/item/I in T)
+			qdel(I)
+
 	if(hide_mode)
 		var/list/modes = new
 		for (var/datum/gamemode/M in runnable_modes)
@@ -203,15 +215,8 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
-	for(var/mob/living/carbon/human/player in player_list)
-		switch(player.mind.assigned_role)
-			if("MODE","Mobile MMI","Trader")
-				//No injection
-			else
-				player.update_icons()
-				data_core.manifest_inject(player)
-
 	current_state = GAME_STATE_PLAYING
+	gamestart_time = world.time / 10
 
 	// Update new player panels so they say join instead of ready up.
 	for(var/mob/new_player/player in player_list)
@@ -359,6 +364,8 @@ var/datum/controller/gameticker/ticker
 		if(new_character.mind.assigned_role != "MODE")
 			job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
 			EquipCustomItems(new_character)
+
+		return new_character.mind
 
 /datum/controller/gameticker/proc/process()
 	if(current_state != GAME_STATE_PLAYING)
