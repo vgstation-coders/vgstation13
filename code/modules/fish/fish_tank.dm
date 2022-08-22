@@ -695,12 +695,12 @@
 		return TRUE
 
 	var/water_value = 0
-	if(!C.reagents.has_any_reagents(PETRITRICINCURES) && C.reagents.has_any_reagents(WATERS))
+	if(!C.reagents.has_any_reagents(ACIDS) && C.reagents.has_any_reagents(WATERS))
 		acidic = FALSE
 		water_value += C.reagents.get_reagent_amount(WATER)
 		water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
 		water_value += C.reagents.get_reagent_amount(ICE) * 0.80
-	else if(C.reagents.has_any_reagents(PETRITRICINCURES) &&  !C.reagents.has_any_reagents(WATERS))
+	else if(C.reagents.has_any_reagents(ACIDS) &&  !C.reagents.has_any_reagents(WATERS))
 		acidic = TRUE
 		water_value += C.reagents.get_reagent_amount(PACID) * 2
 		water_value += C.reagents.get_reagent_amount(SACID)

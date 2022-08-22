@@ -332,8 +332,8 @@ var/list/nuclear_bombs = list()
 
 	reset_vars_after_duration(resettable_vars, duration)
 
-/obj/machinery/nuclearbomb/isacidhardened() // Requires Aliens to channel acidspit on the nuke.
-	return TRUE
+/obj/machinery/nuclearbomb/dissolvable()
+	return FALSE
 
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"

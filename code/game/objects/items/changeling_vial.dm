@@ -44,5 +44,5 @@
 	else
 		to_chat(user, "<span class='notice'>You try to remove \the [src]'s cap, but it won't budge.</span>")
 
-/obj/item/changeling_vial/acidable()
+/obj/item/changeling_vial/dissolvable()
 	return 0

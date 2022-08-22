@@ -662,5 +662,5 @@
 		bus.remove_HUD(M)
 		M.unregister_event(/event/living_login, bus, /obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD)
 
-/obj/structure/bed/chair/vehicle/adminbus/acidable()
+/obj/structure/bed/chair/vehicle/adminbus/dissolvable()
 	return 0

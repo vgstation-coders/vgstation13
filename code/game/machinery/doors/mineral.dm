@@ -285,7 +285,7 @@
 	playsound(src, soundeffect, 100, 1)
 	return ..()
 
-/obj/machinery/door/mineral/resin/acidable()
+/obj/machinery/door/mineral/resin/dissolvable()
 	return 0
 
 /obj/machinery/door/mineral/hive
