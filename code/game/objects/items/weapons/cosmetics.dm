@@ -358,12 +358,12 @@
 	var/static/list/prohibited_objects = list( //For fun removal
 		)
 
-/obj/item/weapon/invisible_spray/examine(mob/user)
+/obj/item/weapon/invisible_spray/examine(var/mob/user)
 	..()
 	if(sprays_left)
-		to_chat(user, "<span class='noticed>The can still has some spray left!</span>")
+		to_chat(user, "<span class='notice'>The can still has some spray left!</span>")
 	else
-		to_chat(user, "<span class='noticed>The can feels empty.</span>")
+		to_chat(user, "<span class='notice'>The can feels empty.</span>")
 
 
 /obj/item/weapon/invisible_spray/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
@@ -381,7 +381,7 @@
 		to_chat(user, "<span class='notice'>For some reason, you don't think that would work.</span>")
 		return
 	if(!do_after(user, target, 2 SECONDS))
-		return
+		return 1
 	if(permanent)
 		invisible_time = 0
 	var/mob/M = target
@@ -401,8 +401,6 @@
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
-	if(istype(target, /obj/machinery/power/supermatter))
-		return 0
 	if(istype(target, /obj/machinery/singularity))
 		animate(target, color = grayscale, time = 6 SECONDS)
 		return 0
