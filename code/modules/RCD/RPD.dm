@@ -77,9 +77,9 @@
 	to_chat(user, "<span class='notice'>To quickly scroll between directions of the selected schematic, use alt+mousewheel.")
 	to_chat(user, "<span class='notice'>To quickly scroll between layers, use shift+mousewheel.</span>")
 	to_chat(user, "<span class='notice'>Note that hotkeys like ctrl click do not work while the RPD is held in your active hand!</span>")
-	if(has_metal_slime = 1)
+	if(has_metal_slime)
 		to_chat(user, "<span class='notice'>The multilayering mode is currently [build_all ? "enabled" : "disabled"].</span>")
-	if(has_yellow_slime = 1)
+	if(has_yellow_slime)
 		to_chat(user, "<span class='notice'>The automatic wrenching mode is currently [autowrench ? "enabled" : "disabled"].</span>")
 		
 /obj/item/device/rcd/rpd/pickup(var/mob/living/L)
