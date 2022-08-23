@@ -360,6 +360,8 @@
 
 /obj/item/weapon/invisible_spray/examine(var/mob/user)
 	..()
+	if(loc != user)
+		return
 	if(sprays_left)
 		to_chat(user, "<span class='notice'>The can still has some spray left!</span>")
 	else
