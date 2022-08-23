@@ -358,6 +358,14 @@
 	var/static/list/prohibited_objects = list( //For fun removal
 		)
 
+/obj/item/weapon/invisible_spray/examine(mob/user)
+	..()
+	if(sprays_left)
+		to_chat(user, "<span class='noticed>The can still has some spray left!</span>")
+	else
+		to_chat(user, "<span class='noticed>The can feels empty.</span>")
+
+
 /obj/item/weapon/invisible_spray/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
 		return 0
@@ -371,7 +379,9 @@
 		return
 	if(is_type_in_list(target,prohibited_objects))
 		to_chat(user, "<span class='notice'>For some reason, you don't think that would work.</span>")
-		return 1
+		return
+	if(!do_after(user, target, 2 SECONDS))
+		return
 	if(permanent)
 		invisible_time = 0
 	var/mob/M = target
