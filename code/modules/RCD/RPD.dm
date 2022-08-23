@@ -77,7 +77,11 @@
 	to_chat(user, "<span class='notice'>To quickly scroll between directions of the selected schematic, use alt+mousewheel.")
 	to_chat(user, "<span class='notice'>To quickly scroll between layers, use shift+mousewheel.</span>")
 	to_chat(user, "<span class='notice'>Note that hotkeys like ctrl click do not work while the RPD is held in your active hand!</span>")
-
+	if(has_metal_slime = 1)
+		to_chat(user, "<span class='notice'>The multilayering mode is currently [build_all ? "enabled" : "disabled"].</span>")
+	if(has_yellow_slime = 1)
+		to_chat(user, "<span class='notice'>The automatic wrenching mode is currently [autowrench ? "enabled" : "disabled"].</span>")
+		
 /obj/item/device/rcd/rpd/pickup(var/mob/living/L)
 	..()
 	L.register_event(/event/clickon, src, .proc/mob_onclickon)
@@ -228,8 +232,7 @@
 		return
 
 	src.build_all = !src.build_all
-
-	to_chat(usr, "You toggle the multilayer building mode on the RPD")
+	to_chat(usr, "You [build_all ? "enable" : "disable"] the multilayer mode.")
 
 /obj/item/device/rcd/rpd/proc/autowrench()
 	set category = "Object"
@@ -239,9 +242,7 @@
 		return
 
 	src.autowrench = !src.autowrench
-
-	to_chat(usr, "You toggle the automatic wrenching feature on the RPD")
-
+	to_chat(usr, "You [autowrench ? "enable" : "disable"] the automatic wrenching mode.")
 
 /obj/item/device/rcd/rpd/admin
 	name = "experimental Rapid-Piping-Device (RPD)"
