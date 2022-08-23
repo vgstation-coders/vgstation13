@@ -83,6 +83,9 @@
 	icon_state = "cowboyhos"
 	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
 
+/obj/item/clothing/head/HoS/cowboy/NoiseDampening()
+	return FALSE
+
 /obj/item/clothing/head/beret/headofsecurity
 	name = "formal Head of Security beret"
 	desc = "A navy beret with a Head of Security rank insignia on it. For formal occasions."
@@ -108,6 +111,9 @@
 	desc = "A menacing black stetson adorned with a jailor's badge. For especially old-school wardens."
 	icon_state = "cowboywarden"
 	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
+
+/obj/item/clothing/head/warden/cowboy/NoiseDampening()
+	return FALSE
 
 /obj/item/clothing/head/beret/warden
 	name = "formal warden beret"
