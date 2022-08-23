@@ -384,6 +384,9 @@
 		return
 	if(!do_after(user, target, 2 SECONDS))
 		return 1
+	if(!sprays_left)
+		to_chat(user, "\The [src] is empty.")
+		return
 	if(permanent)
 		invisible_time = 0
 	var/mob/M = target
