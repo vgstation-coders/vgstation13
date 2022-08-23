@@ -401,6 +401,8 @@
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
+	if(istype(target, /obj/machinery/power/supermatter))
+		return 0
 	if(istype(target, /obj/machinery/singularity))
 		animate(target, color = grayscale, time = 6 SECONDS)
 		return 0
