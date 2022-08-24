@@ -305,7 +305,7 @@
 	if(get_pestlevel() > 0)
 		if(seed.voracious)
 			sum_health += HYDRO_SPEED_MULTIPLIER
-			add_pestlevel(-HYDRO_SPEED_MULTIPLIER)
+			add_pestlevel(-HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 		else if (get_pestlevel() > seed.pest_tolerance)
 			sum_health -= HYDRO_SPEED_MULTIPLIER
 			update_icon_after_process = 1
@@ -314,7 +314,7 @@
 	if(get_weedlevel() > 0)
 		if(seed.voracious)
 			sum_health += HYDRO_SPEED_MULTIPLIER
-			add_weedlevel(-HYDRO_SPEED_MULTIPLIER)
+			add_weedlevel(-HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 		else if (get_weedlevel() > seed.weed_tolerance)
 			sum_health -= HYDRO_SPEED_MULTIPLIER
 			update_icon_after_process = 1
