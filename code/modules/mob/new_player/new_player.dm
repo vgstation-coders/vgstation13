@@ -654,7 +654,7 @@
 	src << browse(dat, "window=latechoices;size=360x640;can_close=1")
 
 
-/mob/new_player/proc/create_character(var/joined_late = 0)
+/mob/new_player/proc/create_character()
 	spawning = 1
 	close_spawn_windows()
 
@@ -733,7 +733,7 @@
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
 	var/rank = new_character.mind.assigned_role
-	if(!joined_late)
+	if(ticker.current_state == GAME_STATE_PLAYING)
 		var/obj/S = null
 		// Find a spawn point that wasn't given to anyone
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
@@ -775,7 +775,6 @@
 	job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
 	EquipCustomItems(new_character)
 	new_character.update_icons()
-	data_core.manifest_inject(new_character)
 
 //Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
 /mob/new_player/proc/create_roundstart_silicon(var/type)

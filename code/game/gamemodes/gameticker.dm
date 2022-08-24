@@ -184,13 +184,9 @@ var/datum/controller/gameticker/ticker
 				player.create_roundstart_silicon(player.mind.assigned_role)
 				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 			if("MODE", "Trader")
-				//not on manifest
-				//delete items?? Why are they on this guy? FIX THIS
-				var/turf/T = get_turf(player)
-				for(var/obj/item/I in T.contents)
-					qdel(I)
+				//do nothing
 			else
-				player.create_roundstart_human() //Create player characters and transfer them*/
+				player.create_roundstart_human() //Create player characters and transfer them
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
 		for(var/mob/living/carbon/human/player in player_list)
@@ -568,13 +564,21 @@ var/datum/controller/gameticker/ticker
 	spawn()
 		var/discrete_areas = areas.Copy()
 		var/captain = FALSE
-		//Get unpopulated departments
+
 		for(var/mob/living/carbon/human/player in player_list)
 			var/area/A = get_area(player)
-			if(A in discrete_areas) //We've already added their department
+			//Getting areas where there is a crewmember. This is used to turn off lights in empty departments
+			if(A in discrete_areas)
 				discrete_areas -= get_department_areas(player)
-			if(player && player.mind && player.mind.assigned_role && player.mind.assigned_role == "Captain")
-				captain = TRUE
+			//Used to display a message the captainship message
+			if(player.mind && player.mind.assigned_role)
+				if(player.mind.assigned_role == "Captain")
+					captain = TRUE
+				switch(player.mind.assigned_role)
+					if("MODE","Trader")
+						//No injection
+					else
+						data_core.manifest_inject(player)
 		//Toggle lightswitches and lamps on in occupied departments
 		for(var/area/DA in discrete_areas)
 			for(var/obj/machinery/light_switch/LS in DA)
