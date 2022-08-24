@@ -45,7 +45,7 @@
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this
-#define DEVELOPER_MODE 0
+#define DEVELOPER_MODE 1
 
 // If 1, unit tests will be compiled
 #define UNIT_TESTS_ENABLED 0
@@ -56,7 +56,7 @@
 
 #if DEVELOPER_MODE
 // If defined, overrides the default lobby timer duration
-#define GAMETICKER_LOBBY_DURATION 5 SECONDS
+#define GAMETICKER_LOBBY_DURATION 35 SECONDS
 #endif
 // If 1, mob/Login checks for multiple connections from the same IP on different ckeys and warns the user
 #define WARN_FOR_CLIENTS_SHARING_IP !DEVELOPER_MODE

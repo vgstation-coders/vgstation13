@@ -206,7 +206,9 @@ var/datum/controller/gameticker/ticker
 	for(var/mob/living/carbon/human/player in player_list)
 		switch(player.mind.assigned_role)
 			if("MODE","Mobile MMI","Trader")
-				//No injection
+				var/turf/T = get_turf(player)
+				for(var/obj/item/I in T.contents)
+					qdel(I)
 			else
 				player.update_icons()
 				data_core.manifest_inject(player)
@@ -214,9 +216,7 @@ var/datum/controller/gameticker/ticker
 	current_state = GAME_STATE_PLAYING
 
 	// Update new player panels so they say join instead of ready up.
-	for(var/mob/new_player/player in player_list)
-		if(player.ready)
-			qdel(player)
+	for(var/mob/new_player/player in player_list)	
 		player.new_player_panel_proc()
 
 #if UNIT_TESTS_AUTORUN
@@ -359,6 +359,7 @@ var/datum/controller/gameticker/ticker
 		if(new_character.mind.assigned_role != "MODE")
 			job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
 			EquipCustomItems(new_character)
+		qdel(player)
 
 /datum/controller/gameticker/proc/process()
 	if(current_state != GAME_STATE_PLAYING)
