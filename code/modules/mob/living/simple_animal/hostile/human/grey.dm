@@ -635,8 +635,8 @@
 	..()
 	if(health <= 70 && defensive_stance == 0) // Health is getting low, lets back off and try to use range to our advantage
 		defensive_stance = 1
-		retreat_distance = 8
-		minimum_distance = 8
+		retreat_distance = 7
+		minimum_distance = 7
 		say("[pick("Trooper under heavy fire! Moving to reserve position.", "Hostile is proving resilient. Backup required.", "Covering fire! Now!")]")
 	if(health > 70 && defensive_stance == 1) // Health has somehow been restored, lets get closer and be more aggressive
 		defensive_stance = 0
