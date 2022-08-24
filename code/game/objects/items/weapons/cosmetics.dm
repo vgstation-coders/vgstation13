@@ -384,7 +384,7 @@
 		return
 	if(!do_after(user, target, 2 SECONDS))
 		return 1
-	if(!sprays_left)
+	if(!sprays_left)   // le do_after check
 		to_chat(user, "\The [src] is empty.")
 		return
 	if(permanent)
