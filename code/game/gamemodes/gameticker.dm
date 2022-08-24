@@ -173,7 +173,7 @@ var/datum/controller/gameticker/ticker
 	init_PDAgames_leaderboard()
 
 	for(var/mob/new_player/player in player_list)
-		if(!(player && player.ready && player.mind && player.mind.assigned_role))
+		if(!(player.ready && player.mind && player.mind.assigned_role))
 			continue
 		var/mob/living/L = player
 		if(istype(L))
@@ -183,7 +183,7 @@ var/datum/controller/gameticker/ticker
 			if("Mobile MMI", "Cyborg", "AI")
 				player.create_roundstart_silicon(player.mind.assigned_role)
 				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-			if("MODE", "Trader")
+			if("MODE")
 				//do nothing
 			else
 				player.create_roundstart_human() //Create player characters and transfer them
@@ -202,8 +202,6 @@ var/datum/controller/gameticker/ticker
 		job_master.ResetOccupations()
 		return 0
 
-	//inherit clumsy
-	//pda drop
 	mode.PostSetup()
 
 	if(hide_mode)
@@ -217,12 +215,33 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
-	gamestart_time = world.time / 10
-	current_state = GAME_STATE_PLAYING
+	var/captain = FALSE
+	for(var/mob/living/carbon/human/player in player_list)	
+		//Used to display a message the captainship message
+		if(player.mind)
+			if(player.mind.assigned_role == "MODE")
+					//no injection
+			else
+				job_master.EquipRank(player, player.mind.assigned_role, 0)
+				EquipCustomItems(player)
+				player.update_icons()
+				if(player.mind.assigned_role == "Captain")
+					captain = TRUE
+				if(player.mind.assigned_role != "Trader")
+					data_core.manifest_inject(player)
 
+		//send message that no one is a captain and store positions for some reason
+	for(var/mob/M in player_list)
+		if(!istype(M,/mob/new_player))
+			if(!captain)
+				to_chat(M, "Captainship not forced on anyone.")
+			M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
 	// Update new player panels so they say join instead of ready up.
 	for(var/mob/new_player/player in player_list)
 		player.new_player_panel_proc()
+
+	gamestart_time = world.time / 10
+	current_state = GAME_STATE_PLAYING
 
 #if UNIT_TESTS_AUTORUN
 	run_unit_tests()
@@ -563,22 +582,12 @@ var/datum/controller/gameticker/ticker
 
 	spawn()
 		var/discrete_areas = areas.Copy()
-		var/captain = FALSE
 
 		for(var/mob/living/carbon/human/player in player_list)
 			var/area/A = get_area(player)
 			//Getting areas where there is a crewmember. This is used to turn off lights in empty departments
 			if(A in discrete_areas)
 				discrete_areas -= get_department_areas(player)
-			//Used to display a message the captainship message
-			if(player.mind && player.mind.assigned_role)
-				if(player.mind.assigned_role == "Captain")
-					captain = TRUE
-				switch(player.mind.assigned_role)
-					if("MODE","Trader")
-						//No injection
-					else
-						data_core.manifest_inject(player)
 		//Toggle lightswitches and lamps on in occupied departments
 		for(var/area/DA in discrete_areas)
 			for(var/obj/machinery/light_switch/LS in DA)
@@ -586,12 +595,6 @@ var/datum/controller/gameticker/ticker
 				break
 			for(var/obj/item/device/flashlight/lamp/L in DA)
 				L.toggle_onoff(0)
-		//send message that no one is a captain and store positions for some reason
-		for(var/mob/M in player_list)
-			if(!istype(M,/mob/new_player))
-				if(!captain)
-					to_chat(M, "Captainship not forced on anyone.")
-				M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
 
 		feedback_set_details("round_start","[time2text(world.realtime)]")
 		if(ticker && ticker.mode)

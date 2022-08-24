@@ -733,7 +733,7 @@
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
 	var/rank = new_character.mind.assigned_role
-	if(ticker.current_state == GAME_STATE_PLAYING)
+	if(!(ticker.current_state == GAME_STATE_PLAYING))
 		var/obj/S = null
 		// Find a spawn point that wasn't given to anyone
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
@@ -769,12 +769,9 @@
 	return new_character
 
 /mob/new_player/proc/create_roundstart_human()
-	var/mob/living/carbon/human/new_character = create_character(0)
+	var/mob/living/carbon/human/new_character = create_character()
 	qdel(src)
 	new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
-	job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
-	EquipCustomItems(new_character)
-	new_character.update_icons()
 
 //Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
 /mob/new_player/proc/create_roundstart_silicon(var/type)
