@@ -768,6 +768,15 @@
 
 	return new_character
 
+/mob/new_player/proc/create_roundstart_human()
+	var/mob/living/carbon/human/new_character = create_character(0)
+	qdel(src)
+	new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+	job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
+	EquipCustomItems(new_character)
+	new_character.update_icons()
+	data_core.manifest_inject(new_character)
+
 //Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
 /mob/new_player/proc/create_roundstart_silicon(var/type)
 	if(type != "Cyborg" && type != "AI" && type != "Mobile MMI")

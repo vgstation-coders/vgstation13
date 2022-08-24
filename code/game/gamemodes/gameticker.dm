@@ -171,14 +171,30 @@ var/datum/controller/gameticker/ticker
 	job_master.DivideOccupations() //Distribute jobs
 	init_mind_ui()
 	init_PDAgames_leaderboard()
-	for(var/mob/new_player/player in player_list)
-		create_characters(player) //Create player characters and transfer them
 
-	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly
+	for(var/mob/new_player/player in player_list)
+		if(!(player && player.ready && player.mind && player.mind.assigned_role))
+			return
+		var/mob/living/L = player
+		if(istype(L))
+			//ticker.minds += L.mind
+		
+		switch(player.mind.assigned_role)
+			if("Mobile MMI", "Cyborg", "AI")
+				player.create_roundstart_silicon(player.mind.assigned_role)
+				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
+			if("MODE", "Trader")
+				//not on manifest
+				//delete items?? Why are they on this guy? FIX THIS
+				var/turf/T = get_turf(player)
+				for(var/obj/item/I in T.contents)
+					qdel(I)
+			else
+				player.create_roundstart_human() //Create player characters and transfer them
+
+	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
 		for(var/mob/living/carbon/human/player in player_list)
 			player.apeify()
-
-	gamestart_time = world.time / 10
 
 	var/can_continue = mode.Setup()//Setup special modes
 	if(!can_continue)
@@ -189,7 +205,9 @@ var/datum/controller/gameticker/ticker
 		del(mode)
 		job_master.ResetOccupations()
 		return 0
-	
+
+	//inherit clumsy
+	//pda drop
 	mode.PostSetup()
 
 	if(hide_mode)
@@ -203,20 +221,11 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
-	for(var/mob/living/carbon/human/player in player_list)
-		switch(player.mind.assigned_role)
-			if("MODE","Mobile MMI","Trader")
-				var/turf/T = get_turf(player)
-				for(var/obj/item/I in T.contents)
-					qdel(I)
-			else
-				player.update_icons()
-				data_core.manifest_inject(player)
-
+	gamestart_time = world.time / 10
 	current_state = GAME_STATE_PLAYING
 
 	// Update new player panels so they say join instead of ready up.
-	for(var/mob/new_player/player in player_list)	
+	for(var/mob/new_player/player in player_list)
 		player.new_player_panel_proc()
 
 #if UNIT_TESTS_AUTORUN
@@ -338,28 +347,6 @@ var/datum/controller/gameticker/ticker
 		qdel(cinematic)		//end the cinematic
 
 	no_life_on_station = TRUE
-
-/datum/controller/gameticker/proc/create_characters(var/mob/new_player/player)
-	if(!player)
-		return
-	if(!player.mind)
-		return
-	var/mob/living/L = player
-	ticker.minds += L.mind
-	if(!player.mind.assigned_role)
-		return
-	if(!player.ready)
-		return
-	if(player.mind.assigned_role=="AI" || player.mind.assigned_role=="Cyborg" || player.mind.assigned_role=="Mobile MMI")
-		log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-		player.create_roundstart_silicon(player.mind.assigned_role)
-	else
-		var/mob/living/carbon/human/new_character = player.create_character(0)
-		new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
-		if(new_character.mind.assigned_role != "MODE")
-			job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
-			EquipCustomItems(new_character)
-		qdel(player)
 
 /datum/controller/gameticker/proc/process()
 	if(current_state != GAME_STATE_PLAYING)
