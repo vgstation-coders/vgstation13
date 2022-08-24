@@ -42,7 +42,7 @@
 	// On each tick, there's a chance the pest population will increase.
 	// This process is under the !seed check because it only happens when a live plant is in the tray.
 	if(prob(1))
-		add_pestlevel(5 * HYDRO_SPEED_MULTIPLIER)
+		add_pestlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient / 2)
 
 	//Bees will attempt to aid the plant's longevity and make it fruit faster.
 	if(bees && age >= seed.maturation && prob(50))
