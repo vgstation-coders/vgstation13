@@ -174,10 +174,10 @@ var/datum/controller/gameticker/ticker
 
 	for(var/mob/new_player/player in player_list)
 		if(!(player && player.ready && player.mind && player.mind.assigned_role))
-			return
+			continue
 		var/mob/living/L = player
 		if(istype(L))
-			//ticker.minds += L.mind
+			ticker.minds += L.mind
 		
 		switch(player.mind.assigned_role)
 			if("Mobile MMI", "Cyborg", "AI")
@@ -190,7 +190,7 @@ var/datum/controller/gameticker/ticker
 				for(var/obj/item/I in T.contents)
 					qdel(I)
 			else
-				player.create_roundstart_human() //Create player characters and transfer them
+				player.create_roundstart_human() //Create player characters and transfer them*/
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
 		for(var/mob/living/carbon/human/player in player_list)
