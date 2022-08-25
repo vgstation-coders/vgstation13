@@ -7,8 +7,10 @@
 	max_genedamage = 0
 	required_dna = 1
 	chemcost = 30
-	horrorallowed = 0
-	duration = 2 MINUTES
+	horrorallowed = 1
+	duration = 1 MINUTES
+	cooldown_min = 1 MINUTES
+	charge_max = 1 MINUTES
 	var/horrorFormMaxHealth = 700
 
 /spell/changeling/horrorform/cast_check(var/skipcharge = 0, var/mob/user = usr)
@@ -21,22 +23,17 @@
 	if(istype(user.loc, /obj/machinery/atmospherics))
 		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
 		return FALSE
+	if (istype(user.loc, /mob))
+		to_chat(usr, "<span class='warning'>We cannot transform here!</span>")
+		return FALSE
 
 /spell/changeling/horrorform/cast(var/list/targets, var/mob/living/carbon/human/user)
 	..()
-	if (istype(user.loc,/mob))
-		to_chat(usr, "<span class='warning'>You can't change right now!</span>")
-		return 1
-	activate(usr)
-	sleep(duration)
-
-/spell/changeling/horrorform/after_cast(list/targets, var/mob/living/carbon/human/user)
-	to_chat(usr, "You are feeling weak. Seek somewhere safe.")
-	sleep(100)	//10 seconds before deactivate
-	deactivate(usr)
-
-	return
-
+	if(ishorrorform(user)
+		activate(user)
+	else 
+		deactivate(user)
+	
 
 /spell/changeling/horrorform/proc/activate(var/mob/living/carbon/human/user)
 	//scale health so they don't get free heals all the time
