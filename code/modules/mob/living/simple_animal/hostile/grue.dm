@@ -43,6 +43,8 @@
 	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
 	var/spawncount=0												//how many eggs laid by this grue have successfully hatched
 
+	var/number = 1 //Appends a number to the grue to keep it distinguishable, the compiler doesn't play nicely with putting rand(1, 1000) here so it goes in New()
+
 	var/busy=FALSE //busy attempting to lay an egg or eat
 
 	var/eattime= 3.5 SECONDS //how long it takes to eat someone
@@ -262,6 +264,7 @@
 	..()
 	add_language(LANGUAGE_GRUE)
 	default_language = all_languages[LANGUAGE_GRUE]
+	number = rand(1, 1000)
 	init_language = default_language
 	lifestage_updates() //update the grue's sprite and stats according to the current lifestage
 
@@ -348,6 +351,8 @@
 		add_spell(new /spell/aoe_turf/grue_drainlight/, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 
+	name = "[name] ([number])"
+	real_name = name
 	grue_stat_updates()
 
 //Grue vision
@@ -551,7 +556,7 @@
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
 		digest+=10 //add 10 life ticks (20 seconds) of increased healing + nutrition gain
-		
+
 		//Transfer any reagents inside the creature to the grue
 		E.reagents.trans_to(src, E.reagents.total_volume)
 

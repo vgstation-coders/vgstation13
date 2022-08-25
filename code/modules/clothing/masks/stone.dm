@@ -74,7 +74,7 @@
 		visible_message("<span class='info'>\The [src] crumbles into dust...</span>")
 	qdel(src)
 
-/obj/item/clothing/mask/stone/acidable()
+/obj/item/clothing/mask/stone/dissolvable()
 	return 0
 
 /obj/item/clothing/mask/stone/infinite //this mask can be used any number of times

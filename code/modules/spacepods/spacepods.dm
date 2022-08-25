@@ -619,7 +619,7 @@
 	new /obj/spacepod/random(get_turf(src))
 	qdel(src)
 
-/obj/spacepod/acidable()
+/obj/spacepod/dissolvable()
 	return 0
 
 /obj/spacepod/proc/move_into_pod(var/mob/living/L)

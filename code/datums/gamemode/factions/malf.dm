@@ -23,7 +23,7 @@
 	return header
 
 /datum/faction/malf/forgeObjectives()
-	AppendObjective(/datum/objective/nuclear)
+	AppendObjective(/datum/objective/takeover)
 
 /datum/faction/malf/stage(var/value)
 	if(value == FACTION_ENDGAME)
@@ -54,7 +54,7 @@
 				dynamic_mode.update_stillborn_rulesets()
 			return
 		if(M.apcs.len >= 3 && can_malf_ai_takeover())
-			AI_win_timeleft -= ((M.apcs.len / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer de-increments based on how many APCs are hacked.
+			AI_win_timeleft = max(0, AI_win_timeleft - ((M.apcs.len / 6) * SSticker.getLastTickerTimeDuration())) //Victory timer de-increments based on how many APCs are hacked.
 
 		if (AI_win_timeleft <= 0 && stage < MALF_CHOOSING_NUKE)
 			stage(MALF_CHOOSING_NUKE)
@@ -81,8 +81,10 @@
 
 	for(var/datum/role/malfAI/M in members)
 		to_chat(M.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
-You should now be able to interface with the nuclear fission device and detonate it.</span>"})
+You may now choose to detonate the nuclear device!</span>"})
 		M.takeover = TRUE
+		M.antag.DisplayUI("Malf")
+
 
 	return
 

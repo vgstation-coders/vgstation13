@@ -84,6 +84,10 @@
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/potato
 	output = /obj/item/weapon/reagent_containers/food/snacks/fries/processed
 
+/datum/food_processor_process/food/diamondcarrot
+	input = /obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond
+	output = /obj/item/weapon/reagent_containers/food/snacks/diamondfries/processed
+
 /datum/food_processor_process/food/carrot
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/carrot
 	output = /obj/item/weapon/reagent_containers/food/snacks/carrotfries/processed

@@ -123,8 +123,7 @@ var/global/disable_vents     = 0
 var/turf/space/Space_Tile = locate(/turf/space) // A space tile to reference when atmos wants to remove excess heat.
 
 //This was a define, but I changed it to a variable so it can be changed in-game.(kept the all-caps definition because... code...) -Errorage
-var/MAX_EXPLOSION_RANGE = 14
-//#define MAX_EXPLOSION_RANGE		14					// Defaults to 12 (was 8) -- TLE
+var/MAX_EXPLOSION_RANGE = 32
 
 #define HUMAN_STRIP_DELAY 40 //takes 40ds = 4s to strip someone.
 #define HUMAN_REVERSESTRIP_DELAY 20
@@ -694,10 +693,10 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LIVING 25		//This what players have by default.
 
 #define SEE_INVISIBLE_LEVEL_ONE 35	//Used by mobs under certain conditions.
-#define INVISIBILITY_LEVEL_ONE 35	//Used by infrared beams
+#define INVISIBILITY_LEVEL_ONE 35	//Used by infrared beams and turrets inside their covers
 
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
-#define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers and objects/spells
+#define INVISIBILITY_LEVEL_TWO 45	//Used objects/spells
 
 #define INVISIBILITY_OBSERVER 60	//Used by Ghosts.
 #define SEE_INVISIBLE_OBSERVER 60	//Used by Ghosts.

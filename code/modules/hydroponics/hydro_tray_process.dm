@@ -22,11 +22,13 @@
 	if(get_waterlevel() > WATERLEVEL_MAX/5 && get_nutrientlevel() > NUTRIENTLEVEL_MAX/5)
 		if(isnull(seed) && prob(5))
 			add_weedlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient)
+			update_icon_after_process = 1
 		else if(prob(2))
 			add_weedlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient)
+			update_icon_after_process = 1
 	// There's a chance for a weed explosion to happen if the weeds take over.
 	// Plants that are themselves weeds (weed_tolerance > 80) are unaffected.
-	if (get_weedlevel() == WEEDLEVEL_MAX && prob(10))
+	if (get_weedlevel() >= WEEDLEVEL_MAX && prob(10))
 		if(!seed || get_weedlevel() >= seed.weed_tolerance + 20)
 			weed_invasion()
 

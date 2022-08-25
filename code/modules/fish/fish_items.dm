@@ -1,23 +1,3 @@
-
-
-var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
-									"clownfish" = /obj/item/weapon/bananapeel/clownfish,
-									"shark" = /obj/item/weapon/fish/shark,
-									//"baby space carp" = /obj/item/weapon/fish/babycarp,
-									"catfish" = /obj/item/weapon/fish/catfish,
-									"feederfish" = /obj/item/weapon/reagent_containers/food/snacks/feederfish,
-									"salmon" = /obj/item/weapon/fish/salmon,
-									"shrimp" = /obj/item/weapon/reagent_containers/food/snacks/shrimp,
-									"electric eel" = /obj/item/weapon/fish/electric_eel,
-									"glofish" = /obj/item/weapon/fish/glofish,
-,									"sea devil" = /obj/item/fish_eggs/seadevil, //You can fish a sea devil straight back out and stick it in another tank.
-									"lobster" = /obj/item/weapon/lobster
-									)
-
-//////////////////////////////////////////////
-//			Aquarium Supplies				//
-//////////////////////////////////////////////
-
 /obj/item/weapon/fishtools/fish_egg_scoop
 	name = "fish egg scoop"
 	desc = "A small scoop to collect fish eggs with."
@@ -76,11 +56,6 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon = 'icons/obj/module.dmi'
 	icon_state = "cyborg_upgrade"
 	w_class = W_CLASS_SMALL
-
-
-//////////////////////////////////////////////
-//				Fish Items					//
-//////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/snacks/shrimp
 	name = "shrimp"

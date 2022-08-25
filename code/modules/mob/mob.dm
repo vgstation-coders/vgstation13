@@ -1910,8 +1910,8 @@ Use this proc preferably at the end of an equipment loadout
 			mind.heard_before[M.name] = M.mind
 			M.heard_by |= mind
 
-/mob/acidable()
-	return 1
+/mob/dissolvable()
+	return PACID
 
 /mob/proc/get_view_range()
 	if(client)

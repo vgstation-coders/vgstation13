@@ -436,6 +436,7 @@
 #include "code\datums\gamemode\objectives\pulsedemon.dm"
 #include "code\datums\gamemode\objectives\ramble.dm"
 #include "code\datums\gamemode\objectives\restore_order.dm"
+#include "code\datums\gamemode\objectives\takeover.dm"
 #include "code\datums\gamemode\objectives\sample.dm"
 #include "code\datums\gamemode\objectives\silence.dm"
 #include "code\datums\gamemode\objectives\spesstv.dm"

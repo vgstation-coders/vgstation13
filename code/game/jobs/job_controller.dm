@@ -310,8 +310,9 @@ var/global/datum/controller/occupations/job_master
 	var/datum/job/officer = job_master.GetJob("Security Officer")
 	var/datum/job/warden = job_master.GetJob("Warden")
 	var/datum/job/hos = job_master.GetJob("Head of Security")
+	var/datum/job/detective = job_master.GetJob("Detective")
 	var/datum/job/master_assistant = GetJob("Assistant")
-	count = (officer.current_positions + warden.current_positions + hos.current_positions)
+	count = (officer.current_positions + warden.current_positions + hos.current_positions + detective.current_positions)
 
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)

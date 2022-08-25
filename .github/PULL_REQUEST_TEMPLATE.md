@@ -21,4 +21,4 @@ You can self-label your PR. See https://ss13.moe/wiki/index.php/Guide_to_Writing
  * imageadd: Added new sprites.
  * imagedel: Removed old sprites.
  * experiment: Added an experimental/work-in-progress something.
-
+ * spellcheck: Fixed missing punctuation, typos or restructured a sentence.

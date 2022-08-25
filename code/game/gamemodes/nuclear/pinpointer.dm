@@ -31,7 +31,7 @@ var/list/pinpointerpinpointer_list = list()
 
 	..()
 
-/obj/item/weapon/pinpointer/acidable()
+/obj/item/weapon/pinpointer/dissolvable()
 	return FALSE
 
 /obj/item/weapon/pinpointer/attack_self()
