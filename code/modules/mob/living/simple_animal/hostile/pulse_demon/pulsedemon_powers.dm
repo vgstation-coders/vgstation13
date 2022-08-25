@@ -1,8 +1,8 @@
 /datum/pulse_demon_upgrade
 	var/ability_name = "Pulse demon upgrade"
-	var/ability_desc = "An upgrade for a pulse demon's inate abilities"
+	var/ability_desc = "An upgrade for a pulse demon's innate abilities"
 	var/mob/living/simple_animal/hostile/pulse_demon/host
-	var/condition = TRUE // So we know if we can display this in the menu
+	var/condition = FALSE // So we know if we can display this in the menu
 	var/upgrade_cost = 0
 
 /datum/pulse_demon_upgrade/New(mob/living/simple_animal/hostile/pulse_demon/PD)
@@ -27,17 +27,32 @@
 	host.update_glow()
 	return TRUE
 
+/datum/pulse_demon_upgrade/capacity
+	ability_name = "Increase Maximum Capacity"
+	ability_desc = "Increases the maximum amount of charge you can store. This is necessary for buying further upgrades."
+
+/datum/pulse_demon_upgrade/capacity/update_condition_and_cost()
+	condition = host.maxcharge < 10000000
+	upgrade_cost = host.maxcharge
+
+/datum/pulse_demon_upgrade/capacity/on_purchase()
+	if(..())
+		host.maxcharge = min(round(host.maxcharge * 1.5, 1), 10000000)
+		to_chat(host,"<span class='notice'>You can now store [host.maxcharge]W.</span>")
+		update_condition_and_cost()
+		host.determine_name()
+
 /datum/pulse_demon_upgrade/takeover
 	ability_name = "Faster takeover time"
 	ability_desc = "Allows hijacking of electronics in less time."
 
 /datum/pulse_demon_upgrade/takeover/update_condition_and_cost()
-	condition = host.takeover_time >= 1
+	condition = host.takeover_time > 1 //In seconds, the code exists in pulsedemon.dm
 	upgrade_cost = 10000 * (100 / host.takeover_time)
 
 /datum/pulse_demon_upgrade/takeover/on_purchase()
 	if(..())
-		host.takeover_time /= 1.5
+		host.takeover_time = max(host.takeover_time/1.5, 1)
 		to_chat(host,"<span class='notice'>You will now take [host.takeover_time] seconds to hijack machinery.</span>")
 		update_condition_and_cost()
 
@@ -46,12 +61,12 @@
 	ability_desc = "Allows more power absorbed per second."
 
 /datum/pulse_demon_upgrade/absorbing/update_condition_and_cost()
-	condition = host.charge_absorb_amount <= 600000
+	condition = host.charge_absorb_amount < 600000
 	upgrade_cost = host.charge_absorb_amount * 10
 
 /datum/pulse_demon_upgrade/absorbing/on_purchase()
 	if(..())
-		host.charge_absorb_amount *= 1.5
+		host.charge_absorb_amount = min(round(host.charge_absorb_amount * 1.5, 1), 600000)
 		to_chat(host,"<span class='notice'>You will now absorb [host.charge_absorb_amount]W per second while in a power source.</span>") //>watts per second
 		update_condition_and_cost()
 
@@ -60,12 +75,12 @@
 	ability_desc = "Allows less health to be drained when not on a power source."
 
 /datum/pulse_demon_upgrade/drain/update_condition_and_cost()
-	condition = host.health_drain_rate >= 1
+	condition = host.health_drain_rate > 1
 	upgrade_cost = 10000 * (100 / host.health_drain_rate)
 
 /datum/pulse_demon_upgrade/drain/on_purchase()
 	if(..())
-		host.health_drain_rate /= 1.5
+		host.health_drain_rate = max(round(host.health_drain_rate / 1.5, 1), 1)
 		to_chat(host,"<span class='notice'>You will now drain [host.health_drain_rate] health per second while not on a power source.</span>")
 		update_condition_and_cost()
 
@@ -74,12 +89,12 @@
 	ability_desc = "Allows more health to be regenerated when on a power source."
 
 /datum/pulse_demon_upgrade/regeneration/update_condition_and_cost()
-	condition = host.health_regen_rate <= host.maxHealth
+	condition = host.health_regen_rate < 200
 	upgrade_cost = host.health_regen_rate * 10000
 
 /datum/pulse_demon_upgrade/regeneration/on_purchase()
 	if(..())
-		host.health_regen_rate *= 1.5
+		host.health_regen_rate = min(round(host.health_regen_rate * 1.5, 1), 200)
 		to_chat(host,"<span class='notice'>You will now regenerate [host.health_regen_rate] health per second while on a power source.</span>")
 		update_condition_and_cost()
 
@@ -88,13 +103,13 @@
 	ability_desc = "Increases the limit of your current health."
 
 /datum/pulse_demon_upgrade/health/update_condition_and_cost()
-	condition = host.maxHealth <= 200
+	condition = host.maxHealth < 200
 	upgrade_cost = host.maxHealth * 1000
 
 /datum/pulse_demon_upgrade/health/on_purchase()
 	if(..())
-		host.maxHealth *= 1.5
-		host.health *= 1.5
+		host.maxHealth = min(round(host.maxHealth * 1.5, 1), 200)
+		host.health = min(round(host.health * 1.5, 1), 200)
 		to_chat(host,"<span class='notice'>Your maximum health is now [host.maxHealth].</span>")
 		update_condition_and_cost()
 
@@ -103,13 +118,13 @@
 	ability_desc = "Drains less power per second to regenerate health."
 
 /datum/pulse_demon_upgrade/regencost/update_condition_and_cost()
-	condition = host.amount_per_regen >= 1
+	condition = host.amount_per_regen > 1
 	upgrade_cost = 10000 * (100 / host.amount_per_regen)
 
 /datum/pulse_demon_upgrade/regencost/on_purchase()
 	if(..())
-		host.amount_per_regen /= 1.5
-		to_chat(host,"<span class='notice'>You will now drain [host.amount_per_regen] per second to regenerate health.</span>")
+		host.amount_per_regen = max(round(host.amount_per_regen / 1.5, 1), 1)
+		to_chat(host,"<span class='notice'>You will now drain [round(host.amount_per_regen, 1)] per second to regenerate health.</span>")
 		update_condition_and_cost()
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/powerMenu()
@@ -121,7 +136,7 @@
 		dat += "<B>Upgrades:</B><BR>"
 		for(var/datum/pulse_demon_upgrade/PDU in possible_upgrades)
 			if(!PDU.condition)
-				possible_upgrades.Remove(PDU)
+				dat += "[PDU.ability_name] (MAXED)<BR><"
 			else
 				dat += "<A href='byond://?src=\ref[src];upgrade=1;thing=\ref[PDU]''>[PDU.ability_name] ([PDU.upgrade_cost]W)</A><BR>"
 				if(show_desc)
@@ -133,9 +148,8 @@
 			if(!istype(S,/spell/pulse_demon/abilities))
 				var/icon/spellimg = icon('icons/mob/screen_spells.dmi', S.hud_state)
 				dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> <B>[S.name]</B> "
-				dat += "[S.can_improve(Sp_SPEED) || S.can_improve(Sp_POWER) ? "(Upgrade for [S.upgrade_cost]W) " : ""]"
-				dat += "[S.can_improve(Sp_SPEED) ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken</A>" : ""] "
-				dat += "[S.can_improve(Sp_POWER) ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower</A>" : ""]<BR>"
+				dat += "[S.can_improve(Sp_SPEED) ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken for [S.quicken_cost]W ([S.spell_levels[Sp_SPEED]]/[S.level_max[Sp_SPEED]])</A>" : "Quicken (MAXED)"] "
+				dat += "[S.can_improve(Sp_POWER) ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower for [S.empower_cost]W ([S.spell_levels[Sp_POWER]]/[S.level_max[Sp_POWER]])</A>" : "Empower (MAXED)"]<BR>"
 				if(show_desc)
 					dat += "<I>[S.desc]</I><BR>"
 		dat += "<HR>"
@@ -178,26 +192,26 @@
         if(PDS.spell_flags & NO_BUTTON)
             to_chat(src,"<span class='warning'>This cannot be cast, so cannot be quickened.</span>")
             return
-        if(PDS.upgrade_cost > charge)
+        if(PDS.quicken_cost > charge)
             to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
             return
         if(PDS.spell_levels[Sp_SPEED] >= PDS.level_max[Sp_SPEED])
             to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
             return
 
-        charge -= PDS.upgrade_cost
+        charge -= PDS.quicken_cost
         PDS.quicken_spell()
 
     if(href_list["empower"])
         var/spell/pulse_demon/PDS = locate(href_list["spell"])
-        if(PDS.upgrade_cost > charge)
+        if(PDS.empower_cost > charge)
             to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
             return
         if(PDS.spell_levels[Sp_POWER] >= PDS.level_max[Sp_POWER])
             to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
             return
 
-        charge -= PDS.upgrade_cost
+        charge -= PDS.empower_cost
         PDS.empower_spell()
 
     powerMenu()
@@ -211,7 +225,7 @@
 	user_type = USER_TYPE_PULSEDEMON
 	school = "pulse demon"
 	spell_flags = 0
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3)
+	level_max = list(Sp_TOTAL = 6, Sp_SPEED = 3, Sp_POWER = 3)
 
 	override_base = "pulsedemon"
 	hud_state = "pd_icon_base"
@@ -219,7 +233,8 @@
 	cooldown_min = 1 SECONDS
 	var/charge_cost = 0
 	var/purchase_cost = 0
-	var/upgrade_cost = 0
+	var/empower_cost = 0
+	var/quicken_cost = 0
 
 /spell/pulse_demon/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
@@ -228,49 +243,65 @@
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
 		if (PD.charge < charge_cost) // Custom charge handling
-			to_chat(PD, "<span class='warning'>You are too low on power, this spell needs a charge of [charge_cost] to cast.</span>")
+			to_chat(PD, "<span class='warning'>You are too low on power, this spell needs a charge of [charge_cost]W to cast.</span>")
 			return FALSE
 	else //only pulse demons allowed
 		message_admins("[user.real_name] has a pulse demon spell... and they aren't a pulse demon!")
+		to_chat(user, "<span class='warning'>You aren't supposed to have this!</span>")
+		user.remove_spell(src)
 		return FALSE
 
 /spell/pulse_demon/cast(var/list/targets, var/mob/living/carbon/human/user)
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-		PD.charge -= charge_cost // Removing chage here
+		PD.charge -= charge_cost // Removing charge here
 		if (charge_cost)
 			to_chat(PD, "<span class='warning'>You use [charge_cost] to cast [name].</span>")
 
 /spell/pulse_demon/empower_spell() // Makes spells use less charge
 	if(!can_improve(Sp_POWER))
 		return 0
-
 	spell_levels[Sp_POWER]++
-
-	name = initial(name)
-	switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
-		if(3)
-			. = "You have improved [name] into Frugal [name]."
-			name = "Frugal [name]"
-		if(2)
-			. = "You have improved [name] into Cheap [name]."
-			name = "Cheap [name]"
-		if(1)
-			. = "You have improved [name] into Renewable [name]."
-			name = "Renewable [name]"
-		if(0)
-			. = "You have improved [name] into Self-Sufficient [name]."
-			name = "Self-Sufficient [name]"
-
-	charge_cost /= 1.5
-	upgrade_cost *= 1.5
+	var/new_name = generate_name()
+	charge_cost = round(charge_cost/1.5, 1) // -33%/-56%/-70% charge cost
+	. = "You have improved [name] into [new_name]. It now costs [charge_cost]W to cast."
+	name = new_name
+	empower_cost = round(empower_cost * 1.5, 1)
 
 /spell/pulse_demon/quicken_spell()
-	. = ..()
-	if(.)
-		upgrade_cost *= 1.5
+	if(!can_improve(Sp_SPEED))
+		return 0
+	var/new_name = generate_name()
+	charge_max = round(charge_max/1.5, 1) // -33%/-56%/-70% cooldown reduction
+	. = "You have improved [name] into [new_name]. Its cooldown is now [round(charge_max/10, 1)] seconds."
+	name = new_name
+	quicken_cost = round(quicken_cost * 1.5, 1)
 
-/spell/pulse_demon/is_valid_target(var/atom/target)
+/spell/pulse_demon/proc/generate_name()
+	var/original_name = initial(name)
+	var/power_name = ""
+	var/power_level = level_max[Sp_POWER] - spell_levels[Sp_POWER]
+	var/speed_name = ""
+	var/speed_level = level_max[Sp_SPEED] - spell_levels[Sp_SPEED]
+	if(power_level == 0 && speed_level == 0) //Spell is maxed out
+		return "Perfected [original_name]"
+	switch(power_level) //We add an extra space so that the words are properly separated in the name regardless of upgrade status.
+		if(2)
+			power_name = "Cheap "
+		if(1)
+			power_name = "Renewable "
+		if(0)
+			power_name = "Self-Sufficient "
+	switch(speed_level)
+		if(2)
+			speed_name = "Speedy "
+		if(1)
+			speed_name = "Flashy "
+		if(0)
+			speed_name = "Lightning-Fast "
+	return "[speed_name][power_name][original_name]"
+
+/spell/pulse_demon/is_valid_target(var/atom/target, mob/user, options)
 	return 1
 
 // The menu itself
@@ -319,7 +350,8 @@
 	hud_state = "pd_cablehop"
 	charge_cost = 5000
 	purchase_cost = 15000
-	upgrade_cost = 10000
+	empower_cost = 10000
+	quicken_cost = 10000
 
 // Must be a cable or a clicked on turf with a cable
 /spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
@@ -327,8 +359,17 @@
 		return (target in options)
 	var/turf/T = get_turf(target)
 	if(T)
-		return ((target in view_or_range(range, user, selection_type)) && (locate(/obj/structure/cable) in T.contents))
-	return ((target in view_or_range(range, user, selection_type)) && istype(target,/obj/structure/cable))
+		if((target in view_or_range(range, user, selection_type)) && ((locate(/obj/structure/cable) in T.contents) ||  istype(target,/obj/structure/cable)))
+			var/obj/structure/cable/cable = locate() in target
+			var/datum/powernet/PN = cable.get_powernet()
+			if(PN) // We need actual power in the cable powernet to move
+				if(!PN.avail)
+					to_chat(user,"<span class='warning'>There is no power to jolt you across!</span>")
+				else
+					return TRUE
+	return FALSE
+
+
 
 /spell/pulse_demon/cable_zap/cast(list/targets, mob/user = usr)
 	var/turf/T = get_turf(user)
@@ -339,27 +380,22 @@
 		return
 	var/obj/item/projectile/beam/lightning/L = new /obj/item/projectile/beam/lightning(T)
 	var/datum/powernet/PN = cable.get_powernet()
-	if(PN) // We need actual power in the cable powernet to move
-		L.damage = PN.get_electrocute_damage()
-	if(L.damage <= 0)
-		qdel(L)
-		to_chat(user,"<span class='warning'>There is no power to jolt you across!</span>")
-	else
-		// Ride the lightning
-		playsound(target, pick(lightning_sound), 75, 1)
-		L.tang = adjustAngle(get_angle(target,T))
-		L.icon = midicon
-		L.icon_state = "[L.tang]"
-		L.firer = user
-		L.def_zone = LIMB_CHEST
-		L.original = target
-		L.current = T
-		L.starting = T
-		L.yo = target.y - T.y
-		L.xo = target.x - T.x
-		spawn L.process()
-		user.forceMove(target)
-		..()
+	L.damage = PN.get_electrocute_damage()
+	// Ride the lightning
+	playsound(target, pick(lightning_sound), 75, 1)
+	L.tang = adjustAngle(get_angle(target,T))
+	L.icon = midicon
+	L.icon_state = "[L.tang]"
+	L.firer = user
+	L.def_zone = LIMB_CHEST
+	L.original = target
+	L.current = T
+	L.starting = T
+	L.yo = target.y - T.y
+	L.xo = target.x - T.x
+	spawn L.process()
+	user.forceMove(target)
+	..()
 
 /spell/pulse_demon/emag
 	name = "Electromagnetic Tamper"
@@ -373,20 +409,28 @@
 	hud_state = "pd_emag"
 	charge_cost = 20000
 	purchase_cost = 200000
-	upgrade_cost = 50000
+	empower_cost = 50000
+	quicken_cost = 50000
 
-/spell/pulse_demon/emag/cast(list/targets, mob/user = usr)
-	var/atom/target = targets[1]
+
+/spell/pulse_demon/emag/is_valid_target(atom/target, mob/user)
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
 		if(PD.controlling_area == get_area(target))
-			target.emag_act(PD)
-			..()
-		// Only works in an APC
-		else if(istype(PD.loc,/obj/machinery/power/apc))
+			return TRUE
+		else if(istype(PD.current_power,/obj/machinery/power/apc))
 			to_chat(holder, "You can only cast this in the area you control!")
 		else
 			to_chat(holder, "You need to be in an APC for this!")
+	return FALSE
+
+
+/spell/pulse_demon/emag/cast(list/targets, mob/user = usr)
+	var/atom/target = targets[1]
+	var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+	target.emag_act(PD)
+	to_chat(user, "<span class='warning'>You attempt to tamper with \the [target]!</span>")
+	..()
 
 /spell/pulse_demon/emp
 	name = "Electromagnetic Pulse"
@@ -400,20 +444,26 @@
 	hud_state = "wiz_tech"
 	charge_cost = 10000
 	purchase_cost = 150000
-	upgrade_cost = 50000
+	empower_cost = 50000
+	quicken_cost = 50000
 
-/spell/pulse_demon/emp/cast(list/targets, mob/user = usr)
-	var/atom/target = targets[1]
+/spell/pulse_demon/emp/is_valid_target(atom/target, mob/user)
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
 		if(PD.controlling_area == get_area(target))
-			empulse(get_turf(target),1,1,0)
-			..()
+			return TRUE
 		// Only works in an APC
-		else if(istype(PD.loc,/obj/machinery/power/apc))
+		else if(istype(PD.current_power,/obj/machinery/power/apc))
 			to_chat(holder, "You can only cast this in the area you control!")
 		else
 			to_chat(holder, "You need to be in an APC for this!")
+	return FALSE
+
+/spell/pulse_demon/emp/cast(list/targets, mob/user = usr)
+	var/atom/target = targets[1]
+	empulse(get_turf(target),1,1,0)
+	to_chat(user, "<span class='warning'>You EMP \the [target]!</span>")
+	..()
 
 // Similar to malf one
 /spell/pulse_demon/overload_machine
@@ -428,32 +478,34 @@
 	hud_state = "overload"
 	charge_cost = 50000
 	purchase_cost = 300000
-	upgrade_cost = 100000
+	empower_cost = 100000
+	quicken_cost = 100000
 
-/spell/pulse_demon/overload_machine/is_valid_target(var/atom/target)
-	if(istype(target, /obj/item/device/radio/intercom))
-		return 1
-	if (istype(target, /obj/machinery))
-		var/obj/machinery/M = target
-		return M.can_overload()
-	else
-		to_chat(holder, "That is not a machine.")
-
-/spell/pulse_demon/overload_machine/cast(var/list/targets, mob/user)
-	var/obj/machinery/M = targets[1]
+/spell/pulse_demon/overload_machine/is_valid_target(var/atom/target, mob/user)
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-		if(PD.controlling_area == get_area(M))
-			M.visible_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>")
-			spawn(50)
-				explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
-				qdel(M)
-			..()
-		// Only works in an APC
-		else if(istype(PD.loc,/obj/machinery/power/apc))
+		if(PD.controlling_area == get_area(target))
+			if(istype(target, /obj/item/device/radio/intercom))
+				return TRUE
+			if (istype(target, /obj/machinery))
+				var/obj/machinery/M = target
+				return M.can_overload()
+			else
+				to_chat(holder, "That is not a machine.")
+		else if(istype(PD.current_power,/obj/machinery/power/apc))
 			to_chat(holder, "You can only cast this in the area you control!")
 		else
 			to_chat(holder, "You need to be in an APC for this!")
+	return FALSE
+
+
+/spell/pulse_demon/overload_machine/cast(var/list/targets, mob/user)
+	var/obj/machinery/M = targets[1]
+	M.visible_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>")
+	spawn(50)
+		explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
+		qdel(M)
+	..()
 
 /spell/pulse_demon/remote_hijack
 	name = "Remote Hijack"
@@ -467,7 +519,8 @@
 	hud_state = "pd_hijack"
 	charge_cost = 10000
 	purchase_cost = 100000
-	upgrade_cost = 20000
+	empower_cost = 20000
+	quicken_cost = 20000
 
 /spell/pulse_demon/remote_hijack/is_valid_target(var/atom/target)
 	if(istype(target, /obj/machinery/power/apc))
@@ -497,7 +550,8 @@
 	hud_state = "pd_drain"
 	charge_cost = 10000
 	purchase_cost = 50000
-	upgrade_cost = 10000
+	empower_cost = 10000
+	quicken_cost = 10000
 
 /spell/pulse_demon/remote_drain/is_valid_target(var/atom/target)
 	if(istype(target, /obj/machinery/power/apc) || istype(target, /obj/machinery/power/battery))
@@ -515,6 +569,7 @@
 		else if(istype(P,/obj/machinery/power/battery))
 			var/obj/machinery/power/battery/B = P
 			PD.suckBattery(B)
+		to_chat(user, "<span class='warning'>You absorb \the [P] for [PD.charge_absorb_amount]W!</span>")
 
 /spell/pulse_demon/sustaincharge
 	level_max = list(Sp_TOTAL = 3, Sp_POWER = 3) // Why would cooldown be here?
@@ -524,7 +579,7 @@
 	abbreviation = "SC"
 	desc = "Toggle that allows leaving cables for brief periods of time, while moving at a slower speed."
 	purchase_cost = 500000
-	upgrade_cost = 200000
+	empower_cost = 200000
 
 /spell/pulse_demon/sustaincharge/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast
@@ -537,6 +592,8 @@
 
 // Custom proc that instead allows less slowdown when off cable, while less than current max speed
 /spell/pulse_demon/sustaincharge/empower_spell()
+	if(!can_improve(Sp_POWER))
+		return 0
 	if(istype(usr,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = usr
 		spell_levels[Sp_POWER]++
@@ -544,18 +601,15 @@
 		var/temp = ""
 		name = initial(name)
 		switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
-			if(3)
-				temp = "You have improved [name] into Frugal [name]."
-				name = "Frugal [name]"
 			if(2)
-				temp = "You have improved [name] into Cheap [name]."
-				name = "Cheap [name]"
+				temp = "You have improved [name] into Ambulatory [name]."
+				name = "Ambulatory [name]"
 			if(1)
-				temp = "You have improved [name] into Renewable [name]."
-				name = "Renewable [name]"
+				temp = "You have improved [name] into Walking [name]."
+				name = "Walking [name]"
 			if(0)
-				temp = "You have improved [name] into Self-Sufficient [name]."
-				name = "Self-Sufficient [name]"
+				temp = "You have improved [name] into Running [name]."
+				name = "Running [name]"
 
 
 		if(PD.move_divide > 1)

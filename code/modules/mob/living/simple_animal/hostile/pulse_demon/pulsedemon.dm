@@ -1,7 +1,7 @@
 #define PULSEDEMON_APC_CHARGE_MULTIPLIER 2
 
 /mob/living/simple_animal/hostile/pulse_demon
-	name = "pulse demon"
+	name = "Pulse Demon"
 	desc = "A strange electrical apparition that lives in wires."
 	icon_state = "pulsedem"
 	icon_living = "pulsedem"
@@ -42,13 +42,14 @@
 	var/health_regen_rate = 5										//Health regenerated per tick when on power source
 	var/amount_per_regen = 100										//Amount of power used to regenerate health
 	var/charge_absorb_amount = 1000									//Amount of power sucked per tick
-	var/max_can_absorb = 10000										//Maximum amount that max charge can increase to
+//	var/max_can_absorb = 10000										//Maximum amount that max charge can increase to
 	var/takeover_time = 30											//Time spent taking over electronics
 	var/show_desc = FALSE											//For the ability menu
 	var/can_leave_cable = FALSE										//For the ability that lets you
 	var/draining = TRUE												//For draining power or not
 	var/move_divide = 4												//For slowing down of above
 	var/powerloss_alerted = FALSE									//Prevent spam notifying
+	var/health_lock = 0												//Goes down every tick, while this is on it prevents the Pulse Demon from regenerating
 
 	//TYPES
 	var/area/controlling_area										// Area controlled from an APC
@@ -121,7 +122,28 @@
 	if(statpanel("Status"))
 		stat(null, text("Charge stored: [charge]W"))
 		stat(null, text("Max charge stored: [maxcharge]W"))
-		
+		stat(null, text("Health: [health]/[maxHealth]"))
+		stat(null, text("Draining power sources: [draining ? "Yes" : "No"]"))
+		stat(null, text("Drain rate: [charge_absorb_amount]"))
+		stat(null, text("APC takeover time: [takeover_time] seconds"))
+
+/mob/living/simple_animal/hostile/pulse_demon/proc/determine_name()
+	switch(maxcharge)
+		if(0 to 50000)
+			name = "Pulse Demon"
+		if(50001 to 100000)
+			if(!name == "Pulse Fiend")
+				name = "Pulse Fiend"
+				to_chat(src, "<span class='info'>You have upgraded your maximum capacity enough to be considered a Pulse Fiend.</span>")
+		if(100001 to 1000000)
+			if(!name == "Pulse Devil")
+				name = "Pulse Devil"
+				to_chat(src, "<span class='info'>You have upgraded your maximum capacity enough to be considered a Pulse Devil.</span>")
+		if(1000001 to INFINITY)
+			if(!name == "Pulse Horror")
+				name = "Pulse Horror"
+				to_chat(src, "<span class='info'>You have upgraded your maximum capacity enough to be considered a Pulse Horror.</span>")
+
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_glow()
 	var/range = 2 + (log(2,charge+1)-log(2,50000)) / 2
 	range = max(range, 1.5)  //negative lights due to logarithms when?
@@ -138,18 +160,23 @@
 		to_chat(src, "You have lost power!")
 		powerloss_alerted = TRUE
 		//TODO add a sound
-	
+
 /mob/living/simple_animal/hostile/pulse_demon/proc/power_restored()
-	var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
-	if(health < maxHealth)
-		health += health_to_add
+	if(!health_lock)
+		var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
+		if(health < maxHealth)
+			health = min(maxHealth, health + health_to_add)
 	if(powerloss_alerted)
 		to_chat(src, "Power restored.")
 		powerloss_alerted = FALSE
 		//TODO add a sound
-	
+
 /mob/living/simple_animal/hostile/pulse_demon/Life()
 	update_glow()
+	if(health_lock)
+		health_lock = max(--health_lock, 0)
+		if(!health_lock) //Tell the Pulse Demon it's all good.
+			to_chat(src, "<span class='good'>You can regenerate again!</span>")
 	if(current_cable)
 		if(current_cable.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
 			power_lost()
@@ -289,7 +316,7 @@
 		playsound(loc, "[pick(emote_sound)]", 50, 1) // Play sound if in an intercom or not
 		var/radio = locate(/obj/item/device/radio) in loc
 		var/holopad = locate(/obj/machinery/hologram/holopad) in loc
-		if(!radio && !holopad) // if not in a machine you can speak out of, just sizzle 
+		if(!radio && !holopad) // if not in a machine you can speak out of, just sizzle
 			emote("me", MESSAGE_HEAR, "[pick(emote_hear)].") // Just do normal NPC emotes if not in them
 			return 1 // To stop speaking normally
 
@@ -321,18 +348,20 @@
 	if(!is_under_tile())
 		visible_message("<span class ='notice'>[user] attempted to taste \the [src], for no particular reason, and got rightfully burned.</span>")
 		shockMob(user)
-		
+
 /mob/living/simple_animal/hostile/pulse_demon/PreImpact(atom/movable/A, speed) //don't get hit by thrown stuff
 	return TRUE
-  
+
 /mob/living/simple_animal/hostile/pulse_demon/electrocute_act() //don't get killed by powercreeper vines
 	return
 
 // Our one weakness
 /mob/living/simple_animal/hostile/pulse_demon/emp_act(severity)
 	visible_message("<span class ='danger'>[src] [pick("fizzles","wails","flails")] in anguish!</span>")
+	to_chat(src, "<span class='warning'>You have been blasted by an EMP and cannot regenerate for a while!</span>")
 	playsound(get_turf(src),"pd_wail_sound",50,1)
-	health -= rand(20,25) / severity
+	health -= round(max(20, round(maxHealth/4)), 1) //Takes 1/4th of max health as damage if health is big enough
+	health_lock = 5 //EMP prevents the Pulse Demon from regenerating
 
 // Shock therapy
 /mob/living/simple_animal/hostile/pulse_demon/attack_hand(mob/living/carbon/human/M as mob)
@@ -412,13 +441,10 @@
 
 // Called in Life() per tick
 /mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
-	max_can_absorb = current_battery.outputlevel
-	var/amount_to_drain = charge_absorb_amount * 10
+	var/amount_to_drain = charge_absorb_amount
 	// Cap conditions
 	if(current_battery.charge <= amount_to_drain)
 		amount_to_drain = current_battery.charge
-	if(maxcharge <= max_can_absorb && charge >= maxcharge)
-		maxcharge = min(maxcharge + amount_to_drain, max_can_absorb)
 	var/amount_added = min((maxcharge-charge),amount_to_drain)
 	charge += amount_added
 	current_battery.charge -= amount_added
@@ -438,7 +464,7 @@
 	maxcharge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER //multiplier to balance the pitiful powercells in APCs
 	charge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER
 	current_apc.cell.use(amount_to_drain)
-	
+
 	// Add to stats if any
 	if(mind && mind.GetRole(PULSEDEMON))
 		var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
