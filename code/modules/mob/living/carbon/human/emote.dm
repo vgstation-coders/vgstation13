@@ -144,13 +144,13 @@
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
 
-	var/is_unconscious = H.InCritical()
-	if(H.stat == UNCONSCIOUS && !is_unconscious) //No farting while unconscious unless in critical condition
-		return FALSE
-	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? 20 SECONDS : 40 SECONDS) && !is_unconscious)
-		message = "strains, and nothing happens."
-		emote_type = EMOTE_VISIBLE
-		return ..()
+	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? 20 SECONDS : 40 SECONDS))
+		if(H.stat != UNCONSCIOUS)
+			message = "strains, and nothing happens."
+			emote_type = EMOTE_VISIBLE
+			return ..()
+		else
+			return FALSE //Already farted
 
 	for(var/mob/living/M in view(0))
 		if(M != H && M.loc == H.loc)
@@ -205,6 +205,7 @@
 						M.reagents.add_reagent(SPACE_DRUGS,rand(1,50))
 
 	if(M_SUPER_FART in H.mutations)
+		var/is_unconscious = H.InCritical()
 		if(!is_unconscious)
 			playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
 			H.visible_message("<span class = 'warning'><b>[H]</b> hunches down and grits their teeth!</span>")
