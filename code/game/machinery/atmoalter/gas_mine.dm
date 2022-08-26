@@ -7,14 +7,14 @@
 
 	starting_materials = null
 	w_type = NOT_RECYCLABLE
-
-	var/datum/gas_mixture/air_contents
-	var/datum/gas_mixture/pumping = new //used in transfering air around
-
+	active_power_usage = 5000	//uses excess power
+	var/datum/power_connection/consumer/cable/power_connection = null
 	var/on=1
 
+	var/datum/gas_mixture/air_contents
+	var/datum/gas_mixture/pumping //used in transfering air around
 	var/max_external_pressure=10000 // 10,000kPa ought to do it.
-	var/internal_pressure=4500 // Bottleneck
+	var/list/gases = list()
 
 	var/overlay_color = "#FFFFFF"
 
@@ -22,13 +22,28 @@
 
 /obj/machinery/atmospherics/miner/New()
 	..()
+	power_connection = new(src)
+	power_connection.power_priority = POWER_PRIORITY_EXCESS
+
+	pumping = new
 	air_contents = new
 	air_contents.volume = 1000
 	pumping.volume = 1000 //Same as above so copying works correctly
 	air_contents.temperature = T20C
-	AddAir()
-	air_contents.update_values()
+	update_rate(4500) //4500 kPa has been used as the bottleneck for miner output
 	update_icon()
+
+/obj/machinery/atmospherics/miner/proc/update_rate(var/internal_pressure)
+	//rate is in mols
+	var/rate = internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
+	//this is ugly
+	if(length(gases) == 1)
+		air_contents.adjust_multi(gases[1], rate)
+	else if(length(gases) == 2)
+		air_contents.adjust_multi(gases[1], gases[gases[1]]*rate, gases[2], gases[gases[2]]*rate)
+	else if(length(gases) == 3)
+		air_contents.adjust_multi(gases[1], gases[gases[1]]*rate, gases[2], gases[gases[2]]*rate, gases[3], gases[gases[3]]*rate)
+	air_contents.update_values()
 
 /obj/machinery/atmospherics/miner/examine(mob/user)
 	. = ..()
@@ -77,12 +92,8 @@
 	else
 		to_chat(user, "<span class='warning'>\The [src] needs to be bolted to the ground first.</span>")
 
-// Add air here.  DO NOT CALL UPDATE_VALUES OR UPDATE_ICON.
-/obj/machinery/atmospherics/miner/proc/AddAir()
-	return
-
 /obj/machinery/atmospherics/miner/update_icon()
-	src.overlays = 0
+	overlays = 0
 	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	if(on)
@@ -99,7 +110,10 @@
 	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	if (!on)
+		use_power = MACHINE_POWER_USE_IDLE
 		return
+	else
+		use_power = MACHINE_POWER_USE_ACTIVE
 
 	var/oldstat=stat
 	if(!istype(loc,/turf/simulated))
@@ -111,6 +125,16 @@
 	if(stat & BROKEN)
 		return
 
+/*
+	var/datum/powernet/PN = power_connection.get_powernet()
+	if(!PN)
+		return
+	var/power_load = Ceiling(0.5 * power_connection.get_surplus())	//scale load by arbitrary 50% surplus
+	to_chat(world, "Power load: [power_load]")
+	active_power_usage = power_load
+	update_rate(Ceiling(0.1 * power_load))		//scale mol output by arbitrary 10% power load
+*/
+	//gas-related
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/environment_pressure = environment.return_pressure()
 
@@ -121,79 +145,44 @@
 	// External pressure bound
 	pressure_delta = min(pressure_delta, (max_external_pressure - environment_pressure))
 
-	// Internal pressure bound (screwed up calc, won't be used anyway)
-	//pressure_delta = min(pressure_delta, (internal_pressure - environment_pressure))
-
 	if(pressure_delta > 0.1)
 		var/transfer_moles = pressure_delta * CELL_VOLUME / (pumping.temperature * R_IDEAL_GAS_EQUATION)
-
 		var/datum/gas_mixture/removed = pumping.remove(transfer_moles)
-
 		loc.assume_air(removed)
-
-//Controls how fast gas comes out (in total)
-/obj/machinery/atmospherics/miner/proc/AirRate()
-  return internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
-
 
 /obj/machinery/atmospherics/miner/sleeping_agent
 	name = "\improper N2O Gas Miner"
 	overlay_color = "#FFCCCC"
-
-/obj/machinery/atmospherics/miner/sleeping_agent/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_SLEEPING, rate)
-
+	gases = list(GAS_SLEEPING = 1)
 
 /obj/machinery/atmospherics/miner/nitrogen
 	name = "\improper N2 Gas Miner"
 	overlay_color = "#CCFFCC"
-
-/obj/machinery/atmospherics/miner/nitrogen/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_NITROGEN, rate)
-
+	gases = list(GAS_NITROGEN = 1)
 
 /obj/machinery/atmospherics/miner/oxygen
 	name = "\improper O2 Gas Miner"
 	overlay_color = "#007FFF"
+	gases = list(GAS_OXYGEN = 1)
 
-/obj/machinery/atmospherics/miner/oxygen/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_OXYGEN, rate)
-
-
-/obj/machinery/atmospherics/miner/toxins
+/obj/machinery/atmospherics/miner/plasma
 	name = "\improper Plasma Gas Miner"
 	overlay_color = "#FF0000"
-
-/obj/machinery/atmospherics/miner/toxins/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_PLASMA, rate)
-
+	gases = list(GAS_PLASMA = 1)
 
 /obj/machinery/atmospherics/miner/carbon_dioxide
 	name = "\improper CO2 Gas Miner"
 	overlay_color = "#CDCDCD"
-
-/obj/machinery/atmospherics/miner/carbon_dioxide/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_CARBON, rate)
-
+	gases = list(GAS_CARBON = 1)
 
 /obj/machinery/atmospherics/miner/air
 	name = "\improper Air Miner"
 	desc = "You fucking <em>cheater</em>."
 	overlay_color = "#70DBDB"
-
+	gases = list(GAS_OXYGEN = 0.2, GAS_NITROGEN = 0.8)
 	on = 0
 
-/obj/machinery/atmospherics/miner/air/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_OXYGEN, 0.2*rate,
-	GAS_NITROGEN, 0.8*rate)
-
-
+/*
 /obj/machinery/atmospherics/miner/gas_giant
 	name = "\improper Gas Miner"
 
@@ -246,3 +235,4 @@
 	if(istype(current_zlevel,/datum/zLevel/hyperspace))
 		return ..()
 	return 0
+*/
