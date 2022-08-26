@@ -307,6 +307,19 @@ var/list/animals_with_wings = list(
 	key_shorthand = "tre"
 	message = "trembles in fear!"
 
+/datum/emote/living/slap
+	key = "slap"
+	key_third_person = "slaps"
+	restraint_check = TRUE
+
+/datum/emote/living/slap/run_emote(mob/user, params)
+	. = ..()
+	var/obj/item/slapper/N = new(user)
+	if(user.put_in_hands(N))
+		to_chat(user, "<span class='notice'>You ready your slapping hand.</span>")
+	else
+		to_chat(user, "<span class='warning'>You're incapable of slapping in your current state.</span>")
+
 /datum/emote/living/custom
 	key = "custom"
 	message = null
