@@ -755,11 +755,20 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/grey_uniform
 	name = "Mothership uniforms"
 	var/laborer = list(/obj/item/clothing/under/grey/grey_worker,
-					/obj/item/clothing/under/grey/grey_worker)
+					/obj/item/clothing/under/grey/grey_worker,
+					/obj/item/clothing/shoes/jackboots/mothership,
+					/obj/item/clothing/shoes/jackboots/mothership)
 	var/scientist = list(/obj/item/clothing/under/grey/grey_researcher,
-					/obj/item/clothing/suit/storage/labcoat/mothership)
+					/obj/item/clothing/suit/storage/labcoat/mothership,
+					/obj/item/clothing/shoes/jackboots/mothership)
 	var/explorer = list(/obj/item/clothing/under/grey/grey_scout,
-					/obj/item/clothing/under/grey/grey_scout)
+					/obj/item/clothing/under/grey/grey_scout,
+					/obj/item/clothing/shoes/jackboots/mothership,
+					/obj/item/clothing/shoes/jackboots/mothership)
+	var/soldier = list(/obj/item/clothing/under/grey/grey_soldier,
+					/obj/item/clothing/under/grey/grey_soldier,
+					/obj/item/clothing/shoes/jackboots/mothership,
+					/obj/item/clothing/shoes/jackboots/mothership)
 	cost = 50
 	containertype = /obj/structure/closet/crate/ayybin
 	containername = "mothership uniform bin"
@@ -1078,10 +1087,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "MDF Surplus standard armor"
 	contains = list(/obj/item/clothing/suit/armor/mothership,
 					/obj/item/clothing/suit/armor/mothership,
+					/obj/item/clothing/suit/armor/mothership,
 					/obj/item/clothing/head/helmet/mothership,
 					/obj/item/clothing/head/helmet/mothership,
-					/obj/item/clothing/under/grey/grey_soldier,
-					/obj/item/clothing/under/grey/grey_soldier)
+					/obj/item/clothing/head/helmet/mothership)
 	cost = 40
 	containertype = /obj/structure/closet/crate/secure/ayybin
 	containername = "MDF standard armor bin"
