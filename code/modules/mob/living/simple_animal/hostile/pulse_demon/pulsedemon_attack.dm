@@ -207,16 +207,18 @@
 	user.change_sight(adding = vision_flags)
 
 /obj/machinery/hologram/holopad/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-//	if(user.loc != src.loc)
-//		user.forceMove(src.loc)
-	attack_hand(user)
+	if(user.loc != src.loc)
+		user.forceMove(src.loc)
+	else
+		attack_hand(user)
 
 // Talk ability handled elsewhere
 /obj/item/device/radio/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
 	//you can jump to station bounced radios too, not just wall intercoms
-//	if(user.loc != src.loc)
-//		user.forceMove(src.loc)
-	attack_ai(user)
+	if(user.loc != src.loc)
+		user.forceMove(src.loc)
+	else
+		attack_ai(user)
 
 // Lets you take over a weapon to fire
 /obj/machinery/recharger/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
