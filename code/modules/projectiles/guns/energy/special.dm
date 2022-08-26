@@ -16,6 +16,45 @@
 /obj/item/weapon/gun/energy/ionrifle/emp_act(severity)
 	return
 
+/obj/item/weapon/gun/energy/ionrifle/attackby(var/obj/item/A as obj, mob/user as mob)
+	..()
+	A.update_icon()
+	update_icon()
+	if(istype(A, /obj/item/tool/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
+		if(prob(25))
+			afterattack(user, user)	//will this work?
+			afterattack(user, user)	//it will. we call it twice, for twice the FUN
+			playsound(user, fire_sound, 50, 1)
+			user.visible_message("<span class='danger'>The [src] goes off!</span>", "<span class='danger'>The [src] goes off in your face!</span>")
+			return
+		if(do_after(user, src, 30))	//STEALTHY EYYYYY
+			var/obj/item/weapon/gun/energy/ionrifle/sawnoff/itssmallnow = new /obj/item/weapon/gun/energy/ionrifle/sawnoff(src.loc)
+			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
+			if(istype(user, /mob/living/carbon/human) && src.loc == user)
+				var/mob/living/carbon/human/H = user
+				H.drop_item(src, force_drop = 1)
+				H.put_in_hands(itssmallnow)
+				H.update_inv_hands()
+			src.transfer_fingerprints_to(itssmallnow)
+			qdel(src)
+
+/obj/item/weapon/gun/energy/ionrifle/sawnoff
+	name = "sawn-off ion rifle"
+	desc = "A modified ion weapon designed to unreliably disable mechanical threats"
+	icon_state = "sawnionrifle"
+	w_class = W_CLASS_MEDIUM
+	slot_flags = SLOT_BELT
+
+/obj/item/weapon/gun/energy/ionrifle/sawnoff/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+	if(prob(90)) //fails to fire and goes off in our hands, otherwise normal shooty
+		afterattack(user, user)	//will this work?
+		afterattack(user, user)	//it will. we call it twice, for twice the FUN
+		playsound(user, fire_sound, 50, 1)
+		user.visible_message("<span class='danger'>The [src] goes off!</span>", "<span class='danger'>The [src] goes off in your face!</span>")
+		return
+	..()
+
 /obj/item/weapon/gun/energy/ionrifle/ioncarbine
 	name = "ion carbine"
 	desc = "A stopgap ion weapon designed to disable smaller mechanical threats."
@@ -25,6 +64,10 @@
 	cell_type = "/obj/item/weapon/cell/crap/better"
 	projectile_type = "/obj/item/projectile/ion/small"
 
+/obj/item/weapon/gun/energy/ionrifle/ioncarbine/attackby(var/obj/item/A as obj, mob/user as mob)
+	if(istype(A, /obj/item/tool/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+		return //hacky but whatever, we only want this on base types
+	..()
 /obj/item/weapon/gun/energy/ionrifle/ioncarbine/ionpistol
 	name = "ion pistol"
 	desc = "A small, low capacity ion weapon designed to disrupt smaller mechanical threats."
