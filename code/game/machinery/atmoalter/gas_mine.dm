@@ -140,7 +140,6 @@
 
 	if(power_surplus > 0.55)
 		power_load += 1000
-		to_chat(world, "Power load: [power_load]")
 		active_power_usage = power_load
 		update_rate(Ceiling(0.1 * power_load))		//scale mol output by arbitrary 10% power load
 	else if (power_surplus < 0.45 && power_load > 0)
