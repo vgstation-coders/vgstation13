@@ -626,18 +626,18 @@
 	icon_state = "latexballon"
 	force = 2
 	throwforce = 0
-	flags_1 = DROPDEL_1 | ABSTRACT_1
 	attack_verb = list("slapped")
 	hitsound = 'sound/effects/snap.ogg'
 
 /obj/item/slapper/attack(mob/M, mob/living/carbon/human/user)
-	if(user.a_intent != INTENT_HARM)
-		var/aim_for_face = ((user.zone_selected == "mouth") || (user.zone_selected == "eyes") || (user.zone_selected == "head"))
-		user.do_attack_animation(M)
-		playsound(M, 'sound/weapons/slap.ogg', 50, 1, -1)
-		user.visible_message("<span class='danger'>[user] slaps [M] in the [(aim_for_face)?"face":user.zone_selected]!</span>",
- 		"<span class='notice'>You slap [M] in the [(aim_for_face)?"face":user.zone_selected]! </span>",\
+	if(user.a_intent == I_HURT)
+		playsound(M, 'sound/effects/snap.ogg', 50, 1, -1)
+		user.visible_message("<span class='danger'>[user] slaps [M] in the face!</span>",
+ 		"<span class='notice'>You slap [M] in the face! </span>",\
  		"You hear a slap.")
 		return
 	else
 		..()
+
+/obj/item/slapper/dropped()
+	qdel(src)
