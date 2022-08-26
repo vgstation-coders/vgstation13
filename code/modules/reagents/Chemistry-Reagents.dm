@@ -2615,7 +2615,7 @@
 			if(!T.seed.immutable && prob(chance))
 				T.check_for_divergence(1)
 				T.seed.potency++
-				
+
 
 /datum/reagent/toxin/plantbgone
 	name = "Plant-B-Gone"
@@ -3543,6 +3543,19 @@ var/procizine_tolerance = 0
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
+/datum/reagent/hyperzine/pcp
+	name = "Liquid PCP"
+	id = LIQUIDPCP
+	description = "I didn't even know it came in liquid form!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#7a6d23" //rgb: 200, 165, 220
+
+/datum/reagent/hyperzine/pcp/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.hallucination += 10
+
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
 	id = HYPOZINE
@@ -4447,7 +4460,7 @@ var/procizine_tolerance = 0
 				chance = unmix(T.seed.lifespan, 15, 125)*20
 				if(prob(chance))
 					T.check_for_divergence(1)
-					T.seed.endurance++					
+					T.seed.endurance++
 
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
@@ -9710,7 +9723,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 0.05
 	custom_metabolism = 0.01
 	var/spookvision = FALSE
-	
+
 /datum/reagent/ectoplasm/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
