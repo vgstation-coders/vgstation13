@@ -92,7 +92,7 @@
 
 /obj/item/device/soundsynth/examine(mob/user)
 	..()
-	if(emagged)
+	if(emagged && user.is_holding_item(src)) 
 		to_chat(user, "<span class='warning'>ERR%_m(mo4y corr?pt+d</span>")
 		
 /obj/item/device/soundsynth/AltClick()
