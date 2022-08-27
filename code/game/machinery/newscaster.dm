@@ -154,7 +154,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 	var/scanned_user = "Unknown" //Will contain the name of the person who currently uses the newscaster
 	var/mob/masterController = null // Mob with control over the newscaster.
-	var/hdln = "" //Feed headline
+	var/hdln = ""; //Feed headline
 	var/msg = ""; //Feed message
 	var/photo = null
 	var/channel_name = ""; //the feed channel which will be receiving the feed, or being created
@@ -342,7 +342,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat += {"Creating new Feed Message...
 					<HR><B><A href='?src=\ref[src];set_channel_receiving=1'>Receiving Channel</A>:</B> [channel_name]<BR>
 					<B>Message Author:</B>[author_text]<BR>
-					<B><A href='?src=\ref[src];set_new_headline=1'>Headline</A>:</B> [msg] <BR>
+					<B><A href='?src=\ref[src];set_new_headline=1'>Headline</A>:</B> [hdln] <BR>
 					<B><A href='?src=\ref[src];set_new_message=1'>Message Body</A>:</B> [msg] <BR>"}
 
 				dat += AttachPhotoButton(user)
@@ -724,7 +724,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					newMsg.author = "Anonymous"
 				else
 					newMsg.author = scanned_user
-				newMSG.headline = hdln
+				newMsg.headline = hdln
 				newMsg.body = msg
 				newMsg.author_log = key_name(usr)
 				if(photo)
