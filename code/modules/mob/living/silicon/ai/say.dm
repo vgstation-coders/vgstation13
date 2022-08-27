@@ -128,7 +128,7 @@ var/VOX_AVAILABLE_VOICES = list(
 
 	var/dat = list("Here, you can type a message that will be played to the entire z-level.<br> \
 	<fieldset><legend>Rules</legend><ul>\
-	<li>You can only say 30 words for every announcement.</li>\
+	<li>You can only say 31 words for every announcement.</li>\
 	<li>Do not use punctuation as you would normally: if you want a pause you can use the full stop and comma characters by separating them with spaces, like so: 'Alpha . Test , Bravo'.</li>\
 	<li>Special sound effects are available, and start with a &quot;_&quot; prefix. e.g. _honk</li></ul>\
 	<span class='bad'><strong>WARNING:</strong> Misuse of the announcement system <em>will</em> get you job banned.</span>\
@@ -211,14 +211,14 @@ var/VOX_AVAILABLE_VOICES = list(
 		return
 
 	var/exception = FALSE
-	if (message == "voxtest5")// Not sure how many words exactly it's counting in that one but more than 30 for sure and the decimal might also hinder the count
+	if (message == "voxtest5")// Not sure how many words exactly it's counting in that one but more than 31 for sure and the decimal might also hinder the count
 		exception = TRUE
 
 	var/list/words = splittext(trim(message), " ")
 	var/list/incorrect_words = list()
 
-	if(words.len > 30)
-		words.len = 30
+	if(words.len > 31)
+		words.len = 31
 
 	var/total_word_len=0
 	for(var/word in words)
