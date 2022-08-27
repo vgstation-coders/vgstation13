@@ -27,10 +27,14 @@
 
 /datum/feed_message
 	var/author =""
+	var/headline = ""
 	var/body =""
 	//var/parent_channel
-	var/backup_body =""
+	
+	//Backup variables are used to store the details of the message if it's redacted so it can be unredacted safely
 	var/backup_author =""
+	var/backup_headline = ""
+	var/backup_body =""
 	var/is_admin_message = FALSE
 
 	var/author_log // Log of the person who did it.
@@ -39,7 +43,7 @@
 	var/icon/backup_img
 	var/icon/img_pda = null
 	var/icon/backup_img_pda
-	var/img_info = "" //Stuff like "You can see Honkers on the photo. Honkins looks hurt..."
+	var/img_info = "" //Stuff like "You can see Honkers on the photo. Honkers looks hurt..."
 
 /datum/feed_channel
 	var/channel_name=""
@@ -55,8 +59,10 @@
 /datum/feed_message/proc/clear()
 	author = ""
 	body = ""
+	headline = ""
 	backup_body = ""
 	backup_author = ""
+	backup_headline = ""
 	img = null
 	backup_img = null
 	img_pda = null
@@ -76,6 +82,7 @@
 	var/datum/feed_message/copy = new()
 	copy.author = author
 	copy.body = body
+	copy.headline = headline
 	copy.author_log = author_log
 	copy.img = icon(img)
 	copy.img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28))//grayscale
@@ -147,6 +154,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 	var/scanned_user = "Unknown" //Will contain the name of the person who currently uses the newscaster
 	var/mob/masterController = null // Mob with control over the newscaster.
+	var/hdln = "" //Feed headline
 	var/msg = ""; //Feed message
 	var/photo = null
 	var/channel_name = ""; //the feed channel which will be receiving the feed, or being created
@@ -334,6 +342,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat += {"Creating new Feed Message...
 					<HR><B><A href='?src=\ref[src];set_channel_receiving=1'>Receiving Channel</A>:</B> [channel_name]<BR>
 					<B>Message Author:</B>[author_text]<BR>
+					<B><A href='?src=\ref[src];set_new_headline=1'>Headline</A>:</B> [msg] <BR>
 					<B><A href='?src=\ref[src];set_new_message=1'>Message Body</A>:</B> [msg] <BR>"}
 
 				dat += AttachPhotoButton(user)
@@ -406,7 +415,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/i = 0
 						for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
 							i++
-							dat+="-[MESSAGE.body] <BR>"
+							dat+="[MESSAGE.headline] -[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 
@@ -450,7 +459,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				else
 					for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
 
-						dat += {"-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>
+						dat += {"[MESSAGE.headline] -[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>
 							<FONT SIZE=2><A href='?src=\ref[src];censor_channel_story_body=\ref[MESSAGE]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=\ref[src];censor_channel_story_author=\ref[MESSAGE]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR>"}
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_CENSORSHIP_MENU]'>Back</A>"
 			if(NEWSCASTER_D_NOTICE_CHANNEL)
@@ -466,7 +475,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						dat+="<I>No feed messages found in channel...</I><BR>"
 					else
 						for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
-							dat+="-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
+							dat+="[MESSAGE.headline] -[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_D_NOTICE_MENU]'>Back</A>"
 			if(NEWSCASTER_WANTED)
@@ -632,6 +641,17 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					available_channels += F.channel_name
 			channel_name = input(usr, "Choose receiving Feed Channel", "Network Channel Handler") in available_channels
 			updateUsrDialog()
+		
+		else if(href_list["set_new_headline"])
+			if(isobserver(usr) && !canGhostWrite(usr,src,"set the headline of a new feed story"))
+				to_chat(usr, "<span class='warning'>You can't do that.</span>")
+				return
+			if(isnull(hdln))
+				hdln = ""
+			hdln = stripped_input(usr, "Write your story headline", "Network Channel Handler", hdln)
+			while (findtext(hdln," ") == 1)
+				hdln = copytext(msg,2,length(hdln)+1)
+			updateUsrDialog()
 
 		else if(href_list["set_new_message"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"set the message of a new feed story"))
@@ -704,6 +724,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					newMsg.author = "Anonymous"
 				else
 					newMsg.author = scanned_user
+				newMSG.headline = hdln
 				newMsg.body = msg
 				newMsg.author_log = key_name(usr)
 				if(photo)
@@ -936,9 +957,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				MSG.img = MSG.backup_img
 				MSG.img_pda = MSG.backup_img_pda
 			if(MSG.body != "<B>\[REDACTED\]</B>")
+				MSG.backup_headline = MSG.headline
+				MSG.headline = ""
 				MSG.backup_body = MSG.body
 				MSG.body = "<B>\[REDACTED\]</B>"
 			else
+				MSG.headline = MSG.backup_headline
 				MSG.body = MSG.backup_body
 			updateUsrDialog()
 
@@ -1196,7 +1220,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/i = 0
 						for(var/datum/feed_message/MESSAGE in C.messages)
 							i++
-							dat+="-[MESSAGE.body] <BR>"
+							dat+="[MESSAGE.headline] -[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								user << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 								dat+="<img src='tmp_photo[i].png' width = '180'><BR>"
