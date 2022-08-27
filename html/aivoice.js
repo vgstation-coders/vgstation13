@@ -1,6 +1,6 @@
 // I have javascript, especially this broke-ass edition of it. - N3X
 
-const MAX_WORDS = 31;
+const MAX_WORDS = 32;
 
 let $errPane = null;
 let $resetButton = null;
