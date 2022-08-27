@@ -313,7 +313,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						else
 							dat+="<B><A href='?src=\ref[src];show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR></B>"
 
-				dat += {"<A href='?src=\ref[src];refresh=1'>Refresh</A>
+				dat += {"<HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
 					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Back</A>"}
 			if(NEWSCASTER_NEW_CHANNEL)
 
@@ -410,17 +410,17 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						No further feed story additions are allowed while the D-Notice is in effect.</FONT><BR><BR>"}
 				else
 					if( isemptylist(viewing_channel.messages) )
-						dat+="<I>No feed messages found in channel...</I><BR>"
+						dat+="<I>No feed messages found in channel...</I><BR><HR>"
 					else
 						var/i = 0
 						for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
 							i++
-							dat+="<b><u>[MESSAGE.headline]</u></b><br>[MESSAGE.body] <BR>"
+							dat+="<b><u>[MESSAGE.headline]</u></b><BR>[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 
-								dat+="<br><a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR><BR>"
-							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><HR>"
+								dat+="<BR><a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR>"
+							dat+="<BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><HR>"
 
 				dat += {"<A href='?src=\ref[src];refresh=1'>Refresh</A>
 					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_CHANNEL_LIST]'>Back</A>"}
@@ -455,12 +455,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					<FONT SIZE=2><A href='?src=\ref[src];censor_channel_name=\ref[viewing_channel]'>[(viewing_channel.channel_name=="\[REDACTED\]") ? ("Undo Title censorship") : ("Censor channel Title")]</A>
 					<A href='?src=\ref[src];censor_channel_author=\ref[viewing_channel]'>[(viewing_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>"}
 				if( isemptylist(viewing_channel.messages) )
-					dat+="<I>No feed messages found in channel...</I><BR>"
+					dat+="<I>No feed messages found in channel...</I><BR><HR>"
 				else
 					for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
 
-						dat += {"<b><u>[MESSAGE.headline]</u></b><br>[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><hr>
-							<FONT SIZE=2><A href='?src=\ref[src];censor_channel_story_body=\ref[MESSAGE]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=\ref[src];censor_channel_story_author=\ref[MESSAGE]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR>"}
+						dat += {"<b><u>[MESSAGE.headline]</u></b><BR>[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>
+							<FONT SIZE=2><A href='?src=\ref[src];censor_channel_story_body=\ref[MESSAGE]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=\ref[src];censor_channel_story_author=\ref[MESSAGE]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR><HR>"}
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_CENSORSHIP_MENU]'>Back</A>"
 			if(NEWSCASTER_D_NOTICE_CHANNEL)
 
@@ -472,10 +472,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						No further feed story additions are allowed while the D-Notice is in effect.</FONT><BR><BR>"}
 				else
 					if( isemptylist(viewing_channel.messages) )
-						dat+="<I>No feed messages found in channel...</I><BR>"
+						dat+="<I>No feed messages found in channel...</I><BR><HR>"
 					else
 						for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
-							dat+="<b><u>[MESSAGE.headline]</u></b><br>[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><hr>"
+							dat+="<b><u>[MESSAGE.headline]</u></b><BR>[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><HR>"
 
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_D_NOTICE_MENU]'>Back</A>"
 			if(NEWSCASTER_WANTED)
@@ -1220,11 +1220,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/i = 0
 						for(var/datum/feed_message/MESSAGE in C.messages)
 							i++
-							dat+="<b><u>[MESSAGE.headline]</u></b><br>[MESSAGE.body] <BR>"
+							dat+="<b><u>[MESSAGE.headline]</u></b><BR>[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								user << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
-								dat+="<br><img src='tmp_photo[i].png' width = '180'><BR>"
-							dat+="<FONT SIZE=1>\[Story by <b>[MESSAGE.author]</b>\]</FONT><BR><hr>"
+								dat+="<BR><img src='tmp_photo[i].png' width = '180'><BR>"
+							dat+="<BR><FONT SIZE=1>\[Story by <b>[MESSAGE.author]</b>\]</FONT><BR><HR>"
 						dat+="</ul>"
 				if(scribble_page==curr_page)
 					dat+="<BR><I>There is a small scribble near the end of this page... It reads: \"[scribble]\"</I>"
