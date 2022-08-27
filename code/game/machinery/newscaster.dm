@@ -415,7 +415,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/i = 0
 						for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
 							i++
-							dat+="[MESSAGE.headline] -[MESSAGE.body] <BR>"
+							dat+="<b><u>[MESSAGE.headline]</u></b> - [MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 
@@ -459,7 +459,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				else
 					for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
 
-						dat += {"[MESSAGE.headline] -[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>
+						dat += {"<b><u>[MESSAGE.headline]</u></b> - [MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>
 							<FONT SIZE=2><A href='?src=\ref[src];censor_channel_story_body=\ref[MESSAGE]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=\ref[src];censor_channel_story_author=\ref[MESSAGE]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR>"}
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_CENSORSHIP_MENU]'>Back</A>"
 			if(NEWSCASTER_D_NOTICE_CHANNEL)
@@ -475,7 +475,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						dat+="<I>No feed messages found in channel...</I><BR>"
 					else
 						for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
-							dat+="[MESSAGE.headline] -[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
+							dat+="<b><u>[MESSAGE.headline]</u></b> - [MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_D_NOTICE_MENU]'>Back</A>"
 			if(NEWSCASTER_WANTED)
@@ -648,9 +648,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				return
 			if(isnull(hdln))
 				hdln = ""
-			hdln = stripped_input(usr, "Write your story headline", "Network Channel Handler", hdln)
+			hdln = stripped_input(usr, "Write your story headline", "Network Channel Handler", hdln, 64)
 			while (findtext(hdln," ") == 1)
-				hdln = copytext(msg,2,length(hdln)+1)
+				hdln = copytext(hdln,2,length(hdln)+1)
 			updateUsrDialog()
 
 		else if(href_list["set_new_message"])
@@ -744,11 +744,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				screen = NEWSCASTER_MENU
 				log_game("[key_name(usr)] posted the message [newMsg.body] as [newMsg.author].")
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
-					NEWSCASTER.newsAlert(channel_name)
+					NEWSCASTER.newsAlert(channel_name, newMsg.headline)
 				for(var/obj/item/device/pda/PDA in PDAs)
 					var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 					if(reader)
-						reader.newsAlert(channel_name)
+						reader.newsAlert(channel_name,newMsg.headline)
 
 			updateUsrDialog()
 
@@ -1220,7 +1220,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/i = 0
 						for(var/datum/feed_message/MESSAGE in C.messages)
 							i++
-							dat+="[MESSAGE.headline] -[MESSAGE.body] <BR>"
+							dat+="<b><u>[MESSAGE.headline]</u></b> - [MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								user << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 								dat+="<img src='tmp_photo[i].png' width = '180'><BR>"
@@ -1363,10 +1363,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	spawn(0.8 SECONDS)
 		printed_issue.forceMove(get_turf(src))
 
-/obj/machinery/newscaster/proc/newsAlert(channel)   //This isn't Agouri's work, for it is ugly and vile.
+/obj/machinery/newscaster/proc/newsAlert(channel, newsHead)   //This isn't Agouri's work, for it is ugly and vile.
 	var/turf/T = get_turf(src)                      //Who the fuck uses spawn(600) anyway, jesus christ
 	if(channel)
-		say("Breaking news from [channel]!")
+		if(newsHead != "" || newsHead != null)
+			say("Breaking news from [channel] - [newsHead]")
+		else
+			say("Breaking news from [channel]!")
 		alert = TRUE
 		update_icon()
 		spawn(30 SECONDS)
