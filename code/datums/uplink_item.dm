@@ -552,7 +552,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/ayylmao/harmor
 	name = "MDF Heavy Armor"
-	desc = "A set of cumbersome but sturdy alien armor that excels at protecting the wearer from energy weapons and melee attacks. The armor plates were measured for a grey, but can be adjusted to fit a human as well. Not guaranteed to fit any other species."
+	desc = "A set of cumbersome but sturdy alien armor that excels at protecting the wearer from energy weapons and melee attacks. The armor plates were measured for a grey, but can be adjusted to fit a human as well. Not guaranteed to fit any other species. A partially loaded gear belt is included with the kit."
 	item = /obj/item/weapon/storage/box/syndie_kit/ayylmao_harmor
 	cost = 4
 	discounted_cost = 3
