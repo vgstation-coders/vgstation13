@@ -41,7 +41,7 @@
 
 /obj/item/weapon/gun/energy/ionrifle/sawnoff
 	name = "sawn-off ion rifle"
-	desc = "A modified ion weapon designed to unreliably disable mechanical threats"
+	desc = "You're not sure how is this still working at all."
 	icon_state = "sawnionrifle"
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
