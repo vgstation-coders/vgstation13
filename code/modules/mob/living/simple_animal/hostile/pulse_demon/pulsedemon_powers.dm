@@ -37,7 +37,7 @@
 
 /datum/pulse_demon_upgrade/capacity/on_purchase()
 	if(..())
-		host.maxcharge = min(round(host.maxcharge * 1.5, 1), 10000000)
+		host.maxcharge = min(round(host.maxcharge * 2, 1), 10000000)
 		to_chat(host,"<span class='notice'>You can now store [host.maxcharge]W.</span>")
 		update_condition_and_cost()
 		host.determine_name()
@@ -145,7 +145,7 @@
 	if(spell_list.len > 1)
 		dat += "<B>Known abilities:</B><BR>"
 		for(var/spell/pulse_demon/S in spell_list)
-			if(!istype(S,/spell/pulse_demon/abilities))
+			if(!S.invisible) //Do not list abilities that aren't meant to be shown, like drain toggling or abilities
 				var/icon/spellimg = icon('icons/mob/screen_spells.dmi', S.hud_state)
 				dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> <B>[S.name]</B> "
 				dat += "[S.can_improve(Sp_SPEED) ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken for [S.quicken_cost]W ([S.spell_levels[Sp_SPEED]]/[S.level_max[Sp_SPEED]])</A>" : "Quicken (MAXED)"] "
@@ -168,53 +168,57 @@
 	popup.open()
 
 /mob/living/simple_animal/hostile/pulse_demon/Topic(href, href_list)
-    ..()
-    if(href_list["upgrade"])
-        var/datum/pulse_demon_upgrade/PDU = locate(href_list["thing"])
-        PDU.on_purchase()
+	..()
+	if(href_list["upgrade"])
+		var/datum/pulse_demon_upgrade/PDU = locate(href_list["thing"])
+		PDU.on_purchase()
 
-    if(href_list["buy"])
-        var/spell/pulse_demon/PDS = locate(href_list["spell"])
-        if(PDS.purchase_cost > charge)
-            to_chat(src,"<span class='warning'>You cannot afford this ability.</span>")
-            return
+	if(href_list["buy"])
+		var/spell/pulse_demon/PDS = locate(href_list["spell"])
+		if(PDS.purchase_cost > charge)
+			to_chat(src,"<span class='warning'>You cannot afford this ability.</span>")
+			return
 
-        // Give the power and take away the money.
-        add_spell(PDS, "pulsedemon_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
-        charge -= PDS.purchase_cost
-        possible_spells.Remove(PDS)
+		// Give the power and take away the money.
+		add_spell(PDS, "pulsedemon_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
+		charge -= PDS.purchase_cost
+		possible_spells.Remove(PDS)
 
-    if(href_list["desc"])
-        show_desc = !show_desc
+	if(href_list["desc"])
+		show_desc = !show_desc
 
-    if(href_list["quicken"])
-        var/spell/pulse_demon/PDS = locate(href_list["spell"])
-        if(PDS.spell_flags & NO_BUTTON)
-            to_chat(src,"<span class='warning'>This cannot be cast, so cannot be quickened.</span>")
-            return
-        if(PDS.quicken_cost > charge)
-            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-            return
-        if(PDS.spell_levels[Sp_SPEED] >= PDS.level_max[Sp_SPEED])
-            to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
-            return
+	if(href_list["quicken"])
+		var/spell/pulse_demon/PDS = locate(href_list["spell"])
+		if(PDS.spell_flags & NO_BUTTON)
+			to_chat(src,"<span class='warning'>This cannot be cast, so cannot be quickened.</span>")
+			return
+		if(PDS.quicken_cost > charge)
+			to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+			return
+		if(PDS.spell_levels[Sp_SPEED] >= PDS.level_max[Sp_SPEED])
+			to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
+			return
 
-        charge -= PDS.quicken_cost
-        PDS.quicken_spell()
+		charge -= PDS.quicken_cost
+		var/temp = PDS.quicken_spell()
+		if(temp)
+			to_chat(usr, "<span class='info'>[temp]</span>")
 
-    if(href_list["empower"])
-        var/spell/pulse_demon/PDS = locate(href_list["spell"])
-        if(PDS.empower_cost > charge)
-            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-            return
-        if(PDS.spell_levels[Sp_POWER] >= PDS.level_max[Sp_POWER])
-            to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
-            return
+	if(href_list["empower"])
+		var/spell/pulse_demon/PDS = locate(href_list["spell"])
+		if(PDS.empower_cost > charge)
+			to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+			return
+		if(PDS.spell_levels[Sp_POWER] >= PDS.level_max[Sp_POWER])
+			to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
+			return
 
-        charge -= PDS.empower_cost
-        PDS.empower_spell()
+		charge -= PDS.empower_cost
+		var/temp = PDS.empower_spell()
+		if(temp)
+			to_chat(usr, "<span class='info'>[temp]</span>")
 
-    powerMenu()
+	powerMenu()
 
 /spell/pulse_demon
 	name = "Pulse Demon Spell"
@@ -235,6 +239,7 @@
 	var/purchase_cost = 0
 	var/empower_cost = 0
 	var/quicken_cost = 0
+	var/invisible = 0 //Whether it appears in the ability list
 
 /spell/pulse_demon/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
@@ -271,6 +276,7 @@
 /spell/pulse_demon/quicken_spell()
 	if(!can_improve(Sp_SPEED))
 		return 0
+	spell_levels[Sp_SPEED]++
 	var/new_name = generate_name()
 	charge_max = round(charge_max/1.5, 1) // -33%/-56%/-70% cooldown reduction
 	. = "You have improved [name] into [new_name]. Its cooldown is now [round(charge_max/10, 1)] seconds."
@@ -304,6 +310,10 @@
 /spell/pulse_demon/is_valid_target(var/atom/target, mob/user, options)
 	return 1
 
+/spell/pulse_demon/generate_tooltip()
+	var/dat = "<br>Charge cost: [charge_cost]W"
+	return ..(dat)
+
 // The menu itself
 /spell/pulse_demon/abilities
 	name = "Abilities"
@@ -312,6 +322,7 @@
 	hud_state = "pd_closed"
 	charge_max = 0
 	level_max = list()
+	invisible = 1
 
 /spell/pulse_demon/abilities/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast
@@ -321,6 +332,10 @@
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
 		PD.powerMenu()
 
+/spell/pulse_demon/abilities/generate_tooltip()
+	var/dat = "<BR>[desc]"
+	return dat
+
 /spell/pulse_demon/toggle_drain
 	name = "Toggle power drain"
 	desc = "Toggles the draining of power while in an APC, battery or cable"
@@ -328,6 +343,7 @@
 	hud_state = "pd_toggle"
 	charge_max = 0
 	level_max = list()
+	invisible = 1
 
 /spell/pulse_demon/toggle_drain/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast
@@ -337,6 +353,10 @@
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
 		PD.draining = !PD.draining
 		to_chat(user,"<span class='notice'>Draining power is [PD.draining ? "on" : "off"].</span>")
+
+/spell/pulse_demon/toggle_drain/generate_tooltip()
+	var/dat = "<BR>[desc]"
+	return dat
 
 /spell/pulse_demon/cable_zap
 	name = "Cable Hop"

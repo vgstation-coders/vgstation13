@@ -271,30 +271,7 @@
 /obj/abstract/screen/spell/MouseEntered(location,control,params)
 	if(!spell)
 		return
-	var/dat = ""
-	if(spell.charge_type & Sp_RECHARGE)
-		dat += "<br>Cooldown: [spell.charge_max/10] second\s"
-	if(spell.charge_type & Sp_CHARGES)
-		dat += "<br>Has [spell.charge_counter] charge\s left"
-	if(spell.charge_type & Sp_HOLDVAR)
-		dat += "<br>Requires [spell.charge_type & Sp_GRADUAL ? "" : "[spell.holder_var_amount]"] "
-		if(spell.holder_var_name)
-			dat += "[spell.holder_var_name]"
-		else
-			dat += "[spell.holder_var_type]"
-		if(spell.charge_type & Sp_GRADUAL)
-			dat += " to sustain"
-	switch(spell.range)
-		if(1)
-			dat += "<br>Range: Adjacency"
-		if(2 to INFINITY)
-			dat += "<br>Range: [spell.range]"
-		if(GLOBALCAST)
-			dat += "<br>Range: Global"
-		if(SELFCAST)
-			dat += "<br>Range: Self"
-	if(spell.desc)
-		dat += "<br>Desc: [spell.desc]"
+	var/dat = spell.generate_tooltip()
 	openToolTip(usr,src,params,title = name,content = dat)
 
 /obj/abstract/screen/spell/MouseExited()

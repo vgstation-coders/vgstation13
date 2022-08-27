@@ -204,11 +204,13 @@
 // Lets you view from these, and inherit view properties like xray if any
 /obj/machinery/camera/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
 	user.forceMove(src.loc)
+	to_chat(user, "<span class='notice'>You jump towards \the [src]. To come back to the APC click the APC.</span>")
 	user.change_sight(adding = vision_flags)
 
 /obj/machinery/hologram/holopad/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
 	if(user.loc != src.loc)
 		user.forceMove(src.loc)
+		to_chat(user, "<span class='notice'>You jump towards \the [src]. To come back to the APC click the APC.</span>")
 	else
 		attack_hand(user)
 
@@ -217,6 +219,7 @@
 	//you can jump to station bounced radios too, not just wall intercoms
 	if(user.loc != src.loc)
 		user.forceMove(src.loc)
+		to_chat(user, "<span class='notice'>You jump towards \the [src]. To come back to the APC click the APC.</span>")
 	else
 		attack_ai(user)
 

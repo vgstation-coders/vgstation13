@@ -241,6 +241,7 @@
 				return
 			if(current_apc.pulsecompromised)
 				controlling_area = get_area(current_power)
+				to_chat(src, "<span class='notice'>You can interact with various electronic objects in the room while connected to the APC.</span>")
 			else
 				hijackAPC(current_apc)
 			if(draining)
@@ -360,7 +361,7 @@
 	visible_message("<span class ='danger'>[src] [pick("fizzles","wails","flails")] in anguish!</span>")
 	to_chat(src, "<span class='warning'>You have been blasted by an EMP and cannot regenerate for a while!</span>")
 	playsound(get_turf(src),"pd_wail_sound",50,1)
-	health -= round(max(20, round(maxHealth/4)), 1) //Takes 1/4th of max health as damage if health is big enough
+	health -= round(max(25, round(maxHealth/4)), 1) //Takes 1/4th of max health as damage if health is big enough
 	health_lock = 5 //EMP prevents the Pulse Demon from regenerating
 
 // Shock therapy
@@ -378,6 +379,13 @@
 // Still not tangible
 /mob/living/simple_animal/hostile/pulse_demon/attackby(obj/item/W as obj, mob/user as mob)
 	if(!is_under_tile())
+		var/obj/item/weapon/cell/C = W.get_cell()
+		if(istype(W, C)) //If the object attacking the pulse demon is a battery
+			C = W
+		if(C && C.charge)
+			C.use(charge_absorb_amount)
+			to_chat(user, "<span class='warning'>You touch \the [src] with \the [W] and \the [src] drains it!</span>")
+			to_chat(src, "<span class='notice'>[user] touches you with \the [W] and you drain its power!</span>")
 		visible_message("<span class ='notice'>The [W] goes right through \the [src].</span>")
 		shockMob(user,W.siemens_coefficient)
 
@@ -445,7 +453,7 @@
 	// Cap conditions
 	if(current_battery.charge <= amount_to_drain)
 		amount_to_drain = current_battery.charge
-	var/amount_added = min((maxcharge-charge),amount_to_drain)
+	var/amount_added = min(maxcharge-charge,amount_to_drain)
 	charge += amount_added
 	current_battery.charge -= amount_added
 	// Add to stats if any
@@ -461,7 +469,8 @@
 	// Cap conditions
 	if(current_apc.cell.charge <= amount_to_drain)
 		amount_to_drain = current_apc.cell.charge
-	maxcharge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER //multiplier to balance the pitiful powercells in APCs
+	amount_to_drain = min(maxcharge-charge, amount_to_drain)
+//	maxcharge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER //multiplier to balance the pitiful powercells in APCs
 	charge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER
 	current_apc.cell.use(amount_to_drain)
 
