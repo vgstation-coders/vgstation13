@@ -89,7 +89,7 @@
 		emagged = 1
 		sound_list = sound_list_emagged + sound_list
 		selected_sound = "sound/effects/superfart.ogg"
-		iconstate = "soundsynth-emagged"
+		icon_state = "soundsynth-emagged"
 
 /obj/item/device/soundsynth/examine(mob/user)
 	..()
