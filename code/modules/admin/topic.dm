@@ -3701,7 +3701,7 @@
 				for(var/turf/simulated/floor/F in world)
 					count++
 					if(!(count % 50000))
-						sleep(world.tick_lag)
+						stoplag()
 					if(F.z == map.zMainStation)
 						F.name = "lava"
 						F.desc = "The floor is LAVA!"
