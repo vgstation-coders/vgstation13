@@ -171,6 +171,10 @@
 				//target.Stun(4)	//naaah
 				target.Knockdown(4)
 		else
+			if(iscarbon(target))
+				var/mob/living/carbon/C = target
+				if(C.check_shields(force,src))
+					return
 			playsound(src, 'sound/weapons/Genhit.ogg', 50, 1, -1)
 			target.Knockdown(2)
 			target.Stun(2)
