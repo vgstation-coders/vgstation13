@@ -415,12 +415,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/i = 0
 						for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
 							i++
-							dat+="<b><u>[MESSAGE.headline]</u></b> - [MESSAGE.body] <BR>"
+							dat+="<b><u>[MESSAGE.headline]</u></b><br>[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 
 								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR><BR>"
-							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
+							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><HR>"
 
 				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
 					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_CHANNEL_LIST]'>Back</A>"}
@@ -459,7 +459,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				else
 					for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
 
-						dat += {"<b><u>[MESSAGE.headline]</u></b> - [MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>
+						dat += {"<b><u>[MESSAGE.headline]</u></b><br>[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><hr>
 							<FONT SIZE=2><A href='?src=\ref[src];censor_channel_story_body=\ref[MESSAGE]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=\ref[src];censor_channel_story_author=\ref[MESSAGE]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR>"}
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_CENSORSHIP_MENU]'>Back</A>"
 			if(NEWSCASTER_D_NOTICE_CHANNEL)
@@ -475,7 +475,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						dat+="<I>No feed messages found in channel...</I><BR>"
 					else
 						for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
-							dat+="<b><u>[MESSAGE.headline]</u></b> - [MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
+							dat+="<b><u>[MESSAGE.headline]</u></b><br>[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><hr>"
 
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_D_NOTICE_MENU]'>Back</A>"
 			if(NEWSCASTER_WANTED)
@@ -1220,11 +1220,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/i = 0
 						for(var/datum/feed_message/MESSAGE in C.messages)
 							i++
-							dat+="<b><u>[MESSAGE.headline]</u></b> - [MESSAGE.body] <BR>"
+							dat+="<b><u>[MESSAGE.headline]</u></b><br>[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								user << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 								dat+="<img src='tmp_photo[i].png' width = '180'><BR>"
-							dat+="<FONT SIZE=1>\[Story by <b>[MESSAGE.author]</b>\]</FONT><BR><BR>"
+							dat+="<FONT SIZE=1>\[Story by <b>[MESSAGE.author]</b>\]</FONT><BR><hr>"
 						dat+="</ul>"
 				if(scribble_page==curr_page)
 					dat+="<BR><I>There is a small scribble near the end of this page... It reads: \"[scribble]\"</I>"
@@ -1366,7 +1366,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 /obj/machinery/newscaster/proc/newsAlert(channel, newsHead)   //This isn't Agouri's work, for it is ugly and vile.
 	var/turf/T = get_turf(src)                      //Who the fuck uses spawn(600) anyway, jesus christ
 	if(channel)
-		if(newsHead != "" || newsHead != null)
+		if(newsHead != "")
 			say("Breaking news from [channel] - [newsHead]")
 		else
 			say("Breaking news from [channel]!")
