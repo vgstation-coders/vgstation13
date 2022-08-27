@@ -313,7 +313,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						else
 							dat+="<B><A href='?src=\ref[src];show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR></B>"
 
-				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
+				dat += {"<hr><A href='?src=\ref[src];refresh=1'>Refresh</A>
 					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Back</A>"}
 			if(NEWSCASTER_NEW_CHANNEL)
 
@@ -422,7 +422,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 								dat+="<br><a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR><BR>"
 							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><HR>"
 
-				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
+				dat += {"<hr><A href='?src=\ref[src];refresh=1'>Refresh</A>
 					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_CHANNEL_LIST]'>Back</A>"}
 			if(NEWSCASTER_CENSORSHIP_MENU)
 
