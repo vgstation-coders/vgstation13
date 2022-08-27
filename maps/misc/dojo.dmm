@@ -42,7 +42,7 @@
 "f" = (
 /obj/structure/table/woodentable,
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -74,7 +74,7 @@
 	pixel_y = -6
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -105,7 +105,7 @@
 	pixel_y = 8
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -117,7 +117,7 @@
 	name = "ninjastart"
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -128,7 +128,7 @@
 /area/dojo)
 "o" = (
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -164,7 +164,7 @@
 	pixel_y = 8
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -176,7 +176,7 @@
 	desc = "Great for practicing your ninja skills."
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -199,7 +199,7 @@
 	name = "Vault Door"
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
