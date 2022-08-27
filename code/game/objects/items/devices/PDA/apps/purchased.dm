@@ -138,7 +138,7 @@
 					var/i = 0
 					for(var/datum/feed_message/message in viewing_channel.messages)
 						i++
-						dat+="-[message.body] <br>"
+						dat+="<b><u>[MESSAGE.headline]</u></b><BR>[MESSAGE.body]<BR>"
 						if(message.img)
 							usr << browse_rsc(message.img_pda, "tmp_photo_pda[i].png")
 
