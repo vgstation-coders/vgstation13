@@ -18,10 +18,10 @@
 	"Conversion" = "selected_sound=sound/effects/convert_start.ogg&shiftpitch=1&volume=50",
 	"Absorb" = "selected_sound=sound/effects/lingabsorbs.ogg&shiftpitch=1&volume=100",
 	"Energy Sword" = "selected_sound=sound/weapons/blade1.ogg&shiftpitch=1&volume=100",
-	"Super Fart" = "selected_sound=sound/effects/superfart.ogg&shiftpitch=1&volume=75",
+	"Super Fart" = "selected_sound=sound/effects/superfart.ogg&shiftpitch=1&volume=100",
 	"Delamination Imminent" = "selected_sound=sound/AI/supermatter_delam.ogg&shiftpitch=0&volume=100",
 	"'elite' Syndie Squad" = "selected_sound=sound/music/elite_syndie_squad.ogg&shiftpitch=0&volume=25",
-	"'elite' NT Squad" = "selected_sound=sound/music/deathsquad.ogg&shiftpitch=0&volume=5",
+	"'elite' NT Squad" = "selected_sound=sound/music/deathsquad.ogg&shiftpitch=0&volume=25",
 	"Command Report" = "selected_sound=sound/AI/commandreport.ogg&shiftpitch=1&volume=100",
 	"Wilhelm" = "selected_sound=sound/vox_sfx/_scream.ogg&shiftpitch=0&volume=100",
 	"DOORSTUCK" = "selected_sound=sound/vox_sfx/_doorstuck.ogg&shiftpitch=0&volume=100"
@@ -89,6 +89,7 @@
 		emagged = 1
 		sound_list = sound_list_emagged + sound_list
 		selected_sound = "sound/effects/superfart.ogg"
+		iconstate = "soundsynth-emagged"
 
 /obj/item/device/soundsynth/examine(mob/user)
 	..()
