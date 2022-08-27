@@ -419,7 +419,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 
-								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR><BR>"
+								dat+="<br><a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR><BR>"
 							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><HR>"
 
 				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
@@ -1223,7 +1223,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							dat+="<b><u>[MESSAGE.headline]</u></b><br>[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								user << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
-								dat+="<img src='tmp_photo[i].png' width = '180'><BR>"
+								dat+="<br><img src='tmp_photo[i].png' width = '180'><BR>"
 							dat+="<FONT SIZE=1>\[Story by <b>[MESSAGE.author]</b>\]</FONT><BR><hr>"
 						dat+="</ul>"
 				if(scribble_page==curr_page)
