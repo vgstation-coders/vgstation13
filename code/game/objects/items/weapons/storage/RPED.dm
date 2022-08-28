@@ -1,24 +1,24 @@
 /obj/item/weapon/storage/bag/gadgets/part_replacer //Bag because disposals bin snowflake code is shit
 	name = "rapid part exchange device"
-	desc = "Special mechanical module made to store, sort, and apply standard machine parts."
+	desc = "Special mechanical module made to store, sort, and apply standard machine parts. It can store a total of 100 components."
 	icon_state = "RPED"
 	item_state = "RPED"
 	w_class = W_CLASS_LARGE
 	use_to_pickup = 1
 	fits_max_w_class = W_CLASS_MEDIUM
-	max_combined_w_class = 100
-	storage_slots = 50
+	max_combined_w_class = 200
+	storage_slots = 100
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	display_contents_with_number = TRUE
 	var/bluespace = FALSE
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/discount_bluespace
-	name = "Prototype bluespace rapid part exchange device" //Alternative name: Discount BRPED, therefore denoted as DBRPED
-	desc = "Not as good as the real deal, but still good. This device is a better variant of the RPED that can hold twice as many parts and can function on machines that do not have their panels open."
-	icon_state = "DBRPED"
-	item_state = "DBRPED"
-	max_combined_w_class = 200
-	storage_slots = 100
+/obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace
+	name = "Bluespace rapid part exchange device"
+	desc = "This device is a better variant of the RPED that can hold twice as many parts and can function on machines that do not have their panels open. It can store a total of 200 components"
+	icon_state = "BRPED"
+	item_state = "BRPED"
+	max_combined_w_class = 400
+	storage_slots = 200
 	bluespace = TRUE
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/proc/play_rped_sound()

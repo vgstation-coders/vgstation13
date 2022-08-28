@@ -22,6 +22,7 @@
 	icon_state = "screen"
 	origin_tech = Tc_MATERIALS + "=1"
 	starting_materials = list(MAT_GLASS = 200)
+	rating = 5 //So that it isn't dumped alongside first-tier parts
 	w_type = RECYK_GLASS
 
 /obj/item/weapon/stock_parts/capacitor
