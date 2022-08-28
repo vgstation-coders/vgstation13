@@ -7,14 +7,15 @@
 
 	starting_materials = null
 	w_type = NOT_RECYCLABLE
-
-	var/datum/gas_mixture/air_contents
-	var/datum/gas_mixture/pumping = new //used in transfering air around
-
+	var/datum/powernet/PN
+	var/power_priority = POWER_PRIORITY_EXCESS
+	var/power_load = 0
 	var/on=1
 
-	var/max_external_pressure=10000 // 10,000kPa ought to do it.
-	var/internal_pressure=4500 // Bottleneck
+	var/datum/gas_mixture/air_contents
+	var/datum/gas_mixture/pumping //used in transfering air around
+	//var/max_external_pressure=10000 // 10,000kPa ought to do it.
+	var/list/gases = list()
 
 	var/overlay_color = "#FFFFFF"
 
@@ -22,13 +23,25 @@
 
 /obj/machinery/atmospherics/miner/New()
 	..()
+	pumping = new
 	air_contents = new
 	air_contents.volume = 1000
 	pumping.volume = 1000 //Same as above so copying works correctly
 	air_contents.temperature = T20C
-	AddAir()
-	air_contents.update_values()
+	update_powernet()
 	update_icon()
+
+/obj/machinery/atmospherics/miner/proc/update_rate(var/internal_pressure)
+	//rate is in mols
+	var/rate = internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
+	//this is ugly
+	if(length(gases) == 1)
+		air_contents.adjust_multi(gases[1], rate)
+	else if(length(gases) == 2)
+		air_contents.adjust_multi(gases[1], gases[gases[1]]*rate, gases[2], gases[gases[2]]*rate)
+	else if(length(gases) == 3)
+		air_contents.adjust_multi(gases[1], gases[gases[1]]*rate, gases[2], gases[gases[2]]*rate, gases[3], gases[gases[3]]*rate)
+	air_contents.update_values()
 
 /obj/machinery/atmospherics/miner/examine(mob/user)
 	. = ..()
@@ -49,6 +62,7 @@
 		return
 	if(on)
 		on = 0
+		power_load = 0
 		update_icon()
 
 // Critical equipment.
@@ -61,7 +75,21 @@
 
 /obj/machinery/atmospherics/miner/power_change()
 	..()
+	power_load = 0
+	update_rate(0)
+	update_powernet()
 	update_icon()
+
+/obj/machinery/atmospherics/miner/proc/update_powernet()
+	var/area/A = get_area(src)
+	var/obj/machinery/power/apc/area_apc
+	if(!A)
+		return
+	area_apc = A.areaapc
+	if(!area_apc)
+		return
+
+	PN = area_apc.terminal.powernet
 
 /obj/machinery/atmospherics/miner/attack_ghost(var/mob/user)
 	return
@@ -77,12 +105,8 @@
 	else
 		to_chat(user, "<span class='warning'>\The [src] needs to be bolted to the ground first.</span>")
 
-// Add air here.  DO NOT CALL UPDATE_VALUES OR UPDATE_ICON.
-/obj/machinery/atmospherics/miner/proc/AddAir()
-	return
-
 /obj/machinery/atmospherics/miner/update_icon()
-	src.overlays = 0
+	overlays = 0
 	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	if(on)
@@ -98,8 +122,11 @@
 /obj/machinery/atmospherics/miner/process()
 	if(stat & (FORCEDISABLE|NOPOWER))
 		return
-	if (!on)
+	if(!on)
+		use_power = MACHINE_POWER_USE_IDLE
 		return
+	use_power = MACHINE_POWER_USE_ACTIVE
+	var/power_surplus = PN.get_satisfaction(power_priority)
 
 	var/oldstat=stat
 	if(!istype(loc,/turf/simulated))
@@ -111,138 +138,58 @@
 	if(stat & BROKEN)
 		return
 
-	var/datum/gas_mixture/environment = loc.return_air()
-	var/environment_pressure = environment.return_pressure()
+	if(power_surplus > 0.55)
+		power_load += 1000
+	else if (power_surplus < 0.45 && power_load > 0)
+		power_load -= 1000
+	else
+		power_load = 0
+
+	active_power_usage = power_load
+	update_rate(Ceiling(0.1 * power_load))		//scale mol output by arbitrary 10% power load
+
+	//gas-related
+	//var/datum/gas_mixture/environment = loc.return_air()
+	//var/environment_pressure = environment.return_pressure()
 
 	pumping.copy_from(air_contents)
-
+/*
 	var/pressure_delta = 10000
-
 	// External pressure bound
 	pressure_delta = min(pressure_delta, (max_external_pressure - environment_pressure))
-
-	// Internal pressure bound (screwed up calc, won't be used anyway)
-	//pressure_delta = min(pressure_delta, (internal_pressure - environment_pressure))
-
 	if(pressure_delta > 0.1)
 		var/transfer_moles = pressure_delta * CELL_VOLUME / (pumping.temperature * R_IDEAL_GAS_EQUATION)
-
 		var/datum/gas_mixture/removed = pumping.remove(transfer_moles)
-
-		loc.assume_air(removed)
-
-//Controls how fast gas comes out (in total)
-/obj/machinery/atmospherics/miner/proc/AirRate()
-  return internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
-
+		loc.assume_air(removed)*/
 
 /obj/machinery/atmospherics/miner/sleeping_agent
 	name = "\improper N2O Gas Miner"
 	overlay_color = "#FFCCCC"
-
-/obj/machinery/atmospherics/miner/sleeping_agent/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_SLEEPING, rate)
-
+	gases = list(GAS_SLEEPING = 1)
 
 /obj/machinery/atmospherics/miner/nitrogen
 	name = "\improper N2 Gas Miner"
 	overlay_color = "#CCFFCC"
-
-/obj/machinery/atmospherics/miner/nitrogen/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_NITROGEN, rate)
-
+	gases = list(GAS_NITROGEN = 1)
 
 /obj/machinery/atmospherics/miner/oxygen
 	name = "\improper O2 Gas Miner"
 	overlay_color = "#007FFF"
-
-/obj/machinery/atmospherics/miner/oxygen/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_OXYGEN, rate)
-
+	gases = list(GAS_OXYGEN = 1)
 
 /obj/machinery/atmospherics/miner/toxins
 	name = "\improper Plasma Gas Miner"
 	overlay_color = "#FF0000"
-
-/obj/machinery/atmospherics/miner/toxins/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_PLASMA, rate)
-
+	gases = list(GAS_PLASMA = 1)
 
 /obj/machinery/atmospherics/miner/carbon_dioxide
 	name = "\improper CO2 Gas Miner"
 	overlay_color = "#CDCDCD"
-
-/obj/machinery/atmospherics/miner/carbon_dioxide/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_CARBON, rate)
-
+	gases = list(GAS_CARBON = 1)
 
 /obj/machinery/atmospherics/miner/air
 	name = "\improper Air Miner"
 	desc = "You fucking <em>cheater</em>."
 	overlay_color = "#70DBDB"
-
+	gases = list(GAS_OXYGEN = 0.2, GAS_NITROGEN = 0.8)
 	on = 0
-
-/obj/machinery/atmospherics/miner/air/AddAir()
-	var/rate = AirRate()
-	air_contents.adjust_multi(GAS_OXYGEN, 0.2*rate,
-	GAS_NITROGEN, 0.8*rate)
-
-
-/obj/machinery/atmospherics/miner/gas_giant
-	name = "\improper Gas Miner"
-
-/obj/machinery/atmospherics/miner/gas_giant/initialize()
-	..()
-	AddAir()
-
-/obj/machinery/atmospherics/miner/gas_giant/AddAir()
-	if(ticker)
-		air_contents.copy_from(gas_giant.GM)
-
-
-/obj/machinery/atmospherics/miner/mixed_nitrogen
-	name = "\improper Mixed Gas Miner"
-	desc = "Pumping nitrogen, carbon dioxide, and plasma."
-	overlay_color = "#FF80BD"
-
-/obj/machinery/atmospherics/miner/mixed_nitrogen/AddAir()
-  var/rate = AirRate()
-  air_contents.adjust_multi(GAS_CARBON, 0.3*rate,
-  GAS_NITROGEN, 0.4*rate,
-  GAS_PLASMA, 0.3*rate)
-
-/obj/machinery/atmospherics/miner/mixed_oxygen
-	name = "\improper Mixed Gas Miner"
-	desc = "Pumping oxygen and nitrous oxide."
-	overlay_color = "#7EA7E0"
-
-/obj/machinery/atmospherics/miner/mixed_oxygen/AddAir()
-  var/rate = AirRate()
-  air_contents.adjust_multi(GAS_OXYGEN, 0.5*rate,
-  GAS_SLEEPING, 0.5*rate)
-
-/obj/machinery/atmospherics/miner/gas_sink
-	name = "Graviton Gas Sink"
-	desc = "This is a piece of machinery that uses gravitons to draw in molecules of gas a ship passes while moving through space. Due to the nature of gas dispersal in a vacuum, it requires traveling at hyperspace speeds in order to collect substantial gas particles, and the intake is a mixed, requiring filtering."
-
-/obj/machinery/atmospherics/miner/gas_sink/AddAir()
-	var/rate = AirRate()
-	if(!rate)
-		return
-	air_contents.adjust_multi(GAS_CARBON, 0.1*rand(1,2)*rate,
-		GAS_NITROGEN, 0.1*rand(2,3)*rate,
-		GAS_PLASMA, 0.1*rand(4,5)*rate,
-		GAS_OXYGEN, 0.1*rand(4,5)*rate,
-		GAS_SLEEPING, 0.1*rand(1,2)*rate)
-
-/obj/machinery/atmospherics/miner/gas_sink/AirRate()
-	var/datum/zLevel/current_zlevel = get_z_level(src)
-	if(istype(current_zlevel,/datum/zLevel/hyperspace))
-		return ..()
-	return 0
