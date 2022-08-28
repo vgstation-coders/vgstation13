@@ -22,8 +22,11 @@
 	icon_state = "screen"
 	origin_tech = Tc_MATERIALS + "=1"
 	starting_materials = list(MAT_GLASS = 200)
-	rating = 5 //So that it isn't dumped alongside first-tier parts
 	w_type = RECYK_GLASS
+
+//Console screens have a higher-than-normal rating so they don't get dumped out of a gadget bag/RPED despite being perfectly usable
+/obj/item/weapon/stock_parts/console_screen/get_rating()
+	return 5
 
 /obj/item/weapon/stock_parts/capacitor
 	name = "capacitor"
@@ -97,6 +100,8 @@
 
 //Rank 2
 
+//The upgraded console screens have been disabled from being conventionally found in-game because nothing in the game
+//currently uses their upgraded qualities.
 /obj/item/weapon/stock_parts/console_screen/reinforced
 	name = "reinforced console screen"
 	desc = "Used in the construction of computers and other devices with a interactive console."
