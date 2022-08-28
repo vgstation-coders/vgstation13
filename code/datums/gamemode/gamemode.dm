@@ -165,6 +165,9 @@
 		warning("Role refused mind and dropped!")
 		newRole.Drop()
 		return 0
+	else
+		var/mob/new_player/NP = P
+		NP.close_spawn_windows()
 
 	return 1
 

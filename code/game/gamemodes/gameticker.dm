@@ -197,7 +197,8 @@ var/datum/controller/gameticker/ticker
 			if("MODE")
 				player.close_spawn_windows()
 			else
-				player.create_roundstart_human() //Create player characters and transfer them
+				player.create_character() //Create player characters and transfer them
+				qdel(player)
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
 		for(var/mob/living/carbon/human/player in player_list)

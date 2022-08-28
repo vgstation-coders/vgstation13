@@ -758,6 +758,8 @@
 			// Use the arrivals shuttle spawn point
 			stack_trace("no spawn points for [rank]")
 			new_character.forceMove(pick(latejoin))
+	else
+		new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 
 	new_character.key = key		//Manually transfer the key to log them in
 
@@ -767,11 +769,6 @@
 			break //Only autoconvert them once, and only if they aren't leading their own faith.
 
 	return new_character
-
-/mob/new_player/proc/create_roundstart_human()
-	var/mob/living/carbon/human/new_character = create_character()
-	qdel(src)
-	new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 
 //Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
 /mob/new_player/proc/create_roundstart_silicon(var/type)
