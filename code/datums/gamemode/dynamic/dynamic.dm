@@ -255,9 +255,9 @@ var/stacking_limit = 90
 		if(player.mind && player.ready)
 			roundstart_pop_ready++
 			candidates.Add(player)
-	message_admins("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [candidates.len] players ready.")
-	log_admin("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [candidates.len] players ready.")
-	if (candidates.len <= 0)
+	message_admins("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
+	log_admin("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
+	if (roundstart_pop_ready <= 0)
 		message_admins("DYNAMIC MODE: Not a single player readied-up. The round will begin without any roles assigned.")
 		log_admin("DYNAMIC MODE: Not a single player readied-up. The round will begin without any roles assigned.")
 		return 1
@@ -273,7 +273,7 @@ var/stacking_limit = 90
 	var/starting_rulesets = ""
 	for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
 		starting_rulesets += "[DR.name], "
-	dynamic_stats.round_start_pop = candidates.len
+	dynamic_stats.round_start_pop = roundstart_pop_ready
 	dynamic_stats.round_start_rulesets = starting_rulesets
 	dynamic_stats.measure_threat(threat)
 	candidates.Cut()

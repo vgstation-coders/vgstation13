@@ -172,6 +172,17 @@ var/datum/controller/gameticker/ticker
 	init_mind_ui()
 	init_PDAgames_leaderboard()
 
+	var/can_continue = mode.Setup()//Setup special modes
+	if(!can_continue)
+		current_state = GAME_STATE_PREGAME
+		to_chat(world, "<B>Error setting up [master_mode].</B> Reverting to pre-game lobby.")
+		log_admin("The gamemode setup for [mode.name] errored out.")
+		world.log << "The gamemode setup for [mode.name] errored out."
+		del(mode)
+		job_master.ResetOccupations()
+		return 0
+
+	//After antagonists have been removed from new_players in player_list, create crew
 	for(var/mob/new_player/player in player_list)
 		if(!(player.ready && player.mind && player.mind.assigned_role))
 			continue
@@ -184,25 +195,13 @@ var/datum/controller/gameticker/ticker
 				player.create_roundstart_silicon(player.mind.assigned_role)
 				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 			if("MODE")
-				//do nothing
+				player.close_spawn_windows()
 			else
 				player.create_roundstart_human() //Create player characters and transfer them
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
 		for(var/mob/living/carbon/human/player in player_list)
 			player.apeify()
-
-	var/can_continue = mode.Setup()//Setup special modes
-	if(!can_continue)
-		current_state = GAME_STATE_PREGAME
-		to_chat(world, "<B>Error setting up [master_mode].</B> Reverting to pre-game lobby.")
-		log_admin("The gamemode setup for [mode.name] errored out.")
-		world.log << "The gamemode setup for [mode.name] errored out."
-		del(mode)
-		job_master.ResetOccupations()
-		return 0
-
-	mode.PostSetup()
 
 	if(hide_mode)
 		var/list/modes = new
@@ -230,7 +229,9 @@ var/datum/controller/gameticker/ticker
 				if(player.mind.assigned_role != "Trader")
 					data_core.manifest_inject(player)
 
-		//send message that no one is a captain and store positions for some reason
+	mode.PostSetup()
+
+	//send message that no one is a captain and store positions for some reason
 	for(var/mob/M in player_list)
 		if(!istype(M,/mob/new_player))
 			if(!captain)
