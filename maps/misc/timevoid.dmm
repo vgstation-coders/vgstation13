@@ -31,7 +31,7 @@
 /turf/simulated/floor/dark,
 /area/timevoid)
 "e" = (
-/obj/structure/railing/plasteel/glass,
+/obj/structure/railing/plasteel,
 /turf/simulated/floor{
 	icon_state = "old_enginewarn"
 	},
@@ -50,8 +50,8 @@
 	},
 /area/timevoid)
 "h" = (
-/obj/structure/railing/plasteel/glass,
-/obj/structure/railing/plasteel/glass{
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -90,10 +90,10 @@
 	dir = 4
 	},
 /obj/structure/curtain/open/shower/right,
-/obj/structure/railing/plasteel/glass{
+/obj/machinery/atmospherics/unary/vent_scrubber,
+/obj/structure/railing/plasteel{
 	dir = 1
 	},
-/obj/machinery/atmospherics/unary/vent_scrubber,
 /turf/simulated/floor/dark,
 /area/timevoid)
 "o" = (
@@ -131,7 +131,7 @@
 	icon = 'icons/effects/floor_decals.dmi';
 	icon_state = "bot"
 	},
-/obj/structure/railing/plasteel/glass,
+/obj/structure/railing/plasteel,
 /turf/simulated/floor/dark,
 /area/timevoid)
 "u" = (
@@ -139,7 +139,7 @@
 	name = "Beta Suit Status Terminal";
 	desc = "Status: In Use"
 	},
-/obj/structure/railing/plasteel/glass{
+/obj/structure/railing/plasteel{
 	dir = 1
 	},
 /turf/simulated/floor/dark{
@@ -160,7 +160,7 @@
 /turf/simulated/floor/dark,
 /area/timevoid)
 "x" = (
-/obj/structure/railing/plasteel/glass{
+/obj/structure/railing/plasteel{
 	dir = 1
 	},
 /turf/simulated/floor/dark{
@@ -179,7 +179,7 @@
 	name = "Alpha Suit Status Terminal";
 	desc = "Status: In Use"
 	},
-/obj/structure/railing/plasteel/glass{
+/obj/structure/railing/plasteel{
 	dir = 1
 	},
 /turf/simulated/floor/dark{
@@ -208,8 +208,8 @@
 	},
 /area/timevoid)
 "E" = (
-/obj/structure/railing/plasteel/glass,
-/obj/structure/railing/plasteel/glass{
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel{
 	dir = 8
 	},
 /turf/simulated/floor{
@@ -254,7 +254,7 @@
 /turf/simulated/floor/dark,
 /area/timevoid)
 "K" = (
-/obj/structure/railing/plasteel/glass{
+/obj/structure/railing/plasteel{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -323,7 +323,7 @@
 	},
 /area/timevoid)
 "W" = (
-/obj/structure/railing/plasteel/glass{
+/obj/structure/railing/plasteel{
 	dir = 8
 	},
 /turf/simulated/floor{
