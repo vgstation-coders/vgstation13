@@ -74,7 +74,8 @@
 "k" = (
 /obj/structure/table/reinforced,
 /obj/machinery/computer/fluff/terminal/old{
-	desc = "A worn and well used computer. It appears to be running Gentoo."
+	desc = "Strangely, the user account is named John Titor.";
+	name = "IBM 5100"
 	},
 /turf/simulated/floor/dark,
 /area/timevoid)
@@ -245,7 +246,10 @@
 /area/timevoid)
 "I" = (
 /obj/structure/table/reinforced,
-/obj/machinery/microwave,
+/obj/machinery/microwave{
+	name = "Future Gadget No. 8";
+	desc = "Not suitable for heating bananas."
+	},
 /turf/simulated/floor/dark,
 /area/timevoid)
 "J" = (
