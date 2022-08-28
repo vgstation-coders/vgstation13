@@ -195,7 +195,7 @@ var/datum/controller/gameticker/ticker
 				player.create_roundstart_silicon(player.mind.assigned_role)
 				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 			if("MODE")
-				player.close_spawn_windows()
+				//do nothing
 			else
 				player.create_character() //Create player characters and transfer them
 				qdel(player)
