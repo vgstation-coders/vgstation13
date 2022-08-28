@@ -232,6 +232,7 @@ var/datum/controller/gameticker/ticker
 	mode.PostSetup()
 
 	//send message that no one is a captain and store positions for some reason
+
 	for(var/mob/M in player_list)
 		if(!istype(M,/mob/new_player))
 			if(!captain)
@@ -240,6 +241,7 @@ var/datum/controller/gameticker/ticker
 	// Update new player panels so they say join instead of ready up.
 	for(var/mob/new_player/player in player_list)
 		player.new_player_panel_proc()
+
 
 	gamestart_time = world.time / 10
 	current_state = GAME_STATE_PLAYING
