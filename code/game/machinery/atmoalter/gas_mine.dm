@@ -179,7 +179,7 @@
 	overlay_color = "#007FFF"
 	gases = list(GAS_OXYGEN = 1)
 
-/obj/machinery/atmospherics/miner/plasma
+/obj/machinery/atmospherics/miner/toxins
 	name = "\improper Plasma Gas Miner"
 	overlay_color = "#FF0000"
 	gases = list(GAS_PLASMA = 1)

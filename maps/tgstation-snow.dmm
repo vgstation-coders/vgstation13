@@ -90103,7 +90103,7 @@
 	},
 /area/derelict/medical/chapel)
 "nEu" = (
-/obj/machinery/atmospherics/miner/plasma,
+/obj/machinery/atmospherics/miner/toxins,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
@@ -99708,7 +99708,7 @@
 /turf/simulated/floor,
 /area/hallway/primary/port)
 "qQU" = (
-/obj/machinery/atmospherics/miner/plasma,
+/obj/machinery/atmospherics/miner/toxins,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
