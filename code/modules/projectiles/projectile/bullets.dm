@@ -47,7 +47,7 @@
 	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/weakbullet/mech
-	damage = 20
+	damage = 18
 	stun = 0
 	weaken = 0
 	embed = 1
