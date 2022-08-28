@@ -142,7 +142,9 @@
 		power_load += 1000
 	else if (power_surplus < 0.45 && power_load > 0)
 		power_load -= 1000
-		
+	else
+		power_load = 0
+
 	active_power_usage = power_load
 	update_rate(Ceiling(0.1 * power_load))		//scale mol output by arbitrary 10% power load
 
