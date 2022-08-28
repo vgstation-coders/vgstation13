@@ -176,9 +176,9 @@
 	desc = "bang-bang, click, tack, shoomph, click"
 	icon_state = "supershotgun"
 	item_state = "sawnshotgun"
-	fire_sound = 'sound/weapons/supershotgun_fire'
-	reloadsound = 'sound/weapons/supershotgun_load'
-	empty_sound = 'sound/weapons/supershotgun_open'
+	fire_sound = 'sound/weapons/supershotgun_fire.ogg'
+	reloadsound = 'sound/weapons/supershotgun_load.ogg'
+	empty_sound = 'sound/weapons/supershotgun_open.ogg'
 	fire_delay = 0
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
