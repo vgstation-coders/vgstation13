@@ -197,9 +197,8 @@
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/duper/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	for(var/i = 0; i < 20; i++)
-		if(..())
-			..()
-			attack_self(user)
+		..()
+		attack_self(user)
 
 /obj/item/weapon/gun/projectile/shotgun/nt12
 	name = "\improper NT-12"
