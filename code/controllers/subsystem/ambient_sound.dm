@@ -42,7 +42,7 @@ Ambience system.
 				cancel_ambience = FALSE
 				break
 		if(cancel_ambience)
-			src << sound(null, 0, 0, CHANNEL_AMBIENCE)//I can't think of a sane way to have this be less abrupt. I don't think you can do anything like animating sounds and having a loop for it is gay.
+			src << sound(null, 0, 0, CHANNEL_AMBIENCE)//I can't think of a sane way to have this be less abrupt. I don't think you can do anything like animating sounds and having a loop for it is dumb.
 			ambience_buffer = null//no delay on starting a new sound.
 
 	if(ambience_buffer > world.timeofday)

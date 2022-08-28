@@ -107,7 +107,7 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 
 
 			// The pod crashed into the shuttle. Make it part of the shuttle
-			// Automatic wall smoothing is gay and causes the pod to 'merge' with the shuttle visually
+			// Automatic wall smoothing is dumb and causes the pod to 'merge' with the shuttle visually
 			// instead of wasting time solving an issue caused by a worthless feature im going to cheat
 			
 			spawn(2 SECONDS)
