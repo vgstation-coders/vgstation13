@@ -183,12 +183,12 @@ var/datum/controller/gameticker/ticker
 		return 0
 
 	//After antagonists have been removed from new_players in player_list, create crew
-	for(var/mob/new_player/player in player_list)
+	for(var/mob/M in player_list)
+		if(istype(player, /mob/living/))
+			var/mob/living/L = player
+			ticker.minds += L.mind
 		if(!(player.ready && player.mind && player.mind.assigned_role))
 			continue
-		var/mob/living/L = player
-		if(istype(L))
-			ticker.minds += L.mind
 		
 		switch(player.mind.assigned_role)
 			if("Mobile MMI", "Cyborg", "AI")
@@ -215,34 +215,28 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
-	var/captain = FALSE
 	for(var/mob/living/carbon/human/player in player_list)	
-		//Used to display a message the captainship message
 		if(player.mind)
 			if(player.mind.assigned_role == "MODE")
-					//no injection
+				player.close_spawn_windows()
 			else
 				job_master.EquipRank(player, player.mind.assigned_role, 0)
 				EquipCustomItems(player)
 				player.update_icons()
-				if(player.mind.assigned_role == "Captain")
-					captain = TRUE
 				if(player.mind.assigned_role != "Trader")
 					data_core.manifest_inject(player)
 
 	mode.PostSetup()
 
-	//send message that no one is a captain and store positions for some reason
+	//store positions for some reason
 
 	for(var/mob/M in player_list)
-		if(!istype(M,/mob/new_player))
-			if(!captain)
-				to_chat(M, "Captainship not forced on anyone.")
+		if(istype(M,/mob/new_player))
+			var/mob/new_player/np = M
+			// Update new player panels so they say join instead of ready up.
+			np.new_player_panel_proc()
+		else
 			M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
-	// Update new player panels so they say join instead of ready up.
-	for(var/mob/new_player/player in player_list)
-		player.new_player_panel_proc()
-
 
 	gamestart_time = world.time / 10
 	current_state = GAME_STATE_PLAYING

@@ -759,7 +759,8 @@
 			stack_trace("no spawn points for [rank]")
 			new_character.forceMove(pick(latejoin))
 	else
-		new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+		// 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+		new_character.DormantGenes(20,10,0,0)
 
 	new_character.key = key		//Manually transfer the key to log them in
 
@@ -826,7 +827,7 @@
 	return 0
 
 
-/mob/new_player/proc/close_spawn_windows()
+/mob/proc/close_spawn_windows()
 	src << browse(null, "window=latechoices") //closes late choices window
 	src << browse(null, "window=playersetup") //closes the player setup window
 
