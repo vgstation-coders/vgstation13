@@ -47,8 +47,10 @@
 	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/weakbullet/mech
+	damage = 20
 	stun = 0
 	weaken = 0
+	embed = 1
 
 /obj/item/projectile/bullet/weakbullet/booze/on_hit(var/atom/target, var/blocked = 0)
 	if(..(target, blocked))
