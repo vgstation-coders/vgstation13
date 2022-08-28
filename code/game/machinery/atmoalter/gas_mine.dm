@@ -149,18 +149,18 @@
 	update_rate(Ceiling(0.1 * power_load))		//scale mol output by arbitrary 10% power load
 
 	//gas-related
-	//var/datum/gas_mixture/environment = loc.return_air()
-	//var/environment_pressure = environment.return_pressure()
+	var/datum/gas_mixture/environment = loc.return_air()
+	var/environment_pressure = environment.return_pressure()
 
 	pumping.copy_from(air_contents)
-/*
+
 	var/pressure_delta = 10000
 	// External pressure bound
 	pressure_delta = min(pressure_delta, (max_external_pressure - environment_pressure))
 	if(pressure_delta > 0.1)
 		var/transfer_moles = pressure_delta * CELL_VOLUME / (pumping.temperature * R_IDEAL_GAS_EQUATION)
 		var/datum/gas_mixture/removed = pumping.remove(transfer_moles)
-		loc.assume_air(removed)*/
+		loc.assume_air(removed)
 
 /obj/machinery/atmospherics/miner/sleeping_agent
 	name = "\improper N2O Gas Miner"
