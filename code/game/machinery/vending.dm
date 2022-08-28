@@ -823,7 +823,7 @@ var/global/num_vending_terminals = 1
 			display_records += src.holiday_records
 		if(src.extended_inventory)
 			display_records += src.hidden_records
-		if(src.coin)
+		if(src.coin || emagged)
 			display_records += src.coin_records
 
 		if(display_records.len > 12)
@@ -870,7 +870,7 @@ var/global/num_vending_terminals = 1
 				dat += GetProductLine(R)
 			dat += "<br>"
 
-		if(src.coin)
+		if(src.coin || emagged)
 			dat += {"<B>&nbsp;&nbsp;premium</B>:<br>"}
 			for (var/datum/data/vending_product/R in coin_records)
 				dat += GetProductLine(R)
