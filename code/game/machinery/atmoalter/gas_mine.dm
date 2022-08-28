@@ -14,7 +14,7 @@
 
 	var/datum/gas_mixture/air_contents
 	var/datum/gas_mixture/pumping //used in transfering air around
-	//var/max_external_pressure=10000 // 10,000kPa ought to do it.
+	var/max_external_pressure=10000 // 10,000kPa ought to do it.
 	var/list/gases = list()
 
 	var/overlay_color = "#FFFFFF"
