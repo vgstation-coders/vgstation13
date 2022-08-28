@@ -176,12 +176,30 @@
 	desc = "bang-bang, click, tack, shoomph, click"
 	icon_state = "supershotgun"
 	item_state = "sawnshotgun"
+	fire_sound = 'sound/weapons/supershotgun_fire'
+	reloadsound = 'sound/weapons/supershotgun_load'
+	empty_sound = 'sound/weapons/supershotgun_open'
 	fire_delay = 0
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(..())
 		..()
 		attack_self(user)
+
+
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/duper
+	name = "super duper shotgun"
+	desc = "bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang, click, tack, shoomph, click"
+	icon_state = "superdupershotgun"
+	item_state = "sawnshotgun"
+	max_shells = 20
+	fire_delay = 0
+
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/duper/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+	for(var/i = 0; i < 20; i++)
+		if(..())
+			..()
+			attack_self(user)
 
 /obj/item/weapon/gun/projectile/shotgun/nt12
 	name = "\improper NT-12"
