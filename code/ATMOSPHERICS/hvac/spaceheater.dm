@@ -203,8 +203,8 @@
 		cell.charge = min(cell.charge+woodnumber*250,cell.maxcharge)
 		update_icon()
 	if(on && istype(I,/obj/item/clothing/mask/cigarette))
-		var/obj/item/clothing/mask/cigarette/fag = I
-		fag.light("<span class='notice'>[user] lights \the [fag] using \the [src]'s flames.</span>")
+		var/obj/item/clothing/mask/cigarette/ciggie = I
+		ciggie.light("<span class='notice'>[user] lights \the [ciggie] using \the [src]'s flames.</span>")
 
 /obj/machinery/space_heater/campfire/proc/light(var/flavourtext = "<span class='notice'>[usr] lights \the [src].</span>")
 	if(on)

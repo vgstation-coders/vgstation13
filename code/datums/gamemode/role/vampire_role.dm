@@ -480,7 +480,7 @@
 						else
 							if(!(locate(/datum/power/vampire/mature) in current_powers))
 								to_chat(H, "<span class='danger'>You are doused with a freezing liquid. You're melting!</span>")
-								H.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+								H.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta death) -- Doohl
 								smitecounter += volume * 2
 							else
 								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric current powers protect you!</span>")

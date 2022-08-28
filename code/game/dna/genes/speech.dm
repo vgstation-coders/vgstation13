@@ -1,6 +1,6 @@
 #define ACT_REPLACE      /datum/speech_filter_action/replace
 #define ACT_PICK_REPLACE /datum/speech_filter_action/pick_replace
-#define GENERIC_INSULT_WORDS "\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|faggot|security|shitcurity)"
+#define GENERIC_INSULT_WORDS "\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|faggot|security|shitcurity)" //For the purpose of word replacement/filtering.
 
 /datum/speech_filter
 	// REGEX OH BOY
@@ -199,6 +199,7 @@
 /datum/speech_filter/smile
 	expressions = list()
 
+//This is strictly a word replacement filter.
 /datum/speech_filter/smile/New()
 //Time for a friendly game of SS13
 	addWordReplacement("stupid","smart")

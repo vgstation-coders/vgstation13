@@ -742,7 +742,7 @@
 				if(screamed)
 					H.audible_scream()
 				if(!splashed)
-					H.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+					H.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta death) -- Doohl
 			else
 				H.take_organ_damage(0, min(15, volume * 2))
 

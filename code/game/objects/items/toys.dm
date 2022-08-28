@@ -1000,8 +1000,8 @@
 
 /obj/item/toy/gasha/snowflake
 	name = "toy snowflake"
-	desc = "What a faggot."
-	icon_state = "fag"
+	desc = "What a unique and interesting toy, unlike all the others!"
+	icon_state = "unique"
 
 /obj/item/toy/gasha/shade
 	name = "toy shade"

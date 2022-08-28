@@ -209,7 +209,7 @@
 							h.equip_to_slot(kneesock,slot_shoes)
 							h.equip_to_slot(apron,slot_wear_suit)
 							h.equip_to_slot(kitty_ears,slot_head)
-							to_chat(user, "<span class=danger><B>You have been turned into a disgusting faggot! </span></B>")
+							to_chat(user, "<span class=danger><B>You have been turned into an affront to God! </span></B>")
 						if(3)
 							if(h.species.name != "Tajaran") // Catbeasts don't get to roll the dice and turn into monsters.
 								var/list/valid_species = (all_species - list("Krampus", "Horror"))

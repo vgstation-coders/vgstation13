@@ -59,7 +59,7 @@
 /datum/ZAS_Setting/airflow_mob_slowdown 1
 
 # Airflow - Push
-#   1=yes please rape my server, 0=no
+#   1=yes please fuck my server, 0=no
 /datum/ZAS_Setting/airflow_push 0
 
 # Connections - Insulation

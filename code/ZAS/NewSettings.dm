@@ -133,7 +133,7 @@ var/global/ZAS_Settings/zas_settings = new
 /datum/ZAS_Setting/airflow_push
 	name="Airflow - Push"
 	value = 0
-	desc="1=yes please rape my server, 0=no"
+	desc="1=yes please fuck my server, 0=no"
 	valtype=ZAS_TYPE_BOOLEAN
 
 /datum/ZAS_Setting/connection_insulation

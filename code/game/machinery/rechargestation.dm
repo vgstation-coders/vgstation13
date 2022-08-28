@@ -11,7 +11,7 @@
 	var/mob/living/occupant = null
 	var/list/acceptable_upgradeables = list(/obj/item/weapon/cell) // battery for now
 	var/list/upgrade_holder = list()
-	var/obj/upgrading = 0 // are we upgrading a nigga?
+	var/obj/upgrading = 0 // are we upgrading someone?
 	var/upgrade_finished = -1 // time the upgrade should finish
 	var/manipulator_coeff = 1 // better manipulator swaps parts faster
 	var/transfer_rate_coeff = 1 // transfer rate bonuses

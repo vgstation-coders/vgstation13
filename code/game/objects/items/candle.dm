@@ -43,8 +43,8 @@
 			var/obj/item/candle/C = W
 			C.light("<span class='notice'>[user] lights [C] with [src].</span>")
 		else if (istype(W,/obj/item/clothing/mask/cigarette))
-			var/obj/item/clothing/mask/cigarette/fag = W
-			fag.light("<span class='notice'>[user] lights \the [fag] using \the [src]'s flame.</span>")
+			var/obj/item/clothing/mask/cigarette/ciggie = W
+			ciggie.light("<span class='notice'>[user] lights \the [ciggie] using \the [src]'s flame.</span>")
 	if(source_temperature && (W.is_hot() || W.sharpness_flags & (HOT_EDGE)))
 		light("<span class='notice'>[user] lights [src] with [W].</span>")
 

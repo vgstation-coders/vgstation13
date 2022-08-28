@@ -301,7 +301,7 @@
 	name = "Emo"
 	icon_state = "hair_emo"
 
-/datum/sprite_accessory/hair/fag
+/datum/sprite_accessory/hair/flow
 	name = "Flow Hair"
 	icon_state = "hair_f"
 

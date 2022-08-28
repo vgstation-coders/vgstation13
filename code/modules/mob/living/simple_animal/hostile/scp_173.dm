@@ -22,7 +22,7 @@
 	var/snap_sound = list('sound/scp/firstpersonsnap.ogg','sound/scp/firstpersonsnap2.ogg','sound/scp/firstpersonsnap3.ogg')
 	var/scare_sound = list('sound/scp/scare1.ogg','sound/scp/scare2.ogg','sound/scp/scare3.ogg','sound/scp/scare4.ogg')	//Boo
 	var/hibernate = 0 //Disables SCP until toggled back to 0
-	var/scare_played = 0 //Did we rape everyone's ears yet ?
+	var/scare_played = 0 //Did we blow out everyone's ears yet?
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent //Graciously stolen from spider code
 
 	blooded = FALSE
