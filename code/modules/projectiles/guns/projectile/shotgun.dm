@@ -196,6 +196,7 @@
 	reloadsound = 'sound/weapons/supershotgun_load.ogg'
 	empty_sound = 'sound/weapons/supershotgun_open.ogg'
 	fire_delay = 0
+	max_shells = 20
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/superduper/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(..())
