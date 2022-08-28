@@ -80,11 +80,6 @@
 	path = "Island"
 	min_players = 25
 	
-/datum/next_map/line
-	name = "Frankenline Station"
-	path = "line"
-	min_players = 25
-	
 /datum/next_map/line/is_votable()
 	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
 	if (MM != 10)
