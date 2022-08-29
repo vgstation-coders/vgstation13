@@ -63,6 +63,7 @@
 /obj/structure/largecrate/polyp/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iscrowbar(W))
 		new /mob/living/simple_animal/hostile/retaliate/polyp(loc)
+		new /obj/item/weapon/paper/mothership/spacepolyp_care(loc)
 	..()
 
 /obj/structure/largecrate/chick

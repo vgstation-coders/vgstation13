@@ -186,6 +186,28 @@
 	play_sound = 'sound/music/elite_syndie_squad.ogg'
 
 //////////////////////////////
+// PAPERWORK (Grey aliens have to deal with a lot of bureaucracy)
+//////////////////////////////
+
+/obj/item/weapon/paper/mothership/spacepolyp_care
+	name = "paper- 'Proper Polyp Care'"
+	info = {"<html><style>
+			body {color: #000000; background: #F8F8F8;}
+			h1 {color: #000000; font-size:30px;}
+			fieldset {width:140px;}
+			</style>
+			<body>
+			<center><img src="https://ss13.moe/wiki/images/e/ec/Mothership_logo.png"> <h1>GDR-43X: Space Polyp Care Instructions</h1></center>
+			Caring for space polyps is a simple but crucial task to maintain mothership food production. The following simple instructions have been written for you by an experienced Head Laborer. Adhere to them or risk consequences to life, limb, and continuation of cloning cycles.<BR><BR>
+			<b>Slaughtering</b>: Pull the polyp you are slaughtering away from its herd to a private room. Use a disintegrator in 40 watt range or a similar substitute. Make it quick.<BR>
+			<b>Injuries</b>: If one of your polyps is injured and remains so at the end of your shift, you will be held accountable. To quickly fix minor injuries, feed the polyp fresh meat. Polyps have a rapid metabolism, and proteins assist with natural healing processes.<BR>
+			<b>Calming</b>: If you abuse a polyp, or it is attacked, it will become defensive and sting any nearby lifeforms. A defensive polyp will not recognize you as its herder. Feed the agitated polyp fresh meat to calm it. If an entire herd has become agitated, isolate and call for mothership soldiers.<BR><BR>
+			Now that you are armed with knowledge, return to work, laborer. Praise the mothership, and all hail the Chairman!<BR>
+			<BR>
+			<b>Head Laborer Signature:</b> <i>Glyzz Bvvmrk</i>
+			"}
+
+//////////////////////////////
 // RAIDER AMBUSH
 //////////////////////////////
 
