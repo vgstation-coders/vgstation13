@@ -199,9 +199,10 @@
 			<body>
 			<center><img src="https://ss13.moe/wiki/images/e/ec/Mothership_logo.png"> <h1>GDR-43X: Space Polyp Care Instructions</h1></center>
 			Caring for space polyps is a simple but crucial task to maintain mothership food production. The following simple instructions have been written for you by an experienced Head Laborer. Adhere to them or risk consequences to life, limb, and continuation of cloning cycles.<BR><BR>
+			<b>Gelatin Harvesting</b>: Polyps secrete gelatin naturally that helps insulate them from vacuum. After some time has passed, collect excess gelatin from the tendrils below the bell using a bucket. Place the lid on the bucket first, or product will be wasted.<BR>
 			<b>Slaughtering</b>: Pull the polyp you are slaughtering away from its herd to a private room. Use a disintegrator in 40 watt range or a similar substitute. Make it quick.<BR>
 			<b>Injuries</b>: If one of your polyps is injured and remains so at the end of your shift, you will be held accountable. To quickly fix minor injuries, feed the polyp fresh meat. Polyps have a rapid metabolism, and proteins assist with natural healing processes.<BR>
-			<b>Calming</b>: If you abuse a polyp, or it is attacked, it will become defensive and sting any nearby lifeforms. A defensive polyp will not recognize you as its herder. Feed the agitated polyp fresh meat to calm it. If an entire herd has become agitated, isolate and call for mothership soldiers.<BR><BR>
+			<b>Calming</b>: If you abuse a polyp, or it is attacked, it will become defensive and sting any nearby lifeforms. A defensive polyp will not recognize you as its herder. Feed the agitated polyp fresh meat to calm it. If an entire herd has become agitated, isolate and call for assistance from mothership soldiers.<BR><BR>
 			Now that you are armed with knowledge, return to work, laborer. Praise the mothership, and all hail the Chairman!<BR>
 			<BR>
 			<b>Head Laborer Signature:</b> <i>Glyzz Bvvmrk</i>
