@@ -2460,6 +2460,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_hydroponics)
 	group = "Hydroponics"
 
+/datum/supply_packs/polyp
+	name = "Polyp"
+	cost = 50
+	containertype = /obj/structure/largecrate/polyp
+	containername = "polyp crate"
+	access = list(access_hydroponics)
+	group = "Hydroponics"
+
 /datum/supply_packs/chicken
 	name = "Chicken"
 	cost = 20
