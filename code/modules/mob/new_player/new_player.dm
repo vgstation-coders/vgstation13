@@ -382,9 +382,9 @@
 
 	ticker.mode.latespawn(character)//can we make them a latejoin antag?
 
-	if(character)
-		qdel(character)
-	else //Character got transformed in a latejoin ruleset
+	if (!character || !character.mind) //Character got transformed in a latejoin ruleset
+		if(character)
+			qdel(character)
 		qdel(src)
 		return
 

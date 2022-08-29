@@ -182,7 +182,7 @@ var/datum/controller/gameticker/ticker
 		job_master.ResetOccupations()
 		return 0
 
-	/After antagonists have been removed from new_players in player_list, create crew
+	//After antagonists have been removed from new_players in player_list, create crew
 	for(var/mob/M in player_list)
 		if(istype(M, /mob/living/))
 			var/mob/living/L = M
