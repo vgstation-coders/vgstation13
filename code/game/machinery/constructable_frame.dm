@@ -966,9 +966,6 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/scanning_module = 2,
 							/obj/item/weapon/stock_parts/manipulator = 2)
 
-
-
-
 //Teleporter
 /obj/item/weapon/circuitboard/telehub
 	name = "Circuit Board (Teleporter Generator)"
@@ -1604,4 +1601,15 @@ to destroy them and players will be able to make replacements.
 		/obj/item/weapon/stock_parts/manipulator = 1,
 		/obj/item/weapon/stock_parts/scanning_module = 1,
 		/obj/item/weapon/stock_parts/capacitor = 1,
-		)
+	)
+
+/obj/item/weapon/circuitboard/airshield
+	name = "Circuit Board (Airshield)"
+	desc = "A circuit board for a structural airshield."
+	board_type = MACHINE
+	build_path = /obj/machinery/airshield
+	origin_tech = c_ENGINEERING + "=6;"+ Tc_PROGRAMMING + "=4" + Tc_MATERIALS + "=3"
+	req_components = list(
+		/obj/item/weapon/stock_parts/manipulator = 3,
+		/obj/item/weapon/stock_parts/micro_laser = 1
+	)
