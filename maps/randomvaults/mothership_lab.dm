@@ -331,6 +331,9 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 
+/obj/item/clothing/under/grey/dissolvable()
+	return WATER
+
 /obj/item/clothing/under/grey/grey_worker
 	desc = "A set of high visibility coveralls issued to mothership engineers and technicians. It has minor radiation shielding."
 	name = "worker's coveralls"
@@ -367,9 +370,6 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 10)
 	sterility = 20
 
-/obj/item/clothing/under/grey/grey_researcher/dissolvable()
-	return WATER
-
 /obj/item/clothing/under/grey/grey_leader
 	name = "Administrator's Uniform"
 	desc = "A uniform for high-ranking mothership officials. For those who wish to command their minions while looking impeccably stylish."
@@ -390,6 +390,9 @@
 	item_state = "labcoat_ayy"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
+
+/obj/item/clothing/suit/storage/labcoat/mothership/dissolvable() // It'll take more than acid to ruin a uniform this sharp
+	return WATER
 
 //Ayy lmao boots
 /obj/item/clothing/shoes/jackboots/mothership

@@ -53843,9 +53843,7 @@
 	},
 /area/shuttle/nuclearops)
 "dxQ" = (
-/obj/effect/landmark{
-	name = "Syndicate-Uplink"
-	},
+/obj/structure/closet/syndicate/nuclear,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
