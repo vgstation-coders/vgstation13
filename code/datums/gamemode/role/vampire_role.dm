@@ -14,6 +14,9 @@
 	admin_voice_style = "danger"
 
 	var/iscloaking = FALSE
+	var/silentbite = FALSE
+	var/deadchat_timer = 0
+	var/deadchat = FALSE
 	var/nullified = 0
 	var/smitecounter = 0
 
@@ -24,7 +27,7 @@
 
 	var/list/feeders = list()
 
-	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
+	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate,  /datum/power/vampire/silentbite)
 
 	var/list/image/cached_images = list()
 
@@ -177,7 +180,7 @@
 	else
 		target.LAssailant = assailant
 		target.assaulted_by(assailant)
-	while(do_mob(assailant, target, 5 SECONDS))
+	while(do_mob(assailant, target, (5 SECONDS) * (silentbite + 1)))
 		if(!isvampire(assailant))
 			to_chat(assailant, "<span class='warning'>Your fangs have disappeared!</span>")
 			draining = null
@@ -216,7 +219,13 @@
 		if(blood_total_before != blood_total)
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
-		target.vessel.remove_reagent(BLOOD,30)
+		target.vessel.remove_reagent(BLOOD,blood)
+		var/mob/living/carbon/V = assailant
+		if(V)
+			var/fatty_chemicals = target.reagents.has_any_reagents(list(CHEESYGLOOP, CORNOIL)) //If the target has these chemicals in his blood the vampire can get fat from sucking blood.
+			var/eating_threshold = fatty_chemicals ? OVEREAT_THRESHOLD * 2 : OVEREAT_THRESHOLD
+			if(V.nutrition < eating_threshold) //Gives the vampire a little bit of food, at a rate of 1/4 the blood sucked.
+				V.nutrition = round(min(V.nutrition + blood/4, OVEREAT_THRESHOLD), 1)
 		update_vamp_hud()
 
 	draining = null
@@ -261,6 +270,7 @@
 	handle_cloak(H)
 	handle_menace(H)
 	handle_smite(H)
+	handle_deadspeak(H)
 	if(istype(H.loc, /turf/space))
 		H.check_sun()
 	if(istype(H.loc, /obj/structure/closet/coffin))
@@ -327,6 +337,19 @@
 		C.Jitter(20)
 		C.Dizzy(20)
 		to_chat(C, "<span class='sinister'>Your heart is filled with dread, and you shake uncontrollably.</span>")
+
+/datum/role/vampire/proc/handle_deadspeak(var/mob/living/carbon/human/H)
+	if(deadchat)
+		return
+	if(H.stat == DEAD)
+		return
+	if(locate(/datum/power/vampire/charisma) in current_powers && world.time > deadchat_timer)
+		deadchat = TRUE
+		//have deadchat for 30 seconds every five minutes
+		spawn(rand(200, 400))
+			if(H.stat != DEAD)
+				deadchat_timer = world.time + 1800 + rand(300, 1200)
+				deadchat = FALSE
 
 /datum/role/vampire/proc/handle_smite(var/mob/living/carbon/human/H)
 	var/smitetemp = 0
@@ -439,7 +462,7 @@
 						to_chat(H, "<span class='warning'>Your helmet protects you from the holy water!</span>")
 						return
 
-					if(H.acidable())
+					if(H.dissolvable())
 						if(prob(15) && volume >= 30)
 							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 							if(head_organ)
@@ -463,7 +486,7 @@
 								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric current powers protect you!</span>")
 								smitecounter += volume * 0.4
 				else
-					if(H.acidable())
+					if(H.dissolvable())
 						H.take_organ_damage(min(15, volume * 2))
 						smitecounter += 5
 

@@ -109,7 +109,7 @@
 		if(!gcDestroyed && is_locking(/datum/locking_category/buckle/bed/nest))
 			stabilize()
 
-/obj/structure/bed/nest/acidable()
+/obj/structure/bed/nest/dissolvable()
 	return 0
 
 #undef ALIEN_NEST_LOCKED_Y_OFFSET

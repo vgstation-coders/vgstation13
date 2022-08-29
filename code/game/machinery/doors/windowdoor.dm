@@ -14,7 +14,6 @@
 	opacity = 0
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/secure = FALSE
-	explosion_resistance = 5
 	air_properties_vary_with_direction = 1
 	ghost_read = 0
 	machine_flags = EMAGGABLE|WIREJACK
@@ -147,7 +146,6 @@
 	playsound(src, soundeffect, 100, 1)
 	icon_state = "[base_state]open"
 	spawn(animation_delay)
-		explosion_resistance = 0
 		setDensity(FALSE)
 		set_opacity(0) //You can see through open windoors even if the glass is opaque
 		update_nearby_tiles()
@@ -170,7 +168,6 @@
 	icon_state = base_state
 
 	setDensity(TRUE)
-	explosion_resistance = initial(explosion_resistance)
 	update_nearby_tiles()
 
 	spawn(animation_delay)

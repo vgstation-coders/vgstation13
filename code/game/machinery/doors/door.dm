@@ -288,7 +288,6 @@ var/list/all_doors = list()
 	layer = open_layer
 	setDensity(FALSE)
 	update_nearby_tiles()
-	explosion_resistance = 0
 	if (animation_delay_predensity_opening)
 		sleep(animation_delay - animation_delay_predensity_opening)
 	update_icon()
@@ -361,12 +360,9 @@ var/list/all_doors = list()
 		// above most items if closed
 		plane = closed_plane
 		layer = closed_layer
-		explosion_resistance = initial(explosion_resistance)
 	else
 		plane = open_plane
 		layer = open_layer
-
-		explosion_resistance = 0
 
 	if(width > 1)
 		if(dir in list(EAST, WEST))
@@ -481,7 +477,10 @@ var/list/all_doors = list()
 
 // Flash denied and such.
 /obj/machinery/door/proc/denied()
-	playsound(loc, 'sound/machines/denied.ogg', 50, 1)
+	if((Holiday == APRIL_FOOLS_DAY) && prob(10) || (prob(1) && prob(10))) // 1/1000 any time or 1/10 during April Fools to play the Half-Life "Access Denied" voiceover
+		playsound(loc, 'sound/machines/access_denied.ogg', 50, 1)
+	else
+		playsound(loc, 'sound/machines/denied.ogg', 50, 1)
 	if (density) //Why are we playing a denied animation on an OPEN DOOR
 		door_animate("deny")
 

@@ -9,8 +9,15 @@ var/datum/subsystem/more_init/SSmore_init
 	NEW_SS_GLOBAL(SSmore_init)
 
 /datum/subsystem/more_init/Initialize(timeofday)
-	setup_news()
 	var/watch=start_watch()
+	log_startup_progress("Initializing stuff formerly left in world/New...")
+	initialize_rune_words()
+	library_catalog.initialize()
+	initialize_beespecies()
+
+	setup_news()
+	log_startup_progress("  Finished stuff formerly left in world/New in [stop_watch(watch)]s.")
+	watch=start_watch()
 	log_startup_progress("Caching damage icons...")
 	cachedamageicons()
 	log_startup_progress("  Finished caching damage icons in [stop_watch(watch)]s.")

@@ -171,14 +171,11 @@
 	if(grown_seed.hematophage)
 		dat += "<br>It is a highly specialized hematophage that will only draw nutrients from blood."
 
-	switch(grown_seed.carnivorous)
+	switch(grown_seed.voracious)
 		if(1)
-			dat += "<br>It is carnivorous and will eat tray pests for sustenance."
+			dat += "<br>It is carnivorous and will eat tray pests and weeds for sustenance."
 		if(2)
 			dat	+= "<br>It is carnivorous and poses a significant threat to living things around it."
-
-	if(grown_seed.parasite)
-		dat += "<br>It is capable of parasitizing and gaining sustenance from tray weeds."
 
 	if(grown_seed.alter_temp)
 		dat += "<br>It will gradually alter the local room temperature to match it's ideal habitat."
@@ -270,7 +267,7 @@
 
 /obj/item/weapon/hatchet
 	name = "hatchet"
-	desc = "A very sharp axe blade upon a short fibremetal handle. It has a long history of chopping things, but now it is used for chopping wood."
+	desc = "A very sharp axe blade upon a short wooden handle. It has a long history of chopping things, but now it is used for chopping wood."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "hatchet"
 	flags = FPRINT
@@ -298,6 +295,12 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "unathiknife"
 	attack_verb = list("rips", "tears", "cuts")
+
+/obj/item/weapon/hatchet/metalhandle
+	name = "hatchet"
+	desc = "A soulless attempt at upgrading the traditional hatchet, clearly a mass produced inferior tool compared to the ones made by elder botanist master-crafstmen."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "lamehatchet"
 
 /obj/item/weapon/scythe
 	icon_state = "scythe0"

@@ -230,6 +230,9 @@
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0) // Identical to default sec helmet, but a lot more stylish!
 
+/obj/item/clothing/head/helmet/mothership/dissolvable()
+	return WATER
+
 /obj/item/clothing/head/helmet/mothership_visor
 	name = "MDF Visored Helmet"
 	icon_state = "ayy_helm_visor"
@@ -238,6 +241,9 @@
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED) // This one only fits ayys
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0) // Identical to default sec helmet, but a lot more stylish!
+
+/obj/item/clothing/head/helmet/mothership_visor/dissolvable()
+	return WATER
 
 /obj/item/clothing/head/helmet/mothership_visor_heavy
 	name = "MDF Heavy Helmet"
@@ -249,6 +255,9 @@
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 	armor = list(melee = 65, bullet = 30, laser = 65, energy = 15, bomb = 40, bio = 0, rad = 0)
 
+/obj/item/clothing/head/helmet/mothership_visor_heavy/dissolvable()
+	return FALSE
+
 //Ayy lmao armor vest
 /obj/item/clothing/suit/armor/mothership
 	name = "MDF Armor"
@@ -259,6 +268,9 @@
 	species_fit = list(GREY_SHAPED) // Can be worn by humans and ayys
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0) // Identical to default armor vest, but a lot more stylish!
+
+/obj/item/clothing/suit/armor/mothership/dissolvable()
+	return WATER
 
 //Ayy lmao heavy armor
 /obj/item/clothing/suit/armor/mothership_heavy
@@ -272,6 +284,9 @@
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 	armor = list(melee = 65, bullet = 30, laser = 65, energy = 15, bomb = 40, bio = 0, rad = 0) // Slightly better stats, but nothing too crazy
 	siemens_coefficient = 0.5
+
+/obj/item/clothing/suit/armor/mothership_heavy/dissolvable()
+	return FALSE
 
 //Ayy lmao soldier belt
 /obj/item/weapon/storage/belt/mothership
@@ -304,6 +319,9 @@
 		"/obj/item/weapon/tank/emergency_oxygen",
 		)
 
+/obj/item/weapon/storage/belt/mothership/dissolvable()
+	return WATER
+
 //////////////////////////////
 // AYY MISC ITEMS (Uniforms and other stuff that doesn't quite fit a "military" label)
 //////////////////////////////
@@ -312,6 +330,9 @@
 /obj/item/clothing/under/grey
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
+
+/obj/item/clothing/under/grey/dissolvable()
+	return WATER
 
 /obj/item/clothing/under/grey/grey_worker
 	desc = "A set of high visibility coveralls issued to mothership engineers and technicians. It has minor radiation shielding."
@@ -358,8 +379,8 @@
 	armor = list(melee = 10, bullet = 0, laser = 15,energy = 5, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.8
 
-/obj/item/clothing/under/grey/grey_leader/acidable() // It'll take more than acid to ruin a uniform this sharp
-	return 0
+/obj/item/clothing/under/grey/grey_leader/dissolvable() // It'll take more than acid to ruin a uniform this sharp
+	return FALSE
 
 //Ayy lmao labcoat (Same as a normal labcoat in stats, but slightly altered spritewise to look better when paired with the uniform)
 /obj/item/clothing/suit/storage/labcoat/mothership
@@ -370,11 +391,17 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 
+/obj/item/clothing/suit/storage/labcoat/mothership/dissolvable() // It'll take more than acid to ruin a uniform this sharp
+	return WATER
+
 //Ayy lmao boots
 /obj/item/clothing/shoes/jackboots/mothership
 	name = "mothership boots"
 	desc = "Issued, recalled post-mortem, and reissued countless times to many mothership denizens. Despite that, the boots still shine impeccably."
 	sterility = 75
+
+/obj/item/clothing/shoes/jackboots/mothership/dissolvable() // It'll take more than acid to ruin a fine pair of boots like these
+	return WATER
 
 /obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior // Meant to be worn by ayy VIPs, like leaders and such
 	name = "Superior Mothership Boots"
@@ -383,8 +410,8 @@
 	clothing_flags = NOSLIP
 	sterility = 100
 
-/obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior/acidable() // It'll take more than acid to ruin a fine pair of boots like these
-	return 0
+/obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior/dissolvable() // It'll take more than acid to ruin a fine pair of boots like these
+	return FALSE
 
 //////////////////////////////
 // AYY ID CARDS (Some IDs for access requirements for the vault. Also allows future coders to use them for their own projects, if they want.)
@@ -431,8 +458,8 @@
 	access = list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
 	base_access = list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
 
-/obj/item/weapon/card/id/mothership_leader/acidable() // ID nanobots or something. This is mostly to prevent it being melted by a stray grenade in the vault crossfire
-	return 0
+/obj/item/weapon/card/id/mothership_leader/dissolvable() // ID nanobots or something. This is mostly to prevent it being melted by a stray grenade in the vault crossfire
+	return FALSE
 
 //////////////////////////////
 // GREY GOO (Pill and pill bottle items for an experimental grey brain medication. More info on Chemistry-Reagents.dm)

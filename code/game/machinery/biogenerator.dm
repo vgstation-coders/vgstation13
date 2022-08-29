@@ -33,6 +33,20 @@
 	amount_per_unit=10
 	other_amounts=list(5)
 
+/datum/biogen_recipe/food/cheese
+	id="cheese"
+	name="Cheese Wheel"
+	cost=100 //Making milk and reacting it with enzyme costs 80, so this is 25% more expensive
+	other_amounts=list(5)
+	result=/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
+
+/datum/biogen_recipe/food/butter
+	id="butter"
+	name="Butter"
+	cost=150 //The 40u milk for 20u cream costs 80, so this is about 87% more expensive
+	other_amounts=list(5)
+	result=/obj/item/weapon/reagent_containers/food/snacks/butter
+
 /datum/biogen_recipe/food/meat
 	id="meat"
 	name="Slab of meat"
@@ -173,6 +187,12 @@
 	id="plants"
 	name="Plant Bag"
 	result=/obj/item/weapon/storage/bag/plants
+
+/datum/biogen_recipe/leather/materials
+	cost=500
+	id="materials"
+	name="Materials Bag"
+	result=/obj/item/weapon/storage/bag/materials
 
 /datum/biogen_recipe/leather/secbelt
 	cost=400

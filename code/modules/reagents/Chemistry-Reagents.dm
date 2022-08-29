@@ -28,7 +28,6 @@
 	var/pain_resistance = 0
 	var/sport = SPORTINESS_NONE //High sport helps you show off on a treadmill. Multiplicative
 	var/custom_metabolism = REAGENTS_METABOLISM
-	var/custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER
 	var/overdose_am = 0
 	var/overdose_tick = 0
 	var/tick = 0
@@ -221,7 +220,7 @@
 	if(!istype(T)) //Still can't find it, abort
 		return
 
-	holder.remove_reagent(src.id, custom_plant_metabolism)
+	holder.remove_reagent(src.id, 1)
 
 //Called after add_reagents creates a new reagent
 /datum/reagent/proc/on_introduced(var/data)
@@ -563,18 +562,51 @@
 					else
 						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
 
-		if(ishuman(L) && (method == TOUCH))
+		if(ishuman(L))
 			var/mob/living/carbon/human/H = L
-			H.bloody_body_from_data(data,0,src)
-			if((LIMB_RIGHT_HAND in zone_sels) || (LIMB_LEFT_HAND in zone_sels))
-				H.bloody_hands_from_data(data,2,src)
-			spawn() //Bloody feet, result of the blood that fell on the floor
-				var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
+			if(method == TOUCH)
+				H.bloody_body_from_data(data,0,src)
+				if((LIMB_RIGHT_HAND in zone_sels) || (LIMB_LEFT_HAND in zone_sels))
+					H.bloody_hands_from_data(data,2,src)
+				spawn() //Bloody feet, result of the blood that fell on the floor
+					var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
 
-				if(B)
-					B.Crossed(H)
+					if(B)
+						B.Crossed(H)
 
-			H.update_icons()
+				H.update_icons()
+			else if(self.data["blood_DNA"])
+				var/datum/role/vampire/V = isvampire(H)
+				if(V)
+					var/mob/living/carbon/human/foundmob
+					for(var/datum/data/record/R in sortRecord(data_core.medical))
+						if(R.fields["b_dna"] == self.data["blood_DNA"])
+							for(var/mob/living/carbon/human/other in player_list)
+								if(other.name == R.fields["name"] && other != M)
+									foundmob = other
+									break
+							if(foundmob)
+								break
+					if(foundmob)
+						var/targetref = "/ref[foundmob]"
+						var/blood_total_before = V.blood_total
+						var/blood_usable_before = V.blood_usable
+						var/divisor = (locate(/datum/power/vampire/mature) in V.current_powers) ? min(2,foundmob.stat + 1) : (min(2,foundmob.stat + 1)*2)
+						if (!(targetref in V.feeders))
+							V.feeders[targetref] = 0
+						if (V.feeders[targetref] < MAX_BLOOD_PER_TARGET)
+							V.blood_total += volume/divisor
+						else
+							to_chat(H, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
+						if(foundmob.stat < DEAD) //alive
+							V.blood_usable += volume/divisor
+						V.feeders[targetref] += volume/divisor
+						if(blood_total_before != V.blood_total)
+							to_chat(H, "<span class='notice'>You have accumulated [V.blood_total] unit[V.blood_total > 1 ? "s" : ""] of blood[blood_usable_before != V.blood_usable ?", and have [V.blood_usable] left to use." : "."]</span>")
+						V.check_vampire_upgrade()
+						V.update_vamp_hud()
+					else
+						to_chat(H, "<span class='warning'>This blood is lifeless and has no power.</span>")
 
 /datum/reagent/blood/reaction_animal(var/mob/living/simple_animal/M, var/method = TOUCH, var/volume)
 
@@ -671,7 +703,7 @@
 		if(iscarbon(M))
 			var/mob/living/carbon/C = M
 			var/datum/disease2/effect/E = C.has_active_symptom(/datum/disease2/effect/thick_skin)
-			C.make_visible(INVISIBLESPRAY)
+			C.make_visible(INVISIBLESPRAY,FALSE)
 			if(E)
 				E.multiplier = max(E.multiplier - rand(1,3), 1)
 				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
@@ -756,6 +788,8 @@
 	else if(O.molten) // Molten shit.
 		O.molten=0
 		O.solidify()
+	else if(O.dissolvable() == WATER &&  prob(15))
+		O.acid_melt()
 
 /datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	..()
@@ -770,7 +804,7 @@
 
 /datum/reagent/water/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_waterlevel(1)
+	T.add_waterlevel(2)
 
 /datum/reagent/lube
 	name = "Space Lube"
@@ -911,7 +945,7 @@
 
 /datum/reagent/toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_toxinlevel(10)
+	T.add_toxinlevel(2)
 
 /datum/reagent/plasticide
 	name = "Plasticide"
@@ -1129,7 +1163,7 @@
 /datum/reagent/srejuvenate
 	name = "Soporific Rejuvenant"
 	id = STOXIN2
-	description = "Put people to sleep, and heals them."
+	description = "Puts people to sleep, and heals them."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
@@ -1196,7 +1230,7 @@
 			M.losebreath = max(10, M.losebreath - 5)
 
 /datum/reagent/space_drugs
-	name = "Space drugs"
+	name = "Space Drugs"
 	id = SPACE_DRUGS
 	description = "An illegal chemical compound used as drug."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -1309,9 +1343,13 @@
 
 /datum/reagent/holysalts/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_waterlevel(-3)
-	T.add_nutrientlevel(-3)
+	T.add_waterlevel(-5)
+	T.add_nutrientlevel(5)
 	T.add_toxinlevel(8)
+	T.add_weedlevel(-20)
+	T.add_pestlevel(-10)
+	if(T.seed && !T.dead)
+		T.add_planthealth(-2)
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -1484,6 +1522,7 @@
 /datum/reagent/chlorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_toxinlevel(8)
+	T.add_weedlevel(-2)
 
 /datum/reagent/fluorine
 	name = "Fluorine"
@@ -1557,6 +1596,7 @@
 /datum/reagent/phosphorus/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_nutrientlevel(1)
+	T.add_weedlevel(3)
 
 /datum/reagent/lithium
 	name = "Lithium"
@@ -1591,10 +1631,11 @@
 /datum/reagent/sugar/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.add_nutrientlevel(1)
-	T.add_pestlevel(1)
+	T.add_pestlevel(20)
+	T.add_weedlevel(20)
 
 /datum/reagent/sugar/cornsyrup
-	name = "High-fructose corn syrup"
+	name = "High-Fructose Corn Syrup"
 	id = CORNSYRUP
 	description = "For when sugar needs to be produced on a budget, can become so prevalent that everyone will be made to drink it."
 
@@ -1664,7 +1705,7 @@
 		..()
 
 /datum/reagent/sacid
-	name = "Sulphuric acid"
+	name = "Sulphuric Acid"
 	id = SACID
 	description = "A strong mineral acid with the molecular formula H2SO4."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -1674,11 +1715,10 @@
 	specheatcap = 1.38
 
 /datum/reagent/sacid/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 
-	if(M.acidable())
+	if(M.dissolvable() == PACID)	//not PACID but it'll do
 		M.adjustFireLoss(REM)
 		M.take_organ_damage(0, REM)
 
@@ -1699,14 +1739,14 @@
 						targeted_zones.Remove(part)
 						break
 				if(covered)
-					if(C.acidable() && prob(15))
+					if(C.dissolvable() == PACID && prob(15))	//not PACID but it will do
 						to_chat(H, "<span class='warning'>Your [C.name] melts away but protects you from the acid!</span>")
 						H.u_equip(C,0)
 						qdel(C)
 					else
 						to_chat(H, "<span class='warning'>Your [C.name] protects you from the acid!</span>")
 
-	if(M.acidable() && targeted_zones.len)
+	if(M.dissolvable() == PACID && targeted_zones.len) //not PACID but it will do
 		if(prob(15) && ishuman(M) && volume >= 30)
 			var/mob/living/carbon/human/H = M
 			var/screamed = FALSE
@@ -1725,11 +1765,10 @@
 			M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 
 /datum/reagent/sacid/reaction_obj(var/obj/O, var/volume)
-
 	if(..())
 		return 1
 
-	if(!O.acidable())
+	if(!(O.dissolvable() == PACID)) //not PACID but it will do
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)) && prob(10))
@@ -1743,10 +1782,10 @@
 
 /datum/reagent/sacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_toxinlevel(10)
+	T.add_toxinlevel(2)
 
 /datum/reagent/pacid
-	name = "Polytrinic acid"
+	name = "Polytrinic Acid"
 	id = PACID
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -1779,14 +1818,14 @@
 						targeted_zones.Remove(part)
 						break
 				if(covered)
-					if(C.acidable() && prob(15))
+					if(C.dissolvable() == PACID && prob(15))
 						to_chat(H, "<span class='warning'>Your [C.name] melts away but protects you from the acid!</span>")
 						H.u_equip(C,0)
 						qdel(C)
 					else
 						to_chat(H, "<span class='warning'>Your [C.name] protects you from the acid!</span>")
 
-	if(M.acidable() && targeted_zones.len) //I think someone doesn't know what this does
+	if(M.dissolvable() == PACID && targeted_zones.len) //I think someone doesn't know what this does
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			var/screamed = FALSE
@@ -1805,15 +1844,13 @@
 			M.take_organ_damage(min(15, volume * 4)) //Same deal as sulphuric acid
 
 /datum/reagent/pacid/reaction_obj(var/obj/O, var/volume)
-
 	if(..())
 		return 1
 
-	if(!O.acidable())
+	if(!(O.dissolvable() == PACID))
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)))
-		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		O.acid_melt()
 	else if(istype(O,/obj/effect/plantsegment))
 		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(get_turf(O))
@@ -1870,7 +1907,6 @@
 	color = "#669966" //rgb: 102, 153, 102
 	density = 5
 	specheatcap = 94
-	custom_plant_metabolism = 2
 
 /datum/reagent/radium/on_mob_life(var/mob/living/M)
 
@@ -1895,12 +1931,17 @@
 			new /obj/effect/decal/cleanable/greenglow(T)
 
 /datum/reagent/radium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_mutationlevel(0.6*T.get_mutationmod()*custom_plant_metabolism)
-	T.add_toxinlevel(4)
-	if(T.seed && !T.dead)
-		if(prob(20))
-			T.add_mutationmod(0.1)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	T.add_toxinlevel(2)
+	if(T.reagents.get_reagent_amount(id) > 0)
+		if(prob(15))
+			T.mutate(GENE_MORPHOLOGY)
+			T.reagents.remove_reagent(id, 1)
 
 /datum/reagent/ryetalyn
 	name = "Ryetalyn"
@@ -2000,14 +2041,13 @@
 	density = 1.26
 
 /datum/reagent/mutagen
-	name = "Unstable mutagen"
+	name = "Unstable Mutagen"
 	id = MUTAGEN
 	description = "Might cause unpredictable mutations. Keep away from children."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 3.35
 	specheatcap = 96.86
-	custom_plant_metabolism = 2
 
 /datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 
@@ -2036,8 +2076,19 @@
 	M.apply_radiation(10,RAD_INTERNAL)
 
 /datum/reagent/mutagen/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_mutationlevel(1*T.get_mutationmod()*custom_plant_metabolism)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(15))
+			T.mutate(GENE_PHYTOCHEMISTRY)
+			T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/tramadol
 	name = "Tramadol"
@@ -2154,7 +2205,7 @@
 	density = 7.874
 
 /datum/reagent/gold
-	name = "Gold powder"
+	name = "Gold Powder"
 	id = GOLD
 	description = "Gold is a dense, soft, shiny metal and the most malleable and ductile metal known."
 	reagent_state = REAGENT_STATE_SOLID
@@ -2163,7 +2214,7 @@
 	density = 19.3
 
 /datum/reagent/silver
-	name = "Silver powder"
+	name = "Silver Powder"
 	id = SILVER
 	description = "A soft, white, lustrous transition metal, it has the highest electrical conductivity of any element and the highest thermal conductivity of any metal."
 	reagent_state = REAGENT_STATE_SOLID
@@ -2196,8 +2247,23 @@
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
 
+/datum/reagent/uranium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(15))
+			T.mutate(GENE_BIOLUMINESCENCE)
+			T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
+
 /datum/reagent/diamond
-	name = "Diamond dust"
+	name = "Diamond Dust"
 	id = DIAMONDDUST
 	description = "An allotrope of carbon, one of the hardest minerals known."
 	reagent_state = REAGENT_STATE_SOLID
@@ -2210,12 +2276,26 @@
 	if(..())
 		return 1
 
-	M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
-	if(prob(30))
-		M.audible_scream()
+	if(isgolem(M)) //golems metabolize the diamond into very expensive doctor's delight
+		if(M.getOxyLoss())
+			M.adjustOxyLoss(-2)
+		if(M.getBruteLoss())
+			M.heal_organ_damage(2, 0)
+		if(M.getFireLoss())
+			M.heal_organ_damage(0, 2)
+		if(M.getToxLoss())
+			M.adjustToxLoss(-2)
+		if(M.dizziness != 0)
+			M.dizziness = max(0, M.dizziness - 15)
+		if(M.confused != 0)
+			M.remove_confused(5)
+	else
+		M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
+		if(prob(30))
+			M.audible_scream()
 
 /datum/reagent/phazon
-	name = "Phazon salt"
+	name = "Phazon Salt"
 	id = PHAZON
 	description = "The properties of this rare metal are not well-known."
 	reagent_state = REAGENT_STATE_SOLID
@@ -2257,7 +2337,7 @@
 	specheatcap = 0.712
 
 /datum/reagent/fuel
-	name = "Welding fuel"
+	name = "Welding Fuel"
 	id = FUEL
 	description = "Required for welders. Flamable."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -2453,7 +2533,7 @@
 				H.apply_damage(2, BRUTE, LIMB_HEAD)
 
 /datum/reagent/fertilizer
-	name = "fertilizer"
+	name = "Fertilizer"
 	id = FERTILIZER
 	description = "A chemical mix good for growing plants with."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -2481,10 +2561,32 @@
 	specheatcap = 0.60
 
 /datum/reagent/fertilizer/left4zed/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
 	T.add_nutrientlevel(10)
-	if(prob(30))
-		T.add_mutationmod(0.2)
+	if(T.reagents.get_reagent_amount(id) >= 1)
+		if(prob(1))
+			T.mutate(GENE_PHYTOCHEMISTRY)
+		if(prob(1))
+			T.mutate(GENE_MORPHOLOGY)
+		if(prob(1))
+			T.mutate(GENE_BIOLUMINESCENCE)
+		if(prob(1))
+			T.mutate(GENE_ECOLOGY)
+		if(prob(1))
+			T.mutate(GENE_ECOPHYSIOLOGY)
+		if(prob(1))
+			T.mutate(GENE_METABOLISM)
+		if(prob(1))
+			T.mutate(GENE_DEVELOPMENT)
+		if(prob(1))
+			T.mutate(GENE_XENOPHYSIOLOGY)
+		if(prob(5))
+			T.reagents.remove_reagent(id, 1)
 
 /datum/reagent/fertilizer/robustharvest
 	name = "Robust Harvest"
@@ -2493,25 +2595,27 @@
 	color = "#3E901C" // rgb: 62, 144, 28
 	density = 1.32
 	specheatcap = 0.60
-	custom_plant_metabolism = 0.1
 
 /datum/reagent/fertilizer/robustharvest/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	if(prob(25*custom_plant_metabolism))
-		T.add_weedlevel(10)
-	if(T.seed && !T.dead && prob(25*custom_plant_metabolism))
-		T.add_pestlevel(10)
-	if(T.seed && !T.dead && !T.seed.immutable)
-		var/chance
-		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism
-		if(prob(chance))
-			T.check_for_divergence(1)
-			T.seed.potency++
-		chance = unmix(T.seed.yield, 6, 2)*15*custom_plant_metabolism
-		if(prob(chance))
-			T.check_for_divergence(1)
-			T.seed.yield--
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	T.reagents.remove_reagent(id, 0.1)
+	if(T.reagents.get_reagent_amount(id) > 0)
+		T.add_nutrientlevel(1)
+		if(prob(3))
+			T.add_weedlevel(10)
+		if(T.seed && !T.dead)
+			if(prob(3))
+				T.add_pestlevel(10)
+			var/chance = unmix(T.seed.potency, 15, 150)*35
+			if(!T.seed.immutable && prob(chance))
+				T.check_for_divergence(1)
+				T.seed.potency++
+				
 
 /datum/reagent/toxin/plantbgone
 	name = "Plant-B-Gone"
@@ -2719,6 +2823,23 @@
 
 	M.heal_organ_damage(0, 2 * REM)
 
+/datum/reagent/kelotane/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(15))
+			T.mutate(GENE_ECOPHYSIOLOGY)
+			T.reagents.remove_reagent(id, 1)
+		if(prob(15))
+			T.mutate(GENE_ECOPHYSIOLOGY)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
+
 /datum/reagent/dermaline
 	name = "Dermaline"
 	id = DERMALINE
@@ -2753,6 +2874,21 @@
 
 	if(holder.has_any_reagents(LEXORINS))
 		holder.remove_reagents(LEXORINS, 2 * REM)
+
+/datum/reagent/dexalin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(15))
+			T.mutate(GENE_XENOPHYSIOLOGY)
+			T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/dexalinp
 	name = "Dexalin Plus"
@@ -2890,8 +3026,8 @@
 
 /datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_nutrientlevel(1)
-	T.add_waterlevel(1)
+	T.add_nutrientlevel(2)
+	T.add_waterlevel(2)
 	T.add_weedlevel(5)
 	T.add_pestlevel(5)
 	T.add_toxinlevel(5)
@@ -3306,6 +3442,23 @@ var/procizine_tolerance = 0
 			for(var/datum/wound/W in E.wounds)
 				W.heal_damage(0.2, TRUE)
 
+/datum/reagent/bicaridine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(15))
+			T.mutate(GENE_ECOLOGY)
+			T.reagents.remove_reagent(id, 1)
+		if(prob(15))
+			T.mutate(GENE_ECOLOGY)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
+
 /datum/reagent/synthocarisol
 	name = "Synthocarisol"
 	id = SYNTHOCARISOL
@@ -3352,7 +3505,6 @@ var/procizine_tolerance = 0
 	density = 1.79
 	specheatcap = 0.70
 
-
 /datum/reagent/hyperzine/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -3373,6 +3525,23 @@ var/procizine_tolerance = 0
 			M.adjustFireLoss(1) // Burn damage for dionae
 	else
 		M.adjustToxLoss(1) // Toxins for everyone else
+
+/datum/reagent/hyperzine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(15))
+			T.mutate(GENE_METABOLISM)
+			T.reagents.remove_reagent(id, 1)
+		if(prob(15))
+			T.mutate(GENE_METABOLISM)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
@@ -3538,7 +3707,6 @@ var/procizine_tolerance = 0
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
-	custom_plant_metabolism = 0.5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -3564,6 +3732,8 @@ var/procizine_tolerance = 0
 		T.age -= deviation
 		T.skip_aging++
 		T.force_update = 1
+		if(prob(25))
+			T.mutate(GENE_ECOPHYSIOLOGY)
 
 /datum/reagent/rezadone
 	name = "Rezadone"
@@ -3970,7 +4140,7 @@ var/procizine_tolerance = 0
 	return ..()
 
 /datum/reagent/nanites/autist
-	name = "Autist nanites"
+	name = "Autist Nanites"
 	id = AUTISTNANITES
 	description = "Microscopic construction robots. They look more autistic than usual."
 	disease_type = DISEASE_MOMMI
@@ -4181,7 +4351,7 @@ var/procizine_tolerance = 0
 //Metal foaming agent
 //This is lithium hydride. Add other recipies (e.g. LiH + H2O -> LiOH + H2) eventually
 /datum/reagent/foaming_agent
-	name = "Foaming agent"
+	name = "Foaming Agent"
 	id = FOAMING_AGENT
 	description = "A agent that yields metallic foam when mixed with light metal and a strong acid."
 	reagent_state = REAGENT_STATE_SOLID
@@ -4251,28 +4421,34 @@ var/procizine_tolerance = 0
 	color = "#604030" //rgb: 96, 64, 48
 	density = 0.65
 	specheatcap = 35.37
-	custom_plant_metabolism = 0.1
 
 /datum/reagent/diethylamine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	T.add_planthealth(1)
-	if(prob(100*custom_plant_metabolism))
-		T.add_pestlevel(-1)
-	if(T.seed && !T.dead)
-		if(prob(200*custom_plant_metabolism))
-			T.affect_growth(1)
-		if(!T.seed.immutable)
-			var/chance
-			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
-			if(prob(chance))
-				T.check_for_divergence(1)
-				T.seed.lifespan++
-			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
-			if(prob(chance))
-				T.check_for_divergence(1)
-				T.seed.endurance++
-//Fuck you, alcohol
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	T.reagents.remove_reagent(id, 0.1)
+	if(T.reagents.get_reagent_amount(id) > 0)
+		T.add_nutrientlevel(1)
+		T.add_planthealth(1)
+		if(prob(10))
+			T.add_pestlevel(-1)
+		if(T.seed && !T.dead)
+			if(prob(20))
+				T.affect_growth(1)
+			if(!T.seed.immutable)
+				var/chance
+				chance = unmix(T.seed.lifespan, 15, 125)*20
+				if(prob(chance))
+					T.check_for_divergence(1)
+					T.seed.lifespan ++
+				chance = unmix(T.seed.lifespan, 15, 125)*20
+				if(prob(chance))
+					T.check_for_divergence(1)
+					T.seed.endurance++					
+
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
 	id = ETHYLREDOXRAZINE
@@ -4894,6 +5070,11 @@ var/procizine_tolerance = 0
 	..()
 	T.add_waterlevel(-5)
 	T.add_nutrientlevel(5)
+	T.add_toxinlevel(8)
+	T.add_weedlevel(-20)
+	T.add_pestlevel(-10)
+	if(T.seed && !T.dead)
+		T.add_planthealth(-2)
 
 /datum/reagent/creatine
 	name = "Creatine"
@@ -4954,6 +5135,21 @@ var/procizine_tolerance = 0
 						dehulk(H)
 					else if(prob(1))
 						H.say(pick("YOU TRYIN' BUILD SUM MUSSLE?", "TOO SWOLE TO CONTROL", "HEY MANG", "HEY MAAAANG"))
+
+/datum/reagent/creatine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(15))
+			T.mutate(GENE_DEVELOPMENT)
+			T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/creatine/proc/dehulk(var/mob/living/carbon/human/H, damage = 200, override_remove = 0, gib = 1)
 
@@ -5342,7 +5538,7 @@ var/procizine_tolerance = 0
 	M.bodytemperature += 10 * TEMPERATURE_DAMAGE_COEFFICIENT
 
 /datum/reagent/flour
-	name = "flour"
+	name = "Flour"
 	id = FLOUR
 	description = "This is what you rub all over yourself to pretend to be a ghost."
 	reagent_state = REAGENT_STATE_SOLID
@@ -5363,7 +5559,7 @@ var/procizine_tolerance = 0
 		new /obj/effect/decal/cleanable/flour(T)
 
 /datum/reagent/flour/nova_flour
-	name = "nova flour"
+	name = "Nova Flour"
 	id = NOVAFLOUR
 	description = "This is what you rub all over yourself to set on fire."
 	color = "#B22222" //rgb: 178, 34, 34
@@ -5374,7 +5570,7 @@ var/procizine_tolerance = 0
 	M.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT
 
 /datum/reagent/pancake_mix
-	name = "pancake mix"
+	name = "Pancake Mix"
 	id = PANCAKE
 	description = "A mix of flour, milk, butter, and egg yolk. ready to be cooked into delicious pancakes."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -5725,7 +5921,7 @@ var/procizine_tolerance = 0
 		M.bodytemperature = max(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/drink/orangejuice
-	name = "Orange juice"
+	name = "Orange Juice"
 	id = ORANGEJUICE
 	description = "Both delicious AND rich in Vitamin C. What more do you need?"
 	color = "#E78108" //rgb: 231, 129, 8
@@ -5791,7 +5987,7 @@ var/procizine_tolerance = 0
 		M.adjustToxLoss(-1)
 
 /datum/reagent/drink/carrotjuice
-	name = "Carrot juice"
+	name = "Carrot Juice"
 	id = CARROTJUICE
 	description = "It's like a carrot, but less crunchy."
 	color = "#FF8820" //rgb: 255, 136, 32
@@ -6121,7 +6317,7 @@ var/procizine_tolerance = 0
 
 /datum/reagent/drink/cold
 	id = EXPLICITLY_INVALID_REAGENT_ID
-	name = "Cold drink"
+	name = "Cold Drink"
 	adj_temp = -5
 
 /datum/reagent/drink/cold/tonic
@@ -7800,7 +7996,7 @@ var/procizine_tolerance = 0
 	glass_icon_state = "whiskeysodaglass2"
 
 /datum/reagent/ethanol/drink/antifreeze
-	name = "Anti-freeze"
+	name = "Anti-Freeze"
 	id = ANTIFREEZE
 	description = "The ultimate refreshment."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -7861,7 +8057,7 @@ var/procizine_tolerance = 0
 	glass_name = "\improper Gin Fizz"
 
 /datum/reagent/ethanol/drink/bahama_mama
-	name = "Bahama mama"
+	name = "Bahama Mama"
 	id = BAHAMA_MAMA
 	description = "Tropical cocktail."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -8668,7 +8864,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	sport = SPORTINESS_SPORTS_DRINK
 	color = "#CCFF66" //rgb: 204, 255, 51
 	custom_metabolism =  0.01
-	custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER/5
 
 /datum/reagent/citalopram
 	name = "Citalopram"
@@ -8811,14 +9006,14 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	return
 
 /datum/reagent/roach_shell
-	name = "Cockroach chitin"
+	name = "Cockroach Chitin"
 	id = ROACHSHELL
 	description = "Looks like somebody's been shelling peanuts."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#8B4513"
 
 /datum/reagent/ethanol/drink/greyvodka
-	name = "Greyshirt vodka"
+	name = "Greyshirt Vodka"
 	id = GREYVODKA
 	description = "Made presumably from whatever scrapings you can get out of maintenance. Don't think, just drink."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -8834,7 +9029,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	H.rad_tick = max(H.rad_tick - 3 * REM, 0)
 
 /datum/reagent/mediumcores
-	name = "medium-salted cores"
+	name = "Medium-Salted Cores"
 	id = MEDCORES
 	description = "A derivative of the chemical known as 'Hardcores', easier to mass produce, but at a cost of quality."
 	reagent_state = REAGENT_STATE_SOLID
@@ -8842,7 +9037,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	custom_metabolism = 0.1
 
 /datum/reagent/softcores
-	name = "softcores"
+	name = "Softcores"
 	id = SOFTCORES
 	description = "Lesser known than its cheaper cousin in the popular snack 'mag-bites', softcores have all the benefits of chemical magnetism without the heart-stopping side effects."
 	reagent_state = REAGENT_STATE_SOLID
@@ -8852,11 +9047,14 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 //Plant-specific reagents
 
 /datum/reagent/kelotane/tannic_acid
-	name = "Tannic acid"
+	name = "Tannic Acid"
 	id = TANNIC_ACID
 	description = "Tannic acid is a natural burn remedy."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#150A03" //rgb: 21, 10, 3
+
+/datum/reagent/kelotane/tannic_acid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
 
 /datum/reagent/dermaline/kathalai
 	name = "Kathalai"
@@ -8869,6 +9067,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = OPIUM
 	description = "Opium is an exceptional natural analgesic."
 	color = "#AE9260" //rgb: 174, 146, 96
+
+/datum/reagent/bicaridine/opium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
 
 /datum/reagent/space_drugs/mescaline
 	name = "Mescaline"
@@ -8888,6 +9089,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Cocaine is a powerful nervous system stimulant."
 	color = "#FFFFFF" //rgb: 255, 255, 255
 
+/datum/reagent/hyperzine/cocaine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+
 /datum/reagent/imidazoline/zeaxanthin
 	name = "Zeaxanthin"
 	id = ZEAXANTHIN
@@ -8895,13 +9099,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#CC4303" //rgb: 204, 67, 3
 
 /datum/reagent/stoxin/valerenic_acid
-	name = "Valerenic acid"
+	name = "Valerenic Acid"
 	id = VALERENIC_ACID
 	description = "An herbal sedative used to treat insomnia."
 	color = "#EAB160" //rgb: 234, 177, 96
 
 /datum/reagent/sacid/formic_acid
-	name = "Formic acid"
+	name = "Formic Acid"
 	id = FORMIC_ACID
 	description = "A weak natural acid which causes a burning sensation upon contact."
 	color = "#9B3D00" //rgb: 155, 61, 0
@@ -8947,6 +9151,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = THYMOL
 	description = "Thymol is used in the treatment of respiratory problems."
 	color = "#790D27" //rgb: 121, 13, 39
+
+/datum/reagent/dexalin/thymol/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
 
 /datum/reagent/synthocarisol/phytocarisol
 	name = "Phytocarisol"
@@ -8996,7 +9203,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(volume >= min_to_start && !is_being_petrified)
 		is_being_petrified = TRUE
 	if(is_being_petrified)
-		if(holder.has_any_reagents(PETRITRICINCURES))
+		if(holder.has_any_reagents(ACIDS))
 			to_chat(M, "<span class='notice'>You feel a wave of relief as your muscles loosen up.</span>")
 			C.pain_shock_stage = max(0, C.pain_shock_stage - 300)
 			is_being_petrified = FALSE
@@ -9262,20 +9469,23 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 2.61
 	specheatcap = 111.8
 
-/datum/reagent/untable
+/datum/reagent/mutagen/untable
 	name = "Untable Mutagen"
 	id = UNTABLE_MUTAGEN
-	description = "Untable Mutagen is a substance that is inert to most materials and objects, but highly corrosive to tables."
+	description = "Untable Mutagen is a substance that is highly corrosive to tables."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#84121D" //rgb: 132, 18, 29
 	overdose_am = REAGENTS_OVERDOSE
 
-/datum/reagent/untable/reaction_obj(var/obj/O, var/volume)
+/datum/reagent/mutagen/untable/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+
+/datum/reagent/mutagen/untable/reaction_obj(var/obj/O, var/volume)
 
 	if(..())
 		return 1
 
-	if(!O.acidable())
+	if(!(O.dissolvable() == PACID))
 		return
 
 	if(istype(O,/obj/structure/table))
@@ -9314,7 +9524,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	..()
 
 /datum/reagent/degeneratecalcium
-	name = "Degenerate calcium"
+	name = "Degenerate Calcium"
 	id = DEGENERATECALCIUM
 	description = "A highly radical chemical derived from calcium that aggressively attempts to regenerate osseus tissues it comes in contact with. In the presence of micro-fractures caused by extensive brute damage it rapidly heals the surrounding tissues, but in healthy limbs the new tissue quickly causes the osseal structure to lose shape and shatter rather graphically."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -9494,26 +9704,43 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/ectoplasm
 	name = "Ectoplasm"
 	id = ECTOPLASM
-	description = "Pure, distilled spooky"
+	description = "Pure, distilled spooky."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#21d389b4"
 	density = 0.05
-
+	custom_metabolism = 0.01
+	var/spookvision = FALSE
+	
 /datum/reagent/ectoplasm/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
+
+	if(!spookvision && tick >= 30 && volume >= 1) //ghostsight after 1m and having more than 1u inside
+		spookvision = TRUE
+		to_chat(M, "<span class='notice'>You start seeing through the veil!</span>")
+		M.see_invisible = SEE_INVISIBLE_OBSERVER
+		M.see_invisible_override = SEE_INVISIBLE_OBSERVER
+
+	if(spookvision && volume < 1)
+		spookvision = FALSE
+		to_chat(M, "<span class='notice'>Your otherworldly sight suddenly vanishes!</span>")
+		M.see_invisible = initial(M.see_invisible)
+		M.see_invisible_override = 0
+
 	if(isskellington(M) || isskelevox(M) || islich(M))	//Slightly better than DD for spooks
 		playsound(M, 'sound/effects/rattling_bones.ogg', 100, 1)
 		if(M.getOxyLoss())
 			M.adjustOxyLoss(-3)
+			holder.remove_reagent(ECTOPLASM, 0.1)
 		if(M.getBruteLoss())
 			M.heal_organ_damage(3, 0)
+			holder.remove_reagent(ECTOPLASM, 0.1)
 		if(M.getFireLoss())
 			M.heal_organ_damage(0, 3)
+			holder.remove_reagent(ECTOPLASM, 0.1)
 		if(M.getToxLoss())
 			M.adjustToxLoss(-3)
-	else
-		M.hallucination += 5	//50% mindbreaker
+			holder.remove_reagent(ECTOPLASM, 0.1)
 
 /datum/reagent/self_replicating
 	id = EXPLICITLY_INVALID_REAGENT_ID

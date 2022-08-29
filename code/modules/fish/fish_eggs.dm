@@ -4,27 +4,12 @@
 	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "eggs"
 	w_class = W_CLASS_SMALL
-	var/fish_type = "dud"			//Holds the name of the fish that the egg is for
+	var/fish_type = "dud"
+	var/acidic = FALSE
+	var/hatching = TRUE
 
 /obj/item/fish_eggs/New()
 	..()
-
-var/list/fish_eggs_list = list("dud" = /obj/item/fish_eggs,
-									"goldfish" = /obj/item/fish_eggs/goldfish,
-									"clownfish" = /obj/item/fish_eggs/clownfish,
-									"shark" = /obj/item/fish_eggs/shark,
-									//"baby space carp" = /obj/item/fish_eggs/babycarp,
-									"catfish" = /obj/item/fish_eggs/catfish,
-									"feederfish" = /obj/item/fish_eggs/feederfish,
-									"salmon" = /obj/item/fish_eggs/salmon,
-									"shrimp" = /obj/item/fish_eggs/shrimp,
-									"electric eel" = /obj/item/fish_eggs/electric_eel,
-									"glofish" = /obj/item/fish_eggs/glofish,
-									"sea devil" = /obj/item/fish_eggs/seadevil,
-									"lobster" = /obj/item/fish_eggs/lobster
-									)
-
-var/list/nonhatching_types = list("sea devil") //If you ever want to create another no-egg fish, add it here.
 
 /obj/item/fish_eggs/goldfish
 	name = "goldfish eggs"
@@ -91,6 +76,7 @@ var/list/nonhatching_types = list("sea devil") //If you ever want to create anot
 	desc = "An aquatic offshoot of gremlins that engage in the peculiar behavior of hatching fish eggs to eat mature adults."
 	icon_state = "seadevil"
 	fish_type = "sea devil"
+	hatching = FALSE
 
 /obj/item/fish_eggs/lobster
 	name = "lobster eggs"

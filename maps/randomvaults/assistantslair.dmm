@@ -436,7 +436,6 @@
 /obj/item/clothing/mask/gas,
 /obj/machinery/light/small{
 	dir = 4;
-	on = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
@@ -676,7 +675,6 @@
 	},
 /obj/machinery/light/small{
 	dir = 4;
-	on = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
@@ -859,7 +857,6 @@
 "cL" = (
 /obj/machinery/light/small{
 	dir = 4;
-	on = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)

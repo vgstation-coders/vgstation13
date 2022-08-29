@@ -23,27 +23,27 @@
 	var/growdirs = 0
 	var/zapdirs = 0
 
-/obj/structure/cable/powercreeper/New(loc, growdir, packet_override)
+/obj/structure/cable/powercreeper/New(loc, growdir) //packet_override var removed to fix a runtime
 	//did we get created by a packet?
 	var/anim_length = 0
-	if(packet_override)
-		flick("creation_packet", src)
-		anim_length = 39
-		add_state = ""
-	else
-		//are we growing from another powercreeper?
-		if(growdir)
-			if(prob(LEAVES_CHANCE))
-				add_state = ""
-			icon_state = initial(icon_state) + add_state
-			dir = growdir
-			flick("growing[add_state]", src)
-			anim_length = 18
-		else
-			//we just kinda spawned i guess
-			flick("creation", src)
+//	if(packet_override)
+//		flick("creation_packet", src)
+//		anim_length = 39
+//		add_state = ""
+//	else
+	//are we growing from another powercreeper?
+	if(growdir)
+		if(prob(LEAVES_CHANCE))
 			add_state = ""
-			anim_length = 20
+		icon_state = initial(icon_state) + add_state
+		dir = growdir
+		flick("growing[add_state]", src)
+		anim_length = 18
+	else
+		//we just kinda spawned i guess
+		flick("creation", src)
+		add_state = ""
+		anim_length = 20
 	spawn(anim_length)
 		grown = 1
 

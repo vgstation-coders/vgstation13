@@ -347,11 +347,6 @@
 				if("allow_admin_ooccolor")
 					config.allow_admin_ooccolor = 1
 
-				if ("allow_vote_restart")
-					config.allow_vote_restart = 1
-
-				if ("allow_vote_mode")
-					config.allow_vote_mode = 1
 				if ("allow_admin_jump")
 					config.allow_admin_jump = 1
 

@@ -7,7 +7,7 @@
 "ay" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/beartrap/ied/armed,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "az" = (/obj/structure/acidtoilet{dir = 4},/obj/machinery/light/small/broken{dir = 8},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/habitation)
 "aA" = (/mob/living/simple_animal/hostile/necro/zombie/raider1,/obj/item/weapon/gun/energy/laser/retro,/obj/effect/decal/cleanable/blood/gibs{basecolor = "#2299FC"; blood_color = "#2299FC"; dir = 4; fleshcolor = "#808D11"; icon_state = "gib4"},/turf/simulated/floor/carpet,/area/vault/mothership_lab/habitation)
-"aD" = (/obj/structure/closet/secure_closet/freezer{anchored = 1},/obj/item/weapon/reagent_containers/food/drinks/flour,/obj/item/weapon/reagent_containers/food/drinks/flour,/obj/item/weapon/reagent_containers/food/drinks/flour,/obj/item/weapon/reagent_containers/food/drinks/milk,/obj/item/weapon/reagent_containers/food/drinks/milk,/obj/item/weapon/reagent_containers/food/condiment/zamspices,/obj/item/weapon/reagent_containers/food/condiment/enzyme,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"aD" = (/obj/structure/closet/secure_closet/freezer{anchored = 1},/obj/item/weapon/reagent_containers/food/drinks/flour,/obj/item/weapon/reagent_containers/food/drinks/flour,/obj/item/weapon/reagent_containers/food/drinks/flour,/obj/item/weapon/reagent_containers/food/drinks/milk,/obj/item/weapon/reagent_containers/food/drinks/milk,/obj/item/weapon/reagent_containers/food/condiment/zamspices,/obj/item/weapon/reagent_containers/food/condiment/enzyme,/obj/machinery/light/small{dir = 1},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "aF" = (/obj/machinery/deployable/barrier{anchored = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/machinery/light/he/broken,/turf/simulated/floor,/area/vault/mothership_lab/habitation)
 "aI" = (/obj/structure/flora/ausbushes/leafybush,/turf/simulated/floor/grass,/area/vault/mothership_lab/habitation)
 "aK" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/obj/structure/window/barricade/full/block,/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
@@ -62,6 +62,7 @@
 "dW" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small/broken{dir = 1},/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
 "dX" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/reagent_containers/glass/bucket/water_filled,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "ec" = (/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher,/obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher,/obj/item/weapon/kitchen/utensil/fork/teflon,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/habitation)
+"eg" = (/obj/item/seeds/potatoseed,/obj/item/seeds/potatoseed,/obj/item/seeds/tomatoseed,/obj/item/seeds/tomatoseed,/obj/item/seeds/wheatseed,/obj/item/seeds/wheatseed,/obj/structure/closet/crate/chest{name = "seed chest"},/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "eh" = (/obj/structure/table/flipped{dir = 8},/turf/simulated/floor/greengrid,/area/vault/mothership_lab/habitation)
 "ek" = (/turf/simulated/wall/r_rock/porous,/area/vault/mothership_lab/raidtunnel_lower)
 "en" = (/obj/effect/decal/cleanable/dirt,/obj/structure/table/reinforced,/obj/item/weapon/folder/black,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
@@ -124,13 +125,14 @@
 "hM" = (/obj/item/weapon/barricade_kit,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "hN" = (/turf/simulated/floor{dir = 1; icon_state = "stage_stairs"; tag = "icon-stage_stairs (NORTH)"},/area/vault/mothership_lab/administration)
 "hO" = (/obj/structure/closet{anchored = 1; name = "Laborer's Locker"},/obj/item/weapon/storage/belt/utility,/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
+"hX" = (/obj/machinery/light/small/broken{dir = 8},/obj/effect/decal/cleanable/dirt,/obj/machinery/portable_atmospherics/hydroponics/soil,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "hZ" = (/obj/effect/spider/stickyweb,/obj/effect/spider/cocoon,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/cave)
 "ia" = (/obj/effect/spider/stickyweb,/obj/machinery/light/small/broken{dir = 8},/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "ib" = (/turf/unsimulated/mineral,/area/vault/mothership_lab/asteroid)
 "id" = (/obj/structure/shuttle/diag_wall/black,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/mothership_lab/habitation)
 "in" = (/turf/simulated/floor/plating/airless,/area/vault/mothership_lab/cave)
-"iy" = (/obj/structure/rack,/obj/item/stack/sheet/glass/glass/bigstack,/obj/item/stack/sheet/metal/bigstack,/obj/item/stack/rods,/obj/item/stack/sheet/wood/bigstack,/obj/item/weapon/cell/empty,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
-"iA" = (/obj/effect/decal/cleanable/dirt,/obj/structure/rack,/obj/item/tool/wirecutters/clippers,/obj/item/tool/wirecutters/clippers,/obj/item/weapon/hatchet,/obj/item/weapon/hatchet,/obj/item/weapon/minihoe,/obj/item/weapon/minihoe,/obj/item/weapon/pickaxe/shovel/spade,/obj/item/weapon/pickaxe/shovel/spade,/obj/item/weapon/storage/bag/plants,/obj/item/weapon/storage/bag/plants,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"iy" = (/obj/structure/rack,/obj/item/stack/sheet/glass/glass/bigstack,/obj/item/stack/sheet/metal/bigstack,/obj/item/stack/rods,/obj/item/stack/sheet/wood/bigstack,/obj/item/weapon/cell/empty,/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small{dir = 1},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"iA" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/processor,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "iC" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/acidshower{dir = 8},/obj/structure/curtain/open/shower/left,/obj/item/weapon/soap,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/hobo)
 "iD" = (/obj/effect/decal/cleanable/blood{basecolor = "#2299FC"; blood_color = "#2299FC"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/mothership_lab/habitation)
 "iE" = (/obj/item/weapon/stool,/turf/simulated/floor{dir = 1; icon_state = "barber"; tag = "icon-barber (NORTH)"},/area/vault/mothership_lab/habitation)
@@ -186,7 +188,7 @@
 "ml" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small{dir = 4},/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "mp" = (/obj/item/weapon/barricade_kit,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/habitation)
 "mr" = (/obj/structure/table/glass,/obj/machinery/light/he/broken,/turf/simulated/floor/carpet,/area/vault/mothership_lab/habitation)
-"mw" = (/obj/structure/closet/crate/freezer,/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher,/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher,/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher,/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"mw" = (/obj/effect/decal/cleanable/dirt,/obj/structure/closet/crate/freezer,/obj/item/weapon/reagent_containers/food/snacks/hoboburger,/obj/item/weapon/reagent_containers/food/snacks/hoboburger,/obj/item/weapon/reagent_containers/food/snacks/hoboburger,/obj/item/weapon/reagent_containers/food/snacks/hoboburger,/obj/item/weapon/reagent_containers/food/snacks/fries,/obj/item/weapon/reagent_containers/food/snacks/fries,/obj/item/weapon/reagent_containers/food/snacks/fries,/obj/item/weapon/reagent_containers/food/snacks/fries,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "mx" = (/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/habitation)
 "my" = (/obj/structure/closet/cabinet,/obj/effect/decal/cleanable/cobweb2,/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/storage/box/drinkingglasses,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "mz" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
@@ -292,7 +294,7 @@
 "sU" = (/obj/machinery/acidshower{dir = 4},/obj/structure/curtain/open/shower/right,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/administration)
 "sX" = (/turf/simulated/floor{dir = 4; icon_state = "darkpurple"; tag = "icon-darkpurple (EAST)"},/area/vault/mothership_lab/habitation)
 "sZ" = (/obj/machinery/seed_extractor,/obj/machinery/light/small/broken{dir = 1},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
-"td" = (/obj/structure/reagent_dispensers/watertank,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/reagent_containers/glass/bucket,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"td" = (/obj/effect/decal/cleanable/dirt,/obj/structure/closet/crate,/obj/item/weapon/stock_parts/manipulator,/obj/item/weapon/stock_parts/manipulator,/obj/item/weapon/stock_parts/matter_bin,/obj/item/weapon/stock_parts/matter_bin,/obj/item/weapon/stock_parts/micro_laser,/obj/item/weapon/stock_parts/micro_laser,/obj/item/weapon/stock_parts/scanning_module,/obj/item/weapon/stock_parts/scanning_module,/obj/item/weapon/stock_parts/console_screen,/obj/item/weapon/stock_parts/console_screen,/obj/item/weapon/stock_parts/micro_laser,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "tf" = (/turf/simulated/floor{dir = 1; icon_state = "dark floor stripe"; tag = "icon-dark floor stripe (NORTH)"},/area/vault/mothership_lab/administration)
 "ts" = (/obj/effect/decal/cleanable/blood{basecolor = "#CFAAAA"; blood_color = "#CFAAAA"},/obj/effect/landmark/corpse/grey/soldier_sentry,/obj/item/weapon/gun/energy/smalldisintegrator,/turf/simulated/floor,/area/vault/mothership_lab/habitation)
 "tv" = (/obj/machinery/deployable/barrier{anchored = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/greengrid,/area/vault/mothership_lab/habitation)
@@ -384,7 +386,7 @@
 "zy" = (/obj/structure/bed,/mob/living/carbon/monkey/grey{faction = "mothership"; name = "Zaxor"},/obj/item/weapon/bedsheet/red,/turf/simulated/floor/carpet,/area/vault/mothership_lab/habitation)
 "zA" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/vault/mothership_lab/habitation)
 "zB" = (/obj/structure/bed/chair/office/dark{dir = 1},/turf/simulated/floor,/area/vault/mothership_lab/habitation)
-"zF" = (/obj/structure/table/woodentable,/obj/item/stack/medical/splint/ghetto,/obj/item/weapon/storage/firstaid/regular,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"zF" = (/obj/structure/table/woodentable,/obj/structure/bedsheetbin,/obj/item/weapon/storage/wallet/random,/obj/item/weapon/storage/wallet/random,/obj/item/weapon/storage/wallet/random,/obj/item/weapon/storage/wallet/random,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "zP" = (/mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier{dir = 4},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/habitation)
 "zQ" = (/turf/simulated/wall/mineral/wood,/area/vault/mothership_lab/hobo)
 "zY" = (/obj/structure/bed/chair/comfy{dir = 8},/turf/simulated/floor,/area/vault/mothership_lab/habitation)
@@ -411,7 +413,7 @@
 "BN" = (/obj/effect/spider/stickyweb,/obj/item/weapon/gun/projectile/pistol,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/cave)
 "BO" = (/turf/simulated/floor{icon_state = "dark floor stripe"; tag = "icon-dark floor stripe"},/area/vault/mothership_lab/administration)
 "BP" = (/obj/structure/bed/chair/office/dark{dir = 4},/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
-"BR" = (/obj/structure/table/woodentable,/obj/structure/bedsheetbin,/obj/item/weapon/storage/wallet/random,/obj/item/weapon/storage/wallet/random,/obj/item/weapon/storage/wallet/random,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"BR" = (/obj/structure/safe,/obj/abstract/map/spawner/safe/medical,/obj/abstract/map/spawner/safe/food,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "BV" = (/obj/item/weapon/beartrap/ied/armed,/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
 "Cf" = (/obj/item/weapon/table_parts,/turf/simulated/floor/greengrid,/area/vault/mothership_lab/habitation)
 "Ch" = (/obj/structure/flora/pottedplant/random{icon_state = "plant-13"; tag = "icon-plant-13"},/turf/simulated/floor{dir = 1; icon_state = "dark floor stripe"; tag = "icon-dark floor stripe (NORTH)"},/area/vault/mothership_lab/administration)
@@ -452,7 +454,7 @@
 "Ez" = (/obj/structure/table/reinforced,/obj/machinery/microwave/upgraded,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/habitation)
 "EQ" = (/obj/item/weapon/reagent_containers/food/snacks/bacon,/obj/item/weapon/reagent_containers/food/snacks/bacon,/obj/item/weapon/reagent_containers/food/snacks/risenshiny,/obj/item/weapon/reagent_containers/food/snacks/risenshiny,/obj/item/weapon/reagent_containers/food/snacks/risenshiny,/obj/item/weapon/reagent_containers/food/condiment/gravy,/obj/item/weapon/reagent_containers/food/condiment/gravy,/obj/structure/closet/crate/chest{name = "raider chest"},/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "EU" = (/obj/structure/flora/ausbushes/genericbush,/turf/simulated/floor/grass,/area/vault/mothership_lab/habitation)
-"EW" = (/obj/structure/safe,/obj/abstract/map/spawner/safe/medical,/obj/abstract/map/spawner/safe/food,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"EW" = (/obj/effect/decal/cleanable/dirt,/obj/structure/bed,/obj/effect/landmark/hobostart,/obj/item/weapon/card/id/mothership,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "EX" = (/obj/structure/shuttle/diag_wall/black{dir = 8},/turf/simulated/floor{dir = 1; icon_state = "dark floor stripe"; tag = "icon-dark floor stripe (NORTH)"},/area/vault/mothership_lab/habitation)
 "EZ" = (/mob/living/simple_animal/hostile/necro/zombie/greylaborer,/turf/simulated/floor/carpet,/area/vault/mothership_lab/habitation)
 "Fb" = (/obj/item/weapon/barricade_kit,/turf/simulated/floor,/area/vault/mothership_lab/habitation)
@@ -470,7 +472,7 @@
 "FM" = (/obj/structure/reagent_dispensers/watertank,/obj/item/weapon/reagent_containers/glass/bucket,/obj/machinery/atmospherics/unary/vent_pump{dir = 1; on = 1},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "FP" = (/turf/simulated/floor{dir = 4; icon_state = "stage_stairs"; tag = "icon-stage_stairs"},/area/vault/mothership_lab/habitation)
 "FS" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced{dir = 1; pixel_y = 1},/obj/item/weapon/paper_bin/yellow,/obj/item/weapon/pen,/obj/machinery/door/poddoor/shutters{dir = 2; id_tag = "lab_toolstorage"; name = "Laborer Office Shutters"},/turf/simulated/floor{dir = 6; icon_state = "dark"},/area/vault/mothership_lab/habitation)
-"FV" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small{dir = 8},/obj/structure/closet/crate/freezer,/obj/item/weapon/reagent_containers/food/snacks/zamitos,/obj/item/weapon/reagent_containers/food/snacks/zamitos,/obj/item/weapon/reagent_containers/food/snacks/zamitos,/obj/item/weapon/reagent_containers/food/snacks/hoboburger,/obj/item/weapon/reagent_containers/food/snacks/hoboburger,/obj/item/weapon/reagent_containers/food/snacks/hoboburger,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"FV" = (/obj/effect/decal/cleanable/dirt,/obj/structure/table/woodentable,/obj/item/stack/medical/splint/ghetto,/obj/item/stack/medical/splint/ghetto,/obj/item/weapon/storage/firstaid/regular,/obj/machinery/light/small{dir = 8},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "FX" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/reagent_containers/food/snacks/bacon,/obj/item/weapon/reagent_containers/food/snacks/bacon,/obj/item/weapon/reagent_containers/food/snacks/bacon,/obj/item/weapon/reagent_containers/food/snacks/risenshiny,/obj/item/weapon/reagent_containers/food/snacks/risenshiny,/obj/item/weapon/reagent_containers/food/snacks/risenshiny,/obj/item/weapon/reagent_containers/food/snacks/risenshiny,/obj/item/weapon/reagent_containers/food/snacks/risenshiny,/obj/item/weapon/reagent_containers/food/condiment/gravy,/obj/structure/closet/crate/chest{name = "raider chest"},/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "FY" = (/obj/machinery/door/airlock/hatch{name = "Lab Maintenance Access"; req_access_txt = "161"; req_one_access_txt = "161"},/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
 "Gc" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/toy/cards,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
@@ -493,7 +495,7 @@
 "Hv" = (/obj/machinery/vending/building{req_access_txt = "161"; req_one_access_txt = "161"},/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "Hy" = (/obj/structure/closet/emcloset,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "Hz" = (/obj/structure/window/barricade{dir = 8},/turf/simulated/floor,/area/vault/mothership_lab/habitation)
-"HA" = (/obj/item/seeds/potatoseed,/obj/item/seeds/potatoseed,/obj/item/seeds/tomatoseed,/obj/item/seeds/tomatoseed,/obj/item/seeds/wheatseed,/obj/item/seeds/wheatseed,/obj/structure/closet/crate/chest{name = "seed chest"},/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"HA" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/obj/machinery/light/small/broken{dir = 1},/obj/structure/table/woodentable,/obj/machinery/reagentgrinder,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "HC" = (/obj/structure/table/reinforced,/obj/item/stack/sheet/glass/plasmaglass/bigstack{pixel_x = 2; pixel_y = 2},/obj/item/stack/sheet/glass/glass{amount = 50},/obj/item/stack/sheet/glass/glass{amount = 50},/obj/item/stack/rods{amount = 50},/obj/machinery/light/he/broken{dir = 4},/obj/machinery/recharger{pixel_x = 30},/obj/item/device/gps,/obj/item/device/gps,/obj/item/device/gps,/obj/item/device/gps,/turf/simulated/floor{icon_state = "dark"},/area/vault/mothership_lab/habitation)
 "HF" = (/obj/effect/decal/cleanable/dirt,/obj/effect/spider/stickyweb,/mob/living/simple_animal/hostile/giant_spider/hunter,/obj/machinery/light/small/broken{dir = 1},/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "HO" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/blood/drip{basecolor = "#2299FC"; blood_color = "#2299FC"},/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
@@ -529,6 +531,7 @@
 "Kt" = (/obj/effect/decal/cleanable/blood/gibs{basecolor = "#2299FC"; blood_color = "#2299FC"; fleshcolor = "#808D11"; icon_state = "gibmid3"},/obj/item/weapon/gun/energy/laser/retro,/turf/simulated/floor,/area/vault/mothership_lab/habitation)
 "Kz" = (/obj/machinery/light/he{dir = 4},/obj/machinery/door_control{id_tag = "lab_toolstorage"; name = "Laborer Office Shutters"; pixel_x = 25; req_access_txt = "161"; req_one_access_txt = "161"},/turf/simulated/floor,/area/vault/mothership_lab/habitation)
 "KD" = (/obj/structure/window/full/reinforced,/obj/structure/grille/broken,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
+"KF" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/chem_master/condimaster,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "KG" = (/obj/effect/decal/cleanable/blood{basecolor = "#CFAAAA"; blood_color = "#CFAAAA"; icon_state = "floor5"},/obj/structure/window/barricade/full,/turf/simulated/floor/plating{icon_state = "platingdmg1"; tag = ""},/area/vault/mothership_lab/habitation)
 "KI" = (/obj/machinery/sleeper/upgraded,/turf/simulated/floor{dir = 4; icon_state = "dark floor stripe"; tag = "icon-dark floor stripe (EAST)"},/area/vault/mothership_lab/administration)
 "KM" = (/obj/machinery/deployable/barrier{anchored = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/plating{icon_state = "platingdmg3"},/area/vault/mothership_lab/habitation)
@@ -547,7 +550,7 @@
 "LT" = (/obj/effect/decal/cleanable/dirt,/obj/structure/rack,/obj/item/weapon/storage/toolbox/mechanical,/obj/item/weapon/storage/toolbox/electrical,/obj/item/weapon/switchtool/swiss_army_knife,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "LY" = (/obj/effect/decal/cleanable/dirt,/obj/structure/cage,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "Mb" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/machinery/portable_atmospherics/canister/nitrogen,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
-"Md" = (/obj/machinery/light/small/broken{dir = 8},/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 5},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/vault/mothership_lab/hobo)
+"Md" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "Ml" = (/obj/structure/closet{anchored = 1; name = "Laborer's Locker"},/obj/item/clothing/under/grey/grey_worker,/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
 "Mn" = (/obj/item/stack/sheet/wood,/turf/simulated/floor,/area/vault/mothership_lab/habitation)
 "Mx" = (/obj/structure/table/glass,/turf/simulated/floor{icon_state = "darkpurple"; tag = "icon-darkpurple"},/area/vault/mothership_lab/habitation)
@@ -597,7 +600,7 @@
 "PP" = (/obj/machinery/light/he,/obj/structure/filingcabinet,/turf/simulated/floor{icon_state = "dark brown stripe"; tag = "icon-dark brown stripe (NORTH)"},/area/vault/mothership_lab/habitation)
 "PQ" = (/mob/living/simple_animal/hostile/necro/zombie/crimson{dir = 4; name = "Patient Zero"},/turf/simulated/floor,/area/vault/mothership_lab/habitation)
 "PR" = (/obj/structure/sink/puddle,/turf/simulated/floor/grass,/area/vault/mothership_lab/habitation)
-"PW" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/constructable_frame,/obj/item/weapon/circuitboard/biogenerator,/obj/item/weapon/reagent_containers/glass/beaker/large,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"PW" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/circuitboard/biogenerator,/obj/item/weapon/reagent_containers/glass/beaker/large,/obj/machinery/constructable_frame/machine_frame,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "Qc" = (/obj/item/trash/zamitos_sj,/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "Qd" = (/obj/structure/bed/chair/folding{dir = 8},/turf/simulated/floor/carpet,/area/vault/mothership_lab/habitation)
 "Ql" = (/obj/machinery/door/airlock{name = "Toilet"},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/habitation)
@@ -704,7 +707,7 @@
 "Xd" = (/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "raider ammunition cabinet"; req_access = null},/obj/item/ammo_storage/box/b380auto,/obj/item/ammo_storage/box/b380auto,/obj/item/ammo_storage/box/b380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/turf/simulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "Xe" = (/obj/effect/spider/stickyweb,/obj/machinery/light/small/broken{dir = 4},/turf/simulated/floor/plating,/area/vault/mothership_lab/cave)
 "Xk" = (/obj/machinery/processor,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/habitation)
-"Xo" = (/obj/machinery/portable_atmospherics/hydroponics/soil,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"Xo" = (/obj/effect/decal/cleanable/dirt,/obj/structure/rack,/obj/item/tool/wirecutters/clippers,/obj/item/tool/wirecutters/clippers,/obj/item/weapon/hatchet,/obj/item/weapon/hatchet,/obj/item/weapon/minihoe,/obj/item/weapon/minihoe,/obj/item/weapon/pickaxe/shovel/spade,/obj/item/weapon/pickaxe/shovel/spade,/obj/item/weapon/storage/bag/plants,/obj/item/weapon/storage/bag/plants,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "Xq" = (/obj/structure/acidtoilet{dir = 8},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/administration)
 "Xz" = (/obj/item/stack/sheet/wood,/turf/simulated/floor/greengrid,/area/vault/mothership_lab/habitation)
 "XB" = (/obj/machinery/light/small/broken{dir = 4},/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/blood/oil{icon_state = "floor2"},/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/breacher{dir = 8},/turf/simulated/floor/plating,/area/vault/mothership_lab/habitation)
@@ -774,12 +777,12 @@ gNjezQUgmwaDaSdgzQUgiymyzQAwAHPeAHjRQGjRjRjRjRjRjRVqVqjRxkjRFGFGNXQXxnNXFGFGjRjR
 gNjezQATIBSxSxVQSSkiSxnyzQAwSqcXSqjQSqxcSqCzSqSqHkHzSqBlxPCzMnKtzlcXCfVICzjQTBbDjQCzzlFbqHwvSqFzcXCzwaSqswHzTJOfAwRGkSRGRGRGkSAabMRGRGEXAwltekqIsNekubib
 gNjezQQpfafyLupxzQFVkRxrzQAwFcxzXzcXbDcXcXmZcXcXcXSgbDcXcXCfcXcXcXjZZncXcXXzgmiRKMehcXwYcXgBcXcXcXehcXcXcXcXcXbDAwrQGxjRjRrQGxjRjRGxrQAwltekfdqIfdekubib
 gNjezQqQUgkRaOaazQzFLuxrzQAwswSqCzCzcXLBueSqjMluVqtXPQbppssfzZcXSqSqSqPJSqHzqpSqjQaFAzVqrvSqIzcXokCzCzHzpDcnSqOoAwfnfnNnMOfnfnRFcLfnfnAwekfdmzqIekubibib
-gNjezQTVUgtMGcuXzQBRaaEWzQAwFmjRjRjRLdjRjRjRjRVqjRjRjRlololojRwkjRoVFSjRaKaKjRKGdBjRcfcHcfcfjREyNRjRACACjRjRjRjRAwLhqishOaQduFfzvLqizyAwekqIqIekubibibBJ
+gNjezQTVUgtMGcuXzQBRMdEWzQAwFmjRjRjRLdjRjRjRjRVqjRjRjRlololojRwkjRoVFSjRaKaKjRKGdBjRcfcHcfcfjREyNRjRACACjRjRjRjRAwLhqishOaQduFfzvLqizyAwekqIqIekubibibBJ
 gNjezQzQwDzQzQzQzQzQzQzQzQAwVFmIiUmIYsZkjRazQlmUmUdLjRDDyzZeFbdnSqzBKzjRWTqwCTIVIVYfqSgCWTiFgCuPuPEzmxjOjRekekekAwAwAwAwAwAwAwAwAwAwAwAwqImzekubibibibBJ
-gNjejemDTuHAiAXomDlrsZPWzQAwcjkJCGmpqPQCjRjRjRmUewjRjRnLzYSqSqSqWYvhdrjRfxxXxXxXxXJxCyxXuzxXxXJpiEuWmxQvjRekbPrFekekevmzsNqIqImzmzqIqIqImzekubibibibBJBJ
-ibgNjezQMdSxhzCljrSxYDTpzQAwcSCGqPzPCGHCjRazQlmUuEBbjRkQSqSqSqwbFwjRjRjRPGSFWTOdPkgCxXWTPkrjgCxXiEecmxprjRekmzqIqImzmzekmzmzqIvYqIqImzekekubibibibBJBJBJ
-ibgNjemDneaWcrJBzQtdFMtdzQAwUFUFUFEpsRJHjRjRjRmUhgBbjRnLDKSqSqfYjRAfsIjRMNRunqPkLAgCvfWTPkqdgCgiJxzomxVXjRekynqIqIHOsNqIqIekekekekekekububibibibBJBJBJBJ
-ibgNjezQzQzQmDzQzQzQmDzQzQAwAwAwAwAwAwAwAwazQlHUjPBbjRSLDZPPSqSqFYUMXBAwAwAwAwAwAwAwAwAwAwAwAwxXSIIWXkNzjReksNmzQJqINVqIekububububububibibibibBJBJBJBJBJ
+gNjemDegTuHAiAXomDlrsZPWzQAwcjkJCGmpqPQCjRjRjRmUewjRjRnLzYSqSqSqWYvhdrjRfxxXxXxXxXJxCyxXuzxXxXJpiEuWmxQvjRekbPrFekekevmzsNqIqImzmzqIqIqImzekubibibibBJBJ
+gNjezQhXATSxhzCljrSxYDTpmDAwcSCGqPzPCGHCjRazQlmUuEBbjRkQSqSqSqwbFwjRjRjRPGSFWTOdPkgCxXWTPkrjgCxXiEecmxprjRekmzqIqImzmzekmzmzqIvYqIqImzekekubibibibBJBJBJ
+gNjemDzQneaWcrJBzQtdFMKFzQAwUFUFUFEpsRJHjRjRjRmUhgBbjRnLDKSqSqfYjRAfsIjRMNRunqPkLAgCvfWTPkqdgCgiJxzomxVXjRekynqIqIHOsNqIqIekekekekekekububibibibBJBJBJBJ
+ibgNjezQmDzQmDzQzQzQmDzQzQAwAwAwAwAwAwAwAwazQlHUjPBbjRSLDZPPSqSqFYUMXBAwAwAwAwAwAwAwAwAwAwAwAwxXSIIWXkNzjReksNmzQJqINVqIekububububububibibibibBJBJBJBJBJ
 ibgNjejejejejejejejejejejejegNgNgNgNgNgNAwAwAwAwAwAwAwAwAwAwAwAwAwAwAwAwgNgNgNgNgNgNgNgNgNgNAwAwAwAwAwAwAwekekekekekekekubibibibibibibibBJBJBJBJBJBJBJBJ
 BJibgNgNgNgNgNgNgNgNgNgNgNgNibibibibibibgNgNgNgNgNgNgNgNgNgNgNgNgNgNgNgNibibibibibibibibibibgNgNgNgNgNgNgNubububububububibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJ
 BJBJBJibibibibibibibibibibibBJBJibibibibibibibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJibibibibibibibibibibibibibibibibBJBJBJBJBJBJBJBJBJBJBJBJBJBJBJ

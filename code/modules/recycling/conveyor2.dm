@@ -318,7 +318,6 @@
 		<li>To make counter-clockwise corners: Use the Reverse Direction button in this menu. Diagonals will attempt to auto set direction based on connected straight line segments.</li>
 	</ul>"}
 
-
 /obj/machinery/conveyor/DuplicateObject(var/location)
 	var/obj/machinery/conveyor/duplicate = ..()
 	duplicate.in_reverse = in_reverse

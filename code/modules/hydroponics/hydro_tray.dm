@@ -11,7 +11,7 @@
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
 
-	// Plant maintenance vars.
+	// Plant maintenance vars
 	var/waterlevel = 100		// Water (max 100)
 	var/nutrientlevel = 100		// Nutrient (max 100)
 	var/pestlevel = 0			// Pests (max 100)
@@ -29,10 +29,7 @@
 	var/sampled = 0            // Have we taken a sample?
 
 	// Harvest/mutation mods.
-	var/yield_mod = 1			// Multiplier to yield for the next harvest.
-	var/mutation_mod = 1		// Modifier to mutationlevel increase.
-	var/mutationlevel = 0		// Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
-	var/is_somatoraying = 0		// Lazy way to make it so that the Floral Somatoray can only cause one mutation at a time.
+	var/list/mutation_levels = list()	// Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
 
 	// Mechanical concerns.
 	var/plant_health = 0       // Plant health.
@@ -46,7 +43,7 @@
 	var/bees = 0			   //Are the trays currently affected by the bees' pollination?
 
 	//var/decay_reduction = 0     //How much is mutation decay reduced by?
-	var/weed_coefficient = 1    //Coefficient to the chance of weeds appearing
+	var/weed_coefficient = 10    //Coefficient to the chance of weeds appearing
 	var/internal_light = 1
 	var/light_on = 0
 
@@ -95,16 +92,13 @@
 		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin))
 			mattercount += SP.rating
 	//decay_reduction = scancount
-	weed_coefficient = 2/mattercount
+	weed_coefficient = WEEDLEVEL_MAX/mattercount/5
 	internal_light = capcount
 
 //Makes the plant not-alive, with proper sanity.
 /obj/machinery/portable_atmospherics/hydroponics/proc/die()
 	dead = 1
 	harvest = 0
-	mutationlevel = 0
-	yield_mod = 1
-	mutation_mod = 1
 	improper_light = 0
 	improper_kpa = 0
 	improper_heat = 0
@@ -115,8 +109,6 @@
 
 //Calls necessary sanity when a plant is removed from the tray.
 /obj/machinery/portable_atmospherics/hydroponics/proc/remove_plant()
-	yield_mod = 1
-	mutation_mod = 1
 	pestlevel = 0
 	seed = null
 	dead = 0
@@ -142,7 +134,7 @@
 	if(!seed.check_harvest(user))
 		return
 
-	seed.harvest(user,get_yieldmod())
+	seed.harvest(user)
 	after_harvest()
 	return
 
@@ -200,13 +192,13 @@
 	if(!seed.spread)
 		return FALSE
 	//Up to 80% chance it doesn't spread
-	if(prob(8 * max(10,seed.potency)))
+	if(prob(80))
 		return FALSE
 	if(closed_system)
 		return FALSE
 	if(age < seed.maturation)
 		return FALSE
-	if(seed.hematophage || seed.carnivorous)
+	if(seed.hematophage || seed.voracious)
 		return TRUE
 	//Doesn't spread if well-fed
 	if(get_nutrientlevel() < NUTRIENTLEVEL_MAX * 0.8)
@@ -323,15 +315,12 @@
 		return
 
 	else if(is_type_in_list(O, list(/obj/item/tool/wirecutters, /obj/item/tool/scalpel)))
-
 		if(!seed)
 			to_chat(user, "There is nothing to take a sample from in \the [src].")
 			return
-
 		if(sampled)
 			to_chat(user, "You have already sampled from this plant.")
 			return
-
 		if(dead)
 			to_chat(user, "The plant is dead.")
 			return
@@ -548,7 +537,7 @@
 	update_name()
 
 /obj/machinery/portable_atmospherics/hydroponics/HasProximity(mob/living/simple_animal/M)
-	if(seed && !dead && seed.carnivorous == 2 && age > seed.maturation)
+	if(seed && !dead && seed.voracious == 2 && age > seed.maturation)
 		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/hostile/lizard) && !M.locked_to && !M.anchored)
 			spawn(10)
 				if(!M || !Adjacent(M) || M.locked_to || M.anchored)
@@ -564,44 +553,17 @@
 						add_nutrientlevel(6)
 						update_icon()
 
-/obj/machinery/portable_atmospherics/hydroponics/bullet_act(var/obj/item/projectile/Proj)
-
-	//Don't act on seeds like dionaea that shouldn't change.
-	if(seed && seed.immutable > 0)
-		return
-
-	//Override for somatoray projectiles.
-	if(!is_somatoraying && istype(Proj ,/obj/item/projectile/energy/floramut))
-		var/obj/item/projectile/energy/floramut/P = Proj
-		var/sev = P.mutstrength
-		is_somatoraying = 1
-		spawn(4*sev)
-			is_somatoraying = 0
-			if(src && seed && !seed.immutable && !dead) //spawn() is tricky with sanity
-				mutate(sev)
-				if(prob(30) && seed.yield != -1)
-					apply_mut("plusstat_yield", sev)
-				return
-	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
-		if(seed && !dead)
-			add_yieldmod(rand(3,5)/10)
-			visible_message("<span class='notice'>\The [seed.display_name] looks lush.</span>")
-			return
-
-	..()
-
 /obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/usr)
 	if((usr.incapacitated() || !Adjacent(usr)))
 		return
 	close_lid()
 
-// See no evil, hear no evil. Returns all the potentially bad things on a hydroponic tray.
 /obj/machinery/portable_atmospherics/hydroponics/proc/bad_stuff()
 	var/list/things = list()
 	if(seed)
 		if (seed.thorny)
 			things += "thorny"
-		if (seed.carnivorous)
+		if (seed.voracious == 2)
 			things += "carnivorous"
 		for (var/chemical_id in seed.chems)
 			if (chemical_id in reagents_to_log)

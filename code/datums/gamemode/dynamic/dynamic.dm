@@ -662,7 +662,7 @@ var/stacking_limit = 90
 
 	if(living_players.len) //if anybody is around and alive in the current round
 		last_time_of_population = world.time
-	else if(last_time_of_population && world.time - last_time_of_population > 5 MINUTES && world.time > 15 MINUTES) //if enough time has passed without it
+	else if(last_time_of_population && world.time - last_time_of_population > 1 HOURS) //if enough time has passed without it
 		ticker.station_nolife_cinematic()
 	if(world.time > (7 HOURS + 40 MINUTES) && world.time - last_time_of_late_shuttle_call > 1 HOURS && emergency_shuttle.direction == 0) // 8 hour work shift, with time for shuttle to arrive and leave. If recalled, do every hour
 		shuttle_autocall("Shift due to end")
@@ -772,7 +772,7 @@ var/stacking_limit = 90
 
 // Same as above, but for midround
 /datum/gamemode/dynamic/proc/refund_midround_threat(var/regain)
-	threat = min(midround_threat_level,midround_threat+regain)
+	midround_threat = min(midround_threat_level,midround_threat+regain)
 
 /datum/gamemode/dynamic/proc/create_midround_threat(var/gain)
 	midround_threat = min(100, midround_threat+gain)

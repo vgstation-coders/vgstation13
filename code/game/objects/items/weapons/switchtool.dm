@@ -22,9 +22,9 @@
 
 	//the colon separates the typepath from the name
 	var/list/obj/item/stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
+											"/obj/item/tool/crowbar:crowbar" = null,
 											"/obj/item/tool/wrench:wrench" = null,
 											"/obj/item/tool/wirecutters:wirecutters" = null,
-											"/obj/item/tool/crowbar:crowbar" = null,
 											"/obj/item/weapon/chisel:chisel" = null,
 											"/obj/item/device/multitool:multitool" = null)
 	var/obj/item/deployed //what's currently in use
@@ -328,12 +328,12 @@
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 
 	stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
+						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/tool/wrench:wrench" = null,
 						"/obj/item/tool/wirecutters:wirecutters" = null,
-						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/weapon/kitchen/utensil/knife/large:knife" = null,
 						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
-						"/obj/item/weapon/hatchet:hatchet" = null,
+						"/obj/item/weapon/hatchet/metalhandle:hatchet" = null,
 						"/obj/item/weapon/lighter/zippo:Zippo lighter" = null,
 						"/obj/item/weapon/match/strike_anywhere:strike-anywhere match" = null,
 						"/obj/item/weapon/pen:pen" = null)
@@ -418,9 +418,9 @@
 		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
 			if(!(has_tech & ENGI))
 				stored_modules["/obj/item/tool/screwdriver:screwdriver"] = new /obj/item/tool/screwdriver(src)
+				stored_modules["/obj/item/tool/crowbar:crowbar"] = new /obj/item/tool/crowbar(src)
 				stored_modules["/obj/item/tool/wrench:wrench"] = new /obj/item/tool/wrench(src)
 				stored_modules["/obj/item/tool/wirecutters:wirecutters"] = new /obj/item/tool/wirecutters(src)
-				stored_modules["/obj/item/tool/crowbar:crowbar"] = new /obj/item/tool/crowbar(src)
 				stored_modules["/obj/item/device/multitool:multitool"] = new /obj/item/device/multitool(src)
 				stored_modules["/obj/item/tool/weldingtool/experimental:experimental welding tool"] = new /obj/item/tool/weldingtool/experimental(src)
 				to_chat(user, "The holo switchtool has engineering designs now!")
@@ -564,9 +564,9 @@
 						"/obj/item/tool/retractor:retractor" = null,
 						"/obj/item/tool/bonesetter:bone setter" = null,
 						"/obj/item/tool/screwdriver:screwdriver" = null,
+						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/tool/wrench:wrench" = null,
 						"/obj/item/tool/wirecutters:wirecutters" = null,
-						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/device/multitool:multitool" = null,
 						"/obj/item/tool/weldingtool/experimental:experimental welding tool" = null,
 						"/obj/item/weapon/soap/holo:UV sterilizer" = null,
@@ -597,8 +597,8 @@
 	name = "\improper Engineering switchtool"
 	desc = "A switchtool designed specifically to be the perfect companion for an Engineer."
 	stored_modules = list(
-		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/screwdriver:screwdriver" = null,
+		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/weldingtool/hugetank:welding tool" = null,
 		"/obj/item/tool/wirecutters:wirecutters" = null,
 		"/obj/item/tool/wrench:wrench" = null,
@@ -629,8 +629,8 @@
 
 /obj/item/weapon/switchtool/engineering/mech
 	stored_modules = list(
-		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/screwdriver:screwdriver" = null,
+		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/weldingtool/hugetank/mech:welding tool" = null,
 		"/obj/item/tool/wirecutters:wirecutters" = null,
 		"/obj/item/tool/wrench:wrench" = null,
