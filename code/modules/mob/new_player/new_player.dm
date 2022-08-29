@@ -382,9 +382,9 @@
 
 	ticker.mode.latespawn(character)//can we make them a latejoin antag?
 
-	if (!character || !character.mind) //Character got transformed in a latejoin ruleset
-		if(character)
-			qdel(character)
+	if(character)
+		qdel(character)
+	else //Character got transformed in a latejoin ruleset
 		qdel(src)
 		return
 
@@ -768,6 +768,8 @@
 		if(R.converts_everyone && new_character.mind.assigned_role != "Chaplain")
 			R.convert(new_character,null,TRUE,TRUE)
 			break //Only autoconvert them once, and only if they aren't leading their own faith.
+
+	qdel(src)
 
 	return new_character
 

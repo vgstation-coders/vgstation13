@@ -90,6 +90,10 @@ var/datum/controller/gameticker/ticker
 				sleep(1)
 				vote.process()
 				watchdog.check_for_update()
+				//if(watchdog.waiting)
+//					to_chat(world, "<span class='notice'>Server update detected, restarting momentarily.</span>")
+					//watchdog.signal_ready()
+					//return
 			if (world.timeofday < (863800 -  delay_timetotal) &&  pregame_timeleft > 863950) // having a remaining time > the max of time of day is bad....
 				pregame_timeleft -= 864000
 			if(!going && !remaining_time)
@@ -191,15 +195,14 @@ var/datum/controller/gameticker/ticker
 			continue
 		
 		switch(np.mind.assigned_role)
-			if("Mobile MMI", "Cyborg", "AI")
-				np.create_roundstart_silicon(np.mind.assigned_role)
-				log_admin("([np.ckey]) started the game as a [np.mind.assigned_role].")
+			if("Cyborg", "Mobile MMI", "AI")
+				var/mob/living/silicon/S = np.create_roundstart_silicon(np.mind.assigned_role)
+				log_admin("([S.ckey]) started the game as a [S.mind.assigned_role].")
 			if("MODE")
 				M.close_spawn_windows()
 				//do nothing as these are already spawned antagonists
 			else
 				var/mob/living/carbon/human/H = np.create_character() //Create player characters and transfer them
-				qdel(np)
 				job_master.EquipRank(H, H.mind.assigned_role, 0)
 				EquipCustomItems(H)
 				H.update_icons()
@@ -220,18 +223,7 @@ var/datum/controller/gameticker/ticker
 		else
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
-/*
-	for(var/mob/living/carbon/human/player in player_list)	
-		if(player.mind)
-			if(player.mind.assigned_role == "MODE")
-				player.close_spawn_windows()
-			else
-				job_master.EquipRank(player, player.mind.assigned_role, 0)
-				EquipCustomItems(player)
-				player.update_icons()
-				if(player.mind.assigned_role != "Trader")
-					data_core.manifest_inject(player)
-*/
+
 	mode.PostSetup()
 
 	//store positions for some reason
