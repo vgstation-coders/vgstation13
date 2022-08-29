@@ -7747,7 +7747,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/polyppudding
 	name = "Polyp Pudding"
-	desc = "An thick and sweet pudding, guaranteed to remind a mothership grey of their childhood whimsy."
+	desc = "A thick and sweet pudding, guaranteed to remind a mothership grey of their childhood whimsy."
 	icon_state = "polyppudding"
 	trash = /obj/item/trash/emptybowl
 	food_flags = FOOD_LIQUID | FOOD_SWEET | FOOD_ANIMAL
