@@ -192,7 +192,7 @@
 /obj/item/weapon/paper/mothership/spacepolyp_care
 	name = "paper- 'Proper Polyp Care'"
 	info = {"<html><style>
-			body {color: #000000; background: #F8F8F8;}
+			body {color: #000000; background: #FAFAFA;}
 			h1 {color: #000000; font-size:30px;}
 			fieldset {width:140px;}
 			</style>
