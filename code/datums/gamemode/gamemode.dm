@@ -100,8 +100,6 @@
 			if(!F.HandleNewMind(P.mind))
 				stack_trace("[P.mind] failed [F] HandleNewMind!")
 				continue
-			else
-				P.close_spawn_windows()
 	return 1
 
 
@@ -134,7 +132,6 @@
 		shuffle(available_players)
 		var/mob/new_player/P = pick(available_players)
 		available_players.Remove(P)
-		P.close_spawn_windows()
 		if(!CreateRole(R, P))
 			i--
 			continue
@@ -168,9 +165,6 @@
 		warning("Role refused mind and dropped!")
 		newRole.Drop()
 		return 0
-	else
-		var/mob/new_player/NP = P
-		NP.close_spawn_windows()
 
 	return 1
 

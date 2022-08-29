@@ -90,10 +90,6 @@ var/datum/controller/gameticker/ticker
 				sleep(1)
 				vote.process()
 				watchdog.check_for_update()
-				//if(watchdog.waiting)
-//					to_chat(world, "<span class='notice'>Server update detected, restarting momentarily.</span>")
-					//watchdog.signal_ready()
-					//return
 			if (world.timeofday < (863800 -  delay_timetotal) &&  pregame_timeleft > 863950) // having a remaining time > the max of time of day is bad....
 				pregame_timeleft -= 864000
 			if(!going && !remaining_time)
@@ -184,21 +180,31 @@ var/datum/controller/gameticker/ticker
 
 	//After antagonists have been removed from new_players in player_list, create crew
 	for(var/mob/M in player_list)
-		if(istype(player, /mob/living/))
-			var/mob/living/L = player
+		if(istype(M, /mob/living/))
+			var/mob/living/L = M
 			ticker.minds += L.mind
-		if(!(player.ready && player.mind && player.mind.assigned_role))
+		if(!istype(M, /mob/new_player/))
+			M.close_spawn_windows()
+			continue
+		var/mob/new_player/np = M
+		if(!(np.ready && np.mind && np.mind.assigned_role))
 			continue
 		
-		switch(player.mind.assigned_role)
+		switch(np.mind.assigned_role)
 			if("Mobile MMI", "Cyborg", "AI")
-				player.create_roundstart_silicon(player.mind.assigned_role)
-				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
+				np.create_roundstart_silicon(np.mind.assigned_role)
+				log_admin("([np.ckey]) started the game as a [np.mind.assigned_role].")
 			if("MODE")
-				//do nothing
+				M.close_spawn_windows()
+				//do nothing as these are already spawned antagonists
 			else
-				player.create_character() //Create player characters and transfer them
-				qdel(player)
+				var/mob/living/carbon/human/H = np.create_character() //Create player characters and transfer them
+				qdel(np)
+				job_master.EquipRank(H, H.mind.assigned_role, 0)
+				EquipCustomItems(H)
+				H.update_icons()
+				if(H.mind.assigned_role != "Trader")
+					data_core.manifest_inject(H)
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
 		for(var/mob/living/carbon/human/player in player_list)
@@ -214,7 +220,7 @@ var/datum/controller/gameticker/ticker
 		else
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
-
+/*
 	for(var/mob/living/carbon/human/player in player_list)	
 		if(player.mind)
 			if(player.mind.assigned_role == "MODE")
@@ -225,7 +231,7 @@ var/datum/controller/gameticker/ticker
 				player.update_icons()
 				if(player.mind.assigned_role != "Trader")
 					data_core.manifest_inject(player)
-
+*/
 	mode.PostSetup()
 
 	//store positions for some reason
