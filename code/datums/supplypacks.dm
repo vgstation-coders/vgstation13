@@ -2462,7 +2462,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/polyp
 	name = "Polyp"
-	cost = 50
+	cost = 75
 	containertype = /obj/structure/largecrate/polyp
 	containername = "polyp crate"
 	access = list(access_hydroponics)
