@@ -1280,6 +1280,7 @@ Thanks.
 
 /mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
+		INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
 		if (now_pushing || !loc || size <= SIZE_TINY)
 			return
 		now_pushing = 1

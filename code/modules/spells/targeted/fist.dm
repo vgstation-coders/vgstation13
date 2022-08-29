@@ -5,8 +5,8 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
 
+	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3)
 	charge_max = 50
-	spell_flags = 0 //So that it doesn't open a dialog box.
 	cooldown_min = 10
 	invocation = "I CAST FIST"
 	invocation_type = SpI_SHOUT
