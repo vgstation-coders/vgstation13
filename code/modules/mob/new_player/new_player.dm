@@ -658,7 +658,6 @@
 	spawning = 1
 	close_spawn_windows()
 
-	//this may seem dumb, but if someone disconnects, their preferences aren't lost during roundstart setup
 	var/client/C = client
 	var/datum/preferences/prefs = C.prefs
 
