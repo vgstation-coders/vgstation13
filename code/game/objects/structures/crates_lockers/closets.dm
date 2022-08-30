@@ -636,9 +636,9 @@
 /obj/structure/closet/proc/shake_closet()
 	shake_animation(3, 3, 0.2, 15)
 	playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
-	spawn(3)
+	spawn(2)
 		playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
-		spawn(3)
+		spawn(2)
 			playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
 
 
