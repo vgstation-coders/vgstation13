@@ -707,7 +707,10 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if(istype(O,/mob/living/carbon/human))
 			var/mob/M=O
 			if(M.ckey != usr.ckey)
-				playsound(M, 'sound/effects/deletescream.ogg', 75, 1)
+				if(prob(50))
+					playsound(M, 'sound/effects/deletescream.ogg', 75, 1)
+				else
+					playsound(M, 'sound/effects/femurscream.ogg', 75, 1)
 				animate(M, alpha = 0, time = 20)
 				sleep(19)
 			qdel(M)
