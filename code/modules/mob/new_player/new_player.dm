@@ -367,7 +367,7 @@
 
 	job_master.AssignRole(src, rank, 1)
 
-	var/mob/living/carbon/human/character = create_character(1)	//creates the human and transfers vars and mind
+	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
@@ -762,7 +762,6 @@
 			// Use the arrivals shuttle spawn point
 			stack_trace("no spawn points for [rank]")
 			new_character.forceMove(pick(latejoin))
-	else
 		// 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 		new_character.DormantGenes(20,10,0,0)
 

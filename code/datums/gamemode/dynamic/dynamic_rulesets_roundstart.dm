@@ -560,7 +560,7 @@ Assign your candidates in choose_candidates() instead.
 	if(old_AI.mind.assigned_role=="AI" || old_AI.mind.assigned_role=="Cyborg" || old_AI.mind.assigned_role=="Mobile MMI")
 		old_AI.create_roundstart_silicon(old_AI.mind.assigned_role)
 	else
-		var/mob/living/carbon/human/new_character = old_AI.create_character(0)
+		var/mob/living/carbon/human/new_character = old_AI.create_character()
 		job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
 		EquipCustomItems(new_character)
 	log_admin("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
