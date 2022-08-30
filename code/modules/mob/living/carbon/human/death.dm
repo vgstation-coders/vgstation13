@@ -95,8 +95,8 @@
 		return
 	if(healths)
 		healths.icon_state = "health7"
-	if(Holiday == APRIL_FOOLS_DAY && mind?.assigned_role == "Clown")
-		playsound(src, 'sound/misc/sadtrombone.ogg', 75, 1)
+	if(mind?.assigned_role == "Clown")
+		playsound(src, 'sound/misc/sadtrombone.ogg', 60, 1)
 	dizziness = 0
 	remove_jitter()
 
