@@ -184,9 +184,6 @@ var/datum/controller/gameticker/ticker
 
 	//After antagonists have been removed from new_players in player_list, create crew
 	for(var/mob/M in player_list)
-		if(istype(M, /mob/living/))
-			var/mob/living/L = M
-			ticker.minds += L.mind
 		if(!istype(M, /mob/new_player/))
 			M.close_spawn_windows()
 			continue
@@ -197,8 +194,11 @@ var/datum/controller/gameticker/ticker
 		switch(np.mind.assigned_role)
 			if("Cyborg", "Mobile MMI", "AI")
 				var/mob/living/silicon/S = np.create_roundstart_silicon(np.mind.assigned_role)
+				ticker.minds += S.mind
 				log_admin("([S.ckey]) started the game as a [S.mind.assigned_role].")
 			if("MODE")
+				var/mob/living/L = M
+				ticker.minds += L.mind
 				M.close_spawn_windows()
 				//do nothing as these are already spawned antagonists
 			else
@@ -206,6 +206,7 @@ var/datum/controller/gameticker/ticker
 				job_master.EquipRank(H, H.mind.assigned_role, 0)
 				EquipCustomItems(H)
 				H.update_icons()
+				ticker.minds += H.mind
 				if(H.mind.assigned_role != "Trader")
 					data_core.manifest_inject(H)
 
