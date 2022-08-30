@@ -2753,6 +2753,10 @@
 	reagents.add_reagent(NUTRIMENT, 10)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/polypwich/after_consume(mob/user)
+	if(prob(10))	//Eating this is just an unpleasant experience, so a player might get a negative flavor message. Has no effect besides rp value. I hope ayy wardens feed these to prisoners as a punishment :)
+		to_chat(user, "<span class='warning'>The sandwich is soggy and tastes too salty to be appetizing...</span>")
+
 /obj/item/weapon/reagent_containers/food/snacks/tomatosoup
 	name = "Tomato Soup"
 	desc = "Drinking this feels like being a vampire! A tomato vampire..."
