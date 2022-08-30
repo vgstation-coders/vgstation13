@@ -108,7 +108,10 @@ the HUD updates properly! */
 		holder = patient.hud_list[STATUS_HUD]
 		if(holder)
 			if(patient.isDead())
-				holder.icon_state = "huddead"
+				if(check_can_revive(patient) == 2) // mmm magic numbers
+					holder.icon_state = "huddead_revivable"
+				else
+					holder.icon_state = "huddead"
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
 			else if(has_recorded_disease(patient))
