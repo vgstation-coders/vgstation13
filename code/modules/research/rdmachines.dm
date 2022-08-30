@@ -294,7 +294,7 @@ var/global/list/rnd_machines = list()
 		spawn(ANIM_LENGTH)
 			busy = FALSE
 		return 1
-	if(O.materials && (research_flags & FAB_RECYCLER))
+	if(O.materials && (research_flags & FAB_RECYCLER) && !istype(O, /obj/item/device/material_synth))
 		if(O.materials.getVolume() + src.materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [O].")
 			return 1
