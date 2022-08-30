@@ -94,6 +94,10 @@
 	. = ..()
 	if(params && isalienadult(user))
 		playsound(user.loc, 'sound/voice/hiss6.ogg', 80, 1, 1)
+	if(ishuman(user) && user.mind?.assigned_role == "Clown")
+		var/mob/living/carbon/human/H = user
+		if(world.time - H.lastDeathgasp > 60 SECONDS)
+			playsound(user, 'sound/misc/sadtrombone.ogg', 70, 1)
 	if (. && user.stat == UNCONSCIOUS && !params)
 		user.succumb_proc(0, 1)
 	message = initial(message)
