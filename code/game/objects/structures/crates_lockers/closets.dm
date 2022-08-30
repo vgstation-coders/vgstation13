@@ -627,12 +627,18 @@
 		return 0
 	return 1
 
-/obj/structure/closet/shake()
+/obj/structure/closet/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+	. = do_after_default_checks(arglist(args))
+	if(.)
+		shake_closet()
+
+
+/obj/structure/closet/proc/shake_closet()
 	shake_animation(3, 3, 0.2, 15)
 	playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
-	spawn(5)
+	spawn(3)
 		playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
-		spawn(5)
+		spawn(3)
 			playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
 
 
