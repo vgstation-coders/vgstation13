@@ -189,6 +189,8 @@ var/datum/controller/gameticker/ticker
 			continue
 		var/mob/new_player/np = M
 		if(!(np.ready && np.mind && np.mind.assigned_role))
+			//If they aren't ready, update new player panels so they say join instead of ready up.
+			np.new_player_panel_proc()
 			continue
 		
 		switch(np.mind.assigned_role)
@@ -230,11 +232,7 @@ var/datum/controller/gameticker/ticker
 	//store positions for some reason
 
 	for(var/mob/M in player_list)
-		if(istype(M,/mob/new_player))
-			var/mob/new_player/np = M
-			// Update new player panels so they say join instead of ready up.
-			np.new_player_panel_proc()
-		else
+		if(!istype(M,/mob/new_player))
 			M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
 
 	gamestart_time = world.time / 10
