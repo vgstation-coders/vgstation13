@@ -658,30 +658,34 @@
 	spawning = 1
 	close_spawn_windows()
 
+	//this may seem dumb, but if someone disconnects, their preferences aren't lost during roundstart setup
+	var/client/C = client
+	var/datum/preferences/prefs = C.prefs
+
 	var/mob/living/carbon/human/new_character = new(loc)
 
 	var/datum/species/chosen_species
-	if(client.prefs.species)
-		chosen_species = all_species[client.prefs.species]
+	if(prefs.species)
+		chosen_species = all_species[prefs.species]
 	if(chosen_species)
-		if(is_alien_whitelisted(src, client.prefs.species) || !config.usealienwhitelist || !(chosen_species.flags & WHITELISTED) || (client && client.holder && (client.holder.rights & R_ADMIN)) )// Have to recheck admin due to no usr at roundstart. Latejoins are fine though.
-			new_character.set_species(client.prefs.species)
+		if(is_alien_whitelisted(src, prefs.species) || !config.usealienwhitelist || !(chosen_species.flags & WHITELISTED) || (C && C.holder && (C.holder.rights & R_ADMIN)) )// Have to recheck admin due to no usr at roundstart. Latejoins are fine though.
+			new_character.set_species(prefs.species)
 			//if(chosen_species.language)
 				//new_character.add_language(chosen_species.language)
 
 	var/datum/language/chosen_language
-	if(client.prefs.language)
-		chosen_language = all_languages["[client.prefs.language]"]
+	if(prefs.language)
+		chosen_language = all_languages["[prefs.language]"]
 	if(chosen_language)
-		if(is_alien_whitelisted(src, client.prefs.language) || !config.usealienwhitelist || !(chosen_language.flags & WHITELISTED) )
-			new_character.add_language("[client.prefs.language]")
+		if(is_alien_whitelisted(src, prefs.language) || !config.usealienwhitelist || !(chosen_language.flags & WHITELISTED) )
+			new_character.add_language("[prefs.language]")
 	if(ticker.random_players || appearance_isbanned(src)) //disabling ident bans for now
 		new_character.setGender(pick(MALE, FEMALE))
-		client.prefs.real_name = random_name(new_character.gender, new_character.species.name)
-		client.prefs.randomize_appearance_for(new_character)
-		client.prefs.flavor_text = ""
+		prefs.real_name = random_name(new_character.gender, new_character.species.name)
+		prefs.randomize_appearance_for(new_character)
+		prefs.flavor_text = ""
 	else
-		client.prefs.copy_to(new_character)
+		prefs.copy_to(new_character)
 
 	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)// MAD JAMS cant last forever yo
 
@@ -696,37 +700,37 @@
 	if(new_character.mind)
 		new_character.mind.store_memory("<b>Your blood type is:</b> [new_character.dna.b_type]<br>")
 
-	if(client.prefs.disabilities & DISABILITY_FLAG_NEARSIGHTED)
+	if(prefs.disabilities & DISABILITY_FLAG_NEARSIGHTED)
 		new_character.dna.SetSEState(GLASSESBLOCK,1,1)
 		new_character.disabilities |= NEARSIGHTED
 
-	if(client.prefs.disabilities & DISABILITY_FLAG_VEGAN)
+	if(prefs.disabilities & DISABILITY_FLAG_VEGAN)
 		new_character.dna.SetSEState(VEGANBLOCK, 1, 1)
 
-	if(client.prefs.disabilities & DISABILITY_FLAG_ASTHMA)
+	if(prefs.disabilities & DISABILITY_FLAG_ASTHMA)
 		new_character.dna.SetSEState(ASTHMABLOCK, 1, 1)
 
-	chosen_species = all_species[client.prefs.species]
-	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
+	chosen_species = all_species[prefs.species]
+	if( (prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		new_character.mutations += M_FAT
 		new_character.overeatduration = 600
 
-	if(client.prefs.disabilities & DISABILITY_FLAG_EPILEPTIC)
+	if(prefs.disabilities & DISABILITY_FLAG_EPILEPTIC)
 		new_character.dna.SetSEState(EPILEPSYBLOCK,1,1)
 		new_character.disabilities |= EPILEPSY
 
-	if(client.prefs.disabilities & DISABILITY_FLAG_DEAF)
+	if(prefs.disabilities & DISABILITY_FLAG_DEAF)
 		new_character.dna.SetSEState(DEAFBLOCK,1,1)
 		new_character.sdisabilities |= DEAF
 
-	if(client.prefs.disabilities & DISABILITY_FLAG_MUTE)
+	if(prefs.disabilities & DISABILITY_FLAG_MUTE)
 		new_character.dna.SetSEState(MUTEBLOCK,1,1)
 		new_character.sdisabilities |= MUTE
 
-	if(client.prefs.disabilities & DISABILITY_FLAG_LISP)
+	if(prefs.disabilities & DISABILITY_FLAG_LISP)
 		new_character.dna.SetSEState(LISPBLOCK, 1, 1)
 
-	if(client.prefs.disabilities & DISABILITY_FLAG_ANEMIA)
+	if(prefs.disabilities & DISABILITY_FLAG_ANEMIA)
 		new_character.dna.SetSEState(ANEMIABLOCK, 1, 1)
 
 	new_character.dna.UpdateSE()
