@@ -229,7 +229,7 @@ var/datum/controller/gameticker/ticker
 
 	for(var/mob/M in player_list)
 		var/mob/living/L = M
-		if(istype(M))
+		if(L.mind)
 			ticker.minds += L.mind
 		if(!istype(M,/mob/new_player))
 			M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
