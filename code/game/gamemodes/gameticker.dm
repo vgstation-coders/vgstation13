@@ -183,6 +183,7 @@ var/datum/controller/gameticker/ticker
 		return 0
 
 	//After antagonists have been removed from new_players in player_list, create crew
+	var/list/new_characters = list()	//list of created crew for transferring
 	for(var/mob/M in player_list)
 		if(!istype(M, /mob/new_player/))
 			M.close_spawn_windows()
@@ -192,21 +193,38 @@ var/datum/controller/gameticker/ticker
 			//If they aren't ready, update new player panels so they say join instead of ready up.
 			np.new_player_panel_proc()
 			continue
-		
+		var/datum/preferences/prefs = M.client.prefs
+		var/key = M.key
+		//Create player characters
 		switch(np.mind.assigned_role)
 			if("Cyborg", "Mobile MMI", "AI")
-				var/mob/living/silicon/S = np.create_roundstart_silicon(np.mind.assigned_role)
+				var/mob/living/silicon/S = np.create_roundstart_silicon(prefs)
+				ticker.minds += S.mind
+				S.store_position()
 				log_admin("([S.ckey]) started the game as a [S.mind.assigned_role].")
+				new_characters[key] = S
 			if("MODE")
+				var/mob/living/L = M
+				ticker.minds += L.mind
+				L.store_position()
 				M.close_spawn_windows()
-				//do nothing as these are already spawned antagonists
 			else
-				var/mob/living/carbon/human/H = np.create_character() //Create player characters and transfer them
-				job_master.EquipRank(H, H.mind.assigned_role, 0)
+				var/mob/living/carbon/human/H = np.create_human(prefs)
+				ticker.minds += H.mind
+				H.store_position()
 				EquipCustomItems(H)
 				H.update_icons()
+				new_characters[key] = H
 				if(H.mind.assigned_role != "Trader")
 					data_core.manifest_inject(H)
+	//Transfer characters to players
+	for(var/i = 1, i <= new_characters.len, i++)
+		var/mob/M = new_characters[new_characters[i]]
+		var/key = new_characters[i]
+		M.key = key
+		if(istype(M, /mob/living/carbon/human/))
+			var/mob/living/carbon/human/H = M
+			job_master.PostJobSetup(H)
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
 		for(var/mob/living/carbon/human/player in player_list)
@@ -223,16 +241,7 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
-	mode.PostSetup()
-
-	//store positions for some reason
-
-	for(var/mob/M in player_list)
-		var/mob/living/L = M
-		if(L.mind)
-			ticker.minds += L.mind
-		if(!istype(M,/mob/new_player))
-			M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
+	mode.PostSetup() //provides antag objectives
 
 	gamestart_time = world.time / 10
 	current_state = GAME_STATE_PLAYING
