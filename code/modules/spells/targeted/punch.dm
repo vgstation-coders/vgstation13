@@ -20,7 +20,7 @@
 	var/has_triggered = 0 //Variable to avoid having multiple explosions as a result of multiple to_bump and throw_impact being triggered
 
 /spell/targeted/punch/invocation(mob/user, list/targets)
-	invocation = pick("ROCKETTOPANCHI", "FARUKONPANCHI", "NORUMARUPANCHI", "BANZAI") //Look the BANZAI is a reference
+	invocation = pick("ROCKETTOPANCHI", "FARUKONPANCHI", "NORUMARUPANCHI", "BANZAI") //Look the BANZAI is a reference and if you get it then hats off to you.
 	..()
 
 /spell/targeted/punch/get_upgrade_info(upgrade_type)
