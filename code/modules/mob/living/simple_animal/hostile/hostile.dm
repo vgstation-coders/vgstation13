@@ -247,7 +247,7 @@
 		if(environment_smash_flags & OPEN_DOOR_SMART)
 			var/turf/T = get_step(src,target)
 			for(var/obj/machinery/door/airlock/AL in T)
-				attack_animal(src)
+				AL.attack_animal(src)
 				delayNextAttack(1 SECONDS)
 		else
 			hostile_interest--
