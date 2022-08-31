@@ -8,11 +8,6 @@ REAGENT SCANNER
 BREATHALYZER
 */
 
-#define CAN_REVIVE_NO 0 // Human cannot be revived.
-#define CAN_REVIVE_GHOSTING 1 // Human is observing but can otherwise be revived.
-#define CAN_REVIVE_IN_BODY 2 // Human can be revived AND is in body.
-
-
 /obj/item/device/t_scanner
 	name = "\improper T-ray scanner"
 	desc = "A terahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible."
@@ -273,7 +268,7 @@ Subject's pulse: ??? BPM"})
 					message += "<br><span class='danger'>Danger: Blood Level Fatal: [blood_percent]% [blood_volume]cl</span>"
 		message += "<br><span class='notice'>Subject's pulse: <font color='[H.pulse == PULSE_THREADY || H.pulse == PULSE_NONE ? "red" : "blue"]'>[H.get_pulse(GETPULSE_TOOL)] BPM</font></span>"
 		if (H.isDead())
-			var/revive_status = check_can_revive(H)
+			var/revive_status = H.check_can_revive()
 
 			if (revive_status == CAN_REVIVE_NO)
 				message += "<br><span class='danger'>No brainwaves detected. Subject cannot be revived.</span>"
@@ -288,25 +283,6 @@ Subject's pulse: ??? BPM"})
 
 	return message //To read last scan
 
-/proc/check_can_revive(mob/living/carbon/human/target)
-	ASSERT(istype(target))
-	ASSERT(target.isDead())
-
-	if (!target.mind)
-		return CAN_REVIVE_NO
-
-	if (target.client)
-		return CAN_REVIVE_IN_BODY
-
-	var/mob/dead/observer/ghost = mind_can_reenter(target.mind)
-	if (!ghost)
-		return CAN_REVIVE_NO
-
-	var/mob/ghostmob = ghost.get_top_transmogrification()
-	if (!ghostmob)
-		return CAN_REVIVE_NO
-
-	return CAN_REVIVE_GHOSTING
 
 /obj/item/device/healthanalyzer/verb/toggle_mode()
 	set name = "Switch mode"
@@ -617,8 +593,3 @@ Subject's pulse: ??? BPM"})
 /obj/item/device/breathalyzer/examine(mob/user)
 	..()
 	to_chat(user, "<span class='notice'>Its legal limit is set to [legal_limit] units.</span>")
-
-
-#undef CAN_REVIVE_NO
-#undef CAN_REVIVE_GHOSTING
-#undef CAN_REVIVE_IN_BODY
