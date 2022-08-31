@@ -312,14 +312,11 @@
 				var/datum/disease2/disease/D = virus2[ID]
 				eater.infect_disease2(D, 1, notes="(Ate an infected [src])")//eating infected food means 100% chance of infection.
 		if(reagentreference.total_volume)
-			reagentreference.reaction(eater, INGEST)
+			reagentreference.reaction(eater, INGEST, amount_override = min(reagentreference.total_volume,bitesize*bitesizemod)/(reagentreference.reagent_list.len))
 			spawn() //WHY IS THIS SPAWN() HERE
 				if(gcDestroyed)
 					return
-				if(reagentreference.total_volume > bitesize*bitesizemod)
-					reagentreference.trans_to(eater, bitesize*bitesizemod)
-				else
-					reagentreference.trans_to(eater, reagentreference.total_volume)
+				reagentreference.trans_to(eater, min(reagentreference.total_volume,bitesize*bitesizemod))
 				bitecount++
 				after_consume(eater, reagentreference)
 		return 1
@@ -1149,6 +1146,30 @@
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/sausage/dan
+	name = "premium sausage"
+	desc = "A piece of premium, mixed meat. Very mixed..."
+	icon_state = "sausage"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/sausage/dan/New()
+	..()
+	reagents.clear_reagents()
+	for(var/blendedmeat = 1 to 6)
+		switch(rand(1,3))
+			if(1)
+				reagents.add_reagent(NUTRIMENT, 1) //15 nutrition
+			if(2)
+				reagents.add_reagent(BEFF,rand(3,8)) //6-16
+			if(3)
+				reagents.add_reagent(HORSEMEAT,rand(3,6)) //9-18
+	reagents.add_reagent(BONEMARROW,rand(0,3)) //0-3
+	if(prob(50))
+		reagents.add_reagent(ROACHSHELL,rand(0,8)) //0
+	//36 to 111 nutrition. 4noraisins has 90...
+	bitesize = 7 //Three bites on average to finish
+
 /obj/item/weapon/reagent_containers/food/snacks/donkpocket
 	name = "\improper Donk-pocket"
 	desc = "The food of choice for the seasoned traitor."
@@ -1453,6 +1474,19 @@
 	reagents.add_reagent(HYPERZINE, 8)
 	src.bitesize = 4
 
+/obj/item/weapon/reagent_containers/food/snacks/glassburger
+	name = "glass burger"
+	desc = "Goes down surprisingly easily considering the ingredients."
+	icon_state = "glassburger"
+	filling_color = "#92CEE9"
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/glassburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(DIAMONDDUST, 4) //It's the closest we have to eating raw glass, causes some brute and screaming
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
 	desc = "That's all you can say!"
@@ -1545,6 +1579,41 @@
 	reagents.add_reagent(NUTRIMENT, 4)
 	reagents.add_reagent(CARAMEL, 3)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie
+	name = "banana cream pie"
+	desc = "Just like back home, on clown planet! HONK!"
+	icon_state = "pie"
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/New()
+	..()
+	reagents.clear_reagents()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(BANANA,3)
+	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/examine(mob/user)
+	..()
+	if(is_holder_of(user,src))
+		to_chat(user, "<span class='info'><b>When inspected hands-on,</b> the [src] feels heavier than normal and seems to be ticking.</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/after_consume(mob/user)
+	explosion(get_turf(user), -1, 0, 0, 3)
+	user.gib()
+	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/throw_impact(atom/hit_atom)
+	set waitfor = FALSE
+	if(ismob(hit_atom))
+		var/mob/M = hit_atom
+		src.visible_message("<span class='warning'>\The [src] explodes in [M]'s face!</span>")
+		explosion(get_turf(M), -1, 0, 1, 3)
+		qdel(src)
+
+	if(isturf(hit_atom))
+		explosion(get_turf(hit_atom), -1, 0, 1, 3)
+		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/berryclafoutis
 	name = "berry clafoutis"
@@ -2441,6 +2510,22 @@
 	reagents.add_reagent(LIMEJUICE, 5)
 	bitesize = 5
 
+/obj/item/weapon/reagent_containers/food/snacks/silicatesoup
+	name = "silicate soup"
+	desc = "It's like eating sand in liquid form."
+	icon_state = "silicatesoup"
+	food_flags = FOOD_LIQUID
+	crumb_icon = "dribbles"
+	filling_color = "#C5C5FF"
+	valid_utensils = UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/silicatesoup/New()
+	..()
+	reagents.add_reagent(WATER, 10)
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SILICATE, 5)
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/hotchili
 	name = "Hot Chili"
 	desc = "A five alarm Texan Chili!"
@@ -2457,7 +2542,6 @@
 	reagents.add_reagent(TOMATOJUICE, 2)
 	bitesize = 5
 
-
 /obj/item/weapon/reagent_containers/food/snacks/coldchili
 	name = "Cold Chili"
 	desc = "This slush is barely a liquid!"
@@ -2471,6 +2555,21 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(FROSTOIL, 3)
+	reagents.add_reagent(TOMATOJUICE, 2)
+	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/plasmastew
+	name = "Plasma Stew"
+	desc = "Plasma free and flavour full."
+	icon_state = "plasmastew"
+	trash = /obj/item/trash/snack_bowl
+	crumb_icon = "dribbles"
+	filling_color = "#CE37BA"
+	valid_utensils = UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/plasmastew/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
 	reagents.add_reagent(TOMATOJUICE, 2)
 	bitesize = 5
 
@@ -2920,10 +3019,26 @@
 	reagents.add_reagent(IMIDAZOLINE, 3)
 	bitesize = 2
 
-
 /obj/item/weapon/reagent_containers/food/snacks/carrotfries/processed/New()
 	..()
 	reagents.clear_reagents()
+
+/obj/item/weapon/reagent_containers/food/snacks/diamondfries
+	name = "Diamond Fries"
+	desc = "Surprisingly juicy and crunchy."
+	icon_state = "diamondfries"
+	filling_color = "#95FFFF"
+	plate_offset_y = -2
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/diamondfries/processed/New()
+	..()
+	reagents.clear_reagents()
+
+/obj/item/weapon/reagent_containers/food/snacks/diamondfries/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/superbiteburger
 	name = "Super Bite Burger"
@@ -3799,6 +3914,29 @@
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/blingpizza
+	name = "Blingpizza"
+	desc = "A pizza made with the most expensive ingredients this side of the galaxy. You feel filthy rich just by looking at it."
+	icon_state = "blingpizza"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/blingpizzaslice
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/blingpizza/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 50)
+	reagents.add_reagent(HELL_RAMEN, 3) //the novaflour turns into hellramen like in novabread
+	reagents.add_reagent(GOLD, 3)
+	reagents.add_reagent(SILVER, 3)
+	reagents.add_reagent(DIAMONDDUST, 3)
+	reagents.add_reagent(TRICORDRAZINE, 8) //ambrosia's medical chems replacement
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/blingpizzaslice
+	name = "Blingpizza slice"
+	desc = "A slice of filthy rich blingpizza. How did you afford it?"
+	icon_state = "blingpizzaslice"
+	bitesize = 2
+
 /obj/item/pizzabox
 	name = "pizza box"
 	desc = "A box suited for pizzas."
@@ -3975,7 +4113,7 @@
 /obj/item/pizzabox/vegetable/New()
 	. = ..()
 	pizza = new /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/vegetablepizza(src)
-	boxtag = "Gourmet Vegatable"
+	boxtag = "Gourmet Vegetable"
 
 /obj/item/pizzabox/mushroom/New()
 	. = ..()
@@ -3986,6 +4124,11 @@
 	. = ..()
 	pizza = new /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza(src)
 	boxtag = "Meatlover's Supreme"
+
+/obj/item/pizzabox/blingpizza/New()
+	. = ..()
+	pizza = new /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/blingpizza(src)
+	boxtag = "Centcomm Selects"
 
 ////////////////////////////////FOOD ADDITIONS////////////////////////////////////////////
 

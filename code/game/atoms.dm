@@ -512,7 +512,7 @@ its easier to just keep the beam vertical.
 	return ex_act(severity, child)
 
 /atom/proc/can_mech_drill()
-	return acidable()
+	return dissolvable()
 
 /atom/proc/blob_act(destroy = 0, var/obj/effect/blob/source = null)
 	if(flags & INVULNERABLE)
@@ -566,6 +566,16 @@ its easier to just keep the beam vertical.
 /atom/proc/supermatter_act(atom/source, severity)
 	qdel(src)
 	return 1
+
+//user: The mob that is suiciding
+//damagetype: The type of damage the item will inflict on the user
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
+//Output a creative message and then return the damagetype done
+/atom/proc/suicide_act(var/mob/living/user)
+	return
 
 // Returns TRUE if it's been handled, children should return if parent has already handled
 /atom/proc/hitby(var/atom/movable/AM)
@@ -844,11 +854,8 @@ its easier to just keep the beam vertical.
 
 /atom/proc/update_icon()
 
-/atom/proc/acidable()
+/atom/proc/dissolvable()
 	return 0
-
-/atom/proc/isacidhardened()
-	return FALSE
 
 /atom/proc/salt_act()
 	return

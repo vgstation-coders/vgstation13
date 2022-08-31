@@ -169,6 +169,8 @@
 	droplimb(1, spawn_limb = 0, display_message = FALSE)
 
 /datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
+	if(owner?.status_flags & GODMODE)
+		return 0	//godmode
 	if((brute <= 0) && (burn <= 0))
 		return 0
 
@@ -321,7 +323,7 @@
 //This function completely restores a damaged organ to perfect condition
 /datum/organ/external/proc/rejuvenate()
 	damage_state = "00"
-	//Robotic organs stay robotic.  Fix because right click rejuvinate makes IPC's organs organic.
+	//Robotic organs stay robotic.  Fix because right click rejuvenate makes IPC's organs organic.
 	//N3X: Use bitmask to exclude shit we don't want.
 	status = status & (ORGAN_ROBOT|ORGAN_PEG)
 	perma_injury = 0
@@ -957,6 +959,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return rval
 
 /datum/organ/external/proc/fracture()
+	if(owner?.status_flags & GODMODE)
+		return 0	//godmode
 	var/datum/species/species = src.species || owner.species
 	if(species.anatomy_flags & NO_BONES)
 		return
@@ -1061,6 +1065,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		//Transfer any internal_organs from the organ item to the body
 		for(var/datum/organ/internal/transfer in organ.internal_organs)
+			if(transfer.name == "eyes" || "brain")
+				owner.organs_by_name["head"].internal_organs += transfer
 			owner.internal_organs += transfer
 			owner.internal_organs_by_name[transfer.organ_type] = transfer
 			owner.internal_organs_by_name[transfer.organ_type].owner = owner
@@ -1508,8 +1514,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(E)
 		owner.internal_organs_by_name.Remove("eyes")
 		owner.internal_organs.Remove(E)
-
-	return
+		src.internal_organs.Remove(E)
+	return E
 
 /datum/organ/external/head/explode()
 	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
@@ -1612,7 +1618,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	wounds = source.wounds.Copy()
 	burn_dam = source.burn_dam
 	brute_dam = source.brute_dam
-	internal_organs = source.internal_organs
+	if(!isnull(source.internal_organs)) //DM throws an error since Copy() can't run on a null object; some limbs don't have this var currently
+		internal_organs = source.internal_organs.Copy()
 
 	//Copy status flags except for ORGAN_CUT_AWAY and ORGAN_DESTROYED
 	status = source.status & ~(ORGAN_CUT_AWAY | ORGAN_DESTROYED)

@@ -42,8 +42,8 @@
 	var/cant_drop_msg = " sticks to your hand!"
 	var/laying_pickup = FALSE //Allows things to be placed in hands while the owner of those hands is laying
 
-	var/list/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	var/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+	var/list/armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+	var/list/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 	var/list/allowed = null //suit storage stuff.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
@@ -121,10 +121,10 @@
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
 /obj/item/acid_melt()
-	if (acidable())
-		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
-		I.desc = "Looks like this was \a [src] some time ago."
-		qdel(src)
+	var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
+	I.desc = "Looks like this was \a [src] some time ago."
+	visible_message("<span class='warning'>\The [src] melts.</span>")
+	qdel(src)
 
 /obj/item/hide(i)
 	if(isturf(loc))
@@ -140,22 +140,23 @@
 	return 0
 
 /obj/item/t_scanner_expose()
-	if (level != LEVEL_BELOW_FLOOR)
-		return
+	if (level > LEVEL_BELOW_FLOOR)
+		..()
+	else
+		var/old_alpha = alpha
+		var/old_invisibility = invisibility
+		invisibility = 0
+		alpha = 127
+		plane = initial(plane)
+		layer = initial(layer)
 
-	var/oldalpha = alpha
-	invisibility = 0
-	alpha = 127
-	plane = initial(plane)
-	layer = initial(layer)
-
-	spawn(1 SECONDS)
-		var/turf/U = loc
-		if(istype(U) && U.intact)
-			invisibility = 101
-			plane = ABOVE_PLATING_PLANE
-			layer = FLOORBOARD_ITEM_LAYER
-		alpha = oldalpha
+		spawn(1 SECONDS)
+			var/turf/U = loc
+			if(istype(U) && U.intact)
+				invisibility = old_invisibility
+				plane = ABOVE_PLATING_PLANE
+				layer = FLOORBOARD_ITEM_LAYER
+			alpha = old_alpha
 
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
@@ -421,6 +422,7 @@
 
 // called when this item is added into a storage item, which is passed on as S. The loc variable is already set to the storage item.
 /obj/item/proc/on_enter_storage(obj/item/weapon/storage/S as obj)
+	invisibility = 0
 	return
 
 // called when "found" in pockets and storage items. Returns 1 if the search should end.
@@ -1361,10 +1363,6 @@ var/global/list/image/blood_overlays = list()
 //Gets the rating of the item, used in stuff like machine construction.
 /obj/item/proc/get_rating()
 	return FALSE
-
-// Like the above, but used for RPED sorting of parts.
-/obj/item/proc/rped_rating()
-	return get_rating()
 
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
 	var/datum/organ/external/kickingfoot = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)

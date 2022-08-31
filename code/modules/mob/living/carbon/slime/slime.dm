@@ -879,7 +879,7 @@
 	canremove = 0
 	siemens_coefficient = 0
 
-/obj/item/clothing/mask/gas/golem/acidable()
+/obj/item/clothing/mask/gas/golem/dissolvable()
 	return 0
 
 /obj/item/clothing/gloves/golem
@@ -904,7 +904,7 @@
 	armor = list(melee = 80, bullet = 20, laser = 20, energy = 10, bomb = 0, bio = 0, rad = 0)
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
-/obj/item/clothing/head/space/golem/acidable()
+/obj/item/clothing/head/space/golem/dissolvable()
 	return 0
 */
 /obj/effect/golem_rune

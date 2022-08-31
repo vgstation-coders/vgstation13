@@ -40,6 +40,7 @@
 	throw_speed = 4
 	throw_range = 20
 	var/potency = 20
+	var/slip_override = 0
 
 /obj/item/weapon/bananapeel/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")

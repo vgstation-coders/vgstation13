@@ -33,6 +33,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		to_chat(world, "[src] \ref[src] found [get_dir(src, B)] its dir is [dir]")
 		if(get_dir(src, B) != dir)
 			return 1
+
 /obj/machinery/prism/verb/rotate_cw()
 	set name = "Rotate (Clockwise)"
 	set category = "Object"
@@ -60,6 +61,12 @@ var/list/obj/machinery/prism/prism_list = list()
 	beam=null
 	update_beams()
 	return 1
+
+
+/obj/machinery/prism/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate_cw()
 
 /obj/machinery/prism/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()

@@ -350,7 +350,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 				if(collision_imminent)
 					playsound(shuttle.linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
-				
+
 				if(timeleft>0)
 					return 0
 
@@ -423,7 +423,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		else
 			return 1
 
-/proc/shuttle_autocall()
+/proc/shuttle_autocall(var/reason = "None")
 	if (emergency_shuttle.departed)
 		return
 
@@ -431,7 +431,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		return
 
 	emergency_shuttle.incall(2)
-	log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
-	message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
+	log_game("[reason]. Shuttle called.")
+	message_admins("[reason]. Shuttle called.", 1)
+	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification: [reason]")
 	world << sound('sound/AI/shuttlecalled.ogg')

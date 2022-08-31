@@ -114,7 +114,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	idle_power_usage = 2
 	active_power_usage = 20
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list
-	var/on = 0					// 1 if on, 0 if off
+	var/on = 1					// 1 if on, 0 if off
 	var/on_gs = 0
 	var/static_power_used = 0
 	var/flickering = 0
@@ -137,21 +137,14 @@ var/global/list/obj/machinery/light/alllights = list()
 		update(0)
 	alllights += src
 
-	spawn(2)
-		var/area/A = get_area(src)
-		if(A && !A.requires_power)
-			on = 1
-
-		if (!map.lights_always_ok)
-			switch(fitting)
-				if("tube")
-					if(prob(2))
-						broken(1)
-				if("bulb")
-					if(prob(5))
-						broken(1)
-		spawn(1)
-			update(0)
+	if(map.broken_lights)
+		switch(fitting)
+			if("tube")
+				if(prob(2))
+					broken(1)
+			if("bulb")
+				if(prob(5))
+					broken(1)
 
 /obj/machinery/light/supports_holomap()
 	return TRUE
@@ -406,7 +399,16 @@ var/global/list/obj/machinery/light/alllights = list()
  */
 /obj/machinery/light/proc/has_power()
 	var/area/this_area = get_area(src)
-	return this_area && this_area.lightswitch && this_area.power_light
+	var/success = FALSE
+	if(!this_area || !this_area.power_light)
+		return FALSE
+	if(!this_area.haslightswitch || !this_area.requires_power)
+		return TRUE
+	for(var/obj/machinery/light_switch/L in this_area)
+		if(L.on)
+			success = TRUE
+		break
+	return success
 
 /obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
 	if(flickering)

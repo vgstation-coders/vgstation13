@@ -65,7 +65,6 @@
 			if(!area_object)
 				area_object = new area_type
 				area_object.tag = "[area_type]/\ref[src]"
-				area_object.addSorted()
 
 			area_object.contents.Add(T)
 			T.change_area(old_area, area_object)
@@ -175,7 +174,7 @@
 			height = 0
 			return
 
-		overwriting = input(usr, "Do you want these vaults to overwrite their area?", "Vault Overwriting", "Yes", "No") == "Yes"
+		overwriting = alert(usr, "Do you want these vaults to overwrite their area?", "Vault Overwriting", "Yes", "No") == "Yes"
 
 /datum/map_element/customizable/vault_placement/initialize()
 	if(!location)

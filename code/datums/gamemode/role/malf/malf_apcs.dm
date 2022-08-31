@@ -7,7 +7,7 @@
 
 /obj/machinery/power/apc/malfhack_valid(var/mob/living/silicon/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
-	if(!istype(M) || !istype(malf))		
+	if(!istype(M) || !istype(malf))
 		to_chat(malf, "<span class='warning'>You are not a malfunctioning AI.</span>")
 		return FALSE
 	if(currently_hacking_ai && currently_hacking_ai != malf)
@@ -54,6 +54,13 @@
 	malfai = malf
 	M.apcs += src
 	to_chat(malf, "<span class='notice'>APC Hack Complete. The [name] is now under your exclusive control. You now have [M.apcs.len] APCs under your control.</span>")
+	var/total_APC = 0
+	for(var/obj/machinery/power/apc/A in M.apcs)
+		total_APC++
+	if(total_APC % 5 == 0 && !(total_APC in M.apc_checkpoints)) //Every 5 APCs hacked, increases the limit of APCs that can be hacked by 1
+		M.apc_hacklimit++
+		to_chat(malf, "<span class='good'>You may now hack an additional APC at a time, up to [M.apc_hacklimit].</span>")
+		M.apc_checkpoints += total_APC //Remembers that this many APCs were hacked to avoid exploits
 	malf.handle_regular_hud_updates()
 	malfimage = new /atom/movable/fake_camera_image(loc)
 	malfimage.pixel_y = pixel_y
@@ -85,7 +92,7 @@
 /obj/machinery/power/apc/enable_AI_control(var/bypass)
 	stat &= ~NOAICONTROL
 	malf_undisrupt()
-	
+
 
 /atom/movable/fake_camera_image
 	name          = ""

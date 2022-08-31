@@ -67,7 +67,7 @@
 	req_tech = list(Tc_MATERIALS = 2, Tc_BIOTECH = 2, Tc_PROGRAMMING = 2)
 	materials = list(MAT_GLASS = 500, MAT_IRON = 1000)
 	category = "Misc"
-	
+
 /datum/design/dses
 	name = "Deep Space Exploration System"
 	desc = "A GPS with a high-gain radio antenna and broadcaster for locating proximity objects in space, the explorers friend."
@@ -77,7 +77,7 @@
 	materials = list(MAT_IRON = 1600, MAT_GLASS = 400)
 	category = "Bluespace"
 	build_path = /obj/item/device/dses
-	
+
 /datum/design/dses_module_rangeboost
 	name = "DSES Ping Long-Range Listener"
 	desc = "A high-gain amplifier circuit for a DSES receiver, effectively doubling the range."
@@ -87,7 +87,7 @@
 	materials = list(MAT_GLASS=3000, MAT_IRON=2500)
 	category = "Misc"
 	build_path = /obj/item/dses_module/range_boost
-	
+
 /datum/design/dses_module_costreduc
 	name = "DSES Ping Resource Optimizer"
 	desc = "Optimizes the cost of DSES pings, reducing the amount of energy needed per ping."
@@ -97,7 +97,7 @@
 	materials = list(MAT_GLASS=4000)
 	category = "Misc"
 	build_path = /obj/item/dses_module/cost_reduc
-	
+
 /datum/design/dses_module_pulsedirection
 	name = "DSES Ping Resonation Locator"
 	desc = "A much more sensitive listening system which can give a direction to a bounce-back ping."
@@ -107,7 +107,7 @@
 	materials = list(MAT_GLASS=2000, MAT_IRON=3000)
 	category = "Misc"
 	build_path = /obj/item/dses_module/pulse_direction
-	
+
 /datum/design/dses_module_gpslogger
 	name = "DSES Ping Resonance Logger"
 	desc = "Basic memory unit for co-ordinating and logging the locations of succesful pings."
@@ -117,7 +117,7 @@
 	materials = list(MAT_GLASS=2000, MAT_IRON=2000)
 	category = "Misc"
 	build_path = /obj/item/dses_module/gps_logger
-	
+
 /datum/design/dses_module_pingtimer
 	name = "DSES Automated Ping System"
 	desc = "Basic clock timer for automating the pinging system, turning it into a toggle."
@@ -127,7 +127,7 @@
 	materials = list(MAT_GLASS=2000)
 	category = "Misc"
 	build_path = /obj/item/dses_module/ping_timer
-	
+
 /datum/design/dses_module_distanceget
 	name = "DSES Ping Distance Approximation System"
 	desc = "A small mathematic system that calculates signal decay between transmission and sending, to approximate distance."
@@ -137,3 +137,13 @@
 	materials = list(MAT_GLASS=2000, MAT_IRON=1000)
 	category = "Misc"
 	build_path = /obj/item/dses_module/distance_get
+
+/datum/design/trackingglasses
+	name = "Eye Tracking Glasses"
+	desc = "Eye tracking glasses which allow the wearer to see what others are looking at."
+	id = "trackingglasses"
+	req_tech = list(Tc_MATERIALS = 6)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_DIAMOND = 500)
+	category = "Misc"
+	build_path = /obj/item/clothing/glasses/regular/tracking

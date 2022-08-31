@@ -185,7 +185,7 @@
 					reagents.remove_any(gulp_size)
 					return 0
 
-			reagents.reaction(M, INGEST)
+			reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,gulp_size)/(reagents.reagent_list.len))
 			spawn(5)
 				reagents.trans_to(M, gulp_size)
 

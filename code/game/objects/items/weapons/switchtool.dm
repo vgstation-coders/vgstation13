@@ -18,12 +18,13 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 	var/hmodule = null
+	var/index = 0
 
 	//the colon separates the typepath from the name
 	var/list/obj/item/stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
+											"/obj/item/tool/crowbar:crowbar" = null,
 											"/obj/item/tool/wrench:wrench" = null,
 											"/obj/item/tool/wirecutters:wirecutters" = null,
-											"/obj/item/tool/crowbar:crowbar" = null,
 											"/obj/item/weapon/chisel:chisel" = null,
 											"/obj/item/device/multitool:multitool" = null)
 	var/obj/item/deployed //what's currently in use
@@ -73,6 +74,7 @@
 /obj/item/weapon/switchtool/examine(mob/user)
 	..()
 	to_chat(user, "This one is capable of holding [get_formatted_modules()].")
+	to_chat(user, " Use SHIFT+Mousewheel to quickly Swap tools")
 
 /obj/item/weapon/switchtool/attack_self(mob/user)
 	if(!user)
@@ -102,6 +104,22 @@
 		return TRUE
 	else
 		return ..()
+
+/obj/item/weapon/switchtool/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)
+	var/modifiers = params2list(params)
+	if (modifiers["shift"])
+		if (delta_y <= 0)
+			index++
+		else
+			index--
+		if (index > stored_modules.len)
+			index = 0
+		if(index < 0)
+			index = stored_modules.len
+		var/moduled = stored_modules[index]
+		undeploy()
+		deploy(moduled, user)
+		edit_deploy(1)
 
 /obj/item/weapon/switchtool/proc/get_module_type(var/module)
 	return copytext(module, 1, findtext(module, ":"))
@@ -180,14 +198,12 @@
 	user.update_inv_hands()
 
 /obj/item/weapon/switchtool/proc/deploy(var/module, mob/user)
-
 	if(!(module in stored_modules))
 		return FALSE
 	if(!stored_modules[module])
 		return FALSE
 	if(deployed)
 		return FALSE
-
 	playsound(src, deploy_sound, 10, 1)
 	deployed = stored_modules[module]
 	hmodule = get_module_name(module)
@@ -312,12 +328,12 @@
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 
 	stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
+						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/tool/wrench:wrench" = null,
 						"/obj/item/tool/wirecutters:wirecutters" = null,
-						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/weapon/kitchen/utensil/knife/large:knife" = null,
 						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
-						"/obj/item/weapon/hatchet:hatchet" = null,
+						"/obj/item/weapon/hatchet/metalhandle:hatchet" = null,
 						"/obj/item/weapon/lighter/zippo:Zippo lighter" = null,
 						"/obj/item/weapon/match/strike_anywhere:strike-anywhere match" = null,
 						"/obj/item/weapon/pen:pen" = null)
@@ -402,9 +418,9 @@
 		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
 			if(!(has_tech & ENGI))
 				stored_modules["/obj/item/tool/screwdriver:screwdriver"] = new /obj/item/tool/screwdriver(src)
+				stored_modules["/obj/item/tool/crowbar:crowbar"] = new /obj/item/tool/crowbar(src)
 				stored_modules["/obj/item/tool/wrench:wrench"] = new /obj/item/tool/wrench(src)
 				stored_modules["/obj/item/tool/wirecutters:wirecutters"] = new /obj/item/tool/wirecutters(src)
-				stored_modules["/obj/item/tool/crowbar:crowbar"] = new /obj/item/tool/crowbar(src)
 				stored_modules["/obj/item/device/multitool:multitool"] = new /obj/item/device/multitool(src)
 				stored_modules["/obj/item/tool/weldingtool/experimental:experimental welding tool"] = new /obj/item/tool/weldingtool/experimental(src)
 				to_chat(user, "The holo switchtool has engineering designs now!")
@@ -548,9 +564,9 @@
 						"/obj/item/tool/retractor:retractor" = null,
 						"/obj/item/tool/bonesetter:bone setter" = null,
 						"/obj/item/tool/screwdriver:screwdriver" = null,
+						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/tool/wrench:wrench" = null,
 						"/obj/item/tool/wirecutters:wirecutters" = null,
-						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/device/multitool:multitool" = null,
 						"/obj/item/tool/weldingtool/experimental:experimental welding tool" = null,
 						"/obj/item/weapon/soap/holo:UV sterilizer" = null,
@@ -581,8 +597,8 @@
 	name = "\improper Engineering switchtool"
 	desc = "A switchtool designed specifically to be the perfect companion for an Engineer."
 	stored_modules = list(
-		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/screwdriver:screwdriver" = null,
+		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/weldingtool/hugetank:welding tool" = null,
 		"/obj/item/tool/wirecutters:wirecutters" = null,
 		"/obj/item/tool/wrench:wrench" = null,
@@ -613,8 +629,8 @@
 
 /obj/item/weapon/switchtool/engineering/mech
 	stored_modules = list(
-		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/screwdriver:screwdriver" = null,
+		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/weldingtool/hugetank/mech:welding tool" = null,
 		"/obj/item/tool/wirecutters:wirecutters" = null,
 		"/obj/item/tool/wrench:wrench" = null,

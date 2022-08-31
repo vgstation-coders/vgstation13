@@ -23,7 +23,7 @@
 	name = "Acid-Proof Air Injector"
 	desc = "Has a valve and pump attached to it. This one has an acid proof coating."
 
-/obj/machinery/atmospherics/unary/outlet_injector/acid_proof/acidable()
+/obj/machinery/atmospherics/unary/outlet_injector/acid_proof/dissolvable()
 	return 0
 
 /obj/machinery/atmospherics/unary/outlet_injector/update_icon()

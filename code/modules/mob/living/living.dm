@@ -516,7 +516,7 @@ Thanks.
 /mob/living/proc/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)
 	if(animation)
-		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
+		T.turf_animation('icons/effects/64x64.dmi',"rejuvenate",-16,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = EFFECTS_PLANE)
 
 	// shut down various types of badness
 	toxloss = 0
@@ -558,6 +558,11 @@ Thanks.
 		locked_to.unbuckle()
 	locked_to = initial(src.locked_to)
 	*/
+	if(istype(src, /mob/living/carbon))
+		var/mob/living/carbon/C = src
+		dead_mob_list -= C
+		living_mob_list |= list(C)
+
 	if(istype(src, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = src
 		H.timeofdeath = 0
@@ -833,6 +838,14 @@ Thanks.
 			qdel(package)
 			playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		return
+	else if(istype(src.loc, /obj/effect/spider/cocoon))
+		var/obj/effect/spider/cocoon/cocoon = src.loc
+		to_chat(L, "<span class='warning'>You attempt to untangle yourself, the webs are tight and will take some time.</span>")
+		if(do_after(src, src, 2 MINUTES))
+			L.visible_message("<span class='danger'>[L] successfully breaks out of [cocoon]!</span>",\
+							  "<span class='notice'>You successfully break out!</span>")
+			forceMove(T)
+			qdel(cocoon)
 
 	//Detaching yourself from a tether
 	if(L.tether)

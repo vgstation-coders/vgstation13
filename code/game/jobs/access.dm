@@ -132,11 +132,10 @@
 			condition |= M.x > src.x
 		if(req_access_dir & WEST)
 			condition |= M.x < src.x
-		if(map.multiz)
-			if(req_access_dir & UP)
-				condition |= M.z > src.z
-			if(req_access_dir & DOWN)
-				condition |= M.z < src.z
+		if(HasAbove(z) && (req_access_dir & UP))
+			condition |= M.z > src.z
+		if(HasBelow(z) && (req_access_dir & DOWN))
+			condition |= M.z < src.z
 		if(condition)
 			return can_access(ACL,req_access,req_one_access)
 		else
@@ -328,6 +327,11 @@
 		if(7) //supply
 			return "Supply"
 
+/proc/get_access_desc_list(var/list/L)
+	var/list/names = list()
+	for(var/access in L)
+		names.Add(get_access_desc(access))
+	return english_list(names)
 
 /proc/get_access_desc(A)
 	switch(A)

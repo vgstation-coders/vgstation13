@@ -116,7 +116,7 @@
 	name = "Creatine"
 	id = CREATINE
 	result = CREATINE
-	required_reagents = list(NUTRIMENT = 1, BICARIDINES = 1, HYPERZINES = 1, MUTAGEN = 1)
+	required_reagents = list(NUTRIMENT = 1, BICARIDINES = 1, HYPERZINES = 1, MUTAGENS = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/discount
@@ -920,6 +920,26 @@
 
 /datum/chemical_reaction/solidification/phazon/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/phazon
+
+/datum/chemical_reaction/solidification/glass
+	name = "Solid Glass"
+	id = "solidglass"
+	result = null
+	required_reagents = list(SILICATE = 20, CAPSAICIN = 10) //You melt the silicate to make glass
+	result_amount = 1 //amount of sheets created per the above reagents 
+
+/datum/chemical_reaction/solidification/glass/product_to_spawn()
+	return /obj/item/stack/sheet/glass/glass
+
+/datum/chemical_reaction/solidification/plasmaglass
+	name = "Solid Plasma Glass"
+	id = "solidplasmaglass"
+	result = null
+	required_reagents = list(SILICATE = 20, CONDENSEDCAPSAICIN = 10, PLASMA = 20) //You need even stronger heat to make plasmaglass
+	result_amount = 1 //amount of sheets created per the above reagents 
+
+/datum/chemical_reaction/solidification/plasmaglass/product_to_spawn()
+	return /obj/item/stack/sheet/glass/plasmaglass
 
 /datum/chemical_reaction/solidification/plasteel
 	name = "Solid Plasteel"
@@ -3958,6 +3978,24 @@
 	result = LOCUTOGEN
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGARS = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/bumcivilian
+	name = "Bumcivilian"
+	id = BUMCIVILIAN
+	result = BUMCIVILIAN
+	required_reagents = list(IRON = 1, SACIDS = 1) //..5.05 Mg
+	result_amount = 1
+
+/datum/chemical_reaction/bumcivilian/required_condition_check(datum/reagents/holder)
+	for(var/obj/item/device/deskbell/B in view(3,get_turf(holder.my_atom)))
+		if(world.time - B.last_ring_time <= 30)
+			return 1
+
+/datum/chemical_reaction/bumcivilian/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in holder.reagent_list
+	for(var/turf/T in view(get_turf(holder.my_atom)))
+		T.mute_time = world.time + B.mute_duration
 
 /datum/chemical_reaction/random
 	name = "Random chemical"

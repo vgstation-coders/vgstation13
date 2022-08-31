@@ -8,8 +8,8 @@
 	var/health		//Structural integrity of the object. If breakable_flags are set, at 0, the object breaks.
 	var/maxHealth	//Maximum structural integrity of the object.
 	var/breakable_flags 	//Flags for different situations the object can break in. See breakable_defines.dm for the full list and explanations of each.
-	var/damage_armor		//Attacks of this much damage or below will glance off.
-	var/damage_resist		//Attacks stronger than damage_armor will have their damage reduced by this much.
+	var/damage_armor		//Attacks of this much damage or below will glance off. Can be a list of the form: list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0) for damage-type-specific armor.
+	var/damage_resist		//Attacks stronger than damage_armor will have their damage reduced by this much. Can be a list of the same form as damage_armor.
 	var/list/breakable_exclude //List of objects that won't be used to hit the object even on harm intent, so as to allow for other interactions.
 	//Fragmentation:
 	var/list/breakable_fragments	//List of objects that will be produced when the object is broken apart. eg. /obj/item/weapon/shard.
@@ -27,11 +27,15 @@
 
 /obj/New()
 	..()
-	if(breakable_flags)	//Initialize health and maxHealth to the same value if only one is specified.
-		if(isnull(health) && maxHealth)
-			health = maxHealth
-		else if(isnull(maxHealth) && health)
-			maxHealth = health
+	if(breakable_flags)
+		breakable_init()
+
+/obj/proc/breakable_init()
+	//Initialize health and maxHealth to the same value if only one is specified.
+	if(isnull(health) && maxHealth)
+		health = maxHealth
+	else if(isnull(maxHealth) && health)
+		maxHealth = health
 
 /obj/proc/on_broken(datum/throwparams/propelparams, atom/hit_atom) //Called right before an object breaks.
 	//Drop and and propel any fragments:
@@ -81,8 +85,8 @@
 			reagents.reaction(hit_atom, TOUCH)
 		reagents.reaction(get_turf(src), TOUCH) //Then spill it onto the floor.
 
-/obj/proc/take_damage(incoming_damage, damage_type = BRUTE, skip_break = FALSE, mute = TRUE)
-	var/thisdmg = (incoming_damage > max(damage_armor, damage_resist)) * (incoming_damage - damage_resist) //damage is 0 if the incoming damage is less than either damage_armor or damage_resist, to prevent negative damage by weak attacks
+/obj/proc/take_damage(incoming_damage, damage_type = "melee", skip_break = FALSE, mute = TRUE)
+	var/thisdmg = modify_incoming_damage(incoming_damage, damage_type)
 	health -= thisdmg
 	play_hit_sounds(thisdmg)
 	if(thisdmg)
@@ -92,6 +96,19 @@
 		if(!skip_break)
 			try_break()
 	return thisdmg //return the amount of damage taken
+
+/obj/proc/modify_incoming_damage(incoming_damage, damage_type)
+	var/dmg_arm = 0
+	if(islist(damage_armor))
+		dmg_arm = damage_armor[damage_type]
+	else if(damage_armor)
+		dmg_arm = damage_armor
+	var/dmg_rst = 0
+	if(islist(damage_resist))
+		dmg_rst = damage_resist[damage_type]
+	else if(damage_resist)
+		dmg_rst = damage_resist
+	return (incoming_damage > max(dmg_arm, dmg_rst)) * (incoming_damage - dmg_rst) //damage is 0 if the incoming damage is less than either damage_armor or damage_resist, to prevent negative damage by weak attacks
 
 /obj/proc/play_hit_sounds(thisdmg, hear_glanced = TRUE, hear_damaged = TRUE) //Plays any relevant sounds whenever the object is hit. glanced_sound overrides damaged_sound if the latter is not set or hear_damaged is set to FALSE.
 	if(health <= 0) //Don't play a sound here if the object is ready to break, because sounds are also played by on_broken().
@@ -217,13 +234,13 @@
 		user.do_attack_animation(src, W)
 		user.delayNextAttack(1 SECONDS)
 		add_fingerprint(user)
-		var/glanced=!take_damage(W.force, skip_break = TRUE)
+		var/glanced=!take_damage(W.force, damage_type = W.damtype == BURN ? "energy" : "melee", skip_break = TRUE)
 		if(W.hitsound)
 			playsound(src, W.hitsound, 50, 1)
 		user.visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [shift_verb_tense(pick(W.attack_verb))] \the [src] with \the [W][generate_break_text(glanced)]<span>")
 		try_break()
 		//Break the weapon as well, if applicable, based on its own force.
-		if(W.breakable_flags & BREAKABLE_AS_MELEE)
+		if(W.breakable_flags & BREAKABLE_AS_MELEE && W.damtype == BRUTE)
 			W.take_damage(min(W.force, BREAKARMOR_MEDIUM), skip_break = FALSE, mute = FALSE) //Cap it at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used.
 		return TRUE
 	else
@@ -276,7 +293,7 @@
 		else if(isobj(AM))
 			var/obj/thisobj = AM
 			thisdmg = max(thisobj.throwforce, thisobj.get_total_scaled_w_class(2) + 1)
-		take_damage(thisdmg)
+		take_damage(thisdmg, damage_type = "bullet")
 
 //Object being hit by a projectile
 
@@ -286,7 +303,7 @@
 	var/turf/T = get_edge_target_turf(loc, get_dir(proj.starting, proj.target))
 	var/thispropel = new /datum/throwparams(T, impact_power, proj.projectile_speed)
 	if(breakable_flags & BREAKABLE_WEAPON)
-		take_damage(proj.damage, skip_break = TRUE)
+		take_damage(proj.damage, damage_type = proj.flag, skip_break = TRUE)
 	//Throw the object in the direction the projectile was traveling
 		if(try_break(impact_power ? thispropel : null))
 			return

@@ -26,6 +26,9 @@
 									/obj/item/weapon/reagent_containers/food/snacks/meat,
 									/obj/item/weapon/reagent_containers/food/snacks/honeycomb,
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
+									/obj/item/weapon/reagent_containers/food/condiment,
+									/obj/item/weapon/reagent_containers/glass,
+									/obj/item/weapon/reagent_containers/food/drinks,
 									/obj/item/weapon/reagent_containers/food/condiment)
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK | EMAGGABLE
@@ -204,31 +207,20 @@
 
 	RefreshParts()
 
-/obj/machinery/smartfridge/drinks
-	name = "\improper Drink Showcase"
-	desc = "A refrigerated storage unit for tasty tasty alcohol."
-
-	accepted_types = list(	/obj/item/weapon/reagent_containers/glass,
-							/obj/item/weapon/reagent_containers/food/drinks,
-							/obj/item/weapon/reagent_containers/food/condiment)
-
-/obj/machinery/smartfridge/drinks/New()
+/obj/machinery/smartfridge/condiments/New()
 	. = ..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smartfridge/drinks,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
-	)
-
-	RefreshParts()
+	for(var/i = 0 to 2)
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/honey(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/hotsauce(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/coldsauce(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/ketchup(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/cinnamon(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/soysauce(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/vinegar(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/drinks/ice(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/drinks/discount_sauce(src))
 
 /obj/machinery/smartfridge/extract
 	name = "\improper Slime Extract Storage"
@@ -269,7 +261,7 @@
 	icon_state = "bloodbank"
 	icon_on = "bloodbank"
 
-	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
+	accepted_types = list(/obj/item/weapon/reagent_containers/blood)	
 
 /obj/machinery/smartfridge/bloodbank/New()
 	. = ..()

@@ -42,7 +42,7 @@
 
 #define ishorrorform(A) (ishuman(A) && istype(A:species, /datum/species/horror))
 
-#define isumbra(A) (ishuman(A) && istype(A:species, /datum/species/umbra))
+#define istruevampire(A)  (ishuman(A) && isvampire(A) && istype(A:species, /datum/species/vampire))
 
 #define ismushroom(A) ((ishuman(A) && istype(A:species, /datum/species/mushroom)) || (istype(A, /mob/living/carbon/monkey/mushroom)))
 
@@ -148,7 +148,7 @@
 
 #define isEmag(A) istype(A, /obj/item/weapon/card/emag)
 
-#define istool(A) is_type_in_list(A, common_tools)
+#define istool(A) iswrench(A) || iswelder(A) || isshovel(A) || ishammer(A) || iscablecoil(A) || iswiretool(A) || iscrowbar(A)
 
 #define iswelder(A) istype(A, /obj/item/tool/weldingtool)
 
@@ -180,7 +180,7 @@
 
 #define issolder(A) istype(A, /obj/item/tool/solder)
 
-#define issocketwrench(A) istype(A, /obj/item/tool/wrench/socket)
+#define iswrench(A) istype(A, /obj/item/tool/wrench)
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 

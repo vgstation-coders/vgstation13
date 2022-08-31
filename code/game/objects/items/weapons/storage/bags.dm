@@ -217,7 +217,6 @@
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
 	display_contents_with_number = TRUE
 
-
 /obj/item/weapon/storage/bag/plants/CtrlClick()
 	if(isturf(loc))
 		return ..()
@@ -272,6 +271,22 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 /obj/item/weapon/storage/bag/plants/portactor/CtrlClick()
 	return
+
+// -----------------------------
+//          Materials bag
+// -----------------------------
+
+/obj/item/weapon/storage/bag/materials
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
+	icon_state = "matsbag"
+	name = "Materials Bag"
+	desc = "Can hold most materials and shards."
+	storage_slots = 50; //the number of plant pieces it can carry.
+	fits_max_w_class = 3
+	max_combined_w_class = 200
+	w_class = W_CLASS_TINY
+	can_only_hold = list("/obj/item/stack/sheet","/obj/item/weapon/shard")
+	display_contents_with_number = TRUE
 
 // -----------------------------
 //          Food bag
@@ -549,11 +564,11 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
 	var/lowest_rating = INFINITY //Get the lowest rating, so only mass drop the lowest parts.
 	for(var/obj/item/B in contents)
-		if(B.rped_rating() < lowest_rating)
-			lowest_rating = B.rped_rating()
+		if(B.get_rating() < lowest_rating)
+			lowest_rating = B.get_rating()
 
 	for(var/obj/item/B in contents) //Now that we have the lowest rating we can dump only parts at the lowest rating.
-		if(B.rped_rating() > lowest_rating)
+		if(B.get_rating() > lowest_rating)
 			continue
 		remove_from_storage(B, A)
 
@@ -701,4 +716,4 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/book","/obj/item/weapon/tome","/obj/item/weapon/tome_legacy","/obj/item/weapon/spellbook","/obj/item/weapon/paper","/obj/item/weapon/paper/nano","/obj/item/weapon/barcodescanner","obj/item/weapon/pen","obj/item/weapon/folder")
-	
+

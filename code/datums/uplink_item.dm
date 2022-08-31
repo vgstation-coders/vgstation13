@@ -815,9 +815,9 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/engineering/powercreeper_packet
 	name = "Powercreep Packet"
 	desc = "A packet that creates a dangerous mutated version of kudzu vines. The vines will repeatedly shock people and connect themselves to any cables near them, rapidly growing and spreading out of control if left unchecked."
-	item = /obj/item/powercreeper_packet
-	cost = 16
-	discounted_cost = 10
+	item = /obj/item/deployable_packet/powercreeper
+	cost = 10
+	discounted_cost = 5
 	jobs_with_discount = list("Botanist", "Station Engineer", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/engineering/syndietape_engineering
@@ -859,6 +859,15 @@ var/list/uplink_items = list()
 	cost = 9
 	discounted_cost = 6
 	jobs_with_discount = list("Mechanic")
+
+// A telecomms technician traitor item
+/datum/uplink_item/jobspecific/engineering/vocal
+	name = "Vocal Implant"
+	desc = "An implant usable after being injected into one's body. Settings can be input to modify speech patterns in the affected's voice once implanted."
+	item = /obj/item/weapon/storage/box/syndie_kit/imp_vocal
+	cost = 8
+	discounted_cost = 6
+	jobs_with_discount = list("Mechanic", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/cargo
 	category = "Cargo and Mining Specials"
@@ -1066,6 +1075,14 @@ var/list/uplink_items = list()
 	jobs_with_discount = list("Clown")
 	jobs_excluded = list("Mime")
 
+/datum/uplink_item/jobspecific/clown_mime/piebomb
+	name = "Pie Bomb"
+	desc = "These aren't homemade, they were made in a factory. A bomb factory. They're bombs."
+	item = /obj/item/weapon/reagent_containers/food/snacks/explosive_pie
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Clown", "Mime")
+
 /datum/uplink_item/jobspecific/assistant
 	category = "Assistant Specials"
 
@@ -1100,6 +1117,14 @@ var/list/uplink_items = list()
 	cost = 7
 	discounted_cost = 4
 	jobs_with_discount = list("Assistant")
+
+/datum/uplink_item/jobspecific/assistant/biomasspacket
+	name = "Biomass Packet"
+	desc = "A packet containing cryo-stabilized biomass tissue. Shake and throw for your very own interdimensional space barf."
+	item = /obj/item/deployable_packet/biomass
+	cost = 8
+	discounted_cost = 5
+	jobs_with_discount = list("Assistant", "Janitor") //There originally was a discount for mechanics too due to them being Assistant+, but it felt like a cheap joke
 
 /datum/uplink_item/jobspecific/command
 	category = "Command Specials"

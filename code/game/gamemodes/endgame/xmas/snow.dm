@@ -574,13 +574,6 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		"pine_2",
 		"pine_3",
 		)
-	/* No
-	if((snow_tiles >= COSMICFREEZE_LEVEL_3) && prob(20))
-		new /mob/living/simple_animal/hostile/giant_spider/spiderling(get_turf(src))
-
-	if((snow_tiles >= COSMICFREEZE_LEVEL_5) && prob(20))
-		new /mob/living/simple_animal/hostile/bear(get_turf(src))
-	*/
 
 /obj/structure/snow_flora/tree/pine/attackby(obj/item/W,mob/user)
 	var/list/cutting = list(

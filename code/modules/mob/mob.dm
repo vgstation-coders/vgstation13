@@ -1166,6 +1166,22 @@ Use this proc preferably at the end of an equipment loadout
 	face_atom(A)
 	A.examine(src)
 
+	if(istype(src,/mob/living))
+		var/mob/living/L = src
+		if(!isobserver(L) && !L.eyecheck() && !L.invisibility && L.alpha >= 1)
+			if(A.loc != L || A == L.get_active_hand() || A == L.get_inactive_hand())
+				for(var/mob/M in viewers(4, L))
+					if(M == L)
+						continue
+					if(istype(M.get_item_by_slot(slot_glasses),/obj/item/clothing/glasses/regular/tracking))
+						if(M.is_blind())
+							continue
+						if(isobj(A.loc))
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks inside \the [A.loc].</span>")
+						else if(A == L)
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks at \the [A].</span>")
+						else
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks at [A].</span>")
 
 /mob/living/verb/verb_pickup(obj/I in acquirable_objects_in_view(usr, 1))
 	set name = "Pick up"
@@ -1894,8 +1910,8 @@ Use this proc preferably at the end of an equipment loadout
 			mind.heard_before[M.name] = M.mind
 			M.heard_by |= mind
 
-/mob/acidable()
-	return 1
+/mob/dissolvable()
+	return PACID
 
 /mob/proc/get_view_range()
 	if(client)
@@ -2107,7 +2123,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/make_visible(var/source_define)
 	if(!invisibility && alpha == 255 || !source_define)
 		return
-	if(src)
+	if(src && alphas[source_define])
 		invisibility = 0
 		alphas.Remove(source_define)
 		handle_alpha()
@@ -2207,6 +2223,8 @@ Use this proc preferably at the end of an equipment loadout
 	if(istype(H))
 		if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 			return null
+	if(istruevampire(H))
+		return null
 	var/datum/role/changeling/C = target.mind.GetRole(CHANGELING)
 	if(istype(C))
 		if(locate(/datum/power/changeling/DigitalCamouflage) in C.current_powers)

@@ -1401,7 +1401,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/pizzabox/margherita,
 					/obj/item/pizzabox/mushroom,
 					/obj/item/pizzabox/meat,
-					/obj/item/pizzabox/vegetable)
+					/obj/item/pizzabox/vegetable,
+					/obj/item/pizzabox/blingpizza)
 	name = "Surprise pack of five pizzas"
 	cost = 75
 	containertype = /obj/structure/closet/crate/freezer
@@ -2798,4 +2799,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 20
 	containertype = /obj/structure/stackopacks
 	containername = "\improper Lotto Ticket stack of packs"
+	group = "Vending Machine packs"
+
+/datum/supply_packs/meat
+	name = "Meat Fridge stack of packs"
+	contains = list(/obj/structure/vendomatpack/meat,
+					/obj/structure/vendomatpack/meat,
+					/obj/item/voucher/free_item/meat)
+	cost = 20
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Meat Fridge stack of packs"
 	group = "Vending Machine packs"

@@ -53,6 +53,7 @@
 		if (istype(O, /obj/machinery/door/firedoor))
 			var/obj/machinery/door/firedoor/FD = O
 			if (!FD.operating)
+				playsound(FD, 'sound/mecha/hydraulic.ogg', 100, 1)
 				FD.force_open(chassis.occupant, src)
 			return
 		if(!O.anchored)
@@ -69,6 +70,7 @@
 			else if(W.cargo.len < W.cargo_capacity)
 				occupant_message("You lift [target] and start to load it into cargo compartment.")
 				chassis.visible_message("[chassis] lifts [target] and starts to load it into cargo compartment.")
+				playsound(chassis, 'sound/mecha/hydraulic.ogg', 100, 1)
 				set_ready_state(0)
 				chassis.use_power(energy_drain)
 				O.anchored = 1 //Why
@@ -101,6 +103,8 @@
 			if(istype(chassis, /obj/mecha/working/clarke))
 				to_chat(chassis.occupant, "<span class='warning'>WARNING: OSHA regulations prohibit use of \the [src] in that way.</span>")
 				return
+			playsound(chassis, 'sound/mecha/hydraulic.ogg', 100, 1)
+			playsound(target, pick('sound/effects/squelch1.ogg', 'sound/effects/flesh_squelch.ogg'), 100, 1)
 			M.take_overall_damage(dam_force)
 			if(!M)
 				return //we killed some sort of simple animal and the corpse was deleted.
@@ -129,6 +133,18 @@
 	force = 15
 	var/dig_walls = 0 //probably a better way to do this through bitflags but I don't really know how
 
+/obj/item/mecha_parts/mecha_equipment/tool/drill/proc/effects_pre(atom/target)
+	playsound(target, 'sound/items/surgicaldrill.ogg', 100, 1)
+	if(!istype(target, /mob/living))
+		spark(target)
+
+/obj/item/mecha_parts/mecha_equipment/tool/drill/proc/effects_post(atom/target)
+	playsound(target, 'sound/mecha/mechdrill.ogg', 100, 1)
+	if(!istype(target, /mob/living))
+		spark(target)
+	else
+		playsound(target, pick('sound/effects/squelch1.ogg', 'sound/effects/flesh_squelch.ogg'), 100, 1)
+
 /obj/item/mecha_parts/mecha_equipment/tool/drill/action(atom/target)
 	if(!action_checks(target))
 		return
@@ -146,22 +162,27 @@
 
 	else if(istype(target, /turf/simulated/wall))
 		if(dig_walls)
+			effects_pre(target)
 			var/delay = istype(target, /turf/simulated/wall/r_wall) ? 10 : 2
 			if(do_after_cooldown(target, delay) && C == chassis.loc && src == chassis.selected)
 				log_message("Drilled through [target]")
 				occupant_message("<span class='red'><b>Your powerful drill screeches as it tears through the last of \the [target], leaving nothing but a girder!</b></span>")
 				chassis.visible_message("<span class='red'><b>[chassis] drills through \the [target]!</b></span>", "You hear a drill tearing through plating.")
+				effects_post(target)
 				//target.ex_act(3) //Why
 				target.mech_drill_act(3)
 		else
+			effects_pre(target)
 			if(do_after_cooldown(target, 1) && C == chassis.loc && src == chassis.selected)
 				occupant_message("<span class='red'>[target] is too durable to drill through.</span>")
 
 	else if(istype(target, /obj/structure/girder))
+		effects_pre(target)
 		if(do_after_cooldown(target) && C == chassis.loc && src == chassis.selected)
 			log_message("Drilled through [target]")
 			occupant_message("<span class='red'><b>Your drill destroys \the [target]!</b></span>")
 			chassis.visible_message("<span class='red'><b>[chassis] destroys \the [target]!</b></span>", "You hear a drill breaking something.")
+			effects_post(target)
 			target.mech_drill_act(2)
 
 	else if(istype(target, /turf/unsimulated/mineral))
@@ -203,7 +224,9 @@
 				occupant_message("<span class='notice'>[count] sand successfully loaded into cargo compartment.</span>")
 
 	else
+		effects_pre(target)
 		if(do_after_cooldown(target, 1) && C == chassis.loc && src == chassis.selected && target.loc == T) //also check that our target hasn't moved
+			effects_post(target)
 			if(istype(target, /mob/living))
 				var/mob/living/M = target
 				M.attack_log +="\[[time_stamp()]\]<font color='orange'> Mech Drilled by [chassis.occupant.name] ([chassis.occupant.ckey]) with [src.name]</font>"
@@ -1250,7 +1273,7 @@
 		EG.log_message("Deactivated - no fuel.")
 		EG.set_ready_state(1)
 		return 0
-	if(anyprob(EG.reliability))
+	if(prob(EG.reliability))
 		EG.critfail()
 		stop()
 		return 0

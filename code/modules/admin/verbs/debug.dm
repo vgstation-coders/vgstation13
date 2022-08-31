@@ -1319,11 +1319,7 @@ var/global/blood_virus_spreading_disabled = 0
 
 	var/turf/epicenter = get_turf(usr)
 	var/max_range = input("Set the max range") as num
-	var/inward = alert("Which way?","Spiral Block", "Inward","Outward")
-	if(inward == "Inward")
-		spiral_block(epicenter,max_range,1,1)
-	else
-		spiral_block(epicenter,max_range,0,1)
+	spiral_block(epicenter,max_range,1)
 
 /client/proc/check_striketeams()
 	set name = "Check StrikeTeams"

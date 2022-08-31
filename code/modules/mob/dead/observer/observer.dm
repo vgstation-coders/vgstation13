@@ -432,6 +432,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		ghostize(1)
 	else if(stat == DEAD)
 		ghostize(1)
+	else if(check_rights(R_ADMIN))
+		if(mind)
+			mind.isScrying = 1
+		ghostize(1)
+		if(!key)
+			key = "@[key]"	//Haaaaaaaack. But the people have spoken. If it breaks; blame adminbus
 	else
 		var/response = alert(src, "Are you -sure- you want to ghost?\n(You are alive. If you ghost, you will not be able to re-enter your current body!  You can't change your mind so choose wisely!)","Are you sure you want to ghost?","Ghost","Stay in body")
 		if(response != "Ghost")

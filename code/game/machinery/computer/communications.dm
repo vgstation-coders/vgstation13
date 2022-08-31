@@ -517,12 +517,9 @@ var/list/shuttle_log = list()
 
 /obj/machinery/computer/communications/update_icon()
 	..()
-	var/initial_icon = initial(icon_state)
-	icon_state = "[emagged ? "[initial_icon]-emag" : "[initial_icon]"]"
-	if(stat & BROKEN)
-		icon_state = "[initial_icon]b"
-	else if(stat & (FORCEDISABLE|NOPOWER))
-		icon_state = "[initial_icon]0"
+	if(icon_state == initial(icon_state) && emagged)
+		icon_state = "[initial(icon_state)]-emag"
+
 
 
 /obj/machinery/computer/communications/proc/setCurrentMessage(var/mob/user,var/value)
@@ -729,7 +726,7 @@ var/list/shuttle_log = list()
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
-	shuttle_autocall()
+	shuttle_autocall("All the AIs, comm consoles and boards are destroyed")
 	..()
 
 // -- Blob defcon 1 things
@@ -831,6 +828,6 @@ var/list/shuttle_log = list()
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
-	shuttle_autocall()
+	shuttle_autocall("All the AIs, comm consoles and boards are destroyed")
 
 	..()

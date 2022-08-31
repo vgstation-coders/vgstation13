@@ -1,12 +1,16 @@
-/client/proc/Jump(var/area/A in sortedAreas)
+/client/proc/Jump()
 	set name = "Jump to Area"
 	set desc = "Area to jump to"
 	set category = "Admin"
+
 	if(!src.holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 
 	if(config.allow_admin_jump)
+		var/sortedAreas = areas.Copy()
+		sortTim(sortedAreas, /proc/cmp_name_asc)
+		var/area/A = input(usr, "Choose the jump area", "Area") as null|anything in sortedAreas
 		if(!A)
 			return
 
@@ -197,6 +201,8 @@
 	if(!src.holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
+	var/sortedAreas = areas.Copy()
+	sortTim(sortedAreas, /proc/cmp_name_asc)
 	var/area/A = input(usr, "Pick an area.", "Pick an area") in sortedAreas
 	if(A)
 		if(config.allow_admin_jump)

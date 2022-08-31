@@ -37,7 +37,7 @@
 //We start by initializing shared behavior between all three generator sub-types, then we fire a spawn proc that they will modify
 /obj/structure/radial_gen/proc/deploy_generator()
 
-	for(var/turf/T in spiral_block(get_turf(src), gen_hard_radius, 0))
+	for(var/turf/T in spiral_block(get_turf(src), gen_hard_radius))
 
 		if(expected_turfs.len && !is_type_in_list(T, expected_turfs)) //We are expecting a specific turf type, and it is not this one
 			continue

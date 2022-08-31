@@ -221,7 +221,7 @@
 "Bv" = (/obj/machinery/light/small/broken,/turf/simulated/floor/greengrid,/area/vault/mothership_lab/entrance)
 "BJ" = (/obj/structure/window/reinforced/plasma,/obj/structure/table/reinforced,/obj/item/weapon/storage/toolbox/emergency,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred"},/area/vault/mothership_lab/control_room)
 "BL" = (/obj/structure/closet/crate,/obj/item/clothing/shoes/jackboots/mothership,/obj/item/clothing/under/grey/grey_soldier,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/entrance)
-"BX" = (/obj/structure/catwalk/invulnerable,/obj/machinery/door/airlock/hatch{name = "Lab Hangar Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/space,/area/vault/mothership_lab/entrance)
+"BX" = (/obj/structure/catwalk/invulnerable,/obj/machinery/door/airlock/hatch{name = "Lab Hangar Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "Ch" = (/obj/structure/table,/obj/item/tool/weldingtool/hugetank,/turf/simulated/floor/plating,/area/vault/mothership_lab/entrance)
 "Cp" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced/plasma{dir = 1},/obj/item/weapon/storage/fancy/flares,/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/mothership_lab/control_room)
 "Cx" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/box/lights/he,/obj/item/device/gps/secure/command,/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (EAST)"},/area/vault/mothership_lab/control_room)

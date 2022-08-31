@@ -217,11 +217,9 @@
 		message_admins("[src] ([src.key]) requested high priority jobs. [count_pings ? "[count_pings]" : "<span class='danger'>No</span>"] players heard the request.")
 		return
 
-	if(!ready && href_list["preference"])
+	if(href_list["preference"])
 		if(client)
 			client.prefs.process_link(src, href_list)
-	else if(!href_list["late_join"])
-		new_player_panel()
 
 	if(href_list["showpoll"])
 
@@ -656,7 +654,7 @@
 	src << browse(dat, "window=latechoices;size=360x640;can_close=1")
 
 
-/mob/new_player/proc/create_character(var/joined_late = 0)
+/mob/new_player/proc/create_character()
 	spawning = 1
 	close_spawn_windows()
 
@@ -735,7 +733,7 @@
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
 	var/rank = new_character.mind.assigned_role
-	if(!joined_late)
+	if(!(ticker.current_state == GAME_STATE_PLAYING))
 		var/obj/S = null
 		// Find a spawn point that wasn't given to anyone
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
@@ -753,9 +751,6 @@
 				S = sloc
 				stack_trace("not enough spawn points for [rank]")
 				break
-		if(!S)
-			// Find a spawn point that's using the ancient landmarks. Do we even have these anymore?
-			S = locate("start*[rank]")
 		if(S)
 			// Use the given spawn point
 			new_character.forceMove(S.loc)
@@ -772,6 +767,11 @@
 			break //Only autoconvert them once, and only if they aren't leading their own faith.
 
 	return new_character
+
+/mob/new_player/proc/create_roundstart_human()
+	var/mob/living/carbon/human/new_character = create_character()
+	qdel(src)
+	new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 
 //Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
 /mob/new_player/proc/create_roundstart_silicon(var/type)

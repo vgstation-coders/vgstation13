@@ -384,8 +384,8 @@ var/list/astral_projections = list()
 	universal_speak = 1
 	plane = GHOST_PLANE
 	layer = GHOST_LAYER
-	invisibility = INVISIBILITY_CULTJAUNT
-	see_invisible = SEE_INVISIBLE_CULTJAUNT
+	invisibility = INVISIBILITY_LEVEL_TWO
+	see_invisible = SEE_INVISIBLE_LEVEL_TWO
 	incorporeal_move = INCORPOREAL_GHOST
 	alpha = 127
 	now_pushing = 1 //prevents pushing atoms
@@ -628,9 +628,9 @@ var/list/astral_projections = list()
 		canmove = 0
 		incorporeal_move = 1
 		flying = 1
-		flags = HEAR | TIMELESS | INVULNERABLE
-		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+		flags = HEAR | TIMELESS | INVULNERABLE	
 		speed = 0.5
+		client.CAN_MOVE_DIAGONALLY = 1
 		overlay_fullscreen("astralborder", /obj/abstract/screen/fullscreen/astral_border)
 		update_fullscreen_alpha("astralborder", 255, 5)
 		var/obj/effect/afterimage/A = new (loc,anchor,10)
@@ -642,15 +642,17 @@ var/list/astral_projections = list()
 		incorporeal_move = 0
 		stop_flying()
 		flags = HEAR | PROXMOVE
-		see_invisible = SEE_INVISIBLE_CULTJAUNT//still can see some hidden things
+		see_invisible = SEE_INVISIBLE_LEVEL_TWO
 		speed = 1
-		clear_fullscreen("astralborder", animate = 0)
+		client.CAN_MOVE_DIAGONALLY = 0
+		clear_fullscreen("astralborder", animate = 5)
 		alpha = 0
 		animate(src, alpha = 255, time = 10)
 		if (client)
 			client.images -= propension
 
 	tangibility = !tangibility
+	update_perception()
 
 //saycode
 /mob/living/simple_animal/astral_projection/say(var/message, bubble_type)
@@ -675,3 +677,23 @@ var/list/astral_projections = list()
 		return
 	if(find_active_faction_by_member(iscultist(src)))//can also use cult chat while tangible when using :x
 		return 1
+
+/mob/living/simple_animal/astral_projection/update_perception()
+	if(client)
+		if(client.darkness_planemaster)
+			client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
+			client.darkness_planemaster.alpha = 180
+		if(!tangibility)
+			client.color = list(
+						1,0,0,0,
+						0,1.3,0,0,
+						0,0,1.3,0,
+						0,-0.3,-0.3,1,
+						0,0,0,0)
+		else
+			client.color = list(
+				1,0,0,0,
+				0,1,0,0,
+				0,0,1,0,
+				0,0,0,1,
+				0,0,0,0)

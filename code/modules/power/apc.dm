@@ -883,13 +883,6 @@
 				nanomanager.close_user_uis(user, src)
 
 			return 0
-	else if(isobserver(user))
-		if(malfhack && istype(malfai) && !isAdminGhost(user))
-			if(!loud)
-				to_chat(user, "<span class='warning'>\The [src] have AI control disabled!</span>")
-				nanomanager.close_user_uis(user, src)
-			return 0
-
 	else
 		if ((!is_in_range(user) || !istype(src.loc, /turf)))
 			nanomanager.close_user_uis(user, src)
@@ -923,9 +916,10 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	if((!aidisabled) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
-		to_chat(usr, "Access refused.")
-		return 0
+	if(!isobserver(usr))
+		if((!aidisabled) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
+			to_chat(usr, "Access refused.")
+			return 0
 	if(!can_use(usr, 1))
 		return 0
 	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr) || OMNI_LINK(usr, src)) && locked)

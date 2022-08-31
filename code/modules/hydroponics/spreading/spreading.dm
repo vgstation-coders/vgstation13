@@ -108,7 +108,7 @@
 	if(!seed)
 		return
 	var/traits = ""
-	if(seed.carnivorous == 2)
+	if(seed.voracious == 2)
 		traits += "<span class='alert'>It's quivering viciously.</span> "
 	if(seed.stinging)
 		traits += "<span class='alert'>It's covered in tiny stingers.</span> "

@@ -106,6 +106,7 @@
 					spawn(10)
 						overlays -= image(icon = icon, icon_state = "[base_state]-bp")
 		return 1
+	return 0
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))

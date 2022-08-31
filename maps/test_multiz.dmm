@@ -871,6 +871,12 @@
 /obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating,
 /area/crew_quarters/casino)
+"nG" = (
+/obj/machinery/atmospherics/pipe/simple/supply/visible{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
 "rd" = (
 /obj/structure/railing/glass{
 	dir = 4
@@ -899,6 +905,12 @@
 "wX" = (
 /turf/simulated/floor/plating,
 /area)
+"xx" = (
+/obj/machinery/atmospherics/unary/vent{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
 "zI" = (
 /obj/structure/railing/plasteel{
 	dir = 1
@@ -921,9 +933,23 @@
 	},
 /turf/simulated/floor/plating,
 /area)
+"Eo" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/unary/vent{
+	dir = 8
+	},
+/turf/simulated/open,
+/area/crew_quarters/bar)
 "EX" = (
 /turf/simulated/floor/plating,
 /area/crew_quarters/casino)
+"Gx" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/zpipe/down/supply{
+	dir = 4
+	},
+/turf/simulated/open,
+/area/crew_quarters/bar)
 "GO" = (
 /obj/structure/railing/plasteel{
 	dir = 8
@@ -4994,7 +5020,7 @@ ad
 ae
 ae
 ae
-ae
+xx
 ae
 ad
 ac
@@ -5056,7 +5082,7 @@ ad
 al
 an
 ae
-ae
+nG
 ae
 ad
 ac
@@ -5118,7 +5144,7 @@ ad
 am
 ao
 ae
-ae
+ap
 as
 ad
 ac
@@ -8839,7 +8865,7 @@ ad
 bF
 bO
 bM
-bM
+Gx
 ch
 az
 aw
@@ -8901,7 +8927,7 @@ aP
 bG
 bP
 bM
-bM
+Eo
 cf
 az
 aw

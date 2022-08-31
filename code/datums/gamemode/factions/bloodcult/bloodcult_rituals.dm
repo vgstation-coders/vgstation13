@@ -299,7 +299,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	
 /datum/bloodcult_ritual/curse_blood
 	name = "Spread the Gift"
-	desc = "Spread our gift amongst the crew. Create cursed blood by pouring it into a goblet, then have at least 3 nonbelievers injest that blood."
+	desc = "Spread our gift amongst the crew. Create cursed blood by pouring it into a goblet, then have at least 3 nonbelievers ingest that blood."
 	point_limit = 100
 	var/list/infected = list()
 

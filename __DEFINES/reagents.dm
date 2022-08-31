@@ -1,4 +1,3 @@
-
 #define REAGENT_STATE_SOLID 1
 #define REAGENT_STATE_LIQUID 2
 #define REAGENT_STATE_GAS 3
@@ -471,6 +470,7 @@
 #define TRINITRINE		"trinitrine"
 #define MIDAZOLINE		"midazoline"
 #define LOCUTOGEN		"locutogen"
+#define BUMCIVILIAN		"bumcivilian"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
@@ -533,6 +533,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define ANTI_TOXINS list(ANTI_TOXIN, ALLICIN)
 #define KELOTANES list(KELOTANE, TANNIC_ACID)
 #define DERMALINES list(DERMALINE, KATHALAI)
+#define MUTAGENS list(MUTAGEN, UNTABLE_MUTAGEN)
 #define BICARIDINES list(BICARIDINE, OPIUM)
 #define SPACE_DRUGGS list(SPACE_DRUGS, MESCALINE)
 #define SYNAPTIZINES list(SYNAPTIZINE, CYTISINE)
@@ -547,8 +548,8 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define IMPEDREZENES list(IMPEDREZENE, HYOSCYAMINE)
 #define LEXORINS list(LEXORIN, CORIAMYRTIN)
 #define DEXALINS list(DEXALIN, THYMOL)
-#define PETRITRICINCURES list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
-#define WATERS list(WATER, HOLYWATER)
+#define ACIDS list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
+#define WATERS list(WATER, HOLYWATER, ICE)
 #define CORES list(SOFTCORES, MEDCORES)
 #define ALLNANITES list(NANITES, AUTISTNANITES)
 #define SUGARS list(SUGAR, CORNSYRUP)

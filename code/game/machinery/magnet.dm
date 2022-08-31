@@ -162,20 +162,8 @@
 		active_power_usage = electricity_level*15
 	else
 		use_power = MACHINE_POWER_USE_NONE
-
-
-	// Overload conditions:
-	/* // Eeeehhh kinda stupid
-	if(on)
-		if(electricity_level > 11)
-			if(prob(electricity_level))
-				explosion(loc, 0, 1, 2, 3) // ooo dat shit EXPLODES son
-				spawn(2)
-					del(src)
-	*/
-
+		
 	updateicon()
-
 
 /obj/machinery/magnetic_module/proc/magnetic_process() // proc that actually does the pulling
 	if(pulling)

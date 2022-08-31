@@ -359,7 +359,7 @@ var/global/ingredientLimit = 10
 	icon_state_on = "cereal_on"
 	foodChoices = null
 	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
-	
+
 /obj/machinery/cooking/cerealmaker/RefreshParts()
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
@@ -416,10 +416,11 @@ var/global/ingredientLimit = 10
 	recursive_ingredients = 1
 	cks_max_volume = 400
 	cooks_in_reagents = 1
+	var/fry_reagent = CORNOIL
 
 /obj/machinery/cooking/deepfryer/initialize()
 	..()
-	reagents.add_reagent(CORNOIL, 300)
+	reagents.add_reagent(fry_reagent, 300)
 
 /obj/machinery/cooking/deepfryer/proc/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
@@ -524,6 +525,7 @@ var/global/ingredientLimit = 10
 	cks_max_volume = 400
 	cooks_in_reagents = 1
 	machine_flags = WRENCHMOVE | CROWDESTROY | SCREWTOGGLE | FIXED2WORK | SHUTTLEWRENCH
+	fry_reagent = SUGAR
 
 /obj/machinery/cooking/deepfryer/confectionator/New()
 	. = ..()
@@ -545,12 +547,6 @@ var/global/ingredientLimit = 10
 	if((. == "valid") && (!foodNesting))
 		if(findtext(I.name,"sugar"))
 			. = "It's already a sugar copy."
-
-/obj/machinery/cooking/deepfryer/confectionator/initialize()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(SUGAR, 300)
-
 
 /obj/machinery/cooking/deepfryer/confectionator/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
