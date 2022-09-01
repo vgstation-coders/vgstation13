@@ -3553,8 +3553,13 @@ var/procizine_tolerance = 0
 /datum/reagent/hyperzine/pcp/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-
-	M.hallucination += 10
+	if(holder.has_reagent(CHILLWAX))
+		holder.remove_reagent(CHILLWAX, REM)
+	if(M)
+		M.a_intent = I_HURT
+		if(M?.hud_used?.action_intent)
+			M.hud_used.action_intent.icon_state = "intent_hurt"
+		M.hallucination += 10
 
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
