@@ -527,7 +527,7 @@ Assign your candidates in choose_candidates() instead.
 		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
 	var/mob/M = pick(assigned)
 	unction.HandleNewMind(M.mind)
-	M.close_spawn_windows()
+
 	var/datum/role/malfAI/MAI = M.mind.GetRole(MALF)
 	MAI.Greet()
 	return 1

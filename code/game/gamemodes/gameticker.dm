@@ -198,7 +198,6 @@ var/datum/controller/gameticker/ticker
 				var/mob/living/silicon/S = np.create_roundstart_silicon(np.mind.assigned_role)
 				log_admin("([S.ckey]) started the game as a [S.mind.assigned_role].")
 			if("MODE")
-				M.close_spawn_windows()
 				//do nothing as these are already spawned antagonists
 			else
 				var/mob/living/carbon/human/H = np.create_character() //Create player characters and transfer them
