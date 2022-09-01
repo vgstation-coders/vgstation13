@@ -186,6 +186,9 @@ var/datum/controller/gameticker/ticker
 	var/list/new_characters = list()	//list of created crew for transferring
 	for(var/mob/M in player_list)
 		if(!istype(M, /mob/new_player/))
+			var/mob/living/L = M
+			ticker.minds += L.mind
+			L.store_position()
 			M.close_spawn_windows()
 			continue
 		var/mob/new_player/np = M
@@ -204,9 +207,7 @@ var/datum/controller/gameticker/ticker
 				log_admin("([S.ckey]) started the game as a [S.mind.assigned_role].")
 				new_characters[key] = S
 			if("MODE")
-				var/mob/living/L = M
-				ticker.minds += L.mind
-				L.store_position()
+				//antags aren't new players
 			else
 				var/mob/living/carbon/human/H = np.create_human(prefs)
 				ticker.minds += H.mind
