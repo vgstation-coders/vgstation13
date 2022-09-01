@@ -1480,7 +1480,6 @@ Use this proc preferably at the end of an equipment loadout
 				for(var/datum/subsystem/SS in Master.subsystems)
 					SS.stat_entry()
 
-	if(client && client.inactivity < (1200))
 		if(listed_turf)
 			if(get_dist(listed_turf,src) > 1)
 				listed_turf = null
