@@ -75,25 +75,21 @@ var/datum/controller/gameticker/ticker
 		login_music = file("[path][pick(filenames)]")
 
 	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
-
 	do
 #ifdef GAMETICKER_LOBBY_DURATION
 		var/delay_timetotal = GAMETICKER_LOBBY_DURATION
 #else
 		var/delay_timetotal = DEFAULT_LOBBY_TIME
 #endif
-		pregame_timeleft = world.timeofday + delay_timetotal
-		to_chat(world, "<B><span class='notice'>Welcome to the pre-game lobby!</span></B>")
-		to_chat(world, "Please, setup your character and select ready. Game will start in [(pregame_timeleft - world.timeofday) / 10] seconds.")
+		if(current_state <= GAME_STATE_PREGAME)
+			pregame_timeleft = world.timeofday + delay_timetotal
+			to_chat(world, "<B><span class='notice'>Welcome to the pre-game lobby!</span></B>")
+			to_chat(world, "Please, setup your character and select ready. Game will start in [(delay_timetotal) / 10] seconds.")
 		while(current_state <= GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
 				sleep(1)
 				vote.process()
 				watchdog.check_for_update()
-				//if(watchdog.waiting)
-//					to_chat(world, "<span class='notice'>Server update detected, restarting momentarily.</span>")
-					//watchdog.signal_ready()
-					//return
 			if (world.timeofday < (863800 -  delay_timetotal) &&  pregame_timeleft > 863950) // having a remaining time > the max of time of day is bad....
 				pregame_timeleft -= 864000
 			if(!going && !remaining_time)
@@ -102,7 +98,6 @@ var/datum/controller/gameticker/ticker
 				pregame_timeleft = world.timeofday + remaining_time
 				going = LOBBY_TICKING
 				remaining_time = 0
-
 			if(going && world.timeofday >= pregame_timeleft)
 				current_state = GAME_STATE_SETTING_UP
 	while (!setup())
