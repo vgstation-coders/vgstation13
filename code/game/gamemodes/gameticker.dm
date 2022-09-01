@@ -216,6 +216,7 @@ var/datum/controller/gameticker/ticker
 				new_characters[key] = H
 				if(H.mind.assigned_role != "Trader")
 					data_core.manifest_inject(H)
+		CHECK_TICK
 	//Transfer characters to players
 	for(var/i = 1, i <= new_characters.len, i++)
 		var/mob/M = new_characters[new_characters[i]]
