@@ -113,6 +113,7 @@
 #define PHYTOCARISOL			"phytocarisol"
 #define HYPERZINE 			"hyperzine"
 #define HYPOZINE 			"hypozine"
+#define LIQUIDPCP 			"liquidpcp"
 #define CRYOXADONE 			"cryoxadone"
 #define CLONEXADONE 			"clonexadone"
 #define REZADONE 			"rezadone"
