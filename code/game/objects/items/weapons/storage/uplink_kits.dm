@@ -362,7 +362,8 @@
 	items_to_spawn = list(
 		/obj/item/clothing/suit/armor/mothership_heavy,
 		/obj/item/clothing/head/helmet/mothership_visor_heavy,
-		/obj/item/weapon/storage/belt/mothership/partial_gear
+		/obj/item/clothing/under/grey/grey_soldier,
+		/obj/item/clothing/shoes/jackboots/mothership
 	)
 
 //Syndicate Experimental Gear

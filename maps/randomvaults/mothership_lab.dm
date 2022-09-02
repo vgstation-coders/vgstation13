@@ -348,9 +348,12 @@
 /obj/item/weapon/storage/belt/mothership/partial_gear/New()
 	..()
 	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+	new /obj/item/stack/medical/advanced/bruise_pack(src)
+	new /obj/item/stack/medical/advanced/ointment(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/zambiscuit(src)
 	new /obj/item/weapon/storage/fancy/cigarettes/redsuits(src)
 	new /obj/item/weapon/lighter/zippo(src)
+	new /obj/item/binoculars(src)
 	new /obj/item/clothing/mask/gas(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 
