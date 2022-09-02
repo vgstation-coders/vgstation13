@@ -2512,7 +2512,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/spray/bugzapper)
 	cost = 40
 	containertype = /obj/structure/largecrate/hissing
-	containername = "insect control crate"
+	containername = "hissing crate"
 	access = list(access_hydroponics)
 	group = "Hydroponics"
 
