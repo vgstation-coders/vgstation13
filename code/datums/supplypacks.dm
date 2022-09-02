@@ -1064,8 +1064,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Armor"
 	contains = list(/obj/item/clothing/head/helmet/tactical/sec,
 					/obj/item/clothing/head/helmet/tactical/sec,
-					/obj/item/clothing/suit/armor/bulletproof,
-					/obj/item/clothing/suit/armor/bulletproof,
+					/obj/item/clothing/head/helmet/tactical/sec,
+					/obj/item/clothing/suit/armor/vest,
 					/obj/item/clothing/suit/armor/vest,
 					/obj/item/clothing/suit/armor/vest)
 	cost = 20
