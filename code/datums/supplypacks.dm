@@ -1078,7 +1078,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Ballistic Armor"
 	contains = list(/obj/item/clothing/head/helmet/tactical/bulletproof,
 					/obj/item/clothing/head/helmet/tactical/bulletproof,
-					/obj/item/clothing/suit/armor/bulletproof
+					/obj/item/clothing/suit/armor/bulletproof,
 					/obj/item/clothing/suit/armor/bulletproof)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/basic
