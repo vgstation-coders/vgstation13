@@ -248,8 +248,8 @@
 	if (client && client.darkness_planemaster)
 		switch(client.darkness_planemaster.alpha)
 			if(255)
-				client.darkness_planemaster.alpha = 90
-			if(90)
+				client.darkness_planemaster.alpha = 180
+			if(180)
 				client.darkness_planemaster.alpha = 0
 			else
 				client.darkness_planemaster.alpha = 255
