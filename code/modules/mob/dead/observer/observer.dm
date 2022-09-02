@@ -57,7 +57,7 @@ var/creating_arena = FALSE
 	add_spell(new /spell/targeted/ghost/toggle_medHUD)
 	add_spell(new /spell/targeted/ghost/toggle_darkness)
 	add_spell(new /spell/targeted/ghost/become_mouse)
-	add_spell(new /spell/targeted/ghost/hide_sprite)
+	add_spell(new /spell/targeted/ghost/hide_ghosts)
 	add_spell(new /spell/targeted/ghost/haunt)
 	add_spell(new /spell/targeted/ghost/reenter_corpse)
 	//add_spell(new /spell/ghost_show_map, "grey_spell_ready")
