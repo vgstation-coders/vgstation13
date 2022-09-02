@@ -322,6 +322,15 @@
 /obj/item/weapon/storage/belt/mothership/dissolvable()
 	return WATER
 
+/obj/item/weapon/storage/belt/mothership/partial_gear/New()
+	..()
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+	new /obj/item/weapon/reagent_containers/food/snacks/zambiscuit(src)
+	new /obj/item/weapon/storage/fancy/cigarettes/redsuits(src)
+	new /obj/item/weapon/lighter/zippo(src)
+	new /obj/item/clothing/mask/gas(src)
+	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
+
 //////////////////////////////
 // AYY MISC ITEMS (Uniforms and other stuff that doesn't quite fit a "military" label)
 //////////////////////////////
