@@ -115,6 +115,12 @@
 		return
 	if(restrained() || lying || locked_to || stat)
 		return
+	if(src.mind.special_role == BOMBERMAN)
+		visible_message("<span class='sinister'>[src] attempted to tackle! DISQUALIFIED!</span>")
+		message_admins("[src] tried to tackle as a [src.mind.special_role] and was gibbed.")
+		playsound(src, 'sound/effects/superfart.ogg', 50, -1)
+		gib(src)
+		return
 	var/tRange = calcTackleRange()
 	isTackling = TRUE
 	knockdown = max(knockdown, 2)	//Not using the Knockdown() proc as it created odd behaviour with hulks or other knockdown immune mobs
