@@ -1,48 +1,48 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /obj/structure/trophy_mount,
-/turf/simulated/wall/invulnerable{
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
 	icon_state = "shoji";
-	name = "shoji wall";
-	desc = "Despite popular belief, shoji walls are not actually made from rice paper. This incorrect piece of trivia likely caught on because it sounded more oriental."
+	name = "shoji wall"
 	},
 /area/dojo)
 "b" = (
 /obj/structure/sign/vacuum,
-/turf/simulated/wall/invulnerable{
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
 	icon_state = "shoji";
-	name = "shoji wall";
-	desc = "Despite popular belief, shoji walls are not actually made from rice paper. This incorrect piece of trivia likely caught on because it sounded more oriental."
+	name = "shoji wall"
 	},
 /area/dojo)
 "c" = (
 /obj/structure/button/ninja/launcher,
-/turf/simulated/wall/invulnerable{
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
 	icon_state = "shoji";
-	name = "shoji wall";
-	desc = "Despite popular belief, shoji walls are not actually made from rice paper. This incorrect piece of trivia likely caught on because it sounded more oriental."
+	name = "shoji wall"
 	},
 /area/dojo)
 "d" = (
 /obj/structure/sign/chinese/restricted_area,
-/turf/simulated/wall/invulnerable{
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
 	icon_state = "shoji";
-	name = "shoji wall";
-	desc = "Despite popular belief, shoji walls are not actually made from rice paper. This incorrect piece of trivia likely caught on because it sounded more oriental."
+	name = "shoji wall"
 	},
 /area/dojo)
 "e" = (
 /obj/structure/button/ninja/teleporter,
-/turf/simulated/wall/invulnerable{
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
 	icon_state = "shoji";
-	name = "shoji wall";
-	desc = "Despite popular belief, shoji walls are not actually made from rice paper. This incorrect piece of trivia likely caught on because it sounded more oriental."
+	name = "shoji wall"
 	},
 /area/dojo)
 "f" = (
 /obj/structure/table/woodentable,
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -74,7 +74,7 @@
 	pixel_y = -6
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -105,7 +105,7 @@
 	pixel_y = 8
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -117,7 +117,7 @@
 	name = "ninjastart"
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -128,7 +128,7 @@
 /area/dojo)
 "o" = (
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -139,24 +139,25 @@
 /area/dojo)
 "q" = (
 /obj/effect/decal/arrow,
-/turf/simulated/wall/invulnerable{
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
 	icon_state = "shoji";
-	name = "shoji wall";
-	desc = "Despite popular belief, shoji walls are not actually made from rice paper. This incorrect piece of trivia likely caught on because it sounded more oriental."
+	name = "shoji wall"
 	},
 /area/dojo)
 "r" = (
-/turf/simulated/wall/invulnerable{
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
 	icon_state = "wood0";
 	name = "sturdy wooden wall";
-	desc = "Legendary oriental lumber, folded over 2 times."
+	desc = "Legendary Japanese lumber, folded over 2 times."
 	},
 /area/dojo)
 "s" = (
-/turf/simulated/wall/invulnerable{
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
 	icon_state = "shoji";
-	name = "shoji wall";
-	desc = "Despite popular belief, shoji walls are not actually made from rice paper. This incorrect piece of trivia likely caught on because it sounded more oriental."
+	name = "shoji wall"
 	},
 /area/dojo)
 "t" = (
@@ -164,7 +165,7 @@
 	pixel_y = 8
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
@@ -176,16 +177,16 @@
 	desc = "Great for practicing your ninja skills."
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
 "z" = (
 /obj/structure/sign/ninjaglove,
-/turf/simulated/wall/invulnerable{
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
 	icon_state = "shoji";
-	name = "shoji wall";
-	desc = "Despite popular belief, shoji walls are not actually made from rice paper. This incorrect piece of trivia likely caught on because it sounded more oriental."
+	name = "shoji wall"
 	},
 /area/dojo)
 "A" = (
@@ -199,7 +200,7 @@
 	name = "Vault Door"
 	},
 /turf/simulated/floor{
-	icon_state = "tatami";
+	icon_state = "tatami-green-spiral";
 	name = "tatami mat"
 	},
 /area/dojo)
