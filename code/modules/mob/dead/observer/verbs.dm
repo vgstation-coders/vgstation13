@@ -245,16 +245,10 @@
 	set name = "Toggle Darkness"
 	set category = "Ghost"
 
-	if (client && client.darkness_planemaster)
-		switch(client.darkness_planemaster.alpha)
-			if(255)
-				client.darkness_planemaster.alpha = 230
-			if(230)
-				client.darkness_planemaster.alpha = 180
-			if(180)
-				client.darkness_planemaster.alpha = 0
-			else
-				client.darkness_planemaster.alpha = 255
+	if (see_invisible == SEE_INVISIBLE_OBSERVER_NOLIGHTING)
+		see_invisible = SEE_INVISIBLE_OBSERVER
+	else
+		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 
 
 /mob/dead/observer/verb/analyze_air()
