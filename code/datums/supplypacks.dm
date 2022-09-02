@@ -1230,9 +1230,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/exparmor
 	name = "Experimental armor"
 	contains = list(/obj/item/clothing/suit/armor/laserproof,
-					/obj/item/clothing/suit/armor/bulletproof,
-					/obj/item/clothing/head/helmet/tactical/riot,
-					/obj/item/clothing/suit/armor/riot)
+					/obj/item/clothing/suit/armor/laserproof,
+					/obj/item/clothing/head/helmet/tactical/laserproof,
+					/obj/item/clothing/head/helmet/tactical/laserproof)
 	cost = 35
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "experimental armor crate"
