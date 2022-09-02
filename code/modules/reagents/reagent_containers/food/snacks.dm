@@ -1487,6 +1487,18 @@
 	reagents.add_reagent(DIAMONDDUST, 4) //It's the closest we have to eating raw glass, causes some brute and screaming
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/polypburger
+	name = "polyp burger"
+	desc = "Millions of burgers like these are cooked and sold by McZargalds every year."
+	icon_state = "polypburger"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/polypburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
 	desc = "That's all you can say!"
@@ -2729,6 +2741,21 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 7)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/polypwich
+	name = "Polypwich"
+	desc = "Polyp meat and gelatin between two slices of bread makes for a nutritious sandwich. Unfortunately it has a soggy and unpleasant texture. These are commonly served to mothership prisoners who misbehave."
+	icon_state = "polypwich"
+	food_flags = FOOD_MEAT | FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/polypwich/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/polypwich/after_consume(mob/user)
+	if(prob(10))	//Eating this is just an unpleasant experience, so a player might get a negative flavor message. Has no effect besides rp value. I hope ayy wardens feed these to prisoners as a punishment :)
+		to_chat(user, "<span class='warning'>The sandwich is soggy and tastes too salty to be appetizing...</span>")
 
 /obj/item/weapon/reagent_containers/food/snacks/tomatosoup
 	name = "Tomato Soup"
@@ -7721,6 +7748,22 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(LOCUTOGEN, 5)
 	if(user)
 		to_chat(user, "<span class='notice'>You pull the tab on the soup can and pop the lid open. An inviting smell wafts out.")
+
+/obj/item/weapon/reagent_containers/food/snacks/polyppudding
+	name = "Polyp Pudding"
+	desc = "A thick and sweet pudding, guaranteed to remind a mothership grey of their childhood whimsy."
+	icon_state = "polyppudding"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_LIQUID | FOOD_SWEET | FOOD_ANIMAL
+	crumb_icon = "dribbles"
+	filling_color = "#B38B26"
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/polyppudding/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(POLYPGELATIN, 5)
+	bitesize = 3
 
 //You have now exited the ayy food zone. Thanks for visiting.
 
