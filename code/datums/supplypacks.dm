@@ -2228,7 +2228,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					)
 	cost = 200
 	containertype = /obj/structure/closet/crate/secure/scisec
-	containername = "gret slime extract crate"
+	containername = "grey slime extract crate"
 	access = list(access_science)
 	group = "Science"
 
@@ -2512,7 +2512,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/spray/bugzapper)
 	cost = 40
 	containertype = /obj/structure/largecrate/hissing
-	containername = "hissing crate"
+	containername = "insect control crate"
 	access = list(access_hydroponics)
 	group = "Hydroponics"
 
