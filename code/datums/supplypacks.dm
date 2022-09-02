@@ -1073,6 +1073,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "armor crate"
 	access = list(access_security)
 	group = "Security"
+	
+/datum/supply_packs/bulletproofarmor
+	name = "Ballistic Armor"
+	contains = list(/obj/item/clothing/head/helmet/tactical/bulletproof,
+					/obj/item/clothing/head/helmet/tactical/bulletproof,
+					/obj/item/clothing/suit/armor/bulletproof
+					/obj/item/clothing/suit/armor/bulletproof)
+	cost = 30
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "ballistic armor crate"
+	access = list(access_security)
+	group = "Security"
 
 /datum/supply_packs/greyarmor
 	name = "MDF Surplus standard armor"
