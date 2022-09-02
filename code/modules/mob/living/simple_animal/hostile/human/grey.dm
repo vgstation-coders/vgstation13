@@ -433,7 +433,7 @@
 	say(pick("Enemy of the mothership!","Pacifying target!","Engaging!","Attack!"), all_languages[LANGUAGE_GREY])
 
 ///////////////////////////////////////////////////////////////////GREY GRENADIER///////////
-//Soldier that can launch grenades, very dangerous
+//Soldier that can launch grenades, very dangerous. Slightly better vision than the average soldier
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier
 	name = "MDF Grenadier"
 	desc = "A thin alien humanoid. This one is armed with a grenade launcher and several strange-looking grenades."
@@ -448,10 +448,29 @@
 	speak = list("Grenade belt loaded, standing by.","A few grenades never fail to soften the enemy up.","When are we due for rotation?")
 	speak_chance = 1
 
+	vision_range = 10
+	aggro_vision_range = 10
+	idle_vision_range = 10 // Keeping an eye open for a target to launch a grenade towards at all times
+
 	ranged = 1
 	retreat_distance = 6
 	minimum_distance = 6
-	ranged_cooldown_cap = 10 // Launching grenades is pretty powerful, gotta give it a cooldown
+	ranged_cooldown_cap = 8 // Launching grenades is pretty powerful, gotta give it a cooldown
+
+	var/reloading = 0 // Grenadier will move further away or closer depending on if cooling down from a grenade launch, or ready to fire
+	var/loaded = 1
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier/Life()
+	..()
+	if(reloading == 1) // We're cooling down or "reloading" after the last shot. Run farther away!
+		retreat_distance = 9
+		minimum_distance = 9
+		spawn(8 SECONDS)
+			loaded = 1
+			reloading = 0
+	if(loaded == 1) // Locked and loaded. Back into the fray!
+		retreat_distance = 6
+		minimum_distance = 6
 
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier/Shoot(var/atom/target, var/atom/start, var/mob/user)
 	switch(rand(1,2))
@@ -463,7 +482,9 @@
 			var/obj/item/weapon/grenade/F = grenade_to_throw
 			grenade_to_throw.throw_at(target,10,2)
 			F.activate()
-			ranged_cooldown = 10
+			ranged_cooldown = 8
+			loaded = 0
+			reloading = 1
 		if(2)
 			visible_message("<span class = 'warning'>\The [src] launches a grenade towards \the [target]!</span>")
 			say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
@@ -472,7 +493,9 @@
 			var/obj/item/weapon/grenade/F = grenade_to_throw
 			grenade_to_throw.throw_at(target,10,2)
 			F.activate()
-			ranged_cooldown = 10
+			ranged_cooldown = 8
+			loaded = 0
+			reloading = 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier/Aggro()
 	..()
