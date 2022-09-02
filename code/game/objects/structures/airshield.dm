@@ -49,3 +49,20 @@
 			qdel(src)
 	else
 		..()
+		
+/obj/machinery/airshield //machinery duplicate so it inherits the simple craftable behaviour of machines
+	name = "airshield"
+	desc = "A shield that allows only non-gasses to pass through."
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "emancipation_grill_on"
+	opacity = 0
+	density = 0
+	anchored = 1
+	plane = ABOVE_HUMAN_PLANE
+	idle_power_usage = 100
+	active_power_usage = 100 //always uses 100w
+	
+/obj/machinery/airshield/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover))
+		return ..()
+	return FALSE

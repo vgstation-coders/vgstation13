@@ -2414,6 +2414,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/glasses/scanner/material = 2,
 		/obj/item/device/multitool = 4,
 		/obj/item/weapon/circuitboard/airlock = 10,
+		/obj/item/weapon/circuitboard/airshield = 10,
 		/obj/item/weapon/circuitboard/power_control = 10,
 		/obj/item/weapon/circuitboard/air_alarm = 10,
 		/obj/item/weapon/circuitboard/fire_alarm = 10,
