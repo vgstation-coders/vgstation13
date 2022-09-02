@@ -1233,7 +1233,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/suit/armor/laserproof,
 					/obj/item/clothing/head/helmet/tactical/laserproof,
 					/obj/item/clothing/head/helmet/tactical/laserproof)
-	cost = 35
+	cost = 70
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "experimental armor crate"
 	access = list(access_armory)
