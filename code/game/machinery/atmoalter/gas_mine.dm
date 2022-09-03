@@ -125,8 +125,6 @@
 	if(!on)
 		use_power = MACHINE_POWER_USE_IDLE
 		return
-	use_power = MACHINE_POWER_USE_ACTIVE
-	var/power_surplus = PN.get_satisfaction(power_priority)
 
 	var/oldstat=stat
 	if(!istype(loc,/turf/simulated))
@@ -138,13 +136,17 @@
 	if(stat & BROKEN)
 		return
 
-	if(power_surplus > 0.55)
-		power_load += 1000
-	else if (power_surplus < 0.45 && power_load > 0)
-		power_load -= 1000
+	if(PN)
+		var/power_surplus = PN.get_satisfaction(power_priority)
+		use_power = MACHINE_POWER_USE_ACTIVE
+		if(power_surplus > 0.55)
+			power_load += 1000
+		else if (power_surplus < 0.45 && power_load > 0)
+			power_load -= 1000
+		else
+			power_load = 0
 	else
 		power_load = 0
-
 	active_power_usage = power_load
 	update_rate(Ceiling(0.1 * power_load))		//scale mol output by arbitrary 10% power load
 	pumping.copy_from(air_contents)
