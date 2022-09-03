@@ -396,6 +396,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/seeds/bloodtomatoseed,
 					/obj/item/weapon/storage/pill_bottle/zoom,
 					/obj/item/weapon/storage/pill_bottle/happy,
+					/obj/item/weapon/reagent_containers/glass/bottle/pcp,
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/absinthe,
 					/obj/item/weapon/storage/bag/wiz_cards/frog)
 
@@ -755,11 +756,20 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/grey_uniform
 	name = "Mothership uniforms"
 	var/laborer = list(/obj/item/clothing/under/grey/grey_worker,
-					/obj/item/clothing/under/grey/grey_worker)
+					/obj/item/clothing/under/grey/grey_worker,
+					/obj/item/clothing/shoes/jackboots/mothership,
+					/obj/item/clothing/shoes/jackboots/mothership)
 	var/scientist = list(/obj/item/clothing/under/grey/grey_researcher,
-					/obj/item/clothing/suit/storage/labcoat/mothership)
+					/obj/item/clothing/suit/storage/labcoat/mothership,
+					/obj/item/clothing/shoes/jackboots/mothership)
 	var/explorer = list(/obj/item/clothing/under/grey/grey_scout,
-					/obj/item/clothing/under/grey/grey_scout)
+					/obj/item/clothing/under/grey/grey_scout,
+					/obj/item/clothing/shoes/jackboots/mothership,
+					/obj/item/clothing/shoes/jackboots/mothership)
+	var/soldier = list(/obj/item/clothing/under/grey/grey_soldier,
+					/obj/item/clothing/under/grey/grey_soldier,
+					/obj/item/clothing/shoes/jackboots/mothership,
+					/obj/item/clothing/shoes/jackboots/mothership)
 	cost = 50
 	containertype = /obj/structure/closet/crate/ayybin
 	containername = "mothership uniform bin"
@@ -1078,10 +1088,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "MDF Surplus standard armor"
 	contains = list(/obj/item/clothing/suit/armor/mothership,
 					/obj/item/clothing/suit/armor/mothership,
+					/obj/item/clothing/suit/armor/mothership,
 					/obj/item/clothing/head/helmet/mothership,
 					/obj/item/clothing/head/helmet/mothership,
-					/obj/item/clothing/under/grey/grey_soldier,
-					/obj/item/clothing/under/grey/grey_soldier)
+					/obj/item/clothing/head/helmet/mothership)
 	cost = 40
 	containertype = /obj/structure/closet/crate/secure/ayybin
 	containername = "MDF standard armor bin"
@@ -1401,7 +1411,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/pizzabox/margherita,
 					/obj/item/pizzabox/mushroom,
 					/obj/item/pizzabox/meat,
-					/obj/item/pizzabox/vegetable)
+					/obj/item/pizzabox/vegetable,
+					/obj/item/pizzabox/blingpizza)
 	name = "Surprise pack of five pizzas"
 	cost = 75
 	containertype = /obj/structure/closet/crate/freezer
@@ -2456,6 +2467,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 25
 	containertype = /obj/structure/largecrate/goat
 	containername = "goat crate"
+	access = list(access_hydroponics)
+	group = "Hydroponics"
+
+/datum/supply_packs/polyp
+	name = "Polyp"
+	cost = 75
+	containertype = /obj/structure/largecrate/polyp
+	containername = "polyp crate"
 	access = list(access_hydroponics)
 	group = "Hydroponics"
 

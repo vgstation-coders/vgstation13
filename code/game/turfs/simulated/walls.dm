@@ -255,20 +255,21 @@
 	//Deconstruction
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
-		if(WT.remove_fuel(1, user))
-			if(engraving)
+		if(engraving)
+			if(WT.remove_fuel(1, user))
 				to_chat(user, "<span class='notice'>You deform the wall back into its original shape")
 				engraving = null
 				engraving_quality = null
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 				overlays.Cut()
 				return
+		if(WT.isOn() && WT.get_fuel() >= 1)
 			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s outer plating.</span>", \
 			"<span class='notice'>You begin slicing through \the [src]'s outer plating.</span>", \
 			"<span class='warning'>You hear welding noises.</span>")
 			playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
-			if(WT.do_weld(user, src, 100, 0))
+			if(WT.do_weld(user, src, 100, 1))
 				if(!istype(src))
 					return
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
@@ -464,8 +465,11 @@
 		if(H.foot_impact(src,rand(5,7)))
 			to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
 
-/turf/simulated/wall/acidable()
-	return !(flags & INVULNERABLE)
+/turf/simulated/wall/dissolvable()
+	if(flags & INVULNERABLE)
+		return FALSE
+	else
+		return PACID
 
 /turf/simulated/wall/clockworkify()
 	ChangeTurf(/turf/simulated/wall/mineral/clockwork)

@@ -679,6 +679,9 @@
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
 
+/obj/item/clothing/head/helmet/space/grey/dissolvable()
+	return FALSE
+
 /obj/item/clothing/suit/space/grey
 	name = "explorer pressure suit"
 	icon_state = "grey-pressure-suit"
@@ -689,6 +692,9 @@
 	w_class = W_CLASS_MEDIUM
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/suit/space/grey/dissolvable()
+	return FALSE
 
 
 //Martian Fishbowl

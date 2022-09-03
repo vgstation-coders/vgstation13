@@ -175,6 +175,11 @@
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellyburger/slime
 
+/datum/recipe/polypburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/polyp)
+	result = /obj/item/weapon/reagent_containers/food/snacks/polypburger
+
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
 	items = list()
@@ -217,6 +222,12 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/bearburger
 
+/datum/recipe/glassburger
+	reagents = list(FLOUR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus,
+		/obj/item/stack/sheet/glass/glass)
+	result = /obj/item/weapon/reagent_containers/food/snacks/glassburger
 
 // Burger sliders //////////////////////////////////////////////
 
@@ -825,6 +836,19 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/coldchili
 
+/datum/recipe/plasmastew
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/plasmastew
+
+/datum/recipe/plasmastew/make_food(var/obj/container, var/mob/user)
+	var/obj/item/weapon/reagent_containers/food/snacks/plasmastew/being_cooked = ..(container)
+	being_cooked.reagents.del_reagent(PLASMA)
+	return being_cooked
+
 /datum/recipe/wrap
 	reagents = list(SOYSAUCE = 10)
 	items = list(
@@ -1250,6 +1274,16 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/vegetablepizza
 
+/datum/recipe/blingpizza
+	reagents = list(NOVAFLOUR = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/silverpear,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/blingpizza
+
 // Mushrooms ///////////////////////////////////////////////////
 
 /datum/recipe/spacylibertyduff
@@ -1452,6 +1486,12 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/avocadosoup
 
+/datum/recipe/silicatesoup
+	reagents = list(WATER = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus)
+	result = /obj/item/weapon/reagent_containers/food/snacks/silicatesoup
+
 /datum/recipe/mothershipbroth
 	reagents = list(ZAMMILD = 5, CREAM = 5)
 	items = list()
@@ -1499,6 +1539,11 @@
 		/obj/item/weapon/reagent_containers/food/snacks/faggot,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/wrapped
+
+/datum/recipe/polyppudding
+	reagents = list(POLYPGELATIN = 5, SUGARS = 5, CREAM = 5)
+	items = list()
+	result = /obj/item/weapon/reagent_containers/food/snacks/polyppudding
 
 // Sandwiches //////////////////////////////////////////////////
 
@@ -1598,6 +1643,15 @@
 		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pbj
+
+/datum/recipe/polypwich
+	reagents = list (POLYPGELATIN = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/polyp,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/polypwich
 
 // Coder Snacks ///////////////////////////////////////////////////////
 

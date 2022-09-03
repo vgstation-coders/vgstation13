@@ -250,7 +250,6 @@
 		dark_plane.alphas -= "toggle_darkness"
 	else
 		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
-
 		dark_plane.alphas["toggle_darkness"] = 255
 	check_dark_vision()
 

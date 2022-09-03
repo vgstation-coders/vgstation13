@@ -1,6 +1,6 @@
 /obj/machinery/chem_master/snackbar_machine
 	name = "\improper SnackBar Machine"
-	desc = "An explosion of flavour in every bite"
+	desc = "An explosion of flavour in every bite."
 	condi = 1
 	icon_state = "snackbar"
 	chem_board = /obj/item/weapon/circuitboard/snackbar_machine

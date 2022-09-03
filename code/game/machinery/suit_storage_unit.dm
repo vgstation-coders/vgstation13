@@ -517,10 +517,8 @@
 						if(rigsuit.MB) //Internal Boots
 							rigsuit.MB.clean_blood()
 							rigsuit.MB.decontaminate()
-						for(var/module in rigsuit.modules)
-							if(istype(module, /obj/item/rig_module/rad_shield))
-								var/obj/item/rig_module/rad_shield/rad = module
-								rad.current_capacity = initial(rad.current_capacity)
+						for(var/obj/item/rig_module/module in rigsuit.modules)
+							module.suit_storage_act()
 				if(mask)
 					mask.clean_blood()
 					mask.decontaminate()

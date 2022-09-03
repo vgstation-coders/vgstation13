@@ -53843,9 +53843,7 @@
 	},
 /area/shuttle/nuclearops)
 "dxQ" = (
-/obj/effect/landmark{
-	name = "Syndicate-Uplink"
-	},
+/obj/structure/closet/syndicate/nuclear,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -81968,7 +81966,6 @@
 	pixel_y = -26
 	},
 /obj/item/device/radio/intercom{
-	broadcasting = 1;
 	freerange = 1;
 	name = "Common Channel";
 	pixel_x = -25;
@@ -92741,7 +92738,6 @@
 	name = "AI"
 	},
 /obj/item/device/radio/intercom{
-	broadcasting = 1;
 	freerange = 1;
 	name = "Common Channel";
 	pixel_y = 25
@@ -119226,7 +119222,6 @@
 	pixel_y = -26
 	},
 /obj/item/device/radio/intercom{
-	broadcasting = 1;
 	freerange = 1;
 	name = "Common Channel";
 	pixel_x = 27;

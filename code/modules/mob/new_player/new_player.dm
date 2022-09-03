@@ -83,22 +83,21 @@
 			stat("Game Mode:", "[master_mode]")
 
 		if(SSticker.initialized)
-			if((ticker.current_state == GAME_STATE_PREGAME) && going)
-				stat("Time To Start:", (round(ticker.pregame_timeleft - world.timeofday) / 10)) //rounding because people freak out at decimals i guess
-			if((ticker.current_state == GAME_STATE_PREGAME) && !going)
-				stat("Time To Start:", "DELAYED")
+			if(ticker.current_state == GAME_STATE_PREGAME)
+				if(going)
+					stat("Time To Start:", (round(ticker.pregame_timeleft - world.timeofday) / 10)) //rounding because people freak out at decimals i guess
+				else
+					stat("Time To Start:", "DELAYED")
+				stat("Players: [totalPlayers]", "Players Ready: [totalPlayersReady]")
+				totalPlayers = 0
+				totalPlayersReady = 0
+				for(var/mob/new_player/player in player_list)
+					stat("[player.key]", (player.ready)?("(Playing)"):(null))
+					totalPlayers++
+					if(player.ready)
+						totalPlayersReady++	
 		else
 			stat("Time To Start:", "LOADING...")
-
-		if(SSticker.initialized && ticker.current_state == GAME_STATE_PREGAME)
-			stat("Players: [totalPlayers]", "Players Ready: [totalPlayersReady]")
-			totalPlayers = 0
-			totalPlayersReady = 0
-			for(var/mob/new_player/player in player_list)
-				stat("[player.key]", (player.ready)?("(Playing)"):(null))
-				totalPlayers++
-				if(player.ready)
-					totalPlayersReady++
 
 /mob/new_player/Topic(href, href_list[])
 	//var/timestart = world.timeofday
@@ -654,7 +653,7 @@
 	src << browse(dat, "window=latechoices;size=360x640;can_close=1")
 
 
-/mob/new_player/proc/create_character(var/joined_late = 0)
+/mob/new_player/proc/create_character()
 	spawning = 1
 	close_spawn_windows()
 
@@ -733,7 +732,7 @@
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
 	var/rank = new_character.mind.assigned_role
-	if(!joined_late)
+	if(!(ticker.current_state == GAME_STATE_PLAYING))
 		var/obj/S = null
 		// Find a spawn point that wasn't given to anyone
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
@@ -751,9 +750,6 @@
 				S = sloc
 				stack_trace("not enough spawn points for [rank]")
 				break
-		if(!S)
-			// Find a spawn point that's using the ancient landmarks. Do we even have these anymore?
-			S = locate("start*[rank]")
 		if(S)
 			// Use the given spawn point
 			new_character.forceMove(S.loc)
@@ -770,6 +766,11 @@
 			break //Only autoconvert them once, and only if they aren't leading their own faith.
 
 	return new_character
+
+/mob/new_player/proc/create_roundstart_human()
+	var/mob/living/carbon/human/new_character = create_character()
+	qdel(src)
+	new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 
 //Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
 /mob/new_player/proc/create_roundstart_silicon(var/type)

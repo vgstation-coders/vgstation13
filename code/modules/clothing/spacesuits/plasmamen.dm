@@ -434,7 +434,7 @@
 	armor = list(melee = 60, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
 	canremove = 0
 
-/obj/item/clothing/suit/space/plasmaman/sith/acidable()
+/obj/item/clothing/suit/space/plasmaman/sith/dissolvable()
 	return 0
 
 //Unlike the suit, the helmet can be taken off
@@ -446,5 +446,5 @@
 	desc = "A menacing helmet that protects the wearer from harm, fit for a plasmaman."
 	armor = list(melee = 60, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
 
-/obj/item/clothing/head/helmet/space/plasmaman/sith/acidable()
+/obj/item/clothing/head/helmet/space/plasmaman/sith/dissolvable()
 	return 0

@@ -730,7 +730,7 @@ var/list/obj/machinery/singularity/white_hole_candidates
 /obj/machinery/singularity/kick_act(mob/user)
 	consume(user)
 
-/obj/machinery/singularity/acidable()
+/obj/machinery/singularity/dissolvable()
 	return 0
 
 /obj/machinery/singularity/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)

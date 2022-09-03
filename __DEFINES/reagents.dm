@@ -113,6 +113,7 @@
 #define PHYTOCARISOL			"phytocarisol"
 #define HYPERZINE 			"hyperzine"
 #define HYPOZINE 			"hypozine"
+#define LIQUIDPCP 			"liquidpcp"
 #define CRYOXADONE 			"cryoxadone"
 #define CLONEXADONE 			"clonexadone"
 #define REZADONE 			"rezadone"
@@ -548,7 +549,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define IMPEDREZENES list(IMPEDREZENE, HYOSCYAMINE)
 #define LEXORINS list(LEXORIN, CORIAMYRTIN)
 #define DEXALINS list(DEXALIN, THYMOL)
-#define PETRITRICINCURES list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
+#define ACIDS list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
 #define WATERS list(WATER, HOLYWATER, ICE)
 #define CORES list(SOFTCORES, MEDCORES)
 #define ALLNANITES list(NANITES, AUTISTNANITES)

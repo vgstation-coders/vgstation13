@@ -597,8 +597,11 @@ a {
 /obj/proc/give_tech_list()
 	return null
 
-/obj/acidable()
-	return !(flags & INVULNERABLE)
+/obj/dissolvable()
+	if (flags & INVULNERABLE)
+		return FALSE
+	else
+		return PACID
 
 /obj/proc/t_scanner_expose()
 	//don't reveal docking ports or spawns
