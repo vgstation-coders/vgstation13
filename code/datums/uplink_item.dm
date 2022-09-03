@@ -560,7 +560,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/ayylmao/mdfbelt
 	name = "MDF Gear Belt"
-	desc = "A mothership soldier's belt. Loaded with first aid supplies, binoculars, and an extended oxygen supply tank for operating in breached areas. Keep away from water."
+	desc = "A mothership soldier's belt. Loaded with an ion pistol, first aid supplies, binoculars, and an extended oxygen supply tank for operating in breached areas. Keep away from water."
 	item = /obj/item/weapon/storage/belt/mothership/partial_gear
 	cost = 5
 	discounted_cost = 4
