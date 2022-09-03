@@ -70,24 +70,38 @@
 	if(isliving(AM))
 		var/burned = rand(2,5)
 		var/mob/living/M = AM
-		if(M.lying)
-			M.take_overall_damage(0, max(0, (burned - 2)))
-			M.simple_message("<span class='danger'>Something burns your back!</span>",\
-				"<span class='userdanger'>They're eating your back!</span>")
-			return 0
+		if(ishuman(M))
+			if(isgrey(M))
+				if(M.lying)
+					M.simple_message("<span class='notice'>You feel a slight tingling sensation on your back, but it quickly subsides.</span>",\
+						"<span class='notice'>You're quite certain that's acid on your back.</span>")
+			else
+				if(M.lying)
+					M.take_overall_damage(0, max(0, (burned - 2)))
+					M.simple_message("<span class='danger'>Something burns your back!</span>",\
+						"<span class='userdanger'>They're eating your back!</span>")
+					return 0
 
 		if(ishuman(M))
 			if(M.CheckSlip())
-				M.simple_message("<span class='warning'>Your feet feel like they're on fire!</span>",\
-					"<span class='userdanger'>Egads! They bite your feet!</span>")
-				M.take_overall_damage(0, max(0, (burned - 2)))
+				if(isgrey(M))
+					M.simple_message("<span class='notice'>You feel a slight tingling sensation in your feet, but it quickly subsides.</span>",\
+						"<span class='notice'>You're quite certain that's acid on your feet.</span>")
+				else
+					M.simple_message("<span class='warning'>Your feet feel like they're on fire!</span>",\
+						"<span class='userdanger'>Egads! They bite your feet!</span>")
+					M.take_overall_damage(0, max(0, (burned - 2)))
 			else
 				return 0
 
 		if(!istype(M, /mob/living/carbon/slime) && !isrobot(M))
-			slip_n_slide(M, 10, 10, "<span class='userdanger[iscarbon(M) ? " notice" : ""]'>Please, just end the pain!</span>")
-			M.take_organ_damage(2) // Was 5 -- TLE
-			M.take_overall_damage(0, burned)
+			if(ishuman(M))
+				if(isgrey(M))
+					slip_n_slide(M, 10, 10)
+				else
+					slip_n_slide(M, 10, 10, "<span class='userdanger[iscarbon(M) ? " notice" : ""]'>Please, just end the pain!</span>")
+					M.take_organ_damage(2) // Was 5 -- TLE
+					M.take_overall_damage(0, burned)
 		return 1
 	return ..()
 
@@ -95,5 +109,7 @@
 	var/burned = rand(1,3)
 	if(istype(hit_atom ,/mob/living))
 		var/mob/living/M = hit_atom
-		M.take_organ_damage(0, burned)
+		if(ishuman(M) && !isgrey(M))
+			M.take_organ_damage(0, burned)
 	return ..()
+
