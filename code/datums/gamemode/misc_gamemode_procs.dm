@@ -193,7 +193,6 @@
 
 
 /proc/equip_highlander(var/mob/living/carbon/human/highlander_human)
-	highlander_human.delete_all_equipped_items()
 	var/static/list/plasmaman_items = list(
 		/obj/item/clothing/suit/space/plasmaman,
 		/obj/item/clothing/head/helmet/space/plasmaman,
