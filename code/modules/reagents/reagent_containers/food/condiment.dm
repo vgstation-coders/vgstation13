@@ -285,6 +285,11 @@
 				desc = "A dangerously flavorful sauce made from mothership spices and powerful acid."
 				icon_state = ZAMSPICYTOXIN
 				condiment_overlay = ZAMSPICYTOXIN
+			if(POLYPGELATIN)
+				name = "Polyp Gelatin"
+				desc = "A thick and nutritious gelatin collected from space polyps that has a mild, salty taste."
+				icon_state = POLYPGELATIN
+				condiment_overlay = POLYPGELATIN
 			if(CREAM)
 				name = "whipped cream dispenser"
 				desc = "Instant delight." //placeholder desc
@@ -584,6 +589,14 @@
 /obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin/New()
 	..()
 	reagents.add_reagent(ZAMSPICYTOXIN, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/polypgelatin
+	name = "Polyp Gelatin Bottle"
+	desc = "A thick gelatin collected from space polyps that is a little salty and very filling."
+
+/obj/item/weapon/reagent_containers/food/condiment/polypgelatin/New()
+	..()
+	reagents.add_reagent(POLYPGELATIN, 50)
 
 
 /obj/item/weapon/reagent_containers/food/condiment/cream
