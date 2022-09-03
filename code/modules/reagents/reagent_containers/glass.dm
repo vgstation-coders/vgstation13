@@ -39,6 +39,7 @@
 		/obj/machinery/apiary,
 		/mob/living/simple_animal/cow,
 		/mob/living/simple_animal/hostile/retaliate/goat,
+		/mob/living/simple_animal/hostile/retaliate/polyp,
 		/obj/machinery/cooking/icemachine,
 		/obj/machinery/sleeper,
 		/obj/machinery/anomaly,

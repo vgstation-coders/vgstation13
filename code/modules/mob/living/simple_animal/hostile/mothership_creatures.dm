@@ -189,11 +189,16 @@
 	speak = list("blblbb","wrmrmm","glglglg")
 	speak_emote = list("burbles", "hums")
 	emote_hear = list("gurgles")
+	emote_see = list("wiggles its bell", "probes around with its tendrils", "expands and contracts rhythmically")
 	speak_chance = 1
 	turns_per_move = 5
 	see_in_dark = 6
+	response_help  = "pokes"
+	response_disarm = "gently pushes aside"
+	response_harm   = "punches"
 	stop_automated_movement_when_pulled = TRUE
 	pass_flags = PASSTABLE // Can fly over tables
+	speak_override = TRUE
 
 	min_oxy = 0
 	max_oxy = 0
@@ -223,6 +228,9 @@
 	flying = 1
 	acidimmune = 1
 
+	var/trades_coins = 0 // Check that allows Phyl to give coins for Zam Raisins, but not a regular polyp
+	var/last_trade = 0
+	var/const/trade_cooldown = 120 SECONDS // Specifically here for the subtype that trades coins for Zam Raisins
 	var/gives_milk = TRUE
 	var/datum/reagents/udder = null
 
@@ -264,6 +272,19 @@
 				to_chat(user, "<span class='warning'>[O] is full.</span>")
 			if(!transfered)
 				to_chat(user, "<span class='warning'>[src]'s tendrils are dry. Wait a bit longer...</span>")
+		if(trades_coins == 1 && istype(O, /obj/item/weapon/reagent_containers/food/snacks/zam_notraisins))
+			if((last_trade + trade_cooldown < world.time))
+				Calm()
+				playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+				visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It burbles contentedly, and drops something in [user]'s hand.</span>")
+				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+				heart.plane = ABOVE_HUMAN_PLANE
+				flick_overlay(heart, list(user.client), 20)
+				qdel(O)
+				user.put_in_hands(new /obj/item/weapon/coin/iron)
+				last_trade = world.time
+			else
+				visible_message("<span class='notice'>[src] doesn't seem interested in \the [O] at the moment.</span>")
 		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat))
 			Calm()
 			health+=15
@@ -290,45 +311,7 @@
 	meat_type = /obj/item/weapon/coin/iron // Instead of meat you get coins, 4 total
 	mob_property_flags = MOB_NO_LAZ // So he can't be killed and revived repeatedly to keep butchering coins
 
-	var/last_trade = 0
-	var/const/trade_cooldown = 120 SECONDS // Hopefully this is reasonable, considering he is an unlimited source of coins if the player has Zam NotRaisins
-
-/mob/living/simple_animal/hostile/retaliate/polyp/phyl/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(stat == CONSCIOUS)
-		if(istype(O, /obj/item/weapon/reagent_containers/glass))
-			user.visible_message("<span class='notice'>[user] collects gelatin from [src]'s tendrils using \the [O].</span>")
-			var/obj/item/weapon/reagent_containers/glass/G = O
-			var/transfered = udder.trans_id_to(G, POLYPGELATIN, rand(5,10))
-			if(G.reagents.total_volume >= G.volume)
-				to_chat(user, "<span class='warning'>[O] is full.</span>")
-			if(!transfered)
-				to_chat(user, "<span class='warning'>[src]'s tendrils are dry. Wait a bit longer...</span>")
-		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/zam_notraisins))
-			if((last_trade + trade_cooldown < world.time))
-				Calm()
-				playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-				visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It burbles contentedly, and drops something in [user]'s hand.</span>")
-				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-				heart.plane = ABOVE_HUMAN_PLANE
-				flick_overlay(heart, list(user.client), 20)
-				qdel(O)
-				user.put_in_hands(new /obj/item/weapon/coin/iron)
-				last_trade = world.time
-			else
-				visible_message("<span class='notice'>[src] doesn't seem interested in \the [O] at the moment.</span>")
-		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat))
-			Calm()
-			health+=15
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It burbles contentedly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			qdel(O)
-		else
-			..()
-	else
-		..()
+	trades_coins = 1 // This one will trade coins occasionally if fed Zam NotRaisins
 
 ///////////////////////////////////////////////////////////////////GYM RAT///////////
 // Can run on a treadmill much like the trader's colossal hamster, but not quite as efficiently. Maybe in the future I can code a unique reaction to creatine or something
