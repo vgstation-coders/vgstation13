@@ -592,7 +592,7 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/polypgelatin
 	name = "Polyp Gelatin Bottle"
-	desc = "A thick gelatin collected from space polyps that is a little salty and very filling."
+	desc = "A thick, nutritious gelatin collected from space polyps. It has a mild flavor with a hint of salt."
 
 /obj/item/weapon/reagent_containers/food/condiment/polypgelatin/New()
 	..()
