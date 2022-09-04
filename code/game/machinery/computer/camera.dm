@@ -47,7 +47,6 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	cam_plane_masters = list()
 	var/static/list/darkness_plane_things = list(
 		/obj/abstract/screen/plane/master,
-		/obj/abstract/screen/backdrop,
 		/obj/abstract/screen/plane/dark
 	)
 	for(var/plane in subtypesof(/obj/abstract/screen/plane_master) + darkness_plane_things)

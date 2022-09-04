@@ -1,6 +1,5 @@
 /mob
 	var/obj/abstract/screen/plane/master/master_plane
-	var/obj/abstract/screen/backdrop/backdrop
 	var/obj/abstract/screen/plane/self_vision/self_vision
 	var/obj/abstract/screen/plane/dark/dark_plane
 	var/seedarkness = 1
@@ -17,11 +16,6 @@
 		qdel(master_plane)
 		master_plane = null
 
-	if (backdrop)
-		client.screen -= backdrop
-		qdel(backdrop)
-		backdrop = null
-
 	if (self_vision)
 		client.screen -= self_vision
 		qdel(self_vision)
@@ -29,7 +23,6 @@
 
 	dark_plane = new(client)
 	master_plane = new(client)
-	backdrop = new(client)
 	self_vision = new(client)
 
 	update_darkness()
