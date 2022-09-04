@@ -355,6 +355,15 @@
 		/obj/item/weapon/card/emag = 3,
 	)
 
+//Syndicate Ayy Lmao Gear
+//The mothership sends its warmest regards
+/obj/item/weapon/storage/box/syndie_kit/ayylmao_harmor
+	name = "MDF Heavy Armor"
+	items_to_spawn = list(
+		/obj/item/clothing/suit/armor/mothership_heavy,
+		/obj/item/clothing/head/helmet/mothership_visor_heavy,
+		/obj/item/weapon/storage/belt/mothership/partial_gear
+	)
 
 //Syndicate Experimental Gear
 //Contains unique gear not found anywhere else

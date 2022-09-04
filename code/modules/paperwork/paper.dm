@@ -613,6 +613,10 @@ var/global/list/paper_folding_results = list ( \
 /obj/item/weapon/paper/outoforder
 	name = "paper- 'OUT OF ORDER'"
 	info = "<B>OUT OF ORDER</B>"
+	
+/obj/item/weapon/paper/time_agent
+	name = "paper- 'Personal Log - John Beckett'"
+	info = "This timeline is doomed. No matter how many alternatives I explore, they all point <b>Back to the Future</b> we must avoid at all costs. Thus, only one solution remains - I must take a <b>Quantum Leap</b> and <b>TimeShift</b> back to the point before the activation of the <b>Chrono Trigger</b> that set us on this calamitous course of history. It may just be a <b>Final Fantasy</b> of mine, but I believe that if I can change the past, I can stop the <b>Doctor Who</b> opened <b>Steins Gate</b> and restore hope to the <b>Outer Wilds</b>, even if it means becoming a <b>Timesplitter</b> in doing so. - <i>John Beckett</i>"
 
 /obj/item/weapon/paper/manifest
 	name = "Supply Manifest"

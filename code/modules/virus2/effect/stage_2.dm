@@ -337,7 +337,7 @@
 						glass_hand.rejuvenate()
 					else
 						to_chat(H, "<span class='warning'>Your [glass_hand.display_name] deresonates, sustaining burns!</span>")
-						glass_hand.take_damage(0, 30 * multiplier)
+						glass_hand.take_damage(0, 15 * multiplier)
 			qdel(glass_to_shatter)
 		else if (prob(1))
 			to_chat(H, "Your [glass_hand.display_name] aches for the cold, smooth feel of container-grade glass...")

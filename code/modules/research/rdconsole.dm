@@ -30,7 +30,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 
 */
-#define RESEARCH_MAX_Q_LEN 50
+#define RESEARCH_MAX_Q_LEN 100
 /obj/machinery/computer/rdconsole
 	name = "R&D Console"
 	icon_state = "rdcomp"
@@ -905,7 +905,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					if(!(D.build_type & PROTOLATHE) || D.category != name_set)
 						continue
 					var/temp_dat = "[D.name] [linked_lathe.output_part_cost(D)]"
-					var/upTo=10
+					var/upTo=20
 					for(var/M in D.materials)
 						var/num_units_avail=linked_lathe.check_mat(D,M)
 						if(num_units_avail)
@@ -919,6 +919,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							dat += "<A href='?src=\ref[src];build=[D.id];n=5'>(&times;5)</A>"
 						if(upTo>=10)
 							dat += "<A href='?src=\ref[src];build=[D.id];n=10'>(&times;10)</A>"
+						if(upTo>=20)
+							dat += "<A href='?src=\ref[src];build=[D.id];n=20'>(&times;20)</A>"
 						dat += "<A href='?src=\ref[src];build=[D.id];customamt=1'>(Custom)</A>"
 						dat += "</li>"
 					else

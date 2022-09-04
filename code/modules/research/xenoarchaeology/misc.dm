@@ -136,17 +136,17 @@
 	icon_broken = "secureresbroken"
 	icon_off = "secureresoff"
 
-/obj/structure/closet/secure_closet/xenoarchaeologist/New()
-	..()
-	sleep(2)
-	new /obj/item/clothing/under/rank/scientist(src)
-	new /obj/item/clothing/suit/storage/labcoat/science(src)
-	new /obj/item/clothing/shoes/white(src)
-	new /obj/item/clothing/glasses/science(src)
-	new /obj/item/device/radio/headset/headset_sci(src)
-	new /obj/item/weapon/storage/belt/archaeology(src)
-	new /obj/item/weapon/storage/box/excavation(src)
-	return
+/obj/structure/closet/secure_closet/xenoarchaeologist/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/under/rank/scientist,
+		/obj/item/clothing/suit/storage/labcoat/science,
+		/obj/item/clothing/shoes/white,
+		/obj/item/clothing/glasses/science,
+		/obj/item/device/radio/headset/headset_sci,
+		/obj/item/weapon/storage/belt/archaeology,
+		/obj/item/weapon/storage/box/excavation,
+	)
+	
 
 /obj/structure/closet/secure_closet/excavation
 	name = "Excavation Tools"
@@ -158,22 +158,20 @@
 	icon_broken = "securexenbroken"
 	icon_off = "securexenoff"
 
-/obj/structure/closet/secure_closet/excavation/New()
-	..()
-	sleep(2)
-	new /obj/item/weapon/storage/belt/archaeology(src)
-	new /obj/item/weapon/storage/box/excavation(src)
-	new /obj/item/device/flashlight/lantern(src)
-	new /obj/item/device/depth_scanner(src)
-	new /obj/item/device/core_sampler(src)
-	new /obj/item/device/gps(src)
-	//new /obj/item/device/beacon_locator(src)
-	//new /obj/item/beacon(src)
-	new /obj/item/clothing/glasses/scanner/meson(src)
-	new /obj/item/weapon/pickaxe(src)
-	new /obj/item/device/measuring_tape(src)
-	new /obj/item/weapon/pickaxe/hand(src)
-	return
+/obj/structure/closet/secure_closet/excavation/atoms_to_spawn()
+	return list(
+		/obj/item/weapon/storage/belt/archaeology,
+		/obj/item/weapon/storage/box/excavation,
+		/obj/item/device/flashlight/lantern,
+		/obj/item/device/depth_scanner,
+		/obj/item/device/core_sampler,
+		/obj/item/device/gps,
+		/obj/item/clothing/glasses/scanner/meson,
+		/obj/item/weapon/pickaxe,
+		/obj/item/device/measuring_tape,
+		/obj/item/weapon/pickaxe/hand,
+	)
+	
 
 //---- Isolation room air alarms
 

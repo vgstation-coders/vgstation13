@@ -555,10 +555,10 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	slot_flags = SLOT_BELT
 	name = "gadget bag"
 	desc = "This bag can be used to store many machine components."
-	storage_slots = 25;
+	storage_slots = 50;
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell")
+	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell", "/obj/item/weapon/circuitboard")
 	display_contents_with_number = TRUE
 
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
