@@ -44,6 +44,7 @@
 		SACID,
 		TUNGSTEN
 		)
+	var/upgraded = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 /*
 USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
@@ -76,21 +77,37 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		dispensable_reagents = sortList(dispensable_reagents)
 
 /obj/machinery/chem_dispenser/RefreshParts()
+	var/R = 0
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
 		T += M.rating-1
+		R += M.rating
 	max_energy = initial(max_energy)+(T * 50 / 4)
 
 	T = 0
 	for(var/obj/item/weapon/stock_parts/micro_laser/Ma in component_parts)
 		T += Ma.rating-1
+		R += Ma.rating
 	rechargerate = initial(rechargerate) + (T / 2)
 
-/*
-	for(var/obj/item/weapon/stock_parts/scanning_module/Ml in component_parts)
-		T += Ml.rating
-	//Who even knows what to use the scanning module for
-*/
+	for(var/obj/item/weapon/stock_parts/scanning_module/Ml in component_parts) //Now we know what to use the scanning module for
+		R += Ml.rating
+
+	if(R >= 28) //Tier 4 parts
+		upgraded = 1
+	else
+		upgraded = 0
+	update_chem_list()
+
+/obj/machinery/chem_dispenser/proc/update_chem_list()
+	if(!upgraded)
+		dispensable_reagents = list(HYDROGEN,LITHIUM,CARBON,NITROGEN,OXYGEN,FLUORINE,SODIUM,ALUMINUM,SILICON,PHOSPHORUS,SULFUR,
+									CHLORINE,POTASSIUM,IRON,COPPER,MERCURY,RADIUM,WATER,ETHANOL,SUGAR,SACID,TUNGSTEN)
+	else
+		dispensable_reagents = list(HYDROGEN,LITHIUM,CARBON,NITROGEN,OXYGEN,FLUORINE,SODIUM,ALUMINUM,SILICON,PHOSPHORUS,SULFUR,
+									CHLORINE,POTASSIUM,IRON,COPPER,MERCURY,RADIUM,WATER,ETHANOL,SUGAR,SACID,TUNGSTEN,
+									INAPROVALINE,DEXALIN,ANTI_TOXIN)
+	dispensable_reagents = sortList(dispensable_reagents)
 
 /obj/machinery/chem_dispenser/proc/recharge()
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
@@ -454,6 +471,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
+/obj/machinery/chem_dispenser/brewer/update_chem_list()
+	return
+
 /obj/machinery/chem_dispenser/brewer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it! It looks like \he's trying to commit suicide.</span>")
 	playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
@@ -487,6 +507,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		/obj/item/weapon/stock_parts/console_screen
 	)
 	RefreshParts()
+
+/obj/machinery/chem_dispenser/soda_dispenser/update_chem_list()
+	return
 
 /obj/machinery/chem_dispenser/soda_dispenser/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it! It looks like \he's trying to commit suicide.</span>")
@@ -547,6 +570,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
+/obj/machinery/chem_dispenser/booze_dispenser/update_chem_list()
+	if(!upgraded)
+		dispensable_reagents = list(BEER,WHISKEY,TEQUILA,VODKA,VERMOUTH,RUM,COGNAC,WINE,SAKE,TRIPLESEC,BITTERS,CINNAMONWHISKY,SCHNAPPS,
+									BLUECURACAO,KAHLUA,ALE,ICE = T0C,WATER,GIN,SODAWATER,COLA,CREAM,TOMATOJUICE,ORANGEJUICE,LIMEJUICE,TONIC)
+	else
+		dispensable_reagents = list(BEER,WHISKEY,TEQUILA,VODKA,VERMOUTH,RUM,COGNAC,WINE,SAKE,TRIPLESEC,BITTERS,CINNAMONWHISKY,SCHNAPPS,
+									BLUECURACAO,KAHLUA,ALE,ICE = T0C,WATER,GIN,SODAWATER,COLA,CREAM,TOMATOJUICE,ORANGEJUICE,LIMEJUICE,TONIC,
+									KARMOTRINE)
+
+
 /obj/machinery/chem_dispenser/booze_dispenser/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and drowning his sorrows! It looks like \he's trying to commit suicide.</span>")
 	playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
@@ -577,6 +610,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		SPRINKLES
 		)
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
+
+/obj/machinery/chem_dispenser/condiment/update_chem_list()
+	return
 
 /obj/machinery/chem_dispenser/condiment/can_insert(obj/item/I)
 	return istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/reagent_containers/food/condiment)

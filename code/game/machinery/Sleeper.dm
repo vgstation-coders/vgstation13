@@ -68,15 +68,18 @@
 	else
 		works_in_crit = FALSE
 	switch(T)
-		if(0 to 5)
+		if(0 to 5) // Tier 1
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", KELOTANE = "Kelotane", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
 			sleeptime = 6 SECONDS
-		if(6 to 8)
+		if(6 to 8) // Tier 2
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine")
 			sleeptime = 4 SECONDS
-		else
+		if(9 to 11) // Tier 3
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
 			sleeptime = 2 SECONDS
+		if(12 to INFINITY) // Tier 4
+			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol", DOCTORSDELIGHT = "Doctor's Delight", PERIDAXON = "Peridaxon")
+			sleeptime = 0.1 SECONDS
 
 /obj/machinery/sleeper/emag_act(mob/user)
 	if(!emagged)
