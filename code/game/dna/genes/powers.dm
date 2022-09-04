@@ -166,7 +166,7 @@
 			to_chat(T,"<span class='notice'>You hear a voice inside your head:</span><span class='bold'> \"[message]\"</span>")
 		if(all_switch)
 			all_switch = FALSE
-			to_chat(user,"<span class='notice'>Projected to <b>[english_list(targets)]</b>:</span><span class='bold'>\"[message]\"</span>")
+			to_chat(user,"<span class='notice'>Projected to <b>[english_list(targets)]</b>:</span><span class='bold'> \"[message]\"</span>")
 			for(var/mob/dead/observer/G in dead_mob_list)
 				G.show_message("<i>Telepathy, <b>[user]</b> to [english_list(targets)]</b>:<b> \"[message]\"</b></i>")
 			log_admin("[key_name(user)] projects his mind towards to [english_list(targets)]: [message]")
