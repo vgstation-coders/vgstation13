@@ -7,7 +7,7 @@
 	hud_state = "wardrobe_main"
 	charge_max = 300 SECONDS
 	cooldown_min = 150 SECONDS
-	spell_flags = NEEDSCLOTHES | Z2NOCAST
+	spell_flags = NEEDSCLOTHES
 	invocation_type = SpI_SHOUT
 	invocation = "NAR'NI'AH"
 	summon_type = list(/obj/structure/closet/magical_wardrobe)
