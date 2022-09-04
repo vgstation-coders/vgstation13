@@ -45,6 +45,9 @@
 		TUNGSTEN
 		)
 	var/upgraded = 0
+	var/list/upgrade_chems = list(
+		PLASMA
+		)
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 /*
 USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
@@ -100,14 +103,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	update_chem_list()
 
 /obj/machinery/chem_dispenser/proc/update_chem_list()
-	if(!upgraded)
-		dispensable_reagents = list(HYDROGEN,LITHIUM,CARBON,NITROGEN,OXYGEN,FLUORINE,SODIUM,ALUMINUM,SILICON,PHOSPHORUS,SULFUR,
-									CHLORINE,POTASSIUM,IRON,COPPER,MERCURY,RADIUM,WATER,ETHANOL,SUGAR,SACID,TUNGSTEN)
-	else
-		dispensable_reagents = list(HYDROGEN,LITHIUM,CARBON,NITROGEN,OXYGEN,FLUORINE,SODIUM,ALUMINUM,SILICON,PHOSPHORUS,SULFUR,
-									CHLORINE,POTASSIUM,IRON,COPPER,MERCURY,RADIUM,WATER,ETHANOL,SUGAR,SACID,TUNGSTEN,
-									INAPROVALINE,DEXALIN,ANTI_TOXIN)
-	dispensable_reagents = sortList(dispensable_reagents)
+	dispensable_reagents.Remove(upgrade_chems) //Reset the list
+	if(upgraded)
+		dispensable_reagents.Add(upgrade_chems)
 
 /obj/machinery/chem_dispenser/proc/recharge()
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
