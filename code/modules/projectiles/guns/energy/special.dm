@@ -261,13 +261,17 @@
 	if(ishuman(target))
 		success = TRUE
 		var/mob/living/carbon/human/H = target
-		if(raisetype)
-			H.dropBorers()
-			var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
-			H.gib()
-			spooky.faction = "\ref[user]"
+		if(H.stat)
+			if(raisetype)
+				H.dropBorers()
+				var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
+				H.gib()
+				spooky.faction = "\ref[user]"
+			else
+				H.zombify(user)
 		else
-			H.zombify(user)
+			success = FALSE
+			
 	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/))
 		success = TRUE
 		var/mob/living/simple_animal/S = target
