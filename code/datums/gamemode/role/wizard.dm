@@ -77,7 +77,7 @@
 
 /datum/role/wizard/process()
 	..()
-	if(!istype(get_area(antag.current), /area/wizard_station))
+	if(!left_den && !istype(get_area(antag.current), /area/wizard_station))
 		left_den = 1
 
 /datum/role/wizard/GetScoreboard()
