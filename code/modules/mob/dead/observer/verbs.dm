@@ -244,13 +244,16 @@
 /mob/dead/observer/verb/toggle_darkness()
 	set name = "Toggle Darkness"
 	set category = "Ghost"
-
-	if (see_invisible == SEE_INVISIBLE_OBSERVER_NOLIGHTING)
-		see_invisible = SEE_INVISIBLE_OBSERVER
-		dark_plane.alphas -= "toggle_darkness"
-	else
-		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
-		dark_plane.alphas["toggle_darkness"] = 255
+	switch(dark_plane.alphas["toggle_darkness"])
+		if(255)
+			see_invisible = SEE_INVISIBLE_OBSERVER
+			dark_plane.alphas["toggle_darkness"] = 180
+		if(180)
+			see_invisible = SEE_INVISIBLE_OBSERVER
+			dark_plane.alphas -= "toggle_darkness"
+		else
+			see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+			dark_plane.alphas["toggle_darkness"] = 255
 	check_dark_vision()
 
 /mob/dead/observer/verb/analyze_air()
