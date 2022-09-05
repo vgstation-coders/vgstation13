@@ -275,11 +275,23 @@
 	overdark_target = new
 	overdark_target.render_source = "night vision goggles (\ref[src])"
 
-/mob/living/simple_animal/hostile/giant_spider/Login()
+/mob/living/simple_animal/hostile/grue/Login()
 	..()
 	//client.images += light_source_images
 	client.screen |= overdark_planemaster
 	client.screen |= overdark_target
+
+/mob/living/simple_animal/hostile/grue/UnarmedAttack(atom/A)
+	if(isturf(A))
+		var/turf/T = A
+		for(var/atom/B in T)
+			if(istype(B, /obj/machinery/light))
+				var/obj/machinery/light/L = B
+				if(!L.current_bulb || L.current_bulb.status == LIGHT_BROKEN)
+					continue
+				UnarmedAttack(B)
+	..()
+
 
 /mob/living/simple_animal/hostile/grue/proc/get_ddl(var/turf/thisturf) //get the dark_dim_light status of a given turf
 	var/thisturf_brightness=10*thisturf.get_lumcount()

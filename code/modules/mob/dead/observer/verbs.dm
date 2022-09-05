@@ -244,6 +244,7 @@
 /mob/dead/observer/verb/toggle_darkness()
 	set name = "Toggle Darkness"
 	set category = "Ghost"
+
 	switch(dark_plane.alphas["toggle_darkness"])
 		if(255)
 			see_invisible = SEE_INVISIBLE_OBSERVER

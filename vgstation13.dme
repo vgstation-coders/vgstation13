@@ -2713,6 +2713,7 @@
 #include "code\modules\spells\targeted\parrotmorph.dm"
 #include "code\modules\spells\targeted\prestidigitation.dm"
 #include "code\modules\spells\targeted\pumpkinhead.dm"
+#include "code\modules\spells\targeted\punch.dm"
 #include "code\modules\spells\targeted\push.dm"
 #include "code\modules\spells\targeted\recall.dm"
 #include "code\modules\spells\targeted\retard.dm"

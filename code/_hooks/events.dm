@@ -154,7 +154,7 @@
 // Currently only implemented for humans.
 // Arguments:
 // atom/movable/bumper: the atom that is bumping.
-// atom/target: the atom that's being bumped into.
+// atom/bumped: the atom that's being bumped into.
 /event/to_bump
 
 // Called by hitby
