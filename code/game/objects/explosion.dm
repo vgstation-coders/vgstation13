@@ -28,7 +28,7 @@
 
 var/explosion_shake_message_cooldown = 0
 
-/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist)
+/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist = list())
 	var/explosion_time = world.time
 
 	spawn()
