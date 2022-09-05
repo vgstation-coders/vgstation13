@@ -206,13 +206,9 @@ var/stacking_limit = 90
 	message_admins("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 	log_admin("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 
-	var/rst_pop = 0
-	for(var/mob/living/player in player_list)
-		if(player.mind)
-			rst_pop++
-	if (rst_pop >= high_pop_limit)
-		message_admins("DYNAMIC MODE: Mode: High Population Override is in effect! ([rst_pop]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
-		log_admin("DYNAMIC MODE: High Population Override is in effect! ([rst_pop]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
+	if (roundstart_pop_ready >= high_pop_limit)
+		message_admins("DYNAMIC MODE: Mode: High Population Override is in effect! ([roundstart_pop_ready]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
+		log_admin("DYNAMIC MODE: High Population Override is in effect! ([roundstart_pop_ready]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
 	dynamic_stats = new
 	dynamic_stats.starting_threat_level = threat_level
 
@@ -255,13 +251,13 @@ var/stacking_limit = 90
 		var/datum/dynamic_ruleset/midround/DR = rule
 		if (initial(DR.weight))
 			midround_rules += new rule()
-	for(var/mob/living/player in player_list)
-		if(player.mind)
+	for(var/mob/new_player/player in player_list)
+		if(player.mind && player.ready)
 			roundstart_pop_ready++
 			candidates.Add(player)
-	message_admins("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [candidates.len] players ready.")
-	log_admin("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [candidates.len] players ready.")
-	if (candidates.len <= 0)
+	message_admins("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
+	log_admin("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
+	if (roundstart_pop_ready <= 0)
 		message_admins("DYNAMIC MODE: Not a single player readied-up. The round will begin without any roles assigned.")
 		log_admin("DYNAMIC MODE: Not a single player readied-up. The round will begin without any roles assigned.")
 		return 1
@@ -277,7 +273,7 @@ var/stacking_limit = 90
 	var/starting_rulesets = ""
 	for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
 		starting_rulesets += "[DR.name], "
-	dynamic_stats.round_start_pop = candidates.len
+	dynamic_stats.round_start_pop = roundstart_pop_ready
 	dynamic_stats.round_start_rulesets = starting_rulesets
 	dynamic_stats.measure_threat(threat)
 	candidates.Cut()
@@ -339,11 +335,7 @@ var/stacking_limit = 90
 	if (classic_secret) // Classic secret experience : one & only one roundstart ruleset
 		extra_rulesets_amount = 0
 	else
-		var/rst_pop = 0
-		for(var/mob/living/player in player_list)
-			if(player.mind)
-				rst_pop++
-		if (rst_pop > high_pop_limit)
+		if (roundstart_pop_ready > high_pop_limit)
 			if (threat_level > 50)
 				extra_rulesets_amount++
 				if (threat_level > 75)
