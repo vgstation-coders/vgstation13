@@ -270,9 +270,14 @@
 
 
 /obj/item/weapon/spellbook/proc/refund(mob/user)
-	if(!istype(get_area(user), /area/wizard_station))
+	var/datum/role/wizard/W = iswizard(user)
+	if(istype(W) && W.left_den)
 		to_chat(user, "<span class='notice'>No refunds once you leave your den.</span>")
 		return
+	else
+		to_chat(user, "<span class='warning'>You are not properly trained by the Wizard Federation to forget spells!</span>")
+		return
+
 
 	for(var/spell/S in user.spell_list)
 		if(S.refund_price <= 0)
@@ -284,7 +289,6 @@
 		uses += S.refund_price
 
 		//stat collection: spellbook purchases
-		var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
 		if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
 			var/datum/stat/role/wizard/WD = W.stat_datum
 			WD.spellbook_purchases.Add("REFUND-" + S.name)

@@ -13,6 +13,7 @@
 
 	var/list/artifacts_bought = list()
 	var/list/potions_bought = list()
+	var/left_den = 0
 
 /datum/role/wizard/ForgeObjectives()
 	if(!antag.current.client.prefs.antag_objectives)
@@ -73,6 +74,11 @@
 	for (var/spell/S in old_character.spell_list)
 		if (S.user_type == USER_TYPE_WIZARD && !(S.spell_flags & LOSE_IN_TRANSFER))
 			new_character.add_spell(S)
+
+/datum/role/wizard/process()
+	..()
+	if(!istype(get_area(antag.current), /area/wizard_station))
+		left_den = 1
 
 /datum/role/wizard/GetScoreboard()
 	. = ..()
