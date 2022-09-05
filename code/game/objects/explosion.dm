@@ -28,7 +28,7 @@
 
 var/explosion_shake_message_cooldown = 0
 
-/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist = list())
+/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist)
 	var/explosion_time = world.time
 
 	spawn()
@@ -135,7 +135,7 @@ var/explosion_shake_message_cooldown = 0
 	else
 		epicenter.turf_animation('icons/effects/96x96.dmi',"explosion_small",-WORLD_ICON_SIZE, -WORLD_ICON_SIZE, 13)
 
-/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit, var/list/whitelist = list())
+/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit, var/list/whitelist)
 	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
 
 	var/x0 = offcenter.x
@@ -146,7 +146,7 @@ var/explosion_shake_message_cooldown = 0
 	var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs)
 
 	for(var/turf/T in affected_turfs)
-		if(whitelist.len && (T in whitelist))
+		if(whitelist && (T in whitelist))
 			continue
 		var/dist = cheap_pythag(T.x - x0, T.y - y0)
 		var/_dist = dist
@@ -170,7 +170,7 @@ var/explosion_shake_message_cooldown = 0
 			continue
 
 		for(var/atom/movable/A in T)
-			if(whitelist.len && (A in whitelist))
+			if(whitelist && (A in whitelist))
 				continue
 			if(T != offcenter && !A.anchored && A.last_explosion_push != explosion_time)
 				A.last_explosion_push = explosion_time
