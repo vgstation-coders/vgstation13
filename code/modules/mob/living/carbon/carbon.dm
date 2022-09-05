@@ -23,7 +23,6 @@
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
 		C.handle_symptom_on_touch(src, AM, BUMP)
-	INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
 
 /mob/living/carbon/Bumped(var/atom/movable/AM)
 	..()
@@ -688,7 +687,7 @@
 		spawn(time)
 			make_visible(source_define)
 
-/mob/living/carbon/make_visible(var/source_define)	
+/mob/living/carbon/make_visible(var/source_define)
 	if(!source_define)
 		return
 	if(src && body_alphas[source_define])
