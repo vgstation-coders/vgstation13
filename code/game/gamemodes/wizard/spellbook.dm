@@ -275,7 +275,7 @@
 		if(W.left_den)
 			to_chat(user, "<span class='notice'>No refunds once you leave your den.</span>")
 			return
-	else if(!W)
+	else
 		to_chat(user, "<span class='warning'>You are not properly trained by the Wizard Federation to forget spells!</span>")
 		return
 
