@@ -14,40 +14,6 @@
 	flags = FPRINT  | OPENCONTAINER
 	layer = ABOVE_OBJ_LAYER
 	var/opaque = FALSE //when true no reagent filling overlay is applied to the icon.
-	//This is absolutely terrible
-	// TODO To remove this, return 1 on every attackby() that handles reagent_containers.
-	var/list/can_be_placed_into = list(
-		/obj/machinery/chem_master/,
-		/obj/machinery/chem_dispenser/,
-		/obj/machinery/reagentgrinder,
-		/obj/structure/table,
-		/obj/structure/closet,
-		/obj/structure/sink,
-		/obj/structure/centrifuge,
-		/obj/item/weapon/storage,
-		/obj/item/tool/solder,
-		/obj/machinery/atmospherics/unary/cryo_cell,
-		/obj/machinery/dna_scannernew,
-		/obj/item/weapon/grenade/chem_grenade,
-		/obj/item/weapon/electrolyzer,
-		/obj/machinery/bot/medbot,
-		/obj/item/weapon/storage/secure/safe,
-		/obj/machinery/iv_drip,
-		/obj/machinery/disease2/incubator,
-		/obj/machinery/disease2/centrifuge,
-		/obj/machinery/disposal,
-		/obj/machinery/apiary,
-		/mob/living/simple_animal/cow,
-		/mob/living/simple_animal/hostile/retaliate/goat,
-		/mob/living/simple_animal/hostile/retaliate/polyp,
-		/obj/machinery/cooking/icemachine,
-		/obj/machinery/sleeper,
-		/obj/machinery/anomaly,
-		/obj/machinery/bunsen_burner,
-		/obj/item/weapon/sword/venom,
-		/obj/item/weapon/cylinder,
-		/obj/item/clothing/gloves/powerfist,
-		)
 
 /obj/item/weapon/reagent_containers/glass/get_rating()
 	return volume / 50
@@ -78,7 +44,7 @@
 	if (!adjacency_flag)
 		return
 
-	if (is_type_in_list(target, can_be_placed_into))
+	if (!splashable)
 		return
 
 	if(ishuman(target) || iscorgi(target)) //Splashing handled in attack now

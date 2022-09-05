@@ -234,6 +234,9 @@
 	var/gives_milk = TRUE
 	var/datum/reagents/udder = null
 
+/mob/living/simple_animal/hostile/retaliate/polyp/splashable()
+	return FALSE
+
 /mob/living/simple_animal/hostile/retaliate/polyp/New()
 	if(gives_milk)
 		udder = new(50)
@@ -468,6 +471,9 @@
 
 	var/gives_milk = TRUE
 	var/datum/reagents/udder = null
+
+/mob/living/simple_animal/hostile/retaliate/cattle_specimen/splashable()
+	return FALSE
 
 /mob/living/simple_animal/hostile/retaliate/cattle_specimen/New()
 	if(gives_milk)

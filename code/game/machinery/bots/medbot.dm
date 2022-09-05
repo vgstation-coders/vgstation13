@@ -64,6 +64,9 @@ var/list/firstaid_exceptions = list(
 	bot_type = MED_BOT
 	commanding_radio = /obj/item/radio/integrated/signal/bot/medbot
 
+/obj/machinery/bot/medbot/splashable()
+	return FALSE
+
 /obj/machinery/bot/medbot/mysterious
 	name = "Mysterious Medibot"
 	desc = "International Medibot of mystery."

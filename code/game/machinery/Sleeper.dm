@@ -39,6 +39,9 @@
 		/datum/malfhack_ability/oneuse/emag
 	)
 
+/obj/machinery/sleeper/splashable()
+	return FALSE
+
 /obj/machinery/sleeper/power_change()
 	..()
 	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)) && occupant)

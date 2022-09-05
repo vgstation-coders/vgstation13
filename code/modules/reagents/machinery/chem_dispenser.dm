@@ -331,6 +331,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			return FALSE
 	return FALSE
 
+/obj/machinery/chem_dispenser/splashable()
+	return FALSE
+
 /obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob, params) //to be worked on
 	if(..())
 		return 1

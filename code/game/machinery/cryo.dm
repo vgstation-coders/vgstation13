@@ -34,6 +34,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	light_power_on = 2
 	use_auto_lights = 1
 
+/obj/machinery/atmospherics/unary/cryo_cell/splashable()
+	return FALSE
+
 /obj/machinery/atmospherics/unary/cryo_cell/New()
 	. = ..()
 

@@ -126,6 +126,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		return TRUE
 	return FALSE
 
+/obj/machinery/chem_master/splashable()
+	return FALSE
+
 /obj/machinery/chem_master/attackby(var/obj/item/weapon/B as obj, var/mob/user as mob)
 	if(..())
 		return 1

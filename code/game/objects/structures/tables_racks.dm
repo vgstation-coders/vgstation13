@@ -25,6 +25,9 @@
 	var/flipped = 0
 	health = 100
 
+/obj/structure/table/splashable()
+	return FALSE
+
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in alldirs)
 		if(locate(/obj/structure/table, get_step(src, direction)))

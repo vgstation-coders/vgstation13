@@ -9,6 +9,9 @@
 	var/list/beakers = new/list()
 	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/)
 
+/obj/item/weapon/electrolyzer/splashable()
+	return FALSE
+
 /obj/item/weapon/electrolyzer/New()
 	. = ..()
 
