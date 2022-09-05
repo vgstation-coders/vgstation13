@@ -255,7 +255,6 @@
 	return 0
 
 /mob/proc/store_position()
-	//updates the players' origin_ vars so they retain their location when the round starts.
 	origin_x = x
 	origin_y = y
 	origin_z = z
