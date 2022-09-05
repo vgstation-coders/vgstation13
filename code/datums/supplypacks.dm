@@ -2239,7 +2239,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					)
 	cost = 200
 	containertype = /obj/structure/closet/crate/secure/scisec
-	containername = "gret slime extract crate"
+	containername = "grey slime extract crate"
 	access = list(access_science)
 	group = "Science"
 
