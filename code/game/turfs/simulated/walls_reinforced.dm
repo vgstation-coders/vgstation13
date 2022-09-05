@@ -317,6 +317,8 @@
 						"<span class='notice'>You mend \the [src]'s external support rods.</span>")
 				else
 					return
+	if(istype(W, /obj/item/tool/crowbar/red))
+		playsound(src, "crowbar_hit", 50, 1, -1)
 
 //This is where we perform actions that aren't deconstructing, constructing or thermiting the reinforced wall
 

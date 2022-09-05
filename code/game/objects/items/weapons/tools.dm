@@ -717,7 +717,7 @@
 		force = 1.0 // To compensate
 
 /obj/item/tool/crowbar/red/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for Half-Life 3!</span>")
 	playsound(get_turf(src), 'sound/medbot/Flatline_custom.ogg', 35)
 	return (SUICIDE_ACT_BRUTELOSS)
 
