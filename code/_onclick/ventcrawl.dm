@@ -141,6 +141,9 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 		to_chat(src, "<span class='notice'>You are too big to fit into the pipe.</span>")
 	return FALSE
 
+/mob/living/simple_animal/amogusflash/can_ventcrawl()
+	return TRUE
+
 /mob/living/var/ventcrawl_layer = PIPING_LAYER_DEFAULT
 
 /mob/living/proc/handle_ventcrawl(var/atom/clicked_on)
