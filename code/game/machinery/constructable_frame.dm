@@ -789,7 +789,7 @@ to destroy them and players will be able to make replacements.
 
 /obj/item/weapon/circuitboard/smartfridge
 	name = "Circuit Board (SmartFridge)"
-	desc = "A circuit board used to run a machine that will hold grown plants, seeds, meat, and eggs."
+	desc = "A circuit board used to run a machine that will hold grown condiments, drinks, plants, seeds, meats, and glasses."
 	build_path = /obj/machinery/smartfridge
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
@@ -808,7 +808,6 @@ to destroy them and players will be able to make replacements.
 		"Chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/chemistry,
 		"Slime extract smartfridge" = /obj/item/weapon/circuitboard/smartfridge/extract,
 		"Seed smartfridge" = /obj/item/weapon/circuitboard/smartfridge/seeds,
-		"Drinks smartfridge" = /obj/item/weapon/circuitboard/smartfridge/drinks,
 		"Refrigerated Blood Bank" = /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	)
 
@@ -846,11 +845,6 @@ to destroy them and players will be able to make replacements.
 	name = "Circuit Board (Megaseed Servitor)"
 	desc = "A circuit board used to run a machine that will hold seed packets."
 	build_path = /obj/machinery/smartfridge/seeds
-
-/obj/item/weapon/circuitboard/smartfridge/drinks
-	name = "Circuit Board (Drinks Showcase)"
-	desc = "A circuit board used to run a machine that will hold glasses, drinks and condiments."
-	build_path = /obj/machinery/smartfridge/drinks
 
 /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	name = "Circuit Board (Refrigerated Blood Bank)"
@@ -971,9 +965,6 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/capacitor = 1,
 							/obj/item/weapon/stock_parts/scanning_module = 2,
 							/obj/item/weapon/stock_parts/manipulator = 2)
-
-
-
 
 //Teleporter
 /obj/item/weapon/circuitboard/telehub
@@ -1610,4 +1601,15 @@ to destroy them and players will be able to make replacements.
 		/obj/item/weapon/stock_parts/manipulator = 1,
 		/obj/item/weapon/stock_parts/scanning_module = 1,
 		/obj/item/weapon/stock_parts/capacitor = 1,
-		)
+	)
+
+/obj/item/weapon/circuitboard/airshield
+	name = "Circuit Board (Airshield)"
+	desc = "A circuit board for a structural airshield."
+	board_type = MACHINE
+	build_path = /obj/machinery/airshield
+	origin_tech = Tc_ENGINEERING + "=6;"+ Tc_PROGRAMMING + "=4" + Tc_MATERIALS + "=3"
+	req_components = list(
+		/obj/item/weapon/stock_parts/manipulator = 3,
+		/obj/item/weapon/stock_parts/micro_laser = 1
+	)

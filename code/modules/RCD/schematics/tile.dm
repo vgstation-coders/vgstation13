@@ -317,6 +317,9 @@
 /datum/rcd_schematic/tile/chapel
 	name = "Chapel"
 
+/datum/rcd_schematic/tile/tatami
+	name = "Tatami"
+
 /datum/rcd_schematic/tile/ss13_logo
 	name = "SS13 logo"
 
@@ -607,6 +610,23 @@ var/global/list/paint_variants = list(
 	"Chapel" = list(
 		new /datum/paint_info(DIR_ALL,		"chapel"),
 		new /datum/paint_info(DIR_ONE,		"chapeldark")
+	),
+	
+	"Tatami" = list(
+		new /datum/paint_info(DIR_ORTHO,	"tatami-green-halfmat"),
+		new /datum/paint_info(DIR_ONE,		"tatami-green-1mat-hori"),
+		new /datum/paint_info(DIR_ONE,		"tatami-green-1mat-verti"),
+		new /datum/paint_info(DIR_ONE,		"tatami-green-2mat-hori"),
+		new /datum/paint_info(DIR_ONE,		"tatami-green-2mat-verti"),
+		new /datum/paint_info(DIR_ORTHO,	"tatami-green-3mat"),
+		new /datum/paint_info(DIR_ONE,		"tatami-green-spiral"),
+		new /datum/paint_info(DIR_ORTHO,	"tatami-yellow-halfmat"),
+		new /datum/paint_info(DIR_ONE,		"tatami-yellow-1mat-hori"),
+		new /datum/paint_info(DIR_ONE,		"tatami-yellow-1mat-verti"),
+		new /datum/paint_info(DIR_ONE,		"tatami-yellow-2mat-hori"),
+		new /datum/paint_info(DIR_ONE,		"tatami-yellow-2mat-verti"),
+		new /datum/paint_info(DIR_ORTHO,	"tatami-yellow-3mat"),
+		new /datum/paint_info(DIR_ONE,		"tatami-yellow-spiral"),
 	),
 
 	"SS13 logo" = list(

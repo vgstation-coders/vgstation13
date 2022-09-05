@@ -62,6 +62,7 @@
 	cost = 15
 	var/traitor_threshold = 4
 	var/additional_cost = 5
+	requirements = list(101,101,101,101,10,10,10,10,10,10)
 	high_population_requirement = 15
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
@@ -463,7 +464,7 @@ Assign your candidates in choose_candidates() instead.
 		if(spawnpos > synd_spawn.len)
 			spawnpos = 1
 		M.forceMove(synd_spawn[spawnpos])
-		if(!isjusthuman(M))
+		if(!ishuman(M))
 			M = M.Humanize("Human")
 		if(leader)
 			leader = 0
@@ -531,7 +532,7 @@ Assign your candidates in choose_candidates() instead.
 	return 1
 
 /datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/displaced)
-	var/mob/new_player/old_AI = new 
+	var/mob/new_player/old_AI = new
 	old_AI.ckey = displaced.ckey
 	old_AI.name = displaced.ckey
 	qdel(displaced)
@@ -553,14 +554,13 @@ Assign your candidates in choose_candidates() instead.
 		log_admin("([old_AI.ckey]) was displaced by a malf AI and sent back to lobby.")
 		message_admins("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
 		old_AI.ready = 0
-		return 
+		return
 
 	if(old_AI.mind.assigned_role=="AI" || old_AI.mind.assigned_role=="Cyborg" || old_AI.mind.assigned_role=="Mobile MMI")
 		old_AI.create_roundstart_silicon(old_AI.mind.assigned_role)
 	else
-		var/mob/living/carbon/human/new_character = old_AI.create_character(0)
-		new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
-		job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
+		var/mob/living/carbon/human/new_character = old_AI.create_human(old_AI.client.prefs)
+		job_master.PostJobSetup(new_character)
 		EquipCustomItems(new_character)
 	log_admin("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
 	message_admins("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")

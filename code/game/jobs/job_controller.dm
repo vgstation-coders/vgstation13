@@ -310,8 +310,9 @@ var/global/datum/controller/occupations/job_master
 	var/datum/job/officer = job_master.GetJob("Security Officer")
 	var/datum/job/warden = job_master.GetJob("Warden")
 	var/datum/job/hos = job_master.GetJob("Head of Security")
+	var/datum/job/detective = job_master.GetJob("Detective")
 	var/datum/job/master_assistant = GetJob("Assistant")
-	count = (officer.current_positions + warden.current_positions + hos.current_positions)
+	count = (officer.current_positions + warden.current_positions + hos.current_positions + detective.current_positions)
 
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
@@ -406,9 +407,11 @@ var/global/datum/controller/occupations/job_master
 	Debug("DO, AC1 end")
 	return TRUE
 
-/datum/controller/occupations/proc/EquipRank(var/mob/living/carbon/human/H, var/rank, var/joined_late = 0)
-	if(!H)
+/datum/controller/occupations/proc/PostJobSetup(var/mob/living/carbon/human/H)
+	if(!(H && H.mind && H.mind.assigned_role))
 		return 0
+	var/joined_late = ticker.current_state == GAME_STATE_PLAYING ? TRUE : FALSE
+	var/rank = H.mind.assigned_role
 	var/datum/job/job = GetJob(rank)
 	if(job && !job.no_starting_money)
 		//give them an account in the station database
@@ -459,11 +462,6 @@ var/global/datum/controller/occupations/job_master
 				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span class='darknotice'>[bank_pref]</span></span>")
 
 	var/alt_title = null
-
-	if(job)
-		job.equip(H, job.priority) // Outfit datum.
-	else
-		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
 
 	H.job = rank
 

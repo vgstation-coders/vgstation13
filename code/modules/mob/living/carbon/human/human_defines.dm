@@ -64,6 +64,7 @@
 
 	var/last_shush = 0 // disarm intent shushing cooldown
 	var/lastFart = 0 // Toxic fart cooldown.
+	var/lastDeathgasp = 0	// Deathgasp cooldown (only for clown trombones atm)
 	var/lastDab = 0 //Dab cooldown.
 	var/lastAnemia = 0 //Anemia rest cooldown
 	var/last_emote_sound = 0 // Prevent scream spam in some situations

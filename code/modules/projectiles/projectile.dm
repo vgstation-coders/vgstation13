@@ -851,7 +851,7 @@ var/list/impact_master = list()
 	if(ismob(A) || isturf(A) || isobj(A))
 		impact = get_hit_atom(A)
 
-/obj/item/projectile/acidable()
+/obj/item/projectile/dissolvable()
 	return 0
 
 /obj/item/projectile/proc/launch_at(var/atom/target,var/tar_zone = "chest",var/atom/curloc = get_turf(src),var/from = null,var/variance_angle = 0) // doot doot shitcode alert

@@ -133,14 +133,14 @@
 		spawn(40)
 			var/cap = 0
 			var/uncapped = result
-			if(result > MAX_EXPLOSION_RANGE && result != 20)
-				cap = 1
-				result = min(result, MAX_EXPLOSION_RANGE) //Apply the bombcap
-				if(result > 14)
-					sleep(20)
-			else if(result == 20) //Roll a nat 20, screw the bombcap
+			if(result > 19) //Roll a nat 20
 				result = 24
 				sleep(40)
+			else
+				cap = 1
+				if(result > 14)
+					sleep(20)
+
 			var/turf/epicenter = get_turf(src)
 			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, cap, whodunnit = user)
 			if(cap)

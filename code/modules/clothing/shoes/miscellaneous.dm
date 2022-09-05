@@ -304,7 +304,7 @@
 	canremove = 0
 	wizard_garb = 1
 
-/obj/item/clothing/shoes/clown_shoes/stickymagic/acidable()
+/obj/item/clothing/shoes/clown_shoes/stickymagic/dissolvable()
 	return 0
 
 /obj/item/clothing/shoes/clown_shoes/slippy

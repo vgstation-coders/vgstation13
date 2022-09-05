@@ -22,11 +22,13 @@
 	if(get_waterlevel() > WATERLEVEL_MAX/5 && get_nutrientlevel() > NUTRIENTLEVEL_MAX/5)
 		if(isnull(seed) && prob(5))
 			add_weedlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient)
+			update_icon_after_process = 1
 		else if(prob(2))
 			add_weedlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient)
+			update_icon_after_process = 1
 	// There's a chance for a weed explosion to happen if the weeds take over.
 	// Plants that are themselves weeds (weed_tolerance > 80) are unaffected.
-	if (get_weedlevel() == WEEDLEVEL_MAX && prob(10))
+	if (get_weedlevel() >= WEEDLEVEL_MAX && prob(10))
 		if(!seed || get_weedlevel() >= seed.weed_tolerance + 20)
 			weed_invasion()
 
@@ -40,7 +42,7 @@
 	// On each tick, there's a chance the pest population will increase.
 	// This process is under the !seed check because it only happens when a live plant is in the tray.
 	if(prob(1))
-		add_pestlevel(5 * HYDRO_SPEED_MULTIPLIER)
+		add_pestlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient / 2)
 
 	//Bees will attempt to aid the plant's longevity and make it fruit faster.
 	if(bees && age >= seed.maturation && prob(50))
@@ -303,7 +305,7 @@
 	if(get_pestlevel() > 0)
 		if(seed.voracious)
 			sum_health += HYDRO_SPEED_MULTIPLIER
-			add_pestlevel(-HYDRO_SPEED_MULTIPLIER)
+			add_pestlevel(-HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 		else if (get_pestlevel() > seed.pest_tolerance)
 			sum_health -= HYDRO_SPEED_MULTIPLIER
 			update_icon_after_process = 1
@@ -312,7 +314,7 @@
 	if(get_weedlevel() > 0)
 		if(seed.voracious)
 			sum_health += HYDRO_SPEED_MULTIPLIER
-			add_weedlevel(-HYDRO_SPEED_MULTIPLIER)
+			add_weedlevel(-HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 		else if (get_weedlevel() > seed.weed_tolerance)
 			sum_health -= HYDRO_SPEED_MULTIPLIER
 			update_icon_after_process = 1

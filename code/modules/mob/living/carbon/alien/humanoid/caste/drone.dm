@@ -22,6 +22,5 @@
 /mob/living/carbon/alien/humanoid/drone/add_spells_and_verbs()
 	..()
 	add_spell(new /spell/aoe_turf/conjure/choice/alienresin, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
-	add_spell(new /spell/alienacid, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+	add_spell(new /spell/corrosive_acid, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
 	add_spell(new /spell/aoe_turf/evolve/drone, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
-	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
