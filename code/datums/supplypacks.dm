@@ -267,11 +267,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "plastic sheets crate"
 	group = "Supplies"
 
-/datum/supply_packs/wood25
-	name = "25 wooden planks"
+/datum/supply_packs/wood50
+	name = "50 wooden planks"
 	contains = list(/obj/item/stack/sheet/wood)
-	amount = 25
-	cost = 12
+	amount = 50
+	cost = 20
 	containertype = /obj/structure/closet/crate/engi
 	containername = "wooden planks crate"
 	group = "Supplies"
