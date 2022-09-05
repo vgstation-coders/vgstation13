@@ -478,7 +478,7 @@ var/list/all_doors = list()
 // Flash denied and such.
 /obj/machinery/door/proc/denied()
 	if((Holiday == APRIL_FOOLS_DAY) && prob(10) || (prob(1) && prob(10))) // 1/1000 any time or 1/10 during April Fools to play the Half-Life "Access Denied" voiceover
-		playsound(loc, 'sound/machines/access_denied.ogg', 50, 1)
+		playsound(loc, 'sound/machines/access_denied.ogg', 50)
 	else
 		playsound(loc, 'sound/machines/denied.ogg', 50, 1)
 	if (density) //Why are we playing a denied animation on an OPEN DOOR
