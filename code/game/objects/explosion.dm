@@ -146,7 +146,7 @@ var/explosion_shake_message_cooldown = 0
 	var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs)
 
 	for(var/turf/T in affected_turfs)
-		if(whitelist.len)
+		if(whitelist)
 			if(T in whitelist)
 				continue
 		var/dist = cheap_pythag(T.x - x0, T.y - y0)
