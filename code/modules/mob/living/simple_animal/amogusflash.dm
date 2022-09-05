@@ -22,6 +22,8 @@
 	add_spell(new /spell/targeted/amogus_piercer)
 	add_spell(new /spell/targeted/amogus_flasher)
 
+/mob/living/simple_animal/amogusflash/can_ventcrawl()
+	return TRUE
 
 /mob/living/simple_animal/amogusflash/verb/ventcrawl()
 	set name = "Crawl through Vent"
