@@ -268,6 +268,17 @@
 	init_language = default_language
 	lifestage_updates() //update the grue's sprite and stats according to the current lifestage
 
+/mob/living/simple_animal/hostile/grue/UnarmedAttack(atom/A)
+	if(isturf(A))
+		var/turf/T = A
+		for(var/atom/B in T)
+			if(istype(B, /obj/machinery/light))
+				var/obj/machinery/light/L = B
+				if(!L.current_bulb || L.current_bulb.status == LIGHT_BROKEN)
+					continue
+				UnarmedAttack(B)
+	..()
+
 /mob/living/simple_animal/hostile/grue/proc/get_ddl(var/turf/thisturf) //get the dark_dim_light status of a given turf
 	var/thisturf_brightness=10*thisturf.get_lumcount()
 	if(thisturf_brightness<=lightparams.bright_limit_gain)

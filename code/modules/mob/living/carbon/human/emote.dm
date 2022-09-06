@@ -144,10 +144,13 @@
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
 
-	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? 20 SECONDS : 40 SECONDS) && H.stat == CONSCIOUS)
-		message = "strains, and nothing happens."
-		emote_type = EMOTE_VISIBLE
-		return ..()
+	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? 20 SECONDS : 40 SECONDS))
+		if(H.stat != UNCONSCIOUS)
+			message = "strains, and nothing happens."
+			emote_type = EMOTE_VISIBLE
+			return ..()
+		else
+			return FALSE //Already farted
 
 	for(var/mob/living/M in view(0))
 		if(M != H && M.loc == H.loc)
@@ -202,12 +205,12 @@
 						M.reagents.add_reagent(SPACE_DRUGS,rand(1,50))
 
 	if(M_SUPER_FART in H.mutations)
-		var/is_unconscious = H.InCritical() //If you're in crit you do a stronger instant superfart at the cost of being gibbed.
+		var/is_unconscious = H.InCritical()
 		if(!is_unconscious)
 			playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
 			H.visible_message("<span class = 'warning'><b>[H]</b> hunches down and grits their teeth!</span>")
 		has_farted = TRUE
-		if(is_unconscious || do_after(H,H,30))
+		if(is_unconscious || do_after(H,H,30)) //If you're in crit you do a stronger instant superfart at the cost of being gibbed.
 			H.visible_message("<span class = 'warning'><b>[H]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>", blind_message = "<span class = 'warning'>You hear a [pick("tremendous","gigantic","colossal")] fart.</span>")
 			if(is_unconscious)
 				H.visible_message("<span class='warning'><b>[H]</b>Explodes in a shower of gore! Damn, what a madman!", "<span class='warning'>The super-fart made you explode!</span>")

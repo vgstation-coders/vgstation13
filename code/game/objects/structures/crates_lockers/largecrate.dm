@@ -56,6 +56,16 @@
 		new /mob/living/simple_animal/hostile/retaliate/goat(loc)
 	..()
 
+/obj/structure/largecrate/polyp
+	name = "polyp crate"
+	icon_state = "lisacrate"
+
+/obj/structure/largecrate/polyp/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iscrowbar(W))
+		new /mob/living/simple_animal/hostile/retaliate/polyp(loc)
+		new /obj/item/weapon/paper/mothership/spacepolyp_care(loc)
+	..()
+
 /obj/structure/largecrate/chick
 	name = "chicken crate"
 	icon_state = "lisacrate"

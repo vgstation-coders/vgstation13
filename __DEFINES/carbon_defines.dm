@@ -20,3 +20,7 @@
 #define COLD_GAS_DAMAGE_LEVEL_3 3 //Amount of damage applied when the current breath's temperature passes the 120K point
 
 #define BASE_CARBON_PAIN_RESIST 80 //Amount of arbitrary "pain" that a mob can take before they start going into shock (see: update_pain_level())
+
+#define CAN_REVIVE_NO 0 //cannot be revived.
+#define CAN_REVIVE_GHOSTING 1 //is observing but can otherwise be revived.
+#define CAN_REVIVE_IN_BODY 2 //can be revived AND is in body.

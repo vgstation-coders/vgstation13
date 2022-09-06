@@ -973,7 +973,7 @@
 	plant_dmi = 'icons/obj/hydroponics/plastellium.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plastellium)
 	mutants = null
-	chems = list(PLASTICIDE = list(3,12))
+	chems = list(PLASTICIDE = list(0,1))
 
 	lifespan = 15
 	maturation = 5

@@ -246,17 +246,22 @@
 	return
 
 /obj/item/weapon/cell/rad/process()
-	if(!maxcharge && prob(5)) //5% chance to explode every 2 seconds if the cell is broken
-		explosion(loc, 0, 1, 2, 2)
-		qdel(src)
+	if(!maxcharge) //Cell is broken, make it dangerous
+		if(prob(5)) //5% chance to explode every 2 seconds
+			explosion(loc, 0, 1, 2, 2)
+			qdel(src)
+		if(prob(25)) //25% chance to leak radiation every 2 seconds
+			for(var/mob/living/L in view(get_turf(src), 5))
+				L.apply_radiation(initial(charge_rate)/10, RAD_EXTERNAL)
+
 	if(maxcharge <= charge)
 		return 0
 	var/power_used = min(maxcharge-charge,charge_rate)
 	charge += power_used
-	if(prob(5))
-		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
-			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
-	if(charge_rate < (initial(charge_rate)/10))	//turns into a broken cell with no charge rate, 0 max charge and a 5% chance to explode every 2s
+//	if(prob(5))
+//		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
+//			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
+	if(charge_rate && charge_rate < (initial(charge_rate)/10))	//turns into a broken cell with no charge rate, 0 max charge, a 5% chance to explode every 2s and 25% chance to leak radiation equal to 1/10th of its charge rate
 		name = "broken cell"
 		icon_state = "cell"
 		starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30)
@@ -265,6 +270,14 @@
 		charge_rate = 0
 		damaged = FALSE //so you don't get the damaged examine if the cell is broken
 		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
+		for(var/mob/living/L in view(get_turf(src), 7)) //Oh, and irradiate everyone nearby in a bigger burst of radiation.
+			L.apply_radiation(initial(charge_rate)/5, RAD_EXTERNAL)
+		if(!isturf(loc))
+			loc.visible_message("<span class='warning'>\The [loc] starts sparking and sizzling, emitting a foul faint smoke!")
+		else
+			visible_message("<span class='warning'>\The [src] breaks and starts leaking radioactive material!</span>")
+		if(prob(25))
+			spark(get_turf(src), 1)
 
 
 /obj/item/weapon/cell/rad/emp_act(severity)
