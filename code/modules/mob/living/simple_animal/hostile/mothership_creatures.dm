@@ -397,7 +397,6 @@
 		speed = 10
 		return
 	if(my_wheel)
-		step_towards(src,my_wheel)
 		if(istype(my_wheel, /obj/structure/stacklifter))
 			var/obj/structure/stacklifter/S = my_wheel
 			S.attack_hand(src, 0, S.Adjacent(src))
@@ -410,6 +409,7 @@
 		else if(istype(my_wheel, /obj/machinery/power/treadmill) && my_wheel.loc == loc)
 			speed = 1
 			step(src,my_wheel.dir)
+		step_towards(src,my_wheel)
 	else
 		wander = TRUE
 		speed = 10
