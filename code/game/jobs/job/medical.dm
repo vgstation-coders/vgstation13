@@ -9,7 +9,7 @@
 	req_admin_notify = 1
 	access = list(access_medical, access_morgue, access_genetics, access_heads,
 			access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce,
-			access_keycard_auth, access_sec_doors, access_paramedic, access_eva)
+			access_keycard_auth, access_sec_doors, access_paramedic, access_eva, access_maint_tunnels)
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_heads,
 			access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce,
 			access_keycard_auth, access_sec_doors, access_paramedic)
