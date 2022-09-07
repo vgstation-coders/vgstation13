@@ -157,10 +157,9 @@
 
 	var/current_armor = C.armor
 	C.hidecount++
-	if(current_armor["laser"] < 30 || current_armor["energy"] < 30)
+	if(current_armor["laser"] < 30)
 		current_armor["laser"] = min(current_armor["laser"] + 5, 30)
-		current_armor["energy"] = min(current_armor["energy"] + 5, 30)
-		to_chat(user, "<span class='info'>You strengthen [target], improving its deflection of lasers and dissipation of energy.</span>")
+		to_chat(user, "<span class='info'>You strengthen [target], improving its dissipation of lasers.</span>")
 		qdel(src)
 	else
 		to_chat(user, "<span class='info'>You can't improve [C] any further.</span>")
