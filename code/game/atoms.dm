@@ -854,6 +854,12 @@ its easier to just keep the beam vertical.
 
 /atom/proc/update_icon()
 
+/atom/proc/splashable()
+	return TRUE
+
+/obj/item/weapon/storage/splashable() // I don't know where to put this, aaaaaaaaaaaaaa
+	return FALSE
+
 /atom/proc/dissolvable()
 	return 0
 

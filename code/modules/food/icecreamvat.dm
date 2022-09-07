@@ -17,6 +17,9 @@
 	var/soda
 	var/alcohol
 
+/obj/machinery/cooking/icemachine/splashable()
+	return FALSE
+
 /obj/machinery/cooking/icemachine/New()
 	create_reagents(500)
 	flags |= NOREACT

@@ -34,6 +34,9 @@
 
 	var/time_initialized_at = 0
 
+/obj/structure/closet/splashable()
+	return FALSE
+
 /obj/structure/closet/New()
 	..()
 	if (has_lock_type)

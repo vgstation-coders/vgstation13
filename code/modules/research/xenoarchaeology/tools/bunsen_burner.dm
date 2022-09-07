@@ -40,6 +40,9 @@
 				"unsafety" = 10))
 	ghost_read = 0
 
+/obj/machinery/bunsen_burner/splashable()
+	return FALSE
+
 /obj/machinery/bunsen_burner/New()
 	..()
 	processing_objects.Remove(src)

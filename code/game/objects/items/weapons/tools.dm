@@ -822,6 +822,9 @@
 	var/max_fuel = 20 	//The max amount of acid stored
 	toolsounds = list('sound/items/Welder.ogg')
 
+/obj/item/tool/solder/splashable()
+	return FALSE
+
 /obj/item/tool/solder/New()
 	. = ..()
 	create_reagents(max_fuel)

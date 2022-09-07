@@ -75,6 +75,9 @@
 	light_range_on = 3
 	light_power_on = 2
 
+/obj/machinery/dna_scannernew/splashable()
+	return FALSE
+
 /obj/machinery/dna_scannernew/New()
 	. = ..()
 

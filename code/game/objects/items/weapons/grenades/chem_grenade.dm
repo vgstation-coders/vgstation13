@@ -31,6 +31,9 @@
 	mech_flags = null
 	det_time =0 //recycling this variable to be used by the grenade launcher's timer override function since chemnades use their assembly's timer instead.
 
+/obj/item/weapon/grenade/chem_grenade/splashable()
+	return FALSE
+
 /obj/item/weapon/grenade/chem_grenade/attack_self(mob/user as mob)
 	if(!stage || stage==GRENADE_STAGE_ASSEMBLY_INSERTED)
 		if(detonator)

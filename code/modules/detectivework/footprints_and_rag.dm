@@ -19,7 +19,6 @@
 	amount_per_transfer_from_this = 5
 	possible_transfer_amounts = list(5)
 	volume = 5
-	can_be_placed_into = null
 	slot_flags = SLOT_MASK
 	body_parts_covered = MOUTH
 	goes_in_mouth = TRUE
