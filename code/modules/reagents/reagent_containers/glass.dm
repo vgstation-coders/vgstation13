@@ -44,7 +44,7 @@
 	if (!adjacency_flag)
 		return
 
-	if (target == !splashable())
+	if (!target.splashable())
 		return
 
 	if(ishuman(target) || iscorgi(target)) //Splashing handled in attack now
