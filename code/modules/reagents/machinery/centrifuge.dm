@@ -8,6 +8,9 @@
 	var/list/cans = new/list() //These are the empty containers.
 	var/obj/item/weapon/reagent_containers/beaker = null // This is the active container
 
+/obj/structure/centrifuge/splashable()
+	return FALSE
+
 /obj/structure/centrifuge/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It contains [cans.len] empty containers[beaker ? " and an active container!" : "."]</span>")

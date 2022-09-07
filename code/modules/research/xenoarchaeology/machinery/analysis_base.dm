@@ -18,6 +18,9 @@
 	// If it's zero we're not scanning.
 	var/scan_process = 0
 
+/obj/machinery/anomaly/splashable()
+	return FALSE
+
 /obj/machinery/anomaly/Destroy()
 	if (held_container)
 		held_container.forceMove(loc)

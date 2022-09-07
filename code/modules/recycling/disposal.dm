@@ -25,6 +25,9 @@
 	var/template_path = "disposalsbin.tmpl"
 	var/deconstructable = TRUE	//Set to FALSE for disposal machinery that can be used for transporting players or things, but not tinkered with by players.
 
+/obj/machinery/disposal/splashable()
+	return FALSE
+
 /obj/machinery/disposal/supports_holomap()
 	return TRUE
 
