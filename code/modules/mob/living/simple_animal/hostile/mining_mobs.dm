@@ -412,9 +412,9 @@
 
 	var/current_armor = C.armor
 	C.hidecount++
-	if(current_armor["bio"] < 100 || current_armor["rad"] < 100)
+	if(current_armor["bio"] < 100 || current_armor["rad"] < 50)
 		current_armor["bio"] = min(current_armor["bio"] + 10, 100)
-		current_armor["rad"] = min(current_armor["rad"] + 10, 100)
+		current_armor["rad"] = min(current_armor["rad"] + 10, 50)
 		to_chat(user, "<span class='info'>You strengthen [target], improving its resistance against biological and radiological attacks.</span>")
 		qdel(src)
 	else
