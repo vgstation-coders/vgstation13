@@ -2,24 +2,17 @@
 	item_state = "glasses"
 	species_fit = list(GREY_SHAPED)
 	var/on = TRUE
+
+	var/darkness_blend_mode = null
+	var/darkness_alpha = null
+	var/scanner_overlay_type = null
+	var/list/darkness_color_matrix = null
 	var/list/color_matrix = null
 
 /obj/item/clothing/glasses/scanner/attack_self()
 	toggle()
 
-/obj/item/clothing/glasses/scanner/proc/apply_color(mob/living/carbon/user)	//for altering the color of the wearer's vision while active
-	if(color_matrix)
-		if(user.client)
-			var/client/C = user.client
-			C.color =  color_matrix
-
-/obj/item/clothing/glasses/scanner/proc/remove_color(mob/living/carbon/user)
-	if(color_matrix)
-		if(user.client)
-			var/client/C = user.client
-			C.color = initial(C.color)
-
-/obj/item/clothing/glasses/scanner/equipped(M as mob, glasses)
+/obj/item/clothing/glasses/scanner/equipped(var/mob/M, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/O = M
 		if(O.glasses != src)
@@ -28,19 +21,17 @@
 		var/mob/living/carbon/human/H = M
 		if(H.glasses != src)
 			return
-	else
-		return
-	if(on)
-		if(iscarbon(M))
-			apply_color(M)
+	if(scanner_overlay_type && on)
+		M.overlay_fullscreen("scanner", scanner_overlay_type)
+	M.update_perception()
 	..()
 
 /obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
-		if(on)
-			if(iscarbon(user))
-				remove_color(user)
+		user.update_perception()
+	user.clear_fullscreen("scanner", 0)
 	..()
+
 
 /obj/item/clothing/glasses/scanner/update_icon()
 	icon_state = initial(icon_state)
@@ -64,34 +55,43 @@
 	else
 		enable(C)
 
+	C.update_perception()
+	C.handle_glasses_vision_updates(src)
 	update_icon()
 	C.update_inv_glasses()
 
 /obj/item/clothing/glasses/scanner/proc/enable(var/mob/C)
 	on = TRUE
 	to_chat(C, "You turn \the [src] on.")
-	if(iscarbon(loc))
-		if(istype(loc, /mob/living/carbon/monkey))
-			var/mob/living/carbon/monkey/M = C
-			if(M.glasses && (M.glasses == src))
-				apply_color(M)
-		else if(istype(loc, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = C
-			if(H.glasses && (H.glasses == src))
-				apply_color(H)
+	if(istype(C, /mob/living/carbon/monkey))
+		var/mob/living/carbon/monkey/O = C
+		if(O.glasses != src)
+			return
+	else if(istype(C, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = C
+		if(H.glasses != src)
+			return
+	if(scanner_overlay_type)
+		C.overlay_fullscreen("scanner", scanner_overlay_type)
+
 
 /obj/item/clothing/glasses/scanner/proc/disable(var/mob/C)
 	on = FALSE
 	to_chat(C, "You turn \the [src] off.")
-	if(iscarbon(loc))
-		if(istype(loc, /mob/living/carbon/monkey))
-			var/mob/living/carbon/monkey/M = C
-			if(M.glasses && (M.glasses == src))
-				remove_color(M)
-		else if(istype(loc, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = C
-			if(H.glasses && (H.glasses == src))
-				remove_color(H)
+	C.clear_fullscreen("scanner", 0)
+
+/obj/item/clothing/glasses/scanner/update_perception(var/mob/living/carbon/human/M)
+	if(!on)
+		return
+	if(color_matrix)
+		M.client.color = color_matrix
+	if(darkness_color_matrix)
+		M.client.darkness_planemaster.color = darkness_color_matrix
+	if(darkness_alpha)
+		M.client.darkness_planemaster.alpha = darkness_alpha
+	if(darkness_blend_mode)
+		M.client.darkness_planemaster.blend_mode = darkness_blend_mode
+
 
 /obj/item/clothing/glasses/scanner/night
 	name = "night vision goggles"
@@ -99,16 +99,26 @@
 	icon_state = "night"
 	item_state = "glasses"
 	origin_tech = Tc_MAGNETS + "=2"
-	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
-	see_in_dark = 8
+	see_in_dark = 9
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
-	color_matrix = list(0.8, 0, 0  ,\
-						0  , 1, 0  ,\
-						0  , 0, 0.8) //equivalent to #CCFFCC
-	my_dark_plane_alpha_override = "night_vision"
-	my_dark_plane_alpha_override_value = 255
+	scanner_overlay_type = /obj/abstract/screen/fullscreen/scanlines
+	color_matrix = list(
+		0.8,0,0,0,
+		0,1.2,0,0,
+		0,0,0.8,0,
+		-0.1,0,-0.1,0.66,
+		0,0,0,0)
+	darkness_color_matrix =  list(
+		1,0,0,0.3,
+		0,1,0,0.3,
+		0,0,1,0.3,
+		0,0,0,1,
+		0,0,0,1)
+	darkness_blend_mode = BLEND_ADD
+	darkness_alpha = 255
+	
 
 /obj/item/clothing/glasses/scanner/night/enable(var/mob/C)
 	see_invisible = initial(see_invisible)
@@ -121,6 +131,7 @@
 	see_invisible = 0
 	see_in_dark = 0
 	eyeprot = 0
+	
 
 var/list/meson_wearers = list()
 
@@ -136,9 +147,6 @@ var/list/meson_wearers = list()
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	glasses_fit = TRUE
 	var/mob/viewing
-
-	my_dark_plane_alpha_override = "mesons"
-	my_dark_plane_alpha_override_value = 255
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
 	var/area/A = get_area(src)

@@ -1380,6 +1380,9 @@
 		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 		if(E)
 			E.update_perception(src)
+		
+		if (istype(glasses))
+			glasses.update_perception(src)
 
 		for(var/ID in virus2)
 			var/datum/disease2/disease/D = virus2[ID]

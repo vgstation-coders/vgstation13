@@ -117,6 +117,10 @@
 	icon_state = "impairedoverlay"
 	layer = IMPAIRED_LAYER
 
+/obj/abstract/screen/fullscreen/scanlines
+	icon_state = "scanlines"
+	layer = IMPAIRED_LAYER
+
 /obj/abstract/screen/fullscreen/blurry
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"

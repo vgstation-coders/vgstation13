@@ -14,7 +14,10 @@
 	return
 
 /datum/organ/internal/eyes/proc/update_perception(var/mob/living/carbon/human/M)
-	return
+	M.client.darkness_planemaster.blend_mode = initial(M.client.darkness_planemaster.blend_mode)
+	M.client.darkness_planemaster.alpha = initial(M.client.darkness_planemaster.alpha)
+	M.client.darkness_planemaster.color = initial(M.client.darkness_planemaster.color)
+	M.client.color = initial(M.client.color)
 
 /datum/organ/internal/eyes/process() //Eye damage replaces the old eye_stat var.
 	if(is_broken())
