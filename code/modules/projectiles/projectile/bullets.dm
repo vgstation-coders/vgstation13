@@ -158,7 +158,7 @@
 
 /obj/item/projectile/bullet/auto380 //new sec pistol ammo, reverse name because lol compiler
 	damage = 15
-	agony = 1
+	agony = 25
 	penetration = 2
 
 /obj/item/projectile/bullet/auto380/practice
