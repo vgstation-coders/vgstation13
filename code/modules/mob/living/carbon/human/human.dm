@@ -318,7 +318,7 @@
 			R.annoy(src)
 	if(blood)
 		blood_splatter(loc,src,1)
-	if(lying && istype(AM, /mob/living/carbon/human))
+	if(prob(15) && lying && istype(AM, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = AM
 		if(H.m_intent == "run")
 			H.Knockdown(1)
