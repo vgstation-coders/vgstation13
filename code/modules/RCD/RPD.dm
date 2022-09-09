@@ -229,7 +229,6 @@
 		afterattack(get_turf(user), user) 	// Skip right to afterattack()
 		return TRUE
 
-
 /obj/item/device/rcd/rpd/proc/multilayer()
 	set category = "Object"
 	set name = "Multilayer Mode"
