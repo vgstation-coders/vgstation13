@@ -318,6 +318,11 @@
 			R.annoy(src)
 	if(blood)
 		blood_splatter(loc,src,1)
+	if(lying && istype(AM, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = AM
+		if(H.m_intent == "run")
+			H.Knockdown(1)
+		
 
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
