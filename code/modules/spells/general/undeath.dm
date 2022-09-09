@@ -1,6 +1,6 @@
 /spell/undeath
 	name = "Cheat Death"
-	desc = "Instantly return to un-life."
+	desc = "Return to un-life after a moderate delay."
 	abbreviation = "UD"
 
 	school = "vampire"

@@ -77,5 +77,5 @@
 	FG2 = master2
 	return 1
 
-/obj/machinery/containment_field/acidable()
+/obj/machinery/containment_field/dissolvable()
 	return 0

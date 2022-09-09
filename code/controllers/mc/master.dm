@@ -1,4 +1,4 @@
- /**
+/**
   * StonedMC
   *
   * Designed to properly split up a given tick among subsystems
@@ -125,14 +125,21 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 /datum/controller/master/proc/Setup()
 	set waitfor = FALSE
 	sleep(1 SECONDS)
-	to_chat(world, "<span class='boldannounce'>Initializing subsystems...</span>")
-
-	// Sort subsystems by init_order, so they initialize in the correct order.
-	sortTim(subsystems, /proc/cmp_subsystem_init)
-
-	var/time_to_init = world.timeofday
+	//moving this random bullshit into here, because it didn't belong in world/New()
+	generate_radio_frequencies()
+	SetupHooks() // /N3X15 project from 8 years ago (WIP). The jukebox seems to be the only thing using this
+	createDatacore()
+	createPaiController()
+	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
+	Holiday = Get_Holiday()
+	world.update_status()
+	
 	// Initialize subsystems.
+	// Sort subsystems by init_order, so they initialize in the correct order.
 	CURRENT_TICKLIMIT = TICK_LIMIT_MC_INIT_DEFAULT
+	sortTim(subsystems, /proc/cmp_subsystem_init)
+	var/time_to_init = world.timeofday
+	to_chat(world, "<span class='boldannounce'>Initializing subsystems...</span>")
 	for (var/datum/subsystem/SS in subsystems)
 		if (SS.flags & SS_NO_INIT)
 			continue

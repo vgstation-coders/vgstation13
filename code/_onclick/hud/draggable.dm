@@ -84,7 +84,7 @@
 				if(attachedobject.drag_use(attachedmob, T)) //cancel our continuous use
 					qdel(src)
 					break
-		sleep(world.tick_lag)
+		stoplag()
 
 /obj/abstract/screen/draggable/MouseDrag(over_object,src_location,turf/over_location,src_control,over_control,params)
 	if(istype(over_location) && attachedmob) //null when over black space

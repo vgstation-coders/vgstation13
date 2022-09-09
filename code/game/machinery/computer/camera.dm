@@ -33,6 +33,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	)
 
 /obj/machinery/computer/security/initialize()
+	..()
 	tv_monitors += src
 	// Map name has to start and end with an A-Z character,
 	// and definitely NOT with a square bracket or even a number.

@@ -439,8 +439,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/malf_win/announce()
 	alert = pick(static_list)
-	alert_title = Gibberish("ERROR: SYSTEM OVERRIDE", 90)
-	message = Gibberish("Warning: Device safeties disabled, decontamination procedure unlocked. Activate device to contain outbreak.", 90)
+	alert_title = "ERROR"
+	message = Gibberish("CRITICAL ERROR: STATION SUBROUTINES OVERRIDDEN. RECOMMEND IMMEDIATE EVACUATION. DEVICE SAFETIES DISABLED.", 100)
 	..()
 
 

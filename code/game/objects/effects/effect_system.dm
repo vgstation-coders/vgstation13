@@ -14,7 +14,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	w_type=NOT_RECYCLABLE
 	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE
 
-/obj/effect/acidable()
+/obj/effect/dissolvable()
 	return 0
 
 /obj/effect/water

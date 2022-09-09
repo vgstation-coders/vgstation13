@@ -145,6 +145,8 @@
 		return 0
 
 	antag = M
+	antag.key = M.current.client.ckey
+	antag.active = TRUE
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
 	objectives.owner = M
@@ -572,6 +574,13 @@
 		threat_level_inflated += amount
 	else
 		D.refund_midround_threat(amount)
+
+/datum/role/proc/decrement_threat(var/amount)
+	var/datum/gamemode/dynamic/D = ticker.mode
+	if(!istype(D))
+		return
+	D.spend_midround_threat(amount)
+	D.threat_log += "[worldtime2text()]: [name] has decreased the threat amount by [amount]."
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

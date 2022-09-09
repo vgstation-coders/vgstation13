@@ -23,7 +23,6 @@
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
 		C.handle_symptom_on_touch(src, AM, BUMP)
-	INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
 
 /mob/living/carbon/Bumped(var/atom/movable/AM)
 	..()
@@ -688,7 +687,7 @@
 		spawn(time)
 			make_visible(source_define)
 
-/mob/living/carbon/make_visible(var/source_define)	
+/mob/living/carbon/make_visible(var/source_define)
 	if(!source_define)
 		return
 	if(src && body_alphas[source_define])
@@ -729,3 +728,19 @@
 				return FALSE
 
 	return TRUE
+
+
+/mob/living/carbon/proc/check_can_revive() // doesn't check suicides
+	if (!isDead())
+		return CAN_REVIVE_NO
+	if (!mind)
+		return CAN_REVIVE_NO
+	if (client)
+		return CAN_REVIVE_IN_BODY
+	var/mob/dead/observer/ghost = mind_can_reenter(mind)
+	if (!ghost)
+		return CAN_REVIVE_NO
+	var/mob/ghostmob = ghost.get_top_transmogrification()
+	if (!ghostmob)
+		return CAN_REVIVE_NO
+	return CAN_REVIVE_GHOSTING

@@ -365,6 +365,8 @@ var/global/datum/controller/vote/vote = new()
 				question = "What should the next map be?"
 				if (config.toggle_maps)
 					maps = get_all_maps()
+				else if(IS_WEEKEND && getTimeslot() == PRIMETIME)
+					maps = get_all_maps()
 				else
 					maps = get_votable_maps()
 				for (var/map in maps)
