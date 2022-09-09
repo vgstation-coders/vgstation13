@@ -77,9 +77,9 @@
 			add_logs(user, src, "ineffectively attacked", admin=1, object=I, addition="weapon force: [power]")
 			return TRUE
 	var/damage = run_armor_absorb(target_zone, I.damtype, power)
-	visible_message("<span class='borange'>damage before: [damage]!</span>")
+	visible_message("<span class='borange'>Damage before: [damage]!</span>")
 	//if(user.ckey || src.ckey) for later
-	visible_message("<span class='borange'>[user.rps_curse]</span>")
+	visible_message("<span class='borange'>[user.rps_curse]</span>") //for debugging, delete later
 	visible_message("<span class='borange'>[src.rps_curse]</span>")
 	var/actual_damage_done
 	var/rps_percentage = 1
@@ -95,9 +95,9 @@
 		damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
 	user.rps_special = 0
 	src.rps_special = 0
-	visible_message("<span class='borange'>[user.rps_intent] attacker intent</span>")
+	visible_message("<span class='borange'>[user.rps_intent] attacker intent</span>") //for debugging, delete later
 	visible_message("<span class='borange'>[src.rps_intent] defender intent</span>")
-	visible_message("<span class='borange'>damage after: [damage]!</span>")
+	visible_message("<span class='borange'>Damage after: [damage]!</span>") //not this though, it's grown on me, even if it's a massive fourth wall break. Might delete if people are against it, but the entire idea of this combat revamp is extrodinarily hard to explain ic.
 	if(!did_rps)
 		actual_damage_done = apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
 		if(originator)

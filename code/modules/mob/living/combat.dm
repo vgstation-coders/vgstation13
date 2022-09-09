@@ -207,30 +207,28 @@
 			defender_wins = 1
 		attacker.HideUI("Rock Paper Scissors Cards")
 		defender.HideUI("Rock Paper Scissors Cards")
-		switch(attacker_wins > defender_wins)
-			if(1)
-				visible_message("<span class='borange'>[attacker] wins!</span>")
-				visible_message("<span class='borange'>[attacker_wins/defender_wins] percentage!</span>")
-				returner = attacker_wins/defender_wins
-
-				attacker.DisplayUI("RPS Winner Beg Cards")
-				defender.DisplayUI("RPS Loser Beg Cards")
-				sleep(30)
-				attacker.HideUI("RPS Winner Beg Cards")
-				defender.HideUI("RPS Loser Beg Cards")
-				winner_beg_stance = attacker.rps_mercy_or_more
-				loser_beg_stance = defender.rps_mercy_or_more
-			if(0)
-				visible_message("<span class='borange'>[defender] wins!</span>")
-				visible_message("<span class='borange'>[(defender_wins/attacker_wins) * -1] percentage!</span>")
-				returner = (defender_wins/attacker_wins) * -1
-				defender.DisplayUI("RPS Winner Beg Cards")
-				attacker.DisplayUI("RPS Loser Beg Cards")
-				sleep(30)
-				defender.HideUI("RPS Winner Beg Cards")
-				attacker.HideUI("RPS Loser Beg Cards")
-				winner_beg_stance = defender.rps_mercy_or_more
-				loser_beg_stance = attacker.rps_mercy_or_more
+		if(attacker_wins > defender_wins) //attacker wins
+			visible_message("<span class='borange'>[attacker] wins!</span>")
+			visible_message("<span class='borange'>[attacker_wins/defender_wins] percentage!</span>")
+			returner = attacker_wins/defender_wins
+			attacker.DisplayUI("RPS Winner Beg Cards")
+			defender.DisplayUI("RPS Loser Beg Cards")
+			sleep(30)
+			attacker.HideUI("RPS Winner Beg Cards")
+			defender.HideUI("RPS Loser Beg Cards")
+			winner_beg_stance = attacker.rps_mercy_or_more
+			loser_beg_stance = defender.rps_mercy_or_more
+		else							//defender wins
+			visible_message("<span class='borange'>[defender] wins!</span>")
+			visible_message("<span class='borange'>[(defender_wins/attacker_wins) * -1] percentage!</span>")
+			returner = (defender_wins/attacker_wins) * -1
+			defender.DisplayUI("RPS Winner Beg Cards")
+			attacker.DisplayUI("RPS Loser Beg Cards")
+			sleep(30)
+			defender.HideUI("RPS Winner Beg Cards")
+			attacker.HideUI("RPS Loser Beg Cards")
+			winner_beg_stance = defender.rps_mercy_or_more
+			loser_beg_stance = attacker.rps_mercy_or_more
 		if(winner_beg_stance == loser_beg_stance)//There must be a better way, but code optimization is for LATER
 			if(winner_beg_stance == "mercy")
 				attacker.rps_in_combat = 0
