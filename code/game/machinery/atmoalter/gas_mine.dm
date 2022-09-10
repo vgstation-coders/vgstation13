@@ -10,7 +10,8 @@
 	var/datum/powernet/PN
 	var/power_priority = POWER_PRIORITY_EXCESS
 	var/power_load = 0
-	var/on=1
+	var/on = TRUE
+	var/datum/power_connection/consumer/cable/power_connection = null
 
 	var/datum/gas_mixture/air_contents
 	var/datum/gas_mixture/pumping //used in transfering air around
@@ -23,6 +24,11 @@
 
 /obj/machinery/atmospherics/miner/New()
 	..()
+	power_connection = new(src)
+	power_connection.monitoring_enabled = TRUE
+	power_connection.idle_usage = idle_power_usage
+	power_connection.active_usage = power_load
+
 	pumping = new
 	air_contents = new
 	air_contents.volume = 1000
@@ -30,6 +36,18 @@
 	air_contents.temperature = T20C
 	update_powernet()
 	update_icon()
+
+/obj/machinery/atmospherics/miner/Destroy()
+	if(power_connection)
+		qdel(power_connection)
+		power_connection = null
+	if(pumping)
+		qdel(pumping)
+		pumping = null
+	if(air_contents)
+		qdel(air_contents)
+		air_contents = null
+	..()
 
 /obj/machinery/atmospherics/miner/proc/update_rate(var/internal_pressure)
 	//rate is in mols
@@ -54,7 +72,7 @@
 	if(stat & BROKEN)
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Broken.</span>")
 		return
-	to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Functional and operating.</span>")
+	to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Functional and operating at a rate of [Ceiling(0.5 * power_load)] kPa per cycle.</span>")
 
 /obj/machinery/atmospherics/miner/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
@@ -90,6 +108,8 @@
 		return
 
 	PN = area_apc.terminal.powernet
+	PN.add_connection(src)
+	return TRUE
 
 /obj/machinery/atmospherics/miner/attack_ghost(var/mob/user)
 	return
@@ -139,6 +159,7 @@
 	if(PN)
 		var/power_surplus = PN.get_satisfaction(power_priority)
 		use_power = MACHINE_POWER_USE_ACTIVE
+		update_rate(Ceiling(0.5 * power_load))		//scale mol output by arbitrary 50% power load
 		if(power_surplus > 0.55)
 			power_load += 1000
 		else if (power_surplus < 0.45 && power_load > 0)
@@ -148,7 +169,6 @@
 	else
 		power_load = 0
 	active_power_usage = power_load
-	update_rate(Ceiling(0.1 * power_load))		//scale mol output by arbitrary 10% power load
 	pumping.copy_from(air_contents)
 /*
 	//gas-related
