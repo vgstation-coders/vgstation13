@@ -55,7 +55,7 @@
 	icon_state = "r_wall-[d_state]"  //You can thank me later
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
-
+	user.delayNextAttack(W.attack_delay)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
@@ -348,7 +348,10 @@
 	//Finally, CHECKING FOR FALSE WALLS if it isn't damaged
 	//This is obsolete since reinforced false walls were commented out, but gotta slap the wall with my hand anyways !
 	else if(!d_state)
-		return attack_hand(user)
+		if(istype(W, /obj/item/tool/crowbar/red))
+			playsound(src, "crowbar_hit", 50, 1, -1)
+		else
+			return attack_hand(user)
 	return
 
 /turf/simulated/wall/r_wall/attack_construct(mob/user as mob)
