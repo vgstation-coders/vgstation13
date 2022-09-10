@@ -318,7 +318,6 @@
 
 ///////////////////////////////////////////////////////////////////GYM RAT///////////
 // Can run on a treadmill much like the trader's colossal hamster, but not quite as efficiently. Maybe in the future I can code a unique reaction to creatine or something
-#define GYMRAT_MOVEDELAY 1
 /mob/living/simple_animal/hostile/retaliate/gym_rat
 	name = "gym rat"
 	desc = "It's pretty swole."
@@ -357,6 +356,7 @@
 	var/health_cap = 45 // Feeding it protein can pack on a whopping 50% increase in max health. GAINZ
 	var/icon_eat = "gymrat-eat"
 	var/obj/my_wheel
+	var/list/gym_equipments = list(/obj/structure/stacklifter, /obj/structure/punching_bag, /obj/structure/weightlifter, /obj/machinery/power/treadmill)
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/Life() // Copied from hammy wheel running code
 	if(timestopped)
@@ -366,25 +366,42 @@
 		if(enemies.len && prob(10))
 			Calm()
 	if(!my_wheel && isturf(loc))
-		var/obj/machinery/power/treadmill/T = locate(/obj/machinery/power/treadmill) in loc
-		if(T)
-			wander = FALSE
-			my_wheel = T
-		else
-			wander = TRUE
-	if(my_wheel)
-		gymratwheel(20)
-
+		for(var/obj/O in view(2, src))
+			if(is_type_in_list(O, gym_equipments))
+				my_wheel = locate(O) in view(2, src)
+				wander = FALSE
+				gymratwheel(20)
+				break
+			else
+				wander = TRUE
+				speed = 10
+		
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/gymratwheel(var/repeat)
 	if(repeat < 1 || stat)
-		return
-	if(!my_wheel || my_wheel.loc != loc) //no longer share a tile with our wheel
 		wander = TRUE
 		my_wheel = null
+		speed = 10
 		return
-	step(src,my_wheel.dir)
-	delayNextMove(GYMRAT_MOVEDELAY)
-	sleep(GYMRAT_MOVEDELAY)
+	if(my_wheel)
+		if(istype(my_wheel, /obj/structure/stacklifter))
+			var/obj/structure/stacklifter/S = my_wheel
+			S.attack_hand(src, 0, S.Adjacent(src))
+		else if(istype(my_wheel, /obj/structure/punching_bag))
+			var/obj/structure/punching_bag/P = my_wheel
+			P.attack_hand(src, 0, P.Adjacent(src))
+		else if(istype(my_wheel, /obj/structure/weightlifter))
+			var/obj/structure/weightlifter/W = my_wheel
+			W.attack_hand(src, 0, W.Adjacent(src))
+		else if(istype(my_wheel, /obj/machinery/power/treadmill) && my_wheel.loc == loc)
+			speed = 1
+			step(src,my_wheel.dir)
+		step_towards(src,my_wheel)
+	else
+		wander = TRUE
+		speed = 10
+	
+	delayNextMove(speed)
+	sleep(speed)
 	gymratwheel(repeat-1)
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/Calm()
@@ -431,8 +448,6 @@
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/mothership // Mothership faction version, so it doesn't get attacked by the vault dwellers
 	faction = "mothership"
-
-#undef GYMRAT_MOVEDELAY
 
 ///////////////////////////////////////////////////////////////////CATTLE SPECIMEN///////////
 // A talking cow!
