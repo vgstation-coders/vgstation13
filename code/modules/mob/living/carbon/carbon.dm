@@ -214,7 +214,7 @@
 					num_injuries++
 
 			if(num_injuries == 0)
-				if(hallucinating())
+				if(hallucinating() || Holiday == APRIL_FOOLS_DAY)
 					to_chat(src, "<span class = 'orange'>My legs are OK.</span>")
 				else
 					to_chat(src, "My limbs are [pick("okay","OK")].")
