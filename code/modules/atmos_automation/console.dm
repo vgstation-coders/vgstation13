@@ -154,6 +154,8 @@
 /obj/machinery/computer/general_air_control/atmos_automation/Topic(href,href_list)
 	if(..())
 		return 1
+	if(secret_check_two(usr, href_list))
+		return 1
 	if(href_list["on"])
 		on = !on
 		updateUsrDialog()
