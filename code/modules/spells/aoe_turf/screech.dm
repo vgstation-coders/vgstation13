@@ -48,9 +48,9 @@
 /spell/aoe_turf/screech/cast(var/list/targets, var/mob/user)
 	for (var/T in targets)
 		var/mob/living/carbon/C = T
-		playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 		if(C.is_deaf())
 			continue
+		playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 		to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
 		C.Knockdown(8)
 		C.ear_deaf = 20
