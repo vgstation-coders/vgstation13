@@ -343,7 +343,6 @@
 	pass_flags = PASSTABLE
 	stop_automated_movement_when_pulled = TRUE
 
-	density = 0
 	min_oxy = 8 //Require atleast 8kPA oxygen
 	minbodytemp = 223		//Below -50 Degrees Celcius
 	maxbodytemp = 323	//Above 50 Degrees Celcius
@@ -358,6 +357,37 @@
 	var/obj/my_wheel
 	var/list/gym_equipments = list(/obj/structure/stacklifter, /obj/structure/punching_bag, /obj/structure/weightlifter, /obj/machinery/power/treadmill)
 
+	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks/cheesewedge, /obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel) // Gym rats are pickier than normal mice. Cheese and raw meat only
+
+/mob/living/simple_animal/hostile/retaliate/gym_rat/UnarmedAttack(var/atom/A)
+	if(is_type_in_list(A, edibles)) // If we click on something edible, it's time to chow down!
+		delayNextAttack(10)
+		chowdown(A)
+	if(is_type_in_list(A, gym_equipments)) // If we click on gym equipment, it's time to work out!
+		A.attack_hand(src, 0, A.Adjacent(src))
+	else return ..()
+
+/mob/living/simple_animal/hostile/retaliate/gym_rat/proc/chowdown(var/atom/eat_this)
+	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) //Mmm, cheese wedge. Gives back a small amount of health upon consumption
+		health+=5
+		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		flick(icon_eat, src)
+		qdel(eat_this)
+	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/meat)) //Protein! Gives back a smaller amount of health, but also packs on some extra max hp
+		health+=1
+		maxHealth+=1
+		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		flick(icon_eat, src)
+		qdel(eat_this)
+	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)) //A cheese wheel feast! Gives back a lot more health than just a slice
+		health+=25
+		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		flick(icon_eat, src)
+		qdel(eat_this)
+
 /mob/living/simple_animal/hostile/retaliate/gym_rat/Life() // Copied from hammy wheel running code
 	if(timestopped)
 		return 0
@@ -365,7 +395,7 @@
 	if(.)
 		if(enemies.len && prob(10))
 			Calm()
-	if(!my_wheel && isturf(loc))
+	if(!my_wheel && isturf(loc) && !client) // Gym rats with players in them won't be force moved
 		for(var/obj/O in view(2, src))
 			if(is_type_in_list(O, gym_equipments))
 				my_wheel = locate(O) in view(2, src)
@@ -374,8 +404,8 @@
 				break
 			else
 				wander = TRUE
-				speed = 10
-		
+				speed = 1
+
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/gymratwheel(var/repeat)
 	if(repeat < 1 || stat)
 		wander = TRUE
@@ -389,6 +419,7 @@
 		else if(istype(my_wheel, /obj/structure/punching_bag))
 			var/obj/structure/punching_bag/P = my_wheel
 			P.attack_hand(src, 0, P.Adjacent(src))
+			sleep(1 SECONDS) // Slows down the punching a little bit after a moment
 		else if(istype(my_wheel, /obj/structure/weightlifter))
 			var/obj/structure/weightlifter/W = my_wheel
 			W.attack_hand(src, 0, W.Adjacent(src))
@@ -398,8 +429,8 @@
 		step_towards(src,my_wheel)
 	else
 		wander = TRUE
-		speed = 10
-	
+		speed = 1
+
 	delayNextMove(speed)
 	sleep(speed)
 	gymratwheel(repeat-1)
@@ -441,6 +472,14 @@
 			..()
 	else
 		..()
+
+/mob/living/simple_animal/hostile/retaliate/gym_rat/verb/ventcrawl()
+	set name = "Crawl through Vent"
+	set desc = "Enter an air vent and crawl through the pipe system."
+	set category = "Object"
+	var/pipe = start_ventcrawl()
+	if(pipe)
+		handle_ventcrawl(pipe)
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/New() // speaks mouse
 	..()
