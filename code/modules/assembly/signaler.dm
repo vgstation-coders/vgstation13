@@ -63,7 +63,7 @@
 /obj/item/device/assembly/signaler/activate()
 	if(cooldown > 0)
 		return 0
-	cooldown = 0.5
+	cooldown = 1
 	spawn(10)
 		process_cooldown()
 
