@@ -48,6 +48,7 @@
 /spell/aoe_turf/screech/cast(var/list/targets, var/mob/user)
 	for (var/T in targets)
 		var/mob/living/carbon/C = T
+		playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 		if(C.is_deaf())
 			continue
 		to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
@@ -60,8 +61,6 @@
 		W.shatter()
 	for(var/obj/machinery/light/L in view(7))
 		L.broken()
-
-	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 
 	var/datum/role/vampire/V = isvampire(user)
 	if (V)
