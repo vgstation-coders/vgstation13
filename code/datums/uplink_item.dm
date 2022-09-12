@@ -326,7 +326,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/stealthy_tools/agent_card
 	name = "Agent ID Card"
-	desc = "A fully programmable ID card that can be modified without the help of an indentification computer, allowing one to craft a full identity on the fly. Starts with Assistant-level access but can accumulate more by scanning other ID cards. Modified ID chip blocks all AI tracking when equipped."
+	desc = "A fully programmable ID card that can be modified without the help of an indentification computer, allowing one to craft a full identity on the fly. Starts with Assistant-level access but can accumulate more by scanning other ID cards. It can directly scan people's ID slots, but certain high-quality cartridges may protect against it. Modified ID chip blocks all AI tracking when equipped."
 	item = /obj/item/weapon/card/id/syndicate
 	cost = 4
 
