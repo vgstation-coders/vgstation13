@@ -466,7 +466,7 @@ var/list/global/id_cards = list()
 			scanned_item = W
 	if(!id)
 		return
-	to_chat(user, "<span class='notice'>The [src]'s microscanners activate as you pass it over \the [scanned_item], copying its access[copy_appearance ? " and appearance" : ""].</span>")
+	to_chat(user, "<span class='notice'>\The [src]'s microscanners activate as you pass it over \the [scanned_item], copying its access[copy_appearance ? " and appearance" : ""].</span>")
 	access |= id.access
 	if(copy_appearance)
 		registered_name = id.registered_name
