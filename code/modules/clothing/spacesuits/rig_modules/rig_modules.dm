@@ -222,9 +222,9 @@
 
 /obj/item/rig_module/rad_shield/New()
 	..()
-	first_threshold = max_capacity/2
-	second_threshold = max_capacity/4
-	third_threshold = max_capacity/10
+	first_threshold = max_capacity * 0.5
+	second_threshold = max_capacity * 0.75
+	third_threshold = max_capacity * 0.9
 
 /obj/item/rig_module/rad_shield/examine_addition(mob/user)
 	var/current_status = round((current_capacity/max_capacity) * 100)
@@ -277,13 +277,13 @@
 		current_capacity += min(max_capacity, (rads * ((100 - initial_helmet) / 100)))
 	current_capacity += min(max_capacity, (rads * ((100 - initial_suit) / 100)))
 
-	if(current_capacity > third_threshold && threshold_announced < third_threshold)
+	if(current_capacity >= third_threshold && threshold_announced < third_threshold)
 		say_to_wearer("\The [src] is at 90% capacity. Take precaution.")
 		threshold_announced = third_threshold
-	if(current_capacity > second_threshold && threshold_announced < second_threshold)
+	if(current_capacity >= second_threshold && threshold_announced < second_threshold)
 		say_to_wearer("\The [src] is at 75% capacity.")
 		threshold_announced = second_threshold
-	if(current_capacity > first_threshold && threshold_announced < first_threshold)
+	if(current_capacity >= first_threshold && threshold_announced < first_threshold)
 		say_to_wearer("\The [src] is at 50% capacity.")
 		threshold_announced = first_threshold
 
