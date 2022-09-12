@@ -760,7 +760,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/prisoner_transfer
 	alert_title = "Prisoner Transfer"
-	message = "A suspected agent of the syndicate has been assigned to your station. The transport shuttle will dock at your station in approximately three minutes. Crew payrolls will recieve a bonus as long as the prisoner is alive."
+	message = "A suspected agent of the syndicate has been assigned to your station. The transport shuttle will dock at your station in approximately three minutes. Crew payrolls will receive a bonus as long as the prisoner is alive."
 
 /datum/command_alert/ancientpod
 	name = "Ancient Cryogenic Pod"
