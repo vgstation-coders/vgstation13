@@ -43,7 +43,7 @@
 		emitted_harvestable_radiation(get_turf(owner), radiation * 100, range = 3) //1 power = ~70W, are you ready for radiation engines?
 		for(var/mob/living/L in orange(1, owner)) //Everyone nearby except the user
 			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
-			L.apply_radiation(5, RAD_EXTERNAL)
+			L.apply_radiation(3 * radiation/10, RAD_EXTERNAL)
 
 /datum/dna/gene/disability/radioactive/OnDrawUnderlays(var/mob/M,var/g,var/fat)
 	return "rads[fat]_s"
