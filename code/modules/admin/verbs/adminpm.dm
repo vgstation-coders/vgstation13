@@ -62,7 +62,7 @@
 			adminhelp(msg)	//admin we are replying to left. adminhelp instead
 		return
 
-	/*if(C && C.last_pm_recieved + config.simultaneous_pm_warning_timeout > world.time && holder)
+	/*if(C && C.last_pm_received + config.simultaneous_pm_warning_timeout > world.time && holder)
 		//send a warning to admins, but have a delay popup for mods
 		if(holder.rights & R_ADMIN)
 			to_chat(src, "<span class='warning'><b>Simultaneous PMs warning:</b> that player has been PM'd in the last [config.simultaneous_pm_warning_timeout / 10] seconds by: [C.ckey_last_pm]</span>")
@@ -93,9 +93,9 @@
 		if(!msg)
 			return
 
-	var/recieve_color = "purple"
+	var/receive_color = "purple"
 	var/send_pm_type = " "
-	var/recieve_pm_type = "Player"
+	var/receive_pm_type = "Player"
 
 
 	if(holder)
@@ -103,31 +103,31 @@
 		//PMs sent from admins and mods display their rank
 		if(holder)
 			if( holder.rights & R_MOD )
-				recieve_color = "maroon"
+				receive_color = "maroon"
 			else
-				recieve_color = "red"
+				receive_color = "red"
 			if(holder.fakekey)
 				send_pm_type = "Admin "
-				recieve_pm_type = "Admin"
+				receive_pm_type = "Admin"
 			else
 				send_pm_type = holder.rank + " "
-				recieve_pm_type = holder.rank
+				receive_pm_type = holder.rank
 
 	else if(!C.holder)
 		to_chat(src, "<span class='red'>Error: Admin-PM: Non-admin to non-admin PM communication is forbidden.</span>")
 		return
 
-	var/recieve_message = ""
+	var/receive_message = ""
 
 	if(holder && !C.holder)
-		recieve_message = "<font color='[recieve_color]' size='4'><b>-- Administrator private message --</b></font>\n"
+		receive_message = "<font color='[receive_color]' size='4'><b>-- Administrator private message --</b></font>\n"
 
 		//AdminPM popup for ApocStation and anybody else who wants to use it. Set it with POPUP_ADMIN_PM in config.txt ~Carn
 		if(config.popup_admin_pm)
 			spawn(0)	//so we don't hold the caller proc up
 				var/sender = src
 				var/sendername = key
-				var/reply = input(C, msg,"[recieve_pm_type] PM from-[sendername]", "") as text|null		//show message and await a reply
+				var/reply = input(C, msg,"[receive_pm_type] PM from-[sendername]", "") as text|null		//show message and await a reply
 				if(C && reply)
 					if(sender)
 						C.cmd_admin_pm(sender,reply)										//sender is still about, let's reply to them
@@ -135,8 +135,8 @@
 						adminhelp(reply)													//sender has left, adminhelp instead
 				return
 
-	recieve_message = "<font color='[recieve_color]'>[recieve_pm_type] PM from-<b>[key_name(src, C, C.holder ? 1 : 0)]</b>: [msg]</font>"
-	C.output_to_special_tab(recieve_message, force_focus = TRUE)
+	receive_message = "<font color='[receive_color]'>[receive_pm_type] PM from-<b>[key_name(src, C, C.holder ? 1 : 0)]</b>: [msg]</font>"
+	C.output_to_special_tab(receive_message, force_focus = TRUE)
 
 	output_to_special_tab("<span class='notice'>[send_pm_type]PM to-<b>[key_name(C, src, holder ? 1 : 0)]</b>: [msg]</span>")
 
@@ -147,7 +147,7 @@
 	//Makes Dreamseeker flash on Windows, regardless of window flashing preference.
 	window_flash(C, 1)
 
-	//play the recieving admin the adminhelp sound (if they have them enabled)
+	//play the receiving admin the adminhelp sound (if they have them enabled)
 	//non-admins shouldn't be able to disable this
 	if(C.prefs.toggles & SOUND_ADMINHELP)
 		C << 'sound/effects/adminhelp.ogg'
@@ -166,7 +166,7 @@
 			to_chat(C, "<span class='red'>Reply PM from-<b>[key_name(src, C, 1)]</b>: [msg]</span>")
 			to_chat(src, "<span class='notice'>PM to-<b>Admins</b>: [msg]</span>")
 
-		//play the recieving admin the adminhelp sound (if they have them enabled)
+		//play the receiving admin the adminhelp sound (if they have them enabled)
 		if(C.prefs.toggles & SOUND_ADMINHELP)
 			C << 'sound/effects/adminhelp.ogg'
 
