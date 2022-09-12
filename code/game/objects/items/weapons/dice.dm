@@ -222,7 +222,7 @@
 									E.droplimb(1) //Catbeasts lose limbs
 
 				if(6 to 9)
-					to_chat(user, "<span class=sinister></B>You have rolled low and shall recieve a curse! It could be a lot worse however! </span></B>")
+					to_chat(user, "<span class=sinister></B>You have rolled low and shall receive a curse! It could be a lot worse however! </span></B>")
 					h.flash_eyes(visual = 1)
 					switch(pick(1,2,3,4))
 						if(1)
@@ -246,7 +246,7 @@
 												h.regenerate_icons()
 											to_chat(user, "<span class=danger><B>You have been turned into a disgusting lizard! </span></B>")
 										else
-											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a lizard can't get out of recieving a curse and so they lose their arms instead
+											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a lizard can't get out of receiving a curse and so they lose their arms instead
 												E.droplimb(1)
 									if(2)
 										if(h.species.name != "Skrell")
@@ -254,7 +254,7 @@
 												h.regenerate_icons()
 											to_chat(user, "<span class=danger><B>You have been turned into a disgusting squidman! </span></B>")
 										else
-											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a squid can't get out of recieving a curse and so they lose their arms instead
+											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a squid can't get out of receiving a curse and so they lose their arms instead
 												E.droplimb(1)
 									if(3)
 										if(h.species.name != "Vox")

@@ -333,7 +333,7 @@
 	return
 
 // Strike teams have 2 particularities : a leader, and several specialised roles.
-// Give the concrete (instancied) outfit datum the right "specialisation" after the player made his choice.
+// Give the concrete (instanced) outfit datum the right "specialisation" after the player made his choice.
 // Then, call "equip_special_items(player)" to give him the items associated.
 
 /datum/outfit/striketeam/
