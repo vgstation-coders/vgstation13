@@ -422,7 +422,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/syndicate/examine(mob/user)
 	..()
 	if(issyndicate(user))
-		to_chat("<span class='info'>As a syndicate agent you can tell a syndicate agent ID at a glance. You can toggle it with Alt-Click to copy every single detail about the IDs it scans, and you can use it directly on people to stealthily scan the IDs they wear.</span>")
+		to_chat("<span class='info'>As a syndicate agent you can tell a syndicate agent ID at a glance. You can toggle it with Alt-Click to copy every single detail about the IDs it scans, and you can use it directly on people to stealthily scan the IDs they wear. However, certain high-quality PDA cartridges protect against this effect.</span>")
 
 /obj/item/weapon/card/id/syndicate/AltClick()
 	if (can_use(usr)) // Checks that the this is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
@@ -462,6 +462,9 @@ var/list/global/id_cards = list()
 	else if(istype(I, /obj/item/device/pda))
 		var/obj/item/device/pda/P = I
 		if(P.id)
+			if(istype(P.cartridge, /obj/item/weapon/cartridge/captain))
+				to_chat(user, "<span class='warning'>\The [P]'s anti-scan cartridge feature blocks you from scanning it!</span>")
+				return
 			id = P.id
 			scanned_item = P
 	else if(istype(I, /obj/item/weapon/storage/wallet))
