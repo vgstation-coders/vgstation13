@@ -449,11 +449,13 @@ var/list/global/id_cards = list()
 	if(proximity_flag)
 		if(istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = target
+			. = 1
 			if(H.wear_id)
-				scan(H.wear_id, user)
-				. = 1
+				scan(H.wear_id, user, target)
+			else
+				to_chat(user, "<span class='warning'>\The [target] is not wearing an ID!</span>")
 
-/obj/item/weapon/card/id/syndicate/proc/scan(var/obj/item/I, mob/user)
+/obj/item/weapon/card/id/syndicate/proc/scan(var/obj/item/I, mob/user, atom/target)
 	var/obj/item/weapon/card/id/id = null
 	var/obj/item/scanned_item = null //Used for the chat message
 	if(istype(I, /obj/item/weapon/card/id))
@@ -472,19 +474,24 @@ var/list/global/id_cards = list()
 		if(W.front_id)
 			id = W.front_id
 			scanned_item = W
+	else if(istype(I, /obj/item/clothing/head/bearpelt/real/spare))
+		to_chat(user, "<span class='warning'>You cannot scan \the [I], it is a pelt!</span>")
+		return
 	if(!id)
 		return
-	to_chat(user, "<span class='notice'>\The [src]'s microscanners activate as you pass it over \the [scanned_item], copying its access[copy_appearance ? " and appearance" : ""].</span>")
-	access |= id.access
-	if(copy_appearance)
-		registered_name = id.registered_name
-		icon_state = id.icon_state
-		assignment = id.assignment
-		associated_account_number = id.associated_account_number
-		blood_type = id.blood_type
-		dna_hash = id.dna_hash
-		fingerprint_hash = id.fingerprint_hash
-		UpdateName()
+	to_chat(user, "<span class='notice'>You are now attempting to subtly hover \the [src] over \the [target]'s ID slot. This will take 5 seconds.</span>")
+	if(do_after(user, target, 5 SECONDS))
+		to_chat(user, "<span class='notice'>\The [src]'s microscanners activate as you pass it over \the [scanned_item], copying its access[copy_appearance ? " and appearance" : ""].</span>")
+		access |= id.access
+		if(copy_appearance)
+			registered_name = id.registered_name
+			icon_state = id.icon_state
+			assignment = id.assignment
+			associated_account_number = id.associated_account_number
+			blood_type = id.blood_type
+			dna_hash = id.dna_hash
+			fingerprint_hash = id.fingerprint_hash
+			UpdateName()
 
 /obj/item/weapon/card/id/syndicate/attack_self(mob/user as mob)
 	if(!src.registered_name)
