@@ -328,7 +328,7 @@ var/list/uplink_items = list()
 	name = "Agent ID Card"
 	desc = "A fully programmable ID card that can be modified without the help of an indentification computer, allowing one to craft a full identity on the fly. Starts with Assistant-level access but can accumulate more by scanning other ID cards. Modified ID chip blocks all AI tracking when equipped."
 	item = /obj/item/weapon/card/id/syndicate
-	cost = 2
+	cost = 4
 
 /datum/uplink_item/stealthy_tools/chameleon_jumpsuit
 	name = "Chameleon Jumpsuit"

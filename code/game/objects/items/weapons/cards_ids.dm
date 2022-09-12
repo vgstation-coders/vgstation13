@@ -419,6 +419,11 @@ var/list/global/id_cards = list()
 	var/registered_user=null
 	var/copy_appearance = FALSE
 
+/obj/item/weapon/card/id/syndicate/examine(mob/user)
+	..()
+	if(issyndicate(user))
+		to_chat("<span class='info'>As a syndicate agent you can tell a syndicate agent ID at a glance. You can toggle it with Alt-Click to copy every single detail about the IDs it scans, and you can use it directly on people to stealthily scan the IDs they wear.</span>")
+
 /obj/item/weapon/card/id/syndicate/AltClick()
 	if (can_use(usr)) // Checks that the this is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
 		copy_appearance = !copy_appearance
