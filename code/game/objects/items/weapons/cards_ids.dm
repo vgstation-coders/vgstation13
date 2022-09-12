@@ -464,7 +464,7 @@ var/list/global/id_cards = list()
 	else if(istype(I, /obj/item/device/pda))
 		var/obj/item/device/pda/P = I
 		if(P.id)
-			if(istype(P.cartridge, /obj/item/weapon/cartridge/captain))
+			if(istype(P.cartridge, /obj/item/weapon/cartridge/captain) || istype(P.cartridge, /obj/item/weapon/cartridge/hop))
 				to_chat(user, "<span class='warning'>\The [P]'s anti-scan cartridge feature blocks you from scanning it!</span>")
 				return
 			id = P.id
