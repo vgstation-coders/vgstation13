@@ -1283,7 +1283,7 @@
 // -- trackers
 
 /atom/movable/proc/add_tracker(var/datum/tracker/T)
-	register_event(T, /datum/tracker/proc/recieve_position)
+	register_event(T, /datum/tracker/proc/receive_position)
 
 /datum/tracker
 	var/name = "Tracker"
@@ -1298,7 +1298,7 @@
 	var/lost_position_probability = 0 // Probability of losing the target
 	var/lost_position_distance = 0 // Distance at which the tracker loses the target
 
-/datum/tracker/proc/recieve_position(var/list/loc)
+/datum/tracker/proc/receive_position(var/list/loc)
 
 	ASSERT(loc)
 
