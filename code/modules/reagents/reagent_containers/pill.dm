@@ -255,15 +255,15 @@
 	reagents.add_reagent(SUGAR, 15)
 
 /obj/item/weapon/reagent_containers/pill/zoom
-	name = "Zoom pill"
-	desc = "Zoooom!"
-	icon_state = "pill7" //grey oblong
+	name = "Cryptosporidium pill"
+	desc = "Straight from the mothership drug labs; a party pill designed for ravers and addicts alike!"
+	icon_state = "pill37" //darkblue tablet
 
 /obj/item/weapon/reagent_containers/pill/zoom/New()
 	..()
-	reagents.add_reagent(IMPEDREZENE, 10)
-	reagents.add_reagent(SYNAPTIZINE, 1)
-	reagents.add_reagent(HYPERZINE, 10)
+	reagents.add_reagent(STOXIN, 1)
+	reagents.add_reagent(CRYPTOBIOLIN, 3)
+	reagents.add_reagent(HYPERZINE, 1)
 
 /obj/item/weapon/reagent_containers/pill/hyperzine
 	name = "Hyperzine pill"
