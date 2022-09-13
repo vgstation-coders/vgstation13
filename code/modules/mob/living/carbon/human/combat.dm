@@ -141,6 +141,7 @@
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
 
 	var/damage = rand(0, S.max_hurt_damage)
+	var/is_luchador = is_wearing_item(/obj/item/weapon/storage/belt/champion) && is_wearing_item(/obj/item/clothing/mask/luchador)
 	damage += S.punch_damage
 
 	if(mutations.Find(M_HULK))
@@ -152,6 +153,8 @@
 		damage += G.get_damage_added() //Increase damage by the gloves' damage modifier
 
 		G.on_punch(src, victim)
+	if(is_luchador)
+		damage *= 2
 
 	return damage
 
