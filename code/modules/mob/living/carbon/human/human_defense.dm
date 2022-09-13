@@ -260,7 +260,7 @@ emp_act
 				knock_out_teeth(user)
 
 	var/bloody = FALSE
-	if(final_force && ((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (final_force * 2)))
+	if(final_force && ((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && (affecting.status & ORGAN_BLEEDING))
 		if(!(src.species.anatomy_flags & NO_BLOOD))
 			I.add_blood(src)	//Make the weapon bloody, not the person.
 			if(prob(33))
