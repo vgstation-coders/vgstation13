@@ -265,7 +265,7 @@
 
 /datum/malfhack_ability/toggle/radio_blackout
 	name = "Communications Blackout"
-	desc = "Force all radio traffic through this reciever and scramble it, making it much harder to communicate."
+	desc = "Force all radio traffic through this receiver and scramble it, making it much harder to communicate."
 	icon = "radial_jam"
 	icon_toggled = "radial_unjam"
 	cost = 10

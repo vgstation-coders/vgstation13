@@ -4,7 +4,7 @@
 	density = 1
 	anchored = 0
 	name = "computer frame"
-	desc = "A metal frame ready to recieve a circuit board, wires and a glass panel."
+	desc = "A metal frame ready to receive a circuit board, wires and a glass panel."
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "0"
 	var/state = 0

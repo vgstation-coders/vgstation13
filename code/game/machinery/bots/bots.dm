@@ -422,14 +422,14 @@
 	else
 		frequency.post_signal(src, signal)
 
-// Checks if the bot can recieve the signal or not.
+// Checks if the bot can receive the signal or not.
 /obj/machinery/bot/proc/is_valid_signal(var/datum/signal/signal)
 	return signal.data["command"] || signal.data["patrol"] // Most bots wait for a patrol signal
 
 // This proc is called when we get a singal from beacons.
 // Either we are looking for the nearest beacon, and in this case we compare each signal we get to get the closest one.
-// Or we are looking for one beacon in particular, and will only set our target if what we recieve is the new destination we are supposed to go to.
-// After recieving a valid signal, we'll set it as our CURRENT destination.
+// Or we are looking for one beacon in particular, and will only set our target if what we receive is the new destination we are supposed to go to.
+// After receiving a valid signal, we'll set it as our CURRENT destination.
 /obj/machinery/bot/receive_signal(var/datum/signal/signal)
 	var/valid = is_valid_signal(signal)
 	if(!valid)
@@ -438,9 +438,9 @@
 	// -- Patrol signal --
 	var/recv = signal.data["beacon"]
 	if (recv)
-		log_astar_beacon("recieved patrol signal : [recv]")
+		log_astar_beacon("received patrol signal : [recv]")
 		if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
-			handle_recieved_destination(signal, recv)
+			handle_received_destination(signal, recv)
 			return 1
 		// if looking for nearest beacon
 		if(new_destination == "__nearest__")
@@ -461,23 +461,23 @@
 	// -- Command signals --
 	var/target_bot = signal.data["target"]
 	var/command = signal.data["command"]
-	log_astar_command("recieved signal [command] for [target_bot]")
+	log_astar_command("received signal [command] for [target_bot]")
 	if (target_bot != "\ref[src]")
 		return
 	execute_signal_command(signal, command)
 
 // -- We got a new destination, how do we go there?
 // Most bots will patrol to the target.
-/obj/machinery/bot/proc/handle_recieved_destination(var/datum/signal/signal, var/recv)
+/obj/machinery/bot/proc/handle_received_destination(var/datum/signal/signal, var/recv)
 	log_astar_beacon("[src] : new destination chosen, [recv]")
 	destination = new_destination
 	patrol_target = signal.source.loc
 	next_destination = signal.data["next_patrol"]
 	awaiting_beacon = 0
 
-// -- Recieved an order via signal. This proc assumes the bot is the correct one to get the command.
+// -- Received an order via signal. This proc assumes the bot is the correct one to get the command.
 /obj/machinery/bot/proc/execute_signal_command(var/datum/signal/signal, var/command)
-	log_astar_command("recieved command [command]")
+	log_astar_command("received command [command]")
 	if (!istype(signal.source, commanding_radio))
 		log_astar_command("refused command [command], wrong radio type")
 		return TRUE

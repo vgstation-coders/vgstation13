@@ -3851,7 +3851,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 				newMsg.author = "Nanotrasen Editor"
 				newMsg.is_admin_message = 1
 
-				newMsg.body = "TC Daily wishes to congratulate <b>[user]</b> for recieving the Tau Ceti-Nanotrasen Stellar Slam Lottery, and receiving the out of this world sum of [final_jackpot] credits!"
+				newMsg.body = "TC Daily wishes to congratulate <b>[user]</b> for receiving the Tau Ceti-Nanotrasen Stellar Slam Lottery, and receiving the out of this world sum of [final_jackpot] credits!"
 
 				for(var/datum/feed_channel/FC in news_network.network_channels)
 					if(FC.channel_name == "Tau Ceti Daily")

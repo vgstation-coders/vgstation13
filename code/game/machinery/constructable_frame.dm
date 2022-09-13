@@ -2,7 +2,7 @@
 
 /obj/machinery/constructable_frame //Made into a seperate type to make future revisions easier.
 	name = "machine frame"
-	desc = "A metal frame ready to recieve wires, a circuit board and parts."
+	desc = "A metal frame ready to receive wires, a circuit board and parts."
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "box_0"
 	density = 1

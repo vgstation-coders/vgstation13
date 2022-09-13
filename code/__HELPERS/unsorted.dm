@@ -50,7 +50,7 @@
 			return 0
 	return 1
 
-//Ensure the frequency is within bounds of what it should be sending/recieving at
+//Ensure the frequency is within bounds of what it should be sending/receiving at
 /proc/sanitize_frequency(var/f)
 	f = clamp(round(f), 1201, 1599) // 120.1, 159.9
 
