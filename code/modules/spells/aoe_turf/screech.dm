@@ -50,6 +50,7 @@
 		var/mob/living/carbon/C = T
 		if(C.is_deaf())
 			continue
+		playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 		to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
 		C.Knockdown(8)
 		C.ear_deaf = 20
@@ -60,8 +61,6 @@
 		W.shatter()
 	for(var/obj/machinery/light/L in view(7))
 		L.broken()
-
-	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 
 	var/datum/role/vampire/V = isvampire(user)
 	if (V)
