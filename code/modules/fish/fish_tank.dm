@@ -276,17 +276,17 @@
 		ate_food = TRUE
 
 	if(water_level > 0)
-		if(!fish_list.len)	
-			//If the tank has no fish, algae growth can occur						
+		if(!fish_list.len)
+			//If the tank has no fish, algae growth can occur
 			if(filth_level < ALGAE_THRESHOLD && prob(15))
 				add_filth(0.05)
 		//Chance for the tank to get dirtier if the filth_level isn't max
-		else 
+		else
 			if(acidic && fish_list_water.len)
 				remove_fish(pick(fish_list_water))
 			else if(!acidic && fish_list_acidic.len)
 				remove_fish(pick(fish_list_acidic))
-		if(filth_level < MAX_FILTH && prob(10))		
+		if(filth_level < MAX_FILTH && prob(10))
 			if(ate_food && prob(25))
 				add_filth(fish_list.len * 0.1)
 			else
@@ -331,7 +331,7 @@
 					//Small chance to eat a random fish that isn't itself.
 					seadevil_eat()
 				if(fish_list.len < max_fish && egg_list.len)
-					add_fish(egg_list[1]) 
+					add_fish(egg_list[1])
 					egg_list -= egg_list[1]
 
 	if(!light_switch && (glo_light > 0))
@@ -800,12 +800,20 @@
 		multiplier = initial(multiplier) + (C.rating*0.1) //1 to 1.2
 
 /obj/machinery/power/conduction_plate/process()
+	var/power = 0
 	if(check_tank())
-		var/power = 0
 		for(var/fish in attached_tank.fish_list)
 			if(fish == "electric eel")
 				power += ARBITRARILY_LARGE_NUMBER * multiplier //10000
 		add_avail(power)
+		return
+	for(var/mob/living/carbon/human/H in loc)
+		if(iswizard(H) && H.stat)
+			power += FIRE_CARBON_ENERGY_RELEASED*(health/100)
+			H.adjustFireLoss(1)
+			if(prob(10))
+				H.emote("scream", , , 1)
+	add_avail(power)
 
 /obj/machinery/power/conduction_plate/proc/check_tank()
 	if(!anchored)
