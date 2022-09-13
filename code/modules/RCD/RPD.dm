@@ -224,6 +224,7 @@
 	busy = FALSE
 	return 1
 
+
 /obj/item/device/rcd/rpd/proc/multilayer()
 	set category = "Object"
 	set name = "Multilayer Mode"
