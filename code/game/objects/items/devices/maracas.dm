@@ -10,6 +10,7 @@
 	slot_flags = SLOT_BELT
 
 	var/emagged = 0//our maracas are different - Deity Link
+	var/triggered = 0 //Do not make it explode twice
 
 /obj/item/device/maracas/cubanpete
 	name = "Cuban Pete's maracas"
@@ -25,9 +26,13 @@
 	chickchicky()
 
 /obj/item/device/maracas/throw_impact(atom/hit_atom, var/speed, var/mob/user)
-	if(emagged)
-		explosion(get_turf(src), -1 ,1, 3, whodunnit = user)
-		qdel(src)
+	if(!triggered)
+		if(emagged)
+			playsound(src, 'sound/misc/cuban_pete.ogg', 100, 0, falloff = 2)
+			triggered = 1
+			spawn(21) //The point in the audio file in which the tune changes
+				explosion(get_turf(src), 1, 2, 6, whodunnit = user)
+				qdel(src)
 
 /obj/item/device/maracas/dropped(mob/user)
 	user.unregister_event(/event/face, src, /obj/item/device/maracas/proc/chickchicky)
@@ -40,7 +45,7 @@
 		to_chat(user, "<span class='warning'>You're not sure why, but you swear that you can hear the maracas ticking.</span>")
 
 /obj/item/device/maracas/emag_act(mob/user)
-	emagged = 1
+	to_chat(user, "<span class='warning'>How do you even emag a maraca? How do you fit the card into it? Come on now, this is stupid.</span>")
 
 /obj/item/device/maracas/afterattack()
 	chickchicky()
