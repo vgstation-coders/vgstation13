@@ -174,7 +174,7 @@ var/list/valid_ninja_suits = list(
 		sleep(5 SECONDS)
 		if(!gcDestroyed)
 			forceMove(L.loc)
-			visible_message("<span class='warning'>The [src] falls off \the [L].", "<span class='warning'>You hear something clattering on the floor</span>.")
+			visible_message("<span class='warning'>The [src] falls off \the [L].", "<span class='warning'>You hear something clattering on the floor.</span>")
 
 /obj/item/stack/shuriken/pickup(mob/user)
 	var/datum/role/ninja/weeb = isninja(user)
