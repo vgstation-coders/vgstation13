@@ -317,7 +317,7 @@
 	trades_coins = 1 // This one will trade coins occasionally if fed Zam NotRaisins
 
 ///////////////////////////////////////////////////////////////////GYM RAT///////////
-// Can run on a treadmill much like the trader's colossal hamster, but not quite as efficiently. Maybe in the future I can code a unique reaction to creatine or something
+// A swole mouse! At the cost of no longer being able to ventcrawl, it has gained the power to increase its mass and striking power with protein. No quite too swole to control...
 /mob/living/simple_animal/hostile/retaliate/gym_rat
 	name = "gym rat"
 	desc = "It's pretty swole."
@@ -339,7 +339,6 @@
 	emote_see = list("flexes", "sweats", "does a rep")
 
 	size = SIZE_SMALL // If they're not at least small it doesn't seem like the treadmill works or makes sound
-	can_ventcrawl = TRUE
 	pass_flags = PASSTABLE
 	stop_automated_movement_when_pulled = TRUE
 
@@ -347,12 +346,10 @@
 	minbodytemp = 223		//Below -50 Degrees Celcius
 	maxbodytemp = 323	//Above 50 Degrees Celcius
 
-	melee_damage_lower = 1
-	melee_damage_upper = 3
-	attacktext = "bites"
-	attack_sound = 'sound/weapons/bite.ogg'
+	attacktext = "headbutts"
+	attack_sound = 'sound/weapons/punch1.ogg'
 
-	var/health_cap = 45 // Feeding it protein can pack on a whopping 50% increase in max health. GAINZ
+	var/health_cap = 75 // Eating protein can pack on a whopping 150% increase in max health. GAINZ
 	var/icon_eat = "gymrat-eat"
 	var/obj/my_wheel
 	var/list/gym_equipments = list(/obj/structure/stacklifter, /obj/structure/punching_bag, /obj/structure/weightlifter, /obj/machinery/power/treadmill)
@@ -393,8 +390,14 @@
 		return 0
 	. = ..()
 	if(.)
-		if(enemies.len && prob(10))
+		if(enemies.len && prob(5))
 			Calm()
+	if(maxHealth < 60)
+		melee_damage_lower = 1
+		melee_damage_upper = 5
+	if(maxHealth >= 60) // Gainz makes for stronger melee attack damage!
+		melee_damage_lower = 5
+		melee_damage_upper = 10
 	if(!my_wheel && isturf(loc) && !client) // Gym rats with players in them won't be force moved
 		for(var/obj/O in view(2, src))
 			if(is_type_in_list(O, gym_equipments))
@@ -438,6 +441,7 @@
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/Calm()
 	enemies.Cut()
 	LoseTarget()
+	src.say(pick("Yeah, you better run.","Not worth my time, anyways."))
 	src.visible_message("<span class='notice'>[src] squeaks softly and calms down.</span>")
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/Retaliate()
@@ -447,7 +451,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/attackby(var/obj/item/O as obj, var/mob/user as mob) // Feed the gym rat some food
 	if(stat == CONSCIOUS)
-		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheese heals it a bit
+		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheesewedges heal it a bit
 			Calm()
 			health+=5
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
@@ -457,7 +461,7 @@
 			flick_overlay(heart, list(user.client), 20)
 			flick(icon_eat, src)
 			qdel(O)
-		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on a bit of extra maximum hp
+		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on some extra maximum hp
 			Calm()
 			health+=1
 			maxHealth+=1
@@ -473,20 +477,225 @@
 	else
 		..()
 
-/mob/living/simple_animal/hostile/retaliate/gym_rat/verb/ventcrawl()
-	set name = "Crawl through Vent"
-	set desc = "Enter an air vent and crawl through the pipe system."
-	set category = "Object"
-	var/pipe = start_ventcrawl()
-	if(pipe)
-		handle_ventcrawl(pipe)
-
 /mob/living/simple_animal/hostile/retaliate/gym_rat/New() // speaks mouse
 	..()
 	languages += all_languages[LANGUAGE_MOUSE]
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/mothership // Mothership faction version, so it doesn't get attacked by the vault dwellers
 	faction = "mothership"
+
+///////////////////////////////////////////////////////////////////ROID RAT///////////
+// That mouse is shredded! Has the science of bodybuilding gone too far? Possibly too swole to control!
+/mob/living/simple_animal/hostile/retaliate/roid_rat
+	name = "roid rat"
+	desc = "It's yoked! Holy shit!"
+	icon_state = "roidrat"
+	icon_living = "roidrat"
+	response_help  = "massages the"
+	response_disarm = "stares jealously at the"
+	response_harm   = "angrily kicks the"
+	treadmill_speed = 3 // CARDIO IS FOR DWEEBS
+	health = 150 // Damn, brother
+	maxHealth = 150
+	speak_chance = 2
+	turns_per_move = 5
+	see_in_dark = 6
+	speak = list("I'M A LEAN, MEAN, WEIGHT PUMPIN'MACHINE.","I BEEN TO THE TOP OF THE MOUNTAIN!","NOTHING MEANS NOTHING!","MAX YOUR PUMP.","OH YEAAAAAH.","CHECK OUT MY PECS, LITTLE MAN.")
+	speak_emote = list("squeaks thunderously")
+	emote_hear = list("squeaks thunderously")
+	emote_see = list("flexes", "sweats", "does a rep")
+
+	pass_flags = PASSTABLE
+	stop_automated_movement_when_pulled = TRUE
+
+	min_oxy = 8 //Require atleast 8kPA oxygen
+	minbodytemp = 223		//Below -50 Degrees Celcius
+	maxbodytemp = 323	//Above 50 Degrees Celcius
+
+	attacktext = "punches"
+	attack_sound = 'sound/weapons/punch1.ogg'
+
+	var/health_cap = 225 // Eating protein can pack on a 50% increase in max health. Less percentage-wise than gym rats who are working out the "natural" way, but the raw numbers are still pretty scary
+	var/icon_eat = "roidrat-eat"
+	var/obj/my_wheel
+	var/list/gym_equipments = list(/obj/structure/stacklifter, /obj/structure/punching_bag, /obj/structure/weightlifter, /obj/machinery/power/treadmill)
+
+	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks/cheesewedge, /obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel) // Roid rats are pickier than normal mice. Cheese and raw meat only
+
+	var/punch_throw_chance = 10 // Chance of sending a target flying a short distance with a punch
+	var/punch_throw_speed = 3
+	var/punch_throw_range = 4
+
+	var/damageblock = 10
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/proc/bulkblock(var/damage, var/atom/A)// roid rats are unaffected by brute damage below at least 10
+	if (!damage || damage < damageblock)
+		if (A)
+			visible_message("<span class='danger'>\The [A] bounces harmlessly off of \the [src]'s muscles! </span>")
+		return TRUE
+	return FALSE
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(bulkblock(O.force, O))
+		user.delayNextAttack(8)
+	else
+		..()
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, sharp, edge, var/used_weapon = null, ignore_events = 0)
+	if (bulkblock(damage))
+		return 0
+	return ..()
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/AttackingTarget() // FLY SON
+	..()
+	if(istype(target, /mob/living))
+		var/mob/living/M = target
+		if(punch_throw_range && prob(punch_throw_chance))
+			visible_message("<span class='danger'>\The [M] is flung away by the [src]'s powerful punch!</span>")
+			M.Knockdown(3)
+			var/turf/T = get_turf(src)
+			var/turf/target_turf
+			if(istype(T, /turf/space)) // if ended in space, then range is unlimited
+				target_turf = get_edge_target_turf(T, dir)
+			else
+				target_turf = get_ranged_target_turf(T, dir, punch_throw_range)
+			M.throw_at(target_turf,100,punch_throw_speed)
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/UnarmedAttack(var/atom/A)
+	if(is_type_in_list(A, edibles)) // If we click on something edible, it's time to chow down!
+		delayNextAttack(10)
+		chowdown(A)
+	if(is_type_in_list(A, gym_equipments)) // If we click on gym equipment, it's time to work out!
+		A.attack_hand(src, 0, A.Adjacent(src))
+	else return ..()
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/proc/chowdown(var/atom/eat_this)
+	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) //Mmm, cheese wedge. Gives back a small amount of health upon consumption
+		health+=5
+		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		flick(icon_eat, src)
+		qdel(eat_this)
+	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/meat)) //Protein! Gives back a smaller amount of health, but also packs on some extra max hp
+		health+=1
+		maxHealth+=1
+		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		flick(icon_eat, src)
+		qdel(eat_this)
+	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)) //A cheese wheel feast! Gives back a lot more health than just a slice
+		health+=25
+		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		flick(icon_eat, src)
+		qdel(eat_this)
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/Life() // Copied from hammy wheel running code
+	if(timestopped)
+		return 0
+	. = ..()
+	if(.)
+		if(enemies.len && prob(5))
+			Calm()
+	if(maxHealth < 225)
+		melee_damage_lower = 10
+		melee_damage_upper = 20
+		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
+	if(maxHealth == 225)
+		melee_damage_lower = 20
+		melee_damage_upper = 30
+		punch_throw_chance = 20
+		punch_throw_speed = 3
+		punch_throw_range = 6
+		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | OPEN_DOOR_STRONG // Maximized gainz will grant roid rats incredible punching power, and the ability to smash through normal walls! Oh YEAAAAAAAAAAAAAAH
+	if(!my_wheel && isturf(loc) && !client) // Roid rats with players in them won't be force moved
+		for(var/obj/O in view(2, src))
+			if(is_type_in_list(O, gym_equipments))
+				my_wheel = locate(O) in view(2, src)
+				wander = FALSE
+				roidratwheel(20)
+				break
+			else
+				wander = TRUE
+				speed = 3
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/proc/roidratwheel(var/repeat)
+	if(repeat < 1 || stat)
+		wander = TRUE
+		my_wheel = null
+		speed = 10
+		return
+	if(my_wheel)
+		if(istype(my_wheel, /obj/structure/stacklifter))
+			var/obj/structure/stacklifter/S = my_wheel
+			S.attack_hand(src, 0, S.Adjacent(src))
+		else if(istype(my_wheel, /obj/structure/punching_bag))
+			var/obj/structure/punching_bag/P = my_wheel
+			P.attack_hand(src, 0, P.Adjacent(src))
+			sleep(1 SECONDS) // Slows down the punching a little bit after a moment
+		else if(istype(my_wheel, /obj/structure/weightlifter))
+			var/obj/structure/weightlifter/W = my_wheel
+			W.attack_hand(src, 0, W.Adjacent(src))
+		else if(istype(my_wheel, /obj/machinery/power/treadmill) && my_wheel.loc == loc)
+			speed = 1
+			step(src,my_wheel.dir)
+		step_towards(src,my_wheel)
+	else
+		wander = TRUE
+		speed = 3
+
+	delayNextMove(speed)
+	sleep(speed)
+	roidratwheel(repeat-1)
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/proc/Calm()
+	enemies.Cut()
+	LoseTarget()
+	src.say(pick("YOU AIN'T NUTHING.","BETTER RUN, TINY MAN."))
+	src.visible_message("<span class='notice'>[src] squeaks softly and calms down.</span>")
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/Retaliate()
+	if(!stat)
+		..()
+		src.say(pick("TIME TO STEP INTO THE SQUARE CIRCLE, SON.","YOU CALLED DOWN THE THUNDER.","GET READY FOR THE BIG GUNS.","YOU EYEBALLING ME?"))
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/attackby(var/obj/item/O as obj, var/mob/user as mob) // Feed the gym rat some food
+	if(stat == CONSCIOUS)
+		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheesewedges heal it a bit
+			Calm()
+			health+=5
+			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
+			flick(icon_eat, src)
+			qdel(O)
+		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on some extra maximum hp
+			Calm()
+			health+=1
+			maxHealth+=1
+			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
+			flick(icon_eat, src)
+			qdel(O)
+		else
+			..()
+	else
+		..()
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/New() // speaks mouse
+	..()
+	languages += all_languages[LANGUAGE_MOUSE]
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/death(var/gibbed = FALSE)
+	visible_message("The <b>[src]</b> is torn apart by its own oversized muscles!")
+	gibs(get_turf(src))
+	..()
+	qdel(src)
 
 ///////////////////////////////////////////////////////////////////CATTLE SPECIMEN///////////
 // A talking cow!
