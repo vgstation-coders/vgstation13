@@ -40,7 +40,6 @@
 		host.maxcharge = min(round(host.maxcharge * 2, 1), 10000000)
 		to_chat(host,"<span class='notice'>You can now store [host.maxcharge]W.</span>")
 		update_condition_and_cost()
-		host.determine_name()
 
 /datum/pulse_demon_upgrade/takeover
 	ability_name = "Faster takeover time"

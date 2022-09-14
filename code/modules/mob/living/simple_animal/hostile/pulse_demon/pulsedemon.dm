@@ -127,23 +127,6 @@
 		stat(null, text("Drain rate: [charge_absorb_amount]"))
 		stat(null, text("APC takeover time: [takeover_time] seconds"))
 
-/mob/living/simple_animal/hostile/pulse_demon/proc/determine_name()
-	switch(maxcharge)
-		if(0 to 50000)
-			name = "Pulse Demon"
-		if(50001 to 100000)
-			if(!name == "Pulse Fiend")
-				name = "Pulse Fiend"
-				to_chat(src, "<span class='info'>You have upgraded your maximum capacity enough to be considered a Pulse Fiend.</span>")
-		if(100001 to 1000000)
-			if(!name == "Pulse Devil")
-				name = "Pulse Devil"
-				to_chat(src, "<span class='info'>You have upgraded your maximum capacity enough to be considered a Pulse Devil.</span>")
-		if(1000001 to INFINITY)
-			if(!name == "Pulse Horror")
-				name = "Pulse Horror"
-				to_chat(src, "<span class='info'>You have upgraded your maximum capacity enough to be considered a Pulse Horror.</span>")
-
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_glow()
 	var/range = 2 + (log(2,charge+1)-log(2,50000)) / 2
 	range = max(range, 1.5)  //negative lights due to logarithms when?
@@ -380,8 +363,6 @@
 /mob/living/simple_animal/hostile/pulse_demon/attackby(obj/item/W as obj, mob/user as mob)
 	if(!is_under_tile())
 		var/obj/item/weapon/cell/C = W.get_cell()
-		if(istype(W, C)) //If the object attacking the pulse demon is a battery
-			C = W
 		if(C && C.charge)
 			C.use(charge_absorb_amount)
 			to_chat(user, "<span class='warning'>You touch \the [src] with \the [W] and \the [src] drains it!</span>")
