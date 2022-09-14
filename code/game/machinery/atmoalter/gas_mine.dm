@@ -1,3 +1,5 @@
+#define KW_TO_MOLS_COEFFICIENT 0.5
+
 /obj/machinery/atmospherics/miner
 	name = "gas miner"
 	desc = "Gasses mined from the gas giant below (above?) flow out through this massive vent."
@@ -159,7 +161,7 @@
 	if(PN)
 		var/power_surplus = PN.get_satisfaction(power_priority)
 		use_power = MACHINE_POWER_USE_ACTIVE
-		update_rate(Ceiling(0.5 * power_load))		//scale mol output by arbitrary 50% power load
+		update_rate(Ceiling(KW_TO_MOLS_COEFFICIENT * power_load))		//scale mol output by arbitrary 50% power load
 		if(power_surplus > 0.55)
 			power_load += 1000
 		else if (power_surplus < 0.45 && power_load > 0)
