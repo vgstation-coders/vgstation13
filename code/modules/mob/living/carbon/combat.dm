@@ -208,6 +208,9 @@
 	tForce += get_strength()*10
 	tForce += offenseMutTackle()
 	tForce += bonusTackleForce()
+	var/is_real_champion = is_wearing_item(/obj/item/weapon/storage/belt/champion) && is_wearing_item(/obj/item/clothing/mask/luchador)
+	if(is_real_champion)
+		tForce *= 2
 	return max(0, tForce)
 
 /mob/living/carbon/proc/offenseMutTackle(var/tF = 0)
@@ -229,6 +232,9 @@
 		tDef += 35
 	tDef += defenseMutTackle()
 	tDef += bonusTackleDefense()
+	var/is_real_champion = is_wearing_item(/obj/item/weapon/storage/belt/champion) && is_wearing_item(/obj/item/clothing/mask/luchador)
+	if(is_real_champion)
+		tDef *= 2
 	return max(0, tDef)
 
 /mob/living/carbon/proc/defenseMutTackle(var/tD = 0)

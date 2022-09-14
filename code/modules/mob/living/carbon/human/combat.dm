@@ -288,9 +288,6 @@
 			tF += C.offenseTackleBonus()
 	if(species)
 		tF += species.tacklePower
-	var/is_real_champion = is_wearing_item(/obj/item/weapon/storage/belt/champion) && is_wearing_item(/obj/item/clothing/mask/luchador)
-	if(is_real_champion)
-		tF *= 2
 	return tF
 
 /mob/living/carbon/human/bonusTackleDefense(var/tD = 0)
@@ -299,9 +296,6 @@
 			tD += C.defenseTackleBonus()
 	if(species)
 		tD += species.tacklePower
-	var/is_real_champion = is_wearing_item(/obj/item/weapon/storage/belt/champion) && is_wearing_item(/obj/item/clothing/mask/luchador)
-	if(is_real_champion)
-		tD *= 2
 	return tD
 
 /mob/living/carbon/human/bonusTackleRange(var/tR = 0)
