@@ -170,7 +170,7 @@
 					generic_mutation_message("rustles!")
 				if(PLANT_VORACIOUS)
 					//clever way of going from 0 to 1 to 2.
-					seed.voracious = (seed.juicy + 1) % 3
+					seed.voracious = (seed.voracious + 1) % 3
 					generic_mutation_message("shudders hungrily.")
 				if(PLANT_HEMATOPHAGE)
 					seed.hematophage = !seed.hematophage
@@ -200,7 +200,7 @@
 					seed.maturation -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.maturation*100),0.01),max_change*seed.maturation),0.1)
 					generic_mutation_message("wriggles!")
 				if(PLANT_SPREAD)
-					seed.spread = (seed.juicy + 1) % 3
+					seed.spread = (seed.spread + 1) % 3
 					if(src && seed && seed.spread == 1)
 						visible_message("<span class='notice'>\The [seed.display_name] shifts in the tray!</span>")
 						spawn(20)
