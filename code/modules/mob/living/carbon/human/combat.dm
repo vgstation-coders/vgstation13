@@ -141,7 +141,7 @@
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
 
 	var/damage = rand(0, S.max_hurt_damage)
-	var/is_luchador = is_wearing_item(/obj/item/weapon/storage/belt/champion) && is_wearing_item(/obj/item/clothing/mask/luchador)
+	var/is_real_champion = is_wearing_item(/obj/item/weapon/storage/belt/champion) && is_wearing_item(/obj/item/clothing/mask/luchador)
 	damage += S.punch_damage
 
 	if(mutations.Find(M_HULK))
@@ -153,7 +153,7 @@
 		damage += G.get_damage_added() //Increase damage by the gloves' damage modifier
 
 		G.on_punch(src, victim)
-	if(is_luchador)
+	if(is_real_champion)
 		damage *= 2
 
 	return damage
@@ -288,6 +288,9 @@
 			tF += C.offenseTackleBonus()
 	if(species)
 		tF += species.tacklePower
+	var/is_real_champion = is_wearing_item(/obj/item/weapon/storage/belt/champion) && is_wearing_item(/obj/item/clothing/mask/luchador)
+	if(is_real_champion)
+		tF *= 2
 	return tF
 
 /mob/living/carbon/human/bonusTackleDefense(var/tD = 0)
@@ -296,6 +299,9 @@
 			tD += C.defenseTackleBonus()
 	if(species)
 		tD += species.tacklePower
+	var/is_real_champion = is_wearing_item(/obj/item/weapon/storage/belt/champion) && is_wearing_item(/obj/item/clothing/mask/luchador)
+	if(is_real_champion)
+		tD *= 2
 	return tD
 
 /mob/living/carbon/human/bonusTackleRange(var/tR = 0)
