@@ -404,8 +404,8 @@
 // Always override this proc instead of BYOND-provided Bump().
 // This gives us better control over what actually gets bumped instead of being stuck with BYOND's decision.
 /atom/movable/proc/to_bump(atom/Obstacle)
-	if(airflow_speed > 3 && airflow_dest)
-		airflow_hit(Obstacle)
+	if(airflow_speed > 0 && airflow_dest)
+		airflow_hit(Obstacle, airflow_speed)
 	else
 		airflow_speed = 0
 		airflow_time = 0

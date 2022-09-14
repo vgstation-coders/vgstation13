@@ -39,6 +39,8 @@ atom/movable/GotoAirflowDest(n)
 
 */
 
+#define AIRFLOW_MINIMUM_COLLISION_SPEED 4 //Objects and mobs will not collide with each other if the airflow is lower than this
+
 /mob/var/tmp/last_airflow_stun = 0
 /mob/proc/airflow_stun(differential)
 	if(isDead() || (flags & INVULNERABLE) || (status_flags & GODMODE))
@@ -209,14 +211,16 @@ atom/movable/GotoAirflowDest(n)
 		if(od)
 			setDensity(FALSE)
 
-/atom/movable/proc/airflow_hit(atom/A)
+/atom/movable/proc/airflow_hit(atom/A, var/airflow_speed)
 	airflow_speed = 0
 	airflow_dest = null
 	A.Bumped(src)
 
-/mob/airflow_hit(atom/A)
+/mob/airflow_hit(atom/A, airflow_speed)
 	if(size == SIZE_TINY)
 		return //Slamming into a mouse/roach doesn't make much sense
+	if(airflow_speed < AIRFLOW_MINIMUM_COLLISION_SPEED)
+		return ..()
 	if(!sound_override)
 		visible_message(message = "<span class='danger'>\The [src] slams into \a [A]!</span>", blind_message = "<span class='danger'>You hear a loud slam!</span>")
 	//playsound(src, "smash.ogg", 25, 1, -1)
@@ -227,17 +231,28 @@ atom/movable/GotoAirflowDest(n)
 		SetKnockdown(rand(1,5))
 	. = ..()
 
-/obj/airflow_hit(atom/A)
+/obj/airflow_hit(atom/A, airflow_speed)
+	if(airflow_speed < AIRFLOW_MINIMUM_COLLISION_SPEED)
+		return ..()
 	if(!sound_override)
 		visible_message(message = "<span class='danger'>\The [src] slams into \a [A]!</span>", blind_message = "<span class='warning'>You hear a loud slam!</span>")
 	//playsound(src, "smash.ogg", 25, 1, -1)
 	. = ..()
 
-/obj/item/airflow_hit(atom/A)
+/obj/item/airflow_hit(atom/A, airflow_speed)
 	airflow_speed = 0
 	airflow_dest = null
 
-/mob/living/carbon/human/airflow_hit(atom/A)
+/mob/living/carbon/human/airflow_hit(atom/A, airflow_speed)
+	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || (M_HARDCORE in mutations))
+		if(airflow_speed > 10)
+			Paralyse(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)))
+			Stun(paralysis + 3)
+		else
+			Stun(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)/2))
+
+	if(airflow_speed < AIRFLOW_MINIMUM_COLLISION_SPEED)
+		return ..() //Lockers of doom be gone
 	var/b_loss = airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_damage)
 
 	for(var/i in contents)
@@ -260,14 +275,6 @@ atom/movable/GotoAirflowDest(n)
 		var/turf/T = get_turf(src)
 		T.add_blood(src)
 		bloody_body(src)
-
-	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || (M_HARDCORE in mutations))
-		if(airflow_speed > 10)
-			Paralyse(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)))
-			Stun(paralysis + 3)
-		else
-			Stun(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)/2))
-
 	. = ..()
 
 /zone/proc/movables() //TODO: Make airflow movement and stunning more closely-associated so this proc can handle differential checking.
