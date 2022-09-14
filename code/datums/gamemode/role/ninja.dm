@@ -125,7 +125,7 @@ var/list/valid_ninja_suits = list(
 /obj/item/stack/shuriken/examine(mob/user)
 	..()
 	if(isninja(user))
-		to_chat(user,"<span class='info'>They are specially designed for one-handed use. Attempting to throw the entire stack will throw only one, and you can just click anything you want to throw it without having the intention to throw. They have a special adhesive coating that allows them to stick to targets for 5 seconds before falling off.</span>")
+		to_chat(user,"<span class='info'>They are specially designed for one-handed use. Attempting to throw the entire stack will throw only one, and you can just click anything you want to throw it without having the intent to throw. They have a special adhesive coating that allows them to stick to targets for 5 seconds before falling off.</span>")
 
 /obj/item/stack/shuriken/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(can_stack_with(target) || proximity_flag || istype(target, /obj/abstract/screen)) //We're using this on the sheet, the target is right next to us or we're clicking a screen like a backpack
@@ -169,12 +169,11 @@ var/list/valid_ninja_suits = list(
 	..()
 	if(isliving(impacted_atom))
 		var/mob/living/L = impacted_atom
-		var/mob/living/carbon/human/H = impacted_atom
-		forceMove(H)
+		forceMove(L)
 		visible_message("<span class='warning'>The [src] sticks to \the [L]!</span>")
-		sleep(50) //Falls off after 5 seconds
-		if(src)
-			forceMove(H.loc)
+		sleep(5 SECONDS)
+		if(!gcDestroyed)
+			forceMove(L.loc)
 			visible_message("<span class='warning'>The [src] falls off \the [L].", "<span class='warning'>You hear something clattering on the floor</span>.")
 
 /obj/item/stack/shuriken/pickup(mob/user)
