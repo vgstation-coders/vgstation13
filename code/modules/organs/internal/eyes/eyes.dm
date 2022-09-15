@@ -13,7 +13,7 @@
 	return*/
 
 /datum/organ/internal/eyes/proc/update_perception(var/mob/living/carbon/human/M)
-	M.dark_plane.alphas["human"] = 0
+	M.dark_plane.alphas["human"] = 5
 
 /datum/organ/internal/eyes/process() //Eye damage replaces the old eye_stat var.
 	if(is_broken())
