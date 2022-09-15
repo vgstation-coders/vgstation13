@@ -800,6 +800,8 @@
 		multiplier = initial(multiplier) + (C.rating*0.1) //1 to 1.2
 
 /obj/machinery/power/conduction_plate/process()
+	if(!anchored)
+		return
 	var/power = 0
 	if(check_tank())
 		for(var/fish in attached_tank.fish_list)
@@ -808,16 +810,14 @@
 		add_avail(power)
 		return
 	for(var/mob/living/carbon/human/H in loc)
-		if(iswizard(H) && H.stat)
-			power += FIRE_CARBON_ENERGY_RELEASED*(health/100)
-			H.adjustFireLoss(1)
+		if(iswizard(H) && !H.stat)
+			power += FIRE_CARBON_ENERGY_RELEASED*H.health/H.maxHealth
+			H.adjustFireLoss(3)
 			if(prob(10))
-				H.emote("scream", , , 1)
+				H.audible_scream()
 	add_avail(power)
 
 /obj/machinery/power/conduction_plate/proc/check_tank()
-	if(!anchored)
-		return 0
 	if(attached_tank && attached_tank.loc == loc)
 		return 1
 	attached_tank = locate(/obj/machinery/fishtank/) in loc
