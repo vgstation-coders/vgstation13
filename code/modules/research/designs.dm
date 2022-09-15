@@ -116,6 +116,8 @@ The required techs are the following:
 //Acts as FindDesign, but makes a new design if it doesn't find one
 //Doesn't take types for the design creation, so don't rely on it for that
 /proc/getScanDesign(var/obj/O)
+	if(istype(O, /obj/machinery))
+		return new/datum/design/mechanic_design(O)
 	var/datum/design/D
 	if(O.materials)
 		D = FindDesign(O, 1) //The 1 means we check strict materials - if we don't have materials, we just check the type

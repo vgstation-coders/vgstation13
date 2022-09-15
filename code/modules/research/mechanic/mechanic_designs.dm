@@ -7,7 +7,7 @@
 
 	req_tech = list() //the origin tech of either the item, or the board in the machine
 	category = ""
-	var/parts = list()
+	var/parts = list() //holds a list of nonstandard components that will be added to the flatpack
 
 /datum/design/mechanic_design/New(var/obj/O) //sets the name, type, design, origin_tech, and circuit, all by itself
 	if(!istype(O))
@@ -22,22 +22,29 @@
 		build_type = FLATPACKER
 		materials += list(MAT_IRON = 5 * CC_PER_SHEET_METAL) //cost of the frame
 		if(M.component_parts && M.component_parts.len)
-			parts = M.component_parts
 			category = "Machines"
 			for(var/obj/item/I in M.component_parts) //fetching the circuit by looking in the parts
-				if(istype(I, /obj/item/weapon/circuitboard))
-					var/obj/item/weapon/circuitboard/CB = I
-					req_tech = ConvertReqString2List(CB.origin_tech) //our tech is the circuit's requirement
+				if(I.mech_flags != MECH_SCAN_FAIL)
+					if(istype(I, /obj/item/weapon/circuitboard))
+						var/obj/item/weapon/circuitboard/CB = I
+						req_tech = ConvertReqString2List(CB.origin_tech) //our tech is the circuit's requirement
 
-				var/datum/design/part_design = FindDesign(I)
-				if(part_design)
-					copyCost(part_design, filter_chems = 1) //copy those materials requirements
-				else
-					for(var/matID in I.materials.storage)
-						if(I.materials.storage[matID] > 0)
-							if(!(matID in materials))
-								materials += list("[matID]" = 0)
-							materials[matID] += I.materials.storage[matID]
+					var/datum/design/part_design = FindDesign(I)
+					if(part_design)
+						copyCost(part_design, filter_chems = 1) //copy those materials requirements
+					else
+						for(var/matID in I.materials.storage)
+							if(I.materials.storage[matID] > 0)
+								if(!(matID in materials))
+									materials += list("[matID]" = 0)
+								materials[matID] += I.materials.storage[matID]
+			//now, create a copy of the components to edit and save into the design
+			//  we have to make a copy or else it will delete components from the source machine...
+			var/list/trimmed_parts = M.component_parts.Copy(1,0)
+			for(var/obj/item/I in M.component_parts)
+				if(!(I.get_rating()>1) || (I.mech_flags == MECH_SCAN_FAIL))
+					trimmed_parts -= I
+			parts = trimmed_parts.Copy(1,0)
 
 		else if(istype(M, /obj/machinery/computer))
 			category = "Computers"
