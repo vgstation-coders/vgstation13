@@ -28,3 +28,17 @@
 	new /obj/item/weapon/reagent_containers/pill/zoom( src )
 	new /obj/item/weapon/reagent_containers/pill/zoom( src )
 	new /obj/item/weapon/reagent_containers/pill/zoom( src )
+
+/obj/item/weapon/storage/pill_bottle/skeet
+	name = "Elderly Thyroid Medication"
+	desc = "An old pill bottle with it's label partially scratched off and written over. It reads 'Take new pill each time vison clears'."
+
+/obj/item/weapon/storage/pill_bottle/skeet/New()
+	. = ..()
+	new /obj/item/weapon/reagent_containers/pill/skeet( src )
+	new /obj/item/weapon/reagent_containers/pill/skeet( src )
+	new /obj/item/weapon/reagent_containers/pill/skeet( src )
+	new /obj/item/weapon/reagent_containers/pill/skeet( src )
+	new /obj/item/weapon/reagent_containers/pill/skeet( src )
+	new /obj/item/weapon/reagent_containers/pill/skeet( src )
+	new /obj/item/weapon/reagent_containers/pill/skeet( src )
