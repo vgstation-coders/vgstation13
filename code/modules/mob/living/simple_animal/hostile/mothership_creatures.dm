@@ -538,10 +538,21 @@
 
 	var/damageblock = 10
 
+	var/all_fours = 1
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/update_icon()
+	if(all_fours == 1)
+		icon_state = "roidrat"
+		icon_eat = "roidrat-eat"
+	else
+		icon_state = "roidrat_dudestop"
+		icon_eat = null
+
 /mob/living/simple_animal/hostile/retaliate/roid_rat/proc/bulkblock(var/damage, var/atom/A)// roid rats are unaffected by brute damage of 10 or lower
 	if (!damage || damage <= damageblock)
 		if (A)
 			visible_message("<span class='danger'>\The [A] bounces ineffectually off \the [src]'s bulk! </span>")
+			playsound(src, 'sound/weapons/genhit1.ogg', 50, 1)
 		return TRUE
 	return FALSE
 
@@ -710,6 +721,21 @@
 /mob/living/simple_animal/hostile/retaliate/roid_rat/New() // speaks mouse
 	..()
 	languages += all_languages[LANGUAGE_MOUSE]
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/verb/stand_up() // Allows the roid rat to toggle poses. They can stand upright, or walk around like a typical mouse
+	set name = "Stand Up / Lie Down"
+	set desc = "Stand up and show off your guns, or walk on all fours to not embarrass the nerds."
+	set category = "Object"
+
+	if(all_fours == 1)
+		all_fours = 0
+		to_chat(src, text("<span class='notice'>You are now standing upright.</span>"))
+		update_icon()
+
+	else
+		all_fours = 1
+		to_chat(src, text("<span class='notice'>You are now moving on all fours.</span>"))
+		update_icon()
 
 /mob/living/simple_animal/hostile/retaliate/roid_rat/death(var/gibbed = FALSE)
 	visible_message("The <b>[src]</b> is torn apart by its own oversized muscles!")
