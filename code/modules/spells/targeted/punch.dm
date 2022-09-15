@@ -69,9 +69,10 @@
 			var/turns = 0 //Fixes a bug where the transform could occasionally get messed up such as when the target is lying down
 			spawn(0) //Continue spell-code
 				while(target.throwing)
-					target.transform = turn(target.transform, 45) //Spin the target
-					target.SetStunned(2) //We don't want the target to move during this time
-					turns += 45
+					if(!target.timestopped)
+						target.transform = turn(target.transform, 45) //Spin the target
+						target.SetStunned(2) //We don't want the target to move during this time
+						turns += 45
 					sleep(1)
 				target.transform = turn(target.transform, -turns)
 				target.Knockdown(2)
