@@ -115,6 +115,7 @@
 	desc = ""
 	density = 0
 	anchored = 0
+	mouse_opacity = 1
 	var/can_move = 1
 	var/obj/item/device/chameleon/master = null
 
