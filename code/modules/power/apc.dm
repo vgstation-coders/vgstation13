@@ -909,7 +909,7 @@
 			usr.unset_machine()
 		return 1
 	if(!isobserver(usr))
-		if((!stat & NOAICONTROL) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
+		if(!(stat & NOAICONTROL) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
 			to_chat(usr, "Access refused.")
 			return 0
 	if(!can_use(usr, 1))
