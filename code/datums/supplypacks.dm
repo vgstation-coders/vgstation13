@@ -778,7 +778,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contraband = 1
 
 /datum/supply_packs/grey_uniform/New()
-	selection_from = list(laborer, scientist, explorer)
+	selection_from = list(laborer, scientist, explorer, soldier)
 
 /datum/supply_packs/neorussian
 	name = "Neo-Russian supplies"
