@@ -723,7 +723,7 @@
 /mob/living/simple_animal/hostile/retaliate/roid_rat/verb/stand_up() // Allows the roid rat to toggle poses. They can stand upright, or walk around like a typical mouse
 	set name = "Stand Up / Lie Down"
 	set desc = "Stand up and show off your guns, or walk on all fours to not embarrass the nerds."
-	set category = "Object"
+	set category = "Roid Rat"
 
 	if(all_fours == 1)
 		all_fours = 0
