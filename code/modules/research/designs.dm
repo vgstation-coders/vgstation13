@@ -100,7 +100,7 @@ The required techs are the following:
 				var/all_correct = 1
 
 				for(var/matID in D.materials)
-					if(copytext(matID, 1, 2) == "$" && (part.materials.storage[matID] != D.materials[matID])) //if it's a materal, but it doesn't match the atom's values
+					if(copytext(matID, 1, 2) == "$" && (part.materials.storage[matID] != D.materials[matID])) //if it's a material, but it doesn't match the atom's values
 						all_correct = 0
 						break
 				if(all_correct)

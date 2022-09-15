@@ -43,7 +43,7 @@
 
 	RefreshParts()
 
-/obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker/build_part(var/datum/design/part)
+/obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker/build_part(var/datum/design/mechanic_design/part)
 	if(!part)
 		return
 
@@ -65,6 +65,10 @@
 	if(being_built)
 		var/turf/output = get_output()
 		var/obj/structure/closet/crate/flatpack/new_flatpack = new(output)
+		if(istype(being_built, /obj/machinery))
+			var/obj/machinery/X = being_built
+			X.force_parts_transfer(part)
+			being_built = X
 		new_flatpack.insert_machine(being_built)
 		for(var/obj/structure/closet/crate/flatpack/existing in output)
 			if(existing.try_add_stack(new_flatpack))
