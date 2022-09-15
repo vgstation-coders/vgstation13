@@ -20,6 +20,7 @@
 	icon_state = "rift"
 	density = 1
 	anchored = 1.0
+	mouse_opacity = 1
 	var/mobsleft = 20
 	var/mobtype = /mob/living/simple_animal/hostile/creature
 
