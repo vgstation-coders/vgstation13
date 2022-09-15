@@ -317,7 +317,7 @@
 	trades_coins = 1 // This one will trade coins occasionally if fed Zam NotRaisins
 
 ///////////////////////////////////////////////////////////////////GYM RAT///////////
-// A swole mouse! At the cost of no longer being able to ventcrawl, it has gained the power to increase its mass and striking power with protein. No quite too swole to control...
+// A swole mouse! At the cost of no longer being able to ventcrawl, it has gained the power to increase its mass and striking power with protein. Not quite too swole to control...
 /mob/living/simple_animal/hostile/retaliate/gym_rat
 	name = "gym rat"
 	desc = "It's pretty swole."
@@ -461,6 +461,16 @@
 			flick_overlay(heart, list(user.client), 20)
 			flick(icon_eat, src)
 			qdel(O)
+		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel))
+			Calm()
+			health+=25
+			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
+			flick(icon_eat, src)
+			qdel(O)
 		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on some extra maximum hp
 			Calm()
 			health+=1
@@ -528,10 +538,10 @@
 
 	var/damageblock = 10
 
-/mob/living/simple_animal/hostile/retaliate/roid_rat/proc/bulkblock(var/damage, var/atom/A)// roid rats are unaffected by brute damage below at least 10
-	if (!damage || damage < damageblock)
+/mob/living/simple_animal/hostile/retaliate/roid_rat/proc/bulkblock(var/damage, var/atom/A)// roid rats are unaffected by brute damage of 10 or lower
+	if (!damage || damage <= damageblock)
 		if (A)
-			visible_message("<span class='danger'>\The [A] bounces harmlessly off of \the [src]'s muscles! </span>")
+			visible_message("<span class='danger'>\The [A] bounces ineffectually off \the [src]'s bulk! </span>")
 		return TRUE
 	return FALSE
 
@@ -571,7 +581,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/roid_rat/proc/chowdown(var/atom/eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) //Mmm, cheese wedge. Gives back a small amount of health upon consumption
-		health+=5
+		health+=10
 		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
@@ -584,7 +594,7 @@
 		flick(icon_eat, src)
 		qdel(eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)) //A cheese wheel feast! Gives back a lot more health than just a slice
-		health+=25
+		health+=50
 		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
@@ -663,7 +673,17 @@
 	if(stat == CONSCIOUS)
 		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheesewedges heal it a bit
 			Calm()
-			health+=5
+			health+=10
+			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
+			flick(icon_eat, src)
+			qdel(O)
+		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel))
+			Calm()
+			health+=50
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
 			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
