@@ -816,6 +816,27 @@ Class Procs:
 		return 1
 	return 0
 
+/obj/machinery/proc/force_parts_transfer(var/datum/design/mechanic_design/O)
+	if(component_parts)
+		var/M = O.parts
+		var/obj/item/weapon/circuitboard/CB = locate(/obj/item/weapon/circuitboard) in component_parts
+		var/P
+		for(var/obj/item/A in component_parts)
+			for(var/D in CB.req_components)
+				if(ispath(A.type, D))
+					P = D
+					break
+			for(var/obj/item/B in M)
+				if(istype(B, P) && istype(A, P))
+					if(B.get_rating() > A.get_rating())
+						component_parts -= A
+						component_parts += B
+						M -= B
+						B.forceMove(null)
+						break
+		RefreshParts()
+		return 1
+	return 0
 
 /obj/machinery/kick_act(mob/living/carbon/human/H)
 	if(H.locked_to && isobj(H.locked_to) && H.locked_to != src)

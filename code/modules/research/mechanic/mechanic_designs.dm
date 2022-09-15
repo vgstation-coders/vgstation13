@@ -7,6 +7,7 @@
 
 	req_tech = list() //the origin tech of either the item, or the board in the machine
 	category = ""
+	var/parts = list()
 
 /datum/design/mechanic_design/New(var/obj/O) //sets the name, type, design, origin_tech, and circuit, all by itself
 	if(!istype(O))
@@ -21,6 +22,7 @@
 		build_type = FLATPACKER
 		materials += list(MAT_IRON = 5 * CC_PER_SHEET_METAL) //cost of the frame
 		if(M.component_parts && M.component_parts.len)
+			parts = M.component_parts
 			category = "Machines"
 			for(var/obj/item/I in M.component_parts) //fetching the circuit by looking in the parts
 				if(istype(I, /obj/item/weapon/circuitboard))
@@ -30,6 +32,12 @@
 				var/datum/design/part_design = FindDesign(I)
 				if(part_design)
 					copyCost(part_design, filter_chems = 1) //copy those materials requirements
+				else
+					for(var/matID in I.materials.storage)
+						if(I.materials.storage[matID] > 0)
+							if(!(matID in materials))
+								materials += list("[matID]" = 0)
+							materials[matID] += I.materials.storage[matID]
 
 		else if(istype(M, /obj/machinery/computer))
 			category = "Computers"
