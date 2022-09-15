@@ -74,7 +74,6 @@
 	var/chargecount = 0
 	var/locked = 1
 	var/coverlocked = 1
-	var/aidisabled = 0
 	var/tdir = null
 	var/lastused_light = 0
 	var/lastused_equip = 0
@@ -870,14 +869,7 @@
 	if (istype(user, /mob/living/silicon))
 		var/mob/living/silicon/ai/AI = user
 		var/mob/living/silicon/robot/robot = user
-		if (                                                             \
-			src.aidisabled ||                                            \
-			malfhack && istype(malfai) &&                                \
-			(                                                            \
-				(istype(AI) && (malfai!=AI && malfai != AI.parent)) ||   \
-				(istype(robot) && (robot in malfai.connected_robots))    \
-			)                                                            \
-		)
+		if((src.stat & NOAICONTROL) || malfhack && istype(malfai) && ((istype(AI) && (malfai!=AI && malfai != AI.parent)) || (istype(robot) && (robot in malfai.connected_robots))))
 			if(!loud)
 				to_chat(user, "<span class='warning'>\The [src] have AI control disabled!</span>")
 				nanomanager.close_user_uis(user, src)
@@ -917,7 +909,7 @@
 			usr.unset_machine()
 		return 1
 	if(!isobserver(usr))
-		if((!aidisabled) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
+		if((!stat & NOAICONTROL) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
 			to_chat(usr, "Access refused.")
 			return 0
 	if(!can_use(usr, 1))

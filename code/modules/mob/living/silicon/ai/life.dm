@@ -19,7 +19,7 @@
 				reset_view(null)
 
 /mob/living/silicon/ai/proc/life_handle_malf()
-	if(!malfhack || !malfhack.aidisabled)
+	if(!malfhack)
 		return
 	to_chat(src, "<span class='warning'>ERROR: APC access disabled, hack attempt canceled.</span>")
 	malfhacking = 0
