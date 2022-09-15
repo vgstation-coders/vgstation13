@@ -1,4 +1,4 @@
-#define KW_TO_MOLS_COEFFICIENT 0.5
+#define KW_TO_KPA_COEFFICIENT 0.5
 
 /obj/machinery/atmospherics/miner
 	name = "gas miner"
