@@ -66,8 +66,8 @@
 		var/turf/output = get_output()
 		var/obj/structure/closet/crate/flatpack/new_flatpack = new(output)
 		if(istype(being_built, /obj/machinery))
-			var/obj/machinery/X = being_built
-			X.force_parts_transfer(part)
+			var/obj/machinery/X = being_built //we have to cast it to a /obj/machinery so we can use the parts transfer code
+			X.force_parts_transfer(part) //add in scanned upgraded components
 			being_built = X
 		new_flatpack.insert_machine(being_built)
 		for(var/obj/structure/closet/crate/flatpack/existing in output)
