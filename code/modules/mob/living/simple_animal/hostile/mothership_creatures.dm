@@ -422,7 +422,6 @@
 		else if(istype(my_wheel, /obj/structure/punching_bag))
 			var/obj/structure/punching_bag/P = my_wheel
 			P.attack_hand(src, 0, P.Adjacent(src))
-			sleep(1 SECONDS) // Slows down the punching a little bit after a moment
 		else if(istype(my_wheel, /obj/structure/weightlifter))
 			var/obj/structure/weightlifter/W = my_wheel
 			W.attack_hand(src, 0, W.Adjacent(src))
@@ -653,7 +652,6 @@
 		else if(istype(my_wheel, /obj/structure/punching_bag))
 			var/obj/structure/punching_bag/P = my_wheel
 			P.attack_hand(src, 0, P.Adjacent(src))
-			sleep(1 SECONDS) // Slows down the punching a little bit after a moment
 		else if(istype(my_wheel, /obj/structure/weightlifter))
 			var/obj/structure/weightlifter/W = my_wheel
 			W.attack_hand(src, 0, W.Adjacent(src))
