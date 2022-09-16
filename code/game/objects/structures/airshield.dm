@@ -77,6 +77,7 @@
 		/obj/item/weapon/stock_parts/micro_laser
 	)
 	RefreshParts()
+	power_change()
 
 /obj/machinery/airshield/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover))
@@ -116,11 +117,14 @@
 			"<span class='notice'>You finish disassembling \the [src].</span>")
 			dropFrame()
 			spillContents()
-			stat |= NOPOWER
-			update_nearby_tiles()
 			qdel(src)
 	else
 		..()
+
+/obj/machinery/airshield/Destroy()
+	stat |= NOPOWER
+	update_nearby_tiles()
+	..()
 
 /obj/machinery/airshield/power_change()
 	if (powered(power_channel))
