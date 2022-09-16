@@ -56,6 +56,12 @@
 	if(!istype(mover)) // Aircheck!
 		return !airtight
 	return 1
+	
+//Destruction ZAS sanity
+/obj/structure/plasticflaps/Destroy()
+	airtight = 0
+	update_nearby_tiles()
+	..()
 
 /obj/structure/plasticflaps/ex_act(severity)
 	switch(severity)
