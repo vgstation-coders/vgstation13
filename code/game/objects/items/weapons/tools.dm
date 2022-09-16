@@ -850,6 +850,7 @@
 	max_fuel = 32
 	work_speed = 0.5 //2x faster
 	icon_state = "ssolder-0"
+	origin_tech = Tc_ENGINEERING + "=6"
 	var/screwmode = TRUE
 
 /obj/item/tool/solder/screw/attack_self(mob/user)
