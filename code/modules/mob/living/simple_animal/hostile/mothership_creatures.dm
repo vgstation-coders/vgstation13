@@ -531,13 +531,15 @@
 
 	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks/cheesewedge, /obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel) // Roid rats are pickier than normal mice. Cheese and raw meat only
 
-	var/punch_throw_chance = 10 // Chance of sending a target flying a short distance with a punch
+	var/punch_throw_chance = 20 // Chance of sending a target flying a short distance with a punch
 	var/punch_throw_speed = 3
-	var/punch_throw_range = 4
+	var/punch_throw_range = 6
 
 	var/damageblock = 10
 
 	var/all_fours = 1
+
+	status_flags = UNPACIFIABLE // Can't pacify muscles like these with hippy shit
 
 /mob/living/simple_animal/hostile/retaliate/roid_rat/update_icon()
 	if(all_fours == 1)
@@ -572,7 +574,7 @@
 		var/mob/living/M = target
 		if(punch_throw_range && prob(punch_throw_chance))
 			visible_message("<span class='danger'>\The [M] is flung away by the [src]'s powerful punch!</span>")
-			M.Knockdown(3)
+			M.Knockdown(4)
 			var/turf/T = get_turf(src)
 			var/turf/target_turf
 			if(istype(T, /turf/space)) // if ended in space, then range is unlimited
@@ -624,9 +626,6 @@
 	if(maxHealth == 225)
 		melee_damage_lower = 20
 		melee_damage_upper = 30
-		punch_throw_chance = 20
-		punch_throw_speed = 3
-		punch_throw_range = 6
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | OPEN_DOOR_STRONG // Maximized gainz will grant roid rats incredible punching power, and the ability to smash through normal walls! Oh YEAAAAAAAAAAAAAAH
 	if(!my_wheel && isturf(loc) && !client) // Roid rats with players in them won't be force moved
 		for(var/obj/O in view(2, src))
@@ -637,7 +636,7 @@
 				break
 			else
 				wander = TRUE
-				speed = 3
+				speed = 2
 
 /mob/living/simple_animal/hostile/retaliate/roid_rat/proc/roidratwheel(var/repeat)
 	if(repeat < 1 || stat)
@@ -661,7 +660,7 @@
 		step_towards(src,my_wheel)
 	else
 		wander = TRUE
-		speed = 3
+		speed = 2
 
 	delayNextMove(speed)
 	sleep(speed)
@@ -716,8 +715,9 @@
 	else
 		..()
 
-/mob/living/simple_animal/hostile/retaliate/roid_rat/New() // speaks mouse
+/mob/living/simple_animal/hostile/retaliate/roid_rat/New() // speaks mouse, and gets their punch spell added
 	..()
+	add_spell(new /spell/targeted/roidrat_punch, "genetic_spell_ready", /obj/abstract/screen/movable/spell_master/genetic)
 	languages += all_languages[LANGUAGE_MOUSE]
 
 /mob/living/simple_animal/hostile/retaliate/roid_rat/verb/stand_up() // Allows the roid rat to toggle poses. They can stand upright, or walk around like a typical mouse
