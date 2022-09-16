@@ -846,7 +846,7 @@
 
 /obj/item/tool/solder/screw
 	name = "screwsolder"
-	desc = "An advanced solder with a screwdriver head. Use in hand to swap to and from the screwhead."
+	desc = "An advanced soldering tool with a screwdriver head. Use in hand to swap to and from the screwhead."
 	max_fuel = 32
 	work_speed = 0.5 //2x faster
 	icon_state = "ssolder-0"
