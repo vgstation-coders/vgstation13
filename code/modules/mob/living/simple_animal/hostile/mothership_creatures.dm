@@ -619,11 +619,11 @@
 	if(.)
 		if(enemies.len && prob(5))
 			Calm()
-	if(maxHealth < 225)
+	if(maxHealth < 200)
 		melee_damage_lower = 10
 		melee_damage_upper = 20
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
-	if(maxHealth == 225)
+	if(maxHealth >= 200)
 		melee_damage_lower = 20
 		melee_damage_upper = 30
 		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | OPEN_DOOR_STRONG // Maximized gainz will grant roid rats incredible punching power, and the ability to smash through normal walls! Oh YEAAAAAAAAAAAAAAH

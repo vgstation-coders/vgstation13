@@ -4,7 +4,7 @@
 	abbreviation = "RP"
 	specialization = SSOFFENSIVE
 
-	charge_max = 300 // Much longer cooldown than the wizard spell
+	charge_max = 450 // Much longer cooldown than the wizard spell
 	cooldown_min = 30
 
 	message = "<span class='danger'>You are punched with great force!<span>"
