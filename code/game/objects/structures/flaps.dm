@@ -34,7 +34,6 @@
 		if(WT.remove_fuel(0, user))
 			new /obj/item/stack/sheet/mineral/plastic (src.loc,10)
 			qdel(src)
-			
 			return
 	return ..()
 
