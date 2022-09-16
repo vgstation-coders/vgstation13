@@ -209,7 +209,7 @@
 	throw_speed = 1
 	throw_range = 2	//Rather heavy
 	force = 10	//Somehow less than a toolbox but okay
-	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*3)
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*20)
 	w_type = RECYK_METAL
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 	var/cannonFired = FALSE
@@ -487,7 +487,7 @@
 	desc = "A large sphere of honk."
 	icon = 'icons/obj/siege_cannon.dmi'
 	icon_state = "clownnonball"
-	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_METAL*3)
+	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_METAL*10.7) //20.006 bananium sheets
 	adjRange = 50
 	adjSpeed = 1
 	adjForce = 0
