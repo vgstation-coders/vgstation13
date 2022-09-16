@@ -266,7 +266,7 @@
 				icon_state = COCO
 				condiment_overlay = COCO
 			if(MAYO)
-				name = "mayonaise jar"
+				name = "mayonnaise jar"
 				desc = "Not an instrument."
 				icon_state = MAYO
 				condiment_overlay = MAYO
@@ -677,7 +677,7 @@
 
 
 /obj/item/weapon/reagent_containers/food/condiment/small/mayo
-	name = "mayonaise packet"
+	name = "mayonnaise packet"
 	desc = "Still not an instrument."
 	icon_state = "mayo_small"
 	condiment_overlay = MAYO
