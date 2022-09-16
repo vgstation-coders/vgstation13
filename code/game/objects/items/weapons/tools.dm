@@ -769,6 +769,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
+	var/work_speed = 1 //multiplier
 	toolsounds = list('sound/items/Welder.ogg')
 
 /obj/item/tool/solder/splashable()
@@ -842,6 +843,36 @@
 	. = ..()
 	reagents.add_reagent(SACID, 50)
 	update_icon()
+
+/obj/item/tool/solder/screw
+	name = "screwsolder"
+	desc = "An advanced solder with a screwdriver head. Use in hand to swap to and from the screwhead."
+	max_fuel = 32
+	work_speed = 0.5 //2x faster
+	icon_state = "ssolder-0"
+	var/screwmode = TRUE
+
+/obj/item/tool/solder/screw/attack_self(mob/user)
+	playsound(src,'sound/items/Screwdriver.ogg',40, 1)
+	screwmode = !screwmode
+	to_chat(user, "<span class='notice'>You toggle the screwhead [screwmode ? "on":"off"].</span>")
+
+/obj/item/tool/solder/screw/is_screwdriver(mob/user)
+	return screwmode
+
+/obj/item/tool/solder/screw/update_icon()
+	..()
+	switch(reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID))
+		if(22 to INFINITY)
+			icon_state = "ssolder-20"
+		if(15 to 21)
+			icon_state = "ssolder-15"
+		if(8 to 14)
+			icon_state = "ssolder-10"
+		if(1 to 7)
+			icon_state = "ssolder-5"
+		if(0)
+			icon_state = "ssolder-0"
 
 /*
 * Fuel Can
