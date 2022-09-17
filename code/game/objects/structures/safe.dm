@@ -134,7 +134,7 @@ FLOOR SAFES
 
 	switch (task)
 		if ("Rotate Clockwise")
-			playsound(loc, 'sound/machines/dial_tick.ogg', 25, 1)
+			user.playsound_local(loc, 'sound/machines/dial_tick.ogg', 25, 1)
 			dial = increment(dial)
 			feedback = "<span class='notice'>You turn the dial up to [dial * 5].</span>"
 			if(dial == tumbler_1_pos)
@@ -157,7 +157,7 @@ FLOOR SAFES
 			to_chat(user, feedback)
 
 		if ("Rotate Counter-Clockwise")
-			playsound(loc, 'sound/machines/dial_tick.ogg', 25, 1)
+			user.playsound_local(loc, 'sound/machines/dial_tick.ogg', 25, 1)
 			dial = decrement(dial)
 			feedback = "<span class='notice'>You turn the dial down to [dial * 5].</span>"
 			if(dial == tumbler_1_pos)
@@ -199,10 +199,10 @@ FLOOR SAFES
 		if(istype(I, /obj/item/clothing/accessory/stethoscope))
 			recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe", custom_check = new /callback(src, .proc/radial_check, user), recursive = TRUE))
 
-obj/structure/safe/blob_act()
+/obj/structure/safe/blob_act()
 	return
 
-obj/structure/safe/ex_act(severity)
+/obj/structure/safe/ex_act(severity)
 	return
 
 //FLOOR SAFES

@@ -77,7 +77,7 @@
 				if(istype(holder, /obj/machinery/artifact))
 					var/obj/machinery/artifact/A = holder
 					if (A.analyzed)
-						score["artifacts"]++
+						score.artifacts++
 
 			spawn(20 SECONDS)
 				isolated = 0
@@ -125,7 +125,7 @@
 
 
 //returns 0..1, with 1 being no protection and 0 being fully protected
-proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
+/proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 	if(!H || !istype(H))
 		return 1
 

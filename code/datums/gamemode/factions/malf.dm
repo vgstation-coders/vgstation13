@@ -12,7 +12,6 @@
 	logo_state = "malf-logo"
 	default_admin_voice = "01100111 01101111 01100100" // god
 	admin_voice_style = "siliconsay"
-	var/apcs = 0
 	var/AI_win_timeleft = 1800
 	playlist = "malfdelta"
 	// for statistics
@@ -24,7 +23,7 @@
 	return header
 
 /datum/faction/malf/forgeObjectives()
-	AppendObjective(/datum/objective/nuclear)
+	AppendObjective(/datum/objective/takeover)
 
 /datum/faction/malf/stage(var/value)
 	if(value == FACTION_ENDGAME)
@@ -36,22 +35,26 @@
 		..()
 
 /datum/faction/malf/process()
+	..()
 	if (stage >= FACTION_ENDGAME)
 		var/living_ais = 0
+		var/datum/role/malfAI/M 
 		for (var/datum/role/R in members)
 			if(!R.antag.current)
 				continue
 			if(isAI(R.antag.current) && !R.antag.current.isDead())
 				living_ais++
-		if(!living_ais && stage<MALF_CHOOSING_NUKE)
+			if(istype(R, /datum/role/malfAI))
+				M = R
+		if((!living_ais || !M) && stage<MALF_CHOOSING_NUKE)
 			command_alert(/datum/command_alert/malf_destroyed)
 			stage(FACTION_DEFEATED)
 			var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 			if (istype(dynamic_mode))
 				dynamic_mode.update_stillborn_rulesets()
 			return
-		if(apcs >= 3 && can_malf_ai_takeover())
-			AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer de-increments based on how many APCs are hacked.
+		if(M.apcs.len >= 3 && can_malf_ai_takeover())
+			AI_win_timeleft = max(0, AI_win_timeleft - ((M.apcs.len / 6) * SSticker.getLastTickerTimeDuration())) //Victory timer de-increments based on how many APCs are hacked.
 
 		if (AI_win_timeleft <= 0 && stage < MALF_CHOOSING_NUKE)
 			stage(MALF_CHOOSING_NUKE)
@@ -64,7 +67,7 @@
 /datum/faction/malf/proc/can_malf_ai_takeover()
 	for(var/datum/role/malfAI in members) //if there happens to be more than one malfunctioning AI, there only needs to be one in the main station: the crew can just kill that one and the countdown stops while they get the rest
 		var/turf/T = get_turf(malfAI.antag.current)
-		if(T && (T.z == STATION_Z))
+		if(T && (T.z == map.zMainStation))
 			return TRUE
 	return FALSE
 
@@ -74,14 +77,14 @@
 	return 0
 
 /datum/faction/malf/proc/capture_the_station()
-	to_chat(world, {"<FONT size = 3><B>The AI has won!</B></FONT><br>
-<B>It has fully taken control of [station_name()]'s systems.</B>"})
+	command_alert(/datum/command_alert/malf_win)
 
-	for(var/datum/role/malfAI in members)
-		to_chat(malfAI.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
-You may decide to blow up the station. You have 60 seconds to choose.<br>
-You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
-		malfAI.antag.current.add_spell(new /spell/targeted/ai_win, "malf_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
+	for(var/datum/role/malfAI/M in members)
+		to_chat(M.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
+You may now choose to detonate the nuclear device!</span>"})
+		M.takeover = TRUE
+		M.antag.DisplayUI("Malf")
+
 
 	return
 

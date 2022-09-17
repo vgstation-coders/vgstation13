@@ -15,7 +15,7 @@ var/list
 					"hsbwater	tank" = "Spawn Water Tank",
 					"hsbtoolbox" = "Spawn Toolbox",
 					"hsbmedkit" = "Spawn Medical Kit",
-					"revive" = "Rejuvinate")
+					"revive" = "Rejuvenate")
 
 /mob/var/datum/hSB/sandbox = null
 /mob/proc/CanBuild()
@@ -48,7 +48,7 @@ var/global/list/banned_sandbox_types=list(
 	// /obj/item/weapon/gun/energy/staff
 	)
 
-proc/is_banned_type(typepath)
+/proc/is_banned_type(typepath)
 	for(var/btype in banned_sandbox_types)
 		if(findtext("[typepath]", "[btype]")!=0)
 			return 1
@@ -90,11 +90,11 @@ proc/is_banned_type(typepath)
 	//send2adminirc("\[SANDBOX\] [key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
 	feedback_add_details("admin_verb","hSBSA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-datum/hSB
+/datum/hSB
 	var/owner = null
 	var/admin = 0
 
-datum/hSB/proc/update()
+/datum/hSB/proc/update()
 	var/hsbpanel = "<center><b>h_Sandbox Panel</b></center><hr>"
 	if(admin)
 
@@ -107,7 +107,7 @@ datum/hSB/proc/update()
 		hsbpanel += "- <a href=\"?\ref[src];hsb=hsbobj\">Spawn Object</a><br><br>"
 	usr << browse(hsbpanel, "window=hsbpanel")
 
-datum/hSB/Topic(href, href_list)
+/datum/hSB/Topic(href, href_list)
 	if(!(src.owner == usr.ckey))
 		return
 	if(!usr)

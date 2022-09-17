@@ -35,8 +35,6 @@
 	if(anchored)
 		verbs -= rotate_verbs
 
-	initialize_directions = dir
-
 /obj/machinery/atmospherics/unary/cold_sink/freezer/RefreshParts()
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
@@ -207,8 +205,6 @@
 
 	if(anchored)
 		verbs -= rotate_verbs
-
-	initialize_directions = dir
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/RefreshParts()
 	var/lasercount = 0

@@ -92,7 +92,7 @@
 				intercepttext += "<b>[M.name]</b>, the <b>[M.mind.assigned_role]</b> <br>"
 
 	for (var/obj/machinery/computer/communications/comm in machines)
-		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+		if (!(comm.stat & (BROKEN | NOPOWER | FORCEDISABLE)) && comm.prints_intercept)
 			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
 			intercept.name = "paper- '[command_name()] Status Summary'"
 			intercept.info = intercepttext
@@ -130,10 +130,10 @@
 		if(66 to 79)
 			intercepttext += "<b>Uncharted Space</b></center><BR>"
 			intercepttext += "Congratulations and thank you for participating in the NT 'Frontier' space program! Your station is actively orbiting a high value system far from the nearest support stations. Little is known about your region of space, and the opportunity to encounter the unknown invites greater glory. You are encouraged to elevate security as necessary to protect Nanotrasen assets."
-		if(80 to 99)
+		if(80 to 94)
 			intercepttext += "<b>Black Orbit</b></center><BR>"
 			intercepttext += "As part of a mandatory security protocol, we are required to inform you that as a result of your orbital pattern directly behind an astrological body (oriented from our nearest observatory), your station will be under decreased monitoring and support. It is anticipated that your extreme location and decreased surveillance could pose security risks. Avoid unnecessary risks and attempt to keep your station in one piece."
-		if(100)
+		if(95 to 100)
 			intercepttext += "<b>Impending Doom</b></center><BR>"
 			intercepttext += "Your station is somehow in the middle of hostile territory, in clear view of any enemy of the corporation. Your likelihood to survive is low, and station destruction is expected and almost inevitable. Secure any sensitive material and neutralize any enemy you will come across. It is important that you at least try to maintain the station.<BR>"
 			intercepttext += "Good luck."
@@ -141,7 +141,7 @@
 	intercepttext += "</body></html>"
 
 	for (var/obj/machinery/computer/communications/comm in machines)
-		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+		if (!(comm.stat & (BROKEN | NOPOWER | FORCEDISABLE)) && comm.prints_intercept)
 			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
 			intercept.name = "paper- '[command_name()] Status Summary'"
 			intercept.info = intercepttext
@@ -159,69 +159,27 @@
 	if (!istype(wizard_mob))
 		return
 
-	//So zards properly get their items when they are admin-made.
-	qdel(wizard_mob.wear_suit)
-	qdel(wizard_mob.head)
-	qdel(wizard_mob.shoes)
-	qdel(wizard_mob.r_store)
-	qdel(wizard_mob.l_store)
-	if(!wizard_mob.find_empty_hand_index())
-		wizard_mob.u_equip(wizard_mob.held_items[GRASP_LEFT_HAND])
-	wizard_mob.equip_to_slot_or_del(new /obj/item/device/radio/headset(wizard_mob), slot_ears)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(wizard_mob), slot_w_uniform)
-	disable_suit_sensors(wizard_mob)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(wizard_mob), slot_shoes)
 	var/datum/faction/wizard/civilwar/wpf/WPF = find_active_faction_by_type(/datum/faction/wizard/civilwar/wpf)
 	var/datum/faction/wizard/civilwar/wpf/PFW = find_active_faction_by_type(/datum/faction/wizard/civilwar/pfw)
-	if(WPF && PFW)  //Are there wizwar factions?
-		if(WPF.get_member_by_mind(wizard_mob.mind))  //WPF get red
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/red(wizard_mob), slot_wear_suit)
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/red(wizard_mob), slot_head)
-			wizard_mob.add_spell(new /spell/targeted/absorb)
-			var/obj/item/weapon/spellbook/S = new /obj/item/weapon/spellbook(wizard_mob)
-		//	S.uses = Sp_BASE_PRICE * 3.5
-		//	S.max_uses = Sp_BASE_PRICE * 3.5
-			wizard_mob.put_in_hands(S)
-		else if(PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
-			wizard_mob.add_spell(new /spell/targeted/absorb)
-			var/obj/item/weapon/spellbook/S = new /obj/item/weapon/spellbook(wizard_mob)
-		//	S.uses = Sp_BASE_PRICE * 3.5
-		//	S.max_uses = Sp_BASE_PRICE * 3.5
-			wizard_mob.put_in_hands(S)
-		else //An ordinary wizard spawned after the wizwar ruleset was called, this shouldn't happen unless someone forces ragin' mages. Give them normal robes but no absorb spell.
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
-			if(!apprentice)
-				wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
-	else //No wizwar, give them normal robes
-		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
-		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
-		if(!apprentice)
-			wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
-	if(wizard_mob.backbag == 2)
-		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(wizard_mob), slot_back)
-	if(wizard_mob.backbag == 3)
-		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_norm(wizard_mob), slot_back)
-	if(wizard_mob.backbag == 4)
-		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(wizard_mob), slot_back)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(wizard_mob), slot_in_backpack)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/hair_dye/skin_dye(wizard_mob), slot_in_backpack)
-//	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
-	var/scroll_type = apprentice ? /obj/item/weapon/teleportation_scroll/apprentice : /obj/item/weapon/teleportation_scroll
-	wizard_mob.equip_to_slot_or_del(new scroll_type(wizard_mob), slot_r_store)
-
-	wizard_mob.make_all_robot_parts_organic()
-
-	// For Vox and plasmadudes.
-	//wizard_mob.species.handle_post_spawn(wizard_mob)
+	if(WPF && WPF.get_member_by_mind(wizard_mob.mind))  //WPF get red
+		wizard_mob.add_spell(new /spell/targeted/absorb)
+		var/datum/outfit/special/wizard/red/W = new
+		W.apprentice = apprentice
+		W.equip(wizard_mob, strip = TRUE, delete = TRUE)
+	else if(PFW && PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
+		wizard_mob.add_spell(new /spell/targeted/absorb)
+		var/datum/outfit/special/wizard/W = new
+		W.apprentice = apprentice
+		W.equip(wizard_mob, strip = TRUE, delete = TRUE)
+	else //Not part of the war? Give them normal robes
+		var/datum/outfit/special/wizard/W = new
+		W.apprentice = apprentice
+		W.equip(wizard_mob, strip = TRUE, delete = TRUE)
 
 	if(!apprentice)
 		to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")
 		to_chat(wizard_mob, "In your pockets you will find a teleport scroll. Use it as needed.")
 		wizard_mob.mind.store_memory("<B>Remember:</B> do not forget to prepare your spells.")
-	wizard_mob.update_icons()
 	return 1
 
 /proc/name_wizard(mob/living/carbon/human/wizard_mob, role_name = "Space Wizard")
@@ -449,7 +407,7 @@
 	C.registered_name = H.real_name
 	C.assignment = "Trader"
 	C.UpdateName()
-	C.SetOwnerInfo(H)
+	C.SetOwnerDNAInfo(H)
 	C.icon_state = "trader"
 	C.access = list(access_syndicate, access_trade)
 	var/obj/item/weapon/storage/wallet/W = new

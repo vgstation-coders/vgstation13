@@ -47,6 +47,7 @@
 		/obj/item/weapon/caution = 6,
 		/obj/item/weapon/storage/bag/trash,
 		/obj/item/device/lightreplacer/loaded/mixed,
+		/obj/item/clothing/suit/apron/overalls,
 		/obj/item/clothing/gloves/black,
 		/obj/item/clothing/head/soft/purple,
 		/obj/item/weapon/storage/box/lights/he = 2,

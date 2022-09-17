@@ -24,7 +24,7 @@ env:
   BYOND_MINOR: 1566
 
   #This can be declared here because build.py will ignore it if DM_UNIT_TESTS is true.
-  ALL_MAPS: tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy bagelstation lowfatbagel Dorfstation waystation
+  ALL_MAPS: tgstation metaclub defficiency packedstation roidstation test_tiny snaxi tgstation-sec tgstation-snow LampreyStation xoq synergy bagelstation lowfatbagel Dorfstation waystation island line nervestation
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -45,9 +45,8 @@ jobs:
         #TODO: Cache Dreamchecker install
       - name: Run dreamchecker
         run: |
-          SPACEMAN_DMM_GIT_TAG="suite-1.7" tools/travis/install_spaceman_dmm.sh dreamchecker
+          SPACEMAN_DMM_GIT_TAG="suite-1.7.2" tools/travis/install_spaceman_dmm.sh dreamchecker
           ~/dreamchecker
-
       - name: Run map checker
         run: python tools/travis/check_map_files.py maps/
 
@@ -56,7 +55,6 @@ jobs:
         run: |
           pip install Pillow
           python tools/dmi-validhunt/dmi-validhunt.py icons/ || true
-
       - name: Make sure test maps or vaults aren't ticked
         run: find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*|\.dmm/ { exit 1 }'
 

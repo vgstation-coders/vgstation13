@@ -30,10 +30,10 @@
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/swat
-	desc = "These tactical gloves are somewhat fire and impact-resistant."
+	desc = "These fingerless gloves make you look, and feel tactical."
 	name = "\improper SWAT Gloves"
-	icon_state = "black"
-	item_state = "black"
+	icon_state = "swat"
+	item_state = "swat"
 	siemens_coefficient = 0.6
 	permeability_coefficient = 0.05
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
@@ -49,7 +49,7 @@
 	if(locate(/obj/item/weapon/implant/loyalty) in user)
 		to_chat(user,"<span class='info'>These gloves can be used to convey messages to other loyalty implanted crew. Use an open hand on yourself while wearing them.</span>")
 
-/obj/item/clothing/gloves/swat/operator/Touch(var/atom/A, mob/user, proximity)
+/obj/item/clothing/gloves/swat/operator/Touch(var/atom/A, mob/living/user, proximity)
 	if(A == user && !user.incapacitated())
 		if(user.is_implanted(/obj/item/weapon/implant/loyalty))
 			var/list/choices = list(
@@ -69,7 +69,7 @@
 /obj/item/clothing/gloves/swat/operator/proc/signal(var/sign, mob/user)
 	if(user.incapacitated())
 		return
-	for(var/mob/M in view(7, user))
+	for(var/mob/living/M in view(7, user))
 		if(!M.client)
 			continue //Don't bother, no one to show it to
 		if(M.isUnconscious() || M.eye_blind || M.blinded)
@@ -86,10 +86,10 @@
 		to_chat(M,"<span class='notice'>[user] makes strange hand symbols.</span>")
 
 /obj/item/clothing/gloves/combat //Combined effect of SWAT gloves and insulated gloves
-	desc = "These tactical gloves are somewhat fire and impact resistant."
+	desc = "These combat gloves are somewhat fire and impact resistant."
 	name = "combat gloves"
-	icon_state = "black"
-	item_state = "black"
+	icon_state = "combat"
+	item_state = "combat"
 	siemens_coefficient = 0
 	permeability_coefficient = 0.05
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
@@ -234,6 +234,9 @@
 
 /obj/item/clothing/gloves/powerfist/full
 	vial = /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium
+
+/obj/item/clothing/gloves/powerfist/splashable()
+	return FALSE
 
 /obj/item/clothing/gloves/powerfist/New()
 	..()
@@ -391,6 +394,7 @@
 	desc = "Start 'em up and rock and roll!"
 	icon_state = "rockernaut_gloves"
 	item_state = "rockernaut_gloves"
+	bonus_knockout = 12
 	damage_added = 5
 	hitsound_added = 'sound/weapons/heavysmash.ogg'
 
@@ -398,12 +402,53 @@
 	return FALSE
 
 /obj/item/clothing/gloves/mining/Touch(var/atom/A, mob/user, proximity)
-	if(proximity && istype(A, /turf/unsimulated/mineral))
-		var/turf/unsimulated/mineral/M = A
-		if(do_after(user, A, max(M.minimum_mine_time,4 SECONDS*M.mining_difficulty)))
+	if(proximity)
+		if(istype(A, /turf/unsimulated/mineral))
+			var/turf/unsimulated/mineral/M = A
 			playsound(src, hitsound_added, 100, 1, vary = 0)
 			user.do_attack_animation(M, src)
 			M.GetDrilled(0)
+		else if(istype(A, /obj/structure/table))
+			var/obj/structure/table/T = A
+			playsound(src, hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(T, src)
+			visible_message("<span class='danger'>[user] smashes \the [T] apart!</span>")
+			user.delayNextAttack(8)
+			T.destroy()
+		else if(istype(A, /obj/structure/rack))
+			var/obj/structure/rack/R = A
+			playsound(src, hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(R, src)
+			visible_message("<span class='danger'>[user] smashes \the [R] apart!</span>")
+			R.destroy()
+		else if(istype(A, /obj/structure/window))
+			var/obj/structure/window/W = A
+			playsound(src, hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(W, src)
+			visible_message("<span class='danger'>[user] smashes \the [W]!</span>")
+			if(!W.adjustHealthLoss(25))
+				user.visible_message("<span class='danger'>[user]'s punch [pick("bounces","gleams")] off \the [W] harmlessly.</span>")
+			W.healthcheck()
+			user.delayNextAttack(8)
+		else if(istype(A, /turf/simulated/wall))
+			var/turf/simulated/wall/WL = A
+			playsound(src, hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(WL, src)
+			if(prob(100 - WL.hardness) || WL.rotting)
+				WL.dismantle_wall(1)
+				user.visible_message("<span class='danger'>[user] smashes through \the [WL].</span>", \
+				"<span class='notice'>You smash through \the [WL].</span>")
+			else
+				user.visible_message("<span class='warning'>[user] punches \the [WL].</span>", \
+				"<span class='notice'>You punch \the [WL].</span>")
+		else if(istype(A, /turf/simulated/floor/glass))
+			var/turf/simulated/floor/glass/G = A
+			playsound(src, hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(G, src)
+			user.visible_message("<span class='danger'>[user] smashes \the [G]!</span>")
+			G.health -= 25
+			G.healthcheck(user, TRUE, "attack_hand hulk")
+			user.delayNextAttack(8)
 
 /obj/item/clothing/gloves/mining/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")

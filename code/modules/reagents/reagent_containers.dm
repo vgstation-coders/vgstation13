@@ -201,25 +201,20 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			to_chat(user, "<span class='warning'>There's nothing to splash with!</span>")
 		return -1
 
-	reagents.reaction(target, TOUCH, amount_override = max(0,amount))
+	var/datum/organ/external/affecting = user && user.zone_sel ? user.zone_sel.selecting : null //Find what the player is aiming at
 
-	if (amount > 0)
-		if(user)
-			user.investigation_log(I_CHEMS, "has splashed [amount]u of [reagents.get_reagent_ids()] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target].")
+	reagents.reaction(target, TOUCH, amount_override = max(0,amount), zone_sels = affecting ? list(affecting) : ALL_LIMBS)
+
+	if(user)
+		user.investigation_log(I_CHEMS, "has splashed [amount > 0 ? "[amount]u of [reagents.get_reagent_ids()]" : "[reagents.get_reagent_ids(1)]"] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""].")
+	if(amount > 0)
 		reagents.remove_any(amount)
-		if(user)
-			if(user.Adjacent(target))
-				user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
-			                     "<span class='notice'>You splash some of the solution onto \the [target].</span>")
 	else
-		if(user)
-			user.investigation_log(I_CHEMS, "has splashed [reagents.get_reagent_ids(1)] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target].")
 		reagents.clear_reagents()
-		if(user)
-			if(user.Adjacent(target))
-				user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
-			                     "<span class='notice'>You splash the solution onto \the [target].</span>")
-
+	if(user)
+		if(user.Adjacent(target))
+			user.visible_message("<span class='warning'>\The [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""] has been splashed with something by [user]!</span>",
+								"<span class='notice'>You splash [amount > 0 ? "some of " : ""]the solution onto \the [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""].</span>")
 /**
  * Transfers reagents to other containers/from dispensers. Handles splashing as well.
  *
@@ -239,11 +234,17 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return -1
 
 	var/success
-	// Transfer from dispenser
-	if (can_receive && istype(target, /obj/structure/reagent_dispensers))
-		var/obj/structure/reagent_dispensers/S = target
-		if(S.can_transfer(src, user))
-			var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
+	// Transfer from dispenser or cooking machine
+	if (can_receive)
+		if(istype(target, /obj/structure/reagent_dispensers))
+			var/obj/structure/reagent_dispensers/S = target
+			if(S.can_transfer(src, user))
+				var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
+				if (tx_amount > 0)
+					to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
+				return tx_amount
+		if(reagents && reagents.is_empty() && istype(target, /obj/machinery/cooking/deepfryer))
+			var/tx_amount = transfer_sub(target, src, reagents.maximum_volume, user)
 			if (tx_amount > 0)
 				to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
 			return tx_amount
@@ -343,7 +344,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.reaction(user, TOUCH)
 		return 1
 	if(reagents.total_volume)
-		reagents.reaction(user, INGEST)
+		reagents.reaction(user, INGEST, amount_override = min(reagents.total_volume,amount_per_imbibe)/(reagents.reagent_list.len))
 		spawn(5)
 			if(reagents)
 				reagents.trans_to(user, amount_per_imbibe)

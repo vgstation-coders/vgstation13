@@ -31,7 +31,7 @@ var/list/pinpointerpinpointer_list = list()
 
 	..()
 
-/obj/item/weapon/pinpointer/acidable()
+/obj/item/weapon/pinpointer/dissolvable()
 	return FALSE
 
 /obj/item/weapon/pinpointer/attack_self()
@@ -256,9 +256,15 @@ var/list/pinpointerpinpointer_list = list()
 /obj/item/weapon/pinpointer/pdapinpointer
 	name = "pda pinpointer"
 	desc = "A pinpointer that has been illegally modified to track the PDA of a crewmember for malicious reasons."
-	var/used = FALSE
 	watches_nuke = FALSE
 	pinpointable = FALSE
+	var/dna_profile
+	var/nextuse
+
+/obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
+	..()
+	to_chat(user, "<span class='notice'>[src] can select a target again in [altFormatTimeDuration(nextuse-world.time)].</span>") 
+	
 
 /obj/item/weapon/pinpointer/pdapinpointer/attack_self()
 	if(!active)
@@ -279,21 +285,33 @@ var/list/pinpointerpinpointer_list = list()
 	set category = "Object"
 	set name = "Select pinpointer target"
 	set src in view(1)
-
-	if(used)
-		to_chat(usr,"Target has already been set!")
+	
+	if(usr.stat || !src.Adjacent(usr))
+		return
+	
+	if(!dna_profile)
+		dna_profile = usr.dna.unique_enzymes
+		to_chat(usr, "<span class='notice'>You submit a DNA sample to [src]</span>")
+	else if(dna_profile != usr.dna.unique_enzymes)
+		to_chat(usr, "<span class='warning'>[src] refuses to operate.</span>")
+		return
+	else if(nextuse - world.time > 0)
+		to_chat(usr, "<span class='warning'>[src] is still recalibrating.</span>")
 		return
 
 	var/list/L = list()
 	L["Cancel"] = "Cancel"
 	var/length = 1
 	for (var/obj/item/device/pda/P in PDAs)
-		if(P.name != "\improper PDA")
+		var/turf/T = get_turf(P)
+		if(P.name != "\improper PDA" && T.z != map.zCentcomm)
 			L[text("([length]) [P.name]")] = P
 			length++
 
-	var/t = input("Select pinpointer target. WARNING: Can only set once.") as null|anything in L
+	var/t = input("Select pinpointer target.") as null|anything in L
 	if(t == "Cancel")
+		return
+	if(nextuse - world.time > 0)
 		return
 	target = L[t]
 	if(!target)
@@ -301,9 +319,13 @@ var/list/pinpointerpinpointer_list = list()
 		return
 	active = TRUE
 	point_at(target)
+	nextuse = world.time + 2 MINUTES
 	to_chat(usr,"You set the pinpointer to locate [target]")
-	used = TRUE
 
+/obj/item/weapon/pinpointer/pdapinpointer/AltClick()
+	if(select_pda())
+		return
+	return ..()
 
 /obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
 	..()
@@ -340,6 +362,7 @@ var/list/pinpointerpinpointer_list = list()
 /obj/item/weapon/pinpointer/implant
 	name = "implant pinpointer"
 	watches_nuke = FALSE
+	var/debug_alerted = FALSE // I don't want to spam the console like a madman
 
 /obj/item/weapon/pinpointer/implant/process()
 	var/closest_distance = INFINITY
@@ -347,6 +370,11 @@ var/list/pinpointerpinpointer_list = list()
 	target = null
 	for(var/mob/living/dude in living_mob_list)
 		var/turf/dude_pos = get_turf(dude)
+		if(!dude_pos)
+			if(!debug_alerted)
+				log_debug("Pinpointer found [dude] of type [dude.type] in nullspace! It being there might be valid or not, please investigate. REF: [ref(dude)]")
+				debug_alerted = TRUE
+			continue
 		if(dude_pos.z != this_pos.z || dude.stat == DEAD || !dude.is_implanted(/obj/item/weapon/implant/loyalty))
 			continue
 		var/distance = abs(cheap_pythag(this_pos.x - dude_pos.x, this_pos.y - dude_pos.y))

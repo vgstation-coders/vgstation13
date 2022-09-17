@@ -135,12 +135,6 @@
 	update_icon()
 	src.updateDialog()
 
-
-/obj/machinery/embedded_controller/attack_ai(mob/user as mob)
-	if(build<2)
-		return 1
-	src.ui_interact(user)
-
 /obj/machinery/embedded_controller/attack_paw(mob/user as mob)
 	attack_hand(user)
 	return
@@ -175,7 +169,7 @@
 	var/frequency = 1449 //seems to be the frequency used for all the controllers on /vg/ so why not make it default
 	var/datum/radio_frequency/radio_connection
 
-/obj/machinery/embedded_controller/radio/acidable()
+/obj/machinery/embedded_controller/radio/dissolvable()
 	return 0
 
 /obj/machinery/embedded_controller/radio/initialize()

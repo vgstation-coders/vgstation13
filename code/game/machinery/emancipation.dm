@@ -5,7 +5,7 @@
 	icon_state = "emancipation_grill"
 	density = FALSE
 	anchored = TRUE
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 75
 	active_power_usage = 750
 	flow_flags = IMPASSABLE
@@ -21,7 +21,7 @@
 	update_icon()
 
 /obj/machinery/emancipation_grill/update_icon()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		icon_state = initial(icon_state)
 	else
 		icon_state = "[initial(icon_state)]_on"
@@ -29,7 +29,7 @@
 /obj/machinery/emancipation_grill/proc/emancipate(atom/movable/victim)
 	if(!victim)
 		return
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	use_power(active_power_usage, power_channel)
 	var/delete = FALSE

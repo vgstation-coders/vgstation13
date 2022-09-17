@@ -12,16 +12,22 @@
 	smashname = "broken glass"
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
+	var/list/datum/reagent/drink/available_drinks = list() //for changeling stab
+	var/switching = FALSE
+	var/current_path = null
+	var/counter = 1
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
-	overlays.len = 0
+	overlays.Cut()
 	flammable = 0
 	if(!molotov)
 		lit = 0
 	light_color = null
-	kill_light()
+	set_light(0)
 	origin_tech = ""
+	switching = FALSE
+	available_drinks.Cut()
 
 	if (reagents.reagent_list.len > 0)
 		if(reagents.has_reagent(BLACKCOLOR))
@@ -43,7 +49,11 @@
 			desc = R.glass_desc ? R.glass_desc : R.description //uses the description if a glass description isn't defined
 			isGlass = R.glass_isGlass
 
-			if(R.glass_icon_state)
+			if(istype(R,/datum/reagent/ethanol/drink/changelingsting/stab))
+				available_drinks = subtypesof(/datum/reagent/drink) + subtypesof(/datum/reagent/ethanol/drink)
+				available_drinks = shuffle(available_drinks)
+				randomize()
+			else if(R.glass_icon_state)
 				icon_state = R.glass_icon_state
 				item_state = R.glass_icon_state
 			else
@@ -62,6 +72,61 @@
 	if(iscarbon(loc))
 		var/mob/living/carbon/M = loc
 		M.update_inv_hands()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/attack_self(mob/user)
+	if(switching)
+		getnofruit(user)
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/attackby(obj/item/weapon/W, mob/user)
+	if(switching)
+		getnofruit(user,W)
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/proc/randomize()
+	if(!available_drinks.len || switching)
+		return
+	switching = TRUE
+	mouse_opacity = 2
+	spawn()
+		while(switching)
+			overlays.Cut()
+			current_path = available_drinks[counter]
+			var/datum/reagent/drink/D = new current_path
+			if(D.glass_icon_state)
+				icon_state = initial(D.glass_icon_state)
+				item_state = initial(D.glass_icon_state)
+			else
+				icon_state ="glass_colour"
+				item_state ="glass_colour"
+				var/image/filling = image('icons/obj/reagentfillings.dmi', src, "glass")
+				filling.icon += mix_color_from_reagents(reagents.reagent_list)
+				filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+				overlays += filling
+			qdel(D)
+			sleep(4)
+			if(counter == available_drinks.len)
+				counter = 0
+				available_drinks = shuffle(available_drinks)
+			counter++
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/proc/getnofruit(mob/user, obj/item/weapon/W = null)
+	if(!switching || !current_path)
+		return
+	switching = FALSE
+	if(get_turf(user))
+		playsound(user, "swing_hit", 50, 1)
+	if(W)
+		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
+	else
+		user.visible_message("[user] smacks \the [src].","You smack \the [src].")
+	reagents.clear_reagents()
+	var/datum/reagent/drink/D = new current_path
+	reagents.add_reagent(D.id, 50)
+	qdel(D)
+	on_reagent_change()
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/examine(mob/user)
 	..()

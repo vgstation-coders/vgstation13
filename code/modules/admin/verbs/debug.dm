@@ -649,7 +649,7 @@ Pressure: [env.pressure]"}
 		var/obj/machinery/power/battery/smes/infinite/magic = new(T)
 		// Manually set up our powernets since stupid seems to reign in the powernet code.
 		magic.connect_to_network()
-		magic.output=200000 // AKA rape
+		magic.outputlevel=200000 // AKA rape
 		magic.online=1
 
 //	to_chat(world, "<b>LET THERE BE JUICE</b>")
@@ -874,7 +874,7 @@ var/global/blood_virus_spreading_disabled = 0
 	else
 		alert("Invalid mob, needs to be a human.")
 
-client/proc/make_invulnerable(var/mob/M in mob_list)
+/client/proc/make_invulnerable(var/mob/M in mob_list)
 	set name = "Toggle Invulnerability"
 	set desc = "Make the target atom invulnerable to all form of damage."
 	set category = "Fun"
@@ -896,7 +896,7 @@ client/proc/make_invulnerable(var/mob/M in mob_list)
 	log_admin("[ckey(key)]/([mob]) has toggled [M]'s invulnerability [(M.flags & INVULNERABLE) ? "on" : "off"]")
 	message_admins("[ckey(key)]/([mob]) has toggled [M]'s invulnerability [(M.flags & INVULNERABLE) ? "on" : "off"]")
 
-client/proc/delete_all_adminbus()
+/client/proc/delete_all_adminbus()
 	set name = "Delete every Adminbus"
 	set desc = "When the world cannot handle them anymore."
 	set category = "Fun"
@@ -907,7 +907,7 @@ client/proc/delete_all_adminbus()
 	for(var/obj/structure/bed/chair/vehicle/adminbus/AB in world)
 		AB.Adminbus_Deletion()
 
-client/proc/delete_all_bomberman()
+/client/proc/delete_all_bomberman()
 	set name = "Remove all that Bomberman shit"
 	set desc = "4th wall ointment."
 	set category = "Fun"
@@ -963,7 +963,7 @@ client/proc/delete_all_bomberman()
 	for(var/obj/structure/powerup/O in bombermangear)
 		qdel(O)
 
-client/proc/create_bomberman_arena()
+/client/proc/create_bomberman_arena()
 	set name = "Create a Bomberman Arena"
 	set desc = "Create a customizable Bomberman-type arena."
 	set category = "Fun"
@@ -985,7 +985,7 @@ client/proc/create_bomberman_arena()
 	var/datum/bomberman_arena/A = new /datum/bomberman_arena(T, arena_type, src.mob)
 	arenas += A
 
-client/proc/control_bomberman_arena()
+/client/proc/control_bomberman_arena()
 	set name = "Arena Control Panel"
 	set desc = "Control or Remove an existing Bomberman-type arena."
 	set category = "Fun"
@@ -1069,7 +1069,7 @@ client/proc/control_bomberman_arena()
 
 
 
-client/proc/mob_list()
+/client/proc/mob_list()
 	set name = "show mob list"
 	set category = "Debug"
 
@@ -1088,7 +1088,7 @@ client/proc/mob_list()
 		to_chat(usr, "Found [foundnull] null entries in the mob list, running null clearer.")
 		listclearnulls(mob_list)
 
-client/proc/check_bomb()
+/client/proc/check_bomb()
 	set name = "Check Bomb Impact"
 	set category = "Debug"
 
@@ -1167,7 +1167,7 @@ client/proc/check_bomb()
 		if("Stealthy")
 			stealthy_level = input("How long do you want the fade-in to last? (in tenth of seconds)","Stealthy Preferences") as num
 
-client/proc/cure_disease()
+/client/proc/cure_disease()
 	set name = "Cure Disease"
 	set category = "Debug"
 	if(!holder)
@@ -1207,7 +1207,7 @@ client/proc/cure_disease()
 	log_admin("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
 	message_admins("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
 
-client/proc/check_convertables()
+/client/proc/check_convertables()
 	set name = "Check Convertables (Cult v2.0)"
 	set category = "Debug"
 	if(!holder || !ticker || !ticker.mode)
@@ -1231,7 +1231,7 @@ client/proc/check_convertables()
 	to_chat(usr, dat)
 
 
-client/proc/toggle_convertibles()
+/client/proc/toggle_convertibles()
 	set name = "Toggle Convertibles HUD (Cult 3.0+)"
 	set category = "Debug"
 	set desc = "Displays a marker over crew members showing their propension to get converted."
@@ -1267,38 +1267,35 @@ client/proc/toggle_convertibles()
 		object = copytext(object, 1, variables_start)
 
 
-	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins) //Exclude non-movable atoms
-
-	if(matches.len == 0)
-		to_chat(usr, "Unable to find any matches.")
+	//Exclude non-movable atoms
+	var/chosen = filter_list_input("Select a datum type", "Spawn Datum", get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins))
+	if(!chosen)
 		return
 
-	var/chosen
-	if(matches.len == 1)
-		chosen = matches[1]
-	else
-		chosen = input("Select a datum type", "Spawn Datum", matches[1]) as null|anything in matches
-		if(!chosen)
-			return
-
+	/*
 	var/list/lst = list()
 	var/argnum = input("Number of arguments","Number:",0) as num|null
 	if(!argnum && (argnum!=0))
 		return
 
-	lst.len = argnum // Expand to right length
-
 	for(var/i = 1 to argnum) // Lists indexed from 1 forwards in byond
-		lst[i] = variable_set(src)
+		var/data = variable_set(src)
+		lst += data
 
-	holder.marked_datum = new chosen(arglist(lst))
+	if (argnum > 0)
+		holder.marked_datum = new chosen(arglist(lst))
+	else
+		holder.marked_datum = new chosen
+	*/
+
+	holder.marked_datum = new chosen
 
 	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum. <a href='?_src_=vars;Vars=\ref[holder.marked_datum]'>Click here to access it</a></span>")
 	log_admin("[key_name(usr)] spawned the datum [chosen] to his marked datum.")
 	feedback_add_details("admin_verb","SD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 	if(varchanges.len)
-		_preloader = new(varchanges, chosen)
+		_preloader.setup(varchanges, chosen)
 		//_preloaded calls load() automatically on atom/New(). However, this proc can also create datums, which don't do that - call load() manually
 		_preloader.load(holder.marked_datum)
 
@@ -1322,11 +1319,7 @@ client/proc/toggle_convertibles()
 
 	var/turf/epicenter = get_turf(usr)
 	var/max_range = input("Set the max range") as num
-	var/inward = alert("Which way?","Spiral Block", "Inward","Outward")
-	if(inward == "Inward")
-		spiral_block(epicenter,max_range,1,1)
-	else
-		spiral_block(epicenter,max_range,0,1)
+	spiral_block(epicenter,max_range,1)
 
 /client/proc/check_striketeams()
 	set name = "Check StrikeTeams"
@@ -1398,6 +1391,14 @@ client/proc/toggle_convertibles()
 		holder.artifacts_panel()
 		log_admin("[key_name(usr)] checked the Artifacts Panel.")
 	feedback_add_details("admin_verb","ART")
+
+/client/proc/body_archive_panel()
+	set name = "Body Archive Panel"
+	set category = "Admin"
+	if(holder)
+		holder.body_archive_panel()
+		log_admin("[key_name(usr)] checked the Body Archive Panel.")
+	feedback_add_details("admin_verb","BAP")
 
 /client/proc/climate_panel()
 	set name = "Climate Panel"

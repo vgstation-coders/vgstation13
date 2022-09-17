@@ -18,8 +18,6 @@
 	if(ticker)
 		initialize()
 
-/obj/machinery/computer/rust_gyrotron_controller/attack_ai(var/mob/user)
-	. = attack_hand(user)
 
 /obj/machinery/computer/rust_gyrotron_controller/attack_hand(mob/user)
 	. = ..()
@@ -56,13 +54,13 @@
 	for(var/obj/machinery/rust/gyrotron/gyro in linked_gyrotrons)
 		//These vars are here because muh readable HTML code.
 		var/gyro_id = linked_gyrotrons.Find(gyro)
-		var/status = ((gyro.state != 2 || gyro.stat & (NOPOWER | BROKEN)) ? "<span style='color: red'>Unresponsive</span>" : "<span style='color: green'>Operational</span>")
+		var/status = ((gyro.state != 2 || gyro.stat & (FORCEDISABLE | NOPOWER | BROKEN)) ? "<span style='color: red'>Unresponsive</span>" : "<span style='color: green'>Operational</span>")
 		dat += {"
 			</tr>
 				<td>[gyro.id_tag]</td>
 				<td>[status]</td>
 		"}
-		if(gyro.state != 2 || gyro.stat & (NOPOWER | BROKEN)) //Error data not found.
+		if(gyro.state != 2 || gyro.stat & (FORCEDISABLE | NOPOWER | BROKEN)) //Error data not found.
 			dat += {"
 				<td><span style='color: red'>ERROR</span></td>
 				<td><span style='color: red'>ERROR</span></td>
@@ -96,7 +94,7 @@
 	var/idx = clamp(text2num(href_list["gyro"]), 1, linked_gyrotrons.len)
 	var/obj/machinery/rust/gyrotron/gyro = linked_gyrotrons[idx]
 
-	if(!gyro || gyro.stat & (NOPOWER | BROKEN))
+	if(!gyro || gyro.stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		return
 
 	if(href_list["modifypower"])

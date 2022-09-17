@@ -1,40 +1,21 @@
 //Refer to life.dm for caller
 
 /mob/living/carbon/human/proc/handle_stomach()
-	spawn(0)
-		for(var/mob/living/M in stomach_contents)
-			if(M.loc != src)
-				stomach_contents.Remove(M)
+	for(var/mob/living/M in stomach_contents)
+		if(M.loc != src)
+			stomach_contents.Remove(M)
+			continue
+		if(istype(M, /mob/living/carbon) && stat & stat != DEAD)//Only digest carbons and only when not dead
+			if(M.stat == DEAD)//Only digest if mob inside is dead
+				M.death(0)
+				M.ghostize(1)
+				qdel(M)
+				drop_stomach_contents()
 				continue
-			if(istype(M, /mob/living/carbon) && stat & stat != DEAD)//Only digest carbons and only when not dead
-				var/digest = 0
-				if(M.stat == DEAD)//Only digest if mob inside is dead
-					M.death(0)
-					if(prob(10))
-						switch(digest)
-							if(0)
-								to_chat(src, "<span class='warning'>Your stomach starts rumbling as /the [M] is shifted around.</span>")
-							if(1)
-								visible_message(src, "<span class='warning'>\The [src] lets out a small toot.</span>", "<span class='warning'>You let out a small toot, your stomach gurgling.</span>")
-								playsound(src, 'sound/misc/fart.ogg', 50, 1)
-							if(2)
-								visible_message(src, "<span class='warning'>\The [src] lets out an extremely long fart.</span>", "<span class='warning'>You let out an extremely long and loud fart, to the point that it starts hurting your ass.</span>")
-								playsound(src, 'sound/effects/superfart.ogg', 50, 1)
-								if(!(status_flags & GODMODE))
-									adjustBruteLoss(5)
-							if(3 to INFINITY)
-								visible_message(src, "<span class='warning'>\The [src] vomits.</span>", "<span class='warning'>You vomit up what little remains of \the [M].</span>")
-								vomit()
-								new /obj/effect/decal/remains/human(src.loc)
-								M.ghostize(1)
-								drop_stomach_contents()
-								qdel(M)
-						digest++
-					continue
-				if(SSair.current_cycle % 3 == 1)
-					if(!(M.status_flags & GODMODE))
-						M.adjustBruteLoss(5)
-					nutrition += 10
+			if(SSair.current_cycle % 3 == 1)
+				if(!(M.status_flags & GODMODE))
+					M.adjustBruteLoss(5)
+				nutrition += 10
 
 	//Code for devouring things by standing on them, for mushroom men
 	if((species.flags & SPECIES_NO_MOUTH) && (species.flags & IS_PLANT))

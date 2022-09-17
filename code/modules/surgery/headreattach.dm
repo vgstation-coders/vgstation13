@@ -1,20 +1,20 @@
 //This is an uguu head restoration surgery TOTALLY not yoinked from chinsky's limb reattacher
 
 
-/datum/surgery_step/head/
+/datum/surgery_step/head
 	can_infect = 0
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		if (!hasorgans(target))
+/datum/surgery_step/head/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (!hasorgans(target))
+		return 0
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if (!affected)
+		return 0
+	if (!(affected.status & ORGAN_DESTROYED))
+		return 0
+	if (affected.parent)
+		if (affected.parent.status & ORGAN_DESTROYED)
 			return 0
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		if (!affected)
-			return 0
-		if (!(affected.status & ORGAN_DESTROYED))
-			return 0
-		if (affected.parent)
-			if (affected.parent.status & ORGAN_DESTROYED)
-				return 0
-		return target_zone == LIMB_HEAD
+	return target_zone == LIMB_HEAD
 
 
 
@@ -27,7 +27,8 @@
 		)
 
 	duration = 8 SECONDS
-
+/datum/surgery_step/head/peel/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	return ..() && target.op_stage.head_reattach == 0
 
 /datum/surgery_step/head/peel/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] starts peeling back tattered flesh where [target]'s head used to be with \the [tool].", \
@@ -39,6 +40,7 @@
 	user.visible_message("<span class='notice'>[user] peels back tattered flesh where [target]'s head used to be with \the [tool].</span>",	\
 	"<span class='notice'>You peel back tattered flesh where [target]'s head used to be with \the [tool].</span>")
 	affected.status |= ORGAN_CUT_AWAY
+	target.op_stage.head_reattach = 1
 
 /datum/surgery_step/head/peel/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -62,7 +64,7 @@
 
 /datum/surgery_step/head/shape/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	return ..() && (affected.status & ORGAN_CUT_AWAY) && affected.open != 3
+	return ..() && (affected.status & ORGAN_CUT_AWAY) && target.op_stage.head_reattach == 1
 
 /datum/surgery_step/head/shape/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -71,10 +73,9 @@
 	..()
 
 /datum/surgery_step/head/shape/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has finished repositioning flesh and tissue to something anatomically recognizable where [target]'s head used to be with \the [tool].</span>",	\
 	"<span class='notice'>You have finished repositioning flesh and tissue to something anatomically recognizable where [target]'s head used to be with \the [tool].</span>")
-	affected.open = 3
+	target.op_stage.head_reattach = 2
 
 /datum/surgery_step/head/shape/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -97,8 +98,7 @@
 	duration = 8 SECONDS
 
 /datum/surgery_step/head/suture/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
-	return ..() && affected.open == 3
+	return ..() && target.op_stage.head_reattach == 2
 
 /datum/surgery_step/head/suture/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] is stapling and suturing flesh into place in [target]'s esophagal and vocal region with \the [tool].", \
@@ -106,10 +106,9 @@
 	..()
 
 /datum/surgery_step/head/suture/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has finished stapling [target]'s neck into place with \the [tool].</span>",	\
 	"<span class='notice'>You have finished stapling [target]'s neck into place with \the [tool].</span>")
-	affected.open = 4
+	target.op_stage.head_reattach = 3
 
 /datum/surgery_step/head/suture/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -140,8 +139,7 @@
 	duration = 6 SECONDS
 
 /datum/surgery_step/head/prepare/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
-	return ..() && affected.open == 4
+	return ..() && target.op_stage.head_reattach == 3
 
 /datum/surgery_step/head/prepare/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] starts adjusting area around [target]'s neck with \the [tool].", \
@@ -156,6 +154,7 @@
 	affected.amputated = 1
 	affected.setAmputatedTree()
 	affected.open = 0
+	target.op_stage.head_reattach = 4
 
 /datum/surgery_step/head/prepare/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -179,7 +178,7 @@
 
 /datum/surgery_step/head/attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/head = target.get_organ(target_zone)
-	return ..() && head.status & ORGAN_ATTACHABLE
+	return ..() && head.status & ORGAN_ATTACHABLE && target.op_stage.head_reattach == 4
 
 /datum/surgery_step/head/attach/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] starts attaching [tool] to [target]'s reshaped neck.", \
@@ -200,6 +199,7 @@
 	target.init_language = target.default_language
 	affected.attach(B)
 	target.decapitated = null
+	target.op_stage.head_reattach = 0
 
 
 /datum/surgery_step/head/attach/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -220,7 +220,7 @@
 
 /datum/surgery_step/head/attach_robot/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/head = target.get_organ(target_zone)
-	return ..() && head.status & ORGAN_ATTACHABLE
+	return ..() && head.status & ORGAN_ATTACHABLE && target.op_stage.head_reattach == 4
 
 /datum/surgery_step/head/attach_robot/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] starts attaching [tool] to [target]'s reshaped neck.", \
@@ -234,6 +234,7 @@
 	affected.destspawn = 0
 	affected.attach(tool)
 	target.decapitated = null
+	target.op_stage.head_reattach = 0
 
 /datum/surgery_step/head/attach_robot/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

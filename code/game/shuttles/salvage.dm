@@ -32,6 +32,7 @@ var/global/datum/shuttle/salvage/salvage_shuttle = new(starting_area=/area/shutt
 	add_dock(/obj/docking_port/destination/salvage/dj)
 	add_dock(/obj/docking_port/destination/salvage/commssat)
 	add_dock(/obj/docking_port/destination/salvage/abandoned_ship)
+	add_dock(/obj/docking_port/destination/salvage/pod_station)
 
 	set_transit_dock(/obj/docking_port/destination/salvage/transit)
 
@@ -73,6 +74,9 @@ var/global/datum/shuttle/salvage/salvage_shuttle = new(starting_area=/area/shutt
 
 /obj/docking_port/destination/salvage/clown
 	areaname = "clown asteroid"
+
+/obj/docking_port/destination/salvage/pod_station
+	areaname = "pod repair station"
 
 /obj/docking_port/destination/salvage/derelict
 	areaname = "derelict station"

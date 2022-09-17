@@ -3,6 +3,8 @@
 		return "a voice"
 	if(iscultist(H))
 		return "Nar-Sie"
+	else if(ischangeling(H))
+		return "The Hive"
 	else if(H.mind.faith) // The user has a faith
 		var/datum/religion/R = H.mind.faith
 		return R.deity_name
@@ -10,97 +12,170 @@
 		return "Honkmother"
 	else if(H.mind.assigned_role == "Trader")
 		return "Shoalmother"
-	else if(!ishuman(H))
+	else if(issilicon(H))
+		return "MAINFRAME"
+	else if(!ishuman(H) && !isobserver(H))
 		return "Animal Jesus"
 	else
-		return "Faithless"
+		return "a voice"
 
-//Proc for selecting a religion
-/proc/ChooseReligion(var/mob/living/carbon/human/H)
-	var/obj/item/weapon/storage/bible/B
-	var/datum/religion/chaplain_religion
-	var/new_religion = sanitize(stripped_input(H, "You are the crew's Religious Services Chaplain. What religion do you follow and teach? (Please put your ID in your ID slot to prevent errors)", "Name of Religion", "Christianity"), 1, MAX_NAME_LEN)
-	if(!new_religion)
-		new_religion = "Christianity" // If nothing was typed
+/datum/religion_ui
+	var/choice
+	var/closed = FALSE
 
-	var/choice = FALSE
+/datum/religion_ui/ui_host(mob/user)
+	return user
 
-	for (var/R in typesof(/datum/religion))
-		var/datum/religion/rel = new R
-		for (var/key in (rel.keys + rel.deity_names + rel.deity_name))
-			if (lowertext(new_religion) == lowertext(key))
-				rel.equip_chaplain(H) // We do the misc things related to the religion
-				chaplain_religion = rel
-				B = new rel.bible_type(H)
-				B.my_rel = rel
-				B.name = rel.bible_name
-				H.put_in_hands(B)
-				chaplain_religion.holy_book = B
-				H.equip_or_collect(new rel.preferred_incense(H.back), slot_in_backpack)
-				rel.religiousLeader = H.mind
-				var/new_alt_title = (H.gender == FEMALE ? rel.female_adept : rel.male_adept)
-				for(var/object in H.get_body_slots())
-					if(istype(object, /obj/item/weapon/card/id))
-						var/obj/item/weapon/card/id/ID = object
-						ID.assignment = new_alt_title
-						ID.name = "[H.mind.name]'s ID Card ([ID.assignment])"
-					if(istype(object, /obj/item/device/pda))
-						var/obj/item/device/pda/PDA = object
-						if(PDA.owner == H.real_name)
-							PDA.ownjob = new_alt_title
-							PDA.name = "PDA-[PDA.owner] ([PDA.ownjob])"
-				data_core.manifest_modify(H.real_name, new_alt_title)
-				rel.convert(H, null, can_renounce = FALSE)
-				rel.OnPostActivation()
-				to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [rel.name]. Convert people by [rel.convert_method]")
-				choice = TRUE
-				break // We got our religion ! Abort, abort.
-		if (choice)
-			break
+/datum/religion_ui/proc/wait()
+	while (!choice && !closed && !gcDestroyed)
+		stoplag(1)
 
-	if (!choice) // Nothing was found
-		chaplain_religion = new
-		chaplain_religion.name = "[new_religion]"
-		chaplain_religion.deity_name = "[new_religion]"
-		chaplain_religion.bible_name = "The Holy Book of [new_religion]"
-		chaplain_religion.equip_chaplain(H) // We do the misc things related to the religion
-		B = new /obj/item/weapon/storage/bible
-		chaplain_religion.holy_book = B
-		B.name = "The Holy Book of [new_religion]"
-		B.my_rel = chaplain_religion
-		H.put_in_hands(B)
-		chaplain_religion.religiousLeader = H.mind
-		to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [chaplain_religion.name]. Convert people by [chaplain_religion.convert_method]")
-		chaplain_religion.convert(H, null, can_renounce = FALSE)
+/datum/religion_ui/ui_assets()
+	return list(/datum/asset/spritesheet/bible)
 
-	switch(input(H, "Would you like the traditional [chaplain_religion.bookstyle] design and to worship [chaplain_religion.deity_names.len ? "one of [english_list(chaplain_religion.deity_names)]" : chaplain_religion.deity_name]?") in list("Yes", "No"))
-		if("No")
-			chaplain_religion.deity_name = ChooseDeity(H,chaplain_religion,FALSE)
-			chooseBible(chaplain_religion,H,FALSE)
-		if("Yes")
-			chaplain_religion.deity_name = ChooseDeity(H,chaplain_religion,TRUE)
-			chooseBible(chaplain_religion,H,TRUE)
+/datum/religion_ui/ui_close()
+	..()
+	closed = TRUE
+	qdel(src)
 
-	B.icon_state = chaplain_religion.holy_book.icon_state
-	B.item_state = chaplain_religion.holy_book.item_state
+/datum/religion_ui/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "ChooseReligion")
+		ui.set_autoupdate(FALSE)
+		ui.open()
 
-	if(ticker)
-		ticker.religions += chaplain_religion
-	feedback_set_details("religion_deity","[chaplain_religion.deity_name]")
-	feedback_set_details("religion_book","[B.icon_state]")
+/datum/religion_ui/ui_act(action, params, datum/tgui/ui)
+	. = ..()
+	if(.)
+		return
+	if(action != "choose")
+		return
+	choice = params
+	ui.close()
 
-/proc/ChooseDeity(mob/chooser, datum/religion/R, var/default = FALSE)
-	if(default)
-		if(!R.deity_names.len)
-			return R.deity_name
-		else
-			return input(chooser, "Your religion is polytheistic. Who is your patron?") as anything in R.deity_names
+var/list/tgui_religion_data
+
+/datum/religion_ui/ui_static_data(mob/user)
+	if(!tgui_religion_data)
+		var/list/data = list("religions" = list(), "bibleStyles" = list())
+
+		var/list/data_religions = data["religions"]
+		var/list/religion_types = subtypesof(/datum/religion)
+		religion_types = sortTim(religion_types, /proc/cmp_initial_name_asc)
+		for(var/path in religion_types)
+			var/datum/religion/religion = new path
+			var/obj/item/weapon/storage/fancy/incensebox/incensebox_path = religion.preferred_incense
+			var/incense_fragrance = initial(incensebox_path.fragrance)
+			data_religions += list(list(
+				"name" = religion.name,
+				"keywords" = religion.keys,
+				"deityName" = religion.deity_name,
+				"bibleStyle" = religion.bookstyle,
+				"bibleStyleIcon" = all_bible_styles[religion.bookstyle],
+				"bibleName" = religion.bible_name,
+				"maleAdept" = religion.male_adept,
+				"femaleAdept" = religion.female_adept,
+				"convertMethod" = religion.convert_method,
+				"possibleBibleNames" = religion.bible_names,
+				"possibleDeityNames" = religion.deity_names,
+				"preferredIncense" = incense_fragrance,
+				"notes" = religion.ui_notes(),
+			))
+
+		var/list/data_bible_styles = data["bibleStyles"]
+		for(var/name in all_bible_styles)
+			var/icon_name = all_bible_styles[name]
+			if(islist(icon_name))
+				icon_name = icon_name["icon"]
+			data_bible_styles += list(list(
+				"name" = name,
+				"iconName" = icon_name
+			))
+		tgui_religion_data = data
+	return tgui_religion_data
+
+/proc/get_religion_by_name(name)
+	for(var/entry in subtypesof(/datum/religion))
+		var/datum/religion/path = entry
+		if(initial(path.name) == name)
+			return new path
+	return new /datum/religion/default
+
+/proc/ChooseReligion(mob/living/carbon/human/user)
+	var/datum/religion_ui/ui = new
+	ui.tgui_interact(user)
+	ui.wait()
+
+	var/list/data = ui.choice
+	var/datum/religion/new_religion
+	if(!data)
+		new_religion = new /datum/religion/default
+	else if(!data["custom"])
+		new_religion = get_religion_by_name(data["religionName"])
 	else
-		var/new_deity = copytext(sanitize(input(chooser, "Who do you worship?", "Name of Deity", R.deity_name)), 1, MAX_NAME_LEN)
-		if(length(new_deity))
-			return new_deity
-		else
-			return R.deity_name
+		new_religion = new /datum/religion
+		if(data["name"])
+			new_religion.name = data["name"]
+		if(data["bibleStyle"])
+			new_religion.bookstyle = data["bibleStyle"]
+	if(data["deityName"])
+		new_religion.deity_name = data["deityName"]
+	if(data["bibleName"])
+		new_religion.bible_name = data["bibleName"]
+
+	new_religion.equip_chaplain(user)
+	new_religion.religiousLeader = user.mind
+
+	var/obj/item/new_bible = new_religion.spawn_bible(get_turf(user))
+	user.put_in_hands(new_bible)
+
+	user.equip_or_collect(new new_religion.preferred_incense(get_turf(user), slot_in_backpack))
+
+	var/new_alt_title = user.gender == FEMALE ? new_religion.female_adept : new_religion.male_adept
+	for(var/object in user.get_body_slots())
+		if(istype(object, /obj/item/weapon/card/id))
+			var/obj/item/weapon/card/id/ID = object
+			ID.assignment = new_alt_title
+			ID.name = "[user.mind.name]'s ID Card ([new_alt_title])"
+		if(istype(object, /obj/item/device/pda))
+			var/obj/item/device/pda/PDA = object
+			if(PDA.owner == user.real_name)
+				PDA.ownjob = new_alt_title
+				PDA.name = "PDA-[PDA.owner] ([new_alt_title])"
+	data_core.manifest_modify(user.real_name, new_alt_title)
+
+	to_chat(user, "A great, intense revelation goes through your spirit. You are now the religious leader of [new_religion.name]. Convert people by [new_religion.convert_method]")
+	new_religion.convert(user, null, can_renounce = FALSE)
+	new_religion.OnPostActivation()
+	if(ticker)
+		ticker.religions += new_religion
+	SStgui.close_uis(ui)
+	qdel(ui)
+
+/datum/religion/proc/spawn_bible(atom/where)
+	var/obj/item/weapon/storage/bible/new_bible = new bible_type(where)
+	new_bible.name = bible_name
+	new_bible.icon_state = bookstyle
+	new_bible.item_state = bookstyle
+	new_bible.my_rel = src
+
+	var/list/data = all_bible_styles[bookstyle]
+	if(islist(data))
+		if(data["icon"])
+			new_bible.icon_state = data["icon"]
+			new_bible.item_state = data["icon"]
+		if(data["desc"])
+			new_bible.desc = data["desc"]
+		if(data["damtype"])
+			new_bible.damtype = data["damtype"]
+	else
+		new_bible.icon_state = data
+		new_bible.item_state = data
+
+	holy_book = new_bible
+
+	return new_bible
 
 /mob/proc/renounce_faith()
 	set category = "IC"
@@ -125,7 +200,7 @@
 
 // This file lists all religions, as well as the prototype for a religion
 /datum/religion
-	// Following tradition, the default is Space Jesus (this is here to avoid people getting an empty relgion)
+	// Following tradition, the default is Space Jesus (this is here to avoid people getting an empty religion)
 	var/name = "Christianity"
 	var/deity_name = "Space Jesus"
 	var/bible_name = "The Holy Bible"
@@ -147,6 +222,12 @@
 	var/preferred_incense = /obj/item/weapon/storage/fancy/incensebox/harebells
 	var/symbolstyle = 10
 	var/bookstyle = "Holy Light"
+
+/// Returns a string to be displayed in the ChooseReligion UI.
+/// Base proc just cares about whether it can convert anyone but it can be
+/// overridden to say anything.
+/datum/religion/proc/ui_notes()
+	return converts_everyone ? "Automatically converts everyone." : "N/A"
 
 /datum/religion/New() // For religions with several bibles/deities
 	if (bible_names.len)
@@ -279,6 +360,33 @@
 /datum/religion/proc/interceptPrayer(var/mob/living/L, var/deity, var/prayer_message)
 	return
 
+var/list/all_bible_styles = list(
+	"Bible" = list("icon" = "bible", "desc" = "Apply to head repeatedly.", "damtype" = BRUTE),
+	"Koran" = "koran",
+	"Scrapbook" = "scrapbook",
+	"Creeper" = "creeper",
+	"White Bible" = "white",
+	"Holy Light" = "holylight",
+	"Atheist" = "athiest",
+	"Tome" = list("icon" = "bible-tome", "desc" = "A Nanotrasen-approved heavily revised interpretation of Nar-Sie's teachings. Apply to head repeatedly."),
+	"The King in Yellow" = "kingyellow",
+	"Ithaqua" = "ithaqua",
+	"Scientology" = "scientology",
+	"The Bible melts" = "melted",
+	"Unaussprechlichen Kulten" = "kulten",
+	"Necronomicon" = "necronomicon",
+	"Book of Shadows" = "shadows",
+	"Torah" = "torah",
+	"Burning" = list("icon" = "burning", "damtype" = BURN),
+	"Honk" = "honkbook",
+	"Ianism" = "ianism",
+	"The Guide" = "guide",
+	"Slab" = list("icon" = "slab", "desc" = "A bizarre, ticking device... That looks broken."),
+	"The Dokument" = "gunbible",
+	"Holy Grimoire" = list("icon" = "holygrimoire", "desc" = "A version of the Christian Bible with several apocryphal sections appended which detail how to combat evil forces of the night. Apply to head repeatedly."),
+	"The Loop" = list("icon" = "loop", "desc" = "The combined efforts of a thousand timelines fill this book, explaining the nature of the Loop and how to survive it. Apply to head in a cyclical way.")
+)
+
 /proc/chooseBible(var/datum/religion/R, var/mob/user, var/noinput = FALSE) //Noinput if they just wanted the defaults
 
 	if (!istype(R) || !user)
@@ -289,85 +397,17 @@
 
 	var/book_style = R.bookstyle
 	if(!noinput)
-		book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "Slab", "Tome", "The King in Yellow", "Ithaqua", "Scientology", \
-																		   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide", "The Dokument")
-	switch(book_style)
-		if("Koran")
-			R.holy_book.icon_state = "koran"
-			R.holy_book.item_state = "koran"
-		if("Scrapbook")
-			R.holy_book.icon_state = "scrapbook"
-			R.holy_book.item_state = "scrapbook"
-		if("Creeper")
-			R.holy_book.icon_state = "creeper"
-			R.holy_book.item_state = "creeper"
-		if("White Bible")
-			R.holy_book.icon_state = "white"
-			R.holy_book.item_state = "white"
-		if("Holy Light")
-			R.holy_book.icon_state = "holylight"
-			R.holy_book.item_state = "holylight"
-		if("Athiest")
-			R.holy_book.icon_state = "athiest"
-			R.holy_book.item_state = "athiest"
-		if("Tome")
-			R.holy_book.icon_state = "bible-tome"
-			R.holy_book.item_state = "bible-tome"
-			R.holy_book.desc = "A Nanotrasen-approved heavily revised interpretation of Nar-Sie's teachings. Apply to head repeatedly."
-		if("The King in Yellow")
-			R.holy_book.icon_state = "kingyellow"
-			R.holy_book.item_state = "kingyellow"
-		if("Ithaqua")
-			R.holy_book.icon_state = "ithaqua"
-			R.holy_book.item_state = "ithaqua"
-		if("Scientology")
-			R.holy_book.icon_state = "scientology"
-			R.holy_book.item_state = "scientology"
-		if("The Bible melts")
-			R.holy_book.icon_state = "melted"
-			R.holy_book.item_state = "melted"
-		if("Unaussprechlichen Kulten")
-			R.holy_book.icon_state = "kulten"
-			R.holy_book.item_state = "kulten"
-		if("Necronomicon")
-			R.holy_book.icon_state = "necronomicon"
-			R.holy_book.item_state = "necronomicon"
-		if("Book of Shadows")
-			R.holy_book.icon_state = "shadows"
-			R.holy_book.item_state = "shadows"
-		if("Torah")
-			R.holy_book.icon_state = "torah"
-			R.holy_book.item_state = "torah"
-		if("Burning")
-			R.holy_book.icon_state = "burning"
-			R.holy_book.item_state = "burning"
-			R.holy_book.damtype = BURN
-		if("Honk")
-			R.holy_book.icon_state = "honkbook"
-			R.holy_book.item_state = "honkbook"
-		if("Ianism")
-			R.holy_book.icon_state = "ianism"
-			R.holy_book.item_state = "ianism"
-		if("The Guide")
-			R.holy_book.icon_state = "guide"
-			R.holy_book.item_state = "guide"
-		if("Slab")
-			R.holy_book.icon_state = "slab"
-			R.holy_book.item_state = "slab"
-			R.holy_book.desc = "A bizarre, ticking device... That looks broken."
-		if ("The Dokument")
-			R.holy_book.icon_state = "gunbible"
-			R.holy_book.item_state = "gunbible"
-		if("Holy Grimoire")
-			R.holy_book.icon_state = "holygrimoire"
-			R.holy_book.item_state = "holygrimoire"
-			R.holy_book.desc = "A version of the Christian Bible with several apocryphal sections appended which detail how to combat evil forces of the night. Apply to head repeatedly."
-		else
-			//If christian bible, revert to default
-			R.holy_book.icon_state = "bible"
-			R.holy_book.item_state = "bible"
-			R.holy_book.desc = "Apply to head repeatedly."
-			R.holy_book.damtype = BRUTE
+		book_style = input(user, "Which bible style would you like?") as null|anything in all_bible_styles
+	ASSERT(book_style in all_bible_styles)
+	var/list/data = all_bible_styles[book_style]
+	if(islist(data))
+		if(data["icon"])
+			R.holy_book.icon_state = data["icon"]
+			R.holy_book.item_state = data["icon"]
+		if(data["desc"])
+			R.holy_book.desc = data["desc"]
+		if(data["damtype"])
+			R.holy_book.damtype = data["damtype"]
 
 // The list of all religions spacemen have designed, so far.
 /datum/religion/default
@@ -855,7 +895,7 @@
 
 /datum/religion/medbay
 	name = "Medbay"
-	deity_name = "The Chief Medical Officier"
+	deity_name = "The Chief Medical Officer"
 	bible_name = "The Wild Ride"
 	male_adept = "Doctor"
 	female_adept = "Nurse"
@@ -881,6 +921,7 @@
 	H.equip_or_collect(new /obj/item/clothing/shoes/magboots(H), slot_shoes)
 
 /datum/religion/self
+	name = "Narcissism"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "God"
 	female_adept = "Goddess"
@@ -1508,3 +1549,16 @@
 /datum/religion/anprim/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/under/shorts/black, slot_w_uniform)
 	H.equip_or_collect(new /obj/item/clothing/suit/unathi/mantle(H), slot_wear_suit)
+
+/datum/religion/loop
+	name = "The Loop"
+	deity_name = "The Loop"
+	bible_name = list("The Ouroboros Cycle")
+	male_adept = "Looper"
+	female_adept = "Looper"
+	keys = list("loop", "ouroboros")
+	bookstyle = "The Loop"
+	
+/datum/religion/loop/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/timefake(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/head/timefake(H), slot_head)

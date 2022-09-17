@@ -1,25 +1,16 @@
 //Uncommenting ALLOW_HOLIDAYS in config.txt will enable Holidays
-var/global/Holiday = null
-
-//Just thinking ahead! Here's the foundations to a more robust Holiday event system.
-//It's easy as hell to add stuff. Just set Holiday to something using the switch (or something else)
-//then use if(Holiday == "MyHoliday") to make stuff happen on that specific day only
+//Get_Holiday() returns a holiday. If multiple holidays are on the same day, the choice is randomized, unless returned immediately, see VG_BIRTHDAY
 //Please, Don't spam stuff up with easter eggs, I'd rather somebody just delete this than people cause
 //the game to lag even more in the name of one-day content.
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-//ALSO, MOST IMPORTANTLY: Don't add stupid stuff! Discuss bonus content with Project-Heads first please!//
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-//																							~Carn
+// sets up the Holiday global variable. Shouldbe called on game configuration or something
+var/global/Holiday = null
 
-// sets up the Holiday global variable. Shouldbe called on game configuration or something.
 /proc/Get_Holiday()
 	if(!Holiday)  //  Holiday stuff was not enabled in the config!
 		return
 
 	var/list/current_holidays = list()	//Because it's possible to have multiple holidays on the same day
-
-	Holiday = null // reset our switch now so we can recycle it as our Holiday name
 
 	var/YY = text2num(time2text(world.timeofday, "YY")) 	// get the current year
 	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
@@ -68,8 +59,7 @@ var/global/Holiday = null
 				if(4)
 					current_holidays += FIREFIGHTERS_DAY
 				if(9)
-					Holiday = VG_BIRTHDAY
-					return //go no further, this is the one
+					return VG_BIRTHDAY //go no further, this is the one
 				if(12)
 					current_holidays += OWL_AND_PUSSYCAT_DAY // what a dumb day of observence...but we -do- have costumes already :3
 				if(20)
@@ -157,13 +147,10 @@ var/global/Holiday = null
 		current_holidays += EASTER
 
 	if(current_holidays.len)
-		Holiday = pick(current_holidays)
+		return pick(current_holidays)
 
-	if(!Holiday)
-		// Friday the 13th
-		if(DD == 13)
-			if(time2text(world.timeofday, "DDD") == "Fri")
-				Holiday = FRIDAY_THE_13TH
+	if(time2text(world.timeofday, "DDD") == "Fri" && DD == 13)
+		return FRIDAY_THE_13TH
 
 //Allows GA and GM to set the Holiday variable
 /client/proc/Set_Holiday(T as text|null)
@@ -195,6 +182,8 @@ var/global/Holiday = null
 		if(Holiday == INTERNATIONAL_CLOWN_DAY)
 			sleep(600)
 			set_security_level("rainbow")
+		if(Holiday == APRIL_FOOLS_DAY)
+			hatStacking = 1
 
 // Nested in the random events loop. Will be triggered every 2 minutes
 /proc/Holiday_Random_Event()

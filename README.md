@@ -64,10 +64,6 @@ where the BYOND key must be in lowercase and the admin rank must be properly cap
 
 Finally, to start the server, run Dream Daemon and enter the path to your compiled vgstation13.dmb file.  Make sure to set the port to the one you  specified in the config.txt, and set the Security box to 'Trusted'.  Then press GO and the server should start up and be ready to join.
 
-#### Linux
-
-We use a Rust library called `libvg` to handle some things like UTF-8 handling. A Windows build is shipped with the code (`libvg.dll`), however a Linux version is not. If you want to run /vg/station13 on Linux, you will have to compile this binary yourself (or ask for a build on Discord). See [`libvg/readme.md`](libvg/README.md) for details on how to compile it.
-
 ---
 
 ### Configuration

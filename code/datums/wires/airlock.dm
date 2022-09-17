@@ -103,16 +103,10 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 
 			if(!mended)
 				//one wire for AI control. Cutting this prevents the AI from controlling the door unless it has hacked the door through the power connection (which takes about a minute). If both main and backup power are cut, as well as this wire, then the AI cannot operate or hack the door at all.
-				//aiControlDisabled: If 1, AI control is disabled until the AI hacks back in and disables the lock. If 2, the AI has bypassed the lock. If -1, the control is enabled but the AI had bypassed it earlier, so if it is disabled again the AI would have no trouble getting back in.
-				if(A.aiControlDisabled == 0)
-					A.aiControlDisabled = 1
-				else if(A.aiControlDisabled == -1)
-					A.aiControlDisabled = 2
+				//aiControlDisabled: If 1, AI control is disabled until the AI hacks back in and disables the lock. If 2, the AI has bypassed the lock.
+				A.disable_AI_control()
 			else
-				if(A.aiControlDisabled == 1)
-					A.aiControlDisabled = 0
-				else if(A.aiControlDisabled == 2)
-					A.aiControlDisabled = -1
+				A.enable_AI_control()
 
 		if(AIRLOCK_WIRE_ELECTRIFY)
 
@@ -168,16 +162,12 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 			A.loseBackupPower()
 		if(AIRLOCK_WIRE_AI_CONTROL)
 			if(A.aiControlDisabled == 0)
-				A.aiControlDisabled = 1
-			else if(A.aiControlDisabled == -1)
-				A.aiControlDisabled = 2
+				A.disable_AI_control()
 
 			spawn(10)
 				if(A)
 					if(A.aiControlDisabled == 1)
-						A.aiControlDisabled = 0
-					else if(A.aiControlDisabled == 2)
-						A.aiControlDisabled = -1
+						A.enable_AI_control()
 
 		if(AIRLOCK_WIRE_ELECTRIFY)
 			//one wire for electrifying the door. Sending a pulse through this electrifies the door for 30 seconds.

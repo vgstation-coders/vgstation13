@@ -10,25 +10,30 @@ var/world_startup_time
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
-
+	sleep_offline = FALSE
+	movement_mode = PIXEL_MOVEMENT_MODE
 
 var/savefile/panicfile
 
 var/datum/early_init/early_init_datum = new
 
 #if AUXTOOLS_DEBUGGER
-var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
+var/auxtools_path
 
 /proc/enable_debugging(mode, port) //Hooked by auxtools
 	CRASH("auxtools not loaded")
 
 /proc/auxtools_stack_trace(msg)
 	CRASH(msg)
+
+/proc/auxtools_expr_stub()
+	CRASH("auxtools not loaded")
 #endif
 
 /datum/early_init/New()
 	..()
 	#if AUXTOOLS_DEBUGGER
+	auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	if(fexists(auxtools_path))
 		call(auxtools_path, "auxtools_init")()
 		enable_debugging()
@@ -36,20 +41,14 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		// warn on missing library
 		warning("There is no auxtools library for this system included with SpacemanDMM. Debugging will not work. Pester them to add one.")
 	#endif
+	world.Profile(PROFILE_START)
 
 /world/New()
 	world_startup_time = world.timeofday
-	Profile(world_startup_time)
-	// Honk honk, fuck you science
+
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
-
-	/*Runtimes, not sure if i need it still so commenting out for now
-	starticon = rotate_icon('icons/obj/lightning.dmi', "lightningstart")
-	midicon = rotate_icon('icons/obj/lightning.dmi', "lightning")
-	endicon = rotate_icon('icons/obj/lightning.dmi', "lightningend")
-	*/
 
 	// logs
 	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
@@ -66,18 +65,15 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	diaryofmeanpeople = file("data/logs/[date_string] Attack.log")
 	admin_diary = file("data/logs/[date_string] admin only.log")
 
-	var/log_start = "---------------------\n\[[time_stamp()]\]WORLD: starting up..."
+	var/now = time_stamp()
+	var/log_start = "---------------------\n\[[now]\]WORLD: starting up..."
 
 	diary << log_start
 	diaryofmeanpeople << log_start
 	admin_diary << log_start
-	var/ourround = time_stamp()
-	panicfile.cd = ourround
-
+	panicfile.cd = now
 
 	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
-
-	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
 	load_configuration()
 	SSdbcore.Initialize(world.timeofday) // Get a database running, first thing
@@ -93,12 +89,10 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		load_alienwhitelist()
 	jobban_loadbanfile()
 	oocban_loadbanfile()
+	paxban_loadbanfile()
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()
-	SetupHooks() // /vg/
-
-	library_catalog.initialize()
 
 	spawn() copy_logs() // Just copy the logs.
 	if(config && config.log_runtimes)
@@ -107,65 +101,12 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		// dumb and hardcoded but I don't care~
 		config.server_name += " #[(world.port % 1000) / 100]"
 
-	Get_Holiday()	//~Carn, needs to be here when the station is named so :P
-
-	src.update_status()
-
-	paperwork_setup()
-
-	global_deadchat_listeners = list()
-
-	initialize_runesets()
-
-	initialize_beespecies()
-	generate_radio_frequencies()
-	//sun = new /datum/sun()
-	data_core = new /obj/effect/datacore()
-	paiController = new /datum/paiController()
-
-	plmaster = new /obj/effect/overlay()
-	plmaster.icon = 'icons/effects/tile_effects.dmi'
-	plmaster.icon_state = "plasma"
-	plmaster.layer = FLY_LAYER
-	plmaster.plane = EFFECTS_PLANE
-	plmaster.mouse_opacity = 0
-
-	slmaster = new /obj/effect/overlay()
-	slmaster.icon = 'icons/effects/tile_effects.dmi'
-	slmaster.icon_state = "sleeping_agent"
-	slmaster.layer = FLY_LAYER
-	slmaster.plane = EFFECTS_PLANE
-	slmaster.mouse_opacity = 0
-
-	src.update_status()
-
-	sleep_offline = 0
-
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
 	Master.Setup()
 
-	SortAreas()							//Build the list of all existing areas and sort it alphabetically
-
-	spawn(2000)		//so we aren't adding to the round-start lag
-		if(config.ToRban)
-			ToRban_autoupdate()
-		/*if(config.kick_inactive)
-			KickInactiveClients()*/
-
 	return ..()
-
-//world/Topic(href, href_list[])
-//		to_chat(world, "Received a Topic() call!")
-//		to_chat(world, "[href]")
-//		for(var/a in href_list)
-//			to_chat(world, "[a]")
-//		if(href_list["hello"])
-//			to_chat(world, "Hello world!")
-//			return "Hello world!"
-//		to_chat(world, "End of Topic() call.")
-//		..()
 
 /world/Topic(T, addr, master, key)
 	diary << "TOPIC: \"[T]\", from:[addr], master:[master], key:[key]"
@@ -189,7 +130,6 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		s["mode"] = master_mode
 		s["respawn"] = config ? abandon_allowed : 0
 		s["enter"] = enter_allowed
-		s["vote"] = config.allow_vote_mode
 		s["ai"] = config.allow_ai
 		s["host"] = host ? host : null
 		s["players"] = list()
@@ -202,17 +142,21 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		s["revision"] = return_revision()
 		var/n = 0
 		var/admins = 0
+		var/afk_admins = 0
 
 		for(var/client/C in clients)
 			if(C.holder)
 				if(C.holder.fakekey)
 					continue	//so stealthmins aren't revealed by the hub
+				if(C.is_afk())
+					afk_admins++
 				admins++
 			s["player[n]"] = C.key
 			n++
 		s["players"] = n
 
-		s["admins"] = admins
+		s["admins"] = admins - afk_admins
+		s["afk_admins"] = afk_admins
 
 		return list2params(s)
 	else if (findtext(T,"notes:"))
@@ -224,7 +168,6 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 
 
 /world/Reboot(reason)
-	testing("[time_stamp()] - World is rebooting. Reason: [reason]")
 	if(reason == REBOOT_HOST)
 		if(usr)
 			if (!check_rights(R_SERVER))
@@ -241,30 +184,17 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		..()
 		return
 
-	if(config.map_voting)
-		//testing("we have done a map vote")
-		if(fexists(vote.chosen_map))
-			//testing("[vote.chosen_map] exists")
-			var/start = 1
-			var/pos = findtext(vote.chosen_map, "/", start)
-			var/lastpos = pos
-			//testing("First slash [lastpos]")
-			while(pos > 0)
-				lastpos = pos
-				pos = findtext(vote.chosen_map, "/", start)
-				start = pos + 1
-				//testing("Next slash [pos]")
-			var/filename = copytext(vote.chosen_map, lastpos + 1, 0)
-			//testing("Found [filename]")
-
-			if(!fcopy(vote.chosen_map, filename))
-				//testing("Fcopy failed, deleting and copying")
+	if(vote.winner && vote.map_paths)
+		//get filename
+		var/filename = "vgstation13.dmb"
+		var/map_path = "maps/voting/" + vote.map_paths[vote.winner] + "/" + filename
+		if(fexists(map_path))
+			//copy file to main folder
+			if(!fcopy(map_path, filename))
 				fdel(filename)
-				fcopy(vote.chosen_map, filename)
-			sleep(60)
+				fcopy(map_path, filename)
 
 	pre_shutdown()
-
 	..()
 
 /world/proc/pre_shutdown()
@@ -272,7 +202,6 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		D.closeAll()
 
 	Master.Shutdown()
-	paperwork_stop()
 
 	stop_all_media()
 
@@ -378,9 +307,6 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		features += "closed"
 
 	features += abandon_allowed ? "respawn" : "no respawn"
-
-	if (config && config.allow_vote_mode)
-		features += "vote"
 
 	if (config && config.allow_ai)
 		features += "AI allowed"

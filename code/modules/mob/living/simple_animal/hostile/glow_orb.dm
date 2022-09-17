@@ -44,6 +44,8 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 	var/last_scan = 0
 	var/unstable = 0
 
+	blooded = FALSE
+
 
 /mob/living/simple_animal/hostile/glow_orb/New()
 	..()
@@ -101,7 +103,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 	flick("glow_stone_deactivate", src)
 	spawn(10)
 		playsound(src, 'sound/weapons/orb_deactivate.ogg', 50,1)
-		kill_light()
+		set_light(0)
 		new/obj/item/weapon/glow_orb(get_turf(src))
 		qdel(src)
 		return

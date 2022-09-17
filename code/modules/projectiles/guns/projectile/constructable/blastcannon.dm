@@ -139,6 +139,8 @@
 			bomb_air_contents_2.react()
 			pressure = bomb_air_contents_2.return_pressure()
 			var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
+			if(range > 14)
+				range = (pressure-TANK_FRAGMENT_PRESSURE+14000)/(2*TANK_FRAGMENT_SCALE)
 			uncapped = range
 			if(!ignorecap)
 				if(range > MAX_EXPLOSION_RANGE)

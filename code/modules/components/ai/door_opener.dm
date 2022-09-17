@@ -1,22 +1,23 @@
 /datum/component/ai/door_opener
-	var/pressure_check=TRUE
-	var/max_pressure_diff=-1
+	var/pressure_check = TRUE
+	var/max_pressure_diff = -1
 
-/datum/component/ai/door_opener/RecieveSignal(var/message_type, var/list/args)
-	switch(message_type)
-		if(COMSIG_ATTACKING) // list("target"=A)
-			OnAttackingTarget(args["target"])
-		else
-			..(message_type, args)
+/datum/component/ai/door_opener/initialize()
+	parent.register_event(/event/comp_ai_cmd_attack, src, .proc/cmd_attack)
+	return TRUE
 
-/datum/component/ai/door_opener/proc/OnAttackingTarget(var/atom/target)
+/datum/component/ai/door_opener/Destroy()
+	parent.unregister_event(/event/comp_ai_cmd_attack, src, .proc/cmd_attack)
+	..()
+
+/datum/component/ai/door_opener/proc/cmd_attack(atom/target)
 	if(istype(target,/obj/machinery/door))
 		var/obj/machinery/door/D = target
 		if(CanOpenDoor(D))
 			if(get_dist(src, target) > 1)
 				return // keep movin'.
-			controller.setBusy(TRUE)
-			SendSignal(COMSIG_MOVE, list("dir"=0)) // Stop movement?
+			INVOKE_EVENT(parent, /event/comp_ai_cmd_set_busy, "yes" = TRUE)
+			INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0)
 			D.visible_message("<span class='warning'>\The [D]'s motors whine as four arachnid claws begin trying to force it open!</span>")
 			spawn(50)
 				if(CanOpenDoor(D) && prob(25))
@@ -29,11 +30,10 @@
 							FD.open(1)
 
 					// Reset targetting
-					controller.setBusy(FALSE)
-					controller.setTarget(null)
+					INVOKE_EVENT(parent, /event/comp_ai_cmd_set_busy, "yes" = FALSE)
+					INVOKE_EVENT(parent, /event/comp_ai_cmd_set_target, "target" = null)
 			return
-		controller.setBusy(FALSE)
-		return
+		INVOKE_EVENT(parent, /event/comp_ai_cmd_set_busy, "yes" = FALSE)
 
 /datum/component/ai/door_opener/proc/performPressureCheck(var/turf/loc)
 	var/turf/simulated/lT=loc

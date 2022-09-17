@@ -1,0 +1,19 @@
+<!--
+Used In File(s): \code\modules\painting\palette.dm
+-->
+
+
+	<h3>Palette </h3>
+	{{for data.paint_colours}}
+	<!-- Paint Tool Controls -->
+		<div class="item">
+			<span style="border:1px solid #161616; background-color: {{>value.base_color}};">&nbsp;&nbsp;&nbsp;</span>
+			{{:helper.link('Apply', null, {'colour':value.tag, 'act': "apply"} ) }}
+			{{:helper.link('Duplicate', null, {'colour':value.tag, 'act': "duplicate"}) }}
+			{{:helper.link('Delete', null, {'colour':value.tag, 'act': "delete"} ) }} <br/>
+		</div>
+	{{empty}}
+		No colours in palette yet.
+	{{/for}}
+	<h3>---</h3>
+	{{:helper.link("Wash pencil", null, {'wash_pencil': 1})}}

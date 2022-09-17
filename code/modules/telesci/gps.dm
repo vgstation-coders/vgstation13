@@ -1,5 +1,6 @@
 var/list/GPS_list = list()
 var/list/SPS_list = list()
+var/list/all_GPS_list = list()
 
 /obj/item/device/gps
 	name = "global positioning system"
@@ -18,6 +19,7 @@ var/list/SPS_list = list()
 	var/builtin = FALSE
 	var/transmitting = FALSE
 	var/list/gps_list // Set in New to be either global.GPS_list or global.SPS_list
+	var/view_all = FALSE
 
 /obj/item/device/gps/proc/get_gps_list()
 	return GPS_list
@@ -30,20 +32,22 @@ var/list/SPS_list = list()
 	gps_list = get_gps_list()
 	gpstag = "[base_tag][gps_list.len]"
 	gps_list += src
+	all_GPS_list += src
 	update_name()
 	update_icon()
 
 /obj/item/device/gps/Destroy()
 	gps_list -= src
+	all_GPS_list -= src
 	..()
 
 /obj/item/device/gps/update_icon()
 	overlays.Cut()
 	if(emped)
-		overlays += image(icon, "emp")
+		overlays += image(icon, "[istype(src,/obj/item/device/gps/secure/command) && Holiday == APRIL_FOOLS_DAY ? "af-" : ""]emp")
 		return
 	if(transmitting)
-		overlays += image(icon, "working")
+		overlays += image(icon, "[istype(src,/obj/item/device/gps/secure/command) && Holiday == APRIL_FOOLS_DAY ? "af-" : ""]working")
 
 /obj/item/device/gps/emp_act(severity)
 	emped = TRUE
@@ -96,7 +100,12 @@ var/list/SPS_list = list()
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
 	if(!emped && transmitting)
-		for(var/obj/item/device/gps/other in gps_list)
+		var/list/ui_list
+		if(view_all)
+			ui_list = all_GPS_list
+		else
+			ui_list = gps_list
+		for(var/obj/item/device/gps/other in ui_list)
 			if(!other.transmitting || other == src)
 				continue
 			var/list/device_data = list()
@@ -147,7 +156,12 @@ var/list/SPS_list = list()
 	data["autorefresh"] = autorefreshing
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
-	for(var/D in gps_list)
+	var/list/ui_list
+	if(view_all)
+		ui_list = all_GPS_list
+	else
+		ui_list = gps_list
+	for(var/D in ui_list)
 		var/obj/item/device/gps/G = D
 		if(G.transmitting && src != G)
 			var/device_data[0]
@@ -246,9 +260,9 @@ var/list/SPS_list = list()
 	if(!transmitting)
 		return
 	. = ..()
-	send_signal(wearer, src, "SPS [gpstag]: Code Yellow", FALSE)
+	send_signal(wearer, src, "SPS [gpstag]: Code Yellow", FALSE, view_all)
 
-/obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead)
+/obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead, var/iscommand = FALSE, var/stfu)
 	var/turf/pos = get_turf(SPS)
 	var/x0 = pos.x-WORLD_X_OFFSET[pos.z]
 	var/y0 = pos.x-WORLD_Y_OFFSET[pos.z]
@@ -263,8 +277,13 @@ var/list/SPS_list = list()
 		if(receiver && !receiver.stat)
 			receiver.receive_alert(alerttype, transmission_data, verbose)
 			boop = TRUE
+	if(iscommand)
+		for(var/obj/item/device/gps/secure/otherSPS in SPS_list)
+			if(otherSPS.transmitting)
+				otherSPS.say("Alert. [alerttype]")
+				playsound(otherSPS,'sound/machines/radioboop.ogg',40,1)
 
-	if(boop)
+	if(boop && !stfu)
 		deathsound(isdead)
 
 /obj/item/device/gps/secure/proc/deathsound(var/dead=FALSE)
@@ -315,3 +334,20 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 	else splitnumber += "0"
 	for(var/n in splitnumber)
 		playsound(source, nums_to_hl_num[n], 100, 0, channel = sound_channel, wait = TRUE)
+
+/obj/item/device/gps/secure/command
+	base_name = "Command SPS"
+	desc = "A secure channel SPS. Sounds an alarm if seperated from their wearer, be it by stripping or death. Shows all GPSes on station."
+	icon_state = "sps-c"
+	base_tag = "CMD"
+	view_all = TRUE
+
+/obj/item/device/gps/secure/command/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		icon_state = "af-sps-c"
+
+/obj/item/device/gps/secure/command/OnMobDeath(mob/wearer)
+	if(!transmitting)
+		return
+	send_signal(wearer, src, "SPS [gpstag]: Code Red", TRUE, TRUE)

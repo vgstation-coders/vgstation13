@@ -18,7 +18,7 @@
 	desc = "A chain link fence. Not as effective as a wall, but generally it keeps people out."
 	density = 1
 	anchored = 1
-
+	pass_flags_self = PASSGRILLE
 	icon = 'icons/obj/structures/fence.dmi'
 	icon_state = "straight"
 
@@ -157,7 +157,7 @@
 /obj/structure/fence/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSGRILLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
 		if(istype(mover, /obj/item/projectile))

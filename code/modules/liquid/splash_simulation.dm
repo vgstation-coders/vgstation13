@@ -4,10 +4,10 @@ var/liquid_delay = 4
 
 var/list/datum/puddle/puddles = list()
 
-datum/puddle
+/datum/puddle
 	var/list/obj/effect/liquid/liquid_objects = list()
 
-datum/puddle/proc/process()
+/datum/puddle/proc/process()
 //	to_chat(world, "DEBUG: Puddle process!")
 	for(var/obj/effect/liquid/L in liquid_objects)
 		L.spread()
@@ -18,18 +18,18 @@ datum/puddle/proc/process()
 	if(liquid_objects.len == 0)
 		qdel(src)
 
-datum/puddle/New()
+/datum/puddle/New()
 	..()
 	puddles += src
 
-datum/puddle/Del()
+/datum/puddle/Del()
 	puddles -= src
 	for(var/obj/O in liquid_objects)
 		qdel(O)
 		O = null
 	..()
 
-client/proc/splash()
+/client/proc/splash()
 	set category = "Debug"
 
 	var/volume = input("Volume?","Volume?", 0 ) as num
@@ -42,7 +42,7 @@ client/proc/splash()
 		return
 	trigger_splash(T, volume)
 
-proc/trigger_splash(turf/epicenter as turf, volume as num)
+/proc/trigger_splash(turf/epicenter as turf, volume as num)
 	if(!epicenter)
 		return
 	if(volume <= 0)
@@ -58,7 +58,7 @@ proc/trigger_splash(turf/epicenter as turf, volume as num)
 
 
 
-obj/effect/liquid
+/obj/effect/liquid
 	icon = 'icons/effects/liquid.dmi'
 	icon_state = "0"
 	name = "liquid"
@@ -66,7 +66,7 @@ obj/effect/liquid
 	var/new_volume = 0
 	var/datum/puddle/controller
 
-obj/effect/liquid/New()
+/obj/effect/liquid/New()
 	..()
 	if( !isturf(loc) )
 		qdel(src)
@@ -77,7 +77,7 @@ obj/effect/liquid/New()
 			qdel(L)
 			L = null
 
-obj/effect/liquid/proc/spread()
+/obj/effect/liquid/proc/spread()
 
 
 //	to_chat(world, "DEBUG: liquid spread!")
@@ -129,7 +129,7 @@ obj/effect/liquid/proc/spread()
 			src.volume -= volume_per_tile //Remove the volume from this tile
 			L.new_volume = L.new_volume + volume_per_tile //Add it to the volume to the other tile
 
-obj/effect/liquid/proc/apply_calculated_effect()
+/obj/effect/liquid/proc/apply_calculated_effect()
 	volume += new_volume
 
 	if(volume < LIQUID_TRANSFER_THRESHOLD)
@@ -138,14 +138,14 @@ obj/effect/liquid/proc/apply_calculated_effect()
 	new_volume = 0
 	update_icon2()
 
-obj/effect/liquid/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/obj/effect/liquid/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
-obj/effect/liquid/Destroy()
+/obj/effect/liquid/Destroy()
 	src.controller.liquid_objects.Remove(src)
 	..()
 
-obj/effect/liquid/proc/update_icon2()
+/obj/effect/liquid/proc/update_icon2()
 	//icon_state = num2text( max(1,min(7,(floor(volume),10)/10)) )
 
 	switch(volume)
@@ -166,17 +166,17 @@ obj/effect/liquid/proc/update_icon2()
 		if(50 to INFINITY)
 			icon_state = "7"
 
-turf/proc/can_accept_liquid(from_direction)
+/turf/proc/can_accept_liquid(from_direction)
 	return 0
-turf/proc/can_leave_liquid(from_direction)
+/turf/proc/can_leave_liquid(from_direction)
 	return 0
 
-turf/space/can_accept_liquid(from_direction)
+/turf/space/can_accept_liquid(from_direction)
 	return 1
-turf/space/can_leave_liquid(from_direction)
+/turf/space/can_leave_liquid(from_direction)
 	return 1
 
-turf/simulated/floor/can_accept_liquid(from_direction)
+/turf/simulated/floor/can_accept_liquid(from_direction)
 	for(var/obj/structure/window/W in src)
 		if(W.is_fulltile)
 			return 0
@@ -187,7 +187,7 @@ turf/simulated/floor/can_accept_liquid(from_direction)
 			return 0
 	return 1
 
-turf/simulated/floor/can_leave_liquid(to_direction)
+/turf/simulated/floor/can_leave_liquid(to_direction)
 	for(var/obj/structure/window/W in src)
 		if(W.is_fulltile)
 			return 0
@@ -198,15 +198,15 @@ turf/simulated/floor/can_leave_liquid(to_direction)
 			return 0
 	return 1
 
-turf/simulated/wall/can_accept_liquid(from_direction)
+/turf/simulated/wall/can_accept_liquid(from_direction)
 	return 0
-turf/simulated/wall/can_leave_liquid(from_direction)
+/turf/simulated/wall/can_leave_liquid(from_direction)
 	return 0
 
-obj/proc/liquid_pass()
+/obj/proc/liquid_pass()
 	return 1
 
-obj/machinery/door/liquid_pass()
+/obj/machinery/door/liquid_pass()
 	return !density
 
 #undef LIQUID_TRANSFER_THRESHOLD

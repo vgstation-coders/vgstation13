@@ -21,6 +21,7 @@
 	var/brute_damage = 0 //Used by cyborgs
 	var/electronics_damage = 0 //Used by cyborgs
 	var/starch_cell = 0
+	var/mob/living/simple_animal/hostile/pulse_demon/occupant
 
 /obj/item/weapon/cell/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -45,6 +46,10 @@
 /obj/item/weapon/cell/crap/better
 	name = "\improper Nanotrasen brand rechargeable D battery"
 	maxcharge = 700 //for the ion carbine
+
+/obj/item/weapon/cell/crap/worse
+	name = "\improper Nanotrasen brand rechargeable AAA battery"
+	maxcharge = 250
 
 /obj/item/weapon/cell/secborg
 	name = "\improper Security borg rechargeable D battery"
@@ -156,7 +161,7 @@
 				if(!user.light_range)
 					user.set_light(2,2,"#ffff00")
 					spawn(power_to_use/100 SECONDS)
-						user.kill_light()
+						user.set_light(0)
 	else
 		to_chat(user, "<span class = 'notice'>\The [src] doesn't seem to have much of a tingle to it.</span>")
 
@@ -241,30 +246,55 @@
 	return
 
 /obj/item/weapon/cell/rad/process()
+	if(!maxcharge) //Cell is broken, make it dangerous
+		if(prob(5)) //5% chance to explode every 2 seconds
+			explosion(loc, 0, 1, 2, 2)
+			qdel(src)
+		if(prob(25)) //25% chance to leak radiation every 2 seconds
+			for(var/mob/living/L in view(get_turf(src), 5))
+				L.apply_radiation(initial(charge_rate)/10, RAD_EXTERNAL)
+
 	if(maxcharge <= charge)
 		return 0
 	var/power_used = min(maxcharge-charge,charge_rate)
 	charge += power_used
-	if(prob(5))
-		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
-			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
+//	if(prob(5))
+//		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
+//			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
+	if(charge_rate && charge_rate < (initial(charge_rate)/10))	//turns into a broken cell with no charge rate, 0 max charge, a 5% chance to explode every 2s and 25% chance to leak radiation equal to 1/10th of its charge rate
+		name = "broken cell"
+		icon_state = "cell"
+		starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30)
+		charge = 0
+		maxcharge = 0
+		charge_rate = 0
+		damaged = FALSE //so you don't get the damaged examine if the cell is broken
+		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
+		for(var/mob/living/L in view(get_turf(src), 7)) //Oh, and irradiate everyone nearby in a bigger burst of radiation.
+			L.apply_radiation(initial(charge_rate)/5, RAD_EXTERNAL)
+		if(!isturf(loc))
+			loc.visible_message("<span class='warning'>\The [loc] starts sparking and sizzling, emitting a foul faint smoke!")
+		else
+			visible_message("<span class='warning'>\The [src] breaks and starts leaking radioactive material!</span>")
+		if(prob(25))
+			spark(get_turf(src), 1)
+
 
 /obj/item/weapon/cell/rad/emp_act(severity)
 	..()
-	switch(rand(3))
-		if(0)
-			charge_rate *= severity*0.3
-			damaged = TRUE
-		if(1)
-			maxcharge *= severity*0.3
-			charge = 0
-		if(2)
-			maxcharge *= severity*0.3
-			charge = 0
-			charge_rate *= severity*0.3
-			damaged = TRUE
-		if(3)
-			return
+	if(maxcharge > 0)
+		switch(rand(0,2))
+			if(0)
+				charge_rate *= severity*0.2
+				damaged = TRUE
+			if(1)
+				maxcharge *= severity*0.2
+				charge = 0
+			if(2)
+				maxcharge *= severity*0.2
+				charge = 0
+				charge_rate *= severity*0.2
+				damaged = TRUE
 
 /obj/item/weapon/cell/rad/examine(mob/user)
 	..()

@@ -1,6 +1,6 @@
 /datum/outfit/special
 	use_pref_bag = FALSE
-	give_disabilities_equipment = FALSE
+	give_disabilities_equipment = TRUE
 	equip_survival_gear = FALSE
 
 // No id in most cases.
@@ -223,12 +223,12 @@
 		)
 	)
 	items_to_collect = list(
-		/obj/item/stack/tile/plasteel,
-		/obj/item/stack/tile/plasteel,
-		/obj/item/stack/tile/plasteel,
-		/obj/item/stack/tile/plasteel,
-		/obj/item/stack/tile/plasteel,
-		/obj/item/stack/tile/plasteel,
+		/obj/item/stack/tile/metal,
+		/obj/item/stack/tile/metal,
+		/obj/item/stack/tile/metal,
+		/obj/item/stack/tile/metal,
+		/obj/item/stack/tile/metal,
+		/obj/item/stack/tile/metal,
 		/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
 	)
 
@@ -338,7 +338,7 @@
 	W.name = "[H.real_name]'s ID Card"
 	W.registered_name = H.real_name
 	W.UpdateName()
-	W.SetOwnerInfo(H)
+	W.SetOwnerDNAInfo(H)
 	H.equip_to_slot_or_drop(W, slot_wear_id)
 	if (pda_type)
 		var/obj/item/device/pda/pda = new pda_type(H)
@@ -556,8 +556,8 @@
 			slot_shoes_str = /obj/item/clothing/shoes/magboots,
 			slot_glasses_str = /obj/item/clothing/glasses/scanner/meson,
 			slot_belt_str = /obj/item/weapon/pickaxe,
-			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/mushmen,
-			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/mushmen,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/trader/flex,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/trader/flex,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
 		),
 		/datum/species/tajaran = list(
@@ -623,11 +623,16 @@
 
 // Wizards
 
-/datum/outfit/special/blue_wizard
+/datum/outfit/special/wizard
 	equip_survival_gear = list() // Default survival gear
+	use_pref_bag = TRUE
+	var/apprentice = FALSE // Apprentice wiz?
 	outfit_name = "Blue wizard"
 	backpack_types = list(
 		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -636,21 +641,21 @@
 			slot_head_str = /obj/item/clothing/head/wizard,
 			slot_wear_suit_str = /obj/item/clothing/suit/wizrobe,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_r_store_str = /obj/item/weapon/teleportation_scroll,
-			slot_l_store_str = /obj/item/weapon/spellbook,
 		),
 	)
 
-/datum/outfit/special/blue_wizard/post_equip(var/mob/living/carbon/human/H)
+/datum/outfit/special/wizard/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/staff(H))
+	disable_suit_sensors(H)
+	if(!apprentice)
+		H.put_in_hands(new /obj/item/weapon/teleportation_scroll(H))
+		H.put_in_hands(new /obj/item/weapon/spellbook(H))
+	else
+		H.put_in_hands(new /obj/item/weapon/teleportation_scroll/apprentice(H))
+	H.equip_to_slot_or_del(new /obj/item/weapon/hair_dye/skin_dye(H), slot_in_backpack)
 
-/datum/outfit/special/red_wizard
-	equip_survival_gear = list() // Default survival gear
+/datum/outfit/special/wizard/red
 	outfit_name = "Red wizard"
-	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-	)
 	items_to_spawn = list(
 		"Default" = list(
 			slot_w_uniform_str =/obj/item/clothing/under/lightpurple,
@@ -658,21 +663,11 @@
 			slot_head_str = /obj/item/clothing/head/wizard/red,
 			slot_wear_suit_str = /obj/item/clothing/suit/wizrobe/red,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_r_store_str = /obj/item/weapon/teleportation_scroll,
-			slot_l_store_str = /obj/item/weapon/spellbook,
 		),
 	)
 
-/datum/outfit/special/red_wizard/post_equip(var/mob/living/carbon/human/H)
-	..()
-	H.put_in_hands(new /obj/item/weapon/staff(H))
-
-/datum/outfit/special/marisa_wizard
-	equip_survival_gear = list() // Default survival gear
+/datum/outfit/special/wizard/marisa
 	outfit_name = "Marisa wizard"
-	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-	)
 	items_to_spawn = list(
 		"Default" = list(
 			slot_w_uniform_str =/obj/item/clothing/under/lightpurple,
@@ -684,10 +679,6 @@
 			slot_l_store_str = /obj/item/weapon/spellbook,
 		),
 	)
-
-/datum/outfit/special/marisa_wizard/post_equip(var/mob/living/carbon/human/H)
-	..()
-	H.put_in_hands(new /obj/item/weapon/staff(H))
 
 
 /datum/outfit/special/prisoner

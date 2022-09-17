@@ -404,7 +404,7 @@
 		return S[Co_NEXTSTEP]
 
 /datum/construction/reversible/proc/get_backward_step(index)
-	if(index < 0 || index > steps.len)
+	if(index < 1 || index > steps.len)
 		return
 	var/list/S = steps[index]
 	if(Co_BACKSTEP in S)

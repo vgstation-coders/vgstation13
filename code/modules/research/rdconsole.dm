@@ -30,7 +30,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 
 */
-#define RESEARCH_MAX_Q_LEN 50
+#define RESEARCH_MAX_Q_LEN 100
 /obj/machinery/computer/rdconsole
 	name = "R&D Console"
 	icon_state = "rdcomp"
@@ -223,7 +223,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	src.updateUsrDialog()
 	return
 
-/obj/machinery/computer/rdconsole/emag(mob/user)
+/obj/machinery/computer/rdconsole/emag_act(mob/user)
 	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 	emagged = 1
 	if(user)
@@ -232,7 +232,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/proc/deconstruct_item(mob/user)
 	if(!linked_destroy || linked_destroy.busy || !linked_destroy.loaded_item)
 		return
-	if(isLocked() || (linked_destroy.stat & (NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN)))
+	if(isLocked() || (linked_destroy.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		return
 	linked_destroy.busy = 1
 	screen = 0.1
@@ -610,6 +610,15 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				screen = 1.6
 				updateUsrDialog()
 
+	else if(href_list["alphatoggle"]) //Reset the R&D console's database.
+		griefProtection()
+		if(files)
+			screen = 0.0
+			files.alphabetsort = !files.alphabetsort
+			spawn(20)
+				screen = 1.6
+				updateUsrDialog()
+
 	else if(href_list["toggleCategory"]) //Filter or unfilter a category
 		var/cat = href_list["toggleCategory"]
 		var/machine = href_list["machine"]
@@ -664,7 +673,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	<div class=\"header\">[jointext(options," || ")]</div><hr />"}
 
 /obj/machinery/computer/rdconsole/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	user.set_machine(src)
@@ -814,6 +823,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 			dat += {"<A href='?src=\ref[src];menu=1.7'>Device Linkage Menu</A><BR>
 				<A href='?src=\ref[src];lock=0.2'>Lock Console</A><BR>
+				<A href='?src=\ref[src];alphatoggle=1'>[files?.alphabetsort ? "Dis" : "En"]able alphabetical sorting.</A><BR>
 				<A href='?src=\ref[src];reset=1'>Reset R&D Database.</A><BR>"}
 		if(1.7) //R&D device linkage
 
@@ -895,7 +905,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					if(!(D.build_type & PROTOLATHE) || D.category != name_set)
 						continue
 					var/temp_dat = "[D.name] [linked_lathe.output_part_cost(D)]"
-					var/upTo=10
+					var/upTo=20
 					for(var/M in D.materials)
 						var/num_units_avail=linked_lathe.check_mat(D,M)
 						if(num_units_avail)
@@ -909,6 +919,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							dat += "<A href='?src=\ref[src];build=[D.id];n=5'>(&times;5)</A>"
 						if(upTo>=10)
 							dat += "<A href='?src=\ref[src];build=[D.id];n=10'>(&times;10)</A>"
+						if(upTo>=20)
+							dat += "<A href='?src=\ref[src];build=[D.id];n=20'>(&times;20)</A>"
 						dat += "<A href='?src=\ref[src];build=[D.id];customamt=1'>(Custom)</A>"
 						dat += "</li>"
 					else

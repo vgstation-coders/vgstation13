@@ -8,7 +8,15 @@
 	icon = 'goon/icons/vehicles.dmi'
 	icon_state = "tractor"
 	keytype = /obj/item/key/tractor
+	headlights = TRUE
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/tractor
+
+/obj/structure/bed/chair/vehicle/tractor/update_icon()
+	for(var/datum/action/vehicle/toggle_headlights/TH in vehicle_actions)
+		if(TH.on)
+			icon_state = "[initial(icon_state)]-on"
+			return
+	icon_state = "[initial(icon_state)]"
 
 /obj/structure/bed/chair/vehicle/tractor/make_offsets()
 	offsets = list(

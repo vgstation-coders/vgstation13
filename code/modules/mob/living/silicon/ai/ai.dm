@@ -51,13 +51,14 @@ var/list/ai_list = list()
 
 	var/control_disabled = FALSE // Set to TRUE to stop AI from interacting via Click() -- TLE
 	var/malfhacking = FALSE // More or less a copy of the above var, so that malf AIs can hack and still get new cyborgs -- NeoFite
-
+	var/mob/living/silicon/ai/shuntedAI = null
+	var/mob/living/silicon/ai/parent = null
 	var/obj/machinery/power/apc/malfhack = null
 	var/explosive = FALSE //does the AI explode when it dies?
 	var/blackout_active = FALSE
 	var/explosive_cyborgs = FALSE	//Will any cyborgs slaved to the AI exploe when they die?
 
-	var/mob/living/silicon/ai/parent = null
+
 	var/camera_light_on = FALSE
 	var/list/obj/machinery/camera/lit_cameras = list()
 
@@ -73,6 +74,8 @@ var/list/ai_list = list()
 	var/sprint = 10
 	var/cooldown = 0
 	var/acceleration = 1
+
+	var/static/obj/abstract/screen/nocontext/aistatic/aistatic = new()
 
 /mob/living/silicon/ai/New(loc, var/datum/ai_laws/L, var/obj/item/device/mmi/B, var/safety = FALSE)
 
@@ -159,10 +162,11 @@ var/list/ai_list = list()
 			job = "AI"
 	ai_list += src
 	..()
-	if(prob(25))
-		playsound(src, get_sfx("windows error"), 75, FALSE)
-	else
-		playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
+	if(!safety)
+		if(prob(25))
+			playsound(src, get_sfx("windows error"), 75, FALSE)
+		else
+			playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
 
 /mob/living/silicon/ai/verb/toggle_anchor()
 	set category = "AI Commands"
@@ -303,16 +307,11 @@ var/list/ai_list = list()
 
 // displays the malf_ai information if the AI is the malf
 /mob/living/silicon/ai/show_malf_ai()
-	var/datum/faction/malf/malf = find_active_faction_by_member(src.mind.GetRole(MALF))
-	if(malf && malf.apcs >= 3)
-		stat(null, "Amount of APCS hacked: [malf.apcs]")
-		stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
-
-
-/mob/proc/remove_malf_spells()
-	for(var/spell/S in spell_list)
-		if(S.panel == MALFUNCTION)
-			remove_spell(S)
+	var/datum/role/malfAI/malf = mind.GetRole(MALF)
+	var/datum/faction/malf/malffac = find_active_faction_by_member(malf)
+	if(malf && malf.apcs.len >= 3)
+		stat(null, "Amount of APCS hacked: [malf.apcs.len]")
+		stat(null, "Time until station control secured: [max(malffac.AI_win_timeleft/(malf.apcs.len/3), 0)] seconds")
 
 /mob/living/silicon/ai/proc/ai_alerts()
 
@@ -433,25 +432,30 @@ var/list/ai_list = list()
 					message_admins("[key_name_admin(src)] called the shuttle due to being hit with an EMP.'.")
 	..()
 
-/mob/living/silicon/ai/ex_act(severity)
+/mob/living/silicon/ai/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		return
 
 	// if(!blinded) (this is now in flash_eyes)
 	flash_eyes(visual = TRUE, affect_silicon = TRUE)
 
-	switch(severity)
-		if(1.0)
-			if(!isDead())
+	if(!isDead())
+		var/dmg_phrase = ""
+		var/msg_admin = (src.key || src.ckey || (src.mind && src.mind.key)) && whodunnit
+		switch(severity)
+			if(1.0)
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
-		if(2.0)
-			if(!isDead())
+				dmg_phrase = "Damage: 200"
+			if(2.0)
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
-		if(3.0)
-			if(!isDead())
+				dmg_phrase = "Damage: 120"
+			if(3.0)
 				adjustBruteLoss(30)
+				dmg_phrase = "Damage: 30"
+
+		add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], [dmg_phrase]", admin_warn = msg_admin)
 
 	updatehealth()
 
@@ -536,8 +540,16 @@ var/list/ai_list = list()
 	#endif
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
-	if((ai_flags & COREFORTIFY) && Proj.damage_type == BURN)
-		return PROJECTILE_COLLISION_DEFAULT // Does nothing
+	if((ai_flags & COREFORTIFY) && istype(Proj, /obj/item/projectile/beam))
+		var/obj/item/projectile/beam/P = Proj
+//		P.damage = P.damage / 2
+//		P.rebound(src)
+//		visible_message("<span class='danger'>\The [P] gets reflected by \the [src]'s firewall!</span>")
+		visible_message("<span class='danger'>\The [P] is blocked by \the [src]'s firewall!</span>")
+		anim(target = src, a_icon = 'icons/effects/64x64.dmi', flick_anim = "juggernaut_armor", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2 + 4, plane = ABOVE_LIGHTING_PLANE)
+		playsound(src, 'sound/items/metal_impact.ogg', 25)
+//		return PROJECTILE_COLLISION_REBOUND
+		return PROJECTILE_COLLISION_BLOCKED
 	..(Proj)
 	updatehealth()
 	return PROJECTILE_COLLISION_DEFAULT
@@ -560,6 +572,8 @@ var/list/ai_list = list()
 		light_cameras()
 	if(istype(A,/obj/machinery/camera))
 		current = A
+		var/obj/machinery/camera/C = A
+		C.camera_twitch()
 	..()
 
 
@@ -746,6 +760,10 @@ var/list/ai_list = list()
 		"SHODAN",
 		"Spoopy",
 		"Yotsuba",
+		"Xenomorph",
+		"Gondola",
+		"Cat",
+		"Hornets"
 		)
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)
@@ -780,30 +798,16 @@ var/list/ai_list = list()
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo13"))
 				if("Beach Ball")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"beachball"))
+				if("Xenomorph")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo15"))
+				if("Gondola")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo16"))
+				if("Cat")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo17"))
+				if("Hornets")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo18"))
 
 	return
-
-/spell/aoe_turf/corereturn
-	name = "Return to Core"
-	panel = MALFUNCTION
-	charge_type = Sp_CHARGES
-	charge_max = 1
-	hud_state = "unshunt"
-	override_base = "grey"
-
-/spell/aoe_turf/corereturn/before_target(mob/user)
-	if(istype(user.loc, /obj/machinery/power/apc))
-		return FALSE
-	else
-		to_chat(user, "<span class='notice'>You are already in your Main Core.</span>")
-		return TRUE
-
-/spell/aoe_turf/corereturn/choose_targets(mob/user = usr)
-	return list(user.loc)
-
-/spell/aoe_turf/corereturn/cast(var/list/targets, mob/user)
-	var/obj/machinery/power/apc/apc = targets[1]
-	apc.malfvacate()
 
 //Toggles the luminosity and applies it by re-entereing the camera.
 /mob/living/silicon/ai/verb/toggle_camera_light()
@@ -931,3 +935,9 @@ var/list/ai_list = list()
 			icon_state = "ai-crash"
 		return
 	icon_state = chosen_core_icon_state
+
+/mob/living/silicon/ai/update_perception()
+	if(ai_flags & HIGHRESCAMS)
+		client?.darkness_planemaster.alpha = 150
+	else
+		client?.darkness_planemaster.alpha = 255

@@ -185,7 +185,8 @@
 	pressure = temp_first.return_pressure()/2
 
 	var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
-
+	if(range > 14)
+		range = (pressure-TANK_FRAGMENT_PRESSURE+14000)/(2*TANK_FRAGMENT_SCALE)
 	var/dev = round(range*0.25)
 
 	return dev
@@ -263,8 +264,10 @@
 		update_icon()
 		to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src]! It looks like \he's trying to commit suicide!</span>")
 		return(SUICIDE_ACT_BRUTELOSS)
-	
-	var/message_say = user.handle_suicide_bomb_cause()
+
+	var/message_say = user.handle_suicide_bomb_cause(src)
+	if(!message_say)
+		return
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	user.say(message_say)
 	toggle_valve(user)

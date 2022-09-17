@@ -77,8 +77,8 @@
 		return
 	if(istype(O, /obj/item/device/pda))
 		var/obj/item/device/pda/PDA = O
-		if(PDA.dev_analys)
-			var/obj/item/device/device_analyser/DA = PDA.dev_analys
+		if(PDA.cartridge.dev_analys)
+			var/obj/item/device/device_analyser/DA = PDA.cartridge.dev_analys
 			for(var/datum/design/loop_design in DA.loaded_designs)
 				AddDesign(loop_design, DA.loaded_designs, user)
 			return 1
@@ -135,11 +135,15 @@
 		techdifference = 0
 	return techdifference
 
+/obj/machinery/r_n_d/reverse_engine/kick_act(mob/living/H)
+	..()
+	researchQueue()
+
 /obj/machinery/r_n_d/reverse_engine/proc/researchQueue()
 	if(!research_queue.len)
 		return
 	while(research_queue[1])
-		if(stat&(NOPOWER|BROKEN))
+		if(stat&(NOPOWER|BROKEN|FORCEDISABLE))
 			return 0
 		var/datum/design/current_design = research_queue[1]
 		if(!researchDesign(current_design))
@@ -189,7 +193,7 @@
 
 
 /obj/machinery/r_n_d/reverse_engine/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(src.stat & (BROKEN|NOPOWER))
+	if(src.stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if((user.stat && !isobserver(user)) || user.restrained() || !allowed(user) || !Adjacent(user))
 		return
@@ -238,8 +242,6 @@
 		var/datum/design/design = ready_queue[text2num(href_list["remove_researched"])]
 		if(design)
 			ready_queue -= design
-			qdel(design)
-			design = null
 		ui_interact(usr)
 		return 1
 

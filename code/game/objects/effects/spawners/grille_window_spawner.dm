@@ -43,7 +43,7 @@
 					break
 		if(!found_connection)
 			var/obj/structure/window/new_window = new window_path(loc)
-			new_window.dir = direction
+			new_window.change_dir(direction)
 			new_window.update_nearby_tiles()
 
 	for(var/obj/window_grille_spawner/other in neighbours)

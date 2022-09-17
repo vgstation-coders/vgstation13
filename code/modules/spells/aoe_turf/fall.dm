@@ -113,7 +113,7 @@ var/global/list/falltempoverlays = list()
 				if(C.mob)
 					C.mob.see_fall()
 
-	user.invoke_event(/event/spellcast, list("spell" = src, "user" = user, "targets" = targets))
+	INVOKE_EVENT(user, /event/spellcast, "spell" = src, "user" = user, "targets" = targets)
 
 		//animate(aoe_underlay, transform = null, time = 2)
 	//var/oursound = (invocation == "ZA WARUDO" ? 'sound/effects/theworld.ogg' :'sound/effects/fall.ogg')

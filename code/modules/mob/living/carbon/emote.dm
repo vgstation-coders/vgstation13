@@ -9,10 +9,12 @@
 /datum/emote/living/carbon/blink
 	key = "blink"
 	key_third_person = "blinks"
+	key_shorthand = "bli"
 	message = "blinks."
 
 /datum/emote/living/carbon/blink_r
 	key = "blink_r"
+	key_shorthand = "blir"
 	message = "blinks rapidly."
 
 /datum/emote/living/carbon/clap
@@ -23,10 +25,11 @@
 	restraint_check = TRUE
 	emote_type = EMOTE_AUDIBLE
 
-/datum/emote/living/carbon/gnarl
-	key = "gnarl"
-	key_third_person = "gnarls"
-	message = "gnarls and shows its teeth..."
+/datum/emote/living/carbon/snarl
+	key = "snarl"
+	key_third_person = "snarls"
+	key_shorthand = "sna"
+	message = "snarls and bares its teeth."
 	mob_type_allowed_typelist = list(/mob/living/carbon/monkey, /mob/living/carbon/alien)
 
 /datum/emote/living/carbon/moan
@@ -46,6 +49,7 @@
 /datum/emote/living/carbon/scratch
 	key = "scratch"
 	key_third_person = "scratches"
+	key_shorthand = "scra"
 	message = "scratches."
 	mob_type_allowed_typelist = list(/mob/living/carbon/monkey, /mob/living/carbon/alien)
 	restraint_check = TRUE
@@ -53,6 +57,7 @@
 /datum/emote/living/carbon/screech
 	key = "screech"
 	key_third_person = "screeches"
+	key_shorthand = "scre"
 	message = "screeches."
 	mob_type_allowed_typelist = list(/mob/living/carbon/monkey, /mob/living/carbon/alien)
 
@@ -71,6 +76,7 @@
 /datum/emote/living/carbon/sign/signal
 	key = "signal"
 	key_third_person = "signals"
+	key_shorthand = "sig"
 	message_param = "raises %t fingers."
 	mob_type_allowed_typelist = list(/mob/living/carbon/human)
 	restraint_check = TRUE
@@ -88,10 +94,12 @@
 /datum/emote/living/carbon/twitch
 	key = "twitch"
 	key_third_person = "twitches"
+	key_shorthand = "twi"
 	message = "twitches violently."
 
 /datum/emote/living/carbon/twitch_s
 	key = "twitch_s"
+	key_shorthand = "twis"
 	message = "twitches."
 
 /datum/emote/living/carbon/wave
@@ -102,12 +110,14 @@
 /datum/emote/living/carbon/whimper
 	key = "whimper"
 	key_third_person = "whimpers"
+	key_shorthand = "whim"
 	message = "whimpers."
 	message_mime = "appears hurt."
 
 /datum/emote/living/carbon/wsmile
 	key = "wsmile"
 	key_third_person = "wsmiles"
+	key_shorthand = "wsmi"
 	message = "smiles weakly."
 
 /datum/emote/living/carbon/yawn
@@ -119,12 +129,14 @@
 /datum/emote/living/carbon/sniff
 	key = "sniff"
 	key_third_person = "sniffs"
+	key_shorthand = "sni"
 	message = "sniffs."
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/carbon/snore
 	key = "snore"
 	key_third_person = "snores"
+	key_shorthand = "sno"
 	message = "snores."
 	message_mime = "sleeps soundly."
 	emote_type = EMOTE_AUDIBLE
@@ -139,18 +151,21 @@
 /datum/emote/living/carbon/scowl
 	key = "scowl"
 	key_third_person = "scowls"
+	key_shorthand = "sco"
 	message = "scowls."
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/shake
 	key = "shake"
 	key_third_person = "shakes"
+	key_shorthand = "sha"
 	message = "shakes their head."
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/carbon/shiver
 	key = "shiver"
 	key_third_person = "shiver"
+	key_shorthand = "shi"
 	message = "shivers."
 	emote_type = EMOTE_AUDIBLE
 
@@ -164,6 +179,7 @@
 /datum/emote/living/carbon/laugh
 	key = "laugh"
 	key_third_person = "laughs"
+	key_shorthand = "lau"
 	message = "laughs."
 	message_mime = "laughs silently!"
 	emote_type = EMOTE_AUDIBLE
@@ -186,6 +202,7 @@
 /datum/emote/living/carbon/giggle
 	key = "giggle"
 	key_third_person = "giggles"
+	key_shorthand = "gig"
 	message = "giggles."
 	message_mime = "giggles silently!"
 	emote_type = EMOTE_AUDIBLE
@@ -198,12 +215,14 @@
 /datum/emote/living/carbon/groan
 	key = "groan"
 	key_third_person = "groans"
+	key_shorthand = "gro"
 	message = "groans!"
 	message_mime = "appears to groan!"
 
 /datum/emote/living/carbon/grimace
 	key = "grimace"
 	key_third_person = "grimaces"
+	key_shorthand = "gri"
 	message = "grimaces."
 
 /datum/emote/living/carbon/burp
@@ -216,12 +235,14 @@
 /datum/emote/living/carbon/choke
 	key = "choke"
 	key_third_person = "chokes"
+	key_shorthand = "cho"
 	message = "chokes!"
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/carbon/chuckle
 	key = "chuckle"
 	key_third_person = "chuckles"
+	key_shorthand = "chu"
 	message = "chuckles."
 	message_mime = "imitates a smug chuckle."
 	emote_type = EMOTE_AUDIBLE
@@ -229,11 +250,13 @@
 /datum/emote/living/carbon/blush
 	key = "blush"
 	key_third_person = "blushes"
+	key_shorthand = "blu"
 	message = "blushes."
 
 /datum/emote/living/carbon/smirk
 	key = "smirk"
 	key_third_person = "smirks"
+	key_shorthand = "smir"
 	message = "smirks."
 
 /datum/emote/living/carbon/fear
@@ -242,6 +265,71 @@
 	message = "screams in fear!"
 	message_mime = "acts out a fearful scream!"
 	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/beckon
+	key = "beckon"
+	key_third_person = "beckons"
+	key_shorthand = "bec"
+	message_param = "beckons %t closer."
+
+/datum/emote/living/carbon/dismiss
+	key = "dismiss"
+	key_third_person = "dismisses"
+	key_shorthand = "dis"
+	message = "waves dimissively."
+	message_param = "waves dismissively to %t."
+
+/datum/emote/living/carbon/snap
+	key = "snap"
+	key_third_person = "snaps"
+	message = "snaps their fingers."
+
+/datum/emote/living/carbon/knuckle
+	key = "knuckle"
+	key_third_person = "knuckles"
+	key_shorthand = "knu"
+	message = "cracks their knuckles."
+
+/datum/emote/living/carbon/flipoff
+	key = "flipoff"
+	key_shorthand = "flipo"
+	message = "flips the bird."
+	message_param = "flips %t off!"
+
+/datum/emote/living/carbon/whistle
+	key = "whistle"
+	key_third_person = "whistles"
+	key_shorthand = "whis"
+	message = "whistles."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/wolfwhistle
+	key = "wolfwhistle"
+	key_third_person = "wolfwhistles"
+	key_shorthand = "wwhi"
+	message = "wolfwhistles."
+	message_param = "wolfwhistles at %t."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/rubhands
+	key = "rubhands"
+	key_shorthand = "rubh"
+	message = "rubs their hands deviously."
+
+/datum/emote/living/carbon/wringhands
+	key = "wringhands"
+	key_shorthand = "wrih"
+	message = "wrings their hands."
+
+/datum/emote/living/carbon/headache
+	key = "headache"
+	key_shorthand = "hea"
+	message = "holds their head in frustration."
+
+/datum/emote/living/carbon/eyerub
+	key = "eyerub"
+	key_shorthand = "eyer"
+	message = "rubs their eyes."
 
 /datum/emote/living/carbon/sound
 	var/sound_message = null
@@ -254,6 +342,7 @@
 /datum/emote/living/carbon/sound/scream
 	key = "scream"
 	key_third_person = "screams"
+	key_shorthand = "scr"
 	message = "screams!"
 	message_mime = "acts out a scream!"
 	emote_type = EMOTE_AUDIBLE
@@ -275,6 +364,7 @@
 /datum/emote/living/carbon/sound/shriek
 	key = "shriek"
 	key_third_person = "shrieks"
+	key_shorthand = "shr"
 	message = "shrieks!"
 	message_mime = "acts out a shriek!"
 	emote_type = EMOTE_AUDIBLE
@@ -291,6 +381,7 @@
 /datum/emote/living/carbon/sound/chitter
 	key = "chitter"
 	key_third_person = "chitters"
+	key_shorthand = "chi"
 	message = "chitters!"
 	message_mime = "chitters silently!"
 	emote_type = EMOTE_AUDIBLE
@@ -307,6 +398,7 @@
 /datum/emote/living/carbon/sound/cough
 	key = "cough"
 	key_third_person = "coughs"
+	key_shorthand = "cou"
 	message = "coughs!"
 	message_mime = "coughs silently!"
 	emote_type = EMOTE_AUDIBLE
@@ -326,7 +418,7 @@
 		return
 	if (!H.is_muzzled() && !issilent(H)) // Silent = mime, mute species.
 		if(arguments == "fueltank_crash")
-			if(isjusthuman(H))
+			if(ishuman(H))
 				playsound(H, 'sound/misc/crash_scream.ogg', 50, 0)
 				H.last_emote_sound = world.time
 				return

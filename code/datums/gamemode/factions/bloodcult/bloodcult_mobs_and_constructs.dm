@@ -150,7 +150,7 @@
 		move_ray()
 		process_construct_hud(src)
 
-/mob/living/simple_animal/construct/builder/perfect/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/mob/living/simple_animal/construct/builder/perfect/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
 	if (ray)
 		move_ray()
@@ -278,6 +278,7 @@
 	flying = 1
 	environment_smash_flags = 0
 	var/mob/living/simple_animal/construct/builder/perfect/master = null
+	var/no_master = TRUE
 
 
 /mob/living/simple_animal/hostile/hex/New()
@@ -305,6 +306,14 @@
 		master.minions.Remove(src)
 	master = null
 	..()
+
+/mob/living/simple_animal/hostile/hex/Life()
+	if(timestopped)
+		return 0
+	. = ..()
+	if (!no_master)
+		if (!master || master.gcDestroyed || master.isDead())
+			adjustBruteLoss(20)//we shortly die out after our master's demise
 
 /mob/living/simple_animal/hostile/hex/Cross(var/atom/movable/mover, var/turf/target, var/height=1.5, var/air_group = 0)
 	if(istype(mover, /obj/item/projectile/bloodslash))//stop hitting yourself ffs!
@@ -375,8 +384,8 @@ var/list/astral_projections = list()
 	universal_speak = 1
 	plane = GHOST_PLANE
 	layer = GHOST_LAYER
-	invisibility = INVISIBILITY_CULTJAUNT
-	see_invisible = SEE_INVISIBLE_CULTJAUNT
+	invisibility = INVISIBILITY_LEVEL_TWO
+	see_invisible = SEE_INVISIBLE_LEVEL_TWO
 	incorporeal_move = INCORPOREAL_GHOST
 	alpha = 127
 	now_pushing = 1 //prevents pushing atoms
@@ -435,7 +444,7 @@ var/list/astral_projections = list()
 			var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
 			I.pixel_x = 20 * PIXEL_MULTIPLIER
 			I.pixel_y = 20 * PIXEL_MULTIPLIER
-			I.plane = relative_plane(ANTAG_HUD_PLANE)
+			I.plane = ANTAG_HUD_PLANE
 			client.images += I
 
 
@@ -551,6 +560,14 @@ var/list/astral_projections = list()
 /mob/living/simple_animal/astral_projection/attempt_suicide(forced = 0, suicide_set = 1)
 	death()
 
+/mob/living/simple_animal/astral_projection/ex_act(var/severity)
+	if(tangibility)
+		death()
+
+/mob/living/simple_animal/astral_projection/shuttle_act()
+	if(tangibility)
+		death()
+
 //called once when we are created, shapes our appearance in the image of our anchor
 /mob/living/simple_animal/astral_projection/proc/ascend(var/mob/living/body)
 	if (!body)
@@ -611,9 +628,9 @@ var/list/astral_projections = list()
 		canmove = 0
 		incorporeal_move = 1
 		flying = 1
-		flags = HEAR | TIMELESS | INVULNERABLE
-		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+		flags = HEAR | TIMELESS | INVULNERABLE	
 		speed = 0.5
+		client.CAN_MOVE_DIAGONALLY = 1
 		overlay_fullscreen("astralborder", /obj/abstract/screen/fullscreen/astral_border)
 		update_fullscreen_alpha("astralborder", 255, 5)
 		var/obj/effect/afterimage/A = new (loc,anchor,10)
@@ -625,15 +642,17 @@ var/list/astral_projections = list()
 		incorporeal_move = 0
 		stop_flying()
 		flags = HEAR | PROXMOVE
-		see_invisible = SEE_INVISIBLE_CULTJAUNT//still can see some hidden things
+		see_invisible = SEE_INVISIBLE_LEVEL_TWO
 		speed = 1
-		clear_fullscreen("astralborder", animate = 0)
+		client.CAN_MOVE_DIAGONALLY = 0
+		clear_fullscreen("astralborder", animate = 5)
 		alpha = 0
 		animate(src, alpha = 255, time = 10)
 		if (client)
 			client.images -= propension
 
 	tangibility = !tangibility
+	update_perception()
 
 //saycode
 /mob/living/simple_animal/astral_projection/say(var/message, bubble_type)
@@ -658,3 +677,23 @@ var/list/astral_projections = list()
 		return
 	if(find_active_faction_by_member(iscultist(src)))//can also use cult chat while tangible when using :x
 		return 1
+
+/mob/living/simple_animal/astral_projection/update_perception()
+	if(client)
+		if(client.darkness_planemaster)
+			client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
+			client.darkness_planemaster.alpha = 180
+		if(!tangibility)
+			client.color = list(
+						1,0,0,0,
+						0,1.3,0,0,
+						0,0,1.3,0,
+						0,-0.3,-0.3,1,
+						0,0,0,0)
+		else
+			client.color = list(
+				1,0,0,0,
+				0,1,0,0,
+				0,0,1,0,
+				0,0,0,1,
+				0,0,0,0)

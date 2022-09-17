@@ -12,9 +12,11 @@
 	var/one_per_turf = 0
 	var/on_floor = 0
 	var/start_unanchored = 0
+	var/z_up_required = 0
+	var/z_down_required = 0
 	var/list/other_reqs = list()
 
-/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list())
+/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), z_up_required = 0, z_down_required = 0)
 	src.title = title
 	src.result_type = result_type
 	src.req_amount = req_amount
@@ -25,6 +27,8 @@
 	src.on_floor = on_floor
 	src.start_unanchored = start_unanchored
 	src.other_reqs = other_reqs
+	src.z_up_required = z_up_required
+	src.z_down_required = z_down_required
 
 /datum/stack_recipe/proc/can_build_here(var/mob/usr, var/turf/T)
 	if(one_per_turf && locate(result_type) in T)
@@ -81,7 +85,7 @@
 							found = FALSE
 						else
 							stacks_to_consume.Add(SS)
-							stacks_to_consume[S] = req_amount
+							stacks_to_consume[SS] = req_amount
 			if(!found)
 				return
 	var/atom/O
@@ -93,7 +97,7 @@
 		for(var/i = 1 to (max_res_amount>1 ? res_amount*multiplier : 1))
 			O = new result_type(usr.loc)
 
-	O.dir = usr.dir
+	O.change_dir(usr.dir)
 	if(start_unanchored)
 		var/obj/A = O
 		A.anchored = 0
@@ -172,11 +176,30 @@
 	if(inherit_material)
 		var/datum/material/mat
 		var/datum/materials/materials_list = new
+
+		//Figure out the material
 		if(istype(S, /obj/item/stack/sheet/))
 			var/obj/item/stack/sheet/SS = S
 			mat = materials_list.getMaterial(SS.mat_type)
 		else if(S.material_type)
 			mat = S.material_type
+
+		// Make it recyclable back into the materials it's made out of
+		// Initialize materials list if doesn't exist already
+		if (R.materials == null)
+			R.materials = new /datum/materials(src)
+
+		// Add main materials off the stack
+		R.materials.addRatioFrom(S.materials, req_amount/(S.amount * res_amount))
+
+		// Add extra materials off additional recipe requisites
+		for (var/req in other_reqs)
+			// other_reqs contains typepaths, so create an instance and use it's materials as base
+			// TODO: pull the materials from the actual object that was used to fulfill the other_req
+			var/atom/movable/A = new req
+			if (A.materials)
+				R.materials.addRatioFrom(A.materials, other_reqs[req]/res_amount)
+
 		R.dorfify(mat)
 	return 1
 
@@ -189,8 +212,33 @@
 	src.req_strikes = required_strikes
 
 /datum/stack_recipe/blacksmithing/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
+	// Figure out main material from stack
+	if(istype(S, /obj/item/stack/sheet/))
+		var/obj/item/stack/sheet/SS = S
+		var/datum/materials/materials_list = new
+		R.material_type = materials_list.getMaterial(SS.mat_type)
+		qdel(materials_list)
+	else if(S.material_type)
+		R.material_type = S.material_type
+
+	// Apply material info to end product for recycling
+	// Initialize materials list if doesn't exist already
+	if (R.materials == null)
+		R.materials = new /datum/materials(src)
+
+	// Add main materials off the stack
+	R.materials.addRatioFrom(S.materials, req_amount/(S.amount * res_amount))
+
+	// Add extra materials off additional recipe requisites
+	for (var/req in other_reqs)
+		// other_reqs contains typepaths, so create an instance and use it's materials as base
+		// TODO: pull the materials from the actual object that was used to fulfill the other_req
+		var/atom/movable/A = new req
+		if (A.materials)
+			R.materials.addRatioFrom(A.materials, other_reqs[req]/res_amount)
+
 	//Yeah nah let's put you in a blacksmith_placeholder
-	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc,S, R, req_strikes)
+	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc, S, R, req_strikes)
 	I.name = "unforged [R.name]"
 	return 0
 
@@ -210,13 +258,14 @@ var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes",
 
 
 var/list/datum/stack_recipe/metal_recipes = list (
-	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 60),
+	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/metal, 1, 4, 60),
 	new/datum/stack_recipe("metal rod",  /obj/item/stack/rods,          1, 2, 60),
 	new/datum/stack_recipe("conveyor belt", /obj/item/stack/conveyor_assembly, 2, 1, 20),
 	//new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
 	null,
 	new/datum/stack_recipe("computer frame", /obj/structure/computerframe,                      5, time = 25, one_per_turf = 1			    ),
 	new/datum/stack_recipe("wall girders",   /obj/structure/girder,                             2, time = 50, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("railings",   /obj/structure/railing/loose,             				2, time = 25, on_floor = 1),
 	new/datum/stack_recipe("firelock frame", /obj/item/firedoor_frame,                          5, time = 50),
 	new/datum/stack_recipe("machine frame",  /obj/machinery/constructable_frame/machine_frame,  5, time = 25, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("mirror frame",   /obj/structure/mirror_frame,                       5, time = 25, one_per_turf = 1, on_floor = 1),
@@ -330,6 +379,17 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe("extinguisher cabinet", 		/obj/item/mounted/frame/extinguisher_cabinet, 2, time = 50, one_per_turf = 0, on_floor = 0),
 		)),
 	null,
+	new/datum/stack_recipe_list("transit tube parts", list(
+		new/datum/stack_recipe("straight tube",				/obj/structure/transit_tube_frame,				4, time = 4 SECONDS, one_per_turf = 0   ),
+		new/datum/stack_recipe("diagonal tube",				/obj/structure/transit_tube_frame/diag,			4, time = 4 SECONDS, one_per_turf = 0   ),
+		new/datum/stack_recipe("bent tube",					/obj/structure/transit_tube_frame/bent,			4, time = 4 SECONDS, one_per_turf = 0   ),
+		new/datum/stack_recipe("inverted bent tube",		/obj/structure/transit_tube_frame/bent_invert,	4, time = 4 SECONDS, one_per_turf = 0   ),
+		new/datum/stack_recipe("fork tube",					/obj/structure/transit_tube_frame/fork,			4, time = 4 SECONDS, one_per_turf = 0   ),
+		new/datum/stack_recipe("inverted fork tube",		/obj/structure/transit_tube_frame/fork_invert,	4, time = 4 SECONDS, one_per_turf = 0   ),
+		new/datum/stack_recipe("station",					/obj/structure/transit_tube_frame/station,		4, time = 4 SECONDS, one_per_turf = 0   ),
+		new/datum/stack_recipe("pod",						/obj/structure/transit_tube_frame/pod,			4, time = 4 SECONDS, one_per_turf = 0   ),
+		)),
+	null,
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 					20, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("stove", /obj/machinery/space_heater/campfire/stove, 			5, time = 25, 	one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
@@ -337,15 +397,19 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("cannonball", /obj/item/cannonball/iron, 20, time = 4 SECONDS, one_per_turf = 0, on_floor = 1),
 	null,
 	blacksmithing_recipes,
+	null,
+	new/datum/stack_recipe("multi-floor stairs",   /obj/structure/stairs_frame, 4, time = 100, one_per_turf = 1, on_floor = 1, z_up_required = 1),
 	)
 
 /* ========================================================================
 							PLASTEEL RECIPES
 ======================================================================== */
 var/list/datum/stack_recipe/plasteel_recipes = list (
+	new/datum/stack_recipe("reinforced floor tile", /obj/item/stack/tile/metal/plasteel, 1, 4, 60),
+	new/datum/stack_recipe("railings",   					/obj/structure/railing/plasteel/loose,             	2, time = 50, on_floor = 1),
 	new/datum/stack_recipe("AI core",						/obj/structure/AIcore,								4,	time = 50,	one_per_turf = 1				),
 	new/datum/stack_recipe("Cage",							/obj/structure/cage,								6,  time = 100, one_per_turf = 1				),
-	new/datum/stack_recipe("Small Cage",					/obj/item/critter_cage,								2,  time = 50, one_per_turf = 0				),
+	new/datum/stack_recipe("Small Cage",					/obj/item/critter_cage,								2,  time = 50,	one_per_turf = 0				),
 	new/datum/stack_recipe("RUST fuel assembly port frame",	/obj/item/mounted/frame/rust_fuel_assembly_port,	12,	time = 50,	one_per_turf = 1				),
 	new/datum/stack_recipe("RUST fuel compressor frame",	/obj/item/mounted/frame/rust_fuel_compressor,		12,	time = 50,	one_per_turf = 1				),
 	new/datum/stack_recipe("Mass Driver frame",				/obj/machinery/mass_driver_frame,					3,	time = 50,	one_per_turf = 1				),
@@ -372,6 +436,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("wall girders",		/obj/structure/girder/wood,				2, 		time = 25, 	one_per_turf = 1, 	on_floor = 1),
 	new/datum/stack_recipe("wooden door",		/obj/machinery/door/mineral/wood,		10,		time = 20,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("barricade kit",		/obj/item/weapon/barricade_kit,			5													),
+	new/datum/stack_recipe("railings",   		/obj/structure/railing/wood/loose,      2,		time = 25, on_floor = 1),
 	null,
 	new/datum/stack_recipe("barrel",            /obj/structure/reagent_dispensers/cauldron/barrel/wood, 20, time = 5 SECONDS, one_per_turf = 1   ),
 	new/datum/stack_recipe("table parts",		/obj/item/weapon/table_parts/wood,		2													),
@@ -387,11 +452,21 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("campfire",			/obj/machinery/space_heater/campfire,	4,		time = 35,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("spit",				/obj/machinery/cooking/grill/spit,		1,		time = 10,	one_per_turf = 1,	on_floor = 1),
 	null,
-	new/datum/stack_recipe("wooden block",		/obj/structure/block/wood,				10,		time = 50,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("apiary",			/obj/item/apiary,						10,		time = 25,	one_per_turf = 0,	on_floor = 0),
-	new/datum/stack_recipe("blank canvas",		/obj/item/mounted/frame/painting/blank,	2,		time = 15									),
 	new/datum/stack_recipe("trophy mount",		/obj/item/mounted/frame/trophy_mount,	2,		time = 15									),
 	new/datum/stack_recipe("notice board",		/obj/structure/noticeboard,				2,		time = 15,	one_per_turf = 1,	on_floor = 1),
+	//Painting
+	new/datum/stack_recipe_list("art supplies", list(
+		new/datum/stack_recipe("wooden block",		/obj/structure/block/wood,							10,	time = 50,	one_per_turf = 1,	on_floor = 1),
+		null,
+		new/datum/stack_recipe("painting brush",	/obj/item/weapon/painting_brush,					1,	time = 15									),
+		new/datum/stack_recipe("small canvas",		/obj/item/mounted/frame/painting/custom,			2,	time = 15									),
+		new/datum/stack_recipe("portrait canvas",	/obj/item/mounted/frame/painting/custom/portrait,	3,	time = 15									),
+		new/datum/stack_recipe("landscape canvas",	/obj/item/mounted/frame/painting/custom/landscape,	3,	time = 15									),
+		new/datum/stack_recipe("large canvas",		/obj/item/mounted/frame/painting/custom/large,		5,	time = 15									),
+		new/datum/stack_recipe("palette",			/obj/item/weapon/palette,							3,	time = 15									),
+		new/datum/stack_recipe("easel",				/obj/structure/easel,								3,	time = 15									),
+	)),
 	null,
 	new/datum/stack_recipe("wooden sandals",	/obj/item/clothing/shoes/sandal																),
 	new/datum/stack_recipe("peg limb",			/obj/item/weapon/peglimb,				2,		time = 50									),
@@ -403,6 +478,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("item handle",		/obj/item/item_handle,					1,2,20,	time = 2 SECONDS							),
 	new/datum/stack_recipe("sword handle",		/obj/item/sword_handle,					1,2,10,	time = 2 SECONDS,							other_reqs = list(/obj/item/stack/sheet/metal = 1)),
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
+	new/datum/stack_recipe("baseball bat",		/obj/item/weapon/baseball_bat,			10,		time = 8 SECONDS							),
 	)
 
 /* =========================================================================
@@ -412,7 +488,7 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 	new/datum/stack_recipe("box",                           /obj/item/weapon/storage/box                            ),
 	new/datum/stack_recipe("large box",                     /obj/item/weapon/storage/box/large,                  4  ),
 	new/datum/stack_recipe("light tubes box",               /obj/item/weapon/storage/box/lights/tubes               ),
-	new/datum/stack_recipe("light bulbs box",               /obj/item/weapon/storage/box/lights/bulbs               ),
+	new/datum/stack_recipe("light bulbs box",               /obj/item/weapon/storage/box/lights               ),
 	new/datum/stack_recipe("mouse traps box",               /obj/item/weapon/storage/box/mousetraps                 ),
 	new/datum/stack_recipe("candle box",                    /obj/item/weapon/storage/fancy/candle_box/empty         ),
 	new/datum/stack_recipe("crayon box",                    /obj/item/weapon/storage/fancy/crayons/empty            ),
@@ -441,9 +517,10 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 	return 1
 
 var/list/datum/stack_recipe/leather_recipes = list (
-	new/datum/stack_recipe/leather("Bullwhip",		/obj/item/weapon/gun/hookshot/whip,					10,	time = 100,),
+	new/datum/stack_recipe/leather("Bullwhip",		/obj/item/weapon/gun/hookshot/whip,			10,	time = 100,),
 	new/datum/stack_recipe/leather("Cowboy hat",	/obj/item/clothing/head/cowboy,				4,	time = 70,),
 	new/datum/stack_recipe/leather("Cowboy boots",	/obj/item/clothing/shoes/jackboots/cowboy,	4, 	time = 80,),
+	new/datum/stack_recipe/leather("Rags",			/obj/item/clothing/under/rags,				3,	time = 80,),
 	new/datum/stack_recipe/leather("Leather gloves",/obj/item/clothing/gloves/botanic_leather,	2,	time = 90,),
 	new/datum/stack_recipe/leather("Leather shoes",	/obj/item/clothing/shoes/leather,			4,	time = 80,),
 	new/datum/stack_recipe/leather("Leather satchel",/obj/item/weapon/storage/backpack/satchel,	12,	time = 130,),

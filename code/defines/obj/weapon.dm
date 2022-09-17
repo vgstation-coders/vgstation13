@@ -40,6 +40,7 @@
 	throw_speed = 4
 	throw_range = 20
 	var/potency = 20
+	var/slip_override = 0
 
 /obj/item/weapon/bananapeel/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
@@ -175,23 +176,18 @@
 			H.drop_item(src)
 			return
 	var/turf/target = get_turf(A)
-	var/atom/movable/adjtarget = new /atom/movable
-	var/xadjust = 0
-	var/yadjust = 0
-	var/scaler = 0 //used to changed the normalised vector to the proper size
+	var/new_x = src.x
+	var/new_y = src.y
+	var/scaler //used to changed the normalised vector to the proper size
 	scaler = throw_range / max(abs(target.x - src.x), abs(target.y - src.y),1) //whichever is larger magnitude is what we normalise to
 	if (target.x - src.x != 0) //just to avoid fucking with math for no reason
-		xadjust = round((target.x - src.x) * scaler) //normalised vector is now scaled up to throw_range
-		adjtarget.x = src.x + xadjust //the new target at max range
-	else
-		adjtarget.x = src.x
+		var/xadjust = round((target.x - src.x) * scaler) //normalised vector is now scaled up to throw_range
+		new_x = src.x + xadjust //the new target at max range
 	if (target.y - src.y != 0)
-		yadjust = round((target.y - src.y) * scaler)
-		adjtarget.y = src.y + yadjust
-	else
-		adjtarget.y = src.y
+		var/yadjust = round((target.y - src.y) * scaler)
+		new_y = src.y + yadjust
 	// log_admin("Adjusted target of [adjtarget.x] and [adjtarget.y], adjusted with [xadjust] and [yadjust] from [scaler]")
-	..(get_turf(adjtarget), throw_range, throw_speed)
+	..(locate(new_x, new_y, src.z), throw_range, throw_speed)
 
 /obj/item/weapon/legcuffs/bolas/throw_impact(atom/hit_atom) //Pomf was right, I was wrong - Comic
 	if(isliving(hit_atom) && hit_atom != usr) //if the target is a live creature other than the thrower
@@ -395,16 +391,16 @@
 	IED = null
 	..()
 
-/obj/item/weapon/beartrap/ex_act(var/severity)
+/obj/item/weapon/beartrap/ex_act(var/severity, var/child = null, var/mob/whodunnit)
 	switch(severity)
 		if (1)
 			qdel(src)
 		if (2)
 			if (IED)
-				IED.prime()
+				IED.prime(whodunnit)
 		if (3)
 			if (IED && prob(50))
-				IED.prime()
+				IED.prime(whodunnit)
 
 /obj/item/weapon/beartrap/armed
 	armed = 1
@@ -622,7 +618,7 @@
 				armed = 0
 				anchored = FALSE
 				var/mob/living/simple_animal/SA = AM
-				visible_message("<span class='danger'>\The [SA] steps on \the [src].</span>",\
+				SA.visible_message("<span class='danger'>\The [SA] steps on \the [src].</span>",\
 						"<span class='danger'>You step on \the [src]![(IED && IED.active) ? " The explosive device attached to it activates." : ""]</span>",\
 						"<span class='notice'>You hear a sudden snapping sound!",\
 						//Hallucination messages
@@ -691,7 +687,7 @@
 	message_admins(log_str)
 	log_game(log_str)
 	spawn(IED.det_time)
-		IED.prime()
+		IED.prime(L)
 		desc = initial(desc)
 		overlays.Remove(ied_overlay)
 		if (trappeduser && trappedorgan?.amputated)//check if they lost their leg, and get them out of the trap
@@ -780,7 +776,7 @@
 	. = do_after_default_checks(arglist(args))
 	if(.)
 		playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
-		target.shake_animation()
+		target.shake_animation(3, 3, 0.2, 15)
 
 /obj/item/weapon/caution
 	desc = "Caution! Wet Floor!"
@@ -831,7 +827,7 @@
 				src.visible_message("The [src.name] beeps, \"Running on wet floors is hazardous to your health.\"")
 				message_admins("[C] triggered the explosive wet floor sign at [loc] ([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
 				log_game("[C] triggered the explosive wet floor sign at [loc]([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
-				explosion(src.loc,-1,2,0)
+				explosion(src.loc,-1,2,0, whodunnit = get_mob_by_key(fingerprintslast))
 				if(ishuman(C))
 					dead_legs(C)
 				if(src)
@@ -851,11 +847,13 @@
 	body_parts_covered = HEAD
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_HEAD
+	starting_materials = list(MAT_PLASTIC = 2*CC_PER_SHEET_MISC) //Recipe calls for 2 sheets
+	w_type = RECYK_PLASTIC
 
 /obj/item/weapon/caution/attackby(obj/item/I as obj, mob/user as mob)
 	if(I.is_wirecutter(user))
 		to_chat(user, "<span class='info'>You cut apart the cone into plastic.</span>")
-		drop_stack(/obj/item/stack/sheet/mineral/plastic, user.loc, 2, user)
+		drop_stack(/obj/item/stack/sheet/mineral/plastic, user.loc, starting_materials[MAT_PLASTIC]/CC_PER_SHEET_PLASTIC, user)
 		qdel(src)
 		return
 	return ..()

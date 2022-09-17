@@ -31,7 +31,7 @@
 	return
 
 /obj/item/projectile/missile/proc/explode()
-	explosion(src.loc, 1, 1, 2, 7, 0)
+	explosion(src.loc, 1, 1, 2, 7, 0, whodunnit = firer)
 	playsound(src.loc, "explosion", 50, 1)
 	del(src)
 
@@ -60,7 +60,7 @@
 	var/wasvalid = 0
 	var/lastfired = 0
 	var/shot_delay = 50
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 50
 	active_power_usage = 300
 	var/atom/movable/cur_target
@@ -107,7 +107,7 @@
 	return new_target
 
 /obj/machinery/meteor_battery/process()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(src.cover==null)
 		src.cover = new /obj/machinery/turretcover(src.loc)
@@ -150,7 +150,7 @@
 		if(!isPopping())
 			if(isDown())
 				popUp()
-				use_power = 2
+				use_power = MACHINE_POWER_USE_ACTIVE
 			else
 				spawn()
 					if(!targeting_active)
@@ -160,7 +160,7 @@
 	else if(!isPopping())//else, pop down
 		if(!isDown())
 			popDown()
-			use_power = 1
+			use_power = MACHINE_POWER_USE_IDLE
 
 	return
 

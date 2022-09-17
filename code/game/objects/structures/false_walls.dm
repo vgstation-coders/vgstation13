@@ -34,13 +34,14 @@ var/list/false_wall_images = list()
 * Gets the highest and lowest pressures from the list of turfs provided
 * around us, then checks the difference.
 */
-/proc/getPressureDifferentialFromTurfList(var/list/turf/simulated/turf_list)
+/proc/getPressureDifferentialFromTurfList(var/list/turf/turf_list)
 	var/minp=SHORT_REAL_LIMIT; // Lowest recorded pressure.
 	var/maxp=0;        // Highest recorded pressure.
-	for(var/turf/simulated/T in turf_list)
+	for(var/turf/T in turf_list)
 		var/cp = 0
-		if(T.zone)
-			var/datum/gas_mixture/environment = T.return_air()
+		var/turf/simulated/TS = T
+		if(TS && istype(TS) && TS.zone)
+			var/datum/gas_mixture/environment = TS.return_air()
 			cp = environment.return_pressure()
 		else
 			if(istype(T,/turf/simulated))
@@ -71,6 +72,12 @@ var/list/false_wall_images = list()
 
 /proc/performWallPressureCheck(var/turf/loc)
 	var/pdiff = getOPressureDifferential(loc)
+	if(pdiff > FALSEDOOR_MAX_PRESSURE_DIFF)
+		return pdiff
+	return 0
+
+/proc/performWallPressureCheckFromTurfList(var/list/turf/turf_list)
+	var/pdiff = getPressureDifferentialFromTurfList(turf_list)
 	if(pdiff > FALSEDOOR_MAX_PRESSURE_DIFF)
 		return pdiff
 	return 0
@@ -126,16 +133,7 @@ var/list/false_wall_images = list()
 	..()
 	relativewall()
 	relativewall_neighbours()
-	var/junction=findSmoothingNeighbors()
-	var/closed_state = "[mineral][junction]"
-	meson_image = image('icons/turf/walls.dmi',loc,closed_state)
-	meson_image.plane = plane
-	meson_image.layer = layer
-	false_wall_images |= meson_image
-
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images |= meson_image
+	update_meson_image()
 
 /obj/structure/falsewall/Destroy()
 	for (var/mob/L in meson_wearers)
@@ -178,19 +176,19 @@ var/list/false_wall_images = list()
 	if(density)
 		opening = 1
 		icon_state = "[mineral]fwall_open"
+		update_meson_image()
 		flick("[mineral]fwall_opening", src)
 		loc.mouse_opacity = 1
-		sleep(15)
+		sleep(5)
 		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
-		update_meson_image()
 	else
 		opening = 1
 		flick("[mineral]fwall_closing", src)
 		icon_state = "[mineral]0"
 		setDensity(TRUE)
-		sleep(15)
+		sleep(5)
 		set_opacity(1)
 		src.relativewall()
 		opening = 0
@@ -308,14 +306,7 @@ var/list/false_wall_images = list()
 	..()
 	relativewall()
 	relativewall_neighbours()
-	var/junction=findSmoothingNeighbors()
-	var/closed_state = "[mineral][junction]"
-	meson_image = image('icons/turf/walls.dmi',src,closed_state)
-	false_wall_images += meson_image
-
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images |= meson_image
+	update_meson_image()
 
 /obj/structure/falserwall/Destroy()
 	var/temploc = src.loc
@@ -366,19 +357,19 @@ var/list/false_wall_images = list()
 		opening = 1
 		// Open wall
 		icon_state = "frwall_open"
+		update_meson_image()
 		flick("frwall_opening", src)
 		loc.mouse_opacity = 1
-		sleep(15)
+		sleep(5)
 		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
-		update_meson_image()
 	else
 		opening = 1
 		icon_state = "r_wall"
 		flick("frwall_closing", src)
 		setDensity(TRUE)
-		sleep(15)
+		sleep(5)
 		set_opacity(1)
 		relativewall()
 		opening = 0

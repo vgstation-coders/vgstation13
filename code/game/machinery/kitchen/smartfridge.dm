@@ -9,7 +9,7 @@
 	density = 1
 	opacity = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 5
 	active_power_usage = 100
 	flags = NOREACT
@@ -26,6 +26,9 @@
 									/obj/item/weapon/reagent_containers/food/snacks/meat,
 									/obj/item/weapon/reagent_containers/food/snacks/honeycomb,
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
+									/obj/item/weapon/reagent_containers/food/condiment,
+									/obj/item/weapon/reagent_containers/glass,
+									/obj/item/weapon/reagent_containers/food/drinks,
 									/obj/item/weapon/reagent_containers/food/condiment)
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK | EMAGGABLE
@@ -40,7 +43,7 @@
 		spawn(rand(0, 15))
 			stat |= NOPOWER
 			if(!(stat & BROKEN))
-				kill_light()
+				set_light(0)
 
 
 /datum/fridge_pile
@@ -110,7 +113,7 @@
 	return -75 //slow
 
 /obj/machinery/smartfridge/process()
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN) || !anchored)
 		return
 
 	for(var/obj/item/I in contents)
@@ -204,31 +207,20 @@
 
 	RefreshParts()
 
-/obj/machinery/smartfridge/drinks
-	name = "\improper Drink Showcase"
-	desc = "A refrigerated storage unit for tasty tasty alcohol."
-
-	accepted_types = list(	/obj/item/weapon/reagent_containers/glass,
-							/obj/item/weapon/reagent_containers/food/drinks,
-							/obj/item/weapon/reagent_containers/food/condiment)
-
-/obj/machinery/smartfridge/drinks/New()
+/obj/machinery/smartfridge/condiments/New()
 	. = ..()
 
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smartfridge/drinks,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
-	)
-
-	RefreshParts()
+	for(var/i = 0 to 2)
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/honey(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/hotsauce(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/coldsauce(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/ketchup(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/cinnamon(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/soysauce(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/vinegar(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/drinks/ice(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/drinks/discount_sauce(src))
 
 /obj/machinery/smartfridge/extract
 	name = "\improper Slime Extract Storage"
@@ -269,7 +261,7 @@
 	icon_state = "bloodbank"
 	icon_on = "bloodbank"
 
-	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
+	accepted_types = list(/obj/item/weapon/reagent_containers/blood)	
 
 /obj/machinery/smartfridge/bloodbank/New()
 	. = ..()
@@ -295,13 +287,14 @@
 /obj/machinery/smartfridge/bloodbank/filled/New()
 	. = ..()
 
-	for(var/i = 0 to 4)
+	for(var/i = 0 to 2)
 		insert_item(new /obj/item/weapon/reagent_containers/blood/APlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/BPlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/BMinus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
+	for(var/i = 0 to 5)
 		insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 
 /obj/machinery/smartfridge/bloodbank/power_change()
@@ -376,7 +369,7 @@
 		update_nearby_tiles()
 
 /obj/machinery/smartfridge/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	if((stat & NOPOWER) || (contents.len >= MAX_N_OF_ITEMS))
+	if((stat & (FORCEDISABLE|NOPOWER)) || (contents.len >= MAX_N_OF_ITEMS))
 		return FALSE
 	if(accept_check(AM))
 		piles = sortList(piles)
@@ -400,7 +393,7 @@
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())
 		return 1
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		to_chat(user, "<span class='notice'>\The [src] is unpowered and useless.</span>")
 		return 1
 	if(contents.len >= MAX_N_OF_ITEMS)
@@ -423,16 +416,12 @@
 /obj/machinery/smartfridge/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/machinery/smartfridge/attack_ai(mob/user as mob)
-	return src.attack_hand(user)
-
 /obj/machinery/smartfridge/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	interact(user)
 
-/obj/machinery/smartfridge/emag(mob/user)
-	new/obj/effect/sparks(get_turf(src))
-	playsound(loc,"sparks",50,1)
+/obj/machinery/smartfridge/emag_act(mob/user)
+	spark(src)
 	emagged = !emagged
 	if(emagged)
 		to_chat(user, "<span class='warning'>You disable the security protocols.</span>")
@@ -444,7 +433,7 @@
 ********************/
 
 /obj/machinery/smartfridge/interact(mob/user as mob)
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 
 	var/dat = list()

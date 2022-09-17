@@ -8,6 +8,7 @@ var/area/space_area
 	var/global/global_uid = 0
 	var/uid
 	var/obj/machinery/power/apc/areaapc = null
+	var/list/obj/machinery/alarm/air_alarms = list()
 	var/list/area_turfs
 	plane = ABOVE_LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
@@ -29,7 +30,7 @@ var/area/space_area
 	if(isspace(src))	// override defaults for space. TODO: make space areas of type /area/space rather than /area
 		requires_power = 1
 		always_unpowered = 1
-		dynamic_lighting = 1
+		dynamic_lighting = 0
 		power_light = 0
 		power_equip = 0
 		power_environ = 0
@@ -47,8 +48,6 @@ var/area/space_area
 		power_environ = 1
 
 	..()
-
-	update_dynamic_lighting()
 
 //	spawn(15)
 	power_change()		// all machines set to current power level, also updates lighting icon
@@ -140,7 +139,7 @@ var/area/space_area
 
 	// Determine what the highest DL reported by air alarms is
 	for(var/obj/machinery/alarm/AA in src)
-		if((AA.stat & (NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
+		if((AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) || AA.shorted || AA.buildstage != 2)
 			continue
 		var/reported_danger_level=AA.local_danger_level
 		if(AA.alarmActivated)
@@ -180,7 +179,7 @@ var/area/space_area
 			UpdateFirelocks()
 		atmosalm = danger_level
 		for (var/obj/machinery/alarm/AA in src)
-			if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted)
+			if ( !(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
 				AA.update_icon()
 		return 1
 	return 0
@@ -189,8 +188,8 @@ var/area/space_area
 	var/danger_level = 0
 
 	// Determine what the highest DL reported by air alarms is
-	for(var/obj/machinery/alarm/AA in src)
-		if((AA.stat & (NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
+	for(var/obj/machinery/alarm/AA in air_alarms)
+		if((AA.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || AA.shorted || AA.buildstage != 2)
 			continue
 		var/reported_danger_level=AA.local_danger_level
 		if(AA.alarmActivated)
@@ -436,6 +435,8 @@ var/area/space_area
 /area/Entered(atom/movable/Obj, atom/OldLoc)
 	var/area/oldArea = get_area(OldLoc)
 
+	if(oldArea == src)
+		return 1
 	if(project_shadows)
 		Obj.update_shadow()
 	else if(istype(oldArea) && oldArea.project_shadows)
@@ -446,9 +447,9 @@ var/area/space_area
 		thing.area_entered(src)
 
 	for(var/mob/mob_in_obj in Obj.contents)
-
 		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
 
+	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
 		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
@@ -456,6 +457,7 @@ var/area/space_area
 			narrator.Crossed(M)
 
 /area/Exited(atom/movable/Obj)
+	INVOKE_EVENT(src, /event/area_exited, "exiter" = Obj)
 	..()
 
 /area/proc/subjectDied(target)
@@ -488,13 +490,6 @@ var/area/space_area
 	poweralert(1, apctoremove) //CANCEL THE POWER ALERT PLEASE
 	if(areaapc == apctoremove)
 		areaapc = null
-
-/area/proc/get_turfs()
-	var/list/L = list()
-	for(var/turf/T in contents)
-		L += T
-
-	return L
 
 /area/proc/get_atoms()
 	var/list/L = list()
@@ -544,7 +539,6 @@ var/area/space_area
 
 var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "zone", "light", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
 var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are moved by move_area_to and move_contents_to
-var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f9","swall_f10") //icon_states for which to prepare an underlay
 
 /area/proc/move_contents_to(var/area/A, var/turftoleave=null, var/direction = null)
 	//Takes: Area. Optional: turf type to leave behind.
@@ -644,42 +638,18 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 						SX.air.copy_from(ST.zone.air)
 						ST.zone.remove(ST)
 
-					/* Quick visual fix for some weird shuttle corner artefacts when on transit space tiles */
-					if(direction && findtext(X.icon_state, "swall_s"))
-
-						// Spawn a new shuttle corner object
-						var/obj/corner = new()
-						corner.forceMove(X)
-						corner.setDensity(TRUE)
-						corner.anchored = 1
-						corner.icon = X.icon
-						corner.icon_state = replacetext(X.icon_state, "_s", "_f")
-						corner.tag = "delete me"
-						corner.name = "wall"
-
+					/* Quick visual fix for transit space tiles */
+					if(direction && (locate(/obj/structure/shuttle/diag_wall) in X))
 						// Find a new turf to take on the property of
-						var/turf/nextturf = get_step(corner, direction)
+						var/turf/nextturf = get_step(X, direction)
 						if(!nextturf || !istype(nextturf, /turf/space))
-							nextturf = get_step(corner, turn(direction, 180))
-
+							nextturf = get_step(X, turn(direction, 180))
 
 						// Take on the icon of a neighboring scrolling space icon
 						X.icon = nextturf.icon
 						X.icon_state = nextturf.icon_state
 
-
 					for(var/obj/O in T)
-
-						// Reset the shuttle corners
-						if(O.tag == "delete me")
-							X.icon = 'icons/turf/shuttle.dmi'
-							X.icon_state = replacetext(O.icon_state, "_f", "_s") // revert the turf to the old icon_state
-							X.name = "wall"
-							qdel(O) // prevents multiple shuttle corners from stacking
-							O = null
-							continue
-						if(!istype(O,/obj))
-							continue
 						O.forceMove(X)
 					for(var/mob/M in T)
 						if(!M.can_shuttle_move())

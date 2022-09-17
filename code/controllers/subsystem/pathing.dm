@@ -74,11 +74,11 @@ var/global/list/pathmakers = list()
 	var/turf/start
 	var/turf/end
 	var/atom/target
-	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
+	var/PriorityQueue/open = new /PriorityQueue/reverse(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
 	var/list/path = null //the returned path, if any
 	var/PathNode/cur //current processed turf
-	var/proc_to_call //how we can tell the owner the finished path
+	var/callback/callback //how we can tell the owner the finished path
 
 	var/adjacent //How we check which turfs that are adjacent to our checked turf are valid
 	var/dist //How we check the distance between points
@@ -90,16 +90,16 @@ var/global/list/pathmakers = list()
 	var/debug = FALSE //Whether we paint our turfs as we calculate
 	var/PM_id //How we will identify PathNodes associated with this, to prevent PathNode conflict
 
-/datum/path_maker/New(var/nowner, var/nproc_to_call, var/turf/nstart, var/turf/nend, var/atom/ntarget, var/nadjacent, var/ndist, var/nmaxnodes, var/nmaxnodedepth, var/nmintargetdist, var/nid=null, var/turf/nexclude, var/ndebug)
+/datum/path_maker/New(var/nowner, var/ncallback, var/turf/nstart, var/turf/nend, var/atom/ntarget, var/nadjacent, var/ndist, var/nmaxnodes, var/nmaxnodedepth, var/nmintargetdist, var/nid=null, var/turf/nexclude, var/ndebug)
 	ASSERT(nowner)
 	ASSERT(nstart)
 	ASSERT(nend)
-	ASSERT(nproc_to_call)
+	ASSERT(ncallback)
 
 	owner = nowner
 	start = nstart
 	end = nend
-	proc_to_call = nproc_to_call
+	callback = ncallback
 	target = ntarget
 	adjacent = nadjacent
 	dist = ndist
@@ -216,7 +216,7 @@ var/global/list/pathmakers = list()
 	astar_debug("open:[open.List().len]")
 
 /datum/path_maker/proc/fail()
-	call(owner, proc_to_call)()
+	callback.invoke_async()
 	qdel(src)
 
 /datum/path_maker/proc/finish()
@@ -230,5 +230,5 @@ var/global/list/pathmakers = list()
 		for(var/i = 1; i <= path.len/2; i++)
 			path.Swap(i,path.len-i+1)
 
-	call(owner, proc_to_call)(path.Copy(), target)
+	callback.invoke_async(path.Copy(), target)
 	qdel(src)

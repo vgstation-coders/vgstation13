@@ -1,4 +1,3 @@
-
 #define REAGENT_STATE_SOLID 1
 #define REAGENT_STATE_LIQUID 2
 #define REAGENT_STATE_GAS 3
@@ -18,6 +17,8 @@
 #define VAPORSALT			"vaporsalt"
 #define BUSTANUT 			"bustanut"
 #define ROGAN 			"rogan"
+#define BLUEGOO			"bluegoo"
+#define GREYGOO			"greygoo"
 #define SLIMEJELLY 			"slimejelly"
 #define BLOOD 			"blood"
 #define VACCINE 			"vaccine"
@@ -96,6 +97,7 @@
 #define TRICORDRAZINE 			"tricordrazine"
 #define SIMPOLINOL			"simpolinol"
 #define ADMINORDRAZINE 			"adminordrazine"
+#define PROCIZINE 			"procizine"
 #define SYNAPTIZINE 			"synaptizine"
 #define IMPEDREZENE 			"impedrezene"
 #define HYRONALIN 			"hyronalin"
@@ -111,6 +113,7 @@
 #define PHYTOCARISOL			"phytocarisol"
 #define HYPERZINE 			"hyperzine"
 #define HYPOZINE 			"hypozine"
+#define LIQUIDPCP 			"liquidpcp"
 #define CRYOXADONE 			"cryoxadone"
 #define CLONEXADONE 			"clonexadone"
 #define REZADONE 			"rezadone"
@@ -157,6 +160,10 @@
 #define CARPPHEROMONES 			"carppheromones"
 #define BLACKPEPPER 			"blackpepper"
 #define CINNAMON 			"cinnamon"
+#define ZAMSPICES			"zamspices"
+#define ZAMMILD				"zammild"
+#define ZAMSPICYTOXIN			"zamspicytoxin"
+#define POLYPGELATIN				"polypgelatin"
 #define COCO 			"coco"
 #define AMATOXIN 			"amatoxin"
 #define AMANATIN 			"amanatin"
@@ -189,6 +196,7 @@
 #define PEPTOBISMOL 			"peptobismol"
 #define DRINK 			"drink"
 #define ORANGEJUICE 			"orangejuice"
+#define OPOKJUICE 			"opokjuice"
 #define TOMATOJUICE 			"tomatojuice"
 #define LIMEJUICE 			"limejuice"
 #define CARROTJUICE 			"carrotjuice"
@@ -266,6 +274,7 @@
 #define BEEPSKYSMASH 			"beepskysmash"
 #define DOCTORSDELIGHT 			"doctorsdelight"
 #define CHANGELINGSTING 			"changelingsting"
+#define CHANGELINGSTAB 			"changelingstab"
 #define IRISHCREAM 			"irishcream"
 #define MANLYDORF 			"manlydorf"
 #define LONGISLANDICEDTEA 			"longislandicedtea"
@@ -274,6 +283,7 @@
 #define SACRIFICIAL_MARY			"sacrificial_mary"
 #define CREAMY_HOT_COCO			"creamy_hot_coco"
 #define MOONSHINE 			"moonshine"
+#define CORNSYRUP 			"cornsyrup"
 #define MIDNIGHTKISS	"midnightkiss"
 #define COSMOPOLITAN	"cosmopolitan"
 #define CORPSEREVIVER	"corpsereviver"
@@ -450,6 +460,8 @@
 #define FESTIVE_EGGNOG	"festive_eggnog"
 #define TENDIES			"tendies"
 #define DSYRUP			"dsyrup"
+#define GRUE_BILE		"grue_bile"
+#define PINKLADY		"pinklady"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -459,6 +471,7 @@
 #define TRINITRINE		"trinitrine"
 #define MIDAZOLINE		"midazoline"
 #define LOCUTOGEN		"locutogen"
+#define BUMCIVILIAN		"bumcivilian"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
@@ -488,6 +501,7 @@
 #define AMINOMICIN		"aminomicin"
 #define AMINOMICIAN		"aminomician"
 #define AMINOCYPRINIDOL	"aminocyprinidol"
+#define AMINOBLATELLA	"aminoblatella"
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
 #define CAFFEINE		"caffeine"
@@ -520,6 +534,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define ANTI_TOXINS list(ANTI_TOXIN, ALLICIN)
 #define KELOTANES list(KELOTANE, TANNIC_ACID)
 #define DERMALINES list(DERMALINE, KATHALAI)
+#define MUTAGENS list(MUTAGEN, UNTABLE_MUTAGEN)
 #define BICARIDINES list(BICARIDINE, OPIUM)
 #define SPACE_DRUGGS list(SPACE_DRUGS, MESCALINE)
 #define SYNAPTIZINES list(SYNAPTIZINE, CYTISINE)
@@ -534,9 +549,11 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define IMPEDREZENES list(IMPEDREZENE, HYOSCYAMINE)
 #define LEXORINS list(LEXORIN, CORIAMYRTIN)
 #define DEXALINS list(DEXALIN, THYMOL)
-#define PETRITRICINCURES list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
-#define WATERS list(WATER, HOLYWATER)
+#define ACIDS list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
+#define WATERS list(WATER, HOLYWATER, ICE)
 #define CORES list(SOFTCORES, MEDCORES)
+#define ALLNANITES list(NANITES, AUTISTNANITES)
+#define SUGARS list(SUGAR, CORNSYRUP)
 
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"

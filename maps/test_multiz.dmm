@@ -18,12 +18,17 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor/plating,
-/area/crew_quarters/bar)
+/area/crew_quarters/casino)
 "ag" = (
 /obj/structure/stairs/west,
 /turf/simulated/floor/plating,
-/area/crew_quarters/bar)
+/area/crew_quarters/casino)
 "ah" = (
 /obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating,
@@ -89,7 +94,7 @@
 /turf/simulated/wall/invulnerable/ice,
 /area)
 "au" = (
-/turf/simulated/shuttle/wall,
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "av" = (
 /turf/simulated/floor/plating/snow/cold,
@@ -98,11 +103,11 @@
 /turf/simulated/floor/plating/snow,
 /area)
 "ax" = (
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "ay" = (
 /obj/machinery/floodlight/on,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "az" = (
 /turf/simulated/wall,
@@ -117,11 +122,11 @@
 /obj/docking_port/shuttle{
 	dir = 8
 	},
-/turf/simulated/shuttle/wall,
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "aC" = (
 /obj/machinery/computer/shuttle,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "aD" = (
 /obj/machinery/light_switch{
@@ -176,6 +181,14 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/railing/glass{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/bar)
 "aL" = (
@@ -216,6 +229,11 @@
 	d2 = 4;
 	icon_state = "2-4";
 	tag = ""
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
 	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/bar)
@@ -574,7 +592,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "bT" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
 	},
 /turf/simulated/floor,
@@ -732,7 +750,7 @@
 /turf/simulated/wall/r_wall,
 /area)
 "co" = (
-/turf/simulated/shuttle/wall,
+/turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
 "cp" = (
 /obj/docking_port/shuttle,
@@ -742,21 +760,21 @@
 "cq" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/card/id/captains_spare,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cr" = (
 /obj/structure/table/reinforced,
 /obj/item/clothing/suit/space/rig/atmos,
 /obj/item/clothing/mask/breath,
 /obj/item/weapon/tank/oxygen,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cs" = (
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "ct" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cu" = (
 /obj/structure/bed/chair{
@@ -765,21 +783,21 @@
 /obj/effect/landmark{
 	name = "JoinLate"
 	},
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cv" = (
 /obj/effect/landmark{
 	name = "Observer-Start"
 	},
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cw" = (
 /obj/effect/landmark/start,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cx" = (
 /obj/item/device/flashlight/lantern/on,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cy" = (
 /obj/structure/radial_gen/movable/snow_nature/snow_forest,
@@ -818,16 +836,16 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cH" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 4
+	},
+/obj/structure/railing/glass{
+	dir = 8
 	},
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cI" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/glass{
 	dir = 1
 	},
 /turf/simulated/floor,
@@ -840,39 +858,173 @@
 /obj/item/weapon/tank/jetpack/carbondioxide,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
+"iT" = (
+/obj/structure/railing/plasteel{
+	dir = 1
+	},
+/obj/structure/railing/plasteel{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area)
+"kG" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor/plating,
+/area/crew_quarters/casino)
+"nG" = (
+/obj/machinery/atmospherics/pipe/simple/supply/visible{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
+"rd" = (
+/obj/structure/railing/glass{
+	dir = 4
+	},
+/obj/structure/railing/glass{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
+"ru" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 16;
+	icon_state = "4-16"
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/casino)
+"tf" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
 "wX" = (
 /turf/simulated/floor/plating,
 /area)
+"xx" = (
+/obj/machinery/atmospherics/unary/vent{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
 "zI" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel{
 	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area)
-"GO" = (
-/obj/structure/window/reinforced{
+"BI" = (
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area)
-"Kl" = (
-/obj/structure/window/reinforced{
-	dir = 8
+"Cj" = (
+/obj/structure/railing/plasteel{
+	dir = 1
 	},
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel{
 	dir = 4
 	},
+/turf/simulated/floor/plating,
+/area)
+"Eo" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/unary/vent{
+	dir = 8
+	},
+/turf/simulated/open,
+/area/crew_quarters/bar)
+"EX" = (
+/turf/simulated/floor/plating,
+/area/crew_quarters/casino)
+"Gx" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/zpipe/down/supply{
+	dir = 4
+	},
+/turf/simulated/open,
+/area/crew_quarters/bar)
+"GO" = (
+/obj/structure/railing/plasteel{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area)
+"He" = (
+/obj/structure/cable/yellow{
+	d1 = 8;
+	d2 = 32;
+	icon_state = "8-32"
+	},
+/obj/structure/catwalk,
+/turf/simulated/open,
+/area/crew_quarters/bar)
+"Jh" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/bar)
+"Kl" = (
 /obj/structure/stairs/north,
+/obj/structure/railing/glass{
+	dir = 4
+	},
+/obj/structure/railing/glass{
+	dir = 8
+	},
 /turf/simulated/floor,
 /area/crew_quarters/bar)
+"Os" = (
+/obj/structure/railing/glass,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
+"OP" = (
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area)
+"Tb" = (
+/turf/simulated/wall/r_wall,
+/area/crew_quarters/casino)
+"VU" = (
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 24
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/casino)
 "WI" = (
-/obj/structure/window/reinforced{
+/obj/structure/railing/plasteel{
 	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area)
 "XD" = (
-/obj/structure/window/reinforced,
+/obj/structure/railing/plasteel,
+/turf/simulated/floor/plating,
+/area)
+"ZG" = (
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area)
 
@@ -4868,7 +5020,7 @@ ad
 ae
 ae
 ae
-ae
+xx
 ae
 ad
 ac
@@ -4930,7 +5082,7 @@ ad
 al
 an
 ae
-ae
+nG
 ae
 ad
 ac
@@ -4992,7 +5144,7 @@ ad
 am
 ao
 ae
-ae
+ap
 as
 ad
 ac
@@ -6274,11 +6426,11 @@ aa
 (28,1,2) = {"
 ab
 ac
-ad
-ad
-ad
-ad
-ad
+Tb
+Tb
+Tb
+Tb
+Tb
 ai
 ai
 ai
@@ -6336,11 +6488,11 @@ aa
 (29,1,2) = {"
 ab
 ac
-ad
-ae
-ae
+Tb
+ru
+EX
 ag
-ad
+Tb
 aj
 ai
 ai
@@ -6398,11 +6550,11 @@ aa
 (30,1,2) = {"
 ab
 ac
-ad
+Tb
 af
-ae
-ae
-ad
+EX
+EX
+Tb
 ai
 ai
 ai
@@ -6460,11 +6612,11 @@ aa
 (31,1,2) = {"
 ab
 ac
-ad
-ae
-ae
-ae
-ah
+Tb
+VU
+EX
+EX
+kG
 ai
 ai
 ai
@@ -6522,11 +6674,11 @@ aa
 (32,1,2) = {"
 ab
 ac
-ad
-ad
-ad
-ad
-ad
+Tb
+Tb
+Tb
+Tb
+Tb
 ai
 ai
 ai
@@ -8713,7 +8865,7 @@ ad
 bF
 bO
 bM
-bM
+Gx
 ch
 az
 aw
@@ -8775,7 +8927,7 @@ aP
 bG
 bP
 bM
-bM
+Eo
 cf
 az
 aw
@@ -9872,7 +10024,7 @@ at
 at
 aw
 ad
-ae
+tf
 aQ
 aT
 ad
@@ -9934,7 +10086,7 @@ at
 at
 aw
 ad
-ae
+Jh
 aR
 aU
 ah
@@ -9997,7 +10149,7 @@ at
 aw
 ad
 aK
-ae
+rd
 aV
 ad
 bf
@@ -10058,7 +10210,7 @@ at
 at
 aw
 ad
-aL
+He
 aL
 aL
 bb
@@ -14477,7 +14629,7 @@ cz
 cz
 bu
 bC
-cD
+Os
 aL
 aL
 cI
@@ -14539,7 +14691,7 @@ cz
 cz
 bu
 bC
-cD
+Os
 aL
 aL
 cI
@@ -18073,12 +18225,12 @@ cz
 cz
 cz
 cz
-wX
-wX
-wX
-wX
-wX
-wX
+iT
+GO
+GO
+GO
+GO
+BI
 cz
 cz
 cz
@@ -18135,12 +18287,12 @@ cz
 cz
 cz
 cz
+zI
 wX
-wX
+OP
 WI
-WI
 wX
-wX
+XD
 cz
 cz
 cz
@@ -18197,12 +18349,12 @@ cz
 cz
 cz
 cz
-wX
+zI
 XD
 cz
 cz
 zI
-wX
+XD
 cz
 cz
 cz
@@ -18259,12 +18411,12 @@ cz
 cz
 cz
 cz
-wX
+zI
 XD
 cz
 cz
 zI
-wX
+XD
 cz
 cz
 cz
@@ -18321,12 +18473,12 @@ cz
 cz
 cz
 cz
-wX
+zI
 wX
 cz
 cz
 zI
-wX
+XD
 cz
 cz
 cz
@@ -18383,12 +18535,12 @@ cz
 cz
 cz
 cz
-wX
+zI
 wX
 GO
 GO
 wX
-wX
+XD
 cz
 cz
 cz
@@ -18445,12 +18597,12 @@ cz
 cz
 cz
 cz
-wX
-wX
-wX
-wX
-wX
-wX
+Cj
+WI
+WI
+WI
+WI
+ZG
 cz
 cz
 cz

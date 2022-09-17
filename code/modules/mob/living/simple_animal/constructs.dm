@@ -47,6 +47,8 @@
 	// for constructs with one spell, locate() that spell and use it.
 	var/spell/spell_on_use_inhand = /spell
 
+	blooded = FALSE
+
 
 /mob/living/simple_animal/construct/New()
 	..()
@@ -65,16 +67,16 @@
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /mob/living/simple_animal/construct/update_perception()
-	if(dark_plane)
-		dark_plane.alphas["construct"] = 75
+	if(client)
+		if(client.darkness_planemaster)
+			client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
+			client.darkness_planemaster.alpha = 180
 		client.color = list(
 					1,0,0,0,
 					0,1.3,0,0,
 	 				0,0,1.3,0,
 		 			0,-0.3,-0.3,1,
 		 			0,0,0,0)
-
-	check_dark_vision()
 
 
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)

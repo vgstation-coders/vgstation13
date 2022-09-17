@@ -6,7 +6,6 @@
 
 	see_in_dark = 8
 	see_invisible = SEE_INVISIBLE_MINIMUM
-	seedarkness = FALSE
 	invisibility = INVISIBILITY_OBSERVER
 
 	pass_flags = PASSBLOB
@@ -196,7 +195,7 @@
 			if(newrange > maxjumprange) //to avoid going in an infinite loop
 				break
 
-		invoke_event(/event/moved, list("mover" = src))
+		INVOKE_EVENT(src, /event/moved, "mover" = src)
 		return 0
 
-	invoke_event(/event/moved, list("mover" = src))
+	INVOKE_EVENT(src, /event/moved, "mover" = src)

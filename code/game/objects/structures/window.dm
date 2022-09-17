@@ -18,7 +18,7 @@ var/list/one_way_windows
 	layer = SIDE_WINDOW_LAYER
 	pressure_resistance = 4*ONE_ATMOSPHERE
 	anchored = 1
-	var/health = 10 //This window is so bad blowing on it would break it, sucks for it
+	health = 10 //This window is so bad blowing on it would break it, sucks for it
 	var/d_state = WINDOWLOOSEFRAME //Normal windows have one step (unanchor), reinforced windows have three
 	var/shardtype = /obj/item/weapon/shard
 	var/reinforcetype = /obj/item/stack/rods
@@ -26,7 +26,7 @@ var/list/one_way_windows
 	var/sheetamount = 1 //Number of sheets needed to build this window (determines how much shit is spawned via Destroy())
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
-
+	pass_flags_self = PASSGLASS
 	var/obj/abstract/Overlays/damage_overlay
 	var/image/oneway_overlay
 	var/cracked_base = "crack"
@@ -39,10 +39,11 @@ var/list/one_way_windows
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
 	var/disperse_coeff = 0.95
 	var/is_fulltile = FALSE
-/obj/structure/window/New(loc)
 
+/obj/structure/window/New(loc)
 	..(loc)
-	flow_flags |= ON_BORDER
+	flow_flags |= ON_BORDER | KEEP_DIR
+	setup_border_dummy()
 
 	update_nearby_tiles()
 	update_nearby_icons()
@@ -51,6 +52,7 @@ var/list/one_way_windows
 	if(one_way)
 		one_way = !one_way
 		toggle_one_way()
+
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
@@ -103,7 +105,11 @@ var/list/one_way_windows
 
 	if(health <= 0)
 		if(M) //Did someone pass a mob ? If so, perform a pressure check
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = 0
+			if(flow_flags & ON_BORDER)
+				pdiff = performWallPressureCheckFromTurfList(list(get_step(loc, dir), loc))
+			else
+				pdiff = performWallPressureCheck(loc)
 			if(pdiff > 0)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				if(M.ckey) //Only send an admin message if it's an actual players, admins don't need to know what the carps are doing
@@ -183,32 +189,20 @@ var/list/one_way_windows
 			"<span class='danger'>Your kick [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
 		healthcheck()
 
-/obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
-		return 1
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return 1
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
-	return 1
-
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
-		return 1
-	if(istype(mover) && mover.checkpass(PASSGLASS))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
-		if((get_dir(loc, target) & dir) || (get_dir(loc, mover) & dir) || (get_dir(loc, target) & reverse_direction(dir)) || (get_dir(loc, mover) & reverse_direction(dir)))
+		return TRUE
+	if(istype(mover) && mover.checkpass(pass_flags_self))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
+		if((get_dir(loc, target) | get_dir(loc, mover)) & (dir | opposite_dirs[dir]))
 			dim_beam(mover)
-		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		return !density
-	return 1
-
+		return TRUE
+	if(!density)
+		return TRUE
+	if(istype(mover))
+		return bounds_dist(border_dummy, mover) >= 0
+	else if(get_dir(loc, target) == dir)
+		return FALSE
+	return TRUE
 
 /obj/structure/window/proc/dim_beam(var/obj/item/projectile/beam/B)
 	if(istype(B))
@@ -464,7 +458,11 @@ var/list/one_way_windows
 							smart_toggle()
 						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 					//Perform pressure check since window no longer blocks air
-					var/pdiff = performWallPressureCheck(src.loc)
+					var/pdiff = 0
+					if(flow_flags & ON_BORDER)
+						pdiff = performWallPressureCheckFromTurfList(list(get_step(loc, dir), loc))
+					else
+						pdiff = performWallPressureCheck(loc)
 					if(pdiff > 0)
 						message_admins("Window with pdiff [pdiff] deanchored by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(loc)]!")
 						log_admin("Window with pdiff [pdiff] deanchored by [user.real_name] ([user.ckey]) at [loc]!")
@@ -559,7 +557,7 @@ var/list/one_way_windows
 		return 0
 
 	update_nearby_tiles() //Compel updates before
-	dir = turn(dir, 90)
+	change_dir(turn(dir, 90))
 	update_nearby_tiles()
 	return
 
@@ -573,7 +571,7 @@ var/list/one_way_windows
 		return 0
 
 	update_nearby_tiles() //Compel updates before
-	dir = turn(dir, 270)
+	change_dir(turn(dir, 270))
 	update_nearby_tiles()
 	return
 
@@ -601,8 +599,7 @@ var/list/one_way_windows
 /obj/structure/window/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 
 	update_nearby_tiles()
-	Dir = dir
-	..()
+	. = ..()
 	update_nearby_tiles()
 
 //This proc is used to update the icons of nearby windows. It should not be confused with update_nearby_tiles(), which is an atmos proc!
@@ -620,7 +617,7 @@ var/list/one_way_windows
 		for(var/obj/structure/window/W in get_step(T,direction))
 			W.update_icon()
 
-/obj/structure/window/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
+/obj/structure/window/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = loc
 	..()
 	update_nearby_icons(T)

@@ -34,6 +34,8 @@
 	mob_property_flags = MOB_SUPERNATURAL
 	alpha = 180
 
+	blooded = FALSE
+
 /mob/living/simple_animal/hostile/shade/New()
 	..()
 	add_language(LANGUAGE_CULT)

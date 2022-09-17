@@ -53,12 +53,8 @@ var/global/list/narsie_list = list()
 		world << sound('sound/effects/wind/wind_5_1.ogg')
 		if(narnar)
 			narsie_spawn_animation()
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (cult)
-		cult.stage(CULT_EPILOGUE)
 	if(!narsie_cometh)//so we don't initiate Hell more than one time.
-
-		if (emergency_shuttle && !cult)//in case of Cult 3.0, the round will end after about 5 minutes
+		if (emergency_shuttle)
 			emergency_shuttle.incall()
 			emergency_shuttle.can_recall = 0
 			if(emergency_shuttle.endtime > world.timeofday + 1800 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)

@@ -19,7 +19,7 @@
 		trigger(AM)
 
 /obj/effect/mine/proc/trigger(mob/living/carbon/AM)
-	explosion(loc, 0, 1, 2, 3)
+	explosion(loc, 0, 1, 2, 3, whodunnit = AM)
 	qdel(src)
 
 /obj/effect/mine/dnascramble

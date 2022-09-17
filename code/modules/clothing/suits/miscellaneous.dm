@@ -348,6 +348,28 @@ var/list/tag_suits_list = list()
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
 
+/obj/item/clothing/suit/opsfake
+	icon_state = "rig-syndi"
+	name = "blood-red hardsuit"
+	desc = "A plastic replica of a nuclear operative's suit, you'll look just like a real murderous syndicate operative in this! This is a toy, it is not made for use in space!"
+	item_state = "syndie_hardsuit"
+	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED, GREY_SHAPED)
+	w_class = W_CLASS_MEDIUM
+	flags = FPRINT
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+
+/obj/item/clothing/suit/timefake
+	name = "time suit"
+	desc = "A replica of a real time suit; it reminds you of the previous timelines. May the loop protect the ones left behind."
+	icon_state = "time_suit"
+	item_state = "time_suit"
+	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
+	w_class = W_CLASS_MEDIUM
+	flags = FPRINT
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+
 /obj/item/clothing/suit/sith
 	name = "Sith Robe"
 	desc = "It's treason then."
@@ -366,7 +388,7 @@ var/list/tag_suits_list = list()
 	item_state = "hastur"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
-obj/item/clothing/suit/cassock
+/obj/item/clothing/suit/cassock
 	name = "Cassock"
 	desc = "A black garment belonging to a priest."
 	icon_state = "cassock"
@@ -443,11 +465,11 @@ obj/item/clothing/suit/cassock
  * Misc
  */
 
-/obj/item/clothing/suit/straight_jacket
-	name = "straight jacket"
+/obj/item/clothing/suit/strait_jacket
+	name = "straitjacket"
 	desc = "A suit that completely restrains the wearer."
-	icon_state = "straight_jacket"
-	item_state = "straight_jacket"
+	icon_state = "strait_jacket"
+	item_state = "strait_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	species_fit = list(INSECT_SHAPED)
@@ -634,7 +656,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "russofurcoat"
 	allowed = list(/obj/item/weapon/gun)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/suit/doshjacket
 	name = "Plasterer's Jacket"
@@ -657,6 +679,8 @@ obj/item/clothing/suit/cassock
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV //transparent
 	allowed = list (/obj/item/weapon/fireaxe)
 	sterility = 100
+	starting_materials = list(MAT_PLASTIC = 5*CC_PER_SHEET_MISC) //Recipe calls for 5 sheets
+	w_type = RECYK_PLASTIC
 
 /obj/item/clothing/suit/kefkarobe
 	name = "Crazed Jester's Robe"
@@ -908,6 +932,7 @@ obj/item/clothing/suit/cassock
 	desc = "A wooly poncho. Smells of beans."
 	icon_state = "poncho"
 	item_state = "poncho"
+	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 
 /obj/item/clothing/suit/banana_suit
@@ -927,6 +952,8 @@ obj/item/clothing/suit/cassock
 	body_parts_covered = FULL_TORSO|IGNORE_INV
 	actions_types = list(/datum/action/item_action/toggle_bomber_vest)
 	var/active = 0
+	var/will_activate = 0 //When worn, will become active
+	var/detonation_msg //This will be parsed onto the admin logs and is written at the time of the detonation trigger.
 
 /obj/item/clothing/suit/bomber_vest/proc/activate_vest()
 	var/mob/living/carbon/human/H = loc
@@ -937,27 +964,33 @@ obj/item/clothing/suit/cassock
 	if(!(H.wear_suit == src))
 		return
 	active = 1
+	canremove = 0
 	H.register_event(/event/touched, src, .proc/on_touched)
-	H.register_event(/event/hitby, src, .proc/on_hitby)
 	H.register_event(/event/attacked_by, src, .proc/on_attacked_by)
+	H.register_event(/event/hitby, src, .proc/on_hitby)
 	H.register_event(/event/unarmed_attack, src, .proc/on_unarmed_attack)
 	H.register_event(/event/to_bump, src, .proc/on_to_bump)
 	H.register_event(/event/bumped, src, .proc/on_bumped)
-	canremove = 0
 
 /obj/item/clothing/suit/bomber_vest/proc/on_touched(mob/toucher, mob/touched)
 	if(toucher == touched) //No bombing ourselves by checking ourselves
 		return
-	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/victim, obj/item/item)
+	detonation_msg = "being touched by [toucher]"
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_attacked_by(mob/attacker, mob/attacked, mob/item)
+	detonation_msg = "being hit with \a [item] by [attacker]"
+	detonate()
+/obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/attacker, mob/attacked, mob/item)
+	detonation_msg = "being hit with a thrown [item]"
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_unarmed_attack(mob/attacker, mob/attacked)
+	detonation_msg = "being punched by [attacker]"
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_to_bump(atom/movable/bumper, atom/bumped)
+	detonation_msg = "bumping into [bumped]"
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_bumped(atom/movable/bumper, atom/bumped)
+	detonation_msg = "being bumped into by [bumper]"
 	detonate()
 
 /obj/item/clothing/suit/bomber_vest/proc/deactivate_vest()
@@ -965,8 +998,8 @@ obj/item/clothing/suit/cassock
 	var/mob/living/carbon/human/H = loc
 	if(H)
 		H.unregister_event(/event/touched, src, .proc/on_touched)
+		H.unregister_event(/event/attacked_by, src, .proc/on_attacked_by)
 		H.unregister_event(/event/hitby, src, .proc/on_hitby)
-		H.unregister_event(/event/unarmed_attack, src, .proc/on_attacked_by)
 		H.unregister_event(/event/unarmed_attack, src, .proc/on_unarmed_attack)
 		H.unregister_event(/event/to_bump, src, .proc/on_to_bump)
 		H.unregister_event(/event/bumped, src, .proc/on_bumped)
@@ -980,11 +1013,13 @@ obj/item/clothing/suit/cassock
 	if (!active) //no explosion with no active vest, dummy
 		return
 
-	var/message_say = user.handle_suicide_bomb_cause()
+	var/message_say = user.handle_suicide_bomb_cause(src)
+	if(!message_say)
+		return
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
 	user.say(message_say)
-	explosion(user, 1, 3, 6)
-	message_admins("[user] has detonated \the [src]!")
+	explosion(user, 3, 5, 7, whodunnit = user)
+	message_admins("[user] has detonated \the [src] via suiciding with it!")
 	qdel(src) //Just in case
 	return SUICIDE_ACT_CUSTOM
 
@@ -992,23 +1027,53 @@ obj/item/clothing/suit/cassock
 	var/mob/living/carbon/human/H = loc
 	if(!ishuman(H) || !active)
 		return
-	explosion(H, 1, 3, 6)
-	message_admins("[H] has detonated \the [src]!")
+	explosion(H, 3, 5, 7, whodunnit = H)
+	message_admins("[H] has detonated \the [src] via [detonation_msg]!")
 	qdel(src) //Just in case
 
+/obj/item/clothing/suit/bomber_vest/equipped(mob/user, slot, hand_index)
+	..()
+	if(will_activate)
+		to_chat(user, "<span class='warning'>\The [src] beeps.</span>")
+		activate_vest()
+
 /datum/action/item_action/toggle_bomber_vest
-	name = "Toggle Bomber Vest Active"
-	desc = "Activate the bomber vest, causing the slightest touch to detonate it and blow both you and everyone nearby into bits if active. Usable only when worn, and can't be taken off once active.</span>"
+	name = "Toggle Bomber Vest"
+	desc = "Activate the bomber vest, causing the slightest touch to detonate it and blow both you and everyone nearby into bits if active. Usable only when worn, and can't be taken off once active. You can prime it ahead of time if it is in your hand so that it automatically activates when worn.</span>"
 
 /datum/action/item_action/toggle_bomber_vest/Trigger()
 	if(IsAvailable() && owner && target)
 		var/obj/item/clothing/suit/bomber_vest/B = target
 		var/mob/living/carbon/human/H = owner
-		if(!(H.wear_suit == B))
-			to_chat(owner, "<span class='warning'>You must wear the vest in order to activate it.</span>")
+		if(B.active)
+			to_chat(H, "<span class='warning'>The vest is already active!</span>")
 			return
-		if(!B.active)
+		else if(!H.is_wearing_item(B, slot_wear_suit)) //There are less complex ways of doing this but something broke
+			if(B.will_activate == 0)
+				to_chat(owner, "<span class='warning'>You prime the bomber vest to activate when worn.</span>")
+				B.will_activate = 1
+			else
+				to_chat(owner, "<span class='notice'>You disarm the bomber vest for the time being.</span>")
+				B.will_activate = 0
+			return
+		else if(!B.active)
 			B.activate_vest()
-			to_chat(owner, "<span class='warning'>You toggle on the vest. Bumping into anything will detonate it, as will being punched.</span>")
-		else
-			to_chat(owner, "<span class='warning'>The vest is already active!</span>")
+			to_chat(owner, "<span class='warning'>You toggle on the vest. Bumping into anything will detonate it, as will being hit.</span>")
+
+// -- American """"""Football""""""
+
+/obj/item/clothing/suit/nt_football
+	name = "NT Football suit"
+	desc = "Contrary to popular belief, 13 wasn't chosen, it's simply the last number that hasn't been permanently inducted into the SNFL Hall of Fame."
+	blood_overlay_type = "armor"
+	body_parts_covered = FULL_TORSO
+	icon_state = "ntfootball"
+	flags = FPRINT
+
+/obj/item/clothing/suit/syndie_football
+	name = "Syndie Football suit"
+	desc = "The S stands for Soccer."
+	blood_overlay_type = "armor"
+	body_parts_covered = FULL_TORSO
+	icon_state = "syndiefootball"
+	flags = FPRINT

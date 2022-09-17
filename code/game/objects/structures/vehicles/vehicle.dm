@@ -14,6 +14,14 @@
 				paired_to = V
 				V.mykey = src
 
+/obj/item/key/dropped(mob/user)
+	..()
+	if(locate(/obj/structure/table) in loc.contents)
+		desc = "Why did they get left upon the table? [user] wanted to."
+
+/obj/item/key/pickup(mob/user)
+	desc = initial(desc)
+
 /obj/item/key/Destroy()
 	if(paired_to)
 		paired_to.mykey = null
@@ -26,10 +34,9 @@
 	icon = 'icons/obj/vehicles.dmi'
 	anchored = 1
 	density = 1
-	noghostspin = 1 //You guys are no fun
 	buckle_range = 1
 	var/empstun = 0
-	var/health = 100
+	health = 100
 	var/max_health = 100
 
 	plane = ABOVE_HUMAN_PLANE
@@ -489,7 +496,7 @@
 		target.set_light(brightness)
 		playsound(target, sounds[1], 50, 1)
 	else
-		target.kill_light()
+		target.set_light(0)
 		playsound(target, sounds[2], 50, 1)
 	target.update_icon()
 

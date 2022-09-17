@@ -18,6 +18,7 @@
 	anchored = 1
 	density = 1
 	layer = ABOVE_DOOR_LAYER
+	pass_flags_self = PASSGLASS
 	var/icon_base
 	var/robot_compatibility
 
@@ -45,7 +46,7 @@
 /obj/item/tape/engineering
 	name = "engineering tape"
 	desc = "A length of engineering tape. Better not cross it."
-	req_one_access = list(access_engine,access_atmospherics)
+	req_one_access = list(access_engine_minor,access_atmospherics)
 	icon_base = "engineering"
 	robot_compatibility = MODULE_CAN_LIFT_ENGITAPE
 
@@ -59,9 +60,23 @@
 /obj/item/tape/atmos
 	name = "atmospherics tape"
 	desc = "A length of atmospherics tape. Better not cross it."
-	req_one_access = list(access_engine,access_atmospherics)
+	req_one_access = list(access_engine_major,access_atmospherics)
 	icon_base = "atmos"
 	robot_compatibility = MODULE_CAN_LIFT_ENGITAPE
+
+/obj/item/taperoll/viro
+	name = "biohazard tape"
+	desc = "A roll of biohazard tape used to block off contaminated areas from the public."
+	icon_state = "viro_start"
+	tape_type = /obj/item/tape/viro
+	icon_base = "viro"
+
+/obj/item/tape/viro
+	name = "biohazard tape"
+	desc = "A length of biohazard tape. Better not cross it."
+	req_access = list(access_medical)
+	icon_base = "viro"
+	robot_compatibility = MODULE_CAN_LIFT_VIROTAPE
 
 /obj/item/taperoll/attack_self(mob/user as mob)
 	..()
@@ -181,7 +196,7 @@
 		return 1
 	if(air_group || (height == 0))
 		return 1
-	if((mover.checkpass(PASSGLASS) || istype(mover, /obj/item/projectile/meteor) || mover.throwing == 1))
+	if((mover.checkpass(pass_flags_self) || istype(mover, /obj/item/projectile/meteor) || mover.throwing == 1))
 		return 1
 	else
 		return 0
@@ -284,6 +299,13 @@
 	icon_state = "engineering_start"
 	icon_base = "engineering"
 	tape_type = /obj/item/tape/engineering/syndie
+
+/obj/item/taperoll/syndie/viro
+	name = "biohazard tape"
+	desc = "A roll of biohazard tape used to block off contaminated areas from the public."
+	icon_state = "viro_start"
+	icon_base = "viro"
+	tape_type = /obj/item/tape/viro/syndie
 
 /obj/item/taperoll/syndie/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	tape_door(target, user, proximity_flag)
@@ -397,3 +419,28 @@
 	. = ..()
 	if (get_dist(user, src) < 3)
 		to_chat(user, "<span class = 'warning'>Its edges look razor sharp!</span>")
+
+// Viro syndie tape : Sturdy, throws unstable goo when you try to break it
+
+/obj/item/tape/viro/syndie/destroy_tape(var/mob/user, var/obj/item/weapon/W)
+
+	if (istype(user, /mob/living))
+		var/mob/living/L = user
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(H.is_wearing_item(/obj/item/clothing/gloves/latex))
+				return ..()
+		var/obj/item/toy/snappop/virus/G = new (get_turf(src))
+		var/turf/target = get_turf(L)
+		to_chat(L, "<span class='danger'>The goo coating the tape reacts violently!")
+		var/speed = 4
+		var/distance = 1
+		G.throw_at(target,distance,speed)
+		return FALSE
+	return ..()
+
+/obj/item/tape/viro/syndie/examine(mob/user)
+	. = ..()
+	if (get_dist(user, src) < 3)
+		to_chat(user, "<span class = 'warning'>It looks strangely sticky.</span>")
+

@@ -8,11 +8,6 @@ REAGENT SCANNER
 BREATHALYZER
 */
 
-#define CAN_REVIVE_NO 0 // Human cannot be revived.
-#define CAN_REVIVE_GHOSTING 1 // Human is observing but can otherwise be revived.
-#define CAN_REVIVE_IN_BODY 2 // Human can be revived AND is in body.
-
-
 /obj/item/device/t_scanner
 	name = "\improper T-ray scanner"
 	desc = "A terahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible."
@@ -50,27 +45,41 @@ BREATHALYZER
 		return null
 
 	for(var/turf/T in trange(ray_range, get_turf(src)))
-
 		if(!T.intact)
 			continue
 
-		for(var/obj/O in T.contents)
-			O.t_scanner_expose()
-
-		for(var/mob/living/M in T.contents)
-			var/oldalpha = M.alpha
-			if(M.alpha < 255 && istype(M))
-				M.alpha = 255
-				spawn(10)
-					if(M)
-						M.alpha = oldalpha
-
-		var/mob/living/M = locate() in T
-		if(M && M.invisibility == 2)
-			M.invisibility = 0
-			spawn(10)
-				if(M)
-					M.invisibility = INVISIBILITY_LEVEL_TWO
+		for(var/A in T.contents)
+			if(istype(A,/obj/))
+				var/obj/O = A
+				O.t_scanner_expose()
+			else if(istype(A,/mob/living/carbon))
+				var/mob/living/carbon/C = A
+				if(C.alpha < OPAQUE || (C.invisibility > 0 && C.invisibility < INVISIBILITY_OBSERVER) || length(C.body_alphas))
+					var/old_alpha = C.alpha
+					var/old_invisibility = C.invisibility
+					var/list/old_body_alphas = C.body_alphas.Copy()
+					C.body_alphas.Cut()
+					C.alpha = OPAQUE
+					C.invisibility = 0
+					C.regenerate_icons()
+					spawn(1 SECONDS)
+						if(C)
+							if(length(old_body_alphas))
+								C.body_alphas = old_body_alphas.Copy()
+								C.regenerate_icons()
+							C.alpha = old_alpha
+							C.invisibility = old_invisibility
+			else if(istype(A,/mob/living/))
+				var/mob/living/L = A
+				if(L.alpha < OPAQUE || (L.invisibility > 0 && L.invisibility < INVISIBILITY_OBSERVER))
+					var/old_alpha = L.alpha
+					var/old_invisibility = L.invisibility
+					L.alpha = OPAQUE
+					L.invisibility = 0
+					spawn(1 SECONDS)
+						if(L)
+							L.alpha = old_alpha
+							L.invisibility = old_invisibility
 
 /obj/item/device/t_scanner/advanced
 	name = "\improper P-ray scanner"
@@ -130,7 +139,8 @@ BREATHALYZER
 				var/datum/disease2/disease/D = I.virus2[ID]
 				if(ID in virusDB)
 					var/datum/data/record/V = virusDB[ID]
-					to_chat(user,"<span class='warning'>Warning: [V.fields["name"]][V.fields["nickname"] ? " \"[V.fields["nickname"]]\"" : ""] detected on \the [src]. Antigen: [D.get_antigen_string()]</span>")
+					var/nickname = V.fields["nickname"]
+					to_chat(user,"<span class='warning'>Warning: [V.fields["name"]][nickname ? " [nickname]" : ""] detected on \the [src]. Antigen: [D.get_antigen_string()]</span>")
 				else
 					to_chat(user,"<span class='warning'>Warning: Unknown [D.form] detected on \the [src].</span>")
 		else
@@ -149,7 +159,7 @@ BREATHALYZER
 		to_chat(user, last_reading)
 
 //Note : Used directly by other objects. Could benefit of OOP, maybe ?
-proc/healthanalyze(mob/living/M as mob, mob/living/user as mob, var/mode = 0, var/skip_checks = 0, var/silent = 0)
+/proc/healthanalyze(mob/living/M as mob, mob/living/user as mob, var/mode = 0, var/skip_checks = 0, var/silent = 0)
 	var/message = ""
 	if(!skip_checks)
 		if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
@@ -168,13 +178,12 @@ Subject's pulse: ??? BPM"})
 	if(!silent)
 		user.visible_message("<span class='notice'>[user] analyzes [M]'s vitals.</span>", ignore_self = TRUE)
 		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
-	var/fake_oxy = max(rand(1, 40), M.getOxyLoss(), (300 - (M.getToxLoss() + M.getFireLoss() + M.getBruteLoss())))
 	var/OX = M.getOxyLoss() > 50   ? "<b>[M.getOxyLoss()]</b>"   : M.getOxyLoss()
 	var/TX = M.getToxLoss() > 50   ? "<b>[M.getToxLoss()]</b>"   : M.getToxLoss()
 	var/BU = M.getFireLoss() > 50  ? "<b>[M.getFireLoss()]</b>"  : M.getFireLoss()
 	var/BR = M.getBruteLoss() > 50 ? "<b>[M.getBruteLoss()]</b>" : M.getBruteLoss()
 	if(M.status_flags & FAKEDEATH)
-		OX = fake_oxy > 50 ? "<b>[fake_oxy]</b>" : fake_oxy
+		OX = "<b>200</b>" 
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: Dead</span><br>"
 	else
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[(M.health - M.halloss)/M.maxHealth*100]% Healthy"]</span>"
@@ -206,9 +215,6 @@ Subject's pulse: ??? BPM"})
 				message += organ_msg
 		else
 			message += "<br><span class='notice'>No limb damage detected.</span>"
-
-	if(M.status_flags & FAKEDEATH)
-		OX = fake_oxy > 50 ? "<span class='notice'><b>Severe oxygen deprivation detected</b></span>" : "Subject bloodstream oxygen level normal"
 
 	if(hardcore_mode_on && ishuman(M) && eligible_for_hardcore_mode(M))
 		var/mob/living/carbon/human/H = M
@@ -276,7 +282,7 @@ Subject's pulse: ??? BPM"})
 					message += "<br><span class='danger'>Danger: Blood Level Fatal: [blood_percent]% [blood_volume]cl</span>"
 		message += "<br><span class='notice'>Subject's pulse: <font color='[H.pulse == PULSE_THREADY || H.pulse == PULSE_NONE ? "red" : "blue"]'>[H.get_pulse(GETPULSE_TOOL)] BPM</font></span>"
 		if (H.isDead())
-			var/revive_status = check_can_revive(H)
+			var/revive_status = H.check_can_revive()
 
 			if (revive_status == CAN_REVIVE_NO)
 				message += "<br><span class='danger'>No brainwaves detected. Subject cannot be revived.</span>"
@@ -291,25 +297,6 @@ Subject's pulse: ??? BPM"})
 
 	return message //To read last scan
 
-/proc/check_can_revive(mob/living/carbon/human/target)
-	ASSERT(istype(target))
-	ASSERT(target.isDead())
-
-	if (!target.mind)
-		return CAN_REVIVE_NO
-
-	if (target.client)
-		return CAN_REVIVE_IN_BODY
-
-	var/mob/dead/observer/ghost = mind_can_reenter(target.mind)
-	if (!ghost)
-		return CAN_REVIVE_NO
-
-	var/mob/ghostmob = ghost.get_top_transmogrification()
-	if (!ghostmob)
-		return CAN_REVIVE_NO
-
-	return CAN_REVIVE_GHOSTING
 
 /obj/item/device/healthanalyzer/verb/toggle_mode()
 	set name = "Switch mode"
@@ -540,7 +527,7 @@ Subject's pulse: ??? BPM"})
 		if(O.reagents.reagent_list.len)
 			for(var/datum/reagent/R in O.reagents.reagent_list)
 				var/reagent_percent = (R.volume/O.reagents.total_volume)*100
-				dat += "<br><span class='notice'>[R] [details ? "([R.volume] units, [reagent_percent]%[R.data && isnum(R.data) && !isNonTimeDataReagent(R) ? ", time in system: [R.data*2] seconds" : ""])" : ""]</span>"
+				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%, time in system: [R.real_tick*2] seconds" : ""]</span>"
 		if(dat)
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else
@@ -620,8 +607,3 @@ Subject's pulse: ??? BPM"})
 /obj/item/device/breathalyzer/examine(mob/user)
 	..()
 	to_chat(user, "<span class='notice'>Its legal limit is set to [legal_limit] units.</span>")
-
-
-#undef CAN_REVIVE_NO
-#undef CAN_REVIVE_GHOSTING
-#undef CAN_REVIVE_IN_BODY

@@ -258,6 +258,9 @@
 		)
 	var/current_chamber = 1
 
+/obj/item/weapon/cylinder/splashable()
+	return FALSE
+
 /obj/item/weapon/cylinder/Destroy()
 	for(var/i = 1; i < chambers.len; i++)
 		if(chambers[i])
@@ -803,6 +806,7 @@
 	icon_state = "wheelchair_assembly"
 	var/cannon_assembly = 0
 	var/siege_assembly = FALSE
+	var/obj/structure/bed/chair/vehicle/wheelchair/base_wheelchair = null
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/proc/update_wheelchair_assembly()
 	if(cannon_assembly)
@@ -823,8 +827,12 @@
 	to_chat(usr, "You remove the barrel from \the [src].")
 	var/obj/item/weapon/gun_barrel/I = new (get_turf(usr))
 	usr.put_in_hands(I)
-	var/obj/structure/bed/chair/vehicle/wheelchair/Q = new (get_turf(src.loc))
-	Q.dir = dir
+	if (!base_wheelchair)
+		base_wheelchair = new (get_turf(src.loc))
+	else
+		base_wheelchair.forceMove(get_turf(src.loc))
+	base_wheelchair.dir = dir
+	base_wheelchair = null
 	qdel(src)
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/attackby(obj/item/weapon/W, mob/user)

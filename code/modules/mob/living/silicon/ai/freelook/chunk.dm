@@ -109,14 +109,14 @@
 					continue
 				if(m.ai.client)
 					m.ai.client.images -= t.obscured
+			qdel(t.obscured)
+			t.obscured = null
 
 	for(var/turf in visRemoved)
 		var/turf/t = turf
 		if(obscuredTurfs[t])
 			if(!t.obscured)
-				var/image/obscured_static = image('icons/effects/cameravis.dmi', t, null, STATIC_LAYER)
-				obscured_static.plane = STATIC_PLANE
-				t.obscured = obscured_static
+				t.obscured = new /image/aistatic(null, t)
 			obscured += t.obscured
 			for(var/eye in seenby)
 				var/mob/camera/aiEye/m = eye
@@ -169,9 +169,20 @@
 	for(var/turf in obscuredTurfs)
 		var/turf/t = turf
 		if(!t.obscured)
-			var/image/obscured_static = image('icons/effects/cameravis.dmi', t, null, STATIC_LAYER)
-			obscured_static.plane = STATIC_PLANE
-			t.obscured = obscured_static
+			t.obscured = new /image/aistatic(null, t)
 		obscured += t.obscured
+
+/image/aistatic
+	render_source = "*aistatic"
+	layer = STATIC_LAYER
+	plane = STATIC_PLANE
+	appearance_flags = PASS_MOUSE
+
+/obj/abstract/screen/nocontext/aistatic
+	icon = 'icons/effects/cameravis.dmi'
+	render_target = "*aistatic"
+	name = "obscured"
+	screen_loc = "1, 1"
+	globalscreen = TRUE
 
 #undef UPDATE_BUFFER

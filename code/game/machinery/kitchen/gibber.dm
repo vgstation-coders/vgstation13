@@ -11,7 +11,7 @@
 	var/gibtime = 40 // Time from starting until meat appears
 	var/mob/living/occupant // Mob who has been put inside
 	var/opened = 0.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	active_power_usage = 500
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
@@ -26,7 +26,7 @@
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
-obj/machinery/gibber/New()
+/obj/machinery/gibber/New()
 	. = ..()
 
 	component_parts = newlist(
@@ -72,7 +72,7 @@ obj/machinery/gibber/New()
 	overlays.len = 0
 	if (dirty)
 		src.overlays += image('icons/obj/kitchen.dmi', "grbloody")
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if (!occupant)
 		src.overlays += image('icons/obj/kitchen.dmi', "grjam")
@@ -89,7 +89,7 @@ obj/machinery/gibber/New()
 	return
 
 /obj/machinery/gibber/attack_hand(mob/user as mob)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(!anchored)
 		to_chat(user, "<span class='warning'>[src] must be anchored first!</span>")
@@ -224,7 +224,7 @@ obj/machinery/gibber/New()
 	for (var/i=1 to totalslabs)
 		//first we spawn the meat
 		var/obj/item/weapon/newmeat
-		if(istype(occupant.meat_type, /obj/item/weapon/reagent_containers))
+		if(ispath(occupant.meat_type, /obj/item/weapon/reagent_containers))
 			newmeat = new occupant.meat_type(src, occupant)
 			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 		else
@@ -302,7 +302,7 @@ obj/machinery/gibber/New()
 	Bumped(user)
 
 /obj/machinery/gibber/autogibber/Bumped(var/atom/A)
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 	use_power(100)
 	if(isliving(A))

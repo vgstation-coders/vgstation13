@@ -1,40 +1,33 @@
-var/list/failure_lines_by_dept = list(
-	COMMAND_POSITIONS = list(
-		"You have failed to lead them. You would have failed to follow." = 3,
-		"And so ends your 'authority.'" = 3,
-		"This is what passes as command these days." = 3,
-	),
-	ENGINEERING_POSITIONS = list(
-		"Our craft is more complex than your pathetic tinkering." = 3,
-		"These machines were beyond your skill anyway." = 3,
-	),
-	MEDICAL_POSITIONS = list(
-		"Your refusal helps no one. The blood will still flow." = 3,
-		"There is no cure for this." = 3,
-		"Nothing can heal the veil." = 3,
-	),
-	SCIENCE_POSITIONS = list(
-		"Your closed mind dishonours you." = 3,
-		"Our secrets were beyond your understanding." = 3,
-		"My science was not for weaklings such as you." = 3,
-	),
-	CIVILIAN_POSITIONS = list(
-		"A little job in life, and a forgotten death." = 3,
-		"This refusal is but a footnote on my story." = 3,
-		"You refused the only opportunity you had to make a difference." = 3,
-	),
-	CARGO_POSITION = list(
-		"I care little for the hoarders of your kind." = 3,
-		"As expected for a glorified crate handler." = 3,
-	),
-	SECURITY_POSITION = list(
-		"You already failed." = 3,
-		"This refusal does not erase your failure." = 3,
-		"Your stubbornness amuses me. I already won." = 3,
-		"I could have freed you." = 3,
-		"You will always remain on the weaker side." = 3,
-	),
-)
+
+
+/*
+DEITYLINK ~ 2021: 
+
+Disabling those for now.
+On one hand I'd rather keep Nar-Sie talking as an admin-only thing
+On the other hand those don't quite portray the love of blood and chaos that Nar-Sie is associated with, aside from one or two lines those are very generic.
+
+As for Conversion Failure lines, they're pretty much deprecated since conversion failures no longer kill their victims
+Also since we might want to try converting them again later no need for Nar-Sie to be this petty, that's not a good image
+
+April 2021:
+Success Lines re-enabled. 
+*/
+
+/* -- Flavour text for refusing/accepting conversion.
+   -- Possible context (static) :
+		=> Dept (weighted 3)
+		=> Specific job (weighted 5)
+		=> Race (weighted 3)
+		=> Specific special role (weighted 5)
+	-- Possible context (dynamic) :
+		=> The guy that converted you is from the same dept (weighted 3)
+		=> Your boss is in the cult (CMO for medbay, ...)
+		=> Your underlings are in the cult
+		=> Your colleagues are in the cult
+		=> Cult has a few/a lot of alive members
+*/
+
 
 var/list/acceptance_lines_by_dept = list(
 	COMMAND_POSITIONS = list(
@@ -82,29 +75,11 @@ var/list/acceptance_lines_by_dept = list(
 	),
 )
 
-var/list/failure_lines_by_specific_job = list(
-	"Paramedic" = list(
-		"You will not save anyone from where I sent you." = 5,
-	),
-	"Trader" = list(
-		"I offered you a home, and you refused." = 5,
-	),
-	"Captain" = list(
-		"Do you feel in charge?" = 5,
-	),
-)
-
 var/list/acceptance_lines_by_specific_job = list(
 	"Trader" = list(
 		"And here ends your wandering." = 5,
 		"No longer will you be content with scraps." = 5,
 	),
-)
-
-var/list/failure_lines_by_specific_race = list(
-	/datum/species/plasmaman = list(
-		"Your loyalty to the company that twisted you into the living dead is amusing." = 3,
-	)
 )
 
 var/list/acceptance_lines_by_specific_race = list(
@@ -169,12 +144,6 @@ var/list/acceptance_lines_by_specific_role = list(
 
 // Context lines
 
-var/list/failure_lines_few_cultists = list(
-	"With or without you, my faithful shall triumph." = 3,
-	"Do you truly think you won?" = 3,
-	"I have no need of a coward in times like this." = 3,
-)
-
 var/list/acceptance_lines_few_cultists = list(
 	"Be the hand I need in these times." = 3,
     "You have been chosen." = 3,
@@ -186,25 +155,6 @@ var/list/acceptance_lines_numerous_cultists =  list(
     "Nothing will resist our might." = 3,
 )
 
-var/list/failure_lines_numerous_cultists = list(
-	"Your refusal changes nothing." = 3,
-	"You will get to see this station fail from the first row." = 3,
-)
-
-var/list/acceptance_lines_thin_veil = list(
-    "Soon you will see the fruits of our efforts." = 3,
-)
-
-var/list/failure_lines_thin_veil = list(
-    "You chose to witness the end, rather than act." = 5,
-	"Can't you see how pointless it is to resist at this point?" = 5,
-)
-
-#define failure_lines_same_dept list( \
-	"[converter.gender == MALE ? "He" : "She"] tried to save you." = 5, \
-	"You betrayed your friend." = 5, \
-	"Your arrogance must have disappointed your friend." = 5, \
-)
 
 #define acceptance_lines_same_dept list( \
 	"[converter.gender == MALE ? "He" : "She"] judged you well." = 5, \
@@ -212,21 +162,6 @@ var/list/failure_lines_thin_veil = list(
 	"Isn't teamwork a wonderful thing." = 5, \
 )
 
-
-/* -- Flavour text for refusing/accepting conversion.
-   -- Possible context (static) :
-		=> Dept (weighted 3)
-		=> Specific job (weighted 5)
-		=> Race (weighted 3)
-		=> Specific special role (weighted 5)
-	-- Possible context (dynamic) :
-		=> The guy that converted you is from the same dept (weighted 3)
-		=> Your boss is in the cult (CMO for medbay, ...)
-		=> Your underlings are in the cult
-		=> Your colleagues are in the cult
-		=> Cult is near the end (Act III or higher)
-		=> Cult has a few/a lot of alive members
-*/
 
 var/list/all_depts_list = list(
 	COMMAND_POSITIONS,
@@ -237,6 +172,131 @@ var/list/all_depts_list = list(
 	CARGO_POSITIONS,
 	SECURITY_POSITIONS,
 )
+/datum/faction/bloodcult/proc/send_flavour_text_accept(var/mob/victim, var/mob/converter)
+	// -- Static context
+	// Default lines
+	var/list/valid_lines = list(
+		"Another one joins the fold." = 1,
+        "With each new one, the veil gets thinner." = 1,
+        "All are welcome." = 1,
+	)
+	// The departement
+	var/victim_job = victim?.mind.assigned_role
+	var/converter_job = converter?.mind.assigned_role
+	for (var/list/L in acceptance_lines_by_dept)
+		if (victim_job in L)
+			valid_lines += acceptance_lines_by_dept[L]
+	// The specific job
+	valid_lines += acceptance_lines_by_specific_job[victim_job]
+	// The roles he may add
+	if (victim.mind)
+		for (var/role in victim.mind.antag_roles)
+			valid_lines += acceptance_lines_by_specific_role[role]
+	// The race
+	if (ishuman(victim))
+		var/mob/living/carbon/human/dude = victim
+		valid_lines += acceptance_lines_by_specific_race[dude.species.type]
+
+	// -- Dynamic context
+	// Cultist count
+	var/cultists = 0
+	for (var/datum/role/R in members)
+		if (R.antag && R.antag.current && !R.antag.current.stat) // If he's alive
+			cultists++
+
+	// Not a lot of cultists...
+	if (cultists < 3)
+		valid_lines += acceptance_lines_few_cultists
+
+	// Or a lot of them !
+	else if (cultists > 10)
+		valid_lines += acceptance_lines_numerous_cultists
+
+	// Converter and victim are of the same dept
+	for (var/list/dept in all_depts_list)
+		if ((victim_job in dept) && (converter_job in dept))
+			valid_lines += acceptance_lines_same_dept
+
+	var/chosen_line = pickweight(valid_lines)
+	to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[chosen_line]</span>")
+
+
+
+
+/*
+
+var/list/failure_lines_by_dept = list(
+	COMMAND_POSITIONS = list(
+		"You have failed to lead them. You would have failed to follow." = 3,
+		"And so ends your 'authority.'" = 3,
+		"This is what passes as command these days." = 3,
+	),
+	ENGINEERING_POSITIONS = list(
+		"Our craft is more complex than your pathetic tinkering." = 3,
+		"These machines were beyond your skill anyway." = 3,
+	),
+	MEDICAL_POSITIONS = list(
+		"Your refusal helps no one. The blood will still flow." = 3,
+		"There is no cure for this." = 3,
+		"Nothing can heal the veil." = 3,
+	),
+	SCIENCE_POSITIONS = list(
+		"Your closed mind dishonours you." = 3,
+		"Our secrets were beyond your understanding." = 3,
+		"My science was not for weaklings such as you." = 3,
+	),
+	CIVILIAN_POSITIONS = list(
+		"A little job in life, and a forgotten death." = 3,
+		"This refusal is but a footnote on my story." = 3,
+		"You refused the only opportunity you had to make a difference." = 3,
+	),
+	CARGO_POSITION = list(
+		"I care little for the hoarders of your kind." = 3,
+		"As expected for a glorified crate handler." = 3,
+	),
+	SECURITY_POSITION = list(
+		"You already failed." = 3,
+		"This refusal does not erase your failure." = 3,
+		"Your stubbornness amuses me. I already won." = 3,
+		"I could have freed you." = 3,
+		"You will always remain on the weaker side." = 3,
+	),
+)
+
+var/list/failure_lines_by_specific_job = list(
+	"Paramedic" = list(
+		"You will not save anyone from where I sent you." = 5,
+	),
+	"Trader" = list(
+		"I offered you a home, and you refused." = 5,
+	),
+	"Captain" = list(
+		"Do you feel in charge?" = 5,
+	),
+)
+
+var/list/failure_lines_by_specific_race = list(
+	/datum/species/plasmaman = list(
+		"Your loyalty to the company that twisted you into the living dead is amusing." = 3,
+	)
+)
+var/list/failure_lines_few_cultists = list(
+	"With or without you, my faithful shall triumph." = 3,
+	"Do you truly think you won?" = 3,
+	"I have no need of a coward in times like this." = 3,
+)
+var/list/failure_lines_numerous_cultists = list(
+	"Your refusal changes nothing." = 3,
+	"You will get to see this station fail from the first row." = 3,
+)
+
+#define failure_lines_same_dept list( \
+	"[converter.gender == MALE ? "He" : "She"] tried to save you." = 5, \
+	"You betrayed your friend." = 5, \
+	"Your arrogance must have disappointed your friend." = 5, \
+)
+
+
 
 /datum/faction/bloodcult/proc/send_flavour_text_refuse(var/mob/victim, var/mob/converter)
 	// -- Static context
@@ -283,10 +343,6 @@ var/list/all_depts_list = list(
 	for (var/list/dept in all_depts_list)
 		if ((victim_job in dept) && (converter_job in dept))
 			valid_lines += failure_lines_same_dept
-	// Act
-	if (veil_thickness >= CULT_ACT_III)
-		valid_lines += failure_lines_thin_veil
-
 	if(victim.mind && victim.mind.assigned_role == "Chaplain")
 		var/list/cult_blood_chaplain = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
 		var/list/cult_clock_chaplain = list("ratvar", "clockwork", "ratvarism")
@@ -302,55 +358,4 @@ var/list/all_depts_list = list(
 	to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[chosen_line]</span>")
 	//to_chat(converter, "Nar-Sie murmurs to [victim]... <span class='warning'>[chosen_line]</span>")
 
-/datum/faction/bloodcult/proc/send_flavour_text_accept(var/mob/victim, var/mob/converter)
-	// -- Static context
-	// Default lines
-	var/list/valid_lines = list(
-		"Another one joins the fold." = 1,
-        "With each new one, the veil gets thinner." = 1,
-        "All are welcome." = 1,
-	)
-	// The departement
-	var/victim_job = victim?.mind.assigned_role
-	var/converter_job = converter?.mind.assigned_role
-	for (var/list/L in acceptance_lines_by_dept)
-		if (victim_job in L)
-			valid_lines += acceptance_lines_by_dept[L]
-	// The specific job
-	valid_lines += acceptance_lines_by_specific_job[victim_job]
-	// The roles he may add
-	if (victim.mind)
-		for (var/role in victim.mind.antag_roles)
-			valid_lines += acceptance_lines_by_specific_role[role]
-	// The race
-	if (ishuman(victim))
-		var/mob/living/carbon/human/dude = victim
-		valid_lines += acceptance_lines_by_specific_race[dude.species.type]
-
-	// -- Dynamic context
-	// Cultist count
-	var/cultists = 0
-	for (var/datum/role/R in members)
-		if (R.antag && R.antag.current && !R.antag.current.stat) // If he's alive
-			cultists++
-
-	// Not a lot of cultists...
-	if (cultists < 3)
-		valid_lines += acceptance_lines_few_cultists
-
-	// Or a lot of them !
-	else if (cultists > 10)
-		valid_lines += acceptance_lines_numerous_cultists
-
-	// Converter and victim are of the same dept
-	for (var/list/dept in all_depts_list)
-		if ((victim_job in dept) && (converter_job in dept))
-			valid_lines += acceptance_lines_same_dept
-
-	// Act
-	if (veil_thickness >= CULT_ACT_III)
-		valid_lines += acceptance_lines_thin_veil
-
-	var/chosen_line = pickweight(valid_lines)
-	to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[chosen_line]</span>")
-	//to_chat(converter, "Nar-Sie murmurs to [victim]... <span class='warning'>[chosen_line]</span>")
+*/

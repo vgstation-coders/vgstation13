@@ -269,34 +269,41 @@
 		return TRUE
 
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) //no platestacking even with recursive food, for now
-			to_chat(user, "<span class='warning'>That's already got a plate!</span>")
-			return
-
-		var/obj/item/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom(get_turf(src),I)
-
-		if (virus2?.len)
-			for (var/ID in virus2)
-				var/datum/disease2/disease/D = virus2[ID]
-				F.infect_disease2(D,1, "added to a sandwhich",0)
-		F.attackby(I, user, params)
-		if (istype(F))
-			if (I.item_state)
-				F.item_state = I.item_state
-			else
-				F.item_state = I.icon_state
-		if (plates.len > 0)
-			user.put_in_hands(F)
-			var/obj/item/trash/plate/plate = plates[plates.len]
-			plates -= plate
-			qdel(plate)
-			update_icon()
-		else
-			F.pixel_x = pixel_x
-			F.pixel_y = pixel_y
-			qdel(src)
+		try_to_put_on_plate(user,I,params)
 	else
 		return ..()
+
+/obj/item/trash/plate/proc/try_to_put_on_plate(var/mob/user, var/obj/item/weapon/reagent_containers/food/snacks/snack, params)
+	if(istype(snack,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) //no platestacking even with recursive food, for now
+		to_chat(user, "<span class='warning'>That's already got a plate!</span>")
+		return
+
+	var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/F = new(get_turf(src),snack)
+
+	F.valid_utensils = snack.valid_utensils
+
+	if (virus2?.len)
+		for (var/ID in virus2)
+			var/datum/disease2/disease/D = virus2[ID]
+			F.infect_disease2(D,1, "added on a plate",0)
+	F.attackby(snack, user, params)
+	if (istype(F))
+		if (snack.item_state)
+			F.item_state = snack.item_state
+		else
+			F.item_state = snack.icon_state
+	if (plates.len > 0)
+		user.put_in_hands(F)
+		var/obj/item/trash/plate/plate = plates[plates.len]
+		plates -= plate
+		qdel(plate)
+		update_icon()
+	else
+		F.pixel_x = pixel_x
+		F.pixel_y = pixel_y
+		qdel(src)
+	return F
+
 
 /obj/item/trash/bowl
 	name = "bowl"
@@ -519,6 +526,8 @@
 	desc = "A bowl with liquid and... stuff in it."
 	icon_state = "soup"
 	trash = /obj/item/trash/bowl
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/pizza
 	name = "pan pizza"
@@ -572,6 +581,7 @@
 	name = "jelly"
 	desc = "Totally jelly."
 	icon_state = "jellycustom"
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/donkpocket
 	name = "donk pocket"
@@ -592,13 +602,18 @@
 	desc = "Made with love."
 	icon_state = "wafflecustom"
 
+/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/
+	trash = null
+
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/cookie
 	name = "cookie"
 	icon_state = "cookiecustom"
+	valid_utensils = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/cotton
 	name = "flavored cotton candy"
 	icon_state = "cottoncandycustom"
+	valid_utensils = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/gummybear
 	name = "flavored giant gummy bear"
@@ -647,6 +662,10 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin
 	name = "flavored chocolate coin"
 	icon_state = "coincustom"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin/New()
+	..()
+	add_component(/datum/component/coinflip)
 
 // Customizable Drinks /////////////////////////////////////////
 

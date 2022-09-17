@@ -55,6 +55,7 @@ var/global/list/hidden_tech = list(
 /datum/research								//Holder for all the existing, archived, and known tech. Individual to console.
 	var/list/known_tech = list()			//List of locally known tech.
 	var/list/known_designs = list()			//List of available designs (at base reliability).
+	var/alphabetsort = FALSE				//Is it sorted alphabetically?
 
 /datum/research/New()		//Insert techs into possible_tech here. Known_tech automatically updated.
 	if(!tech_list.len)
@@ -144,6 +145,8 @@ var/global/list/hidden_tech = list(
 		T.level = clamp(T.level, 1, 20)
 	for(var/datum/design/D in known_designs)
 		D.CalcReliability(known_tech)
+	if(alphabetsort)
+		sortTim(known_designs, /proc/cmp_name_asc)
 	return
 
 //Refreshes the levels of a given tech.
@@ -166,7 +169,7 @@ var/global/list/hidden_tech = list(
  **	Includes all the various technoliges and what they make.  **
  ***************************************************************/
 
-datum/tech	//Datum of individual technologies.
+/datum/tech	//Datum of individual technologies.
 	var/name = "name"					//Name of the technology.
 	var/desc = "description"			//General description of what it does and what it makes.
 	var/id = "id"						//An easily referenced ID. Must be alphanumeric, lower-case, and no symbols.
@@ -183,72 +186,72 @@ datum/tech	//Datum of individual technologies.
 
 //Trunk Technologies (don't require any other techs and you start knowning them).
 
-datum/tech/materials
+/datum/tech/materials
 	name = "Materials Research"
 	desc = "Development of new and improved materials."
 	id = "materials"
 	max_level=9
 	goal_level=8 // 9 is Phazon.
 
-datum/tech/engineering
+/datum/tech/engineering
 	name = "Engineering Research"
 	desc = "Development of new and improved engineering parts and equipment."
 	id = "engineering"
 	max_level=5
 
-datum/tech/plasmatech
+/datum/tech/plasmatech
 	name = "Plasma Research"
 	desc = "Research into the mysterious substance colloqually known as 'plasma'."
 	id = "plasmatech"
 	max_level=4
 
-datum/tech/powerstorage
+/datum/tech/powerstorage
 	name = "Power Manipulation Technology"
 	desc = "The various technologies behind the storage and generation of electicity."
 	id = "powerstorage"
 	max_level=6
 
-datum/tech/bluespace
+/datum/tech/bluespace
 	name = "'Blue-space' Research"
 	desc = "Research into the sub-reality known as 'blue-space'."
 	id = "bluespace"
 	max_level=10
 	goal_level=4 // Without phazon.
 
-datum/tech/biotech
+/datum/tech/biotech
 	name = "Biological Technology"
 	desc = "Research into the deeper mysteries of life and organic substances."
 	id = "biotech"
 	max_level=5 // Max USABLE level.
 
-datum/tech/combat
+/datum/tech/combat
 	name = "Combat Systems Research"
 	desc = "The development of offensive and defensive systems."
 	id = "combat"
 	goal_level=5 // Pulse rifles don't count.
 	max_level=6
 
-datum/tech/magnets
+/datum/tech/magnets
 	name = "Electromagnetic Spectrum Research"
 	desc = "Research into the electromagnetic spectrum. No clue how they actually work, though."
 	id = "magnets"
 	goal_level=5 // No phazon
 	max_level=8
 
-datum/tech/programming
+/datum/tech/programming
 	name = "Data Theory Research"
 	desc = "The development of new computer and artificial intelligence and data storage systems."
 	id = "programming"
 	max_level=5
 
-datum/tech/syndicate
+/datum/tech/syndicate
 	name = "Illegal Technologies Research"
 	desc = "The study of technologies that violate standard Nanotrasen regulations."
 	id = "syndicate"
 	goal_level=0 // Doesn't count towards maxed research, since it's illegal.
 	max_level=8
 
-datum/tech/nanotrasen
+/datum/tech/nanotrasen
 	name = "Nanotrasen Experimental Technologies"
 	desc = "The research of miscellaneous bleeding-edge technologies, sponsored by Nanotrasen."
 	id = "nanotrasen"
@@ -256,7 +259,7 @@ datum/tech/nanotrasen
 	max_level=8
 	new_category = "Nanotrasen"
 
-datum/tech/anomaly
+/datum/tech/anomaly
 	name = "Anomaly Research"
 	desc = "The study of high energy materials and technology reconstruction."
 	id = "anomaly"

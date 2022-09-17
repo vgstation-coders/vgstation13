@@ -60,6 +60,11 @@
 
 	return 0
 
+/mob/proc/activate_empty_hand()
+	var/empty_hand = find_empty_hand_index()
+	if(empty_hand)
+		activate_hand(empty_hand)
+
 /mob/proc/empty_hand_indexes_amount()
 	. = 0
 
@@ -215,7 +220,7 @@
 	if(held_items[index])
 		return 0
 
-	if(W.flags & MUSTTWOHAND)
+	if((W.flags & MUSTTWOHAND) && !(M_STRONG in mutations))
 		if(!W.wield(src, 1))
 			to_chat(src, "You need both hands to pick up \the [W].")
 			return 0
@@ -340,6 +345,12 @@
 	to_drop.dropped(src)
 
 	if(to_drop && to_drop.loc)
+		if(mind)
+			var/datum/role/R = mind.GetRole(TIMEAGENT)
+			if(R)
+				var/datum/objective/target/locate/rearrange/L = locate() in R.objectives.GetObjectives()
+				if(L)
+					L.check(list(to_drop))
 		return 1
 	return 0
 
@@ -378,7 +389,7 @@
 		update_inv_wear_mask()
 	else
 		return 0
-	invoke_event(/event/unequipped, list(W))
+	INVOKE_EVENT(src, /event/unequipped, W)
 	if(success)
 		if(client)
 			client.screen -= W
@@ -559,12 +570,15 @@
 	else
 		return get_id_card()
 
-/mob/proc/slotID2slotname(slot_id)
+/mob/proc/slotID2slotname(slot_id, internal)
 	switch (slot_id)
 		if (slot_back)
 			return "back"
 		if (slot_wear_mask)
-			return "face"
+			if(internal)
+				return "mouth"
+			else
+				return "face"
 		if (slot_handcuffed)
 			return "hands"
 		if (slot_belt)

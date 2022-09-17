@@ -124,7 +124,7 @@
 						GM.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='userdanger'>[user] gives you a swirlie!</span>", "You hear a toilet flushing.")
 						add_fingerprint(user)
 						add_fingerprint(GM)
-						watersource.reagents.reaction(GM, TOUCH)
+						watersource.reagents.reaction(GM, TOUCH, zone_sels = list(LIMB_HEAD,TARGET_EYES,TARGET_MOUTH))
 
 						if(!GM.internal && GM.losebreath <= 30)
 							GM.losebreath += 5
@@ -227,7 +227,7 @@
 	icon_state_open = "shower_t"
 	density = 0
 	anchored = 1
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	var/on = 0
 	var/obj/effect/mist/mymist = null
 	var/ismist = 0 //Needs a var so we can make it linger~
@@ -477,6 +477,9 @@
 	anchored = 1
 	var/busy = 0 	//Something's being washed at the moment
 
+/obj/structure/sink/splashable()
+	return FALSE
+
 /obj/structure/sink/verb/empty_container_into()
 	set name = "Empty container into"
 	set category = "Object"
@@ -595,6 +598,14 @@
 				"<span class='warning'>You have wet \the [O.name], it shocks you!</span>")
 			return
 
+	else if (istype(O, /obj/item/weapon/pen/fountain))
+		..()
+		var/obj/item/weapon/pen/fountain/P = O
+		if (P.bloodied)
+			to_chat(user, "<span class='notice'>You clean the blood out of the nib of \the [P].</span>")
+			P.colour = "black"
+			P.bloodied = FALSE
+
 	if (!isturf(user.loc))
 		return
 
@@ -607,8 +618,9 @@
 			if(O.current_glue_state == GLUE_STATE_TEMP)
 				O.unglue()
 			user.visible_message( \
-				"<span class='notice'>[user] washes \a [O] using \the [src].</span>", \
-				"<span class='notice'>You wash \a [O] using \the [src].</span>")
+				"<span class='notice'>[user] washes \the [O] using \the [src].</span>", \
+				"<span class='notice'>You wash \the [O] using \the [src].</span>")
+			..()
 
 		busy = FALSE
 

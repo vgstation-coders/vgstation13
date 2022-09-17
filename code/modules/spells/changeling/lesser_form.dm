@@ -38,8 +38,7 @@
 	to_chat(user, "<span class='warning'>Our genes cry out!</span>")
 	
 	var/mob/living/carbon/monkey/O = user.monkeyize(ignore_primitive = 1) // stops us from becoming the monkey version of whoever we were pretending to be
-	O.add_spell(new /spell/changeling/higherform, "changeling_spell_base", master_type = /obj/abstract/screen/movable/spell_master/changeling)
-	O.make_changeling(1)
+	O.make_changeling()
 	var/datum/role/changeling/Ochangeling = O.mind.GetRole(CHANGELING)
 	O.changeling_update_languages(Ochangeling.absorbed_languages)
 	feedback_add_details("changeling_powers","LF")

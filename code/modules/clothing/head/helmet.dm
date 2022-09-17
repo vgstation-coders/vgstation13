@@ -11,6 +11,9 @@
 	siemens_coefficient = 0.7
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/head/helmet/NoiseDampening()	// checked on headwear by flashbangs
+	return TRUE
+
 /obj/item/clothing/head/helmet/visor
 	name = "visor helmet"
 	desc = "For when you need to protect your face from the backblast of your pepperspray."
@@ -110,7 +113,7 @@
 	name = "gladiator helmet"
 	desc = "Ave, Imperator, morituri te salutant."
 	icon_state = "gladiator"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 	flags = FPRINT
 	item_state = "gladiator"
 	siemens_coefficient = 1

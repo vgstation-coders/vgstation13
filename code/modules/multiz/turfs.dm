@@ -23,10 +23,10 @@
 	icon_state = ""
 	desc = "\..."
 	density = 0
+	intact = 0 //No seriously, that's not a joke. Allows cable to be laid properLY on catwalks
 	plane = OPENSPACE_PLANE_START
 	//pathweight = 100000 //For lack of pathweights, mobdropping meta inc
 	dynamic_lighting = 0 // Someday lets do proper lighting z-transfer.  Until then we are leaving this off so it looks nicer.
-
 	var/turf/below
 
 /turf/simulated/open/post_change()
@@ -42,10 +42,27 @@
 	..()
 	mover.fall()
 
+// Static list so it isn't slow in the check below
+var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated/wall,/turf/unsimulated/mineral)
+
 /turf/simulated/open/has_gravity()
-	if(locate(/obj/structure/catwalk) in src)
+	var/turf/below = GetBelow(src)
+	if(!below)
+		return 0
+	// Turf checks for not spacemoving
+	if(is_type_in_list(below, no_spacemove_turfs))
+		return get_gravity()
+	// Dense stuff below checks
+	for(var/atom/A in below)
+		if(A.density)
+			return get_gravity()
+	// Structure checks (these really should be turfs)
+	if(locate(/obj/structure/catwalk) in src || locate(/obj/structure/lattice) in src)
 		return get_gravity()
 	return 0
+
+/turf/simulated/open/can_place_cables()
+	return TRUE
 
 /turf/simulated/open/proc/update()
 	plane = OPENSPACE_PLANE + src.z
@@ -65,22 +82,13 @@
 /turf/simulated/open/examine(mob/user, distance, infix, suffix)
 	if(..(user, 2))
 		var/depth = 1
-		for(var/T = GetBelow(src); isopenspace(T); T = GetBelow(T))
+		var/list/checked_belows = list()
+		for(var/turf/T = GetBelow(src); isopenspace(T); T = GetBelow(T))
+			if(T.z in checked_belows) // To stop getting caught on this in infinite loops
+				to_chat(user, "It looks bottomless.")
+				return
 			depth += 1
 		to_chat(user, "It is about [depth] levels deep.")
-
-/**
-* Update icon and overlays of open space to be that of the turf below, plus any visible objects on that turf.
-*/
-/turf
-	vis_flags = VIS_INHERIT_ID
-
-/atom/movable
-	vis_flags = VIS_INHERIT_ID
-
-// Hides these from vis_contents due to how glitchy they are with it
-/atom/movable/light
-	vis_flags = VIS_HIDE
 
 /obj/effect/open_overlay
 	name = "open overlay"
@@ -88,15 +96,22 @@
 	icon = 'icons/effects/32x32.dmi'
 	icon_state = "white"
 	layer = ABOVE_LIGHTING_LAYER
-	plane = ABOVE_LIGHTING_PLANE
+	plane = OPEN_OVERLAY_PLANE
 
 /turf/simulated/open/update_icon()
+	make_openspace_view()
+
+/turf/simulated/proc/make_openspace_view()
 	var/alpha_to_subtract = 127
 	overlays.Cut()
 	vis_contents.Cut()
 	var/turf/bottom
+	var/list/checked_belows = list()
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 		alpha_to_subtract /= 2
+		if(bottom.z in checked_belows) // To stop getting caught on this in infinite loops
+			return // Don't even render anything
+		checked_belows.Add(bottom.z)
 
 	if(!bottom || bottom == src)
 		return
@@ -106,23 +121,13 @@
 	vis_contents += bottom
 	if(!istype(bottom,/turf/space)) // Space below us
 		vis_contents.Add(overimage)
+		return 1
+	return 0
 
 /turf/simulated/open/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	overlays.Cut()
 	vis_contents.Cut()
 	..()
-
-/turf/simulated/wall/New()
-	..()
-	var/turf/simulated/open/OS = GetAbove(src)
-	if(OS && isopenspace(OS))
-		OS.ChangeTurf(/turf/simulated/floor/plating)
-
-/turf/simulated/wall/initialize()
-	..()
-	var/turf/simulated/open/OS = GetAbove(src)
-	if(OS && isopenspace(OS))
-		OS.ChangeTurf(/turf/simulated/floor/plating)
 
 /turf/simulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	var/turf/simulated/open/BS = GetBelow(src)
@@ -180,6 +185,23 @@
 	var/turf/below = GetBelow(src)
 	return !below || below.is_space()
 
+/turf/simulated/open/suicide_act(var/mob/living/user)
+	if(user.can_fall() && Cross(user) && CanZPass(user) && get_gravity() > 0.667)
+		var/turf/below = GetBelow(src)
+		if(!below || below.can_prevent_fall(user,src))
+			return
+		for(var/obj/O in src)
+			if(!O.CanFallThru())
+				return
+		for(var/atom/A in below)
+			if(A.can_prevent_fall(user,src))
+				return
+		user.forceMove(src)
+		to_chat(viewers(user), "<span class='danger'>[user] is plunging to \his death! It looks like \he's trying to commit suicide.</span>")
+		if(prob(1)) // Do a flip!
+			user.emote("flip")
+		return SUICIDE_ACT_CUSTOM
+
 /turf/simulated/floor/glass/New(loc)
 	..(loc)
 	if(get_base_turf(src.z) == /turf/simulated/open)
@@ -204,21 +226,7 @@
 /turf/simulated/floor/glass/update_icon()
 	..()
 	if(get_base_turf(src.z) == /turf/simulated/open)
-		var/alpha_to_subtract = 127
-		vis_contents.Cut()
-		overlays.Cut()
-		var/turf/bottom
-		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
-			alpha_to_subtract /= 2
-
-		if(!bottom || bottom == src)
-			return
-		var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
-		overimage.alpha = 255 - alpha_to_subtract
-		overimage.color = rgb(0,0,0,overimage.alpha)
-		vis_contents += bottom
-		if(!istype(bottom,/turf/space)) // Space below us
-			vis_contents.Add(overimage)
+		if(make_openspace_view()) // Space below us
 			icon_state = "" // Remove any previous space stuff, if any
 		else
 			// We space background now, forget the vis contentsing of it
@@ -226,7 +234,7 @@
 		var/obj/effect/open_overlay/glass/overglass = new /obj/effect/open_overlay/glass
 		overglass.icon_state = glass_state
 		vis_contents.Add(overglass)
-		var/obj/effect/open_overlay/glass/overdamage = new /obj/effect/open_overlay/glass/damage
+		var/obj/effect/open_overlay/glass/damage/overdamage = new /obj/effect/open_overlay/glass/damage
 		overdamage.icon_state = icon_state
 		vis_contents.Add(overdamage)
 

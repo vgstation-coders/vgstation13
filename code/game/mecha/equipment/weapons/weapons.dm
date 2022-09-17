@@ -373,7 +373,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/action(target)
 	if(can_pre_detonate && grenade)
-		grenade.prime()
+		grenade.prime(chassis.occupant)
 		grenade = null
 		return
 	if(!action_checks(target))
@@ -393,7 +393,7 @@
 	spawn(det_time)
 		if(grenade)
 			grenade = null
-			G.prime()
+			G.prime(chassis.occupant)
 	do_after_cooldown()
 	return
 

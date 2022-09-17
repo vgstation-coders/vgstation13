@@ -60,6 +60,7 @@
 	icon_state = "crumbs"
 	plane = OBJ_PLANE
 	layer = TABLE_LAYER+0.1
+	age = 3
 
 /obj/effect/decal/cleanable/crumbs/New()
 	..()

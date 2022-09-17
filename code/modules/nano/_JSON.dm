@@ -3,7 +3,7 @@ n_Json v11.3.21
 */
 
 
-proc/json2list(json)
+/proc/json2list(json)
 	var/static/json_reader/_jsonr = new()
 	// N3X: Array support.
 	if(dd_hasprefix(json,"\["))
@@ -11,7 +11,7 @@ proc/json2list(json)
 	else
 		return _jsonr.ReadObject(_jsonr.ScanJson(json))
 
-proc/list2json(list/L)
+/proc/list2json(list/L)
 	var/static/json_writer/_jsonw = new()
 	// Detect if it's just a list of things, or an associative list
 	// (Used to just assume associative, which broke things.)

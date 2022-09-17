@@ -19,14 +19,14 @@
 				reset_view(null)
 
 /mob/living/silicon/ai/proc/life_handle_malf()
-	if(!malfhack || !malfhack.aidisabled)
+	if(!malfhack)
 		return
 	to_chat(src, "<span class='warning'>ERROR: APC access disabled, hack attempt canceled.</span>")
 	malfhacking = 0
 	malfhack = null
 
 /mob/living/silicon/ai/proc/life_handle_power_damage()
-	if(aiRestorePowerRoutine != 0 || ai_flags & COREFORTIFY)
+	if(aiRestorePowerRoutine != 0)
 		// Lost power
 		adjustOxyLoss(1)
 	else
@@ -36,7 +36,6 @@
 /mob/living/silicon/ai/proc/life_handle_powered_core()
 	var/unblindme = FALSE
 	if(client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
-		client.show_popup_menus = FALSE
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_LEVEL_TWO
@@ -161,13 +160,18 @@
 		return
 
 	if(ai_flags & COREFORTIFY)
-		brute_damage_modifier = 0.25
+		brute_damage_modifier = 0.33
+		burn_damage_modifier = 0.33
 	else
 		brute_damage_modifier = 1
+		burn_damage_modifier = 1
 
 	life_handle_camera()
 	life_handle_malf()
 	life_handle_power_damage()
+
+	if(ismalf(src) && client)
+		client.show_popup_menus = FALSE
 
 	is_ai_powered() ? life_handle_powered_core() : life_handle_unpowered_core()
 
@@ -199,7 +203,12 @@
 	return FALSE
 
 /mob/living/silicon/ai/handle_regular_hud_updates()
-	if(malfhacking)
-		throw_alert(SCREEN_ALARM_APC_HACKING, /obj/abstract/screen/alert/robot/apc_hacking)
-	else
-		clear_alert(SCREEN_ALARM_APC_HACKING)
+	var/datum/role/malfAI/M = mind.GetRole(MALF)
+	if(!M)
+		return ..()
+	for(var/obj/machinery/power/apc/A in M.currently_hacking_apcs)	//throw an alert for any APCs being hacked
+		var/obj/abstract/screen/alert/robot/apc_hacking/new_alert = throw_alert(A.name, /obj/abstract/screen/alert/robot/apc_hacking)
+		if(new_alert && istype(new_alert))
+			new_alert.desc = "You are currently hacking an APC. Click this alert to jump to the APC."
+			new_alert.apc = A
+

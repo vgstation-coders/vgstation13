@@ -5,7 +5,31 @@
 	desc = "A magazine capable of holding bullets. Can be loaded into certain weapons."
 	exact = 1 //we only load the thing we want to load
 	materials = list(MAT_IRON = 200)
+	var/magoffsetx = null // difference between where magazine sprite overlay sprite starts
+	var/magoffsety = null // compared to where the magazine should be on the sprite
+	var/colored_marking = null //for sanely handling image overlays
+	var/markingcolor = null //the color used for the above image, in hex
 
+/obj/item/ammo_storage/magazine/attackby(var/atom/A, var/mob/user)
+	if(istype(A,/obj/item/toy/crayon))
+		var/obj/item/toy/crayon/grayon = A
+		if(colored_marking)
+			overlays -= colored_marking
+		var/image/magazine_mark = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-overlay")
+		if(has_icon(magazine_mark.icon, "[initial(icon_state)]-overlay"))
+			magazine_mark.icon += grayon.mainColour
+			markingcolor = grayon.mainColour
+			overlays += magazine_mark
+			colored_marking = magazine_mark
+			to_chat(user, "<span class='notice'>You add a [grayon.colourName] marking on \the [src] with \the [grayon]. </span>")
+
+	if(istype(A,/obj/item/weapon/soap))
+		if(colored_marking)
+			overlays -= colored_marking
+			colored_marking = null
+			markingcolor = null
+			to_chat(user, "<span class='notice'>You clean the markings off \the [src] with \the [A]. </span>")
+	..()
 
 /obj/item/ammo_storage/magazine/mc9mm
 	name = "magazine (9mm)"
@@ -75,7 +99,7 @@
 	sprite_modulo = 2
 
 /obj/item/ammo_storage/magazine/a12mm/ops
-	name = "C-20r magazine (12mm)"
+	name = "C-20r magazine (12mm SPECIAL)"
 	desc = "A magazine designed for the C-20r. Has 'SA' engraved on the side. Holds 20 rounds."
 	icon_state = "12mm"
 	origin_tech = Tc_COMBAT + "=2"
@@ -198,6 +222,8 @@
 	max_ammo = 10
 	multiple_sprites = 1
 	sprite_modulo = 2
+	magoffsetx = 11
+	magoffsety = 11
 
 /obj/item/ammo_storage/magazine/m380auto/empty
 	starting_ammo = 0

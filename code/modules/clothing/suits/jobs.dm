@@ -84,7 +84,7 @@
 	permeability_coefficient = 0.50
 	body_parts_covered = FULL_TORSO|ARMS
 	allowed = list (/obj/item/weapon/kitchen/utensil/knife/large,/obj/item/weapon/kitchen/utensil/knife/large/butch)
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 
 //Chef
@@ -95,7 +95,7 @@
 	item_state = "apronchef"
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 
 //Detective
 /obj/item/clothing/suit/storage/det_suit
@@ -264,25 +264,25 @@
 	blood_overlay_type = "coat"
 	species_fit = list(INSECT_SHAPED)
 
-	verb/toggle()
-		set name = "Toggle Coat Buttons"
-		set category = "Object"
-		set src in usr
+/obj/item/clothing/suit/storage/internalaffairs/verb/toggle()
+	set name = "Toggle Coat Buttons"
+	set category = "Object"
+	set src in usr
 
-		if(usr.incapacitated())
-			return 0
+	if(usr.incapacitated())
+		return 0
 
-		switch(icon_state)
-			if("ia_jacket_open")
-				src.icon_state = "ia_jacket"
-				to_chat(usr, "You button up the jacket.")
-			if("ia_jacket")
-				src.icon_state = "ia_jacket_open"
-				to_chat(usr, "You unbutton the jacket.")
-			else
-				to_chat(usr, "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are.")
-				return
-		usr.update_inv_wear_suit()	//so our overlays update
+	switch(icon_state)
+		if("ia_jacket_open")
+			src.icon_state = "ia_jacket"
+			to_chat(usr, "You button up the jacket.")
+		if("ia_jacket")
+			src.icon_state = "ia_jacket_open"
+			to_chat(usr, "You unbutton the jacket.")
+		else
+			to_chat(usr, "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are.")
+			return
+	usr.update_inv_wear_suit()	//so our overlays update
 
 //Medical
 /obj/item/clothing/suit/storage/fr_jacket
@@ -295,22 +295,22 @@
 	allowed = list(/obj/item/stack/medical, /obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/hypospray, /obj/item/weapon/reagent_containers/syringe, \
 	/obj/item/device/healthanalyzer, /obj/item/device/flashlight, /obj/item/device/radio, /obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/roller, /obj/item/weapon/autopsy_scanner/healthanalyzerpro)
 
-	verb/toggle()
-		set name = "Toggle Jacket Buttons"
-		set category = "Object"
-		set src in usr
+/obj/item/clothing/suit/storage/fr_jacket/verb/toggle()
+	set name = "Toggle Jacket Buttons"
+	set category = "Object"
+	set src in usr
 
-		if(usr.incapacitated())
-			return 0
+	if(usr.incapacitated())
+		return 0
 
-		switch(icon_state)
-			if("fr_jacket_open")
-				src.icon_state = "fr_jacket"
-				to_chat(usr, "You button up the jacket.")
-			if("fr_jacket")
-				src.icon_state = "fr_jacket_open"
-				to_chat(usr, "You unbutton the jacket.")
-		usr.update_inv_wear_suit()	//so our overlays update
+	switch(icon_state)
+		if("fr_jacket_open")
+			src.icon_state = "fr_jacket"
+			to_chat(usr, "You button up the jacket.")
+		if("fr_jacket")
+			src.icon_state = "fr_jacket_open"
+			to_chat(usr, "You unbutton the jacket.")
+	usr.update_inv_wear_suit()	//so our overlays update
 
 //Mime
 /obj/item/clothing/suit/suspenders

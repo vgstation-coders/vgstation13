@@ -101,7 +101,7 @@
 				if(!prison.brainmob)
 					to_chat(user, "<span class='warning'>Sticking an empty [P] into the frame would sort of defeat the purpose.</span>")
 					return
-				if(!map.map_specific_conditions(ROBOT_CHECK))
+				if(!map.can_have_robots)
 					to_chat(user, "<span class='warning'>The station prevents you from kickstarting the tyranny of the AI!</span>")
 					return
 				if(prison.brainmob.stat == DEAD)
@@ -137,6 +137,7 @@
 				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/mob/living/silicon/ai/A = new /mob/living/silicon/ai ( loc, laws, brain )
+				A.show_intro_text()
 				if(A) //if there's no brain, the mob is deleted and a structure/AIcore is created
 					mob_rename_self(A,"ai", null, 1)
 				feedback_inc("cyborg_ais_created",1)

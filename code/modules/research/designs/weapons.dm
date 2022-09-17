@@ -257,6 +257,16 @@
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
+/datum/design/liberator
+	name = "Liberator"
+	desc = "A laser carbine designed to kill xenofauna, but dramatically reduced effect on human targets."
+	id = "liberator"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 8000, MAT_GLASS = 6000, MAT_PLASTIC = 2000)
+	build_path = /obj/item/weapon/gun/energy/laser/liberator
+	locked = TRUE
+	req_lock_access = list(access_armory, access_weapons)
+
 /datum/design/vector
 	name = "Vector"
 	desc = "A lightweight and compact gun, it has a detachable receiver that contains a recoil mitigation system."
@@ -383,7 +393,7 @@
 	desc = "A 12 gauge shell filled with an incendiary mixture, for lighting up dark areas or setting things on fire."
 	id = "dragonshell"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 500, MAT_PLASMA = 2000)
+	materials = list(MAT_IRON = 500, MAT_PLASMA = 500)
 	build_path = /obj/item/ammo_casing/shotgun/dragonsbreath
 
 /datum/design/shotgun_shell/frag
@@ -496,7 +506,7 @@
 	desc = "A box of 12-gauge dragon's breath shells."
 	id = "ammo_12ga_flare"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 8000, MAT_PLASMA = 32000)
+	materials = list(MAT_IRON = 8000, MAT_PLASMA = 8000)
 	build_path = /obj/item/weapon/storage/box/dragonsbreathshells
 
 /datum/design/ammo_shotgun/frag
@@ -657,8 +667,8 @@
 //Hidden
 
 /datum/design/magazine_12mm/ops
-	name = "C-20r magazine (12mm)"
-	desc = "A magazine for the Syndicate C-20r assault rifle. Holds 12mm ammunition."
+	name = "C-20r magazine (12mm SPECIAL)"
+	desc = "A magazine for the Syndicate C-20r assault rifle. Holds 12mm SPECIAL ammunition."
 	id = "magazine_12mm"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 400)

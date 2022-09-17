@@ -229,7 +229,7 @@
 	powerlevel = 0 // oh no, the power!
 	..()
 
-/mob/living/carbon/slime/ex_act(severity)
+/mob/living/carbon/slime/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		return
 
@@ -243,19 +243,26 @@
 
 	var/b_loss = null
 	var/f_loss = null
+	var/dmg_phrase = ""
+	var/msg_admin = (src.key || src.ckey || (src.mind && src.mind.key)) && whodunnit
 	switch (severity)
 		if (1.0)
 			b_loss += 500
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], Gibbed", admin_warn = msg_admin)
 			return
 
 		if (2.0)
 
 			b_loss += 60
 			f_loss += 60
+			dmg_phrase = "Damage: 120"
 
 
 		if(3.0)
 			b_loss += 30
+			dmg_phrase = "Damage: 30"
+
+	add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], [dmg_phrase]", admin_warn = msg_admin)
 
 	adjustBruteLoss(b_loss)
 	adjustFireLoss(f_loss)
@@ -460,8 +467,8 @@
 	return 0
 
 
-mob/living/carbon/slime/var/co2overloadtime = null
-mob/living/carbon/slime/var/temperature_resistance = T0C+75
+/mob/living/carbon/slime/var/co2overloadtime = null
+/mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 
 /mob/living/carbon/slime/show_inv(mob/user)
@@ -492,6 +499,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	var/Uses = 1 // uses before it goes inert
 	var/enhanced = 0 //has it been enhanced before?
 	var/primarytype = /mob/living/carbon/slime
+	var/list/reactive_reagents = list() //easier lookup for reaction checks in grenades
 
 /obj/item/slime_extract/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/slimesteroid2))
@@ -533,106 +541,127 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	name = "grey slime extract"
 	icon_state = "grey slime extract"
 	primarytype = /mob/living/carbon/slime
+	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/gold
 	name = "gold slime extract"
 	icon_state = "gold slime extract"
 	primarytype = /mob/living/carbon/slime/gold
+	reactive_reagents = list(PLASMA,BLOOD,WATER)
 
 /obj/item/slime_extract/silver
 	name = "silver slime extract"
 	icon_state = "silver slime extract"
 	primarytype = /mob/living/carbon/slime/silver
+	reactive_reagents = list(PLASMA,WATER,CARBON)
 
 /obj/item/slime_extract/metal
 	name = "metal slime extract"
 	icon_state = "metal slime extract"
 	primarytype = /mob/living/carbon/slime/metal
+	reactive_reagents = list(PLASMA,COPPER,TUNGSTEN,RADIUM,CARBON)
 
 /obj/item/slime_extract/purple
 	name = "purple slime extract"
 	icon_state = "purple slime extract"
 	primarytype = /mob/living/carbon/slime/purple
+	reactive_reagents = list(PLASMA,SUGAR)
 
 /obj/item/slime_extract/darkpurple
 	name = "dark purple slime extract"
 	icon_state = "dark purple slime extract"
 	primarytype = /mob/living/carbon/slime/darkpurple
+	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/orange
 	name = "orange slime extract"
 	icon_state = "orange slime extract"
 	primarytype = /mob/living/carbon/slime/orange
+	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/yellow
 	name = "yellow slime extract"
 	icon_state = "yellow slime extract"
 	primarytype = /mob/living/carbon/slime/yellow
+	reactive_reagents = list(PLASMA,BLOOD,WATER)
 
 /obj/item/slime_extract/red
 	name = "red slime extract"
 	icon_state = "red slime extract"
 	primarytype = /mob/living/carbon/slime/red
+	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/blue
 	name = "blue slime extract"
 	icon_state = "blue slime extract"
 	primarytype = /mob/living/carbon/slime/blue
+	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/darkblue
 	name = "dark blue slime extract"
 	icon_state = "dark blue slime extract"
 	primarytype = /mob/living/carbon/slime/darkblue
+	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/pink
 	name = "pink slime extract"
 	icon_state = "pink slime extract"
 	primarytype = /mob/living/carbon/slime/pink
+	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/green
 	name = "green slime extract"
 	icon_state = "green slime extract"
 	primarytype = /mob/living/carbon/slime/green
+	reactive_reagents = list(PLASMA,IRON,BLOOD,WATER)
 
 /obj/item/slime_extract/lightpink
 	name = "light pink slime extract"
 	icon_state = "light pink slime extract"
 	primarytype = /mob/living/carbon/slime/lightpink
+	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/black
 	name = "black slime extract"
 	icon_state = "black slime extract"
 	primarytype = /mob/living/carbon/slime/black
+	reactive_reagents = list(PLASMA,GOLD,WATER,SUGAR,BLOOD)
 
 /obj/item/slime_extract/oil
 	name = "oil slime extract"
 	icon_state = "oil slime extract"
 	primarytype = /mob/living/carbon/slime/oil
+	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/adamantine
 	name = "adamantine slime extract"
 	icon_state = "adamantine slime extract"
 	primarytype = /mob/living/carbon/slime/adamantine
+	reactive_reagents = list(PLASMA,CARBON,GOLD,SILVER)
 
 /obj/item/slime_extract/bluespace
 	name = "bluespace slime extract"
 	icon_state = "bluespace slime extract"
 	primarytype = /mob/living/carbon/slime/bluespace
+	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/pyrite
 	name = "pyrite slime extract"
 	icon_state = "pyrite slime extract"
 	primarytype = /mob/living/carbon/slime/pyrite
+	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/cerulean
 	name = "cerulean slime extract"
 	icon_state = "cerulean slime extract"
 	primarytype = /mob/living/carbon/slime/cerulean
+	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/sepia
 	name = "sepia slime extract"
 	icon_state = "sepia slime extract"
 	primarytype = /mob/living/carbon/slime/sepia
+	reactive_reagents = list(PLASMA,BLOOD,PHAZON)
 
 
 ////Pet Slime Creation///
@@ -850,7 +879,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	canremove = 0
 	siemens_coefficient = 0
 
-/obj/item/clothing/mask/gas/golem/acidable()
+/obj/item/clothing/mask/gas/golem/dissolvable()
 	return 0
 
 /obj/item/clothing/gloves/golem
@@ -875,7 +904,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	armor = list(melee = 80, bullet = 20, laser = 20, energy = 10, bomb = 0, bio = 0, rad = 0)
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
-/obj/item/clothing/head/space/golem/acidable()
+/obj/item/clothing/head/space/golem/dissolvable()
 	return 0
 */
 /obj/effect/golem_rune

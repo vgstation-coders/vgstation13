@@ -33,6 +33,7 @@
 	var/active = 0
 
 	var/memory
+	var/datum/body_archive/body_archive
 
 	var/assigned_role
 	var/special_role
@@ -73,6 +74,8 @@
 
 	var/list/activeUIs = list()
 
+	var/mob_legacy_fac
+
 /datum/mind/New(var/key)
 	src.key = key
 
@@ -81,35 +84,41 @@
 		transfer_to_without_current(new_character)
 		return
 
-	new_character.attack_log += current.attack_log
+	//new_character.attack_log += current.attack_log
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from [current] to [new_character]"
 
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
 		R.PreMindTransfer(current)
 
-	if(current)					//remove ourself from our old body's mind variable
-		current.old_assigned_role = assigned_role
-		current.mind = null
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
 		new_character.mind.current = null
 
 	nanomanager.user_transferred(current, new_character)
 
+	//find a better way to do this, this is horrible
 	if(active)
-		new_character.key = key		//now transfer the key to link the client to our new body
+		new_character.key = key	//now transfer the key to link the client to our new body
+
+	if(current)					//remove ourself from our old body's mind variable NOW THAT THE TRANSFER IS DONE
+		current.old_assigned_role = assigned_role
+		current.mind = null
 
 	var/mob/old_character = current
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
+	new_character.mind.active = TRUE	//necessary for some reason
 
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
 		R.PostMindTransfer(new_character, old_character)
 
+	if(mob_legacy_fac)
+		new_character.faction = mob_legacy_fac
+
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
-	invoke_event(/event/after_mind_transfer, list("mind" = src))
+	INVOKE_EVENT(src, /event/after_mind_transfer, "mind" = src)
 
 /datum/mind/proc/transfer_to_without_current(var/mob/new_character)
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"
@@ -119,6 +128,7 @@
 
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
+		to_chat(world, "transfered to successfully")
 
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
@@ -560,6 +570,8 @@
 			world.log << "## DEBUG: mind_initialize(): No ticker ready yet! Please inform Carn"
 	if(!mind.name)
 		mind.name = real_name
+	if (!mind.body_archive)
+		mind.body_archive = new(src)
 	mind.current = src
 
 //HUMAN

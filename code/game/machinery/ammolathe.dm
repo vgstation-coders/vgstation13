@@ -11,16 +11,17 @@
 
 	default_mat_overlays = TRUE
 	//build_time = 0.5
-	allowed_materials = 0 //A 0 or FALSE Allows all materials.
 	light_color = LIGHT_COLOR_RED
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK //| EMAGGABLE
+	allowed_materials = list()
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT //| EMAGGABLE
 	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER | LOCKBOXES | FAB_RECYCLER
 
 	one_part_set_only = 0
 	part_sets = list(
 		"Weapons"=list(
 		new /obj/item/weapon/gun/projectile/glock/lockbox(), \
+		new /obj/item/weapon/gun/energy/laser/liberator(), \
 		new /obj/item/weapon/gun/projectile/automatic/vector/lockbox(), \
 		new /obj/item/weapon/gun/projectile/shotgun/pump(), \
 		new /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox(), \
@@ -98,4 +99,3 @@
 	RefreshParts()
 
 
-	

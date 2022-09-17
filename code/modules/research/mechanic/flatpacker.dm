@@ -56,17 +56,19 @@
 
 	src.busy = 1
 	src.overlays += image(icon = icon, icon_state = "[base_state]_ani")
-	src.use_power = 2
+	src.use_power = MACHINE_POWER_USE_ACTIVE
 	src.updateUsrDialog()
 	//message_admins("We're going building with [get_construction_time_w_coeff(part)]")
 	sleep(get_construction_time_w_coeff(part))
-	src.use_power = 1
+	src.use_power = MACHINE_POWER_USE_IDLE
 	src.overlays -= image(icon = icon, icon_state = "[base_state]_ani")
 	if(being_built)
-		var/obj/structure/closet/crate/flatpack/FP = new
-		FP.insert_machine(being_built)
 		var/turf/output = get_output()
-		FP.forceMove(get_turf(output))
+		var/obj/structure/closet/crate/flatpack/new_flatpack = new(output)
+		new_flatpack.insert_machine(being_built)
+		for(var/obj/structure/closet/crate/flatpack/existing in output)
+			if(existing.try_add_stack(new_flatpack))
+				break
 		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
 		src.being_built = null
 

@@ -22,29 +22,29 @@
 	speech.message = ""
 
 ////////////////////////////////////////
-// Harmful to others as well as self
+// Harmful to others
 ////////////////////////////////////////
 
 /datum/dna/gene/disability/radioactive
 	name = "Radioactive"
-	desc = "The subject suffers from constant radiation sickness and causes the same on nearby organics."
-	activation_message = "You feel a strange sickness permeate your whole body."
-	deactivation_message = "You no longer feel awful and sick all over."
+	desc = "The subject emits radiation to nearby people, but rapidly gets rid of their own radiation."
+	activation_message = "You feel a strange warmth permeate your whole body."
+	deactivation_message = "You no longer feel strangely warm."
 	flags = GENE_UNNATURAL
 
 /datum/dna/gene/disability/radioactive/New()
 	..()
 	block = RADBLOCK
 
-/datum/dna/gene/disability/radioactive/OnMobLife(var/mob/owner)
-	owner.radiation = max(owner.radiation, 20)
-	for(var/mob/living/L in range(1, owner))
-		if(L == owner)
-			continue
-		to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
-		L.apply_radiation(5, RAD_EXTERNAL)
-
-	emitted_harvestable_radiation(get_turf(owner), 1, range = 2) //Around 70W, nothing much really
+/datum/dna/gene/disability/radioactive/OnMobLife(var/mob/living/owner)
+	var/radiation = owner.radiation
+	var/living_radiation = round(3 * (radiation >= 10 ? radiation/10 : 1), 1) //+3 radiation for every 10 radiation above 10.
+	owner.radiation = max(radiation - 30, 0)
+	if(owner.getarmor(null, "rad") < 100)
+		emitted_harvestable_radiation(get_turf(owner), radiation * 100, range = 3) //1 power = ~70W, are you ready for radiation engines?
+		for(var/mob/living/L in orange(1, owner)) //Everyone nearby except the user
+			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
+			L.apply_radiation(living_radiation, RAD_EXTERNAL)
 
 /datum/dna/gene/disability/radioactive/OnDrawUnderlays(var/mob/M,var/g,var/fat)
 	return "rads[fat]_s"
@@ -73,6 +73,10 @@
 /datum/dna/gene/disability/fat/activate(var/mob/M)
 	if(M.overeatduration < 500)
 		M.overeatduration = 600 // This ensures M_FAT activates if the mob isn't already fat
+
+/datum/dna/gene/disability/fat/deactivate(var/mob/M,var/connected,var/flags)
+	if(..() && M.nutrition <= OVEREAT_THRESHOLD)
+		M.overeatduration = M.overeatduration > 600 ? M.overeatduration - 600 : 0
 
 /datum/dna/gene/disability/fat/New()
 	..()
@@ -127,7 +131,7 @@
 				M.visible_message("<b>[M]</b> busts out some [dancemoves] moves!")
 		if(2)
 			if(prob(15))
-				M.visible_message("<b>[M]</b> [pick("jiggles their hips", "rotates their hips", "gyrates their hips", "taps their foot", "dances to an imaginary song", "jiggles their legs", "snaps their fingers")]")
+				M.visible_message("<b>[M]</b> [pick("jiggles their hips.", "rotates their hips.", "gyrates their hips.", "taps their foot.", "dances to an imaginary song.", "jiggles their legs.", "snaps their fingers.")]")
 
 
 // WAS: /datum/bioEffect/chav
@@ -136,6 +140,7 @@
 	desc = "Forces the language center of the subject's brain to construct sentences in a more rudimentary manner."
 	activation_message = "Ye feel like a reet prat like, innit?"
 	deactivation_message = "You no longer feel like being rude and sassy."
+	mutation = M_CHAV
 
 /datum/dna/gene/disability/chav/New()
 	..()
@@ -148,10 +153,12 @@
 	desc = "Forces the language center of the subject's brain to construct sentences in a vaguely norse manner."
 	activation_message = "You feel Swedish, however that works."
 	deactivation_message = "The feeling of Swedishness passes."
+	mutation = M_SWEDE
 
 /datum/dna/gene/disability/swedish/New()
 	..()
 	block=SWEDEBLOCK
+	speech_filter = new /datum/speech_filter/swedish
 
 /datum/dna/gene/disability/swedish/OnSay(var/mob/M, var/datum/speech/speech)
 	// svedish!

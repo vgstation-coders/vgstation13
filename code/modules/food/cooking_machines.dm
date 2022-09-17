@@ -70,7 +70,7 @@ var/global/ingredientLimit = 10
 	var/recursive_ingredients = 0 //allow /food/snacks/customizable as a valid ingredient
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	active_power_usage = 500
 
@@ -160,7 +160,7 @@ var/global/ingredientLimit = 10
 		return
 	else if(..())
 		return TRUE
-	else if(stat & (NOPOWER | BROKEN))
+	else if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		to_chat(user, "<span class='warning'> The power's off, it's no good. </span>")
 		return
 	else if(isMoMMI(user))// *buzz
@@ -307,7 +307,7 @@ var/global/ingredientLimit = 10
 	cookSound = 'sound/machines/juicer.ogg'
 	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
 
-/obj/machinery/cooking/candy/RefreshParts()						
+/obj/machinery/cooking/candy/RefreshParts()
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
 		T += M.rating-1
@@ -359,7 +359,7 @@ var/global/ingredientLimit = 10
 	icon_state_on = "cereal_on"
 	foodChoices = null
 	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
-	
+
 /obj/machinery/cooking/cerealmaker/RefreshParts()
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
@@ -374,6 +374,9 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/cerealmaker/makeFood()
+	makeCereal()
+
+/obj/machinery/cooking/proc/makeCereal()
 	var/obj/item/weapon/reagent_containers/food/snacks/cereal/C = new(src.loc)
 	for(var/obj/item/embedded in src.ingredient.contents)
 		embedded.forceMove(src.loc)
@@ -413,10 +416,11 @@ var/global/ingredientLimit = 10
 	recursive_ingredients = 1
 	cks_max_volume = 400
 	cooks_in_reagents = 1
+	var/fry_reagent = CORNOIL
 
 /obj/machinery/cooking/deepfryer/initialize()
 	..()
-	reagents.add_reagent(CORNOIL, 300)
+	reagents.add_reagent(fry_reagent, 300)
 
 /obj/machinery/cooking/deepfryer/proc/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
@@ -521,6 +525,7 @@ var/global/ingredientLimit = 10
 	cks_max_volume = 400
 	cooks_in_reagents = 1
 	machine_flags = WRENCHMOVE | CROWDESTROY | SCREWTOGGLE | FIXED2WORK | SHUTTLEWRENCH
+	fry_reagent = SUGAR
 
 /obj/machinery/cooking/deepfryer/confectionator/New()
 	. = ..()
@@ -542,12 +547,6 @@ var/global/ingredientLimit = 10
 	if((. == "valid") && (!foodNesting))
 		if(findtext(I.name,"sugar"))
 			. = "It's already a sugar copy."
-
-/obj/machinery/cooking/deepfryer/confectionator/initialize()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(SUGAR, 300)
-
 
 /obj/machinery/cooking/deepfryer/confectionator/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
@@ -627,7 +626,7 @@ var/global/ingredientLimit = 10
 			src.ingredient.color = "#A34719"
 			if (cook_after(src.cookTime/3, 14))
 				src.makeFood()
-				if(use_power)
+				if(use_power != MACHINE_POWER_USE_NONE)
 					playsound(src,src.cookSound,100,1)
 				else
 					src.visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
@@ -663,7 +662,7 @@ var/global/ingredientLimit = 10
 	density = 0
 	icon_state = "spit"
 	icon_state_on = "spit"
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	cooks_in_reagents = 0
 	machine_flags = null
 
@@ -715,7 +714,7 @@ var/global/ingredientLimit = 10
 	source_temperature = T0C+180
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/obj/item/weapon/reagent_containers/within
 
@@ -768,7 +767,7 @@ var/global/ingredientLimit = 10
 				playsound(src, 'sound/effects/clang.ogg', 50, 1)
 				user.visible_message("<span class = 'warning'>\The [user] slams \the [M]'s head into \the [src]!</span>")
 				M.apply_damage(10, BRUTE, LIMB_HEAD, used_weapon = "Concussive slamming by something on a hinge.")
-				if(use_power == 2)
+				if(use_power == MACHINE_POWER_USE_ACTIVE)
 					M.apply_damage((source_temperature-T0C)/10, BURN, LIMB_HEAD, used_weapon = "Contact with heating element.")
 
 
@@ -776,27 +775,78 @@ var/global/ingredientLimit = 10
 	if(isjustobserver(user))
 		to_chat(user, "<span class = 'warning'>There will be no spooking in my fucking kitchen!</span>")
 		return
-	if(use_power == 1 && within)
+	if(use_power == MACHINE_POWER_USE_IDLE && within)
 		if(user.put_in_active_hand(within))
 			to_chat(user, "<span class = 'notice'>You take \the [within] from \the [src].</span>")
 			within = null
-	else if(use_power == 2)
+	else if(use_power == MACHINE_POWER_USE_ACTIVE)
 		toggle(user)
 
 /obj/machinery/oven/proc/toggle(mob/user)
-	if(use_power == 1)
+	if(use_power == MACHINE_POWER_USE_IDLE)
 		icon_state = icon_state_on
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 		processing_objects.Add(src)
-	else if(use_power == 2)
+	else if(use_power == MACHINE_POWER_USE_ACTIVE)
 		icon_state = initial(icon_state)
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		processing_objects.Remove(src)
 	if(user)
-		to_chat(user, use_power ? "<span class = 'notice'>You turn \the [src] [use_power == 2 ? "on" : "off"].</span>" : "<span class = 'warning'>\The [src] doesn't seem to be plugged in!</span>")
+		to_chat(user, use_power ? "<span class = 'notice'>You turn \the [src] [use_power == MACHINE_POWER_USE_ACTIVE ? "on" : "off"].</span>" : "<span class = 'warning'>\The [src] doesn't seem to be plugged in!</span>")
 
 /obj/machinery/oven/process()
-	if(!use_power)
+	if(use_power == MACHINE_POWER_USE_NONE)
 		toggle()
 	if(within)
 		within.attempt_heating(src)
+
+/obj/machinery/cooking/foodpress
+	name = "food press"
+	desc = "Press your nutriment into various fun shapes!"
+	icon_state = "oven_off"
+	icon_state_on = "oven_on"
+	cookSound = 'sound/machines/juicer.ogg'
+	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
+	var/mode = "Candy"
+
+/obj/machinery/cooking/foodpress/validateIngredient(var/obj/item/I)
+	. = ..()
+	if ((. == "valid") && (!foodNesting))
+		for (var/food in foodChoices)
+			if (findtext(I.name, food))
+				. = "It's already pressed into that shape."
+				break
+
+/obj/machinery/cooking/foodpress/attack_hand(mob/user)
+	if(!active)
+		if(Adjacent(user) && !user.stat && !user.incapacitated() && !isobserver(user))
+			var/which = alert("What shape would you like?", "Food press", "Candy", "Baked Goods", "Cereal")
+			if((!which) || (!Adjacent(user)))
+				return
+			mode = which
+			to_chat(user, "You set \the [src.name] to [mode].")
+			foodChoices = list()
+			var/obj/item/food
+			for (var/path in getFoodChoices())
+				food = path
+				foodChoices.Add(list(initial(food.name) = path))
+		else
+			to_chat(user, "You are too far away from [src.name].")
+	..()
+
+/obj/machinery/cooking/foodpress/makeFood()
+	if(mode == "Cereal")
+		makeCereal()
+		return
+	..()
+
+/obj/machinery/cooking/foodpress/getFoodChoices()
+	var/list/types = list()
+	switch(mode)
+		if("Candy")
+			types = typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable/candy)-(/obj/item/weapon/reagent_containers/food/snacks/customizable/candy)
+		if("Baked Goods")
+			types = typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook)-(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook)
+		if("Cereal")
+			types = list(/obj/item/weapon/reagent_containers/food/snacks/cereal)
+	return types

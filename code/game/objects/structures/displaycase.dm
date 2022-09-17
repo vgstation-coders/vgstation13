@@ -7,7 +7,7 @@
 	desc = "A display case for prized possessions. It tempts you to kick it."
 	density = 1
 	anchored = 1
-	var/health = 30
+	health = 30
 	var/obj/item/occupant = null
 	var/destroyed = 0
 	var/locked = 0
@@ -243,7 +243,7 @@
 				"You gently run your hands over \the [src] in appreciation of its contents.", \
 				"You hear someone streaking glass with their greasy hands.")
 
-/obj/structure/displaycase/acidable()
+/obj/structure/displaycase/dissolvable()
 	return 0
 
 

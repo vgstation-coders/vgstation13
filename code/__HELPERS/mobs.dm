@@ -1,3 +1,8 @@
+var/static/list/ALL_LIMBS = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
+								LIMB_LEFT_ARM,LIMB_RIGHT_ARM,LIMB_LEFT_HAND,LIMB_RIGHT_HAND,
+								LIMB_LEFT_LEG,LIMB_RIGHT_LEG,LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,
+								TARGET_MOUTH,TARGET_EYES)
+
 /proc/random_hair_style(gender, species = "Human")
 	var/h_style = "Bald"
 
@@ -38,7 +43,7 @@
 
 		return f_style
 
-proc/random_name(gender, speciesName = "Human")
+/proc/random_name(gender, speciesName = "Human")
 	var/datum/species/S = all_species[speciesName]
 	if(S)
 		return S.makeName(gender)
@@ -48,7 +53,7 @@ proc/random_name(gender, speciesName = "Human")
 
 
 
-proc/random_skin_tone(species = "Human")
+/proc/random_skin_tone(species = "Human")
 	if(species == "Human")
 		switch(pick(60;"caucasian", 15;"afroamerican", 10;"african", 10;"latino", 5;"albino"))
 			if("caucasian")
@@ -75,7 +80,7 @@ proc/random_skin_tone(species = "Human")
 	else
 		return 0
 
-proc/skintone2racedescription(tone, species = "Human")
+/proc/skintone2racedescription(tone, species = "Human")
 	if(species == "Human")
 		switch (tone)
 			if(30 to INFINITY)
@@ -129,7 +134,26 @@ proc/skintone2racedescription(tone, species = "Human")
 	else
 		return "unknown"
 
-proc/age2agedescription(age)
+/proc/haircolordesc(v_hair)
+	switch(v_hair)
+		if("Green")
+			return "1"
+		if("Azure")
+			return "2"
+		if("Brown")
+			return "3"
+		if("Emerald")
+			return "4"
+		if("Gray")
+			return "5"
+		if("Light Green")
+			return "6"
+		if("Green-Brown")
+			return "7"
+		else
+			return "7"
+
+/proc/age2agedescription(age)
 	switch(age)
 		if(0 to 1)
 			return "infant"
@@ -152,7 +176,7 @@ proc/age2agedescription(age)
 		else
 			return "unknown"
 
-proc/RoundHealth(health)
+/proc/RoundHealth(health)
 	switch(health)
 		if(99 to INFINITY)
 			return "health100"
@@ -217,7 +241,7 @@ Proc for attack log creation, because really why not
 6 is additional information, anything that needs to be added
 */
 
-proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var/addition=null)
+/proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var/addition=null)
 	if(user && ismob(user))
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has [what_done] [target ? "[target.name][(ismob(target) && target.ckey) ? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
 	if(target && ismob(target))
@@ -230,7 +254,7 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 	if(admin)
 		log_attack("<font color='red'>[user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"] [what_done] [target ? "[target.name][(ismob(target) && target.ckey)? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
 
-proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var/addition=null)
+/proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var/addition=null)
 	var/target_text = "NON-EXISTENT TARGET"
 	var/subject_text = "NON-EXISTENT SUBJECT"
 	if(target)
@@ -314,10 +338,13 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 
 	return L
 
-//not to be confused with is_loyalty_implanted in human/human.dm L290
+/mob/proc/is_loyalty_implanted()
+	return is_implanted(/obj/item/weapon/implant/loyalty)
+
+//not to be confused with is_loyalty_implanted
 /mob/proc/is_implanted(var/type)
 	for(var/obj/item/weapon/implant/I in src)
-		if(I.implanted && istype(I,type))
+		if(I.imp_in && istype(I, type))
 			return TRUE
 	return FALSE
 

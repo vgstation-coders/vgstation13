@@ -74,18 +74,18 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 10)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 /obj/item/clothing/suit/space/rig/mining
 	icon_state = "rig-mining"
 	name = "mining hardsuit"
 	desc = "A special suit that protects against hazardous, low pressure environments. Has reinforced plating."
 	item_state = "rig-mining"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 10)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 	head_type = /obj/item/clothing/head/helmet/space/rig/mining
 	allowed = list(
 		/obj/item/device/flashlight,
@@ -131,7 +131,7 @@
 	name = "blood-red hardsuit"
 	desc = "An advanced suit that protects against injuries during special operations. A tag on it says \"Property of Gorlex Marauders\"."
 	item_state = "syndie_hardsuit"
-	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	w_class = W_CLASS_MEDIUM
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 60)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)
@@ -204,7 +204,7 @@
 
 	species_restricted = null
 
-/obj/item/clothing/head/helmet/space/rig/wizard/acidable()
+/obj/item/clothing/head/helmet/space/rig/wizard/dissolvable()
 	return 0
 
 /obj/item/clothing/suit/space/rig/wizard
@@ -224,7 +224,7 @@
 	head_type = /obj/item/clothing/head/helmet/space/rig/wizard
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
 
-/obj/item/clothing/suit/space/rig/wizard/acidable()
+/obj/item/clothing/suit/space/rig/wizard/dissolvable()
 	return 0
 
 /obj/item/clothing/head/helmet/space/rig/wizard/lich_king
@@ -522,7 +522,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	_color = "knight"
-	clothing_flags = PLASMAGUARD|GOLIATHREINFORCE
+	clothing_flags = PLASMAGUARD|GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 
 /obj/item/clothing/suit/space/rig/knight
@@ -536,7 +536,7 @@
 	siemens_coefficient = 0.5
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	clothing_flags = PLASMAGUARD|GOLIATHREINFORCE
+	clothing_flags = PLASMAGUARD|GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 	head_type = /obj/item/clothing/head/helmet/space/rig/knight
 
 /obj/item/clothing/head/helmet/space/rig/knight/black
@@ -597,7 +597,7 @@
 	icon_state = "ghettorig0"
 	item_state = "ghettorig0"
 	light_power = 1.5
-	light_range = 4
+	var/brightness_on = 4 //luminosity when on
 	var/on = 0
 	_color = "ghetto"
 	pressure_resistance = 4 * ONE_ATMOSPHERE
@@ -618,9 +618,9 @@
 	item_state = "ghettorig[on]"
 
 	if(on)
-		set_light()
+		set_light(brightness_on)
 	else
-		kill_light()
+		set_light(0)
 
 /obj/item/clothing/suit/space/ghettorig
 	name = "jury-rigged space-proof firesuit"
@@ -646,7 +646,7 @@
 	item_state = "rorsuit"
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 	head_type = /obj/item/clothing/head/helmet/space/rig/ror
 
 /obj/item/clothing/head/helmet/space/rig/ror
@@ -656,7 +656,7 @@
 	item_state = "rorhelm"
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 /obj/item/clothing/head/helmet/space/rig/ror/update_icon()
 	return
@@ -680,3 +680,49 @@
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
 	color_on = "#81F9C6" //Aquamarine. A combination of the colors from the lamp and rail light.
 	species_fit = list(INSECT_SHAPED)
+
+
+//Ninja Rig
+/obj/item/clothing/suit/space/rig/sundowner
+	name = "sundowner suit"
+	desc = "A unique, vacuum-proof suit of nano-enhanced armor designed specifically for Desperado Spider Clan squad."
+	icon_state = "sundowner_suit"
+	item_state = "sundowner_suit"
+	head_type = /obj/item/clothing/head/helmet/space/rig/sundowner
+	boots_type = /obj/item/clothing/shoes/ninja/redsun
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+	species_fit = list("Human")
+	species_restricted = list("Human") //only have human sprites :/
+	can_take_pai = TRUE
+	allowed = list(
+		/obj/item/weapon/tank,
+		/obj/item/weapon/cell,
+		/obj/item/weapon/melee/energy/sword,
+		/obj/item/stack/shuriken,
+		/obj/item/weapon/storage/box/syndie_kit/smokebombs,
+		/obj/item/toy/snappop/smokebomb,
+		/obj/item/weapon/substitutionhologram,
+		/obj/item/mounted/poster/stealth
+		)
+
+/obj/item/clothing/head/helmet/space/rig/sundowner
+	name = "sundowner headgear"
+	desc = "What may appear to be a simple visor and neck guard is in fact a highly sophisticated nano-weave helmet."
+	icon_state = "rig0-sundowner"
+	item_state = "rig0-sundowner"
+	_color = "sundowner"
+	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+	color_on = "#ff0000" //RED SUN
+	pressure_resistance = 0
+	eyeprot = 0
+	body_parts_covered = EARS|BEARD
+
+/obj/item/clothing/head/helmet/space/rig/sundowner/update_brightness() //Shitcode HIJACK!
+	..()
+	update_mask()
+
+/obj/item/clothing/head/helmet/space/rig/sundowner/proc/update_mask()
+	pressure_resistance = on ? (200 * ONE_ATMOSPHERE) : initial(pressure_resistance)
+	eyeprot = on ? 3 : initial(eyeprot)
+	body_parts_covered = on ? FULL_HEAD : initial(body_parts_covered) //It's ninja magic, i ain't gonna explain shit

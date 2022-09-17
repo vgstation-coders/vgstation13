@@ -2,12 +2,12 @@
 
 /obj/machinery/constructable_frame //Made into a seperate type to make future revisions easier.
 	name = "machine frame"
-	desc = "A metal frame ready to recieve wires, a circuit board and parts."
+	desc = "A metal frame ready to receive wires, a circuit board and parts."
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "box_0"
 	density = 1
 	anchored = 1
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	var/obj/item/weapon/circuitboard/circuit = null
 	var/list/components = null
 	var/list/req_components = null
@@ -172,7 +172,7 @@
 					components = null
 				else
 					if(P.is_screwdriver(user))
-						if(istype(get_turf(src), /turf/simulated/shuttle))
+						if(isshuttleturf(get_turf(src)))
 							to_chat(user, "<span class='warning'>You must move \the [src] to a more stable location, such as a space station, before you can finish constructing it.</span>")
 							return
 						var/component_check = 1
@@ -452,7 +452,7 @@ to destroy them and players will be able to make replacements.
 	icon_state = "door_electronics"
 	//origin_tech = Tc_PROGRAMMING + "=2"
 
-obj/item/weapon/circuitboard/rdserver
+/obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (R&D Server)"
 	desc = "A circuit board used to run a R&D server."
 	build_path = /obj/machinery/r_n_d/server
@@ -633,6 +633,17 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/manipulator = 1,
 							/obj/item/weapon/stock_parts/matter_bin = 1)
 
+/obj/item/weapon/circuitboard/suit_modifier
+	name = "Circuit Board (Spacesuit Modification Station)"
+	desc = "A circuit board used to run a spacesuit modification station."
+	build_path = /obj/machinery/suit_modifier
+	board_type = MACHINE
+	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_PROGRAMMING + "=3"
+	req_components = list (
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 1)
+
 /obj/item/weapon/circuitboard/heater
 	name = "Circuit Board (Heater)"
 	desc = "A circuit board used to run a gas heater."
@@ -778,7 +789,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/smartfridge
 	name = "Circuit Board (SmartFridge)"
-	desc = "A circuit board used to run a machine that will hold grown plants, seeds, meat, and eggs."
+	desc = "A circuit board used to run a machine that will hold grown condiments, drinks, plants, seeds, meats, and glasses."
 	build_path = /obj/machinery/smartfridge
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
@@ -797,7 +808,6 @@ obj/item/weapon/circuitboard/rdserver
 		"Chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/chemistry,
 		"Slime extract smartfridge" = /obj/item/weapon/circuitboard/smartfridge/extract,
 		"Seed smartfridge" = /obj/item/weapon/circuitboard/smartfridge/seeds,
-		"Drinks smartfridge" = /obj/item/weapon/circuitboard/smartfridge/drinks,
 		"Refrigerated Blood Bank" = /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	)
 
@@ -835,11 +845,6 @@ obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (Megaseed Servitor)"
 	desc = "A circuit board used to run a machine that will hold seed packets."
 	build_path = /obj/machinery/smartfridge/seeds
-
-/obj/item/weapon/circuitboard/smartfridge/drinks
-	name = "Circuit Board (Drinks Showcase)"
-	desc = "A circuit board used to run a machine that will hold glasses, drinks and condiments."
-	build_path = /obj/machinery/smartfridge/drinks
 
 /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	name = "Circuit Board (Refrigerated Blood Bank)"
@@ -903,8 +908,8 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/capacitor = 2)
 
 /obj/item/weapon/circuitboard/monkey_recycler
-	name = "Circuit Board (Monkey Recycler)"
-	desc = "A circuit board used to run a machine that turns dead monkeys into monkey cubes."
+	name = "Circuit Board (Animal Recycler)"
+	desc = "A circuit board used to run a machine that turns dead animals into animal cubes."
 	build_path = /obj/machinery/monkey_recycler
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
@@ -960,9 +965,6 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/capacitor = 1,
 							/obj/item/weapon/stock_parts/scanning_module = 2,
 							/obj/item/weapon/stock_parts/manipulator = 2)
-
-
-
 
 //Teleporter
 /obj/item/weapon/circuitboard/telehub
@@ -1284,6 +1286,23 @@ obj/item/weapon/circuitboard/rdserver
 	desc = "A circuit board used to run a machine that sorts input into two outputs from pre-programmed settings. This one is programmed for mail."
 	build_path = /obj/machinery/sorting_machine/destination
 
+/obj/item/weapon/circuitboard/sorting_machine/item
+	name = "Circuit Design (Item Sorting Machine)"
+	desc = "A circuit board used to run a machine that sorts input into two outputs from pre-programmed settings. This one is programmed for items."
+	build_path = /obj/machinery/sorting_machine/item
+
+/obj/item/weapon/circuitboard/wrapping_machine
+	name = "Circuit Board (Wrapping Machine)"
+	desc = "A circuit board used to run a machine that wraps packages."
+	build_path = /obj/machinery/wrapping_machine
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=2"
+	req_components = list(
+		/obj/item/weapon/stock_parts/scanning_module = 1,
+		/obj/item/weapon/stock_parts/manipulator = 1,
+		/obj/item/weapon/stock_parts/matter_bin = 2,
+	)
+
 /obj/item/weapon/circuitboard/processing_unit
 	name = "Circuit Board (Ore Processor)"
 	desc = "A circuit board used to run a machine that smelts mineral ores into sheets."
@@ -1417,7 +1436,7 @@ obj/item/weapon/circuitboard/rdserver
 						/obj/item/weapon/stock_parts/capacitor = 2,
 						/obj/item/weapon/stock_parts/micro_laser = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1)
-						
+
 /obj/item/weapon/circuitboard/cooking/candy
 	name = "circuit board (candy machine)"
 	desc = "A circuit board for a candy machine."
@@ -1427,7 +1446,7 @@ obj/item/weapon/circuitboard/rdserver
 	req_components = list(
 						/obj/item/weapon/stock_parts/manipulator = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1) //boring recipe I know, but they're very simple machines
-						
+
 /obj/item/weapon/circuitboard/cooking/cerealmaker
 	name = "circuit board (cereal maker)"
 	desc = "A circuit board for a cereal maker."
@@ -1582,4 +1601,15 @@ obj/item/weapon/circuitboard/rdserver
 		/obj/item/weapon/stock_parts/manipulator = 1,
 		/obj/item/weapon/stock_parts/scanning_module = 1,
 		/obj/item/weapon/stock_parts/capacitor = 1,
-		)
+	)
+
+/obj/item/weapon/circuitboard/airshield
+	name = "Circuit Board (Airshield)"
+	desc = "A circuit board for a structural airshield."
+	board_type = MACHINE
+	build_path = /obj/machinery/airshield
+	origin_tech = Tc_ENGINEERING + "=6;"+ Tc_PROGRAMMING + "=4" + Tc_MATERIALS + "=3"
+	req_components = list(
+		/obj/item/weapon/stock_parts/manipulator = 3,
+		/obj/item/weapon/stock_parts/micro_laser = 1
+	)

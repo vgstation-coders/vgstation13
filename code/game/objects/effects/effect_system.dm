@@ -14,7 +14,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	w_type=NOT_RECYCLABLE
 	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE
 
-/obj/effect/acidable()
+/obj/effect/dissolvable()
 	return 0
 
 /obj/effect/water
@@ -148,7 +148,6 @@ steam.start() -- spawns the effect
 	desc = "it's a spark what do you need to know?"
 	icon_state = "sparks"
 	anchored = 1
-	light_type = LIGHT_SOFT_FLICKER
 
 	var/move_dir = 0
 	var/energy = 0
@@ -158,7 +157,6 @@ steam.start() -- spawns the effect
 	var/turf/T = loc
 	if(istype(T))
 		T.hotspot_expose(1000, 100, surfaces = 1)
-	set_light(1, 1, LIGHT_COLOR_YELLOW)
 
 /obj/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
 	move_dir=travel_dir
@@ -807,7 +805,7 @@ steam.start() -- spawns the effect
 		if(!T)
 			continue
 
-		if(!T.Enter(src))
+		if(!T.Enter(src, loc, TRUE))
 			continue
 
 		var/obj/effect/foam/F = locate() in T
@@ -841,11 +839,9 @@ steam.start() -- spawns the effect
 			reagents.reaction(M)
 		return
 
-	if (istype(AM, /mob/living/carbon))
+	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(5, 2, 1))
-			to_chat(M, "<span class='notice'>You slipped on the foam!</span>")
-
+		M.Slip(5, 2, 1, onwhat = "the foam")
 
 /datum/effect/system/foam_spread
 	var/amount = 5				// the size of the foam spread.
@@ -1039,8 +1035,9 @@ steam.start() -- spawns the effect
 	var/amount 						// TNT equivalent
 	var/flashing = 0			// does explosion creates flash effect?
 	var/flashing_factor = 0		// factor of how powerful the flash effect relatively to the explosion
+	var/mob/user //for investigation
 
-/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0)
+/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit)
 	amount = amt
 	if(istype(loc, /turf/))
 		location = loc
@@ -1049,6 +1046,7 @@ steam.start() -- spawns the effect
 
 	flashing = flash
 	flashing_factor = flash_fact
+	user = whodunnit
 
 	return
 
@@ -1080,7 +1078,7 @@ steam.start() -- spawns the effect
 		for(var/mob/M in viewers(8, location))
 			to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
 
-		explosion(location, devastation, heavy, light, flash)
+		explosion(location, devastation, heavy, light, flash, whodunnit = user)
 
 /datum/effect/system/reagents_explosion/proc/holder_damage(var/atom/holder)
 	if(holder)

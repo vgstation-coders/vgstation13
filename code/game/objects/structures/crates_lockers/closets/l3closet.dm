@@ -36,6 +36,7 @@
 		/obj/item/clothing/suit/bio_suit/virology,
 		/obj/item/clothing/head/bio_hood/virology,
 		/obj/item/clothing/glasses/science,
+		/obj/item/taperoll/viro
 	)
 
 

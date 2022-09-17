@@ -25,7 +25,7 @@
 	anchored = 0
 	//weight = 1.0E7
 	health = 25
-	maxhealth = 25
+	maxHealth = 25
 	var/cleaning = 0
 	var/screwloose = 0
 	var/oddbutton = 0
@@ -158,7 +158,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	else
 		return ..()
 
-/obj/machinery/bot/cleanbot/Emag(mob/user)
+/obj/machinery/bot/cleanbot/emag_act(mob/user)
 	..()
 	if(open && !locked)
 		if(user)
@@ -345,18 +345,6 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 /*
  *	pAI SHIT, it uses the pAI framework in objs.dm. Check that code for further information
 */
-
-/obj/machinery/bot/cleanbot/getpAIMovementDelay()
-	return 1
-
-/obj/machinery/bot/cleanbot/pAImove(mob/living/silicon/pai/user, dir)
-	if(!on)
-		return
-	if(!..())
-		return
-	if(!isturf(loc))
-		return
-	step(src, dir)
 
 /obj/machinery/bot/cleanbot/on_integrated_pai_click(mob/living/silicon/pai/user, atom/target)
 	if(!Adjacent(target))

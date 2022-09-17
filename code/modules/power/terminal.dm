@@ -92,5 +92,16 @@
 	terminal.dir = get_dir(newloc, src)
 	terminal.master = src
 
+/obj/machinery/power/map_element_rotate(angle)
+	..()
+	if(terminal && terminal.dir != get_dir(terminal.loc, src))
+		terminal.dir = get_dir(terminal.loc, src)
+
+/obj/machinery/power/apc/map_element_rotate(angle)
+	..()
+	tdir = dir
+	if(terminal && terminal.dir != tdir)
+		terminal.dir = tdir
+
 /obj/machinery/power/proc/can_attach_terminal(mob/user)
 	return user.loc != src.loc && (get_dir(user, src) in cardinal) && !terminal

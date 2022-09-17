@@ -54,7 +54,7 @@
 
 /obj/item/weapon/spellbook/oneuse/fireball/recoil(mob/user)
 	..()
-	explosion(user.loc, -1, 0, 2, 3, 0)
+	explosion(user.loc, -1, 0, 2, 3, 0, whodunnit = user)
 	qdel(src)
 
 /obj/item/weapon/spellbook/oneuse/smoke
@@ -248,7 +248,7 @@
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/victim = user
 		to_chat(user, "<span class ='warning'>You suddenly feel very restrained!</span>")
-		var/obj/item/clothing/suit/straight_jacket/magicjacket = new/obj/item/clothing/suit/straight_jacket
+		var/obj/item/clothing/suit/strait_jacket/magicjacket = new
 		user.drop_from_inventory(victim.wear_suit)
 		user.equip_to_slot(magicjacket, slot_wear_suit, 1, 1)
 		user.flash_eyes(visual = 1)

@@ -11,6 +11,21 @@
 	var/selected_sound = "sound/items/bikehorn.ogg"
 	var/shiftpitch = 1
 	var/volume = 50
+	var/emagged = 0
+		
+	var/list/sound_list_emagged = list(
+	"Blob Pulse" = "selected_sound=sound/effects/blob_pulse.ogg&shiftpitch=1&volume=100",
+	"Conversion" = "selected_sound=sound/effects/convert_start.ogg&shiftpitch=1&volume=50",
+	"Absorb" = "selected_sound=sound/effects/lingabsorbs.ogg&shiftpitch=1&volume=100",
+	"Energy Sword" = "selected_sound=sound/weapons/blade1.ogg&shiftpitch=1&volume=100",
+	"Super Fart" = "selected_sound=sound/effects/superfart.ogg&shiftpitch=1&volume=100",
+	"Delamination Imminent" = "selected_sound=sound/AI/supermatter_delam.ogg&shiftpitch=0&volume=100",
+	"'elite' Syndie Squad" = "selected_sound=sound/music/elite_syndie_squad.ogg&shiftpitch=0&volume=25",
+	"'elite' NT Squad" = "selected_sound=sound/music/deathsquad.ogg&shiftpitch=0&volume=25",
+	"Command Report" = "selected_sound=sound/AI/commandreport.ogg&shiftpitch=1&volume=100",
+	"Wilhelm" = "selected_sound=sound/vox_sfx/_scream.ogg&shiftpitch=0&volume=100",
+	"DOORSTUCK" = "selected_sound=sound/vox_sfx/_doorstuck.ogg&shiftpitch=0&volume=100"
+	)
 
 	var/list/sound_list = list( //How I would like to add tabbing to make this not as messy, but BYOND doesn't like that.
 	"Honk" = "selected_sound=sound/items/bikehorn.ogg&shiftpitch=1&volume=50",
@@ -39,7 +54,8 @@
 	"YEET" = "selected_sound=sound/effects/yeet.ogg&shiftpitch=1&volume=50",
 	"Time Stop" = "selected_sound=sound/effects/theworld3.ogg&shiftpitch=0&volume=80",
 	"Click" = "selected_sound=sound/effects/kirakrik.ogg&shiftpitch=0&volume=80",
-	"SPS" = "selected_sound=sound/items/fake_SPS.ogg&shiftpitch=0&volume=100"
+	"SPS" = "selected_sound=sound/items/fake_SPS.ogg&shiftpitch=0&volume=100",
+	"Dramatic" = "selected_sound=goon/sound/effects/dramatic.ogg&shiftpitch=0&volume=80"
 	)
 
 /obj/item/device/soundsynth/verb/pick_sound()
@@ -67,6 +83,19 @@
 		spam_flag = world.timeofday
 		//to_chat(M, selected_sound) //this doesn't actually go to their chat very much at all.
 
+/obj/item/device/soundsynth/emag_act(mob/user)
+	spark(src,5,FALSE)
+	if(!emagged)
+		emagged = 1
+		sound_list = sound_list_emagged + sound_list
+		selected_sound = "sound/effects/superfart.ogg"
+		icon_state = "soundsynth-emagged"
+
+/obj/item/device/soundsynth/examine(mob/user)
+	..()
+	if(emagged && user.is_holding_item(src)) 
+		to_chat(user, "<span class='warning'>ERR%_m(mo4y corr?pt+d</span>")
+		
 /obj/item/device/soundsynth/AltClick()
 	if(!usr.incapacitated() && Adjacent(usr))
 		pick_sound()

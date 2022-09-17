@@ -18,6 +18,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/damtype = "brute"
 	var/force = 0
 
+	var/w_class
+
 	//Should we alert about reagents that should be logged?
 	var/log_reagents = 1
 
@@ -35,13 +37,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/sheet_amt = 1
 	var/can_take_pai = FALSE
 	var/obj/item/device/paicard/integratedpai = null
-	var/datum/delay_controller/pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
+	var/datum/delay_controller/pAImove_delayer
 	var/pAImovement_delay = 0
 
 	// Can we wrench/weld this to a turf with a dense /obj on it?
 	var/can_affix_to_dense_turf=0
 
-	var/has_been_invisible_sprayed = FALSE
+	var/list/alphas = list()
 	var/impactsound
 	var/current_glue_state = GLUE_STATE_NONE
 
@@ -69,6 +71,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		integratedpai = null
 
 	material_type = null //Don't qdel, they're held globally
+	if(associated_forward)
+		associated_forward = null
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
@@ -83,9 +87,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	P.forceMove(src)
 	integratedpai = P
 	verbs += /obj/proc/remove_pai
+	pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
 
 /obj/attackby(obj/item/weapon/W, mob/user)
-	invoke_event(/event/attackby, list("attacker" = user, "item" = W))
+	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = W)
+
+	if(handle_item_attack(W, user))
+		return
+
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
@@ -138,7 +147,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/intenthurt_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the hurt intent hotkey
 	return
 
-/obj/proc/pAImove(mob/living/silicon/pai/user, dir)					//called when integrated pAI attempts to move
+/obj/proc/pAImove(mob/living/user, dir)								//called when integrated pAI attempts to move
 	if(pAImove_delayer.blocked())
 		user.last_movement=world.time
 		return 0
@@ -184,6 +193,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		verbs -= /obj/proc/remove_pai
 		var/obj/item/device/paicard/P = integratedpai
 		integratedpai = null
+		qdel(pAImove_delayer)
+		pAImove_delayer = null
 		return P
 	return 0
 
@@ -211,6 +222,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/proc/clockworkify()
 	return
+
+/obj/map_element_rotate(var/angle)
+	..()
+	if(req_access_dir)
+		req_access_dir = turn(req_access_dir, -angle)
 
 /obj/proc/wrenchable()
 	return 0
@@ -273,6 +289,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					is_in_use = 1
 					src.attack_ai(M)
 
+				else if(ispulsedemon(M))
+					is_in_use = 1
+					src.attack_pulsedemon(M)
+
 				else if(!(M in nearby)) // NOT NEARBY
 					// check for TK users
 					if(M.mutations && M.mutations.len)
@@ -298,8 +318,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			if (!M || !M.client || M.machine != src)
 				_using.Remove(M)
 				continue
-			// Not robot or AI, and not nearby?
-			if(!isAI(M) && !isrobot(M) && !(M in nearby))
+			// Not robot or AI, not nearby and not pulse demon?
+			if(!isAI(M) && !isrobot(M) && !(M in nearby) && !ispulsedemon(M))
 				_using.Remove(M)
 				continue
 			is_in_use = 1
@@ -309,14 +329,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/interact(mob/user)
 	return
 
-//user: The mob that is suiciding
-//damagetype: The type of damage the item will inflict on the user
-//SUICIDE_ACT_BRUTELOSS = 1
-//SUICIDE_ACT_FIRELOSS = 2
-//SUICIDE_ACT_TOXLOSS = 4
-//SUICIDE_ACT_OXYLOSS = 8
-//Output a creative message and then return the damagetype done
-/obj/proc/suicide_act(var/mob/living/user)
+/obj/suicide_act(var/mob/living/user)
 	if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
 		user.IgniteMob()
@@ -348,15 +361,21 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		to_chat(user, "\the [src] already has a slime extract attached.")
 		return FALSE
 
-/obj/singularity_pull(S, current_size)
-	invoke_event(/event/before_move)
+/obj/singularity_pull(S, current_size, repel = FALSE)
+	INVOKE_EVENT(src, /event/before_move)
 	if(anchored)
 		if(current_size >= STAGE_FIVE)
 			anchored = 0
-			step_towards(src, S)
+			if(!repel)
+				step_towards(src, S)
+			else
+				step_away(src, S)
 	else
-		step_towards(src, S)
-	invoke_event(/event/after_move)
+		if(!repel)
+			step_towards(src, S)
+		else
+			step_away(src, S)
+	INVOKE_EVENT(src, /event/after_move)
 
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
@@ -511,7 +530,7 @@ a {
 		return FALSE
 	if(!anchored)
 		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
-			if(istype(src.loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
+			if(isshuttleturf(src.loc) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
 				to_chat(user, "<span class = 'notice'>You can't secure \the [src] to this!</span>")
 				return FALSE
 			if(istype(src.loc, /turf/space)) //if on a space tile
@@ -578,20 +597,25 @@ a {
 /obj/proc/give_tech_list()
 	return null
 
-/obj/acidable()
-	return !(flags & INVULNERABLE)
+/obj/dissolvable()
+	if (flags & INVULNERABLE)
+		return FALSE
+	else
+		return PACID
 
 /obj/proc/t_scanner_expose()
-	if (level != LEVEL_BELOW_FLOOR)
-		return
-
-	if (invisibility == 101)
+	//don't reveal docking ports or spawns
+	if(invisibility > 0 && invisibility < INVISIBILITY_OBSERVER || alpha < 255)
+		var/old_invisibility = invisibility
+		var/old_alpha = alpha
 		invisibility = 0
+		alpha = 255
 
 		spawn(1 SECONDS)
 			var/turf/U = loc
 			if(istype(U) && U.intact)
-				invisibility = 101
+				invisibility = old_invisibility
+				alpha = old_alpha
 
 /obj/proc/become_defective()
 	if(!defective)
@@ -603,7 +627,7 @@ a {
 		if(isrobot(user))
 			var/mob/living/silicon/robot/R = user
 			return HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN)
-		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA)
+		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA) || user.reagents.has_reagent(HONKSERUM)
 	return 0
 
 //Proc that handles NPCs (gremlins) "tampering" with this object.
@@ -641,7 +665,7 @@ a {
 				user.visible_message("<span class='danger'>[user] puts \his foot to \the [A] and kicks \himself away!</span>", \
 					"<span class='warning'>You put your foot to \the [A] and kick as hard as you can! [pick("RAAAAAAAARGH!", "HNNNNNNNNNGGGGGGH!", "GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", "AAAAAAARRRGH!")]</span>")
 				var/turf/T = get_edge_target_turf(src, movementdirection)
-				src.throw_at(T,8,20,fly_speed = 2)
+				src.throw_at(T, 8, 20, TRUE, 2)
 			else
 				user.visible_message("<span class='warning'>[user] kicks \himself away from \the [A].</span>", "<span class='notice'>You kick yourself away from \the [A]. Wee!</span>")
 				for(var/i in list(2,2,3,3))
@@ -653,22 +677,38 @@ a {
 					sleep(i)
 		return 1
 
-/obj/make_invisible(var/source_define, var/time, var/include_clothing)
-	if(..() || !source_define)
+/obj/proc/make_invisible(var/source_define, var/time = 0, var/alpha_value = 1, var/invisibility_value = 0)
+	//INVISIBILITY_MAXIMUM is a value of 100 for invisibility_value
+	//alpha_value = 1 hides the sprite
+	if(invisibility || alpha <= 1 || !source_define)
 		return
-	alpha = 1
-	if(source_define == INVISIBLESPRAY)
-		has_been_invisible_sprayed = TRUE
+	invisibility = invisibility_value
+	alphas[source_define] = alpha_value
+	handle_alpha()
 	if(ismob(loc))
 		var/mob/M = loc
 		M.regenerate_icons()
 	if(time > 0)
 		spawn(time)
-			alpha = initial(alpha)
-			has_been_invisible_sprayed = FALSE
-			if(ismob(loc))
-				var/mob/M = loc
-				M.regenerate_icons()
+			make_visible(source_define)
+
+/obj/proc/make_visible(var/source_define)
+	if(!invisibility && alpha == 255 || !source_define)
+		return
+	if(src && alphas[source_define])
+		invisibility = 0
+		alphas.Remove(source_define)
+		handle_alpha()
+		if(ismob(loc))
+			var/mob/M = loc
+			M.regenerate_icons()
+
+/obj/proc/handle_alpha()	//uses the lowest alpha on the mob
+	if(alphas.len < 1)
+		alpha = 255
+	else
+		sortTim(alphas, /proc/cmp_numeric_asc,1)
+		alpha = alphas[alphas[1]]
 
 /obj/proc/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
 	var/material_mod = mat ? mat.quality_mod : material_type ? material_type.quality_mod : 1
@@ -781,3 +821,19 @@ a {
 						H.updatehealth()
 
 				to_chat(AM, "<span class='[danger ? "danger" : "notice"]'>You step in \the [src]!</span>")
+
+/**
+ * This proc is used for telling whether something can pass by this object in a given direction, for use by the pathfinding system.
+ *
+ * Trying to generate one long path across the station will call this proc on every single object on every single tile that we're seeing if we can move through, likely
+ * multiple times per tile since we're likely checking if we can access said tile from multiple directions, so keep these as lightweight as possible.
+ *
+ * Arguments:
+ * * ID- An ID card representing what access we have (and thus if we can open things like airlocks or windows to pass through them). The ID card's physical location does not matter, just the reference
+ * * to_dir- What direction we're trying to move in, relevant for things like directional windows that only block movement in certain directions
+ * * caller- The movable we're checking pass flags for, if we're making any such checks
+ **/
+/obj/proc/CanAStarPass(obj/item/weapon/card/id/ID, to_dir, atom/movable/caller)
+	if(istype(caller) && (caller.pass_flags & pass_flags_self))
+		return TRUE
+	. = !density

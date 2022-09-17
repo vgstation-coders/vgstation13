@@ -6,9 +6,9 @@
 	origin_tech = Tc_SYNDICATE + "=2" + Tc_COMBAT + "=3"
 	det_time = 3 SECONDS
 
-/obj/item/weapon/grenade/syndigrenade/prime()
+/obj/item/weapon/grenade/syndigrenade/prime(var/mob/user)
 	..()
-	explosion(loc, 0, 2, 4, 6) //Explosive grenades pack a decent punch and are perfectly capable of breaking the hull, so beware
+	explosion(loc, 0, 2, 4, 6, whodunnit = user) //Explosive grenades pack a decent punch and are perfectly capable of breaking the hull, so beware
 	spawn()
 		qdel(src)
 

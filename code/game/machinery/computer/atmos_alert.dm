@@ -60,7 +60,7 @@
 	if(stat & BROKEN)
 		icon_state = "atmosb"
 		return
-	else if(stat & NOPOWER)
+	else if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "atmos0"
 		return
 

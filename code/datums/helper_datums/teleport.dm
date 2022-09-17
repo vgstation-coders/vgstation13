@@ -58,8 +58,6 @@
 	if(istype(ateleatom, /obj/effect) && !istype(ateleatom, /obj/effect/dummy/chameleon))
 		qdel(ateleatom)
 		return FALSE
-	if(istype(ateleatom, /atom/movable/light))
-		return FALSE
 	if(istype(ateleatom))
 		teleatom = ateleatom
 		return TRUE
@@ -131,7 +129,8 @@
 		return FALSE
 
 	playSpecials(curturf,effectin,soundin)
-	teleatom.unlock_from()
+	if (!isobserver(teleatom))
+		teleatom.unlock_from()
 
 	if(istype(teleatom,/obj/item/projectile))
 		var/Xchange = destturf.x - curturf.x
@@ -144,12 +143,12 @@
 		P.reflected = TRUE//you can now get hit by the projectile you just fired. Careful with portals!
 
 	if(curturf.z != destturf.z)
-		teleatom.invoke_event(/event/z_transition, list("user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z))
+		INVOKE_EVENT(teleatom, /event/z_transition, "user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z)
 		for(var/atom/movable/AA in recursive_type_check(teleatom))
-			AA.invoke_event(/event/z_transition, list("user" = AA, "from_z" = curturf.z, "to_z" = destturf.z))
+			INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "from_z" = curturf.z, "to_z" = destturf.z)
 
 	if(force_teleport)
-		teleatom.forceMove(destturf, from_tp = TRUE)
+		teleatom.forceMove(destturf, no_tp = 1)
 		playSpecials(destturf,effectout,soundout)
 	else
 		if(teleatom.Move(destturf))
@@ -247,3 +246,25 @@
 				return FALSE
 
 	return TRUE
+
+/datum/teleport/instant/science/doTeleport()
+	if(..())
+		if(isliving(teleatom)) // Limit telefrags to living mobs only
+			var/mob/living/ourself = teleatom
+			var/turf/outturf = get_turf(ourself)
+			var/obj/item/beacon/I = locate() in outturf
+			if(I && I.emagged) // If safety checks are off on beacons.
+				for(var/mob/living/L in outturf)
+					if(L != ourself && ourself.lying == L.lying) // Don't get ourselves or mobs lying down while we aren't, or vice versa
+						playsound(outturf,'sound/effects/telefrag.ogg',50,0)
+						if(L.size <= ourself.size) // If the same size as us or smaller
+							add_attacklogs(L,ourself,"has been telefragged by", admin_warn = 1)
+							ourself.visible_message("<span class='danger'>[ourself] collides with [L] during teleportation and mangles them to bits!</span>","<span class='danger'>You collide with [L] during teleportation and mangle them to bits!</span>","<span class='danger'>You hear squelching noises below you.</span>")
+							L.gib(1) // Telefrag'd
+						else
+							add_attacklogs(ourself,L,"has been telefragged by", admin_warn = 1)
+							L.visible_message("<span class='danger'>[ourself] collides with [L] during teleportation and gets mangled to bits!</span>","<span class='danger'>You collide with [ourself] during their teleportation and mangle them to bits!</span>","<span class='danger'>You hear squelching noises below you.</span>")
+							ourself.gib(1) // Otherwise we played ourself
+							return TRUE
+		return TRUE
+	return FALSE

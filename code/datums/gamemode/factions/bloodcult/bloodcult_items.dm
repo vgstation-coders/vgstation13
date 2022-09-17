@@ -1,5 +1,7 @@
 #define PAGE_FOREWORD		0
 #define PAGE_LORE1			101
+#define PAGE_LORE2			102
+#define PAGE_LORE3			103
 
 var/list/arcane_tomes = list()
 
@@ -71,46 +73,47 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/tome/proc/tome_text()
 	var/page_data = null
-	var/dat = {"<title>arcane tome</title><body style="color:#5C1D12" background="tomebg.png">
+	var/dat = {"<title>arcane tome</title><body style="color:#FFFFFF" bgcolor="#110000">
 
 			<style>
-				label {display: inline-block; width: 50px;text-align: right;float: left;margin: 0 0 0 -45px;}
+				label {display: inline-block; width: 50px;text-align: right;float: left;margin: 0 0 0 10px;}
 				ul {list-style-type: none;}
 				li:before {content: "-";padding-left: 4px;}
-				a {text-decoration: none; color:#5C1D12}
-				.column {float: left; width: 250px; padding: 0px; height: 300px;}
+				a {text-decoration: none; color:#FFEC66}
+				.column {float: left; width: 400px; padding: 0px; height: 300px;}
 				.row:after {content: ""; display: table; clear: both;}
 			</style>
 
 			<div class="row">
-			<div class="column">
-			<div align="center" style="margin: 0 0 0 -10px;"><div style="font-size:20px"><b>The scriptures of <font color=#AE250F>Nar-Sie</b></font></div>The Geometer of Blood</div>
+			<div class="column" style="font-size:18px">
+			<div align="center" style="margin: 0 0 0 -10px;"><div style="font-size:30px"><b>The scriptures of <font color=#FF250F>Nar-Sie</b></font></div>The Geometer of Blood</div>
 			<ul>
 			<a href='byond://?src=\ref[src];page=[PAGE_FOREWORD]'><label> * </label> <li> Foreword</a> </li>"}
 
 	var i = 1
-	for(var/subtype in subtypesof(/datum/rune_spell/blood_cult))
-		var/datum/rune_spell/blood_cult/instance = subtype
-		if (initial(instance.Act_restriction) <= veil_thickness)
-			dat += "<a href='byond://?src=\ref[src];page=[i]'><label> \Roman[i] </label> <li>  [initial(instance.name)] </li></a>"
-			if (i == current_page)
-				var/datum/runeword/word1 = initial(instance.word1)
-				var/datum/runeword/word2 = initial(instance.word2)
-				var/datum/runeword/word3 = initial(instance.word3)
-				page_data = {"<div align="center"><b>\Roman[i]<br>[initial(instance.name)]</b><br><i>[initial(word1.english)], [initial(word2.english)], [word3 ? "[initial(word3.english)]" : "<any>"]</i></div><br>"}
-				page_data += initial(instance.page)
-		else
-			dat += "<label> \Roman[i] </label> <li>  __________ </li>"
+	for(var/subtype in subtypesof(/datum/rune_spell))
+		var/datum/rune_spell/instance = subtype
+		if (initial(instance.secret))
+			continue
+		dat += "<a href='byond://?src=\ref[src];page=[i]'><label> \Roman[i] </label> <li>  [initial(instance.name)] </li></a>"
+		if (i == current_page)
+			var/datum/rune_word/word1 = initial(instance.word1)
+			var/datum/rune_word/word2 = initial(instance.word2)
+			var/datum/rune_word/word3 = initial(instance.word3)
+			page_data = {"<div align="center"><b>\Roman[i]<br>[initial(instance.name)]</b><br><i>[initial(word1.english)], [initial(word2.english)], [word3 ? "[initial(word3.english)]" : "<any>"]</i></div><br>"}
+			page_data += initial(instance.page)
 		i++
 
-	dat += {"<a href='byond://?src=\ref[src];page=[PAGE_LORE1]'><label> * </label> <li>  about this tome and our goal </li></a>
+	dat += {"<a href='byond://?src=\ref[src];page=[PAGE_LORE1]'><label> * </label> <li>  Addendum I </li></a>
+			<a href='byond://?src=\ref[src];page=[PAGE_LORE2]'><label> * </label> <li>  Addendum II </li></a>
+			<a href='byond://?src=\ref[src];page=[PAGE_LORE3]'><label> * </label> <li>  Addendum III </li></a>
 			</ul></div>
-			<div class="column">      <div align="left">      <b><ul>"}
+			<div style="font-size:18px" class="column">      <div align="left">      <b><ul>"}
 
 	for (var/obj/item/weapon/talisman/T in talismans)
-		dat += {"<label> * </label><li>  <a style="color:#AE250F" href='byond://?src=\ref[src];talisman=\ref[T]'>[T.talisman_name()][(T.uses > 1) ? " [T.uses] uses" : ""]</a> <a style="color:#AE250F" href='byond://?src=\ref[src];remove=\ref[T]'>(x)</a> </li>"}
+		dat += {"<label> * </label><li>  <a style="color:#FFEC66" href='byond://?src=\ref[src];talisman=\ref[T]'>[T.talisman_name()][(T.uses > 1) ? " [T.uses] uses" : ""]</a> <a style="color:#AE250F" href='byond://?src=\ref[src];remove=\ref[T]'>(x)</a> </li>"}
 
-	dat += {"</ul></b></div><div style="margin: 0px 20px;" align="justify">"}
+	dat += {"</ul></b></div><div align="justify">"}
 
 	if (page_data)
 		dat += page_data
@@ -125,18 +128,33 @@ var/list/arcane_tomes = list()
 	var/dat = null
 	switch (current_page)
 		if (PAGE_FOREWORD)
-			dat = {"<div align="center"><b>Foreword</b></div><br>
-				This tome in your hands is both a guide to the ways of the devotes to Nar-Sie, and a tool to help them performing the cult's rituals.
-				Inside are gathered notes on the various rituals, which you can read to study their use, and learn their runes. You don't have to learn
-				the runes by heart however, as keeping this tome open allows you to immediately remember them when tracing words. Additional pieces of lore
-				are available in the latter pages, aiming to satisfy the curiosity of the assiduous cultists.
-				"}
+			dat = {"<div align="center"><b>Foreword</b></div><br>"}
+			dat += "<i>Written over the ages by a collection of arch-cultists, under the guidance of the geometer himself.</i>\
+				<br><br>Touch a chapter to read it."
 		if (PAGE_LORE1)
-			dat = {"<div align="center"><b>About this tome and our goal</b></div><br>
-				This tome was written under the guidance of Nar-Sie, by devotes who have left behind their flesh enveloppes and taken residence in the realm of the Geometer of Blood.
-				Our goal is to help our kin in the physical world, that is you, achieve the Tear Reality ritual, so that you can all join us and bring along lots of value, in other words blood.
-				This goal has been achieved countless times before by different beings in different place, and this tome has been updated thanks to the knowledge of those who joined us.
-				"}
+			dat = {"<div align="center"><b>Addendum I: "From the other side of the veil"</b></div><br>"}
+			dat += "<i>It is by chance that humanity stumbled upon the realm of Nar-Sie some centuries ago, \
+					although while some of those so called wizards called it a happy little accident, few of them know that the dice was loaded from the start.\
+					<br><br>Nar-Sie threw some artifacts adrift in the bluespace, waiting for some intelligent life to pick them up and trace their way back to him. \
+					For you see, Nar-Sie loves two things about humans, the blood that flows from their veins, and the dramatic circumstances around which said blood ends up flowing from their gaping wounds.\
+					<br><br>How did he know about humanity's existence before they even reached him you might ask? It's quite simple, he could hear the drumming of our heartbeats all the way from the other side of the veil.</i>"
+		if (PAGE_LORE2)
+			dat = {"<div align="center"><b>Addendum II: "From whom the blood spills"</b></div><br>"}
+			dat += "<i>After contact was made between the planes, it was a matter of time before some people would appear who would actively seek Nar-Sie.\
+					<br><br>Either because his love of drama and chaos resonated with them, and they wanted to become his heralds, performing sacrifices for his amusement, \
+					or because they were in awe with his... \"otherworldlyness?\" People who had lived until now grounded in reality, and became quite fascinated with something mystic, yet tangible.\
+					<br><br>And of course, then came those who seeked to defy him. Either in the name of their own gods, or out of their own sense of morality, but little do those know, \
+					Nar-Sie loves them equally, and doesn't care too much from whom the blood spills.</i>"
+		if (PAGE_LORE3)
+			dat = {"<div align="center"><b>Addendum III: "The geometer's calling card"</b></div><br>"}
+			dat += "<i>A common misconception about Nar-Sie is about his title, why is he the Geometer of Blood? Nobody dared ask him directly by fear of offending him, so for a long time, \
+					many cultists just assumed that he was really into geometry, and his powers manifesting from blood drawings of precise patterns would corroborate this hypothesis.\
+					<br><br>Some cultists eventually took it upon themselves to commune with him to get an answer, after performing some sacrifices for good measure. The answer was unexpected, and shed more light on the cult's origins. \
+					They learned that after the wizards cut their way into his plane, it took some time for them to run into him, just like humans aren't aware of every single ant living in their garden. \
+					But when they did arrive upon him, his gigantic form twisted upon the scenery gave them the image of a geometer moth.\
+					<br><br>And just like moths tend to be attracted by light, they saw that Nar-Sie was attracted by blood, so they called him the Geometer of Blood, a title very much to his liking.\
+					<br><br>As humanity ventures deeper and deeper into the darkness of space and toys with powers they understand less and less, Nar-Sie feels them coming closer and closer to him, and wants now to hasten the process. \
+					His cult sends heralds to let humanity know how much he likes them (their blood mostly), and until he's ready to invite them into his realm, they leave blood-splattered space stations across the stars as his calling card.</i>"
 	return dat
 
 /obj/item/weapon/tome/Topic(href, href_list)
@@ -163,7 +181,7 @@ var/list/arcane_tomes = list()
 		usr.put_in_hands(T)
 
 	usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-	usr << browse(tome_text(), "window=arcanetome;size=537x375")
+	usr << browse(tome_text(), "window=arcanetome;size=900x600")
 
 /obj/item/weapon/tome/attack(var/mob/living/M, var/mob/living/user)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had the [name] used on him by [user.name] ([user.ckey])</font>")
@@ -206,7 +224,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/tome/pickup(var/mob/user)
 	if(iscultist(user) && state == TOME_OPEN)
 		usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-		usr << browse(tome_text(), "window=arcanetome;size=537x375")
+		usr << browse(tome_text(), "window=arcanetome;size=900x600")
 
 /obj/item/weapon/tome/dropped(var/mob/user)
 	usr << browse(null, "window=arcanetome")
@@ -234,7 +252,7 @@ var/list/arcane_tomes = list()
 			playsound(user, "pageturn", 50, 1, -5)
 			state = TOME_OPEN
 			usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-			usr << browse(tome_text(), "window=arcanetome;size=537x375")
+			usr << browse(tome_text(), "window=arcanetome;size=900x600")
 		else
 			icon_state = "tome"
 			item_state = "tome"
@@ -270,20 +288,31 @@ var/list/arcane_tomes = list()
 				to_chat(user, "<span class='notice'>You slip \the [I] into \the [src].</span>")
 				if (state == TOME_OPEN)
 					usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-					usr << browse(tome_text(), "window=arcanetome;size=537x375")
+					usr << browse(tome_text(), "window=arcanetome;size=900x600")
 		else
 			to_chat(user, "<span class='warning'>This tome cannot contain any more talismans. Use or remove some first.</span>")
 
 /obj/item/weapon/tome/AltClick(var/mob/user)
 	var/list/choices = list()
-	var/datum/rune_spell/blood_cult/instance
+	var/datum/rune_spell/instance
 	var/list/choice_to_talisman = list()
 	var/image/talisman_image
+	var/blood_messages = 0
+	var/blanks = 0
 	for(var/obj/item/weapon/talisman/T in talismans)
 		talisman_image = new(T)
-		instance = T.spell_type
-		choices += list(list(T, talisman_image, initial(instance.desc_talisman), T.talisman_name()))
-		choice_to_talisman[initial(instance.name)] = T
+		if (T.blood_text)
+			choices += list(list("Bloody Message[blood_messages ? " #[blood_messages+1]" : ""]", talisman_image, "A ghost has scribled a message on this talisman."))
+			choice_to_talisman["Bloody Message[blood_messages ? " #[blood_messages+1]" : ""]"] = T
+			blood_messages++
+		else if (T.spell_type)
+			instance = T.spell_type
+			choices += list(list(T.talisman_name(), talisman_image, initial(instance.desc_talisman)))
+			choice_to_talisman[T.talisman_name()] = T
+		else
+			choices += list(list("Blank Talisman[blanks ? " #[blanks+1]" : ""]", talisman_image, "Just an empty talisman."))
+			choice_to_talisman["Blank Talisman[blanks ? " #[blanks+1]" : ""]"] = T
+			blanks++
 
 	if (state == TOME_CLOSED)
 		icon_state = "tome-open"
@@ -292,7 +321,7 @@ var/list/arcane_tomes = list()
 		playsound(user, "pageturn", 50, 1, -5)
 		state = TOME_OPEN
 	var/choice = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi', "radial-cult2")
-	if(!choice_to_talisman[choice])
+	if(!choice)
 		return
 	var/obj/item/weapon/talisman/chosen_talisman = choice_to_talisman[choice]
 	if(!usr.held_items.Find(src))
@@ -307,6 +336,8 @@ var/list/arcane_tomes = list()
 
 #undef PAGE_FOREWORD
 #undef PAGE_LORE1
+#undef PAGE_LORE2
+#undef PAGE_LORE3
 
 ///////////////////////////////////////TALISMAN////////////////////////////////////////////////
 
@@ -327,6 +358,7 @@ var/list/arcane_tomes = list()
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
 	mech_flags = MECH_SCAN_FAIL
+	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/linked_ui
 	var/blood_text = ""
 	var/obj/effect/rune/attuned_rune = null
 	var/spell_type = null
@@ -343,7 +375,7 @@ var/list/arcane_tomes = list()
 	ignite()
 
 /obj/item/weapon/talisman/proc/talisman_name()
-	var/datum/rune_spell/blood_cult/instance = spell_type
+	var/datum/rune_spell/instance = spell_type
 	if (blood_text)
 		return "\[blood message\]"
 	if (instance)
@@ -367,7 +399,7 @@ var/list/arcane_tomes = list()
 		to_chat(user, "<span class='info'>This one, however, seems pretty unremarkable.</span>")
 		return
 
-	var/datum/rune_spell/blood_cult/instance = spell_type
+	var/datum/rune_spell/instance = spell_type
 
 	if (iscultist(user) || isobserver(user))
 		if (attuned_rune)
@@ -392,7 +424,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/talisman/attack(var/mob/living/target, var/mob/living/user)
 	if(iscultist(user) && spell_type)
-		var/datum/rune_spell/blood_cult/instance = spell_type
+		var/datum/rune_spell/instance = spell_type
 		if (initial(instance.touch_cast))
 			new spell_type(user, src, "touch", target)
 			qdel(src)
@@ -415,7 +447,7 @@ var/list/arcane_tomes = list()
 				var/obj/item/weapon/tome/T = loc
 				T.talismans.Remove(src)
 				user << browse_rsc('icons/tomebg.png', "tomebg.png")
-				user << browse(T.tome_text(), "window=arcanetome;size=537x375")
+				user << browse(T.tome_text(), "window=arcanetome;size=900x600")
 				user.put_in_hands(src)
 		return
 
@@ -435,35 +467,30 @@ var/list/arcane_tomes = list()
 	if (istype(loc,/obj/item/weapon/tome))
 		var/obj/item/weapon/tome/T = loc
 		T.talismans.Remove(src)
+	if (linked_ui)
+		linked_ui.talisman = null
 	qdel(src)
 
-/obj/item/weapon/talisman/proc/imbue(var/mob/user, var/obj/effect/rune/blood_cult/R)
+/obj/item/weapon/talisman/proc/imbue(var/mob/user, var/obj/effect/rune/R)
 	if (!user || !R)
 		return
 
 	if (blood_text)
-		to_chat(user, "<span class='warning'>Cannot imbue a talisman that has been written on.</span>")
+		to_chat(user, "<span class='warning'>You can't imbue a talisman that has been written on.</span>")
 		return
 
-	var/datum/rune_spell/blood_cult/spell = get_rune_spell(user,null,"examine",R.word1, R.word2, R.word3)
+	var/datum/rune_spell/spell = get_rune_spell(user,null,"examine",R.word1, R.word2, R.word3)
 	if(initial(spell.talisman_absorb) == RUNE_CANNOT)//placing a talisman on a Conjure Talisman rune to try and fax it
 		user.drop_item(src)
 		src.forceMove(get_turf(R))
 		R.attack_hand(user)
 	else
 		if (attuned_rune)
-			to_chat(user, "<span class='warning'>\The [src] is already linked to a rune.</span>")
-			return
-		if (attuned_rune)
 			to_chat(user, "<span class='warning'>\The [src] is already imbued with the power of a rune.</span>")
 			return
 
 		if (!spell)
 			to_chat(user, "<span class='warning'>There is no power in those runes. \The [src] isn't reacting to it.</span>")
-			return
-
-		if (initial(spell.Act_restriction) > veil_thickness)
-			to_chat(user, "<span class='danger'>The veil is still too thick for \the [src] to draw power from this rune.</span>")
 			return
 
 		//blood markings
@@ -479,21 +506,19 @@ var/list/arcane_tomes = list()
 		uses = initial(spell.talisman_uses)
 
 		var/talisman_interaction = initial(spell.talisman_absorb)
-		var/datum/rune_spell/blood_cult/active_spell = R.active_spell
+		var/datum/rune_spell/active_spell = R.active_spell
 		if(!istype(R))
 			return
 		if (active_spell)//some runes may change their interaction type dynamically (ie: Path Exit runes)
 			talisman_interaction = active_spell.talisman_absorb
-			if (istype(active_spell,/datum/rune_spell/blood_cult/portalentrance))
-				var/datum/rune_spell/blood_cult/portalentrance/entrance = active_spell
+			if (istype(active_spell,/datum/rune_spell/portalentrance))
+				var/datum/rune_spell/portalentrance/entrance = active_spell
 				if (entrance.network)
-					var/datum/runeset/rune_set = global_runesets["blood_cult"]
-					word_pulse(rune_set.words[entrance.network])
-			else if (istype(active_spell,/datum/rune_spell/blood_cult/portalexit))
-				var/datum/rune_spell/blood_cult/portalentrance/exit = active_spell
+					word_pulse(rune_words[entrance.network])
+			else if (istype(active_spell,/datum/rune_spell/portalexit))
+				var/datum/rune_spell/portalentrance/exit = active_spell
 				if (exit.network)
-					var/datum/runeset/rune_set = global_runesets["blood_cult"]
-					word_pulse(rune_set.words[exit.network])
+					word_pulse(rune_words[exit.network])
 
 		switch(talisman_interaction)
 			if (RUNE_CAN_ATTUNE)
@@ -508,7 +533,7 @@ var/list/arcane_tomes = list()
 				message_admins("Error! ([key_name(user)]) managed to imbue a Conjure Talisman rune. That shouldn't be possible!")
 				return
 
-/obj/item/weapon/talisman/proc/word_pulse(var/datum/runeword/W)
+/obj/item/weapon/talisman/proc/word_pulse(var/datum/rune_word/W)
 	var/image/I1 = image(icon,"talisman-[W.icon_state]a")
 	animate(I1, color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5, loop = -1)
 	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
@@ -664,7 +689,9 @@ var/list/arcane_tomes = list()
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
 	health = 40
-	var/maxHealth = 40
+	maxHealth = 40
+	var/reflector = FALSE
+	var/mob/living/linked_cultist = null
 
 /obj/item/weapon/melee/soulblade/Destroy()
 	var/turf/T = get_turf(src)
@@ -690,6 +717,13 @@ var/list/arcane_tomes = list()
 			B.fingerprints = fingerprints.Copy()
 		new /obj/item/soulstone(T)
 	shade = null
+	..()
+
+/obj/item/weapon/melee/soulblade/attack_hand(var/mob/living/user)
+	if (shade)
+		if (iscultist(user) && (linked_cultist != user))
+			linked_cultist = user
+			to_chat(shade, "<spawn class='notice'>You have made contact with [user]. As long as you remain within 5 tiles of them, you can move by yourself without losing blood, and regenerate blood slowly passively.</span>")
 	..()
 
 /obj/item/weapon/melee/soulblade/salt_act()
@@ -787,13 +821,6 @@ var/list/arcane_tomes = list()
 			to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 			return
 
-		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (cult)
-			var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
-			if (O && (target == O.sacrifice_target || (target.mind && target.mind == O.sacrifice_mind)))
-				to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
-				return
-
 		var/datum/soul_capture/capture_datum = new()
 		capture_datum.init_datum(user, target, src)
 		qdel(capture_datum)
@@ -808,6 +835,7 @@ var/list/arcane_tomes = list()
 
 	if (blood >= 5)
 		blood = max(0,blood-5)
+		update_icon()
 		var/turf/starting = get_turf(user)
 		var/turf/target = get_turf(A)
 		var/obj/item/projectile/bloodslash/BS = new (starting)
@@ -843,15 +871,30 @@ var/list/arcane_tomes = list()
 				if (C.take_blood(null,5))//same cost as spin, basically negates the cost, but doesn't let you farm corpses. It lets you make a mess out of them however.
 					blood = min(100,blood+5)
 					to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
-
+			update_icon()
+			if (shade)
+				shade.DisplayUI("Soulblade")
+		else if (M.isBloodedAnimal())
+			var/mob/living/simple_animal/SA = M
+			if (SA.stat != DEAD)
+				blood = min(100,blood+10)
+				to_chat(user, "<span class='warning'>You steal some of their blood!</span>")
+			else
+				blood = min(100,blood+5)
+				to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
+			update_icon()
 			if (shade)
 				shade.DisplayUI("Soulblade")
 
+/obj/item/weapon/melee/soulblade/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
+	..(params, user, -16, -16, FALSE) // clamp has to be false or we can't put the blade in the left and lower portions of a table
 
 /obj/item/weapon/melee/soulblade/pickup(var/mob/living/user)
+	..()
 	if(!iscultist(user))
 		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up \the [src]. It would be wise to rid yourself of this, quickly.</span>")
 		user.Dizzy(120)
+	update_icon()
 
 /obj/item/weapon/melee/soulblade/dropped(var/mob/user)
 	..()
@@ -878,6 +921,11 @@ var/list/arcane_tomes = list()
 	if (istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/C = loc
 		C.update_inv_hands()
+		if (iscultist(C))
+			var/image/I = image('icons/mob/hud.dmi', src, "consthealth[10*round((blood/maxblood)*10)]")
+			I.pixel_x = 16
+			I.pixel_y = 16
+			overlays += I
 
 
 /obj/item/weapon/melee/soulblade/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
@@ -917,11 +965,11 @@ var/list/arcane_tomes = list()
 		playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		qdel(src)
 	else
-		playsound(loc, 'sound/items/trayhit1.ogg', 70, 1)
+		playsound(loc, "trayhit", 70, 1)
 
 /obj/item/weapon/melee/soulblade/Cross(var/atom/movable/mover, var/turf/target, var/height=1.5, var/air_group = 0)
 	if(istype(mover, /obj/item/projectile))
-		if (prob(60))
+		if (prob(60) || reflector)
 			return 0
 	return ..()
 
@@ -950,8 +998,14 @@ var/list/arcane_tomes = list()
 		takeDamage(O.throwforce)
 
 /obj/item/weapon/melee/soulblade/bullet_act(var/obj/item/projectile/P)
-	. = ..()
-	takeDamage(P.damage)
+	if (reflector)
+		if(!istype(P, /obj/item/projectile/beam)) //has seperate logic
+			P.reflected = 1
+			P.rebound(src)
+		return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
+	else
+		. = ..()
+		takeDamage(P.damage)
 
 /obj/item/weapon/melee/soulblade/proc/capture_shade(var/mob/living/simple_animal/shade/target, var/mob/user)
 	if(shade)
@@ -999,10 +1053,16 @@ var/list/arcane_tomes = list()
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	mech_flags = MECH_SCAN_FAIL//not that you should be able to drop it in the first place BUT just in case
 	var/mob/originator = null
+	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger/linked_ui
 	var/stacks = 0
 	var/absorbed = 0
+	surgerysound = 'sound/items/scalpel.ogg'
 
 /obj/item/weapon/melee/blood_dagger/Destroy()
+	if(linked_ui)
+		linked_ui.dagger = null
+		linked_ui.UpdateIcon()
+		linked_ui = null
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/effects/forge_over.ogg', 100, 0, -2)
 	if (!absorbed && !locate(/obj/effect/decal/cleanable/blood/splatter) in T)
@@ -1101,6 +1161,9 @@ var/list/arcane_tomes = list()
 	actions_types = list(/datum/action/item_action/toggle_anon)
 	var/anon_mode = FALSE
 
+/obj/item/clothing/head/culthood/NoiseDampening()	// those hoods cover the ears
+	return TRUE
+
 /obj/item/clothing/head/culthood/attack_self(var/mob/user)
 	if (!iscultist(user))
 		return
@@ -1173,6 +1236,31 @@ var/list/arcane_tomes = list()
 	return
 
 /obj/item/clothing/shoes/cult/salt_act()
+	acid_melt()
+
+///////////////////////////////////////CULT GLOVES////////////////////////////////////////////////
+
+
+/obj/item/clothing/gloves/black/cult
+	name = "cult gloves"
+	desc = "These gloves are quite comfortable, and will keep you warm!"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
+	icon_state = "cult"
+	item_state = "cultgloves"
+	_color = "cult"
+	siemens_coefficient = 0.7
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/clothing/gloves/black/cult/get_cult_power()
+	return 10
+
+/obj/item/clothing/gloves/black/cult/cultify()
+	return
+
+/obj/item/clothing/gloves/black/cult/salt_act()
 	acid_melt()
 
 ///////////////////////////////////////CULT ROBES////////////////////////////////////////////////
@@ -1362,15 +1450,13 @@ var/list/arcane_tomes = list()
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
+	if (iscultist(user))
+		return
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 		cult.OnPostSetup()
-	var/datum/role/cultist/newCultist
-	if (cult.members.len > 0)
-		newCultist = new /datum/role/cultist()
-	else
-		newCultist = new /datum/role/cultist/chief()
+	var/datum/role/cultist/newCultist = new /datum/role/cultist()
 	newCultist.AssignToRole(user.mind,1)
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()
@@ -1390,7 +1476,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/bloodcult_pamphlet/salt_act()
 	ignite()
 
-//Jaunter: creates a pylon on spawn, lets you teleport to it on use
+//Jaunter: creates a pylon on spawn, lets you teleport to it on use. That's an item I made to test and debug cult blood jaunts
 /obj/item/weapon/bloodcult_jaunter
 	name = "test jaunter"
 	desc = ""
@@ -1475,19 +1561,34 @@ var/list/arcane_tomes = list()
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
 
+	for(var/datum/reagent/R in reagents.reagent_list)
+		if(R.id == BLOOD)
+			var/datum/reagent/blood/B = R
+			var/datum/disease2/disease/cultvirus = global_diseases[DISEASE_CULT]
+			B.data["virus2"]["[cultvirus.uniqueID]-[cultvirus.subID]"] += cultvirus.getcopy()
+
 /obj/item/weapon/reagent_containers/food/drinks/cult/throw_impact(var/atom/hit_atom)
 	if(reagents.total_volume)
 		if (ishuman(hit_atom))
 			var/mob/living/carbon/human/H = hit_atom
 			if(!(H.species.chem_flags & NO_DRINK) && !(H.get_body_part_coverage(MOUTH)))
 				H.visible_message("<span class='warning'>Some of \the [src]'s content spills into \the [H]'s mouth.</span>","<span class='danger'>Some of \the [src]'s content spills into your mouth.</span>")
-				reagents.reaction(H, INGEST)
+				reagents.reaction(H, INGEST, amount_override = min(reagents.total_volume,gulp_size)/(reagents.reagent_list.len))
 				reagents.trans_to(H, gulp_size)
 	transfer(get_turf(hit_atom), null, splashable_units = -1)
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/gamer
 	name = "gamer goblet"
 	desc = "A plastic cup in the shape of a skull. Typically full of Geometer-Fuel."
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/gamer/on_reagent_change()
+	..()
+	overlays.len = 0
+	if (reagents.reagent_list.len > 0)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "cult")
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		overlays += filling
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/cultify()
 	return
@@ -1576,6 +1677,7 @@ var/list/arcane_tomes = list()
 		/obj/item/clothing/head/culthood,
 		/obj/item/clothing/shoes/cult,
 		/obj/item/clothing/suit/cultrobes,
+		/obj/item/clothing/gloves/black/cult,
 		)
 
 	var/list/stored_gear = list()
@@ -1655,5 +1757,40 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/blood_tesseract/cultify()
 	return
 
-/obj/item/weapon/handcuffs/cult/salt_act()
+/obj/item/weapon/blood_tesseract/salt_act()
 	throw_impact()
+
+///////////////////////////////////////BLOOD CANDLE////////////////////////////////////////////////
+
+/obj/item/candle/blood
+	name = "blood candle"
+	desc = "A candle made out of blood moth wax, burns much longer than regular candles. Used for moody lighting and occult rituals."
+	icon = 'icons/obj/candle.dmi'
+	icon_state = "bloodcandle"
+
+	wax = 1200 // 20 minutes
+	trashtype = /obj/item/trash/blood_candle
+
+/obj/item/candle/blood/update_icon()
+	overlays.len = 0
+	var/i
+	if(wax > 800)
+		i = 1
+	else if(wax > 400)
+		i = 2
+	else i = 3
+	icon_state = "bloodcandle[i]"
+	if (lit)
+		var/image/I = image(icon,src,"[icon_state]_lit")
+		I.blend_mode = BLEND_ADD
+		if (isturf(loc))
+			I.plane = ABOVE_LIGHTING_PLANE
+		else
+			I.plane = ABOVE_HUD_PLANE // inventory
+		overlays += I
+
+/obj/item/trash/blood_candle
+	name = "blood candle"
+	desc = "A candle made out of blood moth wax, burns much longer than regular candles. Used for moody lighting and occult rituals."
+	icon = 'icons/obj/candle.dmi'
+	icon_state = "bloodcandle4"

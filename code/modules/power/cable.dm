@@ -38,7 +38,6 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/d2 = 1								// cable direction 2 (see above)
 	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in New()
 	layer = WIRE_LAYER
-	var/obj/item/device/powersink/attached	// holding this here for qdel
 	var/_color = "red"
 	color = "red"
 
@@ -46,7 +45,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/build_status = 0 //1 means it needs rebuilding during the next tick or on usage
 	var/oldavail = 0
 	var/oldnewavail = 0
-	var/oldload = 0
+	var/list/oldload[TOTAL_PRIORITY_SLOTS]
 
 /obj/structure/cable/supports_holomap()
 	return TRUE
@@ -101,6 +100,9 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	cable_list += src		//add it to the global cable list
 
+	for (var/i in 1 to oldload.len)
+		oldload[i] = 0
+
 /obj/structure/cable/initialize()
 	..()
 	add_self_to_holomap()
@@ -111,27 +113,19 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	cable_list -= src
 
-	if(istype(attached))
-		attached.kill_light()
-		attached.icon_state = "powersink0"
-		attached.mode = 0
-		processing_objects.Remove(attached)
-		attached.anchored = 0
-		attached.attached = null
 
-	attached = null
 	..()								// then go ahead and delete the cable
 
 /obj/structure/cable/proc/reset_plane() //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
 	plane = ABOVE_PLATING_PLANE
 
-/obj/structure/cable/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
+/obj/structure/cable/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	.=..()
 
 	if(powernet)
 		powernet.set_to_build() // update the powernets
 
-/obj/structure/cable/shuttle_rotate(angle)
+/obj/structure/cable/map_element_rotate(angle)
 	if(d1)
 		d1 = turn(d1, -angle)
 	if(d2)
@@ -222,7 +216,7 @@ By design, d1 is the smallest direction and d2 is the highest
 
 /obj/structure/cable/proc/report_load(mob/user)
 	if((powernet) && (powernet.avail > 0))		// is it powered?
-		to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(powernet.load)] - Available: [format_watts(powernet.avail)].</SPAN>")
+		to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(powernet.get_load())] - Available: [format_watts(powernet.avail)].</SPAN>")
 	else
 		to_chat(user, "<SPAN CLASS='notice'>The cable is not powered.</SPAN>")
 
@@ -254,21 +248,20 @@ By design, d1 is the smallest direction and d2 is the highest
 	//investigate_log("was cut by [key_name(usr, usr.client)] in [user.loc.loc]","wires")
 
 	var/message = "A wire has been cut "
-	var/atom/A = user
+	var/area/my_area = user ? get_area(user) : get_area(T)
 
-	if(A)
-		var/turf/Z = get_turf(A)
-		var/area/my_area = get_area(Z)
+	if(powernet.get_load())
+		message += "with a load of [powernet.get_load()] and avail of [powernet.avail] spanning [powernet.cables.len] cables "
 
-		message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) (<A HREF='?_src_=vars;Vars=\ref[A]'>VV</A>)"}
+	if(my_area)
+		message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) [user ? "(<A HREF='?_src_=vars;Vars=\ref[user]'>VV</A>)" : ""]"}
 
-		var/mob/M = get_holder_of_type(A, /mob) //Why is this here? The use already IS a mob...
+	if(user)
+		message += " - Cut By: [user.real_name] ([user.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[user]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)"
+		log_game("[user.real_name] ([user.key]) cut a wire in [my_area.name] with a load of [powernet.get_load()] and avail of [powernet.avail] spanning [powernet.cables.len] cables ([T.x],[T.y],[T.z])")
 
-		if(M)
-			message += " - Cut By: [M.real_name] ([M.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
-			log_game("[M.real_name] ([M.key]) cut a wire in [my_area.name] ([T.x],[T.y],[T.z])")
-
-	message_admins(message, 0, 1)
+	if(powernet.get_load())
+		message_admins(message, 0, 1)
 
 	qdel(src)
 
@@ -322,19 +315,25 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(get_powernet())
 		powernet.newavail += amount
 
-/obj/structure/cable/proc/add_load(var/amount)
+/obj/structure/cable/proc/add_load(var/amount, var/priority = POWER_PRIORITY_NORMAL)
 	if(get_powernet())
-		powernet.load += amount
+		powernet.add_load(amount, priority)
 
 /obj/structure/cable/proc/surplus()
 	if(get_powernet())
-		return powernet.avail-powernet.load
+		return powernet.avail-powernet.get_load()
 	else
 		return 0
 
 /obj/structure/cable/proc/avail()
 	if(get_powernet())
 		return powernet.avail
+	else
+		return 0
+
+/obj/structure/cable/proc/get_satisfaction(var/priority = POWER_PRIORITY_NORMAL)
+	if (get_powernet())
+		return powernet.get_satisfaction(priority)
 	else
 		return 0
 
@@ -383,6 +382,42 @@ By design, d1 is the smallest direction and d2 is the highest
 				merge_powernets(powernet, C.powernet)
 			else
 				C.powernet.add_cable(src) // else, we simply connect to the matching cable powernet
+
+// merge with the powernets of power objects in the given direction above or below
+/obj/structure/cable/proc/mergeZConnectedNetworks()
+	var/turf/T = GetAbove(src) // go up
+
+	if(T)
+		for(var/obj/structure/cable/C in T)
+			if(!C)
+				continue
+			if(src == C)
+				continue
+			if(C.d1 == DOWN || C.d2 == DOWN) // we've got a z-matching cable
+				if(!C.powernet) // if the matching cable somehow got no powernet, make him one (should not happen for cables)
+					var/datum/powernet/newPN = new /datum/powernet/
+					newPN.add_cable(C)
+				if(powernet) //if we already have a powernet, then merge the two powernets
+					merge_powernets(powernet,C.powernet)
+				else
+					C.powernet.add_cable(src) //else, we simply connect to the matching cable powernet
+
+	T = GetBelow(src) // go down
+
+	if(T)
+		for(var/obj/structure/cable/C in T)
+			if(!C)
+				continue
+			if(src == C)
+				continue
+			if(C.d1 == UP || C.d2 == UP) // we've got a z-matching cable
+				if(!C.powernet) // if the matching cable somehow got no powernet, make him one (should not happen for cables)
+					var/datum/powernet/newPN = new /datum/powernet/
+					newPN.add_cable(C)
+				if(powernet) // if we already have a powernet, then merge the two powernets
+					merge_powernets(powernet, C.powernet)
+				else
+					C.powernet.add_cable(src) // else, we simply connect to the matching cable powernet
 
 // merge with the powernets of power objects in the given direction
 /obj/structure/cable/proc/mergeConnectedNetworks(var/direction)
@@ -481,6 +516,16 @@ By design, d1 is the smallest direction and d2 is the highest
 			. += power_list(T, src, d1 ^ 12, powernetless_only) // get diagonally matching cables
 
 	. += power_list(loc, src, d1, powernetless_only) // get on turf matching cables
+
+	// multi z
+	if(d1 == UP || d2 == UP)
+		T = GetAbove(src)
+		if(T)
+			. += power_list(T, src, DOWN, powernetless_only) // get on turf matching cables
+	if(d1 == DOWN || d2 == DOWN)
+		T = GetBelow(src)
+		if(T)
+			. += power_list(T, src, UP, powernetless_only) // get on turf matching cables
 
 	// do the same on the second direction (which can't be 0)
 	T = get_step(src, d2)

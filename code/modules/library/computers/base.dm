@@ -12,7 +12,7 @@
 	icon_state = "computer"
 
 /obj/machinery/computer/library/proc/interact_check(var/mob/user)
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (FORCEDISABLE | BROKEN | NOPOWER))
 		return TRUE
 
 	if ((get_dist(src, user) > 1))

@@ -16,6 +16,18 @@
 	var/second_chance = 1
 	var/datum/deconversion_ritual/deconversion = null
 
+	//writing runes
+	var/rune_blood_cost = 1	// How much blood spent per rune word written
+	var/verbose = FALSE	// Used by the rune writing UI to avoid message spam
+
+	var/cultist_role = CULTIST_ROLE_NONE // Because the role might change on the fly and we don't want to set everything again each time, better not start dealing with subtypes
+	var/arch_cultist = FALSE	// same as above
+
+	var/time_role_changed_last = 0
+
+	var/datum/role/cultist/mentor = null
+	var/list/acolytes = list()
+
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
 	wikiroute = role_wiki[CULTIST]
@@ -28,15 +40,6 @@
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 
-	if((ishuman(antag.current) || ismonkey(antag.current) || isalien(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
-		antag.current.add_spell(new /spell/cult/trace_rune/blood_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	antag.store_memory("A couple of runes appear clearly in your mind:")
-	antag.store_memory("<B>Raise Structure:</B> BLOOD, TECHNOLOGY, JOIN.")
-	antag.store_memory("<B>Communication:</B> SELF, OTHER, TECHNOLOGY.")
-	antag.store_memory("<B>Summon Tome:</B> SEE, BLOOD, HELL.")
-	antag.store_memory("<hr>")
-
 /datum/role/cultist/RemoveFromRole(var/datum/mind/M)
 	antag.current.remove_language(LANGUAGE_CULT)
 	remove_cult_hud()
@@ -44,6 +47,7 @@
 		antag.current.remove_spell(spell_to_remove)
 	if (src in blood_communion)
 		blood_communion.Remove(src)
+	DropMentorship()
 	if (conversion.len > 0)
 		var/conv = pick(conversion)
 		switch (conv)
@@ -74,57 +78,23 @@
 		return
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
-	if((ishuman(antag.current) || ismonkey(antag.current) || isalien(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
-		antag.current.add_spell(new /spell/cult/trace_rune/blood_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /datum/role/cultist/process()
 	..()
 	if (holywarning_cooldown > 0)
 		holywarning_cooldown--
+	if ((cultist_role == CULTIST_ROLE_ACOLYTE) && !mentor)
+		FindMentor()
 
-	if (veil_thickness == CULT_MENDED && antag?.current)
-		if (ishuman(antag.current))
-			var/mob/living/carbon/human/H = antag.current
-			if(H.get_heart() && prob(10))
-				H.visible_message("<span class='danger'>\The [H]'s heart bursts out of \his chest!</span>","<span class='danger'>Your heart bursts out of your chest!</span>")
-				var/obj/item/organ/internal/blown_heart = H.remove_internal_organ(H,H.get_heart(),H.get_organ(LIMB_CHEST))
-				var/list/spawn_turfs = list()
-				for(var/turf/T in orange(1, H))
-					if(!T.density)
-						spawn_turfs.Add(T)
-				if(!spawn_turfs.len)
-					spawn_turfs.Add(get_turf(H))
-				var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
-				heart_attack.appearance = blown_heart.appearance
-				heart_attack.icon_dead = "heart-off"
-				heart_attack.environment_smash_flags = 0
-				heart_attack.melee_damage_lower = 15
-				heart_attack.melee_damage_upper = 15
-				heart_attack.health = 50
-				heart_attack.maxHealth = 50
-				heart_attack.stat_attack = 1
-				qdel(blown_heart)
-			else
-				H.eye_blurry = max(H.eye_blurry, 30)
-				H.Dizzy(30)
-				H.stuttering = max(H.stuttering, 30)
-				H.Jitter(30)
-				if (prob(70))
-					H.Knockdown(4)
-				else if (prob(70))
-					H.confused = 6
-				H.adjustOxyLoss(20)
-				H.adjustToxLoss(10)
-		else
-			if(isliving(antag.current))
-				var/mob/living/L = antag.current
-				L.adjustBruteLoss(rand(20,50))
+
+// 2022 - Commenting out some part of the greeting message and spacing it out a bit. 
+//  Getting converted floods the chat with a lot of unncessary information
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
 
+	to_chat(antag.current, "<br>")
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	switch(greeting)
 		if (GREET_ROUNDSTART)
@@ -162,107 +132,137 @@
 				to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>You are a lone cultist. You've spent years studying the language of Nar-Sie, but haven't associated with his followers.</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
-	to_chat(antag.current, "<span class='sinister'>A couple of runes linger vividly in your mind.</span><span class='info'> (check your notes).</span>")
-
-
-
+	//to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
+	to_chat(antag.current, "<br>")
 	spawn(1)
 		if (faction)
+			/* 
 			var/datum/objective_holder/OH = faction.objective_holder
 			if (OH.objectives.len > 0)
 				var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
 				to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
+				to_chat(antag.current,"<b>First of all though, choose a role that fits you best using the button on the left.</b>")
+			*/
+			if (greeting != GREET_ROUNDSTART)
+				var/datum/faction/bloodcult/cult = faction
+				to_chat(antag.current, "<span class='sinister'>The station population is currently large enough for <span class='userdanger'>[cult.cultist_cap]</span> cultists.</span>")
 
 /datum/role/cultist/update_antag_hud()
 	update_cult_hud()
 
 /datum/role/cultist/proc/update_cult_hud()
 	var/mob/M = antag?.current
-	if(M && M.client && M.hud_used)
-		if(!M.hud_used.cult_Act_display)
-			M.hud_used.cult_hud()
-		if (!(M.hud_used.cult_Act_display in M.client.screen))
-			M.client.screen += list(M.hud_used.cult_Act_display,M.hud_used.cult_tattoo_display)
-		M.hud_used.cult_Act_display.overlays.len = 0
-		M.hud_used.cult_tattoo_display.overlays.len = 0
-		var/current_act = max(-1,min(5,veil_thickness))
-		var/image/I_act = image('icons/mob/screen1_cult.dmi',"act")
-		I_act.appearance_flags |= RESET_COLOR
-		M.hud_used.cult_Act_display.overlays += I_act
-		var/image/I_tattoos = image('icons/mob/screen1_cult.dmi',"tattoos")
-		I_tattoos.appearance_flags |= RESET_COLOR
-		M.hud_used.cult_tattoo_display.overlays += I_tattoos
-
-		var/image/I_act_indicator = image('icons/mob/screen1_cult.dmi',"[current_act]")
-		if (current_act == CULT_MENDED)
-			I_act_indicator.appearance_flags |= RESET_COLOR
-		M.hud_used.cult_Act_display.overlays += I_act_indicator
-
-		var/image/I_arrow = image('icons/mob/screen1_cult.dmi',"[current_act]a")
-		I_arrow.appearance_flags |= RESET_COLOR
-		M.hud_used.cult_Act_display.overlays += I_arrow
-		switch (current_act)
-			if (CULT_MENDED)
-				M.hud_used.cult_Act_display.name = "..."
-			if (CULT_PROLOGUE)
-				M.hud_used.cult_Act_display.name = "Prologue: The Reunion"
-			if (CULT_ACT_I)
-				M.hud_used.cult_Act_display.name = "Act I: The Followers"
-			if (CULT_ACT_II)
-				M.hud_used.cult_Act_display.name = "Act II: The Sacrifice"
-			if (CULT_ACT_III)
-				M.hud_used.cult_Act_display.name = "Act III: The Blood Bath"
-			if (CULT_ACT_IV)
-				M.hud_used.cult_Act_display.name = "Act IV: The Tear in Reality"
-			if (CULT_EPILOGUE)
-				M.hud_used.cult_Act_display.name = "Epilogue: The Feast"
-		var/tattoos_names = ""
-		var/i = 0
-		for (var/T in tattoos)
-			var/datum/cult_tattoo/tattoo = tattoos[T]
-			if (tattoo)
-				M.hud_used.cult_tattoo_display.overlays += image('icons/mob/screen1_cult.dmi',"t_[tattoo.icon_state]")
-				tattoos_names += "[i ? ", " : ""][tattoo.name]"
-				i++
-		if (!tattoos_names)
-			tattoos_names = "none"
-		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
-
-		if (isshade(M))
-			if (istype(M.loc,/obj/item/weapon/melee/soulblade))
-				M.DisplayUI("Soulblade")
-				M.client.screen |= list(M.healths2)
-			else
-				M.client.screen -= list(M.healths2)
+	if(M)
+		M.DisplayUI("Cultist")
+		if (M.client && M.hud_used)
+			if (isshade(M))
+				if (istype(M.loc,/obj/item/weapon/melee/soulblade))
+					M.DisplayUI("Soulblade")
+					M.client.screen |= list(M.healths2)
+				else
+					M.client.screen -= list(M.healths2)
 
 /datum/role/cultist/proc/remove_cult_hud()
 	var/mob/M = antag?.current
-	if(M && M.client && M.hud_used)
-		qdel(M.hud_used.cult_Act_display)
-		qdel(M.hud_used.cult_tattoo_display)
+	if(M)
+		M.HideUI("Cultist")
+		M.HideUI("Bloodcult Runes")
 
-/mob/proc/occult_muted()
-	if (checkTattoo(TATTOO_HOLY))
-		return 0
-	if (reagents && reagents.has_reagent(HOLYWATER))
-		return 1
-	for(var/obj/item/weapon/implant/holy/I in src)
-		if (I.implanted)
-			return 1
-	return 0
+/datum/role/cultist/extraPanelButtons()
+	var/dat = ""
+	if (mentor)
+		dat = "<br>Currently under the mentorship of <b>[mentor.antag.name]/([mentor.antag.key])</b><br>"
+	if (acolytes.len)
+		dat += "<br>Currently mentoring "
+		for (var/datum/role/cultist/acolyte in acolytes)
+			dat += "<b>[acolyte.antag.name]/([acolyte.antag.key])</b>, "
+		dat += "<br>"
+	return dat
+
+/datum/role/cultist/proc/DropMentorship()
+	if (mentor)
+		to_chat(antag.current,"<span class='warning'>You have ended your mentorship under [mentor.antag.name].</span>")
+		to_chat(mentor.antag.current,"<span class='warning'>[antag.name] has ended their mentorship under you.</span>")
+		message_admins("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
+		log_admin("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
+	if (acolytes.len > 0)
+		for (var/datum/role/cultist/acolyte in acolytes)
+			to_chat(antag.current,"<span class='warning'>You have ended your mentorship of [acolyte.antag.name].</span>")
+			to_chat(acolyte.antag.current,"<span class='warning'>[antag.name] has ended their mentorship.</span>")
+			message_admins("[antag.key]/([antag.name]) has ended their mentorship of [acolyte.antag.name]")
+			log_admin("[antag.key]/([antag.name]) has ended their mentorship of [acolyte.antag.name]")
+
+/datum/role/cultist/proc/ChangeCultistRole(var/new_role)
+	if (!new_role)
+		return
+	var/datum/faction/bloodcult/cult = faction
+	if ((cultist_role == CULTIST_ROLE_MENTOR) && cult)
+		cult.mentor_count--
+
+	cultist_role = new_role
+
+	DropMentorship()
+
+	switch(cultist_role)
+		if (CULTIST_ROLE_ACOLYTE)
+			message_admins("BLOODCULT: [antag.key]/([antag.name]) has become a cultist acolyte.")
+			log_admin("BLOODCULT: [antag.key]/([antag.name]) has become a cultist acolyte.")
+			logo_state = "cult-apprentice-logo"
+			FindMentor()
+			if (!mentor)
+				message_admins("BLOODCULT: [antag.key]/([antag.name]) couldn't find a mentor.")
+				log_admin("BLOODCULT: [antag.key]/([antag.name]) couldn't find a mentor.")
+		if (CULTIST_ROLE_HERALD)
+			message_admins("BLOODCULT: [antag.key]/([antag.name]) has become a cultist herald.")
+			log_admin("BLOODCULT: [antag.key]/([antag.name]) has become a cultist herald.")
+			logo_state = "cult-logo"
+		if (CULTIST_ROLE_MENTOR)
+			message_admins("BLOODCULT: [antag.key]/([antag.name]) has become a cultist mentor.")
+			log_admin("BLOODCULT: [antag.key]/([antag.name]) has become a cultist mentor.")
+			logo_state = "cult-master-logo"
+			if (cult)
+				cult.mentor_count++
+		else
+			logo_state = "cult-logo"
+			cultist_role = CULTIST_ROLE_NONE
+	if (cult)
+		cult.update_hud_icons()
+	if (antag.current)
+		antag.current.DisplayUI("Cultist Left Panel")
+	time_role_changed_last = world.time
+
+/datum/role/cultist/proc/FindMentor()
+	var/datum/faction/bloodcult/cult = faction
+	if (!cult || !cult.mentor_count)
+		return
+	var/datum/role/cultist/potential_mentor
+	var/min_acolytes = ARBITRARILY_LARGE_NUMBER
+	for (var/datum/role/cultist/C in cult.members)
+		if (!C.antag.current || C.antag.current.isDead())
+			continue
+		if (C.cultist_role == CULTIST_ROLE_MENTOR)
+			if (C.acolytes.len < min_acolytes || (C.acolytes.len == min_acolytes && prob(50)))
+				min_acolytes = C.acolytes.len
+				potential_mentor = C
+
+	if (potential_mentor)
+		mentor = potential_mentor
+		potential_mentor.acolytes |= src
+		to_chat(antag.current, "<span class='sinister'>You are now in a mentorship under <span class='danger'>[mentor.name], the [mentor.antag.assigned_role=="MODE" ? (mentor.antag.special_role) : (mentor.antag.assigned_role)]</span>. Seek their help to learn the ways of our cult.</span>")
+		to_chat(mentor.antag.current, "<span class='sinister'>You are now mentoring <span class='danger'>[antag.name], the [antag.assigned_role=="MODE" ? (antag.special_role) : (antag.assigned_role)]</span>. </span>")
+		message_admins("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")
+		log_admin("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")
 
 /datum/role/cultist/handle_reagent(var/reagent_id)
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return
-	var/unholy = H.checkTattoo(TATTOO_HOLY)
-	var/current_act = clamp(veil_thickness,CULT_MENDED,CULT_EPILOGUE)
 	if (reagent_id == INCENSE_HAREBELLS)
-		if (unholy)
-			H.eye_blurry = max(H.eye_blurry, 3)
-			return
-		else
+		H.eye_blurry = max(H.eye_blurry, 12)
+		H.Dizzy(12)
+		H.stuttering = max(H.stuttering, 12)
+		H.Jitter(12)
+		/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
 			switch (current_act)
 				if (CULT_MENDED)
 					H.dust()
@@ -311,19 +311,17 @@
 						H.confused = 6
 					H.adjustOxyLoss(20)
 					H.adjustToxLoss(10)
+					*/
 
 /datum/role/cultist/handle_splashed_reagent(var/reagent_id)//also proc'd when holy water is drinked or ingested in any way
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return
-	var/unholy = H.checkTattoo(TATTOO_HOLY)
-	var/current_act = max(-1,min(5,veil_thickness))
 	if (reagent_id == HOLYWATER)
 		if (holywarning_cooldown <= 0)
 			holywarning_cooldown = 5
-			if (unholy)
-				to_chat(H, "<span class='warning'>You feel the unpleasant touch of holy water, but the mark on your back negates its most debilitating effects.</span>")
-			else
+			to_chat(H, "<span class='danger'>The cold touch of holy water makes your head spin, you're having trouble walking straight.</span>")
+				/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
 				switch (current_act)
 					if (CULT_MENDED)
 						to_chat(H, "<span class='danger'>The holy water permeates your skin and consumes your cursed blood like mercury digests gold.</span>")
@@ -340,11 +338,13 @@
 					if (CULT_EPILOGUE)
 						to_chat(H, "<span class='danger'>Even in these times, holy water proves itself capable of hindering your progression.</span>")
 
+				*/
 	if (reagent_id == HOLYWATER || reagent_id == INCENSE_HAREBELLS)
-		if (unholy)
-			H.eye_blurry = max(H.eye_blurry, 3)
-			return
-		else
+		H.eye_blurry = max(H.eye_blurry, 12)
+		H.Dizzy(12)
+		H.stuttering = max(H.stuttering, 12)
+		H.Jitter(12)
+			/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
 			switch (current_act)
 				if (CULT_MENDED)
 					H.dust()
@@ -393,14 +393,97 @@
 						H.confused = 6
 					H.adjustOxyLoss(20)
 					H.adjustToxLoss(10)
+			*/
 
-/datum/role/cultist/chief
-	id = CHIEF_CULTIST
-	name = "Chief cultist"
-	logo_state = "cult-chief-logo"
+/datum/role/cultist/proc/write_rune(var/word_to_draw)
+	var/mob/living/user = antag.current
 
-/datum/role/cultist/chief/Greet(var/greeting,var/custom)
-	. = ..()
-	if (greeting)
-		to_chat(antag.current, "<span class='notice'>You are the chief cultist. You have been chosen by Nar-Sie to lead this cult to victory. Coordinate with your fellow acolytes, establish a plan, construct a base. Tear down the veil.</span>")
-		to_chat(antag.current, "<span class='notice'>You may speak with your fellow cultists by using ':x'.</span>")
+	if (user.incapacitated())
+		return
+
+	var/muted = user.occult_muted()
+	if (muted)
+		to_chat(user,"<span class='danger'>You find yourself unable to focus your mind on the words of Nar-Sie.</span>")
+		return
+
+	if(!istype(user.loc, /turf))
+		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
+		return
+
+	var/turf/T = get_turf(user)
+	var/obj/effect/rune/rune = locate() in T
+
+	if(rune)
+		if (rune.invisibility == INVISIBILITY_OBSERVER)
+			to_chat(user, "<span class='warning'>You can feel the presence of a concealed rune here. You have to reveal it before you can add more words to it.</span>")
+			return
+		else if (rune.word1 && rune.word2 && rune.word3)
+			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
+			return
+
+	var/datum/rune_word/word = rune_words[word_to_draw]
+	var/list/rune_blood_data = use_available_blood(user, rune_blood_cost, feedback = verbose)
+	if (rune_blood_data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
+		return
+
+	if (verbose)
+		if(rune)
+			user.visible_message("<span class='warning'>\The [user] chants and paints more symbols on the floor.</span>",\
+					"<span class='warning'>You add another word to the rune.</span>",\
+					"<span class='warning'>You hear chanting.</span>")
+		else
+			user.visible_message("<span class='warning'>\The [user] begins to chant and paint symbols on the floor.</span>",\
+					"<span class='warning'>You begin drawing a rune on the floor.</span>",\
+					"<span class='warning'>You hear some chanting.</span>")
+
+	if(!user.checkTattoo(TATTOO_SILENT))
+		user.whisper("...[word.rune]...")
+
+	if(rune)
+		if(rune.word1 && rune.word2 && rune.word3)
+			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
+			return
+	write_rune_word(get_turf(user), word, rune_blood_data["blood"], caster = user)
+	verbose = FALSE
+
+
+/datum/role/cultist/proc/erase_rune()
+	var/mob/living/user = antag.current
+	if (!istype(user))
+		return
+
+	if (user.incapacitated())
+		return
+
+	var/turf/T = get_turf(user)
+	var/obj/effect/rune/rune = locate() in T
+
+	if (rune && rune.invisibility == INVISIBILITY_OBSERVER)
+		to_chat(user, "<span class='warning'>You can feel the presence of a concealed rune here, you have to reveal it before you can erase words from it.</span>")
+		return
+
+	var/removed_word = erase_rune_word(get_turf(user))
+	if (removed_word)
+		to_chat(user, "<span class='notice'>You retrace your steps, carefully undoing the lines of the [removed_word] rune.</span>")
+	else
+		to_chat(user, "<span class='warning'>There aren't any rune words left to erase.</span>")
+
+/datum/role/cultist/proc/GiveTattoo(var/type)
+	if(locate(type) in tattoos)
+		return
+	var/datum/cult_tattoo/T = new type
+	tattoos[T.name] = T
+	update_cult_hud()
+	T.getTattoo(antag.current)
+	anim(target = antag.current, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	sleep(1)
+	antag.current.update_mutations()
+	var/atom/movable/overlay/tattoo_markings = anim(target = antag.current, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[T.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	animate(tattoo_markings, alpha = 0, time = 30)
+
+
+/datum/role/cultist/proc/MakeArchCultist()
+	var/datum/faction/bloodcult/B = faction
+	if(!B || !istype(B))
+		return
+	arch_cultist = TRUE

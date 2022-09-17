@@ -33,25 +33,20 @@
 
 	autoignition_temperature = 0 //Not actually paper
 	fire_fuel = 0
-
-/obj/item/weapon/storage/bible/booze/New()
-	. = ..()
-	new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
-	new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
-	new /obj/item/weapon/spacecash(src)
-	new /obj/item/weapon/spacecash(src)
-	new /obj/item/weapon/spacecash(src)
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/drinks/beer = 2,
+		/obj/item/weapon/spacecash = 3,
+	)
 
 //Even more "Special" Bible with a nicer gift on introduction
 /obj/item/weapon/storage/bible/traitor_gun
 
 	autoignition_temperature = 0 //Not actually paper
 	fire_fuel = 0
-
-/obj/item/weapon/storage/bible/traitor_gun/New()
-	. = ..()
-	new /obj/item/weapon/gun/projectile/luger/small(src)
-	new /obj/item/ammo_storage/magazine/mc9mm(src)
+	items_to_spawn = list(
+		/obj/item/weapon/gun/projectile/luger/small,
+		/obj/item/ammo_storage/magazine/mc9mm,
+	)
 
 //What happens when you slap things with the Bible in general
 /obj/item/weapon/storage/bible/attack(mob/living/M as mob, mob/living/user as mob)
@@ -186,7 +181,7 @@
 		for(var/datum/organ/external/affecting in H.organs)
 			if(affecting.heal_damage(5, 5)) //5 brute and burn healed per bash. Not wonderful, but it can help if someone has Alkyzine handy
 				H.UpdateDamageIcon()
-	return //Nothing else to add
+	H.immune_system.ApplyAntipathogenics(100, list(ANTIGEN_CULT), 5)  // work towards curing curses too
 
 //We're done working on mobs, let's check if we're blessing something else
 /obj/item/weapon/storage/bible/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
@@ -273,11 +268,10 @@
 	deconvertee.Dizzy(30)
 	deconvertee.stuttering = max(deconvertee.stuttering, 10)
 	deconvertee.Jitter(30)
-	if (!deconvertee.checkTattoo(TATTOO_HOLY))
-		if (!bible.my_rel.leadsThisReligion(deconverter))
-			deconvertee.Knockdown(5)
-		else
-			deconvertee.Knockdown(10)
+	if (!bible.my_rel.leadsThisReligion(deconverter))
+		deconvertee.Knockdown(5)
+	else
+		deconvertee.Knockdown(10)
 
 	if (istype(bible.my_rel, /datum/religion/cult))
 		cult_chaplain = TRUE

@@ -187,15 +187,18 @@
 				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
 			else
 				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
-			explode()
+			explode(Proj.firer)
 	return ..()
 
 /obj/structure/reagent_dispensers/fueltank/suicide_act(var/mob/living/user)
-	var/obj/item/tool/weldingtool/welder = user.find_held_item_by_type(/obj/item/tool/weldingtool)
-	if(welder)
+	var/has_welder = user.find_held_item_by_type(/obj/item/tool/weldingtool)
+	if(has_welder)
+		var/obj/item/tool/weldingtool/welder = user.held_items[has_welder]
 		welder.setWelding(1)
 		if(welder.welding)
-			var/message_say = user.handle_suicide_bomb_cause()
+			var/message_say = user.handle_suicide_bomb_cause(src)
+			if(!message_say)
+				return
 			to_chat(viewers(user), "<span class='danger'>[user] presses the warm lit welder against the cold body of a welding fuel tank! It looks like \he's going out with a bang!</span>")
 			user.say(message_say)
 			welder.afterattack(src,user,1)
@@ -227,15 +230,15 @@
 			if(car.occupant && istype(car.occupant, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = car.occupant
 				H.audible_scream("fueltank_crash")
-			explode()
+			explode(car.occupant)
 
-/obj/structure/reagent_dispensers/fueltank/proc/explode()
+/obj/structure/reagent_dispensers/fueltank/proc/explode(var/mob/user)
 	if (reagents.total_volume > 500)
-		explosion(src.loc,1,2,4)
+		explosion(src.loc,1,2,4, whodunnit = user)
 	else if (reagents.total_volume > 100)
-		explosion(src.loc,0,1,3)
+		explosion(src.loc,0,1,3, whodunnit = user)
 	else
-		explosion(src.loc,-1,1,2)
+		explosion(src.loc,-1,1,2, whodunnit = user)
 	if(src)
 		qdel(src)
 
@@ -477,6 +480,17 @@
 
 		overlays += filling
 
+/obj/structure/reagent_dispensers/cauldron/attackby(obj/item/weapon/W, mob/user)
+	if(iswelder(W))
+		var/obj/item/tool/weldingtool/WT = W
+		to_chat(user, "<span class='notice'>You begin deconstructing \the [src].</span>")
+		if(WT.do_weld(user, src, 50, 1))
+			dump_reagents()
+			to_chat(user, "<span class='notice'>You finish deconstructing \the [src].</span>")
+			new /obj/item/stack/sheet/metal/(loc, 20)
+			qdel(src)
+	..()
+
 /obj/structure/reagent_dispensers/cauldron/on_reagent_change()
 	update_icon()
 
@@ -494,6 +508,14 @@
 		return TRUE
 	return FALSE
 
+/obj/structure/reagent_dispensers/cauldron/proc/dump_reagents()
+	if(reagents?.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+	usr.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
+	reagents.reaction(usr.loc)
+	src.reagents.clear_reagents()
+
+
 // BARRELS AND BARREL ACCESSORIES //
 /obj/structure/reagent_dispensers/cauldron/barrel
 	name = "metal barrel"
@@ -502,8 +524,7 @@
 	layer = TABLE_LAYER
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
-	throwforce = 40 // Ends up dealing 20~ brute when thrown because thank you, based throw damage formula
-	var/health = 50
+	health = 50
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood
 	name = "wooden barrel"
@@ -511,34 +532,45 @@
 	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of wood."
 	health = 30
 
+/obj/structure/reagent_dispensers/cauldron/barrel/wood/attackby(obj/item/weapon/W, mob/user)
+	if (iscrowbar(W))
+		var/obj/item/tool/crowbar/C = W
+		to_chat(user, "<span class='notice'>You begin deconstructing \the [src].</span>")
+		C.playtoolsound(src, 50)
+		if(do_after(user, src,50))
+			to_chat(user, "<span class='notice'>You finish deconstructing \the [src].</span>")
+			dump_reagents()
+			new /obj/item/stack/sheet/wood(loc, 20)
+			qdel(src)
+		return
+	..()
+
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
 	return
 
-/obj/structure/reagent_dispensers/cauldron/barrel/proc/take_damage(var/damage, var/sound_effect = 1)
-	health = max(0, health - damage)
+/obj/structure/reagent_dispensers/cauldron/barrel/take_damage(incoming_damage, damage_type, skip_break, mute, var/sound_effect = 1) //Custom take_damage() proc because of sound_effect behavior.
+	health = max(0, health - incoming_damage)
 	if(sound_effect)
 		playsound(loc, 'sound/effects/grillehit.ogg', 75, 1)
+	return try_break()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/try_break()
 	if(health <= 0)
 		spawn(1)
 			Destroy()
-		return 1
-	return 0
+		return TRUE
+	else
+		return FALSE
 
 /obj/structure/reagent_dispensers/cauldron/barrel/kick_act(mob/living/carbon/human/H)
 	..()
-	if (!reagents)
-		return 1
-	if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
-		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-	H.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
-	reagents.reaction(usr.loc)
-	src.reagents.clear_reagents()
+	dump_reagents()
 	H.visible_message("<span class='warning'>[usr] kicks \the [src]!</span>", "<span class='notice'>You kick \the [src].</span>")
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_wrench(user) || istype(W,/obj/item/weapon/reagent_containers))
+	if(W.is_wrench(user) || istype(W,/obj/item/weapon/reagent_containers)) //what did irradiation mean by this
 		return
 	if(istype(W,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
@@ -618,7 +650,7 @@
 		if(2)
 			Destroy()
 		if(3)
-			take_damage(rand(15,45), 0)
+			take_damage(rand(15,45), sound_effect = 0)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attack_animal(var/mob/living/simple_animal/M)
 	if(take_damage(rand(M.melee_damage_lower, M.melee_damage_upper)))

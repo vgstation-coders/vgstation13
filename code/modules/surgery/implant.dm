@@ -6,9 +6,9 @@
 
 /datum/surgery_step/cavity
 	priority = 1
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		return (affected.open == (affected.encased ? 3 : 2) || (!affected.encased ? (target.species.anatomy_flags & NO_SKIN) : 0)) && !(affected.status & ORGAN_BLEEDING)
+/datum/surgery_step/cavity/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	return (affected.open == (affected.encased ? 3 : 2) || (!affected.encased ? (target.species.anatomy_flags & NO_SKIN) : 0)) && !(affected.status & ORGAN_BLEEDING)
 
 /datum/surgery_step/cavity/proc/get_max_wclass(datum/organ/external/affected)
 	switch (affected.name)
@@ -41,15 +41,18 @@
 		)
 
 	duration = 6 SECONDS
+	digging = TRUE
 
 /datum/surgery_step/cavity/make_space/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
-		to_chat(user, "<span class='warning'>This isn't a human!.</span>")
+		to_chat(user, "<span class='warning'>This isn't a human!</span>")
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	return ..() && !affected.cavity && !affected.hidden
 
 /datum/surgery_step/cavity/make_space/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if(istype(tool, /obj/item/tool/surgicaldrill))
+		playsound(target, 'sound/items/surgicaldrill.ogg', 70, 1)
 	user.visible_message("[user] starts making some space inside [target]'s [get_cavity(affected)] cavity with \the [tool].",
 	"You start making some space inside [target]'s [get_cavity(affected)] cavity with \the [tool]." )
 	target.custom_pain("The pain in your chest is living hell!",1, scream=TRUE)
@@ -124,7 +127,7 @@
 
 /datum/surgery_step/cavity/place_item/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
-		to_chat(user, "<span class='warning'>This isn't a human!.</span>")
+		to_chat(user, "<span class='warning'>This isn't a human!</span>")
 		return 0
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	var/can_fit = !affected.hidden && affected.cavity && tool.w_class <= get_max_wclass(affected)
@@ -153,13 +156,7 @@
 
 	if(istype(tool, /obj/item/weapon/implant))
 		var/obj/item/weapon/implant/timp = tool
-		timp.part = affected
-		affected.implants += timp
-		if(timp.implanted(target, user))
-			timp.forceMove(target)
-			timp.imp_in = target
-			timp.implanted = 1
-			timp.part = affected
+		timp.insert(target, affected.name, user)
 	affected.cavity = 0
 
 /datum/surgery_step/cavity/place_item/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -210,23 +207,40 @@
 				target.release_control()
 			worm.detach()
 
-		obj.forceMove(get_turf(target))
 		if(istype(obj,/obj/item/weapon/implant))
 			var/obj/item/weapon/implant/imp = obj
-			imp.handle_removal(user)
-			imp.imp_in = null
-			imp.implanted = 0
-			affected.implants -= imp
-			target.contents -= imp
+			imp.remove(user)
+			user.put_in_hands(imp)
+		else
+			obj.forceMove(get_turf(target))
 	else if (affected.hidden)
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
 		affected.hidden.forceMove(get_turf(target))
+		user.put_in_hands(affected.hidden)
 		if(!affected.hidden.blood_DNA)
 			affected.hidden.blood_DNA = list()
 		affected.hidden.blood_DNA[target.dna.unique_enzymes] = target.dna.b_type
 		affected.hidden.update_icon()
 		affected.hidden = null
+
+	else if (tool.clumsy_check(user) && prob(20))
+		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
+		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
+		var/obj/clowndigobj = pick(/obj/item/weapon/bikehorn/rubberducky, /obj/item/weapon/reagent_containers/food/snacks/pie, /obj/item/toy/singlecard, /obj/item/toy/waterflower)
+		clowndigobj = new clowndigobj(user.loc)
+		if (istype(clowndigobj, /obj/item/toy/singlecard))
+			var/obj/item/toy/singlecard/O = clowndigobj
+			O.cardname = pick("Red Joker","Black Joker")
+			clowndigobj = O
+		else if (istype(clowndigobj, /obj/item/toy/waterflower))
+			clowndigobj.reagents.remove_reagent(WATER, 10)
+			clowndigobj.reagents.add_reagent(BLOOD, 10)
+		user.put_in_hands(clowndigobj)
+		if(!clowndigobj.blood_DNA)
+			clowndigobj.blood_DNA = list()
+		clowndigobj.blood_DNA[target.dna.unique_enzymes] = target.dna.b_type
+		clowndigobj.update_icon()
 
 	else
 		user.visible_message("<span class='notice'>[user] could not find anything inside [target]'s [affected.display_name], and pulls \the [tool] out.</span>", \

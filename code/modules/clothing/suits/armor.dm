@@ -153,10 +153,10 @@
 	siemens_coefficient = 0.5
 
 /obj/item/clothing/suit/armor/riot/offenseTackleBonus()
-	return 1
+	return 15
 
 /obj/item/clothing/suit/armor/riot/defenseTackleBonus()
-	return 2
+	return 20
 
 /obj/item/clothing/suit/armor/rune
 	name = "rune platebody"
@@ -176,7 +176,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 
 /obj/item/clothing/suit/armor/samurai
@@ -321,7 +321,7 @@
 //When the wearer gets hit, this armor will teleport the user a short distance away (to safety or to more danger, no one knows. That's the fun of it!)
 /obj/item/clothing/suit/armor/reactive
 	name = "Reactive Teleport Armor"
-	desc = "Someone seperated our Research Director from his own head!"
+	desc = "Someone separated our Research Director from his own head!"
 	var/active = 0.0
 	icon_state = "reactiveoff"
 	item_state = "reactiveoff"

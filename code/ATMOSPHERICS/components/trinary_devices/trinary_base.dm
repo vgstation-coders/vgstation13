@@ -1,7 +1,7 @@
-obj/machinery/atmospherics/trinary
+/obj/machinery/atmospherics/trinary
 	dir = SOUTH
 	initialize_directions = SOUTH|NORTH|WEST
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	can_be_coloured = 0
 
 	var/datum/gas_mixture/air1
@@ -30,9 +30,9 @@ obj/machinery/atmospherics/trinary
 	var/node_list = list(node1,node2,node3)
 	..(adjacent_procd,node_list)
 
-obj/machinery/atmospherics/trinary/New()
+/obj/machinery/atmospherics/trinary/New()
 	..()
-	initialize_directions()
+	update_dir()
 	air1 = new
 	air2 = new
 	air3 = new
@@ -40,7 +40,7 @@ obj/machinery/atmospherics/trinary/New()
 	air2.volume = starting_volume
 	air3.volume = starting_volume
 
-/obj/machinery/atmospherics/trinary/proc/initialize_directions()
+/obj/machinery/atmospherics/trinary/update_dir()
 	switch(dir)
 		if(NORTH)
 			initialize_directions = SOUTH|NORTH|EAST
@@ -50,8 +50,9 @@ obj/machinery/atmospherics/trinary/New()
 			initialize_directions = WEST|EAST|SOUTH
 		if(WEST)
 			initialize_directions = EAST|WEST|NORTH
+	..()
 
-obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	if(!(pipe.dir in list(NORTH, SOUTH, EAST, WEST)) && src.mirror) //because the dir isn't in the right set, we want to make the mirror kind
 		var/obj/machinery/atmospherics/trinary/mirrored_pipe = new mirror(src.loc)
 		pipe.dir = turn(pipe.dir, -45)
@@ -103,7 +104,7 @@ obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 
 
 // Housekeeping and pipe network stuff below
-obj/machinery/atmospherics/trinary/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
+/obj/machinery/atmospherics/trinary/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
 	if(reference == node1)
 		network1 = new_network
 
@@ -120,7 +121,7 @@ obj/machinery/atmospherics/trinary/network_expand(datum/pipe_network/new_network
 
 	return null
 
-obj/machinery/atmospherics/trinary/Destroy()
+/obj/machinery/atmospherics/trinary/Destroy()
 	if(node1)
 		node1.disconnect(src)
 		if(network1)
@@ -140,7 +141,7 @@ obj/machinery/atmospherics/trinary/Destroy()
 
 	..()
 
-obj/machinery/atmospherics/trinary/initialize()
+/obj/machinery/atmospherics/trinary/initialize()
 	if(node1 && node2 && node3)
 		return
 
@@ -162,7 +163,7 @@ obj/machinery/atmospherics/trinary/initialize()
 	update_icon()
 	add_self_to_holomap()
 
-obj/machinery/atmospherics/trinary/build_network()
+/obj/machinery/atmospherics/trinary/build_network()
 	if(!network1 && node1)
 		network1 = new /datum/pipe_network
 		network1.normal_members += src
@@ -179,7 +180,7 @@ obj/machinery/atmospherics/trinary/build_network()
 		network3.build_network(node3, src)
 
 
-obj/machinery/atmospherics/trinary/return_network(obj/machinery/atmospherics/reference)
+/obj/machinery/atmospherics/trinary/return_network(obj/machinery/atmospherics/reference)
 	build_network()
 
 	if(reference==node1)
@@ -193,7 +194,7 @@ obj/machinery/atmospherics/trinary/return_network(obj/machinery/atmospherics/ref
 
 	return null
 
-obj/machinery/atmospherics/trinary/reassign_network(datum/pipe_network/old_network, datum/pipe_network/new_network)
+/obj/machinery/atmospherics/trinary/reassign_network(datum/pipe_network/old_network, datum/pipe_network/new_network)
 	if(network1 == old_network)
 		network1 = new_network
 	if(network2 == old_network)
@@ -203,7 +204,7 @@ obj/machinery/atmospherics/trinary/reassign_network(datum/pipe_network/old_netwo
 
 	return 1
 
-obj/machinery/atmospherics/trinary/return_network_air(datum/pipe_network/reference)
+/obj/machinery/atmospherics/trinary/return_network_air(datum/pipe_network/reference)
 	var/list/results = list()
 
 	if(network1 == reference)
@@ -215,7 +216,7 @@ obj/machinery/atmospherics/trinary/return_network_air(datum/pipe_network/referen
 
 	return results
 
-obj/machinery/atmospherics/trinary/disconnect(obj/machinery/atmospherics/reference)
+/obj/machinery/atmospherics/trinary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
 		if(network1)
 			qdel(network1)

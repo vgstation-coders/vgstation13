@@ -8,7 +8,7 @@ var/list/camera_names=list()
 	desc = "It's used to monitor rooms."
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "camera"
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	idle_power_usage = 5
 	active_power_usage = 10
 	plane = ABOVE_HUMAN_PLANE
@@ -40,7 +40,17 @@ var/list/camera_names=list()
 	var/hear_voice = 0
 
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
-	var/health = CAMERA_MAX_HEALTH
+	health = CAMERA_MAX_HEALTH
+
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/camera_reactivate,
+		/datum/malfhack_ability/oneuse/camera_upgrade
+	)
+
+	breakable_flags = BREAKABLE_UNARMED //Custom behavior already exists for armed cases.
+	damage_armor = CAMERA_MIN_WEAPON_DAMAGE
+	damage_resist = 0
 
 /obj/machinery/camera/flawless
 	failure_chance = 0
@@ -100,15 +110,13 @@ var/list/camera_names=list()
 	if(!c_tag)
 		name_camera()
 	..()
-	if(adv_camera && adv_camera.initialized && !(src in adv_camera.camerasbyzlevel["[z]"]))
-		adv_camera.update(z, TRUE, list(src))
 	update_hear()
 	cameranet.cameras += src // This is different from addCamera. addCamera() cares about visibility.
 	cameranet.addCamera(src)
 
 /obj/machinery/camera/proc/name_camera()
 	var/area/A=get_area(src)
-	var/basename=A.name
+	var/basename=format_text(A.name)
 	var/nethash=english_list(network)
 	var/suffix = 0
 	while(!suffix || ((nethash+c_tag) in camera_names))
@@ -135,9 +143,6 @@ var/list/camera_names=list()
 	wires = null
 	cameranet.cameras -= src
 	cameranet.removeCamera(src) //Will handle removal from the camera network and the chunks, so we don't need to worry about that
-	if(adv_camera)
-		for(var/key in adv_camera.camerasbyzlevel)
-			adv_camera.camerasbyzlevel[key] -= src
 	..()
 
 /obj/machinery/camera/emp_act(severity)
@@ -148,8 +153,7 @@ var/list/camera_names=list()
 		network = list()
 		cameranet.removeCamera(src)
 		stat |= EMPED
-		adv_camera.update(z, TRUE, list(src))
-		kill_light()
+		set_light(0)
 		triggerCameraAlarm()
 		update_icon()
 		spawn(900)
@@ -159,14 +163,6 @@ var/list/camera_names=list()
 			update_icon()
 			if(can_use())
 				cameranet.addCamera(src)
-				adv_camera.update(z, TRUE, list(src))
-		for(var/mob/O in mob_list)
-			if (istype(O.machine, /obj/machinery/computer/security))
-				var/obj/machinery/computer/security/S = O.machine
-				if (S.current == src)
-					O.unset_machine()
-					O.reset_view(null)
-					to_chat(O, "The screen bursts into static.")
 		..()
 
 /obj/machinery/camera/ex_act(severity)
@@ -295,7 +291,9 @@ var/list/camera_messages = list()
 			info = X.info
 		else
 			var/obj/item/device/pda/P = W
-			info = P.notehtml
+			var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in P.applications
+			if(app)
+				info = app.notehtml
 
 		var/key = "\ref[W]"
 		if(camera_messages.len > MAX_CAMERA_MESSAGES)
@@ -307,36 +305,40 @@ var/list/camera_messages = list()
 				continue
 			to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track=[U.name]'>[U.name]</a></span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
 
-		for(var/mob/O in player_list)
-			if (istype(O.machine, /obj/machinery/computer/security))
-				var/obj/machinery/computer/security/S = O.machine
-				if (S.current == src)
-					to_chat(O, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
+		for(var/obj/machinery/computer/security/tv in tv_monitors)
+			if(tv.active_camera != src)
+				continue
+			for(var/datum/tgui/ui in SStgui.open_uis_by_src[tv])
+				to_chat(ui.user, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
 		add_fingerprint(user)
 		user.delayNextAttack(8)
 		if(user.a_intent == I_HELP)
-			visible_message("<span class='notice'>[user] gently taps [src] with [W].</span>")
+			user.visible_message("<span class='notice'>[user] gently taps [src] with [W].</span>", "<span class='notice'>You gently tap [src] with [W].</span>")
 			return
 		W.on_attack(src, user)
 		if(W.force < CAMERA_MIN_WEAPON_DAMAGE)
 			to_chat(user, "<span class='danger'>\The [W] does no damage to [src].</span>")
-			visible_message("<span class='warning'>[user] hits [src] with [W]. It's not very effective.</span>")
+			user.visible_message("<span class='warning'>[user] hits [src] with [W]. It's not very effective.</span>", "<span class='warning'>You hit [src] with [W]. It's not very effective.</span>")
 			return
-		visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
+		if(W.hitsound)
+			playsound(src, W.hitsound, 50, 1)
+		user.visible_message("<span class='danger'>[user] [pick(W.attack_verb)] [src] with [W].</span>", "<span class='warning'>You [shift_verb_tense(pick(W.attack_verb))] [src] with [W].</span>")
 		take_damage(W.force)
 
-/obj/machinery/camera/proc/take_damage(var/amount)
-	if(amount <= 0)
-		return
+/obj/machinery/camera/damaged_updates()
 	triggerCameraAlarm()
-	health -= amount
 	if(health <= CAMERA_DEACTIVATE_HEALTH && status)
 		deactivate()
+
+/obj/machinery/camera/try_break()
 	if(health <= 0)
 		spark(src)
 		dismantle()
+		return TRUE
+	else
+		return FALSE
 
 /obj/machinery/camera/Topic(href, href_list)
 	if(..())
@@ -376,24 +378,12 @@ var/list/camera_messages = list()
 			playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
 		add_hiddenprint(user)
 		cameranet.updateVisibility(src, 0)
-	// now disconnect anyone using the camera
-	//Apparently, this will disconnect anyone even if the camera was re-activated.
-	//I guess that doesn't matter since they can't use it anyway?
-	for(var/mob/O in player_list)
-		if (istype(O.machine, /obj/machinery/computer/security))
-			var/obj/machinery/computer/security/S = O.machine
-			if (S.current == src)
-				O.unset_machine()
-				O.reset_view(null)
-				to_chat(O, "The screen bursts into static.")
-	adv_camera.update(z, TRUE, list(src))
 
 /obj/machinery/camera/proc/triggerCameraAlarm()
 	alarm_on = 1
 	var/area/this_area = get_area(src)
 	for(var/mob/living/silicon/S in mob_list)
 		S.triggerAlarm("Camera", this_area, list(src), src)
-	adv_camera.update(z, TRUE, list(src))
 
 
 /obj/machinery/camera/proc/cancelCameraAlarm()
@@ -401,7 +391,6 @@ var/list/camera_messages = list()
 	var/area/this_area = get_area(src)
 	for(var/mob/living/silicon/S in mob_list)
 		S.cancelAlarm("Camera", this_area, src)
-	adv_camera.update(z, TRUE, list(src))
 
 /obj/machinery/camera/proc/can_use()
 	if(!status)
@@ -427,7 +416,7 @@ var/list/camera_messages = list()
 		T = get_ranged_target_turf(src, direction, 1)
 
 		if (istype(T))
-			dir = reverse_direction(direction)
+			dir = opposite_dirs[direction]
 			break
 
 //Return a working camera that can see a given mob
@@ -484,7 +473,7 @@ var/list/camera_messages = list()
 		var/datum/speech/copy = speech.clone()
 		tv_message(copy)
 		for(var/obj/machinery/computer/security/S in tv_monitors)
-			if(S.current == src)
+			if(S.active_camera == src)
 				var/range = (istype(S, /obj/machinery/computer/security/telescreen) ? world.view : 1)
 				for (var/mob/virtualhearer/VH in viewers(range, S))
 					if (!ismob(VH.attached))
@@ -495,7 +484,7 @@ var/list/camera_messages = list()
 	name = "arena camera"
 	desc = "A camera anchored to the floor, designed to survive hits and explosions of any size. What's it made of anyway?"
 	icon_state = "camerarena"
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
 	active_power_usage = 0
 	layer = DECAL_LAYER
@@ -583,6 +572,17 @@ var/list/camera_messages = list()
 		togglePanelOpen(null, L)
 	if(wires)
 		wires.npc_tamper(L)
+
+/obj/machinery/camera/proc/camera_twitch()
+	for(var/mob/living/carbon/human/H in view(view_range, src))
+		if(H.disabilities & NERVOUS)
+			var/list/watching_you = list("Did something just move?","Did that camera move?","The security camera... turned?",
+			"Is someone watching you?", "Are you alone?", "Is someone keeping an eye on you?", "Who's there?",
+			"Someone is watching...", "The hairs on your neck stand up.", "The station AI is keeping tabs on you.",
+			"The whirr of the security camera as it turns to face you...", "Is that camera lens focusing in on you?",
+			"The security camera keeps lingering on you...", "The cameras are watching you.", "The security team is observing you.",
+			"Someone is watching you in the camera.", "They know. And they're watching.", "They've found you.")
+			to_chat(H,"<i>[pick(watching_you)]</i>")
 
 #undef CAMERA_MAX_HEALTH
 #undef CAMERA_DEACTIVATE_HEALTH

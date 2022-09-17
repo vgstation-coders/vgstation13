@@ -12,15 +12,15 @@ Gunshots/explosions/opening doors/less rare audio (done)
 */
 #define MIN_HAL_SLEEP 30
 
-mob/living/carbon/var
-	image/halimage
-	image/halbody
-	obj/halitem
-	hal_screwyhud = 0 //1 - critical, 2 - dead, 3 - oxygen indicator, 4 - toxin indicator
-	handling_hal = 0
-	hal_crit = 0
+/mob/living/carbon
+	var/image/halimage
+	var/image/halbody
+	var/obj/halitem
+	var/hal_screwyhud = 0 //1 - critical, 2 - dead, 3 - oxygen indicator, 4 - toxin indicator
+	var/handling_hal = 0
+	var/hal_crit = 0
 
-mob/living/carbon/proc/handle_hallucinations()
+/mob/living/carbon/proc/handle_hallucinations()
 	if(handling_hal || isUnconscious())
 		return
 	handling_hal = 1
@@ -423,7 +423,7 @@ proc/check_panel(mob/M)
 	var/collapse
 	var/image/down
 
-	var/health = 100
+	health = 100
 
 /obj/effect/fake_attacker/attackby(var/obj/item/weapon/P as obj, mob/living/user as mob)
 	step_away(src,my_target,2)

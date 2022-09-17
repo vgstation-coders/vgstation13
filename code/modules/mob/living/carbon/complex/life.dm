@@ -221,8 +221,11 @@
 	var/adjusted_pressure = calculate_affecting_pressure(pressure) //Returns how much pressure actually affects the mob.
 	switch(adjusted_pressure)
 		if(HAZARD_HIGH_PRESSURE to INFINITY)
-			adjustBruteLoss( min( ( (adjusted_pressure / HAZARD_HIGH_PRESSURE) -1 )*PRESSURE_DAMAGE_COEFFICIENT , MAX_HIGH_PRESSURE_DAMAGE) )
-			pressure_alert = 2
+			if( !(M_RESIST_HEAT in mutations) )
+				adjustBruteLoss( min( ( (adjusted_pressure / HAZARD_HIGH_PRESSURE) -1 )*PRESSURE_DAMAGE_COEFFICIENT , MAX_HIGH_PRESSURE_DAMAGE) )
+				pressure_alert = 2
+			else
+				pressure_alert = 1
 		if(WARNING_HIGH_PRESSURE to HAZARD_HIGH_PRESSURE)
 			pressure_alert = 1
 		if(WARNING_LOW_PRESSURE to WARNING_HIGH_PRESSURE)

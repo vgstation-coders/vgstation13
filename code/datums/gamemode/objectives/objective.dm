@@ -6,6 +6,10 @@
 	var/name = ""
 
 	var/flags = 0 // Objective flags.
+	/*
+		FREEFORM_OBJECTIVE	No display of whether the objective was accomplished or failed. A role that only has freeform objectives won't be marked as being successful or having failed.
+		FACTION_OBJECTIVE	When adding this objective using the admin panel, you'll be prompted to select a faction on which to attach the objective
+	*/
 
 /datum/objective/target/Destroy()
 	owner = null

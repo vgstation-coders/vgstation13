@@ -99,6 +99,10 @@
 		return 1
 	return 0
 
+/datum/centcomm_order/department/civilian/food/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/food/snacks/F)
+	if (istype(F) && sauce)
+		F.reagents.add_reagent(sauce,F.reagents.maximum_volume)
+
 
 /datum/centcomm_order/department/civilian/poutinecitadel/New()
 	..()
@@ -199,6 +203,10 @@
 		return 1
 	return 0
 
+/datum/centcomm_order/per_unit/department/civilian/honeycomb/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/food/snacks/honeycomb/H)
+	if (istype(H) && flavor)
+		H.reagents.add_reagent(flavor,H.reagents.maximum_volume)
+
 /datum/centcomm_order/department/civilian/salmon/New()
 	..()
 	request_consoles_to_notify = list(
@@ -289,3 +297,7 @@
 		if (ok && !ruined)
 			return 1
 	return 0
+
+/datum/centcomm_order/department/civilian/custom_drink/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/C)
+	if (istype(C) && grown)
+		C.ingredients.Add(new grown)

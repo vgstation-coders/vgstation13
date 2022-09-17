@@ -1,4 +1,4 @@
-proc/generate_room(var/turf/source, var/range, var/wall, var/floor, var/cardinal_atom, var/insidedoor, var/shape = "circle")
+/proc/generate_room(var/turf/source, var/range, var/wall, var/floor, var/cardinal_atom, var/insidedoor, var/shape = "circle")
 	var/list/outer_turfs
 	var/list/internal_turfs
 	switch(shape)

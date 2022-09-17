@@ -81,87 +81,37 @@
 	addReplacement(REG_BBTAG("\[^\\\]\]"), "")
 	return
 
-//var/stdshellout_dllFile = 'byond_markdown.dll'
-var/paperwork = 0
-var/paperwork_library
-
-/client/proc/handle_paperwork()
-
-	set category = "Debug"
-	set name = "Modify Paperwork Mode"
-
-	if(!check_rights(R_DEBUG))
-		return
-
-	if(!paperwork)
-		paperwork_setup()
-	else
-		paperwork_stop()
-		paperwork = 0
-
-/proc/paperwork_setup()
-	if(config.paperwork_library)
-		if(world.system_type == MS_WINDOWS)
-			paperwork_library = "markdown_byond.dll"
-		else
-			paperwork_library = "markdown_byond.so"
-		world.log << "Setting up paperwork..."
-		if(!fexists(paperwork_library))
-			world.log << "Paperwork was not properly setup, please notify a coder/host about this issue."
-			return
-		world.log << call(paperwork_library, "init_renderer")()
-		paperwork = 1
-		return 1
-	return 0
-
-/proc/paperwork_stop()
-	if(!fexists(paperwork_library))
-		world.log << "Paperwork file may be missing or something terrible has happened, don't panic and notify a coder/host about this issue."
-		return
-	if(paperwork)
-		call(paperwork_library, "free_memory")()
-		return
-	else
-		return
-
-/datum/writing_style/proc/parse_markdown(command_args)
-//	if(!fexists("byond_markdown.dll")){fcopy(stdshellout_dllFile,"[stdshellout_dllFile]")}
-	return call(paperwork_library,"render_html")(command_args)
-
 
 /datum/writing_style/proc/Format(var/t, var/obj/item/weapon/pen/P, var/mob/user, var/obj/item/weapon/paper/paper)
-	if(paperwork)
-		t = parse_markdown(t)
-	else
-		var/count = 0
-		if(expressions.len)
-			for(var/key in expressions)
-				if(count >= 500)
-					break
-				count++
-				var/datum/speech_filter_action/SFA = expressions[key]
-				if(SFA && !SFA.broken)
-					t = SFA.Run(t,user,paper)
-				if(count%100 == 0)
-					sleep(1) //too much for us.
-		t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
-		t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
-		t = replacetext(t, "\[date\]", "[current_date_string]")
-		t = replacetext(t, "\[time\]", "[worldtime2text()]")
+	var/count = 0
+	if(expressions.len)
+		for(var/key in expressions)
+			if(count >= 500)
+				break
+			count++
+			var/datum/speech_filter_action/SFA = expressions[key]
+			if(SFA && !SFA.broken)
+				t = SFA.Run(t,user,paper)
+			if(count%100 == 0)
+				sleep(1) //too much for us.
+	t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
+	t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
+	t = replacetext(t, "\[date\]", "[current_date_string]")
+	t = replacetext(t, "\[time\]", "[worldtime2text()]")
 
-		// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
 
-		t = replacetext(t, "\[table\]", "<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
-		t = replacetext(t, "\[/table\]", "</td></tr></table>")
-		t = replacetext(t, "\[row\]", "</td><tr>")
-		t = replacetext(t, "\[cell\]", "<td>")
+	t = replacetext(t, "\[table\]", "<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+	t = replacetext(t, "\[/table\]", "</td></tr></table>")
+	t = replacetext(t, "\[row\]", "</td><tr>")
+	t = replacetext(t, "\[cell\]", "<td>")
 
 	var/text_color
 	if(istype(P, /obj/item/weapon/pen))
 		text_color = P.colour
 	else if(istype(P, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = P
-		text_color = C.colour
+		text_color = C.mainColour
 
 	return "<span style=\"[style];color:[text_color]\">[t]</span>"
 
@@ -248,6 +198,7 @@ var/paperwork_library
 	pressure_resistance = 2
 
 	var/colour = "black"	//what colour the ink is!
+	var/colour_rgb = "#000000"
 	var/style_type = /datum/writing_style/pen
 	var/nano_style_type = /datum/writing_style/pen/nano_paper
 	var/datum/writing_style/style
@@ -286,16 +237,19 @@ var/paperwork_library
 	desc = "It's a normal blue ink pen."
 	icon_state = "pen_blue"
 	colour = "blue"
+	colour_rgb = "#0000ff"
 
 /obj/item/weapon/pen/red
 	desc = "It's a normal red ink pen."
 	icon_state = "pen_red"
 	colour = "red"
+	colour_rgb = "#ff0000"
 
 /obj/item/weapon/pen/invisible
 	desc = "It's an invisble pen marker."
 	icon_state = "pen"
 	colour = "white"
+	colour_rgb = "#ffffff"
 
 /obj/item/weapon/pen/NT
 	name = "promotional Nanotrasen pen"
@@ -333,8 +287,26 @@ var/paperwork_library
 	throwforce = 5
 	attack_verb = list("stabs")
 	style_type = /datum/writing_style/script
+	var/bloodied = null
+
+/obj/item/weapon/pen/fountain/examine(mob/user)
+	. = ..()
+	if(bloodied)
+		to_chat(user, "<span class='info'>The nib is dripping with a viscous substance.</span>")
+
+/obj/item/weapon/pen/fountain/afterattack(obj/reagentholder, mob/user as mob)
+	..()
+	if(!bloodied)
+		return
+	if(reagentholder.is_open_container() && !ismob(reagentholder) && reagentholder.reagents)
+		if(reagentholder.reagents.has_only_any(list(WATER,CLEANER,BLEACH,ETHANOL, HOLYWATER))) //cannot contain any reagent outside of this list, but can contain the list in any proportion
+			to_chat(user, "<span class='notice'>You dip \the [src] into \the [reagentholder], cleaning out the nib.</span>")
+			bloodied = FALSE
+			colour = "black"
 
 /obj/item/weapon/pen/fountain/cap
+	name = "captain's fountain pen"
+	desc = "A fancy fountain pen, for when you really want to impress. This one comes in a commanding navy and gold. The nib is quite sharp."
 	icon_state = "pen_fountain_cap"
 
 /obj/item/weapon/pen/tactical
@@ -349,12 +321,14 @@ var/paperwork_library
 
 /obj/item/weapon/pen/tactical/is_screwdriver(mob/user)
 	return TRUE
+
 /obj/item/weapon/pen/attack(mob/M as mob, mob/user as mob)
 	if(istype(src, /obj/item/weapon/pen/fountain))
+		var/obj/item/weapon/pen/fountain/P = src
 		if(user.zone_sel.selecting == "eyes" || user.zone_sel.selecting == LIMB_HEAD)
 			if(!istype(M))
 				return ..()
-			if(can_operate(M, user, src))
+			if(can_operate(M, user, P))
 				return ..()
 			if(clumsy_check(user) && prob(50))
 				M = user
@@ -363,7 +337,8 @@ var/paperwork_library
 		var/mob/living/carbon/human/H = M
 		var/datum/reagent/blood/B = get_blood(H.vessel)
 		if(B)
-			colour = B.data["blood_colour"]
+			P.bloodied = TRUE
+			P.colour = B.data["blood_colour"]
 
 	if(!ismob(M))
 		return

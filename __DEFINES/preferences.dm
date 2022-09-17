@@ -14,3 +14,8 @@
 #define JOB_PREF_MED 2
 #define JOB_PREF_LOW 1
 #define JOB_PREF_NEVER 0
+
+// /datum/preferences/var/headset_sound
+#define HEADSET_SOUND_DISABLED 0
+#define HEADSET_SOUND_TRANSMIT 1
+#define HEADSET_SOUND_ALL 2

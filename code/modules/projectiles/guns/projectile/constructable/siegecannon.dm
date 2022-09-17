@@ -388,9 +388,9 @@
 	admin_warn(user)
 	add_fingerprint(user)
 	update_icon()
-	fuse_burn()
+	fuse_burn(user)
 
-/obj/item/cannonball/fuse_bomb/proc/fuse_burn()
+/obj/item/cannonball/fuse_bomb/proc/fuse_burn(var/mob/user)
 	set waitfor = 0
 
 	if(src && src.fuse_lit)
@@ -398,9 +398,9 @@
 			sleep(10)
 			src.seconds_left--
 			src.update_icon()
-			.()
+			.(user)
 		else
-			src.detonation()
+			src.detonation(user)
 	return
 
 /obj/item/cannonball/fuse_bomb/extinguish()
@@ -408,12 +408,12 @@
 	fuse_lit = 0
 	update_icon()
 
-/obj/item/cannonball/fuse_bomb/proc/detonation()
-	explosion(get_turf(src), -1, 0, 4) //buff range to compensate for this somehow breaching
+/obj/item/cannonball/fuse_bomb/proc/detonation(var/mob/user)
+	explosion(get_turf(src), -1, 0, 4, whodunnit = user) //buff range to compensate for this somehow breaching
 	qdel(src)
 
-/obj/item/cannonball/fuse_bomb/admin/detonation() //okay, this one can breach if it wants
-	explosion(get_turf(src), -1, 1, 3)
+/obj/item/cannonball/fuse_bomb/admin/detonation(var/mob/user) //okay, this one can breach if it wants
+	explosion(get_turf(src), -1, 1, 3, whodunnit = user)
 	qdel(src)
 
 /obj/item/cannonball/fuse_bomb/update_icon()
@@ -459,8 +459,8 @@
 	bombers += log_str
 	log_game(log_str)
 
-/obj/item/cannonball/fuse_bomb/ex_act(severity)//MWAHAHAHA
-	detonation()
+/obj/item/cannonball/fuse_bomb/ex_act(severity, var/child = null, var/mob/whodunnit)//MWAHAHAHA
+	detonation(whodunnit)
 
 /obj/item/cannonball/fuse_bomb/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//consistency
 	..()
@@ -492,6 +492,7 @@
 	adjSpeed = 1
 	adjForce = 0
 	var/isBouncing = FALSE	//Prevents it bouncing infinitely due to some dark curse of throw_at()
+	var/lastBounceCount = 0
 
 /obj/item/cannonball/bananium/throw_at(atom/target, range, speed, override = 1)
 	if(!cannonFired)
@@ -508,29 +509,37 @@
 /obj/item/cannonball/bananium/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
 	if(!cannonFired)
+		lastBounceCount = 0
 		return
+	lastBounceCount++
 	if(isliving(hit_atom))
 		honkMob(hit_atom)
+		honkBounce(hit_atom)
 	else if(isitem(hit_atom) && hit_atom.density)
-		spawn(3)	//Give throwing time to stop bullying me
+		spawn(10)	//Give throwing time to stop bullying me
 			if(!throwing && cannonFired)
-				honkBounce(hit_atom)
+
+				honkBounce(hit_atom,lastBounceCount)
 
 
 /obj/item/cannonball/bananium/proc/honkMob(var/mob/living/L)
 	L.Knockdown(rand(2,10))
 	playsound(src, 'sound/items/bikehorn.ogg', 75, 1)
-	honkBounce(L)
 
-/obj/item/cannonball/bananium/proc/honkBounce(var/atom/cTarg)
+/obj/item/cannonball/bananium/proc/honkBounce(var/atom/cTarg, var/tot_bounces = 0)
+	if(tot_bounces > 10)
+		stopBouncing()
+		return 0
 	var/list/honkStep = alldirs.Copy()
 	var/honkDir = get_dir(src, cTarg)
 	honkStep -= list(honkDir, turn(honkDir, 45), turn(honkDir, -45))	//Every direction possible except directly, or diagonally, toward what we hit
 	honkDir = pick(honkStep)
-	spawn(3)	//Prevents multiple instances of throw_at() from being active
+	spawn(10)	//Prevents multiple instances of throw_at() from being active
 		bounceStep(honkDir)
 
 /obj/item/cannonball/bananium/proc/bounceStep(var/honkDir)
+	if(lastBounceCount > 25)
+		stopBouncing()
 	if(cannonFired)
 		if(prob(10) && istype(get_turf(src), /turf/simulated))
 			var/turf/simulated/T = get_turf(src)
@@ -542,6 +551,8 @@
 /obj/item/cannonball/bananium/proc/stopBouncing()
 	throwing = 0
 	kinetic_acceleration = 0
+	isBouncing = FALSE
+	lastBounceCount = 0
 	if(cannonFired)
 		cannonAdjust()
 

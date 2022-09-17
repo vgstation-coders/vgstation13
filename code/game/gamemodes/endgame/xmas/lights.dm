@@ -20,7 +20,7 @@
 
 	use_auto_lights = TRUE
 	light_range_on = 2
-	light_power_on = 2
+	light_power_on = 0.5
 
 	var/image/lights
 	var/static/list/colors = list(
@@ -53,7 +53,7 @@
 
 /obj/machinery/xmas_light/update_icon()
 	overlays.len = 0
-	if (stat & (NOPOWER|BROKEN))
+	if (stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 
 	overlays += lights

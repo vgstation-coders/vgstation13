@@ -14,8 +14,9 @@
 	if(istype(H))
 		head = H
 		name = "[H.name]"
-		if(H.origin_body)
-			desc = "The severed head of [H.origin_body.real_name], crudely shoved onto the tip of a spear."
+		var/mob/living/carbon/human/body = H.origin_body?.get()
+		if(body)
+			desc = "The severed head of [body.real_name], crudely shoved onto the tip of a spear."
 		else
 			desc = "A severed head, crudely shoved onto the tip of a spear."
 		display_head = new (src)
@@ -68,7 +69,7 @@
 	spear = new (src)
 	..(A, H)
 
-obj/structure/bigpeppermint_red
+/obj/structure/bigpeppermint_red
 	name = "mounted peppermint"
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "bigpeppermint_red"
@@ -76,7 +77,7 @@ obj/structure/bigpeppermint_red
 	density = 0
 	anchored = 1
 
-obj/structure/bigpeppermint_green
+/obj/structure/bigpeppermint_green
 	name = "mounted peppermint"
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "bigpeppermint_green"

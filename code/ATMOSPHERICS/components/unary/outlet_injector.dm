@@ -1,7 +1,7 @@
 /obj/machinery/atmospherics/unary/outlet_injector
 	icon = 'icons/obj/atmospherics/outlet_injector.dmi'
 	icon_state = "off"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 
 	name = "Air Injector"
 	desc = "Has a valve and pump attached to it."
@@ -23,12 +23,12 @@
 	name = "Acid-Proof Air Injector"
 	desc = "Has a valve and pump attached to it. This one has an acid proof coating."
 
-/obj/machinery/atmospherics/unary/outlet_injector/acid_proof/acidable()
+/obj/machinery/atmospherics/unary/outlet_injector/acid_proof/dissolvable()
 	return 0
 
 /obj/machinery/atmospherics/unary/outlet_injector/update_icon()
 	if(node1)
-		if(on && !(stat & NOPOWER))
+		if(on && !(stat & (NOPOWER|FORCEDISABLE)))
 			icon_state = "hon"
 		else
 			icon_state = "hoff"
@@ -49,7 +49,7 @@
 	. = ..()
 	injecting = 0
 
-	if(!on || stat & NOPOWER)
+	if(!on || stat & (FORCEDISABLE|NOPOWER))
 		return
 
 	if(air_contents.temperature > 0)

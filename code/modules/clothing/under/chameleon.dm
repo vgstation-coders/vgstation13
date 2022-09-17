@@ -66,6 +66,7 @@
 	icon_state = A.icon_state
 	item_state = A.item_state
 	_color = A._color
+	clothing_flags = A.clothing_flags
 	usr.update_inv_w_uniform()	//so our overlays update.
 
 

@@ -6,7 +6,7 @@
 	desc = "It's a gruesome pile of thick, sticky resin shaped like a nest."
 	icon = 'icons/mob/alien.dmi'
 	icon_state = "nest"
-	var/health = 100
+	health = 100
 
 /obj/structure/bed/nest/New()
 	..()
@@ -109,7 +109,7 @@
 		if(!gcDestroyed && is_locking(/datum/locking_category/buckle/bed/nest))
 			stabilize()
 
-/obj/structure/bed/nest/acidable()
+/obj/structure/bed/nest/dissolvable()
 	return 0
 
 #undef ALIEN_NEST_LOCKED_Y_OFFSET

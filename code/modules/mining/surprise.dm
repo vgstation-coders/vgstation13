@@ -82,7 +82,7 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 			UpdateTurf(AT, no_adjacent=1)
 		var/surprise_turf_info/ATi = turf_info[AT]
 		// By-Ref so shit gets updated.
-		ATi.adjacents["[reverse_direction(dir)]"]=Ti.types
+		ATi.adjacents["[opposite_dirs[dir]]"]=Ti.types
 
 
 	// Common stuff

@@ -6,11 +6,11 @@
 	var/enabled = 1
 	var/obj/item/weapon/gun/installed = null	// the type of weapon installed
 	anchored = 1
-	invisibility = INVISIBILITY_LEVEL_TWO		// the turret is invisible if it's inside its cover
+	invisibility = INVISIBILITY_LEVEL_ONE		// the turret is invisible if it's inside its cover
 	density = 1
 	var/faction = null 							//No shooting our buddies!
 	var/shootsilicons = 0						//You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
-	var/health = 80								// the turret's health
+	health = 80									// the turret's health
 	var/obj/machinery/turretcover/cover = null	// the cover that is covering this turret
 	var/raising = 0								// if the turret is currently opening or closing its cover
 	var/wasvalid = 0
@@ -18,15 +18,25 @@
 
 	var/reqpower = 350							// Amount of power per shot
 	var/shot_delay = 30 						//3 seconds between shots
+	var/last_shot
 	var/fire_twice = 0
 
-	use_power = 1								// this turret uses and requires power
+	use_power = MACHINE_POWER_USE_IDLE			// this turret uses and requires power
 	idle_power_usage = 50						// when inactive, this turret takes up constant 50 Equipment power
 	active_power_usage = 300					// when active, this turret takes up constant 300 Equipment power
 //	var/list/targets
 	var/atom/movable/cur_target
 	var/targeting_active = 0
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/turret_upgrade,
+		/datum/malfhack_ability/oneuse/turret_pulse,
+		/datum/malfhack_ability/oneuse/overload_loud,
+		/datum/malfhack_ability/manual_control
+	)
+
+	var/mob/living/silicon/ai/controlling_malf = null
 
 /obj/machinery/turret/New()
 //	targets = new
@@ -52,11 +62,15 @@
 		icon_state = "grey_target_prism"
 	else
 		if( powered() )
-			if (src.enabled)
+			if (src.enabled && !(stat & FORCEDISABLE))
 				if(istype(installed,/obj/item/weapon/gun/energy/gun))
 					var/obj/item/weapon/gun/energy/gun/EG = installed
 					if(EG.mode == 1)
 						icon_state = "orange_target_prism"
+					else
+						icon_state = "target_prism"
+				else if(istype(installed,/obj/item/weapon/gun/energy/pulse_rifle/destroyer))
+					icon_state = "blue_target_prism"
 				else
 					icon_state = "target_prism"
 			else
@@ -90,7 +104,7 @@
 	if(T && (T in view(7,src)))
 		if( ismob(T) )
 			var/mob/M = T
-			if((M.flags & INVULNERABLE) || M.faction == faction)
+			if((M.flags & INVULNERABLE) || (faction && M.faction == faction))
 				return 0
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
@@ -119,6 +133,8 @@
 			var/mob/living/simple_animal/A = T
 			if( !A.stat )
 				return 1
+		else if(istype(T, /obj/effect/blob))
+			return 1
 	return 0
 
 /obj/machinery/turret/proc/get_new_target()
@@ -133,12 +149,14 @@
 	for(var/obj/structure/bed/chair/vehicle/V in view(7, src))
 		if(check_target(V))
 			new_targets += V
+	for(var/obj/effect/blob/B in view(7, src))
+		new_targets += B
 	if(new_targets.len)
 		new_target = pick(new_targets)
 	return new_target
 
 /obj/machinery/turret/process()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		// if the turret has no power or is broken, make the turret pop down if it hasn't already
 		popDown()
 		return
@@ -149,19 +167,24 @@
 		if(raised && !raising)
 			popDown()
 		return
+
+	if(controlling_malf) // manually controlled by a malf AI
+		if(!raised && !raising)
+			popUp()
+			use_power = 2
+		return
+
 	if(!check_target(cur_target)) //if current target fails target check
 		if(fire_twice)
-			src.dir = get_dir(src, cur_target)
 			shootAt(cur_target)
 			cur_target = get_new_target()
 		else
 			cur_target = get_new_target()
 	if(cur_target) //if it's found, proceed
-//		to_chat(world, "[cur_target]")
 		if(!raising)
 			if(!raised)
 				popUp()
-				use_power = 2
+				use_power = MACHINE_POWER_USE_ACTIVE
 			else
 				spawn()
 					if(!targeting_active)
@@ -176,13 +199,13 @@
 				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
 	else if(!raising || raised)//else, pop down
 		popDown()
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 	return
 
 /obj/machinery/turret/proc/target()
 	while(src && enabled && !stat && check_target(cur_target))
-		src.dir = get_dir(src, cur_target)
 		shootAt(cur_target)
+		cur_target = get_new_target()
 		sleep(shot_delay)
 	return
 
@@ -191,10 +214,15 @@
 	var/turf/U = get_turf(target)
 	if (!istype(T) || !istype(U))
 		return
-	
+	if(world.time < last_shot + shot_delay)
+		return
+
+	src.dir = get_dir(src, target)
 	use_power(reqpower)
 
 	playsound(src, installed.fire_sound, 75, 1)
+
+	last_shot = world.time
 	var/obj/item/projectile/A
 	if(istype(installed, /obj/item/weapon/gun/projectile/roulette_revolver))
 		var/obj/item/weapon/gun/projectile/roulette_revolver/R = installed
@@ -244,7 +272,7 @@
 	raising=0
 	cover.icon_state="turretCover"
 	raised=0
-	invisibility = INVISIBILITY_LEVEL_TWO
+	invisibility = INVISIBILITY_LEVEL_ONE
 
 /obj/machinery/turret/bullet_act(var/obj/item/projectile/Proj)
 	src.health -= Proj.damage
@@ -328,6 +356,24 @@
 		qdel(cover)
 		cover = null
 
+
+/obj/machinery/turret/proc/malf_take_control(mob/living/silicon/ai/A)
+	if(!A.eyeobj)
+		A.make_eyeobj()
+	A.eyeobj.forceMove(get_turf(src))
+	A.current = src
+	controlling_malf = A
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	if(!enabled)
+		return
+	popUp()
+
+/obj/machinery/turret/proc/malf_release_control()
+	if(controlling_malf)
+		controlling_malf.current = null
+		controlling_malf = null
+
 /obj/machinery/turretid
 	name = "turret control switchboard"
 	desc = "A card reader attached to a small switchboard with a big status light. The button labelled 'lethal' has a post-it note under it, showing a skull and crossbones."
@@ -365,7 +411,7 @@
 	ASSERT(isarea(control_area))
 	updateTurrets() //Updates the turrets and the icon if an instance is made that is not set to stun by default
 
-/obj/machinery/turretid/emag(mob/user)
+/obj/machinery/turretid/emag_act(mob/user)
 	if(!emagged)
 		emagged = 1
 		locked = 0
@@ -373,12 +419,12 @@
 			to_chat(user, "<span class='warning'>You short out [src]'s access analysis and threat indicator module.</span>")
 			if(user.machine == src)
 				attack_hand(user)
-			update_icons() //Update the icon immediately since emagging removes the turret threat indicator
+			update_icon() //Update the icon immediately since emagging removes the turret threat indicator
 		return 1
 	return
 
 /obj/machinery/turretid/attackby(obj/item/weapon/W, mob/user)
-	if(stat & BROKEN)
+	if(stat & (BROKEN|FORCEDISABLE))
 		return
 	if(issilicon(user))
 		return attack_hand(user)
@@ -406,7 +452,7 @@
 
 /obj/machinery/turretid/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
-	if(!ailock || isAdminGhost(user))
+	if(!ailock || isAdminGhost(user) || is_malf_owner(user))
 		return attack_hand(user)
 	else
 		to_chat(user, "<span class='notice'>There seems to be a firewall preventing you from accessing [src].</span>")
@@ -475,19 +521,25 @@
 	return ..()
 
 //All AI shortcuts. Basing this on what airlocks do, so slight clash with user (Alt is dangerous so toggle stun/lethal, Ctrl is bolts so lock, Shift is 'open' so toggle turrets)
-/obj/machinery/turretid/AIAltClick() //Stun/lethal toggle
-	if(!ailock)
+/obj/machinery/turretid/AIAltClick(mob/living/silicon/ai/user) //Stun/lethal toggle
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	if(!ailock || is_malf_owner(user))
 		lethal = !lethal
 		to_chat(usr, "<span class='notice'>You switch the turrets to [lethal ? "lethal":"stun"].</span>")
 		updateTurrets()
 
-/obj/machinery/turretid/AICtrlClick() //Lock the device
-	if(!ailock)
+/obj/machinery/turretid/AICtrlClick(mob/living/silicon/ai/user) //Lock the device
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	if(!ailock || is_malf_owner(user))
 		locked = !locked
 		to_chat(usr, "<span class='notice'>You [locked ? "lock" : "unlock"] the switchboard panel.</span>")
 
-/obj/machinery/turretid/AIShiftClick()  //Toggle the turrets on/off
-	if(!ailock)
+/obj/machinery/turretid/AIShiftClick(mob/living/silicon/ai/user)  //Toggle the turrets on/off
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	if(!ailock || is_malf_owner(user))
 		enabled = !enabled
 		to_chat(usr, "<span class='notice'>You [enabled ? "enable":"disable"] the turrets.</span>")
 		updateTurrets()
@@ -496,10 +548,12 @@
 	if(control_area)
 		for(var/obj/machinery/turret/aTurret in control_area.contents)
 			aTurret.setState(enabled, lethal)
-	update_icons()
+	update_icon()
 
-/obj/machinery/turretid/proc/update_icons()
-	if(enabled && !emagged) //Emagged turret controls are always disguised as disabled
+/obj/machinery/turretid/update_icon()
+	if(stat & (BROKEN|FORCEDISABLE))
+		icon_state = "turretid_off"
+	else if(enabled && !emagged) //Emagged turret controls are always disguised as disabled
 		if(lethal)
 			icon_state = "turretid_lethal"
 		else
@@ -518,7 +572,7 @@
 	var/list/exclude = list()
 	var/atom/cur_target
 	var/scan_range = 7
-	var/health = 40
+	health = 40
 	var/list/scan_for = list("human"=0,"cyborg"=0,"mecha"=0,"alien"=1)
 	var/on = 0
 	icon = 'icons/obj/turrets.dmi'
@@ -537,13 +591,6 @@
 	if(src.health<=0)
 		qdel (src)
 	return
-
-/obj/structure/turret/gun_turret/proc/take_damage(damage)
-	src.health -= damage
-	if(src.health<=0)
-		qdel (src)
-	return
-
 
 /obj/structure/turret/gun_turret/bullet_act(var/obj/item/projectile/Proj)
 	src.take_damage(Proj.damage)
@@ -642,6 +689,12 @@
 			if(M.stat || M.lying || (M in exclude))
 				continue
 			pos_targets += M
+		for(var/obj/effect/blob/B in oview(scan_range, src))
+			pos_targets += B
+		for(var/mob/living/simple_animal/hostile/blobspore/BS in oview(scan_range,src))
+			if(BS.stat || BS.lying || (BS in exclude))
+				continue
+			pos_targets += BS
 	if(pos_targets.len)
 		target = pick(pos_targets)
 	return target
@@ -688,3 +741,12 @@
 /obj/machinery/turret/centcomm/update_gun()
 	if(!installed)
 		installed = new /obj/item/weapon/gun/energy/laser/cannon(src)
+
+/obj/machinery/turretcover/hack_interact(var/mob/living/silicon/ai/malf)
+	host.hack_interact(malf)
+
+/obj/machinery/turretcover/malf_disrupt(var/duration, var/bypassafter = FALSE)
+	return
+
+/obj/machinery/turret/centcomm/syndie
+	faction = "syndicate"

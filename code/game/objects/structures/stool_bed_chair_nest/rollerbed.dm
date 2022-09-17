@@ -88,7 +88,6 @@
 			"You attach \the [IV] from \the [src].",
 			"You hear a small metal latch.")
 
-		IV.mode = IVDRIP_INJECTING
 		IV.update_icon()
 
 		if(IV.pulledby)

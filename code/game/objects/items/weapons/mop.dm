@@ -51,8 +51,8 @@
 		return
 	if(istype(A, /mob/living))
 		if(!(reagents.total_volume < 1)) //Slap slap slap
-			A.visible_message("<span class='danger'>[user] covers [A] in the mop's contents</span>")
-			reagents.reaction(A,1,10) //I hope you like my polyacid cleaner mix
+			A.visible_message("<span class='danger'>[user] [ishuman(A) ? "hits [A] in the [parse_zone(user.zone_sel.selecting)] with" : "covers [A] in"] the mop's contents</span>")
+			reagents.reaction(A,1,10, zone_sels = list(user.zone_sel.selecting)) //I hope you like my polyacid cleaner mix
 			reagents.clear_reagents()
 
 	if(istype(A, /turf/simulated) || iscleanaway(A))

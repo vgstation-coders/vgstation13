@@ -20,7 +20,7 @@
 		if(!(O.type in left_to_check))
 			left_to_check[O.type] = 0
 		left_to_check[O.type] += P.amount
-		score["plasmashipped"] += P.amount
+		score.plasmashipped += P.amount
 		qdel(O)
 		return 1
 	return 0

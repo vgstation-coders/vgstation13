@@ -1,7 +1,7 @@
 /obj/machinery/atmospherics/binary
 	dir = SOUTH
 	initialize_directions = SOUTH|NORTH
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 
 	var/datum/gas_mixture/air1
 	var/datum/gas_mixture/air2
@@ -22,6 +22,14 @@
 
 /obj/machinery/atmospherics/binary/New()
 	..()
+	update_dir()
+	air1 = new
+	air2 = new
+	update_icon()
+	air1.volume = 200
+	air2.volume = 200
+
+/obj/machinery/atmospherics/binary/update_dir()
 	switch(dir)
 		if(NORTH)
 			initialize_directions = NORTH|SOUTH
@@ -31,12 +39,7 @@
 			initialize_directions = EAST|WEST
 		if(WEST)
 			initialize_directions = EAST|WEST
-	air1 = new
-	air2 = new
-	update_icon()
-	air1.volume = 200
-	air2.volume = 200
-
+	..()
 
 /obj/machinery/atmospherics/binary/get_node(node_id)
 	switch(node_id)

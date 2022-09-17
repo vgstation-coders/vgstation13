@@ -43,15 +43,13 @@
 				var/list/targetlist = fuel_injectors[Injector.stage]
 				targetlist.Add(Injector)*/
 
-/obj/machinery/computer/rust_fuel_control/attack_ai(mob/user)
-	attack_hand(user)
 
 /obj/machinery/computer/rust_fuel_control/attack_hand(mob/user)
 	add_fingerprint(user)
 	interact(user)
 
 /obj/machinery/computer/rust_fuel_control/interact(mob/user)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		user.unset_machine()
 		user << browse(null, "window=fuel_control")
 		return
@@ -188,7 +186,7 @@
 	if(!I)
 		return 0
 
-	if(I.stat & (BROKEN|NOPOWER) || !I.remote_access_enabled || !I.id_tag)
+	if(I.stat & (FORCEDISABLE|BROKEN|NOPOWER) || !I.remote_access_enabled || !I.id_tag)
 		if(connected_injectors.Find(I))
 			connected_injectors.Remove(I)
 		return 0

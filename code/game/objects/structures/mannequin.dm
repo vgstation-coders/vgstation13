@@ -34,8 +34,8 @@
 	var/hair_color = "#B9C1B8"
 	var/clothing_offset_x = 0
 	var/clothing_offset_y = 3*PIXEL_MULTIPLIER
-	var/health = 90
-	var/maxHealth = 90
+	health = 90
+	maxHealth = 90
 	var/has_pedestal = TRUE
 	var/timer = 80 //in seconds
 	var/mob/living/captured
@@ -74,8 +74,11 @@
 	var/chaintrap_range = 0//= Range at which mannequin awakens nearby mannequins when it awakens.
 
 
-/obj/structure/mannequin/New(turf/loc, var/f_style, var/h_style, var/list/items_to_wear, var/list/items_to_hold = list(null, null), var/mob_to_capture)
+/obj/structure/mannequin/New(turf/loc, var/f_style, var/h_style, var/list/items_to_wear, var/list/items_to_hold = list(null, null), var/mob_to_capture, var/forever)
 	..()
+
+	if (forever)
+		timer = -1
 
 	species = new species_type()
 
@@ -139,7 +142,7 @@
 		captured.setOxyLoss(intialOxy)
 		if (timer >= 5)
 			captured.Paralyse(2)
-	if (timer <= 0)
+	if (timer == 0)
 		freeCaptive()
 		qdel(src)
 
@@ -452,6 +455,8 @@
 /obj/structure/mannequin/proc/freeCaptive()
 	if (!captured)
 		return
+	captured.sdisabilities &= ~MUTE
+	captured.timestopped = 0
 	captured.forceMove(loc)
 	for(var/cloth in clothing)
 		var/obj/O = clothing[cloth]
@@ -497,7 +502,6 @@
 			continue
 		captured.put_in_hands(tool)
 	held_items.len = 0
-
 	captured.dir = dir
 	captured.apply_damage(additional_damage)
 
@@ -752,6 +756,44 @@
 
 		clothToUpdate.generate_accessory_overlays(O)
 
+		if(istype(clothToUpdate,/obj/item/clothing/head))
+			var/obj/item/clothing/head/hat = clothToUpdate
+			var/i = 1
+			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+				if(primitive)
+					I = image(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], above.icon_state)
+				else if (corgi)
+					I = image(slotIcon[MANNEQUIN_ICONS_CORGI], above.icon_state)
+				else if(clothToUpdate.icon_override)
+					I = image(above.icon_override, above.icon_state)
+				else
+					I = image(slotIcon[MANNEQUIN_ICONS_SLOT], above.icon_state)
+
+				if(species.name in above.species_fit)
+					var/icon/species_icon = slotIcon[MANNEQUIN_ICONS_SPECIES]
+					if(species_icon)
+						I.icon = species_icon
+
+				I.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+				O.overlays += I
+
+				if(above.dynamic_overlay)
+					if(above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"])
+						var/image/dyn_overlay = above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"]
+						dyn_overlay.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+						O.overlays += dyn_overlay
+
+				if(above.blood_DNA && above.blood_DNA.len)
+					var/bloodsies_state = get_bloodsies_state(above,slot)
+					if(bloodsies_state)
+						var/image/bloodsies	= image('icons/effects/blood.dmi', bloodsies_state)
+						bloodsies.color		= above.blood_color
+						bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+						O.overlays += bloodsies
+
+				//above.generate_accessory_overlays(O)
+				i++
+
 /obj/structure/mannequin/proc/update_icon_hand(var/obj/abstract/Overlays/O,var/index)
 	var/obj/item/heldItem = get_held_item_by_index(index)
 
@@ -903,9 +945,9 @@
 
 
 /obj/structure/mannequin/proc/spin()
-	invoke_event(/event/before_move)
+	INVOKE_EVENT(src, /event/before_move)
 	change_dir(turn(dir, 90))
-	invoke_event(/event/after_move)
+	INVOKE_EVENT(src, /event/after_move)
 
 /obj/structure/mannequin/verb/rotate_mannequin()
 	set name = "Rotate Mannequin"

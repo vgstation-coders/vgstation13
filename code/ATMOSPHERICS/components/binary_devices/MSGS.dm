@@ -18,8 +18,6 @@
 
 	var/datum/gas_mixture/air				//Internal tank.
 
-	var/datum/html_interface/nanotrasen/interface
-
 	var/tmp/update_flags
 	var/tmp/last_pressure
 
@@ -27,69 +25,19 @@
 	anchored = 0
 
 /obj/machinery/atmospherics/binary/msgs/New()
-	html_machines += src
-
-	interface = new(src, sanitize(name), 500, 520)
-
-	init_ui()
-
 	air = new
 	air.volume = internal_volume
 
 	return ..()
 
-//Here we set the content of the interface.
-/obj/machinery/atmospherics/binary/msgs/proc/init_ui()
-	var/data = {"
-		<h2>
-			Gas storage status
-		</h2>
-		<div class="statusDisplay">
-			<div class="statusLabel">Total pressure: 	</div><div class="statusValue"><span id="pressurereadout">0</span> kPa</div><br>
-			<div class="statusLabel">Temperature:	 	</div><div class="statusValue"><span id="tempreadout">0</span> K</div><br>
-			<hr>
-			<div class="statusLabel">Oxygen: 			</div><div class="statusValue"><span id="oxypercent">0</span> %</div><br>
-			<div class="statusLabel">Nitrogen: 			</div><div class="statusValue"><span id="nitpercent">0</span> %</div><br>
-			<div class="statusLabel">Carbon Dioxide: 	</div><div class="statusValue"><span id="co2percent">0</span> %</div><br>
-			<div class="statusLabel">Plasma: 			</div><div class="statusValue"><span id="plapercent">0</span> %</div><br>
-			<div class="statusLabel">Nitrous Oxide: 	</div><div class="statusValue"><span id="n2opercent">0</span> %</div><br>
-		</div>
-		<h2>
-			I/O controls
-		</h2>
-		<div class="item">
-			<div class="itemLabel">Input: </div>
-			<div class="itemContent">
-				<span id="inputtoggles">
-					<a href="?src=\ref[interface];power=1">Enable</a> <a href="?src=\ref[interface];power=0" class="linkDanger">Disable</a>
-				</span>
-			</div>
-		</div>
-		<br><br>
-		<div class="item">
-			<div class="itemLabel">Output pressure (kPa): </div>
-			<div class="itemContent">
-				<form action="?src=\ref[interface]" method="get"><input type="hidden" name="src" value="\ref[interface]"/>
-					<span id="pressureinput"><input type="textbox" name="set_pressure" value="0"/></span> <input type="submit" name="act" value="Set"/>
-				</form>
-			</div>
-		</div>
-	"}
-	interface.updateContent("content", data)
-
 /obj/machinery/atmospherics/binary/msgs/Destroy()
 	. = ..()
-
-	html_machines -= src
-
-	qdel(interface)
-	interface = null
 
 	air = null
 
 /obj/machinery/atmospherics/binary/msgs/process()
 	. = ..()
-	if(stat & (NOPOWER | BROKEN))
+	if(stat & (NOPOWER | BROKEN | FORCEDISABLE))
 		return
 
 	//Output handling, stolen from pump code.
@@ -129,74 +77,63 @@
 				if(network1)
 					network1.update = 1
 
-	updateUsrDialog()
 	update_icon()
 
-//Screw having to set a machine.
-/obj/machinery/atmospherics/binary/msgs/hiIsValidClient(datum/html_interface_client/hclient, datum/html_interface/hi)
-	if(hclient.client.mob)
-		return hclient.client.mob.html_mob_check(src.type)
+/obj/machinery/atmospherics/binary/msgs/ui_data()
+	var/list/data = list()
 
-/obj/machinery/atmospherics/binary/msgs/updateUsrDialog()
-	if(!interface.isUsed())
-		return
-
-	interface.updateContent("pressurereadout", round(air.return_pressure(), 0.01))
-	interface.updateContent("tempreadout", air.return_temperature())
-
+	data["pressure"] = round(air.return_pressure(), 0.01)
+	data["temperature"] = air.return_temperature()
+	data["power"] = on
+	data["targetPressure"] = target_pressure
+	data["gases"] = list()
+	var/static/list/display_gases = list(
+		GAS_OXYGEN = "Oxygen",
+		GAS_NITROGEN = "Nitrogen",
+		GAS_CARBON = "Carbon Dioxide",
+		GAS_PLASMA = "Plasma",
+		GAS_SLEEPING = "Nitrous Oxide",
+	)
 	var/total_moles = air.total_moles
-	if(round(total_moles, 0.01))	//Check if there's total moles to avoid divisions by zero.
-		interface.updateContent("oxypercent", clamp(round(100 * air[GAS_OXYGEN]			/ total_moles, 0.1), 0, 100))
-		interface.updateContent("nitpercent", clamp(round(100 * air[GAS_NITROGEN]		/ total_moles, 0.1), 0, 100))
-		interface.updateContent("co2percent", clamp(round(100 * air[GAS_CARBON]			/ total_moles, 0.1), 0, 100))
-		interface.updateContent("plapercent", clamp(round(100 * air[GAS_PLASMA]			/ total_moles, 0.1), 0, 100))
-		interface.updateContent("n2opercent", clamp(round(100 * air[GAS_SLEEPING]		/ total_moles, 0.1), 0, 100))
+	for(var/gas in display_gases)
+		data["gases"] += list(list(
+			"name" = display_gases[gas],
+			//Check if there's total moles to avoid divisions by zero.
+			"percentage" = round(total_moles, 0.01) \
+					? clamp(round(100 * air[gas] / total_moles, 0.1), 0, 100) \
+					: 0
+		))
+	return data
 
-	else
-		interface.updateContent("oxypercent", 0)
-		interface.updateContent("nitpercent", 0)
-		interface.updateContent("co2percent", 0)
-		interface.updateContent("plapercent", 0)
-		interface.updateContent("n2opercent", 0)
+/obj/machinery/atmospherics/binary/msgs/ui_act(action, list/params)
+	. = ..()
+	if(.)
+		return
+	switch(action)
+		if("toggle_power")
+			on = !on
+			update_icon()
+			return TRUE
+		if("set_pressure")
+			target_pressure = round(clamp(text2num(params["new_pressure"]), 0, 4500))
+			update_icon()
+			return TRUE
 
-	if(on)
-		interface.updateContent("inputtoggles",	{"<a href="?src=\ref[interface];power=1" class="linkOn">Enable</a> <a href="?src=\ref[interface];power=0">Disable</a>"})
-	else
-		interface.updateContent("inputtoggles",	{"<a href="?src=\ref[interface];power=1">Enable</a> <a href="?src=\ref[interface];power=0" class="linkDanger">Disable</a>"})
+/obj/machinery/atmospherics/binary/msgs/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "MSGS")
+		ui.set_autoupdate(TRUE)
+		ui.open()
 
-	interface.updateContent("pressureinput", 	{"<input type="textbox" name="set_pressure" value="[target_pressure]"/>"})
-
-/obj/machinery/atmospherics/binary/msgs/Topic(href, href_list)
+/obj/machinery/atmospherics/binary/msgs/attack_hand(mob/user)
 	. = ..()
 	if(.)
 		return
 
-	if(href_list["power"])
-		on = round(clamp(text2num(href_list["power"]), 0, 1))
-		updateUsrDialog()
-		update_icon()
-		return 1
+	tgui_interact(user)
 
-	if(href_list["set_pressure"])
-		target_pressure = round(clamp(text2num(href_list["set_pressure"]), 0, 4500))
-		update_icon()
-		updateUsrDialog()
-		return 1
-
-/obj/machinery/atmospherics/binary/msgs/attack_hand(var/mob/user)
-	. = ..()
-	if(.)
-		if(user.machine == src)
-			user.unset_machine()
-		return
-
-	interface.show(user)
-	updateUsrDialog()
-
-/obj/machinery/atmospherics/binary/msgs/attack_ai(var/mob/user)
-	. = attack_hand(user)
-
-/obj/machinery/atmospherics/binary/msgs/attackby(var/obj/item/W, var/mob/user)
+/obj/machinery/atmospherics/binary/msgs/attackby(obj/item/W, mob/user)
 	. = ..()
 	if(.)
 		return
@@ -215,7 +152,7 @@
 	if((update_flags & MSGS_INPUT) != on)
 		update = 1
 
-	if((update_flags & MSGS_ON) != !(stat & (NOPOWER | BROKEN)))
+	if((update_flags & MSGS_ON) != !(stat & (NOPOWER | BROKEN | FORCEDISABLE)))
 		update = 1
 
 	var/pressure = air.return_pressure() // null ref error here.
@@ -233,7 +170,7 @@
 	if(node2)
 		overlays += image(icon = icon, icon_state = "node-2")
 
-	if(!(stat & (NOPOWER | BROKEN)))
+	if(!(stat & (NOPOWER | BROKEN | FORCEDISABLE)))
 
 		overlays += image(icon = icon, icon_state = "o-[i]")
 

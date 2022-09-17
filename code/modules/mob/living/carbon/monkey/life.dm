@@ -82,9 +82,9 @@
 
 		if(prob(33) && canmove && isturf(loc) && !pulledby && !(grabbed_by?.len)) //won't move if being pulled
 
-			invoke_event(/event/before_move)
+			INVOKE_EVENT(src, /event/before_move)
 			step(src, pick(cardinal))
-			invoke_event(/event/after_move)
+			INVOKE_EVENT(src, /event/after_move)
 
 		if(prob(1))
 			passive_emote()
@@ -228,7 +228,7 @@
 				if(!block)
 					for(var/obj/effect/smoke/chem/smoke in view(1, src))
 						if(smoke.reagents.total_volume)
-							smoke.reagents.reaction(src, INGEST)
+							smoke.reagents.reaction(src, INGEST, amount_override = min(smoke.reagents.total_volume,10)/(smoke.reagents.reagent_list.len))
 							spawn(5)
 								if(smoke)
 									smoke.reagents.copy_to(src, 10) // I dunno, maybe the reagents enter the blood stream through the lungs?

@@ -29,7 +29,6 @@ var/list/admin_verbs_admin = list(
 	/datum/admins/proc/toggleguests,	/*toggles whether guests can join the current game*/
 	/datum/admins/proc/announce,		/*priority announce something to all clients.*/
 	/client/proc/colorooc,				/*allows us to set a custom colour for everythign we say in ooc*/
-	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/toggle_view_range,		/*changes how far we can see*/
 	/datum/admins/proc/view_txt_log,	/*shows the server log (diary) for today*/
 	/datum/admins/proc/view_atk_log,	/*shows the server combat-log, doesn't do anything presently*/
@@ -84,11 +83,11 @@ var/list/admin_verbs_admin = list(
 	/client/proc/allow_character_respawn,    /* Allows a ghost to respawn */
 	/client/proc/watchdog_force_restart,	/*forces restart using watchdog feature*/
 	/client/proc/manage_religions,
-	/client/proc/set_veil_thickness,
 	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
 	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 	/client/proc/diseases_panel,
 	/client/proc/artifacts_panel,
+	/client/proc/body_archive_panel,
 	/client/proc/climate_panel,
 	/datum/admins/proc/ashInvokedEmotions	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
 )
@@ -126,7 +125,6 @@ var/list/admin_verbs_fun = list(
 	/client/proc/gib_money, // /vg/
 	/client/proc/smissmas,
 	/client/proc/achievement,
-	/client/proc/mommi_static,
 	/client/proc/makepAI,
 	/client/proc/set_blob_looks,
 	/client/proc/set_teleport_pref,
@@ -146,7 +144,6 @@ var/list/admin_verbs_spawn = list(
 	)
 var/list/admin_verbs_server = list(
 	/client/proc/Set_Holiday,
-	/client/proc/ToRban,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/toggleaban,
@@ -183,12 +180,12 @@ var/list/admin_verbs_debug = list(
 	/client/proc/callproc,
 	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
 	/client/proc/disable_bloodvirii,       // /vg
-	/client/proc/handle_paperwork, //this is completely experimental
 	/client/proc/reload_style_sheet,
 	/client/proc/reset_style_sheet,
 	/client/proc/test_movable_UI,
 	/client/proc/test_snap_UI,
 	/client/proc/configFood,
+	/client/proc/configHat,
 	/client/proc/cmd_dectalk,
 	/client/proc/debug_reagents,
 	/client/proc/create_awaymission,
@@ -209,11 +206,13 @@ var/list/admin_verbs_debug = list(
 	/client/proc/cmd_mass_modify_object_variables,
 	/client/proc/emergency_shuttle_panel,
 	/client/proc/bee_count,
-	/client/proc/see_lightmap,
+	/client/proc/set_procizine_call,
+	/client/proc/set_procizine_properties,
 #if UNIT_TESTS_ENABLED
 	/client/proc/unit_test_panel,
 #endif
 	/client/proc/update_all_open_spaces,
+	/client/proc/update_all_area_portals,
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -237,7 +236,6 @@ var/list/admin_verbs_hideable = list(
 	/datum/admins/proc/toggleguests,
 	/datum/admins/proc/announce,
 	/client/proc/colorooc,
-	/client/proc/admin_ghost,
 	/client/proc/toggle_view_range,
 	/datum/admins/proc/view_txt_log,
 	/datum/admins/proc/view_atk_log,
@@ -262,7 +260,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/toggle_random_events,
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/Set_Holiday,
-	/client/proc/ToRban,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/delay,
@@ -301,7 +298,6 @@ var/list/admin_verbs_mod = list(
 	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game.*/
 	/datum/admins/proc/PlayerNotes,
-	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/cmd_mod_say,
 	/client/proc/cmd_mod_window,
 	/datum/admins/proc/show_player_info,
@@ -332,7 +328,7 @@ var/list/admin_verbs_mod = list(
 			verbs += admin_verbs_polling
 		if(holder.rights & R_STEALTH)
 			verbs += /client/proc/stealth
-		if(holder.rights & R_REJUVINATE)
+		if(holder.rights & R_REJUVENATE)
 			verbs += admin_verbs_rejuv
 		if(holder.rights & R_SOUNDS)
 			verbs += admin_verbs_sounds
@@ -378,8 +374,6 @@ var/list/admin_verbs_mod = list(
 		/client/proc/setup_atmos,
 		/client/proc/ticklag,
 		/client/proc/cmd_admin_grantfullaccess,
-		/client/proc/kaboom,
-		/client/proc/rigvote,
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
@@ -439,30 +433,6 @@ var/list/admin_verbs_mod = list(
 	add_admin_verbs()
 	to_chat(src, "<span class='interface'>All of your adminverbs are now visible.</span>")
 	feedback_add_details("admin_verb","TAVVS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/admin_ghost()
-	set category = "Admin"
-	set name = "Aghost"
-	if(!holder)
-		return
-	if(istype(mob,/mob/dead/observer))
-		//re-enter
-		var/mob/dead/observer/ghost = mob
-		ghost.can_reenter_corpse = 1			//just in-case.
-		ghost.reenter_corpse()
-		feedback_add_details("admin_verb","P") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	else if(istype(mob,/mob/new_player))
-		to_chat(src, "<span class='red'>Error: Aghost: Can't admin-ghost whilst in the lobby. Join or Observe first.</span>")
-	else
-		//ghostize
-		var/mob/body = mob
-		if(body.mind)
-			body.mind.isScrying = 1
-		body.ghostize(1)
-
-		if(body && !body.key)
-			body.key = "@[key]"	//Haaaaaaaack. But the people have spoken. If it breaks; blame adminbus
-		feedback_add_details("admin_verb","O") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
 /client/proc/invisimin()
@@ -675,23 +645,23 @@ var/list/admin_verbs_mod = list(
 	set desc = "Cause an explosion of varying strength at your location."
 
 	var/turf/epicenter = mob.loc
-	var/list/choices = list("Small Bomb (1,2,3)", "Medium Bomb (2,3,4)", "Big Bomb (3,5,7)", "Custom Bomb")
+	var/list/choices = list("Small Bomb (1,3,4)", "Medium Bomb (3,7,14)", "Big Bomb (7,14,28)", "Custom Bomb")
 	var/choice = input("What size explosion would you like to produce?") in choices | null
 	switch(choice)
 		if(null)
 			return 0
-		if("Small Bomb (1,2,3)")
-			explosion(epicenter, 1, 2, 3, 3)
-		if("Medium Bomb (2,3,4)")
-			explosion(epicenter, 2, 3, 4, 4)
-		if("Big Bomb (3,5,7)")
-			explosion(epicenter, 3, 5, 7, 5)
+		if("Small Bomb (1,3,4)")
+			explosion(epicenter, 1, 3, 4, 4, whodunnit = usr)
+		if("Medium Bomb (3,7,14)")
+			explosion(epicenter, 3, 7, 14, 14, whodunnit = usr)
+		if("Big Bomb (7,14,28)")
+			explosion(epicenter, 7, 14, 28, 28, whodunnit = usr)
 		if("Custom Bomb")
 			var/devastation_range = input("Devastation range (in tiles):") as num
 			var/heavy_impact_range = input("Heavy impact range (in tiles):") as num
 			var/light_impact_range = input("Light impact range (in tiles):") as num
 			var/flash_range = input("Flash range (in tiles):") as num
-			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range)
+			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, whodunnit = usr)
 
 	log_admin("[key_name(usr)] creating an admin explosion at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]).")
 	message_admins("<span class='notice'>[key_name_admin(src)] creating an admin explosion at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>).</span>")
@@ -806,10 +776,7 @@ var/list/admin_verbs_mod = list(
 		message_admins("[src] deadminned themself.")
 		if (ticker && ticker.current_state == GAME_STATE_PLAYING) //Only report this stuff if we are currently playing.
 			var/admins_number = admins.len
-			var/admin_number_afk = 0
-			for(var/client/X in admins)
-				if(X.is_afk())
-					admin_number_afk++
+			var/admin_number_afk = get_afk_admins()
 
 			var/available_admins = admins_number - admin_number_afk
 
@@ -1047,23 +1014,6 @@ var/list/admin_verbs_mod = list(
 	var/datum/achievement = new /datum/achievement(award, winner.key, winner.name, name, desc)
 	ticker.achievements.Add(achievement)
 
-/client/proc/mommi_static()
-	set name = "Toggle MoMMI Static"
-	set desc = "Toggle whether MoMMIs can see mobs or if the mobs are cloaked in static"
-	set category = "Fun"
-
-	if(!holder || !config)
-		return
-
-	config.mommi_static = !config.mommi_static
-	log_admin("[key_name(src)] turned MoMMI static [config.mommi_static ? "on" : "off"].")
-	message_admins("[key_name(src)] turned MoMMI static [config.mommi_static ? "on" : "off"].")
-	for(var/mob/living/silicon/robot/mommi/M in player_list)
-		if(M.can_see_static())
-			M.add_static_overlays()
-		else
-			M.remove_static_overlays()
-
 /client/proc/shuttle_magic()
 	set name = "Shuttle Magic"
 	set desc = "Open a menu with magic"
@@ -1212,17 +1162,29 @@ var/list/admin_verbs_mod = list(
 				to_chat(src, "<span class='warning'>Dungeon area not defined! This map is missing the /obj/effect/landmark/dungeon_area object.</span>")
 				return
 
-			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically).")
-			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)")
-			load_dungeon(ME)
-			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"]")
+			var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading", "0") as null|num
+			if(rotate == null)
+				return
+
+			var/rotatetext = rotate ? " rotated by [rotate] degrees" : ""
+			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)[rotatetext].")
+			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)[rotatetext].")
+			load_dungeon(ME, rotate, TRUE)
+			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"][rotatetext].")
 			return
 
 
-	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
-	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
-	ME.load(x_coord - 1, y_coord - 1, z_coord) //Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
-	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"]")
+	var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading", "0") as null|num
+	if(rotate == null)
+		return
+	var/overwrite = alert("Overwrite original objects in area?","Map element loading","Yes","No") == "Yes"
+
+	var/rotatetext = rotate ? " rotated by [rotate] degrees" : ""
+	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
+	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
+	//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
+	ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite, TRUE)
+	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"][rotatetext].")
 
 /client/proc/create_awaymission()
 	set category = "Admin"
@@ -1328,20 +1290,3 @@ var/list/admin_verbs_mod = list(
 		holder.ViewAllRods()
 	feedback_add_details("admin_verb","V-ROD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
-
-/client/proc/see_lightmap()
-	set name = "See lightmap"
-	set category = "Ghost"
-
-	if (!usr.check_rights(R_DEBUG))
-		to_chat(usr, "<span class='notice'>Only admins can use this command.</span>")
-		return
-
-	if (holder.see_lightmap)
-		usr.dark_plane.plane = LIGHTING_PLANE
-		usr.dark_plane.alphas["light_map"] = 0
-	else
-		usr.dark_plane.plane = initial(usr.dark_plane.plane)
-		usr.dark_plane.alphas -= "light_map"
-
-	holder.see_lightmap = !holder.see_lightmap

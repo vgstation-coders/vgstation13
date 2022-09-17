@@ -34,7 +34,7 @@
 /obj/structure/skele_stand/attackby(obj/item/weapon/W, mob/user)
 	rattle_bones(user, W)
 
-obj/structure/skele_stand/spook(mob/user)
+/obj/structure/skele_stand/spook(mob/user)
 	rattle_bones(user, null)
 
 /obj/structure/skele_stand/mrbones

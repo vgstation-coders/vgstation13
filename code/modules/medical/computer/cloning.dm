@@ -20,6 +20,13 @@
 
 	light_color = LIGHT_COLOR_BLUE
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
+
 /obj/machinery/computer/cloning/New()
 	..()
 	spawn(5)
@@ -110,17 +117,13 @@
 				src.updateUsrDialog()
 				return 1
 
-/obj/machinery/computer/cloning/emag(mob/user)
+/obj/machinery/computer/cloning/emag_act(mob/user)
 	if(!emagged)
 		emagged = 1
-		if(user)
+		if(user && !issilicon(user))
 			user.visible_message("<span class='warning'>[user] slides something into \the [src]'s card-reader.</span>","<span class='warning'>You disable \the [src]'s safety overrides.</span>")
 
 /obj/machinery/computer/cloning/attack_paw(mob/user as mob)
-	return attack_hand(user)
-
-/obj/machinery/computer/cloning/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
 	return attack_hand(user)
 
 /obj/machinery/computer/cloning/attack_hand(mob/user as mob)
@@ -196,15 +199,6 @@
 			else
 				dat += {"<br><font size=1><a href='byond://?src=\ref[src];del_rec=1'>Edit Record</a></font><br>
 					<b>Name:</b> [src.active_record.dna.real_name && src.active_record.dna.real_name != "" ? src.active_record.dna.real_name : "Unknown"]<br>"}
-				var/obj/item/weapon/implant/health/H = null
-				if(src.active_record.implant)
-					H=locate(src.active_record.implant)
-
-				if ((H) && (istype(H)))
-					dat += "<b>Health:</b> [H.sensehealth()] | OXY-BURN-TOX-BRUTE<br>"
-				else
-					dat += "<font color=red>Unable to locate implant.</font><br>"
-
 				if (!isnull(src.diskette))
 
 					dat += {"<a href='byond://?src=\ref[src];disk=load'>Load from disk.</a>
@@ -406,11 +400,8 @@
 	src.updateUsrDialog()
 	return
 
-/obj/machinery/computer/cloning/proc/scan_mob(mob/living/carbon/human/subject as mob)
-	if(istype(subject, /mob/living/slime_pile))
-		var/mob/living/slime_pile/S = subject
-		subject = S.slime_person
-	if((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (ismanifested(subject)))
+/obj/machinery/computer/cloning/proc/scan_mob(mob/living/subject as mob)
+	if((isnull(subject)) || (!ishuman(subject) && !istype(subject, /mob/living/slime_pile)) || (!subject.dna) || (ismanifested(subject)))
 		scantemp = "Error: Unable to locate valid genetic data." //Something went very wrong here
 		return
 	if(!subject.has_brain())
@@ -477,7 +468,7 @@
 
 
 	subject.dna.check_integrity()
-	var/datum/organ/internal/brain/Brain = subject.internal_organs_by_name["brain"]
+
 	// Borer sanity checks.
 	var/mob/living/simple_animal/borer/B=subject.has_brain_worms()
 	if(B && B.controlling)
@@ -485,10 +476,15 @@
 		subject.do_release_control(1)
 
 	var/datum/dna2/record/R = new /datum/dna2/record()
-	if(!isnull(Brain.owner_dna) && Brain.owner_dna != subject.dna)
-		R.dna = Brain.owner_dna.Clone()
-	else
-		R.dna=subject.dna.Clone()
+
+//Removed this so that slime puddles, etc. can be cloned. Anyway, in practice here a brain's owner's DNA should always correspond to the DNA of the subject that brain exists within.
+//	var/datum/organ/internal/brain/Brain = subject.internal_organs_by_name["brain"]
+//	if(!isnull(Brain.owner_dna) && Brain.owner_dna != subject.dna)
+//		R.dna = Brain.owner_dna.Clone()
+//	else
+//		R.dna=subject.dna.Clone()
+	R.dna=subject.dna.Clone()
+
 	R.ckey = subject.ckey
 	R.id= copytext(md5(R.dna.real_name), 2, 6)
 	R.name=R.dna.real_name
@@ -498,16 +494,6 @@
 	R.default_language = subject.default_language
 	R.times_cloned = subject.times_cloned
 	R.talkcount = subject.talkcount
-
-	//Add an implant if needed
-	var/obj/item/weapon/implant/health/imp = locate(/obj/item/weapon/implant/health, subject)
-	if (isnull(imp))
-		imp = new /obj/item/weapon/implant/health(subject)
-		imp.implanted = subject
-		R.implant = "\ref[imp]"
-	//Update it if needed
-	else
-		R.implant = "\ref[imp]"
 
 	if (!isnull(subject.mind)) //Save that mind so traitors can continue traitoring after cloning.
 		R.mind = "\ref[subject.mind]"
@@ -527,7 +513,7 @@
 /obj/machinery/computer/cloning/update_icon()
 	..()
 	overlays = 0
-	if(!(stat & (NOPOWER | BROKEN)))
+	if(!(stat & (NOPOWER | BROKEN | FORCEDISABLE)))
 		if(scanner && scanner.occupant)
 			overlays += image(icon = icon, icon_state = "cloning-scan")
 		if(pod1 && pod1.occupant)

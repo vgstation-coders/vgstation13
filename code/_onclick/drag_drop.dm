@@ -2,7 +2,7 @@
 	MouseDrop:
 
 	Called on the atom you're dragging.  In a lot of circumstances we want to use the
-	recieving object instead, so that's the default action.  This allows you to drag
+	receiving object instead, so that's the default action.  This allows you to drag
 	almost anything into a trash can.
 */
 /atom/MouseDrop(atom/over_object,src_location,over_location,src_control,over_control,params)
@@ -22,7 +22,7 @@
 /atom/proc/MouseDropFrom(atom/over_object,src_location,over_location,src_control,over_control,params)
 	return
 
-// recieve a mousedrop
+// receive a mousedrop
 /atom/proc/MouseDropTo(atom/over_object,mob/user,src_location,over_location,src_control,over_control,params)
 	return
 

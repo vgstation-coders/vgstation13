@@ -35,6 +35,8 @@
 	var/datum/gas_mixture/air_contents = null
 	var/col = "#FFFFFF"
 
+	blooded = FALSE
+
 /mob/living/simple_animal/hostile/balloon/New(atom/A, var/chosen_col, var/new_icon_state)
 	..(A)
 	if(col)

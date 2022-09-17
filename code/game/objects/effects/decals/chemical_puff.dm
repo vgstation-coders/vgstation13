@@ -18,12 +18,12 @@
 	..()
 
 // Reacts with the current turf and its contents
-/obj/effect/decal/chemical_puff/proc/react(var/iteration_delay = 2)
+/obj/effect/decal/chemical_puff/proc/react(var/iteration_delay = 2, var/list/zones)
 	var/turf/cur_turf = get_turf(src)
 	reagents.reaction(cur_turf)
 
 	for (var/atom/A in cur_turf)
-		reagents.reaction(A)
+		reagents.reaction(A, zone_sels = zones && zones.len ? zones : ALL_LIMBS)
 
 		// When spraying against a wall, react with it but not its contents
 		if (get_dist(src, initial_turf) <= 1 && initial_turf.density)

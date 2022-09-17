@@ -236,14 +236,14 @@
 
 
 /obj/machinery/detector/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	if(prob(75/severity))
 		flash()
 	..(severity)
 
-/obj/machinery/detector/emag(mob/user)
+/obj/machinery/detector/emag_act(mob/user)
 	..()
 	emagged = TRUE
 

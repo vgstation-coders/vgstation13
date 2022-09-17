@@ -1,3 +1,11 @@
+// Moved from move_loop file, now has full inverted bitflag support!
+var/static/list/opposite_dirs = list(SOUTH,NORTH,NORTH|SOUTH,WEST,SOUTHWEST,NORTHWEST,NORTH|SOUTH|WEST,EAST,SOUTHEAST,NORTHEAST,NORTH|SOUTH|EAST,WEST|EAST,WEST|EAST|NORTH,WEST|EAST|SOUTH,WEST|EAST|NORTH|SOUTH)
+// This was originally a function too, both are now cut down to these.
+var/static/list/counterclockwise_perpendicular_dirs = list(EAST,WEST,EAST|WEST,SOUTH,SOUTHEAST,SOUTHWEST,EAST|WEST|SOUTH,NORTH,NORTHEAST,NORTHWEST,EAST|WEST|NORTH,NORTH|SOUTH,NORTH|SOUTH|EAST,NORTH|SOUTH|WEST,NORTH|SOUTH|EAST|WEST)
+
+// Saves writing a whole new list
+#define clockwise_perpendicular_dirs(A) opposite_dirs[counterclockwise_perpendicular_dirs[A]]
+
 /proc/Get_Angle(atom/movable/start,atom/movable/end)//For beams.
 	if(!start || !end)
 		return 0
@@ -34,7 +42,7 @@
 	return angle
 
 
-proc/get_cardinal_dir(atom/A, atom/B)
+/proc/get_cardinal_dir(atom/A, atom/B)
 	var/dx = abs(B.x - A.x)
 	var/dy = abs(B.y - A.y)
 	return get_dir(A, B) & (rand() * (dx+dy) < dy ? 3 : 12)
@@ -73,45 +81,6 @@ proc/get_cardinal_dir(atom/A, atom/B)
 		else
 			return null
 
-
-/proc/reverse_direction(var/dir)
-	switch(dir)
-		if(NORTH)
-			return SOUTH
-		if(NORTHEAST)
-			return SOUTHWEST
-		if(EAST)
-			return WEST
-		if(SOUTHEAST)
-			return NORTHWEST
-		if(SOUTH)
-			return NORTH
-		if(SOUTHWEST)
-			return NORTHEAST
-		if(WEST)
-			return EAST
-		if(NORTHWEST)
-			return SOUTHEAST
-
-
-/proc/counter_clockwise_perpendicular_direction(var/dir)
-	switch(dir)
-		if(NORTH)
-			return EAST
-		if(SOUTH)
-			return WEST
-		if(EAST)
-			return SOUTH
-		if(WEST)
-			return NORTH
-		if(NORTHEAST)
-			return NORTHWEST
-		if(SOUTHEAST)
-			return NORTHEAST
-		if(SOUTHWEST)
-			return SOUTHEAST
-		if(NORTHWEST)
-			return SOUTHWEST
 
 /proc/widen_dir(var/dir, var/angle = 45)
 	var/list/dirs = list()

@@ -18,6 +18,9 @@
 	// If it's zero we're not scanning.
 	var/scan_process = 0
 
+/obj/machinery/anomaly/splashable()
+	return FALSE
+
 /obj/machinery/anomaly/Destroy()
 	if (held_container)
 		held_container.forceMove(loc)
@@ -33,7 +36,7 @@
 
 /obj/machinery/anomaly/power_change()
 	..()
-	if (stat & NOPOWER && scan_process)
+	if (stat & (FORCEDISABLE|NOPOWER) && scan_process)
 		stop()
 	else
 		update_icon()
@@ -41,7 +44,7 @@
 /obj/machinery/anomaly/process()
 	//First we deal with the machine's task
 	if(scan_process)
-		if (stat & (NOPOWER|BROKEN))
+		if (stat & (NOPOWER|BROKEN|FORCEDISABLE))
 			stop()
 		else
 			use_power = MACHINE_POWER_USE_ACTIVE
@@ -70,7 +73,7 @@
 /obj/machinery/anomaly/attack_hand(var/mob/user)
 	ui_interact(user)
 
-obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
+/obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
 	if(istype(W, /obj/item/weapon/reagent_containers/glass))
 		if(held_container)
 			to_chat(user, "<span class='warning'>You must remove \the [held_container] first.</span>")
@@ -105,7 +108,7 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
 	else
 		visible_message("<span class='notice'>[bicon(src)] makes a low buzzing noise.</span>", "You hear a low buzz.")
 
-obj/machinery/anomaly/Topic(href, href_list)
+/obj/machinery/anomaly/Topic(href, href_list)
 	. = ..()
 	if (.)
 		return
@@ -151,7 +154,7 @@ obj/machinery/anomaly/Topic(href, href_list)
 
 
 /obj/machinery/anomaly/AltClick(var/mob/user)
-	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & NOPOWER)
+	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & (NOPOWER|FORCEDISABLE))
 		return
 
 	eject(user)
@@ -160,14 +163,14 @@ obj/machinery/anomaly/Topic(href, href_list)
 	if (!anchored)
 		return ..()
 
-	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & NOPOWER)
+	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & (NOPOWER|FORCEDISABLE))
 		return
 
 	start(user)
 
 
 /obj/machinery/anomaly/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
-	if (stat & NOPOWER)
+	if (stat & (FORCEDISABLE|NOPOWER))
 		return
 
 	var/list/data[0]

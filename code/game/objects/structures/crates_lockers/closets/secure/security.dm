@@ -18,6 +18,7 @@
 		/obj/item/clothing/suit/captunic,
 		/obj/item/clothing/suit/storage/capjacket,
 		/obj/item/clothing/head/cap,
+		/obj/item/clothing/head/cap/cowboy,
 		/obj/item/clothing/under/rank/captain,
 		/obj/item/clothing/suit/armor/vest,
 		/obj/item/clothing/suit/storage/armorjacketcapt,
@@ -29,8 +30,9 @@
 		/obj/item/weapon/gun/energy/gun,
 		/obj/item/weapon/melee/telebaton,
 		/obj/item/clothing/under/dress/dress_cap,
-		/obj/item/device/gps/secure,
+		/obj/item/device/gps/secure/command,
 		/obj/item/weapon/card/debit/preferred/department/elite/command,
+		/obj/item/mulebot_laser,
 	)
 
 
@@ -54,8 +56,9 @@
 		/obj/item/weapon/storage/box/ids = 2,
 		/obj/item/weapon/gun/energy/gun,
 		/obj/item/device/flash,
-		/obj/item/device/gps/secure,
+		/obj/item/device/gps/secure/command,
 		/obj/item/weapon/card/debit/preferred/department/civilian,
+		/obj/item/mulebot_laser,
 	)
 
 /obj/structure/closet/secure_closet/hop2
@@ -113,12 +116,14 @@
 		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/suit/armor/hos,
 		/obj/item/clothing/head/HoS/dermal,
+		/obj/item/clothing/head/HoS/cowboy,
 		/obj/item/weapon/cartridge/hos,
 		/obj/item/device/detective_scanner,
 		/obj/item/device/radio/headset/heads/hos,
 		/obj/item/weapon/shield/riot,
 		/obj/item/weapon/storage/lockbox/loyalty,
 		/obj/item/weapon/storage/box/flashbangs,
+		/obj/item/weapon/storage/box/teargas,
 		/obj/item/weapon/storage/lockbox/lawgiver/with_magazine,
 		/obj/item/clothing/accessory/holster/handgun/waist,
 		/obj/item/weapon/melee/telebaton,
@@ -150,7 +155,9 @@
 		/obj/item/clothing/suit/armor/vest/warden,
 		/obj/item/clothing/suit/armor/vest/wardenshort,
 		/obj/item/clothing/head/warden,
+		/obj/item/clothing/head/warden/cowboy,
 		/obj/item/weapon/storage/box/flashbangs,
+		/obj/item/weapon/storage/box/teargas,
 		/obj/item/weapon/storage/box/bolas,
 		/obj/item/weapon/batteringram,
 		/obj/item/weapon/storage/box/large/securitygear,

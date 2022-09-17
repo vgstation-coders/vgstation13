@@ -1,4 +1,4 @@
-obj/machinery/atmospherics/trinary/mixer
+/obj/machinery/atmospherics/trinary/mixer
 	icon = 'icons/obj/atmospherics/mixer.dmi'
 	icon_state = "intact_off"
 
@@ -16,8 +16,8 @@ obj/machinery/atmospherics/trinary/mixer
 
 	ex_node_offset = 5
 
-obj/machinery/atmospherics/trinary/mixer/update_icon()
-	if(stat & NOPOWER)
+/obj/machinery/atmospherics/trinary/mixer/update_icon()
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "intact_off"
 	else if(node2 && node3 && node1)
 		icon_state = "intact_[on?("on"):("off")]"
@@ -26,26 +26,26 @@ obj/machinery/atmospherics/trinary/mixer/update_icon()
 		on = 0
 	..()
 
-obj/machinery/atmospherics/trinary/mixer/power_change()
+/obj/machinery/atmospherics/trinary/mixer/power_change()
 	var/old_stat = stat
 	..()
 	if(old_stat != stat)
 		on = !on
 		update_icon()
 
-obj/machinery/atmospherics/trinary/mixer/New()
+/obj/machinery/atmospherics/trinary/mixer/New()
 	..()
 	air3.volume = 300
 
 
-obj/machinery/atmospherics/trinary/mixer/process()
+/obj/machinery/atmospherics/trinary/mixer/process()
 	. = ..()
 	if(!on)
 		return
 
 	var/output_starting_pressure = air3.return_pressure()
 	var/pressure_delta = target_pressure - output_starting_pressure
-	
+
 	if(pressure_delta > 0.01 && ((air1.temperature > 0 && air2.temperature > 0) || air3.temperature > 0))
 		var/output_volume = air3.volume + (network3 ? network3.volume : 0)
 		//get gas from input #1
@@ -64,13 +64,13 @@ obj/machinery/atmospherics/trinary/mixer/process()
 			var/ratio = min(air1_moles/transfer_moles1, air2_moles/transfer_moles2)
 			transfer_moles1 *= ratio
 			transfer_moles2 *= ratio
-		
+
 		//actually transfer the gas
 		var/datum/gas_mixture/removed1 = air1.remove(transfer_moles1)
 		var/datum/gas_mixture/removed2 = air2.remove(transfer_moles2)
 		air3.merge(removed1)
 		air3.merge(removed2)
-		
+
 		if(network1)
 			network1.update = 1
 		if(network2)
@@ -80,7 +80,7 @@ obj/machinery/atmospherics/trinary/mixer/process()
 
 	return 1
 
-obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
+/obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 	if(..())
 		return
 	src.add_fingerprint(usr)
@@ -111,7 +111,7 @@ obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 	onclose(user, "atmo_mixer")
 	return
 
-obj/machinery/atmospherics/trinary/mixer/Topic(href,href_list)
+/obj/machinery/atmospherics/trinary/mixer/Topic(href,href_list)
 	if(..())
 		return
 	if(href_list["power"])
@@ -137,7 +137,7 @@ obj/machinery/atmospherics/trinary/mixer/Topic(href,href_list)
 
 /obj/machinery/atmospherics/trinary/mixer/mirrored/update_icon()
 	..()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "intactm_off"
 	else if(node2 && node3 && node1)
 		icon_state = "intactm_[on?("on"):("off")]"

@@ -22,15 +22,12 @@
 	canPossess = TRUE
 
 /mob/living/carbon/monkey/diona/attack_hand(mob/living/carbon/human/M as mob)
-
 	//Let people pick the little buggers up.
 	if((M.a_intent == I_HELP) && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
 		scoop_up(M)
-
 	..()
 
 /mob/living/carbon/monkey/diona/New()
-
 	..()
 	setGender(NEUTER)
 	dna.mutantrace = "plant"
@@ -40,50 +37,40 @@
 //Verbs after this point.
 
 /mob/living/carbon/monkey/diona/verb/fertilize_plant()
-
-
 	set category = "Diona"
 	set name = "Fertilize plant"
 	set desc = "Turn your food into nutrients for plants."
 
 	var/list/trays = list()
 	for(var/obj/machinery/portable_atmospherics/hydroponics/tray in range(1))
-		if(tray.nutrilevel < 10)
+		if(tray.get_nutrientlevel() < 100)
 			trays += tray
-
-	var/obj/machinery/portable_atmospherics/hydroponics/target = input("Select a tray:") as null|anything in trays
-
-	if(!src || !target || target.nutrilevel == 10)
-		return //Sanity check.
-
-	src.nutrition -= ((10-target.nutrilevel)*5)
-	target.nutrilevel = 10
-	src.visible_message("<span class='warning'>[src] secretes a trickle of green liquid from its tail, refilling [target]'s nutrient tray.</span>","<span class='warning'>You secrete a trickle of green liquid from your tail, refilling [target]'s nutrient tray.</span>")
+	if(length(trays))
+		var/obj/machinery/portable_atmospherics/hydroponics/target = pick(trays)
+		//these values don't matter really
+		nutrition -= 25
+		target.add_nutrientlevel(100)
+		visible_message("<span class='warning'>[src] secretes a trickle of green liquid from its tail, refilling [target]'s nutrient tray.</span>","<span class='warning'>You secrete a trickle of green liquid from your tail, refilling [target]'s nutrient tray.</span>")
+	else
+		to_chat(src, "<span class='notice'>No plants require ferilization.</span>")
 
 /mob/living/carbon/monkey/diona/verb/eat_weeds()
-
-
 	set category = "Diona"
 	set name = "Eat Weeds"
 	set desc = "Clean the weeds out of soil or a hydroponics tray."
 
 	var/list/trays = list()
 	for(var/obj/machinery/portable_atmospherics/hydroponics/tray in range(1))
-		if(tray.weedlevel > 0)
+		if(tray.get_weedlevel() > 0)
 			trays += tray
-
-	var/obj/machinery/portable_atmospherics/hydroponics/target = input("Select a tray:") as null|anything in trays
-
-	if(!src || !target || target.weedlevel == 0)
-		return //Sanity check.
-
-	src.reagents.add_reagent(NUTRIMENT, target.weedlevel)
-	target.weedlevel = 0
-	src.visible_message("<span class='warning'>[src] begins rooting through [target], ripping out weeds and eating them noisily.</span>","<span class='warning'>You begin rooting through [target], ripping out weeds and eating them noisily.</span>")
+	if(length(trays))
+		var/obj/machinery/portable_atmospherics/hydroponics/target = pick(trays)
+		target.add_weedlevel(-50)
+		visible_message("<span class='warning'>[src] begins rooting through [target], ripping out weeds and eating them noisily.</span>","<span class='warning'>You begin rooting through [target], ripping out weeds and eating them noisily.</span>")
+	else
+		to_chat(src, "<span class='notice'>No trays contain weeds.</span>")
 
 /mob/living/carbon/monkey/diona/verb/evolve()
-
-
 	set category = "Diona"
 	set name = "Evolve"
 	set desc = "Grow to a more complex form."
@@ -104,7 +91,7 @@
 		to_chat(src, "You have not yet consumed enough to grow...")
 		return
 
-	src.visible_message("<span class='warning'>[src] begins to shift and quiver, and erupts in a shower of shed bark and twigs!</span>","<span class='warning'>You begin to shift and quiver, then erupt in a shower of shed bark and twigs, attaining your adult form!</span>")
+	visible_message("<span class='warning'>[src] begins to shift and quiver, and erupts in a shower of shed bark and twigs!</span>","<span class='warning'>You begin to shift and quiver, then erupt in a shower of shed bark and twigs, attaining your adult form!</span>")
 
 	var/mob/living/carbon/human/adult = new(get_turf(src.loc))
 	adult.set_species("Diona")
@@ -114,7 +101,7 @@
 
 	if(istype(loc,/obj/item/weapon/holder/diona))
 		var/obj/item/weapon/holder/diona/L = loc
-		src.forceMove(get_turf(L))
+		forceMove(get_turf(L))
 		L = null
 		qdel(L)
 
@@ -122,9 +109,9 @@
 		adult.add_language(L.name)
 
 	adult.regenerate_icons()
-	src.mind.transfer_to(adult)
+	mind.transfer_to(adult)
 	adult.fully_replace_character_name(newname = src.real_name)
-	src.drop_all()
+	drop_all()
 	qdel(src)
 
 /mob/living/carbon/monkey/diona/say_understands(var/mob/other,var/datum/language/speaking = null)
@@ -203,17 +190,17 @@
 
 	if(stat == DEAD)
 		icon_state = "[initial(icon_state)]_dead"
-		src.transform = M
+		transform = M
 	else if(resting)
 		icon_state = "[initial(icon_state)]_sleep"
 	else if(lying || stunned)
 		icon_state = "[initial(icon_state)]_sleep"
 		M.Turn(90)
 		M.Translate(1,-6)
-		src.transform = M
+		transform = M
 	else
 		icon_state = "[initial(icon_state)]"
-		src.transform = M
+		transform = M
 
 /mob/living/carbon/monkey/diona/death(gibbed)
 	..()

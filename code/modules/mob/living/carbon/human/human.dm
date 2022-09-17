@@ -56,7 +56,7 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-/mob/living/carbon/human/plasma/New(var/new_loc, delay_ready_dna = 0)
+/mob/living/carbon/human/plasmaman/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Plasmaman")
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
@@ -76,8 +76,8 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-/mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
-	..(new_loc, "Grue")
+/mob/living/carbon/human/vampire/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Vampire")
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
@@ -122,26 +122,6 @@
 	..(new_loc, "Undead")
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
-
-/mob/living/carbon/human/generate_static_overlay()
-	if(!istype(static_overlays,/list))
-		static_overlays = list()
-	static_overlays.Add(list("static", "blank", "letter", "cult"))
-	var/image/static_overlay = image(icon('icons/effects/effects.dmi', "static"), loc = src)
-	static_overlay.override = 1
-	static_overlays["static"] = static_overlay
-
-	static_overlay = image(icon('icons/effects/effects.dmi', "blank_human"), loc = src)
-	static_overlay.override = 1
-	static_overlays["blank"] = static_overlay
-
-	static_overlay = getLetterImage(src, "H", 1)
-	static_overlay.override = 1
-	static_overlays["letter"] = static_overlay
-
-	static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
-	static_overlay.override = 1
-	static_overlays["cult"] = static_overlay
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
 	my_appearance = new // Initialise how they look.
@@ -304,21 +284,13 @@
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
 
-/mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
-	for(var/L in M.contents)
-		if(istype(L, /obj/item/weapon/implant/loyalty))
-			for(var/datum/organ/external/O in M.organs)
-				if(L in O.implants)
-					return 1
-	return 0
-
 /mob/living/carbon/human/attack_slime(mob/living/carbon/slime/M as mob)
 	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/human/restrained()
 	if (..())
 		return TRUE
-	if (istype(wear_suit, /obj/item/clothing/suit/straight_jacket))
+	if (istype(wear_suit, /obj/item/clothing/suit/strait_jacket))
 		return TRUE
 	return FALSE
 
@@ -394,8 +366,7 @@
 		return get_worn_id_name("Unknown")
 	if( head && head.is_hidden_identity())
 		return get_worn_id_name("Unknown")	//Likewise for hats
-	var/datum/role/vampire/V = isvampire(src)
-	if(V && (locate(/datum/power/vampire/shadow) in V.current_powers) && V.ismenacing)
+	if(istruevampire(src))
 		return get_worn_id_name("Unknown")
 	var/face_name = get_face_name()
 	var/id_name = get_worn_id_name("")
@@ -697,9 +668,11 @@
 	return 0
 
 
-/mob/living/carbon/human/proc/check_dna()
+/mob/living/carbon/human/proc/check_dna_integrity()
 	dna.check_integrity(src)
-	return
+
+/mob/living/carbon/human/proc/update_dna_from_appearance() // Takes care of updating our DNA so it matches our appearance
+	dna.ResetUIFrom(src)
 
 /mob/living/carbon/human/get_species()
 
@@ -803,71 +776,15 @@
 		src.verbs -= /mob/living/carbon/human/proc/morph
 		return
 
-	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(my_appearance.r_facial,my_appearance.g_facial,my_appearance.b_facial)) as color
-	if(new_facial)
-		my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
-		my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
-		my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
+	pick_appearance(src,"Morph",FALSE)
 
-	var/new_hair = input("Please select hair color.", "Character Generation",rgb(my_appearance.r_hair,my_appearance.g_hair,my_appearance.b_hair)) as color
-	if(new_facial)
-		my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
-		my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
-		my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
+	pick_gender(src,"Morph",FALSE)
 
-	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(my_appearance.r_eyes,my_appearance.g_eyes,my_appearance.b_eyes)) as color
-	if(new_eyes)
-		my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
-
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-my_appearance.s_tone]")  as text
-
-	if (!new_tone)
-		new_tone = 35
-	my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
-	my_appearance.s_tone =  -my_appearance.s_tone + 35
-
-	// hair
-	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
-	var/list/hairs = list()
-
-	// loop through potential hairs
-	for(var/x in all_hairs)
-		var/datum/sprite_accessory/hair/H = new x // create new hair datum based on type x
-		hairs.Add(H.name) // add hair name to hairs
-		qdel(H) // delete the hair after it's all done
-		H = null
-
-	var/new_style = input("Please select hair style", "Character Generation",my_appearance.h_style)  as null|anything in hairs
-
-	// if new style selected (not cancel)
-	if (new_style)
-		my_appearance.h_style = new_style
-
-	// facial hair
-	var/list/all_fhairs = typesof(/datum/sprite_accessory/facial_hair) - /datum/sprite_accessory/facial_hair
-	var/list/fhairs = list()
-
-	for(var/x in all_fhairs)
-		var/datum/sprite_accessory/facial_hair/H = new x
-		fhairs.Add(H.name)
-		qdel(H)
-		H = null
-
-	new_style = input("Please select facial style", "Character Generation",my_appearance.f_style)  as null|anything in fhairs
-
-	if(new_style)
-		my_appearance.f_style = new_style
-
-	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
-	if (new_gender)
-		if(new_gender == "Male")
-			setGender(MALE)
-		else
-			setGender(FEMALE)
 	regenerate_icons()
-	check_dna()
+
+	check_dna_integrity()
+
+	update_dna_from_appearance()
 
 	visible_message("<span class='notice'>\The [src] morphs and changes [get_visible_gender() == MALE ? "his" : get_visible_gender() == FEMALE ? "her" : "their"] appearance!</span>", "<span class='notice'>You change your appearance!</span>", "<span class='warning'>Oh, god!  What the hell was that?  It sounded like flesh getting squished and bone ground into a different shape!</span>")
 
@@ -903,11 +820,10 @@
 
 	if(species && !(species.anatomy_flags & NO_BLOOD))
 		vessel.add_reagent(BLOOD,560-vessel.total_volume)
-		fixblood()
 
 	var/datum/organ/internal/brain/BBrain = internal_organs_by_name["brain"]
 	if(!BBrain)
-		var/obj/item/organ/external/head/B = decapitated
+		var/obj/item/organ/external/head/B = decapitated?.get()
 		if(B)
 			var/datum/organ/internal/brain/copied
 			if(B.organ_data)
@@ -1204,6 +1120,11 @@
 
 	if(S.gender)
 		gender = S.gender
+	else if (gender == "neuter") // when going back from an non-gendered species to a gendered one, you'll get assigned randomly
+		if (prob(50))
+			gender = "male"
+		else
+			gender = "female"
 
 	for(var/L in species.known_languages)
 		add_language(L)
@@ -1239,8 +1160,22 @@
 		src.do_deferred_species_setup = 1
 	meat_type = species.meat_type
 	src.movement_speed_modifier = species.move_speed_multiplier
+
 	if(dna)
 		dna.species = new_species_name
+
+	if(my_appearance)
+		var/list/valid_hair = valid_sprite_accessories(hair_styles_list, null, species.name)
+		if (!(my_appearance.h_style in valid_hair))
+			my_appearance.h_style = random_hair_style(gender, species)
+		var/list/valid_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, species.name)
+		if (!(my_appearance.f_style in valid_facial_hair))
+			my_appearance.f_style = random_facial_hair_style(gender, species)
+		if (((my_appearance.s_tone < 0) && !(species.anatomy_flags & HAS_SKIN_TONE)) || (my_appearance.s_tone > species.max_skin_tone))
+			my_appearance.s_tone = random_skin_tone(species)
+		if(dna)
+			update_dna_from_appearance()
+
 	src.species.handle_post_spawn(src)
 	src.update_icons()
 	if(species.species_intro)
@@ -1441,15 +1376,7 @@
 	return id
 
 /mob/living/carbon/human/update_perception()
-	if (dark_plane)
-		dark_plane.alphas = list()
-		dark_plane.colours = null
-		dark_plane.blend_mode = BLEND_ADD
-
-	if (master_plane)
-		master_plane.blend_mode = BLEND_MULTIPLY
-
-	if(client && dark_plane)
+	if(client && client.darkness_planemaster)
 		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 		if(E)
 			E.update_perception(src)
@@ -1457,21 +1384,9 @@
 		for(var/ID in virus2)
 			var/datum/disease2/disease/D = virus2[ID]
 			for (var/datum/disease2/effect/catvision/catvision in D.effects)
-				if (catvision.count)
-					dark_plane.alphas["cattulism"] = clamp(15 + (catvision.count * 20),15,155) // The more it activates, the better we see, until we see as well as a tajaran would.
+				if (catvision.count)//if catulism has activated at least once, we can see much better in the dark.
+					client.darkness_planemaster.alpha = min(100, client.darkness_planemaster.alpha)
 					break
-
-	if (istype(glasses))
-		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
-			dark_plane.alphas += glasses.my_dark_plane_alpha_override
-			dark_plane.alphas["[glasses.my_dark_plane_alpha_override]"] = glasses.my_dark_plane_alpha_override_value
-
-	if (mind)
-		for (var/key in mind.antag_roles)
-			var/datum/role/R = mind.antag_roles[key]
-			R.update_perception()
-
-	check_dark_vision()
 
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
@@ -1525,7 +1440,7 @@
 	if(istype(head, /obj/item/clothing/head/wizard) || istype(head, /obj/item/clothing/head/helmet/space/rig/wizard))
 		threatcount += 2
 	//Loyalty implants imply trustworthyness
-	if(isloyal(src))
+	if(is_loyalty_implanted())
 		threatcount -= 1
 	//Secbots are racist!
 	if(dna && dna.mutantrace && dna.mutantrace != "none")
@@ -1557,14 +1472,17 @@
 	investigation_log(I_SINGULO,"has been consumed by a singularity")
 	gib()
 	return gain
-/mob/living/carbon/human/singularity_pull(S, current_size,var/radiations = 3)
+/mob/living/carbon/human/singularity_pull(S, current_size, repel = FALSE, var/radiations = 3)
 	if(src.flags & INVULNERABLE)
 		return 0
 	if(current_size >= STAGE_THREE) //Pull items from hand
 		for(var/obj/item/I in held_items)
 			if(prob(current_size*5) && I.w_class >= ((11-current_size)/2) && u_equip(I,1))
-				step_towards(I, src)
-				to_chat(src, "<span class = 'warning'>\The [S] pulls \the [I] from your grip!</span>")
+				if(!repel)
+					step_towards(I, S)
+				else
+					step_away(I, S)
+				to_chat(src, "<span class = 'warning'>\The [S] [repel ? "pushes" : "pulls"] \the [I] from your grip!</span>")
 	if(radiations)
 		apply_radiation(current_size * radiations, RAD_EXTERNAL)
 	if(shoes)
@@ -1798,7 +1716,7 @@
 /mob/living/carbon/human/proc/is_bulky()
 	return species.anatomy_flags & IS_BULKY
 
-mob/living/carbon/human/isincrit()
+/mob/living/carbon/human/isincrit()
 	if (health - halloss <= config.health_threshold_softcrit)
 		return 1
 
@@ -1834,7 +1752,7 @@ mob/living/carbon/human/isincrit()
 	return internal_organs_by_name["appendix"]
 
 //Moved from internal organ surgery
-//Removes organ from src, places organ object under user
+//Removes organ from src, places organ object in user's hands
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
 /mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
 	var/obj/item/organ/internal/extractedorgan
@@ -1855,6 +1773,7 @@ mob/living/carbon/human/isincrit()
 			internal_organs -= extractedorgan.organ_data
 			affectedarea.internal_organs -= extractedorgan.organ_data
 			extractedorgan.removed(src,user)
+			user.put_in_hands(extractedorgan)
 
 			return extractedorgan
 
@@ -1909,6 +1828,11 @@ mob/living/carbon/human/isincrit()
 		species.anatomy_flags = rand(0,65535)
 	if(prob(5))
 		species.chem_flags = rand(0,65535)
+	if(prob(15))
+		species.tackleRange = max(0, rand(species.tackleRange-2, species.tackleRange+2))	//Leaving this with no upper limit is a choice I'm making today. God help us tomorrow.
+	if(prob(15))
+		species.tacklePower = max(0, rand(species.tacklePower*0.5, species.tacklePower*1.5))
+
 
 	if(!can_be_fat)
 		species.anatomy_flags &= ~CAN_BE_FAT
@@ -1941,6 +1865,7 @@ mob/living/carbon/human/isincrit()
 		"check_mutations",
 		"lastFart",
 		"lastDab",
+		"lastAnemia",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",
@@ -1968,21 +1893,17 @@ mob/living/carbon/human/isincrit()
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
 /mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
-	BrainContainer = new (src)
-	BrainContainer.AddComponent(/datum/component/controller/mob)
-	BrainContainer.AddComponent(/datum/component/ai/hand_control)
-	BrainContainer.AddComponent(/datum/component/controller/movement/astar)
-	BrainContainer.register_for_updates()
+	add_component(/datum/component/controller/movement/astar)
 
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()
-	BrainContainer.AddComponent(/datum/component/ai/human_brain)
-	BrainContainer.AddComponent(/datum/component/ai/target_finder/human)
-	BrainContainer.AddComponent(/datum/component/ai/target_holder/prioritizing)
-	BrainContainer.AddComponent(/datum/component/ai/melee/attack_human)
-	BrainContainer.AddComponent(/datum/component/ai/melee/throw_attack)
-	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
-	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
+	add_component(/datum/component/ai/human_brain)
+	add_component(/datum/component/ai/target_finder/human)
+	add_component(/datum/component/ai/target_holder/prioritizing)
+	add_component(/datum/component/ai/melee/attack_human)
+	add_component(/datum/component/ai/melee/throw_attack)
+	add_component(/datum/component/ai/crowd_attack)
+	add_component(pick(typesof(/datum/component/ai/targetting_handler)))
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...
@@ -2001,9 +1922,9 @@ mob/living/carbon/human/isincrit()
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
-	dropBorers()
+/mob/living/carbon/human/proc/zombify(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
 	if(crabzombie)
+		dropBorers()
 		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))
 		T.virus2 = virus_copylist(virus2)
 		T.get_clothes(src, T)
@@ -2011,14 +1932,32 @@ mob/living/carbon/human/isincrit()
 		T.host = src
 		forceMove(null)
 		return T
-	else
+	else if(stat == DEAD || InCritical())
+		dropBorers()
 		var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
+		if(master && master.faction)
+			T.faction = "\ref[master]"
+		T.add_spell(/spell/aoe_turf/necro/zombie/evolve)
+		if(isgrey(src))
+			T.icon_state = "mauled_laborer"
+			T.icon_living = "mauled_laborer"
+			T.icon_dead = "mauled_laborer"
+		else if(isvox(src))
+			T.icon_state = "rotting_raider1"
+			T.icon_living = "rotting_raider1"
+			T.icon_dead = "rotting_raider1"
+		else if(isinsectoid(src))
+			T.icon_state = "zombie_turned"
+			T.icon_living = "zombie_turned"
+			T.icon_dead = "zombie_turned"
 		T.virus2 = virus_copylist(virus2)
 		T.get_clothes(src, T)
 		T.name = real_name
 		T.host = src
 		forceMove(null)
 		return T
+	else
+		become_zombie = TRUE
 
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()
@@ -2122,21 +2061,38 @@ mob/living/carbon/human/isincrit()
 	if(ear_deaf || speech.frequency || speech.speaker == src)
 		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
 	var/mob/living/H = speech.speaker
-	var/hangman_answer = speech.message
-	hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation -kanef
-	hangman_answer = replacetext(hangman_answer,"?","")
-	hangman_answer = replacetext(hangman_answer,"!","")
-	if(muted_letters && muted_letters.len && length(hangman_answer) == 1) // If we're working with a hangman cursed individuel and we only said a letter
-		if(hangman_answer in muteletters_check) // Correct answer?
-			muted_letters.Remove(hangman_answer) // Baleet it
-			H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear!</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear!</span>")
-			H.hangman_score++ // Add to score
-		else if(muteletter_tries)
-			muteletter_tries-- //Reduce the attempts left before...
-			visible_message("<span class='sinister'>This letter is not found in obscured speech! [muteletter_tries] tries left.</span>")
-		else
-			set_muted_letters(min(0,26-(muted_letters.len+1))) // It gets scrambled and lengthened!
-			visible_message("<span class='sinister'>Too many bad guessses... the letters have been obscured again!</span>")
+	if(muted_letters && muted_letters.len) // If we're working with a hangman cursed individual
+		var/hangman_answer = speech.message
+		hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation and uppercase
+		hangman_answer = replacetext(hangman_answer,"?","")
+		hangman_answer = replacetext(hangman_answer,"!","")
+		if(hangman_phrase != "" && hangman_answer == hangman_phrase) // Whole phrase guessed right?
+			for(var/letter in muteletters_check)
+				muted_letters.Remove(letter) // Wipe checked letters from muted ones
+				muteletters_check.Remove(letter) // And the list itself
+				H.hangman_score++ // Add to score
+			H.visible_message("<span class='sinister'>[speech.speaker] has found the sentence spoken! It was \"[hangman_phrase]\".</span>","<span class='sinister'>You found the sentence spoken! It was \"[hangman_phrase]\".</span>")
+			hangman_phrase = ""
+		hangman_answer = uppertext(hangman_answer)
+		if(length(hangman_answer) == 1) // If we only said a letter
+			if(hangman_answer in muteletters_check) // Correct answer?
+				muted_letters.Remove(hangman_answer) // Baleet it
+				muteletters_check.Remove(hangman_answer) // Here too
+				var/obscured_answer = hangman_phrase
+				for(var/letter in muted_letters)
+					obscured_answer = replacetext(obscured_answer, letter, "_")
+				if(muteletters_check.len)
+					H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear! Current sentence: [obscured_answer].</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear! Current sentence: [obscured_answer].</span>")
+				else
+					H.visible_message("<span class='sinister'>[speech.speaker] has found the sentence spoken! It was \"[hangman_phrase]\".</span>","<span class='sinister'>You found the sentence spoken! It was \"[hangman_phrase]\".</span>")
+					hangman_phrase = ""
+				H.hangman_score++ // Add to score
+			else if(muteletter_tries)
+				muteletter_tries-- //Reduce the attempts left before...
+				visible_message("<span class='sinister'>This letter is not found in obscured speech! [muteletter_tries] tries left.</span>")
+			else
+				set_muted_letters(max(0,26-(muted_letters.len+1))) // It gets scrambled and lengthened!
+				visible_message("<span class='sinister'>Too many bad guessses... the letters have been obscured again!</span>")
 	if(!mind || !mind.faith || length(speech.message) < 20)
 		return //If we aren't religious or hearing a long message, don't check further
 	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
@@ -2201,7 +2157,7 @@ mob/living/carbon/human/isincrit()
 	var/ourMeat = new meat_type(location, src)
 	return ourMeat	//Exists due to meat having a special New()
 
-/mob/living/carbon/human/turn_into_mannequin(var/material = "marble")
+/mob/living/carbon/human/turn_into_mannequin(var/material = "marble",var/forever = FALSE)
 	var/list/valid_mannequin_species = list(
 		"Human",
 		"Vox",
@@ -2255,27 +2211,27 @@ mob/living/carbon/human/isincrit()
 			if (is_fat())
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 			else if (gender == FEMALE)
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 			else
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 		if ("Vox")
 			switch (material)
 				if ("marble")
-					new_mannequin = new /obj/structure/mannequin/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+					new_mannequin = new /obj/structure/mannequin/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 				if ("wood")
-					new_mannequin = new /obj/structure/mannequin/wood/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+					new_mannequin = new /obj/structure/mannequin/wood/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 
 	if (new_mannequin)
 		return TRUE
@@ -2313,7 +2269,7 @@ mob/living/carbon/human/isincrit()
 			return list(
 		if ("Golem")
 			return list(
-		if ("Grue")
+		if ("Vampire")
 			return list(
 		if ("Slime")
 			return list(

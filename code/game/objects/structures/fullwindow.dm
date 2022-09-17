@@ -4,7 +4,6 @@
 #define WINDOWSECURE 3
 
 /obj/structure/window/full
-
 	name = "window"
 	var/base_state = "window" //Base icon for update_icon
 	icon_state = "window0" //Specifically for the map
@@ -15,21 +14,22 @@
 	cracked_base = "fcrack"
 	is_fulltile = TRUE
 	disperse_coeff = 0.95
+	pass_flags_self = PASSGLASS
 
 /obj/structure/window/full/New(loc)
 
 	..(loc)
 	flow_flags |= ON_BORDER
 
-/obj/structure/window/full/Uncross(atom/movable/O as mob|obj, target as turf)
+/obj/structure/window/full/setup_border_dummy()
+	return
 
-	return 1
 
 /obj/structure/window/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		dim_beam(mover)
-		return 1
-	return 0
+		return TRUE
+	return !density
 
 /obj/structure/window/full/can_be_reached(mob/user)
 

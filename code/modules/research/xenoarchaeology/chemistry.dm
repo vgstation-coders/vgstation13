@@ -1,6 +1,6 @@
 
 //chemistry stuff here so that it can be easily viewed/modified
-datum/reagent/tungsten
+/datum/reagent/tungsten
 	name = "Tungsten"
 	id = TUNGSTEN
 	description = "A chemical element, and a strong oxidising agent."
@@ -8,7 +8,7 @@ datum/reagent/tungsten
 	color = "#DCDCDC"  // rgb: 220, 220, 220, silver
 	density = 19.25
 
-datum/reagent/lithiumsodiumtungstate
+/datum/reagent/lithiumsodiumtungstate
 	name = "Lithium Sodium Tungstate"
 	id = LITHIUMSODIUMTUNGSTATE
 	description = "A reducing agent for geological compounds."
@@ -17,14 +17,14 @@ datum/reagent/lithiumsodiumtungstate
 	density = 3.29
 	specheatcap = 3.99
 
-datum/reagent/ground_rock
+/datum/reagent/ground_rock
 	name = "Ground Rock"
 	id = GROUND_ROCK
 	description = "A fine dust made of ground up rock. Adding a reducing agent would separate the waste from the useful elements."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#A0522D"   //rgb: 160, 82, 45, brown
 
-datum/reagent/analysis_sample
+/datum/reagent/analysis_sample
 	name = "Analysis liquid"
 	id = ANALYSIS_SAMPLE
 	description = "A watery paste used in chemical analysis."
@@ -33,7 +33,7 @@ datum/reagent/analysis_sample
 	density = 4.74
 	specheatcap = 3.99
 
-datum/reagent/chemical_waste
+/datum/reagent/chemical_waste
 	name = "Chemical Waste"
 	id = CHEMICAL_WASTE
 	description = "A viscous, toxic liquid left over from many chemical processes."
@@ -96,7 +96,7 @@ datum/reagent/chemical_waste
 
 /obj/item/weapon/reagent_containers/glass/solution_tray/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 1
-obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+/obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user)
 	else
@@ -162,4 +162,36 @@ obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/
 /obj/item/weapon/reagent_containers/glass/beaker/fuel/New()
 	..()
 	reagents.add_reagent(FUEL,50)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/beaker/acid
+	name = "beaker 'sulphuric acid'"
+
+/obj/item/weapon/reagent_containers/glass/beaker/acid/New()
+	..()
+	reagents.add_reagent(SACID,50)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/pacid
+	name = "huge polytrinic acid flask"
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/pacid/New()
+	..()
+	reagents.add_reagent(PACID,100)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/mutagen
+	name = "huge mutagen flask"
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/mutagen/New()
+	..()
+	reagents.add_reagent(MUTAGEN,100)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/diabeetus
+	name = "huge diabeetusol flask"
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer/diabeetus/New()
+	..()
+	reagents.add_reagent(DIABEETUSOL,100)
 	update_icon()

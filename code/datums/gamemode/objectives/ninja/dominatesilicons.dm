@@ -26,7 +26,7 @@
 	var/any_borgs_alive = FALSE
 	for(var/mob/living/silicon/robot/R in cyborg_list)
 		var/turf/T = get_turf(R)
-		if(T.z == STATION_Z && !(R.stat==DEAD))
+		if(T.z == map.zMainStation && !(R.stat==DEAD))
 			any_borgs_alive = TRUE
 			break
 	if(!any_borgs_alive)

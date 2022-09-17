@@ -7,7 +7,7 @@
 	var/old_icon_mod = "on"
 	anchored = 0
 	density = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 100
 	active_power_usage = 1000
 
@@ -54,7 +54,7 @@
 	if(exploding && !exploded)
 		message_admins("AME explosion at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) - Last touched by [fingerprintslast]",0,1)
 		exploded=1
-		explosion(get_turf(src),8,10,12,15)
+		explosion(get_turf(src),8,10,12,15, whodunnit = get_mob_by_key(fingerprintslast))
 		if(src)
 			qdel(src)
 
@@ -62,7 +62,7 @@
 		check_shield_icons()
 		update_shield_icons = 0
 
-	if(stat & (NOPOWER|BROKEN) || !active)//can update the icons even without power
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN) || !active)//can update the icons even without power
 		return
 
 	if(!fueljar || fueljar.fuel <= 0)//No fuel but we are on, shutdown
@@ -168,7 +168,7 @@
 
 /obj/machinery/power/am_control_unit/power_change()
 	..()
-	if(stat & NOPOWER && active)
+	if(stat & (FORCEDISABLE|NOPOWER) && active)
 		toggle_power()
 	return
 
@@ -275,11 +275,11 @@
 	active = !active
 	if(active)
 		playsound(src, 'sound/effects/fall.ogg', 50, 1)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 		visible_message("[bicon(src)] The [src.name] starts up.")
 	else
 		playsound(src, 'sound/effects/fall2.ogg', 50, 1)
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 		visible_message("[bicon(src)] The [src.name] shuts down.")
 	for(var/obj/machinery/am_shielding/AMS in linked_cores)
 		AMS.update_icon()
@@ -337,7 +337,7 @@
 
 
 /obj/machinery/power/am_control_unit/interact(mob/user)
-	if((get_dist(src, user) > 1) || (stat & (BROKEN|NOPOWER)))
+	if((get_dist(src, user) > 1) || (stat & (FORCEDISABLE|BROKEN|NOPOWER)))
 		if(!istype(user, /mob/living/silicon/ai))
 			user.unset_machine()
 			user << browse(null, "window=AMcontrol")
@@ -389,7 +389,7 @@
 			usr.unset_machine()
 		return 1
 	//Ignore input if we are broken or guy is not touching us, AI can control from a ways away
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		usr.unset_machine()
 		usr << browse(null, "window=AMcontrol")
 		return

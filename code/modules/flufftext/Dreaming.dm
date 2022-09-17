@@ -1,4 +1,4 @@
-mob/living/carbon/proc/dream()
+/mob/living/carbon/proc/dream()
 	dreaming = 1
 	var/list/dreams = list(
 		"an ID card","a bottle","a familiar face","a crewmember","a toolbox","a security officer","the captain",
@@ -20,7 +20,8 @@ mob/living/carbon/proc/dream()
 		"a red bus that drives through space","an alien artifact","the mechanic","a newspaper","an insectoid","a slime","a slime person","a mushroom person",
 		"the Cult of Nar-Sie","the Wizard Federation","an impossibly gigantic lamprey floating through space, bending reality as it goes","a sword that talks",
 		"an eclipse","a sandwich so tall that it pierces the heavens","things you people wouldn't believe","attack ships on fire off the shoulder of Orion","C-beams glittering in the dark near the Tannhäuser Gate",
-		"the xenoarchaeologist", "the xenobiologist", "getting reincarnated in another world",
+		"the xenoarchaeologist", "the xenobiologist", "getting reincarnated in another world","a hat pile so tall that it pierces the heavens","a wheelchair ride pile so tall that it pierces the heavens",
+		"bees","a cryptographic sequencer","the singularity","mr. clean","a dual sword made of pure energy","a welding tool being held to a fuel tank","a cascading supermatter sea",
 		)
 	spawn(0)
 		for(var/i = rand(1,4),i > 0, i--)
@@ -32,8 +33,8 @@ mob/living/carbon/proc/dream()
 				break
 		dreaming = 0
 
-mob/living/carbon/proc/handle_dreams()
+/mob/living/carbon/proc/handle_dreams()
 	if(prob(5) && !dreaming)
 		dream()
 
-mob/living/carbon/var/dreaming = 0
+/mob/living/carbon/var/dreaming = 0

@@ -28,7 +28,7 @@
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
 	if(!floor_overlays[glass_state])
 		var/image/floor_overlay = image('icons/turf/overlays.dmi', glass_state)
-		floor_overlay.plane = relative_plane(GLASSTILE_PLANE)
+		floor_overlay.plane = GLASSTILE_PLANE
 		floor_overlay.layer = TURF_LAYER
 		floor_overlays[glass_state] = floor_overlay
 	overlays += floor_overlays[glass_state]
@@ -46,7 +46,7 @@
 	var/icon_state = "[cracked_base][damage_fraction]"
 	if(!damage_overlays[icon_state])
 		var/image/_damage_overlay = image('icons/obj/structures.dmi', icon_state)
-		_damage_overlay.plane = relative_plane(GLASSTILE_PLANE)
+		_damage_overlay.plane = GLASSTILE_PLANE
 		_damage_overlay.layer = TURF_LAYER
 		damage_overlays[icon_state] = _damage_overlay
 	var/damage_overlay = damage_overlays[icon_state]
@@ -102,7 +102,6 @@
 
 
 /turf/simulated/floor/glass/levelupdate()
-	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(FALSE) // ALWAYS show subfloor stuff.

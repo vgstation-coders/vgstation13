@@ -7,7 +7,7 @@
 	icon = 'icons/obj/telescience.dmi'
 	icon_state = "pad-idle"
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	active_power_usage = 500
 	var/stage = 0
@@ -93,7 +93,8 @@
 
 /obj/item/weapon/rcs/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>There are [round(cell.charge / send_cost)] charges left.</span>")
+	if(send_cost > 0)
+		to_chat(user, "<span class='info'>There are [round(cell.charge / send_cost)] charges left.</span>")
 
 /obj/item/weapon/rcs/Destroy()
 	if (cell)
@@ -121,7 +122,7 @@
 	if (!istype(target) || target.opened || !proximity_flag || !cell || teleporting)
 		return
 
-	if (no_station && user.z == STATION_Z)
+	if (no_station && user.z == map.zMainStation)
 		to_chat(user, "<span class='warning'>The safety prevents the sending of crates from the viscinity of Nanotrasen Station.</span>")
 		return
 

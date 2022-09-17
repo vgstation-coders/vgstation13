@@ -48,17 +48,17 @@
 						var/list/allturfcontents = currentturf.contents.Copy()
 
 						//Remove the following line to allow lighting to be considered, if you do this it must be blended with BLEND_MULTIPLY instead of ICON_OVERLAY
-						for (var/atom/movable/light/L in allturfcontents)
-							allturfcontents -= L
+						allturfcontents -= locate(/atom/movable/lighting_overlay) in allturfcontents
+
+						//Remove the following line if you want to add space to your renders, I think it is cheaper to merely use a pregenned image for this
+						if(!istype(currentturf,/turf/space))
+							var/icon/turficon = getFlatIcon(currentturf, currentturf.dir, cache = 0)
+							map_icon.Blend(turficon, ICON_OVERLAY, ((a-1)*WORLD_ICON_SIZE)+1, ((b-1)*WORLD_ICON_SIZE)+1)
 
 						for(var/atom/movable/A in allturfcontents)
 							if(A.locs.len > 1) //Fix for multitile objects I wish I didn't have to do this its probably slow
 								if(A.locs[1] != A.loc)
 									allturfcontents -= A
-
-						//Remove the following line if you want to add space to your renders, I think it is cheaper to merely use a pregenned image for this
-						if(!istype(currentturf,/turf/space))
-							allturfcontents += currentturf
 
 						//Due to processing order, a pixelshifted object will be overriden in certain directions,
 						//we'll apply it at the end, they're almost always at the top layer anyway
@@ -69,6 +69,8 @@
 
 						if(!allturfcontents.len)
 							continue
+
+						allturfcontents = plane_layer_sort(allturfcontents)
 
 						//Preparing to blend get flat icon of
 						for(var/A in allturfcontents)

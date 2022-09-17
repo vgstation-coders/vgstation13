@@ -168,6 +168,19 @@
 	..()
 	reagents.add_reagent(ADMINORDRAZINE, 50)
 
+/obj/item/weapon/reagent_containers/pill/procizine
+	name = "procizine pill"
+	desc = "What could possibly go wrong?"
+	icon_state = "pill6" //cyan-brown oblong
+
+/obj/item/weapon/reagent_containers/pill/procizine/New()
+	..()
+	reagents.add_reagent(PROCIZINE, 50)
+	for(var/procname in procizine_calls)
+		if(procizine_calls[procname] in bad_procs)
+			desc = "You have a bad feeling about taking this."
+			return
+
 /obj/item/weapon/reagent_containers/pill/stox
 	name = "Sleeping pill"
 	desc = "Commonly used to treat insomnia."
@@ -251,6 +264,17 @@
 	reagents.add_reagent(IMPEDREZENE, 10)
 	reagents.add_reagent(SYNAPTIZINE, 1)
 	reagents.add_reagent(HYPERZINE, 10)
+
+/obj/item/weapon/reagent_containers/pill/skeet
+	name = "Skeet pill"
+	desc = "Straight from the mothership drug labs; a party pill designed for ravers and addicts alike!"
+	icon_state = "pill37" //darkblue tablet
+
+/obj/item/weapon/reagent_containers/pill/skeet/New()
+	..()
+	reagents.add_reagent(STOXIN, 1)
+	reagents.add_reagent(CRYPTOBIOLIN, 3)
+	reagents.add_reagent(HYPERZINE, 1)
 
 /obj/item/weapon/reagent_containers/pill/hyperzine
 	name = "Hyperzine pill"

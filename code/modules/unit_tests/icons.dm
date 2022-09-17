@@ -13,6 +13,7 @@
     types -= /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy // idk what the fuck is this, but it's not broken
     types -= /obj/item/weapon/reagent_containers/food/snacks/snackbar/nutriment
     types -= /obj/item/weapon/reagent_containers/food/snacks/sushi
+    types -= /obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue //because of meat recoloring
     for(var/type in types)
         var/obj/item/weapon/reagent_containers/food/snacks/food = new type()
         if(!has_icon(food.icon, food.icon_state))

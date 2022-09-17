@@ -7,7 +7,7 @@
 	speak_emote = list("clucks","croons")
 	attack_text = "pecks"
 	species_type = /mob/living/carbon/monkey/vox
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken
 	canWearClothes = 0
 	canWearGlasses = 0
 	safe_oxygen_min = 0

@@ -13,7 +13,7 @@
 	icon_state = "genfab"
 	max_material_storage = GEN_FAB_BASESTORAGE
 	nano_file = "genfab.tmpl"
-	var/list/design_types = GENFAB | IMPRINTER | PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
+	var/list/design_types = GENFAB | IMPRINTER | PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB | MULTIOUTPUT
 	var/removable_designs = 1
 	var/plastic_added = 1 //if plastic costs are added for designs - the autolathe doesn't have this
 
@@ -106,9 +106,10 @@
 					spawn(10)
 						overlays -= image(icon = icon, icon_state = "[base_state]-bp")
 		return 1
+	return 0
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if((user.stat && !isobserver(user)) || user.restrained() || !allowed(user))
 		return

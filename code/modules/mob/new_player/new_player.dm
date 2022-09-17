@@ -83,22 +83,21 @@
 			stat("Game Mode:", "[master_mode]")
 
 		if(SSticker.initialized)
-			if((ticker.current_state == GAME_STATE_PREGAME) && going)
-				stat("Time To Start:", (round(ticker.pregame_timeleft - world.timeofday) / 10)) //rounding because people freak out at decimals i guess
-			if((ticker.current_state == GAME_STATE_PREGAME) && !going)
-				stat("Time To Start:", "DELAYED")
+			if(ticker.current_state == GAME_STATE_PREGAME)
+				if(going)
+					stat("Time To Start:", (round(ticker.pregame_timeleft - world.timeofday) / 10)) //rounding because people freak out at decimals i guess
+				else
+					stat("Time To Start:", "DELAYED")
+				stat("Players: [totalPlayers]", "Players Ready: [totalPlayersReady]")
+				totalPlayers = 0
+				totalPlayersReady = 0
+				for(var/mob/new_player/player in player_list)
+					stat("[player.key]", (player.ready)?("(Playing)"):(null))
+					totalPlayers++
+					if(player.ready)
+						totalPlayersReady++	
 		else
 			stat("Time To Start:", "LOADING...")
-
-		if(SSticker.initialized && ticker.current_state == GAME_STATE_PREGAME)
-			stat("Players: [totalPlayers]", "Players Ready: [totalPlayersReady]")
-			totalPlayers = 0
-			totalPlayersReady = 0
-			for(var/mob/new_player/player in player_list)
-				stat("[player.key]", (player.ready)?("(Playing)"):(null))
-				totalPlayers++
-				if(player.ready)
-					totalPlayersReady++
 
 /mob/new_player/Topic(href, href_list[])
 	//var/timestart = world.timeofday
@@ -204,7 +203,7 @@
 			return
 		to_chat(src, "<span class='bnotice'>You have requested for heads of staff to open priority roles. Please stand by.</span>")
 		for(var/obj/item/device/pda/pingme in PDAs)
-			if(pingme.cartridge && pingme.cartridge.fax_pings && pingme.cartridge.access_status_display)
+			if(pingme.cartridge && pingme.cartridge.fax_pings && (locate(/datum/pda_app/cart/status_display) in pingme.applications))
 				//This may seem like a strange check, but it's excluding the IAA for only HOP/Cap
 				playsound(pingme, "sound/effects/kirakrik.ogg", 50, 1)
 				var/mob/living/L = get_holder_of_type(pingme,/mob/living)
@@ -217,11 +216,9 @@
 		message_admins("[src] ([src.key]) requested high priority jobs. [count_pings ? "[count_pings]" : "<span class='danger'>No</span>"] players heard the request.")
 		return
 
-	if(!ready && href_list["preference"])
+	if(href_list["preference"])
 		if(client)
 			client.prefs.process_link(src, href_list)
-	else if(!href_list["late_join"])
-		new_player_panel()
 
 	if(href_list["showpoll"])
 
@@ -333,6 +330,7 @@
 	if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
 		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
 	mind.transfer_to(observer)
+	log_admin("([observer.ckey]/[observer]) started the game as a ghost.")
 	qdel(src)
 
 /mob/new_player/proc/create_cluwne()
@@ -368,41 +366,9 @@
 
 	job_master.AssignRole(src, rank, 1)
 
-	ticker.mode.latespawn(src)//can we make them a latejoin antag?
-
-	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
+	var/mob/living/carbon/human/character = create_character(1)	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
-
-	// Very hacky. Sorry about that
-	if(ticker.tag_mode_enabled == TRUE)
-		character.mind.assigned_role = "MODE"
-		var/datum/outfit/mime/mime_outfit = new
-		mime_outfit.equip(character)
-		var/datum/role/tag_mode_mime/mime = new
-		mime.AssignToRole(character.mind,1)
-		mime.Greet(GREET_ROUNDSTART)
-
-	if(character.mind.assigned_role != "MODE")
-		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
-
-	job_master.CheckPriorityFulfilled(rank)
-
-	var/turf/T = character.loc
-	for(var/role in character.mind.antag_roles)
-		var/datum/role/R = character.mind.antag_roles[role]
-		R.OnPostSetup(TRUE) // Latejoiner post-setup.
-		R.ForgeObjectives()
-		R.AnnounceObjectives()
-
-	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
-		//Removal of job slot is in role/role.dm
-		character.store_position()
-		qdel(src)
-		return
-
-
-	EquipCustomItems(character)
 
 	var/atom/movable/what_to_move = character.locked_to || character
 
@@ -412,6 +378,45 @@
 	else
 		// TODO:  Job-specific latejoin overrides.
 		what_to_move.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
+
+	ticker.mode.latespawn(character)//can we make them a latejoin antag?
+
+	if (!character || !character.mind) //Character got transformed in a latejoin ruleset
+		if(character)
+			qdel(character)
+		qdel(src)
+		return
+
+	// Very hacky. Sorry about that
+	if(ticker.tag_mode_enabled == TRUE)
+		character.mind.assigned_role = "MODE"
+		var/datum/outfit/mime/mime_outfit = new
+		mime_outfit.equip(character, strip = TRUE, delete = TRUE)
+		var/datum/role/tag_mode_mime/mime = new
+		mime.AssignToRole(character.mind,1)
+		mime.Greet(GREET_ROUNDSTART)
+
+	var/turf/T = character.loc
+
+	if(character.mind.assigned_role != "MODE")
+		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
+
+	for(var/role in character.mind.antag_roles)
+		var/datum/role/R = character.mind.antag_roles[role]
+		R.OnPostSetup(TRUE) // Latejoiner post-setup.
+		R.ForgeObjectives()
+		R.AnnounceObjectives()
+
+	job_master.CheckPriorityFulfilled(rank)
+
+	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
+		//Removal of job slot is in role/role.dm
+		character.store_position()
+		qdel(src)
+		return
+
+
+	EquipCustomItems(character)
 
 	character.store_position()
 
@@ -549,7 +554,7 @@
 				civ[job] = active
 			else
 				misc[job] = active
-	
+
 	if(highprior.len > 0)
 		dat += "<tr><th class='reqhead' colspan=3>High Priority Jobs</th></tr>"
 		for(var/datum/job/job in highprior)
@@ -720,8 +725,38 @@
 	if(client.prefs.disabilities & DISABILITY_FLAG_LISP)
 		new_character.dna.SetSEState(LISPBLOCK, 1, 1)
 
+	if(client.prefs.disabilities & DISABILITY_FLAG_ANEMIA)
+		new_character.dna.SetSEState(ANEMIABLOCK, 1, 1)
+
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
+
+	var/rank = new_character.mind.assigned_role
+	if(!(ticker.current_state == GAME_STATE_PLAYING))
+		var/obj/S = null
+		// Find a spawn point that wasn't given to anyone
+		for(var/obj/effect/landmark/start/sloc in landmarks_list)
+			if(sloc.name != rank)
+				continue
+			if(locate(/mob/living) in sloc.loc)
+				continue
+			S = sloc
+			break
+		if(!S)
+			// Find a spawn point that was already given to someone else
+			for(var/obj/effect/landmark/start/sloc in landmarks_list)
+				if(sloc.name != rank)
+					continue
+				S = sloc
+				stack_trace("not enough spawn points for [rank]")
+				break
+		if(S)
+			// Use the given spawn point
+			new_character.forceMove(S.loc)
+		else
+			// Use the arrivals shuttle spawn point
+			stack_trace("no spawn points for [rank]")
+			new_character.forceMove(pick(latejoin))
 
 	new_character.key = key		//Manually transfer the key to log them in
 
@@ -732,8 +767,15 @@
 
 	return new_character
 
+/mob/new_player/proc/create_roundstart_human()
+	var/mob/living/carbon/human/new_character = create_character()
+	qdel(src)
+	new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+
 //Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
-/mob/new_player/proc/create_roundstart_cyborg()
+/mob/new_player/proc/create_roundstart_silicon(var/type)
+	if(type != "Cyborg" && type != "AI" && type != "Mobile MMI")
+		return
 	//End lobby
 	spawning = 1
 	close_spawn_windows()
@@ -742,7 +784,7 @@
 	//Find a spawnloc
 	var/turf/spawn_loc
 	for(var/obj/effect/landmark/start/sloc in landmarks_list)
-		if (sloc.name != "Cyborg")
+		if (sloc.name != type)
 			continue
 		if (locate(/mob/living) in sloc.loc)
 			if(!spawn_loc)
@@ -752,21 +794,21 @@
 		break
 	if(!spawn_loc)
 		spawn_loc = pick(latejoin) //If we absolutely can't find spawns
-		message_admins("WARNING! Couldn't find a spawn location for a cyborg. They will spawn at the arrival shuttle.")
+		message_admins("WARNING! Couldn't find a spawn location for a [type]. They will spawn at the arrival shuttle.")
 
 	//Create the robot and move over prefs
-	var/mob/living/silicon/robot/new_character = new(spawn_loc)
-	new_character.mmi = new /obj/item/device/mmi(new_character)
-	new_character.mmi.create_identity(client.prefs) //Uses prefs to create a brain mob
-
-	//Handles transferring the mind and key manually.
-	if (mind)
-		mind.active = 0 //This prevents mind.transfer_to from setting new_character.key = key
-		mind.transfer_to(new_character)
-	new_character.key = key //Do this after. For reasons known only to oldcoders.
-	spawn()
-		new_character.Namepick()
-	return new_character
+	if(type == "AI")
+		return AIize()
+	else
+		forceMove(spawn_loc)
+		var/mob/living/silicon/robot/new_character
+		var/datum/preferences/prefs = client.prefs
+		if(type == "Mobile MMI")
+			new_character = MoMMIfy()
+		else
+			new_character = Robotize()
+		new_character.mmi.create_identity(prefs) //Uses prefs to create a brain mob
+		return new_character
 
 /mob/new_player/proc/ViewPrediction()
 	var/dat = {"<html><body>
@@ -774,7 +816,7 @@
 	dat += job_master.display_prediction()
 
 	src << browse(dat, "window=manifest;size=370x420;can_close=1")
-	
+
 /mob/new_player/proc/ViewManifest()
 	var/dat = {"<html><body>
 <h4>Crew Manifest</h4>"}

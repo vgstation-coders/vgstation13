@@ -5,14 +5,14 @@
 	icon_state = "table2-idle"
 	density = 1
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 1
 	active_power_usage = 5
 	var/mob/living/carbon/human/victim = null
 	var/strapped = 0.0
 	throwpass = 1 //so Adjacent passes.
 	var/rating = 1 //Use this for upgrades some day
-
+	pass_flags_self = PASSTABLE
 	var/obj/machinery/computer/operating/computer = null
 
 /obj/machinery/optable/New()
@@ -60,7 +60,7 @@
 	if(air_group || (height==0))
 		return 1
 
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
 		return 0
@@ -115,9 +115,9 @@
 
 /obj/machinery/optable/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
 	for (var/atom/A in loc)
-		if (A == src)
+		if (A == src || A == victim || A == user)
 			continue
-		if (A.density)
+		if (!A.Cross(victim,get_turf(victim)))
 			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")
 			return FALSE
 	victim.forceMove(loc)

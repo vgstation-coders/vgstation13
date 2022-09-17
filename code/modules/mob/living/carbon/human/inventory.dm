@@ -1,18 +1,3 @@
-/mob/living/carbon/human/verb/quick_equip()
-	set name = "quick-equip"
-	set hidden = 1
-
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		var/obj/item/I = H.get_active_hand()
-		if(!I)
-			to_chat(H, "<span class='notice'>You are not holding anything to equip.</span>")
-			return
-		if(H.equip_to_appropriate_slot(I))
-			update_inv_hand(active_hand)
-		else
-			to_chat(H, "<span class='warning'>You are unable to equip that.</span>")
-
 /mob/living/carbon/human/get_all_slots()
 	. = get_head_slots() | get_body_slots()
 
@@ -348,7 +333,7 @@
 	else
 		return 0
 	// Call update_name AFTER the inventory gets updated.
-	invoke_event(/event/unequipped, list(W))
+	INVOKE_EVENT(src, /event/unequipped, W)
 	if(success)
 		update_hidden_item_icons(W)
 
@@ -500,7 +485,7 @@
 	W.equipped(src, slot)
 	if(client)
 		client.screen |= W
-	invoke_event(/event/equipped, list(W, slot))
+	INVOKE_EVENT(src, /event/equipped, W, slot)
 
 /mob/living/carbon/human/get_multitool(var/active_only=0)
 	if(istype(get_active_hand(),/obj/item/device/multitool))

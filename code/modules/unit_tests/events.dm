@@ -4,7 +4,7 @@
 /datum/unit_test/event_does_stuff/start()
 	var/datum/demo_datum = new
 	demo_datum.register_event(/event/demo_event, src, .proc/do_something)
-	demo_datum.invoke_event(/event/demo_event)
+	INVOKE_EVENT(demo_datum, /event/demo_event)
 	if(!did_something)
 		fail("lazy event did nothing")
 /datum/unit_test/event_does_stuff/proc/do_something()
@@ -25,11 +25,11 @@
 /datum/unit_test/event_arguments/start()
 	var/datum/demo_datum = new
 	demo_datum.register_event(/event/demo_event, src, .proc/do_stuff_with_args)
-	demo_datum.invoke_event(/event/demo_event, list("abc", 123))
+	INVOKE_EVENT(demo_datum, /event/demo_event, "abc", 123)
 	demo_datum.unregister_event(/event/demo_event, src, .proc/do_stuff_with_args)
 
 	demo_datum.register_event(/event/demo_event, src, .proc/do_something_with_named_args)
-	demo_datum.invoke_event(/event/demo_event, list("second_parameter"=1))
+	INVOKE_EVENT(demo_datum, /event/demo_event, "second_parameter"=1)
 /datum/unit_test/event_arguments/proc/do_stuff_with_args(string, number)
 	assert_eq(string, "abc")
 	assert_eq(number, 123)

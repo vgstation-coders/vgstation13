@@ -9,7 +9,8 @@ var/global/list/ghdel_profiling = list()
 	var/ghost_read  = 1 // All ghosts can read
 	var/ghost_write = 0 // Only aghosts can write
 	var/blessed=0 // Chaplain did his thing. (set by bless() proc, which is called by holywater)
-
+	/// pass_flags that this atom has. If any of this matches a pass_flag on a moving thing, by default, we let them through.
+	var/pass_flags_self = NONE
 	var/flags = FPRINT
 	var/flow_flags = 0
 	var/list/fingerprints
@@ -21,6 +22,7 @@ var/global/list/ghdel_profiling = list()
 	var/had_blood //Something was bloody at some point.
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
+	var/throw_impact_sound = 'sound/weapons/genhit2.ogg'
 
 	///Chemistry.
 	var/datum/reagents/reagents = null
@@ -40,7 +42,7 @@ var/global/list/ghdel_profiling = list()
 	var/ignoreinvert = 0
 	var/timestopped
 
-	appearance_flags = TILE_BOUND|LONG_GLIDE
+	appearance_flags = TILE_BOUND|LONG_GLIDE|TILE_MOVER
 
 	var/slowdown_modifier //modified on how fast a person can move over the tile we are on, see turf.dm for more info
 	/// Last name used to calculate a color for the chatmessage overlays
@@ -51,16 +53,6 @@ var/global/list/ghdel_profiling = list()
 	var/chat_color_darkened
 	/// The chat color var, without alpha.
 	var/chat_color_hover
-
-	// Lighting flags
-	var/lighting_flags
-	var/moody_light_type
-
-/atom/New()
-	. = ..()
-	// Light effects
-	if (moody_light_type || lighting_flags & IS_LIGHT_SOURCE)
-		set_light()
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
@@ -103,14 +95,34 @@ var/global/list/ghdel_profiling = list()
 					contents.Add(new_value)
 					return 1
 
-/atom/proc/shake_animation(pixelshiftx = 3, pixelshifty = 3, duration = 0.2 SECONDS)
+
+//pixelshift - max pixels to shift on each shake
+//speed - The speed of each shake
+//loop - How many shakes to perform
+//Total shaking time is equal to speed * loops
+/atom/proc/shake_animation(pixelshiftx = 3, pixelshifty = 3, speed = 0.2 SECONDS, loops = 3)
+	set waitfor = 0
 	var/initialpixelx = pixel_x
 	var/initialpixely = pixel_y
-	var/shiftx = rand(-pixelshiftx,pixelshiftx)
-	var/shifty = rand(-pixelshifty,pixelshifty)
-	animate(src, pixel_x = pixel_x + shiftx, pixel_y = pixel_y + shifty, time = 0.2, loop = duration)
-	pixel_x = initialpixelx
-	pixel_y = initialpixely
+	var/shakedirections = 0
+	while(shakedirections < loops)
+		if(!src)
+			return
+
+		//pick random values to shift to, exclude the initial position
+		var/shiftx = rand(1,pixelshiftx)
+		var/shifty = rand(1,pixelshifty)
+		if(prob(50))
+			shiftx = -shiftx
+		if(prob(50))
+			shifty = -shifty
+
+		animate(src, pixel_x = pixel_x + shiftx, pixel_y = pixel_y + shifty, time = speed)
+		shakedirections = shakedirections + 1
+		sleep(speed)
+		pixel_x = initialpixelx
+		pixel_y = initialpixely
+
 
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x
@@ -136,6 +148,7 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
+		playsound(src, src.throw_impact_sound, 80, 1)
 		M.hitby(src,speed,src.dir)
 		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by [user] ([user ? user.ckey : "what"])</font>")
 
@@ -154,6 +167,7 @@ var/global/list/ghdel_profiling = list()
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
 				M.take_organ_damage(10)
+	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user)
 
 /atom/Destroy()
 	if(reagents)
@@ -174,15 +188,6 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
-	if(light_obj)
-		qdel(light_obj)
-		light_obj = null
-	if(shadow_obj)
-		qdel(shadow_obj)
-		shadow_obj = null
-	if(smooth_light_obj)
-		qdel(smooth_light_obj)
-		smooth_light_obj = null
 	..()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
@@ -210,6 +215,12 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/Bumped(atom/movable/AM)
 	return
 
+//When this object is bumped by BYOND, what should actually get bumped? Usually itself but there are some cases where it differs.
+//When not returning src, it should generally be called recursively on the found target in case that one also returns something else. Just don't make a cycle.
+//Yes it would be more logical to handle that elsewhere but it would also be more complicated
+/atom/proc/get_bump_target()
+	return src
+
 /atom/proc/setDensity(var/density)
 	if (density == src.density)
 		return FALSE // No need to invoke the event when we're not doing any actual change
@@ -217,7 +228,7 @@ var/global/list/ghdel_profiling = list()
 	densityChanged()
 
 /atom/proc/densityChanged()
-	invoke_event(/event/density_change, list("atom" = src))
+	INVOKE_EVENT(src, /event/density_change, "atom" = src)
 	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
 		beams.len = 0
 	if(!isturf(src))
@@ -466,6 +477,7 @@ its easier to just keep the beam vertical.
 			to_chat(user, "<a href='?src=\ref[src];bug=\ref[bug]'>There's something hidden in there.</a>")
 		else if(isobserver(user) || prob(100 / (distance + 2)))
 			to_chat(user, "There's something hidden in there.")
+	INVOKE_EVENT(src, /event/examined, "user" = user)
 
 /atom/Topic(href, href_list)
 	. = ..()
@@ -493,24 +505,29 @@ its easier to just keep the beam vertical.
 // 3 is light damage.
 //
 // child is set to the child object that exploded, if available.
-/atom/proc/ex_act(var/severity, var/child=null)
+/atom/proc/ex_act(var/severity, var/child=null, var/mob/whodunnit)
 	return
 
 /atom/proc/mech_drill_act(var/severity, var/child=null)
 	return ex_act(severity, child)
 
 /atom/proc/can_mech_drill()
-	return acidable()
+	return dissolvable()
 
-/atom/proc/blob_act(destroy = 0,var/obj/effect/blob/source = null)
-	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
+/atom/proc/blob_act(destroy = 0, var/obj/effect/blob/source = null)
 	if(flags & INVULNERABLE)
 		return
-	if (source)
-		anim(target = loc, a_icon = source.icon, flick_anim = "blob_act", sleeptime = 15, direction = get_dir(source, src), lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
+	var/_target
+
+	if(isturf(src))
+		_target = src
 	else
-		anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
-	return
+		_target = loc
+
+	if(source)
+		anim(target = _target, a_icon = source.icon, flick_anim = "blob_act", sleeptime = 15, direction = get_dir(source, src), lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
+	else
+		anim(target = _target, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
 
 /atom/proc/singularity_act()
 	return
@@ -520,8 +537,8 @@ its easier to just keep the beam vertical.
 	return
 
 //Called on every object in a shuttle which rotates
-/atom/proc/shuttle_rotate(var/angle)
-	src.dir = turn(src.dir, -angle)
+/atom/proc/map_element_rotate(var/angle)
+	change_dir(turn(src.dir, -angle))
 
 	if(canSmoothWith()) //Smooth the smoothable
 		spawn //Usually when this is called right after an atom is moved. Not having this "spawn" here will cause this atom to look for its neighbours BEFORE they have finished moving, causing bad stuff.
@@ -540,7 +557,7 @@ its easier to just keep the beam vertical.
 /atom/proc/singularity_pull()
 	return
 
-/atom/proc/emag_act()
+/atom/proc/emag_act(var/mob/user)
 	return
 
 /atom/proc/slime_act()
@@ -549,6 +566,16 @@ its easier to just keep the beam vertical.
 /atom/proc/supermatter_act(atom/source, severity)
 	qdel(src)
 	return 1
+
+//user: The mob that is suiciding
+//damagetype: The type of damage the item will inflict on the user
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
+//Output a creative message and then return the damagetype done
+/atom/proc/suicide_act(var/mob/living/user)
+	return
 
 // Returns TRUE if it's been handled, children should return if parent has already handled
 /atom/proc/hitby(var/atom/movable/AM)
@@ -618,7 +645,7 @@ its easier to just keep the beam vertical.
 				H.dna = new /datum/dna(null)
 				H.dna.real_name = H.real_name
 				H.dna.flavor_text = H.flavor_text
-		H.check_dna()
+		H.check_dna_integrity()
 
 		//Now, deal with gloves.
 		if (H.gloves && H.gloves != src)
@@ -702,7 +729,7 @@ its easier to just keep the beam vertical.
 	if (!istype(M.dna, /datum/dna))
 		M.dna = new /datum/dna(null)
 		M.dna.real_name = M.real_name
-	M.check_dna()
+	M.check_dna_integrity()
 	if (!( src.flags & FPRINT))
 		return FALSE
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
@@ -755,6 +782,8 @@ its easier to just keep the beam vertical.
 	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
 		clear_luminol()
 
+/atom/proc/ErasableRune() // god that's dumb but I need to work them into that iscleanaway macro somehow
+	return FALSE
 
 /atom/proc/get_global_map_pos()
 	if(!islist(global_map) || isemptylist(global_map))
@@ -825,11 +854,14 @@ its easier to just keep the beam vertical.
 
 /atom/proc/update_icon()
 
-/atom/proc/acidable()
-	return 0
+/atom/proc/splashable()
+	return TRUE
 
-/atom/proc/isacidhardened()
+/obj/item/weapon/storage/splashable() // I don't know where to put this, aaaaaaaaaaaaaa
 	return FALSE
+
+/atom/proc/dissolvable()
+	return 0
 
 /atom/proc/salt_act()
 	return

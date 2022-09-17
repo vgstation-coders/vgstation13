@@ -6,6 +6,7 @@
 	density = 1
 	anchored = 1
 	health = 0 //destroying the statue kills the mob within
+	pass_flags_self = PASSTABLE
 	var/intialTox = 0 	//these are here to keep the mob from taking damage from things that logically wouldn't affect a rock
 	var/intialFire = 0	//it's a little sloppy I know but it was this or the GODMODE flag. Lesser of two evils.
 	var/intialBrute = 0
@@ -108,7 +109,7 @@
 /obj/structure/closet/statue/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 
 	return ..()
@@ -131,6 +132,7 @@
 		O.forceMove(src.loc)
 
 	for(var/mob/living/M in src)
+		M.timestopped = 0
 		M.forceMove(src.loc)
 		M.sdisabilities &= ~MUTE
 		M.take_overall_damage((M.health - health - 100),0) //any new damage the statue incurred is transfered to the mob

@@ -13,8 +13,8 @@
 	sheet_amt = 1
 	var/image/buckle_overlay = null // image for overlays when a mob is buckled to the chair
 	var/image/secondary_buckle_overlay = null // for those really complicated chairs
-	var/noghostspin = 0 //Set it to 1 if ghosts should NEVER be able to spin this
-
+	var/can_rotate = TRUE
+	var/ghost_can_rotate = TRUE
 	mob_lock_type = /datum/locking_category/buckle/chair
 
 /obj/structure/bed/chair/New()
@@ -46,11 +46,6 @@
 		overlays -= secondary_buckle_overlay
 
 	handle_layer() 				         // part of layer fix
-
-/obj/structure/bed/chair/can_spook()
-	. = ..()
-	if(.)
-		return !noghostspin
 
 /obj/structure/bed/chair/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/assembly/shock_kit))
@@ -141,7 +136,18 @@
 	else
 		plane = OBJ_PLANE
 
-/obj/structure/bed/chair/proc/spin(var/mob/M)
+/obj/structure/bed/chair/proc/spin(mob/user)
+	if(!can_rotate || !user || !isturf(user.loc))
+		return
+
+	if(isobserver(user))
+		if(!ghost_can_rotate)
+			return
+		var/mob/dead/observer/ghost = user
+		if(ghost.lastchairspin <= world.time - 5) //do not spam this
+			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+		ghost.lastchairspin = world.time
+
 	change_dir(turn(dir, 90))
 
 /obj/structure/bed/chair/verb/rotate()
@@ -149,27 +155,11 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(!usr || !isturf(usr.loc))
-		return
-
-	if(!config.ghost_interaction || !can_spook())
-		if(usr.isUnconscious() || usr.restrained())
-			return
-
-	if(isobserver(usr))
-		var/mob/dead/observer/ghost = usr
-		if(ghost.lastchairspin <= world.time - 5) //do not spam this
-			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
-		ghost.lastchairspin = world.time
-
 	spin(usr)
 
 /obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
-	if(noghostspin)
+	if(!can_rotate || user.incapacitated())
 		return
-	if(!config.ghost_interaction || !can_spook())
-		if(user.isUnconscious() || user.restrained())
-			return
 	change_dir(direction)
 	return 1
 
@@ -232,7 +222,7 @@
 	desc = "Uncomfortable."
 	sheet_amt = 2
 	anchored = 1
-	noghostspin = 1
+	can_rotate = FALSE
 
 /obj/structure/bed/chair/wood/pew/left
 	icon_state = "bench_left"
@@ -428,7 +418,7 @@
 	desc = "Looks really comfy."
 	sheet_amt = 2
 	anchored = 1
-	noghostspin = 1
+	can_rotate = TRUE
 	color = null
 
 // layer stuff
@@ -591,7 +581,7 @@
 	..()
 
 /obj/item/folding_chair/on_attack(atom/attacked, mob/user)
-	hitsound = pick('sound/items/trayhit1.ogg', 'sound/items/trayhit2.ogg')
+	hitsound = "trayhit"
 	..()
 
 /obj/item/folding_chair/attack_self(mob/user)
@@ -621,7 +611,8 @@
 	desc = "A reinforced chair that's firmly secured to the ground."
 	icon_state = "shuttleseat_neutral"
 	anchored = 1
-	noghostspin = 1
+	can_rotate = TRUE
+	ghost_can_rotate = TRUE
 
 /obj/structure/bed/chair/shuttle/attackby(var/obj/item/W, var/mob/user)
 	var/mob/M = locate() in loc//so attacking people isn't made harder by the seats' bulkiness
@@ -655,9 +646,6 @@
 			qdel(src)
 		return
 	..()
-
-/obj/structure/bed/chair/shuttle/spin(var/mob/M)
-	to_chat(M,"<span class='warning'>\The [src] is firmly secured to \the [loc], you cannot spin it.</span>")
 
 /obj/structure/bed/chair/shuttle/New()
 	..()
@@ -694,7 +682,8 @@
 /obj/structure/bed/chair/shuttle/gamer
 	desc = "Ain't got nothing to compensate."
 	icon_state = "shuttleseat_GAMER"
-	noghostspin = 0
+	can_rotate = TRUE
+	ghost_can_rotate = TRUE
 
 /obj/structure/bed/chair/shuttle/gamer/spin(var/mob/M)
 	change_dir(turn(dir, 90))

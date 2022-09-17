@@ -43,7 +43,7 @@ cons:
 #define GFI_DX_MAX		12	// Remember to keep this updated should you need to keep track of more variables
 
 
-proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/override_dir = 0, var/ignore_spawn_items = FALSE)
+/proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/override_dir = 0, var/ignore_spawn_items = FALSE)
 
 	var/icon/flat = icon('icons/effects/224x224.dmi',"empty") // Final flattened icon
 	var/icon/add // Icon of overlay being added
@@ -215,7 +215,7 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 	var/list/turf_image_datas = list()
 	turf_image_datas = get_content_image_datas(T)
 	for(var/atom/A in T.contents)
-		if (istype(A, /atom/movable/light))
+		if (istype(A, /atom/movable/lighting_overlay))
 			continue
 		if (camera)
 			A.photography_act(camera)

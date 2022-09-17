@@ -40,7 +40,7 @@ var/global/list/floorbot_targets=list()
 	density = 0
 	anchored = 0
 	health = 25
-	maxhealth = 25
+	maxHealth = 25
 	auto_patrol = 0		// set to make bot automatically patrol
 	bot_flags = BOT_PATROL|BOT_BEACON|BOT_NOT_CHASING|BOT_SPACEWORTHY|BOT_CONTROL
 	var/amount = 10
@@ -105,8 +105,8 @@ var/global/list/floorbot_targets=list()
 		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",2)
 
 /obj/machinery/bot/floorbot/attackby(var/obj/item/W , mob/user)
-	if(istype(W, /obj/item/stack/tile/plasteel))
-		var/obj/item/stack/tile/plasteel/T = W
+	if(istype(W, /obj/item/stack/tile/metal))
+		var/obj/item/stack/tile/metal/T = W
 		if(amount >= 50)
 			return
 		var/loaded = min(50-amount, T.amount)
@@ -130,7 +130,7 @@ var/global/list/floorbot_targets=list()
 	else
 		. = ..()
 
-/obj/machinery/bot/floorbot/Emag(mob/user as mob)
+/obj/machinery/bot/floorbot/emag_act(mob/user as mob)
 	..()
 	if(open && !locked)
 		if(user)
@@ -164,12 +164,12 @@ var/global/list/floorbot_targets=list()
 		return 0
 	if(istype(T.loc, /turf/simulated/wall))
 		return 0
-	if(!T.loc.Enter(src))
+	if(!T.loc.Enter(src, loc, TRUE))
 		return 0
 	return 1
 
 /obj/machinery/bot/floorbot/proc/hunt_for_tiles(var/list/shit_in_view, var/list/floorbottargets)
-	for(var/obj/item/stack/tile/plasteel/T in shit_in_view)
+	for(var/obj/item/stack/tile/metal/T in shit_in_view)
 		if(!(T in floorbot_targets) && is_obj_valid_target(T,floorbottargets))
 			add_oldtarget(T)
 			target = T
@@ -201,7 +201,7 @@ var/global/list/floorbot_targets=list()
 		checkforwork()
 
 /obj/machinery/bot/floorbot/at_path_target()
-	if(istype(target, /obj/item/stack/tile/plasteel))
+	if(istype(target, /obj/item/stack/tile/metal))
 		eattile(target)
 	else if(istype(target, /obj/item/stack/sheet/metal))
 		maketile(target)
@@ -210,7 +210,7 @@ var/global/list/floorbot_targets=list()
 		if(emagged < 2)
 			if((T.is_plating() || istype(T,/turf/space/)))
 				repair(target)
-			else if(T.is_plasteel_floor())
+			else if(T.is_metal_floor())
 				var/turf/simulated/floor/F = target
 				if(F.broken || F.burnt)
 					anchored = 1
@@ -281,7 +281,7 @@ var/global/list/floorbot_targets=list()
 						target = F
 						floorbot_targets += F
 						return 1
-				if(F.is_plasteel_floor() && (F.broken||F.burnt))
+				if(F.is_metal_floor() && (F.broken||F.burnt))
 					add_oldtarget(F)
 					target = F
 					floorbot_targets += F
@@ -294,7 +294,7 @@ var/global/list/floorbot_targets=list()
 				continue
 			if(D.has_dense_content())
 				continue
-			if(D.is_plasteel_floor())
+			if(D.is_metal_floor())
 				add_oldtarget(D)
 				target = D
 				floorbot_targets += D
@@ -313,7 +313,7 @@ var/global/list/floorbot_targets=list()
 	icon_state = "[skin][icon_initial]-c"
 	if(istype(target, /turf/space/))
 		visible_message("<span class='warning'>[src] begins to repair the hole</span>")
-		var/obj/item/stack/tile/plasteel/T = new /obj/item/stack/tile/plasteel
+		var/obj/item/stack/tile/metal/T = new /obj/item/stack/tile/metal
 		repairing = 1
 		spawn(50)
 			T.build(target)
@@ -327,7 +327,7 @@ var/global/list/floorbot_targets=list()
 			visible_message("<span class='warning'>[src] begins to improve the floor.</span>")
 			repairing = 1
 			spawn(50)
-				F.make_plasteel_floor(new /obj/item/stack/tile/plasteel)
+				F.make_tiled_floor(new /obj/item/stack/tile/metal)
 				repairing = 0
 				amount -= 1
 				update_icon()
@@ -343,8 +343,8 @@ var/global/list/floorbot_targets=list()
 					F.burnt = 0
 					F.broken = 0
 
-/obj/machinery/bot/floorbot/proc/eattile(var/obj/item/stack/tile/plasteel/T)
-	if(!istype(T, /obj/item/stack/tile/plasteel))
+/obj/machinery/bot/floorbot/proc/eattile(var/obj/item/stack/tile/metal/T)
+	if(!istype(T, /obj/item/stack/tile/metal))
 		return
 	visible_message("<span class='warning'>[src] begins to collect tiles.</span>")
 	repairing = 1
@@ -373,7 +373,7 @@ var/global/list/floorbot_targets=list()
 		if(!M || !get_turf(M))
 			repairing = 0
 			return
-		var/obj/item/stack/tile/plasteel/T = new /obj/item/stack/tile/plasteel(get_turf(M))
+		var/obj/item/stack/tile/metal/T = new /obj/item/stack/tile/metal(get_turf(M))
 		T.amount = 4
 		if(M.amount==1)
 			qdel(M)
@@ -420,11 +420,11 @@ var/global/list/floorbot_targets=list()
 
 	while (amount)//Dumps the tiles into the appropriate sized stacks
 		if(amount >= 16)
-			var/obj/item/stack/tile/plasteel/T = new (Tsec)
+			var/obj/item/stack/tile/metal/T = new (Tsec)
 			T.amount = 16
 			amount -= 16
 		else
-			var/obj/item/stack/tile/plasteel/T = new (Tsec)
+			var/obj/item/stack/tile/metal/T = new (Tsec)
 			T.amount = amount
 			amount = 0
 
@@ -455,8 +455,8 @@ var/global/list/floorbot_targets=list()
 /obj/item/weapon/storage/toolbox/electrical/floorbot_type()
 	return "y"
 
-/obj/item/weapon/storage/toolbox/attackby(var/obj/item/stack/tile/plasteel/T, mob/user as mob)
-	if(!istype(T, /obj/item/stack/tile/plasteel) || contents.len >= 1 || floorbot_type() == "no_build") //Only do this if the thing is empty
+/obj/item/weapon/storage/toolbox/attackby(var/obj/item/stack/tile/metal/T, mob/user as mob)
+	if(!istype(T, /obj/item/stack/tile/metal) || contents.len >= 1 || floorbot_type() == "no_build") //Only do this if the thing is empty
 		return ..()
 	user.remove_from_mob(T)
 	qdel(T)

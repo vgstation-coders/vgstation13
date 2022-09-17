@@ -35,7 +35,7 @@
 	var/min_cap_T = 0.1 //The minimum cap used to how much time coeff can be improved
 	var/fabricator_cooldown = 2 //In deciseconds, the delay between each item starting to be built
 
-	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
+	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE | MULTIOUTPUT
 	research_flags = TAKESMATIN | HASOUTPUT | HASMAT_OVER | NANOTOUCH
 
 /obj/machinery/r_n_d/fabricator/New()
@@ -76,7 +76,7 @@
 		T += Ml.rating - 1
 	time_coeff = max(round(initial(time_coeff) - (initial(time_coeff)*((Tech.level - 1)+(T * 3)))/25,0.01), min_cap_T)
 
-/obj/machinery/r_n_d/fabricator/emag()
+/obj/machinery/r_n_d/fabricator/emag_act()
 	sleep()
 	if(!(research_flags & ACCESS_EMAG))
 		return
@@ -152,7 +152,7 @@
 
 /obj/machinery/r_n_d/fabricator/process()
 	..()
-	if(busy || being_built || stat&(NOPOWER|BROKEN))
+	if(busy || being_built || stat&(NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(stopped)
 		if(auto_make && last_made && !queue.len)
@@ -290,7 +290,7 @@
 
 //The build_part_loop fires independently and will build stuff until the queue is over or when it is stopped.
 /obj/machinery/r_n_d/fabricator/proc/build_part_loop()
-	if(busy || stopped || being_built || stat&(NOPOWER|BROKEN) || queue.len == 0)
+	if(busy || stopped || being_built || stat&(NOPOWER|BROKEN|FORCEDISABLE) || queue.len == 0)
 		return
 	var/datum/design/D = queue_pop()
 	if(!build_part(D))
@@ -323,11 +323,11 @@
 	icon_state = "[base_state]_ani"
 	if(start_end_anims)
 		flick("[base_state]_start",src)
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	updateUsrDialog()
 	//message_admins("We're going building with [get_construction_time_w_coeff(part)]")
 	sleep(get_construction_time_w_coeff(part))
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	icon_state = base_state
 	if(start_end_anims)
 		flick("[base_state]_end",src)
@@ -498,7 +498,7 @@
 	return round(/*TechTotal(part)*/(part.MatTotal()/FAB_MAT_BASEMOD)*build_time*time_coeff, roundto)
 
 /obj/machinery/r_n_d/fabricator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(!isAdminGhost(user) && (user.stat || user.restrained()))
 		return

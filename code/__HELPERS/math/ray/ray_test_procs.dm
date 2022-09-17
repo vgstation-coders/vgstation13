@@ -7,9 +7,11 @@
 	var/list/res = our_ray.cast(dist)
 	for(var/rayCastHit/rCH in res)
 		var/image/I = image('icons/Testing/Zone.dmi',"fullblock",10)
-		rCH.hit_atom.overlays += I
-		var/ref = "\ref[rCH.hit_atom]"
+		var/datum/weakref/ref = rCH.hit_atom
+		var/atom/movable/R = ref.get()
+		R.overlays += I
+		R = null
 		spawn(30)
-			var/atom/movable/R = locate(ref)
+			R = ref.get()
 			R.overlays -= I
 	return res

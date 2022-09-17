@@ -278,16 +278,13 @@
 				visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
 		return
 
-/obj/item/clothing/proc/get_armor(var/type)
-	return armor[type]
-
-/obj/item/clothing/proc/get_armor_absorb(var/type)
-	return armor_absorb[type]
-
 /obj/item/clothing/proc/offenseTackleBonus()
 	return
 
 /obj/item/clothing/proc/defenseTackleBonus()
+	return
+
+/obj/item/clothing/proc/rangeTackleBonus()
 	return
 
 //Ears: headsets, earmuffs and tiny objects
@@ -339,6 +336,7 @@
 	sterility = 50
 	var/wired = 0
 	var/obj/item/weapon/cell/cell = 0
+	var/cant_remove_cell = FALSE
 	var/clipped = 0
 	body_parts_covered = HANDS
 	slot_flags = SLOT_GLOVES
@@ -398,6 +396,77 @@
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
 	var/gave_out_gifts = FALSE //for snowman animation
+	var/obj/item/clothing/head/on_top = null //for stacking
+	var/stack_depth = 0
+
+var/global/hatStacking = 0
+var/global/maxStackDepth = 10
+
+/client/proc/configHat()
+	set name = "Configure Hat Stacking"
+	set category = "Debug"
+
+	. = (alert("Allow hats to stack?",,"Yes","No")=="Yes")
+	if(.)
+		hatStacking = 1
+	else
+		hatStacking = 0
+	. = (input("Set stack limit. (1 to 100)"))
+	. = text2num(.)
+	if(isnum(.) && (. in 1 to 100))
+		maxStackDepth = .
+	else
+		to_chat(usr, "That wasn't a valid number.")
+	log_admin("[key_name(usr)] set hatStacking to [hatStacking].")
+	message_admins("[key_name(usr)] set hatStacking to [hatStacking].")
+	log_admin("[key_name(usr)] set maxStackDepth to [maxStackDepth].")
+	message_admins("[key_name(usr)] set maxStackDepth to [maxStackDepth].")
+
+/obj/item/clothing/head/attackby(obj/item/W, mob/user)
+	if(hatStacking)
+		if(on_top)
+			on_top.attackby(W,user)
+		else if(istype(W,/obj/item/clothing/head) && !istype(W,/obj/item/clothing/head/helmet))
+			var/obj/item/clothing/head/hat = W
+			if(stack_depth >= maxStackDepth)
+				to_chat(user,"<span class='warning'>You cannot stack any higher than this!</span>")
+			else if(user.drop_item(W))
+				to_chat(user,"<span class='notice'>You add \the [hat] onto \the [src] and stack it in a towering pillar!</span>")
+				stack_depth++
+				hat.stack_depth = stack_depth
+				W.forceMove(src)
+				W.pixel_y += 4 * PIXEL_MULTIPLIER
+				vis_contents.Add(W)
+				on_top = hat
+				user.update_inv_head()
+				for(var/obj/item/clothing/head/above = on_top; above; above = above.on_top)
+					above.stack_depth = stack_depth
+	..()
+
+/obj/item/clothing/head/attack_hand(mob/user)
+	if(on_top)
+		if(on_top.on_top)
+			on_top.attack_hand(user)
+		else
+			to_chat(user,"You remove \the [on_top] from the towering pillar.")
+			on_top.pixel_y = 0
+			stack_depth--
+			on_top.stack_depth = 0
+			user.put_in_hands(on_top)
+			vis_contents.Cut()
+			on_top = null
+			user.update_inv_head()
+			for(var/obj/item/clothing/head/above = on_top; above; above = above.on_top)
+				above.stack_depth = stack_depth
+		return
+	return ..()
+
+/obj/item/clothing/head/description_hats()
+	var/list/hat_names = list()
+	for(var/obj/item/clothing/head/above = on_top; above; above = above.on_top)
+		hat_names += above.name
+	if(hat_names.len)
+		return " It is piled underneath a [english_list(hat_names)]."
 
 /obj/item/clothing/head/proc/bite_action(mob/target)
 	return
@@ -506,7 +575,7 @@
 
 /obj/item/clothing/shoes/defenseTackleBonus()
 	if(clothing_flags & MAGPULSE)
-		return 4
+		return 40
 
 //Called from human_defense.dm proc foot_impact
 /obj/item/clothing/shoes/proc/impact_dampen(atom/source, var/damage)

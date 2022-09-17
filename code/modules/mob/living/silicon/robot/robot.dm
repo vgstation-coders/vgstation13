@@ -57,6 +57,7 @@
 
 	var/opened = FALSE
 	var/emagged = FALSE
+	var/pulsecompromised = FALSE //Used for pulsedemons
 	var/illegal_weapons = FALSE
 	var/wiresexposed = FALSE
 	var/locked = TRUE
@@ -72,7 +73,7 @@
 	var/modulelock = FALSE
 	var/modulelock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
-	var/lockcharge //Used when locking down a borg to preserve cell charge
+	var/lockdown //Used when locking down a borg to preserve cell charge
 	var/scrambledcodes = FALSE // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
 	var/braintype = "Cyborg"
 	var/lawcheck[1]
@@ -387,14 +388,15 @@
 /mob/living/silicon/robot/show_malf_ai()
 	..()
 	if(connected_ai && connected_ai.mind)
-		var/datum/faction/malf/malf = find_active_faction_by_member(connected_ai.mind.GetRole(MALF))
+		var/datum/role/malfAI/malfrole = connected_ai.mind.GetRole(MALF)
+		var/datum/faction/malf/malf = find_active_faction_by_member(malfrole)
 		if(!malf)
 			malf = find_active_faction_by_type(/datum/faction/malf) //Let's see if there is anything to print at least
 			var/malf_stat = malf.get_statpanel_addition()
 			if(malf_stat && malf_stat != null)
 				stat(null, malf_stat)
-		if(malf.apcs >= 3)
-			stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
+		if(malfrole.apcs.len >= 3)
+			stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malfrole.apcs.len/3), 0)] seconds")
 	return FALSE
 
 // this function displays jetpack pressure in the stat panel
@@ -456,27 +458,32 @@
 	return FALSE
 
 
-/mob/living/silicon/robot/ex_act(severity)
+/mob/living/silicon/robot/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		to_chat(src, "The bus' robustness protects you from the explosion.")
 		return
 
 	flash_eyes(visual = TRUE, affect_silicon = TRUE)
 
-	switch(severity)
-		if(1.0)
-			if(!isDead())
+	if(!isDead())
+		var/dmg_phrase = ""
+		var/msg_admin = (src.key || src.ckey || (src.mind && src.mind.key)) && whodunnit
+		switch(severity)
+			if(1.0)
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], Gibbed", admin_warn = msg_admin)
 				gib()
 				return
-		if(2.0)
-			if(!isDead())
+			if(2.0)
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
-		if(3.0)
-			if(!isDead())
+				dmg_phrase = "Damage: 120"
+			if(3.0)
 				adjustBruteLoss(30)
+				dmg_phrase = "Damage: 30"
+
+		add_attacklogs(src, whodunnit, "got caught in an explosive blast[whodunnit ? " from" : ""]", addition = "Severity: [severity], [dmg_phrase]", admin_warn = msg_admin)
 
 	updatehealth()
 
@@ -723,6 +730,7 @@
 		var/datum/robot_component/C = components["power cell"]
 		if(wiresexposed)
 			to_chat(user, "Close the panel first.")
+			return
 		else if(cell)
 			to_chat(user, "You swap the power cell within with the new cell in your hand.")
 			var/obj/item/weapon/cell/oldpowercell = cell
@@ -754,6 +762,15 @@
 			C.install()
 			if(can_diagnose())
 				to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [cell.name]. Charge: [cell.charge] out of [cell.maxcharge].</span>")
+		if(cell.occupant)
+			to_chat(cell.occupant,"<span class='notice'>You are now inside \the [src], in control of its targeting.</span>")
+			pulsecompromised = 1
+			cell.occupant.loc = src
+			cell.occupant.current_robot = src
+			cell.occupant = null
+			to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
+			spawn(2 SECONDS)
+				to_chat(src, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
 		updateicon()
 
 	else if(iswiretool(W))
@@ -1151,7 +1168,7 @@
 			var/turf/tile = loc
 			if(isturf(tile))
 				tile.clean_blood()
-				for(var/A in tile)
+				for(var/atom/A in tile)
 					if(istype(A, /obj/effect))
 						if(iscleanaway(A))
 							qdel(A)
@@ -1180,10 +1197,10 @@
 
 /mob/living/silicon/robot/proc/self_destruct()
 	if(istraitor(src) && emagged)
-		to_chat(src, "<span style=\"font-family:Courier\" class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
+		to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE
-	to_chat(src, "<span style=\"font-family:Courier\" class='danger'>Self-Destruct signal recieved.</span>")
+	to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Self-Destruct signal received.</span>")
 	gib()
 	return TRUE
 
@@ -1191,7 +1208,7 @@
 	if(connected_ai)
 		disconnect_AI()
 	lawupdate = FALSE
-	lockcharge = FALSE
+	lockdown = FALSE
 	canmove = TRUE
 	scrambledcodes = TRUE
 	//Disconnect it's camera so it's not so easily tracked.
@@ -1245,11 +1262,23 @@
 	update_icons()
 
 
-/mob/living/silicon/robot/proc/SetLockdown(var/state = TRUE)
+/mob/living/silicon/robot/proc/SetLockdown(var/state = TRUE, var/fromconsole = FALSE)
 	if(wires.LockedCut()) // They stay locked down if their wire is cut.
+		lockdown = TRUE
 		state = TRUE
-	lockcharge = state
+	if(istraitor(src) && emagged && fromconsole)
+		to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Lockdown signal detected. Scrambling security and identification codes.</span>")
+		UnlinkSelf()
+		return FALSE
+	lockdown = state
+	if(lockdown)
+		to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Lockdown signal received. Halting all activity.</b></span>")
+		src << 'sound/machines/twobeep.ogg'
+	else
+		to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='notice'>INFO</span>\] Your lockdown has been lifted.</b></span>")
+		src << 'sound/misc/notice2.ogg'
 	update_canmove()
+	return TRUE
 
 /mob/living/silicon/robot/proc/choose_icon(var/triesleft = 3)
 	if(!triesleft || !module_sprites.len)

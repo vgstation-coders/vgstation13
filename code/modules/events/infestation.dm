@@ -159,7 +159,7 @@
 			break
 
 /datum/event/infestation/announce()
-	var/warning = "Clear them out, before this starts to affect productivity."
+	var/warning = "Clear them out before this starts to affect productivity."
 	if(vermin == VERM_GREMLINS)
 		warning = "Drive them away!" //DF reference
 

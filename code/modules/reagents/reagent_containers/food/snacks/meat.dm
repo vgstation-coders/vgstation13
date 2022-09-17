@@ -6,10 +6,11 @@
 	icon_state = "meat"
 	food_flags = FOOD_MEAT | FOOD_SKELETON_FRIENDLY
 	var/subjectname = ""
-	var/subjectjob = null
 	var/meatword = "meat"
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
+
+	var/meatcolor //If set, the meat will be colored accordingly (hex string). This can be used to add colored meats for various species without making a new sprite.
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
 	..()
@@ -19,9 +20,12 @@
 		if(uppertext(M.name) != "UNKNOWN")
 			name = "[M.name] [meatword]"
 		subjectname = M.name
-		if(istype(M, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = M
-			subjectjob = H.job
+
+	if(meatcolor) //If meatcolor is set, set the icon_state to meat_colorless and modify the tone.
+		icon_state = "meat_colorless"
+		var/icon/original = icon(icon, icon_state)
+		original.ColorTone(meatcolor)
+		icon = original
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()
@@ -35,6 +39,12 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey
 	name = "monkey meat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey/New(atom/A, var/mob/M)
+	..()
+
+	if(M)
+		name = "[initial(M.name)] [meatword]"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
 	desc = "Tastes like the tears of the station. Gives off the faint aroma of a valid salad. Just like mom used to make. This revelation horrifies you greatly."
@@ -52,16 +62,17 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/human
 	name = "human meat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/human/New(atom/A, var/mob/M)
+	..()
+	if(ishuman(M))
+		if(uppertext(M.name) == "UNKNOWN")
+			var/mob/living/carbon/human/H = M
+			name = "[lowertext(H.species.name)] [meatword]"
+
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/human/after_consume(var/mob/user, var/datum/reagents/reagentreference)
 	if(!user)
 		return
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		if(isgrue(H))
-			H.adjustOxyLoss(-50)
-			H.heal_organ_damage(50, 0)
-			H.heal_organ_damage(0, 50)
-			H.adjustToxLoss(-50)
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/diona
@@ -74,6 +85,35 @@
 	desc = "A chunk of meat from a diona nymph. It looks dense and fibrous."
 	icon_state = "nymphmeat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/grey
+	name = "grey meat"
+	desc = "A slab of greyish meat, slightly acidic in taste."
+	icon_state = "greymeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/grey/New()
+	..()
+	reagents.add_reagent(SACID, 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/polyp
+	name = "polyp meat"
+	desc = "A lump of meat from the top of a polyp's bell. Somewhat salty in taste, but quite nutritious."
+	icon_state = "raw_jellyfish"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/polyp/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(POLYPGELATIN, 5)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/insectoid
+	name = "insectoid meat"
+	desc = "A slab of gooey, white meat. It's still got traces of hardened chitin."
+	icon_state = "insectoidmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/insectoid/New()
+	..()
+	reagents.add_reagent(LITHOTORCRAZINE, 5)
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
 	name = "vox meat"
 	desc = "Considering its Avian origin, tastes unsurprisingly like chicken."
@@ -83,11 +123,21 @@
 	name = "chicken meat"
 	desc = "This better be delicious."
 	icon_state = "raw_chicken"
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken
+	name = "vox chicken meat"
+	desc = "Vox, man. No discussion."
+	icon_state = "raw_vox_chicken"
 	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat
 	name = "crab meat"
@@ -236,8 +286,8 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 	return ..()
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
-	if(transformed && istype(NewLoc, /obj/machinery/cooking))
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	if(transformed && istype(destination, /obj/machinery/cooking))
 		revert()
 
 	return ..()
@@ -391,3 +441,36 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	reagents.remove_reagent(NUTRIMENT, 2.5)
 	reagents.add_reagent(PLASMA, 5)
 	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue/
+	name = "grue meat"
+	desc = "Considered a delicacy by some, the edibility of this meat has long been a subject of debate amongst discerning gourmands."
+	meatcolor = GRUE_BLOOD
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue/New()
+	..()
+	reagents.add_reagent(GRUE_BILE, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan
+	name = "meat"
+	desc = "A slab of \"meat\". Something's a little strange about this one."
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/New(atom/A, var/mob/M)
+	..()
+	//A new blend of meat in every slab! Can be better than or worse than normal meat.
+	reagents.clear_reagents()
+	//No room for normal meat chems in here. We're going full DAN
+	for(var/blendedmeat = 1 to 3)
+		switch(rand(1,3))
+			if(1)
+				reagents.add_reagent(NUTRIMENT, 1) //15 nutrition
+			if(2)
+				reagents.add_reagent(BEFF,rand(3,8)) //6-16
+			if(3)
+				reagents.add_reagent(HORSEMEAT,rand(3,6)) //9-18
+	reagents.add_reagent(BONEMARROW,rand(0,3)) //0-3
+	if(prob(5))
+		reagents.add_reagent(ROACHSHELL,1) //Sometimes a roach gets in. No nutritional value
+	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
+
+

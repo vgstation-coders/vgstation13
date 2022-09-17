@@ -69,6 +69,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];newban=\ref[M]'>Ban</A> |
 		<A href='?src=\ref[src];jobban2=\ref[M]'>Jobban</A> |
 		<A href='?src=\ref[src];oocban=\ref[M]'>OOC Ban</A> |
+		<A href='?src=\ref[src];paxban=\ref[M]'>Pax Ban</A> |
 		<A href='?_src_=holder;appearanceban=\ref[M]'>Identity Ban</A> |
 		<A href='?src=\ref[src];notes=show;mob=\ref[M]'>Notes</A>
 	"}
@@ -784,6 +785,7 @@ var/global/floorIsLava = 0
 	if(check_rights(R_FUN,0))
 		dat += {"
 			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
+			<A href='?src=\ref[src];secretsfun=spawnselfdummyoutfit'>Spawn yourself as a Test Dummy with a Custom Outfit</A><BR>
 			<BR>
 			<BR>
 			"}
@@ -836,6 +838,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
 			<A href='?src=\ref[src];secretsfun=fireworks'>Send some fireworks at the station</A><BR>
+			<A href='?src=\ref[src];secretsfun=old_vendotron_crash'>Launch an old vendotron at the station</A><BR>
+			<A href='?src=\ref[src];secretsfun=old_vendotron_teleport'>Teleport an old vendotron onto the station</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
 			<A href='?src=\ref[src];secretsfun=aliens'>Trigger an Alien infestation</A><BR>
@@ -856,6 +860,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
+			<A href='?src=\ref[src];secretsfun=money_lotto'>Start a lotto draw</A><BR>
 			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a random event from all possible random events (WARNING, NOT ALL ARE GUARANTEED TO WORK).</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
@@ -879,10 +884,11 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
-			<A href='?src=\ref[src];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
+			<A href='?src=\ref[src];secretsfun=fakebooms'>Create fake explosions around the station</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
 			<A href='?src=\ref[src];secretsfun=virusdish'>Create a new virus in a dish</A><BR>
+			<A href='?src=\ref[src];secretsfun=bloodstone'>Spawn a cult Blood Stone</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
 			<A href='?src=\ref[src];secretsfun=onlyone'>Highlander/Wizard Wars Mode (There can be only one!)</A><BR>
@@ -1281,6 +1287,14 @@ var/global/floorIsLava = 0
 	if (istype(R) && R.emagged)
 		return TRUE
 	return (M.mind ? M.mind.antag_roles.len : null)
+
+/proc/get_afk_admins()
+	var/admin_number_afk = 0
+	for(var/client/X in admins)
+		if(X.is_afk())
+			admin_number_afk++
+
+	return admin_number_afk
 /*
 /datum/admins/proc/get_sab_desc(var/target)
 	switch(target)
@@ -1317,35 +1331,38 @@ var/global/floorIsLava = 0
 
 		object = copytext(object, 1, variables_start)
 
-	var/list/matches = get_matching_types(object, /atom)
-
-	if(matches.len==0)
+	var/chosen = filter_list_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
+	if(!chosen)
 		return
-
-	var/chosen
-	if(matches.len==1)
-		chosen = matches[1]
-	else
-		chosen = input("Select an atom type", "Spawn Atom", matches[1]) as null|anything in matches
-		if(!chosen)
-			return
-
-	//preloader is hooked to atom/New(), and is automatically deleted once it 'loads' an object
-	_preloader = new(varchanges, chosen)
-
-	if(ispath(chosen,/turf))
-		var/turf/T = get_turf(usr.loc)
-		T.ChangeTurf(chosen)
-	else if(ispath(chosen, /area))
-		var/area/A = locate(chosen)
-		var/turf/T = get_turf(usr.loc)
-
-		T.set_area(A)
-	else
-		new chosen(usr.loc)
+	var/atom/location = usr.loc
+	location.spawn_at(chosen, varchanges)
 
 	log_admin("[key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
 	feedback_add_details("admin_verb","SA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+// Helper functions for proc call madness
+/atom/proc/spawn_at(var/type, var/list/varchanges = list())
+	if(!ispath(type))
+		return
+	//preloader is hooked to atom/New(), and is automatically disabled once it 'loads' an object
+	_preloader.setup(varchanges, type)
+
+	if(ispath(type,/turf))
+		var/turf/T = get_turf(src)
+		T.ChangeTurf(type)
+	else if(ispath(type, /area))
+		var/area/A = locate(type)
+		var/turf/T = get_turf(src)
+
+		T.set_area(A)
+	else
+		new type(src)
+
+/atom/proc/spawn_at_turf(var/type, var/list/varchanges = list())
+	if(isarea(src))
+		return
+	var/turf/T = get_turf(src)
+	T.spawn_at(type,varchanges)
 
 /datum/admins/proc/show_role_panel(var/mob/M in mob_list)
 	set category = "Admin"
@@ -1461,7 +1478,7 @@ var/global/floorIsLava = 0
 
 var/admin_shuttle_location = 0 // 0 = centcom 13, 1 = station
 
-proc/move_admin_shuttle()
+/proc/move_admin_shuttle()
 	var/area/fromArea
 	var/area/toArea
 	if (admin_shuttle_location == 1)
@@ -1481,7 +1498,7 @@ proc/move_admin_shuttle()
 
 var/alien_ship_location = 1 // 0 = base , 1 = mine
 
-proc/move_alien_ship()
+/proc/move_alien_ship()
 	var/area/fromArea
 	var/area/toArea
 	if (alien_ship_location == 1)
@@ -1497,7 +1514,7 @@ proc/move_alien_ship()
 		alien_ship_location = 1
 	return
 
-proc/formatJumpTo(location, where = "")
+/proc/formatJumpTo(location, where = "")
 	var/turf/loc
 
 	if (isturf(location))
@@ -1510,7 +1527,7 @@ proc/formatJumpTo(location, where = "")
 
 	return "<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[loc ? loc.x : "mystery"];Y=[loc ? loc.y : "mystery"];Z=[loc ? loc.z : "mystery"]'>[where]</a>"
 
-proc/formatLocation(location)
+/proc/formatLocation(location)
 	var/turf/loc
 
 	if (isturf(location))
@@ -1522,7 +1539,7 @@ proc/formatLocation(location)
 	var/answer = "[istype(A) ? "[A.name]" : "UNKNOWN"] - [istype(loc) ? "[loc.x],[loc.y],[loc.z]" : "UNKNOWN"]"
 	return answer
 
-proc/formatPlayerPanel(var/mob/U,var/text="PP")
+/proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	return "<A HREF='?_src_=holder;adminplayeropts=\ref[U]'>[text]</A>"
 
 //Credit to MrStonedOne from TG for this QoL improvement

@@ -27,10 +27,14 @@
 
 /datum/feed_message
 	var/author =""
+	var/headline = ""
 	var/body =""
 	//var/parent_channel
-	var/backup_body =""
+	
+	//Backup variables are used to store the details of the message if it's redacted so it can be unredacted safely
 	var/backup_author =""
+	var/backup_headline = ""
+	var/backup_body =""
 	var/is_admin_message = FALSE
 
 	var/author_log // Log of the person who did it.
@@ -39,10 +43,11 @@
 	var/icon/backup_img
 	var/icon/img_pda = null
 	var/icon/backup_img_pda
-	var/img_info = "" //Stuff like "You can see Honkers on the photo. Honkins looks hurt..."
+	var/img_info = "" //Stuff like "You can see Honkers on the photo. Honkers looks hurt..."
 
 /datum/feed_channel
 	var/channel_name=""
+	var/backup_name = ""
 	var/list/datum/feed_message/messages = list()
 	var/locked = FALSE
 	var/author = ""
@@ -54,8 +59,10 @@
 /datum/feed_message/proc/clear()
 	author = ""
 	body = ""
+	headline = ""
 	backup_body = ""
 	backup_author = ""
+	backup_headline = ""
 	img = null
 	backup_img = null
 	img_pda = null
@@ -75,6 +82,7 @@
 	var/datum/feed_message/copy = new()
 	copy.author = author
 	copy.body = body
+	copy.headline = headline
 	copy.author_log = author_log
 	copy.img = icon(img)
 	copy.img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28))//grayscale
@@ -83,6 +91,7 @@
 
 /datum/feed_channel/proc/clear()
 	channel_name = ""
+	backup_name = ""
 	messages = list()
 	locked = 0
 	author = ""
@@ -145,11 +154,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 	var/scanned_user = "Unknown" //Will contain the name of the person who currently uses the newscaster
 	var/mob/masterController = null // Mob with control over the newscaster.
+	var/hdln = ""; //Feed headline
 	var/msg = ""; //Feed message
 	var/photo = null
 	var/channel_name = ""; //the feed channel which will be receiving the feed, or being created
 	var/c_locked = FALSE; //Will our new channel be locked to public submissions?
 	var/c_anonymous = FALSE //Will our new channel be anonymous?
+	var/c_anoncreate = FALSE //Will our new channel be created anonymously?
 	var/hitstaken = 0 //Death at 3 hits from an item with force>=15
 	var/datum/feed_channel/viewing_channel = list()
 	var/anonymous_posting = FALSE
@@ -182,7 +193,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		icon_state = "newscaster_0"
 		return
 
-	if((stat & NOPOWER) || (stat & BROKEN))
+	if((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
 		icon_state = "newscaster_off"
 		if(stat & BROKEN) //If the thing is smashed, add crack overlay on top of the unpowered sprite.
 			overlays.Cut()
@@ -246,10 +257,6 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			update_icon()
 	return ..()
 
-/obj/machinery/newscaster/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/newscaster/attack_hand(mob/user as mob)            //########### THE MAIN BEEF IS HERE! And in the proc below this...############
 
 	if(buildstage != 1)
@@ -306,7 +313,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						else
 							dat+="<B><A href='?src=\ref[src];show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ""]<BR></B>"
 
-				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
+				dat += {"<HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
 					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Back</A>"}
 			if(NEWSCASTER_NEW_CHANNEL)
 
@@ -315,6 +322,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					<B>Channel Author:</B> <FONT COLOR='green'>[scanned_user]</FONT><BR>
 					<B><A href='?src=\ref[src];set_channel_lock=1'>Will Accept Public Feeds</A>:</B> [(c_locked) ? ("NO") : ("YES")]<BR>
 					<B><A href='?src=\ref[src];set_channel_anonymous=1'>Anonymous feed</A>:</B> [(c_anonymous) ? ("YES") : ("NO")]<BR><BR>
+					<B><A href='?src=\ref[src];set_channel_anoncreate=1'>Create feed anonymously</A>:</B> [(c_anoncreate) ? ("YES") : ("NO")]<BR><BR>
 					<BR><A href='?src=\ref[src];submit_new_channel=1'>Submit</A><BR><BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A><BR>"}
 
 			if(NEWSCASTER_NEW_MESSAGE)
@@ -334,6 +342,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat += {"Creating new Feed Message...
 					<HR><B><A href='?src=\ref[src];set_channel_receiving=1'>Receiving Channel</A>:</B> [channel_name]<BR>
 					<B>Message Author:</B>[author_text]<BR>
+					<B><A href='?src=\ref[src];set_new_headline=1'>Headline</A>:</B> [hdln] <BR>
 					<B><A href='?src=\ref[src];set_new_message=1'>Message Body</A>:</B> [msg] <BR>"}
 
 				dat += AttachPhotoButton(user)
@@ -401,19 +410,19 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						No further feed story additions are allowed while the D-Notice is in effect.</FONT><BR><BR>"}
 				else
 					if( isemptylist(viewing_channel.messages) )
-						dat+="<I>No feed messages found in channel...</I><BR>"
+						dat+="<I>No feed messages found in channel...</I><BR><HR>"
 					else
 						var/i = 0
 						for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
 							i++
-							dat+="-[MESSAGE.body] <BR>"
+							dat+="<b><u>[MESSAGE.headline]</u></b><BR>[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 
-								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR><BR>"
-							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
+								dat+="<BR><a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR>"
+							dat+="<BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><HR>"
 
-				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
+				dat += {"<A href='?src=\ref[src];refresh=1'>Refresh</A>
 					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_CHANNEL_LIST]'>Back</A>"}
 			if(NEWSCASTER_CENSORSHIP_MENU)
 
@@ -443,14 +452,15 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(NEWSCASTER_CENSORSHIP_CHANNEL)
 
 				dat += {"<B>[viewing_channel.channel_name]: </B><FONT SIZE=1>\[ created by: <FONT COLOR='maroon'>[viewing_channel.author]</FONT> \]</FONT><BR>
-					<FONT SIZE=2><A href='?src=\ref[src];censor_channel_author=\ref[viewing_channel]'>[(viewing_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>"}
+					<FONT SIZE=2><A href='?src=\ref[src];censor_channel_name=\ref[viewing_channel]'>[(viewing_channel.channel_name=="\[REDACTED\]") ? ("Undo Title censorship") : ("Censor channel Title")]</A>
+					<A href='?src=\ref[src];censor_channel_author=\ref[viewing_channel]'>[(viewing_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>"}
 				if( isemptylist(viewing_channel.messages) )
-					dat+="<I>No feed messages found in channel...</I><BR>"
+					dat+="<I>No feed messages found in channel...</I><BR><HR>"
 				else
 					for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
 
-						dat += {"-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>
-							<FONT SIZE=2><A href='?src=\ref[src];censor_channel_story_body=\ref[MESSAGE]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=\ref[src];censor_channel_story_author=\ref[MESSAGE]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR>"}
+						dat += {"<b><u>[MESSAGE.headline]</u></b><BR>[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>
+							<FONT SIZE=2><A href='?src=\ref[src];censor_channel_story_body=\ref[MESSAGE]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=\ref[src];censor_channel_story_author=\ref[MESSAGE]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR><HR>"}
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_CENSORSHIP_MENU]'>Back</A>"
 			if(NEWSCASTER_D_NOTICE_CHANNEL)
 
@@ -462,10 +472,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						No further feed story additions are allowed while the D-Notice is in effect.</FONT><BR><BR>"}
 				else
 					if( isemptylist(viewing_channel.messages) )
-						dat+="<I>No feed messages found in channel...</I><BR>"
+						dat+="<I>No feed messages found in channel...</I><BR><HR>"
 					else
 						for(var/datum/feed_message/MESSAGE in viewing_channel.messages)
-							dat+="-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
+							dat+="<b><u>[MESSAGE.headline]</u></b><BR>[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><HR>"
 
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_D_NOTICE_MENU]'>Back</A>"
 			if(NEWSCASTER_WANTED)
@@ -576,6 +586,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			c_anonymous = !c_anonymous
 			updateUsrDialog()
 
+		else if(href_list["set_channel_anoncreate"])
+			if(isobserver(usr) && !canGhostWrite(usr,src,"created anonymous channel"))
+				to_chat(usr, "<span class='warning'>You can't do that.</span>")
+				return
+			c_anoncreate = !c_anoncreate
+			updateUsrDialog()
 
 		else if(href_list["set_anon_posting"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"made the author of the post anonymous"))
@@ -606,7 +622,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				if(choice=="Confirm")
 					var/datum/feed_channel/newChannel = new /datum/feed_channel
 					newChannel.channel_name = channel_name
-					newChannel.author = scanned_user
+					newChannel.author = c_anoncreate ? "Anonymous": scanned_user
 					newChannel.locked = c_locked
 					newChannel.anonymous = c_anonymous
 					feedback_inc("newscaster_channels",1)
@@ -624,6 +640,17 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				if( (!F.locked || F.author == scanned_user) && !F.censored)
 					available_channels += F.channel_name
 			channel_name = input(usr, "Choose receiving Feed Channel", "Network Channel Handler") in available_channels
+			updateUsrDialog()
+		
+		else if(href_list["set_new_headline"])
+			if(isobserver(usr) && !canGhostWrite(usr,src,"set the headline of a new feed story"))
+				to_chat(usr, "<span class='warning'>You can't do that.</span>")
+				return
+			if(isnull(hdln))
+				hdln = ""
+			hdln = stripped_input(usr, "Write your story headline", "Network Channel Handler", hdln, 64)
+			while (findtext(hdln," ") == 1)
+				hdln = copytext(hdln,2,length(hdln)+1)
 			updateUsrDialog()
 
 		else if(href_list["set_new_message"])
@@ -697,6 +724,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					newMsg.author = "Anonymous"
 				else
 					newMsg.author = scanned_user
+				newMsg.headline = hdln
 				newMsg.body = msg
 				newMsg.author_log = key_name(usr)
 				if(photo)
@@ -716,11 +744,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				screen = NEWSCASTER_MENU
 				log_game("[key_name(usr)] posted the message [newMsg.body] as [newMsg.author].")
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
-					NEWSCASTER.newsAlert(channel_name)
+					NEWSCASTER.newsAlert(channel_name, newMsg.headline)
 				for(var/obj/item/device/pda/PDA in PDAs)
 					var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 					if(reader)
-						reader.newsAlert(channel_name)
+						reader.newsAlert(channel_name,newMsg.headline)
 
 			updateUsrDialog()
 
@@ -866,6 +894,22 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		else if(href_list["view_wanted"])
 			screen=NEWSCASTER_WANTED_SHOW
 			updateUsrDialog()
+
+		else if(href_list["censor_channel_name"])
+			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to censor a channel title"))
+				to_chat(usr, "<span class='warning'>You can't do that.</span>")
+				return
+			var/datum/feed_channel/FC = locate(href_list["censor_channel_name"])
+			if(FC.is_admin_channel)
+				alert("This channel was created by a Nanotrasen Officer. You cannot censor it.","Ok")
+				return
+			if(FC.channel_name != "<B>\[REDACTED\]</B>")
+				FC.backup_name = FC.channel_name
+				FC.channel_name = "<B>\[REDACTED\]</B>"
+			else
+				FC.channel_name = FC.backup_name
+			updateUsrDialog()
+
 		else if(href_list["censor_channel_author"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to censor an author"))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")
@@ -913,9 +957,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				MSG.img = MSG.backup_img
 				MSG.img_pda = MSG.backup_img_pda
 			if(MSG.body != "<B>\[REDACTED\]</B>")
+				MSG.backup_headline = MSG.headline
+				MSG.headline = ""
 				MSG.backup_body = MSG.body
 				MSG.body = "<B>\[REDACTED\]</B>"
 			else
+				MSG.headline = MSG.backup_headline
 				MSG.body = MSG.backup_body
 			updateUsrDialog()
 
@@ -1173,11 +1220,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/i = 0
 						for(var/datum/feed_message/MESSAGE in C.messages)
 							i++
-							dat+="-[MESSAGE.body] <BR>"
+							dat+="<b><u>[MESSAGE.headline]</u></b><BR>[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								user << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
-								dat+="<img src='tmp_photo[i].png' width = '180'><BR>"
-							dat+="<FONT SIZE=1>\[Story by <b>[MESSAGE.author]</b>\]</FONT><BR><BR>"
+								dat+="<BR><img src='tmp_photo[i].png' width = '180'><BR>"
+							dat+="<BR><FONT SIZE=1>\[Story by <b>[MESSAGE.author]</b>\]</FONT><BR><HR>"
 						dat+="</ul>"
 				if(scribble_page==curr_page)
 					dat+="<BR><I>There is a small scribble near the end of this page... It reads: \"[scribble]\"</I>"
@@ -1243,7 +1290,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			attack_self(loc)
 
 
-obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen))
 		if(scribble_page == curr_page)
 			to_chat(user, "<span class='notice'>There's already a scribble in this page... You wouldn't want to make things too cluttered, would you?</span>")
@@ -1316,10 +1363,13 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	spawn(0.8 SECONDS)
 		printed_issue.forceMove(get_turf(src))
 
-/obj/machinery/newscaster/proc/newsAlert(channel)   //This isn't Agouri's work, for it is ugly and vile.
+/obj/machinery/newscaster/proc/newsAlert(channel, newsHead)   //This isn't Agouri's work, for it is ugly and vile.
 	var/turf/T = get_turf(src)                      //Who the fuck uses spawn(600) anyway, jesus christ
 	if(channel)
-		say("Breaking news from [channel]!")
+		if(newsHead != "")
+			say("Breaking news from [channel] - [newsHead]")
+		else
+			say("Breaking news from [channel]!")
 		alert = TRUE
 		update_icon()
 		spawn(30 SECONDS)

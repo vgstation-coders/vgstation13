@@ -63,12 +63,14 @@ export const DmTarget = new Juke.Target({
     get(DefineParameter).includes('ALL_MAPS') && DmMapsIncludeTarget,
   ],
   inputs: [
-    '_maps/map_files/generic/**',
+    '__DEFINES/**',
     'code/**',
     'goon/**',
     'html/**',
     'icons/**',
     'interface/**',
+    'maps/**',
+    'sound/**',
     `${DME_NAME}.dme`,
   ],
   outputs: [
@@ -193,6 +195,11 @@ export const TguiAnalyzeTarget = new Juke.Target({
   executes: () => yarn('tgui:analyze'),
 });
 
+export const TguiBenchTarget = new Juke.Target({
+  dependsOn: [YarnTarget],
+  executes: () => yarn('tgui:bench'),
+});
+
 export const TestTarget = new Juke.Target({
   dependsOn: [DmTestTarget, TguiTestTarget],
 });
@@ -202,7 +209,7 @@ export const LintTarget = new Juke.Target({
 });
 
 export const BuildTarget = new Juke.Target({
-  dependsOn: [TguiTarget, TgFontTarget, DmTarget],
+  dependsOn: [TguiTarget, DmTarget],
 });
 
 export const ServerTarget = new Juke.Target({
@@ -266,7 +273,7 @@ const prependDefines = (...defines) => {
 };
 
 export const TgsTarget = new Juke.Target({
-  dependsOn: [TguiTarget, TgFontTarget],
+  dependsOn: [TguiTarget],
   executes: async () => {
     Juke.logger.info('Prepending TGS define');
     prependDefines('TGS');

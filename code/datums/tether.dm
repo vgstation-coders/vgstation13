@@ -124,7 +124,7 @@
 
 /datum/tether/equal/restrictive	//A restrictive equal tether disallows pulling from either side. If either the master or slave attempts to exceed the tether's distance, they simply fail.
 
-proc/tether_equal(atom/movable/first, atom/movable/second, var/distance, var/restrictive = FALSE)
+/proc/tether_equal(atom/movable/first, atom/movable/second, var/distance, var/restrictive = FALSE)
 	if(!istype(first) || !istype(second) || !distance)
 		return FALSE
 	if(first.tether_master || second.tether_master)	//an atom can only have a single master or equal tether
@@ -137,10 +137,10 @@ proc/tether_equal(atom/movable/first, atom/movable/second, var/distance, var/res
 	E.make_tether(first,second,distance)
 	return TRUE
 
-proc/tether_equal_restrictive(atom/movable/first, atom/movable/second, var/distance)
+/proc/tether_equal_restrictive(atom/movable/first, atom/movable/second, var/distance)
 	return tether_equal(first, second, distance, TRUE)
 
-proc/tether_master_slave(atom/movable/M, atom/movable/S, var/distance)
+/proc/tether_master_slave(atom/movable/M, atom/movable/S, var/distance)
 	if(!istype(M) || !istype(S) || !distance)
 		return FALSE
 	if(S.tether_master)	//an atom can only have a single master or equal tether

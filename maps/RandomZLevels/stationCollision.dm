@@ -61,7 +61,7 @@
  * Guns - I'm making these specifically so that I dont spawn a pile of fully loaded weapons on the map.
  */
 //Captain's retro laser - Fires practice laser shots instead.
-obj/item/weapon/gun/energy/laser/retro/sc_retro
+/obj/item/weapon/gun/energy/laser/retro/sc_retro
 	name ="retro laser"
 	icon_state = "retro"
 	desc = "An older model of the basic lasergun, no longer used by Nanotrasen's security or military forces."
@@ -146,7 +146,7 @@ var/sc_safecode5 = "[rand(0,9)]"
 			<br>
 			Our on-board spy has learned the code and has hidden away a few copies of the code around the station. Unfortunatly he has been captured by security
 			Your objective is to split up, locate any of the papers containing the captain's safe code, open the safe and
-			secure anything found inside. If possible, recover the imprisioned syndicate operative and recieve the code from him.<br>
+			secure anything found inside. If possible, recover the imprisioned syndicate operative and receive the code from him.<br>
 			<br>
 			<u>As always, eliminate anyone who gets in the way.</u><br>
 			<br>

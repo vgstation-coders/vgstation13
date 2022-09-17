@@ -17,6 +17,16 @@
 	icon_state = "sheet-human"
 	source_string = "human"
 	origin_tech = ""
+	var/skin_color = DEFAULT_FLESH
+
+/obj/item/stack/sheet/animalhide/human/New()
+	..()
+	color = skin_color
+
+/obj/item/stack/sheet/animalhide/human/copy_evidences(var/obj/item/stack/sheet/animalhide/human/from)
+	..()
+	skin_color = from.skin_color
+	color = skin_color
 
 /obj/item/stack/sheet/animalhide/corgi
 	name = "corgi hide"

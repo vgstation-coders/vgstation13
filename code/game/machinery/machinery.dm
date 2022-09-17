@@ -122,7 +122,7 @@ Class Procs:
 
 	var/stat = 0
 	var/emagged = 0
-	var/use_power = 1
+	var/use_power = MACHINE_POWER_USE_IDLE
 		//0 = dont run the auto
 		//1 = run auto, use idle
 		//2 = run auto, use active
@@ -136,6 +136,7 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
+	var/output_dir = 0   //Direction used to output to (for things like fabs), set to 0 for loc.
 
 	var/obj/item/weapon/cell/connected_cell = null 		//The battery connected to this machine
 	var/battery_dependent = 0	//Requires a battery to run
@@ -144,6 +145,7 @@ Class Procs:
 	var/light_range_on = 0
 	var/light_power_on = 0
 	var/use_auto_lights = 0//Incase you want to use it, set this to 0, defaulting to 1 so machinery with no lights doesn't call set_light()
+	var/pulsecompromised = 0 //Used for pulsedemons
 
 	/**
 	 * Machine construction/destruction/emag flags.
@@ -172,6 +174,7 @@ Class Procs:
 /obj/machinery/New()
 	all_machines += src // Machines are only removed from this upon destruction
 	machines += src
+	initialize_malfhack_abilities()
 	//if(ticker) initialize()
 	return ..()
 
@@ -201,6 +204,10 @@ Class Procs:
 			component_parts -= AM
 */
 	component_parts = null
+	for(var/datum/malfhack_ability/MH in hack_abilities)
+		MH.machine = null
+		qdel(MH)
+	qdel(hack_overlay)
 
 	..()
 
@@ -212,7 +219,8 @@ Class Procs:
 	return PROCESS_KILL
 
 /obj/machinery/emp_act(severity)
-	if(use_power && stat == 0)
+	malf_disrupt(MALF_DISRUPT_TIME)
+	if(use_power != MACHINE_POWER_USE_NONE && stat == 0)
 		use_power(7500/severity)
 
 		var/obj/effect/overlay/pulse2 = new/obj/effect/overlay ( src.loc )
@@ -224,11 +232,14 @@ Class Procs:
 
 		spawn(10)
 			qdel(pulse2)
+	for(var/mob/living/simple_animal/hostile/pulse_demon/PD in contents)
+		PD.emp_act(severity) // Finally take these out inside APCs and etc.
 	..()
 
 /obj/machinery/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is placing \his hands into the sockets of the [src] and tries to fry \himself! It looks like \he's trying to commit suicide.</span>")
-	return(SUICIDE_ACT_FIRELOSS)
+	if(!(stat & NOPOWER|BROKEN|FORCEDISABLE) && use_power > 0)
+		to_chat(viewers(user), "<span class='danger'>[user] is placing \his hands into the sockets of the [src] and tries to fry \himself! It looks like \he's trying to commit suicide.</span>")
+		return(SUICIDE_ACT_FIRELOSS)
 
 /obj/machinery/ex_act(severity)
 	switch(severity)
@@ -251,16 +262,77 @@ Class Procs:
 		qdel(src)
 
 /obj/machinery/proc/auto_use_power()
-	if(!powered(power_channel) && !connected_cell)
-		return 0
-
 	switch (use_power)
-		if (1)
+		if (MACHINE_POWER_USE_IDLE)
 			use_power(idle_power_usage, power_channel)
-		if (2)
+		if (MACHINE_POWER_USE_ACTIVE)
 			use_power(active_power_usage, power_channel)
 
 	return 1
+
+// increment the power usage stats for an area
+// defaults to power_channel
+/obj/machinery/proc/use_power(amount, chan = power_channel)
+	var/area/this_area = get_area(src)
+	if(connected_cell && connected_cell.charge > 0)   //If theres a cell directly providing power use it, only for cargo carts at the moment
+		if(connected_cell.charge < amount*0.75)	//Let them squeeze the last bit of power out.
+			connected_cell.charge = 0
+		else
+			connected_cell.use(amount*0.75)
+	else
+		if(!this_area)
+			return 0						// if not, then not powered.
+		if(!powered(chan)) //no point in trying if we don't have power
+			return 0
+
+		this_area.use_power(amount, chan)
+
+// called whenever the power settings of the containing area change
+// by default, check equipment channel & set flag
+// can override if needed
+/obj/machinery/proc/power_change()
+	if(powered(power_channel))
+		stat &= ~NOPOWER
+
+		if(!use_auto_lights)
+			return
+		if(stat & FORCEDISABLE)
+			return
+		set_light(light_range_on, light_power_on)
+
+	else
+		stat |= NOPOWER
+
+		if(!use_auto_lights)
+			return
+		set_light(0)
+
+// returns true if the machine is powered (or doesn't require power).
+// performs basic checks every machine should do, then
+/obj/machinery/proc/powered(chan = power_channel)
+	if(!src.loc)
+		return FALSE
+
+	if(battery_dependent && !connected_cell)
+		return FALSE
+
+	if(connected_cell)
+		if(connected_cell.charge > 0)
+			return TRUE
+		else
+			return FALSE
+
+	if(use_power == MACHINE_POWER_USE_NONE)
+		return TRUE
+
+	if((machine_flags & FIXED2WORK) && !anchored)
+		return FALSE
+
+	var/area/this_area = get_area(src)
+	if(!this_area)
+		return FALSE
+
+	return this_area.powered(chan)
 
 /obj/machinery/proc/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	if("set_id" in href_list)
@@ -383,13 +455,11 @@ Class Procs:
 	return TRUE
 
 /obj/machinery/proc/is_in_range(var/mob/user)
-	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
-		return FALSE
-	return TRUE
+	return (in_range(src, user) && isturf(loc)) || issilicon(user) || ispulsedemon(user)
 
 /obj/machinery/Topic(href, href_list)
 	..()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return 1
 	if(href_list["close"])
 		return
@@ -411,7 +481,7 @@ Class Procs:
 	else if(!custom_aghost_alerts)
 		log_adminghost("[key_name(usr)] screwed with [src] ([href])!")
 
-	src.add_fingerprint(usr)
+		src.add_fingerprint(usr)
 	src.add_hiddenprint(usr)
 
 	return handle_multitool_topic(href,href_list,usr)
@@ -422,9 +492,11 @@ Class Procs:
 		// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.
 		if(user.client && user.client.eye == user)
-			return src.attack_hand(user)
+			return attack_hand(user)
 	else
-		return src.attack_hand(user)
+		if(stat & NOAICONTROL)
+			return
+		return attack_hand(user)
 
 /obj/machinery/attack_ghost(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -438,7 +510,7 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob, var/ignore_brain_damage = 0)
-	if(stat & (NOPOWER|BROKEN|MAINT))
+	if(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
 		return 1
 
 	if(user.lying || (user.stat && !canGhostRead(user))) // Ghost read-only
@@ -450,6 +522,7 @@ Class Procs:
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
+
 /*
 	//distance checks are made by atom/proc/DblClick
 	if ((get_dist(src, user) > 1 || !istype(src.loc, /turf)) && !istype(user, /mob/living/silicon))
@@ -522,7 +595,7 @@ Class Procs:
 		if(icon_state_open)	//don't need to reset the icon_state if it was never changed
 			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
-	if(toggleitem.is_screwdriver(user))
+	if(toggleitem?.is_screwdriver(user))
 		toggleitem.playtoolsound(loc, 50)
 	update_icon()
 	return 1
@@ -572,11 +645,10 @@ Class Procs:
  * Handle emags.
  * @param user /mob The mob that used the emag.
  */
-/obj/machinery/proc/emag(mob/user as mob)
+/obj/machinery/emag_act(mob/user as mob)
 	// Disable emaggability. Note that some machines such as the Communications Computer might be emaggable multiple times.
 	machine_flags &= ~EMAGGABLE
-	new/obj/effect/sparks(get_turf(src))
-	playsound(loc,"sparks",50,1)
+	spark(src)
 
 
 /**
@@ -593,11 +665,11 @@ Class Procs:
 
 	add_fingerprint(user)
 
-	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
+	if(isEmag(O) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
-			emag(user)
-			return
+			emag_act(user)
+			return 1
 
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
@@ -608,7 +680,7 @@ Class Procs:
 				if(wrenchAnchor(user, O) && machine_flags & FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
 					state = anchored
 					power_change() //updates us to turn on or off as necessary
-					return 1
+				return 1
 		else
 			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>")
 			return -1 //we return -1 rather than 0 for the if(..()) checks
@@ -629,9 +701,14 @@ Class Procs:
 			else
 				return -1
 
-	if(O.is_multitool(user) && machine_flags & MULTITOOL_MENU)
-		update_multitool_menu(user)
-		return 1
+	if(O.is_multitool(user))
+		if(!panel_open && machine_flags & MULTIOUTPUT)
+			setOutputLocation(user)
+			return 1
+		if(machine_flags & MULTITOOL_MENU)
+			update_multitool_menu(user)
+			return 1
+
 
 	if(!anchored && machine_flags & FIXED2WORK)
 		return to_chat(user, "<span class='warning'>\The [src] must be anchored first!</span>")
@@ -657,7 +734,7 @@ Class Procs:
 /obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
 	return 1
 
-/obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
+/obj/machinery/proc/shock(mob/living/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
 		return 0
 	if(!istype(user) || !user.Adjacent(src))
@@ -776,4 +853,18 @@ Class Procs:
 			scan = null
 
 /obj/machinery/proc/is_operational()
-	return !(stat & (NOPOWER|BROKEN|MAINT))
+	return !(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
+
+
+/obj/machinery/proc/setOutputLocation(user)
+	var/result = input("Set your location as output?") in list("Yes","No","Machine Location")
+	switch(result)
+		if("Yes")
+			if(!Adjacent(user))
+				to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
+				return 1
+			output_dir = get_dir(src, user)
+			to_chat(user, "<span class='notice'>Output set.</span>")
+		if("Machine Location")
+			output_dir = 0
+			to_chat(user, "<span class='notice'>Output set.</span>")

@@ -2,12 +2,11 @@
 /mob/proc/make_changeling()
 	if(!mind)
 		return
-
 	var/datum/role/changeling/C = mind.GetRole(CHANGELING)
 	if(!C)
 		return
 
-	if(!(locate(/spell/changeling/evolve) in C.antag.current.spell_list))
+	if(!ishorrorform(C.antag.current) && !(locate(/spell/changeling/evolve) in C.antag.current.spell_list))
 		C.antag.current.add_spell(new /spell/changeling/evolve, "changeling_spell_ready", /obj/abstract/screen/movable/spell_master/changeling	)
 
 	if(ismonkey(C.antag.current) && !(locate(/spell/changeling/higherform) in C.antag.current.spell_list))	//let them un-monkey themself. If they don't have any spare genomes theyre screwed, though
@@ -15,9 +14,9 @@
 
 	C.refreshpowers()
 
-
 	var/mob/living/carbon/human/H = src
 	if(istype(H))
+		H.species.fireloss_mult = 2
 		dna.flavor_text = H.flavor_text
 		if(!(M_HUSK in H.mutations))
 			C.absorbed_dna |= dna		
@@ -40,8 +39,8 @@
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
 		var/C = round(changeling.chem_charges)
 		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'>\
-				C:<font color='#EAB67B'>[C]</font><br>\
-				G:<font color='#FF2828'>[changeling.absorbedcount]</font><br>\
+				C:   <font color='#EAB67B'>[C]</font><br>\
+				DNA:<font color='#FF2828'>[changeling.absorbedcount]</font><br>\
 				[changeling.geneticdamage ? "GD: <font color='#8b0000'>[changeling.geneticdamage]</font>" : ""]\
 				</div>"
 	return

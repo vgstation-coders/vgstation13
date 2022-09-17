@@ -7,7 +7,7 @@ var/list/datum_donotcopy = list("tag", "type", "parent_type", "vars", "gcDestroy
 //			thing3 referencing thing1
 // you'll end up in an infinite loop
 // don't use it for that that's bad
-proc/datum2list(var/datum/D, var/list/do_not_copy=datum_donotcopy, parent_datum=null)
+/proc/datum2list(var/datum/D, var/list/do_not_copy=datum_donotcopy, parent_datum=null)
 	var/list/L = list()
 	for(var/I in D.vars)
 		if(I in do_not_copy)
@@ -33,7 +33,7 @@ proc/datum2list(var/datum/D, var/list/do_not_copy=datum_donotcopy, parent_datum=
 
 // converts a datum (including atoms!) to a JSON object
 // do_not_copy is a list of vars to not include in the JSON output
-proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
+/proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	ASSERT(istype(D))
 
 	var/list/L = datum2list(D, do_not_copy)

@@ -140,13 +140,11 @@
 
 /obj/item/projectile/bullet/fourtyfive
 	damage = 35 //buffed up for antag usage
-	drowsy = 2
 	agony = 2
 	penetration = 3
 
 /obj/item/projectile/bullet/fourtyfive/practice
 	damage = 3
-	drowsy = 1
 	agony = 1
 	embed = 0
 	penetration = 0
@@ -160,13 +158,11 @@
 
 /obj/item/projectile/bullet/auto380 //new sec pistol ammo, reverse name because lol compiler
 	damage = 15
-	drowsy = 1
-	agony = 1
+	agony = 15
 	penetration = 2
 
 /obj/item/projectile/bullet/auto380/practice
 	damage = 2
-	drowsy = 0
 	agony = 0
 	embed = 0
 	penetration = 0
@@ -198,7 +194,7 @@
 	damage = 25
 
 
-obj/item/projectile/bullet/suffocationbullet
+/obj/item/projectile/bullet/suffocationbullet
 	name = "CO2 bullet"
 	damage = 20
 	damage_type = OXY
@@ -216,7 +212,7 @@ obj/item/projectile/bullet/suffocationbullet
 
 /obj/item/projectile/bullet/burstbullet/on_hit(var/atom/target, var/blocked = 0)
 	..()
-	explosion(target, 0,1,1,5)
+	explosion(target, 0,1,1,5, whodunnit = firer)
 	qdel(src)
 
 /obj/item/projectile/bullet/boombullet
@@ -388,7 +384,7 @@ obj/item/projectile/bullet/suffocationbullet
 		var/heavy_impact_range = 0.5
 		var/light_impact_range = 1
 		var/flash_range = light_impact_range
-		explosion(target.loc, devastation_range, heavy_impact_range, light_impact_range, flash_range)
+		explosion(target.loc, devastation_range, heavy_impact_range, light_impact_range, flash_range, whodunnit = firer)
 	qdel(src)
 
 /obj/item/projectile/bullet/osipr
@@ -683,6 +679,7 @@ obj/item/projectile/bullet/suffocationbullet
 	bounce_sound = null
 	custom_impact = 1
 	penetration_message = 0
+	var/effect_type = /obj/effect/fire_blast
 	var/has_O2_in_mix = 0
 	var/datum/gas_mixture/gas_jet = null
 	var/max_range = 10
@@ -775,7 +772,7 @@ obj/item/projectile/bullet/suffocationbullet
 	var/initial_burn_damage = burn_strength/100
 	burn_damage = ((((-(10 * (0.9**((initial_burn_damage/10) * 5))) + 10) * 0.4) * 20)/5) //Exponential decay function 20*(y=(-(10*(0.9^(x/10)))+10)*0.4)
 	//assuming the target stays in the fire for its duration, the total burn damage will be roughly 5 * burn_damage
-	new /obj/effect/fire_blast(get_turf(src.loc), burn_damage, stepped_range, 1, jet_pressure, burn_strength)
+	new effect_type(get_turf(src.loc), burn_damage, stepped_range, 1, jet_pressure, burn_strength, 1 SECONDS, firer.loc)
 
 /obj/item/projectile/bullet/fire_plume/process_step()
 	..()
@@ -804,6 +801,7 @@ obj/item/projectile/bullet/suffocationbullet
 	burn_damage = 10
 	jet_pressure = 0
 	gas_jet = null
+	effect_type = /obj/effect/fire_blast/dragonbreath
 
 /obj/item/projectile/bullet/fire_plume/dragonsbreath/New()
 	..()

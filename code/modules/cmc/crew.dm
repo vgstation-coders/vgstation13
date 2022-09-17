@@ -22,7 +22,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	name = "Crew monitoring computer"
 	desc = "Used to monitor active health sensors built into most of the crew's uniforms."
 	icon_state = "crew"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 250
 	active_power_usage = 500
 	circuit = "/obj/item/weapon/circuitboard/crew"
@@ -86,22 +86,25 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	//DO touch, for mappers to varedit
 	var/holomap_filter //can make the cmc display syndie/vox hideout
-	var/list/holomap_z_levels_mapped = list(STATION_Z, ASTEROID_Z, DERELICT_Z) //all z-level which should be mapped
-	var/list/holomap_z_levels_unmapped = list(TELECOMM_Z, SPACEPIRATE_Z) //all z-levels which should not be mapped but should still be scanned for people
-	var/defaultZ = STATION_Z //the z_level which everyone looks at when opening the console for the first time
+	var/list/holomap_z_levels_mapped = list() //all z-level which should be mapped
+	var/list/holomap_z_levels_unmapped = list() //all z-levels which should not be mapped but should still be scanned for people
+
+/obj/machinery/computer/crew/New()
+	..()
+	if(!holomap_z_levels_mapped.len)
+		holomap_z_levels_mapped = list(map.zMainStation, map.zAsteroid, map.zDerelict)
+	if(!holomap_z_levels_unmapped.len)
+		holomap_z_levels_unmapped = list(map.zTCommSat, map.zDeepSpace)
 
 /obj/machinery/computer/crew/Destroy()
 	deactivateAll()
 	..()
 
-/obj/machinery/computer/crew/attack_ai(mob/user)
-	attack_hand(user)
-
 /obj/machinery/computer/crew/attack_hand(mob/user)
 	. = ..()
 	if(.)
 		return
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	initializeUser(user)
 
@@ -109,7 +112,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]b"
 	else
-		if(stat & NOPOWER)
+		if(stat & (FORCEDISABLE|NOPOWER))
 			src.icon_state = "c_unpowered"
 			stat |= NOPOWER
 		else
@@ -126,7 +129,7 @@ GENERAL PROCS
 	holomap_images[uid] = list()
 	holomap_tooltips[uid] = list()
 	freeze[uid] = 0
-	holomap_z[uid] = defaultZ
+	holomap_z[uid] = map.zMainStation
 	textview_updatequeued[uid] = 1
 	holomap[uid] = 0
 	scanCrew() //else the first user has to wait for process to fire
@@ -134,7 +137,7 @@ GENERAL PROCS
 
 //ticks to update holomap/textview
 /obj/machinery/computer/crew/process()
-	if((!_using) || (_using.len == 0) || (stat & (BROKEN|NOPOWER))) //sanity
+	if((!_using) || (_using.len == 0) || (stat & (BROKEN|NOPOWER|FORCEDISABLE))) //sanity
 		deactivateAll()
 		return
 
@@ -270,6 +273,8 @@ GENERAL PROCS
 		health += dam
 	health = round(100 - health)
 	switch (health)
+		if(100)
+			return "0"
 		if(80 to 99)
 			return "1"
 		if(60 to 79)
@@ -278,10 +283,8 @@ GENERAL PROCS
 			return "3"
 		if(20 to 39)
 			return "4"
-		else if(health != 100)
-			return "5"
 		else
-			return "0"
+			return "5"
 
 /*
 HOLOMAP PROCS
@@ -294,7 +297,7 @@ HOLOMAP PROCS
 		if(!(holomap_bgmap in holomap_cache))
 			var/image/background = image('icons/480x480.dmi', "stationmap_blue")
 			if(z_level in holomap_z_levels_mapped)
-				if(z_level == STATION_Z || z_level == ASTEROID_Z || z_level == DERELICT_Z)
+				if(z_level == map.zMainStation || z_level == map.zAsteroid || z_level == map.zDerelict)
 					var/image/station_outline = image(holoMiniMaps[z_level])
 					station_outline.color = "#DEE7FF"
 					station_outline.alpha = 200
@@ -319,7 +322,7 @@ HOLOMAP PROCS
 		background.plane = HUD_PLANE
 		background.layer = HUD_BASE_LAYER
 		holomap_cache[holomap_bgmap] = background
-		holomap_z_levels_unmapped |= CENTCOMM_Z
+		holomap_z_levels_unmapped |= map.zCentcomm
 
 	holomap["\ref[user]"] = 1
 

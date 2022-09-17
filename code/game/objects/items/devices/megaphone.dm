@@ -48,7 +48,7 @@ var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
 	if(mask_voice)
 		clone.name = "A distorted voice"
 		clone.job = ""
-	Broadcast_Message(clone, level = list(STATION_Z, ASTEROID_Z))
+	Broadcast_Message(clone, level = list(map.zMainStation, map.zAsteroid))
 	to_chat(speech.speaker, "\The [src] [pick("creaks", "whines", "crackles", "whirrs", 1;"makes an odd static/popping noise that you kind of recognize as similar to a geiger counter", 1;"squeaks")] \
 		as it transmits your voice into the set frequency...") //Since you may not be able to hear your own demands, some feedback that they're getting through
 

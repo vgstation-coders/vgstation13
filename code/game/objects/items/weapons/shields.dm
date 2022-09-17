@@ -25,7 +25,7 @@
 	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/shield/riot/IsShield()
-	return 1
+	return TRUE
 
 /obj/item/weapon/shield/riot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/melee/baton) || istype(W, /obj/item/weapon/melee/telebaton) || istype(W, /obj/item/weapon/melee/classic_baton))
@@ -243,8 +243,10 @@
 		return
 	if(!parent_borer.channeling_bone_shield) //the borer has stopped sustaining the sword
 		qdel(src)
+		return
 	if(parent_borer.chemicals < 3) //the parent borer no longer has the chemicals required to sustain the shield
 		qdel(src)
+		return
 	else
 		parent_borer.chemicals -= 3
 
@@ -255,6 +257,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
 	flags = FPRINT | SLOWDOWN_WHEN_CARRIED
 	slowdown = 4
+	w_type = RECYK_METAL
 
 /obj/item/weapon/shield/riot/rune
 	name = "rune kiteshield"

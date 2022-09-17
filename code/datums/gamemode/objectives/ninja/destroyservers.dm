@@ -7,6 +7,6 @@
 		return TRUE
 	for(var/obj/machinery/r_n_d/server/S in machines)
 		var/turf/T = get_turf(S)
-		if(T.z == STATION_Z)
+		if(T.z == map.zMainStation)
 			return FALSE
 	return TRUE

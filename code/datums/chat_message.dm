@@ -104,7 +104,8 @@ var/runechat_icon = null
 	// If we heard our name, it's important
 	var/list/names = splittext(owner.name, " ")
 	for (var/word in names)
-		text = replacetext(text, word, "<b>[word]</b>")
+		if(word)
+			text = replacetext(text, word, "<b>[word]</b>")
 
 	// Append radio icon if comes from a radio
 	if (extra_classes.Find("spoken_into_radio"))

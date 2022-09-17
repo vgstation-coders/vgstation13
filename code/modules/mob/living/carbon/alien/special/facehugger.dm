@@ -192,8 +192,9 @@
 	Attach(M)
 
 /obj/item/clothing/mask/facehugger/Crossed(atom/target) // Instead of HasEntered. Probably the right proc, probably.
+	if(..())
+		return 1
 	HasProximity(target)
-	return
 
 /obj/item/clothing/mask/facehugger/on_found(wearer, mob/finder as mob)
 	if(stat == CONSCIOUS)
@@ -395,7 +396,7 @@
 	processing_objects.Remove(src)
 	icon_state = "[initial(icon_state)]_dead"
 	stat = DEAD
-	sterile = TRUE //Dead huggers can't make people pregnant, duh. This also makes them acidable to avoid acid cheesers AND prevents people from using dead huggers to avoid getting hugged.
+	sterile = TRUE //Dead huggers can't make people pregnant, duh. This also makes them dissolvable to avoid acid cheesers AND prevents people from using dead huggers to avoid getting hugged.
 
 	visible_message("<span class='danger'>\The [src] curls up into a ball!</span>")
 
@@ -428,8 +429,11 @@
 
 	return TRUE
 
-/obj/item/clothing/mask/facehugger/acidable()
-	return sterile
+/obj/item/clothing/mask/facehugger/dissolvable()
+	if(sterile)
+		return PACID
+	else
+		return FALSE
 
 
 
@@ -649,7 +653,7 @@
 			target.death(0)
 			visible_message("<span class='danger'>[target.real_name]'s flesh is violently torn apart!</span>")
 			hgibs(target.loc, target.virus2, target.dna)
-			var/mob/living/simple_animal/hostile/necro/zombie/headcrab/Z = target.make_zombie(retain_mind = 1, crabzombie = 1)
+			var/mob/living/simple_animal/hostile/necro/zombie/headcrab/Z = target.zombify(retain_mind = 1, crabzombie = 1)
 			Z.crab = src
 
 

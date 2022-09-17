@@ -18,12 +18,13 @@
 	var/datum/scope/curScope
 	var/datum/scope/globalScope
 
-	var/datum/node/BlockDefinition/program	
-	var/datum/node/statement/FunctionDefinition/curFunction	
+	var/datum/node/BlockDefinition/program
+	var/datum/node/statement/FunctionDefinition/curFunction
 	var/datum/stack/scopes	= new()
 	var/datum/stack/functions	= new()
 
-	var/datum/container // associated container for interpeter
+	var/datum/n_Compiler/Compiler
+
 /*
 	Var: status
 	A variable indicating that the rest of the current block should be skipped. This may be set to any combination of <Status Macros>.
@@ -57,7 +58,7 @@
 	Set ourselves to Garbage Collect
 */
 /datum/n_Interpreter/proc/GC()
-	container = null
+	Compiler = null
 
 /*
 	Proc: RaiseError
@@ -85,14 +86,7 @@ Proc: AlertAdmins
 Alerts the admins of a script that is bad.
 */
 /datum/n_Interpreter/proc/AlertAdmins()
-	if(container && !alertadmins)
-		if(istype(container, /datum/TCS_Compiler))
-			var/datum/TCS_Compiler/Compiler = container
-			var/obj/machinery/telecomms/server/Holder = Compiler.Holder
-			var/message = "Potential crash-inducing NTSL script detected at telecommunications server [Compiler.Holder] ([Holder.x], [Holder.y], [Holder.z])."
-
-			alertadmins = 1
-			message_admins(message, 1)
+	return
 /*
 Proc: RunBlock
 Runs each statement in a block of code.

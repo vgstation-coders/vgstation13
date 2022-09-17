@@ -21,7 +21,7 @@
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 10
 
-	var/health = 50
+	health = 50
 	var/tmp/busy = 0
 	var/list/valid_types = list(/obj/item/weapon/book, \
 								/obj/item/weapon/tome, \
@@ -408,26 +408,26 @@
 	var/obj/item/weapon/book/book	 //  Currently scanned book
 	var/mode = 0 					// 0 - Scan only, 1 - Scan and Set Buffer, 2 - Scan and Attempt to Check In, 3 - Scan and Attempt to Add to Inventory
 
-	attack_self(mob/user as mob)
-		mode += 1
-		if(mode > 3)
-			mode = 0
-		to_chat(user, "[src] Status Display:")
-		var/modedesc
-		switch(mode)
-			if(0)
-				modedesc = "Scan book to local buffer."
-			if(1)
-				modedesc = "Scan book to local buffer and set associated computer buffer to match."
-			if(2)
-				modedesc = "Scan book to local buffer, attempt to check in scanned book."
-			if(3)
-				modedesc = "Scan book to local buffer, attempt to add book to general inventory."
-			else
-				modedesc = "ERROR"
-		to_chat(user, " - Mode [mode] : [modedesc]")
-		if(src.computer)
-			to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
+/obj/item/weapon/barcodescanner/attack_self(mob/user as mob)
+	mode += 1
+	if(mode > 3)
+		mode = 0
+	to_chat(user, "[src] Status Display:")
+	var/modedesc
+	switch(mode)
+		if(0)
+			modedesc = "Scan book to local buffer."
+		if(1)
+			modedesc = "Scan book to local buffer and set associated computer buffer to match."
+		if(2)
+			modedesc = "Scan book to local buffer, attempt to check in scanned book."
+		if(3)
+			modedesc = "Scan book to local buffer, attempt to add book to general inventory."
 		else
-			to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
-		to_chat(user, "\n")
+			modedesc = "ERROR"
+	to_chat(user, " - Mode [mode] : [modedesc]")
+	if(src.computer)
+		to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
+	else
+		to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
+	to_chat(user, "\n")

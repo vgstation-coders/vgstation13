@@ -30,6 +30,11 @@
 	..()
 	chargeoverlay = image("icon" = 'icons/mob/mob.dmi', "icon_state" = "sithlord")
 
+/spell/lightning/is_valid_target(var/target, mob/user, options)
+	if(options)
+		return (target in options)
+	return ((target in view_or_range(range, user, selection_type)) && (istype(target, /mob/living) || istype(target, /obj/machinery/bot) || istype(target, /obj/mecha)))
+
 /spell/lightning/quicken_spell()
 	if(!can_improve(Sp_SPEED))
 		return 0
@@ -95,7 +100,7 @@
 		connected_button.name = name
 		charge_counter = charge_max
 		user.overlays -= chargeoverlay
-		if((zapzap != multicast) && (zapzap != 0)) //partial cast
+		if((zapzap != multicast) && (zapzap > 0)) //partial cast
 			take_charge(holder, 0)
 		zapzap = 0
 	return 1
@@ -106,13 +111,13 @@
 		if (user.is_pacified(VIOLENCE_DEFAULT,L))
 			return
 		zapzap--
-		if(zapzap)
+		if(zapzap > 0)
 			to_chat(user, "<span class='info'>You can throw lightning [zapzap] more time\s</span>")
 			. = 1
 
 		spawn()
 			zapmuthafucka(user, L, bounces)
-		score["lightningwiz"]++
+		score.lightningwiz++
 
 /spell/lightning/proc/zapmuthafucka(var/mob/user, var/mob/living/target, var/chained = bounces, var/list/zapped = list(), var/oursound = null)
 	var/otarget = target

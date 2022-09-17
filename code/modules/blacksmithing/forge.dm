@@ -44,8 +44,8 @@
 		to_chat(user, "<span class = 'notice'>You toss \the [I] into \the [src].</span>")
 		var/obj/item/stack/ore/plasma/P = I
 		if(P.use(1))
-			if(current_temp < MELTPOINT_STEEL)
-				current_temp = MELTPOINT_STEEL
+			if(current_temp < TEMPERATURE_PLASMA)
+				current_temp = TEMPERATURE_PLASMA
 			fuel_time += 15
 			return 1
 	else if(istype(I, /obj/item/stack/sheet/wood))
@@ -134,6 +134,8 @@
 		return
 	if(heating)
 		heating.attempt_heating(src, null)
+		if(heating.gcDestroyed)
+			heating = null
 
 
 //Prefer to burn through sheets over ores

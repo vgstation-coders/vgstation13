@@ -37,6 +37,8 @@
 	minbodytemp = 0
 	speed = 5
 
+	blooded = FALSE
+
 /mob/living/simple_animal/hostile/ginger/gingerchefman
 	name = "gingerchef man"
 	desc = "Prepare to meet your baker."

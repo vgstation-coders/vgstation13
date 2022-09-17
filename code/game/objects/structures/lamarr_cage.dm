@@ -5,7 +5,7 @@
 	desc = "A glass lab container for storing interesting creatures."
 	density = 1
 	anchored = 1
-	var/health = 30
+	health = 30
 	var/occupied = 1
 	var/destroyed = 0
 
@@ -86,7 +86,7 @@
 	update_icon()
 	return
 
-/obj/structure/lamarr/acidable()
+/obj/structure/lamarr/dissolvable()
 	return 0
 
 /obj/item/clothing/mask/facehugger/lamarr

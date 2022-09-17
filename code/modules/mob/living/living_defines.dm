@@ -30,8 +30,6 @@
 
 	var/mob_property_flags
 
-	var/list/image/static_overlays
-
 	var/t_plasma = null
 	var/t_oxygen = null
 	var/t_sl_gas = null
@@ -51,8 +49,6 @@
 	var/fire_stacks = 0 //Tracks how many stacks of fire we have on, max is usually 20
 
 	var/specialsauce = 0 //Has this person consumed enough special sauce? IF so they're a ticking time bomb of death.
-
-	var/implanting = 0 //Used for the mind-slave implant
 	var/silent = null 		//Can't talk. Value goes down every life proc.
 
 	var/locked_to_z = 0 // Locked to a Z-level if nonzero.
@@ -79,8 +75,12 @@
 	var/calorie_burning_heat_multiplier = 1		//The heat generated from burning calories is multiplied by this value.
 	var/thermal_loss_multiplier = 1				//The heat the mob loses to the environment is multiplied by this value.
 
-	var/datum/component_container/BrainContainer
-
 	var/list/datum/disease2/disease/virus2 = list()
 	var/image/pathogen
 	var/datum/immune_system/immune_system
+
+	var/times_cloned = 0 //How many times this creature has been cloned
+	var/talkcount = 0 // How many times a creature has talked - used for determining who's been the "star" for the purposes of round end credits (may only work correctly for humans)
+
+	var/blood_color2	//color of this creature's blood for gibbing purposes (humanoids have their own species-defined values)
+	var/flesh_color2	//color of this creature's flesh for meat purposes (humanoids have their own species-defined values)

@@ -79,7 +79,7 @@
 	message_admins("<span class='info'>Spawning [vault_number] vaults in space!</span>")
 
 	var/area/A = locate(/area/random_vault)
-	var/result = populate_area_with_vaults(A, amount = vault_number, population_density = POPULATION_SCARCE, filter_function=/proc/stay_on_map)
+	var/result = populate_area_with_vaults(A, amount = vault_number, population_density = POPULATION_SCARCE, filter_function=/proc/stay_in_vault_area)
 
 	for(var/turf/TURF in A) //Replace all of the temporary areas with space
 		TURF.set_area(space)
@@ -91,23 +91,31 @@
 
 	var/surprise_number = rand(1, min(list_of_surprises.len, max_secret_rooms))
 
-	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_surprises, surprise_number, filter_function=/proc/asteroid_can_be_placed)
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_surprises, surprise_number, filter_function=/proc/asteroid_can_be_placed, overwrites=TRUE)
 
 	message_admins("<span class='info'>Loaded [result] out of [surprise_number] mining surprises.</span>")
 
 /proc/generate_hoboshack()
 	var/list/list_of_shacks = get_map_element_objects(/datum/map_element/hoboshack)
 
-	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, 1, filter_function=/proc/asteroid_can_be_placed)
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, 1, filter_function=/proc/asteroid_can_be_placed, overwrites=TRUE)
 
 	message_admins("<span class='info'>Loaded space hobo shack [result ? "" : "un"]successfully.</span>")
 
 /proc/asteroid_can_be_placed(var/datum/map_element/E, var/turf/start_turf)
-	var/list/dimensions = E.get_dimensions()
-	var/result = check_complex_placement(start_turf,dimensions[1], dimensions[2])
+	if(!E.width || !E.height) //If the map element doesn't have its width/height calculated yet, do it now
+		E.assign_dimensions()
+	var/result = check_complex_placement(start_turf, E.width, E.height)
 	return result
 
-/proc/stay_on_map(var/datum/map_element/E, var/turf/start_turf)
+/proc/stay_in_vault_area(var/datum/map_element/E, var/turf/start_turf)
+	if(!E.width || !E.height) //If the map element doesn't have its width/height calculated yet, do it now
+		E.assign_dimensions()
+
+	for(var/area/A in block(locate(start_turf.x, start_turf.y, start_turf.z), locate(start_turf.x+E.width, start_turf.y+E.height, start_turf.z)))
+		if(!istype(A, /area/random_vault))
+			return 0
+
 	return start_turf && (start_turf.z <= map.zDeepSpace)
 
 //Proc that populates a single area with many vaults, randomly
@@ -118,13 +126,13 @@
 //POPULATION_SCARCE is cheaper but may not do the job as well
 //NOTE: Vaults may be placed partially outside of the area. Only the lower left corner is guaranteed to be in the area
 
-/proc/populate_area_with_vaults(area/A, list/map_element_objects, var/amount = -1, population_density = POPULATION_DENSE, filter_function)
+/proc/populate_area_with_vaults(area/A, list/map_element_objects, var/amount = -1, population_density = POPULATION_DENSE, filter_function, var/overwrites = FALSE)
 	var/list/area_turfs
 
 	if(ispath(A, /area))
 		A = locate(A)
 	if(isarea(A))
-		area_turfs = A.get_turfs()
+		area_turfs = A.contents.Copy()
 	else if(istype(A, /list))
 		area_turfs = A
 	ASSERT(area_turfs)
@@ -136,6 +144,7 @@
 
 	var/list/spawned = list()
 	var/successes = 0
+	var/list/invalid_bounds = list() // Previously we just removed everything in these bounds from valid_spawn_points, which costed about a second or two during placement, now totally eliminated.
 
 	while(map_element_objects.len)
 		var/datum/map_element/ME = pick(map_element_objects)
@@ -169,7 +178,7 @@
 					var/turf/t2 = locate(T.x + conflict.width, T.y + conflict.height, T.z) //Corner #2: Old vault's coordinates plus old vault's dimensions
 
 					//A rectangle defined by corners #1 and #2 is marked as invalid spawn area
-					valid_spawn_points.Remove(block(t1, t2))
+					invalid_bounds[t1] = t2
 
 			if(POPULATION_SCARCE)
 				//This method is much cheaper but results in less accuracy. Bad spawn areas will be removed later - when the new vault is created
@@ -190,7 +199,13 @@
 			sanity++
 			new_spawn_point = pick(valid_spawn_points)
 			valid_spawn_points.Remove(new_spawn_point)
-			if(filter_function && !call(filter_function)(ME, new_spawn_point))
+			var/inbounds = FALSE
+			for(var/turf/start in invalid_bounds) // And begin the invalid bounds checking. Might look like extra work, but is much faster than just removing blocks of spawn points.
+				var/turf/end = invalid_bounds[start]
+				if(start && end && new_spawn_point.x >= start.x && new_spawn_point.y >= start.y && new_spawn_point.x <= end.x && new_spawn_point.y <= end.y)
+					inbounds = TRUE
+					break
+			if(inbounds || (filter_function && !call(filter_function)(ME, new_spawn_point)))
 				new_spawn_point = null
 				filter_counter++
 				continue
@@ -202,16 +217,23 @@
 		var/vault_x = new_spawn_point.x
 		var/vault_y = new_spawn_point.y
 		var/vault_z = new_spawn_point.z
+		var/vault_rotate = (config.disable_vault_rotation || !ME.can_rotate) ? 0 : pick(0,90,180,270)
 
 		if(population_density == POPULATION_SCARCE)
 			var/turf/t1 = locate(max(1, vault_x - MAX_VAULT_WIDTH - 1), max(1, vault_y - MAX_VAULT_HEIGHT - 1), vault_z)
 			var/turf/t2 = locate(vault_x + new_width, vault_y + new_height, vault_z)
-			valid_spawn_points.Remove(block(t1, t2))
+			invalid_bounds[t1] = t2
 
-		if(ME.load(vault_x, vault_y, vault_z))
+		var/timestart = world.timeofday
+		if(ME.load(vault_x, vault_y, vault_z, vault_rotate, overwrites))
+			var/timetook2load = world.timeofday - timestart
 			spawned.Add(ME)
-			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))].")
-
+			log_debug("Loaded [ME.file_path] in [timetook2load / 10] seconds at ([vault_x],[vault_y],[vault_z])[(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].",FALSE)
+			message_admins("<span class='info'>Loaded [ME.file_path] in [timetook2load / 10] seconds: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].</span>")
+			if(!ME.can_rotate)
+				message_admins("<span class='info'>[ME.file_path] was not rotated, can_rotate was set to FALSE.</span>")
+			else if(config.disable_vault_rotation)
+				message_admins("<span class='info'>[ME.file_path] was not rotated, DISABLE_VAULT_ROTATION enabled in config.</span>")
 			successes++
 			if(amount > 0)
 				amount--
@@ -221,7 +243,7 @@
 		else
 			message_admins("<span class='danger'>Can't find [ME.file_path]!</span>")
 
-		sleep(-1)
+		CHECK_TICK
 
 	return successes
 

@@ -1277,7 +1277,7 @@
 	/obj/item/clothing/accessory/medal/gold/heroism
 )
 //Food spawners////////////////////////////////////
-/obj/abstract/map/spawner/food/voxfood //spawns food for the vox raiders
+/obj/abstract/map/spawner/voxfood //spawns food for the vox raiders
 	name = "vox food spawner"
 	icon_state = "food"
 	amount = 7

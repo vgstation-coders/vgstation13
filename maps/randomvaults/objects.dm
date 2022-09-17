@@ -37,9 +37,14 @@
 			allthings.change_area(src, new_area)
 
 	new_area.tag = "[new_area.type]/\ref[ME]"
-	new_area.addSorted()
+
+/area/vault/powered
+	requires_power = 1
 
 /area/vault/gingerbread_house
+
+/area/vault/podstation
+	requires_power = 1
 
 /area/vault/mechclubhouse
 	requires_power = 1
@@ -120,9 +125,6 @@
 
 /obj/docking_port/destination/vault/biodome
 	areaname = "biodome"
-
-/area/vault/brokeufo
-	requires_power = 1
 
 /area/vault/AIsat
 	requires_power = 1
@@ -206,6 +208,14 @@
 	requires_power = 0
 	jammed = 2
 	color = "blue"
+
+/obj/effect/blob/core/ame_lab
+	name = "antimatter control unit"
+	desc = "This device injects antimatter into connected shielding units. Wrench the device to set it...wait hold on, something's off..?"
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi'
+	looks = "AME_new"
+	asleep = TRUE
+	no_ghosts_allowed = TRUE
 
 /obj/item/weapon/paper/amelab1
 	name = "paper- 'Initial Report'"
@@ -360,7 +370,7 @@
 	anchored = 1
 	cant_drop = 1
 
-	slip_power = 10
+	slip_override = 11
 
 /obj/item/weapon/melee/morningstar/catechizer
 	name = "The Catechizer"
@@ -461,7 +471,7 @@
 /obj/machinery/floodlight/on/New()
 	..()
 	on = 1
-	set_light()
+	set_light(brightness_on)
 	update_icon()
 
 /obj/machinery/floodlight/on/infinite
@@ -471,7 +481,7 @@
 	name = "Duey"
 	desc = "Looks like a maintenance droid, repurposed for botany management. Seems the years haven't been too kind."
 	health = 150
-	maxhealth = 150
+	maxHealth = 150
 	icon_state = "duey0"
 	icon_initial = "duey"
 	Max_Fertilizers = 50
@@ -494,6 +504,10 @@
 /obj/machinery/power/apc/no_alerts/vault_AIsat/initialize()
 	. = ..()
 	name = "\improper AI Satellite APC"
+
+/obj/machinery/turret/portable/cannon/New()
+	installed = new/obj/item/weapon/gun/energy/laser/cannon(src)
+	..()
 
 /obj/machinery/turret/portable/AIvault
 	req_access = list(access_ai_upload)
@@ -548,18 +562,18 @@
 
 /obj/machinery/portable_atmospherics/canister/old/pressure_overlays(var/state)
 	var/static/list/status_overlays_pressure = list(
-		image(icon, "old-o0"),
-		image(icon, "old-o1"),
-		image(icon, "old-o2"),
-		image(icon, "old-o3")
+		image('icons/obj/atmos.dmi', "old-o0"),
+		image('icons/obj/atmos.dmi', "old-o1"),
+		image('icons/obj/atmos.dmi', "old-o2"),
+		image('icons/obj/atmos.dmi', "old-o3")
 	)
 
 	return status_overlays_pressure[state]
 
 /obj/machinery/portable_atmospherics/canister/old/other_overlays(var/state)
 	var/static/list/status_overlays_other = list(
-		image(icon, "old-open"),
-		image(icon, "old-connector")
+		image('icons/obj/atmos.dmi', "old-open"),
+		image('icons/obj/atmos.dmi', "old-connector")
 	)
 
 	return status_overlays_other[state]
@@ -696,10 +710,10 @@
 		return
 	var/powered = 1
 
-	if(surplus() < active_power_usage)
+	if(get_satisfaction() < 1.0)
 		powered = 0
 
-	if(powered && stat & NOPOWER)
+	if(powered && stat & (NOPOWER))
 		stat &= ~NOPOWER
 		update_icon()
 	else if (!powered && !(stat & NOPOWER))
@@ -935,3 +949,48 @@
 
 /obj/machinery/turret/russian/New()
 	installed = new /obj/item/weapon/gun/energy/laser(src)
+
+// Minisat stuff
+
+/obj/item/weapon/disk/shuttle_coords/vault/minisat
+	name = "NT microstation shuttle destination disk"
+	destination = /obj/docking_port/destination/vault/minisat
+
+/obj/docking_port/destination/vault/minisat
+	name = "NT Microstation 1"
+
+/area/vault/powered/mini_station
+	name = "NT Microstation Hallway"
+	icon_state = "hallC"
+
+/area/vault/powered/mini_station_entrance
+	name = "NT Microstation Entrance"
+	icon_state = "entry"
+
+/area/vault/powered/mini_station_kitchen
+	name = "NT Microstation Kitchen"
+	icon_state = "bar"
+
+/area/vault/powered/mini_station_medbay
+	name = "NT Microstation Medbay"
+	icon_state = "medbay"
+
+/area/vault/powered/mini_station_engineering
+	name = "NT Microstation Engineering"
+	icon_state = "engine"
+
+/area/vault/powered/mini_station_botany
+	name = "NT Microstation Botany"
+	icon_state = "hydro"
+
+/area/vault/powered/mini_station_construction
+	name = "NT Microstation Construction Room"
+	icon_state = "construction"
+
+/obj/item/device/pda/clown/broken
+	name = "Antique Clown PDA"
+	desc = "A portable microcomputer by Thinktronic Systems, LTD. The surface is coated with polytetrafluoroethylene and banana drippings. This one has been stepped on for too many times, and appears to be completely unresponsive."
+	starting_apps = list()
+
+/obj/item/device/pda/clown/broken/attack_self(mob/user)
+	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function

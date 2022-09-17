@@ -10,7 +10,7 @@
 	density = 1
 	var/previous_power_state = 0
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	active_power_usage = 2000
 	idle_power_usage = 1000
 
@@ -34,7 +34,7 @@
 			/mob/living/simple_animal/hostile/bear,
 			/mob/living/simple_animal/hostile/creature,
 			/mob/living/simple_animal/hostile/monster/skrite,
-			/mob/living/simple_animal/hostile/necromorph,
+			/mob/living/simple_animal/hostile/necro/necromorph,
 			)
 	else
 		spawn_type = pick(
@@ -67,7 +67,7 @@
 		//if we've finished growing...
 		if(current_ticks_spawning >= ticks_required_to_spawn)
 			current_ticks_spawning = 0
-			use_power = 1
+			use_power = MACHINE_POWER_USE_IDLE
 			src.visible_message("<span class='notice'>[bicon(src)] [src] pings!</span>")
 			icon_state = "autoclone1"
 			desc = "It's full of a bubbling viscous liquid, and is lit by a mysterious glow."
@@ -78,11 +78,11 @@
 
 		//if we're getting close to finished, kick into overdrive power usage
 		if(current_ticks_spawning / ticks_required_to_spawn > 0.75)
-			use_power = 2
+			use_power = MACHINE_POWER_USE_ACTIVE
 			icon_state = "autoclone2"
 			desc = "It's full of a bubbling viscous liquid, and is lit by a mysterious glow. A dark shape appears to be forming inside..."
 		else
-			use_power = 1
+			use_power = MACHINE_POWER_USE_IDLE
 			icon_state = "autoclone1"
 			desc = "It's full of a bubbling viscous liquid, and is lit by a mysterious glow."
 	else
@@ -102,7 +102,7 @@
 		if(prob(Proj.damage/2))
 			if(Proj.firer)
 				msg_admin_attack("[key_name(Proj.firer)] blew up [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)")
-			explosion(get_turf(src), 1, 2, 3, 3)
+			explosion(get_turf(src), 1, 2, 3, 3, whodunnit = Proj.firer)
 			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
 	return ..()
@@ -115,7 +115,7 @@
 		src.visible_message("<span class='warning'>\The [user] damages \the [src] with \the [O].</span>")
 		if(prob(O.force/2))
 			msg_admin_attack("[user] blew up [src]/([formatJumpTo(src)]) with [O] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			explosion(get_turf(src), 1, 2, 3, 3)
+			explosion(get_turf(src), 1, 2, 3, 3, whodunnit = user)
 			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [O] || attacked by [key_name(user)].")
 			qdel(src)
 	else

@@ -4,6 +4,7 @@
 	var/list/prizes = list()
 	var/list/cheaters = list()
 	var/emagged = 0
+	var/turn = 0
 
 /datum/arcade_game/Destroy()
 	cheaters = null
@@ -29,6 +30,8 @@
 /datum/arcade_game/proc/get_dat()
 	return ""
 
+/datum/arcade_game/proc/get_p2_dat()
+	return ""
 
 /datum/arcade_game/proc/is_cheater(mob/user)
 	if(user in cheaters)
@@ -63,6 +66,7 @@
 /datum/arcade_game/space_villain
 	var/enemy_name = "Space Villain"
 	var/temp = "Winners Don't Use Spacedrugs" //Temporary message, for attack messages, etc
+	var/p2_temp = "Winners Don't Use Spacedrugs" //Temporary message, for attack messages, etc
 	var/player_hp = 30 //Player health/attack points
 	var/player_max_hp = 30
 	var/player_mp = 10
@@ -162,18 +166,47 @@
 
 	return dat
 
+/datum/arcade_game/space_villain/get_p2_dat()
+	var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a>"
+
+	dat += {"<center><h4>[enemy_name]</h4></center>
+		<br><center><h3>[p2_temp]</h3></center>
+		<br><center>Health: [enemy_hp] | Magic: [enemy_mp] | Player Health: [player_hp]</center>"}
+	if (gameover)
+		dat += "<center><b><a href='byond://?src=\ref[src];newgame=1'>New Game</a>"
+	else
+
+		dat += {"<center><b><a href='byond://?src=\ref[src];p2attack=1'>Attack</a> |
+			<a href='byond://?src=\ref[src];p2heal=1'>Heal</a> |
+			<a href='byond://?src=\ref[src];p2charge=1'>Recharge Power</a>"}
+
+	dat += "</b></center>"
+
+	return dat
+
 /datum/arcade_game/space_villain/Topic(href, href_list)
 	if(..())
 		return
 	if (!blocked && !gameover)
-		if (href_list["attack"])
-			action_attack()
+		if(usr != holder.playertwo && turn == 0)
+			if (href_list["attack"])
+				action_attack()
 
-		else if (href_list["heal"])
-			action_heal()
+			else if (href_list["heal"])
+				action_heal()
 
-		else if (href_list["charge"])
-			action_charge()
+			else if (href_list["charge"])
+				action_charge()
+
+		else
+			if (href_list["p2attack"])
+				action_attack()
+
+			else if (href_list["p2heal"])
+				action_heal()
+
+			else if (href_list["p2charge"])
+				action_charge()
 
 	if (href_list["close"])
 		usr.unset_machine()
@@ -260,6 +293,67 @@
 			feedback_inc("arcade_loss_hp_normal")
 
 	blocked = 0
+	turn = 0
+
+/datum/arcade_game/space_villain/proc/check_p1_win()
+	if ((enemy_mp <= 0) || (enemy_hp <= 0))
+		if(!gameover)
+			gameover = 1
+			temp = "[enemy_name] has fallen! Rejoice!"
+			harm_p2()
+	if ((player_mp <= 0) || (player_hp <= 0))
+		gameover = 1
+		temp = "You have been crushed! GAME OVER"
+		harm_p1()
+
+/datum/arcade_game/space_villain/proc/check_p2_win()
+	if ((enemy_mp <= 0) || (enemy_hp <= 0))
+		if(!gameover)
+			gameover = 1
+			p2_temp = "You have fallen! GAME OVER"
+			harm_p2()
+	if ((player_mp <= 0) || (player_hp <= 0))
+		gameover = 1
+		p2_temp = "The player has been crushed! Rejoice!"
+		harm_p1()
+
+/datum/arcade_game/space_villain/proc/harm_p2()
+	if(istype(holder.playertwo,/mob/living/simple_animal/hostile/pulse_demon))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = holder.playertwo
+		var/oldhealth = PD.health
+		var/subtract = 50 * (emagged * 3) //Packs a punch to them
+		PD.health -= subtract
+		if(oldhealth - subtract <= 0) //If they die from this
+			if(emagged && prob(25))
+				var/obj/item/device/powersink/PS = new /obj/item/device/powersink(holder.loc)
+				PS.dev_multi = 6
+			else if(prob(50))
+				if(prob(50))
+					if(prob(50))
+						new /obj/item/clothing/gloves/yellow/power(holder.loc)
+					else
+						new /obj/item/clothing/gloves/golden/insul(holder.loc)
+				else
+					var/obj/item/clothing/gloves/G = new /obj/item/clothing/gloves/yellow(holder.loc)
+					G.cell = new /obj/item/weapon/cell/infinite(G)
+					G.cant_remove_cell = TRUE //No exploiting it outside of this
+			else
+				new /obj/item/clothing/gloves/yellow(holder.loc)
+		else if(prob(50))
+			new /obj/item/clothing/gloves/fyellow(holder.loc)
+		else
+			var/obj/item/clothing/gloves/G = new /obj/item/clothing/gloves/black(holder.loc)
+			G.cell = new /obj/item/weapon/cell/crap/empty(G)
+
+/obj/item/clothing/gloves/golden/insul //Pulse demon defeat arcade version.
+	desc = "An impressive fashion statement. The insides are lined with strange high-tech sacs filled with an unidentified fluid which lubricates the outside, and insulation against electric shocks to stop gold conducting through you. It comes with a cryptic note reading: touch the supermatter."
+	name = "insulated golden gloves"
+	siemens_coefficient = 0
+
+/datum/arcade_game/space_villain/proc/harm_p1()
+	if(istype(holder.playertwo,/mob/living/simple_animal/hostile/pulse_demon) && isliving(holder.playerone))
+		var/mob/living/L = holder.playerone
+		L.electrocute_act(67 * (emagged * 3), src, 1) //And to the player too, if (s)he loses
 
 /datum/arcade_game/space_villain/proc/action_charge()
 	blocked = 1
@@ -271,7 +365,11 @@
 
 	holder.updateUsrDialog()
 	sleep(10)
-	arcade_action()
+	turn = 1
+	if(!holder.playertwo)
+		arcade_action()
+	else
+		check_p1_win()
 
 /datum/arcade_game/space_villain/proc/action_heal()
 	blocked = 1
@@ -286,7 +384,11 @@
 	player_hp += healamt
 	blocked = 1
 	holder.updateUsrDialog()
-	arcade_action()
+	turn = 1
+	if(!holder.playertwo)
+		arcade_action()
+	else
+		check_p1_win()
 
 /datum/arcade_game/space_villain/proc/action_attack()
 	blocked = 1
@@ -298,15 +400,56 @@
 
 	sleep(10)
 	enemy_hp -= attackamt
-	arcade_action()
+	turn = 1
+	if(!holder.playertwo)
+		arcade_action()
+	else
+		check_p1_win()
+
+/datum/arcade_game/space_villain/proc/action_p2charge()
+	blocked = 1
+	var/chargeamt = rand(4,7)
+	p2_temp = "You regain [chargeamt] points"
+	enemy_mp += chargeamt
+
+	holder.updateUsrDialog()
+	sleep(10)
+	turn = 0
+	check_p2_win()
+
+/datum/arcade_game/space_villain/proc/action_p2heal()
+	blocked = 1
+	var/pointamt = rand(1,3)
+	var/healamt = rand(6,8)
+	p2_temp = "You use [pointamt] magic to heal for [healamt] damage!"
+	holder.updateUsrDialog()
+
+	sleep(10)
+	enemy_mp -= pointamt
+	enemy_hp += healamt
+	blocked = 1
+	holder.updateUsrDialog()
+	turn = 0
+	check_p2_win()
+
+/datum/arcade_game/space_villain/proc/action_p2attack()
+	blocked = 1
+	var/attackamt = rand(2,6)
+	p2_temp = "You attack for [attackamt] damage!"
+	holder.updateUsrDialog()
+
+	sleep(10)
+	player_hp -= attackamt
+	turn = 0
+	check_p2_win()
 
 /datum/arcade_game/space_villain/is_cheater(mob/user)
 	if(emagged && !gameover)
-		if(holder.stat & (NOPOWER|BROKEN))
+		if(holder.stat & (NOPOWER|BROKEN|FORCEDISABLE))
 			return 0
 		else if(user in cheaters)
 			to_chat(usr, "<span class='danger'>[enemy_name] throws a bomb at you for trying to cheat him again.</span>")
-			explosion(holder.loc,-1,0,2)//IED sized explosion
+			explosion(holder.loc,-1,0,2, whodunnit = user)//IED sized explosion
 			user.gib()
 			cheaters = null
 			qdel(src)
@@ -322,6 +465,7 @@
 		return
 
 	temp = "If you die in the game, you die for real!"
+	p2_temp = "If he dies in the game, he dies for real!"
 	player_hp = 30
 	player_mp = 10
 	enemy_hp = 45
@@ -351,6 +495,7 @@
 
 	if(!emagged && prob(5)) //Bug
 		temp = "|eW R0vnb##[rand(0,9)]#"
+		p2_temp = "|eW R0vnb##[rand(0,9)]#"
 		player_hp = rand(1,30)
 		player_mp = rand(1,10)
 		enemy_hp = rand(1,60)

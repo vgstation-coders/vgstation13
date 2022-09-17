@@ -22,10 +22,10 @@
 /mob/proc/is_fat()
 	return 0
 
-mob/proc/isincrit()
+/mob/proc/isincrit()
 	return 0
 
-mob/proc/get_heart()
+/mob/proc/get_heart()
 	return null
 
 /mob/proc/get_lungs()
@@ -40,7 +40,7 @@ mob/proc/get_heart()
 /mob/proc/get_appendix()
 	return null
 
-mob/proc/remove_internal_organ()
+/mob/proc/remove_internal_organ()
 	return null
 
 /mob/proc/get_broken_organs()
@@ -121,12 +121,6 @@ mob/proc/remove_internal_organ()
 		return 1
 	return 0
 
-/proc/isloyal(A) //Checks to see if the person contains a loyalty implant, then checks that the implant is actually inside of them
-	for(var/obj/item/weapon/implant/loyalty/L in A)
-		if(L && L.implanted)
-			return 1
-	return 0
-
 /proc/check_holy(var/mob/A) //checks to see if the tile the mob stands on is holy
 	var/turf/T = get_turf(A)
 	if(!T)
@@ -135,7 +129,7 @@ mob/proc/remove_internal_organ()
 		return 0
 	return 1  //The tile is holy. Beware!
 
-proc/hasorgans(A)
+/proc/hasorgans(A)
 	return ishuman(A)
 
 
@@ -267,7 +261,7 @@ proc/hasorgans(A)
 		p++
 	return t
 
-proc/slur(phrase)
+/proc/slur(phrase)
 	var/leng=length(phrase)
 	var/counter=length(phrase)
 	var/newphrase=""
@@ -293,34 +287,35 @@ proc/slur(phrase)
 			//if(9,10)	newletter="<b>[newletter]</b>"
 			//if(11,12)	newletter="<big>[newletter]</big>"
 			//if(13)	newletter="<small>[newletter]</small>"
+			else
+				//do nothing
 		newphrase+="[newletter]";counter-=1
 	return newphrase
 
 /proc/stutter(n)
 	var/te = n
-	var/t = ""//placed before the message. Not really sure what it's for.
-	n = length(n)//length of the entire word
-	var/p = null
-	p = 1//1 is the start of any word
-	while(p <= n)//while P, which starts at 1 is less or equal to N which is the length.
-		var/n_letter = copytext(te, p, p + 1)//copies text from a certain distance. In this case, only one letter at a time.
+	var/t = "" //Holds the result as it's being built
+	n = length_char(n) //length of the entire word
+	var/p = 1 //1 is the start of any word
+	while(p <= n)
+		var/n_letter = copytext_char(te, p, p + 1) //copies text from a certain distance. In this case, only one letter at a time.
 		if (prob(80) && (ckey(n_letter) in list("b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","y","z")))
 			if (prob(10))
-				n_letter = text("[n_letter]-[n_letter]-[n_letter]-[n_letter]")//replaces the current letter with this instead.
+				n_letter = "[n_letter]-[n_letter]-[n_letter]-[n_letter]" //replaces the current letter with this instead.
 			else
 				if (prob(20))
-					n_letter = text("[n_letter]-[n_letter]-[n_letter]")
+					n_letter = "[n_letter]-[n_letter]-[n_letter]"
 				else
 					if (prob(5))
 						n_letter = null
 					else
-						n_letter = text("[n_letter]-[n_letter]")
-		t = text("[t][n_letter]")//since the above is ran through for each letter, the text just adds up back to the original word.
-		p++//for each letter p is increased to find where the next letter will be.
-	return copytext(t,1,MAX_MESSAGE_LEN)
+						n_letter = "[n_letter]-[n_letter]"
+		t = "[t][n_letter]" //since the above is ran through for each letter, the text just adds up back to the original word.
+		p++
+	return copytext_char(t,1,MAX_MESSAGE_LEN)
 
 
-proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 for p will cause letters to be replaced instead of added
+/proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 for p will cause letters to be replaced instead of added
 	/* Turn text into complete gibberish! */
 	var/returntext = ""
 	for(var/i = 1, i <= length(t), i++)
@@ -481,7 +476,7 @@ var/list/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT
 	//same declaration as intent function, which this is based on
 	set name = "a-zone"
 	set hidden = 1
-	
+
 	//standard type check
 	if(zone_sel && zone_sel.selecting)
 		var/old_selecting = zone_sel.selecting //same as in click function for icon updates
@@ -520,7 +515,7 @@ var/list/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT
 		var/mob/living/carbon/human/H = src
 		H.set_attack_type(ATTACK_BITE)
 
-proc/is_blind(A)
+/proc/is_blind(A)
 	if(istype(A, /mob/living/carbon))
 		var/mob/living/carbon/C = A
 		if(C.blinded != null)

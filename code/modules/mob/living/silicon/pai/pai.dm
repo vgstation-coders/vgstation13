@@ -82,8 +82,16 @@
 	)
 
 	var/list/synthable_medical_chems = list(
+		"Bicaridine" = BICARIDINE,
+		"Kelotane" = KELOTANE,
+		"Dexalin" = DEXALIN,
+		"Iron" = IRON,
+		"Tramadol" = TRAMADOL,
+		"Alkysine" = ALKYSINE,
+		"Arithrazine" = ARITHRAZINE,
+		"Ethylredoxrazine" = ETHYLREDOXRAZINE,
 		"Spaceacilin" = SPACEACILLIN,
-		"Albuterol" = ALBUTEROL,
+		"Sleep Toxin" = STOXIN,
 	)
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
@@ -101,7 +109,9 @@
 		pda.ownjob = "Personal Assistant"
 		pda.owner = text("[]", src)
 		pda.name = pda.owner + " (" + pda.ownjob + ")"
-		pda.toff = 1
+		var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in pda.applications
+		if(app)
+			app.toff = 1
 
 	add_language(LANGUAGE_GALACTIC_COMMON, 1)
 	add_language(LANGUAGE_TRADEBAND, 1)

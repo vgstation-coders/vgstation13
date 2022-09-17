@@ -101,8 +101,6 @@
 
 var/global/list/obj/machinery/light/alllights = list()
 
-var/list/light_source_images = list()
-
 // the standard tube light fixture
 /obj/machinery/light
 	name = "light fixture"
@@ -112,18 +110,17 @@ var/list/light_source_images = list()
 	anchored = 1
 	plane = OBJ_PLANE
 	layer = ABOVE_DOOR_LAYER
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	idle_power_usage = 2
-	active_power_usage = 10
+	active_power_usage = 20
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list
-	var/on = 0					// 1 if on, 0 if off
+	var/on = 1					// 1 if on, 0 if off
 	var/on_gs = 0
 	var/static_power_used = 0
 	var/flickering = 0
 	var/obj/item/weapon/light/current_bulb = null
 	var/spawn_with_bulb = /obj/item/weapon/light/tube
 	var/fitting = "tube"
-	var/image/source_image = null
 
 	// No ghost interaction.
 	ghost_read=0
@@ -140,21 +137,14 @@ var/list/light_source_images = list()
 		update(0)
 	alllights += src
 
-	spawn(2)
-		var/area/A = get_area(src)
-		if(A && !A.requires_power)
-			on = 1
-
-		if (!map.lights_always_ok)
-			switch(fitting)
-				if("tube")
-					if(prob(2))
-						broken(1)
-				if("bulb")
-					if(prob(5))
-						broken(1)
-		spawn(1)
-			update(0)
+	if(map.broken_lights)
+		switch(fitting)
+			if("tube")
+				if(prob(2))
+					broken(1)
+			if("bulb")
+				if(prob(5))
+					broken(1)
 
 /obj/machinery/light/supports_holomap()
 	return TRUE
@@ -166,7 +156,7 @@ var/list/light_source_images = list()
 // the smaller bulb light fixture
 
 /obj/machinery/light/cultify()
-	new /obj/structure/cult_legacy/pylon(loc)
+	new /obj/structure/cult/pylon(loc)
 	qdel(src)
 
 /obj/machinery/light/bullet_act(var/obj/item/projectile/Proj)
@@ -234,11 +224,7 @@ var/list/light_source_images = list()
 	alllights -= src
 
 /obj/machinery/light/update_icon()
-	if (source_image)
-		light_source_images -= source_image
-		for (var/mob/living/simple_animal/hostile/giant_spider/GS in player_list)
-			if (GS.client)
-				GS.client.images -= source_image
+
 	if(current_bulb)
 		switch(current_bulb.status)		// set icon_states
 			if(LIGHT_OK)
@@ -252,36 +238,33 @@ var/list/light_source_images = list()
 	else
 		icon_state = "l[fitting]-empty"
 		on = 0
-	source_image = image(icon,src,icon_state)
-	source_image.plane = LIGHT_SOURCE_PLANE
-	light_source_images += source_image
-	for (var/mob/living/simple_animal/hostile/giant_spider/GS in player_list)
-		if (GS.client)
-			GS.client.images += source_image
 
 // update the icon_state and luminosity of the light depending on its state
 /obj/machinery/light/proc/update(var/trigger = 1)
+
 	update_icon()
 	if(on)
-		current_bulb.switchcount++
-		if(current_bulb.rigged)
-			if(current_bulb.status == LIGHT_OK && trigger)
+		if(light_range != current_bulb.brightness_range || light_power != current_bulb.brightness_power || light_color != current_bulb.brightness_color)
+			current_bulb.switchcount++
+			if(current_bulb.rigged)
+				if(current_bulb.status == LIGHT_OK && trigger)
 
-				log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
-				message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
-				explode()
-		else if( prob( min(60, current_bulb.switchcount*current_bulb.switchcount*0.01) ) )
-			if(current_bulb.status == LIGHT_OK && trigger)
-				current_bulb.status = LIGHT_BURNED
-				icon_state = "l[current_bulb.base_state]-burned"
-				on = 0
-				kill_light()
-		else
-			use_power = 2
-			set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
+					log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+					message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+
+					explode(get_mob_by_key(fingerprintslast))
+			else if( prob( min(60, current_bulb.switchcount*current_bulb.switchcount*0.01) ) )
+				if(current_bulb.status == LIGHT_OK && trigger)
+					current_bulb.status = LIGHT_BURNED
+					icon_state = "l[current_bulb.base_state]-burned"
+					on = 0
+					set_light(0)
+			else
+				use_power = MACHINE_POWER_USE_ACTIVE
+				set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
 	else
-		use_power = 1
-		kill_light()
+		use_power = MACHINE_POWER_USE_IDLE
+		set_light(0)
 
 	if(current_bulb)
 		active_power_usage = (current_bulb.cost * 10)
@@ -351,7 +334,7 @@ var/list/light_source_images = list()
 					log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
 					message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
 
-					explode()
+					explode(get_mob_by_key(fingerprintslast))
 			else
 				to_chat(user, "This type of light requires a [fitting].")
 				return
@@ -416,7 +399,16 @@ var/list/light_source_images = list()
  */
 /obj/machinery/light/proc/has_power()
 	var/area/this_area = get_area(src)
-	return this_area.lightswitch && this_area.power_light
+	var/success = FALSE
+	if(!this_area || !this_area.power_light)
+		return FALSE
+	if(!this_area.haslightswitch || !this_area.requires_power)
+		return TRUE
+	for(var/obj/machinery/light_switch/L in this_area)
+		if(L.on)
+			success = TRUE
+		break
+	return success
 
 /obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
 	if(flickering)
@@ -489,6 +481,7 @@ var/list/light_source_images = list()
 				if (S)
 					S.broken_lights++
 		broken()
+	return
 // attack with hand - remove tube/bulb
 // if hands aren't protected and the light is on, burn the player
 
@@ -579,8 +572,7 @@ var/list/light_source_images = list()
  */
 /obj/machinery/light/power_change()
 	spawn(10)
-		var/area/this_area = get_area(src)
-		seton(this_area.lightswitch && this_area.power_light)
+		seton(has_power())
 
 // called when on fire
 
@@ -591,11 +583,11 @@ var/list/light_source_images = list()
 /*
  * Explode the light.
  */
-/obj/machinery/light/proc/explode()
+/obj/machinery/light/proc/explode(var/mob/user)
 	spawn(0)
 		broken() // Break it first to give a warning.
 		sleep(2)
-		explosion(get_turf(src), 0, 0, 2, 2)
+		explosion(get_turf(src), 0, 0, 2, 2, whodunnit = user)
 		sleep(1)
 		qdel(src)
 
@@ -629,10 +621,10 @@ var/list/light_source_images = list()
 	item_state = "c_tube"
 	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 60)
 	w_type = RECYK_GLASS
-	brightness_range = 5
-	brightness_power = 3
+	brightness_range = 6
+	brightness_power = 1.5
 	brightness_color = LIGHT_COLOR_TUNGSTEN
-	cost = 4
+	cost = 8
 
 /obj/item/weapon/light/tube/he
 	name = "high efficiency light tube"
@@ -669,10 +661,10 @@ var/list/light_source_images = list()
 /obj/item/weapon/light/tube/large
 	w_class = W_CLASS_SMALL
 	name = "large light tube"
-	brightness_range = 8
+	brightness_range = 15
 	brightness_power = 4
 	starting_materials = list(MAT_GLASS = 200, MAT_IRON = 100)
-	cost = 8
+	cost = 15
 
 /obj/item/weapon/light/bulb
 	name = "light bulb"
@@ -681,11 +673,11 @@ var/list/light_source_images = list()
 	base_state = "bulb"
 	item_state = "contvapour"
 	fitting = "bulb"
-	brightness_range = 4
-	brightness_power = 3
+	brightness_range = 3.5
+	brightness_power = 2
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 30)
-	cost = 2
+	cost = 5
 	w_type = RECYK_GLASS
 
 /obj/item/weapon/light/bulb/broken

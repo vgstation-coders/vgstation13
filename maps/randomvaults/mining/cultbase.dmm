@@ -1,38 +1,356 @@
-"a" = (/turf/unsimulated/mineral/random,/area/asteroid)
-"b" = (/turf/unsimulated/mineral/random,/turf/simulated/wall/cult{icon_state = "cult0"},/area/asteroid)
-"c" = (/obj/structure/cultgirder,/turf/simulated/floor/engine/cult,/area/asteroid)
-"d" = (/turf/simulated/floor/engine/cult,/area/asteroid)
-"e" = (/obj/structure/grille/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
-"f" = (/obj/structure/cult_legacy/forge,/turf/simulated/floor/engine/cult,/area/asteroid)
-"g" = (/turf/simulated/wall/cult{icon_state = "cult0"},/area/asteroid)
-"h" = (/obj/effect/gateway/active/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
-"i" = (/obj/item/candle{desc = "This strange candle is made of some mystery wax. It never seems to burn out."; icon_state = "candle1_lit"; lit = 1; name = "Blood Candle"; pixel_x = 2; wax = 50000},/turf/simulated/floor/engine/cult,/area/asteroid)
-"j" = (/mob/living/simple_animal/hostile/faithless/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
-"k" = (/mob/living/simple_animal/hostile/scarybat/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
-"l" = (/obj/item/clothing/suit/space/plasmaman/cultist,/turf/simulated/floor/engine/cult,/area/asteroid)
-"m" = (/obj/structure/cult_legacy/talisman{icon_state = "altar"; name = "Foresaken Altar"},/obj/item/weapon/coin/iron,/obj/item/weapon/reagent_containers/food/drinks/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
-"n" = (/obj/item/clothing/head/helmet/space/plasmaman/cultist,/turf/simulated/floor/engine/cult,/area/asteroid)
-"o" = (/obj/structure/cult_legacy/tome,/turf/simulated/floor/engine/cult,/area/asteroid)
-"p" = (/obj/structure/cult_legacy/talisman,/turf/simulated/floor/engine/cult,/area/asteroid)
-"q" = (/obj/effect/decal/cleanable/blood{icon_state = "floor4"},/turf/simulated/floor/engine/cult,/area/asteroid)
-"r" = (/obj/effect/decal/cleanable/blood{icon_state = "gibbl4"},/turf/simulated/floor/engine/cult,/area/asteroid)
-"s" = (/obj/item/weapon/storage/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
-"t" = (/obj/effect/decal/cleanable/blood{icon_state = "floor7"},/turf/simulated/floor/engine/cult,/area/asteroid)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/mineral/random,
+/area/asteroid)
+"b" = (
+/turf/unsimulated/mineral/random,
+/turf/simulated/wall/cult{
+	icon_state = "cult0"
+	},
+/area/asteroid)
+"c" = (
+/obj/structure/cultgirder,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"d" = (
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"e" = (
+/obj/structure/grille/cult,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"f" = (
+/obj/structure/cult_legacy/forge,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"g" = (
+/turf/simulated/wall/cult{
+	icon_state = "cult0"
+	},
+/area/asteroid)
+"h" = (
+/obj/effect/gateway/active/cult,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"i" = (
+/obj/item/candle{
+	desc = "This strange candle is made of some mystery wax. It never seems to burn out.";
+	icon_state = "candle1_lit";
+	lit = 1;
+	name = "Blood Candle";
+	pixel_x = 2;
+	wax = 50000
+	},
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"j" = (
+/mob/living/simple_animal/hostile/faithless/cult,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"k" = (
+/mob/living/simple_animal/hostile/scarybat/cult,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"l" = (
+/obj/item/clothing/suit/space/plasmaman/cultist,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"m" = (
+/obj/structure/cult_legacy/talisman{
+	icon_state = "altar";
+	name = "Foresaken Altar"
+	},
+/obj/item/weapon/coin/iron,
+/obj/item/weapon/reagent_containers/food/drinks/cult,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"n" = (
+/obj/item/clothing/head/helmet/space/plasmaman/cultist,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"o" = (
+/obj/structure/cult_legacy/tome,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"p" = (
+/obj/structure/cult_legacy/talisman,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"q" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor4"
+	},
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"r" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "gibbl4"
+	},
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"s" = (
+/obj/item/weapon/storage/cult,
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
+"t" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor7"
+	},
+/turf/simulated/floor/engine/cult,
+/area/asteroid)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaa
-aaaaabcdcbaaaaa
-aaaaefgdgfeaaaa
-aaaedddddddeaaa
-aaehidqddjideaa
-abdjdggdggdddba
-acgeegikigeegca
-ajdqddlmnddrdja
-acgeegikigeegca
-abdsdggdggjdoba
-aaedidddddideaa
-aaaedjddtddeaaa
-aaaaepgdgheaaaa
-aaaaabcdcbaaaaa
-aaaaaaaaaaaaaaa
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+a
+a
+a
+a
+b
+c
+j
+c
+b
+a
+a
+a
+a
+a
+"}
+(3,1,1) = {"
+a
+a
+a
+a
+e
+d
+g
+d
+g
+d
+e
+a
+a
+a
+a
+"}
+(4,1,1) = {"
+a
+a
+a
+e
+h
+j
+e
+q
+e
+s
+d
+e
+a
+a
+a
+"}
+(5,1,1) = {"
+a
+a
+e
+d
+i
+d
+e
+d
+e
+d
+i
+d
+e
+a
+a
+"}
+(6,1,1) = {"
+a
+b
+f
+d
+d
+g
+g
+d
+g
+g
+d
+j
+p
+b
+a
+"}
+(7,1,1) = {"
+a
+c
+g
+d
+q
+g
+i
+l
+i
+g
+d
+d
+g
+c
+a
+"}
+(8,1,1) = {"
+a
+d
+d
+d
+d
+d
+k
+m
+k
+d
+d
+d
+d
+d
+a
+"}
+(9,1,1) = {"
+a
+c
+g
+d
+d
+g
+i
+n
+i
+g
+d
+t
+g
+c
+a
+"}
+(10,1,1) = {"
+a
+b
+f
+d
+j
+g
+g
+d
+g
+g
+d
+d
+h
+b
+a
+"}
+(11,1,1) = {"
+a
+a
+e
+d
+i
+d
+e
+d
+e
+j
+i
+d
+e
+a
+a
+"}
+(12,1,1) = {"
+a
+a
+a
+e
+d
+d
+e
+r
+e
+d
+d
+e
+a
+a
+a
+"}
+(13,1,1) = {"
+a
+a
+a
+a
+e
+d
+g
+d
+g
+o
+e
+a
+a
+a
+a
+"}
+(14,1,1) = {"
+a
+a
+a
+a
+a
+b
+c
+j
+c
+b
+a
+a
+a
+a
+a
+"}
+(15,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
 "}

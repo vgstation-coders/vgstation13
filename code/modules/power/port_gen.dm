@@ -6,9 +6,9 @@
 	icon_state = "portgen1"
 	density = 1
 	anchored = 0
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 
 	var/active = 0
 	var/power_gen = 5000
@@ -161,7 +161,7 @@
 /obj/machinery/power/port_gen/pacman/proc/overheat()
 	explosion(src.loc, 2, 5, 2, -1)
 
-/obj/machinery/power/port_gen/pacman/emag(mob/user)
+/obj/machinery/power/port_gen/pacman/emag_act(mob/user)
 	emagged = 1
 	emp_act(1)
 	return 1
@@ -222,10 +222,6 @@
 	if (!anchored)
 		return
 
-	interact(user)
-
-/obj/machinery/power/port_gen/pacman/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
 	interact(user)
 
 /obj/machinery/power/port_gen/pacman/attack_paw(mob/user as mob)
@@ -306,8 +302,8 @@
 	power_gen = 15000
 	time_per_sheet = 65
 	board_path = "/obj/item/weapon/circuitboard/pacman/super"
-	overheat()
-		explosion(src.loc, 3, 3, 3, -1)
+/obj/machinery/power/port_gen/pacman/super/overheat()
+	explosion(src.loc, 3, 3, 3, -1)
 
 /obj/machinery/power/port_gen/pacman/mrs
 	name = "M.R.S.P.A.C.M.A.N.-type Portable Generator"
@@ -316,5 +312,5 @@
 	power_gen = 40000
 	time_per_sheet = 80
 	board_path = "/obj/item/weapon/circuitboard/pacman/mrs"
-	overheat()
-		explosion(src.loc, 4, 4, 4, -1)
+/obj/machinery/power/port_gen/pacman/mrs/overheat()
+	explosion(src.loc, 4, 4, 4, -1)

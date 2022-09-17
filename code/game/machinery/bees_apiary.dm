@@ -22,6 +22,7 @@ var/list/apiaries_list = list()
 	icon_state = "hydrotray3"
 	density = 1
 	anchored = 1
+	pass_flags_self = PASSTABLE
 	var/apiary_icon = "apiary"
 	var/beezeez = 0//beezeez removes 1 toxic and adds 1 nutrilevel per cycle
 	var/nutrilevel = 0//consumed every round based on how many bees the apiary is sustaining.
@@ -50,6 +51,9 @@ var/list/apiaries_list = list()
 	var/faction = null
 
 	machine_flags = WRENCHMOVE
+
+/obj/machinery/apiary/splashable()
+	return FALSE
 
 /obj/machinery/apiary/New()
 	..()
@@ -128,23 +132,14 @@ var/list/apiaries_list = list()
 /obj/machinery/apiary/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
-
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
 		return 0
 
-/obj/machinery/apiary/bullet_act(var/obj/item/projectile/Proj) //Works with the Somatoray to modify plant variables.
-	if(istype(Proj ,/obj/item/projectile/energy/floramut))
-		damage = round(rand(0,3))//0, 1, or 2 brute damage per stings...per bee in a swarm
-	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
-		if(!yieldmod)
-			yieldmod += 1
-		else if (prob(1/(yieldmod * yieldmod) *100))//This formula gives you diminishing returns based on yield. 100% with 1 yield, decreasing to 25%, 11%, 6, 4, 2...
-			yieldmod += 1
-	else
-		if(src)
-			angry_swarm()
+/obj/machinery/apiary/bullet_act(var/obj/item/projectile/Proj)
+	if(src)
+		angry_swarm()
 	return ..()
 
 /obj/machinery/apiary/hitby(var/atom/movable/AM)
@@ -518,7 +513,7 @@ var/list/apiaries_list = list()
 	var/base_icon_state = "apiary-wild-inprogress"
 	var/prefix = ""
 	var/remaining_work = 10
-	var/health = 20
+	health = 20
 
 /obj/structure/wild_apiary/New(turf/loc, var/p = "")
 	prefix = p
@@ -581,7 +576,7 @@ var/list/apiaries_list = list()
 
 	cycledelay = 100
 
-	var/health = 100
+	health = 100
 
 	//Cannot normally harvest the apiary other than by breaking it
 	wild = APIARY_WILDERNESS_WILD

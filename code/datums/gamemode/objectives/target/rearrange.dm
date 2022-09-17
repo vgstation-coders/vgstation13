@@ -1,24 +1,15 @@
 /datum/objective/target/locate/rearrange
 	name = "rearrange object"
 	var/area/destination
-	obj_min = 1
-	obj_max = 1
+	var/list/objects_in_area = list()
+	object_min = 1
+	object_max = 1
 
 /datum/objective/target/locate/rearrange/format_explanation()
-	var/explanation = "Move "
 	if(objects_to_locate.len)
-		if(objects_to_locate.len > 1)
-			for(var/i in objects_to_locate)
-				if(i != objects_to_locate[objects_to_locate.len])
-					explanation += "\an [i], "
-				else
-					explanation += "& \an [i]."
-		else
-			explanation += "\an [objects_to_locate[1]]."
-		explanation += "to [destination.name]"
+		return "Move [counted_english_list(objects_to_locate)] to [initial(destination.name)]."
 	else
-		explanation = "Item moved."
-	return explanation
+		return "No items to move."
 
 /datum/objective/target/locate/rearrange/find_target()
 	destination = pick(the_station_areas - /area/solar)
@@ -26,11 +17,16 @@
 	return TRUE
 
 /datum/objective/target/locate/rearrange/check(var/list/objects)
-	for(var/A in objects_to_locate)
-		if(is_type_in_list(objects_to_locate[A], objects))
-			var/atom/thing = objects_to_locate[A]
-			if(istype(thing.loc, destination)
-				to_chat(owner.current, "[initial(thing.name)] moved.")
-				objects_to_locate.Remove(A)
-	explanation_text = format_explanation()
+	for(var/atom/A in objects_in_area) // First check, to make sure any objects that used to be in the area don't count as being in it anymore.
+		if(!istype(get_area(A), destination))
+			objects_in_area.Remove(A)
+	for(var/atom/A in objects)
+		// (Have to do it this way to prevent list cache being made and including redundant subtypes, and also to check supertypes)
+		for(var/type in objects_to_locate)
+			if(istype(A,type) && istype(get_area(A), destination) && !(locate(A) in objects_in_area)) // Second, to add anything new
+				objects_in_area.Add(A)
+		if(!(locate(A) in objects_in_area)) // Third, once this is all done, check all objects we need in the area, if one isn't there, break out, we aren't done.
+			return
+	objects_to_locate.Cut() // If done, wipe the list so IsFulfilled() works on super calls, we got everything.
+	to_chat(owner.current, "<span class='notice'>All items moved to [initial(destination.name)].</span>")
 	IsFulfilled()

@@ -9,7 +9,7 @@
 //	weight = 1.0E7
 	req_one_access = list(access_security, access_forensics_lockers)
 	health = 100
-	maxhealth = 100
+	maxHealth = 100
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 	steps_per = 2
@@ -218,7 +218,7 @@ Auto Patrol: []"},
 		target = H
 		shootAt(H)
 
-/obj/machinery/bot/ed209/Emag(mob/user)
+/obj/machinery/bot/ed209/emag_act(mob/user)
 	..()
 	if(open && !locked)
 		if(user)
@@ -240,6 +240,7 @@ Auto Patrol: []"},
 		check_records = 0//Don't actively target people set to arrest
 		arrest_type = 1//Don't even try to cuff
 		declare_arrests = 0
+
 
 /obj/machinery/bot/ed209/target_selection()
 	anchored = 0

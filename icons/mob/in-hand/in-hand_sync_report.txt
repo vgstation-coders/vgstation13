@@ -689,7 +689,7 @@
  + starkist
  + stick
  + stool
- + straight_jacket
+ + strait_jacket
  + suit-command
  + suit-orange
  + sunflower
@@ -1252,7 +1252,7 @@
  + starkist
  + stick
  + stool
- + straight_jacket
+ + strait_jacket
  + suit-command
  + suit-orange
  + sunflower

@@ -106,6 +106,11 @@
 	typepath = /obj/item/blueprints/primary
 	protected_jobs = list("Chief Engineer")
 
+/datum/theft_objective/traitor/arcd
+	name = "an advanced Rapid-Construction-Device"
+	typepath = /obj/item/device/rcd/matter/engineering/pre_loaded/adv
+	protected_jobs = list("Chief Engineer")
+
 /datum/theft_objective/traitor/voidsuit
 	name = "a nasa voidsuit"
 	typepath = /obj/item/clothing/suit/space/nasavoid
@@ -191,11 +196,15 @@
 	typepath = /obj/item/weapon/circuitboard/telesci_computer
 	protected_jobs = list("Research Director", "Scientist", "Roboticist", "Mechanic", "Paramedic")
 
-
 /datum/theft_objective/traitor/lawgiver
 	name = "the lawgiver"
 	typepath = /obj/item/weapon/gun/lawgiver
 	protected_jobs = list("Head of Security")
+
+/datum/theft_objective/traitor/command_sps
+	name = "a command secure positioning system"
+	typepath = /obj/item/device/gps/secure/command
+	protected_jobs = list("Captain", "Head of Personnel")
 
 /datum/theft_objective/number
 	var/min=0

@@ -306,3 +306,19 @@
 	name = "Zam Snax recharge pack"
 	targetvendomat = /obj/machinery/vending/zamsnax
 	icon_state = "ZAMsnax"
+
+/obj/structure/vendomatpack/lotto
+	name = "Lotto Ticket recharge pack"
+	targetvendomat = /obj/machinery/vending/lotto
+	icon_state = "sale"
+
+/obj/structure/vendomatpack/syndicatesuits
+	name = "Syndicate Suits recharge pack"
+	targetvendomat = /obj/machinery/vending/coffee
+	icon_state = "syndicatesuits"
+
+/obj/structure/vendomatpack/meat
+	name = "Meat Fridge recharge pack"
+	desc = "You could return it to cargo or just flatten it. The label looks like it was partially cut off."
+	targetvendomat = /obj/machinery/vending/meat
+	icon_state = "meat"

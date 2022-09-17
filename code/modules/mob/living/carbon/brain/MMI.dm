@@ -16,6 +16,12 @@
 		/obj/item/robot_parts/l_arm = 1
 	)
 
+	var/list/sammi_assembly_parts = list(
+		/obj/item/weapon/cell = 1,
+		/obj/item/robot_parts/r_arm = 1,
+		/obj/item/robot_parts/l_arm = 1
+	)
+
 	req_access = list(access_robotics)
 
 	//Revised. Brainmob is now contained directly within object of transfer. MMI in this case.
@@ -25,7 +31,7 @@
 	var/mob/living/silicon/robot = null//Appears unused.
 	var/obj/mecha = null//This does not appear to be used outside of reference in mecha.dm.
 
-obj/item/device/mmi/Destroy()
+/obj/item/device/mmi/Destroy()
 	if(brainmob)
 		qdel(brainmob)
 		brainmob = null
@@ -97,16 +103,51 @@ obj/item/device/mmi/Destroy()
 					return FALSE
 
 				contents += O
-				to_chat(user, "<span class='notice'>You successfully add \the [O] to the contraption,</span>")
+				to_chat(user, "<span class='notice'>You successfully add \the [O] to the contraption.</span>")
 				return TRUE
 			else if(cc==mommi_assembly_parts[t])
 				to_chat(user, "<span class='warning'>You have enough of these.</span>")
 				return TRUE
 	return FALSE
 
+/obj/item/device/mmi/proc/try_handling_sammi_construction(var/obj/item/O as obj, var/mob/user as mob)
+	if(O.is_wrench(user))
+		for(var/t in sammi_assembly_parts)
+			var/cc=contents_count(t)
+			var/req=sammi_assembly_parts[t]
+			if(cc<req)
+				to_chat(user, "<span class='warning'>You're short [req-cc] [initial(t)]\s.</span>")
+				return TRUE
+		if(!istype(loc,/turf))
+			to_chat(user, "<span class='warning'>You can't assemble the SAMMI, \the [src] has to be standing on the ground (or a table) to be perfectly precise.</span>")
+			return TRUE
+		new /mob/living/silicon/robot/mommi/sammi(get_turf(loc))
+		qdel(src)
+		return TRUE
+
+	for(var/t in sammi_assembly_parts)
+		if(istype(O,t))
+			var/cc=contents_count(t)
+			if(cc<sammi_assembly_parts[t])
+				if(!user.drop_item(O, src))
+					to_chat(user, "<span class='warning'>You can't let go of \the [src]!</span>")
+					return FALSE
+
+				contents += O
+				to_chat(user, "<span class='notice'>You successfully add \the [O] to the contraption,</span>")
+				return TRUE
+			else if(cc==sammi_assembly_parts[t])
+				to_chat(user, "<span class='warning'>You have enough of these.</span>")
+				return TRUE
+	return FALSE
+
 /obj/item/device/mmi/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(try_handling_mommi_construction(O,user))
-		return
+	if(!brainmob)
+		if(try_handling_sammi_construction(O,user))
+			return
+	else
+		if(try_handling_mommi_construction(O,user))
+			return
 	if(istype(O,/obj/item/organ/internal/brain) && !brainmob) //Time to stick a brain in it --NEO
 		// MaMIs inherit from brain, but they shouldn't be insertable into a MMI
 		if (istype(O, /obj/item/organ/internal/brain/mami))

@@ -99,8 +99,6 @@
 	max_luminosity = 5
 	max_power=3000
 
-	light_type = LIGHT_SOFT_FLICKER
-	lighting_flags = IS_LIGHT_SOURCE
 
 /obj/machinery/power/supermatter/New()
 	. = ..()
@@ -125,7 +123,7 @@
 	radio_connection = null
 	. = ..()
 
-/obj/machinery/power/supermatter/proc/explode()
+/obj/machinery/power/supermatter/proc/explode(var/mob/user)
 	has_exploded++
 	var/turf/T = get_turf(src)
 	if (has_exploded <= 1)
@@ -133,7 +131,7 @@
 			var/turf/turff = get_turf(src)
 			new /turf/unsimulated/wall/supermatter(turff)
 			SetUniversalState(/datum/universal_state/supermatter_cascade)
-			explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
+			explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
 			empulse(turff, 100, 200, 1)
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
 		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
@@ -143,11 +141,11 @@
 	if (has_exploded > 1)
 		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
-/obj/machinery/power/supermatter/shard/explode()
+/obj/machinery/power/supermatter/shard/explode(var/mob/user)
 	has_exploded++
 	var/turf/T = get_turf(src)
 	if (has_exploded <= 1)
-		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
+		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
 		empulse(get_turf(src), 100, 200, 1)
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
 		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
@@ -157,15 +155,15 @@
 		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
 /obj/machinery/power/supermatter/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	Consume(AM)
+	Bumped(AM)
 	return TRUE
 
-/obj/machinery/power/supermatter/ex_act(severity)
+/obj/machinery/power/supermatter/ex_act(severity,var/mob/whodunnit)
 	switch(severity)
 		if(3.0)
 			return //Should be improved
 		else
-			return explode()
+			return explode(whodunnit)
 
 /obj/machinery/power/supermatter/shard/singularity_act(current_size, obj/machinery/singularity/S)
 	var/super = FALSE
@@ -444,7 +442,7 @@
 	if(istype(AM, /obj/machinery/power/supermatter))
 		AM.visible_message("<span class='sinister'>As \the [src] bumps into \the [AM] an otherworldly resonance ringing begins to shake the room, you ponder for a moment all the incorrect choices in your life that led you here, to this very moment, to witness this. You take one final sigh before it all ends.</span>")
 		sleep(10) //Adds to the hilarity
-		score["shardstouched"]++
+		score.shardstouched++
 		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 		explode()
 		return
@@ -499,7 +497,7 @@
 			continue
 		var/rads = 75 * sqrt( 1 / (get_dist(l, src) + 1) )
 		if(l.apply_radiation(rads, RAD_EXTERNAL))
-			visible_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find yourself covered in fresh radiation burns.</span>", "<span class=\"warning\">The unearthly ringing subsides and you notice you have fresh radiation burns.</span>")
+			visible_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find yourself covered in fresh radiation burns.</span>", "<span class=\"warning\">The unearthly ringing subsides and you notice you have fresh radiation burns.</span>", range = 1)
 
 /obj/machinery/power/supermatter/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] suicidally slams \himself head first into the [src], inducing a resonance... \his body begins to glow and catch aflame before flashing into ash, never to be seen again.</span>")

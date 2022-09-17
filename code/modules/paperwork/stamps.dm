@@ -15,7 +15,7 @@
 	pressure_resistance = 2
 	attack_verb = list("stamps")
 
-proc/add_paper_overlay(obj/item/weapon/paper/P,image/stampoverlay,Xoffset,Yoffset)
+/proc/add_paper_overlay(obj/item/weapon/paper/P,image/stampoverlay,Xoffset,Yoffset)
 	if(istype(P, /obj/item/weapon/paper/envelope))
 		stampoverlay.pixel_x = Yoffset * PIXEL_MULTIPLIER
 		stampoverlay.pixel_y = Xoffset * PIXEL_MULTIPLIER //envelopes are broad instead of long, we just invert the x and y.
@@ -137,6 +137,9 @@ proc/add_paper_overlay(obj/item/weapon/paper/P,image/stampoverlay,Xoffset,Yoffse
 		to_chat(H, "<span class='warning'>Your active hand is not a talon!</span>")
 		return
 	..()
+	var/obj/structure/trade_window/TW = locate() in P.loc
+	if(TW)
+		TW.attackby(P,user)
 
 /obj/item/weapon/stamp/attack_paw(mob/user as mob)
 	return attack_hand(user)

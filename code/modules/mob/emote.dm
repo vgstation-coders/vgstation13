@@ -1,6 +1,5 @@
 //The code execution of the emote datum is located at code/datums/emotes.dm
 /mob/proc/emote(act, m_type = null, message = null, ignore_status = FALSE, var/arguments)
-	act = lowertext(act)
 	var/param = message
 	var/custom_param = findtext(act, " ") // Someone was given as a parameter
 	if(custom_param)

@@ -42,7 +42,7 @@
 
 #define ishorrorform(A) (ishuman(A) && istype(A:species, /datum/species/horror))
 
-#define isgrue(A) (ishuman(A) && istype(A:species, /datum/species/grue))
+#define istruevampire(A)  (ishuman(A) && isvampire(A) && istype(A:species, /datum/species/vampire))
 
 #define ismushroom(A) ((ishuman(A) && istype(A:species, /datum/species/mushroom)) || (istype(A, /mob/living/carbon/monkey/mushroom)))
 
@@ -73,6 +73,10 @@
 #define isgremlin(A) (istype(A, /mob/living/simple_animal/hostile/gremlin))
 
 #define isgrinch(A) (istype(A, /mob/living/simple_animal/hostile/gremlin/grinch))
+
+#define ispulsedemon(A) (istype(A, /mob/living/simple_animal/hostile/pulse_demon))
+
+#define isgrue(A) (istype(A, /mob/living/simple_animal/hostile/grue))
 
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
@@ -112,6 +116,8 @@
 
 #define isMoMMI(A) istype(A, /mob/living/silicon/robot/mommi)
 
+#define isSaMMI(A) istype(A, /mob/living/silicon/robot/mommi/sammi)
+
 #define isbot(A) istype(A, /obj/machinery/bot)
 
 #define isborer(A) istype(A, /mob/living/simple_animal/borer)
@@ -142,7 +148,7 @@
 
 #define isEmag(A) istype(A, /obj/item/weapon/card/emag)
 
-#define istool(A) is_type_in_list(A, common_tools)
+#define istool(A) iswrench(A) || iswelder(A) || isshovel(A) || ishammer(A) || iscablecoil(A) || iswiretool(A) || iscrowbar(A)
 
 #define iswelder(A) istype(A, /obj/item/tool/weldingtool)
 
@@ -152,7 +158,9 @@
 
 #define iscablecoil(A) istype(A, /obj/item/stack/cable_coil)
 
-#define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
+#define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin))
+
+#define isfood(A) istype(A, /obj/item/weapon/reagent_containers/food)
 
 #define iswirecutter(A) istype(A, /obj/item/tool/wirecutters)
 
@@ -172,7 +180,7 @@
 
 #define issolder(A) istype(A, /obj/item/tool/solder)
 
-#define issocketwrench(A) istype(A, /obj/item/tool/wrench/socket)
+#define iswrench(A) istype(A, /obj/item/tool/wrench)
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
@@ -180,7 +188,7 @@
 
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
-#define islightingoverlay(A) (istype(A, /atom/movable/light))
+#define islightingoverlay(A) (istype(A, /atom/movable/lighting_overlay))
 
 #define ischair(A) (istype(A, /obj/structure/bed/chair))
 
@@ -212,7 +220,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -224,9 +232,9 @@
 
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
-#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor) || istype(A, /turf/simulated/shuttle/floor4))
+#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
 
-#define iswallturf(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall) || istype(A, /turf/simulated/shuttle/wall))
+#define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
 
 #define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & SPECIES_NO_MOUTH))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
@@ -241,8 +249,6 @@
 #define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
 
 #define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
-
-#define isNonTimeDataReagent(R) (is_type_in_list(R, list( /datum/reagent/citalopram, /datum/reagent/paroxetine)))
 
 #define isinvisible(A) (A.invisibility || A.alpha <= 1)
 
@@ -261,11 +267,7 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define isnewcultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
-
-#define ischiefcultist(H) (H.mind ? H.mind.GetRole(CHIEF_CULTIST) : FALSE)
-
-#define iscultist(H) (isnewcultist(H) || ischiefcultist(H))
+#define iscultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
 
 #define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 
@@ -332,16 +334,15 @@
 
 #define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
 
-// This might look silly. But it saves you up to 2 procs calls and a contents search. When you do thousands of it, it adds up.
-#define CHECK_OCCLUSION(T) ((T?.blocks_light > 0) || CheckOcclusion(T))
-
 //Macro for AREAS!
 
 #define isspace(A) (A.type == /area)
 
+#define isopenspace(A) istype(A, /turf/simulated/open)
+
 //This one returns the "space" area
 //#define get_space_area (get_area(locate(1,1,2))) //xd
-proc/get_space_area()
+/proc/get_space_area()
 	//global.space_area is defined in code/game/areas/areas.dm, and set when the space area is created
 	if(!global.space_area)
 		var/area/new_space_area = new /area
@@ -379,6 +380,11 @@ proc/get_space_area()
 #define calculateticks(x)	x * world.tick_lag // Converts your ticks to proper tenths.
 #define tcheck(CPU,TOSLEEP)	if(world.cpu > CPU) sleep(calculateticks(TOSLEEP)) //Shorthand of checking and then sleeping a process based on world CPU
 
+#define FOR_DVIEW(type, range, center, invis_flags) \
+	dview_mob.loc = center;           \
+	dview_mob.see_invisible = invis_flags; \
+	for(type in view(range, dview_mob))
+
 //get_turf(): Returns the turf that contains the atom.
 //Example: A fork inside a box inside a locker will return the turf the locker is standing on.
 //Yes, this is the fastest known way to do it.
@@ -397,8 +403,6 @@ proc/get_space_area()
 
 
 #define subtypesof(A) (typesof(A) - A)
-
-#define LIBVG(function, arguments...) call("./libvg.[world.system_type == UNIX ? "so" : "dll"]", function)(arguments)
 
 // For areas that are on the map, `x` is the coordinate of the turf with the lowest z, y, and x coordinate (in that order) that is contained by the area.
 #define is_area_in_map(A) (A.x)

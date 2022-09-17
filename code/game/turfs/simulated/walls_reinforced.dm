@@ -55,7 +55,7 @@
 	icon_state = "r_wall-[d_state]"  //You can thank me later
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
-
+	user.delayNextAttack(W.attack_delay)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
@@ -91,7 +91,7 @@
 			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under \the [W].</span>")
 			dismantle_wall()
 
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(src)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -291,7 +291,7 @@
 					"<span class='notice'>You pry off [src]'s internal cover.</span>")
 					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 
-					var/pdiff = performWallPressureCheck(loc)
+					var/pdiff = performWallPressureCheck(src)
 					if(pdiff)
 						investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 						message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -334,7 +334,7 @@
 		if(do_after(user, src, (MINE_DURATION * PK.toolspeed) * 50))
 			user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
 			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(src)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -348,7 +348,10 @@
 	//Finally, CHECKING FOR FALSE WALLS if it isn't damaged
 	//This is obsolete since reinforced false walls were commented out, but gotta slap the wall with my hand anyways !
 	else if(!d_state)
-		return attack_hand(user)
+		if(istype(W, /obj/item/tool/crowbar/red))
+			playsound(src, "crowbar_hit", 50, 1, -1)
+		else
+			return attack_hand(user)
 	return
 
 /turf/simulated/wall/r_wall/attack_construct(mob/user as mob)
@@ -399,7 +402,7 @@
 				update_icon()
 	return
 
-/turf/simulated/wall/r_wall/acidable()
+/turf/simulated/wall/r_wall/dissolvable()
 	return 0
 
 #undef WALLCOMPLETED

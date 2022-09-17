@@ -2,9 +2,6 @@
 //SS13 Optimized Map loader
 //////////////////////////////////////////////////////////////
 
-//global datum that will preload variables on atoms instanciation
-var/global/dmm_suite/preloader/_preloader = null
-
 /**
  * Returns a list with two numbers. First number is the map's width. Second number is the map's height.
  */
@@ -21,7 +18,9 @@ var/list/map_dimension_cache = list()
 	var/tfile_len = length(tfile)
 	var/lpos = 1 // the models definition index
 
-	var/key_len = length(copytext(tfile,2,findtext(tfile,quote,2,0)))//the length of the model key (e.g "aa" or "aba")
+	var/quote_index = findtext(tfile, quote)
+	//the length of the model key (e.g "aa" or "aba")
+	var/key_len = length(copytext(tfile, quote_index, findtext(tfile, quote, quote_index + 1, 0))) - 1
 	if(!key_len)
 		key_len = 1
 
@@ -29,16 +28,21 @@ var/list/map_dimension_cache = list()
 	//Another way to do this would be to search for this string: (1,1,1) = {" , but if some joker varedited that into the map it would break bigly
 	for(lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)
 		var/tline = copytext(tfile,lpos,findtext(tfile,"\n",lpos,0))
-		if(copytext(tline,1,2) != quote)//we reached the map "layout"
+		if(tline == "")//we reached the map "layout"
 			break
 
 	var/zpos = findtext(tfile, "\n(1,1,", lpos, 0)
-	var/zgrid = copytext(tfile, findtext(tfile, quote+"\n", zpos, 0)+2, findtext(tfile,"\n"+quote, zpos, 0)+1) //copy the whole map grid
-	var/x_depth = length(copytext(zgrid, 1, findtext(zgrid, "\n", 2, 0))) //Length of an encoded line (like "aaaaaaaaAAAAAAAAAAAA")
-	var/map_width = x_depth / key_len //Divide length of the encoded line by the length of the key to get the map's width
-	var/map_height= length(zgrid) / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
+	var/list/xy_grids = list()
+	for(var/xpos=zpos; xpos != findtext(tfile,"\n(1,1,",zpos+1,0); xpos = findtext(tfile,"\n(",xpos+1,0))
+		var/i = 1
+		for(var/ypos=findtext(tfile,quote+"\n",xpos,0)+2; ypos != findtext(tfile,"\n"+quote,xpos,0)+1; ypos = findtext(tfile,"\n",ypos+1,0)+1)
+			if(i > xy_grids.len)
+				xy_grids += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
+			else
+				xy_grids[i] += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
+			i++
 
-	var/return_list = list(map_width, map_height)
+	var/return_list = list((length(xy_grids[1]) / key_len), xy_grids.len) //Width and height
 	map_dimension_cache[hash] = return_list
 
 	return return_list
@@ -57,7 +61,11 @@ var/list/map_dimension_cache = list()
  * A list of all atoms created
  *
  */
-/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null)
+/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num)
+
+	if((rotate % 90) != 0) //If not divisible by 90, make it
+		rotate += (rotate % 90)
+
 	if(!z_offset)//what z_level we are creating the map on
 		z_offset = world.maxz+1
 
@@ -80,18 +88,32 @@ var/list/map_dimension_cache = list()
 	//first let's map model keys (e.g "aa") to their contents (e.g /turf/space{variables})
 	///////////////////////////////////////////////////////////////////////////////////////
 	var/list/grid_models = list()
-	var/key_len = length(copytext(tfile,2,findtext(tfile,quote,2,0)))//the length of the model key (e.g "aa" or "aba")
+	var/quote_index = findtext(tfile, quote)
+	//the length of the model key (e.g "aa" or "aba")
+	var/key_len = length(copytext(tfile, quote_index, findtext(tfile, quote, quote_index + 1, 0))) - 1
 	if(!key_len)
 		key_len = 1
 
+	var/model_contents = ""
+	var/model_key = ""
 	//proceed line by line
 	for(lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)
 		var/tline = copytext(tfile,lpos,findtext(tfile,"\n",lpos,0))
-		if(copytext(tline,1,2) != quote)//we reached the map "layout"
+		if(copytext(tline,1,3) == "//")//ignore comments
+			continue
+		if(tline == "")//we reached the map "layout"
+			if(model_key != "")
+				grid_models[model_key] = model_contents
 			break
-		var/model_key = copytext(tline,2,2+key_len)
-		var/model_contents = copytext(tline,findtext(tfile,"=")+3,length(tline))
-		grid_models[model_key] = model_contents
+		if(copytext(tline,1,2) == quote)
+			if(model_key != "")
+				grid_models[model_key] = model_contents
+			model_key = copytext(tline,2,2+key_len)
+			model_contents = ""
+		var/model_line = replacetext(tline,"\"[model_key]\" = (","")
+		model_line = replacetext(model_line,")","")
+		model_line = replacetext(model_line,"\t","")
+		model_contents += model_line
 		if (remove_lag)
 			CHECK_TICK
 		else
@@ -105,58 +127,86 @@ var/list/map_dimension_cache = list()
 	var/zcrd=-1
 	var/ycrd=x_offset
 	var/xcrd=y_offset
+	var/ycrd_rotate=x_offset
+	var/xcrd_rotate=y_offset
+	var/ycrd_flip=x_offset
+	var/xcrd_flip=y_offset
+	var/ycrd_flip_rotate=y_offset
+	var/xcrd_flip_rotate=x_offset
 
 	for(var/zpos=findtext(tfile,"\n(1,1,",lpos,0);zpos!=0;zpos=findtext(tfile,"\n(1,1,",zpos+1,0))	//in case there's several maps to load
-
 		zcrd++
 		if(zcrd+z_offset > world.maxz)
 			world.maxz = zcrd+z_offset
 			map.addZLevel(new /datum/zLevel/away, world.maxz) //create a new z_level if needed
 
-		var/zgrid = copytext(tfile,findtext(tfile,quote+"\n",zpos,0)+2,findtext(tfile,"\n"+quote,zpos,0)+1) //copy the whole map grid
-		var/z_depth = length(zgrid) //Length of the whole block (with multiple lines in them)
+		var/list/xy_grids = list()
+		for(var/xpos=zpos; xpos != findtext(tfile,"\n(1,1,",zpos+1,0); xpos = findtext(tfile,"\n(",xpos+1,0))
+			var/i = 1
+			for(var/ypos=findtext(tfile,quote+"\n",xpos,0)+2; ypos != findtext(tfile,"\n"+quote,xpos,0)+1; ypos = findtext(tfile,"\n",ypos+1,0)+1)
+				if(i > xy_grids.len)
+					xy_grids += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
+				else
+					xy_grids[i] += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
+				i++
 
 		//if exceeding the world max x or y, increase it
-		var/x_depth = length(copytext(zgrid,1,findtext(zgrid,"\n",2,0))) //This is the length of an encoded line (like "aaaaaaaaBBBBaaaaccccaaa")
+		var/x_depth = length(xy_grids[1])
+		var/map_height = xy_grids.len
 		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
-		if(world.maxx < map_width + x_offset)
+		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : map_height + y_offset
+		var/y_check = rotate == 0 || rotate == 180 ? map_height + y_offset : map_width + x_offset
+		if(world.maxx < x_check)
 			if(!map.can_enlarge)
 				WARNING("Cancelled load of [map_element] due to map bounds.")
 				return list()
-			world.maxx = map_width + x_offset
+			world.maxx = x_check
 			WARNING("Loading [map_element] enlarged the map. New max x = [world.maxx]")
 
-		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
-		if(world.maxy < y_depth + y_offset)
+		if(world.maxy < y_check)
 			if(!map.can_enlarge)
 				WARNING("Cancelled load of [map_element] due to map bounds.")
 				return list()
-			world.maxy = y_depth + y_offset
+			world.maxy = y_check
 			WARNING("Loading [map_element] enlarged the map. New max y = [world.maxy]")
 
 		//then proceed it line by line, starting from top
-		ycrd = y_offset + y_depth
+		ycrd = y_offset + map_height
+		ycrd_rotate = x_offset + map_width
+		ycrd_flip = y_offset + 1
+		ycrd_flip_rotate = x_offset + 1
 
-		for(var/gpos=1;gpos!=0;gpos=findtext(zgrid,"\n",gpos,0)+1)
-			var/grid_line = copytext(zgrid,gpos,findtext(zgrid,"\n",gpos,0))
-
+		for(var/grid_line in xy_grids)
 			//fill the current square using the model map
 			xcrd=x_offset
+			xcrd_rotate=y_offset
+			xcrd_flip=x_offset + map_width + 1
+			xcrd_flip_rotate=y_offset + map_width + 1
 			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
 				xcrd++
-				var/model_key = copytext(grid_line,mpos,mpos+key_len)
-				spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
+				xcrd_rotate++
+				xcrd_flip--
+				xcrd_flip_rotate--
+				var/parse_key = copytext(grid_line,mpos,mpos+key_len)
+				switch(rotate)
+					if(0)
+						spawned_atoms |= parse_grid(grid_models[parse_key],xcrd,ycrd,zcrd+z_offset,rotate,overwrite)
+					if(90)
+						spawned_atoms |= parse_grid(grid_models[parse_key],ycrd_rotate,xcrd_flip_rotate,zcrd+z_offset,rotate,overwrite)
+					if(180)
+						spawned_atoms |= parse_grid(grid_models[parse_key],xcrd_flip,ycrd_flip,zcrd+z_offset,rotate,overwrite)
+					if(270)
+						spawned_atoms |= parse_grid(grid_models[parse_key],ycrd_flip_rotate,xcrd_rotate,zcrd+z_offset,rotate,overwrite)
 				if (remove_lag)
 					CHECK_TICK
 			if(map_element)
 				map_element.width = xcrd - x_offset
 
-			//reached end of current map
-			if(gpos+x_depth+1>z_depth)
-				break
-
 			ycrd--
+			ycrd_rotate--
+			ycrd_flip++
+			ycrd_flip_rotate++
 
 			if(remove_lag)
 				CHECK_TICK
@@ -164,7 +214,7 @@ var/list/map_dimension_cache = list()
 				sleep(-1)
 
 		if(map_element)
-			map_element.height = y_depth
+			map_element.height = map_height
 
 			if(!map_element.location)
 				//Set location to the lower left corner, if it hasn't already been set
@@ -198,7 +248,7 @@ var/list/map_dimension_cache = list()
  * A list with all spawned atoms
  *
  */
-/dmm_suite/proc/parse_grid(var/model as text,var/xcrd as num,var/ycrd as num,var/zcrd as num)
+/dmm_suite/proc/parse_grid(var/model as text,var/xcrd as num,var/ycrd as num,var/zcrd as num,var/rotate as num,var/overwrite as num)
 	/*Method parse_grid()
 	- Accepts a text string containing a comma separated list of type paths of the
 		same construction as those contained in a .dmm file, and instantiates them.
@@ -251,7 +301,7 @@ var/list/map_dimension_cache = list()
 	//first instance the /area and remove it from the members list
 	index = members.len
 	var/atom/instance
-	_preloader = new(members_attributes[index])//preloader for assigning  set variables on atom creation
+	_preloader.setup(members_attributes[index])//preloader for assigning  set variables on atom creation
 
 	//Locate the area object
 	instance = locate(members[index])
@@ -260,7 +310,7 @@ var/list/map_dimension_cache = list()
 		instance.contents.Add(locate(xcrd,ycrd,zcrd))
 		spawned_atoms.Add(instance)
 
-	if(_preloader && instance)
+	if(use_preloader && instance)
 		_preloader.load(instance)
 
 	//The areas list doesn't contain areas without objects by default
@@ -270,13 +320,17 @@ var/list/map_dimension_cache = list()
 
 		if(istype(A))
 			areas.Add(instance)
-			A.addSorted()
-
 
 	members.Remove(members[index])
 
-	//then instance the /turf and, if multiple tiles are presents, simulates the DMM underlays piling effect (only the last turf is spawned, other ones are drawn as underlays)
+	if(overwrite) //make this come first so lighting overlays don't die
+		var/turf/T_old = locate(xcrd,ycrd,zcrd)
+		var/static/list/blacklisted_types = list(/mob/dead/observer, /mob/dview, /atom/movable/lighting_overlay, /atom/movable/border_dummy)
+		for(var/atom/thing as anything in T_old.contents)
+			if(!is_type_in_list(thing.type,blacklisted_types))
+				qdel(thing)
 
+	//then instance the /turf and, if multiple tiles are presents, simulates the DMM underlays piling effect (only the last turf is spawned, other ones are drawn as underlays)
 	var/first_turf_index = 1
 	while(!ispath(members[first_turf_index],/turf)) //find first /turf object in members
 		first_turf_index++
@@ -286,7 +340,7 @@ var/list/map_dimension_cache = list()
 		last_turf_index++
 
 	//instanciate the last /turf
-	var/turf/T = instance_atom(members[last_turf_index],members_attributes[last_turf_index],xcrd,ycrd,zcrd)
+	var/turf/T = instance_atom(members[last_turf_index],members_attributes[last_turf_index],xcrd,ycrd,zcrd,rotate)
 
 	if(first_turf_index != last_turf_index) //More than one turf is present - go from the lowest turf to the turf before the last one
 		var/turf_index = first_turf_index
@@ -302,7 +356,7 @@ var/list/map_dimension_cache = list()
 
 	//finally instance all remainings objects/mobs
 	for(index=1,index < first_turf_index,index++)
-		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd)
+		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd,rotate)
 		spawned_atoms.Add(new_atom)
 
 	return spawned_atoms
@@ -312,22 +366,31 @@ var/list/map_dimension_cache = list()
 ////////////////
 
 //Instance an atom at (x,y,z) and gives it the variables in attributes
-/dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z)
+/dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z, var/rotate)
 	if(!path)
 		return
+	var/timestart = world.timeofday
 	var/atom/instance
-	_preloader = new(attributes, path)
+	_preloader.setup(attributes, path)
 
+	var/turf/T = locate(x,y,z)
 	if(ispath(path, /turf)) //Turfs use ChangeTurf
-		var/turf/oldTurf = locate(x,y,z)
-		if(path != oldTurf.type)
-			instance = oldTurf.ChangeTurf(path, allow = 1)
+		if(path != T.type)
+			instance = T.ChangeTurf(path, allow = 1)
+			T = instance
 	else
-		instance = new path (locate(x,y,z))//first preloader pass
+		instance = new path (T)//first preloader pass
 
-	if(_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
+	// Stolen from shuttlecode but very good to reuse here
+	if(rotate && instance)
+		instance.map_element_rotate(rotate)
+
+	if(use_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
 
+	var/timetook2instance = world.timeofday - timestart
+	if(timetook2instance > 1)
+		log_debug("Slow atom instance. [instance] ([instance.type]) at [T?.x],[T?.y],[T?.z] took [timetook2instance/10] seconds to instance.")
 	return instance
 
 //text trimming (both directions) helper proc
@@ -420,9 +483,17 @@ var/list/map_dimension_cache = list()
 	placed.underlays += turfs_underlays
 
 /atom/New()
+	// Incase any lighting vars are on in the typepath we turn the light on in New().
+
+	if (light_power && light_range)
+		update_light()
+
+	if (opacity && isturf(loc))
+		var/turf/T = loc
+		T.has_opaque_atom = TRUE // No need to recalculate it in this case, it's guaranteed to be on afterwards anyways.
 
 	//atom creation method that preloads variables at creation
-	if(_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
+	if(use_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
 		_preloader.load(src)
 
 	. = ..()
@@ -431,20 +502,25 @@ var/list/map_dimension_cache = list()
 //Preloader datum
 //////////////////
 
+//global datum that will preload variables on atoms instanciation
+var/global/dmm_suite/preloader/_preloader = new
+var/use_preloader = FALSE
+
 /dmm_suite/preloader
 	parent_type = /datum
 	var/list/attributes
 	var/target_path
 
-/dmm_suite/preloader/New(var/list/the_attributes, var/path)
-	.=..()
+/dmm_suite/preloader/proc/setup(list/the_attributes, path)
 	if(!the_attributes.len)
-		Del()
 		return
+	use_preloader = TRUE
 	attributes = the_attributes
 	target_path = path
 
 /dmm_suite/preloader/proc/load(atom/what)
-	for(var/attribute in attributes - lockedvars)
-		what.vars[attribute] = attributes[attribute]
-	Del()
+	use_preloader = FALSE
+	var/list/local_attributes = attributes
+	var/list/what_vars = what.vars
+	for(var/attribute in local_attributes)
+		what_vars[attribute] = local_attributes[attribute]

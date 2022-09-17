@@ -1,23 +1,3 @@
-
-
-var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
-									"clownfish" = /obj/item/weapon/bananapeel/clownfish,
-									"shark" = /obj/item/weapon/fish/shark,
-									//"baby space carp" = /obj/item/weapon/fish/babycarp,
-									"catfish" = /obj/item/weapon/fish/catfish,
-									"feederfish" = /obj/item/weapon/reagent_containers/food/snacks/feederfish,
-									"salmon" = /obj/item/weapon/fish/salmon,
-									"shrimp" = /obj/item/weapon/reagent_containers/food/snacks/shrimp,
-									"electric eel" = /obj/item/weapon/fish/electric_eel,
-									"glofish" = /obj/item/weapon/fish/glofish,
-,									"sea devil" = /obj/item/fish_eggs/seadevil, //You can fish a sea devil straight back out and stick it in another tank.
-									"lobster" = /obj/item/weapon/lobster
-									)
-
-//////////////////////////////////////////////
-//			Aquarium Supplies				//
-//////////////////////////////////////////////
-
 /obj/item/weapon/fishtools/fish_egg_scoop
 	name = "fish egg scoop"
 	desc = "A small scoop to collect fish eggs with."
@@ -70,9 +50,12 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	visible_message("<span class='warning'>\The [user] is vigorously scrubbing \himself raw with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
-//////////////////////////////////////////////
-//				Fish Items					//
-//////////////////////////////////////////////
+/obj/item/weapon/fishtools/fishtank_helper
+	name = "aquarium automation module"
+	desc = "A module that automates cleaning of aquariums."
+	icon = 'icons/obj/module.dmi'
+	icon_state = "cyborg_upgrade"
+	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/reagent_containers/food/snacks/shrimp
 	name = "shrimp"
@@ -229,10 +212,22 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail(get_turf(src))
 		qdel(src)
 		return
+	if(O.is_sharp(user))
+		to_chat(user, "<span class='notice'>You crack open the shell of \the [src] and pull out the claw meat while separating the tail!")
+		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
+		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
+		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail(get_turf(src))
+		qdel(src)
+		return
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail/attackby(var/obj/item/O, var/mob/user) // extracting the meat from the tail, just makes normal lobster meat
 	if(O.is_wirecutter(user))
+		to_chat(user, "<span class='notice'>You crack open the remains of the shell from \the [src] and pull out the meat!")
+		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
+		qdel(src)
+		return
+	if(O.is_sharp(user))
 		to_chat(user, "<span class='notice'>You crack open the remains of the shell from \the [src] and pull out the meat!")
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
 		qdel(src)

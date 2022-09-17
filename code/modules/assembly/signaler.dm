@@ -51,10 +51,19 @@
 			user.u_equip(src,0)
 			qdel(src)
 
+	if(issignaler(W))
+		var/obj/item/device/assembly/signaler/signaler2 = W
+		if(secured && signaler2.secured)
+			code = signaler2.code
+			set_frequency(signaler2.frequency)
+			to_chat(user, "<span class='notice'>You transfer the frequency and code of \the [signaler2.name] to \the [name].</span>")
+		else
+			to_chat(user, "<span class='warning'>Re-secure the signaler first!</span>")
+
 /obj/item/device/assembly/signaler/activate()
 	if(cooldown > 0)
 		return 0
-	cooldown = 2
+	cooldown = 1
 	spawn(10)
 		process_cooldown()
 
@@ -119,8 +128,11 @@
 		src.code = max(1, src.code)
 
 	if(href_list["send"])
-		spawn( 0 )
-			signal()
+		spawn(0)
+			if(!cooldown)
+				activate()
+			else
+				to_chat(usr, "<span class='warning'>You must wait a little before sending out a signal again!</span>")
 
 	if(usr)
 		attack_self(usr)
@@ -199,7 +211,7 @@
 
 	if(!M || !ismob(M))
 		if(prob(5))
-			signal()
+			activate()
 		deadman = 0
 		processing_objects.Remove(src)
 	else if(prob(5))

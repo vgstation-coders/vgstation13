@@ -24,16 +24,13 @@
 
 	var/nameShort = ""
 	var/nameLong = ""
-	var/list/zLevels = list()
+	var/list/datum/zLevel/zLevels = list()
 	var/zMainStation = 1
 	var/zCentcomm = 2
 	var/zTCommSat = 3
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
-	var/multiz = FALSE //Don't even boot up multiz if we don't need it.
-	var/height = 1 //Height of connecting z levels
-	var/zLoc = 1 //Location of where to connect below from
 
 	//Center of thunderdome admin room
 	var/tDomeX = 0
@@ -105,15 +102,13 @@
 	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
 	var/datum/climate/climate = null //use for weather cycle
 	var/has_engines = FALSE // Is the map a space ship with big engines?
-
-	var/lights_always_ok = FALSE //should all lights be on and working at roundstart
+	var/broken_lights = TRUE //broken lights roundstart
+	var/can_have_robots = TRUE
 
 /datum/map/New()
 	. = ..()
 
 	src.loadZLevels(src.zLevels)
-	if(multiz)
-		src.loadZLevelConnections(height,zLoc)
 
 	//The spawn below is needed
 	spawn()
@@ -121,9 +116,6 @@
 			load_dungeon(T)
 
 /datum/map/proc/map_ruleset(var/datum/dynamic_ruleset/DR)
-	if(ispath(DR.role_category,/datum/role/changeling))
-		return FALSE
-
 	return TRUE //If false, fails Ready()
 
 /datum/map/proc/ruleset_multiplier(var/datum/dynamic_ruleset/DR)
@@ -158,10 +150,6 @@
 var/global/list/accessable_z_levels = list()
 
 /datum/map/proc/map_specific_init()
-
-//Set map-specific conditions here
-/datum/map/proc/map_specific_conditions(var/condition)
-	return 1
 
 //For any map-specific UI, like AI jumps
 /datum/map/proc/special_ui(var/obj/abstract/screen/S, mob/user)
@@ -200,6 +188,8 @@ var/global/list/accessable_z_levels = list()
 	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
 	var/base_area = null //default base area type, what blueprints erase into; if null, space; be careful with parent areas because locate() could find a child!
 	var/z //Number of the z-level (the z coordinate)
+	var/z_above //The linked zLevel Z above, for multiZ
+	var/z_below //Same, with below
 
 /datum/zLevel/proc/post_mapload()
 	return
@@ -250,11 +240,18 @@ var/global/list/accessable_z_levels = list()
 	movementJammed = 1
 	base_turf = /turf/unsimulated/beach/sand
 
-
+/datum/zLevel/snowmine //not used on snaxi
+	name = "belowMine"
+	base_turf = /turf/unsimulated/floor/asteroid/cave/permafrost
+	base_area = /area/mine/explored
+	movementJammed = TRUE
+	transitionLoops = TRUE
+	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/snow //not used on snaxi
 	name = "snow"
 	base_turf = /turf/unsimulated/floor/snow
+	base_area = /area/surface/snow
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/snow/post_mapload()
@@ -297,21 +294,19 @@ var/global/list/accessable_z_levels = list()
 
 //Returns the lowest turf available on a given Z-level, defaults to space.
 
-proc/get_base_turf(var/z)
-
-
+/proc/get_base_turf(var/z)
 	var/datum/zLevel/L = map.zLevels[z]
 	return L.base_turf
 
 //Area that blueprints should erase to
-proc/get_base_area(var/z)
+/proc/get_base_area(var/z)
 	var/datum/zLevel/L = map.zLevels[z]
 	if(L.base_area)
 		return locate(L.base_area) //this is a type
 	else
 		return get_space_area()
 
-proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
+/proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 	var/datum/zLevel/L = map.zLevels[choice]
 	if(update_old_base)
 		var/previous_base_turf = L.base_turf
@@ -325,8 +320,6 @@ proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 			D.base_turf_type = new_base_path
 
 /client/proc/set_base_turf()
-
-
 	set category = "Debug"
 	set name = "Set Base Turf"
 	set desc = "Set the base turf for a z-level. Defaults to space, does not replace existing tiles."

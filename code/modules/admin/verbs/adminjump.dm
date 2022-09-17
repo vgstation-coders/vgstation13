@@ -1,12 +1,16 @@
-/client/proc/Jump(var/area/A in sortedAreas)
+/client/proc/Jump()
 	set name = "Jump to Area"
 	set desc = "Area to jump to"
 	set category = "Admin"
+
 	if(!src.holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 
 	if(config.allow_admin_jump)
+		var/sortedAreas = areas.Copy()
+		sortTim(sortedAreas, /proc/cmp_name_asc)
+		var/area/A = input(usr, "Choose the jump area", "Area") as null|anything in sortedAreas
 		if(!A)
 			return
 
@@ -126,7 +130,7 @@
 		var/list/vaults = list()
 
 		for(var/datum/map_element/V in map_elements)
-			var/name = "[V.type_abbreviation] [V.name ? V.name : V.file_path] @ [V.location ? "[V.location.x],[V.location.y],[V.location.z]" : "UNKNOWN"]"
+			var/name = "[V.type_abbreviation] [V.name ? V.name : V.file_path] @ [V.location ? "[V.location.x],[V.location.y],[V.location.z][V.rotation ? " (rotated by [V.rotation] degrees)" : ""]" : "UNKNOWN"]"
 
 			vaults[name] = V
 
@@ -197,6 +201,8 @@
 	if(!src.holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
+	var/sortedAreas = areas.Copy()
+	sortTim(sortedAreas, /proc/cmp_name_asc)
 	var/area/A = input(usr, "Pick an area.", "Pick an area") in sortedAreas
 	if(A)
 		if(config.allow_admin_jump)

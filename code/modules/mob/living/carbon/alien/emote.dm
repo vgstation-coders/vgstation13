@@ -1,10 +1,11 @@
 /datum/emote/living/alien
 	mob_type_allowed_typelist = list(/mob/living/carbon/alien)
 
-/datum/emote/living/alien/gnarl
-	key = "gnarl"
-	key_third_person = "gnarls"
-	message = "gnarls and shows its teeth..."
+/datum/emote/living/alien/snarl
+	key = "snarl"
+	key_third_person = "snarls"
+	key_shorthand = "sna"
+	message = "snarls and bares its teeth."
 
 /datum/emote/living/alien/hiss
 	key = "hiss"

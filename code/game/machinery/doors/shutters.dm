@@ -7,48 +7,43 @@
 	var/sound_close = 'sound/machines/shutter_close.ogg'
 	animation_delay = 7
 
-/obj/machinery/door/poddoor/shutters/New()
-	..()
-	if(density)
-		layer = closed_layer
-	else
-		layer = open_layer
-
 /obj/machinery/door/poddoor/shutters/preopen
 	icon_state = "shutter0"
 	density = 0
 	opacity = 0
+	layer = BELOW_TABLE_LAYER
 
-/obj/machinery/door/poddoor/shutters/preopen/toplayer
-	open_layer = ABOVE_DOOR_LAYER
-
-/obj/machinery/door/poddoor/shutters/attackby(obj/item/weapon/C as obj, mob/user as mob)
+/obj/machinery/door/poddoor/shutters/attackby(var/obj/item/weapon/C, var/mob/user)
 	add_fingerprint(user)
 	if(!(iscrowbar(C) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
 		return
-	if(density && (stat & NOPOWER) && !operating)
+	if(density && (stat & (FORCEDISABLE|NOPOWER)) && !operating)
 		operating = 1
 		spawn(-1)
 			flick("shutterc0", src)
 			icon_state = "shutter0"
 			sleep(animation_delay)
+			plane = open_plane
 			layer = open_layer
 			setDensity(FALSE)
 			set_opacity(0)
 			operating = 0
 
 /obj/machinery/door/poddoor/shutters/open()
+	if(!density) //it's already open bro
+		return FALSE
 	if(operating == 1) //doors can still open when emag-disabled
 		return
 	if(!ticker)
 		return 0
 	if(!operating) //in case of emag
 		operating = 1
-	layer = closed_layer
 	flick("shutterc0", src)
 	icon_state = "shutter0"
 	playsound(src.loc, sound_open, 100, 1)
 	sleep(animation_delay)
+	plane = open_plane
+	layer = open_layer
 	setDensity(FALSE)
 	set_opacity(0)
 	update_nearby_tiles()
@@ -62,9 +57,10 @@
 
 /obj/machinery/door/poddoor/shutters/close()
 	if(operating)
-	//if(welded) //these are not airlocks.
 		return
 	operating = 1
+	plane = closed_plane
+	layer = closed_layer
 	flick("shutterc1", src)
 	icon_state = "shutter1"
 	playsound(src.loc, sound_close, 100, 1)

@@ -63,7 +63,7 @@
 		if(!I.is_multitool(user))
 			return
 
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	var/dat
@@ -121,8 +121,8 @@
 
 // Off-Site Relays
 //
-// You are able to send/receive signals from the station's z level (changeable in the STATION_Z #define) if
-// the relay is on the telecomm satellite (changable in the TELECOMM_Z #define)
+// You are able to send/receive signals from the station's z level (changeable in the map.zMainStation #define) if
+// the relay is on the telecomm satellite (changable in the zTCommSat var on map datums)
 
 
 /obj/machinery/telecomms/relay/proc/toggle_level()
@@ -131,11 +131,11 @@
 	var/turf/position = get_turf(src)
 
 	// Toggle on/off getting signals from the station or the current Z level
-	if(src.listening_level == STATION_Z) // equals the station
+	if(src.listening_level == map.zMainStation) // equals the station
 		src.listening_level = position.z
 		return 1
-	else if(position.z == TELECOMM_Z)
-		src.listening_level = STATION_Z
+	else if(position.z == map.zTCommSat)
+		src.listening_level = map.zMainStation
 		return 1
 	return 0
 
@@ -168,8 +168,8 @@
 
 /obj/machinery/telecomms/relay/Options_Menu()
 	var/dat = ""
-	if(src.z == TELECOMM_Z)
-		dat += "<br>Signal Locked to Station: <A href='?src=\ref[src];change_listening=1'>[listening_level == STATION_Z ? "TRUE" : "FALSE"]</a>"
+	if(src.z == map.zTCommSat)
+		dat += "<br>Signal Locked to Station: <A href='?src=\ref[src];change_listening=1'>[listening_level == map.zMainStation ? "TRUE" : "FALSE"]</a>"
 
 	dat += {"<br>Broadcasting: <A href='?src=\ref[src];broadcast=1'>[broadcasting ? "YES" : "NO"]</a>
 		<br>Receiving:    <A href='?src=\ref[src];receive=1'>[receiving ? "YES" : "NO"]</a>"}
@@ -214,6 +214,51 @@
 				change_frequency = 0
 				temp = "<font color = #666633>-% Frequency changing deactivated %-</font color>"
 
+/obj/machinery/telecomms/server/Options_Menu()
+	var/dat= {"</ol>
+			<h2>Frequency Names:</h2>"}
+	if(length(freq_names))
+		dat += "<ul>"
+		for(var/x in freq_names)
+			dat += "<li>"
+			if(freq_names[x])
+				dat += "<font color = [freq_names[x]]>"
+			dat += "[x]"
+			if(freq_names[x])
+				dat += "</font color>"
+			dat += "<a href='?src=\ref[src];delete_name=[x]'>\[X\]</a></li>"
+		dat += "</ul>"
+	else
+		dat += "<li>NONE</li>"
+	
+	dat += {"<p><a href='?src=\ref[src];input_name=1'>\[Add Frequency Name\]</a></p>
+			<hr />"}
+	return dat
+
+/obj/machinery/telecomms/server/Options_Topic(href, href_list)
+
+	if(href_list["delete_name"])
+		var/x = href_list["delete_name"]
+		temp = "<font color = #666633>-% Removed frequency name [x] %-</font color>"
+		freq_names.Remove(x)
+
+	if(href_list["input_name"])
+		var/newfreq = input(usr, "Specify a new frequency name.", src, network) as null|text
+		if(newfreq && canAccess(usr))
+			if((!(newfreq == SYND || newfreq == RAIDER || newfreq == REV_COMM)) && (!(newfreq in freq_names)))
+				freq_names.Add(newfreq)
+				temp = "<font color = #666633>-% New frequency name assigned: \"[newfreq]\" %-</font color>"
+	
+				var/newcolor = input(usr, "Specify a new frequency color. Leave blank for defaults.", src, network) as null|color
+				if(newcolor && canAccess(usr))
+					freq_names[newfreq] = newcolor
+					temp = "<font color = [newcolor]>-% New frequency color assigned. %-</font color>"
+
+				var/indx = freq_names.Find(newfreq)
+				if(indx && indx <= freq_listening.len && freq_listening[indx])
+					update_radio_frequency(newfreq, freq_listening[indx], newcolor, usr)
+			else
+				temp = "<font color = #666633>-% Channel name denied. %-</font color>"
 
 /obj/machinery/telecomms/Topic(href, href_list)
 	if(..())
@@ -269,10 +314,15 @@
 				if(newfreq && canAccess(usr))
 					if(findtext(num2text(newfreq), "."))
 						newfreq *= 10 // shift the decimal one place
-					if(!(newfreq == SYND_FREQ || newfreq == RAID_FREQ || newfreq == REV_FREQ))
-						if(!(newfreq in freq_listening) && newfreq < 10000)
-							freq_listening.Add(newfreq)
-							temp = "<font color = #666633>-% New frequency filter assigned: \"[newfreq] GHz\" %-</font color>"
+					if((!(newfreq == SYND_FREQ || newfreq == RAID_FREQ || newfreq == REV_FREQ)) && (!(newfreq in freq_listening) && newfreq < 10000))
+						freq_listening.Add(newfreq)
+						temp = "<font color = #666633>-% New frequency filter assigned: \"[newfreq] GHz\" %-</font color>"
+
+						if(istype(src,/obj/machinery/telecomms/server))
+							var/obj/machinery/telecomms/server/TSM = src
+							var/indx = freq_listening.Find(newfreq)
+							if(indx && indx <= TSM.freq_names.len && TSM.freq_names[indx])
+								update_radio_frequency(TSM.freq_names[indx], newfreq, TSM.freq_names[TSM.freq_names[indx]], usr)
 					else
 						temp = "<font color = #666633>-% Encryption key denied. %-</font color>"
 

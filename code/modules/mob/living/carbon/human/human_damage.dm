@@ -56,7 +56,7 @@
 
 	amount = amount * brute_damage_modifier
 
-	if(invoke_event(/event/damaged, list("kind" = BRUTE, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = amount))
 		return 0
 
 	if(amount > 0)
@@ -68,7 +68,7 @@
 /mob/living/carbon/human/adjustFireLoss(var/amount)
 	amount = amount * burn_damage_modifier
 
-	if(invoke_event(/event/damaged, list("kind" = BURN, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BURN, "amount" = amount))
 		return 0
 
 	if(amount > 0)
@@ -83,7 +83,7 @@
 /mob/living/carbon/human/proc/adjustBruteLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
 	amount = amount * brute_damage_modifier
 
-	if(invoke_event(/event/damaged, list("kind" = BRUTE, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = amount))
 		return 0
 
 	if (organ_name in organs_by_name)
@@ -100,7 +100,7 @@
 /mob/living/carbon/human/proc/adjustFireLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
 	amount = amount * burn_damage_modifier
 
-	if(invoke_event(/event/damaged, list("kind" = BURN, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BURN, "amount" = amount))
 		return 0
 
 	if (organ_name in organs_by_name)
@@ -137,7 +137,7 @@
 	if(isslimeperson(src))
 		amount = 0
 
-	if(invoke_event(/event/damaged, list("kind" = CLONE, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = CLONE, "amount" = amount))
 		return 0
 
 	var/heal_prob = max(0, 80 - getCloneLoss())
@@ -375,7 +375,7 @@ This function restores all organs.
 	if(blocked)
 		damage = (damage/100)*(100-blocked)
 
-	if(!ignore_events && invoke_event(/event/damaged, list("kind" = damagetype, "amount" = damage)))
+	if(!ignore_events && INVOKE_EVENT(src, /event/damaged, "kind" = damagetype, "amount" = damage))
 		return 0
 
 	switch(damagetype)
@@ -494,7 +494,7 @@ This function restores all organs.
 	if(species.flags & RAD_IMMUNE)
 		return
 	if(application == RAD_EXTERNAL)
-		invoke_event(/event/irradiate, list("user" = src, "rads" = rads))
+		INVOKE_EVENT(src, /event/irradiate, "user" = src, "rads" = rads)
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))
 			rads /= 2

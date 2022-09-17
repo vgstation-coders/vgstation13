@@ -304,7 +304,7 @@ var/global/list/bombermangear = list()
 	sleep(5)
 	qdel(src)
 
-obj/structure/bomberflame/Destroy()
+/obj/structure/bomberflame/Destroy()
 	..()
 	bombermangear -= src
 
@@ -960,7 +960,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		A.power_environ = 0
 		A.always_unpowered = 0
 		A.jammed = SUPER_JAMMED	//lol telesci
-		A.addSorted()
 		arena = A
 
 		spawn(0)

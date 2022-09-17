@@ -38,14 +38,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	vessel.add_reagent(BLOOD,560)
 
-	spawn(1)
-		//This lets DNA stuff properly initialize first, otherwise the blood in the vessels won't have any DNA.
-		//To safely remove this spawn(), find where dna.unique_enzymes/b_type are created and call fixblood() right after.
-		//Also test that blood driping when you cut yourself with a knife carries DNA properly using the detective scanner to be sure.
-		fixblood()
-
 //Resets blood data
-/mob/living/carbon/human/proc/fixblood()
+/mob/living/carbon/human/proc/copy_dna_data_to_blood_reagent()
 	for(var/datum/reagent/blood/B in vessel.reagent_list)
 		if(B.id == BLOOD)
 			B.data = list(
@@ -57,6 +51,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				"trace_chem"=null,
 				"virus2" = null,
 				"immunity" = null,
+				"occult" = null,
 				)
 			B.color = B.data["blood_colour"]
 
@@ -67,12 +62,13 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if(species && species.anatomy_flags & NO_BLOOD)
 		return
 
+
 	if(stat != DEAD && bodytemperature >= 170)	//Dead or cryosleep people do not pump the blood.
 
 		var/blood_volume = round(vessel.get_reagent_amount(BLOOD))
 
 		//Blood regeneration if there is some space
-		if(blood_volume < BLOOD_VOLUME_MAX && blood_volume)
+		if(blood_volume < (disabilities & ANEMIA ? BLOOD_VOLUME_SAFE+10 : BLOOD_VOLUME_MAX) && blood_volume)
 			var/datum/reagent/blood/B = locate() in vessel.reagent_list //Grab some blood
 			if(B) // Make sure there's some blood at all
 				B.volume += 0.1 // regenerate blood VERY slowly
@@ -135,15 +131,15 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 						var/word = pick("dizzy","woosey","faint")
 						to_chat(src, "<span class='danger'>You feel very [word].</span>")
 				if(oxyloss < 20)
-					oxyloss += 2
+					adjustOxyLoss(2)
 			if(BLOOD_VOLUME_BAD to BLOOD_VOLUME_OKAY)
 				if(!pale)
 					pale = 1
 					//update_body()
 				eye_blurry = max(eye_blurry,2)
 				if(oxyloss < 40)
-					oxyloss += 3
-				oxyloss += 3
+					adjustOxyLoss(3)
+				adjustOxyLoss(3)
 				if(prob(15))
 					Paralyse(1)
 					var/word = pick("dizzy","woosey","faint")
@@ -154,9 +150,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 					//update_body()
 				eye_blurry = max(eye_blurry,4)
 				if(oxyloss < 60)
-					oxyloss += 5
-				oxyloss += 5
-				toxloss += 1
+					adjustOxyLoss(5)
+				adjustOxyLoss(5)
+				adjustToxLoss(1)
 				if(prob(15))
 					Paralyse(rand(1,3))
 					var/word = pick("dizzy","woosey","faint")
@@ -167,8 +163,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				if(!pale) //Somehow
 					pale = 1
 					//update_body()
-				oxyloss += 8
-				toxloss += 2
+				adjustOxyLoss(8)
+				adjustToxLoss(2)
 				//cloneloss += 1
 				Paralyse(5) //Keep them on the ground, that'll teach them
 
@@ -185,13 +181,13 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 		//Bleeding out
 		var/blood_max = 0
-		var/blood_factor = 1
 		for(var/datum/organ/external/temp in organs)
 			if(!(temp.status & ORGAN_BLEEDING) || temp.status & (ORGAN_ROBOT|ORGAN_PEG))
 				continue
 
-			for(var/datum/wound/W in temp.wounds) if(W.bleeding())
-				blood_max += W.damage / 4
+			for(var/datum/wound/W in temp.wounds)
+				if(W.bleeding())
+					blood_max += W.damage / 4
 
 			if(temp.status & ORGAN_DESTROYED && !(temp.status & ORGAN_GAUZED) && !temp.amputated)
 				blood_max += 20 //Yer missing a fucking limb.
@@ -199,29 +195,47 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 			if (temp.open)
 				blood_max += 2 //Yer stomach is cut open
 
-			blood_max = blood_max * BLOODLOSS_SPEED_MULTIPLIER
+		blood_max = blood_max * BLOODLOSS_SPEED_MULTIPLIER //determines the maximum amount of blood to drip
 
-			if(lying)
-				blood_factor -= 0.3
+		drip(blood_max)
 
-			if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
-				blood_factor += 0.3
+//Calculates the percentage of blood to lose, 1 being 100%, 0 being 0%
+//Called by both internal and external bleeding factors. Keep common-to-both increases/descreases here.
+/mob/living/carbon/human/proc/calcbloodloss()
+	var/blood_factor = 1
+	if(species && species.anatomy_flags & NO_BLOOD) //Things that do not bleed do not bleed
+		return 0
+		
+	if(lying) //Lying down slows blood loss
+		blood_factor -= 0.3
 
-			if(reagents.has_reagent(INAPROVALINE))
-				blood_factor -= 0.3
+	if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
+		blood_factor += 0.3
 
-		drip(blood_max * blood_factor)
+	if(reagents.has_reagent(INAPROVALINE)) //Inaprov and Bicard slow bleeding, and stack
+		blood_factor -= 0.3
+		
+	if(reagents.has_reagent(BICARIDINE))
+		blood_factor -= 0.3
+		
+	if(reagents.has_reagent(CLOTTING_AGENT) || reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely
+		blood_factor = 0
+	
+	if(bodytemperature < 170) //Cryo stops bleeding entirely
+		blood_factor = 0
+		
+	return max(0, blood_factor) //Do not return a negative percent, we don't want free blood healing!
 
 //Makes a blood drop, leaking amt units of blood from the mob
 /mob/living/carbon/human/proc/drip(var/amt as num)
-
-
 	if(species && species.anatomy_flags & NO_BLOOD) //TODO: Make drips come from the reagents instead.
 		return 0
 
+	amt = max(0, amt * calcbloodloss()) //determines how much blood to lose based on human's situation
+	
 	if(!amt)
 		return 0
-
+	
 	vessel.remove_reagent(BLOOD,amt)
 	blood_splatter(src,src)
 	stat_collection.blood_spilled += amt
@@ -266,6 +280,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		temp_chem[R.id] = R.volume
 	B.data["trace_chem"] = list2params(temp_chem)
 
+	if (iscultist(src))
+		B.data["occult"] = mind
+
 	if(container)
 		container.reagents.reagent_list |= B
 		container.reagents.update_total()
@@ -284,6 +301,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		"trace_chem"=null,
 		"virus2" = null,
 		"immunity" = null,
+		"occult" = null,
 		)
 
 	if (dna)
@@ -315,6 +333,10 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	if (immune_system)
 		blood_data["immunity"] = immune_system.GetImmunity()
+
+	if (iscultist(src))
+		blood_data["occult"] = mind
+
 	return blood_data
 
 /proc/copy_blood_data(var/list/list/data)
@@ -327,6 +349,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		"trace_chem"	=data["trace_chem"],
 		"virus2" 		=virus_copylist(data["virus2"]),
 		"immunity" 		=null,
+		"occult" 		=data["occult"],
 		)
 	if (data["resistances"])
 		blood_data["resistances"] = data["resistances"].Copy()
@@ -344,6 +367,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		"trace_chem"	=blood_data["trace_chem"],
 		"virus2" 		=virus_copylist(blood_data["virus2"]),
 		"immunity" 		=null,
+		"occult" 		=blood_data["occult"],
 		)
 	if (blood_data["resistances"])
 		data["resistances"] = blood_data["resistances"].Copy()
@@ -436,7 +460,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 /proc/get_blood(datum/reagents/container)
 	return locate(/datum/reagent/blood) in container.reagent_list
 
-proc/blood_incompatible(donor,receiver)
+/proc/blood_incompatible(donor,receiver)
 	if(!donor || !receiver)
 		return 0
 
@@ -460,7 +484,7 @@ proc/blood_incompatible(donor,receiver)
 		//AB is a universal receiver.
 	return 0
 
-proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
+/proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 	var/obj/effect/decal/cleanable/blood/B
 	var/decal_type = /obj/effect/decal/cleanable/blood/splatter
 	var/turf/T = get_turf(target)

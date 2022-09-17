@@ -17,9 +17,10 @@
 	var/list/space_chance = 55       // Likelihood of getting a space in the random scramble string.
 
 /datum/language/proc/get_spoken_verb(var/msg, var/silicon, var/mode, var/mob/speaker)
-	var/speaker_verb_override = speaker.get_spoken_verb(msg)
-	if (speaker_verb_override)
-		return speaker_verb_override
+	if(istype(speaker))
+		var/speaker_verb_override = speaker.get_spoken_verb(msg)
+		if (speaker_verb_override)
+			return speaker_verb_override
 	switch(mode)
 		if(SPEECH_MODE_WHISPER)
 			return "[whisper_verb]"
@@ -137,6 +138,7 @@
 	exclaim_verb = "rustles"
 	colour = "soghun"
 	key = "q"
+	flags = NONORAL
 	syllables = list("hs","zt","kr","st","sh")
 
 /datum/language/common
@@ -220,6 +222,7 @@
 	colour = "sinister"
 	native=1
 	space_chance = 95
+	flags = NONORAL
 	syllables = list("CLICK", "CLACK")
 
 /datum/language/golem
@@ -232,6 +235,7 @@
 	colour = "golem"
 	native = 1
 	key = "8"
+	flags = NONORAL
 	syllables = list("oa","ur","ae","um","tu","gor","an","lo","ag","oon","po")
 
 /datum/language/slime
@@ -244,6 +248,7 @@
 	colour = "slime"
 	native = 1
 	key = "f"
+	flags = NONORAL
 	syllables = list("ba","ab","be","eb","bi","ib","bo","ob","bu","ub")
 
 /datum/language/skellington/say_misunderstood(mob/M, message)
@@ -294,6 +299,19 @@
 	key = "9"
 	space_chance = 80
 	syllables = list("squeak")
+
+/datum/language/grue
+	name = LANGUAGE_GRUE
+	desc = "The sounds grues use to communicate with one another."
+	speech_verb = "roars"
+	ask_verb = "roars"
+	exclaim_verb = "roars"
+	whisper_verb = "hisses"
+	key = "g"
+	flags = RESTRICTED
+	native = 1
+	syllables = list("BWAAGH","BWOOGH","GRAAH","WAAGH","ROOHR","SWOOH","KROOH","KRAAH")
+	space_chance = 100
 
 /datum/language/martian
 	name = LANGUAGE_MARTIAN

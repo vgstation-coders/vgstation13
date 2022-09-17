@@ -24,9 +24,9 @@
 	user.register_event(/event/face, src, /obj/item/device/maracas/proc/chickchicky)
 	chickchicky()
 
-/obj/item/device/maracas/throw_impact(atom/hit_atom)
+/obj/item/device/maracas/throw_impact(atom/hit_atom, var/speed, var/mob/user)
 	if(emagged)
-		explosion(get_turf(src), -1 ,1, 3)
+		explosion(get_turf(src), -1 ,1, 3, whodunnit = user)
 		qdel(src)
 
 /obj/item/device/maracas/dropped(mob/user)

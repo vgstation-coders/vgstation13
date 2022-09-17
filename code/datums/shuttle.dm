@@ -268,13 +268,31 @@
 			to_chat(user, "The shuttle can't move ([D.areaname] is used by another shuttle)")
 		return 0
 
+	if(broadcast)
+		//Check if the selected docking port is valid (can be selected)
+		if(!broadcast.allow_selecting_all && !(D in docking_ports))
+			//Check disks too
+			if(!broadcast.disk)
+				if(user)
+					to_chat(user, "<span class='warning'>No disk detected.</span>")
+				return 0
+			if(!broadcast.disk.compatible(src))
+				if(user)
+					to_chat(user, "<span class='warning'>Current disk not compatible with current shuttle.</span>")
+				return 0
+			if(broadcast.disk.destination != D)
+				if(user)
+					to_chat(user, "<span class='warning'>Currently selected docking port not valid.</span>")
+				return 0
+
 	if(D.require_admin_permission && !isAdminGhost(user))
 		if(broadcast)
 			broadcast.announce( "Currently requesting permission to reach [D.areaname]..." )
 		else if(user)
 			to_chat(user, "Waiting for permission...")
-		var/reason = input(user, "State your reasons for wanting to dock at [D.areaname].", "Docking Request", "")
-		message_admins("[key_name(user)] is requesting permission to fly their [name] to [D.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
+		if(user)
+			var/reason = input(user, "State your reasons for wanting to dock at [D.areaname].", "Docking Request", "")
+			message_admins("[key_name(user)] is requesting permission to fly their [name] to [D.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
 	else
 		actually_travel_to(D, broadcast, user)
 
@@ -333,7 +351,7 @@
 				destination_port = null
 				return
 			for(var/atom/movable/AA in linked_area)
-				AA.invoke_event(/event/z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
+				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "to_z" = D.z, "from_z" = linked_port.z)
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)
@@ -370,7 +388,7 @@
 	moving = 0
 
 //This is the proc you want to use to FORCE a shuttle to move. It always moves it, unless the shuttle or its area don't exist. Transit is skipped, after_flight() is called
-/datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0) //A direct proc with no bullshit
+/datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0, var/rotate_after = 0) //A direct proc with no bullshit
 	if(!D)
 		return
 	if(!linked_port)
@@ -404,6 +422,8 @@
 		if(linked_port.dir != turn(D.dir,180))
 
 			rotate = dir2angle(turn(D.dir,180)) - dir2angle(linked_port.dir)
+
+			rotate += rotate_after
 
 			if(rotate < 0)
 				rotate += 360
@@ -542,7 +562,7 @@
 	return occupants
 
 /proc/get_refill_area(var/obj/docking_port/destination/D)
-	if(ispath(D.refill_area))
+	if(ispath(D?.refill_area))
 		return locate(D.refill_area)
 	else
 		return get_space_area()
@@ -580,7 +600,7 @@
 	var/list/our_own_turfs = list()
 
 	//Go through all turfs in our area
-	for(var/turf/T in linked_area.get_turfs())
+	for(var/turf/T in linked_area.contents)
 		var/datum/coords/C = new(T.x,T.y)
 		turfs_to_move += C
 		turfs_to_move[C] = T
@@ -638,13 +658,6 @@
 		if(!old_turf)
 			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get original turf at [old_C.x_pos];[old_C.y_pos];[our_center.z]")
 			continue
-		else if(old_turf.preserve_underlay == 0 && istype(old_turf,/turf/simulated/shuttle/wall)) //Varediting a turf's "preserve_underlay" to 1 will protect its underlay from being changed
-			if(old_turf.icon_state in transparent_icons)
-				add_underlay = 1
-				if(old_turf.underlays.len) //this list is in code/game/area/areas.dm
-					var/image/I = locate(/image) in old_turf.underlays //bandaid
-					if(I.icon == 'icons/turf/shuttle.dmi') //Don't change underlay to space if CURRENT underlay is a shuttle floor!
-						add_underlay = 0
 
 		if(!new_turf)
 			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get new turf at [C.x_pos];[C.y_pos];[new_center.z]")
@@ -676,7 +689,8 @@
 
 		linked_area.contents.Add(new_turf)
 		new_turf.change_area(old_area,linked_area)
-		new_turf.ChangeTurf(old_turf.type, allow = 1)
+		if(!istype(old_turf, /turf/space))
+			new_turf.ChangeTurf(old_turf.type, allow = 1)
 		new_turfs[C] = new_turf
 
 		//***Remove old turf from shuttle's area****
@@ -706,11 +720,13 @@
 		else
 			new_turf.underlays += undlay*/
 
-		new_turf.dir = old_turf.dir
-		new_turf.icon_state = old_turf.icon_state
-		new_turf.icon = old_turf.icon
-		new_turf.plane = old_turf.plane
-		new_turf.layer = old_turf.layer
+		if(!istype(old_turf, /turf/space))
+			new_turf.dir = old_turf.dir
+			new_turf.icon_state = old_turf.icon_state
+			new_turf.icon = old_turf.icon
+			new_turf.plane = old_turf.plane
+			new_turf.layer = old_turf.layer
+			new_turf.color = old_turf.color
 
 		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
 		// Floor turfs create their `floor_tile` in New() if it's null.
@@ -723,7 +739,7 @@
 			modern.floor_tile = ancient.floor_tile
 			ancient.floor_tile = null
 		if(rotate)
-			new_turf.shuttle_rotate(rotate)
+			new_turf.map_element_rotate(rotate)
 
 		//*****Move air*****
 
@@ -772,6 +788,9 @@
 			if(D.base_turf_icon_state)
 				old_turf.icon_state = D.base_turf_icon_state
 
+		if(istype(old_turf,/turf/space))
+			old_turf.lighting_clear_overlay() //A horrible band-aid fix for lighting overlays appearing over space
+
 	//Update doors
 	if(turfs_to_update.len)
 		for(var/turf/simulated/T1 in turfs_to_update)
@@ -781,18 +800,17 @@
 	return 1
 
 /datum/shuttle/proc/move_atom(var/atom/movable/AM, var/new_turf, var/rotate)
-	if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
+	if(AM.locs.len > 1) //If the moved object is on multiple tiles, move it after everything else (using spawn())
 		AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
 
 		spawn()
 			AM.forceMove(new_turf)
 
-		//TODO: Make this compactible with bound_x and bound_y.
 	else
 		AM.forceMove(new_turf)
 
 	if(rotate)
-		AM.shuttle_rotate(rotate)
+		AM.map_element_rotate(rotate)
 
 /proc/setup_shuttles()
 	world.log << "Setting up all shuttles..."
@@ -862,7 +880,7 @@
 	var/rotate = dir2angle(turn(user.dir,180)) - dir2angle(linked_port.dir)
 
 	var/list/original_coords = list()
-	for(var/turf/T in linked_area.get_turfs())
+	for(var/turf/T in linked_area.contents)
 		var/datum/coords/C = new(T.x,T.y)
 		original_coords += C
 

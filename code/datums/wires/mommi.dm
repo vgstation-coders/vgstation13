@@ -49,7 +49,7 @@
 				to_chat(R, "Your camera lense focuses loudly.")
 
 		if(BORG_WIRE_LOCKED_DOWN)
-			R.SetLockdown(!R.lockcharge) // Toggle
+			R.SetLockdown(!R.lockdown) // Toggle
 
 /datum/wires/robot/mommi/CanUse(var/mob/living/L)
 	if(!..())

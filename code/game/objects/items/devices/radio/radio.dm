@@ -61,7 +61,11 @@
 
 /obj/item/device/radio/initialize()
 	. = ..()
-	frequency = COMMON_FREQ //common chat
+	// Mapped radios may have their frequency set.
+	// This prevents it from getting reset.
+	if(frequency == initial(frequency))
+		frequency = COMMON_FREQ //common chat
+
 	if(freerange)
 		if(frequency < 1200 || frequency > 1600)
 			frequency = sanitize_frequency(frequency, maxf)
@@ -120,31 +124,31 @@
 
 /obj/item/device/radio/Topic(href, href_list)
 	if (!isAdminGhost(usr) && (usr.stat || !on))
-		return
+		return 1
 
 	if(!in_range(src,usr) && !isAdminGhost(usr) && !issilicon(usr)) //Not adjacent/have telekinesis/a silicon/an aghost? Close it.
 		usr << browse(null, "window=radio")
-		return
+		return 1
 	usr.set_machine(src)
 	if (href_list["open"])
 		var/mob/target = locate(href_list["open"])
 		var/mob/living/silicon/ai/A = locate(href_list["open2"])
 		if(A && target)
 			A.open_nearest_door(target)
-		return
+		return 1
 
 	else if("set_freq" in href_list)
 		var/new_frequency
 		new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
 		new_frequency = sanitize_frequency(new_frequency, maxf)
-		if(!invoke_event(/event/radio_new_frequency, list("user" = usr, "new_frequency" = new_frequency)))
+		if(!INVOKE_EVENT(src, /event/radio_new_frequency, "user" = usr, "new_frequency" = new_frequency))
 			set_frequency(new_frequency)
 
 	else if (href_list["freq"])
 		var/new_frequency
 		new_frequency = (frequency + text2num(href_list["freq"]))
 		new_frequency = sanitize_frequency(new_frequency, maxf)
-		if(!invoke_event(/event/radio_new_frequency, list("user" = usr, "new_frequency" = new_frequency)))
+		if(!INVOKE_EVENT(src, /event/radio_new_frequency, "user" = usr, "new_frequency" = new_frequency))
 			set_frequency(new_frequency)
 
 	else if (href_list["talk"])
@@ -198,7 +202,7 @@
 		dubbed "subspace" which is somewhat similar to 'blue-space' but can't
 		actually transmit large mass. Headsets are the only radio devices capable
 		of sending subspace transmissions to the Communications Satellite.
-		A headset sends a signal to a subspace listener/reciever elsewhere in space,
+		A headset sends a signal to a subspace listener/receiver elsewhere in space,
 		the signal gets processed and logged, and an audible transmission gets sent
 		to each individual headset.
 	*/
@@ -246,6 +250,16 @@
 
 	var/turf/position = get_turf(src)
 
+	//### Radio jammerer function code ###//
+	var/jamming_severity = radio_jamming_severity(position)
+
+	// Completely silences the message if jamming effect is too severe.
+	// Otherwise distorts it.
+	if (is_completely_jammed(jamming_severity))
+		return
+	if (jamming_severity > 0)
+		speech.message = Gibberish(speech.message, jamming_severity)
+
 	//#### Tagging the signal with all appropriate identity values ####//
 
 	// ||-- The mob's name identity --||
@@ -288,6 +302,13 @@
 	// --- Unidentifiable mob ---
 	else
 		speech.job = "Unknown"
+
+	// --- Radio Bugs ---
+
+	if(istype(speech.radio,/obj/item/device/radio/bug))
+		var/obj/item/device/radio/bug/R = speech.radio
+		if(R.radio_tag)
+			speech.message = "\[[R.radio_tag]\] [speech.message]" //hacky solution but it's less invasive than modifying telecomms code
 
 /*
 	// --- Modifications to the mob's identity ---
@@ -492,6 +513,9 @@
 
 
 /obj/item/device/radio/attack_self(mob/user)
+	. = ..()
+	if(.)
+		return
 	user.set_machine(src)
 	interact(user)
 
@@ -516,4 +540,151 @@
 	listening = 0
 	for (var/ch_name in channels)
 		channels[ch_name] = 0
+	for(var/mob/living/simple_animal/hostile/pulse_demon/PD in contents)
+		PD.emp_act(severity) // Not inheriting so do it here too
 	..()
+
+/obj/item/device/radio/phone
+	name = "radio phone"
+	desc = "A hard line, immobile."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "brown_phone"
+	anchored = TRUE
+	w_class = W_CLASS_LARGE
+	canhear_range = 1
+	channels = list("Response Team" = 1, "Command" = 0)
+
+/obj/item/device/radio/phone/attack_hand(mob/user)
+	add_fingerprint(user)
+	if(anchored)
+		attack_self(user)
+	else
+		..()
+
+/obj/item/device/radio/phone/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(!speech.speaker || speech.frequency)
+		return
+	if(broadcasting && (get_dist(src, speech.speaker) <= canhear_range))
+		for(var/ch in channels)
+			if(channels[ch])
+				talk_into(speech, ch)
+
+/obj/item/device/radio/phone/interact(mob/user as mob)
+	if(!on)
+		return
+
+	var/dat = "<html><head><title>[src]</title></head><body><TT>"
+
+	dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
+	if(channels["Response Team"] == 1)
+		dat += "Channel: <b>Responder</b> <A href='byond://?src=\ref[src];toggle_channel=1'>Command</A>"
+	else
+		dat += "Channel: <A href='byond://?src=\ref[src];toggle_channel=1'>Responder</A> <b>Command</b>"
+
+	dat+={"</TT></body></html>"}
+	user << browse(dat, "window=radio")
+	onclose(user, "radio")
+
+/obj/item/device/radio/phone/Topic(href, href_list)
+	if(..())
+		return 1
+	if("toggle_channel" in href_list)
+		channels["Response Team"] = !channels["Response Team"]
+		channels["Command"] = !channels["Command"]
+		updateDialog()
+
+/obj/item/device/radio/phone/pack
+	name = "radio backpack"
+	desc = "Although most of the space is taken up by the radio, there's still space for some storage. Use in hand to access radio channels."
+	anchored = FALSE
+	slot_flags = SLOT_BACK
+	icon_state = "radiopack"
+	item_state = "radiopack"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
+	var/obj/item/weapon/storage/radiopack/ourpack
+
+/obj/item/device/radio/phone/pack/New()
+	..()
+	ourpack = new /obj/item/weapon/storage/radiopack(src)
+
+/obj/item/device/radio/phone/pack/attack_hand(mob/user)
+	if(user.get_inactive_hand() == src)
+		ourpack.show_to(user)
+	else
+		..()
+
+/obj/item/device/radio/phone/pack/AltClick(mob/user)
+	ourpack.AltClick(user)
+
+/obj/item/device/radio/phone/pack/attackby(obj/item/I, mob/user)
+	ourpack.attackby(I,user)
+
+/obj/item/weapon/storage/radiopack
+	name = "radio backpack"
+	desc = "Although most of the space is taken up by the radio, there's still space for some storage. Use in hand to access radio channels."
+	w_class = W_CLASS_LARGE
+
+/obj/item/weapon/storage/radiopack/distance_interact(mob/user)
+	if(istype(loc,/obj/item/device/radio/phone/pack) && in_range(user,loc))
+		playsound(loc, rustle_sound, 50, 1, -5)
+		return TRUE
+	return FALSE
+
+/obj/item/device/radio/phone/surveillance
+	name = "\improper DromedaryCo packet"
+	desc = "A packet of six imported DromedaryCo cigarettes. A label on the packaging reads: \"Wouldn't a slow death make a change?\""
+	icon = 'icons/obj/cigarettes.dmi'
+	icon_state = "Dpacket"
+	item_state = "Dpacket"
+	anchored = FALSE
+	w_class = W_CLASS_TINY
+	channels = list("Radio Bug" = 1)
+	var/obj/item/weapon/storage/box/surveillance/cigbox
+
+/obj/item/device/radio/phone/surveillance/New()
+	..()
+	frequency = BUG_FREQ
+	cigbox = new /obj/item/weapon/storage/box/surveillance(src)
+
+/obj/item/device/radio/phone/surveillance/attack_hand(mob/user)
+	if(user.get_inactive_hand() == src)
+		cigbox.show_to(user)
+	else
+		..()
+
+/obj/item/device/radio/phone/surveillance/interact(mob/user as mob)
+	if(!on)
+		return
+
+	var/dat = "<html><head><title>[src]</title></head><body><TT>"
+
+	dat += "Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>"
+	dat+={"</TT></body></html>"}
+	user << browse(dat, "window=radio")
+	onclose(user, "radio")
+
+/obj/item/device/radio/phone/surveillance/Topic(href, href_list)
+	if(..())
+		return 1
+
+/obj/item/device/radio/phone/surveillance/examine(mob/user)
+	cigbox.examine(user)
+
+/obj/item/device/radio/phone/surveillance/AltClick(mob/user)
+	cigbox.AltClick(user)
+
+/obj/item/device/radio/phone/surveillance/attackby(obj/item/I, mob/user)
+	cigbox.attackby(I,user)
+
+/obj/item/device/radio/bug
+	name = "cigarette butt"
+	desc = "A manky old cigarette butt."
+	icon = 'icons/obj/clothing/masks.dmi'
+	icon_state = "cigbutt"
+	w_class = W_CLASS_TINY
+	throwforce = 1
+	autoignition_temperature = 0 //The filter doesn't burn
+	broadcasting = 1
+	listening = 0
+	always_talk = 1
+	var/radio_tag

@@ -1,4 +1,3 @@
-
 ////////////////////////////////////////////////////////////////////////////////
 /// (Mixing) Glass.
 ////////////////////////////////////////////////////////////////////////////////
@@ -15,39 +14,6 @@
 	flags = FPRINT  | OPENCONTAINER
 	layer = ABOVE_OBJ_LAYER
 	var/opaque = FALSE //when true no reagent filling overlay is applied to the icon.
-	//This is absolutely terrible
-	// TODO To remove this, return 1 on every attackby() that handles reagent_containers.
-	var/list/can_be_placed_into = list(
-		/obj/machinery/chem_master/,
-		/obj/machinery/chem_dispenser/,
-		/obj/machinery/reagentgrinder,
-		/obj/structure/table,
-		/obj/structure/closet,
-		/obj/structure/sink,
-		/obj/structure/centrifuge,
-		/obj/item/weapon/storage,
-		/obj/item/tool/solder,
-		/obj/machinery/atmospherics/unary/cryo_cell,
-		/obj/machinery/dna_scannernew,
-		/obj/item/weapon/grenade/chem_grenade,
-		/obj/item/weapon/electrolyzer,
-		/obj/machinery/bot/medbot,
-		/obj/item/weapon/storage/secure/safe,
-		/obj/machinery/iv_drip,
-		/obj/machinery/disease2/incubator,
-		/obj/machinery/disease2/centrifuge,
-		/obj/machinery/disposal,
-		/obj/machinery/apiary,
-		/mob/living/simple_animal/cow,
-		/mob/living/simple_animal/hostile/retaliate/goat,
-		/obj/machinery/cooking/icemachine,
-		/obj/machinery/sleeper,
-		/obj/machinery/anomaly,
-		/obj/machinery/bunsen_burner,
-		/obj/item/weapon/sword/venom,
-		/obj/item/weapon/cylinder,
-		/obj/item/clothing/gloves/powerfist,
-		)
 
 /obj/item/weapon/reagent_containers/glass/get_rating()
 	return volume / 50
@@ -78,7 +44,7 @@
 	if (!adjacency_flag)
 		return
 
-	if (is_type_in_list(target, can_be_placed_into))
+	if (!target.splashable())
 		return
 
 	if(ishuman(target) || iscorgi(target)) //Splashing handled in attack now
@@ -90,7 +56,13 @@
 		playsound(target, 'sound/effects/slosh.ogg', 25, 1)													//or in an hydro tray, then we make some noise.
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(valid_item_attack(W, user))
+		return ..()
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
+		if(istype(W, /obj/item/weapon/pen/fountain))
+			var/obj/item/weapon/pen/fountain/P = W
+			if(P.bloodied)
+				..()
 		set_tiny_label(user)
 	attempt_heating(W, user)
 
@@ -107,8 +79,20 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	layer = ABOVE_OBJ_LAYER //So it always gets layered above pills and bottles
 
+	//Breakability:
+	health = 3
+	breakable_flags = BREAKABLE_ALL
+	damage_armor = BREAKARMOR_FLIMSY
+	damage_resist = BREAKARMOR_NOARMOR
+	breakable_fragments = list(/obj/item/weapon/shard)
+	damaged_examine_text = "It is cracked."
+	take_hit_text = list("cracking", "chipping")
+	take_hit_text2 = list("cracks", "chips")
+	breaks_text = "shatters"
+	breaks_sound = 'sound/effects/Glassbr3.ogg'
+
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
-	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/tool/surgicaldrill)) //regular beakers only
+	if(user.a_intent != I_HURT && src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/tool/surgicaldrill)) //regular beakers only
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))
@@ -375,6 +359,12 @@
 			visible_message("<span class='warning'>The bucket's content spills on [src]</span>")
 			reagents.clear_reagents()
 
+/obj/item/weapon/reagent_containers/glass/bucket/dissolvable()
+	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
+	if(H && src == H.head)
+		return 0
+	return ..()
+
 /obj/item/weapon/reagent_containers/glass/bucket/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())
 		if (src.reagents.total_volume >= 1)
@@ -437,6 +427,32 @@
 	reagents.add_reagent(WATER, 150)
 	update_icon()
 
+/obj/item/weapon/reagent_containers/glass/soupcan
+	name = "soup can"
+	desc = "A used can of blether noodle soup. At least it fed a hungry greyling."
+	icon_state = "soupcan"
+	starting_materials = list(MAT_IRON = 50)
+	w_type = RECYK_METAL
+	flags = OPENCONTAINER
+
+/obj/item/weapon/reagent_containers/glass/soupcan/attack_self()
+	if(is_open_container())
+		to_chat(usr, "<span class = 'notice'>You can't reseal the can's lid.")
+
+/obj/item/weapon/reagent_containers/glass/soupcan/on_reagent_change()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/soupcan/update_icon()
+	overlays.len = 0
+
+	if(reagents.total_volume)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]")
+
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+
+		overlays += filling
+
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug
 	name = "Blender Jug"
@@ -444,7 +460,6 @@
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "blender_jug_e"
 	volume = 100
-
 	on_reagent_change()
 		switch(src.reagents.total_volume)
 			if(0)
@@ -453,7 +468,6 @@
 				icon_state = "blender_jug_h"
 			if(76 to 100)
 				icon_state = "blender_jug_f"
-
 /obj/item/weapon/reagent_containers/glass/canister		//not used apparantly
 	desc = "It's a canister. Mainly used for transporting fuel."
 	name = "canister"
@@ -463,12 +477,10 @@
 	m_amt = 300
 	g_amt = 0
 	w_class = W_CLASS_LARGE
-
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,30,60)
 	volume = 120
 	flags = FPRINT
-
 /obj/item/weapon/reagent_containers/glass/dispenser
 	name = "reagent glass"
 	desc = "A reagent glass."
@@ -476,15 +488,12 @@
 	icon_state = "beaker0"
 	amount_per_transfer_from_this = 10
 	flags = FPRINT  | OPENCONTAINER
-
 /obj/item/weapon/reagent_containers/glass/dispenser/surfactant
 	name = "reagent glass (surfactant)"
 	icon_state = "liquid"
-
 /obj/item/weapon/reagent_containers/glass/dispenser/surfactant/New()
 	..()
 	reagents.add_reagent(FLUOROSURFACTANT, 20)
-
 */
 
 //No idea if this actually works anymore. Please handle carefully

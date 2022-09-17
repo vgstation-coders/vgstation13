@@ -20,7 +20,7 @@
 
 /obj/machinery/anomaly/hyperspectral/update_icon()
 	overlays.Cut()
-	if (stat & (NOPOWER | BROKEN))
+	if (stat & (NOPOWER | BROKEN | FORCEDISABLE))
 		return
 
 	overlays += "hyperspectral_on"
@@ -37,7 +37,7 @@
 
 /obj/machinery/anomaly/hyperspectral/stop()
 	..()
-	kill_light()
+	set_light(0)
 
 /obj/machinery/anomaly/hyperspectral/ScanResults()
 	var/results = "The scan was inconclusive. Check sample integrity."

@@ -59,44 +59,44 @@ macro "macro"
 	elem "DELETE"
 		name = "Delete"
 		command = "delete-key-pressed"
-	elem "ALT+NUMPAD8"
-		name = "ALT+NUMPAD8"
+	elem "CTRL+NUMPAD8"
+		name = "CTRL+NUMPAD8"
 		command = "a-zone head"
-	elem "ALT+NUMPAD5"
-		name = "ALT+NUMPAD5"
+	elem "CTRL+NUMPAD5"
+		name = "CTRL+NUMPAD5"
 		command = "a-zone chest"
-	elem "ALT+NUMPAD2"
-		name = "ALT+NUMPAD2"
+	elem "CTRL+NUMPAD2"
+		name = "CTRL+NUMPAD2"
 		command = "a-zone groin"
-	elem "ALT+NUMPAD7"
-		name = "ALT+NUMPAD7"
+	elem "CTRL+NUMPAD7"
+		name = "CTRL+NUMPAD7"
 		command = "a-zone eyes"
-	elem "ALT+NUMPAD9"
-		name = "ALT+NUMPAD9"
+	elem "CTRL+NUMPAD9"
+		name = "CTRL+NUMPAD9"
 		command = "a-zone mouth"
-	elem "ALT+NUMPAD4"
-		name = "ALT+NUMPAD4"
-		command = "a-zone l_arm"
-	elem "ALT+NUMPAD1"
-		name = "ALT+NUMPAD1"
-		command = "a-zone l_leg"
-	elem "ALT+NUMPAD6"
-		name = "ALT+NUMPAD6"
-		command = "a-zone r_arm"
-	elem "ALT+NUMPAD3"
-		name = "ALT+NUMPAD3"
-		command = "a-zone r_leg"
 	elem "CTRL+NUMPAD4"
-		name = "CTRL+Numpad4"
-		command = "a-zone l_hand"
+		name = "CTRL+NUMPAD4"
+		command = "a-zone l_arm"
 	elem "CTRL+NUMPAD1"
-		name = "CTRL+Numpad1"
-		command = "a-zone l_foot"
+		name = "CTRL+NUMPAD1"
+		command = "a-zone l_leg"
 	elem "CTRL+NUMPAD6"
-		name = "CTRL+Numpad6"
-		command = "a-zone r_hand"
+		name = "CTRL+NUMPAD6"
+		command = "a-zone r_arm"
 	elem "CTRL+NUMPAD3"
-		name = "CTRL+Numpad3"
+		name = "CTRL+NUMPAD3"
+		command = "a-zone r_leg"
+	elem "ALT+NUMPAD4"
+		name = "ALT+Numpad4"
+		command = "a-zone l_hand"
+	elem "ALT+NUMPAD1"
+		name = "ALT+Numpad1"
+		command = "a-zone l_foot"
+	elem "ALT+NUMPAD6"
+		name = "ALT+Numpad6"
+		command = "a-zone r_hand"
+	elem "ALT+NUMPAD3"
+		name = "ALT+Numpad3"
 		command = "a-zone r_foot"
 	elem "CTRL+1"
 		name = "CTRL+1"
@@ -196,7 +196,7 @@ macro "macro"
 		command = ".Me"
 	elem "F5"
 		name = "F5"
-		command = "Aghost"
+		command = "Ghost"
 	elem "F6"
 		name = "F6"
 		command = "Player-Panel-New"
@@ -295,44 +295,44 @@ macro "hotkeymode"
 	elem "6"
 		name = "6"
 		command = "a-bite"
-	elem "ALT+NUMPAD8"
-		name = "ALT+NUMPAD8"
+	elem "CTRL+NUMPAD8"
+		name = "CTRL+NUMPAD8"
 		command = "a-zone head"
-	elem "ALT+NUMPAD5"
-		name = "ALT+NUMPAD5"
+	elem "CTRL+NUMPAD5"
+		name = "CTRL+NUMPAD5"
 		command = "a-zone chest"
-	elem "ALT+NUMPAD2"
-		name = "ALT+NUMPAD2"
+	elem "CTRL+NUMPAD2"
+		name = "CTRL+NUMPAD2"
 		command = "a-zone groin"
-	elem "ALT+NUMPAD7"
-		name = "ALT+NUMPAD7"
+	elem "CTRL+NUMPAD7"
+		name = "CTRL+NUMPAD7"
 		command = "a-zone eyes"
-	elem "ALT+NUMPAD9"
-		name = "ALT+NUMPAD9"
+	elem "CTRL+NUMPAD9"
+		name = "CTRL+NUMPAD9"
 		command = "a-zone mouth"
-	elem "ALT+NUMPAD4"
-		name = "ALT+NUMPAD4"
-		command = "a-zone l_arm"
-	elem "ALT+NUMPAD1"
-		name = "ALT+NUMPAD1"
-		command = "a-zone l_leg"
-	elem "ALT+NUMPAD6"
-		name = "ALT+NUMPAD6"
-		command = "a-zone r_arm"
-	elem "ALT+NUMPAD3"
-		name = "ALT+NUMPAD3"
-		command = "a-zone r_leg"
 	elem "CTRL+NUMPAD4"
-		name = "CTRL+Numpad4"
-		command = "a-zone l_hand"
+		name = "CTRL+NUMPAD4"
+		command = "a-zone l_arm"
 	elem "CTRL+NUMPAD1"
-		name = "CTRL+Numpad1"
-		command = "a-zone l_foot"
+		name = "CTRL+NUMPAD1"
+		command = "a-zone l_leg"
 	elem "CTRL+NUMPAD6"
-		name = "CTRL+Numpad6"
-		command = "a-zone r_hand"
+		name = "CTRL+NUMPAD6"
+		command = "a-zone r_arm"
 	elem "CTRL+NUMPAD3"
-		name = "CTRL+Numpad3"
+		name = "CTRL+NUMPAD3"
+		command = "a-zone r_leg"
+	elem "ALT+NUMPAD4"
+		name = "ALT+Numpad4"
+		command = "a-zone l_hand"
+	elem "ALT+NUMPAD1"
+		name = "ALT+Numpad1"
+		command = "a-zone l_foot"
+	elem "ALT+NUMPAD6"
+		name = "ALT+Numpad6"
+		command = "a-zone r_hand"
+	elem "ALT+NUMPAD3"
+		name = "ALT+Numpad3"
 		command = "a-zone r_foot"
 	elem "CTRL+1"
 		name = "CTRL+1"
@@ -495,7 +495,7 @@ macro "hotkeymode"
 		command = ".Me"
 	elem "F5"
 		name = "F5"
-		command = "Aghost"
+		command = "Ghost"
 	elem "F6"
 		name = "F6"
 		command = "Player-Panel-New"
@@ -778,6 +778,86 @@ window "Telecomms IDE"
 		multi-line = true
 		no-command = true
 
+window "Vocal Implant IDE"
+	elem "Vocal Implant IDE"
+		type = MAIN
+		pos = 281,0
+		size = 569x582
+		anchor1 = none
+		anchor2 = none
+		background-color = #ffffff
+		is-visible = false
+		saved-params = "pos;size;is-minimized;is-maximized"
+		title = "Vocal Implant IDE"
+		statusbar = false
+		on-close = "exitvi"
+	elem "button5"
+		type = BUTTON
+		pos = 209,464
+		size = 70x20
+		anchor1 = 37,80
+		anchor2 = 49,83
+		saved-params = "is-checked"
+		text = "Clear Memory"
+		command = "viclearmem"
+	elem "button4"
+		type = BUTTON
+		pos = 157,464
+		size = 52x20
+		anchor1 = 28,80
+		anchor2 = 37,83
+		saved-params = "is-checked"
+		text = "Revert"
+		command = "virevert"
+	elem "button3"
+		type = BUTTON
+		pos = 105,464
+		size = 52x20
+		anchor1 = 18,80
+		anchor2 = 28,83
+		saved-params = "is-checked"
+		text = "Execute"
+		command = "virun"
+	elem "vierror"
+		type = OUTPUT
+		pos = 0,488
+		size = 566x94
+		anchor1 = 0,84
+		anchor2 = 99,100
+		font-family = "sans-serif"
+		font-size = 9
+		saved-params = "max-lines"
+	elem "button2"
+		type = BUTTON
+		pos = 53,464
+		size = 52x20
+		anchor1 = 9,80
+		anchor2 = 18,83
+		saved-params = "is-checked"
+		text = "Compile"
+		command = "vicompile"
+	elem "button1"
+		type = BUTTON
+		pos = 0,464
+		size = 53x20
+		anchor1 = 0,80
+		anchor2 = 9,83
+		saved-params = "is-checked"
+		text = "Save"
+		command = "visave"
+	elem "vicode"
+		type = INPUT
+		pos = 0,0
+		size = 569x464
+		anchor1 = 0,0
+		anchor2 = 100,80
+		font-family = "Courier"
+		font-size = 10
+		saved-params = ""
+		command = "cancel"
+		multi-line = true
+		no-command = true
+
 window "mainwindow"
 	elem "mainwindow"
 		type = MAIN
@@ -939,12 +1019,13 @@ window "popupwindow"
 		type = MAIN
 		pos = 281,0
 		size = 120x120
-		anchor1 = none
-		anchor2 = none
+		anchor1 = -1,-1
+		anchor2 = -1,-1
 		background-color = none
 		is-visible = false
 		saved-params = "pos;size;is-minimized;is-maximized"
 		statusbar = false
+		can-resize = false
 
 window "rpane"
 	elem "rpane"

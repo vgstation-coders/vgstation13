@@ -4,7 +4,7 @@
 	density = 1
 	anchored = 0
 	name = "computer frame"
-	desc = "A metal frame ready to recieve a circuit board, wires and a glass panel."
+	desc = "A metal frame ready to receive a circuit board, wires and a glass panel."
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "0"
 	var/state = 0
@@ -397,18 +397,6 @@
 	to_chat(user, "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>")
 	contraband_enabled = !contraband_enabled
 
-
-/obj/item/weapon/circuitboard/security/solder_improve(mob/user)
-	if(istype(src,/obj/item/weapon/circuitboard/security/advanced))
-		return ..()
-	if(istype(src,/obj/item/weapon/circuitboard/security/engineering))
-		return ..()
-	else
-		to_chat(user, "<span class='notice'>You locate a short that makes the feed circuitry more elegant.</span>")
-		var/obj/item/weapon/circuitboard/security/advanced/A = new /obj/item/weapon/circuitboard/security/advanced(src.loc)
-		user.put_in_hands(A)
-		qdel(src)
-
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if(0)
@@ -452,7 +440,7 @@
 				return 1
 			if(iscrowbar(P) && circuit)
 				P.playtoolsound(src, 50)
-				user.visible_message("[user] removes the circuit board.", "You remove the circuit board", "You hear metallic sounds.")
+				user.visible_message("[user] removes the circuit board.", "You remove the circuit board.", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "0"
 				circuit.forceMove(src.loc)
@@ -548,6 +536,7 @@
 				if(istype(MA,/obj/machinery/computer))
 					var/obj/machinery/computer/CM = MA
 					CM.empproof = empproof // Transfer status to new item
+					src.transfer_fingerprints_to(CM)
 				qdel(src)
 				return 1
 	return 0

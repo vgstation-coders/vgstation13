@@ -17,6 +17,9 @@
 	var/soda
 	var/alcohol
 
+/obj/machinery/cooking/icemachine/splashable()
+	return FALSE
+
 /obj/machinery/cooking/icemachine/New()
 	create_reagents(500)
 	flags |= NOREACT
@@ -83,9 +86,6 @@
 			return
 
 // Interactions ////////////////////////////////////////////////
-
-/obj/machinery/cooking/icemachine/attack_ai(mob/user)
-	return attack_hand(user)
 
 /obj/machinery/cooking/icemachine/attack_paw(mob/user)
 	return attack_hand(user)

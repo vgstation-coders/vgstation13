@@ -28,7 +28,7 @@
 	light_color = LIGHT_COLOR_GREEN
 
 /obj/machinery/computer/telecomms/monitor/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	user.set_machine(src)
 	var/dat = "<TITLE>Telecommunications Monitor</TITLE><center><b>Telecommunications Monitor</b></center>"
@@ -64,8 +64,11 @@
 				Selected Network Entity: [SelectedMachine.name] ([SelectedMachine.id])<br>
 				Machine Integrity: [SelectedMachine.get_integrity() < 100 ? "<font color = #D70B00><b>[SelectedMachine.get_integrity()]%</b></font color>" : "<b>100%</b>"]<br>
 				[SelectedMachine.stat & EMPED ? "<b>Local Interference Detected:</b><br>[SelectedMachine.emptime] seconds remaining <a href='?src=\ref[src];operation=boost'>\[Boost Signal\]</a><br>" : ""]
-				Filtering Frequencies: [json_encode(SelectedMachine.freq_listening)]<br>
-				Linked Entities: <ol>"}
+				Filtering Frequencies: [json_encode(SelectedMachine.freq_listening)]<br>"}
+			if(istype(SelectedMachine,/obj/machinery/telecomms/server))
+				var/obj/machinery/telecomms/server/TSM = SelectedMachine
+				dat += "Frequency Names: [json_encode(TSM.freq_names)]<br>"
+			dat += "Linked Entities: <ol>"
 			for(var/obj/machinery/telecomms/T in SelectedMachine.links)
 				if(!T.hide)
 					dat += "<li><a href='?src=\ref[src];viewmachine=[T.id]'>\ref[T.id] [T.name]</a> ([T.id])</li>"
@@ -212,7 +215,7 @@
 		return 1
 	updateUsrDialog()
 
-/obj/machinery/computer/telecomms/monitor/emag(mob/user)
+/obj/machinery/computer/telecomms/monitor/emag_act(mob/user)
 	if(!emagged)
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1

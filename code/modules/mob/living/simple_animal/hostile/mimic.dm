@@ -42,6 +42,8 @@
 	var/angry = 0
 	held_items = list()
 
+	blooded = FALSE
+
 /mob/living/simple_animal/hostile/mimic/New()
 	.=..()
 	apply_disguise()

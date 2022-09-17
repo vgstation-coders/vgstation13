@@ -4,6 +4,8 @@
 /turf/var/needs_air_update = 0
 /turf/var/datum/gas_mixture/air
 
+/turf/var/tmp/list/connection/connections
+
 /turf/simulated/proc/update_graphic(list/graphic_add = null, list/graphic_remove = null)
 	if(graphic_add && graphic_add.len)
 		vis_contents += graphic_add
@@ -70,14 +72,32 @@
 
 	var/list/postponed
 	#ifdef ZLEVELS
-	for(var/d = 1, d < 64, d *= 2)
+	for(var/d = 1, d <= 32, d *= 2)
 	#else
-	for(var/d = 1, d < 16, d *= 2)
+	for(var/d = 1, d <= 8, d *= 2)
 	#endif
 
+		#ifdef ZLEVELS
+		var/turf/unsim
+		if(d == UP)
+			unsim = GetAbove(src)
+		else if(d == DOWN)
+			unsim = GetBelow(src)
+		else
+			unsim = get_step(src, d)
+		#else
 		var/turf/unsim = get_step(src, d)
+		#endif
 
 		if(!unsim) // Edge of map.
+			continue
+
+		if(istype(unsim,/turf/portal))
+			var/turf/portal/port = unsim // Area portal handling.
+			if(port.target_turf)
+				unsim = port.target_turf
+
+		if(!unsim) // Above check should be fine, but sanity
 			continue
 
 		var/block = unsim.c_airblock(src)
@@ -177,8 +197,8 @@
 		SSair.connect(src, T)
 
 /turf/proc/post_update_air_properties()
-	if(connections)
-		connections.update_all()
+	for(var/turf/T in connections) //Attempting to loop through null just doesn't do anything.
+		connections[T].update()
 
 /turf/assume_air(datum/gas_mixture/giver) //use this for machines to adjust air
 	return 0
@@ -192,6 +212,9 @@
 	GM[GAS_CARBON] = carbon_dioxide
 	GM[GAS_NITROGEN] = nitrogen
 	GM[GAS_PLASMA] = toxins
+	if(misc_gases?.len)
+		for(var/G in misc_gases)
+			GM[G] = misc_gases[G]
 
 	GM.temperature = temperature
 	GM.update_values()
@@ -201,17 +224,27 @@
 /turf/remove_air(amount as num)
 	var/datum/gas_mixture/GM = new
 
-	var/sum = oxygen + carbon_dioxide + nitrogen + toxins
+	var/sum = oxygen + carbon_dioxide + nitrogen + toxins + misc_gases_sum()
 	if(sum>0)
 		GM[GAS_OXYGEN] = (oxygen/sum)*amount
 		GM[GAS_CARBON] = (carbon_dioxide/sum)*amount
 		GM[GAS_NITROGEN] = (nitrogen/sum)*amount
 		GM[GAS_PLASMA] = (toxins/sum)*amount
+		if(misc_gases?.len)
+			for(var/G in misc_gases)
+				GM[G] = (misc_gases[G]/sum)*amount
 
 	GM.temperature = temperature
 	GM.update_values()
 
 	return GM
+
+/turf/proc/misc_gases_sum()
+	var/sum = 0
+	if(misc_gases?.len)
+		for(var/G in misc_gases)
+			sum += misc_gases[G]
+	return sum
 
 /turf/simulated/assume_air(datum/gas_mixture/giver)
 	var/datum/gas_mixture/my_air = return_air()
@@ -243,6 +276,9 @@
 		GAS_CARBON, carbon_dioxide,
 		GAS_NITROGEN, nitrogen,
 		GAS_PLASMA, toxins)
+	if(misc_gases?.len)
+		for(var/G in misc_gases)
+			air.adjust_gas(G, misc_gases[G])
 
 /turf/simulated/proc/c_copy_air()
 	if(!air)

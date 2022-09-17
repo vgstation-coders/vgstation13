@@ -8,8 +8,7 @@
 	var/on = 0
 	var/obj/item/weapon/cell/high/cell = /obj/item/weapon/cell/high
 	var/powercost = 5
-	light_range = 5
-	light_power = 2
+	var/brightness_on = 8	//This time justified in balance. Encumbering but nice lightning
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE
 
@@ -30,20 +29,16 @@
 			if(cell.charge < powercost)
 				on = 0
 				update_icon()
-				kill_light()
+				set_light(0)
 				visible_message("<span class='warning'>\The [src] shuts down!</span>")
 				return
 
 		else
 			on = 0
 			update_icon()
-			kill_light()
+			set_light(0)
 			visible_message("<span class='warning'>\The [src] shuts down!</span>")
 			return
-
-/obj/machinery/floodlight/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/floodlight/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -62,12 +57,12 @@
 
 	if(on)
 		on = 0
-		kill_light()
+		set_light(0)
 	else
 		if(!cell || !cell.charge > powercost)
 			return
 		on = 1
-		set_light()
+		set_light(brightness_on)
 
 	user.visible_message("<span class='notice'>[user] turns \the [src] [on ? "on":"off"].</span>", \
 	"<span class='notice'>You turn \the [src] [on ? "on":"off"].</span>")

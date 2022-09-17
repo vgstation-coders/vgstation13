@@ -18,144 +18,26 @@
 	icon_off = "miningsecoff"
 	req_access = list(access_mining)
 
-/obj/structure/closet/secure_closet/miner/New()
-	..()
-	sleep(2)
-	if(prob(50))
-		new /obj/item/weapon/storage/backpack/industrial(src)
-	else
-		new /obj/item/weapon/storage/backpack/satchel_eng(src)
-	new /obj/item/device/radio/headset/headset_mining(src)
-	new /obj/item/clothing/under/rank/miner(src)
-	new /obj/item/clothing/gloves/black(src)
-	new /obj/item/clothing/shoes/black(src)
-	new /obj/item/device/mining_scanner(src)
-	new /obj/item/weapon/storage/bag/ore(src)
-	new /obj/item/device/flashlight/lantern(src)
-	new /obj/item/weapon/pickaxe/shovel(src)
-	new /obj/item/weapon/pickaxe(src)
-	new /obj/item/clothing/glasses/scanner/meson(src)
-	new /obj/item/device/gps/mining(src)
-	new /obj/item/weapon/storage/belt/mining(src)
-
-
-/**********************Shuttle Computer**************************/
-/*
-var/mining_shuttle_tickstomove = 10
-var/mining_shuttle_moving = 0
-var/mining_shuttle_location = 0 // 0 = station 13, 1 = mining station
-
-proc/move_mining_shuttle()
-	if(mining_shuttle_moving)
-		return
-	mining_shuttle_moving = 1
-	spawn(mining_shuttle_tickstomove*10)
-		var/area/fromArea
-		var/area/toArea
-		if (mining_shuttle_location == 1)
-			fromArea = locate(/area/shuttle/mining/outpost)
-			toArea = locate(/area/shuttle/mining/station)
-		else
-			fromArea = locate(/area/shuttle/mining/station)
-			toArea = locate(/area/shuttle/mining/outpost)
-			var/list/search = fromArea.search_contents_for(/obj/item/weapon/disk/nuclear)
-			if(!isemptylist(search))
-				mining_shuttle_moving = 0
-				return
-
-		var/list/dstturfs = list()
-		var/throwy = world.maxy
-
-		for(var/turf/T in toArea)
-			dstturfs += T
-			if(T.y < throwy)
-				throwy = T.y
-
-		// hey you, get out of the way!
-		for(var/turf/T in dstturfs)
-			// find the turf to move things to
-			var/turf/D = locate(T.x, throwy - 1, 1)
-			//var/turf/E = get_step(D, SOUTH)
-			for(var/atom/movable/AM as mob|obj in T)
-				AM.Move(D)
-
-			if(istype(T, /turf/simulated))
-				del(T)
-		//Do I really need to explain this loop?
-		for(var/atom/A in toArea)
-			if(istype(A,/mob/living))
-				var/mob/living/unlucky_person = A
-				unlucky_person.gib()
-			// Weird things happen when this shit gets in the way.
-			if(istype(A,/obj/structure/lattice) \
-				|| istype(A, /obj/structure/window) \
-				|| istype(A, /obj/structure/grille))
-				qdel(A)
-
-		fromArea.move_contents_to(toArea)
-		if (mining_shuttle_location)
-			mining_shuttle_location = 0
-		else
-			mining_shuttle_location = 1
-
-		for(var/mob/M in toArea)
-			if(M.client)
-				spawn(0)
-					if(M.locked_to)
-						shake_camera(M, 3, 1) // locked_to, not a lot of shaking
-					else
-						shake_camera(M, 10, 1) // unlocked_to, HOLY SHIT SHAKE THE ROOM
-			if(istype(M, /mob/living/carbon))
-				if(!M.locked_to)
-					M.Knockdown(3)
-
-		mining_shuttle_moving = 0
-	return
-
-/obj/machinery/computer/mining_shuttle
-	name = "mining shuttle console"
-	icon = 'icons/obj/computer.dmi'
-	icon_state = "shuttle"
-	req_access = list(access_mining)
-	circuit = "/obj/item/weapon/circuitboard/mining_shuttle"
-	var/location = 0 //0 = station, 1 = mining base
-	machine_flags = EMAGGABLE | SCREWTOGGLE
-	light_color = LIGHT_COLOR_CYAN
-
-/obj/machinery/computer/mining_shuttle/attack_hand(user as mob)
-	if(..(user))
-		return
-	src.add_fingerprint(usr)
-	var/dat = "<center>Mining shuttle:<br> <b><A href='?src=\ref[src];move=[1]'>Send</A></b></center>"
-	user << browse("[dat]", "window=miningshuttle;size=200x100")
-
-/obj/machinery/computer/mining_shuttle/Topic(href, href_list)
-	if(..())
-		return
-	usr.set_machine(src)
-	src.add_fingerprint(usr)
-	if(href_list["move"])
-		if(ticker.mode.name == "blob")
-			if(ticker.mode:declared)
-				to_chat(usr, "Under directive 7-10, [station_name()] is quarantined until further notice.")
-				return
-		var/area/A = locate(/area/shuttle/mining/station)
-		if(!mining_shuttle_location)
-			var/list/search = A.search_contents_for(/obj/item/weapon/disk/nuclear)
-			if(!isemptylist(search))
-				to_chat(usr, "<span class='notice'>The nuclear disk is too precious for Nanotrasen to send it to an Asteroid.</span>")
-				return
-		if (!mining_shuttle_moving)
-			to_chat(usr, "<span class='notice'>Shuttle received message and will be sent shortly.</span>")
-			move_mining_shuttle()
-		else
-			to_chat(usr, "<span class='notice'>Shuttle is already moving.</span>")
-
-/obj/machinery/computer/mining_shuttle/emag(mob/user as mob)
-	..()
-	src.req_access = list()
-	to_chat(usr, "You disable the console's access requirement.")
-*/
+/obj/structure/closet/secure_closet/miner/atoms_to_spawn()
+	return list(
+		pick(
+			/obj/item/weapon/storage/backpack/industrial,
+			/obj/item/weapon/storage/backpack/satchel_eng,
+		),
+		/obj/item/device/radio/headset/headset_mining,
+		/obj/item/clothing/under/rank/miner,
+		/obj/item/clothing/gloves/black,
+		/obj/item/clothing/shoes/black,
+		/obj/item/device/mining_scanner,
+		/obj/item/weapon/storage/bag/ore,
+		/obj/item/device/flashlight/lantern,
+		/obj/item/weapon/pickaxe/shovel,
+		/obj/item/weapon/pickaxe,
+		/obj/item/clothing/glasses/scanner/meson,
+		/obj/item/device/gps/mining,
+		/obj/item/weapon/storage/belt/mining,
+	)
+	
 /******************************Lantern*******************************/
 
 /obj/item/device/flashlight/lantern
@@ -164,7 +46,7 @@ proc/move_mining_shuttle()
 	icon_state = "lantern"
 	item_state = "lantern"
 	desc = "A mining lantern."
-	light_range = 5			// luminosity when on
+	brightness_on = 6			// luminosity when on
 	light_power = 2
 	light_color = LIGHT_COLOR_TUNGSTEN
 
@@ -196,7 +78,7 @@ proc/move_mining_shuttle()
 	w_class = W_CLASS_LARGE
 	sharpness = 0.6
 	sharpness_flags = SHARP_TIP
-	starting_materials = list(MAT_IRON = 3750) //one sheet, but where can you make them?
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL * 4, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5) // Blacksmithing recipe
 	w_type = RECYK_METAL
 	toolspeed = 0.4 //moving the delay to an item var so R&D can make improved picks. --NEO
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
@@ -226,6 +108,7 @@ proc/move_mining_shuttle()
 	toolspeed = 0.3
 	origin_tech = Tc_MATERIALS + "=3"
 	desc = "This makes no metallurgic sense."
+	starting_materials = list(MAT_SILVER = CC_PER_SHEET_SILVER * 4, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5)
 
 /obj/item/weapon/pickaxe/jackhammer
 	name = "sonic jackhammer"
@@ -256,6 +139,7 @@ proc/move_mining_shuttle()
 	toolspeed = 0.2
 	origin_tech = Tc_MATERIALS + "=4"
 	desc = "This makes no metallurgic sense."
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD * 4, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5)
 
 /obj/item/weapon/pickaxe/plasmacutter
 	name = "plasma torch"
@@ -344,7 +228,8 @@ proc/move_mining_shuttle()
 	toolspeed = 0.1
 	sharpness = 1.2
 	origin_tech = Tc_MATERIALS + "=6;" + Tc_ENGINEERING + "=4"
-	desc = "A pickaxe with a diamond pick head, this is just like minecraft."
+	desc = "A pickaxe with a diamond coated pick head, this is just like minecraft."
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL * 3.9, MAT_DIAMOND = CC_PER_SHEET_DIAMOND * 0.1, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5) // Letting miners recycle their diamond pickaxes into 4 diamond sheets would be a tad bit much, so let's make it mostly iron with diamond bits
 
 /obj/item/weapon/pickaxe/drill
 	name = "mining drill" // Can dig sand as well!
@@ -394,6 +279,18 @@ proc/move_mining_shuttle()
 	toolspeed = 0.4
 	diggables = DIG_SOIL //soil only
 
+/obj/item/weapon/pickaxe/shovel/attack(var/mob/living/M, var/mob/user)
+	var/obj/item/I
+	if(user.zone_sel.selecting == "l_hand")
+		I = M.get_held_item_by_index(GRASP_LEFT_HAND)
+	else if(user.zone_sel.selecting == "r_hand")
+		I = M.get_held_item_by_index(GRASP_RIGHT_HAND)
+	if(I && istype(I,src.type) && user.a_intent == I_HELP)
+		playsound(get_turf(user), "trayhit", 50, 1)
+		visible_message("<span class='notice'>[user] high shovels [M].</span>", "<span class='notice'>You high shovel [M].</span>")
+	else
+		..()
+
 /obj/item/weapon/pickaxe/shovel/spade
 	name = "spade"
 	desc = "A small tool for digging and moving dirt."
@@ -403,7 +300,7 @@ proc/move_mining_shuttle()
 	sharpness = 0.8
 	throwforce = 7.0
 	w_class = W_CLASS_SMALL
-
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL * 2.5) // costs less than a full pick, come on man it's a tiny ass shovel
 	toolspeed = 0.6 //slower than the large shovel
 
 
@@ -434,7 +331,7 @@ proc/move_mining_shuttle()
 
 /obj/item/device/wormhole_jaunter/attack_self(mob/user as mob)
 	var/turf/device_turf = get_turf(user)
-	if(!device_turf || device_turf.z == CENTCOMM_Z || device_turf.z > map.zLevels.len)
+	if(!device_turf || device_turf.z == map.zCentcomm || device_turf.z > map.zLevels.len)
 		to_chat(user, "<span class='notice'>You're having difficulties getting [src] to work.</span>")
 		return
 	else

@@ -78,7 +78,7 @@
 	if (!invasion)
 		var/list/found_vents = list()
 		for(var/obj/machinery/atmospherics/unary/vent_pump/v in atmos_machines)
-			if(!v.welded && v.z == STATION_Z && v.canSpawnMice==1) // No more spawning in atmos.  Assuming the mappers did their jobs, anyway.
+			if(!v.welded && v.z == map.zMainStation && v.canSpawnMice==1) // No more spawning in atmos.  Assuming the mappers did their jobs, anyway.
 				found_vents.Add(v)
 		if(found_vents.len)
 			invasion = get_turf(pick(found_vents))

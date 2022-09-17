@@ -55,9 +55,10 @@
 /obj/item/projectile/rocket/to_bump(var/atom/A)
 	var/A_turf = get_turf(A)
 	..()
-	explosion(A_turf, exdev, exheavy, exlight, exflash)
-	if(!gcDestroyed)
-		qdel(src)
+	if(special_collision == PROJECTILE_COLLISION_DEFAULT || special_collision == PROJECTILE_COLLISION_BLOCKED)
+		explosion(A_turf, exdev, exheavy, exlight, exflash, whodunnit = firer)
+		if(!gcDestroyed)
+			qdel(src)
 
 /obj/item/projectile/rocket/lowyield
 	name = "low yield rocket"
@@ -245,7 +246,7 @@
 	return 1
 
 /obj/item/projectile/rocket/nikita/proc/detonate(var/atom/A)
-	explosion(A, exdev, exheavy, exlight, exflash)
+	explosion(A, exdev, exheavy, exlight, exflash, whodunnit = firer)
 	if(!gcDestroyed)
 		qdel(src)
 
@@ -301,7 +302,7 @@
 /obj/item/projectile/rocket/clown/pizza
 	name = "pizza rocket"
 	icon_state = "rpground_pizza"
-	payload_type = /obj/item/weapon/reagent_containers/food/snacks/margheritaslice
+	payload_type = /obj/item/weapon/reagent_containers/food/snacks/margheritaslice/rocket
 
 /obj/item/projectile/rocket/clown/pie
 	name = "pie rocket"

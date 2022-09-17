@@ -7,7 +7,7 @@ var/list/station_holomaps = list()
 	icon_state = "station_map"
 	anchored = 1
 	density = 0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 10
 	dir = NORTH
@@ -98,7 +98,7 @@ var/list/station_holomaps = list()
 		to_chat(user, "<span class='warning'>You need to stand in front of \the [src].</span>")
 		return
 
-	if(isliving(user) && anchored && !(stat & (NOPOWER|BROKEN)))
+	if(isliving(user) && anchored && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 		if(user.hud_used && user.hud_used.holomap_obj)
 			holomap_datum.station_map.loc = user.hud_used.holomap_obj
 			holomap_datum.station_map.alpha = 0
@@ -128,7 +128,7 @@ var/list/station_holomaps = list()
 	user.station_holomap.toggleHolomap(user, isAI(user))
 
 /obj/machinery/station_map/process()
-	if((stat & (NOPOWER|BROKEN)) || !anchored)
+	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || !anchored)
 		stopWatching()
 
 	checkPosition()
@@ -159,7 +159,7 @@ var/list/station_holomaps = list()
 	overlays.len = 0
 	if(stat & BROKEN)
 		icon_state = "station_mapb"
-	else if((stat & NOPOWER) || !anchored)
+	else if((stat & (FORCEDISABLE|NOPOWER)) || !anchored)
 		icon_state = "station_map0"
 	else
 		icon_state = "station_map"
@@ -249,12 +249,13 @@ var/list/station_holomaps = list()
 	var/datum/station_holomap/holomap_datum
 
 	var/bogus = 0
-	var/lastZ = STATION_Z
+	var/lastZ
 	var/prevent_close = 0
 
 /obj/item/device/station_map/New()
 	..()
 	holomap_datum = new()
+	lastZ = map.zMainStation
 
 /obj/item/device/station_map/attack_self(var/mob/user)
 	toggleHolomap(user)
@@ -401,7 +402,7 @@ var/list/station_holomaps = list()
 	update_icon()
 
 /obj/machinery/station_map/strategic/attack_hand(var/mob/user)
-	if(isliving(user) && anchored && !(stat & (NOPOWER|BROKEN)))
+	if(isliving(user) && anchored && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 		if( (holoMiniMaps.len < user.loc.z) || (holoMiniMaps[user.loc.z] == null ))
 			to_chat(user, "<span class='notice'>It doesn't seem to be working.</span>")
 			return
@@ -449,7 +450,7 @@ var/list/station_holomaps = list()
 
 /obj/machinery/station_map/strategic/update_icon()
 	overlays.len = 0
-	if(!(stat & (NOPOWER|BROKEN)))
+	if(!(stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		if(!small_station_map)
 			small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])
 			small_station_map.plane = ABOVE_LIGHTING_PLANE

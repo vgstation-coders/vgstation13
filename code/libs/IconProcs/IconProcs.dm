@@ -11,14 +11,14 @@
 #define TO_HEX_DIGIT(n) ascii2text((n&15) + ((n&15)<10 ? 48 : 87))
 
 // Multiply all alpha values by this float
-icon/proc/ChangeOpacity(opacity = 1.0)
+/icon/proc/ChangeOpacity(opacity = 1.0)
 	MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,opacity, 0,0,0,0)
 
 // Convert to grayscale
-icon/proc/GrayScale()
+/icon/proc/GrayScale()
 	MapColors(0.3,0.3,0.3, 0.59,0.59,0.59, 0.11,0.11,0.11, 0,0,0)
 
-icon/proc/ColorTone(tone)
+/icon/proc/ColorTone(tone)
 	GrayScale()
 
 	var/list/TONE = ReadRGB(tone)
@@ -37,14 +37,14 @@ icon/proc/ColorTone(tone)
 		Blend(upper, ICON_ADD)
 
 // Take the minimum color of two icons; combine transparency as if blending with ICON_ADD
-icon/proc/MinColors(icon)
+/icon/proc/MinColors(icon)
 	var/icon/I = new(src)
 	I.Opaque()
 	I.Blend(icon, ICON_SUBTRACT)
 	Blend(I, ICON_SUBTRACT)
 
 // Take the maximum color of two icons; combine opacity as if blending with ICON_OR
-icon/proc/MaxColors(icon)
+/icon/proc/MaxColors(icon)
 	var/icon/I
 	if(isicon(icon))
 		I = new(icon)
@@ -60,21 +60,21 @@ icon/proc/MaxColors(icon)
 	Blend(I, ICON_OR)
 
 // make this icon fully opaque--transparent pixels become black
-icon/proc/Opaque(background = "#000000")
+/icon/proc/Opaque(background = "#000000")
 	SwapColor(null, background)
 	MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,0, 0,0,0,1)
 
 // Change a grayscale icon into a white icon where the original color becomes the alpha
 // I.e., black -> transparent, gray -> translucent white, white -> solid white
-icon/proc/BecomeAlphaMask()
+/icon/proc/BecomeAlphaMask()
 	SwapColor(null, "#000000ff")	// don't let transparent become gray
 	MapColors(0,0,0,0.3, 0,0,0,0.59, 0,0,0,0.11, 0,0,0,0, 1,1,1,0)
 
-icon/proc/UseAlphaMask(mask)
+/icon/proc/UseAlphaMask(mask)
 	Opaque()
 	AddAlphaMask(mask)
 
-icon/proc/AddAlphaMask(mask)
+/icon/proc/AddAlphaMask(mask)
 	var/icon/M = new(mask)
 	M.Blend("#ffffff", ICON_SUBTRACT)
 	// apply mask
@@ -102,7 +102,7 @@ icon/proc/AddAlphaMask(mask)
 		Higher value means brighter color
  */
 
-proc/ReadRGB(rgb)
+/proc/ReadRGB(rgb)
 	if(!rgb)
 		return
 
@@ -167,7 +167,7 @@ proc/ReadRGB(rgb)
 	if(usealpha)
 		. += alpha
 
-proc/ReadHSV(hsv)
+/proc/ReadHSV(hsv)
 	if(!hsv)
 		return
 
@@ -221,7 +221,7 @@ proc/ReadHSV(hsv)
 	if(usealpha)
 		. += alpha
 
-proc/HSVtoRGB(hsv)
+/proc/HSVtoRGB(hsv)
 	if(!hsv)
 		return "#000000"
 	var/list/HSV = ReadHSV(hsv)
@@ -270,7 +270,7 @@ proc/HSVtoRGB(hsv)
 
 	return (HSV.len > 3) ? rgb(r,g,b,HSV[4]) : rgb(r,g,b)
 
-proc/RGBtoHSV(rgb)
+/proc/RGBtoHSV(rgb)
 	if(!rgb)
 		return "#0000000"
 	var/list/RGB = ReadRGB(rgb)
@@ -321,7 +321,7 @@ proc/RGBtoHSV(rgb)
 
 	return hsv(hue, sat, val, (RGB.len>3 ? RGB[4] : null))
 
-proc/hsv(hue, sat, val, alpha)
+/proc/hsv(hue, sat, val, alpha)
 	if(hue < 0 || hue >= 1536)
 		hue %= 1536
 	if(hue < 0)
@@ -363,7 +363,7 @@ proc/hsv(hue, sat, val, alpha)
 
 	amount<0 or amount>1 are allowed
  */
-proc/BlendHSV(hsv1, hsv2, amount)
+/proc/BlendHSV(hsv1, hsv2, amount)
 	var/list/HSV1 = ReadHSV(hsv1)
 	var/list/HSV2 = ReadHSV(hsv2)
 
@@ -435,7 +435,7 @@ proc/BlendHSV(hsv1, hsv2, amount)
 
 	amount<0 or amount>1 are allowed
  */
-proc/BlendRGB(rgb1, rgb2, amount)
+/proc/BlendRGB(rgb1, rgb2, amount)
 	var/list/RGB1 = ReadRGB(rgb1)
 	var/list/RGB2 = ReadRGB(rgb2)
 
@@ -453,10 +453,10 @@ proc/BlendRGB(rgb1, rgb2, amount)
 
 	return isnull(alpha) ? rgb(r, g, b) : rgb(r, g, b, alpha)
 
-proc/BlendRGBasHSV(rgb1, rgb2, amount)
+/proc/BlendRGBasHSV(rgb1, rgb2, amount)
 	return HSVtoRGB(RGBtoHSV(rgb1), RGBtoHSV(rgb2), amount)
 
-proc/HueToAngle(hue)
+/proc/HueToAngle(hue)
 	// normalize hsv in case anything is screwy
 	if(hue < 0 || hue >= 1536)
 		hue %= 1536
@@ -466,7 +466,7 @@ proc/HueToAngle(hue)
 	hue -= hue >> 8
 	return hue / (1530/360)
 
-proc/AngleToHue(angle)
+/proc/AngleToHue(angle)
 	// normalize hsv in case anything is screwy
 	if(angle < 0 || angle >= 360)
 		angle -= 360 * round(angle / 360)
@@ -477,7 +477,7 @@ proc/AngleToHue(angle)
 
 
 // positive angle rotates forward through red->green->blue
-proc/RotateHue(hsv, angle)
+/proc/RotateHue(hsv, angle)
 	var/list/HSV = ReadHSV(hsv)
 
 	// normalize hsv in case anything is screwy
@@ -504,13 +504,13 @@ proc/RotateHue(hsv, angle)
 	return hsv(HSV[1], HSV[2], HSV[3], (HSV.len > 3 ? HSV[4] : null))
 
 // Convert an rgb color to grayscale
-proc/GrayScale(rgb)
+/proc/GrayScale(rgb)
 	var/list/RGB = ReadRGB(rgb)
 	var/gray = RGB[1]*0.3 + RGB[2]*0.59 + RGB[3]*0.11
 	return (RGB.len > 3) ? rgb(gray, gray, gray, RGB[4]) : rgb(gray, gray, gray)
 
 // Change grayscale color to black->tone->white range
-proc/ColorTone(rgb, tone)
+/proc/ColorTone(rgb, tone)
 	var/list/RGB = ReadRGB(rgb)
 	var/list/TONE = ReadRGB(tone)
 

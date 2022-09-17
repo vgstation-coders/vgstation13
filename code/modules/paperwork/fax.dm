@@ -10,7 +10,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	req_one_access = list(access_lawyer, access_heads)
 	anchored = 1
 	density = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 30
 	active_power_usage = 200
 	power_channel = EQUIP
@@ -49,9 +49,6 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
 			scancount += SP.rating-1
 	cooldown_time = initial(cooldown_time) - 300*scancount
-
-/obj/machinery/faxmachine/attack_ai(mob/user as mob)
-	return attack_hand(user)
 
 /obj/machinery/faxmachine/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -200,6 +197,9 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	if(stat & BROKEN)
 		to_chat(user, "<span class = 'warning'>\The [src] is broken!</span>")
 		return
+	if(stat & FORCEDISABLE)
+		to_chat(user, "<span class = 'warning'>\The [src] is unresponsive!</span>")
+		return
 	if(istype(O, /obj/item/weapon/paper))
 		if(!tofax)
 			if(user.drop_item(O, src))
@@ -239,10 +239,10 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 //why the fuck doesnt the thing show as orange
 	var/admin_msg = "Receiving '[sentname]' to <b>[centcomm_dpt]</b> via secure connection..."
 	var/msg = "<span class='notice'><b>  CENTCOMM FAX: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<a href='?_src_=holder;role_panel=\ref[Sender]'>RP</a>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: [admin_msg] <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
-	send_prayer_to_admins(msg, admin_msg, 'sound/effects/fax.ogg', "Centcomm Fax", key_name(Sender, 1), get_turf(Sender))
+	send_prayer_to_admins(msg, admin_msg, 'sound/effects/fax.ogg', "Centcomm Fax", key_name(Sender), get_turf(Sender))
 
 	for (var/obj/machinery/faxmachine/fax in allfaxes)
-		if (fax.z == CENTCOMM_Z)
+		if (fax.z == map.zCentcomm)
 			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(fax)
 			P.name = "[sentname]"
 			P.info = "[sent.info]"
@@ -254,7 +254,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	for(var/obj/machinery/faxmachine/F in allfaxes)
 
 		if(centcomm || F.department == dpt )
-			if(! (F.stat & (BROKEN|NOPOWER) ) )
+			if(! (F.stat & (BROKEN|NOPOWER|FORCEDISABLE) ) )
 
 				flick("faxreceive", F)
 
@@ -299,12 +299,12 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
 
 /proc/SendMerchantFax(mob/living/carbon/human/merchant)
-	var/obj/item/weapon/paper/merchantreport/P
+	var/obj/item/weapon/paper/merchant/report/P
 	for(var/obj/machinery/faxmachine/F in allfaxes)
 		if(F.department == "Internal Affairs" && !F.stat)
 			flick("faxreceive", F)
 			playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
-			P = new /obj/item/weapon/paper/merchantreport(F,merchant)
+			P = new /obj/item/weapon/paper/merchant/report(F,merchant)
 			spawn(2 SECONDS)
 				P.forceMove(F.loc)
 	return P

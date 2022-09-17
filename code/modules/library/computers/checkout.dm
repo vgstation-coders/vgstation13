@@ -22,6 +22,12 @@
 	pass_flags = PASSTABLE
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
+
 /obj/machinery/computer/library/checkout/attack_hand(var/mob/user as mob)
 	if(..())
 		return
@@ -196,7 +202,7 @@
 	B.set_content(dat)
 	B.open()
 
-/obj/machinery/computer/library/checkout/emag(mob/user)
+/obj/machinery/computer/library/checkout/emag_act(mob/user)
 	if(!emagged)
 		src.emagged = 1
 		if(user)

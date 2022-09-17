@@ -1,4 +1,6 @@
 
+// Tattoos are currently unobtainable and being reworked. Blood Daggers and Cult Chat will be available to cultists in other ways until then.
+
 /datum/cult_tattoo
 	var/name = "cult tattoo"
 	var/desc = ""
@@ -29,7 +31,7 @@
 ///////////////////////////
 var/list/blood_communion = list()
 
-/datum/cult_tattoo/bloodpool
+/datum/cult_tattoo/bloodpool 
 	name = TATTOO_POOL
 	desc = "All blood costs reduced by 20%. Tributes are split with other bearers of this mark."
 	icon_state = "bloodpool"
@@ -39,6 +41,7 @@ var/list/blood_communion = list()
 	..()
 	if (iscultist(M))
 		blood_communion.Add(iscultist(M))
+
 
 /datum/cult_tattoo/silent
 	name = TATTOO_SILENT
@@ -54,9 +57,10 @@ var/list/blood_communion = list()
 
 /datum/cult_tattoo/dagger/getTattoo(var/mob/M)
 	..()
+	/*
 	if (iscultist(M))
 		M.add_spell(new /spell/cult/blood_dagger, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-
+	*/
 
 ///////////////////////////
 //                       //
@@ -64,7 +68,7 @@ var/list/blood_communion = list()
 //                       //
 ///////////////////////////
 
-/datum/cult_tattoo/holy
+/datum/cult_tattoo/holy // doesn't actually do anything right now beside give you a cool tattoo
 	name = TATTOO_HOLY
 	desc = "Holy water will now only slow you down a bit, and no longer prevent you from casting."
 	icon_state = "holy"
@@ -81,11 +85,21 @@ var/list/blood_communion = list()
 	if (iscultist(M))
 		M.add_spell(new /spell/cult/arcane_dimension, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
-/datum/cult_tattoo/chat
+
+/datum/cult_tattoo/rune_store
+	name = TATTOO_RUNESTORE
+	desc = "Allows you to trace a rune onto your skin and activate it at will."
+	icon_state = "rune"
+	tier = 2
+
+// Obsolete - Spire grants :x communication when built.
+/*
+/datum/cult_tattoo/chat // functionality moved to Spires
 	name = TATTOO_CHAT
 	desc = "Chat with the cult using :x."
 	icon_state = "chat"
 	tier = 2
+*/
 
 ///////////////////////////
 //                       //
@@ -98,6 +112,7 @@ var/list/blood_communion = list()
 	desc = "Acquire a new, fully healed body that cannot feel pain."
 	icon_state = "manifest"
 	tier = 3
+
 
 /datum/cult_tattoo/manifest/getTattoo(var/mob/M)
 	..()
@@ -119,14 +134,17 @@ var/list/blood_communion = list()
 	H.status_flags &= ~CANSTUN
 	H.status_flags &= ~CANKNOCKDOWN
 	H.status_flags &= ~CANPARALYSE
-	H.fixblood()
 	H.regenerate_icons()
+	H.update_dna_from_appearance()
 
+// Obsolete - Runes are traced instantly now.
+/*
 /datum/cult_tattoo/fast
 	name = TATTOO_FAST
 	desc = "Trace runes 66% faster."
 	icon_state = "fast"
 	tier = 3
+*/
 
 /datum/cult_tattoo/shortcut
 	name = TATTOO_SHORTCUT

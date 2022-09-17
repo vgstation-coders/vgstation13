@@ -190,7 +190,7 @@
 	range = 0
 	cast_delay = 20
 
-	summon_type = list(/obj/structure/cult_legacy/pylon)
+	summon_type = list(/obj/structure/cult/pylon)
 
 	cast_sound = 'sound/items/welder.ogg'
 	hud_state = "const_pylon"
@@ -202,14 +202,6 @@
 		playsound(user, 'sound/items/welder.ogg', 100, 1)
 	. = ..()
 
-/spell/aoe_turf/conjure/pylon/cast(list/targets)
-	..()
-	var/turf/spawn_place = pick(targets)
-	for(var/obj/structure/cult_legacy/pylon/P in spawn_place.contents)
-		if(P.isbroken)
-			P.repair(usr)
-		continue
-	return
 
 /spell/aoe_turf/conjure/forcewall/lesser
 	name = "Shield"
@@ -370,6 +362,7 @@
 
 /spell/aoe_turf/conjure/hex/on_creation(var/mob/living/simple_animal/hostile/hex/AM, var/mob/user)
 	AM.master = user
+	AM.no_master = FALSE
 	AM.master.minions.Add(AM)
 	var/mob/living/simple_animal/construct/builder = user
 	AM.setupglow(builder.construct_color)
@@ -410,7 +403,7 @@
 		return 1
 	var/list/choices = list(
 		list("Altar", "radial_altar", "Allows for crafting soul gems, and performing various other cult rituals."),
-		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos."),
+		list("Spire", "radial_spire", "Allows all cultists in the level to communicate with each others using :x"),
 		list("Forge", "radial_forge", "Enables the forging of cult blades and armor, as well as new construct shells. Raise the temperature of nearby creatures."),
 	)
 	var/structure = show_radial_menu(user,T,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
@@ -428,7 +421,7 @@
 
 /spell/aoe_turf/conjure/path_entrance
 	name = "Path Entrance"
-	desc = "Place a shortcut through the veil between this world and the other one."
+	desc = "Place an entrance to a shortcut through the veil between this world and the other one."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 600
@@ -436,7 +429,7 @@
 	invocation = "none"
 	invocation_type = SpI_NONE
 	range = 1
-	summon_type = list(/obj/effect/rune/blood_cult)
+	summon_type = list(/obj/effect/rune)
 
 	override_base = "cult"
 	hud_state = "const_entrance"
@@ -459,15 +452,13 @@
 	var/turf/T = R.loc
 	log_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
 	message_admins("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
-	var/datum/runeset/rune_set = global_runesets["blood_cult"]
-	write_rune_word(R.loc, rune_set.words["travel"])
-	write_rune_word(R.loc, rune_set.words["self"])
-	write_rune_word(R.loc, rune_set.words["other"])
+	write_full_rune(R.loc, /datum/rune_spell/portalentrance)
 	R.one_pulse()
+	R.trigger(user)
 
 /spell/aoe_turf/conjure/path_exit
-	name = "Path Entrance"
-	desc = "Place a shortcut through the veil between this world and the other one."
+	name = "Path Exit"
+	desc = "Place an exit to a shotcut through the veil between this world and the other one."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 600
@@ -475,7 +466,7 @@
 	invocation = "none"
 	invocation_type = SpI_NONE
 	range = 1
-	summon_type = list(/obj/effect/rune/blood_cult)
+	summon_type = list(/obj/effect/rune)
 
 	override_base = "cult"
 	hud_state = "const_exit"
@@ -498,11 +489,9 @@
 	var/turf/T = R.loc
 	log_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
 	message_admins("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
-	var/datum/runeset/rune_set = global_runesets["blood_cult"]
-	write_rune_word(R.loc, rune_set.words["travel"])
-	write_rune_word(R.loc, rune_set.words["other"])
-	write_rune_word(R.loc, rune_set.words["self"])
+	write_full_rune(R.loc, /datum/rune_spell/portalexit)
 	R.one_pulse()
+	R.trigger(user)
 
 
 /obj/effect/artificer_underlay

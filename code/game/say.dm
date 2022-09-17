@@ -41,7 +41,7 @@ var/global/lastDecTalkUse = 0
 /atom/movable/proc/can_speak()
 	return 1
 
-/atom/movable/proc/send_speech(var/datum/speech/speech, var/range=7)
+/atom/movable/proc/send_speech(var/datum/speech/speech, var/range=7, var/bubble_type)
 	say_testing(src, "/atom/movable/proc/send_speech() start, msg = [speech.message]; message_range = [range]; language = [speech.language ? speech.language.name : "None"];")
 	if(isnull(range))
 		range = 7
@@ -52,6 +52,7 @@ var/global/lastDecTalkUse = 0
 		listeners |= observers
 	for(var/atom/movable/AM in listeners)
 		AM.Hear(speech, rendered)
+	send_speech_bubble(speech.message, bubble_type, listeners)
 
 /atom/movable/proc/atmospheric_speech(var/datum/speech/speech, var/range=7)
 	var/turf/T = get_turf(speech.speaker)
@@ -102,9 +103,11 @@ var/global/lastDecTalkUse = 0
 /atom/movable/proc/render_speech(var/datum/speech/speech)
 	say_testing(src, "render_speech() - Freq: [speech.frequency], radio=\ref[speech.radio]")
 	var/freqpart = ""
+	var/colorpart
 	if(speech.frequency)
 		freqpart = " \[[get_radio_name(speech.frequency)]\]"
 		speech.wrapper_classes.Add(get_radio_span(speech.frequency))
+		colorpart = get_radio_color(speech.frequency)
 	var/pooled=0
 	var/datum/speech/filtered_speech
 	if(speech.language)
@@ -125,7 +128,7 @@ var/global/lastDecTalkUse = 0
 	var/enc_wrapclass=jointext(filtered_speech.wrapper_classes, ", ")
 	say_testing(src, "render_speech() - wrapper_classes = \[[enc_wrapclass]\]")
 #endif
-	// Below, but formatted nicely.
+	// Below, but formatted nicely, and with the optional color override.
 	/*
 	return {"
 		<span class='[filtered_speech.render_wrapper_classes()]'>
@@ -137,7 +140,21 @@ var/global/lastDecTalkUse = 0
 			[filtered_speech.render_message()]
 		</span>"}
 	*/
-	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
+	// All this font_color spam is annoying but it's the only way to work it right.
+	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>"
+	if(colorpart)
+		. += "<font color = [colorpart]>"
+		say_testing(src, "render_speech() - colorpart = \[[colorpart]\]")
+	. += "[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]"
+	if(colorpart)
+		. += "</font color>"
+	. += "</span>"
+	if(colorpart)
+		. += "<font color = [colorpart]>"
+	. += " [filtered_speech.render_message()]"
+	if(colorpart)
+		. += "</font color>"
+	. += "</span>"
 	say_testing(src, html_encode(.))
 	if(pooled)
 		qdel(filtered_speech)
@@ -233,6 +250,11 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 	if(returntext)
 		return returntext
 	return "radio"
+
+/proc/get_radio_color(freq)
+	var/returntext = freqtocolor["[freq]"]
+	if(returntext)
+		return returntext
 
 /proc/get_radio_name(freq)
 	var/returntext = radiochannelsreverse["[freq]"]
@@ -357,81 +379,3 @@ var/global/resethearers = 0
 			if(turf)
 				for(var/mob/virtualhearer/VH in hearers(radio.canhear_range, turf))
 					. |= VH.attached
-
-/* Unused
-/proc/get_movables_in_radio_ranges(var/list/obj/item/device/radio/radios)
-	. = new/list()
-	// Returns a list of mobs who can hear any of the radios given in @radios
-	for(var/i = 1; i <= radios.len; i++)
-		var/obj/item/device/radio/R = radios[i]
-		if(R)
-			. |= get_hearers_in_view(R)
-	. |= get_mobs_in_radio_ranges(radios)
-
-//But I don't want to check EVERYTHING to find a hearer you say? I agree
-//This is the new version of recursive_mob_check, used for say().
-//The other proc was left intact because morgue trays use it.
-/proc/recursive_hear_check(atom/O)
-	var/list/processing_list = list(O)
-	var/list/processed_list = list()
-	var/found_atoms = list()
-
-	while (processing_list.len)
-		var/atom/A = processing_list[1]
-
-		if (A.flags & HEAR)
-			found_atoms |= A
-
-		for (var/atom/B in A)
-			if (!processed_list[B])
-				processing_list |= B
-
-		processing_list.Cut(1, 2)
-		processed_list[A] = A
-
-	return found_atoms
-
-Even further legacy saycode
-// Will recursively loop through an atom's contents and check for mobs, then it will loop through every atom in that atom's contents.
-// It will keep doing this until it checks every content possible. This will fix any problems with mobs, that are inside objects,
-// being unable to hear people due to being in a box within a bag.
-
-/proc/recursive_mob_check(var/atom/O,var/client_check=1,var/sight_check=1,var/include_radio=1)
-
-
-	var/list/processing_list = list(O)
-	var/list/processed_list = list()
-	var/list/found_mobs = list()
-
-	while(processing_list.len)
-
-		var/atom/A = processing_list[1]
-		var/passed = 0
-
-		if(ismob(A))
-			var/mob/A_tmp = A
-			passed=1
-
-			if(client_check && !A_tmp.client)
-				passed=0
-
-			if(sight_check && !isInSight(A_tmp, O))
-				passed=0
-
-		else if(include_radio && istype(A, /obj/item/device/radio))
-			passed=1
-
-			if(sight_check && !isInSight(A, O))
-				passed=0
-
-		if(passed)
-			found_mobs |= A
-
-		for(var/atom/B in A)
-			if(!processed_list[B])
-				processing_list |= B
-
-		processing_list.Cut(1, 2)
-		processed_list[A] = A
-
-	return found_mobs*/

@@ -7,9 +7,11 @@
 	icon_state = "emitter0"
 	anchored = 0
 	density = 1
-	req_access = list(access_engine_equip)
+	req_access = list(access_engine_minor)
 
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
+	power_priority = POWER_PRIORITY_POWER_EQUIPMENT
+	monitoring_enabled = TRUE
 	idle_power_usage = 10
 	active_power_usage = 300
 
@@ -20,6 +22,9 @@
 	var/shot_number = 0
 	var/locked = 0
 	var/previous_state = 0//for update_icon() purposes
+	var/beam_power = 1
+	var/min_satisfaction = 0.3 //Emitter will shutdown below this level of power satisfaction
+	var/last_satisfaction = 0
 
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | WELD_FIXED | MULTITOOL_MENU
 
@@ -29,25 +34,8 @@
 	//Now uses a constant beam.
 	var/obj/effect/beam/emitter/beam = null
 
-	lighting_flags = IS_LIGHT_SOURCE
-	light_power = 1
-	light_range = 1
-	light_color = "#ffffff"
-
-/obj/machinery/power/emitter/antique
-	name = "antique emitter"
-	desc = "An old fashioned heavy duty industrial laser."
-	icon_state = "emitter"
-
-/obj/machinery/power/emitter/antique/update_icon()
-	if(powered && get_powernet() && avail(active_power_usage) && active)
-		icon_state = "emitter_+a"
-	else
-		icon_state = "emitter"
-
 /obj/machinery/power/emitter/New(var/turf/loc)
 	..()
-	kill_light() // Start off
 	previous_state = state
 
 	//Radio remote control
@@ -79,6 +67,11 @@
 	src.dir = turn(src.dir, 90)
 	return 1
 
+/obj/machinery/power/emitter/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate_cw()
+
 /obj/machinery/power/emitter/initialize()
 	..()
 	if(state == 2 && anchored)
@@ -103,13 +96,13 @@
 			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir = dir
 			beam.emit(spawn_by=src)
-			set_light()
+		if (last_satisfaction != get_satisfaction()) // Beam power scales down is satisfaction is down too
+			beam.set_power(beam_power * get_satisfaction())
 	else
 		if(beam)
 			beam._re_emit = 0
 			qdel(beam)
 			beam = null
-			kill_light()
 
 /obj/machinery/power/emitter/receive_signal(datum/signal/signal)
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag))
@@ -132,13 +125,16 @@
 				on = !active
 
 		if(!isnull(on) && anchored && state == 2 && on != active)
-			active = on
+			if (active != on)
+				if (on)
+					turn_on()
+				else
+					turn_off()
+
 			var/statestr = on ? "on":"off"
 			// Spammy message_admins("Emitter turned [statestr] by radio signal ([signal.data["command"]] @ [frequency]) in [formatJumpTo(src)]",0,1)
 			log_game("Emitter turned [statestr] by radio signal ([signal.data["command"]] @ [frequency]) in ([x],[y],[z])")
 			investigation_log(I_SINGULO,"turned <font color='orange'>[statestr]</font> by radio signal ([signal.data["command"]] @ [frequency])")
-			update_icon()
-			update_beam()
 
 /obj/machinery/power/emitter/Destroy()
 	qdel(beam)
@@ -154,7 +150,7 @@
 		flick("emitterflick-[previous_state][state]",src)
 		previous_state = state
 
-	if(powered && get_powernet() && avail(active_power_usage) && active)
+	if(powered && get_powernet() && get_satisfaction() > min_satisfaction && active)
 		var/image/emitterbeam = image(icon,"emitter-beam")
 		emitterbeam.plane = ABOVE_LIGHTING_PLANE
 		emitterbeam.layer = ABOVE_LIGHTING_LAYER
@@ -165,6 +161,15 @@
 		emitterlock.plane = ABOVE_LIGHTING_PLANE
 		emitterlock.layer = ABOVE_LIGHTING_LAYER
 		overlays += emitterlock
+
+/obj/machinery/power/emitter/get_monitor_status()
+	if (!(monitoring_enabled && active))
+		return null
+
+	var/list/template = get_monitor_status_template()
+	template["demand"] = active_power_usage
+
+	return list("\ref[src]" = template)
 
 /obj/machinery/power/emitter/attack_hand(mob/user as mob)
 	//Require consciousness
@@ -197,7 +202,7 @@
 		to_chat(user, "<span class='warning'>\The [src] needs to be firmly secured to the floor first.</span>")
 		return 1
 
-/obj/machinery/power/emitter/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0, from_tp = 0)
+/obj/machinery/power/emitter/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	if(active) // You just removed it from the power cable it was on, what did you think would happen?
 		visible_message("<span class='warning'>The [src] gets yanked off of its power source and turns off!</span>")
 		turn_off()
@@ -209,7 +214,7 @@
 	shot_number = 0
 	fire_delay = 100
 	update_icon()
-	update_beam()
+	//update_beam()
 
 /obj/machinery/power/emitter/proc/turn_off()
 	active = 0
@@ -235,14 +240,18 @@
 		update_beam()
 		return
 
+	if (active)
+		add_load(active_power_usage) //Request power for next tick
+
 	if(((last_shot + fire_delay) <= world.time) && (active == 1)) //It's currently activated and it hasn't processed in a bit
-		if(!active_power_usage || avail(active_power_usage)) //Doesn't require power or powernet has enough supply
-			add_load(active_power_usage) //Drain it then bitch
+		if(!active_power_usage || get_satisfaction() > min_satisfaction) //Doesn't require power or powernet has enough supply
 			if(!powered) //Yay its powered
 				powered = 1
 				update_icon()
 				update_beam()
 				investigation_log(I_SINGULO,"regained power and turned <font color='green'>on</font>")
+			else if (last_satisfaction != get_satisfaction())
+				update_beam()
 		else
 			if(powered) //Fuck its not anymore
 				powered = 0 //Whelp time to kill it then
@@ -269,7 +278,7 @@
 
 		//A.dumbfire()
 
-/obj/machinery/power/emitter/emag(mob/user)
+/obj/machinery/power/emitter/emag_act(mob/user)
 	if(!emagged)
 		locked = 0
 		emagged = 1
@@ -341,13 +350,6 @@
 	var/base_state = "emitter"
 	var/power = 1
 
-	moody_light_type = /atom/movable/light/moody/beam
-	light_color = LIGHT_COLOR_HALOGEN
-	light_power = 3
-	light_range = 1
-	light_type = LIGHT_SOFT_FLICKER
-	lighting_flags = FOLLOW_PIXEL_OFFSET
-
 /obj/effect/beam/emitter/proc/set_power(var/newpower = 1)
 	power = newpower
 	if(next)
@@ -355,7 +357,7 @@
 		next_beam.set_power(power)
 	update_icon()
 	if(!master)
-		invoke_event(/event/beam_power_change, list("beam" = src))
+		INVOKE_EVENT(src, /event/beam_power_change, "beam" = src)
 
 /obj/effect/beam/emitter/spawn_child()
 	var/obj/effect/beam/emitter/beam = ..()
@@ -388,7 +390,7 @@
 	icon_state = "emitter"
 
 /obj/machinery/power/emitter/antique/update_icon()
-	if(powered && get_powernet() && avail(active_power_usage) && active)
+	if(powered && get_powernet() && get_satisfaction() > min_satisfaction && active)
 		icon_state = "emitter_+a"
 	else
 		icon_state = "emitter"

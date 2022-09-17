@@ -12,7 +12,7 @@
 	var/base_state = "sheater"
 	var/nocell = 0
 	var/intake_rate = 0.25
-	light_power_on = 2
+	light_power_on = 0.75
 	light_range_on = 2
 	light_color = LIGHT_COLOR_ORANGE
 
@@ -55,10 +55,9 @@
 	icon_state = "campfire0"
 	base_state = "campfire"
 	desc = "Warning: May attract Space Bears."
-	light_power_on = 2
+	light_power_on = 1.5
 	light_range_on = 2
 	light_color = LIGHT_COLOR_FIRE
-	light_type = LIGHT_SOFT_FLICKER
 	set_temperature = 35
 	nocell = 1
 	anchored = 1
@@ -126,7 +125,7 @@
 			to_chat(user, "<span class='info'>The charge meter reads [cell ? round(cell.percent(),1) : 0]%</span>")
 
 /obj/machinery/space_heater/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	if((cell) && (!nocell))
@@ -322,7 +321,7 @@
 
 /obj/machinery/space_heater/process()
 	if(on)
-		if(ispowered())
+		if(ispowered() && !(stat & FORCEDISABLE))
 			var/turf/simulated/L = loc
 			if(istype(L))
 				var/datum/gas_mixture/env = L.return_air()

@@ -300,6 +300,20 @@
 				sleep(1)
 		return
 
+	if(istype(item_to_add,/obj/item/clothing/head))
+		var/obj/item/clothing/head/hat = item_to_add
+		if(hat.on_top)
+			to_chat(usr, "You set [item_to_add] on [src]'s head, but it falls off from [src]'s restlessness!")
+			usr.drop_item(item_to_add, src.loc)
+
+			if(prob(25))
+				step_rand(item_to_add)
+			if (ckey == null)
+				for(var/i in list(1,2,4,8,4,8,4,dir))
+					dir = i
+					sleep(1)
+			return
+
 	on_new_hat(item_to_add)//changes the corgi's name, description and behaviour to match their new hat
 
 	if(usr)
@@ -334,7 +348,7 @@
 	min_oxy = initial(min_oxy)
 	minbodytemp = initial(minbodytemp)
 	maxbodytemp = initial(maxbodytemp)
-	kill_light()
+	set_light(0)
 
 /mob/living/simple_animal/corgi/proc/remove_inventory(var/remove_from = "head", mob/user)
 	switch(remove_from)
@@ -549,7 +563,7 @@
 	icon_dead = "doby_dead"
 	spin_emotes = list("prances around.","chases her nub of a tail.")
 	is_pet = TRUE
-
+	holder_type = /obj/item/weapon/holder/animal/mutt
 	species_type = /mob/living/simple_animal/corgi/sasha
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal
 
@@ -633,7 +647,7 @@
 
 
 
-/mob/living/simple_animal/corgi/turn_into_mannequin(var/material = "marble")
+/mob/living/simple_animal/corgi/turn_into_mannequin(var/material = "marble",var/forever = FALSE)
 	var/turf/T = get_turf(src)
 	var/obj/structure/mannequin/new_mannequin
 
@@ -658,9 +672,9 @@
 
 	switch (material)
 		if ("marble")
-			new_mannequin = new /obj/structure/mannequin/corgi(T,null,null,mannequin_clothing,list(null, null),src)
+			new_mannequin = new /obj/structure/mannequin/corgi(T,null,null,mannequin_clothing,list(null, null),src,forever)
 		if ("wood")
-			new_mannequin = new /obj/structure/mannequin/wood/corgi(T,null,null,mannequin_clothing,list(null, null),src)
+			new_mannequin = new /obj/structure/mannequin/wood/corgi(T,null,null,mannequin_clothing,list(null, null),src,forever)
 
 	if (new_mannequin)
 		return TRUE

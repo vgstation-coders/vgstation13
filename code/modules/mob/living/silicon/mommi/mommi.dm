@@ -42,20 +42,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	var/prefix = "Mobile MMI"
 	var/damage_control_network = "Damage Control"
 
-	var/static_choice = "static"
-	var/list/static_choices = list("static", "letter", "blank")
-
 	var/obj/abstract/screen/inv_tool = null
 	var/obj/item/tool_state = null
 	var/obj/item/head_state = null
 
 /mob/living/silicon/robot/mommi/getModules()
 	return mommi_modules //Default non-subtype mommis aren't supposed to spawn outside of bus anyways
-
-//REMOVE STATIC
-/mob/living/silicon/robot/mommi/Destroy()
-	remove_static_overlays()
-	..()
 
 /mob/living/silicon/robot/mommi/track_globally()
 	return //don't track
@@ -86,7 +78,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		return TRUE
 	if(..())
 		return TRUE
-	remove_static_overlays()
 	updateicon()
 
 	//If KEEPER is enabled, disable it.
@@ -238,8 +229,14 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 						visible_message("<span class='danger'>[user] attempted to disarm [src]!</span>")
 					return
 			if(I_HELP)
-				help_shake_act(user)
-				return
+				if(lying)
+					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					visible_message("<span class='notice'>\The [user.name] attempts to pull up \the [name]!</span>")
+					AdjustKnockdown(-3)
+					if(knockdown <= 0)
+						untip()
+				else
+					help_shake_act(user)
 
 /mob/living/silicon/robot/mommi/choose_icon()
 	if(..())

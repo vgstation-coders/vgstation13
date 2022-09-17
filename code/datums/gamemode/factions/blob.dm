@@ -94,7 +94,7 @@
 	var/floor_count = 0
 	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
-			var/turf/tile = locate(i, r, STATION_Z)
+			var/turf/tile = locate(i, r, map.zMainStation)
 			if(tile && istype(tile, /turf/simulated/floor) && !isspace(tile.loc) && !istype(tile.loc, /area/asteroid) && !istype(tile.loc, /area/mine) && !istype(tile.loc, /area/vault) && !istype(tile.loc, /area/prison) && !istype(tile.loc, /area/vox_trading_post))
 				floor_count++
 	blobwincount = round(floor_count *  0.25) // Must take over a quarter of the station.
@@ -165,7 +165,7 @@
 			command_alert(/datum/command_alert/blob_defcon_1)
 			// Egalitarian mode
 			for(var/obj/machinery/door/airlock/W in all_doors)
-				if(W.z == STATION_Z  && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
+				if(W.z == map.zMainStation  && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
 					W.backup_access = W.req_access
 					W.req_access = list()
 			for (var/obj/machinery/computer/communications/comm in machines)
@@ -255,7 +255,7 @@ Directive 7-12 has been lifted for [station_name()].
 The biohazard has been contained. Please resume normal station activities.
 Message ends."}
 	for (var/obj/machinery/computer/communications/comm in machines)
-		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+		if (!(comm.stat & (BROKEN | NOPOWER | FORCEDISABLE)) && comm.prints_intercept)
 			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
 			intercept.name = "paper- [interceptname]"
 			intercept.info = intercepttext

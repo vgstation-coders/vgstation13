@@ -184,7 +184,7 @@
 
 var/list/cover_protection_value_list = list()
 
-proc/return_cover_protection(var/body_parts_covered)
+/proc/return_cover_protection(var/body_parts_covered)
 	var/true_body_parts_covered = body_parts_covered
 	true_body_parts_covered &= ~(IGNORE_INV|BEARD) // these being covered doesn't particularly matter so no need for them here
 	if(cover_protection_value_list["[true_body_parts_covered]"])

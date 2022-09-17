@@ -308,8 +308,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 		edit_area(user)
 
-	newarea.addSorted()
-
 	ghostteleportlocs[newarea.name] = newarea
 
 	sleep(5)
@@ -403,7 +401,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 /obj/item/blueprints/proc/check_tile_is_border(var/turf/T2,var/dir)
 	if (istype(T2, /turf/space))
 		return BORDER_SPACE //omg hull breach we all going to die here
-	if (istype(T2, /turf/simulated/shuttle))
+	if (isshuttleturf(T2))
 		return BORDER_SPACE
 	var/areatype = get_area_type(T2.loc)
 	if (areatype != AREA_SPACE && areatype != AREA_CONSTRUCT)
@@ -538,7 +536,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	var/turf/home_base = get_step(get_turf(DP), DP.dir)
 	var/obj/docking_port/destination/my_shuttle_home_base = new(home_base)
 	my_shuttle_home_base.name = "[name] home port"
-	my_shuttle_home_base.dir = reverse_direction(DP.dir)
+	my_shuttle_home_base.dir = opposite_dirs[DP.dir]
 
 	var/datum/shuttle/custom/S = new(starting_area = A)
 	S.initialize()

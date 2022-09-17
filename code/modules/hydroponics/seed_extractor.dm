@@ -9,7 +9,7 @@
 
 	var/min_seeds = 1 //better manipulators improve this
 	var/max_seeds = 4 //better scanning modules improve this
-	
+
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
 /********************************************************************
@@ -65,12 +65,12 @@
 		S.use(1)
 		new /obj/item/seeds/grassseed(loc)
 		return TRUE
-	
+
 	if(seedify(AM, src))
 		return TRUE
 	return FALSE
 
-obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 	// Emptying a plant bag
 	if (istype(O,/obj/item/weapon/storage/bag/plants))
@@ -107,26 +107,26 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 		S.use(1)
 		new /obj/item/seeds/grassseed(loc)
 		return
-	
+
 	if(seedify(O, src, user))
 		to_chat(user, "<span class='notice'>You extract some seeds from [O].</span>")
-		return		
+		return
 
 	..()
 
 //Code shamelessly ported over and adapted from tgstation's github repo, PR #2973, credit to Kelenius for the original code
-datum/seed_pile //Maybe there's a better way to do this.
+/datum/seed_pile //Maybe there's a better way to do this.
 	var/datum/seed/seed
 	var/amount
 
-datum/seed_pile/New(var/seed, var/amount = 1)
+/datum/seed_pile/New(var/seed, var/amount = 1)
 	src.seed = seed
 	src.amount = amount
 
 /obj/machinery/seed_extractor/attack_hand(mob/user as mob)
 	interact(user)
 
-obj/machinery/seed_extractor/interact(mob/user as mob)
+/obj/machinery/seed_extractor/interact(mob/user as mob)
 	if (stat)
 		return 0
 
@@ -213,11 +213,11 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 					dat += "<span title=\"This plant is capable of growing beyond the confines of a tray.\">CREEP </span>"
 				if(2)
 					dat += "<span title=\"This plant is a robust and vigorous vine that will spread rapidly.\">VINE </span>"
-			switch(P.seed.carnivorous)
+			switch(P.seed.voracious)
 				if(1)
-					dat += "<span title=\"This plant is carnivorous and will eat tray pests for sustenance.\">CARN </span>"
+					dat += "<span title=\"This plant is voracious and will eat tray pests and weeds for sustenance.\">VORA </span>"
 				if(2)
-					dat += "<span title=\"This plant is carnivorous and poses a significant threat to living things around it.\">HCARN </span>"
+					dat += "<span title=\"This plant is carnivorous and poses a significant threat to living things around it.\">CARN </span>"
 			switch(P.seed.juicy)
 				if(1)
 					dat += "<span title=\"This plant's fruit is soft-skinned and abudantly juicy\">SPLAT</span>"
@@ -225,8 +225,6 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 					dat += "<span title=\"This plant's fruit is excessively soft and juicy.\">SLIP </span>"
 			if(P.seed.immutable > 0)
 				dat += "<span title=\"This plant does not possess genetics that are alterable.\">NOMUT </span>"
-			if(P.seed.parasite)
-				dat += "<span title=\"This plant is capable of parasitizing and gaining sustenance from tray weeds.\">PARA </span>"
 			if(P.seed.hematophage)
 				dat += "<span title=\"This plant is a highly specialized hematophage that will only draw nutrients from blood.\">BLOOD </span>"
 			if(P.seed.alter_temp)
@@ -241,6 +239,10 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 				dat += "<span title=\"This is a ligneous plant with strong and robust stems.\">WOOD </span>"
 			if(P.seed.teleporting)
 				dat += "<span title=\"This plant possesses a high degree of temporal/spatial instability and may cause spontaneous bluespace disruptions.\">TELE </span>"
+			if(P.seed.toxin_affinity > 7)
+				dat += "<span title=\"This plant can only survive in extremely toxic environments.\">HTOX </span>"
+			else if(P.seed.toxin_affinity > 5)
+				dat += "<span title=\"This plant requires a balanced toxin and water environment.\">TOX </span>"
 			dat += "</td><tr>"
 		dat += "</tbody></table>"
 	dat = jointext(dat,"")
@@ -249,7 +251,7 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 	popup.open()
 	return
 
-obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
+/obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 	if(..())
 		return
 	usr.set_machine(src)
@@ -278,7 +280,7 @@ obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 		sortTim(piles, sorting_methods[sortby])
 		updateUsrDialog()
 		return
-	
+
 	if("amt" in href_list)
 		var/amt = text2num(href_list["amt"])
 		var/datum/seed/S = SSplant.seeds[href_list["seed"]]
@@ -294,7 +296,6 @@ obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 				break
 
 		for (var/obj/item/seeds/O in contents) //Now we find the seed we need to vend
-			//if (O.seed.display_name == href_list["name"] && O.seed.lifespan == href_list["li"] && O.seed.endurance == href_list["en"] && O.seed.maturation == href_list["ma"] && O.seed.production == href_list["pr"] && O.seed.yield == href_list["yi"] && O.seed.potency == href_list["pot"] && href_list["biolum_colour"] == O.seed.biolum_colour && href_list["gasexude"] == O.seed.exude_gasses.len && O.seed.spread == href_list["spread"] && O.seed.alter_temp == href_list["alter_temp"] && O.seed.carnivorous == href_list["carnivorous"] && O.seed.parasite == href_list["parasite"] && O.seed.hematophage == href_list["hematophage"] && O.seed.thorny == href_list["thorny"] && O.seed.stinging == href_list["stinging"] && O.seed.ligneous == href_list["ligneous"] && O.seed.teleporting == href_list["teleporting"] && O.seed.juicy == href_list["juicy"]) //If the spaghetti above wasn't proof enough, the length of of this line alone should tell you that something is probably very very wrong here and this whole fucking file probably shouldn't work the way it does. What it SHOULD do is just store the seed datum itself and check the stored seed's seed datum, which would be infinitely simpler. However, since no other machines use or are dependent on this shitcode, and due to the fact that seed datums will likely not be re-structured much if at all in the future, to that I say fuck it, it just werks. Sincerely, please don't git blame me I only intended well, oh god don't take my pomfcoins way no i didn't even come up with this system originally i just ported it and lazily expanded it please okay there I made it not shit chickenman no
 			if(O.seed == S)
 				O.forceMove(src.loc)
 				amt--
@@ -304,7 +305,7 @@ obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 		updateUsrDialog()
 		return
 
-obj/machinery/seed_extractor/proc/moveToStorage(var/obj/item/seeds/O as obj)
+/obj/machinery/seed_extractor/proc/moveToStorage(var/obj/item/seeds/O as obj)
 	if(istype(O.loc,/obj/item/weapon/storage))
 		var/obj/item/weapon/storage/S = O.loc
 		S.remove_from_storage(O,src)
@@ -317,7 +318,7 @@ obj/machinery/seed_extractor/proc/moveToStorage(var/obj/item/seeds/O as obj)
 			return
 	piles += new /datum/seed_pile(O.seed)
 
-obj/machinery/seed_extractor/proc/hasSpaceCheck(mob/user as mob)
+/obj/machinery/seed_extractor/proc/hasSpaceCheck(mob/user as mob)
 	if(contents.len >= MAX_N_OF_ITEMS)
 		to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 		return 0

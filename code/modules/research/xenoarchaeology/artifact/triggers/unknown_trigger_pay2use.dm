@@ -12,7 +12,7 @@
 /datum/artifact_trigger/pay2use/New()
 	..()
 	my_artifact.register_event(/event/attackhand, src, .proc/owner_attackhand)
-	my_artifact.register_event(/event/attackhand, src, .proc/owner_attackby)
+	my_artifact.register_event(/event/attackby, src, .proc/owner_attackby)
 	mode = rand(0,2)
 	var/where = pick("on one of its sides","at the top","hidden underneath", "on the front")
 	switch(mode)
@@ -27,7 +27,7 @@
 /datum/artifact_trigger/pay2use/proc/reconnect_database()
 	for(var/obj/machinery/account_database/DB in account_DBs)
 		//Checks for a database on its Z-level, else it checks for a database at the main Station.
-		if((my_artifact.loc && (DB.z == my_artifact.loc.z)) || (DB.z == STATION_Z))
+		if((my_artifact.loc && (DB.z == my_artifact.loc.z)) || (DB.z == map.zMainStation))
 			if((DB.stat == 0) && DB.activated )//If the database if damaged or not powered, people won't be able to use the app anymore.
 				linked_db = DB
 				break
@@ -167,14 +167,7 @@
 			to_chat(M, "[bicon(my_artifact)]<span class='notice'>Remaining balance ([using_account]): [D.money]$</span>")
 
 			//create an entry on the buy's account's transaction log
-			var/datum/transaction/T = new()
-			T.target_name = "[my_artifact.artifact_id]"
-			T.purpose = "Purchase of [dosh * 2] seconds of activation."
-			T.amount = "-[transaction_amount]"
-			T.source_terminal = my_artifact.artifact_id
-			T.date = current_date_string
-			T.time = worldtime2text()
-			D.transaction_log.Add(T)
+			new /datum/transaction(D, "Purchase of [dosh * 2] seconds of activation.", "-[transaction_amount]", my_artifact.artifact_id, "[my_artifact.artifact_id]")
 
 			// Vend the item
 			time_left += bought_time

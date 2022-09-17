@@ -66,22 +66,30 @@
 			base_state = "intake"
 			dpdir = dir
 
-		if(9, 11)
+		if(9)
 			base_state = "pipe-j1s"
 			dpdir = dir | right | flip
 
-		if(10, 12)
+		if(10)
 			base_state = "pipe-j2s"
+			dpdir = dir | left | flip
+
+		if(11)
+			base_state = "pipe-j1ms"
+			dpdir = dir | right | flip
+
+		if(12)
+			base_state = "pipe-j2ms"
 			dpdir = dir | left | flip
 
 		if(13)
 			base_state = "pipe-u"
 			dpdir = dir
-		
+
 		if(14)
 			base_state = "pipe-d"
 			dpdir = dir
-	
+
 	if(ptype<6 || ptype>8)
 		icon_state = "con[base_state]"
 	else
@@ -277,7 +285,7 @@
 					switch(ptype)
 						if(9, 10)
 							var/obj/structure/disposalpipe/sortjunction/SortP = P
-							SortP.updatedir()
+							SortP.update_dir()
 						if(11, 12)
 							var/obj/structure/disposalpipe/wrapsortjunction/sort_P = P
 							sort_P.update_dir()

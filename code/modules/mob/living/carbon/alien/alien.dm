@@ -35,6 +35,7 @@
 
 	var/heat_protection = 0.5
 	var/list/can_only_pickup = list(/obj/item/clothing/mask/facehugger, /obj/item/weapon/grab) //What types of object can the alien pick up?
+	var/list/xeno_cult_items = list(/obj/item/weapon/melee/blood_dagger)
 
 /mob/living/carbon/alien/New()
 	add_language(LANGUAGE_XENO)
@@ -43,6 +44,7 @@
 	. = ..()
 	change_sight(adding = SEE_MOBS)
 
+/*
 /mob/living/carbon/alien/update_perception()
 	if(dark_plane)
 		dark_plane.alphas["alien"] = 200
@@ -55,6 +57,7 @@
 		 			0,0,0,0)
 
 	check_dark_vision()
+*/
 
 /mob/living/carbon/alien/AdjustPlasma(amount)
 	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
@@ -270,7 +273,7 @@ In all, this is a lot like the monkey code. /N
 	//src.updatehealth()
 
 	visible_message( \
-		"<span class='warning'>[src] was shocked by the [source]!</span>", \
+		"<span class='warning'>[src] was shocked by \the [source]!</span>", \
 		"<span class='danger'>You feel a powerful shock course through your body!</span>", \
 		"<span class='warning'>You hear a heavy electrical crack.</span>", \
 		"<span class='notice'>[src] starts raving!</span>", \

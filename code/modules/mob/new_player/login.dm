@@ -3,6 +3,8 @@
 	if(join_motd)
 		to_chat(src, "<div class=\"motd\">[join_motd]</div>")
 
+	client.reset_screen()
+	
 	if(!mind)
 		mind = new /datum/mind(key)
 		mind.active = 1
@@ -12,7 +14,7 @@
 		loc = pick(newplayer_start)
 	else
 		loc = locate(1,1,1)
-
+	
 	change_sight(adding = SEE_TURFS)
 	player_list |= src
 

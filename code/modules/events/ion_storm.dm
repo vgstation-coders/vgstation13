@@ -34,7 +34,7 @@
 
 	//First of all, we acquire a comprehensive list of all crewmen
 	for(var/mob/living/carbon/human/player in mob_list)
-		if(player.client && player.z != CENTCOMM_Z)
+		if(player.client && player.z != map.zCentcomm)
 			players += player.real_name //We make a list with the obvious intent of picking through it if needed
 
 	if(!players.len)
@@ -173,7 +173,7 @@
 				bots -= bot
 				continue
 			if(prob(botEmagChance))
-				bot.Emag()
+				bot.emag_act()
 
 /datum/event/ionstorm/end()
 	active = 0
@@ -291,7 +291,7 @@
 	if(botEmagChance)
 		for(var/obj/machinery/bot/bot in world)
 			if(prob(botEmagChance))
-				bot.Emag()
+				bot.emag_act()
 */
 
 	/*
@@ -312,7 +312,7 @@
 		to_chat(world, "Finished processing APCs. Processed: [apcnum]")
 	spawn(0)
 		to_chat(world, "Started processing SMES")
-		for (var/obj/machinery/power/smes/SMES in world)
+		for (var/obj/machinery/power/battery/smes/SMES in world)
 			if(SMES.z == map.zMainStation)
 				SMES.ion_act()
 				smesnum++

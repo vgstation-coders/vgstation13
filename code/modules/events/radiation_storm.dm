@@ -18,6 +18,7 @@
 		/area/medical/patient_room1,
 		/area/medical/patient_room2,
 		/area/derelictparts,
+		/area/vox_trading_post,
 	)
 
 /datum/event/radiation_storm/can_start()
@@ -42,7 +43,7 @@
 			var/area/ma = get_area(A)
 			ma.radiation_alert()
 
-		make_maint_all_access()
+		make_doors_all_access(list(access_maint_tunnels))
 
 
 		sleep(30 SECONDS)
@@ -66,8 +67,9 @@
 				if(T.z != map.zMainStation || is_safe_zone(T.loc))
 					continue
 				D.receive_pulse(irradiationThisBurst * 50)
-			var/randomMutation = prob(50)
-			var/badMutation = prob(50)
+
+			var/randomMutation
+			var/badMutation
 			for(var/mob/living/carbon/human/H in living_mob_list)
 				if(istype(H.loc, /obj/spacepod))
 					continue
@@ -76,10 +78,12 @@
 					continue
 				if(T.z != map.zMainStation || is_safe_zone(T.loc))
 					continue
-
+				randomMutation = prob(50)
 				var/applied_rads = (H.apply_radiation(irradiationThisBurst,RAD_EXTERNAL) > (irradiationThisBurst/4))
 				if(randomMutation && applied_rads)
-					if (badMutation)
+					//luck plays a role in the mutations acquired
+					badMutation = H?.lucky_prob(50, -1/10)
+					if(badMutation)
 						//H.apply_effect((rand(25,50)),IRRADIATE,0)
 						randmutb(H) // Applies bad mutation
 						domutcheck(H,null,MUTCHK_FORCED)
@@ -102,4 +106,4 @@
 		sleep(600) // Want to give them time to get out of maintenance.
 
 
-		revoke_maint_all_access()
+		revoke_doors_all_access(list(access_maint_tunnels))

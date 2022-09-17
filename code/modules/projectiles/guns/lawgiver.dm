@@ -20,7 +20,7 @@
 
 /datum/lawgiver_mode/stun
 	name = "stun"
-	voice_triggers = list("stun", "taser")
+	voice_triggers = list("stun", "taser", "detain")
 	firing_mode = LAWGIVER_STUN
 	fire_sound = 'sound/weapons/Taser.ogg'
 	projectile_type = /obj/item/projectile/energy/electrode
@@ -313,8 +313,8 @@ var/list/lawgiver_modes = list(
 	var/turf/target_turf = get_turf(target)
 	var/orientation = get_dir(origin_turf, target_turf)
 	// Turfs to the "left" and to the "right" of the clicked target
-	var/projectile1_target = get_step(target_turf, counter_clockwise_perpendicular_direction(orientation))
-	var/projectile2_target = get_step(target_turf, reverse_direction(counter_clockwise_perpendicular_direction(orientation)))
+	var/projectile1_target = get_step(target_turf, counterclockwise_perpendicular_dirs[orientation])
+	var/projectile2_target = get_step(target_turf, clockwise_perpendicular_dirs(orientation))
 	Fire(projectile1_target, user, params, struggle)
 	if(!in_chamber)
 		in_chamber = new projectile_type(src)

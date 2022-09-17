@@ -153,7 +153,7 @@
 
 /obj/item/weapon/gun/energy/mouser/update_icon()
 	return
-	
+
 /obj/item/weapon/gun/energy/mouser/isHandgun()
 	return TRUE
 
@@ -175,11 +175,44 @@
 	projectile_type = "/obj/item/projectile/animate"
 	charge_cost = 100
 
-#define RAISE_TYPE_ZOMBIE 0
-#define RAISE_TYPE_SKELETON 1
-#define RAISE_HUMAN 1
-#define RAISE_ANIMAL 2
-#define RAISE_MEAT 3
+#define MAJOR "major"
+#define MINOR "minor"
+#define DEFECTIVE "defect"
+
+/obj/item/weapon/gun/energy/staff/polymorph
+	name = "staff of polymorph"
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "staffofpolymorph"
+	item_state = "staffofpolymorph"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/wiz_left.dmi', "right_hand" = 'icons/mob/in-hand/right/wiz_right.dmi')
+	desc = "An artefact that turns the person afflicted into an animal."
+	charge_cost = 250
+	projectile_type = "/obj/item/projectile/polymorph"
+	var/setting = MINOR
+	var/next_changetype = 0
+
+/obj/item/weapon/gun/energy/staff/polymorph/attack_self(var/mob/living/user)
+	if(world.time < next_changetype)
+		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
+		return
+
+	var/selected = input("You squint at the dial conspicuously mounted on the side of your [name].","[name]") as null|anything in list(MINOR, MAJOR)
+	if(!selected)
+		return
+
+	to_chat(user, "<span class='info'>You set \the [src] to [selected].</span>")
+	add_gamelogs(user, "set \the [src] to \ [selected]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "warning")
+	setting=selected
+	next_changetype=world.time+SOC_CHANGETYPE_COOLDOWN
+
+/obj/item/weapon/gun/energy/staff/polymorph/process_chambered()
+	if(!..())
+		return 0
+	var/obj/item/projectile/polymorph/P=in_chamber
+	if(P && istype(P))
+		P.status=setting
+	return 1
+
 /obj/item/weapon/gun/energy/staff/necro
 	name = "staff of necromancy"
 	desc = "A wicked looking staff that pulses with evil energy."
@@ -217,100 +250,66 @@
 		return
 	raisetype = !raisetype
 
-	to_chat(user, "<span class='notice'>You will now raise [raisetype < 2 ? (raisetype ? "skeletal" : "zombified") : "unknown"] minions from corpses.</span>")
+	to_chat(user, "<span class='notice'>You will now raise [raisetype ? "skeletal" : "zombified"] minions from corpses.</span>")
 	next_change = world.timeofday + 30
 
-/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user, flag, params, struggle = 0)
-	if(!charges || istype(target, /mob/living/simple_animal/hostile/necro) || get_dist(target, user) > 7)
+/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user = usr, flag, params, struggle = 0)
+	if(!charges || get_dist(target, user) > 7)
 		return 0
-	var/toRaise = canRaise(target, user)
-	if(!toRaise)
-		return
-	switch(toRaise)
-		if(RAISE_HUMAN)
-			humanRaise(target, user)
-		if(RAISE_ANIMAL)
-			var/mob/living/L = target
-			if(L.stat == DEAD)
-				simpleRaise(target, user)
-			else
-				to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
-		if(RAISE_MEAT)
-			meatRaise(target, user)
+	var/success = FALSE
 
-
-/obj/item/weapon/gun/energy/staff/necro/proc/canRaise(atom/target, mob/living/user)
 	if(ishuman(target))
+		success = TRUE
 		var/mob/living/carbon/human/H = target
-		if(H.stat != DEAD && !H.InCritical())
-			to_chat(user, "<span class = 'warning'>[!H.stat?"\The [target] needs to be dead or in a critical state first.":H.health>config.health_threshold_crit?"\The [target] has not received enough damage.":"Something went wrong with the conversion process."]</span>")
-			return 0
-		return RAISE_HUMAN
-	if(isanimal(target) || ismonkey(target))
-		return RAISE_ANIMAL
-	if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		return RAISE_MEAT
+		if(H.stat)
+			if(raisetype)
+				H.dropBorers()
+				var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
+				H.gib()
+				spooky.faction = "\ref[user]"
+			else
+				H.zombify(user)
+		else
+			success = FALSE
+			
+	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/))
+		success = TRUE
+		var/mob/living/simple_animal/S = target
+		S.faction = "\ref[user]"
+	else if(isanimal(target) || ismonkey(target))
+		var/mob/living/L = target
+		if(L.stat == DEAD)
+			success = TRUE
+			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user)
+			mG.ghoulifyMeat(L)
+			mG.faction = "\ref[user]"
+			L.gib()
+		else
+			to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
+	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat))
+		var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user, target)
+		success = TRUE
+		aG.ghoulifyAnimal(target)
+		aG.faction = "\ref[user]"
+		qdel(target)
 
-	return 0
-
-
-
-/obj/item/weapon/gun/energy/staff/necro/proc/meatRaise(var/obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
-	var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(M), user)
-	make_tracker_effects(get_turf(M), user)
-	mG.ghoulifyMeat(M)
-	mG.faction = "\ref[user]"
-	qdel(M)
-	charges--
-
-/obj/item/weapon/gun/energy/staff/necro/proc/simpleRaise(var/mob/living/S, mob/living/user)
-	var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(S), user, S)
-	make_tracker_effects(get_turf(S), user)
-	aG.ghoulifyAnimal(S)
-	aG.faction = "\ref[user]"
-	S.gib()
-	charges--
-
-/obj/item/weapon/gun/energy/staff/necro/proc/humanRaise(mob/target, mob/user)
-	var/mob/living/carbon/human/H = target
-	make_tracker_effects(get_turf(H), user)
-	if(iswizard(user) || isapprentice(user))
-		user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
-		"BOW BEFORE [pick("MY POWER","ME, [uppertext(H.real_name)]")].",\
-		"G'T T'FUK UP.",\
-		"IF YOU DIE, YOU DIE FOR ME.",\
-		"EVEN IN DEATH YOU MAY SERVE.",\
-		"YOUR SUFFERING IS MY ENJOYMENT.",\
-		"A NEW PLAYTHING FOR MY COLLECTION.",\
-		"YOUR TIME HAS NOT COME, YET.",\
-		"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
-	playsound(src, get_sfx("soulstone"), 50,1)
-	H.dropBorers()
-	switch(raisetype)
-		if(RAISE_TYPE_ZOMBIE)
-			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(H), user, H)
-			T.get_clothes(H, T)
-			T.name = H.real_name
-			T.host = H
-			H.loc = null
-			T.faction = "\ref[user]"
-		if(RAISE_TYPE_SKELETON)
-			var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
-			H.gib()
-			spooky.faction = "\ref[user]"
-	charges--
-
-
+	if(success)
+		make_tracker_effects(get_turf(target), user)
+		if(iswizard(user) || isapprentice(user))
+			user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
+			"BOW BEFORE [pick("MY POWER","ME, [uppertext(target.name)]")].",\
+			"G'T T'FUK UP.",\
+			"IF YOU DIE, YOU DIE FOR ME.",\
+			"EVEN IN DEATH YOU MAY SERVE.",\
+			"YOUR SUFFERING IS MY ENJOYMENT.",\
+			"A NEW PLAYTHING FOR MY COLLECTION.",\
+			"YOUR TIME HAS NOT COME, YET.",\
+			"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
+		playsound(src, get_sfx("soulstone"), 50,1)
+		charges--
 
 /obj/item/weapon/gun/energy/staff/necro/attack(mob/living/target as mob, mob/living/user as mob)
 	afterattack(target,user,1)
-
-#undef RAISE_TYPE_ZOMBIE
-#undef RAISE_TYPE_SKELETON
-#undef RAISE_HUMAN
-#undef RAISE_ANIMAL
-#undef RAISE_MEAT
-
 
 /obj/item/weapon/gun/energy/staff/destruction_wand
 	name = "wand of destruction"
@@ -397,7 +396,7 @@
 				else
 					var/turf/simulated/wall/W = target
 					W.dismantle_wall(1,1)
-			else if(istype(target, /turf/simulated/floor) || istype(target, /turf/simulated/shuttle))
+			else if(istype(target, /turf/simulated/floor) || isshuttleturf(target))
 				to_chat(user, "<span class='notice'>[src] fizzles quietly.</span>")
 				return
 			else
@@ -437,15 +436,16 @@
 	icon_state = "floramut100"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	fire_sound = 'sound/effects/stealthoff.ogg'
 	charge_cost = 100
 	projectile_type = "/obj/item/projectile/energy/floramut"
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=3"
 	mech_flags = null // So it can be scanned by the Device Analyser
 	modifystate = "floramut"
 	var/charge_tick = 0
-	var/mode = 0 //0 = mutate, 1 = yield boost, 2 = emag-mutate
-	var/mutstrength = 10 //how many units of mutagen will the mutation projectile act as
+	var/mode = 1
+	var/list/genes = list(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
+	var/emagged = FALSE
+	var/isSomatoraying = FALSE
 
 /obj/item/weapon/gun/energy/floragun/isHandgun()
 	return TRUE
@@ -454,11 +454,9 @@
 	..()
 	processing_objects.Add(src)
 
-
 /obj/item/weapon/gun/energy/floragun/Destroy()
 	processing_objects.Remove(src)
 	..()
-
 
 /obj/item/weapon/gun/energy/floragun/process()
 	charge_tick++
@@ -471,50 +469,17 @@
 	update_icon()
 	return 1
 
-/obj/item/weapon/gun/energy/floragun/process_chambered()
-	. = ..()
-	if(istype(in_chamber, /obj/item/projectile/energy/floramut))
-		var/obj/item/projectile/energy/floramut/P = in_chamber
-		P.mutstrength = src.mutstrength
-
 /obj/item/weapon/gun/energy/floragun/attack_self(mob/living/user as mob)
-	switch(mode)
-		if(0)
-			mode = 1
-			charge_cost = 100
-			to_chat(user, "<span class='warning'>\The [src] is now set to improve harvests.</span>")
-			projectile_type = "/obj/item/projectile/energy/florayield"
-			modifystate = "florayield"
-		if(1)
-			mode = 0
-			charge_cost = mutstrength * 10
-			to_chat(user, "<span class='warning'>\The [src] is now set to induce mutations.</span>")
-			projectile_type = "/obj/item/projectile/energy/floramut"
-			modifystate = "floramut"
-		if(2)
-			to_chat(user, "<span class='warning'>\The [src] appears to be locked into one mode.</span>")
-			return
-	update_icon()
-	return
-
-/obj/item/weapon/gun/energy/floragun/verb/SetMutationStrength()
-	set name = "Set mutation strength"
-	set category = "Object"
-	if(mode == 2)
-		mutstrength = input(usr, "Enter new mutation strength level (15-25):", "Somatoray Gamma Ray Threshold", mutstrength) as num
-		mutstrength = clamp(round(mutstrength), 15, 25)
-	else
-		mutstrength = input(usr, "Enter new mutation strength level (1-15):", "Somatoray Alpha Ray Threshold", mutstrength) as num
-		mutstrength = clamp(round(mutstrength), 1, 15)
+	//loops through all genes
+	mode = mode % length(genes) + 1
+	to_chat(user, "<span class='warning'>\The [src] is now set to modify [genes[mode]] traits.</span>")
 
 /obj/item/weapon/gun/energy/floragun/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(isEmag(W) || issolder(W))
-		if (mode == 2)
+		if (emagged)
 			to_chat(user, "The safeties are already de-activated.")
 		else
-			mode = 2
-			mutstrength = 25
-			charge_cost = mutstrength * 10
+			emagged = TRUE
 			projectile_type = "/obj/item/projectile/energy/floramut/emag"
 			to_chat(user, "<span class='warning'>You short out the safety limit of the [src.name]!</span>")
 			desc += " It seems to have it's safety features de-activated."
@@ -522,14 +487,74 @@
 			modifystate = "floraemag"
 			update_icon()
 
-/obj/item/weapon/gun/energy/floragun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
-	if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
-		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-		if(process_chambered())
-			user.visible_message("<span class='danger'> \The [user] fires \the [src] into \the [tray]!</span>")
-			Fire(target,user)
+/obj/item/weapon/gun/energy/floragun/attack(atom/movable/target, mob/living/user as mob)
+	afterattack(target,user,1)
+
+/obj/item/weapon/gun/energy/floragun/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+	afterattack(target,user,1)
+
+/obj/item/weapon/gun/energy/floragun/afterattack(atom/movable/target, mob/living/user, flag, params, struggle = 0)
+	if(isSomatoraying)
 		return
-	..()
+	isSomatoraying = TRUE
+	if(emagged)
+		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
+			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
+			make_tracker_effects(get_turf(user), get_turf(tray))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
+			if(do_after(user,tray, 10))
+				for(var/gene in genes)
+					if(prob(50))
+						tray.mutate(gene)
+
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = target
+			make_tracker_effects(get_turf(user), get_turf(H))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
+			if((H.species.flags & IS_PLANT))
+				H.apply_radiation((rand(10,30)),RAD_EXTERNAL)
+				H.Knockdown(5)
+				H.Stun(5)
+				user.show_message("<span class='warning'>[H] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
+			else
+				H.show_message("<span class='warning'>The radiation beam singes you!</span>")
+				if(prob(80))
+					randmutb(H)
+					domutcheck(H,null)
+				else
+					H.adjustFireLoss(rand(3, 10))
+					randmutg(H)
+					domutcheck(H,null)
+		if(istype(target, /obj/machinery/apiary))
+			var/obj/machinery/apiary/A = target
+			make_tracker_effects(get_turf(user), get_turf(A))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
+			A.angry_swarm()
+	else
+		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
+			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
+			make_tracker_effects(get_turf(user), get_turf(tray))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
+			if(do_after(user,tray, 10))
+				if(prob(50))
+					tray.mutate((genes[mode]))
+		if(istype(target, /obj/machinery/apiary))
+			var/obj/machinery/apiary/A = target
+			make_tracker_effects(get_turf(user), get_turf(A))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
+			if(!A.yieldmod)
+				A.yieldmod += 1
+			else if (prob(1/(A.yieldmod * A.yieldmod) *100))//This formula gives you diminishing returns based on yield. 100% with 1 yield, decreasing to 25%, 11%, 6, 4, 2...
+				A.yieldmod += 1
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = target
+			make_tracker_effects(get_turf(user), get_turf(H))
+			playsound(user,'sound/effects/stealthoff.ogg', 50)
+			if((H.species.flags & IS_PLANT) && (H.nutrition < 500))
+				H.nutrition += 30
+			else 
+				H.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
+	isSomatoraying = FALSE
 
 /obj/item/weapon/gun/energy/meteorgun
 	name = "meteor gun"
@@ -582,7 +607,7 @@
 	projectile_type = "/obj/item/projectile/beam/mindflayer"
 	fire_sound = 'sound/weapons/Laser.ogg'
 
-obj/item/weapon/gun/energy/staff/focus
+/obj/item/weapon/gun/energy/staff/focus
 	name = "mental focus"
 	desc = "An artifact that channels the will of the user into destructive bolts of force. If you aren't careful with it, you might poke someone's brain out.\n Has two modes: Single and AoE."
 	icon = 'icons/obj/wizard.dmi'
@@ -591,7 +616,7 @@ obj/item/weapon/gun/energy/staff/focus
 	projectile_type = "/obj/item/projectile/forcebolt"
 	charge_cost = 100
 
-obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
+/obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	if(projectile_type == "/obj/item/projectile/forcebolt")
 		charge_cost = 250
 		to_chat(user, "<span class='warning'>The [src.name] will now strike a small area.</span>")
@@ -720,7 +745,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	cell_type = "/obj/item/weapon/cell"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 
-obj/item/weapon/gun/energy/ricochet/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+/obj/item/weapon/gun/energy/ricochet/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(defective && prob(30))
 		target = get_ranged_target_turf(user, pick(diagonal), 7)
 	..()

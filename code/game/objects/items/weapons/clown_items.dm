@@ -8,37 +8,41 @@
  * Banana Peels
  */
 /obj/item/weapon/bananapeel/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
-		var/mob/living/carbon/M = AM
-		if(slip_n_slide(M))
-			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
-				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
-	if(istype(AM, /obj/structure/bed/chair/vehicle/gokart))
-		var/obj/structure/bed/chair/vehicle/gokart/kart = AM
-		var/left_or_right = prob(50) ? turn(kart.dir, 90) : turn(kart.dir, -90)
-		var/tiles_to_slip = rand(round(potency/20, 1), round(potency/10, 1))
-		kart.speen()
-		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
-		spawn()
-			for(var/i in 1 to tiles_to_slip)
-				step(kart, left_or_right)
-				sleep(1)
+	if(..())  // Slipping if these are below a floor tile is nonsensical
+		return 1
+	handle_slip(AM)
 
 /datum/locking_category/banana_peel
 
-/obj/item/weapon/bananapeel/proc/slip_n_slide(var/mob/living/carbon/M)
-	if(!M.Slip(2,2,1))
-		return 0
-	var/tiles_to_slip = rand(round(potency/20, 1),round(potency/10, 1))
-	if(tiles_to_slip && !locked_to) //The banana peel will not be dragged along so stop the ride
-		M.lock_atom(src, /datum/locking_category/banana_peel)
-		for(var/i = 1 to tiles_to_slip)
-			if(!M.locked_to)
-				step(M, M.dir)
-				sleep(1)
-		spawn(1) M.unlock_atom(src)
-	return 1
+/obj/item/weapon/bananapeel/proc/handle_slip(atom/movable/AM)
+	if(iscarbon(AM) || istype(AM, /obj/structure/bed/chair/vehicle/gokart))
+		return slip_n_slide(AM,2,2,"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
+/obj/item/weapon/bananapeel/proc/slip_n_slide(var/atom/movable/AM,var/stun_amount,var/weaken_amount,var/drug_message)
+	if(iscarbon(AM) || istype(AM, /obj/structure/bed/chair/vehicle/gokart))
+		var/old_dir = AM.dir // Slipping changes dir, this is consistent
+		if(iscarbon(AM))
+			var/mob/living/carbon/M = AM
+			if(!M.Slip(stun_amount, weaken_amount, 1, slipped_on = src, drugged_message = drug_message))
+				return 0
+		var/tiles_to_slip = slip_override > 0 ? slip_override : rand(round(potency/20, 1),round(potency/10, 1))
+		if(istype(AM, /obj/structure/bed/chair/vehicle/gokart))
+			var/obj/structure/bed/chair/vehicle/gokart/kart = AM
+			var/left_or_right = prob(50) ? turn(AM.dir, 90) : turn(AM.dir, -90)
+			kart.speen()
+			playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
+			spawn()
+				for(var/i in 1 to tiles_to_slip)
+					step(AM, left_or_right)
+					sleep(1)
+		else if(tiles_to_slip && !locked_to) //The banana peel will not be dragged along so stop the ride
+			AM.lock_atom(src, /datum/locking_category/banana_peel)
+			for(var/i = 1 to tiles_to_slip)
+				if(!AM.locked_to)
+					step(AM, old_dir)
+					sleep(1)
+			spawn(1) AM.unlock_atom(src)
+	return 1
 
 /*
  * Bike Horns
@@ -67,12 +71,12 @@
 	user.gib()
 
 /obj/item/weapon/bikehorn/attack_self(mob/user as mob)
-	if(honk())
+	if(honk(user))
 		add_fingerprint(user)
 
 /obj/item/weapon/bikehorn/Crossed(var/mob/living/AM)
-	if (isliving(AM) && world.time > next_honk)
-		honk()
+	if (isliving(AM) && world.time > next_honk) // Honking these while under floortiles is fine though
+		honk(AM)
 		next_honk = world.time + honk_delay
 
 /obj/item/weapon/bikehorn/afterattack(atom/target, mob/user as mob, proximity_flag)
@@ -81,7 +85,7 @@
 		//honk()
 		//return
 
-	if(!proximity_flag && istype(target, /mob) && honk()) //for skilled honking at a range
+	if(!proximity_flag && istype(target, /mob) && honk(user)) //for skilled honking at a range
 		target.visible_message(\
 			"<span class='notice'>[user] honks \the [src] at \the [target].</span>",\
 			"[user] honks \the [src] at you.")
@@ -90,15 +94,22 @@
 	if(..())
 		return 1
 
-	honk()
+	honk(H)
 
 /obj/item/weapon/bikehorn/bite_act(mob/living/H)
 	H.visible_message("<span class='danger'>[H] bites \the [src]!</span>", "<span class='danger'>You bite \the [src].</span>")
 
-	honk()
+	honk(H)
 
-/obj/item/weapon/bikehorn/proc/honk()
+/obj/item/weapon/bikehorn/proc/honk(var/mob/user)
 	if(world.time - last_honk_time >= honk_delay)
+		var/initial_hitsound = hitsound
+		if(ishuman(user)) //Merry Cico Del Mayo, ai caramba!!!!!
+			var/mob/living/carbon/human/H = user
+			if(clumsy_check(H) && H.is_wearing_item(/obj/item/clothing/head/sombrero) && H.is_wearing_item(/obj/item/clothing/suit/poncho))
+				hitsound = 'sound/items/bikehorn_curaracha.ogg'
+				spawn(0)
+					hitsound = initial_hitsound
 		last_honk_time = world.time
 		playsound(src, hitsound, 50, vary_pitch)
 		return 1
@@ -151,6 +162,17 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "honkbaton"
 	item_state = "honkbaton"
+	can_honk_baton = 0
+
+/obj/item/weapon/bikehorn/skullhorn
+	name = "skull horn"
+	desc = "To be or not to be bad to the bone..."
+	icon = 'icons/effects/blood.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/remains.dmi', "right_hand" = 'icons/mob/in-hand/right/remains.dmi')
+	icon_state = "remains_skull"
+	item_state = "skull"
+	attack_verb = list("hits")
+	hitsound = 'sound/items/badtothebone.ogg'
 	can_honk_baton = 0
 
 #define TELE_COOLDOWN 5 SECONDS
@@ -268,6 +290,9 @@
 	icon_state = "glue_safe0"
 
 /obj/proc/glue_act(var/stick_time = 1 SECONDS, var/glue_state = GLUE_STATE_NONE) //proc for when glue is used on something
+	default_glue_act(stick_time, glue_state)
+
+/obj/proc/default_glue_act(stick_time, glue_state)
 	switch(glue_state)
 		if(GLUE_STATE_TEMP)
 			current_glue_state = GLUE_STATE_TEMP
@@ -277,27 +302,30 @@
 			current_glue_state = GLUE_STATE_PERMA
 
 /obj/proc/unglue()
+	return default_unglue()
+
+/obj/proc/default_unglue()
 	if(current_glue_state == GLUE_STATE_TEMP)
 		current_glue_state = GLUE_STATE_NONE
 		return 1
 	else
 		return 0
 
-/obj/item/unglue()
-	if(..())
-		cant_drop--
-
-/obj/item/clothing/unglue()
-	if(..())
-		canremove++
-
 /obj/item/glue_act(stick_time)
 	cant_drop++
 	..()
 
-/obj/item/clothing/glue_act(stick_time)
+/obj/item/unglue()
+	if(..())
+		cant_drop--
+
+/obj/item/clothing/glue_act(stick_time, glue_state)
 	canremove--
-	..()
+	default_glue_act(stick_time, glue_state)
+
+/obj/item/clothing/unglue()
+	if(default_unglue())
+		canremove++
 
 /obj/structure/bed/glue_act(stick_time)
 	..()

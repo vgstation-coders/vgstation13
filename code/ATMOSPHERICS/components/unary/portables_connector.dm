@@ -8,12 +8,11 @@
 	var/obj/machinery/portable_atmospherics/connected_device
 
 	var/on = 0
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	level = 0
 
 
 /obj/machinery/atmospherics/unary/portables_connector/New()
-	initialize_directions = dir
 	..()
 
 /obj/machinery/atmospherics/unary/portables_connector/hide(var/i) //to make the little pipe section invisible, the icon changes.

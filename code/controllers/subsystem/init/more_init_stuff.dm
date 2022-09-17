@@ -9,8 +9,15 @@ var/datum/subsystem/more_init/SSmore_init
 	NEW_SS_GLOBAL(SSmore_init)
 
 /datum/subsystem/more_init/Initialize(timeofday)
-	setup_news()
 	var/watch=start_watch()
+	log_startup_progress("Initializing stuff formerly left in world/New...")
+	initialize_rune_words()
+	library_catalog.initialize()
+	initialize_beespecies()
+
+	setup_news()
+	log_startup_progress("  Finished stuff formerly left in world/New in [stop_watch(watch)]s.")
+	watch=start_watch()
 	log_startup_progress("Caching damage icons...")
 	cachedamageicons()
 	log_startup_progress("  Finished caching damage icons in [stop_watch(watch)]s.")
@@ -30,7 +37,6 @@ var/datum/subsystem/more_init/SSmore_init
 		log_startup_progress("Not generating holominimaps - SKIP_HOLOMINIMAP_GENERATION found in config/config.txt")
 	..()
 
-	buildcamlist()
 	if(config.media_base_url)
 		watch = start_watch()
 		log_startup_progress("Caching jukebox playlists...")
@@ -44,12 +50,12 @@ var/datum/subsystem/more_init/SSmore_init
 	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
 	process_adminbus_teleport_locs()	//Sets up adminbus teleport locations.
 	camera_sort(cameranet.cameras)
-	for (var/obj/machinery/computer/security/S in tv_monitors)
-		S.init_cams()
 	create_global_diseases()
 	init_wizard_apprentice_setups()
 	machinery_rating_cache = cache_machinery_components_rating()
 	typing_indicator = new
+	CHECK_TICK
+	centcomm_store = new
 	log_startup_progress("Finished doing the other misc. initializations in [stop_watch(watch)]s.")
 
 /proc/cache_machinery_components_rating()
@@ -68,28 +74,6 @@ var/datum/subsystem/more_init/SSmore_init
 		wizard_apprentice_setups_nanoui += list(list("name" = setup_datum.name, "desc" = setup_datum.generate_description()))
 		wizard_apprentice_setups_by_name[setup_datum.name] = setup_datum
 
-/datum/subsystem/more_init/proc/buildcamlist()
-	adv_camera.camerasbyzlevel = list()
-	for(var/key in adv_camera.zlevels)
-		adv_camera.camerasbyzlevel["[key]"] = list()
-	//camerasbyzlevel = list("1" = list(), "5" = list())
-	if(!istype(cameranet) || !istype(cameranet.cameras) || !cameranet.cameras.len)
-		world.log << "cameranet has not been initialized before us, finding cameras manually."
-		for(var/obj/machinery/camera/C in world) //can't use machines list because cameras are removed from it.
-			if(C.z == map.zMainStation || C.z == map.zAsteroid)
-				var/list/ourlist = adv_camera.camerasbyzlevel["[C.z]"]
-				ourlist += C
-	else
-		for(var/obj/machinery/camera/C in cameranet.cameras) //can't use machines list because cameras are removed from it.
-			if(C.z == map.zMainStation || C.z == map.zAsteroid)
-				var/list/ourlist = adv_camera.camerasbyzlevel["[C.z]"]
-				ourlist += C
-	for(var/key in adv_camera.camerasbyzlevel)
-		var/list/keylist = adv_camera.camerasbyzlevel[key]
-		world.log << "[key] has [keylist.len] entries"
-
-	adv_camera.initialized = 1
-
 
 /datum/subsystem/more_init/proc/cachedamageicons()
 	var/mob/living/carbon/human/H = new(locate(1,1,2))
@@ -101,8 +85,8 @@ var/datum/subsystem/more_init/SSmore_init
 //		testing("Generating [S], Blood([species_blood])")
 		for(var/datum/organ/external/O in H.organs)
 			//testing("[O] part")
-			for(var/brute = 1 to 3)
-				for(var/burn = 1 to 3)
+			for(var/brute = 0 to 3)
+				for(var/burn = 0 to 3)
 					var/damage_state = "[brute][burn]"
 					if(species_blood)
 						DI = icon('icons/mob/dam_human.dmi', "[brute]0-color")

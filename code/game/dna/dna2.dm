@@ -113,10 +113,6 @@ var/global/list/facial_hair_styles_female_list	= list()
 	var/struc_enzymes="" // Encoded SE
 	var/unique_enzymes="" // MD5 of player name
 
-	// Internal dirtiness checks
-	var/dirtyUI=0
-	var/dirtySE=0
-
 	// Okay to read, but you're an idiot if you do.
 	// BLOCK = VALUE
 	var/list/SE[DNA_SE_LENGTH]
@@ -137,18 +133,17 @@ var/global/list/facial_hair_styles_female_list	= list()
 // USE THIS WHEN COPYING STUFF OR YOU'LL GET CORRUPTION!
 /datum/dna/proc/Clone()
 	var/datum/dna/new_dna = new()
-	new_dna.unique_enzymes=unique_enzymes
-	new_dna.b_type=b_type
-	new_dna.mutantrace=mutantrace
-	new_dna.real_name=real_name
-	new_dna.flavor_text=flavor_text
-	new_dna.species=species
+	new_dna.unique_enzymes = unique_enzymes
+	new_dna.struc_enzymes = struc_enzymes
+	new_dna.b_type = b_type
+	new_dna.mutantrace = mutantrace
+	new_dna.real_name = real_name
+	new_dna.flavor_text = flavor_text
+	new_dna.species = species
 	for(var/b=1;b<=DNA_SE_LENGTH;b++)
 		new_dna.SE[b]=SE[b]
 		if(b<=DNA_UI_LENGTH)
 			new_dna.UI[b]=UI[b]
-	new_dna.UpdateUI()
-	new_dna.UpdateSE()
 	return new_dna
 
 /datum/dna/proc/GiveRandomSE(var/notflags = 0, var/flags = 0, var/genetype = -1, var/dormant = FALSE)
@@ -200,7 +195,13 @@ var/global/list/facial_hair_styles_female_list	= list()
 	SetUIValueRange(DNA_UI_EYES_G,    character.my_appearance.g_eyes,    255,    1)
 	SetUIValueRange(DNA_UI_EYES_B,    character.my_appearance.b_eyes,    255,    1)
 
-	SetUIValueRange(DNA_UI_SKIN_TONE, 35-character.my_appearance.s_tone, 220,    1) // Value can be negative.
+	if (character.species)
+		if (character.species.anatomy_flags & HAS_SKIN_TONE)
+			SetUIValueRange(DNA_UI_SKIN_TONE, 35-character.my_appearance.s_tone, 220,    1)
+		else
+			SetUIValueRange(DNA_UI_SKIN_TONE, character.my_appearance.s_tone, character.species.max_skin_tone,    1)
+	else
+		SetUIValueRange(DNA_UI_SKIN_TONE, 35-character.my_appearance.s_tone, 220,    1)
 
 	SetUIState(DNA_UI_GENDER,         character.gender!=MALE,        1)
 
@@ -216,7 +217,6 @@ var/global/list/facial_hair_styles_female_list	= list()
 	ASSERT(value>=0)
 	ASSERT(value<=4095)
 	UI[block]=value
-	dirtyUI=1
 	if(!defer)
 		UpdateUI()
 
@@ -232,7 +232,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if (block<=0)
 		return
 	ASSERT(maxvalue<=4095)
-	var/mapped_value = round(map_range(value, 0, maxvalue, 0, 0xFFF))
+	var/mapped_value = round(map_range(value, 0, max(maxvalue,1), 0, 0xFFF), 1)
 	SetUIValue(block, mapped_value, defer)
 
 // Getter version of above.
@@ -240,7 +240,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if (block<=0)
 		return 0
 	var/value = GetUIValue(block)
-	return round(map_range(value, 0, 0xFFF, 0, maxvalue))
+	return round(map_range(value, 0, 0xFFF, 0, maxvalue), 1)
 
 // Is the UI gene "on" or "off"?
 // For UI, this is simply a check of if the value is > 2050.
@@ -311,7 +311,6 @@ var/global/list/facial_hair_styles_female_list	= list()
 	ASSERT(value>=0)
 	ASSERT(value<=4095)
 	SE[block]=value
-	dirtySE=1
 	if(!defer)
 		UpdateSE()
 	//testing("SetSEBlock([block],[value],[defer]): [value] -> [GetSEValue(block)]")
@@ -389,31 +388,24 @@ var/global/list/facial_hair_styles_female_list	= list()
 			newBlock+=newSubBlock
 		else
 			newBlock+=copytext(oldBlock,i,i+1)
-	//testing("SetSESubBlock([block],[subBlock],[newSubBlock],[defer]): [oldBlock] -> [newBlock]")
 	SetSEBlock(block,newBlock,defer)
 
 
 /proc/EncodeDNABlock(var/value)
 	if(!isnum(value))
 		warning("Expected a number, got [value]")
-		return 0
+		return "0"
 	return num2hex(value, 3)
 
 /datum/dna/proc/UpdateUI()
 	src.uni_identity=""
 	for(var/block in UI)
 		uni_identity += EncodeDNABlock(block)
-	//testing("New UI: [uni_identity]")
-	dirtyUI=0
 
 /datum/dna/proc/UpdateSE()
-	//var/oldse=struc_enzymes
 	struc_enzymes=""
 	for(var/block in SE)
 		struc_enzymes += EncodeDNABlock(block)
-	//testing("Old SE: [oldse]")
-	//testing("New SE: [struc_enzymes]")
-	dirtySE=0
 
 // BACK-COMPAT!
 //  Just checks our character has all the crap it needs.
@@ -425,22 +417,29 @@ var/global/list/facial_hair_styles_female_list	= list()
 		if(length(struc_enzymes)!= 3*DNA_SE_LENGTH)
 			ResetSE()
 
-		if(length(unique_enzymes) != 32)
+		if(character.real_name != "unknown")
 			unique_enzymes = md5(character.real_name)
+		else if(real_name && real_name != "unknown")
+			unique_enzymes = md5(real_name)
+		else
+			unique_enzymes = md5(capitalize(pick(first_names_male)))
 	else
 		if(length(uni_identity) != 3*DNA_UI_LENGTH)
 			uni_identity = "00600200A00E0110148FC01300B0095BD7FD3F4"
 		if(length(struc_enzymes)!= 3*DNA_SE_LENGTH)
 			struc_enzymes = "43359156756131E13763334D1C369012032164D4FE4CD61544B6C03F251B6C60A42821D26BA3B0FD6"
+		unique_enzymes = md5(capitalize(pick(first_names_male)))
+
 
 // BACK-COMPAT!
-//  Initial DNA setup.  I'm kind of wondering why the hell this doesn't just call the above.
+//  Initial DNA setup.
 /datum/dna/proc/ready_dna(mob/living/carbon/human/character)
 	ResetUIFrom(character)
+	check_integrity(character)
 
-	ResetSE()
-
-	unique_enzymes = md5(character.real_name)
 	reg_dna[unique_enzymes] = character.real_name
 	if(character.species)
 		species = character.species.name
+	character.copy_dna_data_to_blood_reagent()
+	for (var/obj/item/weapon/card/id/card in character)
+		card.SetOwnerDNAInfo(character)

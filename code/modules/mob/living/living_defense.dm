@@ -152,7 +152,6 @@
 			throwByName = M.name
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Hit [src.name] ([src.ckey]) with a thrown [O] (speed: [speed])</font>")
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been hit with a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed])</font>")
-
 		if(!src.isDead() && src.ckey) //Message admins if the hit mob is alive and has a ckey
 			msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 
@@ -161,7 +160,6 @@
 		else
 			src.LAssailant = M
 			assaulted_by(M)
-
 /*
 	Ear and eye protection
 
@@ -295,7 +293,7 @@
 /mob/living/proc/IgniteMob()
 	if(fire_stacks > 0 && !on_fire)
 		on_fire = 1
-		set_light(max(fire_stacks, 3), l_color = LIGHT_COLOR_FIRE)
+		set_light(src.light_range + 3)
 		update_fire()
 		return 1
 	else
@@ -305,7 +303,7 @@
 	if(on_fire)
 		on_fire = 0
 		fire_stacks = 0
-		kill_light()
+		set_light(src.light_range - 3)
 		update_fire()
 
 /mob/living/proc/update_fire()

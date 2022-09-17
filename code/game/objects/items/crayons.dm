@@ -33,74 +33,74 @@ var/global/list/all_graffitis = list(
 
 /obj/item/toy/crayon/red
 	icon_state = "crayonred"
-	colour = "#DA0000"
+	mainColour = "#DA0000"
 	shadeColour = "#810C0C"
 	colourName = "red"
 
 /obj/item/toy/crayon/orange
 	icon_state = "crayonorange"
-	colour = "#FF9300"
+	mainColour = "#FF9300"
 	shadeColour = "#A55403"
 	colourName = "orange"
 
 /obj/item/toy/crayon/yellow
 	icon_state = "crayonyellow"
-	colour = "#FFF200"
+	mainColour = "#FFF200"
 	shadeColour = "#886422"
 	colourName = "yellow"
 
 /obj/item/toy/crayon/green
 	icon_state = "crayongreen"
-	colour = "#A8E61D"
+	mainColour = "#A8E61D"
 	shadeColour = "#61840F"
 	colourName = "green"
 
 /obj/item/toy/crayon/blue
 	icon_state = "crayonblue"
-	colour = "#00B7EF"
+	mainColour = "#00B7EF"
 	shadeColour = "#0082A8"
 	colourName = "blue"
 
 /obj/item/toy/crayon/purple
 	icon_state = "crayonpurple"
-	colour = "#DA00FF"
+	mainColour = "#DA00FF"
 	shadeColour = "#810CFF"
 	colourName = "purple"
 
 /obj/item/toy/crayon/black
 	icon_state = "crayonblack"
-	colour = "#222222"
+	mainColour = "#222222"
 	shadeColour = "#000000"
 	colourName = "black"
 
 /obj/item/toy/crayon/mime
 	icon_state = "crayonmime"
 	desc = "A very sad-looking crayon."
-	colour = "#FFFFFF"
+	mainColour = "#FFFFFF"
 	shadeColour = "#000000"
 	colourName = "mime"
 	uses = 0
 
 /obj/item/toy/crayon/mime/attack_self(mob/living/user as mob) //inversion
-	if(colour != "#FFFFFF" && shadeColour != "#000000")
-		colour = "#FFFFFF"
+	if(mainColour != "#FFFFFF" && shadeColour != "#000000")
+		mainColour = "#FFFFFF"
 		shadeColour = "#000000"
 		to_chat(user, "You will now draw in white and black with this crayon.")
 	else
-		colour = "#000000"
+		mainColour = "#000000"
 		shadeColour = "#FFFFFF"
 		to_chat(user, "You will now draw in black and white with this crayon.")
 	return
 
 /obj/item/toy/crayon/rainbow
 	icon_state = "crayonrainbow"
-	colour = "#FFF000"
+	mainColour = "#FFF000"
 	shadeColour = "#000FFF"
 	colourName = "rainbow"
 	uses = 0
 
 /obj/item/toy/crayon/rainbow/attack_self(mob/living/user as mob)
-	colour = input(user, "Please select the main colour.", "Crayon colour") as color
+	mainColour = input(user, "Please select the main colour.", "Crayon colour") as color
 	shadeColour = input(user, "Please select the shade colour.", "Crayon colour") as color
 	return
 
@@ -159,7 +159,7 @@ var/global/list/all_graffitis = list(
 
 				if(user.client)
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
-					I.maptext = {"<span style="color:[colour];font-size:[FONT_SIZE];font-family:'[FONT_NAME]';" valign="[alignment]">[preference]</span>"}
+					I.maptext = {"<span style="color:[mainColour];font-size:[FONT_SIZE];font-family:'[FONT_NAME]';" valign="[alignment]">[preference]</span>"}
 					I.loc = get_turf(target)
 					animate(I, alpha = 100, 10, -1)
 					animate(alpha = 255, 10, -1)
@@ -190,12 +190,12 @@ var/global/list/all_graffitis = list(
 				C.name = "written text"
 				C.desc = "\"[preference]\", written in crayon."
 
-				var/maptext_start = {"<span style="color:[colour];font-size:[FONT_SIZE];font-family:'[FONT_NAME]';" valign="[alignment]">"}
+				var/maptext_start = {"<span style="color:[mainColour];font-size:[FONT_SIZE];font-family:'[FONT_NAME]';" valign="[alignment]">"}
 				var/maptext_end = "</span>"
 				C.maptext = "[maptext_start][preference][maptext_end]"
 
 			else
-				C = new /obj/effect/decal/cleanable/crayon(target, main = colour, shade = shadeColour, type = drawtype)
+				C = new /obj/effect/decal/cleanable/crayon(target, main = mainColour, shade = shadeColour, type = drawtype)
 
 			if(target.density && (C.loc != get_turf(user))) //Drawn on a wall (while standing on a floor)
 				C.forceMove(get_turf(user))
@@ -223,7 +223,7 @@ var/global/list/all_graffitis = list(
 		user.visible_message("<span class='notice'>[user] bites a chunk out of \the [src].</span>", \
 			"<span class='notice'>You bite a chunk out of \the [src].</span>")
 		user.nutrition += 5
-		score["foodeaten"]++
+		score.foodeaten++
 		if(ispath(text2path("/datum/reagent/paint/[colourName]")) && M.reagents)
 			M.reagents.add_reagent("paint_[colourName]", 10)
 		if(uses)

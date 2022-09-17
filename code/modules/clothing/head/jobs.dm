@@ -41,6 +41,12 @@
 	siemens_coefficient = 0.9
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/head/cap/cowboy
+	name = "general's hat"
+	desc = "A regal white stetson adorned with a general's badge. For especially old-school captains."
+	icon_state = "cowboycap"
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
+
 //Head of Security
 /obj/item/clothing/head/HoS
 	name = "Head of Security Hat"
@@ -53,6 +59,9 @@
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8
+
+/obj/item/clothing/head/HoS/NoiseDampening()
+	return TRUE
 
 /obj/item/clothing/head/HoS/surveyor
 	name = "surveyor cap"
@@ -67,6 +76,15 @@
 	icon_state = "dermal"
 	item_state = "dermal"
 	siemens_coefficient = 0.6
+
+/obj/item/clothing/head/HoS/cowboy
+	name = "sheriff's hat"
+	desc = "A stalwart white stetson adorned with a sheriff's badge. For especially old-school heads of security."
+	icon_state = "cowboyhos"
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
+
+/obj/item/clothing/head/HoS/cowboy/NoiseDampening()
+	return FALSE
 
 /obj/item/clothing/head/beret/headofsecurity
 	name = "formal Head of Security beret"
@@ -84,6 +102,18 @@
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
+
+/obj/item/clothing/head/warden/NoiseDampening()
+	return TRUE
+
+/obj/item/clothing/head/warden/cowboy
+	name = "jailor's hat"
+	desc = "A menacing black stetson adorned with a jailor's badge. For especially old-school wardens."
+	icon_state = "cowboywarden"
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
+
+/obj/item/clothing/head/warden/cowboy/NoiseDampening()
+	return FALSE
 
 /obj/item/clothing/head/beret/warden
 	name = "formal warden beret"
@@ -161,6 +191,12 @@
 	icon_state = "garrison"
 	item_state = "garrison"
 	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/head/cowboy/sec
+	name = "deputy hat"
+	desc = "A classic stetson adorned with a security badge. For especially old-school officers."
+	icon_state = "cowboysec"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 //Medical
 /obj/item/clothing/head/surgery

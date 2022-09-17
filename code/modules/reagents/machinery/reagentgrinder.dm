@@ -21,7 +21,7 @@ var/global/list/juice_items = list (
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "juicer1"
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 5
 	active_power_usage = 100
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
@@ -120,6 +120,9 @@ var/global/list/juice_items = list (
 		to_chat(user, "You can't do that while \the [src] has a beaker loaded!")
 		return FALSE
 	return ..()
+
+/obj/machinery/reagentgrinder/splashable()
+	return FALSE
 
 /obj/machinery/reagentgrinder/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
@@ -290,7 +293,7 @@ var/global/list/juice_items = list (
 	[processing_chamber]<br>
 	[beaker_contents]<hr>
 	"}
-		if (is_beaker_ready && !is_chamber_empty && !(stat & (NOPOWER|BROKEN)))
+		if (is_beaker_ready && !is_chamber_empty && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 
 			dat += {"<A href='?src=\ref[src];action=grind'>Grind the reagents</a><BR>
 				<A href='?src=\ref[src];action=juice'>Juice the reagents</a><BR><BR>"}
@@ -332,7 +335,7 @@ var/global/list/juice_items = list (
 	update_icon()
 
 /obj/machinery/reagentgrinder/AltClick(mob/user)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return ..()
 	if(!anchored)
 		return ..()
@@ -425,7 +428,7 @@ var/global/list/juice_items = list (
 
 /obj/machinery/reagentgrinder/proc/juice()
 	power_change()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(inuse)
 		return
@@ -459,7 +462,7 @@ var/global/list/juice_items = list (
 
 /obj/machinery/reagentgrinder/proc/grind()
 	power_change()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(inuse)
 		return
@@ -502,21 +505,18 @@ var/global/list/juice_items = list (
 		if(O.reagents.reagent_list.len == 0)
 			remove_object(O)
 
+
 	//Sheets
-	for (var/obj/item/stack/sheet/O in holdingitems)
+	for(var/obj/item/stack/sheet/O in holdingitems)
 		var/allowed = get_allowed_by_id(O)
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-			break
-		for(var/i = 1; i <= round(O.amount, 1); i++)
-			for (var/r_id in allowed)
-				var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-				var/amount = allowed[r_id]
-				beaker.reagents.add_reagent(r_id,min(amount, space))
-				if (space < amount)
+
+		while(beaker.reagents.total_volume < beaker.reagents.maximum_volume && O.use(1))
+			for(var/r_id in allowed)
+				if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 					break
-			if (i == round(O.amount, 1))
-				remove_object(O)
-				break
+				beaker.reagents.add_reagent(r_id, allowed[r_id])
+		if(O.gcDestroyed)
+			holdingitems -= O
 
 	//xenoarch
 	for(var/obj/item/weapon/rocksliver/O in holdingitems)

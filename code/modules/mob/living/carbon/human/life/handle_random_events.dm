@@ -7,10 +7,16 @@
 			vomit()
 
 		//No hair for radroaches
-		if((src.radiation >= 50) && !(src.species.anatomy_flags & NO_BALD))
-			src.my_appearance.h_style = "Bald"
-			src.my_appearance.f_style = "Shaved"
-			src.update_hair()
+		if((radiation >= 50) && !(species.anatomy_flags & NO_BALD))
+			var/update_needed = FALSE
+			if(my_appearance.h_style != "Bald")
+				my_appearance.h_style = "Bald"
+				update_needed = TRUE
+			if(my_appearance.f_style != "Shaved")
+				my_appearance.f_style = "Shaved"
+				update_needed = TRUE
+			if(update_needed)
+				update_hair()
 
 	//0.1% chance of playing a scary sound to someone who's in complete darkness
 	if(isturf(loc) && rand(1,1000) == 1)

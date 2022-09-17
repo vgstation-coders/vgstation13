@@ -9,6 +9,14 @@
 	emag_cost = 0 // because fun
 	light_color = LIGHT_COLOR_GREEN
 	var/haunted = 0
+	var/mob/playerone
+	var/mob/playertwo
+
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag,
+	)
 
 /obj/machinery/computer/arcade/haunted
 	desc = "Still doesn't support pinball, but does support spookiness."
@@ -44,16 +52,24 @@
 	if(..())
 		return
 	user.set_machine(src)
+	playerone = user
 	var/dat = game.get_dat()
 
 	user << browse(dat, "window=arcade")
 	onclose(user, "arcade")
 
-/obj/machinery/computer/arcade/emag(mob/user)
+// Lets you be "player two" against a human
+/obj/machinery/computer/arcade/attack_ai(mob/user)
+    playertwo = user
+    var/dat = game.get_p2_dat()
+    user << browse(dat, "window=arcade")
+    onclose(user, "arcade")
+
+/obj/machinery/computer/arcade/emag_act(mob/user)
 	game.emag_act(user)
 
 /obj/machinery/computer/arcade/emp_act(severity)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		..(severity)
 		return
 	game.emp_act(severity)
@@ -71,7 +87,7 @@
 
 /obj/machinery/computer/arcade/kick_act()
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	game.kick_act()

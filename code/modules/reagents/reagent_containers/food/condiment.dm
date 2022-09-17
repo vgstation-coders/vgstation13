@@ -40,7 +40,7 @@
 
 		to_chat(M, "<span class='notice'>You swallow some of the contents of \the [src].</span>")
 		if(reagents.total_volume) //Deal with the reagents in the food
-			reagents.reaction(M, INGEST)
+			reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,amount_per_transfer_from_this)/(reagents.reagent_list.len))
 			spawn(5)
 				reagents.trans_to(M, amount_per_transfer_from_this)
 
@@ -70,7 +70,7 @@
 			M.assaulted_by(user)
 
 		if(reagents.total_volume) //Deal with the reagents in the food
-			reagents.reaction(M, INGEST)
+			reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,amount_per_transfer_from_this)/(reagents.reagent_list.len))
 			spawn(5)
 				reagents.trans_to(M, amount_per_transfer_from_this)
 
@@ -270,6 +270,26 @@
 				desc = "Not an instrument."
 				icon_state = MAYO
 				condiment_overlay = MAYO
+			if(ZAMSPICES)
+				name = "Zam Spice Bottle"
+				desc = "A blend of several mothership spices. It has a sharp, tangy aroma."
+				icon_state = ZAMSPICES
+				condiment_overlay = ZAMSPICES
+			if(ZAMMILD)
+				name = "Zam's Mild Sauce"
+				desc = "A tasty sauce made from mothership spices and acid."
+				icon_state = ZAMMILD
+				condiment_overlay = ZAMMILD
+			if(ZAMSPICYTOXIN)
+				name = "Zam's Spicy Sauce"
+				desc = "A dangerously flavorful sauce made from mothership spices and powerful acid."
+				icon_state = ZAMSPICYTOXIN
+				condiment_overlay = ZAMSPICYTOXIN
+			if(POLYPGELATIN)
+				name = "Polyp Gelatin"
+				desc = "A thick and nutritious gelatin collected from space polyps that has a mild, salty taste."
+				icon_state = POLYPGELATIN
+				condiment_overlay = POLYPGELATIN
 			if(CREAM)
 				name = "whipped cream dispenser"
 				desc = "Instant delight." //placeholder desc
@@ -521,7 +541,7 @@
 	name = "exotic bottle"
 	desc = "If you can see this label, something is wrong."
 	//~9% chance of anything but special sauce, which is .09 chance
-	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,MUSTARD=10,RELISH=10,COCO=10)
+	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,MUSTARD=10,RELISH=10,COCO=10,ZAMSPICES=10,ZAMMILD=5,ZAMSPICYTOXIN=3)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()
@@ -544,6 +564,39 @@
 /obj/item/weapon/reagent_containers/food/condiment/mayo/New()
 	..()
 	reagents.add_reagent(MAYO, 50)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/zamspices
+	name = "Zam Spice Bottle"
+	desc = "A blend of several mothership spices. It has a sharp, tangy aroma."
+
+/obj/item/weapon/reagent_containers/food/condiment/zamspices/New()
+	..()
+	reagents.add_reagent(ZAMSPICES, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/zammild
+	name = "Zam's Mild Sauce"
+	desc = "A tasty sauce made from mothership spices and acid."
+
+/obj/item/weapon/reagent_containers/food/condiment/zammild/New()
+	..()
+	reagents.add_reagent(ZAMMILD, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin
+	name = "Zam's Spicy Sauce"
+	desc = "A dangerously flavorful sauce made from mothership spices and powerful acid."
+
+/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin/New()
+	..()
+	reagents.add_reagent(ZAMSPICYTOXIN, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/polypgelatin
+	name = "Polyp Gelatin Bottle"
+	desc = "A thick, nutritious gelatin collected from space polyps. It has a mild flavor with a hint of salt."
+
+/obj/item/weapon/reagent_containers/food/condiment/polypgelatin/New()
+	..()
+	reagents.add_reagent(POLYPGELATIN, 50)
 
 
 /obj/item/weapon/reagent_containers/food/condiment/cream
@@ -633,3 +686,59 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/mayo/New()
 	..()
 	reagents.add_reagent(MAYO, 5)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/small/soysauce
+	name = "soy sauce packet"
+	desc = "Tasty soy sauce in a convenient tiny packet."
+	icon_state = "soysauce_small"
+	condiment_overlay = SOYSAUCE
+	trash_type = /obj/item/trash/soysauce_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/soysauce/New()
+	..()
+	reagents.add_reagent(SOYSAUCE, 5)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/vinegar
+	name = "malt vinegar packet"
+	desc = "Perfect for smaller portions of fish and chips."
+	icon_state = "vinegar_small"
+	condiment_overlay = VINEGAR
+	trash_type = /obj/item/trash/vinegar_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/vinegar/New()
+	..()
+	reagents.add_reagent(VINEGAR, 5)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zamspices
+	name = "Zam Spices Packet"
+	desc = "A tiny packet of mothership spices."
+	icon_state = "zamspices_small"
+	condiment_overlay = ZAMSPICES
+	trash_type = /obj/item/trash/zamspices_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zamspices/New()
+	..()
+	reagents.add_reagent(ZAMSPICES, 5)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zammild
+	name = "Zam's Mild Sauce Packet"
+	desc = "More portable than the bottle, just as tasty."
+	icon_state = "zammild_small"
+	condiment_overlay = ZAMMILD
+	trash_type = /obj/item/trash/zammild_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zammild/New()
+	..()
+	reagents.add_reagent(ZAMMILD, 5)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
+	name = "Zam's Spicy Sauce Packet"
+	desc = "More portable than the bottle, just as spicy."
+	icon_state = "zamspicytoxin_small"
+	condiment_overlay = ZAMSPICYTOXIN
+	trash_type = /obj/item/trash/zamspicytoxin_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin/New()
+	..()
+	reagents.add_reagent(ZAMSPICYTOXIN, 5)

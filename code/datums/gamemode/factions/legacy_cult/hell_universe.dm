@@ -27,7 +27,7 @@ In short:
 	if(!T.holy)
 		T.cultify()
 		for(var/obj/machinery/light/L in T.contents)
-			new /obj/structure/cult_legacy/pylon(L.loc)
+			new /obj/structure/cult/pylon(L.loc)
 			qdel(L)
 	return
 
@@ -98,9 +98,16 @@ In short:
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "hell01")
 		else
-			if(!T.holy && prob(1) && T.z != CENTCOMM_Z)
+			if(!T.holy && prob(1) && T.z != map.zCentcomm)
 				new /obj/effect/gateway/active/cult(T)
 			T.underlays += "hell01"
+		CHECK_TICK
+
+	for(var/datum/lighting_corner/C in global.all_lighting_corners)
+		if (!C.active)
+			continue
+
+		C.update_lumcount(0.5, 0, 0)
 		CHECK_TICK
 
 /datum/universal_state/hell/proc/MiscSet()

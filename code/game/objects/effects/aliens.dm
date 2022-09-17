@@ -24,11 +24,11 @@
 	name = "resin"
 	desc = "Looks like some kind of slimy growth."
 	icon_state = "resin"
-
+	pass_flags_self = PASSGLASS
 	density = 1
 	opacity = 1
 	anchored = 1
-	var/health = 200
+	health = 200
 	var/turf/linked_turf
 
 /obj/effect/alien/resin/wall
@@ -163,7 +163,7 @@
 /obj/effect/alien/resin/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
 		return 0
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return !opacity
 	return !density
 
@@ -183,7 +183,7 @@
 	density = 0
 	plane = ABOVE_TURF_PLANE
 	layer = WEED_LAYER
-	var/health = 14
+	health = 14
 	var/obj/effect/alien/weeds/node/linked_node = null
 	var/obj/machinery/door/jammin = null
 
@@ -287,7 +287,7 @@
 	//			continue
 
 			for(var/obj/O in T)
-				if(O.density)
+				if(!O.Cross(src, get_turf(T)))
 					continue direction_loop
 
 			new /obj/effect/alien/weeds(T, linked_node)
@@ -455,7 +455,7 @@
 	density = 0
 	anchored = 1
 
-	var/health = 50
+	health = 50
 	var/status = GROWING //can be GROWING, GROWN or BURST; all mutually exclusive
 
 	flags = PROXMOVE

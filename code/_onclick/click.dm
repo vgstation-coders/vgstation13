@@ -22,13 +22,6 @@
 /atom/Click(location,control,params)
 	usr.ClickOn(src, params)
 
-/mob/living/Click()
-	if(isAI(usr))
-		var/mob/living/silicon/ai/A = usr
-		if(!A.aicamera.in_camera_mode) //Fix for taking photos of mobs
-			return
-	..()
-
 /atom/DblClick(location,control,params)
 	usr.DblClickOn(src,params)
 
@@ -50,7 +43,7 @@
 
 	After that, mostly just check your state, check whether you're holding an item,
 	check whether you're adjacent to the target, then pass off the click to whoever
-	is recieving it.
+	is receiving it.
 	The most common are:
 	* mob/UnarmedAttack(atom,adjacent,params) - used here only when adjacent, with no item in hand; in the case of humans, checks gloves
 	* atom/attackby(item,user,params) - used only when adjacent
@@ -75,11 +68,7 @@
 		return
 
 	var/list/modifiers = params2list(params)
-	invoke_event(/event/clickon, list(
-		"user" = src,
-		"modifiers" = modifiers,
-		"target" = A
-	))
+	INVOKE_EVENT(src, /event/clickon, "user" = src,	"modifiers" = modifiers, "target" = A)
 	if(modifiers["middle"])
 		if(modifiers["shift"])
 			MiddleShiftClickOn(A)
@@ -94,6 +83,9 @@
 		return
 	if(modifiers["ctrl"])
 		CtrlClickOn(A)
+		return
+	if(modifiers["right"])
+		RightClickOn(A)
 		return
 
 	if(attempt_crawling(A))
@@ -118,7 +110,7 @@
 		return
 
 	if(in_throw_mode)
-		if(!get_active_hand() && (a_intent == I_GRAB || a_intent == I_DISARM))
+		if(!get_active_hand() && (a_intent == I_DISARM))
 			doTackle(A)
 		else
 			throw_item(A)
@@ -150,12 +142,12 @@
 				resolved = A.attackby(held_item, src, params)
 				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
-				if(!resolved && A && !A.gcDestroyed && held_item)
+				if(!resolved && A && !A.gcDestroyed && held_item && !held_item.gcDestroyed)
 					held_item.afterattack(A,src,1,params) // 1 indicates adjacency
 		else
 			if(ismob(A) || istype(held_item, /obj/item/weapon/grab))
 				delayNextAttack(10)
-			if(invoke_event(/event/uattack, list("atom" = A))) //This returns 1 when doing an action intercept
+			if(INVOKE_EVENT(src, /event/uattack, "atom" = A)) //This returns 1 when doing an action intercept
 				return
 			UnarmedAttack(A, 1, params)
 
@@ -186,7 +178,7 @@
 	else
 		if(ismob(A))
 			delayNextAttack(10)
-		if(invoke_event(/event/uattack, list("atom" = A))) //This returns 1 when doing an action intercept
+		if(INVOKE_EVENT(src, /event/uattack, "atom" = A)) //This returns 1 when doing an action intercept
 			return
 		RangedAttack(A, params)
 
@@ -248,7 +240,7 @@
 	Not currently used by anything but could easily be.
 */
 /mob/proc/RestrainedClickOn(var/atom/A)
-	invoke_event(/event/ruattack, list("atom" = A))
+	INVOKE_EVENT(src, /event/ruattack, "atom" = A)
 
 /*
 	Middle click
@@ -300,6 +292,16 @@
 	if(Adjacent(user))
 		user.start_pulling(src)
 
+/*
+	Right Click
+*/
+
+/mob/proc/RightClickOn(var/atom/A)
+	A.RightClick()
+
+/atom/proc/RightClick(var/mob/user)
+	return
+
 
 /*
 	Alt click
@@ -326,9 +328,15 @@
 			user.client.statpanel = T.name
 
 /mob/living/carbon/AltClick(var/mob/user)
-	if(!(user == src) && !(isrobot(user)) && user.Adjacent(src))
-		src.give_item(user)
-		return
+	if(!(user == src) && user.Adjacent(src))
+		if((meat_type || butchering_drops) && (stat == DEAD))	//if the carbon has a meat, and if it is dead.
+			var/obj/item/item_in_hand = user.get_active_hand()
+			if(item_in_hand && (item_in_hand.sharpness_flags & SHARP_BLADE))
+				butcher()
+				return 1
+		else if(!isrobot(user))
+			src.give_item(user)
+			return
 	..()
 
 /*
@@ -391,9 +399,9 @@
 		else if(A.pixel_x < -16)
 			change_dir(WEST)
 
-		invoke_event(/event/before_move)
-		invoke_event(/event/face)
-		invoke_event(/event/after_move)
+		INVOKE_EVENT(src, /event/before_move)
+		INVOKE_EVENT(src, /event/face)
+		INVOKE_EVENT(src, /event/after_move)
 		return
 
 	if(abs(dx) < abs(dy))
@@ -407,9 +415,9 @@
 		else
 			change_dir(WEST)
 
-	invoke_event(/event/before_move)
-	invoke_event(/event/face)
-	invoke_event(/event/after_move)
+	INVOKE_EVENT(src, /event/before_move)
+	INVOKE_EVENT(src, /event/face)
+	INVOKE_EVENT(src, /event/after_move)
 
 
 // File renamed to mouse.dm?

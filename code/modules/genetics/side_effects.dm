@@ -76,7 +76,7 @@
 	if(!H.reagents.has_reagent(ANTI_TOXIN))
 		H.confused += 100
 
-proc/trigger_side_effect(mob/living/carbon/human/H)
+/proc/trigger_side_effect(mob/living/carbon/human/H)
 	spawn
 		if(!istype(H))
 			return

@@ -151,6 +151,7 @@
 			<option value='?_src_=vars;build_mode=\ref[D]'>Toggle Build Mode</option>
 			<option value='?_src_=vars;drop_everything=\ref[D]'>Drop Everything</option>
 			<option value='?_src_=vars;regenerateicons=\ref[D]'>Regenerate Icons</option>
+			<option value='?_src_=vars;resetbody=\ref[D]'>Reset Body From Archive</option>
 		if(ishuman(D))
 
 			body += {"<option value>---</option>
@@ -600,7 +601,7 @@ function loadPage(list) {
 		href_list["datumrefresh"] = href_list["give_disease2"]
 
 	else if(href_list["godmode"])
-		if(!check_rights(R_REJUVINATE))
+		if(!check_rights(R_REJUVENATE))
 			return
 
 		var/mob/M = locate(href_list["godmode"])
@@ -841,9 +842,9 @@ function loadPage(list) {
 
 		switch(href_list["rotatedir"])
 			if("right")
-				A.dir = turn(A.dir, -45)
+				A.change_dir(turn(A.dir, -45))
 			if("left")
-				A.dir = turn(A.dir, 45)
+				A.change_dir(turn(A.dir, 45))
 		href_list["datumrefresh"] = href_list["rotatedatum"]
 
 	else if(href_list["setspecies"])
@@ -876,6 +877,26 @@ function loadPage(list) {
 			to_chat(usr, "This can only be done to instances of type /mob")
 			return
 		M.regenerate_icons()
+
+	else if(href_list["resetbody"])
+		if(!check_rights(0))
+			return
+
+		var/mob/M = locate(href_list["resetbody"])
+		if(!ismob(M))
+			to_chat(usr, "This can only be done to instances of type /mob")
+			return
+		if(!M.mind)
+			to_chat(usr, "Only mobs with a /mind have their original body archived")
+			return
+		if (ishuman(M) && alert("Since you are resetting a human, do you want them to keep their current inventory equipped or drop it all on the floor?", "Body Resetting", "Keep Inventory", "Drop Everything") == "Keep Inventory")
+			M.reset_body(keep_clothes = TRUE)
+		else if (ishuman(M) && alert("Since you are resetting a human, do you want them to get their current job equipment again or not?", "Body Resetting", "Keep Outfit", "Spawn Naked") == "Keep Outfit")
+			M.reset_body(spawn_naked = FALSE)
+		else
+			M.reset_body()
+		add_gamelogs(usr, " reset [(M == usr) ? "their own" : "[key_name(M)]'s"] body from its archive.", admin = TRUE, tp_link = TRUE)
+
 
 	else if(href_list["adjustDamage"] && href_list["mobToDamage"])
 		if(!check_rights(R_DEBUG|R_ADMIN|R_FUN))

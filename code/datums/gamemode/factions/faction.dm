@@ -159,17 +159,21 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/GetScoreboard()
 	var/count = 1
 	var/score_results = ""
+	var/fully_freeform = TRUE
 	if(objective_holder.objectives.len > 0)
 		score_results += "<ul>"
 		for (var/datum/objective/objective in objective_holder.GetObjectives())
+			var/freeform = objective.flags & FREEFORM_OBJECTIVE
+			if (!freeform)
+				fully_freeform = FALSE
 			var/successful = objective.IsFulfilled()
 			objective.extraInfo()
-			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<span class='red'>Fail.</span>"]"
-			feedback_add_details("[ID]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
+			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [freeform ? "" : "[successful ? "<font color='green'><B>Success!</B></font>" : "<span class='red'>Fail.</span>"]"]"
+			feedback_add_details("[ID]_objective","[objective.type]|[freeform ? "FREEFORM" : "[successful ? "SUCCESS" : "FAIL"]"]")
 			count++
 			if (count <= objective_holder.objectives.len)
 				score_results += "<br>"
-	if (count>1)
+	if ((count > 1) && !fully_freeform)
 		if (IsSuccessful())
 			score_results += "<br><font color='green'><B>\The [name] was successful!</B></font>"
 			feedback_add_details("[ID]_success","SUCCESS")
@@ -225,13 +229,13 @@ var/list/factions_with_hud_icons = list()
 			return
 		for (var/datum/role/R in members)
 			if (R.antag?.current)
-				to_chat(R.antag.current, "<b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>[message]</span>")
+				to_chat(R.antag.current, "<b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>\"[message]\"</span>")
 
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>[message]</span></span>")
+			to_chat(O, "<span class='game say'><b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>\"[message]\"</span></span>")
 
 		message_admins("Admin [key_name_admin(usr)] has talked to [name] as [voice_per_admin[user.ckey]].")
-		log_factionspeak("[key_name(usr)] as [voice_per_admin[user.ckey]]: [message]")
+		log_factionspeak("[key_name(usr)] as [voice_per_admin[user.ckey]]: \"[message]\"")
 
 	if (href_list["faction_set_speaker"])
 		if (!(user.ckey in voice_per_admin))
@@ -254,7 +258,7 @@ var/list/factions_with_hud_icons = list()
 
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'><br>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'>"}
 	return header
 
 /datum/faction/proc/AdminPanelEntry(var/datum/admins/A)

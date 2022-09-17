@@ -126,7 +126,7 @@
 		 contain only turfs, or even only atoms.
  */
 
-swapmap
+/swapmap
 	var/id		// a string identifying this map uniquely
 	var/x1		// minimum x,y,z coords
 	var/y1
@@ -138,7 +138,7 @@ swapmap
 	var/tmp/mode	// save as text-mode
 	var/ischunk		// tells the load routine to load to the specified location
 
-swapmap/New(_id,x,y,z)
+/swapmap/New(_id,x,y,z)
 	if(isnull(_id))
 		return
 	id=_id
@@ -164,7 +164,7 @@ swapmap/New(_id,x,y,z)
 	z2=z?(z):1
 	AllocateSwapMap()
 
-swapmap/Del()
+/swapmap/Del()
 	// a temporary datum for a chunk can be deleted outright
 	// for others, some cleanup is necessary
 	if(!ischunk)
@@ -208,7 +208,7 @@ swapmap/Del()
 			AREA    // if non-default; saved as a number (index into areas list)
 			vars    // all other changed vars
 	*/
-swapmap/Write(savefile/S)
+/swapmap/Write(savefile/S)
 	var/x
 	var/y
 	var/z
@@ -251,7 +251,7 @@ swapmap/Write(savefile/S)
 	locked=0
 	del(areas)
 
-swapmap/Read(savefile/S,_id,turf/locorner)
+/swapmap/Read(savefile/S,_id,turf/locorner)
 	var/x
 	var/y
 	var/z
@@ -322,7 +322,7 @@ swapmap/Read(savefile/S,_id,turf/locorner)
 	Ignore certain operations if loading a map as a chunk. Use the
 	x1,y1,z1 position for it, and *don't* count it as a loaded map.
 	*/
-swapmap/proc/AllocateSwapMap()
+/swapmap/proc/AllocateSwapMap()
 	InitializeSwapMaps()
 	world.maxx=max(x2,world.maxx)	// stretch x/y if necessary
 	world.maxy=max(y2,world.maxy)
@@ -344,7 +344,7 @@ swapmap/proc/AllocateSwapMap()
 		swapmaps_loaded[src]=null
 		swapmaps_byname[id]=src
 
-swapmap/proc/ConsiderRegion(X1,Y1,X2,Y2,Z1,Z2)
+/swapmap/proc/ConsiderRegion(X1,Y1,X2,Y2,Z1,Z2)
 	while(1)
 		var/nextz=0
 		var/swapmap/M
@@ -382,7 +382,7 @@ swapmap/proc/ConsiderRegion(X1,Y1,X2,Y2,Z1,Z2)
 			X1=1;X2=world.maxx
 			Y1=1;Y2=world.maxy
 
-swapmap/proc/CutXYZ()
+/swapmap/proc/CutXYZ()
 	var/mx=swapmaps_compiled_maxx
 	var/my=swapmaps_compiled_maxy
 	var/mz=swapmaps_compiled_maxz
@@ -395,11 +395,11 @@ swapmap/proc/CutXYZ()
 	world.maxz=mz
 
 // save and delete
-swapmap/proc/Unload()
+/swapmap/proc/Unload()
 	Save()
 	del(src)
 
-swapmap/proc/Save()
+/swapmap/proc/Save()
 	if(id==src)
 		return 0
 	var/savefile/S=mode?(new):new("map_[id].sav")
@@ -411,30 +411,30 @@ swapmap/proc/Save()
 	return 1
 
 // this will not delete existing savefiles for this map
-swapmap/proc/SetID(newid)
+/swapmap/proc/SetID(newid)
 	swapmaps_byname-=id
 	id=newid
 	swapmaps_byname[id]=src
 
-swapmap/proc/AllTurfs(z)
+/swapmap/proc/AllTurfs(z)
 	if(isnum(z) && (z<z1 || z>z2))
 		return null
 	return block(LoCorner(z),HiCorner(z))
 
 // this could be safely called for an obj or mob as well, but
 // probably not an area
-swapmap/proc/Contains(turf/T)
+/swapmap/proc/Contains(turf/T)
 	return (T && T.x>=x1 && T.x<=x2\
 				&& T.y>=y1 && T.y<=y2\
 				&& T.z>=z1 && T.z<=z2)
 
-swapmap/proc/InUse()
+/swapmap/proc/InUse()
 	for(var/turf/T in AllTurfs())
 		for(var/mob/M in T) if(M.key) return 1
 
-swapmap/proc/LoCorner(z=z1)
+/swapmap/proc/LoCorner(z=z1)
 	return locate(x1,y1,z)
-swapmap/proc/HiCorner(z=z2)
+/swapmap/proc/HiCorner(z=z2)
 	return locate(x2,y2,z)
 
 /*
@@ -444,7 +444,7 @@ swapmap/proc/HiCorner(z=z2)
 	/turf/wall
 	/obj/fence{icon_state="iron"}
 	*/
-swapmap/proc/BuildFilledRectangle(turf/T1,turf/T2,item)
+/swapmap/proc/BuildFilledRectangle(turf/T1,turf/T2,item)
 	if(!Contains(T1) || !Contains(T2))
 		return
 	var/turf/T=T1
@@ -453,7 +453,7 @@ swapmap/proc/BuildFilledRectangle(turf/T1,turf/T2,item)
 	T2=locate(max(T.x,T2.x),max(T.y,T2.y),max(T.z,T2.z))
 	for(T in block(T1,T2)) new item(T)
 
-swapmap/proc/BuildRectangle(turf/T1,turf/T2,item)
+/swapmap/proc/BuildRectangle(turf/T1,turf/T2,item)
 	if(!Contains(T1) || !Contains(T2))
 		return
 	var/turf/T=T1
@@ -473,11 +473,11 @@ swapmap/proc/BuildRectangle(turf/T1,turf/T2,item)
 	Supplementary build proc: Takes a list of turfs, plus an item
 	type. Actually the list doesn't have to be just turfs.
 	*/
-swapmap/proc/BuildInTurfs(list/turfs,item)
+/swapmap/proc/BuildInTurfs(list/turfs,item)
 	for(var/T in turfs) new item(T)
 
 
-atom/Write(savefile/S)
+/atom/Write(savefile/S)
 	for(var/V in vars-"x"-"y"-"z"-"contents"-"icon"-"overlays"-"underlays")
 		if(issaved(vars[V]))
 			if(vars[V] != initial(vars[V]))
@@ -506,7 +506,7 @@ atom/Write(savefile/S)
 		if(l != contents)
 			del(l)
 
-atom/Read(savefile/S)
+/atom/Read(savefile/S)
 	var/list/l
 	if(contents.len)
 		l=contents
@@ -543,7 +543,7 @@ var/swapmaps_initialized
 var/swapmaps_loaded
 var/swapmaps_byname
 
-proc/InitializeSwapMaps()
+/proc/InitializeSwapMaps()
 	if(swapmaps_initialized)
 		return
 	swapmaps_initialized=1
@@ -558,17 +558,17 @@ proc/InitializeSwapMaps()
 			// so you can look up an icon file by name or vice-versa
 			swapmaps_iconcache[swapmaps_iconcache[V]]=V
 
-proc/SwapMaps_AddIconToCache(name,icon)
+/proc/SwapMaps_AddIconToCache(name,icon)
 	if(!swapmaps_iconcache)
 		swapmaps_iconcache=list()
 	swapmaps_iconcache[name]=icon
 	swapmaps_iconcache[icon]=name
 
-proc/SwapMaps_Find(id)
+/proc/SwapMaps_Find(id)
 	InitializeSwapMaps()
 	return swapmaps_byname[id]
 
-proc/SwapMaps_Load(id)
+/proc/SwapMaps_Load(id)
 	InitializeSwapMaps()
 	var/swapmap/M=swapmaps_byname[id]
 	if(!M)
@@ -590,20 +590,20 @@ proc/SwapMaps_Load(id)
 		M.mode=text
 	return M
 
-proc/SwapMaps_Save(id)
+/proc/SwapMaps_Save(id)
 	InitializeSwapMaps()
 	var/swapmap/M=swapmaps_byname[id]
 	if(M)
 		M.Save()
 	return M
 
-proc/SwapMaps_Save_All()
+/proc/SwapMaps_Save_All()
 	InitializeSwapMaps()
 	for(var/swapmap/M in swapmaps_loaded)
 		if(M)
 			M.Save()
 
-proc/SwapMaps_Unload(id)
+/proc/SwapMaps_Unload(id)
 	InitializeSwapMaps()
 	var/swapmap/M=swapmaps_byname[id]
 	if(!M)
@@ -611,11 +611,11 @@ proc/SwapMaps_Unload(id)
 	M.Unload()
 	return 1
 
-proc/SwapMaps_DeleteFile(id)
+/proc/SwapMaps_DeleteFile(id)
 	fdel("map_[id].sav")
 	fdel("map_[id].txt")
 
-proc/SwapMaps_CreateFromTemplate(template_id)
+/proc/SwapMaps_CreateFromTemplate(template_id)
 	var/swapmap/M=new
 	var/savefile/S
 	var/text=0
@@ -642,7 +642,7 @@ proc/SwapMaps_CreateFromTemplate(template_id)
 	while(M.locked) sleep(1)
 	return M
 
-proc/SwapMaps_LoadChunk(chunk_id,turf/locorner)
+/proc/SwapMaps_LoadChunk(chunk_id,turf/locorner)
 	var/swapmap/M=new
 	var/savefile/S
 	var/text=0
@@ -669,7 +669,7 @@ proc/SwapMaps_LoadChunk(chunk_id,turf/locorner)
 	del(M)
 	return 1
 
-proc/SwapMaps_SaveChunk(chunk_id,turf/corner1,turf/corner2)
+/proc/SwapMaps_SaveChunk(chunk_id,turf/corner1,turf/corner2)
 	if(!corner1 || !corner2)
 		world.log << "SwapMaps error in SwapMaps_SaveChunk():"
 		if(!corner1)
@@ -692,7 +692,7 @@ proc/SwapMaps_SaveChunk(chunk_id,turf/corner1,turf/corner2)
 	del(M)
 	return 1
 
-proc/SwapMaps_GetSize(id)
+/proc/SwapMaps_GetSize(id)
 	var/savefile/S
 	var/text=0
 	if(swapmaps_mode==SWAPMAPS_TEXT && fexists("map_[id].txt"))

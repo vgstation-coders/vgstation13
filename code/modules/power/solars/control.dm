@@ -10,7 +10,7 @@
 	desc = "A controller for solar panel arrays."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "solar"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 50
 	active_power_usage = 300
 	id_tag = 0
@@ -47,7 +47,7 @@
 		icon_state = "solarb"
 		return
 
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "solar0"
 		return
 
@@ -56,9 +56,6 @@
 	if(cdir > 0)
 		overlays += image('icons/obj/computer.dmi', "solcon-o", FLY_LAYER, angle2dir(cdir))
 
-/obj/machinery/power/solar/control/attack_ai(mob/user)
-	add_hiddenprint(user)
-	interact(user)
 
 /obj/machinery/power/solar/control/attack_hand(mob/user)
 	add_fingerprint(user)
@@ -68,7 +65,7 @@
 	lastgen = gen
 	gen = 0
 
-	if(stat & (NOPOWER | BROKEN))
+	if(stat & (NOPOWER | BROKEN | FORCEDISABLE))
 		return
 
 	if(track == 1 && nexttime < world.time && trackdir * trackrate)
@@ -115,7 +112,7 @@
 
 // called by solar tracker when sun position changes (somehow, that's not supposed to be in process)
 /obj/machinery/power/solar/control/proc/tracker_update(angle)
-	if(track != TRACK_AUTOMATIC || stat & (NOPOWER | BROKEN))
+	if(track != TRACK_AUTOMATIC || stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		return
 
 	cdir = angle
@@ -124,7 +121,7 @@
 	updateDialog()
 
 /obj/machinery/power/solar/control/interact(mob/user)
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 
 	if (!src.Adjacent(user))

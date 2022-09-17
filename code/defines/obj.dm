@@ -4,18 +4,18 @@
 	anchored = 1
 	density = 1
 
-	attackby(obj/item/weapon/W as obj, mob/user as mob)
-		return attack_hand(user)
+/obj/structure/signpost/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	return attack_hand(user)
 
-	attack_hand(mob/user as mob)
-		switch(alert("Travel back to ss13?",,"Yes","No"))
-			if("Yes")
-				if(user.z != src.z)
-					return
-				user.loc.loc.Exited(user)
-				user.forceMove(pick(latejoin))
-			if("No")
+/obj/structure/signpost/attack_hand(mob/user as mob)
+	switch(alert("Travel back to ss13?",,"Yes","No"))
+		if("Yes")
+			if(user.z != src.z)
 				return
+			user.loc.loc.Exited(user)
+			user.forceMove(pick(latejoin))
+		if("No")
+			return
 
 /obj/effect/mark
 	var/mark = ""
@@ -101,6 +101,8 @@
 	// sort mobs
 	if(OOC)
 		for(var/mob/living/silicon/ai/dooropener in mob_list)
+			if(dooropener.parent) //Hide shunted AI APC Copies from view.
+				continue
 			bot[dooropener.name] = "AI"
 			isactive[dooropener.name] = (dooropener.client && dooropener.client.inactivity <= 10 * 60 * 10) ? "Active" : "Inactive"
 		for(var/mob/living/silicon/robot/tincan in mob_list)

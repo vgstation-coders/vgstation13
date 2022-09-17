@@ -23,8 +23,6 @@
 	density = 1
 	nick = "honkin' ride" //For fucks sake, well then
 	flags = OPENCONTAINER
-	noghostspin = 0
-
 	max_health = 100 //Bananium sheets increases maximum health by 20
 	var/activated = 0 //Honk to activate, it stays active while you sit in it, and will deactivate when you unbuckle
 	var/mode = MODE_NORMAL
@@ -63,19 +61,18 @@
 /obj/structure/bed/chair/vehicle/clowncart/examine(mob/user)
 	..()
 	if(max_health > 100)
-		to_chat(user, "<span class='info'>It is reinforced with [(max_health-100)/20] bananium sheets.</span>")
+		to_chat(user, "<span class='info'>It is reinforced with [(max_health - 100) / 20] bananium sheets.</span>")
 	switch(mode)
 		if(MODE_DRAWING)
 			to_chat(user, "Currently in drawing mode.")
 		if(MODE_PEELS)
 			to_chat(user, "Currently in banana mode.")
-	switch(health)
-		if(max_health*0.5 to max_health)
-			to_chat(user, "<span class='notice'>It appears slightly dented.</span>")
-		if(1 to max_health*0.5)
-			to_chat(user, "<span class='warning'>It appears heavily dented.</span>")
-		if((INFINITY * -1) to 0)
-			to_chat(user, "<span class='danger'>It appears completely unsalvageable.</span>")
+	if(health in max_health * 0.5 to max_health)
+		to_chat(user, "<span class='notice'>It appears slightly dented.</span>")
+	else if(health in 1 to max_health * 0.5)
+		to_chat(user, "<span class='warning'>It appears heavily dented.</span>")
+	else if(health <= 0)
+		to_chat(user, "<span class='danger'>It appears completely unsalvageable.</span>")
 
 /obj/structure/bed/chair/vehicle/clowncart/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/weapon/bikehorn))
@@ -191,7 +188,7 @@
 					to_chat(user, "<span class='notice'>Set to draw graffiti!</span>")
 				if("rune")
 					to_chat(user, "<span class='notice'>Set to draw runes!</span>")
-				if("" || "nothing")
+				if("", "nothing")
 					to_chat(user, "<span class='warning'>No longer drawing anything.</span>")
 				if("paint")
 					to_chat(user, "<span class='notice'>Set to paint the floor!</span>")

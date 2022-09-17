@@ -1,19 +1,9 @@
 /mob/living/silicon/ai/Login()	//ThisIsDumb(TM) TODO: tidy this up ¬_¬ ~Carn
 	..()
-	
-	to_chat(src, "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>")
-	to_chat(src, "<B>To look at other parts of the station, click on yourself to get a camera menu.</B>")
-	to_chat(src, "<B>While observing through a camera, you can use most (networked) devices which you can see, such as computers, APCs, intercoms, doors, etc.</B>")
-	to_chat(src, "To use something, simply click on it.")
-	to_chat(src, {"Use say ":b to speak to your cyborgs through binary."})
-	show_laws()
-	if(ismalf(src))
-		to_chat(src, "<b>These laws may be changed by other players, but you are not required to follow any of them.</b>")
-	var/datum/runeset/rune_set = global_runesets["blood_cult"]
-	for(var/obj/effect/rune/rune in rune_set.rune_list) //HOLY FUCK WHO THOUGHT LOOPING THROUGH THE WORLD WAS A GOOD IDEA
+
+	for(var/obj/effect/rune/rune in runes)
 		client.images += rune.blood_image
 	regenerate_icons()
-
 	clear_all_alerts()	//fuck alerts
 	handle_regular_hud_updates()
 
@@ -27,4 +17,17 @@
 		spawn(1)
 			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
 		stored_freqs = 1
+	var/datum/role/malfAI/M = mind.GetRole(MALF)
+	if(M)
+		M.regenerate_hack_overlays()
+		DisplayUI("Malf")
 	client.CAN_MOVE_DIAGONALLY = TRUE
+	client.screen += aistatic
+
+/mob/living/silicon/ai/proc/show_intro_text()
+	to_chat(src, "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>")
+	to_chat(src, "<B>To look at other parts of the station, click on yourself to get a camera menu.</B>")
+	to_chat(src, "<B>While observing through a camera, you can use most (networked) devices which you can see, such as computers, APCs, intercoms, doors, etc.</B>")
+	to_chat(src, "To use something, simply click on it.")
+	to_chat(src, {"Use say ":b to speak to your cyborgs through binary."})
+

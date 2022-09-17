@@ -166,11 +166,32 @@
 	mymob.client.screen += list(vampire_blood_display)
 
 
-/datum/hud/proc/countdown_hud()
+/datum/hud/proc/countdown_blob()
 
 	countdown_display = new /obj/abstract/screen
+	countdown_display.icon = 'icons/mob/screen_countdowns.dmi'
 	countdown_display.name = "Burst Countdown"
-	countdown_display.icon_state = "template"
+	countdown_display.icon_state = "countdown_blob"
+	countdown_display.screen_loc = ui_under_health
+
+	mymob.client.screen += list(countdown_display)
+
+/datum/hud/proc/countdown_monkey()
+
+	countdown_display = new /obj/abstract/screen
+	countdown_display.icon = 'icons/mob/screen_countdowns.dmi'
+	countdown_display.name = "Primitive Countdown"
+	countdown_display.icon_state = "countdown_monkey"
+	countdown_display.screen_loc = ui_under_health
+
+	mymob.client.screen += list(countdown_display)
+
+/datum/hud/proc/countdown_time_agent()
+
+	countdown_display = new /obj/abstract/screen
+	countdown_display.name = "Time Countdown"
+	countdown_display.icon = 'icons/mob/screen_countdowns.dmi'
+	countdown_display.icon_state = "countdown_default"
 	countdown_display.screen_loc = ui_under_health
 
 	mymob.client.screen += list(countdown_display)
@@ -263,3 +284,36 @@
 		spiderling_growth_display.screen_loc = ui_under_health
 
 		mymob.client.screen += list(spiderling_growth_display)
+
+/datum/hud/proc/pulsedemon_hud()
+
+	mymob.healths = new /obj/abstract/screen
+	mymob.healths.icon = 'icons/mob/screen1_pulsedemon.dmi'
+	mymob.healths.icon_state = "health0"
+	mymob.healths.name = "health"
+	mymob.healths.screen_loc = ui_health
+
+	vampire_blood_display = new /obj/abstract/screen
+	vampire_blood_display.name = "Charge"
+	vampire_blood_display.icon_state = "dark128"
+	vampire_blood_display.screen_loc = ui_under_health
+
+	mymob.client.reset_screen()
+
+	mymob.client.screen += list(mymob.healths,vampire_blood_display)
+
+/datum/hud/proc/grue_hud()
+
+	mymob.healths = new /obj/abstract/screen
+	mymob.healths.icon = 'icons/mob/screen1_grue.dmi'
+	mymob.healths.icon_state = "health0"
+	mymob.healths.name = "health"
+	mymob.healths.screen_loc = ui_health
+
+	mymob.healths2 = new /obj/abstract/screen
+	mymob.healths2.icon= 'icons/mob/screen1_grue.dmi'
+	mymob.healths2.icon_state= "lightlevel_dim"
+	mymob.healths2.name= "darkness"
+	mymob.healths2.screen_loc=ui_under_health
+
+	mymob.client.screen += list(mymob.healths,mymob.healths2)

@@ -66,8 +66,8 @@
 	O.max_chance = 10
 	S.strength = rand(70,100)
 	S.robustness = 100
-	S.antigen = list(pick(all_antigens))
-	S.antigen |= pick(all_antigens)
+	S.antigen = list(pick(all_antigens - special_antigens))
+	S.antigen |= pick(all_antigens - special_antigens)
 	S.spread = SPREAD_BLOOD
 	S.uniqueID = rand(0,9999)
 	S.subID = rand(0,9999)

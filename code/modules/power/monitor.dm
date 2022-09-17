@@ -1,220 +1,250 @@
-#define POWER_MONITOR_HIST_SIZE 15
+/*
+ * For reference, this is the JSON being produced by ui_data() that will be sent to PowerMonitor.js:
+ *
+ *  {
+ *      "engineer_access": Boolean. Whether the user has minor engineering access (same access as APCs). Enables priority buttons.
+ *      "attached": Boolean. Whether the console is attached to a grid
+ *
+ *      "history": {
+ *          "supply": Float List. Contains previous measurements of power available to the grid.
+ *          "demand": Float List. Contains previous measurements of power requested by the grid.
+ *      },
+ *      "supply": String. Last measured supply, preformatted. eg: 1234.5 becomes "1.23 kW"
+ *      "demand": String. Last measured demand, preformatted.
+ *
+ *      "areas": Map. Key is the area's \ref, value is area stats and machine list. May contain a
+ *                fake "\ref[null]" area named "Other" grouping any machines whose area can't be determined
+ *               Value is as follows:
+ *      {
+ *          "name": String. Area name
+ *
+ *          "demand": Float. Sum of machine and APC demand in this area.
+ *          "f_demand": String. Preformatted version of "demand". eg: 1234.5 becomes "1.23 kW"
+ *
+ *          "charge": Float, 0 to 100. Area's APC percent charge
+ *          "charging": Integer, -1 to 1. Whether the area's APC is currently charging (1), unchanged (0) or discharging (-1)
+ *
+ *          "eqp": Integer, 0 to 3. Whether the APC's equipment channel is off (0), auto-off (1), on (2) or auto-on (3)
+ *          "lgt": Integer, 0 to 3. Whether the APC's light channel is off (0), auto-off (1), on (2) or auto-on (3)
+ *          "env": Integer, 0 to 3. Whether the APC's enviroment channel is off (0), auto-off (1), on (2) or auto-on (3)
+ *
+ *          "machines": Map. Key is the machine's identifier, usually derived from "\ref[src]". May identify separate aspects
+ *                       of the same object, eg: powering things in an APC's area (identified as "\ref[src]") vs recharging said
+ *                       APC's battery (identified as "\ref[src]_b").
+ *                      Value is as follows:
+ *          {
+ *              "ref": String, "\ref[src]". A reference, for use in Topic() calls, to the object managing this machine's priority
+ *              "name": String. Machine name.
+ *
+ *              "priority": Integer, ranges 1 to 11. Machine priority. Keep in mind priority level 1 is reserved for
+ *                           rogue power consumers (eg: syndicate tech, pulse demons) and not meant to be recognized.
+ *
+ *              "demand": Float. Power being requested by this machine
+ *              "f_demand": String. Preformatted version of "demand". eg: 1234.5 becomes "1.23 kW"
+ *
+ *              "isbattery": Boolean. Whether this machine has an internal battery, eg: an SMES, an APC's battery
+ *              "charge": Float, 0 to 100. Machine percent charge
+ *              "charging": Integer, -1 to 1. Whether the machine's battery is charging (1), unchanged (0) or discharging (-1)
+ *          }
+ *      }
+ *  }
+*/
 
-// the power monitoring computer
-// for the moment, just report the status of all APCs in the same powernet
 /obj/machinery/computer/powermonitor
-	name = "Power Monitoring Computer"
+	name = "power monitor"
 	desc = "It monitors power levels across the station."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "power"
-
-	circuit = "/obj/item/weapon/circuitboard/powermonitor"
+	circuit = /obj/item/weapon/circuitboard/powermonitor
 
 	use_auto_lights = 1
 	light_range_on = 2
 	light_power_on = 1
 	light_color = LIGHT_COLOR_YELLOW
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 300
 	active_power_usage = 300
-	var/datum/html_interface/interface
-	var/tmp/next_process = 0
 
-	var/datum/powernet/connected_powernet
+	//var/datum/powernet/connected_powernet
+	var/datum/power_connection/power_connection = null
 
-	//Lists used for the charts.
-	var/list/demand_hist[0]
-	var/list/supply_hist[0]
-	var/list/load_hist[0]
+	var/list/history = list()
+	var/record_size = 60
+	var/record_interval = 50
+	var/next_record = 0
 
 /obj/machinery/computer/powermonitor/New()
 	..()
+	power_connection = new(src)
 
-	
+/obj/machinery/computer/powermonitor/Destroy()
+	if(power_connection)
+		qdel(power_connection)
+		power_connection = null
+	. = ..()
 
-	for(var/i = 1 to POWER_MONITOR_HIST_SIZE) //The chart doesn't like lists with null.
-		demand_hist.Add(list(0))
-		supply_hist.Add(list(0))
-		load_hist.Add(list(0))
+/obj/machinery/computer/powermonitor/initialize()
+	..()
+	search()
+	history["supply"] = list()
+	history["demand"] = list()
 
-	var/head = {"
-		<style type="text/css">
-			span.area
-			{
-				display: block;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-				overflow: hidden;
-				width: auto;
-			}
-		</style>
-		<script src="Chart.js"></script>
-		<script>var chartSize = [POWER_MONITOR_HIST_SIZE];</script>
-		<script src="powerChart.js"></script>
-	"}
-
-	interface = new/datum/html_interface/nanotrasen(src, "Power Monitoring", 420, 600, head)
+/obj/machinery/computer/powermonitor/proc/search()
 
 	var/obj/machinery/power/apc/areaapc = get_area(src).areaapc
 	if(areaapc)
-		connected_powernet = areaapc.terminal.powernet
+		var/turf/T = get_turf(areaapc)
+		var/obj/structure/cable/C = T.get_cable_node()
+		power_connection.connect(C)
 
-	var/obj/structure/cable/attached = null
-	var/turf/T = loc
-	if(isturf(T))
-		attached = locate() in T
-	if(attached)
-		connected_powernet = attached.get_powernet()
-	html_machines += src
-
-	init_ui()
-
-/obj/machinery/computer/powermonitor/proc/init_ui()
-	var/dat = {"
-		<div id="operatable">
-			<canvas id="powerChart" style="width: 261px;"><!--261px is as much as possible.-->
-
-			</canvas>
-			<div id="legend" style="float: right;"></div>
-			<table class="table" width="100%; table-layout: fixed;">
-				<colgroup><col style="width: 180px;"/><col/></colgroup>
-				<tr><td><strong>Total power:</strong></td><td id="totPower">X W</td></tr>
-				<tr><td><strong>Total load:</strong></td><td id="totLoad">X W</td></tr>
-				<tr><td><strong>Total demand:</strong></td><td id="totDemand">X W</td></tr>
-			</table>
-
-		<table class="table" width="100%; table-layout: fixed;">
-			<colgroup><col/><col style="width: 60px;"/><col style="width: 60px;"/><col style="width: 60px;"/><col style="width: 80px;"/><col style="width: 80px;"/><col style="width: 20px;"/></colgroup>
-			<thead><tr><th>Area</th><th>Eqp.</th><th>Lgt.</th><th>Env.</th><th align="right">Load</th><th align="right">Cell</th><th></th></tr></thead>
-			<tbody id="APCTable">
-
-			</tbody>
-		</table>
-		</div>
-		<div id="n_operatable" style="display: none;">
-			<span class="error">No connection.</span>
-		</div>
-	"}
-
-	interface.updateContent("content", dat)
-
-/obj/machinery/computer/powermonitor/attack_ai(mob/user)
-	. = attack_hand(user)
-
-/obj/machinery/computer/powermonitor/Destroy()
-	..()
-	html_machines -= src
-
-	qdel(interface)
-	interface = null
+	power_connection.connect()
 
 /obj/machinery/computer/powermonitor/attack_hand(mob/user)
 	. = ..()
 	if(.)
-		interface.hide(user)
 		return
+	tgui_interact(user)
 
-	interact(user)
+/obj/machinery/computer/powermonitor/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "PowerMonitor")
+		ui.open()
+		ui.set_autoupdate(TRUE)
 
+/obj/machinery/computer/powermonitor/ui_data(mob/user)
+	var/list/data = list()
 
-//Needs to be overriden because else it will use the shitty set_machine().
-/obj/machinery/computer/powermonitor/hiIsValidClient(datum/html_interface_client/hclient, datum/html_interface/hi)
-	return hclient.client.mob.html_mob_check(type)
+	var/datum/powernet/connected_powernet = power_connection.get_powernet()
 
-/obj/machinery/computer/powermonitor/interact(mob/user)
-	var/delay = 0
-	delay += send_asset(user.client, "Chart.js")
-	delay += send_asset(user.client, "powerChart.js")
+	data["engineer_access"] = (access_engine_minor in user.GetAccess()) // Engineer access allows players to modify priorities
+	data["attached"] = connected_powernet ? TRUE : FALSE
+	data["history"] = history
 
-	spawn(delay) //To prevent Jscript issues with resource sending.
-		interface.show(user)
+	if(!connected_powernet)
+		return data
 
-		interface.executeJavaScript("makeChart()", user) //Making the chart in something like $("document").ready() won't work so I do it here
+	data["supply"] = format_watts(connected_powernet.avail)
+	data["demand"] = format_watts(connected_powernet.viewload)
 
-		for(var/i = 1 to POWER_MONITOR_HIST_SIZE)
-			interface.callJavaScript("pushPowerData", list(demand_hist[i], supply_hist[i], load_hist[i]), user)
+	data["areas"] = list()
+
+	var/list/obj/machinery/power/machines = list()
+	for(var/obj/machinery/power/machine in connected_powernet.nodes)
+		if (istype(machine, /obj/machinery/power/terminal))
+			var/obj/machinery/power/terminal/T = machine
+			machine = T.master
+
+		if (istype(machine, /obj/machinery/power/apc))
+			var/obj/machinery/power/apc/apc = machine
+			var/list/apc_status = apc.get_monitor_status()
+
+			apc_status["\ref[apc]"]["f_demand"] = format_watts(apc_status["\ref[apc]"]["demand"])
+			data["areas"]["\ref[get_area(apc)]"] = list(
+				"name" = get_area(apc).name,
+				"demand" = apc_status["\ref[apc]"]["demand"],
+				"charging" = MONITOR_STATUS_BATTERY_STEADY,
+				"charge" = 0,
+				"eqp" = apc.equipment,
+				"lgt" = apc.lighting,
+				"env" = apc.environ,
+				"machines" = apc_status
+			)
+
+			if (apc_status["\ref[apc]_b"])
+				apc_status["\ref[apc]_b"]["f_demand"] = format_watts(apc_status["\ref[apc]_b"]["demand"])
+				data["areas"]["\ref[get_area(apc)]"]["demand"] += apc_status["\ref[apc]_b"]["demand"]
+				data["areas"]["\ref[get_area(apc)]"]["charging"] = apc_status["\ref[apc]_b"]["charging"]
+				data["areas"]["\ref[get_area(apc)]"]["charge"] = apc_status["\ref[apc]_b"]["charge"]
+
+		else if (machine && !(machine in machines)) //Some machines (eg: SMES) could have an input terminal and output wire knot on
+			machines += machine						// the same grid, counting them twice. This prevents that
+
+	var/unknown_areas = FALSE
+	var/list/unknown_area = list(
+		"name" = "Other",
+		"demand" = 0,
+		"machines" = list()
+	)
+
+	var/list/areas = data["areas"]
+	for (var/obj/machinery/power/machine in machines)
+		var/list/status_list = machine.get_monitor_status()
+		if (status_list)
+			var/list/apcarea = areas["\ref[get_area(machine)]"]
+			if (!apcarea)
+				unknown_areas = TRUE
+				apcarea = unknown_area
+			for (var/key in status_list)
+				status_list[key]["f_demand"] = format_watts(status_list[key]["demand"])
+				apcarea["machines"][key] = status_list[key]
+				apcarea["demand"] += status_list[key]["demand"]
+
+	for (var/datum/power_connection/component in connected_powernet.components)
+		var/list/status_list = component.get_monitor_status()
+		if (status_list)
+			var/list/apcarea = areas["\ref[get_area(component.parent)]"]
+			if (!apcarea)
+				unknown_areas = TRUE
+				apcarea = unknown_area
+			for (var/key in status_list)
+				status_list[key]["f_demand"] = format_watts(status_list[key]["demand"])
+				apcarea["machines"][key] = status_list[key]
+				apcarea["demand"] += status_list[key]["demand"]
+
+	if (unknown_areas)
+		data["areas"]["\ref[null]"] = unknown_area
+
+	for (var/apcarea in areas)
+		areas[apcarea]["f_demand"] = format_watts(areas[apcarea]["demand"])
+
+	return data
+
+/obj/machinery/computer/powermonitor/proc/record()
+	if(world.time >= next_record)
+		next_record = world.time + record_interval
+
+		var/list/supply = history["supply"]
+		var/list/demand = history["demand"]
+
+		var/datum/powernet/connected_powernet = power_connection.get_powernet()
+		if(connected_powernet)
+			supply += connected_powernet.avail
+			if(supply.len > record_size)
+				supply.Cut(1, 2)
+
+			demand += connected_powernet.viewload
+			if(demand.len > record_size)
+				demand.Cut(1, 2)
 
 /obj/machinery/computer/powermonitor/power_change()
+	search()
 	..()
 
-	var/obj/machinery/power/apc/areaapc = get_area(src).areaapc
-	if(areaapc)
-		connected_powernet = areaapc.terminal.powernet
-		
-	var/obj/structure/cable/attached = null
-	var/turf/T = loc
-	if(isturf(T))
-		attached = locate() in T
-	if(attached)
-		connected_powernet = attached.get_powernet()
-
-	if(stat & BROKEN)
-		icon_state = "broken"
-	else
-		if (stat & NOPOWER)
-			spawn(rand(0, 15))
-				icon_state = "c_unpowered"
-		else
-			icon_state = initial(icon_state)
-
 /obj/machinery/computer/powermonitor/process()
-	if(stat & (BROKEN|NOPOWER) || !connected_powernet)
-		interface.executeJavaScript("setDisabled()")
+	record()
+
+/obj/machinery/computer/powermonitor/ui_act(action, params, datum/tgui/ui)
+	. = ..()
+	if(.)
 		return
 
-	else
-		interface.executeJavaScript("setEnabled()")
+	if(action == "priority")
+		var/value = params["value"]
+		var/id = params["id"]
 
-	demand_hist += connected_powernet.load
-	supply_hist += connected_powernet.avail
-	load_hist += connected_powernet.viewload
+		// Ensure the user has engineer access and isn't setting bogus priority values
+		if (!(access_engine_minor in ui.user.GetAccess()) || value < POWER_PRIORITY_CRITICAL || value > POWER_PRIORITY_MINIMAL)
+			return
 
-	if(demand_hist.len > POWER_MONITOR_HIST_SIZE) //Should always be true but eh.
-		demand_hist.Cut(1, 2)
-		supply_hist.Cut(1, 2)
-		load_hist.Cut(1,2)
+		var/datum/D = locate(params["ref"])
+		if (istype(D, /obj/machinery/power))
+			var/obj/machinery/power/machine = D
+			machine.change_priority(value, id)
 
-	interface.callJavaScript("pushPowerData", list(connected_powernet.load, connected_powernet.avail, connected_powernet.viewload))
+		else if (istype(D, /datum/power_connection))
+			var/datum/power_connection/machine = D
+			machine.change_priority(value, id)
 
-	// next_process == 0 is in place to make it update the first time around, then wait until someone watches
-	if ((!next_process || interface.isUsed()) && world.time >= next_process)
-		next_process = world.time + 30
-
-		interface.updateContent("totPower", "[connected_powernet.avail] W")
-		interface.updateContent("totLoad", "[num2text(connected_powernet.viewload,10)] W")
-		interface.updateContent("totDemand", "[connected_powernet.load] W")
-
-		var/tbl = list()
-
-		var/list/S = list(" <span class='bad'>Off","<span class='bad'>AOff","  <span class='good'>On", " <span class='good'>AOn")
-		var/list/chg = list(" <span class='bad'>N","<span class='average'>C","<span class='good'>F")
-
-		for(var/obj/machinery/power/terminal/term in connected_powernet.nodes)
-			if(istype(term.master, /obj/machinery/power/apc))
-
-
-				var/obj/machinery/power/apc/A = term.master
-				var/area/APC_area = get_area(A)
-				tbl += "<tr>"
-				tbl += "<td><span class=\"area\">["\The [APC_area]"]</span></td>"
-				tbl += "<td>[S[A.equipment+1]]</span></td><td>[S[A.lighting+1]]</span></td><td>[S[A.environ+1]]</span></td>"
-				tbl += "<td align=\"right\">[A.lastused_total]</td>"
-				if(A.cell)
-					var/class = "good"
-
-					switch(A.cell.percent())
-						if(49 to 15)
-							class = "average"
-						if(15 to -INFINITY)
-							class = "bad"
-
-					tbl += "<td align='right' class='[class]'>[round(A.cell.percent())]%</td><td align='right'>[chg[A.charging+1]]</span>"
-				else
-					tbl += "<td colspan='2' align='right'>N/C</td>"
-				tbl += "</tr>"
-
-		tbl = jointext(tbl,"")
-		interface.updateContent("APCTable", tbl)
-
-#undef POWER_MONITOR_HIST_SIZE
+		return TRUE

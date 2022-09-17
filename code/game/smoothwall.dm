@@ -30,8 +30,13 @@
 	if(!A)
 		return 0
 	if(is_type_in_list(A, canSmoothWith()))
-		// COLON OPERATORS ARE TERRIBLE BUT I HAVE NO CHOICE
-		if(src.mineral == A:mineral)
+		if(istype(A, /turf/simulated/wall/shuttle) && !istype(src, /turf/simulated/wall/shuttle))
+			return 0
+		if(istype(A, /turf/simulated/wall))
+			var/turf/simulated/wall/W = A
+			if(src.mineral == W.mineral)
+				return 1
+		else
 			return 1
 
 	return 0
@@ -85,15 +90,6 @@
 			for(var/atom/A in T)
 				A.relativewall()
 
-/turf/simulated/wall/New()
-	..()
-
-	// SMOOTH US WITH OUR NEIGHBORS
-	relativewall()
-
-	// WE NEED TO TELL ALL OUR FRIENDS ABOUT THIS SCANDAL
-	relativewall_neighbours()
-
 /turf/simulated/wall/Destroy()
 	remove_rot()
 	var/temploc = src.loc
@@ -119,6 +115,8 @@
 
 var/list/smoothable_unsims = list(
 	"riveted",
+	"r_wall",
+	"rock_rf0",
 	)
 
 /turf/unsimulated/wall/New()

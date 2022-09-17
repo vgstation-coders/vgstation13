@@ -34,7 +34,7 @@
 	//Internal organs of this body part
 	var/list/datum/organ/internal/internal_organs
 
-	var/damage_msg = "<span class='warning'>You feel an intense pain</span>"
+	var/damage_msg = "<span class='warning'>You feel an intense pain.</span>"
 	var/broken_description
 
 	var/open = 0
@@ -53,8 +53,6 @@
 
 	var/grasp_id = 0 //Does this organ affect other grasping organs?
 	var/can_grasp = 0 //Can this organ actually grasp something?
-
-	var/w_class = W_CLASS_LARGE
 
 
 /datum/organ/external/New(var/datum/organ/external/P)
@@ -171,6 +169,8 @@
 	droplimb(1, spawn_limb = 0, display_message = FALSE)
 
 /datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
+	if(owner?.status_flags & GODMODE)
+		return 0	//godmode
 	if((brute <= 0) && (burn <= 0))
 		return 0
 
@@ -323,7 +323,7 @@
 //This function completely restores a damaged organ to perfect condition
 /datum/organ/external/proc/rejuvenate()
 	damage_state = "00"
-	//Robotic organs stay robotic.  Fix because right click rejuvinate makes IPC's organs organic.
+	//Robotic organs stay robotic.  Fix because right click rejuvenate makes IPC's organs organic.
 	//N3X: Use bitmask to exclude shit we don't want.
 	status = status & (ORGAN_ROBOT|ORGAN_PEG)
 	perma_injury = 0
@@ -612,20 +612,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/datum/species/species = src.species || owner.species
 
 	for(var/datum/wound/W in wounds)
-		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
-		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(species && species.anatomy_flags & NO_BLOOD))
-			var/blood_factor = 1
+		//Internal wounds get worse over time, and you lose blood
+		if(W.internal && !W.is_treated() && !(species && species.anatomy_flags & NO_BLOOD))
+			var/blood_factor = owner.calcbloodloss() //Calls helper function to determine amount of blood loss.
 
-			if(owner.reagents.has_reagent(INAPROVALINE) || owner.reagents.has_reagent(BICARIDINE)) //Inaprovaline and bicaridine slow bleeding by 30%
-				blood_factor -= 0.3
-
-			if(owner.reagents.has_reagent(HYPERZINE)) //On the other hand, hyperzine speeds up bleeding by 30%
-				blood_factor += 0.3
-
-			if(owner.reagents.has_reagent(CLOTTING_AGENT) || owner.reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely.
-				blood_factor = 0
-
-			owner.vessel.remove_reagent(BLOOD, W.damage * wound_update_accuracy * 0.07 * blood_factor)
+			owner.vessel.remove_reagent(BLOOD, W.damage * wound_update_accuracy * 0.07 * max(0, blood_factor))
 
 			if(prob(1 * wound_update_accuracy))
 				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)
@@ -834,7 +825,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			owner.visible_message("<span class='danger'>\The [owner]'s [display_name] explodes violently!</span>", \
 			"<span class='danger'>Your [display_name] explodes violently!</span>", \
 			"<span class='danger'>You hear an explosion followed by a scream!</span>")
-			explosion(get_turf(owner), -1, -1, 2, 3)
+			explosion(get_turf(owner), -1, -1, 2, 3, whodunnit = owner)
 			spark(src, 5, FALSE)
 
 		if(organ)
@@ -968,6 +959,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return rval
 
 /datum/organ/external/proc/fracture()
+	if(owner?.status_flags & GODMODE)
+		return 0	//godmode
 	var/datum/species/species = src.species || owner.species
 	if(species.anatomy_flags & NO_BONES)
 		return
@@ -1068,6 +1061,17 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.brute_dam = organ.brute_dam
 		src.burn_dam = organ.burn_dam
 
+		owner.butchering_drops += organ.butchering_drops
+
+		//Transfer any internal_organs from the organ item to the body
+		for(var/datum/organ/internal/transfer in organ.internal_organs)
+			if(transfer.name == "eyes" || "brain")
+				owner.organs_by_name["head"].internal_organs += transfer
+			owner.internal_organs += transfer
+			owner.internal_organs_by_name[transfer.organ_type] = transfer
+			owner.internal_organs_by_name[transfer.organ_type].owner = owner
+
+
 		//Process attached parts (i.e. if attaching an arm with a hand, this will process the hand)
 		for(var/obj/item/organ/external/attached in organ.children)
 			organ.remove_child(attached)
@@ -1076,12 +1080,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 			var/datum/organ/external/OE = owner.get_organ(attached.part)
 
 			OE.attach(attached)
-
-		if(organ.organ_data && !owner.internal_organs_by_name[organ.organ_data.organ_type])
-			owner.internal_organs_by_name[organ.organ_data.organ_type] = organ.organ_data.Copy()
-			owner.internal_organs += owner.internal_organs_by_name[organ.organ_data.organ_type]
-			internal_organs += owner.internal_organs_by_name[organ.organ_data.organ_type]
-			owner.internal_organs_by_name[organ.organ_data.organ_type].owner = owner
+		//If the limb we're attaching has organ_data, convert and transfer it to internal_organs (this is for the brain only)
+		if(organ.organ_data && !owner.internal_organs_by_name[organ.organ_data.organ_type]) //If the limb has organ_data, and the patient doesn't have that internal organ yet:
+			owner.internal_organs_by_name[organ.organ_data.organ_type] = organ.organ_data.Copy() //Patient's interal organ (of the same name) is assigned the organ_data's properties from the limb
+			owner.internal_organs += owner.internal_organs_by_name[organ.organ_data.organ_type] //Patient's internal organ list has organ_data added to it
+			internal_organs += owner.internal_organs_by_name[organ.organ_data.organ_type] //the limb's internal organ list has organ_data added to it
+			owner.internal_organs_by_name[organ.organ_data.organ_type].owner = owner //the patient's new organ has its owner set to the patient
 
 
 	else if(istype(I, /obj/item/weapon/peglimb)) //Attaching a peg limb
@@ -1240,7 +1244,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	has_fat = 1
 	vital = 1
 	encased = "ribcage"
-	w_class = W_CLASS_MEDIUM
 
 /datum/organ/external/groin
 	name = LIMB_GROIN
@@ -1250,7 +1253,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 70
 	body_part = LOWER_TORSO
 	vital = 1
-	w_class = W_CLASS_MEDIUM
 
 //=====Legs======
 
@@ -1262,7 +1264,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 30
 	body_part = LEG_LEFT
 	icon_position = LEFT
-	w_class = W_CLASS_SMALL
 
 /datum/organ/external/l_leg/can_stand()
 	//Peg legs don't require an attached foot
@@ -1299,8 +1300,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = LEG_RIGHT
 	icon_position = RIGHT
 
-	w_class = W_CLASS_SMALL
-
 //This proc is same as l_leg/can_stand()
 /datum/organ/external/r_leg/can_stand()
 	//Peg legs don't require an attached foot
@@ -1336,7 +1335,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_arm"
 	max_damage = 75
 	min_broken_damage = 30
-	w_class = W_CLASS_SMALL
 	body_part = ARM_LEFT
 
 	grasp_id = GRASP_LEFT_HAND
@@ -1357,7 +1355,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_arm"
 	max_damage = 75
 	min_broken_damage = 30
-	w_class = W_CLASS_SMALL
 	body_part = ARM_RIGHT
 
 	grasp_id = GRASP_RIGHT_HAND
@@ -1381,7 +1378,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = FOOT_LEFT
 	icon_position = LEFT
 
-	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_shoes, slot_legcuffed)
 
 /datum/organ/external/l_foot/generate_dropped_organ(current_organ)
@@ -1401,7 +1397,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = FOOT_RIGHT
 	icon_position = RIGHT
 
-	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_shoes, slot_legcuffed)
 
 /datum/organ/external/r_foot/generate_dropped_organ(current_organ)
@@ -1422,7 +1417,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	grasp_id = GRASP_RIGHT_HAND
 	can_grasp = 1
 
-	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
 
 /datum/organ/external/r_hand/generate_dropped_organ(current_organ)
@@ -1443,7 +1437,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	grasp_id = GRASP_LEFT_HAND
 	can_grasp = 1
 
-	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
 
 /datum/organ/external/l_hand/generate_dropped_organ(current_organ)
@@ -1465,18 +1458,43 @@ Note that amputating the affected organ does in fact remove the infection from t
 	vital = 1
 	encased = "skull"
 
-	w_class = W_CLASS_SMALL
 	slots_to_drop = list(slot_glasses, slot_wear_mask, slot_head, slot_ears)
+
+/datum/organ/external/head/attach(obj/item/I)
+	..()
+	var/obj/item/organ/external/head/head_item = I
+	if(!istype(head_item))
+		return
+	var/datum/human_appearance/app = head_item.owner_appearance
+	if(app)
+		owner.my_appearance.name = app.name
+		owner.real_name = app.name
+
+		owner.my_appearance.h_style = app.h_style
+		owner.my_appearance.r_hair = app.r_hair
+		owner.my_appearance.g_hair = app.g_hair
+		owner.my_appearance.b_hair = app.b_hair
+
+		owner.my_appearance.f_style = app.f_style
+		owner.my_appearance.r_facial = app.r_facial
+		owner.my_appearance.g_facial = app.g_facial
+		owner.my_appearance.b_facial = app.b_facial
+
+		owner.my_appearance.r_eyes = app.r_eyes
+		owner.my_appearance.g_eyes = app.g_eyes
+		owner.my_appearance.b_eyes = app.b_eyes
+		owner.regenerate_icons()
+		owner.update_name()
 
 /datum/organ/external/head/generate_dropped_organ(current_organ)
 	if(!current_organ)
 		current_organ = new /obj/item/organ/external/head(owner.loc, owner, src)
-		owner.decapitated = current_organ
+		owner.decapitated = makeweakref(current_organ)
 	var/datum/organ/internal/brain/B = eject_brain()
+	eject_eyes()
 	var/obj/item/organ/external/head/H = current_organ
 	if(B)
 		H.organ_data = B
-		B.organ_holder = current_organ
 		B.owner_dna = H.owner_dna
 
 	return current_organ
@@ -1488,11 +1506,20 @@ Note that amputating the affected organ does in fact remove the infection from t
 		owner.internal_organs_by_name.Remove("brain")
 		owner.internal_organs.Remove(B)
 		src.internal_organs.Remove(B)
-
 	return B
+
+/datum/organ/external/head/proc/eject_eyes()
+	var/datum/organ/internal/eyes/E = owner.internal_organs_by_name["eyes"]
+
+	if(E)
+		owner.internal_organs_by_name.Remove("eyes")
+		owner.internal_organs.Remove(E)
+		src.internal_organs.Remove(E)
+	return E
 
 /datum/organ/external/head/explode()
 	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
+	eject_eyes()
 	.=..()
 	owner.update_hair()
 
@@ -1513,9 +1540,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs)
 	if(!disfigured)
+		/*
 		if(brute_dam > 40)
 			if(prob(50))
 				disfigure("brute")
+		*/
 		if(burn_dam > 40)
 			disfigure((used_weapon != WPN_LOW_BODY_TEMP) ? "burn" : "frostbite")
 
@@ -1527,7 +1556,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		owner.visible_message("<span class='warning'>You hear a sickening cracking sound coming from \the [owner]'s face.</span>",
 		                      "<span class='danger'>Your face becomes an unrecognizable, mangled mess!</span>",
 		                      "<span class='warning'>You hear a sickening crack.</span>")
-	else if (type == "burn")
+	else if (type == "burn")// Also caused by Sulph Acid and Poly Acid.
 		owner.visible_message("<span class='warning'>[owner]'s face melts away, turning into a mangled mess!</span>",
 		                      "<span class='danger'>Your face melts away into an unrecognizable, mangled mess!</span>",
 		                      "<span class='warning'>You hear a sickening sizzle.</span>")
@@ -1547,9 +1576,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 			   EXTERNAL ORGAN ITEMS
 ****************************************************/
 
-obj/item/organ/external
+/obj/item/organ/external
 	icon = 'icons/mob/human_races/r_human.dmi'
-	var/datum/organ/internal/organ_data
+	var/datum/organ/internal/organ_data //Harvestable organs
+	var/list/datum/organ/internal/internal_organs //Actual organs (for surgery)
 	var/datum/dna/owner_dna
 	var/part = "organ"
 
@@ -1573,7 +1603,7 @@ obj/item/organ/external
 	var/list/obj/item/organ/external/children = list()
 
 
-obj/item/organ/external/New(loc, mob/living/carbon/human/H, datum/organ/external/source)
+/obj/item/organ/external/New(loc, mob/living/carbon/human/H, datum/organ/external/source)
 	..(loc)
 	if(!istype(H))
 		return
@@ -1584,11 +1614,12 @@ obj/item/organ/external/New(loc, mob/living/carbon/human/H, datum/organ/external
 		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
 
 	src.species = source.species || H.species
-	w_class = source.w_class
 	cancer_stage = source.cancer_stage
 	wounds = source.wounds.Copy()
 	burn_dam = source.burn_dam
 	brute_dam = source.brute_dam
+	if(!isnull(source.internal_organs)) //DM throws an error since Copy() can't run on a null object; some limbs don't have this var currently
+		internal_organs = source.internal_organs.Copy()
 
 	//Copy status flags except for ORGAN_CUT_AWAY and ORGAN_DESTROYED
 	status = source.status & ~(ORGAN_CUT_AWAY | ORGAN_DESTROYED)
@@ -1605,6 +1636,7 @@ obj/item/organ/external/New(loc, mob/living/carbon/human/H, datum/organ/external
 			B.amount = 0 //Transfer the found product's amount to the new datum
 
 			src.butchering_drops += new_bp
+			H.butchering_drops -= B
 
 			//The reason why B isn't just transferred from H.butchering_drops to src.butchering_drops is:
 			//on examine(), each butchering drop's "desc_modifier()" is added to the description. This adds stuff like "he HAS NO TEETH AT ALL!!!" to the resulting description.
@@ -1700,64 +1732,72 @@ obj/item/organ/external/New(loc, mob/living/carbon/human/H, datum/organ/external
 			   EXTERNAL ORGAN ITEMS DEFINES
 ****************************************************/
 
-obj/item/organ/external/l_arm
+/obj/item/organ/external/l_arm
 	name = "left arm"
 	icon_state = LIMB_LEFT_ARM
 	part = LIMB_LEFT_ARM
-obj/item/organ/external/l_arm/New(loc, mob/living/carbon/human/H)
+	w_class = W_CLASS_SMALL
+/obj/item/organ/external/l_arm/New(loc, mob/living/carbon/human/H)
 	..()
 	if(H && istype(H))
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms(LIMB_LEFT_ARM)
 		if(B)
 			B.infest_limb(src)
 
-obj/item/organ/external/l_foot
+/obj/item/organ/external/l_foot
 	name = "left foot"
 	icon_state = LIMB_LEFT_FOOT
 	part = LIMB_LEFT_FOOT
+	w_class = W_CLASS_TINY
 
-obj/item/organ/external/l_hand
+/obj/item/organ/external/l_hand
 	name = "left hand"
 	icon_state = LIMB_LEFT_HAND
 	part = LIMB_LEFT_HAND
+	w_class = W_CLASS_TINY
 
-obj/item/organ/external/l_leg
+/obj/item/organ/external/l_leg
 	name = "left leg"
 	icon_state = LIMB_LEFT_LEG
 	part = LIMB_LEFT_LEG
-obj/item/organ/external/l_leg/New(loc, mob/living/carbon/human/H)
+	w_class = W_CLASS_SMALL
+/obj/item/organ/external/l_leg/New(loc, mob/living/carbon/human/H)
 	..()
 	if(H && istype(H))
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms(LIMB_LEFT_LEG)
 		if(B)
 			B.infest_limb(src)
 
-obj/item/organ/external/r_arm
+/obj/item/organ/external/r_arm
 	name = "right arm"
 	icon_state = LIMB_RIGHT_ARM
 	part = LIMB_RIGHT_ARM
-obj/item/organ/external/r_arm/New(loc, mob/living/carbon/human/H)
+	w_class = W_CLASS_SMALL
+/obj/item/organ/external/r_arm/New(loc, mob/living/carbon/human/H)
 	..()
 	if(H && istype(H))
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms(LIMB_RIGHT_ARM)
 		if(B)
 			B.infest_limb(src)
 
-obj/item/organ/external/r_foot
+/obj/item/organ/external/r_foot
 	name = "right foot"
 	icon_state = LIMB_RIGHT_FOOT
 	part = LIMB_RIGHT_FOOT
+	w_class = W_CLASS_TINY
 
-obj/item/organ/external/r_hand
+/obj/item/organ/external/r_hand
 	name = "right hand"
 	icon_state = LIMB_RIGHT_HAND
 	part = LIMB_RIGHT_HAND
+	w_class = W_CLASS_TINY
 
-obj/item/organ/external/r_leg
+/obj/item/organ/external/r_leg
 	name = "right leg"
 	icon_state = LIMB_RIGHT_LEG
 	part = LIMB_RIGHT_LEG
-obj/item/organ/external/r_leg/New(loc, mob/living/carbon/human/H)
+	w_class = W_CLASS_SMALL
+/obj/item/organ/external/r_leg/New(loc, mob/living/carbon/human/H)
 	..()
 	if(H && istype(H))
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms(LIMB_RIGHT_LEG)
@@ -1769,14 +1809,18 @@ obj/item/organ/external/r_leg/New(loc, mob/living/carbon/human/H)
 	name = LIMB_HEAD
 	icon_state = "head_m"
 	part = LIMB_HEAD
+	w_class = W_CLASS_SMALL
 	var/mob/living/carbon/brain/brainmob
 	var/brain_op_stage = 0
-	var/mob/living/carbon/human/origin_body = null
+	/// (/mob/living/carbon/human)
+	var/datum/weakref/origin_body
+	/// Copied from the human passed to New(). Used when the head is reattached.
+	var/datum/human_appearance/owner_appearance
 
 /obj/item/organ/external/head/ashtype()
 	return /obj/item/weapon/skull
 
-obj/item/organ/external/head/Destroy()
+/obj/item/organ/external/head/Destroy()
 	if(brainmob)
 		qdel(brainmob)
 		brainmob = null
@@ -1790,8 +1834,8 @@ obj/item/organ/external/head/Destroy()
 /obj/item/organ/external/head/posi
 	name = "robotic head"
 
-obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ/external/head/O)
-	origin_body = H
+/obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ/external/head/O)
+	origin_body = makeweakref(H)
 
 	if(istype(H))
 		src.icon_state = H.gender == MALE? "head_m" : "head_f"
@@ -1804,6 +1848,8 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ
 		return
 
 	if (!O || !O.disfigured)
+		owner_appearance = H.my_appearance.Copy()
+		owner_appearance.name = H.real_name
 		//Add (facial) hair.
 		if(H && H.my_appearance.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
 			var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.my_appearance.f_style]
@@ -1853,7 +1899,7 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ
 					var/turf/T1 = get_turf(H)
 					make_tracker_effects(T1, L)
 
-obj/item/organ/external/head/proc/transfer_identity(var/mob/living/carbon/human/H)//Same deal as the regular brain proc. Used for human-->head
+/obj/item/organ/external/head/proc/transfer_identity(var/mob/living/carbon/human/H)//Same deal as the regular brain proc. Used for human-->head
 	brainmob = new(src)
 	brainmob.name = H.real_name
 	brainmob.real_name = H.real_name
@@ -1874,7 +1920,7 @@ obj/item/organ/external/head/proc/transfer_identity(var/mob/living/carbon/human/
 	brainmob.init_language = brainmob.default_language
 	brainmob.container = src
 
-obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/tool/scalpel) || istype(W,/obj/item/weapon/shard) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)))
 		if(organ_data)
 			switch(brain_op_stage)
@@ -1912,6 +1958,8 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 					msg_admin_attack("[user] ([user.ckey]) debrained [brainmob] ([brainmob.ckey]) (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 					//TODO: ORGAN REMOVAL UPDATE.
+
+
 					var/turf/T = get_turf(src)
 					if(isatom(organ_data.removed_type))
 						var/obj/I = organ_data.removed_type
@@ -1971,12 +2019,11 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	else
 		..()
 
-obj/item/organ/external/head/Destroy()
+/obj/item/organ/external/head/Destroy()
 	if(brainmob)
 		brainmob.ghostize()
-	if(origin_body)
-		origin_body.decapitated = null
-		origin_body = null
+		qdel(brainmob)
+		brainmob = null
 	..()
 
 /mob/living/carbon/human/find_organ_by_grasp_index(index)

@@ -53,6 +53,7 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 	toolsounds = list('sound/items/Ratchet.ogg')
+	surgerysound = 'sound/items/bonesetter.ogg'
 
 	crit_chance_melee = 2*CRIT_CHANCE_MELEE
 
@@ -81,6 +82,7 @@
 	icon_state = "socket_wrench"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	w_class = W_CLASS_LARGE //big shit, to balance its power
+	starting_materials = list(MAT_IRON = 150)
 	force = 15.0
 	throwforce = 12.0
 
@@ -115,6 +117,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	attack_verb = list("stabs")
 	toolsounds = list('sound/items/Screwdriver.ogg', 'sound/items/Screwdriver2.ogg')
+	surgerysound = 'sound/items/Screwdriver.ogg'
 
 /obj/item/tool/screwdriver/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is stabbing the [src.name] into \his temple! It looks like \he's trying to commit suicide.</span>", \
@@ -210,6 +213,7 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("pinches", "nips at")
 	toolsounds = list('sound/items/Wirecutter.ogg')
+	surgerysound = 'sound/items/hemostat.ogg'
 
 /obj/item/tool/wirecutters/is_wirecutter(mob/user)
 	return TRUE
@@ -252,6 +256,7 @@
 	flags = FPRINT | OPENCONTAINER
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
+	surgerysound = 'sound/items/cautery.ogg'
 
 	//Amount of OUCH when it's thrown
 	force = 3.0
@@ -264,7 +269,6 @@
 	heat_production = 3800
 	source_temperature = TEMPERATURE_WELDER
 	light_color = LIGHT_COLOR_FIRE
-	light_type = LIGHT_SOFT_FLICKER
 
 	//Cost to make in the autolathe
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
@@ -489,7 +493,7 @@
 	else
 		to_chat(usr, "<span class='notice'>\The [src] switches off.</span>")
 		playsound(src,'sound/effects/zzzt.ogg',20,1)
-		kill_light()
+		set_light(0)
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()
@@ -530,7 +534,7 @@
 		else
 			visible_message("<span class='notice'>\The [src] shuts off!</span>")
 		playsound(src,'sound/effects/zzzt.ogg',20,1)
-		kill_light()
+		set_light(0)
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()
@@ -692,6 +696,7 @@
 	origin_tech = Tc_ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 	toolsounds = list('sound/items/Crowbar.ogg')
+	surgerysound = 'sound/items/retractor.ogg'
 
 /obj/item/tool/crowbar/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -702,9 +707,18 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "red_crowbar"
 	item_state = "crowbar_red"
+	miss_sound = "sounds/weapons/cbar_miss1.ogg"
+	hitsound = "crowbar_hitbod"
+
+/obj/item/tool/crowbar/red/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		attack_delay = 2 // Speed of the original
+		force = 1.0 // To compensate
 
 /obj/item/tool/crowbar/red/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for Half-Life 3!</span>")
+	playsound(get_turf(src), 'sound/medbot/Flatline_custom.ogg', 35)
 	return (SUICIDE_ACT_BRUTELOSS)
 
 
@@ -756,6 +770,9 @@
 	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
 	toolsounds = list('sound/items/Welder.ogg')
+
+/obj/item/tool/solder/splashable()
+	return FALSE
 
 /obj/item/tool/solder/New()
 	. = ..()

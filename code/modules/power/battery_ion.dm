@@ -7,7 +7,8 @@
 	icon_state = "port_smes"
 	density = 1
 	anchored = 0
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
+	power_priority = POWER_PRIORITY_SMES_RECHARGE
 
 	capacity = 3e6
 
@@ -54,9 +55,14 @@
 	if(connected_to)
 		connected_to.add_avail(amount)
 
-/obj/machinery/power/battery/portable/add_load(var/amount)
+/obj/machinery/power/battery/portable/add_load(var/amount, var/priority = power_priority)
 	if(connected_to)
-		connected_to.add_load(amount)
+		connected_to.add_load(amount, priority)
+
+/obj/machinery/power/battery/portable/get_satisfaction(var/priority = power_priority)
+	if(connected_to)
+		return connected_to.get_satisfaction(priority)
+	return 0
 
 /obj/machinery/power/battery/portable/surplus()
 	if(connected_to)

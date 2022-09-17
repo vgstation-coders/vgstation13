@@ -3,7 +3,7 @@
 
 // Called when the item is in the active hand, and clicked; alternately, there is an 'activate held object' verb or you can hit pagedown.
 /obj/item/proc/attack_self(mob/user)
-	. = invoke_event(/event/item_attack_self, list("user" = user))
+	. = INVOKE_EVENT(src, /event/item_attack_self, "user" = user)
 	if(flags & TWOHANDABLE)
 		if(!(flags & MUSTTWOHAND))
 			if(wielded)
@@ -32,8 +32,7 @@
 			I.attack(src, user, def_zone, originator)
 		else
 			I.attack(src, user, def_zone)
-	if(BrainContainer)
-		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
+	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = I)
 
 
 
@@ -49,12 +48,6 @@
 // If it returns 1 it exits click code. Always . = 1 at start of the function if you delete src.
 /obj/item/proc/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	return
-
-obj/item/proc/get_clamped_volume()
-	if(src.force && src.w_class)
-		return clamp((src.force + src.w_class) * 4, 30, 100)// Add the item's force to its weight class and multiply by 4, then clamp the value between 30 and 100
-	else if(!src.force && src.w_class)
-		return clamp(src.w_class * 6, 10, 100) // Multiply the item's weight class by 6, then clamp the value between 10 and 100
 
 /obj/item/proc/attack(mob/living/M as mob, mob/living/user as mob, def_zone, var/originator = null)
 	if(restraint_resist_time > 0)
@@ -100,7 +93,7 @@ obj/item/proc/get_clamped_volume()
 	if(M_HULK in user.mutations)
 		power *= 2
 
-	if(!istype(M, /mob/living/carbon/human))
+	if(!(ishuman(M) || ismonkey(M)))
 		if(istype(M, /mob/living/carbon/slime))
 			var/mob/living/carbon/slime/slime = M
 			if(prob(25))
@@ -215,6 +208,7 @@ obj/item/proc/get_clamped_volume()
 	var/is_crit = I.on_attack(M,user)
 	if (is_crit == CRITICAL_HIT)
 		power *= CRIT_MULTIPLIER
+
 	if(istype(M, /mob/living/carbon))
 		var/mob/living/carbon/C = M
 		if(originator)
@@ -226,7 +220,6 @@ obj/item/proc/get_clamped_volume()
 			if("brute")
 				if(istype(src, /mob/living/carbon/slime))
 					M.adjustBrainLoss(power)
-
 				else
 					if(istype(M, /mob/living/carbon/monkey))
 						var/mob/living/carbon/monkey/K = M
@@ -243,9 +236,18 @@ obj/item/proc/get_clamped_volume()
 						power = K.defense(power,def_zone)
 					M.take_organ_damage(0, power)
 					to_chat(M, "Aargh it burns!")
+
+	//Break the item if applicable.
+	if(power && (I.breakable_flags & BREAKABLE_AS_MELEE) && (I.breakable_flags & BREAKABLE_MOB) && (I.damtype == BRUTE))
+		take_damage(min(power, BREAKARMOR_MEDIUM), skip_break = TRUE, mute = FALSE) //Cap recoil damage at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used. Be verbose about the item being damaged if applicable.
+		try_break(hit_atom = M) //Break the item and spill any reagents onto the target.
+
+
+
 		. = TRUE //The attack always lands
 		M.updatehealth()
 	I.add_fingerprint(user)
+
 
 
 /obj/item/proc/on_attack(var/atom/attacked, var/mob/user)

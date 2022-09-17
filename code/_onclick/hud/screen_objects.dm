@@ -170,32 +170,39 @@
 			//usr.next_move = world.time+2
 	return 1
 
+/obj/abstract/screen/nocontext/MouseEntered(location, control, params)
+	usr?.client?.show_popup_menus = FALSE
+
+/obj/abstract/screen/nocontext/MouseExited(location, control, params)
+	if(ismalf(usr))
+		return
+	usr?.client?.show_popup_menus = TRUE
+
 /obj/abstract/screen/gun
 	name = "gun"
 	icon = 'icons/mob/screen1.dmi'
 	master = null
 	dir = 2
 
-	move
-		name = "Allow Walking"
-		icon_state = "no_walk0"
-		screen_loc = ui_gun2
+/obj/abstract/screen/gun/move
+	name = "Allow Walking"
+	icon_state = "no_walk0"
+	screen_loc = ui_gun2
 
-	run
-		name = "Allow Running"
-		icon_state = "no_run0"
-		screen_loc = ui_gun3
+/obj/abstract/screen/gun/run
+	name = "Allow Running"
+	icon_state = "no_run0"
+	screen_loc = ui_gun3
 
-	item
-		name = "Allow Item Use"
-		icon_state = "no_item0"
-		screen_loc = ui_gun1
+/obj/abstract/screen/gun/item
+	name = "Allow Item Use"
+	icon_state = "no_item0"
+	screen_loc = ui_gun1
 
-	mode
-		name = "Toggle Gun Mode"
-		icon_state = "gun0"
-		screen_loc = ui_gun_select
-		//dir = 1
+/obj/abstract/screen/gun/mode
+	name = "Toggle Gun Mode"
+	icon_state = "gun0"
+	screen_loc = ui_gun_select
 
 /obj/abstract/screen/gun/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = desc)
@@ -325,8 +332,8 @@
 		if("equip")
 			if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 				return 1
-			if(ishuman(usr))
-				var/mob/living/carbon/human/H = usr
+			if(iscarbon(usr))
+				var/mob/living/carbon/H = usr
 				H.quick_equip()
 
 		if("resist")
@@ -620,5 +627,5 @@
 			qdel(objects)
 	src.screen = null
 
-/obj/abstract/screen/acidable()
+/obj/abstract/screen/dissolvable()
 	return 0

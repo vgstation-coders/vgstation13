@@ -9,6 +9,7 @@ em						{font-style: normal;	font-weight: bold;}
 						{color: #638500;}
 .prefix					{					font-weight: bold;}
 .ooc					{					font-weight: bold;}
+.looc					{					font-weight: bold;}
 .adminobserverooc		{color: #0099cc;	font-weight: bold;}
 .adminooc				{color: #b82e00;	font-weight: bold;}
 .adminobserver			{color: #996600;	font-weight: bold;}
@@ -49,6 +50,7 @@ h1.alert, h2.alert		{color: #000000;}
 .userdanger				{color: #ff0000;	font-weight: bold;	font-size: 120%}
 .warning				{color: #ff0000;	font-style: italic;}
 .sinister				{color: #800080;	font-weight: bold;	font-style: italic;} /* /vg/ */
+.sinisterbig			{color: #800080;	font-weight: bold;	font-style: italic;	font-size: 120%} /* /vg/ */
 .blob					{color: #006221;	font-weight: bold;	font-style: italic;}
 .numb					{color: transparent;font-weight: bold;	text-shadow: 0 0 2px rgba(0,161,161,0.5);} /* blurry text */
 .confirm				{color: #00af3b;}
@@ -58,7 +60,7 @@ h1.alert, h2.alert		{color: #000000;}
 .bnotice				{color: #000099; 	font-weight: bold;}
 .sans					{font-family: 'Comic Sans MS', cursive, sans-serif;}
 .alien					{color: #543354;}
-.ancient				{color: #008B8B;	font-stye: italic;}
+.ancient				{color: #008B8B;	font-style: italic;}
 .newscaster				{color: #800000;}
 .mod					{color: #735638;	font-weight: bold;}
 .modooc					{color: #000000;	font-weight: bold;}
@@ -85,6 +87,8 @@ h1.alert, h2.alert		{color: #000000;}
 .maroon					{color: #800000;}
 .clown 					{color: #ff9fef; font-family: Comic Sans MS, Comic Sans, cursive;}
 .borer					{color: #800080; font-weight: bold;}
+.grue					{color: #272728; font-weight: bold;}
+.valentines				{color: #db5b8c; font-weight: bold; font-family: Comic Sans MS, Comic Sans, cursive;}
 
 /* If you're adding a new class here, add it to browserOutput.css too! */
 
@@ -92,7 +96,7 @@ h1.alert, h2.alert		{color: #000000;}
 .good					{color: green;}
 .average				{color: #FF8000;}
 .bad					{color: #FF0000;}
-.mushroom				{color: #4B0082;}
+.mushroom				{color: #4B0082; font-weight: bold;}
 /* /vg/ Saycode Rewrite */
 .italics, .talkinto		{font-style:italic;}
 .whisper				{font-style:italic;color:#333333;}

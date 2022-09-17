@@ -22,7 +22,7 @@
 		return 1
 	else if(istype(I, /obj/item/weapon/card/data/))
 		var/obj/item/weapon/card/data/C = I
-		if(stat & (NOPOWER|BROKEN) & (C.function != "teleporter"))
+		if(stat & (FORCEDISABLE|NOPOWER|BROKEN) & (C.function != "teleporter"))
 			src.attack_hand()
 
 		var/obj/L = null
@@ -153,7 +153,7 @@
 			continue
 		if (!T)
 			continue
-		if(T.z == CENTCOMM_Z || T.z > map.zLevels.len)
+		if(T.z == map.zCentcomm || T.z > map.zLevels.len)
 			continue
 		var/tmpname = T.loc.name
 		if(areaindex[tmpname])
@@ -163,7 +163,7 @@
 		L[tmpname] = R
 
 	for (var/obj/item/weapon/implant/tracking/I in tracking_implants)
-		if (!I.implanted || !ismob(I.loc))
+		if (!I.imp_in || !ismob(I.loc))
 			continue
 		else
 			var/mob/M = I.loc
@@ -186,7 +186,7 @@
 
 /obj/machinery/computer/teleporter/proc/change_freq(var/mob/user)
 	var/newfreq = input("Input a new frequency for the teleporter", "Frequency", null) as null|num
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return 0
 	var/ghost_flags=0
 	if(ghost_write)
@@ -215,7 +215,7 @@
 	set src in oview(1)
 	set desc = "ID Tag:"
 
-	if(stat & (NOPOWER|BROKEN) || !istype(usr,/mob/living))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !istype(usr,/mob/living))
 		return
 	if (t)
 		src.id = t
@@ -237,7 +237,7 @@
 	desc = "This generates the portal through which you step through to teleport elsewhere."
 	icon_state = "tele0"
 	//var/accurate = 0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 2000
 	var/teleport_power_usage = 5000
@@ -271,14 +271,14 @@
 
 /obj/machinery/teleport/hub/power_change()
 	..()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		engaged = 0
 	update_icon()
 
 /obj/machinery/teleport/hub/update_icon()
-	if(stat & (BROKEN|NOPOWER) || !engaged)
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE) || !engaged)
 		icon_state = "tele0"
-		kill_light()
+		set_light(0)
 	else
 		icon_state = "tele1"
 		set_light(3, l_color = "#FFAA00")
@@ -347,7 +347,7 @@
 	name = "teleporter controller"
 	desc = "This co-ordinates nearby teleporter horizon generators."
 	icon_state = "controller"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 2000
 	var/teleport_power_usage = 5000
@@ -373,12 +373,12 @@
 
 /obj/machinery/teleport/station/power_change()
 	..()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		disengage()
 	update_icon()
 
 /obj/machinery/teleport/station/update_icon()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "controller-p"
 	else
 		icon_state = "controller"
@@ -402,11 +402,11 @@
 		src.engage()
 
 /obj/machinery/teleport/station/proc/engage()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	var/count = 0
 	for(var/obj/machinery/teleport/hub/hub in orange(1, src))
-		if(hub.stat & (BROKEN|NOPOWER))
+		if(hub.stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			continue
 		count++
 		hub.engaged = 1
@@ -464,7 +464,7 @@
 		to_chat(user,"<span class='danger'>Due to the alert, it is set to travel to [get_area(embeacon)].</span>")
 
 /obj/machinery/teleport/hub/emergency/power_change()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		engaged = FALSE
 	else
 		engaged = emergency

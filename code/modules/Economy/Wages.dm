@@ -65,33 +65,24 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 	..()
 
 /proc/stationAllowance()//grants the station the allowance it'll need to pay the next salary
+	if(!station_account)
+		message_admins("Station allowance skipped, no station account found.")
+		return
 	station_account.money += station_allowance + WageBonuses()
 
-	var/datum/transaction/T = new()
-	T.purpose = "Nanotrasen station allowance"
-	T.target_name = station_account.owner_name
-	T.amount = "[station_allowance]"
-	T.date = current_date_string
-	T.time = worldtime2text()
-	T.source_terminal = "Nanotrasen Payroll Server"
-	station_account.transaction_log.Add(T)
+	new /datum/transaction(station_account,"Nanotrasen station allowance","[station_allowance]","Nanotrasen Payroll Server",send2PDAs=FALSE)
 
 
 /proc/wagePayout()
+	if(!station_account)
+		message_admins("Wage payout skipped, no station account found.")
+		return
 	//adding extra allowance due to latejoiners
 	if (latejoiner_allowance > 0)
 		station_allowance += latejoiner_allowance
 		station_account.money += latejoiner_allowance
 
-		var/datum/transaction/allowance = new()
-		allowance.purpose = "Nanotrasen new employee allowance"
-		allowance.target_name = station_account.owner_name
-		allowance.amount = "[latejoiner_allowance]"
-		allowance.date = current_date_string
-		allowance.time = worldtime2text()
-		allowance.source_terminal = "Nanotrasen Payroll Server"
-		station_account.transaction_log.Add(allowance)
-
+		new /datum/transaction(station_account,"Nanotrasen new employee allowance","[latejoiner_allowance]","Nanotrasen Payroll Server",send2PDAs=FALSE)
 		latejoiner_allowance = 0
 
 	//checking for wage raises/decreases and emptying station account
@@ -105,14 +96,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 		payroll_modifier = 1
 	message_admins("Wages: Payroll Modifier is [round(100*payroll_modifier - 100)]%.")
 
-	var/datum/transaction/salaries = new()
-	salaries.purpose = "Employee and Department salaries"
-	salaries.target_name = station_account.owner_name
-	salaries.amount = "-[station_account.money]"
-	salaries.date = current_date_string
-	salaries.time = worldtime2text()
-	salaries.source_terminal = "Account Database"//todo: destroying the account database fucks up salaries? Sounds a bit easy to abuse, at least until the database gets moved to somwhere safe.
-	station_account.transaction_log.Add(salaries)
+	new /datum/transaction(station_account,"Employee and Department salaries","-[station_account.money]","Account Database",send2PDAs=FALSE)
 
 	station_account.money = 0
 
@@ -124,26 +108,12 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 				Acc.money += adjusted_wage_gain
 
 				if(adjusted_wage_gain > 0)
-					var/datum/transaction/T = new()
-					T.purpose = "Nanotrasen employee payroll"
-					T.target_name = Acc.owner_name
-					T.amount = "[adjusted_wage_gain]"
-					T.date = current_date_string
-					T.time = worldtime2text()
-					T.source_terminal = station_account.owner_name
-					Acc.transaction_log.Add(T)
+					new /datum/transaction(Acc,"Nanotrasen employee payroll","[adjusted_wage_gain]",station_account.owner_name)
 
 		else 	//non-station accounts get their money from magic, not that these accounts have any wages anyway
 			Acc.money += Acc.wage_gain
 			if(Acc.wage_gain > 0)
-				var/datum/transaction/T = new()
-				T.purpose = "mysterious transaction"
-				T.target_name = Acc.owner_name
-				T.amount = "[Acc.wage_gain]"
-				T.date = current_date_string
-				T.time = worldtime2text()
-				T.source_terminal = "unknown"
-				Acc.transaction_log.Add(T)
+				new /datum/transaction(Acc,"mysterious transaction","[Acc.wage_gain]","unknown")
 
 	//telling the crew
 	if(payroll_modifier > 1.1)//taking the overhead into account
@@ -160,8 +130,8 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 	var/bonus = 0
 
 	//1000 bonus per prisoner
-	for(var/mob/living/carbon/human/H in current_prisoners) 
-		if(H.z == STATION_Z && !isspace(get_area(H)) && !H.isDead())
+	for(var/mob/living/carbon/human/H in current_prisoners)
+		if(H.z == map.zMainStation && !isspace(get_area(H)) && !H.isDead())
 			bonus += 1000
 
 	return bonus

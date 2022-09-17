@@ -3,7 +3,7 @@
 
 /obj/machinery/door/mineral
 	name = "mineral door"
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	machine_flags = 0
 	icon = 'icons/obj/doors/mineral.dmi'
 	icon_state = "metaldoor_closed"
@@ -26,7 +26,7 @@
 
 	if(istype(user, /obj/mecha))
 		open()
-	else if (istype(user, /obj/machinery/bot))
+	else if (istype(user, /obj/machinery/bot) && SpecialAccess(user))
 		open()
 	else if(ismob(user))
 		var/mob/M = user
@@ -34,7 +34,6 @@
 			return
 		TryToSwitchState(user)
 	return
-
 
 /obj/machinery/door/mineral/attack_ai(mob/user as mob) //those aren't really machinery, they're just big fucking slabs of a mineral
 	if(isAI(user)) //so the AI can't open it
@@ -152,9 +151,9 @@
 /obj/machinery/door/mineral/transparent
 	opacity = 0
 
-	close()
-		..()
-		opacity = 0
+/obj/machinery/door/mineral/transparent/close()
+	..()
+	opacity = 0
 
 /obj/machinery/door/mineral/transparent/plasma
 	prefix = "plasma"
@@ -286,7 +285,7 @@
 	playsound(src, soundeffect, 100, 1)
 	return ..()
 
-/obj/machinery/door/mineral/resin/acidable()
+/obj/machinery/door/mineral/resin/dissolvable()
 	return 0
 
 /obj/machinery/door/mineral/hive
@@ -303,7 +302,7 @@
 
 /obj/machinery/door/mineral/transparent/icicle
 	name = "icicle door"
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	machine_flags = 0
 	icon = 'icons/obj/doors/mineral.dmi'
 	icon_state = "icicledoor_closed"
@@ -336,8 +335,8 @@
 	explosion_block = 1
 	prefix = "cult"
 	animation_delay = 0
-	var/health = 100
-	var/maxHealth = 100
+	health = 100
+	maxHealth = 100
 
 /obj/machinery/door/mineral/cult/New()
 	..()

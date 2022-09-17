@@ -6,16 +6,8 @@
 	var/list/path = list()
 
 /mob/living/clickbot/ClickOn(var/atom/A, var/params)
-	make_astar_path(A)
-
-/mob/living/clickbot/make_astar_path(var/atom/target, var/receiving_proc = .get_astar_path)
-	AStar(src, receiving_proc, get_turf(src), target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30, debug = TRUE)
-
-
-/mob/living/clickbot/get_astar_path(var/list/L)
-	.=..()
-	if(.)
-		path = .
+	path = get_path_to(src, A)
+	pathers += src
 
 /mob/living/clickbot/process_astar_path()
 	if(gcDestroyed || stat == DEAD)
@@ -29,7 +21,6 @@
 		playsound(loc, 'sound/machines/ping.ogg', 50, 0)
 		return FALSE
 	return TRUE
-
 
 /mob/living/clickbot/drop_astar_path()
 	path.Cut()

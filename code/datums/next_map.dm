@@ -5,14 +5,12 @@
 	var/max_players = 999
 	var/is_enabled = TRUE // If FALSE, it doesn't show up during the vote but can be rigged
 
+/datum/next_map/proc/is_compiled()
+	return fexists("maps/voting/"+path+"/vgstation13.dmb")
+
 /datum/next_map/proc/is_votable()
-	if(!fexists("maps/voting/"+path))
-		var/msg = "Skipping map [name] because the folder [path] does not exist."
-		message_admins(msg)
-		warning(msg)
-		return FALSE
-	if(!fexists("maps/voting/"+path+"/vgstation13.dmb"))
-		var/msg = "Skipping map [name] because the file [path]/vgstation13.dmb does not exist."
+	if(!is_compiled())
+		var/msg = "Skipping map [name] because it has not been compiled."
 		message_admins(msg)
 		warning(msg)
 		return FALSE
@@ -35,7 +33,7 @@
 	is_enabled = FALSE
 
 /datum/next_map/bagel/is_votable()
-	if(score["bagelscooked"] < bagel_requirement)
+	if(score.bagelscooked < bagel_requirement)
 		var/msg = "Skipping map [name], fewer than [bagel_requirement] bagels made."
 		message_admins(msg)
 		warning(msg)
@@ -77,15 +75,28 @@
 		return FALSE
 	return ..()
 
+/datum/next_map/island
+	name = "Island Station"
+	path = "Island"
+	min_players = 25
+	
+/datum/next_map/line/is_votable()
+	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
+	if (MM != 10)
+		var/msg = "Skipping map [name] as this is no longer the Halloween season."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	return ..()
+
 /datum/next_map/lamprey
 	name = "Lamprey Station"
 	path = "Lamprey"
 	is_enabled = FALSE
 
 /datum/next_map/lamprey/is_votable()
-	var/crew_score = score["crewscore"] // So that we can use this in the admin messaging
-	if(crew_score > -20000)
-		var/msg = "Skipping map [name], station requires lower than -20000 score (is [crew_score])."
+	if(score.crewscore > -20000)
+		var/msg = "Skipping map [name], station requires lower than -20000 score (is [score.crewscore])."
 		message_admins(msg)
 		warning(msg)
 		return FALSE
@@ -140,6 +151,31 @@
 	path = "xoq"
 	is_enabled = FALSE
 
+/datum/next_map/snowbox
+	name = "Snowbox Station"
+	path = "snowstation"
+
+/datum/next_map/snowbox/is_votable()
+	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
+	var/allowed_months = list(1, 2, 7, 12)
+	if (!(MM in allowed_months))
+		var/msg = "Skipping map [name] as this is no longer the Christmas season."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+
+	if(get_station_avg_temp() >= T0C)
+		var/msg = "Skipping map [name] as station average temperature is above 0C."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	return ..()
+
+/datum/next_map/nerve
+	name = "Nerve Station"
+	path = "nervestation"
+	min_players = 20
+
 /proc/get_votable_maps()
 	var/list/votable_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))
@@ -147,19 +183,13 @@
 		if(candidate.is_enabled && candidate.is_votable())
 			votable_maps += candidate.name
 			votable_maps[candidate.name] = candidate.path
-
-	var/list/maplist = get_list_of_keys(votable_maps)
-	var/msg = "A map vote was initiated with these options: [english_list(maplist)]."
-	send2maindiscord(msg)
-	send2mainirc(msg)
-	send2ickdiscord(config.kill_phrase) // This the magic kill phrase
-
 	return votable_maps
 
 /proc/get_all_maps()
 	var/list/all_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))
 		var/datum/next_map/map = new map_path
-		all_maps += map.name
-		all_maps[map.name] = map.path
+		if(map.is_compiled())
+			all_maps += map.name
+			all_maps[map.name] = map.path
 	return all_maps

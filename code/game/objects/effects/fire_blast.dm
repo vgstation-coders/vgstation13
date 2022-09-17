@@ -13,7 +13,7 @@
 	var/spread_start = 100
 	var/spread_chance = 20
 
-/obj/effect/fire_blast/New(atom/A, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration)
+/obj/effect/fire_blast/New(atom/A, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration, var/origin)
 	..(A)
 	icon_state = "[rand(1,3)]"
 
@@ -27,6 +27,7 @@
 
 	pressure = round(pressure)
 	var/adjusted_fire_damage = fire_damage
+	var/began_life = world.time
 
 	switch(pressure)
 		if(1000 to INFINITY)
@@ -71,24 +72,14 @@
 				sleep(1)
 
 	spawn()
-		for(var/i = 1; i <= (duration * 0.5); i++)
+		while(world.time < began_life + duration)
 			for(var/mob/living/L in get_turf(src))
 				if(issilicon(L))
 					continue
 				if(L.mutations.Find(M_UNBURNABLE))
 					continue
 
-				if(!L.on_fire)
-					L.adjust_fire_stacks(0.5)
-					L.IgniteMob()
-
-				if(L.mutations.Find(M_RESIST_HEAT)) //Heat resistance protects you from damage, but you still get set on fire
-					continue
-
-				if(!istype(L, /mob/living/carbon/human))
-					L.adjustFireLoss(adjusted_fire_damage * 2) //Deals double damage to non-human mobs
-				else
-					L.adjustFireLoss(adjusted_fire_damage)
+				burn_mob(L,adjusted_fire_damage, origin)
 
 			for(var/obj/O in get_turf(A))
 				if(istype(O, /obj/structure/reagent_dispensers/fueltank))
@@ -106,10 +97,29 @@
 					B.update_health()
 
 			var/turf/T2 = get_turf(src)
-			T2.hotspot_expose((blast_temperature * 2) + 380,500)
+			if(T2)
+				T2.hotspot_expose((blast_temperature * 2) + 380,500)
 			sleep(2)
-
 		qdel(src)
+
+/obj/effect/fire_blast/proc/burn_mob(mob/living/L, var/adjusted_fire_damage)
+	if(!L.on_fire)
+		L.adjust_fire_stacks(0.5)
+		L.IgniteMob()
+
+	if(L.mutations.Find(M_RESIST_HEAT)) //Heat resistance protects you from damage, but you still get set on fire
+		return
+
+	if(!istype(L, /mob/living/carbon/human))
+		L.adjustFireLoss(adjusted_fire_damage * 2) //Deals double damage to non-human mobs
+	else
+		L.adjustFireLoss(adjusted_fire_damage)
+
+/obj/effect/fire_blast/dragonbreath/burn_mob(mob/living/L, var/adjusted_fire_damage, var/origin)
+	if(L.mutations.Find(M_RESIST_HEAT)) //Heat resistance protects you from fear
+		return ..()
+	L.confused = min(2, L.confused + 2)
+	..()
 
 /obj/effect/fire_blast/blue
 	icon = 'icons/effects/fireblue.dmi'

@@ -46,6 +46,8 @@
 	size = SIZE_SMALL
 	meat_type = null
 
+	blooded = FALSE
+
 /mob/living/simple_animal/spiderbot/canEnterVentWith()
 	var/static/list/allowed_items = list(
 		/obj/item/device/radio/borg,
@@ -73,9 +75,7 @@
 			to_chat(user, "<span class='warning'>[O] is dead. Sticking it into the frame would sort of defeat the purpose.</span>")
 			return
 
-		if(jobban_isbanned(B.brainmob, "Cyborg"))
-			to_chat(user, "<span class='warning'>[O] does not seem to fit.</span>")
-			return
+		
 		if(!user.drop_item(O, src))
 			user << "<span class='warning'>You can't let go of \the [O].</span>"
 
@@ -162,7 +162,7 @@
 	src.name = "Spider-bot ([M.brainmob.name])"
 
 /mob/living/simple_animal/spiderbot/proc/explode() //When emagged.
-	explosion(get_turf(loc), -1, -1, 3, 5)
+	explosion(get_turf(loc), -1, -1, 3, 5, whodunnit = src)
 	death()
 
 /mob/living/simple_animal/spiderbot/update_icon()

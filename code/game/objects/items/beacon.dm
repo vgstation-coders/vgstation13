@@ -8,6 +8,7 @@ var/global/list/obj/item/beacon/beacons = list()
 	item_state = "signaler"
 	var/code = "electronic"
 	var/frequency = 1459
+	var/emagged = 0
 	origin_tech = Tc_BLUESPACE + "=1"
 	flags = FPRINT
 
@@ -35,6 +36,12 @@ var/global/list/obj/item/beacon/beacons = list()
 		return
 	frequency = format_frequency(sanitize_frequency(newfreq))
 
+/obj/item/beacon/emag_act(mob/user)
+	if(!emagged)
+		spark(src)
+		emagged = 1
+		to_chat(user,"<span class='warning'>Teleportation collision safety protocols disabled.</span>")
+
 /obj/item/beacon/verb/alter_signal(t as text)
 	set name = "Alter Beacon's Signal"
 	set category = "Object"
@@ -53,6 +60,7 @@ var/global/list/obj/item/beacon/beacons = list()
 	name = "suspicious beacon"
 	desc = "A label on it reads: <i>Activate to have a singularity beacon teleported to your location</i>."
 	origin_tech = Tc_BLUESPACE + "=1;" + Tc_SYNDICATE + "=7"
+	emagged = 1
 
 /obj/item/beacon/syndicate/attack_self(mob/user as mob)
 	if(user)

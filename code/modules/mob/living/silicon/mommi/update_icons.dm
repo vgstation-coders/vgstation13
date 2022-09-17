@@ -95,6 +95,26 @@
 			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
 			bloodsies.color = head.blood_color
 			overhats.overlays	+= bloodsies
+		
+		if(istype(head,/obj/item/clothing/head))
+			var/obj/item/clothing/head/hat = head
+			var/i = 1
+			var/image/abovehats
+			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+				abovehats = image("icon" = ((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[above.icon_state]")
+
+				abovehats.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+				overhats.overlays += abovehats
+
+				if(above.blood_DNA && above.blood_DNA.len)
+					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+					bloodsies.color = above.blood_color
+					//standing.overlays	+= bloodsies
+					bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+					abovehats.overlays	+= bloodsies
+
+				i++
+
 		// Add our hat images to overlays_hats
 		overlays_hats[MOMMI_HEAD_LAYER]	= overhats
 	// If the MoMMI is not wearing a hat

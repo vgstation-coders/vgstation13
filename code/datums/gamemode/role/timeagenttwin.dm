@@ -36,10 +36,6 @@
 
 
 /datum/role/time_agent/eviltwin/timer_action(severity)
-	return
-	// switch(severity)
-	// 	if(1)
-	// 	if(2)
-	// 	if(3)
-	// 		evil_twin()
-	// 	if(4 to INFINITY)
+	if(severity == 1)
+		var/mob/living/carbon/human/H = antag.current
+		spawn_rand_maintenance(H) // Just so the teleporter itself works

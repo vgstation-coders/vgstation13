@@ -50,32 +50,23 @@
 
 /datum/faction/syndicate/nuke_op/OnPostSetup()
 	. = ..()
+
+	var/obj/effect/landmark/nuke_spawn = locate("landmark*Nuclear-Bomb")
+	var/nuke_code = "[rand(10000, 99999)]"
+	var/leader_selected = 0
+	var/agent_number = 1
 	var/list/turf/synd_spawn = list()
 
 	for(var/obj/effect/landmark/A in landmarks_list)
 		if(A.name == "Syndicate-Spawn")
 			synd_spawn += get_turf(A)
-			qdel(A)
-			A = null
 			continue
-
-	var/obj/effect/landmark/uplinklocker = locate("landmark*Syndicate-Uplink") //I will be rewriting this shortly
-	var/obj/effect/landmark/nuke_spawn = locate("landmark*Nuclear-Bomb")
-
-	var/nuke_code = "[rand(10000, 99999)]"
-	var/leader_selected = 0
-	var/agent_number = 1
-	var/spawnpos = 1
-
 	for(var/datum/role/nuclear_operative/N in members)
-		if(spawnpos > synd_spawn.len)
-			spawnpos = 1
 		var/datum/mind/synd_mind = N.antag
-		synd_mind.current.forceMove(synd_spawn[spawnpos])
 
 		var/datum/outfit/striketeam/nukeops/concrete_outfit = new our_outfit
 
-		concrete_outfit.equip(synd_mind.current)
+		concrete_outfit.equip(synd_mind.current, strip = TRUE, delete = TRUE)
 
 		share_syndicate_codephrase(N.antag.current)
 		N.antag.current << sound('sound/voice/syndicate_intro.ogg')
@@ -86,15 +77,11 @@
 		else
 			synd_mind.current.real_name = "[syndicate_name()] Operative #[agent_number]"
 			agent_number++
-		spawnpos++
 		N.antag.current.flavor_text = null
 
 		spawn()
 			concrete_outfit.chosen_spec = equip_nuke_loadout(synd_mind.current)
 			concrete_outfit.equip_special_items(synd_mind.current)
-
-	if(uplinklocker)
-		new /obj/structure/closet/syndicate/nuclear(uplinklocker.loc)
 
 	if(nuke_spawn && synd_spawn.len > 0)
 		var/obj/machinery/nuclearbomb/the_bomb = new /obj/machinery/nuclearbomb(nuke_spawn.loc)

@@ -73,7 +73,7 @@
 	rpm = max(0, rpm - (rpm*rpm)/COMPFRICTION)
 
 
-	if(starter && !(stat & NOPOWER))
+	if(starter && !(stat & (FORCEDISABLE|NOPOWER)))
 		use_power(2800)
 		if(rpm<1000)
 			rpmtarget = 1000
@@ -143,7 +143,7 @@
 
 /obj/machinery/power/turbine/interact(mob/user)
 
-	if ( (get_dist(src, user) > 1 ) || (stat & (NOPOWER|BROKEN)) && (!istype(user, /mob/living/silicon/ai)) )
+	if ( (get_dist(src, user) > 1 ) || (stat & (FORCEDISABLE|NOPOWER|BROKEN)) && (!istype(user, /mob/living/silicon/ai)) )
 		user.machine = null
 		user << browse(null, "window=turbine")
 		return
@@ -218,6 +218,9 @@
 				doors += P
 
 /obj/machinery/computer/turbine_computer/attackby(obj/item/I as obj, mob/user as mob)
+
+	add_fingerprint(user)
+
 	if(I.is_screwdriver(user))
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 20))
@@ -233,6 +236,7 @@
 				A.state = 3
 				A.icon_state = "3"
 				A.anchored = 1
+				src.transfer_fingerprints_to(A)
 				qdel(src)
 			else
 				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
@@ -245,6 +249,7 @@
 				A.state = 4
 				A.icon_state = "4"
 				A.anchored = 1
+				src.transfer_fingerprints_to(A)
 				qdel(src)
 	else
 		src.attack_hand(user)

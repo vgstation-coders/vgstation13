@@ -8,17 +8,17 @@
 		head = null
 		success = 1
 		update_inv_head()
-		invoke_event(/event/unequipped, list(W))
+		INVOKE_EVENT(src, /event/unequipped, W)
 	if (W == w_uniform)
 		w_uniform = null
 		success = 1
 		update_inv_w_uniform()
-		invoke_event(/event/unequipped, list(W))
+		INVOKE_EVENT(src, /event/unequipped, W)
 	if (W == wear_suit)
 		wear_suit = null
 		success = 1
 		update_inv_wear_suit()
-		invoke_event(/event/unequipped, list(W))
+		INVOKE_EVENT(src, /event/unequipped, W)
 	else
 		success = ..()
 
@@ -136,6 +136,27 @@
 		head.generate_accessory_overlays(O)
 		O.icon = standing
 		O.icon_state = standing.icon_state
+
+		if(istype(head,/obj/item/clothing/head))
+			var/obj/item/clothing/head/hat = head
+			var/i = 1
+			var/image/abovehats
+			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+				abovehats = image("icon" = ((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[above.icon_state]")
+				abovehats.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+				O.overlays += abovehats
+				if(above.dynamic_overlay)
+					if(above.dynamic_overlay["[HEAD_LAYER]"])
+						var/image/dyn_overlay = above.dynamic_overlay["[HEAD_LAYER]"]
+						O.overlays += dyn_overlay
+				if(above.blood_DNA && above.blood_DNA.len)
+					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+					bloodsies.color = above.blood_color
+					bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+					O.overlays	+= bloodsies
+
+				i++
+
 		var/image/I = new()
 		I.appearance = O.appearance
 		I.plane = FLOAT_PLANE
@@ -184,7 +205,7 @@
 		var/obj/abstract/Overlays/O = obj_overlays[SUIT_LAYER]
 		O.overlays.len = 0
 		var/image/standing	= image("icon" = ((wear_suit.icon_override) ? wear_suit.icon_override : 'icons/mob/suit.dmi'), "icon_state" = "[wear_suit.icon_state]")
-		if( istype(wear_suit, /obj/item/clothing/suit/straight_jacket) )
+		if( istype(wear_suit, /obj/item/clothing/suit/strait_jacket) )
 			drop_hands()
 		if(wear_suit.dynamic_overlay)
 			if(wear_suit.dynamic_overlay["[SUIT_LAYER]"])

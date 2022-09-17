@@ -17,6 +17,14 @@
 	abstract = 1
 	var/obj/item/wielding = null
 
+/obj/item/offhand/pregive(mob/living/carbon/giver, mob/living/carbon/receiver)
+	giver.swap_hand()
+	receiver.give_item(giver)
+	return FALSE
+
+/obj/item/offhand/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
+	return FALSE
+
 /obj/item/offhand/dropped(user)
 	if(!wielding)
 		qdel(src)
@@ -78,7 +86,7 @@
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/fireaxe/suicide_act(var/mob/living/user)
+/obj/item/weapon/fireaxe/suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is smashing \himself in the head with the [src.name]! It looks like \he's commit suicide!</span>")
 		return (SUICIDE_ACT_BRUTELOSS)
 
@@ -174,6 +182,19 @@
 		var/obj/structure/headpole/H = new (get_turf(src), W, src)
 		user.drop_item(W, H, force_drop = 1)
 
+/obj/item/weapon/spear/attack(var/mob/living/M, var/mob/user)
+	var/obj/item/I
+	if(user.zone_sel.selecting == "l_hand")
+		I = M.get_held_item_by_index(GRASP_LEFT_HAND)
+	else if(user.zone_sel.selecting == "r_hand")
+		I = M.get_held_item_by_index(GRASP_RIGHT_HAND)
+	if(I && istype(I,src.type) && user.a_intent == I_HELP)
+		playsound(get_turf(user), 'sound/weapons/Genhit.ogg', 50, 1)
+		visible_message("<span class='bad'>[user] high spears [M], but it feels too similar to doing it with a shovel, and isn't good.</span>",\
+						"<span class='bad'>You high spear [M], but it feels too similar to doing it with a shovel, and isn't good.</span>")
+	else
+		..()
+
 /obj/item/weapon/spear/wooden
 	name = "steel spear"
 	desc = "An ancient weapon of an ancient design, with a smooth wooden handle and a sharp steel blade."
@@ -218,86 +239,3 @@
 			user.regenerate_icons()
 			var/client/C = user.client
 			C.changeView(C.view - 7)
-
-/obj/item/weapon/bloodlust
-	icon_state = "bloodlust0"
-	name = "high-frequency pincer blade \"bloodlust\""
-	desc = "A scissor-like weapon made using two high-frequency machetes. Don't run with it in your hands."
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	force = 17
-	throwforce = 3
-	throw_speed = 1
-	throw_range = 5
-	attack_delay = 15 // Heavy.//Come on man that makes it useless (reduced it)
-	w_class = W_CLASS_LARGE
-	flags = FPRINT | TWOHANDABLE
-	mech_flags = MECH_SCAN_ILLEGAL
-	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
-	origin_tech = Tc_COMBAT + "=6" + Tc_SYNDICATE + "=6"
-	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
-
-/obj/item/weapon/bloodlust/update_wield(mob/user)
-	..()
-	icon_state = "bloodlust[wielded ? 1 : 0]"
-	item_state = icon_state
-	force = wielded ? 34 : initial(force)
-	sharpness_flags = wielded ? SHARP_BLADE | SERRATED_BLADE | HOT_EDGE | CUT_WALL | CUT_AIRLOCK : initial(sharpness_flags)
-	sharpness = wielded ? 2 : initial(sharpness)
-	armor_penetration = wielded ? 100 : 50
-	to_chat(user, wielded ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
-	playsound(user, wielded ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0 )
-	if(user)
-		user.update_inv_hands()
-	if(wielded)
-		user.register_event(/event/moved, src, .proc/mob_moved)
-	else
-		user.unregister_event(/event/moved, src, .proc/mob_moved)
-
-/obj/item/weapon/bloodlust/attack(target as mob, mob/living/user)
-	if(isliving(target))
-		playsound(target, get_sfx("machete_hit"),50, 0)
-	if(clumsy_check(user) && prob(50))
-		to_chat(user, "<span class='warning'>Son of a bitch... You... got yourself.</span>")
-		playsound(target, get_sfx("machete_hit"),50, 0)
-		user.take_organ_damage(wielded ? 34 : 17)
-		return
-	..()
-
-/obj/item/weapon/bloodlust/proc/mob_moved(atom/movable/mover)
-	if(iscarbon(mover) && wielded)
-		for(var/obj/effect/plantsegment/P in range(mover,0))
-			qdel(P)
-
-/obj/item/weapon/bloodlust/IsShield()
-	if(wielded)
-		return 1
-	else
-		return 0
-
-/obj/item/weapon/bloodlust/pickup(mob/user)
-	playsound(src.loc, 'sound/weapons/Genhit.ogg', 50, 1)
-	to_chat(user, "<span class='notice'>You attach [src] to your arm.</span>")
-	cant_drop = 1
-
-/obj/item/weapon/bloodlust/attackby(obj/item/weapon/W, mob/living/user)
-	..()
-	if(W.is_screwdriver(user) && user.is_holding_item(src))
-		W.playtoolsound(loc, 50)
-		to_chat(user, "<span class='notice'>You detach [src] from your arm.</span>")
-		new /obj/item/weapon/melee/energy/hfmachete(user.loc)
-		new /obj/item/weapon/melee/energy/hfmachete(user.loc)
-		qdel(src)
-
-/obj/item/weapon/bloodlust/suicide_act(var/mob/living/user)
-	. = (SUICIDE_ACT_OXYLOSS)
-	user.visible_message("<span class='danger'>[user] is putting \his neck between \the [src]s blades! It looks like \he's trying to commit suicide.</span>")
-	spawn(2 SECONDS) //Adds drama.
-	if(ishuman(user))
-		var/mob/living/carbon/human/U = user
-		if(U.organs_by_name)
-			var/datum/organ/external/head/H = U.get_organ(LIMB_HEAD)
-			if(istype(H) && ~H.status & ORGAN_DESTROYED)
-				H.droplimb(1)
-				playsound(U, get_sfx("machete_hit"),50, 0)
-				blood_splatter(get_turf(user),U,1)
-	return .

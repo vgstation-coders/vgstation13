@@ -67,7 +67,7 @@
 	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
 	items_to_collect[randomcan] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
-	items_to_collect[/obj/item/clothing/suit/straight_jacket] = GRASP_RIGHT_HAND
+	items_to_collect[/obj/item/clothing/suit/strait_jacket] = GRASP_RIGHT_HAND
 	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
 	return ..()
 
@@ -101,7 +101,7 @@
 				"Medical Doctor" =  /obj/item/clothing/suit/storage/labcoat,
 			),
 			slot_head_str = list(
-				"Surgeron" = /obj/item/clothing/head/surgery/blue,
+				"Surgeon" = /obj/item/clothing/head/surgery/blue,
 			),
 			slot_s_store_str = /obj/item/device/flashlight/pen,
 		),
@@ -149,36 +149,6 @@
 	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
-
-	special_snowflakes = list(
-		"Default" = list(
-			"Nurse" = list(slot_w_uniform_str, slot_head_str),
-		),
-		/datum/species/vox = list(
-			"Nurse" = list(slot_w_uniform_str),
-		),
-		/datum/species/plasmaman = list(
-			"Nurse" = list(slot_w_uniform_str),
-		),
-	)
-
-// This right here is the proof that the female gender should be removed from the codebase. Fucking snowflakes
-
-/datum/outfit/doctor/special_equip(var/title, var/slot, var/mob/living/carbon/human/H)
-	switch (title)
-		if ("Nurse")
-			switch (slot)
-				if (slot_w_uniform_str)
-					if(H.gender == FEMALE)
-						if(prob(50))
-							H.equip_or_collect(new /obj/item/clothing/under/rank/nursesuit(H), slot_w_uniform)
-						else
-							H.equip_or_collect(new /obj/item/clothing/under/rank/nurse(H), slot_w_uniform)
-					else
-						H.equip_or_collect(new /obj/item/clothing/under/rank/medical/purple(H), slot_w_uniform)
-				if (slot_head_str)
-					if (H.gender == FEMALE)
-						H.equip_or_collect(new /obj/item/clothing/head/nursehat(H), slot_head)
 
 /datum/outfit/doctor/post_equip(var/mob/living/carbon/human/H)
 	..()
@@ -389,7 +359,9 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/orderly,
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
-			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector,
+			slot_head_str = list(
+				"Surgeron" = /obj/item/clothing/head/surgery/purple, //special_equip needs this slot to exist and a null value won't work. have a joke about an old bug instead.
+			),
 			slot_r_store_str = /obj/item/weapon/soap,
 		),
 		/datum/species/plasmaman = list(
@@ -420,9 +392,38 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
+	special_snowflakes = list(
+		"Default" = list(
+			"Nurse" = list(slot_w_uniform_str, slot_head_str),
+		),
+		/datum/species/vox = list(
+			"Nurse" = list(slot_w_uniform_str),
+		),
+		/datum/species/plasmaman = list(
+			"Nurse" = list(slot_w_uniform_str),
+		),
+	)
+
+// This right here is the proof that the female gender should be removed from the codebase. Fucking snowflakes
+
+/datum/outfit/orderly/special_equip(var/title, var/slot, var/mob/living/carbon/human/H)
+	switch (title)
+		if ("Nurse")
+			switch (slot)
+				if (slot_w_uniform_str)
+					if(H.gender == FEMALE)
+						if(prob(50))
+							H.equip_or_collect(new /obj/item/clothing/under/rank/nursesuit(H), slot_w_uniform)
+						else
+							H.equip_or_collect(new /obj/item/clothing/under/rank/nurse(H), slot_w_uniform)
+					else
+						H.equip_or_collect(new /obj/item/clothing/under/rank/medical/purple(H), slot_w_uniform)
+				if (slot_head_str)
+					if (H.gender == FEMALE)
+						H.equip_or_collect(new /obj/item/clothing/head/nursehat(H), slot_head)
+
 /datum/outfit/orderly/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/clothing/suit/straight_jacket)
 	H.put_in_hands(new /obj/item/weapon/storage/briefcase/orderly)
 
 // -- Geneticist
@@ -483,11 +484,11 @@
 
 /datum/outfit/geneticist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
-	var/obj/item/weapon/dnainjector/nofail/randominjector = pick(/obj/item/weapon/dnainjector/nofail/remotesay, /obj/item/weapon/dnainjector/nofail/runfast, /obj/item/weapon/dnainjector/nofail/strong)
+	var/obj/item/weapon/dnainjector/nofail/randominjector = pick(/obj/item/weapon/dnainjector/nofail/telepathy, /obj/item/weapon/dnainjector/nofail/runfast, /obj/item/weapon/dnainjector/nofail/strong)
 	items_to_collect[randomcan] = GRASP_RIGHT_HAND
 	items_to_collect[randominjector] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
-	items_to_collect[/obj/item/weapon/dnainjector/nofail/remotesay] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/dnainjector/nofail/telepathy] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
 	return ..()
 

@@ -103,6 +103,8 @@
 	show_roll(user, thrown, result)
 
 /obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
+	if(..())
+		return 1
 	if(istype(H) && !H.shoes)
 		to_chat(H, "<span class='danger'>You step on the D4!</span>")
 		H.apply_damage(4,BRUTE,(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)))
@@ -131,16 +133,16 @@
 		spawn(40)
 			var/cap = 0
 			var/uncapped = result
-			if(result > MAX_EXPLOSION_RANGE && result != 20)
-				cap = 1
-				result = min(result, MAX_EXPLOSION_RANGE) //Apply the bombcap
-				if(result > 14)
-					sleep(20)
-			else if(result == 20) //Roll a nat 20, screw the bombcap
+			if(result > 19) //Roll a nat 20
 				result = 24
 				sleep(40)
+			else
+				cap = 1
+				if(result > 14)
+					sleep(20)
+
 			var/turf/epicenter = get_turf(src)
-			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, cap)
+			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, cap, whodunnit = user)
 			if(cap)
 				for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
 					if(bhangmeter)
@@ -170,29 +172,29 @@
 				if(1)
 					to_chat(user, "<span class=sinister><B>A natural failure, your poor roll has cursed you. Better luck next time! </span></B>")
 					h.flash_eyes(visual = 1)
-					h.Cluwneize()
+					if(h.species.name != "Tajaran")
+						if(h.set_species("Tajaran"))
+							h.regenerate_icons()
+						to_chat(user, "<span class=danger><B>You have been turned into a disgusting catbeast! </span></B>")
+					else
+						for(var/datum/organ/external/E in h.organs) //Being a catbeast doesn't exempt you from getting a curse just because you cannot turn into a catbeast again.
+							E.droplimb(1)
 				if(2 to 5)
 					to_chat(user, "<span class=sinister><B>It could be worse, but not much worse! Enjoy your curse! </span></B>")
 					h.flash_eyes(visual = 1)
-					switch(pick(1,2,3,4))
+					switch(pick(1,2,3))
 						if(1)
-							if(h.species.name != "Tajaran")
-								if(h.set_species("Tajaran"))
-									h.regenerate_icons()
-								to_chat(user, "<span class=danger><B>You have been turned into a disgusting catbeast! </span></B>")
-							else
-								for(var/datum/organ/external/E in h.organs) //Being a catbeast doesn't exempt you from getting a curse just because you cannot turn into a catbeast again.
-									E.droplimb(1)
-						if(2)
 							for(var/datum/organ/external/E in h.organs)
 								E.droplimb(1)
-						if(3)
+						if(2)
 							var/obj/item/clothing/shoes/kneesocks/kneesock = new /obj/item/clothing/shoes/kneesocks
 							kneesock.canremove = 0
 							var/obj/item/clothing/suit/maidapron/apron = new /obj/item/clothing/suit/maidapron
 							apron.canremove = 0
 							var/obj/item/clothing/head/kitty/kitty_ears = new /obj/item/clothing/head/kitty
 							kitty_ears.canremove = 0
+							kitty_ears.anime = TRUE
+							kitty_ears.cringe = TRUE
 							var/obj/item/clothing/under/maid/maid_uniform = new /obj/item/clothing/under/maid
 							maid_uniform.canremove = 0
 							if(h.w_uniform)
@@ -208,7 +210,7 @@
 							h.equip_to_slot(apron,slot_wear_suit)
 							h.equip_to_slot(kitty_ears,slot_head)
 							to_chat(user, "<span class=danger><B>You have been turned into a disgusting faggot! </span></B>")
-						if(4)
+						if(3)
 							if(h.species.name != "Tajaran") // Catbeasts don't get to roll the dice and turn into monsters.
 								var/list/valid_species = (all_species - list("Krampus", "Horror"))
 								for(var/datum/organ/external/E in h.organs)
@@ -220,7 +222,7 @@
 									E.droplimb(1) //Catbeasts lose limbs
 
 				if(6 to 9)
-					to_chat(user, "<span class=sinister></B>You have rolled low and shall recieve a curse! It could be a lot worse however! </span></B>")
+					to_chat(user, "<span class=sinister></B>You have rolled low and shall receive a curse! It could be a lot worse however! </span></B>")
 					h.flash_eyes(visual = 1)
 					switch(pick(1,2,3,4))
 						if(1)
@@ -244,7 +246,7 @@
 												h.regenerate_icons()
 											to_chat(user, "<span class=danger><B>You have been turned into a disgusting lizard! </span></B>")
 										else
-											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a lizard can't get out of recieving a curse and so they lose their arms instead
+											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a lizard can't get out of receiving a curse and so they lose their arms instead
 												E.droplimb(1)
 									if(2)
 										if(h.species.name != "Skrell")
@@ -252,7 +254,7 @@
 												h.regenerate_icons()
 											to_chat(user, "<span class=danger><B>You have been turned into a disgusting squidman! </span></B>")
 										else
-											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a squid can't get out of recieving a curse and so they lose their arms instead
+											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a squid can't get out of receiving a curse and so they lose their arms instead
 												E.droplimb(1)
 									if(3)
 										if(h.species.name != "Vox")
@@ -272,13 +274,13 @@
 					to_chat(user, "<span class=sinister><B>You get nothing. No curse or reward! </span></B>")
 				if(13)
 					to_chat(user, "<span class=sinister><B>You've rolled 13! The cursed dice is broken! </span></B>")
-					explosion(get_turf(src), 0, 0, 4, 7)
+					explosion(get_turf(src), 0, 0, 4, 7, whodunnit = user)
 					to_chat(user, "<span class=danger><B>The dice explosively shatters! </span></B>")
 					qdel(src)
 
 				if(14 to 19)
 					to_chat(user, "<span class=sinister><B>You've rolled well and shall be rewarded! </span></B>")
-					switch(pick(1,2,3,4,5,6))
+					switch(pick(1,2,3,4,5,6,7))
 						if(1)
 							user.dna.SetSEState(INCREASERUNBLOCK,1)
 							user.dna.SetSEState(SMALLSIZEBLOCK,1)
@@ -324,6 +326,10 @@
 								if(3)
 									new /obj/item/clothing/head/helmet/richard(user.loc, user)
 									new /obj/item/clothing/under/jacketsuit(user.loc, user)
+						if(7)
+							to_chat(user, "<span class=danger><B>You have been reward with a selection of random potions! </span></B>")
+							new /obj/item/weapon/storage/bag/potion/dice_potion_bundle(user.loc, user)
+
 
 				if(20)
 					to_chat(user, "<span class=sinister><B>A perfect roll! enjoy your reward! </span></B>")

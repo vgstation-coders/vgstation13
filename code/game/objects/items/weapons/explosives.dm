@@ -27,7 +27,9 @@
 	..()
 
 /obj/item/weapon/c4/suicide_act(var/mob/living/user)
-	var/message_say = user.handle_suicide_bomb_cause()
+	var/message_say = user.handle_suicide_bomb_cause(src)
+	if(!message_say)
+		return
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	user.say(message_say)
 	target = user
@@ -53,7 +55,7 @@
 /obj/item/weapon/c4/afterattack(atom/target as obj|turf, mob/user as mob, flag)
 	if (!flag)
 		return
-	if (istype(target, /turf/unsimulated) || istype(target, /turf/simulated/shuttle) || istype(target, /obj/item/weapon/storage/))
+	if (istype(target, /turf/unsimulated) || isshuttleturf(target) || istype(target, /obj/item/weapon/storage/))
 		return
 	to_chat(user, "Planting explosives...")
 	if(ismob(target))

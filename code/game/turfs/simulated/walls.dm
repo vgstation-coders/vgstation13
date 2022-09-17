@@ -25,6 +25,19 @@
 	explosion_block = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_FULL
+	var/mob/living/peeper = null
+
+/turf/simulated/wall/initialize()
+	..()
+	// SMOOTH US WITH OUR NEIGHBORS
+	relativewall()
+
+	// WE NEED TO TELL ALL OUR FRIENDS ABOUT THIS SCANDAL
+	relativewall_neighbours()
+
+	var/turf/simulated/open/OS = GetAbove(src)
+	if(istype(OS))
+		OS.ChangeTurf(/turf/simulated/floor/plating)
 
 /turf/simulated/wall/canSmoothWith()
 	var/static/list/smoothables = list(
@@ -66,6 +79,7 @@
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
 
+	reset_view()
 	ChangeTurf(dismantle_type)
 	update_near_walls()
 
@@ -152,11 +166,26 @@
 						"<span class='notice'>You finish drawing the sigil.</span>")
 			return
 
+	if(bullet_marks)
+		peeper = user
+		peeper.client.perspective = EYE_PERSPECTIVE
+		peeper.client.eye = src
+		peeper.visible_message("<span class='notice'>[peeper] leans in and looks through \the [src].</span>", \
+		"<span class='notice'>You lean in and look through \the [src].</span>")
+		src.add_fingerprint(peeper)
+		return ..()
+
 	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
 	"<span class='notice'>You push \the [src] but nothing happens!</span>")
 	playsound(src, 'sound/weapons/Genhit.ogg', 25, 1)
 	src.add_fingerprint(user)
 	return ..()
+
+/turf/simulated/wall/proc/reset_view()
+	if(!peeper)
+		return
+	peeper.client.eye = peeper.client.mob
+	peeper.client.perspective = MOB_PERSPECTIVE
 
 /turf/simulated/wall/proc/attack_rotting(mob/user as mob)
 	if(istype(src, /turf/simulated/wall/r_wall)) //I wish I didn't have to do typechecks
@@ -170,7 +199,7 @@
 		return
 
 /turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	user.delayNextAttack(8)
+	user.delayNextAttack(W.attack_delay)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
@@ -180,9 +209,10 @@
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
-		to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")
+		to_chat(user, "<span class='notice'>You remove the hole[bullet_marks > 1 ? "s" : ""] with \the [W].</span>")
 		bullet_marks = 0
 		icon = initial(icon)
+		reset_view()
 		return
 
 	//Get the user's location
@@ -205,7 +235,7 @@
 			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under \the [W].</span>")
 			src.dismantle_wall(1)
 
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(src)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -225,33 +255,50 @@
 	//Deconstruction
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
-		if(WT.remove_fuel(1, user))
-			if(engraving)
+		if(engraving)
+			if(WT.remove_fuel(1, user))
 				to_chat(user, "<span class='notice'>You deform the wall back into its original shape")
 				engraving = null
 				engraving_quality = null
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 				overlays.Cut()
 				return
+		if(WT.isOn() && WT.get_fuel() >= 1)
 			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s outer plating.</span>", \
 			"<span class='notice'>You begin slicing through \the [src]'s outer plating.</span>", \
 			"<span class='warning'>You hear welding noises.</span>")
 			playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
-			if(do_after(user, src, 100))
+			if(WT.do_weld(user, src, 100, 1))
 				if(!istype(src))
 					return
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 				user.visible_message("<span class='warning'>[user] slices through \the [src]'s outer plating.</span>", \
 				"<span class='notice'>You slice through \the [src]'s outer plating.</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
-				var/pdiff = performWallPressureCheck(src.loc)
+				var/pdiff = performWallPressureCheck(src)
 				if(pdiff)
 					investigation_log(I_ATMOS, "with a pdiff of [pdiff] dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 					message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				dismantle_wall()
 		else
 			return
+
+	// Drilling peepholes
+	if(istype(W,/obj/item/tool/surgicaldrill))
+		user.visible_message("<span class='warning'>[user] begins drilling a hole into \the [src].</span>", \
+		"<span class='notice'>You begin drilling a hole into \the [src].</span>", \
+		"<span class='warning'>You hear drilling noises.</span>")
+		//playsound(src, 'sound/items/Welder.ogg', 100, 1)
+
+		if(do_after(user, src, 100*W.toolspeed))
+			if(!istype(src))
+				return
+			//playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			user.visible_message("<span class='warning'>[user] drills a hole into \the [src].</span>", \
+			"<span class='notice'>You drill a hole into \the [src] to peep through.</span>", \
+			"<span class='warning'>You hear drilling noises.</span>")
+			add_bullet_mark("peephole",round(Get_Angle(user,src)))
 
     //CUT_WALL will dismantle the wall
 	else if((W.sharpness_flags & (CUT_WALL)) && user.a_intent == I_HURT)
@@ -267,7 +314,7 @@
 			user.visible_message("<span class='warning'>[user] slices through \the [src]'s outer plating.</span>", \
 			"<span class='notice'>You slice through \the [src]'s outer plating.</span>", \
 			"<span class='warning'>You hear welding noises.</span>")
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(src)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -288,7 +335,7 @@
 			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
 			dismantle_wall()
 
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(src)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -297,6 +344,8 @@
 	else if(istype(W, /obj/item/mounted)) //If we place it, we don't want to have a silly message
 		return
 
+	else if(istype(W, /obj/item/tool/crowbar/red))
+		playsound(src, "crowbar_hit", 50, 1, -1)
 	else
 		return attack_hand(user)
 	return
@@ -347,7 +396,7 @@
 	F.burn_tile()
 	F.icon_state = "[cultwall ? "cultwall_thermite" : "wall_thermite"]"
 
-	var/pdiff = performWallPressureCheck(src.loc)
+	var/pdiff = performWallPressureCheck(src)
 	if(pdiff)
 		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been thermited through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 		message_admins("\The [src] with a pdiff of [pdiff] has been thermited by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -416,8 +465,11 @@
 		if(H.foot_impact(src,rand(5,7)))
 			to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
 
-/turf/simulated/wall/acidable()
-	return !(flags & INVULNERABLE)
+/turf/simulated/wall/dissolvable()
+	if(flags & INVULNERABLE)
+		return FALSE
+	else
+		return PACID
 
 /turf/simulated/wall/clockworkify()
 	ChangeTurf(/turf/simulated/wall/mineral/clockwork)

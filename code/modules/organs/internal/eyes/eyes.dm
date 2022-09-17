@@ -10,8 +10,6 @@
 	var/see_in_dark=2
 	var/list/colourmatrix = list()
 
-
-
 /datum/organ/internal/eyes/proc/init_perception(var/mob/living/carbon/human/M)
 	return
 
@@ -24,14 +22,13 @@
 	if(is_bruised())
 		owner.eye_blurry = max(2, owner.eye_blurry)
 
-
 /datum/organ/internal/eyes/tajaran
 	name = "feline eyes"
 	see_in_dark=9
 	removed_type = /obj/item/organ/internal/eyes/tajaran
 
 /datum/organ/internal/eyes/tajaran/update_perception(var/mob/living/carbon/human/M)
-	M.dark_plane.alphas["tajaran"] = 155
+	M.client.darkness_planemaster.alpha = 100
 
 /datum/organ/internal/eyes/grey
 	name = "huge eyes"
@@ -52,14 +49,13 @@
 	name = "bird eyes"
 	removed_type = /obj/item/organ/internal/eyes/vox
 
-/datum/organ/internal/eyes/grue
+/datum/organ/internal/eyes/monstrous
 	name = "monstrous eyes"
-	see_in_dark=8
-	colourmatrix = list(-1, 0, 0,
-						 0,-1, 0,
-						 0, 0,-1,
-						 1, 1, 1)
-	removed_type = /obj/item/organ/internal/eyes/grue
+	see_in_dark= 9
+	removed_type = /obj/item/organ/internal/eyes/monstrous
+
+/datum/organ/internal/eyes/monstrous/update_perception(var/mob/living/carbon/human/M)
+	M.client.darkness_planemaster.alpha = 100
 
 /datum/organ/internal/eyes/mushroom
 	name = "mushroom eyes"
@@ -69,10 +65,9 @@
 
 /datum/organ/internal/eyes/mushroom/update_perception(var/mob/living/carbon/human/M)
 	if (dark_mode)
-		M.master_plane.blend_mode = BLEND_SUBTRACT
-		M.dark_plane.alphas["mushroom_darkmode"] = 155
-		M.dark_plane.blend_mode = BLEND_MULTIPLY
-		M.dark_plane.colours = "#FF0000"
+		M.client.darkness_planemaster.blend_mode = BLEND_SUBTRACT
+		M.client.darkness_planemaster.alpha = 100
+		M.client.darkness_planemaster.color = "#FF0000"
 		M.client.color = list(
 			1,0,0,0,
 			0,1,0,0,
@@ -80,10 +75,9 @@
 			0,-0.1,0,1,
 			0,0,0,0)
 	else
-		M.dark_plane.alphas["mushroom_normal"] = 105
-		M.master_plane.blend_mode = BLEND_MULTIPLY
-		M.dark_plane.blend_mode = BLEND_ADD
-		M.dark_plane.colours = null
+		M.client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
+		M.client.darkness_planemaster.alpha = 150
+		M.client.darkness_planemaster.color = null
 		M.client.color = list(
 			1,0,0,0,
 			0,1,0,0,

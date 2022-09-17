@@ -310,8 +310,9 @@ var/global/datum/controller/occupations/job_master
 	var/datum/job/officer = job_master.GetJob("Security Officer")
 	var/datum/job/warden = job_master.GetJob("Warden")
 	var/datum/job/hos = job_master.GetJob("Head of Security")
+	var/datum/job/detective = job_master.GetJob("Detective")
 	var/datum/job/master_assistant = GetJob("Assistant")
-	count = (officer.current_positions + warden.current_positions + hos.current_positions)
+	count = (officer.current_positions + warden.current_positions + hos.current_positions + detective.current_positions)
 
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
@@ -410,35 +411,6 @@ var/global/datum/controller/occupations/job_master
 	if(!H)
 		return 0
 	var/datum/job/job = GetJob(rank)
-	if(!joined_late)
-		var/obj/S = null
-		// Find a spawn point that wasn't given to anyone
-		for(var/obj/effect/landmark/start/sloc in landmarks_list)
-			if(sloc.name != rank)
-				continue
-			if(locate(/mob/living) in sloc.loc)
-				continue
-			S = sloc
-			break
-		if(!S)
-			// Find a spawn point that was already given to someone else
-			for(var/obj/effect/landmark/start/sloc in landmarks_list)
-				if(sloc.name != rank)
-					continue
-				S = sloc
-				stack_trace("not enough spawn points for [rank]")
-				break
-		if(!S)
-			// Find a spawn point that's using the ancient landmarks. Do we even have these anymore?
-			S = locate("start*[rank]")
-		if(S)
-			// Use the given spawn point
-			H.forceMove(S.loc)
-		else
-			// Use the arrivals shuttle spawn point
-			stack_trace("no spawn points for [rank]")
-			H.forceMove(pick(latejoin))
-
 	if(job && !job.no_starting_money)
 		//give them an account in the station database
 		// Total between $200 and $500
@@ -499,11 +471,6 @@ var/global/datum/controller/occupations/job_master
 	if(H.mind)
 		H.mind.assigned_role = rank
 		alt_title = H.mind.role_alt_title
-
-		switch(rank)
-			if("Mobile MMI")
-				H.MoMMIfy()
-				return 1
 	if(job)
 		job.introduce(H, (alt_title ? alt_title : rank))
 	else

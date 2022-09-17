@@ -134,12 +134,18 @@
 /obj/structure/poutineocean/attack_hand(mob/user)
 	to_chat(user, "<span class='warning'>You need a plate to get food from \the [src]!</span>")
 
-/obj/structure/poutineocean/attackby(obj/item/W, mob/user)
+/obj/structure/poutineocean/attackby(obj/item/W, mob/user, params)
 	if (istype(W, /obj/item/trash/plate))
-		if(user.drop_item(W))
-			qdel(W)
+		var/obj/item/trash/plate/P = W
+
+		if (P.plates.len > 0)
+			to_chat(user, "<span class='warning'>You're not sure anything good will happen from trying to fill a whole stack of plates at once.</span>")
+			return
+
+		if(user.drop_item(P))
 			var/obj/item/AM = new type_to_dispense(get_turf(src))
-			user.put_in_hands(AM)
+			var/obj/item/poutine_on_plate = P.try_to_put_on_plate(user,AM,params)
+			user.put_in_hands(poutine_on_plate)
 			user.visible_message("<span class='notice'>[user] gathers some [AM.name] from \the [src], and shovels it onto their plate!</span>", "<span class='notice'>You gather some [AM.name] from \the [src], and shovel it onto your plate!</span>")
 			return
 	..()

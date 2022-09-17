@@ -27,6 +27,13 @@
 	price = 2 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
 
+/datum/spellbook_artifact/staff_of_polymorph
+	name = "Staff of Polymorph"
+	desc = "An artefact that shoots highly chaotic bolts of energy which transform the target into a random creature for a short while. Using the staff on oneself will permanently corrupt the user's form, transforming into an unstable, writhing pollywog!"
+	abbreviation = "PM"
+	price = 20
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/polymorph)
+
 /datum/spellbook_artifact/staff_of_swapping
 	name = "Staff of Swapping"
 	desc = "An artefact that fires a glowing bolt of energy which transfers the caster and targets position in space. Wielding in it both hands increases the power of the staff, and allows it to pass through certain objects.."
@@ -93,7 +100,7 @@
 
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
-	desc = "Feeling adventurous? Buy this bundle and recieve seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
+	desc = "Feeling adventurous? Buy this bundle and receive seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
 	abbreviation = "SB"
 	price = 4 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/storage/box/spellbook)
@@ -327,7 +334,7 @@
 /datum/spellbook_artifact/darkness/purchased(mob/living/carbon/human/H)
 	..()
 	for(var/obj/machinery/power/apc/apc in power_machines)
-		if(apc.z == STATION_Z)
+		if(apc.z == map.zMainStation)
 			apc.overload_lighting()
 
 
@@ -359,13 +366,10 @@
 	abbreviation = "NGA"
 	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation."
 	price = -0.5 * Sp_BASE_PRICE
+	one_use = TRUE
 
 /datum/spellbook_artifact/nogunallowed/can_buy(var/mob/user)
-	if(iswizard(user) || isapprentice(user) || ismagician(user))
-		if(!locate(/spell/passive/nogunallowed) in user.spell_list)
-			return TRUE
-	else
-		return FALSE
+	return iswizard(user) || isapprentice(user) || ismagician(user)
 
 /datum/spellbook_artifact/nogunallowed/purchased(mob/living/carbon/human/H)
 	..()

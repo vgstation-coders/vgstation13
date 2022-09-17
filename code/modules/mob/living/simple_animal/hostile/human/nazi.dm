@@ -373,5 +373,5 @@
 	sleep(10)
 	var/turf/eloc = get_turf(loc)
 	qdel(src)
-	explosion(eloc,1,2,3)
+	explosion(eloc,1,2,3, whodunnit = src)
 	new /obj/item/weapon/gun/gatling(eloc)

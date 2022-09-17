@@ -1,7 +1,7 @@
 var/list/allEvents = typesof(/datum/event) - /datum/event
 
-var/eventTimeLower = 6000	//10 minutes
-var/eventTimeUpper = 12000	//20 minutes
+var/eventTimeLower = 20 //minutes
+var/eventTimeUpper = 40
 var/scheduledEvent = null
 
 /proc/checkEvent()
@@ -34,19 +34,22 @@ var/scheduledEvent = null
 			if(0 to 18000) //30 first minutes
 				roundlength_modifier = 1 //Don't particularly speed up event rate
 			if(18000 to 36000) //Next thirty minutes
-				roundlength_modifier = 0.95 //Start ramping up
+				roundlength_modifier = 0.7 //Start ramping up
 			if(36000 to 54000)
-				roundlength_modifier = 0.90
+				roundlength_modifier = 0.6
 			if(54000 to INFINITY) //Round has been going for 1 hour and 30 minutes at least
-				roundlength_modifier = 0.85
+				roundlength_modifier = 0.45
 
-		var/next_event_delay = rand(eventTimeLower, eventTimeUpper)*playercount_modifier*roundlength_modifier
-		scheduledEvent = world.timeofday + next_event_delay
+		var/next_event_delay = round(rand(eventTimeLower, eventTimeUpper)*playercount_modifier*roundlength_modifier,1) MINUTES
+		scheduledEvent = world.timeofday + next_event_delay  //in deciseconds
 		message_admins("Random event call. Next event call in [next_event_delay/600] minutes.")
 
 	else if(world.timeofday > scheduledEvent)
-		spawn_dynamic_event()
-
+		var/event_executed = FALSE
+		var/event_count = 0
+		while(!event_executed && event_count < 5 ) //try for an event 5x
+			event_executed = spawn_dynamic_event()
+			event_count++
 		scheduledEvent = null
 		checkEvent()
 

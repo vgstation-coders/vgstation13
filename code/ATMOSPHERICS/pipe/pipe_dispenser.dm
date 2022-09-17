@@ -34,11 +34,11 @@
 	interact(user)
 
 /obj/machinery/pipedispenser/interact(mob/user)
-	var/multi_z_dat = map.multiz ? {"
+	var/multi_z_dat = HasAbove(z) || HasBelow(z) ? {"
 <b>Multi-floor pipes:</b>
 <ul>
-	<li><a href='?src=\ref[src];make=[PIPE_Z_UP];dir=1'>Up Pipe</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_Z_DOWN];dir=1'>Down Pipe</a></li>
+	[HasAbove(z) ? "<li><a href='?src=\ref[src];make=[PIPE_Z_UP];dir=1'>Up Pipe</a></li>" : ""]
+	[HasBelow(z) ? "<li><a href='?src=\ref[src];make=[PIPE_Z_DOWN];dir=1'>Down Pipe</a></li>" : ""]
 </ul>"} : ""
 	var/dat = {"
 <b>Regular pipes:</b>
@@ -48,6 +48,8 @@
 	<li><a href='?src=\ref[src];make=[PIPE_MANIFOLD];dir=1'>Manifold</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_MVALVE];dir=1'>Manual Valve</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_DVALVE];dir=1'>Digital Valve</a></li>
+	<li><a href='?src=\ref[src];make=[PIPE_MPVALVE];dir=1'>Manual Pressure Valve</a></li>
+	<li><a href='?src=\ref[src];make=[PIPE_DPVALVE];dir=1'>Digital Pressure Valve</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_CAP];dir=1'>Pipe Cap</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_MANIFOLD4W];dir=1'>4-Way Manifold</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_MTVALVE];dir=1'>Manual T-Valve</a></li>

@@ -26,7 +26,7 @@
 		/obj/item/weapon/stock_parts/capacitor
 	)
 	RefreshParts()
-	in_dir = reverse_direction(dir)
+	in_dir = opposite_dirs[dir]
 	out_dir = dir
 
 /obj/machinery/mineral/unloading_machine/RefreshParts()
@@ -48,16 +48,16 @@
 			return 1
 		newdir = text2dir(newdir)
 		if (changingdir == 1)
-			dir = reverse_direction(newdir)
+			dir = opposite_dirs[newdir]
 		else
 			dir = newdir
-		in_dir = reverse_direction(dir)
+		in_dir = opposite_dirs[dir]
 		out_dir = dir
 		return MT_UPDATE
 	return ..()
 
 /obj/machinery/mineral/unloading_machine/process()
-	var/turf/T = get_step(src,reverse_direction(dir))
+	var/turf/T = get_step(src,opposite_dirs[dir])
 
 	for(var/atom/movable/A in T)
 		if(A.anchored)
@@ -140,7 +140,7 @@
 			qdel(src)
 			return
 		icon_state = "grabber-retract-3"
-		for (var/atom/movable/AM in get_step(src,reverse_direction(dir)))
+		for (var/atom/movable/AM in get_step(src,opposite_dirs[dir]))
 			if (Adjacent(AM) && is_type_in_list(AM, unloader.allowed_types))
 				stack_of_items.overlays +=  image(AM.icon,src,AM.icon_state)
 				AM.forceMove(src)

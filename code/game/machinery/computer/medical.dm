@@ -24,10 +24,6 @@
 
 	light_color = LIGHT_COLOR_BLUE
 
-/obj/machinery/computer/med_data/attack_ai(user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/med_data/attack_paw(user as mob)
 	return attack_hand(user)
 
@@ -142,16 +138,31 @@
 
 
 /obj/machinery/computer/med_data/attackby(var/obj/item/O, var/mob/living/user)
-	if (istype(user) && authenticated && istype(O, /obj/item/weapon/photo/id) && (screen == 4.0) && active1)
-		var/obj/item/weapon/photo/id/photo_id = O
-		if (photo_id.four_sides)
-			if (alert("Do you want to update the records with this ID photo?",,"Yes","No") == "Yes")
-				if (user && !user.incapacitated() && Adjacent(user) && photo_id && (photo_id == user.get_active_hand()) && authenticated && (screen == 4.0) && active1)
-					active1.fields["photo"] = photo_id.four_sides
-					visible_message("<span class='notice'>[bicon(src)] Database updated.</span>")
-					playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
-					updateUsrDialog()
-
+	if (istype(user) && authenticated && (screen == 4.0) && active1)
+		if(istype(O, /obj/item/weapon/photo/id))
+			var/obj/item/weapon/photo/id/photo_id = O
+			if (photo_id.four_sides)
+				if (alert("Do you want to update the records with this ID photo?",,"Yes","No") == "Yes")
+					if (user && !user.incapacitated() && Adjacent(user) && photo_id && (photo_id == user.get_active_hand()) && authenticated && (screen == 4.0) && active1)
+						active1.fields["photo"] = photo_id.four_sides
+						visible_message("<span class='notice'>[bicon(src)] Database updated.</span>")
+						playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
+						updateUsrDialog()
+		if(istype(O,/obj/item/device/detective_scanner/forger))
+			var/obj/item/device/detective_scanner/forger/F = O
+			if(active1.fields["fingerprint"])
+				var/list/customprints = list()
+				var/print = active1.fields["fingerprint"]
+				to_chat(user,"<span class='notice'>You scan the fingerprints from the active record and add them to the custom fingerprints. It will be tied to the next applicable scanned item.</span>")
+				customprints[print] = print
+				F.custom_forgery[1] = customprints ? customprints.Copy() : null
+			if(active2 && active2.fields["b_dna"] && active2.fields["b_type"])
+				var/list/customblood = list()
+				var/blood = active2.fields["b_dna"]
+				var/bloodtype = active2.fields["b_type"]
+				to_chat(user,"<span class='notice'>You scan the blood type and DNA from the active record and add them to the custom blood data. It will be tied to the next applicable scanned item.</span>")
+				customblood[blood] = bloodtype
+				F.custom_forgery[3] = customblood ? customblood.Copy() : null
 	..()
 
 /obj/machinery/computer/med_data/proc/pathogen_dat(var/datum/data/record/v)
@@ -554,7 +565,7 @@
 	return
 
 /obj/machinery/computer/med_data/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 

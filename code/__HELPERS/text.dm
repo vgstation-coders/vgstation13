@@ -1,4 +1,5 @@
 #define HTMLTAB "&nbsp;&nbsp;&nbsp;&nbsp;"
+#define UTF_LIMIT (1 << 20) + (1 << 16) - 1
 #define string2charlist(string) (splittext(string, regex("(.)")) - splittext(string, ""))
 
 /*
@@ -111,6 +112,11 @@
 	var/name = input(user, message, title, default) as null|text
 	return strip_html_simple(name, max_length)
 
+//As above, but for full-size paragraph textboxes
+/proc/stripped_message(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
+	var/name = input(user, message, title, default) as null|message
+	return strip_html_simple(name, max_length)
+
 //Filters out undesirable characters from names
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
 	if(!t_in || length(t_in) > max_length)
@@ -188,7 +194,7 @@
 //checks text for html tags
 //if tag is not in whitelist (var/list/paper_tag_whitelist in global.dm)
 //relpaces < with &lt;
-proc/checkhtml(var/t)
+/proc/checkhtml(var/t)
 	t = sanitize_simple(t, list("&#"="."))
 	var/p = findtext(t,"<",1)
 	while (p)	//going through all the tags
@@ -261,14 +267,14 @@ proc/checkhtml(var/t)
 //Returns a string with reserved characters and spaces before the first letter removed
 /proc/trim_left(text)
 	for (var/i = 1 to length(text))
-		if (text2ascii(text, i) > 32)
+		if (text2ascii(text, i) > 32 && text2ascii(text, i) <= UTF_LIMIT)
 			return copytext(text, i)
 	return ""
 
 //Returns a string with reserved characters and spaces after the last letter removed
 /proc/trim_right(text)
 	for (var/i = length(text), i > 0, i--)
-		if (text2ascii(text, i) > 32)
+		if (text2ascii(text, i) > 32 && text2ascii(text, i) <= UTF_LIMIT)
 			return copytext(text, 1, i + 1)
 
 	return ""
@@ -379,12 +385,13 @@ proc/checkhtml(var/t)
  */
 var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
 
-/proc/format_units(var/number)
+/proc/format_units(var/number, var/decimals=2)
 	if (number<0)
 		return "-[format_units(abs(number))]"
 	if (number==0)
 		return "0 "
 
+	// Figure out suffix
 	var/max_unit_suffix = unit_suffixes.len
 	var/i=1
 	while (round(number/1000) >= 1)
@@ -392,6 +399,10 @@ var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
 		i++
 		if (i == max_unit_suffix)
 			break
+
+	// Remove excess decimals
+	decimals = 10 ** decimals
+	number = round(number * decimals)/decimals
 
 	return "[format_num(number)] [unit_suffixes[i]]"
 
@@ -407,7 +418,7 @@ var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
 //Example: text_ends_with("Woody got wood", "dy got wood") returns 1
 //         text_ends_with("Woody got wood", "d") returns 1
 //         text_ends_with("Woody got wood", "Wood") returns 0
-proc/text_ends_with(text, suffix)
+/proc/text_ends_with(text, suffix)
 	if(length(suffix) > length(text))
 		return FALSE
 
@@ -517,7 +528,7 @@ var/quote = ascii2text(34)
 //	to_chat(usr, "\"[jointext(num2words(number), " ")]\"")
 
 // Sanitize inputs to avoid SQL injection attacks
-proc/sql_sanitize_text(var/text)
+/proc/sql_sanitize_text(var/text)
 	text = replacetext(text, "'", "''")
 	text = replacetext(text, ";", "")
 	text = replacetext(text, "&", "")
@@ -526,11 +537,11 @@ proc/sql_sanitize_text(var/text)
 /proc/is_letter(var/thing) // Thing is an ascii number
     return (thing >= 65 && thing <= 122)
 
-/proc/buttbottify(var/message)
+/proc/buttbottify(var/message, var/min = 1, var/max = 3)
 	var/list/split_phrase = splittext(message," ") // Split it up into words.
 
 	var/list/prepared_words = split_phrase.Copy()
-	var/i = rand(1,3)
+	var/i = rand(min,max)
 	for(,i > 0,i--) //Pick a few words to change.
 
 		if (!prepared_words.len)
@@ -711,3 +722,37 @@ proc/sql_sanitize_text(var/text)
 			count++
 	while(last_index)
 	return count
+
+/proc/get_reflexive_pronoun(var/gender) //For when \himself won't work.
+	switch(gender)
+		if(MALE)
+			return "himself"
+		if(FEMALE)
+			return "herself"
+		if(PLURAL) //Can be used in conjunction with shift_verb_tense(). eg. "The bees cleans themselves." -> "The bees clean themselves."
+			return "themselves"
+		else
+			return "itself"
+
+/proc/shift_verb_tense(var/input) //Turns "slashes" into "slash" and "hits" into "hit".
+	//Special cases can be added here as they are encountered.
+	switch(input)
+		if("staves in")
+			return "stave in"
+	//Check if input ends in "es" or "s" and chop those off if so.
+	var/inputlength = length(input)
+	if(inputlength > 2)
+		if(copytext(input, inputlength - 1, inputlength + 1) == "es") //If it ends in "es"
+			var/third_to_last = copytext(input, inputlength - 2, inputlength - 1)
+			if(findtext("cdefgklmnprstuvxz", third_to_last)) //If the third-to-last letter is any of the given letters, remove only the "s".
+				return copytext(input, 1, inputlength) //"smiles" becomes "smile"
+			else if(third_to_last == "i")
+				return copytext(input, 1, inputlength - 2) + "y" //"parries" becomes "parry"
+			else
+				return copytext(input, 1, inputlength - 1) //Otherwise remove the "es".
+		else if(copytext(input, inputlength, inputlength + 1) == "s") //If the second-to-last letter isn't "e", and the last letter is "s", remove the "s".
+			return copytext(input, 1, inputlength)	//"gets" becomes "get"
+		else
+			return input
+	else
+		return input

@@ -1,5 +1,5 @@
 /obj/item/mounted
-	var/list/buildon_types = list(/turf/simulated/wall, /turf/simulated/shuttle/wall)
+	var/list/buildon_types = list(/turf/simulated/wall, /turf/simulated/wall/shuttle)
 
 
 /obj/item/mounted/afterattack(var/atom/A, mob/user, proximity_flag)

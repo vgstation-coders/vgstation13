@@ -29,15 +29,15 @@ var/list/obj/machinery/holosign/holosigns = list()
 	..()
 
 /obj/machinery/holosign/proc/toggle(var/active)
-	if (stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	lit = active
 	update_icon()
 
 /obj/machinery/holosign/update_icon()
 	overlays.len = 0
-	if(!lit || (stat & (NOPOWER|BROKEN)))
-		kill_light()
+	if(!lit || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
+		set_light(0)
 		return
 	if(!overlay)
 		overlay = image(icon, on_icon)
@@ -100,7 +100,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 	var/active = 0
 	var/image/overlay
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 4
 
@@ -114,10 +114,6 @@ var/list/obj/machinery/holosign/holosigns = list()
 		overlay = null
 	..()
 
-/obj/machinery/holosign_switch/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/holosign_switch/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
@@ -129,7 +125,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 /obj/machinery/holosign_switch/attack_hand(mob/user as mob)
 	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	src.add_fingerprint(usr)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	add_fingerprint(user)
 
@@ -158,7 +154,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 
 /obj/machinery/holosign_switch/update_icon()
 	overlays.len = 0
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		icon_state = "light-p"
 	else
 		icon_state = active ? "light1" : "light0"

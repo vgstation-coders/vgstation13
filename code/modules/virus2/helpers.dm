@@ -1,5 +1,5 @@
 //Build random disease type
-proc/get_random_weighted_disease(var/operation = WDISH)
+/proc/get_random_weighted_disease(var/operation = WDISH)
 	var/list/possibles = subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined)
 	var/list/weighted_list = list()
 	for(var/P in possibles)
@@ -13,7 +13,7 @@ proc/get_random_weighted_disease(var/operation = WDISH)
 
 //Checks if table-passing table can reach target (5 tile radius)
 //For the record that proc is only used by the "Gregarious Impetus" symptom and super/toxic farts.
-proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
+/proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	var/obj/dummy = new(source)
 	dummy.flags = FPRINT
 	dummy.pass_flags = PASSTABLE
@@ -200,12 +200,12 @@ var/list/infected_contact_mobs = list()
 			plague.update_hud_icons()
 			for(var/datum/role/plague_mouse/M in plague.members)
 				var/datum/mind/mouse_mind = M.antag
-				mouse_mind.store_memory(D.get_info(), forced = 1)
+				mouse_mind.store_memory(D.get_info(TRUE), forced = 1)
 				mouse_mind.store_memory("<hr>")
 		//----------------
 
 		for (var/obj/item/device/pda/p in contents)
-			if (p.scanmode == (SCANMODE_MEDICAL))
+			if (istype(p.scanning_app,/datum/pda_app/cart/scanner/medical))
 				playsound(loc, 'sound/machines/twobeep.ogg', 50, 1)
 				if("[disease.uniqueID]-[disease.subID]" in virusDB)
 					var/datum/data/record/V = virusDB["[disease.uniqueID]-[disease.subID]"]
@@ -366,7 +366,7 @@ var/list/infected_items = list()
 /proc/spread_disease_among_crew(var/datum/disease2/disease/D, var/reason = "4noraisin")
 	var/list/candidates = list()
 	for(var/mob/living/candidate in player_list)
-		if(candidate.z == STATION_Z && candidate.client && candidate.stat != DEAD && candidate.can_be_infected() && candidate.immune_system.CanInfect(D))
+		if(candidate.z == map.zMainStation && candidate.client && candidate.stat != DEAD && candidate.can_be_infected() && candidate.immune_system.CanInfect(D))
 			candidates += candidate
 
 	if(!candidates.len)

@@ -22,6 +22,7 @@
 	var/mag_type = ""
 	var/list/mag_type_restricted = list() //better magazine manipulation
 	var/list/magwellmod = list() //this holds the magtype restriction when a mod is applied
+	var/image/magazine_overlay = null //holds a copy of the overlay for the currently loaded magazine, for manipulation
 	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
 	var/automagdrop_delay_time = 5 // delays the automagdrop
 	var/spawn_mag = TRUE
@@ -43,6 +44,8 @@
 		for(var/i = 1, i <= max_shells, i++)
 			if(ammo_type)
 				loaded += new ammo_type(src)
+	if(gun_flags & MAG_OVERLAYS)
+		mag_overlay()
 	update_icon()
 	return
 
@@ -61,6 +64,8 @@
 		stored_magazine = AM
 		chamber_round()
 		AM.update_icon()
+		if(src.gun_flags & MAG_OVERLAYS)
+			mag_overlay()
 		update_icon()
 
 		if(user)
@@ -99,6 +104,8 @@
 				to_chat(usr, "<span class='notice'>You drop [stored_magazine] out of \the [src]!</span>")
 		stored_magazine.update_icon()
 		stored_magazine = null
+		if(src.gun_flags & MAG_OVERLAYS)
+			mag_overlay()
 		update_icon()
 		if(user)
 			user.update_inv_hands()
@@ -117,6 +124,25 @@
 	else
 		to_chat(usr, "<span class='rose'>There is no magazine to remove!</span>")
 
+
+/obj/item/weapon/gun/projectile/proc/mag_overlay()
+	if(stored_magazine)
+		var/mag_sprite = initial(stored_magazine.icon_state)
+		if(!magazine_overlay || magazine_overlay.icon_state != mag_sprite) 
+			overlays -= magazine_overlay
+			var/image/magazine_adjustment = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = mag_sprite)
+			magazine_adjustment.pixel_x -= stored_magazine.magoffsetx
+			magazine_adjustment.pixel_y -= stored_magazine.magoffsety
+			if(stored_magazine.markingcolor)
+				magazine_adjustment.icon += stored_magazine.markingcolor
+			overlays += magazine_adjustment
+			magazine_overlay = magazine_adjustment
+			return
+	else
+		if(magazine_overlay)
+			overlays -= magazine_overlay
+			magazine_overlay = null
+		
 
 /obj/item/weapon/gun/projectile/proc/chamber_round() //Only used by guns with magazine
 	if(chambered || !stored_magazine)
@@ -310,13 +336,11 @@
 		to_chat(user, "<span class='info'>Has [getAmmo()] round\s remaining.</span>")
 	if(getSpent() > 0)
 		to_chat(user, "<span class='info'>Has [getSpent()] round\s spent.</span>")
-//		if(in_chamber && !loaded.len)
-//			to_chat(usr, "However, it has a chambered round.")
-//		if(in_chamber && loaded.len)
-//			to_chat(usr, "It also has a chambered round." {R})
 	if(istype(silenced, /obj/item/gun_part/silencer))
 		var/obj/item/gun_part/silencer/A = silenced
 		to_chat(user, "<span class='warning'>It has \a [A] attached to the barrel.</span>")
+	if(magwellmod.len)
+		to_chat(user, "<span class='warning'>There's something strange screwed into the magwell.</span>")
 
 /obj/item/weapon/gun/projectile/proc/getAmmo()
 	var/bullets = 0

@@ -86,7 +86,6 @@ var/list/barsigns = list()
 	var/interval_ticker = 0
 	var/already_fired = FALSE
 
-
 /obj/structure/sign/double/barsign/Destroy()
 	if(viscon)
 		vis_contents -= viscon
@@ -101,11 +100,11 @@ var/list/barsigns = list()
 /obj/structure/sign/double/barsign/ghetto
 	req_access = null
 
-/obj/structure/sign/double/barsign/attack_ai(mob/user)
-	return attack_hand(user)
-
 /obj/structure/sign/double/barsign/attack_ghost(mob/user)
 	attack_hand(user)
+
+/obj/structure/sign/double/barsign/attack_ai(mob/user)
+	return attack_hand(user)
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user)
 	if((!isAdminGhost(user) || !isAI(user)) && !allowed(user))
@@ -194,7 +193,7 @@ var/list/barsigns = list()
 /obj/structure/sign/double/barsign/Topic(href, href_list)
 	if(..())
 		return
-	if(in_range(src, usr) && isliving(usr) && allowed(usr) || isAdminGhost(usr) || isAI(usr))
+	if(in_range(src, usr) && isliving(usr) && allowed(usr) || isAdminGhost(usr) || isAI(usr) || isrobot(usr))
 		var/mob/user = usr
 
 		if(href_list["direct_select"])
@@ -450,6 +449,8 @@ var/list/barsigns = list()
 
 //You get actual annoying sounds and scrambled symbol fonts If its emag'd
 /obj/structure/sign/double/barsign/emag_act(mob/user)
+	to_chat(user, "<span class='warning'>You scramble the sound files on the [src].</span>")
+
 	sound_selection["Rooster"] = 'sound/misc/6amRooster.wav'
 	sound_selection["Wolf"] = 'sound/misc/6pmWolf.wav'
 	sound_selection["Male Scream"] = 'sound/misc/malescream5.ogg'
@@ -458,7 +459,9 @@ var/list/barsigns = list()
 	sound_selection["Bike Horn"] = 'sound/items/bikehorn.ogg'
 	font_selection += "Wingdings"
 
-
+/obj/structure/sign/double/barsign/mining
+	name = "Armok's Bar N Grill"
+	icon_state = "armokbar"
 
 #undef PREMADE_SCREEN
 #undef CUSTOM_SCREEN

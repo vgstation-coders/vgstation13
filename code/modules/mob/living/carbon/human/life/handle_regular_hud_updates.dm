@@ -35,7 +35,7 @@
 				if (N)
 					if (i > V.cached_images.len)
 						var/image/I = image('icons/mob/mob.dmi', loc = C, icon_state = "vampnullrod")
-						I.plane = ABOVE_LIGHTING_PLANE
+						I.plane = MISC_HUD_MARKERS_PLANE
 						V.cached_images += I
 						src.client.images += I
 					else
@@ -64,6 +64,8 @@
 					see_in_dark = 3
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
 				if("shadow")
+					if(client)
+						client.darkness_planemaster.alpha = 100
 					see_in_dark = 8
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
 		if(M_THERMALS in mutations)
@@ -145,6 +147,8 @@
 
 
 		if(has_reagent_in_blood(CAPSAICIN))
+			temperature_alert = TEMP_ALARM_HEAT_STRONG
+		if(has_reagent_in_blood(ZAMSPICYTOXIN))
 			temperature_alert = TEMP_ALARM_HEAT_STRONG
 		else if(has_reagent_in_blood(FROSTOIL))
 			temperature_alert = TEMP_ALARM_COLD_STRONG
@@ -233,7 +237,7 @@
 		var/masked = 0
 
 		if(head)
-			if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen) || istype(head, /obj/item/clothing/head/helmet/space/unathi) || (/datum/action/item_action/toggle_helmet_mask in head.actions_types))
+			if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi) || (/datum/action/item_action/toggle_helmet_mask in head.actions_types))
 				var/enable_mask = TRUE
 
 				var/datum/action/item_action/toggle_helmet_mask/action = locate(/datum/action/item_action/toggle_helmet_mask) in head.actions
@@ -242,9 +246,6 @@
 					enable_mask = !action.up
 				else if(istype(head, /obj/item/clothing/head/welding))
 					var/obj/item/clothing/head/welding/O = head
-					enable_mask = !O.up
-				else if(istype(head, /obj/item/clothing/head/helmet/space/vox/civ/mushmen))
-					var/obj/item/clothing/head/helmet/space/vox/civ/mushmen/O = head
 					enable_mask = !O.up
 				if(enable_mask && tinted_weldhelh)
 					overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
@@ -278,7 +279,7 @@
 					isRemoteObserve = 0
 
 				//Does he have psy resist?
-				if(M_PSY_RESIST in remoteview_target.mutations)
+				if(!can_mind_interact(remoteview_target.mind))
 					to_chat(src, "<span class='warning'>Your mind is shut out!</span>")
 					isRemoteObserve = 0
 

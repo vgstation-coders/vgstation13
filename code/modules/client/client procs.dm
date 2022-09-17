@@ -137,18 +137,6 @@
 
 	TopicData = null							//Prevent calls to client.Topic from connect
 
-	//Admin Authorisation
-	holder = admin_datums[ckey]
-	if(holder)
-		admins += src
-		holder.owner = src
-
-	var/static/list/localhost_addresses = list("127.0.0.1","::1")
-	if(config.localhost_autoadmin)
-		if((!address && !world.port) || (address in localhost_addresses))
-			var/datum/admins/D = new /datum/admins("Host", R_HOST, src.ckey)
-			D.associate(src)
-
 	if(connection != "seeker")			//Invalid connection type.
 		if(connection == "web")
 			if(!holder)
@@ -201,11 +189,6 @@
 	if( (world.address == address || !address) && !host )
 		host = key
 		world.update_status()
-
-	if(holder)
-		add_admin_verbs()
-		admin_memo_show()
-		holder.add_menu_items()
 
 	log_client_to_db()
 
@@ -286,20 +269,32 @@
 	if (runescape_pvp)
 		to_chat(src, "<span class='userdanger'>WARNING: Wilderness mode is enabled; players can only harm one another in maintenance areas!</span>")
 
-	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
-
 	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
 		to_chat(src, "<span class='warning'>Unable to access asset cache browser, if you are using a custom skin file, please allow DS to download the updated version, if you are not, then make a bug report. This is not a critical issue but can cause issues with resource downloading, as it is impossible to know when extra resources arrived to you.</span>")
 	//This is down here because of the browse() calls in tooltip/New()
 	if(!tooltips)
 		tooltips = new /datum/tooltip(src)
 
-	if(holder && prefs.toggles & AUTO_DEADMIN)
-		message_admins("[src] was automatically de-admined.")
-		deadmin()
-		verbs += /client/proc/readmin
-		deadmins += ckey
-		to_chat(src, "<span class='interface'>You are now de-admined.</span>")
+	//Admin Authorisation
+	var/static/list/localhost_addresses = list("127.0.0.1","::1")
+	if(config.localhost_autoadmin)
+		if((!address && !world.port) || (address in localhost_addresses))
+			holder = new /datum/admins("Host", R_HOST, src.ckey)
+	else
+		holder = admin_datums[ckey]
+
+	if(holder)
+		if(prefs.toggles & AUTO_DEADMIN)
+			message_admins("[src] was automatically de-admined.")
+			deadmin()
+			verbs += /client/proc/readmin
+			deadmins += ckey
+			holder = null
+			to_chat(src, "<span class='interface'>You are now de-admined.</span>")
+		else
+			holder.associate(src)
+			admin_memo_show()
+
 	fps = (prefs.fps < 0) ? RECOMMENDED_CLIENT_FPS : prefs.fps
 	//////////////
 	//DISCONNECT//
@@ -489,8 +484,6 @@
 
 
 /client/proc/send_html_resources()
-	if(adv_camera && minimapinit)
-		adv_camera.sendResources(src)
 	while(!vote || !vote.interface)
 		sleep(1)
 	vote.interface.sendAssets(src)
@@ -559,18 +552,6 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		view = world.view
 	else
 		view = newView
-
-	if (mob.dark_plane)
-		mob.dark_plane.transform = null
-		var/matrix/M = matrix()
-		M.Scale(view*2.2)
-		mob.dark_plane.transform = M
-
-	if (mob.backdrop)
-		mob.backdrop.transform = null
-		var/matrix/M = matrix()
-		M.Scale(view*3)
-		mob.backdrop.transform = M
 
 	if(mob && ishuman(mob))
 		var/mob/living/carbon/human/H = mob

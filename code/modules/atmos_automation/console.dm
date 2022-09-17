@@ -54,7 +54,7 @@
 		icon_state += "b"
 
 	// Powered
-	else if(stat & NOPOWER)
+	else if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = initial(icon_state)
 		icon_state += "0"
 	else if(on)
@@ -153,6 +153,8 @@
 
 /obj/machinery/computer/general_air_control/atmos_automation/Topic(href,href_list)
 	if(..())
+		return 1
+	if(secret_check_two(usr, href_list))
 		return 1
 	if(href_list["on"])
 		on = !on

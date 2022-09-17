@@ -180,7 +180,8 @@ var/list/impact_master = list()
 			log_attack("<font color='red'>[key_name(firer)] shot himself with a [type].</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot himself with a <b>[type]</b>"
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot himself with a <b>[type]</b>"
-			msg_admin_attack("[key_name(firer)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
+			if(firer.key || firer.ckey)
+				msg_admin_attack("[key_name(firer)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
 			if(!iscarbon(firer))
 				M.LAssailant = null
 			else
@@ -190,7 +191,7 @@ var/list/impact_master = list()
 			log_attack("<font color='red'>[key_name(firer)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
-			if(firer.client || M.client)
+			if((firer.key || firer.ckey) && (M.key || M.ckey))
 				msg_admin_attack("[key_name(firer)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
 			if(!iscarbon(firer))
 				M.LAssailant = null
@@ -394,11 +395,7 @@ var/list/impact_master = list()
 			damage -= (damage/4)	//and diminish the bullet's damage a bit
 			if(!destroy)//destroying projectiles don't leave marks, as they would then appear on the resulting plating.
 				var/turf/T = A
-				T.bullet_marks++
-				var/icon/trace = icon('icons/effects/96x96.dmi',mark_type)	//first we take the 96x96 icon with the overlay we want to blend on the wall
-				trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
-				trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
-				T.overlays += trace
+				T.add_bullet_mark(mark_type,target_angle)
 
 		var/turf/target = get_step(loc, dir)
 		if(loc == A_turf) //Special case where we collided with something while exiting a turf, instead of while entering.
@@ -427,6 +424,13 @@ var/list/impact_master = list()
 	bullet_die()
 	return 1
 
+/turf/proc/add_bullet_mark(var/mark_type,var/target_angle)
+	bullet_marks++
+	var/icon/trace = icon('icons/effects/96x96.dmi',mark_type)	//first we take the 96x96 icon with the overlay we want to blend on the wall
+	trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
+	trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
+	overlays += trace
+
 /obj/item/projectile/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
@@ -449,6 +453,10 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/OnFired(var/proj_target = original)	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(proj_target)
+
+	if(!original && !target)
+		qdel(src) //If for some reason the target stops existing as the weapon is fired, just delete the projectile
+		return
 
 	// 2 % chance to crit
 	if (firer && is_ranged_crit(src, firer))
@@ -829,7 +837,7 @@ var/list/impact_master = list()
 	if(ismob(A) || isturf(A) || isobj(A))
 		impact = get_hit_atom(A)
 
-/obj/item/projectile/acidable()
+/obj/item/projectile/dissolvable()
 	return 0
 
 /obj/item/projectile/proc/launch_at(var/atom/target,var/tar_zone = "chest",var/atom/curloc = get_turf(src),var/from = null,var/variance_angle = 0) // doot doot shitcode alert

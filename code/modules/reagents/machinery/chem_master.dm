@@ -11,7 +11,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	anchored = 1
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "mixer"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	var/obj/item/weapon/reagent_containers/container = null
 	var/list/accepted_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks)
@@ -126,6 +126,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		return TRUE
 	return FALSE
 
+/obj/machinery/chem_master/splashable()
+	return FALSE
+
 /obj/machinery/chem_master/attackby(var/obj/item/weapon/B as obj, var/mob/user as mob)
 	if(..())
 		return 1
@@ -227,7 +230,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				if(!condi)
 					if(istype(reagent, /datum/reagent/blood))
 						dat += "Blood type: [reagent.data["blood_type"] || "Unknown"]<BR>Blood DNA: [reagent.data["blood_DNA"] || "Unable to determine"]<BR><BR>"
-					else if(reagent.data["stored_phrase"])
+					else if(islist(reagent.data) && reagent.data["stored_phrase"])
 						dat += "The polymer chains currently read: \"[reagent.data["stored_phrase"]]\".<BR><BR>"
 					dat += "Density:<BR>[reagent.density]<BR><BR>Specific heat capacity:<BR>[reagent.specheatcap]<BR><BR><BR>"
 				dat += "<A href='?src=\ref[src];main=1'>(Back)</A>"
@@ -490,14 +493,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		updateUsrDialog()
 
 /obj/machinery/chem_master/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (FORCEDISABLE|NOPOWER|BROKEN) && usr.dexterity_check()))
 		detach()
 		return
 	return ..()
-
-/obj/machinery/chem_master/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/chem_master/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -730,7 +729,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		container.update_icon() //Forcefully update the beaker
 		overlays += container //Set it as an overlay
 
-	if(reagents.total_volume && !(stat & (BROKEN|NOPOWER))) //If we have reagents in here, and the machine is powered and functional
+	if(reagents.total_volume && !(stat & (FORCEDISABLE|BROKEN|NOPOWER))) //If we have reagents in here, and the machine is powered and functional
 		var/image/overlay = image('icons/obj/chemical.dmi', src, "mixer_overlay")
 		overlay.icon += mix_color_from_reagents(reagents.reagent_list)
 		overlays += overlay

@@ -36,6 +36,8 @@
 
 	faction = "faithless"
 
+	blooded = FALSE
+
 /mob/living/simple_animal/hostile/faithless/Process_Spacemove(var/check_drift = 0)
 	return 1
 
@@ -98,7 +100,7 @@
 			var/obj/machinery/door/D = A
 			if(D.density)
 				D.open()
-		else if(istype(A,/obj/structure/cult_legacy/pylon))
+		else if(istype(A,/obj/structure/cult/pylon))
 			A.attack_animal(src)
 		else if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
 			A.attack_animal(src)

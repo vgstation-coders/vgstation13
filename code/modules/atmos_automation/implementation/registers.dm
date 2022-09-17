@@ -83,7 +83,7 @@
 	out += ")"
 	return out
 
-datum/automation/set_register_data/Topic(href, href_list)
+/datum/automation/set_register_data/Topic(href, href_list)
 	. = ..()
 	if(.)
 		return

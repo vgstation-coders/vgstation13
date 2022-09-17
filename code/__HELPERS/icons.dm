@@ -83,7 +83,7 @@
 		composite.Blend(C, ICON_OVERLAY)
 	return composite
 
-proc/adjust_brightness(var/color, var/value)
+/proc/adjust_brightness(var/color, var/value)
 	if (!color)
 		return "#FFFFFF"
 	if (!value)
@@ -95,7 +95,7 @@ proc/adjust_brightness(var/color, var/value)
 	RGB[3] = clamp(RGB[3]+value,0,255)
 	return rgb(RGB[1],RGB[2],RGB[3])
 
-proc/adjust_RGB(var/color, var/red, var/green, var/blue)
+/proc/adjust_RGB(var/color, var/red, var/green, var/blue)
 	if (!color)
 		return "#FFFFFF"
 	if (!red && !green && !blue)

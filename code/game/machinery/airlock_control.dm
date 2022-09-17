@@ -7,12 +7,9 @@
 
 // This code allows for airlocks to be controlled externally by setting an id_tag and comm frequency (disables ID access)
 /obj/machinery/door/airlock
-
 	var/frequency
 	var/shockedby = list()
 	var/datum/radio_frequency/radio_connection
-	explosion_resistance = 15
-
 
 /obj/machinery/door/airlock/receive_signal(datum/signal/signal)
 	if(!signal || signal.encryption)
@@ -98,7 +95,7 @@
 	send_status()
 
 
-obj/machinery/door/airlock/proc/send_status()
+/obj/machinery/door/airlock/proc/send_status()
 	if(radio_connection)
 		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
@@ -111,19 +108,19 @@ obj/machinery/door/airlock/proc/send_status()
 		radio_connection.post_signal(src, signal, range = AIRLOCK_CONTROL_RANGE, filter = RADIO_AIRLOCK)
 
 
-obj/machinery/door/airlock/open(surpress_send)
+/obj/machinery/door/airlock/open(surpress_send)
 	. = ..()
 	if(!surpress_send)
 		send_status()
 
 
-obj/machinery/door/airlock/close(surpress_send)
+/obj/machinery/door/airlock/close(surpress_send)
 	. = ..()
 	if(!surpress_send)
 		send_status()
 
 
-obj/machinery/door/airlock/Bumped(atom/AM)
+/obj/machinery/door/airlock/Bumped(atom/AM)
 	..(AM)
 	if(istype(AM, /obj/mecha))
 		var/obj/mecha/mecha = AM
@@ -141,7 +138,7 @@ obj/machinery/door/airlock/Bumped(atom/AM)
 			radio_connection.post_signal(src, signal, range = AIRLOCK_CONTROL_RANGE, filter = RADIO_AIRLOCK)
 	return
 
-obj/machinery/door/airlock/proc/set_frequency(new_frequency)
+/obj/machinery/door/airlock/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	if(new_frequency)
 		frequency = new_frequency

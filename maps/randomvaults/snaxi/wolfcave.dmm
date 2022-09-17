@@ -1,27 +1,291 @@
-"a" = (/turf/unsimulated/floor/snow,/area)
-"o" = (/mob/living/simple_animal/hostile/wolf/alpha,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
-"q" = (/turf/unsimulated/wall/rock/ice,/area/vault/wolfcave)
-"u" = (/obj/item/stack/sheet/bone,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
-"H" = (/turf/unsimulated/floor/snow/cave,/area/vault/wolfcave)
-"M" = (/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
-"S" = (/obj/item/weapon/reagent_containers/food/snacks/meat/animal,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
-"T" = (/obj/item/weapon/skull,/obj/abstract/map/nest/wolf,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
-"U" = (/obj/item/weapon/reagent_containers/food/snacks/meat/animal,/obj/effect/gibspawner/generic,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/floor/snow,
+/area)
+"o" = (
+/mob/living/simple_animal/hostile/wolf/alpha,
+/turf/unsimulated/floor/snow/cave/rock,
+/area/vault/wolfcave)
+"q" = (
+/turf/unsimulated/wall/rock/ice,
+/area/vault/wolfcave)
+"u" = (
+/obj/item/stack/sheet/bone,
+/turf/unsimulated/floor/snow/cave/rock,
+/area/vault/wolfcave)
+"H" = (
+/turf/unsimulated/floor/snow/cave,
+/area/vault/wolfcave)
+"M" = (
+/turf/unsimulated/floor/snow/cave/rock,
+/area/vault/wolfcave)
+"S" = (
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal,
+/turf/unsimulated/floor/snow/cave/rock,
+/area/vault/wolfcave)
+"T" = (
+/obj/item/weapon/skull,
+/obj/abstract/map/nest/wolf,
+/turf/unsimulated/floor/snow/cave/rock,
+/area/vault/wolfcave)
+"U" = (
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal,
+/obj/effect/gibspawner/generic,
+/turf/unsimulated/floor/snow/cave/rock,
+/area/vault/wolfcave)
 
 (1,1,1) = {"
-aaaaaqqaaaaaaaa
-aaaaqqqqqqqaaaa
-aaaaHqqHHHHaaaa
-aaqHHqHHHHHHqaa
-aaqHHqHHqqqqqaa
-aaqHHqHqHHHHqqa
-aqqHHqHqHHHHHqa
-aqHHHHHHHUMuHqq
-qqHHHHHHSToMHqq
-qqHHqqHHuMSMHqq
-qqHHHqqHHMMHHqa
-aqqHHHqqHHHHHqa
-aqqqHHHqqHHHqqa
-aaqqqHHqqqqqqaa
-aaaaaaaaaaaaaaa
+a
+a
+a
+a
+a
+a
+a
+a
+q
+q
+q
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+a
+a
+a
+a
+a
+q
+q
+q
+q
+q
+q
+q
+a
+a
+"}
+(3,1,1) = {"
+a
+a
+a
+q
+q
+q
+q
+H
+H
+H
+H
+q
+q
+q
+a
+"}
+(4,1,1) = {"
+a
+a
+a
+H
+H
+H
+H
+H
+H
+H
+H
+H
+q
+q
+a
+"}
+(5,1,1) = {"
+a
+q
+H
+H
+H
+H
+H
+H
+H
+q
+H
+H
+H
+q
+a
+"}
+(6,1,1) = {"
+q
+q
+q
+q
+q
+q
+q
+H
+H
+q
+q
+H
+H
+H
+a
+"}
+(7,1,1) = {"
+q
+q
+q
+H
+H
+H
+H
+H
+H
+H
+q
+q
+H
+H
+a
+"}
+(8,1,1) = {"
+a
+q
+H
+H
+H
+q
+q
+H
+H
+H
+H
+q
+q
+q
+a
+"}
+(9,1,1) = {"
+a
+q
+H
+H
+q
+H
+H
+H
+S
+u
+H
+H
+q
+q
+a
+"}
+(10,1,1) = {"
+a
+q
+H
+H
+q
+H
+H
+U
+T
+M
+M
+H
+H
+q
+a
+"}
+(11,1,1) = {"
+a
+q
+H
+H
+q
+H
+H
+M
+o
+S
+M
+H
+H
+q
+a
+"}
+(12,1,1) = {"
+a
+a
+a
+H
+q
+H
+H
+u
+M
+M
+H
+H
+H
+q
+a
+"}
+(13,1,1) = {"
+a
+a
+a
+q
+q
+q
+H
+H
+H
+H
+H
+H
+q
+q
+a
+"}
+(14,1,1) = {"
+a
+a
+a
+a
+a
+q
+q
+q
+q
+q
+q
+q
+q
+a
+a
+"}
+(15,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+q
+q
+q
+a
+a
+a
+a
+a
 "}

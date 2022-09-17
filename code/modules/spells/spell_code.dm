@@ -29,6 +29,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
 	var/holder_var_amount = 20 //Amount to adjust var when spell is used, THIS VALUE IS SUBTRACTED
+	var/holder_var_name		//Name of the holder var on the UI.
 	var/insufficient_holder_msg //Override for still recharging msg for holder variables
 	var/datum/special_var_holder //if a holder var is stored on a different object or a datum
 
@@ -123,7 +124,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	spawn while(charge_counter < charge_max)
 		if(holder && !holder.timestopped)
 			if(gradual_casting)
-				if(charge_counter <= 0)
+				if(charge_type & Sp_HOLDVAR) //If the spell is both Sp_GRADUAL and Sp_HOLDVAR, decrement the holder var instead.
+					if(holder.vars[holder_var_type] <= 0)
+						holder.vars[holder_var_type] = 0 //Assumes the minimum of the holder var is 0.
+						gradual_casting = FALSE
+						stop_casting(null, holder)
+					else
+						holder.vars[holder_var_type] -= holder_var_amount
+				else if(charge_counter <= 0)
 					charge_counter = 0
 					gradual_casting = FALSE
 					stop_casting(null, holder)
@@ -195,7 +203,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, targets)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		user.invoke_event(/event/spellcast, list("spell" = src, "user" = user, "targets" = targets))
+		INVOKE_EVENT(user, /event/spellcast, "spell" = src, "user" = user, "targets" = targets)
 
 		if(prob(critfailchance))
 			critfail(targets, user)
@@ -242,7 +250,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, target)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		user.invoke_event(/event/spellcast, list("spell" = src, "user" = user, "targets" = target))
+		INVOKE_EVENT(user, /event/spellcast, "spell" = src, "user" = user, "targets" = target)
 
 		if(prob(critfailchance))
 			critfail(target, holder)
@@ -265,6 +273,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/stop_casting(list/targets, mob/user)
+	if(gradual_casting)
+		gradual_casting = FALSE
 	return
 
 /spell/proc/critfail(list/targets, mob/user) //the wizman has fucked up somehow
@@ -391,7 +401,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			return 0
 
 		if((ishuman(user) || ismonkey(user)) && !(invocation_type in list(SpI_EMOTE, SpI_NONE)))
-			if(istype(user.wear_mask, /obj/item/clothing/mask/muzzle))
+			if(user.wear_mask?.is_muzzle)
 				to_chat(user, "Mmmf mrrfff!")
 				return 0
 
@@ -659,3 +669,31 @@ Made a proc so this is not repeated 14 (or more) times.*/
 		return 0
 	return 1
 */
+
+//Atomizes what data the spell shows, that way different spells such as pulse demon and vampire spells can have their own descriptions.
+/spell/proc/generate_tooltip(var/previous_data = "")
+	var/dat = previous_data //In case you want to put some text at the top instead of bottom
+	if(charge_type & Sp_RECHARGE)
+		dat += "<br>Cooldown: [charge_max/10] second\s"
+	if(charge_type & Sp_CHARGES)
+		dat += "<br>Has [charge_counter] charge\s left"
+	if(charge_type & Sp_HOLDVAR)
+		dat += "<br>Requires [charge_type & Sp_GRADUAL ? "" : "[holder_var_amount]"] "
+		if(holder_var_name)
+			dat += "[holder_var_name]"
+		else
+			dat += "[holder_var_type]"
+		if(charge_type & Sp_GRADUAL)
+			dat += " to sustain"
+	switch(range)
+		if(1)
+			dat += "<br>Range: Adjacency"
+		if(2 to INFINITY)
+			dat += "<br>Range: [range]"
+		if(GLOBALCAST)
+			dat += "<br>Range: Global"
+		if(SELFCAST)
+			dat += "<br>Range: Self"
+	if(desc)
+		dat += "<br>Desc: [desc]"
+	return dat

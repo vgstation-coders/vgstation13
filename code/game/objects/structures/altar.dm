@@ -30,10 +30,10 @@
 /obj/structure/altar/cultify()
 	return
 
-obj/structure/altar/blob_act()
+/obj/structure/altar/blob_act()
 	return
 
-obj/structure/altar/ex_act(severity)
+/obj/structure/altar/ex_act(severity)
 	return
 
 
@@ -58,7 +58,7 @@ obj/structure/altar/ex_act(severity)
 	if(prob(66))
 		qdel(src)
 
-obj/structure/altar/podium/ex_act(severity)
+/obj/structure/altar/podium/ex_act(severity)
 	if(prob(10*severity))
 		qdel(src)
 

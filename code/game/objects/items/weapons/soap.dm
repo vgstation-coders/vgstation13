@@ -47,11 +47,11 @@
 
 
 /obj/item/weapon/soap/Crossed(var/atom/movable/AM)
-	if (istype(AM, /mob/living/carbon))
+	if(..())
+		return 1
+	if(iscarbon(AM))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(3, 2, 1))
-			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
-				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+		if(M.Slip(3, 2, 1, slipped_on = src, drugged_message = "<span class='userdanger'>Something is scratching at your feet! Oh god!</span>"))
 			on_successful_use()
 
 /obj/item/weapon/soap/afterattack(var/atom/target, var/mob/user)
@@ -68,6 +68,14 @@
 		qdel(target)
 		on_successful_use(user)
 
+	else if(istype(target,/obj/effect/rune))
+		var/obj/effect/rune/R = target
+		if (!R.activated)
+			user.simple_message("<span class='notice'>You scrub \the [target.name] out.</span>",
+				"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
+			qdel(target)
+			on_successful_use(user)
+
 	else if(istype(target,/turf/simulated))
 		var/turf/simulated/T = target
 		var/list/cleanables = list()
@@ -76,6 +84,10 @@
 			if(!istype(CC) || !CC)
 				continue
 			cleanables += CC
+
+		for(var/obj/effect/rune/R in T)
+			if(!R.activated)
+				cleanables += R
 
 		for(var/obj/effect/decal/cleanable/CC in get_turf(user)) //Get all nearby decals drawn on this wall and erase them
 			if(CC.on_wall == target)

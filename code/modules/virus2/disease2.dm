@@ -7,6 +7,7 @@ var/global/list/disease2_list = list()
 	var/subID = 0// 000 to 9999, set if the pathogen underwent effect or antigen mutation
 	var/childID = 0// 01 to 99, incremented as the pathogen gets analyzed after a mutation
 	var/list/datum/disease2/effect/effects = list()
+	var/list/datum/disease2/effect/fake_effects = list()
 
 	//When an opportunity for the disease to spread to a mob arrives, runs this percentage through prob()
 	//Ignored if infected materials are ingested (injected with infected blood, eating infected meat)
@@ -582,6 +583,8 @@ var/global/list/disease2_list = list()
 	var/mob/living/body = null
 	var/obj/item/weapon/virusdish/dish = null
 	var/obj/machinery/disease2/incubator/machine = null
+	var/can_focus_effect = 0 //So we do not copypaste the entire check everywhere
+	var/effect_being_focused = 0 //What effect is being focused on
 
 	if (isliving(incubator))
 		body = incubator
@@ -589,6 +592,11 @@ var/global/list/disease2_list = list()
 		dish = incubator
 		if (istype(dish.loc,/obj/machinery/disease2/incubator))
 			machine = dish.loc
+			if(machine.can_focus) //If it can focus
+				can_focus_effect = 1
+				effect_being_focused = clamp(machine.effect_focus, 0, max_stage) //Do not let the machine focus on the wrong things
+				if(effect_being_focused == 0) //Toggle it off
+					can_focus_effect = 0
 
 	if (mutatechance > 0 && (body || dish) && incubator.reagents)
 		//MUTAGEN + CREATINE = Robustness Up, Effect Strength Up, Effect Chance randomized
@@ -598,6 +606,8 @@ var/global/list/disease2_list = list()
 				var/change = rand(1,5)
 				robustness = min(100,robustness + change)
 				for(var/datum/disease2/effect/e in effects)
+					if(can_focus_effect && !e.stage == effect_being_focused)
+						continue
 					e.multiplier_tweak(0.1)//all effects get their strength increased
 					minormutate()// a random effect has a 20% chance of getting its chance re-rolled between its initial value and max chance.
 							// and the disease's infection chance is rerolled to more or less 10% of the base infection chance for that disease type.
@@ -611,6 +621,8 @@ var/global/list/disease2_list = list()
 				var/change = rand(1,5)
 				robustness = max(0,robustness - change)
 				for(var/datum/disease2/effect/e in effects)
+					if(can_focus_effect && !e.stage == effect_being_focused)
+						continue
 					e.multiplier_tweak(-0.1)//all effects get their strength reduced
 					minormutate()// a random effect has a 20% chance of getting its chance re-rolled between its initial value and max chance.
 							// and the disease's infection chance is rerolled to more or less 10% of the base infection chance for that disease type.
@@ -621,7 +633,8 @@ var/global/list/disease2_list = list()
 			//MUTAGEN (with no creatine or spaceacillin) = New Effect
 			if(!incubator.reagents.remove_reagent(MUTAGEN,0.05) && prob(mutatechance))
 				log += "<br />[timestamp()] Effect Mutation (Mutagen in [incubator])"
-				effectmutate(body != null)
+				var/focused_effect = (can_focus_effect && effect_being_focused)
+				effectmutate(body != null, focused_effect)
 				if (dish)
 					if(dish.info && dish.analysed)
 						dish.info = "OUTDATED : [dish.info]"
@@ -710,8 +723,8 @@ var/global/list/disease2_list = list()
 
 /datum/disease2/disease/proc/roll_antigen(var/list/factors = list())
 	if (factors.len <= 0)
-		antigen = list(pick(all_antigens))
-		antigen |= pick(all_antigens)
+		antigen = list(pick(all_antigens - special_antigens))
+		antigen |= pick(all_antigens - special_antigens)
 	else
 		var/selected_first_antigen = pick(
 			factors[ANTIGEN_BLOOD];ANTIGEN_BLOOD,
@@ -733,13 +746,15 @@ var/global/list/disease2_list = list()
 
 
 //Major Mutations
-/datum/disease2/disease/proc/effectmutate(var/inBody=FALSE)
+/datum/disease2/disease/proc/effectmutate(var/inBody=FALSE, var/specific_effect)
 	clean_global_log()
 	subID = rand(0,9999)
 	var/list/randomhexes = list("7","8","9","a","b","c","d","e")
 	var/colormix = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	color = BlendRGB(color,colormix,0.25)
 	var/i = rand(1, effects.len)
+	if(specific_effect)
+		i = specific_effect
 	var/datum/disease2/effect/e = effects[i]
 	var/datum/disease2/effect/f
 	if (inBody)//mutations that occur directly in a body don't cause helpful symptoms to become deadly instantly.
@@ -785,7 +800,7 @@ var/global/list/disease2_list = list()
 
 
 /datum/disease2/disease/proc/getcopy()
-	var/datum/disease2/disease/disease = new /datum/disease2/disease("")
+	var/datum/disease2/disease/disease = new src.type("")
 	disease.form=form
 	disease.log=log
 	disease.origin=origin
@@ -856,16 +871,23 @@ var/global/list/virusDB = list()
 		dat += "[A]"
 	return dat
 
-/datum/disease2/disease/proc/get_info()
+/datum/disease2/disease/proc/get_info(var/trueinfo = FALSE)
 	var/r = "GNAv3 [name()]"
 	r += "<BR>Strength / Robustness : <b>[strength]% / [robustness]%</b> - [get_subdivisions_string()]"
 	r += "<BR>Infectability : <b>[infectionchance]%</b>"
 	r += "<BR>Spread forms : <b>[get_spread_string()]</b>"
 	r += "<BR>Progress Speed : <b>[stageprob]%</b>"
 	r += "<dl>"
+	var/i = 1
 	for(var/datum/disease2/effect/e in effects)
-		r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurrence: <b>[e.chance]%</b>.</dt>"
-		r += "<dd>[e.desc]</dd>"
+		if(fake_effects.len >= i && !trueinfo)
+			var/datum/disease2/effect/f_e = fake_effects[i]
+			r += "<dt> &#x25CF; <b>Stage [f_e.stage] - [f_e.name]</b> (Danger: [f_e.badness]). Strength: <b>[f_e.multiplier]</b>. Occurrence: <b>[f_e.chance]%</b>.</dt>"
+			r += "<dd>[f_e.desc]</dd>"
+		else
+			r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurrence: <b>[e.chance]%</b>.</dt>"
+			r += "<dd>[e.desc]</dd>"
+		i++
 	r += "</dl>"
 	r += "<BR>Antigen pattern: [get_antigen_string()]"
 	r += "<BR><i>last analyzed at: [worldtime2text()]</i>"
@@ -893,9 +915,14 @@ var/global/list/virusDB = list()
 	v.fields["name"] = name()
 	v.fields["nickname"] = ""
 	v.fields["description"] = get_info()
+	v.fields["description_hidden"] = get_info(TRUE)
 	v.fields["custom_desc"] = "No comments yet."
 	v.fields["antigen"] = get_antigen_string()
 	v.fields["spread type"] = get_spread_string()
 	v.fields["danger"] = "Undetermined"
 	virusDB["[uniqueID]-[subID]"] = v
 	return 1
+
+// Override with additional checks if needed.
+/datum/disease2/disease/proc/CanInfect(var/mob/living/body)
+	return TRUE

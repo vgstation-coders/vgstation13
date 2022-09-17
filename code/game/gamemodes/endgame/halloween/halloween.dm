@@ -75,13 +75,13 @@
 			continue
 		var/list/available_turfs = A.area_turfs.Copy()
 		var/turf/test_turf = available_turfs[1]
-		if(test_turf.z != STATION_Z)
+		if(test_turf.z != map.zMainStation)
 			continue
 		for(var/i=1 to mob_amount)
 			if(!available_turfs.len)
 				break
 			var/turf/T = pick(available_turfs)
-			if(T.holy || T.z != STATION_Z || !istype(T, /turf/simulated/floor) || T.has_dense_content())
+			if(T.holy || T.z != map.zMainStation || !istype(T, /turf/simulated/floor) || T.has_dense_content())
 				available_turfs.Remove(T)
 				continue
 			new /obj/effect/gravestone/halloween(T)
@@ -95,6 +95,13 @@
 			T.overlays += image(icon = T.icon, icon_state = "hell01")
 		else
 			T.underlays += "hell01"
+		CHECK_TICK
+
+	for(var/datum/lighting_corner/C in global.all_lighting_corners)
+		if (!C.active)
+			continue
+
+		C.update_lumcount(0.5, 0, 0)
 		CHECK_TICK
 
 /datum/universal_state/halloween/proc/MiscSet()

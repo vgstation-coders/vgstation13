@@ -9,7 +9,7 @@
 	density = 0
 	anchored = 0
 	health = 25
-	maxhealth = 25
+	maxHealth = 25
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 //	weight = 1.0E7
@@ -42,11 +42,6 @@
 		/obj/item/weapon/melee/defibrillator
 		)
 
-	var/list/cannot_open = list(
-		/obj/machinery/door/firedoor,
-		/obj/machinery/door/mineral/resin,
-		/obj/machinery/door/mineral/cult,
-		)
 	light_color = LIGHT_COLOR_RED
 	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL
 	var/obj/item/weapon/melee/baton/baton = null
@@ -55,12 +50,17 @@
 
 	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
 
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/emag,
+		/datum/malfhack_ability/oneuse/overload_quiet
+	)
+
 /obj/machinery/bot/secbot/power_change()
 	..()
 	if(src.on)
 		set_light(2)
 	else
-		kill_light()
+		set_light(0)
 
 /obj/machinery/bot/secbot/beepsky
 	name = "Officer Beep O'sky"
@@ -214,7 +214,7 @@ Auto Patrol: []"},
 	if(threatlevel > 0)
 		set_target(H)
 
-/obj/machinery/bot/secbot/Emag(mob/user)
+/obj/machinery/bot/secbot/emag_act(mob/user)
 	..()
 	if(open && !locked)
 		if(user)
@@ -572,7 +572,7 @@ Auto Patrol: []"},
 	icon_state = "cheapsky0"
 	icon_initial = "cheapsky"
 	health = 15
-	maxhealth = 15
+	maxHealth = 15
 //Cheapsky Construction
 
 /obj/item/weapon/secbot_assembly/cheapsky

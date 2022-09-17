@@ -337,7 +337,7 @@
 						glass_hand.rejuvenate()
 					else
 						to_chat(H, "<span class='warning'>Your [glass_hand.display_name] deresonates, sustaining burns!</span>")
-						glass_hand.take_damage(0, 30 * multiplier)
+						glass_hand.take_damage(0, 15 * multiplier)
 			qdel(glass_to_shatter)
 		else if (prob(1))
 			to_chat(H, "Your [glass_hand.display_name] aches for the cold, smooth feel of container-grade glass...")
@@ -397,6 +397,59 @@
 	affect_voice_active = 0
 	..()
 
+/datum/disease2/effect/piglatin
+	name = "Porcus Latinus Syndrome"
+	desc = "Securitas Eunt Domus"
+	stage = 2
+	affect_voice = 1
+	max_count = 1
+	badness = EFFECT_DANGER_HINDRANCE
+	var/list/virus_piglatin_word_list
+
+/datum/disease2/effect/piglatin/activate(var/mob/living/mob,var/multiplier)
+	to_chat(mob, "<span class='warning'>You feel mediterranean</span>")
+	affect_voice_active = 1
+	if(!virus_piglatin_word_list)
+		initialize_word_list()
+
+/datum/disease2/effect/piglatin/affect_mob_voice(var/datum/speech/speech)
+	var/message=speech.message
+	var/list/word_list = splittext(message," ")		//split message into list of words
+	for(var/i = 1 to word_list.len)
+		var/punct = ""								//take punctuation into account
+		if(findtext(word_list[i], ",", -1))
+			punct = ","
+		if(findtext(word_list[i], ".", -1))
+			punct = "."
+		if(findtext(word_list[i], "!", -1))
+			punct = "!"
+		if(findtext(word_list[i], "?", -1))
+			punct = "?"
+		if(findtext(word_list[i], "~", -1))
+			punct = "~"
+		for(var/x in virus_piglatin_word_list)
+			var/word = word_list[i]
+			if(punct)
+				word = copytext(word_list[i], 1, length(word_list[i]))
+			if(uppertext(word) == uppertext(x))
+				word_list[i] = virus_piglatin_word_list[x] + punct
+			else if(uppertext(word) == uppertext(virus_piglatin_word_list[x]))
+				word_list[i] = x + punct
+
+	message = ""
+	for(var/z = 1 to word_list.len)
+		if(z == word_list.len)
+			message += word_list[z]
+		else
+			message += "[word_list[z]] "
+
+	speech.message = message
+
+
+/datum/disease2/effect/opposite/deactivate(var/mob/living/mob)
+	to_chat(mob, "<span class='warning'>You feel like a barbarian.</span>")
+	affect_voice_active = 0
+	..()
 
 /datum/disease2/effect/spiky_skin
 	name = "Porokeratosis Acanthus"
@@ -499,22 +552,18 @@
 				H.adjustCloneLoss(5 * multiplier)
 
 	for(var/obj/machinery/portable_atmospherics/hydroponics/H in range(3*multiplier,mob))
-		if(H.seed && !H.dead) // Get your xenobotanist/vox trader/hydroponist mad with you in less than 1 minute with this simple trick.
-			switch(rand(1,3))
-				if(1)
-					if(H.waterlevel >= 10)
-						H.waterlevel -= rand(1,10)
-					if(H.nutrilevel >= 5)
-						H.nutrilevel -= rand(1,5)
-				if(2)
-					if(H.toxins <= 50)
-						H.toxins += rand(1,50)
-				if(3)
-					H.weed_coefficient++
-					H.weedlevel++
-					H.pestlevel++
-					if(prob(5))
-						H.dead = 1
+		switch(rand(1,3))
+			if(1)
+				H.add_waterlevel(-rand(1,10))
+				H.add_nutrientlevel(-rand(1,5))
+			if(2)
+				H.add_toxinlevel(rand(1,50))
+			if(3)
+				H.weed_coefficient += WEEDLEVEL_MAX / 10
+				H.add_weedlevel(10)
+				H.add_pestlevel(10)
+				if(prob(5))
+					H.die()
 
 
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in range(2*multiplier,mob))
@@ -632,24 +681,16 @@
 	if(activated)
 		return
 	to_chat(mob, "<span class = 'warning'>You feel small...</span>")
-	var/matrix/M = matrix()
-	M.Scale(1,0.7)
-	mob.transform = M
-
-	mob.pixel_y = -4 * PIXEL_MULTIPLIER
-
+	mob.shrunken = 1
+	mob.update_transform()
 	mob.pass_flags |= PASSTABLE
 
 	activated = 1
 
 /datum/disease2/effect/mommi_shrink/deactivate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'warning'>You feel like an adult again.</span>")
-	var/matrix/M = matrix()
-	M.Scale(1,1)
-	mob.transform = M
-
-	mob.pixel_y = 0 * PIXEL_MULTIPLIER
-
+	mob.shrunken = 0
+	mob.update_transform()
 	mob.pass_flags &= ~PASSTABLE
 	activated = 0
 
@@ -706,3 +747,44 @@
 		H.vomit(instant = 1)
 	else
 		H.vomit()
+
+/datum/disease2/effect/antitox
+	name = "Antioxidantisation Syndrome"
+	desc = "A very real syndrome beloved by Super-Food Fans and Essential Oil Enthusiasts; encourages the production of anti-toxin within the body."
+	stage = 2
+	badness = EFFECT_DANGER_HELPFUL
+
+/datum/disease2/effect/antitox/activate(var/mob/living/mob)
+	to_chat(mob, "<span class = 'notice'>You feel your toxins being purged!</span>")
+	if (mob.reagents.get_reagent_amount(ANTI_TOXIN) < 1)
+		mob.reagents.add_reagent(ANTI_TOXIN, 1)
+
+/datum/disease2/effect/cult_vomit
+	name = "Hemoptysis"
+	desc = "Causes the infected to cough up blood."
+	stage = 2
+	restricted = 2
+	badness = EFFECT_DANGER_HINDRANCE
+	var/active = 0
+
+/datum/disease2/effect/cult_vomit/activate(mob/living/carbon/M)
+	if(!ishuman(M) || active)
+		return
+	if(istype(get_area(M), /area/chapel))
+		return
+	if(iscultist(M))
+		return
+
+	var/mob/living/carbon/human/mob = M
+	active = 1
+	to_chat(mob, "<span class='warning'>You feel a burning sensation in your throat.</span>")
+	sleep(10 SECONDS)
+	to_chat(mob, "<span class='danger'>You feel an agonizing pain in your throat!</span>")
+	sleep(10 SECONDS)
+	mob.visible_message("<span class='danger'>[mob] vomits up blood!</span>", "<span class='danger'>You vomit up blood!</span>")
+	var/obj/effect/decal/cleanable/blood/splatter/S = new(loc = get_turf(mob), color = mob.species.blood_color)
+	S.amount = 1
+	playsound(mob, 'sound/effects/splat.ogg', 50, 1)
+	mob.Stun(5)
+	mob.vessel.remove_reagent(BLOOD,8)
+	active = 0

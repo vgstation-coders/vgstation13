@@ -33,7 +33,7 @@
 
 /mob/proc/death(gibbed)
 	timeofdeath = world.time
-	invoke_event(/event/death, list("user" = src, "body_destroyed" = gibbed))
+	INVOKE_EVENT(src, /event/death, "user" = src, "body_destroyed" = gibbed)
 	living_mob_list -= src
 	dead_mob_list += src
 	stat_collection.add_death_stat(src)
@@ -57,7 +57,7 @@
 	var/mob/living/L = C.contained_mob
 	transmogrify()
 	L.visible_message("<span class='danger'>\The [L]'s body shifts and contorts!</span>")
-	if(istype(L))
+	if(C.kill_on_death && istype(L))
 		L.adjustOxyLoss(max(L.health,200))	//if you die while transmogrified, you die for real
 		L.updatehealth()
 
@@ -66,5 +66,6 @@
 /mob/proc/resurrect()
 	living_mob_list |= src
 	dead_mob_list -= src
-
+	if(src.client)
+		clear_fullscreens()
 	verbs -= /mob/living/proc/butcher

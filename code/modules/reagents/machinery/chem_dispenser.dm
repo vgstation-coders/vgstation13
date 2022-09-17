@@ -7,7 +7,7 @@
 	anchored = TRUE
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "dispenser"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 40
 	var/energy = 0
 	var/max_energy = 50
@@ -44,8 +44,11 @@
 		SACID,
 		TUNGSTEN
 		)
+	var/upgraded = 0
+	var/list/upgrade_chems = list(
+		PLASMA
+		)
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-
 /*
 USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 */
@@ -77,24 +80,35 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		dispensable_reagents = sortList(dispensable_reagents)
 
 /obj/machinery/chem_dispenser/RefreshParts()
+	var/R = 0
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
 		T += M.rating-1
+		R += M.rating
 	max_energy = initial(max_energy)+(T * 50 / 4)
 
 	T = 0
 	for(var/obj/item/weapon/stock_parts/micro_laser/Ma in component_parts)
 		T += Ma.rating-1
+		R += Ma.rating
 	rechargerate = initial(rechargerate) + (T / 2)
 
-/*
-	for(var/obj/item/weapon/stock_parts/scanning_module/Ml in component_parts)
-		T += Ml.rating
-	//Who even knows what to use the scanning module for
-*/
+	for(var/obj/item/weapon/stock_parts/scanning_module/Ml in component_parts) //Now we know what to use the scanning module for
+		R += Ml.rating
+
+	if(R >= 28) //Tier 4 parts
+		upgraded = 1
+	else
+		upgraded = 0
+	update_chem_list()
+
+/obj/machinery/chem_dispenser/proc/update_chem_list()
+	dispensable_reagents.Remove(upgrade_chems) //Reset the list
+	if(upgraded)
+		dispensable_reagents.Add(upgrade_chems)
 
 /obj/machinery/chem_dispenser/proc/recharge()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	var/oldenergy = energy
 	energy = min(energy + rechargerate, max_energy)
@@ -179,7 +193,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
   * @return nothing
   */
 /obj/machinery/chem_dispenser/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if((user.stat && !isobserver(user)) || user.restrained())
 		return
@@ -241,7 +255,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return 0 // don't update UIs attached to this object
 
 	if(href_list["amount"])
@@ -297,7 +311,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		return 1
 
 /obj/machinery/chem_dispenser/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (FORCEDISABLE|NOPOWER|BROKEN) && usr.dexterity_check()))
 		detach()
 		return
 	return ..()
@@ -330,6 +344,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			return TRUE
 		else
 			return FALSE
+	return FALSE
+
+/obj/machinery/chem_dispenser/splashable()
 	return FALSE
 
 /obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob, params) //to be worked on
@@ -370,10 +387,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		dispensable_reagents.Add(DSYRUP)
 		to_chat(user, "You throw the slime into the dispenser's tank.")
 		return TRUE
-
-/obj/machinery/chem_dispenser/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/chem_dispenser/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -459,6 +472,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
+/obj/machinery/chem_dispenser/brewer/update_chem_list()
+	return
+
 /obj/machinery/chem_dispenser/brewer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it! It looks like \he's trying to commit suicide.</span>")
 	playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
@@ -492,6 +508,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		/obj/item/weapon/stock_parts/console_screen
 	)
 	RefreshParts()
+
+/obj/machinery/chem_dispenser/soda_dispenser/update_chem_list()
+	return
 
 /obj/machinery/chem_dispenser/soda_dispenser/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it! It looks like \he's trying to commit suicide.</span>")
@@ -552,6 +571,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
+/obj/machinery/chem_dispenser/booze_dispenser/update_chem_list()
+	if(!upgraded)
+		dispensable_reagents = list(BEER,WHISKEY,TEQUILA,VODKA,VERMOUTH,RUM,COGNAC,WINE,SAKE,TRIPLESEC,BITTERS,CINNAMONWHISKY,SCHNAPPS,
+									BLUECURACAO,KAHLUA,ALE,ICE = T0C,WATER,GIN,SODAWATER,COLA,CREAM,TOMATOJUICE,ORANGEJUICE,LIMEJUICE,TONIC)
+	else
+		dispensable_reagents = list(BEER,WHISKEY,TEQUILA,VODKA,VERMOUTH,RUM,COGNAC,WINE,SAKE,TRIPLESEC,BITTERS,CINNAMONWHISKY,SCHNAPPS,
+									BLUECURACAO,KAHLUA,ALE,ICE = T0C,WATER,GIN,SODAWATER,COLA,CREAM,TOMATOJUICE,ORANGEJUICE,LIMEJUICE,TONIC,
+									KARMOTRINE)
+
+
 /obj/machinery/chem_dispenser/booze_dispenser/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and drowning his sorrows! It looks like \he's trying to commit suicide.</span>")
 	playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
@@ -583,6 +612,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		)
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
 
+/obj/machinery/chem_dispenser/condiment/update_chem_list()
+	return
+
 /obj/machinery/chem_dispenser/condiment/can_insert(obj/item/I)
 	return istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/reagent_containers/food/condiment)
 
@@ -597,7 +629,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 #undef FORMAT_DISPENSER_NAME
 
 /obj/machinery/chem_dispenser/npc_tamper_act(mob/living/L)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return 0
 
 	var/amount = rand(1,25)

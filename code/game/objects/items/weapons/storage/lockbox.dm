@@ -177,81 +177,58 @@
 /obj/item/weapon/storage/lockbox/loyalty
 	name = "lockbox (loyalty implants)"
 	req_one_access = list(access_security)
-
-/obj/item/weapon/storage/lockbox/loyalty/New()
-	..()
-	new /obj/item/weapon/implantcase/loyalty(src)
-	new /obj/item/weapon/implantcase/loyalty(src)
-	new /obj/item/weapon/implantcase/loyalty(src)
-	new /obj/item/weapon/implanter/loyalty(src)
+	items_to_spawn = list(
+		/obj/item/weapon/implantcase/loyalty = 3,
+		/obj/item/weapon/implanter/loyalty,
+	)
 
 /obj/item/weapon/storage/lockbox/exile
 	name = "lockbox (exile implants)"
 	req_one_access = list(access_armory)
-
-/obj/item/weapon/storage/lockbox/exile/New()
-	..()
-	new /obj/item/weapon/implantcase/exile(src)
-	new /obj/item/weapon/implantcase/exile(src)
-	new /obj/item/weapon/implanter/exile(src)
+	items_to_spawn = list(
+		/obj/item/weapon/implantcase/exile = 3,
+		/obj/item/weapon/implanter/exile,
+	)
 
 /obj/item/weapon/storage/lockbox/tracking
 	name = "lockbox (tracking implants)"
 	req_one_access = list(access_security)
-	storage_slots = 5
-
-/obj/item/weapon/storage/lockbox/tracking/New()
-	..()
-	new /obj/item/weapon/implantcase/tracking(src)
-	new /obj/item/weapon/implantcase/tracking(src)
-	new /obj/item/weapon/implantcase/tracking(src)
-	new /obj/item/weapon/implantpad(src)
-	new /obj/item/weapon/implanter(src)
+	can_add_storageslots = TRUE
+	items_to_spawn = list(
+		/obj/item/weapon/implantcase/tracking = 3,
+		/obj/item/weapon/implantpad,
+		/obj/item/weapon/implanter,
+	)
 
 /obj/item/weapon/storage/lockbox/chem
 	name = "lockbox (chemical implants)"
 	req_one_access = list(access_security)
-	storage_slots = 5
-
-/obj/item/weapon/storage/lockbox/chem/New()
-	..()
-	new /obj/item/weapon/implantcase/chem(src)
-	new /obj/item/weapon/implantcase/chem(src)
-	new /obj/item/weapon/implantcase/chem(src)
-	new /obj/item/weapon/reagent_containers/syringe(src)
-	new /obj/item/weapon/implanter(src)
+	can_add_storageslots = TRUE
+	items_to_spawn = list(
+		/obj/item/weapon/implantcase/chem = 3,
+		/obj/item/weapon/reagent_containers/syringe,
+		/obj/item/weapon/implanter,
+	)
 
 /obj/item/weapon/storage/lockbox/holy
 	name = "lockbox (holy implants)"
 	req_one_access = list(access_security)
-
-/obj/item/weapon/storage/lockbox/holy/New()
-	..()
-	new /obj/item/weapon/implantcase/holy(src)
-	new /obj/item/weapon/implantcase/holy(src)
-	new /obj/item/weapon/implantcase/holy(src)
-	new /obj/item/weapon/implanter/holy(src)
+	items_to_spawn = list(
+		/obj/item/weapon/implantcase/holy = 3,
+		/obj/item/weapon/implanter/holy,
+	)
 
 /obj/item/weapon/storage/lockbox/clusterbang
 	name = "lockbox (clusterbang)"
 	desc = "You have a bad feeling about opening this."
 	req_one_access = list(access_security)
-
-/obj/item/weapon/storage/lockbox/clusterbang/New()
-	..()
-	new /obj/item/weapon/grenade/flashbang/clusterbang(src)
+	items_to_spawn = list(/obj/item/weapon/grenade/flashbang/clusterbang)
 
 /obj/item/weapon/storage/lockbox/secway
 	name = "lockbox (secway keys)"
 	desc = "Nobody knows this mall better than I do."
 	req_one_access = list(access_security)
-
-/obj/item/weapon/storage/lockbox/secway/New()
-	..()
-	new /obj/item/key/security(src)
-	new /obj/item/key/security(src)
-	new /obj/item/key/security(src)
-	new /obj/item/key/security(src)
+	items_to_spawn = list(/obj/item/key/security = 4)
 
 /obj/item/weapon/storage/lockbox/unlockable
 	name = "semi-secure lockbox"
@@ -285,11 +262,7 @@
 
 /obj/item/weapon/storage/lockbox/unlockable/peace
 	name = "semi-secure lockbox (pax implants)"
-
-/obj/item/weapon/storage/lockbox/unlockable/peace/New()
-	..()
-	for(var/i = 1 to 5)
-		new/obj/item/weapon/implantcase/peace(src)
+	items_to_spawn = list(/obj/item/weapon/implantcase/peace = 5)
 
 /obj/item/weapon/storage/lockbox/coinbox
 	name = "coinbox"
@@ -311,14 +284,13 @@
 /obj/item/weapon/storage/lockbox/lawgiver
 	name = "lockbox (lawgiver)"
 	req_one_access = list(access_armory)
+	items_to_spawn = list(/obj/item/weapon/gun/lawgiver)
 
-/obj/item/weapon/storage/lockbox/lawgiver/New()
-	..()
-	new /obj/item/weapon/gun/lawgiver(src)
-
-/obj/item/weapon/storage/lockbox/lawgiver/with_magazine/New()
-	..()
-	new /obj/item/ammo_storage/magazine/lawgiver(src)
+/obj/item/weapon/storage/lockbox/lawgiver/with_magazine
+	items_to_spawn = list(
+		/obj/item/weapon/gun/lawgiver,
+		/obj/item/ammo_storage/magazine/lawgiver,
+	)
 
 /obj/item/weapon/storage/lockbox/oneuse
 	desc = "A locked box. When unlocked, the case will fall apart."
@@ -393,44 +365,25 @@
 /obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk
 	name = "flora diskette box"
 	desc = "A lockable box of flora data disks."
-
-/obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk/New()
-	..()
-	for(var/i = 1 to storage_slots)
-		new /obj/item/weapon/disk/botany(src)
-	update_icon()
+	items_to_spawn = list(/obj/item/weapon/disk/botany = 7)
 
 /obj/item/weapon/storage/lockbox/diskettebox/large/open/botanydisk
 	name = "large flora diskette box"
 	desc = "A large lockable box of flora data disks."
-
-/obj/item/weapon/storage/lockbox/diskettebox/large/open/botanydisk/New()
-	..()
-	for(var/i = 1 to storage_slots)
-		new /obj/item/weapon/disk/botany(src)
-	update_icon()
+	items_to_spawn = list(/obj/item/weapon/disk/botany = 14)
 
 /obj/item/weapon/storage/lockbox/diskettebox/open/cloning
 	name = "cloning diskette box"
 	desc = "A lockable box of cloning data disks."
-
-/obj/item/weapon/storage/lockbox/diskettebox/open/cloning/New()
-	..()
-	for(var/i = 1 to storage_slots)
-		new /obj/item/weapon/disk/data(src)
-	update_icon()
+	items_to_spawn = list(/obj/item/weapon/disk/data = 7)
 
 /obj/item/weapon/storage/lockbox/diskettebox/open/research
 	name = "research diskette box"
 	desc = "A lockable box of tech data disks."
-
-/obj/item/weapon/storage/lockbox/diskettebox/open/research/New()
-	..()
-	new /obj/item/weapon/disk/tech_disk(src)
-	new /obj/item/weapon/disk/tech_disk(src)
-	new /obj/item/weapon/disk/design_disk(src)
-	new /obj/item/weapon/disk/design_disk(src)
-	update_icon()
+	items_to_spawn = list(
+		/obj/item/weapon/disk/tech_disk = 2,
+		/obj/item/weapon/disk/design_disk = 2,
+	)
 
 /obj/item/weapon/storage/lockbox/diskettebox/open/blanks/New()
 	..()
@@ -498,24 +451,18 @@
 	name = "sponsored Team Security lockbox"
 	desc = "A sponsor-sticker-plastered lockbox."
 	req_one_access = list(access_brig)
-	storage_slots = 6
-
-/obj/item/weapon/storage/lockbox/security_sponsored/New()
-	..()
-	for(var/i in 1 to 4)
-		new /obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch(src)
-	new /obj/item/weapon/implanter/spesstv(src)
+	can_add_storageslots = TRUE
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch = 4,
+		/obj/item/weapon/implanter/spesstv,
+	)
 
 /obj/item/weapon/storage/lockbox/team_security_cameras
 	name = "sponsored Team Security cameras lockbox"
 	desc = "A sponsor-sticker-plastered lockbox."
 	req_one_access = list(access_brig)
-	storage_slots = 6
-
-/obj/item/weapon/storage/lockbox/team_security_cameras/New()
-	..()
-	for(var/i in 1 to 6)
-		new /obj/item/clothing/accessory/spesstv_tactical_camera(src)
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/clothing/accessory/spesstv_tactical_camera = 6)
 
 /obj/item/weapon/storage/lockbox/advanced
 	name = "advanced lockbox"
@@ -551,15 +498,9 @@
 /obj/item/weapon/storage/lockbox/advanced/energyshotgun
 	name = "advanced lockbox (energy shotgun)"
 	req_access = list(access_security)
-
-/obj/item/weapon/storage/lockbox/advanced/energyshotgun/New()
-	..()
-	new /obj/item/weapon/gun/energy/shotgun(src)
+	items_to_spawn = list(/obj/item/weapon/gun/energy/shotgun)
 
 /obj/item/weapon/storage/lockbox/advanced/ricochettaser
 	name = "advanced lockbox (ricochet taser)"
 	req_access = list(access_security)
-
-/obj/item/weapon/storage/lockbox/advanced/ricochettaser/New()
-	..()
-	new /obj/item/weapon/gun/energy/taser/ricochet(src)
+	items_to_spawn = list(/obj/item/weapon/gun/energy/taser/ricochet)

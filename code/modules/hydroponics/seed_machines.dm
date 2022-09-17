@@ -17,7 +17,7 @@
 		if(src && user && genes && choice && choice == "Yes" && user.get_active_hand() == src)
 			to_chat(user, "You wipe the disk data.")
 			name = initial(name)
-			desc = initial(name)
+			desc = initial(desc)
 			genes = list()
 			genesource = "unknown"
 
@@ -26,7 +26,7 @@
 	icon_state = "hydrotray3"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
@@ -63,9 +63,6 @@
 /obj/machinery/botany/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/botany/attack_ai(mob/user as mob)
-	return attack_hand(user)
-
 /obj/machinery/botany/attack_hand(mob/user as mob)
 	ui_interact(user)
 
@@ -74,14 +71,17 @@
 	if(failed_task)
 		failed_task = 0
 		visible_message("[bicon(src)] [src] pings unhappily, flashing a red warning light.")
+		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 	else
 		visible_message("[bicon(src)] [src] pings happily.")
+		playsound(src, 'sound/machines/notify.ogg', 50, 0)
 
 	if(eject_disk)
 		eject_disk = 0
 		if(loaded_disk)
 			loaded_disk.forceMove(get_turf(src))
 			visible_message("[bicon(src)] [src] beeps and spits out [loaded_disk].")
+			playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
 			loaded_disk = null
 
 	nanomanager.update_uis(src)
@@ -196,8 +196,8 @@
 		list("tag" = GENE_ECOLOGY),
 		list("tag" = GENE_ECOPHYSIOLOGY),
 		list("tag" = GENE_METABOLISM),
-		list("tag" = GENE_NUTRITION),
-		list("tag" = GENE_DEVELOPMENT)
+		list("tag" = GENE_DEVELOPMENT),
+		list("tag" = GENE_XENOPHYSIOLOGY)
 	)
 	data["geneTags"] = gene_tag_list
 

@@ -20,7 +20,7 @@
 	volume = 2000
 
 /obj/machinery/portable_atmospherics/scrubber/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 
@@ -76,12 +76,12 @@
 /obj/machinery/portable_atmospherics/scrubber/huge/stationary
 	name = "Stationary Air Scrubber"
 
-	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-		if(W.is_wrench(user))
-			to_chat(user, "<span class='notice'>The bolts are too tight for you to unscrew!</span>")
-			return
+/obj/machinery/portable_atmospherics/scrubber/huge/stationary/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
+	if(W.is_wrench(user))
+		to_chat(user, "<span class='notice'>The bolts are too tight for you to unscrew!</span>")
+		return
 
-		..()
+	..()
 
 
 /obj/machinery/portable_atmospherics/scrubber/update_icon()
@@ -164,10 +164,6 @@
 
 /obj/machinery/portable_atmospherics/scrubber/return_air()
 	return air_contents
-
-/obj/machinery/portable_atmospherics/scrubber/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/portable_atmospherics/scrubber/attack_paw(var/mob/user as mob)
 	return src.attack_hand(user)

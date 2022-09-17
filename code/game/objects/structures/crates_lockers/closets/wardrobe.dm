@@ -26,6 +26,7 @@
 		/obj/item/clothing/mask/bandana/red = 3,
 		/obj/item/clothing/head/peaked = 3,
 		/obj/item/clothing/head/garrison = 2,
+		/obj/item/clothing/head/cowboy/sec = 3,
 	)
 
 /obj/structure/closet/wardrobe/pink
@@ -94,6 +95,8 @@
 		/obj/item/clothing/suit/unathi/mantle,
 		/obj/item/clothing/suit/unathi/robe,
 		/obj/item/clothing/shoes/sandal = 3,
+		/obj/item/clothing/under/rags = 2,
+		/obj/item/clothing/under/shorts/black,
 	)
 
 

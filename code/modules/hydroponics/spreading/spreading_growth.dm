@@ -21,7 +21,7 @@
 				spawn(rand(5,25))
 					T.ex_act(prob(80) ? 3 : 2)
 			continue
-		if(!Adjacent(T) || !T.Enter(src))
+		if(!Adjacent(T) || !T.Enter(src, loc, TRUE))
 			continue
 		neighbors |= T
 	// Update all of our friends.
@@ -52,8 +52,8 @@
 
 			// Kudzu does NOT need light, otherwise, you could just turn off the lights to kill it.
 
-	if(health < max_health)
-		health = min(max_health, health + rand(3,5))
+	if(health < maxHealth)
+		health = min(maxHealth, health + rand(3,5))
 
 	if(prob(80))
 		age++
@@ -77,7 +77,7 @@
 					do_chem_inject(V)
 					do_carnivorous_bite(V, seed.potency)
 		else
-			if(seed.carnivorous == 2)
+			if(seed.voracious == 2)
 				var/mob/living/victim = locate() in range(src,1)
 				if(victim)
 					grab_mob(victim)
@@ -116,9 +116,9 @@
 					child.update_icon()
 
 	// We shouldn't have spawned if the controller doesn't exist.
-	check_health()
+	try_break()
 	// Keep processing us until we've done all there is for us to do in life.
-	if(!neighbors.len && (health == max_health || health <= 0) && harvest && !is_locking(/datum/locking_category))
+	if(!neighbors.len && (health == maxHealth || health <= 0) && harvest && !is_locking(/datum/locking_category))
 		SSplant.remove_plant(src)
 
 /obj/effect/plantsegment/proc/die_off()

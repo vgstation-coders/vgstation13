@@ -168,7 +168,7 @@ nanoui is used to open and update nano browser uis
 		if(nano.src_object in view(7, nano.user))
 			can_interactive = 1
 	else
-		can_interactive = (isAI(nano.user) || !nano.distance_check || isAdminGhost(nano.user) || OMNI_LINK(nano.user,nano.src_object))
+		can_interactive = (isAI(nano.user) || ispulsedemon(nano.user) || !nano.distance_check || isAdminGhost(nano.user) || OMNI_LINK(nano.user,nano.src_object))
 
 	if (can_interactive)
 		return STATUS_INTERACTIVE // interactive (green visibility)
@@ -422,7 +422,7 @@ nanoui is used to open and update nano browser uis
 		<script type='text/javascript'>
 			function receiveUpdateData(jsonString)
 			{
-				// We need both jQuery and NanoStateManager to be able to recieve data
+				// We need both jQuery and NanoStateManager to be able to receive data
 				// At the moment any data received before those libraries are loaded will be lost
 				if (typeof NanoStateManager != 'undefined' && typeof jQuery != 'undefined')
 				{

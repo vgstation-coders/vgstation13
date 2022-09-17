@@ -212,79 +212,6 @@ var/custom_event_msg = null
 //Recall time limit:  2 hours
 var/recall_time_limit = 72000
 
-//Goonstyle scoreboard
-//NOW AN ASSOCIATIVE LIST
-//NO FUCKING EXCUSE FOR THE ATROCITY THAT WAS
-var/list/score=list(
-	"crewscore"      = 0, //This is the overall var/score for the whole round
-	"plasmashipped"   = 0,//How much plasma has been sent to centcom?
-	"stuffshipped"   = 0, //How many centcom orders have cargo fulfilled?
-	"stuffharvested" = 0, //How many harvests have hydroponics done (per crop)?
-	"oremined"       = 0, //How many chunks of ore were smelted
-	"eventsendured"  = 0, //How many random events did the station endure?
-	"powerloss"      = 0, //How many APCs have alarms (under 30 %)?
-	"maxpower"       = 0, //Most watts in grid on any of the world's powergrids.
-	"escapees"       = 0, //How many people got out alive?
-	"deadcrew"       = 0, //Humans who died during the round
-	"deadsilicon"	 = 0, //Silicons who died during the round
-	"mess"           = 0, //How much messes on the floor went uncleaned
-	"litter"		 = 0, //How much trash is laying on the station floor
-	"meals"          = 0, //How much food was actively cooked that day
-	"slimes"     	 = 0, //How many slimes were harvested
-	"artifacts"      = 0, //How many large artifacts were analyzed and activated
-	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
-	"disease_vaccine"	= null, //Which many vaccine antibody isolated
-	"disease_vaccine_score"	= 0, //the associated score
-	"disease_extracted"	= 0, //Score based on the unique extracted effects
-	"disease_effects"	= 0, //Score based on the unique extracted effects
-	"disease_bad"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger >= 3
-	"disease_most"        = null, //Most spread disease
-	"disease_most_count"        = 0, //Most spread disease
-
-	//These ones are mainly for the stat panel
-	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
-	"messbonus"     = 0, //If there are no messes on the station anywhere, huge bonus
-	"deadaipenalty" = 0, //AIs who died during the round
-	"foodeaten"     = 0, //How much food was consumed
-	"clownabuse"    = 0, //How many times a clown was punched, struck or otherwise maligned
-	"slips"			= 0, //How many people have slipped during this round
-	"gunsspawned"	= 0, //Guns spawned by the Summon Guns spell. Only guns, not other artifacts.
-	"dimensionalpushes" = 0, //Amount of times a wizard casted Dimensional Push.
-	"assesblasted"  = 0, //Amount of times a wizard casted Buttbot's Revenge.
-	"shoesnatches"  = 0, //Amount of shoes magically snatched.
-	"greasewiz"     = 0, //Amount of times a wizard casted Grease.
-	"lightningwiz"  = 0, //Amount of times a wizard casted Lighting.
-	"random_soc"    = 0, //Staff of Change bolts set to "random" that hit a human.
-	"heartattacks"  = 0, //Amount of times the "Heart Attack" virus reached final stage, unleashing a hostile floating heart.
-	"hangmanname"	= null, //Player with most correct letter guesses from Curse of the Hangman
-	"hangmanjob"	= null,
-	"hangmanrecord" = 0,
-	"hangmankey"	= null,
-	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
-	"richestjob"    = null,  //Kinda pointless if you dont have a money system i guess
-	"richestcash"   = 0,
-	"richestkey"    = null,
-	"dmgestname"    = null, //Who had the most damage on the shuttle (but was still alive)
-	"dmgestjob"     = null,
-	"dmgestdamage"  = 0,
-	"dmgestkey"     = null,
-	"explosions"	= 0, //How many explosions happened total
-	"deadpets"		= 0, //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
-	"buttbotfarts"  = 0, //Messages mimicked by buttbots.
-	"turfssingulod" = 0, //Amount of turfs eaten by singularities.
-	"shardstouched" = 0, //+1 for each pair of shards that bump into eachother.
-	"kudzugrowth"   = 0, //Amount of kudzu tiles successfully grown, even if they were later eradicated.
-	"nukedefuse"	= 9999, //Seconds the nuke had left when it was defused.
-	"tobacco"        = 0, //Amount of cigarettes, pipes, cigars, etc. lit
-	"lawchanges"	 = 0, //Amount of AI modules used.
-
-
-	"arenafights"   = 0,
-	"arenabest"		= null,
-
-	"money_leaderboard" = list(),
-)
-
 var/list/isolated_antibodies = list(
 	ANTIGEN_O	= 0,
 	ANTIGEN_A	= 0,
@@ -299,6 +226,7 @@ var/list/isolated_antibodies = list(
 	ANTIGEN_X	= 0,
 	ANTIGEN_Y	= 0,
 	ANTIGEN_Z	= 0,
+	ANTIGEN_CULT = 0,
 	)
 var/list/extracted_gna = list()
 
@@ -311,9 +239,6 @@ var/global/datum/gas_mixture/space_gas = new
 //Announcement intercom
 var/global/obj/item/device/radio/intercom/universe/announcement_intercom = new
 
-//used by jump-to-area etc. Updated by area/updateName()
-var/list/sortedAreas = list()
-
 var/global/bomberman_mode = 0
 var/global/bomberman_hurt = 0
 var/global/bomberman_destroy = 0
@@ -325,9 +250,6 @@ var/global/list/never_gladiators = list()
 var/global/list/arena_leaderboard = list()
 var/arena_rounds = 0
 var/arena_top_score = 0
-
-
-var/explosion_newmethod = 1	// 1 = explosions take walls and obstacles into account; 0 = explosions pass through walls and obstacles without any impediments;
 
 //PDA games vars
 //Snake II leaderboard
@@ -389,6 +311,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
 		/mob/living/simple_animal/hostile/bunnybot,						// See viscerator
 		/mob/living/carbon/human/NPC,									// Unfinished, with its own AI that conflicts with player movements.
+		/mob/living/simple_animal/hostile/pulse_demon/					// Your motherfucking life ends in 0 seconds.
 		)
 
 //Boss monster list
@@ -403,13 +326,43 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times
 	/mob/living/simple_animal/hostile/bear/spare,					// Captain bear
-	/mob/living/simple_animal/hostile/ginger/gingerbroodmother		// Gingerbominations...
+	/mob/living/simple_animal/hostile/ginger/gingerbroodmother,		// Gingerbominations...
+	/mob/living/simple_animal/hostile/old_vendotron,				// Why is a normal, harmless, vending machine on this list?
+	/mob/living/simple_animal/hostile/humanoid/greynurse,           // Turn your head and cough
+	/mob/living/simple_animal/hostile/humanoid/nurseunit,           // Nurse...?
+	/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader,  // Very mean chikun man
+	/mob/living/simple_animal/hostile/humanoid/grey/leader,          // Evil, pompous, and alien
 	)
+//Mobs that are unlikely to cause trouble
+var/list/minor_mobs = list(/mob/living/simple_animal/parrot,
+	/mob/living/simple_animal/cockroach,
+	/mob/living/simple_animal/hostile/lizard,
+	/mob/living/simple_animal/mouse,
+	/mob/living/simple_animal/hostile/asteroid/pillow
+	)+ typesof(/mob/living/simple_animal/cat) + typesof(/mob/living/simple_animal/corgi)
+
+//Mobs that may cause a mess of the crew
+var/list/major_mobs = list(
+	/mob/living/simple_animal/hostile/carp,
+	/mob/living/simple_animal/hostile/giant_spider,
+	/mob/living/simple_animal/hostile/giant_spider/hunter,
+	/mob/living/simple_animal/hostile/giant_spider/nurse,
+	/mob/living/simple_animal/hostile/monster/skrite
+	) + typesof(/mob/living/simple_animal/hostile/bear)\
+	+ typesof(/mob/living/simple_animal/hostile/frog)\
+	+ subtypesof(/mob/living/simple_animal/hostile/asteroid)\
+	+ typesof(/mob/living/simple_animal/hostile/bigroach)
+
+//Supernatural mobs, preferably organic or unsettling
+var/list/corrupt_mobs = list(
+	/mob/living/simple_animal/hostile/creature,
+	/mob/living/simple_animal/hostile/mannequin/cult,
+	/mob/living/simple_animal/hostile/humanoid/supermatter)
 
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
 
-//Set by Malf AI Blackout
+//Malf AI global variables
 var/malf_radio_blackout = FALSE
 var/malf_rcd_disable = FALSE
 
@@ -418,7 +371,7 @@ var/cyborg_detonation_time = 0
 
 
 //Radial menus currently existing in the world.
-var/global/list/radial_menus = list()
+var/global/list/radial_menu_anchors = list()
 
 // Copying atoms is stupid and this is a stupid solution
 var/list/variables_not_to_be_copied = list(

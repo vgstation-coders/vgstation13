@@ -4,6 +4,8 @@ var/list/small_explosion_sound = list('sound/effects/Explosion_Small1.ogg','soun
 var/list/spark_sound = list('sound/effects/sparks1.ogg','sound/effects/sparks2.ogg','sound/effects/sparks3.ogg','sound/effects/sparks4.ogg')
 var/list/rustle_sound = list('sound/effects/rustle1.ogg','sound/effects/rustle2.ogg','sound/effects/rustle3.ogg','sound/effects/rustle4.ogg','sound/effects/rustle5.ogg')
 var/list/punch_sound = list('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg')
+var/list/crowbar_hit_sound = list('sound/weapons/cbar_hit1.ogg','sound/weapons/cbar_hit2.ogg')
+var/list/crowbar_hitbod_sound = list('sound/weapons/cbar_hitbod1.ogg','sound/weapons/cbar_hitbod2.ogg','sound/weapons/cbar_hitbod3.ogg')
 var/list/clown_sound = list('sound/effects/clownstep1.ogg','sound/effects/clownstep2.ogg')
 var/list/slap_sound = list('sound/effects/slap1.ogg','sound/effects/slap2.ogg')
 var/list/swing_hit_sound = list('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg')
@@ -34,6 +36,9 @@ var/list/windows_error = list('sound/machines/WXP_error.ogg', 'sound/machines/W9
 var/list/fuckup_step = list('sound/effects/fuckupstep1.ogg', 'sound/effects/fuckupstep2.ogg')
 var/list/jingle_sound = list('sound/items/jinglebell1.ogg', 'sound/items/jinglebell2.ogg', 'sound/items/jinglebell3.ogg')
 var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/disappear_2.ogg', 'sound/effects/disappear_3.ogg')
+var/list/pd_wail_sound = list('sound/voice/pdwail1.ogg', 'sound/voice/pdwail2.ogg', 'sound/voice/pdwail3.ogg')
+var/list/procgun_sound = list('sound/weapons/procgun1.ogg', 'sound/weapons/procgun2.ogg')
+var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
@@ -78,6 +83,10 @@ var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/
 
 	var/Dist = world.view + extrarange
 
+	//Area muting
+	if(turf_source.mute_time > world.time)
+		return
+
 	// Looping through the player list has the added bonus of working for mobs inside containers
 	for (var/mob/player in player_list)
 		if(!player || !player.client)
@@ -90,7 +99,9 @@ var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/
 
 		for(var/z0 in GetOpenConnectedZlevels(turf_source))
 			if (player_turf && turf_source && player_turf.z == z0)
-				if(get_z_dist(player_turf, turf_source) <= Dist)
+				var/turf/portal/P1 = locate(/turf/portal) in player_turf.vis_locs
+				var/turf/portal/P2 = locate(/turf/portal) in turf_source.vis_locs
+				if((get_z_dist(player_turf, turf_source) <= Dist) || (P1 && get_z_dist(P1, turf_source) <= Dist) || (P2 && get_z_dist(player_turf, P2) <= Dist) || (P1 && P2 && get_z_dist(P1, P2) <= Dist))
 					player.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel,wait)
 
 var/const/FALLOFF_SOUNDS = 1
@@ -174,6 +185,10 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(rustle_sound)
 			if ("punch")
 				soundin = pick(punch_sound)
+			if ("crowbar_hit")
+				soundin = pick(crowbar_hit_sound)
+			if ("crowbar_hitbod")
+				soundin = pick(crowbar_hitbod_sound)
 			if ("clownstep")
 				soundin = pick(clown_sound)
 			if ("slap")
@@ -228,5 +243,11 @@ var/const/SURROUND_CAP = 7
 				soundin = jingle_sound
 			if ("disappear_sound")
 				soundin = pick(disappear_sound)
+			if ("pd_wail_sound")
+				soundin = pick(pd_wail_sound)
+			if ("procgun_sound")
+				soundin = pick(procgun_sound)
+			if ("trayhit")
+				soundin = pick(trayhit_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
 	return soundin

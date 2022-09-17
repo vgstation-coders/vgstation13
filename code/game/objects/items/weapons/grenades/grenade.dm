@@ -87,7 +87,7 @@
 		prime(user)
 
 
-/obj/item/weapon/grenade/proc/prime()
+/obj/item/weapon/grenade/proc/prime(var/mob/user)
 //	playsound(loc, 'sound/items/Welder2.ogg', 25, 1)
 	var/turf/T = get_turf(src)
 	if(T)

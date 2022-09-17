@@ -18,12 +18,29 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "hanginglantern1"
 	anchored = 1
-	plane = ABOVE_HUMAN_PLANE
-	layer = LIGHTBULB_LAYER
+	plane = OBJ_PLANE
+	layer = ABOVE_DOOR_LAYER
 	var/tmp/flickering = 0 //SPOOK
 	var/obj/item/device/flashlight/lantern/lantern = null
 	var/start_with_lantern = /obj/item/device/flashlight/lantern/on
 	var/busy = 0
+
+	health = 60
+	breakable_flags = BREAKABLE_ALL
+	damage_armor = BREAKARMOR_MEDIUM
+	damage_resist = BREAKARMOR_WEAK
+	damaged_examine_text = "It is dented."
+	take_hit_text = "denting"
+	take_hit_text2 = "dents"
+	breaks_text = "breaks apart"
+	glanced_sound = 'sound/items/trayhit1.ogg'
+
+/obj/structure/hanging_lantern/try_break()
+	if(health <= 0)
+		qdel(src)
+		return TRUE
+	else
+		return FALSE
 
 /obj/structure/hanging_lantern/New(turf/T, var/build_dir)
 
@@ -88,6 +105,9 @@
 			update()
 			return 1
 
+	else
+		..()
+
 /obj/structure/hanging_lantern/update_icon()
 
 	if(lantern)
@@ -95,15 +115,20 @@
 	else
 		icon_state = "hanginglantern-construct"
 
-/obj/structure/hanging_lantern/proc/flicker(var/duration = rand(20, 60))
-	if(lantern.on && light_type == LIGHT_SOFT)
-		light_type = LIGHT_SOFT_FLICKER
-		set_light()
-		spawn(duration)
-			light_type = LIGHT_SOFT
-			animate(light_obj)
-			animate(shadow_obj)
-			set_light()
+//Direct rip from lights with a few adjustments, not much to worry about since it's not machinery
+/obj/structure/hanging_lantern/proc/flicker(var/amount = rand(10, 20))
+	if(flickering)
+		return
+	//Store our light's vars in here
+	flickering = 1
+	spawn()
+		for(var/i = 0; i < amount; i++)
+			if(!lantern)
+				break
+			toggle_lantern()
+			sleep(rand(5, 15))
+		toggle_lantern()
+		flickering = 0
 
 /obj/structure/hanging_lantern/proc/update()
 	update_icon()

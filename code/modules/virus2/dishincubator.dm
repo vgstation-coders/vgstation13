@@ -26,7 +26,11 @@
 
 	var/mutatechance = 5
 	var/growthrate = 4
+	var/can_focus = 0 //Whether the machine can focus on an effect to mutate it or not
+	var/effect_focus = 0 //What effect of the disease are we focusing on?
 
+/obj/machinery/disease2/incubator/splashable()
+	return FALSE
 
 /obj/machinery/disease2/incubator/New()
 	. = ..()
@@ -51,6 +55,10 @@
 			scancount += SP.rating-1
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
+	if(lasercount >= 4)
+		can_focus = 1
+	else
+		can_focus = 0
 	mutatechance = initial(mutatechance) * max(1, scancount)
 	growthrate = initial(growthrate) + lasercount
 
@@ -169,14 +177,29 @@
 
 		dish_datum.dish.reagents.clear_reagents()
 		return TRUE
-
+	if (href_list["changefocus"])
+		var/slot = text2num(href_list["changefocus"])
+		if(slot == null || slot < 1 || slot > dish_data.len)
+			return TRUE
+		var/dish_incubator_dish/dish_datum = dish_data[slot]
+		if (dish_datum == null)
+			return TRUE
+		var/stage_to_focus = input(usr, "Choose a stage to focus on. This will block symptoms from other stages from being mutated. Input 0 to disable effect focusing.", "Choose a stage.") as num
+		if(!stage_to_focus)
+			to_chat(usr, "<span class='notice'>The effect focusing is now turned off.</span>")
+		else
+			to_chat(usr, "span class='notice'>\The [src] will now focus on stage [stage_to_focus].</span>")
+		effect_focus = stage_to_focus
+		return TRUE
 
 /obj/machinery/disease2/incubator/attack_hand(var/mob/user)
 	. = ..()
 	if (stat & (BROKEN))
 		to_chat(user, "<span class='notice'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
 		return
-
+	if(stat & (FORCEDISABLE))
+		to_chat(user, "<span class='notice'>\The [src] is unresponsive.</span>")
+		return
 	if (stat & (NOPOWER))
 		to_chat(user, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
 		for (var/i in 1 to dish_data.len)
@@ -203,6 +226,7 @@
 	var/list/data = list()
 
 	data["on"] = on
+	data["can_focus"] = can_focus
 	var/list/dish_ui_data = list()
 	data["dishes"] = dish_ui_data
 
@@ -234,7 +258,7 @@
 
 
 /obj/machinery/disease2/incubator/process()
-	if (stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	if (on)
@@ -282,7 +306,7 @@
 	overlays.len = 0
 	icon_state = "incubator"
 
-	if (stat & (NOPOWER))
+	if (stat & (NOPOWER|FORCEDISABLE))
 		icon_state = "incubator0"
 
 	if (stat & (BROKEN))
@@ -293,8 +317,8 @@
 	else
 		light_color = "#6496FA"
 
-	if(stat & (BROKEN|NOPOWER))
-		kill_light()
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		set_light(0)
 	else
 		if (on)
 			set_light(2,2)
@@ -332,7 +356,7 @@
 	overlays += dish_content
 
 	//updating the light indicators
-	if (dish.contained_virus && !(stat & (BROKEN|NOPOWER)))
+	if (dish.contained_virus && !(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		var/image/grown_gauge = image(icon,"incubator_growth7")
 		grown_gauge.plane = ABOVE_LIGHTING_PLANE
 		grown_gauge.layer = ABOVE_LIGHTING_LAYER

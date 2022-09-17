@@ -1,19 +1,498 @@
-"a" = (/turf/simulated/wall/invulnerable,/area/timevoid)
-"b" = (/turf/simulated/floor/arcade,/area/timevoid)
-"c" = (/obj/effect/landmark{name = "timeagentstart"},/turf/simulated/floor/arcade,/area/timevoid)
-"v" = (/obj/effect/decal/timeagentporter,/turf/simulated/floor/arcade,/area/timevoid)
-"L" = (/obj/structure/button/time_agent,/turf/simulated/wall/invulnerable,/area/timevoid)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/wall/invulnerable,
+/area/timevoid)
+"b" = (
+/turf/simulated/floor{
+	icon_state = "old_enginewarn"
+	},
+/area/timevoid)
+"c" = (
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "bot"
+	},
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "2"
+	},
+/obj/effect/landmark{
+	name = "timeagentstart"
+	},
+/turf/simulated/floor/dark{
+	icon_state = "old_engine"
+	},
+/area/timevoid)
+"d" = (
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "warning_corner"
+	},
+/turf/simulated/floor/dark,
+/area/timevoid)
+"e" = (
+/obj/structure/railing/plasteel,
+/turf/simulated/floor{
+	icon_state = "old_enginewarn"
+	},
+/area/timevoid)
+"g" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "bcircuit"
+	},
+/area/timevoid)
+"h" = (
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "old_enginewarn";
+	dir = 6
+	},
+/area/timevoid)
+"i" = (
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "warning"
+	},
+/obj/structure/closet/crate/trashcart,
+/turf/simulated/floor/dark,
+/area/timevoid)
+"j" = (
+/obj/machinery/disposal/compactor,
+/turf/simulated/floor/dark,
+/area/timevoid)
+"k" = (
+/obj/structure/table/reinforced,
+/obj/machinery/computer/fluff/terminal/old{
+	desc = "Strangely, the user account is named John Titor.";
+	name = "IBM 5100"
+	},
+/turf/simulated/floor/dark,
+/area/timevoid)
+"l" = (
+/turf/simulated/floor/dark,
+/area/timevoid)
+"n" = (
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "bot"
+	},
+/obj/machinery/shower{
+	dir = 4
+	},
+/obj/structure/curtain/open/shower/right,
+/obj/machinery/atmospherics/unary/vent_scrubber,
+/obj/structure/railing/plasteel{
+	dir = 1
+	},
+/turf/simulated/floor/dark,
+/area/timevoid)
+"o" = (
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "iron6";
+	name = "power conduit"
+	},
+/area/timevoid)
+"p" = (
+/obj/structure/reagent_dispensers/water_cooler,
+/turf/simulated/floor/dark,
+/area/timevoid)
+"r" = (
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons\obj\doors\Door1.dmi';
+	icon_state = "pdoor1";
+	name = "sealed blast door";
+	desc = "There's no going back now, John."
+	},
+/area/timevoid)
+"s" = (
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "loading_area";
+	dir = 8
+	},
+/turf/simulated/floor/dark{
+	icon_state = "old_engine"
+	},
+/area/timevoid)
+"t" = (
+/obj/structure/closet/emcloset,
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "bot"
+	},
+/obj/structure/railing/plasteel,
+/turf/simulated/floor/dark,
+/area/timevoid)
+"u" = (
+/obj/machinery/computer/fluff/terminal/compact{
+	name = "Beta Suit Status Terminal";
+	desc = "Status: In Use"
+	},
+/obj/structure/railing/plasteel{
+	dir = 1
+	},
+/turf/simulated/floor/dark{
+	icon_state = "old_engine"
+	},
+/area/timevoid)
+"v" = (
+/obj/effect/decal/timeagentporter,
+/turf/simulated/floor{
+	icon_state = "enginebot"
+	},
+/area/timevoid)
+"w" = (
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "warning"
+	},
+/turf/simulated/floor/dark,
+/area/timevoid)
+"x" = (
+/obj/structure/railing/plasteel{
+	dir = 1
+	},
+/turf/simulated/floor/dark{
+	icon_state = "old_engine"
+	},
+/area/timevoid)
+"z" = (
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "iron10";
+	name = "power conduit"
+	},
+/area/timevoid)
+"A" = (
+/obj/machinery/computer/fluff/terminal/compact{
+	name = "Alpha Suit Status Terminal";
+	desc = "Status: In Use"
+	},
+/obj/structure/railing/plasteel{
+	dir = 1
+	},
+/turf/simulated/floor/dark{
+	icon_state = "old_engine"
+	},
+/area/timevoid)
+"B" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/lockbox/diskettebox/open/blanks,
+/turf/simulated/floor/dark,
+/area/timevoid)
+"C" = (
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "bot"
+	},
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "1"
+	},
+/obj/effect/landmark{
+	name = "timeagentstart"
+	},
+/turf/simulated/floor/dark{
+	icon_state = "old_engine"
+	},
+/area/timevoid)
+"E" = (
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "old_enginewarn";
+	dir = 10
+	},
+/area/timevoid)
+"F" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/box/donkpockets,
+/turf/simulated/floor/dark,
+/area/timevoid)
+"G" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "bcircuit"
+	},
+/area/timevoid)
+"H" = (
+/obj/structure/closet/firecloset,
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "bot"
+	},
+/turf/simulated/floor/dark,
+/area/timevoid)
+"I" = (
+/obj/structure/table/reinforced,
+/obj/machinery/microwave{
+	name = "Future Gadget No. 8";
+	desc = "Not suitable for heating bananas."
+	},
+/turf/simulated/floor/dark,
+/area/timevoid)
+"J" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/paper/time_agent,
+/turf/simulated/floor/dark,
+/area/timevoid)
+"K" = (
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "old_enginewarn";
+	dir = 4
+	},
+/area/timevoid)
+"L" = (
+/obj/structure/button/time_agent,
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "iron15";
+	name = "power conduit"
+	},
+/area/timevoid)
+"M" = (
+/obj/structure/rack,
+/obj/item/weapon/storage/toolbox/electrical{
+	pixel_y = 4
+	},
+/obj/item/weapon/storage/toolbox/mechanical,
+/obj/item/weapon/storage/toolbox/emergency{
+	pixel_y = -4
+	},
+/turf/simulated/floor/dark,
+/area/timevoid)
+"N" = (
+/obj/item/weapon/stool,
+/turf/simulated/floor/dark,
+/area/timevoid)
+"P" = (
+/obj/structure/bed/chair/office/dark{
+	dir = 8
+	},
+/turf/simulated/floor/dark,
+/area/timevoid)
+"Q" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/paper_bin/black,
+/obj/item/weapon/pen,
+/turf/simulated/floor/dark,
+/area/timevoid)
+"R" = (
+/obj/effect/decal/arrow{
+	icon = 'icons/effects/floor_decals.dmi';
+	icon_state = "warning";
+	dir = 4
+	},
+/turf/simulated/floor/dark,
+/area/timevoid)
+"T" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/box/cups,
+/turf/simulated/floor/dark,
+/area/timevoid)
+"V" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "bcircuit"
+	},
+/area/timevoid)
+"W" = (
+/obj/structure/railing/plasteel{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "old_enginewarn";
+	dir = 8
+	},
+/area/timevoid)
+"X" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "bcircuit"
+	},
+/area/timevoid)
+"Y" = (
+/turf/simulated/floor{
+	icon_state = "ramptop"
+	},
+/area/timevoid)
 
 (1,1,1) = {"
-aaaaaLaaaaa
-abbbbvbbbba
-abbbbbbbbba
-abbbbbbbbba
-abbbbbbbbba
-abbbbcbbbba
-abbbbbbbbba
-abbbbbbbbba
-abbbbbbbbba
-abbbbbbbbba
-aaaaaaaaaaa
+a
+a
+a
+a
+a
+a
+a
+a
+r
+r
+a
+"}
+(2,1,1) = {"
+a
+B
+k
+Q
+M
+n
+H
+t
+l
+l
+a
+"}
+(3,1,1) = {"
+a
+J
+P
+l
+l
+l
+l
+l
+l
+l
+a
+"}
+(4,1,1) = {"
+a
+W
+W
+E
+l
+l
+l
+l
+l
+l
+a
+"}
+(5,1,1) = {"
+o
+V
+g
+e
+l
+l
+l
+l
+l
+l
+a
+"}
+(6,1,1) = {"
+L
+v
+Y
+b
+l
+l
+l
+l
+l
+l
+a
+"}
+(7,1,1) = {"
+z
+X
+G
+e
+l
+l
+l
+l
+l
+l
+a
+"}
+(8,1,1) = {"
+a
+K
+K
+h
+l
+d
+R
+R
+R
+R
+a
+"}
+(9,1,1) = {"
+a
+p
+N
+l
+l
+w
+x
+s
+x
+s
+a
+"}
+(10,1,1) = {"
+a
+I
+F
+T
+j
+i
+u
+c
+A
+C
+a
+"}
+(11,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
 "}

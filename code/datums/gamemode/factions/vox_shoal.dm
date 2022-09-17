@@ -132,14 +132,8 @@ var/list/potential_bonus_items = list(
 
 /datum/faction/vox_shoal/OnPostSetup()
 	..()
-	var/list/turf/vox_spawn = list()
 
 	for(var/obj/effect/landmark/A in landmarks_list)
-		if(A.name == "voxstart")
-			vox_spawn += get_turf(A)
-			qdel(A)
-			A = null
-			continue
 		if (A.name == "vox_locker")
 			var/obj/structure/closet/loot/L = new(get_turf(A))
 			our_bounty_lockers += L
@@ -150,11 +144,7 @@ var/list/potential_bonus_items = list(
 	var/spawn_count = 1
 
 	for(var/datum/role/vox_raider/V in members)
-		if(spawn_count > vox_spawn.len)
-			spawn_count = 1
 		var/datum/mind/synd_mind = V.antag
-		synd_mind.current.forceMove(vox_spawn[spawn_count])
-		spawn_count++
 		equip_raider(synd_mind.current, spawn_count)
 
 /datum/faction/vox_shoal/proc/equip_raider(var/mob/living/carbon/human/vox, var/index)
@@ -325,6 +315,9 @@ var/list/potential_bonus_items = list(
 	name = "Vox equipment box"
 	desc = "A Vox Box for short."
 
+/obj/item/weapon/storage/box/large/vox_equipment/raider
+	name = "Vox hunter box"
+
 /obj/item/weapon/storage/box/large/vox_equipment/raider/New()
 	..()
 	new /obj/item/clothing/suit/space/vox/carapace(src)
@@ -338,6 +331,9 @@ var/list/potential_bonus_items = list(
 	var/obj/item/stack/rods/A = new(src)
 	A.amount = 20
 
+/obj/item/weapon/storage/box/large/vox_equipment/engineer
+	name = "Vox engineer box"
+
 /obj/item/weapon/storage/box/large/vox_equipment/engineer/New()
 	..()
 	new /obj/item/clothing/suit/space/vox/pressure(src)
@@ -349,6 +345,9 @@ var/list/potential_bonus_items = list(
 	var/obj/item/weapon/paper/vox_paper/VP = new(src)
 	VP.initialize()
 
+/obj/item/weapon/storage/box/large/vox_equipment/saboteur
+	name = "Vox hacker box"
+
 /obj/item/weapon/storage/box/large/vox_equipment/saboteur/New()
 	..()
 	new /obj/item/clothing/suit/space/vox/carapace(src)
@@ -358,6 +357,9 @@ var/list/potential_bonus_items = list(
 	new /obj/item/weapon/card/emag(src)
 	new /obj/item/weapon/gun/dartgun/vox/raider(src)
 	new /obj/item/device/multitool(src)
+
+/obj/item/weapon/storage/box/large/vox_equipment/medic
+	name = "Vox medic box"
 
 /obj/item/weapon/storage/box/large/vox_equipment/medic/New()
 	..()

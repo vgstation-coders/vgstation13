@@ -1,4 +1,44 @@
 
+/datum/objective/bloodcult
+	name = "Cultist of Nar-Sie"
+	explanation_text = "Set up secret temples dedicated to Nar-Sie, the Geometer of Blood, harbinger of gunk and chaos. Spread your influence among the crew without getting caught by security. Convert the willing and torment the others."
+	force_success = TRUE // Freeform
+	flags = FREEFORM_OBJECTIVE
+
+/datum/objective/bloodcult/IsFulfilled()
+	if (..())
+		return TRUE
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult && cult.members.len > 0)
+		for (var/datum/role/cultist/C in cult.members)
+			if (C.antag.current && !C.antag.current.isDead())
+				return TRUE
+	return FALSE
+
+
+/datum/objective/bloodcult_ritual
+	name = "Blood Cult: Ritual"
+	explanation_text = ""
+	var/datum/bloodcult_ritual/assigned_ritual
+	var/complete = FALSE
+
+/datum/objective/bloodcult_ritual/IsFulfilled()
+	if(..())
+		return TRUE
+	return complete ? TRUE : FALSE
+	
+/datum/objective/bloodcult_ritual/New(var/datum/bloodcult_ritual/ritual)
+	if(ritual)
+		assigned_ritual = ritual
+		name = ritual.name
+		explanation_text = ritual.desc
+
+/datum/objective/bloodcult_ritual/extraInfo()
+	explanation_text += assigned_ritual.extraInfo()
+	
+
+/* there might be useful bits of code here to use later so I'm leaving this commented out for convenience for now.
 /datum/objective/bloodcult_reunion
 	explanation_text = "The Reunion: Meet up with your fellow cultists, and erect an altar aboard the station."
 	name = "Blood Cult: Prologue"
@@ -92,13 +132,9 @@
 	for(var/mob/living/carbon/human/player in player_list)
 		//They may be dead, but we only need their flesh
 		var/turf/player_turf = get_turf(player)
-		if(player_turf.z != STATION_Z)//We only look for people currently aboard the station
+		if(player_turf.z != map.zMainStation)//We only look for people currently aboard the station
 			continue
-		var/is_implanted = FALSE
-		for(var/obj/item/weapon/implant/loyalty/loyalty_implant in player)
-			if(loyalty_implant.implanted)
-				is_implanted = TRUE
-				break
+		var/is_implanted = player.is_loyalty_implanted()
 		if(is_implanted || isReligiousLeader(player) || isantagbanned(player) || jobban_isbanned(player, CULTIST))
 			possible_targets += player
 		else
@@ -233,3 +269,4 @@
 
 /datum/objective/bloodcult_feast/IsFulfilled()
 	return TRUE//might expand on that later after release, if I ever get to implement my rework of post-NarSie.
+*/

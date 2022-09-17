@@ -118,6 +118,7 @@
 	species_restricted = list(VOX_SHAPED)
 	species_fit = list(VOX_SHAPED)
 	body_parts_visible_override = 0
+	hides_identity = HIDES_IDENTITY_NEVER
 
 /obj/item/clothing/head/helmet/space/vox/pressure
 	name = "alien helmet"
@@ -249,14 +250,26 @@
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "A huge, pressurized suit, designed for distinctly nonhuman proportions. It looks unusually cheap, even for Vox."
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader //brownhelmet
 	name = "alien helmet"
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "Hey, wasn't this a prop in \'The Abyss\'?"
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
+
+/obj/item/clothing/suit/space/vox/civ/trader/flex
+	name = "flexible trader pressure suit"
+	desc = "A bulky, pressurized suit, even larger than would need to accomodate an alien body. A flexible solution for certain friends of the Shoal."
+	species_fit = list(VOX_SHAPED,MUSHROOM_SHAPED)
+	species_restricted = list(VOX_SHAPED,MUSHROOM_SHAPED)
+
+/obj/item/clothing/head/helmet/space/vox/civ/trader/flex
+	name = "flexible helmet"
+	desc = "A pressurized helmet. The sides expand to accomodate quills or cap."
+	species_fit = list(VOX_SHAPED,MUSHROOM_SHAPED)
+	species_restricted = list(VOX_SHAPED,MUSHROOM_SHAPED)
 
 /obj/item/clothing/suit/space/vox/civ/trader/carapace //carapace
 	name = "alien carapace armor"
@@ -307,42 +320,6 @@
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A smoothly contoured, matte-black alien helmet.?"
-
-// -- Mushroom,traders --
-
-/obj/item/clothing/suit/space/vox/civ/mushmen
-	name = "mushmen pressure suit"
-	icon_state = "mushroom-pressure"
-	item_state = "mushroom-pressure"
-	desc = "It looks like a deformed vox pressure suit, fit for mushroom people."
-	species_restricted = list(MUSHROOM_SHAPED)
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen
-	actions_types = list(/datum/action/item_action/dim_lighting)
-	name = "mushmen helmet"
-	icon_state = "mushroom-pressure"
-	item_state = "mushroom-pressure"
-	desc = "It looks like a deformed vox pressure helmet, fit for mushroom people."
-	species_restricted = list(MUSHROOM_SHAPED)
-	var/up = 0
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen/attack_self(var/mob/user)
-	toggle(user)
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen/proc/toggle(var/mob/user)
-	if(!user.incapacitated())
-		if(src.up)
-			to_chat(user, "<span class='notice'>You use \the [src]'s visor to protect your face from incoming light.</span>")
-		else
-			to_chat(user, "<span class='notice'>You disengage \the [src]'s light protection visor.</span>")
-		src.up = !src.up
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen/islightshielded()
-	return !up
-
-
-/datum/action/item_action/dim_lighting
-	name = "Dim lighting"
 
 // Vox Casual//////////////////////////////////////////////
 // Civvie
@@ -432,12 +409,12 @@
 /obj/item/clothing/suit/space/vox/civ/mining
 	name = "vox mining pressure suit"
 	icon_state = "vox-civ-mining"
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 /obj/item/clothing/head/helmet/space/vox/civ/mining
 	name = "vox mining pressure helmet"
 	icon_state = "vox-civ-mining"
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 //Engineering
 /obj/item/clothing/suit/space/vox/civ/engineer
@@ -695,22 +672,29 @@
 	name = "explorer pressure helmet"
 	icon_state = "grey-fishbowl-helm"
 	item_state = "grey-fishbowl-helm"
-	desc = "A Grey explorer's pressure helmet. It has plenty of room for planning an atmospheric reentry. Zounds!"
+	desc = "A grey explorer's pressure helmet. It has plenty of room for planning an atmospheric reentry. Zounds!"
 	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
 
+/obj/item/clothing/head/helmet/space/grey/dissolvable()
+	return FALSE
+
 /obj/item/clothing/suit/space/grey
 	name = "explorer pressure suit"
 	icon_state = "grey-pressure-suit"
 	item_state = "grey-pressure-suit"
-	desc = "An outdated pressure suit that was once standard issue for spacefaring Grey explorers. It's compact enough to be stored in a bag."
+	desc = "An outdated pressure suit that was once standard issue for spacefaring grey explorers. It's compact enough to be stored in a bag."
 	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
+	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/gun/energy/smalldisintegrator)
 	w_class = W_CLASS_MEDIUM
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/suit/space/grey/dissolvable()
+	return FALSE
 
 
 //Martian Fishbowl

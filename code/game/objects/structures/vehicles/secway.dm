@@ -208,7 +208,7 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 
 /obj/structure/bed/chair/vehicle/secway/custom/process()
 	..()
-	if(light_obj && siren)
+	if(light && siren)
 		if(light_color == "#FF0000")
 			light_color = "#0000FF"
 		else
@@ -258,7 +258,7 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 		setup_wreckage(wreck)
 	qdel(src)
 
-/obj/structure/bed/chair/vehicle/secway/custom/pAImove(mob/living/silicon/pai/user, dir)
+/obj/structure/bed/chair/vehicle/secway/custom/pAImove(mob/living/user, dir)
 	if(!..())
 		return
 	var/turf/T = loc

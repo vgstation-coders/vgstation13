@@ -15,7 +15,7 @@
 	anchored = FALSE
 	density = FALSE
 	dir = NORTH
-
+	pass_flags_self = PASSDOOR|PASSGLASS
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/windoor_type = /obj/machinery/door/window
 	var/secure_type = /obj/machinery/door/window/brigdoor
@@ -36,8 +36,9 @@
 /obj/structure/windoor_assembly/New()
 	..()
 	update_nearby_tiles()
+	setup_border_dummy() //I guess? It's not dense anyway but whatever
 
-obj/structure/windoor_assembly/Destroy()
+/obj/structure/windoor_assembly/Destroy()
 	setDensity(FALSE)
 	update_nearby_tiles()
 	..()
@@ -46,32 +47,20 @@ obj/structure/windoor_assembly/Destroy()
 	icon_state = "[facing]_[secure ? "secure_":""]windoor_assembly[wired ? "02":"01"]"
 
 /obj/structure/windoor_assembly/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE
-	if(get_dir(target, mover) == dir) //Make sure looking at appropriate border
+	if(istype(mover))
+		return !density || (bounds_dist(border_dummy, mover) >= 0)
+	else if(get_dir(loc, target) == dir)
 		if(air_group)
-			return FALSE
+			return FALSE //There's no especially compelling reason for this here but it's copied from windoors
 		return !density
-	else
-		return TRUE
-
-/obj/structure/windoor_assembly/Uncross(atom/movable/mover, turf/target)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return TRUE
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
 	return TRUE
 
 /obj/structure/windoor_assembly/proc/make_windoor(var/mob/user)
 	var/spawn_type = secure ? secure_type : windoor_type
 	var/obj/machinery/door/window/windoor = new spawn_type(loc)
-	windoor.dir = dir
+	windoor.change_dir(dir)
 	windoor.base_state = (facing == "l" ? "left" : "right")
 	windoor.icon_state = windoor.base_state
 	transfer_fingerprints_to(windoor)
@@ -85,6 +74,8 @@ obj/structure/windoor_assembly/Destroy()
 			windoor.req_one_access = electronics.conf_access
 		else
 			windoor.req_access = electronics.conf_access
+		windoor.req_access_dir = src.electronics.dir_access
+		windoor.access_not_dir = src.electronics.access_nodir
 		electronics.forceMove(windoor)
 		windoor.electronics = electronics
 		electronics.installed = TRUE
@@ -250,7 +241,7 @@ obj/structure/windoor_assembly/Destroy()
 	if(anchored)
 		to_chat(usr, "It is fastened to the floor; therefore, you can't rotate it!")
 		return FALSE
-	dir = turn(dir, 270)
+	change_dir(turn(dir, 270))
 	update_nearby_tiles()
 	update_icon()
 

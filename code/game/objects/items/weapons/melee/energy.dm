@@ -242,7 +242,7 @@
 
 /obj/item/weapon/melee/energy/sword/dualsaber/update_wield(mob/user)
 	..()
-	force = wielded ? 30 : 3
+	force = wielded ? 33 : 3
 	w_class = wielded ? 5 : 2
 	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD | CUT_WALL | CUT_AIRLOCK : 0
 	sharpness = wielded ? 1.5 : 0
@@ -316,11 +316,11 @@
 			sleep(1)
 
 /obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
+	if(..())
+		return 1
+	if(iscarbon(AM))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(2, 2, 1))
-			M.simple_message("<span class='notice'>You slipped on [src]!</span>",
-				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+		M.Slip(2, 2, 1, slipped_on = src, drugged_message = "<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
 /obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/clumsy_check(mob/living/user)
 	return 0
@@ -345,6 +345,7 @@
 	origin_tech = Tc_COMBAT + "=3" + Tc_SYNDICATE + "=3"
 	attack_verb = list("attacks", "dices", "cleaves", "tears", "cuts", "slashes",)
 	armor_penetration = 50
+	var/machete_combined = 0 //Used to distinguish between the hfmachete and the bloodlust
 
 /obj/item/weapon/melee/energy/hfmachete/update_icon()
 	icon_state = "[base_state][active]"
@@ -354,34 +355,19 @@
 	add_fingerprint(user)
 
 /obj/item/weapon/melee/energy/hfmachete/proc/toggleActive(mob/user, var/togglestate = "")
-	switch(togglestate)
-		if("on")
-			active = 1
-		if("off")
-			active = 0
-		else
-			active = !active
+	active = !active
+	force = active ? 25 : initial(force)
+	sterility = active ? 100 : initial(sterility)
+	throwforce = active ? 6 : initial(throwforce)
+	throw_speed = active ? 3 : initial(throw_speed)
+	sharpness = active ? 1.7 : initial(sharpness)
+	sharpness_flags = active ? SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE | CUT_WALL | CUT_AIRLOCK : initial(sharpness_flags)
+	armor_penetration = active ? 100 : initial(armor_penetration)
+	to_chat(user, active ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
+	playsound(user, active ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0)
 	if(active)
-		force = 25
-		sterility = 100
-		throwforce = 6
-		throw_speed = 3
-		sharpness = 1.7
-		sharpness_flags += HOT_EDGE | CUT_WALL | CUT_AIRLOCK
-		armor_penetration = 100
-		to_chat(user, "<span class='warning'> [src] starts vibrating.</span>")
-		playsound(user, 'sound/weapons/hfmachete1.ogg', 40, 0)
 		user.register_event(/event/moved, src, .proc/mob_moved)
 	else
-		force = initial(force)
-		sterility = initial(sterility)
-		throwforce = initial(throwforce)
-		throw_speed = initial(throw_speed)
-		sharpness = initial(sharpness)
-		sharpness_flags = initial(sharpness_flags)
-		armor_penetration = initial(armor_penetration)
-		to_chat(user, "<span class='notice'> [src] stops vibrating.</span>")
-		playsound(user, 'sound/weapons/hfmachete0.ogg', 40, 0)
 		user.unregister_event(/event/moved, src, .proc/mob_moved)
 	update_icon()
 
@@ -414,9 +400,13 @@
 	if(isliving(target))
 		playsound(target, get_sfx("machete_hit"),50, 0)
 	if(clumsy_check(user) && prob(50))
-		to_chat(user, "<span class='warning'>Christ.</span>")
+		if(machete_combined)
+			to_chat(user, "<span class='warning'>Son of a bitch... You... got yourself.</span>")
+			user.take_organ_damage(wielded ? 34 : 17)
+		else
+			to_chat(user, "<span class='warning'>Christ.</span>")
+			user.take_organ_damage(active ? 25 : 13)
 		playsound(target, get_sfx("machete_hit"),50, 0)
-		user.take_organ_damage(active ? 25 : 13)
 		return
 	..()
 
@@ -427,14 +417,19 @@
 
 /obj/item/weapon/melee/energy/hfmachete/attackby(obj/item/weapon/W, mob/living/user)
 	..()
-	if(istype(W, /obj/item/weapon/melee/energy/hfmachete))
-		to_chat(user, "<span class='notice'>You combine the two [W] together, making a single scissor-bladed weapon! You feel fucking invincible!</span>")
-		qdel(W)
-		W = null
-		qdel(src)
-		var/B = new /obj/item/weapon/bloodlust(user.loc)
-		user.put_in_hands(B)
+	if(!istype(W, /obj/item/weapon/melee/energy/hfmachete))
+		return
+	var/obj/item/weapon/melee/energy/hfmachete/HF = W
+	if(machete_combined || HF.machete_combined) //Adding a variable to separate the bloodlust from the machete is a lot less lines than copypasting most of the machete code
+		return
+	to_chat(user, "<span class='notice'>You combine the two [HF] together, making a single scissor-bladed weapon! You feel fucking invincible!</span>")
+	qdel(HF)
+	W = null
+	qdel(src)
+	var/B = new /obj/item/weapon/melee/energy/hfmachete/bloodlust(user.loc)
+	user.put_in_hands(B)
 
+//Buggy if actually spawned and wielded, used by the holotool
 /obj/item/weapon/melee/energy/hfmachete/activated/New()
 	..()
 	active = 1
@@ -443,8 +438,74 @@
 	throwforce = 6
 	throw_speed = 3
 	sharpness = 1.7
-	w_class = W_CLASS_LARGE
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE | CUT_WALL | CUT_AIRLOCK
 	armor_penetration = 100
 	hitsound = get_sfx("machete_hit")
 	update_icon()
+
+/obj/item/weapon/melee/energy/hfmachete/bloodlust
+	icon_state = "bloodlust0"
+	base_state = "bloodlust"
+	name = "high-frequency pincer blade \"bloodlust\""
+	desc = "A scissor-like weapon made using two high-frequency machetes. Don't run with it in your hands."
+	force = 17
+	throwforce = 3
+	throw_speed = 1
+	throw_range = 5
+	attack_delay = 15 // Takes 50% more time between attacks
+	w_class = W_CLASS_LARGE
+	mech_flags = MECH_SCAN_ILLEGAL
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
+	origin_tech = Tc_COMBAT + "=6" + Tc_SYNDICATE + "=6"
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	machete_combined = 1
+
+/obj/item/weapon/melee/energy/hfmachete/bloodlust/toggleActive(mob/user, togglestate)
+	active = !active
+	icon_state = "bloodlust[active ? 1 : 0]"
+	item_state = icon_state
+	force = active ? 34 : initial(force)
+	sharpness_flags = active ? SHARP_BLADE | SERRATED_BLADE | HOT_EDGE | CUT_WALL | CUT_AIRLOCK : initial(sharpness_flags)
+	sharpness = active ? 2 : initial(sharpness)
+	armor_penetration = active ? 100 : initial(armor_penetration)
+	update_icon()
+	to_chat(user, active ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
+	playsound(user, active ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0 )
+	if(active)
+		user.register_event(/event/moved, src, .proc/mob_moved)
+	else
+		user.unregister_event(/event/moved, src, .proc/mob_moved)
+
+/obj/item/weapon/melee/energy/hfmachete/bloodlust/IsShield()
+	if(active)
+		return 1
+	else
+		return 0
+
+/obj/item/weapon/melee/energy/hfmachete/bloodlust/pickup(mob/user)
+	playsound(src.loc, 'sound/weapons/Genhit.ogg', 50, 1)
+	to_chat(user, "<span class='notice'>You attach [src] to your arm.</span>")
+	cant_drop = 1
+
+/obj/item/weapon/melee/energy/hfmachete/bloodlust/attackby(obj/item/weapon/W, mob/living/user)
+	..()
+	if(W.is_screwdriver(user) && user.is_holding_item(src))
+		W.playtoolsound(loc, 50)
+		to_chat(user, "<span class='notice'>You detach [src] from your arm.</span>")
+		new /obj/item/weapon/melee/energy/hfmachete(user.loc)
+		new /obj/item/weapon/melee/energy/hfmachete(user.loc)
+		qdel(src)
+
+/obj/item/weapon/melee/energy/hfmachete/bloodlust/suicide_act(var/mob/living/user)
+	. = (SUICIDE_ACT_OXYLOSS)
+	user.visible_message("<span class='danger'>[user] is putting \his neck between \the [src]s blades! It looks like \he's trying to commit suicide.</span>")
+	spawn(2 SECONDS) //Adds drama.
+	if(ishuman(user))
+		var/mob/living/carbon/human/U = user
+		if(U.organs_by_name)
+			var/datum/organ/external/head/H = U.get_organ(LIMB_HEAD)
+			if(istype(H) && ~H.status & ORGAN_DESTROYED)
+				H.droplimb(1)
+				playsound(U, get_sfx("machete_hit"),50, 0)
+				blood_splatter(get_turf(user),U,1)
+	return .

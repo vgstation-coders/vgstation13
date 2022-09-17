@@ -22,10 +22,10 @@
 	speech.message = message
 
 /obj/item/clothing/mask/luchador/offenseTackleBonus()
-	return 1
+	return 5
 
 /obj/item/clothing/mask/luchador/defenseTackleBonus()
-	return 1
+	return 5
 
 /obj/item/clothing/mask/luchador/tecnicos
 	name = "Tecnicos Mask"

@@ -45,7 +45,7 @@
 			if(do_after(user, src, 30))
 				to_chat(user, "<span class='notice'>You finish the barricade.</span>")
 				var/obj/structure/window/barricade/BC = new /obj/structure/window/barricade(user.loc)
-				BC.dir = user.dir
+				BC.change_dir(user.dir)
 				kit_uses--
 				if(kit_uses < 1)
 					qdel(src)

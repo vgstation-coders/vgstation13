@@ -86,7 +86,7 @@
 
 
 /obj/machinery/computer/pod/proc/launch_sequence(var/ident_tag)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	var/anydriver = 0
 	for(var/obj/machinery/mass_driver/M in mass_drivers)
@@ -124,11 +124,6 @@
 			spawn()
 				M.close()
 	return
-
-
-/obj/machinery/computer/pod/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
 
 
 /obj/machinery/computer/pod/attack_paw(var/mob/user as mob)

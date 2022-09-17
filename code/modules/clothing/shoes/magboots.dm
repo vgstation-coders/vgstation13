@@ -99,8 +99,7 @@
 
 /obj/item/clothing/shoes/magboots/emag_act(var/mob/user)
 	emagged = TRUE
-	new/obj/effect/sparks(get_turf(src))
-	playsound(loc,"sparks",50,1)
+	spark(src)
 	clothing_flags &= ~(NOSLIP | MAGPULSE)
 	slowdown = SHACKLE_SHOES_SLOWDOWN
 	icon_state = "[base_state]1"
@@ -164,7 +163,7 @@
 	name = "Paramedic magboots"
 	icon_state = "para_magboots0"
 	base_state = "para_magboots"
-	
+
 //Trauma Team
 /obj/item/clothing/shoes/magboots/trauma
 	name = "Trauma Team magboots"

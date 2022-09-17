@@ -6,7 +6,7 @@
 	density = 0
 	anchored = 1
 	plane = ABOVE_HUMAN_PLANE
-	explosion_resistance = 5
+	pass_flags_self = PASSGLASS
 	var/airtight = 0
 
 /obj/structure/plasticflaps/attackby(obj/item/I as obj, mob/user as mob)
@@ -41,7 +41,7 @@
 	to_chat(user, "It appears to be [anchored? "anchored to" : "unachored from"] the floor, [airtight? "and it seems to be airtight as well." : "but it does not seem to be airtight."]")
 
 /obj/structure/plasticflaps/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return prob(60)
 
 	var/obj/structure/bed/B = mover

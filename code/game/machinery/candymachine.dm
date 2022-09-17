@@ -11,10 +11,15 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	emag_cost = 0
 	emagged = 0
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
+
+	hack_abilities = list(
+		/datum/malfhack_ability/oneuse/overload_quiet,
+		/datum/malfhack_ability/oneuse/emag
+	)
 
 /obj/machinery/sweet/attackby(var/obj/O as obj, var/mob/user as mob)
-	if (stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return ..()
 
 	if(istype(O, /obj/item/weapon/coin/pomf))
@@ -65,7 +70,7 @@
 	else
 		return ..()
 
-/obj/machinery/sweet/emag(mob/user)
+/obj/machinery/sweet/emag_act(mob/user)
 	if(!emagged && user)
 		to_chat(user, "<span class='warning'>You inexplicably short out the [src.name].</span>")
 	emagged = !emagged

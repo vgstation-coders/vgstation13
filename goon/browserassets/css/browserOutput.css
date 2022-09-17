@@ -48,7 +48,8 @@ em						{font-style: normal;	font-weight: bold;}
 .motd a, .motd a:link, .motd a:visited, .motd a:active, .motd a:hover
 						{color: #638500;}
 .prefix					{font-weight: bold;}
-.ooc					{font-weight: bold;}
+.ooc					{color: #002eb8;	font-weight: bold;}
+.looc					{color: #6699CC;	font-weight: bold;}
 .adminobserverooc		{color: #0099cc;	font-weight: bold;}
 .adminooc				{color: #b82e00;	font-weight: bold;}
 .adminobserver			{color: #996600;	font-weight: bold;}
@@ -89,6 +90,7 @@ h1.alert, h2.alert		{color: #000000;}
 .userdanger				{color: #ff0000;	font-weight: bold;	font-size: 120%}
 .warning				{color: #ff0000;	font-style: italic;}
 .sinister				{color: #800080;	font-weight: bold;	font-style: italic;} /* /vg/ */
+.sinisterbig			{color: #800080;	font-weight: bold;	font-style: italic;	font-size: 120%} /* /vg/ */
 .blob					{color: #006221;	font-weight: bold;	font-style: italic;}
 .numb					{color: transparent;font-weight: bold;	text-shadow: 0 0 2px rgba(0,161,161,0.5);} /* blurry text */
 .confirm				{color: #00af3b;}
@@ -99,7 +101,7 @@ h1.alert, h2.alert		{color: #000000;}
 .darknotice				{color: #000000;}
 .sans					{font-family: 'Comic Sans MS', cursive, sans-serif;}
 .alien					{color: #543354;}
-.ancient				{color: #008B8B;	font-stye: italic;}
+.ancient				{color: #008B8B;	font-style: italic;}
 .newscaster				{color: #800000;}
 .mod					{color: #735638;	font-weight: bold;}
 .modooc					{color: #000000;	font-weight: bold;}
@@ -119,7 +121,7 @@ h1.alert, h2.alert		{color: #000000;}
 .red					{color: #FF0000;}
 .grey					{color: #585858; font-family: Dotum, sans-serif;}
 .skeleton				{color: #585858; font-weight: bold; font-style: italic;}
-.mushroom				{color: #4B0082;}
+.mushroom				{color: #4B0082; font-weight: bold;}
 .gutter					{color: #61380B; font-style: italic;}
 .golem					{color: #B4DBCB; font-weight: bold;}
 .slime					{color: #34A7Af;}
@@ -128,7 +130,8 @@ h1.alert, h2.alert		{color: #000000;}
 .maroon					{color: #800000;}
 .clown 					{color: #ff9fef; font-family: Comic Sans MS, Comic Sans, cursive;}
 .borer					{color: #800080; font-weight: bold;}
-
+.grue					{color: #272728; font-weight: bold;}
+.valentines				{color: #db5b8c; font-weight: bold; font-family: 'Comic Sans';}
 
 .good					{color: green;}
 .average				{color: #FF8000;}

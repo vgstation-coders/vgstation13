@@ -156,12 +156,11 @@
 //This is used to give the user a hint that he's a massive retard for using a floor painter on the carpet
 /datum/paint_info/proc/validate(var/turf/simulated/floor/test)
 	switch (ftype)
-		if (PAINT_FLOOR) //why is it named plasteel anyway?
-			if (!(istype(test.floor_tile,/obj/item/stack/tile/plasteel)))
+		if (PAINT_FLOOR)
+			if (!(istype(test.floor_tile,/obj/item/stack/tile/metal)))
 				return 0 //if it's carpet, wood or some other stuff, we aren't going to paint that
-			if (istype(test, /turf/simulated/floor/engine))
-				return 0 	//reinforced floor has plasteel in floor_tile too
-							//but that isn't a regular floor
+			if (istype(test, /turf/simulated/floor/engine) && !test.floor_tile)
+				return 0 	//for reinforced floors with (actual) plasteel tiles on them
 		if (PAINT_PLATING)
 			if (!istype(test,/turf/simulated/floor/plating))
 				return 0
@@ -317,6 +316,9 @@
 
 /datum/rcd_schematic/tile/chapel
 	name = "Chapel"
+
+/datum/rcd_schematic/tile/tatami
+	name = "Tatami"
 
 /datum/rcd_schematic/tile/ss13_logo
 	name = "SS13 logo"
@@ -608,6 +610,23 @@ var/global/list/paint_variants = list(
 	"Chapel" = list(
 		new /datum/paint_info(DIR_ALL,		"chapel"),
 		new /datum/paint_info(DIR_ONE,		"chapeldark")
+	),
+	
+	"Tatami" = list(
+		new /datum/paint_info(DIR_ORTHO,	"tatami-green-halfmat"),
+		new /datum/paint_info(DIR_ONE,		"tatami-green-1mat-hori"),
+		new /datum/paint_info(DIR_ONE,		"tatami-green-1mat-verti"),
+		new /datum/paint_info(DIR_ONE,		"tatami-green-2mat-hori"),
+		new /datum/paint_info(DIR_ONE,		"tatami-green-2mat-verti"),
+		new /datum/paint_info(DIR_ORTHO,	"tatami-green-3mat"),
+		new /datum/paint_info(DIR_ONE,		"tatami-green-spiral"),
+		new /datum/paint_info(DIR_ORTHO,	"tatami-yellow-halfmat"),
+		new /datum/paint_info(DIR_ONE,		"tatami-yellow-1mat-hori"),
+		new /datum/paint_info(DIR_ONE,		"tatami-yellow-1mat-verti"),
+		new /datum/paint_info(DIR_ONE,		"tatami-yellow-2mat-hori"),
+		new /datum/paint_info(DIR_ONE,		"tatami-yellow-2mat-verti"),
+		new /datum/paint_info(DIR_ORTHO,	"tatami-yellow-3mat"),
+		new /datum/paint_info(DIR_ONE,		"tatami-yellow-spiral"),
 	),
 
 	"SS13 logo" = list(

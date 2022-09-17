@@ -108,7 +108,7 @@
 	desc = "A small box that rapidly assembles shaudy, barely working wind-up toys."
 	icon = 'icons/obj/butterfly.dmi'
 	icon_state = "Bflyknife_toy"
-	hitsound = "sound/items/trayhit1.ogg"
+	hitsound = "trayhit"
 	sharpness = 0
 	sharpness_flags = 0
 	w_class = W_CLASS_SMALL

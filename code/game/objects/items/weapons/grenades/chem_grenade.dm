@@ -27,10 +27,12 @@
 	var/obj/item/slime_extract/firstExtract = null	//for large and Ex grenades
 	var/obj/item/slime_extract/secondExtract = null	//for Ex grenades
 	var/obj/item/weapon/reagent_containers/glass/beaker/noreactgrenade/reservoir = null
-	var/extract_uses = 0
 	var/mob/primed_by = "N/A" //"name (ckey)". For logging purposes
 	mech_flags = null
 	det_time =0 //recycling this variable to be used by the grenade launcher's timer override function since chemnades use their assembly's timer instead.
+
+/obj/item/weapon/grenade/chem_grenade/splashable()
+	return FALSE
 
 /obj/item/weapon/grenade/chem_grenade/attack_self(mob/user as mob)
 	if(!stage || stage==GRENADE_STAGE_ASSEMBLY_INSERTED)
@@ -265,30 +267,28 @@
 	for(var/obj/item/slime_extract/S in beakers)		//checking for reagents inside the slime extracts
 		S.reagents.trans_to(reservoir, S.reagents.total_volume)
 	if (firstExtract != null)
-		extract_uses = firstExtract.Uses
-		for(var/i=1,i<=extract_uses,i++)//<-------//exception for slime extracts injected with steroids. The grenade will repeat its checks untill all its remaining uses are gone
-			if (reservoir.reagents.has_reagent(PLASMA, 5))
-				reservoir.reagents.trans_id_to(firstExtract, PLASMA, 5)		//If the grenade contains a slime extract, the grenade will check in this order
-			else if (reservoir.reagents.has_reagent(BLOOD, 5))	//for any Plasma -> Blood ->or Water among the reagents of the other containers
-				reservoir.reagents.trans_id_to(firstExtract, BLOOD, 5)		//and inject 5u of it into the slime extract.
-			else if (reservoir.reagents.has_reagent(WATER, 5))
-				reservoir.reagents.trans_id_to(firstExtract, WATER, 5)
-			else if (reservoir.reagents.has_reagent(SUGAR, 5))
-				reservoir.reagents.trans_id_to(firstExtract, SUGAR, 5)
-		if(firstExtract.reagents.total_volume)						  //<-------//exception for slime reactions that produce new reagents. The grenade checks if any
+		while(firstExtract && firstExtract.Uses)//<-------//exception for slime extracts injected with steroids. The grenade will repeat its checks untill all its remaining uses are gone
+			var/init_uses = firstExtract.Uses
+			for(var/reagent in firstExtract.reactive_reagents) //If the grenade contains a slime extract, the grenade will check in this order
+				if (reservoir.reagents.has_reagent(reagent, 5))
+					reservoir.reagents.trans_id_to(firstExtract, reagent, 5) //and inject 5u of it into the slime extract.
+				if (!firstExtract)
+					break
+			if(!firstExtract || init_uses == firstExtract.Uses) //Nothing happened, get outta here
+				break
+		if(firstExtract && firstExtract.reagents && firstExtract.reagents.total_volume)	//<-------//exception for slime reactions that produce new reagents. The grenade checks if any
 			firstExtract.reagents.trans_to(reservoir, firstExtract.reagents.total_volume)	//reagents are left in the slime extracts after the slime reactions occured
 		if (secondExtract != null)
-			extract_uses = secondExtract.Uses
-			for(var/j=1,j<=extract_uses,j++)	//why don't anyone ever uses "while" directives anyway?
-				if (reservoir.reagents.has_reagent(PLASMA, 5))
-					reservoir.reagents.trans_id_to(secondExtract, PLASMA, 5)	//since the order in which slime extracts are inserted matters (in the case of an Ex grenade)
-				else if (reservoir.reagents.has_reagent(BLOOD, 5))//this allow users to plannify which reagent will get into which extract.
-					reservoir.reagents.trans_id_to(secondExtract, BLOOD, 5)
-				else if (reservoir.reagents.has_reagent(WATER, 5))
-					reservoir.reagents.trans_id_to(secondExtract, WATER, 5)
-				else if (reservoir.reagents.has_reagent(SUGAR, 5))
-					reservoir.reagents.trans_id_to(secondExtract, SUGAR, 5)
-			if(secondExtract.reagents.total_volume)
+			while(secondExtract && secondExtract.Uses)	//why don't anyone ever uses "while" directives anyway? //we do now
+				var/init_uses = secondExtract.Uses
+				for(var/reagent2 in secondExtract.reactive_reagents)
+					if (reservoir.reagents.has_reagent(reagent2, 5))
+						reservoir.reagents.trans_id_to(secondExtract, reagent2, 5)
+					if (!secondExtract)
+						break
+				if(!secondExtract || init_uses == secondExtract.Uses)
+					break
+			if(secondExtract && secondExtract.reagents && secondExtract.reagents.total_volume)
 				secondExtract.reagents.trans_to(reservoir, secondExtract.reagents.total_volume)
 
 		reservoir.reagents.update_total()
@@ -329,7 +329,7 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3"
 	affected_area = 4
 
-obj/item/weapon/grenade/chem_grenade/exgrenade
+/obj/item/weapon/grenade/chem_grenade/exgrenade
 	name = "EX Chem Grenade"
 	desc = "A specially designed large grenade that can hold three containers."
 	icon_state = "ex_grenade"
@@ -337,7 +337,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2"
 	affected_area = 4
 
-obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==GRENADE_STAGE_ASSEMBLY_INSERTED) && path != PATH_STAGE_COMPLETE)
 		var/obj/item/device/assembly_holder/det = W
 		if(istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))
@@ -557,3 +557,26 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 /obj/item/weapon/grenade/chem_grenade/timer/New()
 	..()
 	detonator = new/obj/item/device/assembly_holder/timer_igniter(src)
+
+/obj/item/weapon/grenade/chem_grenade/teargas
+	name = "teargas grenade"
+	desc = "Used for training and crowd control operations. Contents under pressure. Do not directly inhale contents."
+	stage = GRENADE_STAGE_COMPLETE
+	path = PATH_STAGE_CONTAINER_INSERTED
+
+/obj/item/weapon/grenade/chem_grenade/teargas/New()
+	..()
+	var/obj/item/weapon/reagent_containers/glass/beaker/large/B1 = new(src)
+	var/obj/item/weapon/reagent_containers/glass/beaker/large/B2 = new(src)
+
+	B1.reagents.add_reagent(CONDENSEDCAPSAICIN, 60)
+	B1.reagents.add_reagent(POTASSIUM, 40)
+	B2.reagents.add_reagent(PHOSPHORUS, 40)
+	B2.reagents.add_reagent(SUGAR, 40)
+
+	detonator = new/obj/item/device/assembly_holder/timer_igniter(src)
+
+	beakers += B1
+	beakers += B2
+	icon_state = initial(icon_state) +"_locked"
+

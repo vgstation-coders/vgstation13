@@ -28,6 +28,12 @@ JOBS_HAVE_MINIMAL_ACCESS
 ## Unhash this to use recursive explosions, keep it hashed to use circle explosions. Recursive explosions react to walls, airlocks and blast doors, making them look a lot cooler than the boring old circular explosions. They require more CPU and are (as of january 2013) experimental
 #USE_RECURSIVE_EXPLOSIONS
 
+## Remove # here if you wish to have cargo forwarding on by default at roundstart
+#CARGO_FORWARDING_ON_ROUNDSTART
+
+## Remove # here if you wish to have cargo forwards sent always be a set amount (for debugging)
+#CARGO_FORWARDING_AMOUNT_OVERRIDE 5
+
 ## (SECURITY RISK ON PUBLIC SERVERS) Automatically give localhost clients +HOST access.
 LOCALHOST_AUTOADMIN
 
@@ -192,7 +198,7 @@ GUEST_BAN
 ##Remove the # mark infront of this to forbid admins from posssessing the singularity.
 #FORBID_SINGULO_POSSESSION
 
-## Remove the # to show a popup 'reply to' window to every non-admin that recieves an adminPM.
+## Remove the # to show a popup 'reply to' window to every non-admin that receives an adminPM.
 ## The intention is to make adminPMs more visible. (although I fnd popups annoying so this defaults to off)
 #POPUP_ADMIN_PM
 
@@ -312,6 +318,10 @@ SKIP_HOLOMINIMAP_GENERATION
 ## SKIP_VAULT_GENERATION
 ## Uncomment to disable generation of vaults (makes the server start faster!)
 SKIP_VAULT_GENERATION
+
+## DISABLE_VAULT_ROTATION
+## Uncomment to disable rotation of vaults
+#DISABLE_VAULT_ROTATION
 
 ## SHUT_UP_AUTOMATIC_DIAGNOSTIC_AND_ANNOUNCEMENT_SYSTEM
 ## Uncomment to disable the lovely robotic voice that tells you the time at the start of every shift.

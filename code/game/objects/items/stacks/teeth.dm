@@ -91,3 +91,5 @@
 	w_class = W_CLASS_TINY
 	throw_speed = 4
 	throw_range = 10
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD) // Recipe requires 1 sheet. Could probably stand to be less though
+	w_type = RECYK_METAL

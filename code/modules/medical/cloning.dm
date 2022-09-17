@@ -28,10 +28,9 @@
 	id_tag = "clone_pod"
 	var/upgraded = 0 //if fully upgraded with T4 components, it will drastically improve and allow for some stuff
 	var/obj/machinery/computer/cloning/cloning_computer = null
-	var/output_dir //Which direction to try to place our patients onto, should they eject naturally.
 
 
-	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
+	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU | MULTIOUTPUT
 
 	light_color = LIGHT_COLOR_CYAN
 	use_auto_lights = 1
@@ -76,8 +75,12 @@
 	T = 0
 	if(total >= 16)
 		upgraded = 1
+		name = "Advanced Cloning Pod"
+		desc = "An electronically-lockable pod for growing organic tissue. This one is extremely advanced, and can output perfectly fine clones that do not need treatment of any kind."
 	else
 		upgraded = 0
+		name = initial(name)
+		desc = initial(desc)
 
 //The return of data disks?? Just for transferring between genetics machine/cloning machine.
 //TO-DO: Make the genetics machine accept them.
@@ -162,31 +165,13 @@
 /obj/item/weapon/disk/data/examine(mob/user)
 	..()
 	to_chat(user, "The write-protect tab is set to [read_only ? "protected" : "unprotected"].")
-
-//Health Tracker Implant
-
-/obj/item/weapon/implant/health
-	name = "health implant"
-	var/healthstring = ""
-
-/obj/item/weapon/implant/health/proc/sensehealth()
-	if (!implanted)
-		return "ERROR"
-	else
-		if(isliving(implanted))
-			var/mob/living/L = implanted
-			healthstring = "[round(L.getOxyLoss())] - [round(L.getFireLoss())] - [round(L.getToxLoss())] - [round(L.getBruteLoss())]"
-		if (!healthstring)
-			healthstring = "ERROR"
-		return healthstring
-
 /obj/machinery/cloning/clonepod/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
 	return attack_hand(user)
 /obj/machinery/cloning/clonepod/attack_paw(mob/user as mob)
 	return attack_hand(user)
 /obj/machinery/cloning/clonepod/attack_hand(mob/user as mob)
-	if ((isnull(occupant)) || (stat & NOPOWER))
+	if ((isnull(occupant)) || (stat & (FORCEDISABLE|NOPOWER)))
 		return
 	if ((!isnull(occupant)) && (occupant.stat != 2))
 		var/completion = (100 * ((occupant.health + 100) / (heal_level + 100)))
@@ -296,7 +281,7 @@
 //Grow clones to maturity then kick them out.  FREELOADERS
 /obj/machinery/cloning/clonepod/process()
 
-	if(stat & NOPOWER) //Autoeject if power is lost
+	if(stat & (FORCEDISABLE|NOPOWER)) //Autoeject if power is lost
 		if (occupant)
 			locked = FALSE
 			go_out()
@@ -351,7 +336,7 @@
 
 	return
 
-/obj/machinery/cloning/clonepod/emag(mob/user as mob)
+/obj/machinery/cloning/clonepod/emag_act(mob/user as mob)
 	if(isnull(occupant))
 		return
 	if(user)
@@ -564,7 +549,7 @@
 	if(user.incapacitated() || user.lying)
 		return
 
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	if(!busy)
@@ -597,15 +582,6 @@
 		return loc
 	return T
 
-/obj/machinery/cloning/clonepod/Topic(href,href_list)
-	if(..())
-		return
-	if(href_list["set_output_dir"])
-		if(!Adjacent(usr))
-			to_chat(usr, "<span class='warning'>Cannot set output location: Out of range.</span>")
-			return 1
-		output_dir = get_dir(src, usr)
-		to_chat(usr, "<span class='notice'>[bicon(src)]Output location set.</span>")
 
 /*
  *	Diskette Box

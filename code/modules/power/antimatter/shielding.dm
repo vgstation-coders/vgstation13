@@ -1,5 +1,5 @@
 //like orange but only checks north/south/east/west for one step
-proc/cardinalrange(var/center)
+/proc/cardinalrange(var/center)
 	var/list/things = list()
 	for(var/direction in cardinal)
 		var/turf/T = get_step(center, direction)
@@ -17,7 +17,7 @@ proc/cardinalrange(var/center)
 	anchored = 1
 	density = 1
 	dir = 1
-	use_power = 0//Living things generally dont use power
+	use_power = MACHINE_POWER_USE_NONE//Living things generally dont use power
 	idle_power_usage = 0
 	active_power_usage = 0
 	mech_flags = MECH_SCAN_FAIL
@@ -32,12 +32,6 @@ proc/cardinalrange(var/center)
 	var/dirs = 0
 	var/mapped = 0 //Set to 1 to ignore usual suicide if it doesn't immediately find a control_unit
 	var/getting_blobbed = 0
-
-	lighting_flags = IS_LIGHT_SOURCE
-	light_power = 0
-	light_range = 1
-	light_color = LIGHT_COLOR_HALOGEN
-	light_type = LIGHT_SOFT_FLICKER
 
 // Stupidly easy way to use it in maps
 /obj/machinery/am_shielding/map
@@ -106,16 +100,14 @@ proc/cardinalrange(var/center)
 			if(AMC.add_shielding(src))
 				break
 		if(!mapped) // Prevent suicide if it's part of the map
-			if(!priorscan)
-				sleep(20)
-				controllerscan(1)//Last chance
-				return
-			qdel(src)
-		else
-			if(!priorscan)
-				sleep(20)
+			if(priorscan)
+				qdel(src)
+			else
+				spawn(20)
+					controllerscan(1)//Last chance
+		else if(!priorscan)
+			spawn(20)
 				controllerscan(1)
-				return
 
 // Find surrounding unconnected shielding and add them to our controller
 /obj/machinery/am_shielding/proc/assimilate()
@@ -189,12 +181,12 @@ proc/cardinalrange(var/center)
 			overlays += I
 			set_light(1.4,1)
 		else
-			kill_light()
+			set_light(0)
 		if(!processing)
 			setup_core()
 		return
 	else if(processing)
-		kill_light()
+		set_light(0)
 		shutdown_core()
 
 	for(var/direction in alldirs)
@@ -204,11 +196,6 @@ proc/cardinalrange(var/center)
 			if(direction in cardinal)
 				if((istype(machine, /obj/machinery/am_shielding) && machine:control_unit == control_unit) || (istype(machine, /obj/machinery/power/am_control_unit) && machine == control_unit))
 					dirs |= direction
-
-	if (control_unit && control_unit.active)
-		set_light(1, 1)
-	else
-		kill_light()
 
 	icon_state = "shield_[dirs]"
 

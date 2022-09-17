@@ -2,7 +2,7 @@
 	name = "inflatable"
 	w_class = W_CLASS_MEDIUM
 	icon = 'icons/obj/inflatable.dmi'
-	w_type = RECYK_METAL
+	w_type = RECYK_PLASTIC
 	melt_temperature = MELTPOINT_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 1.5*CC_PER_SHEET_MISC)
 
@@ -134,11 +134,11 @@
 	opacity = 0
 	icon = 'icons/obj/inflatable.dmi'
 	icon_state = "wall"
-
+	pass_flags_self = PASSGLASS
 	var/undeploy_path = null
 	var/spawn_undeployed = TRUE
 	var/tmp/deflating = 0
-	var/health = 30
+	health = 30
 	var/ctrl_deflate = TRUE
 
 /obj/structure/inflatable/wall
@@ -168,7 +168,7 @@
 		if(2)
 			deflate(1)
 		if(3)
-			take_damage(rand(15,45), 0)
+			take_damage(rand(15,45), sound_effect = 0)
 
 /obj/structure/inflatable/attackby(obj/item/I, mob/user)
 	if(!istype(I) || istype(I, /obj/item/weapon/inflatable_dispenser))
@@ -198,15 +198,19 @@
 	user.visible_message("<span class='danger'>[user] rips \the [src] apart!</span>")
 	deflate(1)
 
-/obj/structure/inflatable/proc/take_damage(var/damage, var/sound_effect = 1)
-	health = max(0, health - damage)
+/obj/structure/inflatable/take_damage(incoming_damage, damage_type, skip_break, mute, var/sound_effect = 1) //Custom take_damage() proc because of sound_effect behavior.
+	health = max(0, health - incoming_damage)
 	if(sound_effect)
 		playsound(loc, 'sound/effects/Glasshit.ogg', 75, 1)
+	return try_break()
+
+/obj/structure/inflatable/try_break()
 	if(health <= 0)
 		spawn(1)
 			deflate(1)
-		return 1
-	return 0
+		return TRUE
+	return FALSE
+
 
 /obj/structure/inflatable/CtrlClick()
 	if(ctrl_deflate)
@@ -250,7 +254,7 @@
 /obj/structure/inflatable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
 		return 0
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return !density
 
@@ -333,7 +337,7 @@
 	if(living_contents.len)
 		to_chat(user,"<span class='info'>You can see [english_list(living_contents)] inside.</span>")
 
-/obj/structure/inflatable/shelter/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0) //Like an unanchored window, we can block if pushed into place.
+/obj/structure/inflatable/shelter/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0) //Like an unanchored window, we can block if pushed into place.
 	..()
 	update_nearby_tiles()
 

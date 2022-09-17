@@ -6,7 +6,7 @@
 	icon_state = "bigscanner"
 	anchored = 1
 	density = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 30
 	active_power_usage = 200
 	power_channel = EQUIP
@@ -40,10 +40,6 @@
 
 	RefreshParts()
 
-/obj/machinery/photocopier/attack_ai(mob/user)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/photocopier/attack_paw(mob/user)
 	return attack_hand(user)
 
@@ -66,7 +62,7 @@
 						c.info = "<font color = #101010>"
 					else			//no toner? shitty copies for you!
 						c.info = "<font color = #808080>"
-					var/copied = html_decode(copy.info)
+					var/copied = copy.info
 					copied = replacetext(copied, "color:", "nocolor:")	//state of the art techniques in action
 					c.info += copied
 					c.info += "</font>"

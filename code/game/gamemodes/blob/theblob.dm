@@ -19,8 +19,9 @@ var/list/blob_overminds = list()
 	anchored = 1
 	penetration_dampening = 17
 	mouse_opacity = 1
-	var/health = 20
-	var/maxhealth = 20
+	pass_flags_self = PASSBLOB
+	health = 20
+	maxHealth = 20
 	var/health_timestamp = 0
 	var/brute_resist = 4
 	var/fire_resist = 1
@@ -108,7 +109,7 @@ var/list/blob_overminds = list()
 /obj/effect/blob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSBLOB))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return 0
 
@@ -172,13 +173,14 @@ var/list/blob_overminds = list()
 	update_icon()
 	return
 
-/obj/effect/blob/bullet_act(var/obj/item/projectile/Proj)
+/obj/effect/blob/bullet_act(var/obj/item/projectile/Proj, var/def_zone, var/damage_override = null)
 	. = ..()
+	var/damage = isnull(damage_override) ? Proj.damage : damage_override
 	switch(Proj.damage_type)
 		if(BRUTE)
-			health -= (Proj.damage/brute_resist)
+			health -= (damage/brute_resist)
 		if(BURN)
-			health -= (Proj.damage/fire_resist)
+			health -= (damage/fire_resist)
 
 	update_health()
 	update_icon()
@@ -205,8 +207,8 @@ var/list/blob_overminds = list()
 
 /obj/effect/blob/update_icon(var/spawnend = 0)
 	if(icon_size == 64)
-		if(health < maxhealth)
-			var/hurt_percentage = round((health * 100) / maxhealth)
+		if(health < maxHealth)
+			var/hurt_percentage = round((health * 100) / maxHealth)
 			var/hurt_icon
 			switch(hurt_percentage)
 				if(0 to 25)
@@ -334,12 +336,10 @@ var/list/blob_looks_player = list(//Options available to players
 /obj/effect/blob/proc/run_action()
 	return 0
 
-/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source, var/manual = FALSE)
+/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source)
 	if(prob && !prob(health))
 		return
 	if(istype(T, /turf/space) && prob(75))
-		if (source && manual)
-			source.add_points(round(2*BLOBATTCOST/3))
 		return
 	if(!T)
 		var/list/dirs = cardinal.Copy()
@@ -362,7 +362,7 @@ var/list/blob_looks_player = list(//Options available to players
 			num /= 10000
 			B.layer = layer - num
 
-	if(T.Enter(B,src))//Attempt to move into the tile
+	if(T.Enter(B, loc, TRUE))//Attempt to move into the tile //This should probably just actually call Move() instead
 		B.setDensity(initial(B.density))
 		if(icon_size == 64)
 			spawn(1)
@@ -382,8 +382,6 @@ var/list/blob_looks_player = list(//Options available to players
 	else //If we cant move in hit the turf
 		if(!source || !source.restrain_blob)
 			T.blob_act(0,src) //Don't attack the turf if our source mind has that turned off.
-		if (source && manual)
-			source.add_points(round(2*BLOBATTCOST/3))
 		B.manual_remove = 1
 		B.Delete()
 
@@ -409,7 +407,7 @@ var/list/blob_looks_player = list(//Options available to players
 	qdel(src)
 
 /obj/effect/blob/proc/update_health()
-	if(asleep && (health < maxhealth))
+	if(asleep && (health < maxHealth))
 		for (var/obj/effect/blob/B in range(7,src))
 			B.asleep = FALSE
 	if(!dying && (health <= 0))

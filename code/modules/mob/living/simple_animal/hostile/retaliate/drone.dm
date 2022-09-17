@@ -160,7 +160,7 @@
 		walk(src,0)
 		spawn(rand(50,80))
 			if(!disabled && exploding)
-				explosion(get_turf(src), 0, 1, 4, 7)
+				explosion(get_turf(src), 0, 1, 4, 7, whodunnit = src)
 				//proc/explosion(turf/epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, adminlog = 1)
 	return ..()
 

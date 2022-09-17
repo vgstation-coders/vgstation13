@@ -1,4 +1,4 @@
-datum/event/organ_failure
+/datum/event/organ_failure
 	var/severity = 1
 
 /datum/event/organ_failure/can_start(var/list/active_with_role)
@@ -6,15 +6,15 @@ datum/event/organ_failure
 		return 30
 	return 0
 
-datum/event/organ_failure/setup()
+/datum/event/organ_failure/setup()
 	announceWhen = rand(0, 150)
 	endWhen = announceWhen + 1
 	severity = rand(1, 4)
 
-datum/event/organ_failure/announce()
+/datum/event/organ_failure/announce()
 	command_alert(/datum/command_alert/biohazard_organ)
 
-datum/event/organ_failure/start()
+/datum/event/organ_failure/start()
 	var/list/candidates = list()	//list of candidate keys
 	for(var/mob/living/carbon/human/G in player_list)
 		if(G.mind && G.mind.current && G.mind.current.stat != DEAD)

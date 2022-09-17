@@ -9,7 +9,7 @@
 		return FALSE
 	if(isbrain(owner.current) || isborer(owner.current))
 		return FALSE
-	if(emergency_shuttle.location != CENTCOMM_Z)
+	if(emergency_shuttle.location != map.zCentcomm)
 		return FALSE
 	if(!owner.current || owner.current.isDead())
 		return FALSE
@@ -19,7 +19,7 @@
 
 	var/datum/shuttle/S = is_on_shuttle(owner.current)
 	if(emergency_shuttle.shuttle == S || emergency_shuttle.escape_pods.Find(S))
-		if(istype(location, /turf/simulated/shuttle/floor4)) // Fails traitors if they are in the shuttle brig
+		if(istype(location, /turf/simulated/floor/shuttle/brig)) // Fails traitors if they are in the shuttle brig
 			if(istype(owner.current, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = owner.current
 				if(!H.restrained()) // Technically, traitors will fail the objective if they are time stopped by a wizard
@@ -59,7 +59,7 @@
 		return FALSE
 
 	var/turf/T = get_turf(owner.current)
-	if(istype(T, /turf/simulated/shuttle/floor4)) //red shuttle floors grant redtext
+	if(istype(T, /turf/simulated/floor/shuttle/brig)) //red shuttle floors grant redtext
 		return FALSE
 
 	if(istype(owner.current, /mob/living/carbon/human))

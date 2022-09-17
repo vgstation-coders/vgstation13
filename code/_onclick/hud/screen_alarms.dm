@@ -34,6 +34,8 @@
 			return FALSE
 	else
 		new_alert = new alert_type()
+		new_alert.category = category
+		new_alert.owner = src
 		new_alert.override_alerts = override
 		if(override)
 			new_alert.timeout = null
@@ -56,18 +58,7 @@
 		hud_used.reorganize_alerts()
 	new_alert.transform = matrix(32, 6, MATRIX_TRANSLATE)
 	animate(new_alert, transform = matrix(), time = 2.5, easing = CUBIC_EASING)
-
-	if(new_alert.timeout)
-		alert_timeout(new_alert, category)
-		new_alert.timeout = world.time + new_alert.timeout - world.tick_lag
 	return new_alert
-
-/mob/proc/alert_timeout(var/obj/abstract/screen/alert/alert, category)
-	if(!istype(alert) || !category)
-		return
-	spawn(alert.timeout)
-		if(alert.timeout && alerts[category] == alert && world.time >= alert.timeout)
-			clear_alert(category)
 
 // Proc to clear an existing alert.
 /mob/proc/clear_alert(category, clear_override = FALSE)
@@ -76,10 +67,6 @@
 		return FALSE
 	if(alert.override_alerts && !clear_override)
 		return FALSE
-	alerts -= category
-	if(client && hud_used)
-		hud_used.reorganize_alerts()
-		client.screen -= alert
 	qdel(alert)
 
 /mob/proc/clear_all_alerts()
@@ -145,6 +132,7 @@ var/global/list/screen_alarms_locs = list(
 #define SCREEN_ALARM_ROBOT_LAW "robot_law"
 #define SCREEN_ALARM_ROBOT_HACK "robot_hack"
 #define SCREEN_ALARM_ROBOT_LOCK "robot_lock"
+#define SCREEN_ALARM_ROBOT_MODULELOCK "robot_modulelock"
 #define SCREEN_ALARM_ROBOT_RESET "robot_reset"
 
 #define SCREEN_ALARM_APC_HACKING "apc_hacking"
@@ -157,16 +145,32 @@ var/global/list/screen_alarms_locs = list(
 	icon = 'icons/mob/screen_alarms.dmi'
 	icon_state = "default"
 	mouse_opacity = TRUE
+	var/severity
+	var/mob/owner
+	var/category
 	var/timeout = null //If set to a number, this alert will clear itself after that many deciseconds
-	var/severity = null
 	var/override_alerts = FALSE //If it is overriding other alerts of the same type
 	var/alerttooltipstyle = null
 	var/emph = FALSE //Whether to have a flashy outline
 
 /obj/abstract/screen/alert/New()
 	..()
+	if(timeout)
+		add_timer(new /callback(src, .proc/qdel_self), timeout)
 	if(emph)
 		overlays.Add(image('icons/mob/screen_alarms.dmi', icon_state = "emph_outline"))
+
+/obj/abstract/screen/alert/proc/qdel_self()
+	qdel(src)
+
+/obj/abstract/screen/alert/Destroy()
+	if(owner)
+		owner.alerts -= category
+		if(owner.client && owner.hud_used)
+			owner.hud_used.reorganize_alerts()
+			owner.client.screen -= src
+		owner = null
+	..()
 
 /obj/abstract/screen/alert/Click(location, control, params)
 	if(!usr || !usr.client)
@@ -355,16 +359,16 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/robot/apc_hacking
 	icon_state = "hacking"
 	name = "Overriding APC"
-	desc = "You are currently overriding an APC's programming. Click this alert to jump to the APC."
+	desc = "You are currently hacking an APC. Click this alert to jump to the APC."
+	var/obj/machinery/power/apc/apc = null
 
 /obj/abstract/screen/alert/robot/apc_hacking/Click()
 	..()
 	if(!isAI(usr))
 		return
 	var/mob/living/silicon/ai/A = usr
-	if(A.alerts[SCREEN_ALARM_APC_HACKING] == src)
-		if(A.eyeobj && A.malfhacking && A.malfhack)
-			A.eyeobj.forceMove(A.malfhack.loc)
+	if(A.eyeobj)
+		A.eyeobj.forceMove(apc.loc)
 
 /obj/abstract/screen/alert/robot/hacked
 	name = "Hacked"
@@ -374,6 +378,11 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/robot/locked
 	name = "Locked Down"
 	desc = "This unit has been remotely locked down."
+	icon_state = "locked"
+
+/obj/abstract/screen/alert/robot/modulelocked
+	name = "Locked Down"
+	desc = "This modules on this unit have been remotely locked down."
 	icon_state = "locked"
 
 /obj/abstract/screen/alert/robot/newlaw

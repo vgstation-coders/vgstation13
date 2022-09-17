@@ -30,7 +30,7 @@
 
 	var/list/requirements = list(40,30,20,10,10,10,10,10,10,10)
 	//requirements are the threat level requirements per pop range. The ranges are as follow:
-	//0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39, 40-54, 45+
+	//0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39, 40-44, 45+
 	//so with the above default values, The rule will never get drafted below 10 threat level (aka: "peaceful extended"), and it requires a higher threat level at lower pops.
 	//for reminder: the threat level is rolled at roundstart and tends to hover around 50 https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
 	var/high_population_requirement = 10
@@ -289,7 +289,7 @@
 	//------------------------------------------------
 	var/role_id = initial(role_category.id)
 	var/role_pref = initial(role_category.required_pref)
-	for(var/mob/new_player/P in candidates)
+	for(var/mob/P in candidates)
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			a++
@@ -352,9 +352,13 @@
 			return 0
 	return ..()
 
-/datum/dynamic_ruleset/proc/latejoinprompt(var/mob/user, var/ruleset)
-	if(alert(user,"The gamemode is trying to select you for [ruleset], do you want this?",,"Yes","No") == "Yes")
+/datum/dynamic_ruleset/proc/latejoinprompt(var/mob/user)
+	var/turf/oldloc = get_turf(user)
+	user.forceMove(null)
+	if(alert(user,"The gamemode is trying to select you for [src], do you want this?",,"Yes","No") == "Yes")
 		return 1
+	user.forceMove(oldloc)
+	message_admins("[user.key] has opted out of [src].")
 	return 0
 
 /datum/dynamic_ruleset/proc/generate_ruleset_body(mob/applicant)

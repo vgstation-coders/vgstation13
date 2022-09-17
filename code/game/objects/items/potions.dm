@@ -124,13 +124,19 @@
 	var/time = 5 MINUTES
 	var/include_clothes = FALSE
 
-/obj/item/potion/invisibility/imbibe_effect(mob/user)
-	user.make_invisible(INVISIBLEPOTION, time, include_clothes)
+/obj/item/potion/invisibility/imbibe_effect(mob/living/carbon/human/user)
+	user.make_invisible(INVISIBLEPOTION, time, include_clothes, 1, INVISIBILITY_LEVEL_TWO)
 
-/obj/item/potion/invisibility/impact_atom(atom/target)
-	if(ismovable(target))
-		var/atom/movable/AM = target
-		AM.make_invisible(INVISIBLEPOTION, time)
+/obj/item/potion/invisibility/impact_atom(atom/movable/target)
+	if(istype(target, /obj/))
+		var/obj/O = target
+		O.make_invisible(INVISIBLEPOTION, time, 1, INVISIBILITY_LEVEL_TWO)
+	if(istype(target, /mob/living/carbon))
+		var/mob/C = target
+		C.make_invisible(INVISIBLEPOTION, time, include_clothes, 1, INVISIBILITY_LEVEL_TWO)
+	if(istype(target, /mob/))
+		var/mob/M = target
+		M.make_invisible(INVISIBLEPOTION, time, include_clothes, 1, INVISIBILITY_LEVEL_TWO)
 
 /obj/item/potion/invisibility/major
 	name = "potion of major invisibility"
@@ -161,7 +167,7 @@
 /obj/item/potion/light/imbibe_effect(mob/user)
 	user.set_light(7,10)
 	spawn(5 MINUTES)
-		user.kill_light()
+		user.set_light(0)
 
 /obj/item/potion/light/impact_atom(atom/target)
 	var/list/L = get_all_mobs_in_dview(get_turf(src), ignore_types = list(/mob/living/carbon/brain, /mob/living/silicon/ai))
@@ -198,7 +204,7 @@
 	var/static/list/possible_types = list(
 		/mob/living/simple_animal/construct/armoured,
 		/mob/living/simple_animal/hostile/gremlin,
-		/mob/living/simple_animal/hostile/necromorph,
+		/mob/living/simple_animal/hostile/necro/necromorph,
 		/mob/living/simple_animal/hostile/asteroid/goliath,
 		/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider,
 		/mob/living/simple_animal/hostile/retaliate/cockatrice,
@@ -241,18 +247,13 @@
 	return ishuman(user)
 
 /obj/item/potion/zombie/imbibe_effect(mob/living/carbon/human/user)
-	user.become_zombie_after_death = 2
+	user.zombify()
 
 /obj/item/potion/zombie/impact_atom(atom/target)
 	var/mob/M = get_last_player_touched()
 	var/list/L = get_all_mobs_in_dview(get_turf(src))
 	for(var/mob/living/carbon/human/H in L)
-		if(H.isDeadorDying())
-			if(isjusthuman(H))
-				H.make_zombie(M)
-			else
-				new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), M, H.mind)
-				H.gib()
+		H.zombify(M)
 
 /obj/item/potion/fullness
 	name = "potion of fullness"
@@ -269,18 +270,13 @@
 	name = "potion of reduced visibility"
 	desc = "Become slightly transparent for ten minutes."
 	icon_state = "blue_minibottle"
+	var/time = 10 MINUTES
 
 /obj/item/potion/transparency/imbibe_effect(mob/user)
-	user.alphas[TRANSPARENCYPOTION] = 125
-	spawn(10 MINUTES)
-		user.alphas -= TRANSPARENCYPOTION
+	user.make_invisible(TRANSPARENCYPOTION, time, TRUE, 125)
 
-/obj/item/potion/transparency/impact_atom(atom/target)
-	if(!ismovable(target))
-		return
-	target.alpha = 125
-	spawn(10 MINUTES)
-		target.alpha = initial(target.alpha)
+/obj/item/potion/transparency/impact_atom(obj/target)
+	target.make_invisible(TRANSPARENCYPOTION, time, 125)
 
 /obj/item/potion/paralysis
 	name = "potion of minor paralysis"
@@ -469,7 +465,7 @@
 	icon_state = "fireball_flask"
 
 /obj/item/potion/fireball/imbibe_effect(mob/living/user)
-	explosion(get_turf(user), -1, 1, 2, 5)
+	explosion(get_turf(user), -1, 1, 2, 5, whodunnit = user)
 
 /obj/item/potion/fireball/impact_atom(atom/target)
 	explosion(get_turf(target), -1, 1, 2, 5)

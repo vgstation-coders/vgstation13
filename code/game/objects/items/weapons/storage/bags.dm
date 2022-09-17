@@ -107,11 +107,13 @@
 	clothing_flags = BLOCK_BREATHING | BLOCK_GAS_SMOKE_EFFECT
 	no_storage_slot = list(slot_head)
 	foldable = /obj/item/folded_bag
+	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_MISC) //Recipe calls for 3 sheets
+	w_type = RECYK_PLASTIC
 
-obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
+/obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
 
-obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
+/obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	return handle_item_insertion(I,0)
 
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(var/mob/living/user)
@@ -215,7 +217,6 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
 	display_contents_with_number = TRUE
 
-
 /obj/item/weapon/storage/bag/plants/CtrlClick()
 	if(isturf(loc))
 		return ..()
@@ -272,6 +273,22 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	return
 
 // -----------------------------
+//          Materials bag
+// -----------------------------
+
+/obj/item/weapon/storage/bag/materials
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
+	icon_state = "matsbag"
+	name = "Materials Bag"
+	desc = "Can hold most materials and shards."
+	storage_slots = 50; //the number of plant pieces it can carry.
+	fits_max_w_class = 3
+	max_combined_w_class = 200
+	w_class = W_CLASS_TINY
+	can_only_hold = list("/obj/item/stack/sheet","/obj/item/weapon/shard")
+	display_contents_with_number = TRUE
+
+// -----------------------------
 //          Food bag
 // -----------------------------
 
@@ -308,6 +325,53 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind(src)//-7 drowsy, -1 sleepy
 	new/obj/item/weapon/reagent_containers/food/condiment/small/ketchup(src)
 	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
+	update_icon()
+
+/obj/item/weapon/storage/bag/zam_food
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "Zam_foodbag0"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
+	name = "Zam Food Bag"
+	desc = "A gift from the mothership to keep your Zam drinks cool and your Zam meals warm. Praise the mothership!"
+	storage_slots = 14
+	fits_max_w_class = 3
+	max_combined_w_class = 28
+	w_class = W_CLASS_MEDIUM
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil")
+
+/obj/item/weapon/storage/bag/zam_food/update_icon()
+	if(contents.len < 1)
+		icon_state = "Zam_foodbag0"
+	else icon_state = "Zam_foodbag1"
+
+/obj/item/weapon/storage/bag/zam_food/zam_menu1/New()
+	..()
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped(src)//18 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
+	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea(src)//tea you can't trust
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
+	update_icon()
+
+/obj/item/weapon/storage/bag/zam_food/zam_menu2/New()
+	..()
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped(src)//15 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
+	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz(src)//yum yum melts my tum
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
+	update_icon()
+
+/obj/item/weapon/storage/bag/zam_food/zam_menu3/New()
+	..()
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped(src)//12 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
+	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
 	update_icon()
 
 // -----------------------------
@@ -461,7 +525,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 		return FALSE
 
 	//I would prefer to drop a new stack, but the item/attack_hand code
-	// that calls this can't recieve a different object than you clicked on.
+	// that calls this can't receive a different object than you clicked on.
 	//Therefore, make a new stack internally that has the remainder.
 	// -Sayu
 
@@ -491,20 +555,20 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	slot_flags = SLOT_BELT
 	name = "gadget bag"
 	desc = "This bag can be used to store many machine components."
-	storage_slots = 25;
+	storage_slots = 50;
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell")
+	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell", "/obj/item/weapon/circuitboard")
 	display_contents_with_number = TRUE
 
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
 	var/lowest_rating = INFINITY //Get the lowest rating, so only mass drop the lowest parts.
 	for(var/obj/item/B in contents)
-		if(B.rped_rating() < lowest_rating)
-			lowest_rating = B.rped_rating()
+		if(B.get_rating() < lowest_rating)
+			lowest_rating = B.get_rating()
 
 	for(var/obj/item/B in contents) //Now that we have the lowest rating we can dump only parts at the lowest rating.
-		if(B.rped_rating() > lowest_rating)
+		if(B.get_rating() > lowest_rating)
 			continue
 		remove_from_storage(B, A)
 
@@ -595,6 +659,16 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 		var/potiontype = pick(existing_typesof(/obj/item/potion))
 		new potiontype(src)
 
+/obj/item/weapon/storage/bag/potion/dice_potion_bundle
+	name = "Lucky potion bundle"
+	desc = "A bundle of potions for a lucky individual"
+
+/obj/item/weapon/storage/bag/potion/dice_potion_bundle/New()
+	..()
+	for(var/i = 1 to 5)
+		var/potiontype = pick(existing_typesof(/obj/item/potion))
+		new potiontype(src)
+
 /obj/item/weapon/storage/bag/ammo_pouch
 	name = "ammunition pouch"
 	desc = "Designed to hold stray magazines and spare bullets."
@@ -624,3 +698,22 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/slime_extract","/obj/item/weapon/slimenutrient","/obj/item/weapon/slimesteroid", "/obj/item/weapon/slimepotion", "/obj/item/weapon/slimepotion2", "/obj/item/weapon/slimesteroid2", "/obj/item/weapon/slimeres", "/obj/item/weapon/slimedupe")
 	display_contents_with_number = TRUE
+
+
+
+// -----------------------------
+//          Book Bag
+// -----------------------------
+
+/obj/item/weapon/storage/bag/bookbag
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "bookbag"
+	name = "book bag"
+	desc = "A bag designed to hold books."
+	item_state = "satchel"
+	storage_slots = 25
+	fits_max_w_class = 3
+	max_combined_w_class = 200
+	w_class = W_CLASS_TINY
+	can_only_hold = list("/obj/item/weapon/book","/obj/item/weapon/tome","/obj/item/weapon/tome_legacy","/obj/item/weapon/spellbook","/obj/item/weapon/paper","/obj/item/weapon/paper/nano","/obj/item/weapon/barcodescanner","obj/item/weapon/pen","obj/item/weapon/folder")
+

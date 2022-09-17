@@ -111,7 +111,8 @@
 	step(controlled,direction)
 	controlled.dir = direction
 	if (blade.loc != start)
-		blade.blood = max(blade.blood-1,0)
+		if (!blade.linked_cultist || (get_dist(get_turf(blade.linked_cultist),get_turf(controller)) > 5))
+			blade.blood = max(blade.blood-1,0)
 		move_delay = 1
 		spawn(blade.movespeed)
 			move_delay = 0

@@ -9,8 +9,8 @@
 /var/const/access_rnd = 7			// Research and Development
 /var/const/access_tox_storage = 8	// Toxins mixing and storage
 /var/const/access_genetics = 9
-/var/const/access_engine = 10		// Power Engines
-/var/const/access_engine_equip = 11	// Engineering Foyer
+/var/const/access_engine_major = 10		// Power Engines
+/var/const/access_engine_minor = 11	// Engineering Foyer
 /var/const/access_maint_tunnels = 12
 /var/const/access_external_airlocks = 13
 /var/const/access_emergency_storage = 14
@@ -86,6 +86,13 @@
 	//The Syndicate
 /var/const/access_syndicate = 150//General Syndicate Access
 
+	//The Mothership (ayy lmao)
+/var/const/access_mothership_general = 160//General Mothership Access
+/var/const/access_mothership_maintenance = 161//Laborer Access
+/var/const/access_mothership_military = 162//Military Access
+/var/const/access_mothership_research = 163//Research Access
+/var/const/access_mothership_leader = 164//Administrator Access
+
 	//Vox are Pox
 /var/const/access_trade = 140//Vox Trader Access
 
@@ -101,6 +108,8 @@
 /obj/var/req_access_txt = "0"			// A user must have ALL of these accesses to use the object
 /obj/var/list/req_one_access = null
 /obj/var/req_one_access_txt = "0"		// If this list is populated, a user must have at least ONE of these accesses to use the object
+/obj/var/req_access_dir = 0				// The dir the user must be facing to do access checks on
+/obj/var/access_not_dir = TRUE			// Behaviour if the user is not in the access dir
 
 //returns 1 if this mob has sufficient access to use this object
 /obj/proc/allowed(var/mob/M)
@@ -110,6 +119,27 @@
 	if(M.hasFullAccess()) // AI, adminghosts, etc.
 		return 1
 	var/list/ACL = M.GetAccess()
+	if(req_access_dir)
+		// A special check that combines dirs specified in this number by chaining the conditions below, for example NORTHEAST would add the north and east conditions together.
+		var/condition = FALSE
+		if((flow_flags & ON_BORDER) && opposite_dirs[req_access_dir] & dir) // For windoors and etc.
+			condition |= M.y == src.y && M.x == src.x
+		if(req_access_dir & NORTH)
+			condition |= M.y > src.y
+		if(req_access_dir & SOUTH)
+			condition |= M.y < src.y
+		if(req_access_dir & EAST)
+			condition |= M.x > src.x
+		if(req_access_dir & WEST)
+			condition |= M.x < src.x
+		if(HasAbove(z) && (req_access_dir & UP))
+			condition |= M.z > src.z
+		if(HasBelow(z) && (req_access_dir & DOWN))
+			condition |= M.z < src.z
+		if(condition)
+			return can_access(ACL,req_access,req_one_access)
+		else
+			return access_not_dir
 	return can_access(ACL,req_access,req_one_access)
 
 /obj/item/proc/GetAccess()
@@ -229,7 +259,7 @@
 /proc/get_all_accesses()
 	return list(access_shop, access_security, access_sec_doors, access_brig, access_armory, access_forensics_lockers, access_court,
 	            access_medical, access_genetics, access_morgue, access_rd,
-	            access_rnd, access_tox_storage, access_chemistry, access_engine, access_engine_equip, access_maint_tunnels,
+	            access_rnd, access_tox_storage, access_chemistry, access_engine_major, access_engine_minor, access_maint_tunnels,
 	            access_external_airlocks, access_change_ids, access_ai_upload,
 	            access_teleporter, access_eva, access_heads, access_captain, access_all_personal_lockers,
 	            access_tech_storage, access_chapel_office, access_atmospherics, access_kitchen,
@@ -252,7 +282,7 @@
 	return list(
 		access_security, access_sec_doors, access_brig, access_armory,		//sec
 		access_medical, access_genetics, access_surgery, access_paramedic,	//med
-		access_atmospherics, access_engine,	access_tech_storage,			//engi
+		access_atmospherics, access_engine_major,	access_tech_storage,			//engi
 		access_robotics, access_science,									//sci
 		access_external_airlocks, access_teleporter, access_eva,			//entering/leaving the station
 		access_maint_tunnels,
@@ -270,7 +300,7 @@
 		if(3) //research
 			return list(access_science, access_rnd, access_tox_storage, access_robotics, access_mechanic, access_xenobiology, access_rd)
 		if(4) //engineering and maintenance
-			return list(access_construction, access_maint_tunnels, access_engine, access_engine_equip, access_external_airlocks, access_tech_storage, access_mechanic, access_atmospherics, access_ce)
+			return list(access_construction, access_maint_tunnels, access_engine_major, access_engine_minor, access_external_airlocks, access_tech_storage, access_mechanic, access_atmospherics, access_ce)
 		if(5) //command
 			return list(access_heads, access_RC_announce, access_keycard_auth, access_change_ids, access_ai_upload, access_teleporter, access_eva, access_tcomsat, access_gateway, access_all_personal_lockers, access_heads_vault, access_hop, access_captain)
 		if(6) //station general
@@ -297,6 +327,11 @@
 		if(7) //supply
 			return "Supply"
 
+/proc/get_access_desc_list(var/list/L)
+	var/list/names = list()
+	for(var/access in L)
+		names.Add(get_access_desc(access))
+	return english_list(names)
 
 /proc/get_access_desc(A)
 	switch(A)
@@ -332,10 +367,10 @@
 			return "Bar"
 		if(access_janitor)
 			return "Custodial Closet"
-		if(access_engine)
-			return "Engineering"
-		if(access_engine_equip)
-			return "Power Equipment"
+		if(access_engine_major)
+			return "Advanced Engineering"
+		if(access_engine_minor)
+			return "Basic Engineering"
 		if(access_maint_tunnels)
 			return "Maintenance"
 		if(access_external_airlocks)
@@ -482,7 +517,7 @@ var/global/list/all_jobs
 	return list("VIP Guest","Custodian","Thunderdome Overseer","Intel Officer","Medical Officer","Death Commando","Research Officer","BlackOps Commander","Supreme Commander")
 
 
-proc/FindNameFromID(var/mob/living/carbon/human/H)
+/proc/FindNameFromID(var/mob/living/carbon/human/H)
 	ASSERT(istype(H))
 	var/obj/item/weapon/card/id/C = H.get_active_hand()
 	if( istype(C) || istype(C, /obj/item/device/pda) )
@@ -511,5 +546,5 @@ proc/FindNameFromID(var/mob/living/carbon/human/H)
 		if(ID)
 			return ID.registered_name
 
-proc/get_all_job_icons() //For all existing HUD icons
+/proc/get_all_job_icons() //For all existing HUD icons
 	return get_all_jobs() + list("Prisoner", "visitor")

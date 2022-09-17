@@ -149,6 +149,8 @@
 		desc = initial(desc)
 		if(times_examined_while_dead)
 			times_examined_while_dead = 0
+		if(held_item)
+			desc += "<br>It is holding [bicon(held_item)] \a [held_item]"
 	..()
 
 /mob/living/simple_animal/parrot/death(var/gibbed = FALSE)
@@ -303,22 +305,35 @@
 	..()
 	if(client)
 		return
-	if(!stat && M.a_intent == I_HURT)
+	if(!stat)
+		switch(M.a_intent)
+			if(I_DISARM)
+				icon_state = "parrot_fly" //It is going to be flying regardless
 
-		icon_state = "parrot_fly" //It is going to be flying regardless of whether it flees or attacks
+				if(parrot_state == PARROT_PERCH)
+					parrot_sleep_dur = parrot_sleep_max //Reset it's sleep timer if it was perched
 
-		if(parrot_state == PARROT_PERCH)
-			parrot_sleep_dur = parrot_sleep_max //Reset it's sleep timer if it was perched
+				parrot_interest = M
+				parrot_state = PARROT_SWOOP //The parrot just got a disarm, it WILL move, now to pick a direction..
 
-		parrot_interest = M
-		parrot_state = PARROT_SWOOP //The parrot just got hit, it WILL move, now to pick a direction..
+				parrot_state |= PARROT_FLEE	//Don't let the item be caught
+				playsound(M, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				if(prob(50))
+					drop_held_item(pick(0,1)) // May or may not prime grenades
+			if(I_HURT)
+				icon_state = "parrot_fly" //It is going to be flying regardless of whether it flees or attacks
 
-		if(M.health < 50) //Weakened mob? Fight back!
-			parrot_state |= PARROT_ATTACK
-		else
-			parrot_state |= PARROT_FLEE		//Otherwise, fly like a bat out of hell!
-			drop_held_item(0)
-	return
+				if(parrot_state == PARROT_PERCH)
+					parrot_sleep_dur = parrot_sleep_max //Reset it's sleep timer if it was perched
+
+				parrot_interest = M
+				parrot_state = PARROT_SWOOP //The parrot just got hit, it WILL move, now to pick a direction..
+
+				if(M.health < 50) //Weakened mob? Fight back!
+					parrot_state |= PARROT_ATTACK
+				else
+					parrot_state |= PARROT_FLEE	//Otherwise, fly like a bat out of hell!
+					drop_held_item(0)
 
 /mob/living/simple_animal/parrot/attack_paw(mob/living/carbon/monkey/M as mob)
 	attack_hand(M)
@@ -527,6 +542,7 @@
 				if(!parrot_perch || parrot_interest.loc != parrot_perch.loc)
 					held_item = parrot_interest
 					parrot_interest.forceMove(src)
+					response_disarm = "tries to remove \the [held_item] from"
 					visible_message("[src] grabs [held_item]!", "<span class='notice'>You grab [held_item]!</span>", "You hear the sounds of wings flapping furiously.")
 
 			parrot_interest = null
@@ -724,6 +740,7 @@
 
 			held_item = I
 			I.forceMove(src)
+			response_disarm = "tries to remove \the [held_item] from"
 			visible_message("[src] grabs [held_item]!", "<span class='notice'>You grab [held_item]!</span>", "You hear the sounds of wings flapping furiously.")
 			return held_item
 
@@ -758,6 +775,7 @@
 			C.u_equip(stolen_item)
 			held_item = stolen_item
 			stolen_item.forceMove(src)
+			response_disarm = "tries to remove \the [held_item] from"
 			visible_message("[src] grabs [held_item] out of [C]'s hand!", "<span class='notice'>You snag [held_item] out of [C]'s hand!</span>", "You hear the sounds of wings flapping furiously.")
 			return held_item
 
@@ -805,13 +823,13 @@
 		if(istype(held_item, /obj/item/weapon/grenade))
 			var/obj/item/weapon/grenade/G = held_item
 			G.forceMove(src.loc)
-			G.prime()
+			G.prime(src)
 			to_chat(src, "You let go of [held_item]!")
 			held_item = null
 			return 1
 
-	to_chat(src, "You drop [held_item].")
-
+	visible_message("[src] drops \the [held_item].", "You drop \the [held_item].")
+	response_disarm = "gently pushes aside"
 	held_item.forceMove(src.loc)
 	held_item = null
 	return 1

@@ -5,6 +5,20 @@
 	var/state = 0
 	var/material = /obj/item/stack/sheet/metal
 	var/construction_length = 40
+	pass_flags_self = PASSGIRDER
+
+/obj/structure/girder/attack_animal(var/mob/living/simple_animal/M)
+	M.delayNextAttack(8)
+	if(M.environment_smash_flags & SMASH_WALLS)
+		if(prob(25)) // Not the best solution, but this should allow for better feedback so the player realizes the mob is trying to break through and has time to retreat
+			playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+			M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
+			"<span class='attack'>You smash through \the [src].</span>")
+			drop_stack(material, get_turf(src), 2)
+			qdel(src)
+		else
+			M.visible_message("<span class='danger'>[M] smashes against \the [src].</span>", \
+			"<span class='attack'>You smash against \the [src].</span>")
 
 /obj/structure/girder/wood
 	icon_state = "girder_wood"
@@ -13,7 +27,7 @@
 	construction_length = 20
 
 /obj/structure/girder/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSGIRDER))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return ..()
 

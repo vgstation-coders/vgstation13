@@ -17,6 +17,8 @@
 	var/can_infect = 0
 	//How much blood this step can get on surgeon. 1 - hands, 2 - full body.
 	var/blood_level = 0
+	//Whether or not the sound played will be a digging sound or the surgery sound designated by the tools used.
+	var/digging = FALSE
 
 	//returns how well tool is suited for this step
 /datum/surgery_step/proc/tool_quality(obj/item/tool)
@@ -79,6 +81,20 @@
 		tool.icon_state = "[initial(tool.icon_state)]_on"
 		spawn(duration * tool.toolspeed)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
 			tool.icon_state = "[initial(tool.icon_state)]_off"
+
+	if((M_CLUMSY in user.mutations) && prob(20))
+		if ((istype(tool, /obj/item/tool/circular_saw)) || (istype(tool, /obj/item/tool/surgicaldrill)))
+			return
+		else
+			var/clownsound = null
+			clownsound = pick("toysqueak","partyhorn","bikehorn","quack")
+			playsound(target, "sound/items/[clownsound].ogg", 75, 2)
+	else
+		if(digging)
+			playsound(target, 'sound/items/hemostatdig.ogg', 75, 1)
+		else
+			tool.playsurgerysound(target, 75, 1)
+
 	return
 
 	// does stuff to end the step, which is normally print a message + do whatever this step changes
@@ -91,7 +107,7 @@
 /datum/surgery_step/proc/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return null
 
-proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
+/proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	if(!istype(user) || !istype(E))
 		return
 
@@ -101,7 +117,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	if(!(E.status & (ORGAN_ROBOT|ORGAN_PEG))) //Germs on robotic limbs bad
 		E.germ_level = max(germ_level,E.germ_level) //as funny as scrubbing microbes out with clean gloves is - no.
 
-proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool, var/success_override = SURGERY_SUCCESS_NORMAL)
+/proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool, var/success_override = SURGERY_SUCCESS_NORMAL)
 	if(!ishuman(M) && !isslime(M))
 		return 0
 	if (user.a_intent == I_HURT)	//check for Hippocratic Oath
@@ -157,7 +173,7 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool, var/success_overri
 		return 1
 	return 0
 
-proc/sort_surgeries()
+/proc/sort_surgeries()
 	var/gap = surgery_steps.len
 	var/swapped = 1
 	while (gap > 1 || swapped)
@@ -173,7 +189,7 @@ proc/sort_surgeries()
 				surgery_steps.Swap(i, gap + i)
 				swapped = 1
 
-/datum/surgery_status/
+/datum/surgery_status
 	var/eyes	=	0
 	var/face	=	0
 	var/appendix =	0

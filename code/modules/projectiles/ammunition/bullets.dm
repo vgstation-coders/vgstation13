@@ -100,12 +100,13 @@
 	icon_state = "p22-casing"
 
 /obj/item/ammo_casing/a12mm
-	desc = "A 12mm bullet casing."
+	desc = "A 12mm SPECIAL bullet casing."
 	caliber = MM12
 	projectile_type = /obj/item/projectile/bullet/midbullet
 	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/a12mm/assault
+	desc = "A standard 12mm bullet casing."
 	projectile_type = /obj/item/projectile/bullet/midbullet/assault
 
 /obj/item/ammo_casing/a12mm/bounce

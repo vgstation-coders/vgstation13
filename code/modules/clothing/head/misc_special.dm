@@ -28,7 +28,7 @@
 	body_parts_covered = HEAD
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -104,7 +104,7 @@
 		src.force = null
 		src.damtype = "brute"
 		src.icon_state = "cake0"
-		kill_light()
+		set_light(0)
 	return
 
 
@@ -161,22 +161,22 @@
 	_color = "pumpkin"
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
-	light_range = 2
+	var/brightness_on = 2 //luminosity when on
 	var/on = 0
 
-	attack_self(mob/user)
-		if(!isturf(user.loc))
-			to_chat(user, "You cannot turn the light on while in this [user.loc]")//To prevent some lighting anomalities.
+/obj/item/clothing/head/pumpkinhead/attack_self(mob/user)
+	if(!isturf(user.loc))
+		to_chat(user, "You cannot turn the light on while in this [user.loc]")//To prevent some lighting anomalities.
 
-			return
-		on = !on
-		icon_state = "hardhat[on]_[_color]"
-		item_state = "hardhat[on]_[_color]"
+		return
+	on = !on
+	icon_state = "hardhat[on]_[_color]"
+	item_state = "hardhat[on]_[_color]"
 
-		if(on)
-			set_light()
-		else
-			kill_light()
+	if(on)
+		set_light(brightness_on)
+	else
+		set_light(0)
 
 /obj/item/clothing/head/pumpkinhead/attackby(var/obj/item/I, var/mob/user)
 	..()

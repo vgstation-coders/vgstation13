@@ -11,6 +11,7 @@
 	tDomeX = 128
 	tDomeY = 58
 	tDomeZ = 2
+	zAsteroid = 6
 	zLevels = list(
 		/datum/zLevel/snowsurface,
 		/datum/zLevel/centcomm,
@@ -49,7 +50,6 @@
 ****************************/
 /datum/subsystem/daynightcycle
 	flags = SS_FIRE_IN_LOBBY
-	daynight_z_lvl = STATION_Z
 
 /datum/map/active/New()
 	. = ..()
@@ -148,7 +148,7 @@
 	var/result
 	for(var/area/A in areas_to_vault)
 		var/amount = rand(MIN_REGIONAL_VAULTS,MAX_REGIONAL_VAULTS)
-		result = populate_area_with_vaults(A, list_of_vaults, amount, 1, filter_function=/proc/just_snow)
+		result = populate_area_with_vaults(A, list_of_vaults, amount, 1, filter_function=/proc/just_snow, overwrites=TRUE)
 		message_admins("<span class='info'>Loaded [result] vaults in [A].</span>")
 	return TRUE
 

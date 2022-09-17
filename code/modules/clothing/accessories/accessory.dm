@@ -77,6 +77,9 @@
 /obj/item/proc/description_accessories()
 	return
 
+/obj/item/proc/description_hats()
+	return
+
 /obj/item/clothing/description_accessories()
 	if(accessories.len)
 		return " It has [counted_english_list(accessories)]."
@@ -222,7 +225,7 @@
 
 /obj/item/clothing/accessory/medal/gold/heroism
 	name = "medal of exceptional heroism"
-	desc = "An extremely rare golden medal awarded only by CentComm. To recieve such a medal is the highest honor and as such, very few exist. This medal is almost never awarded to anybody but commanders."
+	desc = "An extremely rare golden medal awarded only by CentComm. To receive such a medal is the highest honor and as such, very few exist. This medal is almost never awarded to anybody but commanders."
 
 /obj/item/clothing/accessory/medal/byond
 	name = "\improper BYOND support pin"
@@ -309,7 +312,7 @@
 	slot_flags = SLOT_BELT
 	var/stored_name = null
 	starting_materials = list(MAT_PLASTIC = 50)
-	w_type = RECYK_MISC
+	w_type = RECYK_PLASTIC
 
 /obj/item/clothing/accessory/assistantcard/attack_self(mob/user as mob)
 	if(!stored_name)
@@ -466,8 +469,9 @@
 	desc = "The hind left foot from a rabbit. It makes you feel lucky."
 	icon_state = "rabbit_foot"
 	_color = "rabbit_foot"
-	var/thisvarmakesyoulucky = TRUE //Note: Luck is a mental construct and doesn't actually exist.
 	var/wired = FALSE
+	luckiness = 50
+	luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
 
 /obj/item/clothing/accessory/rabbit_foot/attackby(obj/item/I, mob/user)
 	..()

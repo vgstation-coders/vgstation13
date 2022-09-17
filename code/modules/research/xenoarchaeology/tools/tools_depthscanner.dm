@@ -28,6 +28,8 @@
 	if(istype(A,/turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
 		if(M.finds.len || M.artifact_find)
+			for(var/mob/L in range(src, 1))
+				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings.</span>")
 			playsound(user, 'sound/machines/info.ogg', 20, 1)
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
@@ -42,18 +44,27 @@
 				D.depth = F.excavation_required	//0-100% and 0-100cm
 				D.clearance = F.clearance_range
 				D.material = F.responsive_reagent
-
+				to_chat(user,"<span class='notice'>Anomaly depth: <strong>[F.excavation_required]</strong> cm</span>")
+				to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>[F.clearance_range]</strong> cm</span>")
+				var/index = responsive_carriers.Find(F.responsive_reagent)
+				if(index > 0 && index <= finds_as_strings.len)
+					to_chat(user,"<span class='notice'>Anomaly material: <strong><font color=[color_from_find_reagent[finds_as_strings[index]]]>[finds_as_strings[index]]</font></strong></span>")
+				else
+					to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
+			else
+				to_chat(user,"<span class='notice'>Anomaly depth: <strong>0</strong> cm</span>")
+				to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>0</strong> cm</span>")
+				to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
 
 			positive_locations.Add(D)
-
-			for(var/mob/L in range(src, 1))
-				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings.</span>")
 		else
 			playsound(user, 'sound/items/detscan.ogg', 10, 1)
 
 	else if(istype(A,/obj/structure/boulder))
 		var/obj/structure/boulder/B = A
 		if(B.artifact_find)
+			for(var/mob/L in range(src, 1))
+				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings [pick("madly","wildly","excitedly","crazily")]!</span>")
 			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
@@ -67,8 +78,9 @@
 
 			positive_locations.Add(D)
 
-			for(var/mob/L in range(src, 1))
-				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings [pick("madly","wildly","excitedly","crazily")]!</span>")
+			to_chat(user,"<span class='notice'>Anomaly depth: <strong>[rand(75,100)]</strong></span> cm")
+			to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>[rand(5,25)]</strong> cm</span>")
+			to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
 		else
 			playsound(user, 'sound/items/detscan.ogg', 10, 1)
 
@@ -85,7 +97,7 @@
 		dat += "Clearance above anomaly depth: [current.clearance] cm<br>"
 		var/index = responsive_carriers.Find(current.material)
 		if(index > 0 && index <= finds_as_strings.len)
-			dat += "Anomaly material: [finds_as_strings[index]]<br>"
+			dat += "Anomaly material: <font color=[color_from_find_reagent[finds_as_strings[index]]]>[finds_as_strings[index]]</font><br>"
 		else
 			dat += "Anomaly material: Unknown<br>"
 		dat += "<A href='?src=\ref[src];clear=[current.record_index]'>clear entry</a><br>"

@@ -1,14 +1,8 @@
-#define EVENT_HANDLER_OBJREF_INDEX 1
-#define EVENT_HANDLER_PROCNAME_INDEX 2
-
-/proc/CallAsync(datum/source, proctype, list/arguments)
-	set waitfor = FALSE
-	return call(source, proctype)(arglist(arguments))
+// WARNING
+// Event handlers (i.e.: procs that are registered with `proc/register_event` MUST NOT sleep()).
 
 // Declare children of this type path to use as identifiers for the events.
 /event
-
-// TODO: Document here the arguments that need to be passed to the procs invoked by each event
 
 // Called by human/proc/apply_radiation()
 // Arguments:
@@ -160,7 +154,7 @@
 // Currently only implemented for humans.
 // Arguments:
 // atom/movable/bumper: the atom that is bumping.
-// atom/target: the atom that's being bumped into.
+// atom/bumped: the atom that's being bumped into.
 /event/to_bump
 
 // Called by hitby
@@ -211,6 +205,18 @@
 // obj/item/item: the item being used for the attack
 /event/attackby
 
+// Called by throw_impact
+// Arguments:
+// atom/hit_atom: the atom hit by the throw impact
+// speed: the speed at which the thrown atom was thrown
+// mob/living/user: the mob who threw the atom, if any
+/event/throw_impact
+
+//Called by examine
+//Arguments:
+//mob/user: the mob doing the examining
+/event/examined
+
 /event/ui_act
 
 // Called when living calls a life() tick
@@ -242,6 +248,50 @@
 // mob/source: the mob performing the emote
 /event/emote
 
+// Called by mob/living/Hear
+// Arguments:
+// datum/speech/speech: the speech datum being heard
+/event/hear
+
+// Called by area/Entered
+// Arguments:
+// atom/movable/enterer: the movable entering the area
+/event/area_entered
+
+// Called by area/Exited
+// Arguments:
+// atom/movable/exiter: the movable exiting the area
+/event/area_exited
+
+// Note: the following are used by datum/component/ai subtypes to give instructions to each other.
+// AI components are expected to INVOKE_EVENT these to send commands to other components
+// on the same datum without having to hold references to them.
+// They may need to be reworked, and they are currently undocumented.
+/event/comp_ai_friend_attacked
+
+/event/comp_ai_cmd_get_best_target
+/event/comp_ai_cmd_add_target
+/event/comp_ai_cmd_remove_target
+/event/comp_ai_cmd_find_targets
+
+/event/comp_ai_cmd_can_attack
+/event/comp_ai_cmd_move
+/event/comp_ai_cmd_attack
+/event/comp_ai_cmd_evaluate_target
+/event/comp_ai_cmd_get_damage_type
+
+/event/comp_ai_cmd_set_busy
+/event/comp_ai_cmd_get_busy
+
+/event/comp_ai_cmd_set_target
+/event/comp_ai_cmd_get_target
+
+/event/comp_ai_cmd_set_state
+/event/comp_ai_cmd_get_state
+
+/event/comp_ai_cmd_say
+/event/comp_ai_cmd_specific_say
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.
@@ -257,21 +307,21 @@
   * * event/event_type Required. The typepath of the event to invoke.
   * * list/arguments Optional. List of parameters to be passed to the event handlers.
   */
+#define INVOKE_EVENT(target, event_type, arguments...) (target.registered_events?[event_type] && target.invoke_event(event_type, list(##arguments)))
+
+#define EVENT_HANDLER_OBJREF_INDEX 1
+#define EVENT_HANDLER_PROCNAME_INDEX 2
+
 /datum/proc/invoke_event(event/event_type, list/arguments)
 	SHOULD_NOT_OVERRIDE(TRUE)
-	if(!length(registered_events))
-		// No event at all is registered for this datum.
-		return
 	var/list/event_handlers = registered_events[event_type]
-	if(!length(event_handlers))
-		// This datum does not have any handler registered for this event_type.
-		return
-	. = NONE
 	for(var/key in event_handlers)
 		var/list/handler = event_handlers[key]
 		var/objRef = handler[EVENT_HANDLER_OBJREF_INDEX]
 		var/procName = handler[EVENT_HANDLER_PROCNAME_INDEX]
-		. |= CallAsync(objRef, procName, arguments)
+		// not |= because `null |= list()` is a runtime error
+		// but `null = null | list()` is not.
+		. = . | call(objRef, procName)(arglist(arguments))
 
 /**
   * Registers a proc to be called on an object whenever the specified event_type

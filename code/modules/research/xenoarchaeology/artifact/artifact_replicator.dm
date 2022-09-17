@@ -8,7 +8,7 @@
 
 	idle_power_usage = 100
 	active_power_usage = 1000
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 
 	machine_flags = WRENCHMOVE
 
@@ -75,6 +75,7 @@
 		/obj/item/weapon/grenade/chem_grenade/cleaner,
 		/obj/item/weapon/grenade/chem_grenade/metalfoam,
 		/obj/item/weapon/grenade/flashbang,		//Pretty powerful
+		/obj/item/weapon/grenade/chem_grenade/teargas,
 		/obj/item/weapon/grenade/smokebomb,
 		/obj/item/weapon/grenade/chem_grenade/wind,
 
@@ -129,7 +130,7 @@
 			max_spawn_ticks = rand(5,30)
 
 			if(!spawning_types.len)
-				use_power = 1
+				use_power = MACHINE_POWER_USE_IDLE
 				icon_state = "borgcharger0(old)"
 
 			playsound(src, 'sound/machines/heps.ogg', 50, 0)
@@ -144,7 +145,7 @@
 		if(prob(Proj.damage/2))
 			if(Proj.firer)
 				msg_admin_attack("[key_name(Proj.firer)] blew up [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)")
-			explosion(get_turf(src), -1, 2, 3, 3)
+			explosion(get_turf(src), -1, 2, 3, 3, whodunnit = Proj.firer)
 			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
 	return ..()
@@ -158,7 +159,7 @@
 		if(prob(O.force/2))
 			msg_admin_attack("[user] blew up [src]/([formatJumpTo(src)]) with [O] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [O] || attacked by [key_name(user)].")
-			explosion(get_turf(src), -1, 2, 3, 3)
+			explosion(get_turf(src), -1, 2, 3, 3, whodunnit = user)
 			qdel(src)
 	else
 		src.visible_message("<span class='warning'>\The [user] taps \the [src] with \the [O].</span>")
@@ -189,6 +190,6 @@
 			spawning_types.Add(construction[construction[index]])
 			src.investigation_log(I_ARTIFACT, "|| [spawning_types[1]] || added to replication queue by [key_name(usr)][isobserver(usr) ? "'s ghostly hands" : ""].")
 			spawn_progress = 0
-			use_power = 2
+			use_power = MACHINE_POWER_USE_ACTIVE
 			icon_state = "borgcharger1(old)"
 			playsound(src, 'sound/machines/click.ogg', 50, 0)

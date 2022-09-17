@@ -25,15 +25,10 @@ var/prison_shuttle_timeleft = 0
 	if(!..())
 		attack_hand(user)
 
-/obj/machinery/computer/prison_shuttle/attack_ai(var/mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
-
 /obj/machinery/computer/prison_shuttle/attack_paw(var/mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/computer/prison_shuttle/emag(mob/user as mob)
+/obj/machinery/computer/prison_shuttle/emag_act(mob/user as mob)
 	if(!emagged)
 		emagged = TRUE
 		if(user)

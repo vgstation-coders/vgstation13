@@ -106,14 +106,14 @@
 			L[T] = MAX_VALUE //Set them equal to the max value which is unlikely to collide with any other pregenerated value
 
 //Removes returns a new list which only contains elements from the original list of a certain type
-/proc/prune_list_to_type(list/L, datum/A)
+/proc/prune_list_to_type(list/L, datum/A, var/exclude_type = FALSE)
 	if(!L || !L.len || !A)
-		return 0
+		return list()
 	if(!ispath(A))
 		A = A.type
 	var/list/nu = L.Copy()
 	for(var/element in nu)
-		if(!istype(element,A))
+		if(istype(element,A) == exclude_type)
 			nu -= element
 	return nu
 
@@ -132,6 +132,21 @@
 				++i
 				continue
 			L.Cut(i,i+1)
+
+/*
+ * Returns a choice from an input list.
+ * If only one thing is returned, just gives us that with no input list.
+ */
+/proc/filter_list_input(input_text, input_heading, var/list/matches)
+	if(!matches.len)
+		return
+	if(matches.len==1)
+		return matches[1]
+	else
+		var/chosen = input(input_text, input_heading, matches[1]) as null|anything in matches
+		if(!chosen)
+			return
+		return chosen
 
 /*
  * Returns list containing all the entries from first list that are not present in second.
@@ -272,11 +287,16 @@
 	return K
 
 //Return a list with no duplicate names
-/proc/uniquenamelist(var/list/atom/L)
+/proc/uniquenamelist(var/list/L)
 	var/list/K = list()
-	for(var/atom/item in L)
-		if(!(item.name in K))
-			K += item.name
+	var/current_name = ""
+	var/atom/current_atom = null
+	for(var/item in L)
+		if(isatom(item) || ispath(item))
+			current_atom = item
+		current_name = ispath(item) ? initial(current_atom.name) : isatom(item) ? current_atom.name : item
+		if(!(current_name in K))
+			K += current_name
 	return K
 
 //for sorting clients or mobs by ckey
@@ -352,10 +372,15 @@
 			i++
 	return i
 
-/proc/count_by_name(var/list/atom/L, name)
+/proc/count_by_name(var/list/L, name)
 	var/i = 0
-	for(var/atom/T in L)
-		if(T.name == name)
+	var/atom/current_atom = null
+	var/current_name = ""
+	for(var/T in L)
+		if(isatom(T) || ispath(T))
+			current_atom = T
+		current_name = ispath(T) ? initial(current_atom.name) : isatom(T) ? current_atom.name : T
+		if(current_name == name)
 			i++
 	return i
 

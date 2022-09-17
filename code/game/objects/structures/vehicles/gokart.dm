@@ -9,7 +9,6 @@
 	icon_state = "gokart0"
 	//nick = "TRUE POWER"
 	keytype = /obj/item/key/gokart
-	noghostspin = 0
 	can_have_carts = FALSE
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/gokart
 	explodes_fueltanks = TRUE

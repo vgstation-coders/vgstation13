@@ -149,11 +149,11 @@
 /proc/timestamp(var/format = "hh:mm:ss") // Get the game time in text
 	return time2text(world.time + (10 HOURS), format) // Yes, 10, not 12 hours, for some reason time2text() is being moronic (T-thanks BYOND), and it's adding 2 hours to this, I don't even know either.
 
-proc/string_explode(var/string, var/separator = "")
+/proc/string_explode(var/string, var/separator = "")
 	if(istext(string) && (istext(separator) || isnull(separator)))
 		return splittext(string, separator)
 
-proc/n_repeat(var/string, var/amount)
+/proc/n_repeat(var/string, var/amount)
 	if(istext(string) && isnum(amount))
 		var/i
 		var/newstring = ""
@@ -167,7 +167,7 @@ proc/n_repeat(var/string, var/amount)
 		return newstring
 
 // I don't know if it's neccesary to make my own proc, but I think I have to to be able to check for istext.
-proc/n_str2num(var/string)
+/proc/n_str2num(var/string)
 	if(istext(string))
 		return text2num(string)
 
@@ -177,32 +177,32 @@ proc/n_str2num(var/string)
 		return clamp(num, min, max)
 
 // Number shit
-proc/n_num2str(var/num)
+/proc/n_num2str(var/num)
 	if(isnum(num))
 		return num2text(num)
 
 // Squareroot
-proc/n_sqrt(var/num)
+/proc/n_sqrt(var/num)
 	if(isnum(num))
 		return sqrt(num)
 
 // Magnitude of num
-proc/n_abs(var/num)
+/proc/n_abs(var/num)
 	if(isnum(num))
 		return abs(num)
 
 // Round down
-proc/n_floor(var/num)
+/proc/n_floor(var/num)
 	if(isnum(num))
 		return round(num)
 
 // Round up
-proc/n_ceil(var/num)
+/proc/n_ceil(var/num)
 	if(isnum(num))
 		return round(num)+1
 
 // Round to nearest integer
-proc/n_round(var/num)
+/proc/n_round(var/num)
 	if(isnum(num))
 		if(num-round(num)<0.5)
 			return round(num)

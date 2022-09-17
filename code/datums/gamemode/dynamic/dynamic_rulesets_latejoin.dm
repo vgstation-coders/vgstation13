@@ -7,7 +7,7 @@
 /datum/dynamic_ruleset/latejoin/trim_candidates()
 	var/role_id = initial(role_category.id)
 	var/role_pref = initial(role_category.required_pref)
-	for(var/mob/new_player/P in candidates)
+	for(var/mob/P in candidates)
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
@@ -91,11 +91,14 @@
 	return ..()
 
 /datum/dynamic_ruleset/latejoin/raginmages/execute()
+	var/mob/M = pick(assigned)
+	if(!latejoinprompt(M))
+		return 0
 	var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
 	if (!federation)
 		federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
-	var/mob/M = pick(assigned)
 	var/datum/role/wizard/newWizard = new
+	M.forceMove(pick(wizardstart))
 	newWizard.AssignToRole(M.mind,1)
 	federation.HandleRecruitedRole(newWizard)
 	newWizard.Greet(GREET_LATEJOIN)
@@ -125,19 +128,128 @@
 
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(assigned)
-	if(!latejoinprompt(M,src))
-		message_admins("[M.key] has opted out of becoming a ninja.")
+	if(!latejoinprompt(M))
 		return 0
-	var/datum/role/ninja/newninja = new
-	newninja.AssignToRole(M.mind,1)
 	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
 	if (!spoider)
 		spoider = ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
+	var/datum/role/ninja/newninja = new
+	M.forceMove(pick(ninjastart))
+	newninja.AssignToRole(M.mind,1)
 	spoider.HandleRecruitedRole(newninja)
 	newninja.Greet(GREET_DEFAULT)
 	return 1
 
 
+//////////////////////////////////////////////
+//                                          //
+//                PULSE DEMON               ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/pulse_demon
+	name = "Pulse Demon Infiltration"
+	role_category = /datum/role/pulse_demon
+	enemy_jobs = list("Station Engineer","Chief Engineer")
+	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 25
+	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	high_population_requirement = 10
+	logo = "pulsedemon-logo"
+
+	repeatable = TRUE
+	var/list/cables_to_spawn_at = list()
+
+/datum/dynamic_ruleset/latejoin/pulse_demon/ready(var/forced = 0)
+	for(var/datum/powernet/PN in powernets)
+		for(var/obj/structure/cable/C in PN.cables)
+			var/turf/simulated/floor/F = get_turf(C)
+			// Cable to spawn at must be on a floor, not tiled over, on the main station, powered and in maint
+			if(istype(F,/turf/simulated/floor) && !F.floor_tile && C.z == map.zMainStation && istype(get_area(C),/area/maintenance) && C.powernet.avail)
+				cables_to_spawn_at.Add(C)
+	if(!cables_to_spawn_at.len)
+		log_admin("Cannot accept Pulse Demon ruleset, no suitable cables found.")
+		message_admins("Cannot accept Pulse Demon ruleset, no suitable cables found.")
+		return 0
+
+	return ..()
+
+/datum/dynamic_ruleset/latejoin/pulse_demon/execute()
+	var/mob/M = pick(assigned)
+	if(!latejoinprompt(M))
+		return 0
+	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
+	M.forceMove(get_turf(our_cable))
+	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))
+	M.Postmorph(PD)
+	var/datum/role/pulse_demon/newpd = new
+	newpd.AssignToRole(PD.mind,1)
+	newpd.Greet(GREET_DEFAULT)
+	newpd.ForgeObjectives()
+	newpd.AnnounceObjectives()
+	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//                   GRUE                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/grue
+	name = "Grue Infestation"
+	role_category = /datum/role/grue
+	enemy_jobs = list()
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 20
+	requirements = list(70,60,50,40,30,20,10,10,10,10)
+	high_population_requirement = 10
+	logo = "grue-logo"
+	repeatable = TRUE
+	var/list/grue_spawn_spots=list()
+
+/datum/dynamic_ruleset/latejoin/grue/ready(var/forced = 0)
+	grue_spawn_spots=list()
+	var/list/found_vents = list()
+	var/turf/thisturf
+	var/vent_visible=0 //used to check if vent is visible by a living player
+	for(var/obj/machinery/atmospherics/unary/vent_pump/thisvent in atmos_machines)
+		thisturf=get_turf(thisvent)
+		if(!thisvent.welded && thisvent.z == map.zMainStation && thisvent.canSpawnMice==1&&thisturf.get_lumcount()<=0.1 && thisvent.network) // Check that the vent isn't welded, is on the main z-level, can spawn mice, is in the dark, and is connected to a pipe network.
+			if(thisvent.network.normal_members.len > 50) //only accept vents with suitably large networks
+				found_vents.Add(thisvent)
+	if(found_vents.len)
+		while(found_vents.len > 0)
+			var/obj/machinery/atmospherics/unary/vent_pump/thisvent = pick(found_vents)
+			found_vents -= thisvent
+			vent_visible=0
+			for (var/mob/M in player_list)
+				if (isliving(M) && (get_dist(M,thisvent) <= 7)) //make sure vent is not in default view range of any living player
+					vent_visible=1
+			if(!vent_visible)
+				grue_spawn_spots+=get_turf(thisvent)
+	if(!grue_spawn_spots.len)
+		log_admin("Cannot accept Grue ruleset, no suitable spawn locations found.")
+		message_admins("Cannot accept Grue ruleset, no spawn locations found.")
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/latejoin/grue/execute()
+	var/mob/M = pick(assigned)
+	if(!latejoinprompt(M))
+		return 0
+	var/our_spawnspot = pick(grue_spawn_spots)
+	M.forceMove(our_spawnspot)
+	var/mob/living/simple_animal/hostile/grue/gruespawn/ourgrue = new(our_spawnspot)
+	M.Postmorph(ourgrue)
+	var/datum/role/grue/newgrue = new
+	newgrue.AssignToRole(ourgrue.mind,1)
+	newgrue.Greet(GREET_DEFAULT)
+	newgrue.ForgeObjectives(ourgrue.hatched) //Assign it grue_basic objectives if its a hatched grue (likely wont be here but just in case)
+	newgrue.AnnounceObjectives()
+	return 1
 
 //////////////////////////////////////////////
 //                                          //
@@ -183,3 +295,81 @@
 		L.OnPostSetup()
 		update_faction_icons()
 	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//               TIME AGENT                 //
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/time_agent
+	name = "Time Agent Anomaly"
+	role_category = /datum/role/time_agent
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT * 0.4
+	cost = 10
+	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
+	logo = "time-logo"
+
+/datum/dynamic_ruleset/latejoin/time_agent/acceptable(var/population=0,var/threat=0)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if (antag_count < max_traitors)
+		return ..()
+	else
+		return 0
+
+/datum/dynamic_ruleset/latejoin/time_agent/ready(var/forced=0)
+	if(required_candidates > (mode.dead_players.len + mode.list_observers.len))
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/latejoin/time_agent/execute()
+	var/mob/M = pick(assigned)
+	if(!latejoinprompt(M))
+		return 0
+	var/datum/faction/time_agent/agency = find_active_faction_by_type(/datum/faction/time_agent)
+	if (!agency)
+		agency = ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
+	var/datum/role/time_agent/newagent = new
+	M.forceMove(pick(timeagentstart))
+	newagent.AssignToRole(M.mind,1)
+	agency.HandleRecruitedRole(newagent)
+	newagent.Greet(GREET_DEFAULT)
+
+//////////////////////////////////////////////
+//                                          //
+//               CHANGELINGS                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/changeling
+	name = "Changelings"
+	role_category = /datum/role/changeling
+	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
+	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
+	required_pop = list(15,15,15,10,10,10,10,5,5,0)
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 20
+	requirements = list(80,70,60,60,30,20,10,10,10,10)
+	high_population_requirement = 30
+	repeatable = FALSE
+
+/datum/dynamic_ruleset/latejoin/changeling/execute()
+	var/mob/M = pick(assigned)
+	var/datum/role/changeling/newChangeling = new
+	newChangeling.AssignToRole(M.mind,1)
+	newChangeling.Greet(GREET_LATEJOIN)
+	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
+	if(!hivemind)
+		hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
+		hivemind.OnPostSetup()
+	hivemind.HandleRecruitedRole(newChangeling)
+	return 1
+
+/datum/dynamic_ruleset/latejoin/changeling/previous_rounds_odds_reduction(var/result)
+	return result

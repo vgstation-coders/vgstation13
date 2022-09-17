@@ -11,7 +11,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
-	noghostspin = 1
+	ghost_can_rotate = FALSE
 	var/can_move=1
 	var/list/passengers = list()
 	var/unloading = 0
@@ -233,7 +233,7 @@
 		switch(roadlights)							//if the bus is right against a wall, only the wall's tile is lit
 			if(0)
 				if(lightsource.light_range != 0)
-					lightsource.kill_light()
+					lightsource.set_light(0)
 			if(1,2)
 				if(lightsource.light_range != 1)
 					lightsource.set_light(1)
@@ -244,7 +244,7 @@
 			switch(roadlights)
 				if(0)
 					if(lightsource.light_range != 0)
-						lightsource.kill_light()
+						lightsource.set_light(0)
 				if(1)
 					if(lightsource.light_range != 1)
 						lightsource.set_light(1)
@@ -256,7 +256,7 @@
 			switch(roadlights)						//otherwise, the lightsource position itself two tiles in front of the bus and with regular light_range
 				if(0)
 					if(lightsource.light_range != 0)
-						lightsource.kill_light()
+						lightsource.set_light(0)
 				if(1)
 					if(lightsource.light_range != 2)
 						lightsource.set_light(2)
@@ -662,5 +662,5 @@
 		bus.remove_HUD(M)
 		M.unregister_event(/event/living_login, bus, /obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD)
 
-/obj/structure/bed/chair/vehicle/adminbus/acidable()
+/obj/structure/bed/chair/vehicle/adminbus/dissolvable()
 	return 0

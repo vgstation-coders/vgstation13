@@ -58,6 +58,7 @@
 	name = "cryptographic sequencer"
 	icon_state = "emag"
 	item_state = "card-id"
+	slot_flags = SLOT_ID
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=2"
 
 	/**
@@ -178,7 +179,12 @@
 		var/datum/organ/external/organ = target_living.get_organ(zone)
 		target_living.emag_act(user, organ, src)
 		return
+	if(istype(target,/obj/machinery))
+		return // Handled in machine attackby()
 	target.emag_act(user)
+
+
+var/list/global/id_cards = list()
 
 /obj/item/weapon/card/id
 	name = "identification card"
@@ -206,13 +212,16 @@
 /obj/item/weapon/card/id/New()
 	..()
 
+	id_cards += src
+
 	if(virtual_wallet)
 		update_virtual_wallet()
-		spawn(30) //AWFULNESS AHOY
-			if(ishuman(loc))
-				var/mob/living/carbon/human/H = loc
-				SetOwnerInfo(H)
-			update_virtual_wallet()
+	if(ishuman(loc))
+		SetOwnerDNAInfo(loc)
+
+/obj/item/weapon/card/id/Destroy()
+	id_cards -= src
+	..()
 
 /obj/item/weapon/card/id/examine(mob/user)
 	..()
@@ -261,22 +270,13 @@
 	if(!virtual_wallet)
 		return 0
 	virtual_wallet.money += added_funds
-	var/datum/transaction/T = new()
-	if(user)
-		T.target_name = user.name
-	T.purpose = "Currency deposit"
-	T.amount = added_funds
-	if(source)
-		T.source_terminal = source.name
-	T.date = current_date_string
-	T.time = worldtime2text()
-	virtual_wallet.transaction_log.Add(T)
+	new /datum/transaction(virtual_wallet, "Currency deposit", added_funds, source ? source.name : "", user ? user.name : "")
 	return 1
 
 /obj/item/weapon/card/id/proc/UpdateName()
 	name = "[src.registered_name]'s ID Card ([src.assignment])"
 
-/obj/item/weapon/card/id/proc/SetOwnerInfo(var/mob/living/carbon/human/H)
+/obj/item/weapon/card/id/proc/SetOwnerDNAInfo(var/mob/living/carbon/human/H)
 	if(!H || !H.dna)
 		return
 
@@ -345,7 +345,7 @@
 
 		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
-			SetOwnerInfo(H)
+			SetOwnerDNAInfo(H)
 			alert(user,"Personal data gathered successfully; this includes: blood type, DNA, and fingerprints.\nYou may now proceed with the rest.","Nanotrasen undercover ID: notification","Ok")
 
 		var/n = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names
@@ -417,6 +417,19 @@
 	base_access = list(access_syndicate)
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/registered_user=null
+	var/copy_appearance = FALSE
+
+/obj/item/weapon/card/id/syndicate/AltClick()
+	if (can_use(usr)) // Checks that the this is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
+		copy_appearance = !copy_appearance
+		to_chat(usr, "<span class='notice'>The [src] is now set to copy [copy_appearance ? "the appearance along with" : "just"] the access.</span>")
+		return
+	return ..()
+
+/obj/item/weapon/card/id/syndicate/proc/can_use(mob/user)
+	if(ismob(user) && !user.incapacitated() && loc == user)
+		return 1
+	return 0
 
 /obj/item/weapon/card/id/syndicate/commando
 	name = "Hacked syndie card"
@@ -428,8 +441,17 @@
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = O
-		to_chat(user, "<span class='notice'>The [src]'s microscanners activate as you pass it over \the [I], copying its access.</span>")
+		to_chat(user, "<span class='notice'>The [src]'s microscanners activate as you pass it over \the [I], copying its access[copy_appearance ? " and appearance" : ""].</span>")
 		access |= I.access
+		if(copy_appearance)
+			registered_name = I.registered_name
+			icon_state = I.icon_state
+			assignment = I.assignment
+			associated_account_number = I.associated_account_number
+			blood_type = I.blood_type
+			dna_hash = I.dna_hash
+			fingerprint_hash = I.fingerprint_hash
+			UpdateName()
 
 /obj/item/weapon/card/id/syndicate/attack_self(mob/user as mob)
 	if(!src.registered_name)
@@ -669,14 +691,14 @@
 	registered_name = "Engineer"
 	icon_state = "engineering"
 	desc = "Shame it's going to be lost in the void of a black hole."
-	access = list(access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_atmospherics, access_emergency_storage, access_eva, access_construction)
+	access = list(access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_atmospherics, access_emergency_storage, access_eva, access_construction)
 
 /obj/item/weapon/card/id/hos
 	name = "Head of Security ID"
 	registered_name = "HoS"
 	icon_state = "HoS"
 	desc = "An ID awarded to only the most robust shits in the business."
-	access = list(access_security, access_sec_doors, access_brig, access_armory, access_court, access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers, access_science, access_engine, access_mining, access_medical, access_construction, access_mailsorting, access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
+	access = list(access_security, access_sec_doors, access_brig, access_armory, access_court, access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers, access_science, access_engine_major, access_mining, access_medical, access_construction, access_mailsorting, access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
 
 /obj/item/weapon/card/id/cmo
 	name = "Chief Medical Officer ID"
@@ -697,7 +719,7 @@
 	registered_name = "CE"
 	icon_state = "CE"
 	desc = "The card has a faint aroma of autism."
-	access = list(access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_teleporter, access_external_airlocks, access_atmospherics, access_emergency_storage, access_eva, access_heads, access_construction, access_sec_doors, access_ce, access_RC_announce, access_keycard_auth, access_tcomsat, access_ai_upload)
+	access = list(access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_teleporter, access_external_airlocks, access_atmospherics, access_emergency_storage, access_eva, access_heads, access_construction, access_sec_doors, access_ce, access_RC_announce, access_keycard_auth, access_tcomsat, access_ai_upload)
 
 /obj/item/weapon/card/id/clown
 	name = "Pink ID"
