@@ -79,6 +79,7 @@ var/list/beam_master = list()
 	flag = "laser"
 	eyeblur = 4
 	fire_sound = 'sound/weapons/Laser.ogg'
+	source_temperature = TEMPERATURE_FLAME
 	var/frequency = 1
 	var/wait = 0
 	var/beam_color = null
@@ -185,6 +186,9 @@ var/list/beam_master = list()
 	var/vector/direction = dir2vector(src.dir)
 	fireto(origin, direction)
 
+/obj/item/projectile/beam/is_hot()
+	if(src.damage > 0)
+		return source_temperature
 // Special laser the captains gun uses
 /obj/item/projectile/beam/captain
 	name = "captain laser"

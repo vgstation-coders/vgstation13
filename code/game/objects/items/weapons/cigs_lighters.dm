@@ -305,6 +305,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		light("<span class='notice'>[user] lights \his [name] with \the [W].</span>")
 	return
 
+//Fire at cigarettes to light them
+/obj/item/clothing/mask/cigarette/bullet_act(var/obj/item/projectile/proj)
+	. = ..()
+	if(proj.is_hot())
+		light("<span class='warning'>\The [src] is hit by \the [proj.name], setting it alight!</span>")
+
 /obj/item/clothing/mask/cigarette/afterattack(obj/reagentholder, mob/user as mob)
 	..()
 	if(reagentholder.is_open_container() && !ismob(reagentholder) && reagentholder.reagents)
@@ -439,7 +445,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/attack_self(mob/user as mob)
 	if(lit)
-		user.visible_message("<span class='notice'>[user] calmly drops and treads on the lit [name], putting it out.</span>")
+		user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
 		var/turf/T = get_turf(src)
 		var/atom/new_butt = new type_butt(T)
 		transfer_fingerprints_to(new_butt)
