@@ -642,16 +642,6 @@
 	user.drop_from_inventory(src)
 	qdel(src)
 
-/obj/item/weapon/reagent_containers/food/drinks/discount_sauce
-	name = "Discount Dan's Special Sauce"
-	desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
-	icon_state = "discount_sauce"
-	volume = 3
-
-/obj/item/weapon/reagent_containers/food/drinks/discount_sauce/New()
-	..()
-	reagents.add_reagent(DISCOUNT, 3)
-
 
 /obj/item/weapon/reagent_containers/food/drinks/beer
 	name = "Space Beer"
