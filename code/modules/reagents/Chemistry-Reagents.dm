@@ -5157,13 +5157,17 @@ var/procizine_tolerance = 0
 			if(ismouse(M)) //If mouse, become a gym rat. With a 1 in 20 chance of becoming a roid rat
 				if(has_mouse_bulked == 0)
 					if(prob(95))
-						M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand!</span>")
-						M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat)
 						has_mouse_bulked = 1
+						if(prob(90))
+							M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand!</span>")
+							M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat)
+						else
+							M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand! A pomadour also sprouts from the top of its head!</span>")
+							M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour)
 					else
+						has_mouse_bulked = 1
 						M.visible_message("<span class='danger'>[M] grows to the size of a dog, and its muscles expand to ridiculous proportions! It's ripped!</span>")
 						M.transmogrify(/mob/living/simple_animal/hostile/retaliate/roid_rat)
-						has_mouse_bulked = 1
 				else //You only bulk once, fella. If you lose the bulk, you're outta luck
 					return
 

@@ -508,6 +508,15 @@
 /mob/living/simple_animal/hostile/retaliate/gym_rat/mothership // Mothership faction version, so it doesn't get attacked by the vault dwellers
 	faction = "mothership"
 
+/mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour // Gym rat with a fancy hairstyle
+	name = "pomdadour rat"
+	desc = "Dang! That's a pretty hunky mouse, let me tell ya."
+	icon_state = "gymrat_pompadour"
+	icon_living = "gymrat_pompadour"
+	icon_dead = "gymrat_pompadour-dead"
+
+	icon_eat = "gymrat_pompadour-eat"
+
 ///////////////////////////////////////////////////////////////////ROID RAT///////////
 // That mouse is shredded! Has the science of bodybuilding gone too far? Possibly too swole to control!
 /mob/living/simple_animal/hostile/retaliate/roid_rat
