@@ -165,6 +165,9 @@
 	add_logs(src, target, "attacked ([damage_done]dmg)", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 	return damage_done
 
+#define RPS_ATTACKER_WIN 0 //to make this easier to read
+#define RPS_DEFENDER_WIN 1
+#define RPS_STALEMATE 2
 
 /mob/proc/rps_battle(var/mob/living/attacker, var/mob/living/defender)
 	visible_message("<span class='borange'>curse check success</span>")
@@ -191,15 +194,15 @@
 		for(i=0, i < b, i=i)
 			sleep(30)
 			switch(rps_win_check(attacker, defender))
-				if(0)
+				if(RPS_ATTACKER_WIN)
 					attacker_wins++
 					visible_message("<span class='borange'>[attacker] wins this round!</span>")
 					i++
-				if(1)
+				if(RPS_DEFENDER_WIN)
 					defender_wins++
 					visible_message("<span class='borange'>[defender] wins this round!</span>")
 					i++
-				if(2)
+				if(RPS_STALEMATE)
 					visible_message("<span class='borange'>[attacker] and [defender] both picked [defender.rps_intent]. Stalemate!</span>")
 		if(attacker_wins == 0)
 			attacker_wins = 1
@@ -261,11 +264,11 @@
 
 /mob/proc/rps_win_check(var/mob/living/attacker, var/mob/living/defender)
 	if((attacker.rps_intent=="rock" && defender.rps_intent=="scissors") || (attacker.rps_intent=="scissors" && defender.rps_intent=="paper") || (attacker.rps_intent=="paper" && defender.rps_intent=="rock"))
-		return 0
+		return RPS_ATTACKER_WIN
 	else if((defender.rps_intent=="rock" && attacker.rps_intent=="scissors") || (defender.rps_intent=="scissors" && attacker.rps_intent=="paper") || (defender.rps_intent=="paper" && attacker.rps_intent=="rock"))
-		return 1
+		return RPS_DEFENDER_WIN
 	else if(defender.rps_intent == attacker.rps_intent)
-		return 2
+		return RPS_STALEMATE
 	else
 		return 3
 
