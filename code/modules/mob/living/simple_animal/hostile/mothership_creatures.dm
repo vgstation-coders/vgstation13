@@ -486,6 +486,21 @@
 	else
 		..()
 
+/mob/living/simple_animal/hostile/retaliate/gym_rat/reagent_act(id, method, volume) // Gym rats have to keep away from soymilk... it's bad for their gainz
+	if(isDead())
+		return
+
+	.=..()
+
+	switch(id)
+		if(SOYMILK)
+			if(maxHealth >= 20)
+				visible_message("<span class='warning'>[src] seems to shrink as the soymilk washes over them! Its muscles look less visible...</span>")
+				maxHealth-=5
+			if(maxHealth < 20)
+				visible_message("<span class='warning'>[src] shrinks back into a more appropriate size for a mouse.</span>")
+				transmogrify()
+
 /mob/living/simple_animal/hostile/retaliate/gym_rat/New() // speaks mouse
 	..()
 	languages += all_languages[LANGUAGE_MOUSE]
@@ -734,6 +749,21 @@
 		all_fours = 1
 		to_chat(src, text("<span class='notice'>You are now moving on all fours.</span>"))
 		update_icon()
+
+/mob/living/simple_animal/hostile/retaliate/roid_rat/reagent_act(id, method, volume) // Roid rats have to keep away from soymilk... it's bad for their gainz
+	if(isDead())
+		return
+
+	.=..()
+
+	switch(id)
+		if(SOYMILK)
+			if(maxHealth >= 80)
+				visible_message("<span class='warning'>[src] seems to shrink as the soymilk washes over them! Its muscles look less visible...</span>")
+				maxHealth-=10
+			if(maxHealth < 80)
+				visible_message("<span class='warning'>[src] shrinks back into a more appropriate size for a mouse.</span>")
+				transmogrify()
 
 /mob/living/simple_animal/hostile/retaliate/roid_rat/death(var/gibbed = FALSE)
 	visible_message("The <b>[src]</b> is torn apart by its own oversized muscles!")

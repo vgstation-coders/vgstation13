@@ -5103,6 +5103,7 @@ var/procizine_tolerance = 0
 	var/has_been_hulk = 0
 	var/has_ripped_and_torn = 0 //We've applied permanent damage.
 	var/hulked_at = 0 //world.time
+	var/has_mouse_bulked = 0
 	custom_metabolism = 0.1
 	density = 6.82
 	specheatcap = 678.67
@@ -5154,12 +5155,17 @@ var/procizine_tolerance = 0
 					else if(prob(1))
 						H.say(pick("YOU TRYIN' BUILD SUM MUSSLE?", "TOO SWOLE TO CONTROL", "HEY MANG", "HEY MAAAANG"))
 			if(ismouse(M)) //If mouse, become a gym rat. With a 1 in 20 chance of becoming a roid rat
-				if(prob(95))
-					M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand!</span>")
-					M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat)
-				else
-					M.visible_message("<span class='danger'>[M] grows to the size of a dog, and its muscles expand to ridiculous proportions! It's ripped!</span>")
-					M.transmogrify(/mob/living/simple_animal/hostile/retaliate/roid_rat)
+				if(has_mouse_bulked == 0)
+					if(prob(95))
+						M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand!</span>")
+						M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat)
+						has_mouse_bulked = 1
+					else
+						M.visible_message("<span class='danger'>[M] grows to the size of a dog, and its muscles expand to ridiculous proportions! It's ripped!</span>")
+						M.transmogrify(/mob/living/simple_animal/hostile/retaliate/roid_rat)
+						has_mouse_bulked = 1
+				else //You only bulk once, fella. If you lose the bulk, you're outta luck
+					return
 
 /datum/reagent/creatine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
