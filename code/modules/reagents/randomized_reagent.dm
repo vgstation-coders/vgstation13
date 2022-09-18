@@ -5,7 +5,7 @@
 	var/fire  = 0
 	var/clone = 0
 
-	var/gib = FALSE
+	var/explode = 0
 
 	var/simp_type = null
 	var/immerse   = FALSE
@@ -15,6 +15,23 @@
 /datum/randomized_reagent/proc/init()
 	var/datum/log_controller/I = investigations[I_CHEMS]
 	var/investigate_text = "<small>[time_stamp()]</small> || Initializing <a href='?_src_=vars;Vars=\ref[src]'>randomized reagent</a>"
+	for(var/k in vars)
+		vars[k] = initial(vars[k])
+
+	// Modifiers, do nothing on their own
+	if(prob(5)) // explode=1 just gibs, explode=2 is a non-breaching explosion, explode=3 breaches, explode=4 breaches reinforced floors
+		explode = 1
+
+		if(prob(1))
+			explode += 1
+
+		if(prob(0.1))
+			explode += 1
+
+		if(prob(0.1))
+			explode += 1
+
+		investigate_text += "- explode [explode]"
 
 	// Standard damage types
 	var/generator/G = generator("num", 150, 0.001, SQUARE_RAND) // Second numeric argument is significantly more likely
@@ -25,17 +42,12 @@
 				vars[k] = -vars[k]
 			investigate_text += "- [k] [vars[k]]"
 
-	// Modifiers
-	if(prob(5)) // Gib if killed, spawn gibs if simplified
-		investigate_text += "- gib"
-		gib = TRUE
-
 	// Effects to discourage unethical testing by non-antags
 	if(prob(3)) // Turn female humans into boring males
 		investigate_text += "- immerse"
 		immerse = TRUE
 
-	if(prob(1)) // Instant damageless death (unless gibbing was selected)
+	if(prob(1)) // Instant death
 		kill = TRUE
 		investigate_text += "- kill"
 
@@ -50,9 +62,17 @@
 	investigate_text += "<br />"
 	I.write(investigate_text)
 
+
 /datum/randomized_reagent/proc/on_mindful_life(var/mob/living/carbon/human/H)
 	if(kill)
-		H.death(gib)
+		H.death(explode)
+		switch(explode)
+			if(2)
+				explosion(get_turf(H), 0, 0, 1, 3, whodunnit=H)
+			if(3)
+				explosion(get_turf(H), 0, 1, 3, 5, whodunnit=H)
+			if(4 to INFINITY)
+				explosion(get_turf(H), 1, 3, 5, 7, whodunnit=H)
 		return
 
 	if(simp_type)
@@ -78,8 +98,8 @@
 		H.mind.transfer_to(S)
 		var/obj/effect/smoke/smoke = new /obj/effect/smoke(get_turf(H))
 		smoke.time_to_live = 1
-		if(gib)
-			hgibs(get_turf(H), H.virus2, H.dna, H.species.flesh_color, H.species.blood_color, 1)
+		if(explode)
+			hgibs(get_turf(H), H.virus2, H.dna, H.species.flesh_color, H.species.blood_color, explode*explode)
 		qdel(H)
 		return
 
