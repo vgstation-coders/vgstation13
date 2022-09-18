@@ -306,6 +306,11 @@
 				desc = "Reddish brown Canadian maple syrup, perfectly sweet and thick. Nutritious and effective at healing."
 				icon_state = MAPLESYRUP
 				condiment_overlay = MAPLESYRUP
+			if(DISCOUNT)
+				name = "Discount Dan's Special Sauce"
+				desc = "Discount Sauce now in a family sized package."
+				icon_state = "discount_sauce"
+				condiment_overlay = DISCOUNT 
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
@@ -468,6 +473,14 @@
 /obj/item/weapon/reagent_containers/food/condiment/cinnamon/New()
 	..()
 	reagents.add_reagent(CINNAMON, 50)
+	
+/obj/item/weapon/reagent_containers/food/condiment/discount
+	name = "Discount Dan's Special Sauce"
+	desc = "Discount Sauce now in a family sized package."
+	
+/obj/item/weapon/reagent_containers/food/condiment/discount/New()
+	..()
+	reagents.add_reagent(DISCOUNT, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/saltshaker
 	name = "salt shaker"
@@ -556,7 +569,7 @@
 	RELISH=10,
 	COCO=10,
 	ZAMSPICES=10,
-	//discount dan sauce when?
+	DISCOUNT=10,
 	ZAMMILD=5,
 	ZAMSPICYTOXIN=3,
 	ROYALJELLY=5,
