@@ -181,4 +181,4 @@
 		return 4
 	if (findtextEx(haystack, "iVBORw0KGgoAAAANSUhEUgAAACAAAABg"))
 		return 8
-	return 0 //unknown patern, most likely something animated, oh well. be sure to account for that in your proc call.
+	return 0 //unknown pattern, most likely something animated, oh well. be sure to account for that in your proc call.
