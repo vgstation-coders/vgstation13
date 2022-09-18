@@ -1863,16 +1863,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/attack_pai(mob/user as mob)
 	ShiftClick(user)
 
-/mob/proc/handle_alpha()
-	if(alpha_override == TRUE)
-		return
-	if(alphas.len < 1)
-		alpha = 255
-	else
-		var/lowest_alpha = 255
-		for(var/alpha_modification in alphas)
-			lowest_alpha = min(lowest_alpha,alphas[alpha_modification])
-		alpha = lowest_alpha
+
 
 /mob/proc/teleport_to(var/atom/A)
 	forceMove(get_turf(A))
@@ -2141,6 +2132,8 @@ Use this proc preferably at the end of an equipment loadout
 		regenerate_icons()
 
 /mob/proc/handle_alpha()	//uses the lowest alpha on the mob
+	if(alpha_override == TRUE)
+		return
 	if(alphas.len < 1)
 		alpha = 255
 	else
