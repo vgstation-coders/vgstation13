@@ -32,6 +32,7 @@
 	var/spawnPowerRestoreRunning = 0
 	var/welded = null
 	var/locked = 0
+	var/lifted = 0
 	var/lights = 1 // bolt lights show by default
 	var/datum/wires/airlock/wires = null
 	secondsElectrified = 0 //How many seconds remain until the door is no longer electrified. -1 if it is permanently electrified until someone fixes it.
@@ -1215,7 +1216,39 @@ About the new airlock wires panel:
 			user.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
 			bashed_in(user, TRUE)
 		return
-
+	if(istype(I, /obj/item/tool/crowbar/halligan))
+		var/breaktime = 10 SECONDS
+		if(locked)
+			if(!lifted)
+				to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
+				if(do_after(user,src,breaktime))
+					lift(user)
+				return
+			else
+				if(locked)
+					if(do_after(user,src,5))
+						lifted = FALSE
+						pixel_y = -5
+						to_chat(user, "<span class='notice'>You lower the airlock back into its track.</span>")
+					return
+				else
+					if(istype(user,/mob/living/carbon/human))
+						var/mob/living/carbon/human/H = user
+						if(H.get_strength() >= 2)
+							breaktime = 5 SECONDS
+						to_chat(user, "<span class='notice'>The airlock's motors grind as you pry it open.</span>")
+						if(do_after(user,src,breaktime))
+							open(1)
+				return
+		else
+			if(istype(user,/mob/living/carbon/human))
+				var/mob/living/carbon/human/H = user
+				if(H.get_strength() >= 2)
+					breaktime = 5 SECONDS
+				to_chat(user, "<span class='notice'>The airlock's motors grind as you pry it open.</span>")
+				if(do_after(user,src,breaktime))
+					open(1)
+				return
 	if (iswelder(I))
 		if (density && !operating)
 			var/obj/item/tool/weldingtool/WT = I
@@ -1241,6 +1274,21 @@ About the new airlock wires panel:
 			return
 		src.busy = 1
 		var/beingcrowbarred = null
+		if(lifted)
+			if(istype(I, /obj/item/weapon/fireaxe))
+				if(istype(user,/mob/living/carbon/human))
+					var/mob/living/carbon/human/H = user
+					var/breaktime = 45 SECONDS
+					if(H.get_strength() >= 2)
+						breaktime = 30 SECONDS
+					to_chat(user, "<span class='notice'>You begin chopping the bolts down.</span>")
+					playsound(src,"sound/misc/clang.ogg",50,1)
+					if(do_after(H,src,breaktime))
+						playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+						to_chat(user, "<span class='notice'>You finish chopping the bolts down.</span>")
+						locked = FALSE
+						update_icon()
+						return
 		if(iscrowbar(I) )
 			beingcrowbarred = 1 //derp, Agouri
 		else
@@ -1302,6 +1350,12 @@ About the new airlock wires panel:
 	DA.state = 0 //Completely smash the door here; reduce it to its lowest state, eject electronics smoked
 	DA.update_state()
 	qdel(src)
+
+/obj/machinery/door/airlock/proc/lift(mob/user as mob)
+	to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+	pixel_y = 5
+	lifted = TRUE
 
 /obj/machinery/door/airlock/proc/revert(mob/user as mob, var/direction)
 	var/obj/structure/door_assembly/DA = new assembly_type(loc)
