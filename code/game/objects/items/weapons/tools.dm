@@ -721,6 +721,55 @@
 	playsound(get_turf(src), 'sound/medbot/Flatline_custom.ogg', 35)
 	return (SUICIDE_ACT_BRUTELOSS)
 
+/obj/item/tool/crowbar/halligan
+	name = "Halligan bar"
+	desc = "Combination pick, crowbar, and adze used for forcible entry."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "halligan"
+	hitsound = "sound/weapons/toolhit.ogg"
+	item_state = "halligan"
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("pries", "slashes", "stabs", "bludgeons", "whacks")
+
+/obj/item/tool/crowbar/halligan/attackby(obj/item/I, mob/user)
+	if(istype(I,/obj/item/weapon/fireaxe))
+		var/obj/item/weapon/fireaxe/F = I
+		to_chat(user, "<span class='notice'>You attach the fireaxe and Halligan bar to carry them easier.</span>")
+		var/obj/item/tool/irons/SI = new (user.loc)
+		SI.fireaxe = F
+		SI.halligan = src
+		user.drop_item(F)
+		F.forceMove(SI)
+		user.drop_item(src)
+		forceMove(SI)
+		user.put_in_hands(SI)
+		return 1
+	return 0
+
+/obj/item/tool/irons
+	name = "set of irons"
+	desc = "Fireaxe and Halligan bar used for forcible entry."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "irons"
+	hitsound = "sound/weapons/toolhit.ogg"
+	item_state = "irons"
+	w_class = W_CLASS_MEDIUM
+	force = 1.0
+	throwforce = 1.0
+	sharpness = 1
+	sharpness_flags = SHARP_TIP
+	slot_flags = SLOT_BACK
+
+	var/obj/item/tool/crowbar/halligan/halligan = new /obj/item/tool/crowbar/halligan
+	var/obj/item/weapon/fireaxe/fireaxe = new /obj/item/weapon/fireaxe
+
+/obj/item/tool/irons/attack_self(mob/user)
+	to_chat(user, "<span class='notice'>You separate \the [src].</span>")
+	user.drop_item(src, force_drop = 1)
+	user.put_in_hands(src.fireaxe)
+	user.put_in_hands(src.halligan)
+	qdel(src)
+
 
 /obj/item/weapon/conversion_kit
 	name = "\improper Revolver Conversion Kit"
