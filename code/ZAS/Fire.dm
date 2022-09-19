@@ -276,6 +276,38 @@ Attach to transfer valve and open. BOOM.
 	set_light(0)
 	..()
 
+/obj/effect/hellfire
+	//Icon for fire on brimstone.
+
+	anchored = 1
+	mouse_opacity = 0
+
+	blend_mode = BLEND_ADD
+
+	icon = 'icons/effects/fire.dmi'
+	icon_state = "3"
+	layer = TURF_FIRE_LAYER
+	plane = ABOVE_TURF_PLANE
+
+	light_color = LIGHT_COLOR_FIRE
+
+/obj/effect/hellfire/process()
+	if(timestopped)
+		return 0
+	. = 1
+
+	for(var/mob/living/carbon/human/M in loc)
+		M.FireBurn(11, 9001, ONE_ATMOSPHERE) //Burn the DAMNED!
+
+/obj/effect/hellfire/New()
+	..()
+	processing_objects.Add(src)
+	dir = pick(cardinal)
+
+/obj/effect/hellfire/Destory()
+	processing_objects.Remove(src)
+	..()
+
 /turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
 /turf/proc/apply_fire_protection()
 /turf/simulated/apply_fire_protection()

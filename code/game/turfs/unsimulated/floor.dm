@@ -85,3 +85,17 @@
 	..()
 
 	color = "#FFFFFF"
+
+/turf/unsimulated/floor/brimstone
+	icon_state = "ironsand1"
+	var/obj/effect/hellfire/thefire = null
+
+/turf/unsimulated/floor/brimstone/New()
+	..()
+	icon_state = "ironsand[rand(1,15)]"
+	new /obj/effect/hellfire(src)
+
+/turf/unsimulated/floor/brimstone/Destroy()
+	qdel(thefire)
+	thefire = null
+	..()
