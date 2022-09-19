@@ -304,7 +304,7 @@ Attach to transfer valve and open. BOOM.
 	processing_objects.Add(src)
 	dir = pick(cardinal)
 
-/obj/effect/hellfire/Destory()
+/obj/effect/hellfire/Destroy()
 	processing_objects.Remove(src)
 	..()
 
