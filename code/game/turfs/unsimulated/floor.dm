@@ -88,14 +88,22 @@
 
 /turf/unsimulated/floor/brimstone
 	icon_state = "ironsand1"
-	var/obj/effect/hellfire/thefire = null
 
 /turf/unsimulated/floor/brimstone/New()
 	..()
 	icon_state = "ironsand[rand(1,15)]"
-	new /obj/effect/hellfire(src)
+	overlays.Cut()
+	var/image/fire = image('icons/effects/fire.dmi', "3")
+	fire.blend_mode = BLEND_ADD
+	fire.layer = TURF_FIRE_LAYER
+	fire.plane = ABOVE_TURF_PLANE
+	overlays += fire
 
 /turf/unsimulated/floor/brimstone/Destroy()
-	qdel(thefire)
-	thefire = null
+	overlays.Cut()
 	..()
+
+/turf/unsimulated/floor/brimstone/Crossed(mob/living/M)
+	..()
+	if(istype(M))
+		M.FireBurn(11, 9001, ONE_ATMOSPHERE) //Burn the DAMNED!

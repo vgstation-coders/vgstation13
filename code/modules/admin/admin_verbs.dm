@@ -1249,15 +1249,24 @@ var/list/admin_verbs_mod = list(
 		if(archive.key == O.key)
 			if(!(locate(/datum/zLevel/hell) in map.zLevels))
 				world.maxz++
-				map.addZLevel(new /datum/zLevel/hell, world.maxz)
-			var/mob/tempM = new archive.mob_type
-			var/mob/M = tempM.actually_reset_body(archive = archive, our_mind = get_mind_by_key(O.key))
+				map.addZLevel(new /datum/zLevel/hell, world.maxz, TRUE)
+				log_admin("[ckey(key)]/([mob]) has created hell, as it did not exist. (located on z-level [world.maxz])")
+				message_admins("ckey(key)]/([mob]) has created hell, as it did not exist. (located on z-level [world.maxz])")
+			var/mob/living/tempM = new archive.mob_type
+			if(!istype(tempM))
+				CRASH("Body archive to send to hell was not a living mob!")
+			var/mob/living/M = tempM.actually_reset_body(archive = archive, our_mind = get_mind_by_key(O.key))
+			if(!istype(M))
+				CRASH("Body archive to send to hell was not a living mob!")
 			M.status_flags ^= BUDDHAMODE
 			M.forceMove(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
+			M.FireBurn(11, 9001, ONE_ATMOSPHERE)
 			log_admin("[ckey(key)]/([mob]) has damned [M] to HELL")
 			message_admins("[ckey(key)]/([mob]) has damned [M] to HELL")
 			qdel(tempM)
 			return
+	log_admin("[ckey(key)]/([mob]) could not damn [O] to hell as they have not lived in this round")
+	message_admins("[ckey(key)]/([mob]) could not damn [O] to hell as they have not lived in this round")
 
 /client/proc/cmd_dectalk()
 	set name = "Dectalk"

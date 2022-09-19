@@ -131,7 +131,7 @@
 		var/path = levelPaths[i]
 		addZLevel(new path, i)
 
-/datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0)
+/datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0, make_base_turf_on_load = FALSE)
 
 
 	if(!istype(level))
@@ -144,7 +144,9 @@
 	zLevels[z_to_use] = level
 	if(!level.movementJammed)
 		accessable_z_levels += list("[z_to_use]" = level.movementChance)
-
+	if(make_base_turf_on_load)
+		for(var/turf/T in block(locate(1, 1, z_to_use), locate(world.maxx, world.maxy, z_to_use)))
+			T.ChangeTurf(level.base_turf)
 	level.z = z_to_use
 
 var/global/list/accessable_z_levels = list()
