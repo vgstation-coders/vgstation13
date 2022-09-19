@@ -1294,12 +1294,9 @@ var/list/admin_verbs_mod = list(
 			if(check.Execute(db))
 				if(!check.NextRow())
 					message_admins("[ckey] had no character file, skipping")
-					WARNING("CREATING HELL: datum/preferences/load_save_sqlite has returned")
 					return
 			else
 				message_admins("load_save_sqlite Check Error #: [check.Error()] - [check.ErrorMsg()]")
-				WARNING("CREATING HELL: datum/preferences/load_save_sqlite has returned")
-
 				return
 			q.Add({"
 SELECT
@@ -1375,7 +1372,6 @@ AND players.player_slot = ? ;"}, ckey, 1)
 						preference_list[a] = row[a]
 			else
 				message_admins("load_save_sqlite Error #: [q.Error()] - [q.ErrorMsg()]")
-				WARNING("CREATING HELL: datum/preferences/load_save_sqlite has returned")
 				return
 			H.name = preference_list["real_name"] || ckey
 			H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
