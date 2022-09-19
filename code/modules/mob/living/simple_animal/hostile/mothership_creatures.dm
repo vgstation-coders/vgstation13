@@ -497,6 +497,7 @@
 			if(maxHealth >= 20)
 				visible_message("<span class='warning'>[src] seems to shrink as the soymilk washes over them! Its muscles look less visible...</span>")
 				maxHealth-=5
+				adjustBruteLoss(1) // Here so that the mouse aggros. It won't be happy that you're cutting into its gainz!
 			if(maxHealth < 20)
 				visible_message("<span class='warning'>[src] shrinks back into a more appropriate size for a mouse.</span>")
 				transmogrify()
@@ -641,7 +642,7 @@
 		return 0
 	. = ..()
 	if(.)
-		if(enemies.len && prob(5))
+		if(enemies.len && prob(1)) // Roid rats take much longer to calm down compared to gym rats. Roid rage!
 			Calm()
 	if(maxHealth < 200)
 		melee_damage_lower = 10
@@ -770,6 +771,7 @@
 			if(maxHealth >= 80)
 				visible_message("<span class='warning'>[src] seems to shrink as the soymilk washes over them! Its muscles look less visible...</span>")
 				maxHealth-=10
+				adjustBruteLoss(1) // Here so that the mouse aggros. It won't be happy that you're cutting into its gainz!
 			if(maxHealth < 80)
 				visible_message("<span class='warning'>[src] shrinks back into a more appropriate size for a mouse.</span>")
 				transmogrify()
