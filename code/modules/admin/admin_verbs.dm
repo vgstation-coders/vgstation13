@@ -1282,7 +1282,8 @@ var/list/admin_verbs_mod = list(
 			log_sql("Error: [select_query.ErrorMsg()]")
 			return
 
-		while(select_query.NextRow())
+		var/bancount = 0
+		while(select_query.NextRow() && (!bans_shown_in_hell_limit || bancount <= bans_shown_in_hell_limit))
 			var/ckey = select_query.item[1]
 			var/reason = select_query.item[2]
 			var/mob/living/carbon/human/H = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
@@ -1375,6 +1376,7 @@ AND players.player_slot = ? ;"}, ckey, 1)
 				continue
 			H.name = preference_list["real_name"] || ckey
 			H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
+			bancount++
 
 /client/proc/cmd_dectalk()
 	set name = "Dectalk"
