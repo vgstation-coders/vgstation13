@@ -5158,7 +5158,7 @@ var/procizine_tolerance = 0
 				if(has_mouse_bulked == 0)
 					if(prob(95))
 						has_mouse_bulked = 1
-						if(prob(90))
+						if(prob(95))
 							M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand!</span>")
 							M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat)
 						else
