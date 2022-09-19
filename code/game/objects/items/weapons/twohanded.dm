@@ -107,21 +107,6 @@
 			qdel(A)
 			A = null
 
-/obj/item/weapon/fireaxe/attackby(obj/item/I, mob/user)
-	if(istype(I,/obj/item/tool/crowbar/halligan))
-		var/obj/item/tool/crowbar/halligan/H = I
-		to_chat(user, "<span class='notice'>You attach the fireaxe and Halligan bar to carry them easier.</span>")
-		var/obj/item/tool/irons/SI = new (user.loc)
-		SI.fireaxe = H
-		SI.halligan = src
-		user.drop_item(H)
-		H.forceMove(SI)
-		user.drop_item(src)
-		forceMove(SI)
-		user.put_in_hands(SI)
-		return 1
-	return 0
-
 /*
  * High-Frequency Blade
  */

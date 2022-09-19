@@ -19,7 +19,7 @@
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/extinguisher,/obj/item/tool/irons,/obj/item/tool/crowbar/halligan)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/extinguisher)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	clothing_flags = ONESIZEFITSALL
 	pressure_resistance = 3 * ONE_ATMOSPHERE
