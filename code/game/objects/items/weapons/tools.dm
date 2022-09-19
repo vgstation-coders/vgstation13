@@ -734,7 +734,7 @@
 /obj/item/tool/crowbar/halligan/attackby(obj/item/I, mob/user)
 	if(istype(I,/obj/item/weapon/fireaxe))
 		var/obj/item/weapon/fireaxe/F = I
-		to_chat(user, "<span class='notice'>You attach the fireaxe and Halligan bar to carry them easier.</span>")
+		to_chat(user, "<span class='notice'>You attach \the [F] and [src] to carry them easier.</span>")
 		var/obj/item/tool/irons/SI = new (user.loc)
 		SI.fireaxe = F
 		SI.halligan = src
@@ -754,8 +754,8 @@
 	hitsound = "sound/weapons/toolhit.ogg"
 	item_state = "irons"
 	w_class = W_CLASS_MEDIUM
-	force = 1.0
-	throwforce = 1.0
+	force = 5.0
+	throwforce = 7.0
 	sharpness = 1
 	sharpness_flags = SHARP_TIP
 	slot_flags = SLOT_BACK

@@ -1220,7 +1220,7 @@ About the new airlock wires panel:
 		var/breaktime = 10 SECONDS
 		if(locked)
 			if(!lifted)
-				to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
+				to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
 				if(do_after(user,src,breaktime))
 					lift(user)
 				return
@@ -1228,16 +1228,20 @@ About the new airlock wires panel:
 				if(locked)
 					if(do_after(user,src,5))
 						lifted = FALSE
-						pixel_y = -5
-						to_chat(user, "<span class='notice'>You lower the airlock back into its track.</span>")
+						update_icon()
+						pixel_y = initial(pixel_y)
+						to_chat(user, "<span class='notice'>You lower \the [src] back into its track.</span>")
 					return
 				else
 					if(istype(user,/mob/living/carbon/human))
 						var/mob/living/carbon/human/H = user
 						if(H.get_strength() >= 2)
 							breaktime = 5 SECONDS
-						to_chat(user, "<span class='notice'>The airlock's motors grind as you pry it open.</span>")
+						to_chat(user, "<span class='notice'>\The [src]'s motors grind as you pry it open.</span>")
 						if(do_after(user,src,breaktime))
+							if(!(stat & (NOPOWER)) || src.arePowerSystemsOn())
+								spark(src, 5)
+								playsound(src,"sparks",75,1,-1)
 							open(1)
 				return
 		else
@@ -1245,8 +1249,11 @@ About the new airlock wires panel:
 				var/mob/living/carbon/human/H = user
 				if(H.get_strength() >= 2)
 					breaktime = 5 SECONDS
-				to_chat(user, "<span class='notice'>The airlock's motors grind as you pry it open.</span>")
+				to_chat(user, "<span class='notice'>\The [src]'s motors grind as you pry it open.</span>")
 				if(do_after(user,src,breaktime))
+					if(!(stat & (NOPOWER)) || src.arePowerSystemsOn())
+						spark(src, 5)
+						playsound(src,"sparks",75,1,-1)
 					open(1)
 				return
 	if (iswelder(I))
@@ -1278,17 +1285,18 @@ About the new airlock wires panel:
 			if(istype(I, /obj/item/weapon/fireaxe))
 				if(istype(user,/mob/living/carbon/human))
 					var/mob/living/carbon/human/H = user
-					var/breaktime = 45 SECONDS
+					var/breaktime = 30 SECONDS
 					if(H.get_strength() >= 2)
-						breaktime = 30 SECONDS
+						breaktime = 15 SECONDS
 					to_chat(user, "<span class='notice'>You begin chopping the bolts down.</span>")
-					playsound(src,"sound/misc/clang.ogg",50,1)
-					if(do_after(H,src,breaktime))
-						playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-						to_chat(user, "<span class='notice'>You finish chopping the bolts down.</span>")
-						locked = FALSE
-						update_icon()
+					if(!do_after(user, src, breaktime, 10, custom_checks = new /callback(I, /obj/item/weapon/fireaxe/proc/on_do_after)))
 						return
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+					to_chat(user, "<span class='notice'>You finish chopping the bolts.</span>")
+					src.pixel_y = 0
+					locked = FALSE
+					update_icon()
+					return
 		if(iscrowbar(I) )
 			beingcrowbarred = 1 //derp, Agouri
 		else
@@ -1354,7 +1362,7 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/proc/lift(mob/user as mob)
 	to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-	pixel_y = 5
+	animate(src, pixel_y = pixel_y + 5 * PIXEL_MULTIPLIER, time = 1)
 	lifted = TRUE
 
 /obj/machinery/door/airlock/proc/revert(mob/user as mob, var/direction)

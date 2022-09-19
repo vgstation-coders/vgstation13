@@ -110,7 +110,7 @@
 /obj/item/weapon/fireaxe/attackby(obj/item/I, mob/user)
 	if(istype(I,/obj/item/tool/crowbar/halligan))
 		var/obj/item/tool/crowbar/halligan/H = I
-		to_chat(user, "<span class='notice'>You attach the fireaxe and Halligan bar to carry them easier.</span>")
+		to_chat(user, "<span class='notice'>You attach \the [src] and [H] to carry them easier.</span>")
 		var/obj/item/tool/irons/SI = new (user.loc)
 		SI.fireaxe = H
 		SI.halligan = src
@@ -121,6 +121,12 @@
 		user.put_in_hands(SI)
 		return 1
 	return 0
+
+/obj/item/weapon/fireaxe/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+	. = do_after_default_checks(arglist(args))
+	if(.)
+		playsound(src,"sound/misc/clang.ogg",50,1)
+		target.shake_animation(3, 3, 0.2, 15)
 
 /*
  * High-Frequency Blade
