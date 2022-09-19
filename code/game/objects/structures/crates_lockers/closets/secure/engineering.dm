@@ -142,6 +142,7 @@
 		/obj/item/device/analyzer,
 		/obj/item/clothing/glasses/scanner/material,
 		/obj/item/device/gps/engineering,
+		/obj/item/tool/crowbar/halligan,
 	)
 
 /obj/structure/closet/secure_closet/engineering_mechanic
