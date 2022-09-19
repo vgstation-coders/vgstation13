@@ -291,6 +291,7 @@ to destroy them and players will be able to make replacements.
 	"air alarm"=/obj/item/weapon/circuitboard/air_alarm,
 	"fire alarm"=/obj/item/weapon/circuitboard/fire_alarm,
 	"airlock"=/obj/item/weapon/circuitboard/airlock,
+	"airshield"=/obj/item/weapon/circuitboard/airshield,
 	"APC"=/obj/item/weapon/circuitboard/power_control,
 	"vendomat"=/obj/item/weapon/circuitboard/vendomat,
 	"microwave"=/obj/item/weapon/circuitboard/microwave,
