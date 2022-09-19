@@ -126,7 +126,6 @@
 	. = do_after_default_checks(arglist(args))
 	if(.)
 		playsound(src,"sound/misc/clang.ogg",50,1)
-		target.shake_animation(3, 3, 0.2, 15)
 
 /*
  * High-Frequency Blade
