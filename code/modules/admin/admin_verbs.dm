@@ -1250,7 +1250,7 @@ var/list/admin_verbs_mod = list(
 			if(!(locate(/datum/zLevel/hell) in map.zLevels))
 				world.maxz++
 				var/datum/zLevel/hell/HL = new
-				map.addZLevel(new /datum/zLevel/hell, world.maxz, TRUE)
+				map.addZLevel(HL, world.maxz, TRUE)
 				for(var/x in 1 to world.maxx)
 					for(var/y in 1 to world.maxy)
 						var/turf/T = locate(x,y,world.maxz)
