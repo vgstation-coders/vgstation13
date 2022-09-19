@@ -1249,7 +1249,7 @@ var/list/admin_verbs_mod = list(
 		if(archive.key == O.key)
 			if(!(locate(/datum/zLevel/hell) in map.zLevels))
 				world.maxz++
-				map.addZLevel(new /datum/zLevel/hell, world.maxz, TRUE)
+				map.addZLevel(new /datum/zLevel/hell, world.maxz)
 				log_admin("[ckey(key)]/([mob]) has created hell, as it did not exist. (located on z-level [world.maxz])")
 				message_admins("ckey(key)]/([mob]) has created hell, as it did not exist. (located on z-level [world.maxz])")
 			var/mob/living/tempM = new archive.mob_type
