@@ -86,6 +86,8 @@
 			mutations.Remove(M_HARDCORE)
 			to_chat(src, "<span class='notice'>You feel like a pleb.</span>")
 	handle_beams()
+	if(istype(get_turf(src),/turf/unsimulated/floor/brimstone))
+		FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
 	return 1
 
 // Apply connect damage

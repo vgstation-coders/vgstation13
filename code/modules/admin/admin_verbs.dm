@@ -1249,7 +1249,12 @@ var/list/admin_verbs_mod = list(
 		if(archive.key == O.key)
 			if(!(locate(/datum/zLevel/hell) in map.zLevels))
 				world.maxz++
-				map.addZLevel(new /datum/zLevel/hell, world.maxz)
+				var/datum/zLevel/hell/HL = new
+				map.addZLevel(new /datum/zLevel/hell, world.maxz, TRUE)
+				for(var/x in 1 to world.maxx)
+					for(var/y in 1 to world.maxy)
+						var/turf/T = locate(x,y,world.maxz)
+						new HL.base_turf(T) // Not ideal but much faster than changeturf(), otherwise server would lag for ages rather than just a few seconds.
 				log_admin("[ckey(key)]/([mob]) has created hell, as it did not exist. (located on z-level [world.maxz])")
 				message_admins("ckey(key)]/([mob]) has created hell, as it did not exist. (located on z-level [world.maxz])")
 			var/mob/living/tempM = new archive.mob_type
@@ -1260,7 +1265,6 @@ var/list/admin_verbs_mod = list(
 				CRASH("Body archive to send to hell was not a living mob!")
 			M.status_flags ^= BUDDHAMODE
 			M.forceMove(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
-			M.FireBurn(11, 9001, ONE_ATMOSPHERE)
 			log_admin("[ckey(key)]/([mob]) has damned [M] to HELL")
 			message_admins("[ckey(key)]/([mob]) has damned [M] to HELL")
 			qdel(tempM)
