@@ -558,7 +558,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		stat(null, "Health: [round((health / maxHealth) * 100)]%")
 
 /mob/living/simple_animal/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 
 	if(!gibbed)

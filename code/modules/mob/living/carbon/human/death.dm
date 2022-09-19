@@ -91,7 +91,7 @@
 	obj_overlays = null
 
 /mob/living/carbon/human/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	if(healths)
 		healths.icon_state = "health7"

@@ -15,7 +15,7 @@
 			handle_organs()	//Optimized.
 			handle_blood()
 
-		if(health <= config.health_threshold_dead || !has_brain())
+		if((health <= config.health_threshold_dead || !has_brain()) && !(status_flags & BUDDHAMODE))
 			emote("deathgasp", message = TRUE)
 			death()
 			blinded = 1
@@ -26,7 +26,7 @@
 		pain_numb = max(0, pain_numb - 1)
 
 		//UNCONSCIOUS. NO-ONE IS HOME
-		if((getOxyLoss() > 50) || (config.health_threshold_crit > health))
+		if((getOxyLoss() > 50 || config.health_threshold_crit > health) && !(status_flags & BUDDHAMODE))
 			Paralyse(3)
 			species.OnCrit(src)
 
@@ -63,7 +63,7 @@
 		if(paralysis)
 			AdjustParalysis(-1)
 			blinded = 1
-			stat = UNCONSCIOUS
+			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 			if(halloss > 0)
 				adjustHalLoss(-3)
 		else if(sleeping)
@@ -71,13 +71,13 @@
 			adjustHalLoss(-3)
 			sleeping = max(sleeping-1, 0)
 			blinded = 1
-			stat = UNCONSCIOUS
+			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 			if(prob(2) && health && !hal_crit)
 				spawn(0)
 					emote("snore")
 		else if(undergoing_hypothermia() >= SEVERE_HYPOTHERMIA)
 			blinded = 1
-			stat = UNCONSCIOUS
+			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 		//CONSCIOUS
 		else
 			stat = CONSCIOUS

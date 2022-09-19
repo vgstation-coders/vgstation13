@@ -38,7 +38,7 @@
 
 
 /mob/living/silicon/robot/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	if(connected_ai)
 		if(connected_ai.explosive_cyborgs)

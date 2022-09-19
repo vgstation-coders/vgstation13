@@ -28,7 +28,7 @@
 
 
 /mob/living/carbon/monkey/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	if(healths)
 		healths.icon_state = "health5"

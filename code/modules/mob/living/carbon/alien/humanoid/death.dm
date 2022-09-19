@@ -1,5 +1,5 @@
 /mob/living/carbon/alien/humanoid/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	if(healths)
 		healths.icon_state = "health6"

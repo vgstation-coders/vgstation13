@@ -615,6 +615,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define UNPACIFIABLE 16		//Immune to pacify effects.
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
+#define BUDDHAMODE	16384
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
 #define ALWAYS_CRIT 65536
 

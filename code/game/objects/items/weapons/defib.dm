@@ -184,7 +184,7 @@
 			target.resurrect()
 
 			target.tod = null
-			target.stat = UNCONSCIOUS
+			target.stat = target.status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 			target.regenerate_icons()
 			target.update_canmove()
 			target.flash_eyes(visual = 1)

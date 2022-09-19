@@ -32,7 +32,7 @@
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
-	
+
 	if(locked_to_z)
 		check_locked_zlevel()
 
@@ -91,7 +91,7 @@
 	if(!isDead()) //Alive.
 		blinded = !(paralysis || is_component_functioning("camera"))
 		stat = !(paralysis || stunned || knockdown) ? CONSCIOUS : UNCONSCIOUS
-	else //Dead.
+	else if(!(status_flags & BUDDHAMODE)) //Dead.
 		blinded = TRUE
 		stat = DEAD
 
