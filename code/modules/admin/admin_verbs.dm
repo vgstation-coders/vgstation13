@@ -1250,12 +1250,13 @@ var/list/admin_verbs_mod = list(
 			if(!(locate(/datum/zLevel/hell) in map.zLevels))
 				world.maxz++
 				map.addZLevel(new /datum/zLevel/hell, world.maxz)
-			var/mob/temp_mob = new mob_type
-			var/mob/M = temp_mob.actually_reset_body(archive = archive, our_mind = get_mind_by_key(O.key))
+			var/mob/tempM = new mob_type
+			var/mob/M = tempM.actually_reset_body(archive = archive, our_mind = get_mind_by_key(O.key))
 			M.status_flags ^= BUDDHAMODE
 			M.forceMove(locate(rand(1,world.maxx),rand(1,world.maxy),world.mazx))
-			log_admin("[ckey(key)]/([mob]) has damned [O] to HELL")
-			message_admins("[ckey(key)]/([mob]) has damned [O] to HELL")
+			log_admin("[ckey(key)]/([mob]) has damned [M] to HELL")
+			message_admins("[ckey(key)]/([mob]) has damned [M] to HELL")
+			qdel(tempM)
 			return
 
 /client/proc/cmd_dectalk()
