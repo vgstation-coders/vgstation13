@@ -1280,7 +1280,7 @@ var/list/admin_verbs_mod = list(
 			qdel(select_query)
 			message_admins("Error: [select_query.ErrorMsg()]")
 			log_sql("Error: [select_query.ErrorMsg()]")
-			return
+			continue
 
 		while(select_query.NextRow())
 			var/ckey = select_query.item[1]
@@ -1294,10 +1294,10 @@ var/list/admin_verbs_mod = list(
 			if(check.Execute(db))
 				if(!check.NextRow())
 					message_admins("[ckey] had no character file, skipping")
-					return
+					continue
 			else
 				message_admins("load_save_sqlite Check Error #: [check.Error()] - [check.ErrorMsg()]")
-				return
+				continue
 			q.Add({"
 SELECT
     limbs.player_ckey,
@@ -1372,7 +1372,7 @@ AND players.player_slot = ? ;"}, ckey, 1)
 						preference_list[a] = row[a]
 			else
 				message_admins("load_save_sqlite Error #: [q.Error()] - [q.ErrorMsg()]")
-				return
+				continue
 			H.name = preference_list["real_name"] || ckey
 			H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
 
