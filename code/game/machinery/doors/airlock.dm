@@ -1224,29 +1224,19 @@ About the new airlock wires panel:
 				if(do_after(user,src,breaktime))
 					to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-					animate(src, pixel_y = pixel_y + 5 * PIXEL_MULTIPLIER, time = 1)
+					animate(src, pixel_y = pixel_y + 5, time = 1)
 					lifted = TRUE
-				return
 			else
-				if(locked)
-					if(do_after(user,src,5))
-						lifted = FALSE
-						update_icon()
-						pixel_y = initial(pixel_y)
-						to_chat(user, "<span class='notice'>You lower \the [src] back into its track.</span>")
-					return
-				else
-					if(istype(user,/mob/living/carbon/human))
-						var/mob/living/carbon/human/H = user
-						if(H.get_strength() >= 2)
-							breaktime = 5 SECONDS
-						to_chat(user, "<span class='notice'>\The [src]'s motors grind as you pry it open.</span>")
-						if(do_after(user,src,breaktime))
-							if(!(stat & (NOPOWER)) || src.arePowerSystemsOn())
-								spark(src, 5)
-								playsound(src,"sparks",75,1,-1)
-							open(1)
-				return
+				if(istype(user,/mob/living/carbon/human))
+					var/mob/living/carbon/human/H = user
+					if(H.get_strength() >= 2)
+						breaktime = 5 SECONDS
+					to_chat(user, "<span class='notice'>\The [src]'s motors grind as you pry it open.</span>")
+					if(do_after(user,src,breaktime))
+						if(!(stat & (NOPOWER)) || src.arePowerSystemsOn())
+							spark(src, 5)
+							playsound(src,"sparks",75,1,-1)
+						open(1)
 		else
 			if(istype(user,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = user
@@ -1258,7 +1248,7 @@ About the new airlock wires panel:
 						spark(src, 5)
 						playsound(src,"sparks",75,1,-1)
 					open(1)
-				return
+		return
 	if (iswelder(I))
 		if (density && !operating)
 			var/obj/item/tool/weldingtool/WT = I
@@ -1296,12 +1286,11 @@ About the new airlock wires panel:
 						return
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You finish chopping the bolts.</span>")
-					reset_plane_and_layer()
 					pixel_y = initial(pixel_y)
-					locked = FALSE
+					toggle_bolts()
 					lifted = FALSE
 					update_icon()
-					return
+			return
 		if(iscrowbar(I) )
 			beingcrowbarred = 1 //derp, Agouri
 		else
@@ -1353,7 +1342,6 @@ About the new airlock wires panel:
 			sleep(6)
 			open(1)
 		operating = -1
-
 
 /obj/machinery/door/airlock/bashed_in(var/mob/user, var/throw_circuit = TRUE)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)

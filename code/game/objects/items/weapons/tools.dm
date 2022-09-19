@@ -726,6 +726,8 @@
 	desc = "Combination pick, crowbar, and adze used for forcible entry."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "halligan"
+	item_state = "halligan"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	hitsound = "sound/weapons/toolhit.ogg"
 	item_state = "halligan"
 	w_class = W_CLASS_MEDIUM
