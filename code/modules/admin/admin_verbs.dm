@@ -1247,16 +1247,7 @@ var/list/admin_verbs_mod = list(
 
 	for(var/datum/body_archive/archive in body_archives)
 		if(archive.key == O.key)
-			if(!(locate(/datum/zLevel/hell) in map.zLevels))
-				world.maxz++
-				var/datum/zLevel/hell/HL = new
-				map.addZLevel(HL, world.maxz, TRUE)
-				for(var/x in 1 to world.maxx)
-					for(var/y in 1 to world.maxy)
-						var/turf/T = locate(x,y,world.maxz)
-						new HL.base_turf(T) // Not ideal but much faster than changeturf(), otherwise server would lag for ages rather than just a few seconds.
-				log_admin("[ckey(key)]/([mob]) has created hell, as it did not exist. (located on z-level [world.maxz])")
-				message_admins("ckey(key)]/([mob]) has created hell, as it did not exist. (located on z-level [world.maxz])")
+			create_hell()
 			var/mob/living/tempM = new archive.mob_type
 			if(!istype(tempM))
 				CRASH("Body archive to send to hell was not a living mob!")
@@ -1266,11 +1257,128 @@ var/list/admin_verbs_mod = list(
 			M.status_flags ^= BUDDHAMODE
 			M.forceMove(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
 			log_admin("[ckey(key)]/([mob]) has damned [M] to HELL")
-			message_admins("[ckey(key)]/([mob]) has damned [M] to HELL")
+			message_admins("[ckey(key)]/([mob]) has damned [formatJumpTo(M,"[M]")] to HELL")
 			qdel(tempM)
 			return
 	log_admin("[ckey(key)]/([mob]) could not damn [O] to hell as they have not lived in this round")
 	message_admins("[ckey(key)]/([mob]) could not damn [O] to hell as they have not lived in this round")
+
+/proc/create_hell()
+	if(!(locate(/datum/zLevel/hell) in map.zLevels))
+		world.maxz++
+		var/datum/zLevel/hell/HL = new
+		map.addZLevel(HL, world.maxz, TRUE)
+		for(var/x in 1 to world.maxx)
+			for(var/y in 1 to world.maxy)
+				var/turf/T = locate(x,y,world.maxz)
+				new HL.base_turf(T) // Not ideal but much faster than changeturf(), otherwise server would lag for ages rather than just a few seconds.
+		log_admin("Hell was created, as it did not exist. (located on z-level [world.maxz])")
+		message_admins("Hell was created, as it did not exist. [formatJumpTo(locate(world.maxx/2,world.maxy/2,world.maxz),"JMP")]")
+
+		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE unbanned = 0")
+		if(!select_query.Execute())
+			qdel(select_query)
+			message_admins("Error: [select_query.ErrorMsg()]")
+			log_sql("Error: [select_query.ErrorMsg()]")
+			return
+
+		while(select_query.NextRow())
+			var/ckey = select_query.item[1]
+			var/reason = select_query.item[2]
+			var/mob/living/carbon/human/H = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
+			var/list/preference_list = new
+			var/database/query/q     = new
+			var/database/query/check = new
+			var/database/db = ("players2.sqlite")
+			check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, 1)
+			if(check.Execute(db))
+				if(!check.NextRow())
+					message_admins("[ckey] had no character file, skipping")
+					WARNING("[__LINE__]: datum/preferences/load_save_sqlite has returned")
+					return
+			else
+				message_admins("load_save_sqlite Check Error #: [check.Error()] - [check.ErrorMsg()]")
+				WARNING("[__LINE__]: datum/preferences/load_save_sqlite has returned")
+
+				return
+			q.Add({"
+SELECT
+    limbs.player_ckey,
+    limbs.player_slot,
+    limbs.l_arm,
+    limbs.r_arm,
+    limbs.l_leg,
+    limbs.r_leg,
+    limbs.l_foot,
+    limbs.r_foot,
+    limbs.l_hand,
+    limbs.r_hand,
+    limbs.heart,
+    limbs.eyes,
+    limbs.lungs,
+    limbs.liver,
+    limbs.kidneys,
+    players.player_ckey,
+    players.player_slot,
+    players.real_name,
+    players.random_name,
+    players.random_body,
+    players.gender,
+    players.species,
+    players.disabilities,
+    body.player_ckey,
+    body.player_slot,
+    body.hair_red,
+    body.hair_green,
+    body.hair_blue,
+    body.facial_red,
+    body.facial_green,
+    body.facial_blue,
+    body.skin_tone,
+    body.hair_style_name,
+    body.facial_style_name,
+    body.eyes_red,
+    body.eyes_green,
+    body.eyes_blue,
+    body.underwear,
+    body.backbag
+FROM
+    players
+INNER JOIN
+    limbs
+ON
+    (
+        players.player_ckey = limbs.player_ckey)
+AND (
+        players.player_slot = limbs.player_slot)
+INNER JOIN
+    jobs
+ON
+    (
+        limbs.player_ckey = jobs.player_ckey)
+AND (
+        limbs.player_slot = jobs.player_slot)
+INNER JOIN
+    body
+ON
+    (
+        jobs.player_ckey = body.player_ckey)
+AND (
+        jobs.player_slot = body.player_slot)
+WHERE
+    players.player_ckey = ?
+AND players.player_slot = ? ;"}, ckey, 1)
+			if(q.Execute(db))
+				while(q.NextRow())
+					var/list/row = q.GetRowData()
+					for(var/a in row)
+						preference_list[a] = row[a]
+			else
+				message_admins("load_save_sqlite Error #: [q.Error()] - [q.ErrorMsg()]")
+				WARNING("[__LINE__]: datum/preferences/load_save_sqlite has returned")
+				return 0
+			H.name = preference_list["real_name"] || ckey
+			H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
 
 /client/proc/cmd_dectalk()
 	set name = "Dectalk"
