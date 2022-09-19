@@ -34,6 +34,9 @@
 
 	var/time_initialized_at = 0
 
+/obj/structure/closet/splashable()
+	return FALSE
+
 /obj/structure/closet/New()
 	..()
 	if (has_lock_type)
@@ -627,30 +630,20 @@
 		return 0
 	return 1
 
-/obj/structure/closet/container_resist(mob/user)
-	var/breakout_time = 2 //2 minutes by default
+/obj/structure/closet/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+	. = do_after_default_checks(arglist(args))
+	if(.)
+		shake_closet()
 
-	if(opened || (!welded && !locked))
-		return  //Door's open, not locked or welded, no point in resisting.
 
-	//okay, so the closet is either welded or locked... resist!!!
-	user.delayNext(DELAY_ALL,100)
+/obj/structure/closet/proc/shake_closet()
+	shake_animation(3, 3, 0.2, 15)
+	playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
+	spawn(2)
+		playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
+		spawn(2)
+			playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
 
-	to_chat(user, "<span class='notice'>You lean on the back of [src] and start pushing the door open. (this will take about [breakout_time] minutes.)</span>")
-	for(var/mob/O in viewers(src))
-		to_chat(O, "<span class='warning'>[src] begins to shake violently!</span>")
-	var/turf/T = get_turf(src)	//Check for moved locker
-	if(do_after(user, src, (breakout_time*60*10))) //minutes * 60seconds * 10deciseconds
-		if(!user || user.stat != CONSCIOUS || user.loc != src || opened || (!locked && !welded) || T != get_turf(src))
-			return
-		//we check after a while whether there is a point of resisting anymore and whether the user is capable of resisting
-
-		welded = 0 //applies to all lockers lockers
-		locked = 0 //applies to critter crates and secure lockers only
-		broken = 1 //applies to secure lockers only
-		visible_message("<span class='danger'>[user] successfully broke out of [src]!</span>")
-		to_chat(user, "<span class='notice'>You successfully break out of [src]!</span>")
-		open(user)
 
 /obj/structure/closet/send_to_past(var/duration)
 	..()
@@ -672,6 +665,9 @@
 				return
 		to_chat(ghost, "It contains: <span class='info'>[counted_english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+
+
+
 
 // -- Vox raiders.
 

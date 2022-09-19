@@ -465,8 +465,11 @@
 		if(H.foot_impact(src,rand(5,7)))
 			to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
 
-/turf/simulated/wall/acidable()
-	return !(flags & INVULNERABLE)
+/turf/simulated/wall/dissolvable()
+	if(flags & INVULNERABLE)
+		return FALSE
+	else
+		return PACID
 
 /turf/simulated/wall/clockworkify()
 	ChangeTurf(/turf/simulated/wall/mineral/clockwork)

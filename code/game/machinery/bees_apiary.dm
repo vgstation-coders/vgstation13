@@ -52,6 +52,9 @@ var/list/apiaries_list = list()
 
 	machine_flags = WRENCHMOVE
 
+/obj/machinery/apiary/splashable()
+	return FALSE
+
 /obj/machinery/apiary/New()
 	..()
 	apiaries_list.Add(src)

@@ -167,7 +167,7 @@ var/global/list/ghdel_profiling = list()
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
 				M.take_organ_damage(10)
-	INVOKE_EVENT(src, /event/throw_impact, "user" = user)
+	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user)
 
 /atom/Destroy()
 	if(reagents)
@@ -512,7 +512,7 @@ its easier to just keep the beam vertical.
 	return ex_act(severity, child)
 
 /atom/proc/can_mech_drill()
-	return acidable()
+	return dissolvable()
 
 /atom/proc/blob_act(destroy = 0, var/obj/effect/blob/source = null)
 	if(flags & INVULNERABLE)
@@ -854,11 +854,14 @@ its easier to just keep the beam vertical.
 
 /atom/proc/update_icon()
 
-/atom/proc/acidable()
-	return 0
+/atom/proc/splashable()
+	return TRUE
 
-/atom/proc/isacidhardened()
+/obj/item/weapon/storage/splashable() // I don't know where to put this, aaaaaaaaaaaaaa
 	return FALSE
+
+/atom/proc/dissolvable()
+	return 0
 
 /atom/proc/salt_act()
 	return

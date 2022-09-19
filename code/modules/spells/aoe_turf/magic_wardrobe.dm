@@ -22,7 +22,7 @@
 
 /spell/aoe_turf/conjure/magical_wardrobe/on_added(mob/user)
 	mWRecall = new /spell/targeted/magical_wardrobe_recall
-	mWRecall.mCloset = src
+	mWRecall.mCloset = magicCloset
 	if(user.mind)
 		if(!user.mind.wizard_spells)
 			user.mind.wizard_spells = list()
@@ -49,6 +49,7 @@
 				var/mob/living/user = usr
 				wardrobeHealth += 25
 				mWSummon = new /spell/magical_wardrobe_summon
+				mWSummon.mCloset = magicCloset
 				if(user.mind)
 					if(!user.mind.wizard_spells)
 						user.mind.wizard_spells = list()

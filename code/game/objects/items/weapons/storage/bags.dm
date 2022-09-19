@@ -217,7 +217,6 @@
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
 	display_contents_with_number = TRUE
 
-
 /obj/item/weapon/storage/bag/plants/CtrlClick()
 	if(isturf(loc))
 		return ..()
@@ -272,6 +271,22 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 /obj/item/weapon/storage/bag/plants/portactor/CtrlClick()
 	return
+
+// -----------------------------
+//          Materials bag
+// -----------------------------
+
+/obj/item/weapon/storage/bag/materials
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
+	icon_state = "matsbag"
+	name = "Materials Bag"
+	desc = "Can hold most materials and shards."
+	storage_slots = 50; //the number of plant pieces it can carry.
+	fits_max_w_class = 3
+	max_combined_w_class = 200
+	w_class = W_CLASS_TINY
+	can_only_hold = list("/obj/item/stack/sheet","/obj/item/weapon/shard")
+	display_contents_with_number = TRUE
 
 // -----------------------------
 //          Food bag
@@ -510,7 +525,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 		return FALSE
 
 	//I would prefer to drop a new stack, but the item/attack_hand code
-	// that calls this can't recieve a different object than you clicked on.
+	// that calls this can't receive a different object than you clicked on.
 	//Therefore, make a new stack internally that has the remainder.
 	// -Sayu
 
@@ -540,10 +555,10 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	slot_flags = SLOT_BELT
 	name = "gadget bag"
 	desc = "This bag can be used to store many machine components."
-	storage_slots = 25;
+	storage_slots = 50;
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell")
+	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell", "/obj/item/weapon/circuitboard")
 	display_contents_with_number = TRUE
 
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)

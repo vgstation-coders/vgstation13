@@ -189,11 +189,16 @@
 	speak = list("blblbb","wrmrmm","glglglg")
 	speak_emote = list("burbles", "hums")
 	emote_hear = list("gurgles")
+	emote_see = list("wiggles its bell", "probes around with its tendrils", "expands and contracts rhythmically")
 	speak_chance = 1
 	turns_per_move = 5
 	see_in_dark = 6
+	response_help  = "pokes"
+	response_disarm = "gently pushes aside"
+	response_harm   = "punches"
 	stop_automated_movement_when_pulled = TRUE
 	pass_flags = PASSTABLE // Can fly over tables
+	speak_override = TRUE
 
 	min_oxy = 0
 	max_oxy = 0
@@ -223,8 +228,14 @@
 	flying = 1
 	acidimmune = 1
 
+	var/trades_coins = 0 // Check that allows Phyl to give coins for Zam Raisins, but not a regular polyp
+	var/last_trade = 0
+	var/const/trade_cooldown = 120 SECONDS // Specifically here for the subtype that trades coins for Zam Raisins
 	var/gives_milk = TRUE
 	var/datum/reagents/udder = null
+
+/mob/living/simple_animal/hostile/retaliate/polyp/splashable()
+	return FALSE
 
 /mob/living/simple_animal/hostile/retaliate/polyp/New()
 	if(gives_milk)
@@ -264,46 +275,7 @@
 				to_chat(user, "<span class='warning'>[O] is full.</span>")
 			if(!transfered)
 				to_chat(user, "<span class='warning'>[src]'s tendrils are dry. Wait a bit longer...</span>")
-		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat))
-			Calm()
-			health+=15
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It burbles contentedly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			qdel(O)
-		else
-			..()
-	else
-		..()
-
-// Mothership faction version, so it doesn't get attacked by the vault dwellers
-/mob/living/simple_animal/hostile/retaliate/polyp/mothership
-	faction = "mothership"
-
-// Unique polyp that has been trained to trade coins when fed NotRaisins, there's no way to know this in-game as of yet. Jellyfish traders when?
-/mob/living/simple_animal/hostile/retaliate/polyp/phyl
-	name = "Phyl"
-	desc = "This polyp has several coins stuck to its inner tendrils. How odd."
-
-	meat_type = /obj/item/weapon/coin/iron // Instead of meat you get coins, 4 total
-	mob_property_flags = MOB_NO_LAZ // So he can't be killed and revived repeatedly to keep butchering coins
-
-	var/last_trade = 0
-	var/const/trade_cooldown = 120 SECONDS // Hopefully this is reasonable, considering he is an unlimited source of coins if the player has Zam NotRaisins
-
-/mob/living/simple_animal/hostile/retaliate/polyp/phyl/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(stat == CONSCIOUS)
-		if(istype(O, /obj/item/weapon/reagent_containers/glass))
-			user.visible_message("<span class='notice'>[user] collects gelatin from [src]'s tendrils using \the [O].</span>")
-			var/obj/item/weapon/reagent_containers/glass/G = O
-			var/transfered = udder.trans_id_to(G, POLYPGELATIN, rand(5,10))
-			if(G.reagents.total_volume >= G.volume)
-				to_chat(user, "<span class='warning'>[O] is full.</span>")
-			if(!transfered)
-				to_chat(user, "<span class='warning'>[src]'s tendrils are dry. Wait a bit longer...</span>")
-		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/zam_notraisins))
+		if(trades_coins == 1 && istype(O, /obj/item/weapon/reagent_containers/food/snacks/zam_notraisins))
 			if((last_trade + trade_cooldown < world.time))
 				Calm()
 				playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
@@ -330,9 +302,22 @@
 	else
 		..()
 
+// Mothership faction version, so it doesn't get attacked by the vault dwellers
+/mob/living/simple_animal/hostile/retaliate/polyp/mothership
+	faction = "mothership"
+
+// Unique polyp that has been trained to trade coins when fed NotRaisins, there's no way to know this in-game as of yet. Jellyfish traders when?
+/mob/living/simple_animal/hostile/retaliate/polyp/phyl
+	name = "Phyl"
+	desc = "This polyp has several coins stuck to its inner tendrils. How odd."
+
+	meat_type = /obj/item/weapon/coin/iron // Instead of meat you get coins, 4 total
+	mob_property_flags = MOB_NO_LAZ // So he can't be killed and revived repeatedly to keep butchering coins
+
+	trades_coins = 1 // This one will trade coins occasionally if fed Zam NotRaisins
+
 ///////////////////////////////////////////////////////////////////GYM RAT///////////
 // Can run on a treadmill much like the trader's colossal hamster, but not quite as efficiently. Maybe in the future I can code a unique reaction to creatine or something
-#define GYMRAT_MOVEDELAY 1
 /mob/living/simple_animal/hostile/retaliate/gym_rat
 	name = "gym rat"
 	desc = "It's pretty swole."
@@ -371,6 +356,7 @@
 	var/health_cap = 45 // Feeding it protein can pack on a whopping 50% increase in max health. GAINZ
 	var/icon_eat = "gymrat-eat"
 	var/obj/my_wheel
+	var/list/gym_equipments = list(/obj/structure/stacklifter, /obj/structure/punching_bag, /obj/structure/weightlifter, /obj/machinery/power/treadmill)
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/Life() // Copied from hammy wheel running code
 	if(timestopped)
@@ -380,25 +366,42 @@
 		if(enemies.len && prob(10))
 			Calm()
 	if(!my_wheel && isturf(loc))
-		var/obj/machinery/power/treadmill/T = locate(/obj/machinery/power/treadmill) in loc
-		if(T)
-			wander = FALSE
-			my_wheel = T
-		else
-			wander = TRUE
-	if(my_wheel)
-		gymratwheel(20)
-
+		for(var/obj/O in view(2, src))
+			if(is_type_in_list(O, gym_equipments))
+				my_wheel = locate(O) in view(2, src)
+				wander = FALSE
+				gymratwheel(20)
+				break
+			else
+				wander = TRUE
+				speed = 10
+		
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/gymratwheel(var/repeat)
 	if(repeat < 1 || stat)
-		return
-	if(!my_wheel || my_wheel.loc != loc) //no longer share a tile with our wheel
 		wander = TRUE
 		my_wheel = null
+		speed = 10
 		return
-	step(src,my_wheel.dir)
-	delayNextMove(GYMRAT_MOVEDELAY)
-	sleep(GYMRAT_MOVEDELAY)
+	if(my_wheel)
+		if(istype(my_wheel, /obj/structure/stacklifter))
+			var/obj/structure/stacklifter/S = my_wheel
+			S.attack_hand(src, 0, S.Adjacent(src))
+		else if(istype(my_wheel, /obj/structure/punching_bag))
+			var/obj/structure/punching_bag/P = my_wheel
+			P.attack_hand(src, 0, P.Adjacent(src))
+		else if(istype(my_wheel, /obj/structure/weightlifter))
+			var/obj/structure/weightlifter/W = my_wheel
+			W.attack_hand(src, 0, W.Adjacent(src))
+		else if(istype(my_wheel, /obj/machinery/power/treadmill) && my_wheel.loc == loc)
+			speed = 1
+			step(src,my_wheel.dir)
+		step_towards(src,my_wheel)
+	else
+		wander = TRUE
+		speed = 10
+	
+	delayNextMove(speed)
+	sleep(speed)
 	gymratwheel(repeat-1)
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/Calm()
@@ -446,8 +449,6 @@
 /mob/living/simple_animal/hostile/retaliate/gym_rat/mothership // Mothership faction version, so it doesn't get attacked by the vault dwellers
 	faction = "mothership"
 
-#undef GYMRAT_MOVEDELAY
-
 ///////////////////////////////////////////////////////////////////CATTLE SPECIMEN///////////
 // A talking cow!
 /mob/living/simple_animal/hostile/retaliate/cattle_specimen
@@ -485,6 +486,9 @@
 
 	var/gives_milk = TRUE
 	var/datum/reagents/udder = null
+
+/mob/living/simple_animal/hostile/retaliate/cattle_specimen/splashable()
+	return FALSE
 
 /mob/living/simple_animal/hostile/retaliate/cattle_specimen/New()
 	if(gives_milk)

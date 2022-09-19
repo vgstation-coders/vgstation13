@@ -223,14 +223,14 @@
 	icon_state = "plasmamanMiner_suit"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
-	clothing_flags = GOLIATHREINFORCE|CONTAINPLASMAMAN
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE|CONTAINPLASMAMAN
 
 /obj/item/clothing/head/helmet/space/plasmaman/miner
 	name = "plasmaman miner helmet"
 	icon_state = "plasmamanMiner_helmet0"
 	base_state = "plasmamanMiner_helmet"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
-	clothing_flags = GOLIATHREINFORCE|CONTAINPLASMAMAN
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE|CONTAINPLASMAMAN
 
 
 // MEDSCI
@@ -434,7 +434,7 @@
 	armor = list(melee = 60, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
 	canremove = 0
 
-/obj/item/clothing/suit/space/plasmaman/sith/acidable()
+/obj/item/clothing/suit/space/plasmaman/sith/dissolvable()
 	return 0
 
 //Unlike the suit, the helmet can be taken off
@@ -446,5 +446,5 @@
 	desc = "A menacing helmet that protects the wearer from harm, fit for a plasmaman."
 	armor = list(melee = 60, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
 
-/obj/item/clothing/head/helmet/space/plasmaman/sith/acidable()
+/obj/item/clothing/head/helmet/space/plasmaman/sith/dissolvable()
 	return 0

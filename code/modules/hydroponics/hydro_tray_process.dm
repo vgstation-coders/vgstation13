@@ -42,7 +42,7 @@
 	// On each tick, there's a chance the pest population will increase.
 	// This process is under the !seed check because it only happens when a live plant is in the tray.
 	if(prob(1))
-		add_pestlevel(5 * HYDRO_SPEED_MULTIPLIER)
+		add_pestlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient / 2)
 
 	//Bees will attempt to aid the plant's longevity and make it fruit faster.
 	if(bees && age >= seed.maturation && prob(50))
@@ -129,6 +129,8 @@
 		update_icon()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/affect_growth(var/amount)
+	if(!seed)
+		return
 	if(amount > 0)
 		if(age < seed.maturation)
 			age += amount
@@ -213,7 +215,7 @@
 	set_light(light_out)
 
 	var/light_available = 5
-	if(T.dynamic_lighting)
+	if(T?.dynamic_lighting)
 		light_available = T.get_lumcount() * 10
 
 	if(!seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
@@ -305,7 +307,7 @@
 	if(get_pestlevel() > 0)
 		if(seed.voracious)
 			sum_health += HYDRO_SPEED_MULTIPLIER
-			add_pestlevel(-HYDRO_SPEED_MULTIPLIER)
+			add_pestlevel(-HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 		else if (get_pestlevel() > seed.pest_tolerance)
 			sum_health -= HYDRO_SPEED_MULTIPLIER
 			update_icon_after_process = 1
@@ -314,7 +316,7 @@
 	if(get_weedlevel() > 0)
 		if(seed.voracious)
 			sum_health += HYDRO_SPEED_MULTIPLIER
-			add_weedlevel(-HYDRO_SPEED_MULTIPLIER)
+			add_weedlevel(-HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 		else if (get_weedlevel() > seed.weed_tolerance)
 			sum_health -= HYDRO_SPEED_MULTIPLIER
 			update_icon_after_process = 1

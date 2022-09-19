@@ -11,6 +11,9 @@
 	var/obj/item/weapon/reagent_containers/beaker = null
 	var/mob/living/carbon/human/attached = null
 
+/obj/machinery/iv_drip/splashable()
+	return FALSE
+
 /obj/machinery/iv_drip/update_icon()
 	if(src.attached)
 		icon_state = "hooked[mode ? "_inject" : "_draw"]"

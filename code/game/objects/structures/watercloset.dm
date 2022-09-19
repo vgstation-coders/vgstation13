@@ -477,6 +477,9 @@
 	anchored = 1
 	var/busy = 0 	//Something's being washed at the moment
 
+/obj/structure/sink/splashable()
+	return FALSE
+
 /obj/structure/sink/verb/empty_container_into()
 	set name = "Empty container into"
 	set category = "Object"

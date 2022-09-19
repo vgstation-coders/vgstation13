@@ -717,7 +717,7 @@
 		force = 1.0 // To compensate
 
 /obj/item/tool/crowbar/red/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for Half-Life 3!</span>")
 	playsound(get_turf(src), 'sound/medbot/Flatline_custom.ogg', 35)
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -821,6 +821,9 @@
 	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
 	toolsounds = list('sound/items/Welder.ogg')
+
+/obj/item/tool/solder/splashable()
+	return FALSE
 
 /obj/item/tool/solder/New()
 	. = ..()

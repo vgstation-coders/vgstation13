@@ -188,6 +188,12 @@
 	name="Plant Bag"
 	result=/obj/item/weapon/storage/bag/plants
 
+/datum/biogen_recipe/leather/materials
+	cost=500
+	id="materials"
+	name="Materials Bag"
+	result=/obj/item/weapon/storage/bag/materials
+
 /datum/biogen_recipe/leather/secbelt
 	cost=400
 	id="secbelt"

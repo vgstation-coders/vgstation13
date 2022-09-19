@@ -788,6 +788,8 @@
 	else if(O.molten) // Molten shit.
 		O.molten=0
 		O.solidify()
+	else if(O.dissolvable() == WATER &&  prob(15))
+		O.acid_melt()
 
 /datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	..()
@@ -1713,11 +1715,10 @@
 	specheatcap = 1.38
 
 /datum/reagent/sacid/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 
-	if(M.acidable())
+	if(M.dissolvable() == PACID)	//not PACID but it'll do
 		M.adjustFireLoss(REM)
 		M.take_organ_damage(0, REM)
 
@@ -1738,14 +1739,14 @@
 						targeted_zones.Remove(part)
 						break
 				if(covered)
-					if(C.acidable() && prob(15))
+					if(C.dissolvable() == PACID && prob(15))	//not PACID but it will do
 						to_chat(H, "<span class='warning'>Your [C.name] melts away but protects you from the acid!</span>")
 						H.u_equip(C,0)
 						qdel(C)
 					else
 						to_chat(H, "<span class='warning'>Your [C.name] protects you from the acid!</span>")
 
-	if(M.acidable() && targeted_zones.len)
+	if(M.dissolvable() == PACID && targeted_zones.len) //not PACID but it will do
 		if(prob(15) && ishuman(M) && volume >= 30)
 			var/mob/living/carbon/human/H = M
 			var/screamed = FALSE
@@ -1764,11 +1765,10 @@
 			M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 
 /datum/reagent/sacid/reaction_obj(var/obj/O, var/volume)
-
 	if(..())
 		return 1
 
-	if(!O.acidable())
+	if(!(O.dissolvable() == PACID)) //not PACID but it will do
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)) && prob(10))
@@ -1818,14 +1818,14 @@
 						targeted_zones.Remove(part)
 						break
 				if(covered)
-					if(C.acidable() && prob(15))
+					if(C.dissolvable() == PACID && prob(15))
 						to_chat(H, "<span class='warning'>Your [C.name] melts away but protects you from the acid!</span>")
 						H.u_equip(C,0)
 						qdel(C)
 					else
 						to_chat(H, "<span class='warning'>Your [C.name] protects you from the acid!</span>")
 
-	if(M.acidable() && targeted_zones.len) //I think someone doesn't know what this does
+	if(M.dissolvable() == PACID && targeted_zones.len) //I think someone doesn't know what this does
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			var/screamed = FALSE
@@ -1844,15 +1844,13 @@
 			M.take_organ_damage(min(15, volume * 4)) //Same deal as sulphuric acid
 
 /datum/reagent/pacid/reaction_obj(var/obj/O, var/volume)
-
 	if(..())
 		return 1
 
-	if(!O.acidable())
+	if(!(O.dissolvable() == PACID))
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)))
-		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		O.acid_melt()
 	else if(istype(O,/obj/effect/plantsegment))
 		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(get_turf(O))
@@ -2278,9 +2276,23 @@
 	if(..())
 		return 1
 
-	M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
-	if(prob(30))
-		M.audible_scream()
+	if(isgolem(M)) //golems metabolize the diamond into very expensive doctor's delight
+		if(M.getOxyLoss())
+			M.adjustOxyLoss(-2)
+		if(M.getBruteLoss())
+			M.heal_organ_damage(2, 0)
+		if(M.getFireLoss())
+			M.heal_organ_damage(0, 2)
+		if(M.getToxLoss())
+			M.adjustToxLoss(-2)
+		if(M.dizziness != 0)
+			M.dizziness = max(0, M.dizziness - 15)
+		if(M.confused != 0)
+			M.remove_confused(5)
+	else
+		M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
+		if(prob(30))
+			M.audible_scream()
 
 /datum/reagent/phazon
 	name = "Phazon Salt"
@@ -2603,7 +2615,7 @@
 			if(!T.seed.immutable && prob(chance))
 				T.check_for_divergence(1)
 				T.seed.potency++
-				
+
 
 /datum/reagent/toxin/plantbgone
 	name = "Plant-B-Gone"
@@ -3531,6 +3543,24 @@ var/procizine_tolerance = 0
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
+/datum/reagent/hyperzine/pcp
+	name = "Liquid PCP"
+	id = LIQUIDPCP
+	description = "I didn't even know it came in liquid form!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#7a6d23" //rgb: 200, 165, 220
+
+/datum/reagent/hyperzine/pcp/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(holder.has_reagent(CHILLWAX))
+		holder.remove_reagent(CHILLWAX, REM)
+	if(M)
+		M.a_intent = I_HURT
+		if(M?.hud_used?.action_intent)
+			M.hud_used.action_intent.icon_state = "intent_hurt"
+		M.hallucination += 10
+
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
 	id = HYPOZINE
@@ -4435,7 +4465,7 @@ var/procizine_tolerance = 0
 				chance = unmix(T.seed.lifespan, 15, 125)*20
 				if(prob(chance))
 					T.check_for_divergence(1)
-					T.seed.endurance++					
+					T.seed.endurance++
 
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
@@ -9191,7 +9221,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(volume >= min_to_start && !is_being_petrified)
 		is_being_petrified = TRUE
 	if(is_being_petrified)
-		if(holder.has_any_reagents(PETRITRICINCURES))
+		if(holder.has_any_reagents(ACIDS))
 			to_chat(M, "<span class='notice'>You feel a wave of relief as your muscles loosen up.</span>")
 			C.pain_shock_stage = max(0, C.pain_shock_stage - 300)
 			is_being_petrified = FALSE
@@ -9473,7 +9503,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	if(!O.acidable())
+	if(!(O.dissolvable() == PACID))
 		return
 
 	if(istype(O,/obj/structure/table))
@@ -9698,7 +9728,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 0.05
 	custom_metabolism = 0.01
 	var/spookvision = FALSE
-	
+
 /datum/reagent/ectoplasm/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1

@@ -376,7 +376,7 @@
 	anchored = 1
 	layer = BELOW_PROJECTILE_LAYER
 
-/obj/structure/ricochet_trail/acidable()
+/obj/structure/ricochet_trail/dissolvable()
 	return 0
 
 /obj/structure/ricochet_trail/New()
@@ -393,7 +393,7 @@
 	anchored = 1
 	layer = ABOVE_PROJECTILE_LAYER
 
-/obj/structure/ricochet_bump/acidable()
+/obj/structure/ricochet_bump/dissolvable()
 	return 0
 
 /obj/structure/ricochet_bump/New()

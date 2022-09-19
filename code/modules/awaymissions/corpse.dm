@@ -1103,6 +1103,15 @@
 	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 	corpsehelmet = /obj/item/clothing/head/helmet/mothership_visor_heavy
 
+/obj/effect/landmark/corpse/grey/soldier_space
+	name = "Grey Soldier"
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsesuit = /obj/item/clothing/suit/space/rig/grey/soldier
+	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
+	corpsebelt = /obj/item/weapon/storage/belt/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
+	corpseback = /obj/item/weapon/tank/oxygen/red
+
 /obj/effect/landmark/corpse/grey/explorer
 	name = "Grey Explorer"
 	corpseuniform = /obj/item/clothing/under/grey/grey_scout

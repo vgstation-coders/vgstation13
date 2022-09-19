@@ -838,6 +838,14 @@ Thanks.
 			qdel(package)
 			playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		return
+	else if(istype(src.loc, /obj/effect/spider/cocoon))
+		var/obj/effect/spider/cocoon/cocoon = src.loc
+		to_chat(L, "<span class='warning'>You attempt to untangle yourself, the webs are tight and will take some time.</span>")
+		if(do_after(src, src, 2 MINUTES))
+			L.visible_message("<span class='danger'>[L] successfully breaks out of [cocoon]!</span>",\
+							  "<span class='notice'>You successfully break out!</span>")
+			forceMove(T)
+			qdel(cocoon)
 
 	//Detaching yourself from a tether
 	if(L.tether)
@@ -1016,7 +1024,7 @@ Thanks.
 		L.visible_message("<span class='danger'>The [C] begins to shake violenty!</span>",
 						  "<span class='warning'>You lean on the back of [C] and start pushing the door open (this will take about [breakout_time] minutes).</span>")
 		spawn(0)
-			if(do_after(usr,src,breakout_time * 60 * 10)) //minutes * 60seconds * 10deciseconds
+			if(do_after(usr, C, breakout_time * 60 * 10, 30, custom_checks = new /callback(C, /obj/structure/closet/proc/on_do_after))) 	//minutes * 60seconds * 10deciseconds
 				if(!C || !L || L.stat != CONSCIOUS || L.loc != C || C.opened) //closet/user destroyed OR user dead/unconcious OR user no longer in closet OR closet opened
 					return
 
@@ -1272,6 +1280,7 @@ Thanks.
 
 /mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
+		INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
 		if (now_pushing || !loc || size <= SIZE_TINY)
 			return
 		now_pushing = 1

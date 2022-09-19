@@ -175,6 +175,11 @@
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellyburger/slime
 
+/datum/recipe/polypburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/polyp)
+	result = /obj/item/weapon/reagent_containers/food/snacks/polypburger
+
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
 	items = list()
@@ -838,7 +843,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/plasmastew
-	
+
 /datum/recipe/plasmastew/make_food(var/obj/container, var/mob/user)
 	var/obj/item/weapon/reagent_containers/food/snacks/plasmastew/being_cooked = ..(container)
 	being_cooked.reagents.del_reagent(PLASMA)
@@ -1535,6 +1540,11 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/wrapped
 
+/datum/recipe/polyppudding
+	reagents = list(POLYPGELATIN = 5, SUGARS = 5, CREAM = 5)
+	items = list()
+	result = /obj/item/weapon/reagent_containers/food/snacks/polyppudding
+
 // Sandwiches //////////////////////////////////////////////////
 
 /datum/recipe/sandwich
@@ -1633,6 +1643,15 @@
 		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pbj
+
+/datum/recipe/polypwich
+	reagents = list (POLYPGELATIN = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/polyp,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/polypwich
 
 // Coder Snacks ///////////////////////////////////////////////////////
 

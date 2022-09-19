@@ -1,453 +1,555 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 1;
-	icon_state = "wall3"
+/obj/structure/trophy_mount,
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "shoji";
+	name = "shoji wall"
 	},
 /area/dojo)
 "b" = (
 /obj/structure/sign/vacuum,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 1;
-	icon_state = "wall3"
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "shoji";
+	name = "shoji wall"
 	},
 /area/dojo)
 "c" = (
 /obj/structure/button/ninja/launcher,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 1;
-	icon_state = "wall3"
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "shoji";
+	name = "shoji wall"
 	},
 /area/dojo)
 "d" = (
 /obj/structure/sign/chinese/restricted_area,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 1;
-	icon_state = "wall3"
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "shoji";
+	name = "shoji wall"
 	},
 /area/dojo)
 "e" = (
 /obj/structure/button/ninja/teleporter,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 1;
-	icon_state = "wall3"
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "shoji";
+	name = "shoji wall"
 	},
 /area/dojo)
 "f" = (
-/turf/simulated/floor/engine/acoustic,
+/obj/structure/table/woodentable,
+/turf/simulated/floor{
+	icon_state = "tatami-green-spiral";
+	name = "tatami mat"
+	},
 /area/dojo)
 "g" = (
 /obj/effect/decal/ninjaporter,
-/turf/simulated/floor/engine/acoustic,
+/turf/simulated/floor/wood,
 /area/dojo)
 "h" = (
-/obj/item/weapon/stool/cushion,
-/turf/simulated/floor/engine/acoustic,
+/obj/structure/punching_bag/captain,
+/turf/simulated/floor/wood,
 /area/dojo)
 "i" = (
+/obj/structure/table/woodentable,
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake,
-/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake{
-	pixel_x = 8;
-	pixel_y = -6
-	},
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago{
 	pixel_x = -8;
 	pixel_y = -6
-	},
-/obj/structure/table/woodentable,
-/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi{
-	pixel_x = 8;
-	pixel_y = 8
 	},
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura{
 	pixel_x = -8;
 	pixel_y = 8
 	},
-/turf/simulated/floor/engine/acoustic,
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi{
+	pixel_x = 8;
+	pixel_y = 8
+	},
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake{
+	pixel_x = 8;
+	pixel_y = -6
+	},
+/turf/simulated/floor{
+	icon_state = "tatami-green-spiral";
+	name = "tatami mat"
+	},
 /area/dojo)
 "j" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/wood,
+/area/dojo)
+"k" = (
+/turf/simulated/wall/mineral/wood,
+/area/dojo)
+"l" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake,
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura{
+	pixel_x = -8;
+	pixel_y = 8
+	},
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago{
+	pixel_x = -8;
+	pixel_y = -6
+	},
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake{
+	pixel_x = 8;
+	pixel_y = -6
+	},
+/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi{
+	pixel_x = 8;
+	pixel_y = 8
+	},
+/turf/simulated/floor{
+	icon_state = "tatami-green-spiral";
+	name = "tatami mat"
+	},
+/area/dojo)
+"m" = (
+/obj/item/weapon/stool/cushion{
+	pixel_y = 8
+	},
 /obj/effect/landmark{
 	name = "ninjastart"
 	},
-/turf/simulated/floor/engine/acoustic,
+/turf/simulated/floor{
+	icon_state = "tatami-green-spiral";
+	name = "tatami mat"
+	},
 /area/dojo)
-"k" = (
-/obj/structure/punching_bag/captain,
-/turf/simulated/floor/engine/acoustic,
+"n" = (
+/obj/structure/table/woodentable,
+/mob/living/silicon/robot/dummy,
+/turf/simulated/floor/wood,
 /area/dojo)
-"l" = (
-/turf/simulated/wall,
+"o" = (
+/turf/simulated/floor{
+	icon_state = "tatami-green-spiral";
+	name = "tatami mat"
+	},
 /area/dojo)
-"m" = (
+"p" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/gun/energy/tag/blue,
+/turf/simulated/floor/wood,
+/area/dojo)
+"q" = (
+/obj/effect/decal/arrow,
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "shoji";
+	name = "shoji wall"
+	},
+/area/dojo)
+"r" = (
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "wood0";
+	name = "sturdy wooden wall";
+	desc = "Legendary Japanese lumber, folded over 2 times."
+	},
+/area/dojo)
+"s" = (
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "shoji";
+	name = "shoji wall"
+	},
+/area/dojo)
+"t" = (
+/obj/item/weapon/stool/cushion{
+	pixel_y = 8
+	},
+/turf/simulated/floor{
+	icon_state = "tatami-green-spiral";
+	name = "tatami mat"
+	},
+/area/dojo)
+"u" = (
+/turf/simulated/floor/wood,
+/area/dojo)
+"y" = (
 /obj/machinery/door/airlock{
 	desc = "Great for practicing your ninja skills."
 	},
-/turf/simulated/floor/engine/acoustic,
+/turf/simulated/floor{
+	icon_state = "tatami-green-spiral";
+	name = "tatami mat"
+	},
 /area/dojo)
-"n" = (
-/turf/simulated/wall/r_wall,
+"z" = (
+/obj/structure/sign/ninjaglove,
+/turf/simulated/wall/shuttle/unsmoothed/black{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "shoji";
+	name = "shoji wall"
+	},
 /area/dojo)
-"o" = (
+"A" = (
+/obj/structure/mannequin/wood,
+/turf/simulated/floor/wood,
+/area/dojo)
+"H" = (
 /obj/machinery/door/airlock/vault{
 	desc = "Great for practicing your ninja skills.";
 	locked = 1;
 	name = "Vault Door"
 	},
-/turf/simulated/floor/engine/acoustic,
+/turf/simulated/floor{
+	icon_state = "tatami-green-spiral";
+	name = "tatami mat"
+	},
 /area/dojo)
-"p" = (
-/obj/effect/decal,
+"J" = (
+/obj/structure/bed/chair/wood/throne,
+/turf/simulated/floor/wood,
+/area/dojo)
+"L" = (
 /obj/effect/decal/arrow{
 	dir = 8
 	},
-/turf/simulated/floor/engine/acoustic,
+/turf/simulated/floor/wood,
 /area/dojo)
-"q" = (
-/mob/living/silicon/robot/dummy,
-/turf/simulated/floor/engine/acoustic,
+"Q" = (
+/obj/structure/mannequin/wood/woman,
+/turf/simulated/floor/wood,
 /area/dojo)
-"r" = (
-/obj/structure/sign/ninjaglove,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 1;
-	icon_state = "wall3"
-	},
-/area/dojo)
-"s" = (
-/obj/item/weapon/gun/energy/tag/blue,
-/turf/simulated/floor/engine/acoustic,
-/area/dojo)
-"t" = (
+"T" = (
 /obj/item/weapon/cell/crap,
-/turf/simulated/floor/engine/acoustic,
+/obj/structure/table/woodentable,
+/turf/simulated/floor/wood,
 /area/dojo)
-"u" = (
-/obj/item/weapon/stool/cushion{
-	pixel_y = 16
+"Z" = (
+/obj/effect/decal/arrow{
+	dir = 4
 	},
-/turf/simulated/floor/engine/acoustic,
+/turf/simulated/floor/wood,
 /area/dojo)
 
 (1,1,1) = {"
-a
-a
-a
-a
-a
-a
-a
-a
-a
-a
-a
-a
-a
-a
-a
-a
-a
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
 "}
 (2,1,1) = {"
-a
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-a
+s
+u
+u
+u
+u
+u
+u
+u
+s
+u
+u
+u
+u
+u
+u
+u
+s
 "}
 (3,1,1) = {"
-a
-f
-f
-f
-f
-f
-f
-h
-i
+s
 u
-f
-f
-f
-f
-f
-f
-a
+o
+o
+o
+o
+o
+u
+s
+u
+o
+o
+o
+o
+o
+u
+s
 "}
 (4,1,1) = {"
 b
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
+Z
+o
+t
+t
+t
+o
+u
+s
+h
+o
 k
-f
-f
-a
+y
+k
+o
+u
+s
 "}
 (5,1,1) = {"
 c
 g
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-a
-"}
-(6,1,1) = {"
-b
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-a
-"}
-(7,1,1) = {"
-a
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-a
-"}
-(8,1,1) = {"
-a
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-a
-"}
-(9,1,1) = {"
-a
-f
-f
-f
-f
-f
-f
-f
-j
-f
-f
-f
-f
-f
-f
-f
-a
-"}
-(10,1,1) = {"
-a
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-l
-f
-f
-a
-"}
-(11,1,1) = {"
-a
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-m
-f
-f
-a
-"}
-(12,1,1) = {"
-d
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-n
-f
-f
-a
-"}
-(13,1,1) = {"
-e
-g
-f
-f
-f
-f
-f
-f
-f
-f
+o
 f
 f
 f
 o
-f
-f
+u
+s
+h
+o
+o
+o
+o
+o
+u
+s
+"}
+(6,1,1) = {"
+b
+L
+o
+t
+t
+t
+o
+u
+s
+h
+o
+o
+o
+o
+o
+u
+s
+"}
+(7,1,1) = {"
+s
+u
+o
+o
+o
+o
+o
+u
+s
+u
+o
+m
+m
+m
+o
+u
+s
+"}
+(8,1,1) = {"
 a
+A
+o
+t
+t
+t
+o
+u
+j
+u
+o
+i
+i
+i
+o
+u
+s
+"}
+(9,1,1) = {"
+a
+J
+o
+f
+f
+f
+o
+u
+j
+u
+o
+f
+f
+f
+o
+u
+s
+"}
+(10,1,1) = {"
+a
+Q
+o
+t
+t
+t
+o
+u
+j
+u
+o
+l
+l
+l
+o
+u
+s
+"}
+(11,1,1) = {"
+s
+u
+o
+o
+o
+o
+o
+u
+s
+u
+o
+m
+m
+m
+o
+u
+s
+"}
+(12,1,1) = {"
+d
+Z
+o
+t
+t
+t
+o
+u
+q
+p
+o
+o
+o
+o
+o
+u
+s
+"}
+(13,1,1) = {"
+e
+g
+o
+f
+f
+f
+o
+u
+z
+n
+o
+o
+o
+o
+o
+u
+s
 "}
 (14,1,1) = {"
 d
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-f
-l
-f
-f
-a
+L
+o
+t
+t
+t
+o
+u
+q
+T
+o
+k
+H
+k
+o
+u
+s
 "}
 (15,1,1) = {"
-a
-f
-f
-f
-f
-f
-f
-q
 s
-t
-f
-f
-f
-f
-f
-f
-a
+u
+o
+o
+o
+o
+o
+u
+s
+u
+o
+o
+o
+o
+o
+u
+s
 "}
 (16,1,1) = {"
-a
-f
-f
-f
-f
-f
-f
-p
-p
-p
-f
-f
-f
-f
-f
-f
-a
+s
+u
+u
+u
+u
+u
+u
+u
+s
+u
+u
+u
+u
+u
+u
+u
+s
 "}
 (17,1,1) = {"
-a
-a
-a
-a
-a
-a
-a
-a
 r
-a
-a
-a
-a
-a
-a
-a
-a
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
+r
 "}

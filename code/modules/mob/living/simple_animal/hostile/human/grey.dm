@@ -433,54 +433,76 @@
 	say(pick("Enemy of the mothership!","Pacifying target!","Engaging!","Attack!"), all_languages[LANGUAGE_GREY])
 
 ///////////////////////////////////////////////////////////////////GREY GRENADIER///////////
-//Soldier that can throw grenades
+//Soldier that can launch grenades, very dangerous. Slightly better vision than the average soldier
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier
 	name = "MDF Grenadier"
-	desc = "A thin alien humanoid. This one is armed with a disintegrator and several strange-looking grenades."
+	desc = "A thin alien humanoid. This one is armed with a grenade launcher and several strange-looking grenades."
 
 	icon_state = "greygrenadier"
 	icon_living = "greygrenadier"
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_grenadier
 
-	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/weapon/grenade/chem_grenade/mothershipacid, /obj/item/weapon/grenade/spawnergrenade/mothershipdrone)
+	items_to_drop = list(/obj/item/weapon/gun/grenadelauncher, /obj/item/weapon/grenade/chem_grenade/mothershipacid, /obj/item/weapon/grenade/spawnergrenade/mothershipdrone)
 
 	speak = list("Grenade belt loaded, standing by.","A few grenades never fail to soften the enemy up.","When are we due for rotation?")
 	speak_chance = 1
 
-	projectiletype = /obj/item/projectile/beam/scorchray
-	projectilesound = 'sound/weapons/ray1.ogg'
-	retreat_distance = 5
-	minimum_distance = 5
+	vision_range = 10
+	aggro_vision_range = 10
+	idle_vision_range = 10 // Keeping an eye open for a target to launch a grenade towards at all times
+
 	ranged = 1
+	retreat_distance = 6
+	minimum_distance = 6
+	ranged_cooldown_cap = 8 // Launching grenades is pretty powerful, gotta give it a cooldown
+
+	var/reloading = 0 // Grenadier will move further away or closer depending on if cooling down from a grenade launch, or ready to fire
+	var/loaded = 1
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier/Life()
+	..()
+	if(reloading == 1) // We're cooling down or "reloading" after the last shot. Run farther away!
+		retreat_distance = 9
+		minimum_distance = 9
+		spawn(8 SECONDS)
+			loaded = 1
+			reloading = 0
+	if(loaded == 1) // Locked and loaded. Back into the fray!
+		retreat_distance = 6
+		minimum_distance = 6
 
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier/Shoot(var/atom/target, var/atom/start, var/mob/user)
-	if(prob(15)) // This weird mess creates a small chance to throw and prime one of two grenade types
-		switch(rand(1,2))
-			if(1)
-				visible_message("<span class = 'warning'>\The [src] primes a grenade and hurls it towards \the [target]!</span>")
-				say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
-				var/atom/movable/grenade_to_throw = new /obj/item/weapon/grenade/spawnergrenade/mothershipdrone(get_turf(src))
-				var/obj/item/weapon/grenade/F = grenade_to_throw
-				grenade_to_throw.throw_at(target,10,2)
-				F.activate()
-			if(2)
-				visible_message("<span class = 'warning'>\The [src] primes a grenade and hurls it towards \the [target]!</span>")
-				say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
-				var/atom/movable/grenade_to_throw = new /obj/item/weapon/grenade/chem_grenade/mothershipacid(get_turf(src))
-				var/obj/item/weapon/grenade/F = grenade_to_throw
-				grenade_to_throw.throw_at(target,10,2)
-				F.activate()
-
-	else // Otherwise just fire a projectile normally
-		..()
+	switch(rand(1,2))
+		if(1)
+			visible_message("<span class = 'warning'>\The [src] launches a grenade towards \the [target]!</span>")
+			say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
+			playsound(src, 'sound/weapons/grenadelauncher.ogg', 50, 1)
+			var/atom/movable/grenade_to_throw = new /obj/item/weapon/grenade/spawnergrenade/mothershipdrone(get_turf(src))
+			var/obj/item/weapon/grenade/F = grenade_to_throw
+			grenade_to_throw.throw_at(target,10,2)
+			F.activate()
+			ranged_cooldown = 8
+			loaded = 0
+			reloading = 1
+		if(2)
+			visible_message("<span class = 'warning'>\The [src] launches a grenade towards \the [target]!</span>")
+			say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
+			playsound(src, 'sound/weapons/grenadelauncher.ogg', 50, 1)
+			var/atom/movable/grenade_to_throw = new /obj/item/weapon/grenade/chem_grenade/mothershipacid(get_turf(src))
+			var/obj/item/weapon/grenade/F = grenade_to_throw
+			grenade_to_throw.throw_at(target,10,2)
+			F.activate()
+			ranged_cooldown = 8
+			loaded = 0
+			reloading = 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier/Aggro()
 	..()
 	say(pick("Hostile target!","Prepping grenade.","Open fire!","For the mothership!"), all_languages[LANGUAGE_GREY])
 
 ///////////////////////////////////////////////////////////////////GREY HEAVY SOLDIER///////////
-//A much tankier but slower grey soldier. Can throw a grenade like the grenadier, and when health gets low will deploy an energy shield to protect himself
+//A much tankier but slower grey soldier. Has a small chance to throw a grenade, and when health gets low will deploy an energy shield to protect himself
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/heavy
 	name = "MDF Heavy"
 	desc = "A thin alien humanoid. This one is heavily armored from head to toe and armed with a heavy disintegrator."
@@ -577,6 +599,76 @@
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/heavy/Aggro()
 	..()
 	say(pick("For the Administration!","Report, target marked for disintegration.","Sterilizing target.","For the mothership!","You cannot stand against us."), all_languages[LANGUAGE_GREY])
+
+///////////////////////////////////////////////////////////////////GREY TROOPER BASE///////////
+//Baseline unarmed spaceworthy ayy soldier, here for the sake of inheritance. Has a slightly larger vision range than the average soldier
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space
+	name = "MDF Trooper"
+	desc = "A thin alien humanoid. This one is wearing an armored rigsuit and seems to be hostile."
+
+	icon_state = "greytrooper"
+	icon_living = "greytrooper"
+
+	vision_range = 10
+	aggro_vision_range = 10
+	idle_vision_range = 10
+
+	maxHealth = 140 // More hp than a standard soldier, less than the heavy soldier
+	health = 140
+
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
+	maxbodytemp = 1000 // Spess protection stats
+
+	corpse = /obj/effect/landmark/corpse/grey/soldier_space
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/Process_Spacemove(var/check_drift = 0) // They can follow enemies into space, and won't just drift off
+	return 1
+
+///////////////////////////////////////////////////////////////////GREY TROOPER///////////
+//Less tanky than the heavy soldier, but spaceworthy. A little more clever than a regular soldier with its tactics, will back off and shoot from further away if his health gets low
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged
+	name = "MDF Trooper"
+	desc = "A thin alien humanoid. This one is wearing an armored rigsuit and armed with a heavy disintegrator."
+
+	icon_state = "greytrooper_laser"
+	icon_living = "greytrooper_laser"
+
+	var/defensive_stance = 0
+
+	items_to_drop = list(/obj/item/weapon/gun/energy/heavydisintegrator)
+
+	speak = list("Sweeping sector, be prepared for EVA.","Praise the mothership, and all hail the Chairman.","Air supply capacity check is green.","Terminate all unauthorized personnel and unidentified xenofauna.")
+	speak_chance = 1
+
+	projectiletype = /obj/item/projectile/beam/immolationray
+	projectilesound = 'sound/weapons/ray1.ogg'
+	retreat_distance = 5
+	minimum_distance = 5
+	ranged = 1
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged/Life()
+	..()
+	if(health <= 70 && defensive_stance == 0) // Health is getting low, lets back off and try to use range to our advantage
+		defensive_stance = 1
+		retreat_distance = 7
+		minimum_distance = 7
+		say("[pick("Trooper under heavy fire! Moving to reserve position.", "Hostile is proving resilient. Backup required.", "Covering fire! Now!")]")
+	if(health > 70 && defensive_stance == 1) // Health has somehow been restored, lets get closer and be more aggressive
+		defensive_stance = 0
+		retreat_distance = 5
+		minimum_distance = 5
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged/Aggro()
+	..()
+	say(pick("Hostile sighted, my sector.","Report, target marked for disintegration.","Sterilizing target.","For the mothership!","Target acquired. Disintegrate with extreme prejudice."), all_languages[LANGUAGE_GREY])
 
 //////////////////////////////
 // GREY RESEARCHERS
@@ -928,3 +1020,6 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/GetAccess()
 	return list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
+
+/mob/living/simple_animal/hostile/humanoid/grey/leader/Process_Spacemove(var/check_drift = 0) // The ayy leader can follow enemies into space, and won't just drift off
+	return 1

@@ -1,5 +1,6 @@
-#define MODE_WALL 0
-#define MODE_DOOR 1
+#define MODE_WALL "wall"
+#define MODE_DOOR "door"
+#define MODE_SHELTER "shelter"
 
 /obj/item/weapon/inflatable_dispenser
 	name = "inflatables dispenser"
@@ -10,34 +11,53 @@
 
 	var/list/stored_walls = list()
 	var/list/stored_doors = list()
+	var/list/stored_shelters = list()
 	var/max_walls = 18
 	var/max_doors = 15
-	var/list/allowed_types = list(/obj/item/inflatable/wall, /obj/item/inflatable/door)
+	var/max_shelters = 5
+	var/list/allowed_types = list(/obj/item/inflatable/wall, /obj/item/inflatable/door, /obj/item/inflatable/shelter)
 	var/mode = MODE_WALL
+	var/borgdisp = 0
 
 /obj/item/weapon/inflatable_dispenser/New()
 	..()
-	for(var/i = 0 to max(max_walls,max_doors))
+	for(var/i = 0 to max(max_walls,max_doors,max_shelters))
 		if(stored_walls.len < max_walls)
 			stored_walls += new /obj/item/inflatable/wall(src)
 		if(stored_doors.len < max_doors)
 			stored_doors += new /obj/item/inflatable/door(src)
+		if(stored_shelters.len < max_shelters)
+			if(!borgdisp) //breaks in some unfathomable ways if done any other way, such as dispensers having half the stored inflatables, not being able to pick up shelters, spawning with only 1 of each, etc	
+				stored_shelters += new /obj/item/inflatable/shelter(src)
 
 /obj/item/weapon/inflatable_dispenser/Destroy()
 	stored_walls = null
 	stored_doors = null
+	stored_shelters = null
 	..()
 
 /obj/item/weapon/inflatable_dispenser/robot
-	w_class = W_CLASS_HUGE
+	borgdisp = 1
 
 /obj/item/weapon/inflatable_dispenser/examine(mob/user)
 	..()
-	to_chat(user, "It has [stored_walls.len] wall segment\s and [stored_doors.len] door segment\s stored, and is set to deploy [mode ? "doors" : "walls"].")
+	if(stored_walls.len)
+		to_chat(user, "It has [stored_walls.len] wall segment\s stored.")
+	if(stored_doors.len)
+		to_chat(user, "It has [stored_doors.len] door\s stored.")
+	if(stored_shelters.len)
+		to_chat(user, "It has [stored_shelters.len] shelter\s stored.")
+	to_chat(user, "It is set to deploy [mode]s.")
 
 /obj/item/weapon/inflatable_dispenser/attack_self()
-	mode = !mode
-	to_chat(usr, "You set \the [src] to deploy [mode ? "doors" : "walls"].")
+	switch(mode)
+		if(MODE_DOOR)
+			mode = MODE_SHELTER
+		if(MODE_WALL)
+			mode = MODE_DOOR
+		if(MODE_SHELTER)
+			mode = MODE_WALL
+	to_chat(usr, "You set \the [name] to deploy [mode]s.")
 
 /obj/item/weapon/inflatable_dispenser/attackby(var/obj/item/O, var/mob/user)
 	if(O.type in allowed_types)
@@ -65,7 +85,7 @@
 	var/obj/item/inflatable/I
 	if(mode == MODE_WALL)
 		if(!stored_walls.len)
-			to_chat(user, "\The [src] is out of walls!")
+			to_chat(user, "\The [name] is out of walls!")
 			return
 
 		I = stored_walls[1]
@@ -75,18 +95,28 @@
 
 	if(mode == MODE_DOOR)
 		if(!stored_doors.len)
-			to_chat(user, "\The [src] is out of doors!")
+			to_chat(user, "\The [name] is out of doors!")
 			return
 
 		I = stored_doors[1]
 		if(!I.can_inflate(T))
 			return
 		stored_doors -= I
+	
+	if(mode == MODE_SHELTER)
+		if(!stored_shelters.len)
+			to_chat(user, "\The [name] is out of shelters!")
+			return
+
+		I = stored_shelters[1]
+		if(!I.can_inflate(T))
+			return
+		stored_shelters -= I
 
 	I.forceMove(T)
 	I.inflate()
-	user.visible_message("<span class='danger'>[user] deploys an inflatable [mode ? "door" : "wall"].</span>", \
-	"<span class='notice'>You deploy an inflatable [mode ? "door" : "wall"].</span>")
+	user.visible_message("<span class='danger'>[user] deploys \an [I.name].</span>", \
+	"<span class='notice'>You deploy \an [I.name].</span>")
 
 /obj/item/weapon/inflatable_dispenser/proc/pick_up(var/obj/A, var/mob/living/user)
 	if(istype(A, /obj/structure/inflatable))
@@ -99,14 +129,19 @@
 			return FALSE
 		if(istype(I, /obj/item/inflatable/wall))
 			if(stored_walls.len >= max_walls)
-				to_chat(user, "\The [src] can't hold more walls.")
+				to_chat(user, "\The [name] can't hold more walls.")
 				return FALSE
 			stored_walls += I
 		else if(istype(I, /obj/item/inflatable/door))
 			if(stored_doors.len >= max_doors)
-				to_chat(usr, "\The [src] can't hold more doors.")
+				to_chat(usr, "\The [name] can't hold more doors.")
 				return FALSE
 			stored_doors += I
+		else if(istype(I, /obj/item/inflatable/shelter))
+			if(stored_shelters.len >= max_shelters)
+				to_chat(usr, "\The [name] can't hold more shelters.")
+				return FALSE
+			stored_shelters += I
 		if(istype(I.loc, /obj/item/weapon/storage))
 			var/obj/item/weapon/storage/S = I.loc
 			S.remove_from_storage(I,src)
@@ -124,3 +159,4 @@
 
 #undef MODE_WALL
 #undef MODE_DOOR
+#undef MODE_SHELTER

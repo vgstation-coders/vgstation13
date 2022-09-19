@@ -2054,6 +2054,7 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/clothing/head/helmet/siren = 2,
 		/obj/item/clothing/head/helmet/police = 2,
+		/obj/item/clothing/head/helmet/tactical/antichrist = 2,
 		/obj/item/clothing/under/police = 2,
 		/obj/item/clothing/under/casualsec = 2,
 		/obj/item/device/modkit/fatsec_rig = 2
@@ -2413,6 +2414,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/glasses/scanner/material = 2,
 		/obj/item/device/multitool = 4,
 		/obj/item/weapon/circuitboard/airlock = 10,
+		/obj/item/weapon/circuitboard/airshield = 10,
 		/obj/item/weapon/circuitboard/power_control = 10,
 		/obj/item/weapon/circuitboard/air_alarm = 10,
 		/obj/item/weapon/circuitboard/fire_alarm = 10,
@@ -3849,7 +3851,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 				newMsg.author = "Nanotrasen Editor"
 				newMsg.is_admin_message = 1
 
-				newMsg.body = "TC Daily wishes to congratulate <b>[user]</b> for recieving the Tau Ceti-Nanotrasen Stellar Slam Lottery, and receiving the out of this world sum of [final_jackpot] credits!"
+				newMsg.body = "TC Daily wishes to congratulate <b>[user]</b> for receiving the Tau Ceti-Nanotrasen Stellar Slam Lottery, and receiving the out of this world sum of [final_jackpot] credits!"
 
 				for(var/datum/feed_channel/FC in news_network.network_channels)
 					if(FC.channel_name == "Tau Ceti Daily")

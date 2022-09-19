@@ -28,6 +28,9 @@
 		/datum/malfhack_ability/oneuse/emag
 	)
 
+/obj/machinery/chem_dispenser/scp_294/update_chem_list()
+	return
+
 /obj/machinery/chem_dispenser/scp_294/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return

@@ -11,7 +11,7 @@
 	maxHealth = 200
 	health = 200 //The shield can only take so much beating (prevents perma-prisons)
 
-/obj/machinery/shield/acidable()
+/obj/machinery/shield/dissolvable()
 	return 0
 
 /obj/machinery/shield/New()
@@ -526,7 +526,7 @@
 	var/obj/machinery/shieldwallgen/gen_primary
 	var/obj/machinery/shieldwallgen/gen_secondary
 
-/obj/machinery/shieldwall/acidable()
+/obj/machinery/shieldwall/dissolvable()
 	return 0
 
 /obj/machinery/shieldwall/can_overload()

@@ -32,7 +32,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		//add the account
 		all_money_accounts.Add(station_account)
 
-/proc/create_department_account(department, var/recieves_wage = 0)
+/proc/create_department_account(department, var/receives_wage = 0)
 	next_account_number = rand(111111, 999999)
 
 	var/datum/money_account/department_account = new()
@@ -40,7 +40,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	department_account.account_number = rand(11111, 99999)
 	department_account.remote_access_pin = rand(1111, 9999)
 	department_account.money = DEPARTMENT_START_FUNDS
-	if(recieves_wage == 1)
+	if(receives_wage == 1)
 		department_account.wage_gain = DEPARTMENT_START_WAGE
 		station_allowance += DEPARTMENT_START_WAGE + round(DEPARTMENT_START_WAGE/10)//overhead of 10%
 
@@ -204,7 +204,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 
 	if(department_accounts.len == 0)
 		for(var/department in station_departments)
-			create_department_account(department, recieves_wage = 1)
+			create_department_account(department, receives_wage = 1)
 	if(!vendor_account)
 		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE, FALSE)
 

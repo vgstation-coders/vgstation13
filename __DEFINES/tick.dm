@@ -7,6 +7,13 @@
 #define MAPTICK_LAST_INTERNAL_TICK_USAGE 50
 #endif
 
+#define TimeOfTick (world.tick_usage*0.01*world.tick_lag)
+
+#define DS2TICKS(DS) ((DS)/world.tick_lag)
+#define TICKS2DS(T) ((T) TICKS)
+#define MS2DS(T) ((T) MILLISECONDS)
+#define DS2MS(T) ((T) * 100)
+
 // Tick limit while running normally
 #define TICK_BYOND_RESERVE 2
 #define TICK_LIMIT_RUNNING (max(100 - TICK_BYOND_RESERVE - MAPTICK_LAST_INTERNAL_TICK_USAGE, MAPTICK_MC_MIN_RESERVE))
@@ -34,3 +41,20 @@
 
 // Do X until it's done, while looking for lag.
 #define UNTIL(X) while(!(X)) stoplag()
+
+//Increases delay as the server gets more overloaded,
+//as sleeps aren't cheap and sleeping only to wake up and sleep again is wasteful
+#define DELTA_CALC max(((max(world.tick_usage, world.cpu) / 100) * max(Master.sleep_delta,1)), 1)
+
+/proc/stoplag(initial_delay)
+	. = 0
+	var/i = 1
+	if(!initial_delay)
+		initial_delay = world.tick_lag
+	do
+		. += Ceiling(i*DELTA_CALC)
+		sleep(i*world.tick_lag*DELTA_CALC)
+		i *= 2
+	while (world.tick_usage > min(TICK_LIMIT_TO_RUN, CURRENT_TICKLIMIT))
+
+#undef DELTA_CALC

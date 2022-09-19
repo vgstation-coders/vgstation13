@@ -1021,7 +1021,7 @@
 /atom/proc/attack_icon()
 	return appearance
 
-/atom/movable/proc/do_attack_animation(atom/target, atom/tool)
+/atom/movable/proc/do_attack_animation(atom/target, atom/tool, var/icon/I)
 	set waitfor = 0
 
 	ASSERT(tool) //If no tool, shut down the proc and call the coder police
@@ -1068,7 +1068,7 @@
 	spawn()
 		//Attack Animation for ghost object being pixel shifted onto person
 		var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
-		item.appearance = tool.attack_icon()
+		item.appearance = I ? I : tool.attack_icon()
 		item.alpha = 128
 		item.loc = target
 		item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
@@ -1283,7 +1283,7 @@
 // -- trackers
 
 /atom/movable/proc/add_tracker(var/datum/tracker/T)
-	register_event(T, /datum/tracker/proc/recieve_position)
+	register_event(T, /datum/tracker/proc/receive_position)
 
 /datum/tracker
 	var/name = "Tracker"
@@ -1298,7 +1298,7 @@
 	var/lost_position_probability = 0 // Probability of losing the target
 	var/lost_position_distance = 0 // Distance at which the tracker loses the target
 
-/datum/tracker/proc/recieve_position(var/list/loc)
+/datum/tracker/proc/receive_position(var/list/loc)
 
 	ASSERT(loc)
 
