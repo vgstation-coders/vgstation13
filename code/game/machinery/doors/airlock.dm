@@ -1222,7 +1222,10 @@ About the new airlock wires panel:
 			if(!lifted)
 				to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
 				if(do_after(user,src,breaktime))
-					lift(user)
+					to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+					animate(src, pixel_y = pixel_y + 5 * PIXEL_MULTIPLIER, time = 1)
+					lifted = TRUE
 				return
 			else
 				if(locked)
@@ -1293,8 +1296,10 @@ About the new airlock wires panel:
 						return
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You finish chopping the bolts.</span>")
-					src.pixel_y = 0
+					reset_plane_and_layer()
+					pixel_y = initial(pixel_y)
 					locked = FALSE
+					lifted = FALSE
 					update_icon()
 					return
 		if(iscrowbar(I) )
@@ -1358,12 +1363,6 @@ About the new airlock wires panel:
 	DA.state = 0 //Completely smash the door here; reduce it to its lowest state, eject electronics smoked
 	DA.update_state()
 	qdel(src)
-
-/obj/machinery/door/airlock/proc/lift(mob/user as mob)
-	to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
-	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-	animate(src, pixel_y = pixel_y + 5 * PIXEL_MULTIPLIER, time = 1)
-	lifted = TRUE
 
 /obj/machinery/door/airlock/proc/revert(mob/user as mob, var/direction)
 	var/obj/structure/door_assembly/DA = new assembly_type(loc)
