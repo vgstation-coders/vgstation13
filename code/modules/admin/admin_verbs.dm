@@ -1280,7 +1280,7 @@ var/list/admin_verbs_mod = list(
 			qdel(select_query)
 			message_admins("Error: [select_query.ErrorMsg()]")
 			log_sql("Error: [select_query.ErrorMsg()]")
-			continue
+			return
 
 		while(select_query.NextRow())
 			var/ckey = select_query.item[1]
