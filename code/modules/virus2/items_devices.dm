@@ -42,10 +42,11 @@
 					continue
 				if (L.virus2.len)
 					for (var/ID in L.virus2)
-						var/datum/disease2/disease/D = L.virus2[ID]
-						if (antibody in D.antigen)
-							antigens_that_matter += antibody
-							continue finding_antigens
+						if(ID in virusDB)
+							var/datum/disease2/disease/D = L.virus2[ID]
+							if (antibody in D.antigen)
+								antigens_that_matter += antibody
+								continue finding_antigens
 
 	var/bar_spacing = round(display_width/antigens_that_matter.len)
 	var/bar_width = round(bar_spacing/2)
