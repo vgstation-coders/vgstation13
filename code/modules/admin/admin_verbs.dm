@@ -1278,7 +1278,7 @@ var/list/admin_verbs_mod = list(
 		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE unbanned = 0")
 		if(!select_query.Execute())
 			qdel(select_query)
-			message_admins("Error: [select_query.ErrorMsg()]")
+			message_admins("Banned player search error on populating hell: [select_query.ErrorMsg()]")
 			log_sql("Error: [select_query.ErrorMsg()]")
 			return
 
@@ -1288,93 +1288,96 @@ var/list/admin_verbs_mod = list(
 			var/reason = select_query.item[2]
 			var/mob/living/carbon/human/H = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
 			var/list/preference_list = new
-			var/database/query/q     = new
-			var/database/query/check = new
-			var/database/db = ("players2.sqlite")
-			check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, 1)
-			if(check.Execute(db))
+			var/datum/DBQuery/check = SSdbcore.NewQuery("SELECT player_ckey FROM players WHERE player_ckey = :ckey AND player_slot = :slot",
+				list(
+				"ckey" = ckey,
+				"slot" = 1,
+				))
+			if(check.Execute())
 				if(!check.NextRow())
 					message_admins("[ckey] had no character file, skipping")
 					continue
 			else
-				message_admins("load_save_sqlite Check Error #: [check.Error()] - [check.ErrorMsg()]")
+				message_admins("Player appearance file check error on populating hell: [check.ErrorMsg()]")
+				log_sql("Error: [check.ErrorMsg()]")
 				continue
-			q.Add({"
-SELECT
-    limbs.player_ckey,
-    limbs.player_slot,
-    limbs.l_arm,
-    limbs.r_arm,
-    limbs.l_leg,
-    limbs.r_leg,
-    limbs.l_foot,
-    limbs.r_foot,
-    limbs.l_hand,
-    limbs.r_hand,
-    limbs.heart,
-    limbs.eyes,
-    limbs.lungs,
-    limbs.liver,
-    limbs.kidneys,
-    players.player_ckey,
-    players.player_slot,
-    players.real_name,
-    players.random_name,
-    players.random_body,
-    players.gender,
-    players.species,
-    players.disabilities,
-    body.player_ckey,
-    body.player_slot,
-    body.hair_red,
-    body.hair_green,
-    body.hair_blue,
-    body.facial_red,
-    body.facial_green,
-    body.facial_blue,
-    body.skin_tone,
-    body.hair_style_name,
-    body.facial_style_name,
-    body.eyes_red,
-    body.eyes_green,
-    body.eyes_blue,
-    body.underwear,
-    body.backbag
-FROM
-    players
-INNER JOIN
-    limbs
-ON
-    (
-        players.player_ckey = limbs.player_ckey)
-AND (
-        players.player_slot = limbs.player_slot)
-INNER JOIN
-    jobs
-ON
-    (
-        limbs.player_ckey = jobs.player_ckey)
-AND (
-        limbs.player_slot = jobs.player_slot)
-INNER JOIN
-    body
-ON
-    (
-        jobs.player_ckey = body.player_ckey)
-AND (
-        jobs.player_slot = body.player_slot)
-WHERE
-    players.player_ckey = ?
-AND players.player_slot = ? ;"}, ckey, 1)
-			if(q.Execute(db))
+			var/datum/DBQuery/q = SSdbcore.NewQuery({"
+				SELECT
+					limbs.player_ckey,
+					limbs.player_slot,
+					limbs.l_arm,
+					limbs.r_arm,
+					limbs.l_leg,
+					limbs.r_leg,
+					limbs.l_foot,
+					limbs.r_foot,
+					limbs.l_hand,
+					limbs.r_hand,
+					limbs.heart,
+					limbs.eyes,
+					limbs.lungs,
+					limbs.liver,
+					limbs.kidneys,
+					players.player_ckey,
+					players.player_slot,
+					players.real_name,
+					players.random_name,
+					players.random_body,
+					players.gender,
+					players.species,
+					players.disabilities,
+					body.player_ckey,
+					body.player_slot,
+					body.hair_red,
+					body.hair_green,
+					body.hair_blue,
+					body.facial_red,
+					body.facial_green,
+					body.facial_blue,
+					body.skin_tone,
+					body.hair_style_name,
+					body.facial_style_name,
+					body.eyes_red,
+					body.eyes_green,
+					body.eyes_blue,
+					body.underwear,
+					body.backbag
+				FROM
+					players
+				INNER JOIN
+					limbs
+				ON
+					(
+						players.player_ckey = limbs.player_ckey)
+				AND (
+						players.player_slot = limbs.player_slot)
+				INNER JOIN
+					jobs
+				ON
+					(
+						limbs.player_ckey = jobs.player_ckey)
+				AND (
+						limbs.player_slot = jobs.player_slot)
+				INNER JOIN
+					body
+				ON
+					(
+						jobs.player_ckey = body.player_ckey)
+				AND (
+						jobs.player_slot = body.player_slot)
+				WHERE
+					players.player_ckey = :ckey
+				AND players.player_slot = :slot ;"}, list("ckey" = ckey, "slot" = 1))
+			if(q.Execute())
+				var/a = 0
 				while(q.NextRow())
-					var/list/row = q.GetRowData()
-					for(var/a in row)
-						preference_list[a] = row[a]
+					a++
+					preference_list[q.item[a]] = q.item[a]
 			else
-				message_admins("load_save_sqlite Error #: [q.Error()] - [q.ErrorMsg()]")
+				message_admins("Player appearance loading error on populating hell: [q.ErrorMsg()]")
+				log_sql("Error: [q.ErrorMsg()]")
 				continue
-			H.name = preference_list["real_name"] || ckey
+			H.name = preference_list && preference_list.len && preference_list["real_name"] ? preference_list["real_name"] : ckey
 			H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
 			bancount++
 
