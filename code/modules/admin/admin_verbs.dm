@@ -1288,7 +1288,7 @@ var/list/admin_verbs_mod = list(
 			return
 
 		var/bancount = 0
-		while(select_query.NextRow() && (!config.bans_shown_in_hell_limit || bancount <= config.bans_shown_in_hell_limit))
+		while(select_query.NextRow() && config.bans_shown_in_hell_limit && bancount <= config.bans_shown_in_hell_limit)
 			var/ckey = select_query.item[1]
 			var/reason = select_query.item[2]
 			var/mob/living/carbon/human/H = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
