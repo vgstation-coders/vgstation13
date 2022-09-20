@@ -31,6 +31,12 @@
 	playsound(user, 'sound/items/detscan.ogg', 50, 1)
 	var/info = ""
 	var/icon/scan = icon('icons/virology.dmi',"immunitybg")
+	var/display_width = scan.Width()
+	var/bar_spacing = round(display_width/all_antigens.len)
+	var/bar_width = round(bar_spacing/2)
+	var/bar_offset = round(bar_width/4)
+	var/x_adjustment = 5//Sometimes you have to adjust things manually so they look good. This var moves all the gauges and graduations on the x axis.
+
 	if (L.immune_system)
 		var/immune_system = L.immune_system.GetImmunity()
 		var/immune_str = immune_system[1]
@@ -41,31 +47,38 @@
 
 		var/i = 0
 		for (var/antibody in L.immune_system.antibodies)
-			var/rgb = "#80DEFF"
+			var/rgb = "#FFFFFF"
 			switch (i)
+				if (0 to 3)
+					rgb = "#80DEFF"
 				if (4 to 6)
 					rgb = "#81FF9F"
 				if (7 to 9)
 					rgb = "#E6FF81"
 				if (10 to 12)
 					rgb = "#FF9681"
-			scan.DrawBox(rgb,i*43+11,6,i*43+31,6+antibodies[antibody]*3*immune_str)
+				if (13)
+					rgb = "#F54B4B"
+				//add colors for new special antigens here
+			scan.DrawBox(rgb,i*bar_spacing+bar_offset+x_adjustment,6,i*bar_spacing+bar_width+bar_offset+x_adjustment,6+antibodies[antibody]*3*immune_str)
 			i++
 
 	if (L.virus2.len)
 		for (var/ID in L.virus2)
 			var/datum/disease2/disease/D = L.virus2[ID]
-			scan.DrawBox("#FF0000",5,6+D.strength*3,564,6+D.strength*3)
+			scan.DrawBox("#FF0000",6,6+D.strength*3,display_width-5,6+D.strength*3)
 			if(ID in virusDB)
 				var/subdivision = (D.strength - ((D.robustness * D.strength) / 100)) / D.max_stage
 				var/i = 0
 				for (var/antigen in all_antigens)
 					if (antigen in D.antigen)
-						scan.DrawBox("#FF0000",18+43*i,6+D.strength*3-3,24+43*i,6+D.strength*3+3)
-						scan.DrawBox("#FF0000",21+43*i,6+D.strength*3,21+43*i,6+round(D.strength - D.max_stage * subdivision)*3)
+						var/box_size = 3
+						scan.DrawBox("#FF0000",bar_width-box_size+bar_spacing*i,6+D.strength*3-3,bar_width+box_size+bar_spacing*i,6+D.strength*3+3)
+						scan.DrawBox("#FF0000",bar_width+bar_spacing*i,6+D.strength*3,bar_width+bar_spacing*i,6+round(D.strength - D.max_stage * subdivision)*3)
+						var/stick_out = 6//how far the graduations go left and right of the gauge
 						for (var/j = 1 to D.max_stage)
 							var/alt = round(D.strength - j * subdivision)
-							scan.DrawBox("#FF0000",5+43*i,6+alt*3,38+43*i,6+alt*3)
+							scan.DrawBox("#FF0000",i*bar_spacing+bar_offset-stick_out+x_adjustment,6+alt*3,i*bar_spacing+bar_offset+bar_width+stick_out+x_adjustment,6+alt*3)
 					i++
 
 	info += "<br><img src='data:image/png;base64,[icon2base64(scan)]'/>"
