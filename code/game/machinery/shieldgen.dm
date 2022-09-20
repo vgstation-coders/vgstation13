@@ -406,7 +406,7 @@
 
 /obj/machinery/shieldwallgen/examine(mob/user)
 	..()
-	to_chat(usr, "<span class='info'>[src.get_status_text()]</span>")
+	to_chat(user, "<span class='info'>[src.get_status_text()]</span>")
 
 /obj/machinery/shieldwallgen/process()
 	spawn(100)
