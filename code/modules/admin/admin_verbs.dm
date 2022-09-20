@@ -1383,6 +1383,23 @@ var/list/admin_verbs_mod = list(
 				if(!isnull(preference_list["species"]))
 					H.set_species(preference_list["species"])
 				H.setGender(sanitize_gender(preference_list["gender"]))
+
+				H.my_appearance.r_eyes = sanitize_integer(preference_list["r_eyes"], 0, 255)
+				H.my_appearance.g_eyes = sanitize_integer(preference_list["g_eyes"], 0, 255)
+				H.my_appearance.b_eyes = sanitize_integer(preference_list["b_eyes"], 0, 255)
+
+				H.my_appearance.r_hair = sanitize_integer(preference_list["r_hair"], 0, 255)
+				H.my_appearance.g_hair = sanitize_integer(preference_list["g_hair"], 0, 255)
+				H.my_appearance.b_hair = sanitize_integer(preference_list["b_hair"], 0, 255)
+
+				H.my_appearance.r_facial = sanitize_integer(preference_list["r_facial"], 0, 255)
+				H.my_appearance.g_facial = sanitize_integer(preference_list["g_facial"], 0, 255)
+				H.my_appearance.b_facial = sanitize_integer(preference_list["b_facial"], 0, 255)
+
+				H.my_appearance.s_tone = sanitize_integer(preference_list["s_tone"], 0, 255)
+
+				H.my_appearance.h_style = sanitize_integer(preference_list["h_style"], 0, 255)
+				H.my_appearance.f_style = sanitize_integer(preference_list["f_style"], 0, 255)
 			H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
 			bancount++
 
