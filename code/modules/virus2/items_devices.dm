@@ -32,7 +32,22 @@
 	var/info = ""
 	var/icon/scan = icon('icons/virology.dmi',"immunitybg")
 	var/display_width = scan.Width()
-	var/bar_spacing = round(display_width/all_antigens.len)
+
+	var/list/antigens_that_matter = list()
+	if (L.immune_system)
+		finding_antigens:
+			for (var/antibody in L.immune_system.antibodies)
+				if (L.immune_system.antibodies[antibody] > 0)
+					antigens_that_matter += antibody
+					continue
+				if (L.virus2.len)
+					for (var/ID in L.virus2)
+						var/datum/disease2/disease/D = L.virus2[ID]
+						if (antibody in D.antigen)
+							antigens_that_matter += antibody
+							continue finding_antigens
+
+	var/bar_spacing = round(display_width/antigens_that_matter.len)
 	var/bar_width = round(bar_spacing/2)
 	var/bar_offset = round(bar_width/4)
 	var/x_adjustment = 5//Sometimes you have to adjust things manually so they look good. This var moves all the gauges and graduations on the x axis.
@@ -46,18 +61,18 @@
 		info += "<br>Antibody Concentrations:"
 
 		var/i = 0
-		for (var/antibody in L.immune_system.antibodies)
+		for (var/antibody in antigens_that_matter)
 			var/rgb = "#FFFFFF"
-			switch (i)
-				if (0 to 3)
+			switch (antibody)
+				if ("O","A","B","Rh")
 					rgb = "#80DEFF"
-				if (4 to 6)
+				if ("Q","U","V")
 					rgb = "#81FF9F"
-				if (7 to 9)
+				if ("M","N","P")
 					rgb = "#E6FF81"
-				if (10 to 12)
+				if ("X","Y","Z")
 					rgb = "#FF9681"
-				if (13)
+				if ("C")
 					rgb = "#F54B4B"
 				//add colors for new special antigens here
 			scan.DrawBox(rgb,i*bar_spacing+bar_offset+x_adjustment,6,i*bar_spacing+bar_width+bar_offset+x_adjustment,6+antibodies[antibody]*3*immune_str)
@@ -70,7 +85,7 @@
 			if(ID in virusDB)
 				var/subdivision = (D.strength - ((D.robustness * D.strength) / 100)) / D.max_stage
 				var/i = 0
-				for (var/antigen in all_antigens)
+				for (var/antigen in antigens_that_matter)
 					if (antigen in D.antigen)
 						var/box_size = 3
 						scan.DrawBox("#FF0000",bar_width-box_size+bar_spacing*i,6+D.strength*3-3,bar_width+box_size+bar_spacing*i,6+D.strength*3+3)
@@ -86,12 +101,12 @@
 	info += "<table style='table-layout:fixed;width:560px;text-align:center'>"
 	info += "<tr>"
 	if (L.immune_system)
-		for (var/antibody in L.immune_system.antibodies)
+		for (var/antibody in antigens_that_matter)
 			info += "<th>[antibody]</th>"
 	info += "</tr>"
 	info += "<tr>"
 	if (L.immune_system)
-		for (var/antibody in L.immune_system.antibodies)
+		for (var/antibody in antigens_that_matter)
 			info += "<td>[round(L.immune_system.antibodies[antibody]*L.immune_system.strength)]%</th>"
 	info += "</tr>"
 	info += "</table>"
