@@ -52,7 +52,36 @@
 		investigate_text += "- kill"
 
 	if(prob(0.5)) // Transform into a simple animal
-		tf_simpmob = pick(/mob/living/simple_animal/cat, /mob/living/simple_animal/cat/kitten, /mob/living/simple_animal/cat/snek, /mob/living/simple_animal/corgi, /mob/living/simple_animal/corgi/puppy, /mob/living/simple_animal/corgi/sasha, /mob/living/simple_animal/corgi/saint, /mob/living/simple_animal/crab, /mob/living/simple_animal/cow, /mob/living/simple_animal/chicken, /mob/living/simple_animal/rabbit, /mob/living/simple_animal/rabbit/bunny, /mob/living/simple_animal/hostile/lizard, /mob/living/simple_animal/hostile/lizard/frog, /mob/living/simple_animal/penguin, /mob/living/simple_animal/penguin/chick)
+		tf_simpmob = pick(
+			/mob/living/simple_animal/capybara, /mob/living/simple_animal/cat,
+			/mob/living/simple_animal/cat/kitten, /mob/living/simple_animal/cat/snek,
+			/mob/living/simple_animal/chick, /mob/living/simple_animal/chicken,
+			/mob/living/simple_animal/corgi, /mob/living/simple_animal/corgi/puppy,
+			/mob/living/simple_animal/corgi/saint, /mob/living/simple_animal/corgi/sasha,
+			/mob/living/simple_animal/cow, /mob/living/simple_animal/crab,
+			/mob/living/simple_animal/hamster, /mob/living/simple_animal/hostile/retaliate/goat,
+			/mob/living/simple_animal/hostile/retaliate/goat/wooly, /mob/living/simple_animal/parrot,
+			/mob/living/simple_animal/penguin, /mob/living/simple_animal/penguin/chick,
+			/mob/living/simple_animal/rabbit, /mob/living/simple_animal/rabbit/bunny,
+			25; list( // Uncommon
+				/mob/living/simple_animal/borer, /mob/living/simple_animal/puddi/happy,
+				/mob/living/simple_animal/puddi/anger, /mob/living/simple_animal/spiderbot
+			),
+			1; list( // Dangerous
+				/mob/living/simple_animal/amogusflash,
+				/mob/living/simple_animal/hostile/asteroid/basilisk, /mob/living/simple_animal/hostile/asteroid/goldgrub,
+				/mob/living/simple_animal/hostile/asteroid/goliath, /mob/living/simple_animal/hostile/asteroid/rockernaut,
+				/mob/living/simple_animal/hostile/bear, /mob/living/simple_animal/hostile/carp,
+				/mob/living/simple_animal/hostile/giant_spider/hunter, /mob/living/simple_animal/hostile/pitbull,
+				/mob/living/simple_animal/slime, /mob/living/simple_animal/slime/adult
+			),
+			1; list( // You poor bastard
+				/mob/living/simple_animal/hostile/retaliate/clown, /mob/living/simple_animal/hostile/retaliate/cluwne,
+				/mob/living/simple_animal/hostile/retaliate/faguette, /mob/living/simple_animal/hostile/retaliate/mime
+			),
+		)
+		if(islist(tf_simpmob))
+			tf_simpmob = pick(tf_simpmob)
 		investigate_text += "- tf_simpmob [tf_simpmob]"
 
 	if(prob(0.25)) // Transform into a catbeast
