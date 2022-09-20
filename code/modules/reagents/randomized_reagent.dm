@@ -7,10 +7,10 @@
 
 	var/explode = 0
 
-	var/simp_type = null
-	var/immerse   = FALSE
-	var/kill      = FALSE
-	var/cat       = FALSE
+	var/kill        = FALSE
+	var/tf_simpmob  = null
+	var/tf_immerse  = FALSE
+	var/tf_catbeast = FALSE
 
 /datum/randomized_reagent/proc/init()
 	var/datum/log_controller/I = investigations[I_CHEMS]
@@ -44,26 +44,26 @@
 
 	// Effects to discourage unethical testing by non-antags
 	if(prob(3)) // Turn female humans into boring males
-		investigate_text += "- immerse"
-		immerse = TRUE
+		investigate_text += "- tf_immerse"
+		tf_immerse = TRUE
 
 	if(prob(1)) // Instant death
 		kill = TRUE
 		investigate_text += "- kill"
 
 	if(prob(0.5)) // Transform into a simple animal
-		simp_type = pick(/mob/living/simple_animal/cat, /mob/living/simple_animal/cat/kitten, /mob/living/simple_animal/cat/snek, /mob/living/simple_animal/corgi, /mob/living/simple_animal/corgi/puppy, /mob/living/simple_animal/corgi/sasha, /mob/living/simple_animal/corgi/saint, /mob/living/simple_animal/crab, /mob/living/simple_animal/cow, /mob/living/simple_animal/chicken, /mob/living/simple_animal/rabbit, /mob/living/simple_animal/rabbit/bunny, /mob/living/simple_animal/hostile/lizard, /mob/living/simple_animal/hostile/lizard/frog, /mob/living/simple_animal/penguin, /mob/living/simple_animal/penguin/chick)
-		investigate_text += "- simplify [simp_type]"
+		tf_simpmob = pick(/mob/living/simple_animal/cat, /mob/living/simple_animal/cat/kitten, /mob/living/simple_animal/cat/snek, /mob/living/simple_animal/corgi, /mob/living/simple_animal/corgi/puppy, /mob/living/simple_animal/corgi/sasha, /mob/living/simple_animal/corgi/saint, /mob/living/simple_animal/crab, /mob/living/simple_animal/cow, /mob/living/simple_animal/chicken, /mob/living/simple_animal/rabbit, /mob/living/simple_animal/rabbit/bunny, /mob/living/simple_animal/hostile/lizard, /mob/living/simple_animal/hostile/lizard/frog, /mob/living/simple_animal/penguin, /mob/living/simple_animal/penguin/chick)
+		investigate_text += "- tf_simpmob [tf_simpmob]"
 
 	if(prob(0.25)) // Transform into a catbeast
-		cat = TRUE
-		investigate_text += "- cat"
+		tf_catbeast = TRUE
+		investigate_text += "- tf_catbeast"
 
 	investigate_text += "<br />"
 	I.write(investigate_text)
 
 
-/datum/randomized_reagent/proc/on_mindful_life(var/mob/living/carbon/human/H)
+/datum/randomized_reagent/proc/on_human_life(var/mob/living/carbon/human/H)
 	if(kill)
 		H.death(explode)
 		switch(explode)
@@ -75,8 +75,8 @@
 				explosion(get_turf(H), 1, 3, 5, 7, whodunnit=H)
 		return
 
-	if(simp_type)
-		var/mob/living/simple_animal/S = new simp_type(get_turf(H))
+	if(tf_simpmob)
+		var/mob/living/simple_animal/S = new tf_simpmob(get_turf(H))
 		S.name = get_first_word(H.name)
 		S.real_name = get_first_word(H.real_name)
 		S.flavor_text = H.flavor_text
@@ -103,7 +103,7 @@
 		qdel(H)
 		return
 
-	if(immerse && isjusthuman(H) && H.gender != MALE)
+	if(tf_immerse && isjusthuman(H) && H.gender != MALE)
 		H.emote("faint")
 		var/obj/effect/smoke/smoke = new /obj/effect/smoke(get_turf(H))
 		smoke.time_to_live = 1
@@ -124,7 +124,7 @@
 		H.check_dna_integrity()
 		H.update_dna_from_appearance()
 
-	if(cat && !iscatbeast(H))
+	if(tf_catbeast && !iscatbeast(H))
 		H.set_species("Tajaran")
 		H.regenerate_icons()
 		H.emote("me", MESSAGE_HEAR, pick("meows", "mews"))
