@@ -2782,13 +2782,14 @@ var/list/bloodcult_exitportals = list()
 		return
 
 	husk = new (R.loc)
+	flick("rune_resurrect_start", husk)
 	shade.forceMove(husk)
 
 	contributors.Add(activator)
 	update_progbar()
 	if (activator.client)
 		activator.client.images |= progbar
-	spell_holder.overlays += image('icons/obj/cult.dmi',"runetrigger-build")
+	spell_holder.overlays += image('icons/obj/cult.dmi',"build")
 	to_chat(activator, "<span class='rose'>This ritual has a very high blood cost per second, but it can be completed faster by having multiple cultists partake in it.</span>")
 	spawn()
 		payment()
@@ -2808,7 +2809,7 @@ var/list/bloodcult_exitportals = list()
 		add_cultist.client.images |= progbar
 
 /datum/rune_spell/reincarnation/abort(var/cause)
-	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
+	spell_holder.overlays -= image('icons/obj/cult.dmi',"build")
 	if (shade)
 		shade.loc = husk.loc
 	if (husk)
@@ -2859,7 +2860,7 @@ var/list/bloodcult_exitportals = list()
 	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
 
 /datum/rune_spell/reincarnation/proc/success()
-	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
+	spell_holder.overlays -= image('icons/obj/cult.dmi',"build")
 	var/resurrector = activator.real_name
 	if (shade && husk)
 		shade.loc = husk.loc
@@ -2890,11 +2891,6 @@ var/list/bloodcult_exitportals = list()
 			vessel.my_appearance.g_eyes = 21
 			vessel.my_appearance.b_eyes = 21
 			vessel.my_appearance.s_tone = 45 // super duper albino
-
-			// purely cosmetic tattoos. giving cultists some way to have tattoos until those get reworked
-			newCultist.tattoos[TATTOO_POOL] = new /datum/cult_tattoo/bloodpool()
-			newCultist.tattoos[TATTOO_HOLY] = new /datum/cult_tattoo/holy()
-			newCultist.tattoos[TATTOO_MANIFEST] = new /datum/cult_tattoo/manifest()
 
 			vessel.equip_or_collect(new /obj/item/clothing/under/rags(vessel), slot_w_uniform)
 
