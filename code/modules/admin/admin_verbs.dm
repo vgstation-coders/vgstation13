@@ -1378,6 +1378,11 @@ var/list/admin_verbs_mod = list(
 				log_sql("Error: [q.ErrorMsg()]")
 				continue
 			H.name = preference_list && preference_list.len && preference_list["real_name"] ? preference_list["real_name"] : ckey
+			H.real_name = preference_list && preference_list.len && preference_list["real_name"] ? preference_list["real_name"] : ckey
+			if(preference_list && preference_list.len)
+				if(!isnull(preference_list["species"]))
+					H.set_species(preference_list["species"])
+				H.setGender(sanitize_gender(preference_list["gender"]))
 			H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
 			bancount++
 
