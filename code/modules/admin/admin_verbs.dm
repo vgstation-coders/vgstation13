@@ -1385,8 +1385,12 @@ var/list/admin_verbs_mod = list(
 			if(H.dna)
 				H.dna.real_name = H.real_name
 			if(preference_list && preference_list.len)
+				var/disabilities = text2num(preference_list["disabilities"])
 				if(!isnull(preference_list["species"]))
 					H.set_species(preference_list["species"])
+					var/datum/species/chosen_species = all_species[preference_list["species"]]
+					if( (disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
+						H.mutations += M_FAT
 				H.setGender(sanitize_gender(preference_list["gender"]))
 
 				H.my_appearance.r_eyes = sanitize_integer(preference_list["eyes_red"], 0, 255)
@@ -1407,6 +1411,18 @@ var/list/admin_verbs_mod = list(
 				H.my_appearance.f_style = sanitize_inlist(preference_list["facial_style_name"], facial_hair_styles_list)
 
 				H.dna.ResetUIFrom(H)
+
+				if(disabilities & DISABILITY_FLAG_NEARSIGHTED)
+					H.disabilities|=NEARSIGHTED
+				if(disabilities & DISABILITY_FLAG_EPILEPTIC)
+					H.disabilities|=EPILEPSY
+				if(disabilities & DISABILITY_FLAG_EHS)
+					H.disabilities|=ELECTROSENSE
+				if(disabilities & DISABILITY_FLAG_DEAF)
+					H.sdisabilities|=DEAF
+				if(disabilities & DISABILITY_FLAG_BLIND)
+					H.sdisabilities|=BLIND
+
 			H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
 			bancount++
 

@@ -102,8 +102,3 @@
 /turf/unsimulated/floor/brimstone/Destroy()
 	overlays.Cut()
 	..()
-
-/turf/unsimulated/floor/brimstone/Crossed(mob/living/M)
-	..()
-	if(istype(M))
-		M.FireBurn(11, 9001, ONE_ATMOSPHERE) //Burn the DAMNED!
