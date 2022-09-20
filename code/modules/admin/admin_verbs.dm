@@ -1376,7 +1376,9 @@ var/list/admin_verbs_mod = list(
 				log_sql("Error: [q.ErrorMsg()]")
 				continue
 			H.name = preference_list && preference_list.len && preference_list["real_name"] ? preference_list["real_name"] : ckey
-			H.real_name = preference_list && preference_list.len && preference_list["real_name"] ? preference_list["real_name"] : ckey
+			H.real_name = H.name
+			if(H.dna)
+				H.dna.real_name = H.real_name
 			if(preference_list && preference_list.len)
 				if(!isnull(preference_list["species"]))
 					H.set_species(preference_list["species"])
@@ -1398,6 +1400,8 @@ var/list/admin_verbs_mod = list(
 
 				H.my_appearance.h_style = sanitize_inlist(preference_list["hair_style_name"], hair_styles_list)
 				H.my_appearance.f_style = sanitize_inlist(preference_list["facial_style_name"], facial_hair_styles_list)
+
+				H.dna.ResetUIFrom(H)
 			H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
 			bancount++
 
