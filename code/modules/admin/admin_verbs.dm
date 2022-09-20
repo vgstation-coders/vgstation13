@@ -1242,9 +1242,17 @@ var/list/admin_verbs_mod = list(
 	if(alert(usr, "Are you sure you want to do this?", "Confirm judgement", "Yes", "No") != "Yes")
 		return
 
+	var/mob/newmob = send_to_hedoublehockeysticks(O)
+	if(newmob)
+		log_admin("[ckey(key)]/([mob]) has damned [newmob] to HELL")
+		message_admins("[ckey(key)]/([mob]) has damned [newmob] [formatJumpTo(newmob,"(JMP)")] to HELL")
+	else
+		log_admin("[ckey(key)]/([mob]) could not damn [O] to hell as they have not lived in this round")
+		message_admins("[ckey(key)]/([mob]) could not damn [O] to hell as they have not lived in this round")
+
+/proc/send_to_hedoublehockeysticks(mob/O)
 	if(!O || !O.key)
 		return
-
 	for(var/datum/body_archive/archive in body_archives)
 		if(archive.key == O.key)
 			create_hell()
@@ -1256,12 +1264,9 @@ var/list/admin_verbs_mod = list(
 				CRASH("Body archive to send to hell was not a living mob!")
 			M.status_flags ^= BUDDHAMODE
 			M.forceMove(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
-			log_admin("[ckey(key)]/([mob]) has damned [M] to HELL")
-			message_admins("[ckey(key)]/([mob]) has damned [formatJumpTo(M,"[M]")] to HELL")
 			qdel(tempM)
-			return
-	log_admin("[ckey(key)]/([mob]) could not damn [O] to hell as they have not lived in this round")
-	message_admins("[ckey(key)]/([mob]) could not damn [O] to hell as they have not lived in this round")
+			qdel(O)
+			return M
 
 /proc/create_hell()
 	if(!(locate(/datum/zLevel/hell) in map.zLevels))

@@ -179,6 +179,10 @@
 					else
 						for(var/datum/organ/external/E in h.organs) //Being a catbeast doesn't exempt you from getting a curse just because you cannot turn into a catbeast again.
 							E.droplimb(1)
+					if(prob(1))
+						to_chat(user, "<span class=sinister><B>You have been damned directly to hell! </span></B>")
+						h.death()
+						send_to_hedoublehockeysticks(h)
 				if(2 to 5)
 					to_chat(user, "<span class=sinister><B>It could be worse, but not much worse! Enjoy your curse! </span></B>")
 					h.flash_eyes(visual = 1)
