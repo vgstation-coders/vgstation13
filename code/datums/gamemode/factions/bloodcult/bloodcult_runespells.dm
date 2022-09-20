@@ -2893,6 +2893,11 @@ var/list/bloodcult_exitportals = list()
 			vessel.my_appearance.s_tone = 45 // super duper albino
 
 			vessel.equip_or_collect(new /obj/item/clothing/under/rags(vessel), slot_w_uniform)
+			
+			// purely cosmetic tattoos. giving cultists some way to have tattoos until those get reworked
+			newCultist.tattoos[TATTOO_POOL] = new /datum/cult_tattoo/bloodpool()
+			newCultist.tattoos[TATTOO_HOLY] = new /datum/cult_tattoo/holy()
+			newCultist.tattoos[TATTOO_MANIFEST] = new /datum/cult_tattoo/manifest()
 
 		M.regenerate_icons()
 
