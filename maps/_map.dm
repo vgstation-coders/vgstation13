@@ -278,6 +278,11 @@ var/global/list/accessable_z_levels = list()
 	movementJammed = TRUE
 	transitionLoops = TRUE
 
+/datum/zLevel/hell/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		base_turf = /turf/unsimulated/floor/snow // hell froze over
+
 // Debug ///////////////////////////////////////////////////////
 
 /*
