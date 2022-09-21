@@ -19,17 +19,13 @@
 		vars[k] = initial(vars[k])
 
 	// Modifiers, do nothing on their own
-	if(prob(5)) // explode=1 just gibs, explode=2 is a non-breaching explosion, explode=3 breaches, explode=4 breaches reinforced floors
-		explode = 1
-
-		if(prob(1))
-			explode += 1
-
-		if(prob(0.1))
-			explode += 1
-
-		if(prob(0.1))
-			explode += 1
+	if(prob(5))
+		explode = pick(
+			1000; 1, // Just gibs
+			 500; 2, // Small explosion
+			 400; 3, // Breaches normal floor
+			 100; 4, // Breaches reinforced floor
+		)
 
 		investigate_text += "- explode [explode]"
 
@@ -63,6 +59,7 @@
 			/mob/living/simple_animal/hostile/retaliate/goat/wooly, /mob/living/simple_animal/parrot,
 			/mob/living/simple_animal/penguin, /mob/living/simple_animal/penguin/chick,
 			/mob/living/simple_animal/rabbit, /mob/living/simple_animal/rabbit/bunny,
+
 			25; list( // Uncommon
 				/mob/living/simple_animal/borer, /mob/living/simple_animal/puddi/happy,
 				/mob/living/simple_animal/puddi/anger, /mob/living/simple_animal/spiderbot
