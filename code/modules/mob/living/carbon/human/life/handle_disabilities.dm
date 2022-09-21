@@ -116,7 +116,7 @@
 		"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
 		"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!", \
 		"I AM BASTE", \
-		"THE TRAITOR THEY KILL PEOPLE BUT I RESPAWN"))
+		"TEH TRAITOR THEY KILL PEEPLE BUT I RESPAWN!!!"))
 	else if(getBrainLoss() >= 60 && prob(3))
 		emote("drool")
 	if(getBrainLoss() > 50 && prob(1.5))
