@@ -2085,6 +2085,7 @@
 #include "code\modules\mob\living\simple_animal\hostile\grinch.dm"
 #include "code\modules\mob\living\simple_animal\hostile\grue.dm"
 #include "code\modules\mob\living\simple_animal\hostile\grue_powers.dm"
+#include "code\modules\mob\living\simple_animal\hostile\gym_rats.dm"
 #include "code\modules\mob\living\simple_animal\hostile\heart_attack.dm"
 #include "code\modules\mob\living\simple_animal\hostile\hive_aliens.dm"
 #include "code\modules\mob\living\simple_animal\hostile\hivebot.dm"
