@@ -12,11 +12,27 @@
 	var/tf_immerse  = FALSE
 	var/tf_catbeast = FALSE
 
-/datum/randomized_reagent/proc/init()
+/datum/randomized_reagent/New()
+ . = ..()
+ randomize()
+
+/datum/randomized_reagent/proc/randomize()
 	var/datum/log_controller/I = investigations[I_CHEMS]
-	var/investigate_text = "<small>[time_stamp()]</small> || Initializing <a href='?_src_=vars;Vars=\ref[src]'>randomized reagent</a>"
-	for(var/k in vars)
-		vars[k] = initial(vars[k])
+	var/investigate_text = ""
+
+	for(var/K in vars)
+		if(issaved(vars[K]) && (vars[K] != initial(vars[K])))
+			var/V = vars[K]
+			if(isnull(V)) V = "null"
+			if(isnum(V))  V = round(V, 0.1)
+			investigate_text += " - [K] [V]"
+
+	I.write("<small>[time_stamp()]</small> \ref[src] || Randomized <a href='?_src_=vars;Vars=\ref[src]'>[src]</a>[investigate_text]<br />")
+
+/datum/randomized_reagent/all_effects/randomize()
+	for(var/K in vars)
+		if(issaved(vars[K]) && (vars[K] != initial(vars[K])))
+			vars[K] = initial(vars[K])
 
 	// Modifiers, do nothing on their own
 	if(prob(5))
@@ -27,25 +43,18 @@
 			 100; 4, // Breaches reinforced floor
 		)
 
-		investigate_text += "- explode [explode]"
-
 	// Standard damage types
 	var/generator/G = generator("num", 150, 0.001, SQUARE_RAND) // Second numeric argument is significantly more likely
-	for(var/k in list("brute", "oxy", "tox", "fire", "clone"))
-		if(prob((k!="clone")?20:2)) // Room-temperature clone damage healing should be rare
-			vars[k] = G.Rand()
+	for(var/K in list("brute", "oxy", "tox", "fire", "clone"))
+		if(prob((K!="clone")?20:2)) // Room-temperature clone damage healing should be rare
+			vars[K] = G.Rand()
 			if(prob(75)) // Mostly beneficial
-				vars[k] = -vars[k]
-			investigate_text += "- [k] [vars[k]]"
+				vars[K] = -vars[K]
 
 	// Effects to discourage unethical testing by non-antags
-	if(prob(3)) // Turn female humans into boring males
-		investigate_text += "- tf_immerse"
-		tf_immerse = TRUE
-
-	if(prob(1)) // Instant death
-		kill = TRUE
-		investigate_text += "- kill"
+	tf_immerse  = prob(3)    // Turn female humans into boring males
+	kill        = prob(1)    // Instant death
+	tf_catbeast = prob(0.25) // Transform into a catbeast
 
 	if(prob(0.5)) // Transform into a simple animal
 		tf_simpmob = pick(
@@ -77,17 +86,11 @@
 				/mob/living/simple_animal/hostile/retaliate/faguette, /mob/living/simple_animal/hostile/retaliate/mime
 			),
 		)
+
 		if(islist(tf_simpmob))
 			tf_simpmob = pick(tf_simpmob)
-		investigate_text += "- tf_simpmob [tf_simpmob]"
 
-	if(prob(0.25)) // Transform into a catbeast
-		tf_catbeast = TRUE
-		investigate_text += "- tf_catbeast"
-
-	investigate_text += "<br />"
-	I.write(investigate_text)
-
+	..()
 
 /datum/randomized_reagent/proc/on_human_life(var/mob/living/carbon/human/H)
 	if(kill)
@@ -164,7 +167,5 @@
 	H.updatehealth()
 
 var/datum/randomized_reagent/global_randomized_reagent = null
-
 /proc/init_randomized_reagent()
-	global_randomized_reagent = new
-	global_randomized_reagent.init()
+	global_randomized_reagent = new /datum/randomized_reagent/all_effects
