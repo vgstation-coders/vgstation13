@@ -428,15 +428,15 @@
 /turf/simulated/floor/wood,
 /area/shack)
 "Yn" = (
-/obj/machinery/door/window{
-	dir = 2
-	},
-/obj/machinery/door/window{
-	dir = 1
-	},
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 1;
 	on = 1
+	},
+/obj/machinery/door/window/brigdoor{
+	dir = 2
+	},
+/obj/machinery/door/window/brigdoor{
+	dir = 1
 	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
