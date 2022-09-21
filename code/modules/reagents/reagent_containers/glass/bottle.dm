@@ -607,7 +607,7 @@ var/datum/disease2/disease/wizarditis = null
 	name = "Gallon of PCP"
 	desc = "You had no idea it even came in liquid form."
 	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bleachbottle"
+	icon_state = "pcpjug"
 	starting_materials = list(MAT_PLASTIC = 1000)
 	w_type = RECYK_PLASTIC
 	melt_temperature = MELTPOINT_PLASTIC
