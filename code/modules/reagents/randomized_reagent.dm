@@ -4,6 +4,7 @@
 	var/tox   = 0
 	var/fire  = 0
 	var/clone = 0
+	var/brain = 0
 
 	var/explode = 0
 
@@ -44,11 +45,12 @@
 		)
 
 	// Standard damage types
-	var/generator/G = generator("num", 150, 0.001, SQUARE_RAND) // Second numeric argument is significantly more likely
-	for(var/K in list("brute", "oxy", "tox", "fire", "clone"))
-		if(prob((K!="clone")?20:2)) // Room-temperature clone damage healing should be rare
-			vars[K] = G.Rand()
-			if(prob(75)) // Mostly beneficial
+	var/generator/rng = generator("num", 10, 0.2, LINEAR_RAND) // Second numeric argument is more likely
+	for(var/K in list("brute", "oxy", "tox", "fire", "clone", "brain"))
+		var/P = (K!="clone")?15:1; // Room-temperature clone damage healing should be rare
+		if(prob(P))
+			vars[K] = rng.Rand()
+			if(prob(80)) // Heal most of the time
 				vars[K] = -vars[K]
 
 	// Effects to discourage unethical testing by non-antags
@@ -164,6 +166,7 @@
 	H.adjustToxLoss(tox*REM)
 	H.adjustFireLoss(fire*REM)
 	H.adjustCloneLoss(clone*REM)
+	H.adjustBrainLoss(brain*REM)
 	H.updatehealth()
 
 var/datum/randomized_reagent/global_randomized_reagent = null
