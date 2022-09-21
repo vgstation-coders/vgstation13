@@ -2952,7 +2952,7 @@
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			if(H.mind && H.mind.active && H.client && (!H.client.is_afk())) // I demand that live assistants be sacrificed in the name of science
-				global_randomized_reagent.on_human_life(H)
+				global_randomized_reagent.on_human_life(H, tick)
 			else
 				H.adjustToxLoss(5)
 				if(prob(50))

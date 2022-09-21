@@ -13,6 +13,8 @@
 	var/tf_immerse  = FALSE
 	var/tf_catbeast = FALSE
 
+	var/scramble_damage = FALSE
+
 /datum/randomized_reagent/New()
  . = ..()
  randomize()
@@ -92,9 +94,15 @@
 		if(islist(tf_simpmob))
 			tf_simpmob = pick(tf_simpmob)
 
+	// Misc
+	scramble_damage = prob(3)
+
 	..()
 
-/datum/randomized_reagent/proc/on_human_life(var/mob/living/carbon/human/H)
+/datum/randomized_reagent/proc/on_human_life(var/mob/living/carbon/human/H, var/tick)
+	if(tick==0)
+		on_human_life_zeroth(H)
+
 	if(kill)
 		H.death(explode)
 		switch(explode)
@@ -168,6 +176,23 @@
 	H.adjustCloneLoss(clone*REM)
 	H.adjustBrainLoss(brain*REM)
 	H.updatehealth()
+
+/datum/randomized_reagent/proc/on_human_life_zeroth(var/mob/living/carbon/human/H)
+	if(scramble_damage && !(H.status_flags&GODMODE))
+		var/damage_budget = H.getOxyLoss() + H.getToxLoss() + H.getCloneLoss()
+		H.setOxyLoss(0)
+		H.setToxLoss(0)
+		H.setCloneLoss(0)
+		for(var/datum/organ/external/O in H.organs)
+			if(O.is_organic() && O.is_existing())
+				damage_budget += O.brute_dam + O.burn_dam
+				O.brute_dam = O.burn_dam = 0
+
+		while(damage_budget>0)
+			var/D = rand(max(damage_budget, 1))
+			var/P = pick("adjustBruteLoss", "adjustOxyLoss", "adjustToxLoss", "adjustFireLoss", "adjustCloneLoss")
+			call(H,P)(D)
+			damage_budget -= D
 
 var/datum/randomized_reagent/global_randomized_reagent = null
 /proc/init_randomized_reagent()
