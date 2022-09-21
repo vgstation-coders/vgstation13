@@ -665,6 +665,37 @@ var/list/tag_suits_list = list()
 	body_parts_covered = FULL_TORSO|ARMS
 	species_fit = list(INSECT_SHAPED)
 
+/obj/item/clothing/suit/storage/greaserjacket
+	name = "Greaser Jacket"
+	desc = "Need a haircut greaser?"
+	icon_state = "greaserjacket_plain"
+	item_state = "greaserjacket_plain"
+	body_parts_covered = FULL_TORSO|ARMS
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
+	allowed = list(
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank/emergency_oxygen,
+		/obj/item/weapon/tank/emergency_nitrogen)
+
+/obj/item/clothing/suit/storage/greaserjacket/spider
+	name = "Spider Leather Jacket"
+	desc = "Lookin' pretty fly, guy."
+	icon_state = "greaserjacket_spider"
+	item_state = "greaserjacket_spider"
+
+/obj/item/clothing/suit/storage/greaserjacket/cult
+	name = "Nar-Sie MC Jacket"
+	desc = "Betcha didn't think cultists could look this good."
+	icon_state = "greaserjacket_cult"
+	item_state = "greaserjacket_cult"
+
+/obj/item/clothing/suit/storage/greaserjacket/snakes
+	name = "Tunnel Snake Jacket"
+	desc = "Tunnel Snakes Rule!"
+	icon_state = "greaserjacket_snakes"
+	item_state = "greaserjacket_snakes"
+
 /obj/item/clothing/suit/lordadmiral
 	name = "Lord Admiral's Coat"
 	desc = "You'll be the Ruler of the King's Navy in no time."

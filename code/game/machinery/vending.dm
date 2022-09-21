@@ -2781,6 +2781,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/dress/plaid_red = 10,
 		/obj/item/clothing/under/dress/plaid_blue = 10,
 		/obj/item/clothing/under/greaser = 10,
+		/obj/item/clothing/suit/storage/greaserjacket = 10,
+		/obj/item/clothing/suit/storage/greaserjacket/spider = 10,
+		/obj/item/clothing/suit/storage/greaserjacket/snakes = 10,
 		/obj/item/clothing/under/sl_suit = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/black = 10,
@@ -2796,6 +2799,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/syndicate/tacticool = 5,
 		/obj/item/clothing/under/color/orange = 5,
 		/obj/item/clothing/under/psyche = 5,
+		/obj/item/clothing/suit/storage/greaserjacket/cult = 5,
 		)
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
