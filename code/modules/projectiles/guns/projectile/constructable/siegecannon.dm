@@ -487,7 +487,7 @@
 	desc = "A large sphere of honk."
 	icon = 'icons/obj/siege_cannon.dmi'
 	icon_state = "clownnonball"
-	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_METAL*10.7) //20.006 bananium sheets
+	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_CLOWN*20)
 	adjRange = 50
 	adjSpeed = 1
 	adjForce = 0
