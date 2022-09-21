@@ -465,7 +465,6 @@
 	minbodytemp = 223		//Below -50 Degrees Celcius
 	maxbodytemp = 323	//Above 50 Degrees Celcius
 
-	attacktext = "punches"
 	attack_sound = 'sound/weapons/punch1.ogg'
 
 	var/health_cap = 225 // Eating protein can pack on a 50% increase in max health. Less percentage-wise than gym rats who are working out the "natural" way, but the raw numbers are still pretty scary
@@ -489,9 +488,11 @@
 	if(all_fours == 1)
 		icon_state = "roidrat"
 		icon_eat = "roidrat-eat"
+		attacktext = "headbutts"
 	else
 		icon_state = "roidrat_dudestop"
 		icon_eat = null
+		attacktext = "punches"
 
 /mob/living/simple_animal/hostile/retaliate/roid_rat/proc/bulkblock(var/damage, var/atom/A)// roid rats are unaffected by brute damage of 10 or lower
 	if (!damage || damage <= damageblock)
