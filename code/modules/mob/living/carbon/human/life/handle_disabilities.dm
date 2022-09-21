@@ -119,7 +119,7 @@
 		"I C-CANT BREEET!!!!!!!", \
 		"TEH TRAITOR THEY KILL PEEPLE BUT I RESPAWN!!!"))
 
-else if(getBrainLoss() >= 60 && prob(3))
+	else if(getBrainLoss() >= 60 && prob(3))
 		emote("drool")
 	if(getBrainLoss() > 50 && prob(1.5))
 		if(canmove)
