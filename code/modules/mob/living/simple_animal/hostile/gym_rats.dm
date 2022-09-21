@@ -65,8 +65,8 @@
 		flick(icon_eat, src)
 		qdel(eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/meat)) //Protein! Gives back a smaller amount of health, but also packs on some extra max hp
-		health+=1
-		maxHealth+=1
+		health+=3
+		maxHealth+=3
 		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
@@ -167,8 +167,8 @@
 			qdel(O)
 		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on some extra maximum hp
 			Calm()
-			health+=1
-			maxHealth+=1
+			health+=3
+			maxHealth+=3
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
 			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
@@ -286,8 +286,8 @@
 		flick(icon_eat, src)
 		qdel(eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/meat)) //Protein! Gives back a smaller amount of health, but also packs on some extra max hp
-		health+=1
-		maxHealth+=1
+		health+=3
+		maxHealth+=3
 		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
@@ -388,8 +388,8 @@
 			qdel(O)
 		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on some extra maximum hp
 			Calm()
-			health+=1
-			maxHealth+=1
+			health+=3
+			maxHealth+=3
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
 			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
@@ -544,8 +544,8 @@
 		flick(icon_eat, src)
 		qdel(eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/meat)) //Protein! Gives back a smaller amount of health, but also packs on some extra max hp
-		health+=1
-		maxHealth+=1
+		health+=3
+		maxHealth+=3
 		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
@@ -646,8 +646,8 @@
 			qdel(O)
 		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on some extra maximum hp
 			Calm()
-			health+=1
-			maxHealth+=1
+			health+=3
+			maxHealth+=3
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
 			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
