@@ -346,7 +346,8 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 
 /obj/abstract/screen/plane_master/overdark_planemaster_target
 	appearance_flags = 0
-	plane = ABOVE_LIGHTING_PLANE
+	plane = LIGHTING_PLANE
+	blend_mode = BLEND_ADD
 	mouse_opacity = 0
 	screen_loc = "CENTER,CENTER"
 

@@ -75,7 +75,6 @@
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
-	my_dark_plane_alpha_override_value = 30
 	var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
 	var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_target
 
@@ -90,15 +89,16 @@
 	see_in_dark = initial(see_in_dark)
 	eyeprot = initial(eyeprot)
 	my_dark_plane_alpha_override = "night_vision"
-	add_overdark(C)
 	if (ishuman(C))
 		var/mob/living/carbon/human/H = C
 		if (H.glasses == src)
 			C.update_perception()
+			add_overdark(C)
 	else if (ismonkey(C))
 		var/mob/living/carbon/monkey/M = C
 		if (M.glasses == src)
 			C.update_perception()
+			add_overdark(C)
 	return ..()
 
 /obj/item/clothing/glasses/scanner/night/disable(var/mob/C)
@@ -144,9 +144,6 @@
 			return
 	else
 		return
-	if(on)
-		if(iscarbon(M))
-			add_overdark(M)
 	..()
 
 /obj/item/clothing/glasses/scanner/night/unequipped(mob/user, var/from_slot = null)
