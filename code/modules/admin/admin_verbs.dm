@@ -1256,11 +1256,11 @@ var/list/admin_verbs_mod = list(
 		if(archive.key == O.key)
 			var/mob/living/tempM = new archive.mob_type
 			if(!istype(tempM))
-				WARNING("Body archive to send to hell was not a living mob!")
+				warning("Body archive to send to hell was not a living mob!")
 				break
 			var/mob/living/M = tempM.actually_reset_body(archive = archive, our_mind = get_mind_by_key(O.key))
 			if(!istype(M))
-				WARNING("Body archive to send to hell was not a living mob!")
+				warning("Body archive to send to hell was not a living mob!")
 				break
 			M.status_flags ^= BUDDHAMODE
 			M.forceMove(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
