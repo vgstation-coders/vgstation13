@@ -16,8 +16,8 @@
 	var/scramble_damage = FALSE
 
 /datum/randomized_reagent/New()
- . = ..()
- randomize()
+	. = ..()
+	randomize()
 
 /datum/randomized_reagent/proc/randomize()
 	var/datum/log_controller/I = investigations[I_CHEMS]
