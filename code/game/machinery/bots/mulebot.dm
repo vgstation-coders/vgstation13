@@ -699,7 +699,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/to_bump(var/atom/obs)
 	if(!wires.MobAvoid())		//usually just bumps, but if avoidance disabled knock over mobs
 		var/mob/M = obs
-		if(ismob(M))
+		if(ismob(M) && !istype(M.locked_to,/obj/structure/bed))
 			if(istype(M,/mob/living/silicon/robot))
 				src.visible_message("<span class='warning'>[src] bumps into [M]!</span>")
 			else
