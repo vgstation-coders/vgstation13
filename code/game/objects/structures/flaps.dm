@@ -19,6 +19,7 @@
 		airtight = !airtight
 		name = "\improper [airtight? "Airtight p" : "P"]lastic flaps"
 		desc = "[airtight? "Heavy duty, airtight, plastic flaps." : "I definitely can't get past those. No way."]"
+		update_nearby_tiles()
 		return 1
 	if(I.is_wrench(user) && airtight != 1)
 		if(anchored == 0)
@@ -55,6 +56,12 @@
 	if(!istype(mover)) // Aircheck!
 		return !airtight
 	return 1
+	
+//Destruction ZAS sanity
+/obj/structure/plasticflaps/Destroy()
+	airtight = 0
+	update_nearby_tiles()
+	..()
 
 /obj/structure/plasticflaps/ex_act(severity)
 	switch(severity)

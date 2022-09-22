@@ -396,7 +396,7 @@
 		if(!target.internal_organs_by_name[O.organ_tag])
 			organ_missing = 1
 		else
-			to_chat(user, "<span class='warning'>\The [target] already has [o_a][O.organ_tag].</span>")
+			to_chat(user, "<span class='warning'>\The [target] already has [o_a] [O.organ_tag].</span>")
 			return 0
 
 		if(O.organ_data && affected.name == O.organ_data.parent_organ && affected.destspawn == 0)
