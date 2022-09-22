@@ -882,7 +882,7 @@ var/global/list/alcatraz_stuff = list(
 		return FALSE
 
 /obj/structure/closet/crate/medical/yantar
-	name = "Yantar security crate"
+	name = "Yantar medical crate"
 	desc = "From the forbidden 'X' laboratory focused on medical research."
 	has_lock_type = null
 
@@ -897,7 +897,7 @@ var/global/list/yantar_stuff = list(
 
 /obj/structure/closet/crate/medical/yantar/New()
 	..()
-	for(var/i = 1 to 3)
+	for(var/i = 1 to 6)
 		if(!yantar_stuff.len)
 			return
 		var/path = pick_n_take(yantar_stuff)
