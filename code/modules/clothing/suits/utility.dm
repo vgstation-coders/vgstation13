@@ -24,7 +24,7 @@
 	clothing_flags = ONESIZEFITSALL
 	pressure_resistance = 3 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-
+	autoignition_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/suit/fire/firefighter
 	icon_state = "firesuit"
@@ -54,6 +54,7 @@
 	item_state = "ro_suit"
 	w_class = W_CLASS_LARGE//bulky item
 	slowdown = HARDSUIT_SLOWDOWN_MED
+	autoignition_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE * 2
 
 /*
  * Bomb protection
@@ -68,6 +69,7 @@
 	body_parts_visible_override = EYES
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	autoignition_temperature = AUTOIGNITION_PROTECTIVE
 
 /obj/item/clothing/suit/bomb_suit
 	name = "bomb suit"
@@ -83,6 +85,7 @@
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/head/bomb_hood/security
 	icon_state = "bombsuitsec"
@@ -105,6 +108,7 @@
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	species_restricted = list("exclude",VOX_SHAPED)
 	siemens_coefficient = 0
+	autoignition_temperature = AUTOIGNITION_PROTECTIVE
 
 
 /obj/item/clothing/suit/advancedeod
@@ -123,6 +127,7 @@
 	species_fit = list(INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	siemens_coefficient = 0
+	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /*
  * Radiation protection
@@ -136,6 +141,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_visible_override = EYES|BEARD
+	autoignition_temperature = AUTOIGNITION_PROTECTIVE
 
 /obj/item/clothing/suit/radiation
 	name = "radiation suit"
@@ -151,3 +157,4 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
+	autoignition_temperature = AUTOIGNITION_PROTECTIVE
