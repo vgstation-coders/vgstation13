@@ -269,18 +269,19 @@
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/to_bump(var/atom/A)
 	if(isliving(A) && !attack_cooldown)
 		var/mob/living/L = A
-		if(isrobot(L))
-			src.visible_message("<span class='warning'>[src] slams into [L]!</span>")
-			L.Stun(2)
-			L.Knockdown(2)
-			L.adjustBruteLoss(rand(4,6))
-		else
-			src.visible_message("<span class='warning'>[src] knocks over [L]!</span>")
-			L.stop_pulling()
-			L.Stun(8)
-			L.Knockdown(5)
-			L.lying = 1
-			L.update_icons()
+		if(!istype(L.locked_to,/obj/structure/bed))
+			if(isrobot(L))
+				src.visible_message("<span class='warning'>[src] slams into [L]!</span>")
+				L.Stun(2)
+				L.Knockdown(2)
+				L.adjustBruteLoss(rand(4,6))
+			else
+				src.visible_message("<span class='warning'>[src] knocks over [L]!</span>")
+				L.stop_pulling()
+				L.Stun(2)
+				L.Knockdown(2)
+				L.lying = 1
+				L.update_icons()
 	..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/proc/crush(var/mob/living/H,var/bloodcolor) //Basically identical to the MULE, see mulebot.dm
@@ -291,7 +292,7 @@
 	H.apply_damage(damage, BRUTE, LIMB_LEFT_LEG)
 	H.apply_damage(damage, BRUTE, LIMB_RIGHT_LEG)
 	attack_cooldown = 1
-	spawn(10)
+	spawn(40)
 		attack_cooldown = 0
 
 /obj/item/syndicate_wheelchair_kit

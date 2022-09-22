@@ -75,7 +75,7 @@ var/global/mulebot_count = 0
 
 	var/bloodiness = 0		// count of bloodiness
 	var/currentBloodColor = DEFAULT_BLOOD
-	var/run_over_cooldown = 3 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
+	var/run_over_cooldown = 4 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
 	var/coolingdown = FALSE
 
 	commanding_radio = /obj/item/radio/integrated/signal/bot/mule
@@ -709,8 +709,8 @@ var/global/mulebot_count = 0
 					M.Stun(1)
 					M.Knockdown(1)
 				else
-					M.Stun(8)
-					M.Knockdown(5)
+					M.Stun(2)
+					M.Knockdown(2)
 				M.lying = 1
 	..()
 
