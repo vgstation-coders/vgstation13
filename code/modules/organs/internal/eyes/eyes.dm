@@ -9,9 +9,6 @@
 	var/see_in_dark=2
 	var/list/colourmatrix = list()
 
-/*/datum/organ/internal/eyes/proc/init_perception(var/mob/living/carbon/human/M)
-	return*/
-
 /datum/organ/internal/eyes/proc/update_perception(var/mob/living/carbon/human/M)
 	M.dark_plane.alphas["human"] = 5
 
