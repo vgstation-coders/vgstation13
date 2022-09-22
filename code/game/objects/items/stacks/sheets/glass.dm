@@ -10,7 +10,6 @@
 /obj/item/stack/sheet/glass
 	w_type = RECYK_GLASS
 	melt_temperature = MELTPOINT_GLASS
-	autoignition_temperature = AUTOIGNITION_GLASS
 	var/reinforced = 0
 	var/rglass = 0
 	//For solars created from this glass type

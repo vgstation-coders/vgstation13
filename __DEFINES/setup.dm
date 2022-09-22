@@ -1123,7 +1123,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define AUTOIGNITION_WOOD  573.15
 #define AUTOIGNITION_PAPER 519.15
 #define AUTOIGNITION_PLASTIC 689.15 //autoignition temperature of ABS plastic
-#define AUTOIGNITION_GLASS 1053.15 //autoignition temperature of silicon
 #define AUTOIGNITION_METAL 1033.15 //autoignition temperature of steel
 #define AUTOIGNITION_FABRIC 523.15
 #define AUTOIGNITION_PROTECTIVE 573.15 //autoignition temperature of protective clothing like firesuits or kevlar vests

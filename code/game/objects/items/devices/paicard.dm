@@ -7,7 +7,6 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_PROGRAMMING + "=2"
-	autoignition_temperature = AUTOIGNITION_GLASS
 	var/looking_for_personality = FALSE
 	var/mob/living/silicon/pai/pai
 	var/last_ping_time = 0

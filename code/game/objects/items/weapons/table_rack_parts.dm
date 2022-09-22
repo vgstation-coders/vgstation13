@@ -148,7 +148,6 @@
 	starting_materials = list(MAT_GLASS = 3750)
 	w_type = RECYK_GLASS
 	melt_temperature=MELTPOINT_GLASS
-	autoignition_temperature = AUTOIGNITION_GLASS
 	flags = FPRINT
 	siemens_coefficient = 0 //copying from glass sheets and shards even if its bad balance
 	table_type = /obj/structure/table/glass

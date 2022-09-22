@@ -13,7 +13,6 @@
 	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
-	autoignition_temperature = AUTOIGNITION_GLASS
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_PROGRAMMING + "=6;" + Tc_SYNDICATE + "=7"
 	slot_flags = SLOT_BELT
 	var/operation = 0

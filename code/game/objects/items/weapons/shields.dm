@@ -16,7 +16,6 @@
 	w_class = W_CLASS_LARGE
 	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 7500)
 	melt_temperature = MELTPOINT_GLASS
-	autoignition_temperature = AUTOIGNITION_GLASS
 	origin_tech = Tc_MATERIALS + "=2"
 	attack_verb = list("shoves", "bashes")
 	var/cooldown = 0 //shield bash cooldown. based on world.time

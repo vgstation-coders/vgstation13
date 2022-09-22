@@ -19,7 +19,6 @@
 	starting_materials = list(MAT_GLASS = 3750)
 	w_type = RECYK_GLASS
 	melt_temperature = MELTPOINT_GLASS
-	autoignition_temperature = AUTOIGNITION_GLASS
 	siemens_coefficient = 0 //no conduct
 	attack_verb = list("stabs", "slashes", "slices", "cuts")
 	var/glass = /obj/item/stack/sheet/glass/glass

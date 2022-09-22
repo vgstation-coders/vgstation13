@@ -136,7 +136,6 @@
 	starting_materials = list(MAT_GLASS = 60)
 	empty_desc = "Glass ashtray. Looks fragile."
 	throwforce = 6
-	autoignition_temperature = AUTOIGNITION_GLASS
 
 /obj/item/ashtray/glass/die()
 	..()

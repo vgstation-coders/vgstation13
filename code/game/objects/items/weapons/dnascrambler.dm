@@ -4,7 +4,6 @@
 	icon = 'icons/obj/syringe.dmi'
 	item_state = "syringe_0"
 	icon_state = "b10"
-	autoignition_temperature = AUTOIGNITION_GLASS
 
 /obj/item/weapon/dnascrambler/attack(var/mob/living/carbon/human/M, var/mob/living/carbon/human/user)
 	if(!istype(M) || !istype(user))
