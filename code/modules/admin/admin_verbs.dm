@@ -1266,11 +1266,12 @@ var/list/admin_verbs_mod = list(
 			qdel(tempM)
 			qdel(O)
 			return
-	var/mob/living/carbon/human/prefM = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
-	prefM.status_flags ^= BUDDHAMODE
-	prefM.quick_copy_prefs()
+
 	var/datum/mind/mind = get_mind_by_key(O.key)
 	if (mind)
+		var/mob/living/carbon/human/prefM = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
+		prefM.status_flags ^= BUDDHAMODE
+		prefM.quick_copy_prefs()
 		mind.transfer_to(prefM)
 		qdel(O)
 
