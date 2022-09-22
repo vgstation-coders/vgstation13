@@ -1250,7 +1250,8 @@ var/list/admin_verbs_mod = list(
 /proc/send_to_hedoublehockeysticks(mob/O)
 	if(!O || !O.key)
 		return
-	create_hell()
+	if(!(locate(/datum/zLevel/hell) in map.zLevels))
+		create_hell()
 	for(var/datum/body_archive/archive in body_archives)
 		if(archive.key == O.key)
 			var/mob/living/tempM = new archive.mob_type
@@ -1276,32 +1277,33 @@ var/list/admin_verbs_mod = list(
 		qdel(O)
 
 /proc/create_hell()
-	if(!(locate(/datum/zLevel/hell) in map.zLevels))
-		world.maxz++
-		var/datum/zLevel/hell/HL = new
-		map.addZLevel(HL, world.maxz, TRUE)
-		for(var/x in 1 to world.maxx)
-			for(var/y in 1 to world.maxy)
-				var/turf/T = locate(x,y,world.maxz)
-				new HL.base_turf(T) // Not ideal but much faster than changeturf(), otherwise server would lag for ages rather than just a few seconds.
-		log_admin("Hell was created, as it did not exist. (located on z-level [world.maxz])")
-		message_admins("Hell was created, as it did not exist. [formatJumpTo(locate(world.maxx/2,world.maxy/2,world.maxz),"JMP")]")
+	if(locate(/datum/zLevel/hell) in map.zLevels)
+		return
+	world.maxz++
+	var/datum/zLevel/hell/HL = new
+	map.addZLevel(HL, world.maxz, TRUE)
+	for(var/x in 1 to world.maxx)
+		for(var/y in 1 to world.maxy)
+			var/turf/T = locate(x,y,world.maxz)
+			new HL.base_turf(T) // Not ideal but much faster than changeturf(), otherwise server would lag for ages rather than just a few seconds.
+	log_admin("Hell was created, as it did not exist. (located on z-level [world.maxz])")
+	message_admins("Hell was created, as it did not exist. [formatJumpTo(locate(world.maxx/2,world.maxy/2,world.maxz),"JMP")]")
 
-		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE unbanned = 0")
-		if(!select_query.Execute())
-			qdel(select_query)
-			message_admins("Banned player search error on populating hell: [select_query.ErrorMsg()]")
-			log_sql("Error: [select_query.ErrorMsg()]")
-			return
+	var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE unbanned = 0")
+	if(!select_query.Execute())
+		qdel(select_query)
+		message_admins("Banned player search error on populating hell: [select_query.ErrorMsg()]")
+		log_sql("Error: [select_query.ErrorMsg()]")
+		return
 
-		var/bancount = 0
-		while(select_query.NextRow() && config.bans_shown_in_hell_limit && bancount <= config.bans_shown_in_hell_limit)
-			var/ckey = select_query.item[1]
-			var/reason = select_query.item[2]
-			var/mob/living/carbon/human/H = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
-			H.quick_copy_prefs()
-			H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
-			bancount++
+	var/bancount = 0
+	while(select_query.NextRow() && config.bans_shown_in_hell_limit && bancount <= config.bans_shown_in_hell_limit)
+		var/ckey = select_query.item[1]
+		var/reason = select_query.item[2]
+		var/mob/living/carbon/human/H = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
+		H.quick_copy_prefs()
+		H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
+		bancount++
 
 /mob/living/carbon/human/proc/quick_copy_prefs()
 	var/list/preference_list = new
