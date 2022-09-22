@@ -4,6 +4,7 @@
 	icon = 'icons/obj/ball_ornaments.dmi'
 	icon_state = "white_ball_ornament"
 	w_class = 2
+	autoignition_temperature = AUTOIGNITION_GLASS
 	var/list/ornaments_list = list("red" = /obj/item/ornament/red,
 								"blue" = /obj/item/ornament/blue,
 								"green" = /obj/item/ornament/green,

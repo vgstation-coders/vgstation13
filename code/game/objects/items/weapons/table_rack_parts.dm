@@ -17,6 +17,7 @@
 	starting_materials = list(MAT_IRON = 3750)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	flags = FPRINT
 	siemens_coefficient = 1
 	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
@@ -107,6 +108,7 @@
 	flags = 0
 	table_type = /obj/structure/table/woodentable
 	sheet_type = /obj/item/stack/sheet/wood
+	autoignition_temperature = AUTOIGNITION_WOOD
 
 /obj/item/weapon/table_parts/wood/cultify()
 	return
@@ -146,6 +148,7 @@
 	starting_materials = list(MAT_GLASS = 3750)
 	w_type = RECYK_GLASS
 	melt_temperature=MELTPOINT_GLASS
+	autoignition_temperature = AUTOIGNITION_GLASS
 	flags = FPRINT
 	siemens_coefficient = 0 //copying from glass sheets and shards even if its bad balance
 	table_type = /obj/structure/table/glass
@@ -179,6 +182,7 @@
 	desc = "Parts of a slightly beveled brass table."
 	icon_state = "brass_tableparts"
 	starting_materials = list(MAT_BRASS = 15000)
+	autoignition_temperature = AUTOIGNITION_METAL
 	table_type = /obj/structure/table/reinforced/clockwork
 	sheet_type = /obj/item/stack/sheet/brass
 	sheet_amount = 4
@@ -195,6 +199,7 @@
 	icon_state = "plastic_tableparts"
 	starting_materials = list(MAT_PLASTIC = 3750)
 	w_type = RECYK_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	table_type = /obj/structure/table/plastic
 	sheet_type = /obj/item/stack/sheet/mineral/plastic
 	sheet_amount = 5
@@ -209,6 +214,7 @@
 	starting_materials = list(MAT_IRON = 3750)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	var/sheet_amount = 1
 
 /obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)

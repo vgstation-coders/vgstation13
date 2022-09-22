@@ -3,6 +3,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cigs_lighters.dmi', "right_hand" = 'icons/mob/in-hand/right/cigs_lighters.dmi')
 	item_state = "ashtray"
 	w_class = W_CLASS_TINY
+	autoignition_temperature = AUTOIGNITION_METAL
 
 	var/max_butts 	= 0
 	var/empty_desc 	= ""
@@ -92,6 +93,7 @@
 	w_type = RECYK_PLASTIC
 	empty_desc = "Cheap plastic ashtray."
 	throwforce = 3
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/ashtray/plastic/die()
 	..()
@@ -134,6 +136,7 @@
 	starting_materials = list(MAT_GLASS = 60)
 	empty_desc = "Glass ashtray. Looks fragile."
 	throwforce = 6
+	autoignition_temperature = AUTOIGNITION_GLASS
 
 /obj/item/ashtray/glass/die()
 	..()

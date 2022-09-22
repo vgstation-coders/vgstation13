@@ -4,6 +4,7 @@ var/global/list/camera_bugs = list()
 	desc = "A handheld tv meant for remote viewing."
 	icon_state = "handtv"
 	w_class = W_CLASS_TINY
+	autoignition_temperature = AUTOIGNITION_METAL
 	var/obj/item/device/camera_bug/current
 	var/network
 

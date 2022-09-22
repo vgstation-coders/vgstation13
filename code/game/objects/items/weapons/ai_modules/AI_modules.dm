@@ -25,6 +25,7 @@ Refactored AI modules by N3X15
 	starting_materials = list(MAT_GLASS = 2000)
 	w_type=RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
+	autoignition_temperature = AUTOIGNITION_GLASS
 	// Don't specify sulfuric, as that's renewable and is used up in the etching process anyway.
 
 	var/law // Cached law

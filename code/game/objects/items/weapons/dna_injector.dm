@@ -12,6 +12,7 @@
 	var/nofail = 0
 	var/is_bullet = 0
 	var/inuse = 0
+	autoignition_temperature = AUTOIGNITION_GLASS
 
 	// USE ONLY IN PREMADE SYRINGES.  WILL NOT WORK OTHERWISE.
 	var/datatype=0

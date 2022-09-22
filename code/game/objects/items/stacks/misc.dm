@@ -15,6 +15,7 @@
 	attack_verb = list("hits", "bludgeons", "whacks")
 	w_type=RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	var/active = 0
 
 /obj/item/stack/rods/Destroy()
@@ -153,6 +154,7 @@
 	irregular_plural = "chains"
 	max_amount = 20
 	w_type = RECYK_METAL
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/stack/chains/can_stack_with(var/obj/item/other_stack)
 	if(!ispath(other_stack) && istype(other_stack) && other_stack.material_type == material_type)

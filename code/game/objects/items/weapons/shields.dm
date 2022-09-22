@@ -16,6 +16,7 @@
 	w_class = W_CLASS_LARGE
 	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 7500)
 	melt_temperature = MELTPOINT_GLASS
+	autoignition_temperature = AUTOIGNITION_GLASS
 	origin_tech = Tc_MATERIALS + "=2"
 	attack_verb = list("shoves", "bashes")
 	var/cooldown = 0 //shield bash cooldown. based on world.time
@@ -41,6 +42,7 @@
 	desc = "A small wooden shield. Its surface area is small, but it's still somewhat effective."
 	icon_state = "buckler"
 	w_class = W_CLASS_MEDIUM
+	autoignition_temperature = AUTOIGNITION_METAL
 	slot_flags = 0
 	starting_materials = list()
 
@@ -66,6 +68,7 @@
 	name = "roman shield"
 	desc = "Bears an inscription on the inside: <i>\"Romanes venio domus\"</i>."
 	icon_state = "roman_shield"
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/shield/riot/roman/IsShield()
 	return 1
@@ -94,6 +97,7 @@
 	throw_speed = 1
 	throw_range = 4
 	w_class = W_CLASS_TINY
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("shoves", "bashes")
 	var/active = 0
@@ -143,6 +147,7 @@
 	throw_speed = 2
 	throw_range = 10
 	w_class = W_CLASS_SMALL
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 
 
@@ -216,6 +221,7 @@
 	w_class = 5
 	mech_flags = MECH_SCAN_ILLEGAL
 	cant_drop = 1
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 	var/mob/living/simple_animal/borer/parent_borer = null
 
 /obj/item/weapon/shield/riot/bone/New(atom/A, var/p_borer = null)
@@ -258,6 +264,7 @@
 	flags = FPRINT | SLOWDOWN_WHEN_CARRIED
 	slowdown = 4
 	w_type = RECYK_METAL
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/shield/riot/rune
 	name = "rune kiteshield"
@@ -272,6 +279,7 @@
 	throw_speed = 1
 	throw_range = 6
 	w_class = W_CLASS_LARGE
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/shield/riot/tower/IsShield()
 	return 2 //Considering its size, twice as effective as a normal shield, but difficult to lug around

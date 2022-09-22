@@ -7,6 +7,7 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_SMALL
+	autoignition_temperature = AUTOIGNITION_GLASS
 	var/obj/item/weapon/implant/imp = null
 	var/imp_type = null
 

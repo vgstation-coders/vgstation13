@@ -49,6 +49,7 @@
 	allow_quick_gather = TRUE
 	icon = 'icons/obj/storage/smallboxes.dmi'
 	icon_state = "box"
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/weapon/storage/gachabox/New()
 	..()
@@ -68,6 +69,7 @@
 	is_wooden = TRUE
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
 	w_type = RECYK_WOOD
+	autoignition_temperature = AUTOIGNITION_WOOD
 	var/wonder_whitelist = list(
 	/obj/item/clothing/mask/morphing/corgi,
 	/obj/item/clothing/under/rank/vice,
@@ -343,6 +345,7 @@ var/global/list/alcatraz_stuff = list(
 	icon_state = "bangerboy"
 	mech_flags = MECH_SCAN_FAIL
 	var/obj/item/tool/screwdriver/S
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/clothing/accessory/bangerboy/New()
 	..()
@@ -499,6 +502,7 @@ var/global/list/alcatraz_stuff = list(
 	siemens_coefficient = 0.9
 	species_fit = list(GREY_SHAPED) //Unlike normal skirts this is not VOX_SHAPED
 	body_parts_covered = FULL_TORSO|ARMS
+	autoignition_temperature = AUTOIGNITION_PROTECTIVE
 
 /obj/item/clothing/under/securityskirt/elite/equipped(var/mob/user, var/slot)
 	..()
@@ -577,6 +581,7 @@ var/global/list/alcatraz_stuff = list(
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/boxofsnow/attack_self(mob/user)
 	var/turf/center = get_turf(loc)
@@ -598,6 +603,7 @@ var/global/list/alcatraz_stuff = list(
 	name = "warden's spare secway key"
 	desc = "It has a tag that reads:"
 	var/home_map
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/key/security/spare/New()
 	..()
@@ -616,6 +622,7 @@ var/global/list/alcatraz_stuff = list(
 	icon_state = "telebaton_1"
 	item_state = "telebaton_1"
 	w_class = W_CLASS_SMALL
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/depocket_wand/attack(mob/living/M, mob/living/user)
 
@@ -859,6 +866,7 @@ var/global/list/alcatraz_stuff = list(
 	restraint_resist_time = TRUE //This doesn't actually matter as long as it is nonzero
 	req_access = list(access_brig) //Brig timers
 	var/obj/item/weapon/handcuffs/cyborg/stored
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/weapon/autocuffer/Destroy()
 	if(stored)
@@ -931,6 +939,7 @@ var/global/list/yantar_stuff = list(
 	siemens_coefficient = 0
 	w_class = W_CLASS_SMALL
 	var/working = FALSE
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/mech_expansion_kit/preattack(atom/target, mob/user , proximity)
 	if(!proximity)
@@ -965,6 +974,7 @@ var/global/list/yantar_stuff = list(
 	var/max_trash = 50
 	var/list/trash = list()
 	var/obj/item/vachandle/myhandle
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/structure/wetdryvac/New()
 	..()
@@ -1144,6 +1154,7 @@ var/global/list/yantar_stuff = list(
 	icon = 'icons/obj/barricade.dmi'
 	icon_state = "barricade_kit"
 	w_class = W_CLASS_MEDIUM
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/fakeposter_kit/preattack(atom/target, mob/user , proximity)
 	if(!proximity)
@@ -1163,6 +1174,7 @@ var/global/list/yantar_stuff = list(
 	icon = 'icons/obj/posters.dmi'
 	var/obj/item/weapon/storage/cargocache/cash
 	var/turf/access_loc
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/structure/fakecargoposter/New()
 	..()
@@ -1208,6 +1220,7 @@ var/global/list/yantar_stuff = list(
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 28
 	slot_flags = 0
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/storage/cargocache/distance_interact(mob/user)
 	if(istype(loc,/obj/structure/fakecargoposter) && user.Adjacent(loc))
@@ -1222,6 +1235,7 @@ var/global/list/yantar_stuff = list(
 	icon_state = "pedometer"
 	w_class = W_CLASS_SMALL
 	slot_flags = SLOT_BELT
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/count = 0
 	var/list/approved_areas = list(/area/maintenance,/area/hallway)
 	var/list/special_rewards = list(/obj/item/weapon/pen/tactical)
@@ -1276,6 +1290,7 @@ var/global/list/yantar_stuff = list(
 	plane = ABOVE_HUMAN_PLANE
 	var/state = AT_SEED
 	var/pity_timer = 0
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/structure/ammotree/attackby(obj/item/I, mob/user)
 	if(state == AT_SEED && istype(I, /obj/item/weapon/batteringram))
@@ -1327,6 +1342,7 @@ var/global/list/yantar_stuff = list(
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "ammofruit"
 	w_class = W_CLASS_SMALL
+	autoignition_temperature = 	AUTOIGNITION_PAPER
 
 /obj/item/ammofruit/New()
 	..()
@@ -1517,6 +1533,7 @@ var/list/decelerators = list()
 /obj/item/weapon/am_containment/decelerator
 	name = "antimatter decelerator"
 	desc = "Acts as a 'filter' to trap antiparticles emitted by radiation. In function, it can be used to power an antimatter engine and refuel itself with nearby radiation."
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/am_containment/decelerator/New()
 	..()
@@ -1540,6 +1557,7 @@ var/list/decelerators = list()
 	force = 6
 	req_access = list(access_engine_minor)
 	var/mode = OMNIMODE_TOOL
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/device/multitool/omnitool/attack_self(mob/user)
 	mode = !mode
@@ -1593,6 +1611,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	icon = 'icons/obj/items_weird.dmi'
 	icon_state = "toxiccereal"
 	flags = FPRINT | OPENCONTAINER
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/wasteos/New()
 	..()
@@ -1694,6 +1713,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	icon_state = "pbag"	//Supposed to look kind of shitty, cubes aren't even wrapped
 	foldable = /obj/item/weapon/paper
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube")
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/storage/box/mysterycubes/New()
 	..()

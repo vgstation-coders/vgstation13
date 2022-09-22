@@ -7,6 +7,7 @@
 	w_class = W_CLASS_TINY
 	var/colour = "red"
 	var/open = 0
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 
 /obj/item/weapon/lipstick/purple
@@ -411,7 +412,7 @@
 	if(istype(target, /obj/machinery/singularity))
 		animate(target, color = grayscale, time = 6 SECONDS)
 		return 0
-	return 1	
+	return 1
 
 /obj/item/weapon/invisible_spray/permanent
 	desc = "A can of... invisibility?"

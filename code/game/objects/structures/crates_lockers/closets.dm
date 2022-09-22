@@ -27,6 +27,7 @@
 	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
 	var/is_wooden = null //used in dismantling cabinet-type closets
 	var/obj/item/weapon/circuitboard/airlock/electronics
+	autoignition_temperature = AUTOIGNITION_METAL
 
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL

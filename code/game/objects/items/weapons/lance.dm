@@ -21,6 +21,7 @@
 
 	slowdown = 3.0 //Very heavy
 	flags = SLOWDOWN_WHEN_CARRIED
+	autoignition_temperature = AUTOIGNITION_METAL
 
 	var/obj/effect/lance_trigger/trigger
 	var/last_used = 0

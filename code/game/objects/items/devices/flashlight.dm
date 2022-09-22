@@ -12,6 +12,7 @@
 	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL // Assuming big beefy fucking maglite.
+	autoignition_temperature = AUTOIGNITION_METAL //see above
 	actions_types = list(/datum/action/item_action/toggle_light)
 	var/on = 0
 	var/brightness_on = 4 //luminosity when on
@@ -349,6 +350,7 @@
 	on = 0
 	luminosity = 2
 	has_sound = 0
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 	var/brightness_max = 6
 	var/brightness_min = 2
 

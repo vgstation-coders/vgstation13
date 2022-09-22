@@ -22,6 +22,7 @@
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=4"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	surgerysound = 'sound/items/scalpel.ogg'
+	autoignition_temperature = AUTOIGNITION_GLASS
 
 	var/mob/living/simple_animal/shade/shade = null
 

@@ -27,6 +27,7 @@ var/global/list/lightfloor_colors = list(
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
+	autoignition_temperature = AUTOIGNITION_GLASS
 	attack_verb = list("bashes", "batters", "bludgeons", "thrashes", "smashes")
 
 	material = "glass"

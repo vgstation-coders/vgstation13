@@ -8,6 +8,7 @@
 	starting_materials = list(MAT_IRON = 937.5)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	throwforce = 10
 	throw_speed = 4
 	throw_range = 20
@@ -135,6 +136,7 @@
 	desc = "A relatively clear reinforced glass tile."
 	icon_state = "tile_rglass"
 	max_amount = 60
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/stack/glass_tile/rglass/proc/build(turf/S as turf)
 	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
