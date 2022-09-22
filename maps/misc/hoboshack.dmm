@@ -433,10 +433,12 @@
 	on = 1
 	},
 /obj/machinery/door/window/brigdoor{
-	dir = 2
+	dir = 2;
+	req_access = null
 	},
 /obj/machinery/door/window/brigdoor{
-	dir = 1
+	dir = 1;
+	req_access = null
 	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
