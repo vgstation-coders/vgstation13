@@ -83,7 +83,7 @@
 
 /spell/aoe_turf/grue_drainlight
 	name = "Drain Light"
-	desc = "Drain the light from the surrounding area."
+	desc = "Drain the light from the surrounding area. Darkness will not heal you while you do this."
 	hud_state = "grue_drainlight"
 	user_type = USER_TYPE_GRUE
 	panel = "Grue"
