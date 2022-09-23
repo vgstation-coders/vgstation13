@@ -37,10 +37,10 @@
 
 	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks/cheesewedge, /obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel) // Gym rats are pickier than normal mice. Cheese and raw meat only
 
-	var/all_fours = 1
+	var/all_fours = TRUE
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/update_icon()
-	if(all_fours == 1)
+	if(all_fours == TRUE)
 		icon_state = "gymrat"
 		icon_eat = "gymrat-eat"
 		attacktext = "headbutts"
@@ -182,13 +182,13 @@
 	set desc = "Stand up and show off your guns, or walk on all fours to not embarrass the nerds."
 	set category = "Gym_Rat"
 
-	if(all_fours == 1)
-		all_fours = 0
+	if(all_fours == TRUE)
+		all_fours = FALSE
 		to_chat(src, text("<span class='notice'>You are now standing upright.</span>"))
 		update_icon()
 
 	else
-		all_fours = 1
+		all_fours = TRUE
 		to_chat(src, text("<span class='notice'>You are now moving on all fours.</span>"))
 		update_icon()
 
@@ -228,15 +228,11 @@
 	speak = list("I'm a rat burger, with extra beef.","Hoo-ha hooah!","Damn, I'm pretty.")
 	emote_see = list("flexes", "admires itself", "does a rep", "poses", "brushes its pompadour")
 
-	size = SIZE_SMALL // If they're not at least small it doesn't seem like the treadmill works or makes sound
-	pass_flags = PASSTABLE
-	stop_automated_movement_when_pulled = TRUE
-
 	health_cap = 90 // Eating protein can pack on a whopping 125% increase in max health. GAINZ
 	icon_eat = "gymrat_pompadour-eat"
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat/update_icon()
-	if(all_fours == 1)
+	if(all_fours == TRUE)
 		icon_state = "gymrat_pompadour"
 		icon_eat = "gymrat_pompadour-eat"
 		attacktext = "headbutts"
@@ -298,6 +294,8 @@
 	speak_emote = list("squeaks thunderously")
 	emote_hear = list("squeaks thunderously")
 
+	size = SIZE_NORMAL
+
 	health_cap = 225 // Eating protein can pack on a 50% increase in max health. Less percentage-wise than gym rats who are working out the "natural" way, but the raw numbers are still pretty scary
 	icon_eat = "roidrat-eat"
 
@@ -310,7 +308,7 @@
 	status_flags = UNPACIFIABLE // Can't pacify muscles like these with hippy shit
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/update_icon()
-	if(all_fours == 1)
+	if(all_fours == TRUE)
 		icon_state = "roidrat"
 		icon_eat = "roidrat-eat"
 		attacktext = "headbutts"
