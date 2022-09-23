@@ -393,18 +393,6 @@ steam.start() -- spawns the effect
 	R.updatehealth()
 	return
 
-/obj/effect/smoke/heat
-	name = "geyser smoke"
-
-/obj/effect/smoke/heat/affect(var/mob/living/carbon/human/R)
-	if (!..())
-		return 0
-	if (R.wear_suit)
-		return 0
-
-	R.burn_skin(2)
-	R.bodytemperature = min(60, R.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
-
 /obj/effect/smoke/transparent
 	opacity = FALSE
 
