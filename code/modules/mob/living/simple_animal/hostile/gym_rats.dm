@@ -363,7 +363,7 @@
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
 		if(punch_throw_range && prob(punch_throw_chance))
-			visible_message("<span class='danger'>\The [M] is flung away by the [src]'s powerful punch!</span>")
+			visible_message("<span class='danger'>\The [M] is flung away by the [src]'s attack!</span>")
 			M.Knockdown(4)
 			var/turf/T = get_turf(src)
 			var/turf/target_turf
