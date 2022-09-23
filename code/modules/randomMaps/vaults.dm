@@ -102,6 +102,208 @@
 
 	message_admins("<span class='info'>Loaded space hobo shack [result ? "" : "un"]successfully.</span>")
 
+/proc/create_hell()
+	var/time2make = world.time
+	if(locate(/datum/zLevel/hell) in map.zLevels)
+		return
+	world.maxz++
+	var/datum/zLevel/hell/HL = new
+	map.addZLevel(HL, world.maxz, TRUE)
+	for(var/x in 1 to world.maxx)
+		for(var/y in 1 to world.maxy)
+			var/turf/T = locate(x,y,world.maxz)
+			new HL.base_turf(T) // Not ideal but much faster than changeturf(), otherwise server would lag for ages rather than just a few seconds.
+
+	var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE unbanned = 0")
+	if(!select_query.Execute())
+		qdel(select_query)
+		message_admins("Banned player search error on populating hell: [select_query.ErrorMsg()]")
+		log_sql("Error: [select_query.ErrorMsg()]")
+		return
+
+	var/bancount = 0
+	while(select_query.NextRow() && config.bans_shown_in_hell_limit && bancount <= config.bans_shown_in_hell_limit)
+		var/ckey = select_query.item[1]
+		var/reason = select_query.item[2]
+		var/mob/living/carbon/human/H = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
+		H.quick_copy_prefs()
+		H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
+		bancount++
+	time2make = world.time - time2make
+	log_admin("Hell was created in [time2make/10] seconds, as it did not exist. (located on z-level [world.maxz])")
+	message_admins("Hell was created in [time2make/10] seconds, as it did not exist. (located on z-level [world.maxz])")
+
+/mob/living/carbon/human/proc/quick_copy_prefs()
+	var/list/preference_list = new
+	var/datum/DBQuery/check = SSdbcore.NewQuery("SELECT player_ckey FROM players WHERE player_ckey = :ckey AND player_slot = :slot",
+		list(
+		"ckey" = ckey,
+		"slot" = 1,
+		))
+	if(check.Execute())
+		if(!check.NextRow())
+			message_admins("[ckey] had no character file, skipping")
+			return
+	else
+		message_admins("Player appearance file check error on populating hell: [check.ErrorMsg()]")
+		log_sql("Error: [check.ErrorMsg()]")
+		return
+	var/datum/DBQuery/q = SSdbcore.NewQuery({"
+		SELECT
+			limbs.player_ckey,
+			limbs.player_slot,
+			limbs.l_arm,
+			limbs.r_arm,
+			limbs.l_leg,
+			limbs.r_leg,
+			limbs.l_foot,
+			limbs.r_foot,
+			limbs.l_hand,
+			limbs.r_hand,
+			limbs.heart,
+			limbs.eyes,
+			limbs.lungs,
+			limbs.liver,
+			limbs.kidneys,
+			players.player_ckey,
+			players.player_slot,
+			players.real_name,
+			players.random_name,
+			players.random_body,
+			players.gender,
+			players.species,
+			players.disabilities,
+			body.player_ckey,
+			body.player_slot,
+			body.hair_red,
+			body.hair_green,
+			body.hair_blue,
+			body.facial_red,
+			body.facial_green,
+			body.facial_blue,
+			body.skin_tone,
+			body.hair_style_name,
+			body.facial_style_name,
+			body.eyes_red,
+			body.eyes_green,
+			body.eyes_blue
+		FROM
+			players
+		INNER JOIN
+			limbs
+		ON
+			(
+				players.player_ckey = limbs.player_ckey)
+		AND (
+				players.player_slot = limbs.player_slot)
+		INNER JOIN
+			jobs
+		ON
+			(
+				limbs.player_ckey = jobs.player_ckey)
+		AND (
+				limbs.player_slot = jobs.player_slot)
+		INNER JOIN
+			body
+		ON
+			(
+				jobs.player_ckey = body.player_ckey)
+		AND (
+				jobs.player_slot = body.player_slot)
+		WHERE
+			players.player_ckey = :ckey
+		AND players.player_slot = :slot ;"}, list("ckey" = ckey, "slot" = 1))
+	if(q.Execute())
+		var/a = 0
+		while(q.NextRow())
+			a++
+			preference_list[q.item[a]] = q.item[a]
+	else
+		message_admins("Player appearance loading error on populating hell: [q.ErrorMsg()]")
+		log_sql("Error: [q.ErrorMsg()]")
+		return
+	name = preference_list && preference_list.len && preference_list["real_name"] ? preference_list["real_name"] : ckey
+	real_name = name
+	if(dna)
+		dna.real_name = real_name
+	if(preference_list && preference_list.len)
+		var/disabilities = text2num(preference_list["disabilities"])
+		if(!isnull(preference_list["species"]))
+			set_species(preference_list["species"])
+			var/datum/species/chosen_species = all_species[preference_list["species"]]
+			if( (disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
+				mutations += M_FAT
+		setGender(sanitize_gender(preference_list["gender"]))
+
+		my_appearance.r_eyes = sanitize_integer(preference_list["eyes_red"], 0, 255)
+		my_appearance.g_eyes = sanitize_integer(preference_list["eyes_green"], 0, 255)
+		my_appearance.b_eyes = sanitize_integer(preference_list["eyes_blue"], 0, 255)
+
+		my_appearance.r_hair = sanitize_integer(preference_list["hair_red"], 0, 255)
+		my_appearance.g_hair = sanitize_integer(preference_list["hair_green"], 0, 255)
+		my_appearance.b_hair = sanitize_integer(preference_list["hair_blue"], 0, 255)
+
+		my_appearance.r_facial = sanitize_integer(preference_list["facial_red"], 0, 255)
+		my_appearance.g_facial = sanitize_integer(preference_list["facial_green"], 0, 255)
+		my_appearance.b_facial = sanitize_integer(preference_list["facial_blue"], 0, 255)
+
+		my_appearance.s_tone = sanitize_integer(preference_list["skin_tone"], -185, 34)
+
+		my_appearance.h_style = sanitize_inlist(preference_list["hair_style_name"], hair_styles_list)
+		my_appearance.f_style = sanitize_inlist(preference_list["facial_style_name"], facial_hair_styles_list)
+
+		dna.ResetUIFrom(src)
+
+		if(disabilities & DISABILITY_FLAG_NEARSIGHTED)
+			disabilities|=NEARSIGHTED
+		if(disabilities & DISABILITY_FLAG_EPILEPTIC)
+			disabilities|=EPILEPSY
+		if(disabilities & DISABILITY_FLAG_EHS)
+			disabilities|=ELECTROSENSE
+		if(disabilities & DISABILITY_FLAG_DEAF)
+			sdisabilities|=DEAF
+		if(disabilities & DISABILITY_FLAG_BLIND)
+			sdisabilities|=BLIND
+
+		var/list/organ_data = list()
+		organ_data[LIMB_LEFT_ARM] = preference_list[LIMB_LEFT_ARM]
+		organ_data[LIMB_RIGHT_ARM] = preference_list[LIMB_RIGHT_ARM]
+		organ_data[LIMB_LEFT_LEG] = preference_list[LIMB_LEFT_LEG]
+		organ_data[LIMB_RIGHT_LEG] = preference_list[LIMB_RIGHT_LEG]
+		organ_data[LIMB_LEFT_FOOT]= preference_list[LIMB_LEFT_FOOT]
+		organ_data[LIMB_RIGHT_FOOT]= preference_list[LIMB_RIGHT_FOOT]
+		organ_data[LIMB_LEFT_HAND]= preference_list[LIMB_LEFT_HAND]
+		organ_data[LIMB_RIGHT_HAND]= preference_list[LIMB_RIGHT_HAND]
+		organ_data["heart"] = preference_list["heart"]
+		organ_data["eyes"] 	= preference_list["eyes"]
+		organ_data["lungs"] = preference_list["lungs"]
+		organ_data["kidneys"]=preference_list["kidneys"]
+		organ_data["liver"] = preference_list["liver"]
+
+		for(var/name in organ_data)
+			var/datum/organ/external/O = organs_by_name[name]
+			var/datum/organ/internal/I = internal_organs_by_name[name]
+			var/status = organ_data[name]
+
+			if(status == "amputated")
+				O.status &= ~ORGAN_ROBOT
+				O.status &= ~ORGAN_PEG
+				O.amputated = 1
+				O.status |= ORGAN_DESTROYED
+				O.destspawn = 1
+			else if(status == "cyborg")
+				O.status &= ~ORGAN_PEG
+				O.status |= ORGAN_ROBOT
+			else if(status == "peg")
+				O.status &= ~ORGAN_ROBOT
+				O.status |= ORGAN_PEG
+			else if(status == "assisted")
+				I?.mechassist()
+			else if(status == "mechanical")
+				I?.mechanize()
+			else
+				continue
+
 /proc/asteroid_can_be_placed(var/datum/map_element/E, var/turf/start_turf)
 	if(!E.width || !E.height) //If the map element doesn't have its width/height calculated yet, do it now
 		E.assign_dimensions()
