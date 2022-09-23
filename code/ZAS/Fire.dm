@@ -30,6 +30,14 @@ Attach to transfer valve and open. BOOM.
 
 /atom/proc/burnFireFuel(used_fuel_ratio, used_reactants_ratio)
 	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio) //* 5
+
+	if(used_fuel_ratio<(1/3))
+		if(prob(clamp(100*((1/3)-used_fuel_ratio),0,25))) //0-25% chance of smoke creation increasing as fire burns more fuel-rich
+			var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread()
+			smoke.set_up(get_turf(src))
+			smoke.time_to_live = 5 SECONDS
+			smoke.start()
+
 	if(fire_fuel <= 0.1)
 		//testing("[src] ashifying (BFF)!")
 		ashify()
