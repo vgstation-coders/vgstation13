@@ -131,7 +131,7 @@
 		var/path = levelPaths[i]
 		addZLevel(new path, i)
 
-/datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0)
+/datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0, make_base_turf = FALSE, fast_base_turf = FALSE)
 
 
 	if(!istype(level))
@@ -145,6 +145,8 @@
 	if(!level.movementJammed)
 		accessable_z_levels += list("[z_to_use]" = level.movementChance)
 	level.z = z_to_use
+	if(!istype(level.base_turf,/turf/space) && make_base_turf)
+		level.reset_base_turf(/turf/space,fast_base_turf)
 
 var/global/list/accessable_z_levels = list()
 
@@ -192,6 +194,15 @@ var/global/list/accessable_z_levels = list()
 
 /datum/zLevel/proc/post_mapload()
 	return
+
+/datum/zLevel/proc/reset_base_turf(old_type, fast_base_turf = FALSE)
+	for(var/turf/T in block(locate(1,1,z),locate(world.maxx,world.maxy,z)))
+		if(istype(T,old_type))
+			if(fast_base_turf)
+				new base_turf(T)
+			else
+				T.set_area(base_area)
+				T.ChangeTurf(base_turf)
 
 ////////////////////////////////
 
@@ -273,6 +284,7 @@ var/global/list/accessable_z_levels = list()
 /datum/zLevel/hell
 	name = "HELL"
 	base_turf = /turf/unsimulated/floor/brimstone
+	base_area = /area/hell // for ease of admin jumps
 	teleJammed = TRUE
 	bluespace_jammed = TRUE
 	movementJammed = TRUE

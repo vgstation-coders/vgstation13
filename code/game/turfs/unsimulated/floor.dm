@@ -93,7 +93,7 @@
 	..()
 	icon_state = "ironsand[rand(1,15)]"
 	overlays.Cut()
-	var/image/fire = image('icons/effects/fire.dmi', "3")
+	var/image/fire = image('icons/effects/fire.dmi', "[rand(1,3)]")
 	fire.blend_mode = BLEND_ADD
 	fire.layer = TURF_FIRE_LAYER
 	fire.plane = ABOVE_TURF_PLANE

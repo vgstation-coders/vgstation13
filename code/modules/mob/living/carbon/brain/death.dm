@@ -62,6 +62,8 @@
 		..()
 
 /mob/living/carbon/brain/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		return
 	if(!isUnconscious())
 		forcesay("-")
 	death(1)

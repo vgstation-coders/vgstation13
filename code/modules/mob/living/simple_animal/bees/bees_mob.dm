@@ -89,6 +89,8 @@ var/bee_mobs_count = 0
 	qdel(src)
 
 /mob/living/simple_animal/bee/gib(var/animation = 0, var/meat = 1)
+	if(status_flags & BUDDHAMODE)
+		return
 	death(1)
 	monkeyizing = 1
 	canmove = 0

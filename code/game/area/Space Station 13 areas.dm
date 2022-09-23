@@ -2993,3 +2993,8 @@ var/list/the_station_areas = list (
 	icon_state = "mommishuttle"
 
 //END Island
+
+/area/hell
+	name = "\improper HELL"
+	requires_power = 0
+	dynamic_lighting = 0

@@ -57,6 +57,8 @@
 	. = ..(message, "C")
 
 /mob/living/simple_animal/shade/gib(var/animation = 0, var/meat = 1)
+	if(status_flags & BUDDHAMODE)
+		return
 	if(!isUnconscious())
 		forcesay("-")
 	death(TRUE)

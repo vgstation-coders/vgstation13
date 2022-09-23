@@ -1,4 +1,6 @@
 /mob/living/carbon/monkey/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		return
 	if(!isUnconscious())
 		forcesay("-")
 	death(1)
