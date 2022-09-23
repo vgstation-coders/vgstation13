@@ -254,7 +254,7 @@
 
 //Orders mobs by type then by name
 /proc/sortmobs()
-	var/list/moblist = list()
+	var/list/sorted_output = list()
 	var/list/sortedplayers = list()
 	var/list/sortedmobs = list()
 	for(var/mob/M in mob_list) //divide every mob into either players (has a mind) or non-players (no mind). braindead/catatonic/etc. mobs included in players
@@ -265,35 +265,35 @@
 	sortNames(sortedplayers) //sort both lists in preparation for what we'll do below
 	sortNames(sortedmobs)
 	for(var/mob/living/silicon/ai/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/camera/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/living/silicon/pai/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/living/silicon/robot/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/living/carbon/human/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/living/carbon/brain/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/living/carbon/alien/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/dead/observer/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/new_player/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/living/carbon/monkey/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/living/carbon/slime/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/living/simple_animal/M in sortedplayers)
-		moblist.Add(M)
+		sorted_output.Add(M)
 	for(var/mob/living/M in sortedmobs) //mobs that have never been controlled by a player go last in the list. /mob/living to filter unwanted non-player non-world mobs (i.e. you'll nullspace if you observe them)
 		if(M.client)
 			continue
-		moblist.Add(M)
+		sorted_output.Add(M)
 		
-	return moblist
+	return sorted_output
 
 // Finds ALL mobs on turfs in line of sight. Similar to "in dview", but catches mobs that are not on a turf (e.g. inside a locker or such).
 /proc/get_all_mobs_in_dview(var/turf/T, var/range = world.view, var/list/ignore_types = list())
