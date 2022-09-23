@@ -218,9 +218,6 @@
 	icon_state = "asteroidplating"
 	},
 /area/shack)
-"xn" = (
-/turf/space,
-/area/shack)
 "zr" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5;
@@ -585,7 +582,7 @@ lF
 lF
 lF
 lF
-xn
+lF
 ZK
 ZK
 "}
