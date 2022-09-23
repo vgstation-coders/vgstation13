@@ -42,7 +42,7 @@
 
 	var/all_fours = TRUE
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/update_icon()
 	if(all_fours == TRUE)
@@ -86,16 +86,17 @@
 		qdel(eat_this)
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/adjust_hp(var/amount)
-	health += amount
-	maxHealth += amount
-	if(maxHealth < 60)
-		melee_damage_lower = 1
-		melee_damage_upper = 5
-		environment_smash_flags &= ~OPEN_DOOR_STRONG
-	else
-		melee_damage_lower = 5
-		melee_damage_upper = 10
-		environment_smash_flags |= OPEN_DOOR_STRONG
+	health = max(maxHealth, health+amount)
+	if(amount > 0 && maxHealth < health_cap) //below health_cap, increase maxHealth but no further than health_cap
+		maxHealth = max(maxHealth+amount, health_cap)
+		if(maxHealth < 60)
+			melee_damage_lower = 1
+			melee_damage_upper = 5
+			environment_smash_flags &= ~OPEN_DOOR_STRONG
+		else
+			melee_damage_lower = 5
+			melee_damage_upper = 10
+			environment_smash_flags |= OPEN_DOOR_STRONG
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/Life() // Copied from hammy wheel running code
 	if(timestopped)
@@ -258,16 +259,17 @@
 		attacktext = "punches"
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat/adjust_hp(var/amount)
-	health += amount
-	maxHealth += amount
-	if(maxHealth < 75)
-		melee_damage_lower = 1
-		melee_damage_upper = 6
-		environment_smash_flags &= ~OPEN_DOOR_STRONG
-	else
-		melee_damage_lower = 6
-		melee_damage_upper = 12
-		environment_smash_flags |= OPEN_DOOR_STRONG
+	health = max(maxHealth, health+amount)
+	if(amount > 0 && maxHealth < health_cap) //below health_cap, increase maxHealth but no further than health_cap
+		maxHealth = max(maxHealth+amount, health_cap)
+		if(maxHealth < 75)
+			melee_damage_lower = 1
+			melee_damage_upper = 6
+			environment_smash_flags &= ~OPEN_DOOR_STRONG
+		else
+			melee_damage_lower = 6
+			melee_damage_upper = 12
+			environment_smash_flags |= OPEN_DOOR_STRONG
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat/Life()
 	if(timestopped)
@@ -397,16 +399,17 @@
 		qdel(eat_this)
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/adjust_hp(var/amount) // Maximized gainz will grant roid rats incredible punching power, and the ability to smash through normal walls! Oh YEAAAAAAAAAAAAAAH
-	health += amount
-	maxHealth += amount
-	if(maxHealth < 200)
-		melee_damage_lower = 10
-		melee_damage_upper = 20
-		environment_smash_flags &= ~SMASH_WALLS
-	else
-		melee_damage_lower = 20
-		melee_damage_upper = 30
-		environment_smash_flags |= SMASH_WALLS
+	health = max(maxHealth, health+amount)
+	if(amount > 0 && maxHealth < health_cap) //below health_cap, increase maxHealth but no further than health_cap
+		maxHealth = max(maxHealth+amount, health_cap)
+		if(maxHealth < 200)
+			melee_damage_lower = 10
+			melee_damage_upper = 20
+			environment_smash_flags &= ~SMASH_WALLS
+		else
+			melee_damage_lower = 20
+			melee_damage_upper = 30
+			environment_smash_flags |= SMASH_WALLS
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/Life() // Copied from hammy wheel running code
 	if(timestopped)
