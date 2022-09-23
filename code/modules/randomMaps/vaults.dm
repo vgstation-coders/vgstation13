@@ -113,6 +113,10 @@
 		for(var/y in 1 to world.maxy)
 			var/turf/T = locate(x,y,world.maxz)
 			new HL.base_turf(T) // Not ideal but much faster than changeturf(), otherwise server would lag for ages rather than just a few seconds.
+	time2make = world.time - time2make
+	log_admin("Hell was created in [time2make/10] seconds, as it did not exist. (located on z-level [world.maxz])")
+	message_admins("Hell was created in [time2make/10] seconds, as it did not exist. (located on z-level [world.maxz])")
+	time2make = world.time
 
 	var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE unbanned = 0")
 	if(!select_query.Execute())
@@ -130,8 +134,8 @@
 		H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
 		bancount++
 	time2make = world.time - time2make
-	log_admin("Hell was created in [time2make/10] seconds, as it did not exist. (located on z-level [world.maxz])")
-	message_admins("Hell was created in [time2make/10] seconds, as it did not exist. (located on z-level [world.maxz])")
+	log_admin("Hell was populated successfully with [bancount] banned players out of a max of [config.bans_show_in_hell_limit] in [time2make/10] seconds.")
+	message_admins("Hell was populated successfully with [bancount] banned players out of a max of [config.bans_show_in_hell_limit] in [time2make/10] seconds.")
 
 /mob/living/carbon/human/proc/quick_copy_prefs()
 	var/list/preference_list = new
