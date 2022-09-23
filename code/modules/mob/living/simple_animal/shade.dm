@@ -58,6 +58,7 @@
 
 /mob/living/simple_animal/shade/gib(var/animation = 0, var/meat = 1)
 	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
 		return
 	if(!isUnconscious())
 		forcesay("-")

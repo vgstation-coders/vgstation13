@@ -354,6 +354,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
 	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
 		return
 	if(icon_gib)
 		anim(target = src, a_icon = icon, flick_anim = icon_gib, sleeptime = 15)

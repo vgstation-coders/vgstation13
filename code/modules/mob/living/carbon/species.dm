@@ -168,6 +168,7 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/proc/gib(var/mob/living/carbon/human/H)
 	if(H.status_flags & BUDDHAMODE)
+		H.adjustBruteLoss(200)
 		return
 	H.death(1)
 	H.monkeyizing = 1

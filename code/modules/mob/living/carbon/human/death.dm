@@ -1,5 +1,6 @@
 /mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
 	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
 		return
 	if(!isUnconscious())
 		forcesay("-")

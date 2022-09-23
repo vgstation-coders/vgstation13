@@ -73,6 +73,7 @@
 
 /mob/living/carbon/gib(animation = FALSE, meat = TRUE)
 	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
 		return
 	dropBorers(1)
 	if(stomach_contents && stomach_contents.len)
