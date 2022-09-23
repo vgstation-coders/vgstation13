@@ -5163,11 +5163,11 @@ var/procizine_tolerance = 0
 							M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat)
 						else
 							M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand! A pomadour also sprouts from the top of its head!</span>")
-							M.transmogrify(/mob/living/simple_animal/hostile/retaliate/pompadour_rat)
+							M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat)
 					else
 						has_mouse_bulked = 1
 						M.visible_message("<span class='danger'>[M] grows to the size of a dog, and its muscles expand to ridiculous proportions! It's ripped!</span>")
-						M.transmogrify(/mob/living/simple_animal/hostile/retaliate/roid_rat)
+						M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat)
 				else //You only bulk once, fella. If you lose the bulk, you're outta luck
 					return
 
