@@ -369,7 +369,7 @@ steam.start() -- spawns the effect
 
 /obj/effect/smoke/fire
 	name = "fire smoke"
-	icon_state = "fire"
+	icon_state = "firesmoke"
 
 /obj/effect/smoke/fire/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
