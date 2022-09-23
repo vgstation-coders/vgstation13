@@ -1351,8 +1351,8 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/boozeomat
 
 /obj/machinery/vending/assist
-	name = "\improper Vendomat"
-	desc = "A vending machine containing generic parts."
+	name = "\improper StockPro"
+	desc = "A vending machine containing generic stock parts and assemblies."
 	icon_state = "generic"
 	products = list(
 		/obj/item/device/assembly/prox_sensor = 5,
