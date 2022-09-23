@@ -114,7 +114,7 @@
 	message_admins("Hell was created in [time2make/10] seconds, as it did not exist. (located on z-level [world.maxz])")
 	time2make = world.time
 
-	var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE unbanned = 0")
+	var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE bantype = PERMABAN AND isnull(unbanned)")
 	if(!select_query.Execute())
 		qdel(select_query)
 		message_admins("Banned player search error on populating hell: [select_query.ErrorMsg()]")
