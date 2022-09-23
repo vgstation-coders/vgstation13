@@ -255,35 +255,44 @@
 //Orders mobs by type then by name
 /proc/sortmobs()
 	var/list/moblist = list()
-	var/list/sortmob = sortNames(mob_list)
-	for(var/mob/living/silicon/ai/M in sortmob)
+	var/list/sortedplayers = list()
+	var/list/sortedmobs = list()
+	for(var/mob/M in mob_list) //divide every mob into either players (has a mind) or non-players (no mind). braindead/catatonic/etc. mobs included in players
+		if(!M.mind)
+			sortedmobs |= M
+			continue
+		sortedplayers |= M
+	sortNames(sortedplayers) //sort both lists in preparation for what we'll do below
+	sortNames(sortedmobs)
+	for(var/mob/living/silicon/ai/M in sortedplayers)
 		moblist.Add(M)
-	for(var/mob/camera/M in sortmob)
+	for(var/mob/camera/M in sortedplayers)
 		moblist.Add(M)
-	for(var/mob/living/silicon/pai/M in sortmob)
+	for(var/mob/living/silicon/pai/M in sortedplayers)
 		moblist.Add(M)
-	for(var/mob/living/silicon/robot/M in sortmob)
+	for(var/mob/living/silicon/robot/M in sortedplayers)
 		moblist.Add(M)
-	for(var/mob/living/carbon/human/M in sortmob)
+	for(var/mob/living/carbon/human/M in sortedplayers)
 		moblist.Add(M)
-	for(var/mob/living/carbon/brain/M in sortmob)
+	for(var/mob/living/carbon/brain/M in sortedplayers)
 		moblist.Add(M)
-	for(var/mob/living/carbon/alien/M in sortmob)
+	for(var/mob/living/carbon/alien/M in sortedplayers)
 		moblist.Add(M)
-	for(var/mob/dead/observer/M in sortmob)
+	for(var/mob/dead/observer/M in sortedplayers)
 		moblist.Add(M)
-	for(var/mob/new_player/M in sortmob)
+	for(var/mob/new_player/M in sortedplayers)
 		moblist.Add(M)
-	for(var/mob/living/carbon/monkey/M in sortmob)
+	for(var/mob/living/carbon/monkey/M in sortedplayers)
 		moblist.Add(M)
-	for(var/mob/living/carbon/slime/M in sortmob)
+	for(var/mob/living/carbon/slime/M in sortedplayers)
 		moblist.Add(M)
-	for(var/mob/living/simple_animal/M in sortmob)
+	for(var/mob/living/simple_animal/M in sortedplayers)
 		moblist.Add(M)
-//	for(var/mob/living/silicon/hivebot/M in world)
-//		mob_list.Add(M)
-//	for(var/mob/living/silicon/hive_mainframe/M in world)
-//		mob_list.Add(M)
+	for(var/mob/living/M in sortedmobs) //mobs that have never been controlled by a player go last in the list. /mob/living to filter unwanted non-player non-world mobs (i.e. you'll nullspace if you observe them)
+		if(M.client)
+			continue
+		moblist.Add(M)
+		
 	return moblist
 
 // Finds ALL mobs on turfs in line of sight. Similar to "in dview", but catches mobs that are not on a turf (e.g. inside a locker or such).
