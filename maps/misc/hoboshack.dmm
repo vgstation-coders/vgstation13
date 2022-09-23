@@ -218,6 +218,9 @@
 	icon_state = "asteroidplating"
 	},
 /area/shack)
+"xn" = (
+/turf/space,
+/area/shack)
 "zr" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5;
@@ -343,8 +346,8 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced,
-/obj/machinery/door/mineral/wood{
-	name = "Wooden Door";
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
 	opacity = 0
 	},
 /turf/simulated/floor/plating{
@@ -436,8 +439,8 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/machinery/door/mineral/wood{
-	name = "Wooden Door";
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
 	opacity = 0
 	},
 /turf/simulated/floor/plating{
@@ -582,7 +585,7 @@ lF
 lF
 lF
 lF
-lF
+xn
 ZK
 ZK
 "}
