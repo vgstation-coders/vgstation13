@@ -1218,36 +1218,15 @@ About the new airlock wires panel:
 		return
 	if(istype(I, /obj/item/tool/crowbar/halligan))
 		var/breaktime = 10 SECONDS
-		if(locked)
-			if(!lifted)
-				to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
-				if(do_after(user,src,breaktime))
-					to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
-					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-					animate(src, pixel_y = pixel_y + 5, time = 1)
-					lifted = TRUE
-			else
-				if(istype(user,/mob/living/carbon/human))
-					var/mob/living/carbon/human/H = user
-					if(H.get_strength() >= 2)
-						breaktime = 5 SECONDS
-					to_chat(user, "<span class='notice'>\The [src]'s motors grind as you pry it open.</span>")
-					if(do_after(user,src,breaktime))
-						if(!(stat & (NOPOWER)) || src.arePowerSystemsOn())
-							spark(src, 5)
-							playsound(src,"sparks",75,1,-1)
-						open(1)
+		if(locked && !lifted)
+			to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
+			if(do_after(user,src,breaktime))
+				to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+				animate(src, pixel_y = pixel_y + 5, time = 1)
+				lifted = TRUE
 		else
-			if(istype(user,/mob/living/carbon/human))
-				var/mob/living/carbon/human/H = user
-				if(H.get_strength() >= 2)
-					breaktime = 5 SECONDS
-				to_chat(user, "<span class='notice'>\The [src]'s motors grind as you pry it open.</span>")
-				if(do_after(user,src,breaktime))
-					if(!(stat & (NOPOWER)) || src.arePowerSystemsOn())
-						spark(src, 5)
-						playsound(src,"sparks",75,1,-1)
-					open(1)
+			pry(user)
 		return
 	if (iswelder(I))
 		if (density && !operating)
@@ -1351,6 +1330,23 @@ About the new airlock wires panel:
 	DA.state = 0 //Completely smash the door here; reduce it to its lowest state, eject electronics smoked
 	DA.update_state()
 	qdel(src)
+
+/obj/machinery/door/airlock/proc/pry(mob/user as mob)
+	if(istype(user,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = user
+		var/breaktime = 10 SECONDS
+		if(H.get_strength() >= 2)
+			breaktime = 5 SECONDS
+		to_chat(user, "<span class='notice'>\The [src]'s motors grind as you pry it open.</span>")
+		if(do_after(user,src,breaktime))
+			if(!(stat & (NOPOWER)) || src.arePowerSystemsOn())
+				spark(src, 5)
+				playsound(src,"sparks",75,1,-1)
+			open(1)
+			return 1
+		return 0
+	else
+		return 0
 
 /obj/machinery/door/airlock/proc/revert(mob/user as mob, var/direction)
 	var/obj/structure/door_assembly/DA = new assembly_type(loc)
