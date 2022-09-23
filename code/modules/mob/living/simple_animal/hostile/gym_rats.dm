@@ -183,7 +183,7 @@
 	set category = "Gym_Rat"
 
 	if(all_fours == TRUE)
-		all_fours = FALSE
+		all_fours = 0
 		to_chat(src, text("<span class='notice'>You are now standing upright.</span>"))
 		update_icon()
 
@@ -293,8 +293,6 @@
 	speak = list("I'M A LEAN, MEAN, WEIGHT PUMPIN'MACHINE.","I BEEN TO THE TOP OF THE MOUNTAIN!","NOTHING MEANS NOTHING!","MAX YOUR PUMP.","OH YEAAAAAH.","CHECK OUT MY PECS, LITTLE MAN.")
 	speak_emote = list("squeaks thunderously")
 	emote_hear = list("squeaks thunderously")
-
-	size = SIZE_NORMAL
 
 	health_cap = 225 // Eating protein can pack on a 50% increase in max health. Less percentage-wise than gym rats who are working out the "natural" way, but the raw numbers are still pretty scary
 	icon_eat = "roidrat-eat"
