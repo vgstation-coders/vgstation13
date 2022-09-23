@@ -240,10 +240,18 @@
 		close()
 		visible_message("\The [src] slams shut!", "You hear a slamming of wood.")
 
-/obj/machinery/door/mineral/wood/log/Dismantle(devestated = 0)
-	if(!devestated)
+/obj/machinery/door/mineral/wood/log/Dismantle(devastated = 0)
+	if(!devastated)
 		new /obj/item/weapon/grown/log/tree(src)
 		new /obj/item/weapon/grown/log/tree(src)
+	qdel(src)
+
+/obj/machinery/door/mineral/wood/log/towercap
+
+/obj/machinery/door/mineral/wood/log/towercap/Dismantle(devastated = 0)
+	if(!devastated)
+		new /obj/item/weapon/grown/log(src)
+		new /obj/item/weapon/grown/log(src)
 	qdel(src)
 
 /obj/machinery/door/mineral/resin
