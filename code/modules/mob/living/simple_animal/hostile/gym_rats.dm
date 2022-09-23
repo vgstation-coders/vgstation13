@@ -30,6 +30,9 @@
 
 	attack_sound = 'sound/weapons/punch1.ogg'
 
+	melee_damage_lower = 1
+	melee_damage_upper = 5
+
 	var/health_cap = 75 // Eating protein can pack on a whopping 150% increase in max health. GAINZ
 	var/icon_eat = "gymrat-eat"
 	var/obj/my_wheel
@@ -38,6 +41,8 @@
 	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks/cheesewedge, /obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel) // Gym rats are pickier than normal mice. Cheese and raw meat only
 
 	var/all_fours = TRUE
+
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/update_icon()
 	if(all_fours == TRUE)
@@ -65,10 +70,12 @@
 		flick(icon_eat, src)
 		qdel(eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/meat)) //Protein! Gives back a smaller amount of health, but also packs on some extra max hp
-		health+=3
-		maxHealth+=3
 		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
+			adjust_hp(3)
+		else
+			health+=3 // Otherwise we just get a little health back
 		flick(icon_eat, src)
 		qdel(eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)) //A cheese wheel feast! Gives back a lot more health than just a slice
@@ -78,6 +85,18 @@
 		flick(icon_eat, src)
 		qdel(eat_this)
 
+/mob/living/simple_animal/hostile/retaliate/gym_rat/proc/adjust_hp(var/amount)
+	health += amount
+	maxHealth += amount
+	if(maxHealth < 60)
+		melee_damage_lower = 1
+		melee_damage_upper = 5
+		environment_smash_flags &= ~OPEN_DOOR_STRONG
+	else
+		melee_damage_lower = 5
+		melee_damage_upper = 10
+		environment_smash_flags |= OPEN_DOOR_STRONG
+
 /mob/living/simple_animal/hostile/retaliate/gym_rat/Life() // Copied from hammy wheel running code
 	if(timestopped)
 		return 0
@@ -85,14 +104,6 @@
 	if(.)
 		if(enemies.len && prob(5))
 			Calm()
-	if(maxHealth < 60)
-		melee_damage_lower = 1
-		melee_damage_upper = 5
-		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
-	if(maxHealth >= 60) // Gainz makes for stronger melee attack damage, and the ability to open powered doors!
-		melee_damage_lower = 5
-		melee_damage_upper = 10
-		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
 	if(!my_wheel && isturf(loc) && !client) // Gym rats with players in them won't be force moved
 		for(var/obj/O in view(2, src))
 			if(is_type_in_list(O, gym_equipments))
@@ -163,13 +174,15 @@
 			qdel(O)
 		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on some extra maximum hp
 			Calm()
-			health+=3
-			maxHealth+=3
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
 			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 			heart.plane = ABOVE_HUMAN_PLANE
 			flick_overlay(heart, list(user.client), 20)
+			if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
+				adjust_hp(3)
+			else
+				health+=3 // Otherwise we just get a little health back
 			flick(icon_eat, src)
 			qdel(O)
 		else
@@ -228,6 +241,9 @@
 	speak = list("I'm a rat burger, with extra beef.","Hoo-ha hooah!","Damn, I'm pretty.")
 	emote_see = list("flexes", "admires itself", "does a rep", "poses", "brushes its pompadour")
 
+	melee_damage_lower = 1
+	melee_damage_upper = 6
+
 	health_cap = 90 // Eating protein can pack on a whopping 125% increase in max health. GAINZ
 	icon_eat = "gymrat_pompadour-eat"
 
@@ -241,6 +257,18 @@
 		icon_eat = null
 		attacktext = "punches"
 
+/mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat/adjust_hp(var/amount)
+	health += amount
+	maxHealth += amount
+	if(maxHealth < 75)
+		melee_damage_lower = 1
+		melee_damage_upper = 6
+		environment_smash_flags &= ~OPEN_DOOR_STRONG
+	else
+		melee_damage_lower = 6
+		melee_damage_upper = 12
+		environment_smash_flags |= OPEN_DOOR_STRONG
+
 /mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat/Life()
 	if(timestopped)
 		return 0
@@ -248,14 +276,6 @@
 	if(.)
 		if(enemies.len && prob(5))
 			Calm()
-	if(maxHealth < 75)
-		melee_damage_lower = 1
-		melee_damage_upper = 6
-		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
-	if(maxHealth >= 75) // Gainz makes for stronger melee attack damage, and the ability to open powered doors!
-		melee_damage_lower = 6
-		melee_damage_upper = 12
-		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
 	if(!my_wheel && isturf(loc) && !client) // Pompadour rats with players in them won't be force moved
 		for(var/obj/O in view(2, src))
 			if(is_type_in_list(O, gym_equipments))
@@ -294,6 +314,9 @@
 	speak_emote = list("squeaks thunderously")
 	emote_hear = list("squeaks thunderously")
 
+	melee_damage_lower = 10
+	melee_damage_upper = 20
+
 	health_cap = 225 // Eating protein can pack on a 50% increase in max health. Less percentage-wise than gym rats who are working out the "natural" way, but the raw numbers are still pretty scary
 	icon_eat = "roidrat-eat"
 
@@ -303,6 +326,7 @@
 
 	var/damageblock = 10
 
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
 	status_flags = UNPACIFIABLE // Can't pacify muscles like these with hippy shit
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/update_icon()
@@ -357,10 +381,12 @@
 		flick(icon_eat, src)
 		qdel(eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/meat)) //Protein! Gives back a smaller amount of health, but also packs on some extra max hp
-		health+=3
-		maxHealth+=3
 		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
+			adjust_hp(3)
+		else
+			health+=3 // Otherwise we just get a little health back
 		flick(icon_eat, src)
 		qdel(eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)) //A cheese wheel feast! Gives back a lot more health than just a slice
@@ -370,6 +396,18 @@
 		flick(icon_eat, src)
 		qdel(eat_this)
 
+/mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/adjust_hp(var/amount) // Maximized gainz will grant roid rats incredible punching power, and the ability to smash through normal walls! Oh YEAAAAAAAAAAAAAAH
+	health += amount
+	maxHealth += amount
+	if(maxHealth < 200)
+		melee_damage_lower = 10
+		melee_damage_upper = 20
+		environment_smash_flags &= ~SMASH_WALLS
+	else
+		melee_damage_lower = 20
+		melee_damage_upper = 30
+		environment_smash_flags |= SMASH_WALLS
+
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/Life() // Copied from hammy wheel running code
 	if(timestopped)
 		return 0
@@ -377,14 +415,6 @@
 	if(.)
 		if(enemies.len && prob(1)) // Roid rats take much longer to calm down compared to gym rats. Roid rage!
 			Calm()
-	if(maxHealth < 200)
-		melee_damage_lower = 10
-		melee_damage_upper = 20
-		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
-	if(maxHealth >= 200)
-		melee_damage_lower = 20
-		melee_damage_upper = 30
-		environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | OPEN_DOOR_STRONG // Maximized gainz will grant roid rats incredible punching power, and the ability to smash through normal walls! Oh YEAAAAAAAAAAAAAAH
 	if(!my_wheel && isturf(loc) && !client) // Roid rats with players in them won't be force moved
 		for(var/obj/O in view(2, src))
 			if(is_type_in_list(O, gym_equipments))
@@ -431,13 +461,15 @@
 			qdel(O)
 		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on some extra maximum hp
 			Calm()
-			health+=3
-			maxHealth+=3
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
 			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 			heart.plane = ABOVE_HUMAN_PLANE
 			flick_overlay(heart, list(user.client), 20)
+			if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
+				adjust_hp(3)
+			else
+				health+=3 // Otherwise we just get a little health back
 			flick(icon_eat, src)
 			qdel(O)
 		else
