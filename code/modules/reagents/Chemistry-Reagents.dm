@@ -5103,6 +5103,7 @@ var/procizine_tolerance = 0
 	var/has_been_hulk = 0
 	var/has_ripped_and_torn = 0 //We've applied permanent damage.
 	var/hulked_at = 0 //world.time
+	var/has_mouse_bulked = 0
 	custom_metabolism = 0.1
 	density = 6.82
 	specheatcap = 678.67
@@ -5136,7 +5137,7 @@ var/procizine_tolerance = 0
 			if(prob(5) && M.feels_pain())
 				to_chat(M, "<span class='warning'>Oh god, the pain!</span>")
 		if(25 to INFINITY)
-			if(ishuman(M)) //Does nothing to non-humans.
+			if(ishuman(M)) //If human and not diona, hulk out
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona") //Dionae are broken as fuck
 					if(H.hulk_time<world.time && !has_been_hulk)
@@ -5153,6 +5154,22 @@ var/procizine_tolerance = 0
 						dehulk(H)
 					else if(prob(1))
 						H.say(pick("YOU TRYIN' BUILD SUM MUSSLE?", "TOO SWOLE TO CONTROL", "HEY MANG", "HEY MAAAANG"))
+			if(ismouse(M)) //If mouse, become a gym rat. With a 1 in 20 chance of becoming a roid rat
+				if(has_mouse_bulked == 0)
+					if(prob(95))
+						has_mouse_bulked = 1
+						if(prob(95))
+							M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand!</span>")
+							M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat)
+						else
+							M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand! A pomadour also sprouts from the top of its head!</span>")
+							M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat)
+					else
+						has_mouse_bulked = 1
+						M.visible_message("<span class='danger'>[M] grows to the size of a dog, and its muscles expand to ridiculous proportions! It's ripped!</span>")
+						M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat)
+				else //You only bulk once, fella. If you lose the bulk, you're outta luck
+					return
 
 /datum/reagent/creatine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
