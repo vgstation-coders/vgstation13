@@ -1,31 +1,19 @@
-/spell/targeted/roidrat_punch // A much less powerful version of the wizard punch. Can launch a mob a long distance, but causes no explosion. Even this rat's gains have their limits
+/spell/targeted/punch/roidrat // A much less powerful version of the wizard punch. Can launch a mob a long distance, but causes no explosion. Even this rat's gains have their limits
 	name = "Roid Rat Punch"
 	desc = "This spell empowers your next close-and-personal unarmed attack to launch the enemy with great force"
 	abbreviation = "RP"
+	user_type = USER_TYPE_GYMRAT
 	specialization = SSOFFENSIVE
-
-	charge_max = 450 // Much longer cooldown than the wizard spell
-	cooldown_min = 30
-
-	message = "<span class='danger'>You are punched with great force!<span>"
+	charge_max = 300 // Much longer cooldown than the wizard spell
 	spell_flags = IS_HARMFUL | WAIT_FOR_CLICK
-
-	invocation = "OHYEAH"
-	invocation_type = SpI_SHOUT
-
-	max_targets = 1
-	range = 1
-
+	invocation_type = SpI_NONE
 	compatible_mobs = list(/mob/living) // Unlike the other version, this one can't target and destroy mechs
 	hud_state = "gen_hulk"
 
-	var/mob/living/present_target //A placeholder proc that records the target for the purpose of actually getting the impact handled. Thanks Barry
+/spell/targeted/punch/roidrat/invocation(mob/user, list/targets) // No invocation on this one, just raw muscle
+	return
 
-/spell/targeted/roidrat_punch/invocation(mob/user, list/targets)
-	invocation = pick("OHYEAH", "YEAH", "POWEEEER", "BOOOM")
-	..()
-
-/spell/targeted/roidrat_punch/cast(var/list/targets)
+/spell/targeted/punch/roidrat/cast(var/list/targets)
 	var/mob/living/L = holder
 	if(istype(L) && L.has_hand_check() && !L.restrained())
 		var/image/I = generate_punch_sprite()
@@ -66,13 +54,16 @@
 				target.unregister_event(/event/to_bump, src, .proc/handle_bump) //Just in case
 				target.unregister_event(/event/throw_impact, src, .proc/handle_throw_impact)
 
-/spell/targeted/roidrat_punch/proc/handle_bump(atom/movable/bumper, atom/bumped)
+/spell/targeted/punch/roidrat/handle_bump(atom/movable/bumper, atom/bumped)
 	present_target.unregister_event(/event/to_bump, src, .proc/handle_bump)
 	present_target.unregister_event(/event/throw_impact, src, .proc/handle_throw_impact)
 
-/spell/targeted/roidrat_punch/proc/handle_throw_impact(atom/hit_atom, speed, mob/living/user)
+/spell/targeted/punch/roidrat/handle_throw_impact(atom/hit_atom, speed, mob/living/user)
 	present_target.unregister_event(/event/to_bump, src, .proc/handle_bump)
 	present_target.unregister_event(/event/throw_impact, src, .proc/handle_throw_impact)
 
-/spell/targeted/roidrat_punch/proc/generate_punch_sprite()
-	return image(icon = 'icons/mob/screen_spells.dmi', icon_state = hud_state)
+/spell/targeted/punch/roidrat/explode_on_impact(var/atom/bumped, var/mob/living/T, var/mob/living/user) // No explosions wanted on this child of the spell
+	return
+
+/spell/targeted/punch/roidrat/explosive_punch(atom/target) // No explosions wanted on this child of the spell
+	return

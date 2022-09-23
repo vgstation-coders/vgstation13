@@ -183,7 +183,7 @@
 	set category = "Gym_Rat"
 
 	if(all_fours == TRUE)
-		all_fours = 0
+		all_fours = FALSE
 		to_chat(src, text("<span class='notice'>You are now standing upright.</span>"))
 		update_icon()
 
@@ -447,7 +447,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/New() // speaks mouse, and gets their punch spell added
 	..()
-	add_spell(new /spell/targeted/roidrat_punch, "genetic_spell_ready", /obj/abstract/screen/movable/spell_master/genetic)
+	add_spell(new /spell/targeted/punch/roidrat, "genetic_spell_ready", /obj/abstract/screen/movable/spell_master/genetic)
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/death(var/gibbed = FALSE)
 	visible_message("The <b>[src]</b> is torn apart by its own oversized muscles!")
