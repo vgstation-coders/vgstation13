@@ -63,7 +63,7 @@
 		to_chat(src, text("<span class='notice'>You rummage through the [A].</span>"))
 
 		if((last_disposalscavenge + disposalscavenge_cooldown >= world.time))
-			to_chat(src, text("<span class='warning'>You scavenged too recently. Wait a little longer.</span>")) // If we scavenged too recently, we get told to wait
+			to_chat(src, text("<span class='warning'>You just checked a disposal unit! You won't find anything new for now.</span>")) // If we scavenged too recently, we get told to wait
 
 		if((last_disposalscavenge + disposalscavenge_cooldown < world.time))
 			last_disposalscavenge = world.time
