@@ -179,6 +179,7 @@
 #define HONEY			"honey"
 #define ROYALJELLY			"royaljelly"
 #define CHILLWAX			"chillwax"
+#define CHILLESSENCE			"chillessence"
 #define DIPPING_SAUCE	"dippingsauce"
 #define DISCOUNT 			"discount"
 #define IRRADIATEDBEANS 			"irradiatedbeans"
