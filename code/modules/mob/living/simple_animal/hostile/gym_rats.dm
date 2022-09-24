@@ -87,7 +87,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/chowdown(var/atom/eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) //Mmm, cheese wedge. Gives back a small amount of health upon consumption
-		health+=5
+		health+=6
 		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
@@ -103,7 +103,7 @@
 		flick(icon_eat, src)
 		qdel(eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)) //A cheese wheel feast! Gives back a lot more health than just a slice
-		health+=25
+		health+=30
 		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
@@ -176,7 +176,7 @@
 /mob/living/simple_animal/hostile/retaliate/gym_rat/attackby(var/obj/item/O as obj, var/mob/user as mob) // Feed the gym rat some food
 	if(stat == CONSCIOUS)
 		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheesewedges heal it a bit
-			health+=5
+			health+=6
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
 			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
@@ -185,7 +185,7 @@
 			flick(icon_eat, src)
 			qdel(O)
 		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel))
-			health+=25
+			health+=30
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
 			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
@@ -397,7 +397,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/chowdown(var/atom/eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) //Mmm, cheese wedge. Gives back a small amount of health upon consumption
-		health+=10
+		health+=15
 		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
@@ -413,7 +413,7 @@
 		flick(icon_eat, src)
 		qdel(eat_this)
 	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)) //A cheese wheel feast! Gives back a lot more health than just a slice
-		health+=50
+		health+=75
 		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
@@ -454,7 +454,7 @@
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/attackby(var/obj/item/O as obj, var/mob/user as mob) // Feed the roid rat some food
 	if(stat == CONSCIOUS)
 		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheesewedges heal it a bit
-			health+=10
+			health+=15
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
 			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
@@ -463,7 +463,7 @@
 			flick(icon_eat, src)
 			qdel(O)
 		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel))
-			health+=50
+			health+=75
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
 			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
