@@ -1704,6 +1704,27 @@
 			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
 		..()
 
+/datum/reagent/chillessence
+	name = "Chill Essence"
+	id = CHILLESSENCE
+	description = "The raw essence of 'chill' turned liquid."
+	color = "#4C78C1"
+	alpha = 250
+	density = 1.59
+	quality = 1
+	specheatcap = 1.244
+
+/datum/reagent/chillessence/on_mob_life(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.druggy = max(H.druggy, 5)
+		H.Dizzy(2)
+		if(prob(10))
+			H.emote(pick("stare", "giggle"), null, null, TRUE)
+		if(prob(5))
+			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
+		..()
+
 /datum/reagent/sacid
 	name = "Sulphuric Acid"
 	id = SACID
