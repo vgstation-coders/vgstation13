@@ -62,8 +62,8 @@
 		..()
 
 /obj/item/device/instrument/recorder/shakashuri/OnPlayed(mob/user,mob/M)
-	if(user!=M && M.reagents && !M.reagents.has_reagent(CHILLWAX,1))
-		M.reagents.add_reagent(CHILLWAX,0.3)
+	if(user!=M && M.reagents && !M.reagents.has_reagent(CHILLESSENCE,1))
+		M.reagents.add_reagent(CHILLESSENCE,0.3)
 
 /obj/item/weapon/reagent_containers/food/snacks/quiche/frittata/New()
 	..()
