@@ -1704,7 +1704,7 @@
 			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
 		..()
 
-/datum/reagent/chillessence
+/datum/reagent/chillessence //here to tame the vegan & nutrition issue with soul ramblers
 	name = "Chill Essence"
 	id = CHILLESSENCE
 	description = "The raw essence of 'chill' turned liquid."
