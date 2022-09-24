@@ -3574,8 +3574,8 @@ var/procizine_tolerance = 0
 /datum/reagent/hyperzine/pcp/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	if(holder.has_reagent(CHILLWAX))
-		holder.remove_reagent(CHILLWAX, REM)
+	if(holder.has_any_reagents(list(CHILLWAX, CHILLESSENCE)))
+		holder.remove_reagents(list(CHILLWAX, CHILLESSENCE), REM)
 	if(M)
 		M.a_intent = I_HURT
 		if(M?.hud_used?.action_intent)
