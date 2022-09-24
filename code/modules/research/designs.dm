@@ -116,6 +116,9 @@ The required techs are the following:
 //Acts as FindDesign, but makes a new design if it doesn't find one
 //Doesn't take types for the design creation, so don't rely on it for that
 /proc/getScanDesign(var/obj/O)
+	//all the designs are hidden somewhere in the backend
+	//so if you have an unupgraded machine scanned earlier it'll overwrite an upgraded machine you scan later
+	//that's why we have to force it to make a new datum if it's a machine
 	if(istype(O, /obj/machinery))
 		return new/datum/design/mechanic_design(O)
 	var/datum/design/D

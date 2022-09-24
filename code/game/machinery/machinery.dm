@@ -822,25 +822,27 @@ Class Procs:
 /obj/machinery/proc/force_parts_transfer(var/datum/design/mechanic_design/O)
 	if(component_parts)
 		var/list/X = O.parts
-		var/M = X.Copy(1,0) //We paid for it when we made the flatpack, now we get new components
+		//We paid for it when we made the flatpack, now we get new components.
+		//...has to be copied otherwise you delete the parts from the source
+		var/M = X.Copy(1,0)
 		var/obj/item/weapon/circuitboard/CB = locate(/obj/item/weapon/circuitboard) in component_parts
 		var/P
 		for(var/obj/item/A in component_parts)
-			for(var/D in CB.req_components) //this logic is only necessary because some parts are unscannable - trade injector
+			//use some logic to, one by one, replace the parts in the flatpack
+			//we can't just force add all the parts to the machine because (including stock parts) because some parts aren't copiable
+			for(var/D in CB.req_components)
 				if(ispath(A.type, D))
 					P = D
 					break
 			for(var/obj/item/B in M)
-				if(B.mech_flags != MECH_SCAN_FAIL) //prevent adding components that aren't scannable - they should already not be in this list, but I guess I'm paranoid?
-					if(istype(B, P) && istype(A, P))
-						if(B.get_rating() > A.get_rating()) //again, these components shouldn't be in the list already
-							component_parts -= A
-							component_parts += B
-							M -= B //so we have to loop over less later
-							B.forceMove(null)
-							break
+				if(istype(B, P) && istype(A, P))
+					if(B.get_rating() > A.get_rating()) //base rating parts should not be added (they already shouldn't be in this list, but whatever)
+						component_parts -= A
+						component_parts += B
+						M -= B //if you don't remove the part, one upgraded part will replace everything in the recipe
+						B.forceMove(null)
+						break
 		RefreshParts()
-		qdel(M)
 		return 1
 	return 0
 
