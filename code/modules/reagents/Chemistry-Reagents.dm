@@ -1711,7 +1711,6 @@
 	color = "#4C78C1"
 	alpha = 250
 	density = 1.59
-	quality = 1
 	specheatcap = 1.244
 
 /datum/reagent/chillessence/on_mob_life(var/mob/living/M)
