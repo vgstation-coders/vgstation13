@@ -2158,7 +2158,7 @@ Use this proc preferably at the end of an equipment loadout
 	if(A && A.flags & NO_PACIFICATION)
 		return FALSE
 
-	if (reagents && reagents.has_any_reagents(list(CHILLWAX,CHILLESSENCE,INCENSE_POPPIES)) && prob(50))))
+	if (reagents && reagents.has_any_reagents(list(CHILLWAX,CHILLESSENCE,INCENSE_POPPIES)) && prob(50))
 		switch (message)
 			if (VIOLENCE_DEFAULT)//unarmed, melee weapon, spell
 				to_chat(src, "<span class='notice'>[pick("Like...violence...what is it even good for?","Nah, you don't feel like doing that.","What did \the [target] even do to you? Chill out.")]</span>")
