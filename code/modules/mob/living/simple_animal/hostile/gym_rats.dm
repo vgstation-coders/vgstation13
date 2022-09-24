@@ -214,7 +214,7 @@
 /mob/living/simple_animal/hostile/retaliate/gym_rat/verb/stand_up() // Allows the gym rat to toggle poses. They can stand upright, or walk around like a typical mouse
 	set name = "Stand Up / Lie Down"
 	set desc = "Stand up and show off your guns, or walk on all fours to not embarrass the nerds."
-	set category = "Gym_Rat"
+	set category = "GymRat"
 
 	if(all_fours == TRUE)
 		all_fours = FALSE
@@ -229,7 +229,7 @@
 /mob/living/simple_animal/hostile/retaliate/gym_rat/verb/info() // Tells the gym rat how to gym rat
 	set name = "How 2 Gainz"
 	set desc = "How do become swole?"
-	set category = "Gym_Rat"
+	set category = "GymRat"
 
 	to_chat(src, text("<span class='warning'>You are a gym rat, a much larger and stronger cousin of a normal mouse.</span>"))
 	to_chat(src, text("<span class='warning'>You need cheese and raw meat. Cheese will heal you, and raw meat will increase your attack damage and maximum health.</span>"))
