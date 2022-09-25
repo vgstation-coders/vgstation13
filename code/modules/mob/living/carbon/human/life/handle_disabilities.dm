@@ -71,7 +71,7 @@
 		say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
 		"without oxigen blob don't evoluate?", \
 		"CAPTAINS A COMDOM", \
-		"[pick("", "that faggot traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
+		"[pick("", "that "+CANDY_ASS+" traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
 		"can u give me [pick("telikesis","halk","eppilapse")]?", \
 		"THe saiyans screwed", \
 		"Bi is THE BEST OF BOTH WORLDS>", \
@@ -115,8 +115,7 @@
 		"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
 		"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
 		"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!", \
-		"I AM BASTE", \
-		"TEH TRAITOR THEY KILL PEEPLE BUT I RESPAWN!!!"))
+		"I AM BASTE"))
 	else if(getBrainLoss() >= 60 && prob(3))
 		emote("drool")
 	if(getBrainLoss() > 50 && prob(1.5))
