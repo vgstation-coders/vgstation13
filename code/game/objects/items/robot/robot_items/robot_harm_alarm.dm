@@ -65,7 +65,7 @@
 	desc = "Releases a harmless blast that confuses most organics. For when the crime is JUST TOO MUCH"
 	alarm = "HALT! SECURITY!"
 	alarm_sound = 'sound/voice/halt.ogg'
-	emagged_alarm = "FUCK YOUR CUNT YOU SHIT EATING COCKSUCKER MAN EAT A DONG FUCKING ASS RAMMING SHITFUCK. EAT PENISES IN YOUR FUCKFACE AND SHIT OUT ABORTIONS OF FUCK AND DO A SHIT IN YOUR ASS YOU COCK FUCK SHIT MONKEY FUCK ASS WANKER FROM THE DEPTHS OF SHIT."
+	emagged_alarm = RUDE_BEEPSKY_MESSAGE
 	emagged_alarm_sound = 'sound/voice/binsult.ogg'
 	vary = FALSE
 
