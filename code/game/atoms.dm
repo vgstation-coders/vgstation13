@@ -167,7 +167,7 @@ var/global/list/ghdel_profiling = list()
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
 				M.take_organ_damage(10)
-	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user)
+	INVOKE_EVENT(src, /event/throw_impact, "user" = user)
 
 /atom/Destroy()
 	if(reagents)
@@ -807,7 +807,7 @@ its easier to just keep the beam vertical.
 
 /datum/proc/setGender(gend = FEMALE)
 	if(!("gender" in vars))
-		CRASH("Oh shit you stupid nigger the [src] doesn't have a gender variable.")
+		CRASH("Oh shit you stupid "+ROODY_POO+" the [src] doesn't have a gender variable.")
 	if(ishuman(src))
 		ASSERT(gend != PLURAL && gend != NEUTER)
 	src:gender = gend
@@ -853,12 +853,6 @@ its easier to just keep the beam vertical.
 	blessed = 1
 
 /atom/proc/update_icon()
-
-/atom/proc/splashable()
-	return TRUE
-
-/obj/item/weapon/storage/splashable() // I don't know where to put this, aaaaaaaaaaaaaa
-	return FALSE
 
 /atom/proc/dissolvable()
 	return 0
