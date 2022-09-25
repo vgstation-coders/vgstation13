@@ -34,6 +34,7 @@
 #include "__DEFINES\disease2.dm"
 #include "__DEFINES\error_hander.dm"
 #include "__DEFINES\game.dm"
+#include "__DEFINES\gamer_words.dm"
 #include "__DEFINES\gases.dm"
 #include "__DEFINES\global.dm"
 #include "__DEFINES\human.dm"
