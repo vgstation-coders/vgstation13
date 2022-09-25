@@ -194,7 +194,7 @@
 			call(H,P)(D)
 			damage_budget -= D
 
-var/list/randomized_reagents = list()
+var/list/datum/randomized_reagent/randomized_reagents = list()
 /proc/create_randomized_reagents()
 	randomized_reagents.Cut()
 	randomized_reagents[SIMPOLINOL] = new /datum/randomized_reagent/all_effects
