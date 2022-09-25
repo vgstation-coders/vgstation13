@@ -702,7 +702,7 @@ var/list/all_bible_styles = list(
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "LGBT Advocate"
 	female_adept = "LGBT Advocate"
-	keys = list("homosexuality", "faggotry", "gayness", "gay", "penis", "faggot", "cock", "cocks", "dick", "dicks")
+	keys = list("homosexuality", CANDY_ASS+"ry", "gayness", "gay", "penis", CANDY_ASS, "cock", "cocks", "dick", "dicks")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
 /datum/religion/homosexuality/equip_chaplain(var/mob/living/carbon/human/H)
@@ -715,7 +715,7 @@ var/list/all_bible_styles = list(
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Retard"
 	female_adept = "Retard"
-	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damag")
+	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", ROODY_POO, "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damag")
 	convert_method = "standing both next to a table."
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
