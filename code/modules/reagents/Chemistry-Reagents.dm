@@ -2942,21 +2942,24 @@
 	specheatcap = 0.44
 
 /datum/reagent/simpolinol/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
-
 	if(isanimal(M))
 		M.health = min(M.maxHealth, M.health + REM)
-	else
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
-			if(H.mind && H.mind.active && H.client && (!H.client.is_afk())) // I demand that live assistants be sacrificed in the name of science
-				randomized_reagents[SIMPOLINOL].on_human_life(H, tick)
-			else
-				H.adjustToxLoss(5)
-				if(prob(50))
-					H.vomit(0,1)
+		return
+
+	if(!ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+
+	if(!H.ckey)
+		H.adjustToxLoss(5)
+	if((!H.client) || H.client.is_afk())
+		if(prob(30))
+			H.vomit(0,1)
+		return
+
+	randomized_reagents[SIMPOLINOL].on_human_life(H, tick)
 
 //An OP chemical for admins and detecting exploits
 /datum/reagent/adminordrazine
