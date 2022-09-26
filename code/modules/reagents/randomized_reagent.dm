@@ -39,7 +39,7 @@
 			vars[K] = initial(vars[K])
 
 	// Modifiers, do nothing on their own
-	if(prob(5))
+	if(prob(8))
 		explode = pick(
 			1000; 1, // Just gibs
 			 500; 2, // Small explosion
@@ -57,11 +57,11 @@
 				vars[K] = -vars[K]
 
 	// Effects to discourage unethical testing by non-antags
-	tf_immerse  = prob(3)    // Turn female humans into boring males
-	kill        = prob(1)    // Instant death
-	tf_catbeast = prob(0.25) // Transform into a catbeast
+	tf_immerse  = prob(4)   // Turn female humans into boring males
+	kill        = prob(2)   // Instant death
+	tf_catbeast = prob(0.5) // Transform into a catbeast
 
-	if(prob(0.5)) // Transform into a simple animal
+	if(prob(2)) // Transform into a simple animal
 		tf_simpmob = pick(
 			/mob/living/simple_animal/capybara, /mob/living/simple_animal/cat,
 			/mob/living/simple_animal/cat/kitten, /mob/living/simple_animal/cat/snek,
@@ -96,7 +96,7 @@
 			tf_simpmob = pick(tf_simpmob)
 
 	// Misc
-	scramble_damage = prob(3)
+	scramble_damage = prob(5)
 	if(prob(5))
 		hallucination = rng.Rand()
 
