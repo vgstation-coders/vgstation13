@@ -5,6 +5,7 @@
 	var/fire  = 0
 	var/clone = 0
 	var/brain = 0
+	var/hallucination = 0
 
 	var/explode = 0
 
@@ -96,6 +97,8 @@
 
 	// Misc
 	scramble_damage = prob(3)
+	if(prob(5))
+		hallucination = rng.Rand()
 
 	..()
 
@@ -181,6 +184,7 @@
 		H.update_dna_from_appearance()
 		log_effect(H, "was transformed into a man")
 
+	H.hallucination += hallucination
 	H.adjustBruteLoss(brute*REM)
 	H.adjustOxyLoss(oxy*REM)
 	H.adjustToxLoss(tox*REM)
