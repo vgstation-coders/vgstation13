@@ -3894,12 +3894,10 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 
 /obj/machinery/vending/lotto/throw_item()
 	var/mob/living/target = locate() in view(7, src)
-
 	if (!target)
 		return 0
-	for(var/i = 0 to rand(3,12))
-		var/obj/I = new /obj/item/weapon/paper(get_turf(src))
-		I.throw_at(target, 16, 3)
+	var/obj/I = new /obj/item/toy/lotto_ticket/unprinted(get_turf(src))
+	I.throw_at(target, 16, 3)
 
 /obj/machinery/vending/syndicatesuits
 	name = "\improper Syndicate Suits"
