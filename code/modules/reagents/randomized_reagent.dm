@@ -106,11 +106,18 @@
 	if(kill)
 		H.death(explode)
 		switch(explode)
+			if(0)
+				log_effect(H, "was killed instantly")
+			if(1)
+				log_effect(H, "was gibbed")
 			if(2)
+				log_effect(H, "exploded (small)")
 				explosion(get_turf(H), 0, 0, 1, 3, whodunnit=H)
 			if(3)
+				log_effect(H, "exploded (medium)")
 				explosion(get_turf(H), 0, 1, 3, 5, whodunnit=H)
 			if(4 to INFINITY)
+				log_effect(H, "exploded (large)")
 				explosion(get_turf(H), 1, 3, 5, 7, whodunnit=H)
 		return
 
@@ -121,7 +128,9 @@
 		S.flavor_text = H.flavor_text
 		S.gender = H.gender
 		S.desc = "Something is off about this one."
-		S.meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
+		S.faction = H.faction
+		S.meat_type = H.meat_type
+		S.attack_log = H.attack_log.Copy()
 		H.reagents.trans_to(S.reagents, S.reagents.maximum_volume)
 
 		S.health = 100
@@ -135,12 +144,20 @@
 		H.Premorph()
 		H.audible_scream()
 		H.mind.transfer_to(S)
+		log_effect(S, "was transformed into a simplemob")
 		var/obj/effect/smoke/smoke = new /obj/effect/smoke(get_turf(H))
 		smoke.time_to_live = 1
 		if(explode)
 			hgibs(get_turf(H), H.virus2, H.dna, H.species.flesh_color, H.species.blood_color, explode*explode)
 		qdel(H)
 		return
+
+	if(tf_catbeast && !iscatbeast(H))
+		H.set_species("Tajaran")
+		H.regenerate_icons()
+		H.emote("me", MESSAGE_HEAR, pick("meows", "mews"))
+		playsound(H, 'sound/voice/catmeow.ogg', 100)
+		log_effect(H, "was transformed into a catbeast")
 
 	if(tf_immerse && isjusthuman(H) && H.gender != MALE)
 		H.emote("faint")
@@ -162,12 +179,7 @@
 		H.regenerate_icons()
 		H.check_dna_integrity()
 		H.update_dna_from_appearance()
-
-	if(tf_catbeast && !iscatbeast(H))
-		H.set_species("Tajaran")
-		H.regenerate_icons()
-		H.emote("me", MESSAGE_HEAR, pick("meows", "mews"))
-		playsound(H, 'sound/voice/catmeow.ogg', 100)
+		log_effect(H, "was transformed into a man")
 
 	H.adjustBruteLoss(brute*REM)
 	H.adjustOxyLoss(oxy*REM)
@@ -179,6 +191,7 @@
 
 /datum/randomized_reagent/proc/on_human_life_zeroth(var/mob/living/carbon/human/H)
 	if(scramble_damage && !(H.status_flags&GODMODE))
+		var/damage_msg = "[H.getBruteLoss()]/[H.getOxyLoss()]/[H.getToxLoss()]/[H.getFireLoss()]/[H.getCloneLoss()]"
 		var/damage_budget = H.getOxyLoss() + H.getToxLoss() + H.getCloneLoss()
 		H.setOxyLoss(0)
 		H.setToxLoss(0)
@@ -193,6 +206,13 @@
 			var/P = pick("adjustBruteLoss", "adjustOxyLoss", "adjustToxLoss", "adjustFireLoss", "adjustCloneLoss")
 			call(H,P)(D)
 			damage_budget -= D
+		damage_msg += " to [H.getBruteLoss()]/[H.getOxyLoss()]/[H.getToxLoss()]/[H.getFireLoss()]/[H.getCloneLoss()]"
+		log_effect(H, "had their damage scrambled ([damage_msg])")
+
+/datum/randomized_reagent/proc/log_effect(var/mob/M, var/msg)
+	M.attack_log += text("\[[time_stamp()]\]: <font color='orange'>[msg] (<a href='?_src_=vars;Vars=\ref[src]'>[src]</a>)</font>")
+	log_attack("[M.name] ([M.ckey]) [msg] ([src] \ref[src])")
+	msg_admin_attack("[M.name] ([M.ckey]) [msg] (<a href='?_src_=vars;Vars=\ref[src]'>RR</a>) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>)")
 
 var/list/datum/randomized_reagent/randomized_reagents = list()
 /proc/create_randomized_reagents()
