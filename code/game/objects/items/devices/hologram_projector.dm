@@ -5,7 +5,7 @@
 
 	var/mob/living/simple_animal/hologram/advanced/projector/holoperson = null
 	var/holo_range = 6
-	var/holo_mode = 1
+	var/holo_mode = 0
 	var/obj/effect/overlay/holoray/ray		//The link between the projection and the projector.
 	var/datum/recruiter/recruiter = null
 	var/polling_ghosts = FALSE
@@ -30,8 +30,8 @@
 /obj/item/device/hologram_projector/hologram_projector/process()
 	if(holoperson)//If there is a hologram.
 		var/turf/T = get_turf(holoperson)
+		var/turf/dest = get_turf(src)
 		if(ray)
-			var/turf/dest = get_turf(src)
 			var/disty = holoperson.y - ray.y
 			var/distx = holoperson.x - ray.x
 			var/newangle
@@ -53,11 +53,11 @@
 				ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
 		if(T && T.obscured)
 			clear_holo()
-		if((holo_mode == 0 && (get_dist(holoperson, src) <= holo_range)))
+		if((holo_mode == 0 && (get_dist(dest, T) <= holo_range)))
 			return 1
 		else if (holo_mode == 1)
-			var/area/area = get_area(src)
-			var/area/holoperson_area = get_area(holoperson)
+			var/area/area = get_area(dest)
+			var/area/holoperson_area = get_area(T)
 			if(holoperson_area == area)
 				return 1
 	
