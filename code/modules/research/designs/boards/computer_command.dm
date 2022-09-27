@@ -10,7 +10,7 @@
 	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/aiupload
 	locked = 1
-	req_lock_access = list(access_rnd, access_robotics, access_rd)
+	req_lock_access = list(access_ai_upload)
 
 /datum/design/aiupload/longrange
 	name = "Circuit Design (Long Range AI Upload)"
