@@ -99,6 +99,8 @@
 
 	if(!projector)
 		return
+	if((mind && !client))
+		projector.clear_holo()
 
 	var/turf/T = get_turf(src)
 	var/turf/dest = get_turf(projector)
