@@ -17,6 +17,10 @@
 	visible_message("<span class = 'notice>\The [src] dissipates from view.</span>")
 	qdel(src)
 
+/mob/living/simple_animal/hologram/New()
+	..()
+	mimic()
+
 /mob/living/simple_animal/hologram/proc/mimic(var/atom/mimic = atom_to_mimic)
 	if(!mimic)
 		return
