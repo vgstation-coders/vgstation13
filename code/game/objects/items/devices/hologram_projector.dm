@@ -23,6 +23,8 @@
 /mob/living/simple_animal/hologram/advanced/projector/Destroy()
 	if(projector)
 		projector = null
+		qdel(projector.ray)
+		projector.ray = null
 	..()
 
 /obj/item/device/hologram_projector/proc/clear_holo()
@@ -49,9 +51,6 @@
 	else
 		to_chat(usr, "Generating hologram...")
 		recruit_holoperson()
-
-/obj/item/device/hologram_projector/examine(mob/user)
-	recruit_holoperson()
 
 /obj/item/device/hologram_projector/proc/recruit_holoperson()
 	if(polling_ghosts)
