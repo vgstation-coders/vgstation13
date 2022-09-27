@@ -3898,6 +3898,9 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		return 0
 	var/obj/I = new /obj/item/toy/lotto_ticket/unprinted(get_turf(src))
 	I.throw_at(target, 16, 3)
+	src.visible_message("<span class='danger'>[src] launches [I.name] at [target.name]!</span>")
+	src.updateUsrDialog()
+	return 1
 
 /obj/machinery/vending/syndicatesuits
 	name = "\improper Syndicate Suits"
