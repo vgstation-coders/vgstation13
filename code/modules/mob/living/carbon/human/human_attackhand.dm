@@ -209,8 +209,6 @@
 		share_contact_diseases(M,block,bleeding)
 
 /mob/living/carbon/human/attack_hand(var/mob/living/carbon/human/M)
-	if(!istype(M))
-		return
 	//M.delayNextAttack(10)
 	if (istype(loc, /turf) && istype(loc.loc, /area/start))
 		to_chat(M, "No attacking people at spawn, you jackass.")
@@ -292,7 +290,7 @@
 				if (punch_zone == TARGET_EYES || punch_zone == TARGET_MOUTH)
 					punch_zone = LIMB_HEAD
 				var/datum/organ/external/limb = organs_by_name[punch_zone]
-				if(limb.status & ORGAN_BLEEDING)
+				if(limb.status & ORGAN_BLEEDING && istype(M))
 					M.bloody_hands(src,1)
 				return punch_damage
 			else // dodged
