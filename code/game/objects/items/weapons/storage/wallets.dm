@@ -6,6 +6,7 @@
 	icon_state = "wallet"
 	w_class = W_CLASS_SMALL
 	use_to_pickup = TRUE
+	autoignition_temperature = AUTOIGNITION_ORGANIC //leather
 	can_only_hold = list(
 		"/obj/item/weapon/spacecash",
 		"/obj/item/weapon/card",

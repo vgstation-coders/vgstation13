@@ -7,6 +7,7 @@
 	item_state = "retractor"
 	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	w_type = RECYK_METAL
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -42,6 +43,7 @@
 	item_state = "hemostat"
 	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 2500)
 	w_type = RECYK_METAL
+	autoignition_temperature = AUTOIGNITION_METAL
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
@@ -73,6 +75,7 @@
 	item_state = "cautery"
 	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 2500)
 	w_type = RECYK_ELECTRONIC
+	autoignition_temperature = AUTOIGNITION_METAL
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
@@ -101,6 +104,7 @@
 	toolspeed = 0.6
 	heat_production = 1500
 	source_temperature = TEMPERATURE_PLASMA
+	autoignition_temperature = AUTOIGNITION_METAL
 	sterility = 100
 
 /*
@@ -131,6 +135,7 @@
 	hitsound = 'sound/weapons/circsawhit.ogg'
 	starting_materials = list(MAT_IRON = 15000, MAT_GLASS = 10000)
 	w_type = RECYK_ELECTRONIC
+	autoignition_temperature = AUTOIGNITION_METAL
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 15.0
@@ -171,6 +176,7 @@
 	throw_range = 5
 	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
 	w_type = RECYK_METAL
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	surgerysound = 'sound/items/scalpel.ogg'
@@ -183,6 +189,7 @@
 	item_state = "laserscalpel1"
 	heat_production = 0
 	source_temperature = TEMPERATURE_PLASMA //Even if it's laser based, it depends on plasma
+	autoignition_temperature = AUTOIGNITION_METAL
 	damtype = "fire"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
 	toolspeed = 0.6
@@ -288,6 +295,7 @@
 	throw_range = 5
 	starting_materials = list(MAT_IRON = 20000, MAT_GLASS = 10000)
 	w_type = RECYK_ELECTRONIC
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "saws", "cuts")
 	surgerysound = 'sound/items/circularsaw.ogg'
@@ -321,6 +329,7 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 	surgerysound = 'sound/items/bonegel.ogg'
 
 /obj/item/tool/bonegel/suicide_act(var/mob/living/user)
@@ -339,6 +348,7 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=3"
 	var/usage_amount = 10
 	surgerysound = 'sound/items/fixovein.ogg'
@@ -405,6 +415,7 @@
 	attack_verb = list("attacks", "hits", "bludgeons")
 	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
 	w_type = RECYK_METAL
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	surgerysound = 'sound/items/bonesetter.ogg'
 
@@ -427,6 +438,7 @@
 	//icon = 'icons/obj/surgery.dmi'
 	icon_state = "stun baton"
 	force = 0
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/revivalprod/attack(mob/target,mob/user)
 	if(target.lying)

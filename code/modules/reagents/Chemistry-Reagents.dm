@@ -4925,7 +4925,7 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	if(method == TOUCH && ishuman(M) && ((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels)))
+	if(method == TOUCH && ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/obj/item/mouth_covered = H.get_body_part_coverage(MOUTH)
 		var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)

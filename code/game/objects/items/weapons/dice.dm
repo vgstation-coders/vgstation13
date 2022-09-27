@@ -8,6 +8,7 @@
 	var/minsides = 1
 	var/result = null
 	var/multiplier = 0 //For modifying the result (d00 etc)
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/weapon/dice/New()
 	..()

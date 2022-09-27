@@ -9,6 +9,7 @@
 	var/list/original = list()	//the starting parts
 	var/list/finished = list()	//the finished products
 	toolsounds = list('sound/items/Screwdriver.ogg')
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/device/modkit/New()
 	..()

@@ -54,6 +54,7 @@
 	origin_tech = Tc_BIOTECH + "=1"
 
 	material = "grass"
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 /*
  * Wood
@@ -73,6 +74,7 @@
 	max_amount = 60
 	sheet_type = /obj/item/stack/sheet/wood
 	material = "wood"
+	autoignition_temperature = AUTOIGNITION_WOOD
 
 /obj/item/stack/tile/wood/proc/build(turf/S as turf)
 	if(S.air)
@@ -130,6 +132,7 @@
 	max_amount = 60
 
 	material = "fabric"
+	autoignition_temperature = AUTOIGNITION_FABRIC
 
 /obj/item/stack/tile/arcade
 	name = "length of arcade carpet"
@@ -146,6 +149,7 @@
 	max_amount = 60
 
 	material = "fabric"
+	autoignition_temperature = AUTOIGNITION_FABRIC
 
 /obj/item/stack/tile/slime
 	name = "tile of slime"
@@ -159,6 +163,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 /obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
 	if(isslimeperson(L) || isslime(L))

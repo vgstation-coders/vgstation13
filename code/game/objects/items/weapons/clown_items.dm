@@ -59,6 +59,7 @@
 	throw_range = 15
 	attack_verb = list("HONKS")
 	hitsound = 'sound/items/bikehorn.ogg'
+	autoignition_temperature = AUTOIGNITION_METAL
 	var/honk_delay = 20
 	var/last_honk_time = 0
 	var/vary_pitch = 1
@@ -220,6 +221,7 @@
 	icon_state = "glue0"
 
 	w_class = W_CLASS_TINY
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/uses = 1 //How many uses the glue has.
 	var/glue_duration = -1 //-1 For infinite.
 	var/glue_state_to_set = GLUE_STATE_PERMA //This is the glue state we set to the item the user puts glue on.

@@ -5,6 +5,7 @@
 	flags = FPRINT
 	item_state = "hardhat0_yellow"
 	light_power = 1.5
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/brightness_on = 4 //luminosity when on
 	var/on = 0
 	_color = "yellow" //Determines used sprites: hardhat[on]_[_color] and hardhat[on]_[_color]2 (lying down sprite)

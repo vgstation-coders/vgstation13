@@ -7,6 +7,7 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	siemens_coefficient = 1
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 	var/nextuse = 0
 	var/cooldown = 2 SECONDS

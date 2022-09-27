@@ -8,6 +8,7 @@
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 4
 	req_one_access = list(access_armory)
+	autoignition_temperature = AUTOIGNITION_METAL
 	var/locked = 1
 	var/broken = 0
 	var/icon_locked = "lockbox+l"

@@ -14,6 +14,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
+	autoignition_temperature = AUTOIGNITION_METAL
 
 	var/obj/item/device/toner/ink = null
 

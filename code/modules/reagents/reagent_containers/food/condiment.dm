@@ -777,7 +777,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/discount
 	name = "Discount Dan's Special Sauce"
 	desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
-	icon_state = "discount_sauce"
+	icon_state = "discount_sauce_small"
 	condiment_overlay = DISCOUNT
 	trash_type = /obj/item/trash/discount_packet
 

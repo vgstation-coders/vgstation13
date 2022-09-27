@@ -7,6 +7,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	w_type=RECYK_ELECTRONIC
+	autoignition_temperature = AUTOIGNITION_METAL
 	var/list/part = null
 	var/sabotaged = 0 //Emagging limbs can have repercussions when installed as prosthetics.
 	var/brute_dam = 0

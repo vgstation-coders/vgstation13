@@ -12,6 +12,7 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FACE
 	pressure_resistance = ONE_ATMOSPHERE
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/canstage = 1
 	var/stage = 0
 

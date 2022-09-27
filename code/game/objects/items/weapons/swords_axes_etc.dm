@@ -30,6 +30,7 @@
 	mech_flags = MECH_SCAN_FAIL
 	flags = FPRINT
 	slot_flags = SLOT_BELT
+	autoignition_temperature = AUTOIGNITION_METAL
 	force = 10
 	var/hurt_intent_stun_duration = 0.8 SECONDS
 	var/normal_stun_duration = 0.5 SECONDS
@@ -98,6 +99,7 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
+	autoignition_temperature = AUTOIGNITION_METAL
 	force = 3
 	var/on = 0
 
@@ -252,6 +254,7 @@
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	mech_flags = MECH_SCAN_ILLEGAL
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
@@ -296,6 +299,7 @@
 	item_state = "grey_sword"
 	force = 4
 	w_type = RECYK_METAL
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/rsscimmy
 	name = "rune scimitar"
@@ -309,6 +313,7 @@
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	force = 25.0
 	w_class = W_CLASS_MEDIUM
+	autoignition_temperature = AUTOIGNITION_METAL
 	throwforce = 15.0
 	throw_speed = 3
 	throw_range = 9
@@ -323,6 +328,7 @@
 	sharpness = 1
 	flags = FPRINT
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	autoignition_temperature = AUTOIGNITION_METAL
 	force = 25 //A solid weapon by itself
 	w_class = W_CLASS_LARGE
 	attack_verb = list("slashes", "rips", "dices", "cuts", "attacks", "slices", "tears")

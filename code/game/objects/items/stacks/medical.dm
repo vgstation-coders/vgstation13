@@ -10,6 +10,7 @@
 	throw_range = 10
 	var/heal_brute = 0
 	var/heal_burn = 0
+	autoignition_temperature = AUTOIGNITION_FABRIC
 
 /obj/item/stack/medical/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(restraint_resist_time > 0)
