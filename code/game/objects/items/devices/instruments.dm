@@ -8,6 +8,7 @@
 	icon = 'icons/obj/musician.dmi'
 	force = 10
 	var/requires_mouth = FALSE
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/device/instrument/New()
 	..()

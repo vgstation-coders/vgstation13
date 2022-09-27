@@ -11,6 +11,7 @@
 	throw_range = 20
 	origin_tech = Tc_BLUESPACE + "=4"
 	mech_flags = MECH_SCAN_FAIL // Because why should the crew be able to make scrolls out of nothing
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/teleportation_scroll/apprentice
 	name = "lesser scroll of teleportation"

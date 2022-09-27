@@ -17,6 +17,7 @@
 	starting_materials = list(MAT_IRON = 500)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MATERIALS + "=1"
 	toolsounds = list('sound/weapons/handcuffs.ogg')
 	restraint_resist_time = 2 MINUTES
@@ -26,7 +27,7 @@
 	for (var/mob/living/carbon/cuffed_mob in mutual_handcuffed_mobs)
 		src.remove_mutual_cuff_events(cuffed_mob)
 	. = ..()
-	
+
 /obj/item/weapon/handcuffs/restraint_apply_intent_check(mob/user)
 	return 1
 

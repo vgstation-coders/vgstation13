@@ -8,6 +8,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 	var/emagged = 0//our maracas are different - Deity Link
 
