@@ -119,6 +119,20 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 			init_subtypes(/datum/subsystem, subsystems)
 			Setup()
 
+//i'm stuffing random bullshit into the master controller despite the comment telling me not to
+/datum/controller/master/proc/alert_undefined_gamerwords()
+	if(WARN_ROODYPOO_NOT_DEFINED)
+		var/msg = "to comply with github, naughty words have been removed from the code. you should define ROODY_POO and recompile, now defaulting to 'african spaceman'"
+		message_admins(msg)
+		warning(msg)
+	if(WARN_CANDYASS_NOT_DEFINED)
+		var/msg = "to comply with github, naughty words have been removed from the code. you should define CANDY_ASS and recompile, now defaulting to 'effeminate male'"
+		message_admins(msg)
+		warning(msg)
+	if(WARN_RUDEBEEPSKY_NOT_DEFINED)
+		var/msg = "same goes for RUDE_BEEPSKY_MESSAGE, a transcription of the iconic VOX message, which now defaults to something less offensive."
+		message_admins(msg)
+		warning(msg)
 
 // Please don't stuff random bullshit here,
 // 	Make a subsystem, give it the SS_NO_FIRE flag, and do your work in it's Initialize()
@@ -150,6 +164,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 
 	to_chat(world, "<span class='boldannounce'>Initializations complete in [time_taken_to_init / 10] seconds!</span>")
 	world.log << "Initializations complete. Took [time_taken_to_init / 10] seconds."
+	alert_undefined_gamerwords()
 
 	// Sort subsystems by display setting for easy access.
 	sortTim(subsystems, /proc/cmp_subsystem_display)
