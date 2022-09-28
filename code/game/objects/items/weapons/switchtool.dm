@@ -219,6 +219,8 @@
 	return TRUE
 
 /obj/item/weapon/switchtool/proc/edit_deploy(var/doedit)
+	if(!deployed) 
+		return
 	if(doedit) //Makes the deployed item take on the features of the switchtool for attack animations and text. Other bandaid fixes for snowflake issues can go here.
 		sharpness = deployed.sharpness
 		deployed.name = name
@@ -226,7 +228,8 @@
 		//deployed.icon_state = icon_state
 		deployed.overlays = overlays
 		deployed.cant_drop = TRUE
-	else if(deployed) //Revert the changes to the deployed item.
+	//Revert the changes to the deployed item.
+	else 
 		sharpness = initial(sharpness)
 		deployed.name = initial(deployed.name)
 		deployed.icon = initial(deployed.icon)
