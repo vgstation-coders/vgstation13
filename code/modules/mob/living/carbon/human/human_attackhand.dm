@@ -6,6 +6,10 @@
 	if(M == src)
 		return //Can't bite yourself
 
+	if(src.rps_in_combat)
+		visible_message("<span class='borange'>[M] notices [src] is concentrating on the battle, and decides not to attack [src].</span>")
+		return
+
 	//Vampire code
 	if(M.zone_sel && M.zone_sel.selecting == LIMB_HEAD && src != M)
 		var/datum/role/vampire/V = isvampire(M)
@@ -46,7 +50,10 @@
 		damage += 4*dam_check
 
 	var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
-
+	apply_damage(20, BRUTE, affecting)
+	visible_message("<span class='danger'>\The usr: [usr]</span>")
+	visible_message("<span class='danger'>\The M: [M]</span>")
+	visible_message("<span class='danger'>\The src: [src]</span>")
 	var/armorblock = run_armor_check(affecting, modifier = armor_modifier) //Bites are easy to stop, hence the modifier value
 	switch(armorblock)
 		if(1) //Partial block
@@ -76,11 +83,28 @@
 		if(D.spread == "Bite")
 			contract_disease(D,1,0)
 
-	apply_damage(damage, BRUTE, affecting)
-	attack_hand_contact_diseases(M, affecting, FALSE, TRUE)
-
-	M.attack_log += text("\[[time_stamp()]\] <font color='red'>bit [src.name] ([src.ckey]) for [damage] damage</font>")
-	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bitten by [M.name] ([M.ckey]) for [damage] damage</font>")
+	var/rps_percentage = 0
+	if(M.rps_curse || src.rps_curse) //Bite Rock Paper Scissors battle is here
+		rps_percentage = rps_battle(M, src)
+		if(rps_percentage > 0)
+			damage *= rps_percentage
+			src.apply_damage(damage, BRUTE, affecting)
+			M.visible_message("<span class='danger'>\The [src] follows through with the attack!</span>", "<span class='userdanger'>You were able to go through with the attack!</span>")
+			M.attack_log += text("\[[time_stamp()]\] <font color='red'>bit [src.name] ([src.ckey]) for [damage] damage</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bitten by [M.name] ([M.ckey]) for [damage] damage</font>")
+		else if(rps_percentage < 0)
+			damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
+			M.apply_damage(damage, BRUTE, affecting)
+			to_chat(M, "attacker is the [M]")
+			to_chat(M, "damage: [damage]")
+			src.visible_message("<span class='danger'>\The [M] has managed to reverse the attack!</span>", "<span class='userdanger'>You were able to reverse the attack from \the [src]!</span>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='red'>RPS reversed [M.name] ([M.ckey]) for [damage] damage</font>")
+			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Attempted to bite [src.name] ([src.ckey]) for [damage] damage, but was reversed and recieved the damage.</font>")
+	if(rps_percentage == 0)// to keep in mind for later: make a return of 0 from the battle proc mean that there is no ckey in one of the battlers, so there is no battle
+		apply_damage(damage, BRUTE, affecting)
+		attack_hand_contact_diseases(M, affecting, FALSE, TRUE)
+		M.attack_log += text("\[[time_stamp()]\] <font color='red'>bit [src.name] ([src.ckey]) for [damage] damage</font>")
+		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bitten by [M.name] ([M.ckey]) for [damage] damage</font>")
 	if(!iscarbon(M))
 		LAssailant = null
 	else
@@ -152,7 +176,7 @@
 
 	var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 
-	var/armorblock = run_armor_check(affecting, modifier = armor_modifier) //Bites are easy to stop, hence the modifier value
+	var/armorblock = run_armor_check(affecting, modifier = armor_modifier) //Kicks are easy to stop, hence the modifier value
 	damage = max(0, (damage/100)*(100-armorblock))
 	damage = run_armor_absorb(affecting, "melee", damage)
 	if(knockout >= 7 && prob(33))
@@ -162,25 +186,43 @@
 	if(isrambler(src) && !(M == src)) //Redundant check for kicking a soul rambler. Punching is in carbon/human/combat.dm
 		M.say(pick("Take that!", "Taste the pain!"))
 
-	apply_damage(damage, BRUTE, affecting)
-	attack_hand_contact_diseases(M, affecting, TRUE)
+	var/rps_percentage = 0
+	if(M.rps_curse || src.rps_curse) //Bite Rock Paper Scissors battle is here
+		rps_percentage = rps_battle(M, src)
+		if(rps_percentage > 0)
+			damage *= rps_percentage
+			src.apply_damage(damage, BRUTE, affecting)
+			M.visible_message("<span class='danger'>\The [M] follows through with the attack!</span>", "<span class='userdanger'>You were able to go through with the attack!</span>")
+			M.attack_log += text("\[[time_stamp()]\] <font color='red'>bit [src.name] ([src.ckey]) for [damage] damage</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bitten by [M.name] ([M.ckey]) for [damage] damage</font>")
+			attack_hand_contact_diseases(M, affecting, TRUE)
+		else if(rps_percentage < 0)
+			damage = damage * (rps_percentage * -1) //Since you can only return one output in a proc, I decided to make the output multiplier inversed, as a way to differentiate attacker and defender wins
+			M.apply_damage(damage, BRUTE, affecting)
+			src.visible_message("<span class='danger'>\The [src] has managed to reverse the attack!</span>", "<span class='userdanger'>You were able to reverse the attack from \the [M]!</span>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='red'>RPS reversed [M.name] ([M.ckey]) for [damage] damage</font>")
+			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Attempted to bite [src.name] ([src.ckey]) for [damage] damage, but was reversed and recieved the damage.</font>")
+			M.attack_hand_contact_diseases(src, affecting, TRUE)
+	if(rps_percentage == 0)
+		apply_damage(damage, BRUTE, affecting)
+		attack_hand_contact_diseases(M, affecting, TRUE)
 
-	if(!stomping) //Kicking somebody while holding them with a grab sends the victim flying
-		var/obj/item/weapon/grab/G = M.get_inactive_hand()
-		if(istype(G) && G.affecting == src)
-			spawn()
-				qdel(G)
+		if(!stomping) //Kicking somebody while holding them with a grab sends the victim flying
+			var/obj/item/weapon/grab/G = M.get_inactive_hand()
+			if(istype(G) && G.affecting == src)
+				spawn()
+					qdel(G)
 
-				var/throw_dir = M.dir
-				if(M.loc != src.loc)
-					throw_dir = get_dir(M, src)
+					var/throw_dir = M.dir
+					if(M.loc != src.loc)
+						throw_dir = get_dir(M, src)
 
-				var/turf/T = get_edge_target_turf(get_turf(src), throw_dir)
-				var/throw_strength = 3 * M.get_strength()
-				throw_at(T, throw_strength, 1)
+					var/turf/T = get_edge_target_turf(get_turf(src), throw_dir)
+					var/throw_strength = 3 * M.get_strength()
+					throw_at(T, throw_strength, 1)
 
-	M.attack_log += text("\[[time_stamp()]\] <font color='red'>Kicked [src.name] ([src.ckey]) for [damage] damage</font>")
-	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been kicked by [M.name] ([M.ckey]) for [damage] damage</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='red'>Kicked [src.name] ([src.ckey]) for [damage] damage</font>")
+		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been kicked by [M.name] ([M.ckey]) for [damage] damage</font>")
 	if(!iscarbon(M))
 		LAssailant = null
 	else
