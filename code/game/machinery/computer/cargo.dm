@@ -309,9 +309,10 @@ For vending packs, see vending_packs.dm*/
 	data["are_forwards"] = SSsupply_shuttle.cargo_forwards.len
 
 	var/datum/money_account/account = current_acct["account"]
-	data["name_of_source_account"] = account.owner_name
-	data["authorized_name"] = current_acct["authorized_name"]
-	data["money"] = account.fmtBalance()
+	if(account)
+		data["name_of_source_account"] = account.owner_name
+		data["authorized_name"] = current_acct["authorized_name"]
+		data["money"] = account.fmtBalance()
 	data["send"] = list("send" = 1)
 	data["forward"] = list("forward" = 1)
 	data["moving"] = SSsupply_shuttle.moving
