@@ -238,9 +238,11 @@
 	var/released = FALSE
 
 /obj/item/weapon/storage/briefcase/bees/show_to(mob/user as mob)
+	..()
+	if(!isliving(user) || user.stat)
+		return
 	if(!released)
 		release(user)
-	..()
 
 //You can hit someone with the briefcase, and the bees will swarm at them
 /obj/item/weapon/storage/briefcase/bees/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)
