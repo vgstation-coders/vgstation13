@@ -226,7 +226,7 @@
 		//deployed.icon_state = icon_state
 		deployed.overlays = overlays
 		deployed.cant_drop = TRUE
-	else //Revert the changes to the deployed item.
+	else if(deployed) //Revert the changes to the deployed item.
 		sharpness = initial(sharpness)
 		deployed.name = initial(deployed.name)
 		deployed.icon = initial(deployed.icon)
@@ -318,7 +318,8 @@
 	dynamic_overlay.len = 0
 	w_class = initial(w_class)
 	update_icon()
-	user.update_inv_hands()
+	if(user)
+		user.update_inv_hands()
 
 /obj/item/weapon/switchtool/swiss_army_knife
 	name = "swiss army knife"

@@ -127,7 +127,7 @@ var/runechat_icon = null
 
 	// Translate any existing messages upwards, apply exponential decay factors to timers
 	message_loc = target
-	if (owned_by.seen_messages)
+	if (owned_by?.seen_messages)
 		var/idx = 1
 		var/combined_height = approx_lines
 		for(var/msg in owned_by.seen_messages)
@@ -156,8 +156,9 @@ var/runechat_icon = null
 		message.plane = ABOVE_HUD_PLANE
 
 	// View the message
-	owned_by.seen_messages.Add(src)
-	owned_by.images += message
+	if (owned_by)
+		owned_by.seen_messages.Add(src)
+		owned_by.images += message
 	animate(message, alpha = 255, time = CHAT_MESSAGE_SPAWN_TIME)
 
 	// Prepare for destruction
