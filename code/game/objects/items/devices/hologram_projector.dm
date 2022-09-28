@@ -33,6 +33,7 @@
 			qdel(projector.ray)
 		projector = null
 	..()
+	
 
 /obj/item/device/hologram_projector/proc/clear_holo()
 	set_light(0)
