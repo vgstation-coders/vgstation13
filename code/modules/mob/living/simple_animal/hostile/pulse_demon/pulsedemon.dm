@@ -47,7 +47,7 @@
 	var/show_desc = FALSE											//For the ability menu
 	var/can_leave_cable = FALSE										//For the ability that lets you
 	var/draining = TRUE												//For draining power or not
-	var/move_divide = 4												//For slowing down of above
+	var/move_divide = 16											//when unlocked, ability lets you move out of cables with a BIG slowdown
 	var/powerloss_alerted = FALSE									//Prevent spam notifying
 	var/health_lock = 0												//Goes down every tick, while this is on it prevents the Pulse Demon from regenerating
 
@@ -430,10 +430,12 @@
 
 // Called in Life() per tick
 /mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
-	var/amount_to_drain = charge_absorb_amount
-	// Cap conditions
+	var/max_can_absorb = current_battery.outputlevel //only raise maxcharge up to the SMES' output level
+	var/amount_to_drain = charge_absorb_amount * 10 //so you don't need to idle for 10 minutes
 	if(current_battery.charge <= amount_to_drain)
 		amount_to_drain = current_battery.charge
+	if(maxcharge <= max_can_absorb && charge >= maxcharge)
+		maxcharge = min(maxcharge + amount_to_drain, max_can_absorb)
 	var/amount_added = min(maxcharge-charge,amount_to_drain)
 	charge += amount_added
 	current_battery.charge -= amount_added
@@ -450,8 +452,7 @@
 	// Cap conditions
 	if(current_apc.cell.charge <= amount_to_drain)
 		amount_to_drain = current_apc.cell.charge
-	amount_to_drain = min(maxcharge-charge, amount_to_drain)
-//	maxcharge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER //multiplier to balance the pitiful powercells in APCs
+	maxcharge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER //multiplier to balance the pitiful powercells in APCs
 	charge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER
 	current_apc.cell.use(amount_to_drain)
 

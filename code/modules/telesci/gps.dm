@@ -194,7 +194,7 @@ var/list/all_GPS_list = list()
 			to_chat(usr, "<span class = 'caution'>You need to have the GPS in your hand to do that!</span>")
 			return TRUE
 
-		var/a = input("Please enter desired tag.", name, gpstag) as text|null
+		var/a = sanitize(input("Please enter desired tag.", name, gpstag) as text|null)
 
 		if(!builtin && (usr.get_active_hand() != src || usr.incapacitated())) //second check in case some chucklefuck drops the GPS while typing the tag
 			to_chat(usr, "<span class = 'caution'>The GPS needs to be kept in your active hand!</span>")

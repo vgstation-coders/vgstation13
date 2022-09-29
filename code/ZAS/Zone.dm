@@ -75,7 +75,7 @@ Class Procs:
 	air.volume += turf_air.volume
 	air.merge(turf_air)
 	T.zone = src
-	contents.Add(T)
+	contents += T
 	T.update_graphic(air.graphic)
 	#ifdef ZAS_COLOR
 	T.color = turf_color
@@ -89,11 +89,13 @@ Class Procs:
 	soft_assert(T in contents, "Lists are weird broseph")
 #endif
 
+	T.c_copy_air()
 	T.zone = null
 	var/datum/gas_mixture/turf_air = T.return_air()
 	air.multiply(1 - turf_air.volume / air.volume)
 	air.volume -= turf_air.volume
-	contents.Remove(T)
+	air.update_values()
+	contents -= T
 	T.update_graphic(graphic_remove = air.graphic)
 	#ifdef ZAS_COLOR
 	T.color = null

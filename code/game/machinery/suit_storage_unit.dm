@@ -618,7 +618,6 @@
 		usr.client.perspective = EYE_PERSPECTIVE
 		usr.client.eye = src
 		usr.forceMove(src)
-//		usr.metabslow = 1
 		occupant = usr
 		isopen = 0 //Close the thing after the guy gets inside
 		update_icon()
@@ -639,7 +638,7 @@
 		if(!S.remove_fuel(4,user))
 			return
 		S.playtoolsound(loc, 100)
-		if(do_after(user, src,40))
+		if(do_after(user, src,4 SECONDS * S.work_speed))
 			S.playtoolsound(loc, 100)
 			stat &= !BROKEN
 			emagged = FALSE

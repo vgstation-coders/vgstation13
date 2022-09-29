@@ -43,6 +43,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/tool/wrench/socket, /obj/item/tool/irons)
 	cell_type = /obj/item/weapon/cell/super
 	head_type = /obj/item/clothing/head/helmet/space/rig/engineer/elite
 
@@ -376,7 +377,6 @@
 	_color = "atmos_gold"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	no_light = 1
 
 /obj/item/clothing/suit/space/rig/atmos/gold
 	desc = "A special suit that protects against hazardous low pressure environments and extreme temperatures. In other words, perfect for atmos."
@@ -389,7 +389,7 @@
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	species_fit = list(GREY_SHAPED,INSECT_SHAPED)
 	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/extinguisher/foam, /obj/item/weapon/storage/toolbox, /obj/item/tool/wrench/socket)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/extinguisher/foam, /obj/item/weapon/storage/toolbox, /obj/item/tool/wrench/socket, /obj/item/tool/irons)
 	head_type = /obj/item/clothing/head/helmet/space/rig/atmos/gold
 
 //ADMINBUS RIGS. SOVIET + NAZI
@@ -637,6 +637,15 @@
 	permeability_coefficient = 0.30
 	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, MUSHROOM_SHAPED)
+
+//Space hobo stuff
+/obj/item/clothing/head/helmet/space/ghetto/hobo
+	name = "tattered space-proof helmet"
+	desc = "After years of wear and tear this is somehow still 'space-proof'."
+
+/obj/item/clothing/suit/space/ghettorig/hobo
+	name = "tattered space-proof suit"
+	desc = "After years of wear and tear this is somehow still 'space-proof'."
 
 //RoR survivor Rig
 /obj/item/clothing/suit/space/rig/ror

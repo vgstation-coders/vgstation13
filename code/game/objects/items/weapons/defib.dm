@@ -13,6 +13,7 @@
 	force = 5
 	throwforce = 5
 	origin_tech = Tc_BIOTECH + "=3"
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 	var/charges = 10
 	var/ready = 0
@@ -184,7 +185,7 @@
 			target.resurrect()
 
 			target.tod = null
-			target.stat = UNCONSCIOUS
+			target.stat = target.status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 			target.regenerate_icons()
 			target.update_canmove()
 			target.flash_eyes(visual = 1)

@@ -202,7 +202,7 @@
 			qdel(insert_query)
 			return
 		qdel(insert_query)
-		var/datum/DBQuery/log_query = SSdbcore.NewQuery("INSERT INTO [sqlfdbkdb].`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , :ckey', :address, :log_text)",
+		var/datum/DBQuery/log_query = SSdbcore.NewQuery("INSERT INTO [sqlfdbkdb].`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , :ckey, :address, :log_text)",
 		 	list(
 				 "ckey" = "[usr.ckey]",
 				 "address" = "[usr.client.address]",

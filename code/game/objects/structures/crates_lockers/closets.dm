@@ -148,8 +148,13 @@
 	setDensity(FALSE)
 	src.dump_contents()
 	playsound(src, sound_file, 15, 1, -3)
+	if(arcanetampered)
+		src.insert(user)
+		if(src.close())
+			if(src.canweld())
+				src.welded =! src.welded
+			src.update_icon()
 	return 1
-
 
 /obj/structure/closet/proc/insert(var/atom/movable/AM)
 

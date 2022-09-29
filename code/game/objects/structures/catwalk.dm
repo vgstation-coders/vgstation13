@@ -12,17 +12,8 @@
 	var/static/list/smoothables = list(/obj/structure/catwalk)
 	return smoothables
 
-/obj/structure/catwalk/New(loc)
-
-	..(loc)
-
-	relativewall()
-	relativewall_neighbours()
-
 /obj/structure/catwalk/relativewall()
-
-	var/junction = findSmoothingNeighbors()
-	icon_state = "catwalk[junction]"
+	icon_state = "catwalk[..()]"
 
 /obj/structure/catwalk/isSmoothableNeighbor(atom/A)
 

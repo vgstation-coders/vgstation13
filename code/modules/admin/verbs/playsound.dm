@@ -49,6 +49,27 @@
 	playsound(source = get_turf(src.mob), soundin = S, vol = 50, vary = 0, falloff = 0)
 	feedback_add_details("admin_verb","PLS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/client/proc/play_direct_sound(var/mob/M)
+	set category = "Fun"
+	set name = "Play Direct Sound"
+	if(!check_rights(R_SOUNDS))
+		return
+	if(!M)
+		M = input("Direct sound to who?", "Active Players") as null|anything in player_list
+
+	if(!M)
+		return
+
+	var/sound/S = input("Sound file?", "Sound") as null|sound
+
+	var/prompt = alert(src, "Are you sure you want to play this sound to [M]?","Are you sure?","Yes","Cancel")
+	if(prompt == "Cancel")
+		return
+	log_admin("[key_name(src)] played sound [S] directly to [M]")
+	message_admins("[key_name_admin(src)] played sound [S] directly to [M]", 1)
+	//S.status = SOUND_STREAM | SOUND_UPDATE
+	M << S
+	feedback_add_details("admin_verb","PDS")
 
 /*
 /client/proc/cuban_pete()

@@ -329,7 +329,8 @@
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
-	flags = HIGHLANDER_RULESET
+	//Readd this once proper round ending rituals are added
+	//flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
@@ -559,9 +560,8 @@ Assign your candidates in choose_candidates() instead.
 	if(old_AI.mind.assigned_role=="AI" || old_AI.mind.assigned_role=="Cyborg" || old_AI.mind.assigned_role=="Mobile MMI")
 		old_AI.create_roundstart_silicon(old_AI.mind.assigned_role)
 	else
-		var/mob/living/carbon/human/new_character = old_AI.create_character(0)
-		new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
-		job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
+		var/mob/living/carbon/human/new_character = old_AI.create_human(old_AI.client.prefs)
+		job_master.PostJobSetup(new_character)
 		EquipCustomItems(new_character)
 	log_admin("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
 	message_admins("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
@@ -576,9 +576,10 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/blob
 	name = "Blob Conglomerate"
 	role_category = /datum/role/blob_overmind/
-	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel")
+	enemy_jobs = list("AI", "Cyborg", "Warden", "Head of Security", "Captain", "Quartermaster", "Head of Personnel", "Station Engineer", "Chief Engineer", "Atmospheric Technician")
 	required_pop = list(30,25,25,20,20,20,15,15,15,15)
+	required_enemies = list(4,4,4,4,4,4,4,3,2,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	weekday_rule_boost = list("Tue")

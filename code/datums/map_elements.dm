@@ -11,6 +11,7 @@ var/list/datum/map_element/map_elements = list()
 	var/load_at_once = TRUE //If true, lag reduction methods will not be applied when this is loaded, freezing atmos and mob simulations until the map element is loaded.
 
 	var/turf/location //Lower left turf of the map element
+	var/list/spawned_atoms = list()
 
 	var/width //Width of the map element, in turfs
 	var/height //Height of the map element, in turfs
@@ -37,7 +38,8 @@ var/list/datum/map_element/map_elements = list()
 	for(var/atom/A in objects)
 		A.spawned_by_map_element(src, objects)
 
-/datum/map_element/proc/load(x, y, z, rotate=0, overwrite = FALSE, override_can_rotate = FALSE)
+
+/datum/map_element/proc/load(x, y, z, rotate=0, overwrite = FALSE, override_can_rotate = FALSE, clipmin_x=0, clipmax_x=INFINITY, clipmin_y=0, clipmax_y=INFINITY, clipmin_z=0, clipmax_z=INFINITY)
 	//Location is always lower left corner.
 	//In some cases, location is set to null (when creating a new z-level, for example)
 	//To account for that, location is set again in maploader's load_map() proc
@@ -53,9 +55,9 @@ var/list/datum/map_element/map_elements = list()
 	if(file_path)
 		var/file = file(file_path)
 		if(isfile(file))
-			var/list/L = maploader.load_map(file, z, x, y, src, rotation, overwrite)
-			initialize(L)
-			return L
+			spawned_atoms = maploader.load_map(file, z, x, y, src, rotation, overwrite, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
+			initialize(spawned_atoms)
+			return spawned_atoms
 	else //No file specified - empty map element
 		//These variables are usually set by the map loader. Here we have to set them manually
 		initialize(list()) //Initialize with an empty list

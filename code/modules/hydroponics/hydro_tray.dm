@@ -124,7 +124,7 @@
 //Harvests the product of a plant.
 /obj/machinery/portable_atmospherics/hydroponics/proc/harvest(var/mob/user)
 	//Harvest the product of the plant,
-	if(!seed || !harvest || !user)
+	if(!seed || !harvest || !user || arcanetampered)
 		return
 
 	if(closed_system)
@@ -139,7 +139,7 @@
 	return
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/autoharvest()
-	if(!seed || !harvest)
+	if(!seed || !harvest || arcanetampered)
 		return
 
 	seed.autoharvest(get_turf(src))
@@ -256,12 +256,15 @@
 
 			qdel(O)
 			update_icon()
+			if(S.arcanetampered)
+				arcanetampered = S.arcanetampered
 		else
 			to_chat(user, "<span class='alert'>\The [src] already has seeds in it!</span>")
 
 	else if(O.force && seed && user.a_intent == I_HURT)
 		visible_message("<span class='danger'>\The [seed.display_name] has been attacked by [user] with \the [O]!</span>")
-		add_planthealth(-O.force)
+		if(!arcanetampered) // not gonna get rid of it, sorry
+			add_planthealth(-O.force)
 		user.delayNextAttack(5)
 
 	else if(istype(O, /obj/item/claypot))
@@ -269,6 +272,9 @@
 		return
 
 	else if(seed && isshovel(O))
+		if(arcanetampered)
+			to_chat(user,"<span class='sinister'>You cannot dig into the soil.</span>")
+			return
 		var/obj/item/claypot/C = locate() in range(user,1)
 		if(!C)
 			to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
@@ -326,7 +332,9 @@
 			return
 
 		// Create a sample.
-		seed.spawn_seed_packet(get_turf(user))
+		var/obj/item/seeds/seeds = seed.spawn_seed_packet(get_turf(user))
+		if(arcanetampered)
+			seeds.arcanetampered = arcanetampered
 		to_chat(user, "You take a sample from the [seed.display_name].")
 		add_planthealth(-rand(3,5)*10)
 
@@ -370,9 +378,10 @@
 			to_chat(user, "<span class='alert'>[src] is already occupied!</span>")
 		else
 			user.drop_item(O, force_drop = 1)
-			qdel(O)
-
-			var/obj/machinery/apiary/A = new(src.loc)
+			var/obj/item/apiary/IA = O
+			var/obj/machinery/apiary/A = new IA.buildtype(src.loc)
+			A.itemform = O
+			O.forceMove(A)
 			A.icon = src.icon
 			A.icon_state = src.icon_state
 			A.hydrotray_type = src.type
@@ -383,6 +392,9 @@
 			qdel(src)
 
 	else if((O.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE)) && harvest)
+		if(arcanetampered)
+			to_chat(user,"<span class='sinister'>The plant resists your attack.</span>")
+			return
 		attack_hand(user)
 
 	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown)) //composting
@@ -419,6 +431,25 @@
 	if(isobserver(user))
 		if(!(..()))
 			return 0
+	if(arcanetampered && seed && isliving(user)) // no seed for you if tampered, get stung instead
+		var/mob/living/H = user
+		to_chat(user, "<span class='sinister'>You are </span><span class='danger'>stung and prickled</span><span class='sinister'> by the sharp thorns on \the [seed.display_name]!</span>")
+		var/datum/organ/external/affecting = H.get_organ(pick(LIMB_RIGHT_HAND,LIMB_LEFT_HAND))
+		affecting.take_damage(8, 0, 0, "plant thorns")
+		H.UpdateDamageIcon()
+		seed.potency -= rand(1,(seed.potency/3)+1)
+		if(H.reagents && seed.chems && seed.chems.len)
+			var/list/thingsweinjected = list()
+			var/injecting = clamp(1, 3, seed.potency/10)
+
+			for(var/rid in seed.chems) //Only transfer reagents that the plant naturally produces.
+				H.reagents.add_reagent(rid,injecting)
+				thingsweinjected += "[injecting]u of [rid]"
+				. = 1
+
+			if(. && fingerprintshidden && fingerprintshidden.len)
+				H.investigation_log(I_CHEMS, "was stung by \a [seed.display_name], transfering [english_list(thingsweinjected)] - all touchers: [english_list(src.fingerprintshidden)]")
+		return
 	if(harvest)
 		harvest(user)
 	else if(dead)
@@ -440,7 +471,7 @@
 		to_chat(user, "[src] is full of dead plant matter.")
 	else
 		to_chat(user, "[src] has nothing planted.")
-	if (Adjacent(user) || isobserver(user) || issilicon(user))
+	if (Adjacent(user) || isobserver(user) || issilicon(user) || hydrovision(user))
 		to_chat(user, "Water: [get_waterlevel()]/100")
 		if(seed && seed.toxin_affinity >= 5)
 			to_chat(user, "Toxin: [get_toxinlevel()]/100")
@@ -487,6 +518,14 @@
 				light_available = T.get_lumcount() * 10
 
 			to_chat(user, "The tray's sensor suite is reporting a light level of [round(light_available, 0.1)] lumens and a temperature of [environment.temperature]K.")
+
+		if(hydrovision(user))
+			var/mob/living/carbon/human/H = user
+			to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[H.glasses];scan=\ref[src]'>\[Scan\]</a>")
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/hydrovision(mob/user)
+	hydro_hud_scan(user, src)
+	return FALSE
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/close_lid()
 	set name = "Toggle Tray Lid"

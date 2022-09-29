@@ -59,7 +59,7 @@
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
 
 	var/turf/T = get_turf(src)
-	if (!client && istype(T.loc,/area/maintenance) && prob(20))
+	if (!client && (T ? istype(T.loc,/area/maintenance) : FALSE) && prob(20))
 		MaintInfection()
 
 /mob/living/simple_animal/mouse/can_be_infected()
@@ -74,7 +74,7 @@
 		for(var/mob/M in view())
 			M << 'sound/effects/mousesqueek.ogg'
 
-	if(!ckey && stat == CONSCIOUS && prob(0.5))
+	if(!ckey && stat == CONSCIOUS && prob(0.5) && !(status_flags & BUDDHAMODE))
 		stat = UNCONSCIOUS
 		icon_state = icon_sleep
 		wander = 0
@@ -443,7 +443,7 @@
 	name = "Discount Mouse" //full name is discount mouse, so it's correctly capitalized
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan
 	namenumbers = FALSE
-	
+
 /mob/living/simple_animal/mouse/common/dan/New()
 	..()
 	desc = "It's a small [_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself. It looks well fed..."

@@ -285,6 +285,7 @@
 					if(H && B)
 						to_chat(H, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
 						H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
+						log_attack("<font color='red'>[key_name(H)] was disintegrated for farting on a bible.</font>")
 						explosion(get_turf(H),-1,-1,1,5, whodunnit = H) //Tiny explosion with flash
 						H.dust(TRUE)
 //Ayy lmao
@@ -327,6 +328,7 @@
 			return
 		if(H.mind)
 			H.mind.suiciding = 1
+		log_attack("<font color='red'>[key_name(H)] has committed suicide via dabbing.</font>")
 		H.visible_message("<span class='danger'>[H] holds one arm up and slams \his other arm into \his face! It looks like \he's trying to commit suicide.</span>",)
 		for(var/datum/organ/external/breakthis in H.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM, LIMB_HEAD))
 			H.apply_damage(50, BRUTE, breakthis)

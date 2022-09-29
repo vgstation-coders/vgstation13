@@ -7,6 +7,7 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	siemens_coefficient = 1
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 	var/spamcheck = 0
 	var/emagged = 0

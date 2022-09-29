@@ -142,7 +142,13 @@
 		if(do_surgery(M, user, src))
 			return
 
-	if (loaded_food)
+	if(arcanetampered && M.hasmouth())
+		M.visible_message("<span class='sinister'>[M] eats a delicious spoon!</span>")
+		feed_to(user, M)
+		playsound(M, 'sound/items/eatfood.ogg', 50, 0)
+		qdel(src)
+		return
+	else if (loaded_food)
 		reagents.update_total()
 		if(!M.hasmouth())
 			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")
@@ -175,6 +181,7 @@
 	desc = "Super dull action!"
 	icon_state = "pspoon"
 	melt_temperature = MELTPOINT_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	bendable = FALSE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
@@ -207,7 +214,14 @@
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD && M != user && !loaded_food)
 		return ..()
 
-	if (loaded_food)
+	if(arcanetampered)
+		M.visible_message("<span class='sinister'>[M] eats a delicious fork!</span>")
+		playsound(M, 'sound/items/eatfood.ogg', 50, 0)
+		feed_to(user, M)
+		M.adjustBruteLoss(10)
+		qdel(src)
+		return
+	else if (loaded_food)
 		reagents.update_total()
 		if(!M.hasmouth())
 			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")
@@ -257,6 +271,7 @@
 	desc = "Yay, no washing up to do."
 	icon_state = "pfork"
 	melt_temperature = MELTPOINT_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
 
@@ -265,6 +280,7 @@
 	desc = "Less likely to dissolve when picking up a forkful of mothership stew."
 	icon_state = "tfork"
 	melt_temperature = MELTPOINT_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /*
  * Knives
@@ -300,6 +316,7 @@
 	throwforce = 1
 	sharpness = 0.8
 	melt_temperature = MELTPOINT_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
 

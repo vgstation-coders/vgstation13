@@ -75,10 +75,6 @@
 	set name = "Evolve"
 	set desc = "Grow to a more complex form."
 
-	if(!is_alien_whitelisted(src, "Diona") && config.usealienwhitelist)
-		to_chat(src, alert("You are currently not whitelisted to play an adult Diona."))
-		return FALSE
-
 	if(stat == DEAD)
 		to_chat(src, "You cannot evolve if you are dead!")
 		return

@@ -285,7 +285,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		if("verbs")
 			update_verbs(!isnull(host))
 		if("add_chem")
-			var/chemID = input("Chem name (ex: creatine):","Chemicals") as text|null
+			var/chemID = copytext(sanitize(input("Chem name (ex: creatine):","Chemicals") as text|null),1,MAX_NAME_LEN)
 			if(isnull(chemID))
 				return
 			var/datum/borer_chem/C = new /datum/borer_chem()
@@ -1119,7 +1119,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			to_chat(O,"<span class='notice'>While the borer may be mindless, you have recently ghosted and thus are not allowed to take over for now.</span>")
 
 /mob/living/simple_animal/borer/proc/passout(var/wait_time = 0, var/show_message = 0)
-	if(!wait_time)
+	if((status_flags & BUDDHAMODE) || !wait_time)
 		return
 	if(show_message)
 		to_chat(src, "<span class='warning'>You lose consciousness due to overexertion.</span>")

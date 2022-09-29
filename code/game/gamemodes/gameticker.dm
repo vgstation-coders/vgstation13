@@ -126,7 +126,6 @@ var/datum/controller/gameticker/ticker
 	theme.update_music()
 	theme.update_icon()
 
-
 /datum/controller/gameticker/proc/setup()
 	//Create and announce mode
 	if(master_mode=="secret")
@@ -164,28 +163,6 @@ var/datum/controller/gameticker/ticker
 
 	//Configure mode and assign player to special mode stuff
 	job_master.DivideOccupations() //Distribute jobs
-	init_mind_ui()
-	init_PDAgames_leaderboard()
-
-	for(var/mob/new_player/player in player_list)
-		if(!(player.ready && player.mind && player.mind.assigned_role))
-			continue
-		var/mob/living/L = player
-		if(istype(L))
-			ticker.minds += L.mind
-		
-		switch(player.mind.assigned_role)
-			if("Mobile MMI", "Cyborg", "AI")
-				player.create_roundstart_silicon(player.mind.assigned_role)
-				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-			if("MODE")
-				//do nothing
-			else
-				player.create_roundstart_human() //Create player characters and transfer them
-
-	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
-		for(var/mob/living/carbon/human/player in player_list)
-			player.apeify()
 
 	var/can_continue = mode.Setup()//Setup special modes
 	if(!can_continue)
@@ -196,6 +173,69 @@ var/datum/controller/gameticker/ticker
 		del(mode)
 		job_master.ResetOccupations()
 		return 0
+
+	//After antagonists have been removed from new_players in player_list, create crew
+	var/list/new_characters = list()	//list of created crew for transferring
+	var/list/new_players_ready = list() //unique list of people who have readied up, so we can delete mob/new_player later (ready is lost on mind transfer)
+	for(var/mob/M in player_list)
+		if(!istype(M, /mob/new_player/))
+			var/mob/living/L = M
+			ticker.minds += L.mind
+			L.store_position()
+			M.close_spawn_windows()
+			continue
+		var/mob/new_player/np = M
+		if(!(np.ready && np.mind && np.mind.assigned_role))
+			//If they aren't ready, update new player panels so they say join instead of ready up.
+			np.new_player_panel()
+			continue
+		var/datum/preferences/prefs = M.client.prefs
+		var/key = M.key
+		new_players_ready |= M
+		//Create player characters
+		switch(np.mind.assigned_role)
+			if("Cyborg", "Mobile MMI", "AI")
+				var/mob/living/silicon/S = np.create_roundstart_silicon(prefs)
+				ticker.minds += S.mind
+				S.store_position()
+				log_admin("([key]) started the game as a [S.mind.assigned_role].")
+				new_characters[key] = S
+			if("MODE")
+				//antags aren't new players
+			else
+				var/mob/living/carbon/human/H = np.create_human(prefs)
+				ticker.minds += H.mind
+				H.store_position()
+				EquipCustomItems(H)
+				H.update_icons()
+				new_characters[key] = H
+				if(H.mind.assigned_role != "Trader")
+					data_core.manifest_inject(H)
+		CHECK_TICK
+
+	//Transfer characters to players
+	for(var/i = 1, i <= new_characters.len, i++)
+		var/mob/M = new_characters[new_characters[i]]
+		var/key = new_characters[i]
+		M.key = key
+		if(istype(M, /mob/living/carbon/human/))
+			var/mob/living/carbon/human/H = M
+			job_master.PostJobSetup(H)
+		//minds are linked to accounts... And accounts are linked to jobs.
+		var/rank = M.mind.assigned_role
+		var/datum/job/job = job_master.GetJob(rank)
+		if(job)
+			job.equip(M, job.priority) // Outfit datum.
+
+	handle_lights()
+
+	//delete the new_player mob for those who readied
+	for(var/mob/np in new_players_ready)
+		qdel(np)
+
+	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
+		for(var/mob/living/carbon/human/player in player_list)
+			player.apeify()
 
 	if(hide_mode)
 		var/list/modes = new
@@ -208,34 +248,7 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
-	var/captain = FALSE
-	for(var/mob/living/carbon/human/player in player_list)	
-		//Used to display a message the captainship message
-		if(player.mind)
-			if(player.mind.assigned_role == "MODE")
-					//no injection
-			else
-				job_master.EquipRank(player, player.mind.assigned_role, 0)
-				EquipCustomItems(player)
-				player.update_icons()
-				if(player.mind.assigned_role == "Captain")
-					captain = TRUE
-				if(player.mind.assigned_role != "Trader")
-					data_core.manifest_inject(player)
-
-	mode.PostSetup()
-
-		//send message that no one is a captain and store positions for some reason
-	for(var/mob/M in player_list)
-		if(!istype(M,/mob/new_player))
-			if(!captain)
-				to_chat(M, "Captainship not forced on anyone.")
-			M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
-	// Update new player panels so they say join instead of ready up.
-	for(var/mob/new_player/player in player_list)
-		player.new_player_panel_proc()
-
-
+	mode.PostSetup() //provides antag objectives
 	gamestart_time = world.time / 10
 	current_state = GAME_STATE_PLAYING
 
@@ -438,10 +451,6 @@ var/datum/controller/gameticker/ticker
 				delay_end = 2
 	return 1
 
-/datum/controller/gameticker/proc/init_PDAgames_leaderboard()
-	init_snake_leaderboard()
-	init_minesweeper_leaderboard()
-
 /datum/controller/gameticker/proc/init_snake_leaderboard()
 	for(var/x=1;x<=PDA_APP_SNAKEII_MAXSPEED;x++)
 		snake_station_highscores += x
@@ -560,6 +569,19 @@ var/datum/controller/gameticker/ticker
 			roles += player.mind.assigned_role
 	return roles
 
+/datum/controller/gameticker/proc/handle_lights()
+	var/list/discrete_areas = areas.Copy()
+	//Get department areas where there is a crewmember. This is used to turn on lights in occupied departments
+	for(var/mob/living/player in player_list)
+		discrete_areas -= get_department_areas(player)
+	//Toggle lightswitches and lamps on in occupied departments
+	for(var/area/DA in discrete_areas)
+		for(var/obj/machinery/light_switch/LS in DA)
+			LS.toggle_switch(0, playsound = FALSE)
+			break
+		for(var/obj/item/device/flashlight/lamp/L in DA)
+			L.toggle_onoff(0)
+
 /datum/controller/gameticker/proc/post_roundstart()
 	//Handle all the cyborg syncing
 	var/list/active_ais = active_ais()
@@ -577,21 +599,6 @@ var/datum/controller/gameticker/ticker
 		mode.send_intercept()
 
 	spawn()
-		var/discrete_areas = areas.Copy()
-
-		for(var/mob/living/carbon/human/player in player_list)
-			var/area/A = get_area(player)
-			//Getting areas where there is a crewmember. This is used to turn off lights in empty departments
-			if(A in discrete_areas)
-				discrete_areas -= get_department_areas(player)
-		//Toggle lightswitches and lamps on in occupied departments
-		for(var/area/DA in discrete_areas)
-			for(var/obj/machinery/light_switch/LS in DA)
-				LS.toggle_switch(0)
-				break
-			for(var/obj/item/device/flashlight/lamp/L in DA)
-				L.toggle_onoff(0)
-
 		feedback_set_details("round_start","[time2text(world.realtime)]")
 		if(ticker && ticker.mode)
 			feedback_set_details("game_mode","[ticker.mode]")
@@ -616,7 +623,7 @@ var/datum/controller/gameticker/ticker
 		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
-		
+
 		if(0 == admins.len)
 			send2adminirc("Round has started with no admins online.")
 			send2admindiscord("**Round has started with no admins online.**", TRUE)
@@ -644,7 +651,7 @@ var/datum/controller/gameticker/ticker
 			'sound/AI/vox_reminder15.ogg')
 		for(var/sound in welcome_sentence)
 			play_vox_sound(sound,map.zMainStation,null)
-	
+
 	create_random_orders(3) //Populate the order system so cargo has something to do
 
 // -- Tag mode!

@@ -355,6 +355,7 @@
 		// Request power for next tick
 		shieldload = rand(storedpower_consumption, storedpower_consumption * 4)
 		power_connection.add_load(shieldload)
+		power_connection.monitor_demand = shieldload
 
 	// Attemp to consume stored power. If enough, we're powered,
 	if (storedpower >= storedpower_consumption)
@@ -364,6 +365,19 @@
 	else
 		power = FALSE
 
+/obj/machinery/shieldwallgen/proc/get_status_text()
+	if(!anchored)
+		return "<span class='warning'>It is not secured to the floor.</span>"
+	if(!power_connection.connected)
+		return "<span class='warning'>It is not connected to power.</span>"
+
+	. = "It is <span class='[storedpower>=storedpower_consumption?"info":"warning"]'>"
+	. += "[round((storedpower/maxstoredpower)*100)]%</span> charged. "
+	if(power_connection.get_satisfaction()>0)
+		. += "It is charging at at rate of [round(power_connection.get_satisfaction()*100)]%."
+	else
+		. += "<span class='warning'>It is not charging.</span>"
+
 /obj/machinery/shieldwallgen/attack_hand(mob/user as mob)
 	if(!anchored)
 		to_chat(user, "<span class='warning'>The shield generator needs to be firmly secured to the floor first.</span>")
@@ -371,8 +385,8 @@
 	if(src.locked && !istype(user, /mob/living/silicon))
 		to_chat(user, "<span class='warning'>The controls are locked!</span>")
 		return 1
-	if(power != 1)
-		to_chat(user, "<span class='warning'>The shield generator needs to be powered by wire underneath.</span>")
+	if(!power)
+		to_chat(user, "<span class='warning'>The shield generator's status display flashes: [src.get_status_text()]</span>")
 		return 1
 
 	if(src.active)
@@ -390,6 +404,10 @@
 			"You turn on the shield generator.", \
 			"You hear heavy droning.")
 	src.add_fingerprint(user)
+
+/obj/machinery/shieldwallgen/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>[src.get_status_text()]</span>")
 
 /obj/machinery/shieldwallgen/process()
 	spawn(100)
@@ -473,8 +491,10 @@
 		to_chat(user, "Turn off the field generator first.")
 		return FALSE
 	. = ..()
-	if(!.)
-		return
+	if(anchored)
+		power_connection.connect()
+	else
+		power_connection.disconnect()
 
 /obj/machinery/shieldwallgen/attack_ghost(mob/user)
 	if(isAdminGhost(user))

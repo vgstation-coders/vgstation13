@@ -228,7 +228,7 @@
 	if(stat & (FORCEDISABLE|NOPOWER))
 		operating = 0
 	var/disp_op = operating
-	if(in_reverse && disp_op!=0)
+	if((in_reverse && disp_op!=0 && !arcanetampered) || ((!in_reverse || disp_op==0) && arcanetampered))
 		disp_op = -operating
 	icon_state = "conveyor[disp_op]"
 

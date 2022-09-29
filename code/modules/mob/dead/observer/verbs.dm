@@ -196,6 +196,8 @@
 
 	var/list/mobs = getmobs()
 	var/input = input("Please, select a mob!", "Haunt", null, null) as null|anything in mobs
+	if(!input)
+		return
 	var/mob/target = mobs[input]
 	manual_follow(target)
 
@@ -245,15 +247,17 @@
 	set name = "Toggle Darkness"
 	set category = "Ghost"
 
-	if (client && client.darkness_planemaster)
-		switch(client.darkness_planemaster.alpha)
-			if(255)
-				client.darkness_planemaster.alpha = 180
-			if(180)
-				client.darkness_planemaster.alpha = 0
-			else
-				client.darkness_planemaster.alpha = 255
-
+	switch(dark_plane.alphas["toggle_darkness"])
+		if(255)
+			see_invisible = SEE_INVISIBLE_OBSERVER
+			dark_plane.alphas["toggle_darkness"] = 180
+		if(180)
+			see_invisible = SEE_INVISIBLE_OBSERVER
+			dark_plane.alphas -= "toggle_darkness"
+		else
+			see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+			dark_plane.alphas["toggle_darkness"] = 255
+	check_dark_vision()
 
 /mob/dead/observer/verb/analyze_air()
 	set name = "Analyze Air"
@@ -452,7 +456,7 @@
 
 /mob/dead/observer/verb/find_arena()
 	set category = "Ghost"
-	set name = "Search For Arenas"
+	set name = "Find Arenas"
 	set desc = "Try to find an Arena to polish your robust bomb placement skills.."
 
 	if(!arenas.len)
@@ -481,7 +485,7 @@
 	set category = "Ghost"
 	set desc = "Create a bomberman arena for other observers and dead players."
 
-	if (ticker && ticker.current_state != GAME_STATE_PLAYING)
+	if (ticker && ticker.current_state < GAME_STATE_PLAYING)
 		to_chat(src, "<span class ='notice'>You can't use this verb before the game has started.</span>")
 		return
 

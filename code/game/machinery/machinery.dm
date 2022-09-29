@@ -237,8 +237,8 @@ Class Procs:
 	..()
 
 /obj/machinery/suicide_act(var/mob/living/user)
-	if(!(stat & NOPOWER|BROKEN|FORCEDISABLE) && use_power > 0)
-		to_chat(viewers(user), "<span class='danger'>[user] is placing \his hands into the sockets of the [src] and tries to fry \himself! It looks like \he's trying to commit suicide.</span>")
+	if(!(stat & (NOPOWER|BROKEN|FORCEDISABLE)) && use_power > 0)
+		to_chat(viewers(user), "<span class='danger'>[user] is placing \his hands into the sockets of the [src] to try to fry \himself! It looks like \he's trying to commit suicide.</span>")
 		return(SUICIDE_ACT_FIRELOSS)
 
 /obj/machinery/ex_act(severity)
@@ -309,7 +309,7 @@ Class Procs:
 
 // returns true if the machine is powered (or doesn't require power).
 // performs basic checks every machine should do, then
-/obj/machinery/proc/powered(chan = power_channel)
+/obj/machinery/proc/powered(chan = power_channel, power_check_anyways = FALSE)
 	if(!src.loc)
 		return FALSE
 
@@ -322,7 +322,7 @@ Class Procs:
 		else
 			return FALSE
 
-	if(use_power == MACHINE_POWER_USE_NONE)
+	if(!power_check_anyways && use_power == MACHINE_POWER_USE_NONE)
 		return TRUE
 
 	if((machine_flags & FIXED2WORK) && !anchored)
@@ -510,6 +510,7 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob, var/ignore_brain_damage = 0)
+	. = ..()
 	if(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
 		return 1
 
@@ -665,6 +666,9 @@ Class Procs:
 
 	add_fingerprint(user)
 
+	if(O.is_cookvessel && is_cooktop)
+		return 1
+
 	if(isEmag(O) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
@@ -816,6 +820,35 @@ Class Procs:
 		return 1
 	return 0
 
+//exclusively for use with machines being made from the flatpacker
+//works like the parts exchange but because we only call this from a certain location
+//we can make some particular assumptions about what's going on
+/obj/machinery/proc/force_parts_transfer(var/datum/design/mechanic_design/O)
+	if(component_parts)
+		var/list/X = O.parts
+		//We paid for it when we made the flatpack, now we get new components.
+		//...has to be copied otherwise you delete the parts from the source
+		var/M = X.Copy(1,0)
+		var/obj/item/weapon/circuitboard/CB = locate(/obj/item/weapon/circuitboard) in component_parts
+		var/P
+		for(var/obj/item/A in component_parts)
+			//use some logic to, one by one, replace the parts in the flatpack
+			//we can't just force add all the parts to the machine because (including stock parts) because some parts aren't copiable
+			for(var/D in CB.req_components)
+				if(ispath(A.type, D))
+					P = D
+					break
+			for(var/obj/item/B in M)
+				if(istype(B, P) && istype(A, P))
+					if(B.get_rating() > A.get_rating()) //base rating parts should not be added (they already shouldn't be in this list, but whatever)
+						component_parts -= A
+						component_parts += B
+						M -= B //if you don't remove the part, one upgraded part will replace everything in the recipe
+						B.forceMove(null)
+						break
+		RefreshParts()
+		return 1
+	return 0
 
 /obj/machinery/kick_act(mob/living/carbon/human/H)
 	if(H.locked_to && isobj(H.locked_to) && H.locked_to != src)
@@ -845,6 +878,13 @@ Class Procs:
 					sleep(3)
 	else
 		src.shake(1, 3) //1 means x movement, 3 means intensity
+
+	if(arcanetampered && density && anchored)
+		to_chat(H,"<span class='sinister'>[src] kicks YOU!</span>")
+		playsound(src, 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
+		H.Knockdown(10)
+		H.Stun(10)
+		return
 
 	if(scan)
 		if(prob(50))

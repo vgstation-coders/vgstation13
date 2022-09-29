@@ -5,6 +5,7 @@
 	var/obj/item/weapon/r_store = null
 	var/obj/item/weapon/l_store = null
 	var/caste = ""
+	var/has_fine_manipulation = 0
 	update_icon = TRUE
 
 	species_type = /mob/living/carbon/alien/humanoid
@@ -169,7 +170,6 @@
 
 
 /mob/living/carbon/alien/humanoid/var/co2overloadtime = null
-/mob/living/carbon/alien/humanoid/var/temperature_resistance = T0C+75
 
 /mob/living/carbon/alien/humanoid/show_inv(mob/user as mob)
 	user.set_machine(src)
