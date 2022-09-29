@@ -25,8 +25,15 @@
 		command += {"<br><span class='alert'>[gibberish_main ? Gibberish(html_encode(text),70) : html_encode(text)]</span><br>
 			<br>"}
 
+
+	var/list/send_to_zs = list(map.zCentcomm)
+
+	for(var/obj/machinery/telecomms/relay/R in telecomms_list)
+		if(R.on && !(R.z in send_to_zs)
+			send_to_zs.Add(R.z)
+
 	for(var/mob/M in player_list)
-		if(!istype(M,/mob/new_player) && M.client)
+		if(!istype(M,/mob/new_player) && M.client && (M.z in send_to_zs))
 			to_chat(M, command)
 			if(!map.linked_to_centcomm)
 				M << sound(pick(static_list), volume = 60)

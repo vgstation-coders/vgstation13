@@ -419,8 +419,14 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	if(!announcementConsole)
 		return
 
+	var/list/send_to_zs = list(map.zCentcomm)
+
+	for(var/obj/machinery/telecomms/relay/R in telecomms_list)
+		if(R.on && !(R.z in send_to_zs)
+			send_to_zs.Add(R.z)
+
 	for(var/mob/M in player_list)
-		if(!istype(M,/mob/new_player) && M.client)
+		if(!istype(M,/mob/new_player) && M.client && (M.z in send_to_zs))
 			to_chat(M, "<b><font size = 3><font color = red>[department] announcement:</font color> [msg]</font size></b>")
 			M << sound(announceSound)
 	log_say("[key_name(user)] ([formatJumpTo(get_turf(user))]) has made an announcement from \the [src]: [msg]")
