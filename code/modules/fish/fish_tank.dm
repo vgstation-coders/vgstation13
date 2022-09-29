@@ -438,7 +438,7 @@
 	for(var/fish_path in subtypesof(/obj/item/weapon/fish/))
 		var/obj/item/weapon/fish = new fish_path
 		if(fish.name == caught_fish)
-			new fish(get_turf(user))
+			fish = new fish_path(get_turf(user))
 
 /obj/machinery/fishtank/proc/destroy(var/deconstruct = FALSE)
 	if(!deconstruct)

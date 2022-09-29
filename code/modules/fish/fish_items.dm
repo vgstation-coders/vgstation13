@@ -198,13 +198,13 @@
 		return TRUE
 	..()
 
-/obj/item/weapon/lobster
+/obj/item/weapon/fish/lobster
 	name = "lobster"
 	desc = "The cousin of the crab, genetically modified to be unable to snap at anyone. Its innate anger and hatred is kept intact."
 	icon_state = "lobster"
 	icon = 'icons/obj/fish_items.dmi'
 
-/obj/item/weapon/lobster/attackby(var/obj/item/O, var/mob/user) // extracting tail and claw meat from a sea cockroach
+/obj/item/weapon/fish/lobster/attackby(var/obj/item/O, var/mob/user) // extracting tail and claw meat from a sea cockroach
 	if(O.is_wirecutter(user))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src] and pull out the claw meat while separating the tail!")
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
