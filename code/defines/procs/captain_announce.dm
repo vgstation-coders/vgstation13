@@ -2,7 +2,7 @@
 	var/list/send_to_zs = list(map.zCentcomm)
 
 	for(var/obj/machinery/telecomms/relay/R in telecomms_list)
-		if(R.on && !(R.z in send_to_zs)
+		if(R.on && !(R.z in send_to_zs))
 			send_to_zs.Add(R.z)
 
 	for(var/mob/M in player_list)

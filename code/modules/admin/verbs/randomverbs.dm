@@ -671,6 +671,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			command_alert(input, customname,1);
 		if("Heads Only")
 			headsonly = TRUE
+			world << sound('sound/AI/commandreport.ogg', volume = 60)
 			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
 		else
 			return
@@ -684,7 +685,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			C.messagetitle.Add("[command_name()] Update")
 			C.messagetext.Add(P.info)
 
-	world << sound('sound/AI/commandreport.ogg', volume = 60)
 	log_admin("[key_name(src)] has created a [headsonly ? "heads only" : "publicly announced"] command report titled [customname]: [input]")
 	message_admins("[key_name_admin(src)] has created a command report", 1)
 	feedback_add_details("admin_verb","CCR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
