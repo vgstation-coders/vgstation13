@@ -57,19 +57,6 @@
 	icon_state = "cyborg_upgrade"
 	w_class = W_CLASS_SMALL
 
-/obj/item/weapon/reagent_containers/food/snacks/shrimp
-	name = "shrimp"
-	desc = "A single raw shrimp."
-	icon = 'icons/obj/seafood.dmi'
-	icon_state = "shrimp_raw"
-	filling_color = "#FF1C1C"
-	bitesize = 1
-
-/obj/item/weapon/reagent_containers/food/snacks/shrimp/New()
-	..()
-	desc = pick("Anyway, like I was sayin', shrimp is the fruit of the sea.", "You can barbecue it, boil it, broil it, bake it, saute it.")
-	reagents.add_reagent(NUTRIMENT, 1)
-
 /obj/item/weapon/reagent_containers/food/snacks/feederfish
 	name = "feeder fish"
 	desc = "A tiny feeder fish. Sure doesn't look very filling..."
@@ -95,6 +82,13 @@
 	attack_verb = list("slapped", "humiliated", "hit", "rubbed")
 	hitsound = 'sound/effects/snap.ogg'
 	var/meat_type
+
+/obj/item/weapon/fish/shrimp
+	name = "shrimp"
+	desc = "Raw shrimp."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "shrimp_raw"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/shrimp
 
 /obj/item/weapon/fish/glofish
 	name = "glofish"
