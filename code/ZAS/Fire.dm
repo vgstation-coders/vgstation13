@@ -41,7 +41,11 @@ Attach to transfer valve and open. BOOM.
 			in_fire = TRUE
 			break
 		if(!in_fire)
-			var/used_ratio = min(0.2 / getFireFuel(), 1) //To maintain the previous behavior of just using 0.2 fire_fuel
+			var/used_ratio = 0
+			if(!getFireFuel())
+				used_ratio = 0.2 //uses 0.2 fire_fuel if it isn't defined for an object
+			else
+				used_ratio = min(0.2 / getFireFuel(), 1) //To maintain the previous behavior of just using 0.2 fire_fuel
 			burnFireFuel(1, used_ratio) //1 is valid as used_fuel_ratio and the two arguments should multiply to used_ratio, so this is simplest.
 		sleep(2 SECONDS)
 
