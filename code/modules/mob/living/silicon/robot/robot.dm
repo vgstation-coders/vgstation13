@@ -1202,7 +1202,7 @@
 		to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE
-	to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Self-Destruct signal recieved.</span>")
+	to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Self-Destruct signal received.</span>")
 	gib()
 	return TRUE
 
@@ -1274,7 +1274,7 @@
 		return FALSE
 	lockdown = state
 	if(lockdown)
-		to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Lockdown signal recieved. Halting all activity.</b></span>")
+		to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Lockdown signal received. Halting all activity.</b></span>")
 		src << 'sound/machines/twobeep.ogg'
 	else
 		to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='notice'>INFO</span>\] Your lockdown has been lifted.</b></span>")
