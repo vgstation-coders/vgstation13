@@ -73,6 +73,14 @@
 
 		qdel(src)
 		return
+	if(istype(W,/obj/item/weapon/grown/log) && isturf(loc))
+		to_chat(user,"<span class='notice'>You begin building a storm door out of the tower-cap logs.</span>")
+		if(do_after(user,src,4 SECONDS))
+			to_chat(user,"<span class='notice'>You finish the door.</span>")
+			new /obj/machinery/door/mineral/wood/log/towercap(loc)
+			qdel(src)
+	else
+		..()
 
 /obj/item/weapon/grown/log/tree
 	name = "log"

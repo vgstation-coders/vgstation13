@@ -29,6 +29,7 @@
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED,INSECT_SHAPED, GREY_SHAPED)
+	autoignition_temperature = AUTOIGNITION_PROTECTIVE
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -68,6 +69,7 @@
 	flags = FPRINT
 	body_parts_covered = HEAD|EYES
 	light_power = 0.5
+	autoignition_temperature = AUTOIGNITION_METAL
 	var/onfire = 0.0
 	var/status = 0
 	var/fire_resist = T0C+1300	//this is the max temp it can stand before you start to cook. although it might not burn away, you take damage

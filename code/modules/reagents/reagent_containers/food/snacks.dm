@@ -7756,7 +7756,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	trash = /obj/item/trash/emptybowl
 	food_flags = FOOD_LIQUID | FOOD_SWEET | FOOD_ANIMAL
 	crumb_icon = "dribbles"
-	filling_color = "#B38B26"
+	filling_color = "#00FFFF"
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/polyppudding/New()

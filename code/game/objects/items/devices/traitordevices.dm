@@ -24,6 +24,7 @@ effective or pretty fucking useless.
 	throw_range = 10
 	flags = FPRINT
 	siemens_coefficient = 1
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	item_state = "electronic"
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_COMBAT + "=3;" + Tc_SYNDICATE + "=3"
 

@@ -4,6 +4,7 @@
 	suffix = "\[3\]"
 	icon_state = "walkietalkie"
 	item_state = "walkietalkie"
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/on = 1 // 0 for off
 	var/last_transmission
 	var/frequency = 1459

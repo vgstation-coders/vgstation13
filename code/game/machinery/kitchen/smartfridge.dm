@@ -220,7 +220,7 @@
 		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/soysauce(src))
 		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/vinegar(src))
 		insert_item(new /obj/item/weapon/reagent_containers/food/drinks/ice(src))
-		insert_item(new /obj/item/weapon/reagent_containers/food/drinks/discount_sauce(src))
+		insert_item(new /obj/item/weapon/reagent_containers/food/condiment/small/discount(src))
 
 /obj/machinery/smartfridge/extract
 	name = "\improper Slime Extract Storage"

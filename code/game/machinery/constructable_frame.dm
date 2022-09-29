@@ -333,7 +333,7 @@ to destroy them and players will be able to make replacements.
 			return
 		S.playtoolsound(loc, 50)
 		soldering = 1
-		if(do_after(user, src,40))
+		if(do_after(user, src,4 SECONDS * S.work_speed))
 			var/boardType = allowed_boards[t]
 			var/obj/item/I = new boardType(get_turf(user))
 			to_chat(user, "<span class='notice'>You fashion a crude [I] from the blank circuitboard.</span>")

@@ -6,6 +6,7 @@
 	heat_production = 3500
 	source_temperature = TEMPERATURE_PLASMA
 	sterility = 0
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/melee/energy/is_hot()
 	if(active)

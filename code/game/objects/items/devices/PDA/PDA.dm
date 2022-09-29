@@ -18,6 +18,7 @@ var/global/msg_id = 0
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	slot_flags = SLOT_ID | SLOT_BELT
+	autoignition_temperature = AUTOIGNITION_METAL
 
 	//Main variables
 	var/owner = null

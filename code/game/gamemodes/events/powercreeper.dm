@@ -13,8 +13,9 @@
 	desc = "A strange alien fruit that passively generates electricity. Best not to touch it."
 	icon = 'icons/obj/structures/powercreeper.dmi'
 	icon_state = "neutral"
+	plane = OBJ_PLANE
+	layer = OBJ_LAYER
 	level = LEVEL_ABOVE_FLOOR
-	plane = ABOVE_TURF_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
 	slowdown_modifier = 2
 	autoignition_temperature = AUTOIGNITION_PAPER

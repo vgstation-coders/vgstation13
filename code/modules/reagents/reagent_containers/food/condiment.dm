@@ -266,7 +266,7 @@
 				icon_state = COCO
 				condiment_overlay = COCO
 			if(MAYO)
-				name = "mayonaise jar"
+				name = "mayonnaise jar"
 				desc = "Not an instrument."
 				icon_state = MAYO
 				condiment_overlay = MAYO
@@ -306,6 +306,11 @@
 				desc = "Reddish brown Canadian maple syrup, perfectly sweet and thick. Nutritious and effective at healing."
 				icon_state = MAPLESYRUP
 				condiment_overlay = MAPLESYRUP
+			if(DISCOUNT)
+				name = "Discount Dan's Special Sauce"
+				desc = "Discount Sauce now in a family sized package."
+				icon_state = "discount_sauce"
+				condiment_overlay = DISCOUNT 
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
@@ -468,6 +473,14 @@
 /obj/item/weapon/reagent_containers/food/condiment/cinnamon/New()
 	..()
 	reagents.add_reagent(CINNAMON, 50)
+	
+/obj/item/weapon/reagent_containers/food/condiment/discount
+	name = "Discount Dan's Special Sauce"
+	desc = "Discount Sauce now in a family sized package."
+	
+/obj/item/weapon/reagent_containers/food/condiment/discount/New()
+	..()
+	reagents.add_reagent(DISCOUNT, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/saltshaker
 	name = "salt shaker"
@@ -540,13 +553,31 @@
 /obj/item/weapon/reagent_containers/food/condiment/exotic
 	name = "exotic bottle"
 	desc = "If you can see this label, something is wrong."
-	//~9% chance of anything but special sauce, which is .09 chance
-	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,MUSTARD=10,RELISH=10,COCO=10,ZAMSPICES=10,ZAMMILD=5,ZAMSPICYTOXIN=3)
+	//~6.5% chance of anything but special sauce, which is 0.65% chance
+	var/global/list/possible_exotic_condiments = list(
+	ENZYME=10,
+	BLACKPEPPER=10,
+	VINEGAR=10,
+	SODIUMCHLORIDE=10,
+	CINNAMON=10,
+	FROSTOIL=10,
+	SOYSAUCE=10,
+	CAPSAICIN=10,
+	HONEY=10,
+	KETCHUP=10,
+	MUSTARD=10,
+	RELISH=10,
+	COCO=10,
+	ZAMSPICES=10,
+	DISCOUNT=10,
+	ZAMMILD=5,
+	ZAMSPICYTOXIN=3,
+	ROYALJELLY=5,
+	CHEFSPECIAL=1)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()
 	reagents.add_reagent(pickweight(possible_exotic_condiments), 30)
-
 
 /obj/item/weapon/reagent_containers/food/condiment/coco
 	name = "cocoa powder"
@@ -677,7 +708,7 @@
 
 
 /obj/item/weapon/reagent_containers/food/condiment/small/mayo
-	name = "mayonaise packet"
+	name = "mayonnaise packet"
 	desc = "Still not an instrument."
 	icon_state = "mayo_small"
 	condiment_overlay = MAYO
@@ -742,3 +773,14 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin/New()
 	..()
 	reagents.add_reagent(ZAMSPICYTOXIN, 5)
+	
+/obj/item/weapon/reagent_containers/food/condiment/small/discount
+	name = "Discount Dan's Special Sauce"
+	desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
+	icon_state = "discount_sauce_small"
+	condiment_overlay = DISCOUNT
+	trash_type = /obj/item/trash/discount_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/discount/New()
+	..()
+	reagents.add_reagent(DISCOUNT, 3)

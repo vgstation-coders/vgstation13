@@ -242,6 +242,7 @@
 	icon_state = "goldenmask"
 	item_state = "goldenmask"
 	species_fit = list(INSECT_SHAPED)
+	autoignition_temperature = null
 
 /obj/item/clothing/mask/goldface/equipped()
 	..()

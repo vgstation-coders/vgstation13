@@ -26,6 +26,7 @@
 	var/descriptive_type = "" //piece of, stick of, et cetera
 	var/plural_descriptive_type = "" //pieces of, sticks of
 	var/box_type = "box"
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 	foldable = /obj/item/stack/sheet/cardboard
 

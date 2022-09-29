@@ -662,29 +662,13 @@
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/greaser
-	name = "greaser outfit"
+	name = "Greaser Outfit"
 	desc = "The one that you want!"
-	icon_state = "greaser_default"
-	item_state = "greaser_default"
+	icon_state = "greaser"
+	item_state = "greaser"
+	_color = "greaser"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(INSECT_SHAPED)
-
-/obj/item/clothing/under/greaser/New()
-	var/greaser_colour = "default"
-	switch(rand(1,4))
-		if(1)
-			greaser_colour = "default"
-		if(2)
-			greaser_colour = "cult"
-		if(3)
-			greaser_colour = "spider"
-		if(4)
-			greaser_colour = "snakes"
-			desc = "Tunnel Snakes Rule!"
-	icon_state = "greaser_[greaser_colour]"
-	item_state = "greaser_[greaser_colour]"
-	_color = "greaser_[greaser_colour]"
-	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/under/wintercasualwear
 	name = "winter casualwear"

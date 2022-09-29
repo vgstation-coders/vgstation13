@@ -23,6 +23,7 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	mat_type = MAT_IRON
 	perunit = CC_PER_SHEET_METAL
 
@@ -140,6 +141,7 @@
 	singular_name = "cloth roll"
 	icon_state = "sheet-cloth"
 	origin_tech = Tc_MATERIALS + "=2"
+	autoignition_temperature = AUTOIGNITION_FABRIC
 
 /*
  * Cardboard
@@ -153,6 +155,7 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	starting_materials = list(MAT_CARDBOARD = CC_PER_SHEET_CARDBOARD)
 	w_type=RECYK_MISC
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/stack/sheet/cardboard/New(var/loc, var/amount=null)
 		recipes = cardboard_recipes
@@ -188,6 +191,7 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	origin_tech = Tc_BIOTECH + "=1"
 	icon_state = "sheet-bone"
 	//item_state = "bone"
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 /obj/item/stack/sheet/brass
 	name = "brass"
