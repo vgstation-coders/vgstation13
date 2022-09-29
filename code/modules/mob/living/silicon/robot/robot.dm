@@ -535,7 +535,7 @@
 	var/list/L = alarms[class]
 	var/cleared = FALSE
 	if(!A)
-		return
+		return FALSE
 	for (var/I in L)
 		if(I == A.name)
 			var/list/alarm = L[I]
