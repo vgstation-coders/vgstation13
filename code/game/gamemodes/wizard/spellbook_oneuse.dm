@@ -158,6 +158,18 @@
 		H.set_muted_letters(6)
 		H.visible_message("<span class='danger'>[H]'s spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>","<span class='sinister'>You attempt to read the book and find your spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>")
 
+/obj/item/weapon/spellbook/oneuse/arcanetamper
+	spell = /spell/targeted/arcane_tamper
+	spellname = "arcane tamper"
+	icon_state ="bookhangman"
+	desc = "This book is strange."
+
+/obj/item/weapon/spellbook/oneuse/arcanetamper/recoil(mob/user)
+	..()
+	to_chat(user, "<span class='sinister'>You feel strange...</span>")
+	for(var/atom/movable/AM in user.contents)
+		AM.arcane_act(user)
+
 /obj/item/weapon/spellbook/oneuse/horsemask
 	spell = /spell/targeted/equip_item/horsemask
 	spellname = "horses"

@@ -390,6 +390,8 @@
 	slot_flags = SLOT_ID|SLOT_HEAD
 
 /obj/item/clothing/head/bearpelt/real/spare/GetAccess()
+	if(arcanetampered)
+		return ..()
 	return get_all_accesses()
 
 /obj/item/clothing/head/bearpelt/black

@@ -38,6 +38,11 @@
 	var/can_add_storageslots = FALSE
 	var/can_increase_wclass_stored = FALSE
 
+/obj/item/weapon/storage/arcane_act(mob/user)
+	..()
+	for(var/atom/A in contents)
+		A.arcane_act(user)
+
 /obj/item/weapon/storage/proc/can_use()
 	return TRUE
 

@@ -2690,6 +2690,7 @@
 #include "code\modules\spells\passive\no_gun_allowed.dm"
 #include "code\modules\spells\passive\passive.dm"
 #include "code\modules\spells\targeted\absorb.dm"
+#include "code\modules\spells\targeted\arcanetamper.dm"
 #include "code\modules\spells\targeted\balefulmutate.dm"
 #include "code\modules\spells\targeted\buttbots_revenge.dm"
 #include "code\modules\spells\targeted\card.dm"

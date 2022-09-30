@@ -254,6 +254,7 @@
 	shapeshift()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/bless()
+	..()
 	visible_message("<span class='info'>\The [src] starts fizzling!</span>")
 	spawn(10)
 		shapeshift(/obj/item/weapon/storage/bible) //Turn into a bible

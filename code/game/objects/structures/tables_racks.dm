@@ -453,6 +453,12 @@
 		return
 	if (!can_touch(usr))
 		return
+	if(arcanetampered)
+		var/mob/living/M = usr
+		if(istype(M))
+			to_chat(usr, "<span class='sinister'>Table flips YOU!</span>")
+			M.Knockdown(10)
+			return
 	if(!flip(get_cardinal_dir(usr,src)))
 		to_chat(usr, "<span class='notice'>It won't budge.</span>")
 	else

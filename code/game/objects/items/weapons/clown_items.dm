@@ -116,6 +116,17 @@
 		return 1
 	return 0
 
+/obj/item/weapon/bikehorn/arcane_act(mob/user) // ideally only on cast because this thing would be dummy broken if it was kept like that
+	visible_message("<span class='warning'>HONK</span>")
+	playsound(user, istype(src,/obj/item/weapon/bikehorn/skullhorn) ? hitsound : 'sound/items/AirHorn.ogg', 100, 1)
+	for(var/mob/living/carbon/M in ohearers(4, user))
+		M.sleeping = 0
+		M.stuttering += 10
+		M.ear_deaf += 5
+		M.confused += 5
+		M.dizziness += 5
+		M.jitteriness += 5
+
 /obj/item/weapon/bikehorn/syndicate
 	var/super_honk_delay = 50 //5 seconds
 	var/last_super_honk_time
@@ -155,6 +166,11 @@
 	hitsound = 'sound/items/quack.ogg'
 	honk_delay = 10
 	can_honk_baton = 0
+
+/obj/item/weapon/bikehorn/rubberducky/arcane_act(mob/user)
+	to_chat(user,"<span class='danger'>You divide by zero!</span>")
+	new /obj/item/toy/spinningtoy(loc)
+	qdel(src)
 
 /obj/item/weapon/bikehorn/baton
 	name = "honk baton"

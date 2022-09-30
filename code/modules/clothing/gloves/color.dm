@@ -9,6 +9,14 @@
 	_color = "yellow"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/gloves/yellow/arcane_act(mob/user)
+	..()
+	siemens_coefficient = pick(0,0.5,0.5,0.5,0.5,0.75,1.5)
+
+/obj/item/clothing/gloves/yellow/bless()
+	..()
+	siemens_coefficient = initial(siemens_coefficient)
+
 /obj/item/clothing/gloves/yellow/power //fuck you don't relative path this
 	var/next_shock = 0
 

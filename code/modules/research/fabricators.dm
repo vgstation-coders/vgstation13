@@ -354,6 +354,9 @@
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
 		being_built.anchored = 0
+		if(arcanetampered)
+			qdel(being_built)
+			being_built = new /obj/item/weapon/bikehorn/rubberducky(get_turf(output)) // BONUS DUCKS! No material refunds
 		visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
 		being_built = null
 		last_made = part

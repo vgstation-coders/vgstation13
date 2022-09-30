@@ -143,6 +143,8 @@
 	return can_access(ACL,req_access,req_one_access)
 
 /obj/item/proc/GetAccess()
+	if(arcanetampered)
+		return pick(get_all_accesses())
 	return list()
 
 /obj/item/proc/GetID()

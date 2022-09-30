@@ -40,6 +40,10 @@
 		return 0
 
 	else if(!src.reagents.total_volume || !src)
+		if(arcanetampered && ishuman(user))
+			var/mob/living/carbon/human/H = user
+			H.vessel.trans_to(reagents,reagents.total_volume)
+			return 0
 		to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
 		return 0
 
@@ -52,6 +56,23 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bite_act(mob/user)
 	return try_consume(user)
+
+/obj/item/weapon/reagent_containers/food/drinks/arcane_act(mob/user)
+	..()
+	cant_drop = 1
+
+/obj/item/weapon/reagent_containers/food/drinks/bless()
+	..()
+	cant_drop = 0
+
+/obj/item/weapon/reagent_containers/food/drinks/pickup(mob/user as mob)
+	..()
+	if(ishuman(user) && arcanetampered) // wizards turn it into SCP-198
+		var/mob/living/carbon/human/H = user
+		reagents.clear_reagents()
+		H.audible_scream()
+		H.adjustHalLoss(50)
+		H.vessel.trans_to(reagents,reagents.maximum_volume)
 
 /obj/item/weapon/reagent_containers/food/drinks/attack(mob/living/M as mob, mob/user as mob, def_zone)
 	var/datum/reagents/R = src.reagents

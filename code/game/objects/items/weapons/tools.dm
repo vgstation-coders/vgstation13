@@ -428,6 +428,15 @@
 		var/obj/structure/reagent_dispensers/fueltank/tank = A
 		tank.explode()
 		return
+	if(arcanetampered)
+		if (!src.welding)
+			if(src.reagents.add_reagent(FUEL, max_fuel))
+				to_chat(user, "<span class='notice'>Welder refueled.</span>")
+				playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+		else
+			to_chat(user, "<span class='warning'>That was stupid of you.</span>")
+			explosion(get_turf(A),-1,0,3)
+			return
 	if (src.welding)
 		if(isliving(A))
 			var/mob/living/L = A

@@ -338,6 +338,12 @@ var/list/telesci_warnings = list(
 
 		log_admin(log)
 		do_teleport(ROI, dest, 0)
+		if(telepad.arcanetampered) // i have done nothing but arcane tamper telepads for 3 days!
+			var/breadtype = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread))
+			new breadtype(dest)
+		if(arcanetampered)
+			var/breadtype = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread))
+			new breadtype(dest)
 		if (++things > 10)
 			break
 

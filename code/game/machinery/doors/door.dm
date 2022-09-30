@@ -60,6 +60,7 @@ var/list/all_doors = list()
 
 	var/being_cut = FALSE
 	var/explosion_block = 0 //regular airlocks are 1, blast doors are 3, higher values mean increasingly effective at blocking explosions.
+	var/obj/machinery/door/arcane_linked_door = null
 
 /obj/machinery/door/proc/bashed_in(mob/user)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -381,6 +382,18 @@ var/list/all_doors = list()
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "breakdoor", sleeptime = 10)
 		qdel(src)
 
+/obj/machinery/door/arcane_act(mob/user)
+	..()
+	while(!arcane_linked_door || arcane_linked_door == src)
+		arcane_linked_door = pick(all_doors)
+	arcane_linked_door.arcanetampered = TRUE
+
+/obj/machinery/door/bless()
+	..()
+	if(arcane_linked_door)
+		arcane_linked_door.bless()
+		arcane_linked_door = null
+
 /obj/machinery/door/Destroy()
 	update_nearby_tiles()
 	all_doors -= src
@@ -399,6 +412,12 @@ var/list/all_doors = list()
 /obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
 	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird)) //Which is not 100% correct for things like windoors but it's close enough.
 		open()
+	if(!density && arcane_linked_door && istype(AM,/atom/movable))
+		var/turf/T = get_turf(arcane_linked_door)
+		if(T)
+			arcane_linked_door.open()
+			var/atom/movable/A = AM
+			A.forceMove(T)
 	return ..()
 
 /obj/machinery/door/CanAStarPass(var/obj/item/weapon/card/id/ID)

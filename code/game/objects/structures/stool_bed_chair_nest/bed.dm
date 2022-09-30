@@ -154,7 +154,10 @@
 	playsound(src, 'sound/misc/buckle_click.ogg', 50, 1)
 	add_fingerprint(user)
 
-	lock_atom(M, mob_lock_type)
+	if(arcanetampered)
+		M.lock_atom(src)
+	else
+		lock_atom(M, mob_lock_type)
 
 	if(M.pulledby)
 		M.pulledby.start_pulling(src)

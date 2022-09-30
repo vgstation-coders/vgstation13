@@ -54,6 +54,8 @@ var/global/list/ghdel_profiling = list()
 	/// The chat color var, without alpha.
 	var/chat_color_hover
 
+	var/arcanetampered = 0 //A looot of things can be
+
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
 		last_beamchecks = list()
@@ -848,8 +850,12 @@ its easier to just keep the beam vertical.
 		return FALSE
 	return TRUE
 
+/atom/proc/arcane_act(var/mob/user)
+	arcanetampered = TRUE
+
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
+	arcanetampered = FALSE
 	blessed = 1
 
 /atom/proc/update_icon()
