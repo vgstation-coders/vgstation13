@@ -7,15 +7,15 @@
 	icon_dead = null
 	mob_property_flags = MOB_HOLOGRAPHIC
 	var/atom/atom_to_mimic
-
+	var/login_text = "You are a hologram. You can perform a few basic functions, and are unable to leave the holodeck.\
+		\n<span class='danger'>You know nothing of this station or its crew except what you learn from this point on.</span>\
+		\n<span class='danger'>Do not damage the holodeck. Do not harm crew members without their consent.</span>"
 	blooded = FALSE
-
 
 /mob/living/simple_animal/hologram/death(var/gibbed = FALSE)
 	..(gibbed)
 	visible_message("<span class = 'notice>\The [src] dissipates from view.</span>")
 	qdel(src)
-
 
 /mob/living/simple_animal/hologram/New()
 	..()
@@ -84,9 +84,7 @@
 
 /mob/living/simple_animal/hologram/advanced/Login()
 	..()
-	to_chat(src, "You are a hologram. You can perform a few basic functions, and are unable to leave the holodeck.\
-		\n<span class='danger'>You know nothing of this station or its crew except what you learn from this point on.</span>\
-		\n<span class='danger'>Do not damage the holodeck. Do not harm crew members without their consent.</span>")
+	to_chat(src, login_text)
 	if(transmogged_from)
 		to_chat(src, "Use the spell in the top-right corner of the screen to go back to being a ghost.")
 
