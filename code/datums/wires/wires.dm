@@ -129,7 +129,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 			holder.add_hiddenprint(L)
 			if(href_list["cut"]) // Toggles the cut/mend status
 				if(I?.is_wirecutter(L))
-					if(holder.arcanetampered || I.arcanetampered)
+					if(I.arcanetampered)
 						L.electrocute_act(30,holder)
 					else
 						var/colour = href_list["cut"]
@@ -140,7 +140,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 
 			else if(href_list["pulse"])
 				if(I?.is_multitool(L))
-					if(holder.arcanetampered || I.arcanetampered)
+					if(I.arcanetampered)
 						L.electrocute_act(30,holder)
 					else
 						var/colour = href_list["pulse"]
@@ -153,7 +153,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 				var/colour = href_list["attach"]
 				// Detach
 				if(IsAttached(colour))
-					if(holder.arcanetampered || I.arcanetampered)
+					if(I.arcanetampered)
 						L.electrocute_act(30,holder)
 					else
 						var/obj/item/O = Detach(colour)
@@ -164,11 +164,11 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 				// Attach
 				else
 					if(istype(I, /obj/item/device/assembly))
-						if(holder.arcanetampered || I.arcanetampered)
+						if(I.arcanetampered)
 							L.electrocute_act(30,holder)
 						else if(L.drop_item(I))
-								Attach(colour, I)
-								holder.investigation_log(I_WIRES, "|| [I] \ref[I] attached to [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
+							Attach(colour, I)
+							holder.investigation_log(I_WIRES, "|| [I] \ref[I] attached to [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
 					else
 						to_chat(L, "<span class='error'>You need an assembly!</span>")
 
