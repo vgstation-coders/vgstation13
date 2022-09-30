@@ -127,6 +127,10 @@
 	update_icon()
 	return
 
+/obj/item/weapon/melee/defibrillator/arcane_act(mob/user)
+	..()
+	user.say("W'SE FW'M Y'W GW'VE!")
+
 /obj/item/weapon/melee/defibrillator/proc/attemptDefib(mob/living/carbon/human/target,mob/user)
 	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest.</span>", \
 	"<span class='notice'>You start setting up the paddles on [target]'s chest</span>")
@@ -137,6 +141,10 @@
 		update_icon()
 		to_chat(user, "<span class='notice'>You shock [target] with the paddles.</span>")
 		var/datum/organ/internal/heart/heart = target.get_heart()
+		if(arcanetampered)
+			target.visible_message("<span class='notice'>[src] beeps: Defibrillation</span> <span class='sinister'>successful.</span>")
+			target.Zombify(user)
+			return
 		if(!heart)
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Subject requires a heart.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)

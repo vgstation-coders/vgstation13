@@ -1097,11 +1097,15 @@ var/global/num_vending_terminals = 1
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	spawn(vend_delay)
 		if(!R.custom)
-			new R.product_path(get_turf(src))
+			var/atom/A = new R.product_path(get_turf(src))
+			if(arcanetampered)
+				A.arcane_act()
 		else
 			for(var/obj/O in custom_stock)
 				if(O.product_name() == R.product_name)
 					O.forceMove(src.loc)
+					if(arcanetampered)
+						O.arcane_act()
 					custom_stock.Remove(O)
 					break
 		src.vend_ready = 1
