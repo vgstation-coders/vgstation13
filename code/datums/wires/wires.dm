@@ -129,17 +129,23 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 			holder.add_hiddenprint(L)
 			if(href_list["cut"]) // Toggles the cut/mend status
 				if(I?.is_wirecutter(L))
-					var/colour = href_list["cut"]
-					CutWireColour(colour)
-					holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire [IsColourCut(colour) ? "cut" : "mended"] by [key_name(usr)] ([src.type])")
+					if(holder.arcanetampered || I.arcanetampered)
+						L.electrocute_act(30,holder)
+					else
+						var/colour = href_list["cut"]
+						CutWireColour(colour)
+						holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire [IsColourCut(colour) ? "cut" : "mended"] by [key_name(usr)] ([src.type])")
 				else
 					to_chat(L, "<span class='error'>You need wirecutters!</span>")
 
 			else if(href_list["pulse"])
 				if(I?.is_multitool(L))
-					var/colour = href_list["pulse"]
-					PulseColour(colour)
-					holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by [key_name(usr)] ([src.type])")
+					if(holder.arcanetampered || I.arcanetampered)
+						L.electrocute_act(30,holder)
+					else
+						var/colour = href_list["pulse"]
+						PulseColour(colour)
+						holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by [key_name(usr)] ([src.type])")
 				else
 					to_chat(L, "<span class='error'>You need a multitool!</span>")
 
@@ -147,17 +153,22 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 				var/colour = href_list["attach"]
 				// Detach
 				if(IsAttached(colour))
-					var/obj/item/O = Detach(colour)
-					if(O)
-						L.put_in_hands(O)
-						holder.investigation_log(I_WIRES, "|| [O] \ref[O] detached from [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
+					if(holder.arcanetampered || I.arcanetampered)
+						L.electrocute_act(30,holder)
+					else
+						var/obj/item/O = Detach(colour)
+						if(O)
+							L.put_in_hands(O)
+							holder.investigation_log(I_WIRES, "|| [O] \ref[O] detached from [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
 
 				// Attach
 				else
 					if(istype(I, /obj/item/device/assembly))
-						if(L.drop_item(I))
-							Attach(colour, I)
-							holder.investigation_log(I_WIRES, "|| [I] \ref[I] attached to [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
+						if(holder.arcanetampered || I.arcanetampered)
+							L.electrocute_act(30,holder)
+						else if(L.drop_item(I))
+								Attach(colour, I)
+								holder.investigation_log(I_WIRES, "|| [I] \ref[I] attached to [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
 					else
 						to_chat(L, "<span class='error'>You need an assembly!</span>")
 
