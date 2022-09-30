@@ -850,7 +850,7 @@ its easier to just keep the beam vertical.
 		return FALSE
 	return TRUE
 
-/mob/living/var/list/atom/arcane_tampered_atoms = list()
+/mob/var/list/atom/arcane_tampered_atoms = list()
 
 /atom/proc/arcane_act(var/mob/user)
 	arcanetampered = user
