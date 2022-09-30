@@ -56,6 +56,7 @@ var/datum/subsystem/more_init/SSmore_init
 	typing_indicator = new
 	CHECK_TICK
 	centcomm_store = new
+	create_randomized_reagents()
 	log_startup_progress("Finished doing the other misc. initializations in [stop_watch(watch)]s.")
 
 /proc/cache_machinery_components_rating()

@@ -2387,6 +2387,7 @@
 #include "code\modules\reagents\Chemistry-Recipes.dm"
 #include "code\modules\reagents\dartgun.dm"
 #include "code\modules\reagents\grenade_launcher.dm"
+#include "code\modules\reagents\randomized_reagent.dm"
 #include "code\modules\reagents\reagent_containers.dm"
 #include "code\modules\reagents\reagent_dispenser.dm"
 #include "code\modules\reagents\syringe_gun.dm"
