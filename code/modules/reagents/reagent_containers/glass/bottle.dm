@@ -16,6 +16,11 @@
 	melt_temperature = MELTPOINT_GLASS
 	origin_tech = Tc_MATERIALS + "=1"
 
+/obj/item/weapon/reagent_containers/glass/bottle/New(loc,altvol)
+	if(altvol)
+		volume = altvol
+	..(loc)
+
 //JUST
 /obj/item/weapon/reagent_containers/glass/bottle/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())
