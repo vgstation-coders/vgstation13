@@ -143,7 +143,8 @@
 		var/datum/organ/internal/heart/heart = target.get_heart()
 		if(arcanetampered)
 			target.visible_message("<span class='notice'>[src] beeps: Defibrillation</span> <span class='sinister'>successful.</span>")
-			target.Zombify(user)
+			target.zombify(user)
+			target.remove_spell(/spell/aoe_turf/necro/zombie/evolve)
 			return
 		if(!heart)
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Subject requires a heart.</span>")
