@@ -113,6 +113,15 @@
 		playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
 	return TRUE
 
+/obj/structure/bed/arcane_act(mob/user)
+	..()
+	user.say("'N S'VIET R'SIA...!")
+
+/obj/structure/bed/bless()
+	..()
+	var/mob/M = locked_to
+	M.unlock_atom(src)
+
 /obj/structure/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
 	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai))
 		return
@@ -155,6 +164,7 @@
 	add_fingerprint(user)
 
 	if(arcanetampered)
+		to_chat(usr, "<span class='sinister'>Chair buckles YOU!</span>")
 		M.lock_atom(src)
 	else
 		lock_atom(M, mob_lock_type)

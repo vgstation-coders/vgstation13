@@ -48,6 +48,7 @@
 
 /obj/item/weapon/storage/toolbox/arcane_act(mob/user)
 	..()
+	user.say("R'B'STO!")
 	force = 0
 	throwforce = 0
 

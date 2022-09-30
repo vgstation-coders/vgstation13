@@ -168,8 +168,10 @@
 	can_honk_baton = 0
 
 /obj/item/weapon/bikehorn/rubberducky/arcane_act(mob/user)
+	user.say("B'NUS D'CK!")
 	to_chat(user,"<span class='danger'>You divide by zero!</span>")
-	new /obj/item/toy/spinningtoy(loc)
+	var/obj/item/toy/spinningtoy/ST = new(loc)
+	ST.arcane_act(user)
 	qdel(src)
 
 /obj/item/weapon/bikehorn/baton

@@ -19,6 +19,7 @@
 
 /obj/item/weapon/dice/arcane_act(mob/user)
 	..()
+	user.say("'RE Y' F'LIN L'KY!?")
 	activated = 1
 	sides = min(sides,12) // always cursed if a wiz made it, shmuck bait
 

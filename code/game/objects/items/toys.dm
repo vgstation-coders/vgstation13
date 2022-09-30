@@ -140,6 +140,22 @@
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
 
+/obj/item/toy/spinningtoy/arcane_act(mob/user)
+	..()
+	user.say("I'S LO'SE!")
+	processing_objects.Add(src)
+
+/obj/item/toy/spinningtoy/bless()
+	..()
+	if(src in processing_objects)
+		processing_objects.Remove(src)
+
+/obj/item/toy/spinningtoy/process()
+	..()
+	if(arcanetampered)
+		for(var/atom/X in orange(4, src))
+			X.singularity_pull(src, 1)
+
 /obj/item/toy/spinningtoy/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)

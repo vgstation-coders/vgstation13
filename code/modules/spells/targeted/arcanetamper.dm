@@ -4,7 +4,7 @@
 // -Usable items should generally be weakened by these, as a cursing wizard spell would.
 
 /spell/targeted/arcane_tamper
-	name = "Arcane tamper"
+	name = "Arcane Tamper"
 	desc = "Bestows anomalous properties on items."
 	abbreviation = "AT"
 	user_type = USER_TYPE_WIZARD
@@ -12,10 +12,8 @@
 	school = "transmutation"
 	charge_max = 300
 	spell_flags = NEEDSCLOTHES // now it's balanced
-	invocation = "INSERT WITTY PHRASE HERE"
-	invocation_type = SpI_SHOUT
+	invocation_type = SpI_NONE // we say it in the arcane_acts
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3)
-	range = 1
 	cooldown_min = 200 //100 deciseconds reduction per rank
 	hud_state = "wiz_disint"
 	spell_flags = WAIT_FOR_CLICK

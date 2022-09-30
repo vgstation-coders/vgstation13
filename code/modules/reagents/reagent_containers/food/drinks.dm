@@ -42,7 +42,7 @@
 	else if(!src.reagents.total_volume || !src)
 		if(arcanetampered && ishuman(user))
 			var/mob/living/carbon/human/H = user
-			H.vessel.trans_to(reagents,reagents.total_volume)
+			H.vessel.trans_to(reagents,reagents.maximum_volume)
 			return 0
 		to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
 		return 0
@@ -59,6 +59,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/arcane_act(mob/user)
 	..()
+	user.say("D'TA EX'P'GED!")
 	cant_drop = 1
 
 /obj/item/weapon/reagent_containers/food/drinks/bless()

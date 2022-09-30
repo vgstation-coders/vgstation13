@@ -384,6 +384,7 @@ var/list/all_doors = list()
 
 /obj/machinery/door/arcane_act(mob/user)
 	..()
+	user.say("D'R ST'K!")
 	while(!arcane_linked_door || arcane_linked_door == src)
 		arcane_linked_door = pick(all_doors)
 	arcane_linked_door.arcanetampered = TRUE

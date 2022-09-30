@@ -123,6 +123,7 @@
 
 /obj/item/weapon/paper/envelope/arcane_act(mob/user)
 	..()
+	user.say("I W'S F'Z'N T'DAY!")
 	throwforce = 10 // i forget if this is a reference to something
 
 /obj/item/weapon/paper/envelope/bless()

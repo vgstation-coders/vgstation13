@@ -443,7 +443,9 @@
 		return 0
 	return 1
 
-
+/obj/structure/table/arcane_act(mob/user)
+	..()
+	user.say("'N S'VIET R'SIA...!")
 /obj/structure/table/verb/do_flip()
 	set name = "Flip table"
 	set desc = "Flips a non-reinforced table"
