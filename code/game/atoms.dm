@@ -850,12 +850,18 @@ its easier to just keep the beam vertical.
 		return FALSE
 	return TRUE
 
+/mob/living/var/list/atom/arcane_tampered_atoms = list()
+
 /atom/proc/arcane_act(var/mob/user)
-	arcanetampered = TRUE
+	arcanetampered = user
+	user.arcane_tampered_atoms.Add(src)
 
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
-	arcanetampered = FALSE
+	if(arcanetampered && ismob(arcanetampered))
+		var/mob/M = arcanetampered
+		M.arcane_tampered_items.Remove(src)
+		arcanetampered = FALSE
 	blessed = 1
 
 /atom/proc/update_icon()
