@@ -6391,6 +6391,18 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 6
 
+/obj/item/weapon/reagent_containers/food/snacks/shrimp
+	name = "shrimp"
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "shrimp_raw"
+	filling_color = "#FF1C1C"
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/shrimp/New()
+	..()
+	desc = pick("Anyway, like I was sayin', shrimp is the fruit of the sea.", "You can barbecue it, boil it, broil it, bake it, saute it.")
+	reagents.add_reagent(NUTRIMENT, 1)
+
 /obj/item/weapon/reagent_containers/food/snacks/glofishmeat
 	name = "raw glofish"
 	desc = "A fillet of raw glofish. The bioluminescence glands have been removed."

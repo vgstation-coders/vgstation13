@@ -3326,7 +3326,7 @@
 /datum/recipe/steamed_lobster_deluxe //the deluxe comes with butter and a slice of lemon
 	reagents = list (WATER = 10)
 	items = list(
-		/obj/item/weapon/lobster,
+		/obj/item/weapon/fish/lobster,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
 		/obj/item/weapon/reagent_containers/food/snacks/butter,
 		)
@@ -3335,7 +3335,7 @@
 /datum/recipe/steamed_lobster_simple //the simple has no fancy butter or lemon
 	reagents = list (WATER = 10)
 	items = list(
-		/obj/item/weapon/lobster
+		/obj/item/weapon/fish/lobster
 		)
 	result = /obj/item/weapon/steamed_lobster_simple_uncracked //same as the deluxe, wirecutter it to make it edible
 
