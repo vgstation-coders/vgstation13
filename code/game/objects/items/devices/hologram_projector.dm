@@ -189,5 +189,6 @@
 	ray = new(T)
 
 /obj/item/device/hologram_projector/remove_pai(obj/item/device/paicard/P)
+	var/obj/item/device/paicard/P = integratedpai
 	P.pai = holoperson
 	..()
