@@ -5710,6 +5710,22 @@ var/procizine_tolerance = 0
 	name = "Mannitol"
 	id = MANNITOL
 	description = "The only medicine a <B>REAL MAN</B> needs."
+	color = "#5C4033" //rgb: 92, 64, 51
+	var/originalbraindamage = 0
+	var/yourarted = FALSE
+	
+/datum/reagent/discount/mannitol/on_mob_life(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!yourarted && volume >= 1)
+			originalbraindamage = H.getBrainLoss() //saves your current brain damage so you DON'T heal when the effects run out
+			H.setBrainLoss(200) //you go absolutely rarted here
+			to_chat(M, "<span class='notice'>You feel your mind cloud and your dexterity vanish...</span>")
+			yourarted = TRUE
+		if(yourarted && volume < 1)
+			H.setBrainLoss(originalbraindamage) //restores your original brain damage value
+			to_chat(M, "<span class='notice'>You suddenly feel your previous mental capabilities return to you!</span>")
+			yourarted = FALSE
 
 /datum/reagent/irradiatedbeans
 	name = "Irradiated Beans"
