@@ -860,7 +860,7 @@ its easier to just keep the beam vertical.
 /atom/proc/bless()
 	if(arcanetampered && ismob(arcanetampered))
 		var/mob/M = arcanetampered
-		M.arcane_tampered_items.Remove(src)
+		M.arcane_tampered_atoms.Remove(src)
 		arcanetampered = FALSE
 	blessed = 1
 
