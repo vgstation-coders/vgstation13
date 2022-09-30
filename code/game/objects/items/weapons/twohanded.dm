@@ -120,7 +120,7 @@
 		forceMove(SI)
 		user.put_in_hands(SI)
 		return 1
-	return 0
+	return ..()
 
 /obj/item/weapon/fireaxe/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
 	. = do_after_default_checks(arglist(args))

@@ -755,7 +755,7 @@
 	icon_state = "irons"
 	hitsound = "sound/weapons/toolhit.ogg"
 	item_state = "irons"
-	w_class = W_CLASS_MEDIUM
+	w_class = W_CLASS_LARGE
 	force = 5.0
 	throwforce = 7.0
 	sharpness = 1
