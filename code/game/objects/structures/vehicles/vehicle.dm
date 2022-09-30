@@ -131,7 +131,7 @@
 		else
 			to_chat(user, "Need more welding fuel!")
 			return
-	else if(istype(W, /obj/item/key))
+	else if((W.arcanetampered &&  W.is_screwdriver(user)) || (!W.arcanetampered && istype(W, /obj/item/key)))
 		if(!heldkey)
 			if(keytype)
 				if(!istype(W, keytype))
@@ -154,7 +154,7 @@
 				to_chat(user, "<span class='notice'>You don't need a key.</span>")
 		else
 			to_chat(user, "<span class='notice'>\The [src] already has \the [heldkey] in it.</span>")
-	else if(W.is_screwdriver(user) && !heldkey)
+	else if(((W.arcanetampered && istype(W, /obj/item/key)) || (!W.arcanetampered && W.is_screwdriver(user))) && !heldkey)
 		var/mob/living/carbon/human/H = user
 		to_chat(user, "<span class='warning'>You jam \the [W] into \the [src]'s ignition and feel like a genius as you try turning it!</span>")
 		playsound(src, "sound/items/screwdriver.ogg", 10, 1)
