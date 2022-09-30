@@ -26,13 +26,12 @@
 	chickchicky()
 
 /obj/item/device/maracas/throw_impact(atom/hit_atom, var/speed, var/mob/user)
-	if(!triggered)
-		if(emagged)
-			playsound(src, 'sound/misc/cuban_pete.ogg', 100, 0, falloff = 2)
-			triggered = 1
-			spawn(21) //The point in the audio file in which the tune changes
-				explosion(get_turf(src), 1, 2, 6, whodunnit = user)
-				qdel(src)
+	if(!triggered && emagged)
+		playsound(src, 'sound/misc/cuban_pete.ogg', 100, 0, falloff = 2)
+		triggered = TRUE
+		spawn(2.1 SECONDS) //The point in the audio file in which the tune changes
+			explosion(get_turf(src), 1, 2, 6, whodunnit = user)
+			qdel(src)
 
 /obj/item/device/maracas/dropped(mob/user)
 	user.unregister_event(/event/face, src, /obj/item/device/maracas/proc/chickchicky)
