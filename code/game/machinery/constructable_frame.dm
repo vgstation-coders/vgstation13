@@ -184,7 +184,7 @@
 							P.playtoolsound(src, 50)
 							var/type2build = src.circuit.build_path
 							if(arcanetampered || circuit.arcanetampered)
-								type2build = pick(subtypesof(/obj/machinery/cooking))
+								type2build = pick(typesof(/obj/machinery/cooking))
 							var/obj/machinery/new_machine = new type2build(src.loc)
 							for(var/obj/O in new_machine.component_parts)
 								qdel(O)
@@ -205,7 +205,7 @@
 							components = null
 							if(arcanetampered || circuit.arcanetampered)
 								new_machine.stat |= BROKEN
-								new_machin.eupdate_icon()
+								new_machine.update_icon()
 							qdel(src)
 					else
 						if(istype(P, /obj/item/weapon/storage/bag/gadgets/part_replacer) && P.contents.len && get_req_components_amt())
