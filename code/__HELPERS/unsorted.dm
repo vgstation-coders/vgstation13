@@ -419,13 +419,13 @@
 // returns the turf located at the map edge in the specified direction relative to A
 // used for mass driver
 /proc/get_edge_target_turf(var/atom/A, var/direction)
-	var/turf/target = locate(A.x, A.y, A.z)
-	if(!A || !target)
+	if(!A)
 		return 0
-		//since NORTHEAST == NORTH & EAST, etc, doing it this way allows for diagonal mass drivers in the future
-		//and isn't really any more complicated
+	var/turf/target = locate(A.x, A.y, A.z)
+	//since NORTHEAST == NORTH & EAST, etc, doing it this way allows for diagonal mass drivers in the future
+	//and isn't really any more complicated
 
-		// Note diagonal directions won't usually be accurate
+	// Note diagonal directions won't usually be accurate
 	if(direction & NORTH)
 		target = locate(target.x, world.maxy, target.z)
 	if(direction & SOUTH)
