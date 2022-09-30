@@ -429,3 +429,5 @@
 #define isapperanceeditable(A) (isatom(A))
 
 #define OMNI_LINK(A,B) isliving(A) && A:omnitool_connect(B)
+
+#define is_real_champion(A) ismob(A) && A.is_wearing_item(/obj/item/weapon/storage/belt/champion) && A.is_wearing_item(/obj/item/clothing/mask/luchador)
