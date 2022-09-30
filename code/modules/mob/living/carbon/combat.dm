@@ -208,8 +208,7 @@
 	tForce += get_strength()*10
 	tForce += offenseMutTackle()
 	tForce += bonusTackleForce()
-	var/is_real_champion = is_wearing_item(/obj/item/weapon/storage/belt/champion) && is_wearing_item(/obj/item/clothing/mask/luchador)
-	if(is_real_champion)
+	if(is_real_champion(src)) //Wearing championship belt and luchador mask
 		tForce *= 2
 	return max(0, tForce)
 
@@ -232,8 +231,7 @@
 		tDef += 35
 	tDef += defenseMutTackle()
 	tDef += bonusTackleDefense()
-	var/is_real_champion = is_wearing_item(/obj/item/weapon/storage/belt/champion) && is_wearing_item(/obj/item/clothing/mask/luchador)
-	if(is_real_champion)
+	if(is_real_champion(src)) //Wearing championship belt and luchador mask
 		tDef *= 2
 	return max(0, tDef)
 
