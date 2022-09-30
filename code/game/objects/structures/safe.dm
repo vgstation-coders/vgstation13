@@ -57,6 +57,10 @@ FLOOR SAFES
 	if(tumbler_1_pos == tumbler_1_open && tumbler_2_pos == tumbler_2_open)
 		if(user)
 			feedback += " <span class='danger'>*[pick("Spring", "Sprang", "Sproing", "Clunk", "Krunk")]*</span>"
+		if(arcanetampered)
+			playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(T, 'sound/machines/dial_reset.ogg', 50, 1)
+			return 0
 		open = TRUE
 		var/turf/T = get_turf(src)
 		playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
