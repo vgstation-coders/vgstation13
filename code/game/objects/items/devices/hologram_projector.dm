@@ -61,13 +61,15 @@
 		clear_holo()
 	
 /obj/item/device/hologram_projector/attack_self()
-	if(integratedpai || holoperson)
-		remove_pai()
+	if(holoperson)
 		clear_holo()
 		to_chat(usr, "Shutting down hologram...")
+		return
+	else if(integratedpai)
+		install_pai()
 	else
-		to_chat(usr, "Generating hologram...")
 		recruit_holoperson()
+	to_chat(usr, "Generating hologram...")
 
 /obj/item/device/hologram_projector/proc/recruit_holoperson()
 	if(polling_ghosts)
@@ -169,11 +171,11 @@
 
 //pAI it uses the pAI framework in objs.dm. Check that code for further information
 /obj/item/device/hologram_projector/install_pai(obj/item/device/paicard/P)
+	..()
 	if(holoperson)
 		clear_holo()
 	if(!P?.pai)
 		return
-	..()
 	var/turf/T = get_turf(src)
 	P.pai.forceMove(T)
 	var/mob/living/simple_animal/hologram/advanced/projector/H = P.pai.transmogrify(/mob/living/simple_animal/hologram/advanced/projector, TRUE)
