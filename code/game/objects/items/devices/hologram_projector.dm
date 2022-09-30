@@ -187,3 +187,7 @@
 
 	icon_state = "shield1"
 	ray = new(T)
+
+/obj/item/device/hologram_projector/remove_pai(obj/item/device/paicard/P)
+	P.pai = holoperson
+	..()
