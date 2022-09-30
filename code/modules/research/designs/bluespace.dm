@@ -98,7 +98,7 @@
 	name = "Hologram Projector"
 	desc = "The projector creates a lifelike hologram friend."
 	id = "hologram_projector"
-	req_tech = list(Tc_BLUESPACE = 1, Tc_MAGNETS = 2)
+	req_tech = list(Tc_BLUESPACE = 2, Tc_MAGNETS = 2)
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 2000, MAT_GLASS = 2000)
 	category = "Bluespace"
