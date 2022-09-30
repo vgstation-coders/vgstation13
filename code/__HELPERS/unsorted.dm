@@ -258,10 +258,12 @@
 	var/list/sortedplayers = list()
 	var/list/sortedmobs = list()
 	for(var/mob/M in mob_list) //divide every mob into either players (has a mind) or non-players (no mind). braindead/catatonic/etc. mobs included in players
-		if(!M.mind)
-			sortedmobs |= M
+		if(isnull(M))
 			continue
-		sortedplayers |= M
+		if(M.mind || istype(M, /mob/camera))
+			sortedplayers |= M
+			continue
+		sortedmobs |= M
 	sortNames(sortedplayers) //sort both lists in preparation for what we'll do below
 	sortNames(sortedmobs)
 	for(var/mob/living/silicon/ai/M in sortedplayers)
