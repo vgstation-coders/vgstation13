@@ -190,5 +190,7 @@
 
 /obj/item/device/hologram_projector/remove_pai()
 	var/obj/item/device/paicard/P = integratedpai
-	P.pai = holoperson
+	if(holoperson)
+		P.pai = holoperson
+		clear_holo()
 	..()
