@@ -178,7 +178,7 @@ var/list/shuttle_log = list()
 				if(message_cooldown || !input || (!usr.Adjacent(src) && !issilicon(usr)))
 					return
 				if(arcanetampered)
-					switch(random(1,4))
+					switch(rand(1,4))
 						if(1)
 							captain_announce(derpspeech(input))
 						if(2)

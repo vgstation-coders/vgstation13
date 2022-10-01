@@ -290,7 +290,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 
 	if(href_list["sendAnnouncement"])
 		if(arcanetampered)
-			switch(random(1,4))
+			switch(rand(1,4))
 				if(1)
 					make_announcement(derpspeech(message))
 				if(2)
