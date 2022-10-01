@@ -18,8 +18,8 @@
 
 /obj/item/weapon/storage/backpack/arcane_act(mob/user)
 	..()
-	for(var/atom/A in contents)
-		A.forceMove(get_turf(A)) // less cruel than baleeting
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(get_turf(AM)) // less cruel than baleeting
 	return "H'NGRY B'G!"
 
 /obj/item/weapon/storage/attack_hand(mob/user)
