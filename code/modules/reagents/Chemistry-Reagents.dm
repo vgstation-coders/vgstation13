@@ -5711,6 +5711,7 @@ var/procizine_tolerance = 0
 	id = MANNITOL
 	description = "The only medicine a <B>REAL MAN</B> needs."
 	color = "#5C4033" //rgb: 92, 64, 51
+	custom_metabolism = 0.4 //5u means 13s rarted
 	var/originalbraindamage = 0
 	var/yourarted = FALSE
 
