@@ -5721,6 +5721,7 @@ var/procizine_tolerance = 0
 		if(!yourarted)
 			originalbraindamage = H.getBrainLoss() //saves your current brain damage so you DON'T heal when the effects run out
 			H.setBrainLoss(200) //you go absolutely rarted here
+			H.eye_blurry = max(M.eye_blurry, 5)
 			to_chat(M, "<span class='notice'>You feel your mind cloud and your dexterity vanish...</span>")
 			yourarted = TRUE
 
