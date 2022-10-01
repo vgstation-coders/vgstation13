@@ -161,7 +161,7 @@
 /obj/item/weapon/spellbook/oneuse/arcanetamper
 	spell = /spell/targeted/arcane_tamper
 	spellname = "arcane tamper"
-	icon_state ="bookhangman"
+	icon_state ="bookarctam"
 	desc = "This book is strange."
 
 /obj/item/weapon/spellbook/oneuse/arcanetamper/recoil(mob/user)
@@ -169,6 +169,7 @@
 	to_chat(user, "<span class='sinister'>You feel strange...</span>")
 	for(var/atom/movable/AM in user.contents)
 		AM.arcane_act(user)
+	adjustCloneLoss(100)
 
 /obj/item/weapon/spellbook/oneuse/horsemask
 	spell = /spell/targeted/equip_item/horsemask

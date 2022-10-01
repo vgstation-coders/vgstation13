@@ -16,7 +16,7 @@
 	invocation_type = SpI_NONE // we say it in the arcane_acts
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3)
 	cooldown_min = 200 //100 deciseconds reduction per rank
-	hud_state = "wiz_disint"
+	hud_state = "wiz_arctam"
 	spell_flags = WAIT_FOR_CLICK
 
 /spell/targeted/arcane_tamper/cast(list/targets, mob/user)
