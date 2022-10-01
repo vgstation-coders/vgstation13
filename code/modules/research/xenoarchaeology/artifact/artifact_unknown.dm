@@ -47,6 +47,9 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 	primary_effect.artifact_id = "[artifact_id]a"
 	spawn(1)	//delay logging so if admin tools override/other fuckery occurs the logs still end up correct
 		src.investigation_log(I_ARTIFACT, "|| was given a primary effect [primary_effect.artifact_id]: [primary_effect] || range: [primary_effect.effectrange] || charge time: [primary_effect.chargelevelmax] || trigger: [primary_effect.trigger].")
+		if(arcanetampered)
+			src.investigation_log(I_ARTIFACT, "|| primary effect [secondary_effect.artifact_id] starts triggered by default.")
+			secondary_effect.ToggleActivate(2)
 
 	//75% chance to have a secondary effect
 	if(prob(75))
@@ -56,7 +59,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 		spawn(1)
 			if(secondary_effect)	//incase admin tools or something deleted the secondary
 				src.investigation_log(I_ARTIFACT, "|| was given a secondary effect [secondary_effect.artifact_id]: [secondary_effect] || range: [secondary_effect.effectrange] || charge time: [secondary_effect.chargelevelmax] || trigger: [secondary_effect.trigger].")
-				if(prob(75) && secondary_effect.effect != ARTIFACT_EFFECT_TOUCH)
+				if(arcanetampered || (prob(75) && secondary_effect.effect != ARTIFACT_EFFECT_TOUCH))
 					src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
 					secondary_effect.ToggleActivate(2)
 
