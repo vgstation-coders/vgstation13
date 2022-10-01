@@ -6,7 +6,7 @@
 
 /datum/artifact_trigger/electricity/New()
 	. = ..()
-	power_connection = new(src)
+	power_connection = new(my_artifact)
 	power_connection.power_priority = POWER_PRIORITY_BYPASS
 
 /datum/artifact_trigger/electricity/Destroy()
@@ -17,12 +17,16 @@
 
 /datum/artifact_trigger/electricity/CheckTrigger()
 
-	if(!power_connection.connected && !power_connection.connect())
+	var/turf/T = get_turf(my_artifact)
+	var/obj/structure/cable/cable = locate() in T
+	if(!cable || !istype(cable))
 		if(my_effect.activated)
 			Triggered(0, "NOCABLE", 0)
 		return
-
+	
+	power_connection.connect(cable)
 	var/datum/powernet/PN = power_connection.get_powernet()
+	
 	if(!PN) //Powernet is dead
 		if(my_effect.activated)
 			Triggered(0, "NOPOWERNET", 0)
