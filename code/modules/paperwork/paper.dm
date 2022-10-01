@@ -340,7 +340,7 @@
 					M.adjustBruteLoss(length(new_text))
 
 		if(arcanetampered)
-			switch(rand(1,3))
+			switch(rand(1,4))
 				if(1)
 					new_text = slur(new_text)
 				if(2)
@@ -348,6 +348,8 @@
 				if(3)
 					new_text = tumblrspeech(new_text)
 					new_text = nekospeech(new_text)
+				if(4)
+					new_text = markov_chain(new_text, rand(2,5), rand(100,700))
 
 		spawn()
 			new_text = parsepencode(usr, usr.get_active_hand() ,new_text)
