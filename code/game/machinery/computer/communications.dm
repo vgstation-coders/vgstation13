@@ -181,6 +181,7 @@ var/list/shuttle_log = list()
 				var/input = stripped_message(usr, "Please choose a message to announce to the station crew.", "Priority Announcement")
 				if(message_cooldown || !input || (!usr.Adjacent(src) && !issilicon(usr)))
 					return
+				var/turf/T = get_turf(usr)
 				if(arcanetampered)
 					var/oldinput = input
 					input = ""
@@ -190,7 +191,6 @@ var/list/shuttle_log = list()
 					log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has made an arcane tampered Comms Console announcement, originally: [oldinput]")
 				else
 					captain_announce(input)//This should really tell who is, IE HoP, CE, HoS, RD, Captain
-				var/turf/T = get_turf(usr)
 				log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has made a Comms Console announcement: [input]")
 				message_admins("[key_name_admin(usr)] has made a Comms Console announcement.", 1)
 				message_cooldown = 1

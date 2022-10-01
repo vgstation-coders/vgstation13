@@ -54,6 +54,9 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	var/dpt = ""; //the department which will be receiving the message
 	var/priority = -1 ; //Priority of the message being sent
 	var/announceSound = 'sound/vox/_bloop.wav'
+	//for arcane tampering
+	var/list/hear_memory = list()
+	var/const/max_hear_memory = 20
 	luminosity = 0
 
 /obj/machinery/requests_console/power_change()
@@ -289,7 +292,16 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			screen = 0
 
 	if(href_list["sendAnnouncement"])
-		make_announcement(message)
+		if(arcanetampered)
+			var/oldinput = message
+			message = ""
+			for(var/memory in hear_memory)
+				message += memory + " "
+			make_announcement(markov_chain(message, rand(2,5), rand(100,700)))
+			var/turf/T = get_turf(usr)
+			log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has made an arcane tampered Requests Console announcement, originally: [oldinput]")
+		else
+			make_announcement(message)
 
 	if( href_list["department"] && message )
 		var/log_msg = message
@@ -436,6 +448,13 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 
 		if(msg)
 			make_announcement(msg, G)
+
+/obj/machinery/requests_console/Hear(datum/speech/speech, rendered_speech="")
+	if(arcanetampered && speech.message)
+		hear_memory.Insert(1, speech.message)
+		if(hear_memory.len > max_hear_memory)
+			hear_memory.Cut(hear_memory.len)
+	return ..()
 
 					//deconstruction and hacking
 /obj/machinery/requests_console/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
