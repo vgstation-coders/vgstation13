@@ -314,6 +314,11 @@
 
 /obj/kick_act/(mob/living/carbon/human/kicker)
 	if(breakable_flags & BREAKABLE_UNARMED && kicker.can_kick(src))
+		if(arcanetampered && density)
+			to_chat(kicker,"<span class='sinister'>[src] kicks YOU!</span>")
+			kicker.Knockdown(10)
+			kicker.Stun(10)
+			return
 		//Pick a random usable foot to perform the kick with
 		var/datum/organ/external/foot_organ = kicker.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
 		kicker.delayNextAttack(2 SECONDS) //Kicks are slow
