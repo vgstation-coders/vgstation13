@@ -83,6 +83,10 @@ var/list/shuttle_log = list()
 	var/stat_msg2
 	var/display_type="blank"
 
+	//for arcane tampering
+	var/list/hear_memory = list()
+	var/const/max_hear_memory = 20
+
 	light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/communications/Topic(href, href_list)
@@ -177,7 +181,15 @@ var/list/shuttle_log = list()
 				var/input = stripped_message(usr, "Please choose a message to announce to the station crew.", "Priority Announcement")
 				if(message_cooldown || !input || (!usr.Adjacent(src) && !issilicon(usr)))
 					return
-				captain_announce(input)//This should really tell who is, IE HoP, CE, HoS, RD, Captain
+				if(arcanetampered)
+					var/oldinput = input
+					input = ""
+					for(var/memory in hear_memory)
+						input += memory + " "
+					captain_announce(markov_chain(input, rand(2,5), rand(100,700)))
+					log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has made an arcane tampered Comms Console announcement, originally: [oldinput]")
+				else
+					captain_announce(input)//This should really tell who is, IE HoP, CE, HoS, RD, Captain
 				var/turf/T = get_turf(usr)
 				log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has made a Comms Console announcement: [input]")
 				message_admins("[key_name_admin(usr)] has made a Comms Console announcement.", 1)
@@ -708,6 +720,13 @@ var/list/shuttle_log = list()
 				captain_announce(result)
 				log_say("[key_name(usr)] ([formatJumpTo(get_turf(G))]) has made a captain announcement: [result]")
 				message_admins("[key_name_admin(G)] has made a captain announcement.", 1)
+
+/obj/machinery/computer/communications/Hear(datum/speech/speech, rendered_speech="")
+	if(arcanetampered && speech.message)
+		hear_memory.Insert(1, speech.message)
+		if(hear_memory.len > max_hear_memory)
+			hear_memory.Cut(hear_memory.len)
+	return ..()
 
 /obj/machinery/computer/communications/Destroy()
 
