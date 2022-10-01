@@ -156,12 +156,6 @@
 			src.update_icon()
 	return 1
 
-/obj/structure/closet/arcane_act(mob/user)
-	..()
-	if(!src.opened)
-		for(var/atom/A in contents)
-			A.arcane_act(user)
-
 /obj/structure/closet/proc/insert(var/atom/movable/AM)
 
 
