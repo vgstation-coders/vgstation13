@@ -314,7 +314,7 @@
 
 /obj/kick_act/(mob/living/carbon/human/kicker)
 	if(breakable_flags & BREAKABLE_UNARMED && kicker.can_kick(src))
-		if(arcanetampered && density)
+		if(arcanetampered && density && anchored)
 			to_chat(kicker,"<span class='sinister'>[src] kicks YOU!</span>")
 			kicker.Knockdown(10)
 			kicker.Stun(10)
