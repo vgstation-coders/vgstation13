@@ -421,14 +421,14 @@
 		else
 			to_chat(user, "<span class='notice'>\The [src] is already full.</span>")
 		return
-	else if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && src.welding)
+	else if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && (src.welding || A.arcanetampered))
 		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
 		log_game("[key_name(user)] triggered a fueltank explosion.")
 		to_chat(user, "<span class='warning'>That was stupid of you.</span>")
 		var/obj/structure/reagent_dispensers/fueltank/tank = A
 		tank.explode()
 		return
-	if(arcanetampered)
+	if(arcanetampered && get_dist(src,A) <= 1)
 		if (!src.welding)
 			if(src.reagents.add_reagent(FUEL, max_fuel))
 				to_chat(user, "<span class='notice'>Welder refueled.</span>")
