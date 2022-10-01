@@ -19,7 +19,7 @@
 /obj/item/weapon/storage/backpack/arcane_act(mob/user)
 	..()
 	for(var/atom/A in contents)
-		A.forceMove(A.loc) // less cruel than baleeting
+		A.forceMove(get_turf(A)) // less cruel than baleeting
 	return "H'NGRY B'G!"
 
 /obj/item/weapon/storage/backpack/attackby(obj/item/weapon/W as obj, mob/user as mob)
