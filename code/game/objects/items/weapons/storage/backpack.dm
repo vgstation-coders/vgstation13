@@ -16,6 +16,12 @@
 	max_combined_w_class = 21
 	autoignition_temperature = AUTOIGNITION_FABRIC
 
+/obj/item/weapon/storage/backpack/arcane_act(mob/user)
+	..()
+	for(var/atom/A in contents)
+		A.forceMove(A.loc)
+	return "H'NGRY B'G!"
+
 /obj/item/weapon/storage/backpack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(arcanetampered && can_be_inserted(W)) // the hungry bag, scip 101
 		playsound(src, 'sound/weapons/bite.ogg', 50, 1, -1)
