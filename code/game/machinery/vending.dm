@@ -1052,9 +1052,9 @@ var/global/num_vending_terminals = 1
 	update_vicon()
 	qdel(R)
 
-/obj/item/weapon/bikehorn/rubberducky/arcane_act(mob/user)
+/obj/machinery/vending/arcane_act(mob/user)
 	..()
-	return "B'NUS D'CK!"
+	return "B'NUS D'CKS!"
 
 /obj/machinery/vending/proc/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	if (!allowed(user) && !emagged && wires.IsIndexCut(VENDING_WIRE_IDSCAN)) //For SECURE VENDING MACHINES YEAH

@@ -368,6 +368,10 @@
 	busy = 0
 	return 1
 
+/obj/machinery/r_n_d/fabricator/arcane_act(mob/user)
+	..()
+	return "B'NUS D'CKS!"
+
 //max_length is, from the top of the list, the parts you want to queue down to
 /obj/machinery/r_n_d/fabricator/proc/add_part_set_to_queue(set_name, max_length)
 	var/list/set_parts = part_sets[set_name]
