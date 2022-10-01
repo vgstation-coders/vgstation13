@@ -226,6 +226,15 @@ var/datum/controller/gameticker/ticker
 		if(istype(M, /mob/living/carbon/human/))
 			var/mob/living/carbon/human/H = M
 			job_master.PostJobSetup(H)
+		//minds are linked to accounts... And accounts are linked to jobs.
+		var/rank = M.mind.assigned_role
+		var/datum/job/job = job_master.GetJob(rank)
+		if(job)
+			job.equip(M, job.priority) // Outfit datum.
+
+	for(var/mob/new_player/np in player_list)
+		if(np.ready)
+			qdel(np)
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
 		for(var/mob/living/carbon/human/player in player_list)

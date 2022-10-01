@@ -416,6 +416,8 @@
 		qdel(src)
 		return
 
+	if(job)
+		job.equip(character, job.priority) // Outfit datum.
 
 	EquipCustomItems(character)
 
@@ -691,7 +693,7 @@
 		mind.active = 0 // we wish to transfer the key manually
 		mind.transfer_to(new_character) // won't transfer key since the mind is not active
 
-	new_character.name = real_name
+	new_character.name = prefs.real_name
 	new_character.dna.ready_dna(new_character)
 
 	if(new_character.mind)
@@ -734,10 +736,6 @@
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
 	var/rank = new_character.mind.assigned_role
-	var/datum/job/job = job_master.GetJob(rank)
-	if(job)
-		job.equip(new_character, job.priority) // Outfit datum.
-
 	if(!late_join)
 		var/obj/S = null
 		// Find a spawn point that wasn't given to anyone
@@ -770,11 +768,9 @@
 		if(R.converts_everyone && new_character.mind.assigned_role != "Chaplain")
 			R.convert(new_character,null,TRUE,TRUE)
 			break //Only autoconvert them once, and only if they aren't leading their own faith.
-	
+
 	if(late_join)
 		new_character.key = key
-
-	qdel(src)
 
 	return new_character
 
