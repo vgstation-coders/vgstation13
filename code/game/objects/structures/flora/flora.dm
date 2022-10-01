@@ -352,7 +352,7 @@
 			while(!thearea)
 				if(prospective.type != /area)
 					var/turf/T = pick(get_area_turfs(prospective.type))
-					if(T.z == holder.z)
+					if(T.z == user.z)
 						thearea = prospective
 						break
 				prospective = pick(areas)
@@ -374,13 +374,13 @@
 			var/success = 0
 			while(L.len)
 				attempt = pick(L)
-				success = target.Move(attempt)
+				success = I.Move(attempt)
 				if(!success)
 					L.Remove(attempt)
 				else
 					break
 			if(!success)
-				target.forceMove(pick(backup_L))
+				I.forceMove(pick(backup_L))
 
 /obj/structure/flora/pottedplant/attack_hand(mob/user)
 	if(contents.len)
