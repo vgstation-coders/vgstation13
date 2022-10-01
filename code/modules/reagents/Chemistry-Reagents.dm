@@ -5713,8 +5713,8 @@ var/procizine_tolerance = 0
 	color = "#5C4033" //rgb: 92, 64, 51
 	var/originalbraindamage = 0
 	var/yourarted = FALSE
-	
-/datum/reagent/discount/mannitol/on_mob_life(var/mob/living/M)
+
+/datum/reagent/discount/mannitol/on_introduced(var/mob/living/M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!yourarted)
@@ -5723,7 +5723,7 @@ var/procizine_tolerance = 0
 			to_chat(M, "<span class='notice'>You feel your mind cloud and your dexterity vanish...</span>")
 			yourarted = TRUE
 
-/datum/reagent/discount/mannitol/reagent_deleted()
+/datum/reagent/discount/mannitol/reagent_deleted(var/mob/living/M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		H.setBrainLoss(originalbraindamage) //go back to your previous brain damage even if the chem is forcefully purged
