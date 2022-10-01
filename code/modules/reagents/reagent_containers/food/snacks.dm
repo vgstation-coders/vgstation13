@@ -7781,3 +7781,17 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(SODIUMCHLORIDE, 1)
 	reagents.add_reagent(CORNOIL, 1)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps
+	name = "half-eaten cheese wedge"
+	desc = "Looks like someone already got to this one, but there's still quite a bit of cheese left."
+	icon_state = "halfeaten_wedge"
+	filling_color = "#FFCC33"
+	bitesize = 2
+	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 3

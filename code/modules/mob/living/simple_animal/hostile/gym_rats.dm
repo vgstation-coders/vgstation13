@@ -42,8 +42,8 @@
 
 	var/all_fours = TRUE
 
-	var/last_disposalscavenge = 0
-	var/const/disposalscavenge_cooldown = 15 SECONDS
+	var/last_scavenge = 0
+	var/const/scavenge_cooldown = 15 SECONDS
 
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 
@@ -61,16 +61,30 @@
 	if(istype(A, /obj/machinery/disposal)) // If we click on a disposal unit and 15 seconds have passed, let's look for meat or cheese
 		to_chat(src, text("<span class='notice'>You rummage through the [A].</span>"))
 
-		if((last_disposalscavenge + disposalscavenge_cooldown >= world.time))
+		if((last_scavenge + scavenge_cooldown >= world.time))
 			to_chat(src, text("<span class='warning'>You just checked a disposal unit! You won't find anything new for now.</span>")) // If we scavenged too recently, we get told to wait
 
-		if((last_disposalscavenge + disposalscavenge_cooldown < world.time))
-			last_disposalscavenge = world.time
+		if((last_scavenge + scavenge_cooldown < world.time))
+			last_scavenge = world.time
 			if(prob(60))
 				to_chat(src, text("<span class='warning'>You don't find anything interesting.</span>"))
 			else
 				to_chat(src, text("<span class='warning'>You find something!</span>"))
-				new /obj/item/weapon/reagent_containers/food/snacks/cheesewedge(src.loc)
+				new /obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps(src.loc)
+
+	if(istype(A, /obj/machinery/microwave))
+		to_chat(src, text("<span class='notice'>You rummage through the [A].</span>"))
+
+		if((last_scavenge + scavenge_cooldown >= world.time))
+			to_chat(src, text("<span class='warning'>You just checked a microwave! You won't find anything new for now.</span>")) // If we scavenged too recently, we get told to wait
+
+		if((last_scavenge + scavenge_cooldown < world.time))
+			last_scavenge = world.time
+			if(prob(60))
+				to_chat(src, text("<span class='warning'>You don't find anything interesting.</span>"))
+			else
+				to_chat(src, text("<span class='warning'>You find something!</span>"))
+				new /obj/item/weapon/reagent_containers/food/snacks/meat/scraps(src.loc)
 
 	if(is_type_in_list(A, edibles)) // If we click on something edible, it's time to chow down!
 		delayNextAttack(10)
@@ -88,6 +102,12 @@
 		else
 			health+=5 // Otherwise we just get a little health back
 			to_chat(src, text("<span class='warning'>The meat nourishes you, but your muscles don't grow. You've bulked all you can...</span>"))
+		flick(icon_eat, src)
+		qdel(F)
+	if(istype(F,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps)) //Half-eaten cheese wedge. Better than nothing
+		health+=4
+		visible_message("\The [name] gobbles up \the [F].", "<span class='notice'>You gobble up the [F].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
 		qdel(F)
 	if(istype(F,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) //Mmm, cheese wedge. Gives back a small amount of health upon consumption
@@ -169,6 +189,15 @@
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/attackby(var/obj/item/weapon/reagent_containers/food/snacks/F as obj, var/mob/user as mob) // Feed the gym rat some food
 	if(stat == CONSCIOUS)
+		if(istype(F, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps)) // Cheesewedge scraps heal it a bit
+			health+=4
+			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			visible_message("<span class='notice'>[user] feeds \the [F] to [src]. It squeaks loudly.</span>")
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
+			flick(icon_eat, src)
+			qdel(F)
 		if(istype(F, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheesewedges heal it a bit
 			health+=6
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
@@ -227,7 +256,7 @@
 
 	to_chat(src, text("<span class='warning'>You are a gym rat, a much larger and stronger cousin of a normal mouse.</span>"))
 	to_chat(src, text("<span class='warning'>You need cheese and meaty foods. Cheese will heal you, and meat will increase your attack damage and maximum health.</span>"))
-	to_chat(src, text("<span class='warning'>If you're desperate, you can scavenge for meat or cheese from disposal units by interacting with them.</span>"))
+	to_chat(src, text("<span class='warning'>If you're desperate, you can scavenge for meat or cheese from disposal units or microwaves.</span>"))
 	to_chat(src, text("<span class='warning'>Protect your gains, and avoid soy milk at all costs. If you lose your gains, there's no going back.</span>"))
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/reagent_act(id, method, volume) // Gym rats have to keep away from soymilk... it's bad for their gainz
@@ -400,6 +429,12 @@
 			to_chat(src, text("<span class='warning'>The meat nourishes you, but your muscles don't grow. You've bulked all you can...</span>"))
 		flick(icon_eat, src)
 		qdel(F)
+	if(istype(F,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps)) //Half-eaten cheese wedge. Better than nothing
+		health+=10
+		visible_message("\The [name] gobbles up \the [F].", "<span class='notice'>You gobble up the [F].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		flick(icon_eat, src)
+		qdel(F)
 	if(istype(F,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) //Mmm, cheese wedge. Gives back a small amount of health upon consumption
 		health+=15
 		visible_message("\The [name] gobbles up \the [F].", "<span class='notice'>You gobble up the [F].</span>")
@@ -447,6 +482,15 @@
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/attackby(var/obj/item/weapon/reagent_containers/food/snacks/F as obj, var/mob/user as mob) // Feed the roid rat some food
 	if(stat == CONSCIOUS)
+		if(istype(F, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps)) // Cheesewedge scraps heal it a bit
+			health+=10
+			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+			visible_message("<span class='notice'>[user] feeds \the [F] to [src]. It squeaks loudly.</span>")
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
+			flick(icon_eat, src)
+			qdel(F)
 		if(istype(F, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheesewedges heal it a bit
 			health+=15
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
