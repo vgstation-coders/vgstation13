@@ -48,9 +48,9 @@
 
 /obj/item/weapon/storage/toolbox/arcane_act(mob/user)
 	..()
-	user.say("R'B'STO!")
 	force = 0
 	throwforce = 0
+	return "R'B'STO!"
 
 /obj/item/weapon/storage/toolbox/bless()
 	..()
@@ -114,10 +114,10 @@
 		new /obj/item/stack/cable_coil(src,30,color)
 
 /obj/item/weapon/storage/toolbox/electrical/arcane_act(mob/user)
-	..()
 	for(var/atom/A in contents)
 		qdel(A)
 		new /obj/item/clothing/gloves/fyellow(src)
+	return ..()
 
 /obj/item/weapon/storage/toolbox/syndicate
 	name = "suspicious looking toolbox"

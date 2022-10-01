@@ -11,8 +11,8 @@
 
 /obj/item/clothing/gloves/yellow/arcane_act(mob/user)
 	..()
-	user.say("GR'Y T'DE!")
 	siemens_coefficient = pick(0,0.5,0.5,0.5,0.5,0.75,1.5)
+	return "GR'Y T'DE!"
 
 /obj/item/clothing/gloves/yellow/bless()
 	..()

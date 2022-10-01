@@ -1052,6 +1052,10 @@ var/global/num_vending_terminals = 1
 	update_vicon()
 	qdel(R)
 
+/obj/item/weapon/bikehorn/rubberducky/arcane_act(mob/user)
+	..()
+	return "B'NUS D'CK!"
+
 /obj/machinery/vending/proc/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	if (!allowed(user) && !emagged && wires.IsIndexCut(VENDING_WIRE_IDSCAN)) //For SECURE VENDING MACHINES YEAH
 		to_chat(user, "<span class='warning'>Access denied.</span>")//Unless emagged of course
@@ -1097,15 +1101,18 @@ var/global/num_vending_terminals = 1
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	spawn(vend_delay)
 		if(!R.custom)
-			var/atom/A = new R.product_path(get_turf(src))
-			if(arcanetampered)
-				A.arcane_act()
+			var/path2use = R.product_path
+			if(arcanetampered && prob(90))
+				path2use = /obj/item/weapon/bikehorn/rubberducky  // BONUS DUCKS! refunds
+			var/atom/A = new path2use(get_turf(src))
+			if(arcanetampered && path2use == R.product_path)
+				A.arcane_act(user)
 		else
 			for(var/obj/O in custom_stock)
 				if(O.product_name() == R.product_name)
 					O.forceMove(src.loc)
 					if(arcanetampered)
-						O.arcane_act()
+						O.arcane_act(user)
 					custom_stock.Remove(O)
 					break
 		src.vend_ready = 1

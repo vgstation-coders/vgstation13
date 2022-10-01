@@ -853,14 +853,19 @@ its easier to just keep the beam vertical.
 /mob/var/list/atom/arcane_tampered_atoms = list()
 
 /atom/proc/arcane_act(var/mob/user)
-	arcanetampered = user
-	user.arcane_tampered_atoms.Add(src)
+	if(user)
+		arcanetampered = user
+		user.arcane_tampered_atoms.Add(src)
+	else
+		arcanetampered = TRUE
+	return "E'MAGI!"
 
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
-	if(arcanetampered && ismob(arcanetampered))
-		var/mob/M = arcanetampered
-		M.arcane_tampered_atoms.Remove(src)
+	if(arcanetampered)
+		if(ismob(arcanetampered))
+			var/mob/M = arcanetampered
+			M.arcane_tampered_atoms.Remove(src)
 		arcanetampered = FALSE
 	blessed = 1
 

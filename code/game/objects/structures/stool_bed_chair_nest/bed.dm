@@ -115,7 +115,7 @@
 
 /obj/structure/bed/arcane_act(mob/user)
 	..()
-	user.say("'N S'VIET R'SIA...!")
+	return "'N S'VIET R'SIA...!"
 
 /obj/structure/bed/bless()
 	..()
@@ -166,7 +166,7 @@
 	add_fingerprint(user)
 
 	if(arcanetampered)
-		to_chat(user, "<span class='sinister'>Chair buckles YOU!</span>")
+		to_chat(user, "<span class='sinister'>[capitalize(name)] buckles YOU!</span>")
 		M.lock_atom(src)
 	else
 		lock_atom(M, mob_lock_type)

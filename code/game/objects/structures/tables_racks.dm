@@ -445,7 +445,8 @@
 
 /obj/structure/table/arcane_act(mob/user)
 	..()
-	user.say("'N S'VIET R'SIA...!")
+	return "'N S'VIET R'SIA...!"
+
 /obj/structure/table/verb/do_flip()
 	set name = "Flip table"
 	set desc = "Flips a non-reinforced table"
@@ -458,7 +459,7 @@
 	if(arcanetampered)
 		var/mob/living/M = usr
 		if(istype(M))
-			to_chat(usr, "<span class='sinister'>Table flips YOU!</span>")
+			to_chat(usr, "<span class='sinister'>[capitalize(name)] flips YOU!</span>")
 			M.Knockdown(10)
 			return
 	if(!flip(get_cardinal_dir(usr,src)))

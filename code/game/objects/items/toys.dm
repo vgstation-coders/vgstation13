@@ -142,8 +142,8 @@
 
 /obj/item/toy/spinningtoy/arcane_act(mob/user)
 	..()
-	user.say("I'S LO'SE!")
 	processing_objects.Add(src)
+	return "I'S LO'SE!"
 
 /obj/item/toy/spinningtoy/bless()
 	..()

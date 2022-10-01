@@ -12,6 +12,7 @@
 	school = "transmutation"
 	charge_max = 300
 	spell_flags = NEEDSCLOTHES // now it's balanced
+	invocation = "E'MAGI!"
 	invocation_type = SpI_NONE // we say it in the arcane_acts
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3)
 	cooldown_min = 200 //100 deciseconds reduction per rank
@@ -20,5 +21,14 @@
 
 /spell/targeted/arcane_tamper/cast(list/targets, mob/user)
 	..()
+	invocation = "E'MAGI!"
 	for(var/atom/AM in targets)
-		AM.arcane_act(user)
+		invocation = AM.arcane_act(user)
+		// below looks close enough to ideal
+		anim(target = AM, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
+		var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
+		steam.set_up(10, 0, AM.loc)
+		steam.start()
+	if(prob(50))
+		invocation = replacetext(invocation," ","`")
+	user.say(invocation)
