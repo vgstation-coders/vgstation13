@@ -166,10 +166,12 @@
 
 /obj/item/weapon/spellbook/oneuse/arcanetamper/recoil(mob/user)
 	..()
-	to_chat(user, "<span class='sinister'>You feel strange...</span>")
-	for(var/atom/movable/AM in user.contents)
-		AM.arcane_act(user)
-	adjustCloneLoss(100)
+	if(isliving(user))
+		var/mob/living/L = user
+		to_chat(user, "<span class='sinister'>You feel strange...</span>")
+		for(var/atom/movable/AM in user.contents)
+			AM.arcane_act(user)
+		L.adjustCloneLoss(100)
 
 /obj/item/weapon/spellbook/oneuse/horsemask
 	spell = /spell/targeted/equip_item/horsemask
