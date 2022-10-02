@@ -184,6 +184,7 @@ var/datum/controller/gameticker/ticker
 
 	//After antagonists have been removed from new_players in player_list, create crew
 	var/list/new_characters = list()	//list of created crew for transferring
+	var/list/new_players_ready = list() //unique list of people who have readied up, so we can delete mob/new_player later (ready is lost on mind transfer)
 	for(var/mob/M in player_list)
 		if(!istype(M, /mob/new_player/))
 			var/mob/living/L = M
@@ -194,10 +195,11 @@ var/datum/controller/gameticker/ticker
 		var/mob/new_player/np = M
 		if(!(np.ready && np.mind && np.mind.assigned_role))
 			//If they aren't ready, update new player panels so they say join instead of ready up.
-			np.new_player_panel_proc()
+			np.new_player_panel()
 			continue
 		var/datum/preferences/prefs = M.client.prefs
 		var/key = M.key
+		new_players_ready |= M
 		//Create player characters
 		switch(np.mind.assigned_role)
 			if("Cyborg", "Mobile MMI", "AI")
@@ -232,9 +234,9 @@ var/datum/controller/gameticker/ticker
 		if(job)
 			job.equip(M, job.priority) // Outfit datum.
 
-	for(var/mob/new_player/np in player_list)
-		if(np.ready)
-			qdel(np)
+	//delete the new_player mob for those who readied
+	for(var/mob/np in new_players_ready)
+		qdel(np)
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
 		for(var/mob/living/carbon/human/player in player_list)
