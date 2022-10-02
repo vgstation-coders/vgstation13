@@ -3208,6 +3208,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/biscuit = 2,
 		/obj/item/talonprosthetic = 3,
 		/obj/machinery/vending/sale/trader = 1,
+		/obj/item/weapon/storage/toolbox/paint = 1,
 		)
 
 	prices = list(
@@ -3219,6 +3220,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/dses = 200,
 		/obj/item/talonprosthetic = 80,
 		/obj/machinery/vending/sale/trader = 80,
+		/obj/item/weapon/storage/toolbox/paint = 80,
 		)
 	slogan_languages = list(LANGUAGE_VOX)
 
