@@ -189,46 +189,8 @@
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/attackby(var/obj/item/weapon/reagent_containers/food/snacks/F as obj, var/mob/user as mob) // Feed the gym rat some food
 	if(stat == CONSCIOUS)
-		if(istype(F, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps)) // Cheesewedge scraps heal it a bit
-			health+=4
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [F] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			flick(icon_eat, src)
-			qdel(F)
-		if(istype(F, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheesewedges heal it a bit
-			health+=6
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [F] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			flick(icon_eat, src)
-			qdel(F)
-		else if(istype(F, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel))
-			health+=30
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [F] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			flick(icon_eat, src)
-			qdel(F)
-		else if(F.food_flags & FOOD_MEAT) // Meat heals less, but packs on some extra maximum hp
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [F] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
-				adjust_hp(5)
-			else
-				health+=5 // Otherwise we just get a little health back
-				to_chat(src, text("<span class='warning'>The meat nourishes you, but your muscles don't grow. You've bulked all you can...</span>"))
-			flick(icon_eat, src)
-			qdel(F)
+		if(is_type_in_list(F, edibles)) // If it's something edible, chow down!
+			chowdown(F)
 		else
 			..()
 	else
@@ -482,46 +444,8 @@
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/attackby(var/obj/item/weapon/reagent_containers/food/snacks/F as obj, var/mob/user as mob) // Feed the roid rat some food
 	if(stat == CONSCIOUS)
-		if(istype(F, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps)) // Cheesewedge scraps heal it a bit
-			health+=10
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [F] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			flick(icon_eat, src)
-			qdel(F)
-		if(istype(F, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheesewedges heal it a bit
-			health+=15
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [F] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			flick(icon_eat, src)
-			qdel(F)
-		else if(istype(F, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel))
-			health+=75
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [F] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			flick(icon_eat, src)
-			qdel(F)
-		else if(F.food_flags & FOOD_MEAT) // Meat heals less, but packs on some extra maximum hp
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [F] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
-				adjust_hp(5)
-			else
-				health+=5 // Otherwise we just get a little health back
-				to_chat(src, text("<span class='warning'>The meat nourishes you, but your muscles don't grow. You've bulked all you can...</span>"))
-			flick(icon_eat, src)
-			qdel(F)
+		if(is_type_in_list(F, edibles)) // If it's something edible, chow down!
+			chowdown(F)
 		else
 			..()
 	else
