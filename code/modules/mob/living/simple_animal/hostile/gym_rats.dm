@@ -442,15 +442,6 @@
 				wander = TRUE
 				speed = 2
 
-/mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/attackby(var/obj/item/weapon/reagent_containers/food/snacks/F as obj, var/mob/user as mob) // Feed the roid rat some food
-	if(stat == CONSCIOUS)
-		if(is_type_in_list(F, edibles)) // If it's something edible, chow down!
-			chowdown(F)
-		else
-			..()
-	else
-		..()
-
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/New() // speaks mouse, and gets their punch spell added
 	..()
 	add_spell(new /spell/targeted/punch/roidrat, "genetic_spell_ready", /obj/abstract/screen/movable/spell_master/genetic)
