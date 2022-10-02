@@ -337,6 +337,7 @@ var/global/datum/controller/occupations/job_master
 				continue //no, you can't evade the blacklist just by not being picked for your available jobs
 			Debug("AC2 Assistant located, Player: [player]")
 			AssignRole(player, "Assistant")
+			master_assistant = GetJob("Assistant")
 
 	// Those that got assigned a role, but had assistant higher.
 	var/security_jobs = list(
@@ -364,6 +365,7 @@ var/global/datum/controller/occupations/job_master
 				if(secmod)
 					count = GetSecurityCount()
 				AssignRole(player, "Assistant")
+				master_assistant = GetJob("Assistant")
 			else
 				Debug("AC3: [player] failed the second chance assistant lottery.")
 
