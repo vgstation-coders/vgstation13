@@ -80,15 +80,14 @@
 
 	if (mind)
 		mind.name = newname
+		if(mind.initial_account)
+			mind.initial_account.owner_name = newname
 
 	if (dna)
 		dna.real_name = real_name
 
 	if (oldname)
-		/*
-		 * Update the datacore records!
-		 * This is going to be a bit costly.
-		 */
+		//Update the datacore records and centcomm database
 		for (var/list/L in list(data_core.general, data_core.medical, data_core.security,data_core.locked))
 			if (L)
 				var/datum/data/record/R = find_record("name", oldname, L)
