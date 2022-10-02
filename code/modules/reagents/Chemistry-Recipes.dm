@@ -765,7 +765,7 @@
 	name = "Lipozine"
 	id = LIPOZINE
 	result = LIPOZINE
-	required_reagents = list(PHOSPHOROUS = 1, ETHANOL = 1, CAPSAICIN = 1)
+	required_reagents = list(SODIUMCHLORIDE = 1, PHOSPHOROUS = 1, CAPSAICIN = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/dietine
