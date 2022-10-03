@@ -206,7 +206,7 @@ var/datum/controller/gameticker/ticker
 				var/mob/living/silicon/S = np.create_roundstart_silicon(prefs)
 				ticker.minds += S.mind
 				S.store_position()
-				log_admin("([S.ckey]) started the game as a [S.mind.assigned_role].")
+				log_admin("([key]) started the game as a [S.mind.assigned_role].")
 				new_characters[key] = S
 			if("MODE")
 				//antags aren't new players
