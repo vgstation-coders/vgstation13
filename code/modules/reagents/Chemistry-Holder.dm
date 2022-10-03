@@ -47,20 +47,22 @@ var/const/INGEST = 2
 			var/list/reaction_ids = list()
 
 			if(D.required_reagents && D.required_reagents.len)
-				for(var/reaction in D.required_reagents)
-					if(islist(reaction))
-						var/list/L = reaction
-						for(var/content in L)
-							reaction_ids += content
-					else
-						reaction_ids += reaction
+				var/reaction = D.required_reagents[1]
+				if(islist(reaction))
+					var/list/L = reaction
+					for(var/content in L)
+						reaction_ids += content
+				else
+					reaction_ids += reaction
 
 			// Create filters based on each reagent id in the required reagents list
 			for(var/id in reaction_ids)
 				if(!chemical_reactions_list[id])
 					chemical_reactions_list[id] = list()
 				chemical_reactions_list[id] += D
-				break // Don't bother adding ourselves to other reagent ids, it is redundant.
+				//previously we broke here, which meant that we were only testing the first reagent - even if the first reagent was a list
+				//now we no longer break because we didn't add all the reagents to reaction_ids - we want to add the reaction to everything in
+				//reaction_ids, which will be over everything in the first reagent in the table
 
 
 /datum/reagents/proc/remove_any(var/amount=1)

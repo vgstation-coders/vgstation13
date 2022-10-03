@@ -14,6 +14,7 @@
 	var/det_time = 5 SECONDS
 	var/armsound = 'sound/weapons/armbomb.ogg'
 	mech_flags = MECH_SCAN_ILLEGAL
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/grenade/proc/clown_check(var/mob/living/user)
 	if(clumsy_check(user) && prob(50))

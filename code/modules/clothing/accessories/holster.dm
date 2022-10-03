@@ -5,6 +5,7 @@
 	origin_tech = Tc_COMBAT + "=2"
 	var/obj/item/holstered = null
 	accessory_exclusion = HOLSTER
+	autoignition_temperature = AUTOIGNITION_ORGANIC //leather
 	var/holster_verb_name = "Holster"
 
 /obj/item/clothing/accessory/holster/proc/can_holster(obj/item/weapon/gun/W)
@@ -164,10 +165,10 @@
 
 /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy
 	gun_type = /obj/item/weapon/gun/projectile/NTUSP/fancy
-	
+
 /obj/item/clothing/accessory/holster/handgun/preloaded/glock
 	gun_type = /obj/item/weapon/gun/projectile/glock
-	
+
 /obj/item/clothing/accessory/holster/handgun/preloaded/glock/fancy
 	gun_type = /obj/item/weapon/gun/projectile/glock/fancy
 

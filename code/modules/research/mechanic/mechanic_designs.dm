@@ -7,6 +7,7 @@
 
 	req_tech = list() //the origin tech of either the item, or the board in the machine
 	category = ""
+	var/parts = list() //holds a list of nonstandard components that will be added to the flatpack
 
 /datum/design/mechanic_design/New(var/obj/O) //sets the name, type, design, origin_tech, and circuit, all by itself
 	if(!istype(O))
@@ -22,14 +23,29 @@
 		materials += list(MAT_IRON = 5 * CC_PER_SHEET_METAL) //cost of the frame
 		if(M.component_parts && M.component_parts.len)
 			category = "Machines"
+			//Now, we need to accomplish a few things. For every part:
+			//If it can be scanned, we need to add the cost of the part to the flatpack cost
+			//If it can be scanned and is better than a stock part, add it to the "parts" list that will be transfered to the new flatpack
 			for(var/obj/item/I in M.component_parts) //fetching the circuit by looking in the parts
+				if(I.mech_flags & MECH_SCAN_FAIL) //It can't be scanned, i.e. trader parts
+					continue //don't price it, don't do anything with it
 				if(istype(I, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/CB = I
 					req_tech = ConvertReqString2List(CB.origin_tech) //our tech is the circuit's requirement
-
 				var/datum/design/part_design = FindDesign(I)
+				//now, if the part has a "design" that could be built in a protolathe, find that and use the costs
+				//If it doesn't have a design, it'll still have a "materials.storage" that tells us an alt cost
+				//this applies to t4 parts, which don't have a design.
 				if(part_design)
 					copyCost(part_design, filter_chems = 1) //copy those materials requirements
+				else
+					for(var/matID in I.materials.storage)
+						if(I.materials.storage[matID] > 0)
+							if(!(matID in materials))
+								materials += list("[matID]" = 0) //Without this, phazon is not charged for t4 parts
+							materials[matID] += I.materials.storage[matID]
+				if(I.get_rating()>1) //if it's an upgraded part, add it to the parts list!
+					parts += I
 
 		else if(istype(M, /obj/machinery/computer))
 			category = "Computers"

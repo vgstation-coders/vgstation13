@@ -50,6 +50,7 @@
 	starting_materials = list(MAT_IRON = 150)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 	toolsounds = list('sound/items/Ratchet.ogg')
@@ -115,6 +116,7 @@
 	starting_materials = list(MAT_IRON = 75)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	attack_verb = list("stabs")
 	toolsounds = list('sound/items/Screwdriver.ogg', 'sound/items/Screwdriver2.ogg')
 	surgerysound = 'sound/items/Screwdriver.ogg'
@@ -210,6 +212,7 @@
 	starting_materials = list(MAT_IRON = 80)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("pinches", "nips at")
 	toolsounds = list('sound/items/Wirecutter.ogg')
@@ -274,6 +277,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 	//R&D tech level
 	origin_tech = Tc_ENGINEERING + "=1"
@@ -693,6 +697,7 @@
 	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 	toolsounds = list('sound/items/Crowbar.ogg')
@@ -783,6 +788,7 @@
 	w_class = W_CLASS_SMALL
 	w_type = RECYK_MISC
 	origin_tech = Tc_COMBAT + "=2"
+	autoignition_temperature = AUTOIGNITION_METAL
 	var/open = 0
 
 /obj/item/weapon/conversion_kit/New()
@@ -818,8 +824,10 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
+	var/work_speed = 1 //multiplier
 	toolsounds = list('sound/items/Welder.ogg')
 
 /obj/item/tool/solder/splashable()
@@ -894,6 +902,37 @@
 	reagents.add_reagent(SACID, 50)
 	update_icon()
 
+/obj/item/tool/solder/screw
+	name = "screwsolder"
+	desc = "An advanced soldering tool with a screwdriver head. Use in hand to swap to and from the screwhead."
+	max_fuel = 32
+	work_speed = 0.5 //2x faster
+	icon_state = "ssolder-0"
+	origin_tech = Tc_ENGINEERING + "=6"
+	var/screwmode = TRUE
+
+/obj/item/tool/solder/screw/attack_self(mob/user)
+	playsound(src,'sound/items/Screwdriver.ogg',40, 1)
+	screwmode = !screwmode
+	to_chat(user, "<span class='notice'>You toggle the screwhead [screwmode ? "on":"off"].</span>")
+
+/obj/item/tool/solder/screw/is_screwdriver(mob/user)
+	return screwmode
+
+/obj/item/tool/solder/screw/update_icon()
+	..()
+	switch(reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID))
+		if(22 to INFINITY)
+			icon_state = "ssolder-20"
+		if(15 to 21)
+			icon_state = "ssolder-15"
+		if(8 to 14)
+			icon_state = "ssolder-10"
+		if(1 to 7)
+			icon_state = "ssolder-5"
+		if(0)
+			icon_state = "ssolder-0"
+
 /*
 * Fuel Can
 * A special, large container that fits on the belt
@@ -916,6 +955,7 @@
 	slotone = new/datum/reagents(volume)
 	slotone.my_atom = src
 	reagents.add_reagent(FUEL, 50)
+	slotone.add_reagent(SACID, 50)
 
 /obj/item/weapon/reagent_containers/glass/fuelcan/attack_self(mob/user as mob)
 	if(!slot)

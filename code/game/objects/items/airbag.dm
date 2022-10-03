@@ -6,6 +6,7 @@
 	item_state = "syringe_kit"
 	w_class = W_CLASS_SMALL
 	slot_flags = SLOT_BELT
+	autoignition_temperature = AUTOIGNITION_PROTECTIVE
 
 /obj/item/airbag/New(atom/A, var/deployed)
 	..(A)

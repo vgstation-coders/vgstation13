@@ -639,7 +639,7 @@
 		if(!S.remove_fuel(4,user))
 			return
 		S.playtoolsound(loc, 100)
-		if(do_after(user, src,40))
+		if(do_after(user, src,4 SECONDS * S.work_speed))
 			S.playtoolsound(loc, 100)
 			stat &= !BROKEN
 			emagged = FALSE

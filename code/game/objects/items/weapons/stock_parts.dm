@@ -5,6 +5,7 @@
 	w_class = W_CLASS_SMALL
 	var/rating = 1
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/stock_parts/New()
 	. = ..()

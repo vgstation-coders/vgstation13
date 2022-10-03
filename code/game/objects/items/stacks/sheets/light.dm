@@ -12,6 +12,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/stack/light_w/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O,/obj/item/tool/wirecutters))

@@ -21,6 +21,8 @@
 
 	origin_tech = Tc_ENGINEERING + "=2"
 
+	autoignition_temperature = AUTOIGNITION_METAL
+
 	var/start_filled = TRUE
 	var/max_silicate = 50
 	var/silicate_per_state = 5 // Used in the calculation for the icon states for the meter.

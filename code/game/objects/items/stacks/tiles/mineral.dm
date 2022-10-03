@@ -15,6 +15,7 @@
 	material = "plasma"
 	starting_materials = list(MAT_PLASMA = CC_PER_SHEET_PLASMA / 4) // Recipe requires 1 sheet for 4 tiles
 	w_type = RECYK_METAL
+	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/stack/tile/mineral/uranium
 	name = "uranium tile"
@@ -141,6 +142,7 @@
 	max_amount = 60
 	starting_materials = list(MAT_PLASTIC = CC_PER_SHEET_PLASTIC / 4) // Recipe requires 1 sheet for 4 tiles
 	w_type = RECYK_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 	material = "plastic"
 
@@ -193,5 +195,6 @@
 	max_amount = 60
 
 	material  = "gingerbread"
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 

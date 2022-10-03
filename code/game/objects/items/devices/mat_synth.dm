@@ -28,6 +28,7 @@ var/static/list/mat2type = list(
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_MEDIUM
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=5;" + Tc_POWERSTORAGE + "=3"
 
 	var/mode = 1 //0 is material selection, 1 is material production

@@ -19,6 +19,7 @@
 	var/associated_account_number = 0
 
 	var/list/files = list(  )
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/weapon/card/data
 	name = "data disk"

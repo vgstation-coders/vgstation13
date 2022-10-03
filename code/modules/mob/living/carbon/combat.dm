@@ -208,6 +208,8 @@
 	tForce += get_strength()*10
 	tForce += offenseMutTackle()
 	tForce += bonusTackleForce()
+	if(is_real_champion(src)) //Wearing championship belt and luchador mask
+		tForce *= 2
 	return max(0, tForce)
 
 /mob/living/carbon/proc/offenseMutTackle(var/tF = 0)
@@ -229,6 +231,8 @@
 		tDef += 35
 	tDef += defenseMutTackle()
 	tDef += bonusTackleDefense()
+	if(is_real_champion(src)) //Wearing championship belt and luchador mask
+		tDef *= 2
 	return max(0, tDef)
 
 /mob/living/carbon/proc/defenseMutTackle(var/tD = 0)

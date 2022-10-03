@@ -1122,6 +1122,11 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 #define AUTOIGNITION_WOOD  573.15
 #define AUTOIGNITION_PAPER 519.15
+#define AUTOIGNITION_PLASTIC 689.15 //autoignition temperature of ABS plastic
+#define AUTOIGNITION_METAL null //1033.15 is the autoignition temperature of steel under high pressure pure oxgen
+#define AUTOIGNITION_FABRIC 523.15
+#define AUTOIGNITION_PROTECTIVE 573.15 //autoignition temperature of protective clothing like firesuits or kevlar vests
+#define AUTOIGNITION_ORGANIC 633.15 //autoignition temperature of animal fats
 
 // snow business
 #define SNOWBALL_MINIMALTEMP 265	//about -10°C, the minimal temperature at which a thrown snowball can cool you down.

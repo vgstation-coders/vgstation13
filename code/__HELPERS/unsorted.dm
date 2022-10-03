@@ -254,37 +254,48 @@
 
 //Orders mobs by type then by name
 /proc/sortmobs()
-	var/list/moblist = list()
-	var/list/sortmob = sortNames(mob_list)
-	for(var/mob/living/silicon/ai/M in sortmob)
-		moblist.Add(M)
-	for(var/mob/camera/M in sortmob)
-		moblist.Add(M)
-	for(var/mob/living/silicon/pai/M in sortmob)
-		moblist.Add(M)
-	for(var/mob/living/silicon/robot/M in sortmob)
-		moblist.Add(M)
-	for(var/mob/living/carbon/human/M in sortmob)
-		moblist.Add(M)
-	for(var/mob/living/carbon/brain/M in sortmob)
-		moblist.Add(M)
-	for(var/mob/living/carbon/alien/M in sortmob)
-		moblist.Add(M)
-	for(var/mob/dead/observer/M in sortmob)
-		moblist.Add(M)
-	for(var/mob/new_player/M in sortmob)
-		moblist.Add(M)
-	for(var/mob/living/carbon/monkey/M in sortmob)
-		moblist.Add(M)
-	for(var/mob/living/carbon/slime/M in sortmob)
-		moblist.Add(M)
-	for(var/mob/living/simple_animal/M in sortmob)
-		moblist.Add(M)
-//	for(var/mob/living/silicon/hivebot/M in world)
-//		mob_list.Add(M)
-//	for(var/mob/living/silicon/hive_mainframe/M in world)
-//		mob_list.Add(M)
-	return moblist
+	var/list/sorted_output = list()
+	var/list/sortedplayers = list()
+	var/list/sortedmobs = list()
+	for(var/mob/M in mob_list) //divide every mob into either players (has a mind) or non-players (no mind). braindead/catatonic/etc. mobs included in players
+		if(isnull(M))
+			continue
+		if(M.mind || istype(M, /mob/camera))
+			sortedplayers |= M
+			continue
+		sortedmobs |= M
+	sortNames(sortedplayers) //sort both lists in preparation for what we'll do below
+	sortNames(sortedmobs)
+	for(var/mob/living/silicon/ai/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/camera/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/living/silicon/pai/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/living/silicon/robot/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/living/carbon/human/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/living/carbon/brain/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/living/carbon/alien/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/dead/observer/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/new_player/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/living/carbon/monkey/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/living/carbon/slime/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/living/simple_animal/M in sortedplayers)
+		sorted_output.Add(M)
+	for(var/mob/living/M in sortedmobs) //mobs that have never been controlled by a player go last in the list. /mob/living to filter unwanted non-player non-world mobs (i.e. you'll nullspace if you observe them)
+		if(M.client)
+			continue
+		sorted_output.Add(M)
+		
+	return sorted_output
 
 // Finds ALL mobs on turfs in line of sight. Similar to "in dview", but catches mobs that are not on a turf (e.g. inside a locker or such).
 /proc/get_all_mobs_in_dview(var/turf/T, var/range = world.view, var/list/ignore_types = list())
@@ -408,13 +419,13 @@
 // returns the turf located at the map edge in the specified direction relative to A
 // used for mass driver
 /proc/get_edge_target_turf(var/atom/A, var/direction)
-	var/turf/target = locate(A.x, A.y, A.z)
-	if(!A || !target)
+	if(!A)
 		return 0
-		//since NORTHEAST == NORTH & EAST, etc, doing it this way allows for diagonal mass drivers in the future
-		//and isn't really any more complicated
+	var/turf/target = locate(A.x, A.y, A.z)
+	//since NORTHEAST == NORTH & EAST, etc, doing it this way allows for diagonal mass drivers in the future
+	//and isn't really any more complicated
 
-		// Note diagonal directions won't usually be accurate
+	// Note diagonal directions won't usually be accurate
 	if(direction & NORTH)
 		target = locate(target.x, world.maxy, target.z)
 	if(direction & SOUTH)

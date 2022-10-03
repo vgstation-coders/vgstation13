@@ -17,6 +17,7 @@
 	throw_range = 6
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
+	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MATERIALS + "=3"
 	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "cuts")
 	var/open = FALSE

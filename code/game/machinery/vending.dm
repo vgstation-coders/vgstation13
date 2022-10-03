@@ -1351,8 +1351,8 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/boozeomat
 
 /obj/machinery/vending/assist
-	name = "\improper Vendomat"
-	desc = "A vending machine containing generic parts."
+	name = "\improper StockPro"
+	desc = "A vending machine containing generic stock parts and assemblies."
 	icon_state = "generic"
 	products = list(
 		/obj/item/device/assembly/prox_sensor = 5,
@@ -2781,6 +2781,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/dress/plaid_red = 10,
 		/obj/item/clothing/under/dress/plaid_blue = 10,
 		/obj/item/clothing/under/greaser = 10,
+		/obj/item/clothing/suit/storage/greaserjacket = 10,
+		/obj/item/clothing/suit/storage/greaserjacket/spider = 10,
+		/obj/item/clothing/suit/storage/greaserjacket/snakes = 10,
 		/obj/item/clothing/under/sl_suit = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/black = 10,
@@ -2796,6 +2799,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/syndicate/tacticool = 5,
 		/obj/item/clothing/under/color/orange = 5,
 		/obj/item/clothing/under/psyche = 5,
+		/obj/item/clothing/suit/storage/greaserjacket/cult = 5,
 		)
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
@@ -3037,7 +3041,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 6,
-		/obj/item/weapon/reagent_containers/food/drinks/discount_sauce = 12
+		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 12
+		)
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/condiment/discount = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/pill/antitox = 10
@@ -3051,7 +3058,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 3,
 		/obj/item/weapon/reagent_containers/pill/antitox = 10,
-		/obj/item/weapon/reagent_containers/food/drinks/discount_sauce = 1
+		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 1,
+		/obj/item/weapon/reagent_containers/food/condiment/discount = 25
 		)
 
 	pack = /obj/structure/vendomatpack/discount
@@ -3890,12 +3898,13 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 
 /obj/machinery/vending/lotto/throw_item()
 	var/mob/living/target = locate() in view(7, src)
-
 	if (!target)
 		return 0
-	for(var/i = 0 to rand(3,12))
-		var/obj/I = new /obj/item/weapon/paper(get_turf(src))
-		I.throw_at(target, 16, 3)
+	var/obj/I = new /obj/item/toy/lotto_ticket/unprinted(get_turf(src))
+	I.throw_at(target, 16, 3)
+	src.visible_message("<span class='danger'>[src] launches [I.name] at [target.name]!</span>")
+	src.updateUsrDialog()
+	return 1
 
 /obj/machinery/vending/syndicatesuits
 	name = "\improper Syndicate Suits"

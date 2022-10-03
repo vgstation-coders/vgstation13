@@ -5,6 +5,7 @@
 	w_class = W_CLASS_TINY
 	var/activated = 0
 	var/deployeditem = null
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/deployable_packet/attack_self(mob/user)
 	if(!istype(user))
@@ -17,7 +18,7 @@
 	activated = 1
 
 	spawn(POWERCREEP_PACKET_ACTIVATION_TIME_IN_SECONDS SECONDS)
-		new deployeditem(get_turf(src)) //used to have the [packet_override = 1] var for powercreep fast spawn from packet, but it broke biomass spawning 
+		new deployeditem(get_turf(src)) //used to have the [packet_override = 1] var for powercreep fast spawn from packet, but it broke biomass spawning
 		qdel(src)
 
 /obj/item/deployable_packet/biomass
@@ -38,7 +39,7 @@
 	icon = 'icons/obj/structures/powercreeper.dmi'
 	icon_state = "packet"
 	deployeditem = /obj/structure/cable/powercreeper
-	
+
 /obj/item/deployable_packet/powercreeper/examine(mob/user, size, show_name)
 	. = ..()
 	to_chat(user, "Derek Baum VII's most popular creation. Carries a self-replicating sample of powercreeper.")

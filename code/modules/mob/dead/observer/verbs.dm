@@ -196,6 +196,8 @@
 
 	var/list/mobs = getmobs()
 	var/input = input("Please, select a mob!", "Haunt", null, null) as null|anything in mobs
+	if(!input)
+		return
 	var/mob/target = mobs[input]
 	manual_follow(target)
 
