@@ -967,7 +967,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 	)
 
 //Generic species flags.
-#define WHITELISTED (1<<0)	//species that don't break player preferences
+#define WHITELISTED (1<<0)	//species that don't break player preferences available to admins only
 #define PLAYABLE (1<<1)		//species available to players
 #define NO_BREATHE (1<<2)
 #define NO_SCAN (1<<3)
