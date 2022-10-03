@@ -158,6 +158,7 @@
 	if(stat & BROKEN)
 		return
 
+	//scale based on powernet, otherwise constant 4500
 	if(PN)
 		var/power_surplus = PN.get_satisfaction(power_priority)
 		use_power = MACHINE_POWER_USE_ACTIVE
@@ -170,6 +171,8 @@
 			power_load = 0
 	else
 		power_load = 0
+		use_power = MACHINE_POWER_USE_IDLE
+		update_rate(4500)
 	active_power_usage = power_load
 	pumping.copy_from(air_contents)
 /*
