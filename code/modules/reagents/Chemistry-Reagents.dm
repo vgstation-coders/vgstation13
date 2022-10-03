@@ -5715,11 +5715,17 @@ var/procizine_tolerance = 0
 	var/originalbraindamage = 0
 	var/yourarted = FALSE
 
+/datum/reagent/discount/mannitol/on_mob_life(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(holder.has_any_reagents(ALKYSINE,ALKYCOSINE,ADMINORDRAZINE,GREYGOO) && H.getBrainLoss() < originalbraindamage) //chems with brain healing effects
+			originalbraindamage = H.getBrainLoss() //if you have brainmeds and heal enough to be under the original braindamage, set the original to the current, so you end up healed once mannitol runs out
+
 /datum/reagent/discount/mannitol/on_introduced(var/mob/living/M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!yourarted)
-			originalbraindamage = H.getBrainLoss() //saves your current brain damage so you DON'T heal when the effects run out
+			originalbraindamage = H.getBrainLoss() //saves your current brain damage so you DON'T heal if your haven't gone under the original value
 			H.setBrainLoss(200) //you go absolutely rarted here
 			H.eye_blurry = max(M.eye_blurry, 5)
 			to_chat(M, "<span class='notice'>You feel your mind cloud and your dexterity vanish...</span>")
