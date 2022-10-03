@@ -154,12 +154,6 @@
 			to_chat(usr, "<span class='warning'>The round is either not ready, or has already finished...</span>")
 			return
 
-		if(client.prefs.species != "Human")
-
-			if(!is_alien_whitelisted(src, client.prefs.species) && config.usealienwhitelist)
-				to_chat(src, alert("You are currently not whitelisted to play [client.prefs.species]."))
-				return 0
-
 		LateChoices()
 	if(href_list["cluwnebanned"])
 		if(!iscluwnebanned(usr))
@@ -185,10 +179,6 @@
 		if(!enter_allowed)
 			to_chat(usr, "<span class='notice'>There is an administrative lock on entering the game!</span>")
 			return
-
-		if(!is_alien_whitelisted(src, client.prefs.species) && config.usealienwhitelist)
-			to_chat(src, alert("You are currently not whitelisted to play [client.prefs.species]."))
-			return 0
 
 		AttemptLateSpawn(href_list["SelectedJob"])
 		return
@@ -666,17 +656,14 @@
 
 	if(prefs.species)
 		chosen_species = all_species[prefs.species]
-	if(chosen_species)
-		if(is_alien_whitelisted(src, prefs.species) || !config.usealienwhitelist || !(chosen_species.flags & WHITELISTED))
-			new_character.set_species(prefs.species)
-			//if(chosen_species.language)
-				//new_character.add_language(chosen_species.language)
+	if(chosen_species && (check_rights(R_ADMIN, 0) || chosen_species.flags & PLAYABLE || chosen_species.conditional_playable()))
+		new_character.set_species(prefs.species)
 
 	var/datum/language/chosen_language
 	if(prefs.language)
 		chosen_language = all_languages["[prefs.language]"]
 	if(chosen_language)
-		if(is_alien_whitelisted(src, prefs.language) || !config.usealienwhitelist || !(chosen_language.flags & WHITELISTED) )
+		if(chosen_language.flags & WHITELISTED)
 			new_character.add_language("[prefs.language]")
 	if(ticker.random_players || appearance_isbanned(src)) //disabling ident bans for now
 		new_character.setGender(pick(MALE, FEMALE))
