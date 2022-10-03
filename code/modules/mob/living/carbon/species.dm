@@ -13,7 +13,7 @@ var/global/list/whitelisted_species = list("Human")
 /proc/buildSpeciesLists()
 	var/datum/language/L
 	var/datum/species/S
-	for(. in subtypesof(/datum/language)-/datum/language)
+	for(. in (typesof(/datum/language)-/datum/language))
 		L = new .
 		all_languages[L.name] = L
 	for (var/language_name in all_languages)
@@ -21,10 +21,10 @@ var/global/list/whitelisted_species = list("Human")
 		language_keys[":[lowertext(L.key)]"] = L
 		language_keys[".[lowertext(L.key)]"] = L
 		language_keys["#[lowertext(L.key)]"] = L
-	for(. in subtypesof(/datum/species))
+	for(. in (typesof(/datum/species)-/datum/species))
 		S = new .
 		all_species[S.name] = S
-		if(S.flags & WHITELISTED)
+		if(S.flags & IS_WHITELISTED)
 			whitelisted_species += S.name
 	return
 
@@ -393,6 +393,7 @@ var/global/list/whitelisted_species = list("Human")
 	heat_level_2 = 480 //Default 400
 	heat_level_3 = 1100 //Default 1000
 
+	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
 
 	default_mutations=list(M_CLAWS)
@@ -416,7 +417,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_skeleton.dmi'
 	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
 	known_languages = list(LANGUAGE_CLATTER)
-	flags = NO_BREATHE
+	flags = IS_WHITELISTED | NO_BREATHE
 	anatomy_flags = NO_SKIN | NO_BLOOD
 	meat_type = /obj/item/stack/sheet/bone
 	chem_flags = NO_EAT | NO_INJECT
@@ -533,6 +534,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/tajara
 
+	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL | HAS_SWEAT_GLANDS
 
 	default_mutations=list(M_CLAWS)
@@ -610,7 +612,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/grey
 
-	flags = WHITELISTED
+	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | ACID4WATER
 
 	spells = list(/spell/targeted/telepathy)
@@ -717,6 +719,7 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_SKRELLIAN)
 	primitive = /mob/living/carbon/monkey/skrell
 
+	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_SWEAT_GLANDS
 
 	flesh_color = "#8CD7A3"
@@ -750,7 +753,7 @@ var/global/list/whitelisted_species = list("Human")
 	breath_type = GAS_NITROGEN
 
 	default_mutations = list(M_BEAK, M_TALONS)
-	flags = WHITELISTED | NO_SCAN
+	flags = IS_WHITELISTED | NO_SCAN
 
 	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
@@ -866,7 +869,7 @@ var/global/list/whitelisted_species = list("Human")
 	heat_level_2 = T0C + 75
 	heat_level_3 = T0C + 100
 
-	flags = WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | IS_SLOW | NO_PAIN | HYPOTHERMIA_IMMUNE
+	flags = IS_WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | IS_SLOW | NO_PAIN | HYPOTHERMIA_IMMUNE
 	anatomy_flags = NO_BLOOD | HAS_SWEAT_GLANDS
 
 	blood_color = "#004400"
@@ -1026,7 +1029,7 @@ var/list/has_died_as_golem = list()
 	icobase = 'icons/mob/human_races/r_grue.dmi'		// Normal icon set.
 	deform = 'icons/mob/human_races/r_def_grue.dmi'	// Mutated icon set.
 	attack_verb = "claws"
-	flags = HYPOTHERMIA_IMMUNE
+	flags = IS_WHITELISTED | HYPOTHERMIA_IMMUNE
 	anatomy_flags = HAS_LIPS
 	punch_damage = 7
 	default_mutations=list(M_CLAWS,M_TALONS)
@@ -1056,7 +1059,7 @@ var/list/has_died_as_golem = list()
 	icobase = 'icons/mob/human_races/r_ghoul.dmi'
 	deform = 'icons/mob/human_races/r_skeleton.dmi' //It's thin leathery skin on top of bone, deformation's just gonna show bone
 
-	flags = NO_PAIN | RAD_ABSORB
+	flags = NO_PAIN | IS_WHITELISTED | RAD_ABSORB
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS
 	has_mutant_race = 0
 
@@ -1081,7 +1084,7 @@ var/list/has_died_as_golem = list()
 	attack_verb = "glomps"
 	tacklePower = 35
 
-	flags = NO_BREATHE | ELECTRIC_HEAL
+	flags = IS_WHITELISTED | NO_BREATHE | ELECTRIC_HEAL
 	anatomy_flags = NO_SKIN | NO_BLOOD | NO_BONES | NO_STRUCTURE | MULTICOLOR
 
 	spells = list(/spell/regen_limbs)
@@ -1208,7 +1211,7 @@ var/list/has_died_as_golem = list()
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/insectoid
 	primitive = /mob/living/carbon/monkey/roach
 
-	flags = WHITELISTED
+	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
 	burn_mod = 1.1
@@ -1269,7 +1272,7 @@ var/list/has_died_as_golem = list()
 	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
 
-	flags = WHITELISTED | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
+	flags = IS_WHITELISTED | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
 	anatomy_flags = NO_BALD
 
 	gender = NEUTER
@@ -1364,7 +1367,7 @@ var/list/has_died_as_golem = list()
 	icobase = 'icons/mob/human_races/r_lich.dmi'
 	deform = 'icons/mob/human_races/r_lich.dmi'
 	known_languages = list(LANGUAGE_CLATTER)
-	flags = NO_BREATHE
+	flags = IS_WHITELISTED | NO_BREATHE
 	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD
 	meat_type = /obj/item/stack/sheet/bone
 	chem_flags = NO_EAT | NO_INJECT
