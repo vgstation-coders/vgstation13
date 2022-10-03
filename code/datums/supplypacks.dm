@@ -1853,6 +1853,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/firefighting_advanced
 	name = "Advanced firefighting equipment"
 	contains = list (/obj/item/weapon/fireaxe,
+					/obj/item/tool/crowbar/halligan,
 					/obj/item/weapon/extinguisher/foam,
 					/obj/item/weapon/extinguisher/foam)
 	cost = 25
