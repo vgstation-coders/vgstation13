@@ -684,7 +684,6 @@ var/global/list/playable_species = list("Human")
 	tacklePower = 90
 
 	primitive = /mob/living/carbon/monkey // TODO
-	flags = WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS
 
 	// Both must be set or it's only a 45% chance of manifesting.
