@@ -27,8 +27,8 @@ var/global/list/playable_species = list("Human")
 		all_species[S.name] = S
 		if(S.flags & WHITELISTED)
 			whitelisted_species += S.name
-		if(S.flags & PLAYABLE || S.conditional_playable())
-			playable_species += S.name
+			if(S.flags & PLAYABLE || S.conditional_playable())
+				playable_species += S.name
 	return
 
 ////////////////////////////////////////////////////////////////
