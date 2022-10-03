@@ -967,21 +967,21 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 	)
 
 //Generic species flags.
-#define NO_BREATHE 1
-#define NO_SCAN 2
-#define NO_PAIN 4
-#define IS_SLOW 8
-#define IS_PLANT 16
-#define IS_WHITELISTED 32
-#define RAD_ABSORB 64
-#define REQUIRE_LIGHT 128
-#define HYPOTHERMIA_IMMUNE 256
-#define PLASMA_IMMUNE 512
-#define RAD_GLOW 1024
-#define ELECTRIC_HEAL 2048
-#define SPECIES_NO_MOUTH 4096
-//#define REQUIRE_DARK 8192
-#define RAD_IMMUNE 16384
+#define WHITELISTED (1<<0)
+#define NO_SCAN (1<<1)
+#define NO_PAIN (1<<2)
+#define IS_SLOW (1<<3)
+#define IS_PLANT (1<<4)
+#define NO_BREATHE (1<<5)
+#define RAD_ABSORB (1<<6)
+#define REQUIRE_LIGHT (1<<7)
+#define HYPOTHERMIA_IMMUNE (1<<8)
+#define PLASMA_IMMUNE (1<<9)
+#define RAD_GLOW (1<<10)
+#define ELECTRIC_HEAL (1<<11)
+#define SPECIES_NO_MOUTH (1<<12)
+//#define REQUIRE_DARK (1<<13)
+#define RAD_IMMUNE (1<<14)
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -1061,7 +1061,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 
 //Language flags.
-#define WHITELISTED (1<<0)  // Language is available if the speaker is whitelisted.
+//#define WHITELISTED // Language is available if the speaker is whitelisted. Also a species flag of the same bitflag value
 #define RESTRICTED (1<<1)   // Language can only be accquired by spawning or an admin.
 #define CAN_BE_SECONDARY_LANGUAGE (1<<2)	// Language is available on character setup as secondary language.
 #define NONORAL (1<<3)		//Language is spoken without using the mouth, so can be spoken while muzzled.

@@ -61,6 +61,9 @@ var/global/list/alien_whitelist = list()
 	if("*" in alien_whitelist[species])
 		return 1
 
+	if(current_species.flags & WHITELISTED)
+		return 1
+
 	// CKey is in whitelist
 	/*testing("Checking [M]/[M.ckey] for whitelisted species [species]")
 	for(var/ckey in alien_whitelist[species])

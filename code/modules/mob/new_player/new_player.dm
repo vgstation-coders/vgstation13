@@ -667,16 +667,14 @@
 	if(prefs.species)
 		chosen_species = all_species[prefs.species]
 	if(chosen_species)
-		if(is_alien_whitelisted(src, prefs.species) || !config.usealienwhitelist || !(chosen_species.flags & WHITELISTED))
+		if(is_alien_whitelisted(usr, prefs.species) || !config.usealienwhitelist || chosen_species.flags & WHITELISTED)
 			new_character.set_species(prefs.species)
-			//if(chosen_species.language)
-				//new_character.add_language(chosen_species.language)
 
 	var/datum/language/chosen_language
 	if(prefs.language)
 		chosen_language = all_languages["[prefs.language]"]
 	if(chosen_language)
-		if(is_alien_whitelisted(src, prefs.language) || !config.usealienwhitelist || !(chosen_language.flags & WHITELISTED) )
+		if(is_alien_whitelisted(src, prefs.language) || !config.usealienwhitelist || chosen_language.flags & WHITELISTED)
 			new_character.add_language("[prefs.language]")
 	if(ticker.random_players || appearance_isbanned(src)) //disabling ident bans for now
 		new_character.setGender(pick(MALE, FEMALE))
