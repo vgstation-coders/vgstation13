@@ -43,9 +43,12 @@ var/global/media_receivers=list()
 	// Check if there's a broadcast to tune into.
 	if(freq in media_transmitters)
 		// Pick a random broadcast in that frequency.
-		var/obj/machinery/media/transmitter/B = pick(media_transmitters[freq])
-		if(B.media_crypto == media_crypto) // Crypto-key check, if needed.
-			receive_broadcast(B.media_url, B.media_start_time, B.media_finish_time, B.current_song_info)
+		if(media_transmitters[freq])
+			var/obj/machinery/media/transmitter/B = pick(media_transmitters[freq])
+			if(B.media_crypto == media_crypto) // Crypto-key check, if needed.
+				receive_broadcast(B.media_url, B.media_start_time, B.media_finish_time, B.current_song_info)
+		else
+			to_chat(usr, "<span class='info'>No media transmitter frequencies.")
 
 /obj/machinery/media/receiver/proc/disconnect_frequency()
 	var/list/receivers=list()

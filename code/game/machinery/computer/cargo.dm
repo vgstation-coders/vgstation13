@@ -298,13 +298,15 @@ For vending packs, see vending_packs.dm*/
 	for(var/datum/cargo_forwarding/CF in SSsupply_shuttle.cargo_forwards)
 		var/displayworth = CF.worth
 		if (isnum(CF.worth))
-			displayworth = "[CF.worth]$"
+			displayworth = "$[CF.worth]"
 		var/timeleft = CF.time_created && CF.time_limit ? ((CF.time_created + (CF.time_limit MINUTES)) - world.time) : 0 // Should never see 0 but just in case
 		var/mm = text2num(time2text(timeleft, "mm")) // Set the minute
 		var/ss = text2num(time2text(timeleft, "ss")) // Set the second
 		var/weighedtext = CF.weighed ? "Yes" : "No"
-		var/stampedtext = CF.associated_manifest.stamped && CF.associated_manifest.stamped.len ? "Yes" : "No"
-		forward_list.Add(list(list("name" = CF.name, "origin_station_name" = CF.origin_station_name, "origin_sender_name" = CF.origin_sender_name, "worth" = displayworth, "mm" = mm, "ss" = ss, "weighed" = weighedtext, "stamped" = stampedtext)))
+		var/stampedtext = "No"
+		if(CF.associated_manifest)
+			stampedtext = CF.associated_manifest.stamped ? "Yes" : "No"
+		forward_list.Add(list(list("name" = CF.name, "origin_station_name" = CF.origin_station_name, "origin_sender_name" = CF.origin_sender_name, "worth" = displayworth, "mm" = mm, "ss" = ss, "weighed" = weighedtext, "associated manifest" = CF.associated_manifest ? "Yes" : "No", "stamped" = stampedtext)))
 	data["forwards"] = forward_list
 	data["are_forwards"] = SSsupply_shuttle.cargo_forwards.len
 
