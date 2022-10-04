@@ -386,7 +386,7 @@ var/list/all_doors = list()
 	..()
 	while(!arcane_linked_door || arcane_linked_door == src || arcane_linked_door.flow_flags & ON_BORDER) // no windoors pls
 		arcane_linked_door = pick(all_doors)
-	arcane_linked_door.arcanetampered = TRUE
+	arcane_linked_door.arcanetampered = arcanetampered
 	return "D'R ST'K!"
 
 /obj/machinery/door/bless()

@@ -80,7 +80,9 @@
 
 	// If the plant's age is negative, let's revert it into a seed packet, for funsies
 	if(age < 0)
-		seed.spawn_seed_packet(get_turf(src))
+		var/obj/item/seeds/seeds = seed.spawn_seed_packet(get_turf(src))
+		if(arcanetampered)
+			seeds.arcanetampered = arcanetampered
 		remove_plant()
 		force_update = 1
 		process()
@@ -124,7 +126,7 @@
 					msg_admin_attack("limited growth creeper vines ([seed.display_name]) have spread out of a tray. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>, last touched by [key_name_last_user]. Seed id: [seed.uid]. ([bad_stuff()])")
 				if(2)
 					msg_admin_attack("space vines ([seed.display_name]) have spread out of a tray. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>, last touched by [key_name_last_user]. Seed id: [seed.uid]. ([bad_stuff()])")
-	
+
 	if(update_icon_after_process)
 		update_icon()
 
@@ -188,7 +190,7 @@
 		overlays += image(icon = icon, icon_state = "over_alert3")
 	if(get_waterlevel() <= WATERLEVEL_MAX/5 && get_toxinlevel() <= TOXINLEVEL_MAX/5)
 		overlays += image(icon = icon, icon_state = "over_lowwater3")
-	
+
 	if(!seed)
 		return
 	if(seed.toxin_affinity < 5)
@@ -284,7 +286,7 @@
 		else
 			update_icon_after_process = 1
 
-	if(seed.toxin_affinity < 5 && get_toxinlevel() > TOXINLEVEL_MAX/5)	
+	if(seed.toxin_affinity < 5 && get_toxinlevel() > TOXINLEVEL_MAX/5)
 		sum_health -= healthmod*(5-seed.toxin_affinity)
 
 	if(missing_gas)

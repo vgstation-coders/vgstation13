@@ -43,6 +43,20 @@
 
 	return "You have improved [oldname] into [name]. [description]"
 
+/spell/targeted/arcane_tamper/get_upgrade_price(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return 10
+		if(Sp_POWER)
+			return 10
+
+/spell/targeted/arcane_tamper/get_upgrade_info(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return "Lowers the cooldown of the spell."
+		if(Sp_POWER)
+			return "Upgrades the range, then recursiveness, of the spell"
+
 /spell/targeted/arcane_tamper/cast(list/targets, mob/user)
 	..()
 	invocation = "E'MAGI!"
