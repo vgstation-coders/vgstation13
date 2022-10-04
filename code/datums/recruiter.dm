@@ -111,9 +111,6 @@
 			if(jobban_isbanned(O, jbrole))
 				return 0
 
-	if(alien_whitelist_id && !is_alien_whitelisted(src, alien_whitelist_id) && config.usealienwhitelist)
-		return 0
-
 	return O.client
 
 /datum/recruiter/Destroy()
