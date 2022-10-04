@@ -48,7 +48,7 @@ var/global/media_receivers=list()
 			if(B.media_crypto == media_crypto) // Crypto-key check, if needed.
 				receive_broadcast(B.media_url, B.media_start_time, B.media_finish_time, B.current_song_info)
 		else
-			to_chat(usr, "<span class='info'>No media transmitter frequencies.")
+			to_chat(usr, "<span class='info'>No media transmitter frequencies.</span>")
 
 /obj/machinery/media/receiver/proc/disconnect_frequency()
 	var/list/receivers=list()
