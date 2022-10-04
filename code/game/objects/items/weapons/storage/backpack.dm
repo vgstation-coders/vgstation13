@@ -16,30 +16,7 @@
 	max_combined_w_class = 21
 	autoignition_temperature = AUTOIGNITION_FABRIC
 
-/obj/item/weapon/storage/backpack/arcane_act(mob/user)
-	..()
-	for(var/atom/movable/AM in contents)
-		AM.forceMove(get_turf(AM)) // less cruel than baleeting
-	return "H'NGRY B'G!"
-
-/obj/item/weapon/storage/attack_hand(mob/user)
-	if(arcanetampered)
-		var/datum/organ/external/external = user.get_active_hand_organ()
-		if(external)
-			playsound(src, 'sound/weapons/bite.ogg', 50, 1, -1)
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			to_chat(user,"<span class='sinister'>The bag opens up to reveal a huge mouth that eats your hand clean off!</span>")
-			external.dust()
-		return
-	..()
-
 /obj/item/weapon/storage/backpack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(arcanetampered && can_be_inserted(W)) // the hungry bag, scip 101
-		playsound(src, 'sound/weapons/bite.ogg', 50, 1, -1)
-		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-		to_chat(user,"<span class='sinister'>The bag opens up to reveal a huge mouth that eats your item right up!</span>")
-		qdel(W)
-		return
 	if(!stealthy(user))
 		playsound(src, "rustle", 50, 1, -5)
 	..()
