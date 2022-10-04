@@ -23,7 +23,7 @@
 			E.droplimb(1, 1)
 	dropBorers()
 	var/gib_radius = 0
-	if(reagents?.has_reagent(LUBE))
+	if(reagents.has_reagent(LUBE))
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
