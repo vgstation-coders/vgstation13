@@ -158,7 +158,7 @@
 /proc/equip_wizard(mob/living/carbon/human/wizard_mob, apprentice = FALSE)
 	if (!istype(wizard_mob))
 		return
-
+	wizard_mob.delete_all_equipped_items()
 	var/datum/faction/wizard/civilwar/wpf/WPF = find_active_faction_by_type(/datum/faction/wizard/civilwar/wpf)
 	var/datum/faction/wizard/civilwar/wpf/PFW = find_active_faction_by_type(/datum/faction/wizard/civilwar/pfw)
 	if(WPF && WPF.get_member_by_mind(wizard_mob.mind))  //WPF get red

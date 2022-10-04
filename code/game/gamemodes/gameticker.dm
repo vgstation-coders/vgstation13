@@ -167,26 +167,6 @@ var/datum/controller/gameticker/ticker
 	init_mind_ui()
 	init_PDAgames_leaderboard()
 
-	for(var/mob/new_player/player in player_list)
-		if(!(player.ready && player.mind && player.mind.assigned_role))
-			continue
-		var/mob/living/L = player
-		if(istype(L))
-			ticker.minds += L.mind
-		
-		switch(player.mind.assigned_role)
-			if("Mobile MMI", "Cyborg", "AI")
-				player.create_roundstart_silicon(player.mind.assigned_role)
-				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-			if("MODE")
-				//do nothing
-			else
-				player.create_roundstart_human() //Create player characters and transfer them
-
-	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
-		for(var/mob/living/carbon/human/player in player_list)
-			player.apeify()
-
 	var/can_continue = mode.Setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
@@ -196,6 +176,66 @@ var/datum/controller/gameticker/ticker
 		del(mode)
 		job_master.ResetOccupations()
 		return 0
+
+	//After antagonists have been removed from new_players in player_list, create crew
+	var/list/new_characters = list()	//list of created crew for transferring
+	var/list/new_players_ready = list() //unique list of people who have readied up, so we can delete mob/new_player later (ready is lost on mind transfer)
+	for(var/mob/M in player_list)
+		if(!istype(M, /mob/new_player/))
+			var/mob/living/L = M
+			ticker.minds += L.mind
+			L.store_position()
+			M.close_spawn_windows()
+			continue
+		var/mob/new_player/np = M
+		if(!(np.ready && np.mind && np.mind.assigned_role))
+			//If they aren't ready, update new player panels so they say join instead of ready up.
+			np.new_player_panel()
+			continue
+		var/datum/preferences/prefs = M.client.prefs
+		var/key = M.key
+		new_players_ready |= M
+		//Create player characters
+		switch(np.mind.assigned_role)
+			if("Cyborg", "Mobile MMI", "AI")
+				var/mob/living/silicon/S = np.create_roundstart_silicon(prefs)
+				ticker.minds += S.mind
+				S.store_position()
+				log_admin("([key]) started the game as a [S.mind.assigned_role].")
+				new_characters[key] = S
+			if("MODE")
+				//antags aren't new players
+			else
+				var/mob/living/carbon/human/H = np.create_human(prefs)
+				ticker.minds += H.mind
+				H.store_position()
+				EquipCustomItems(H)
+				H.update_icons()
+				new_characters[key] = H
+				if(H.mind.assigned_role != "Trader")
+					data_core.manifest_inject(H)
+		CHECK_TICK
+	//Transfer characters to players
+	for(var/i = 1, i <= new_characters.len, i++)
+		var/mob/M = new_characters[new_characters[i]]
+		var/key = new_characters[i]
+		M.key = key
+		if(istype(M, /mob/living/carbon/human/))
+			var/mob/living/carbon/human/H = M
+			job_master.PostJobSetup(H)
+		//minds are linked to accounts... And accounts are linked to jobs.
+		var/rank = M.mind.assigned_role
+		var/datum/job/job = job_master.GetJob(rank)
+		if(job)
+			job.equip(M, job.priority) // Outfit datum.
+
+	//delete the new_player mob for those who readied
+	for(var/mob/np in new_players_ready)
+		qdel(np)
+
+	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
+		for(var/mob/living/carbon/human/player in player_list)
+			player.apeify()
 
 	if(hide_mode)
 		var/list/modes = new
@@ -208,33 +248,7 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
-	var/captain = FALSE
-	for(var/mob/living/carbon/human/player in player_list)	
-		//Used to display a message the captainship message
-		if(player.mind)
-			if(player.mind.assigned_role == "MODE")
-					//no injection
-			else
-				job_master.EquipRank(player, player.mind.assigned_role, 0)
-				EquipCustomItems(player)
-				player.update_icons()
-				if(player.mind.assigned_role == "Captain")
-					captain = TRUE
-				if(player.mind.assigned_role != "Trader")
-					data_core.manifest_inject(player)
-
-	mode.PostSetup()
-
-		//send message that no one is a captain and store positions for some reason
-	for(var/mob/M in player_list)
-		if(!istype(M,/mob/new_player))
-			if(!captain)
-				to_chat(M, "Captainship not forced on anyone.")
-			M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
-	// Update new player panels so they say join instead of ready up.
-	for(var/mob/new_player/player in player_list)
-		player.new_player_panel_proc()
-
+	mode.PostSetup() //provides antag objectives
 
 	gamestart_time = world.time / 10
 	current_state = GAME_STATE_PLAYING

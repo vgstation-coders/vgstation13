@@ -138,3 +138,21 @@
 	..()
 	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
 	new /obj/item/stack/cable_coil(src,30,color)
+
+/obj/item/weapon/storage/toolbox/paint
+	name = "painter's toolbox"
+	desc = "Contains an assortment of paints for the artistic trader."
+	icon_state = "toolbox_paint"
+	item_state = "toolbox_paint"
+	attack_verb = list("daubs", "decorates", "slathers")
+	items_to_spawn = list(
+	/obj/item/weapon/reagent_containers/glass/paint/red,
+	/obj/item/weapon/reagent_containers/glass/paint/green,
+	/obj/item/weapon/reagent_containers/glass/paint/blue,
+	/obj/item/weapon/reagent_containers/glass/paint/yellow,
+	/obj/item/weapon/reagent_containers/glass/paint/purple,
+	/obj/item/weapon/reagent_containers/glass/paint/cyan,
+	/obj/item/weapon/reagent_containers/glass/paint/black,
+	/obj/item/weapon/reagent_containers/glass/paint/white,
+	/obj/item/weapon/reagent_containers/glass/paint/remover
+	)
