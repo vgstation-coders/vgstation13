@@ -518,16 +518,35 @@
 	icon_state = initial(icon_state) +"_locked"
 
 /obj/item/weapon/grenade/chem_grenade/cleaner/arcane_act(mob/user, recursive)
-	B2.reagents.clear_reagents()
+	for(var/atom/A in beakers)
+		qdel(A)
+	beakers.Cut()
+	var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
+	var/obj/item/weapon/reagent_containers/glass/beaker/B2 = new(src)
+
+	B1.reagents.add_reagent(FLUOROSURFACTANT, 40)
 	B2.reagents.add_reagent(WATER, 40)
 	B2.reagents.add_reagent(pick(FLOUR,RADIUM,BLOOD,CARBON,FUEL,CORNOIL,LUBE), 10)
+
+	beakers += B1
+	beakers += B2
 	return ..()
 
-/obj/item/weapon/grenade/chem_grenade/cleaner/arcane_act(mob/user, recursive)
+/obj/item/weapon/grenade/chem_grenade/cleaner/bless()
 	..()
-	B2.reagents.clear_reagents()
-	B2.reagents.add_reagent(WATER, 40)
-	B2.reagents.add_reagent(CLEANER, 10)
+	if(arcanetampered)
+		for(var/atom/A in beakers)
+			qdel(A)
+		beakers.Cut()
+		var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
+		var/obj/item/weapon/reagent_containers/glass/beaker/B2 = new(src)
+
+		B1.reagents.add_reagent(FLUOROSURFACTANT, 40)
+		B2.reagents.add_reagent(WATER, 40)
+		B2.reagents.add_reagent(CLEANER, 10)
+
+		beakers += B1
+		beakers += B2
 
 /obj/item/weapon/grenade/chem_grenade/wind
 	name = "wind grenade"
@@ -551,16 +570,37 @@
 	icon_state = initial(icon_state) +"_locked"
 
 /obj/item/weapon/grenade/chem_grenade/wind/arcane_act(mob/user, recursive)
-	B2.reagents.clear_reagents()
+	for(var/atom/A in beakers)
+		qdel(A)
+	beakers.Cut()
+
+	var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
+	var/obj/item/weapon/reagent_containers/glass/beaker/B2 = new(src)
+
+	B1.reagents.add_reagent(VAPORSALT, 50)
 	B2.reagents.add_reagent(OXYGEN, 25)
 	B2.reagents.add_reagent(PLASMA, 25)
+
+	beakers += B1
+	beakers += B2
 	return ..()
 
-/obj/item/weapon/grenade/chem_grenade/wind/arcane_act(mob/user, recursive)
+/obj/item/weapon/grenade/chem_grenade/wind/bless()
 	..()
-	B2.reagents.clear_reagents()
-	B2.reagents.add_reagent(OXYGEN, 10)
-	B2.reagents.add_reagent(NITROGEN, 40)
+	if(arcanetampered)
+		for(var/atom/A in beakers)
+			qdel(A)
+		beakers.Cut()
+
+		var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
+		var/obj/item/weapon/reagent_containers/glass/beaker/B2 = new(src)
+
+		B1.reagents.add_reagent(VAPORSALT, 50)
+		B2.reagents.add_reagent(OXYGEN, 10)
+		B2.reagents.add_reagent(NITROGEN, 40)
+
+		beakers += B1
+		beakers += B2
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreactgrenade
 	name = "grenade reservoir"
