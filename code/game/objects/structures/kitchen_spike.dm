@@ -84,7 +84,7 @@
 
 	if(occupant)
 		if(occupant.meat_amount > occupant.meat_taken)
-			if(arcanetampered)
+			if(arcanetampered || occupant.arcanetampered)
 				new /obj/item/weapon/reagent_containers/food/snacks/tofu(get_turf(src))
 				occupant.meat_taken++
 			else

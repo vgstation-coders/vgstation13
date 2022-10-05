@@ -281,6 +281,7 @@
 	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/arcane_act(mob/user, recursive)
+	reagents.clear_reagents()
 	volume = 25
 	return ..()
 
