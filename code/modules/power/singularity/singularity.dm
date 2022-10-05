@@ -64,6 +64,35 @@ var/list/obj/machinery/singularity/white_hole_candidates
 	if(prob(1) && white_hole_candidates.len > 1)
 		link_a_wormhole()
 
+/obj/machinery/singularity/arcane_act(mob/user, recursive)
+	if(current_size <= 1)
+		var/obj/item/toy/spinningtoy/T = new(loc)
+		T.arcane_act(user,recursive)
+		qdel(src)
+		return
+	else if(!wormhole_in)
+		name = "white hole"
+		desc = "Every action has an equal and opposite reaction. A black hole sucks time and matter out of the universe, a white hole returns it."
+		repels = TRUE
+		color= list(-1,0,0,
+					0,-1,0,
+					0,0,-1,
+					1,1,1) //Invert it
+	else
+		name = initial(name)
+		desc = initial(desc)
+		repels = FALSE
+		color= initial(color)
+	return ..()
+
+/obj/machinery/singularity/bless() // yeah good luck doing this
+	if(!wormhole_in)
+		name = initial(name)
+		desc = initial(desc)
+		repels = FALSE
+		color= initial(color)
+	..()
+
 /obj/machinery/singularity/proc/link_a_wormhole()
 	var/obj/machinery/singularity/other = null
 	do
