@@ -64,7 +64,7 @@
 		user.delayNextAttack(10)
 		if(arcanetampered)
 			var/dirttype = pick(subtypesof(/obj/effect/decal/cleanable))
-			new dirttype(tile)
+			new dirttype(get_turf(A))
 		else
 			clean(get_turf(A))
 		reagents.remove_any(1) //Might be a tad wonky with "special mop mixes", but fuck it
