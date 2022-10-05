@@ -134,7 +134,7 @@
 	else if((W.arcanetampered && W.is_screwdriver(user)) || (!W.arcanetampered && istype(W, /obj/item/key)))
 		if(!heldkey)
 			if(keytype)
-				if(!arcanetampered)
+				if(!W.arcanetampered)
 					if(!istype(W, keytype))
 						to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
 						return
