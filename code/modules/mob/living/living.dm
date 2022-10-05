@@ -1129,7 +1129,7 @@ Thanks.
 			for(var/i = 1 to firecount)
 				CM.dir = turn(CM.dir, pick(-90, 90))
 				sleep(10)
-
+			CM.fire_stacks = 0
 			if(fire_stacks <= 0)
 				CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>",
 								   "<span class='notice'>You extinguish yourself.</span>")
