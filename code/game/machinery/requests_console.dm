@@ -289,18 +289,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			screen = 0
 
 	if(href_list["sendAnnouncement"])
-		if(arcanetampered)
-			switch(rand(1,4))
-				if(1)
-					make_announcement(derpspeech(message))
-				if(2)
-					make_announcement(slur(message))
-				if(2)
-					make_announcement(tumblrspeech(nekospeech(message)))
-				if(4)
-					make_announcement(markov_chain(message, rand(1,5), length(message)))
-		else
-			make_announcement(message)
+		make_announcement(message)
 
 	if( href_list["department"] && message )
 		var/log_msg = message
