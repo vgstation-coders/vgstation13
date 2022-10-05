@@ -131,15 +131,16 @@
 		else
 			to_chat(user, "Need more welding fuel!")
 			return
-	else if((W.arcanetampered &&  W.is_screwdriver(user)) || (!W.arcanetampered && istype(W, /obj/item/key)))
+	else if((W.arcanetampered && W.is_screwdriver(user)) || (!W.arcanetampered && istype(W, /obj/item/key)))
 		if(!heldkey)
 			if(keytype)
-				if(!istype(W, keytype))
-					to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
-					return
-				if(mykey && mykey != W)
-					to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
-					return
+				if(!arcanetampered)
+					if(!istype(W, keytype))
+						to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
+						return
+					if(mykey && mykey != W)
+						to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
+						return
 				if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
 					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
 					return
