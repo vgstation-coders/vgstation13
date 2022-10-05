@@ -124,11 +124,15 @@
 /obj/item/weapon/paper/envelope/arcane_act(mob/user)
 	..()
 	throwforce = 10 // i forget if this is a reference to something
+	throw_speed = 2
+	throw_range = 7
 	return "I W'S F'Z'N T'DAY!"
 
 /obj/item/weapon/paper/envelope/bless()
 	..()
 	throwforce = initial(throwforce)
+	throw_speed = initial(throw_speed)
+	throw_range = initial(throw_range)
 
 /obj/item/weapon/paper/envelope/proc/seal()
 	open = FALSE
