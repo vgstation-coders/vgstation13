@@ -465,8 +465,9 @@ var/global/msg_id = 0
 			to_chat(user, "[bicon(src)]<span class='warning'>There is no ID in the PDA!</span>")
 			return
 		var/obj/item/weapon/spacecash/dosh = C
-		if(add_to_virtual_wallet(dosh.worth * dosh.amount, user))
-			to_chat(user, "<span class='info'>You insert [dosh.worth * dosh.amount] credit\s into the PDA.</span>")
+		var/multiplier = dosh.arcanetampered ? rand(0,99) : 100
+		if(add_to_virtual_wallet(round(dosh.worth * dosh.amount * (multiplier/100)), user))
+			to_chat(user, "<span class='info'>You insert [round(dosh.worth * dosh.amount * (multiplier/100))] credit\s into the PDA.</span>")
 			qdel(dosh)
 		updateDialog()
 

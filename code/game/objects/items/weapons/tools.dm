@@ -412,21 +412,25 @@
 /obj/item/tool/weldingtool/afterattack(atom/A, mob/user as mob, proximity)
 	if(!proximity)
 		return
-	if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && !src.welding)
-		if(A.reagents.trans_to(src, max_fuel))
-			to_chat(user, "<span class='notice'>Welder refueled.</span>")
-			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
-		else if(!A.reagents)
-			to_chat(user, "<span class='notice'>\The [A] is empty.</span>")
+	if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1)
+		if (src.welding || A.arcanetampered)
+			if(ismob(A.arcanetampered))
+				message_admins("[key_name_admin(arcanetampered)] caused a fueltank explosion.")
+				log_game("[key_name(arcanetampered)] caused a fueltank explosion.")
+			else if(!A.arcanetampered)
+				message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
+				log_game("[key_name(user)] triggered a fueltank explosion.")
+			to_chat(user, "<span class='warning'>That was stupid of you.</span>")
+			var/obj/structure/reagent_dispensers/fueltank/tank = A
+			tank.explode()
 		else
-			to_chat(user, "<span class='notice'>\The [src] is already full.</span>")
-		return
-	else if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && (src.welding || A.arcanetampered))
-		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
-		log_game("[key_name(user)] triggered a fueltank explosion.")
-		to_chat(user, "<span class='warning'>That was stupid of you.</span>")
-		var/obj/structure/reagent_dispensers/fueltank/tank = A
-		tank.explode()
+			if(A.reagents.trans_to(src, max_fuel))
+				to_chat(user, "<span class='notice'>Welder refueled.</span>")
+				playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+			else if(!A.reagents)
+				to_chat(user, "<span class='notice'>\The [A] is empty.</span>")
+			else
+				to_chat(user, "<span class='notice'>\The [src] is already full.</span>")
 		return
 	if(arcanetampered && get_dist(src,A) <= 1)
 		if (!src.welding)

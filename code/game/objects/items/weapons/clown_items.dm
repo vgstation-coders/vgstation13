@@ -119,7 +119,7 @@
 /obj/item/weapon/bikehorn/arcane_act(mob/user) // ideally only on cast because this thing would be dummy broken if it was kept like that
 	visible_message("<span class='warning'>HONK</span>")
 	playsound(user, istype(src,/obj/item/weapon/bikehorn/skullhorn) ? hitsound : 'sound/items/AirHorn.ogg', 100, 1)
-	for(var/mob/living/carbon/M in ohearers(4, user))
+	for(var/mob/living/carbon/M in hearers(4, src))
 		M.sleeping = 0
 		M.stuttering += 10
 		M.ear_deaf += 5

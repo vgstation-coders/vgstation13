@@ -152,7 +152,8 @@
 	if(arcanetampered)
 		src.insert(user)
 		if(src.close())
-			src.welded =! src.welded
+			if(src.canweld())
+				src.welded =! src.welded
 			src.update_icon()
 	return 1
 

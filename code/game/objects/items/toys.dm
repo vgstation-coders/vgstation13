@@ -151,7 +151,6 @@
 		processing_objects.Remove(src)
 
 /obj/item/toy/spinningtoy/process()
-	..()
 	if(arcanetampered)
 		for(var/atom/X in orange(4, src))
 			X.singularity_pull(src, 1)
