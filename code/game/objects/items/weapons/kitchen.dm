@@ -143,7 +143,13 @@
 		if(do_surgery(M, user, src))
 			return
 
-	if (loaded_food)
+	if(arcanetampered && M.hasmouth())
+		M.visible_message("<span class='sinister'>[M] eats a delicious spoon!</span>")
+		feed_to(user, M)
+		playsound(M, 'sound/items/eatfood.ogg', 50, 0)
+		qdel(src)
+		return
+	else if (loaded_food)
 		reagents.update_total()
 		if(!M.hasmouth())
 			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")
@@ -209,7 +215,14 @@
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD && M != user && !loaded_food)
 		return ..()
 
-	if (loaded_food)
+	if(arcanetampered)
+		M.visible_message("<span class='sinister'>[M] eats a delicious fork!</span>")
+		playsound(M, 'sound/items/eatfood.ogg', 50, 0)
+		feed_to(user, M)
+		M.adjustBruteLoss(10)
+		qdel(src)
+		return
+	else if (loaded_food)
 		reagents.update_total()
 		if(!M.hasmouth())
 			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")

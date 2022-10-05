@@ -224,7 +224,9 @@
 	for (var/i=1 to totalslabs)
 		//first we spawn the meat
 		var/obj/item/weapon/newmeat
-		if(ispath(occupant.meat_type, /obj/item/weapon/reagent_containers))
+		if(occupant.arcanetampered || src.arcanetampered)
+			newmeat = new /obj/item/weapon/reagent_containers/food/snacks/tofu(src)
+		else if(ispath(occupant.meat_type, /obj/item/weapon/reagent_containers))
 			newmeat = new occupant.meat_type(src, occupant)
 			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 		else

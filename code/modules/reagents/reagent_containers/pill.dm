@@ -12,9 +12,11 @@
 	starting_materials = null
 	w_type = RECYK_METAL
 	attack_delay = 0 //so you don't get a delay after pilling someone. as of the time of writing, this only applies to mobs, remove if in the future this allows you to kenshiro windows
+	var/prearcane_name = ""
 
 /obj/item/weapon/reagent_containers/pill/New()
 	..()
+	prearcane_name = name
 	if(!icon_state)
 		icon_state = "pill[rand(1,20)]"
 
@@ -77,6 +79,14 @@
 
 /obj/item/weapon/reagent_containers/pill/bite_act(mob/user)
 	try_feed(user, user)
+
+/obj/item/weapon/reagent_containers/pill/arcane_act(mob/user, recursive)
+	name = generate_floorpill_name()
+	return ..()
+
+/obj/item/weapon/reagent_containers/pill/bless()
+	..()
+	name = prearcane_name
 
 //OOP, HO!
 /obj/item/weapon/reagent_containers/pill/proc/ingest(mob/M as mob)
@@ -432,9 +442,8 @@
 		list(DEGENERATECALCIUM = 2) = 0.25 // he he
 	)
 
-/obj/item/weapon/reagent_containers/pill/random/maintenance/New()
-	. = ..()
-	name = "\improper [pick( \
+/proc/generate_floorpill_name()
+	return "\improper [pick( \
 		3000;"floor", 1000;"funny", 1000;"mystery", 1000;"adventure", 1000;"double-dog dare", 1000;"suspicious", 1000;"happy happy", 500;"heal", 500;"handmade", \
 		"the cure part 1", "Werewolf Serum (10 units)", "help me", "5u Of Everything", "Quadcordrazine", "Delicious candy", "EAT IF YOU", "Anticarisol (10 units)", "Fix And Fun", \
 		"FUN TIME - ONLY TAKE 1", "violent suicide", "STRONG BONES PILL CONSULT YOUR DOCTOR BEFORE USING", "SKELETON+3 arms (CAUTION!!!)", "Tricordrazine (1.5 units)", \
@@ -471,6 +480,10 @@
 		"you werent supposed to find this", "For Experts", "Monkey Juice (10 units)", "test", "Rapid Gene Enhancer (9.6 units)", "Adminordrazine (10 units)", "Babys Day Out",\
 		"Dylovene (13.4328u) + Bicaridine (13.4328u) + Nutriment (1.75278u) + Green Grape Juice (3.39774u) + Tannic acid (6.8396u) + Honey (15.0536u) + Sugar (1.8241u) + Opium (4.62655u) + Allicin (5.39507u) + Blood (5.88667u) + Kelotane (5.97015u) + Dermaline (8.95522u) + Tricordrazine (13.4328u)",\
 		"antiubodies for the disease that makes you scream.", "Xenomicrobes (1 unit)", "Miracle butt heal", "lesser death", "All-Natural", "still fucking hurts doc")] pill"
+
+/obj/item/weapon/reagent_containers/pill/random/maintenance/New()
+	. = ..()
+	name = generate_floorpill_name()
 	desc = pick(300;"A strange pill found in the depths of maintenance.", "Just what the doctor ordered.", "Hey, look! Free healthcare!", "For best results, take one as close to noon as possible.")
 	icon_state = "pill[rand(20,40)]"
 

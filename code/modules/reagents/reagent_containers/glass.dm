@@ -216,7 +216,7 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/large/plasma/on_reagent_change()
 	..()
-	if(arcanetampered)
+	if(arcanetampered && reagents.total_volume)
 		var/datum/chemical_reaction/chemsmoke/CS = new()
 		CS.on_reaction(src.reagents)
 
@@ -282,12 +282,14 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/arcane_act(mob/user, recursive)
 	reagents.clear_reagents()
+	reagents.maximum_volume = 25
 	volume = 25
 	return ..()
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/bless()
 	..()
 	volume = initial(volume)
+	reagents.maximum_volume = initial(volume)
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
@@ -300,12 +302,9 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large/arcane_act(mob/user, recursive)
 	. = ..()
+	reagents.maximum_volume = 10
 	volume = 10
 	return .
-
-/obj/item/weapon/reagent_containers/glass/beaker/bluespace/large/bless()
-	..()
-	volume = initial(volume)
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial
 	name = "vial"

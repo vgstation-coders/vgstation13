@@ -192,7 +192,7 @@
 
 	var/obj/item/object = loaded_item
 	var/speed
-	var/wclasstouse = object.arcanetampered || src.arcanetampered ? 1/object.w_class : object.w_class
+	var/wclasstouse = object.arcanetampered || src.arcanetampered ? (W_CLASS_HUGE+1)-object.w_class : object.w_class
 	if(object.w_class > W_CLASS_TINY)
 		speed = (((fire_force*(4/wclasstouse))/5)*2) //projectile speed.
 	else
