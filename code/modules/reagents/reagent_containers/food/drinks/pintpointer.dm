@@ -4,7 +4,7 @@
 	icon_state = "pintdist5"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	item_state = "electronic"
-	var/mob/creator
+	var/atom/movable/creator
 	var/smashed
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/New()
@@ -21,12 +21,15 @@
 	icon_state = "pintdist[dist]"
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/proc/calculate_distance()
-	if(!creator)
+	var/atom/movable/thing2find = creator
+	if(arcanetampered)
+		thing2find = nukedisk
+	if(!thing2find)
 		return round(reagents.total_volume/10)
-	else if(creator.gcDestroyed)
+	else if(!arcanetampered && creator.gcDestroyed)
 		creator = null
 		return .()
-	switch(get_dist(get_turf(src),creator))
+	switch(get_dist(get_turf(src),thing2find))
 		if(-1 to 8)
 			. = 5
 		if(9 to 16)
