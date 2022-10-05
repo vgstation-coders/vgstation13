@@ -142,12 +142,24 @@
 			return access_not_dir
 	return can_access(ACL,req_access,req_one_access)
 
-/obj/item/var/time_since_last_random_access = 0
+/obj/item/var/list/arcane_access = list()
+
+/obj/item/arcane_act(mob/user, recursive)
+	arcane_access.Cut()
+	for(var/i in 1 to rand(1,5))
+		arcane_access.Add(pick(get_all_accesses()))
+	return ..()
+
+/obj/item/bless()
+	..()
+	arcane_access.Cut()
 
 /obj/item/proc/GetAccess()
-	if(arcanetampered && (time_since_last_random_access + (2 SECONDS) < world.time)) // to stop access spam
-		time_since_last_random_access = world.time
-		return pick(get_all_accesses())
+	if(arcanetampered)
+		if(!arcane_access || !arcane_access.len)
+			for(var/i in 1 to rand(1,5))
+				arcane_access.Add(pick(get_all_accesses()))
+		return arcane_access
 	return list()
 
 /obj/item/proc/GetID()
