@@ -79,6 +79,19 @@
 		Bumped(movingA)
 	. = ..()
 
+/obj/machinery/power/supermatter/arcane_act(mob/user, recursive)
+	if(!arcanetampered)
+		warning_point /= 10
+		audio_warning_point /= 10
+		emergency_point /= 10
+	return ..()
+
+/obj/machinery/power/supermatter/bless()
+	warning_point = initial(warning_point)
+	audio_warning_point initial(audio_warning_point)
+	emergency_point = initial(emergency_point)
+	..()
+
 /obj/machinery/power/supermatter/shard //Small subtype, less efficient and more sensitive, but less boom.
 	name = "\improper Supermatter Shard"
 	short_name = "Shard"
@@ -145,6 +158,14 @@
 	has_exploded++
 	var/turf/T = get_turf(src)
 	if (has_exploded <= 1)
+		if(arcanetampered)
+			new /obj/structure/bomberflame(T,1,MAX_BOMB_POWER,NORTH,1,1)
+			new /obj/structure/bomberflame(T,1,MAX_BOMB_POWER,SOUTH,1,1)
+			new /obj/structure/bomberflame(T,1,MAX_BOMB_POWER,EAST,1,1)
+			new /obj/structure/bomberflame(T,1,MAX_BOMB_POWER,WEST,1,1)
+			empulse(get_turf(src), 100, 200, 1)
+			qdel(src)
+			return
 		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
 		empulse(get_turf(src), 100, 200, 1)
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
@@ -416,7 +437,8 @@
 	Consume(user)
 
 /obj/machinery/power/supermatter/proc/transfer_energy()
-	emitted_harvestable_radiation(get_turf(src), power, range = 15)
+	if(!arcanetampered)
+		emitted_harvestable_radiation(get_turf(src), power, range = 15)
 
 /obj/machinery/power/supermatter/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	. = ..()
