@@ -386,10 +386,10 @@
 		mime.AssignToRole(character.mind,1)
 		mime.Greet(GREET_ROUNDSTART)
 
-	var/turf/T = character.loc
 
-	if(character.mind.assigned_role != "MODE")
+	if(job && character.mind.assigned_role != "MODE")
 		job_master.PostJobSetup(character)
+		job.equip(character, job.priority) // Outfit datum.
 
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
@@ -399,14 +399,12 @@
 
 	job_master.CheckPriorityFulfilled(rank)
 
+	var/turf/T = character.loc
 	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
 		//Removal of job slot is in role/role.dm
 		character.store_position()
 		qdel(src)
 		return
-
-	if(job)
-		job.equip(character, job.priority) // Outfit datum.
 
 	EquipCustomItems(character)
 
