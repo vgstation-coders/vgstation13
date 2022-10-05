@@ -517,6 +517,18 @@
 	beakers += B2
 	icon_state = initial(icon_state) +"_locked"
 
+/obj/item/weapon/grenade/chem_grenade/cleaner/arcane_act(mob/user, recursive)
+	B2.reagents.clear_reagents()
+	B2.reagents.add_reagent(WATER, 40)
+	B2.reagents.add_reagent(pick(FLOUR,RADIUM,BLOOD,CARBON,FUEL,CORNOIL,LUBE), 10)
+	return ..()
+
+/obj/item/weapon/grenade/chem_grenade/cleaner/arcane_act(mob/user, recursive)
+	..()
+	B2.reagents.clear_reagents()
+	B2.reagents.add_reagent(WATER, 40)
+	B2.reagents.add_reagent(CLEANER, 10)
+
 /obj/item/weapon/grenade/chem_grenade/wind
 	name = "wind grenade"
 	desc = "Designed to perfectly bring an empty five-by-five room back into a filled, breathable state. Larger rooms will require additional gas sources."
@@ -537,6 +549,18 @@
 	beakers += B1
 	beakers += B2
 	icon_state = initial(icon_state) +"_locked"
+
+/obj/item/weapon/grenade/chem_grenade/wind/arcane_act(mob/user, recursive)
+	B2.reagents.clear_reagents()
+	B2.reagents.add_reagent(OXYGEN, 25)
+	B2.reagents.add_reagent(PLASMA, 25)
+	return ..()
+
+/obj/item/weapon/grenade/chem_grenade/wind/arcane_act(mob/user, recursive)
+	..()
+	B2.reagents.clear_reagents()
+	B2.reagents.add_reagent(OXYGEN, 10)
+	B2.reagents.add_reagent(NITROGEN, 40)
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreactgrenade
 	name = "grenade reservoir"
