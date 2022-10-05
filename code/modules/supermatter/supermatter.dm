@@ -88,7 +88,7 @@
 
 /obj/machinery/power/supermatter/bless()
 	warning_point = initial(warning_point)
-	audio_warning_point initial(audio_warning_point)
+	audio_warning_point = initial(audio_warning_point)
 	emergency_point = initial(emergency_point)
 	..()
 
