@@ -405,7 +405,7 @@
 		qdel(src)
 		return
 
-	if(job)
+	if(job && character.mind.assigned_role != "MODE")
 		job.equip(character, job.priority) // Outfit datum.
 
 	EquipCustomItems(character)
