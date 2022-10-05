@@ -142,8 +142,11 @@
 			return access_not_dir
 	return can_access(ACL,req_access,req_one_access)
 
+/obj/item/var/time_since_last_random_access = 0
+
 /obj/item/proc/GetAccess()
-	if(arcanetampered)
+	if(arcanetampered && (time_since_last_random_access + (2 SECONDS) < world.time)) // to stop access spam
+		time_since_last_random_access = world.time
 		return pick(get_all_accesses())
 	return list()
 
