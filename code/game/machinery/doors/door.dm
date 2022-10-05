@@ -397,6 +397,8 @@ var/list/all_doors = list()
 	if(arcane_linked_door)
 		arcane_linked_door.bless()
 		arcane_linked_door = null
+		if(!density)
+			set_opacity(0)
 
 /obj/machinery/door/Destroy()
 	update_nearby_tiles()
