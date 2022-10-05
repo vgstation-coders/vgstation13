@@ -129,7 +129,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 			holder.add_hiddenprint(L)
 			if(href_list["cut"]) // Toggles the cut/mend status
 				if(I?.is_wirecutter(L))
-					if(I.arcanetampered)
+					if(I.arcanetampered || holder.arcanetampered)
 						L.electrocute_act(30,holder)
 					else
 						var/colour = href_list["cut"]
@@ -140,7 +140,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 
 			else if(href_list["pulse"])
 				if(I?.is_multitool(L))
-					if(I.arcanetampered)
+					if(I.arcanetampered || holder.arcanetampered)
 						L.electrocute_act(30,holder)
 					else
 						var/colour = href_list["pulse"]

@@ -386,7 +386,7 @@ var/list/all_doors = list()
 
 /obj/machinery/door/arcane_act(mob/user)
 	..()
-	while(!arcane_linked_door || arcane_linked_door == src || arcane_linked_door.flow_flags & ON_BORDER) // no windoors pls
+	while(!arcane_linked_door || arcane_linked_door == src || arcane_linked_door.flow_flags & ON_BORDER || arcane_linked_door.z == map.zCentcomm) // no windoors or centcomm pls
 		arcane_linked_door = pick(all_doors)
 	arcane_linked_door.arcanetampered = arcanetampered
 	arcane_linked_door.arcane_linked_door = src
@@ -419,11 +419,14 @@ var/list/all_doors = list()
 	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird)) //Which is not 100% correct for things like windoors but it's close enough.
 		open()
 	if(!density && arcane_linked_door && istype(AM,/atom/movable))
+		var/atom/movable/A = AM
 		var/turf/T = get_turf(arcane_linked_door)
 		if(T)
-			arcane_linked_door.open()
-			var/atom/movable/A = AM
-			A.forceMove(T)
+			T = get_step(T,A.dir)
+			if(T && T.Cross())
+				spawn(0)
+					arcane_linked_door.open()
+				A.forceMove(T)
 	return ..()
 
 /obj/machinery/door/CanAStarPass(var/obj/item/weapon/card/id/ID)
