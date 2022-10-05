@@ -273,6 +273,8 @@ var/list/all_doors = list()
 	for (var/obj/O in src.loc)
 		if (O.blocks_doors())
 			return 0
+	if(arcane_linked_door)
+		arcane_linked_door.open()
 	if(!operating)
 		operating = 1
 
@@ -315,6 +317,9 @@ var/list/all_doors = list()
 	for (var/obj/O in src.loc)
 		if (O.blocks_doors())
 			return 0
+
+	if(arcane_linked_door)
+		arcane_linked_door.close()
 
 	operating = 1
 
@@ -418,16 +423,21 @@ var/list/all_doors = list()
 /obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
 	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird)) //Which is not 100% correct for things like windoors but it's close enough.
 		open()
-	if(!density && arcane_linked_door && istype(AM,/atom/movable))
+	if(arcane_linked_door && !density && istype(AM,/atom/movable))
 		var/atom/movable/A = AM
 		var/turf/T = get_turf(arcane_linked_door)
 		if(T)
 			T = get_step(T,A.dir)
 			if(T && T.Cross())
-				spawn(0)
-					arcane_linked_door.open()
 				A.forceMove(T)
-	return ..()
+				return ..()
+			for(var/dir in cardinal)
+				T = get_step(T,dir)
+				if(T && T.Cross())
+					A.forceMove(T)
+					return ..()
+			A.forceMove(T)
+			return ..()
 
 /obj/machinery/door/CanAStarPass(var/obj/item/weapon/card/id/ID)
 	return !density || check_access(ID)

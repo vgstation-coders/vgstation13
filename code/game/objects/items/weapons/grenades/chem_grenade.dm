@@ -533,7 +533,6 @@
 	return ..()
 
 /obj/item/weapon/grenade/chem_grenade/cleaner/bless()
-	..()
 	if(arcanetampered)
 		for(var/atom/A in beakers)
 			qdel(A)
@@ -547,6 +546,7 @@
 
 		beakers += B1
 		beakers += B2
+	..()
 
 /obj/item/weapon/grenade/chem_grenade/wind
 	name = "wind grenade"
@@ -586,7 +586,6 @@
 	return ..()
 
 /obj/item/weapon/grenade/chem_grenade/wind/bless()
-	..()
 	if(arcanetampered)
 		for(var/atom/A in beakers)
 			qdel(A)
@@ -601,6 +600,7 @@
 
 		beakers += B1
 		beakers += B2
+	..()
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreactgrenade
 	name = "grenade reservoir"
