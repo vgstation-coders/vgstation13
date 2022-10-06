@@ -486,7 +486,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		M.angry = 0
 		M.apply_disguise()
 	for(var/mob/living/M in contents)
-		if(M.key || M.ckey) //only mobs that were never player controlled
+		if(M.key || M.ckey || M.mind) //only mobs that were never player controlled
 			return TRUE
 
 	if (locate(/obj/item/weapon/disk/nuclear) in contents)
