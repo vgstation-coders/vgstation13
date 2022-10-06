@@ -485,7 +485,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	for(var/mob/living/simple_animal/hostile/mimic/M in contents)
 		M.angry = 0
 		M.apply_disguise()
-	for(var/mob/M in contents)
+	for(var/mob/living/M in contents)
 		if(M.key || M.ckey) //only mobs that were never player controlled
 			return TRUE
 
