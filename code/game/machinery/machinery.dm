@@ -876,9 +876,10 @@ Class Procs:
 		src.shake(1, 3) //1 means x movement, 3 means intensity
 
 	if(arcanetampered && density && anchored)
-		to_chat(kicker,"<span class='sinister'>[src] kicks YOU!</span>")
-		kicker.Knockdown(10)
-		kicker.Stun(10)
+		to_chat(H,"<span class='sinister'>[src] kicks YOU!</span>")
+		playsound(src, 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
+		H.Knockdown(10)
+		H.Stun(10)
 		return
 
 	if(scan)
