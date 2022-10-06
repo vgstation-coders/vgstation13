@@ -875,6 +875,12 @@ Class Procs:
 	else
 		src.shake(1, 3) //1 means x movement, 3 means intensity
 
+	if(arcanetampered && density && anchored)
+		to_chat(kicker,"<span class='sinister'>[src] kicks YOU!</span>")
+		kicker.Knockdown(10)
+		kicker.Stun(10)
+		return
+
 	if(scan)
 		if(prob(50))
 			scan.forceMove(get_turf(src))
