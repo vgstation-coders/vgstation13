@@ -525,6 +525,36 @@
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
 	health = 50
+	var/burning = FALSE
+	var/list/possible_fuels = list(
+		PLASMA = list(
+				"max_temperature" = TEMPERATURE_PLASMA,
+				"thermal_energy_transfer" = 9000,
+				"consumption_rate" = 0.1,
+				"o2_cons" = 0.01,
+				"co2_cons" = 0,
+				"unsafety" = 0),
+		GLYCEROL = list(
+				"max_temperature" = 1833.15,
+				"thermal_energy_transfer" = 6000,
+				"consumption_rate" = 0.25,
+				"o2_cons" = 0.05,
+				"co2_cons" = -0.025,
+				"unsafety" = 5),
+		FUEL = list(
+				"max_temperature" = TEMPERATURE_WELDER,
+				"thermal_energy_transfer" = 5400,
+				"consumption_rate" = 0.5,
+				"o2_cons" = 0.2,
+				"co2_cons" = -0.2,
+				"unsafety" = 25),
+		ETHANOL = list(
+				"max_temperature" = 1833.15,
+				"thermal_energy_transfer" = 3900,
+				"consumption_rate" = 0.5,
+				"o2_cons" = 0.08,
+				"co2_cons" = -0.04,
+				"unsafety" = 10))
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood
 	name = "wooden barrel"
@@ -572,6 +602,14 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.is_wrench(user) || istype(W,/obj/item/weapon/reagent_containers)) //what did irradiation mean by this
 		return
+
+	if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
+		if(burn_contents())
+			user.visible_message("<span class='notice'>[user] ignites \the [src]'s contents with \the [W].</span>")
+		else
+			user.visible_message("<span class='notice'>[user] fails to ignite \the [src]'s contents with \the [W].</span>")
+		return
+
 	if(istype(W,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
 		var/mob/living/target = G.affecting
@@ -663,3 +701,61 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/attack_alien(mob/user)
 	user.visible_message("<span class='danger'>[user] rips \the [src] apart!</span>")
 	Destroy()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
+	if(burning)
+		icon_state = "flamingmetalbarrel"
+	else
+		icon_state = "metalbarrel"
+
+/obj/structure/reagent_dispensers/cauldron/barrel/examine(mob/user)
+	..()
+	if(burning)
+		to_chat(user, "<span class='info'>The contents of \the [src] are burning.</span>")
+
+/obj/structure/reagent_dispensers/cauldron/barrel/burn_contents(mob/user)
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/G = T.return_air()
+	if(!G || G.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
+		visible_message("<span class = 'warning'>\The [src] splutters out from lack of oxygen.</span>","<span class = 'warning'>You hear something cough.</span>")
+		update_icon()
+		return 0
+
+	var/max_temperature
+	var/thermal_energy_transfer
+	var/consumption_rate
+	var/unsafety = 0 //Possibility it lights things on its turf
+	var/o2_consumption
+	var/co2_consumption
+
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			burning = TRUE
+			var/list/fuel_stats = possible_fuels[possible_fuel]
+			max_temperature = fuel_stats["max_temperature"]
+			thermal_energy_transfer = fuel_stats["thermal_energy_transfer"]
+			consumption_rate = fuel_stats["consumption_rate"]
+			unsafety = fuel_stats["unsafety"]
+			o2_consumption = fuel_stats["o2_cons"]
+			co2_consumption = fuel_stats["co2_cons"]
+
+			reagents.remove_reagent(possible_fuel, consumption_rate)
+			if(held_container)
+				held_container.reagents.heating(thermal_energy_transfer, max_temperature)
+				update_icon()
+			G.adjust_multi(
+				GAS_OXYGEN, -o2_consumption,
+				GAS_CARBON, -co2_consumption)
+			if(prob(unsafety) && T)
+				T.hotspot_expose(max_temperature, 5)
+			break
+
+		if(!max_temperature)
+			burning = FALSE
+			visible_message("<span class = 'warning'>\The [src] splutters out from lack of fuel.</span>","<span class = 'warning'>You hear something cough.</span>")
+			update_icon()
+			return 0
+	return 1
+
+/obj/structure/reagent_dispensers/cauldron/barrel/wood/start_fire(mob/user)
+	return 0 //nice try!
