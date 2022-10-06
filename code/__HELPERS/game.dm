@@ -191,9 +191,9 @@
 	return null
 
 /proc/get_mind_by_key(var/key)
-	for(var/datum/mind/M in ticker.minds)
-		if(lowertext(M.key) == lowertext(key))
-			return M
+	for(var/mob/M in mob_list)
+		if(lowertext(M.ckey) == lowertext(key))
+			return M.mind
 	return null
 
 // Comment out when done testing shit.

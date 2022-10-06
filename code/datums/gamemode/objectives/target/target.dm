@@ -46,15 +46,15 @@
 
 /datum/objective/target/proc/get_targets()
 	var/list/targets = list()
-	for(var/datum/mind/possible_target in ticker.minds)
-		if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && (possible_target.current.stat != DEAD) && !(possible_target.assigned_role in bad_assassinate_targets))
-			targets += possible_target
+	for(var/mob/living/carbon/human/H in player_list)
+		if(H.ckey != owner.ckey && (H.z != map.zCentcomm) && (!isDead(H)) && !(H.mind.assigned_role in bad_assassinate_targets))
+			targets += H.mind
 	return targets
 
 /datum/objective/target/proc/find_target_by_role(role, role_type = 0)//Option sets either to check assigned role or special role. Default to assigned.
-	for(var/datum/mind/possible_target in ticker.minds)
-		if((possible_target != owner) && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && ((role_type ? possible_target.special_role : possible_target.assigned_role) == role) && !(possible_target.assigned_role in bad_assassinate_targets))
-			target = possible_target
+	for(var/mob/living/carbon/human/H in player_list)
+		if(H.ckey != owner.ckey && (H.z != map.zCentcomm) && (!isDead(H)) && ((role_type ? H.mind.special_role : H.mind.assigned_role) == role) && !(H.mind.assigned_role in bad_assassinate_targets))
+			target = H.mind
 			return TRUE
 	return FALSE
 

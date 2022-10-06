@@ -155,15 +155,10 @@
 	station_name = station_name()
 
 	// check for survivors
-	for(var/datum/mind/M in ticker.minds)
-		// i'd like manifest stats, eventually, to be something that doesn't depend on
-		// all data being 'pristine' at round end; for instance, an ayy'd player
-		// will probably have a different entry than what they were at roundstart
-		// and that's gross
-		manifest_entries.Add(new /datum/stat/manifest_entry(M))
-		if(istype(M.current, /mob/living) && !M.current.isDead())
-			add_survivor_stat(M.current)
-
+	for(var/mob/living/M in player_list)
+		manifest_entries.Add(new /datum/stat/manifest_entry(M.mind))
+		if(!M.isDead())
+			add_survivor_stat(M)
 
 /proc/stats_server_alert_new_file()
 	world.Export("http://stats.ss13.moe/alert_new_file")

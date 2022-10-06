@@ -485,12 +485,9 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	for(var/mob/living/simple_animal/hostile/mimic/M in contents)
 		M.angry = 0
 		M.apply_disguise()
-	for(var/mob/living/M in contents)
+	for(var/mob/M in contents)
 		if(M.key || M.ckey) //only mobs that were never player controlled
 			return TRUE
-		for(var/datum/mind/M2 in ticker.minds) //see above, but for ghosts
-			if(M2.current == M)
-				return TRUE
 
 	if (locate(/obj/item/weapon/disk/nuclear) in contents)
 		return TRUE

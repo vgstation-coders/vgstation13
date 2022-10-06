@@ -564,10 +564,6 @@
 		mind.key = key
 	else
 		mind = new /datum/mind(key)
-		if(ticker)
-			ticker.minds += mind
-		else
-			world.log << "## DEBUG: mind_initialize(): No ticker ready yet! Please inform Carn"
 	if(!mind.name)
 		mind.name = real_name
 	if (!mind.body_archive)
