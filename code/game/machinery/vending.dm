@@ -3897,10 +3897,17 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		playsound(src, "buzz-sigh", 50, 1)
 		visible_message("<b>[src]</b>'s monitor flashes, \"The Central Command Lottery Fund is empty, and cannot dispense money.\"")
 		return
-	visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [amount] credits from the Central Command Lottery Fund!\"")
-	dispense_cash(amount, get_turf(src))
 	playsound(src, "polaroid", 50, 1)
-	station_jackpot -= (min(station_jackpot,amount))
+	if(arcanetampered)
+		var/total = 0
+		for(var/i in 0 to round(sqrt(sqrt(amount)))) // anywhere from about 1 to 118(!) ducks (thankfully that should be really really rare)
+			new /obj/item/weapon/bikehorn/rubberducky(get_turf(src))
+			total++
+		visible_message("<b>[src]</b>'s monitor flashes, <span class='sinister'>\"Withdrawing [total] ducks from the Central Command Bonus Duck Fund!\"</span>")
+	else
+		visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [amount] credits from the Central Command Lottery Fund!\"")
+		dispense_cash(amount, get_turf(src))
+		station_jackpot -= (min(station_jackpot,amount))
 
 
 /obj/machinery/vending/lotto/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
