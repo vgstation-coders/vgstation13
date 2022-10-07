@@ -1179,19 +1179,19 @@ var/list/admin_verbs_mod = list(
 		clipmin_x = input(usr, "Minimum X to clip at", "Map element loading", "0") as null|num
 		if(clipmin_x == null)
 			return
-		clipmax_x = input(usr, "Maximum X to clip at", "Map element loading", "0") as null|num
+		clipmax_x = input(usr, "Maximum X to clip at", "Map element loading", "[world.maxx]") as null|num
 		if(clipmax_x == null)
 			return
 		clipmin_y = input(usr, "Minimum Y to clip at", "Map element loading", "0") as null|num
 		if(clipmin_y == null)
 			return
-		clipmax_y = input(usr, "Maximum Y to clip at", "Map element loading", "0") as null|num
+		clipmax_y = input(usr, "Maximum Y to clip at", "Map element loading", "[world.maxy]") as null|num
 		if(clipmax_y == null)
 			return
 		clipmin_z = input(usr, "Minimum Z to clip at", "Map element loading", "0") as null|num
 		if(clipmin_z == null)
 			return
-		clipmax_z = input(usr, "Maximum Z to clip at", "Map element loading", "0") as null|num
+		clipmax_z = input(usr, "Maximum Z to clip at", "Map element loading", "[world.maxz]") as null|num
 		if(clipmax_z == null)
 			return
 

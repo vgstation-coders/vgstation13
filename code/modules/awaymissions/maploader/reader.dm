@@ -146,6 +146,7 @@ var/list/map_dimension_cache = list()
 			world.log << "skipped [x_on],[y_on],[z_on] on Z"
 			continue
 		if(z_on > clipmax_z)
+			world.log << "broke out with [x_on],[y_on],[z_on] on Z"
 			break
 		if(zcrd+z_offset > world.maxz)
 			world.maxz = zcrd+z_offset
@@ -160,18 +161,25 @@ var/list/map_dimension_cache = list()
 				world.log << "skipped [x_on],[y_on],[z_on] on X"
 				continue
 			if(x_on > clipmax_x)
+				world.log << "broke out with [x_on],[y_on],[z_on] on X"
 				break
 			for(var/ypos=findtext(tfile,quote+"\n",xpos,0)+2; ypos != findtext(tfile,"\n"+quote,xpos,0)+1; ypos = findtext(tfile,"\n",ypos+1,0)+1)
 				i++
-				xy_grids.len = i
-				xy_grids[i] = ""
 				y_on++
 				if(y_on < clipmin_y)
 					world.log << "skipped [x_on],[y_on],[z_on] on Y"
+					if(i > xy_grids.len)
+						xy_grids = ""
+					else
+						xy_grids[i] = ""
 					continue
 				if(y_on > clipmax_y)
+					world.log << "broke out with [x_on],[y_on],[z_on] on Y"
 					break
-				xy_grids[i] += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
+				if(i > xy_grids.len)
+					xy_grids += y_on < clipmin_y ? copytext(tfile,ypos,findtext(tfile,"\n",ypos,0)) : ""
+				else
+					xy_grids[i] += y_on < clipmin_y ? copytext(tfile,ypos,findtext(tfile,"\n",ypos,0)) : ""
 
 		//if exceeding the world max x or y, increase it
 		var/x_depth = length(xy_grids[1])
