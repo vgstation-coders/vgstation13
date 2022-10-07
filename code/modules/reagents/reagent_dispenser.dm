@@ -525,9 +525,9 @@
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
 	health = 50
-	var/light_power = 1.5
-	var/light_range = 2
-	var/light_color = LIGHT_COLOR_FIRE
+	light_power = 1.5
+	light_range = 2
+	light_color = LIGHT_COLOR_FIRE
 	var/burning = FALSE
 	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	var/list/possible_fuels = list(
