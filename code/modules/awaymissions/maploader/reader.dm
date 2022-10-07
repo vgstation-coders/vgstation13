@@ -155,9 +155,9 @@ var/list/map_dimension_cache = list()
 			var/i = 1
 			for(var/ypos=findtext(tfile,quote+"\n",xpos,0)+2; ypos != findtext(tfile,"\n"+quote,xpos,0)+1; ypos = findtext(tfile,"\n",ypos+1,0)+1)
 				if(i > xy_grids.len)
-					xy_grids += y_on < clipmin_y ? copytext(tfile,ypos,findtext(tfile,"\n",ypos,0)) : ""
+					xy_grids += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
 				else
-					xy_grids[i] += y_on < clipmin_y ? copytext(tfile,ypos,findtext(tfile,"\n",ypos,0)) : ""
+					xy_grids[i] += copytext(tfile,ypos,findtext(tfile,"\n",ypos,0))
 				i++
 
 		//if exceeding the world max x or y, increase it
