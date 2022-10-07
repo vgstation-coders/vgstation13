@@ -1166,7 +1166,9 @@ var/list/admin_verbs_mod = list(
 	var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading", "0") as null|num
 	if(rotate == null)
 		return
-	var/overwrite = alert("Overwrite original objects in area?","Map element loading","Yes","No") == "Yes"
+	var/overwrite = FALSE
+	if(!dungeoning)
+		overwrite = alert("Overwrite original objects in area?","Map element loading","Yes","No") == "Yes"
 	var/clipmin_x = 0
 	var/clipmax_x = INFINITY
 	var/clipmin_y = 0
