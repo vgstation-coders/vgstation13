@@ -282,7 +282,7 @@
 	C.account_number = M.account_number
 	H.equip_or_collect(C, slot_wear_id)
 	if(C.virtual_wallet)
-		C.update_virtual_wallet(virtual)
+		C.update_virtual_wallet(M.virtual)
 
 	if (pda_type)
 		var/obj/item/device/pda/pda = new pda_type(H)

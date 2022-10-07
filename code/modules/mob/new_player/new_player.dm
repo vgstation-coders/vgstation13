@@ -406,8 +406,6 @@
 		qdel(src)
 		return
 
-	EquipCustomItems(character)
-
 	character.store_position()
 
 	// WHY THE FUCK IS THIS HERE
@@ -650,6 +648,14 @@
 	var/mob/living/carbon/human/new_character = new(loc)
 	var/datum/species/chosen_species
 	var/late_join = ticker.current_state == GAME_STATE_PLAYING ? TRUE : FALSE
+	var/rank = new_character.mind.assigned_role
+	var/datum/job/job = job_master.GetJob(rank)
+	new_character.job = rank	//the ultimate jobby: your body is assigned a job
+	if(rank != "MODE")
+		job.equip(new_character, job.priority) // Outfit datum.	
+		create_account(new_character.real_name, rand(100,250), rand(100,250), null, job.wage_payout, prefs.bank_security)
+		EquipCustomItems(new_character)
+		new_character.update_icons()
 
 	if(prefs.species)
 		chosen_species = all_species[prefs.species]
@@ -673,7 +679,6 @@
 		prefs.copy_to(new_character)
 
 	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)// MAD JAMS cant last forever yo
-
 
 	if (mind)
 		mind.active = 0 // we wish to transfer the key manually
@@ -721,7 +726,6 @@
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
-	var/rank = new_character.mind.assigned_role
 	if(!late_join)
 		var/obj/S = null
 		// Find a spawn point that wasn't given to anyone

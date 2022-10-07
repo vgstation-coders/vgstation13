@@ -430,17 +430,13 @@ var/global/datum/controller/occupations/job_master
 	if(!(H && H.mind && H.mind.assigned_role))
 		return 0
 	var/joined_late = ticker.current_state == GAME_STATE_PLAYING ? TRUE : FALSE
-	var/datum/money_account/M = get_account_byname(H.real_name)
 	var/rank = H.mind.assigned_role
 	var/datum/job/job = GetJob(rank)
 	var/remembered_info = ""
 
-	if(job && !job.no_starting_money)
-		var/bank_pref_number = H.client.prefs.bank_security
-		var/bank_pref = bank_security_num2text(bank_pref_number)
-		if(centcomm_account_db)
-			var/datum/money_account/M = get_account_byname(real_name)
-
+	if(centcomm_account_db)
+		var/datum/money_account/M = get_account_byname(real_name)
+		if(M)
 			remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
 			remembered_info += "<b>Your account pin is:</b> [M.remote_access_pin]<br>"
 			remembered_info += "<b>Your bank account funds are:</b> $[M.money]<br>"
@@ -451,35 +447,24 @@ var/global/datum/controller/occupations/job_master
 				remembered_info += "<b>Your account was created:</b> [T.time], [T.date] at [T.source_terminal]<br>"
 
 			// If they're head, give them the account info for their department
-			if(H.mind && job.head_position)
+			if(job.head_position)
 				var/datum/money_account/department_account = department_accounts[job.department]
 				if(department_account)
 					remembered_info += "<b>Your department's account number is:</b> #[department_account.account_number]<br>"
 					remembered_info += "<b>Your department's account pin is:</b> [department_account.remote_access_pin]<br>"
 					remembered_info += "<b>Your department's account funds are:</b> $[department_account.money]<br>"
 
-				to_chat(H, "<span class='danger'>Your bank account number is: <span class='darknotice'>[M.account_number]</span>, your bank account pin is: <span class='darknotice'>[M.remote_access_pin]</span></span>")
-				to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span class='darknotice'>$[balance_wallet]</span>, your bank account funds are: <span class='darknotice'>$[balance_bank]</span></span>")
-				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span class='darknotice'>[bank_pref]</span></span>")
-
 			H.mind.store_memory(remembered_info)
-	var/alt_title = null
 
-	H.job = rank
+			to_chat(H, "<span class='danger'>Your bank account number is: <span class='darknotice'>[M.account_number]</span>, your bank account pin is: <span class='darknotice'>[M.remote_access_pin]</span></span>")
+			to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span class='darknotice'>$[M.virtual]</span>, your bank account funds are: <span class='darknotice'>$[M.money]</span></span>")
+			to_chat(H, "<span class='danger'>Your bank account security level is set to: <span class='darknotice'>[M.security_level]</span></span>")
 
-	if(H.mind)
-		H.mind.assigned_role = rank
-		alt_title = H.mind.role_alt_title
+	var/alt_title = H.mind.role_alt_title
 	if(job)
 		job.introduce(H, (alt_title ? alt_title : rank))
-	else
-		to_chat(H, "<B>You are the [alt_title ? alt_title : rank].</B>")
-		to_chat(H, "<b>As the [alt_title ? alt_title : rank] you answer directly to [job.supervisors]. Special circumstances may change this.</b>")
-		if(job.req_admin_notify)
-			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
-
-	if(job.priority)
-		to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
+		if(job.priority)
+			to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
 	return 1
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist

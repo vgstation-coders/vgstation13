@@ -58,16 +58,17 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 //the current ingame time (hh:mm) can be obtained by calling:
 //worldtime2text()
 
-/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0, var/security_pref = 1, var/makehidden = FALSE, var/isStationAccount = TRUE)
+/proc/create_account(var/owner_name = "Default user", var/money = 0, var/virtual = 0, var/obj/machinery/account_database/source_db, var/wage_gain= 0, var/security_level = 1, var/hidden = FALSE, var/isStationAccount = TRUE)
 
 	//create a new account
 	var/datum/money_account/M = new()
-	M.owner_name = new_owner_name
+	M.owner_name = owner_name
 	M.remote_access_pin = rand(1111, 9999)
-	M.money = starting_funds
-	M.wage_gain = wage_payout
-	M.security_level = security_pref
-	M.hidden = makehidden
+	M.money = money
+	M.virtual = virtual
+	M.wage_gain = wage_gain
+	M.security_level = security_level
+	M.hidden = hidden
 
 	var/ourdate = ""
 	var/ourtime = ""
@@ -113,12 +114,20 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		R.stamps += "<HR><i>This paper has been stamped by the Accounts Database.</i>"
 
 	//add the account
-	new /datum/transaction(M,"Account creation",starting_funds,ourterminal,new_owner_name,ourdate,ourtime)
+	new /datum/transaction(M,"Account creation",money,ourterminal,owner_name,ourdate,ourtime)
 	all_money_accounts.Add(M)
 	if (isStationAccount)
 		all_station_accounts.Add(M)
 
 	return M
+
+/proc/get_account_byname(var/name)
+	if(!name)
+		// Don't bother searching if there's no name.
+		return null
+	for(var/datum/money_account/D in all_money_accounts)
+		if(D.owner_name == name)
+			return D
 
 /datum/money_account
 	var/owner_name = ""
@@ -162,7 +171,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 				// Only works and does this if ID is in PDA
 				if(PDA.id)
 					var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
-					if(app && app.linked_db && account == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
+					if(app && app.linked_db && account == app.linked_db.attempt_account_access(PDA.id.account_number, 0, 2, 0))
 						var/turf/U = get_turf(PDA)
 						var/datum/pda_app/messenger/app2 = locate(/datum/pda_app/messenger) in PDA.applications
 						if(app2 && !app2.silent)
@@ -446,3 +455,4 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == account_number)
 			return D
+

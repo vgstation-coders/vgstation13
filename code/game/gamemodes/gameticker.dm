@@ -209,8 +209,6 @@ var/datum/controller/gameticker/ticker
 				var/mob/living/carbon/human/H = np.create_human(prefs)
 				ticker.minds += H.mind
 				H.store_position()
-				EquipCustomItems(H)
-				H.update_icons()
 				new_characters[key] = H
 				if(H.mind.assigned_role != "Trader")
 					data_core.manifest_inject(H)
@@ -223,11 +221,6 @@ var/datum/controller/gameticker/ticker
 		if(istype(M, /mob/living/carbon/human/))
 			var/mob/living/carbon/human/H = M
 			job_master.PostJobSetup(H)
-		//minds are linked to accounts... And accounts are linked to jobs.
-		var/rank = M.mind.assigned_role
-		var/datum/job/job = job_master.GetJob(rank)
-		if(job)
-			job.equip(M, job.priority) // Outfit datum.
 
 	//delete the new_player mob for those who readied
 	for(var/mob/np in new_players_ready)
