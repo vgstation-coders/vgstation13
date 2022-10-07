@@ -215,7 +215,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		for(var/department in station_departments)
 			create_department_account(department, receives_wage = 1)
 	if(!vendor_account)
-		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE, FALSE)
+		vendor_account = create_account("Vendor", 0, 0, null, 0, 1, TRUE, FALSE)
 
 	if(!current_date_string)
 		current_date_string = "[time2text(world.timeofday, "DD")] [time2text(world.timeofday, "Month")], [game_year]"
@@ -380,7 +380,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 						//Create a transaction log entry if you need to
 						new /datum/transaction(station_account, "New account funds initialisation", "([starting_funds])",\
 												machine_id, account_name, send2PDAs = FALSE)
-					create_account(account_name, starting_funds, src)
+					create_account(account_name, starting_funds, 0, src)
 					creating_new_account = 0
 			if("insert_card")
 				if(held_card)

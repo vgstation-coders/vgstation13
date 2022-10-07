@@ -194,23 +194,24 @@ var/datum/controller/gameticker/ticker
 			continue
 		var/datum/preferences/prefs = M.client.prefs
 		var/key = M.key
+		var/rank = np.mind.assigned_role
 		new_players_ready |= M
 		//Create player characters
-		switch(np.mind.assigned_role)
+		switch(rank)
 			if("Cyborg", "Mobile MMI", "AI")
 				var/mob/living/silicon/S = np.create_roundstart_silicon(prefs)
 				ticker.minds += S.mind
 				S.store_position()
-				log_admin("([key]) started the game as a [S.mind.assigned_role].")
+				log_admin("([key]) started the game as a [rank].")
 				new_characters[key] = S
 			if("MODE")
 				//antags aren't new players
 			else
-				var/mob/living/carbon/human/H = np.create_human(prefs)
+				var/mob/living/carbon/human/H = np.create_human(prefs, rank)
 				ticker.minds += H.mind
 				H.store_position()
 				new_characters[key] = H
-				if(H.mind.assigned_role != "Trader")
+				if(rank != "Trader")
 					data_core.manifest_inject(H)
 		CHECK_TICK
 	//Transfer characters to players

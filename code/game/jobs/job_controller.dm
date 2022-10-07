@@ -429,13 +429,12 @@ var/global/datum/controller/occupations/job_master
 /datum/controller/occupations/proc/PostJobSetup(var/mob/living/carbon/human/H)
 	if(!(H && H.mind && H.mind.assigned_role))
 		return 0
-	var/joined_late = ticker.current_state == GAME_STATE_PLAYING ? TRUE : FALSE
 	var/rank = H.mind.assigned_role
 	var/datum/job/job = GetJob(rank)
 	var/remembered_info = ""
 
 	if(centcomm_account_db)
-		var/datum/money_account/M = get_account_byname(real_name)
+		var/datum/money_account/M = get_account_byname(H.real_name)
 		if(M)
 			remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
 			remembered_info += "<b>Your account pin is:</b> [M.remote_access_pin]<br>"

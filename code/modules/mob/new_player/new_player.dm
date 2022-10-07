@@ -356,7 +356,7 @@
 
 	job_master.AssignRole(src, rank, 1)
 
-	var/mob/living/carbon/human/character = create_human(client.prefs)	//creates the human and transfers vars and mind
+	var/mob/living/carbon/human/character = create_human(client.prefs, rank)	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
@@ -641,21 +641,16 @@
 	src << browse(dat, "window=latechoices;size=360x640;can_close=1")
 
 
-/mob/new_player/proc/create_human(var/datum/preferences/prefs)
+/mob/new_player/proc/create_human(var/datum/preferences/prefs, var/rank)
 	spawning = TRUE
 	close_spawn_windows()
 
 	var/mob/living/carbon/human/new_character = new(loc)
 	var/datum/species/chosen_species
 	var/late_join = ticker.current_state == GAME_STATE_PLAYING ? TRUE : FALSE
-	var/rank = new_character.mind.assigned_role
-	var/datum/job/job = job_master.GetJob(rank)
-	new_character.job = rank	//the ultimate jobby: your body is assigned a job
-	if(rank != "MODE")
-		job.equip(new_character, job.priority) // Outfit datum.	
-		create_account(new_character.real_name, rand(100,250), rand(100,250), null, job.wage_payout, prefs.bank_security)
-		EquipCustomItems(new_character)
-		new_character.update_icons()
+
+	EquipCustomItems(new_character)
+	new_character.update_icons()
 
 	if(prefs.species)
 		chosen_species = all_species[prefs.species]
@@ -726,6 +721,16 @@
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
+	// 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+	new_character.DormantGenes(20,10,0,0)
+
+	var/datum/job/job = job_master.GetJob(rank)
+	if(job)
+		new_character.job = rank	//the ultimate jobby: your body is assigned a job
+		if(rank != "MODE")
+			create_account(new_character.real_name, rand(100,250), rand(100,250), null, job.wage_payout, prefs.bank_security)
+			job.equip(new_character, job.priority) //Outfit datum.	
+
 	if(!late_join)
 		var/obj/S = null
 		// Find a spawn point that wasn't given to anyone
@@ -751,8 +756,6 @@
 			// Use the arrivals shuttle spawn point
 			stack_trace("no spawn points for [rank]")
 			new_character.forceMove(pick(latejoin))
-		// 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
-		new_character.DormantGenes(20,10,0,0)
 
 	for(var/datum/religion/R in ticker.religions)
 		if(R.converts_everyone && new_character.mind.assigned_role != "Chaplain")
