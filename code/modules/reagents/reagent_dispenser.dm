@@ -604,10 +604,8 @@
 		return
 
 	if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
-		if(burn_contents())
+		if(start_fire())
 			user.visible_message("<span class='notice'>[user] ignites \the [src]'s contents with \the [W].</span>")
-		else
-			user.visible_message("<span class='notice'>[user] fails to ignite \the [src]'s contents with \the [W].</span>")
 		return
 
 	if(istype(W,/obj/item/weapon/grab))
@@ -713,13 +711,30 @@
 	if(burning)
 		to_chat(user, "<span class='info'>The contents of \the [src] are burning.</span>")
 
-/obj/structure/reagent_dispensers/cauldron/barrel/burn_contents(mob/user)
+/obj/structure/reagent_dispensers/cauldron/barrel/start_fire(mob/user)
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/G = T.return_air()
+	if(!G || G.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
+		visible_message("<span class = 'warning'>\The [src] fails to ignite due to lack of oxygen.</span>")
+		return 0
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			burning = TRUE
+			processing_objects.Add(src)
+			update_icon()
+			return 1
+	visible_message("<span class = 'warning'>\The [src] fails to ignite due to lack of fuel.</span>")
+	return 0
+
+/obj/structure/reagent_dispensers/cauldron/barrel/process()
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/G = T.return_air()
 	if(!G || G.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
 		visible_message("<span class = 'warning'>\The [src] splutters out from lack of oxygen.</span>","<span class = 'warning'>You hear something cough.</span>")
+		burning = FALSE
+		processing_objects.Remove(src)
 		update_icon()
-		return 0
+		return
 
 	var/max_temperature
 	var/thermal_energy_transfer
@@ -727,6 +742,8 @@
 	var/unsafety = 0 //Possibility it lights things on its turf
 	var/o2_consumption
 	var/co2_consumption
+
+	playsound(src, pick(comfyfire), G.molar_density(GAS_OXYGEN)/MOLES_CELLSTANDARD,1)
 
 	for(var/possible_fuel in possible_fuels)
 		if(reagents.has_reagent(possible_fuel))
@@ -740,9 +757,6 @@
 			co2_consumption = fuel_stats["co2_cons"]
 
 			reagents.remove_reagent(possible_fuel, consumption_rate)
-			if(held_container)
-				held_container.reagents.heating(thermal_energy_transfer, max_temperature)
-				update_icon()
 			G.adjust_multi(
 				GAS_OXYGEN, -o2_consumption,
 				GAS_CARBON, -co2_consumption)
@@ -751,11 +765,11 @@
 			break
 
 		if(!max_temperature)
-			burning = FALSE
 			visible_message("<span class = 'warning'>\The [src] splutters out from lack of fuel.</span>","<span class = 'warning'>You hear something cough.</span>")
+			burning = FALSE
+			processing_objects.Remove(src)
 			update_icon()
-			return 0
-	return 1
+			return
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood/start_fire(mob/user)
 	return 0 //nice try!
