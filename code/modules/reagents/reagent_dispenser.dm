@@ -525,9 +525,6 @@
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
 	health = 50
-	light_power = 1.5
-	light_range = 2
-	light_color = LIGHT_COLOR_FIRE
 	var/burning = FALSE
 	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	var/list/possible_fuels = list(
@@ -582,10 +579,10 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
 	if(burning)
 		icon_state = "flamingmetalbarrel"
-		set_light(light_range,light_power,light_color)
+		set_light(1.5,2,LIGHT_COLOR_FIRE)
 	else
 		icon_state = "metalbarrel"
-		set_light(0,0,light_color)
+		set_light(0,0,LIGHT_COLOR_FIRE)
 	return
 
 /obj/structure/reagent_dispensers/cauldron/barrel/take_damage(incoming_damage, damage_type, skip_break, mute, var/sound_effect = 1) //Custom take_damage() proc because of sound_effect behavior.
