@@ -576,10 +576,18 @@
 		return
 	..()
 
+/obj/structure/reagent_dispensers/cauldron/barrel/attack_hand(mob/user as mob)
+	if(burning)
+		visible_message("<span class = 'warning'>You carefully snuff out \the [src] fire.</span>")
+		burning = FALSE
+		processing_objects.Remove(src)
+		update_icon()
+	..()
+
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
 	if(burning)
 		icon_state = "flamingmetalbarrel"
-		set_light(1.5,2,LIGHT_COLOR_FIRE)
+		set_light(3,4,LIGHT_COLOR_FIRE)
 	else
 		icon_state = "metalbarrel"
 		set_light(0,0,LIGHT_COLOR_FIRE)
@@ -643,6 +651,8 @@
 		return
 	else if(O.anchored)
 		return
+	if(burning)
+		return
 	if(issilicon(O)) //robutts dont fit
 		return
 	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the barrel
@@ -672,6 +682,12 @@
 	exiting += user
 	spawn(3 SECONDS)
 		if(loc && exiting.Remove(user))
+			if(burning)
+				if(istype(user,/mob/living))
+					var/mob/living/L = user
+					L.adjustFireLoss(10)
+					L.adjust_fire_stacks(1)
+					to_chat(L,"<span class='notice'>You set yourself on fire exiting the barrel!</span>")
 			user.forceMove(loc)
 			update_icon()
 			to_chat(user,"<span class='notice'>You climb free of the barrel.</span>")
