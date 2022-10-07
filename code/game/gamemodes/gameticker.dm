@@ -219,8 +219,11 @@ var/datum/controller/gameticker/ticker
 		var/mob/M = new_characters[new_characters[i]]
 		var/key = new_characters[i]
 		M.key = key
-		if(istype(M, /mob/living/carbon/human/))
-			var/mob/living/carbon/human/H = M
+	CHECK_TICK
+	//The idea is to ensure everyone is transferred ASAP
+	for(var/i = 1, i <= new_characters.len, i++)
+		var/mob/living/carbon/human/H = new_characters[new_characters[i]]
+		if(istype(H))
 			job_master.PostJobSetup(H)
 
 	//delete the new_player mob for those who readied
