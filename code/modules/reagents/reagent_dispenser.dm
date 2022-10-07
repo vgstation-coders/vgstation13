@@ -768,12 +768,12 @@
 				T.hotspot_expose(max_temperature, 5)
 			break
 
-		if(!max_temperature)
-			visible_message("<span class = 'warning'>\The [src] splutters out from lack of fuel.</span>","<span class = 'warning'>You hear something cough.</span>")
-			burning = FALSE
-			processing_objects.Remove(src)
-			update_icon()
-			return
+	if(!max_temperature)
+		visible_message("<span class = 'warning'>\The [src] splutters out from lack of fuel.</span>","<span class = 'warning'>You hear something cough.</span>")
+		burning = FALSE
+		processing_objects.Remove(src)
+		update_icon()
+		return
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood/start_fire(mob/user)
 	return 0 //nice try!
