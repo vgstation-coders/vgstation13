@@ -99,7 +99,7 @@
 				harvest = 0
 				lastproduce = age
 
-	var/turf/T = loc
+	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/environment
 	// If we're closed, take from our internal sources.
 	if(closed_system && (connected_port || holding))
@@ -215,7 +215,7 @@
 	set_light(light_out)
 
 	var/light_available = 5
-	if(istype(T) && T.dynamic_lighting)
+	if(T?.dynamic_lighting)
 		light_available = T.get_lumcount() * 10
 
 	if(!seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
