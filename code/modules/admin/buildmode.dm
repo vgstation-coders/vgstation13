@@ -2,6 +2,9 @@
 #define MASS_DELETE			1
 #define SELECTIVE_DELETE	2
 #define SELECTIVE_FILL		3
+#define MASS_RESET			4
+#define SELECTIVE_RESET		5
+
 /proc/togglebuildmode(mob/M as mob in player_list)
 	set name = "Toggle Build Mode"
 	set category = "Special Verbs"
@@ -154,6 +157,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 	var/turf/fill_left
 	var/turf/fill_right
 	var/deletemode = FALSE
+	var/resetmode = FALSE
 	var/selective = FALSE
 	var/resetvars = FALSE
 	var/strictness = FALSE
@@ -192,6 +196,12 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 	if(pa.Find("middle"))
 		master.strictness = !master.strictness
 		to_chat(usr, "<span class='blob'>Toggled strictness [master.strictness ? "ON" : "OFF"].</span>")
+		return 1
+
+	if(pa.Find("shift"))
+		if(master.cl.buildmode < 3) //1 or 2
+			master.resetmode = !master.resetmode
+			to_chat(usr, "<span class='blob'>Toggled map reset mode [master.resetmode ? "ON" : "OFF"].</span>")
 		return 1
 
 	if(pa.Find("ctrl"))
@@ -233,7 +243,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 				var/partial_type = input(usr, "Enter type, or leave blank to see all types", "Typepath", "/obj/structure/closet") as text|null
 				if(isnull(partial_type))
 					return
-					
+
 				var/list/matches = get_matching_types(partial_type, /atom)
 				objholder = input("Select type", "Typepath") as null|anything in matches
 
@@ -286,10 +296,12 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 				return
 			if(holder.warnings && alert("You're about to do a fill operation spanning [fillturfs.len] tiles, are you sure?","Panic","Yes","No") == "No")
 				return
-			var/areaAction = holder.deletemode
-			if(areaAction) //1
+			var/areaAction
+			if(holder.deletemode)
 				areaAction = holder.selective ? SELECTIVE_DELETE : MASS_DELETE //2 : 1
-			else //0
+			else if(holder.resetmode)
+				areaAction = holder.selective ? SELECTIVE_RESET : MASS_RESET //4 : 5
+			else
 				areaAction = holder.selective ? SELECTIVE_FILL : MASS_FILL //3 : 0
 
 			var/whatfill = (buildmode == 1 ? input("What are we filling with?", "So many choices") as null|anything in list(/turf/simulated/floor,/turf/simulated/wall,/turf/simulated/wall/r_wall,/obj/machinery/door/airlock, /obj/structure/window/reinforced) : holder.buildmode.objholder)
@@ -311,6 +323,13 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 					if(!chosen)
 						return
 					msglog += " Changed all [chosen] in [fillturfs.len] tile\s to [whatfill] "
+				if(SELECTIVE_RESET)
+					chosen = easyTypeSelector()
+					if(!chosen)
+						return
+					msglog += " Resetted all [chosen] in [fillturfs.len] tile\s to [whatfill] "
+				if(MASS_RESET)
+					msglog += " <big>RESETTED</big> [fillturfs.len] tile\s "
 				else
 					msglog += " FILLED [fillturfs.len] tile\s with [whatfill] "
 			msglog += "at ([formatJumpTo(start)] to [formatJumpTo(end)])</span>"
@@ -333,6 +352,20 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 							CHECK_TICK
 						if(areaAction == MASS_DELETE)
 							T.ChangeTurf(get_base_turf(T.z))
+				else if(areaAction == MASS_RESET || areaAction == SELECTIVE_RESET)
+					var/lowest_x = min(start.x,end.x)
+					var/lowest_y = min(start.y,end.y)
+					var/highest_x = max(start.x,end.x)
+					var/highest_y = max(start.y,end.y)
+					var/datum/map_element/ME = new
+					ME.file_path = "maps/[map.map_dir].dmm"
+					if(!fexists(file(ME.file_path)))
+						if(map.file_dir != "")
+							ME.file_path = "maps/[map.file_dir].dmm"
+						if(!fexists(file(ME.file_path)))
+							CRASH("Map file path for current map ([ME.file_path]) not found somehow! Cannot reset map segment.")
+							return
+					ME.load(0, 0, 0, 0, 0, 0, lowest_x, highest_x, lowest_y, highest_y, start.z, end.z)
 				else
 					if(ispath(whatfill, /area) || istype(holder.buildmode.copycat, /area))
 						//In case of a selective fill, make sure the turf fits into the criteria before changing it

@@ -61,7 +61,7 @@ var/list/map_dimension_cache = list()
  * A list of all atoms created
  *
  */
-/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num)
+/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num, var/clipmin_x as num, var/clipmax_x as num, var/clipmin_y as num, var/clipmax_y as num, var/clipmin_z as num, var/clipmax_z as num)
 
 	if((rotate % 90) != 0) //If not divisible by 90, make it
 		rotate += (rotate % 90)
@@ -71,7 +71,7 @@ var/list/map_dimension_cache = list()
 
 	//If this is true, the lag is reduced at the cost of slower loading speed, and tiny atmos leaks during loading
 	var/remove_lag
-	if(map_element.load_at_once)
+	if(map_element?.load_at_once)
 		remove_lag = FALSE
 	else if(ticker && ticker.current_state > GAME_STATE_PREGAME)
 		//Lag doesn't matter before the game
@@ -136,6 +136,8 @@ var/list/map_dimension_cache = list()
 
 	for(var/zpos=findtext(tfile,"\n(1,1,",lpos,0);zpos!=0;zpos=findtext(tfile,"\n(1,1,",zpos+1,0))	//in case there's several maps to load
 		zcrd++
+		if(zcrd-z_offset < clipmin_z || zcrd-z_offset > clipmax_z)
+			continue
 		if(zcrd+z_offset > world.maxz)
 			world.maxz = zcrd+z_offset
 			map.addZLevel(new /datum/zLevel/away, world.maxz) //create a new z_level if needed
@@ -188,6 +190,10 @@ var/list/map_dimension_cache = list()
 				xcrd_rotate++
 				xcrd_flip--
 				xcrd_flip_rotate--
+				if(ycrd-y_offset < clipmin_y || ycrd-y_offset > clipmax_y)
+					break
+				if(xcrd-x_offset < clipmin_x || xcrd-x_offset > clipmax_x)
+					continue
 				var/parse_key = copytext(grid_line,mpos,mpos+key_len)
 				switch(rotate)
 					if(0)
