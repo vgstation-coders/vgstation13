@@ -38,7 +38,7 @@ var/list/datum/map_element/map_elements = list()
 		A.spawned_by_map_element(src, objects)
 
 
-/datum/map_element/proc/load(x, y, z, rotate=0, overwrite = FALSE, override_can_rotate = FALSE, clipmin_x=0, clipmax_x=0, clipmin_y=0, clipmax_y=0, clipmin_z=0, clipmax_z=0)
+/datum/map_element/proc/load(x, y, z, rotate=0, overwrite = FALSE, override_can_rotate = FALSE, clipmin_x=0, clipmax_x=INFINITY, clipmin_y=0, clipmax_y=INFINITY, clipmin_z=0, clipmax_z=INFINITY)
 	//Location is always lower left corner.
 	//In some cases, location is set to null (when creating a new z-level, for example)
 	//To account for that, location is set again in maploader's load_map() proc

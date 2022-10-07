@@ -366,7 +366,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 							ME.file_path = "maps/[map.file_dir].dmm"
 						if(!fexists(file(ME.file_path)))
 							CRASH("Map file path for current map ([ME.file_path]) not found somehow! Cannot reset map segment.")
-					ME.load(0, 0, 1, 0, 0, 0, lowest_x, highest_x, lowest_y, highest_y, lowest_z, highest_z)
+					ME.load(0, 0, 1, 0, 1, 0, lowest_x, highest_x, lowest_y, highest_y, lowest_z, highest_z)
 				else
 					if(ispath(whatfill, /area) || istype(holder.buildmode.copycat, /area))
 						//In case of a selective fill, make sure the turf fits into the criteria before changing it
