@@ -62,8 +62,11 @@
 	
 /obj/item/device/hologram_projector/attack_self()
 	if(holoperson)
-		clear_holo()
 		to_chat(usr, "Shutting down hologram...")
+		if(integratedpai)
+			remove_pai()
+			return
+		clear_holo()
 		return
 	else if(integratedpai)
 		install_pai()
@@ -178,19 +181,20 @@
 		return
 	var/turf/T = get_turf(src)
 	P.pai.forceMove(T)
-	var/mob/living/simple_animal/hologram/advanced/projector/H = P.pai.transmogrify(/mob/living/simple_animal/hologram/advanced/projector, TRUE)
-	holoperson = H
+	holoperson = new (T)
 	holoperson.real_name = P.pai.real_name
 	holoperson.name = P.pai.name
 	holoperson.projector = src
 	holoperson.proj_turf = T
+	P.pai.mind.transfer_to(holoperson)
+	qdel(P.pai)
 
 	icon_state = "shield1"
 	ray = new(T)
 
 /obj/item/device/hologram_projector/remove_pai()
-	var/obj/item/device/paicard/P = integratedpai
 	if(holoperson)
-		P.pai = holoperson
+		integratedpai.pai = new (integratedpai)
+		holoperson.mind.transfer_to(integratedpai.pai)
 		clear_holo()
 	..()
