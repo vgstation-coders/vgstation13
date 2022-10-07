@@ -525,6 +525,9 @@
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
 	health = 50
+	var/light_power = 1.5
+	var/light_range = 2
+	var/light_color = LIGHT_COLOR_FIRE
 	var/burning = FALSE
 	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	var/list/possible_fuels = list(
@@ -577,6 +580,12 @@
 	..()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
+	if(burning)
+		icon_state = "flamingmetalbarrel"
+		set_light(light_range,light_power,light_color)
+	else
+		icon_state = "metalbarrel"
+		set_light(0,0,light_color)
 	return
 
 /obj/structure/reagent_dispensers/cauldron/barrel/take_damage(incoming_damage, damage_type, skip_break, mute, var/sound_effect = 1) //Custom take_damage() proc because of sound_effect behavior.
@@ -701,18 +710,12 @@
 	user.visible_message("<span class='danger'>[user] rips \the [src] apart!</span>")
 	Destroy()
 
-/obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
-	if(burning)
-		icon_state = "flamingmetalbarrel"
-	else
-		icon_state = "metalbarrel"
-
 /obj/structure/reagent_dispensers/cauldron/barrel/examine(mob/user)
 	..()
 	if(burning)
 		to_chat(user, "<span class='info'>The contents of \the [src] are burning.</span>")
 
-/obj/structure/reagent_dispensers/cauldron/barrel/start_fire(mob/user)
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/start_fire(mob/user)
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/G = T.return_air()
 	if(!G || G.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
@@ -738,7 +741,7 @@
 		return
 
 	var/max_temperature
-	var/thermal_energy_transfer
+//	var/thermal_energy_transfer to be used later if barrels should heat the room they're in
 	var/consumption_rate
 	var/unsafety = 0 //Possibility it lights things on its turf
 	var/o2_consumption
@@ -751,7 +754,7 @@
 			burning = TRUE
 			var/list/fuel_stats = possible_fuels[possible_fuel]
 			max_temperature = fuel_stats["max_temperature"]
-			thermal_energy_transfer = fuel_stats["thermal_energy_transfer"]
+//			thermal_energy_transfer = fuel_stats["thermal_energy_transfer"] to be used later if barrels should heat the room they're in
 			consumption_rate = fuel_stats["consumption_rate"]
 			unsafety = fuel_stats["unsafety"]
 			o2_consumption = fuel_stats["o2_cons"]
