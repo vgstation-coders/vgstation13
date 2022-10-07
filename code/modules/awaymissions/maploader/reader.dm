@@ -133,11 +133,17 @@ var/list/map_dimension_cache = list()
 	var/xcrd_flip=y_offset
 	var/ycrd_flip_rotate=y_offset
 	var/xcrd_flip_rotate=x_offset
+	var/z_on = 0
+	var/x_on = 0
+	var/y_on = 0
 
 	for(var/zpos=findtext(tfile,"\n(1,1,",lpos,0);zpos!=0;zpos=findtext(tfile,"\n(1,1,",zpos+1,0))	//in case there's several maps to load
 		zcrd++
-		if(zcrd-z_offset < clipmin_z || zcrd-z_offset > clipmax_z)
+		z_on++
+		if(z_on < clipmin_z)
 			continue
+		if(z_on > clipmax_z)
+			break
 		if(zcrd+z_offset > world.maxz)
 			world.maxz = zcrd+z_offset
 			map.addZLevel(new /datum/zLevel/away, world.maxz) //create a new z_level if needed
@@ -186,14 +192,15 @@ var/list/map_dimension_cache = list()
 			xcrd_flip=x_offset + map_width + 1
 			xcrd_flip_rotate=y_offset + map_width + 1
 			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
+				x_on++
 				xcrd++
 				xcrd_rotate++
 				xcrd_flip--
 				xcrd_flip_rotate--
-				if(ycrd-y_offset < clipmin_y || ycrd-y_offset > clipmax_y)
-					break
-				if(xcrd-x_offset < clipmin_x || xcrd-x_offset > clipmax_x)
+				if(x_on < clipmin_x || y_on < clipmin_y)
 					continue
+				if(x_on > clipmax_x || y_on > clipmax_y)
+					break
 				var/parse_key = copytext(grid_line,mpos,mpos+key_len)
 				switch(rotate)
 					if(0)
@@ -209,10 +216,13 @@ var/list/map_dimension_cache = list()
 			if(map_element)
 				map_element.width = xcrd - x_offset
 
+			y_on++
 			ycrd--
 			ycrd_rotate--
 			ycrd_flip++
 			ycrd_flip_rotate++
+			if(y_on > clipmax_y)
+				break
 
 			if(remove_lag)
 				CHECK_TICK
