@@ -145,7 +145,7 @@
 			//if there isn't enough money in the virtual wallet, then we check the bank account connected to the ID
 			if(D.money < transaction_amount)
 				if(linked_db)
-					D = linked_db.attempt_account_access(C.associated_account_number, 0, 2, 0)
+					D = linked_db.attempt_account_access(C.account_number, 0, 2, 0)
 				else
 					D = null
 				using_account = "Bank Account"

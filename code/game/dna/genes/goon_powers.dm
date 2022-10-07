@@ -674,9 +674,10 @@
 	if (istype(M,/mob/living/carbon/human))
 		var/numbers[0]
 		var/mob/living/carbon/human/H = M
-		if(H.mind && H.mind.initial_account)
-			numbers += H.mind.initial_account.account_number
-			numbers += H.mind.initial_account.remote_access_pin
+		var/datum/money_account/D = get_account_byname(H.real_name)
+		if(D)
+			numbers += D.account_number
+			numbers += D.remote_access_pin
 		if(numbers.len>0)
 			to_chat(user, "<span class='notice'> <b>Numbers</b>: You sense the number[numbers.len>1?"s":""] [english_list(numbers)] [numbers.len>1?"are":"is"] important to [M.name].</span>")
 	to_chat(user, "<span class='notice'> <b>Thoughts</b>: [M.name] is currently [thoughts].</span>")

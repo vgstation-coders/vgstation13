@@ -430,56 +430,39 @@ var/global/datum/controller/occupations/job_master
 	if(!(H && H.mind && H.mind.assigned_role))
 		return 0
 	var/joined_late = ticker.current_state == GAME_STATE_PLAYING ? TRUE : FALSE
+	var/datum/money_account/M = get_account_byname(H.real_name)
 	var/rank = H.mind.assigned_role
 	var/datum/job/job = GetJob(rank)
+	var/remembered_info = ""
+
 	if(job && !job.no_starting_money)
-		//give them an account in the station database
-		// Total between $200 and $500
-		var/balance_bank = rand(100,250)
-		var/balance_wallet = rand(100,250)
 		var/bank_pref_number = H.client.prefs.bank_security
 		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
-			var/wage = job.get_wage()
-			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = wage, security_pref = bank_pref_number)
+			var/datum/money_account/M = get_account_byname(real_name)
 
-			if (joined_late)
-				latejoiner_allowance += wage + round(wage/10)
-			else
-				station_allowance += wage + round(wage/10)//overhead of 10%
+			remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
+			remembered_info += "<b>Your account pin is:</b> [M.remote_access_pin]<br>"
+			remembered_info += "<b>Your bank account funds are:</b> $[M.money]<br>"
+			remembered_info += "<b>Your virtual wallet funds are:</b> $[M.virtual]<br>"
 
-			if(H.mind)
-				var/remembered_info = ""
-				remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
-				remembered_info += "<b>Your account pin is:</b> [M.remote_access_pin]<br>"
-				remembered_info += "<b>Your bank account funds are:</b> $[balance_bank]<br>"
-				remembered_info += "<b>Your virtual wallet funds are:</b> $[balance_wallet]<br>"
-
-				if(M.transaction_log.len)
-					var/datum/transaction/T = M.transaction_log[1]
-					remembered_info += "<b>Your account was created:</b> [T.time], [T.date] at [T.source_terminal]<br>"
-				H.mind.store_memory(remembered_info)
-
-				H.mind.initial_account = M
-				H.mind.initial_wallet_funds = balance_wallet
+			if(M.transaction_log.len)
+				var/datum/transaction/T = M.transaction_log[1]
+				remembered_info += "<b>Your account was created:</b> [T.time], [T.date] at [T.source_terminal]<br>"
 
 			// If they're head, give them the account info for their department
 			if(H.mind && job.head_position)
-				var/remembered_info = ""
 				var/datum/money_account/department_account = department_accounts[job.department]
-
 				if(department_account)
 					remembered_info += "<b>Your department's account number is:</b> #[department_account.account_number]<br>"
 					remembered_info += "<b>Your department's account pin is:</b> [department_account.remote_access_pin]<br>"
 					remembered_info += "<b>Your department's account funds are:</b> $[department_account.money]<br>"
 
-				H.mind.store_memory(remembered_info)
-
-			spawn()
 				to_chat(H, "<span class='danger'>Your bank account number is: <span class='darknotice'>[M.account_number]</span>, your bank account pin is: <span class='darknotice'>[M.remote_access_pin]</span></span>")
 				to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span class='darknotice'>$[balance_wallet]</span>, your bank account funds are: <span class='darknotice'>$[balance_bank]</span></span>")
 				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span class='darknotice'>[bank_pref]</span></span>")
 
+			H.mind.store_memory(remembered_info)
 	var/alt_title = null
 
 	H.job = rank

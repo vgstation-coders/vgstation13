@@ -280,7 +280,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 			reconnect_database()
 		if(linked_db)
 			if(linked_db.activated)
-				var/datum/money_account/D = linked_db.attempt_account_access(pda_device.id.associated_account_number, 0, 2, 0)
+				var/datum/money_account/D = linked_db.attempt_account_access(pda_device.id.account_number, 0, 2, 0)
 				if(D)
 					dat += {"
 						<h5>Bank Account</h5>

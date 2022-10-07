@@ -16,7 +16,7 @@
 	desc = "Does card things."
 	icon = 'icons/obj/card.dmi'
 	w_class = W_CLASS_TINY
-	var/associated_account_number = 0
+	var/account_number = 0
 
 	var/list/files = list(  )
 	autoignition_temperature = AUTOIGNITION_PLASTIC
@@ -448,7 +448,7 @@ var/list/global/id_cards = list()
 			registered_name = I.registered_name
 			icon_state = I.icon_state
 			assignment = I.assignment
-			associated_account_number = I.associated_account_number
+			account_number = I.account_number
 			blood_type = I.blood_type
 			dna_hash = I.dna_hash
 			fingerprint_hash = I.fingerprint_hash
@@ -540,7 +540,7 @@ var/list/global/id_cards = list()
 						var/new_account = input(user,"What money account would you like to link to this card?","Agent card account",11111) as num
 						if(!Adjacent(user))
 							return
-						associated_account_number = new_account
+						account_number = new_account
 						to_chat(user, "Linked money account changed to [new_account].")
 
 					if("Blood type")
@@ -590,7 +590,7 @@ var/list/global/id_cards = list()
 						registered_name = initial(registered_name)
 						icon_state = initial(icon_state)
 						assignment = initial(assignment)
-						associated_account_number = initial(associated_account_number)
+						account_number = initial(account_number)
 						blood_type = initial(blood_type)
 						dna_hash = initial(dna_hash)
 						fingerprint_hash = initial(fingerprint_hash)

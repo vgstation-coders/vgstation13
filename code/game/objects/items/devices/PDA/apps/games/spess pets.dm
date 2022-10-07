@@ -559,7 +559,7 @@
 			reconnect_database()
 		if(linked_db)
 			if(linked_db.activated)
-				var/datum/money_account/D = linked_db.attempt_account_access(pda_device.id.associated_account_number, 0, 2, 0)
+				var/datum/money_account/D = linked_db.attempt_account_access(pda_device.id.account_number, 0, 2, 0)
 				if(D)
 					last_spoken = {"<i>Transferring all nanocoins to [D.owner_name]'s bank account.</i>"}
 					var/transaction_amount = nano2dollar(total_coins)

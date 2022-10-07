@@ -30,7 +30,7 @@ var/global/no_pin_for_debit = TRUE
 	if (istype(I, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/C = I
 		var/attempt_pin=0
-		var/datum/money_account/D = get_money_account(C.associated_account_number)
+		var/datum/money_account/D = get_money_account(C.account_number)
 		if(require_pin && user)
 			attempt_pin = input(user,"Enter pin code", "Transaction") as num
 			if(D.remote_access_pin != attempt_pin)
@@ -44,7 +44,7 @@ var/global/no_pin_for_debit = TRUE
 		var/attempt_pin=0
 		if(!istype(I))
 			return null
-		var/datum/money_account/D = get_money_account(I.associated_account_number)
+		var/datum/money_account/D = get_money_account(I.account_number)
 		if(require_pin && user)
 			attempt_pin = input(user,"Enter pin code", "Transaction") as num
 			if(D.remote_access_pin != attempt_pin)
@@ -105,7 +105,7 @@ var/global/no_pin_for_debit = TRUE
 			if(!linked_db.activated || linked_db.stat & (FORCEDISABLE|BROKEN|NOPOWER))
 				to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
 				return CARD_CAPTURE_FAILURE_NO_CONNECTION
-			account = linked_db.get_account(card.associated_account_number)
+			account = linked_db.get_account(card.account_number)
 			if(!account)
 				to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination or ID is not registered with Nanotrasen accounts database.</span>")
 				return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
@@ -114,7 +114,7 @@ var/global/no_pin_for_debit = TRUE
 			return CARD_CAPTURE_FAILURE_GENERAL
 	if(card)
 		to_chat(user, "[bicon(src)] <span class='notice'>Using \the [bicon(card)] [card] to authenticate transaction...</span>")
-	if(card && card.associated_account_number != account.account_number)
+	if(card && card.account_number != account.account_number)
 		// Using card, but account number doesn't match what's on the card.
 		to_chat(user, "[bicon(src)] <span class='warning'>The account information on \the [bicon(card)] does not match the requested account.</span>")
 		return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
@@ -249,7 +249,7 @@ var/global/no_pin_for_debit = TRUE
 
 		if(!primary_money_account)
 			// There wasn't enough funds in the virtual wallet, so lets get the bank account.
-			primary_money_account = linked_db.get_account(card.associated_account_number)
+			primary_money_account = linked_db.get_account(card.account_number)
 			// Using the associated account number, get the account.
 			if(!primary_money_account)
 				// Couldn't find a matching account so fail.

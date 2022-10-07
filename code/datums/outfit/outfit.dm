@@ -272,16 +272,17 @@
 	var/datum/job/concrete_job = new associated_job
 
 	var/obj/item/weapon/card/id/C
+	var/datum/money_account/M = get_account_byname(H.real_name)
 	C = new id_type(H)
 	C.access = concrete_job.get_access()
 	C.registered_name = H.real_name
 	C.rank = concrete_job.title
 	C.assignment = H.mind ? H.mind.role_alt_title : concrete_job.title
 	C.name = "[C.registered_name]'s ID Card ([C.assignment])"
-	C.associated_account_number = H?.mind?.initial_account?.account_number
+	C.account_number = M.account_number
 	H.equip_or_collect(C, slot_wear_id)
-	if(C.virtual_wallet && H.mind)
-		C.update_virtual_wallet(H.mind.initial_wallet_funds)
+	if(C.virtual_wallet)
+		C.update_virtual_wallet(virtual)
 
 	if (pda_type)
 		var/obj/item/device/pda/pda = new pda_type(H)

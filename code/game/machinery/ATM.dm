@@ -91,7 +91,7 @@ log transactions
 		if(!atm_card && is_valid_atm_card(I))
 			if(usr.drop_item(I, src))
 				atm_card = I
-				if(authenticated_account && atm_card.associated_account_number != authenticated_account.account_number)
+				if(authenticated_account && atm_card.account_number != authenticated_account.account_number)
 					authenticated_account = null
 				src.attack_hand(user)
 	else if(CAN_INTERACT_WITH_ACCOUNT)
@@ -123,7 +123,7 @@ log transactions
 	if(!atm_card)
 		return "------"
 	if(istype(atm_card, /obj/item/weapon/card/debit))
-		return "DEBIT [atm_card.associated_account_number]"
+		return "DEBIT [atm_card.account_number]"
 	if(istype(atm_card, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/card_id = atm_card
 		return card_id.name
@@ -314,10 +314,10 @@ log transactions
 				if(linked_db && !ticks_left_locked_down)
 					var/tried_account_num = text2num(href_list["account_num"])
 					if(!tried_account_num && atm_card)
-						tried_account_num = atm_card.associated_account_number
+						tried_account_num = atm_card.account_number
 					var/tried_pin = text2num(href_list["account_pin"])
 
-					authenticated_account = linked_db.attempt_account_access(tried_account_num, tried_pin, atm_card && atm_card.associated_account_number == tried_account_num ? 2 : 1)
+					authenticated_account = linked_db.attempt_account_access(tried_account_num, tried_pin, atm_card && atm_card.account_number == tried_account_num ? 2 : 1)
 					if(!authenticated_account)
 						number_incorrect_tries++
 						if(previous_account_number == tried_account_num)
@@ -508,7 +508,7 @@ log transactions
 				var/obj/item/device/pda/P = human_user.wear_id
 				I = P.id
 			if(I)
-				authenticated_account = linked_db.attempt_account_access(I.associated_account_number)
+				authenticated_account = linked_db.attempt_account_access(I.account_number)
 				if(authenticated_account)
 					to_chat(human_user, "<span class='notice'>[bicon(src)] Access granted. Welcome user '[authenticated_account.owner_name].'</span>")
 

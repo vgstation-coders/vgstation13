@@ -35,11 +35,11 @@ For vending packs, see vending_packs.dm*/
 			var/using_debit = FALSE
 			var/account_number = null
 			if(istype(debit_card))
-				account_number = debit_card.associated_account_number
+				account_number = debit_card.account_number
 				acc_info["authorized_name"] = debit_card.authorized_name
 				using_debit = TRUE
 			else
-				account_number = usr_id.associated_account_number
+				account_number = usr_id.account_number
 			bank_account = linked_db.get_account(account_number)
 			if(!bank_account)
 				to_chat(user, "<span class='warning'>A valid bank account does not exist for \the [using_debit ? "[bicon(debit_card)] [debit_card]" : "[bicon(usr_id)] [usr_id]"]. Please try a different card.</span>")

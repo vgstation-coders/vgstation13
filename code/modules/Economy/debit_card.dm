@@ -13,17 +13,17 @@
 	var/to_cut = 0.8
 	var/authorized_name = "" // The name of the card. Edited at any ATM.
 
-/obj/item/weapon/card/debit/New(var/new_loc, var/account_number, var/desired_authorized_name)
+/obj/item/weapon/card/debit/New(var/new_loc, var/a_num, var/desired_authorized_name)
 	. = ..(new_loc)
-	associated_account_number = account_number
+	account_number = a_num
 	if(desired_authorized_name)
 		change_authorized_name(desired_authorized_name)
 
 /obj/item/weapon/card/debit/examine(var/mob/user)
 	. = ..()
 	if(user.Adjacent(src) || istype(user, /mob/dead))
-		if(associated_account_number)
-			to_chat(user, "<span class='notice'>The account number on the card reads: [associated_account_number]</span>")
+		if(account_number)
+			to_chat(user, "<span class='notice'>The account number on the card reads: [account_number]</span>")
 		else
 			to_chat(user, "<span class='warning'>The account number appears to be scratched off.</span>")
 
@@ -103,7 +103,7 @@
 		set_department_account(department)
 
 /obj/item/weapon/card/debit/preferred/department/examine(var/mob/user)
-	if(!associated_account_number && department)
+	if(!account_number && department)
 		var/old_name
 		if(easter_egg)
 			old_name = name
@@ -114,7 +114,7 @@
 /obj/item/weapon/card/debit/preferred/department/proc/set_department_account(var/desired_department)
 	if(desired_department in department_accounts)
 		var/datum/money_account/department_account = department_accounts[desired_department]
-		associated_account_number = department_account.account_number
+		account_number = department_account.account_number
 		name = "\improper [department_account.owner_name] debit card"
 		change_authorized_name(desired_department + " DEPT")
 		return TRUE

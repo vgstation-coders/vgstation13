@@ -549,7 +549,7 @@ var/global/num_vending_terminals = 1
 				return 0
 			var/obj/item/weapon/card/card_swiped = W
 			visible_message("<span class='info'>[user] swipes a card through [src].</span>")
-			if(card_swiped.associated_account_number != linked_account.account_number)
+			if(card_swiped.account_number != linked_account.account_number)
 				to_chat(user, "[bicon(src)]<span class='warning'> Access denied. Your ID doesn't match the vending machine's connected account.</span>")
 				return 0
 			else if (!edit_mode && charge_flow_verify_security(linked_db, card_swiped, user, null, TRUE) != CARD_CAPTURE_SUCCESS)
@@ -3379,7 +3379,7 @@ var/global/num_vending_terminals = 1
 	if(!is_custom_machine)
 		return ..()
 	var/obj/item/weapon/card/C = user.get_card() //Looks for a debit card first
-	if(!account_first_linked || (C && C.associated_account_number == linked_account.account_number))
+	if(!account_first_linked || (C && C.account_number == linked_account.account_number))
 		togglePanelOpen(toggleitem, user)
 		return 1
 	to_chat(user, "<span class='warning'>The machine requires an ID to unlock it.</span>")
@@ -3406,7 +3406,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/sale/trader/wrenchAnchor(var/mob/user, var/obj/item/I)
 	var/obj/item/weapon/card/C = user.get_card()
-	if(!anchored || (C && C.associated_account_number == linked_account.account_number))
+	if(!anchored || (C && C.account_number == linked_account.account_number))
 		return ..()
 	to_chat(user, "<span class='warning'>\The [src] can only be moved with the linked ID.</span>")
 	return FALSE

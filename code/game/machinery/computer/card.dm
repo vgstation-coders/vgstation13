@@ -155,7 +155,7 @@
 	data["scan_name"] = scan ? scan.name : "-----"
 	data["authenticated"] = is_authenticated()
 	data["has_modify"] = !!modify
-	data["account_number"] = modify ? modify.associated_account_number : null
+	data["account_number"] = modify ? modify.account_number : null
 	data["centcom_access"] = is_centcom()
 	data["all_centcom_access"] = null
 	data["regions"] = null
@@ -318,7 +318,7 @@
 					if(MA.hidden)
 						to_chat(usr, "<span class='warning'>That account number is reserved.</span>")
 						return
-					modify.associated_account_number = account_num
+					modify.account_number = account_num
 			nanomanager.update_uis(src)
 
 		if ("mode")
@@ -345,7 +345,7 @@
 							<u>For:</u> [modify.registered_name ? modify.registered_name : "Unregistered"]<br>
 							<hr>
 							<u>Assignment:</u> [modify.assignment]<br>
-							<u>Account Number:</u> #[modify.associated_account_number]<br>
+							<u>Account Number:</u> #[modify.account_number]<br>
 							<u>Blood Type:</u> [modify.blood_type]<br><br>
 							<u>Access:</u><br>
 						"}
