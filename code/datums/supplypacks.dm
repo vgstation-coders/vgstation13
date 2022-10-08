@@ -2158,7 +2158,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "lab mouse crate"
 	group = "Medical"
 	
-	/datum/supply_packs/sutures
+/datum/supply_packs/sutures
 	name = "Wound mending supplies"
 	contains = list (
 					/obj/item/tool/suture/surgical_line,
