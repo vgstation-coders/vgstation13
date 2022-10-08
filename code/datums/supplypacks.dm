@@ -2157,6 +2157,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "lab mouse crate"
 	group = "Medical"
+	
+	/datum/supply_packs/sutures
+	name = "Wound mending supplies"
+	contains = list (
+					/obj/item/tool/suture/surgical_line,
+					/obj/item/tool/suture/surgical_line,
+					/obj/item/tool/suture/synthgraft,
+					/obj/item/tool/suture/synthgraft)
+	cost = 50
+	containertype = /obj/structure/closet/crate/medical
+	containername = "CM surplus medical equipment crate"
+	group = "Medical"
 
 //////SCIENCE//////
 
