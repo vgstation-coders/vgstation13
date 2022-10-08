@@ -451,7 +451,7 @@
 		exiting -= user
 		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
 		return
-	if(!dest.Cross(user))
+	if(!dest.Cross(user,dest))
 		exiting -= user
 		to_chat(user,"<span class='warning'>You cannot climb out here, the way is blocked.</span>")
 		return
