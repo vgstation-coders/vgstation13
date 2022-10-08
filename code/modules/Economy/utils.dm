@@ -231,7 +231,7 @@ var/global/no_pin_for_debit = TRUE
 			// We'll charge the virtual wallet first.
 			if(primary_money_account.money < transaction_amount)
 				// Not enough funds in the virtual wallet so we'll need the bank account.
-				if(primary_money_account.money > 0 && alert(user, "Apply remaining balance of $[num2septext(primary_money_account.money)] from \the [card] virtual wallet?", "Card Transaction", "Yes", "No") == "Yes")
+				if(primary_money_account.money > 0 && alert(user, "Not enough funds in \the [card]'s virtual wallet. Do you want to charge the virtual wallet's remaining balance of $[num2septext(primary_money_account.money)] before charging the rest to your bank account?", "Card Transaction", "Yes", "No") == "Yes")
 					// But lets check if there's an amount on the virtual card and ask if the user would like to apply that balance.
 					if(user_loc != user.loc)
 						to_chat(user, "[bicon(src)] <span class='warning'>You have to keep still to enter information.</span>")
@@ -307,11 +307,21 @@ var/global/no_pin_for_debit = TRUE
 
 	if(transaction_amount_secondary)
 		// If we have a vaild secondary amount, charge the secondary payment method.
-		secondary_money_account.charge(transaction_amount_secondary, dest, transaction_purpose, terminal_name, terminal_id, dest_name, authorized)
+		if(!secondary_money_account.charge(transaction_amount_secondary, dest, transaction_purpose, terminal_name, terminal_id, dest_name, authorized))
+			return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
+			// imagine fixing the bug where they dispensed money out of their PDA before buying an expensive item with a secure bank account
 
 	if(!primary_money_account.charge(transaction_amount_primary, dest, transaction_purpose, terminal_name, terminal_id, dest_name, authorized))
+		if(transaction_amount_secondary)
+			to_chat(user, "[bicon(src)] <span class='warning'>Refunding virtual wallet.</span>")
+			secondary_money_account.charge(-1 * transaction_amount_secondary, dest, "Refund due to lack of funds on secondary payment", terminal_name, terminal_id, dest_name, authorized)
+		// If they can't afford it, refund their initial virtual wallet
 		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 	// Finally charge the primary
+
+	if(transaction_amount_secondary)
+		var/second_account_type = secondary_money_account.virtual ? "virtual wallet" : "bank account"
+		to_chat(user, "[bicon(src)] <span class='notice'>Remaining balance on [second_account_type], $[num2septext(secondary_money_account.money)].</span>")
 	var/account_type = primary_money_account.virtual ? "virtual wallet" : "bank account"
 	to_chat(user, "[bicon(src)] <span class='notice'>Remaining balance on [account_type], $[num2septext(primary_money_account.money)].</span>")
 	// Present the remaining balance to the user.
