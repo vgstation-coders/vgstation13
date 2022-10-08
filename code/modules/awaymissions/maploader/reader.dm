@@ -201,13 +201,11 @@ var/list/map_dimension_cache = list()
 			xcrd_flip=x_offset + map_width + (clipmin_x)
 			xcrd_flip_rotate=y_offset + map_width + (clipmin_x)
 
-			for(var/mpos=1+(key_len*(clipmin_x-1));mpos<=x_depth;mpos+=key_len)
+			for(var/mpos=1+(key_len*(clipmin_x-1));mpos<=x_depth-((map_width-clipmax_x)*key_len);mpos+=key_len)
 				xcrd++
 				xcrd_rotate++
 				xcrd_flip--
 				xcrd_flip_rotate--
-				if((xcrd-x_offset) > clipmax_x)
-					break
 				var/parse_key = copytext(grid_line,mpos,mpos+key_len)
 				switch(rotate)
 					if(0)
