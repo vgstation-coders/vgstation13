@@ -189,21 +189,19 @@ var/list/map_dimension_cache = list()
 		ycrd_flip_rotate = x_offset + (map_height - clipmax_y)
 
 		var/grid_line
-		for(var/i in ((map_height - clipmax_y) + 1) to map_height)
+		for(var/i in (map_height - (clipmax_y - 1)) to (map_height - (clipmin_y - 1)))
 			grid_line = xy_grids[i]
 			ycrd--
 			ycrd_rotate--
 			ycrd_flip++
 			ycrd_flip_rotate++
-			if((ycrd-y_offset) < clipmin_y)
-				break
 			//fill the current square using the model map
 			xcrd=x_offset + (clipmin_x - 1)
 			xcrd_rotate=y_offset + (clipmin_x - 1)
 			xcrd_flip=x_offset + map_width + (clipmin_x)
 			xcrd_flip_rotate=y_offset + map_width + (clipmin_x)
 
-			for(var/mpos=1+((key_len*clipmin_x)-2);mpos<=x_depth;mpos+=key_len)
+			for(var/mpos=1+(key_len*(clipmin_x-1));mpos<=x_depth;mpos+=key_len)
 				xcrd++
 				xcrd_rotate++
 				xcrd_flip--
