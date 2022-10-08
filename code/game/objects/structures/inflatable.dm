@@ -451,14 +451,20 @@
 		exiting -= user
 		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
 		return
+	var/turf/T = get_turf(src)
+	var/x_offset = 0
+	var/y_offset = 0
+	var/z_offset = 0
+	if(dest)
+		x_offset = dest.x-T.x
+		y_offset = dest.y-T.y
+		z_offset = dest.z-T.z
 	visible_message("<span class='warning'>[user] begins to climb free of the \the [src]!</span>")
 	exiting += user
 	spawn(6 SECONDS)
 		if(loc && exiting.Find(user)) //If not loc, it was probably deflated
-			if (dest)
-				user.forceMove(dest)
-			else
-				user.forceMove(loc)
+			var/turf/T2 = get_turf(src)
+			user.forceMove(locate(T2.x+x_offset,T2.y+y_offset,T2.z+z_offset))
 			exiting -= user
 			update_icon()
 			to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
