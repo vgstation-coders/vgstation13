@@ -464,10 +464,12 @@
 	spawn(6 SECONDS)
 		if(loc && exiting.Find(user)) //If not loc, it was probably deflated
 			var/turf/T2 = get_turf(src)
-			user.forceMove(locate(T2.x+x_offset,T2.y+y_offset,T2.z+z_offset))
-			exiting -= user
-			update_icon()
-			to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
+			var/turf/T3 = locate(T2.x+x_offset,T2.y+y_offset,T2.z+z_offset)
+			if(T3.Cross(user))
+				user.forceMove(T3)
+				update_icon()
+				to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
+		exiting -= user
 
 /obj/structure/inflatable/shelter/MouseDropTo(atom/movable/O, mob/user) //copy pasted from cryo code
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
