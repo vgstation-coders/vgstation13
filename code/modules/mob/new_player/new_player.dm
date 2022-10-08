@@ -728,7 +728,7 @@
 	if(job)
 		new_character.job = rank	//the ultimate jobby: your body is assigned a job
 		if(rank != "MODE")
-			create_account(new_character.real_name, rand(200,500), null, job.wage_payout, prefs.bank_security)
+			create_account(new_character.real_name, rand(100,250), rand(100,250), null, job.wage_payout, prefs.bank_security)
 			job.equip(new_character, job.priority) //Outfit datum.	
 
 	if(!late_join)

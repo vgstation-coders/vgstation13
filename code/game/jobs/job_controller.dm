@@ -438,7 +438,8 @@ var/global/datum/controller/occupations/job_master
 		if(M)
 			remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
 			remembered_info += "<b>Your account pin is:</b> [M.remote_access_pin]<br>"
-			remembered_info += "<b>Your bank account balance is:</b> $[M.money]<br>"
+			remembered_info += "<b>Your bank account funds are:</b> $[M.money]<br>"
+			remembered_info += "<b>Your virtual wallet funds are:</b> $[M.virtual]<br>"
 
 			if(M.transaction_log.len)
 				var/datum/transaction/T = M.transaction_log[1]
@@ -450,12 +451,12 @@ var/global/datum/controller/occupations/job_master
 				if(department_account)
 					remembered_info += "<b>Your department's account number is:</b> #[department_account.account_number]<br>"
 					remembered_info += "<b>Your department's account pin is:</b> [department_account.remote_access_pin]<br>"
-					remembered_info += "<b>Your department's account balance is:</b> $[department_account.money]<br>"
+					remembered_info += "<b>Your department's account funds are:</b> $[department_account.money]<br>"
 
 			H.mind.store_memory(remembered_info)
 
 			to_chat(H, "<span class='danger'>Your bank account number is: <span class='darknotice'>[M.account_number]</span>, your bank account pin is: <span class='darknotice'>[M.remote_access_pin]</span></span>")
-			to_chat(H, "<span class='danger'>Your bank account balance is: <span class='darknotice'>$[M.money]</span></span>")
+			to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span class='darknotice'>$[M.virtual]</span>, your bank account funds are: <span class='darknotice'>$[M.money]</span></span>")
 			to_chat(H, "<span class='danger'>Your bank account security level is set to: <span class='darknotice'>[M.security_level]</span></span>")
 
 	var/alt_title = H.mind.role_alt_title

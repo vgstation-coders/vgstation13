@@ -470,10 +470,9 @@ var/global/msg_id = 0
 			qdel(dosh)
 		updateDialog()
 
-/obj/item/device/pda/proc/transfer(var/amount, var/mob/user, var/atom/giver)
+/obj/item/device/pda/proc/add_to_virtual_wallet(var/amount, var/mob/user, var/atom/giver)
 	if(!id)
 		return 0
-	var/datum/money_account/M = get_money_account(id.account_number)
 	if(id.add_to_virtual_wallet(amount, user, giver))
 		if(prob(50))
 			playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)

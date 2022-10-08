@@ -243,7 +243,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
     return dat
 
 /datum/pda_app/balance_check
-	name = "Balance Check"
+	name = "Virtual Wallet and Balance Check"
 	desc = "Connects to the Account Database to check the balance history the inserted ID card."
 	price = 0
 	icon = "pda_money"
@@ -254,55 +254,72 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	reconnect_database()
 
 /datum/pda_app/balance_check/get_dat(var/mob/user)
-	var/dat = {"<h4><span class='pda_icon [icon]'></span>Balance Check Application</h4>"}
+	var/dat = {"<h4><span class='pda_icon [icon]'></span> Virtual Wallet and Balance Check Application</h4>"}
 	if(!pda_device.id)
-		return dat += {"<i>Insert an ID card in the PDA to use this application.</i>"}
-	var/MM = pda_device.MM
-	var/DD = pda_device.DD
-	if(!linked_db)
-		reconnect_database()
-	if(!linked_db)
-		return dat += {"
-			<h5>Bank Account</h5>
-			<i>Unable to connect to accounts database. The database is either nonexistent, inoperative, or too far away.</i>
-			"}
-	if(!linked_db.activated)
-		return dat += {"
-			<h5>Bank Account</h5>
-			<i>Unfortunately your station's Accounts Database doesn't allow remote access. Negociate with your HoP or Captain to solve this issue.</i>
-			"}
-
-	var/datum/money_account/D = get_card_account(pda_device.id, user, pda_device.id.security_level)
-	if(!D)
-		return dat += {"
-			<h5>Bank Account</h5>
-			<i>Unable to access bank account. Either its security settings don't allow remote checking or the account is nonexistent.</i>
-			"}
+		dat += {"<i>Insert an ID card in the PDA to use this application.</i>"}
 	else
-		var/list/t_log = list()
+		var/MM = pda_device.MM
+		var/DD = pda_device.DD
+		if(!pda_device.id.virtual_wallet)
+			pda_device.id.update_virtual_wallet()
 		dat += {"<hr>
-		<h5>Account Details</h5>
-		Owner: <b>[M.owner_name]</b><br>
-		Balance: <b>[M.money]</b>$  <u><a href='byond://?src=\ref[src];printCurrency=1'><span class='pda_icon [icon]'></span>Print Currency</a></u>
-		<h6>Transaction History</h6>
-		On [MM]/[DD]/[game_year]:
-		<ul>
-		"}
-		for(var/e in D.transaction_log)
-			t_log += e
-		for(var/datum/transaction/T in reverseRange(t_log))
-			if(T.purpose == "Account creation")//always the last element of the reverse transaction_log
-				dat += {"</ul>
-					On [(DD == 1) ? "[((MM-2)%12)+1]" : "[MM]"]/[((DD-2)%30)+1]/[(DD == MM == 1) ? "[game_year - 1]" : "[game_year]"]:
-					<ul>
-					<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>
-					</ul>"}
+			<h5>Virtual Wallet</h5>
+			Owner: <b>[pda_device.id.virtual_wallet.owner_name]</b><br>
+			Balance: <b>[pda_device.id.virtual_wallet.money]</b>$  <u><a href='byond://?src=\ref[src];printCurrency=1'><span class='pda_icon [icon]'></span>Print Currency</a></u>
+			<h6>Transaction History</h6>
+			On [MM]/[DD]/[game_year]:
+			<ul>
+			"}
+		var/list/v_log = list()
+		for(var/e in pda_device.id.virtual_wallet.transaction_log)
+			v_log += e
+		for(var/datum/transaction/T in reverseRange(v_log))
+			dat += {"<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>"}
+		dat += {"</ul><hr>"}
+		if(!(linked_db))
+			reconnect_database()
+		if(linked_db)
+			if(linked_db.activated)
+				var/datum/money_account/D = linked_db.attempt_account_access(pda_device.id.account_number, 0, 2, 0)
+				if(D)
+					dat += {"
+						<h5>Bank Account</h5>
+						Owner: <b>[D.owner_name]</b><br>
+						Balance: <b>[D.money]</b>$
+						<h6>Transaction History</h6>
+						On [MM]/[DD]/[game_year]:
+						<ul>
+						"}
+					var/list/t_log = list()
+					for(var/e in D.transaction_log)
+						t_log += e
+					for(var/datum/transaction/T in reverseRange(t_log))
+						if(T.purpose == "Account creation")//always the last element of the reverse transaction_log
+							dat += {"</ul>
+								On [(DD == 1) ? "[((MM-2)%12)+1]" : "[MM]"]/[((DD-2)%30)+1]/[(DD == MM == 1) ? "[game_year - 1]" : "[game_year]"]:
+								<ul>
+								<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>
+								</ul>"}
+						else
+							dat += {"<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>"}
+					if(!D.transaction_log.len)
+						dat += {"</ul>"}
+				else
+					dat += {"
+						<h5>Bank Account</h5>
+						<i>Unable to access bank account. Either its security settings don't allow remote checking or the account is nonexistent.</i>
+						"}
 			else
-				dat += {"<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>"}
-		if(!D.transaction_log.len)
-			dat += {"</ul>"}
-
-		return dat
+				dat += {"
+					<h5>Bank Account</h5>
+					<i>Unfortunately your station's Accounts Database doesn't allow remote access. Negociate with your HoP or Captain to solve this issue.</i>
+					"}
+		else
+			dat += {"
+				<h5>Bank Account</h5>
+				<i>Unable to connect to accounts database. The database is either nonexistent, inoperative, or too far away.</i>
+				"}
+	return dat
 
 /datum/pda_app/balance_check/Topic(href, href_list)
 	if(..())

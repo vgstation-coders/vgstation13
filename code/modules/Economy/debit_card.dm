@@ -61,7 +61,7 @@
 
 /obj/item/weapon/card/debit/trader/New(var/new_loc, var/account_number)
 	if(!trader_account)
-		trader_account = create_account("Trader Shoal", 0, null, 0, 1, TRUE, FALSE)
+		trader_account = create_account("Trader Shoal", 0, 0, null, 0, 1, TRUE, FALSE)
 	return ..(new_loc, trader_account.account_number)
 
 /obj/item/weapon/card/debit/preferred
