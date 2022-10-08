@@ -58,14 +58,13 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 //the current ingame time (hh:mm) can be obtained by calling:
 //worldtime2text()
 
-/proc/create_account(var/owner_name = "Default user", var/money = 0, var/virtual = 0, var/obj/machinery/account_database/source_db, var/wage_gain= 0, var/security_level = 1, var/hidden = FALSE, var/isStationAccount = TRUE)
+/proc/create_account(var/owner_name = "Default user", var/balance = 0, var/obj/machinery/account_database/source_db, var/wage_gain= 0, var/security_level = 1, var/hidden = FALSE, var/isStationAccount = TRUE)
 
 	//create a new account
 	var/datum/money_account/M = new()
 	M.owner_name = owner_name
 	M.remote_access_pin = rand(1111, 9999)
-	M.money = money
-	M.virtual = virtual
+	M.money = balance
 	M.wage_gain = wage_gain
 	M.security_level = security_level
 	M.hidden = hidden
@@ -215,7 +214,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		for(var/department in station_departments)
 			create_department_account(department, receives_wage = 1)
 	if(!vendor_account)
-		vendor_account = create_account("Vendor", 0, 0, null, 0, 1, TRUE, FALSE)
+		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE, FALSE)
 
 	if(!current_date_string)
 		current_date_string = "[time2text(world.timeofday, "DD")] [time2text(world.timeofday, "Month")], [game_year]"
@@ -380,7 +379,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 						//Create a transaction log entry if you need to
 						new /datum/transaction(station_account, "New account funds initialisation", "([starting_funds])",\
 												machine_id, account_name, send2PDAs = FALSE)
-					create_account(account_name, starting_funds, 0, src)
+					create_account(account_name, starting_funds, src)
 					creating_new_account = 0
 			if("insert_card")
 				if(held_card)

@@ -221,6 +221,7 @@ log transactions
 						if(atm_card)
 							if(istype(atm_card, /obj/item/weapon/card/id))
 								var/obj/item/weapon/card/id/card_id = atm_card
+								/*var/money_account =
 								dat += {"
 									<b>Virtual Wallet balance:</b> $[card_id.virtual_wallet.money]<br>
 									<form name='withdraw_to_wallet' action='?src=\ref[src]' method='get'>
@@ -233,7 +234,7 @@ log transactions
 									<input type='hidden' name='choice' value='deposit_from_wallet'>
 									<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Deposit from virtual wallet'><br>
 									</form><hr>
-									"}
+									"}*/
 							else if(istype(atm_card, /obj/item/weapon/card/debit))
 								var/obj/item/weapon/card/debit/card_debit = atm_card
 								dat += {"
@@ -368,52 +369,6 @@ log transactions
 							new /datum/transaction(authenticated_account, "Credit withdrawal", "-[amount]", machine_id)
 						else
 							to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
-			if("withdraw_to_wallet")
-				if(CAN_INTERACT_WITH_ACCOUNT)
-					var/amount = max(text2num(href_list["funds_amount"]),0)
-					if(!istype(atm_card, /obj/item/weapon/card/id))
-						to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds to it.</span>")
-						return
-
-					var/obj/item/weapon/card/id/card_id = atm_card
-					if(amount <= 0)
-						alert("That is not a valid amount.")
-					else if(authenticated_account && amount > 0)
-						if(amount <= authenticated_account.money)
-							authenticated_account.money -= amount
-							card_id.virtual_wallet.money += amount
-
-							//create an entry in the account transaction log
-							new /datum/transaction(authenticated_account, "Credit transfer to wallet", "-[amount]",\
-													machine_id, card_id.virtual_wallet.owner_name)
-
-							new /datum/transaction(card_id.virtual_wallet, "Credit transfer to wallet", "[amount]",\
-													machine_id, authenticated_account.owner_name)
-						else
-							to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
-			if("deposit_from_wallet")
-				if(CAN_INTERACT_WITH_ACCOUNT)
-					var/amount = max(text2num(href_list["funds_amount"]),0)
-					if(!istype(atm_card, /obj/item/weapon/card/id))
-						to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds from its virtual wallet.</span>")
-						return
-
-					var/obj/item/weapon/card/id/card_id = atm_card
-					if(amount <= 0)
-						alert("That is not a valid amount.")
-					else if(authenticated_account && amount > 0)
-						if(amount <= card_id.virtual_wallet.money)
-							authenticated_account.money += amount
-							card_id.virtual_wallet.money -= amount
-
-							//create an entry in the account transaction log
-							new /datum/transaction(authenticated_account, "Credit transfer from wallet", "[amount]",\
-													machine_id, card_id.virtual_wallet.owner_name)
-
-							new /datum/transaction(card_id.virtual_wallet, "Credit transfer from wallet", "-[amount]",\
-													machine_id, authenticated_account.owner_name)
-						else
-							to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("balance_statement")
 				if(CAN_INTERACT_WITH_ACCOUNT)
 					if(world.timeofday < lastprint + PRINT_DELAY)
@@ -485,12 +440,12 @@ log transactions
 			return
 		if(istype(H.wear_id, /obj/item/device/pda))
 			var/obj/item/device/pda/P = H.wear_id
-			if(P.add_to_virtual_wallet(arbitrary_sum, user, src))
+			if(P.transfer(arbitrary_sum, user, src))
 				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
 				return
 		if(istype(H.wear_id, /obj/item/weapon/card/id))
 			var/obj/item/weapon/card/id/ID = H.wear_id
-			if(ID.add_to_virtual_wallet(arbitrary_sum, user, src))
+			if(ID.transfer(arbitrary_sum, user, src))
 				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
 				return
 		var/list/cash = dispense_cash(arbitrary_sum, H.loc)

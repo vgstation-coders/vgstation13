@@ -17,6 +17,7 @@
 	icon = 'icons/obj/card.dmi'
 	w_class = W_CLASS_TINY
 	var/account_number = 0
+	var/security_level = 0
 
 	var/list/files = list(  )
 	autoignition_temperature = AUTOIGNITION_PLASTIC
@@ -208,8 +209,6 @@ var/list/global/id_cards = list()
 	var/rank = null			//actual job
 	var/dorm = 0		// determines if this ID has claimed a dorm already
 
-	var/datum/money_account/virtual_wallet = 1	//money! If 0, don't create a wallet. Otherwise create one!
-
 /obj/item/weapon/card/id/New()
 	..()
 
@@ -249,23 +248,6 @@ var/list/global/id_cards = list()
 
 /obj/item/weapon/card/id/get_owner_name_from_ID()
 	return registered_name
-
-/obj/item/weapon/card/id/proc/update_virtual_wallet(var/new_funds=0)
-	if(!istype(virtual_wallet))
-		virtual_wallet = new()
-		virtual_wallet.virtual = 1
-
-	virtual_wallet.owner_name = registered_name
-
-	if(new_funds)
-		virtual_wallet.money = new_funds
-
-	//Virtual wallet accounts are tied to an ID card, not an account database, thus they don't need an acount number.
-	//For now using the virtual wallet doesn't require a PIN either.
-
-	if(!virtual_wallet.account_number)
-		virtual_wallet.account_number = next_account_number
-		next_account_number += rand(1,25)
 
 /obj/item/weapon/card/id/proc/add_to_virtual_wallet(var/added_funds=0, var/mob/user, var/atom/source)
 	if(!virtual_wallet)

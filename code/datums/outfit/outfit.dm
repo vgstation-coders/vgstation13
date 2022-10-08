@@ -280,9 +280,8 @@
 	C.assignment = H.mind ? H.mind.role_alt_title : concrete_job.title
 	C.name = "[C.registered_name]'s ID Card ([C.assignment])"
 	C.account_number = M.account_number
+	C.security_level = M.security_level
 	H.equip_or_collect(C, slot_wear_id)
-	if(C.virtual_wallet)
-		C.update_virtual_wallet(M.virtual)
 
 	if (pda_type)
 		var/obj/item/device/pda/pda = new pda_type(H)
