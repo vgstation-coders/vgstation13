@@ -126,7 +126,6 @@ var/datum/controller/gameticker/ticker
 	theme.update_music()
 	theme.update_icon()
 
-
 /datum/controller/gameticker/proc/setup()
 	//Create and announce mode
 	if(master_mode=="secret")

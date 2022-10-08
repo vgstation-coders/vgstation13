@@ -9,17 +9,15 @@ var/datum/subsystem/more_init/SSmore_init
 	NEW_SS_GLOBAL(SSmore_init)
 
 /datum/subsystem/more_init/Initialize(timeofday)
-	var/watch=start_watch()
 	initialize_rune_words()
 	library_catalog.initialize()
 	initialize_beespecies()
-
 	init_mind_ui()
 	createPaiController()
 	ticker.init_snake_leaderboard()
 	ticker.init_minesweeper_leaderboard()
-
 	setup_news()
+	
 	watch=start_watch()
 	log_startup_progress("Caching damage icons...")
 	cachedamageicons()
