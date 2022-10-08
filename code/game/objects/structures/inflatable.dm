@@ -451,6 +451,10 @@
 		exiting -= user
 		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
 		return
+	if(!dest.Cross())
+		exiting -= user
+		to_chat(user,"<span class='warning'>You cannot climb out here, the way is blocked.</span>")
+		return
 	var/turf/T = get_turf(src)
 	var/x_offset = 0
 	var/y_offset = 0
@@ -464,11 +468,11 @@
 	spawn(6 SECONDS)
 		if(loc && exiting.Find(user)) //If not loc, it was probably deflated
 			var/turf/T2 = get_turf(src)
-			var/turf/T3 = locate(T2.x+x_offset,T2.y+y_offset,T2.z+z_offset)
-			if(T3.Cross(user))
-				user.forceMove(T3)
+			if(user.Move(locate(T2.x+x_offset,T2.y+y_offset,T2.z+z_offset)))
 				update_icon()
 				to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
+			else
+				to_chat(user,"<span class='warning'>You cannot climb out here, the way is blocked.</span>")
 		exiting -= user
 
 /obj/structure/inflatable/shelter/MouseDropTo(atom/movable/O, mob/user) //copy pasted from cryo code
@@ -510,19 +514,9 @@
 
 
 /obj/structure/inflatable/shelter/MouseDropFrom(over_object, src_location, turf/over_location, src_control, over_control, params)
-	if(!Adjacent(over_location))
+	if(!Adjacent(over_location) || !istype(over_location) || usr.incapacitated())
 		return
-	if(!istype(over_location) || over_location.density)
-		return
-	if(usr.incapacitated())
-		return
-	for(var/atom/movable/A in over_location.contents)
-		if(A.density)
-			if((A == src) || istype(A, /mob))
-				continue
-			return
-	if(istype(over_location))
-		container_resist(usr,over_location)
+	container_resist(usr,over_location)
 
 /obj/structure/inflatable/shelter/Exited(var/atom/movable/mover)
 	update_icon()
