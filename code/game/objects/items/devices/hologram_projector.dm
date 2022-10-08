@@ -27,7 +27,7 @@
 	\n<span class='danger'>Do not damage the station. Do not harm crew members without their consent.</span>"
 
 /mob/living/simple_animal/hologram/advanced/projector/Login()
-	if(projector.integratedpai)
+	if(projector?.integratedpai)
 		var/obj/item/device/paicard/P = projector.integratedpai
 		login_text = "Your supplemental directives have been updated. Your new directives are: \
 			\nPrime Directive : <br>[P.pai.pai_law0] \
@@ -45,6 +45,8 @@
 /obj/item/device/hologram_projector/proc/clear_holo()
 	set_light(0)
 	if(holoperson)
+		if(integratedpai)
+			remove_pai()
 		visible_message("<span class='warning'>The image of [holoperson] fades away.</span>")
 		animate(holoperson, alpha = 0, time = 5)
 		spawn(5)
@@ -63,9 +65,6 @@
 /obj/item/device/hologram_projector/attack_self()
 	if(holoperson)
 		to_chat(usr, "Shutting down hologram...")
-		if(integratedpai)
-			remove_pai()
-			return
 		clear_holo()
 		return
 	else if(integratedpai)
@@ -108,8 +107,7 @@
 
 	var/turf/T = get_turf(src)
 	player.forceMove(T)
-	var/mob/living/simple_animal/hologram/advanced/projector/H = player.transmogrify(/mob/living/simple_animal/hologram/advanced/projector, TRUE)
-	holoperson = H
+	holoperson = player.transmogrify(/mob/living/simple_animal/hologram/advanced/projector, TRUE)
 	holoperson.set_light(1)
 	holoperson.projector = src
 	holoperson.proj_turf = T
@@ -180,8 +178,8 @@
 	if(!P?.pai)
 		return
 	var/turf/T = get_turf(src)
-	P.pai.forceMove(T)
 	holoperson = new (T)
+	holoperson.set_light(1)
 	holoperson.real_name = P.pai.real_name
 	holoperson.name = P.pai.name
 	holoperson.projector = src
@@ -195,6 +193,9 @@
 /obj/item/device/hologram_projector/remove_pai()
 	if(holoperson)
 		integratedpai.pai = new (integratedpai)
-		holoperson.mind.transfer_to(integratedpai.pai)
+		integratedpai.pai.real_name = holoperson.real_name
+		integratedpai.pai.name = holoperson.name
+		var/datum/mind/M = holoperson.mind
+		M.transfer_to(integratedpai.pai)
 		clear_holo()
 	..()
