@@ -231,6 +231,14 @@ var/global/no_pin_for_debit = TRUE
 			// We'll charge the virtual wallet first.
 			if(primary_money_account.money < transaction_amount)
 				// Not enough funds in the virtual wallet so we'll need the bank account.
+				var/datum/money_account/bank_acc_check = linked_db.get_account(card.associated_account_number)
+				if(!bank_acc_check)
+					to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
+					return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
+				if((bank_acc_check.money + primary_money_account.money) < transaction_amount)
+					to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
+					return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
+				// But if they don't have enough money to begin with, even with a bank account, reject the whole thing.
 				if(primary_money_account.money > 0 && alert(user, "Not enough funds in \the [card]'s virtual wallet. Do you want to charge the virtual wallet's remaining balance of $[num2septext(primary_money_account.money)] before charging the rest to your bank account?", "Card Transaction", "Yes", "No") == "Yes")
 					// But lets check if there's an amount on the virtual card and ask if the user would like to apply that balance.
 					if(user_loc != user.loc)
