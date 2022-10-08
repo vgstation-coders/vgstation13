@@ -3,7 +3,6 @@
 #define SELECTIVE_DELETE	2
 #define SELECTIVE_FILL		3
 #define MASS_RESET			4
-#define SELECTIVE_RESET		5
 
 /proc/togglebuildmode(mob/M as mob in player_list)
 	set name = "Toggle Build Mode"
@@ -300,7 +299,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 			if(holder.deletemode)
 				areaAction = holder.selective ? SELECTIVE_DELETE : MASS_DELETE //2 : 1
 			else if(holder.resetmode)
-				areaAction = holder.selective ? SELECTIVE_RESET : MASS_RESET //4 : 5
+				areaAction = MASS_RESET //4
 			else
 				areaAction = holder.selective ? SELECTIVE_FILL : MASS_FILL //3 : 0
 
@@ -323,11 +322,6 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 					if(!chosen)
 						return
 					msglog += " Changed all [chosen] in [fillturfs.len] tile\s to [whatfill] "
-				if(SELECTIVE_RESET)
-					chosen = easyTypeSelector()
-					if(!chosen)
-						return
-					msglog += " Resetted all [chosen] in [fillturfs.len] tile\s to [whatfill] "
 				if(MASS_RESET)
 					msglog += " <big>RESETTED</big> [fillturfs.len] tile\s "
 				else
@@ -337,7 +331,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 			log_admin(msglog)
 			to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the fill may take longer than typical.</span>")
 			var/deletions = 0
-			if(areaAction == MASS_RESET || areaAction == SELECTIVE_RESET)
+			if(areaAction == MASS_RESET)
 				var/lowest_x = min(start.x,end.x)
 				var/lowest_y = min(start.y,end.y)
 				var/lowest_z = min(start.z,end.z)
@@ -548,7 +542,9 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 							if(areaAction)
 								areaAction = (alert("Selective(TYPE) Delete or MASS Delete?", "Scorched Earth or selective destruction?", "Selective", "MASS") == "Selective" ? 2 : 1)
 							else
-								areaAction = (alert("Mass FILL or Selective(Type => Type) FILL?", "Do they really need [fillturfs.len] of closets?", "Selective", "Mass") == "Selective" ? 3 : 0)
+								areaAction = (alert("Type FILL or map reset FILL?", "Do they really need [fillturfs.len] of the old station?", "Reset", "Fill") == "Reset" ? 4 : 0)
+								if(!areaAction)
+									areaAction = (alert("Mass FILL or Selective(Type => Type) FILL?", "Do they really need [fillturfs.len] of closets?", "Selective", "Mass") == "Selective" ? 3 : 0)
 							var/msglog = "<span class='danger'>[key_name_admin(usr)] just buildmode"
 							var/strict = 1
 							var/chosen
@@ -567,6 +563,8 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 										return
 									strict = alert("Change all children of [chosen]?", "Children being all types and subtypes of [chosen]", "Yes", "No") == "No"
 									msglog += " Changed all [chosen] in [fillturfs.len] tile\s to [holder.buildmode.objholder] "
+								if(MASS_RESET)
+									msglog += " <big>RESETTED</big> [fillturfs.len] tile\s "
 								else
 									msglog += " FILLED [fillturfs.len] tile\s with [holder.buildmode.objholder] "
 							msglog += "at ([formatJumpTo(start)] to [formatJumpTo(end)])</span>"
@@ -575,67 +573,83 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 							to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the fill may take longer than typical.</span>")
 
 							var/deletions = 0
-							for(var/turf/T in fillturfs)
-								if(areaAction == MASS_DELETE || areaAction == SELECTIVE_DELETE)
-									if(ispath(chosen, /turf))
-										T.ChangeTurf(chosen)
-										deletions++
-									else
-										for(var/atom/thing in T.contents)
-											if(thing==usr)
-												continue
-											if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
-												qdel(thing)
+							if(areaAction == MASS_RESET)
+								var/lowest_x = min(start.x,end.x)
+								var/lowest_y = min(start.y,end.y)
+								var/lowest_z = min(start.z,end.z)
+								var/highest_x = max(start.x,end.x)
+								var/highest_y = max(start.y,end.y)
+								var/highest_z = max(start.z,end.z)
+								var/datum/map_element/ME = new
+								ME.file_path = "maps/[map.map_dir].dmm"
+								if(!fexists(file(ME.file_path)))
+									if(map.file_dir != "")
+										ME.file_path = "maps/[map.file_dir].dmm"
+									if(!fexists(file(ME.file_path)))
+										CRASH("Map file path for current map ([ME.file_path]) not found somehow! Cannot reset map segment.")
+								ME.load(0, 0, 1, 0, 1, 0, lowest_x, highest_x, lowest_y, highest_y, lowest_z, highest_z)
+							else
+								for(var/turf/T in fillturfs)
+									if(areaAction == MASS_DELETE || areaAction == SELECTIVE_DELETE)
+										if(ispath(chosen, /turf))
+											T.ChangeTurf(chosen)
 											deletions++
-											CHECK_TICK
-										if(areaAction == MASS_DELETE)
-											T.ChangeTurf(get_base_turf(T.z))
-								else
-									if(ispath(holder.buildmode.objholder, /area) || istype(holder.buildmode.copycat, /area))
-										//In case of a selective fill, make sure the turf fits into the criteria before changing it
-										if(areaAction == SELECTIVE_FILL)
-											if(strict)
-												if(T.type != chosen)
-													continue
-											else
-												if(!istype(T, chosen))
-													continue
-
-										var/area/A
-										if(istype(holder.buildmode.copycat, /area))
-											A = holder.buildmode.copycat
 										else
-											A = locate(holder.buildmode.objholder)
-
-										T.set_area(A)
-									else if(ispath(holder.buildmode.objholder, /turf))
-										if(areaAction == SELECTIVE_FILL)
-											if(strict)
-												if(T.type != chosen)
-													continue
-											else
-												if(!istype(T, chosen))
-													continue
-
-										T.ChangeTurf(holder.buildmode.objholder)
-									else
-										if(areaAction == SELECTIVE_FILL)
 											for(var/atom/thing in T.contents)
+												if(thing==usr)
+													continue
+												if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
+													qdel(thing)
+												deletions++
+												CHECK_TICK
+											if(areaAction == MASS_DELETE)
+												T.ChangeTurf(get_base_turf(T.z))
+									else
+										if(ispath(holder.buildmode.objholder, /area) || istype(holder.buildmode.copycat, /area))
+											//In case of a selective fill, make sure the turf fits into the criteria before changing it
+											if(areaAction == SELECTIVE_FILL)
 												if(strict)
-													if(thing.type != chosen)
+													if(T.type != chosen)
 														continue
 												else
-													if(!istype(thing, chosen))
+													if(!istype(T, chosen))
 														continue
-												var/atom/A = new holder.buildmode.objholder(T)
-												A.change_dir(thing.dir)
-												qdel(thing)
-												CHECK_TICK
+
+											var/area/A
+											if(istype(holder.buildmode.copycat, /area))
+												A = holder.buildmode.copycat
+											else
+												A = locate(holder.buildmode.objholder)
+
+											T.set_area(A)
+										else if(ispath(holder.buildmode.objholder, /turf))
+											if(areaAction == SELECTIVE_FILL)
+												if(strict)
+													if(T.type != chosen)
+														continue
+												else
+													if(!istype(T, chosen))
+														continue
+
+											T.ChangeTurf(holder.buildmode.objholder)
 										else
-											var/obj/A = new holder.buildmode.objholder(T)
-											if(istype(A))
-												A.change_dir(holder.builddir.dir)
-								CHECK_TICK
+											if(areaAction == SELECTIVE_FILL)
+												for(var/atom/thing in T.contents)
+													if(strict)
+														if(thing.type != chosen)
+															continue
+													else
+														if(!istype(thing, chosen))
+															continue
+													var/atom/A = new holder.buildmode.objholder(T)
+													A.change_dir(thing.dir)
+													qdel(thing)
+													CHECK_TICK
+											else
+												var/obj/A = new holder.buildmode.objholder(T)
+												if(istype(A))
+													A.change_dir(holder.builddir.dir)
+									CHECK_TICK
 							holder.fill_left = null
 							holder.fill_right = null
 							if(deletions)
