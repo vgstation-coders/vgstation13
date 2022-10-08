@@ -2152,7 +2152,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list (
 					/obj/item/critter_cage,
 					/obj/item/critter_cage,
-					/obj/item/weapon/storage/box/monkeycubes/mousecubes,)
+					/obj/item/weapon/storage/box/monkeycubes/mousecubes)
 	cost = 20
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "lab mouse crate"
