@@ -350,14 +350,14 @@
 	return TRUE
 
 /obj/structure/inflatable/shelter/update_icon()
-	overlays = list()
-	var/mob/living/carbon/human/occupant = locate(/mob/living/carbon/human) in contents
-	if(occupant)
-		var/image/occupant_overlay = occupant.appearance
-		overlays += occupant_overlay
-	var/image/cover_overlay = image('icons/obj/inflatable.dmi', icon_state = "shelter_top", layer = FLY_LAYER)
-	cover_overlay.plane = ABOVE_HUMAN_PLANE
-	overlays += cover_overlay
+	vis_contents.Cut()
+	overlays.Cut()
+	for(var/mob/living/L in contents)
+		vis_contents.Add(L)
+	if(contents.len)
+		var/image/cover_overlay = image('icons/obj/inflatable.dmi', icon_state = "shelter_top", layer = FLY_LAYER)
+		cover_overlay.plane = ABOVE_HUMAN_PLANE
+		overlays += cover_overlay
 
 /obj/structure/inflatable/shelter/attack_hand(mob/user)
 	if(user.loc == src && ishuman(user))
@@ -451,7 +451,7 @@
 		exiting -= user
 		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
 		return
-	if(!dest.Cross(user,dest))
+	if(dest && !dest.Cross(user,dest))
 		exiting -= user
 		to_chat(user,"<span class='warning'>You cannot climb out here, the way is blocked.</span>")
 		return
@@ -467,12 +467,17 @@
 	exiting += user
 	spawn(6 SECONDS)
 		if(loc && exiting.Find(user)) //If not loc, it was probably deflated
-			var/turf/T2 = get_turf(src)
-			if(user.Move(locate(T2.x+x_offset,T2.y+y_offset,T2.z+z_offset)))
+			if(dest)
+				var/turf/T2 = get_turf(src)
+				if(user.Move(locate(T2.x+x_offset,T2.y+y_offset,T2.z+z_offset)))
+					update_icon()
+					to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
+				else
+					to_chat(user,"<span class='warning'>You cannot climb out here, the way is blocked.</span>")
+			else
+				user.forceMove(loc)
 				update_icon()
 				to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
-			else
-				to_chat(user,"<span class='warning'>You cannot climb out here, the way is blocked.</span>")
 		exiting -= user
 
 /obj/structure/inflatable/shelter/MouseDropTo(atom/movable/O, mob/user) //copy pasted from cryo code
