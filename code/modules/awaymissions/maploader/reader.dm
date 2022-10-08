@@ -63,6 +63,10 @@ var/list/map_dimension_cache = list()
  */
 /dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num, var/clipmin_x as num, var/clipmax_x as num, var/clipmin_y as num, var/clipmax_y as num, var/clipmin_z as num, var/clipmax_z as num)
 
+	clipmin_x = max(clipmin_x,1)
+	clipmin_y = max(clipmin_y,1)
+	clipmin_z = max(clipmin_z,1)
+
 	if((rotate % 90) != 0) //If not divisible by 90, make it
 		rotate += (rotate % 90)
 
@@ -159,6 +163,9 @@ var/list/map_dimension_cache = list()
 		var/map_height = xy_grids.len
 		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
+		clipmax_x = min(clipmax_x,map_width)
+		clipmax_y = min(clipmax_y,map_height)
+
 		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : map_height + y_offset
 		var/y_check = rotate == 0 || rotate == 180 ? map_height + y_offset : map_width + x_offset
 		if(world.maxx < x_check)
@@ -176,33 +183,31 @@ var/list/map_dimension_cache = list()
 			WARNING("Loading [map_element] enlarged the map. New max y = [world.maxy]")
 
 		//then proceed it line by line, starting from top
-		ycrd = y_offset + map_height + 1
-		ycrd_rotate = x_offset + map_width + 1
-		ycrd_flip = y_offset
-		ycrd_flip_rotate = x_offset
+		ycrd = (y_offset + map_height + 1) - (map_height - clipmax_y)
+		ycrd_rotate = (x_offset + map_width + 1) - (map_height - clipmax_y)
+		ycrd_flip = y_offset + (map_height - clipmax_y)
+		ycrd_flip_rotate = x_offset + (map_height - clipmax_y)
 
-		for(var/grid_line in xy_grids)
+		var/grid_line
+		for(var/i in ((map_height - clipmax_y) + 1) to map_height)
+			grid_line = xy_grids[i]
 			ycrd--
 			ycrd_rotate--
 			ycrd_flip++
 			ycrd_flip_rotate++
-			if((ycrd-y_offset) > clipmax_y)
-				continue
 			if((ycrd-y_offset) < clipmin_y)
 				break
 			//fill the current square using the model map
-			xcrd=x_offset
-			xcrd_rotate=y_offset
-			xcrd_flip=x_offset + map_width + 1
-			xcrd_flip_rotate=y_offset + map_width + 1
+			xcrd=x_offset + (clipmin_x - 1)
+			xcrd_rotate=y_offset + (clipmin_x - 1)
+			xcrd_flip=x_offset + map_width + (clipmin_x)
+			xcrd_flip_rotate=y_offset + map_width + (clipmin_x)
 
-			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
+			for(var/mpos=1+((key_len*clipmin_x)-2);mpos<=x_depth;mpos+=key_len)
 				xcrd++
 				xcrd_rotate++
 				xcrd_flip--
 				xcrd_flip_rotate--
-				if((xcrd-x_offset) < clipmin_x)
-					continue
 				if((xcrd-x_offset) > clipmax_x)
 					break
 				var/parse_key = copytext(grid_line,mpos,mpos+key_len)
