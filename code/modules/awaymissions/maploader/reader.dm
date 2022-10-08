@@ -186,7 +186,7 @@ var/list/map_dimension_cache = list()
 		ycrd_rotate = x_offset + map_width + 1
 		ycrd_flip = y_offset
 		ycrd_flip_rotate = x_offset
-		y_on = map_height
+		y_on = map_height + 1
 
 		for(var/grid_line in xy_grids)
 			ycrd--
@@ -194,10 +194,10 @@ var/list/map_dimension_cache = list()
 			ycrd_flip++
 			ycrd_flip_rotate++
 			y_on--
-			if(y_on >= clipmax_y)
+			if(y_on > clipmax_y)
 				world.log << "skipped [x_on],[y_on],[z_on] on Y"
 				continue
-			if((y_on+1) < clipmin_y)
+			if(y_on < clipmin_y)
 				world.log << "broke out on [x_on],[y_on],[z_on] on Y"
 				break
 			//fill the current square using the model map
