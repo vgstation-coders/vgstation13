@@ -133,18 +133,12 @@ var/list/map_dimension_cache = list()
 	var/xcrd_flip=y_offset
 	var/ycrd_flip_rotate=y_offset
 	var/xcrd_flip_rotate=x_offset
-	var/z_on = 0
-	var/x_on = 0
-	var/y_on = 0
 
 	for(var/zpos=findtext(tfile,"\n(1,1,",lpos,0);zpos!=0;zpos=findtext(tfile,"\n(1,1,",zpos+1,0))	//in case there's several maps to load
 		zcrd++
-		z_on++
-		if(z_on < clipmin_z)
-			world.log << "skipped [x_on],[y_on],[z_on] on Z"
+		if((zcrd+1) < clipmin_z)
 			continue
-		if(z_on > clipmax_z)
-			world.log << "broke out with [x_on],[y_on],[z_on] on Z"
+		if((zcrd+1) > clipmax_z)
 			break
 		if(zcrd+z_offset > world.maxz)
 			world.maxz = zcrd+z_offset
@@ -186,38 +180,30 @@ var/list/map_dimension_cache = list()
 		ycrd_rotate = x_offset + map_width + 1
 		ycrd_flip = y_offset
 		ycrd_flip_rotate = x_offset
-		y_on = map_height + 1
 
 		for(var/grid_line in xy_grids)
 			ycrd--
 			ycrd_rotate--
 			ycrd_flip++
 			ycrd_flip_rotate++
-			y_on--
-			if(y_on > clipmax_y)
-				world.log << "skipped [x_on],[y_on],[z_on] on Y"
+			if((ycrd-y_offset) > clipmax_y)
 				continue
-			if(y_on < clipmin_y)
-				world.log << "broke out on [x_on],[y_on],[z_on] on Y"
+			if((ycrd-y_offset) < clipmin_y)
 				break
 			//fill the current square using the model map
 			xcrd=x_offset
 			xcrd_rotate=y_offset
 			xcrd_flip=x_offset + map_width + 1
 			xcrd_flip_rotate=y_offset + map_width + 1
-			x_on = 0
 
 			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
 				xcrd++
 				xcrd_rotate++
 				xcrd_flip--
 				xcrd_flip_rotate--
-				x_on++
-				if(x_on < clipmin_x)
-					world.log << "skipped [x_on],[y_on],[z_on] on X"
+				if((xcrd-x_offset) < clipmin_x)
 					continue
-				if(x_on > clipmax_x)
-					world.log << "broke out with [x_on],[y_on],[z_on] on X"
+				if((xcrd-x_offset) > clipmax_x)
 					break
 				var/parse_key = copytext(grid_line,mpos,mpos+key_len)
 				switch(rotate)
