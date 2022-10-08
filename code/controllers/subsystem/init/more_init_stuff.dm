@@ -18,7 +18,7 @@ var/datum/subsystem/more_init/SSmore_init
 	ticker.init_minesweeper_leaderboard()
 	setup_news()
 	
-	watch=start_watch()
+	var/watch=start_watch()
 	log_startup_progress("Caching damage icons...")
 	cachedamageicons()
 	log_startup_progress("  Finished caching damage icons in [stop_watch(watch)]s.")
