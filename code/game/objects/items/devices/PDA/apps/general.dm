@@ -343,7 +343,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 			else
 				playsound(pda_device, 'sound/items/polaroid2.ogg', 50, 1)
 
-			new /datum/transaction(M.virtual, "Currency printed", "-[amount]", pda_device.name, user.name)
+			new /datum/transaction(M, "Currency printed", "-[amount]", pda_device.name, user.name)
 	refresh_pda()
 
 /datum/pda_app/balance_check/proc/reconnect_database()

@@ -344,6 +344,7 @@
 	if(!IsJobAvailable(rank))
 		to_chat(src, alert("[rank] is not available. Please try another."))
 		return 0
+
 	var/datum/job/job = job_master.GetJob(rank)
 	if(job.species_whitelist.len)
 		if(!job.species_whitelist.Find(client.prefs.species))
@@ -362,8 +363,7 @@
 
 	var/atom/movable/what_to_move = character.locked_to || character
 
-	var/datum/job/J = job_master.GetJob(rank)
-	if(J.spawns_from_edge)
+	if(job.spawns_from_edge)
 		Meteortype_Latejoin(what_to_move, rank)
 	else
 		// TODO:  Job-specific latejoin overrides.
@@ -379,17 +379,12 @@
 
 	// Very hacky. Sorry about that
 	if(ticker.tag_mode_enabled == TRUE)
-		character.mind.assigned_role = "MODE"
+		rank = "MODE"
 		var/datum/outfit/mime/mime_outfit = new
 		mime_outfit.equip(character, strip = TRUE, delete = TRUE)
 		var/datum/role/tag_mode_mime/mime = new
 		mime.AssignToRole(character.mind,1)
 		mime.Greet(GREET_ROUNDSTART)
-
-
-	if(job && character.mind.assigned_role != "MODE")
-		job_master.PostJobSetup(character)
-		job.equip(character, job.priority) // Outfit datum.
 
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
@@ -429,11 +424,12 @@
 		to_chat(character, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
-	if(character.mind.assigned_role != "MODE")
-		if(character.mind.assigned_role != "Cyborg")
+	if(rank != "MODE")
+		job_master.PostJobSetup(character)
+		if(rank != "Cyborg")
 			data_core.manifest_inject(character)
 			ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
-			if(character.mind.assigned_role == "Trader")
+			if(rank == "Trader")
 				//If we're a trader, instead send a message to PDAs with the trader cartridge
 				for (var/obj/item/device/pda/P in PDAs)
 					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
@@ -721,13 +717,10 @@
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
-	// 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
-	new_character.DormantGenes(20,10,0,0)
-
 	var/datum/job/job = job_master.GetJob(rank)
 	if(job)
-		new_character.job = rank	//the ultimate jobby: your body is assigned a job
 		if(rank != "MODE")
+			new_character.job = rank	//the ultimate jobby: your body is assigned a job
 			create_account(new_character.real_name, rand(100,250), rand(100,250), null, job.wage_payout, prefs.bank_security)
 			job.equip(new_character, job.priority) //Outfit datum.	
 
@@ -756,6 +749,9 @@
 			// Use the arrivals shuttle spawn point
 			stack_trace("no spawn points for [rank]")
 			new_character.forceMove(pick(latejoin))
+
+		// 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+		new_character.DormantGenes(20,10,0,0)
 
 	for(var/datum/religion/R in ticker.religions)
 		if(R.converts_everyone && new_character.mind.assigned_role != "Chaplain")

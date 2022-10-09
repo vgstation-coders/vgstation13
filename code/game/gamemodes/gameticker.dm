@@ -219,7 +219,6 @@ var/datum/controller/gameticker/ticker
 		var/mob/M = new_characters[new_characters[i]]
 		var/key = new_characters[i]
 		M.key = key
-	CHECK_TICK
 	//The idea is to ensure everyone is transferred ASAP
 	for(var/i = 1, i <= new_characters.len, i++)
 		var/mob/living/carbon/human/H = new_characters[new_characters[i]]

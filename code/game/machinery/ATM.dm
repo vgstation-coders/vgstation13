@@ -381,14 +381,15 @@ log transactions
 						alert("That is not a valid amount.")
 					else if(authenticated_account && amount > 0)
 						if(amount <= authenticated_account.money)
-							authenticated_account.money -= amount
 							var/datum/money_account/M = get_money_account(card_id.account_number)
+							authenticated_account.money -= amount
+							M.virtual += amount
+
 							//create an entry in the account transaction log
 							new /datum/transaction(authenticated_account, "Credit transfer to wallet", "-[amount]",\
 													machine_id, M.owner_name)
 
-							new /datum/transaction(M.virtual, "Credit transfer to wallet", "[amount]",\
-													machine_id, authenticated_account.owner_name)
+							new /datum/transaction(M, "Credit transfer to wallet", "[amount]", machine_id, authenticated_account.owner_name)
 						else
 							to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("deposit_from_wallet")
@@ -409,8 +410,7 @@ log transactions
 							new /datum/transaction(authenticated_account, "Credit transfer from wallet", "[amount]",\
 													machine_id, M.owner_name)
 
-							new /datum/transaction(M.virtual, "Credit transfer from wallet", "-[amount]",\
-													machine_id, authenticated_account.owner_name)
+							new /datum/transaction(M, "Credit transfer from wallet", "-[amount]", machine_id, authenticated_account.owner_name)
 						else
 							to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("balance_statement")
