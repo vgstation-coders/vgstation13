@@ -73,7 +73,8 @@
 		dat += "<br>Current unclaimed credits: $[num2septext(smelter_data["credits"])]<br>"
 
 		if(istype(id))
-			dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
+			var/datum/money_account/M = get_money_account(id.account_number, -1, FALSE)
+			dat += "You have [M.money] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
 			dat += "<A href='?src=\ref[src];claim=1'>Claim points.</A><br>"
 		else
 			dat += text("No ID inserted. <A href='?src=\ref[src];insert=1'>Insert ID.</A><br>")

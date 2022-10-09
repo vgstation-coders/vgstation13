@@ -208,15 +208,10 @@ var/list/global/id_cards = list()
 	var/rank = null			//actual job
 	var/dorm = 0		// determines if this ID has claimed a dorm already
 
-	var/datum/money_account/virtual_wallet = 1	//money! If 0, don't create a wallet. Otherwise create one!
-
 /obj/item/weapon/card/id/New()
 	..()
 
 	id_cards += src
-
-	if(virtual_wallet)
-		update_virtual_wallet()
 	if(ishuman(loc))
 		SetOwnerDNAInfo(loc)
 
@@ -250,28 +245,14 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/get_owner_name_from_ID()
 	return registered_name
 
-/obj/item/weapon/card/id/proc/update_virtual_wallet(var/new_funds=0)
-	if(!istype(virtual_wallet))
-		virtual_wallet = new()
-		virtual_wallet.virtual = 1
-
-	virtual_wallet.owner_name = registered_name
-
-	if(new_funds)
-		virtual_wallet.money = new_funds
-
-	//Virtual wallet accounts are tied to an ID card, not an account database, thus they don't need an acount number.
-	//For now using the virtual wallet doesn't require a PIN either.
-
-	if(!virtual_wallet.account_number)
-		virtual_wallet.account_number = next_account_number
-		next_account_number += rand(1,25)
-
 /obj/item/weapon/card/id/proc/add_to_virtual_wallet(var/added_funds=0, var/mob/user, var/atom/source)
-	if(!virtual_wallet)
-		return 0
-	virtual_wallet.money += added_funds
-	new /datum/transaction(virtual_wallet, "Currency deposit", added_funds, source ? source.name : "", user ? user.name : "")
+	var/datum/money_account/M = get_money_account(account_number, -1, FALSE)
+	if(prob(50))
+		playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
+	else
+		playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
+	M.virtual += added_funds
+	new /datum/transaction(M, "Currency deposit", added_funds, source ? source.name : "", user ? user.name : "")
 	return 1
 
 /obj/item/weapon/card/id/proc/UpdateName()
@@ -284,15 +265,6 @@ var/list/global/id_cards = list()
 	blood_type = H.dna.b_type
 	dna_hash = H.dna.unique_enzymes
 	fingerprint_hash = md5(H.dna.uni_identity)
-
-/obj/item/weapon/card/id/proc/GetBalance(var/format=0)
-	var/amt = 0
-	var/datum/money_account/acct = get_card_account(src)
-	if(acct)
-		amt = acct.money
-	if(format)
-		amt = "$[num2septext(amt)]"
-	return amt
 
 /obj/item/weapon/card/id/proc/GetJobName()
 	var/jobName = src.assignment //what the card's job is called

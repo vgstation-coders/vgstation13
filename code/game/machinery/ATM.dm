@@ -221,8 +221,9 @@ log transactions
 						if(atm_card)
 							if(istype(atm_card, /obj/item/weapon/card/id))
 								var/obj/item/weapon/card/id/card_id = atm_card
+								var/datum/money_account/M = get_money_account(card_id.account_number, -1, FALSE)
 								dat += {"
-									<b>Virtual Wallet balance:</b> $[card_id.virtual_wallet.money]<br>
+									<b>Virtual Wallet balance:</b> $[M.virtual]<br>
 									<form name='withdraw_to_wallet' action='?src=\ref[src]' method='get'>
 									<input type='hidden' name='src' value='\ref[src]'>
 									<input type='hidden' name='choice' value='withdraw_to_wallet'>
@@ -327,7 +328,7 @@ log transactions
 								playsound(src, 'sound/machines/buzz-two.ogg', 50, 1)
 
 								//create an entry in the account transaction log
-								var/datum/money_account/failed_account = linked_db.get_account(tried_account_num)
+								var/datum/money_account/failed_account = get_money_account(tried_account_num)
 								if(failed_account)
 									new /datum/transaction(failed_account, "Unauthorised login attempt", 0, machine_id)
 							else
@@ -381,13 +382,12 @@ log transactions
 					else if(authenticated_account && amount > 0)
 						if(amount <= authenticated_account.money)
 							authenticated_account.money -= amount
-							card_id.virtual_wallet.money += amount
-
+							var/datum/money_account/M = get_money_account(card_id.account_number)
 							//create an entry in the account transaction log
 							new /datum/transaction(authenticated_account, "Credit transfer to wallet", "-[amount]",\
-													machine_id, card_id.virtual_wallet.owner_name)
+													machine_id, M.owner_name)
 
-							new /datum/transaction(card_id.virtual_wallet, "Credit transfer to wallet", "[amount]",\
+							new /datum/transaction(M.virtual, "Credit transfer to wallet", "[amount]",\
 													machine_id, authenticated_account.owner_name)
 						else
 							to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
@@ -397,20 +397,19 @@ log transactions
 					if(!istype(atm_card, /obj/item/weapon/card/id))
 						to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds from its virtual wallet.</span>")
 						return
-
-					var/obj/item/weapon/card/id/card_id = atm_card
 					if(amount <= 0)
 						alert("That is not a valid amount.")
 					else if(authenticated_account && amount > 0)
-						if(amount <= card_id.virtual_wallet.money)
+						var/datum/money_account/M = get_money_account(atm_card.account_number)
+						if(amount <= M.virtual)
 							authenticated_account.money += amount
-							card_id.virtual_wallet.money -= amount
+							M.virtual -= amount
 
 							//create an entry in the account transaction log
 							new /datum/transaction(authenticated_account, "Credit transfer from wallet", "[amount]",\
-													machine_id, card_id.virtual_wallet.owner_name)
+													machine_id, M.owner_name)
 
-							new /datum/transaction(card_id.virtual_wallet, "Credit transfer from wallet", "-[amount]",\
+							new /datum/transaction(M.virtual, "Credit transfer from wallet", "-[amount]",\
 													machine_id, authenticated_account.owner_name)
 						else
 							to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
@@ -485,7 +484,7 @@ log transactions
 			return
 		if(istype(H.wear_id, /obj/item/device/pda))
 			var/obj/item/device/pda/P = H.wear_id
-			if(P.add_to_virtual_wallet(arbitrary_sum, user, src))
+			if(P.id && P.id.add_to_virtual_wallet(arbitrary_sum, user, src))
 				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
 				return
 		if(istype(H.wear_id, /obj/item/weapon/card/id))

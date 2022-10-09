@@ -258,20 +258,19 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	if(!pda_device.id)
 		dat += {"<i>Insert an ID card in the PDA to use this application.</i>"}
 	else
+		var/datum/money_account/M = get_money_account(pda_device.id.account_number, -1, FALSE)
 		var/MM = pda_device.MM
 		var/DD = pda_device.DD
-		if(!pda_device.id.virtual_wallet)
-			pda_device.id.update_virtual_wallet()
 		dat += {"<hr>
 			<h5>Virtual Wallet</h5>
-			Owner: <b>[pda_device.id.virtual_wallet.owner_name]</b><br>
-			Balance: <b>[pda_device.id.virtual_wallet.money]</b>$  <u><a href='byond://?src=\ref[src];printCurrency=1'><span class='pda_icon [icon]'></span>Print Currency</a></u>
+			Owner: <b>[M.owner_name]</b><br>
+			Balance: <b>[M.virtual]</b>$  <u><a href='byond://?src=\ref[src];printCurrency=1'><span class='pda_icon [icon]'></span>Print Currency</a></u>
 			<h6>Transaction History</h6>
 			On [MM]/[DD]/[game_year]:
 			<ul>
 			"}
 		var/list/v_log = list()
-		for(var/e in pda_device.id.virtual_wallet.transaction_log)
+		for(var/e in M.transaction_log)
 			v_log += e
 		for(var/datum/transaction/T in reverseRange(v_log))
 			dat += {"<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>"}
@@ -327,23 +326,24 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	if(href_list["printCurrency"])
 		var/mob/user = usr
 		var/amount = round(input("How much money do you wish to print?", "Currency Printer", 0) as num)
-		if(!amount || (amount < 0) || (pda_device.id.virtual_wallet.money <= 0))
+		var/datum/money_account/M = get_money_account(pda_device.id.account_number, -1, FALSE)
+		if(!amount || (amount < 0) || (M.virtual <= 0))
 			to_chat(user, "[bicon(pda_device)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
 			return
-		if(amount > pda_device.id.virtual_wallet.money)
-			amount = pda_device.id.virtual_wallet.money
+		if(amount > M.virtual)
+			amount = M.virtual
 		if(amount > 10000) // prevent crashes
 			to_chat(user, "[bicon(pda_device)]<span class='notice'>The PDA's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>")
 			amount = 10000
 
 		if(withdraw_arbitrary_sum(user,amount))
-			pda_device.id.virtual_wallet.money -= amount
+			M.virtual -= amount
 			if(prob(50))
 				playsound(pda_device, 'sound/items/polaroid1.ogg', 50, 1)
 			else
 				playsound(pda_device, 'sound/items/polaroid2.ogg', 50, 1)
 
-			new /datum/transaction(pda_device.id.virtual_wallet, "Currency printed", "-[amount]", pda_device.name, user.name)
+			new /datum/transaction(M.virtual, "Currency printed", "-[amount]", pda_device.name, user.name)
 	refresh_pda()
 
 /datum/pda_app/balance_check/proc/reconnect_database()

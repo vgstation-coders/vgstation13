@@ -26,7 +26,7 @@
                 creating_new_account = 0
             if("edit_balance")
                 var/acc_num = text2num(hrefs["account_num"])
-                var/datum/money_account/acc = get_money_account_global(acc_num)
+                var/datum/money_account/acc = get_money_account(acc_num, -1, FALSE)
                 if(acc)
                     var/new_balance = input(usr, "Select a new balance for this account", "New balance", acc.money) as null|num
                     if(new_balance && new_balance >= 0)
@@ -34,7 +34,7 @@
                     detailed_account_view = acc
             if("edit_wage_payout")
                 var/acc_num = text2num(hrefs["account_num"])
-                var/datum/money_account/acc = get_money_account_global(acc_num)
+                var/datum/money_account/acc = get_money_account(acc_num, -1, FALSE)
                 if(acc)
                     var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
                     if(new_payout && new_payout >= 0)

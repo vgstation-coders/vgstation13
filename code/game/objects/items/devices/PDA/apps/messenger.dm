@@ -126,11 +126,12 @@
                 return
 
             var/amount = round(input("How much money do you wish to transfer to [P.owner]?", "Money Transfer", 0) as num)
-            if(!amount || (amount < 0) || (pda_device.id.virtual_wallet.money <= 0))
+            var/datum/money_account/M = get_money_account(pda_device.id.account_number, -1, FALSE)
+            if(!amount || (amount < 0) || (M.virtual <= 0))
                 to_chat(usr, "[bicon(pda_device)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
                 return
-            if(amount > pda_device.id.virtual_wallet.money)
-                amount = pda_device.id.virtual_wallet.money
+            if(amount > M.virtual)
+                amount =  M.virtual
 
             var/datum/pda_app/messenger/P_app = locate(/datum/pda_app/messenger) in P.applications
             if(P_app)
@@ -146,8 +147,8 @@
                 to_chat(usr, "[bicon(pda_device)]<span class='warning'>The PDA's screen flashes, 'Error, transaction canceled'</span>")
                 return
 
-            pda_device.id.virtual_wallet.money -= amount
-            new /datum/transaction(pda_device.id.virtual_wallet, "Money transfer", "-[amount]", pda_device.name, P.owner)
+            M.virtual -= amount
+            new /datum/transaction(M, "Money transfer", "-[amount]", pda_device.name, P.owner)
     refresh_pda()
 
 //Receive money transferred from another PDA
@@ -176,12 +177,10 @@
 
 	tnote["msg_id"] = "<i><b>&larr; Money transfer from [creditor_name] ([arbitrary_sum]$)<br>"
 	msg_id++
-
+	var/datum/money_account/M = get_money_account(pda_device.id.account_number, -1, FALSE)
 	if(pda_device.id)
-		if(!pda_device.id.virtual_wallet)
-			pda_device.id.update_virtual_wallet()
-		pda_device.id.virtual_wallet.money += arbitrary_sum
-		new /datum/transaction(pda_device.id.virtual_wallet, "Money transfer", arbitrary_sum, other_pda, creditor_name, send2PDAs = FALSE)
+		M.virtual += arbitrary_sum
+		new /datum/transaction(M, "Money transfer", arbitrary_sum, other_pda, creditor_name, send2PDAs = FALSE)
 		return 1
 	else
 		incoming_transactions |= list(list(creditor_name,arbitrary_sum,other_pda))
@@ -193,12 +192,10 @@
 	if(pda_device.loc && isliving(pda_device.loc))
 		L = pda_device.loc
 	to_chat(L, "[bicon(pda_device)]<span class='notice'> <b>Transactions successfully received! </b></span>")
-
+	var/datum/money_account/M = get_money_account(ID_card.account_number, -1, FALSE)
 	for(var/transac in incoming_transactions)
-		if(!pda_device.id.virtual_wallet)
-			pda_device.id.update_virtual_wallet()
-		pda_device.id.virtual_wallet.money += transac[2]
-		new /datum/transaction(pda_device.id.virtual_wallet, "Money transfer", transac[2], transac[3], transac[1])
+		M.virtual += transac[2]
+		new /datum/transaction(M, "Money transfer", transac[2], transac[3], transac[1])
 
 	incoming_transactions = list()
 

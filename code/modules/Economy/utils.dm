@@ -8,23 +8,23 @@ var/global/no_pin_for_debit = TRUE
 // If you want to engage the fun, go for TRUE.
 // Otherwise everyone has to use a PIN to swipe debits like normal.
 
-/proc/get_money_account(var/account_number, var/from_z=-1)
-	for(var/obj/machinery/account_database/DB in account_DBs)
-		if(from_z > -1 && DB.z != from_z)
-			continue
-		if((DB.stat & (FORCEDISABLE|NOPOWER)) || !DB.activated )
-			continue
-		var/datum/money_account/acct = DB.get_account(account_number)
-		if(!acct)
-			continue
-		return acct
-
-// Added this proc for admin tools. Not even sure we need the above proc as it is
-/proc/get_money_account_global(account_number)
-	for(var/datum/money_account/D in all_money_accounts)
-		if(D.account_number == account_number)
-			return D
-
+//This can be used to access virtual wallets with require_DB = FALSE
+/proc/get_money_account(var/account_number, var/from_z=-1, var/require_DB = TRUE)
+	if(!account_number)
+		return
+	if(require_DB)
+		for(var/obj/machinery/account_database/DB in account_DBs)
+			if(from_z > -1 && DB.z != from_z)
+				continue
+			if((DB.stat & (FORCEDISABLE|NOPOWER)) || !DB.activated )
+				continue
+			for(var/datum/money_account/D in all_money_accounts)
+				if(D.account_number == account_number)
+					return D
+	else
+		for(var/datum/money_account/D in all_money_accounts)
+			if(D.account_number == account_number)
+				return D
 
 /proc/get_card_account(var/obj/item/weapon/card/I, var/mob/user=null,  var/require_pin=0)
 	if (istype(I, /obj/item/weapon/card/id))
@@ -105,7 +105,7 @@ var/global/no_pin_for_debit = TRUE
 			if(!linked_db.activated || linked_db.stat & (FORCEDISABLE|BROKEN|NOPOWER))
 				to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
 				return CARD_CAPTURE_FAILURE_NO_CONNECTION
-			account = linked_db.get_account(card.account_number)
+			account = get_money_account(card.account_number)
 			if(!account)
 				to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination or ID is not registered with Nanotrasen accounts database.</span>")
 				return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
@@ -219,12 +219,8 @@ var/global/no_pin_for_debit = TRUE
 		if(istype(card, /obj/item/weapon/card/id))
 			// Expect more cards with virtual accounts.
 			var/obj/item/weapon/card/id/card_id = card
-			primary_money_account = card_id.virtual_wallet
-			if(!primary_money_account)
-				// A lot of machines keep doing this so for the sake of conformity we'll do it here too.
-				// Supposed to make sure the id always comes with a virtual wallet if it hasn't been made yet.
-				card_id.update_virtual_wallet()
-				primary_money_account = card_id.virtual_wallet
+			var/datum/money_account/M = get_money_account(card_id.account_number, -1, FALSE)
+			primary_money_account = M
 
 		if(primary_money_account && primary_money_account.virtual)
 			// The card contains a virtual wallet, so lets use it.
@@ -249,7 +245,7 @@ var/global/no_pin_for_debit = TRUE
 
 		if(!primary_money_account)
 			// There wasn't enough funds in the virtual wallet, so lets get the bank account.
-			primary_money_account = linked_db.get_account(card.account_number)
+			primary_money_account = get_money_account(card.account_number)
 			// Using the associated account number, get the account.
 			if(!primary_money_account)
 				// Couldn't find a matching account so fail.
@@ -269,7 +265,7 @@ var/global/no_pin_for_debit = TRUE
 			return CARD_CAPTURE_FAILURE_USER_CANCELED
 
 		visible_message("<span class='info'>[user] enters some digits into \the [src]'s PIN pad.</span>")
-		primary_money_account = linked_db.get_account(account_number)
+		primary_money_account = get_money_account(account_number)
 		if(!primary_money_account)
 			// Couldn't find a matching account so fail.
 			to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination.</span>")

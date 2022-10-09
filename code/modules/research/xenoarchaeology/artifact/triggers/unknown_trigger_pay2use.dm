@@ -120,59 +120,47 @@
 		else
 			to_chat(attacker, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept credits!</span>")
 
-/datum/artifact_trigger/pay2use/proc/payviacard(var/dosh = 0, var/time = 0, var/mob)
+/datum/artifact_trigger/pay2use/proc/payviacard(var/transaction_amount = 0, var/time = 0, var/mob)
+	if(mode != BANK_CARD)
+		return
+	var/mob/living/M = mob
+	var/obj/item/weapon/card/I = M.get_id_card()
+	if (!istype(I, /obj/item/weapon/card/id))
+		return
 
-	if(mode == BANK_CARD)
-		var/mob/living/M = mob
-		var/obj/item/weapon/card/I = M.get_id_card()
-		var/bought_time = time / 2
+	var/bought_time = time / 2
+	var/obj/item/weapon/card/id/C = I
+	my_artifact.visible_message("<span class='info'>[M] swipes a card through [my_artifact].</span>")
 
-		if (istype(I, /obj/item/weapon/card/id))
-			var/obj/item/weapon/card/id/C = I
-			my_artifact.visible_message("<span class='info'>[M] swipes a card through [my_artifact].</span>")
+	//we start by checking the ID card's virtual wallet
+	var/datum/money_account/D = get_money_account(C.account_number, -1, FALSE)
 
-			//we start by checking the ID card's virtual wallet
-			var/datum/money_account/D = C.virtual_wallet
-			var/using_account = "Virtual Wallet"
+	//if there isn't enough money in the virtual wallet, then we check the bank account connected to the ID
+	if(!D)
+		to_chat(M, "[bicon(my_artifact)]<span class='warning'>Unable to access your virtual wallet.</span>")
+		return 0
+	if(D.virtual < transaction_amount)
+		to_chat(M, "[bicon(my_artifact)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
+		if(!linked_db)
+			to_chat(M, "[bicon(my_artifact)]<span class='warning'>Unable to access your bank account.</span>")
+			return 0
+		else if(D.money < transaction_amount)
+			to_chat(M, "[bicon(my_artifact)]<span class='warning'>You don't have that much money on your bank account!</span>")
+			return 0
+		else if(D.security_level > 0)		//next we check if the security is low enough to pay directly from it
+			to_chat(M, "[bicon(my_artifact)]<span class='warning'>Lower your bank account's security settings if you wish to pay directly from it.</span>")
+			return 0
+		D.money -= transaction_amount
+		to_chat(M, "[bicon(my_artifact)]<span class='notice'>Remaining balance (Bank Account): [D.money]$</span>")
+	D.virtual -= transaction_amount
+	to_chat(M, "[bicon(my_artifact)]<span class='notice'>Remaining balance (Virtual Wallet): [D.virtual]$</span>")
 
-			//if there isn't one for some reason we create it, that should never happen but oh well.
-			if(!D)
-				C.update_virtual_wallet()
-				D = C.virtual_wallet
+	//create an entry on the buy's account's transaction log
+	new /datum/transaction(D, "Purchase of [transaction_amount * 2] seconds of activation.", "-[transaction_amount]", my_artifact.artifact_id, "[my_artifact.artifact_id]")
+	// Vend the item
+	time_left += bought_time
 
-			var/transaction_amount = dosh
-
-			//if there isn't enough money in the virtual wallet, then we check the bank account connected to the ID
-			if(D.money < transaction_amount)
-				if(linked_db)
-					D = linked_db.attempt_account_access(C.account_number, 0, 2, 0)
-				else
-					D = null
-				using_account = "Bank Account"
-				if(!D)								//first we check if there IS a bank account in the first place
-					to_chat(M, "[bicon(my_artifact)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
-					to_chat(M, "[bicon(my_artifact)]<span class='warning'>Unable to access your bank account.</span>")
-					return 0
-				else if(D.security_level > 0)		//next we check if the security is low enough to pay directly from it
-					to_chat(M, "[bicon(my_artifact)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
-					to_chat(M, "[bicon(my_artifact)]<span class='warning'>Lower your bank account's security settings if you wish to pay directly from it.</span>")
-					return 0
-				else if(D.money < transaction_amount)//and lastly we check if there's enough money on it, duh
-					to_chat(M, "[bicon(my_artifact)]<span class='warning'>You don't have that much money on your bank account!</span>")
-					return 0
-
-			//transfer the money
-			D.money -= transaction_amount
-
-			to_chat(M, "[bicon(my_artifact)]<span class='notice'>Remaining balance ([using_account]): [D.money]$</span>")
-
-			//create an entry on the buy's account's transaction log
-			new /datum/transaction(D, "Purchase of [dosh * 2] seconds of activation.", "-[transaction_amount]", my_artifact.artifact_id, "[my_artifact.artifact_id]")
-
-			// Vend the item
-			time_left += bought_time
-
-			my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || [C] used to deposit $[dosh] and activate ([my_effect.trigger]) || used by [key_name(M)].")
+	my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || [C] used to deposit $[transaction_amount] and activate ([my_effect.trigger]) || used by [key_name(M)].")
 
 /datum/artifact_trigger/pay2use/Topic(href, href_list)
 	if(..())

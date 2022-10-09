@@ -416,7 +416,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 					detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
 			if("edit_wage_payout")
 				var/acc_num = text2num(href_list["account_num"])
-				var/datum/money_account/acc = get_money_account_global(acc_num)
+				var/datum/money_account/acc = get_money_account(acc_num)
 				if(acc)
 					var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
 					if(new_payout >= 0 && new_payout != null)
@@ -447,12 +447,3 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		if(D.account_number == attempt_account_number)
 			if( D.security_level <= security_level_passed && (!D.security_level || D.remote_access_pin == attempt_pin_number || !pin_needed) )
 				return D
-
-/obj/machinery/account_database/proc/get_account(var/account_number)
-	if(!account_number)
-		// Don't bother searching if there's no account number.
-		return null
-	for(var/datum/money_account/D in all_money_accounts)
-		if(D.account_number == account_number)
-			return D
-

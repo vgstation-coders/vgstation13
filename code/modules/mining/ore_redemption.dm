@@ -88,7 +88,8 @@
 	dat += text("Current unclaimed credits: $[num2septext(credits)]<br>")
 
 	if(istype(inserted_id))
-		dat += "You have [inserted_id.GetBalance(format=1)] credits in your bank account. <A href='?src=\ref[src];choice=eject'>Eject ID.</A><br>"
+		var/datum/money_account/M = get_money_account(inserted_id.account_number, -1, FALSE)
+		dat += "You have [M.money] credits in your bank account. <A href='?src=\ref[src];choice=eject'>Eject ID.</A><br>"
 		dat += "<A href='?src=\ref[src];choice=claim'>Claim points.</A><br>"
 	else
 		dat += text("No ID inserted.  <A href='?src=\ref[src];choice=insert'>Insert ID.</A><br>")

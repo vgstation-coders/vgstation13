@@ -62,9 +62,10 @@
 			var/dmgscore = 0
 
 			for(var/obj/item/weapon/card/id/C1 in get_contents_in_object(player, /obj/item/weapon/card/id))
-				cashscore += C1.GetBalance() //From bank account
-				if(istype(C1.virtual_wallet))
-					cashscore += C1.virtual_wallet.money
+				//IDs have account numbers associated with bank accounts
+				var/datum/money_account/M = get_money_account(C1.account_number, -1, FALSE)
+				cashscore += M.money
+				cashscore += M.virtual
 
 			for(var/obj/item/weapon/spacecash/C2 in get_contents_in_object(player, /obj/item/weapon/spacecash))
 				cashscore += (C2.amount * C2.worth)
