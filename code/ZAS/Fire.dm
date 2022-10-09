@@ -485,12 +485,15 @@ Attach to transfer valve and open. BOOM.
 
 	//Always check these damage procs first if fire damage isn't working. They're probably what's wrong.
 
-	apply_damage(5.0*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
-	apply_damage(5.0*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
-	apply_damage(4.0*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
-	apply_damage(1.2*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
-	apply_damage(1.2*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
-	apply_damage(0.8*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
-	apply_damage(0.8*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
-
+	apply_damage(10.0*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
+	apply_damage(10.0*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
+	apply_damage(8.0*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
+	apply_damage(2.4*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(2.4*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(1.6*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
+	apply_damage(1.6*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
 	adjustHalLoss(10) //now with extra agony
+
+	src.dizziness += 5
+	src.confused +=  5
+	src.audible_scream()
