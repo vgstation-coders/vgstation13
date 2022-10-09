@@ -3294,7 +3294,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/circus
 	name = "\improper Circus of Values"
-	desc = "The Circus of Values Vending Machine offers a variety of items for sale."
+	desc = "Welcome to the Circus of Values!"
 	//Desc text is a direct quote from the Bioshock description
 	product_slogans = list(
 		"Hahahahahahaha!",
