@@ -53,7 +53,7 @@ var/global/no_pin_for_debit = TRUE
 	else if(issilicon(src) || isAdminGhost(src))
 		return station_account
 
-/datum/money_account/proc/fmtBalance()
+/proc/fmtBalance(var/money)
 	return "$[num2septext(money)]"
 
 /datum/money_account/proc/charge(var/transaction_amount,var/datum/money_account/dest,var/transaction_purpose, var/terminal_name="", var/terminal_id=0, var/dest_name = "UNKNOWN", var/authorized_name = "")

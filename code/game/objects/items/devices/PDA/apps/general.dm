@@ -261,8 +261,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 		var/datum/money_account/M = get_money_account(pda_device.id.account_number, -1, FALSE)
 		var/MM = pda_device.MM
 		var/DD = pda_device.DD
-		dat += {"<hr>
-			<h5>Virtual Wallet</h5>
+		dat += {"<h5>Virtual Wallet</h5>
 			Owner: <b>[M.owner_name]</b><br>
 			Balance: <b>[M.virtual]</b>$  <u><a href='byond://?src=\ref[src];printCurrency=1'><span class='pda_icon [icon]'></span>Print Currency</a></u>
 			<hr>"}

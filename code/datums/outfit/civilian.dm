@@ -364,6 +364,7 @@
 
 /datum/outfit/clown/post_equip(var/mob/living/carbon/human/H)
 	..()
+	H.fully_replace_character_name(H.real_name,pick(clown_names))
 	H.mutations.Add(M_CLUMSY)
 	H.dna.real_name = H.real_name
 	H.add_language(LANGUAGE_CLOWN)

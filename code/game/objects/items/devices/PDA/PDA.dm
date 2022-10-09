@@ -479,7 +479,7 @@ var/global/msg_id = 0
 		else
 			playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
 		return 1
-	return 0		
+	return 0
 
 /obj/item/device/pda/attack(mob/living/carbon/C, mob/living/user as mob)
 	if(istype(C) && scanning_app)

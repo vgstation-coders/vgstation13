@@ -466,7 +466,6 @@ var/global/datum/controller/occupations/job_master
 			spawn(0)
 				ChooseReligion(H) // Contains an input() proc and hence must be spawn()ed.
 		if("Clown")
-			H.fully_replace_character_name(H.real_name,pick(clown_names))
 			mob_rename_self(H,"clown")
 			to_chat(H, "<span class = 'notice'>You can perfectly paint Her colourbook blindfolded and have learned how to communicate with in the holiest of languages, honk. Praise be her Honkmother.</span>")
 		if("Mime")

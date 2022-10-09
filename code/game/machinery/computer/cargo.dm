@@ -25,9 +25,9 @@ For vending packs, see vending_packs.dm*/
 			MENTION_DB_OFFLINE
 			return
 
-		var/datum/money_account/bank_account
+		var/datum/money_account/M
 		if(REQUISITION)
-			bank_account = department_accounts["Cargo"]
+			M = department_accounts["Cargo"]
 			acc_info["check"] = FALSE
 		else
 			// Humans, or really physical people at the terminal, can present a debit card. Let's find one or just find the same ID.
@@ -40,15 +40,15 @@ For vending packs, see vending_packs.dm*/
 				using_debit = TRUE
 			else
 				account_number = usr_id.account_number
-			bank_account = get_money_account(account_number)
-			if(!bank_account)
+			M = get_money_account(account_number)
+			if(!M)
 				to_chat(user, "<span class='warning'>A valid bank account does not exist for \the [using_debit ? "[bicon(debit_card)] [debit_card]" : "[bicon(usr_id)] [usr_id]"]. Please try a different card.</span>")
 				return
 			acc_info["card"] = using_debit ? debit_card : usr_id
 			acc_info["check"] = TRUE
 		acc_info["idname"] = usr_id.registered_name
 		acc_info["idrank"] = usr_id.assignment
-		acc_info["account"] = bank_account
+		acc_info["account"] = M
 	else if(isAdminGhost(user))
 		acc_info["idname"] = "Commander Green"
 		acc_info["idrank"] = "Central Commander"
@@ -312,7 +312,7 @@ For vending packs, see vending_packs.dm*/
 	if(account)
 		data["name_of_source_account"] = account.owner_name
 		data["authorized_name"] = current_acct["authorized_name"]
-		data["money"] = account.fmtBalance()
+		data["money"] = fmtBalance(account.virtual)
 	data["send"] = list("send" = 1)
 	data["forward"] = list("forward" = 1)
 	data["moving"] = SSsupply_shuttle.moving
@@ -408,8 +408,8 @@ For vending packs, see vending_packs.dm*/
 				var/datum/supply_packs/R_pack = R.object
 				total_money_req += R_pack.cost
 		// check they can afford the order
-		if(P.cost * crates + total_money_req > account.money)
-			var/max_crates = round((account.money - total_money_req) / P.cost)
+		if(P.cost * crates + total_money_req > account.virtual)
+			var/max_crates = round((account.virtual - total_money_req) / P.cost)
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
 		var/timeout = world.time + 600
@@ -587,7 +587,7 @@ For vending packs, see vending_packs.dm*/
 	var/datum/money_account/account = current_acct["account"]
 	data["name_of_source_account"] = account.owner_name
 	data["authorized_name"] = current_acct["authorized_name"]
-	data["money"] = account.fmtBalance()
+	data["money"] = fmtBalance(account.virtual)
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
@@ -646,9 +646,9 @@ For vending packs, see vending_packs.dm*/
 				var/datum/supply_packs/R_pack = R.object
 				total_money_req += R_pack.cost
 		// Check they have enough cash to order another crate
-		if((P.cost * crates + total_money_req > account.money))
+		if((P.cost * crates + total_money_req > account.virtual))
 			// Tell them how many they can actually afford if they can't afford their order
-			var/max_crates = round((account.money - total_money_req) / P.cost)
+			var/max_crates = round((account.virtual - total_money_req) / P.cost)
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
 		var/reason = stripped_input(usr,"Why do you want this crate and where/to whom would you like it sent?","Reason/Destination:","",REASON_LEN)
