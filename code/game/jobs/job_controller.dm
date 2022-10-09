@@ -459,6 +459,20 @@ var/global/datum/controller/occupations/job_master
 			to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span class='darknotice'>$[M.virtual]</span>, your bank account funds are: <span class='darknotice'>$[M.money]</span></span>")
 			to_chat(H, "<span class='danger'>Your bank account security level is set to: <span class='darknotice'>[M.security_level]</span></span>")
 
+	H.store_frequency_list_in_memory()
+
+	switch(rank)
+		if("Chaplain")
+			spawn(0)
+				ChooseReligion(H) // Contains an input() proc and hence must be spawn()ed.
+		if("Clown")
+			H.fully_replace_character_name(H.real_name,pick(clown_names))
+			mob_rename_self(H,"clown")
+			to_chat(H, "<span class = 'notice'>You can perfectly paint Her colourbook blindfolded and have learned how to communicate with in the holiest of languages, honk. Praise be her Honkmother.</span>")
+		if("Mime")
+			mob_rename_self(H,"mime")
+			to_chat(H, "<span class = 'notice'>The Clown-Mime war may have ended, but you were still taught their language. You can understand clownspeak as well as speak it, but a Mime wouldn't stoop so low, right?</span>")
+
 	var/alt_title = H.mind.role_alt_title
 	if(job)
 		job.introduce(H, (alt_title ? alt_title : rank))

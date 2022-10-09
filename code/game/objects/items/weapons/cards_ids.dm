@@ -247,12 +247,8 @@ var/list/global/id_cards = list()
 
 /obj/item/weapon/card/id/proc/add_to_virtual_wallet(var/added_funds=0, var/mob/user, var/atom/source)
 	var/datum/money_account/M = get_money_account(account_number, -1, FALSE)
-	if(prob(50))
-		playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
-	else
-		playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
 	M.virtual += added_funds
-	new /datum/transaction(M, "Currency deposit", added_funds, source ? source.name : "", user ? user.name : "")
+	new /datum/transaction(M, "Virtual wallet deposit", added_funds, source ? source.name : "", user ? user.name : "")
 	return 1
 
 /obj/item/weapon/card/id/proc/UpdateName()

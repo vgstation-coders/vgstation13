@@ -57,13 +57,22 @@ var/global/no_pin_for_debit = TRUE
 	return "$[num2septext(money)]"
 
 /datum/money_account/proc/charge(var/transaction_amount,var/datum/money_account/dest,var/transaction_purpose, var/terminal_name="", var/terminal_id=0, var/dest_name = "UNKNOWN", var/authorized_name = "")
-	if(transaction_amount <= money || account_number == dest.account_number)
+	var/success = FALSE
+	if(transaction_amount <= virtual || account_number == dest.account_number)
+		//transfer the money
+		virtual -= transaction_amount
+		if(dest)
+			dest.money += transaction_amount
+		success = TRUE
+
+	else if(transaction_amount <= money)
 		//transfer the money
 		money -= transaction_amount
 		if(dest)
 			dest.money += transaction_amount
-
-		//create entries in the two account transaction logs
+		success = TRUE
+	//create entries in the two account transaction logs
+	if(success)
 		transaction_purpose = copytext(sanitize(transaction_purpose),1,MAX_MESSAGE_LEN)
 		var/targname
 		if(dest)
@@ -309,7 +318,7 @@ var/global/no_pin_for_debit = TRUE
 		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 	// Finally charge the primary
 	var/account_type = primary_money_account.virtual ? "virtual wallet" : "bank account"
-	to_chat(user, "[bicon(src)] <span class='notice'>Remaining balance on [account_type], $[num2septext(primary_money_account.money)].</span>")
+	to_chat(user, "[bicon(src)] <span class='notice'>Remaining balance on [account_type], $[num2septext(primary_money_account.virtual)].</span>")
 	// Present the remaining balance to the user.
 	return CARD_CAPTURE_SUCCESS
 

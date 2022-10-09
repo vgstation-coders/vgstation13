@@ -243,7 +243,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
     return dat
 
 /datum/pda_app/balance_check
-	name = "Virtual Wallet and Balance Check"
+	name = "Balance Check"
 	desc = "Connects to the Account Database to check the balance history the inserted ID card."
 	price = 0
 	icon = "pda_money"
@@ -254,7 +254,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	reconnect_database()
 
 /datum/pda_app/balance_check/get_dat(var/mob/user)
-	var/dat = {"<h4><span class='pda_icon [icon]'></span> Virtual Wallet and Balance Check Application</h4>"}
+	var/dat = {"<h4><span class='pda_icon [icon]'></span>Balance Check Application</h4>"}
 	if(!pda_device.id)
 		dat += {"<i>Insert an ID card in the PDA to use this application.</i>"}
 	else
@@ -265,16 +265,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 			<h5>Virtual Wallet</h5>
 			Owner: <b>[M.owner_name]</b><br>
 			Balance: <b>[M.virtual]</b>$  <u><a href='byond://?src=\ref[src];printCurrency=1'><span class='pda_icon [icon]'></span>Print Currency</a></u>
-			<h6>Transaction History</h6>
-			On [MM]/[DD]/[game_year]:
-			<ul>
-			"}
-		var/list/v_log = list()
-		for(var/e in M.transaction_log)
-			v_log += e
-		for(var/datum/transaction/T in reverseRange(v_log))
-			dat += {"<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>"}
-		dat += {"</ul><hr>"}
+			<hr>"}
 		if(!(linked_db))
 			reconnect_database()
 		if(linked_db)
@@ -284,8 +275,8 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 					dat += {"
 						<h5>Bank Account</h5>
 						Owner: <b>[D.owner_name]</b><br>
-						Balance: <b>[D.money]</b>$
-						<h6>Transaction History</h6>
+						Balance: <b>[D.money]</b>$<hr>
+						<h5>Transaction History</h5>
 						On [MM]/[DD]/[game_year]:
 						<ul>
 						"}

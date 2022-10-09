@@ -179,7 +179,7 @@
 			to_chat(usr, "<span class='notice'>There is an administrative lock on entering the game!</span>")
 			return
 
-		AttemptLateSpawn(href_list["SelectedJob"])
+		AttemptLateSpawn(client.prefs, href_list["SelectedJob"])
 		return
 
 	if(href_list["RequestPrio"])
@@ -332,7 +332,7 @@
 	mind.transfer_to(cluwne)
 	qdel(src)
 
-/mob/new_player/proc/AttemptLateSpawn(rank)
+/mob/new_player/proc/AttemptLateSpawn(var/datum/preferences/prefs, rank)
 	if (src != usr)
 		return 0
 	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
@@ -347,19 +347,19 @@
 
 	var/datum/job/job = job_master.GetJob(rank)
 	if(job.species_whitelist.len)
-		if(!job.species_whitelist.Find(client.prefs.species))
-			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
+		if(!job.species_whitelist.Find(prefs.species))
+			to_chat(src, alert("[rank] is not available for [prefs.species]."))
 			return 0
 	if(job.species_blacklist.len)
-		if(job.species_blacklist.Find(client.prefs.species))
-			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
+		if(job.species_blacklist.Find(prefs.species))
+			to_chat(src, alert("[rank] is not available for [prefs.species]."))
 			return 0
 
 	job_master.AssignRole(src, rank, 1)
 
-	var/mob/living/carbon/human/character = create_human(client.prefs, rank)	//creates the human and transfers vars and mind
-	if(character.client.prefs.randomslot)
-		character.client.prefs.random_character_sqlite(character, character.ckey)
+	var/mob/living/carbon/human/character = create_human(prefs, rank)	//creates the human and transfers vars and mind
+	if(prefs.randomslot)
+		prefs.random_character_sqlite(character, character.ckey)
 
 	var/atom/movable/what_to_move = character.locked_to || character
 
@@ -426,7 +426,7 @@
 
 	if(rank != "MODE")
 		if(rank != "Cyborg")
-			create_account(character.real_name, rand(100,250), rand(100,250), null, job.wage_payout, client.prefs.bank_security)
+			create_account(character.real_name, rand(100,250), rand(100,250), null, job.wage_payout, prefs.bank_security)
 			job.equip(character, job.priority) //Outfit datum.	
 			data_core.manifest_inject(character)
 			ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn

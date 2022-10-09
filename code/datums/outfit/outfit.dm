@@ -305,7 +305,7 @@
 // -- Things to do AFTER all the equipment is given (ex: accessories)
 /datum/outfit/proc/post_equip(var/mob/living/carbon/human/H)
 	SHOULD_CALL_PARENT(TRUE)
-	H.store_frequency_list_in_memory()
+	return
 
 // -- Same as above, for priority arrivals
 /datum/outfit/proc/post_equip_priority(var/mob/living/carbon/human/H)

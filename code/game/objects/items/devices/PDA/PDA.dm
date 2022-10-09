@@ -465,10 +465,21 @@ var/global/msg_id = 0
 			to_chat(user, "[bicon(src)]<span class='warning'>There is no ID in the PDA!</span>")
 			return
 		var/obj/item/weapon/spacecash/dosh = C
-		if(id.add_to_virtual_wallet(dosh.worth * dosh.amount, user))
+		if(add_to_virtual_wallet(dosh.worth * dosh.amount, user))
 			to_chat(user, "<span class='info'>You insert [dosh.worth * dosh.amount] credit\s into the PDA.</span>")
 			qdel(dosh)
 		updateDialog()
+
+/obj/item/device/pda/proc/add_to_virtual_wallet(var/amount, var/mob/user, var/atom/giver)
+	if(!id)
+		return 0
+	if(id.add_to_virtual_wallet(amount, user, giver))
+		if(prob(50))
+			playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
+		else
+			playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
+		return 1
+	return 0		
 
 /obj/item/device/pda/attack(mob/living/carbon/C, mob/living/user as mob)
 	if(istype(C) && scanning_app)
