@@ -425,8 +425,9 @@
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
 	if(rank != "MODE")
-		job_master.PostJobSetup(character)
 		if(rank != "Cyborg")
+			create_account(character.real_name, rand(100,250), rand(100,250), null, job.wage_payout, client.prefs.bank_security)
+			job.equip(character, job.priority) //Outfit datum.	
 			data_core.manifest_inject(character)
 			ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
 			if(rank == "Trader")
@@ -442,7 +443,7 @@
 			else
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
-			character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
+			job_master.PostJobSetup(character)
 		else
 			character.Robotize()
 	qdel(src)
@@ -716,13 +717,17 @@
 
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
+	new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 
 	var/datum/job/job = job_master.GetJob(rank)
 	if(job)
 		if(rank != "MODE")
 			new_character.job = rank	//the ultimate jobby: your body is assigned a job
-			create_account(new_character.real_name, rand(100,250), rand(100,250), null, job.wage_payout, prefs.bank_security)
-			job.equip(new_character, job.priority) //Outfit datum.	
+			var/wage = job.get_wage()
+			if (late_join)
+				latejoiner_allowance += wage + round(wage/10)
+			else
+				station_allowance += wage + round(wage/10)//overhead of 10%
 
 	if(!late_join)
 		var/obj/S = null
@@ -749,9 +754,6 @@
 			// Use the arrivals shuttle spawn point
 			stack_trace("no spawn points for [rank]")
 			new_character.forceMove(pick(latejoin))
-
-		// 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
-		new_character.DormantGenes(20,10,0,0)
 
 	for(var/datum/religion/R in ticker.religions)
 		if(R.converts_everyone && new_character.mind.assigned_role != "Chaplain")

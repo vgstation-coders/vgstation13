@@ -208,6 +208,9 @@ var/datum/controller/gameticker/ticker
 				//antags aren't new players
 			else
 				var/mob/living/carbon/human/H = np.create_human(prefs, rank)
+				var/datum/job/job = job_master.GetJob(rank)
+				create_account(H.real_name, rand(100,250), rand(100,250), null, job.wage_payout, prefs.bank_security)
+				job.equip(H, job.priority) //Outfit datum.	
 				ticker.minds += H.mind
 				H.store_position()
 				new_characters[key] = H
