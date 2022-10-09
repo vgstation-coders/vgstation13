@@ -463,6 +463,7 @@
 
 /datum/outfit/mime/clown_ling/post_equip(var/mob/living/carbon/human/H)
 	. = ..()
+	H.fully_replace_character_name(H.real_name,pick(clown_names))
 
 // -- Janitor
 
