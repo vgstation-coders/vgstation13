@@ -27,13 +27,11 @@
 			return TRUE
 		else
 			to_chat(user,"<span class='warning'>[target]'s [affected.display_name] wounds are not severe enough to stitch together.")
-			return FALSE
 	if(tool.heal_burn)
 		if(affected.burn_dam > affected.SUTURABLE_DAMAGE)
 			return TRUE
 		else
 			to_chat(user,"<span class='warning'>[target]'s [affected.display_name] burns are not severe enough to graft.")
-			return FALSE
 	
 /datum/surgery_step/suture_wounds/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool/suture/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
