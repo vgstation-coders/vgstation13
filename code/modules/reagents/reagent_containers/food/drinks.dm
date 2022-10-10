@@ -1019,6 +1019,14 @@
 	..()
 	reagents.add_reagent(SECCOFFEE, 50)
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/
+	name = "HOSS Rainbow Donut Blend"
+	desc = "All the essentials, for on the go."
+	icon_state = "engicoffee"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee/New()
+	..()
+	reagents.add_reagent(SECCOFFEE, 50)
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white
 	name = "Picomed: White edition"
 	desc = "Good for the body and good for the bones."
