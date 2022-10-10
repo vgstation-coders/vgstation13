@@ -74,6 +74,7 @@
 	items_to_collect[/obj/item/weapon/reagent_containers/food/snacks/cracker] = SURVIVAL_BOX //poly gets part of the divvy, savvy?
 	items_to_collect[/obj/item/device/analyzer/scope] = SURVIVAL_BOX
 	items_to_collect[/obj/item/device/multitool/omnitool] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee] = SURVIVAL_BOX
 	return ..()
 
 // -- Station engineer
@@ -159,6 +160,7 @@
 
 /datum/outfit/engineer/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/device/multitool/omnitool] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee] = SURVIVAL_BOX
 	return ..()
 
 // -- Atmos tech
@@ -220,6 +222,7 @@
 
 /datum/outfit/atmos/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/device/analyzer/scope] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee] = SURVIVAL_BOX
 	return ..()
 
 // -- Mechanic
@@ -274,6 +277,11 @@
 	pda_type = /obj/item/device/pda/mechanic
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/engineering
+
+/datum/outfit/mechanic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/device/device_analyser/advanced] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee] = SURVIVAL_BOX
+	return ..()
 
 /datum/outfit/mechanic/post_equip(var/mob/living/carbon/human/H)
 	..()
