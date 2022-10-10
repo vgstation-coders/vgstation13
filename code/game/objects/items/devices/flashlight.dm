@@ -246,9 +246,6 @@
 		pwrconn.use_power = on ? MACHINE_POWER_USE_ACTIVE : MACHINE_POWER_USE_NONE
 		pwrconn.active_usage = 60 * 5 / brightness_on //power usage scales with brightness
 
-/obj/item/device/flashlight/lamp/process()
-	update_brightness(playsound = FALSE)
-
 /obj/item/device/flashlight/lamp/toggle_onoff(var/onoff = null)
 	if(isnull(onoff))
 		on = !on
@@ -256,7 +253,7 @@
 		on = onoff
 	update_brightness()
 
-/obj/item/device/flashlight/lamp/update_brightness(var/mob/user = null, var/playsound = 1)
+/obj/item/device/flashlight/lamp/update_brightness(var/mob/user = null, var/playsound = TRUE)
 	if(drawspower)
 		if(on)
 			processing_objects.Add(src)
@@ -264,6 +261,9 @@
 		else
 			processing_objects.Remove(src)
 			pwrconn.use_power = MACHINE_POWER_USE_NONE
+	process(playsound = TRUE)
+
+/obj/item/device/flashlight/lamp/process(var/playsound = FALSE)
 	if(on && (!drawspower || pwrconn?.powered()))
 		icon_state = "[initial(icon_state)]-on"
 		set_light(brightness_on)
