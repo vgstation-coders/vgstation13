@@ -501,6 +501,8 @@
 
 
 /obj/machinery/power/supermatter/proc/Consume(atom/A)
+	if(A?.reagents?.has_reagent(HOLYWATER)) // for removing arcane tampers
+		bless()
 	if(isliving(A))
 		. = A.supermatter_act(src, SUPERMATTER_DUST)
 		if(ismouse(A)) //>implying mice are going to follow the rules

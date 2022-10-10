@@ -490,6 +490,8 @@ var/list/obj/machinery/singularity/white_hole_candidates
 			newsea.ChangeTurf(/turf/unsimulated/wall/supermatter)
 
 /obj/machinery/singularity/proc/consume(const/atom/A)
+	if(A?.reagents?.has_reagent(HOLYWATER)) // for removing arcane tampers
+		bless()
 	if(repels && !(istype(A,/obj/item/bluespace_crystal)))
 		return
 	if(wormhole_out && !(istype(A,/obj/item/bluespace_crystal)))
