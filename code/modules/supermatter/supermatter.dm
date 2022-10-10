@@ -159,7 +159,7 @@
 	var/turf/T = get_turf(src)
 	if (has_exploded <= 1)
 		if(arcanetampered)
-			new /obj/structure/bomberflame(T,1,MAX_BOMB_POWER,SOUTH,1,1)
+			new /obj/structure/bomberflame(T,1,MAX_BOMB_POWER,SOUTH,1,1,1)
 			empulse(get_turf(src), 100, 200, 1)
 			qdel(src)
 			return
