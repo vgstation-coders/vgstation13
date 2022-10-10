@@ -1449,7 +1449,7 @@ FIRE ALARM
 	this_area.firealert()
 	update_icon()
 	alarm = 1
-	//playsound(src, 'sound/ambience/signal.ogg', 75, 0)
+	playsound(src, 'sound/misc/weather_warning.ogg', 75, 0)
 
 var/global/list/firealarms = list() //shrug
 
