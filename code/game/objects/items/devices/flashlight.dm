@@ -244,7 +244,7 @@
 		pwrconn = new(src)
 		pwrconn.channel = LIGHT
 		pwrconn.use_power = on ? MACHINE_POWER_USE_ACTIVE : MACHINE_POWER_USE_NONE
-		pwrconn.active_usage = 60 * 5 / brightness_on //power usage scales with brightness
+		pwrconn.active_usage = 60 * brightness_on / 5 //power usage scales with brightness
 
 /obj/item/device/flashlight/lamp/toggle_onoff(var/onoff = null)
 	if(isnull(onoff))
