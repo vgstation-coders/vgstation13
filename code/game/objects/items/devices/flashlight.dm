@@ -33,7 +33,6 @@
 	glanced_sound = 'sound/items/metal_impact.ogg'
 	breaks_sound = 'sound/effects/Glassbr1.ogg'
 
-
 /obj/item/device/flashlight/initialize()
 	..()
 	if(on)
@@ -205,6 +204,8 @@
 	siemens_coefficient = 1
 	starting_materials = null
 	on = 0	//Lamps start out off unless someone spawns in the same room as them at roundstart.
+	var/drawspower = TRUE
+	var/datum/power_connection/consumer/pwrconn //the on var means the lamp switch is turned on but the area also has to be powered for it to produce light
 
 /obj/item/device/flashlight/lamp/AltClick()
 	if(toggle_light())
@@ -236,6 +237,44 @@
 	if(usr.has_hand_check())
 		attack_self(usr)
 		return TRUE
+
+//Lamps draw power from the area they're in, unlike flashlights.
+/obj/item/device/flashlight/lamp/New()
+	if(drawspower)
+		pwrconn = new(src)
+		pwrconn.channel = LIGHT
+		pwrconn.use_power = on ? MACHINE_POWER_USE_ACTIVE : MACHINE_POWER_USE_NONE
+		pwrconn.active_usage = 60 * 5 / brightness_on //power usage scales with brightness
+
+/obj/item/device/flashlight/lamp/process()
+	update_brightness(playsound = FALSE)
+
+/obj/item/device/flashlight/lamp/toggle_onoff(var/onoff = null)
+	if(isnull(onoff))
+		on = !on
+	else
+		on = onoff
+	update_brightness()
+
+/obj/item/device/flashlight/lamp/update_brightness(var/mob/user = null, var/playsound = 1)
+	if(drawspower)
+		if(on)
+			processing_objects.Add(src)
+			pwrconn.use_power = MACHINE_POWER_USE_ACTIVE
+		else
+			processing_objects.Remove(src)
+			pwrconn.use_power = MACHINE_POWER_USE_NONE
+	if(on && (!drawspower || pwrconn?.powered()))
+		icon_state = "[initial(icon_state)]-on"
+		set_light(brightness_on)
+		if(playsound && has_sound)
+			if(get_turf(src))
+				playsound(src, sound_on, 50, 1)
+	else
+		icon_state = initial(icon_state)
+		set_light(0)
+		if(playsound && has_sound)
+			playsound(src, sound_off, 50, 1)
 
 // FLARES
 
@@ -353,6 +392,7 @@
 	autoignition_temperature = AUTOIGNITION_ORGANIC
 	var/brightness_max = 6
 	var/brightness_min = 2
+	drawspower = FALSE //slime lamps don't draw power from the area apc
 
 	breakable_fragments = null
 	damaged_examine_text = "It is cracked."
