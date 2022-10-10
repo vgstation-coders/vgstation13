@@ -513,7 +513,7 @@
 				clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
 			if(/datum/job/trader)
 				clothes_s = new /icon(uniform_dmi, "vox-casual-2_s")
-				clothes_s.Blend(new /icon(feet_dmi, "boots-vox"), ICON_UNDERLAY)
+				clothes_s.Blend(new /icon(feet_dmi, "boots-vox"), ICON_OVERLAY)
 				clothes_s.Blend(new /icon('icons/mob/belt.dmi', "walkietalkie"), ICON_OVERLAY)
 				clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
 			if(/datum/job/ai)//Gives AI and borgs assistant-wear, so they can still customize their character
