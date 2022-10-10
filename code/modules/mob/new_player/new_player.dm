@@ -421,15 +421,13 @@
 
 	switch(rank)
 		if("MODE")
-			qdel(src)
-			return
+			//do nothing
 		if("Cyborg")
 			character.Robotize()
-			qdel(src)
-			return
 		if("Trader")
 			ticker.minds += character.mind
 			job.equip(character, job.priority) // Outfit datum
+			job_master.PostJobSetup(character)
 			//If we're a trader, instead send a message to PDAs with the trader cartridge
 			for (var/obj/item/device/pda/P in PDAs)
 				if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
@@ -446,7 +444,7 @@
 			data_core.manifest_inject(character)
 			AnnounceArrival(character, rank)
 			CallHook("Arrival", list("character" = character, "rank" = rank))
-	job_master.PostJobSetup(character)
+			job_master.PostJobSetup(character)
 	qdel(src)
 
 /proc/Meteortype_Latejoin(var/atom/movable/target, var/rank)
