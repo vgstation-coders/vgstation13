@@ -446,7 +446,7 @@ var/global/datum/controller/occupations/job_master
 				remembered_info += "<b>Your account was created:</b> [T.time], [T.date] at [T.source_terminal]<br>"
 
 			// If they're head, give them the account info for their department
-			if(job.head_position)
+			if(job?.head_position)
 				var/datum/money_account/department_account = department_accounts[job.department]
 				if(department_account)
 					remembered_info += "<b>Your department's account number is:</b> #[department_account.account_number]<br>"

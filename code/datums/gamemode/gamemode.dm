@@ -181,7 +181,7 @@
 			possible_factions.Add(F)
 	if(possible_factions.len)
 		var/datum/faction/F = pick(possible_factions)
-		F.HandleRecruitedMind(mob.mind)
+		return F.HandleRecruitedMind(mob.mind)
 
 /datum/gamemode/proc/PostSetup()
 	for(var/datum/faction/F in factions)

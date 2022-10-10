@@ -363,19 +363,22 @@
 
 	var/atom/movable/what_to_move = character.locked_to || character
 
-	if(job.spawns_from_edge)
+	if(job?.spawns_from_edge)
 		Meteortype_Latejoin(what_to_move, rank)
 	else
 		// TODO:  Job-specific latejoin overrides.
 		what_to_move.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 
-	ticker.mode.latespawn(character)//can we make them a latejoin antag?
-
-	if (!character || !character.mind) //Character got transformed in a latejoin ruleset
-		if(character)
-			qdel(character)
+	//Antagonist spawning
+	var/turf/T = character.loc
+	if(ticker.mode.latespawn(character))
 		qdel(src)
-		return
+		if (!character || !character.mind) //Character got transformed in a latejoin ruleset
+			if(character)
+				qdel(character)
+		if(character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
+			character.store_position()
+			return
 
 	// Very hacky. Sorry about that
 	if(ticker.tag_mode_enabled == TRUE)
@@ -393,14 +396,6 @@
 		R.AnnounceObjectives()
 
 	job_master.CheckPriorityFulfilled(rank)
-
-	var/turf/T = character.loc
-	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
-		//Removal of job slot is in role/role.dm
-		character.store_position()
-		qdel(src)
-		return
-
 	character.store_position()
 
 	// WHY THE FUCK IS THIS HERE
@@ -424,28 +419,34 @@
 		to_chat(character, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
-	if(rank != "MODE")
-		if(rank != "Cyborg")
-			create_account(character.real_name, rand(100,250), rand(100,250), null, job.wage_payout, prefs.bank_security)
-			job.equip(character, job.priority) //Outfit datum.	
-			data_core.manifest_inject(character)
-			ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
-			if(rank == "Trader")
-				//If we're a trader, instead send a message to PDAs with the trader cartridge
-				for (var/obj/item/device/pda/P in PDAs)
-					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
-						var/mob/living/L = get_holder_of_type(P,/mob/living)
-						if(L)
-							L.show_message("[bicon(P)] <b>Message from U*{*,*;8AYE1*;*;*a;1 (0x034ac15e), </b>\"Caw. Cousin [character.real_name] detected in sector.\".", 2)
-				for(var/mob/dead/observer/M in player_list)
-					if(M.stat == DEAD && M.client)
-						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character.real_name] has arrived in the sector from space.</span></span>",character) //handle_render generates a Follow link
-			else
-				AnnounceArrival(character, rank)
-				CallHook("Arrival", list("character" = character, "rank" = rank))
-			job_master.PostJobSetup(character)
-		else
+	switch(rank)
+		if("MODE")
+			qdel(src)
+			return
+		if("Cyborg")
 			character.Robotize()
+			qdel(src)
+			return
+		if("Trader")
+			ticker.minds += character.mind
+			job.equip(character, job.priority) // Outfit datum
+			//If we're a trader, instead send a message to PDAs with the trader cartridge
+			for (var/obj/item/device/pda/P in PDAs)
+				if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
+					var/mob/living/L = get_holder_of_type(P,/mob/living)
+					if(L)
+						L.show_message("[bicon(P)] <b>Message from U*{*,*;8AYE1*;*;*a;1 (0x034ac15e), </b>\"Caw. Cousin [character.real_name] detected in sector.\".", 2)
+			for(var/mob/dead/observer/M in player_list)
+				if(M.stat == DEAD && M.client)
+					handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character.real_name] has arrived in the sector from space.</span></span>",character) //handle_render generates a Follow link
+		else
+			ticker.minds += character.mind
+			create_account(character.real_name, rand(100,250), rand(100,250), null, job.wage_payout, prefs.bank_security)
+			job.equip(character, job.priority) // Outfit datum. Ensure this occurs after account creation to link the ID properly
+			data_core.manifest_inject(character)
+			AnnounceArrival(character, rank)
+			CallHook("Arrival", list("character" = character, "rank" = rank))
+	job_master.PostJobSetup(character)
 	qdel(src)
 
 /proc/Meteortype_Latejoin(var/atom/movable/target, var/rank)
