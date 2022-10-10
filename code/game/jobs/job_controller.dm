@@ -478,6 +478,12 @@ var/global/datum/controller/occupations/job_master
 		job.introduce(H, (alt_title ? alt_title : rank))
 		if(job.priority)
 			to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
+
+	for(var/datum/religion/R in ticker.religions)
+		if(R.converts_everyone && rank != "Chaplain")
+			R.convert(H,null,TRUE,TRUE)
+			break //Only autoconvert them once, and only if they aren't leading their own faith.
+			
 	return 1
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist

@@ -757,11 +757,6 @@
 			stack_trace("no spawn points for [rank]")
 			new_character.forceMove(pick(latejoin))
 
-	for(var/datum/religion/R in ticker.religions)
-		if(R.converts_everyone && new_character.mind.assigned_role != "Chaplain")
-			R.convert(new_character,null,TRUE,TRUE)
-			break //Only autoconvert them once, and only if they aren't leading their own faith.
-
 	if(late_join)
 		new_character.key = key
 
