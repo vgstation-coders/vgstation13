@@ -427,6 +427,7 @@ var/global/datum/controller/occupations/job_master
 	return TRUE
 
 /datum/controller/occupations/proc/PostJobSetup(var/mob/living/carbon/human/H)
+	//This proc should be dedicated to only displaying messages and committing memories to minds
 	if(!(H && H.mind && H.mind.assigned_role))
 		return 0
 	var/rank = H.mind.assigned_role
