@@ -372,11 +372,13 @@
 	//Antagonist spawning
 	var/turf/T = character.loc
 	if(ticker.mode.latespawn(character))
-		qdel(src)
 		if (!character || !character.mind) //Character got transformed in a latejoin ruleset
 			if(character)
+				qdel(src)
 				qdel(character)
+				return
 		if(character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
+			qdel(src)
 			character.store_position()
 			return
 
@@ -388,12 +390,6 @@
 		var/datum/role/tag_mode_mime/mime = new
 		mime.AssignToRole(character.mind,1)
 		mime.Greet(GREET_ROUNDSTART)
-
-	for(var/role in character.mind.antag_roles)
-		var/datum/role/R = character.mind.antag_roles[role]
-		R.OnPostSetup(TRUE) // Latejoiner post-setup.
-		R.ForgeObjectives()
-		R.AnnounceObjectives()
 
 	job_master.CheckPriorityFulfilled(rank)
 	character.store_position()
@@ -445,6 +441,13 @@
 			AnnounceArrival(character, rank)
 			CallHook("Arrival", list("character" = character, "rank" = rank))
 			job_master.PostJobSetup(character)
+		
+	for(var/role in character.mind.antag_roles)
+		var/datum/role/R = character.mind.antag_roles[role]
+		R.OnPostSetup(TRUE) // Latejoiner post-setup.
+		R.ForgeObjectives()
+		R.AnnounceObjectives()
+
 	qdel(src)
 
 /proc/Meteortype_Latejoin(var/atom/movable/target, var/rank)
