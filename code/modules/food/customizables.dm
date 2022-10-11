@@ -11,70 +11,40 @@
 
 // Various Snacks //////////////////////////////////////////////
 
-/obj/item/weapon/reagent_containers/food/snacks/breadslice/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
-			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
-			return
-		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich(get_turf(src),I) //boy ain't this a mouthful
-		F.pixel_x = pixel_x
-		F.pixel_y = pixel_y
-		F.attackby(I, user, params)
-		qdel(src)
-	else
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/attackby(obj/item/I, mob/user, params)
+	if(!handle_customizable_addition(I, user, params, /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich))
 		return ..()
 
-/obj/item/weapon/reagent_containers/food/snacks/breadslice/nova/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
-			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
-			return
-		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova(get_turf(src),I) //welp nevermind that
-		F.pixel_x = pixel_x
-		F.pixel_y = pixel_y
-		F.attackby(I, user, params)
-		qdel(src)
-	else
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/nova/attackby(obj/item/I, mob/user, params)
+	if(!handle_customizable_addition(I, user, params, /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova))
 		return ..()
 
-/obj/item/weapon/reagent_containers/food/snacks/bun/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
-			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
-			return
-		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/burger(get_turf(src),I)
-		F.pixel_x = pixel_x
-		F.pixel_y = pixel_y
-		F.attackby(I, user, params)
-		qdel(src)
-	else
+/obj/item/weapon/reagent_containers/food/snacks/bun/attackby(obj/item/I, mob/user, params)
+	if(!handle_customizable_addition(I, user, params, /obj/item/weapon/reagent_containers/food/snacks/customizable/burger))
 		return ..()
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
-			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
-			return
-		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/pizza(get_turf(src),I)
-		F.pixel_x = pixel_x
-		F.pixel_y = pixel_y
-		F.attackby(I, user, params)
-		qdel(src)
-	else
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough/attackby(obj/item/I, mob/user, params)
+	if(!handle_customizable_addition(I, user, params, /obj/item/weapon/reagent_containers/food/snacks/customizable/pizza))
 		return ..()
 
-/obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti/attackby(obj/item/I,mob/user,params)
+/obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti/attackby(obj/item/I, mob/user, params)
+	if(!handle_customizable_addition(I, user, params, /obj/item/weapon/reagent_containers/food/snacks/customizable/pasta))
+		return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/proc/handle_customizable_addition(obj/item/I, mob/user, params, snacktype)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
 		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
-			return
-		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/pasta(get_turf(src),I)
+			return TRUE
+		var/obj/F = new snacktype (get_turf(src),I)
+		if(isitem(F))
+			var/obj/item/Food = F
+			Food.luckiness += I.luckiness
 		F.pixel_x = pixel_x
 		F.pixel_y = pixel_y
 		F.attackby(I, user, params)
 		qdel(src)
-	else
-		return ..()
+		return TRUE
 
 // Custom Meals ////////////////////////////////////////////////
 
