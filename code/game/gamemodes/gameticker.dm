@@ -126,7 +126,6 @@ var/datum/controller/gameticker/ticker
 	theme.update_music()
 	theme.update_icon()
 
-
 /datum/controller/gameticker/proc/setup()
 	//Create and announce mode
 	if(master_mode=="secret")
@@ -164,8 +163,6 @@ var/datum/controller/gameticker/ticker
 
 	//Configure mode and assign player to special mode stuff
 	job_master.DivideOccupations() //Distribute jobs
-	init_mind_ui()
-	init_PDAgames_leaderboard()
 
 	var/can_continue = mode.Setup()//Setup special modes
 	if(!can_continue)
@@ -451,10 +448,6 @@ var/datum/controller/gameticker/ticker
 				to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")
 				delay_end = 2
 	return 1
-
-/datum/controller/gameticker/proc/init_PDAgames_leaderboard()
-	init_snake_leaderboard()
-	init_minesweeper_leaderboard()
 
 /datum/controller/gameticker/proc/init_snake_leaderboard()
 	for(var/x=1;x<=PDA_APP_SNAKEII_MAXSPEED;x++)
