@@ -735,24 +735,23 @@ var/quote = ascii2text(34)
 			return "itself"
 
 /proc/shift_verb_tense(var/input) //Turns "slashes" into "slash" and "hits" into "hit".
-	//Special cases can be added here as they are encountered.
-	switch(input)
-		if("staves in")
-			return "stave in"
+	//Check if there's more than one word in the input, and if so, separate the first word from the rest, eg. "looks over at" separates into "looks" and " over at".
+	var/space = findtext(input," ")
+	var/fromspace
+	if(space && space <= length(input))
+		fromspace = copytext(input, space)
+		input = copytext(input, 1, space)
 	//Check if input ends in "es" or "s" and chop those off if so.
 	var/inputlength = length(input)
 	if(inputlength > 2)
 		if(copytext(input, inputlength - 1, inputlength + 1) == "es") //If it ends in "es"
 			var/third_to_last = copytext(input, inputlength - 2, inputlength - 1)
 			if(findtext("cdefgklmnprstuvxz", third_to_last)) //If the third-to-last letter is any of the given letters, remove only the "s".
-				return copytext(input, 1, inputlength) //"smiles" becomes "smile"
+				input = copytext(input, 1, inputlength) //"smiles" becomes "smile"
 			else if(third_to_last == "i")
-				return copytext(input, 1, inputlength - 2) + "y" //"parries" becomes "parry"
+				input = copytext(input, 1, inputlength - 2) + "y" //"parries" becomes "parry"
 			else
-				return copytext(input, 1, inputlength - 1) //Otherwise remove the "es".
+				input = copytext(input, 1, inputlength - 1) //Otherwise remove the "es".
 		else if(copytext(input, inputlength, inputlength + 1) == "s") //If the second-to-last letter isn't "e", and the last letter is "s", remove the "s".
-			return copytext(input, 1, inputlength)	//"gets" becomes "get"
-		else
-			return input
-	else
-		return input
+			input = copytext(input, 1, inputlength)	//"gets" becomes "get"
+	return space ? input + fromspace : input
