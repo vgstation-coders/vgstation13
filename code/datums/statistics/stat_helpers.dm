@@ -155,9 +155,9 @@
 	station_name = station_name()
 
 	// check for survivors
-	for(var/mob/living/M in player_list)
+	for(var/mob/living/M in mob_list)
 		manifest_entries.Add(new /datum/stat/manifest_entry(M.mind))
-		if(!M.isDead())
+		if(M.mind && !M.isDead())
 			add_survivor_stat(M)
 
 /proc/stats_server_alert_new_file()
