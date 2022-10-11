@@ -33,13 +33,13 @@
 				if(!is_slot_hidden(C.body_parts_covered,ARMS))
 					arms_exposure = 0
 
-		apply_damage(2.5*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
-		apply_damage(2.5*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
-		apply_damage(2.0*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
-		apply_damage(0.6*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
-		apply_damage(0.6*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
-		apply_damage(0.4*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
-		apply_damage(0.4*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
+		apply_damage(HEAD_FIRE_DAMAGE_MULTIPLIER*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
+		apply_damage(CHEST_FIRE_DAMAGE_MULTIPLIER*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
+		apply_damage(GROIN_FIRE_DAMAGE_MULTIPLIER*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
+		apply_damage(LEGS_FIRE_DAMAGE_MULTIPLIER*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
+		apply_damage(LEGS_FIRE_DAMAGE_MULTIPLIER*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
+		apply_damage(ARMS_FIRE_DAMAGE_MULTIPLIER*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
+		apply_damage(ARMS_FIRE_DAMAGE_MULTIPLIER*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
 		adjustHalLoss(1)
 
 		if(prob(20))
