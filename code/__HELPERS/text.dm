@@ -738,7 +738,7 @@ var/quote = ascii2text(34)
 	//Check if there's more than one word in the input, and if so, separate the first word from the rest, eg. "looks over at" separates into "looks" and " over at".
 	var/space = findtext(input," ")
 	var/fromspace
-	if(space && space <= length(input))
+	if(space)
 		fromspace = copytext(input, space)
 		input = copytext(input, 1, space)
 	//Check if input ends in "es" or "s" and chop those off if so.
