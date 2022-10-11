@@ -1,8 +1,23 @@
+/******************************
+***                         ***
+***                         ***
+***      TRADER GEAR        ***
+*** Items that help traders ***
+*** not necessarily for sale***
+***                         ***
+******************************/
+
+/obj/item/weapon/coin/trader
+	material=MAT_GOLD
+	name = "trader coin"
+	icon_state = "coin_mythril"
+
+
 /obj/item/dictionary
 	name = "nanodictionary"
 	desc = "Prized communication tools, nanodictionaries let you learn a whole language extremely quickly. The process comes at the cost of destroying the nanodictionary itself -- this also means that only one person can make use of it, because pieces will be missing if someone else claims it."
 	icon = 'icons/obj/library.dmi'
-	icon_state ="book"
+	icon_state = "bookDummy"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
 	item_state = "book"
 
@@ -31,6 +46,9 @@
 /obj/item/dictionary/attack_self(mob/user)
 	if(!tongue)
 		to_chat(user,"<span class='danger'>This nanodictionary is blank!</span>")
+		return
+	if(tongue in user.languages)
+		to_chat(user,"<span class='danger'>You already know this language!</span>")
 		return
 	if(!master)
 		master = user
@@ -105,3 +123,59 @@
 	H.regenerate_icons()
 	to_chat(H, "<span class='good'>You have a robotic talon!</span>")
 	qdel(src)
+
+/obj/item/weapon/card/id/vox/extra
+	name = "Spare trader ID"
+	desc = "A worn looking ID with access to the tradepost, able to be set once for aspiring traders."
+	assignment = "Trader"
+	var/canSet = TRUE
+
+/obj/item/weapon/card/id/vox/extra/attack_self(mob/user as mob)
+	if(canSet)
+		var t = reject_bad_name(input(user, "What name would you like to put on this card?", "Trader ID Card Name", ishuman(user) ? user.real_name : user.name))
+		if(!t) //Same as mob/new_player/prefrences.dm
+			alert("Invalid name.")
+			return
+		src.registered_name = t
+		canSet = FALSE
+		name = "[t]'s ID card ([assignment])"
+	else
+		return
+
+/obj/item/crackerbox
+	name = "crackerbox"
+	desc = "The greatest invention known to birdkind. Converts unwanted, unneeded cash, into useful, beautiful crackers!"
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "fingerbox"
+	var/status //if true, is in use.
+
+/obj/item/crackerbox/examine(mob/user)
+	..()
+	to_chat(user, "<span class = 'notice'>Currently the conversion rate reads at [get_cash2cracker_rate()] per cracker.</span>")
+
+/obj/item/crackerbox/proc/get_cash2cracker_rate()
+	return round(10, nanocoins_rates)
+
+/obj/item/crackerbox/attackby(obj/item/I, mob/user)
+	if(!status && istype(I, /obj/item/weapon/spacecash) && user.drop_item(I, src))
+		status = TRUE
+		var/obj/item/weapon/spacecash/S = I
+		var/crackers_to_dispense = round((S.worth*S.amount)/get_cash2cracker_rate())
+		playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
+		if(!crackers_to_dispense)
+			say("Not enough! Never enough!")
+		spawn(3 SECONDS)
+			say("That is enough for [crackers_to_dispense] crackers!")
+			if(crackers_to_dispense > 100)
+				visible_message("<span class = 'warning'>\The [src]'s matter fabrication unit overloads!</span>")
+				explosion(loc, 0, prob(15), 2, 0, whodunnit = user)
+				qdel(src)
+				return
+			for(var/x = 1 to crackers_to_dispense)
+				var/obj/II = new /obj/item/weapon/reagent_containers/food/snacks/cracker(get_turf(src))
+				II.throw_at(get_turf(pick(orange(7,src))), 1*crackers_to_dispense, 1*crackers_to_dispense)
+				sleep(1)
+			status = FALSE
+		qdel(S)
+		return
+	..()

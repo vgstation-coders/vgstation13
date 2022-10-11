@@ -64,6 +64,13 @@
 	maxunits = 4
 	sales_category = TRADE_VARIETY
 
+/datum/trade_product/babel
+	name = "Library of Babel shipment"
+	path = /obj/structure/closet/crate/library
+	baseprice = 100
+	maxunits = 5
+	sales_category = TRADE_VARIETY
+
 /datum/trade_product/mechagy
 	name = "Mecha Graveyard shuttle disk"
 	path = /obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard
