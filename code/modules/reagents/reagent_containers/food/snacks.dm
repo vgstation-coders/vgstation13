@@ -6384,7 +6384,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse/
 	name = "tontes de pelouse"
-	desc = "A fashionable dish that some critics say engages the aesthetic sensibilites of even the most refined gastrononeme."
+	desc = "A fashionable dish that some critics say engages the aesthetic sensibilites of even the most refined gastronome."
 	icon_state = "tontesdepelouse"
 	bitesize = 3
 
