@@ -881,3 +881,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return TRUE
 	else
 		return FALSE
+
+// Simplemobs do not have hands.
+/mob/living/simple_animal/put_in_hand_check(obj/item/W, index)
+	return 0
