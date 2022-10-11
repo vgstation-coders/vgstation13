@@ -224,6 +224,7 @@
 /obj/structure/closet/crate/library
 	name = "Library of Babel shipment"
 	desc = "A shipment of nanodictionaries to be delivered to the Library of Babel. How'd it end up here?"
+	icon_state = "plasmacrate"
 	icon_opened = "plasmacrateopen"
 	icon_closed = "plasmacrate"
 	var/list/common_tongues = list(/obj/item/dictionary/insect,/obj/item/dictionary/root,/obj/item/dictionary/grey,
@@ -235,7 +236,7 @@
 
 /obj/structure/closet/crate/library/New()
 	..()
-	var/pix_x = 6
+	var/pix_x = -8
 	for(var/i = 1 to 5)
 		var/path
 		switch(rand(99))
@@ -264,6 +265,7 @@
 	..()
 	name = "skrell nanodictionary"
 	desc += " Finally, you'll be able to understand wetskrell.nt!"
+	icon_state = "book4"
 	tongue = all_languages[LANGUAGE_SKRELLIAN]
 	progress_goal = 10
 	progress_time = 6 SECONDS
@@ -273,6 +275,7 @@
 	..()
 	name = "catbeast nanodictionary"
 	desc += " Slightly clawed."
+	icon_state = "book9"
 	tongue = all_languages[LANGUAGE_CATBEAST]
 	progress_goal = 8
 	progress_time = 6 SECONDS
@@ -282,6 +285,7 @@
 	..()
 	name = "hilarious nanodictionary"
 	desc += " Is this a picturebook?"
+	icon_state = "bookclown"
 	tongue = all_languages[LANGUAGE_CLOWN]
 	progress_goal = 4
 	progress_time = 2 SECONDS
@@ -314,6 +318,7 @@
 /obj/item/dictionary/monkey/New()
 	name = "monkey nanodictionary"
 	desc += " For those with primal aspirations."
+	icon_state = "book8"
 	tongue = all_languages[LANGUAGE_MONKEY]
 	progress_goal = 20
 	progress_time = 2 SECONDS
@@ -338,6 +343,7 @@
 /obj/item/dictionary/mouse/New()
 	name = "custodial nanodictionary"
 	desc += " Can this one actually work? It's dripping..."
+	icon_state = "chemistry"
 	tongue = all_languages[LANGUAGE_MOUSE]
 	progress_goal = 20
 	progress_time = 15 SECONDS
@@ -354,6 +360,7 @@
 /obj/item/dictionary/golem/New()
 	name = "golem nanodictionary"
 	desc += " What a grind."
+	icon_state = "bookstatue"
 	tongue = all_languages[LANGUAGE_GOLEM]
 	progress_goal = 4
 	progress_time = 3 SECONDS
@@ -362,6 +369,7 @@
 /obj/item/dictionary/slime/New()
 	name = "slime nanodictionary"
 	desc += " Each word flows into the next."
+	icon_state = "book7"
 	tongue = all_languages[LANGUAGE_SLIME]
 	progress_goal = 6
 	progress_time = 5 SECONDS
@@ -378,6 +386,7 @@
 /obj/item/dictionary/martian/New()
 	name = "martian nanodictionary"
 	desc += " You need to supply the extra arms."
+	icon_state = "book2"
 	tongue = all_languages[LANGUAGE_MARTIAN]
 	progress_goal = 6
 	progress_time = 12 SECONDS
@@ -386,6 +395,7 @@
 /obj/item/dictionary/cult/New()
 	name = "Commentaries on the Arcane Tome"
 	desc = "A particularly dubious-looking nanodictionary with the stated goal of translating the Arcane Tome of the Blood Cult dedicated to Nar-Sie. According to the unknown author, 'each word is razor-fed and secret, thinner than cataclysms, tarnished like red-drink.'"
+	icon_state = "book"
 	tongue = all_languages[LANGUAGE_CULT]
 	progress_goal = 4
 	progress_time = 60 SECONDS
@@ -394,6 +404,7 @@
 /obj/item/dictionary/xeno/New()
 	name = "unknown nanodictionary"
 	desc += " This one contains a lot of terrifying shrieks. Is this a language?"
+	icon_state = "bookHacking"
 	tongue = all_languages[LANGUAGE_XENO]
 	progress_goal = 40
 	progress_time = 6 SECONDS
@@ -402,6 +413,7 @@
 /obj/item/dictionary/dsquad/New()
 	name = "redacted nanodictionary"
 	desc += " Is it in some kind of code?"
+	icon_state = "booknuclear"
 	tongue = all_languages[LANGUAGE_DEATHSQUAD]
 	progress_goal = 20
 	progress_time = 15 SECONDS

@@ -370,10 +370,10 @@
 			to_chat(user, "<span class='alert'>[src] is already occupied!</span>")
 		else
 			user.drop_item(O, force_drop = 1)
-			qdel(O)
 			var/obj/item/apiary/IA = O
 			var/obj/machinery/apiary/A = new IA.buildtype(src.loc)
 			A.itemform = O
+			O.forceMove(A)
 			A.icon = src.icon
 			A.icon_state = src.icon_state
 			A.hydrotray_type = src.type

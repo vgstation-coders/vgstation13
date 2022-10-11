@@ -17,7 +17,7 @@
 	name = "nanodictionary"
 	desc = "Prized communication tools, nanodictionaries let you learn a whole language extremely quickly. The process comes at the cost of destroying the nanodictionary itself -- this also means that only one person can make use of it, because pieces will be missing if someone else claims it."
 	icon = 'icons/obj/library.dmi'
-	icon_state ="book"
+	icon_state = "bookDummy"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
 	item_state = "book"
 
