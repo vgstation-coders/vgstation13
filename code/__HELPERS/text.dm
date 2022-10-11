@@ -736,7 +736,7 @@ var/quote = ascii2text(34)
 
 /proc/shift_verb_tense(var/input) //Turns "slashes" into "slash" and "hits" into "hit".
 	//Check if there's more than one word in the input, and if so, separate the first word from the rest, eg. "looks over at" separates into "looks" and " over at".
-	var/space = findtext(input," ")
+	var/space = findtext(input, " ")
 	var/fromspace
 	if(space)
 		fromspace = copytext(input, space)
