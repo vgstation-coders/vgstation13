@@ -1119,16 +1119,15 @@ Thanks.
 		var/mob/living/carbon/CM = L
 	//putting out a fire
 		if(CM.on_fire && CM.canmove && ((!locate(/obj/effect/fire) in loc) || !CM.handcuffed))	//No point in putting ourselves out if we'd just get set on fire again. Unless there's nothing more pressing to resist out of, in which case go nuts.
-			var/firecount = CM.fire_stacks + 7
 			CM.Knockdown(5)
 			CM.Stun(5)
 			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
 			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>",
 							   "<span class='warning'>You stop, drop, and roll!</span>")
 
-			for(var/i = 1 to firecount)
+			for(var/i = 1 to CM.fire_stacks + 7)
 				CM.dir = turn(CM.dir, pick(-90, 90))
-				sleep(10)
+				sleep(SECOND)
 			CM.fire_stacks = 0
 			CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>","<span class='notice'>You extinguish yourself.</span>")
 			ExtinguishMob()
