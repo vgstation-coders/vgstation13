@@ -237,6 +237,16 @@
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 16)
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket
+	name = "cricket meat"
+	desc = "Tastes a bit like nuts, very earthy. Not much of a serving, though."
+	icon_state = "roachmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/New()
+	..()
+	reagents.add_reagent(FLOUR, rand(4,10))
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
 	desc = "Woah! You were eating THIS all along?"
