@@ -9,7 +9,7 @@
 	var/hitsound = null
 	var/miss_sound = 'sound/weapons/punchmiss.ogg'
 	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
-	var/uncountable //TRUE means the item will be described as "it" even if its gender is PLURAL.
+	var/uncountable //TRUE means the item's examine description will use "It is" even if the item's gender is PLURAL.
 
 	w_class = W_CLASS_MEDIUM
 	var/attack_delay = 10 //Delay between attacking with this item, in 1/10s of a second (default = 1 second)
