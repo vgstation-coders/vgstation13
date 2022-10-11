@@ -485,13 +485,13 @@ Attach to transfer valve and open. BOOM.
 
 	//Always check these damage procs first if fire damage isn't working. They're probably what's wrong.
 	var/fire_tile_modifier = 4 //multiplicative modifier for damage received while on fire and standing on a fire tile
-	apply_damage(fire_tile_modifier*HEAD_FIRE_DAMAGE_MULTIPLIER*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
-	apply_damage(fire_tile_modifier*CHEST_FIRE_DAMAGE_MULTIPLIER*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
-	apply_damage(fire_tile_modifier*GROIN_FIRE_DAMAGE_MULTIPLIER*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
-	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
-	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
-	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
-	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*HEAD_FIRE_DAMAGE_MULTIPLIER*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*CHEST_FIRE_DAMAGE_MULTIPLIER*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
+	apply_damage(fire_tile_modifier*GROIN_FIRE_DAMAGE_MULTIPLIER*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
+	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
 	adjustHalLoss(10) //now with extra agony
 
 	src.dizziness = 5
