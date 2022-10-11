@@ -228,10 +228,11 @@
 	user.loc = src
 	if(charging)
 		to_chat(user,"<span class='notice'>You are now attempting to hijack \the [charging], this will take approximately [user.takeover_time] seconds.</span>")
-		if(do_after(user,src,user.takeover_time*10))
-			to_chat(user,"<span class='notice'>You are now inside \the [charging].</span>")
-			user.loc = charging
-			user.current_weapon = charging
+		if(do_after(user,charging,user.takeover_time*10))
+			if(charging)
+				to_chat(user,"<span class='notice'>You are now inside \the [charging].</span>")
+				user.loc = charging
+				user.current_weapon = charging
 	else
 		to_chat(user,"<span class='warning'>There is no weapon charging.</span>")
 
