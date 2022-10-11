@@ -21,6 +21,8 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
 	item_state = "book"
 
+	var/busy = FALSE
+
 	var/mob/living/owner
 	var/datum/language/tongue
 	var/progress = 0
@@ -47,6 +49,8 @@
 	if(!tongue)
 		to_chat(user,"<span class='danger'>This nanodictionary is blank!</span>")
 		return
+	if(busy)
+		return
 	if(tongue in user.languages)
 		to_chat(user,"<span class='danger'>You already know this language!</span>")
 		return
@@ -55,7 +59,8 @@
 	if(master != user)
 		to_chat(user,"<span class='danger'>This nanodictionary is already partially used up. Useless. You need the fundamentals.</span>.")
 		return
-	if(do_after(user,src,progress_time, 10, custom_checks = new /callback(src, /obj/item/dictionary/proc/on_do_after)))
+	busy = TRUE
+	if(do_after(user, src,progress_time, 10, custom_checks = new /callback(src, /obj/item/dictionary/proc/on_do_after)))
 		if(prob(progress_fail_chance))
 			to_chat(user,"<span class='danger'>Although you practiced your hardest, you didn't make any progress</span>.")
 		else
@@ -66,11 +71,13 @@
 				to_chat(user,"<span class='good'>You have mastered the language!</span>")
 				user.languages += tongue
 				qdel(src)
+	busy = FALSE
 
 /obj/item/dictionary/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
-	if(prob(35))
+	. =  do_after_default_checks(arglist(args))
+	if(. && prob(35))
 		practice(user)
-	return do_after_default_checks(arglist(args))
+	return .
 
 /obj/item/dictionary/proc/practice(mob/user)
 	var/phrase
