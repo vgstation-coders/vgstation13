@@ -27,7 +27,7 @@
 		toggle_toxins(user)
 
 /obj/item/weapon/cookiesynth/AltClick()
-	if(src.loc == usr)
+	if(loc == usr)
 		synthesize(src, usr, TRUE, TRUE)
 
 /obj/item/weapon/cookiesynth/proc/toggle_toxins(mob/user)
