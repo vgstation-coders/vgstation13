@@ -132,7 +132,7 @@
 			return
 		playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>You finish cutting through \the [src].</span>")
-		cut = TRUE
+		cut_open = TRUE
 		update_icon()
 
 /obj/machinery/door/poddoor/shutters/proc/pry(mob/user as mob)
@@ -146,5 +146,5 @@
 			return
 		playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>You finish prying \the [src] open.</span>")
-		pried = TRUE
+		pried_open = TRUE
 		update_icon()
