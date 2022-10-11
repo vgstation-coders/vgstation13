@@ -494,6 +494,6 @@ Attach to transfer valve and open. BOOM.
 	apply_damage(1.6*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
 	adjustHalLoss(10) //now with extra agony
 
-	src.dizziness += 5
+	src.dizziness = 5
 	src.confused +=  5
 	src.audible_scream()
