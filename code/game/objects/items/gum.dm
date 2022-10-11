@@ -14,6 +14,7 @@
 	autoignition_temperature = AUTOIGNITION_PAPER
 	goes_in_mouth = TRUE
 	gender = PLURAL
+	uncountable = TRUE
 
 /obj/item/gum/New()
 	..()
