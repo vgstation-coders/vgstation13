@@ -526,7 +526,6 @@
 	var/list/exiting = list() // Manages people leaving the barrel
 	health = 50
 	var/burning = FALSE
-	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	var/list/possible_fuels = list(
 		PLASMA = list(
 				"max_temperature" = TEMPERATURE_PLASMA,

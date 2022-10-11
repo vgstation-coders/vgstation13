@@ -39,6 +39,9 @@ var/global/list/med_hud_users = list() //list of all entities using a medical HU
 var/global/list/sec_hud_users = list() //list of all entities using a security HUD.
 var/list/diagnostic_hud_users = list() // list of all entities using a diagnostic HUD.
 
+//Lists for things that make various sounds
+var/global/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg') //list of sounds a fire makes
+
 //////////////////////////
 /////Initial Building/////
 //////////////////////////
