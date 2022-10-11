@@ -1221,6 +1221,7 @@ About the new airlock wires panel:
 		if(src.arePowerSystemsOn())
 			if(locked && !lifted)
 				to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
+				playsound(src, 'sound/effects/rustle-metal.ogg', 50, 1)
 				if(do_after(user,src,breaktime))
 					to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
