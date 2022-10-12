@@ -2935,20 +2935,31 @@
 /datum/reagent/simpolinol
 	name = "Simpolinol"
 	id = SIMPOLINOL
-	description = "A broad spectrum rejuvenant used to heal fauna with less complex cardiovascular systems. Not for human injestion."
+	description = "An experimental medication which has shown promising results in animal tests. Has not yet advanced to human trials."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A5A5FF" //rgb: 165, 165, 255
 	density = 1.58
 	specheatcap = 0.44
 
 /datum/reagent/simpolinol/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 	if(isanimal(M))
 		M.health = min(M.maxHealth, M.health + REM)
-	else
-		M.adjustToxLoss(5)
+		return
+
+	if(!ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+
+	if(!H.ckey)
+		H.adjustToxLoss(5)
+	if((!H.client) || H.client.is_afk())
+		if(prob(30))
+			H.vomit(0,1)
+		return
+
+	randomized_reagents[SIMPOLINOL].on_human_life(H, tick)
 
 //An OP chemical for admins and detecting exploits
 /datum/reagent/adminordrazine

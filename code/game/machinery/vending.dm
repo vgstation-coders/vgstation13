@@ -887,6 +887,7 @@ var/global/num_vending_terminals = 1
 	if(is_custom_machine)
 		if(edit_mode)
 			dat += "Machine name: [src.name] <a href='?src=\ref[src];rename=1'>(Rename)</a><br>"
+			dat += "Currently [dont_render_OOS ? "not " : ""]showing out of stock items. <a href='?src=\ref[src];show_oos=1'>(Toggle)</a><br>"
 			dat += "Current slogans: " + (product_slogans.len >= CUSTOM_VENDING_MAX_SLOGANS ? "" : "<a href='?src=\ref[src];add_slogan=1'>(Add a Slogan)</a>") + "<br>"
 			for(var/i = 1, i <= product_slogans.len, i++) // list slogans
 				dat += "[product_slogans[i]] <a href='?src=\ref[src];delete_slogan_line=[i]'>(Delete)</a><br>"
@@ -1026,6 +1027,9 @@ var/global/num_vending_terminals = 1
 		var/newname = input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text
 		if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
 			src.name = html_encode(newname)
+
+	else if (href_list["show_oos"] && edit_mode)
+		dont_render_OOS = !dont_render_OOS
 
 	else if (href_list["add_slogan"] && edit_mode)
 		var/newslogan = input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text
@@ -3208,6 +3212,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/biscuit = 2,
 		/obj/item/talonprosthetic = 3,
 		/obj/machinery/vending/sale/trader = 1,
+		/obj/item/weapon/storage/toolbox/paint = 1,
 		)
 
 	prices = list(
@@ -3219,6 +3224,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/dses = 200,
 		/obj/item/talonprosthetic = 80,
 		/obj/machinery/vending/sale/trader = 80,
+		/obj/item/weapon/storage/toolbox/paint = 40,
 		)
 	slogan_languages = list(LANGUAGE_VOX)
 
@@ -3401,6 +3407,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/sale/trader/link_to_account()
 	reconnect_database()
 	linked_account = trader_account
+	account_first_linked = TRUE
 
 /obj/machinery/vending/sale/trader/wrenchAnchor(var/mob/user, var/obj/item/I)
 	var/obj/item/weapon/card/C = user.get_card()
@@ -3898,12 +3905,13 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 
 /obj/machinery/vending/lotto/throw_item()
 	var/mob/living/target = locate() in view(7, src)
-
 	if (!target)
 		return 0
-	for(var/i = 0 to rand(3,12))
-		var/obj/I = new /obj/item/weapon/paper(get_turf(src))
-		I.throw_at(target, 16, 3)
+	var/obj/I = new /obj/item/toy/lotto_ticket/unprinted(get_turf(src))
+	I.throw_at(target, 16, 3)
+	src.visible_message("<span class='danger'>[src] launches [I.name] at [target.name]!</span>")
+	src.updateUsrDialog()
+	return 1
 
 /obj/machinery/vending/syndicatesuits
 	name = "\improper Syndicate Suits"

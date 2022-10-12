@@ -237,6 +237,16 @@
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 16)
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket
+	name = "cricket meat"
+	desc = "Tastes a bit like nuts, very earthy. Not much of a serving, though."
+	icon_state = "roachmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/New()
+	..()
+	reagents.add_reagent(FLOUR, rand(4,10))
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
 	desc = "Woah! You were eating THIS all along?"
@@ -473,4 +483,11 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		reagents.add_reagent(ROACHSHELL,1) //Sometimes a roach gets in. No nutritional value
 	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/scraps
+	name = "meat scraps"
+	desc = "Some leftover scraps of meat, probably trimmed off a bigger slab."
+	icon_state = "meat_scraps"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/scraps/New()
+	..()
+	reagents.remove_reagent(NUTRIMENT, 1) // A bit less nutriment

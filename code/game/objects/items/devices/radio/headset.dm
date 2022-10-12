@@ -35,7 +35,7 @@
 /obj/item/device/radio/headset/talk_into(datum/speech/speech_orig, channel=null)
 	if(!broadcasting)
 		return
-	if(usr.client && usr.client.prefs.headset_sound)
+	if(usr?.client?.prefs.headset_sound)
 		playsound(usr, 'sound/effects/radio_chatter.ogg', 100, 1, vary = 0)
 	return ..()
 

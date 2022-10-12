@@ -419,9 +419,6 @@
 #define LOWEST_DENOMINATION 1
 #define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
 
-#define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE, FALSE)
-//Starts 0 credits, not sourced from any database, earns 0 credits, hidden
-
 // strips all newlines from a string, replacing them with null
 #define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
 
@@ -429,3 +426,5 @@
 #define isapperanceeditable(A) (isatom(A))
 
 #define OMNI_LINK(A,B) isliving(A) && A:omnitool_connect(B)
+
+#define is_real_champion(A) ismob(A) && A.is_wearing_item(/obj/item/weapon/storage/belt/champion) && A.is_wearing_item(/obj/item/clothing/mask/luchador)

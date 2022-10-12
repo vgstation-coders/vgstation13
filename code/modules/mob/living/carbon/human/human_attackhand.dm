@@ -290,7 +290,7 @@
 				if (punch_zone == TARGET_EYES || punch_zone == TARGET_MOUTH)
 					punch_zone = LIMB_HEAD
 				var/datum/organ/external/limb = organs_by_name[punch_zone]
-				if(limb.status & ORGAN_BLEEDING)
+				if(limb.status & ORGAN_BLEEDING && istype(M))
 					M.bloody_hands(src,1)
 				return punch_damage
 			else // dodged

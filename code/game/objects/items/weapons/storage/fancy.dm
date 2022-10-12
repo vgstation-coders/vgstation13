@@ -234,7 +234,6 @@
 	storage_slots = 21 //3 rows of 7 items
 	max_combined_w_class = 21
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_PAPER
 	flags = 0
 	var/matchtype = /obj/item/weapon/match
 	can_only_hold = list("/obj/item/weapon/match", "/obj/item/weapon/p_folded/note_small", "/obj/item/weapon/coin", \

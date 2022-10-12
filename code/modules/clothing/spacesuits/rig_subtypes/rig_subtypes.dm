@@ -646,7 +646,6 @@
 /obj/item/clothing/suit/space/ghettorig/hobo
 	name = "tattered space-proof suit"
 	desc = "After years of wear and tear this is somehow still 'space-proof'."
-	slowdown = 0
 
 //RoR survivor Rig
 /obj/item/clothing/suit/space/rig/ror

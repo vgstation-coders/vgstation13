@@ -80,15 +80,14 @@
 
 	if (mind)
 		mind.name = newname
+		if(mind.initial_account)
+			mind.initial_account.owner_name = newname
 
 	if (dna)
 		dna.real_name = real_name
 
 	if (oldname)
-		/*
-		 * Update the datacore records!
-		 * This is going to be a bit costly.
-		 */
+		//Update the datacore records and centcomm database
 		for (var/list/L in list(data_core.general, data_core.medical, data_core.security,data_core.locked))
 			if (L)
 				var/datum/data/record/R = find_record("name", oldname, L)
@@ -258,10 +257,12 @@
 	var/list/sortedplayers = list()
 	var/list/sortedmobs = list()
 	for(var/mob/M in mob_list) //divide every mob into either players (has a mind) or non-players (no mind). braindead/catatonic/etc. mobs included in players
-		if(!M.mind)
-			sortedmobs |= M
+		if(isnull(M))
 			continue
-		sortedplayers |= M
+		if(M.mind || istype(M, /mob/camera))
+			sortedplayers |= M
+			continue
+		sortedmobs |= M
 	sortNames(sortedplayers) //sort both lists in preparation for what we'll do below
 	sortNames(sortedmobs)
 	for(var/mob/living/silicon/ai/M in sortedplayers)
@@ -417,13 +418,13 @@
 // returns the turf located at the map edge in the specified direction relative to A
 // used for mass driver
 /proc/get_edge_target_turf(var/atom/A, var/direction)
-	var/turf/target = locate(A.x, A.y, A.z)
-	if(!A || !target)
+	if(!A)
 		return 0
-		//since NORTHEAST == NORTH & EAST, etc, doing it this way allows for diagonal mass drivers in the future
-		//and isn't really any more complicated
+	var/turf/target = locate(A.x, A.y, A.z)
+	//since NORTHEAST == NORTH & EAST, etc, doing it this way allows for diagonal mass drivers in the future
+	//and isn't really any more complicated
 
-		// Note diagonal directions won't usually be accurate
+	// Note diagonal directions won't usually be accurate
 	if(direction & NORTH)
 		target = locate(target.x, world.maxy, target.z)
 	if(direction & SOUTH)

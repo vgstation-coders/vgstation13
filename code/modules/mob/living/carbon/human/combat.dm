@@ -152,6 +152,8 @@
 		damage += G.get_damage_added() //Increase damage by the gloves' damage modifier
 
 		G.on_punch(src, victim)
+	if(is_real_champion(src)) //Wearing championship belt and luchador mask
+		damage *= 2
 
 	return damage
 

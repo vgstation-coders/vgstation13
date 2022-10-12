@@ -635,6 +635,8 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/cancelAlarm(var/class, area/A as area, obj/origin)
 	var/list/L = alarms[class]
 	var/cleared = FALSE
+	if(!A)
+		return
 	for (var/I in L)
 		if(I == A.name)
 			var/list/alarm = L[I]
