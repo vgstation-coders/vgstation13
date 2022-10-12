@@ -231,7 +231,16 @@ By design, d1 is the smallest direction and d2 is the highest
 			if(prob(5) && N.can_chew_wires)
 				var/turf/T = src.loc
 				cut(N, T)
-
+		else if(istype(M, /mob/living/simple_animal/hostile/grue))
+			var/mob/living/simple_animal/hostile/grue/G = M
+			G.delayNextAttack(10)
+			G.visible_message("<span class='danger'>[G] [G.attacktext] \the [src]!</span>", "<span class='userdanger'>You [shift_verb_tense(G.attacktext)] \the [src]!</span>")
+			shock(G, 50)
+			var/thisdmg = rand(G.melee_damage_lower, G.melee_damage_upper)
+			if((thisdmg >= 15) || prob(5))
+				var/turf/T = src.loc
+				cut(G, T)
+				
 /obj/structure/cable/bite_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] bites \the [src]!</span>", "<span class='userdanger'>You bite \the [src]!</span></span>")
 
