@@ -329,7 +329,6 @@ var/global/list/alcatraz_stuff = list(
 	name = "warden's spare secway key"
 	desc = "It has a tag that reads:"
 	var/home_map
-	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/key/security/spare/New()
 	..()
@@ -348,7 +347,6 @@ var/global/list/alcatraz_stuff = list(
 	icon_state = "telebaton_1"
 	item_state = "telebaton_1"
 	w_class = W_CLASS_SMALL
-	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/depocket_wand/attack(mob/living/M, mob/living/user)
 
@@ -450,7 +448,7 @@ var/global/list/alcatraz_stuff = list(
 										"Try again when you can relate to the intoxicating taste of blood.",
 										"What is a man? A miserable little pile of soft drinks.",
 										"You mortals all look underage to me. Pray tell, can you even manage a bottle?",
-										"Bah. You mock Le Confrérie des Chevaliers du Tastevin with your plebian visage.",
+										"Bah. You mock Le Confrï¿½rie des Chevaliers du Tastevin with your plebian visage.",
 										"I will not associate with any less than an iron liver.",
 										"You dare ask my service when you cannot even hold your liquor?")
 			to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")

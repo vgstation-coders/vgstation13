@@ -3,7 +3,6 @@
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "labeler1"
 	item_state = "flight"
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/list/modes = list(
 		"grey",
 		"red",

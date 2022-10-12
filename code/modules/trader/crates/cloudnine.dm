@@ -162,7 +162,6 @@ var/list/decelerators = list()
 /obj/item/weapon/am_containment/decelerator
 	name = "antimatter decelerator"
 	desc = "Acts as a 'filter' to trap antiparticles emitted by radiation. In function, it can be used to power an antimatter engine and refuel itself with nearby radiation."
-	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/am_containment/decelerator/New()
 	..()

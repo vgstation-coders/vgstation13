@@ -9,7 +9,6 @@
 	var/datum/organ/external/part
 	var/allow_reagents = FALSE
 	var/malfunction = NONE
-	autoignition_temperature = AUTOIGNITION_METAL
 
 // return FALSE if the implant fails. In this case the implant is NOT consumed.
 // If you wish to consume the implant, delete it inside `implanted()` instead.

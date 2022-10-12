@@ -8,7 +8,6 @@
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/magboots
 	w_class = W_CLASS_LARGE
-	autoignition_temperature = AUTOIGNITION_METAL
 
 	var/stomp_attack_power = 45
 	var/stomp_delay = 3 SECONDS
