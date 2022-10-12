@@ -30,6 +30,8 @@
 					return
 	if(iswelder(I))
 		if(cut_open || pried_open)
+			if(!do_after(3 SECONDS))
+				return
 			if(pried_open)
 				to_chat(user, "<span class='notice'>You bend \the [src] back into place and weld it shut.</span>")
 			else
@@ -103,7 +105,7 @@
 
 /obj/machinery/door/poddoor/shutters/examine(mob/user)
 	..()
-	if(cut_open)
+	if(cut_open && !pried_open)
 		to_chat(user, "<span class='info'>A hole has been cut into \the [src]. It still needs to be pried open with a Halligan bar.</span>")
 		return
 	else if(pried_open)
