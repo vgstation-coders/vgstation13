@@ -359,6 +359,8 @@
 		return insectoid_chitter_sound
 	if(H.gender == FEMALE)
 		return female_scream_sound
+	if(H.species.name == "Tajaran")
+		return tajaran_scream_sound
 	return male_scream_sound
 
 /datum/emote/living/carbon/sound/shriek
