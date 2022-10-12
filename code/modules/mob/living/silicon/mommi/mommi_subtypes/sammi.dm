@@ -18,6 +18,7 @@
 	var/mob/ghost_body
 	var/cellhold = null
 	var/unsafe = 0
+	var/searching = 0
 	var/datum/recruiter/recruiter = null
 
 /mob/living/silicon/robot/mommi/sammi/proc/check_law(var/check)
@@ -251,6 +252,7 @@
 		if(response == "Yes")
 			if(!(src.key))
 				transfer_personality(O)
+				searching = 0
 				reset_ping()
 			else if(src.key)
 				to_chat(src, "<span class='notice'>Someone has already began controlling this SAMMI. Try another! </span>")
@@ -258,6 +260,7 @@
 
 /mob/living/silicon/robot/mommi/sammi/proc/ping()
 	if(!recruiter)
+		searching = 1
 		recruiter = new(src)
 		recruiter.display_name = "sammi"
 		recruiter.role = ROLE_POSIBRAIN // keep it same for these
@@ -309,6 +312,9 @@
 	updateicon()
 
 /mob/living/silicon/robot/mommi/sammi/proc/reset_ping() //We give the players sixty seconds to decide, then reset the timer.
+	if(!searching)
+		return
+	searching = 0
 	if(src.key)
 		return
 
