@@ -1026,11 +1026,11 @@
 	..()
 	reagents.add_reagent(ENGICOFFEE, 50)
 
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard
 	name = "Supermatter Sea Salt Soda "
 	desc = "Mmmmm Blurple"
 	icon_state = "engicoffee_shard"
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee/New()
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard/New()
 	..()
 	reagents.add_reagent(ENGICOFFEE, 50)
 
