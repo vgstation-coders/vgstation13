@@ -1185,6 +1185,7 @@ FIRE ALARM
 	var/buildstage = 2 // 2 = complete, 1 = no wires,  0 = circuit gone
 	var/shelter = 1
 	var/alarm = 0
+	var/emagged = FALSE
 
 /obj/machinery/firealarm/empty
 	shelter = 0
@@ -1449,7 +1450,10 @@ FIRE ALARM
 	this_area.firealert()
 	update_icon()
 	alarm = 1
-	playsound(src, 'sound/misc/weather_warning.ogg', 75, 0)
+	if(emagged)
+		playsound(src, 'sound/misc/imperial_alert.ogg', 75, 0)
+	else
+		playsound(src, 'sound/misc/fire_alarm.ogg', 75, 0)
 
 var/global/list/firealarms = list() //shrug
 
@@ -1489,6 +1493,9 @@ var/global/list/firealarms = list() //shrug
 		update_icon()
 		visible_message("<span class='notice'>\The shelter detaches from \the [src]!</span>")
 
+/obj/machinery/firealarm/emag_act()
+	emagged = TRUE
+	..()
 /obj/machinery/partyalarm
 	name = "\improper PARTY BUTTON"
 	desc = "Cuban Pete is in the house!"
