@@ -253,7 +253,6 @@
 			if(!(src.key))
 				transfer_personality(O)
 				searching = 0
-				reset_ping()
 			else if(src.key)
 				to_chat(src, "<span class='notice'>Someone has already began controlling this SAMMI. Try another! </span>")
 
