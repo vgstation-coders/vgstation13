@@ -210,7 +210,7 @@
 					cell = null
 					updateicon()
 					return
-		else if(!opened)
+		else if(!opened && 1key)
 			to_chat(user, "<span class='notice'>You carefully locate the manual activation switch and start \the [src]'s boot process.</span>")
 			ping()
 
