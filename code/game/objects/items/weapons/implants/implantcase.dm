@@ -7,7 +7,6 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/obj/item/weapon/implant/imp
 
 /obj/item/weapon/implantcase/proc/update()

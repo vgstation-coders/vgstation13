@@ -7,7 +7,6 @@
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=3"
 	amount = 10
 	surgerysound = 'sound/items/bonegel.ogg'
-	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/stack/nanopaste/attack(mob/living/M as mob, mob/user as mob)
 	if(!istype(M) || !istype(user))

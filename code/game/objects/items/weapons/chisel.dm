@@ -11,7 +11,6 @@
 	starting_materials = list(MAT_IRON = 120)
 
 	flags = FPRINT
-	autoignition_temperature = AUTOIGNITION_METAL
 	siemens_coefficient = 1
 
 	var/use_name

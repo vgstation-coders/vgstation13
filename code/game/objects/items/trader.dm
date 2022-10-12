@@ -67,7 +67,6 @@
 	siemens_coefficient = 0
 	w_class = W_CLASS_SMALL
 	var/working = FALSE
-	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/mech_expansion_kit/preattack(atom/target, mob/user , proximity)
 	if(!proximity)

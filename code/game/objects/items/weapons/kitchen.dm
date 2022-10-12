@@ -29,7 +29,6 @@
 	shrapnel_amount = 1
 	shrapnel_size = 2
 	shrapnel_type = /obj/item/projectile/bullet/shrapnel
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/loaded_food = ""
 	var/image/food_overlay
 	var/food_type
@@ -516,7 +515,6 @@
 	starting_materials = list(MAT_IRON = 3000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/list/carrying = list() // List of things on the tray. - Doohl
 	var/max_carry = 10 // w_class = W_CLASS_TINY -- takes up 1
 					   // w_class = W_CLASS_SMALL -- takes up 3

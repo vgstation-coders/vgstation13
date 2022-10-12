@@ -7,7 +7,6 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
-	autoignition_temperature = AUTOIGNITION_METAL
 
 	pressure_resistance = ONE_ATMOSPHERE*5
 

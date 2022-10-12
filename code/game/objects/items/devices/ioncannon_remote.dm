@@ -9,7 +9,6 @@
 	flags = FPRINT
 	var/cooldown = 0
 	mech_flags = MECH_SCAN_FAIL
-	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/device/loic_remote/New()
 	processing_objects.Add(src)

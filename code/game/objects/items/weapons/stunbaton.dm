@@ -11,7 +11,6 @@
 	w_class = W_CLASS_MEDIUM
 	origin_tech = Tc_COMBAT + "=2"
 	attack_verb = list("beats")
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/stunforce = 10
 	var/status = 0
 	var/obj/item/weapon/cell/bcell = null

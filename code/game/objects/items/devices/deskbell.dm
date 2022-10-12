@@ -17,7 +17,6 @@
 	starting_materials = list(MAT_IRON = 3750)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	anchored = 1
 	origin_tech = Tc_MATERIALS + "=1"
 

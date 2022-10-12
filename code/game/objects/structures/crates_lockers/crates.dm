@@ -11,7 +11,6 @@
 	req_access = null
 	opened = 0
 	flags = FPRINT
-	autoignition_temperature = AUTOIGNITION_METAL
 //	mouse_drag_pointer = MOUSE_ACTIVE_POINTER	//???
 	var/rigged = 0
 	var/sound_effect_open = 'sound/machines/click.ogg'

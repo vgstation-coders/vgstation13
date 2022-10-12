@@ -23,7 +23,6 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	mat_type = MAT_IRON
 	perunit = CC_PER_SHEET_METAL
 
