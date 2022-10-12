@@ -131,11 +131,9 @@
 	if(maxHealth < 60)
 		melee_damage_lower = 1
 		melee_damage_upper = 5
-		environment_smash_flags &= ~OPEN_DOOR_STRONG
 	else
 		melee_damage_lower = 5
 		melee_damage_upper = 10
-		environment_smash_flags |= OPEN_DOOR_STRONG
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/Life() // Copied from hammy wheel running code
 	if(timestopped)
