@@ -114,24 +114,25 @@
 	message_admins("Hell was created in [time2make/10] seconds, as it did not exist. (located on z-level [world.maxz])")
 	time2make = world.time
 
-	var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE bantype = PERMABAN AND isnull(unbanned)")
-	if(!select_query.Execute())
-		qdel(select_query)
-		message_admins("Banned player search error on populating hell: [select_query.ErrorMsg()]")
-		log_sql("Error: [select_query.ErrorMsg()]")
-		return
+	if(config.bans_shown_in_hell_limit)
+		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE bantype = PERMABAN AND isnull(unbanned)")
+		if(!select_query.Execute())
+			qdel(select_query)
+			message_admins("Banned player search error on populating hell: [select_query.ErrorMsg()]")
+			log_sql("Error: [select_query.ErrorMsg()]")
+			return
 
-	var/bancount = 0
-	while(select_query.NextRow() && config.bans_shown_in_hell_limit && bancount <= config.bans_shown_in_hell_limit)
-		var/ckey = select_query.item[1]
-		var/reason = select_query.item[2]
-		var/mob/living/carbon/human/H = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
-		H.quick_copy_prefs()
-		H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
-		bancount++
-	time2make = world.time - time2make
-	log_admin("Hell was populated successfully with [bancount] banned players out of a max of [config.bans_shown_in_hell_limit] in [time2make/10] seconds.")
-	message_admins("Hell was populated successfully with [bancount] banned players out of a max of [config.bans_shown_in_hell_limit] in [time2make/10] seconds.")
+		var/bancount = 0
+		while(select_query.NextRow() && bancount <= config.bans_shown_in_hell_limit)
+			var/ckey = select_query.item[1]
+			var/reason = select_query.item[2]
+			var/mob/living/carbon/human/H = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
+			H.quick_copy_prefs()
+			H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
+			bancount++
+		time2make = world.time - time2make
+		log_admin("Hell was populated successfully with [bancount] banned players out of a max of [config.bans_shown_in_hell_limit] in [time2make/10] seconds.")
+		message_admins("Hell was populated successfully with [bancount] banned players out of a max of [config.bans_shown_in_hell_limit] in [time2make/10] seconds.")
 
 /mob/living/carbon/human/proc/quick_copy_prefs()
 	var/list/preference_list = new
