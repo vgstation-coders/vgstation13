@@ -74,7 +74,7 @@
 	items_to_collect[/obj/item/weapon/reagent_containers/food/snacks/cracker] = SURVIVAL_BOX //poly gets part of the divvy, savvy?
 	items_to_collect[/obj/item/device/analyzer/scope] = SURVIVAL_BOX
 	items_to_collect[/obj/item/device/multitool/omnitool] = SURVIVAL_BOX
-	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard] = SURVIVAL_BOX
 	return ..()
 
 // -- Station engineer
@@ -160,7 +160,7 @@
 
 /datum/outfit/engineer/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/device/multitool/omnitool] = SURVIVAL_BOX
-	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard] = SURVIVAL_BOX
 	return ..()
 
 // -- Atmos tech

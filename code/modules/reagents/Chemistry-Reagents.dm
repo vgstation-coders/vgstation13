@@ -8812,7 +8812,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = ENGICOFFEE
 	description = "This Plasma Infused Brew, will fix what ails you."
 	mug_icon_state = "engicoffeee"
-	mug_name = "\improper Wake-Up Call"
+	mug_name = "\improper Energizer"
 	mug_desc = "Taste that Triple A Goodness."
 
 /datum/reagent/drink/coffee/engicoffee/on_mob_life(var/mob/living/M)

@@ -1026,6 +1026,14 @@
 	..()
 	reagents.add_reagent(ENGICOFFEE, 50)
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee
+	name = "Supermatter Sea Salt Soda "
+	desc = "Mmmmm Blurple"
+	icon_state = "engicoffee_shard"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee/New()
+	..()
+	reagents.add_reagent(ENGICOFFEE, 50)
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white
 	name = "Picomed: White edition"
 	desc = "Good for the body and good for the bones."
