@@ -229,7 +229,7 @@
 		update_icons()
 		
 
-/mob/proc/put_in_hand_check(var/obj/item/W, index)
+/mob/living/simple_animal/hologram/advanced/put_in_hand_check(var/obj/item/W, index)
 	if(lying && !W.laying_pickup) //&& !(W.flags & ABSTRACT))
 		return 0
 	if(!isitem(W))
