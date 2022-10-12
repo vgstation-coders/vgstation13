@@ -1218,7 +1218,7 @@ About the new airlock wires panel:
 		return
 	if(istype(I, /obj/item/tool/crowbar/halligan))
 		var/breaktime = 10 SECONDS
-		if(src.arePowerSystemsOn())
+		if(operating)
 			if(locked && !lifted)
 				to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
 				playsound(src, 'sound/effects/rustle-metal.ogg', 50, 1)
