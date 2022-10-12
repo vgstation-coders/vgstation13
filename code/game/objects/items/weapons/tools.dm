@@ -753,6 +753,11 @@
 		return 1
 	return 0
 
+/obj/item/tool/crowbar/halligan/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+	. = do_after_default_checks(arglist(args))
+	if(.)
+		playsound(src,"sound/items/metal_impact.ogg",50,1)
+
 /obj/item/tool/irons
 	name = "set of irons"
 	desc = "Fireaxe and Halligan bar used for forcible entry."
