@@ -289,11 +289,15 @@ var/global/ingredientLimit = 10
 		F.ingredients += I
 		F.updateName()
 		F.overlays += F.generateFilling(I)
+		F.luckiness += I.luckiness
+		I.luckiness = null
 	else if (istype(new_food, /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable))
 		var/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/F = new_food
 		F.ingredients += I
 		F.updateName()
 		F.overlays += F.generateFilling(I)
+		F.luckiness += I.luckiness
+		I.luckiness = null
 	src.ingredient = null
 	return new_food
 
@@ -396,6 +400,11 @@ var/global/ingredientLimit = 10
 			H.stored_mob.death()
 
 			qdel(H.stored_mob)
+
+	//Luck
+	if(isitem(src.ingredient))
+		var/obj/item/itemIngredient = src.ingredient
+		C.luckiness += itemIngredient.luckiness
 
 	qdel(src.ingredient)
 	src.ingredient = null
@@ -582,6 +591,11 @@ var/global/ingredientLimit = 10
 					)
 	if(src.ingredient.inhand_states)
 		D.inhand_states = src.ingredient.inhand_states
+
+	//Luck
+	if(isitem(src.ingredient))
+		var/obj/item/itemIngredient = src.ingredient
+		D.luckiness += itemIngredient.luckiness
 
 	src.ingredient.forceMove(src.loc) // returns the item instead of destroying it, as the confectionator creates a sugar copy
 	src.ingredient = null

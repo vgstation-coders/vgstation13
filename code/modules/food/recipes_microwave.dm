@@ -1151,6 +1151,16 @@
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie
 
+/datum/recipe/cloverpie
+	reagents = list(MILK = 5, SUGARS = 5, FLOUR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cloverpie
+
 // Kebabs //////////////////////////////////////////////////////
 
 /datum/recipe/syntikabob
@@ -2053,6 +2063,14 @@
 				/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
 				/obj/item/weapon/reagent_containers/food/snacks/meat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chiliconcarne
+
+/datum/recipe/cloverconcarne
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+				/obj/item/weapon/reagent_containers/food/snacks/meat,
+				/obj/item/weapon/reagent_containers/food/snacks/butter)
+	result = /obj/item/weapon/reagent_containers/food/snacks/cloverconcarne
 
 /datum/recipe/chilaquiles
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
@@ -3436,3 +3454,11 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/dionaroast
+
+/datum/recipe/tontesdepelouse
+	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/grass,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse
