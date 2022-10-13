@@ -334,11 +334,12 @@
 		return
 	if(H.mind.role_alt_title == "Brig Medic") //Briggies get an implant
 		implant_types += /obj/item/weapon/implant/loyalty
+	else
+		H.put_in_hands(new /obj/item/device/pcmc/paramed)
 
 /datum/outfit/paramedic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
-	items_to_collect[/obj/item/tool/FixOVein/clot] = GRASP_RIGHT_HAND
-	return ..()
+	items_to_collect[/obj/item/tool/FixOVein/clot] = SURVIVAL_BOX
 
 // -- Orderly
 /datum/outfit/orderly
