@@ -1258,15 +1258,13 @@ FIRE ALARM
 		attackby(AM,user)
 
 /obj/machinery/firealarm/attackby(obj/item/W as obj, mob/user as mob)
+	..()
 	src.add_fingerprint(user)
 
 	if (istype(W,/obj/item/inflatable/shelter))
 		qdel(W)
 		shelter = TRUE
 		update_icon()
-		return
-	if(istype(W,/obj/item/weapon/card/emag))
-		emag_act(user)
 		return
 	if (W.is_screwdriver(user) && buildstage == 2)
 		wiresexposed = !wiresexposed
