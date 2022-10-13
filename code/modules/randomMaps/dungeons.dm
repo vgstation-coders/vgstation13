@@ -45,7 +45,7 @@ var/turf/dungeon_area = null
 
 #define MAXIMUM_DUNGEON_WIDTH 80
 
-/proc/load_dungeon(dungeon_type, var/rotate = 0, var/override_can_rotate = FALSE)
+/proc/load_dungeon(dungeon_type, var/rotate = 0, var/override_can_rotate = FALSE, var/clipmin_x=0, var/clipmax_x=INFINITY, var/clipmin_y=0, var/clipmax_y=INFINITY, var/clipmin_z=0, var/clipmax_z=INFINITY)
 	if(!dungeon_area)
 		return 0
 
@@ -96,6 +96,6 @@ var/turf/dungeon_area = null
 	existing_dungeons.Add(ME) //Add it now, to prevent issues occuring when two dungeons are loaded at once
 
 	//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
-	var/result = ME.load(spawn_x - 1, spawn_y - 1, dungeon_area.z, rotate, FALSE, override_can_rotate)
+	var/result = ME.load(spawn_x - 1, spawn_y - 1, dungeon_area.z, rotate, FALSE, override_can_rotate, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
 
 	return result

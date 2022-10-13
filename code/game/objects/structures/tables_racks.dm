@@ -413,6 +413,11 @@
 			destroy()
 		return
 
+	if(istype(W, /obj/item/weapon/cookiesynth))
+		var/obj/item/weapon/cookiesynth/C = W
+		C.synthesize()
+		return
+
 	if(user.drop_item(W, src.loc))
 		if(W.loc == src.loc && params)
 			W.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)

@@ -5,7 +5,6 @@
 	icon_state = "densecrate"
 	density = 1
 	flags = FPRINT
-	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/structure/largecrate/attack_hand(mob/user as mob)
 	to_chat(user, "<span class='notice'>You need a crowbar to pry this open!</span>")

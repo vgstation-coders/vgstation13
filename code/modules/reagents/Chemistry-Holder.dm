@@ -476,9 +476,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			if(islist(B))
 				var/list/L = B
 				for(var/D in L)
-					if(!preserved_data)
-						preserved_data = get_data(D)
-					remove_reagent(D, (multiplier * C.required_reagents[B]), safety = 1)
+					if(has_reagent(D, C.required_reagents[B]))
+						if(!preserved_data)
+							preserved_data = get_data(D)
+						remove_reagent(D, (multiplier * C.required_reagents[B]), safety = 1)
+						break
 			else
 				if(!preserved_data)
 					preserved_data = get_data(B)

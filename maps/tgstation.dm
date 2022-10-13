@@ -7,6 +7,7 @@
 	nameShort = "box"
 	nameLong = "Box Station"
 	map_dir = "boxstation"
+	file_dir = "tgstation"
 	tDomeX = 128
 	tDomeY = 58
 	tDomeZ = 2

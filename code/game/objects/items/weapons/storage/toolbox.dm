@@ -16,7 +16,6 @@
 	w_type = RECYK_METAL
 	w_class = W_CLASS_LARGE
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_COMBAT + "=1"
 	attack_verb = list("robusts", "batters", "staves in")
 	fits_max_w_class = W_CLASS_MEDIUM

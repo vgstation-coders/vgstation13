@@ -17,7 +17,6 @@
 	starting_materials = list(MAT_IRON = 90) // TODO: Check against autolathe.
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	attack_verb = list("slams", "whacks", "bashes", "thunks", "batters", "bludgeons", "thrashes")
 	var/max_water = 50
 	var/last_use = 1.0

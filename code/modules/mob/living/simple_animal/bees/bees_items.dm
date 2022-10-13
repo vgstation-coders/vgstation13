@@ -197,6 +197,7 @@
 	icon_state = "apiary_item"
 	item_state = "giftbag"
 	w_class = W_CLASS_HUGE
+	var/buildtype = /obj/machinery/apiary
 
 
 /obj/item/weapon/reagent_containers/food/snacks/beezeez

@@ -5,7 +5,6 @@
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/spacesuits.dmi', "right_hand" = 'icons/mob/in-hand/right/spacesuits.dmi')
 	w_class = W_CLASS_LARGE
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/buildstate = RIG_EMPTY
 	var/obj/item/weapon/cell/cell = null
 	var/obj/item/clothing/suit/space/rig/result = null //changes based on which kit you use

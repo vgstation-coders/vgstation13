@@ -11,7 +11,6 @@
 	w_class = W_CLASS_HUGE
 	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 2500)
 	w_type = RECYK_ELECTRONIC
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/code = 2
 	var/datum/radio_frequency/radio_connection
 
