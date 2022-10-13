@@ -40,9 +40,7 @@
 		apply_damage(LEGS_FIRE_DAMAGE_MULTIPLIER*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
 		apply_damage(ARMS_FIRE_DAMAGE_MULTIPLIER*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
 		apply_damage(ARMS_FIRE_DAMAGE_MULTIPLIER*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
-		adjustHalLoss(1)
 
-		if(prob(20))
-			src.audible_cough()
-		if(prob(10))
-			src.audible_scream()
+		if(head_exposure+chest_exposure+groin_exposure+legs_exposure+arms_exposure)
+			if(prob(10))
+				src.audible_scream()

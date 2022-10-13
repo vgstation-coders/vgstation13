@@ -492,8 +492,8 @@ Attach to transfer valve and open. BOOM.
 	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
 	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
 	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
-	adjustHalLoss(10) //now with extra agony
 
-	src.dizziness = 5
-	src.confused =  5
-	src.audible_scream()
+	if(head_exposure+chest_exposure+groin_exposure+legs_exposure+arms_exposure)
+		src.dizziness = 5
+		src.confused =  5
+		src.audible_scream()
