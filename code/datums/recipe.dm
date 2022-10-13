@@ -133,11 +133,12 @@
 				O.reagents.del_reagent(r_r)
 			//Transfer any reagents found in the object, to the resulting object
 			O.reagents.trans_to(result_obj, O.reagents.total_volume)
-		//Transfer any luckiness from the ingredients, to the resulting object
-		var/obj/item/I = O
-		var/obj/item/result_item = result_obj
-		if(I.luckiness)
-			result_item.luckiness += I.luckiness
+		//Transfer any luckiness from the ingredients, to the resulting item
+		if(isitem(result_obj) && isitem(O))
+			var/obj/item/I = O
+			var/obj/item/result_item = result_obj
+			if(I.luckiness)
+				result_item.luckiness += I.luckiness
 		qdel(O)
 	container.reagents.clear_reagents() //Clear all the reagents we haven't transfered, for instance if we need to cook in water
 	score.meals++
