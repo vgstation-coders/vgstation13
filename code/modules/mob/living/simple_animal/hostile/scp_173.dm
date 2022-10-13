@@ -24,6 +24,7 @@
 	var/hibernate = 0 //Disables SCP until toggled back to 0
 	var/scare_played = 0 //Did we rape everyone's ears yet ?
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent //Graciously stolen from spider code
+	var/turf/target_turf
 
 	blooded = FALSE
 
@@ -34,6 +35,9 @@
 /mob/living/simple_animal/scp_173/Life()
 	if(timestopped)
 		return 0 //Under effects of time magick
+
+	if(mind || client || key || ckey) // not if player controlled
+		return
 
 	//If we are hibernating, just don't do anything
 	if(hibernate)
@@ -105,19 +109,17 @@
 		return 0 //Try again when we get a chance
 	return 1 //Success, let's move
 
-/mob/living/simple_animal/scp_173/proc/handle_target(var/mob/living/carbon/human/target)
+/mob/living/simple_animal/scp_173/proc/handle_target(var/atom/target)
 
-	if(!target) //Sanity
+	if(!istype(target)) //Sanity
 		return
 
 	if(!check_los())
 		return
 
-	var/turf/target_turf
-
 	//Send the warning that SPC is homing in
 	target_turf = get_turf(target)
-	if(!scare_played) //Let's minimize the spam
+	if(!scare_played && ishuman(target)) //Let's minimize the spam
 		playsound(src, pick(scare_sound), 100, 1, -1)
 		scare_played = 1
 		spawn(50)
@@ -158,6 +160,7 @@
 			dir = get_dir(src, target)
 			next_turf = get_step(src, get_dir(next_turf,target))
 			num_turfs--
+		target_turf = null
 
 /mob/living/simple_animal/scp_173/proc/handle_idle()
 
@@ -221,17 +224,19 @@
 		if(entry_vent.network && entry_vent.network.normal_members.len)
 			var/list/vents = list()
 			for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
-				vents.Add(temp_vent)
+				if(!temp_vent.welded)
+					vents.Add(temp_vent)
 			if(!vents.len)
 				entry_vent = null
 				return
 			if(!check_los()) //Someone started looking at us
+				entry_vent = null
 				return
 			var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
 			spawn()
 				visible_message("<span class='danger'>\The [src] suddenly disappears into the vent!</span>")
-				loc = exit_vent
 				var/travel_time = round(get_dist(loc, exit_vent.loc)/2)
+				loc = entry_vent
 				spawn(travel_time)
 					if(!exit_vent || exit_vent.welded)
 						forceMove(get_turf(entry_vent))
@@ -247,7 +252,6 @@
 
 //This performs an immediate neck snap check, meant to avoid people cheesing SCP-173 by just running faster than Life() refresh
 /mob/living/simple_animal/scp_173/proc/check_snap_neck()
-
 	//See if we're able to strangle anyone
 	for(var/mob/living/carbon/human/M in get_turf(src))
 		if(M.stat == CONSCIOUS && check_los())
@@ -296,3 +300,30 @@
 
 //You cannot destroy SCP-173, fool!
 /mob/living/simple_animal/scp_173/ex_act(var/severity)
+
+// player control funstuffs below
+/mob/living/simple_animal/scp_173/movement_tally_multiplier()
+	. = ..()
+	. *= 0.1
+
+/mob/living/simple_animal/scp_173/ClickOn(var/atom/A, var/params)
+	if(check_los())
+		if(Adjacent(A) && is_type_in_list(A,ventcrawl_machinery))
+			handle_ventcrawl(A)
+		else if(A in view(7, src))
+			handle_target(A)
+
+/mob/living/simple_animal/scp_173/Move(NewLoc, Dir, step_x, step_y, glide_size_override)
+	if(check_los() && !target_turf)
+		..()
+
+/mob/living/simple_animal/scp_173/verb/ventcrawl()
+	set name = "Crawl through Vent"
+	set desc = "Enter an air vent and crawl through the pipe system."
+	set category = "Object"
+	var/pipe = start_ventcrawl()
+	if(pipe)
+		handle_ventcrawl(pipe)
+
+/mob/living/simple_animal/scp_173/can_ventcrawl()
+	return TRUE
