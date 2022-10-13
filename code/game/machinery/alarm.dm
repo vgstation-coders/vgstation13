@@ -1185,7 +1185,6 @@ FIRE ALARM
 	var/buildstage = 2 // 2 = complete, 1 = no wires,  0 = circuit gone
 	var/shelter = 1
 	var/alarm = 0
-	var/emagged = FALSE
 
 /obj/machinery/firealarm/empty
 	shelter = 0
@@ -1495,7 +1494,8 @@ var/global/list/firealarms = list() //shrug
 
 /obj/machinery/firealarm/emag_act()
 	emagged = TRUE
-	..()
+	to_chat(user, "You scramble \the [src]'s audio processor.")
+
 /obj/machinery/partyalarm
 	name = "\improper PARTY BUTTON"
 	desc = "Cuban Pete is in the house!"
