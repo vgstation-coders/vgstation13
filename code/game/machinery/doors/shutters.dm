@@ -28,18 +28,30 @@
 				if(!pried_open)
 					cut(H,user)
 					return
-	if(iswelder(I))
-		if(cut_open || pried_open)
-			if(!do_after(3 SECONDS))
-				return
-			if(pried_open)
-				to_chat(user, "<span class='notice'>You bend \the [src] back into place and weld it shut.</span>")
+	if(istype(I,/obj/item/stack/sheet/metal))
+		var/obj/item/stack/sheet/metal/S = I
+		if(pried_open)
+			if(S.use(2))
+				to_chat(user, "<span class='notice'>You begin mending the damage to the [src].</span>")
+				if(do_after(user,src,3 SECONDS))
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+					to_chat(user, "<span class='notice'>You finish mending the damage to the [src].</span>")
+					icon_state = "shutter2"
+					setDensity(TRUE)
+					set_opacity(1)
+					pried_open = FALSE
 			else
-				to_chat(user, "<span class='notice'>You weld \the [src] shut.</span>")
-			playsound(src, 'sound/items/Welder.ogg', 100, 1)
-			close()
-			cut_open = FALSE
-			pried_open = FALSE
+				to_chat(user, "<span class='notice'>You need at least 2 sheets to mend the damage to the [src].</span>")
+	if(iswelder(I))
+		var/obj/item/tool/weldingtool/WT = I
+		if(cut_open || pried_open)
+			if(!pried_open)
+				weld(WT,user)
+				to_chat(user, "<span class='notice'>You finish welding the [src].</span>")
+				icon_state = "shutter1"
+				cut_open = FALSE
+			else
+				to_chat(user, "<span class='notice'>You need to add metal sheets first.</span>")
 
 	if(istype(I,/obj/item/weapon))
 		var/obj/item/weapon/C = I
@@ -58,7 +70,15 @@
 				operating = 0
 
 /obj/machinery/door/poddoor/shutters/open()
-	if(cut_open || pried_open) //it broke
+	if(cut_open && !pried_open)
+		icon_state = "shutter2"
+		setDensity(TRUE)
+		set_opacity(1)
+		return FALSE
+	if(pried_open)
+		icon_state = "shutter3"
+		setDensity(FALSE)
+		set_opacity(0)
 		return FALSE
 	if(!density) //it's already open bro
 		return FALSE
@@ -86,6 +106,16 @@
 	return 1
 
 /obj/machinery/door/poddoor/shutters/close()
+	if(cut_open && !pried_open)
+		icon_state = "shutter2"
+		setDensity(TRUE)
+		set_opacity(1)
+		return FALSE
+	if(pried_open)
+		icon_state = "shutter3"
+		setDensity(FALSE)
+		set_opacity(0)
+		return FALSE
 	if(operating)
 		return
 	operating = 1
@@ -109,7 +139,7 @@
 		to_chat(user, "<span class='info'>A hole has been cut into \the [src]. It still needs to be pried open with a Halligan bar.</span>")
 		return
 	else if(pried_open)
-		to_chat(user, "<span class='info'>A hole has been cut into \the [src]. It can be repaired with a welding tool.</span>")
+		to_chat(user, "<span class='info'>A hole has been cut into \the [src]. It can be repaired with metal and a welding tool.</span>")
 
 /obj/machinery/door/poddoor/shutters/proc/cut(var/obj/item/tool/crowbar/halligan/T, mob/user as mob)
 	if(istype(user,/mob/living/carbon/human))
@@ -139,3 +169,15 @@
 		icon_state = "shutter3"
 		setDensity(FALSE)
 		set_opacity(0)
+
+/obj/machinery/door/poddoor/shutters/proc/weld(var/obj/item/tool/weldingtool/WT, var/mob/user)
+	if(!WT.isOn())
+		return 0
+	to_chat(user, "<span class='notice'>You start to weld the [src]...</span>")
+	WT.playtoolsound(src, 50)
+	WT.eyecheck(user)
+	if(do_after(user, src, 20))
+		if(!WT.isOn())
+			return 0
+		return 1
+	return 0
