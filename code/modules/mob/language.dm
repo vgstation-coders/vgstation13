@@ -81,7 +81,7 @@
 	colour = "clown"
 	native=1
 	key = "!"
-	space_chance = 35
+	space_chance = 45
 	syllables = list("honk", "henk", "nk", "ho", "ha", "hunke", "hunk", "hu", "ba", "nana", "bwo", "bwoink", "ink", "fart", "peel", "banana", "poot", "toot", "cluwn")
 
 /datum/language/tajaran
