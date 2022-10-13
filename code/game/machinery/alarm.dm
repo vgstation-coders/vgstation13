@@ -1180,6 +1180,7 @@ FIRE ALARM
 	idle_power_usage = 2
 	active_power_usage = 6
 	power_channel = ENVIRON
+	machine_flags = EMAGGABLE
 	var/last_process = 0
 	var/wiresexposed = 0
 	var/buildstage = 2 // 2 = complete, 1 = no wires,  0 = circuit gone
@@ -1257,6 +1258,7 @@ FIRE ALARM
 		attackby(AM,user)
 
 /obj/machinery/firealarm/attackby(obj/item/W as obj, mob/user as mob)
+	..()
 	src.add_fingerprint(user)
 
 	if (istype(W,/obj/item/inflatable/shelter))
@@ -1264,7 +1266,6 @@ FIRE ALARM
 		shelter = TRUE
 		update_icon()
 		return
-
 	if (W.is_screwdriver(user) && buildstage == 2)
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
@@ -1449,7 +1450,10 @@ FIRE ALARM
 	this_area.firealert()
 	update_icon()
 	alarm = 1
-	//playsound(src, 'sound/ambience/signal.ogg', 75, 0)
+	if(emagged)
+		playsound(src, 'sound/misc/imperial_alert.ogg', 75, 0, 5)
+	else
+		playsound(src, 'sound/misc/fire_alarm.ogg', 75, 0, 5)
 
 var/global/list/firealarms = list() //shrug
 
@@ -1488,6 +1492,11 @@ var/global/list/firealarms = list() //shrug
 		shelter = FALSE
 		update_icon()
 		visible_message("<span class='notice'>\The shelter detaches from \the [src]!</span>")
+
+/obj/machinery/firealarm/emag_act(mob/user as mob)
+	emagged = TRUE
+	to_chat(user, "You scramble \the [src]'s audio processor.")
+	..()
 
 /obj/machinery/partyalarm
 	name = "\improper PARTY BUTTON"
