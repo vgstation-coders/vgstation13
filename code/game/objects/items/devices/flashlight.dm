@@ -243,14 +243,12 @@
 	if(drawspower)
 		pwrconn = new(src)
 		pwrconn.channel = LIGHT
-		pwrconn.use_power = on ? MACHINE_POWER_USE_ACTIVE : MACHINE_POWER_USE_NONE
 		pwrconn.active_usage = 60 * brightness_on / 5 //power usage scales with brightness
-
-//Though lamps generally are spawned "off", just in case one is spawned "on", add it to processing_objects to ensure it is using power properly.
-/obj/item/device/flashlight/lamp/initialize()
-	..()
-	if(on)
-		update_brightness(playsound = FALSE)
+		if(on)
+			pwrconn.use_power = MACHINE_POWER_USE_ACTIVE
+			processing_objects.Add(src)
+		else
+			pwrconn.use_power = MACHINE_POWER_USE_NONE
 
 /obj/item/device/flashlight/lamp/update_brightness(var/mob/user = null, var/playsound = TRUE)
 	if(drawspower)
