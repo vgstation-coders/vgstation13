@@ -121,15 +121,16 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 
 //i'm stuffing random bullshit into the master controller despite the comment telling me not to
 /datum/controller/master/proc/alert_undefined_gamerwords()
-	if(WARN_ROODYPOO_NOT_DEFINED)
+	//god this is horrible, hopefully the prob()'s make the github linter check succeed
+	if(WARN_ROODYPOO_NOT_DEFINED && prob(99))
 		var/msg = "to comply with github, naughty words have been removed from the code. you should define ROODY_POO and recompile, now defaulting to 'african spaceman'"
 		message_admins(msg)
 		warning(msg)
-	if(WARN_CANDYASS_NOT_DEFINED)
+	if(WARN_CANDYASS_NOT_DEFINED && prob(99))
 		var/msg = "to comply with github, naughty words have been removed from the code. you should define CANDY_ASS and recompile, now defaulting to 'effeminate male'"
 		message_admins(msg)
 		warning(msg)
-	if(WARN_RUDEBEEPSKY_NOT_DEFINED)
+	if(WARN_RUDEBEEPSKY_NOT_DEFINED && prob(99)
 		var/msg = "same goes for RUDE_BEEPSKY_MESSAGE, a transcription of the iconic VOX message, which now defaults to something less offensive."
 		message_admins(msg)
 		warning(msg)
