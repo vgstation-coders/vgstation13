@@ -1568,6 +1568,9 @@
 		sleep(120)
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-2")
 
+		if(luckiness)
+			M.luck_adjust(luckiness, temporary = TRUE)
+
 	if(isturf(hit_atom))
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
 		if(trash)
