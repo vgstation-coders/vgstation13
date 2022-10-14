@@ -85,13 +85,14 @@ var/global/global_cricket_population = 0
 	icon_state = "cricketfarm"
 	var/population = 2
 	var/eggs = 5
-	var/flourmode
+	var/flourmode = TRUE
 
 /obj/item/cricketfarm/New()
 	processing_objects += src
 
 /obj/item/cricketfarm/Destroy()
 	processing_objects -= src
+	..()
 
 /obj/item/cricketfarm/examine(mob/user)
 	..()
