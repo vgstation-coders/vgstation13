@@ -130,7 +130,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		var/msg = "to comply with github, naughty words have been removed from the code. you should define CANDY_ASS and recompile, now defaulting to 'effeminate male'"
 		message_admins(msg)
 		warning(msg)
-	if(WARN_RUDEBEEPSKY_NOT_DEFINED && prob(99)
+	if(WARN_RUDEBEEPSKY_NOT_DEFINED && prob(99))
 		var/msg = "same goes for RUDE_BEEPSKY_MESSAGE, a transcription of the iconic VOX message, which now defaults to something less offensive."
 		message_admins(msg)
 		warning(msg)
