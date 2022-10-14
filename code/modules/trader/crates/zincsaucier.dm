@@ -13,7 +13,7 @@ var/global/list/chef_stuff = list(
 	/obj/item/cricketfarm,
 	/obj/structure/bed/chair/vehicle/mower,
 	/obj/structure/closet/crate/flatpack/ancient/condiment_dispenser,
-	/obj/item/dartboard,
+	/obj/item/weapon/storage/box/darts,
 	/obj/item/weapon/reagent_containers/glass/mantinivessel
 	)
 
@@ -125,7 +125,8 @@ var/global/global_cricket_population = 0
 
 /obj/item/cricketfarm/AltClick(mob/user)
 	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
-		makefood(user)
+		return
+	makefood(user)
 
 /obj/item/cricketfarm/attackby(obj/item/I, mob/user)
 	if(istype(I,/obj/item/weapon/holder))
@@ -181,7 +182,7 @@ var/global/global_cricket_population = 0
 	update_icon()
 
 /obj/item/cricketfarm/proc/makefood(mob/user)
-	if(population+eggs<7 || !population)
+	if(population+eggs<7 || population<5)
 		if(user)
 			to_chat(user,"<span class='notice'>The crickets need more time to populate.</span>")
 		return
@@ -337,6 +338,14 @@ var/global/global_cricket_population = 0
 	can_have_carts = TRUE
 	headlights = TRUE
 
+/obj/structure/bed/chair/vehicle/mower/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 7 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 0 * PIXEL_MULTIPLIER, "y" = 7 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 4 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = 0 * PIXEL_MULTIPLIER, "y" = 7 * PIXEL_MULTIPLIER)
+		)
+
 /obj/machinery/portable_atmospherics/hydroponics/Crossed(var/atom/movable/AM)
 	if(istype(AM,/obj/structure/bed/chair/vehicle/mower))
 		weedlevel = 0
@@ -412,6 +421,20 @@ var/global/global_cricket_population = 0
 	icon_state = "langstroth_item"
 	buildtype = /obj/machinery/apiary/langstroth
 
+
+/obj/item/weapon/storage/box/darts
+	name = "darts box"
+	desc = "Everything you need to set up darts."
+	items_to_spawn = list(
+		/obj/item/dartboard,
+		/obj/item/dart/yellow,
+		/obj/item/dart/yellow,
+		/obj/item/dart/yellow,
+		/obj/item/dart/blue,
+		/obj/item/dart/blue,
+		/obj/item/dart/blue
+	)
+
 /obj/item/dartboard
 	name = "dartboard"
 	desc = "Step right up and test your skill."
@@ -454,7 +477,7 @@ var/global/global_cricket_population = 0
 	I.pixel_x = pixel_x + rand(-10,10)
 	I.pixel_y = pixel_y + rand(-10,10)
 	I.forceMove(loc)
-	if(istype(I,/obj/item/stack/dart))
+	if(istype(I,/obj/item/dart))
 		score(AM)
 
 /obj/item/dartboard/attackby(obj/item/I, mob/user)
@@ -469,7 +492,7 @@ var/global/global_cricket_population = 0
 	else
 		..()
 
-/obj/item/dartboard/proc/score(obj/item/stack/dart/D,speed,user)
+/obj/item/dartboard/proc/score(obj/item/dart/D,speed,user)
 	var/aim = clamp(round(D.aim),1, 5)
 	var/scorezone = 0
 	for(var/i = 1 to aim) //take aim attempts at aiming for a good spot
@@ -488,9 +511,9 @@ var/global/global_cricket_population = 0
 	visible_message("<span class='good'>\The [D] scored [scorezone]!</span>")
 	playsound(loc, 'sound/items/hammer_strike.ogg', 75, 1, -1)
 
-/obj/item/stack/dart
+/obj/item/dart
 	name = "throwing dart"
-	desc = "A dart designed for recreational throwing. It's not very deadly as a weapon."
+	desc = "A dart designed for recreational throwing. It's not very deadly as a weapon. When stacked, only one dart will be thrown at a time."
 	icon = 'icons/obj/items_weird.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 5
@@ -499,11 +522,11 @@ var/global/global_cricket_population = 0
 	sharpness_flags = SHARP_TIP
 	melt_temperature = MELTPOINT_STEEL
 	hitsound = 'sound/weapons/bladeslice.ogg'
-	max_amount = 3
+	w_class = W_CLASS_TINY
 	var/aim = 1
 	var/luck = 1
 
-/obj/item/stack/dart/throw_at(var/atom/A, throw_range, throw_speed)
+/obj/item/dart/throw_at(var/atom/A, throw_range, throw_speed)
 	if(ishuman(usr))
 		var/mob/living/carbon/human/H = usr
 		var/common_data = 1
@@ -516,11 +539,11 @@ var/global/global_cricket_population = 0
 	..()
 
 //Note to future coders: these sprites have large invisible low-alpha boxes around them to make clicking them easier.
-/obj/item/stack/dart/yellow
+/obj/item/dart/yellow
 	name = "yellow dart"
 	icon_state = "dartyellow"
 
-/obj/item/stack/dart/blue
+/obj/item/dart/blue
 	name = "blue dart"
 	icon_state = "dartblue"
 
