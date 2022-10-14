@@ -1218,7 +1218,7 @@ About the new airlock wires panel:
 		return
 	if(istype(I, /obj/item/tool/crowbar/halligan))
 		var/breaktime = 10 SECONDS
-		if(operating)
+		if(!operating && density && src.arePowerSystemsOn() && !((stat) & (FORCEDISABLE|NOPOWER)) && !welded)
 			if(locked && !lifted)
 				to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
 				playsound(src, 'sound/effects/rustle-metal.ogg', 50, 1)
@@ -1227,9 +1227,9 @@ About the new airlock wires panel:
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					animate(src, pixel_y = pixel_y + 5, time = 1)
 					lifted = TRUE
-			else
-				pry(user)
-			return
+				else
+					pry(user)
+				return
 	if (iswelder(I))
 		if (density && !operating)
 			var/obj/item/tool/weldingtool/WT = I
