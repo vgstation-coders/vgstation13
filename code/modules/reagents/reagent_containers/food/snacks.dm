@@ -1582,7 +1582,7 @@
 	reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie
-	name = "clover cream pie"
+	name = "whipped clover pie"
 	desc = "Traditional dish in the Clownplanet's Irish exclusion zone."
 	icon_state = "clovercreampie"
 	trash = /obj/item/trash/pietin
@@ -3827,7 +3827,7 @@
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cloverpie
-	name = "clover pie"
+	name = "clover cream pie"
 	desc = "A creamy, sweet dessert with herbal notes that recall open fields and verdant pastures."
 	icon_state = "cloverpie"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cloverpieslice
@@ -3842,8 +3842,8 @@
 	reagents.add_reagent(NUTRIMENT, 15)
 
 /obj/item/weapon/reagent_containers/food/snacks/cloverpieslice
-	name = "clover pie slice"
-	desc = "Nothing says springtime like a slice of clover pie... maybe."
+	name = "clover cream pie slice"
+	desc = "Nothing says springtime like a slice of clover cream pie... maybe."
 	icon_state = "cloverpieslice"
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
