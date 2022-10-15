@@ -126,7 +126,6 @@ var/datum/controller/gameticker/ticker
 	theme.update_music()
 	theme.update_icon()
 
-
 /datum/controller/gameticker/proc/setup()
 	//Create and announce mode
 	if(master_mode=="secret")
@@ -164,8 +163,6 @@ var/datum/controller/gameticker/ticker
 
 	//Configure mode and assign player to special mode stuff
 	job_master.DivideOccupations() //Distribute jobs
-	init_mind_ui()
-	init_PDAgames_leaderboard()
 
 	var/can_continue = mode.Setup()//Setup special modes
 	if(!can_continue)
@@ -249,7 +246,7 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
 	mode.PostSetup() //provides antag objectives
-
+	
 	gamestart_time = world.time / 10
 	current_state = GAME_STATE_PLAYING
 
@@ -268,6 +265,7 @@ var/datum/controller/gameticker/ticker
 	stat_collection.round_start_time = world.realtime
 	Master.RoundStart()
 	wageSetup()
+	handle_lights()
 	post_roundstart()
 	return 1
 
@@ -452,10 +450,6 @@ var/datum/controller/gameticker/ticker
 				delay_end = 2
 	return 1
 
-/datum/controller/gameticker/proc/init_PDAgames_leaderboard()
-	init_snake_leaderboard()
-	init_minesweeper_leaderboard()
-
 /datum/controller/gameticker/proc/init_snake_leaderboard()
 	for(var/x=1;x<=PDA_APP_SNAKEII_MAXSPEED;x++)
 		snake_station_highscores += x
@@ -574,6 +568,19 @@ var/datum/controller/gameticker/ticker
 			roles += player.mind.assigned_role
 	return roles
 
+/datum/controller/gameticker/proc/handle_lights()
+	var/list/discrete_areas = list()
+	//Get department areas where there is a crewmember. This is used to turn on lights in occupied departments
+	for(var/mob/living/player in player_list)
+		discrete_areas += get_department_areas(player)
+	//Toggle lightswitches and lamps on in occupied departments
+	for(var/area/DA in discrete_areas)
+		for(var/obj/machinery/light_switch/LS in DA)
+			LS.toggle_switch(1, playsound = FALSE)
+			break
+		for(var/obj/item/device/flashlight/lamp/L in DA)
+			L.toggle_onoff(1)
+
 /datum/controller/gameticker/proc/post_roundstart()
 	//Handle all the cyborg syncing
 	var/list/active_ais = active_ais()
@@ -591,21 +598,6 @@ var/datum/controller/gameticker/ticker
 		mode.send_intercept()
 
 	spawn()
-		var/discrete_areas = areas.Copy()
-
-		for(var/mob/living/carbon/human/player in player_list)
-			var/area/A = get_area(player)
-			//Getting areas where there is a crewmember. This is used to turn off lights in empty departments
-			if(A in discrete_areas)
-				discrete_areas -= get_department_areas(player)
-		//Toggle lightswitches and lamps on in occupied departments
-		for(var/area/DA in discrete_areas)
-			for(var/obj/machinery/light_switch/LS in DA)
-				LS.toggle_switch(0)
-				break
-			for(var/obj/item/device/flashlight/lamp/L in DA)
-				L.toggle_onoff(0)
-
 		feedback_set_details("round_start","[time2text(world.realtime)]")
 		if(ticker && ticker.mode)
 			feedback_set_details("game_mode","[ticker.mode]")
