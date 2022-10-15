@@ -214,7 +214,7 @@
 	icon_state = "lampgreen"
 	item_state = "lampgreen"
 	brightness_on = 5
-	
+
 /obj/item/device/flashlight/lamp/verb/toggle_light()
 	set name = "Toggle light"
 	set category = "Object"
