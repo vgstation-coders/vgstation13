@@ -196,7 +196,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	starting_materials = null
-	on = 1	//Lamps start out on but are turned off at roundstart unless someone spawns in the same room as them.
+	on = 0	//Lamps start off but are turned on if someone spawns in the same room as them at roundstart.
 	var/drawspower = TRUE
 	var/datum/power_connection/consumer/pwrconn //the on var means the lamp switch is turned on but the area also has to be powered for it to produce light
 
@@ -232,6 +232,8 @@
 		return TRUE
 
 /obj/item/device/flashlight/lamp/proc/toggle_onoff(var/onoff = null) //this is only called by gameticker.dm at roundstart, so we call update_brightness() with playsound = FALSE below.
+	if(on == onoff)
+		return
 	if(isnull(onoff))
 		on = !on
 	else
@@ -244,11 +246,7 @@
 		pwrconn = new(src)
 		pwrconn.channel = LIGHT
 		pwrconn.active_usage = 60 * brightness_on / 5 //power usage scales with brightness
-		if(on)
-			pwrconn.use_power = MACHINE_POWER_USE_ACTIVE
-			processing_objects.Add(src)
-		else
-			pwrconn.use_power = MACHINE_POWER_USE_NONE
+	update_brightness(playsound = FALSE)
 
 /obj/item/device/flashlight/lamp/update_brightness(var/mob/user = null, var/playsound = TRUE)
 	if(drawspower)
@@ -258,18 +256,18 @@
 		else
 			processing_objects.Remove(src)
 			pwrconn.use_power = MACHINE_POWER_USE_NONE
-		if(playsound && has_sound)
-			if(get_turf(src))
-				playsound(src, on ? sound_on : sound_off, 50, 1)
-	process()
+	process(playsound)
 
-/obj/item/device/flashlight/lamp/process()
+/obj/item/device/flashlight/lamp/process(var/playsound = FALSE)
 	if(on && (!drawspower || pwrconn?.powered()))
 		icon_state = "[initial(icon_state)]-on"
 		set_light(brightness_on)
 	else
 		icon_state = initial(icon_state)
 		set_light(0)
+	if(playsound && has_sound)
+		if(get_turf(src))
+			playsound(src, on ? sound_on : sound_off, 50, 1)
 	
 // FLARES
 
@@ -381,7 +379,6 @@
 	item_state = ""
 	origin_tech = Tc_BIOTECH + "=3"
 	light_color = LIGHT_COLOR_SLIME_LAMP
-	on = 0
 	luminosity = 2
 	has_sound = 0
 	autoignition_temperature = AUTOIGNITION_ORGANIC
