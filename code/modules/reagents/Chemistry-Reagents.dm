@@ -7076,7 +7076,7 @@ var/procizine_tolerance = 0
 		if(!M.is_wearing_item(/obj/item/clothing/under/callum))
 			var/turf/T = get_turf(H)
 			T.turf_animation('icons/effects/96x96.dmi',"manexplode",-32,0,MOB_LAYER+1,'sound/items/poster_ripped.ogg',anim_plane = MOB_PLANE)
-			H.visible_message("<span class='warning'>[H] reveals his true outfit in a vortex of ripped clothes!</span>")
+			H.visible_message("<span class='warning'>[H] reveals her true outfit in a vortex of ripped clothes!</span>")
 			var/obj/item/clothing/under/callum/C = new /obj/item/clothing/under/callum(get_turf(H))
 			if(H.w_uniform)
 				H.u_equip(H.w_uniform, 1)
