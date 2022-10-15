@@ -7000,10 +7000,10 @@ var/procizine_tolerance = 0
 					imageloc = M.current.loc
 					imagelocB = M.current.loc
 				var/image/I = image('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
-				I.plane = MISC_HUD_MARKERS_PLANE
+				I.plane = ANTAG_HUD_PLANE
 				M.current.client.images += I
 				var/image/J = image('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
-				J.plane = MISC_HUD_MARKERS_PLANE
+				J.plane = ANTAG_HUD_PLANE
 				new_buddy.current.client.images += J
 
 /datum/reagent/ethanol/waifu
