@@ -11,7 +11,6 @@
 	icon_state = "holdingpack"
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 28
-	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/storage/backpack/holding/miniblackhole
 	name = "miniature black hole"

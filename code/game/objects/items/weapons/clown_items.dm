@@ -59,7 +59,6 @@
 	throw_range = 15
 	attack_verb = list("HONKS")
 	hitsound = 'sound/items/bikehorn.ogg'
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/honk_delay = 20
 	var/last_honk_time = 0
 	var/vary_pitch = 1

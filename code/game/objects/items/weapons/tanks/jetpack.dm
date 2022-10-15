@@ -7,7 +7,6 @@
 	w_class = W_CLASS_MEDIUM
 	item_state = "jetpack"
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/datum/effect/system/trail/ion_trail
 	var/on = 0.0
 	var/stabilization_on = 0

@@ -39,6 +39,7 @@ var/list/apiaries_list = list()
 	var/list/bees_outside_hive = list()
 
 	var/hydrotray_type = /obj/machinery/portable_atmospherics/hydroponics
+	var/obj/item/itemform = null //The item used to build this
 
 	var/obj/item/weapon/reagent_containers/glass/consume = null
 
@@ -201,7 +202,10 @@ var/list/apiaries_list = list()
 			for(var/obj/I in src.contents)
 				I.forceMove(created_tray)
 				contents -= I
-			new /obj/item/apiary(src.loc)
+			if(itemform)
+				itemform.forceMove(loc)
+			else //if there is no stored itemform, just make a normal apiary
+				new /obj/item/apiary(loc)
 
 			if(harvest_honeycombs())
 				to_chat(user, "<span class='notice'>You successfully harvest the honeycombs. The empty apiary can be relocated.</span>")

@@ -3,7 +3,6 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cigs_lighters.dmi', "right_hand" = 'icons/mob/in-hand/right/cigs_lighters.dmi')
 	item_state = "ashtray"
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_METAL
 
 	var/max_butts 	= 0
 	var/empty_desc 	= ""

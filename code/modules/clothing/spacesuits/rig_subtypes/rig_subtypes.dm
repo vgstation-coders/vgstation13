@@ -376,7 +376,6 @@
 	_color = "atmos_gold"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	no_light = 1
 
 /obj/item/clothing/suit/space/rig/atmos/gold
 	desc = "A special suit that protects against hazardous low pressure environments and extreme temperatures. In other words, perfect for atmos."

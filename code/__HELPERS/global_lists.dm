@@ -39,6 +39,40 @@ var/global/list/med_hud_users = list() //list of all entities using a medical HU
 var/global/list/sec_hud_users = list() //list of all entities using a security HUD.
 var/list/diagnostic_hud_users = list() // list of all entities using a diagnostic HUD.
 
+//Lists for things that make various sounds
+var/global/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg') //list of sounds a fire makes
+
+//fuel list
+var/global/list/possible_fuels = list(
+	PLASMA = list(
+			"max_temperature" = TEMPERATURE_PLASMA,
+			"thermal_energy_transfer" = 9000,
+			"consumption_rate" = 0.1,
+			"o2_cons" = 0.01,
+			"co2_cons" = 0,
+			"unsafety" = 0),
+	GLYCEROL = list(
+			"max_temperature" = 1833.15,
+			"thermal_energy_transfer" = 6000,
+			"consumption_rate" = 0.25,
+			"o2_cons" = 0.05,
+			"co2_cons" = -0.025,
+			"unsafety" = 5),
+	FUEL = list(
+			"max_temperature" = TEMPERATURE_WELDER,
+			"thermal_energy_transfer" = 5400,
+			"consumption_rate" = 0.5,
+			"o2_cons" = 0.2,
+			"co2_cons" = -0.2,
+			"unsafety" = 25),
+	ETHANOL = list(
+			"max_temperature" = 1833.15,
+			"thermal_energy_transfer" = 3900,
+			"consumption_rate" = 0.5,
+			"o2_cons" = 0.08,
+			"co2_cons" = -0.04,
+			"unsafety" = 10))
+
 //////////////////////////
 /////Initial Building/////
 //////////////////////////

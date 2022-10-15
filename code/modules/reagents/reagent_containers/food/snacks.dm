@@ -473,6 +473,9 @@
 					S.name = "[C.name][S.name]"
 					S.filling.color = C.filling.color
 					S.overlays += S.filling
+				if(luckiness && isitem(slice))
+					var/obj/item/sliceItem = slice
+					sliceItem.luckiness += luckiness / slices_num
 				reagents.trans_to(slice, reagents_per_slice)
 			qdel(src) //So long and thanks for all the fish
 			return 1
@@ -1565,6 +1568,9 @@
 		sleep(120)
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-2")
 
+		if(luckiness)
+			M.luck_adjust(luckiness, temporary = TRUE)
+
 	if(isturf(hit_atom))
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
 		if(trash)
@@ -1577,6 +1583,22 @@
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty/New()
 	..()
 	reagents.clear_reagents()
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie
+	name = "whipped clover pie"
+	desc = "Traditional dish in the Clownplanet's Irish exclusion zone."
+	icon_state = "clovercreampie"
+	trash = /obj/item/trash/pietin
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie/New()
+	..()
+	bitesize = 3
+	if(prob(25))
+		reagents.add_reagent(NUTRIMENT, 8) //Lucky pie is more nutritious
+		desc = "The pie was blessed by Saint Honktrick!"
+	else
+		reagents.add_reagent(NUTRIMENT, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie
 	name = "caramel pie"
@@ -3416,7 +3438,7 @@
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/tofubread
-	name = "Tofubread"
+	name = "tofubread"
 	icon_state = "Like meatbread but for vegetarians. Not guaranteed to give superpowers."
 	icon_state = "tofubread"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/tofubreadslice
@@ -3455,7 +3477,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/carrotcakeslice
 	name = "carrot cake slice"
-	desc = "Carrotty slice of Carrot Cake, carrots are good for your eyes! Also not a lie."
+	desc = "Carrotty slice of carrot cake, carrots are good for your eyes! Also not a lie."
 	icon_state = "carrotcake_slice"
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
@@ -3695,7 +3717,7 @@
 	plate_icon = "bluecustom"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
-	name = "Bread"
+	name = "bread"
 	desc = "Some plain old Earthen bread."
 	icon_state = "bread"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice
@@ -3709,7 +3731,7 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
-	name = "Nova bread"
+	name = "nova bread"
 	desc = "Some plain old destabilizing star bread."
 	icon_state = "novabread"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
@@ -3721,20 +3743,20 @@
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice
-	name = "Bread slice"
+	name = "bread slice"
 	desc = "A slice of home."
 	icon_state = "breadslice"
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
-	name = "Nova bread slice"
+	name = "nova bread slice"
 	desc = "A slice of Sol."
 	icon_state = "novabreadslice"
 	plate_icon = "novacustom"
 
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
-	name = "Cream Cheese Bread"
+	name = "cream cheese bread"
 	desc = "Yum yum yum!"
 	icon_state = "creamcheesebread"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/creamcheesebreadslice
@@ -3749,7 +3771,7 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/creamcheesebreadslice
-	name = "Cream Cheese Bread slice"
+	name = "cream cheese bread slice"
 	desc = "A slice of yum!"
 	icon_state = "creamcheesebreadslice"
 	bitesize = 2
@@ -3757,14 +3779,14 @@
 	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
-	name = "Watermelon Slice"
+	name = "watermelon slice"
 	desc = "A slice of watery goodness."
 	icon_state = "watermelonslice"
 	bitesize = 2
 	food_flags = FOOD_SWEET
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/applecake
-	name = "Apple Cake"
+	name = "apple cake"
 	desc = "A cake centred with apple."
 	icon_state = "applecake"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/applecakeslice
@@ -3778,7 +3800,7 @@
 	reagents.add_reagent(NUTRIMENT, 15)
 
 /obj/item/weapon/reagent_containers/food/snacks/applecakeslice
-	name = "Apple Cake slice"
+	name = "apple cake slice"
 	desc = "A slice of heavenly cake."
 	icon_state = "applecakeslice"
 	bitesize = 2
@@ -3786,7 +3808,7 @@
 	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinpie //You can't throw this pie
-	name = "Pumpkin Pie"
+	name = "pumpkin pie"
 	desc = "A delicious treat for the autumn months."
 	icon_state = "pumpkinpie"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/pumpkinpieslice
@@ -3801,14 +3823,36 @@
 	reagents.add_reagent(NUTRIMENT, 15)
 
 /obj/item/weapon/reagent_containers/food/snacks/pumpkinpieslice
-	name = "Pumpkin Pie slice"
+	name = "pumpkin pie slice"
 	desc = "A slice of pumpkin pie, with whipped cream on top. Perfection."
 	icon_state = "pumpkinpieslice"
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cloverpie
+	name = "clover cream pie"
+	desc = "A creamy, sweet dessert with herbal notes that recall open fields and verdant pastures."
+	icon_state = "cloverpie"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cloverpieslice
+	slices_num = 5
+	storage_slots = 3
+	w_class = W_CLASS_MEDIUM
+	trash = /obj/item/trash/pietin
+	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cloverpie/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 15)
+
+/obj/item/weapon/reagent_containers/food/snacks/cloverpieslice
+	name = "clover cream pie slice"
+	desc = "Nothing says springtime like a slice of clover cream pie... maybe."
+	icon_state = "cloverpieslice"
+	bitesize = 2
+	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+
 /obj/item/weapon/reagent_containers/food/snacks/cracker
-	name = "Cracker"
+	name = "cracker"
 	desc = "It's a salted cracker."
 	icon_state = "cracker"
 
@@ -6029,6 +6073,17 @@
 	reagents.add_reagent(NUTRIMENT,10)
 	reagents.add_reagent(CAPSAICIN,2)
 
+/obj/item/weapon/reagent_containers/food/snacks/cloverconcarne
+	name = "clover con carne"
+	desc = "Hearty, yet delightfully refreshing. The savory taste of the steak is complemented by the herbal je ne sais quoi of the clover."
+	icon_state = "cloverconcarne"
+	bitesize = 3
+	food_flags = FOOD_ANIMAL | FOOD_LACTOSE | FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/cloverconcarne/New()
+	..()
+	reagents.add_reagent(NUTRIMENT,5)
+
 /obj/item/weapon/reagent_containers/food/snacks/chilaquiles
 	name = "chilaquiles"
 	desc = "The salsa-equivalent of nachos."
@@ -6346,6 +6401,15 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		return TRUE
 	return ..(W)
 
+/obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse/
+	name = "tontes de pelouse"
+	desc = "A fashionable dish that some critics say engages the aesthetic sensibilities of even the most refined gastronome."
+	icon_state = "tontesdepelouse"
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse/New()
+	..()
+	reagents.add_reagent(NUTRIMENT,1)
 
 // fishtank stuff
 
