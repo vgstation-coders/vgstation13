@@ -381,6 +381,7 @@
 	item_state = ""
 	origin_tech = Tc_BIOTECH + "=3"
 	light_color = LIGHT_COLOR_SLIME_LAMP
+	on = 0
 	luminosity = 2
 	has_sound = 0
 	autoignition_temperature = AUTOIGNITION_ORGANIC
