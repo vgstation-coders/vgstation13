@@ -1595,8 +1595,8 @@
 	..()
 	bitesize = 3
 	if(prob(25))
-		reagents.add_reagent(NUTRIMENT, 10) //Lucky pie is more nutritious
-		desc = "Blessed be Saint Honktrick, this one's extra creamy!"
+		reagents.add_reagent(NUTRIMENT, 8) //Lucky pie is more nutritious
+		desc = "The pie was blessed by Saint Honktrick!"
 	else
 		reagents.add_reagent(NUTRIMENT, 5)
 
