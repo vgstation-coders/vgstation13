@@ -1568,6 +1568,9 @@
 		sleep(120)
 		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-2")
 
+		if(luckiness)
+			M.luck_adjust(luckiness, temporary = TRUE)
+
 	if(isturf(hit_atom))
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
 		if(trash)
@@ -1580,6 +1583,22 @@
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty/New()
 	..()
 	reagents.clear_reagents()
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie
+	name = "whipped clover pie"
+	desc = "Traditional dish in the Clownplanet's Irish exclusion zone."
+	icon_state = "clovercreampie"
+	trash = /obj/item/trash/pietin
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie/New()
+	..()
+	bitesize = 3
+	if(prob(25))
+		reagents.add_reagent(NUTRIMENT, 8) //Lucky pie is more nutritious
+		desc = "The pie was blessed by Saint Honktrick!"
+	else
+		reagents.add_reagent(NUTRIMENT, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie
 	name = "caramel pie"
