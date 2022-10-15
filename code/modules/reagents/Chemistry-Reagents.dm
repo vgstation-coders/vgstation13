@@ -7058,6 +7058,32 @@ var/procizine_tolerance = 0
 			holder.remove_reagent(HUSBANDO,4)
 	M.regenerate_icons()
 
+/datum/reagent/ethanol/tomboy
+	name = "Tomboy"
+	id = TOMBOY
+	description = "Best girl."
+	color = "#20D03B"
+	glass_icon_state = "tomboy"
+	glass_name = "\improper Tomboy"
+
+/datum/reagent/ethanol/tomboy/on_mob_life(var/mob/living/M) 
+	if(..())
+		return 1
+	if(M.gender == MALE)
+		M.setGender(FEMALE)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!M.is_wearing_item(/obj/item/clothing/under/callum))
+			var/turf/T = get_turf(H)
+			T.turf_animation('icons/effects/96x96.dmi',"manexplode",-32,0,MOB_LAYER+1,'sound/items/poster_ripped.ogg',anim_plane = MOB_PLANE)
+			H.visible_message("<span class='warning'>[H] reveals his true outfit in a vortex of ripped clothes!</span>")
+			var/obj/item/clothing/under/callum/C = new /obj/item/clothing/under/callum(get_turf(H))
+			if(H.w_uniform)
+				H.u_equip(H.w_uniform, 1)
+			H.equip_to_slot(C, slot_w_uniform)
+			holder.remove_reagent(TOMBOY,4)
+	M.regenerate_icons()
+
 /datum/reagent/ethanol/scientists_serendipity
 	name = "Scientist's Serendipity"
 	id = SCIENTISTS_SERENDIPITY
