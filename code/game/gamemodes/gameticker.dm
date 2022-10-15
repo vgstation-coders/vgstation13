@@ -163,7 +163,7 @@ var/datum/controller/gameticker/ticker
 
 	//Configure mode and assign player to special mode stuff
 	job_master.DivideOccupations() //Distribute jobs
-  
+
 	var/can_continue = mode.Setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
@@ -246,7 +246,7 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
 	mode.PostSetup() //provides antag objectives
-	
+
 	gamestart_time = world.time / 10
 	current_state = GAME_STATE_PLAYING
 
