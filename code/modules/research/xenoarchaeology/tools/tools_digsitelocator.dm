@@ -33,16 +33,28 @@
 		playtoolsound(src, 50)
 		for(var/turf/unsimulated/mineral/M in range(7, user))
 			if(M.finds.len)
-				var/datum/find/F = M.finds[1]
-				var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = "find_overlay[pick("1","2","3")]", layer = UNDER_HUD_LAYER)
-				I.color = color_from_find_reagent[F.responsive_reagent]
-				I.plane = HUD_PLANE
-				C.images += I
+				var/n = 0
+				var/list/image/IS = list()
+				var/totalfinds = M.finds.len
+				for(var/datum/find/F in M.finds)
+					n++
+					var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = "find_overlay[pick("1","2","3")]", layer = UNDER_HUD_LAYER)
+					IS.Add(I)
+					I.color = color_from_find_reagent[F.responsive_reagent]
+					I.plane = HUD_PLANE
+					var/matrix/TR = matrix()
+					TR.Scale(((totalfinds + 1) - n) / totalfinds, ((totalfinds + 1) - n) / totalfinds)
+					I.transform = TR
+					var/list/col = rgb2num(I.color)
+					I.filters = filter(type="outline",color=rgb(255-col[1],255-col[2],255-col[3]))
+					C.images += I
 				spawn(1 SECONDS)
-					animate(I, alpha = 0, time = 4 SECONDS)
+					for(var/image/I in IS)
+						animate(I, alpha = 0, time = 4 SECONDS)
 				spawn(5 SECONDS)
-					if(C)
-						C.images -= I
+					for(var/image/I in IS)
+						if(C)
+							C.images -= I
 			if (adv && M.artifact_find)
 				var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = "artifact_overlay", layer = UNDER_HUD_LAYER)
 				I.plane = HUD_PLANE
