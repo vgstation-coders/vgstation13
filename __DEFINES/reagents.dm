@@ -428,6 +428,7 @@
 #define RAGSTORICHES	"ragstoriches"
 #define WAIFU			"waifu"
 #define HUSBANDO		"husbando"
+#define TOMBOY			"tomboy"
 #define BEEPSKY_CLASSIC	"beepsky_classic"
 #define SMOKYROOM		"smokyroom"
 #define BAD_TOUCH		"bad_touch"
