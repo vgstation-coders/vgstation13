@@ -42,11 +42,12 @@
 					IS.Add(I)
 					I.color = color_from_find_reagent[F.responsive_reagent]
 					I.plane = HUD_PLANE
-					var/matrix/TR = matrix()
-					TR.Scale(((totalfinds + 1) - n) / totalfinds, ((totalfinds + 1) - n) / totalfinds)
-					I.transform = TR
-					var/list/col = rgb2num(I.color)
-					I.filters = filter(type="outline",color=rgb(255-col[1],255-col[2],255-col[3]))
+					if(n > 1)
+						var/matrix/TR = matrix()
+						TR.Scale(((totalfinds + 1) - n) / totalfinds, ((totalfinds + 1) - n) / totalfinds)
+						I.transform = TR
+						var/list/col = rgb2num(I.color)
+						I.filters = filter(type="outline",color=rgb(255-col[1],255-col[2],255-col[3]))
 					C.images += I
 				spawn(1 SECONDS)
 					for(var/image/I in IS)
