@@ -132,9 +132,8 @@
 	this_area.updateicon()
 
 	for(var/obj/machinery/light_switch/L in this_area)
-		if(L != src)
-			L.on = on
-			L.updateicon()
+		L.on = on
+		L.updateicon()
 
 	this_area.power_change()
 
