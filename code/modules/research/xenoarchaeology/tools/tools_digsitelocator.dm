@@ -1,6 +1,6 @@
 /obj/item/device/xenoarch_scanner
 	name = "xenoarchaeological digsite locator"
-	desc = "A scanner that checks the surrounding area for potential xenoarch digsites. If it finds any, It will briefly make them visible. Requires mesons for optimal use."
+	desc = "A scanner that scans the surrounding area for potential xenoarch digsites, highlighting them temporarily in a colour associated with their responsive reagent. Requires mesons for optimal use."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "digsitelocator"
 	item_state  = "analyzer"
@@ -15,10 +15,10 @@
 /obj/item/device/xenoarch_scanner/adv
 	name = "advanced xenoarchaeological digsite locator"
 	icon_state = "digsitelocator_adv"
-	desc = "A scanner that scans the surrounding area for potential xenoarch digsites, highlighting them temporarily in a colour associated with their responsive reagent. Requires mesons for optimal use."
+	desc = "A scanner that scans the surrounding area for potential xenoarch digsites, highlighting them temporarily in a colour associated with their responsive reagent, along with a flashing red circle mark for larger artifacts. Requires mesons for optimal use."
 	adv = TRUE
 
-/obj/item/device/xenoarch_scanner/adv/examine(mob/user)
+/obj/item/device/xenoarch_scanner/examine(mob/user)
 	..()
 	to_chat(user, "<span class = 'notice'>It has a list of colour codes:</span>")
 	for(var/i in color_from_find_reagent)
