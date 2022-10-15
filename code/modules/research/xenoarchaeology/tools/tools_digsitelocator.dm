@@ -38,7 +38,7 @@
 				var/totalfinds = M.finds.len
 				for(var/datum/find/F in M.finds)
 					n++
-					var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = "find_overlay[pick("1","2","3")]", layer = UNDER_HUD_LAYER)
+					var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = "find_overlay[rand(1,3)]", layer = UNDER_HUD_LAYER)
 					IS.Add(I)
 					I.color = color_from_find_reagent[F.responsive_reagent]
 					I.plane = HUD_PLANE
