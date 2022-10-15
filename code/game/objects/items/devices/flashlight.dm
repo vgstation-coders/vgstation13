@@ -64,13 +64,6 @@
 	update_brightness(user)
 	return 1
 
-/obj/item/device/flashlight/proc/toggle_onoff(var/onoff = null)
-	if(isnull(onoff))
-		on = !on
-	else
-		on = onoff
-	update_brightness()
-
 /obj/item/device/flashlight/attack(mob/living/M as mob, mob/living/user as mob)
 	add_fingerprint(user)
 	if(on && user.zone_sel.selecting == "eyes")
@@ -203,7 +196,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	starting_materials = null
-	on = 0	//Lamps start out off unless someone spawns in the same room as them at roundstart.
+	on = 1	//Lamps start out on but are turned off at roundstart unless someone spawns in the same room as them.
 	var/drawspower = TRUE
 	var/datum/power_connection/consumer/pwrconn //the on var means the lamp switch is turned on but the area also has to be powered for it to produce light
 
@@ -222,7 +215,7 @@
 	icon_state = "lampgreen"
 	item_state = "lampgreen"
 	brightness_on = 5
-
+	
 /obj/item/device/flashlight/lamp/verb/toggle_light()
 	set name = "Toggle light"
 	set category = "Object"
@@ -237,6 +230,13 @@
 	if(usr.has_hand_check())
 		attack_self(usr)
 		return TRUE
+
+/obj/item/device/flashlight/lamp/proc/toggle_onoff(var/onoff = null) //this is only called by gameticker.dm at roundstart, so we call update_brightness() with playsound = FALSE below.
+	if(isnull(onoff))
+		on = !on
+	else
+		on = onoff
+	update_brightness(playsound = FALSE)
 
 //Lamps draw power from the area they're in, unlike flashlights.
 /obj/item/device/flashlight/lamp/New()
@@ -258,21 +258,19 @@
 		else
 			processing_objects.Remove(src)
 			pwrconn.use_power = MACHINE_POWER_USE_NONE
-	process(playsound = TRUE)
+		if(playsound && has_sound)
+			if(get_turf(src))
+				playsound(src, on ? sound_on : sound_off, 50, 1)
+	process()
 
-/obj/item/device/flashlight/lamp/process(var/playsound = FALSE)
+/obj/item/device/flashlight/lamp/process()
 	if(on && (!drawspower || pwrconn?.powered()))
 		icon_state = "[initial(icon_state)]-on"
 		set_light(brightness_on)
-		if(playsound && has_sound)
-			if(get_turf(src))
-				playsound(src, sound_on, 50, 1)
 	else
 		icon_state = initial(icon_state)
 		set_light(0)
-		if(playsound && has_sound)
-			playsound(src, sound_off, 50, 1)
-
+	
 // FLARES
 
 /obj/item/device/flashlight/flare
@@ -383,7 +381,7 @@
 	item_state = ""
 	origin_tech = Tc_BIOTECH + "=3"
 	light_color = LIGHT_COLOR_SLIME_LAMP
-	on = 0
+	on = 1
 	luminosity = 2
 	has_sound = 0
 	autoignition_temperature = AUTOIGNITION_ORGANIC
