@@ -327,6 +327,7 @@ var/global/global_cricket_population = 0
 /obj/item/weapon/storage/bag/plants/reaper
 	name = "reaper bag"
 	desc = "A plantbag with a built in miniscythe. It's farmerific! It can hold inedible things like logs."
+	icon_state = "reaperbag"
 	sharpness_flags = SHARP_BLADE|SERRATED_BLADE
 	sharpness = 1
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb", "/obj/item/weapon/grown")
