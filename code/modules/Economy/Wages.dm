@@ -105,10 +105,24 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 		if(locate(Acc) in all_station_accounts)
 			if(Acc.wage_gain)
 				adjusted_wage_gain = round((Acc.wage_gain)*payroll_modifier)
-				Acc.money += adjusted_wage_gain
+				var/added_to_virtual_wallet = 0
+				var/list/obj/item/device/pda/matching_PDAs = list()
+				for(var/obj/item/device/pda/PDA in PDAs)
+					// Only works and does this if ID is in PDA
+					if(PDA?.id?.virtual_wallet)
+						var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
+						if(app && app.linked_db && Acc == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
+							matching_PDAs.Add(PDA)
+				if(matching_PDAs.len)
+					added_to_virtual_wallet = Acc.virtual_wallet_wage_ratio/100
+				for(var/obj/item/device/pda/PDA in matching_PDAs)
+					PDA.id.virtual_wallet.money += adjusted_wage_gain*(added_to_virtual_wallet/matching_PDAs.len)
+					if(adjusted_wage_gain*(added_to_virtual_wallet/matching_PDAs.len) > 0)
+						new /datum/transaction(PDA.id.virtual_wallet,"Nanotrasen employee payroll","[adjusted_wage_gain*(added_to_virtual_wallet/matching_PDAs.len)]",station_account.owner_name)
+				Acc.money += adjusted_wage_gain*(1-added_to_virtual_wallet)
 
-				if(adjusted_wage_gain > 0)
-					new /datum/transaction(Acc,"Nanotrasen employee payroll","[adjusted_wage_gain]",station_account.owner_name)
+				if(adjusted_wage_gain*(1-added_to_virtual_wallet) > 0)
+					new /datum/transaction(Acc,"Nanotrasen employee payroll","[adjusted_wage_gain*(1-added_to_virtual_wallet)]",station_account.owner_name)
 
 		else 	//non-station accounts get their money from magic, not that these accounts have any wages anyway
 			Acc.money += Acc.wage_gain
