@@ -279,7 +279,7 @@
 	id_type = /obj/item/weapon/card/id/engineering
 
 /datum/outfit/mechanic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/device/device_analyser/advanced] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/valuable_asteroid] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee] = SURVIVAL_BOX
 	return ..()
 
