@@ -8,7 +8,7 @@
 	icon_state = "light1"
 	anchored = 1.0
 	var/buildstage = 2
-	var/on = 0
+	var/on = 1
 	var/image/overlay
 
 /obj/machinery/light_switch/supports_holomap()
@@ -127,7 +127,7 @@
 
 	if(playsound)
 		playsound(src,'sound/misc/click.ogg',30,0,-1)
-	
+
 	var/area/this_area = get_area(src)
 	this_area.updateicon()
 
