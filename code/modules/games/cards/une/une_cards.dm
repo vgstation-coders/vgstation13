@@ -47,7 +47,7 @@
 
 /obj/item/toy/singlecard/une
 	name = "une card"
-	desc = "a card."
+	desc = "A card."
 	icon = 'icons/obj/une_cards.dmi'
 	icon_state = "unecard_down"
 	var/image/unecardimg
