@@ -1,6 +1,7 @@
 /obj/item/clothing
 	name = "clothing"
 	sterility = 5
+	autoignition_temperature = AUTOIGNITION_FABRIC
 	var/list/species_restricted = null //Only these species can wear this kit.
 	var/wizard_garb = 0 // Wearing this empowers a wizard.
 	var/eyeprot = 0 //for head and eyewear

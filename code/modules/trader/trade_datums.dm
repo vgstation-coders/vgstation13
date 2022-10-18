@@ -64,6 +64,13 @@
 	maxunits = 4
 	sales_category = TRADE_VARIETY
 
+/datum/trade_product/babel
+	name = "Library of Babel shipment"
+	path = /obj/structure/closet/crate/library
+	baseprice = 100
+	maxunits = 5
+	sales_category = TRADE_VARIETY
+
 /datum/trade_product/mechagy
 	name = "Mecha Graveyard shuttle disk"
 	path = /obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard
@@ -97,8 +104,8 @@
 /datum/trade_product/yantarcrate
 	name = "Yantar medical crate"
 	path = /obj/structure/closet/crate/medical/yantar
-	baseprice = 220
-	maxunits = 2
+	baseprice = 160
+	maxunits = 1
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/condidisp

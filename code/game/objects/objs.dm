@@ -43,7 +43,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	// Can we wrench/weld this to a turf with a dense /obj on it?
 	var/can_affix_to_dense_turf=0
 
-	var/list/alphas = list()
+	var/list/alphas_obj = list()
 	var/impactsound
 	var/current_glue_state = GLUE_STATE_NONE
 
@@ -683,7 +683,7 @@ a {
 	if(invisibility || alpha <= 1 || !source_define)
 		return
 	invisibility = invisibility_value
-	alphas[source_define] = alpha_value
+	alphas_obj[source_define] = alpha_value
 	handle_alpha()
 	if(ismob(loc))
 		var/mob/M = loc
@@ -695,20 +695,20 @@ a {
 /obj/proc/make_visible(var/source_define)
 	if(!invisibility && alpha == 255 || !source_define)
 		return
-	if(src && alphas[source_define])
+	if(src && alphas_obj[source_define])
 		invisibility = 0
-		alphas.Remove(source_define)
+		alphas_obj.Remove(source_define)
 		handle_alpha()
 		if(ismob(loc))
 			var/mob/M = loc
 			M.regenerate_icons()
 
 /obj/proc/handle_alpha()	//uses the lowest alpha on the mob
-	if(alphas.len < 1)
+	if(alphas_obj.len < 1)
 		alpha = 255
 	else
-		sortTim(alphas, /proc/cmp_numeric_asc,1)
-		alpha = alphas[alphas[1]]
+		sortTim(alphas_obj, /proc/cmp_numeric_asc,1)
+		alpha = alphas_obj[alphas_obj[1]]
 
 /obj/proc/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
 	var/material_mod = mat ? mat.quality_mod : material_type ? material_type.quality_mod : 1

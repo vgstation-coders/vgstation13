@@ -349,6 +349,7 @@
 	on = 0
 	luminosity = 2
 	has_sound = 0
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 	var/brightness_max = 6
 	var/brightness_min = 2
 

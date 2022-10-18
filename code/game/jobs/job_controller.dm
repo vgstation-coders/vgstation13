@@ -256,6 +256,16 @@ var/global/datum/controller/occupations/job_master
 		AssignRole(candidate, command_position)
 	return
 
+/** Proc GetSecurityCount
+ *  gets the current number of 'security' roles currently assigned to the station
+ **/
+/datum/controller/occupations/proc/GetSecurityCount()
+	var/datum/job/officer = job_master.GetJob("Security Officer")
+	var/datum/job/warden = job_master.GetJob("Warden")
+	var/datum/job/hos = job_master.GetJob("Head of Security")
+	var/datum/job/detective = job_master.GetJob("Detective")
+	return (officer.current_positions + warden.current_positions + hos.current_positions + detective.current_positions)
+
 /** Proc DivideOccupations
  *  fills var "assigned_role" for all ready players.
  *  This proc must not have any side effect besides of modifying "assigned_role".
@@ -325,13 +335,8 @@ var/global/datum/controller/occupations/job_master
 	// Rejoice, for you have been given a second chance to be a greytider.
 	Debug("DO, Running AC2")
 
-	var/count = 0
-	var/datum/job/officer = job_master.GetJob("Security Officer")
-	var/datum/job/warden = job_master.GetJob("Warden")
-	var/datum/job/hos = job_master.GetJob("Head of Security")
-	var/datum/job/detective = job_master.GetJob("Detective")
+	var/count = GetSecurityCount()
 	var/datum/job/master_assistant = GetJob("Assistant")
-	count = (officer.current_positions + warden.current_positions + hos.current_positions + detective.current_positions)
 
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
@@ -351,19 +356,37 @@ var/global/datum/controller/occupations/job_master
 				continue //no, you can't evade the blacklist just by not being picked for your available jobs
 			Debug("AC2 Assistant located, Player: [player]")
 			AssignRole(player, "Assistant")
+			master_assistant = GetJob("Assistant")
 
 	// Those that got assigned a role, but had assistant higher.
+	var/security_jobs = list(
+		/datum/job/hos,
+		/datum/job/warden,
+		/datum/job/detective,
+		/datum/job/officer)
 	for (var/mob/new_player/player in shuffle(player_list))
 		if (player.ckey in assistant_second_chance)
-			var/assistant_pref = assistant_second_chance[player.ckey]
-			Debug("AC3: [player] running the second chances for priority [assistant_pref]")
-			if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec...
-				if(count < 5) // And less than 5 seccies...
-					Debug("AC3: [player] failed the lottery.")
-			if (assistant_pref < player.mind.job_priority)
-				Debug("AC3: got made an assistant as a second chance.")
+			var/secmod = 0
+			Debug("AC3: [player] running the second chance for assistant")
+
+			//if they are already a security officer, add a modifier to the number of secoffs to see if they qualify for assistant
+			var/datum/job/oldjob = GetJob(player.mind.assigned_role)
+			for(var/secjob in security_jobs)
+				if(istype(oldjob, secjob))
+					Debug("AC3: [player] is a security officer of some sort, noting in case of the assistant cap.")
+					secmod = 1
+			//and if there's enough security officers (assuming you lose your current job) to let you be an assistant...
+			if(!(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * (count-secmod))) || ((count-secmod) >= 5))
+				//No need to check assistant prefs, if you're here then they're on the second_chance list
+				Debug("AC3: [player] got made an assistant as a second chance.")
 				UnassignRole(player)
+				//This may change the number of security players, so we have to update the list of secoffs
+				if(secmod)
+					count = GetSecurityCount()
 				AssignRole(player, "Assistant")
+				master_assistant = GetJob("Assistant")
+			else
+				Debug("AC3: [player] failed the second chance assistant lottery.")
 
 	//Final pass - first deal with the empty job group, otherwise send any leftovers to the lobby
 	final_pass: //this is a loop label
@@ -404,11 +427,7 @@ var/global/datum/controller/occupations/job_master
 // -- Snowflaked proc which can be adjusted to more jobs than assistants if needed.
 /datum/controller/occupations/proc/CheckAssistantCount(var/mob/new_player/player, var/level)
 	//People who wants to be assistants, sure, go on.
-	var/count = 0
-	var/datum/job/officer = job_master.GetJob("Security Officer")
-	var/datum/job/warden = job_master.GetJob("Warden")
-	var/datum/job/hos = job_master.GetJob("Head of Security")
-	count = (officer.current_positions + warden.current_positions + hos.current_positions)
+	var/count = GetSecurityCount()
 	Debug("DO, Running Assistant Check 1 for [player]")
 	var/datum/job/master_assistant = GetJob("Assistant")
 	var/not_enough_sec = (master_assistant.current_positions - FREE_ASSISTANTS_BRUT) > (config.assistantratio * count)
@@ -426,9 +445,11 @@ var/global/datum/controller/occupations/job_master
 	Debug("DO, AC1 end")
 	return TRUE
 
-/datum/controller/occupations/proc/EquipRank(var/mob/living/carbon/human/H, var/rank, var/joined_late = 0)
-	if(!H)
+/datum/controller/occupations/proc/PostJobSetup(var/mob/living/carbon/human/H)
+	if(!(H && H.mind && H.mind.assigned_role))
 		return 0
+	var/joined_late = ticker.current_state == GAME_STATE_PLAYING ? TRUE : FALSE
+	var/rank = H.mind.assigned_role
 	var/datum/job/job = GetJob(rank)
 	if(job && !job.no_starting_money)
 		//give them an account in the station database

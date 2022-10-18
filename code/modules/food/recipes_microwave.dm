@@ -1076,6 +1076,15 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/banana)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie
 
+/datum/recipe/clovercreampie
+	reagents = list(FLOUR = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie
+	
 /datum/recipe/applepie
 	reagents = list(FLOUR = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
@@ -1150,6 +1159,16 @@
 	reagents = list(FLOUR = 10, CARAMEL = 10)
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie
+
+/datum/recipe/cloverpie
+	reagents = list(MILK = 5, SUGARS = 5, FLOUR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cloverpie
 
 // Kebabs //////////////////////////////////////////////////////
 
@@ -2053,6 +2072,14 @@
 				/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
 				/obj/item/weapon/reagent_containers/food/snacks/meat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chiliconcarne
+
+/datum/recipe/cloverconcarne
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/clover,
+				/obj/item/weapon/reagent_containers/food/snacks/meat,
+				/obj/item/weapon/reagent_containers/food/snacks/butter)
+	result = /obj/item/weapon/reagent_containers/food/snacks/cloverconcarne
 
 /datum/recipe/chilaquiles
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
@@ -3326,7 +3353,7 @@
 /datum/recipe/steamed_lobster_deluxe //the deluxe comes with butter and a slice of lemon
 	reagents = list (WATER = 10)
 	items = list(
-		/obj/item/weapon/lobster,
+		/obj/item/weapon/fish/lobster,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
 		/obj/item/weapon/reagent_containers/food/snacks/butter,
 		)
@@ -3335,7 +3362,7 @@
 /datum/recipe/steamed_lobster_simple //the simple has no fancy butter or lemon
 	reagents = list (WATER = 10)
 	items = list(
-		/obj/item/weapon/lobster
+		/obj/item/weapon/fish/lobster
 		)
 	result = /obj/item/weapon/steamed_lobster_simple_uncracked //same as the deluxe, wirecutter it to make it edible
 
@@ -3436,3 +3463,11 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/dionaroast
+
+/datum/recipe/tontesdepelouse
+	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/grass,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse

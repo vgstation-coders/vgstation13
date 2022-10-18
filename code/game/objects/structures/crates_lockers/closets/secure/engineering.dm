@@ -37,7 +37,8 @@
 		/obj/item/weapon/storage/belt/utility/chief,
 		/obj/item/clothing/glasses/scanner/material,
 		/obj/item/weapon/card/debit/preferred/department/engineering,
-		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger
+		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger,
+		/obj/item/tool/solder/screw
 	)
 
 /obj/structure/closet/secure_closet/engineering_electrical
@@ -142,6 +143,7 @@
 		/obj/item/device/analyzer,
 		/obj/item/clothing/glasses/scanner/material,
 		/obj/item/device/gps/engineering,
+		/obj/item/tool/crowbar/halligan,
 	)
 
 /obj/structure/closet/secure_closet/engineering_mechanic

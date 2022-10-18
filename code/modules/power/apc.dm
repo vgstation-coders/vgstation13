@@ -833,6 +833,8 @@
 
 /obj/machinery/power/apc/proc/update()
 	var/area/this_area = get_area(src)
+	if(!this_area)
+		return
 	if(operating && !shorted)
 		this_area.power_light = (lighting > 1)
 		this_area.power_equip = (equipment > 1)

@@ -967,21 +967,22 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 	)
 
 //Generic species flags.
-#define NO_BREATHE 1
-#define NO_SCAN 2
-#define NO_PAIN 4
-#define IS_SLOW 8
-#define IS_PLANT 16
-#define IS_WHITELISTED 32
-#define RAD_ABSORB 64
-#define REQUIRE_LIGHT 128
-#define HYPOTHERMIA_IMMUNE 256
-#define PLASMA_IMMUNE 512
-#define RAD_GLOW 1024
-#define ELECTRIC_HEAL 2048
-#define SPECIES_NO_MOUTH 4096
-//#define REQUIRE_DARK 8192
-#define RAD_IMMUNE 16384
+#define WHITELISTED (1<<0)	//species that don't break player preferences available to admins only
+#define PLAYABLE (1<<1)		//species available to players
+#define NO_BREATHE (1<<2)
+#define NO_SCAN (1<<3)
+#define NO_PAIN (1<<4)
+#define IS_SLOW (1<<5)
+#define IS_PLANT (1<<6)
+#define RAD_ABSORB (1<<7)
+#define REQUIRE_LIGHT (1<<8)
+#define HYPOTHERMIA_IMMUNE (1<<9)
+#define PLASMA_IMMUNE (1<<10)
+#define RAD_GLOW (1<<11)
+#define ELECTRIC_HEAL (1<<12)
+#define SPECIES_NO_MOUTH (1<<13)
+//#define REQUIRE_DARK (1<<14)
+#define RAD_IMMUNE (1<<15)
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -1061,7 +1062,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 
 //Language flags.
-#define WHITELISTED (1<<0)  // Language is available if the speaker is whitelisted.
+//#define WHITELISTED (1<<0)  // Language is available if the speaker is whitelisted. Used in species flags
 #define RESTRICTED (1<<1)   // Language can only be accquired by spawning or an admin.
 #define CAN_BE_SECONDARY_LANGUAGE (1<<2)	// Language is available on character setup as secondary language.
 #define NONORAL (1<<3)		//Language is spoken without using the mouth, so can be spoken while muzzled.
@@ -1122,6 +1123,10 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 #define AUTOIGNITION_WOOD  573.15
 #define AUTOIGNITION_PAPER 519.15
+#define AUTOIGNITION_PLASTIC 689.15 //autoignition temperature of ABS plastic
+#define AUTOIGNITION_FABRIC 523.15
+#define AUTOIGNITION_PROTECTIVE 573.15 //autoignition temperature of protective clothing like firesuits or kevlar vests
+#define AUTOIGNITION_ORGANIC 633.15 //autoignition temperature of animal fats
 
 // snow business
 #define SNOWBALL_MINIMALTEMP 265	//about -10°C, the minimal temperature at which a thrown snowball can cool you down.

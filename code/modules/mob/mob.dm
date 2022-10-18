@@ -255,6 +255,7 @@
 	return 0
 
 /mob/proc/store_position()
+	//updates the players' origin_ vars so they retain their location when the round starts.
 	origin_x = x
 	origin_y = y
 	origin_z = z
@@ -1610,6 +1611,23 @@ Use this proc preferably at the end of an equipment loadout
 	set hidden = 1
 	return directionface(SOUTH)
 
+/mob/proc/check_dark_vision()
+	if (dark_plane && dark_plane.alphas.len)
+		var/max_alpha = 0
+		for (var/key in dark_plane.alphas)
+			max_alpha = max(dark_plane.alphas[key], max_alpha)
+		animate(dark_plane, alpha = max_alpha, color = dark_plane.colours, time = 10)
+	else if (dark_plane)
+		animate(dark_plane, alpha = initial(dark_plane.alpha), color = dark_plane.colours, time = 10)
+
+	if (self_vision)
+		if (isturf(loc))
+			var/turf/T = loc
+			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY))
+				animate(self_vision, alpha = self_vision.target_alpha, time = 10)
+			else
+				animate(self_vision, alpha = 0, time = 10)
+
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
 	INVOKE_EVENT(src, /event/before_move)
@@ -1862,6 +1880,8 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/attack_pai(mob/user as mob)
 	ShiftClick(user)
+
+
 
 /mob/proc/teleport_to(var/atom/A)
 	forceMove(get_turf(A))
@@ -2130,6 +2150,8 @@ Use this proc preferably at the end of an equipment loadout
 		regenerate_icons()
 
 /mob/proc/handle_alpha()	//uses the lowest alpha on the mob
+	if(alpha_override == TRUE)
+		return
 	if(alphas.len < 1)
 		alpha = 255
 	else

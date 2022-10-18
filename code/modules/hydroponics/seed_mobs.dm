@@ -130,7 +130,7 @@
 	if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
 		return 0
 
-	if(jobban_isbanned(O, "Dionaea") || (!is_alien_whitelisted(src, "Diona") && config.usealienwhitelist))
+	if(jobban_isbanned(O, "Dionaea"))
 		return 0
 
 	return O.client

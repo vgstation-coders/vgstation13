@@ -376,7 +376,6 @@
 	_color = "atmos_gold"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	no_light = 1
 
 /obj/item/clothing/suit/space/rig/atmos/gold
 	desc = "A special suit that protects against hazardous low pressure environments and extreme temperatures. In other words, perfect for atmos."
@@ -637,6 +636,15 @@
 	permeability_coefficient = 0.30
 	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, MUSHROOM_SHAPED)
+
+//Space hobo stuff
+/obj/item/clothing/head/helmet/space/ghetto/hobo
+	name = "tattered space-proof helmet"
+	desc = "After years of wear and tear this is somehow still 'space-proof'."
+
+/obj/item/clothing/suit/space/ghettorig/hobo
+	name = "tattered space-proof suit"
+	desc = "After years of wear and tear this is somehow still 'space-proof'."
 
 //RoR survivor Rig
 /obj/item/clothing/suit/space/rig/ror

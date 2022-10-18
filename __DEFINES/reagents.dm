@@ -361,6 +361,7 @@
 #define DOPPIO 			"doppio"
 #define PASSIONE 			"passione"
 #define SECCOFFEE 			"seccoffee"
+#define ENGICOFFEE			"engicoffee"
 #define MEDCOFFEE 			"medcoffee"
 #define DETCOFFEE 			"detcoffee"
 #define ETANK 			"etank"

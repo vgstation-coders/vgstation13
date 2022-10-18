@@ -35,7 +35,7 @@
 				if (N)
 					if (i > V.cached_images.len)
 						var/image/I = image('icons/mob/mob.dmi', loc = C, icon_state = "vampnullrod")
-						I.plane = MISC_HUD_MARKERS_PLANE
+						I.plane = ABOVE_LIGHTING_PLANE
 						V.cached_images += I
 						src.client.images += I
 					else

@@ -30,6 +30,13 @@ Attach to transfer valve and open. BOOM.
 
 /atom/proc/burnFireFuel(used_fuel_ratio, used_reactants_ratio)
 	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio) //* 5
+
+	if(prob(10)) //10% chance of smoke creation per tick
+		var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread()
+		smoke.set_up(4,0,get_turf(loc))
+		smoke.time_to_live = 60 SECONDS
+		smoke.start()
+
 	if(fire_fuel <= 0.1)
 		//testing("[src] ashifying (BFF)!")
 		ashify()
@@ -41,7 +48,11 @@ Attach to transfer valve and open. BOOM.
 			in_fire = TRUE
 			break
 		if(!in_fire)
-			var/used_ratio = min(0.2 / getFireFuel(), 1) //To maintain the previous behavior of just using 0.2 fire_fuel
+			var/used_ratio = 0
+			if(!getFireFuel())
+				used_ratio = 0.2 //uses 0.2 fire_fuel if it isn't defined for an object
+			else
+				used_ratio = min(0.2 / getFireFuel(), 1) //To maintain the previous behavior of just using 0.2 fire_fuel
 			burnFireFuel(1, used_ratio) //1 is valid as used_fuel_ratio and the two arguments should multiply to used_ratio, so this is simplest.
 		sleep(2 SECONDS)
 
@@ -473,11 +484,16 @@ Attach to transfer valve and open. BOOM.
 	var/mx = 5 * firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier) * min(pressure / ONE_ATMOSPHERE, 1)
 
 	//Always check these damage procs first if fire damage isn't working. They're probably what's wrong.
+	var/fire_tile_modifier = 4 //multiplicative modifier for damage received while on fire and standing on a fire tile
+	apply_damage(fire_tile_modifier*HEAD_FIRE_DAMAGE_MULTIPLIER*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*CHEST_FIRE_DAMAGE_MULTIPLIER*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
+	apply_damage(fire_tile_modifier*GROIN_FIRE_DAMAGE_MULTIPLIER*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
+	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
 
-	apply_damage(2.5*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
-	apply_damage(2.5*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
-	apply_damage(2.0*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
-	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
-	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
-	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
-	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
+	if(head_exposure+chest_exposure+groin_exposure+legs_exposure+arms_exposure)
+		src.dizziness = 5
+		src.confused =  5
+		src.audible_scream()

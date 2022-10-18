@@ -94,6 +94,16 @@
 	category = "Bluespace"
 	build_path = /obj/item/device/gps/science
 
+/datum/design/hologram_projector
+	name = "Hologram Projector"
+	desc = "The projector creates a lifelike hologram friend."
+	id = "hologram_projector"
+	req_tech = list(Tc_BLUESPACE = 2, Tc_MAGNETS = 2)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 2000, MAT_GLASS = 2000)
+	category = "Bluespace"
+	build_path = /obj/item/device/hologram_projector
+
 /datum/design/rcs_device
 	name = "Rapid Crate Sender"
 	desc = "Use this to send crates and closets to cargo telepads."
