@@ -1010,7 +1010,6 @@
 	..()
 	reagents.add_reagent(CAFE_LATTE, 50)
 
-
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee
 	name = "HOSS Rainbow Donut Blend"
 	desc = "All the essentials, for on the go."
@@ -1018,6 +1017,22 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee/New()
 	..()
 	reagents.add_reagent(SECCOFFEE, 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee
+	name = "Energizer"
+	desc = "Smells a bit like Battery Acid"
+	icon_state = "engicoffee"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee/New()
+	..()
+	reagents.add_reagent(ENGICOFFEE, 50)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard
+	name = "Supermatter Sea Salt Soda "
+	desc = "Mmmmm Blurple"
+	icon_state = "engicoffee_shard"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard/New()
+	..()
+	reagents.add_reagent(ENGICOFFEE, 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white
 	name = "Picomed: White edition"
