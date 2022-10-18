@@ -20,20 +20,10 @@
 	)
 	return smoothables
 
-/obj/structure/grille/New(loc)
-	..(loc)
-	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
-		initialize()
-
-/obj/structure/grille/initialize()
-	relativewall()
-	relativewall_neighbours()
-
 /obj/structure/grille/relativewall()
 	if(broken)
 		return
-	var/junction = findSmoothingNeighbors()
-	icon_state = "grille[junction]"
+	icon_state = "grille[..()]"
 
 /obj/structure/grille/isSmoothableNeighbor(atom/A)
 	if(istype(A,/obj/structure/grille))

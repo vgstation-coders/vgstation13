@@ -14,7 +14,6 @@
 	flow_flags = ON_BORDER
 	pass_flags_self = PASSTABLE|PASSGLASS
 	var/railingtype = "metal"
-	var/junction = 0
 	var/wrenchtime = 10
 	var/weldtime = 25
 	var/sheettype = /obj/item/stack/sheet/metal
@@ -32,10 +31,6 @@
 	setup_border_dummy()
 	desc = "A [railingtype] railing, for protecting people from going too far over ledges."
 	update_icon()
-
-/obj/structure/railing/initialize()
-	relativewall()
-	relativewall_neighbours()
 
 /obj/structure/railing/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
@@ -163,15 +158,16 @@
 		return O.anchored && O.dir == src.dir && ..()
 
 /obj/structure/railing/relativewall()
-	junction = findSmoothingNeighbors()
-	switch(dir)
-		if(NORTH, SOUTH)
-			junction &= ~NORTH
-			junction &= ~SOUTH
-		if(EAST, WEST)
-			junction &= ~EAST
-			junction &= ~WEST
-	update_icon()
+	if(anchored)
+		junction = findSmoothingNeighbors()
+		switch(dir)
+			if(NORTH, SOUTH)
+				junction &= ~NORTH
+				junction &= ~SOUTH
+			if(EAST, WEST)
+				junction &= ~EAST
+				junction &= ~WEST
+		update_icon()
 
 /obj/structure/railing/update_icon()
 	update_dir()

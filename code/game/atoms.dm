@@ -908,6 +908,8 @@ its easier to just keep the beam vertical.
 			return C.mob
 
 /atom/initialize()
+	if(canSmoothWith())
+		relativewall()
 	flags |= ATOM_INITIALIZED
 
 /atom/proc/get_cell()
