@@ -24,7 +24,6 @@
 	var/glasshealth = 0
 	var/min_damage_force = 10
 	var/atom/movable/hurdler = null
-	var/junction = 0
 	health = 100
 
 /obj/structure/railing/New(loc)
