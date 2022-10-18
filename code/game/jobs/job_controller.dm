@@ -159,6 +159,8 @@ var/global/datum/controller/occupations/job_master
 
 /datum/controller/occupations/proc/PrioritzeDeparmentHead(var/datum/job/job, mob/user)
 	var/datum/job/head = department_head(job.department)
+	if(head.department = "Civilian")
+		return
 	head.department_prioritized = 1
 
 /datum/controller/occupations/proc/DePrioritzeDeparmentHead(var/datum/job/job, mob/user)
