@@ -2,9 +2,6 @@
 // FUCK YOU MYSTERY CODERS
 // FOR THIS SHIT I'M GOING TO MAKE ALL MY COMMENTS IN CAPS
 
-/atom
-	var/junction = 0
-
 /atom/proc/canSmoothWith() // TYPE PATHS I CAN SMOOTH WITH~~~~~ (HAS TO BE THIS FUNCTION OR ELSE OBJECT INIT IS WAY WAY SLOWER)
 
 // MOVED INTO UTILITY FUNCTION FOR LESS DUPLICATED CODE.
@@ -55,10 +52,8 @@
  */
 /atom/proc/relativewall()
 	if(canSmoothWith())
-		junction = findSmoothingNeighbors()
-	else
-		junction = 0
-	return junction // PREVIOUSLY DID NOTHING, NOW INHERITS THIS FOR COMMON BEHAVIOUR.
+		return findSmoothingNeighbors()
+	return 0 // PREVIOUSLY DID NOTHING, NOW INHERITS THIS FOR COMMON BEHAVIOUR.
 
 /atom/New()
 	. = ..()
