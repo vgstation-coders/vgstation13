@@ -160,13 +160,6 @@
 /obj/structure/railing/relativewall()
 	if(anchored)
 		junction = findSmoothingNeighbors()
-		switch(dir)
-			if(NORTH, SOUTH)
-				junction &= ~NORTH
-				junction &= ~SOUTH
-			if(EAST, WEST)
-				junction &= ~EAST
-				junction &= ~WEST
 		update_icon()
 
 /obj/structure/railing/update_icon()

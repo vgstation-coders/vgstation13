@@ -3,7 +3,7 @@
 // FOR THIS SHIT I'M GOING TO MAKE ALL MY COMMENTS IN CAPS
 
 /atom
-	var/junction = 0
+	var/junction = 0 // THIS USED TO BE DEFINED TO THE TURF LEVEL BUT IT'S HERE NOW IN CASE ANYTHING ELSE (LIKE STRUCTURES) NEED IT, ALSO COMMENT IN CAPS IN THEME WITH THIS FILE
 
 /atom/proc/canSmoothWith() // TYPE PATHS I CAN SMOOTH WITH~~~~~ (HAS TO BE THIS FUNCTION OR ELSE OBJECT INIT IS WAY WAY SLOWER)
 
@@ -11,18 +11,18 @@
 /atom/proc/findSmoothingNeighbors()
 	// THIS IS A BITMAP BECAUSE NORTH/SOUTH/ETC ARE ALL BITFLAGS BECAUSE BYOND IS DUMB AND
 	// DOESN'T FUCKING MAKE SENSE, BUT IT WORKS TO OUR ADVANTAGE
-	var/J = 0
+	. = 0
 	for(var/cdir in cardinal)
+		if((flow_flags & ON_BORDER) && (dir == cdir || opposite_dirs[dir] == cdir))
+			continue
 		var/turf/T = get_step(src,cdir)
 		if(isSmoothableNeighbor(T))
-			J |= cdir
+			. |= cdir
 			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 		for(var/atom/A in T)
 			if(isSmoothableNeighbor(A))
-				J |= cdir
+				. |= cdir
 				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
-
-	return J
 
 /atom/proc/isSmoothableNeighbor(atom/A)
 	if(!A)
