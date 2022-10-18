@@ -1,4 +1,5 @@
 var/list/station_departments = list("Command", "Medical", "Engineering", "Science", "Security", "Cargo", "Civilian")
+var/list/department_head = list("Engineering" = /datum/job/chief_engineer, "Medical" = /datum/job/cmo, "Science" = /datum/job/rd, "Security" = /datum/job/hos, "Cargo" = /datum/job/qm)
 
 // The department the job belongs to.
 /datum/job/var/department = null
@@ -34,6 +35,7 @@ var/list/station_departments = list("Command", "Medical", "Engineering", "Scienc
 
 /datum/job/qm/department = "Cargo"
 /datum/job/qm/head_position = 1
+/datum/job/qm/department_prioritized = 0
 
 /datum/job/cargo_tech/department = "Cargo"
 
@@ -41,6 +43,7 @@ var/list/station_departments = list("Command", "Medical", "Engineering", "Scienc
 
 /datum/job/chief_engineer/department = "Engineering"
 /datum/job/chief_engineer/head_position = 1
+/datum/job/chief_engineer/department_prioritized = 0
 
 /datum/job/engineer/department = "Engineering"
 
@@ -48,6 +51,7 @@ var/list/station_departments = list("Command", "Medical", "Engineering", "Scienc
 
 /datum/job/cmo/department = "Medical"
 /datum/job/cmo/head_position = 1
+/datum/job/cmo/department_prioritized = 0
 
 /datum/job/doctor/department = "Medical"
 
@@ -57,6 +61,7 @@ var/list/station_departments = list("Command", "Medical", "Engineering", "Scienc
 
 /datum/job/rd/department = "Science"
 /datum/job/rd/head_position = 1
+/datum/job/rd/department_prioritized = 0
 
 /datum/job/scientist/department = "Science"
 
@@ -64,6 +69,7 @@ var/list/station_departments = list("Command", "Medical", "Engineering", "Scienc
 
 /datum/job/hos/department = "Security"
 /datum/job/hos/head_position = 1
+/datum/job/hos/department_prioritized = 0
 
 /datum/job/warden/department = "Security"
 

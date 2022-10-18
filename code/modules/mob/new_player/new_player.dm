@@ -95,7 +95,7 @@
 					stat("[player.key]", (player.ready)?("(Playing)"):(null))
 					totalPlayers++
 					if(player.ready)
-						totalPlayersReady++	
+						totalPlayersReady++
 		else
 			stat("Time To Start:", "LOADING...")
 
@@ -517,6 +517,7 @@
 		.manifest tr.alt td {background-color: #DEF}
 		.manifest tr.striked td {background-color: #999}
 		.manifest tr.request td {background-color: #F99}
+		.manifest tr.requested_department td {background-color: #00FF00}
 		.manifest th.reqhead td {background-color: #844}
 		.manifest tr.reqalt td {background-color: #FCC}
 		</style></head><body><center>Round Duration: [round(hours)]h [round(mins)]m<br>"}
@@ -573,7 +574,10 @@
 			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
 				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
 				continue
-
+			if(job.department_prioritized)
+				dat += "<tr[color ? " class='requested_department'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[heads[job]]</td></tr>"
+				color = !color
+				continue
 			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[heads[job]]</td></tr>"
 			color = !color
 

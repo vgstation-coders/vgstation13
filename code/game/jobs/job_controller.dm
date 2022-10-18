@@ -140,11 +140,15 @@ var/global/datum/controller/occupations/job_master
 		if(job.priority)
 			job.priority = FALSE
 			priority_jobs_remaining++
+			if(!job.head_position)
+				ToggleHeadPriority(job)
 		else
 			if(priority_jobs_remaining < 1)
 				return 0
 			job.priority = TRUE
 			priority_jobs_remaining--
+			if(!job.head_position)
+				ToggleHeadPriority(job)
 		if(user)
 			log_admin("[key_name(user)] has set the priority of the [rank] job to [job.priority].")
 			message_admins("[key_name_admin(user)] has set the priority of the [rank] job to [job.priority].")
@@ -152,6 +156,19 @@ var/global/datum/controller/occupations/job_master
 			to_chat(player, "<span class='notice'>The [rank] job is [job.priority ? "now highly requested!" : "no longer highly requested."]</span>")
 		return 1
 	return 0
+
+/datum/controller/occupations/proc/PrioritzeDeparmentHead(var/datum/job/job, mob/user)
+	var/datum/job/head = department_head(job.department)
+	head.department_prioritized = 1
+
+/datum/controller/occupations/proc/DePrioritzeDeparmentHead(var/datum/job/job, mob/user)
+	var/datum/job/head = department_head(job.department)
+	remaining_prioritized_jobs = GetPrioritizedJobs()
+	for(var/datum/job/J in remaining_prioritized_jobs)
+		// If there is still a job from that department prioritized
+		if(j.department == job.department)
+			return
+	head.department_prioritized = 0
 
 /datum/controller/occupations/proc/IsJobPrioritized(var/rank)
 	var/datum/job/job = GetJob(rank)
@@ -461,8 +478,10 @@ var/global/datum/controller/occupations/job_master
 
 	var/alt_title = null
 
-	if(job)
+	if(job && !job.department_prioritized)
 		job.equip(H, job.priority) // Outfit datum.
+	else if(job.department_prioritized) // If Department is Prioritized, equip them with priority equipment.
+		job.equip(H, 1)
 	else
 		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
 
@@ -481,6 +500,8 @@ var/global/datum/controller/occupations/job_master
 
 	if(job.priority)
 		to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
+	else if(job.department_prioritized)
+		to_chat(H, "<span class='notice'>You've been granted a little bonus due to your department staff being High Priority. Enjoy!</span>")
 	return 1
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist
