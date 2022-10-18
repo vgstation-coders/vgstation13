@@ -212,6 +212,7 @@ var/datum/controller/gameticker/ticker
 				if(H.mind.assigned_role != "Trader")
 					data_core.manifest_inject(H)
 		CHECK_TICK
+
 	//Transfer characters to players
 	for(var/i = 1, i <= new_characters.len, i++)
 		var/mob/M = new_characters[new_characters[i]]
@@ -225,6 +226,8 @@ var/datum/controller/gameticker/ticker
 		var/datum/job/job = job_master.GetJob(rank)
 		if(job)
 			job.equip(M, job.priority) // Outfit datum.
+
+	handle_lights()
 
 	//delete the new_player mob for those who readied
 	for(var/mob/np in new_players_ready)
@@ -246,7 +249,6 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 
 	mode.PostSetup() //provides antag objectives
-
 	gamestart_time = world.time / 10
 	current_state = GAME_STATE_PLAYING
 
@@ -265,7 +267,6 @@ var/datum/controller/gameticker/ticker
 	stat_collection.round_start_time = world.realtime
 	Master.RoundStart()
 	wageSetup()
-	handle_lights()
 	post_roundstart()
 	return 1
 
@@ -569,17 +570,17 @@ var/datum/controller/gameticker/ticker
 	return roles
 
 /datum/controller/gameticker/proc/handle_lights()
-	var/list/discrete_areas = list()
+	var/list/discrete_areas = areas.Copy()
 	//Get department areas where there is a crewmember. This is used to turn on lights in occupied departments
 	for(var/mob/living/player in player_list)
-		discrete_areas += get_department_areas(player)
+		discrete_areas -= get_department_areas(player)
 	//Toggle lightswitches and lamps on in occupied departments
 	for(var/area/DA in discrete_areas)
 		for(var/obj/machinery/light_switch/LS in DA)
-			LS.toggle_switch(1, playsound = FALSE)
+			LS.toggle_switch(0, playsound = FALSE)
 			break
 		for(var/obj/item/device/flashlight/lamp/L in DA)
-			L.toggle_onoff(1)
+			L.toggle_onoff(0)
 
 /datum/controller/gameticker/proc/post_roundstart()
 	//Handle all the cyborg syncing
@@ -622,7 +623,7 @@ var/datum/controller/gameticker/ticker
 		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
-		
+
 		if(0 == admins.len)
 			send2adminirc("Round has started with no admins online.")
 			send2admindiscord("**Round has started with no admins online.**", TRUE)
@@ -650,7 +651,7 @@ var/datum/controller/gameticker/ticker
 			'sound/AI/vox_reminder15.ogg')
 		for(var/sound in welcome_sentence)
 			play_vox_sound(sound,map.zMainStation,null)
-	
+
 	create_random_orders(3) //Populate the order system so cargo has something to do
 
 // -- Tag mode!
