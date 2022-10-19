@@ -441,7 +441,7 @@
 		to_chat(user, "[src] is full of dead plant matter.")
 	else
 		to_chat(user, "[src] has nothing planted.")
-	if (Adjacent(user) || isobserver(user) || issilicon(user))
+	if (Adjacent(user) || isobserver(user) || issilicon(user) || hydrovision(user))
 		to_chat(user, "Water: [get_waterlevel()]/100")
 		if(seed && seed.toxin_affinity >= 5)
 			to_chat(user, "Toxin: [get_toxinlevel()]/100")
@@ -488,6 +488,17 @@
 				light_available = T.get_lumcount() * 10
 
 			to_chat(user, "The tray's sensor suite is reporting a light level of [round(light_available, 0.1)] lumens and a temperature of [environment.temperature]K.")
+
+		if(hydrovision(user))
+			var/mob/living/carbon/human/H = user
+			to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[H.glasses];scan=\ref[src]'>\[Scan\]</a>")
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/hydrovision(mob/user)
+    if(ishuman(user))
+        var/mob/living/carbon/human/H = user
+        if(H.is_wearing_item(/obj/item/clothing/glasses/hud/hydro))
+            return TRUE
+    return FALSE
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/close_lid()
 	set name = "Toggle Tray Lid"

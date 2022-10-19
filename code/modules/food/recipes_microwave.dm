@@ -2808,7 +2808,7 @@
 
 /datum/recipe/sweetandsourpork
 	reagents = list(SOYSAUCE = 10, SUGARS = 10) //Will require trading with humans to get soy, but they can make their own acid.
-	items = (
+	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/box
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sweetandsourpork
