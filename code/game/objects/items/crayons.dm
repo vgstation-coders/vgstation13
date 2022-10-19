@@ -104,7 +104,7 @@ var/global/list/all_graffitis = list(
 	shadeColour = input(user, "Please select the shade colour.", "Crayon colour") as color
 	return
 
-#define FONT_NAME "Comic Sans MS"
+#define MAX_LETTERS 10
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity, click_parameters)
 	if(!proximity)
 		return
@@ -142,7 +142,6 @@ var/global/list/all_graffitis = list(
 			if("rune")
 				to_chat(user, "You start drawing a rune on \the [target].")
 			if("text")
-				#define MAX_LETTERS 10
 				preference = input("Write some text here (maximum [MAX_LETTERS] letters).", "Crayon scribbles") as null|text
 
 				var/letter_amount = length(replacetext(preference, " ", ""))
@@ -159,11 +158,10 @@ var/global/list/all_graffitis = list(
 				#undef MIN_FONTSIZE
 				#undef MAX_FONTSIZE
 				preference = copytext(preference, 1, MAX_LETTERS/(fontsize/6))
-				#undef MAX_LETTERS
 
 				if(user.client)
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
-					I.maptext = {"<span style="color:[mainColour];font-size:[fontsize]pt;font-family:'[FONT_NAME]';">[preference]</span>"}
+					I.maptext = {"<span style="color:[mainColour];font-size:[fontsize]pt;font-family:'Comic Sans MS';">[preference]</span>"}
 					I.loc = get_turf(target)
 					I.maptext_height = 31
 					I.maptext_width = 64
@@ -194,12 +192,7 @@ var/global/list/all_graffitis = list(
 		if(instant || do_after(user,target, drawtime))
 			var/obj/effect/decal/cleanable/C
 			if(drawtype == "text")
-				C = new /obj/effect/decal/cleanable/crayontext(target)
-				C.desc = "\"[preference]\", written in crayon."
-
-				var/maptext_start = {"<span style="color:[mainColour];font-size:[fontsize]pt;font-family:'[FONT_NAME]';">"}
-				var/maptext_end = "</span>"
-				C.maptext = "[maptext_start][preference][maptext_end]"
+				C = new /obj/effect/decal/cleanable/crayon/text(target, size = fontsize, main = mainColour, type = preference)
 				C.maptext_x = text2num(params2list(click_parameters)["icon-x"]) - length(preference)*(fontsize/2)
 				C.maptext_y = text2num(params2list(click_parameters)["icon-y"]) - fontsize
 
@@ -229,7 +222,10 @@ var/global/list/all_graffitis = list(
 						if(EAST)
 							C.maptext_x = min(-16,C.maptext_x)
 							C.pixel_x = min(-16,C.pixel_x)+x_offset
-							C.maptext_width = 31
+							if(istype(C,/obj/effect/decal/cleanable/crayon/text))
+								var/obj/effect/decal/cleanable/crayon/text/CT = C
+								CT.text = copytext(CT.text, 1, min(length(CT.text),MAX_LETTERS/(CT.fontsize/3)))
+								CT.update_icon()
 						if(NORTH)
 							C.maptext_y = min(-16,C.maptext_y)
 							C.pixel_y = min(-16,C.pixel_y)+y_offset
@@ -244,7 +240,7 @@ var/global/list/all_graffitis = list(
 					to_chat(user, "<span class='warning'>You used up your crayon!</span>")
 					qdel(src)
 
-#undef FONT_NAME
+#undef MAX_LETTERS
 
 /obj/item/toy/crayon/attack(mob/M as mob, mob/user as mob)
 	if(M == user)
