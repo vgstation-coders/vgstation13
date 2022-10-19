@@ -104,17 +104,16 @@ var/global/list/all_graffitis = list(
 	shadeColour = input(user, "Please select the shade colour.", "Crayon colour") as color
 	return
 
-#define FONT_SIZE "6pt"
 #define FONT_NAME "Comic Sans MS"
-/obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity)
+/obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity, click_parameters)
 	if(!proximity)
 		return
 
 	if(istype(target, /turf/simulated))
 		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") as null|anything in list("graffiti","rune","letter","text")
 		var/preference
-		var/alignment = "center" //For text
 		var/drawtime = 50
+		var/fontsize = 6 //For text
 
 		if(!drawtype)
 			return
@@ -143,24 +142,33 @@ var/global/list/all_graffitis = list(
 			if("rune")
 				to_chat(user, "You start drawing a rune on \the [target].")
 			if("text")
-				#define MAX_LETTERS 15
+				#define MAX_LETTERS 10
 				preference = input("Write some text here (maximum [MAX_LETTERS] letters).", "Crayon scribbles") as null|text
-				preference = copytext(preference, 1, MAX_LETTERS)
-				#undef MAX_LETTERS
 
 				var/letter_amount = length(replacetext(preference, " ", ""))
 				if(!letter_amount) //If there is no text
 					return
 				drawtime = 4 * letter_amount //10 letters = 4 seconds
 
-				alignment = input("Select vertical text alignment (your text is \"[preference]\")", "Crayon scribbles") as null|anything in list("middle", "bottom", "top")
-				if(!alignment)
+				#define MIN_FONTSIZE 6
+				#define MAX_FONTSIZE 31
+				fontsize = input("How big should the text be, in pts?", "Crayon scribbles", "6") as num
+				if(!fontsize)
 					return
+				fontsize = clamp(fontsize,MIN_FONTSIZE,MAX_FONTSIZE)
+				#undef MIN_FONTSIZE
+				#undef MAX_FONTSIZE
+				preference = copytext(preference, 1, MAX_LETTERS/(fontsize/6))
+				#undef MAX_LETTERS
 
 				if(user.client)
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
-					I.maptext = {"<span style="color:[mainColour];font-size:[FONT_SIZE];font-family:'[FONT_NAME]';" valign="[alignment]">[preference]</span>"}
+					I.maptext = {"<span style="color:[mainColour];font-size:[fontsize]pt;font-family:'[FONT_NAME]';">[preference]</span>"}
 					I.loc = get_turf(target)
+					I.maptext_height = 31
+					I.maptext_width = 64
+					I.maptext_x = text2num(params2list(click_parameters)["icon-x"]) - length(preference)*(fontsize/2)
+					I.maptext_y = text2num(params2list(click_parameters)["icon-y"]) - fontsize
 					animate(I, alpha = 100, 10, -1)
 					animate(alpha = 255, 10, -1)
 
@@ -186,26 +194,48 @@ var/global/list/all_graffitis = list(
 		if(instant || do_after(user,target, drawtime))
 			var/obj/effect/decal/cleanable/C
 			if(drawtype == "text")
-				C = new /obj/effect/decal/cleanable(target)
-				C.name = "written text"
+				C = new /obj/effect/decal/cleanable/crayontext(target)
 				C.desc = "\"[preference]\", written in crayon."
 
-				var/maptext_start = {"<span style="color:[mainColour];font-size:[FONT_SIZE];font-family:'[FONT_NAME]';" valign="[alignment]">"}
+				var/maptext_start = {"<span style="color:[mainColour];font-size:[fontsize]pt;font-family:'[FONT_NAME]';">"}
 				var/maptext_end = "</span>"
 				C.maptext = "[maptext_start][preference][maptext_end]"
+				C.maptext_x = text2num(params2list(click_parameters)["icon-x"]) - length(preference)*(fontsize/2)
+				C.maptext_y = text2num(params2list(click_parameters)["icon-y"]) - fontsize
 
 			else
 				C = new /obj/effect/decal/cleanable/crayon(target, main = mainColour, shade = shadeColour, type = drawtype)
+				C.pixel_x = text2num(params2list(click_parameters)["icon-x"]) - 16
+				C.pixel_y = text2num(params2list(click_parameters)["icon-y"]) - 16
 
+			var/desired_density = 1
+			var/x_offset = 0
+			var/y_offset = 0
 			if(target.density && (C.loc != get_turf(user))) //Drawn on a wall (while standing on a floor)
+				desired_density = !desired_density
 				C.forceMove(get_turf(user))
-
 				var/angle = dir2angle_t(get_dir(C, target))
-
-				C.pixel_x = WORLD_ICON_SIZE * cos(angle)
-				C.pixel_y = WORLD_ICON_SIZE * sin(angle) //Offset the graffiti to make it appear on the wall
+				x_offset = WORLD_ICON_SIZE * cos(angle)
+				y_offset = WORLD_ICON_SIZE * sin(angle) //Offset the graffiti to make it appear on the wall
 				C.on_wall = target
 
+			for(var/direction in cardinal)
+				var/turf/current_turf = get_step(target,direction)
+				if(current_turf.density == desired_density)
+					switch(direction)
+						if(WEST)
+							C.maptext_x = max(-16,C.maptext_x)
+							C.pixel_x = max(-16,C.pixel_x)+x_offset
+						if(EAST)
+							C.maptext_x = min(-16,C.maptext_x)
+							C.pixel_x = min(-16,C.pixel_x)+x_offset
+							C.maptext_width = 31
+						if(NORTH)
+							C.maptext_y = min(-16,C.maptext_y)
+							C.pixel_y = min(-16,C.pixel_y)+y_offset
+						if(SOUTH)
+							C.maptext_y = max(-16,C.maptext_y)
+							C.pixel_y = max(-16,C.pixel_y)+y_offset
 			to_chat(user, "You finish drawing.")
 			target.add_fingerprint(user)		// Adds their fingerprints to the floor the crayon is drawn on.
 			if(uses)
@@ -213,9 +243,7 @@ var/global/list/all_graffitis = list(
 				if(!uses)
 					to_chat(user, "<span class='warning'>You used up your crayon!</span>")
 					qdel(src)
-	return
 
-#undef FONT_SIZE
 #undef FONT_NAME
 
 /obj/item/toy/crayon/attack(mob/M as mob, mob/user as mob)

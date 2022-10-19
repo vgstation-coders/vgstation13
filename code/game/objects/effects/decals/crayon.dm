@@ -35,3 +35,10 @@
 
 /obj/effect/decal/cleanable/crayon/fuckyou/New()
 	..(main = "#007F0E", shade = "#02560B", type = "fuckyou")
+
+/obj/effect/decal/cleanable/crayontext
+	name = "written text"
+	desc = "Text written in crayon."
+	gender = NEUTER
+	maptext_height = 31
+	maptext_width = 64
