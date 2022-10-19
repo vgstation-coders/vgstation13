@@ -22,7 +22,7 @@ var/global/list/lemuria_stuff = list(
 		new path(src)
 
 /obj/item/weapon/quantumroutingcomputer
-	name = "quantum routing computer"
+	name = "quantum routing gcomputer"
 	desc = "A quantum supercomputer uses q-bits to perform very large calculations. This one can reduce shipping times dramatically by calculating the most efficient use of gravity wells along a route."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
@@ -207,7 +207,7 @@ var/global/list/lemuria_stuff = list(
 			processing_objects -= src
 	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/meat))
 		to_chat(user, "<span class='notice'>You create some bait at the base of \the [src].</span>")
-		var/mob/M = new /mob/living/simple_animal/bait(loc)
+		new /mob/living/simple_animal/bait(loc)
 		qdel(I)
 
 /obj/item/goliath_lure/Destroy()
