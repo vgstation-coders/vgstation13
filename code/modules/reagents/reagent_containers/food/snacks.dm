@@ -1936,7 +1936,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket
 	name = "hopcorn"
-	desc = "Surprisingly crunchy!."
+	desc = "Surprisingly crunchy!"
 	icon_state = "hoppers"
 	trash = /obj/item/trash/popcorn/hoppers
 	filling_color = "#610000"
