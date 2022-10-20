@@ -141,14 +141,14 @@ var/global/datum/controller/occupations/job_master
 			job.priority = FALSE
 			priority_jobs_remaining++
 			if(!job.head_position)
-				ToggleHeadPriority(job)
+				DePrioritzeDeparmentHead(job)
 		else
 			if(priority_jobs_remaining < 1)
 				return 0
 			job.priority = TRUE
 			priority_jobs_remaining--
 			if(!job.head_position)
-				ToggleHeadPriority(job)
+				PrioritzeDeparmentHead(job)
 		if(user)
 			log_admin("[key_name(user)] has set the priority of the [rank] job to [job.priority].")
 			message_admins("[key_name_admin(user)] has set the priority of the [rank] job to [job.priority].")
@@ -157,20 +157,20 @@ var/global/datum/controller/occupations/job_master
 		return 1
 	return 0
 
-/datum/controller/occupations/proc/PrioritzeDeparmentHead(var/datum/job/job, mob/user)
-	var/datum/job/head = department_head(job.department)
-	if(head.department = "Civilian")
+/datum/controller/occupations/proc/PrioritzeDeparmentHead(var/datum/job/job)
+	if(job.department == "Civilian")
 		return
-	head.department_prioritized = 1
+	var/datum/job/head = locate(job.department_head) in job_master.occupations
+	head.department_prioritized = TRUE
 
-/datum/controller/occupations/proc/DePrioritzeDeparmentHead(var/datum/job/job, mob/user)
-	var/datum/job/head = department_head(job.department)
-	remaining_prioritized_jobs = GetPrioritizedJobs()
+/datum/controller/occupations/proc/DePrioritzeDeparmentHead(var/datum/job/job)
+	var/datum/job/head = locate(job.department_head) in job_master.occupations
+	var/list/remaining_prioritized_jobs = job_master.GetPrioritizedJobs()
 	for(var/datum/job/J in remaining_prioritized_jobs)
 		// If there is still a job from that department prioritized
-		if(j.department == job.department)
+		if(J.department == job.department)
 			return
-	head.department_prioritized = 0
+	head.department_prioritized = FALSE
 
 /datum/controller/occupations/proc/IsJobPrioritized(var/rank)
 	var/datum/job/job = GetJob(rank)
@@ -501,13 +501,6 @@ var/global/datum/controller/occupations/job_master
 
 	var/alt_title = null
 
-	if(job && !job.department_prioritized)
-		job.equip(H, job.priority) // Outfit datum.
-	else if(job.department_prioritized) // If Department is Prioritized, equip them with priority equipment.
-		job.equip(H, 1)
-	else
-		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
-
 	H.job = rank
 
 	if(H.mind)
@@ -523,8 +516,8 @@ var/global/datum/controller/occupations/job_master
 
 	if(job.priority)
 		to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
-	else if(job.department_prioritized)
-		to_chat(H, "<span class='notice'>You've been granted a little bonus due to your department staff being High Priority. Enjoy!</span>")
+	if(job.department_prioritized)
+		to_chat(H, "<span class='notice'>You've been granted a little bonus for because your department is prioritized. Enjoy!</span>")
 	return 1
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist
