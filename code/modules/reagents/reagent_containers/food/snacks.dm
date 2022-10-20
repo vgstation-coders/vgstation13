@@ -1503,7 +1503,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/gunkburger
 	name = "gunk burger"
-	desc = "You can feel the legs wriggling and bug juices with each bite. Oh god, you're gonna THR-"
+	desc = "A GunkCo classic! You will eat the bugs and you will enjoy them."
 	icon_state = "bugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
@@ -1511,12 +1511,14 @@
 /obj/item/weapon/reagent_containers/food/snacks/gunkburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(SALTWATER, 3) //the best non-karm emetic we have
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 3) //the best non-karm emetic we have
+		desc = "You can feel the legs wriggling and bug juices with each bite. Oh god, you're gonna THR-"
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/deluxegunkburger
 	name = "deluxe gunk burger"
-	desc = "You can't comprehend how much I regret biting into this thing. The disgusting texture, burning juices and terrible taste will never leave my mind."
+	desc = "GunkCo's latest innovation! You won't guess the special ingredient!"
 	icon_state = "deluxebugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
@@ -1524,7 +1526,9 @@
 /obj/item/weapon/reagent_containers/food/snacks/deluxegunkburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 12)
-	reagents.add_reagent(SALTWATER, 3)
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 3)
+		desc = "You can't comprehend how much I regret biting into this thing. The disgusting texture, burning juices and terrible taste will never leave my mind."
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
