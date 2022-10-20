@@ -3168,7 +3168,7 @@
 	reagents.add_reagent(NUTRIMENT, 40)
 	if(prob(30))
 		reagents.add_reagent(SALTWATER, 3)
-		desc = "I have tasted upon all the universe has to hold of horror, and even the ambrosia and blingpizzas must ever afterward be poison to me.
+		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosia and blingpizzas must ever afterward be poison to me.
 	bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/candiedapple
