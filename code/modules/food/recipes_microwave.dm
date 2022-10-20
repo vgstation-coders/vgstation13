@@ -847,7 +847,11 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/popcorn
 
 /datum/recipe/hoppers
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/cricket)
+	items = list(
+				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+				)
 	result = /obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket
 
 /datum/recipe/syntisteak
