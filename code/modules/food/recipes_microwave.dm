@@ -180,6 +180,22 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/polyp)
 	result = /obj/item/weapon/reagent_containers/food/snacks/polypburger
 
+/datum/recipe/gunkburgerroach
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/roach)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gunkburger
+
+/datum/recipe/gunkburgercricket
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/cricket)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gunkburger
+
+/datum/recipe/deluxegunkburger
+	reagents = list(FLOUR = 5)
+	priority = 1
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big)
+	result = /obj/item/weapon/reagent_containers/food/snacks/deluxegunkburger
+
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
 	items = list()
@@ -1203,6 +1219,23 @@
 		/obj/item/weapon/reagent_containers/food/snacks/tofu,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/tofukabob
+
+/datum/recipe/gunkkabobroach
+	items = list(
+		/obj/item/stack/rods,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
+
+/datum/recipe/gunkkabobcricket
+	items = list(
+		/obj/item/stack/rods,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
+
 
 // Pizza ///////////////////////////////////////////////////////
 
