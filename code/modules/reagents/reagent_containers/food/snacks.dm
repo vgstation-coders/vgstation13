@@ -1516,8 +1516,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/deluxegunkburger
 	name = "deluxe gunk burger"
-	desc = "You can't comprehend how much I regret biting into this thing. The unnerving texture, the burning juices, the terrible taste..."
-	icon_state = "bugburger"
+	desc = "You can't comprehend how much I regret biting into this thing. The disgusting texture, burning juices and terrible taste will never leave my mind."
+	icon_state = "deluxebugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
 
