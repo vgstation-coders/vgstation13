@@ -1963,9 +1963,9 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket/after_consume()
 	if(prob(unpopped))
-		to_chat(usr, "<span class='warning'>You bite down on an uncooked cricket. The juices sting your tongue!</span>")
-		unpopped = max(0, unpopped-3)
-		reagents.add_reagent(SACID, 0.1) //only a little tingle.
+		to_chat(usr, "<span class='warning'>Just as you were going to bite down on the cricket, it jumps away from your hand. It was alive!</span>")
+		unpopped = max(0, unpopped-3) //max 3 crickets per hoppers bag
+		new /mob/living/simple_animal/cricket(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/sosjerky
 	name = "\improper Scaredy's Private Reserve Beef Jerky"
