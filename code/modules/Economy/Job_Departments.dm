@@ -96,6 +96,10 @@ var/list/station_departments = list("Command", "Medical", "Engineering", "Scienc
 /datum/job/xenobiologist/department  = "Science"
 /datum/job/xenobiologist/department_head = /datum/job/rd
 
+/datum/job/xenoarchaeologist/department =  = "Science"
+/datum/job/xenoarchaeologist/department_head = /datum/job/rd
+
+
 /datum/job/hos/department = "Security"
 /datum/job/hos/head_position = 1
 /datum/job/hos/department_prioritized = FALSE
