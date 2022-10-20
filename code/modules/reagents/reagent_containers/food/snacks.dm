@@ -1935,7 +1935,7 @@
 		reagents.add_reagent(SACID, 0.1) //only a little tingle.
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket
-	name = "hoppers"
+	name = "hopcorn"
 	desc = "Surprisingly crunchy!."
 	icon_state = "hoppers"
 	trash = /obj/item/trash/popcorn/hoppers
