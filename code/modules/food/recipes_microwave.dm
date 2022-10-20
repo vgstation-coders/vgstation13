@@ -190,6 +190,26 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/supergunkburger
 
+/datum/recipe/moonsupergunkburger
+	reagents = list(SODIUMCHLORIDE = 5, BLACKPEPPER = 5, FLOUR = 15)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/supergunkburger
+
 /datum/recipe/slimeburger
 	reagents = list(SLIMEJELLY = 5, FLOUR = 15)
 	items = list()
