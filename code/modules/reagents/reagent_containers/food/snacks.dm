@@ -1259,7 +1259,6 @@
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 2
 
-
 /obj/item/weapon/reagent_containers/food/snacks/human
 	name = "-burger"
 	desc = "A bloody burger."
@@ -1500,6 +1499,32 @@
 /obj/item/weapon/reagent_containers/food/snacks/polypburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/gunkburger
+	name = "gunk burger"
+	desc = "You can feel the legs wriggling and bug juices with each bite. Oh god, you're gonna THR-"
+	icon_state = "bugburger"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/gunkburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SALTWATER, 3) //the best non-karm emetic we have
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/deluxegunkburger
+	name = "deluxe gunk burger"
+	desc = "You can't comprehend how much I regret biting into this thing. The unnerving texture, the burning juices, the terrible taste..."
+	icon_state = "bugburger"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/deluxegunkburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(SALTWATER, 3)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
@@ -1854,6 +1879,19 @@
 /obj/item/weapon/reagent_containers/food/snacks/tofukabob/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/gunkkabob
+	name = "Gunk-kabob"
+	icon_state = "bugkabob"
+	desc = "Not as disgusting as you'd expect!"
+	trash = /obj/item/stack/rods
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/gunkkabob/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(SALINE, 0.5) //just a taste
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/cubancarp
