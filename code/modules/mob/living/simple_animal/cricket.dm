@@ -6,7 +6,7 @@
 
 	icon_state = "cricket"
 	icon_living = "cricket"
-	icon_dead = "cricket-dead"
+	icon_dead = "cricket_dead"
 
 	emote_hear = list("chirps")
 	emote_sound = list("sound/effects/cricket_chirp.ogg")
