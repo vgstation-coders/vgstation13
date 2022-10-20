@@ -1890,6 +1890,7 @@
 	icon_state = "bugkabob"
 	desc = "Not as disgusting as you'd expect!"
 	trash = /obj/item/stack/rods
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/gunkkabob/New()
@@ -1933,6 +1934,18 @@
 		unpopped = max(0, unpopped-1)
 		reagents.add_reagent(SACID, 0.1) //only a little tingle.
 
+/obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket
+	name = "hoppers"
+	desc = "Surprisingly crunchy!."
+	icon_state = "hoppers"
+	trash = /obj/item/trash/popcorn/hoppers
+	filling_color = "#610000"
+
+/obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket/after_consume()
+	if(prob(unpopped))
+		to_chat(usr, "<span class='warning'>You bite down on an uncooked cricket. The juices sting your tongue!</span>")
+		unpopped = max(0, unpopped-3)
+		reagents.add_reagent(SACID, 0.1) //only a little tingle.
 
 /obj/item/weapon/reagent_containers/food/snacks/sosjerky
 	name = "\improper Scaredy's Private Reserve Beef Jerky"
@@ -3141,6 +3154,21 @@
 /obj/item/weapon/reagent_containers/food/snacks/superbiteburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 40)
+	bitesize = 10
+
+/obj/item/weapon/reagent_containers/food/snacks/supergunkburger
+	name = "Super Gunk Burger"
+	desc = "The Cockroach King! Or matriarch actually. You can't even fathom eating that much cockroach."
+	icon_state = "supergunkburger"
+	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/supergunkburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 40)
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 3)
+		desc = "I have tasted upon all the universe has to hold of horror, and even the ambrosia and blingpizzas must ever afterward be poison to me.
 	bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/candiedapple
