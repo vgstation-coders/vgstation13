@@ -393,16 +393,16 @@
 	var/mob/M = target
 	if(M == user)
 		to_chat(user, "You spray yourself with \the [src].")
-		user.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1, INVISIBILITY_LEVEL_TWO)
+		user.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1)
 	else if (ismob(M))
 		to_chat(user, "You spray [M] with \the [src].")
-		M.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1, INVISIBILITY_LEVEL_TWO)
+		M.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1)
 	var/obj/O = target
 	if(isobj(O))
 		if(locate(O) in get_contents_in_object(user))
 			O.make_invisible(INVISIBLESPRAY, invisible_time, 1)
 		else
-			O.make_invisible(INVISIBLESPRAY, invisible_time, 1, INVISIBILITY_LEVEL_TWO)
+			O.make_invisible(INVISIBLESPRAY, invisible_time, 1)
 		to_chat(user, "You spray \the [O] with \the [src].")
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
