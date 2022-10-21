@@ -210,6 +210,16 @@
 	icon_state = "beakerplasma"
 	origin_tech = Tc_PLASMATECH + "=4;" + Tc_MATERIALS + "=4"
 
+/obj/item/weapon/reagent_containers/glass/beaker/large/plasma/arcane_act(mob/user, recursive)
+	on_reagent_change()
+	return ..()
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/plasma/on_reagent_change()
+	..()
+	if(arcanetampered && reagents.total_volume)
+		var/datum/chemical_reaction/chemsmoke/CS = new()
+		CS.on_reaction(src.reagents)
+
 /obj/item/weapon/reagent_containers/glass/beaker/large/supermatter
 	name = "supermatter beaker"
 	desc = "A beaker with a supermatter sliver. It heats fluids inside, but holding it makes your hand feel strange..."
@@ -225,7 +235,7 @@
 	..()
 
 /obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/process()
-	if(reagents.total_volume)
+	if(reagents.total_volume && !arcanetampered)
 		reagents.heating(9000, TEMPERATURE_PLASMA)
 	if(ishuman(loc))
 		//held or in pocket of a human
@@ -241,6 +251,14 @@
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 	opaque = TRUE
+
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/arcane_act(mob/user, recursive)
+	flags &= ~NOREACT
+	return ..()
+
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/bless()
+	..()
+	flags |= NOREACT
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
@@ -262,6 +280,17 @@
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MATERIALS + "=3"
 	opaque = TRUE
 
+/obj/item/weapon/reagent_containers/glass/beaker/bluespace/arcane_act(mob/user, recursive)
+	reagents.clear_reagents()
+	reagents.maximum_volume = 25
+	volume = 25
+	return ..()
+
+/obj/item/weapon/reagent_containers/glass/beaker/bluespace/bless()
+	..()
+	volume = initial(volume)
+	reagents.maximum_volume = initial(volume)
+
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
 	desc = "A prototype ultra-capacity beaker that uses advances in bluespace research. Can hold up to 300 units."
@@ -270,6 +299,12 @@
 	volume = 300
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,150,200,300)
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=5"
+
+/obj/item/weapon/reagent_containers/glass/beaker/bluespace/large/arcane_act(mob/user, recursive)
+	. = ..()
+	reagents.maximum_volume = 10
+	volume = 10
+	return .
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial
 	name = "vial"

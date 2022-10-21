@@ -98,16 +98,17 @@ log transactions
 		if(istype(I,/obj/item/weapon/spacecash))
 			var/obj/item/weapon/spacecash/dosh = I
 			//consume the money
-			authenticated_account.money += dosh.worth * dosh.amount
+			var/multiplier = dosh.arcanetampered ? rand(0,99) : 100
+			authenticated_account.money += round(dosh.worth * dosh.amount * (multiplier/100))
 			if(prob(50))
 				playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
 			else
 				playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
 
 			//create a transaction log entry
-			new /datum/transaction(authenticated_account, "Credit deposit", dosh.worth * dosh.amount, machine_id)
+			new /datum/transaction(authenticated_account, "Credit deposit", round(dosh.worth * dosh.amount * (multiplier/100)), machine_id)
 
-			to_chat(user, "<span class='info'>You insert [dosh.worth * dosh.amount] credit\s into \the [src].</span>")
+			to_chat(user, "<span class='info'>You insert [round(dosh.worth * dosh.amount * (multiplier/100))] credit\s into \the [src].</span>")
 			src.attack_hand(user)
 			qdel(I)
 	else

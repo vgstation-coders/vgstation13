@@ -182,6 +182,10 @@
 		return
 	if(istype(target,/obj/machinery))
 		return // Handled in machine attackby()
+	if(arcanetampered && prob(50))
+		target.arcane_act(user)
+		if(prob(50))
+			return
 	target.emag_act(user)
 
 
@@ -242,6 +246,8 @@ var/list/global/id_cards = list()
 	add_fingerprint(user)
 
 /obj/item/weapon/card/id/GetAccess()
+	if(arcanetampered)
+		return ..()
 	return (access | base_access)
 
 /obj/item/weapon/card/id/GetID()
