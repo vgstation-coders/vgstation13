@@ -3,7 +3,7 @@ var/list/forced_roundstart_ruleset = list()
 // -- Distribution parameters chosen prior to roundstart --
 var/dynamic_curve_centre = 0
 var/dynamic_curve_width = 1.8
-var/dynamic_chosen_mode = LORENTZ
+var/dynamic_chosen_mode = EXPONENTIAL
 
 // -- Dynamic tweaks chosen prior to roundstart --
 var/dynamic_no_stacking = 1 // NO STACKING : only one "round-ender", except if we're above 80 threat
@@ -57,7 +57,7 @@ var/stacking_limit = 90
 	var/datum/stat/dynamic_mode/dynamic_stats = null
 	var/pop_last_updated = 0
 
-	var/distribution_mode = LORENTZ
+	var/distribution_mode = EXPONENTIAL
 	var/relative_threat = 0 // Relative threat, Lorentz-distributed.
 	var/curve_centre_of_round = 0
 	var/curve_width_of_round = 1.8
