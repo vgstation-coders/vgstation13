@@ -1538,7 +1538,7 @@
 	reagents.add_reagent(NUTRIMENT, 6)
 	if(prob(30))
 		reagents.add_reagent(SALTWATER, 3) //the best non-karm emetic we have
-		desc = "You can feel the legs wriggling and bug juices with each bite. Oh god, you're gonna THR-"
+		desc = "Legs wriggling, bug juices oozing out and that rotten smell... Oh god, you're gonna THR-"
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger
