@@ -3623,6 +3623,13 @@
 	result = HUSBANDO
 	required_reagents = list(MANLYDORF = 1, KARMOTRINE = 4)
 	result_amount = 5
+	
+/datum/chemical_reaction/tomboy
+	name = "Tomboy"
+	id = TOMBOY
+	result = TOMBOY
+	required_reagents = list(HUSBANDO = 1, WAIFU = 1)
+	result_amount = 2
 
 /datum/chemical_reaction/beepskyclassic
 	name = "Beepsky Classic"
