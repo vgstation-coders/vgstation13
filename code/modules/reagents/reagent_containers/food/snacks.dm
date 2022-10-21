@@ -1507,8 +1507,8 @@
 	name = "skittering burger"							//make sure to add "processing_objects += src" under New() for it to work
 	desc = "A burger-shaped cockroach."
 	icon_state = "bugburger"
-	skitterdelay = 30
-	skitterchance = 60
+	var/skitterdelay = 30
+	var/skitterchance = 50
 	
 /obj/item/weapon/reagent_containers/food/snacks/skitter/pickup(mob/user)
 	timer = 0
