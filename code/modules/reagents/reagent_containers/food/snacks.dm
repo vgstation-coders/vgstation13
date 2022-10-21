@@ -42,7 +42,7 @@
 
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
-	var/timer = 0
+	var/timer = 0 //currently only used on skittering food
 	
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	var/turf/T = get_turf(src)
@@ -1504,11 +1504,15 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/skitter/ //if ye dish is a child of skitter it will move around after 30 ticks
-	name = "skittering burger"							//make sure to add "processing_objects += src" under New() for it to work
+	name = "skittering burger"
 	desc = "A burger-shaped cockroach."
 	icon_state = "bugburger"
 	var/skitterdelay = 30
 	var/skitterchance = 50
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/New()
+	..()
+	processing_objects += src
 	
 /obj/item/weapon/reagent_containers/food/snacks/skitter/pickup(mob/user)
 	timer = 0
@@ -1531,7 +1535,6 @@
 	
 /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/New()
 	..()
-	processing_objects += src
 	reagents.add_reagent(NUTRIMENT, 6)
 	if(prob(30))
 		reagents.add_reagent(SALTWATER, 3) //the best non-karm emetic we have
@@ -1547,7 +1550,6 @@
 	
 /obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger/New()
 	..()
-	processing_objects += src
 	reagents.add_reagent(NUTRIMENT, 12)
 	if(prob(30))
 		reagents.add_reagent(SALTWATER, 3)
@@ -1565,7 +1567,6 @@
 	
 /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger/New()
 	..()
-	processing_objects += src
 	reagents.add_reagent(NUTRIMENT, 40)
 	if(prob(30))
 		reagents.add_reagent(SALTWATER, 3)
