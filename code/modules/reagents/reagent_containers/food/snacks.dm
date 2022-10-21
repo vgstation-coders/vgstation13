@@ -1507,18 +1507,20 @@
 	name = "skittering burger"							//make sure to add "processing_objects += src" under New() for it to work
 	desc = "A burger-shaped cockroach."
 	icon_state = "bugburger"
+	skitterdelay = 30
+	skitterchance = 60
 	
 /obj/item/weapon/reagent_containers/food/snacks/skitter/pickup(mob/user)
 	timer = 0
 	
 /obj/item/weapon/reagent_containers/food/snacks/skitter/process()
 	timer += 1
-	if(timer > 30 && istype(loc, /turf) && prob(60))
+	if(timer > skitterdelay && istype(loc, /turf) && prob(skitterchance))
 		Move(get_step(loc, pick(cardinal)))
 
 /obj/item/weapon/reagent_containers/food/snacks/skitter/Destroy()
 	processing_objects -= src
-	 ..()
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger
 	name = "gunk burger"
@@ -1542,7 +1544,7 @@
 	icon_state = "deluxebugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
+	
 /obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger/New()
 	..()
 	processing_objects += src
@@ -1558,6 +1560,8 @@
 	icon_state = "supergunkburger"
 	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
 	base_crumb_chance = 20
+	skitterchance = 40
+	skitterdelay = 60 //takes longer for super gunkburgers to walk and they walk less, muh weight or something
 	
 /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger/New()
 	..()
@@ -1565,7 +1569,7 @@
 	reagents.add_reagent(NUTRIMENT, 40)
 	if(prob(30))
 		reagents.add_reagent(SALTWATER, 3)
-		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosia and blingpizzas must ever afterward be poison to me."
+		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosias and blingpizzas must ever afterward be poison to me."
 	bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
