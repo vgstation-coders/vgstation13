@@ -23,7 +23,6 @@
 							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
 							)// List of the items you can put in
 	var/global/list/acceptable_reagents // List of the reagents you can put in
-	var/list/holdingitems = list()
 	var/limit = 100
 	var/speed_multiplier = 1
 	var/scanning_power = 0
@@ -94,7 +93,7 @@
 ********************/
 
 /obj/machinery/microwave/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	if(holdingitems && holdingitems.len >= limit)
+	if(contents.len >= limit)
 		return FALSE
 	else if(istype(AM, /obj/item/weapon/storage/bag/plants))
 		var/obj/item/weapon/storage/bag/B = AM
@@ -172,7 +171,7 @@
 	if(..())
 		return 1
 
-	if(holdingitems && holdingitems.len >= limit)
+	if(contents.len >= limit)
 		to_chat(usr, "The machine cannot hold anymore items.")
 		return 1
 	else if(istype(O, /obj/item/weapon/storage/bag/plants) || istype(O, /obj/item/weapon/storage/bag/food/borg))
@@ -180,7 +179,7 @@
 		for (var/obj/item/weapon/reagent_containers/food/snacks/G in O.contents)
 			B.remove_from_storage(G,src)
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
-				to_chat(user, "<span class='notice'>You fill \the [src]] to the brim.</span>")
+				to_chat(user, "<span class='notice'>You fill \the [src] to the brim.</span>")
 				break
 		updateUsrDialog()
 
@@ -192,14 +191,14 @@
 				new ST.type (src)
 				ST.use(1)
 				user.visible_message( \
-					"<span class='notice'>[user] has added one of [O] to \the [src].</span>", \
-					"<span class='notice'>You add one of [O] to \the [src].</span>")
+					"<span class='notice'>[user] adds one of [O] to [src].</span>", \
+					"<span class='notice'>You add one of [O] to [src].</span>")
 				updateUsrDialog()
 				return 1
 		if(user.drop_item(O, src))
 			user.visible_message( \
-				"<span class='notice'>[user] has added \the [O] to \the [src].</span>", \
-				"<span class='notice'>You add \the [O] to \the [src].</span>")
+				"<span class='notice'>[user] adds [O] to [src].</span>", \
+				"<span class='notice'>You add [O] to [src].</span>")
 			updateUsrDialog()
 			return 1
 	else if(is_type_in_list(O,accepts_reagents_from))
@@ -207,15 +206,15 @@
 			return 1
 		for (var/datum/reagent/R in O.reagents.reagent_list)
 			if (!(R.id in acceptable_reagents))
-				to_chat(user, "<span class='warning'>Your [O] contains components unsuitable for cookery.</span>")
+				to_chat(user, "<span class='warning'>[O] contains substances unsuitable for cookery.</span>")
 				return 1
 		//G.reagents.trans_to(src,G.amount_per_transfer_from_this)
 	else if(istype(O,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
-		to_chat(user, "<span class='warning'>This is ridiculous. You can not fit \the [G.affecting] in this [src].</span>")
+		to_chat(user, "<span class='warning'>This is ridiculous. You can not fit [G.affecting] in this [src].</span>")
 		return 1
 	else
-		to_chat(user, "<span class='warning'>You have no idea what you can cook with this [O].</span>")
+		to_chat(user, "<span class='warning'>You have no idea what you can cook with [O].</span>")
 		return 1
 	updateUsrDialog()
 

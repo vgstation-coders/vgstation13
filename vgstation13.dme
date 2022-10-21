@@ -1094,6 +1094,7 @@
 #include "code\game\objects\items\weapons\mop.dm"
 #include "code\game\objects\items\weapons\null_rod.dm"
 #include "code\game\objects\items\weapons\paiwire.dm"
+#include "code\game\objects\items\weapons\pan.dm"
 #include "code\game\objects\items\weapons\peglimb.dm"
 #include "code\game\objects\items\weapons\power_cells.dm"
 #include "code\game\objects\items\weapons\RCL.dm"

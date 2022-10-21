@@ -11,6 +11,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	var/possible_transfer_amounts = list(5,10,15,25,30)
 	var/volume = 30
 	var/amount_per_imbibe = 5
+	var/attack_mob_instead_of_feed //If true, the reagent container will be used as a melee weapon rather than as vessel to feed another mob with (in attack()).
 
 /obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
@@ -87,6 +88,10 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return
 
 /obj/item/weapon/reagent_containers/attack(mob/M as mob, mob/user as mob, def_zone)
+
+	if(attack_mob_instead_of_feed)
+		return ..()
+
 	//If harm intent, splash it on em, else try to feed em it
 	if(!M.reagents)
 		return
@@ -253,7 +258,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		var/obj/container = target
 		if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers) && !istype(container,/obj/item/weapon/reagent_containers/food/snacks))
 			return -1
-
 		if(target.is_open_container())
 			success = transfer_sub(src, target, amount_per_transfer_from_this, user, log_transfer = TRUE)
 
