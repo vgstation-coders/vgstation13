@@ -188,7 +188,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/supergunkburger
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
 
 /datum/recipe/moonsupergunkburger
 	reagents = list(SODIUMCHLORIDE = 5, BLACKPEPPER = 5, FLOUR = 15)
@@ -208,7 +208,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/supergunkburger
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
 
 /datum/recipe/slimeburger
 	reagents = list(SLIMEJELLY = 5, FLOUR = 15)
@@ -223,18 +223,18 @@
 /datum/recipe/gunkburgerroach
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/roach)
-	result = /obj/item/weapon/reagent_containers/food/snacks/gunkburger
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger
 
 /datum/recipe/gunkburgercricket
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/cricket)
-	result = /obj/item/weapon/reagent_containers/food/snacks/gunkburger
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger
 
 /datum/recipe/deluxegunkburger
 	reagents = list(FLOUR = 5)
 	priority = 1
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big)
-	result = /obj/item/weapon/reagent_containers/food/snacks/deluxegunkburger
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger
 
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
@@ -866,7 +866,7 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/corn)
 	result = /obj/item/weapon/reagent_containers/food/snacks/popcorn
 
-/datum/recipe/hoppers
+/datum/recipe/hopcorn
 	items = list(
 				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
 				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
