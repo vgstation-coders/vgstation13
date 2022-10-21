@@ -1503,14 +1503,31 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/gunkburger
+/obj/item/weapon/reagent_containers/food/snacks/skitter/ //if ye dish is a child of skitter it will move around after 30 ticks
+	name = "skittering burger"							//make sure to add "processing_objects += src" under New() for it to work
+	desc = "A burger-shaped cockroach."
+	icon_state = "bugburger"
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/pickup(mob/user)
+	timer = 0
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/process()
+	timer += 1
+	if(timer > 30 && istype(loc, /turf) && prob(60))
+		Move(get_step(loc, pick(cardinal)))
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/Destroy()
+	processing_objects -= src
+	 ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger
 	name = "gunk burger"
 	desc = "A GunkCo classic! You will eat the bugs and you will enjoy them."
 	icon_state = "bugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
 	
-/obj/item/weapon/reagent_containers/food/snacks/gunkburger/New()
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/New()
 	..()
 	processing_objects += src
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -1519,22 +1536,14 @@
 		desc = "You can feel the legs wriggling and bug juices with each bite. Oh god, you're gonna THR-"
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/gunkburger/pickup(mob/user)
-	timer = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/gunkburger/process()
-	timer += 1
-	if(timer > 30 && istype(loc, /turf) && prob(60))
-		Move(get_step(loc, pick(cardinal)))
-
-/obj/item/weapon/reagent_containers/food/snacks/deluxegunkburger
+/obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger
 	name = "deluxe gunk burger"
 	desc = "GunkCo's latest innovation! You won't guess the special ingredient!"
 	icon_state = "deluxebugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
 
-/obj/item/weapon/reagent_containers/food/snacks/deluxegunkburger/New()
+/obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger/New()
 	..()
 	processing_objects += src
 	reagents.add_reagent(NUTRIMENT, 12)
@@ -1543,13 +1552,21 @@
 		desc = "You can't comprehend how much I regret biting into this thing. The disgusting texture, burning juices and terrible taste will never leave my mind."
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/deluxegunkburger/pickup(mob/user)
-	timer = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/deluxegunkburger/process()
-	timer += 1
-	if(timer > 30 && istype(loc, /turf) && prob(60))
-		Move(get_step(loc, pick(cardinal)))
+/obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
+	name = "Super Gunk Burger"
+	desc = "The Cockroach King! Or matriarch actually. You can't even fathom eating that much cockroach."
+	icon_state = "supergunkburger"
+	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
+	base_crumb_chance = 20
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger/New()
+	..()
+	processing_objects += src
+	reagents.add_reagent(NUTRIMENT, 40)
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 3)
+		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosia and blingpizzas must ever afterward be poison to me."
+	bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
@@ -3175,30 +3192,6 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 40)
 	bitesize = 10
-
-/obj/item/weapon/reagent_containers/food/snacks/supergunkburger
-	name = "Super Gunk Burger"
-	desc = "The Cockroach King! Or matriarch actually. You can't even fathom eating that much cockroach."
-	icon_state = "supergunkburger"
-	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
-	base_crumb_chance = 20
-	
-/obj/item/weapon/reagent_containers/food/snacks/supergunkburger/New()
-	..()
-	processing_objects += src
-	reagents.add_reagent(NUTRIMENT, 40)
-	if(prob(30))
-		reagents.add_reagent(SALTWATER, 3)
-		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosia and blingpizzas must ever afterward be poison to me."
-	bitesize = 10
-
-/obj/item/weapon/reagent_containers/food/snacks/supergunkburger/pickup(mob/user)
-	timer = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/supergunkburger/process()
-	timer += 1
-	if(timer > 30 && istype(loc, /turf) && prob(60))
-		Move(get_step(loc, pick(cardinal)))
 
 /obj/item/weapon/reagent_containers/food/snacks/candiedapple
 	name = "Candied Apple"
