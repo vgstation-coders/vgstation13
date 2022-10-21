@@ -19,9 +19,7 @@
 	add_fingerprint(user)
 	if(istype(I,/obj/item/tool/crowbar/halligan))
 		var/obj/item/tool/crowbar/halligan/H = I
-		if(density) //can't cut an open door open
-			if(pried_open) //shutter is already fully cut open
-				return
+		if(density && !pried_open) //can't cut an open door open
 			if(cut_open)
 				pry(user)
 				return
