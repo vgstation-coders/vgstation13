@@ -646,9 +646,9 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/grill/cook()
-	if(istype(ingredient, /obj/item/weapon/reagent_containers/pan)) //If it's a pan, start cooking via the pan's cook() instead.
+	if(istype(ingredient, /obj/item/weapon/reagent_containers/pan)) //If it's a pan, start cooking via the pan's cook_start() instead.
 		var/obj/item/weapon/reagent_containers/pan/P = ingredient
-		P.cook()
+		P.cook_start()
 		return
 	var/foodname = "rotisserie [ingredient.name]"
 	active = 1

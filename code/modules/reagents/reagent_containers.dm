@@ -200,6 +200,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /**
  * Helper proc to handle reagent splashes. A negative `amount` will splash all the reagents.
  */
+
 /proc/splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user = null)
 	if (amount == 0 || reagents.is_empty())
 		if(user)
@@ -220,6 +221,11 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(user.Adjacent(target))
 			user.visible_message("<span class='warning'>\The [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""] has been splashed with something by [user]!</span>",
 								"<span class='notice'>You splash [amount > 0 ? "some of " : ""]the solution onto \the [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""].</span>")
+
+//Define this wrapper as well to allow for proc overrides eg. for frying pan
+/obj/item/weapon/reagent_containers/proc/container_splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user = null)
+	return splash_sub(reagents, target, amount, user)
+
 /**
  * Transfers reagents to other containers/from dispensers. Handles splashing as well.
  *
@@ -281,7 +287,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				add_logs(user, M, "splashed", admin = TRUE, object = src, addition = "Reagents: [splashed_reagents]")
 
 				// Splash the target
-				splash_sub(reagents, M, splashable_units, user)
+				container_splash_sub(reagents, M, splashable_units, user)
 				return (to_splash)
 			// Non-mob splashing
 			else
@@ -291,7 +297,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 							add_gamelogs(user, "poured '[reagent_id]' onto \the [target]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
 
 					// Splash the thing
-					splash_sub(reagents, target, splashable_units, user)
+					container_splash_sub(reagents, target, splashable_units, user)
 					return (to_splash)
 	return 0
 

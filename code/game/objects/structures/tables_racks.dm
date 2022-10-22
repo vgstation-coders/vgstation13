@@ -419,6 +419,7 @@
 			qdel(W)
 			return
 
+	//these should maybe be moved into something like W.table_act()
 	if (W.is_wrench(user) && can_disassemble())
 		to_chat(user, "<span class='notice'>Now disassembling table...</span>")
 		W.playtoolsound(src, 50)
@@ -426,12 +427,17 @@
 			destroy()
 		return
 
-	if(istype(W, /obj/item/weapon/cookiesynth))
+	if (istype(W, /obj/item/weapon/reagent_containers/pan) && user.a_intent == I_DISARM)
+		var/obj/item/weapon/reagent_containers/pan/P = W
+		if(P.drop_ingredients(src, deliberate = TRUE))
+			return
+
+	if (istype(W, /obj/item/weapon/cookiesynth))
 		var/obj/item/weapon/cookiesynth/C = W
 		C.synthesize()
 		return
 
-	if(user.drop_item(W, src.loc))
+	if (user.drop_item(W, src.loc))
 		if(W.loc == src.loc && params)
 			W.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)
 			return 1

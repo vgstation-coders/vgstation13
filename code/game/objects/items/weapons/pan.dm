@@ -5,17 +5,12 @@
 	//attacksounds
 	//sizzle sounds/stuff having to be removed manually
 	//fires/smoke when something burns
-	//globalize recipies and stuff to subsystem to avoid redundancy with microwave
-	//make list of acceptable containers more implicit?
-	//fix removing stuff from pan (attack_self?)
+	//globalize recipes and stuff to subsystem to avoid redundancy with microwave
+	//implement recipes only being cookable on a pan versus a microwave based on flag
+	//make list of acceptable containers more implicit or do away with it as it's already a reagent container?
 	//emptying contents/reagents into other stuff?
-	//burned mess sprite on top of pan rather than under?
 	//inhand sprites
 	//sizzling with reagents in it
-	//reagent color overlays
-	//fix spam cooking before cook finishes
-	//fix food not appearing if pan is held
-	//fix reagents not working
 	//crafting/cargo/vending/mapping
 	//change visible message when start cooking etc.
 	//bunsen burners
@@ -41,10 +36,17 @@
 	//glued stuff sticking in the frying pan
 	//add check for being out in the open (dont dump contents inside of a locker, mech, etc.)
 	//issue with adding reagents after it already started cooking
-	//issue with random pixel offsets
-	//front overlay not working
-	//splash not occuring on attack
-	//get splash sound working for sufficient volumes
+	//componentize
+	//spilling when thrown/propelled/impacted
+	//cooktop component
+	//what to do with only reagents/no burned mess/etc(just heat the reagents?)
+	//body-part specific text
+	//consider only generating the front icon once
+	//address infinite toxin farming
+	//check that timing is consistent
+	//check removing stuff from the grill when power's off
+	//chef meals count (passing user into the cooking)
+	//is has_extra_item necessary?
 
 /obj/item/weapon/reagent_containers/pan
 	name = "frying pan"
@@ -64,16 +66,14 @@
 	//var/speed_multiplier = 0.5 //Cooks half as fast as a microwave so it's easier to get stuff on the pan without failing the recipe.
 	var/speed_multiplier = 2 //for debugging
 	var/reagent_disposal = 1 //Does it empty out reagents when you eject? Default yes.
-	var/operating = 0 // Is it currently cooking? //todo: rename this
+	var/currentlycooking = 0 //Is it currently cooking?
+	var/cookingprogress = 0 //How far along into cooking something are we? Increments by 1 every process() tick. When it reaches, the cook time of the recipe, the recipe is cooked.
+	var/datum/recipe/currentrecipe //What recipe is currently being cooked?
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
 	var/global/list/acceptable_items = list(
 							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
 							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
 							)// List of the items you can put in
-	var/global/list/accepts_reagents_from = list(/obj/item/weapon/reagent_containers/glass,
-												/obj/item/weapon/reagent_containers/food/drinks,
-												/obj/item/weapon/reagent_containers/food/condiment,
-												/obj/item/weapon/reagent_containers/dropper)
 /*
 
 /obj/item/weapon/reagent_containers/pan/skillet
@@ -102,16 +102,25 @@
 
 	update_icon()
 
+/obj/item/weapon/reagent_containers/pan/proc/contains_anything()
+	if(reagents.total_volume || contents.len)
+		return TRUE
+	else
+		return FALSE
+
 /obj/item/weapon/reagent_containers/pan/on_reagent_change()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/pan/update_icon()
-	message_admins("DEBUG 001")
+
 	overlays.len = 0
 
+	if(blood_overlay)
+		overlays += blood_overlay
+
 	//reagents:
-	if(reagents && reagents.total_volume)
-		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "pan10")
+	if(reagents.total_volume)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "pan20")
 
 		var/percent = round((reagents.total_volume / volume) * 100)
 		switch(percent)
@@ -127,43 +136,65 @@
 				filling.icon_state = "pan100"
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		//filling.layer = layer
 		overlays += filling
 
 	//non-reagent ingredients:
-	message_admins("DEBUG 002")
-	var/needs_front
-	for(var/atom/content in contents)
-		message_admins("DEBUG 003")
-		needs_front = TRUE
-		var/mutable_appearance/mini_ingredient = image("icon"=content)
+	if(contents.len)
 		var/matrix/M = matrix()
 		M.Scale(0.5, 0.5)
-		mini_ingredient.transform = M
-		overlays += mini_ingredient
+		for(var/atom/content in contents)
+			var/mutable_appearance/mini_ingredient = image("icon"=content)
+			mini_ingredient.transform = M
+			mini_ingredient.pixel_x = 0
+			mini_ingredient.pixel_y = 0
+			mini_ingredient.layer = FLOAT_LAYER
+			mini_ingredient.plane = FLOAT_PLANE
+			overlays += mini_ingredient
+		//put a front over the ingredients where they're occluded from view by the side of the pan
+		var/image/pan_front = image('icons/obj/pan.dmi', src, "pan_front")
+		overlays += pan_front
+		//put blood back onto the pan front
+		if(blood_overlay)
 
-	//put a front over the ingredients where they're occluded from view by the side of the pan
-	message_admins("DEBUG 004")
-	if(needs_front)
-		message_admins("DEBUG 005")
-		var/image/front = image('icons/obj/pan.dmi', src, "pan_front")
-		overlays += front
+			var/icon/I = new /icon('icons/obj/pan.dmi', "pan_front")
+			I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD) //fills the icon_state with white (except where it's transparent)
+			I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
 
+			var/image/frontblood = image(I)
+			frontblood.color = blood_color
+
+			overlays += frontblood
+			//overlays += blood_overlays["[type]_front"]
+
+/////////////////////Dumping-and-splashing-related stuff/////////////////////
 /obj/item/weapon/reagent_containers/pan/afterattack(var/atom/target, var/mob/user, var/adjacency_flag, var/click_params)
 	if (!adjacency_flag)
 		return
 
-	drop_ingredients(target, user, deliberate = TRUE)
+	message_admins("[target]|[user]|[adjacency_flag]|[click_params]")
+	//we drop ingredients out of the pan here in three situations:
+		//if we are on disarm intent and use it on a table
+		//if we use it on a non-dense turf
+		//if we use it on a mob
+
+	message_admins("[user]|[user.a_intent]|[user.a_intent == TRUE]|[istable(target)]")
+	if((user.a_intent == I_DISARM) && istable(target))
+		drop_ingredients(target, user)
+	else if(isturf(target))
+		var/turf/T = target
+		if(!T.density)
+			drop_ingredients(target, user)
+	else if(ismob(target))
+		drop_ingredients(target, user)
+
+	//todo: transferring directly to plates and trays and other foods
 
 /obj/item/weapon/reagent_containers/pan/attackby(var/obj/item/I, var/mob/user)
 
 	//Sanity to avoid adding something to the pan when cooking has already been initiated
-	if(operating)
+	if(currentlycooking)
 		to_chat(usr, "<span class='notice'>Something is already cooking on [src]!</span>")
-
-	//If we're using a reagent container that can transfer to the pan, transfer to the pan.
-	if(is_type_in_list(I,accepts_reagents_from))
-		var/obj/item/weapon/reagent_containers/R = I
-		R.transfer(src, user)
 
 	//If we're using a plant bag, add the contents to the pan.
 	else if(istype(I, /obj/item/weapon/storage/bag/plants) || istype(I, /obj/item/weapon/storage/bag/food/borg))
@@ -205,36 +236,111 @@
 	else
 		to_chat(user, "<span class='notice'>You have no idea what you can cook with [I].</span>")
 
-//temporarily make attack_self() cook the food for testing
-/obj/item/weapon/reagent_containers/pan/attack_self(mob/user as mob)
-	cook()
 
-/obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target, deliberate = FALSE)
-	var/mob/dropper = usr
-	if(contents.len == 0 && reagents.total_volume == 0)
+/obj/item/weapon/reagent_containers/pan/attack_self(mob/user as mob)
+	if(user.a_intent == I_DISARM)
+		drop_ingredients()
 		return
-	spill_reagents(target)
+	//temporarily make attack_self() cook the food for testing
+	if(!currentlycooking)
+		cook_start()
+	else
+		cook_abort()
+
+/obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target)
+	var/mob/dropper = usr
+	if(!contains_anything())
+		return FALSE //Return FALSE if there's nothing to drop.
+
+	var/splashverb = reagents.total_volume ? "splashes" : "dumps"
+
+	var/transfer_result = transfer(target, dropper, splashable_units = -1) // Potentially splash with everything inside
+	if(transfer_result >= 10)
+		playsound(target ? target : src, 'sound/effects/slosh.ogg', 25, 1)
+
 	for(var/atom/movable/AM in contents)
 		AM.forceMove(target ? get_turf(target) : get_turf(src))
-	(deliberate && loc == dropper) ? dropper.visible_message( \
-				"<span class='notice'>[dropper] dumps[target ? "" : " out"] the contents of [src][target ? " onto [target]" : ""].</span>", \
-				"<span class='notice'>You dump[target ? "" : " out"] the contents of [src][target ? " onto [target]" : ""].</span>") : visible_message("<span class='warning'>Everything spills out of [src]!</span>")
+		AM.pixel_x = rand(-10, 10)
+		AM.pixel_y = rand(-10, 10)
+
+	var/spanclass = "notice"
+	if(ismob(target) && (dropper != target))
+		spanclass = "warning"
+
+	//now display the appropriate message:
+	if(dropper)
+		//if we splashed someone while also attacking them, say that the contents spill out onto them
+		if((dropper.a_intent != I_HELP) && ismob(target))
+			var/mob/M = target
+			M.visible_message( \
+					"<span class='[spanclass]'>The contents of [src] spill out onto [M][spanclass == "warning" ? "!" : "."]</span>", \
+					"<span class='[spanclass]'>The contents of [src] spill out onto you[spanclass == "warning" ? "!" : "."]</span>")
+		//otherwise, say that the wielder spills it onto the target
+		else
+			dropper.visible_message( \
+					"<span class='[spanclass]'>[dropper] [splashverb][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? get_reflexive_pronoun(dropper) : target]" : ""][spanclass == "warning" ? "!" : "."]</span>", \
+					"<span class='[spanclass]'>You [shift_verb_tense(splashverb)][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? "yourself" : target]" : ""].</span>")
+	else
+		visible_message("<span class='warning'>Everything spills out of [src] [target ? "onto [target]" : ""]!</span>")
+
+	cook_abort() //sanity
 	update_icon()
+	return TRUE
 
-/obj/item/weapon/reagent_containers/pan/proc/start()
+/obj/item/weapon/reagent_containers/pan/container_splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user = null)
+
+	var/datum/organ/external/affecting = user && user.zone_sel ? user.zone_sel.selecting : null //Find what the player is aiming at
+
+	reagents.reaction(target, TOUCH, amount_override = max(0,amount), zone_sels = affecting ? list(affecting) : ALL_LIMBS)
+
+	if(user)
+		user.investigation_log(I_CHEMS, "has splashed [amount > 0 ? "[amount]u of [reagents.get_reagent_ids()]" : "[reagents.get_reagent_ids(1)]"] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""].")
+
+	reagents.reaction(get_turf(target ? target : src), TOUCH) //Spill the remainder onto the floor.
+	if(amount > 0)
+		reagents.remove_any(amount)
+	else
+		reagents.clear_reagents()
+
+/obj/item/weapon/reagent_containers/pan/attack(mob/M as mob, mob/user as mob, def_zone)
+	//If there's something in the pan, and we're on help intent, only splash the mob.
+	if(contains_anything() && (user.a_intent == I_HELP))
+		return
+	return ..()
+
+/*
+//generate both base and front overlays
+/obj/item/weapon/reagent_containers/pan/generate_blood_overlay()
+	if(blood_overlays["[type]"] && blood_overlays["[type]_front"])
+		return
+	var/icon/Base = new /icon(icon, icon_state)
+	Base.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD)
+	Base.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY)
+	blood_overlays["[type]"] = image(Base)
+	var/icon/Front = new /icon(icon, "pan_front")
+	Front.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD)
+	Front.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY)
+	blood_overlays["[type]_front"] = image(Front)
+*/
+
+/////////////////////Cooking-related stuff/////////////////////
+/obj/item/weapon/reagent_containers/pan/proc/cook_start() //called when the pan is placed on a valid cooktop (eg. placed on grill)
 	visible_message("<span class='notice'>[src] starts cooking.</span>", "<span class='notice'>You hear \a [src] cooking.</span>")
-	operating = 1
-	//icon_state = "mw1"
+	currentlycooking = 1
+	processing_objects.Add(src)
+	currentrecipe = select_recipe(available_recipes,src)
 
-/obj/item/weapon/reagent_containers/pan/proc/abort()
-	operating = 0 // Turn it off again aferwards
-	//icon_state = "mw"
+/obj/item/weapon/reagent_containers/pan/proc/cook_stop() //called when the pan is no longer on a valid cooktop (eg. removed from grill)
+	currentlycooking = 0
+	processing_objects.Remove(src)
 
-/obj/item/weapon/reagent_containers/pan/proc/stop()
-	operating = 0 // Turn it off again aferwards
-	//icon_state = "mw"
+/obj/item/weapon/reagent_containers/pan/proc/cook_abort() //called when things are dumped out of the pan
+	currentlycooking = 0
+	cookingprogress = 0
+	processing_objects.Remove(src)
+	currentrecipe = select_recipe(available_recipes,src)
 
-/obj/item/weapon/reagent_containers/pan/proc/fail()
+/obj/item/weapon/reagent_containers/pan/proc/cook_fail() //called when the recipe is invalid (including overcooking something by not removing the pan from the cooktop in time, which is the same as attempting to cook the already-cooked resulting dish)
 	var/obj/item/weapon/reagent_containers/food/snacks/badrecipe/ffuu = new(src)
 	var/amount = 0
 	for (var/obj/O in contents-ffuu)
@@ -250,69 +356,55 @@
 	ffuu.reagents.add_reagent(TOXIN, amount/10)
 	if(Holiday == APRIL_FOOLS_DAY)
 		playsound(src, "goon/sound/effects/dramatic.ogg", 100, 0)
+	ffuu.pixel_x = 0
+	ffuu.pixel_y = 0
+	currentrecipe = select_recipe(available_recipes, src)
 	return ffuu
 
+/obj/item/weapon/reagent_containers/pan/proc/on_valid_cooktop()
+	if(istype(loc, /obj/machinery/cooking/grill)) //todo: generalize this, but for now just check if we're on a grill or not
+		return TRUE
+	return FALSE
+
+/obj/item/weapon/reagent_containers/pan/proc/cooktop_is_on()
+	if(istype(loc, /obj/machinery/cooking/grill)) //todo: generalize this, but for now just check if the grill we're on is powered or not
+		var/obj/machinery/cooking/grill/G = loc
+		if(!(G.stat & (FORCEDISABLE | NOPOWER | BROKEN)))
+			return TRUE
+	return FALSE
+
+/obj/item/weapon/reagent_containers/pan/process()
+	if(!on_valid_cooktop())
+		cook_stop()
+
+	if(!cooktop_is_on()) //if the power went out on the grill, don't cook
+		return
+
+	cookingprogress += speed_multiplier
+
+	if(cookingprogress >= (currentrecipe ? currentrecipe.time : 10 SECONDS)) //it's done when it's cooked for the cooking time, or a default of 10 seconds if there's no valid recipe
+
+		cookingprogress = 0 //reset the cooking progress
+
+		var/obj/cooked
+		if(currentrecipe)
+			cooked = currentrecipe.make_food(src)
+			visible_message("<span class='notice'>[cooked] looks done.</span>")
+		else
+			cooked = cook_fail()
+		if(cooked)
+			cooked.forceMove(src)
+			update_icon()
+
+		//re-check the recipe. generally this will return null because we'll continue cooking the previous result, which will lead to a burned mess
+		currentrecipe = select_recipe(available_recipes, src)
+
+/*
 /obj/item/weapon/reagent_containers/pan/proc/iscooking(var/seconds as num) //Whether or not something is currently cooking in the pan
 	for (var/i=1 to seconds)
 		sleep(10/speed_multiplier)
 	return 1
-
-/obj/item/weapon/reagent_containers/pan/proc/cook(mob/user)
-	if(operating)
-		return
-	start()
-	if (reagents.total_volume==0 && !(locate(/obj) in contents)) //dry run
-		if (!iscooking(10))
-			abort()
-			return
-		stop()
-		return
-
-	var/datum/recipe/recipe = select_recipe(available_recipes,src)
-	var/obj/cooked
-
-	if (!recipe)
-		if (has_extra_item())
-			if(!iscooking(4))
-				abort()
-				return
-			cooked = fail()
-			cooked.forceMove(src)
-
-		else
-			if(!iscooking(10))
-				abort()
-				return
-			stop()
-			cooked = fail()
-			cooked.forceMove(src)
-		update_icon()
-		return
-	else
-		var/halftime = round(recipe.time/10/2)
-		if (!iscooking(halftime))
-			abort()
-			return
-		if (!iscooking(halftime))
-			abort()
-			cooked = fail()
-			cooked.forceMove(src)
-			update_icon()
-			return
-		cooked = recipe.make_food(src,user)
-		stop()
-		cooked?.forceMove(src)
-		update_icon()
-		return
-
-/obj/item/weapon/reagent_containers/pan/proc/has_extra_item()
-	for (var/obj/O in contents)
-		if ( \
-				!istype(O,/obj/item/weapon/reagent_containers/food) && \
-				!istype(O, /obj/item/weapon/grown) \
-			)
-			return 1
-	return 0
+*/
 
 /obj/item/weapon/reagent_containers/pan/proc/build_list_of_contents()
 	var/dat = ""

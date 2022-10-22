@@ -1830,3 +1830,8 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 //Muzzles
 #define MUZZLE_SOFT 1	//Muzzle causes muffled speech.
 #define MUZZLE_HARD	2	//Muzzle prevents speech.
+
+//Microwave-or-pan selective cookability of recipes
+#define COOKABLE_WITH_MICROWAVE (1<<0)
+#define COOKABLE_WITH_PAN (1<<1)
+#define COOKABLE_WITH_ALL COOKABLE_WITH_MICROWAVE | COOKABLE_WITH_PAN
