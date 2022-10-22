@@ -15,8 +15,6 @@ var/list/all_rods = list()
 	return 0
 
 /datum/event/immovable_rod/big/can_start(var/list/active_with_role)
-	if(active_with_role["Engineer"] > 2)
-		return 15
 	return 0
 
 /datum/event/immovable_rod/hyper/can_start(var/list/active_with_role)
