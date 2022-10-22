@@ -1995,7 +1995,7 @@
 	if(prob(unpopped))
 		to_chat(usr, "<span class='warning'>Just as you were going to bite down on the cricket, it jumps away from your hand. It was alive!</span>")
 		unpopped = max(0, unpopped-3) //max 3 crickets per hoppers bag
-		new /mob/living/simple_animal/cricket(src)
+		new /mob/living/simple_animal/cricket(get_turf(src))
 
 /obj/item/weapon/reagent_containers/food/snacks/sosjerky
 	name = "\improper Scaredy's Private Reserve Beef Jerky"
