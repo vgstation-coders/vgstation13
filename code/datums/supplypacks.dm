@@ -1373,6 +1373,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/diona,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/polyp,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
