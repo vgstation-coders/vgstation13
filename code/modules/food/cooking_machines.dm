@@ -85,8 +85,6 @@ var/global/ingredientLimit = 10
 	var/cooks_in_reagents = 0 //are we able to add stuff to the machine so that reagents are added to food?
 	var/cks_max_volume = 50
 
-	var/allow_pan = FALSE //Can we put a frying pan into this machine and have it cook?
-
 /obj/machinery/cooking/cultify()
 	new /obj/structure/cult_legacy/talisman(loc)
 	..()
@@ -137,6 +135,9 @@ var/global/ingredientLimit = 10
 	else if(isMoMMI(user))// *buzz
 		to_chat(user, "This is old analog equipment. You can't interface with it.")
 
+	else if(is_cooktop && cookingvessel) //If there's currently a cooking vessel on the cooking machine.
+		INVOKE_EVENT(src, /event/attackhand, "user" = user, "target" = src)
+
 	else if(active)
 		if(alert(user,"Remove \the [ingredient.name]?",,"Yes","No") == "Yes")
 			if(ingredient && (get_turf(ingredient)==get_turf(src)))
@@ -157,24 +158,19 @@ var/global/ingredientLimit = 10
 		. = ..()
 
 /obj/machinery/cooking/attackby(obj/item/I, mob/user)
-	message_admins("DEBUG 001")
+	message_admins("DEBUG COOKING 001")
 	if(active)
-		message_admins("DEBUG 002")
 		to_chat(user, "<span class='warning'>[name] is currently busy.</span>")
 		return
 	else if(..())
-		message_admins("DEBUG 003")
 		return TRUE
 	else if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
-		message_admins("DEBUG 004")
 		to_chat(user, "<span class='warning'> The power's off, it's no good. </span>")
 		return
 	else if(isMoMMI(user))// *buzz
-		message_admins("DEBUG 005")
 		to_chat(user, "<span class='warning'>That's a terrible idea.</span>")
 		return
 	else
-		message_admins("DEBUG 006")
 		takeIngredient(I,user)
 	return
 
@@ -208,8 +204,6 @@ var/global/ingredientLimit = 10
 		. = "It would be a straining topological exercise."
 	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/holder) || deepFriedEverything || force_cook)
 		. = "valid"
-	else if(allow_pan && istype(I,/obj/item/weapon/reagent_containers/pan))
-		. = "valid"
 	else if(istype(I,/obj/item/weapon/reagent_containers))
 		. = "transto"
 	else if(istype(I,/obj/item/organ/internal))
@@ -223,28 +217,21 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/proc/takeIngredient(var/obj/item/I,mob/user,var/force_cook)
-	message_admins("DEBUG 011")
 	. = validateIngredient(I, force_cook)
 	if(. == "transto")
-		message_admins("DEBUG 012")
 		return
 	if(. == "valid")
-		message_admins("DEBUG 013")
 		if(foodChoices)
 			. = foodChoices[(input("Select production.") in foodChoices)]
 		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != (I) && !isgripper(user.get_active_hand())) && !force_cook))
-			message_admins("DEBUG 014")
 			return FALSE
-		message_admins("DEBUG 015")
 		if(user.drop_item(I, src))
-			message_admins("DEBUG 016")
 			ingredient = I
 			spawn() cook(.)
 			to_chat(user, "<span class='notice'>You add \the [I.name] to \the [name].</span>")
 			return TRUE
 	else
 		to_chat(user, "<span class='warning'>You can't put that in \the [name]. \n[.]</span>")
-	message_admins("DEBUG 017")
 	return FALSE
 
 /obj/machinery/cooking/proc/transfer_reagents_to_food(var/obj/item/I)
@@ -632,7 +619,7 @@ var/global/ingredientLimit = 10
 
 	cooks_in_reagents = 1
 
-	allow_pan = TRUE
+	is_cooktop = TRUE //Allows frying pans to be placed on top of it.
 
 /obj/machinery/cooking/grill/validateIngredient(var/obj/item/I)
 	. = ..()
@@ -646,10 +633,6 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/grill/cook()
-	if(istype(ingredient, /obj/item/weapon/reagent_containers/pan)) //If it's a pan, start cooking via the pan's cook_start() instead.
-		var/obj/item/weapon/reagent_containers/pan/P = ingredient
-		P.cook_start()
-		return
 	var/foodname = "rotisserie [ingredient.name]"
 	active = 1
 	icon_state = icon_state_on

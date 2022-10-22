@@ -40,15 +40,30 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/datum/delay_controller/pAImove_delayer
 	var/pAImovement_delay = 0
 
-	// Can we wrench/weld this to a turf with a dense /obj on it?
+	//Can we wrench/weld this to a turf with a dense /obj on it?
 	var/can_affix_to_dense_turf=0
 
 	var/list/alphas_obj = list()
 	var/impactsound
 	var/current_glue_state = GLUE_STATE_NONE
 
-	// Does this item have a slime installed?
+	//Does this item have a slime installed?
 	var/has_slime = 0
+
+	//Cooking stuff:
+	var/is_cooktop //If true, the object can be used in conjunction with a cooking vessel, eg. a frying pan, to cook food.
+	var/obj/item/weapon/reagent_containers/pan/cookingvessel //The vessel being used to cook food in. If generalized out to other types of vessels, make sure to also generalize the frying pan's cook_start(), etc. as well.
+
+/obj/New()
+	..()
+	if(breakable_flags)
+		breakable_init()
+	if(is_cooktop)
+		add_component(/datum/component/cooktop)
+
+/obj/proc/can_cook() //Return true if object is currently in a state that would allow for food to be cooked on it. Can (and generally should) be overriden to check for more specific conditions.
+	if(is_cooktop)
+		return TRUE
 
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
@@ -837,3 +852,60 @@ a {
 	if(istype(caller) && (caller.pass_flags & pass_flags_self))
 		return TRUE
 	. = !density
+
+/obj/proc/build_list_of_contents() //used by microwaves and frying pans
+	var/dat = ""
+	var/list/items_counts = new
+	var/list/items_measures = new
+	var/list/items_measures_p = new
+	for (var/obj/O in contents)
+		var/display_name = O.name
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat)) //any meat
+			items_measures[display_name] = "slab of meat"
+			items_measures_p[display_name] = "slabs of meat"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat))
+			items_measures[display_name] = "fillet of fish"
+			items_measures_p[display_name] = "fillets of fish"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/egg))
+			items_measures[display_name] = "egg"
+			items_measures_p[display_name] = "eggs"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/tofu))
+			items_measures[display_name] = "tofu chunk"
+			items_measures_p[display_name] = "tofu chunks"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/donkpocket))
+			display_name = "Turnovers"
+			items_measures[display_name] = "turnover"
+			items_measures_p[display_name] = "turnovers"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans))
+			items_measures[display_name] = "soybean"
+			items_measures_p[display_name] = "soybeans"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/grapes))
+			display_name = "Grapes"
+			items_measures[display_name] = "bunch of grapes"
+			items_measures_p[display_name] = "bunches of grapes"
+		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes))
+			display_name = "Green Grapes"
+			items_measures[display_name] = "bunch of green grapes"
+			items_measures_p[display_name] = "bunches of green grapes"
+		if (istype(O,/obj/item/weapon/kitchen/utensil)) //any spoons, forks, knives, etc
+			items_measures[display_name] = "utensil"
+			items_measures_p[display_name] = "utensils"
+		items_counts[display_name]++
+	for (var/O in items_counts)
+		var/N = items_counts[O]
+		if (!(O in items_measures))
+			dat += {"<B>[capitalize(O)]:</B> [N] [lowertext(O)]\s<BR>"}
+		else
+			if (N==1)
+				dat += {"<B>[capitalize(O)]:</B> [N] [items_measures[O]]<BR>"}
+			else
+				dat += {"<B>[capitalize(O)]:</B> [N] [items_measures_p[O]]<BR>"}
+
+	for (var/datum/reagent/R in reagents.reagent_list)
+		var/display_name = R.name
+		if (R.id == CAPSAICIN)
+			display_name = "Hotsauce"
+		if (R.id == FROSTOIL)
+			display_name = "Coldsauce"
+		dat += {"<B>[display_name]:</B> [R.volume] unit\s<BR>"}
+	return dat

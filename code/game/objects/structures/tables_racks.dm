@@ -429,7 +429,7 @@
 
 	if (istype(W, /obj/item/weapon/reagent_containers/pan) && user.a_intent == I_DISARM)
 		var/obj/item/weapon/reagent_containers/pan/P = W
-		if(P.drop_ingredients(src, deliberate = TRUE))
+		if(P.drop_ingredients(src))
 			return
 
 	if (istype(W, /obj/item/weapon/cookiesynth))

@@ -1,38 +1,37 @@
 //Frying pan
 	//todo:
-	//add damage vs undead
 	//not able to add stuff when it's still cooking
-	//attacksounds
 	//sizzle sounds/stuff having to be removed manually
-	//fires/smoke when something burns
 	//globalize recipes and stuff to subsystem to avoid redundancy with microwave
 	//implement recipes only being cookable on a pan versus a microwave based on flag
-	//make list of acceptable containers more implicit or do away with it as it's already a reagent container?
 	//emptying contents/reagents into other stuff?
 	//inhand sprites
 	//sizzling with reagents in it
 	//crafting/cargo/vending/mapping
 	//change visible message when start cooking etc.
-	//bunsen burners
+	//stuff dumping out of the pan when attacking a breakable object/window/etc
+	//add more of an outline to the sprite
+	//fix disarm-dumping onto a table.
+
 	//cooking automatically in high heat?
 	//cook with heat transfer rather than timer
+
+	//bunsen burners
 	//barrels
 	//campfires
 	//spits?
-	//different cook timing based on heat
 	//fireplace
+	//stoves
 	//oven
-	//frying stuff in oil?
-	//leaving the pan on the stove causing a burned mess or a fire
+
+	//leaving the pan on the stove causing a burned mess
+	//burning something causing a fire and smoke
 	//hot pans with glowing red sprite and extra damage
 	//throwing stuff at people with pans or stuff falling out when used as a weapon
 	//getting scalding oil or other reagents on people
 	//sounds on grill, cook etc
 	//pan not getting erased when placed on grill is ready
 	//food being ready/steam sprite that turns to smoke and fire/burned mess if left on too long
-	//do independant in microwave for "fullness" for reagents vs. contents
-	//empty contents on floor when splashing
-	//disarm intent attack_hand to dump it on a table or on the floor
 	//glued stuff sticking in the frying pan
 	//add check for being out in the open (dont dump contents inside of a locker, mech, etc.)
 	//issue with adding reagents after it already started cooking
@@ -41,12 +40,20 @@
 	//cooktop component
 	//what to do with only reagents/no burned mess/etc(just heat the reagents?)
 	//body-part specific text
-	//consider only generating the front icon once
 	//address infinite toxin farming
 	//check that timing is consistent
 	//check removing stuff from the grill when power's off
 	//chef meals count (passing user into the cooking)
+	//items cooked, jecties, etc.
 	//is has_extra_item necessary?
+	//test splashverbs
+	//check edge cases of blowing up a grill with a pan on it, etc
+
+	//areas for expansion:
+
+	//different cook timing based on heat
+	//frying stuff in oil?
+	//consider only generating the front icon once
 
 /obj/item/weapon/reagent_containers/pan
 	name = "frying pan"
@@ -62,6 +69,9 @@
 	possible_transfer_amounts = list(10,20,50,100)
 	attack_mob_instead_of_feed = TRUE
 	attack_verb = list("smashes", "bludgeons", "batters", "pans")
+	hitsound = list('sound/weapons/pan_01.ogg', 'sound/weapons/pan_02.ogg', 'sound/weapons/pan_03.ogg', 'sound/weapons/pan_04.ogg')
+	miss_sound = list('sound/weapons/pan_miss_01.ogg', 'sound/weapons/pan_miss_02.ogg')
+	is_cookingvessel = TRUE
 	var/limit = 10 //Number of ingredients that the pan can hold at once.
 	//var/speed_multiplier = 0.5 //Cooks half as fast as a microwave so it's easier to get stuff on the pan without failing the recipe.
 	var/speed_multiplier = 2 //for debugging
@@ -70,10 +80,11 @@
 	var/cookingprogress = 0 //How far along into cooking something are we? Increments by 1 every process() tick. When it reaches, the cook time of the recipe, the recipe is cooked.
 	var/datum/recipe/currentrecipe //What recipe is currently being cooked?
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
-	var/global/list/acceptable_items = list(
+	var/global/list/acceptable_items = list( // List of the items you can put in
 							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
 							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
-							)// List of the items you can put in
+							)
+
 /*
 
 /obj/item/weapon/reagent_containers/pan/skillet
@@ -103,10 +114,13 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/pan/proc/contains_anything()
-	if(reagents.total_volume || contents.len)
-		return TRUE
-	else
-		return FALSE
+	//Returns (1<<0) if contains reagents, (1<<1) if it contains non-reagent contents, and the bitwise OR if it contains both.
+	var/result = 0
+	if(reagents.total_volume)
+		result |= (1<<0) //1
+	if(contents.len)
+		result |= (1<<1) //2
+	return result
 
 /obj/item/weapon/reagent_containers/pan/on_reagent_change()
 	update_icon()
@@ -249,12 +263,22 @@
 
 /obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target)
 	var/mob/dropper = usr
-	if(!contains_anything())
+	var/contains = contains_anything()
+	if(!contains)
 		return FALSE //Return FALSE if there's nothing to drop.
 
-	var/splashverb = reagents.total_volume ? "splashes" : "dumps"
+	var/splashverb
+	if(!dropper)
+		splashverb = "spills"
+	else if(!(contains & COOKVESSEL_CONTAINS_CONTENTS))
+		if(target)
+			splashverb = "splashes"
+		else
+			splashverb = "pours"
+	else
+		splashverb = "dumps"
 
-	var/transfer_result = transfer(target, dropper, splashable_units = -1) // Potentially splash with everything inside
+	var/transfer_result = transfer(target ? target : get_turf(src), dropper, splashable_units = -1) // Potentially splash with everything inside
 	if(transfer_result >= 10)
 		playsound(target ? target : src, 'sound/effects/slosh.ogg', 25, 1)
 
@@ -281,7 +305,7 @@
 					"<span class='[spanclass]'>[dropper] [splashverb][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? get_reflexive_pronoun(dropper) : target]" : ""][spanclass == "warning" ? "!" : "."]</span>", \
 					"<span class='[spanclass]'>You [shift_verb_tense(splashverb)][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? "yourself" : target]" : ""].</span>")
 	else
-		visible_message("<span class='warning'>Everything spills out of [src] [target ? "onto [target]" : ""]!</span>")
+		visible_message("<span class='warning'>Everything [splashverb] out of [src] [target ? "onto [target]" : ""]!</span>")
 
 	cook_abort() //sanity
 	update_icon()
@@ -322,6 +346,11 @@
 	Front.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY)
 	blood_overlays["[type]_front"] = image(Front)
 */
+
+/obj/item/weapon/reagent_containers/pan/modify_attack_power(power, mob/attackee, mob/attacker)
+	if(istype(attackee, /mob/living/simple_animal/hostile/necro))
+		power *= 2 //L4D4EVR
+	return power
 
 /////////////////////Cooking-related stuff/////////////////////
 /obj/item/weapon/reagent_containers/pan/proc/cook_start() //called when the pan is placed on a valid cooktop (eg. placed on grill)
@@ -393,7 +422,7 @@
 		else
 			cooked = cook_fail()
 		if(cooked)
-			cooked.forceMove(src)
+			cooked.forceMove(src, harderforce = TRUE)
 			update_icon()
 
 		//re-check the recipe. generally this will return null because we'll continue cooking the previous result, which will lead to a burned mess
@@ -406,70 +435,15 @@
 	return 1
 */
 
-/obj/item/weapon/reagent_containers/pan/proc/build_list_of_contents()
-	var/dat = ""
-	var/list/items_counts = new
-	var/list/items_measures = new
-	var/list/items_measures_p = new
-	for (var/obj/O in contents)
-		var/display_name = O.name
-		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat)) //any meat
-			items_measures[display_name] = "slab of meat"
-			items_measures_p[display_name] = "slabs of meat"
-		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat))
-			items_measures[display_name] = "fillet of fish"
-			items_measures_p[display_name] = "fillets of fish"
-		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/egg))
-			items_measures[display_name] = "egg"
-			items_measures_p[display_name] = "eggs"
-		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/tofu))
-			items_measures[display_name] = "tofu chunk"
-			items_measures_p[display_name] = "tofu chunks"
-		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/donkpocket))
-			display_name = "Turnovers"
-			items_measures[display_name] = "turnover"
-			items_measures_p[display_name] = "turnovers"
-		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans))
-			items_measures[display_name] = "soybean"
-			items_measures_p[display_name] = "soybeans"
-		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/grapes))
-			display_name = "Grapes"
-			items_measures[display_name] = "bunch of grapes"
-			items_measures_p[display_name] = "bunches of grapes"
-		if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes))
-			display_name = "Green Grapes"
-			items_measures[display_name] = "bunch of green grapes"
-			items_measures_p[display_name] = "bunches of green grapes"
-		if (istype(O,/obj/item/weapon/kitchen/utensil)) //any spoons, forks, knives, etc
-			items_measures[display_name] = "utensil"
-			items_measures_p[display_name] = "utensils"
-		items_counts[display_name]++
-	for (var/O in items_counts)
-		var/N = items_counts[O]
-		if (!(O in items_measures))
-			dat += {"<B>[capitalize(O)]:</B> [N] [lowertext(O)]\s<BR>"}
-		else
-			if (N==1)
-				dat += {"<B>[capitalize(O)]:</B> [N] [items_measures[O]]<BR>"}
-			else
-				dat += {"<B>[capitalize(O)]:</B> [N] [items_measures_p[O]]<BR>"}
-
-	for (var/datum/reagent/R in reagents.reagent_list)
-		var/display_name = R.name
-		if (R.id == CAPSAICIN)
-			display_name = "Hotsauce"
-		if (R.id == FROSTOIL)
-			display_name = "Coldsauce"
-		dat += {"<B>[display_name]:</B> [R.volume] unit\s<BR>"}
-	return dat
+/obj/item/weapon/reagent_containers/pan/hide_own_reagents()
+	return TRUE //because we have a custom examine() that displays the reagents and contents in microwave format
 
 /obj/item/weapon/reagent_containers/pan/examine(mob/user)
-	to_chat(user, "[bicon(src)] That's \a [name]. It is [wclass2text(w_class)].")
-	if(desc)
-		to_chat(user, desc)
+	. = ..()
 	if(get_dist(user, src) <= 3)
-		if(contents.len==0 && reagents.reagent_list.len==0)
-			to_chat(user, "It's empty.")
-		else
+		if(contains_anything())
 			var/list_of_contents = "It contains:<br>" + build_list_of_contents()
-			to_chat(user, list_of_contents)
+			to_chat(user, "<span class='notice'>[list_of_contents]</span>")
+		else
+			to_chat(user, "It's empty.")
+

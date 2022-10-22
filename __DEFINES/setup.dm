@@ -1835,3 +1835,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define COOKABLE_WITH_MICROWAVE (1<<0)
 #define COOKABLE_WITH_PAN (1<<1)
 #define COOKABLE_WITH_ALL COOKABLE_WITH_MICROWAVE | COOKABLE_WITH_PAN
+
+//Flags for the contents of a cooking vessel
+#define COOKVESSEL_CONTAINS_REAGENTS (1<<0) //The cooking vessel contains reagents
+#define COOKVESSEL_CONTAINS_CONTENTS (1<<1)	//The cooking vessel contains non-reagent contents (eg. items)
