@@ -64,6 +64,7 @@
 	density = 0
 	flags = null
 	machine_flags = null
+	is_cooktop = TRUE
 	var/lastcharge = null
 
 /obj/machinery/space_heater/campfire/stove
@@ -113,7 +114,30 @@
 		set_temperature = 15 + 5*fireintensity
 	else icon_state = "[base_state][on]"
 	set_light(on ? light_r : 0, light_p)
+	render_cookvessel()
+
+/////////////////////Cooking stuff
+
+/obj/machinery/space_heater/can_cook()
+	. = ..()
+	if(!on)
+		. = FALSE
 	return
+
+/obj/machinery/space_heater/on_cook_start()
+	update_icon()
+
+/obj/machinery/space_heater/on_cook_stop()
+	update_icon()
+
+/obj/machinery/space_heater/campfire/render_cookvessel(offset_x, offset_y = 1)
+	if(cookingvessel)
+		var/image/cookvesselimage = image(cookingvessel)
+		cookvesselimage.pixel_x = offset_x
+		cookvesselimage.pixel_y = offset_y
+		overlays += cookvesselimage
+
+/////////////////////
 
 /obj/machinery/space_heater/examine(mob/user)
 	..()
@@ -227,6 +251,8 @@
 
 /obj/machinery/space_heater/attack_hand(mob/user as mob)
 	src.add_fingerprint(user)
+	if(cookingvessel)
+		return ..()
 	interact(user)
 
 /obj/machinery/space_heater/interact(mob/user as mob)

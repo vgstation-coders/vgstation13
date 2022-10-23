@@ -120,12 +120,48 @@ var/global/ingredientLimit = 10
 		T += M.rating-1
 	cookTime = initial(cookTime)-(25 * T) //150 ticks minus 25 ticks per every laser tier, T4s make it 75 ticks.
 
+/obj/machinery/cooking/update_icon() //Used by some, but not all, cooking machines.
+	if(active)
+		icon_state = icon_state_on
+	else
+		icon_state = initial(icon_state)
+
+//Cooking vessel (eg. frying pan) stuff.
+/obj/machinery/cooking/can_cook() //Whether or not we are in a valid state to cook the contents of a cooking vessel.
+	. = ..()
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+		. = FALSE
+	return
+
+/obj/machinery/cooking/can_receive_cookvessel() //Whether or not we are in a valid state to receive a cooking vessel.
+	. = ..()
+	if(active)
+		. = FALSE
+	return
+
+/obj/machinery/cooking/on_cook_start()
+	active = TRUE
+	update_icon()
+
+/obj/machinery/cooking/on_cook_stop()
+	active = FALSE
+	update_icon()
+
+/obj/machinery/cooking/render_cookvessel(offset_x, offset_y = 5)
+	overlays.len = 0
+	if(cookingvessel)
+		var/image/cookvesselimage = image(cookingvessel)
+		cookvesselimage.pixel_x = offset_x
+		cookvesselimage.pixel_y = offset_y
+		overlays += cookvesselimage
+
 // Interactions ////////////////////////////////////////////////
 
 /obj/machinery/cooking/examine(mob/user)
 	. = ..()
 	if(active)
-		to_chat(user, "<span class='info'>It's currently processing [ingredient ? ingredient.name : ""].</span>")
+		if(!cookingvessel)
+			to_chat(user, "<span class='info'>It's currently processing [ingredient ? ingredient.name : ""].</span>")
 	if(cooks_in_reagents)
 		to_chat(user, "<span class='info'>It seems to have [reagents.total_volume] units left.</span>")
 
@@ -143,7 +179,7 @@ var/global/ingredientLimit = 10
 			if(ingredient && (get_turf(ingredient)==get_turf(src)))
 				if(Adjacent(user))
 					active = 0
-					icon_state = initial(icon_state)
+					update_icon()
 					ingredient.mouse_opacity = 1
 					user.put_in_hands(ingredient)
 					to_chat(user, "<span class='notice'>You remove \the [ingredient.name] from \the [name].</span>")
@@ -259,12 +295,12 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/proc/cook(var/foodType)
 	active = 1
-	icon_state = icon_state_on
+	update_icon()
 	if (cook_after(cookTime, 25))
 		makeFood(foodType)
 		playsound(src,cookSound,100,1)
 	active = 0
-	icon_state = initial(icon_state)
+	update_icon()
 	return
 
 /obj/machinery/cooking/proc/makeFood(var/foodType)
@@ -635,7 +671,7 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/grill/cook()
 	var/foodname = "rotisserie [ingredient.name]"
 	active = 1
-	icon_state = icon_state_on
+	update_icon()
 	ingredient.pixel_y += 5 * PIXEL_MULTIPLIER
 	ingredient.forceMove(loc)
 	ingredient.mouse_opacity = 0
@@ -649,8 +685,8 @@ var/global/ingredientLimit = 10
 					playsound(src,cookSound,100,1)
 				else
 					visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
-	icon_state = initial(icon_state)
 	active = 0
+	update_icon()
 	return
 
 /obj/machinery/cooking/grill/makeFood()

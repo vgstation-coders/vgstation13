@@ -61,9 +61,27 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(is_cooktop)
 		add_component(/datum/component/cooktop)
 
-/obj/proc/can_cook() //Return true if object is currently in a state that would allow for food to be cooked on it. Can (and generally should) be overriden to check for more specific conditions.
+//More cooking stuff:
+/obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.
 	if(is_cooktop)
 		return TRUE
+	return FALSE
+
+/obj/proc/can_receive_cookvessel() //Returns true if object is currently in a state that would allow for a cooking vessel to be placed on or in it (eg. there's not already something being grilled). Can (and generally should) be overriden to check for more specific conditions.
+	//Doesn't need to check for there already being a cooking vessel, as that is already handled separately by the cooktop component.
+	return TRUE
+
+/obj/proc/on_cook_start() //Anything that needs to be done when we start cooking something.
+	return
+
+/obj/proc/on_cook_stop() //Anything that needs to be done when we stop cooking something.
+	return
+
+/obj/proc/render_cookvessel(offset_x, offset_y) //Called whenever we want to visibly render the cooking vessel. Does nothing by default.
+	return
+
+/obj/proc/cook_temperature() //Returns the temperature the object cooks at.
+	return COOKTEMP_DEFAULT
 
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
@@ -94,7 +112,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/proc/blocks_doors()
 	return 0
-
 
 /obj/proc/install_pai(obj/item/device/paicard/P)
 	if(!P || !istype(P))

@@ -1,44 +1,34 @@
 //Frying pan
 	//todo:
-	//not able to add stuff when it's still cooking
-	//sizzle sounds/stuff having to be removed manually
-	//globalize recipes and stuff to subsystem to avoid redundancy with microwave
 	//implement recipes only being cookable on a pan versus a microwave based on flag
 	//emptying contents/reagents into other stuff?
-	//inhand sprites
 	//sizzling with reagents in it
 	//crafting/cargo/vending/mapping
 	//change visible message when start cooking etc.
-	//stuff dumping out of the pan when attacking a breakable object/window/etc
-	//add more of an outline to the sprite
-	//fix disarm-dumping onto a table.
+	//silicon service gripper
+	//remove debug/todos
+	//transferring directly to plates and trays and other foods
 
-	//cooking automatically in high heat?
-	//cook with heat transfer rather than timer
-
-	//bunsen burners
-	//barrels
+	//grill
+		//power issues
 	//campfires
+		//cant remove from
+	//bunsen burners
+		//todo:
+	//barrels
+		//todo:
 	//spits?
+		//todo:
 	//fireplace
+		//todo:
 	//stoves
+		//todo:
 	//oven
+		//todo:
 
-	//leaving the pan on the stove causing a burned mess
 	//burning something causing a fire and smoke
-	//hot pans with glowing red sprite and extra damage
-	//throwing stuff at people with pans or stuff falling out when used as a weapon
-	//getting scalding oil or other reagents on people
-	//sounds on grill, cook etc
-	//pan not getting erased when placed on grill is ready
 	//food being ready/steam sprite that turns to smoke and fire/burned mess if left on too long
-	//glued stuff sticking in the frying pan
-	//add check for being out in the open (dont dump contents inside of a locker, mech, etc.)
-	//issue with adding reagents after it already started cooking
-	//componentize
-	//spilling when thrown/propelled/impacted
-	//cooktop component
-	//what to do with only reagents/no burned mess/etc(just heat the reagents?)
+
 	//body-part specific text
 	//address infinite toxin farming
 	//check that timing is consistent
@@ -47,13 +37,20 @@
 	//items cooked, jecties, etc.
 	//is has_extra_item necessary?
 	//test splashverbs
-	//check edge cases of blowing up a grill with a pan on it, etc
 
 	//areas for expansion:
-
+	//hot pans with glowing red sprite and extra damage
+	//stuff dumping out of the pan when attacking a breakable object/window/etc
+	//generalize heating parameters
+	//also heat reagents even if there are non-reagent contents in the pan
+	//componentize
+	//spilling (onto people) when thrown/propelled/impacted
 	//different cook timing based on heat
-	//frying stuff in oil?
+	//frying stuff in oil (could use recipes for this)
+	//address large ingredient sprite cases
 	//consider only generating the front icon once
+	//cooking automatically in high heat
+	//cook with heat transfer rather than timer
 
 /obj/item/weapon/reagent_containers/pan
 	name = "frying pan"
@@ -76,28 +73,13 @@
 	//var/speed_multiplier = 0.5 //Cooks half as fast as a microwave so it's easier to get stuff on the pan without failing the recipe.
 	var/speed_multiplier = 2 //for debugging
 	var/reagent_disposal = 1 //Does it empty out reagents when you eject? Default yes.
-	var/currentlycooking = 0 //Is it currently cooking?
-	var/cookingprogress = 0 //How far along into cooking something are we? Increments by 1 every process() tick. When it reaches, the cook time of the recipe, the recipe is cooked.
+	var/cookingprogress = 0 //How long have we been cooking the current recipe? When it reaches the cook time of the recipe, the recipe is cooked, and this is reset to 0.
 	var/datum/recipe/currentrecipe //What recipe is currently being cooked?
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
 	var/global/list/acceptable_items = list( // List of the items you can put in
 							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
 							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
 							)
-
-/*
-
-/obj/item/weapon/reagent_containers/pan/skillet
-	name = "skillet"
-	desc = "A metal pan used to contain food while cooking."
-	icon = 'icons/obj/pan.dmi'
-	icon_state = "pan_skillet"
-
-/obj/item/weapon/reagent_containers/pan/wok
-	name = "wok"
-	desc = "A large, rounded pan used for cooking."
-	icon_state = "pan_wok"
-*/
 
 /obj/item/weapon/reagent_containers/pan/New()
 	. = ..()
@@ -123,6 +105,7 @@
 	return result
 
 /obj/item/weapon/reagent_containers/pan/on_reagent_change()
+	cook_reboot()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/pan/update_icon()
@@ -165,6 +148,7 @@
 			mini_ingredient.layer = FLOAT_LAYER
 			mini_ingredient.plane = FLOAT_PLANE
 			overlays += mini_ingredient
+
 		//put a front over the ingredients where they're occluded from view by the side of the pan
 		var/image/pan_front = image('icons/obj/pan.dmi', src, "pan_front")
 		overlays += pan_front
@@ -179,20 +163,21 @@
 			frontblood.color = blood_color
 
 			overlays += frontblood
-			//overlays += blood_overlays["[type]_front"]
+
+		//Note: an alternative to the above might be to overlay all of the non-reagent ingredients onto a single icon, then mask it with the "pan_mask" icon_state.
+		//This would obviate the need to regenerate the blood overlay, and help avoid anomalies with large ingredient sprites.
+		//However I'm not totally sure how to do this nicely.
 
 /////////////////////Dumping-and-splashing-related stuff/////////////////////
 /obj/item/weapon/reagent_containers/pan/afterattack(var/atom/target, var/mob/user, var/adjacency_flag, var/click_params)
 	if (!adjacency_flag)
 		return
 
-	message_admins("[target]|[user]|[adjacency_flag]|[click_params]")
 	//we drop ingredients out of the pan here in three situations:
 		//if we are on disarm intent and use it on a table
 		//if we use it on a non-dense turf
 		//if we use it on a mob
 
-	message_admins("[user]|[user.a_intent]|[user.a_intent == TRUE]|[istable(target)]")
 	if((user.a_intent == I_DISARM) && istable(target))
 		drop_ingredients(target, user)
 	else if(isturf(target))
@@ -202,29 +187,10 @@
 	else if(ismob(target))
 		drop_ingredients(target, user)
 
-	//todo: transferring directly to plates and trays and other foods
-
 /obj/item/weapon/reagent_containers/pan/attackby(var/obj/item/I, var/mob/user)
 
-	//Sanity to avoid adding something to the pan when cooking has already been initiated
-	if(currentlycooking)
-		to_chat(usr, "<span class='notice'>Something is already cooking on [src]!</span>")
-
-	//If we're using a plant bag, add the contents to the pan.
-	else if(istype(I, /obj/item/weapon/storage/bag/plants) || istype(I, /obj/item/weapon/storage/bag/food/borg))
-		if(contents.len >= limit)
-			to_chat(usr, "<span class='notice'>[src] is completely full!</span>")
-			update_icon()
-		var/obj/item/weapon/storage/bag/B = I
-		for (var/obj/item/weapon/reagent_containers/food/snacks/G in I.contents)
-			B.remove_from_storage(G,src)
-			if(contents.len >= limit) //Sanity checking so the pan doesn't overfill
-				to_chat(user, "<span class='notice'>You fill [src] to the brim.</span>")
-				break
-		update_icon()
-
 	//If we're using an acceptable item, add the item to the pan.
-	else if(is_type_in_list(I,acceptable_items))
+	if(is_type_in_list(I,acceptable_items))
 		if(contents.len >= limit)
 			to_chat(usr, "<span class='notice'>[src] is completely full!</span>")
 		else if (istype(I,/obj/item/stack))
@@ -236,12 +202,28 @@
 					"<span class='notice'>[user] adds one of [I] to [src].</span>", \
 					"<span class='notice'>You add one of [I] to [src].</span>")
 				updateUsrDialog()
+				cook_reboot() //Reset the cooking status.
 				update_icon()
 		else if(user.drop_item(I, src))
 			user.visible_message( \
 				"<span class='notice'>[user] adds [I] to [src].</span>", \
 				"<span class='notice'>You add [I] to [src].</span>")
+			cook_reboot() //Reset the cooking status.
 			update_icon()
+
+	//If we're using a plant bag, add the contents to the pan.
+	else if (istype(I, /obj/item/weapon/storage/bag/plants) || istype(I, /obj/item/weapon/storage/bag/food/borg))
+		if(contents.len >= limit)
+			to_chat(usr, "<span class='notice'>[src] is completely full!</span>")
+			return
+		var/obj/item/weapon/storage/bag/B = I
+		for (var/obj/item/weapon/reagent_containers/food/snacks/G in I.contents)
+			B.remove_from_storage(G,src)
+			if(contents.len >= limit) //Sanity checking so the pan doesn't overfill
+				to_chat(user, "<span class='notice'>You fill [src] to the brim.</span>")
+				break
+		cook_reboot() //Reset the cooking status.
+		update_icon()
 
 	else if(istype(I,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
@@ -250,22 +232,20 @@
 	else
 		to_chat(user, "<span class='notice'>You have no idea what you can cook with [I].</span>")
 
-
 /obj/item/weapon/reagent_containers/pan/attack_self(mob/user as mob)
 	if(user.a_intent == I_DISARM)
 		drop_ingredients()
 		return
-	//temporarily make attack_self() cook the food for testing
-	if(!currentlycooking)
-		cook_start()
-	else
-		cook_abort()
 
 /obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target)
+
 	var/mob/dropper = usr
 	var/contains = contains_anything()
 	if(!contains)
 		return FALSE //Return FALSE if there's nothing to drop.
+
+	if(!isturf(dropper.loc)) //No pouring the contents of a pan out while hiding inside of a locker. Let's just say its too cramped.
+		return FALSE
 
 	var/splashverb
 	if(!dropper)
@@ -275,6 +255,8 @@
 			splashverb = "splashes"
 		else
 			splashverb = "pours"
+	else if(istable(target))
+		splashverb = "empties"
 	else
 		splashverb = "dumps"
 
@@ -284,8 +266,8 @@
 
 	for(var/atom/movable/AM in contents)
 		AM.forceMove(target ? get_turf(target) : get_turf(src))
-		AM.pixel_x = rand(-10, 10)
-		AM.pixel_y = rand(-10, 10)
+		AM.pixel_x = rand(-5, 5)
+		AM.pixel_y = rand(-5, 5)
 
 	var/spanclass = "notice"
 	if(ismob(target) && (dropper != target))
@@ -332,21 +314,6 @@
 		return
 	return ..()
 
-/*
-//generate both base and front overlays
-/obj/item/weapon/reagent_containers/pan/generate_blood_overlay()
-	if(blood_overlays["[type]"] && blood_overlays["[type]_front"])
-		return
-	var/icon/Base = new /icon(icon, icon_state)
-	Base.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD)
-	Base.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY)
-	blood_overlays["[type]"] = image(Base)
-	var/icon/Front = new /icon(icon, "pan_front")
-	Front.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD)
-	Front.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY)
-	blood_overlays["[type]_front"] = image(Front)
-*/
-
 /obj/item/weapon/reagent_containers/pan/modify_attack_power(power, mob/attackee, mob/attacker)
 	if(istype(attackee, /mob/living/simple_animal/hostile/necro))
 		power *= 2 //L4D4EVR
@@ -355,24 +322,27 @@
 /////////////////////Cooking-related stuff/////////////////////
 /obj/item/weapon/reagent_containers/pan/proc/cook_start() //called when the pan is placed on a valid cooktop (eg. placed on grill)
 	visible_message("<span class='notice'>[src] starts cooking.</span>", "<span class='notice'>You hear \a [src] cooking.</span>")
-	currentlycooking = 1
-	processing_objects.Add(src)
-	currentrecipe = select_recipe(available_recipes,src)
+	var/contains_anything = contains_anything()
+	if(contains_anything)
+		fast_objects.Add(src)
+	if(contains_anything & COOKVESSEL_CONTAINS_CONTENTS)
+		currentrecipe = select_recipe(available_recipes,src)
 
-/obj/item/weapon/reagent_containers/pan/proc/cook_stop() //called when the pan is no longer on a valid cooktop (eg. removed from grill)
-	currentlycooking = 0
-	processing_objects.Remove(src)
+/obj/item/weapon/reagent_containers/pan/proc/cook_stop() //called when the pan is no longer on a valid cooktop (eg. removed from grill). cooking progress is retained unless things are added or removed from the pan
+	fast_objects.Remove(src)
 
 /obj/item/weapon/reagent_containers/pan/proc/cook_abort() //called when things are dumped out of the pan
-	currentlycooking = 0
-	cookingprogress = 0
-	processing_objects.Remove(src)
+	cook_stop()
+	cook_reboot()
+
+/obj/item/weapon/reagent_containers/pan/proc/cook_reboot() //called when we want to restart the cooking process eg. when something was added to the pan
+	reset_cooking_progress()
 	currentrecipe = select_recipe(available_recipes,src)
 
 /obj/item/weapon/reagent_containers/pan/proc/cook_fail() //called when the recipe is invalid (including overcooking something by not removing the pan from the cooktop in time, which is the same as attempting to cook the already-cooked resulting dish)
 	var/obj/item/weapon/reagent_containers/food/snacks/badrecipe/ffuu = new(src)
 	var/amount = 0
-	for (var/obj/O in contents-ffuu)
+	for(var/obj/O in contents-ffuu)
 		amount++
 		if (O.reagents)
 			var/id = O.reagents.get_master_reagent_id()
@@ -380,6 +350,9 @@
 				amount+=O.reagents.get_reagent_amount(id)
 		qdel(O)
 		O = null
+	if(isobj(loc))
+		var/obj/O = loc
+		O.render_cookvessel()
 	reagents.clear_reagents()
 	ffuu.reagents.add_reagent(CARBON, amount)
 	ffuu.reagents.add_reagent(TOXIN, amount/10)
@@ -390,50 +363,54 @@
 	currentrecipe = select_recipe(available_recipes, src)
 	return ffuu
 
-/obj/item/weapon/reagent_containers/pan/proc/on_valid_cooktop()
-	if(istype(loc, /obj/machinery/cooking/grill)) //todo: generalize this, but for now just check if we're on a grill or not
-		return TRUE
-	return FALSE
-
-/obj/item/weapon/reagent_containers/pan/proc/cooktop_is_on()
-	if(istype(loc, /obj/machinery/cooking/grill)) //todo: generalize this, but for now just check if the grill we're on is powered or not
-		var/obj/machinery/cooking/grill/G = loc
-		if(!(G.stat & (FORCEDISABLE | NOPOWER | BROKEN)))
-			return TRUE
-	return FALSE
 
 /obj/item/weapon/reagent_containers/pan/process()
-	if(!on_valid_cooktop())
+
+	var/obj/O
+	if(isobj(loc))
+		O = loc
+		if(!O.is_cooktop)
+			cook_stop()
+	else
 		cook_stop()
 
-	if(!cooktop_is_on()) //if the power went out on the grill, don't cook
+	if(!(O?.can_cook())) //if eg. the power went out on the grill, don't cook
 		return
 
-	cookingprogress += speed_multiplier
+	cookingprogress += (SS_WAIT_FAST_OBJECTS * speed_multiplier)
 
 	if(cookingprogress >= (currentrecipe ? currentrecipe.time : 10 SECONDS)) //it's done when it's cooked for the cooking time, or a default of 10 seconds if there's no valid recipe
 
-		cookingprogress = 0 //reset the cooking progress
+		var/contains_anything = contains_anything()
+
+		reset_cooking_progress() //reset the cooking progress
 
 		var/obj/cooked
 		if(currentrecipe)
 			cooked = currentrecipe.make_food(src)
 			visible_message("<span class='notice'>[cooked] looks done.</span>")
-		else
+			playsound(src, 'sound/effects/frying.ogg', 50, 1)
+			O?.render_cookvessel()
+		else if(contains_anything & COOKVESSEL_CONTAINS_CONTENTS) //Don't make a burned mess out of just reagents, even though recipes can call for only reagents (spaghetti). In that case we just keep heating the reagents.
 			cooked = cook_fail()
 		if(cooked)
 			cooked.forceMove(src, harderforce = TRUE)
 			update_icon()
 
-		//re-check the recipe. generally this will return null because we'll continue cooking the previous result, which will lead to a burned mess
-		currentrecipe = select_recipe(available_recipes, src)
+		if(contains_anything)
+			//re-check the recipe. generally this will return null because we'll continue cooking the previous result, which will lead to a burned mess
+			currentrecipe = select_recipe(available_recipes, src)
 
-/*
-/obj/item/weapon/reagent_containers/pan/proc/iscooking(var/seconds as num) //Whether or not something is currently cooking in the pan
-	for (var/i=1 to seconds)
-		sleep(10/speed_multiplier)
-	return 1
-*/
+	//If there are any reagents in the pan, heat them.
+	if(reagents.total_volume)
+		reagents.heating(500, O ? O.cook_temperature() : COOKTEMP_DEFAULT) //Thermal transfer is half that of fire_act.  Could be generalized based on the conditions of the cooktop. For example, like how bunsen burners work.
+
+	//Hotspot expose
+	var/turf/T = get_turf(src)
+	T?.hotspot_expose(O ? O.cook_temperature() : COOKTEMP_DEFAULT, 500, 1, surfaces = 0) //Everything but the first arg is taken from igniter.
+
+/obj/item/weapon/reagent_containers/pan/proc/reset_cooking_progress()
+	cookingprogress = 0
 
 /obj/item/weapon/reagent_containers/pan/hide_own_reagents()
 	return TRUE //because we have a custom examine() that displays the reagents and contents in microwave format
