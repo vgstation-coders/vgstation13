@@ -170,46 +170,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/superbiteburger
 
-/datum/recipe/supergunkburger
-	reagents = list(SODIUMCHLORIDE = 5, BLACKPEPPER = 5, FLOUR = 15)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
-
-/datum/recipe/moonsupergunkburger
-	reagents = list(SODIUMCHLORIDE = 5, BLACKPEPPER = 5, FLOUR = 15)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
-
 /datum/recipe/slimeburger
 	reagents = list(SLIMEJELLY = 5, FLOUR = 15)
 	items = list()
@@ -219,22 +179,6 @@
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/polyp)
 	result = /obj/item/weapon/reagent_containers/food/snacks/polypburger
-
-/datum/recipe/gunkburgerroach
-	reagents = list(FLOUR = 5)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/roach)
-	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger
-
-/datum/recipe/gunkburgercricket
-	reagents = list(FLOUR = 5)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/cricket)
-	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger
-
-/datum/recipe/deluxegunkburger
-	reagents = list(FLOUR = 5)
-	priority = 1
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big)
-	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger
 
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
@@ -866,14 +810,6 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/corn)
 	result = /obj/item/weapon/reagent_containers/food/snacks/popcorn
 
-/datum/recipe/hopcorn
-	items = list(
-				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
-				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
-				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
-				)
-	result = /obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket
-
 /datum/recipe/syntisteak
 	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh)
@@ -1267,23 +1203,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/tofu,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/tofukabob
-
-/datum/recipe/gunkkabobroach
-	items = list(
-		/obj/item/stack/rods,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
-
-/datum/recipe/gunkkabobcricket
-	items = list(
-		/obj/item/stack/rods,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
-
 
 // Pizza ///////////////////////////////////////////////////////
 
@@ -3552,3 +3471,168 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/clover
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse
+
+////////////////////////////////
+// YE ENTERING THE GUNK ZONE ///
+////////////////////////////////
+
+/datum/recipe/gunkburgerroach
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/roach)
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger
+
+/datum/recipe/gunkburgercricket
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/cricket)
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger
+
+/datum/recipe/deluxegunkburger
+	reagents = list(FLOUR = 5)
+	priority = 1
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big)
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger
+
+/datum/recipe/supergunkburger
+	reagents = list(SODIUMCHLORIDE = 5, BLACKPEPPER = 5, FLOUR = 15)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
+
+/datum/recipe/moonsupergunkburger
+	reagents = list(SODIUMCHLORIDE = 5, BLACKPEPPER = 5, FLOUR = 15)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
+
+/datum/recipe/hopcorn
+	items = list(
+				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+				/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+				)
+	result = /obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket
+
+/datum/recipe/gunkkabobroach
+	items = list(
+		/obj/item/stack/rods,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
+
+/datum/recipe/gunkkabobcricket
+	items = list(
+		/obj/item/stack/rods,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
+
+/datum/recipe/roachsalad
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/lime,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/popcorn/roachsalad
+
+/datum/recipe/gunksouproach
+	reagents = list(WATER = 10, RADIUM = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gunksoup
+	
+/datum/recipe/gunksoupcricket
+	reagents = list(WATER = 10, RADIUM = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gunksoup
+
+/datum/recipe/gunkbread
+	reagents = list(FLOUR = 15, CHEMICAL_WASTE = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkbread
+	
+/datum/recipe/moongunkbread
+	reagents = list(FLOUR = 15, CHEMICAL_WASTE = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkbread
+
+/datum/recipe/gunkpieroach
+	reagents = list(FLOUR = 5, CHEMICAL_WASTE = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/roach)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/gunkpie
+	
+/datum/recipe/gunkpiecricket
+	reagents = list(FLOUR = 5, CHEMICAL_WASTE = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/cricket)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/gunkpie
+	
+/datum/recipe/gunkcake
+	reagents = list(CHEMICAL_WASTE = 5, FLOUR = 15)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkcake
+	
+/datum/recipe/roachesonastick
+	reagents = list(FLOUR = 5)
+	items = list(
+		/obj/item/stack/rods,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/corndog
