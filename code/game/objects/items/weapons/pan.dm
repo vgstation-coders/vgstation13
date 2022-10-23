@@ -1,27 +1,24 @@
 //Frying pan
 	//todo:
-	//implement recipes only being cookable on a pan versus a microwave based on flag
-	//sizzling sound with reagents in it
+	//sizzling sound / smoke / fire with hot reagents in it
 	//crafting/cargo/vending/mapping
 	//remove debug/todos
-	//burning something causing a fire and smoke
-	//food being ready/steam sprite that turns to smoke and fire/burned mess if left on too long
-	//test bodypart reactions
-	//body-part specific text
+	//food being ready/steam sprite that turns to smoke and fire if left on too long
 	//address infinite toxin farming/recooking burned messes
 	//check that timing is consistent
-	//check removing stuff from the grill when power's off
-	//sprite update the grill when power's off
 	//passing user into the cooking for jecties, etc.
-	//test splashverbs
 	//scooping hot oil out of the deepfryer
-	//scalding people with hot things
-	//wearing it on your head, flipping the sprite and dumping it onto yourself, and giving armor
+	//sprite update the grill when power's off
 
-	//bunsen burners
+	//grill
+		//fix placing on and off with no power
+
+	//bunsen burner
 		//doesn't cook
 
 	//areas for expansion:
+	//scalding people with hot reagents
+	//body-part specific splash text
 	//transferring directly to plates and trays and other foods (need to consider what to do if contains anything more than a single item)
 	//pouring reagents into other reagent containers (need to consider what to do if it also contains items)
 	//hot pans with glowing red sprite and extra damage
@@ -35,6 +32,7 @@
 	//consider only generating the front icon once
 	//cooking automatically in high heat
 	//cook with heat transfer rather than timer
+	//change order of messages with splashing acid on onesself when equipping the pan
 
 /obj/item/weapon/reagent_containers/pan
 	name = "frying pan"
@@ -53,6 +51,9 @@
 	hitsound = list('sound/weapons/pan_01.ogg', 'sound/weapons/pan_02.ogg', 'sound/weapons/pan_03.ogg', 'sound/weapons/pan_04.ogg')
 	miss_sound = list('sound/weapons/pan_miss_01.ogg', 'sound/weapons/pan_miss_02.ogg')
 	is_cookvessel = TRUE
+	slot_flags = SLOT_HEAD
+	armor = list(melee = 30, bullet = 30, laser = 30, energy = 10, bomb = 25, bio = 0, rad = 0)
+	body_parts_covered = HEAD
 	var/mob/chef //The most recent mob who added something to the pan.
 	var/limit = 10 //Number of ingredients that the pan can hold at once.
 	//var/speed_multiplier = 0.5 //Cooks half as fast as a microwave so it's easier to get stuff on the pan without failing the recipe.
@@ -171,6 +172,10 @@
 
 /obj/item/weapon/reagent_containers/pan/attackby(var/obj/item/I, var/mob/user)
 
+	//If the pan is on someone's head, it's upside down so don't put anything in.
+	if(is_on_someones_head())
+		return
+
 	//If we're using an acceptable item, add the item to the pan.
 	if(is_type_in_list(I,acceptable_items))
 		if(contents.len >= limit)
@@ -215,13 +220,25 @@
 		to_chat(user, "<span class='notice'>You have no idea what you can cook with [I].</span>")
 
 /obj/item/weapon/reagent_containers/pan/attack_self(mob/user as mob)
-	if(user.a_intent == I_DISARM)
-		drop_ingredients()
-		return
+	message_admins("attack_self procced()")
+	take_something_out(user)
 
-/obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target)
+/obj/item/weapon/reagent_containers/pan/AltClick(mob/user as mob)
+	message_admins("AltClick procced()")
+	take_something_out(user)
 
-	var/mob/dropper = usr
+/obj/item/weapon/reagent_containers/pan/proc/take_something_out(mob/user as mob)
+	message_admins("take_something_out procced()")
+	for(var/atom/movable/content in contents)
+		message_admins("DEBUG [content]")
+		if(user.put_in_hands(content))
+			to_chat(user, "<span class='notice'>You take [content] out of [src].</span>")
+			cook_reboot()
+			update_icon()
+			return
+
+/obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target, mob/dropper = usr)
+
 	var/contains = contains_anything()
 	if(!contains)
 		return FALSE //Return FALSE if there's nothing to drop.
@@ -397,10 +414,34 @@
 
 /obj/item/weapon/reagent_containers/pan/examine(mob/user)
 	. = ..()
-	if(get_dist(user, src) <= 3)
+	var/mob/wearer = is_on_someones_head()
+	if(wearer)
+		to_chat(user, "It looks like [wearer == user ? "you're" : "[wearer] is"] using [src] as a drying pan.")
+	else if((get_dist(user, src) <= 3))
 		if(contains_anything())
 			var/list_of_contents = "It contains:<br>" + build_list_of_contents()
 			to_chat(user, "<span class='notice'>[list_of_contents]</span>")
 		else
 			to_chat(user, "It's empty.")
 
+/////////////////////Wearing the pan/////////////////////
+/obj/item/weapon/reagent_containers/pan/equipped(user, slot, hand_index)
+	. = .. ()
+	if(slot == slot_head)
+		pour_on_self(user)
+
+/obj/item/weapon/reagent_containers/pan/proc/pour_on_self(mob/user)
+	drop_ingredients(target = user, dropper = null)
+	container_splash_sub(reagents, target = user, amount = reagents.total_volume, user = user)
+
+/obj/item/weapon/reagent_containers/pan/proc/is_on_someones_head()
+	if(iscarbon(loc))
+		var/mob/living/carbon/C = loc
+		if(C.get_item_by_slot(slot_head) == src)
+			return C
+
+/obj/item/weapon/reagent_containers/pan/is_open_container()
+	if(is_on_someones_head())
+		return FALSE
+	return ..()
+/////////////////////
