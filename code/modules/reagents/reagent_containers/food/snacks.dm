@@ -8081,7 +8081,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/gunkcakeslice
 	name = "gunk cake slice"
-	desc = "Your nose hairs recoil at the fumes coming out of the garbage."
+	desc = "Your nose hairs recoil at the fumes coming out of this."
 	icon_state = "gunkcakeslice"
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
@@ -8099,13 +8099,8 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 5)
 	bitesize = 5
-	
-/obj/item/weapon/reagent_containers/food/snacks/sosjerky/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/nutsnbugs
+food/snacks/nutsnbugs
 	name = "nuts 'n bugs"
 	icon_state = "nutsnbugs"
 	desc = "The unborn children of the insectoid colonies; processed, treated and mixed with nuts for your enjoyment."
@@ -8113,7 +8108,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	valid_utensils = 0
 	base_crumb_chance = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/bugs4u/New()
+/obj/item/weapon/reagent_containers/food/snacks/nutsnbugs/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 1)
