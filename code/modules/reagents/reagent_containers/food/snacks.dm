@@ -7998,12 +7998,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	if(prob(unpopped))
 		to_chat(usr, "<span class='warning'>A cockroach wriggles out of the bowl!</span>")
 		unpopped = max(0, unpopped-3) //max 3 roaches per roach salad
-		new /mob/living/simple_animal/roach(get_turf(src))
-
-/obj/item/weapon/reagent_containers/food/snacks/popcorn/roachsalad/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6) //so it ends with 8
-	bitesize = 3
+		new /mob/living/simple_animal/cockroach(get_turf(src))
 
 /obj/item/weapon/reagent_containers/food/snacks/gunksoup
 	name = "Gunk Soup"
@@ -8100,7 +8095,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(ROACHSHELL, 5)
 	bitesize = 5
 
-food/snacks/nutsnbugs
+/obj/item/weapon/reagent_containers/food/snacks/nutsnbugs
 	name = "nuts 'n bugs"
 	icon_state = "nutsnbugs"
 	desc = "The unborn children of the insectoid colonies; processed, treated and mixed with nuts for your enjoyment."
