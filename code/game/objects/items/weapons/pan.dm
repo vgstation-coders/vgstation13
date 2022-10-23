@@ -1,21 +1,24 @@
 //Frying pan
 	//todo:
 	//implement recipes only being cookable on a pan versus a microwave based on flag
-	//emptying contents/reagents into other stuff?
-	//sizzling with reagents in it
+	//sizzling sound with reagents in it
 	//crafting/cargo/vending/mapping
-	//change visible message when start cooking etc.
-	//silicon service gripper
 	//remove debug/todos
-	//transferring directly to plates and trays and other foods
+	//burning something causing a fire and smoke
+	//food being ready/steam sprite that turns to smoke and fire/burned mess if left on too long
+	//body-part specific text
+	//address infinite toxin farming/recooking burned messes
+	//check that timing is consistent
+	//check removing stuff from the grill when power's off
+	//passing user into the cooking for jecties, etc.
+	//test splashverbs
+	//barrel fuel affecting temperature
 
 	//grill
 		//power issues
-	//campfires
-		//cant remove from
+	//barrel
+		//snuffs out at the same time we take pan off
 	//bunsen burners
-		//todo:
-	//barrels
 		//todo:
 	//spits?
 		//todo:
@@ -26,19 +29,9 @@
 	//oven
 		//todo:
 
-	//burning something causing a fire and smoke
-	//food being ready/steam sprite that turns to smoke and fire/burned mess if left on too long
-
-	//body-part specific text
-	//address infinite toxin farming
-	//check that timing is consistent
-	//check removing stuff from the grill when power's off
-	//chef meals count (passing user into the cooking)
-	//items cooked, jecties, etc.
-	//is has_extra_item necessary?
-	//test splashverbs
-
 	//areas for expansion:
+	//transferring directly to plates and trays and other foods (need to consider what to do if contains anything more than a single item)
+	//pouring reagents into other reagent containers (need to consider what to do if it also contains items)
 	//hot pans with glowing red sprite and extra damage
 	//stuff dumping out of the pan when attacking a breakable object/window/etc
 	//generalize heating parameters
@@ -69,10 +62,10 @@
 	hitsound = list('sound/weapons/pan_01.ogg', 'sound/weapons/pan_02.ogg', 'sound/weapons/pan_03.ogg', 'sound/weapons/pan_04.ogg')
 	miss_sound = list('sound/weapons/pan_miss_01.ogg', 'sound/weapons/pan_miss_02.ogg')
 	is_cookingvessel = TRUE
+	var/mob/chef //The most recent mob who added something to the pan.
 	var/limit = 10 //Number of ingredients that the pan can hold at once.
 	//var/speed_multiplier = 0.5 //Cooks half as fast as a microwave so it's easier to get stuff on the pan without failing the recipe.
 	var/speed_multiplier = 2 //for debugging
-	var/reagent_disposal = 1 //Does it empty out reagents when you eject? Default yes.
 	var/cookingprogress = 0 //How long have we been cooking the current recipe? When it reaches the cook time of the recipe, the recipe is cooked, and this is reset to 0.
 	var/datum/recipe/currentrecipe //What recipe is currently being cooked?
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
@@ -84,12 +77,10 @@
 /obj/item/weapon/reagent_containers/pan/New()
 	. = ..()
 
-	if (!available_recipes)
-		available_recipes = new
-		for (var/type in (typesof(/datum/recipe)-/datum/recipe))
-			available_recipes+= new type
-		for (var/datum/recipe/recipe in available_recipes)
-			for (var/item in recipe.items)
+	if(!available_recipes)
+		available_recipes = generate_available_recipes(flags = COOKABLE_WITH_PAN)
+		for(var/datum/recipe/recipe in available_recipes)
+			for(var/item in recipe.items)
 				acceptable_items |= item
 		sortTim(available_recipes, /proc/cmp_microwave_recipe_dsc)
 
@@ -321,7 +312,6 @@
 
 /////////////////////Cooking-related stuff/////////////////////
 /obj/item/weapon/reagent_containers/pan/proc/cook_start() //called when the pan is placed on a valid cooktop (eg. placed on grill)
-	visible_message("<span class='notice'>[src] starts cooking.</span>", "<span class='notice'>You hear \a [src] cooking.</span>")
 	var/contains_anything = contains_anything()
 	if(contains_anything)
 		fast_objects.Add(src)
@@ -363,7 +353,6 @@
 	currentrecipe = select_recipe(available_recipes, src)
 	return ffuu
 
-
 /obj/item/weapon/reagent_containers/pan/process()
 
 	var/obj/O
@@ -403,7 +392,7 @@
 
 	//If there are any reagents in the pan, heat them.
 	if(reagents.total_volume)
-		reagents.heating(500, O ? O.cook_temperature() : COOKTEMP_DEFAULT) //Thermal transfer is half that of fire_act.  Could be generalized based on the conditions of the cooktop. For example, like how bunsen burners work.
+		reagents.heating(500, O ? O.cook_temperature() : COOKTEMP_DEFAULT) //Thermal transfer is half that of fire_act. Could be generalized based on the conditions of the cooktop. For example, like how bunsen burners work.
 
 	//Hotspot expose
 	var/turf/T = get_turf(src)

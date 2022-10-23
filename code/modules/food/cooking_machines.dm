@@ -126,7 +126,7 @@ var/global/ingredientLimit = 10
 	else
 		icon_state = initial(icon_state)
 
-//Cooking vessel (eg. frying pan) stuff.
+/////////////////////Cooking stuff/////////////////////
 /obj/machinery/cooking/can_cook() //Whether or not we are in a valid state to cook the contents of a cooking vessel.
 	. = ..()
 	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
@@ -172,7 +172,7 @@ var/global/ingredientLimit = 10
 		to_chat(user, "This is old analog equipment. You can't interface with it.")
 
 	else if(is_cooktop && cookingvessel) //If there's currently a cooking vessel on the cooking machine.
-		INVOKE_EVENT(src, /event/attackhand, "user" = user, "target" = src)
+		return ..()
 
 	else if(active)
 		if(alert(user,"Remove \the [ingredient.name]?",,"Yes","No") == "Yes")
@@ -191,7 +191,7 @@ var/global/ingredientLimit = 10
 		else
 			to_chat(user, "You leave \the [name] alone.")
 	else
-		. = ..()
+		return ..()
 
 /obj/machinery/cooking/attackby(obj/item/I, mob/user)
 	message_admins("DEBUG COOKING 001")

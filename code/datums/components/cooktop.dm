@@ -17,10 +17,8 @@
 /datum/component/cooktop/proc/on_attackhand(mob/user, atom/target)
 	var/obj/P = parent
 	message_admins("DEBUG COOKTOP on_attackhand [P] | [P.cookingvessel] | [user] | [target]")
-	if(P.cookingvessel)
-		if(iscarbon(user))
-			var/mob/living/carbon/C = user
-			C.put_in_active_hand(P.cookingvessel)
+	if(P.cookingvessel && ismob(user))
+		if(user.put_in_active_hand(P.cookingvessel))
 			P.cookingvessel.cook_stop()
 			P.cookingvessel = null
 			P.on_cook_stop()
@@ -48,4 +46,6 @@
 				vesseltext += ", containing:<br>[P.cookingvessel.build_list_of_contents()]"
 			else
 				vesseltext += ", which is empty."
+		else
+			vesseltext += "."
 		to_chat(user, "<span class='notice'>[vesseltext]</span>")

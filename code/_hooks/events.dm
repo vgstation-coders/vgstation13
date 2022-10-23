@@ -101,7 +101,6 @@
 /event/clickon
 
 // Called when an atom is attacked with an empty hand.
-// Currently only used by xenoarch artifacts, should probably be moved to the base proc.
 // Arguments:
 // mob/user: the guy who is attacking.
 // atom/target: the atom that's being attacked.

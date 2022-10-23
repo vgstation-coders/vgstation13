@@ -276,9 +276,6 @@
 		user << browse("<HEAD><TITLE>Space Heater Control Panel</TITLE></HEAD><TT>[dat]</TT>", "window=spaceheater")
 		onclose(user, "spaceheater")
 
-
-
-
 	else
 		on = !on
 		user.visible_message("<span class='notice'>[user] switches [on ? "on" : "off"] the [src].</span>","<span class='notice'>You switch [on ? "on" : "off"] the [src].</span>")
@@ -380,7 +377,6 @@
 		else
 			on = 0
 			update_icon()
-
 
 	return
 

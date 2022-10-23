@@ -1084,7 +1084,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/clover
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie
-	
+
 /datum/recipe/applepie
 	reagents = list(FLOUR = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)

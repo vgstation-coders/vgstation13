@@ -83,6 +83,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/cook_temperature() //Returns the temperature the object cooks at.
 	return COOKTEMP_DEFAULT
 
+/obj/proc/generate_available_recipes(flags = COOKABLE_WITH_ALL)
+	var/list/recipes = list()
+	for(var/type in (typesof(/datum/recipe) - /datum/recipe))
+		var/datum/recipe/thisrecipe = new type
+		if(thisrecipe.cookable_with & flags)
+			recipes += thisrecipe
+	return recipes
+
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
 	return FALSE

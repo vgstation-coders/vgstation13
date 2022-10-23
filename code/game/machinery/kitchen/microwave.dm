@@ -64,9 +64,7 @@
 	create_reagents(100)
 
 	if (!available_recipes)
-		available_recipes = new
-		for (var/type in (typesof(/datum/recipe)-/datum/recipe))
-			available_recipes+= new type
+		available_recipes = generate_available_recipes(flags = COOKABLE_WITH_MICROWAVE)
 		acceptable_reagents = new
 		for (var/datum/recipe/recipe in available_recipes)
 			for (var/item in recipe.items)
@@ -74,6 +72,7 @@
 			for (var/reagent in recipe.reagents)
 				acceptable_reagents |= reagent
 		sortTim(available_recipes, /proc/cmp_microwave_recipe_dsc)
+
 /*******************
 *   Part Upgrades
 ********************/

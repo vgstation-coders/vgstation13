@@ -11,7 +11,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	var/possible_transfer_amounts = list(5,10,15,25,30)
 	var/volume = 30
 	var/amount_per_imbibe = 5
-	var/attack_mob_instead_of_feed //If true, the reagent container will be used as a melee weapon rather than as vessel to feed another mob with (in attack()).
+	var/attack_mob_instead_of_feed //If true, the reagent container will be used as a melee weapon rather than as a vessel to feed another mob with (in attack()).
 
 /obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
