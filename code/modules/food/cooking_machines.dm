@@ -149,11 +149,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/render_cookvessel(offset_x, offset_y = 5)
 	overlays.len = 0
-	if(cookvessel)
-		var/image/cookvesselimage = image(cookvessel)
-		cookvesselimage.pixel_x = offset_x
-		cookvesselimage.pixel_y = offset_y
-		overlays += cookvesselimage
+	..()
 
 // Interactions ////////////////////////////////////////////////
 
@@ -194,7 +190,6 @@ var/global/ingredientLimit = 10
 		return ..()
 
 /obj/machinery/cooking/attackby(obj/item/I, mob/user)
-	message_admins("DEBUG COOKING 001")
 	if(active)
 		to_chat(user, "<span class='warning'>[name] is currently busy.</span>")
 		return

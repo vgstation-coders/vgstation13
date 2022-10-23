@@ -1,22 +1,18 @@
 //Frying pan
 	//todo:
-	//sizzling sound / smoke / fire with hot reagents in it
-	//crafting/cargo/vending/mapping
-	//remove debug/todos
-	//food being ready/steam sprite that turns to smoke and fire if left on too long
-	//address infinite toxin farming/recooking burned messes
+	//rearrange todos
 	//check that timing is consistent
-	//passing user into the cooking for jecties, etc.
-	//scooping hot oil out of the deepfryer
 	//sprite update the grill when power's off
-
 	//grill
 		//fix placing on and off with no power
 
-	//bunsen burner
-		//doesn't cook
-
 	//areas for expansion:
+	//setting chef when reagents are transferred as well
+	//edge case when recooking the same donk pocket over and over
+	//crafting/cargo/vending
+	//food being ready/steam sprite that turns to smoke and fire if left on too long
+	//sizzling sound/smoke/fire with hot reagents in it
+	//scooping hot oil out of the deepfryer
 	//scalding people with hot reagents
 	//body-part specific splash text
 	//transferring directly to plates and trays and other foods (need to consider what to do if contains anything more than a single item)
@@ -54,11 +50,11 @@
 	slot_flags = SLOT_HEAD
 	armor = list(melee = 30, bullet = 30, laser = 30, energy = 10, bomb = 25, bio = 0, rad = 0)
 	body_parts_covered = HEAD
-	var/mob/chef //The most recent mob who added something to the pan.
+	var/mob/chef //The mob who most recently added a non-reagent ingredient to or picked up the pan.
 	var/limit = 10 //Number of ingredients that the pan can hold at once.
-	//var/speed_multiplier = 0.5 //Cooks half as fast as a microwave so it's easier to get stuff on the pan without failing the recipe.
-	var/speed_multiplier = 2 //for debugging
+	var/speed_multiplier = 1 //Can be changed to modify cooking speed.
 	var/cookingprogress = 0 //How long have we been cooking the current recipe? When it reaches the cook time of the recipe, the recipe is cooked, and this is reset to 0.
+	var/burned //Whether or not the current dish has been burned.
 	var/datum/recipe/currentrecipe //What recipe is currently being cooked?
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
 	var/global/list/acceptable_items = list( // List of the items you can put in
@@ -189,13 +185,13 @@
 					"<span class='notice'>[user] adds one of [I] to [src].</span>", \
 					"<span class='notice'>You add one of [I] to [src].</span>")
 				updateUsrDialog()
-				cook_reboot() //Reset the cooking status.
+				cook_reboot(user) //Reset the cooking status.
 				update_icon()
 		else if(user.drop_item(I, src))
 			user.visible_message( \
 				"<span class='notice'>[user] adds [I] to [src].</span>", \
 				"<span class='notice'>You add [I] to [src].</span>")
-			cook_reboot() //Reset the cooking status.
+			cook_reboot(user) //Reset the cooking status.
 			update_icon()
 
 	//If we're using a plant bag, add the contents to the pan.
@@ -209,7 +205,7 @@
 			if(contents.len >= limit) //Sanity checking so the pan doesn't overfill
 				to_chat(user, "<span class='notice'>You fill [src] to the brim.</span>")
 				break
-		cook_reboot() //Reset the cooking status.
+		cook_reboot(user) //Reset the cooking status.
 		update_icon()
 
 	else if(istype(I,/obj/item/weapon/grab))
@@ -220,22 +216,18 @@
 		to_chat(user, "<span class='notice'>You have no idea what you can cook with [I].</span>")
 
 /obj/item/weapon/reagent_containers/pan/attack_self(mob/user as mob)
-	message_admins("attack_self procced()")
 	take_something_out(user)
 
 /obj/item/weapon/reagent_containers/pan/AltClick(mob/user as mob)
-	message_admins("AltClick procced()")
 	take_something_out(user)
 
 /obj/item/weapon/reagent_containers/pan/proc/take_something_out(mob/user as mob)
-	message_admins("take_something_out procced()")
-	for(var/atom/movable/content in contents)
-		message_admins("DEBUG [content]")
+	if(contents.len)
+		var/atom/movable/content = contents[contents.len]
 		if(user.put_in_hands(content))
 			to_chat(user, "<span class='notice'>You take [content] out of [src].</span>")
-			cook_reboot()
+			cook_reboot(user)
 			update_icon()
-			return
 
 /obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target, mob/dropper = usr)
 
@@ -327,14 +319,16 @@
 		currentrecipe = select_recipe(available_recipes,src)
 
 /obj/item/weapon/reagent_containers/pan/proc/cook_stop() //called when the pan is no longer on a valid cooktop (eg. removed from grill). cooking progress is retained unless things are added or removed from the pan
+	burned = FALSE
 	fast_objects.Remove(src)
 
 /obj/item/weapon/reagent_containers/pan/proc/cook_abort() //called when things are dumped out of the pan
 	cook_stop()
 	cook_reboot()
 
-/obj/item/weapon/reagent_containers/pan/proc/cook_reboot() //called when we want to restart the cooking process eg. when something was added to the pan
+/obj/item/weapon/reagent_containers/pan/proc/cook_reboot(mob/user) //called when we want to restart the cooking process eg. when something was added to the pan
 	reset_cooking_progress()
+	chef = user
 	currentrecipe = select_recipe(available_recipes,src)
 
 /obj/item/weapon/reagent_containers/pan/proc/cook_fail() //called when the recipe is invalid (including overcooking something by not removing the pan from the cooktop in time, which is the same as attempting to cook the already-cooked resulting dish)
@@ -376,20 +370,22 @@
 
 	cookingprogress += (SS_WAIT_FAST_OBJECTS * speed_multiplier)
 
-	if(cookingprogress >= (currentrecipe ? currentrecipe.time : 10 SECONDS)) //it's done when it's cooked for the cooking time, or a default of 10 seconds if there's no valid recipe
+	if(cookingprogress >= (currentrecipe ? currentrecipe.time : 10 SECONDS) && !burned) //it's done when it's cooked for the cooking time, or a default of 10 seconds if there's no valid recipe. also if it's already been burned, don't keep looping.
 
 		var/contains_anything = contains_anything()
 
+		burned = TRUE
 		reset_cooking_progress() //reset the cooking progress
 
 		var/obj/cooked
 		if(currentrecipe)
-			cooked = currentrecipe.make_food(src)
+			cooked = currentrecipe.make_food(src, chef)
 			visible_message("<span class='notice'>[cooked] looks done.</span>")
 			playsound(src, 'sound/effects/frying.ogg', 50, 1)
 			O?.render_cookvessel()
-		else if(contains_anything & COOKVESSEL_CONTAINS_CONTENTS) //Don't make a burned mess out of just reagents, even though recipes can call for only reagents (spaghetti). In that case we just keep heating the reagents.
+		else if(contains_anything & COOKVESSEL_CONTAINS_CONTENTS) //Don't make a burned mess out of just reagents, even though recipes can call for only reagents (spaghetti). Just keep heating the reagents.
 			cooked = cook_fail()
+
 		if(cooked)
 			cooked.forceMove(src, harderforce = TRUE)
 			update_icon()
@@ -427,6 +423,7 @@
 /////////////////////Wearing the pan/////////////////////
 /obj/item/weapon/reagent_containers/pan/equipped(user, slot, hand_index)
 	. = .. ()
+	chef = user
 	if(slot == slot_head)
 		pour_on_self(user)
 

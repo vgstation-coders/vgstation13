@@ -16,7 +16,6 @@
 
 /datum/component/cooktop/proc/on_attackhand(mob/user, atom/target)
 	var/obj/P = parent
-	message_admins("DEBUG COOKTOP on_attackhand [P] | [P.cookvessel] | [user] | [target]")
 	if(P.cookvessel && ismob(user))
 		if(user.put_in_active_hand(P.cookvessel))
 			P.cookvessel.cook_stop()
@@ -26,7 +25,6 @@
 
 /datum/component/cooktop/proc/on_attackby(mob/attacker, obj/item/item)
 	var/obj/P = parent
-	message_admins("DEBUG COOKTOP on_attackby [P] | [P.cookvessel] | [attacker] | [item]")
 	if(P.cookvessel)
 		to_chat(attacker, "<span class='notice'>\A [P.cookvessel] is already there.</span>")
 	else if(item.is_cookvessel && P.can_receive_cookvessel())
@@ -38,7 +36,6 @@
 
 /datum/component/cooktop/proc/on_examine(mob/user)
 	var/obj/P = parent
-	message_admins("DEBUG COOKTOP on_examine [P] | [P.cookvessel] | [user]")
 	if(P.cookvessel)
 		var/vesseltext = "There's \a [P.cookvessel] on it"
 		if(get_dist(user, P) <= 3)

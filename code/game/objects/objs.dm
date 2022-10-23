@@ -77,8 +77,12 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/on_cook_stop() //Anything that needs to be done when we stop cooking something.
 	return
 
-/obj/proc/render_cookvessel(offset_x, offset_y) //Called whenever we want to visibly render the cooking vessel. Does nothing by default.
-	return
+/obj/proc/render_cookvessel(offset_x, offset_y) //Called whenever we want to visibly render the cooking vessel.
+	if(cookvessel)
+		var/image/cookvesselimage = image(cookvessel)
+		cookvesselimage.pixel_x = offset_x
+		cookvesselimage.pixel_y = offset_y
+		overlays += cookvesselimage
 
 /obj/proc/cook_temperature() //Returns the temperature the object cooks at.
 	return COOKTEMP_DEFAULT

@@ -15,7 +15,6 @@
 /////////////////////Cooking stuff
 
 /obj/machinery/bunsen_burner/can_cook()
-	message_admins("bunsen burner can_cook() [heating] | [BUNSEN_ON]")
 	return (heating == BUNSEN_ON)
 
 /obj/machinery/bunsen_burner/on_cook_start()
@@ -24,12 +23,8 @@
 /obj/machinery/bunsen_burner/on_cook_stop()
 	update_icon()
 
-/obj/machinery/bunsen_burner/render_cookvessel(offset_x, offset_y = 6)
-	if(cookvessel)
-		var/image/cookvesselimage = image(cookvessel)
-		cookvesselimage.pixel_x = offset_x
-		cookvesselimage.pixel_y = offset_y
-		overlays += cookvesselimage
+/obj/machinery/bunsen_burner/render_cookvessel(offset_x = 2, offset_y = 12)
+	..()
 
 /obj/machinery/bunsen_burner/cook_temperature()
 	var/temperature = get_max_temperature()
@@ -72,6 +67,7 @@
 		held_container.examine(user)
 
 /obj/machinery/bunsen_burner/attackby(obj/item/weapon/W, mob/user)
+
 	if(istype(W, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/R = W
 		if(heating == BUNSEN_OPEN && R.is_open_container())
@@ -83,13 +79,14 @@
 						add_fingerprint(user)
 						return
 		else
-			if(!held_container && user.drop_item(W, src))
+			if(W.is_cookvessel)
+				add_fingerprint(user)
+				//if it is a cooking vessel, we do want to call afterattack() so that it gets added properly
+			else if(!held_container && user.drop_item(W, src))
 				to_chat(user, "<span class='notice'>You put [W] onto \the [src].</span>")
 				add_fingerprint(user)
 				load_item(W)
-				if(W.is_cookvessel)
-					return 0 //return false so we can start cooking.
-				return 1 // otherwise avoid afterattack() being called
+				return 1 //otherwise avoid afterattack() being called
 	if(W.is_wrench(user))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
 		if(do_after(user, src, 5 SECONDS))
@@ -189,7 +186,7 @@
 /obj/machinery/bunsen_burner/attack_hand(mob/user)
 	if(cookvessel)
 		..()
-	if(held_container)
+	else if(held_container)
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
 		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)

@@ -547,11 +547,7 @@
 	update_icon()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/render_cookvessel(offset_x = -1, offset_y = 6)
-	if(cookvessel)
-		var/image/cookvesselimage = image(cookvessel)
-		cookvesselimage.pixel_x = offset_x
-		cookvesselimage.pixel_y = offset_y
-		overlays += cookvesselimage
+	..()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/cook_temperature()
 	var/temperature = get_max_temperature()

@@ -132,11 +132,7 @@
 	update_icon()
 
 /obj/machinery/space_heater/campfire/render_cookvessel(offset_x, offset_y = 1)
-	if(cookvessel)
-		var/image/cookvesselimage = image(cookvessel)
-		cookvesselimage.pixel_x = offset_x
-		cookvesselimage.pixel_y = offset_y
-		overlays += cookvesselimage
+	..()
 
 /////////////////////
 
