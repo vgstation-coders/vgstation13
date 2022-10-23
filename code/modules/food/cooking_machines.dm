@@ -149,8 +149,8 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/render_cookvessel(offset_x, offset_y = 5)
 	overlays.len = 0
-	if(cookingvessel)
-		var/image/cookvesselimage = image(cookingvessel)
+	if(cookvessel)
+		var/image/cookvesselimage = image(cookvessel)
 		cookvesselimage.pixel_x = offset_x
 		cookvesselimage.pixel_y = offset_y
 		overlays += cookvesselimage
@@ -160,7 +160,7 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/examine(mob/user)
 	. = ..()
 	if(active)
-		if(!cookingvessel)
+		if(!cookvessel)
 			to_chat(user, "<span class='info'>It's currently processing [ingredient ? ingredient.name : ""].</span>")
 	if(cooks_in_reagents)
 		to_chat(user, "<span class='info'>It seems to have [reagents.total_volume] units left.</span>")
@@ -171,7 +171,7 @@ var/global/ingredientLimit = 10
 	else if(isMoMMI(user))// *buzz
 		to_chat(user, "This is old analog equipment. You can't interface with it.")
 
-	else if(is_cooktop && cookingvessel) //If there's currently a cooking vessel on the cooking machine.
+	else if(is_cooktop && cookvessel) //If there's currently a cooking vessel on the cooking machine.
 		return ..()
 
 	else if(active)
@@ -720,6 +720,7 @@ var/global/ingredientLimit = 10
 	use_power = MACHINE_POWER_USE_NONE
 	cooks_in_reagents = 0
 	machine_flags = null
+	is_cooktop = FALSE
 
 /obj/machinery/cooking/grill/spit/cook()
 	ingredient.pixel_y += 7 * PIXEL_MULTIPLIER

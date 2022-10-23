@@ -6,28 +6,20 @@
 	//remove debug/todos
 	//burning something causing a fire and smoke
 	//food being ready/steam sprite that turns to smoke and fire/burned mess if left on too long
+	//test bodypart reactions
 	//body-part specific text
 	//address infinite toxin farming/recooking burned messes
 	//check that timing is consistent
 	//check removing stuff from the grill when power's off
+	//sprite update the grill when power's off
 	//passing user into the cooking for jecties, etc.
 	//test splashverbs
-	//barrel fuel affecting temperature
+	//scooping hot oil out of the deepfryer
+	//scalding people with hot things
+	//wearing it on your head, flipping the sprite and dumping it onto yourself, and giving armor
 
-	//grill
-		//power issues
-	//barrel
-		//snuffs out at the same time we take pan off
 	//bunsen burners
-		//todo:
-	//spits?
-		//todo:
-	//fireplace
-		//todo:
-	//stoves
-		//todo:
-	//oven
-		//todo:
+		//doesn't cook
 
 	//areas for expansion:
 	//transferring directly to plates and trays and other foods (need to consider what to do if contains anything more than a single item)
@@ -35,7 +27,6 @@
 	//hot pans with glowing red sprite and extra damage
 	//stuff dumping out of the pan when attacking a breakable object/window/etc
 	//generalize heating parameters
-	//also heat reagents even if there are non-reagent contents in the pan
 	//componentize
 	//spilling (onto people) when thrown/propelled/impacted
 	//different cook timing based on heat
@@ -61,7 +52,7 @@
 	attack_verb = list("smashes", "bludgeons", "batters", "pans")
 	hitsound = list('sound/weapons/pan_01.ogg', 'sound/weapons/pan_02.ogg', 'sound/weapons/pan_03.ogg', 'sound/weapons/pan_04.ogg')
 	miss_sound = list('sound/weapons/pan_miss_01.ogg', 'sound/weapons/pan_miss_02.ogg')
-	is_cookingvessel = TRUE
+	is_cookvessel = TRUE
 	var/mob/chef //The most recent mob who added something to the pan.
 	var/limit = 10 //Number of ingredients that the pan can hold at once.
 	//var/speed_multiplier = 0.5 //Cooks half as fast as a microwave so it's easier to get stuff on the pan without failing the recipe.

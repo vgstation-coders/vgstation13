@@ -75,6 +75,7 @@
 	density = 1
 	nocell = 2
 	machine_flags = WRENCHMOVE
+	is_cooktop = FALSE
 
 /obj/machinery/space_heater/New()
 
@@ -131,8 +132,8 @@
 	update_icon()
 
 /obj/machinery/space_heater/campfire/render_cookvessel(offset_x, offset_y = 1)
-	if(cookingvessel)
-		var/image/cookvesselimage = image(cookingvessel)
+	if(cookvessel)
+		var/image/cookvesselimage = image(cookvessel)
 		cookvesselimage.pixel_x = offset_x
 		cookvesselimage.pixel_y = offset_y
 		overlays += cookvesselimage
@@ -251,7 +252,7 @@
 
 /obj/machinery/space_heater/attack_hand(mob/user as mob)
 	src.add_fingerprint(user)
-	if(cookingvessel)
+	if(cookvessel)
 		return ..()
 	interact(user)
 

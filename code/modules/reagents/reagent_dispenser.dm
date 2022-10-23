@@ -547,11 +547,17 @@
 	update_icon()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/render_cookvessel(offset_x = -1, offset_y = 6)
-	if(cookingvessel)
-		var/image/cookvesselimage = image(cookingvessel)
+	if(cookvessel)
+		var/image/cookvesselimage = image(cookvessel)
 		cookvesselimage.pixel_x = offset_x
 		cookvesselimage.pixel_y = offset_y
 		overlays += cookvesselimage
+
+/obj/structure/reagent_dispensers/cauldron/barrel/cook_temperature()
+	var/temperature = get_max_temperature()
+	if(isnull(temperature))
+		return COOKTEMP_DEFAULT //Sanity in case the barrel runs out of fuel before this is called.
+	return temperature
 
 /////////////////////
 
@@ -569,7 +575,7 @@
 	..()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attack_hand(mob/user as mob)
-	if(burning)
+	if(burning && !cookvessel)
 		visible_message("<span class = 'warning'>You carefully snuff out \the [src] fire.</span>")
 		burning = FALSE
 		processing_objects.Remove(src)
@@ -608,7 +614,7 @@
 		AM.forceMove(loc)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_wrench(user) || (istype(W, /obj/item/weapon/reagent_containers) && !W.is_cookingvessel)) //what did irradiation mean by this
+	if(W.is_wrench(user) || (istype(W, /obj/item/weapon/reagent_containers) && !W.is_cookvessel)) //what did irradiation mean by this
 		return
 
 	else if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
@@ -785,6 +791,16 @@
 		processing_objects.Remove(src)
 		update_icon()
 		return
+
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/get_max_temperature()
+	var/max_temperature
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			var/list/fuel_stats = possible_fuels[possible_fuel]
+			max_temperature = fuel_stats["max_temperature"]
+			break
+
+	return max_temperature
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood/start_fire(mob/user)
 	return 0 //nice try!

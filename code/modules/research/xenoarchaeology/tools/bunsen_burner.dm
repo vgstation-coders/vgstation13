@@ -10,6 +10,34 @@
 	var/heating = BUNSEN_OFF //whether the bunsen is turned on
 	var/obj/item/weapon/reagent_containers/held_container
 	ghost_read = 0
+	is_cooktop = TRUE
+
+/////////////////////Cooking stuff
+
+/obj/machinery/bunsen_burner/can_cook()
+	message_admins("bunsen burner can_cook() [heating] | [BUNSEN_ON]")
+	return (heating == BUNSEN_ON)
+
+/obj/machinery/bunsen_burner/on_cook_start()
+	update_icon()
+
+/obj/machinery/bunsen_burner/on_cook_stop()
+	update_icon()
+
+/obj/machinery/bunsen_burner/render_cookvessel(offset_x, offset_y = 6)
+	if(cookvessel)
+		var/image/cookvesselimage = image(cookvessel)
+		cookvesselimage.pixel_x = offset_x
+		cookvesselimage.pixel_y = offset_y
+		overlays += cookvesselimage
+
+/obj/machinery/bunsen_burner/cook_temperature()
+	var/temperature = get_max_temperature()
+	if(isnull(temperature))
+		return COOKTEMP_DEFAULT //Sanity in case the burner runs out of fuel before this is called.
+	return temperature
+
+/////////////////////
 
 /obj/machinery/bunsen_burner/splashable()
 	return FALSE
@@ -40,7 +68,7 @@
 			to_chat(user, "<span class = 'notice'>\The [src]'s fuel port is open.</span>")
 	reagents.get_examine(user)
 	if(held_container)
-		to_chat(user, "<span class='info'>It is holding a:</span>")
+		to_chat(user, "<span class='info'>It is holding \a [held_container]:</span>")
 		held_container.examine(user)
 
 /obj/machinery/bunsen_burner/attackby(obj/item/weapon/W, mob/user)
@@ -56,10 +84,12 @@
 						return
 		else
 			if(!held_container && user.drop_item(W, src))
-				to_chat(user, "<span class='notice'>You put \the [held_container] onto \the [src].</span>")
+				to_chat(user, "<span class='notice'>You put [W] onto \the [src].</span>")
 				add_fingerprint(user)
 				load_item(W)
-				return 1 // avoid afterattack() being called
+				if(W.is_cookvessel)
+					return 0 //return false so we can start cooking.
+				return 1 // otherwise avoid afterattack() being called
 	if(W.is_wrench(user))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
 		if(do_after(user, src, 5 SECONDS))
@@ -104,7 +134,8 @@
 
 				reagents.remove_reagent(possible_fuel, consumption_rate)
 				if(held_container)
-					held_container.reagents.heating(thermal_energy_transfer, max_temperature)
+					if(!cookvessel) //Cooking vessels are heated differently.
+						held_container.reagents.heating(thermal_energy_transfer, max_temperature)
 					update_icon()
 				G.adjust_multi(
 					GAS_OXYGEN, -o2_consumption,
@@ -120,6 +151,16 @@
 	if(!heating || heating == BUNSEN_OPEN)
 		processing_objects.Remove(src)
 		set_light(0)
+
+/obj/machinery/bunsen_burner/proc/get_max_temperature()
+	var/max_temperature
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			var/list/fuel_stats = possible_fuels[possible_fuel]
+			max_temperature = fuel_stats["max_temperature"]
+			break
+
+	return max_temperature
 
 /obj/machinery/bunsen_burner/proc/try_refill_nearby()
 	for(var/obj/machinery/chem_dispenser/CD in view(1))
@@ -140,11 +181,14 @@
 		var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
 		overlays += I
 		overlays += I2
+	render_cookvessel()
 
 /obj/machinery/bunsen_burner/attack_ghost()
 	return
 
 /obj/machinery/bunsen_burner/attack_hand(mob/user)
+	if(cookvessel)
+		..()
 	if(held_container)
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
 		held_container.forceMove(src.loc)
