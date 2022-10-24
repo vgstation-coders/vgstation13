@@ -187,6 +187,8 @@
 
 /obj/item/weapon/bat/hurley/proc/drop_balanced()
 	if(balanced_item)
+		balanced_item.pixel_x = initial(balanced_item.pixel_x)
+		balanced_item.pixel_y = initial(balanced_item.pixel_y)
 		balanced_item.forceMove(get_turf(src))
 		balanced_item = null
 		vis_contents.Cut()
