@@ -165,3 +165,20 @@
 	icon_state = "baseball_bat"
 	item_state = "baseball_bat0"
 	can_spike = 0
+	var/obj/item/balanced_item - null
+
+/obj/item/weapon/bat/hurley/attack_self(mob/user)
+	vis_contents.Cut()
+	if(!balanced_item)
+		balanced_item = user.get_inactive_hand()
+		balanced_item.forceMove(src)
+		vis_contents += balanced_item
+	else
+		balanced_item.forceMove(get_turf(src))
+		balanced_item = null
+
+/obj/item/weapon/bat/pre_throw(atom/movable/target)
+	var/mob/living/carbon/human/user = usr
+	if(istype(user) && balanced_item)
+		return hit_away(balanced_item,user,target)
+	return ..()
