@@ -351,8 +351,8 @@
 /obj/item/weapon/storage/box/syndie_kit/emags_and_glue/ //Exactly what it sounds like.
 	name = "box (E&G)"
 	items_to_spawn = list(
-		/obj/item/weapon/glue = 4,
-		/obj/item/weapon/card/emag = 4,
+		/obj/item/weapon/glue = 3,
+		/obj/item/weapon/card/emag = 3,
 	)
 
 //Syndicate Ayy Lmao Gear
