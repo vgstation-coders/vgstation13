@@ -138,7 +138,7 @@
 	desc = "Good for reducing a doubleheader to a zeroheader." // TODO: i got nothing, maybe something canada?
 	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
 	icon_state = "hockey_stick"
-	item_state = "baseball_bat0"
+	item_state = "hockey_stick0"
 	autoignition_temperature = AUTOIGNITION_PLASTIC
 	flags = TWOHANDABLE
 	force = 10
@@ -151,12 +151,12 @@
 	name = "cricket bat"
 	desc = "Good for reducing a doubleheader to a zeroheader." // TODO: someone help me put a good shaun of the dead reference here that fits
 	icon_state = "cricket_bat"
-	item_state = "baseball_bat0"
+	item_state = "cricket_bat0"
 
 /obj/item/weapon/bat/cricket/spike()
 	..()
 	icon_state = "spikecricket"
-	item_state = "spikebat0"
+	item_state = "spikecricket0"
 
 /obj/item/weapon/bat/cricket/spiked/New()
 	..()
@@ -166,7 +166,7 @@
 	name = "hurley"
 	desc = "Camán, step it up." // TODO: something less than a lame pun
 	icon_state = "hurley"
-	item_state = "baseball_bat0"
+	item_state = "hurley0"
 	var/obj/item/balanced_item = null
 
 /obj/item/weapon/bat/hurley/process()
@@ -210,7 +210,7 @@
 /obj/item/weapon/bat/hurley/spike()
 	..()
 	icon_state = "spikehurley"
-	item_state = "spikebat0"
+	item_state = "spikehurley0"
 
 /obj/item/weapon/bat/hurley/spiked/New()
 	..()
