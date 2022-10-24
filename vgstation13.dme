@@ -1069,6 +1069,7 @@
 #include "code\game\objects\items\weapons\airlock_painter.dm"
 #include "code\game\objects\items\weapons\armblade.dm"
 #include "code\game\objects\items\weapons\barricade_kit.dm"
+#include "code\game\objects\items\weapons\bats.dm"
 #include "code\game\objects\items\weapons\boomerang.dm"
 #include "code\game\objects\items\weapons\butterfly.dm"
 #include "code\game\objects\items\weapons\cards_ids.dm"
