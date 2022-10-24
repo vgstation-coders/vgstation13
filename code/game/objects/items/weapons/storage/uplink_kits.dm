@@ -352,7 +352,7 @@
 	name = "box (E&G)"
 	items_to_spawn = list(
 		/obj/item/weapon/glue = 4,
-		/obj/item/weapon/card/emag = 3,
+		/obj/item/weapon/card/emag = 4,
 	)
 
 //Syndicate Ayy Lmao Gear
