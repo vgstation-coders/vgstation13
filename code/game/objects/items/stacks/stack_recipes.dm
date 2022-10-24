@@ -480,6 +480,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
 	new/datum/stack_recipe("baseball bat",		/obj/item/weapon/bat,			10,		time = 8 SECONDS							),
 	new/datum/stack_recipe("cricket bat",		/obj/item/weapon/bat/cricket,			10,		time = 8 SECONDS							),
+	new/datum/stack_recipe("hurley",			/obj/item/weapon/bat/hurley,			10,		time = 8 SECONDS							),
 	)
 
 /* =========================================================================
