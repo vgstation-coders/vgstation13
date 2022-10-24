@@ -207,7 +207,7 @@
 	return ..()
 
 
-/obj/item/weapon/bat/cricket/spike()
+/obj/item/weapon/bat/hurley/spike()
 	..()
 	icon_state = "spikehurley"
 	item_state = "spikebat0"
