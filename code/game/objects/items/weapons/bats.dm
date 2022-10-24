@@ -16,6 +16,7 @@
 	var/spiked = 0
 	var/can_spike = 1
 	var/twohandforce = 16
+	var/on_floor_only = 0
 
 /obj/item/weapon/bat/update_wield(mob/user)
 	..()
@@ -46,11 +47,11 @@
 	hitsound = "sound/weapons/spikebat_hit.ogg"
 	icon_state = "spikebat"
 	item_state = "spikebat0"
-	force -= 3
+	force = 10
 	sharpness = 0.3
 	sharpness_flags = SHARP_TIP
 	spiked = 1
-	twohandforce -= 3
+	twohandforce = 13
 
 /obj/item/weapon/bat/proc/unspike()
 	name = initial(name)
@@ -58,20 +59,20 @@
 	hitsound = initial(hitsound)
 	icon_state = initial(icon_state)
 	item_state = initial(item_state)
-	force += 3
+	force = initial(force)
 	sharpness = 0
 	sharpness_flags = 0
 	spiked = 0
-	twohandforce += 3
+	twohandforce = initial(twohandforce)
 
 /obj/item/weapon/bat/IsShield()
-	return !spiked
+	return !spiked && !on_floor_only
 
 /obj/item/weapon/bat/pre_throw(atom/movable/target)
 	var/mob/living/carbon/human/user = usr
 	if(istype(user))
 		var/obj/item/I = user.get_inactive_hand()
-		if(istype(I) && I != src)
+		if(!on_floor_only && istype(I) && I != src)
 			return hit_away(I,user,target)
 		else if(isturf(target.loc) && user.Adjacent(target))
 			return hit_away(target,user)
@@ -89,16 +90,21 @@
 		throw_mult += (user.get_strength()-1)/2 //For each level of strength above 1, add 0.5
 		throw_mult *= 2/(2**(I.w_class-1)) //multiplier of 2, 1, 0.5, 0.25 and 0.125 for each increasing w_class
 		throw_mult *= max(0,1-(spiked/2)) //spiked bats can hit, but less effectively
+		var/range_mult = 1
+		if(istype(I.loc,/turf/simulated))
+			var/turf/simulated/T = I.loc
+			if(T.is_wet() && on_floor_only)
+				range_mult *= 2 //slippery floors are good for hockey sticks
 		if(!target)
 			var/ourdir = get_dir(user,I) || user.dir
 			target = get_ranged_target_turf(get_turf(I), ourdir, I.throw_range*throw_mult)
-		I.throw_at(target, I.throw_range*throw_mult, I.throw_speed*throw_mult)
+		I.throw_at(target, I.throw_range*throw_mult*range_mult, I.throw_speed*throw_mult)
 		return 1
 
 /obj/item/weapon/bat/on_block(damage, atom/movable/blocked)
 	if(isliving(loc))
 		var/mob/living/H = loc
-		if(!H.in_throw_mode || !wielded || damage > 15)
+		if(!H.in_throw_mode || !wielded || damage > 15 || on_floor_only)
 			return FALSE
 		if(IsShield() < blocked.ignore_blocking)
 			return FALSE
@@ -127,3 +133,35 @@
 /obj/item/weapon/bat/spiked/New()
 	..()
 	spike()
+
+/obj/item/weapon/bat/hockey
+	name = "hockey stick"
+	desc = "Good for reducing a doubleheader to a zeroheader."
+	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
+	icon_state = "baseball_bat"
+	item_state = "baseball_bat0"
+	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flags = TWOHANDABLE
+	force = 10
+	throwforce = 7
+	twohandforce = 13
+	w_type = RECYK_PLASTIC
+	on_floor_only = 1
+	can_spike = 0
+
+/obj/item/weapon/bat/cricket
+	name = "cricket bat"
+	desc = "Good for reducing a doubleheader to a zeroheader."
+	icon_state = "baseball_bat"
+	item_state = "baseball_bat0"
+
+/obj/item/weapon/bat/cricket/spiked/New()
+	..()
+	spike()
+
+/obj/item/weapon/bat/hurley
+	name = "hurley"
+	desc = "Camán, step it up." // TODO: something less than a lame pun
+	icon_state = "baseball_bat"
+	item_state = "baseball_bat0"
+	can_spike = 0
