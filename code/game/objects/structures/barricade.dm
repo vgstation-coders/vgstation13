@@ -111,18 +111,10 @@
 
 	..()
 
-//We don't want to update our icon, period
-/obj/structure/window/barricade/update_icon()
-
-	return
-
 /obj/structure/window/barricade/update_nearby_tiles()
 
 	return
 
-/obj/structure/window/barricade/update_nearby_icons()
-
-	return
 
 /obj/structure/window/barricade/full
 	name = "wood barricade"

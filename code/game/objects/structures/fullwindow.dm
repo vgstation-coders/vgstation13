@@ -15,11 +15,21 @@
 	is_fulltile = TRUE
 	disperse_coeff = 0.95
 	pass_flags_self = PASSGLASS
+	bordersmooth_override = 1
 
 /obj/structure/window/full/New(loc)
 
 	..(loc)
 	flow_flags |= ON_BORDER
+
+/obj/structure/window/full/canSmoothWith()
+	var/static/list/smoothables = list(/obj/structure/window/full)
+	return smoothables
+
+/obj/structure/window/full/isSmoothableNeighbor(atom/A)
+	if(isobj(A))
+		var/obj/O = A
+		return ..() && O.anchored && O.density
 
 /obj/structure/window/full/setup_border_dummy()
 	return
@@ -35,23 +45,13 @@
 
 	return 1 //That about it Captain
 
-//Merges adjacent full-tile windows into one (blatant ripoff from game/smoothwall.dm)
-/obj/structure/window/full/update_icon()
-
-	//A little cludge here, since I don't know how it will work with slim windows. Most likely VERY wrong.
-	//This way it will only update full-tile ones
+//Merges adjacent full-tile windows into one
+/obj/structure/window/full/relativewall()
 	//This spawn is here so windows get properly updated when one gets deleted.
 	spawn()
-		if(!src)
+		if(!src || !anchored || !density)
 			return
-		var/junction = 0 //Will be used to determine from which side the window is connected to other windows
-		if(anchored)
-			for(var/obj/structure/window/full/W in orange(src, 1))
-				if(W.anchored && W.density) //Only counts anchored, not-destroyed full-tile windows.
-					if(abs(x-W.x)-abs(y-W.y)) 	//Doesn't count windows, placed diagonally to src
-						junction |= get_dir(src,W)
-		icon_state = "[base_state][junction]"
-		return
+		icon_state = "[base_state][..()]"
 
 /obj/structure/window/full/verb/set_direction() //Full windows get this because it's possible for them to face diagonally
 	set name = "Set Window Direction"			//Diagonal facing matters in the use of one-way windows
@@ -195,10 +195,6 @@
 /obj/structure/window/full/reinforced/clockwork/loose
 	anchored = 0
 	d_state = 0
-
-
-/obj/structure/window/full/reinforced/clockwork/update_icon()
-	return
 
 /obj/structure/window/full/reinforced/clockwork/cultify()
 	return

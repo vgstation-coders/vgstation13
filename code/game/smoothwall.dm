@@ -4,7 +4,7 @@
 
 /atom
 	var/junction = 0 // THIS USED TO BE DEFINED TO THE TURF LEVEL BUT IT'S HERE NOW IN CASE ANYTHING ELSE (LIKE STRUCTURES) NEED IT, ALSO COMMENT IN CAPS IN THEME WITH THIS FILE
-
+	var/bordersmooth_override = 0 // SOME ON_BORDER ITEMS PREFER FULL TILE SMOOTHING OKAY?
 /atom/proc/canSmoothWith() // TYPE PATHS I CAN SMOOTH WITH~~~~~ (HAS TO BE THIS FUNCTION OR ELSE OBJECT INIT IS WAY WAY SLOWER)
 
 // MOVED INTO UTILITY FUNCTION FOR LESS DUPLICATED CODE.
@@ -13,7 +13,7 @@
 	// DOESN'T FUCKING MAKE SENSE, BUT IT WORKS TO OUR ADVANTAGE
 	. = 0
 	for(var/cdir in cardinal)
-		if((flow_flags & ON_BORDER) && (dir == cdir || opposite_dirs[dir] == cdir))
+		if((flow_flags & ON_BORDER) && !bordersmooth_override && (dir == cdir || opposite_dirs[dir] == cdir))
 			continue
 		var/turf/T = get_step(src,cdir)
 		if(isSmoothableNeighbor(T))
@@ -21,6 +21,18 @@
 			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 		for(var/atom/A in T)
 			if(isSmoothableNeighbor(A))
+				. |= cdir
+				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
+
+// OTHER FUNCTION SOME BORDER ITEMS MIGHT LIKE TO USE
+/atom/proc/findSmoothingOnTurf()
+	for(var/cdir in list(clockwise_perpendicular_dirs(dir),counterclockwise_perpendicular_dirs[dir]))
+		var/turf/T = get_turf(src)
+		if(isSmoothableNeighbor(T) && T.dir == cdir)
+			. |= cdir
+			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
+		for(var/atom/A in T)
+			if(isSmoothableNeighbor(A) && A.dir == cdir)
 				. |= cdir
 				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 

@@ -46,7 +46,6 @@ var/list/one_way_windows
 	setup_border_dummy()
 
 	update_nearby_tiles()
-	update_nearby_icons()
 	update_icon()
 	oneway_overlay = image('icons/obj/structures.dmi', src, "one_way_overlay")
 	if(one_way)
@@ -449,7 +448,8 @@ var/list/one_way_windows
 					d_state = WINDOWLOOSE
 					anchored = 0
 					update_nearby_tiles() //Needed if it's a full window, since unanchored windows don't link
-					update_nearby_icons()
+					relativewall()
+					relativewall_neighbours()
 					update_icon()
 					if(smartwindow)
 						qdel(smartwindow)
@@ -477,7 +477,8 @@ var/list/one_way_windows
 					d_state = WINDOWLOOSEFRAME
 					anchored = 1
 					update_nearby_tiles() //Ditto above, but in reverse
-					update_nearby_icons()
+					relativewall()
+					relativewall_neighbours()
 					update_icon()
 					if(smartwindow)
 						qdel(smartwindow)
@@ -510,7 +511,8 @@ var/list/one_way_windows
 			d_state = !d_state
 			anchored = !anchored
 			update_nearby_tiles() //Ditto above
-			update_nearby_icons()
+			relativewall()
+			relativewall_neighbours()
 			update_icon()
 			return
 
@@ -578,7 +580,8 @@ var/list/one_way_windows
 /obj/structure/window/Destroy()
 	setDensity(FALSE) //Sanity while we do the rest
 	update_nearby_tiles()
-	update_nearby_icons()
+	relativewall()
+	relativewall_neighbours()
 	if(one_way)
 		one_way_windows.Remove(src)
 		update_oneway_nearby_clients()
@@ -602,32 +605,15 @@ var/list/one_way_windows
 	. = ..()
 	update_nearby_tiles()
 
-//This proc is used to update the icons of nearby windows. It should not be confused with update_nearby_tiles(), which is an atmos proc!
-/obj/structure/window/proc/update_nearby_icons(var/turf/T)
-
-
-	if(!loc)
-		return 0
-	if(!T)
-		T = get_turf(src)
-
-	update_icon()
-
-	for(var/direction in cardinal)
-		for(var/obj/structure/window/W in get_step(T,direction))
-			W.update_icon()
-
 /obj/structure/window/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = loc
-	..()
-	update_nearby_icons(T)
-	update_nearby_icons()
+	relativewall()
+	relativewall_neighbours()
 	update_nearby_tiles(T)
+	..()
+	relativewall()
+	relativewall_neighbours()
 	update_nearby_tiles()
-
-/obj/structure/window/update_icon()
-
-	return
 
 /obj/structure/window/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 
