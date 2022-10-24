@@ -171,8 +171,9 @@
 	vis_contents.Cut()
 	if(!balanced_item)
 		balanced_item = user.get_inactive_hand()
-		balanced_item.forceMove(src)
-		vis_contents += balanced_item
+		if(balanced_item)
+			balanced_item.forceMove(src)
+			vis_contents += balanced_item
 	else
 		balanced_item.forceMove(get_turf(src))
 		balanced_item = null
