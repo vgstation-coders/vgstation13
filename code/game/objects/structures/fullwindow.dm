@@ -5,8 +5,7 @@
 
 /obj/structure/window/full
 	name = "window"
-	var/base_state = "window" //Base icon for update_icon
-	icon_state = "window0" //Specifically for the map
+	icon_state = "fwindow0" //Specifically for the map
 	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
 	layer = FULL_WINDOW_LAYER
@@ -26,11 +25,6 @@
 	var/static/list/smoothables = list(/obj/structure/window/full)
 	return smoothables
 
-/obj/structure/window/full/isSmoothableNeighbor(atom/A)
-	if(isobj(A))
-		var/obj/O = A
-		return ..() && O.anchored && O.density
-
 /obj/structure/window/full/setup_border_dummy()
 	return
 
@@ -44,14 +38,6 @@
 /obj/structure/window/full/can_be_reached(mob/user)
 
 	return 1 //That about it Captain
-
-//Merges adjacent full-tile windows into one
-/obj/structure/window/full/relativewall()
-	//This spawn is here so windows get properly updated when one gets deleted.
-	spawn()
-		if(!src || !anchored || !density)
-			return
-		icon_state = "[base_state][..()]"
 
 /obj/structure/window/full/verb/set_direction() //Full windows get this because it's possible for them to face diagonally
 	set name = "Set Window Direction"			//Diagonal facing matters in the use of one-way windows
@@ -108,8 +94,8 @@
 /obj/structure/window/full/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrix. It looks more solid than the average window."
-	icon_state = "rwindow0"
-	base_state = "rwindow"
+	icon_state = "frwindow0"
+	base_state = "frwindow"
 	sheet_type = /obj/item/stack/sheet/glass/rglass
 	health = 40
 	penetration_dampening = 3
@@ -126,8 +112,8 @@
 
 	name = "plasma window"
 	desc = "A window made out of a plasma-silicate alloy. It looks insanely tough to break and burn through."
-	icon_state = "plasmawindow0"
-	base_state = "plasmawindow"
+	icon_state = "fplasmawindow0"
+	base_state = "fplasmawindow"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
@@ -146,8 +132,8 @@
 /obj/structure/window/full/reinforced/plasma
 	name = "reinforced plasma window"
 	desc = "A window made out of a plasma-silicate alloy and a rod matrix. It looks hopelessly tough to break and is most likely nigh fireproof."
-	icon_state = "plasmarwindow0"
-	base_state = "plasmarwindow"
+	icon_state = "fplasmarwindow0"
+	base_state = "fplasmarwindow"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
@@ -167,8 +153,8 @@
 
 	name = "tinted window"
 	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
-	icon_state = "twindow0"
-	base_state = "twindow"
+	icon_state = "ftwindow0"
+	base_state = "ftwindow"
 	opacity = 1
 	sheet_type = /obj/item/stack/sheet/glass/rglass //A glass type for this window doesn't seem to exist, so here's to you
 
@@ -176,16 +162,16 @@
 
 	name = "frosted window"
 	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
-	icon_state = "fwindow0"
-	base_state = "fwindow"
+	icon_state = "frwindow0"
+	base_state = "frwindow"
 	health = 30
 	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
 
 /obj/structure/window/full/reinforced/clockwork
 	name = "brass window"
 	desc = "A paper-thin pane of translucent yet reinforced brass."
-	icon_state = "clockworkwindow0"
-	base_state = "clockworkwindow"
+	icon_state = "fclockworkwindow0"
+	base_state = "fclockworkwindow"
 	shardtype = null
 	sheet_type = /obj/item/stack/sheet/brass
 	reinforcetype = /obj/item/stack/sheet/ralloy
