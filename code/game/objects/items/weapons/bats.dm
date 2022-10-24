@@ -177,7 +177,7 @@
 		balanced_item.forceMove(get_turf(src))
 		balanced_item = null
 
-/obj/item/weapon/bat/pre_throw(atom/movable/target)
+/obj/item/weapon/bat/hurley/pre_throw(atom/movable/target)
 	var/mob/living/carbon/human/user = usr
 	if(istype(user) && balanced_item)
 		return hit_away(balanced_item,user,target)
