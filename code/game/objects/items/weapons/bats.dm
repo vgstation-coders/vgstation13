@@ -41,7 +41,7 @@
 		unspike()
 
 /obj/item/weapon/bat/proc/spike()
-	name = "spiked bat"
+	name = "spiked [name]"
 	desc = "A classic among delinquent youths. Not very effective at hitting balls."
 	hitsound = "sound/weapons/spikebat_hit.ogg"
 	icon_state = "spikebat"
@@ -153,6 +153,11 @@
 	icon_state = "cricket_bat"
 	item_state = "baseball_bat0"
 
+/obj/item/weapon/bat/cricket/spike()
+	..()
+	icon_state = "spikecricket"
+	item_state = "spikebat0"
+
 /obj/item/weapon/bat/cricket/spiked/New()
 	..()
 	spike()
@@ -200,6 +205,12 @@
 		drop_balanced()
 		return hit_away(balanced_item,user,target)
 	return ..()
+
+
+/obj/item/weapon/bat/cricket/spike()
+	..()
+	icon_state = "spikehurley"
+	item_state = "spikebat0"
 
 /obj/item/weapon/bat/hurley/spiked/New()
 	..()
