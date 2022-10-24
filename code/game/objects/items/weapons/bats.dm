@@ -14,7 +14,6 @@
 	w_class = W_CLASS_LARGE
 	w_type = RECYK_WOOD
 	var/spiked = 0
-	var/can_spike = 1
 	var/twohandforce = 16
 	var/on_floor_only = 0
 
@@ -27,7 +26,7 @@
 
 /obj/item/weapon/bat/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/stack/rods) && !spiked && can_spike)
+	if(istype(W, /obj/item/stack/rods) && !spiked && w_type == RECYK_WOOD)
 		if(!ishammer(user.get_inactive_hand()))
 			to_chat(user, "<span class='info'>You need to be holding a toolbox or hammer to do that!</span>")
 			return
@@ -136,7 +135,7 @@
 
 /obj/item/weapon/bat/hockey
 	name = "hockey stick"
-	desc = "Good for reducing a doubleheader to a zeroheader."
+	desc = "Good for reducing a doubleheader to a zeroheader." // TODO: i got nothing, maybe something canada?
 	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
 	icon_state = "baseball_bat"
 	item_state = "baseball_bat0"
@@ -147,11 +146,10 @@
 	twohandforce = 13
 	w_type = RECYK_PLASTIC
 	on_floor_only = 1
-	can_spike = 0
 
 /obj/item/weapon/bat/cricket
 	name = "cricket bat"
-	desc = "Good for reducing a doubleheader to a zeroheader."
+	desc = "Good for reducing a doubleheader to a zeroheader." // TODO: someone help me put a good shaun of the dead reference here that fits
 	icon_state = "baseball_bat"
 	item_state = "baseball_bat0"
 
@@ -164,22 +162,44 @@
 	desc = "Camán, step it up." // TODO: something less than a lame pun
 	icon_state = "baseball_bat"
 	item_state = "baseball_bat0"
-	can_spike = 0
 	var/obj/item/balanced_item = null
 
+/obj/item/weapon/bat/hurley/process()
+	. = ..()
+	if(balanced_item && ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(prob( (25 / H.reagents.get_sportiness()) / H.move_speed) )
+			to_chat(H,"<span class='warning'>\the [balanced_item] falls off \the [src]!</span>")
+			drop_balanced()
+
 /obj/item/weapon/bat/hurley/attack_self(mob/user)
-	vis_contents.Cut()
-	if(!balanced_item)
+	if(!balanced_item && !spiked)
 		balanced_item = user.get_inactive_hand()
-		if(balanced_item)
-			balanced_item.forceMove(src)
+		if(balanced_item && balanced_item.w_class == W_CLASS_TINY && user.drop_item(balanced_item,src))
 			vis_contents += balanced_item
+			balanced_item.pixel_x = 8
+			balanced_item.pixel_y = 8
+			processing_objects.Add(src)
+		else
+			balanced_item = null
 	else
+		drop_balanced()
+
+/obj/item/weapon/bat/hurley/proc/drop_balanced()
+	if(balanced_item)
+		steps_taken = 0
 		balanced_item.forceMove(get_turf(src))
 		balanced_item = null
+		vis_contents.Cut()
+		processing_objects.Remove(src)
 
 /obj/item/weapon/bat/hurley/pre_throw(atom/movable/target)
 	var/mob/living/carbon/human/user = usr
 	if(istype(user) && balanced_item)
+		vis_contents.Cut()
 		return hit_away(balanced_item,user,target)
 	return ..()
+
+/obj/item/weapon/bat/hurley/spiked/New()
+	..()
+	spike()
