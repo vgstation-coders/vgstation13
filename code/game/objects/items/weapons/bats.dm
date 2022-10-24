@@ -187,7 +187,6 @@
 
 /obj/item/weapon/bat/hurley/proc/drop_balanced()
 	if(balanced_item)
-		steps_taken = 0
 		balanced_item.forceMove(get_turf(src))
 		balanced_item = null
 		vis_contents.Cut()
@@ -196,7 +195,7 @@
 /obj/item/weapon/bat/hurley/pre_throw(atom/movable/target)
 	var/mob/living/carbon/human/user = usr
 	if(istype(user) && balanced_item)
-		vis_contents.Cut()
+		drop_balanced()
 		return hit_away(balanced_item,user,target)
 	return ..()
 
