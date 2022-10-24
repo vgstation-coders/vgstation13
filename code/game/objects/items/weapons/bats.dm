@@ -165,7 +165,7 @@
 	icon_state = "baseball_bat"
 	item_state = "baseball_bat0"
 	can_spike = 0
-	var/obj/item/balanced_item - null
+	var/obj/item/balanced_item = null
 
 /obj/item/weapon/bat/hurley/attack_self(mob/user)
 	vis_contents.Cut()
