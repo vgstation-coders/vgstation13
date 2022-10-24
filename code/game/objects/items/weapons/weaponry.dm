@@ -564,6 +564,24 @@
 /obj/item/weapon/baseball_bat/IsShield()
 	return TRUE
 
+/obj/item/weapon/baseball_bat/pre_throw(atom/movable/target)
+	var/mob/living/carbon/human/user = usr
+	if(istype(user))
+		var/obj/item/I = user.get_inactive_hand()
+		if(istype(I) && !istype(I,/obj/item/offhand) && !istype(I,/obj/item/weapon/grab) && I != src)
+			if(I.cant_drop)
+				to_chat(user, "<span class='warning'>You can't hit away an item stuck to your hand!</span>")
+				return
+			visible_message("<span class='borange'>[user] hits \the [I] away with \the [src]!</span>")
+			playsound(user, 'sound/weapons/baseball_hit.ogg', 75, 1)
+			user.remove_from_mob(I)
+			I.forceMove(get_turf(user))
+			var/throw_mult = user.species.throw_mult
+			throw_mult += (user.get_strength()-1)/2 //For each level of strength above 1, add 0.5
+			throw_mult *= 2/(2**(I.w_class-1)) //multiplier of 2, 1, 0.5, 0.25 and 0.125 for each increasing w_class
+			I.throw_at(target, I.throw_range*throw_mult, I.throw_speed*throw_mult)
+			return 1
+
 /obj/item/weapon/baseball_bat/on_block(damage, atom/movable/blocked)
 	if(isliving(loc))
 		var/mob/living/H = loc
