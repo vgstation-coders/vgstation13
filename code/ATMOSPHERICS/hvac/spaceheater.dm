@@ -131,7 +131,7 @@
 /obj/machinery/space_heater/on_cook_stop()
 	update_icon()
 
-/obj/machinery/space_heater/campfire/render_cookvessel(offset_x, offset_y = 1)
+/obj/machinery/space_heater/campfire/render_cookvessel(offset_x, offset_y = 2)
 	..()
 
 /////////////////////

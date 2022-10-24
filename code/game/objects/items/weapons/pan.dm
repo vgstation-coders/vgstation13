@@ -1,34 +1,4 @@
-//Frying pan
-	//todo:
-	//rearrange todos
-	//check that timing is consistent
-	//sprite update the grill when power's off
-	//grill
-		//fix placing on and off with no power
-
-	//areas for expansion:
-	//setting chef when reagents are transferred as well
-	//edge case when recooking the same donk pocket over and over
-	//crafting/cargo/vending
-	//food being ready/steam sprite that turns to smoke and fire if left on too long
-	//sizzling sound/smoke/fire with hot reagents in it
-	//scooping hot oil out of the deepfryer
-	//scalding people with hot reagents
-	//body-part specific splash text
-	//transferring directly to plates and trays and other foods (need to consider what to do if contains anything more than a single item)
-	//pouring reagents into other reagent containers (need to consider what to do if it also contains items)
-	//hot pans with glowing red sprite and extra damage
-	//stuff dumping out of the pan when attacking a breakable object/window/etc
-	//generalize heating parameters
-	//componentize
-	//spilling (onto people) when thrown/propelled/impacted
-	//different cook timing based on heat
-	//frying stuff in oil (could use recipes for this)
-	//address large ingredient sprite cases
-	//consider only generating the front icon once
-	//cooking automatically in high heat
-	//cook with heat transfer rather than timer
-	//change order of messages with splashing acid on onesself when equipping the pan
+/////////////////////Frying pan/////////////////////
 
 /obj/item/weapon/reagent_containers/pan
 	name = "frying pan"
@@ -148,6 +118,7 @@
 		//However I'm not totally sure how to do this nicely.
 
 /////////////////////Dumping-and-splashing-related stuff/////////////////////
+
 /obj/item/weapon/reagent_containers/pan/afterattack(var/atom/target, var/mob/user, var/adjacency_flag, var/click_params)
 	if (!adjacency_flag)
 		return
@@ -228,6 +199,10 @@
 			to_chat(user, "<span class='notice'>You take [content] out of [src].</span>")
 			cook_reboot(user)
 			update_icon()
+
+/obj/item/weapon/reagent_containers/pan/proc/something_in_pan()
+	if(contents.len)
+		return contents[contents.len]
 
 /obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target, mob/dropper = usr)
 
@@ -310,7 +285,25 @@
 		power *= 2 //L4D4EVR
 	return power
 
+/obj/item/weapon/reagent_containers/pan/empty_contents()
+	set name = "Dump contents"
+	set category = "Object"
+	set src in usr
+
+	if(usr.incapacitated())
+		to_chat(usr, "<span class='warning'>You can't do that while incapacitated.</span>")
+		return
+	if(!is_open_container(src))
+		return
+	if(!src.contains_anything())
+		to_chat(usr, "<span class='warning'>\The [src] is empty.</span>")
+		return
+	if(isturf(usr.loc))
+		usr.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
+		drop_ingredients(usr.loc, usr)
+
 /////////////////////Cooking-related stuff/////////////////////
+
 /obj/item/weapon/reagent_containers/pan/proc/cook_start() //called when the pan is placed on a valid cooktop (eg. placed on grill)
 	var/contains_anything = contains_anything()
 	if(contains_anything)
@@ -341,10 +334,6 @@
 			if (id)
 				amount+=O.reagents.get_reagent_amount(id)
 		qdel(O)
-		O = null
-	if(isobj(loc))
-		var/obj/O = loc
-		O.render_cookvessel()
 	reagents.clear_reagents()
 	ffuu.reagents.add_reagent(CARBON, amount)
 	ffuu.reagents.add_reagent(TOXIN, amount/10)
@@ -353,6 +342,7 @@
 	ffuu.pixel_x = 0
 	ffuu.pixel_y = 0
 	currentrecipe = select_recipe(available_recipes, src)
+	burned = TRUE
 	return ffuu
 
 /obj/item/weapon/reagent_containers/pan/process()
@@ -362,19 +352,20 @@
 		O = loc
 		if(!O.is_cooktop)
 			cook_stop()
+			return
 	else
 		cook_stop()
+		return
 
 	if(!(O?.can_cook())) //if eg. the power went out on the grill, don't cook
 		return
 
 	cookingprogress += (SS_WAIT_FAST_OBJECTS * speed_multiplier)
 
-	if(cookingprogress >= (currentrecipe ? currentrecipe.time : 10 SECONDS) && !burned) //it's done when it's cooked for the cooking time, or a default of 10 seconds if there's no valid recipe. also if it's already been burned, don't keep looping.
+	if(cookingprogress >= (currentrecipe ? currentrecipe.time : 10 SECONDS) && !burned) //it's done when it's cooked for the cooking time, or a default of 10 seconds if there's no valid recipe. also if it's already been burned, don't keep looping burned mess -> burned mess.
 
 		var/contains_anything = contains_anything()
 
-		burned = TRUE
 		reset_cooking_progress() //reset the cooking progress
 
 		var/obj/cooked
@@ -382,13 +373,13 @@
 			cooked = currentrecipe.make_food(src, chef)
 			visible_message("<span class='notice'>[cooked] looks done.</span>")
 			playsound(src, 'sound/effects/frying.ogg', 50, 1)
-			O?.render_cookvessel()
 		else if(contains_anything & COOKVESSEL_CONTAINS_CONTENTS) //Don't make a burned mess out of just reagents, even though recipes can call for only reagents (spaghetti). Just keep heating the reagents.
 			cooked = cook_fail()
 
 		if(cooked)
 			cooked.forceMove(src, harderforce = TRUE)
 			update_icon()
+			O?.render_cookvessel()
 
 		if(contains_anything)
 			//re-check the recipe. generally this will return null because we'll continue cooking the previous result, which will lead to a burned mess
@@ -421,6 +412,7 @@
 			to_chat(user, "It's empty.")
 
 /////////////////////Wearing the pan/////////////////////
+
 /obj/item/weapon/reagent_containers/pan/equipped(user, slot, hand_index)
 	. = .. ()
 	chef = user
@@ -441,4 +433,28 @@
 	if(is_on_someones_head())
 		return FALSE
 	return ..()
-/////////////////////
+
+/////////////////////Areas for to consider for further expansion/////////////////////
+
+	//Plating directly to trays and robot trays.
+	//Grill sprite dynamically responding to power
+	//Setting chef var on_reagents_change as well
+	//Edge cases like recooking the same warm donk pocket over and over
+	//Getting pans by crafting, cargo crates, and vending machines.
+	//Food being ready making a steam sprite that turns to smoke and fire if left on too long.
+	//Sizzling sound with hot reagents in the pan.
+	//Scooping hot oil out of the deepfryer
+	//Scalding people with hot reagents (the reagents are alread heated on the pan I'm just not sure if there's a way to scald someone with hot reagents)
+	//Body-part specific splash text and also when you dump it onto yourself upon equipping to the head.
+	//Pouring reagents from the pan into other reagent containers (need to consider what to do if it also contains items)
+	//Hot pans with glowing red sprite and extra damage
+	//Stuff dumping out of the pan when attacking a breakable object, window, camera, etc.
+	//Generalize thermal transfer parameter.
+	//Componentize cooking vessels
+	//Spilling (including onto people) when thrown impacting..
+	//Different cook timings based on heat, or cooking with heat transfer (defined at the recipe level?) rather than a timer.
+	//Frying stuff in oil (could use recipes for this)
+	//Address cases with large ingredient sprites (see the note in update_icon()).
+	//Consider generating and storing the pan front blood overlay in the same manner as general blood overlays.
+	//Cooking automatically with high ambient heat.
+	//Change order of messages with eg. splashing acid on onesself when equipping the pan to the heat.

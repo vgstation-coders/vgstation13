@@ -32,7 +32,15 @@
 		return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/handle_customizable_addition(obj/item/I, mob/user, params, snacktype)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
+	//If we're using a pan, try to add something from the pan.
+	var/obj/item/weapon/reagent_containers/pan/P
+	if(istype(I, /obj/item/weapon/reagent_containers/pan))
+		P = I
+		var/atom/movable/thing_to_add = P.something_in_pan()
+		if(thing_to_add)
+			I = thing_to_add
+
+	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks))
 		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
 			return TRUE
@@ -43,6 +51,7 @@
 		F.pixel_x = pixel_x
 		F.pixel_y = pixel_y
 		F.attackby(I, user, params)
+		P?.update_icon()
 		qdel(src)
 		return TRUE
 
@@ -205,8 +214,9 @@
 
 		pick_a_plate(C)
 
-/obj/item/trash/plate/attackby(obj/item/I,mob/user,params)
-	if( istype(I, /obj/item/trash/plate) )
+/obj/item/trash/plate/attackby(obj/item/I, mob/user, params)
+
+	if(istype(I, /obj/item/trash/plate))
 		var/obj/item/trash/plate/plate = I
 		// Make a list of all plates to be added
 		var/list/platestoadd = list()
@@ -238,8 +248,16 @@
 		update_icon()
 		return TRUE
 
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		try_to_put_on_plate(user,I,params)
+	if(istype(I, /obj/item/weapon/reagent_containers/pan))
+		var/obj/item/weapon/reagent_containers/pan/P = I
+		var/atom/movable/thing_to_plate = P.something_in_pan()
+		if(thing_to_plate)
+			if(try_to_put_on_plate(user, thing_to_plate, params))
+				P.cook_reboot(user)
+				P.update_icon()
+
+	else if(istype(I, /obj/item/weapon/reagent_containers/food/snacks))
+		try_to_put_on_plate(user, I, params)
 	else
 		return ..()
 

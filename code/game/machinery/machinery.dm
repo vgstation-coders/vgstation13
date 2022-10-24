@@ -510,6 +510,7 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob, var/ignore_brain_damage = 0)
+	. = ..()
 	if(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
 		return 1
 
@@ -538,7 +539,6 @@ Class Procs:
 			return 1
 
 	src.add_fingerprint(user)
-	..()
 	return 0
 
 /obj/machinery/proc/RefreshParts() //Placeholder proc for machines that are built using frames.
@@ -665,6 +665,9 @@ Class Procs:
 	..()
 
 	add_fingerprint(user)
+
+	if(O.is_cookvessel && is_cooktop)
+		return 1
 
 	if(isEmag(O) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
