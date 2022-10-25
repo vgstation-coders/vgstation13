@@ -57,6 +57,10 @@ var/list/one_way_windows
 	var/static/list/smoothables = list(/obj/structure/window)
 	return smoothables
 
+/obj/structure/window/full/cannotSmoothWith()
+	var/static/list/unsmoothables = list(/obj/structure/window/full)
+	return unsmoothables
+
 /obj/structure/window/isSmoothableNeighbor(atom/A)
 	if(isobj(A))
 		var/obj/O = A
