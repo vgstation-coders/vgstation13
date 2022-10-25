@@ -10,7 +10,7 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSUTILITY
 	school = "transmutation"
-	charge_max = 200
+	charge_max = 150
 	spell_flags = NEEDSCLOTHES // now it's balanced
 	invocation = "E'MAGI!"
 	invocation_type = SpI_NONE // we say it in the arcane_acts
