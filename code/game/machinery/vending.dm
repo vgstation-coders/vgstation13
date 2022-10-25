@@ -1502,7 +1502,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
 		)
 	contraband = list(
-		/obj/item/weapon/reagent_containers/food/snacks/nutsnbugs = 4,
+		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/bustanuts = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/oldempirebar = 4,
