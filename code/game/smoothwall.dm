@@ -39,6 +39,8 @@
 /atom/proc/isSmoothableNeighbor(atom/A)
 	if(!A)
 		return 0
+	if((flow_flags & ON_BORDER) && (A.flow_flags & ON_BORDER) && !bordersmooth_override && A.dir != dir)
+		retun 0
 	return is_type_in_list(A, canSmoothWith())
 
 /turf/simulated/wall/isSmoothableNeighbor(atom/A)
