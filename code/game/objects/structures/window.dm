@@ -66,13 +66,10 @@ var/list/one_way_windows
 		var/obj/O = A
 		return ..() && O.anchored && O.density
 
-//Merges adjacent full-tile windows into one
 /obj/structure/window/relativewall()
-	//This spawn is here so windows get properly updated when one gets deleted.
-	spawn()
-		if(!src || !anchored || !density)
-			return
-		icon_state = "[base_state][..()]"
+	if(!anchored || !density)
+		return
+	icon_state = "[base_state][..()]"
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
@@ -601,7 +598,6 @@ var/list/one_way_windows
 /obj/structure/window/Destroy()
 	setDensity(FALSE) //Sanity while we do the rest
 	update_nearby_tiles()
-	relativewall()
 	relativewall_neighbours()
 	if(one_way)
 		one_way_windows.Remove(src)
