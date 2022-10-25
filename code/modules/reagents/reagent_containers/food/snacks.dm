@@ -8095,15 +8095,15 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(ROACHSHELL, 5)
 	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/nutsnbugs
-	name = "nuts 'n bugs"
+/obj/item/weapon/reagent_containers/food/snacks/grandpaspeanuts
+	name = "Grandpa Tik's Roasted 'Peanuts'"
 	icon_state = "nutsnbugs"
-	desc = "The unborn children of the insectoid colonies; processed, treated and mixed with nuts for your enjoyment."
+	desc = "The unborn children of the insectoid colonies; processed, treated and mixed with love (and nuts!) for your enjoyment."
 	base_crumb_chance = 30
 	valid_utensils = 0
 	base_crumb_chance = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/nutsnbugs/New()
+/obj/item/weapon/reagent_containers/food/snacks/grandpaspeanuts/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 1)
