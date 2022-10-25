@@ -29,20 +29,21 @@
 
 // OTHER FUNCTION SOME BORDER ITEMS MIGHT LIKE TO USE
 /atom/proc/findSmoothingOnTurf()
-	for(var/cdir in list(clockwise_perpendicular_dirs(dir),counterclockwise_perpendicular_dirs[dir]))
+	. = 0
+	for(var/cdir in cardinal)
+		if((flow_flags & ON_BORDER) && !bordersmooth_override && (dir == cdir || opposite_dirs[dir] == cdir))
+			continue
 		var/turf/T = get_turf(src)
-		if(isSmoothableNeighbor(T) && T.dir == cdir)
+		if(isSmoothableNeighbor(T,0) && T.dir == cdir)
 			. |= cdir
-			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 		for(var/atom/A in T)
-			if(isSmoothableNeighbor(A) && A.dir == cdir)
+			if(isSmoothableNeighbor(A,0) && A.dir == cdir)
 				. |= cdir
-				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 
-/atom/proc/isSmoothableNeighbor(atom/A)
+/atom/proc/isSmoothableNeighbor(atom/A, bordercheck = TRUE)
 	if(!A)
 		return 0
-	if((flow_flags & ON_BORDER) && (A.flow_flags & ON_BORDER) && !bordersmooth_override && A.dir != dir)
+	if(bordercheck && (flow_flags & ON_BORDER) && (A.flow_flags & ON_BORDER) && !bordersmooth_override && A.dir != dir)
 		return 0
 	return is_type_in_list(A, canSmoothWith()) && !(is_type_in_list(A, cannotSmoothWith()))
 

@@ -1228,8 +1228,8 @@
 
 /atom/movable/border_dummy
 	#ifdef DEBUG_BORDER_DUMMY
-	icon = 'icons/obj/structures.dmi'
-	icon_state = "window"
+	icon = 'icons/obj/structures/window.dmi'
+	icon_state = "window0"
 	color = "red"
 	#else
 	invisibility = 101

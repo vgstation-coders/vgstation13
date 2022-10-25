@@ -687,7 +687,7 @@
 
 /datum/selection_schematic/window_schematic/New()
 	for(var/d in dirs)
-		overlays += image(icon,icon_state="rwindow",dir=d)
+		overlays += image('icons/obj/structures/window.dmi',icon_state="rwindow0",dir=d)
 	..()
 
 /datum/selection_schematic/window_schematic/Destroy()

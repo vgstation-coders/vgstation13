@@ -25,6 +25,9 @@
 	var/static/list/smoothables = list(/obj/structure/window/full)
 	return smoothables
 
+/obj/structure/window/full/cannotSmoothWith()
+	return
+
 /obj/structure/window/full/setup_border_dummy()
 	return
 

@@ -57,7 +57,7 @@ var/list/one_way_windows
 	var/static/list/smoothables = list(/obj/structure/window)
 	return smoothables
 
-/obj/structure/window/full/cannotSmoothWith()
+/obj/structure/window/cannotSmoothWith()
 	var/static/list/unsmoothables = list(/obj/structure/window/full)
 	return unsmoothables
 
@@ -68,8 +68,17 @@ var/list/one_way_windows
 
 /obj/structure/window/relativewall()
 	if(!anchored || !density)
+		icon_state = initial(icon_state)
 		return
 	icon_state = "[base_state][..()]"
+	if(!is_fulltile)
+		var/cmasknumber = findSmoothingOnTurf()
+		if(cmasknumber)
+			var/icon/I = new('icons/obj/structures/window.dmi', icon_state)
+			var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]")
+			I.Blend(mask, ICON_OVERLAY)
+			I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
+			icon = I
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
