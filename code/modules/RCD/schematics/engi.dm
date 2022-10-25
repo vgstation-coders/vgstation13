@@ -682,7 +682,7 @@
 	name			= "window"						//Name of the window for the tooltip.
 	build_type		= /obj/effect/spawner/window	//Type of the window.
 	icon = 'icons/obj/structures.dmi'
-	icon_state = "grille"
+	icon_state = "grille0"
 	var/list/dirs = list(NORTH,EAST,WEST,SOUTH)
 
 /datum/selection_schematic/window_schematic/New()
@@ -772,7 +772,7 @@
 	build_type	= /obj/effect/spawner/window/full
 
 /datum/selection_schematic/window_schematic/full/New()
-	overlays += image(icon,icon_state="rwindow0")
+	overlays += image('icons/obj/structures/window.dmi',icon_state="frwindow0")
 	..()
 
 /datum/selection_schematic/window_schematic/full/northend

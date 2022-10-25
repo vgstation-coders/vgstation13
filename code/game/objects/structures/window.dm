@@ -47,7 +47,6 @@ var/list/one_way_windows
 	setup_border_dummy()
 
 	update_nearby_tiles()
-	update_icon()
 	oneway_overlay = image('icons/obj/structures/window.dmi', src, "one_way_overlay")
 	if(one_way)
 		one_way = !one_way
@@ -68,7 +67,8 @@ var/list/one_way_windows
 
 /obj/structure/window/relativewall()
 	if(!anchored || !density)
-		icon_state = initial(icon_state)
+		var/icon/I = new('icons/obj/structures/window.dmi', initial(icon_state))
+		icon = I
 		return
 	icon_state = "[base_state][..()]"
 	if(!is_fulltile)
@@ -477,7 +477,6 @@ var/list/one_way_windows
 					update_nearby_tiles() //Needed if it's a full window, since unanchored windows don't link
 					relativewall()
 					relativewall_neighbours()
-					update_icon()
 					if(smartwindow)
 						qdel(smartwindow)
 						smartwindow = null
@@ -506,7 +505,6 @@ var/list/one_way_windows
 					update_nearby_tiles() //Ditto above, but in reverse
 					relativewall()
 					relativewall_neighbours()
-					update_icon()
 					if(smartwindow)
 						qdel(smartwindow)
 						smartwindow = null
