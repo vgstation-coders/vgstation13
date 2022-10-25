@@ -8,7 +8,7 @@
 
 /atom/proc/canSmoothWith() // TYPE PATHS I CAN SMOOTH WITH~~~~~ (HAS TO BE THIS FUNCTION OR ELSE OBJECT INIT IS WAY WAY SLOWER)
 
-/atom/proc/canSmoothWith() // TYPE PATHS I CANNOT SMOOTH WITH~~~~~ (HAS TO BE THIS FUNCTION OR ELSE OBJECT INIT IS WAY WAY SLOWER)
+/atom/proc/cannotSmoothWith() // TYPE PATHS I CANNOT SMOOTH WITH~~~~~ (HAS TO BE THIS FUNCTION OR ELSE OBJECT INIT IS WAY WAY SLOWER)
 
 // MOVED INTO UTILITY FUNCTION FOR LESS DUPLICATED CODE.
 /atom/proc/findSmoothingNeighbors()
@@ -43,7 +43,7 @@
 	if(!A)
 		return 0
 	if((flow_flags & ON_BORDER) && (A.flow_flags & ON_BORDER) && !bordersmooth_override && A.dir != dir)
-		retun 0
+		return 0
 	return is_type_in_list(A, canSmoothWith()) && !(is_type_in_list(A, cannotSmoothWith()))
 
 /turf/simulated/wall/isSmoothableNeighbor(atom/A)
