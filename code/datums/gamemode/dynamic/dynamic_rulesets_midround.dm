@@ -823,7 +823,7 @@
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	cost = 20
-	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	requirements = list(70,40,20,20,20,20,15,15,5,5)
 	high_population_requirement = 10
 	logo = "pulsedemon-logo"
 	var/list/cables_to_spawn_at = list()
@@ -914,11 +914,11 @@
 	restricted_from_jobs = list()
 	enemy_jobs = list("Warden","Head of Security")
 	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
-	required_pop = list(0,0,10,10,15,15,20,20,20,25)
+	required_pop = list(25,20,20,20,15,15,10,10,0,0)
 	required_candidates = 1
-	weight = 3
+	weight = 1
 	cost = 0
-	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	requirements = list(70,40,20,20,20,20,15,15,5,5)
 	high_population_requirement = 10
 	flags = MINOR_RULESET
 	makeBody = FALSE
