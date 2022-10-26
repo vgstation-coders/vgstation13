@@ -28,9 +28,9 @@
 
 /turf/unsimulated/floor/snow/New()
 	..()
+	vis_contents += blizzard_image
 	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
 		var/datum/weather/snow/S = map.climate.current_weather
-		vis_contents += S.blizzard_image
 	if(real_snow_tile)
 		if(initial_snowballs == -1)
 			snowballs = rand(5, 10)
@@ -49,6 +49,7 @@
 	..()
 
 /turf/unsimulated/floor/snow/proc/update_environment()
+	vis_contents.Cut()
 	if(real_snow_tile)
 		if(snowballs)
 			icon_state = "snow[rand(0,6)]"
@@ -75,6 +76,7 @@
 		temperature = T_ARCTIC
 		turf_speed_multiplier = 1 //higher numbers mean slower
 	turf_speed_multiplier *= 1+(snowballs/10)
+	vis_contents += blizzard_image
 
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
 	..()
