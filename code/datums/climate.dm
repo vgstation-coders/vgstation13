@@ -136,7 +136,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 
 var/list/global_snowtiles = list()
 var/list/snow_state_to_texture = list()
-var/snowtiles_setup = 0 //has the blizzard parent been initialized?
 
 /datum/weather/snow
 	var/snow_intensity = SNOW_CALM
@@ -144,6 +143,11 @@ var/snowtiles_setup = 0 //has the blizzard parent been initialized?
 	var/snowfall_prob = 0
 	var/snowfall_rate = list(0,0)
 	var/snow_fluff_estimate = "snowing"
+	var/obj/effect/blizzard_holder/blizzard_image = null
+
+/datum/weather/snow/New(var/datum/climate/C)
+	..()
+	blizzard_image = new
 
 /datum/weather/snow/execute()
 	for(var/obj/machinery/teleport/hub/emergency/E in machines)
@@ -152,7 +156,7 @@ var/snowtiles_setup = 0 //has the blizzard parent been initialized?
 	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
 		if(tile.ignore_blizzard_updates)
 			continue
-		tile.snow_state = snow_intensity
+		blizzard_image.UpdateSnowfall(snow_intensity)
 		tile.update_environment()
 	force_update_snowfall_sfx()
 
