@@ -150,6 +150,7 @@ var/obj/effect/blizzard_holder/blizzard_image = null
 	..()
 	if(!blizzard_image)
 		blizzard_image = new
+	blizzard_image.UpdateSnowfall(snow_intensity)
 
 /datum/weather/snow/execute()
 	for(var/obj/machinery/teleport/hub/emergency/E in machines)

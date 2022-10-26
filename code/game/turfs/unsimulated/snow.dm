@@ -16,6 +16,7 @@
 	var/snowprints = TRUE //if false, do not set up a snowprint parent, do not make snowprints
 	var/obj/effect/snowprint_holder/snowprint_parent
 	var/ignore_blizzard_updates = FALSE //if true, don't worry about global blizzard events
+	var/snow_intensity_override = 0
 	turf_speed_multiplier = 1
 	gender = PLURAL
 	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
@@ -29,8 +30,6 @@
 /turf/unsimulated/floor/snow/New()
 	..()
 	vis_contents += blizzard_image
-	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
-		var/datum/weather/snow/S = map.climate.current_weather
 	if(real_snow_tile)
 		if(initial_snowballs == -1)
 			snowballs = rand(5, 10)
@@ -48,8 +47,12 @@
 		qdel(snowprint_parent)
 	..()
 
-/turf/unsimulated/floor/snow/proc/update_environment()
+/turf/unsimulated/floor/snow/initialize()
+	..()
 	vis_contents.Cut()
+	vis_contents += blizzard_image
+
+/turf/unsimulated/floor/snow/proc/update_environment()
 	if(real_snow_tile)
 		if(snowballs)
 			icon_state = "snow[rand(0,6)]"
@@ -57,26 +60,27 @@
 			icon_state = "permafrost_full"
 			if(snowprint_parent)
 				snowprint_parent.ClearSnowprints()
+	var/snow_state = snow_intensity_override
 	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
 		var/datum/weather/snow/S = map.climate.current_weather
-		switch(S.snow_intensity)
-			if(SNOW_CALM)
-				temperature = T_ARCTIC
-				turf_speed_multiplier = 1 //higher numbers mean slower
-			if(SNOW_AVERAGE)
-				temperature = T_ARCTIC-5
-				turf_speed_multiplier = 1
-			if(SNOW_HARD)
-				temperature = T_ARCTIC-10
-				turf_speed_multiplier = 1.4
-			if(SNOW_BLIZZARD)
-				temperature = T_ARCTIC-20
-				turf_speed_multiplier = 2.8
-	else
-		temperature = T_ARCTIC
-		turf_speed_multiplier = 1 //higher numbers mean slower
+		if(!snow_state)
+			snow_state = S.snow_intensity
+	if(!snow_state)
+		snow_state = SNOW_CALM
+	switch(snow_state)
+		if(SNOW_CALM)
+			temperature = T_ARCTIC
+			turf_speed_multiplier = 1 //higher numbers mean slower
+		if(SNOW_AVERAGE)
+			temperature = T_ARCTIC-5
+			turf_speed_multiplier = 1
+		if(SNOW_HARD)
+			temperature = T_ARCTIC-10
+			turf_speed_multiplier = 1.4
+		if(SNOW_BLIZZARD)
+			temperature = T_ARCTIC-20
+			turf_speed_multiplier = 2.8
 	turf_speed_multiplier *= 1+(snowballs/10)
-	vis_contents += blizzard_image
 
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
 	..()
@@ -97,6 +101,7 @@
 
 /turf/unsimulated/floor/snow/Entered(atom/A, atom/OL)
 	..()
+	var/snow_state = snow_intensity_override
 	if(istype(A,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = A
 		if(snowprint_parent && snowballs && !H.flying)
@@ -106,26 +111,26 @@
 				snowprint_parent.AddSnowprintComing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
 		if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
 			var/datum/weather/snow/S = map.climate.current_weather
-			switch(S.snow_intensity)
-				if(SNOW_CALM)
-					H.clear_fullscreen("snowfall_average",0)
-					H.clear_fullscreen("snowfall_hard",0)
-					H.clear_fullscreen("snowfall_blizzard",0)
-				if(SNOW_AVERAGE)
-					H.overlay_fullscreen("snowfall_average", /obj/abstract/screen/fullscreen/snowfall_average)
-					H.clear_fullscreen("snowfall_hard",0)
-					H.clear_fullscreen("snowfall_blizzard",0)
-				if(SNOW_HARD)
-					H.clear_fullscreen("snowfall_average",0)
-					H.overlay_fullscreen("snowfall_hard", /obj/abstract/screen/fullscreen/snowfall_hard)
-				if(SNOW_BLIZZARD)
-					H.clear_fullscreen("snowfall_average",0)
-					H.clear_fullscreen("snowfall_hard",0)
-					H.overlay_fullscreen("snowfall_blizzard", /obj/abstract/screen/fullscreen/snowfall_blizzard)
-		else
-			H.clear_fullscreen("snowfall_average",0)
-			H.clear_fullscreen("snowfall_hard",0)
-			H.clear_fullscreen("snowfall_blizzard",0)
+			if(!snow_state)
+				snow_state = S.snow_intensity
+		if(!snow_state)
+			snow_state = SNOW_CALM
+		switch(snow_state)
+			if(SNOW_CALM)
+				H.clear_fullscreen("snowfall_average",0)
+				H.clear_fullscreen("snowfall_hard",0)
+				H.clear_fullscreen("snowfall_blizzard",0)
+			if(SNOW_AVERAGE)
+				H.overlay_fullscreen("snowfall_average", /obj/abstract/screen/fullscreen/snowfall_average)
+				H.clear_fullscreen("snowfall_hard",0)
+				H.clear_fullscreen("snowfall_blizzard",0)
+			if(SNOW_HARD)
+				H.clear_fullscreen("snowfall_average",0)
+				H.overlay_fullscreen("snowfall_hard", /obj/abstract/screen/fullscreen/snowfall_hard)
+			if(SNOW_BLIZZARD)
+				H.clear_fullscreen("snowfall_average",0)
+				H.clear_fullscreen("snowfall_hard",0)
+				H.overlay_fullscreen("snowfall_blizzard", /obj/abstract/screen/fullscreen/snowfall_blizzard)
 		if(H.client)
 			if(!istype(OL,/turf/unsimulated/floor/snow))
 				H << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
@@ -155,7 +160,7 @@
 	var/list/snowfall_overlays = list("snowfall_calm","snowfall_average","snowfall_hard","snowfall_blizzard")
 	var/list/overlay_counts = list(2,2,2,3)
 	for(var/i = 1 to overlay_counts[snow_state+1])
-		var/image/snowfx = image('icons/turf/snowfx.dmi', "[snowfall_overlays[parent.snow_state+1]][i]",SNOW_OVERLAY_LAYER)
+		var/image/snowfx = image('icons/turf/snowfx.dmi', "[snowfall_overlays[snow_state+1]][i]",SNOW_OVERLAY_LAYER)
 		snowfx.plane = EFFECTS_PLANE
 		overlays += snowfx
 	snow_state_to_texture["[snow_state]"] = appearance
@@ -364,10 +369,26 @@
 	ignore_blizzard_updates = TRUE
 	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+	snow_intensity_override = SNOW_BLIZZARD
 
 /turf/unsimulated/floor/snow/heavy_blizzard/update_environment()
-	snow_state = SNOW_BLIZZARD //forces this to always be blizzarding regardless of blizzard rules
+	..() //forces this to always be blizzarding regardless of blizzard rules
+	if(!heavy_blizzard_image)
+		heavy_blizzard_image = new
+	vis_contents.Cut()
+	vis_contents += heavy_blizzard_image
+
+var/obj/effect/blizzard_holder/heavy/heavy_blizzard_image = null
+
+/obj/effect/blizzard_holder/heavy/New()
 	..()
+	UpdateSnowfall(SNOW_BLIZZARD)
+
+/obj/effect/blizzard_holder/heavy/UpdateSnowfall(var/snow_state)
+	..(SNOW_BLIZZARD)
+
+/obj/effect/blizzard_holder/heavy/cache_snowtile(var/snow_state)
+	..(SNOW_BLIZZARD)
 
 /turf/unsimulated/floor/noblizz_permafrost
 	icon = 'icons/turf/new_snow.dmi'
