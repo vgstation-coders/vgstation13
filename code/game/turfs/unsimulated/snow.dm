@@ -51,8 +51,9 @@
 
 /turf/unsimulated/floor/snow/initialize()
 	..()
-	vis_contents.Cut()
-	vis_contents += blizzard_image
+	if(!snow_intensity_override)
+		vis_contents.Cut()
+		vis_contents += blizzard_image
 
 /turf/unsimulated/floor/snow/proc/update_environment()
 	if(real_snow_tile)
