@@ -209,6 +209,18 @@ var/global/list/thing_storm_types = list(
 	var/list/candidates = list()
 	var/started = FALSE
 
+/datum/event/thing_storm/blob_storm/can_start(var/list/active_with_role)
+	if(active_with_role["Engineer"] <= 1)
+		return 0
+	
+	var/list/popl = list()	//list of living players
+	for(var/mob/living/carbon/human/G in player_list)
+		if(G.mind && G.mind.current && G.mind.current.stat != DEAD)
+			popl += G
+	if(popl.len >= 25)
+		return 15
+	return 0
+
 /datum/event/thing_storm/blob_storm/setup()
 	endWhen = rand(60, 90) + 10
 	storm_name="blob storm"
