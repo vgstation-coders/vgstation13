@@ -191,6 +191,9 @@ var/global/num_vending_terminals = 1
 		qdel(coinbox)
 		coinbox = null
 	..()
+	
+/obj/machinery/vending/splashable()
+	return FALSE
 
 /obj/machinery/vending/proc/dump_vendpack_and_coinbox()
 	if(product_records.len && cardboard) //Only spit out if we have slotted cardboard
