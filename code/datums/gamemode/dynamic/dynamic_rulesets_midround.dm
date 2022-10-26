@@ -396,7 +396,7 @@
 	my_fac = /datum/faction/blob_conglomerate/
 	enemy_jobs = list("AI", "Cyborg", "Warden", "Head of Security", "Captain", "Quartermaster", "Head of Personnel", "Station Engineer", "Chief Engineer", "Atmospheric Technician")
 	required_pop = list(30,25,25,20,20,20,15,15,15,15)
-	required_enemies = list(5,5,4,4,3,3,2,2,1,1)
+	required_enemies = list(4,4,4,4,4,4,4,3,2,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	weekday_rule_boost = list("Tue")
