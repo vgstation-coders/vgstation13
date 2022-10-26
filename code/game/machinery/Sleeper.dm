@@ -33,6 +33,10 @@
 	var/cools = 0
 	var/works_in_crit = FALSE //Will it let you inject chemicals into people in critical condition
 
+
+	//TODO - plugin system
+	var/obj/item/plugin = null
+
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
 		/datum/malfhack_ability/oneuse/overload_quiet,
