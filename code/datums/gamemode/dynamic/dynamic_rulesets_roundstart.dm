@@ -582,7 +582,7 @@ Assign your candidates in choose_candidates() instead.
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	weekday_rule_boost = list("Tue")
-	cost = 50
+	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
 	flags = HIGHLANDER_RULESET
