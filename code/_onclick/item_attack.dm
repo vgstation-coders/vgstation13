@@ -182,7 +182,6 @@
 						showname = "[user]'s left arm"
 
 		//make not the same mistake as me, these messages are only for slimes (not the case anymore, this applies to simple_animals as well)
-		message_admins("DEBUG HERE")
 		if(I.force == 0)
 			M.visible_message("<span class='danger'>[showname] [pick("taps","pats")] [M] with [I].</span>", \
 				"<span class='userdanger'>[showname] [pick("taps","pats")] you with [I].</span>")
