@@ -169,8 +169,6 @@
 						"<span class='warning'>Sorry pal, safety procedures.</span>", \
 						"<span class='warning'>But it's not bedtime yet!</span>")]")
 					sedativeblock++
-				else if((!works_in_crit && occupant.health < 0) && (href_list["chemical"] != INAPROVALINE))
-					to_chat(usr, "<span class='danger'>This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!</span>")
 				else
 					if(!(href_list["chemical"] in available_options)) //href exploitu go home
 						to_chat(usr,"<span class='warning'>That's odd. You could've sworn the [href_list["chemical"]] button was there just a second ago!")
