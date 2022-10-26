@@ -143,20 +143,22 @@ var/list/snow_state_to_texture = list()
 	var/snowfall_prob = 0
 	var/snowfall_rate = list(0,0)
 	var/snow_fluff_estimate = "snowing"
-	var/obj/effect/blizzard_holder/blizzard_image = null
+
+var/obj/effect/blizzard_holder/blizzard_image = null
 
 /datum/weather/snow/New(var/datum/climate/C)
 	..()
-	blizzard_image = new
+	if(!blizzard_image)
+		blizzard_image = new
 
 /datum/weather/snow/execute()
 	for(var/obj/machinery/teleport/hub/emergency/E in machines)
 		E.alarm(!(snow_intensity % SNOW_BLIZZARD))
 		//sends 1 if snow_intensity equals blizzard exactly, otherwise sends 0
+	blizzard_image.UpdateSnowfall(snow_intensity)
 	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
 		if(tile.ignore_blizzard_updates)
 			continue
-		blizzard_image.UpdateSnowfall(snow_intensity)
 		tile.update_environment()
 	force_update_snowfall_sfx()
 
