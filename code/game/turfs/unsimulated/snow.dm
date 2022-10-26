@@ -381,11 +381,10 @@
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 	snow_intensity_override = SNOW_BLIZZARD
 
-/turf/unsimulated/floor/snow/heavy_blizzard/update_environment()
+/turf/unsimulated/floor/snow/heavy_blizzard/New()
 	..() //forces this to always be blizzarding regardless of blizzard rules
 	if(!heavy_blizzard_image)
 		heavy_blizzard_image = new
-	vis_contents.Cut()
 	vis_contents += heavy_blizzard_image
 
 var/obj/effect/blizzard_holder/heavy/heavy_blizzard_image = null
