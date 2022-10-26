@@ -575,13 +575,14 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/blob
 	name = "Blob Conglomerate"
 	role_category = /datum/role/blob_overmind/
-	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel")
+	enemy_jobs = list("AI", "Cyborg", "Warden", "Head of Security", "Captain", "Quartermaster", "Head of Personnel", "Station Engineer", "Chief Engineer", "Atmospheric Technician")
 	required_pop = list(30,25,25,20,20,20,15,15,15,15)
+	required_enemies = list(5,5,4,4,3,3,3,2,2,2)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	weekday_rule_boost = list("Tue")
-	cost = 45
+	cost = 50
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
 	flags = HIGHLANDER_RULESET
