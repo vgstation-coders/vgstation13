@@ -30,6 +30,8 @@
 				if(PLANT_POTENCY)
 					if(seed.potency <= 0)
 						return
+					if(seed.potency == 198)
+						seed.potency += 2 //quick and dirty fix cause tweaking the equation will probably break it in unfathomable ways
 					var/hardcap = 200
 					var/max_change = 0.10 //percent
 					seed.potency += round(min(hardcap - hardcap/2*round(log(10,seed.potency/hardcap*100),0.01),max_change*hardcap),0.1)
