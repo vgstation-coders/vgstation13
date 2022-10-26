@@ -2445,7 +2445,7 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/H = M
 		for(var/obj/item/I in H.held_items)
-				I.clean_blood()
+			I.clean_blood()
 
 		for(var/obj/item/clothing/C in M.get_equipped_items())
 			for(var/part in zone_sels)
