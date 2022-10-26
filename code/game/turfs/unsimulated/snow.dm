@@ -70,20 +70,8 @@
 			snow_state = S.snow_intensity
 	if(!snow_state)
 		snow_state = SNOW_CALM
-	switch(snow_state)
-		if(SNOW_CALM)
-			temperature = T_ARCTIC
-			turf_speed_multiplier = 1 //higher numbers mean slower
-		if(SNOW_AVERAGE)
-			temperature = T_ARCTIC-5
-			turf_speed_multiplier = 1
-		if(SNOW_HARD)
-			temperature = T_ARCTIC-10
-			turf_speed_multiplier = 1.4
-		if(SNOW_BLIZZARD)
-			temperature = T_ARCTIC-20
-			turf_speed_multiplier = 2.8
-	turf_speed_multiplier *= 1+(snowballs/10)
+	temperature = T_ARCTIC-(5*round(2**(snow_state-1))) //0 = 0, 1 = 5, 2 = 10, 3 = 20
+	turf_speed_multiplier = max(1,1.4*(snow_state-1)) /*0 = 1, 1 = 1, 2 = 1.4, 3 = 2.8*/ * (1+(snowballs/10)) //higher numbers mean slower
 
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
 	..()
