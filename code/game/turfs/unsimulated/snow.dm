@@ -29,7 +29,7 @@
 
 /turf/unsimulated/floor/snow/New()
 	..()
-	if((!map || !map.climate || !istype(map.climate.current_weather,/datum/weather/snow)) && !blizzard_image)
+	if(!blizzard_image)
 		blizzard_image = new
 	vis_contents += blizzard_image
 	if(real_snow_tile)
@@ -49,12 +49,6 @@
 		qdel(snowprint_parent)
 	..()
 
-/turf/unsimulated/floor/snow/initialize()
-	..()
-	if(!snow_intensity_override)
-		vis_contents.Cut()
-		vis_contents += blizzard_image
-
 /turf/unsimulated/floor/snow/proc/update_environment()
 	if(real_snow_tile)
 		if(snowballs)
@@ -70,8 +64,8 @@
 			snow_state = S.snow_intensity
 	if(!snow_state)
 		snow_state = SNOW_CALM
-	temperature = T_ARCTIC-(5*round(2**(snow_state-1))) //0 = 0, 1 = 5, 2 = 10, 3 = 20
-	turf_speed_multiplier = max(1,1.4*(snow_state-1)) /*0 = 1, 1 = 1, 2 = 1.4, 3 = 2.8*/ * (1+(snowballs/10)) //higher numbers mean slower
+	temperature = T_ARCTIC-(5*round(2**(snow_state-1))) //CALM -= 0, AVERAGE -= 5, HARD -= 10, BLIZZARD -= 20
+	turf_speed_multiplier = max(1,1.4*(snow_state-1)) /*CALM = 1, AVERAGE = 1, HARD = 1.4, BLIZZARD = 2.8*/ * (1+(snowballs/10)) //higher numbers mean slower
 
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
 	..()
