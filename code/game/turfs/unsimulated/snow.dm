@@ -29,6 +29,8 @@
 
 /turf/unsimulated/floor/snow/New()
 	..()
+	if((!map || !map.climate || !istype(map.climate.current_weather,/datum/weather/snow)) && !blizzard_image)
+		blizzard_image = new
 	vis_contents += blizzard_image
 	if(real_snow_tile)
 		if(initial_snowballs == -1)
@@ -149,6 +151,14 @@
 	anchored = 1
 	plane = ABOVE_TURF_PLANE
 	mouse_opacity = 0
+
+/obj/effect/blizzard_holder/New()
+	..()
+	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = map.climate.current_weather
+		UpdateSnowfall(S.snow_intensity)
+	else
+		UpdateSnowfall(SNOW_CALM)
 
 /obj/effect/blizzard_holder/proc/UpdateSnowfall(var/snow_state)
 	if(!snow_state_to_texture["[snow_state]"])
