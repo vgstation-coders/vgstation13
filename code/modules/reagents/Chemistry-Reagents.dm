@@ -2444,8 +2444,7 @@
 
 	if(iscarbon(M))
 		var/mob/living/carbon/H = M
-		if((LIMB_LEFT_HAND in zone_sels) || (LIMB_RIGHT_HAND in zone_sels))
-			for(var/obj/item/I in H.held_items)
+		for(var/obj/item/I in H.held_items)
 				I.clean_blood()
 
 		for(var/obj/item/clothing/C in M.get_equipped_items())
