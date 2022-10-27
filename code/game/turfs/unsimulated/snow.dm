@@ -68,7 +68,7 @@
 		. = SNOW_CALM
 
 /turf/unsimulated/floor/snow/adjust_slowdown(mob/living/L, current_slowdown)
-	current_slowdown *= max(1,1.4*(get_snow_state()-1)) /*CALM = 1, AVERAGE = 1, HARD = 1.4, BLIZZARD = 2.8*/ * (1+(snowballs/10)) //higher numbers mean slower
+	current_slowdown *= (max(1,1.4*(get_snow_state()-1)) /*CALM = 1, AVERAGE = 1, HARD = 1.4, BLIZZARD = 2.8*/ * (1+(snowballs/10))) //higher numbers mean slower
 	return ..()
 
 /turf/unsimulated/floor/snow/return_air()
