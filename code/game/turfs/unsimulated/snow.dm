@@ -57,15 +57,25 @@
 			icon_state = "permafrost_full"
 			if(snowprint_parent)
 				snowprint_parent.ClearSnowprints()
-	var/snow_state = snow_intensity_override
+
+/turf/unsimulated/floor/snow/proc/get_snow_state()
+	. = snow_intensity_override
 	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
 		var/datum/weather/snow/S = map.climate.current_weather
-		if(!snow_state)
-			snow_state = S.snow_intensity
-	if(!snow_state)
-		snow_state = SNOW_CALM
-	temperature = T_ARCTIC-(5*round(2**(snow_state-1))) //CALM -= 0, AVERAGE -= 5, HARD -= 10, BLIZZARD -= 20
-	turf_speed_multiplier = max(1,1.4*(snow_state-1)) /*CALM = 1, AVERAGE = 1, HARD = 1.4, BLIZZARD = 2.8*/ * (1+(snowballs/10)) //higher numbers mean slower
+		if(!.)
+			. = S.snow_intensity
+	if(!.)
+		. = SNOW_CALM
+
+/turf/unsimulated/floor/snow/adjust_slowdown(mob/living/L, current_slowdown)
+	current_slowdown *= max(1,1.4*(get_snow_state()-1)) /*CALM = 1, AVERAGE = 1, HARD = 1.4, BLIZZARD = 2.8*/ * (1+(snowballs/10)) //higher numbers mean slower
+	return ..()
+
+/turf/unsimulated/floor/snow/return_air()
+	var/datum/gas_mixture/unsimulated/GM = ..()
+	GM.temperature = T_ARCTIC-(5*round(2**(get_snow_state()-1))) //CALM -= 0, AVERAGE -= 5, HARD -= 10, BLIZZARD -= 20
+	GM.update_values()
+	return GM
 
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
 	..()
@@ -86,7 +96,6 @@
 
 /turf/unsimulated/floor/snow/Entered(atom/A, atom/OL)
 	..()
-	var/snow_state = snow_intensity_override
 	if(istype(A,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = A
 		if(snowprint_parent && snowballs && !H.flying)
@@ -94,12 +103,7 @@
 				snowprint_parent.AddSnowprintComing(H.get_footprint_type(), H.dir)
 			else //Our human is down on his ass or in a vehicle, create tracks
 				snowprint_parent.AddSnowprintComing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
-		if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
-			var/datum/weather/snow/S = map.climate.current_weather
-			if(!snow_state)
-				snow_state = S.snow_intensity
-		if(!snow_state)
-			snow_state = SNOW_CALM
+		var/snow_state = get_snow_state()
 		switch(snow_state)
 			if(SNOW_CALM)
 				H.clear_fullscreen("snowfall_average",0)
