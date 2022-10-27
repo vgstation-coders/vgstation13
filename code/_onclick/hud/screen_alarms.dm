@@ -200,8 +200,11 @@ var/global/list/screen_alarms_locs = list(
 
 /obj/abstract/screen/alert/object/cryo/Click(location, control, params)
 	. = ..()
-	if(master)
-		return master.AltClick(usr)
+	var/obj/machinery/atmospherics/unary/cryo_cell/C = master
+	if(C)
+		if(!C.on)
+			return C.go_out(ejector = usr) //If the cryo tube is off, exit normally.
+		return C.AltClick(usr) //Otherwise, use the 30 second exit method.
 
 /obj/abstract/screen/alert/object/buckled
 	name = "Buckled"
