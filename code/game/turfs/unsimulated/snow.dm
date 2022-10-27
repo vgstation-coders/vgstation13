@@ -234,7 +234,7 @@
 				break
 			if(!found_on_ground)
 				qdel(W)
-			user.visible_message("<span class='notice'>[user] finishes \the log wall.</span>", \
+			user.visible_message("<span class='notice'>[user] finishes the log wall.</span>", \
 						"<span class='notice'>You finish the log wall.</span>")
 			var/turf/simulated/wall/X = ChangeTurf(/turf/simulated/wall/mineral/wood/log)
 			if(X)

@@ -349,7 +349,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					fluid_consumption 		= mix(gene.values[2], fluid_consumption,	rand(40, 60)/100)
 					voracious 				= max(gene.values[3], voracious)
 					hematophage 			= max(gene.values[4], hematophage)
-          
+
 		if(GENE_DEVELOPMENT)
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
@@ -585,7 +585,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/obj/item/seeds/seeds = new(target)
 	seeds.seed_type = src.name
 	seeds.update_seed()
-	return
+	return seeds
 
 // When the seed in this machine mutates/is modified, the tray seed value
 // is set to a new datum copied from the original. This datum won't actually

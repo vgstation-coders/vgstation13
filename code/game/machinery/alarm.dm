@@ -1186,6 +1186,8 @@ FIRE ALARM
 	var/buildstage = 2 // 2 = complete, 1 = no wires,  0 = circuit gone
 	var/shelter = 1
 	var/alarm = 0
+	var/last_alarm_time = 0
+	var/alarm_delay = 10 SECONDS
 
 /obj/machinery/firealarm/empty
 	shelter = 0
@@ -1444,16 +1446,19 @@ FIRE ALARM
 	alarm = 0
 
 /obj/machinery/firealarm/proc/alarm()
-	if (!( src.working ))
+	if (!( src.working ) || alarm || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		return
 	var/area/this_area = get_area(src)
 	this_area.firealert()
 	update_icon()
 	alarm = 1
+	if(world.time - last_alarm_time < alarm_delay)
+		return
 	if(emagged)
 		playsound(src, 'sound/misc/imperial_alert.ogg', 75, 0, 5)
 	else
 		playsound(src, 'sound/misc/fire_alarm.ogg', 75, 0, 5)
+	last_alarm_time = world.time
 
 var/global/list/firealarms = list() //shrug
 

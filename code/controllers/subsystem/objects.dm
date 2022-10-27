@@ -30,7 +30,7 @@ var/list/processing_objects = list()
 		else
 			bad_inits[object.type] = bad_inits[object.type]+1
 	..()
-	spawn()	
+	spawn()
 		for(var/area/A in areas)
 			var/obj/machinery/power/apc/place_apc = A.areaapc
 			if(place_apc)

@@ -123,6 +123,10 @@
 /datum/recipe/proc/make_food(var/obj/container, var/mob/user)
 	var/obj/result_obj = new result(container)
 	for(var/obj/O in (container.contents - result_obj))
+		if(O.arcanetampered && istype(container,/obj/machinery/microwave))
+			var/obj/machinery/microwave/M = container
+			M.fail(O.arcanetampered)
+			return
 		if(O.reagents)
 			//Should we have forbidden reagents, purge them first.
 			for(var/r_r in reagents_forbidden)

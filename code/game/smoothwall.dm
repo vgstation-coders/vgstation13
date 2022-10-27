@@ -2,24 +2,27 @@
 // FUCK YOU MYSTERY CODERS
 // FOR THIS SHIT I'M GOING TO MAKE ALL MY COMMENTS IN CAPS
 
-/atom/proc/canSmoothWith() // TYPE PATHS I CAN SMOOTH WITH~~~~~
+/atom
+	var/junction = 0 // THIS USED TO BE DEFINED TO THE TURF LEVEL BUT IT'S HERE NOW IN CASE ANYTHING ELSE (LIKE STRUCTURES) NEED IT, ALSO COMMENT IN CAPS IN THEME WITH THIS FILE
+
+/atom/proc/canSmoothWith() // TYPE PATHS I CAN SMOOTH WITH~~~~~ (HAS TO BE THIS FUNCTION OR ELSE OBJECT INIT IS WAY WAY SLOWER)
 
 // MOVED INTO UTILITY FUNCTION FOR LESS DUPLICATED CODE.
 /atom/proc/findSmoothingNeighbors()
 	// THIS IS A BITMAP BECAUSE NORTH/SOUTH/ETC ARE ALL BITFLAGS BECAUSE BYOND IS DUMB AND
 	// DOESN'T FUCKING MAKE SENSE, BUT IT WORKS TO OUR ADVANTAGE
-	var/J = 0
+	. = 0
 	for(var/cdir in cardinal)
+		if((flow_flags & ON_BORDER) && (dir == cdir || opposite_dirs[dir] == cdir))
+			continue
 		var/turf/T = get_step(src,cdir)
 		if(isSmoothableNeighbor(T))
-			J |= cdir
+			. |= cdir
 			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 		for(var/atom/A in T)
 			if(isSmoothableNeighbor(A))
-				J |= cdir
+				. |= cdir
 				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
-
-	return J
 
 /atom/proc/isSmoothableNeighbor(atom/A)
 	if(!A)
@@ -51,7 +54,17 @@
  * SHITTY FUNCTIONAL PROGRAMMER, WE WILL BE COOL AND MODERN AND USE INHERITANCE.
  */
 /atom/proc/relativewall()
-	return // DOES JACK SHIT BY DEFAULT. OLD BEHAVIOR WAS TO SPAM LOOPS ANYWAY.
+	if(canSmoothWith())
+		junction = findSmoothingNeighbors()
+	else
+		junction = 0
+	return junction // PREVIOUSLY DID NOTHING, NOW INHERITS THIS FOR COMMON BEHAVIOUR.
+
+/atom/New()
+	. = ..()
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING && canSmoothWith())
+		relativewall()
+		relativewall_neighbours()
 
 /*
  * SEE?  NOW WE ONLY HAVE TO PROGRAM THIS SHIT INTO WHAT WE WANT TO SMOOTH
@@ -62,8 +75,7 @@
  * WE COULD STANDARDIZE THIS BUT EVERYONE'S A FUCKING SNOWFLAKE
  */
 /turf/simulated/wall/relativewall()
-	junction = findSmoothingNeighbors()
-	icon_state = "[walltype][junction]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
+	icon_state = "[walltype][..()]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
 
 // AND NOW WE HAVE TO YELL AT THE NEIGHBORS FOR BEING LOUD AND NOT PAINTING WITH HOA-APPROVED COLORS
 /atom/proc/relativewall_neighbours(var/at=null)
@@ -119,12 +131,10 @@ var/list/smoothable_unsims = list(
 	"rock_rf0",
 	)
 
-/turf/unsimulated/wall/New()
-	..()
+/turf/unsimulated/wall/initialize()
 	if(icon_state in smoothable_unsims)
 		relativewall()
-		relativewall_neighbours()
 
 /turf/unsimulated/wall/relativewall()
-	junction = findSmoothingNeighbors()
-	icon_state = "[walltype][junction]"
+	if(icon_state in smoothable_unsims)
+		icon_state = "[walltype][..()]"

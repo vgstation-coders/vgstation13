@@ -145,10 +145,10 @@
 
 		if (EXPONENTIAL)
 			relative_threat = exp_distribution(dynamic_curve_centre)
-			threat_level = exp2threat(relative_threat)
+			threat_level = exp2threat(relative_threat) * 1.25
 			threat = round(threat, 0.1)
 
-			curve_centre_of_round = dynamic_curve_centre
+			curve_centre_of_round = dynamic_curve_centre + 1
 
 			peaceful_percentage = round(exp_cummulative_distribution(relative_threat, curve_centre_of_round), 0.01)*100
 
@@ -156,7 +156,7 @@
 			starting_threat = threat_level
 
 			relative_threat = exp_distribution(dynamic_curve_centre)
-			midround_threat_level = exp2threat(relative_threat)
+			midround_threat_level = exp2threat(relative_threat) * 1.25
 			midround_starting_threat = midround_threat_level
 			midround_threat = midround_threat_level
 

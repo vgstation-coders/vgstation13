@@ -1056,6 +1056,10 @@ var/global/num_vending_terminals = 1
 	update_vicon()
 	qdel(R)
 
+/obj/machinery/vending/arcane_act(mob/user)
+	..()
+	return "B'NUS D'CKS!"
+
 /obj/machinery/vending/proc/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	if (!allowed(user) && !emagged && wires.IsIndexCut(VENDING_WIRE_IDSCAN)) //For SECURE VENDING MACHINES YEAH
 		to_chat(user, "<span class='warning'>Access denied.</span>")//Unless emagged of course
@@ -1101,11 +1105,18 @@ var/global/num_vending_terminals = 1
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	spawn(vend_delay)
 		if(!R.custom)
-			new R.product_path(get_turf(src))
+			var/path2use = R.product_path
+			if(arcanetampered && prob(90))
+				path2use = /obj/item/weapon/bikehorn/rubberducky  // BONUS DUCKS! refunds
+			var/atom/A = new path2use(get_turf(src))
+			if(arcanetampered && path2use == R.product_path)
+				A.arcane_act(user)
 		else
 			for(var/obj/O in custom_stock)
 				if(O.product_name() == R.product_name)
 					O.forceMove(src.loc)
+					if(arcanetampered)
+						O.arcane_act(user)
 					custom_stock.Remove(O)
 					break
 		src.vend_ready = 1
@@ -3893,10 +3904,17 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		playsound(src, "buzz-sigh", 50, 1)
 		visible_message("<b>[src]</b>'s monitor flashes, \"The Central Command Lottery Fund is empty, and cannot dispense money.\"")
 		return
-	visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [amount] credits from the Central Command Lottery Fund!\"")
-	dispense_cash(amount, get_turf(src))
 	playsound(src, "polaroid", 50, 1)
-	station_jackpot -= (min(station_jackpot,amount))
+	if(arcanetampered)
+		var/total = 0
+		for(var/i in 0 to round(sqrt(sqrt(amount)))) // anywhere from about 1 to 118(!) ducks (thankfully that should be really really rare)
+			new /obj/item/weapon/bikehorn/rubberducky(get_turf(src))
+			total++
+		visible_message("<b>[src]</b>'s monitor flashes, <span class='sinister'>\"Withdrawing [total] ducks from the Central Command Bonus Duck Fund!\"</span>")
+	else
+		visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [amount] credits from the Central Command Lottery Fund!\"")
+		dispense_cash(amount, get_turf(src))
+		station_jackpot -= (min(station_jackpot,amount))
 
 
 /obj/machinery/vending/lotto/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)

@@ -460,7 +460,7 @@
 			cooked = fail()
 			cooked.forceMove(src.loc)
 			return
-		if(!emagged)
+		if(!emagged && !arcanetampered)
 			cooked = recipe.make_food(src,user)
 		else
 			cooked = fail()
@@ -553,7 +553,7 @@
 	src.operating = 0 // Turn it off again aferwards
 	src.updateUsrDialog()
 
-/obj/machinery/microwave/proc/fail()
+/obj/machinery/microwave/proc/fail(var/arcane = FALSE)
 	var/obj/item/weapon/reagent_containers/food/snacks/badrecipe/ffuu = new(src)
 	var/amount = 0
 	for (var/obj/O in contents-ffuu)
@@ -567,8 +567,12 @@
 	src.reagents.clear_reagents()
 	ffuu.reagents.add_reagent(CARBON, amount)
 	ffuu.reagents.add_reagent(TOXIN, amount/10)
-	if(emagged || Holiday == APRIL_FOOLS_DAY)
+	if(emagged || arcanetampered || arcane || Holiday == APRIL_FOOLS_DAY)
 		playsound(src, "goon/sound/effects/dramatic.ogg", 100, 0)
+	if(arcanetampered || arcane)
+		muck_start()
+		muck_finish()
+		broke()
 	return ffuu
 
 /obj/machinery/microwave/proc/empty()

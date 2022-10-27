@@ -926,7 +926,7 @@
 	id = "solidglass"
 	result = null
 	required_reagents = list(SILICATE = 20, CAPSAICIN = 10) //You melt the silicate to make glass
-	result_amount = 1 //amount of sheets created per the above reagents 
+	result_amount = 1 //amount of sheets created per the above reagents
 
 /datum/chemical_reaction/solidification/glass/product_to_spawn()
 	return /obj/item/stack/sheet/glass/glass
@@ -936,7 +936,7 @@
 	id = "solidplasmaglass"
 	result = null
 	required_reagents = list(SILICATE = 20, CONDENSEDCAPSAICIN = 10, PLASMA = 20) //You need even stronger heat to make plasmaglass
-	result_amount = 1 //amount of sheets created per the above reagents 
+	result_amount = 1 //amount of sheets created per the above reagents
 
 /datum/chemical_reaction/solidification/plasmaglass/product_to_spawn()
 	return /obj/item/stack/sheet/glass/plasmaglass
@@ -3399,6 +3399,13 @@
 	required_reagents = list(COFFEE = 5, SPRINKLES = 1, BEEPSKYSMASH = 5)
 	result_amount = 10
 
+/datum/chemical_reaction/engicoffee
+	name = "NT Standard Battery Acid"
+	id = ENGICOFFEE
+	result = ENGICOFFEE
+	required_reagents = list(COFFEE = 5, FUEL = 1, SULFURIC = 5)
+	result_amount = 10
+
 /datum/chemical_reaction/medcoffee
 	name = "Lifeline"
 	id = MEDCOFFEE
@@ -3616,6 +3623,13 @@
 	result = HUSBANDO
 	required_reagents = list(MANLYDORF = 1, KARMOTRINE = 4)
 	result_amount = 5
+	
+/datum/chemical_reaction/tomboy
+	name = "Tomboy"
+	id = TOMBOY
+	result = TOMBOY
+	required_reagents = list(HUSBANDO = 1, WAIFU = 1)
+	result_amount = 2
 
 /datum/chemical_reaction/beepskyclassic
 	name = "Beepsky Classic"

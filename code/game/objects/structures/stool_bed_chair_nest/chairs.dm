@@ -312,6 +312,41 @@
 
 		if (user.drop_item(W, src))
 			to_chat(user, "You hide \the [W] between \the [src]'s cushions.")
+			if(arcanetampered)
+				var/area/thearea
+				var/area/prospective = pick(areas)
+				while(!thearea)
+					if(prospective.type != /area)
+						var/turf/T = pick(get_area_turfs(prospective.type))
+						if(T.z == user.z)
+							thearea = prospective
+							break
+					prospective = pick(areas)
+				var/list/L = list()
+				for(var/turf/T in get_area_turfs(thearea.type))
+					if(!T.density)
+						var/clear = 1
+						for(var/obj/O in T)
+							if(O.density)
+								clear = 0
+								break
+						if(clear)
+							L+=T
+				if(!L.len)
+					return
+
+				var/list/backup_L = L
+				var/attempt = null
+				var/success = 0
+				while(L.len)
+					attempt = pick(L)
+					success = W.Move(attempt)
+					if(!success)
+						L.Remove(attempt)
+					else
+						break
+				if(!success)
+					W.forceMove(pick(backup_L))
 
 		return TRUE
 

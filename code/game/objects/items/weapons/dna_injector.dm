@@ -118,6 +118,8 @@
 				if(!block) //isolated block?
 					M.dna.SE = buf.dna.SE.Copy()
 					M.dna.UpdateSE()
+				else if(arcanetampered)
+					M.dna.GiveRandomSE(genetype = GENETYPE_BAD)
 				else
 					M.dna.SetSEValue(block,src.GetValue())
 				spawn() //domutcheck can include monkeyization which is long and stops the proc until it's done, this fixes it

@@ -131,8 +131,6 @@ var/list/false_wall_images = list()
 
 /obj/structure/falsewall/New()
 	..()
-	relativewall()
-	relativewall_neighbours()
 	update_meson_image()
 
 /obj/structure/falsewall/Destroy()
@@ -161,8 +159,7 @@ var/list/false_wall_images = list()
 		icon_state = "[mineral]fwall_open"
 		return
 
-	var/junction=findSmoothingNeighbors()
-	icon_state = "[mineral][junction]"
+	icon_state = "[mineral][..()]"
 
 /obj/structure/falsewall/attack_ai(mob/user as mob)
 	if(isMoMMI(user))
@@ -304,8 +301,6 @@ var/list/false_wall_images = list()
 
 /obj/structure/falserwall/New()
 	..()
-	relativewall()
-	relativewall_neighbours()
 	update_meson_image()
 
 /obj/structure/falserwall/Destroy()
@@ -394,8 +389,7 @@ var/list/false_wall_images = list()
 	if(!density)
 		icon_state = "frwall_open"
 		return
-	var/junction=findSmoothingNeighbors()
-	icon_state = "rwall[junction]"
+	icon_state = "rwall[..()]"
 
 /obj/structure/falserwall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opening)

@@ -182,7 +182,10 @@
 								break
 						if(component_check)
 							P.playtoolsound(src, 50)
-							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
+							var/type2build = src.circuit.build_path
+							if(arcanetampered || circuit.arcanetampered)
+								type2build = pick(typesof(/obj/machinery/cooking))
+							var/obj/machinery/new_machine = new type2build(src.loc)
 							for(var/obj/O in new_machine.component_parts)
 								qdel(O)
 							new_machine.component_parts = list()
@@ -200,6 +203,9 @@
 							new_machine.power_change()
 							circuit.finish_building(new_machine, user)
 							components = null
+							if(arcanetampered || circuit.arcanetampered)
+								new_machine.stat |= BROKEN
+								new_machine.update_icon()
 							qdel(src)
 					else
 						if(istype(P, /obj/item/weapon/storage/bag/gadgets/part_replacer) && P.contents.len && get_req_components_amt())

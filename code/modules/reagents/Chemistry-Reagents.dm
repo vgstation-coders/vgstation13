@@ -7017,20 +7017,23 @@ var/procizine_tolerance = 0
 /datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	if(M.gender == MALE)
-		M.setGender(FEMALE)
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(!M.is_wearing_item(/obj/item/clothing/under/schoolgirl))
-			var/turf/T = get_turf(H)
-			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = MOB_PLANE)
-			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
-			var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
-			if(H.w_uniform)
-				H.u_equip(H.w_uniform, 1)
-			H.equip_to_slot(S, slot_w_uniform)
-			holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
-	M.regenerate_icons()
+	if(holder.has_reagent(TOMBOY))
+		return
+	else
+		if(M.gender == MALE)
+			M.setGender(FEMALE)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(!M.is_wearing_item(/obj/item/clothing/under/schoolgirl))
+				var/turf/T = get_turf(H)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = MOB_PLANE)
+				H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
+				var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
+				if(H.w_uniform)
+					H.u_equip(H.w_uniform, 1)
+				H.equip_to_slot(S, slot_w_uniform)
+				holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
+		M.regenerate_icons()
 
 /datum/reagent/ethanol/husbando
 	name = "Husbando"
@@ -7039,23 +7042,52 @@ var/procizine_tolerance = 0
 	color = "#2043D0"
 	glass_icon_state = "husbando"
 	glass_name = "\improper Husbando"
-
+	
 /datum/reagent/ethanol/husbando/on_mob_life(var/mob/living/M) //it's copypasted from waifu
 	if(..())
 		return 1
-	if(M.gender == FEMALE)
-		M.setGender(MALE)
+	if(holder.has_reagent(TOMBOY))
+		return
+	else
+		if(M.gender == FEMALE)
+			M.setGender(MALE)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(!M.is_wearing_item(/obj/item/clothing/under/callum))
+				var/turf/T = get_turf(H)
+				T.turf_animation('icons/effects/96x96.dmi',"manexplode",-32,0,MOB_LAYER+1,'sound/items/poster_ripped.ogg',anim_plane = MOB_PLANE)
+				H.visible_message("<span class='warning'>[H] reveals his true outfit in a vortex of ripped clothes!</span>")
+				var/obj/item/clothing/under/callum/C = new /obj/item/clothing/under/callum(get_turf(H))
+				if(H.w_uniform)
+					H.u_equip(H.w_uniform, 1)
+				H.equip_to_slot(C, slot_w_uniform)
+				holder.remove_reagent(HUSBANDO,4)
+		M.regenerate_icons()
+
+/datum/reagent/ethanol/tomboy
+	name = "Tomboy"
+	id = TOMBOY
+	description = "Best girl."
+	color = "#20D03B"
+	glass_icon_state = "tomboy"
+	glass_name = "\improper Tomboy"
+
+/datum/reagent/ethanol/tomboy/on_mob_life(var/mob/living/M) 
+	if(..())
+		return 1
+	if(M.gender == MALE)
+		M.setGender(FEMALE)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!M.is_wearing_item(/obj/item/clothing/under/callum))
 			var/turf/T = get_turf(H)
 			T.turf_animation('icons/effects/96x96.dmi',"manexplode",-32,0,MOB_LAYER+1,'sound/items/poster_ripped.ogg',anim_plane = MOB_PLANE)
-			H.visible_message("<span class='warning'>[H] reveals his true outfit in a vortex of ripped clothes!</span>")
+			H.visible_message("<span class='warning'>[H] reveals her true outfit in a vortex of ripped clothes!</span>")
 			var/obj/item/clothing/under/callum/C = new /obj/item/clothing/under/callum(get_turf(H))
 			if(H.w_uniform)
 				H.u_equip(H.w_uniform, 1)
 			H.equip_to_slot(C, slot_w_uniform)
-			holder.remove_reagent(HUSBANDO,4)
+			holder.remove_reagent(TOMBOY,4)
 	M.regenerate_icons()
 
 /datum/reagent/ethanol/scientists_serendipity
@@ -8816,6 +8848,20 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		var/mob/living/carbon/human/H = M
 		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
 			H.heal_organ_damage(1, 1) //liquid sprinkles!
+
+
+/datum/reagent/drink/coffee/engicoffee
+	name = "NT Standard Battery Acid"
+	id = ENGICOFFEE
+	description = "This Plasma Infused Brew, will fix what ails you."
+	mug_icon_state = "engicoffeee"
+	mug_name = "\improper Energizer"
+	mug_desc = "Taste that Triple A Goodness."
+
+/datum/reagent/drink/coffee/engicoffee/on_mob_life(var/mob/living/M)
+	..()
+	M.hallucination = 0
+	M.reagents.add_reagent (HYRONALIN, 0.1)
 
 /datum/reagent/drink/coffee/medcoffee
 	name = "Lifeline"

@@ -42,6 +42,8 @@
 
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
+	var/timer = 0 //currently only used on skittering food
+	
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	var/turf/T = get_turf(src)
 	if(contents.len)
@@ -250,6 +252,14 @@
 //Bitesizemod to multiply how much of a bite should be taken out. 1 is default bitesize.
 /obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/carbon/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
 	if(!istype(eater))
+		return
+	if(arcanetampered)
+		eater.visible_message("<span class='sinister'>[eater]'s mouth goes right through \the [src] </span><span class='danger'>and bites \his hand! Ouch!</span>", \
+		"<span class='sinister'>Your mouth goes right through \the [src] </span><span class='danger'>and bites your hand! Ouch!</span>")
+		var/oldselect = eater.zone_sel.selecting
+		eater.zone_sel.selecting = eater.active_hand == GRASP_RIGHT_HAND ? LIMB_RIGHT_HAND : LIMB_LEFT_HAND
+		eater.bite_act(eater,TRUE)
+		eater.zone_sel.selecting = oldselect
 		return
 	if(!eatverb)
 		eatverb = pick("bite", "chew", "nibble", "gnaw", "gobble", "chomp")
@@ -1259,7 +1269,6 @@
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 2
 
-
 /obj/item/weapon/reagent_containers/food/snacks/human
 	name = "-burger"
 	desc = "A bloody burger."
@@ -1501,6 +1510,76 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/ //if ye dish is a child of skitter it will move around after 30 ticks
+	name = "skittering burger"
+	desc = "A burger-shaped cockroach."
+	icon_state = "bugburger"
+	var/skitterdelay = 30
+	var/skitterchance = 50
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/New()
+	..()
+	processing_objects += src
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/pickup(mob/user)
+	timer = 0
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/process()
+	timer += 1
+	if(timer > skitterdelay && istype(loc, /turf) && prob(skitterchance))
+		Move(get_step(loc, pick(cardinal)))
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger
+	name = "gunk burger"
+	desc = "A GunkCo classic! You will eat the bugs and you will enjoy them."
+	icon_state = "bugburger"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 3) //the best non-karm emetic we have
+		desc = "Legs wriggling, bug juices oozing out and that rotten smell... Oh god, you're gonna THR-"
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger
+	name = "deluxe gunk burger"
+	desc = "GunkCo's latest innovation! You won't guess the special ingredient!"
+	icon_state = "deluxebugburger"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 3)
+		desc = "You can't comprehend how much I regret biting into this thing. The disgusting texture, burning juices and terrible taste will never leave my mind."
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
+	name = "Super Gunk Burger"
+	desc = "The Cockroach King! Or matriarch actually. You can't even fathom eating that much cockroach."
+	icon_state = "supergunkburger"
+	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
+	base_crumb_chance = 20
+	skitterchance = 40
+	skitterdelay = 60 //takes longer for super gunkburgers to walk and they walk less, muh weight or something
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 40)
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 3)
+		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosias and blingpizzas must ever afterward be poison to me."
+	bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
@@ -1856,6 +1935,20 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/gunkkabob
+	name = "Gunk-kabob"
+	icon_state = "bugkabob"
+	desc = "Not as disgusting as you'd expect!"
+	trash = /obj/item/stack/rods
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/gunkkabob/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(SALINE, 0.5) //just a taste
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/cubancarp
 	name = "Cuban Carp"
 	desc = "A grifftastic sandwich that burns your tongue and then leaves it numb!"
@@ -1891,6 +1984,18 @@
 		unpopped = max(0, unpopped-1)
 		reagents.add_reagent(SACID, 0.1) //only a little tingle.
 
+/obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket
+	name = "hopcorn"
+	desc = "Surprisingly crunchy!"
+	icon_state = "hoppers"
+	trash = /obj/item/trash/popcorn/hoppers
+	filling_color = "#610000"
+
+/obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket/after_consume()
+	if(prob(unpopped))
+		to_chat(usr, "<span class='warning'>Just as you were going to bite down on the cricket, it jumps away from your hand. It was alive!</span>")
+		unpopped = max(0, unpopped-3) //max 3 crickets per hoppers bag
+		new /mob/living/simple_animal/cricket(get_turf(src))
 
 /obj/item/weapon/reagent_containers/food/snacks/sosjerky
 	name = "\improper Scaredy's Private Reserve Beef Jerky"
