@@ -194,10 +194,19 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/object
 	icon_state = "template" // We'll set the icon to the client's ui pref in reorganize_alerts()
 
+/obj/abstract/screen/alert/object/cryo
+	name = "Cryogenics"
+	desc = "You're frozen inside a cryogenics tube. Click on this alert to engage the release sequence."
+
+/obj/abstract/screen/alert/object/cryo/Click(location, control, params)
+	. = ..()
+	if(master)
+		return master.AltClick(usr)
+
 /obj/abstract/screen/alert/object/buckled
 	name = "Buckled"
 	desc = "You've been buckled to something and can't move. Click on this alert to unbuckle."
-
+	
 /obj/abstract/screen/alert/object/buckled/coffin/Click(location, control, params)
 	if(!usr || !usr.client)
 		return
