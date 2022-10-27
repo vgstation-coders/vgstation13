@@ -171,7 +171,8 @@ var/obj/effect/blizzard_holder/blizzard_image = null
 		if(i == tile_interval)
 			tile.change_snowballs(snowfall_rate[1],snowfall_rate[2])
 			if(tile.snowprint_parent)
-				tile.snowprint_parent.ClearSnowprints()
+				qdel(tile.snowprint_parent)
+				tile.snowprint_parent = null
 			i = 1
 		else
 			i++
