@@ -618,7 +618,6 @@
 		usr.client.perspective = EYE_PERSPECTIVE
 		usr.client.eye = src
 		usr.forceMove(src)
-//		usr.metabslow = 1
 		occupant = usr
 		isopen = 0 //Close the thing after the guy gets inside
 		update_icon()
