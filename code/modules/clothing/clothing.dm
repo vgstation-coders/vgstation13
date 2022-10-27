@@ -31,6 +31,14 @@
 		qdel(A)
 	..()
 
+/obj/item/clothing/can_quick_store(var/obj/item/I)
+	for(var/obj/item/clothing/accessory/storage/A in accessories)
+		return A.hold && A.hold.can_be_inserted(I,1)
+
+/obj/item/clothing/quick_store(var/obj/item/I,mob/user)
+	for(var/obj/item/clothing/accessory/storage/A in accessories)
+		return A.hold && A.hold.handle_item_insertion(I,0)
+
 /obj/item/clothing/CtrlClick(var/mob/user)
 	if(isturf(loc))
 		return ..()
