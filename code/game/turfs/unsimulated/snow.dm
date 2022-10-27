@@ -1,5 +1,8 @@
 //This file includes all associated code with snow tiles, snowprints, and blizzards on them.
 
+#define SNOWPRINT_COMING 1
+#define SNOWPRINT_GOING 2
+
 /turf/unsimulated/floor/snow
 	name = "snow"
 	desc = "A layer of frozen water particles, kept solid by temperatures way below freezing."
@@ -23,6 +26,8 @@
 
 /turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	global_snowtiles -= src
+	if(real_snow_tile && !ignore_blizzard_updates)
+		environment_snowtiles -= src
 	if(snowprint_parent)
 		qdel(snowprint_parent)
 	..()
@@ -42,15 +47,19 @@
 			snowprint_parent = new /obj/effect/snowprint_holder(src)
 	update_environment()
 	global_snowtiles += src
+	if(real_snow_tile && !ignore_blizzard_updates)
+		environment_snowtiles += src
 
 /turf/unsimulated/floor/snow/Destroy()
+	if(real_snow_tile && !ignore_blizzard_updates)
+		environment_snowtiles -= src
 	global_snowtiles -= src
 	if(snowprint_parent)
 		qdel(snowprint_parent)
 	..()
 
 /turf/unsimulated/floor/snow/proc/update_environment()
-	if(real_snow_tile)
+	if(real_snow_tile && !ignore_blizzard_updates)
 		if(snowballs)
 			icon_state = "snow[rand(0,6)]"
 		else
@@ -83,9 +92,9 @@
 		var/mob/living/carbon/human/H = A
 		if(snowprint_parent && snowballs && !H.flying)
 			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
-				snowprint_parent.AddSnowprintGoing(H.get_footprint_type(), H.dir)
+				snowprint_parent.AddSnowprint(H.get_footprint_type(), H.dir, SNOWPRINT_GOING)
 			else //Our human is down on his ass or in a vehicle, create tracks
-				snowprint_parent.AddSnowprintGoing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
+				snowprint_parent.AddSnowprint(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir, SNOWPRINT_GOING)
 
 		if(!istype(newloc,/turf/unsimulated/floor/snow))
 			H.clear_fullscreen("snowfall_average",0)
@@ -100,9 +109,9 @@
 		var/mob/living/carbon/human/H = A
 		if(snowprint_parent && snowballs && !H.flying)
 			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
-				snowprint_parent.AddSnowprintComing(H.get_footprint_type(), H.dir)
+				snowprint_parent.AddSnowprint(H.get_footprint_type(), H.dir, SNOWPRINT_COMING)
 			else //Our human is down on his ass or in a vehicle, create tracks
-				snowprint_parent.AddSnowprintComing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
+				snowprint_parent.AddSnowprint(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir, SNOWPRINT_COMING)
 		var/snow_state = get_snow_state()
 		switch(snow_state)
 			if(SNOW_CALM)
@@ -171,30 +180,20 @@
 	anchored = 1
 	plane = ABOVE_TURF_PLANE
 	mouse_opacity = 0 //Unclickable
-	var/snowprint_color = "#BEBEBE"
-	var/list/existing_prints = list()
+	var/list/icon/existing_prints = list()
 
-/obj/effect/snowprint_holder/proc/AddSnowprintComing(var/obj/effect/decal/cleanable/blood/tracks/footprints/footprint_type, var/dir)
-	if(existing_prints["[initial(footprint_type.coming_state)]-[dir]"])
+/obj/effect/snowprint_holder/proc/AddSnowprint(var/obj/effect/decal/cleanable/blood/tracks/footprints/footprint_type, var/dir, var/comeorgo = SNOWPRINT_COMING)
+	var/state2check = comeorgo == SNOWPRINT_COMING ? initial(footprint_type.coming_state) : initial(footprint_type.going_state)
+	if(existing_prints["[state2check]-[dir]"])
 		return
-	existing_prints["[initial(footprint_type.coming_state)]-[dir]"] = 1
-	var/icon/footprint = icon('icons/effects/fluidtracks.dmi', initial(footprint_type.coming_state), dir)
-	footprint.SwapColor("#FFFFFF",snowprint_color)
+	var/icon/footprint = icon('icons/effects/fluidtracks.dmi', state2check, dir)
+	footprint.SwapColor("#FFFFFF","#BEBEBE")
 	overlays += footprint
-
-/obj/effect/snowprint_holder/proc/AddSnowprintGoing(var/obj/effect/decal/cleanable/blood/tracks/footprints/footprint_type, var/dir)
-	if(existing_prints["[initial(footprint_type.going_state)]-[dir]"])
-		return
-	existing_prints["[initial(footprint_type.going_state)]-[dir]"] = 1
-	var/icon/footprint = icon('icons/effects/fluidtracks.dmi', initial(footprint_type.going_state), dir)
-	footprint.SwapColor("#FFFFFF",snowprint_color)
-	overlays += footprint
+	existing_prints["[state2check]-[dir]"] = footprint
 
 /obj/effect/snowprint_holder/proc/ClearSnowprints()
 	overlays.Cut()
-	existing_prints.len = 0
-
-
+	existing_prints.Cut()
 
 /turf/unsimulated/floor/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 

@@ -138,6 +138,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	weathertracker[name] += SS_WAIT_WEATHER
 
 var/list/global_snowtiles = list()
+var/list/environment_snowtiles = list()
 var/list/snow_state_to_texture = list()
 
 /datum/weather/snow
@@ -157,9 +158,7 @@ var/obj/effect/blizzard_holder/blizzard_image = null
 		E.alarm(!(snow_intensity % SNOW_BLIZZARD))
 		//sends 1 if snow_intensity equals blizzard exactly, otherwise sends 0
 	blizzard_image.UpdateSnowfall(snow_intensity)
-	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
-		if(tile.ignore_blizzard_updates)
-			continue
+	for(var/turf/unsimulated/floor/snow/tile in environment_snowtiles)
 		tile.update_environment()
 	force_update_snowfall_sfx()
 
