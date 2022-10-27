@@ -206,7 +206,7 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/object/buckled
 	name = "Buckled"
 	desc = "You've been buckled to something and can't move. Click on this alert to unbuckle."
-	
+
 /obj/abstract/screen/alert/object/buckled/coffin/Click(location, control, params)
 	if(!usr || !usr.client)
 		return
