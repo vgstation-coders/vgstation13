@@ -110,6 +110,9 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 
 /datum/climate/arctic/New()
 	current_weather = new /datum/weather/snow/calm(src)
+	if(!blizzard_image)
+		blizzard_image = new
+	blizzard_image.UpdateSnowfall(SNOW_CALM)
 	..()
 
 ///////////////////////////////////  WEATHER DATUMS //////////////////////////////
@@ -148,9 +151,6 @@ var/obj/effect/blizzard_holder/blizzard_image = null
 
 /datum/weather/snow/New(var/datum/climate/C)
 	..()
-	if(!blizzard_image)
-		blizzard_image = new
-	blizzard_image.UpdateSnowfall(snow_intensity)
 
 /datum/weather/snow/execute()
 	for(var/obj/machinery/teleport/hub/emergency/E in machines)
