@@ -99,6 +99,13 @@
 		at = get_turf(src)
 	// OPTIMIZE BY NOT CHECKING FOR NEIGHBORS IF WE DON'T FUCKING SMOOTH
 	if(canSmoothWith())
+		if((flow_flags & ON_BORDER) && !bordersmooth_override)
+			var/turf/OT = get_turf(src)
+			if(isSmoothableNeighbor(OT,0) && OT.canSmoothWith())
+				OT.relativewall()
+			for(var/atom/A in OT)
+				if(isSmoothableNeighbor(A,0))
+					A.relativewall()
 		for(var/cdir in cardinal)
 			var/turf/T = get_step(src,cdir)
 			if(isSmoothableNeighbor(T) && T.canSmoothWith())
