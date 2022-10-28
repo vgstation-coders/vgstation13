@@ -37,7 +37,7 @@
 		if(T0 == src) //same turf
 			return 1
 
-		if(get_dist(src, T0) > 1) //too far
+		if(get_z_dist(src, T0) > 1 || (src.z != T0.z && !(locate(/obj/structure/stairs) in src) && !(locate(/obj/structure/stairs) in T0))) //too far
 			continue
 
 		// Non diagonal case
