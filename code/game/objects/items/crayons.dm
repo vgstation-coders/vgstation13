@@ -104,7 +104,7 @@ var/global/list/all_graffitis = list(
 	shadeColour = input(user, "Please select the shade colour.", "Crayon colour") as color
 	return
 
-#define MAX_LETTERS 12
+#define MAX_LETTERS 10
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity, click_parameters)
 	if(!proximity)
 		return
@@ -142,14 +142,8 @@ var/global/list/all_graffitis = list(
 			if("rune")
 				to_chat(user, "You start drawing a rune on \the [target].")
 			if("text")
-				preference = input("Write some text here (maximum [MAX_LETTERS] letters).", "Crayon scribbles") as null|text
 
-				var/letter_amount = length(replacetext(preference, " ", ""))
-				if(!letter_amount) //If there is no text
-					return
-				drawtime = 4 * letter_amount //10 letters = 4 seconds
-
-				#define MIN_FONTSIZE 6
+				#define MIN_FONTSIZE 8
 				#define MAX_FONTSIZE 16
 				fontsize = input("How big should the text be, in pts?", "Crayon scribbles", "6") as num
 				if(!fontsize)
@@ -157,7 +151,14 @@ var/global/list/all_graffitis = list(
 				fontsize = clamp(fontsize,MIN_FONTSIZE,MAX_FONTSIZE)
 				#undef MIN_FONTSIZE
 				#undef MAX_FONTSIZE
-				preference = copytext(preference, 1, (MAX_LETTERS/(fontsize/6))+1)
+
+				preference = input("Write some text here (maximum ([MAX_LETTERS/(fontsize/8)]) letters).", "Crayon scribbles") as null|text
+
+				var/letter_amount = length(replacetext(preference, " ", ""))
+				if(!letter_amount) //If there is no text
+					return
+				drawtime = 4 * letter_amount * (fontsize/8) //10 letters at 8pt = 4 seconds, 5 at 16pt = 4 seconds
+				preference = copytext(preference, 1, (MAX_LETTERS/(fontsize/8))+1)
 
 				if(user.client)
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
@@ -165,7 +166,7 @@ var/global/list/all_graffitis = list(
 					I.loc = get_turf(target)
 					I.maptext_height = 32
 					I.maptext_width = 64
-					I.maptext_y = -5
+					I.maptext_y = -2
 					I.pixel_x = text2num(params2list(click_parameters)["icon-x"]) - length(preference)*(fontsize/2)
 					I.pixel_y = text2num(params2list(click_parameters)["icon-y"]) - fontsize
 					animate(I, alpha = 100, 10, -1)
@@ -225,7 +226,7 @@ var/global/list/all_graffitis = list(
 								CT.update_icon()
 							C.pixel_x = min(C.pixel_x, 0)
 						if(NORTH)
-							C.pixel_y = min(C.pixel_y, drawtype == "text" ? max(0,C.maptext_height - fontsize) : 0)
+							C.pixel_y = min(C.pixel_y, drawtype == "text" ? max(0,C.maptext_height - (fontsize*1.5)) : 0)
 			C.pixel_x += x_offset
 			C.pixel_y += y_offset
 

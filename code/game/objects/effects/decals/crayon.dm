@@ -51,7 +51,7 @@
 	gender = NEUTER
 	maptext_height = 32
 	maptext_width = 64
-	maptext_y = -5
+	maptext_y = -2
 	var/fontsize = 6
 	var/font = "Comic Sans MS"
 
