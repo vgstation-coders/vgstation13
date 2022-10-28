@@ -195,8 +195,8 @@ var/global/list/all_graffitis = list(
 				C = new /obj/effect/decal/cleanable/crayon/text(target, size = fontsize, main = mainColour, type = preference)
 			else
 				C = new /obj/effect/decal/cleanable/crayon(target, main = mainColour, shade = shadeColour, type = drawtype)
-			C.pixel_x = text2num(params2list(click_parameters)["icon-x"]) - (drawtype == "text" ? length(preference)*(fontsize/2) : 16)
-			C.pixel_y = text2num(params2list(click_parameters)["icon-y"]) - (drawtype == "text" ? fontsize : 16)
+			C.pixel_x = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-x"]) - (drawtype == "text" ? length(preference)*(fontsize/2) : 16) : -16
+			C.pixel_y = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-y"]) - (drawtype == "text" ? fontsize : 16) : -16
 
 			var/desired_density = 1
 			var/x_offset = 0
@@ -214,17 +214,20 @@ var/global/list/all_graffitis = list(
 				if(current_turf.density == desired_density)
 					switch(direction)
 						if(WEST)
-							C.pixel_x = min(x_offset,max(0,C.pixel_x))
+							C.pixel_x = max(C.pixel_x,0)
 						if(SOUTH)
-							C.pixel_y = min(y_offset,max(0,C.pixel_y))
+							C.pixel_y = max(C.pixel_y,0)
 						if(EAST)
 							if(istype(C,/obj/effect/decal/cleanable/crayon/text))
 								var/obj/effect/decal/cleanable/crayon/text/CT = C
 								CT.text = copytext(CT.text, 1, min(length(CT.text),MAX_LETTERS/(CT.fontsize/3)))
 								CT.update_icon()
-							C.pixel_x = max(x_offset,min(0,C.pixel_x))
+							C.pixel_x = min(C.pixel_x,0)
 						if(NORTH)
-							C.pixel_y = max(y_offset,min(0,C.pixel_y))
+							C.pixel_y = min(C.pixel_y,0)
+			C.pixel_x += x_offset
+			C.pixel_y += y_offset
+
 			to_chat(user, "You finish drawing.")
 			target.add_fingerprint(user)		// Adds their fingerprints to the floor the crayon is drawn on.
 			if(uses)
