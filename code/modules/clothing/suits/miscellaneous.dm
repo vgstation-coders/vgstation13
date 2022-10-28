@@ -1108,3 +1108,18 @@ var/list/tag_suits_list = list()
 	body_parts_covered = FULL_TORSO
 	icon_state = "syndiefootball"
 	flags = FPRINT
+
+/obj/item/clothing/suit/reticulatedvest
+	name = "reticulated vest"
+	desc = "A vest that makes use of reticulation to increase surface area and help disperse emitter particles. It was later discovered this also makes it effective against blobs organisms."
+	icon_state = "reticulated2"
+	item_state = "labgreen"
+	blood_overlay_type = "armor"
+	allowed = list(/obj/item/weapon/tank,
+	/obj/item/weapon/gun/energy/laser/liberator)
+	starting_materials = list(MAT_WOOD = 1*CC_PER_SHEET_MISC)
+	w_type = RECYK_WOOD
+	var/hits = 2
+
+/obj/item/clothing/suit/reticulatedvest/update_icon()
+	icon_state = "reticulated[hits]"

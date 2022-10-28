@@ -140,13 +140,17 @@
 	var/lastcheck=last_beamchecks["\ref[B]"]
 	// Figure out how much damage to deal.
 	// Formula: (deciseconds_since_connect/10 deciseconds)*B.get_damage()
-	var/damage = ((world.time - lastcheck)/10)  * B.get_damage()
+	var/damage = ((world.time - lastcheck)/10)  * B.get_damage() * beam_defense(B)
 
 	// Actually apply damage
 	apply_damage(damage, B.damage_type, B.def_zone)
 
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
+
+//Return multiplier for damage
+/mob/living/proc/beam_defense(var/obj/effect/beam/B)
+	return 1
 
 /mob/living/verb/succumb()
 	set hidden = 1
