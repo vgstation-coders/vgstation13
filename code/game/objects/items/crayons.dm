@@ -105,6 +105,8 @@ var/global/list/all_graffitis = list(
 	return
 
 #define MAX_LETTERS 10
+#define MIN_FONTSIZE 8
+#define MAX_FONTSIZE 16
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity, click_parameters)
 	if(!proximity)
 		return
@@ -142,23 +144,18 @@ var/global/list/all_graffitis = list(
 			if("rune")
 				to_chat(user, "You start drawing a rune on \the [target].")
 			if("text")
-
-				#define MIN_FONTSIZE 8
-				#define MAX_FONTSIZE 16
 				fontsize = input("How big should the text be, in pts?", "Crayon scribbles", "6") as num
 				if(!fontsize)
 					return
 				fontsize = clamp(fontsize,MIN_FONTSIZE,MAX_FONTSIZE)
-				#undef MIN_FONTSIZE
-				#undef MAX_FONTSIZE
 
-				preference = input("Write some text here (maximum ([MAX_LETTERS/(fontsize/8)]) letters).", "Crayon scribbles") as null|text
+				preference = input("Write some text here (maximum ([MAX_LETTERS/(fontsize/MIN_FONTSIZE)]) letters).", "Crayon scribbles") as null|text
 
 				var/letter_amount = length(replacetext(preference, " ", ""))
 				if(!letter_amount) //If there is no text
 					return
 				drawtime = 4 * letter_amount * (fontsize/8) //10 letters at 8pt = 4 seconds, 5 at 16pt = 4 seconds
-				preference = copytext(preference, 1, (MAX_LETTERS/(fontsize/8))+1)
+				preference = copytext(preference, 1, (MAX_LETTERS/(fontsize/MIN_FONTSIZE))+1)
 
 				if(user.client)
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
@@ -221,7 +218,7 @@ var/global/list/all_graffitis = list(
 						if(EAST)
 							if(istype(C,/obj/effect/decal/cleanable/crayon/text))
 								var/obj/effect/decal/cleanable/crayon/text/CT = C
-								CT.name = copytext(CT.name, 1, (MAX_LETTERS/(CT.fontsize/3)))
+								CT.name = copytext(CT.name, 1, (MAX_LETTERS/(CT.fontsize/(MIN_FONTSIZE/2))))
 								CT.maptext_width = 32
 								CT.update_icon()
 							C.pixel_x = min(C.pixel_x, 0)
@@ -238,6 +235,8 @@ var/global/list/all_graffitis = list(
 					to_chat(user, "<span class='warning'>You used up your crayon!</span>")
 					qdel(src)
 
+#undef MIN_FONTSIZE
+#undef MAX_FONTSIZE
 #undef MAX_LETTERS
 
 /obj/item/toy/crayon/attack(mob/M as mob, mob/user as mob)
