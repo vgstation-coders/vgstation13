@@ -19,13 +19,14 @@
 
 /obj/effect/decal/cleanable/crayon/update_icon()
 	overlays.Cut()
-	desc = "A [name] drawn in crayon."
 
 	switch(name) //For generics
 		if("rune")
 			name = "rune[rand(1,6)]"
 		if("graffiti")
 			name = pick("amyjon","face","matt","revolution","engie","guy","end","dwarf","uboa","heart","borgsrogue","shitcurity","catbeast","voxpox","security","hieroglyphs[rand(1,3)]","nanotrasen","lie","syndicate[rand(1,2)]","lambda","50bless","chaos")
+
+	desc = "\A [name] drawn in crayon."
 
 	var/icon/mainOverlay = new/icon('icons/effects/crayondecal.dmi',"[name]",2.1)
 	var/icon/shadeOverlay = new/icon('icons/effects/crayondecal.dmi',"[name]s",2.1)
