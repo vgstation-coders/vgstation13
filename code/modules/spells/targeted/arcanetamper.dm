@@ -10,13 +10,13 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSUTILITY
 	school = "transmutation"
-	charge_max = 300
+	charge_max = 150
 	spell_flags = NEEDSCLOTHES // now it's balanced
 	invocation = "E'MAGI!"
 	invocation_type = SpI_NONE // we say it in the arcane_acts
 	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 2, Sp_POWER = 2)
 	range = 1
-	cooldown_min = 200 // 100 deciseconds reduction per rank
+	cooldown_min = 100 // 50 deciseconds reduction per rank
 	hud_state = "wiz_arctam"
 	spell_flags = WAIT_FOR_CLICK
 	var/recursive = FALSE // does it curse contents too?
