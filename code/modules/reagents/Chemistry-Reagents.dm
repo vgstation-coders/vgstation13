@@ -2447,11 +2447,10 @@
 		for(var/obj/item/I in H.held_items)
 			I.clean_blood()
 
-		for(var/obj/item/clothing/C in M.get_equipped_items())
-			for(var/part in zone_sels)
-				if(C.body_parts_covered & limb_define_to_part_define(part))
-					if(C.clean_blood())
-						H.update_inv_by_slot(C.slot_flags)
+		for(var/obj/item/clothing/C in M.get_equipped_items())	
+			if(C.clean_blood())
+				H.update_inv_by_slot(C.slot_flags)
+
 		M.clean_blood()
 		M.color = ""
 
