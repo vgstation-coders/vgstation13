@@ -219,6 +219,9 @@ var/global/list/all_graffitis = list(
 						if(WEST)
 							C.maptext_x = max(-16,C.maptext_x)
 							C.pixel_x = max(0,C.pixel_x)+x_offset
+						if(SOUTH)
+							C.maptext_y = max(-16,C.maptext_y)
+							C.pixel_y = max(0,C.pixel_y)+y_offset
 						if(EAST)
 							C.maptext_x = min(-16,C.maptext_x)
 							C.pixel_x = min(0,C.pixel_x)+x_offset
@@ -229,9 +232,6 @@ var/global/list/all_graffitis = list(
 						if(NORTH)
 							C.maptext_y = min(-16,C.maptext_y)
 							C.pixel_y = min(0,C.pixel_y)+y_offset
-						if(SOUTH)
-							C.maptext_y = max(-16,C.maptext_y)
-							C.pixel_y = max(0,C.pixel_y)+y_offset
 			to_chat(user, "You finish drawing.")
 			target.add_fingerprint(user)		// Adds their fingerprints to the floor the crayon is drawn on.
 			if(uses)
