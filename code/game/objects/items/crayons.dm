@@ -104,7 +104,7 @@ var/global/list/all_graffitis = list(
 	shadeColour = input(user, "Please select the shade colour.", "Crayon colour") as color
 	return
 
-#define MAX_LETTERS 10
+#define MAX_LETTERS 12
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity, click_parameters)
 	if(!proximity)
 		return
@@ -168,7 +168,6 @@ var/global/list/all_graffitis = list(
 					I.pixel_x = text2num(params2list(click_parameters)["icon-x"]) - length(preference)*(fontsize/2)
 					I.pixel_y = text2num(params2list(click_parameters)["icon-y"]) - fontsize
 					animate(I, alpha = 100, 10, -1)
-					animate(alpha = 255, 10, -1)
 
 					user.client.images.Add(I)
 					var/continue_drawing = alert(user, "This is how your drawing will look. Continue?", "Crayon scribbles", "Yes", "Cancel")
@@ -220,7 +219,7 @@ var/global/list/all_graffitis = list(
 						if(EAST)
 							if(istype(C,/obj/effect/decal/cleanable/crayon/text))
 								var/obj/effect/decal/cleanable/crayon/text/CT = C
-								CT.text = copytext(CT.text, 1, min(length(CT.text),MAX_LETTERS/(CT.fontsize/3)))
+								CT.name = copytext(CT.name, 1, MAX_LETTERS/(CT.fontsize/3))
 								CT.update_icon()
 							C.pixel_x = min(C.pixel_x,0)
 						if(NORTH)
