@@ -456,8 +456,16 @@
 	name = "Hyperzine"
 	id = HYPERZINE
 	result = HYPERZINE
-	required_reagents = list(SUGARS = 1, PHOSPHORUS = 1, SULFUR = 1,)
+	required_reagents = list(SUGARS = 1, PHOSPHORUS = 1, SULFUR = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/PCP
+	name = "Liquid PCP"
+	id = LIQUIDPCP
+	result = LIQUIDPCP
+	required_reagents = list(HYPERZINES = 5, MINDBREAKER = 5)
+	required_temp = T0C + 200
+	result_amount = 5
 
 /datum/chemical_reaction/ryetalyn
 	name = "Ryetalyn"
