@@ -165,8 +165,8 @@ var/global/list/all_graffitis = list(
 					I.loc = get_turf(target)
 					I.maptext_height = 31
 					I.maptext_width = 64
-					I.maptext_x = text2num(params2list(click_parameters)["icon-x"]) - length(preference)*(fontsize/2)
-					I.maptext_y = text2num(params2list(click_parameters)["icon-y"]) - fontsize
+					I.pixel_x = text2num(params2list(click_parameters)["icon-x"]) - length(preference)*(fontsize/2)
+					I.pixel_y = text2num(params2list(click_parameters)["icon-y"]) - fontsize
 					animate(I, alpha = 100, 10, -1)
 					animate(alpha = 255, 10, -1)
 
@@ -193,13 +193,10 @@ var/global/list/all_graffitis = list(
 			var/obj/effect/decal/cleanable/C
 			if(drawtype == "text")
 				C = new /obj/effect/decal/cleanable/crayon/text(target, size = fontsize, main = mainColour, type = preference)
-				C.maptext_x = text2num(params2list(click_parameters)["icon-x"]) - length(preference)*(fontsize/2)
-				C.maptext_y = text2num(params2list(click_parameters)["icon-y"]) - fontsize
-
 			else
 				C = new /obj/effect/decal/cleanable/crayon(target, main = mainColour, shade = shadeColour, type = drawtype)
-				C.pixel_x = text2num(params2list(click_parameters)["icon-x"]) - 16
-				C.pixel_y = text2num(params2list(click_parameters)["icon-y"]) - 16
+			C.pixel_x = text2num(params2list(click_parameters)["icon-x"]) - (drawtype == "text" ? length(preference)*(fontsize/2) : 16)
+			C.pixel_y = text2num(params2list(click_parameters)["icon-y"]) - (drawtype == "text" ? fontsize : 16)
 
 			var/desired_density = 1
 			var/x_offset = 0
@@ -217,20 +214,16 @@ var/global/list/all_graffitis = list(
 				if(current_turf.density == desired_density)
 					switch(direction)
 						if(WEST)
-							C.maptext_x = max(-16,C.maptext_x)
 							C.pixel_x = min(x_offset,max(0,C.pixel_x))
 						if(SOUTH)
-							C.maptext_y = max(-16,C.maptext_y)
 							C.pixel_y = min(y_offset,max(0,C.pixel_y))
 						if(EAST)
-							C.maptext_x = min(-16,C.maptext_x)
-							C.pixel_x = max(x_offset,min(0,C.pixel_x))
 							if(istype(C,/obj/effect/decal/cleanable/crayon/text))
 								var/obj/effect/decal/cleanable/crayon/text/CT = C
 								CT.text = copytext(CT.text, 1, min(length(CT.text),MAX_LETTERS/(CT.fontsize/3)))
 								CT.update_icon()
+							C.pixel_x = max(x_offset,min(0,C.pixel_x))
 						if(NORTH)
-							C.maptext_y = min(-16,C.maptext_y)
 							C.pixel_y = max(y_offset,min(0,C.pixel_y))
 			to_chat(user, "You finish drawing.")
 			target.add_fingerprint(user)		// Adds their fingerprints to the floor the crayon is drawn on.
