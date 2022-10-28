@@ -150,7 +150,7 @@ var/global/list/all_graffitis = list(
 				drawtime = 4 * letter_amount //10 letters = 4 seconds
 
 				#define MIN_FONTSIZE 6
-				#define MAX_FONTSIZE 32
+				#define MAX_FONTSIZE 16
 				fontsize = input("How big should the text be, in pts?", "Crayon scribbles", "6") as num
 				if(!fontsize)
 					return
