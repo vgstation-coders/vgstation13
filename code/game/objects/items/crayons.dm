@@ -224,14 +224,14 @@ var/global/list/all_graffitis = list(
 							C.pixel_y = min(y_offset,max(0,C.pixel_y))
 						if(EAST)
 							C.maptext_x = min(-16,C.maptext_x)
-							C.pixel_x = min(0,C.pixel_x)+x_offset
+							C.pixel_x = max(x_offset,min(0,C.pixel_x))
 							if(istype(C,/obj/effect/decal/cleanable/crayon/text))
 								var/obj/effect/decal/cleanable/crayon/text/CT = C
 								CT.text = copytext(CT.text, 1, min(length(CT.text),MAX_LETTERS/(CT.fontsize/3)))
 								CT.update_icon()
 						if(NORTH)
 							C.maptext_y = min(-16,C.maptext_y)
-							C.pixel_y = min(0,C.pixel_y)+y_offset
+							C.pixel_y = max(y_offset,min(0,C.pixel_y))
 			to_chat(user, "You finish drawing.")
 			target.add_fingerprint(user)		// Adds their fingerprints to the floor the crayon is drawn on.
 			if(uses)
