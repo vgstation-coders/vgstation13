@@ -198,6 +198,7 @@ var/const/MAX_SAVE_SLOTS = 16
 
 	var/nanotrasen_relation = "Neutral"
 	var/bank_security = 1			//for bank accounts, 0-2, no-pin,pin,pin&card
+	var/wage_ratio = 50
 
 
 	// 0 = character settings, 1 = game preferences
@@ -321,6 +322,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	<b>Character records:</b>
 	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a>"]<br>
 	<b>Bank account security preference:</b><a href ='?_src_=prefs;preference=bank_security;task=input'>[bank_security_num2text(bank_security)]</a> <br>
+	<b>Percent of wages sent to ID virtual wallet:</b><a href ='?_src_=prefs;preference=wage_ratio;task=input'>[wage_ratio]</a> <br>
 	</td><td valign='top' width='21%'>
 	<h3>Hair Style</h3>
 	<a href='?_src_=prefs;preference=h_style;task=input'>[h_style]</a><BR>
@@ -1111,6 +1113,12 @@ var/const/MAX_SAVE_SLOTS = 16
 					var/new_bank_security = input(user, BANK_SECURITY_EXPLANATION, "Character Preference")  as null|anything in bank_security_text2num_associative
 					if(!isnull(new_bank_security))
 						bank_security = bank_security_text2num_associative[new_bank_security]
+
+				if("wage_ratio")
+					var/new_wage_ratio = input(user, "Input what % of wages end up in virtual wallets, from 0-100", "Character Preference",wage_ratio) as num
+					if(!isnull(new_wage_ratio))
+						new_wage_ratio = clamp(new_wage_ratio,0,100)
+						wage_ratio = new_wage_ratio
 
 				if("flavor_text")
 					flavor_text = input(user,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message

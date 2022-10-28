@@ -1765,6 +1765,7 @@
 #include "code\modules\migrations\SS13_Prefs\026-add-fps.dm"
 #include "code\modules\migrations\SS13_Prefs\027-refactor-jobs.dm"
 #include "code\modules\migrations\SS13_Prefs\028-headset-sounds.dm"
+#include "code\modules\migrations\SS13_Prefs\029-wage-ratio.dm"
 #include "code\modules\migrations\SS13_Prefs\_base.dm"
 #include "code\modules\mining\abandonedcrates.dm"
 #include "code\modules\mining\debug_shit.dm"
