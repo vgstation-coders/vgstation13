@@ -150,21 +150,22 @@ var/global/list/all_graffitis = list(
 				drawtime = 4 * letter_amount //10 letters = 4 seconds
 
 				#define MIN_FONTSIZE 6
-				#define MAX_FONTSIZE 31
+				#define MAX_FONTSIZE 32
 				fontsize = input("How big should the text be, in pts?", "Crayon scribbles", "6") as num
 				if(!fontsize)
 					return
 				fontsize = clamp(fontsize,MIN_FONTSIZE,MAX_FONTSIZE)
 				#undef MIN_FONTSIZE
 				#undef MAX_FONTSIZE
-				preference = copytext(preference, 1, MAX_LETTERS/(fontsize/6))
+				preference = copytext(preference, 1, (MAX_LETTERS/(fontsize/6))+1)
 
 				if(user.client)
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
 					I.maptext = {"<span style="color:[mainColour];font-size:[fontsize]pt;font-family:'Comic Sans MS';">[preference]</span>"}
 					I.loc = get_turf(target)
-					I.maptext_height = 31
+					I.maptext_height = 32
 					I.maptext_width = 64
+					I.maptext_y = -5
 					I.pixel_x = text2num(params2list(click_parameters)["icon-x"]) - length(preference)*(fontsize/2)
 					I.pixel_y = text2num(params2list(click_parameters)["icon-y"]) - fontsize
 					animate(I, alpha = 100, 10, -1)
@@ -213,17 +214,18 @@ var/global/list/all_graffitis = list(
 				if(current_turf.density == desired_density)
 					switch(direction)
 						if(WEST)
-							C.pixel_x = max(C.pixel_x,0)
+							C.pixel_x = max(C.pixel_x, 0)
 						if(SOUTH)
-							C.pixel_y = max(C.pixel_y,0)
+							C.pixel_y = max(C.pixel_y, 0)
 						if(EAST)
 							if(istype(C,/obj/effect/decal/cleanable/crayon/text))
 								var/obj/effect/decal/cleanable/crayon/text/CT = C
-								CT.name = copytext(CT.name, 1, MAX_LETTERS/(CT.fontsize/3))
+								CT.name = copytext(CT.name, 1, (MAX_LETTERS/(CT.fontsize/3)))
+								CT.maptext_width = 32
 								CT.update_icon()
-							C.pixel_x = min(C.pixel_x,0)
+							C.pixel_x = min(C.pixel_x, 0)
 						if(NORTH)
-							C.pixel_y = min(C.pixel_y,0)
+							C.pixel_y = min(C.pixel_y, drawtype == "text" ? max(0,C.maptext_height - fontsize) : 0)
 			C.pixel_x += x_offset
 			C.pixel_y += y_offset
 

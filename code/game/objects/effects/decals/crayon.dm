@@ -49,8 +49,9 @@
 	name = "written text"
 	desc = "Text written in crayon."
 	gender = NEUTER
-	maptext_height = 31
+	maptext_height = 32
 	maptext_width = 64
+	maptext_y = -5
 	var/fontsize = 6
 	var/font = "Comic Sans MS"
 
