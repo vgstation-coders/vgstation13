@@ -30,8 +30,7 @@
 //TODO make it actually change your skin color
 /obj/item/tool/suture/synthgraft
 	name = "\improper Synth-Graft"
-	desc = "An applicator for synthetic skin field grafts. The stuff reeks, itches like the dickens, hurts going on, and the colour is \
-		a perfectly averaged multiethnic tone that doesn't blend with <i>anyone's</i> complexion. But at least you don't have to stay in sickbay."
+	desc = "An applicator for synthetic skin field grafts. The stuff reeks, itches like the dickens, hurts going on, and the colour is a perfectly averaged multiethnic tone that doesn't blend with <i>anyone's</i> complexion. But at least you don't have to stay in sickbay."
 	icon_state = "graft" 
 	
 	heal_burn = 10
