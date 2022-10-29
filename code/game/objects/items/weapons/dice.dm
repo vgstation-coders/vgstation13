@@ -72,6 +72,12 @@
 	icon_state = "d20"
 	sides = 20
 
+/obj/item/weapon/dice/fudge
+	name = "fudge dice"
+	desc = "A d6 with pluses and minuses on it."
+	icon_state = "df"
+	var/list/result_names = list("-", "-", "a blank side", "a blank side", "+", "+")
+
 /obj/item/weapon/dice/loaded
 	desc = "A die with six even sides. Basic and servicable."
 
@@ -107,6 +113,16 @@
 							 "<span class='notice'>You hear [src] landing on [result]. [comment]</span>")
 	else if(src.throwing == 0) //Dice was thrown and is coming to rest
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result]. [comment]</span>")
+
+/obj/item/weapon/dice/fudge/show_roll(mob/user as mob, thrown, result)
+	update_icon()
+	if(!thrown) //Dice was rolled in someone's hand
+		user.visible_message("<span class='notice'>[user] has thrown [src]. It lands on [result_names[result]].</span>", \
+							 "<span class='notice'>You throw [src]. It lands on [result_names[result]].</span>", \
+							 "<span class='notice'>You hear [src] landing on [result_names[result]].</span>")
+	else if(src.throwing == 0) //Dice was thrown and is coming to rest
+		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result_names[result]].</span>")
+
 
 /obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown)
 	result = rand(minsides, sides)

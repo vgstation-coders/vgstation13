@@ -210,10 +210,50 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		/obj/item/weapon/dice/d20,
 	)
 
+/obj/item/weapon/storage/pill_bottle/dice/fudge
+	name = "bag of fudge dice"
+	items_to_spawn = list(
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+	)
+
 /obj/item/weapon/storage/pill_bottle/dice/New()
 	..()
 	overlays -= colour_overlay
 	colour_overlay = null
+
+/obj/item/weapon/storage/pill_bottle/dice/cup
+	name = "dice cup"
+	icon = 'icons/obj/drinks.dmi'
+	icon_state = "sakeglass"
+	items_to_spawn = null
+
+/obj/item/weapon/storage/pill_bottle/dice/cup/on_attack(atom/attacked, mob/user)
+	..()
+	if(contents.len)
+		empty_contents_to(get_turf(attacked))
+
+/obj/item/weapon/storage/pill_bottle/dice/cup/throw_impact(atom/impacted_atom, speed, mob/user)
+	..()
+	if(contents.len)
+		empty_contents_to(get_turf(src))
+
+
+/obj/item/weapon/storage/pill_bottle/dice/cup/empty_contents_to(var/atom/place)
+	var/turf = get_turf(place)
+	if(contents.len)
+		visible_message("<span class='notice'>Dice roll out of the cup!</span>")
+	for(var/obj/item/weapon/dice/objects in contents)
+		remove_from_storage(objects, turf)
+		objects.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+		objects.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
+		objects.diceroll(usr, TRUE)
+	..()
 
 /obj/item/weapon/storage/pill_bottle/dice/with_die/New()
 	. = ..()
