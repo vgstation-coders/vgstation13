@@ -22,10 +22,10 @@
 		var/desired_density = 0
 		var/x_offset = 0
 		var/y_offset = 0
-		if(target.density && (src.loc != get_turf(user))) //Drawn on a wall (while standing on a floor)
+		if(target.density && (src.loc != get_turf(usr))) //Drawn on a wall (while standing on a floor)
 			desired_density = !desired_density
-			src.forceMove(get_turf(user))
-			var/angle = dir2angle_t(get_dir(C, target))
+			src.forceMove(get_turf(usr))
+			var/angle = dir2angle_t(get_dir(src, target))
 			x_offset = WORLD_ICON_SIZE * cos(angle)
 			y_offset = WORLD_ICON_SIZE * sin(angle) //Offset the graffiti to make it appear on the wall
 			src.on_wall = target
