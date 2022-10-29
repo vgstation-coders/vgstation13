@@ -41,14 +41,14 @@
 					if(EAST)
 						if(istype(src,/obj/effect/decal/cleanable/crayon/text))
 							var/obj/effect/decal/cleanable/crayon/text/CT = src
-							CT.name = copytext(CT.name, 1, (CRAYON_MAX_LETTERS/(CT.fontsize/(CRAYON_MIN_FONTSIZE/2))))
-							CT.maptext_width = 32
-							CT.update_icon()
+							src.name = copytext(CT.name, 1, (CRAYON_MAX_LETTERS/(CT.fontsize/(CRAYON_MIN_FONTSIZE/2))))
+							src.maptext_width = 32
+							src.update_icon()
 						src.pixel_x = min(src.pixel_x, 0)
 					if(NORTH || NORTHEAST || NORTHWEST)
 						if(istype(src,/obj/effect/decal/cleanable/crayon/text))
 							var/obj/effect/decal/cleanable/crayon/text/CT2 = src
-							src.pixel_y = min(src.pixel_y, max(0,src.maptext_height - (fontsize*1.5)))
+							src.pixel_y = min(src.pixel_y, max(0,src.maptext_height - (CT2.fontsize*1.5)))
 						else
 							src.pixel_y = min(src.pixel_y, type == 0)
 		src.pixel_x += x_offset
