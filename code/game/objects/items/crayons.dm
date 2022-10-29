@@ -196,7 +196,7 @@ var/global/list/all_graffitis = list(
 			C.pixel_x = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-x"]) - (drawtype == "text" ? length(preference)*(fontsize/2) : 16) : -16
 			C.pixel_y = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-y"]) - (drawtype == "text" ? fontsize : 16) : -16
 
-			var/desired_density = 1
+			var/desired_density = 0
 			var/x_offset = 0
 			var/y_offset = 0
 			if(target.density && (C.loc != get_turf(user))) //Drawn on a wall (while standing on a floor)
@@ -207,13 +207,13 @@ var/global/list/all_graffitis = list(
 				y_offset = WORLD_ICON_SIZE * sin(angle) //Offset the graffiti to make it appear on the wall
 				C.on_wall = target
 
-			for(var/direction in cardinal)
+			for(var/direction in alldirs)
 				var/turf/current_turf = get_step(target,direction)
-				if(current_turf.density == desired_density)
+				if(current_turf.density != desired_density)
 					switch(direction)
 						if(WEST)
 							C.pixel_x = max(C.pixel_x, 0)
-						if(SOUTH)
+						if(SOUTH || SOUTHEAST || SOUTHWEST)
 							C.pixel_y = max(C.pixel_y, 0)
 						if(EAST)
 							if(istype(C,/obj/effect/decal/cleanable/crayon/text))
@@ -222,7 +222,7 @@ var/global/list/all_graffitis = list(
 								CT.maptext_width = 32
 								CT.update_icon()
 							C.pixel_x = min(C.pixel_x, 0)
-						if(NORTH)
+						if(NORTH || NORTHEAST || NORTHWEST)
 							C.pixel_y = min(C.pixel_y, drawtype == "text" ? max(0,C.maptext_height - (fontsize*1.5)) : 0)
 			C.pixel_x += x_offset
 			C.pixel_y += y_offset
