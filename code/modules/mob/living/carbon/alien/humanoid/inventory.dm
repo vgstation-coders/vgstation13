@@ -90,7 +90,7 @@
 /mob/living/carbon/alien/humanoid/put_in_hand_check(var/obj/item/W)
 	if(is_type_in_list(W, xeno_cult_items) && iscultist(src))
 		return 1
-	if(!is_type_in_list(W, can_only_pickup))
+	if(!has_fine_manipulation && !is_type_in_list(W, can_only_pickup))
 		to_chat(src, "<span class = 'warning'>Your claws aren't capable of such fine manipulation.</span>")
 		return 0
 	return 1
