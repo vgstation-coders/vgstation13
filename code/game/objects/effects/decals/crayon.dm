@@ -17,7 +17,8 @@
 	add_hiddenprint(usr)
 	update_icon()
 
-	if(type != "rune")
+	if(type != "rune" && isturf(loc))
+		var/turf/target = loc
 		var/desired_density = 0
 		var/x_offset = 0
 		var/y_offset = 0
