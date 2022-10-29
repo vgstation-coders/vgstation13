@@ -40,7 +40,7 @@
 					if(EAST)
 						if(istype(src,/obj/effect/decal/cleanable/crayon/text))
 							var/obj/effect/decal/cleanable/crayon/text/CT = src
-							CT.name = copytext(CT.name, 1, (MAX_LETTERS/(CT.fontsize/(MIN_FONTSIZE/2))))
+							CT.name = copytext(CT.name, 1, (CRAYON_MAX_LETTERS/(CT.fontsize/(CRAYON_MIN_FONTSIZE/2))))
 							CT.maptext_width = 32
 							CT.update_icon()
 						src.pixel_x = min(src.pixel_x, 0)

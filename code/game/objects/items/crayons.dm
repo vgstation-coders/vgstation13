@@ -31,6 +31,10 @@ var/global/list/all_graffitis = list(
 	"Chaos Undivided"="chaos"
 )
 
+#define CRAYON_MAX_LETTERS 10
+#define CRAYON_MIN_FONTSIZE 8
+#define CRAYON_MAX_FONTSIZE 16
+
 /obj/item/toy/crayon/red
 	icon_state = "crayonred"
 	mainColour = "#DA0000"
@@ -104,9 +108,6 @@ var/global/list/all_graffitis = list(
 	shadeColour = input(user, "Please select the shade colour.", "Crayon colour") as color
 	return
 
-#define MAX_LETTERS 10
-#define MIN_FONTSIZE 8
-#define MAX_FONTSIZE 16
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity, click_parameters)
 	if(!proximity)
 		return
@@ -203,10 +204,6 @@ var/global/list/all_graffitis = list(
 				if(!uses)
 					to_chat(user, "<span class='warning'>You used up your crayon!</span>")
 					qdel(src)
-
-#undef MIN_FONTSIZE
-#undef MAX_FONTSIZE
-#undef MAX_LETTERS
 
 /obj/item/toy/crayon/attack(mob/M as mob, mob/user as mob)
 	if(M == user)
