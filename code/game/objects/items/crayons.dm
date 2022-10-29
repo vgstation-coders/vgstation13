@@ -148,15 +148,15 @@ var/global/list/all_graffitis = list(
 				fontsize = input("How big should the text be, in pts?", "Crayon scribbles", "6") as num
 				if(!fontsize)
 					return
-				fontsize = clamp(fontsize,MIN_FONTSIZE,MAX_FONTSIZE)
+				fontsize = clamp(fontsize,CRAYON_MIN_FONTSIZE,CRAYON_MAX_FONTSIZE)
 
-				preference = input("Write some text here (maximum ([MAX_LETTERS/(fontsize/MIN_FONTSIZE)]) letters).", "Crayon scribbles") as null|text
+				preference = input("Write some text here (maximum ([CRAYON_MAX_LETTERS/(fontsize/CRAYON_MIN_FONTSIZE)]) letters).", "Crayon scribbles") as null|text
 
 				var/letter_amount = length(replacetext(preference, " ", ""))
 				if(!letter_amount) //If there is no text
 					return
 				drawtime = 4 * letter_amount * (fontsize/8) //10 letters at 8pt = 4 seconds, 5 at 16pt = 4 seconds
-				preference = copytext(preference, 1, (MAX_LETTERS/(fontsize/MIN_FONTSIZE))+1)
+				preference = copytext(preference, 1, (CRAYON_MAX_LETTERS/(fontsize/CRAYON_MIN_FONTSIZE))+1)
 
 				if(user.client)
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
