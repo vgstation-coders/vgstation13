@@ -189,43 +189,12 @@ var/global/list/all_graffitis = list(
 
 		if(instant || do_after(user,target, drawtime))
 			var/obj/effect/decal/cleanable/C
+			var/pix_x = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-x"]) - (drawtype == "text" ? length(preference)*(fontsize/2) : 16) : -16
+			var/pix_y = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-y"]) - (drawtype == "text" ? fontsize : 16) : -16
 			if(drawtype == "text")
-				C = new /obj/effect/decal/cleanable/crayon/text(target, size = fontsize, main = mainColour, type = preference)
+				C = new /obj/effect/decal/cleanable/crayon/text(target, size = fontsize, color = mainColour, type = preference, pixel_x = pix_x, pixel_y = pix_y)
 			else
-				C = new /obj/effect/decal/cleanable/crayon(target, main = mainColour, shade = shadeColour, type = drawtype)
-			C.pixel_x = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-x"]) - (drawtype == "text" ? length(preference)*(fontsize/2) : 16) : -16
-			C.pixel_y = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-y"]) - (drawtype == "text" ? fontsize : 16) : -16
-
-			var/desired_density = 0
-			var/x_offset = 0
-			var/y_offset = 0
-			if(target.density && (C.loc != get_turf(user))) //Drawn on a wall (while standing on a floor)
-				desired_density = !desired_density
-				C.forceMove(get_turf(user))
-				var/angle = dir2angle_t(get_dir(C, target))
-				x_offset = WORLD_ICON_SIZE * cos(angle)
-				y_offset = WORLD_ICON_SIZE * sin(angle) //Offset the graffiti to make it appear on the wall
-				C.on_wall = target
-
-			for(var/direction in alldirs)
-				var/turf/current_turf = get_step(target,direction)
-				if(current_turf.density != desired_density)
-					switch(direction)
-						if(WEST)
-							C.pixel_x = max(C.pixel_x, 0)
-						if(SOUTH || SOUTHEAST || SOUTHWEST)
-							C.pixel_y = max(C.pixel_y, 0)
-						if(EAST)
-							if(istype(C,/obj/effect/decal/cleanable/crayon/text))
-								var/obj/effect/decal/cleanable/crayon/text/CT = C
-								CT.name = copytext(CT.name, 1, (MAX_LETTERS/(CT.fontsize/(MIN_FONTSIZE/2))))
-								CT.maptext_width = 32
-								CT.update_icon()
-							C.pixel_x = min(C.pixel_x, 0)
-						if(NORTH || NORTHEAST || NORTHWEST)
-							C.pixel_y = min(C.pixel_y, drawtype == "text" ? max(0,C.maptext_height - (fontsize*1.5)) : 0)
-			C.pixel_x += x_offset
-			C.pixel_y += y_offset
+				C = new /obj/effect/decal/cleanable/crayon(target, main = mainColour, shade = shadeColour, type = drawtype, pixel_x = pix_x, pixel_y = pix_y)
 
 			to_chat(user, "You finish drawing.")
 			target.add_fingerprint(user)		// Adds their fingerprints to the floor the crayon is drawn on.
