@@ -46,7 +46,11 @@
 							CT.update_icon()
 						src.pixel_x = min(src.pixel_x, 0)
 					if(NORTH || NORTHEAST || NORTHWEST)
-						src.pixel_y = min(src.pixel_y, type == "text" ? max(0,src.maptext_height - (fontsize*1.5)) : 0)
+						if(istype(src,/obj/effect/decal/cleanable/crayon/text))
+							var/obj/effect/decal/cleanable/crayon/text/CT2 = src
+							src.pixel_y = min(src.pixel_y, max(0,src.maptext_height - (fontsize*1.5)))
+						else
+							src.pixel_y = min(src.pixel_y, type == 0)
 		src.pixel_x += x_offset
 		src.pixel_y += y_offset
 
