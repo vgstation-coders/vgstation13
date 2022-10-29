@@ -1,6 +1,6 @@
 /obj/item/tool/suture/ //parent type, should never appear ingame
 	name = "Suture"
-	desc = "Some sort of simple surgical tool. this one doesn't seem to do anything."
+	desc = "Some sort of simple surgical tool. This one doesn't seem to do anything."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "fixovein_old"
 	
