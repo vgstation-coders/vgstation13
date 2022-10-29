@@ -76,7 +76,7 @@
 	icon_state = "fuckyou"
 
 /obj/effect/decal/cleanable/crayon/fuckyou/New()
-	..(main = "#007F0E", shade = "#02560B", type = "fuckyou")
+	..(color = "#007F0E", shade = "#02560B", type = "fuckyou")
 
 /obj/effect/decal/cleanable/crayon/text
 	name = "written text"

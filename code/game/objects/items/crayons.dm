@@ -195,7 +195,7 @@ var/global/list/all_graffitis = list(
 			if(drawtype == "text")
 				C = new /obj/effect/decal/cleanable/crayon/text(target, size = fontsize, color = mainColour, type = preference, pixel_x = pix_x, pixel_y = pix_y)
 			else
-				C = new /obj/effect/decal/cleanable/crayon(target, main = mainColour, shade = shadeColour, type = drawtype, pixel_x = pix_x, pixel_y = pix_y)
+				C = new /obj/effect/decal/cleanable/crayon(target, color = mainColour, shade = shadeColour, type = drawtype, pixel_x = pix_x, pixel_y = pix_y)
 
 			to_chat(user, "You finish drawing.")
 			target.add_fingerprint(user)		// Adds their fingerprints to the floor the crayon is drawn on.
