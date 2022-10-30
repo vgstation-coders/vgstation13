@@ -156,7 +156,7 @@ var/global/list/all_graffitis = list(
 
 				if(user.client)
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
-					I.maptext = {"<span style="color:[mainColour];font-size:[fontsize]pt;font-family:'Comic Sans MS';">[preference]</span>"}
+					I.maptext = {"<span style="color:[mainColour];font-size:[fontsize]pt;font-family:'[clumsy_check(user) ? "Comic Sans MS" : "DK Cool Crayon"]';">[preference]</span>"}
 					I.loc = get_turf(target)
 					I.maptext_height = 32
 					I.maptext_width = 64
