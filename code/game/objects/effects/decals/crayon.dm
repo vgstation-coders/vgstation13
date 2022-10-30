@@ -1,3 +1,7 @@
+#define CRAYON_MAX_LETTERS 10
+#define CRAYON_MIN_FONTSIZE 8
+#define CRAYON_MAX_FONTSIZE 16
+
 /obj/effect/decal/cleanable/crayon
 	name = "rune"
 	desc = "A rune drawn in crayon."

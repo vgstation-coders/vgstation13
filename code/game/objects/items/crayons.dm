@@ -31,10 +31,6 @@ var/global/list/all_graffitis = list(
 	"Chaos Undivided"="chaos"
 )
 
-#define CRAYON_MAX_LETTERS 10
-#define CRAYON_MIN_FONTSIZE 8
-#define CRAYON_MAX_FONTSIZE 16
-
 /obj/item/toy/crayon/red
 	icon_state = "crayonred"
 	mainColour = "#DA0000"
