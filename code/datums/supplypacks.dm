@@ -511,6 +511,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					//Vampire set
 					/obj/item/clothing/suit/storage/draculacoat_fake,
 					/obj/item/clothing/mask/vamp_fangs,
+
+					//Devil set
+					/obj/item/clothing/head/devil_horns,
+					/obj/item/toy/pitchfork,
+					/obj/item/clothing/under/color/red,
+					/obj/item/weapon/bedsheet/red
 					)
 	cost = 31
 	containertype = /obj/structure/closet/crate/basic

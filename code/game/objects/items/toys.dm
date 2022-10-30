@@ -504,10 +504,20 @@
 	slot_flags = SLOT_BACK
 	attack_verb = list("chops", "slices", "cuts", "reaps")
 
+/obj/item/toy/pitchfork
+	name = "plastic pitchfork"
+	desc = "Great for harassing sinners in the fiery depths of Heck."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "devil_pitchfork"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	w_class = W_CLASS_LARGE
+	slot_flags = SLOT_BACK
+	attack_verb = list("stabs", "prongs", "pokes")
+
 /obj/item/toy/chainsaw
 	name = "plastic chainsaw"
 	desc = "Won't cut down anything, except maybe some horny teens' make-out session in your cabin in the woods."
-	icons = 'icons/obj/toy.dmi'
+	icon = 'icons/obj/toy.dmi'
 	icon_state = "chainsaw"
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("attacks", "slashes", "saws", "cuts")
