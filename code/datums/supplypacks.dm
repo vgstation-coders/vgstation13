@@ -492,9 +492,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/helmet/space/plasmaman/moltar,
 					/obj/item/clothing/under/skelesuit,
 					/obj/item/clothing/head/snake,
-					/obj/item/clothing/mask/vamp_fangs,
 					/obj/item/clothing/head/franken_bolt,
-					/obj/item/clothing/head/alien_antenna)
+					/obj/item/clothing/head/alien_antenna
+					//Vampire set
+					/obj/item/clothing/suit/storage/draculacoat_fake,
+					/obj/item/clothing/mask/vamp_fangs,
+					)
 	cost = 31
 	containertype = /obj/structure/closet/crate/basic
 	containername = "halloween costumes crate"
@@ -2164,7 +2167,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "lab mouse crate"
 	group = "Medical"
-	
+
 /datum/supply_packs/sutures
 	name = "Wound mending supplies"
 	contains = list (

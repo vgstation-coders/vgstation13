@@ -734,6 +734,13 @@ var/list/tag_suits_list = list()
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/suit/storage/draculacoat_fake
+	name = "Vampire Costume"
+	desc = "Smells faintly of pumpkins and bloody mary."
+	icon_state = "draculacoat"
+	blood_overlay_type = "coat"
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/suit/maidapron
 	name = "Apron"
 	desc = "Simple white apron."
