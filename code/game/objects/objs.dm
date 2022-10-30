@@ -574,7 +574,7 @@ a {
 /obj/proc/can_quick_store(var/obj/item/I) //proc used to check that the current object can store another through quick equip
 	return 0
 
-/obj/proc/quick_store(var/obj/item/I) //proc used to handle quick storing
+/obj/proc/quick_store(var/obj/item/I,mob/user) //proc used to handle quick storing
 	return 0
 
 /**
