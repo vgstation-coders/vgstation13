@@ -504,6 +504,25 @@
 	slot_flags = SLOT_BACK
 	attack_verb = list("chops", "slices", "cuts", "reaps")
 
+/obj/item/toy/chainsaw
+	name = "plastic chainsaw"
+	desc = "Won't cut down anything, except maybe some horny teens' make-out session in your cabin in the woods."
+	icons = 'icons/obj/toy.dmi'
+	icon_state = "chainsaw"
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("attacks", "slashes", "saws", "cuts")
+	hitsound = 'sound/items/circularsaw.ogg' //Maybe find a better sfx?
+	var/last_revv_time = 0
+	var/revv_delay = 60
+
+/obj/item/toy/chainsaw/attack_self(mob/user as mob)
+	..()
+	if(world.time - last_revv_time >= revv_delay)
+		last_revv_time = world.time
+		playsound(src, hitsound, 50, 1)
+		to_chat(viewers(user), "<span class='danger'>[user] revvs up \the [src.name] </span>")
+		add_fingerprint(user)
+
 /*
  * Foam armblade
  */

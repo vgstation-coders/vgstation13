@@ -492,7 +492,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/helmet/space/plasmaman/moltar,
 					/obj/item/clothing/head/snake,
 					/obj/item/clothing/head/franken_bolt,
-					/obj/item/clothing/head/alien_antenna
+					/obj/item/clothing/head/alien_antenna,
+
+					//Slasher set
+					/obj/item/toy/chainsaw,
+					/obj/item/clothing/mask/gas/slasher,
 
 					//Skeleton "set"
 					/obj/item/clothing/under/skelesuit,
@@ -500,8 +504,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 					//Reaper set
 					/obj/item/clothing/mask/gas/grim_reaper,
-					/obj/item/clothing/head/reaper_robes,
-					/obj/item/clothing/suit/chaplain_hoodie,
+					/obj/item/clothing/head/chaplain_hood,
+					/obj/item/clothing/suit/reaper_robes,
 					/obj/item/toy/scythe,
 
 					//Vampire set
