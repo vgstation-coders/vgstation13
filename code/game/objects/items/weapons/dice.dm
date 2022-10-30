@@ -104,7 +104,6 @@
 			comment = "Nat 20!"
 		else if(result == 1)
 			comment = "Ouch, bad luck."
-	update_icon()
 	if(multiplier)
 		result = (result - 1) * multiplier
 	if(!thrown) //Dice was rolled in someone's hand
@@ -115,7 +114,6 @@
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result]. [comment]</span>")
 
 /obj/item/weapon/dice/fudge/show_roll(mob/user as mob, thrown, result)
-	update_icon()
 	if(!thrown) //Dice was rolled in someone's hand
 		user.visible_message("<span class='notice'>[user] has thrown [src]. It lands on [result_names[result]].</span>", \
 							 "<span class='notice'>You throw [src]. It lands on [result_names[result]].</span>", \
@@ -124,9 +122,11 @@
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result_names[result]].</span>")
 
 
-/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown)
+/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown, silent = FALSE)
 	result = rand(minsides, sides)
-	show_roll(user, thrown, result)
+	update_icon()
+	if(!silent)
+		show_roll(user, thrown, result)
 	if(activated) //If the dice has power then something will happen
 		if(istype(user,/mob/living/carbon/human)) //check that a humanoid is rolling the dice; Xenomorphs / Sillicons need not apply.
 			message_admins("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled [result]")
@@ -323,14 +323,15 @@
 					user.visible_message("<span class=danger><B>The dice shudders and loses its power! </span></B>")
 					name = "d20"
 					desc = "A die with twenty sides. The prefered die to throw at the GM."
-				else
-					return 0
-	else
-		return 0
+	return result
+
+/obj/item/weapon/dice/fudge/diceroll(mob/user as mob, thrown)
+	return result_names[..()]
 
 /obj/item/weapon/dice/loaded/diceroll(mob/user as mob, thrown)
 	result = rand(minsides, sides * 1.5)
 	result = min(result, sides)
+	update_icon()
 	show_roll(user, thrown, result)
 
 /obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)

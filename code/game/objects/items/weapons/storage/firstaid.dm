@@ -243,16 +243,39 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	if(contents.len)
 		empty_contents_to(get_turf(src))
 
-
 /obj/item/weapon/storage/pill_bottle/dice/cup/empty_contents_to(var/atom/place)
 	var/turf = get_turf(place)
 	if(contents.len)
-		visible_message("<span class='notice'>Everything goes flying out of the cup!</span>")
+		visible_message("<span class='notice'>Everything goes flying out of \the [src]!</span>")
+	var/list/results_list = list()
+	var/total_result = 0
+	var/has_dice = 0
 	for(var/obj/item/weapon/dice/objects in contents)
+		has_dice = 1
 		remove_from_storage(objects, turf)
 		objects.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
 		objects.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
-		objects.diceroll(usr, TRUE)
+		var/result = objects.diceroll(usr, TRUE, TRUE)
+		results_list += result
+		//fudge dice are -1 -1 0 0 1 1
+		if(istype(objects,/obj/item/weapon/dice/fudge))
+			switch(result)
+				if("+")
+					total_result += 1
+				if("-")
+					total_result += -1
+				if("a blank side")
+					total_result += 0
+		else
+			total_result += result
+	if(has_dice)
+		var/result_string = jointext(results_list, ", ")
+		if(usr) //Dice was rolled in someone's hand
+			usr.visible_message("<span class='notice'>[usr] has rolled dice out of \the [src]. The results were <i>[result_string]</i>, totaling <b>[total_result]</b>.</span>", \
+								 "<span class='notice'>You roll the dice. The results were <i>[result_string]</i>, totaling <b>[total_result]</b>.</span>", \
+								 "<span class='notice'>You hear the rolling of dice.</span>")
+		else
+			visible_message("<span class='notice'>Dice roll out of \the [src]. The results were <i>[result_string]</i>, totaling <b>[total_result]</b>.</span>")
 	..()
 
 /obj/item/weapon/storage/pill_bottle/dice/with_die/New()
