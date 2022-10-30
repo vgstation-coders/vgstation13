@@ -97,7 +97,7 @@
 	var/fontsize = 6
 	var/font = "Comic Sans MS"
 
-/obj/effect/decal/cleanable/crayon/text/New(loc,age,icon_state,color = "#FFFFFF",dir,pixel_x,pixel_y,shade = "#000000",var/type = "Sample Text",size = 6,fontname = "Comic Sans MS")
+/obj/effect/decal/cleanable/crayon/text/New(loc,age,icon_state,color = "#FFFFFF",dir,pixel_x,pixel_y,shade = "#000000",var/type = "Sample Text",size = 6,fontname = "DK Cool Crayon")
 	fontsize = size
 	font = fontname
 	..()
