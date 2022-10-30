@@ -651,6 +651,9 @@ Use this proc preferably at the end of an equipment loadout
 	if(!istype(W))
 		return 0
 
+	for(var/obj/item/I in held_items)
+		if(I.can_quick_store(W))
+			return I.quick_store(W,src)
 	var/list/backup_slots = list()
 	for(var/slot in slot_equipment_priority)
 		if(!is_holding_item(W) && !override)
