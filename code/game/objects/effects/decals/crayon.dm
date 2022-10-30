@@ -21,42 +21,43 @@
 	add_hiddenprint(usr)
 	update_icon()
 
-	if(type != "rune" && isturf(loc) && loc.Adjacent(usr))
+	if(isturf(loc))
 		var/turf/target = loc
-		var/desired_density = 0
-		var/x_offset = 0
-		var/y_offset = 0
-		if(target.density && (src.loc != get_turf(usr))) //Drawn on a wall (while standing on a floor)
-			desired_density = !desired_density
-			src.forceMove(get_turf(usr))
-			var/angle = dir2angle_t(get_dir(src, target))
-			x_offset = WORLD_ICON_SIZE * cos(angle)
-			y_offset = WORLD_ICON_SIZE * sin(angle) //Offset the graffiti to make it appear on the wall
-			src.on_wall = target
+		if(type != "rune" && target.Adjacent(usr))
+			var/desired_density = 0
+			var/x_offset = 0
+			var/y_offset = 0
+			if(target.density && (src.loc != get_turf(usr))) //Drawn on a wall (while standing on a floor)
+				desired_density = !desired_density
+				src.forceMove(get_turf(usr))
+				var/angle = dir2angle_t(get_dir(src, target))
+				x_offset = WORLD_ICON_SIZE * cos(angle)
+				y_offset = WORLD_ICON_SIZE * sin(angle) //Offset the graffiti to make it appear on the wall
+				src.on_wall = target
 
-		for(var/direction in alldirs)
-			var/turf/current_turf = get_step(target,direction)
-			if(current_turf.density != desired_density)
-				switch(direction)
-					if(WEST)
-						src.pixel_x = max(src.pixel_x, 0)
-					if(SOUTH || SOUTHEAST || SOUTHWEST)
-						src.pixel_y = max(src.pixel_y, 0)
-					if(EAST)
-						if(istype(src,/obj/effect/decal/cleanable/crayon/text))
-							var/obj/effect/decal/cleanable/crayon/text/CT = src
-							src.name = copytext(CT.name, 1, (CRAYON_MAX_LETTERS/(CT.fontsize/(CRAYON_MIN_FONTSIZE/2))))
-							src.maptext_width = 32
-							src.update_icon()
-						src.pixel_x = min(src.pixel_x, 0)
-					if(NORTH || NORTHEAST || NORTHWEST)
-						if(istype(src,/obj/effect/decal/cleanable/crayon/text))
-							var/obj/effect/decal/cleanable/crayon/text/CT2 = src
-							src.pixel_y = min(src.pixel_y, max(0,src.maptext_height - (CT2.fontsize*1.5)))
-						else
-							src.pixel_y = min(src.pixel_y, type == 0)
-		src.pixel_x += x_offset
-		src.pixel_y += y_offset
+			for(var/direction in alldirs)
+				var/turf/current_turf = get_step(target,direction)
+				if(current_turf.density != desired_density)
+					switch(direction)
+						if(WEST)
+							src.pixel_x = max(src.pixel_x, 0)
+						if(SOUTH || SOUTHEAST || SOUTHWEST)
+							src.pixel_y = max(src.pixel_y, 0)
+						if(EAST)
+							if(istype(src,/obj/effect/decal/cleanable/crayon/text))
+								var/obj/effect/decal/cleanable/crayon/text/CT = src
+								src.name = copytext(CT.name, 1, (CRAYON_MAX_LETTERS/(CT.fontsize/(CRAYON_MIN_FONTSIZE/2))))
+								src.maptext_width = 32
+								src.update_icon()
+							src.pixel_x = min(src.pixel_x, 0)
+						if(NORTH || NORTHEAST || NORTHWEST)
+							if(istype(src,/obj/effect/decal/cleanable/crayon/text))
+								var/obj/effect/decal/cleanable/crayon/text/CT2 = src
+								src.pixel_y = min(src.pixel_y, max(0,src.maptext_height - (CT2.fontsize*1.5)))
+							else
+								src.pixel_y = min(src.pixel_y, type == 0)
+			src.pixel_x += x_offset
+			src.pixel_y += y_offset
 
 /obj/effect/decal/cleanable/crayon/update_icon()
 	overlays.Cut()
