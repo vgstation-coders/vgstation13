@@ -495,6 +495,15 @@
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("attacks", "slashes", "stabs", "slices")
 
+/obj/item/toy/scythe
+	name = "plastic scythe"
+	desc = "A blunt and curved plastic blade on a long plastic handle, this tool makes it hard for kids to hurt themselves while trick-or-treating."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "scythe0"
+	w_class = W_CLASS_LARGE
+	slot_flags = SLOT_BACK
+	attack_verb = list("chops", "slices", "cuts", "reaps")
+
 /*
  * Foam armblade
  */

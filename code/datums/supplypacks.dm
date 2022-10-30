@@ -490,10 +490,20 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Halloween costumes"
 	contains = list(/obj/item/clothing/suit/space/plasmaman/moltar,
 					/obj/item/clothing/head/helmet/space/plasmaman/moltar,
-					/obj/item/clothing/under/skelesuit,
 					/obj/item/clothing/head/snake,
 					/obj/item/clothing/head/franken_bolt,
 					/obj/item/clothing/head/alien_antenna
+
+					//Skeleton "set"
+					/obj/item/clothing/under/skelesuit,
+					/obj/item/clothing/under/skelesuit,
+
+					//Reaper set
+					/obj/item/clothing/mask/gas/grim_reaper,
+					/obj/item/clothing/head/reaper_robes,
+					/obj/item/clothing/suit/chaplain_hoodie,
+					/obj/item/toy/scythe,
+
 					//Vampire set
 					/obj/item/clothing/suit/storage/draculacoat_fake,
 					/obj/item/clothing/mask/vamp_fangs,

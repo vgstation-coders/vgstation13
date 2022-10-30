@@ -276,14 +276,19 @@
 	can_flip = 0
 	canstage = 0
 
-/obj/item/clothing/mask/gas/death_commando
-	name = "Death Commando Mask"
+/obj/item/clothing/mask/gas/grim_reaper
+	name = "grim reaper mask"
+	desc = "Spare a coin for the ferryman, or brave the Styx on your own?"
 	icon_state = "death"
 	item_state = "death"
-	siemens_coefficient = 0.2
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
+
+/obj/item/clothing/mask/gas/grim_reaper/death_commando
+	name = "Death Commando Mask"
+	desc = "A face-covering mask that can be connected to an air supply."
+	siemens_coefficient = 0.2
 
 /obj/item/clothing/mask/gas/cyborg
 	name = "cyborg visor"
