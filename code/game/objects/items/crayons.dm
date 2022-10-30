@@ -185,13 +185,12 @@ var/global/list/all_graffitis = list(
 			return
 
 		if(instant || do_after(user,target, drawtime))
-			var/obj/effect/decal/cleanable/C
 			var/pix_x = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-x"]) - (drawtype == "text" ? length(preference)*(fontsize/2) : 16) : -16
 			var/pix_y = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-y"]) - (drawtype == "text" ? fontsize : 16) : -16
 			if(drawtype == "text")
-				C = new /obj/effect/decal/cleanable/crayon/text(target, size = fontsize, color = mainColour, type = preference, pixel_x = pix_x, pixel_y = pix_y)
+				new /obj/effect/decal/cleanable/crayon/text(target, size = fontsize, color = mainColour, type = preference, pixel_x = pix_x, pixel_y = pix_y)
 			else
-				C = new /obj/effect/decal/cleanable/crayon(target, color = mainColour, shade = shadeColour, type = drawtype, pixel_x = pix_x, pixel_y = pix_y)
+				new /obj/effect/decal/cleanable/crayon(target, color = mainColour, shade = shadeColour, type = drawtype, pixel_x = pix_x, pixel_y = pix_y)
 
 			to_chat(user, "You finish drawing.")
 			target.add_fingerprint(user)		// Adds their fingerprints to the floor the crayon is drawn on.
