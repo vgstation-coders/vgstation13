@@ -23,7 +23,7 @@
 
 	if(isturf(loc))
 		var/turf/target = loc
-		if(type != "rune" && target.Adjacent(usr))
+		if(type != "rune" && src.pixel_x != 0 && src.pixel_y != 0 && target.Adjacent(usr))
 			var/desired_density = 0
 			var/x_offset = 0
 			var/y_offset = 0
