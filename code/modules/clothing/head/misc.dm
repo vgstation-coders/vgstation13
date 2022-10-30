@@ -665,6 +665,14 @@
 	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
+/obj/item/clothing/head/devil_horns
+	name = "devil horns"
+	desc = "Might be slightly offensive to your local chaplain."
+	icon_state = "devil_horns"
+	item_state = "devil_horns"
+	species_fit = list(INSECT_SHAPED)
+	flags = FPRINT
+
 /obj/item/clothing/head/elfhat
 	name = "elf hat"
 	desc = "Wear this hat, and become one of Santa's little helpers!"
