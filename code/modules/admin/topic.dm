@@ -3096,6 +3096,13 @@
 		var/mob/M = locate(href_list["subtlemessage"])
 		usr.client.cmd_admin_subtle_message(M)
 
+	else if(href_list["sound_reply"])
+		if(!check_rights(R_SOUNDS))
+			return
+
+		var/mob/M = locate(href_list["sound_reply"])
+		usr.client.play_direct_sound(M)
+
 	else if(href_list["rapsheet"])
 		usr << link(getVGPanel("rapsheet", admin = 1, query = list("ckey" = href_list["rsckey"])))
 		return

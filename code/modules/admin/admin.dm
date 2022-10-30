@@ -93,7 +93,8 @@ var/global/floorIsLava = 0
 		<br><br>
 		<A href='?src=\ref[src];traitor=\ref[M]'>Role panel</A> |
 		<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
-		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
+		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A> |
+		<A href='?src=\ref[src];sound_reply=\ref[M]'>Direct sound</A>
 	"}
 
 	if(istype(M, /mob/living/carbon/human))
