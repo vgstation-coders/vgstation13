@@ -163,9 +163,9 @@ var/global/list/all_graffitis = list(
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
 					I.maptext = example.maptext
 					I.loc = get_turf(target)
-					I.maptext_height = 32
-					I.maptext_width = 64
-					I.maptext_y = -2
+					I.maptext_height = example.maptext_height
+					I.maptext_width = example.maptext_width
+					I.maptext_y = example.maptext_y
 					I.pixel_x = example.pixel_x
 					I.pixel_y = example.pixel_y
 					qdel(example)
