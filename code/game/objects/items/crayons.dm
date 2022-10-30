@@ -113,6 +113,8 @@ var/global/list/all_graffitis = list(
 		var/preference
 		var/drawtime = 50
 		var/fontsize = 6 //For text
+		var/pix_x = text2num(params2list(click_parameters)["icon-x"]) - (drawtype == "text" ? length(preference)*(fontsize/2) : 16)
+		var/pix_y = text2num(params2list(click_parameters)["icon-y"]) - (drawtype == "text" ? fontsize : 16)
 
 		if(!drawtype)
 			return
@@ -140,6 +142,8 @@ var/global/list/all_graffitis = list(
 				to_chat(user, "You start drawing graffiti on \the [target].")
 			if("rune")
 				to_chat(user, "You start drawing a rune on \the [target].")
+				pix_x = -16
+				pix_y = -16
 			if("text")
 				fontsize = input("How big should the text be, in pts?", "Crayon scribbles", "[CRAYON_MIN_FONTSIZE]") as num
 				if(!fontsize)
@@ -155,14 +159,16 @@ var/global/list/all_graffitis = list(
 				preference = copytext(preference, 1, (CRAYON_MAX_LETTERS/(fontsize/CRAYON_MIN_FONTSIZE))+1)
 
 				if(user.client)
+					var/obj/effect/decal/cleanable/crayon/text/example = new(null, size = fontsize, fontname = clumsy_check(user) ? "Comic Sans MS" : "DK Cool Crayon", color = mainColour, type = preference, pixel_x = pix_x, pixel_y = pix_y)
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
-					I.maptext = {"<span style="color:[mainColour];font-size:[fontsize]pt;font-family:'[clumsy_check(user) ? "Comic Sans MS" : "DK Cool Crayon"]';">[preference]</span>"}
+					I.maptext = example.maptext
 					I.loc = get_turf(target)
 					I.maptext_height = 32
 					I.maptext_width = 64
 					I.maptext_y = -2
-					I.pixel_x = text2num(params2list(click_parameters)["icon-x"]) - length(preference)*(fontsize/2)
-					I.pixel_y = text2num(params2list(click_parameters)["icon-y"]) - fontsize
+					I.pixel_x = example.pixel_x
+					I.pixel_y = example.pixel_y
+					qdel(example)
 					animate(I, alpha = 100, 10, -1)
 
 					user.client.images.Add(I)
@@ -185,8 +191,6 @@ var/global/list/all_graffitis = list(
 			return
 
 		if(instant || do_after(user,target, drawtime))
-			var/pix_x = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-x"]) - (drawtype == "text" ? length(preference)*(fontsize/2) : 16) : -16
-			var/pix_y = drawtype != "rune" ? text2num(params2list(click_parameters)["icon-y"]) - (drawtype == "text" ? fontsize : 16) : -16
 			if(drawtype == "text")
 				new /obj/effect/decal/cleanable/crayon/text(target, size = fontsize, fontname = clumsy_check(user) ? "Comic Sans MS" : "DK Cool Crayon", color = mainColour, type = preference, pixel_x = pix_x, pixel_y = pix_y)
 			else
