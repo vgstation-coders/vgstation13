@@ -15,6 +15,8 @@ var/datum/money_account/trader_account
 
 var/station_allowance = 0//This is what Nanotrasen will send to the Station Account after every salary, as provision for the next salary.
 var/latejoiner_allowance = 0//Added to station_allowance and reset before every wage payout.
+var/station_funding = 0 //A bonus to the station allowance that persists between cycles. Admins can set this on the database.
+var/station_bonus = 0 //A bonus to station allowance that gets reset after wage payout. Admins can boost this too.
 
 /proc/create_station_account()
 	if(!station_account)
@@ -245,7 +247,11 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		if(access_level > 0 || isAdminGhost(user) || is_malf_owner(user))
 
 			dat += {"<a href='?src=\ref[src];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>
-				Combined department and personnel budget is currently [station_allowance] credits. A total of [global.requested_payroll_amount] credits were requested during the last payroll cycle.<br>"}
+				Combined department and personnel budget is currently [station_allowance+station_bonus+station_funding] credits. A total of [global.requested_payroll_amount] credits were requested during the last payroll cycle.<br>"}
+			if(station_bonus || isAdminGhost(user))
+				dat += "The budget was increased by a bonus of [station_bonus] this cycle. [isAdminGhost(user) ? "<a href='?src=\ref[src];choice=addbonus;'>Adjust</a>" : ""]<br>"
+			if(station_funding || isAdminGhost(user))
+				dat += "Central Command has earmarked an additional [station_funding] for the budget. [isAdminGhost(user) ? "<a href='?src=\ref[src];choice=addfunding;'>Adjust</a>" : ""]<br>"
 			if(creating_new_account)
 
 				dat += {"<br>
@@ -404,6 +410,16 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 			if("view_accounts_list")
 				detailed_account_view = null
 				creating_new_account = 0
+			if("addfunding")
+				if(!isAdminGhost(usr))
+					return
+				var/new_funding = input(usr, "Adjust the budget for ALL cycles", "Adjust by", station_funding) as null|num
+				station_funding = new_funding
+			if("addbonus")
+				if(!isAdminGhost(usr))
+					return
+				var/new_bonus = input(usr, "Adjust the budget for THIS cycles", "Adjust by", station_bonus) as null|num
+				station_bonus = new_bonus
 			if("toggle_account")
 				if(detailed_account_view)
 					detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
