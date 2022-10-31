@@ -36,6 +36,9 @@
 	sensor_augs = list("Mesons", "Disable")
 
 	fix_modules()
+	
+	if(Holiday == HALLOWEEN)
+		sprites["Spooky"] = "skullmommi"
 
 //Nanotrasen's MoMMI
 /obj/item/weapon/robot_module/mommi/nt
@@ -52,8 +55,7 @@
 		"RepairBot" = "repairbot",
 		"Hover" = "hovermommi",
 		"Junkheap" = "junkmommi",
-		"Cutie" = "cutie",
-		"Spooky" = "skullmommi"
+		"Cutie" = "cutie"
 		)
 	speed_modifier = MOMMI_NT_SPEED_MODIFIER
 
