@@ -57,11 +57,7 @@
 /obj/machinery/computer/accounting/Topic(href, href_list)
 	if(..())
 		return 1
-	if(href_list["close"])
-		if(usr.machine == src)
-			usr.unset_machine()
-		return 1
-	if("reg")
+	if(href_list["reg"])
 		if(!in_range(src, usr))
 			return 1
 		var/sol = text2num(href_list["reg"])
