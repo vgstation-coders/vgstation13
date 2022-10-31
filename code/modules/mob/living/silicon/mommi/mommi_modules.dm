@@ -53,6 +53,7 @@
 		"Hover" = "hovermommi",
 		"Junkheap" = "junkmommi",
 		"Cutie" = "cutie"
+		"Spooky" = "skullmommi"
 		)
 	speed_modifier = MOMMI_NT_SPEED_MODIFIER
 
