@@ -1400,8 +1400,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_kitchen)
 	group = "Hospitality"
 
-/datum/supply_packs/randomised/assorted_meats
-	name = "Assorted meats"
+/datum/supply_packs/randomised/budget_meats
+	name = "Budget meats"
 	num_contained = 8
 	contains = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
@@ -1414,7 +1414,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					)
 	cost = 15
 	containertype = /obj/structure/closet/crate/secure/basic
-	containername = "assorted meats crate"
+	containername = "budget meats crate"
 	access = list(access_kitchen)
 	group = "Hospitality"
 
