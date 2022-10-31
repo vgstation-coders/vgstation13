@@ -75,7 +75,12 @@
 	..()
 
 /obj/machinery/sleeper/update_icon()
+	overlays = list()
 	icon_state = "[base_icon]_[occupant ? "1" : "0"]"
+	if(panel_open)
+		overlays += "sleeper-panel"
+	else
+		overlays -= "sleeper-panel"
 
 /obj/machinery/sleeper/RefreshParts()
 	var/T = 0
@@ -92,6 +97,8 @@
 		works_in_crit = TRUE
 	else
 		works_in_crit = FALSE
+
+	update_icon()
 
 	//Better upgrades means faster wake-up-patient speeds
 	switch(T)
@@ -431,7 +438,6 @@
 				return
 			plugins += obj_used
 			to_chat(user, "You install \the [obj_used] to the machine!")
-			update_icon()
 			RefreshParts()
 
 	if(!istype(obj_used, /obj/item/weapon/grab))

@@ -459,6 +459,8 @@ var/global/ingredientLimit = 10
 			. = "It's already deep-fried."
 		else if(findtext(I.name,"grilled"))
 			. = "It's already grilled."
+	if(istype(I,/obj/item/device/plugin/sleeper/dan))
+		. = "valid"
 	return
 
 /obj/machinery/cooking/deepfryer/flush_reagents()
@@ -474,6 +476,9 @@ var/global/ingredientLimit = 10
 		src.ingredient.forceMove(src.loc)
 		for(var/obj/item/embedded in src.ingredient.contents)
 			embedded.forceMove(ingredient)
+	else if(istype(src.ingredient,/obj/item/device/plugin/sleeper/dan))
+		qdel(src.ingredient)
+		new /obj/item/device/plugin/sleeper/clown(get_turf(src))
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
 		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 		if(cooks_in_reagents)
