@@ -5,6 +5,7 @@
 	desc = "A breakthrough of technology. Easily shows all detected suit sensors, and can filter to only injuries."
 	icon = 'icons/obj/pda.dmi'
 	icon_state = "pcmc"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/pcmc.dmi', "right_hand" = 'icons/mob/in-hand/right/pcmc.dmi')
 	item_state = "pcmc"
 	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
