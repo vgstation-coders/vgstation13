@@ -5744,6 +5744,15 @@ var/procizine_tolerance = 0
 	if(prob(20))
 		M.adjustToxLoss(1)
 
+/datum/reagent/toxicwaste/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(istype(O,/obj/item/device/plugin/sleeper) && !istype(O,/obj/item/device/plugin/sleeper/gunk))
+		playsound(O, 'sound/effects/grue_burn.ogg', 100, 1)
+		new /obj/item/device/plugin/sleeper/gunk(get_turf(O))
+		qdel(O)
+
 /datum/reagent/refriedbeans
 	name = "Re-Fried Beans"
 	id = REFRIEDBEANS
@@ -7042,7 +7051,7 @@ var/procizine_tolerance = 0
 	color = "#2043D0"
 	glass_icon_state = "husbando"
 	glass_name = "\improper Husbando"
-	
+
 /datum/reagent/ethanol/husbando/on_mob_life(var/mob/living/M) //it's copypasted from waifu
 	if(..())
 		return 1
@@ -7072,7 +7081,7 @@ var/procizine_tolerance = 0
 	glass_icon_state = "tomboy"
 	glass_name = "\improper Tomboy"
 
-/datum/reagent/ethanol/tomboy/on_mob_life(var/mob/living/M) 
+/datum/reagent/ethanol/tomboy/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	if(M.gender == MALE)
@@ -7442,6 +7451,21 @@ var/procizine_tolerance = 0
 	color = "#361412" //rgb: 54, 20, 18
 	glass_icon_state = "bittersglass"
 	glass_desc = "A glass of dark and, well, bitter, bitters."
+
+/datum/reagent/ethanol/drink/champari
+	name = "Champari"
+	id = CHAMPARI
+	description = "Drinking this nasty mix will probably make you vomit."
+	color = "#DD0000" //rgb: 54, 20, 18
+	glass_icon_state = "dragonsspit"
+	glass_desc = "A glass of the worst thing to come out of Italy."
+
+/datum/reagent/ethanol/drink/champari/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(ishuman(M) && prob(5))
+		var/mob/living/carbon/human/H = M
+		H.vomit()
 
 /datum/reagent/ethanol/drink/champagne
 	name = "Champagne"

@@ -34,6 +34,7 @@
 	var/cools = 0
 	var/works_in_crit = FALSE //Will it let you inject chemicals into people in critical condition
 	var/hiss_noise = 'sound/machines/pressurehiss.ogg'
+	var/funny = FALSE //clown time?
 
 
 	//TODO - plugin system
@@ -85,6 +86,7 @@
 /obj/machinery/sleeper/RefreshParts()
 	var/T = 0
 	available_options = list()
+	funny = FALSE
 	advertising = FALSE
 	ad_list = list()
 	hiss_noise = 'sound/machines/pressurehiss.ogg'
@@ -130,6 +132,8 @@
 		//Plugins can manually enable injecting in crit
 		if(plug.override_crit)
 			works_in_crit = TRUE
+		if(plug.funny)
+			funny = TRUE
 
 	if(overriding_chems)
 		for(var/obj/item/device/plugin/sleeper/plug in plugins)
@@ -182,6 +186,8 @@
 
 /obj/machinery/sleeper/interact(var/mob/user)
 	var/dat = list()
+	if(funny)
+		dat += "<font face=\"Comic Sans MS\">"
 	if(on)
 		dat += "<B>Performing anaesthesic emergence...</B><BR>" //Best I could come up with
 		dat += "<B>Purging sleep-inducing chemicals...</B>" //Same
@@ -228,6 +234,8 @@
 
 		else
 			dat += "The sleeper is empty."
+	if(funny)
+		dat += "</font>"
 	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "\ref[src]", name, 400, 500)
 	popup.set_content(dat)
@@ -424,7 +432,7 @@
 			if(istype(obj_used, plug))
 				to_chat(user, "<span class='warning'>This device is already installed.</span>")
 				return
-		to_chat(user, "You start installing \the [obj_used] to the machine!")
+		to_chat(user, "You start installing \the [obj_used] to the machine.")
 		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 		if(do_after(user, src, 40))
 			if(!panel_open)
@@ -437,7 +445,7 @@
 				to_chat(user, "<span class='warning'>You can't let go of \the [obj_used]!</span>")
 				return
 			plugins += obj_used
-			to_chat(user, "You install \the [obj_used] to the machine!")
+			to_chat(user, "You install \the [obj_used] to the machine.")
 			RefreshParts()
 
 	if(!istype(obj_used, /obj/item/weapon/grab))

@@ -22,6 +22,7 @@
 	var/override_chems = FALSE
 	var/override_crit = FALSE
 	var/list/advertisements = list()
+	var/funny = FALSE
 
 /obj/item/device/plugin/sleeper/ntbasic
 	name = "Nanotrasen Simple Sleeper Upgrade Module"
@@ -33,12 +34,30 @@
 /obj/item/device/plugin/sleeper/dan
 	name = "Discount Dan's Discount Nutrition Injectors"
 	advertisements = list("This injection was brought to you by Discount Dan!")
-	emagchems = list(CHEESYGLOOP = "Cheesy Gloop")
+	t1chems = list(
+		DISCOUNT = "Discount Dan's Sauce",
+		GRAPEJUICE = "Discount Raisin Juice"
+		)
+	t2chems = list(
+		REFRIEDBEANS = "Re-Fried Beans"
+		)
+	t3chems = list(
+		BEFF = "Beff"
+		)
+	//Example of use, not implemented because gloop is owchies
+	//emagchems = list(CHEESYGLOOP = "Cheesy Gloop")
 
 /obj/item/device/plugin/sleeper/trader
 	name = "Vox Shoal Sleeper Optimization Kit"
 	mech_flags = MECH_SCAN_FAIL
-	t2chems = list(GRAVY = "Mmm... Gravy")
+	t1chems = list(
+		NITROGEN = "Nitrogen",
+		GRAVY = "Gravy"
+		)
+	t3chems = list(
+		MAPLESYRUP = "Maple Syrup",
+		CHILLWAX = "Chillwax"
+		)
 
 /obj/item/device/plugin/sleeper/alien
 	name = "unknown device"
@@ -48,7 +67,37 @@
 	t1chems = list(SIMPOLINOL = "Simpolinol")
 
 /obj/item/device/plugin/sleeper/clown
-	name = "Funny looking device"
+	name = "funny looking device"
 	desc = "A strange object. It has an image of what looks like a sleeper on it."
 	custom_hiss = 'sound/items/bikehorn.ogg'
+	funny = TRUE
+	t1chems = list(
+		BANANA = "Banana Juice",
+		HONKSERUM = "Clown Juice"
+		)
+	t2chems = list(
+		LUBE = "Lube Juice"
+		)
+	t3chems = list(
+		COLORFUL_REAGENT = "Colorful Juice"
+		)
+
+/obj/item/device/plugin/sleeper/gunk
+	name = "damaged device"
+	desc = "This looks like it was once a high tech piece of equipment, but now it's covered in toxic waste."
+	override_chems = TRUE
+	t1chems = list(
+		TOXICWASTE = "Toxic Waste",
+		CHEMICAL_WASTE = "Chemical Waste",
+		SALTWATER = "Salt Water"
+		)
+	t2chems = list(
+		BOOGER = "Boogers",
+		VOMIT = "Vomit",
+		BILK = "Bilk",
+		)
+	t3chems = list(
+		//watch out this is literal garbage
+		CHAMPARI = "Champari"
+		)
 

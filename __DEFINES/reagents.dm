@@ -249,6 +249,7 @@
 #define BLUECURACAO "bluecuracao"
 #define TRIPLESEC		"triplesec"
 #define BITTERS 		"bitters"
+#define CHAMPARI 		"champari"
 #define SCHNAPPS		"schnapps"
 #define ALE 			"ale"
 #define THIRTEENLOKO 			"thirteenloko"
