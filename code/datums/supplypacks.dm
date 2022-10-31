@@ -1384,7 +1384,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/randomised/assorted_meats
 	name = "Assorted meats"
-	num_contained = 8
+	num_contained = 10
 	contains = list(/obj/item/weapon/reagent_containers/food/snacks/meat/mimic,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
