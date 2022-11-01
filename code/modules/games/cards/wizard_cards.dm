@@ -293,6 +293,13 @@ var/global/list/wizard_cards_normal = list(
 		var/newcard = new card(src)
 		cards += newcard
 
+/obj/item/toy/cards/wizard/draw_with_luck(user)
+	. = 1
+	for(var/obj/item/toy/singlecard/card in cards)
+		if(istype(card,/obj/item/toy/singlecard/wizard/legendary))
+			break
+		.++
+
 /obj/item/weapon/storage/bag/wiz_cards/attack_self(mob/user)
 	icon_state = "cardpack_open"
 	.=..()

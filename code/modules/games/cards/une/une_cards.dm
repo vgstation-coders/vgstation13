@@ -31,6 +31,8 @@ var/static/list/specialunecards2icon = list("skip","reverse","draw2")
 			for(var/i in UNE_SKIP to UNE_DRAW2)
 				cards += new/obj/item/toy/singlecard/une(src, src, i, suit, specialunecards2icon[i-9], une_suits[suit])
 
+/obj/item/toy/cards/une/draw_with_luck(user)
+	return 1 // TODO: something for this game
 
 /obj/item/toy/singlecard/une
 	name = "une card"

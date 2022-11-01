@@ -94,52 +94,7 @@ var/static/list/cardcombos2name = list("high card","pair","two pair","three of a
 		return
 	var/draw_index = 1
 	if(user?.lucky_prob(1/cards.len,1/10,20,user?.luck()))
-		var/obj/item/toy/cardhand/CH = user.get_inactive_hand()
-		if(istype(CH))
-			var/num2get = 0
-			var/suit2get = 0
-			var/list/nums = list()
-			var/list/suits = list()
-			for(var/obj/item/toy/singlecard/card in CH.currenthand)
-				if(!istype(card,/obj/item/toy/singlecard/une) && !istype(card,/obj/item/toy/singlecard/wizard))
-					nums += "[card.number]"
-					suits += card.suit
-			var/obj/item/toy/cardhand/OH
-			for(var/obj/item/toy/cardhand/otherhand in adjacent_atoms(src))
-				if(otherhand != src)
-					OH = otherhand
-					break
-			switch(CH.get_texas_holdem_combo(OH))
-				if(THREE_KIND)
-					if(user?.lucky_prob(50,1/10,40,user?.luck()))
-						for(var/number in nums)
-							if(count_by_name(nums,number) == 3)
-								num2get = text2num(number) // make it four of a kind
-					else
-						for(var/number in nums)
-							if(count_by_name(nums,number) == 2)
-								num2get = text2num(number) // make it a full house
-				if(TWO_PAIR)
-					for(var/number in nums)
-						if(count_by_name(nums,number) >= 2)
-							num2get = text2num(number) // make it a full house
-				if(PAIR)
-					for(var/number in nums)
-						if(count_by_name(nums,number) >= 2)
-							num2get = text2num(number) // make it a three of a kind
-				else
-					if(user?.lucky_prob(50,1/10,40,user?.luck()))
-						if(user?.lucky_prob(50,1/10,40,user?.luck()))
-							suit2get = pick(suits) // attempt at a flush
-						num2get = text2num(pick(nums))+1 // attempt at a straight
-						if(num2get > KING_CARD)
-							num2get = ACE_CARD // helps with royal flushes
-					else
-						num2get = text2num(pick(nums)) // just a pair
-			for(var/obj/item/toy/singlecard/card in cards)
-				if((!num2get || card.number == num2get) && (!suit2get || card.suit == suit2get))
-					break
-				draw_index++
+		draw_index = draw_with_luck(user)
 
 	choice = cards[draw_index]
 	cards -= choice
@@ -148,6 +103,55 @@ var/static/list/cardcombos2name = list("high card","pair","two pair","three of a
 						"<span class='notice'>You draw a card from the deck.")
 
 	update_icon()
+
+/obj/item/toy/cards/proc/draw_with_luck(mob/user)
+	. = 1
+	var/obj/item/toy/cardhand/CH = user.get_inactive_hand()
+	if(istype(CH))
+		var/num2get = 0
+		var/suit2get = 0
+		var/list/nums = list()
+		var/list/suits = list()
+		for(var/obj/item/toy/singlecard/card in CH.currenthand)
+			if(!istype(card,/obj/item/toy/singlecard/une) && !istype(card,/obj/item/toy/singlecard/wizard))
+				nums += "[card.number]"
+				suits += card.suit
+		var/obj/item/toy/cardhand/OH
+		for(var/obj/item/toy/cardhand/otherhand in adjacent_atoms(src))
+			if(otherhand != src)
+				OH = otherhand
+				break
+		switch(CH.get_texas_holdem_combo(OH))
+			if(THREE_KIND)
+				if(user?.lucky_prob(50,1/10,40,user?.luck()))
+					for(var/number in nums)
+						if(count_by_name(nums,number) == 3)
+							num2get = text2num(number) // make it four of a kind
+				else
+					for(var/number in nums)
+						if(count_by_name(nums,number) == 2)
+							num2get = text2num(number) // make it a full house
+			if(TWO_PAIR)
+				for(var/number in nums)
+					if(count_by_name(nums,number) >= 2)
+						num2get = text2num(number) // make it a full house
+			if(PAIR)
+				for(var/number in nums)
+					if(count_by_name(nums,number) >= 2)
+						num2get = text2num(number) // make it a three of a kind
+			else
+				if(user?.lucky_prob(50,1/10,40,user?.luck()))
+					if(user?.lucky_prob(50,1/10,40,user?.luck()))
+						suit2get = pick(suits) // attempt at a flush
+					num2get = text2num(pick(nums))+1 // attempt at a straight
+					if(num2get > KING_CARD)
+						num2get = ACE_CARD // helps with royal flushes
+				else
+					num2get = text2num(pick(nums)) // just a pair
+		for(var/obj/item/toy/singlecard/card in cards)
+			if((!num2get || card.number == num2get) && (!suit2get || card.suit == suit2get))
+				break
+			.++
 
 /obj/item/toy/cards/attack_self(var/mob/user)
 	if(user.attack_delayer.blocked())
