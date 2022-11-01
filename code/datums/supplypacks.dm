@@ -490,11 +490,34 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Halloween costumes"
 	contains = list(/obj/item/clothing/suit/space/plasmaman/moltar,
 					/obj/item/clothing/head/helmet/space/plasmaman/moltar,
-					/obj/item/clothing/under/skelesuit,
 					/obj/item/clothing/head/snake,
-					/obj/item/clothing/mask/vamp_fangs,
 					/obj/item/clothing/head/franken_bolt,
-					/obj/item/clothing/head/alien_antenna)
+					/obj/item/clothing/head/alien_antenna,
+
+					//Slasher set
+					/obj/item/toy/chainsaw,
+					/obj/item/clothing/mask/gas/slasher,
+
+					//Skeleton "set"
+					/obj/item/clothing/under/skelesuit,
+					/obj/item/clothing/under/skelesuit,
+
+					//Reaper set
+					/obj/item/clothing/mask/gas/grim_reaper,
+					/obj/item/clothing/head/chaplain_hood,
+					/obj/item/clothing/suit/reaper_robes,
+					/obj/item/toy/scythe,
+
+					//Vampire set
+					/obj/item/clothing/suit/storage/draculacoat_fake,
+					/obj/item/clothing/mask/vamp_fangs,
+
+					//Devil set
+					/obj/item/clothing/head/devil_horns,
+					/obj/item/toy/pitchfork,
+					/obj/item/clothing/under/color/red,
+					/obj/item/weapon/bedsheet/red
+					)
 	cost = 31
 	containertype = /obj/structure/closet/crate/basic
 	containername = "halloween costumes crate"
@@ -2164,7 +2187,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "lab mouse crate"
 	group = "Medical"
-	
+
 /datum/supply_packs/sutures
 	name = "Wound mending supplies"
 	contains = list (

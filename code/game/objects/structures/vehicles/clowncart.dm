@@ -331,7 +331,7 @@
 		return
 	reagents.remove_reagent(BANANA, BANANA_FOR_DRAWING)//"graffiti" and "rune" will draw graffiti and runes
 	if(printing_text == "graffiti" || printing_text == "rune") //"paint" will paint floor tiles with selected colour
-		new /obj/effect/decal/cleanable/crayon(pos, main = colour1, shade = colour2, type = printing_text)
+		new /obj/effect/decal/cleanable/crayon(pos, color = colour1, shade = colour2, type = printing_text)
 	else
 		if(printing_text == "paint")
 			var/turf/T = pos
@@ -350,7 +350,7 @@
 				if(printing_pos >= 0)
 					printing_pos = -length(printing_text)-1 //indian code magic
 			printing_pos++
-			new /obj/effect/decal/cleanable/crayon(pos, main = colour1, shade = colour2, type = copytext(printing_text, abs(printing_pos), 1+abs(printing_pos)))
+			new /obj/effect/decal/cleanable/crayon(pos, color = colour1, shade = colour2, type = copytext(printing_text, abs(printing_pos), 1+abs(printing_pos)))
 			if(printing_pos > length(printing_text) - 1 || printing_pos == - 1)
 				printing_text = ""
 				printing_pos = 0
