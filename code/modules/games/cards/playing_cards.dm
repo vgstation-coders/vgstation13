@@ -1,9 +1,29 @@
 #define CARD_DISPLACE	9
 #define CARD_WIDTH		7 //Width of the icon
 
+#define JOKER_CARD	0
+#define ACE_CARD	1
+#define JACK_CARD 	11
+#define QUEEN_CARD	12
+#define KING_CARD	13
+
+#define ROYAL_FLUSH 10
+#define STRAIGHT_FLUSH 9
+#define FOUR_KIND 8
+#define FULL_HOUSE 7
+#define FLUSH 6
+#define STRAIGHT 5
+#define THREE_KIND 4
+#define TWO_PAIR 3
+#define PAIR 2
+#define HIGH_CARD 1
+
 /*
  *	Taken from /tg/
  */
+
+var/static/list/card_suits = list("Hearts","Spades","Clubs","Diamonds")
+var/static/list/cardcombos2name = list("high card","pair","two pair","three of a kind","straight","flush","full house","four of a kind","straight flush","royal flush")
 
 /datum/context_click/cardhand/return_clicked_id(x_pos, y_pos)
 	var/obj/item/toy/cardhand/hand = holder
@@ -51,31 +71,15 @@
 	update_icon()
 
 /obj/item/toy/cards/proc/generate_cards()
-	cards += new/obj/item/toy/singlecard(src, src, "Red Joker")
-	cards += new/obj/item/toy/singlecard(src, src, "Black Joker")
+	for(var/obj/item/toy/singlecard/card in cards)
+		qdel(card)
+	cards.Cut()
+	cards += new/obj/item/toy/singlecard(src, src, 0, "Hearts")
+	cards += new/obj/item/toy/singlecard(src, src, 0, "Spades")
 
-	for(var/i = 2; i <= 10; i++)
-		cards += new/obj/item/toy/singlecard(src, src, "[i] of Hearts")
-		cards += new/obj/item/toy/singlecard(src, src, "[i] of Spades")
-		cards += new/obj/item/toy/singlecard(src, src, "[i] of Clubs")
-		cards += new/obj/item/toy/singlecard(src, src, "[i] of Diamonds")
-
-	cards += new/obj/item/toy/singlecard(src, src, "King of Hearts")
-	cards += new/obj/item/toy/singlecard(src, src, "King of Spades")
-	cards += new/obj/item/toy/singlecard(src, src, "King of Clubs")
-	cards += new/obj/item/toy/singlecard(src, src, "King of Diamonds")
-	cards += new/obj/item/toy/singlecard(src, src, "Queen of Hearts")
-	cards += new/obj/item/toy/singlecard(src, src, "Queen of Spades")
-	cards += new/obj/item/toy/singlecard(src, src, "Queen of Clubs")
-	cards += new/obj/item/toy/singlecard(src, src, "Queen of Diamonds")
-	cards += new/obj/item/toy/singlecard(src, src, "Jack of Hearts")
-	cards += new/obj/item/toy/singlecard(src, src, "Jack of Spades")
-	cards += new/obj/item/toy/singlecard(src, src, "Jack of Clubs")
-	cards += new/obj/item/toy/singlecard(src, src, "Jack of Diamonds")
-	cards += new/obj/item/toy/singlecard(src, src, "Ace of Hearts")
-	cards += new/obj/item/toy/singlecard(src, src, "Ace of Spades")
-	cards += new/obj/item/toy/singlecard(src, src, "Ace of Clubs")
-	cards += new/obj/item/toy/singlecard(src, src, "Ace of Diamonds")
+	for(var/suit in card_suits)
+		for(var/i in ACE_CARD to KING_CARD)
+			cards += new/obj/item/toy/singlecard(src, src, i, suit)
 
 
 /obj/item/toy/cards/examine(mob/user)
@@ -191,7 +195,7 @@
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "handbase"
 	w_class = W_CLASS_SMALL
-	var/list/currenthand = list()
+	var/list/obj/item/toy/singlecard/currenthand = list()
 	var/obj/item/toy/cards/parentdeck = null
 	var/max_hand_size = 7
 
@@ -270,6 +274,85 @@
 			card.pixel_x = i * (CARD_DISPLACE - currenthand.len) - CARD_DISPLACE
 			overlays += card
 
+/obj/item/toy/cardhand/dropped(mob/user)
+	for(var/obj/item/toy/cardhand/otherhand in adjacent_atoms(src))
+		if(otherhand != src)
+			var/ourcombo = get_texas_holdem_combo(otherhand)
+			var/result = "\a [cardcombos2name[ourcombo]][ourcombo == HIGH_CARD ? " of [cardnumber2name(get_high_card(otherhand))]" : ""]."
+			user.visible_message("<span class = 'notice'>[user] has [result]</span>","<span class = 'notice'>You have [result]</span>")
+
+/obj/item/toy/cardhand/proc/get_texas_holdem_combo(var/obj/item/toy/cardhand/otherhand)
+	var/list/nums = list()
+	var/list/suits = list()
+	var/list/found_combos = list()
+	for(var/obj/item/toy/singlecard/card in currenthand)
+		if(!istype(card,/obj/item/toy/singlecard/une) && !istype(card,/obj/item/toy/singlecard/wizard))
+			nums += "[card.number]"
+			suits += card.suit
+	if(otherhand)
+		for(var/obj/item/toy/singlecard/card in otherhand.currenthand)
+			if(!istype(card,/obj/item/toy/singlecard/une) && !istype(card,/obj/item/toy/singlecard/wizard))
+				nums += "[card.number]"
+				suits += card.suit
+	var/highcard = get_high_card(otherhand)
+	for(var/suit in suits)
+		if(count_by_name(suits,suit) >= 5)
+			found_combos += FLUSH
+			break
+	var/matches = 0
+	for(var/straightnum in highcard-1 to highcard-4)
+		if("[straightnum]" in nums)
+			matches++
+	if(matches >= 4)
+		if(FLUSH in found_combos)
+			if(highcard == KING_CARD+1)
+				found_combos += ROYAL_FLUSH
+			else
+				found_combos += STRAIGHT_FLUSH
+		else
+			found_combos += STRAIGHT
+	for(var/number in nums)
+		switch(count_by_name(nums,number))
+			if(4 to INFINITY)
+				found_combos += FOUR_KIND
+				break
+			if(3)
+				for(var/number2 in nums)
+					if(text2num(number2) != text2num(number) && count_by_name(nums,number2) >= 2)
+						found_combos += FULL_HOUSE
+						break
+				if(!(THREE_KIND in found_combos))
+					found_combos += THREE_KIND
+			if(2)
+				for(var/number2 in nums)
+					if(text2num(number2) != text2num(number))
+						switch(count_by_name(nums,number2))
+							if(3 to INFINITY)
+								found_combos += FULL_HOUSE
+								break
+							if(2)
+								found_combos += TWO_PAIR
+								break
+				found_combos += PAIR
+				break
+	. = HIGH_CARD
+	for(var/combo in found_combos)
+		if(combo > .)
+			. = combo
+
+/obj/item/toy/cardhand/proc/get_high_card(var/obj/item/toy/cardhand/otherhand)
+	. = 2
+	for(var/obj/item/toy/singlecard/card in currenthand)
+		if(!istype(card,/obj/item/toy/singlecard/une) && !istype(card,/obj/item/toy/singlecard/wizard))
+			if(card.number == ACE_CARD)
+				return KING_CARD+1
+			if(card.number > .)
+				. = card.number
+	if(otherhand)
+		var/otherhigh = otherhand.get_high_card()
+		if(otherhigh > .)
+			. = otherhigh
+
 ///////////////////////////
 /////////CARD ITEMS////////
 ///////////////////////////
@@ -280,7 +363,9 @@
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "singlecard_down"
 	w_class = W_CLASS_TINY
-	var/cardname = null
+	var/number = 1
+	var/suit = "Spades"
+	var/cardname = "Ace of Spades"
 	var/obj/item/toy/cards/parentdeck = null
 	var/flipped = TRUE //Cards start flipped so that dealers can deal without having to see the card.
 	pixel_x = -5
@@ -288,14 +373,37 @@
 /obj/item/toy/singlecard/unflipped //Card that is face-up, just so that it's visible
 	flipped = FALSE
 
-/obj/item/toy/singlecard/New(NewLoc, cardsource, newcardname)
+/obj/item/toy/singlecard/New(NewLoc, cardsource, cardnum, cardsuit)
 	..(NewLoc)
 	if(cardsource)
 		parentdeck = cardsource
-	if(newcardname)
-		cardname = newcardname
-		name = cardname
+	if(cardnum >= 0 && cardnum <= 13)
+		number = cardnum
+	if(cardsuit && (cardsuit in card_suits))
+		suit = cardsuit
+	if(!number)
+		switch(suit)
+			if("Spades" || "Clubs")
+				suit = "Black"
+			if("Hearts" || "Diamonds")
+				suit = "Red"
+	cardname = number ? "[cardnumber2name(number)] of [suit]" : "[suit] [cardnumber2name(number)]"
+	name = cardname
 	update_icon()
+
+/proc/cardnumber2name(var/number)
+	switch(number)
+		if(JOKER_CARD)
+			return "Joker"
+		if(ACE_CARD)
+			return "Ace"
+		if(JACK_CARD)
+			return "Jack"
+		if(QUEEN_CARD)
+			return "Queen"
+		if(KING_CARD)
+			return "King"
+	return "[number]"
 
 /obj/item/toy/singlecard/Destroy()
 	if(parentdeck)

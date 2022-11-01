@@ -4,6 +4,14 @@
 #define BLUECARD	"#0000ff"
 #define BLACKCARD	"#000000"
 
+#define UNE_SKIP 10
+#define UNE_REVERSE 11
+#define UNE_DRAW2 12
+
+var/static/list/une_suits = list("Red" = REDCARD,"Yellow" = YELLOWCARD,"Green" = GREENCARD,"Blue" = BLUECARD)
+var/static/list/other_une_suits = list("Wild" = "wild","Draw 4" = "draw4")
+var/static/list/specialunecards2icon = list(UNE_SKIP = "skip",UNE_REVERSE = "reverse",UNE_DRAW2 = "draw2")
+
 /obj/item/toy/cards/une
 	name = "deck of une cards"
 	desc = "A deck of une playing cards."
@@ -11,38 +19,17 @@
 	icon_state = "deck_full"
 
 /obj/item/toy/cards/une/generate_cards()
-	for(var/i = 0 to 9)
-		cards += new/obj/item/toy/singlecard/une(src, src, "Red [i]", "[i]", REDCARD)
-		cards += new/obj/item/toy/singlecard/une(src, src, "Yellow [i]", "[i]", YELLOWCARD)
-		cards += new/obj/item/toy/singlecard/une(src, src, "Green [i]", "[i]", GREENCARD)
-		cards += new/obj/item/toy/singlecard/une(src, src, "Blue [i]", "[i]", BLUECARD)
-	for(var/i = 1 to 9)//Second full set without a 0 card this time.
-		cards += new/obj/item/toy/singlecard/une(src, src, "Red [i]", "[i]", REDCARD)
-		cards += new/obj/item/toy/singlecard/une(src, src, "Yellow [i]", "[i]", YELLOWCARD)
-		cards += new/obj/item/toy/singlecard/une(src, src, "Green [i]", "[i]", GREENCARD)
-		cards += new/obj/item/toy/singlecard/une(src, src, "Blue [i]", "[i]", BLUECARD)
-	for(var/i = 0 to 3)//Black is just a placeholder and not actually used in the coloring.
-		cards += new/obj/item/toy/singlecard/une(src, src, "Wild", "wild", BLACKCARD)
-		cards += new/obj/item/toy/singlecard/une(src, src, "Draw 4", "draw4", BLACKCARD)
-	for(var/i = 1 to 8)
-		var/cardcolor = "Red"
-		var/hexcolor = REDCARD
-		switch(i)
-			if(1,2)
-				cardcolor = "Red"
-				hexcolor = REDCARD
-			if(3,4)
-				cardcolor = "Yellow"
-				hexcolor = YELLOWCARD
-			if(5,6)
-				cardcolor = "Green"
-				hexcolor = GREENCARD
-			if(7,8)
-				cardcolor = "Blue"
-				hexcolor = BLUECARD
-		cards += new/obj/item/toy/singlecard/une(src, src, "[cardcolor] Skip", "skip", hexcolor)
-		cards += new/obj/item/toy/singlecard/une(src, src, "[cardcolor] Reverse", "reverse",  hexcolor)
-		cards += new/obj/item/toy/singlecard/une(src, src, "[cardcolor] Draw 2", "draw2", hexcolor)
+	for(var/i in 0 to 1)
+		for(var/j in i to 9)//Second full set without a 0 card this time.
+			for(var/suit in une_suits)
+				cards += new/obj/item/toy/singlecard/une(src, src, j, suit, "[j]", une_suits[suit])
+	for(var/i in 0 to 3)//Black is just a placeholder and not actually used in the coloring.
+		for(var/suit in other_une_suits)
+			cards += new/obj/item/toy/singlecard/une(src, src, 0, suit, other_une_suits[suit], BLACKCARD)
+	for(var/suit in une_suits)
+		for(var/j in 1 to 2)
+			for(var/i in UNE_SKIP to UNE_DRAW2)
+				cards += new/obj/item/toy/singlecard/une(src, src, i, suit, specialunecards2icon[i], une_suits[suit])
 
 
 /obj/item/toy/singlecard/une
@@ -52,11 +39,18 @@
 	icon_state = "unecard_down"
 	var/image/unecardimg
 
-/obj/item/toy/singlecard/une/New(NewLoc, cardsource, newcardname, truecardname, cardhexcolor)
+/obj/item/toy/singlecard/une/New(NewLoc, cardsource, cardnum, cardsuit, truecardname, cardhexcolor)
 	unecardimg = image('icons/obj/une_cards.dmi', truecardname)
 	if(cardhexcolor != BLACKCARD)
 		unecardimg.color = cardhexcolor
 	..()
+	if(cardnum >= 0 && cardnum <= 9)
+		number = cardnum
+	if(cardsuit && ((number && (cardsuit in une_suits)) || (cardsuit in other_une_suits)))
+		suit = cardsuit
+	cardname = "[suit][number ? " [unecardnumber2name(number)]" : ""]"
+	name = cardname
+	update_icon()
 
 /obj/item/toy/singlecard/une/update_icon()
 	if(flipped)
@@ -69,6 +63,16 @@
 		overlays += unecardimg
 		name = cardname
 		pixel_x = 5
+
+/proc/unecardnumber2name(var/number)
+	switch(number)
+		if(UNE_SKIP)
+			return "Skip"
+		if(UNE_REVERSE)
+			return "Reverse"
+		if(UNE_DRAW2)
+			return "Draw 2"
+	return "[number]"
 
 
 #undef REDCARD
