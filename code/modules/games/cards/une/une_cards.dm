@@ -31,8 +31,24 @@ var/static/list/specialunecards2icon = list("skip","reverse","draw2")
 			for(var/i in UNE_SKIP to UNE_DRAW2)
 				cards += new/obj/item/toy/singlecard/une(src, src, i, suit, specialunecards2icon[i-9], une_suits[suit])
 
-/obj/item/toy/cards/une/draw_with_luck(user)
-	return 1 // TODO: something for this game
+/obj/item/toy/cards/une/draw_with_luck(mob/user)
+	. = 1
+	var/suit2get = 0
+	var/num2get = 0
+	if(user?.lucky_prob(50,1/10,40,user?.luck()))
+		suit2get = "Wild"
+		if(user?.lucky_prob(50,1/10,40,user?.luck()))
+			suit2get = "Draw 4"
+	else
+		num2get = UNE_DRAW2
+		if(user?.lucky_prob(50,1/10,40,user?.luck()))
+			num2get = UNE_REVERSE
+			if(user?.lucky_prob(50,1/10,40,user?.luck()))
+				num2get = UNE_SKIP
+	for(var/obj/item/toy/singlecard/card in cards)
+		if((!num2get || card.number == num2get) && (!suit2get || card.suit == suit2get))
+			break
+		.++
 
 /obj/item/toy/singlecard/une
 	name = "une card"
