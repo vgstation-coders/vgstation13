@@ -14,16 +14,14 @@
 	hud_state = "card_trick"
 	var/current_suit
 	var/current_number
-	var/current_card
 
 /spell/targeted/card/before_cast(list/targets, user)
 	. = ..()
 	current_suit = pick(card_suits)
 	current_number = pick(ACE_CARD,KING_CARD)
-	current_card = "[current_number] of [current_suit]"
 
 /spell/targeted/card/invocation(mob/user, list/targets)
-	invocation = "IS THE [uppertext(current_card)] YOUR CARD?"
+	invocation = "IS THE [uppertext(current_number)] OF [uppertext(current_suit)] YOUR CARD?"
 	..()
 
 /spell/targeted/card/cast(list/targets, mob/user)
