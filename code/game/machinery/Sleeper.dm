@@ -593,7 +593,20 @@
 	if(!emagged && occupant.reagents.get_reagent_amount(chemical) + amount > 20)
 		to_chat(user, "<span class='warning'>Overdose Prevention System: The occupant already has enough [available_options[chemical]] in their system.</span>")
 		return
-	occupant.reagents.add_reagent(chemical, amount)
+
+	//Handle Locutogen messaging, otherwise, inject the chemical
+	if(chemical == LOCUTOGEN)
+		var/reason = stripped_input(usr,"Please encode your message.","Locutogen Autoencoder","",REASON_LEN)
+		if(!reason)
+			return
+		occupant.reagents.add_reagent(chemical, amount)
+		var/datum/reagent/temp_hearer/D = occupant.reagents.get_reagent(LOCUTOGEN)
+		playsound(occupant, 'sound/effects/bubbles.ogg', 20, -3)
+		D.set_phrase(sanitize(reason))
+	else
+		occupant.reagents.add_reagent(chemical, amount)
+
+	//Advertising. Thanks, Dan!
 	if(advertising && !ad_cooldown)
 		say(pick(ad_list))
 		ad_cooldown = TRUE

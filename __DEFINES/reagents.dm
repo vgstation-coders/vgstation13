@@ -249,7 +249,7 @@
 #define BLUECURACAO "bluecuracao"
 #define TRIPLESEC		"triplesec"
 #define BITTERS 		"bitters"
-#define CHAMPARI 		"champari"
+#define CHUMPARI 		"chumpari"
 #define SCHNAPPS		"schnapps"
 #define ALE 			"ale"
 #define THIRTEENLOKO 			"thirteenloko"
@@ -475,6 +475,7 @@
 #define MIDAZOLINE		"midazoline"
 #define LOCUTOGEN		"locutogen"
 #define BUMCIVILIAN		"bumcivilian"
+#define MAHKOEXPITOL		"mahkoexpitol"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"

@@ -7452,15 +7452,15 @@ var/procizine_tolerance = 0
 	glass_icon_state = "bittersglass"
 	glass_desc = "A glass of dark and, well, bitter, bitters."
 
-/datum/reagent/ethanol/drink/champari
-	name = "Champari"
-	id = CHAMPARI
+/datum/reagent/ethanol/drink/chumpari
+	name = "Chumpari"
+	id = CHUMPARI
 	description = "Drinking this nasty mix will probably make you vomit."
 	color = "#DD0000" //rgb: 54, 20, 18
 	glass_icon_state = "dragonsspit"
 	glass_desc = "A glass of the worst thing to come out of Italy."
 
-/datum/reagent/ethanol/drink/champari/on_mob_life(var/mob/living/M)
+/datum/reagent/ethanol/drink/chumpari/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	if(ishuman(M) && prob(5))
@@ -10147,3 +10147,17 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	specheatcap = 0.45
 	density = 7.874
 	var/mute_duration = 300 //30 seconds
+
+/datum/reagent/mahkoexpitol
+	name = "Mahkoexpitol"
+	id = MAHKOEXPITOL
+	description = "An unusual chemical that annihilates other chemicals on contact."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#808080" //rgb: 128, 128, 128
+	specheatcap = 1.23
+	density = 0.968
+
+/datum/reagent/mahkoexpitol/on_introduced(var/data)
+	..()
+	playsound(holder, "sound/effects/bubbles.ogg", 75, 1)
+	holder.clear_reagents()

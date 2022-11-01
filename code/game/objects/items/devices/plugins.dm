@@ -26,10 +26,27 @@
 
 /obj/item/device/plugin/sleeper/ntbasic
 	name = "Nanotrasen Simple Sleeper Upgrade Module"
-	t1chems = list(COPPER = "Copper")
+	t1chems = list(
+		MANNITOL = "Mannitol",
+		PICCOLYN = "Piccolyn",
+		SPRINKLES = "Sprinkles",
+		)
+	t2chems = list(
+		ANTI_TOXIN = "Dylovene"
+		)
+	t3chems = list(
+		MEDCOFFEE = "Lifeline",
+		LOCUTOGEN = "Locutogen"
+		)
 
 /obj/item/device/plugin/sleeper/ntresearch
 	name = "Nanotrasen Experimental Sleeper Upgrade Module"
+	t3chems = list(
+		MAHKOEXPITOL = "Mahkoexpitol"
+		)
+	//t1chems = MEDCOFFEE,
+	//t2 = METRAZENE (dex+)
+	//t3 = MORATHIAL (internal wound healing like bicard overdose)
 
 /obj/item/device/plugin/sleeper/dan
 	name = "Discount Dan's Discount Nutrition Injectors"
@@ -64,6 +81,7 @@
 	desc = "A strange object. It has an image of what looks like a sleeper on it."
 	override_chems = TRUE
 	override_crit = TRUE
+	mech_flags = MECH_SCAN_FAIL
 	t1chems = list(SIMPOLINOL = "Simpolinol")
 
 /obj/item/device/plugin/sleeper/clown
@@ -98,6 +116,6 @@
 		)
 	t3chems = list(
 		//watch out this is literal garbage
-		CHAMPARI = "Champari"
+		CHUMPARI = "Chumpari"
 		)
 
