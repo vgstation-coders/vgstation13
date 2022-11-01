@@ -12,13 +12,15 @@
 	compatible_mobs = list(/mob/living/carbon/human)
 	level_max = list(Sp_TOTAL = 0, Sp_SPEED = 0, Sp_POWER = 0) //You can't quicken this, this would be kind of useless
 	hud_state = "card_trick"
+	var/current_suit
+	var/current_number
 	var/current_card
-	var/list/card_type = list("Hearts", "Spades", "Clubs", "Diamonds")
-	var/list/card_number = list("2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace")
 
 /spell/targeted/card/before_cast(list/targets, user)
 	. = ..()
-	current_card = "[pick(card_number)] of [pick(card_type)]"
+	current_suit = pick(card_suits)
+	current_number = pick(ACE_CARD,KING_CARD)
+	current_card = "[current_number] of [current_suit]"
 
 /spell/targeted/card/invocation(mob/user, list/targets)
 	invocation = "IS THE [uppertext(current_card)] YOUR CARD?"
@@ -29,9 +31,9 @@
 	for(var/mob/living/carbon/human/H in targets)
 		for(var/obj/item/weapon/storage/S in recursive_type_check(H, /obj/item/weapon/storage))
 			while(!S.is_full())
-				new /obj/item/toy/singlecard/unflipped(S, newcardname = "[current_card]")
+				new /obj/item/toy/singlecard/unflipped(S, cardnum = current_number, cardsuit = current_suit)
 		if(!H.get_item_by_slot(slot_l_store))
-			H.l_store = new /obj/item/toy/singlecard/unflipped(newcardname = "[current_card]")
+			H.l_store = new /obj/item/toy/singlecard/unflipped(cardnum = current_number, cardsuit = current_suit)
 		if(!H.get_item_by_slot(slot_r_store))
-			H.r_store = new /obj/item/toy/singlecard/unflipped(newcardname = "[current_card]")
+			H.r_store = new /obj/item/toy/singlecard/unflipped(cardnum = current_number, cardsuit = current_suit)
 		H.update_inv_pockets(0)
