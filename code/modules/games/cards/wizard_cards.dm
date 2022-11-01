@@ -293,7 +293,7 @@ var/global/list/wizard_cards_normal = list(
 		var/newcard = new card(src)
 		cards += newcard
 
-/obj/item/toy/cards/wizard/draw_with_luck(user)
+/obj/item/toy/cards/wizard/draw_with_luck(mob/user)
 	. = 1
 	for(var/obj/item/toy/singlecard/card in cards)
 		if(istype(card,/obj/item/toy/singlecard/wizard/legendary))
