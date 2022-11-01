@@ -465,6 +465,59 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 //////CLOTHING//////
 
+/datum/supply_packs/disguisekit
+	name = "Disguise kit"
+	var/list/engineer = list(
+		/obj/item/clothing/under/rank/engineer,
+		/obj/item/weapon/storage/backpack/industrial,
+		/obj/item/clothing/shoes/workboots,
+		/obj/item/clothing/gloves/black,
+		/obj/item/device/radio/headset/headset_eng,
+		/obj/item/clothing/suit/storage/hazardvest,
+		/obj/item/clothing/mask/gas,
+	)
+	var/scientist = list(/obj/item/clothing/under/rank/scientist,
+		/obj/item/weapon/storage/backpack/satchel_tox,
+		/obj/item/clothing/suit/storage/labcoat/science,
+		/obj/item/clothing/shoes/white,
+		/obj/item/device/radio/headset/headset_sci,
+		/obj/item/clothing/mask/gas,
+	)
+	var/atmos = list(/obj/item/clothing/under/rank/atmospheric_technician,
+		/obj/item/weapon/storage/backpack/industrial,
+		/obj/item/clothing/shoes/workboots,
+		/obj/item/clothing/gloves/black,
+		/obj/item/device/radio/headset/headset_eng,
+		/obj/item/clothing/suit/storage/hazardvest,
+		/obj/item/clothing/mask/gas,
+	)
+	var/doctor = list(/obj/item/clothing/under/rank/medical,
+		/obj/item/weapon/storage/backpack/medic,
+		/obj/item/clothing/shoes/white,
+		/obj/item/device/radio/headset/headset_med,
+		/obj/item/clothing/mask/surgical,
+		/obj/item/weapon/storage/belt/medical,
+		/obj/item/clothing/glasses/hud/health,
+		/obj/item/clothing/gloves/latex,
+	)
+	var/janitor = list(/obj/item/clothing/under/rank/janitor,
+		/obj/item/weapon/storage/backpack,
+		/obj/item/clothing/shoes/galoshes,
+		/obj/item/clothing/gloves/black,
+		/obj/item/clothing/suit/apron/overalls,
+		/obj/item/weapon/storage/belt/janitor,
+		/obj/item/clothing/head/soft/purple)
+	contains = list(/obj/item/weapon/hair_dye,
+					/obj/item/weapon/pocket_mirror)
+	cost = 40
+	containertype = /obj/structure/closet/basic
+	containername = "formalwear crate"
+	group = "Clothing"
+	hidden = 1
+	
+/datum/supply_packs/disguisekit/New()
+	selection_from = list(engineer, scientist, atmos, doctor, janitor)
+
 /datum/supply_packs/costume
 	name = "Standard costumes"
 	contains = list(/obj/item/weapon/storage/backpack/clown,
@@ -757,6 +810,45 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "plasmaman suit crate"
 	group = "Clothing"
 
+/datum/supply_packs/amogus
+	name = "Theatric Space Suits"
+	var/list/colored = list(
+		/obj/item/clothing/head/helmet/space,
+		/obj/item/clothing/suit/space,
+		/obj/item/clothing/head/helmet/space/syndicate,
+		/obj/item/clothing/suit/space/syndicate,
+		/obj/item/clothing/head/helmet/space/syndicate/green,
+		/obj/item/clothing/suit/space/syndicate/green,
+		/obj/item/clothing/head/helmet/space/syndicate/green/dark,
+		/obj/item/clothing/suit/space/syndicate/green/dark,
+		/obj/item/clothing/head/helmet/space/syndicate/orange,
+		/obj/item/clothing/suit/space/syndicate/orange,
+		/obj/item/clothing/head/helmet/space/syndicate/blue,
+		/obj/item/clothing/suit/space/syndicate/blue,
+	)
+	var/black = list(/obj/item/clothing/head/helmet/space/syndicate/black,
+					/obj/item/clothing/suit/space/syndicate/black,
+					/obj/item/clothing/head/helmet/space/syndicate/black/green,
+					/obj/item/clothing/suit/space/syndicate/black/green,
+					/obj/item/clothing/head/helmet/space/syndicate/black/blue,
+					/obj/item/clothing/suit/space/syndicate/black/blue,
+					/obj/item/clothing/head/helmet/space/syndicate/black/med,
+					/obj/item/clothing/suit/space/syndicate/black/med,
+					/obj/item/clothing/head/helmet/space/syndicate/black/orange,
+					/obj/item/clothing/suit/space/syndicate/black/orange,
+					/obj/item/clothing/head/helmet/space/syndicate/black/red,
+					/obj/item/clothing/suit/space/syndicate/black/red,
+					/obj/item/clothing/head/helmet/space/syndicate/black/engie,
+					/obj/item/clothing/suit/space/syndicate/black/engie)
+	cost = 300
+	containertype = /obj/structure/closet/crate/radiation
+	containername = "theatrical space suit crate"
+	group = "Clothing"
+	hidden = 1
+	
+/datum/supply_packs/amogus/New()
+	selection_from = list(colored, black)
+
 /datum/supply_packs/grey_supply
 	name = "Grey Space-Ex"
 	var/list/basic = list(
@@ -997,6 +1089,82 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "special ops crate"
 	group = "Security"
 	hidden = 1
+	
+/datum/supply_packs/holdout
+	name = "Holdout supplies"
+	var/list/uzi = list(/obj/item/weapon/gun/projectile/automatic/uzi,
+					/obj/item/ammo_storage/magazine/uzi45,
+	)
+	var/biguzi = list(/obj/item/weapon/gun/projectile/automatic/uzi/bigmag,
+					/obj/item/ammo_storage/magazine/uzi45/extended,
+	)
+	var/microuzi = list(/obj/item/weapon/gun/projectile/automatic/microuzi,
+					/obj/item/ammo_storage/magazine/microuzi9,
+	)
+	var/silentmicrouzi = list(/obj/item/weapon/gun/projectile/automatic/microuzi,
+					/obj/item/gun_part/silencer,
+					/obj/item/ammo_storage/magazine/microuzi9,
+	)
+	var/stechkin = list(/obj/item/weapon/gun/projectile/pistol,
+					/obj/item/ammo_storage/magazine/mc9mm,
+	)
+	var/silentstechkin = list(/obj/item/weapon/gun/projectile/pistol,
+					/obj/item/gun_part/silencer,
+					/obj/item/ammo_storage/magazine/mc9mm,
+	)
+	var/luger = list(/obj/item/weapon/gun/projectile/luger,
+					/obj/item/ammo_storage/magazine/mc9mm,
+	)
+	var/smallluger = list(/obj/item/weapon/gun/projectile/luger/small,
+					/obj/item/ammo_storage/magazine/mc9mm,
+	)
+	var/colt = list(/obj/item/weapon/gun/projectile/colt,
+					/obj/item/ammo_storage/speedloader/a357,
+	)
+	var/eagle = list(/obj/item/weapon/gun/projectile/deagle,
+					/obj/item/ammo_storage/magazine/a50,
+	)
+	var/goldeagle = list(/obj/item/weapon/gun/projectile/deagle/gold,
+					/obj/item/ammo_storage/magazine/a50,
+	)
+	var/camoeagle = list(/obj/item/weapon/gun/projectile/deagle/camo,
+					/obj/item/ammo_storage/magazine/a50,
+	)
+	var/gyrojet = list(/obj/item/weapon/gun/projectile/gyropistol,
+					/obj/item/ammo_storage/magazine/a75,
+	)
+	var/beretta = list(/obj/item/weapon/gun/projectile/beretta,
+					/obj/item/ammo_storage/magazine/beretta,
+	)
+	var/silentpistol = list(/obj/item/weapon/gun/projectile/silenced,
+					/obj/item/ammo_storage/magazine/c45,
+	)
+	var/revolver = list(/obj/item/weapon/gun/projectile/revolver,
+					/obj/item/ammo_storage/speedloader/a357,
+	)
+	var/mateba = list(/obj/item/weapon/gun/projectile/mateba,
+					/obj/item/ammo_storage/speedloader/a357,
+	)
+	var/nagant = list(/obj/item/weapon/gun/projectile/nagant,
+					/obj/item/ammo_storage/speedloader/a762x55,
+	)
+	var/silentnagant = list(/obj/item/weapon/gun/projectile/nagant,
+					/obj/item/gun_part/silencer,
+					/obj/item/ammo_storage/speedloader/a762x55,
+	)
+	contains = list(/obj/item/clothing/accessory/holster/handgun,
+					/obj/item/clothing/accessory/storage/brown_vest,
+					/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical,
+					/obj/item/clothing/accessory/holomap_chip,
+	)
+	cost = 300
+	containertype = /obj/structure/closet/crate/basic
+	containername = "holdout equipment crate"
+	group = "Security"
+	hidden = 1
+	
+/datum/supply_packs/holdout/New()
+	selection_from = list(uzi, biguzi, microuzi, silentmicrouzi, stechkin, silentstechkin, luger, smallluger, colt, eagle, goldeagle, camoeagle, gyrojet, beretta, silentpistol, revolver, mateba, nagant, silentnagant)
 
 /datum/supply_packs/randomised/russianguns
 	name = "Russian weapons"
@@ -1929,6 +2097,53 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 
 //////CARGO//////
+
+/datum/supply_packs/cargobundle
+	name = "Lesser Syndicate bundle"
+	var/list/poisons = list(/obj/item/weapon/reagent_containers/glass/bottle/cyanide,
+					/obj/item/weapon/reagent_containers/glass/bottle/stoxin,
+					/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+					/obj/item/weapon/reagent_containers/glass/bottle/mutagen,
+					/obj/item/weapon/reagent_containers/glass/bottle/mindbreaker,
+					/obj/item/weapon/reagent_containers/dropper,
+					/obj/item/weapon/reagent_containers/glass/beaker,
+					/obj/item/weapon/reagent_containers/syringe)
+	var/exploder = list(/obj/item/clothing/accessory/storage/bandolier/chaos)
+	var/rocketlauncher = list(/obj/item/weapon/gun/projectile/rocketlauncher,
+					/obj/item/ammo_casing/rocket_rpg)
+	var/luber = list(/obj/item/weapon/reagent_containers/spray/rev,
+					/obj/item/weapon/reagent_containers/spray/antilube)
+	var/martyrdom = list(/obj/item/clothing/suit/bomber_vest)
+	var/machineglock = list(/obj/item/weapon/gun/projectile/glock,
+					/obj/item/gun_part/glock_auto_conversion_kit,
+					/obj/item/gun_part/universal_magwell_expansion_kit,
+					/obj/item/ammo_storage/magazine/m380auto/extended)
+	var/fakenews = list(/obj/item/device/reportintercom,
+					/obj/item/device/reportintercom,
+					/obj/item/device/reportintercom)
+	var/neighborhoodsniper = list(/obj/item/clothing/glasses/thermal/syndi,
+					/obj/item/binoculars,
+					/obj/item/weapon/gun/projectile/mosin,
+					/obj/item/ammo_storage/box/b762x55)
+	var/radcell = list(/obj/item/weapon/cell/rad,
+					/obj/item/weapon/cell/rad,
+					/obj/item/weapon/cell/rad,
+					/obj/item/weapon/cell/rad)
+	var/wiretap = list(/obj/item/device/encryptionkey/syndicate/hacked,
+					/obj/item/device/encryptionkey/binary)
+	var/forbiddengum = list(/obj/item/gum/explosive,
+					/obj/item/gum/explosive,
+					/obj/item/gum/explosive)
+	var/pocketsat = list(/obj/item/weapon/grenade/station)
+	var/adrenals = list(/obj/item/weapon/implanter/adrenalin)
+	cost = 750
+	containertype = /obj/structure/closet/crate/basic
+	containername = "mining equipment crate"
+	group = "Cargo"
+	hidden = 1
+	
+/datum/supply_packs/cargobundle/New()
+	selection_from = list(poisons, exploder, rocketlauncher, luber, martyrdom, machineglock, fakenews, neighborhoodsniper, radcell, wiretap, forbiddengum, pocketsat, adrenals)
 
 /datum/supply_packs/mule
 	name = "MULEbot"

@@ -711,3 +711,12 @@ var/datum/disease2/disease/wizarditis = null
 /obj/item/weapon/reagent_containers/glass/bottle/carppheromones/New()
 	..()
 	reagents.add_reagent(CARPPHEROMONES, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/mindbreaker
+	name = "Mindbreaker Toxin Bottle"
+	desc = "A bottle filled with a strangely low-viscosity fluid. A small decal shows a starburst symbol."
+	icon = 'icons/obj/chemical.dmi'
+	
+/obj/item/weapon/reagent_containers/glass/bottle/mindbreaker/New()
+	..()
+	reagents.add_reagent(MINDBREAKER, 30)
