@@ -10,7 +10,7 @@
 
 var/static/list/une_suits = list("Red" = REDCARD,"Yellow" = YELLOWCARD,"Green" = GREENCARD,"Blue" = BLUECARD)
 var/static/list/other_une_suits = list("Wild" = "wild","Draw 4" = "draw4")
-var/static/list/specialunecards2icon = list(UNE_SKIP = "skip",UNE_REVERSE = "reverse",UNE_DRAW2 = "draw2")
+var/static/list/specialunecards2icon = list("skip","reverse","draw2")
 
 /obj/item/toy/cards/une
 	name = "deck of une cards"
@@ -29,7 +29,7 @@ var/static/list/specialunecards2icon = list(UNE_SKIP = "skip",UNE_REVERSE = "rev
 	for(var/suit in une_suits)
 		for(var/j in 1 to 2)
 			for(var/i in UNE_SKIP to UNE_DRAW2)
-				cards += new/obj/item/toy/singlecard/une(src, src, i, suit, specialunecards2icon[i], une_suits[suit])
+				cards += new/obj/item/toy/singlecard/une(src, src, i, suit, specialunecards2icon[i-9], une_suits[suit])
 
 
 /obj/item/toy/singlecard/une

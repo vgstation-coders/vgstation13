@@ -92,7 +92,56 @@ var/static/list/cardcombos2name = list("high card","pair","two pair","three of a
 		icon_state = "deck_empty"
 		to_chat(user, "<span class='notice'>There are no more cards to draw.</span>")
 		return
-	choice = cards[1]
+	var/draw_index = 1
+	if(user?.lucky_prob(1/cards.len,1/10,20,user?.luck()))
+		var/obj/item/toy/cardhand/CH = user.get_inactive_hand()
+		if(istype(CH))
+			var/num2get = 0
+			var/suit2get = 0
+			var/list/nums = list()
+			var/list/suits = list()
+			for(var/obj/item/toy/singlecard/card in CH.currenthand)
+				if(!istype(card,/obj/item/toy/singlecard/une) && !istype(card,/obj/item/toy/singlecard/wizard))
+					nums += "[card.number]"
+					suits += card.suit
+			var/obj/item/toy/cardhand/OH
+			for(var/obj/item/toy/cardhand/otherhand in adjacent_atoms(src))
+				if(otherhand != src)
+					OH = otherhand
+					break
+			switch(CH.get_texas_holdem_combo(OH))
+				if(THREE_KIND)
+					if(user?.lucky_prob(50,1/10,40,user?.luck()))
+						for(var/number in nums)
+							if(count_by_name(nums,number) == 3)
+								num2get = text2num(number) // make it four of a kind
+					else
+						for(var/number in nums)
+							if(count_by_name(nums,number) == 2)
+								num2get = text2num(number) // make it a full house
+				if(TWO_PAIR)
+					for(var/number in nums)
+						if(count_by_name(nums,number) >= 2)
+							num2get = text2num(number) // make it a full house
+				if(PAIR)
+					for(var/number in nums)
+						if(count_by_name(nums,number) >= 2)
+							num2get = text2num(number) // make it a three of a kind
+				else
+					if(user?.lucky_prob(50,1/10,40,user?.luck()))
+						if(user?.lucky_prob(50,1/10,40,user?.luck()))
+							suit2get = pick(suits) // attempt at a flush
+						num2get = text2num(pick(nums))+1 // attempt at a straight
+						if(num2get > KING_CARD)
+							num2get = ACE_CARD // helps with royal flushes
+					else
+						num2get = text2num(pick(nums)) // just a pair
+			for(var/obj/item/toy/singlecard/card in cards)
+				if((!num2get || card.number == num2get) && (!suit2get || card.suit == suit2get))
+					break
+				draw_index++
+
+	choice = cards[draw_index]
 	cards -= choice
 	user.put_in_active_hand(choice)
 	user.visible_message("<span class='notice'>[user] draws a card from the deck.</span>",
@@ -274,12 +323,12 @@ var/static/list/cardcombos2name = list("high card","pair","two pair","three of a
 			card.pixel_x = i * (CARD_DISPLACE - currenthand.len) - CARD_DISPLACE
 			overlays += card
 
-/obj/item/toy/cardhand/dropped(mob/user)
+/*/obj/item/toy/cardhand/dropped(mob/user) // use for testing
 	for(var/obj/item/toy/cardhand/otherhand in adjacent_atoms(src))
 		if(otherhand != src)
 			var/ourcombo = get_texas_holdem_combo(otherhand)
 			var/result = "\a [cardcombos2name[ourcombo]][ourcombo == HIGH_CARD ? " of [cardnumber2name(get_high_card(otherhand))]" : ""]."
-			user.visible_message("<span class = 'notice'>[user] has [result]</span>","<span class = 'notice'>You have [result]</span>")
+			user.visible_message("<span class = 'notice'>[user] has [result]</span>","<span class = 'notice'>You have [result]</span>")*/
 
 /obj/item/toy/cardhand/proc/get_texas_holdem_combo(var/obj/item/toy/cardhand/otherhand)
 	var/list/nums = list()
@@ -383,9 +432,9 @@ var/static/list/cardcombos2name = list("high card","pair","two pair","three of a
 		suit = cardsuit
 	if(!number)
 		switch(suit)
-			if("Spades" || "Clubs")
+			if("Spades", "Clubs")
 				suit = "Black"
-			if("Hearts" || "Diamonds")
+			if("Hearts", "Diamonds")
 				suit = "Red"
 	cardname = number ? "[cardnumber2name(number)] of [suit]" : "[suit] [cardnumber2name(number)]"
 	name = cardname
