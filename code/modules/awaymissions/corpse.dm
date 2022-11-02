@@ -71,6 +71,8 @@
 	M.adjustFireLoss(burn_dmg)
 	M.adjustToxLoss(toxin_dmg)
 
+	updatehealth()
+
 	M.iscorpse = 1
 
 	M.pixel_x = src.pixel_x
