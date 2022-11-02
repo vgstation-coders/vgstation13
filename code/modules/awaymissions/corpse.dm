@@ -71,12 +71,15 @@
 	M.adjustFireLoss(burn_dmg)
 	M.adjustToxLoss(toxin_dmg)
 
-	M.updatehealth()
-
 	M.iscorpse = 1
 
 	M.pixel_x = src.pixel_x
 	M.pixel_y = src.pixel_y
+
+	M.lying = 1
+	M.updatehealth()
+	M.regenerate_icons()
+	M.update_transform()
 
 	if(generate_random_appearance)
 		M.dna.ResetSE()
