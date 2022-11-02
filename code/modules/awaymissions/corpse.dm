@@ -71,7 +71,7 @@
 	M.adjustFireLoss(burn_dmg)
 	M.adjustToxLoss(toxin_dmg)
 
-	updatehealth()
+	M.updatehealth()
 
 	M.iscorpse = 1
 
