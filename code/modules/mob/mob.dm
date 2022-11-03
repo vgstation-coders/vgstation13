@@ -651,9 +651,6 @@ Use this proc preferably at the end of an equipment loadout
 	if(!istype(W))
 		return 0
 
-	for(var/obj/item/I in held_items)
-		if(I.can_quick_store(W))
-			return I.quick_store(W,src)
 	var/list/backup_slots = list()
 	for(var/slot in slot_equipment_priority)
 		if(!is_holding_item(W) && !override)
@@ -668,6 +665,9 @@ Use this proc preferably at the end of an equipment loadout
 	for(var/slot in backup_slots)
 		if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 0)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
 			return 1
+	for(var/obj/item/I in held_items)
+		if(I.can_quick_store(W))
+			return I.quick_store(W,src)
 
 	return 0
 
