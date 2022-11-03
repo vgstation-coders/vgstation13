@@ -50,7 +50,6 @@
 	if(Hs.len)
 		for(var/obj/item/weapon/storage/backpack/holding/H in Hs)
 			qdel(H)
-	qdel(H)
 	qdel(src)
 	var/datum/zLevel/ourzLevel = map.zLevels[user.z]
 	if(ourzLevel.bluespace_jammed && !is_on_shuttle(usr))
