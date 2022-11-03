@@ -31,14 +31,13 @@
 
 /obj/item/weapon/storage/backpack/holding/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	. = ..()
-	if(!.)
-		return
 	if(W == src)
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
-	if(istype(W, /obj/item/weapon/storage/backpack/holding/grinch))
+	var/list/grinch_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding/grinch)
+	if(grinch_list.len)
 		return
-	var/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
-	if(length(recursive_list) > 0) // Placing a bag of holding into another will singuloose when stored inside other objects too, such as when on your back or on a diona's back and stuffed in
+	var/list/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
+	if(recursive_list.len) // Placing a bag of holding into another will singuloose when stored inside other objects too, such as when on your back or on a diona's back and stuffed in
 		singulocreate(recursive_list[1], user)
 		return
 
