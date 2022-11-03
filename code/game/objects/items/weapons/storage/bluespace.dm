@@ -37,16 +37,19 @@
 		return
 	var/list/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
 	if(recursive_list.len) // Placing a bag of holding into another will singuloose when stored inside other objects too, such as when on your back or on a diona's back and stuffed in
-		singulocreate(recursive_list[1], user)
+		singulocreate(recursive_list, user)
 		return
 
 //BoH+BoH=Singularity, WAS commented out
-/obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)
+/obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/list/obj/item/weapon/storage/backpack/holding/Hs, var/mob/user)
 	user.Knockdown(10)
 	user.Stun(10)
 	to_chat(user, "<span class = 'danger'>The Bluespace interfaces of the two devices catastrophically malfunction, throwing you to the ground in the process!</span>")
 	to_chat(user, "<span class='danger'>FUCK!</span>")
 	var/turf/T = get_turf(src)
+	if(Hs.len)
+		for(var/obj/item/weapon/storage/backpack/holding/H in Hs)
+			qdel(H)
 	qdel(H)
 	qdel(src)
 	var/datum/zLevel/ourzLevel = map.zLevels[user.z]
