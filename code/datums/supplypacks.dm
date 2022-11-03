@@ -1393,7 +1393,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/polyp,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken)
+					/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "Premium meats crate"
