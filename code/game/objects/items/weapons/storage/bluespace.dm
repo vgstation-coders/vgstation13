@@ -47,7 +47,7 @@
 	to_chat(user, "<span class = 'danger'>The Bluespace interfaces of the two devices catastrophically malfunction, throwing you to the ground in the process!</span>")
 	to_chat(user, "<span class='danger'>FUCK!</span>")
 	var/turf/T = get_turf(src)
-	if(Hs.len)
+	if(Hs?.len)
 		for(var/obj/item/weapon/storage/backpack/holding/H in Hs)
 			qdel(H)
 	qdel(src)
