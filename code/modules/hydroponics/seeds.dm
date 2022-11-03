@@ -44,6 +44,9 @@
 	else
 		to_chat(user, "Plant Yield: <span class='info'>[(seed.yield != -1) ? seed.yield : "<span class='warning'> ERROR</span>"]</span>")
 		to_chat(user, "Plant Potency: <span class='info'>[(seed.potency != -1) ? seed.potency : "<span class='warning'> ERROR</span>"]</span>")
+	var/mob/living/carbon/human/H = user
+	if(istype(H) && H.is_wearing_item(/obj/item/clothing/glasses/hud/hydro))
+		to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[H.glasses];scan=\ref[src]'>\[Scan\]</a>")
 
 /obj/item/seeds/random
 	seed_type = null

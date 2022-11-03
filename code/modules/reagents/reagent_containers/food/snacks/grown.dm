@@ -195,6 +195,9 @@ var/list/special_fruits = list()
 		traits += "It seems to be spatially unstable. "
 	if(traits)
 		to_chat(user, traits)
+	var/mob/living/carbon/human/H = user
+	if(istype(H) && H.is_wearing_item(/obj/item/clothing/glasses/hud/hydro))
+		to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[H.glasses];scan=\ref[src]'>\[Scan\]</a>")
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
 	var/obj/effect/decal/cleanable/S = new seed.splat_type(T)
