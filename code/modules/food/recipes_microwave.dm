@@ -3631,8 +3631,7 @@
 	reagents = list(GUNKS = 5)
 	items = list(
 		/obj/item/stack/rods,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/corndog
+	result = /obj/item/weapon/reagent_containers/food/snacks/roachesonstick
