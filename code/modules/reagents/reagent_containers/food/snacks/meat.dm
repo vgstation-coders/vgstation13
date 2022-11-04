@@ -229,6 +229,7 @@
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
+	name = "mutated cockroach meat"
 	desc = "A chunk of meat from an above-average sized cockroach."
 	icon_state = "bigroachmeat"
 
