@@ -456,7 +456,7 @@
 
 /mob/dead/observer/verb/find_arena()
 	set category = "Ghost"
-	set name = "Search For Arenas"
+	set name = "Find Arenas"
 	set desc = "Try to find an Arena to polish your robust bomb placement skills.."
 
 	if(!arenas.len)
@@ -485,7 +485,7 @@
 	set category = "Ghost"
 	set desc = "Create a bomberman arena for other observers and dead players."
 
-	if (ticker && ticker.current_state != GAME_STATE_PLAYING)
+	if (ticker && ticker.current_state < GAME_STATE_PLAYING)
 		to_chat(src, "<span class ='notice'>You can't use this verb before the game has started.</span>")
 		return
 
