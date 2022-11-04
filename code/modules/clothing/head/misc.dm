@@ -606,12 +606,12 @@
 /obj/item/clothing/head/pajamahat/red
 	icon_state = "pajamahat_red"
 	item_state = "pajamahat_red"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/pajamahat/blue
 	icon_state = "pajamahat_blue"
 	item_state = "pajamahat_blue"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/mummy_rags
 	name = "mummy rags"
