@@ -11,8 +11,8 @@
 
 #if ASTAR_DEBUG == 1
 #define log_astar_bot(text) visible_message("[src] : [text]")
-#define log_astar_beacon(text) to_chat(world, "[src] : [text]")
-#define log_astar_command(text) to_chat(world, "[src] : [text]")
+#define log_astar_beacon(text) //to_chat(world, "[src] : [text]")
+#define log_astar_command(text) //to_chat(world, "[src] : [text]")
 #else
 #define log_astar_bot(text)
 #define log_astar_beacon(text)
@@ -74,7 +74,7 @@
 
 	var/summoned = FALSE // Were they summoned?
 
-	var/commanding_radio = /obj/item/radio/integrated/signal/bot
+	var/commanding_radios = list(/obj/item/radio/integrated/signal/bot)
 
 	// Queue of directions. Just like shift-clicking on age of empires 2. It'll go to the next direction after it's finished with this one
 	// It's a list of lists. These lists are coordinates
@@ -364,10 +364,11 @@
 // However, it just says, "i'm a bot looking for a beacon named [new_dest]"
 // Only [new_dest], if it exist, replies with its location.
 /obj/machinery/bot/proc/set_destination(var/new_dest)
-	log_astar_beacon("new_destination [new_dest]")
-	new_destination = new_dest
-	post_signal(beacon_freq, "findbeacon", "patrol")
-	awaiting_beacon = 1
+	if (new_dest)
+		log_astar_beacon("new_destination [new_dest]")
+		new_destination = new_dest
+		post_signal(beacon_freq, "findbeacon", "patrol")
+		awaiting_beacon = 1
 
 // Proc called when we reached our patrol destination.
 // Normal behaviour is to null the current target and find a new one.
@@ -478,8 +479,8 @@
 // -- Recieved an order via signal. This proc assumes the bot is the correct one to get the command.
 /obj/machinery/bot/proc/execute_signal_command(var/datum/signal/signal, var/command)
 	log_astar_command("recieved command [command]")
-	if (!istype(signal.source, commanding_radio))
-		log_astar_command("refused command [command], wrong radio type")
+	if (!is_type_in_list(signal.source, commanding_radios))
+		log_astar_command("refused command [command], wrong radio type. Expected [english_list(commanding_radios, and_text = " or ")] got [signal.source.type]")
 		return TRUE
 	switch (command)
 		if ("auto_patrol")
@@ -548,7 +549,7 @@
 /obj/machinery/bot/proc/calc_path(var/target, var/callback, var/turf/avoid = null)
 	ASSERT(target && callback)
 	var/cardinal_proc = bot_flags & BOT_SPACEWORTHY ? /turf/proc/AdjacentTurfsSpace : /turf/proc/CardinalTurfsWithAccess
-	if ((get_dist(src, target) < 13) && !(bot_flags & BOT_NOT_CHASING)) // For beepers and ED209
+	if (((get_dist(src, target) < 13) && !(bot_flags & BOT_NOT_CHASING)) || (get_dist(src, target) < 6)) // For beepers and ED209
 		// IMPORTANT: Quick AStar only takes TURFS as arguments.
 		log_astar_bot("quick astar path calculation...")
 		path = quick_AStar(src.loc, get_turf(target), cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
