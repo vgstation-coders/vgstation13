@@ -4,7 +4,7 @@
 	density = 1
 	anchored = 0
 	name = "computer frame"
-	desc = "A metal frame ready to recieve a circuit board, wires and a glass panel."
+	desc = "A metal frame ready to receive a circuit board, wires and a glass panel."
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "0"
 	var/state = 0
@@ -513,7 +513,10 @@
 					to_chat(user, "<span class='warning'>You connect the monitor, but nothing turns on!</span>")
 					return
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
-				var/B = new src.circuit.build_path ( src.loc )
+				var/buildpath = src.circuit.build_path
+				if(arcanetampered || circuit.arcanetampered)
+					buildpath = pick(subtypesof(/obj/machinery/computer/fluff))
+				var/B = new buildpath ( src.loc )
 				if(circuit.powernet)
 					B:powernet = circuit.powernet
 				if(circuit.id_tag)

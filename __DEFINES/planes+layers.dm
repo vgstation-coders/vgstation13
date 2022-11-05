@@ -213,6 +213,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 #define FAKE_CAMERA_PLANE		(13)
 
 #define LIGHTING_PLANE 			(14)	// Don't put anything other than lighting_overlays in there please
+	#define SELF_VISION_LAYER 		   -1
 	#define LIGHTING_LAYER 				0
 
 #define ABOVE_LIGHTING_PLANE	(15)
@@ -338,6 +339,17 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy
 
+// OVERDARKNESS PLANEMASTER
+// Used to apply darkness over lights that the player isn't supposed to see when the lighting master is set to BLEND_ADD
+/obj/abstract/screen/plane_master/overdark_planemaster
+	plane = 0
+
+/obj/abstract/screen/plane_master/overdark_planemaster_target
+	appearance_flags = 0
+	plane = LIGHTING_PLANE
+	blend_mode = BLEND_ADD
+	mouse_opacity = 0
+	screen_loc = "CENTER,CENTER"
 
 // DARKNESS PLANEMASTER
 // One planemaster for each client, which they gain during mob/login()

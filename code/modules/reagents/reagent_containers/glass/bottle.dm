@@ -16,8 +16,9 @@
 	melt_temperature = MELTPOINT_GLASS
 	origin_tech = Tc_MATERIALS + "=1"
 
-/obj/item/weapon/reagent_containers/glass/bottle/New(loc,altvol=30)
-	volume = altvol
+/obj/item/weapon/reagent_containers/glass/bottle/New(loc,altvol)
+	if(altvol)
+		volume = altvol
 	..(loc)
 
 //JUST
@@ -606,6 +607,27 @@ var/datum/disease2/disease/wizarditis = null
 /obj/item/weapon/reagent_containers/glass/bottle/bleach/New()
 	..()
 	reagents.add_reagent(BLEACH, 100)
+
+/obj/item/weapon/reagent_containers/glass/bottle/pcp
+	name = "Gallon of PCP"
+	desc = "You had no idea it even came in liquid form."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "pcpjug"
+	starting_materials = list(MAT_PLASTIC = 1000)
+	w_type = RECYK_PLASTIC
+	melt_temperature = MELTPOINT_PLASTIC
+	volume = 100
+
+/obj/item/weapon/reagent_containers/glass/bottle/pcp/update_icon()
+	overlays.len = 0
+
+	if(!is_open_container())
+		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
+		overlays += lid
+
+/obj/item/weapon/reagent_containers/glass/bottle/pcp/New()
+	..()
+	reagents.add_reagent(LIQUIDPCP, 100)
 
 /obj/item/weapon/reagent_containers/glass/bottle/eznutrient
 	name = "E-Z-Nutrient Bottle"

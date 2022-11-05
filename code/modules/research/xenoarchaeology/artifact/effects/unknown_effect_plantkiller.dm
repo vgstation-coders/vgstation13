@@ -12,7 +12,7 @@
 					H.add_waterlevel(-5)
 					H.add_nutrientlevel(-10)
 				if(2)
-					H.weed_coefficient++
+					H.weed_coefficient += WEEDLEVEL_MAX / 10
 					H.add_weedlevel(10)
 				if(3)
 					H.age++
@@ -28,7 +28,7 @@
 				if(2)
 					H.add_toxinlevel(rand(1,50))
 				if(3)
-					H.weed_coefficient++
+					H.weed_coefficient += WEEDLEVEL_MAX / 10
 					H.add_weedlevel(10)
 					H.add_pestlevel(10)
 					if(prob(5))

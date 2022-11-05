@@ -43,6 +43,8 @@
 	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
 	var/spawncount=0												//how many eggs laid by this grue have successfully hatched
 
+	var/number = 1 //Appends a number to the grue to keep it distinguishable, the compiler doesn't play nicely with putting rand(1, 1000) here so it goes in New()
+
 	var/busy=FALSE //busy attempting to lay an egg or eat
 
 	var/eattime= 3.5 SECONDS //how long it takes to eat someone
@@ -56,6 +58,8 @@
 	stop_automated_movement = TRUE //has custom light-related wander movement
 	wander = FALSE
 
+	var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
+	var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_target
 
 /datum/grue_calc //used for light-related calculations
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
@@ -262,8 +266,32 @@
 	..()
 	add_language(LANGUAGE_GRUE)
 	default_language = all_languages[LANGUAGE_GRUE]
+	number = rand(1, 1000)
 	init_language = default_language
 	lifestage_updates() //update the grue's sprite and stats according to the current lifestage
+
+	overdark_planemaster = new
+	overdark_planemaster.render_target = "night vision goggles (\ref[src])"
+	overdark_target = new
+	overdark_target.render_source = "night vision goggles (\ref[src])"
+
+/mob/living/simple_animal/hostile/grue/Login()
+	..()
+	//client.images += light_source_images
+	client.screen |= overdark_planemaster
+	client.screen |= overdark_target
+
+/mob/living/simple_animal/hostile/grue/UnarmedAttack(atom/A)
+	if(isturf(A))
+		var/turf/T = A
+		for(var/atom/B in T)
+			if(istype(B, /obj/machinery/light))
+				var/obj/machinery/light/L = B
+				if(!L.current_bulb || L.current_bulb.status == LIGHT_BROKEN)
+					continue
+				UnarmedAttack(B)
+	..()
+
 
 /mob/living/simple_animal/hostile/grue/proc/get_ddl(var/turf/thisturf) //get the dark_dim_light status of a given turf
 	var/thisturf_brightness=10*thisturf.get_lumcount()
@@ -348,28 +376,24 @@
 		add_spell(new /spell/aoe_turf/grue_drainlight/, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 
+	name = "[name] ([number])"
+	real_name = name
 	grue_stat_updates()
 
 //Grue vision
 /mob/living/simple_animal/hostile/grue/update_perception()
-
-	if(client)
-		if(client.darkness_planemaster)
-			client.darkness_planemaster.blend_mode = BLEND_ADD
-			client.darkness_planemaster.alpha = 255
-			client.darkness_planemaster.color = list(
-						1,0,0,0.5,
-						0,1,0,0.5,
-	 					0,0,1,0.5,
-		 				0,0,0,1,
-		 				0,0,0,1)
-
+	if(dark_plane)
+		if (master_plane)
+			master_plane.blend_mode = BLEND_ADD
+		dark_plane.alphas["grue"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
 		client.color = list(
-					1,0,0,0,
-					-1,0.2,0.2,0,
-	 				-1,0.2,0.2,0,
-		 			0,0,0,1,
-		 			0,0,0,0)
+				1,0,0,0,
+				-1,0.2,0.2,0,
+				-1,0.2,0.2,0,
+				0,0,0,1,
+				0,0,0,0)
+
+	check_dark_vision()
 
 /mob/living/simple_animal/hostile/grue/Stat()
 	..()
@@ -551,7 +575,7 @@
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
 		digest+=10 //add 10 life ticks (20 seconds) of increased healing + nutrition gain
-		
+
 		//Transfer any reagents inside the creature to the grue
 		E.reagents.trans_to(src, E.reagents.total_volume)
 
@@ -633,7 +657,7 @@
 	return FALSE
 
 /mob/living/simple_animal/hostile/grue/proc/drainlight_set()	//Set the strength of light drain.
-	set_light(7 + eatencount, -3 * eatencount, GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
+	set_light(7 + eatencount, -3 * eatencount - 3, GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
 
 //Ventcrawling and hiding, only for gruespawn
 /mob/living/simple_animal/hostile/grue/proc/ventcrawl()

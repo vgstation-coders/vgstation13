@@ -180,7 +180,10 @@
 	for(var/i in objects_to_delete)
 		objects_to_delete.Remove(i)
 		qdel(i)
-	increment_threat(rand(5,10))
+	if(H.mind.GetRole(TIMEAGENT)) //The Time Agent is successful
+		decrement_threat(25)
+	else if(H.mind.GetRole(TIMEAGENTTWIN)) //The evil twin destabilizes the timestream
+		increment_threat(25)
 
 /obj/item/device/chronocapture
 	name = "chronocapture device"
@@ -209,6 +212,16 @@
 	icon_state = "xcomlasergun"
 	ammo_type = "/obj/item/ammo_casing/a12mm"
 	caliber = list(MM12 = 1)
+	var/logo
+
+/obj/item/weapon/gun/projectile/automatic/rewind/New()
+	..()
+	logo = "<img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "time-logo"))]'/>"
+
+/obj/item/weapon/gun/projectile/automatic/rewind/examine(mob/user)
+	..()
+	if(istimeagent(user))
+		to_chat(user, "[logo] <span class='info'>This state-of-the-art rewind rifle engages its rewind mechanism only when firing, which takes between 10 and 15 seconds to finalize. When it rewinds it will end up in your possession if you held it at the time of firing.")
 
 /obj/item/weapon/gun/projectile/automatic/rewind/send_to_past(var/duration)
 	..()
@@ -232,29 +245,101 @@
 	desc = "A strange button."
 	icon_state = "jump_charge"
 	w_class = W_CLASS_SMALL
+	flags = TIMELESS
 	var/triggered = FALSE
+	var/disarmed = FALSE //If toggled on, will delete itself without respawning
+	var/times_respawned = 0 //A metric for how many times it respawned. You know, for fun.
+	var/logo
 
-/obj/item/device/jump_charge/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(istimeagent(user) && istype(target, /obj/effect/time_anomaly))
+/obj/item/device/jump_charge/examine(mob/user, size, show_name)
+	..()
+	if(istimeagent(user))
+		to_chat(user, "[logo] <span class='info'>As a time agent, you know that you need this in order to go back through the time anomaly. Its extremely advanced technology allows it to regenerate in case of destruction, and in a pinch you can use it to send anything into the future after 3 seconds.</span>")
+		if(triggered)
+			to_chat(user, "<span class='warning'>It is still recharging.</span>")
+		switch(times_respawned)
+			if(-INFINITY to -1) //Not that it would happen outside of bus shenanigans, but who knows?
+				to_chat(user, "<span class='sinister'>Somehow this device feels off, likely due to the tamperings of Bluespace Technicians.</span>")
+			if(0)
+				to_chat(user, "<span class='info'>This device is as pristine as it was in the day it was made.</span>")
+			if(1)
+				to_chat(user, "<span class='info'>This device looks a bit roughed up, likely as a result of undergoing temporal regeneration. You might want to keep it more safe.</span>")
+			if(2 to 4)
+				to_chat(user, "<span class='info'>This device has seen some better days. It has already undergone temporal regeneration several times, likely as a result of careless destruction. The Time Agency might make you go through Jump Charge Usage Orientation again...</span>")
+			if(5 to 10)
+				to_chat(user, "<span class='info'>This device is in a seriously rough shape. It has been destroyed enough times that the button feels sticky and you're worried about its internal components. At this point it is more likely that it was deliberately destroyed repeatedly rather than out of accident. The Time Agency might ask you a few questions about this.</span>")
+			if(11 to INFINITY)
+				to_chat(user, "<span class='info'>This device has been destroyed many, many times and it shows. Through sheer luck or just extremely advanced technology it still thankfully works as intended, but such damage will raise a brow or two, or three, or the entirety of the Time Agency's.</span>")
+//Behavior shamelessly stolen from nuclear disks
+
+/obj/item/device/jump_charge/New()
+	..()
+	logo = "<img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "time-logo"))]'/>"
+	processing_objects.Add(src)
+
+/obj/item/device/jump_charge/Destroy()
+	processing_objects.Remove(src)
+	replace_jump_charge()
+	..()
+
+/obj/item/device/jump_charge/Del()
+	processing_objects.Remove(src)
+	replace_jump_charge()
+	..()
+
+/obj/item/device/jump_charge/proc/replace_jump_charge()
+	if(blobstart.len > 0 && !disarmed) //Does it really have to be blobstart? Feel free to replace with a more sane "anywhere on the station" list
+		var/picked_turf = get_turf(pick(blobstart))
+		var/obj/item/device/jump_charge/J = new(picked_turf)
+		J.times_respawned = times_respawned + 1
+		disarmed = TRUE
+		qdel(src)
+
+/obj/item/device/jump_charge/process()
+	var/turf/T = get_turf(src)
+	if(!T)
+		qdel(src)
+
+/obj/item/device/jump_charge/preattack(atom/target, mob/user, proximity_flag)
+	if(!istimeagent(user)) //Non-time agents have no idea how to use this.
+		return ..()
+	. = 1
+	if(!proximity_flag)
+		return
+	if(istype(target, /obj/effect/time_anomaly))
 		var/datum/faction/time_agent/F = user.mind.GetFactionFromRole(TIMEAGENT) || user.mind.GetFactionFromRole(TIMEAGENTTWIN)
 		if(F)
 			var/datum/objective/time_agent_extract/TAE = locate() in F.objective_holder.GetObjectives()
 			if(TAE && target == TAE.anomaly)
-				to_chat(user, "<span class = 'notice'>New anomaly discovered. Welcome back, [user.real_name]. Moving to new co-ordinates.</span>")
+				var/time_agency_panic = FALSE
+				if(times_respawned > 10)
+					time_agency_panic = TRUE
+				if(user.mind.GetRole(TIMEAGENT))
+					to_chat(user, "<span class = 'notice'>New anomaly discovered. Welcome back, [user.real_name]. Moving to ne[time_agency_panic ? "-WHAT THE HELL HAPPENED TO THE JUMP CHARGE?!" : "w co-ordinates."]</span>")
+				if(user.mind.GetRole(TIMEAGENTTWIN))
+					to_chat(user, "<span class='notice'>As the time anomaly sizzles and refracts, you wonder what awaits you now as a fugitive from the Time Agency. One thing is for certain, you are going to cause chaos.")
 				var/datum/role/time_agent/R = user.mind.GetRole(TIMEAGENT) || user.mind.GetRole(TIMEAGENTTWIN)
 				R.extract()
 				TAE.extracted = TRUE
 				TAE.anomaly = null
+				disarmed = TRUE
+				qdel(src)
 				qdel(target)
+			else
+				to_chat(user, "<span class='warning'>Your work is not over yet!</span>")
 		return
-	if(proximity_flag && !triggered)
+	if(triggered)
+		to_chat(user, "<span class='warning'>It is still recharging!</span>")
+		return
+	if(!triggered)
 		playsound(loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 		icon_state = "jump_charge_firing"
-		to_chat(user, "<span class = 'notice'>Jump charge armed. Firing in 3 seconds.</span>")
+		to_chat(user, "<span class = 'warning'>Jump charge armed and calibrated onto \the [target]. Firing in 3 seconds.</span>")
 		triggered = TRUE
 		spawn(3 SECONDS)
 			icon_state = "jump_no_charge"
 			future_rift(target, 10 SECONDS, 1)
+			add_logs(user, target, "sent to the future", object=src.name)
 			spawn(10 SECONDS)
 				icon_state = initial(icon_state)
 				triggered = FALSE
@@ -274,33 +359,74 @@
 
 /obj/item/device/timeline_eraser
 	name = "timeline eraser"
-	desc = "Erase someone from the timeline. It has an unusual affinity against time travellers..."
+	desc = "A strange button."
 	icon_state = "jump_charge"
 	w_class = W_CLASS_SMALL
-	var/channeling = FALSE
+	flags = TIMELESS
+	var/in_process = FALSE
+	var/charge = 5 //Will set to 0 and gradually increment to from 0 to 5 (10 seconds total), after which it can be used again
+	var/logo
 
+/obj/item/device/timeline_eraser/examine(mob/user, size, show_name)
+	..()
+	if(istimeagent(user))
+		to_chat(user, "[logo] <span class='info'>As a time agent, you know that this device can erase nearly anything from reality. Erasing entities will take 10 seconds, erasing objects will take 5 seconds and erasing other time agents will take no time at all. People with temporal suits are protected from its effects.</span>")
+		if(charge < 5)
+			to_chat(user, "<span class='warning'>It is still recharging.</span>")
 
+/obj/item/device/timeline_eraser/New()
+	..()
+	logo = "<img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "time-logo"))]'/>"
 
-/obj/item/device/timeline_eraser/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
-	var/duration = 100
+/obj/item/device/timeline_eraser/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/item/device/timeline_eraser/process()
+	charge++
+	if(charge >= 5)
+		icon_state = "jump_charge"
+		processing_objects.Remove(src)
+
+/obj/item/device/timeline_eraser/preattack(atom/target, mob/user, proximity_flag)
+	if(!istimeagent(user))
+		return ..()
+	if(!proximity_flag)
+		return
+	if(in_process)
+		to_chat(user, "<span class='warning'>\The [src] is already erasing someone from reality!</span>")
+		return
+	if(charge < 5)
+		to_chat(user, "<span class='warning'>\The [src] is still recharging!</span>")
+		return
+	if(istype(target, /obj/item/device/jump_charge)) //It is already unaffected but leaving a message here for trying to soft-lock is funny
+		to_chat(user, "<span class='warning'>Are you insane? You can't just erase such an important device!</span>")
+		return
+	if(target.flags & TIMELESS)
+		to_chat(user, "<span class = 'warning'>The target is currently immune to temporal meddling.</span>")
+		return
+	. = 1
+	var/duration = 10 SECONDS
 	// TODO: Make the timestop, properly stop when the process is done
 	if(istype(target, /mob))
 		var/mob/M = target
 		if(istimeagent(M))
 			duration = 0
-
-	if(proximity_flag && !(target.flags & TIMELESS))
-		channeling = TRUE
-		spawn()
-			while(channeling)
-				//make the process obvious, but don't impede people interfering with it too much
-				timestop(src, 30, 7, 0, /mob/living/carbon/)
-				sleep(60)
-		if(do_after(user, target, duration))
-			delete_from_timeline(target, user)
-		channeling = FALSE
-	if(target.flags & TIMELESS)
-		to_chat(user, "<span class = 'warning'>The target is currently immune to temporal meddling.</span>")
+	if(istype(target, /obj))
+		duration = 5 SECONDS
+	to_chat(user, "<span class='warning'>You start erasing \the [target] from existence...</span>")
+	in_process = TRUE
+	icon_state = "jump_charge_firing"
+	timestop(src, 50, 7, 0, /mob/living/carbon/)
+	if(do_after(user, target, duration))
+		delete_from_timeline(target, user)
+		charge = 0
+		icon_state = "jump_no_charge"
+		processing_objects.Add(src)
+	else
+		to_chat(user, "<span class-'warning'>Erasing \the [target] has been aborted.</span>")
+		icon_state = "jump_charge"
+	in_process = FALSE
 
 /obj/item/device/timeline_eraser/proc/delete_from_timeline(atom/target, mob/user)
 	if(istimeagent(user))
@@ -311,28 +437,43 @@
 				E.check(target)
 	if(istype(target, /mob))
 		var/mob/M = target
-		var/name = M.mind.name
-		for (var/list/L in list(data_core.general, data_core.medical, data_core.security,data_core.locked))
-			if (L)
-				var/datum/data/record/R = find_record("name", name, L)
-				qdel(R)
-				R = null
-		for(var/obj/machinery/telecomms/server/S in telecomms_list)
-			for(var/datum/comm_log_entry/C in S.log_entries)
-				if(C.parameters["realname"] == name)
-					S.log_entries.Remove(C)
-					qdel(C)
-					C = null
-		for(var/obj/machinery/message_server/S in message_servers)
-			for(var/datum/data_pda_msg/P in S.pda_msgs)
-				if((P.sender == name) || (P.recipient == name))
-					S.pda_msgs.Remove(P)
-					qdel(P)
-					P = null
+		if(M.mind)
+			var/name = M.mind.name
+			for (var/list/L in list(data_core.general, data_core.medical, data_core.security,data_core.locked))
+				if (L)
+					var/datum/data/record/R = find_record("name", name, L)
+					qdel(R)
+					R = null
+			for(var/obj/machinery/telecomms/server/S in telecomms_list)
+				for(var/datum/comm_log_entry/C in S.log_entries)
+					if(C.parameters["realname"] == name)
+						S.log_entries.Remove(C)
+						qdel(C)
+						C = null
+			for(var/obj/machinery/message_server/S in message_servers)
+				for(var/datum/data_pda_msg/P in S.pda_msgs)
+					if((P.sender == name) || (P.recipient == name))
+						S.pda_msgs.Remove(P)
+						qdel(P)
+						P = null
+		M.drop_all()
+	var/target_location = get_turf(target)
+	message_admins("[user] ([user.ckey]) has ERASED [target] from existence at [formatJumpTo(target_location)]!")
 	qdel(target)
+	to_chat(user, "<span class='warning'>You erase \the [target] from existence.</span>")
 
 /obj/item/weapon/pinpointer/advpinpointer/time_agent
 	mode = 2
+	var/logo
+
+/obj/item/weapon/pinpointer/advpinpointer/time_agent/New()
+	..()
+	logo = "<img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "time-logo"))]'/>"
+
+/obj/item/weapon/pinpointer/advpinpointer/time_agent/examine(mob/user)
+	..()
+	if(istimeagent(user))
+		to_chat(user, "[logo] <span class='info'>This allows you to search for the jump charge and the time anomaly when set.</span>")
 
 /obj/item/weapon/pinpointer/advpinpointer/time_agent/New()
 	item_paths["Jump Charge"] = /obj/item/device/jump_charge

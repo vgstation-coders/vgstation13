@@ -30,6 +30,9 @@
 	var/gives_milk = TRUE
 	var/datum/reagents/udder = null
 
+/mob/living/simple_animal/hostile/retaliate/goat/splashable()
+	return FALSE
+
 /mob/living/simple_animal/hostile/retaliate/goat/New()
 	if(gives_milk)
 		udder = new(50)
@@ -131,6 +134,9 @@
 
 	size = SIZE_BIG
 	holder_type = /obj/item/weapon/holder/animal/cow
+
+/mob/living/simple_animal/cow/splashable()
+	return FALSE
 
 /mob/living/simple_animal/cow/New()
 	..()

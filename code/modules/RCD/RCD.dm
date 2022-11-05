@@ -198,6 +198,11 @@
 	interface.updateContent("selectedname", selected.name)
 
 
+/obj/item/device/rcd/preattack(atom/movable/A, mob/user, proximity_flag, click_parameters)
+	if(A == user)
+		afterattack(get_turf(user), user) 	// Skip right to afterattack()
+		return TRUE
+
 /obj/item/device/rcd/afterattack(var/atom/A, var/mob/user)
 	if(!selected)
 		return 1

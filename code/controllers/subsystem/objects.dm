@@ -2,7 +2,6 @@ var/datum/subsystem/obj/SSobj
 
 var/list/processing_objects = list()
 
-
 /datum/subsystem/obj
 	name          = "Objects"
 	init_order    = SS_INIT_OBJECT
@@ -13,10 +12,8 @@ var/list/processing_objects = list()
 	var/list/currentrun
 	var/list/bad_inits = list()
 
-
 /datum/subsystem/obj/New()
 	NEW_SS_GLOBAL(SSobj)
-
 
 /datum/subsystem/obj/Initialize()
 	for(var/atom/object in world)
@@ -29,13 +26,17 @@ var/list/processing_objects = list()
 				log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time/10] seconds to initialize.")
 		else
 			bad_inits[object.type] = bad_inits[object.type]+1
-		CHECK_TICK
-	for(var/area/place in areas)
-		var/obj/machinery/power/apc/place_apc = place.areaapc
-		if(place_apc)
-			place_apc.update()
 	..()
-
+	spawn()
+		for(var/area/A in areas)
+			var/obj/machinery/power/apc/place_apc = A.areaapc
+			if(place_apc)
+				place_apc.update()
+			//Toggle lights without lightswitches
+			//with better area organization, a lot of this headache can be limited
+			if(!A.requires_power || !A.haslightswitch)
+				for(var/obj/machinery/light/L in A)
+					L.seton(1)
 
 /datum/subsystem/obj/stat_entry()
 	..("P:[processing_objects.len]")

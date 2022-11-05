@@ -22,11 +22,13 @@
 	if(get_waterlevel() > WATERLEVEL_MAX/5 && get_nutrientlevel() > NUTRIENTLEVEL_MAX/5)
 		if(isnull(seed) && prob(5))
 			add_weedlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient)
+			update_icon_after_process = 1
 		else if(prob(2))
 			add_weedlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient)
+			update_icon_after_process = 1
 	// There's a chance for a weed explosion to happen if the weeds take over.
 	// Plants that are themselves weeds (weed_tolerance > 80) are unaffected.
-	if (get_weedlevel() == WEEDLEVEL_MAX && prob(10))
+	if (get_weedlevel() >= WEEDLEVEL_MAX && prob(10))
 		if(!seed || get_weedlevel() >= seed.weed_tolerance + 20)
 			weed_invasion()
 
@@ -40,7 +42,7 @@
 	// On each tick, there's a chance the pest population will increase.
 	// This process is under the !seed check because it only happens when a live plant is in the tray.
 	if(prob(1))
-		add_pestlevel(5 * HYDRO_SPEED_MULTIPLIER)
+		add_pestlevel(HYDRO_SPEED_MULTIPLIER * weed_coefficient / 2)
 
 	//Bees will attempt to aid the plant's longevity and make it fruit faster.
 	if(bees && age >= seed.maturation && prob(50))
@@ -78,7 +80,9 @@
 
 	// If the plant's age is negative, let's revert it into a seed packet, for funsies
 	if(age < 0)
-		seed.spawn_seed_packet(get_turf(src))
+		var/obj/item/seeds/seeds = seed.spawn_seed_packet(get_turf(src))
+		if(arcanetampered)
+			seeds.arcanetampered = arcanetampered
 		remove_plant()
 		force_update = 1
 		process()
@@ -122,11 +126,13 @@
 					msg_admin_attack("limited growth creeper vines ([seed.display_name]) have spread out of a tray. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>, last touched by [key_name_last_user]. Seed id: [seed.uid]. ([bad_stuff()])")
 				if(2)
 					msg_admin_attack("space vines ([seed.display_name]) have spread out of a tray. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>, last touched by [key_name_last_user]. Seed id: [seed.uid]. ([bad_stuff()])")
-	
+
 	if(update_icon_after_process)
 		update_icon()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/affect_growth(var/amount)
+	if(!seed)
+		return
 	if(amount > 0)
 		if(age < seed.maturation)
 			age += amount
@@ -184,7 +190,7 @@
 		overlays += image(icon = icon, icon_state = "over_alert3")
 	if(get_waterlevel() <= WATERLEVEL_MAX/5 && get_toxinlevel() <= TOXINLEVEL_MAX/5)
 		overlays += image(icon = icon, icon_state = "over_lowwater3")
-	
+
 	if(!seed)
 		return
 	if(seed.toxin_affinity < 5)
@@ -211,7 +217,7 @@
 	set_light(light_out)
 
 	var/light_available = 5
-	if(T.dynamic_lighting)
+	if(T?.dynamic_lighting)
 		light_available = T.get_lumcount() * 10
 
 	if(!seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
@@ -280,7 +286,7 @@
 		else
 			update_icon_after_process = 1
 
-	if(seed.toxin_affinity < 5 && get_toxinlevel() > TOXINLEVEL_MAX/5)	
+	if(seed.toxin_affinity < 5 && get_toxinlevel() > TOXINLEVEL_MAX/5)
 		sum_health -= healthmod*(5-seed.toxin_affinity)
 
 	if(missing_gas)
@@ -303,7 +309,7 @@
 	if(get_pestlevel() > 0)
 		if(seed.voracious)
 			sum_health += HYDRO_SPEED_MULTIPLIER
-			add_pestlevel(-HYDRO_SPEED_MULTIPLIER)
+			add_pestlevel(-HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 		else if (get_pestlevel() > seed.pest_tolerance)
 			sum_health -= HYDRO_SPEED_MULTIPLIER
 			update_icon_after_process = 1
@@ -312,7 +318,7 @@
 	if(get_weedlevel() > 0)
 		if(seed.voracious)
 			sum_health += HYDRO_SPEED_MULTIPLIER
-			add_weedlevel(-HYDRO_SPEED_MULTIPLIER)
+			add_weedlevel(-HYDRO_SPEED_MULTIPLIER * weed_coefficient)
 		else if (get_weedlevel() > seed.weed_tolerance)
 			sum_health -= HYDRO_SPEED_MULTIPLIER
 			update_icon_after_process = 1

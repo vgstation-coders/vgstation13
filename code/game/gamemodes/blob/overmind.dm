@@ -7,6 +7,7 @@
 	see_in_dark = 8
 	see_invisible = SEE_INVISIBLE_MINIMUM
 	invisibility = INVISIBILITY_OBSERVER
+	seedarkness = FALSE
 
 	pass_flags = PASSBLOB
 	faction = "blob"

@@ -71,6 +71,7 @@
 #define USER_TYPE_CHANGELING "changeling"
 #define USER_TYPE_PULSEDEMON "pulsedemon"
 #define USER_TYPE_GRUE "grue"
+#define USER_TYPE_GYMRAT "gymrat"
 
 //Spell aspect flags
 #define SPELL_FIRE 1 //Fire based spells

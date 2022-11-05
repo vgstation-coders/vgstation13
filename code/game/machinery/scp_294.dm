@@ -28,6 +28,9 @@
 		/datum/malfhack_ability/oneuse/emag
 	)
 
+/obj/machinery/chem_dispenser/scp_294/update_chem_list()
+	return
+
 /obj/machinery/chem_dispenser/scp_294/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
@@ -93,39 +96,43 @@
 				return
 		var/space = U.maximum_volume - U.total_volume
 
-		var/chemfound = FALSE
-		var/mob/living/mobfound = null
-		var/bloodonly = 0 // This is a number for subtraction purposes, see below
-		// First checks for all living mobs to see if input matches their name to take stuff from, like the cup of joe in the original SCP
-		for(var/mob/living/L in mob_list)
-			var/list/mob_name_parts = splittext(L.name," ")
-			if(findtext(input_reagent,"'s blood"))
-				bloodonly = 1
-				input_reagent = replacetext(input_reagent,"'s blood","")
-			if(input_reagent == L.name || (input_reagent in mob_name_parts))
-				mobfound = L
-				break
-		// Then searches through the list of all reagents and ignores case, plus converts spaces into either nothing or underscores for IDs
-		// (due to no consistent alternating between either)
-		for(var/reagent_id in chemical_reagents_list)
-			var/datum/reagent/R = chemical_reagents_list[reagent_id]
-			if(input_reagent == lowertext(R.name) || input_reagent == lowertext(reagent_id) || lowertext(reagent_id) == replacetext(input_reagent," ","") || lowertext(reagent_id) == replacetext(input_reagent," ","_"))
-				input_reagent = reagent_id
-				chemfound = TRUE
-				break
-		if(mobfound && mobfound.reagents && !(mobfound.status_flags & GODMODE) && !(mobfound.flags & INVULNERABLE))
-			if(!mobfound.reagents.total_volume) // Stops division by zero runtime
-				bloodonly = TRUE
-			// Take half from each unless only taking blood, then take all from blood instead
-			mobfound.take_blood(X, (min(amount, energy * 10, space)) / (2 - bloodonly))
-			if(!bloodonly)
-				mobfound.reagents.trans_to(U, (min(amount, energy * 10, space)) / 2)
-			energy = max(energy - min(amount, energy * 10, space) / 10, 0)
-		else if(chemfound && !(input_reagent in prohibited_reagents) && !((input_reagent in emagged_only_reagents) && !emagged))
-			U.add_reagent(input_reagent, min(amount, energy * 10, space))
-			energy = max(energy - min(amount, energy * 10, space) / 10, 0)
+		if(!arcanetampered)
+			var/chemfound = FALSE
+			var/mob/living/mobfound = null
+			var/bloodonly = 0 // This is a number for subtraction purposes, see below
+			// First checks for all living mobs to see if input matches their name to take stuff from, like the cup of joe in the original SCP
+			for(var/mob/living/L in mob_list)
+				var/list/mob_name_parts = splittext(L.name," ")
+				if(findtext(input_reagent,"'s blood"))
+					bloodonly = 1
+					input_reagent = replacetext(input_reagent,"'s blood","")
+				if(input_reagent == L.name || (input_reagent in mob_name_parts))
+					mobfound = L
+					break
+			// Then searches through the list of all reagents and ignores case, plus converts spaces into either nothing or underscores for IDs
+			// (due to no consistent alternating between either)
+			for(var/reagent_id in chemical_reagents_list)
+				var/datum/reagent/R = chemical_reagents_list[reagent_id]
+				if(input_reagent == lowertext(R.name) || input_reagent == lowertext(reagent_id) || lowertext(reagent_id) == replacetext(input_reagent," ","") || lowertext(reagent_id) == replacetext(input_reagent," ","_"))
+					input_reagent = reagent_id
+					chemfound = TRUE
+					break
+			if(mobfound && mobfound.reagents && !(mobfound.status_flags & GODMODE) && !(mobfound.flags & INVULNERABLE))
+				if(!mobfound.reagents.total_volume) // Stops division by zero runtime
+					bloodonly = TRUE
+				// Take half from each unless only taking blood, then take all from blood instead
+				mobfound.take_blood(X, (min(amount, energy * 10, space)) / (2 - bloodonly))
+				if(!bloodonly)
+					mobfound.reagents.trans_to(U, (min(amount, energy * 10, space)) / 2)
+				energy = max(energy - min(amount, energy * 10, space) / 10, 0)
+			else if(chemfound && !(input_reagent in prohibited_reagents) && !((input_reagent in emagged_only_reagents) && !emagged))
+				U.add_reagent(input_reagent, min(amount, energy * 10, space))
+				energy = max(energy - min(amount, energy * 10, space) / 10, 0)
+			else
+				say("OUT OF RANGE")
 		else
-			say("OUT OF RANGE")
+			U.add_reagent(APPLEJUICE, min(amount, energy * 10, space)) // room temperature superconductor
+			energy = max(energy - min(amount, energy * 10, space) / 10, 0)
 
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object

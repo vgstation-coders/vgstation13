@@ -14,39 +14,6 @@
 	flags = FPRINT  | OPENCONTAINER
 	layer = ABOVE_OBJ_LAYER
 	var/opaque = FALSE //when true no reagent filling overlay is applied to the icon.
-	//This is absolutely terrible
-	// TODO To remove this, return 1 on every attackby() that handles reagent_containers.
-	var/list/can_be_placed_into = list(
-		/obj/machinery/chem_master/,
-		/obj/machinery/chem_dispenser/,
-		/obj/machinery/reagentgrinder,
-		/obj/structure/table,
-		/obj/structure/closet,
-		/obj/structure/sink,
-		/obj/structure/centrifuge,
-		/obj/item/weapon/storage,
-		/obj/item/tool/solder,
-		/obj/machinery/atmospherics/unary/cryo_cell,
-		/obj/machinery/dna_scannernew,
-		/obj/item/weapon/grenade/chem_grenade,
-		/obj/item/weapon/electrolyzer,
-		/obj/machinery/bot/medbot,
-		/obj/item/weapon/storage/secure/safe,
-		/obj/machinery/iv_drip,
-		/obj/machinery/disease2/incubator,
-		/obj/machinery/disease2/centrifuge,
-		/obj/machinery/disposal,
-		/obj/machinery/apiary,
-		/mob/living/simple_animal/cow,
-		/mob/living/simple_animal/hostile/retaliate/goat,
-		/obj/machinery/cooking/icemachine,
-		/obj/machinery/sleeper,
-		/obj/machinery/anomaly,
-		/obj/machinery/bunsen_burner,
-		/obj/item/weapon/sword/venom,
-		/obj/item/weapon/cylinder,
-		/obj/item/clothing/gloves/powerfist,
-		)
 
 /obj/item/weapon/reagent_containers/glass/get_rating()
 	return volume / 50
@@ -77,7 +44,7 @@
 	if (!adjacency_flag)
 		return
 
-	if (is_type_in_list(target, can_be_placed_into))
+	if (!target.splashable())
 		return
 
 	if(ishuman(target) || iscorgi(target)) //Splashing handled in attack now
@@ -243,6 +210,16 @@
 	icon_state = "beakerplasma"
 	origin_tech = Tc_PLASMATECH + "=4;" + Tc_MATERIALS + "=4"
 
+/obj/item/weapon/reagent_containers/glass/beaker/large/plasma/arcane_act(mob/user, recursive)
+	on_reagent_change()
+	return ..()
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/plasma/on_reagent_change()
+	..()
+	if(arcanetampered && reagents.total_volume)
+		var/datum/chemical_reaction/chemsmoke/CS = new()
+		CS.on_reaction(src.reagents)
+
 /obj/item/weapon/reagent_containers/glass/beaker/large/supermatter
 	name = "supermatter beaker"
 	desc = "A beaker with a supermatter sliver. It heats fluids inside, but holding it makes your hand feel strange..."
@@ -258,7 +235,7 @@
 	..()
 
 /obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/process()
-	if(reagents.total_volume)
+	if(reagents.total_volume && !arcanetampered)
 		reagents.heating(9000, TEMPERATURE_PLASMA)
 	if(ishuman(loc))
 		//held or in pocket of a human
@@ -274,6 +251,14 @@
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 	opaque = TRUE
+
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/arcane_act(mob/user, recursive)
+	flags &= ~NOREACT
+	return ..()
+
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/bless()
+	..()
+	flags |= NOREACT
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
@@ -295,6 +280,17 @@
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MATERIALS + "=3"
 	opaque = TRUE
 
+/obj/item/weapon/reagent_containers/glass/beaker/bluespace/arcane_act(mob/user, recursive)
+	reagents.clear_reagents()
+	reagents.maximum_volume = 25
+	volume = 25
+	return ..()
+
+/obj/item/weapon/reagent_containers/glass/beaker/bluespace/bless()
+	..()
+	volume = initial(volume)
+	reagents.maximum_volume = initial(volume)
+
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
 	desc = "A prototype ultra-capacity beaker that uses advances in bluespace research. Can hold up to 300 units."
@@ -303,6 +299,12 @@
 	volume = 300
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,150,200,300)
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=5"
+
+/obj/item/weapon/reagent_containers/glass/beaker/bluespace/large/arcane_act(mob/user, recursive)
+	. = ..()
+	reagents.maximum_volume = 10
+	volume = 10
+	return .
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial
 	name = "vial"
@@ -392,7 +394,7 @@
 			visible_message("<span class='warning'>The bucket's content spills on [src]</span>")
 			reagents.clear_reagents()
 
-/obj/item/weapon/reagent_containers/glass/bucket/acidable()
+/obj/item/weapon/reagent_containers/glass/bucket/dissolvable()
 	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
 	if(H && src == H.head)
 		return 0

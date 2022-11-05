@@ -235,6 +235,9 @@
 /obj/item/clothing/gloves/powerfist/full
 	vial = /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium
 
+/obj/item/clothing/gloves/powerfist/splashable()
+	return FALSE
+
 /obj/item/clothing/gloves/powerfist/New()
 	..()
 

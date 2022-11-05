@@ -627,5 +627,5 @@
 			qdel(objects)
 	src.screen = null
 
-/obj/abstract/screen/acidable()
+/obj/abstract/screen/dissolvable()
 	return 0

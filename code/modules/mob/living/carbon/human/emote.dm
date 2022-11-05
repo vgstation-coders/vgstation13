@@ -135,6 +135,7 @@
 /datum/emote/living/carbon/human/fart
 	key = "fart"
 	key_third_person = "farts"
+	stat_allowed = UNCONSCIOUS
 
 /datum/emote/living/carbon/human/fart/run_emote(mob/user, params, type_override, ignore_status = FALSE)
 	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
@@ -144,9 +145,12 @@
 		return FALSE // Can't fart without an arse (dummy)
 
 	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? 20 SECONDS : 40 SECONDS))
-		message = "strains, and nothing happens."
-		emote_type = EMOTE_VISIBLE
-		return ..()
+		if(H.stat != UNCONSCIOUS)
+			message = "strains, and nothing happens."
+			emote_type = EMOTE_VISIBLE
+			return ..()
+		else
+			return FALSE //Already farted
 
 	for(var/mob/living/M in view(0))
 		if(M != H && M.loc == H.loc)
@@ -201,11 +205,15 @@
 						M.reagents.add_reagent(SPACE_DRUGS,rand(1,50))
 
 	if(M_SUPER_FART in H.mutations)
-		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
-		H.visible_message("<span class = 'warning'><b>[H]</b> hunches down and grits their teeth!</span>")
+		var/is_unconscious = H.InCritical()
+		if(!is_unconscious)
+			playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
+			H.visible_message("<span class = 'warning'><b>[H]</b> hunches down and grits their teeth!</span>")
 		has_farted = TRUE
-		if(do_after(H,H,30))
-			H.visible_message("<span class = 'warning'><b>[H]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>","<span class = 'warning'>You hear a [pick("tremendous","gigantic","colossal")] fart.</span>")
+		if(is_unconscious || do_after(H,H,30)) //If you're in crit you do a stronger instant superfart at the cost of being gibbed.
+			H.visible_message("<span class = 'warning'><b>[H]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>", blind_message = "<span class = 'warning'>You hear a [pick("tremendous","gigantic","colossal")] fart.</span>")
+			if(is_unconscious)
+				H.visible_message("<span class='warning'><b>[H]</b>Explodes in a shower of gore! Damn, what a madman!", "<span class='warning'>The super-fart made you explode!</span>")
 			playsound(location, 'sound/effects/superfart.ogg', 50, 0)
 			for(var/mob/living/V in oviewers(aoe_range, get_turf(H)))
 				if(!airborne_can_reach(location,get_turf(V),aoe_range))
@@ -214,15 +222,17 @@
 				if (V == H)
 					continue
 				to_chat(V, "<span class = 'danger'>You're sent flying!</span>")
-				V.Knockdown(5) // why the hell was this set to 12 christ
-				V.Stun(5)
-				step_away(V,location,15)
-				step_away(V,location,15)
-				step_away(V,location,15)
+				is_unconscious ? V.Knockdown(7) : V.Knockdown(5) // why the hell was this set to 12 christ
+				is_unconscious ? V.Stun(7) : V.Stun(5)
+				var/iterations = is_unconscious ? 5 : 3
+				for(var/i = 0, i < iterations, i++)
+					step_away(V,location,15)
 				var/turf/T = get_turf(H)
 				if (!T.has_gravity(H))
 					to_chat(H, "<span class = 'notice'>The gastrointestinal blast sends you careening through space!</span>")
 					H.throw_at(get_edge_target_turf(H, H.dir), 5, 5)
+			if(is_unconscious)
+				H.gib()
 		else
 			to_chat(H, "<span class = 'notice'>You were interrupted and couldn't fart! Rude!</span>")
 			return
@@ -246,6 +256,11 @@
 				playsound(H, pick('sound/items/bikehorn.ogg','sound/items/AirHorn.ogg'), 50, 1)
 			else
 				playsound(H, 'sound/misc/fart.ogg', 50, 1)
+		if(H.InCritical() && !params)
+			message = "farts one last time before succumbing."
+			to_chat(user, "<span class='notice'You fart one last time before succumbing.</span>")
+			H.succumb_proc()
+			return ..(ignore_status = TRUE) //This is so that it doesn't say the user is unconscious after farting.
 		. =..()
 
 
@@ -271,7 +286,7 @@
 						to_chat(H, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
 						H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
 						explosion(get_turf(H),-1,-1,1,5, whodunnit = H) //Tiny explosion with flash
-						H.dust()
+						H.dust(TRUE)
 //Ayy lmao
 
 

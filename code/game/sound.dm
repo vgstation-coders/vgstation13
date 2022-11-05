@@ -19,6 +19,7 @@ var/list/male_scream_sound = list('sound/misc/malescream1.ogg', 'sound/misc/male
 var/list/female_scream_sound = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 var/list/vox_shriek_sound = list('sound/misc/shriek1.ogg')
 var/list/insectoid_chitter_sound = list('sound/misc/hiss1.ogg', 'sound/misc/hiss2.ogg', 'sound/misc/hiss3.ogg')
+var/list/tajaran_scream_sound = list('sound/misc/tom_scream1.mp3','sound/misc/tom_scream2.mp3','sound/misc/tom_scream3.mp3')
 var/list/male_cough_sound = list('sound/misc/cough/cough_m1.ogg', 'sound/misc/cough/cough_m2.ogg', 'sound/misc/cough/cough_m3.ogg', 'sound/misc/cough/cough_m4.ogg')
 var/list/female_cough_sound = list('sound/misc/cough/cough_f1.ogg', 'sound/misc/cough/cough_f2.ogg', 'sound/misc/cough/cough_f3.ogg', 'sound/misc/cough/cough_f4.ogg')
 var/list/lightning_sound = list('sound/effects/lightning/chainlightning1.ogg', 'sound/effects/lightning/chainlightning2.ogg', 'sound/effects/lightning/chainlightning3.ogg', 'sound/effects/lightning/chainlightning4.ogg', 'sound/effects/lightning/chainlightning5.ogg', 'sound/effects/lightning/chainlightning6.ogg', 'sound/effects/lightning/chainlightning7.ogg')
@@ -250,4 +251,6 @@ var/const/SURROUND_CAP = 7
 			if ("trayhit")
 				soundin = pick(trayhit_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
+	else if(islist(soundin))
+		soundin = pick(soundin)
 	return soundin

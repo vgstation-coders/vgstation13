@@ -4,6 +4,7 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "taclight"
 	accessory_exclusion = ACCESSORY_LIGHT
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/obj/item/device/flashlight/tactical/source_light
 	ignoreinteract = TRUE
 
@@ -27,7 +28,7 @@
 		icon_state = "[initial(icon_state)]_armor"
 	if(source_light && source_light.on)
 		icon_state = "[icon_state]-on"
-	
+
 
 /obj/item/clothing/accessory/taclight/can_attach_to(obj/item/clothing/C)
 	return (istype(C, /obj/item/clothing/head) || istype(C, /obj/item/clothing/suit/armor))

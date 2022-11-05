@@ -90,7 +90,7 @@
 	return
 
 // -- Equip mindless: if we're going to give the outfit to a mob without a mind
-/datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = FALSE, var/priority = FALSE, var/strip = FALSE, var/delete = FALSE)
+/datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = TRUE, var/priority = FALSE, var/strip = FALSE, var/delete = FALSE)
 	if (!H || (!H.mind && !equip_mindless) )
 		return
 
@@ -333,7 +333,7 @@
 	return
 
 // Strike teams have 2 particularities : a leader, and several specialised roles.
-// Give the concrete (instancied) outfit datum the right "specialisation" after the player made his choice.
+// Give the concrete (instanced) outfit datum the right "specialisation" after the player made his choice.
 // Then, call "equip_special_items(player)" to give him the items associated.
 
 /datum/outfit/striketeam/

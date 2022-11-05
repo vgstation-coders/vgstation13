@@ -28,7 +28,7 @@
 
 var/explosion_shake_message_cooldown = 0
 
-/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit)
+/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist)
 	var/explosion_time = world.time
 
 	spawn()
@@ -59,7 +59,7 @@ var/explosion_shake_message_cooldown = 0
 		var/z0 = epicenter.z
 
 
-		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit)
+		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist)
 
 		var/took = stop_watch(watch)
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
@@ -135,17 +135,19 @@ var/explosion_shake_message_cooldown = 0
 	else
 		epicenter.turf_animation('icons/effects/96x96.dmi',"explosion_small",-WORLD_ICON_SIZE, -WORLD_ICON_SIZE, 13)
 
-/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit)
+/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit, var/list/whitelist)
 	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
 
 	var/x0 = offcenter.x
 	var/y0 = offcenter.y
 	//var/z0 = offcenter.z
 
-	var/list/affected_turfs = spiral_block(offcenter,max_range)	
+	var/list/affected_turfs = spiral_block(offcenter,max_range)
 	var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs)
 
 	for(var/turf/T in affected_turfs)
+		if(whitelist && (T in whitelist))
+			continue
 		var/dist = cheap_pythag(T.x - x0, T.y - y0)
 		var/_dist = dist
 		var/pushback = 0
@@ -168,9 +170,11 @@ var/explosion_shake_message_cooldown = 0
 			continue
 
 		for(var/atom/movable/A in T)
+			if(whitelist && (A in whitelist))
+				continue
 			if(T != offcenter && !A.anchored && A.last_explosion_push != explosion_time)
 				A.last_explosion_push = explosion_time
-				
+
 				var/max_dist = _dist+(pushback)
 				var/max_count = pushback
 				var/turf/throwT = get_step_away(A,offcenter,max_dist)

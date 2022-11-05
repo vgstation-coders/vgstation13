@@ -195,7 +195,9 @@
 			return
 		if(prob(70))
 			sampled = 1
-		seed.spawn_seed_packet(get_turf(user))
+		var/obj/item/seeds/seeds = seed.spawn_seed_packet(get_turf(user))
+		if(arcanetampered)
+			seeds.arcanetampered = arcanetampered
 		health -= (rand(3,5)*5)
 		sampled = 1
 		SSplant.add_plant(src)

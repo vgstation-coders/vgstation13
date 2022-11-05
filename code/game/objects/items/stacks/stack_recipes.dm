@@ -265,7 +265,6 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	null,
 	new/datum/stack_recipe("computer frame", /obj/structure/computerframe,                      5, time = 25, one_per_turf = 1			    ),
 	new/datum/stack_recipe("wall girders",   /obj/structure/girder,                             2, time = 50, one_per_turf = 1, on_floor = 1),
-	new/datum/stack_recipe("multi-floor stairs",   /obj/structure/stairs_frame, 4, time = 100, one_per_turf = 1, on_floor = 1, z_up_required = 1),
 	new/datum/stack_recipe("railings",   /obj/structure/railing/loose,             				2, time = 25, on_floor = 1),
 	new/datum/stack_recipe("firelock frame", /obj/item/firedoor_frame,                          5, time = 50),
 	new/datum/stack_recipe("machine frame",  /obj/machinery/constructable_frame/machine_frame,  5, time = 25, one_per_turf = 1, on_floor = 1),
@@ -398,6 +397,8 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("cannonball", /obj/item/cannonball/iron, 20, time = 4 SECONDS, one_per_turf = 0, on_floor = 1),
 	null,
 	blacksmithing_recipes,
+	null,
+	new/datum/stack_recipe("multi-floor stairs",   /obj/structure/stairs_frame, 4, time = 100, one_per_turf = 1, on_floor = 1, z_up_required = 1),
 	)
 
 /* ========================================================================

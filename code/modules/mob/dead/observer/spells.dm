@@ -113,15 +113,15 @@ var/global/list/boo_phrases_silicon=list(
 	ASSERT(istype(ghost))
 	ghost.become_mouse()
 
-/spell/targeted/ghost/hide_sprite
-	name = "Hide Sprite"
+/spell/targeted/ghost/hide_ghosts
+	name = "Hide Ghosts"
 	desc = "For filming shit."
 	hud_state = "hidesprite"
 
-/spell/targeted/ghost/hide_sprite/cast()
+/spell/targeted/ghost/hide_ghosts/cast()
 	var/mob/dead/observer/ghost = holder
 	ASSERT(istype(ghost))
-	ghost.hide_sprite()
+	ghost.hide_ghosts()
 
 /spell/targeted/ghost/haunt
 	name = "Haunt"

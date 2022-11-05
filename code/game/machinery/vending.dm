@@ -191,6 +191,9 @@ var/global/num_vending_terminals = 1
 		qdel(coinbox)
 		coinbox = null
 	..()
+	
+/obj/machinery/vending/splashable()
+	return FALSE
 
 /obj/machinery/vending/proc/dump_vendpack_and_coinbox()
 	if(product_records.len && cardboard) //Only spit out if we have slotted cardboard
@@ -887,6 +890,7 @@ var/global/num_vending_terminals = 1
 	if(is_custom_machine)
 		if(edit_mode)
 			dat += "Machine name: [src.name] <a href='?src=\ref[src];rename=1'>(Rename)</a><br>"
+			dat += "Currently [dont_render_OOS ? "not " : ""]showing out of stock items. <a href='?src=\ref[src];show_oos=1'>(Toggle)</a><br>"
 			dat += "Current slogans: " + (product_slogans.len >= CUSTOM_VENDING_MAX_SLOGANS ? "" : "<a href='?src=\ref[src];add_slogan=1'>(Add a Slogan)</a>") + "<br>"
 			for(var/i = 1, i <= product_slogans.len, i++) // list slogans
 				dat += "[product_slogans[i]] <a href='?src=\ref[src];delete_slogan_line=[i]'>(Delete)</a><br>"
@@ -1027,6 +1031,9 @@ var/global/num_vending_terminals = 1
 		if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
 			src.name = html_encode(newname)
 
+	else if (href_list["show_oos"] && edit_mode)
+		dont_render_OOS = !dont_render_OOS
+
 	else if (href_list["add_slogan"] && edit_mode)
 		var/newslogan = input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text
 		if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
@@ -1051,6 +1058,10 @@ var/global/num_vending_terminals = 1
 	product_records -= R
 	update_vicon()
 	qdel(R)
+
+/obj/machinery/vending/arcane_act(mob/user)
+	..()
+	return "B'NUS D'CKS!"
 
 /obj/machinery/vending/proc/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	if (!allowed(user) && !emagged && wires.IsIndexCut(VENDING_WIRE_IDSCAN)) //For SECURE VENDING MACHINES YEAH
@@ -1097,11 +1108,18 @@ var/global/num_vending_terminals = 1
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	spawn(vend_delay)
 		if(!R.custom)
-			new R.product_path(get_turf(src))
+			var/path2use = R.product_path
+			if(arcanetampered && prob(90))
+				path2use = /obj/item/weapon/bikehorn/rubberducky  // BONUS DUCKS! refunds
+			var/atom/A = new path2use(get_turf(src))
+			if(arcanetampered && path2use == R.product_path)
+				A.arcane_act(user)
 		else
 			for(var/obj/O in custom_stock)
 				if(O.product_name() == R.product_name)
 					O.forceMove(src.loc)
+					if(arcanetampered)
+						O.arcane_act(user)
 					custom_stock.Remove(O)
 					break
 		src.vend_ready = 1
@@ -1351,8 +1369,8 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/boozeomat
 
 /obj/machinery/vending/assist
-	name = "\improper Vendomat"
-	desc = "A vending machine containing generic parts."
+	name = "\improper StockPro"
+	desc = "A vending machine containing generic stock parts and assemblies."
 	icon_state = "generic"
 	products = list(
 		/obj/item/device/assembly/prox_sensor = 5,
@@ -1487,6 +1505,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
 		)
 	contraband = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/bustanuts = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/oldempirebar = 4,
@@ -2054,6 +2073,7 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/clothing/head/helmet/siren = 2,
 		/obj/item/clothing/head/helmet/police = 2,
+		/obj/item/clothing/head/helmet/tactical/antichrist = 2,
 		/obj/item/clothing/under/police = 2,
 		/obj/item/clothing/under/casualsec = 2,
 		/obj/item/device/modkit/fatsec_rig = 2
@@ -2413,6 +2433,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/glasses/scanner/material = 2,
 		/obj/item/device/multitool = 4,
 		/obj/item/weapon/circuitboard/airlock = 10,
+		/obj/item/weapon/circuitboard/airshield = 10,
 		/obj/item/weapon/circuitboard/power_control = 10,
 		/obj/item/weapon/circuitboard/air_alarm = 10,
 		/obj/item/weapon/circuitboard/fire_alarm = 10,
@@ -2779,6 +2800,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/dress/plaid_red = 10,
 		/obj/item/clothing/under/dress/plaid_blue = 10,
 		/obj/item/clothing/under/greaser = 10,
+		/obj/item/clothing/suit/storage/greaserjacket = 10,
+		/obj/item/clothing/suit/storage/greaserjacket/spider = 10,
+		/obj/item/clothing/suit/storage/greaserjacket/snakes = 10,
 		/obj/item/clothing/under/sl_suit = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/black = 10,
@@ -2794,6 +2818,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/syndicate/tacticool = 5,
 		/obj/item/clothing/under/color/orange = 5,
 		/obj/item/clothing/under/psyche = 5,
+		/obj/item/clothing/suit/storage/greaserjacket/cult = 5,
 		)
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
@@ -3035,7 +3060,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 6,
-		/obj/item/weapon/reagent_containers/food/drinks/discount_sauce = 12
+		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 12
+		)
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/condiment/discount = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/pill/antitox = 10
@@ -3049,7 +3077,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 3,
 		/obj/item/weapon/reagent_containers/pill/antitox = 10,
-		/obj/item/weapon/reagent_containers/food/drinks/discount_sauce = 1
+		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 1,
+		/obj/item/weapon/reagent_containers/food/condiment/discount = 25
 		)
 
 	pack = /obj/structure/vendomatpack/discount
@@ -3198,6 +3227,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/biscuit = 2,
 		/obj/item/talonprosthetic = 3,
 		/obj/machinery/vending/sale/trader = 1,
+		/obj/item/weapon/storage/toolbox/paint = 1,
 		)
 
 	prices = list(
@@ -3209,6 +3239,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/dses = 200,
 		/obj/item/talonprosthetic = 80,
 		/obj/machinery/vending/sale/trader = 80,
+		/obj/item/weapon/storage/toolbox/paint = 40,
 		)
 	slogan_languages = list(LANGUAGE_VOX)
 
@@ -3391,6 +3422,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/sale/trader/link_to_account()
 	reconnect_database()
 	linked_account = trader_account
+	account_first_linked = TRUE
 
 /obj/machinery/vending/sale/trader/wrenchAnchor(var/mob/user, var/obj/item/I)
 	var/obj/item/weapon/card/C = user.get_card()
@@ -3849,7 +3881,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 				newMsg.author = "Nanotrasen Editor"
 				newMsg.is_admin_message = 1
 
-				newMsg.body = "TC Daily wishes to congratulate <b>[user]</b> for recieving the Tau Ceti-Nanotrasen Stellar Slam Lottery, and receiving the out of this world sum of [final_jackpot] credits!"
+				newMsg.body = "TC Daily wishes to congratulate <b>[user]</b> for receiving the Tau Ceti-Nanotrasen Stellar Slam Lottery, and receiving the out of this world sum of [final_jackpot] credits!"
 
 				for(var/datum/feed_channel/FC in news_network.network_channels)
 					if(FC.channel_name == "Tau Ceti Daily")
@@ -3876,10 +3908,17 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		playsound(src, "buzz-sigh", 50, 1)
 		visible_message("<b>[src]</b>'s monitor flashes, \"The Central Command Lottery Fund is empty, and cannot dispense money.\"")
 		return
-	visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [amount] credits from the Central Command Lottery Fund!\"")
-	dispense_cash(amount, get_turf(src))
 	playsound(src, "polaroid", 50, 1)
-	station_jackpot -= (min(station_jackpot,amount))
+	if(arcanetampered)
+		var/total = 0
+		for(var/i in 0 to round(sqrt(sqrt(amount)))) // anywhere from about 1 to 118(!) ducks (thankfully that should be really really rare)
+			new /obj/item/weapon/bikehorn/rubberducky(get_turf(src))
+			total++
+		visible_message("<b>[src]</b>'s monitor flashes, <span class='sinister'>\"Withdrawing [total] ducks from the Central Command Bonus Duck Fund!\"</span>")
+	else
+		visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [amount] credits from the Central Command Lottery Fund!\"")
+		dispense_cash(amount, get_turf(src))
+		station_jackpot -= (min(station_jackpot,amount))
 
 
 /obj/machinery/vending/lotto/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
@@ -3888,12 +3927,13 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 
 /obj/machinery/vending/lotto/throw_item()
 	var/mob/living/target = locate() in view(7, src)
-
 	if (!target)
 		return 0
-	for(var/i = 0 to rand(3,12))
-		var/obj/I = new /obj/item/weapon/paper(get_turf(src))
-		I.throw_at(target, 16, 3)
+	var/obj/I = new /obj/item/toy/lotto_ticket/unprinted(get_turf(src))
+	I.throw_at(target, 16, 3)
+	src.visible_message("<span class='danger'>[src] launches [I.name] at [target.name]!</span>")
+	src.updateUsrDialog()
+	return 1
 
 /obj/machinery/vending/syndicatesuits
 	name = "\improper Syndicate Suits"

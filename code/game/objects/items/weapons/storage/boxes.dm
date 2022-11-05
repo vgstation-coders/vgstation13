@@ -32,6 +32,7 @@
 	w_type=RECYK_MISC
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/storage/box/large
 	name = "large box"

@@ -22,7 +22,7 @@
 	speech.message = ""
 
 ////////////////////////////////////////
-// Harmful to others as well as self
+// Harmful to others
 ////////////////////////////////////////
 
 /datum/dna/gene/disability/radioactive
@@ -38,12 +38,13 @@
 
 /datum/dna/gene/disability/radioactive/OnMobLife(var/mob/living/owner)
 	var/radiation = owner.radiation
+	var/living_radiation = round(3 * (radiation >= 10 ? radiation/10 : 1), 1) //+3 radiation for every 10 radiation above 10.
 	owner.radiation = max(radiation - 30, 0)
 	if(owner.getarmor(null, "rad") < 100)
 		emitted_harvestable_radiation(get_turf(owner), radiation * 100, range = 3) //1 power = ~70W, are you ready for radiation engines?
 		for(var/mob/living/L in orange(1, owner)) //Everyone nearby except the user
 			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
-			L.apply_radiation(5, RAD_EXTERNAL)
+			L.apply_radiation(living_radiation, RAD_EXTERNAL)
 
 /datum/dna/gene/disability/radioactive/OnDrawUnderlays(var/mob/M,var/g,var/fat)
 	return "rads[fat]_s"

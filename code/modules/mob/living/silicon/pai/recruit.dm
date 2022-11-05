@@ -4,6 +4,10 @@
 
 var/datum/paiController/paiController			// Global handler for pAI candidates
 
+/proc/createPaiController()
+	paiController = new /datum/paiController()
+	return 1
+
 /datum/paiCandidate
 	var/name
 	var/key
@@ -115,11 +119,9 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 	var/dat = ""
 	dat += {"
 			<style type="text/css">
-
 			p.top {
 				background-color: #AAAAAA; color: black;
 			}
-
 			tr.d0 td {
 				background-color: #CC9999; color: black;
 			}
@@ -162,11 +164,9 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 
 	dat += {"
 			<style type="text/css">
-
 			p.top {
 				background-color: #AAAAAA; color: black;
 			}
-
 			tr.d0 td {
 				background-color: #CC9999; color: black;
 			}

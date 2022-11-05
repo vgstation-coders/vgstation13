@@ -76,6 +76,11 @@
 	M.pixel_x = src.pixel_x
 	M.pixel_y = src.pixel_y
 
+	M.lying = 1
+	M.updatehealth()
+	M.regenerate_icons()
+	M.update_transform()
+
 	if(generate_random_appearance)
 		M.dna.ResetSE()
 		M.dna.ResetUI()
@@ -1102,6 +1107,15 @@
 	corpsebelt = /obj/item/weapon/storage/belt/mothership
 	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 	corpsehelmet = /obj/item/clothing/head/helmet/mothership_visor_heavy
+
+/obj/effect/landmark/corpse/grey/soldier_space
+	name = "Grey Soldier"
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsesuit = /obj/item/clothing/suit/space/rig/grey/soldier
+	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
+	corpsebelt = /obj/item/weapon/storage/belt/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
+	corpseback = /obj/item/weapon/tank/oxygen/red
 
 /obj/effect/landmark/corpse/grey/explorer
 	name = "Grey Explorer"

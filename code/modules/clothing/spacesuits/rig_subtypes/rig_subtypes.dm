@@ -43,6 +43,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/tool/wrench/socket, /obj/item/tool/irons)
 	cell_type = /obj/item/weapon/cell/super
 	head_type = /obj/item/clothing/head/helmet/space/rig/engineer/elite
 
@@ -74,7 +75,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 10)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 /obj/item/clothing/suit/space/rig/mining
 	icon_state = "rig-mining"
@@ -85,7 +86,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 10)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 	head_type = /obj/item/clothing/head/helmet/space/rig/mining
 	allowed = list(
 		/obj/item/device/flashlight,
@@ -204,7 +205,7 @@
 
 	species_restricted = null
 
-/obj/item/clothing/head/helmet/space/rig/wizard/acidable()
+/obj/item/clothing/head/helmet/space/rig/wizard/dissolvable()
 	return 0
 
 /obj/item/clothing/suit/space/rig/wizard
@@ -224,7 +225,7 @@
 	head_type = /obj/item/clothing/head/helmet/space/rig/wizard
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
 
-/obj/item/clothing/suit/space/rig/wizard/acidable()
+/obj/item/clothing/suit/space/rig/wizard/dissolvable()
 	return 0
 
 /obj/item/clothing/head/helmet/space/rig/wizard/lich_king
@@ -376,7 +377,6 @@
 	_color = "atmos_gold"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	no_light = 1
 
 /obj/item/clothing/suit/space/rig/atmos/gold
 	desc = "A special suit that protects against hazardous low pressure environments and extreme temperatures. In other words, perfect for atmos."
@@ -389,7 +389,7 @@
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	species_fit = list(GREY_SHAPED,INSECT_SHAPED)
 	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/extinguisher/foam, /obj/item/weapon/storage/toolbox, /obj/item/tool/wrench/socket)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/extinguisher/foam, /obj/item/weapon/storage/toolbox, /obj/item/tool/wrench/socket, /obj/item/tool/irons)
 	head_type = /obj/item/clothing/head/helmet/space/rig/atmos/gold
 
 //ADMINBUS RIGS. SOVIET + NAZI
@@ -522,7 +522,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	_color = "knight"
-	clothing_flags = PLASMAGUARD|GOLIATHREINFORCE
+	clothing_flags = PLASMAGUARD|GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 
 /obj/item/clothing/suit/space/rig/knight
@@ -536,7 +536,7 @@
 	siemens_coefficient = 0.5
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	clothing_flags = PLASMAGUARD|GOLIATHREINFORCE
+	clothing_flags = PLASMAGUARD|GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 	head_type = /obj/item/clothing/head/helmet/space/rig/knight
 
 /obj/item/clothing/head/helmet/space/rig/knight/black
@@ -638,6 +638,15 @@
 	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, MUSHROOM_SHAPED)
 
+//Space hobo stuff
+/obj/item/clothing/head/helmet/space/ghetto/hobo
+	name = "tattered space-proof helmet"
+	desc = "After years of wear and tear this is somehow still 'space-proof'."
+
+/obj/item/clothing/suit/space/ghettorig/hobo
+	name = "tattered space-proof suit"
+	desc = "After years of wear and tear this is somehow still 'space-proof'."
+
 //RoR survivor Rig
 /obj/item/clothing/suit/space/rig/ror
 	name = "survivor's hardsuit"
@@ -646,7 +655,7 @@
 	item_state = "rorsuit"
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 	head_type = /obj/item/clothing/head/helmet/space/rig/ror
 
 /obj/item/clothing/head/helmet/space/rig/ror
@@ -656,7 +665,7 @@
 	item_state = "rorhelm"
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 /obj/item/clothing/head/helmet/space/rig/ror/update_icon()
 	return

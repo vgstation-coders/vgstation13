@@ -23125,6 +23125,13 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
+"boo" = (
+/obj/structure/wizard/scrying,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
 "bop" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/plating,
@@ -53843,9 +53850,7 @@
 	},
 /area/shuttle/nuclearops)
 "dxQ" = (
-/obj/effect/landmark{
-	name = "Syndicate-Uplink"
-	},
+/obj/structure/closet/syndicate/nuclear,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -81968,7 +81973,6 @@
 	pixel_y = -26
 	},
 /obj/item/device/radio/intercom{
-	broadcasting = 1;
 	freerange = 1;
 	name = "Common Channel";
 	pixel_x = -25;
@@ -92741,7 +92745,6 @@
 	name = "AI"
 	},
 /obj/item/device/radio/intercom{
-	broadcasting = 1;
 	freerange = 1;
 	name = "Common Channel";
 	pixel_y = 25
@@ -119226,7 +119229,6 @@
 	pixel_y = -26
 	},
 /obj/item/device/radio/intercom{
-	broadcasting = 1;
 	freerange = 1;
 	name = "Common Channel";
 	pixel_x = 27;
@@ -363890,7 +363892,7 @@ dty
 dty
 dty
 dzN
-dBd
+boo
 dBd
 dBd
 dBd

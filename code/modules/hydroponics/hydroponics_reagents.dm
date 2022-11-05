@@ -41,6 +41,7 @@
 		pestlevel = round(min(pestlevel + amount,PESTLEVEL_MAX))
 	else
 		pestlevel = round(max(0, pestlevel + amount))
+	update_icon_after_process = 1
 	
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_pestlevel()
 	return pestlevel
@@ -50,6 +51,7 @@
 		weedlevel = round(min(weedlevel + amount,WEEDLEVEL_MAX))
 	else
 		weedlevel = round(max(0, weedlevel + amount))
+	update_icon_after_process = 1
 	
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_weedlevel()
 	return weedlevel
@@ -83,6 +85,7 @@
 		plant_health = round(max(0, plant_health + amount))
 		if(get_planthealth() < 1)
 			die()
+	update_icon_after_process = 1
 			
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_planthealth()
 	return plant_health

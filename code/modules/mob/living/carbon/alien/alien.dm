@@ -21,7 +21,6 @@
 	var/neurotoxin_cooldown = 0
 
 	var/obj/item/weapon/card/id/wear_id = null // Fix for station bounced radios -- Skie
-	var/has_fine_manipulation = 0//Deprecated, only used by /mob/living/carbon/alien/humanoid/special which isn't compiled
 
 	var/move_delay_add = 0 // movement delay to add
 
@@ -44,7 +43,6 @@
 	. = ..()
 	change_sight(adding = SEE_MOBS)
 
-/*
 /mob/living/carbon/alien/update_perception()
 	if(dark_plane)
 		dark_plane.alphas["alien"] = 200
@@ -57,7 +55,6 @@
 		 			0,0,0,0)
 
 	check_dark_vision()
-*/
 
 /mob/living/carbon/alien/AdjustPlasma(amount)
 	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
@@ -72,16 +69,6 @@
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
 		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'> P:<font color='#E9DAE9' size='1'>[plasma]</font><br>  / <font color='#BE7DBE' size='1'>[max_plasma]</font></div>"
 	return
-
-/*
-/mob/living/carbon/alien/adjustFireLoss(amount) // Weak to Fire
-	if(amount > 0)
-		..(amount * 2)
-	else
-		..(amount)
-	return
-*/
-//No longer weak to fire
 
 /*Code for aliens attacking aliens. Because aliens act on a hivemind, I don't see them as very aggressive with each other.
 As such, they can either help or harm other aliens. Help works like the human help command while harm is a simple nibble.
