@@ -90,8 +90,7 @@ var/list/navbeacons = list()
 	var/request = signal.data["findbeacon"]
 	if(request && ((request in codes) || request == "any" || request == location))
 		spawn(1)
-			if (request != "patrol")
-				astar_debug_mulebots("navbeacons accepted request [request] and posted its own location")
+			astar_debug_mulebots("navbeacons accepted request [request] and posted its own location")
 			post_signal(request)
 
 	// return a signal giving location and transponder codes
@@ -112,8 +111,7 @@ var/list/navbeacons = list()
 	for(var/key in codes)
 		signal.data[key] = codes[key]
 
-	if (request != "patrol")
-		astar_debug_mulebots("navbeacon [location] posted signal with request [request] on freq [freq].")
+	astar_debug_mulebots("navbeacon [location] posted signal with request [request] on freq [freq].")
 
 	frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
 
