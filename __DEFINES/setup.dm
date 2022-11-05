@@ -1834,7 +1834,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 //Microwave-or-pan selective cookability of recipes
 #define COOKABLE_WITH_MICROWAVE (1<<0)
 #define COOKABLE_WITH_PAN (1<<1)
-#define COOKABLE_WITH_ALL COOKABLE_WITH_MICROWAVE | COOKABLE_WITH_PAN
+#define COOKABLE_WITH_ALL ALL
 
 //Flags for the contents of a cooking vessel
 #define COOKVESSEL_CONTAINS_REAGENTS (1<<0) //The cooking vessel contains reagents

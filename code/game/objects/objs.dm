@@ -91,7 +91,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/list/recipes = list()
 	for(var/type in (typesof(/datum/recipe) - /datum/recipe))
 		var/datum/recipe/thisrecipe = new type
-		if(thisrecipe.cookable_with & flags)
+		if((thisrecipe.cookable_with & flags) && ispath(thisrecipe.result)) //Check that the recipe is cookable with the given method, and also that the recipe isn't a base type with no result.
 			recipes += thisrecipe
 	return recipes
 
