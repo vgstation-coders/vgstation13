@@ -39,6 +39,8 @@
 	var/result //Result of a complete recipe. result = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 	var/time = 10 SECONDS //Length of time it takes to complete the recipe. In 10ths of a second
 	var/priority = 0 //To check which recipe takes priority if they share ingredients
+	var/cookable_with = COOKABLE_WITH_ALL //How this recipe can be cooked, eg. COOKABLE_WITH_MICROWAVE (see setup.dm).
+
 /*
 	check_reagents function
 	Looks for reagents in the reagent container passed to it, and if this matches what we require.
@@ -51,6 +53,7 @@
 		1/TRUE: Able to find enough reagents to satisfy requirements
 		-1: Found what we require, but there is more reagents than just what we need
 */
+
 /datum/recipe/proc/check_reagents(var/datum/reagents/avail_reagents)
 	. = 1
 	for(var/r_r in reagents)

@@ -1024,10 +1024,10 @@ var/list/tag_suits_list = list()
 		return
 	detonation_msg = "being touched by [toucher]"
 	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_attacked_by(mob/attacker, mob/attacked, mob/item)
+/obj/item/clothing/suit/bomber_vest/proc/on_attacked_by(mob/attacker, mob/attacked, obj/item/item)
 	detonation_msg = "being hit with \a [item] by [attacker]"
 	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/attacker, mob/attacked, mob/item)
+/obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/attacker, mob/attacked, obj/item/item)
 	detonation_msg = "being hit with a thrown [item]"
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_unarmed_attack(mob/attacker, mob/attacked)
