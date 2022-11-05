@@ -247,16 +247,6 @@
 	if(usr.has_hand_check())
 		attack_self(usr)
 		return TRUE
-
-/obj/item/device/flashlight/lamp/proc/toggle_onoff(var/onoff = null) //this is only called by gameticker.dm at roundstart, so we call update_brightness() with playsound = FALSE below.
-	if(on == onoff)
-		return
-	if(isnull(onoff))
-		on = !on
-	else
-		on = onoff
-	update_brightness(playsound = FALSE)
-
 //Lamps draw power from the area they're in, unlike flashlights.
 /obj/item/device/flashlight/lamp/New()
 	if(drawspower)
@@ -278,7 +268,7 @@
 /obj/item/device/flashlight/lamp/process(var/playsound = FALSE)
 	if(on && (!drawspower || pwrconn?.powered()))
 		icon_state = "[initial(icon_state)]-on"
-		set_light(brightness_on)
+		set_light()
 	else
 		icon_state = initial(icon_state)
 		set_light(0)
