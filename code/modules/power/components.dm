@@ -66,7 +66,7 @@
 		turf.power_connections += src
 
 /datum/power_connection/proc/removeFromTurf()
-	if(!turf)
+	if(!turf || !turf.power_connections)
 		return
 	// We don't grab the current turf here because we're removing the reference from the turf that has it.
 	turf.power_connections -= src

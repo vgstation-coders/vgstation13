@@ -8,7 +8,7 @@
 	icon_state = "light1"
 	anchored = 1.0
 	var/buildstage = 2
-	var/on = 0
+	var/on = 1
 	var/image/overlay
 
 /obj/machinery/light_switch/supports_holomap()
@@ -114,13 +114,20 @@
 /obj/machinery/light_switch/attack_hand(mob/user)
 	toggle_switch()
 
-/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null)
-	if(!isnull(newstate) && on == newstate)
-		return
+/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null, var/playsound = TRUE)
 	if(buildstage != 2)
 		return
-	on = !on
-	playsound(src,'sound/misc/click.ogg',30,0,-1)
+
+	if(isnull(newstate))
+		on = !on
+	else if(on != newstate)
+		on = newstate
+	else
+		return
+
+	if(playsound)
+		playsound(src,'sound/misc/click.ogg',30,0,-1)
+
 	var/area/this_area = get_area(src)
 	this_area.updateicon()
 

@@ -550,6 +550,30 @@ var/list/uplink_items = list()
 	discounted_cost = 12
 	jobs_with_discount = list("Grey")
 
+/datum/uplink_item/ayylmao/harmor
+	name = "MDF Heavy Armor"
+	desc = "A set of cumbersome but sturdy alien armor that excels at protecting the wearer from energy weapons and melee attacks. The armor plates were measured for a grey, but can be adjusted to fit a human as well. Not guaranteed to fit any other species. A soldier's uniform and boots are included with the kit."
+	item = /obj/item/weapon/storage/box/syndie_kit/ayylmao_harmor
+	cost = 4
+	discounted_cost = 3
+	jobs_with_discount = list("Grey")
+
+/datum/uplink_item/ayylmao/mdfbelt
+	name = "MDF Gear Belt"
+	desc = "A mothership soldier's belt. Loaded with an ion pistol, first aid supplies, binoculars, and an extended oxygen supply tank for operating in breached areas. Keep away from water."
+	item = /obj/item/weapon/storage/belt/mothership/partial_gear
+	cost = 5
+	discounted_cost = 4
+	jobs_with_discount = list("Grey")
+
+/datum/uplink_item/ayylmao/sdrone_grenade
+	name = "Saucer Drone Grenade"
+	desc = "A single grenade containing a payload of four mothership saucer drones. The drones are fragile, but equipped with a small cannon capable of firing scorch bolts. The drones will attack all unidentified lifeforms in the area except the grenade operator."
+	item = /obj/item/weapon/grenade/spawnergrenade/mothershipdrone
+	cost = 6
+	discounted_cost = 4
+	jobs_with_discount = list("Grey")
+
 // IMPLANTS
 // Any Syndicate item that gets implanted into the body goes here
 

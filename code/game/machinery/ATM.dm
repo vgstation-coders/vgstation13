@@ -98,16 +98,17 @@ log transactions
 		if(istype(I,/obj/item/weapon/spacecash))
 			var/obj/item/weapon/spacecash/dosh = I
 			//consume the money
-			authenticated_account.money += dosh.worth * dosh.amount
+			var/multiplier = dosh.arcanetampered ? rand(0,99) : 100
+			authenticated_account.money += round(dosh.worth * dosh.amount * (multiplier/100))
 			if(prob(50))
 				playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
 			else
 				playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
 
 			//create a transaction log entry
-			new /datum/transaction(authenticated_account, "Credit deposit", dosh.worth * dosh.amount, machine_id)
+			new /datum/transaction(authenticated_account, "Credit deposit", round(dosh.worth * dosh.amount * (multiplier/100)), machine_id)
 
-			to_chat(user, "<span class='info'>You insert [dosh.worth * dosh.amount] credit\s into \the [src].</span>")
+			to_chat(user, "<span class='info'>You insert [round(dosh.worth * dosh.amount * (multiplier/100))] credit\s into \the [src].</span>")
 			src.attack_hand(user)
 			qdel(I)
 	else
@@ -252,6 +253,7 @@ log transactions
 							<A href='?src=\ref[src];choice=view_screen;view_screen=1'>Change account security level</a><br>
 							<A href='?src=\ref[src];choice=view_screen;view_screen=2'>Make transfer to another bank account</a><br>
 							<A href='?src=\ref[src];choice=view_screen;view_screen=3'>View transaction log</a><br>
+							<A href='?src=\ref[src];choice=wage_percent'>Change virtual wallet wage payout percentage</a><br>
 							<A href='?src=\ref[src];choice=balance_statement'>Print balance statement</a><br>
 							<A href='?src=\ref[src];choice=create_debit_card'>Print new debit card ($5)</a><br>
 							<A href='?src=\ref[src];choice=toggle_account'>Toggle account status</a><br>
@@ -283,6 +285,12 @@ log transactions
 				if(authenticated_account && linked_db && authenticated_account.disabled < 2)
 					authenticated_account.disabled = !authenticated_account.disabled
 					to_chat(usr, "[bicon(src)]<span class='info'>Account [authenticated_account.disabled ? "disabled" : "enabled"].</span>")
+			if("wage_percent")
+				if(authenticated_account && linked_db && authenticated_account.disabled < 2)
+					var/new_wage_ratio = input(usr, "Input what % of wages end up in virtual wallets, from 0-100", "Wage Percentage",authenticated_account.virtual_wallet_wage_ratio) as num
+					if(!isnull(new_wage_ratio))
+						new_wage_ratio = clamp(new_wage_ratio,0,100)
+						authenticated_account.virtual_wallet_wage_ratio = new_wage_ratio
 			if("transfer")
 				if(CAN_INTERACT_WITH_ACCOUNT)
 					var/transfer_amount = text2num(href_list["funds_amount"])

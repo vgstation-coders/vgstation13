@@ -351,10 +351,20 @@
 /obj/item/weapon/storage/box/syndie_kit/emags_and_glue/ //Exactly what it sounds like.
 	name = "box (E&G)"
 	items_to_spawn = list(
-		/obj/item/weapon/glue = 4,
+		/obj/item/weapon/glue = 3,
 		/obj/item/weapon/card/emag = 3,
 	)
 
+//Syndicate Ayy Lmao Gear
+//The mothership sends its warmest regards
+/obj/item/weapon/storage/box/syndie_kit/ayylmao_harmor
+	name = "MDF Heavy Armor"
+	items_to_spawn = list(
+		/obj/item/clothing/suit/armor/mothership_heavy,
+		/obj/item/clothing/head/helmet/mothership_visor_heavy,
+		/obj/item/clothing/under/grey/grey_soldier,
+		/obj/item/clothing/shoes/jackboots/mothership
+	)
 
 //Syndicate Experimental Gear
 //Contains unique gear not found anywhere else

@@ -29,6 +29,11 @@
 			// the warm reaction doesn't require any particular temperature or the range of temperatures does not overlap, so there is no conflict
 			return FALSE
 
+	//test if the recipes are aliases - important if one of the reagents is a list
+	if(r1.result == r2.result)
+		if(r1.required_reagents == r2.required_reagents)
+			return FALSE
+
 	//find the reactions with the shorter and longer required_reagents list
 	var/datum/chemical_reaction/long_req
 	var/datum/chemical_reaction/short_req

@@ -5,12 +5,14 @@
 	icon_state = "beer"
 	reagent_list = BEER
 	artifact = FALSE
-	can_be_placed_into = null
 	units_per_tick = 1
 	var/synth_cost = 30 // 1500 cell charge for 50u beer
 
 /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/fits_in_iv_drip()
 	return FALSE
+
+/obj/item/weapon/reagent_containers/glass/replenishing/cyborg/afterattack(var/atom/target, var/mob/user, var/adjacency_flag, var/click_params)
+    return //This container does not splash
 
 /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/process()
 	if(isrobot(loc))

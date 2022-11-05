@@ -40,6 +40,7 @@
 		humanform = FALSE
 	else
 		user.set_species(identity.species, 0)
+		user.set_default_language(user.init_language)
 		user.name = identity.real_name
 		user.real_name = identity.real_name
 		user.dna = identity

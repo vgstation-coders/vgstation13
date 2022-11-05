@@ -539,6 +539,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return
 	if(supernatural && isholyweapon(O))
 		purge = 3
+	playsound(loc, O.hitsound, 50, 1, -1)
 	..()
 
 
@@ -881,3 +882,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return TRUE
 	else
 		return FALSE
+
+// Simplemobs do not have hands.
+/mob/living/simple_animal/put_in_hand_check(obj/item/W, index)
+	return 0

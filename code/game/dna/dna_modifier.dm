@@ -75,6 +75,9 @@
 	light_range_on = 3
 	light_power_on = 2
 
+/obj/machinery/dna_scannernew/splashable()
+	return FALSE
+
 /obj/machinery/dna_scannernew/New()
 	. = ..()
 
@@ -1080,6 +1083,8 @@
 
 				var/success = 1
 				var/obj/item/weapon/dnainjector/I = new /obj/item/weapon/dnainjector
+				if(arcanetampered)
+					I.arcanetampered = arcanetampered
 				var/datum/dna2/record/buf = src.buffers[bufferId]
 				if(href_list["createBlockInjector"])
 					waiting_for_user_input=1

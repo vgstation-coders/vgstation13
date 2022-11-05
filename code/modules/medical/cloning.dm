@@ -75,8 +75,12 @@
 	T = 0
 	if(total >= 16)
 		upgraded = 1
+		name = "Advanced Cloning Pod"
+		desc = "An electronically-lockable pod for growing organic tissue. This one is extremely advanced, and can output perfectly fine clones that do not need treatment of any kind."
 	else
 		upgraded = 0
+		name = initial(name)
+		desc = initial(desc)
 
 //The return of data disks?? Just for transferring between genetics machine/cloning machine.
 //TO-DO: Make the genetics machine accept them.

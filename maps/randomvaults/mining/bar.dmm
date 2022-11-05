@@ -369,7 +369,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/machinery/smartfridge/drinks,
+/obj/machinery/smartfridge,
 /turf/simulated/wall/mineral/wood,
 /area/mining_bar)
 "bf" = (

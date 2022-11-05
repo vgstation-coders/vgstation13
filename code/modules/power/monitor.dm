@@ -140,23 +140,24 @@
 			var/obj/machinery/power/apc/apc = machine
 			var/list/apc_status = apc.get_monitor_status()
 
-			apc_status["\ref[apc]"]["f_demand"] = format_watts(apc_status["\ref[apc]"]["demand"])
-			data["areas"]["\ref[get_area(apc)]"] = list(
-				"name" = get_area(apc).name,
-				"demand" = apc_status["\ref[apc]"]["demand"],
-				"charging" = MONITOR_STATUS_BATTERY_STEADY,
-				"charge" = 0,
-				"eqp" = apc.equipment,
-				"lgt" = apc.lighting,
-				"env" = apc.environ,
-				"machines" = apc_status
-			)
+			if (apc_status) //broken APCs and APCs being dismantled will return null, don't forget to check for those
+				apc_status["\ref[apc]"]["f_demand"] = format_watts(apc_status["\ref[apc]"]["demand"])
+				data["areas"]["\ref[get_area(apc)]"] = list(
+					"name" = get_area(apc).name,
+					"demand" = apc_status["\ref[apc]"]["demand"],
+					"charging" = MONITOR_STATUS_BATTERY_STEADY,
+					"charge" = 0,
+					"eqp" = apc.equipment,
+					"lgt" = apc.lighting,
+					"env" = apc.environ,
+					"machines" = apc_status
+				)
 
-			if (apc_status["\ref[apc]_b"])
-				apc_status["\ref[apc]_b"]["f_demand"] = format_watts(apc_status["\ref[apc]_b"]["demand"])
-				data["areas"]["\ref[get_area(apc)]"]["demand"] += apc_status["\ref[apc]_b"]["demand"]
-				data["areas"]["\ref[get_area(apc)]"]["charging"] = apc_status["\ref[apc]_b"]["charging"]
-				data["areas"]["\ref[get_area(apc)]"]["charge"] = apc_status["\ref[apc]_b"]["charge"]
+				if (apc_status["\ref[apc]_b"])
+					apc_status["\ref[apc]_b"]["f_demand"] = format_watts(apc_status["\ref[apc]_b"]["demand"])
+					data["areas"]["\ref[get_area(apc)]"]["demand"] += apc_status["\ref[apc]_b"]["demand"]
+					data["areas"]["\ref[get_area(apc)]"]["charging"] = apc_status["\ref[apc]_b"]["charging"]
+					data["areas"]["\ref[get_area(apc)]"]["charge"] = apc_status["\ref[apc]_b"]["charge"]
 
 		else if (machine && !(machine in machines)) //Some machines (eg: SMES) could have an input terminal and output wire knot on
 			machines += machine						// the same grid, counting them twice. This prevents that
@@ -219,16 +220,8 @@
 				demand.Cut(1, 2)
 
 /obj/machinery/computer/powermonitor/power_change()
-	..()
 	search()
-	if(stat & BROKEN)
-		icon_state = "broken"
-	else
-		if (stat & (FORCEDISABLE|NOPOWER))
-			spawn(rand(0, 15))
-				icon_state = "c_unpowered"
-		else
-			icon_state = initial(icon_state)
+	..()
 
 /obj/machinery/computer/powermonitor/process()
 	record()

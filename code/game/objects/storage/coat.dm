@@ -25,6 +25,12 @@
 		hold = null
 	return ..()
 
+/obj/item/clothing/suit/storage/can_quick_store(var/obj/item/I)
+	return (hold && hold.can_be_inserted(I,1)) || ..()
+
+/obj/item/clothing/suit/storage/quick_store(var/obj/item/I,mob/user)
+	return (hold && hold.handle_item_insertion(I,0)) || ..()
+
 /obj/item/clothing/suit/storage/attack_hand(mob/user)
 	if(user == src.loc)
 		return hold.attack_hand(user)
@@ -54,4 +60,4 @@
 		return hold.attack_hand(user)
 	else
 		return ..()
-	
+

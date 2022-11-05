@@ -59,4 +59,4 @@
 
 /datum/objective/target/assassinate/sacrifice/feedbackText()
 	if(target && target.current)
-		return "<span class = 'sinister'>You succesfully sacrificied [target.current.real_name]. The veil between this world and Nar'Sie grows thinner.</span>"
+		return "<span class = 'sinister'>You succesfully sacrificed [target.current.real_name]. The veil between this world and Nar'Sie grows thinner.</span>"

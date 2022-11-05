@@ -11,6 +11,7 @@
 	force = 2.5 //A big book, solely used for non-Chaplains trying to use it on people
 	flags = FPRINT
 	attack_verb = list("whacks", "slaps", "slams", "forcefully blesses")
+	autoignition_temperature = AUTOIGNITION_PAPER //bible-burning heathen
 	var/mob/affecting = null
 	var/datum/religion/my_rel = new /datum/religion
 	actions_types = list(/datum/action/item_action/convert)

@@ -1,14 +1,14 @@
+#define MILLISECONDS * 0.01
 #define SECONDS * 10
 #define MINUTES * 600
 #define HOURS   * 36000
 
-#define TimeOfGame (get_game_time())
-#define TimeOfTick (world.tick_usage*0.01*world.tick_lag)
+#define MIDNIGHT_ROLLOVER_CHECK (rollovercheck_last_timeofday != world.timeofday ? update_midnight_rollover() : midnight_rollovers)
+#define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
+#define REALTIMEOFDAY (world.timeofday + (MIDNIGHT_ROLLOVER * MIDNIGHT_ROLLOVER_CHECK))
 
-#define DS2TICKS(DS) ((DS)/world.tick_lag)
-#define TICKS2DS(T) ((T) TICKS)
-#define MS2DS(T) ((T) MILLISECONDS)
-#define DS2MS(T) ((T) * 100)
+
+#define TimeOfGame (get_game_time())
 
 /proc/get_game_time()
 	var/global/time_offset = 0
@@ -33,7 +33,6 @@
 	return "[(round(((timestamp / 600) + 55) / 60) + 11) % 24]:\
 	[(((timestamp / 600) + 55) % 60) < 10 ? add_zero(((timestamp / 600) + 55) % 60, 1) : ((timestamp / 600) + 55) % 60]\
 	[give_seconds ? ":[(timestamp / 10 % 60) < 10 ? add_zero(timestamp / 10 % 60, 1) : timestamp / 10 % 60]" : ""]"
-
 
 /proc/formatTimeDuration(var/deciseconds)
 	var/m = round(deciseconds / 600)
@@ -121,13 +120,11 @@
 			return LATETIME
 	CRASH("getTimeslot: Hour not found.")
 
-
 var/global/obj/effect/statclick/time/time_statclick
 /proc/timeStatEntry()
 	if(!time_statclick)
 		time_statclick = new /obj/effect/statclick/time("loading...")
 	stat("Station Time:", time_statclick.update("[worldtime2text()]"))
-
 
 var/midnight_rollovers = 0
 var/rollovercheck_last_timeofday = 0
@@ -136,7 +133,3 @@ var/rollovercheck_last_timeofday = 0
 		midnight_rollovers++
 	rollovercheck_last_timeofday = world.timeofday
 	return midnight_rollovers
-
-#define MIDNIGHT_ROLLOVER_CHECK (rollovercheck_last_timeofday != world.timeofday ? update_midnight_rollover() : midnight_rollovers)
-#define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
-#define REALTIMEOFDAY (world.timeofday + (MIDNIGHT_ROLLOVER * MIDNIGHT_ROLLOVER_CHECK))

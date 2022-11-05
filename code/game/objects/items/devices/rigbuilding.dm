@@ -22,7 +22,7 @@
 			desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. Though the wiring is secure, it lacks a power source."
 		if(RIG_CELL)
 			icon_state = "rigframe_2"
-			desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. This frame is ready to recieve its plating."
+			desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. This frame is ready to receive its plating."
 		if(RIG_PLATE)
 			icon_state = "rigframe_3"
 			desc = "A nearly-complete hardsuit frame. The plates are installed, but not yet fastened. You couldn't wear it without it falling apart around you."

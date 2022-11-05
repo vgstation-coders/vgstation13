@@ -39,6 +39,8 @@
 
 	var/special = CENTRIFUGE_LIGHTSPECIAL_OFF
 
+/obj/machinery/disease2/centrifuge/splashable()
+	return FALSE
 
 /obj/machinery/disease2/centrifuge/New()
 	. = ..()

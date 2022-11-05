@@ -108,7 +108,10 @@ the HUD updates properly! */
 		holder = patient.hud_list[STATUS_HUD]
 		if(holder)
 			if(patient.isDead())
-				holder.icon_state = "huddead"
+				if(patient.check_can_revive() == CAN_REVIVE_IN_BODY)
+					holder.icon_state = "huddead_revivable"
+				else
+					holder.icon_state = "huddead"
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
 			else if(has_recorded_disease(patient))
@@ -294,6 +297,9 @@ the HUD updates properly! */
 		if(G.see_invisible)
 			see_invisible = G.see_invisible
 
+	seedarkness = G.seedarkness
+	update_darkness()
+
 	/* HUD shit goes here, as long as it doesn't modify sight flags
 	 * The purpose of this is to stop xray and w/e from preventing you from using huds -- Love, Doohl
 	 */
@@ -333,4 +339,5 @@ the HUD updates properly! */
 				holder.icon_state = "consthealth0"
 			else
 				holder.icon_state = "consthealth[10*round((construct.health/construct.maxHealth)*10)]"
+			holder.plane = ABOVE_LIGHTING_PLANE
 			C.images += holder

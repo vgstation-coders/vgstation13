@@ -171,6 +171,10 @@
 				//target.Stun(4)	//naaah
 				target.Knockdown(4)
 		else
+			if(iscarbon(target))
+				var/mob/living/carbon/C = target
+				if(C.check_shields(force,src))
+					return
 			playsound(src, 'sound/weapons/Genhit.ogg', 50, 1, -1)
 			target.Knockdown(2)
 			target.Stun(2)
@@ -248,6 +252,7 @@
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	mech_flags = MECH_SCAN_ILLEGAL
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 

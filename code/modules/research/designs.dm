@@ -100,7 +100,7 @@ The required techs are the following:
 				var/all_correct = 1
 
 				for(var/matID in D.materials)
-					if(copytext(matID, 1, 2) == "$" && (part.materials.storage[matID] != D.materials[matID])) //if it's a materal, but it doesn't match the atom's values
+					if(copytext(matID, 1, 2) == "$" && (part.materials.storage[matID] != D.materials[matID])) //if it's a material, but it doesn't match the atom's values
 						all_correct = 0
 						break
 				if(all_correct)
@@ -116,6 +116,11 @@ The required techs are the following:
 //Acts as FindDesign, but makes a new design if it doesn't find one
 //Doesn't take types for the design creation, so don't rely on it for that
 /proc/getScanDesign(var/obj/O)
+	//all the designs are hidden somewhere in the backend
+	//so if you have an unupgraded machine scanned earlier it'll overwrite an upgraded machine you scan later
+	//that's why we have to force it to make a new datum if it's a machine
+	if(istype(O, /obj/machinery))
+		return new/datum/design/mechanic_design(O)
 	var/datum/design/D
 	if(O.materials)
 		D = FindDesign(O, 1) //The 1 means we check strict materials - if we don't have materials, we just check the type

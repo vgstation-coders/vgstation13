@@ -231,7 +231,7 @@
 	return isgrinch(M)
 
 /obj/item/weapon/storage/backpack/holding/grinch/attackby(obj/item/weapon/W, mob/user)
-	var/obj/item/weapon/storage/backpack/holding/H = locate(/obj/item/weapon/storage/backpack/holding) in W
-	if(H || istype(W, /obj/item/weapon/storage/backpack/holding))
+	var/list/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
+	if(recursive_list.len)
 		return
 	return ..()
