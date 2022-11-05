@@ -143,9 +143,14 @@
 	name = "plasma-proof sealing authority"
 	desc = "Brings the suit it is installed into up to plasma environment standards."
 	active_power_usage = 5
+	var/already_has = FALSE //what kind of shitlang uses all cap booleans?
 
 /obj/item/rig_module/plasma_proof/activate()
 	if(!check_activate())
+		return
+	if(rig.clothing_flags & PLASMAGUARD) //i think that's how it's done?
+		say_to_wearer("Existing plasma seal detected. Aborting.")
+		already_has=TRUE
 		return
 	say_to_wearer("Plasma seal initialized.")
 	rig.clothing_flags |= PLASMAGUARD
@@ -155,6 +160,8 @@
 
 /obj/item/rig_module/plasma_proof/deactivate()
 	if(!check_deactivate())
+		return
+	if(already_has)
 		return
 	say_to_wearer("Plasma seal disengaged.")
 	rig.clothing_flags &= ~PLASMAGUARD
