@@ -313,7 +313,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/receiver/Destroy()
 	if(blackout_active)
-		malf_radio_blackout = FALSE 
+		malf_radio_blackout = FALSE
 	..()
 
 /obj/machinery/telecomms/receiver/receive_signal(datum/signal/signal)
@@ -642,7 +642,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 	var/list/memory = list()	// stored memory
 	var/rawcode = ""	// the code to compile (raw text)
-	var/datum/TCS_Compiler/Compiler	// the compiler that compiles and runs the code
+	var/datum/n_Compiler/TCS_Compiler/Compiler	// the compiler that compiles and runs the code
 	var/autoruncode = 0		// 1 if the code is set to run every time a signal is picked up
 
 	var/encryption = "null" // encryption key: ie "password"

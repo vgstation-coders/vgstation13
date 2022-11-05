@@ -11,6 +11,10 @@
 	var/image/color_overlay
 	var/atom/target = null
 	var/sprite_shrunk = FALSE //I couldn't think of a satisfactory way to check if our transform matrix is minty fresh, so this is used to track if we're shrunk from being stuck to a vending machine
+	autoignition_temperature = AUTOIGNITION_PAPER
+	goes_in_mouth = TRUE
+	gender = PLURAL
+	uncountable = TRUE
 
 /obj/item/gum/New()
 	..()
@@ -174,7 +178,7 @@
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				if(prob(25)) //So it's not an instarape in case of acid
-					reagents.reaction(M, INGEST)
+					reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,1)/(reagents.reagent_list.len))
 				reagents.trans_to(M, 1)
 		else //Else just remove some of the reagents
 			reagents.remove_any(REAGENTS_METABOLISM)

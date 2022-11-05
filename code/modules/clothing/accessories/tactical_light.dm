@@ -4,6 +4,7 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "taclight"
 	accessory_exclusion = ACCESSORY_LIGHT
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/obj/item/device/flashlight/tactical/source_light
 	ignoreinteract = TRUE
 

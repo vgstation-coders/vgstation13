@@ -62,7 +62,8 @@
 		return
 
 	form_title = "[grown_seed.seed_name] (#[grown_seed.uid])"
-	user.visible_message("<span class='notice'>[user] runs the scanner over [target].</span>")
+	if(loc == user) //Don't show this message if we are not inhand
+		user.visible_message("<span class='notice'>[user] runs the scanner over [target].</span>")
 
 	var/dat = list()
 	dat += "<h3>Plant data for [form_title]</h3>"
@@ -171,14 +172,11 @@
 	if(grown_seed.hematophage)
 		dat += "<br>It is a highly specialized hematophage that will only draw nutrients from blood."
 
-	switch(grown_seed.carnivorous)
+	switch(grown_seed.voracious)
 		if(1)
-			dat += "<br>It is carnivorous and will eat tray pests for sustenance."
+			dat += "<br>It is carnivorous and will eat tray pests and weeds for sustenance."
 		if(2)
 			dat	+= "<br>It is carnivorous and poses a significant threat to living things around it."
-
-	if(grown_seed.parasite)
-		dat += "<br>It is capable of parasitizing and gaining sustenance from tray weeds."
 
 	if(grown_seed.alter_temp)
 		dat += "<br>It will gradually alter the local room temperature to match it's ideal habitat."
@@ -252,42 +250,7 @@
 	user.visible_message("<span class='notice'>\The [src] spits out a piece of paper.</span>")
 	return
 
-// *************************************
-// Hydroponics Tools
-// *************************************
-
-/obj/item/weapon/plantspray
-	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-	item_state = "spray"
-	flags = FPRINT | NO_ATTACK_MSG
-	slot_flags = SLOT_BELT
-	throwforce = 4
-	w_class = W_CLASS_SMALL
-	throw_speed = 2
-	throw_range = 10
-	var/toxicity = 40
-	var/uses = 0
-
-/obj/item/weapon/plantspray/proc/use(amount = 1)
-	uses = max(uses - amount,0)
-	if(!uses)
-		name = "empty [src]"
-		return FALSE
-	else
-		return TRUE
-
-/obj/item/weapon/plantspray/weeds
-	name = "weed-spray"
-	desc = "It's a toxic mixture, in spray form, to kill small weeds."
-	icon_state = "weedspray"
-	uses = 6
-
-/obj/item/weapon/plantspray/pests
-	name = "pest-spray"
-	desc = "It's some pest eliminator spray! <I>Do not inhale!</I>"
-	icon_state = "pestspray"
-	uses = 6
-
+//Hatchets and things
 /obj/item/weapon/minihoe
 	name = "mini hoe"
 	desc = "It's used for removing weeds or scratching your back."
@@ -303,51 +266,9 @@
 	w_type = RECYK_METAL
 	attack_verb = list("slashes", "slices", "cuts", "claws")
 
-// *************************************
-// Weedkiller defines for hydroponics
-// *************************************
-
-/obj/item/weedkiller
-	name = "bottle of weedkiller"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-	flags = FPRINT
-	var/toxicity = 40
-	var/uses = 6
-
-/obj/item/weedkiller/proc/use(amount = 1)
-	uses = max(uses - amount,0)
-	if(!uses)
-		name = "empty [src]"
-		return FALSE
-	else
-		return TRUE
-
-/obj/item/weedkiller/triclopyr
-	name = "bottle of glyphosate"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle16"
-	flags = FPRINT
-	toxicity = 4
-
-/obj/item/weedkiller/lindane
-	name = "bottle of triclopyr"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle18"
-	flags = FPRINT
-	toxicity = 6
-
-/obj/item/weedkiller/D24
-	name = "bottle of 2,4-D"
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle15"
-	flags = FPRINT
-	toxicity = 8
-
-//Hatchets and things to kill kudzu
 /obj/item/weapon/hatchet
 	name = "hatchet"
-	desc = "A very sharp axe blade upon a short fibremetal handle. It has a long history of chopping things, but now it is used for chopping wood."
+	desc = "A very sharp axe blade upon a short wooden handle. It has a long history of chopping things, but now it is used for chopping wood."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "hatchet"
 	flags = FPRINT
@@ -376,6 +297,12 @@
 	icon_state = "unathiknife"
 	attack_verb = list("rips", "tears", "cuts")
 
+/obj/item/weapon/hatchet/metalhandle
+	name = "hatchet"
+	desc = "A soulless attempt at upgrading the traditional hatchet, clearly a mass produced inferior tool compared to the ones made by elder botanist master-crafstmen."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "lamehatchet"
+
 /obj/item/weapon/scythe
 	icon_state = "scythe0"
 	name = "scythe"
@@ -397,7 +324,10 @@
 		return
 	if(istype(A, /obj/effect/plantsegment) || istype(A, /turf/simulated/floor) || istype(A, /obj/effect/biomass) || istype(A, /obj/structure/cable/powercreeper))
 		for(var/obj/effect/plantsegment/B in range(user,1))
-			B.take_damage(src)
+			if(is_hot() || (is_sharp() && !B.seed.ligneous))
+				B.take_damage(force * 4)
+			else
+				B.take_damage(force)
 		for(var/obj/effect/biomass/BM in range(user,1))
 			BM.adjust_health(rand(15,45))
 		for(var/obj/structure/cable/powercreeper/C in range(user,1))

@@ -24,7 +24,7 @@
 /obj/item/clothing/mask/explosive_collar/update_icon()
 	icon_state = primed ? "bombcollaron" : "bombcollaroff"
 
-/obj/item/clothing/mask/explosive_collar/acidable()
+/obj/item/clothing/mask/explosive_collar/dissolvable()
 	return FALSE
 
 /obj/item/clothing/mask/explosive_collar/proc/explode()

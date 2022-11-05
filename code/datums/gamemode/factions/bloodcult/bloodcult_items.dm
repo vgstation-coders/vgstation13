@@ -1053,7 +1053,7 @@ var/list/arcane_tomes = list()
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	mech_flags = MECH_SCAN_FAIL//not that you should be able to drop it in the first place BUT just in case
 	var/mob/originator = null
-	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger/linked_ui 
+	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger/linked_ui
 	var/stacks = 0
 	var/absorbed = 0
 	surgerysound = 'sound/items/scalpel.ogg'
@@ -1560,7 +1560,7 @@ var/list/arcane_tomes = list()
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
-	
+
 	for(var/datum/reagent/R in reagents.reagent_list)
 		if(R.id == BLOOD)
 			var/datum/reagent/blood/B = R
@@ -1573,7 +1573,7 @@ var/list/arcane_tomes = list()
 			var/mob/living/carbon/human/H = hit_atom
 			if(!(H.species.chem_flags & NO_DRINK) && !(H.get_body_part_coverage(MOUTH)))
 				H.visible_message("<span class='warning'>Some of \the [src]'s content spills into \the [H]'s mouth.</span>","<span class='danger'>Some of \the [src]'s content spills into your mouth.</span>")
-				reagents.reaction(H, INGEST)
+				reagents.reaction(H, INGEST, amount_override = min(reagents.total_volume,gulp_size)/(reagents.reagent_list.len))
 				reagents.trans_to(H, gulp_size)
 	transfer(get_turf(hit_atom), null, splashable_units = -1)
 

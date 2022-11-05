@@ -74,6 +74,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/clown_base
 	file_path = "maps/randomvaults/clown_base.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/rust
 	file_path = "maps/randomvaults/rust.dmm"

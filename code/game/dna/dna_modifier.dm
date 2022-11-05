@@ -75,6 +75,9 @@
 	light_range_on = 3
 	light_power_on = 2
 
+/obj/machinery/dna_scannernew/splashable()
+	return FALSE
+
 /obj/machinery/dna_scannernew/New()
 	. = ..()
 
@@ -90,7 +93,9 @@
 
 /obj/machinery/dna_scannernew/RefreshParts()
 	var/efficiency = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts) efficiency += SP.rating-1
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		if(!istype(SP,/obj/item/weapon/stock_parts/console_screen))
+			efficiency += SP.rating-1
 	injector_cooldown = initial(injector_cooldown) - 15*(efficiency)
 
 /obj/machinery/dna_scannernew/allow_drop()
@@ -1078,6 +1083,8 @@
 
 				var/success = 1
 				var/obj/item/weapon/dnainjector/I = new /obj/item/weapon/dnainjector
+				if(arcanetampered)
+					I.arcanetampered = arcanetampered
 				var/datum/dna2/record/buf = src.buffers[bufferId]
 				if(href_list["createBlockInjector"])
 					waiting_for_user_input=1

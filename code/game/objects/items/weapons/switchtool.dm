@@ -18,12 +18,14 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 	var/hmodule = null
+	var/index = 0
+	var/fakename = ""
 
 	//the colon separates the typepath from the name
 	var/list/obj/item/stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
+											"/obj/item/tool/crowbar:crowbar" = null,
 											"/obj/item/tool/wrench:wrench" = null,
 											"/obj/item/tool/wirecutters:wirecutters" = null,
-											"/obj/item/tool/crowbar:crowbar" = null,
 											"/obj/item/weapon/chisel:chisel" = null,
 											"/obj/item/device/multitool:multitool" = null)
 	var/obj/item/deployed //what's currently in use
@@ -73,6 +75,7 @@
 /obj/item/weapon/switchtool/examine(mob/user)
 	..()
 	to_chat(user, "This one is capable of holding [get_formatted_modules()].")
+	to_chat(user, " Use SHIFT+Mousewheel to quickly Swap tools")
 
 /obj/item/weapon/switchtool/attack_self(mob/user)
 	if(!user)
@@ -80,7 +83,7 @@
 
 	if(deployed)
 		edit_deploy(0)
-		to_chat(user, "You store \the [deployed].")
+		to_chat(user, "You store \the [arcanetampered ? fakename : deployed].")
 		undeploy(user)
 	else
 		choose_deploy(user)
@@ -102,6 +105,22 @@
 		return TRUE
 	else
 		return ..()
+
+/obj/item/weapon/switchtool/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)
+	var/modifiers = params2list(params)
+	if (modifiers["shift"])
+		if (delta_y <= 0)
+			index++
+		else
+			index--
+		if (index > stored_modules.len)
+			index = 0
+		if(index < 0)
+			index = stored_modules.len
+		var/moduled = stored_modules[index]
+		undeploy()
+		deploy(moduled, user)
+		edit_deploy(1)
 
 /obj/item/weapon/switchtool/proc/get_module_type(var/module)
 	return copytext(module, 1, findtext(module, ":"))
@@ -147,7 +166,7 @@
 		if(stored_modules[module] == deployed)
 			stored_modules[module] = null
 			break
-	to_chat(user, "You successfully remove \the [deployed] from \the [src].")
+	to_chat(user, "You successfully remove \the [arcanetampered ? fakename : deployed] from \the [src].")
 	playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 	undeploy(user)
 	return TRUE
@@ -180,16 +199,18 @@
 	user.update_inv_hands()
 
 /obj/item/weapon/switchtool/proc/deploy(var/module, mob/user)
-
+	if(arcanetampered)
+		module = pick(stored_modules)
 	if(!(module in stored_modules))
 		return FALSE
 	if(!stored_modules[module])
 		return FALSE
 	if(deployed)
 		return FALSE
-
 	playsound(src, deploy_sound, 10, 1)
 	deployed = stored_modules[module]
+	if(arcanetampered)
+		module = pick(stored_modules)
 	hmodule = get_module_name(module)
 	var/image/inhand_overlayr = image('icons/mob/in-hand/right/switchtool.dmi', src, "[hmodule]")
 	var/image/inhand_overlayl = image('icons/mob/in-hand/left/switchtool.dmi', src, "[hmodule]")
@@ -199,9 +220,14 @@
 	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = inhand_overlayr
 	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = inhand_overlayl
 	user.update_inv_hands()
+	if(arcanetampered)
+		module = pick(stored_modules)
+		fakename = "[stored_modules[module]]"
 	return TRUE
 
 /obj/item/weapon/switchtool/proc/edit_deploy(var/doedit)
+	if(!deployed)
+		return
 	if(doedit) //Makes the deployed item take on the features of the switchtool for attack animations and text. Other bandaid fixes for snowflake issues can go here.
 		sharpness = deployed.sharpness
 		deployed.name = name
@@ -209,7 +235,8 @@
 		//deployed.icon_state = icon_state
 		deployed.overlays = overlays
 		deployed.cant_drop = TRUE
-	else //Revert the changes to the deployed item.
+	//Revert the changes to the deployed item.
+	else
 		sharpness = initial(sharpness)
 		deployed.name = initial(deployed.name)
 		deployed.icon = initial(deployed.icon)
@@ -252,7 +279,7 @@
 					true_module = checkmodule
 					break
 			if(deploy(true_module,user))
-				to_chat(user, "You deploy \the [deployed].")
+				to_chat(user, "You deploy \the [arcanetampered ? fakename : deployed].")
 				edit_deploy(1)
 			return TRUE
 		return
@@ -301,7 +328,8 @@
 	dynamic_overlay.len = 0
 	w_class = initial(w_class)
 	update_icon()
-	user.update_inv_hands()
+	if(user)
+		user.update_inv_hands()
 
 /obj/item/weapon/switchtool/swiss_army_knife
 	name = "swiss army knife"
@@ -312,12 +340,12 @@
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 
 	stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
+						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/tool/wrench:wrench" = null,
 						"/obj/item/tool/wirecutters:wirecutters" = null,
-						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/weapon/kitchen/utensil/knife/large:knife" = null,
 						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
-						"/obj/item/weapon/hatchet:hatchet" = null,
+						"/obj/item/weapon/hatchet/metalhandle:hatchet" = null,
 						"/obj/item/weapon/lighter/zippo:Zippo lighter" = null,
 						"/obj/item/weapon/match/strike_anywhere:strike-anywhere match" = null,
 						"/obj/item/weapon/pen:pen" = null)
@@ -402,9 +430,9 @@
 		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
 			if(!(has_tech & ENGI))
 				stored_modules["/obj/item/tool/screwdriver:screwdriver"] = new /obj/item/tool/screwdriver(src)
+				stored_modules["/obj/item/tool/crowbar:crowbar"] = new /obj/item/tool/crowbar(src)
 				stored_modules["/obj/item/tool/wrench:wrench"] = new /obj/item/tool/wrench(src)
 				stored_modules["/obj/item/tool/wirecutters:wirecutters"] = new /obj/item/tool/wirecutters(src)
-				stored_modules["/obj/item/tool/crowbar:crowbar"] = new /obj/item/tool/crowbar(src)
 				stored_modules["/obj/item/device/multitool:multitool"] = new /obj/item/device/multitool(src)
 				stored_modules["/obj/item/tool/weldingtool/experimental:experimental welding tool"] = new /obj/item/tool/weldingtool/experimental(src)
 				to_chat(user, "The holo switchtool has engineering designs now!")
@@ -548,9 +576,9 @@
 						"/obj/item/tool/retractor:retractor" = null,
 						"/obj/item/tool/bonesetter:bone setter" = null,
 						"/obj/item/tool/screwdriver:screwdriver" = null,
+						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/tool/wrench:wrench" = null,
 						"/obj/item/tool/wirecutters:wirecutters" = null,
-						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/device/multitool:multitool" = null,
 						"/obj/item/tool/weldingtool/experimental:experimental welding tool" = null,
 						"/obj/item/weapon/soap/holo:UV sterilizer" = null,
@@ -581,8 +609,8 @@
 	name = "\improper Engineering switchtool"
 	desc = "A switchtool designed specifically to be the perfect companion for an Engineer."
 	stored_modules = list(
-		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/screwdriver:screwdriver" = null,
+		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/weldingtool/hugetank:welding tool" = null,
 		"/obj/item/tool/wirecutters:wirecutters" = null,
 		"/obj/item/tool/wrench:wrench" = null,
@@ -613,8 +641,8 @@
 
 /obj/item/weapon/switchtool/engineering/mech
 	stored_modules = list(
-		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/screwdriver:screwdriver" = null,
+		"/obj/item/tool/crowbar:crowbar" = null,
 		"/obj/item/tool/weldingtool/hugetank/mech:welding tool" = null,
 		"/obj/item/tool/wirecutters:wirecutters" = null,
 		"/obj/item/tool/wrench:wrench" = null,

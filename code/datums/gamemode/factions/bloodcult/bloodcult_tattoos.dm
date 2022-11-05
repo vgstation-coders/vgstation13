@@ -49,7 +49,7 @@ var/list/blood_communion = list()
 	icon_state = "silent"
 	tier = 1
 
-/datum/cult_tattoo/dagger // now available to all cultists by default
+/datum/cult_tattoo/dagger
 	name = TATTOO_DAGGER
 	desc = "Materialize a sharp dagger in your hand for a small cost in blood. Use to retrieve."
 	icon_state = "dagger"
@@ -57,9 +57,10 @@ var/list/blood_communion = list()
 
 /datum/cult_tattoo/dagger/getTattoo(var/mob/M)
 	..()
+	/*
 	if (iscultist(M))
 		M.add_spell(new /spell/cult/blood_dagger, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-
+	*/
 
 ///////////////////////////
 //                       //

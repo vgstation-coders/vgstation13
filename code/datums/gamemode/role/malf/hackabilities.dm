@@ -265,7 +265,7 @@
 
 /datum/malfhack_ability/toggle/radio_blackout
 	name = "Communications Blackout"
-	desc = "Force all radio traffic through this reciever and scramble it, making it much harder to communicate."
+	desc = "Force all radio traffic through this receiver and scramble it, making it much harder to communicate."
 	icon = "radial_jam"
 	icon_toggled = "radial_unjam"
 	cost = 10
@@ -476,7 +476,7 @@
 	if (M.apcs.len < 3)
 		to_chat(A, "<span class='notice'>You don't have enough hacked APCs to take over the station yet. You need to hack at least 3, however hacking more will make the takeover faster. You have hacked [M.apcs.len] APCs so far.</span>")
 		return
-	if (alert(A, "Are you sure you wish to initiate the takeover? The station hostile runtime detection software is bound to alert everyone. You have hacked [M.apcs.len] APCs.", "Takeover:", "Yes", "No") != "Yes")
+	if (alert(A, "Are you sure you wish to initiate the takeover? The station hostile runtime detection software is bound to alert everyone. You have hacked [M.apcs.len] APCs, and it will take [round(MF.AI_win_timeleft / (M.apcs.len / 6), 1)] seconds to complete.", "Takeover:", "Yes", "No") != "Yes")
 		return
 
 	MF.stage(FACTION_ENDGAME)
@@ -725,6 +725,8 @@
 	N.extended = 1
 
 
+/*
+
 /datum/malfhack_ability/oneuse/nuke_detonate
 	name = "Detonate"
 	desc = "Destroy the station."
@@ -782,6 +784,9 @@
 	if(!M.takeover)
 		return FALSE
 	return TRUE
+
+*/
+
 
 //--------------------------------------------------------
 

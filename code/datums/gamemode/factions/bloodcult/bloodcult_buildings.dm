@@ -68,7 +68,7 @@
 	return
 
 //nuh-uh
-/obj/structure/cult/acidable()
+/obj/structure/cult/dissolvable()
 	return 0
 
 /obj/structure/cult/ex_act(var/severity)

@@ -1,7 +1,3 @@
-#define STAGE_SOURCES  1
-#define STAGE_CORNERS  2
-#define STAGE_OVERLAYS 3
-
 var/datum/subsystem/lighting/SSlighting
 
 var/list/lighting_update_lights = list() // List of lighting sources  queued for update.
@@ -23,10 +19,8 @@ var/init_lights = list()
 /datum/subsystem/lighting/New()
 	NEW_SS_GLOBAL(SSlighting)
 
-
 /datum/subsystem/lighting/stat_entry()
 	..("L:[lighting_update_lights.len] queued")
-
 
 /datum/subsystem/lighting/Initialize(timeofday)
 	for(var/atom/movable/light/L in init_lights)
@@ -35,7 +29,6 @@ var/init_lights = list()
 	init_lights = null
 	initialized = TRUE
 	..()
-
 
 /datum/subsystem/lighting/fire(resumed=FALSE)
 	if (!resumed)
@@ -55,8 +48,3 @@ var/init_lights = list()
 /datum/subsystem/lighting/Recover()
 	initialized = SSlighting.initialized
 	..()
-
-
-#undef STAGE_SOURCES
-#undef STAGE_CORNERS
-#undef STAGE_OVERLAYS

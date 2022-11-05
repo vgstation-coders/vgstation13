@@ -23,7 +23,6 @@
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
 		C.handle_symptom_on_touch(src, AM, BUMP)
-	INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
 
 /mob/living/carbon/Bumped(var/atom/movable/AM)
 	..()
@@ -33,7 +32,6 @@
 
 /mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
-
 	if(.)
 		if(nutrition && stat != DEAD)
 			burn_calories(HUNGER_FACTOR / 20)
@@ -216,7 +214,7 @@
 					num_injuries++
 
 			if(num_injuries == 0)
-				if(hallucinating())
+				if(hallucinating() || Holiday == APRIL_FOOLS_DAY)
 					to_chat(src, "<span class = 'orange'>My legs are OK.</span>")
 				else
 					to_chat(src, "My limbs are [pick("okay","OK")].")
@@ -645,13 +643,10 @@
 	. = ..()
 	if(!istype(loc, /turf/space))
 		for(var/obj/item/I in get_all_slots())
-			if(I.slowdown <= 0)
-				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
+			if(I.flags & SLOWDOWN_WHEN_CARRIED)
+				. *= max(1,I.slowdown / 2) // heavy items worn on the back. those shouldn't slow you down as much.
 			else
-				if(I.flags & SLOWDOWN_WHEN_CARRIED)
-					. *= max(1,I.slowdown / 2) // heavy items worn on the back. those shouldn't slow you down as much.
-				else
-					. *= I.slowdown
+				. *= I.slowdown
 
 		for(var/obj/item/I in held_items)
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
@@ -680,23 +675,22 @@
 /mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
 	//INVISIBILITY_LEVEL_ONE to INVISIBILITY_MAXIMUM for invisibility
 	if(include_clothing)
-		return ..()
+		..()
 	if(invisibility || alpha <= 1 || !source_define)
 		return
 	body_alphas[source_define] = alpha_value
 	regenerate_icons()
 	if(time > 0)
 		spawn(time)
-			make_visible(source_define, include_clothing)
+			make_visible(source_define)
 
-/mob/living/carbon/make_visible(var/source_define, var/include_clothing)
-	if(include_clothing)
-		..()
-	if(!body_alphas || !source_define)
+/mob/living/carbon/make_visible(var/source_define)
+	if(!source_define)
 		return
-	if(src)
+	if(src && body_alphas[source_define])
 		body_alphas.Remove(source_define)
 		regenerate_icons()
+	..()
 
 /mob/living/carbon/ApplySlip(var/obj/effect/overlay/puddle/P)
 	if(!..())
@@ -731,3 +725,19 @@
 				return FALSE
 
 	return TRUE
+
+
+/mob/living/carbon/proc/check_can_revive() // doesn't check suicides
+	if (!isDead())
+		return CAN_REVIVE_NO
+	if (!mind)
+		return CAN_REVIVE_NO
+	if (client)
+		return CAN_REVIVE_IN_BODY
+	var/mob/dead/observer/ghost = mind_can_reenter(mind)
+	if (!ghost)
+		return CAN_REVIVE_NO
+	var/mob/ghostmob = ghost.get_top_transmogrification()
+	if (!ghostmob)
+		return CAN_REVIVE_NO
+	return CAN_REVIVE_GHOSTING

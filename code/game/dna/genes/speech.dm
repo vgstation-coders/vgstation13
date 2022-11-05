@@ -1,5 +1,6 @@
 #define ACT_REPLACE      /datum/speech_filter_action/replace
 #define ACT_PICK_REPLACE /datum/speech_filter_action/pick_replace
+#define GENERIC_INSULT_WORDS "\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|faggot|security|shitcurity)"
 
 /datum/speech_filter
 	// REGEX OH BOY
@@ -32,7 +33,9 @@
 	if(expressions.len)
 		for(var/key in expressions)
 			var/datum/speech_filter_action/SFA = expressions[key]
-//			to_chat(world, "speech filter run on <br>[msg], name is [SFA.expr.name], flags are [SFA.expr.flags]")
+#ifdef SAY_DEBUG
+			say_testing(world, "speech filter run on <br>[msg], name is [SFA.expr.name], flags are [SFA.expr.flags]")
+#endif
 			if(SFA && !SFA.broken)
 				msg = SFA.Run(msg)
 	return msg
@@ -90,7 +93,7 @@
 
 	// Note: Comes BEFORE other stuff.
 	// Trying to remember all the stupid fucking furry memes is hard
-	addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|faggot|shitcurity)",
+	addPickReplacement(GENERIC_INSULT_WORDS,
 		list(
 			"silly rabbit",
 			"sandwich", // won't work too well with plurals OH WELL
@@ -112,22 +115,25 @@
 	expressions = list()
 
 /datum/speech_filter/unathi/New()
-	addReplacement("s", "s-s") //not using stutter("s") because it likes adding more s's.
-	addReplacement("s-ss-s", "ss-ss") //asshole shows up as ass-sshole
+	addReplacement("s", "s-s", 1) //not using stutter("s") because it likes adding more s's.
+	addReplacement("s-ss-s", "ss-ss", 1) //asshole shows up as ass-sshole
+	addReplacement("S", "S-S", 1) //not using stutter("s") because it likes adding more s's.
+	addReplacement("S-SS-S", "SS-SS", 1) //asshole shows up as ass-sshole
 
 // INZECTOIDZ
 /datum/speech_filter/insectoid
 	expressions = list()
 
 /datum/speech_filter/insectoid/New()
-	addReplacement("s", "z") //stolen from plasman code if it borks.
+	addReplacement("s", "z", 1) //stolen from plasman code if it borks.
+	addReplacement("S", "Z", 1) //stolen from plasman code if it borks.
 
 // HONK
 /datum/speech_filter/cluwne
 	expressions = list()
 
 /datum/speech_filter/cluwne/New()
-	addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|faggot|security|shitcurity)",
+	addPickReplacement(GENERIC_INSULT_WORDS,
 	list(
 		"honker",
 		"fun police",
@@ -162,7 +168,6 @@
 	addReplacement("what","wot")
 	addReplacement("drink","wet")
 	addWordReplacement("get","giz")
-	addReplacement("what","wot")
 	addReplacement("no thanks","wuddent fukken do one")
 	addReplacement("\\b(don't know|dunno)","don't bleedin knaw")
 	addReplacement("\\b(isn't|ain't)\\sit","innit")
@@ -185,8 +190,10 @@
 	expressions = list()
 
 /datum/speech_filter/swedish/New()
-	addReplacement("w","v")
-	addReplacement("\\b(ow|oh|ou|oa|au)","er")
+	addReplacement("(ow|oh|ou|oa|au)","er",1)
+	addReplacement("(OW|OH|OU|OA|AU)","ER",1)
+	addReplacement("w","v",1)
+	addReplacement("W","V",1)
 
 // How nice
 /datum/speech_filter/smile
@@ -200,7 +207,7 @@
 	addReplacement("dumb","smart")
 	addWordReplacement("awful","great")
 	addPickReplacement("gay",list("nice","ok","alright"))
-	addWordReplacement("\\b(horrible|terrifying)",list("fun","pleasant","lovely","wonderful"))
+	addPickReplacement("\\b(horrible|terrifying)",list("fun","pleasant","lovely","wonderful"))
 	addWordReplacement("terrible","terribly fun")
 	addWordReplacement("gross","cool")
 	addWordReplacement("disgusting","amazing")
@@ -209,6 +216,7 @@
 	addWordReplacement("oh god","cheese and crackers")
 	addWordReplacement("jesus","gee wiz")
 	addWordReplacement("weak","strong")
+	addWordReplacement("\\b(fuck you|i hate you|kill yourself|go die)","you're mean")
 	addWordReplacement("kill","hug")
 	addReplacement("murder","tease")
 	addWordReplacement("ugly","beutiful")
@@ -225,7 +233,6 @@
 	addWordReplacement("beer","water with ice")
 	addWordReplacement("drink","water")
 	addWordReplacement("\\b(feminist|feminazi|SJW|social justice warrior)","empowered woman")
-	addWordReplacement("\\b(fuck you|i hate you|kill yourself|go die)","you're mean")
 	addWordReplacement("nigger","african american")
 	addWordReplacement("faggot","effeminate male")
 	addPickReplacement("fag", list("fig", "friend"))
@@ -237,8 +244,9 @@
 	addPickReplacement("damn",list("darn","dang"))
 	addReplacement("hell","heck")
 	addReplacement("fuck","gently caress")
-	addWordReplacement("\\b(penis|cunt|vagina)","privates")
+	addWordReplacement("\\b(penis|cunt|vagina|cock)","privates")
 	addReplacement("dick","jerk")
+	addReplacement("tits","mammary glands") //now all the 7 dirty words are filtered
 
 // WHOA MAMA
 /datum/speech_filter/elvis
@@ -254,10 +262,10 @@
 	addWordReplacement("what are you","whatcha")
 	addWordReplacement("what do you","whaddya")
 	addPickReplacement("yes",list("sure", "yea", "sure thing", "that's right"))
-	addWordReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|shitcurity|faggot)","square")
+	addWordReplacement(GENERIC_INSULT_WORDS,"square")
 	addWordReplacement("valids","kicks")
 	addReplacement("\\b(v|p)ox","bird")
-	addReplacement("\\b(insect|insectoid)","bug")
+	addReplacement("\\b(insectoid|insect)","bug")
 
 // OLE!
 /datum/speech_filter/luchador

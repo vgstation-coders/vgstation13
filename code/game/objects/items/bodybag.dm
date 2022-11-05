@@ -40,6 +40,7 @@
 	icon_opened = "bodybag_open"
 	density = 0
 	sound_file = 'sound/items/zip.ogg'
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/structure/closet/body_bag/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/stack/sheet/metal))

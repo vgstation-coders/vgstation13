@@ -29,6 +29,8 @@
 	var/can_focus = 0 //Whether the machine can focus on an effect to mutate it or not
 	var/effect_focus = 0 //What effect of the disease are we focusing on?
 
+/obj/machinery/disease2/incubator/splashable()
+	return FALSE
 
 /obj/machinery/disease2/incubator/New()
 	. = ..()

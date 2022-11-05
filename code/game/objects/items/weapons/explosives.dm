@@ -10,6 +10,7 @@
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
 	origin_tech = Tc_SYNDICATE + "=2"
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/datum/wires/explosive/plastic/wires = null
 	var/timer = 10
 	var/atom/target = null

@@ -25,6 +25,9 @@
 	var/template_path = "disposalsbin.tmpl"
 	var/deconstructable = TRUE	//Set to FALSE for disposal machinery that can be used for transporting players or things, but not tinkered with by players.
 
+/obj/machinery/disposal/splashable()
+	return FALSE
+
 /obj/machinery/disposal/supports_holomap()
 	return TRUE
 
@@ -456,7 +459,7 @@
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
 		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
-		if(prob(75) || (mob && mob.reagents.get_sportiness()>=5))
+		if(prob(75) || (mob?.reagents?.get_sportiness()>=5))
 			I.forceMove(src)
 			for(var/mob/M in viewers(src))
 				M.show_message("\the [I] lands in \the [src].", 1)
@@ -834,14 +837,14 @@
 /obj/structure/disposalpipe/t_scanner_expose()
 	if (level != LEVEL_BELOW_FLOOR)
 		return
-
+	var/old_invisibility = invisibility
 	invisibility = 0
 	plane = ABOVE_TURF_PLANE
 
 	spawn(1 SECONDS)
 		var/turf/U = loc
 		if(istype(U) && U.intact)
-			invisibility = 101
+			invisibility = old_invisibility
 			plane = initial(plane)
 
 // expel the held objects into a turf

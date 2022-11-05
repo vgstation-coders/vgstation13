@@ -164,10 +164,9 @@
 			if (M.locked_to)
 				M.locked_to.unlock_atom(M)
 			suffix = "_mob"
-			if(M.getCloneLoss() < (1.25*M.maxHealth))
-				fed++
-				visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and sucks a viscous substance out.</span>")
-				M.adjustCloneLoss(30 * size)
+			fed++
+			visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and secretes a digestive enzyme.</span>")
+			M.adjustToxLoss(85)
 			M.forceMove(C)
 			C.pixel_x = M.pixel_x
 			C.pixel_y = M.pixel_y

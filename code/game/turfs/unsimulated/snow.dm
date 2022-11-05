@@ -1,5 +1,8 @@
 //This file includes all associated code with snow tiles, snowprints, and blizzards on them.
 
+#define SNOWPRINT_COMING 1
+#define SNOWPRINT_GOING 2
+
 /turf/unsimulated/floor/snow
 	name = "snow"
 	desc = "A layer of frozen water particles, kept solid by temperatures way below freezing."
@@ -13,89 +16,86 @@
 	var/real_snow_tile = TRUE //Set this to false if you want snowfall/blizzard overlay but no texture updating nor ability to pick up snowballs.
 	var/initial_snowballs = -1 //-1 means random.
 	var/snowballs = 0
-	var/snow_state = SNOW_CALM
 	var/snowprints = TRUE //if false, do not set up a snowprint parent, do not make snowprints
 	var/obj/effect/snowprint_holder/snowprint_parent
 	var/ignore_blizzard_updates = FALSE //if true, don't worry about global blizzard events
-	var/obj/effect/blizzard_holder/blizzard_parent
+	var/snow_intensity_override = 0
 	turf_speed_multiplier = 1
 	gender = PLURAL
 	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 
 /turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	global_snowtiles -= src
+	if(real_snow_tile && !ignore_blizzard_updates)
+		environment_snowtiles -= src
 	if(snowprint_parent)
 		qdel(snowprint_parent)
-	if(blizzard_parent)
-		qdel(blizzard_parent)
 	..()
 
 /turf/unsimulated/floor/snow/New()
 	..()
-	blizzard_parent = new /obj/effect/blizzard_holder(src)
-	blizzard_parent.parent = src
-	if(!snowtiles_setup)
-		for(var/i = 0 to 3)
-			snow_state = i
-			blizzard_parent.UpdateSnowfall()
-		snowtiles_setup = 1
-	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
-		var/datum/weather/snow/S = map.climate.current_weather
-		snow_state = S.snow_intensity
-	else
-		snow_state = SNOW_CALM
+	if(!blizzard_image)
+		blizzard_image = new
+	vis_contents += blizzard_image
 	if(real_snow_tile)
 		if(initial_snowballs == -1)
 			snowballs = rand(5, 10)
 		else
 			snowballs = initial_snowballs
 		icon_state = "snow[rand(0, 6)]"
-		if(snowprints)
-			snowprint_parent = new /obj/effect/snowprint_holder(src)
 	update_environment()
 	global_snowtiles += src
+	if(real_snow_tile && !ignore_blizzard_updates)
+		environment_snowtiles += src
 
 /turf/unsimulated/floor/snow/Destroy()
+	if(real_snow_tile && !ignore_blizzard_updates)
+		environment_snowtiles -= src
 	global_snowtiles -= src
 	if(snowprint_parent)
 		qdel(snowprint_parent)
-	if(blizzard_parent)
-		qdel(blizzard_parent)
 	..()
 
 /turf/unsimulated/floor/snow/proc/update_environment()
-	if(real_snow_tile)
+	if(real_snow_tile && !ignore_blizzard_updates)
 		if(snowballs)
 			icon_state = "snow[rand(0,6)]"
 		else
 			icon_state = "permafrost_full"
 			if(snowprint_parent)
-				snowprint_parent.ClearSnowprints()
-	blizzard_parent.UpdateSnowfall()
-	switch(snow_state)
-		if(SNOW_CALM)
-			temperature = T_ARCTIC
-			turf_speed_multiplier = 1 //higher numbers mean slower
-		if(SNOW_AVERAGE)
-			temperature = T_ARCTIC-5
-			turf_speed_multiplier = 1
-		if(SNOW_HARD)
-			temperature = T_ARCTIC-10
-			turf_speed_multiplier = 1.4
-		if(SNOW_BLIZZARD)
-			temperature = T_ARCTIC-20
-			turf_speed_multiplier = 2.8
-	turf_speed_multiplier *= 1+(snowballs/10)
+				qdel(snowprint_parent)
+				snowprint_parent = null
+
+/turf/unsimulated/floor/snow/proc/get_snow_state()
+	. = snow_intensity_override
+	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = map.climate.current_weather
+		if(!.)
+			. = S.snow_intensity
+	if(!.)
+		. = SNOW_CALM
+
+/turf/unsimulated/floor/snow/adjust_slowdown(mob/living/L, current_slowdown)
+	current_slowdown *= (max(1,1.4*(get_snow_state()-1)) /*CALM = 1, AVERAGE = 1, HARD = 1.4, BLIZZARD = 2.8*/ * (1+(snowballs/10))) //higher numbers mean slower
+	return ..()
+
+/turf/unsimulated/floor/snow/return_air()
+	var/datum/gas_mixture/unsimulated/GM = ..()
+	GM.temperature = T_ARCTIC-(5*round(2**(get_snow_state()-1))) //CALM -= 0, AVERAGE -= 5, HARD -= 10, BLIZZARD -= 20
+	GM.update_values()
+	return GM
 
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
 	..()
 	if(istype(A,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = A
-		if(snowprint_parent && snowballs && !H.flying)
+		if(snowprints && snowballs && !H.flying)
+			if(!snowprint_parent)
+				snowprint_parent = new /obj/effect/snowprint_holder(src)
 			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
-				snowprint_parent.AddSnowprintGoing(H.get_footprint_type(), H.dir)
+				snowprint_parent.AddSnowprint(H.get_footprint_type(), H.dir, SNOWPRINT_GOING)
 			else //Our human is down on his ass or in a vehicle, create tracks
-				snowprint_parent.AddSnowprintGoing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
+				snowprint_parent.AddSnowprint(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir, SNOWPRINT_GOING)
 
 		if(!istype(newloc,/turf/unsimulated/floor/snow))
 			H.clear_fullscreen("snowfall_average",0)
@@ -108,11 +108,14 @@
 	..()
 	if(istype(A,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = A
-		if(snowprint_parent && snowballs && !H.flying)
+		if(snowprints && snowballs && !H.flying)
+			if(!snowprint_parent)
+				snowprint_parent = new /obj/effect/snowprint_holder(src)
 			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
-				snowprint_parent.AddSnowprintComing(H.get_footprint_type(), H.dir)
+				snowprint_parent.AddSnowprint(H.get_footprint_type(), H.dir, SNOWPRINT_COMING)
 			else //Our human is down on his ass or in a vehicle, create tracks
-				snowprint_parent.AddSnowprintComing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
+				snowprint_parent.AddSnowprint(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir, SNOWPRINT_COMING)
+		var/snow_state = get_snow_state()
 		switch(snow_state)
 			if(SNOW_CALM)
 				H.clear_fullscreen("snowfall_average",0)
@@ -147,26 +150,29 @@
 	anchored = 1
 	plane = ABOVE_TURF_PLANE
 	mouse_opacity = 0
-	var/turf/unsimulated/floor/snow/parent
 
-/obj/effect/blizzard_holder/Destroy()
-	parent = null
+/obj/effect/blizzard_holder/New()
 	..()
+	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = map.climate.current_weather
+		UpdateSnowfall(S.snow_intensity)
+	else
+		UpdateSnowfall(SNOW_CALM)
 
-/obj/effect/blizzard_holder/proc/UpdateSnowfall()
-	if(!snow_state_to_texture["[parent.snow_state]"])
-		cache_snowtile()
-	appearance = snow_state_to_texture["[parent.snow_state]"]
+/obj/effect/blizzard_holder/proc/UpdateSnowfall(var/snow_state)
+	if(!snow_state_to_texture["[snow_state]"])
+		cache_snowtile(snow_state)
+	appearance = snow_state_to_texture["[snow_state]"]
 
-/obj/effect/blizzard_holder/proc/cache_snowtile()
+/obj/effect/blizzard_holder/proc/cache_snowtile(var/snow_state)
 	overlays.Cut()
 	var/list/snowfall_overlays = list("snowfall_calm","snowfall_average","snowfall_hard","snowfall_blizzard")
 	var/list/overlay_counts = list(2,2,2,3)
-	for(var/i = 1 to overlay_counts[parent.snow_state+1])
-		var/image/snowfx = image('icons/turf/snowfx.dmi', "[snowfall_overlays[parent.snow_state+1]][i]",SNOW_OVERLAY_LAYER)
+	for(var/i = 1 to overlay_counts[snow_state+1])
+		var/image/snowfx = image('icons/turf/snowfx.dmi', "[snowfall_overlays[snow_state+1]][i]",SNOW_OVERLAY_LAYER)
 		snowfx.plane = EFFECTS_PLANE
 		overlays += snowfx
-	snow_state_to_texture["[parent.snow_state]"] = appearance
+	snow_state_to_texture["[snow_state]"] = appearance
 
 
 
@@ -177,30 +183,16 @@
 	anchored = 1
 	plane = ABOVE_TURF_PLANE
 	mouse_opacity = 0 //Unclickable
-	var/snowprint_color = "#BEBEBE"
 	var/list/existing_prints = list()
 
-/obj/effect/snowprint_holder/proc/AddSnowprintComing(var/obj/effect/decal/cleanable/blood/tracks/footprints/footprint_type, var/dir)
-	if(existing_prints["[initial(footprint_type.coming_state)]-[dir]"])
+/obj/effect/snowprint_holder/proc/AddSnowprint(var/obj/effect/decal/cleanable/blood/tracks/footprints/footprint_type, var/dir, var/comeorgo = SNOWPRINT_COMING)
+	var/state2check = comeorgo == SNOWPRINT_COMING ? initial(footprint_type.coming_state) : initial(footprint_type.going_state)
+	if(existing_prints["[state2check]-[dir]"])
 		return
-	existing_prints["[initial(footprint_type.coming_state)]-[dir]"] = 1
-	var/icon/footprint = icon('icons/effects/fluidtracks.dmi', initial(footprint_type.coming_state), dir)
-	footprint.SwapColor("#FFFFFF",snowprint_color)
+	var/icon/footprint = icon('icons/effects/fluidtracks.dmi', state2check, dir)
+	footprint.SwapColor("#FFFFFF","#BEBEBE")
 	overlays += footprint
-
-/obj/effect/snowprint_holder/proc/AddSnowprintGoing(var/obj/effect/decal/cleanable/blood/tracks/footprints/footprint_type, var/dir)
-	if(existing_prints["[initial(footprint_type.going_state)]-[dir]"])
-		return
-	existing_prints["[initial(footprint_type.going_state)]-[dir]"] = 1
-	var/icon/footprint = icon('icons/effects/fluidtracks.dmi', initial(footprint_type.going_state), dir)
-	footprint.SwapColor("#FFFFFF",snowprint_color)
-	overlays += footprint
-
-/obj/effect/snowprint_holder/proc/ClearSnowprints()
-	overlays.Cut()
-	existing_prints.len = 0
-
-
+	existing_prints["[state2check]-[dir]"] = footprint
 
 /turf/unsimulated/floor/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -234,7 +226,7 @@
 				break
 			if(!found_on_ground)
 				qdel(W)
-			user.visible_message("<span class='notice'>[user] finishes \the log wall.</span>", \
+			user.visible_message("<span class='notice'>[user] finishes the log wall.</span>", \
 						"<span class='notice'>You finish the log wall.</span>")
 			var/turf/simulated/wall/X = ChangeTurf(/turf/simulated/wall/mineral/wood/log)
 			if(X)
@@ -372,10 +364,26 @@
 	ignore_blizzard_updates = TRUE
 	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+	snow_intensity_override = SNOW_BLIZZARD
 
-/turf/unsimulated/floor/snow/heavy_blizzard/update_environment()
-	snow_state = SNOW_BLIZZARD //forces this to always be blizzarding regardless of blizzard rules
+/turf/unsimulated/floor/snow/heavy_blizzard/New()
+	..() //forces this to always be blizzarding regardless of blizzard rules
+	if(!heavy_blizzard_image)
+		heavy_blizzard_image = new
+	vis_contents.Cut()
+	vis_contents += heavy_blizzard_image
+
+var/obj/effect/blizzard_holder/heavy/heavy_blizzard_image = null
+
+/obj/effect/blizzard_holder/heavy/New()
 	..()
+	UpdateSnowfall(SNOW_BLIZZARD)
+
+/obj/effect/blizzard_holder/heavy/UpdateSnowfall(var/snow_state)
+	..(SNOW_BLIZZARD)
+
+/obj/effect/blizzard_holder/heavy/cache_snowtile(var/snow_state)
+	..(SNOW_BLIZZARD)
 
 /turf/unsimulated/floor/noblizz_permafrost
 	icon = 'icons/turf/new_snow.dmi'

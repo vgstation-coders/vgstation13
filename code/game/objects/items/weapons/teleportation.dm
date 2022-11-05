@@ -24,6 +24,7 @@
 	throw_range = 20
 	starting_materials = list(MAT_IRON = 400)
 	w_type = RECYK_ELECTRONIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	origin_tech = Tc_MAGNETS + "=1"
 
 /obj/item/weapon/locator/attack_self(mob/user as mob)
@@ -126,19 +127,17 @@ Frequency:
 	icon = 'icons/obj/hydroponics/bluespacebanana.dmi'
 	icon_state = "peel"
 	item_state = "bluespacebanana_peel"
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 /obj/item/weapon/bananapeel/bluespace/handle_slip(atom/movable/AM)
-	if(iscarbon(AM))
-		var/mob/living/carbon/M = AM
-		if(M.Slip(2, 2, 1, slipped_on = src, drugged_message = "<span class='userdanger'>Something is scratching at your feet! Oh god!</span>"))
-			if(ishuman(AM))
-				var/mob/living/carbon/human/H = AM
-				var/obj/teleported_shoes = H.get_item_by_slot(slot_shoes)
-				var/tele_destination = pick_rand_tele_turf(H, src.potency/15, src.potency/10)
-				if(teleported_shoes && tele_destination)
-					H.drop_from_inventory(teleported_shoes)
-					teleported_shoes.forceMove(tele_destination)
-					spark(H.loc)
+	if(..() && ishuman(AM))
+		var/mob/living/carbon/human/H = AM
+		var/obj/teleported_shoes = H.get_item_by_slot(slot_shoes)
+		var/tele_destination = pick_rand_tele_turf(H, src.potency/15, src.potency/10)
+		if(teleported_shoes && tele_destination)
+			H.drop_from_inventory(teleported_shoes)
+			teleported_shoes.forceMove(tele_destination)
+			spark(H.loc)
 
 /*
  * Hand-tele
@@ -157,6 +156,7 @@ Frequency:
 	throw_range = 5
 	starting_materials = list(MAT_IRON = 10000, MAT_GOLD = 500, MAT_PHAZON = 50)
 	w_type = RECYK_ELECTRONIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_BLUESPACE + "=3"
 	var/list/portals = list()
 	var/charge = HANDTELE_MAX_CHARGE//how many pairs of portal can the hand-tele sustain at once. a new charge is added every 30 seconds until the maximum is reached..

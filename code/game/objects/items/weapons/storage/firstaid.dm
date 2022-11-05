@@ -15,6 +15,7 @@
 	icon_state = "firstaid"
 	throw_speed = 2
 	throw_range = 8
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 
 /obj/item/weapon/storage/firstaid/fire

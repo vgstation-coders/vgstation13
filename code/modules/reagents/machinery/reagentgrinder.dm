@@ -121,6 +121,9 @@ var/global/list/juice_items = list (
 		return FALSE
 	return ..()
 
+/obj/machinery/reagentgrinder/splashable()
+	return FALSE
+
 /obj/machinery/reagentgrinder/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 	if(..())

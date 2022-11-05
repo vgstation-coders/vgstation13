@@ -7,7 +7,7 @@
 /turf/unsimulated/floor/snow,
 /area)
 "g" = (
-/obj/item/weapon/lobster,
+/obj/item/weapon/fish/lobster,
 /turf/unsimulated/beach/shallows,
 /area)
 "n" = (

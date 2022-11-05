@@ -113,8 +113,6 @@ var/global/disable_vents     = 0
 // Factor of how fast mob nutrition decreases
 #define HUNGER_FACTOR 0.15  // Please remember when editing this that it will also affect hypothermia.
 
-#define FIRE_MINIMUM_TEMPERATURE_TO_SPREAD	150+T0C
-#define FIRE_MINIMUM_TEMPERATURE_TO_EXIST	100+T0C
 #define FIRE_SPREAD_RADIOSITY_SCALE		0.85
 #define FIRE_CARBON_ENERGY_RELEASED	  500000 //Amount of heat released per mole of burnt carbon into the tile
 #define FIRE_PLASMA_ENERGY_RELEASED	 3000000 //Amount of heat released per mole of burnt plasma into the tile
@@ -125,8 +123,7 @@ var/global/disable_vents     = 0
 var/turf/space/Space_Tile = locate(/turf/space) // A space tile to reference when atmos wants to remove excess heat.
 
 //This was a define, but I changed it to a variable so it can be changed in-game.(kept the all-caps definition because... code...) -Errorage
-var/MAX_EXPLOSION_RANGE = 14
-//#define MAX_EXPLOSION_RANGE		14					// Defaults to 12 (was 8) -- TLE
+var/MAX_EXPLOSION_RANGE = 32
 
 #define HUMAN_STRIP_DELAY 40 //takes 40ds = 4s to strip someone.
 #define HUMAN_REVERSESTRIP_DELAY 20
@@ -696,13 +693,10 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LIVING 25		//This what players have by default.
 
 #define SEE_INVISIBLE_LEVEL_ONE 35	//Used by mobs under certain conditions.
-#define INVISIBILITY_LEVEL_ONE 35	//Used by infrared beams.
+#define INVISIBILITY_LEVEL_ONE 35	//Used by infrared beams and turrets inside their covers
 
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
-#define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers.
-
-#define INVISIBILITY_CULTJAUNT 50	//Used by cult
-#define SEE_INVISIBLE_CULTJAUNT 50	//Used by cult
+#define INVISIBILITY_LEVEL_TWO 45	//Used objects/spells
 
 #define INVISIBILITY_OBSERVER 60	//Used by Ghosts.
 #define SEE_INVISIBLE_OBSERVER 60	//Used by Ghosts.
@@ -847,7 +841,7 @@ SEE_PIXELS	256
 #define R_POSSESS		64
 #define R_PERMISSIONS	128
 #define R_STEALTH		256
-#define R_REJUVINATE	512
+#define R_REJUVENATE	512
 #define R_VAREDIT		1024
 #define R_SOUNDS		2048
 #define R_SPAWN			4096
@@ -973,21 +967,22 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 	)
 
 //Generic species flags.
-#define NO_BREATHE 1
-#define NO_SCAN 2
-#define NO_PAIN 4
-#define IS_SLOW 8
-#define IS_PLANT 16
-#define IS_WHITELISTED 32
-#define RAD_ABSORB 64
-#define REQUIRE_LIGHT 128
-#define HYPOTHERMIA_IMMUNE 256
-#define PLASMA_IMMUNE 512
-#define RAD_GLOW 1024
-#define ELECTRIC_HEAL 2048
-#define SPECIES_NO_MOUTH 4096
-//#define REQUIRE_DARK 8192
-#define RAD_IMMUNE 16384
+#define WHITELISTED (1<<0)	//species that don't break player preferences available to admins only
+#define PLAYABLE (1<<1)		//species available to players
+#define NO_BREATHE (1<<2)
+#define NO_SCAN (1<<3)
+#define NO_PAIN (1<<4)
+#define IS_SLOW (1<<5)
+#define IS_PLANT (1<<6)
+#define RAD_ABSORB (1<<7)
+#define REQUIRE_LIGHT (1<<8)
+#define HYPOTHERMIA_IMMUNE (1<<9)
+#define PLASMA_IMMUNE (1<<10)
+#define RAD_GLOW (1<<11)
+#define ELECTRIC_HEAL (1<<12)
+#define SPECIES_NO_MOUTH (1<<13)
+//#define REQUIRE_DARK (1<<14)
+#define RAD_IMMUNE (1<<15)
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -1067,7 +1062,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 
 //Language flags.
-#define WHITELISTED (1<<0)  // Language is available if the speaker is whitelisted.
+//#define WHITELISTED (1<<0)  // Language is available if the speaker is whitelisted. Used in species flags
 #define RESTRICTED (1<<1)   // Language can only be accquired by spawning or an admin.
 #define CAN_BE_SECONDARY_LANGUAGE (1<<2)	// Language is available on character setup as secondary language.
 #define NONORAL (1<<3)		//Language is spoken without using the mouth, so can be spoken while muzzled.
@@ -1128,6 +1123,10 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 #define AUTOIGNITION_WOOD  573.15
 #define AUTOIGNITION_PAPER 519.15
+#define AUTOIGNITION_PLASTIC 689.15 //autoignition temperature of ABS plastic
+#define AUTOIGNITION_FABRIC 523.15
+#define AUTOIGNITION_PROTECTIVE 573.15 //autoignition temperature of protective clothing like firesuits or kevlar vests
+#define AUTOIGNITION_ORGANIC 633.15 //autoignition temperature of animal fats
 
 // snow business
 #define SNOWBALL_MINIMALTEMP 265	//about -10°C, the minimal temperature at which a thrown snowball can cool you down.
@@ -1359,7 +1358,7 @@ var/proccalls = 1
 #define CHANNEL_WEATHER				1018
 #define CHANNEL_MEDBOTS				1019
 #define CHANNEL_BALLOON				1020
-#define CHANNEL_UMBRA				1021	//only ever used to allow the ambient umbra sound to be made to stop playing
+#define CHANNEL_GRUE				1021	//only ever used to allow the ambient grue sound to be made to stop playing
 #define CHANNEL_LOBBY				1022
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024
@@ -1831,3 +1830,15 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 //Muzzles
 #define MUZZLE_SOFT 1	//Muzzle causes muffled speech.
 #define MUZZLE_HARD	2	//Muzzle prevents speech.
+
+//Microwave-or-pan selective cookability of recipes
+#define COOKABLE_WITH_MICROWAVE (1<<0)
+#define COOKABLE_WITH_PAN (1<<1)
+#define COOKABLE_WITH_ALL ALL
+
+//Flags for the contents of a cooking vessel
+#define COOKVESSEL_CONTAINS_REAGENTS (1<<0) //The cooking vessel contains reagents
+#define COOKVESSEL_CONTAINS_CONTENTS (1<<1)	//The cooking vessel contains non-reagent contents (eg. items)
+
+//Default cooking temperature
+#define COOKTEMP_DEFAULT T0C + 316 //Around 600 F

@@ -42,7 +42,7 @@
 
 #define ishorrorform(A) (ishuman(A) && istype(A:species, /datum/species/horror))
 
-#define isumbra(A) (ishuman(A) && istype(A:species, /datum/species/umbra))
+#define istruevampire(A)  (ishuman(A) && isvampire(A) && istype(A:species, /datum/species/vampire))
 
 #define ismushroom(A) ((ishuman(A) && istype(A:species, /datum/species/mushroom)) || (istype(A, /mob/living/carbon/monkey/mushroom)))
 
@@ -148,7 +148,7 @@
 
 #define isEmag(A) istype(A, /obj/item/weapon/card/emag)
 
-#define istool(A) is_type_in_list(A, common_tools)
+#define istool(A) iswrench(A) || iswelder(A) || isshovel(A) || ishammer(A) || iscablecoil(A) || iswiretool(A) || iscrowbar(A)
 
 #define iswelder(A) istype(A, /obj/item/tool/weldingtool)
 
@@ -180,7 +180,7 @@
 
 #define issolder(A) istype(A, /obj/item/tool/solder)
 
-#define issocketwrench(A) istype(A, /obj/item/tool/wrench/socket)
+#define iswrench(A) istype(A, /obj/item/tool/wrench)
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
@@ -419,9 +419,6 @@
 #define LOWEST_DENOMINATION 1
 #define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
 
-#define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE, FALSE)
-//Starts 0 credits, not sourced from any database, earns 0 credits, hidden
-
 // strips all newlines from a string, replacing them with null
 #define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
 
@@ -429,3 +426,5 @@
 #define isapperanceeditable(A) (isatom(A))
 
 #define OMNI_LINK(A,B) isliving(A) && A:omnitool_connect(B)
+
+#define is_real_champion(A) ismob(A) && A.is_wearing_item(/obj/item/weapon/storage/belt/champion) && A.is_wearing_item(/obj/item/clothing/mask/luchador)

@@ -7,6 +7,7 @@
 	w_class = W_CLASS_SMALL
 	body_parts_covered = EYES
 	slot_flags = SLOT_EYES
+	autoignition_temperature = null
 	var/vision_flags = 0
 	var/darkness_view = 0//Base human is 2
 	var/invisa_view = 0
@@ -26,7 +27,6 @@
 	var/my_dark_plane_alpha_override
 	var/my_dark_plane_alpha_override_value
 
-
 /obj/item/clothing/glasses/proc/update_perception(var/mob/living/carbon/human/M)
 	return
 
@@ -39,7 +39,6 @@ SEE_PIXELS// if an object is located on an unlit area, but some of its pixels ar
           // in a lit area (via pixel_x,y or smooth movement), can see those pixels
 BLIND     // can't see anything
 */
-
 /obj/item/clothing/glasses/mob_can_equip(mob/living/carbon/human/user, slot, disable_warning = 0)
 	var/mob/living/carbon/human/H = user
 	if(!istype(H) || stored_glasses || !glasses_fit || slot == slot_l_store || slot == slot_r_store)
@@ -252,6 +251,13 @@ var/list/science_goggles_wearers = list()
 	icon_state = "hipster_glasses"
 	item_state = "hipster_glasses"
 	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/glasses/regular/tracking
+	name = "eye tracking glasses"
+	desc = "Eye tracking glasses which allow the wearer to see what others are looking at."
+	icon_state = "tracking"
+	item_state = "tracking"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/gglasses
 	name = "Green Glasses"

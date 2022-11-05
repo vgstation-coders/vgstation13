@@ -10,38 +10,45 @@
 /obj/item/weapon/bananapeel/Crossed(AM as mob|obj)
 	if(..())  // Slipping if these are below a floor tile is nonsensical
 		return 1
-	handle_slip(AM)
+	if(!arcanetampered)
+		handle_slip(AM)
 
 /datum/locking_category/banana_peel
 
+/obj/item/weapon/bananapeel/dropped(mob/user)
+	..()
+	if(arcanetampered)
+		slip_n_slide(user,2,2,"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+
 /obj/item/weapon/bananapeel/proc/handle_slip(atom/movable/AM)
-	if(iscarbon(AM))
-		var/mob/living/carbon/M = AM
-		slip_n_slide(M)
-	if(istype(AM, /obj/structure/bed/chair/vehicle/gokart))
-		var/obj/structure/bed/chair/vehicle/gokart/kart = AM
-		var/left_or_right = prob(50) ? turn(kart.dir, 90) : turn(kart.dir, -90)
-		var/tiles_to_slip = rand(round(potency/20, 1), round(potency/10, 1))
-		kart.speen()
-		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
-		spawn()
-			for(var/i in 1 to tiles_to_slip)
-				step(kart, left_or_right)
-				sleep(1)
+	if(iscarbon(AM) || istype(AM, /obj/structure/bed/chair/vehicle/gokart))
+		return slip_n_slide(AM,2,2,"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
-/obj/item/weapon/bananapeel/proc/slip_n_slide(var/mob/living/carbon/M)
-	if(!M.Slip(2, 2, 1, slipped_on = src, drugged_message = "<span class='userdanger'>Something is scratching at your feet! Oh god!</span>"))
-		return 0
-	var/tiles_to_slip = rand(round(potency/20, 1),round(potency/10, 1))
-	if(tiles_to_slip && !locked_to) //The banana peel will not be dragged along so stop the ride
-		M.lock_atom(src, /datum/locking_category/banana_peel)
-		for(var/i = 1 to tiles_to_slip)
-			if(!M.locked_to)
-				step(M, M.dir)
-				sleep(1)
-		spawn(1) M.unlock_atom(src)
+/obj/item/weapon/bananapeel/proc/slip_n_slide(var/atom/movable/AM,var/stun_amount,var/weaken_amount,var/drug_message)
+	if(iscarbon(AM) || istype(AM, /obj/structure/bed/chair/vehicle/gokart))
+		var/old_dir = AM.dir // Slipping changes dir, this is consistent
+		if(iscarbon(AM))
+			var/mob/living/carbon/M = AM
+			if(!M.Slip(stun_amount, weaken_amount, 1, slipped_on = src, drugged_message = drug_message))
+				return 0
+		var/tiles_to_slip = slip_override > 0 ? slip_override : rand(round(potency/20, 1),round(potency/10, 1))
+		if(istype(AM, /obj/structure/bed/chair/vehicle/gokart))
+			var/obj/structure/bed/chair/vehicle/gokart/kart = AM
+			var/left_or_right = prob(50) ? turn(AM.dir, 90) : turn(AM.dir, -90)
+			kart.speen()
+			playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
+			spawn()
+				for(var/i in 1 to tiles_to_slip)
+					step(AM, left_or_right)
+					sleep(1)
+		else if(tiles_to_slip && !locked_to) //The banana peel will not be dragged along so stop the ride
+			AM.lock_atom(src, /datum/locking_category/banana_peel)
+			for(var/i = 1 to tiles_to_slip)
+				if(!AM.locked_to)
+					step(AM, old_dir)
+					sleep(1)
+			spawn(1) AM.unlock_atom(src)
 	return 1
-
 
 /*
  * Bike Horns
@@ -114,6 +121,17 @@
 		return 1
 	return 0
 
+/obj/item/weapon/bikehorn/arcane_act(mob/user) // ideally only on cast because this thing would be dummy broken if it was kept like that
+	visible_message("<span class='warning'>HONK</span>")
+	playsound(user, istype(src,/obj/item/weapon/bikehorn/skullhorn) ? hitsound : 'sound/items/AirHorn.ogg', 100, 1)
+	for(var/mob/living/carbon/M in hearers(4, src))
+		M.sleeping = 0
+		M.stuttering += 10
+		M.ear_deaf += 5
+		M.confused += 5
+		M.dizziness += 5
+		M.jitteriness += 5
+
 /obj/item/weapon/bikehorn/syndicate
 	var/super_honk_delay = 50 //5 seconds
 	var/last_super_honk_time
@@ -153,6 +171,12 @@
 	hitsound = 'sound/items/quack.ogg'
 	honk_delay = 10
 	can_honk_baton = 0
+
+/obj/item/weapon/bikehorn/rubberducky/arcane_act(mob/user)
+	to_chat(user,"<span class='danger'>You divide by zero!</span>")
+	var/obj/item/toy/spinningtoy/ST = new(loc)
+	ST.arcane_act(user)
+	qdel(src)
 
 /obj/item/weapon/bikehorn/baton
 	name = "honk baton"
@@ -219,6 +243,7 @@
 	icon_state = "glue0"
 
 	w_class = W_CLASS_TINY
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/uses = 1 //How many uses the glue has.
 	var/glue_duration = -1 //-1 For infinite.
 	var/glue_state_to_set = GLUE_STATE_PERMA //This is the glue state we set to the item the user puts glue on.

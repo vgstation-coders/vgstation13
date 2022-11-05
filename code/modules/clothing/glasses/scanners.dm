@@ -7,7 +7,7 @@
 	toggle()
 
 
-/obj/item/clothing/glasses/scanner/equipped(var/mob/M, glasses)
+/obj/item/clothing/glasses/scanner/equipped(var/mob/living/carbon/M, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/O = M
 		if(O.glasses != src)
@@ -24,7 +24,7 @@
 			M.update_darkness()
 	..()
 
-/obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
+/obj/item/clothing/glasses/scanner/unequipped(mob/living/carbon/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
 			user.seedarkness = TRUE
@@ -48,18 +48,17 @@
 
 	if (on)
 		disable(C)
-
 	else
 		enable(C)
 
 	update_icon()
 	C.update_inv_glasses()
 
-/obj/item/clothing/glasses/scanner/proc/enable(var/mob/C)
+/obj/item/clothing/glasses/scanner/proc/enable(var/mob/living/carbon/C)
 	on = TRUE
 	to_chat(C, "You turn \the [src] on.")
 
-/obj/item/clothing/glasses/scanner/proc/disable(var/mob/C)
+/obj/item/clothing/glasses/scanner/proc/disable(var/mob/living/carbon/C)
 	on = FALSE
 	to_chat(C, "You turn \the [src] off.")
 
@@ -101,7 +100,7 @@
 			C.update_perception()
 	return ..()
 
-/obj/item/clothing/glasses/scanner/night/disable(var/mob/C)
+/obj/item/clothing/glasses/scanner/night/disable(var/mob/living/carbon/C)
 	. = ..()
 	see_in_dark = 0
 	my_dark_plane_alpha_override = null
@@ -187,7 +186,7 @@ var/list/meson_wearers = list()
 	my_dark_plane_alpha_override = "mesons"
 	my_dark_plane_alpha_override_value = 255
 
-/obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
+/obj/item/clothing/glasses/scanner/meson/enable(var/mob/living/carbon/C)
 	on = 1
 	update_mob(viewing)
 	var/area/A = get_area(src)
@@ -203,7 +202,7 @@ var/list/meson_wearers = list()
 //	body_parts_covered |= EYES
 	..()
 
-/obj/item/clothing/glasses/scanner/meson/disable(var/mob/C)
+/obj/item/clothing/glasses/scanner/meson/disable(var/mob/living/carbon/C)
 	update_mob(viewing)
 	eyeprot = 0
 	on = 0
@@ -212,13 +211,15 @@ var/list/meson_wearers = list()
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
 	my_dark_plane_alpha_override_value = 0
 	seedarkness = TRUE
+	C.update_perception()
 
-/obj/item/clothing/glasses/scanner/meson/unequipped(mob/user, from_slot)
+/obj/item/clothing/glasses/scanner/meson/unequipped(mob/living/carbon/user, from_slot)
 	. = ..()
 	if (user)
 		user.dark_plane?.alphas -= "mesons"
 		user.update_darkness()
 		user.check_dark_vision()
+		user.update_perception()
 
 /obj/item/clothing/glasses/scanner/meson/area_entered(area/A)
 	if(A.flags & NO_MESONS && on)
@@ -238,15 +239,15 @@ var/list/meson_wearers = list()
 	meson_wearers += viewing
 	viewing.client.images += false_wall_images
 
-/obj/item/clothing/glasses/scanner/meson/unequipped(var/mob/M)
+/obj/item/clothing/glasses/scanner/meson/unequipped(var/mob/living/carbon/M)
 	update_mob()
 	..()
 
-/obj/item/clothing/glasses/scanner/meson/equipped(var/mob/M)
+/obj/item/clothing/glasses/scanner/meson/equipped(var/mob/living/carbon/M)
 	update_mob(M)
 	..()
 
-/obj/item/clothing/glasses/scanner/meson/proc/update_mob(var/mob/new_mob)
+/obj/item/clothing/glasses/scanner/meson/proc/update_mob(var/mob/living/carbon/new_mob)
 	if (new_mob == viewing)
 		clear()
 		apply()
@@ -290,15 +291,15 @@ var/list/meson_wearers = list()
 	else
 		icon_state = initial(icon_state)
 
-/obj/item/clothing/glasses/scanner/material/dropped(var/mob/M)
+/obj/item/clothing/glasses/scanner/material/dropped(var/mob/living/carbon/M)
 	update_mob()
 	..()
 
-/obj/item/clothing/glasses/scanner/material/unequipped(var/mob/M)
+/obj/item/clothing/glasses/scanner/material/unequipped(var/mob/living/carbon/M)
 	update_mob()
 	..()
 
-/obj/item/clothing/glasses/scanner/material/equipped(var/mob/M)
+/obj/item/clothing/glasses/scanner/material/equipped(var/mob/living/carbon/M)
 	update_mob(M)
 	..()
 
@@ -322,7 +323,7 @@ var/list/meson_wearers = list()
 	viewing.client.images += showing
 
 
-/obj/item/clothing/glasses/scanner/material/proc/update_mob(var/mob/new_mob)
+/obj/item/clothing/glasses/scanner/material/proc/update_mob(var/mob/living/carbon/new_mob)
 	if (new_mob == viewing)
 		clear()
 		apply()
@@ -338,7 +339,7 @@ var/list/meson_wearers = list()
 		new_mob.register_event(/event/logout, src, .proc/mob_logout)
 		viewing = new_mob
 
-/obj/item/clothing/glasses/scanner/material/proc/mob_logout(mob/user)
+/obj/item/clothing/glasses/scanner/material/proc/mob_logout(mob/living/carbon/user)
 	if (user != viewing)
 		return
 

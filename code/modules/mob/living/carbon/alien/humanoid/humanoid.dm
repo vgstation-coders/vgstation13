@@ -5,6 +5,7 @@
 	var/obj/item/weapon/r_store = null
 	var/obj/item/weapon/l_store = null
 	var/caste = ""
+	var/has_fine_manipulation = 0
 	update_icon = TRUE
 
 	species_type = /mob/living/carbon/alien/humanoid

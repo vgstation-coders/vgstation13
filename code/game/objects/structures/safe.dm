@@ -57,8 +57,12 @@ FLOOR SAFES
 	if(tumbler_1_pos == tumbler_1_open && tumbler_2_pos == tumbler_2_open)
 		if(user)
 			feedback += " <span class='danger'>*[pick("Spring", "Sprang", "Sproing", "Clunk", "Krunk")]*</span>"
-		open = TRUE
 		var/turf/T = get_turf(src)
+		if(arcanetampered)
+			playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(T, 'sound/machines/dial_reset.ogg', 50, 1)
+			return 0
+		open = TRUE
 		playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
 		for (var/atom/movable/AM in contents)
 			AM.forceMove(T)
@@ -134,7 +138,7 @@ FLOOR SAFES
 
 	switch (task)
 		if ("Rotate Clockwise")
-			playsound(loc, 'sound/machines/dial_tick.ogg', 25, 1)
+			user.playsound_local(loc, 'sound/machines/dial_tick.ogg', 25, 1)
 			dial = increment(dial)
 			feedback = "<span class='notice'>You turn the dial up to [dial * 5].</span>"
 			if(dial == tumbler_1_pos)
@@ -157,7 +161,7 @@ FLOOR SAFES
 			to_chat(user, feedback)
 
 		if ("Rotate Counter-Clockwise")
-			playsound(loc, 'sound/machines/dial_tick.ogg', 25, 1)
+			user.playsound_local(loc, 'sound/machines/dial_tick.ogg', 25, 1)
 			dial = decrement(dial)
 			feedback = "<span class='notice'>You turn the dial down to [dial * 5].</span>"
 			if(dial == tumbler_1_pos)

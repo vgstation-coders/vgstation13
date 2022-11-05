@@ -19,16 +19,7 @@ Possible to do for anyone motivated enough:
 	Itegrate EMP effect to disable the unit.
 */
 
-
-/*
- * Holopad
- */
-
-// HOLOPAD MODE
-// 0 = RANGE BASED
-// 1 = AREA BASED
-var/const/HOLOPAD_MODE = 0
-
+//Holopad
 var/list/holopads = list()
 
 /obj/machinery/hologram/holopad
@@ -38,6 +29,7 @@ var/list/holopads = list()
 	var/mob/living/silicon/ai/master  //Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
 	var/last_request = 0 //to prevent request spam. ~Carn
 	var/holo_range = 6 // Change to change how far the AI can move away from the holopad before deactivating.
+	var/holopad_mode = 0	//0 = RANGE BASED, 1 = AREA BASED
 	flags = HEAR
 	plane = ABOVE_TURF_PLANE
 	layer = ABOVE_TILE_LAYER
@@ -99,7 +91,7 @@ var/list/holopads = list()
 	return
 
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/living/silicon/ai/user)
-	if(!(stat & (FORCEDISABLE|NOPOWER)) && user.eyeobj.loc == src.loc)//If the projector has power and client eye is on it.
+	if(!(stat & (FORCEDISABLE|NOPOWER)) && user.eyeobj.loc == loc)//If the projector has power and client eye is on it.
 		if(!holo)//If there is not already a hologram.
 			create_holo(user)//Create one.
 			src.visible_message("A holographic image of [user] flicks to life right before your eyes!")
@@ -217,20 +209,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 				var/turf/T = get_turf(holo)
 				if(T.obscured)
 					clear_holo()
-				if((HOLOPAD_MODE == 0 && (get_dist(master.eyeobj, src) <= holo_range)) || advancedholo)
+				if((holopad_mode == 0 && (get_dist(master.eyeobj, src) <= holo_range)) || advancedholo)
 					return 1
-
-				else if (HOLOPAD_MODE == 1)
-
+				else if (holopad_mode == 1)
 					var/area/holo_area = get_area(src)
 					var/area/eye_area = get_area(master.eyeobj)
-
 					if(eye_area == holo_area || advancedholo)
 						return 1
-
 		clear_holo()//If not, we want to get rid of the hologram.
-
-
 	return 1
 
 /obj/machinery/hologram/holopad/proc/move_hologram(var/forced = 0 )
@@ -351,12 +337,6 @@ Holographic project of everything else.
 /*
  * Other Stuff: Is this even used?
  */
-/obj/machinery/hologram/projector
-	name = "hologram projector"
-	desc = "It makes a hologram appear...with magnets or something..."
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "hologram0"
-
 
 /obj/effect/overlay/hologram/lifelike
 	plane = HUMAN_PLANE

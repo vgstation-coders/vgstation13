@@ -665,6 +665,37 @@ var/list/tag_suits_list = list()
 	body_parts_covered = FULL_TORSO|ARMS
 	species_fit = list(INSECT_SHAPED)
 
+/obj/item/clothing/suit/storage/greaserjacket
+	name = "Greaser Jacket"
+	desc = "Need a haircut greaser?"
+	icon_state = "greaserjacket_plain"
+	item_state = "greaserjacket_plain"
+	body_parts_covered = FULL_TORSO|ARMS
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
+	allowed = list(
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank/emergency_oxygen,
+		/obj/item/weapon/tank/emergency_nitrogen)
+
+/obj/item/clothing/suit/storage/greaserjacket/spider
+	name = "Spider Leather Jacket"
+	desc = "Lookin' pretty fly, guy."
+	icon_state = "greaserjacket_spider"
+	item_state = "greaserjacket_spider"
+
+/obj/item/clothing/suit/storage/greaserjacket/cult
+	name = "Nar-Sie MC Jacket"
+	desc = "Betcha didn't think cultists could look this good."
+	icon_state = "greaserjacket_cult"
+	item_state = "greaserjacket_cult"
+
+/obj/item/clothing/suit/storage/greaserjacket/snakes
+	name = "Tunnel Snake Jacket"
+	desc = "Tunnel Snakes Rule!"
+	icon_state = "greaserjacket_snakes"
+	item_state = "greaserjacket_snakes"
+
 /obj/item/clothing/suit/lordadmiral
 	name = "Lord Admiral's Coat"
 	desc = "You'll be the Ruler of the King's Navy in no time."
@@ -701,6 +732,22 @@ var/list/tag_suits_list = list()
 	blood_overlay_type = "coat"
 	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/suit/storage/draculacoat
+	name = "Vampire Coat"
+	desc = "What is a man? A miserable little pile of secrets."
+	icon_state = "draculacoat"
+	blood_overlay_type = "coat"
+	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
+	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/suit/storage/draculacoat_fake
+	name = "Vampire Costume"
+	desc = "Smells faintly of pumpkins and bloody mary."
+	icon_state = "draculacoat"
+	blood_overlay_type = "coat"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/maidapron
@@ -977,10 +1024,10 @@ var/list/tag_suits_list = list()
 		return
 	detonation_msg = "being touched by [toucher]"
 	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_attacked_by(mob/attacker, mob/attacked, mob/item)
+/obj/item/clothing/suit/bomber_vest/proc/on_attacked_by(mob/attacker, mob/attacked, obj/item/item)
 	detonation_msg = "being hit with \a [item] by [attacker]"
 	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/attacker, mob/attacked, mob/item)
+/obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/attacker, mob/attacked, obj/item/item)
 	detonation_msg = "being hit with a thrown [item]"
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_unarmed_attack(mob/attacker, mob/attacked)
@@ -1059,3 +1106,36 @@ var/list/tag_suits_list = list()
 		else if(!B.active)
 			B.activate_vest()
 			to_chat(owner, "<span class='warning'>You toggle on the vest. Bumping into anything will detonate it, as will being hit.</span>")
+
+// -- American """"""Football""""""
+
+/obj/item/clothing/suit/nt_football
+	name = "NT Football suit"
+	desc = "Contrary to popular belief, 13 wasn't chosen, it's simply the last number that hasn't been permanently inducted into the SNFL Hall of Fame."
+	blood_overlay_type = "armor"
+	body_parts_covered = FULL_TORSO
+	icon_state = "ntfootball"
+	flags = FPRINT
+
+/obj/item/clothing/suit/syndie_football
+	name = "Syndie Football suit"
+	desc = "The S stands for Soccer."
+	blood_overlay_type = "armor"
+	body_parts_covered = FULL_TORSO
+	icon_state = "syndiefootball"
+	flags = FPRINT
+
+/obj/item/clothing/suit/reticulatedvest
+	name = "reticulated vest"
+	desc = "A vest that makes use of reticulation to increase surface area and help disperse emitter particles. It was later discovered this also makes it effective against blobs organisms."
+	icon_state = "reticulated2"
+	item_state = "labgreen"
+	blood_overlay_type = "armor"
+	allowed = list(/obj/item/weapon/tank,
+	/obj/item/weapon/gun/energy/laser/liberator)
+	starting_materials = list(MAT_WOOD = 1*CC_PER_SHEET_MISC)
+	w_type = RECYK_WOOD
+	var/hits = 2
+
+/obj/item/clothing/suit/reticulatedvest/update_icon()
+	icon_state = "reticulated[hits]"

@@ -78,7 +78,6 @@
 
 	check_dark_vision()
 
-
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
 	if (healers.len > 0)

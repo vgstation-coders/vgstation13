@@ -239,9 +239,6 @@ var/global/datum/gas_mixture/space_gas = new
 //Announcement intercom
 var/global/obj/item/device/radio/intercom/universe/announcement_intercom = new
 
-//used by jump-to-area etc. Updated by area/updateName()
-var/list/sortedAreas = list()
-
 var/global/bomberman_mode = 0
 var/global/bomberman_hurt = 0
 var/global/bomberman_destroy = 0
@@ -253,9 +250,6 @@ var/global/list/never_gladiators = list()
 var/global/list/arena_leaderboard = list()
 var/arena_rounds = 0
 var/arena_top_score = 0
-
-
-var/explosion_newmethod = 1	// 1 = explosions take walls and obstacles into account; 0 = explosions pass through walls and obstacles without any impediments;
 
 //PDA games vars
 //Snake II leaderboard
@@ -317,6 +311,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
 		/mob/living/simple_animal/hostile/bunnybot,						// See viscerator
 		/mob/living/carbon/human/NPC,									// Unfinished, with its own AI that conflicts with player movements.
+		/mob/living/simple_animal/hostile/pulse_demon/					// Your motherfucking life ends in 0 seconds.
 		)
 
 //Boss monster list

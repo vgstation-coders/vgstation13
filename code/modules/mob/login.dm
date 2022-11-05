@@ -31,7 +31,8 @@
 						matches_both = TRUE
 					matches += "ID ([client.computer_id])"
 #if WARN_FOR_CLIENTS_SHARING_IP
-					spawn() alert("You have logged in already with another key this round, please log out of this one NOW or risk being banned!")
+					if(!client.holder)
+						spawn() alert("You have logged in already with another key this round, please log out of this one NOW or risk being banned!")
 #endif
 				if(matches)
 					message_admins("<font color='red'><B>Notice: </B><span class='notice'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as <A href='?src=\ref[usr];priv_msg=\ref[M]'>[key_name_admin(M)]</A>[M.client ? "" : " (no longer logged in)"].</span>", 1)
@@ -72,7 +73,6 @@
 	client.initialize_fakecamera_planemaster()
 	update_perception()
 	create_lighting_planes()
-
 	regular_hud_updates()
 
 	update_antag_huds()

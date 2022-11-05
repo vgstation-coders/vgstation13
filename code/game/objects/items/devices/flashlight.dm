@@ -34,7 +34,6 @@
 	glanced_sound = 'sound/items/metal_impact.ogg'
 	breaks_sound = 'sound/effects/Glassbr1.ogg'
 
-
 /obj/item/device/flashlight/initialize()
 	..()
 	if(on)
@@ -214,7 +213,14 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	starting_materials = null
-	on = 0	//Lamps start out off unless someone spawns in the same room as them at roundstart.
+	on = 1	//Lamps start on but are turned off unless someone spawns in the same department as them at roundstart.
+	var/drawspower = TRUE
+	var/datum/power_connection/consumer/pwrconn //the on var means the lamp switch is turned on but the area also has to be powered for it to produce light
+
+/obj/item/device/flashlight/lamp/AltClick()
+	if(toggle_light())
+		return
+	return ..()
 
 /obj/item/device/flashlight/lamp/cultify()
 	new /obj/structure/cult/pylon(loc)
@@ -227,14 +233,58 @@
 	item_state = "lampgreen"
 	light_range = 5
 
-
 /obj/item/device/flashlight/lamp/verb/toggle_light()
 	set name = "Toggle light"
 	set category = "Object"
 	set src in oview(1)
 
-	if(!usr.stat)
+	if(!Adjacent(usr))
+		return
+
+	if(usr.incapacitated()) //Checks for stuns, ghost, restraint, and being awake.
+		return
+
+	if(usr.has_hand_check())
 		attack_self(usr)
+		return TRUE
+
+/obj/item/device/flashlight/lamp/proc/toggle_onoff(var/onoff = null) //this is only called by gameticker.dm at roundstart, so we call update_brightness() with playsound = FALSE below.
+	if(on == onoff)
+		return
+	if(isnull(onoff))
+		on = !on
+	else
+		on = onoff
+	update_brightness(playsound = FALSE)
+
+//Lamps draw power from the area they're in, unlike flashlights.
+/obj/item/device/flashlight/lamp/New()
+	if(drawspower)
+		pwrconn = new(src)
+		pwrconn.channel = LIGHT
+		pwrconn.active_usage = 60 * brightness_on / 5 //power usage scales with brightness
+	update_brightness(playsound = FALSE)
+
+/obj/item/device/flashlight/lamp/update_brightness(var/mob/user = null, var/playsound = TRUE)
+	if(drawspower)
+		if(on)
+			processing_objects.Add(src)
+			pwrconn.use_power = MACHINE_POWER_USE_ACTIVE
+		else
+			processing_objects.Remove(src)
+			pwrconn.use_power = MACHINE_POWER_USE_NONE
+	process(playsound)
+
+/obj/item/device/flashlight/lamp/process(var/playsound = FALSE)
+	if(on && (!drawspower || pwrconn?.powered()))
+		icon_state = "[initial(icon_state)]-on"
+		set_light(brightness_on)
+	else
+		icon_state = initial(icon_state)
+		set_light(0)
+	if(playsound && has_sound)
+		if(get_turf(src))
+			playsound(src, on ? sound_on : sound_off, 50, 1)
 
 // FLARES
 
@@ -352,11 +402,13 @@
 	item_state = ""
 	origin_tech = Tc_BIOTECH + "=3"
 	light_color = LIGHT_COLOR_SLIME_LAMP
-	on = 0
 	luminosity = 2
 	has_sound = 0
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 	var/brightness_max = 6
 	var/brightness_min = 2
+	on = 0
+	drawspower = FALSE //slime lamps don't draw power from the area apc
 
 	breakable_fragments = null
 	damaged_examine_text = "It is cracked."

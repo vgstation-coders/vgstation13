@@ -669,3 +669,31 @@ Made a proc so this is not repeated 14 (or more) times.*/
 		return 0
 	return 1
 */
+
+//Atomizes what data the spell shows, that way different spells such as pulse demon and vampire spells can have their own descriptions.
+/spell/proc/generate_tooltip(var/previous_data = "")
+	var/dat = previous_data //In case you want to put some text at the top instead of bottom
+	if(charge_type & Sp_RECHARGE)
+		dat += "<br>Cooldown: [charge_max/10] second\s"
+	if(charge_type & Sp_CHARGES)
+		dat += "<br>Has [charge_counter] charge\s left"
+	if(charge_type & Sp_HOLDVAR)
+		dat += "<br>Requires [charge_type & Sp_GRADUAL ? "" : "[holder_var_amount]"] "
+		if(holder_var_name)
+			dat += "[holder_var_name]"
+		else
+			dat += "[holder_var_type]"
+		if(charge_type & Sp_GRADUAL)
+			dat += " to sustain"
+	switch(range)
+		if(1)
+			dat += "<br>Range: Adjacency"
+		if(2 to INFINITY)
+			dat += "<br>Range: [range]"
+		if(GLOBALCAST)
+			dat += "<br>Range: Global"
+		if(SELFCAST)
+			dat += "<br>Range: Self"
+	if(desc)
+		dat += "<br>Desc: [desc]"
+	return dat

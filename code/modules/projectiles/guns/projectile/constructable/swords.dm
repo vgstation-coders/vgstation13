@@ -84,6 +84,9 @@
 	var/max_inject_amount = 20
 	var/inject_amount = 20 //The amount of reagents injected from the beaker each hit
 
+/obj/item/weapon/sword/venom/splashable()
+	return FALSE
+
 /obj/item/weapon/sword/venom/verb/set_inject_amount()
 	set name = "Set injection amount"
 	set category = "Object"
@@ -217,7 +220,7 @@
 
 	to_chat(M, "<span class='warning'>The blade's coating seeps into your wound!</span>")
 
-	B.reagents.reaction(M, INGEST)
+	B.reagents.reaction(M, INGEST, amount_override = min(B.reagents.total_volume,inject_amount)/(B.reagents.reagent_list.len))
 
 	if(M.reagents)
 		var/list/injected = list()
@@ -249,7 +252,7 @@
 	hitsound = "sound/weapons/smash.ogg"
 	var/complete = 0
 
-/obj/item/weapon/sword/executioner/afterattack(null, mob/living/user as mob|obj, null, null, null)
+/obj/item/weapon/sword/executioner/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(complete)
 		user.delayNextAttack(30) //thrice the regular attack delay
 

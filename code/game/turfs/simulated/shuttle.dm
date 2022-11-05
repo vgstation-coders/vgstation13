@@ -18,6 +18,9 @@
 	)
 	return smoothables
 
+/turf/simulated/wall/shuttle/cannotSmoothWith()
+	return
+
 /turf/simulated/wall/shuttle/isSmoothableNeighbor(atom/A)
 	if (get_area(A) != get_area(src))
 		return 0

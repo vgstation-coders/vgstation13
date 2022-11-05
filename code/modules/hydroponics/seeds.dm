@@ -378,6 +378,14 @@
 	seed_type = "silicatecitrus"
 	vending_cat = "fruits"
 
+/obj/item/seeds/shardlime
+	name = "packet of shardlime seeds"
+	seed_type = "shardlime"
+
+/obj/item/seeds/purpleshardlime
+	name = "packet of purple shardlime seeds"
+	seed_type = "purpleshardlime"
+
 /obj/item/seeds/poisonberryseed
 	name = "packet of poison berry seeds"
 	seed_type = "poisonberries"
@@ -965,7 +973,7 @@
 	plant_dmi = 'icons/obj/hydroponics/plastellium.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plastellium)
 	mutants = null
-	chems = list(PLASTICIDE = list(3,12))
+	chems = list(PLASTICIDE = list(0,1))
 
 	lifespan = 15
 	maturation = 5
@@ -1506,13 +1514,47 @@
 	plant_dmi = 'icons/obj/hydroponics/silicatecitrus.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus)
 	harvest_repeat = 1
-	mutants = null
+	mutants = list("shardlime")
 	chems = list(SILICATE = list(3,5))
 
 	lifespan = 55
 	maturation = 6
 	production = 6
 	yield = 5
+
+/datum/seed/shardlime
+	name = "shardlime"
+	seed_name = "shardlime"
+	display_name = "shardlime"
+	plant_dmi = 'icons/obj/hydroponics/shardlime.dmi'
+	products = list(/obj/item/weapon/shard)
+	mutants = list("purpleshardlime")
+	harvest_repeat = 1
+
+	lifespan = 70
+	maturation = 4
+	production = 5
+	yield = 5
+	biolum = 1
+	biolum_colour = "#FFFFFF"
+	thorny = 1
+
+/datum/seed/purpleshardlime
+	name = "purpleshardlime"
+	seed_name = "purple shardlime"
+	display_name = "purple shardlime"
+	plant_dmi = 'icons/obj/hydroponics/purpleshardlime.dmi'
+	products = list(/obj/item/weapon/shard/plasma)
+	harvest_repeat = 1
+	mutants = null
+
+	lifespan = 70
+	maturation = 4
+	production = 5
+	yield = 5
+	biolum = 1
+	biolum_colour = "#DBBEF0"
+	thorny = 1
 
 /datum/seed/grass
 	name = "grass"
@@ -1811,7 +1853,7 @@
 	ideal_heat = 310
 	pest_tolerance = 100
 	endurance = 25 //Fragile...
-	carnivorous = 1 //Eats pests!
+	voracious = 1 //Eats pests!
 	juicy = 2 //And here's where the slipperiness comes in
 
 /datum/seed/aloe

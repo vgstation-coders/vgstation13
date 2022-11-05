@@ -73,13 +73,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/human/after_consume(var/mob/user, var/datum/reagents/reagentreference)
 	if(!user)
 		return
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		if(isumbra(H))
-			H.adjustOxyLoss(-50)
-			H.heal_organ_damage(50, 0)
-			H.heal_organ_damage(0, 50)
-			H.adjustToxLoss(-50)
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/diona
@@ -236,6 +229,7 @@
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
+	name = "mutated cockroach meat"
 	desc = "A chunk of meat from an above-average sized cockroach."
 	icon_state = "bigroachmeat"
 
@@ -243,6 +237,16 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 16)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket
+	name = "cricket meat"
+	desc = "Tastes a bit like nuts, very earthy. Not much of a serving, though."
+	icon_state = "roachmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/New()
+	..()
+	reagents.add_reagent(FLOUR, rand(4,10))
+	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
@@ -261,6 +265,7 @@
 	shapeshift()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/bless()
+	..()
 	visible_message("<span class='info'>\The [src] starts fizzling!</span>")
 	spawn(10)
 		shapeshift(/obj/item/weapon/storage/bible) //Turn into a bible
@@ -457,3 +462,34 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue/New()
 	..()
 	reagents.add_reagent(GRUE_BILE, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan
+	name = "meat"
+	desc = "A slab of \"meat\". Something's a little strange about this one."
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/New(atom/A, var/mob/M)
+	..()
+	//A new blend of meat in every slab! Can be better than or worse than normal meat.
+	reagents.clear_reagents()
+	//No room for normal meat chems in here. We're going full DAN
+	for(var/blendedmeat = 1 to 3)
+		switch(rand(1,3))
+			if(1)
+				reagents.add_reagent(NUTRIMENT, 1) //15 nutrition
+			if(2)
+				reagents.add_reagent(BEFF,rand(3,8)) //6-16
+			if(3)
+				reagents.add_reagent(HORSEMEAT,rand(3,6)) //9-18
+	reagents.add_reagent(BONEMARROW,rand(0,3)) //0-3
+	if(prob(5))
+		reagents.add_reagent(ROACHSHELL,1) //Sometimes a roach gets in. No nutritional value
+	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/scraps
+	name = "meat scraps"
+	desc = "Some leftover scraps of meat, probably trimmed off a bigger slab."
+	icon_state = "meat_scraps"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/scraps/New()
+	..()
+	reagents.remove_reagent(NUTRIMENT, 1) // A bit less nutriment

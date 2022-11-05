@@ -351,20 +351,15 @@
 	projectilesound = 'sound/weapons/mosin.ogg'
 	noloot_retreat = 7
 	noloot_minimum = 7
+	ranged_cooldown_cap = 6 // Fairly long cooldown to balance the serious punch these guys pack
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/deadeye/Aggro()
 	..()
 	say(pick("Run, run, run! Keheh.","You will look good as wall trophy.","Hold still just a moment, yes?."), all_languages[LANGUAGE_VOX])
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/deadeye/Shoot()
-	if(prob(5))
-		visible_message("<span class = 'warning'>\The [src] pauses abruptly to clear a jam!</span>") // This is a good opportunity to blast him with impunity
-		playsound(src, 'sound/weapons/mosinreload.ogg', 100, 1)
-		new /obj/item/ammo_casing/a762x55(src.loc)
-		ranged_cooldown = 4
-	else
-		ranged_cooldown = 2
-		..()
+	ranged_cooldown = 6
+	..()
 
 ///////////////////////////////////////////////////////////////////RAID LEADER///////////
 //He's the boss, boss chikun. Should be a fairly tough fight

@@ -56,7 +56,7 @@ emp_act
 	if(def_zone)
 		if(isorgan(def_zone))
 			return checkarmor(def_zone, type)
-		var/datum/organ/external/affecting = get_organ(ran_zone(def_zone))
+		var/datum/organ/external/affecting = get_organ(check_zone(def_zone))
 		return checkarmor(affecting, type)
 		//If a specific bodypart is targetted, check how that bodypart is protected and return the value.
 
@@ -108,10 +108,11 @@ emp_act
 			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor(type)
-			var/obj/item/clothing/CC = C
-			for(var/obj/item/clothing/accessory/A in CC.accessories)
-				if(A.body_parts_covered & def_zone.body_part)
-					protection += A.get_armor(type)
+			if(istype(C, /obj/item/clothing))
+				var/obj/item/clothing/CC = C
+				for(var/obj/item/clothing/accessory/A in CC.accessories)
+					if(A.body_parts_covered & def_zone.body_part)
+						protection += A.get_armor(type)
 	if(istype(loc, /obj/mecha))
 		var/obj/mecha/M = loc
 		protection += M.rad_protection
@@ -127,10 +128,11 @@ emp_act
 			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor_absorb(type)
-			var/obj/item/clothing/CC = C
-			for(var/obj/item/clothing/accessory/A in CC.accessories)
-				if(A.body_parts_covered & def_zone.body_part)
-					protection += A.get_armor_absorb(type)
+			if(istype(C, /obj/item/clothing))
+				var/obj/item/clothing/CC = C
+				for(var/obj/item/clothing/accessory/A in CC.accessories)
+					if(A.body_parts_covered & def_zone.body_part)
+						protection += A.get_armor_absorb(type)
 	return protection
 
 
@@ -258,7 +260,7 @@ emp_act
 				knock_out_teeth(user)
 
 	var/bloody = FALSE
-	if(final_force && ((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (final_force * 2)))
+	if(final_force && ((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && (affecting.status & ORGAN_BLEEDING))
 		if(!(src.species.anatomy_flags & NO_BLOOD))
 			I.add_blood(src)	//Make the weapon bloody, not the person.
 			if(prob(33))
@@ -561,6 +563,16 @@ emp_act
 /mob/living/carbon/human/blob_act()
 	if(flags & INVULNERABLE)
 		return
+	var/obj/item/clothing/suit/reticulatedvest/RV = wear_suit
+	if(istype(RV) && RV.hits>0) //will fail if not wearing a suit or wearing one not of this type
+		RV.hits--
+		if(RV.hits)
+			to_chat(src, "<big><span class='good'>Your reticulated vest groans as it resists the blob!</span></big>")
+		else
+			to_chat(src, "<big><span class='danger'>Your reticulated vest rips apart as it resists the blob one last time!</span></big>")
+		RV.update_icon()
+		update_inv_wear_suit()
+		return
 	if(cloneloss < 120)
 		playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 		if(isDead(src))
@@ -574,5 +586,11 @@ emp_act
 
 			apply_damage(run_armor_absorb(affecting, "melee", rand(30,40)), BRUTE, affecting, run_armor_check(affecting, "melee"))
 
-/mob/living/carbon/human/acidable()
-	return !(species && species.anatomy_flags & ACID4WATER)
+/mob/living/carbon/human/dissolvable()
+	if(species && species.anatomy_flags & ACID4WATER)
+		return WATER
+	else
+		return PACID
+
+/mob/living/carbon/human/beam_defense(var/obj/effect/beam/B)
+	return is_wearing_item(/obj/item/clothing/suit/reticulatedvest) ? 0.4 : 1

@@ -59,7 +59,7 @@
 	return FALSE
 
 /atom/proc/attack_hand(mob/user as mob, params, var/proximity)
-	return
+	INVOKE_EVENT(src, /event/attackhand, "user" = user, "target" = src)
 
 //called when we try to click but have no hand
 //good for general purposes

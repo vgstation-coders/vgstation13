@@ -130,7 +130,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)
 	if(animation)
-		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
+		T.turf_animation('icons/effects/64x64.dmi',"rejuvenate",-16,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = EFFECTS_PLANE)
 	src.health = src.maxHealth
 	return 1
 
@@ -240,8 +240,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(purge)
 		purge -= 1
-
-	isRegenerating = 0
 
 	//Movement
 	if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
@@ -541,6 +539,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return
 	if(supernatural && isholyweapon(O))
 		purge = 3
+	playsound(loc, O.hitsound, 50, 1, -1)
 	..()
 
 
@@ -786,9 +785,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return ..()
 
 /mob/living/simple_animal/proc/reagent_act(id, method, volume)
-	if(isDead())
-		return
-
 	switch(id)
 		if(SACID)
 			if(acidimmune)
@@ -800,15 +796,18 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				return
 			if(!supernatural)
 				adjustBruteLoss(volume * 0.5)
+		if(WATER)
+			make_visible(INVISIBLESPRAY)
 
 /mob/living/simple_animal/proc/delayedRegen()
 	set waitfor = 0
 	isRegenerating = 1
 	sleep(rand(minRegenTime, maxRegenTime)) //Don't want it being predictable
-	src.resurrect()
-	src.revive()
-	visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
-	isRegenerating = 0
+	if(src)
+		resurrect()
+		revive()
+		visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
+		isRegenerating = 0
 
 /mob/living/simple_animal/proc/pointed_at(var/mob/pointer)
 	return
@@ -883,3 +882,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return TRUE
 	else
 		return FALSE
+
+// Simplemobs do not have hands.
+/mob/living/simple_animal/put_in_hand_check(obj/item/W, index)
+	return 0

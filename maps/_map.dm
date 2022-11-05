@@ -31,7 +31,6 @@
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
-	var/multiz = FALSE //Don't even boot up multiz if we don't need it.
 
 	//Center of thunderdome admin room
 	var/tDomeX = 0
@@ -47,6 +46,8 @@
 
 	//nanoui stuff
 	var/map_dir = ""
+	//buildmode reset
+	var/file_dir = ""
 
 	//Fuck the preprocessor
 	var/dorf = 0
@@ -103,8 +104,7 @@
 	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
 	var/datum/climate/climate = null //use for weather cycle
 	var/has_engines = FALSE // Is the map a space ship with big engines?
-
-	var/lights_always_ok = FALSE //should all lights be on and working at roundstart
+	var/broken_lights = TRUE //broken lights roundstart
 	var/can_have_robots = TRUE
 
 /datum/map/New()

@@ -45,7 +45,7 @@ var/auxtools_path
 
 /world/New()
 	world_startup_time = world.timeofday
-	// Honk honk, fuck you science
+
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
@@ -75,8 +75,6 @@ var/auxtools_path
 
 	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
 
-	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
-
 	load_configuration()
 	SSdbcore.Initialize(world.timeofday) // Get a database running, first thing
 
@@ -85,19 +83,12 @@ var/auxtools_path
 	load_admins()
 	load_mods()
 	LoadBansjob()
-	if(config.usewhitelist)
-		load_whitelist()
-	if(config.usealienwhitelist)
-		load_alienwhitelist()
 	jobban_loadbanfile()
 	oocban_loadbanfile()
 	paxban_loadbanfile()
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()
-	SetupHooks() // /vg/
-
-	library_catalog.initialize()
 
 	spawn() copy_logs() // Just copy the logs.
 	if(config && config.log_runtimes)
@@ -106,26 +97,10 @@ var/auxtools_path
 		// dumb and hardcoded but I don't care~
 		config.server_name += " #[(world.port % 1000) / 100]"
 
-	Get_Holiday()	//~Carn, needs to be here when the station is named so :P
-
-	src.update_status()
-
-	initialize_rune_words()
-
-	initialize_beespecies()
-	generate_radio_frequencies()
-
-	data_core = new /obj/effect/datacore()
-	paiController = new /datum/paiController()
-
-	src.update_status()
-
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
 	Master.Setup()
-
-	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
 	return ..()
 
@@ -151,7 +126,6 @@ var/auxtools_path
 		s["mode"] = master_mode
 		s["respawn"] = config ? abandon_allowed : 0
 		s["enter"] = enter_allowed
-		s["vote"] = config.allow_vote_mode
 		s["ai"] = config.allow_ai
 		s["host"] = host ? host : null
 		s["players"] = list()
@@ -329,9 +303,6 @@ var/auxtools_path
 		features += "closed"
 
 	features += abandon_allowed ? "respawn" : "no respawn"
-
-	if (config && config.allow_vote_mode)
-		features += "vote"
 
 	if (config && config.allow_ai)
 		features += "AI allowed"

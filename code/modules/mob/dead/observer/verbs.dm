@@ -1,15 +1,22 @@
+/mob/dead/observer/verb/ghost()
+	set category = "OOC"
+	set name = "Ghost"
+
+	reenter_corpse()
+
 /mob/dead/observer/verb/reenter_corpse()
 	set category = "Ghost"
 	set name = "Re-enter Corpse"
 
 	var/mob/M = get_top_transmogrification()
+	if(check_rights(R_ADMIN)) // admins
+		can_reenter_corpse = 1			//just in-case.
 	if(!M.client)
 		return
 	if(!(mind && mind.current && can_reenter_corpse))
 		to_chat(src, "<span class='warning'>You have no body.</span>")
 		return
 	if(mind.current.key && copytext(mind.current.key,1,2)!="@")	//makes sure we don't accidentally kick any clients
-		to_chat(usr, "<span class='warning'>Another consciousness is in your body...It is resisting you.</span>")
 		return
 	if(mind.current.ajourn && istype(mind.current.ajourn,/obj/effect/rune_legacy) && mind.current.stat != DEAD) 	//check if the corpse is astral-journeying (it's client ghosted using a cultist rune).
 		var/obj/effect/rune_legacy/R = mind.current.ajourn	//whilst corpse is alive, we can only reenter the body if it's on the rune
@@ -189,6 +196,8 @@
 
 	var/list/mobs = getmobs()
 	var/input = input("Please, select a mob!", "Haunt", null, null) as null|anything in mobs
+	if(!input)
+		return
 	var/mob/target = mobs[input]
 	manual_follow(target)
 
@@ -443,7 +452,7 @@
 
 /mob/dead/observer/verb/find_arena()
 	set category = "Ghost"
-	set name = "Search For Arenas"
+	set name = "Find Arenas"
 	set desc = "Try to find an Arena to polish your robust bomb placement skills.."
 
 	if(!arenas.len)
@@ -472,7 +481,7 @@
 	set category = "Ghost"
 	set desc = "Create a bomberman arena for other observers and dead players."
 
-	if (ticker && ticker.current_state != GAME_STATE_PLAYING)
+	if (ticker && ticker.current_state < GAME_STATE_PLAYING)
 		to_chat(src, "<span class ='notice'>You can't use this verb before the game has started.</span>")
 		return
 

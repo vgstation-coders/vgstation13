@@ -345,6 +345,17 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy
 
+// OVERDARKNESS PLANEMASTER
+// Used to apply darkness over lights that the player isn't supposed to see when the lighting master is set to BLEND_ADD
+/obj/abstract/screen/plane_master/overdark_planemaster
+	plane = 0
+
+/obj/abstract/screen/plane_master/overdark_planemaster_target
+	appearance_flags = 0
+	plane = LIGHTING_PLANE
+	blend_mode = BLEND_ADD
+	mouse_opacity = 0
+	screen_loc = "CENTER,CENTER"
 
 // OVERDARKNESS PLANEMASTER
 // Used to apply darkness over lights that the player isn't supposed to see when the lighting master is set to BLEND_ADD

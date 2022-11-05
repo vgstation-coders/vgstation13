@@ -64,7 +64,7 @@
 /datum/power/changeling/hivemind
 	name = "Hivemind"
 	desc = "We can transmit and receive DNA. We can use this DNA to transform as if we acquired the DNA ourselves."
-	helptext = "Allows changelings to transmit and recieve DNA. This DNA will not help toward absorb objectives."
+	helptext = "Allows changelings to transmit and receive DNA. This DNA will not help toward absorb objectives."
 	cost = 0
 	spellpath = /spell/changeling/hivemind
 	allowduringhorrorform = 0
@@ -165,7 +165,7 @@
 /datum/power/changeling/Epinephrine
 	name = "Epinephrine sacs"
 	desc = "We evolve additional sacs of adrenaline throughout our body."
-	helptext = "Gives the ability to instantly recover from stuns.  High chemical cost."
+	helptext = "Gives the ability to instantly recover from stuns."
 	cost = 3
 	spellpath = /spell/changeling/unstun
 

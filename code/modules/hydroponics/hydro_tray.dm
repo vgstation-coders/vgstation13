@@ -11,7 +11,7 @@
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
 
-	// Plant maintenance vars.
+	// Plant maintenance vars
 	var/waterlevel = 100		// Water (max 100)
 	var/nutrientlevel = 100		// Nutrient (max 100)
 	var/pestlevel = 0			// Pests (max 100)
@@ -29,10 +29,7 @@
 	var/sampled = 0            // Have we taken a sample?
 
 	// Harvest/mutation mods.
-	var/yield_mod = 1			// Multiplier to yield for the next harvest.
-	var/mutation_mod = 1		// Modifier to mutationlevel increase.
-	var/mutationlevel = 0		// Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
-	var/is_somatoraying = 0		// Lazy way to make it so that the Floral Somatoray can only cause one mutation at a time.
+	var/list/mutation_levels = list()	// Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
 
 	// Mechanical concerns.
 	var/plant_health = 0       // Plant health.
@@ -46,7 +43,7 @@
 	var/bees = 0			   //Are the trays currently affected by the bees' pollination?
 
 	//var/decay_reduction = 0     //How much is mutation decay reduced by?
-	var/weed_coefficient = 1    //Coefficient to the chance of weeds appearing
+	var/weed_coefficient = 10    //Coefficient to the chance of weeds appearing
 	var/internal_light = 1
 	var/light_on = 0
 
@@ -95,16 +92,13 @@
 		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin))
 			mattercount += SP.rating
 	//decay_reduction = scancount
-	weed_coefficient = 2/mattercount
+	weed_coefficient = WEEDLEVEL_MAX/mattercount/5
 	internal_light = capcount
 
 //Makes the plant not-alive, with proper sanity.
 /obj/machinery/portable_atmospherics/hydroponics/proc/die()
 	dead = 1
 	harvest = 0
-	mutationlevel = 0
-	yield_mod = 1
-	mutation_mod = 1
 	improper_light = 0
 	improper_kpa = 0
 	improper_heat = 0
@@ -115,8 +109,6 @@
 
 //Calls necessary sanity when a plant is removed from the tray.
 /obj/machinery/portable_atmospherics/hydroponics/proc/remove_plant()
-	yield_mod = 1
-	mutation_mod = 1
 	pestlevel = 0
 	seed = null
 	dead = 0
@@ -132,7 +124,7 @@
 //Harvests the product of a plant.
 /obj/machinery/portable_atmospherics/hydroponics/proc/harvest(var/mob/user)
 	//Harvest the product of the plant,
-	if(!seed || !harvest || !user)
+	if(!seed || !harvest || !user || arcanetampered)
 		return
 
 	if(closed_system)
@@ -142,12 +134,12 @@
 	if(!seed.check_harvest(user))
 		return
 
-	seed.harvest(user,get_yieldmod())
+	seed.harvest(user)
 	after_harvest()
 	return
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/autoharvest()
-	if(!seed || !harvest)
+	if(!seed || !harvest || arcanetampered)
 		return
 
 	seed.autoharvest(get_turf(src))
@@ -200,13 +192,13 @@
 	if(!seed.spread)
 		return FALSE
 	//Up to 80% chance it doesn't spread
-	if(prob(8 * max(10,seed.potency)))
+	if(prob(80))
 		return FALSE
 	if(closed_system)
 		return FALSE
 	if(age < seed.maturation)
 		return FALSE
-	if(seed.hematophage || seed.carnivorous)
+	if(seed.hematophage || seed.voracious)
 		return TRUE
 	//Doesn't spread if well-fed
 	if(get_nutrientlevel() < NUTRIENTLEVEL_MAX * 0.8)
@@ -264,12 +256,15 @@
 
 			qdel(O)
 			update_icon()
+			if(S.arcanetampered)
+				arcanetampered = S.arcanetampered
 		else
 			to_chat(user, "<span class='alert'>\The [src] already has seeds in it!</span>")
 
 	else if(O.force && seed && user.a_intent == I_HURT)
 		visible_message("<span class='danger'>\The [seed.display_name] has been attacked by [user] with \the [O]!</span>")
-		add_planthealth(-O.force)
+		if(!arcanetampered) // not gonna get rid of it, sorry
+			add_planthealth(-O.force)
 		user.delayNextAttack(5)
 
 	else if(istype(O, /obj/item/claypot))
@@ -277,6 +272,9 @@
 		return
 
 	else if(seed && isshovel(O))
+		if(arcanetampered)
+			to_chat(user,"<span class='sinister'>You cannot dig into the soil.</span>")
+			return
 		var/obj/item/claypot/C = locate() in range(user,1)
 		if(!C)
 			to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
@@ -323,21 +321,20 @@
 		return
 
 	else if(is_type_in_list(O, list(/obj/item/tool/wirecutters, /obj/item/tool/scalpel)))
-
 		if(!seed)
 			to_chat(user, "There is nothing to take a sample from in \the [src].")
 			return
-
 		if(sampled)
 			to_chat(user, "You have already sampled from this plant.")
 			return
-
 		if(dead)
 			to_chat(user, "The plant is dead.")
 			return
 
 		// Create a sample.
-		seed.spawn_seed_packet(get_turf(user))
+		var/obj/item/seeds/seeds = seed.spawn_seed_packet(get_turf(user))
+		if(arcanetampered)
+			seeds.arcanetampered = arcanetampered
 		to_chat(user, "You take a sample from the [seed.display_name].")
 		add_planthealth(-rand(3,5)*10)
 
@@ -369,19 +366,6 @@
 				return
 			S.handle_item_insertion(G, 1)
 
-	else if ( istype(O, /obj/item/weapon/plantspray) )
-
-		var/obj/item/weapon/plantspray/spray = O
-		user.drop_item(spray, force_drop = 1)
-		add_toxinlevel(spray.toxicity)
-		add_pestlevel(-spray.toxicity)
-		add_weedlevel(-spray.toxicity)
-		to_chat(user, "You spray [src] with [O].")
-		playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
-		qdel(O)
-
-		update_icon()
-
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 
@@ -394,9 +378,10 @@
 			to_chat(user, "<span class='alert'>[src] is already occupied!</span>")
 		else
 			user.drop_item(O, force_drop = 1)
-			qdel(O)
-
-			var/obj/machinery/apiary/A = new(src.loc)
+			var/obj/item/apiary/IA = O
+			var/obj/machinery/apiary/A = new IA.buildtype(src.loc)
+			A.itemform = O
+			O.forceMove(A)
 			A.icon = src.icon
 			A.icon_state = src.icon_state
 			A.hydrotray_type = src.type
@@ -407,6 +392,9 @@
 			qdel(src)
 
 	else if((O.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE)) && harvest)
+		if(arcanetampered)
+			to_chat(user,"<span class='sinister'>The plant resists your attack.</span>")
+			return
 		attack_hand(user)
 
 	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown)) //composting
@@ -443,6 +431,25 @@
 	if(isobserver(user))
 		if(!(..()))
 			return 0
+	if(arcanetampered && seed && isliving(user)) // no seed for you if tampered, get stung instead
+		var/mob/living/H = user
+		to_chat(user, "<span class='sinister'>You are </span><span class='danger'>stung and prickled</span><span class='sinister'> by the sharp thorns on \the [seed.display_name]!</span>")
+		var/datum/organ/external/affecting = H.get_organ(pick(LIMB_RIGHT_HAND,LIMB_LEFT_HAND))
+		affecting.take_damage(8, 0, 0, "plant thorns")
+		H.UpdateDamageIcon()
+		seed.potency -= rand(1,(seed.potency/3)+1)
+		if(H.reagents && seed.chems && seed.chems.len)
+			var/list/thingsweinjected = list()
+			var/injecting = clamp(1, 3, seed.potency/10)
+
+			for(var/rid in seed.chems) //Only transfer reagents that the plant naturally produces.
+				H.reagents.add_reagent(rid,injecting)
+				thingsweinjected += "[injecting]u of [rid]"
+				. = 1
+
+			if(. && fingerprintshidden && fingerprintshidden.len)
+				H.investigation_log(I_CHEMS, "was stung by \a [seed.display_name], transfering [english_list(thingsweinjected)] - all touchers: [english_list(src.fingerprintshidden)]")
+		return
 	if(harvest)
 		harvest(user)
 	else if(dead)
@@ -456,28 +463,28 @@
 	view_contents(user)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/view_contents(mob/user)
-	if(src.seed && !src.dead)
-		to_chat(user, "<span class='info'>[src.seed.display_name]</span> is growing here.")
-		if(src.get_planthealth() <= (src.seed.endurance / 2))
+	if(seed && !dead)
+		to_chat(user, "<span class='info'>[seed.display_name]</span> is growing here.")
+		if(get_planthealth() <= (seed.endurance / 2))
 			to_chat(user, "The plant looks <span class='alert'>[age > seed.lifespan ? "old and wilting" : "unhealthy"].</span>")
-	else if(src.seed && src.dead)
+	else if(seed && dead)
 		to_chat(user, "[src] is full of dead plant matter.")
 	else
 		to_chat(user, "[src] has nothing planted.")
-	if (Adjacent(user) || isobserver(user) || issilicon(user))
-		to_chat(user, "Water: [src.get_waterlevel()]/100")
+	if (Adjacent(user) || isobserver(user) || issilicon(user) || hydrovision(user))
+		to_chat(user, "Water: [get_waterlevel()]/100")
 		if(seed && seed.toxin_affinity >= 5)
-			to_chat(user, "Toxin: [src.get_toxinlevel()]/100")
+			to_chat(user, "Toxin: [get_toxinlevel()]/100")
 		if(seed && seed.hematophage)
-			to_chat(user, "<span class='danger'>Blood:</span> [src.get_nutrientlevel()]/100")
+			to_chat(user, "<span class='danger'>Blood:</span> [get_nutrientlevel()]/100")
 		else
 			to_chat(user, "Nutrient: [src.get_nutrientlevel()]/100")
-		if(src.get_weedlevel() >= WEEDLEVEL_MAX/2)
+		if(get_weedlevel() >= WEEDLEVEL_MAX/2)
 			to_chat(user, "[src] is <span class='alert'>filled with weeds!</span>")
-		if(src.get_pestlevel() >= WEEDLEVEL_MAX/2)
+		if(get_pestlevel() >= WEEDLEVEL_MAX/2)
 			to_chat(user, "[src] is <span class='alert'>filled with tiny worms!</span>")
-		if(draw_warnings)
-			if(src.seed.toxin_affinity < 5 && src.get_toxinlevel() >= TOXINLEVEL_MAX/2)
+		if(seed && draw_warnings)
+			if(seed.toxin_affinity < 5 && get_toxinlevel() >= TOXINLEVEL_MAX/2)
 				to_chat(user, "The tray's <span class='alert'>toxicity level alert</span> is flashing red.")
 			if(improper_light)
 				to_chat(user, "The tray's <span class='alert'>improper light level alert</span> is blinking.")
@@ -511,6 +518,17 @@
 				light_available = T.get_lumcount() * 10
 
 			to_chat(user, "The tray's sensor suite is reporting a light level of [round(light_available, 0.1)] lumens and a temperature of [environment.temperature]K.")
+
+		if(hydrovision(user))
+			var/mob/living/carbon/human/H = user
+			to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[H.glasses];scan=\ref[src]'>\[Scan\]</a>")
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/hydrovision(mob/user)
+    if(ishuman(user))
+        var/mob/living/carbon/human/H = user
+        if(H.is_wearing_item(/obj/item/clothing/glasses/hud/hydro))
+            return TRUE
+    return FALSE
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/close_lid()
 	set name = "Toggle Tray Lid"
@@ -561,7 +579,7 @@
 	update_name()
 
 /obj/machinery/portable_atmospherics/hydroponics/HasProximity(mob/living/simple_animal/M)
-	if(seed && !dead && seed.carnivorous == 2 && age > seed.maturation)
+	if(seed && !dead && seed.voracious == 2 && age > seed.maturation)
 		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/hostile/lizard) && !M.locked_to && !M.anchored)
 			spawn(10)
 				if(!M || !Adjacent(M) || M.locked_to || M.anchored)
@@ -577,44 +595,17 @@
 						add_nutrientlevel(6)
 						update_icon()
 
-/obj/machinery/portable_atmospherics/hydroponics/bullet_act(var/obj/item/projectile/Proj)
-
-	//Don't act on seeds like dionaea that shouldn't change.
-	if(seed && seed.immutable > 0)
-		return
-
-	//Override for somatoray projectiles.
-	if(!is_somatoraying && istype(Proj ,/obj/item/projectile/energy/floramut))
-		var/obj/item/projectile/energy/floramut/P = Proj
-		var/sev = P.mutstrength
-		is_somatoraying = 1
-		spawn(4*sev)
-			is_somatoraying = 0
-			if(src && seed && !seed.immutable && !dead) //spawn() is tricky with sanity
-				mutate(sev)
-				if(prob(30) && seed.yield != -1)
-					apply_mut("plusstat_yield", sev)
-				return
-	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
-		if(seed && !dead)
-			add_yieldmod(rand(3,5)/10)
-			visible_message("<span class='notice'>\The [seed.display_name] looks lush.</span>")
-			return
-
-	..()
-
 /obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/usr)
 	if((usr.incapacitated() || !Adjacent(usr)))
 		return
 	close_lid()
 
-// See no evil, hear no evil. Returns all the potentially bad things on a hydroponic tray.
 /obj/machinery/portable_atmospherics/hydroponics/proc/bad_stuff()
 	var/list/things = list()
 	if(seed)
 		if (seed.thorny)
 			things += "thorny"
-		if (seed.carnivorous)
+		if (seed.voracious == 2)
 			things += "carnivorous"
 		for (var/chemical_id in seed.chems)
 			if (chemical_id in reagents_to_log)

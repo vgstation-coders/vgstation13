@@ -320,6 +320,13 @@
 	..()
 	icon_state = "cockroach_remains[rand(1,2)]"
 
+/obj/effect/decal/cleanable/cricket_remains
+	name = "cricket remains"
+	desc = "A disgusting mess."
+	icon = 'icons/mob/animal.dmi'
+	icon_state = "cockroach_remains1"
+	reagent = FLOUR
+
 /obj/effect/decal/cleanable/wizrune
 	name = "rune"
 	desc = "Looks unfinished."

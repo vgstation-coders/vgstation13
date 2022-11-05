@@ -183,3 +183,17 @@
 	parts[1] =	1
 	original[1] = /obj/item/weapon/gun/lawgiver
 	finished[1] = /obj/item/weapon/gun/lawgiver/demolition
+
+/obj/item/device/modkit/antiaxe_kit
+	name = "antimatter axe kit"
+	desc = "A matter inverter from the secret labs of the Cloud IX engineering facility. It will turn your ordinary axe into an antimatter axe."
+
+/obj/item/device/modkit/antiaxe_kit/New()
+	..()
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
+
+	parts[1] =	1
+	original[1] = /obj/item/weapon/fireaxe
+	finished[1] = /obj/item/weapon/fireaxe/antimatter

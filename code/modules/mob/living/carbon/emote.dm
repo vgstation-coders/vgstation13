@@ -359,6 +359,8 @@
 		return insectoid_chitter_sound
 	if(H.gender == FEMALE)
 		return female_scream_sound
+	if(H.species.name == "Tajaran")
+		return tajaran_scream_sound
 	return male_scream_sound
 
 /datum/emote/living/carbon/sound/shriek
@@ -418,7 +420,7 @@
 		return
 	if (!H.is_muzzled() && !issilent(H)) // Silent = mime, mute species.
 		if(arguments == "fueltank_crash")
-			if(isjusthuman(H))
+			if(ishuman(H))
 				playsound(H, 'sound/misc/crash_scream.ogg', 50, 0)
 				H.last_emote_sound = world.time
 				return

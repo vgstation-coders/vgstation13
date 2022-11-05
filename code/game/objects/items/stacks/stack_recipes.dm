@@ -12,9 +12,11 @@
 	var/one_per_turf = 0
 	var/on_floor = 0
 	var/start_unanchored = 0
+	var/z_up_required = 0
+	var/z_down_required = 0
 	var/list/other_reqs = list()
 
-/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list())
+/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), z_up_required = 0, z_down_required = 0)
 	src.title = title
 	src.result_type = result_type
 	src.req_amount = req_amount
@@ -25,6 +27,8 @@
 	src.on_floor = on_floor
 	src.start_unanchored = start_unanchored
 	src.other_reqs = other_reqs
+	src.z_up_required = z_up_required
+	src.z_down_required = z_down_required
 
 /datum/stack_recipe/proc/can_build_here(var/mob/usr, var/turf/T)
 	if(one_per_turf && locate(result_type) in T)
@@ -393,6 +397,8 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("cannonball", /obj/item/cannonball/iron, 20, time = 4 SECONDS, one_per_turf = 0, on_floor = 1),
 	null,
 	blacksmithing_recipes,
+	null,
+	new/datum/stack_recipe("multi-floor stairs",   /obj/structure/stairs_frame, 4, time = 100, one_per_turf = 1, on_floor = 1, z_up_required = 1),
 	)
 
 /* ========================================================================

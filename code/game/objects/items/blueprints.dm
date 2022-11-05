@@ -22,6 +22,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	attack_verb = list("attacks", "baps", "hits")
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 	var/header = "<small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small>"
 
@@ -307,8 +308,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		T.set_area(newarea)
 
 		edit_area(user)
-
-	newarea.addSorted()
 
 	ghostteleportlocs[newarea.name] = newarea
 

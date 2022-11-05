@@ -10,12 +10,7 @@
 	hitsound = "sound/weapons/whip.ogg"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
-
-/obj/item/weapon/storage/belt/can_quick_store(var/obj/item/I)
-	return can_be_inserted(I,1)
-
-/obj/item/weapon/storage/belt/quick_store(var/obj/item/I)
-	return handle_item_insertion(I,0)
+	autoignition_temperature = AUTOIGNITION_ORGANIC //leather
 
 /obj/item/weapon/storage/belt/utility
 	name = "tool-belt" //Carn: utility belt is nicer, but it bamboozles the text parsing.
@@ -518,9 +513,9 @@
 		"/obj/item/weapon/reagent_containers/glass/bucket",
 		"/obj/item/device/analyzer/plant_analyzer",
 		"/obj/item/tool/wirecutters/clippers",
-		"/obj/item/weapon/plantspray",
+		"/obj/item/weapon/reagent_containers/spray/plantbgone",
+		"/obj/item/weapon/reagent_containers/spray/bugzapper",
 		"/obj/item/weapon/scythe",
-		"/obj/item/weedkiller",
 		"/obj/item/weapon/pickaxe/shovel/spade",
 		"/obj/item/weapon/minihoe",
 		"/obj/item/weapon/hatchet",

@@ -4,6 +4,16 @@
 	faction = "necro"
 	mob_property_flags = MOB_UNDEAD
 
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
+
 /mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller)
 	..()
 	if(Victim && Victim.mind)
@@ -16,20 +26,8 @@
 		friends += makeweakref(Owner)
 		creator = Owner
 		if(client)
-			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
-		/*
-		var/ref = "\ref[Owner.mind]"
-		var/list/necromancers
-		if(!(Owner.mind in ticker.mode.necromancer))
-			ticker.mode:necromancer[ref] = list()
-		necromancers = ticker.mode:necromancer[ref]
-		necromancers.Add(Victim.mind)
-		ticker.mode:necromancer[ref] = necromancers
-		ticker.mode.update_necro_icons_added(Owner.mind)
-		ticker.mode.update_necro_icons_added(Victim.mind)
-		ticker.mode.update_all_necro_icons()
-		ticker.mode.risen.Add(Victim.mind)
-		*/
+			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner].</span></big>")
+
 	if(name == initial(name) && !unique_name)
 		name += " ([rand(1,1000)])"
 
@@ -74,7 +72,6 @@
 		to_chat(user, "<span class='notice'>You devour \the [src]!</span>")
 		qdel(src)
 
-
 /mob/living/simple_animal/hostile/necro/meat_ghoul/death(var/gibbed = FALSE)
 	..(gibbed)
 	new /obj/effect/decal/cleanable/ash(loc)
@@ -115,7 +112,6 @@
 	name = "[aGhoul.name] ghoul"
 	desc = "A ghoulish [aGhoul.name]."
 
-
 /mob/living/simple_animal/hostile/necro/animal_ghoul/death(var/gibbed = FALSE)
 	..(gibbed)
 	new /obj/effect/decal/cleanable/ash(loc)
@@ -147,28 +143,12 @@
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
 
-	min_oxy = 0
-	max_oxy = 0
-	min_tox = 0
-	max_tox = 0
-	min_co2 = 0
-	max_co2 = 0
-	min_n2 = 0
-	max_n2 = 0
-	minbodytemp = 0
-
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK | OPEN_DOOR_SMART
 	meat_type = null
-/*
-#define EVOLVING 1
-#define MOVING_TO_TARGET 2
-#define EATING 3
-#define OPENING_DOOR 4
-#define SMASHING_LIGHT 5*/
 
 #define MAX_EAT_MULTIPLIER 4 //Dead for humans is -maxHealth, uncloneable is -maxHealth * 2
 
-/mob/living/simple_animal/hostile/necro/zombie //Boring ol default zombie
+/mob/living/simple_animal/hostile/necro/zombie
 	name = "zombie"
 	desc = "A reanimated corpse that looks like it has seen better days."
 	icon_state = "zombie"
@@ -186,9 +166,8 @@
 	maxHealth = 100
 	health = 100
 	canRegenerate = 1
-	minRegenTime = 300
-	maxRegenTime = 1800
-
+	minRegenTime = 30 SECONDS
+	maxRegenTime = 120 SECONDS
 
 	harm_intent_damage = 15
 	melee_damage_lower = 10
@@ -196,16 +175,6 @@
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
 	stat_attack = DEAD
-
-	min_oxy = 0
-	max_oxy = 0
-	min_tox = 0
-	max_tox = 0
-	min_co2 = 0
-	max_co2 = 0
-	min_n2 = 0
-	max_n2 = 0
-	minbodytemp = 0
 
 	var/times_revived //Tracks how many times the zombie has regenerated from death
 	var/times_eaten //Tracks how many times the zombie has chewed on a human corpse
@@ -276,11 +245,8 @@
 	if((health < maxHealth) || (maxHealth < health_cap))
 		if(!(target.isDead()))
 			return 0 //It ain't dead
-		if(isjusthuman(target)) //Humans are always edible
-			return 1
 		if(target.health > -(target.maxHealth*MAX_EAT_MULTIPLIER)) //So they're not caught eating the same dumb bird all day
 			return 1
-
 	return 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/eat(var/mob/living/carbon/human/target)
@@ -297,7 +263,7 @@
 	stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_evolve()
-	if(!can_evolve) //How did you get here if not?
+	if(!can_evolve)
 		return
 
 	/*
@@ -308,9 +274,6 @@
 			Putrid													Crimson
 	Eaten too much, died too little								Eaten too little, died too much
 	*/
-/*	if(istype(src, /mob/living/simple_animal/hostile/necro/zombie/turned))
-	else if (istype(src, /mob/living/simple_animal/hostile/necro/zombie/rotting))
-		*/
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/stats()
 	stat(null, "Times revived - [times_revived]")
@@ -376,7 +339,6 @@
 			eat(A)
 
 /mob/living/simple_animal/hostile/necro/zombie/Destroy()
-
 	for(var/obj/item/I in clothing)
 		I.forceMove(get_turf(src))
 		clothing.Remove(I)
@@ -405,47 +367,35 @@
 		host = null
 	..()
 
-
 /mob/living/simple_animal/hostile/necro/zombie/turned/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
-	if(stat == DEAD) //Can only attempt to unzombify if they're dead
-		if(istype (W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
-			if(being_unzombified)
-				to_chat(user, "<span class='warning'>\The [src] is already being repeatedly whacked!</span>")
-				return
-			being_unzombified = TRUE
-			var/obj/item/weapon/storage/bible/bible = W
-			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
+	if(!istype(W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
+		return
+	if(being_unzombified)
+		to_chat(user, "<span class='warning'>\The [src] is already being repeatedly whacked!</span>")
+		return
+	being_unzombified = TRUE
+	var/obj/item/weapon/storage/bible/bible = W
+	user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
 
-			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
-			if(user.mind && isReligiousLeader(user))
-				chaplain = TRUE //Indeed we are
-			if(do_after(user, src, 25)) //So there's a nice delay
-				if(!chaplain)
-					if(prob(5)) //Let's be generous, they'll only get one regen for this
-						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!</span>")
-						unzombify()
-					else
-						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
-
-				else if(chaplain)
-					var/holy_modifier = 1 //How much the potential for reconversion works
-					if(user.reagents.reagent_list.len)
-						if(user.reagents.has_reagent(WHISKEY) || user.reagents.has_reagent(HOLYWATER)) //Take a swig, then get to work
-							holy_modifier += 1
-					var/turf/turf_on = get_turf(src) //See if the dead guy's on holy ground
-					if(turf_on.holy) //We're in the chapel
-						holy_modifier += 2
-					else
-						if(turf_on.blessed) //The chaplain's spilt some of his holy water
-							holy_modifier += 1
-
-					if(prob(15*holy_modifier)) //Gotta have faith
-						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name], it's working!</span>")
-						unzombify()
-					else
-						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
-			being_unzombified = FALSE
+	var/holy_bonus = 0 //How much the potential for reconversion works
+	if(do_after(user, src, 25)) //So there's a nice delay
+		if(user.reagents.reagent_list.len)
+			if(user.reagents.has_reagent(WHISKEY) || user.reagents.has_reagent(HOLYWATER)) //Take a swig, then get to work
+				holy_bonus += 10
+		var/turf/turf_on = get_turf(src) //See if the dead guy's on holy ground
+		if(turf_on.holy) //We're in the chapel
+			holy_bonus += 10
+		if(turf_on.blessed) //Blessed ground by holy water
+			holy_bonus += 10
+		if(user.mind && isReligiousLeader(user)) //chaplain
+			holy_bonus += 65
+		if(prob(5+holy_bonus)) //Gotta have faith
+			to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name], it's working!</span>")
+			unzombify()
+		else
+			to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
+	being_unzombified = FALSE
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/proc/unzombify()
 	if(host && mind)
@@ -456,6 +406,7 @@
 			key = mind.key
 		host.resurrect() //It's a miracle!
 		host.revive()
+		host.become_zombie = FALSE
 		visible_message("<span class='notice'>\The [src]'s eyes regain focus, and the smell of decay vanishes. [host] has come back to their senses!</span>")
 		host = null
 		qdel(src)
@@ -492,34 +443,13 @@
 	var/zombify_chance = 25 //Down with hardcoding
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
-/mob/living/simple_animal/hostile/necro/zombie/putrid/check_edibility(var/mob/living/carbon/human/target)
-	if(busy)
-		return 0
-	if(isjusthuman(target))
-		return 1
-	..()
-
 /mob/living/simple_animal/hostile/necro/zombie/putrid/eat(mob/living/carbon/human/target)
 	..()
-	if(target.health < -150  && isjusthuman(target)) //Gotta be a bit chewed on
+	if(target.health < -150) //Gotta be a bit chewed on
 		visible_message("<span class='warning'>\The [target] stirs, as if it's trying to get up.</span>")
 		if(prob(zombify_chance))
 			var/master = creator ? creator : src
-			target.make_zombie(master)
-
-/*
-
-/mob/living/simple_animal/hostile/necro/zombie/putrid/proc/zombify(var/mob/living/carbon/human/target)
-	//Make the target drop their stuff, move them into the contents of the zombie so the ghost can at least see how its zombie self is doing
-	//target.drop_all()
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/new_zombie = new /mob/living/simple_animal/hostile/necro/zombie/turned(target.loc)
-	get_clothes(target, new_zombie)
-	new_zombie.name = target.real_name
-	new_zombie.host = target
-	target.ghostize()
-	target.loc = null
-
-*/
+			target.zombify(master)
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/get_clothes(var/mob/target, var/mob/living/simple_animal/hostile/necro/zombie/new_zombie)
 	/*Check what mob type the target is, if it's carbon, run through their wear_ slots see human_defines.dm L#34
@@ -598,7 +528,6 @@
 	health = 80
 
 ///////////////// Vox Raider Zombies ////////////////////
-
 /mob/living/simple_animal/hostile/necro/zombie/raider1
 	name = "tainted raider"
 	desc = "A zombified vox raider, still clad in the remains of armored hardsuit plates. Its remaining eye gleams with a new kind of hunger."
@@ -640,7 +569,6 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 
 ///////////////// GHOULS ////////////////////
-
 /mob/living/simple_animal/hostile/necro/zombie/ghoul
 	name = "ghoul"
 	icon_state = "ghoul"
@@ -726,11 +654,7 @@
 
 #undef RAD_COST
 
-
-///////////////////////////////////////////////////////
 ///////////////// HEADCRAB ZOMBIES ////////////////////
-///////////////////////////////////////////////////////
-
 /mob/living/simple_animal/hostile/necro/zombie/headcrab
 	icon_state = "zombie_headcrab"
 	icon_living = "zombie_headcrab"
@@ -789,4 +713,179 @@
 	return ..(reverse_text(message))
 
 
+/*Necromorphs
+	4 types
+		Slasher, melee based, simple mobs
+		Leaper, melee based, high mobility, latch onto foes, hide in vents
+		Puker, semi-ranged based, vomits a highly corrosive cone of acid forwards towards its victims
+		Exploder, melee based, steady shuffle towards a target before exploding. Explodes on death
+*/
+/mob/living/simple_animal/hostile/necro/necromorph
+	name = "necromorph"
+	desc = "A twisted husk of what was once human, repurposed to kill."
+	speak_emote = list("roars")
+	icon = 'icons/mob/monster_big.dmi'
+	icon_state = "nmorph_standard"
+	icon_living = "nmorph_standard"
+	icon_dead = "nmorph_dead"
+	health = 80
+	maxHealth = 80
+	melee_damage_lower = 25
+	melee_damage_upper = 50
+	attacktext = "slashes"
+	attack_sound = 'sound/weapons/bladeslice.ogg'
+	faction = "marker"
+	speed = 5
+	size = SIZE_BIG
+	move_to_delay = 4
+	canRegenerate = 1
+	minRegenTime = 30 SECONDS
+	maxRegenTime = 60 SECONDS
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART
 
+/mob/living/simple_animal/hostile/necro/necromorph/leaper
+	desc = "A twisted husk of what was once human. Sporting razor-sharp fangs, along with a long scythe-tipped tail."
+	icon_state = "nmorph_leaper"
+	icon_living = "nmorph_leaper"
+	icon_dead = "nmorph_leaper_dead"
+	speed = 1
+	health = 45
+	maxHealth = 45
+
+	melee_damage_lower = 10
+	melee_damage_upper = 20
+	attacktext = "slashes"
+	attack_sound = 'sound/weapons/slashmiss.ogg'
+
+	ranged = 1
+	ranged_cooldown_cap = 8
+	ranged_message = "leaps"
+
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
+	if(locked_to)
+		return 0
+
+	src.throw_at(get_turf(target),7,1)
+	return 1
+
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/to_bump(atom/A)
+	if(throwing && isliving(A) && CanAttack(A))
+		attach(A)
+	..()
+
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/Life()
+	update_climb()
+	if(!isUnconscious())
+		if(stance == HOSTILE_STANCE_IDLE && !client)
+			var/list/can_see = view(get_turf(src), vision_range/2) //Nothing too close for comfort
+			var/all_clear = 1
+			for(var/mob/living/L in can_see)
+				if(!istype(L, /mob/living/simple_animal/hostile/necro/necromorph) && !(L.isDead()))
+					all_clear = 0
+			if(!istype(loc, /obj/machinery/atmospherics/unary/vent_pump) && istype(loc, /turf) && all_clear)
+				stop_automated_movement = 0
+
+				for(var/obj/machinery/atmospherics/unary/vent_pump/vent in can_see)
+					if(Adjacent(vent))
+						//Climb in
+						visible_message("<span class = 'warning'>\The [src] starts climbing into \the [vent]!</span>")
+						forceMove(vent)
+						stop_automated_movement = 1
+						break
+					else
+						if(prob(30))
+							step_towards(src, vent)//Step towards it
+							if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+								EscapeConfinement()
+						break
+
+			else if(istype(loc, /obj/machinery/atmospherics/unary/vent_pump) && !all_clear)
+				loc.visible_message("<span class = 'warning'>\The [src] clambers out of \the [loc]!</span>")
+				forceMove(get_turf(loc))
+	..()
+
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/verb/ventcrawl()
+	set name = "Crawl through Vent"
+	set desc = "Enter an air vent and crawl through the pipe system."
+	set category = "Object"
+	var/pipe = start_ventcrawl()
+	if(pipe)
+		handle_ventcrawl(pipe)
+
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/proc/update_climb()
+	var/mob/living/L = locked_to
+
+	if(!istype(L))
+		return
+
+	if(incapacitated())
+		return detach()
+
+	if(!CanAttack(L))
+		return detach()
+
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/proc/detach()
+	unlock_from()
+
+	pixel_x = initial(pixel_x)
+	pixel_y = initial(pixel_y)
+
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/proc/attach(mob/living/victim)
+	victim.lock_atom(src, /datum/locking_category/)
+	victim.visible_message("<span class = 'warning'>\The [src] latches onto \the [victim]!</span>","<span class = 'userdanger'>\The [src] latches onto you!</span>")
+
+	pixel_x = rand(-8,8) * PIXEL_MULTIPLIER
+	pixel_y = rand(0,16) * PIXEL_MULTIPLIER
+
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/AttackingTarget()
+	.=..()
+
+	if(locked_to == target && isliving(target))
+		var/mob/living/L = target
+
+		if(prob(10))
+			to_chat(L, "<span class='userdanger'>\The [src] throws you to the ground!</span>")
+			var/incapacitation_duration = rand(2, 5)
+			L.Knockdown(incapacitation_duration)
+			L.Stun(incapacitation_duration)
+
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/adjustBruteLoss(amount)
+	.=..()
+
+	if(locked_to && prob(amount * 5))
+		detach()
+
+/mob/living/simple_animal/hostile/necro/necromorph/exploder
+	desc = "A twisted husk of what was once human. A large glowing pustule attached to their left arm."
+	icon_state = "nmorph_exploder"
+	icon_living = "nmorph_exploder"
+	icon_dead = ""
+	health = 30
+	maxHealth = 30
+	speed = 2
+
+/mob/living/simple_animal/hostile/necro/necromorph/exploder/AttackingTarget()
+	visible_message("<span class='warning'>\The [src] hits \the [target] with their left arm!</span>")
+	death()
+
+/mob/living/simple_animal/hostile/necro/necromorph/exploder/death(var/gibbed = FALSE)
+	..(TRUE)
+	visible_message("<span class='warning'>\The [src] explodes!</span>")
+	var/turf/T = get_turf(src)
+	new /obj/effect/gibspawner/generic(T)
+	qdel(src)
+	explosion(T, -1, 1, 4, whodunnit = src)
+
+/mob/living/simple_animal/hostile/necro/necromorph/puker
+	desc = "A twisted, engorged husk of what was once human. It reeks of stomach acid."
+	icon_state = "nmorph_puker"
+	icon_living = "nmorph_puker"
+	icon_dead = "nmorph_puker_dead"
+
+	ranged = 1
+	ranged_cooldown_cap = 20
+	projectiletype = /obj/item/projectile/puke
+	ranged_message = "pukes"
+
+	melee_damage_lower = 10
+	melee_damage_upper = 15

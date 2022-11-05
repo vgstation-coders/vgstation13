@@ -250,14 +250,14 @@
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "A huge, pressurized suit, designed for distinctly nonhuman proportions. It looks unusually cheap, even for Vox."
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader //brownhelmet
 	name = "alien helmet"
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "Hey, wasn't this a prop in \'The Abyss\'?"
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 /obj/item/clothing/suit/space/vox/civ/trader/flex
 	name = "flexible trader pressure suit"
@@ -409,12 +409,12 @@
 /obj/item/clothing/suit/space/vox/civ/mining
 	name = "vox mining pressure suit"
 	icon_state = "vox-civ-mining"
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 /obj/item/clothing/head/helmet/space/vox/civ/mining
 	name = "vox mining pressure helmet"
 	icon_state = "vox-civ-mining"
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 //Engineering
 /obj/item/clothing/suit/space/vox/civ/engineer
@@ -679,6 +679,9 @@
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
 
+/obj/item/clothing/head/helmet/space/grey/dissolvable()
+	return FALSE
+
 /obj/item/clothing/suit/space/grey
 	name = "explorer pressure suit"
 	icon_state = "grey-pressure-suit"
@@ -689,6 +692,9 @@
 	w_class = W_CLASS_MEDIUM
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/suit/space/grey/dissolvable()
+	return FALSE
 
 
 //Martian Fishbowl

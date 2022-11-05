@@ -140,13 +140,17 @@
 	var/lastcheck=last_beamchecks["\ref[B]"]
 	// Figure out how much damage to deal.
 	// Formula: (deciseconds_since_connect/10 deciseconds)*B.get_damage()
-	var/damage = ((world.time - lastcheck)/10)  * B.get_damage()
+	var/damage = ((world.time - lastcheck)/10)  * B.get_damage() * beam_defense(B)
 
 	// Actually apply damage
 	apply_damage(damage, B.damage_type, B.def_zone)
 
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
+
+//Return multiplier for damage
+/mob/living/proc/beam_defense(var/obj/effect/beam/B)
+	return 1
 
 /mob/living/verb/succumb()
 	set hidden = 1
@@ -516,7 +520,7 @@ Thanks.
 /mob/living/proc/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)
 	if(animation)
-		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
+		T.turf_animation('icons/effects/64x64.dmi',"rejuvenate",-16,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = EFFECTS_PLANE)
 
 	// shut down various types of badness
 	toxloss = 0
@@ -838,6 +842,14 @@ Thanks.
 			qdel(package)
 			playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		return
+	else if(istype(src.loc, /obj/effect/spider/cocoon))
+		var/obj/effect/spider/cocoon/cocoon = src.loc
+		to_chat(L, "<span class='warning'>You attempt to untangle yourself, the webs are tight and will take some time.</span>")
+		if(do_after(src, src, 2 MINUTES))
+			L.visible_message("<span class='danger'>[L] successfully breaks out of [cocoon]!</span>",\
+							  "<span class='notice'>You successfully break out!</span>")
+			forceMove(T)
+			qdel(cocoon)
 
 	//Detaching yourself from a tether
 	if(L.tether)
@@ -1016,7 +1028,7 @@ Thanks.
 		L.visible_message("<span class='danger'>The [C] begins to shake violenty!</span>",
 						  "<span class='warning'>You lean on the back of [C] and start pushing the door open (this will take about [breakout_time] minutes).</span>")
 		spawn(0)
-			if(do_after(usr,src,breakout_time * 60 * 10)) //minutes * 60seconds * 10deciseconds
+			if(do_after(usr, C, breakout_time * 60 * 10, 30, custom_checks = new /callback(C, /obj/structure/closet/proc/on_do_after))) 	//minutes * 60seconds * 10deciseconds
 				if(!C || !L || L.stat != CONSCIOUS || L.loc != C || C.opened) //closet/user destroyed OR user dead/unconcious OR user no longer in closet OR closet opened
 					return
 
@@ -1111,21 +1123,18 @@ Thanks.
 		var/mob/living/carbon/CM = L
 	//putting out a fire
 		if(CM.on_fire && CM.canmove && ((!locate(/obj/effect/fire) in loc) || !CM.handcuffed))	//No point in putting ourselves out if we'd just get set on fire again. Unless there's nothing more pressing to resist out of, in which case go nuts.
-			CM.fire_stacks -= 5
-			CM.Knockdown(3)
-			CM.Stun(3)
+			CM.Knockdown(5)
+			CM.Stun(5)
 			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
 			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>",
 							   "<span class='warning'>You stop, drop, and roll!</span>")
 
-			for(var/i = 1 to rand(8,12))
+			for(var/i = 1 to CM.fire_stacks + 7)
 				CM.dir = turn(CM.dir, pick(-90, 90))
-				sleep(2)
-
-			if(fire_stacks <= 0)
-				CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>",
-								   "<span class='notice'>You extinguish yourself.</span>")
-				ExtinguishMob()
+				sleep(1 SECONDS)
+			CM.fire_stacks = 0
+			CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>","<span class='notice'>You extinguish yourself.</span>")
+			ExtinguishMob()
 			return
 
 		CM.resist_restraints()
@@ -1272,6 +1281,7 @@ Thanks.
 
 /mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
+		INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
 		if (now_pushing || !loc || size <= SIZE_TINY)
 			return
 		now_pushing = 1

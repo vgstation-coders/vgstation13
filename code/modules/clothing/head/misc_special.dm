@@ -29,6 +29,7 @@
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED,INSECT_SHAPED, GREY_SHAPED)
+	autoignition_temperature = AUTOIGNITION_PROTECTIVE
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()

@@ -132,18 +132,37 @@
 			condition |= M.x > src.x
 		if(req_access_dir & WEST)
 			condition |= M.x < src.x
-		if(map.multiz)
-			if(req_access_dir & UP)
-				condition |= M.z > src.z
-			if(req_access_dir & DOWN)
-				condition |= M.z < src.z
+		if(HasAbove(z) && (req_access_dir & UP))
+			condition |= M.z > src.z
+		if(HasBelow(z) && (req_access_dir & DOWN))
+			condition |= M.z < src.z
 		if(condition)
 			return can_access(ACL,req_access,req_one_access)
 		else
 			return access_not_dir
 	return can_access(ACL,req_access,req_one_access)
 
+/obj/item/var/time_since_last_random_access = 0
+/obj/item/var/list/arcane_access = list()
+
+/obj/item/arcane_act(mob/user, recursive)
+	arcane_access.Cut()
+	for(var/i in 1 to rand(1,5))
+		arcane_access.Add(pick(get_all_accesses()))
+	return ..()
+
+/obj/item/bless()
+	..()
+	arcane_access.Cut()
+
 /obj/item/proc/GetAccess()
+	if(arcanetampered)
+		if(!arcane_access || !arcane_access.len || (time_since_last_random_access + (30 SECONDS) < world.time))
+			for(var/i in 1 to rand(1,5))
+				arcane_access.Add(pick(get_all_accesses()))
+		if(time_since_last_random_access + (30 SECONDS) < world.time)
+			time_since_last_random_access = world.time
+		return arcane_access
 	return list()
 
 /obj/item/proc/GetID()

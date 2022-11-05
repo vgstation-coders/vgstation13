@@ -433,14 +433,14 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	theme = "malfdelta"
 	alertlevel = "delta"
 
-/datum/command_alert/malf_win 
+/datum/command_alert/malf_win
 	name = "AI Malfunctioning Win"
 	alert = 'sound/effects/static/static4.ogg'
 
 /datum/command_alert/malf_win/announce()
 	alert = pick(static_list)
-	alert_title = Gibberish("ERROR: SYSTEM OVERRIDE", 90)
-	message = Gibberish("Warning: Device safeties disabled, decontamination procedure unlocked. Activate device to contain outbreak.", 90)
+	alert_title = "ERROR"
+	message = Gibberish("CRITICAL ERROR: STATION SUBROUTINES OVERRIDDEN. RECOMMEND IMMEDIATE EVACUATION. DEVICE SAFETIES DISABLED.", 100)
 	..()
 
 
@@ -760,7 +760,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/prisoner_transfer
 	alert_title = "Prisoner Transfer"
-	message = "A suspected agent of the syndicate has been assigned to your station. The transport shuttle will dock at your station in approximately three minutes. Crew payrolls will recieve a bonus as long as the prisoner is alive."
+	message = "A suspected agent of the syndicate has been assigned to your station. The transport shuttle will dock at your station in approximately three minutes. Crew payrolls will receive a bonus as long as the prisoner is alive."
 
 /datum/command_alert/ancientpod
 	name = "Ancient Cryogenic Pod"
@@ -777,3 +777,11 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/old_vendotron_teleport/announce()
 	message = "A bluespace tear of unknown origin is formi!g w£thi$ !$@ cu&ic met£#s o£ [station_name()] plea$e-BZZZZZZZT Come on down for fabulous, splendiferous, one of a kind goods at reasona#le pri$es! We'%e prac@ic£all% giving #$e@ away! All $ales a#$ fi@%l-BZZZT excercise caution and report any anomalous activity."
 	..()
+
+/datum/command_alert/lotto_announce
+	alert_title = "Central Command Grand Slam -Stellar- Lottery"
+	message = "A lotto number draw is scheduled to happen within the next 5 minutes. All nearby entertainment monitors will be broadcasting the results."
+
+/datum/command_alert/lotto_winner
+	alert_title = "Grand Slam -Stellar- Lottery Winner!"
+	message = "Congratulations to John Nanotrasen for winning the Central Command Grand Slam -Stellar- Lottery Fund! He walks home with a million credits!"

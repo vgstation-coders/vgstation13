@@ -12,7 +12,7 @@
 
 //Attempt to perform suicide with an item nearby or in-hand
 //Return 0 if the suicide failed, return 1 if successful. Returning 1 does not perform the default suicide afterwards
-/mob/living/proc/attempt_object_suicide(var/obj/suicide_object)
+/mob/living/proc/attempt_atom_suicide(var/atom/suicide_object)
 	if(suicide_object && suicide_object.mouse_opacity && !suicide_object.invisibility) //We need the item to be there and tangible to begin, otherwise abort
 		var/damagetype = suicide_object.suicide_act(src)
 		if(damagetype)
@@ -122,25 +122,25 @@
 	if(!held_item)
 		held_item = get_inactive_hand()
 
-	if(!attempt_object_suicide(held_item)) //Failed that, attempt alternate methods
-		var/list/obj/nearbystuff = list() //Check stuff in front of us
-		for(var/obj/O in get_step(loc,dir))
-			nearbystuff += O
+	if(!attempt_atom_suicide(held_item)) //Failed that, attempt alternate methods
+		var/list/atom/nearbystuff = list() //Check stuff in front of us
+		for(var/atom/A in get_step(loc,dir))
+			nearbystuff += A
 		log_debug("Nearby stuff in front of [src]: [counted_english_list(nearbystuff)]")
 		while(nearbystuff.len)
-			var/obj/chosen_item = pick_n_take(nearbystuff)
-			if(attempt_object_suicide(chosen_item))
+			var/atom/chosen_item = pick_n_take(nearbystuff)
+			if(attempt_atom_suicide(chosen_item))
 				if(istype(chosen_item,/obj/item))
 					var/obj/item/I = chosen_item
 					put_in_hands(I)
 				return
 		nearbystuff = list()
-		for(var/obj/O in adjacent_atoms(src)) //Failed that, check anything around us
-			nearbystuff += O
+		for(var/atom/A in adjacent_atoms(src)) //Failed that, check anything around us
+			nearbystuff += A
 		log_debug("Nearby stuff around [src]: [counted_english_list(nearbystuff)]")
 		while(nearbystuff.len)
-			var/obj/chosen_item = pick_n_take(nearbystuff)
-			if(attempt_object_suicide(chosen_item))
+			var/atom/chosen_item = pick_n_take(nearbystuff)
+			if(attempt_atom_suicide(chosen_item))
 				if(istype(chosen_item,/obj/item))
 					var/obj/item/I = chosen_item
 					put_in_hands(I)

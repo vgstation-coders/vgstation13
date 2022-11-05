@@ -32,6 +32,7 @@
 	var/spawnPowerRestoreRunning = 0
 	var/welded = null
 	var/locked = 0
+	var/lifted = 0
 	var/lights = 1 // bolt lights show by default
 	var/datum/wires/airlock/wires = null
 	secondsElectrified = 0 //How many seconds remain until the door is no longer electrified. -1 if it is permanently electrified until someone fixes it.
@@ -1215,7 +1216,20 @@ About the new airlock wires panel:
 			user.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
 			bashed_in(user, TRUE)
 		return
-
+	if(istype(I, /obj/item/tool/crowbar/halligan))
+		var/breaktime = 10 SECONDS
+		if(!operating && density && src.arePowerSystemsOn() && !((stat) & NOPOWER) && !welded)
+			if(locked && !lifted)
+				to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
+				playsound(src, 'sound/effects/rustle-metal.ogg', 50, 1)
+				if(do_after(user,src,breaktime))
+					to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+					animate(src, pixel_y = pixel_y + 5, time = 1)
+					lifted = TRUE
+			else
+				pry(user)
+			return
 	if (iswelder(I))
 		if (density && !operating)
 			var/obj/item/tool/weldingtool/WT = I
@@ -1241,6 +1255,23 @@ About the new airlock wires panel:
 			return
 		src.busy = 1
 		var/beingcrowbarred = null
+		if(lifted)
+			if(istype(I, /obj/item/weapon/fireaxe))
+				if(istype(user,/mob/living/carbon/human))
+					var/mob/living/carbon/human/H = user
+					var/breaktime = 30 SECONDS
+					if(H.get_strength() >= 2)
+						breaktime = 15 SECONDS
+					to_chat(user, "<span class='notice'>You begin chopping the bolts down.</span>")
+					if(!do_after(user, src, breaktime, 10, custom_checks = new /callback(I, /obj/item/weapon/fireaxe/proc/on_do_after)))
+						return
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+					to_chat(user, "<span class='notice'>You finish chopping the bolts.</span>")
+					pixel_y = initial(pixel_y)
+					toggle_bolts()
+					lifted = FALSE
+					update_icon()
+			return
 		if(iscrowbar(I) )
 			beingcrowbarred = 1 //derp, Agouri
 		else
@@ -1249,11 +1280,10 @@ About the new airlock wires panel:
 			I.playtoolsound(loc, 100)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
-			if (do_after(user, src, 40))
-				to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
-				revert(user,null)
-				qdel(src)
-				return
+			to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
+			revert(user,null)
+			qdel(src)
+			return
 		else if(arePowerSystemsOn() && !(stat & (FORCEDISABLE|NOPOWER)))
 			to_chat(user, "<span class='notice'>The airlock's motors resist your efforts to force it.</span>")
 		else if(locked)
@@ -1294,7 +1324,6 @@ About the new airlock wires panel:
 			open(1)
 		operating = -1
 
-
 /obj/machinery/door/airlock/bashed_in(var/mob/user, var/throw_circuit = TRUE)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	operating = -1
@@ -1303,6 +1332,23 @@ About the new airlock wires panel:
 	DA.state = 0 //Completely smash the door here; reduce it to its lowest state, eject electronics smoked
 	DA.update_state()
 	qdel(src)
+
+/obj/machinery/door/airlock/proc/pry(mob/user as mob)
+	if(istype(user,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = user
+		var/breaktime = 10 SECONDS
+		if(H.get_strength() >= 2)
+			breaktime = 5 SECONDS
+		to_chat(user, "<span class='notice'>\The [src]'s motors grind as you pry it open.</span>")
+		if(do_after(user,src,breaktime))
+			if(!(stat & (NOPOWER)) || src.arePowerSystemsOn())
+				spark(src, 5)
+				playsound(src,"sparks",75,1,-1)
+			open(1)
+			return 1
+		return 0
+	else
+		return 0
 
 /obj/machinery/door/airlock/proc/revert(mob/user as mob, var/direction)
 	var/obj/structure/door_assembly/DA = new assembly_type(loc)

@@ -174,7 +174,7 @@
 
 /////////////////
 
-/obj/structure/bed/chair/vehicle/adminbus/proc/mass_rejuvinate(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/mass_rejuvenate(mob/bususer)
 	for(var/mob/living/M in orange(src,3))
 		M.revive(1)
 		if(M.mind)

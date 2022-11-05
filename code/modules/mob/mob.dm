@@ -255,6 +255,7 @@
 	return 0
 
 /mob/proc/store_position()
+	//updates the players' origin_ vars so they retain their location when the round starts.
 	origin_x = x
 	origin_y = y
 	origin_z = z
@@ -611,11 +612,8 @@
 		B.handle_item_insertion(W,1)
 
 //The list of slots by priority. equip_to_appropriate_slot() uses this list. Doesn't matter if a mob type doesn't have a slot.
-var/list/slot_equipment_priority = list( \
-		slot_back,\
+var/static/list/slot_equipment_priority = list( \
 		slot_wear_id,\
-		slot_w_uniform,\
-		slot_wear_suit,\
 		slot_wear_mask,\
 		slot_head,\
 		slot_shoes,\
@@ -625,7 +623,10 @@ var/list/slot_equipment_priority = list( \
 		slot_belt,\
 		slot_s_store,\
 		slot_l_store,\
-		slot_r_store\
+		slot_r_store,\
+		slot_w_uniform,\
+		slot_wear_suit,\
+		slot_back\
 	)
 
 /*Equips accessories.
@@ -650,14 +651,23 @@ Use this proc preferably at the end of an equipment loadout
 	if(!istype(W))
 		return 0
 
+	var/list/backup_slots = list()
 	for(var/slot in slot_equipment_priority)
 		if(!is_holding_item(W) && !override)
 			return 0
 		var/obj/item/S = get_item_by_slot(slot)
 		if(S && S.can_quick_store(W))
-			return S.quick_store(W)
+			return S.quick_store(W,src)
+		if((slot in list(slot_l_store,slot_r_store)) && W.mob_can_equip(src, slot, 1) == CAN_EQUIP_BUT_SLOT_TAKEN)
+			backup_slots.Add(slot)
+		else if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 0)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
+			return 1
+	for(var/slot in backup_slots)
 		if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 0)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
 			return 1
+	for(var/obj/item/I in held_items)
+		if(I.can_quick_store(W))
+			return I.quick_store(W,src)
 
 	return 0
 
@@ -1166,6 +1176,22 @@ Use this proc preferably at the end of an equipment loadout
 	face_atom(A)
 	A.examine(src)
 
+	if(istype(src,/mob/living))
+		var/mob/living/L = src
+		if(!isobserver(L) && !L.eyecheck() && !L.invisibility && L.alpha >= 1)
+			if(A.loc != L || A == L.get_active_hand() || A == L.get_inactive_hand())
+				for(var/mob/M in viewers(4, L))
+					if(M == L)
+						continue
+					if(istype(M.get_item_by_slot(slot_glasses),/obj/item/clothing/glasses/regular/tracking))
+						if(M.is_blind())
+							continue
+						if(isobj(A.loc))
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks inside \the [A.loc].</span>")
+						else if(A == L)
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks at \the [A].</span>")
+						else
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks at [A].</span>")
 
 /mob/living/verb/verb_pickup(obj/I in acquirable_objects_in_view(usr, 1))
 	set name = "Pick up"
@@ -1864,6 +1890,8 @@ Use this proc preferably at the end of an equipment loadout
 /mob/attack_pai(mob/user as mob)
 	ShiftClick(user)
 
+
+
 /mob/proc/teleport_to(var/atom/A)
 	forceMove(get_turf(A))
 
@@ -1911,8 +1939,8 @@ Use this proc preferably at the end of an equipment loadout
 			mind.heard_before[M.name] = M.mind
 			M.heard_by |= mind
 
-/mob/acidable()
-	return 1
+/mob/dissolvable()
+	return PACID
 
 /mob/proc/get_view_range()
 	if(client)
@@ -2124,13 +2152,15 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/make_visible(var/source_define)
 	if(!invisibility && alpha == 255 || !source_define)
 		return
-	if(src)
+	if(src && alphas[source_define])
 		invisibility = 0
 		alphas.Remove(source_define)
 		handle_alpha()
 		regenerate_icons()
 
 /mob/proc/handle_alpha()	//uses the lowest alpha on the mob
+	if(alpha_override == TRUE)
+		return
 	if(alphas.len < 1)
 		alpha = 255
 	else
@@ -2224,6 +2254,8 @@ Use this proc preferably at the end of an equipment loadout
 	if(istype(H))
 		if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 			return null
+	if(istruevampire(H))
+		return null
 	var/datum/role/changeling/C = target.mind.GetRole(CHANGELING)
 	if(istype(C))
 		if(locate(/datum/power/changeling/DigitalCamouflage) in C.current_powers)

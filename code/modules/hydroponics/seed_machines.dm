@@ -17,7 +17,7 @@
 		if(src && user && genes && choice && choice == "Yes" && user.get_active_hand() == src)
 			to_chat(user, "You wipe the disk data.")
 			name = initial(name)
-			desc = initial(name)
+			desc = initial(desc)
 			genes = list()
 			genesource = "unknown"
 
@@ -196,8 +196,8 @@
 		list("tag" = GENE_ECOLOGY),
 		list("tag" = GENE_ECOPHYSIOLOGY),
 		list("tag" = GENE_METABOLISM),
-		list("tag" = GENE_NUTRITION),
-		list("tag" = GENE_DEVELOPMENT)
+		list("tag" = GENE_DEVELOPMENT),
+		list("tag" = GENE_XENOPHYSIOLOGY)
 	)
 	data["geneTags"] = gene_tag_list
 

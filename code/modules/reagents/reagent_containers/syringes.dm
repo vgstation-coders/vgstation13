@@ -285,9 +285,10 @@
 		target.take_organ_damage(3)// 7 is the same as crowbar punch
 
 	// Break the syringe and transfer some of the reagents to the target
-	src.reagents.reaction(target, INGEST)
-	var/syringestab_amount_transferred = max(rand(min(reagents.total_volume, 2), (reagents.total_volume - 5)), 0) //nerfed by popular demand.
-	src.reagents.trans_to(target, syringestab_amount_transferred)
+	if(reagents.reagent_list.len)
+		var/syringestab_amount_transferred = max(rand(min(reagents.total_volume, 2), (reagents.total_volume - 5)), 0) //nerfed by popular demand.
+		src.reagents.reaction(target, INGEST, amount_override = min(reagents.total_volume,syringestab_amount_transferred)/(reagents.reagent_list.len))
+		src.reagents.trans_to(target, syringestab_amount_transferred)
 	src.desc += " It is broken."
 	src.mode = SYRINGE_BROKEN
 	src.add_blood(target)

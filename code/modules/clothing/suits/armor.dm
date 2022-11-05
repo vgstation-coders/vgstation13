@@ -21,6 +21,7 @@
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.6
+	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 
 
 /obj/item/clothing/suit/armor/vest
@@ -176,7 +177,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 
 /obj/item/clothing/suit/armor/samurai

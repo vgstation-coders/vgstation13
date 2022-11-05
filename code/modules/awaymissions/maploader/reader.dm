@@ -61,7 +61,11 @@ var/list/map_dimension_cache = list()
  * A list of all atoms created
  *
  */
-/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num)
+/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num, var/clipmin_x as num, var/clipmax_x as num, var/clipmin_y as num, var/clipmax_y as num, var/clipmin_z as num, var/clipmax_z as num)
+
+	clipmin_x = max(clipmin_x,1)
+	clipmin_y = max(clipmin_y,1)
+	clipmin_z = max(clipmin_z,1)
 
 	if((rotate % 90) != 0) //If not divisible by 90, make it
 		rotate += (rotate % 90)
@@ -71,7 +75,7 @@ var/list/map_dimension_cache = list()
 
 	//If this is true, the lag is reduced at the cost of slower loading speed, and tiny atmos leaks during loading
 	var/remove_lag
-	if(map_element.load_at_once)
+	if(map_element?.load_at_once)
 		remove_lag = FALSE
 	else if(ticker && ticker.current_state > GAME_STATE_PREGAME)
 		//Lag doesn't matter before the game
@@ -136,6 +140,10 @@ var/list/map_dimension_cache = list()
 
 	for(var/zpos=findtext(tfile,"\n(1,1,",lpos,0);zpos!=0;zpos=findtext(tfile,"\n(1,1,",zpos+1,0))	//in case there's several maps to load
 		zcrd++
+		if((zcrd+1) < clipmin_z)
+			continue
+		if((zcrd+1) > clipmax_z)
+			break
 		if(zcrd+z_offset > world.maxz)
 			world.maxz = zcrd+z_offset
 			map.addZLevel(new /datum/zLevel/away, world.maxz) //create a new z_level if needed
@@ -155,6 +163,9 @@ var/list/map_dimension_cache = list()
 		var/map_height = xy_grids.len
 		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
+		clipmax_x = min(clipmax_x,map_width)
+		clipmax_y = min(clipmax_y,map_height)
+
 		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : map_height + y_offset
 		var/y_check = rotate == 0 || rotate == 180 ? map_height + y_offset : map_width + x_offset
 		if(world.maxx < x_check)
@@ -172,18 +183,25 @@ var/list/map_dimension_cache = list()
 			WARNING("Loading [map_element] enlarged the map. New max y = [world.maxy]")
 
 		//then proceed it line by line, starting from top
-		ycrd = y_offset + map_height
-		ycrd_rotate = x_offset + map_width
-		ycrd_flip = y_offset + 1
-		ycrd_flip_rotate = x_offset + 1
+		ycrd = (y_offset + map_height + 1) - (map_height - clipmax_y)
+		ycrd_rotate = (x_offset + map_width + 1) - (map_height - clipmax_y)
+		ycrd_flip = y_offset + (map_height - clipmax_y)
+		ycrd_flip_rotate = x_offset + (map_height - clipmax_y)
 
-		for(var/grid_line in xy_grids)
+		var/grid_line
+		for(var/i in (map_height - (clipmax_y - 1)) to (map_height - (clipmin_y - 1)))
+			grid_line = xy_grids[i]
+			ycrd--
+			ycrd_rotate--
+			ycrd_flip++
+			ycrd_flip_rotate++
 			//fill the current square using the model map
-			xcrd=x_offset
-			xcrd_rotate=y_offset
-			xcrd_flip=x_offset + map_width + 1
-			xcrd_flip_rotate=y_offset + map_width + 1
-			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
+			xcrd=x_offset + (clipmin_x - 1)
+			xcrd_rotate=y_offset + (clipmin_x - 1)
+			xcrd_flip=x_offset + map_width + (clipmin_x)
+			xcrd_flip_rotate=y_offset + map_width + (clipmin_x)
+
+			for(var/mpos=1+(key_len*(clipmin_x-1));mpos<=x_depth-((map_width-clipmax_x)*key_len);mpos+=key_len)
 				xcrd++
 				xcrd_rotate++
 				xcrd_flip--
@@ -202,11 +220,6 @@ var/list/map_dimension_cache = list()
 					CHECK_TICK
 			if(map_element)
 				map_element.width = xcrd - x_offset
-
-			ycrd--
-			ycrd_rotate--
-			ycrd_flip++
-			ycrd_flip_rotate++
 
 			if(remove_lag)
 				CHECK_TICK
@@ -320,8 +333,6 @@ var/list/map_dimension_cache = list()
 
 		if(istype(A))
 			areas.Add(instance)
-			A.addSorted()
-
 
 	members.Remove(members[index])
 
@@ -371,15 +382,17 @@ var/list/map_dimension_cache = list()
 /dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z, var/rotate)
 	if(!path)
 		return
+	var/timestart = world.timeofday
 	var/atom/instance
 	_preloader.setup(attributes, path)
 
+	var/turf/T = locate(x,y,z)
 	if(ispath(path, /turf)) //Turfs use ChangeTurf
-		var/turf/oldTurf = locate(x,y,z)
-		if(path != oldTurf.type)
-			instance = oldTurf.ChangeTurf(path, allow = 1)
+		if(path != T.type)
+			instance = T.ChangeTurf(path, allow = 1)
+			T = instance
 	else
-		instance = new path (locate(x,y,z))//first preloader pass
+		instance = new path (T)//first preloader pass
 
 	// Stolen from shuttlecode but very good to reuse here
 	if(rotate && instance)
@@ -388,6 +401,9 @@ var/list/map_dimension_cache = list()
 	if(use_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
 
+	var/timetook2instance = world.timeofday - timestart
+	if(timetook2instance > 1)
+		log_debug("Slow atom instance. [instance] ([instance.type]) at [T?.x],[T?.y],[T?.z] took [timetook2instance/10] seconds to instance.")
 	return instance
 
 //text trimming (both directions) helper proc

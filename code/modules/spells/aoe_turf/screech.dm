@@ -26,7 +26,6 @@
 		return FALSE
 
 /spell/aoe_turf/screech/choose_targets(var/mob/user = usr)
-
 	var/list/targets = list()
 
 	for(var/mob/living/carbon/C in hearers(user, 4))
@@ -44,11 +43,6 @@
 					continue
 				if (VAMP_FAILURE)
 					critfail(targets, user)
-
-	if (!targets.len)
-		to_chat(user, "<span class='warning'>There are no targets.</span>")
-		return FALSE
-
 	return targets
 
 /spell/aoe_turf/screech/cast(var/list/targets, var/mob/user)
@@ -56,6 +50,7 @@
 		var/mob/living/carbon/C = T
 		if(C.is_deaf())
 			continue
+		playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
 		to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
 		C.Knockdown(8)
 		C.ear_deaf = 20
@@ -64,8 +59,8 @@
 		C.Jitter(150)
 	for(var/obj/structure/window/W in view(4))
 		W.shatter()
-
-	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
+	for(var/obj/machinery/light/L in view(7))
+		L.broken()
 
 	var/datum/role/vampire/V = isvampire(user)
 	if (V)

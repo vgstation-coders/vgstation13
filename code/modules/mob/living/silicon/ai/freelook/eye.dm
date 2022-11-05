@@ -49,7 +49,7 @@
 			ai.client.eye = src
 			ai.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			ai.see_in_dark = 8
-			ai.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+			ai.see_invisible = SEE_INVISIBLE_LEVEL_ONE
 
 		if(istype(H) && !holo_bump)  // move our hologram to our new location (unless our advanced hologram was bumped, in which case we're moving to the hologram)
 			H.move_hologram()

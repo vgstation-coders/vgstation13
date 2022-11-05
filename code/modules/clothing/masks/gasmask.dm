@@ -12,6 +12,7 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FACE
 	pressure_resistance = ONE_ATMOSPHERE
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/canstage = 1
 	var/stage = 0
 
@@ -192,7 +193,7 @@
 /obj/item/clothing/mask/gas/clown_hat/stickymagic
 	canremove = 0
 
-/obj/item/clothing/mask/gas/clown_hat/stickymagic/acidable()
+/obj/item/clothing/mask/gas/clown_hat/stickymagic/dissolvable()
 	return 0
 
 /obj/item/clothing/mask/gas/clown_hat/wiz
@@ -254,7 +255,7 @@
 	canremove = 0
 	muted = 1
 
-/obj/item/clothing/mask/gas/mime/stickymagic/acidable()
+/obj/item/clothing/mask/gas/mime/stickymagic/dissolvable()
 	return 0
 
 /obj/item/clothing/mask/gas/monkeymask
@@ -275,11 +276,25 @@
 	can_flip = 0
 	canstage = 0
 
-/obj/item/clothing/mask/gas/death_commando
-	name = "Death Commando Mask"
+/obj/item/clothing/mask/gas/grim_reaper
+	name = "grim reaper mask"
+	desc = "Spare a coin for the ferryman, or brave the Styx on your own?"
 	icon_state = "death"
 	item_state = "death"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	can_flip = 0
+	canstage = 0
+
+/obj/item/clothing/mask/gas/grim_reaper/death_commando
+	name = "Death Commando Mask"
+	desc = "A face-covering mask that can be connected to an air supply."
 	siemens_coefficient = 0.2
+
+/obj/item/clothing/mask/gas/slasher
+	name = "hockey mask"
+	desc = "Maybe don't wear this near a lake on unlucky days."
+	icon_state = "jason"
+	item_state = "jason"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0

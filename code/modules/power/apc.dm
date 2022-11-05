@@ -74,7 +74,6 @@
 	var/chargecount = 0
 	var/locked = 1
 	var/coverlocked = 1
-	var/aidisabled = 0
 	var/tdir = null
 	var/lastused_light = 0
 	var/lastused_equip = 0
@@ -873,6 +872,8 @@
 
 /obj/machinery/power/apc/proc/update()
 	var/area/this_area = get_area(src)
+	if(!this_area)
+		return
 	if(operating && !shorted)
 		this_area.power_light = (lighting > 1)
 		this_area.power_equip = (equipment > 1)
@@ -909,26 +910,12 @@
 	if (istype(user, /mob/living/silicon))
 		var/mob/living/silicon/ai/AI = user
 		var/mob/living/silicon/robot/robot = user
-		if (                                                             \
-			src.aidisabled ||                                            \
-			malfhack && istype(malfai) &&                                \
-			(                                                            \
-				(istype(AI) && (malfai!=AI && malfai != AI.parent)) ||   \
-				(istype(robot) && (robot in malfai.connected_robots))    \
-			)                                                            \
-		)
+		if((src.stat & NOAICONTROL) || malfhack && istype(malfai) && ((istype(AI) && (malfai!=AI && malfai != AI.parent)) || (istype(robot) && (robot in malfai.connected_robots))))
 			if(!loud)
 				to_chat(user, "<span class='warning'>\The [src] have AI control disabled!</span>")
 				nanomanager.close_user_uis(user, src)
 
 			return 0
-	else if(isobserver(user))
-		if(malfhack && istype(malfai) && !isAdminGhost(user))
-			if(!loud)
-				to_chat(user, "<span class='warning'>\The [src] have AI control disabled!</span>")
-				nanomanager.close_user_uis(user, src)
-			return 0
-
 	else
 		if ((!is_in_range(user) || !istype(src.loc, /turf)))
 			nanomanager.close_user_uis(user, src)
@@ -962,9 +949,10 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	if((!aidisabled) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
-		to_chat(usr, "Access refused.")
-		return 0
+	if(!isobserver(usr))
+		if(!(stat & NOAICONTROL) && malflocked && (usr != malfai && usr.loc != src)) //exclusive control enabled
+			to_chat(usr, "Access refused.")
+			return 0
 	if(!can_use(usr, 1))
 		return 0
 	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr) || OMNI_LINK(usr, src)) && locked)

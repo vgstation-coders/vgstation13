@@ -8,7 +8,7 @@
 	icon_state = "light1"
 	anchored = 1.0
 	var/buildstage = 2
-	var/on = 0
+	var/on = 1
 	var/image/overlay
 
 	moody_light_type = /atom/movable/light/moody/light_switch
@@ -20,25 +20,18 @@
 /obj/machinery/light_switch/supports_holomap()
 	return TRUE
 
-/obj/machinery/light_switch/initialize()
-	add_self_to_holomap()
-	if (!map.lights_always_ok)
-		var/area/A = get_area(src)
-		if (!A.lights_always_start_on)
-			toggle_switch(newstate = 0)
-
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	var/area/this_area = get_area(src)
 	name = "[this_area.name] light switch"
 	buildstage = building
-	if(buildstage)
-		on = this_area.lightswitch
-	else
+	this_area.haslightswitch = TRUE
+	if(!buildstage)
 		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER)
 		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir = ndir
 	updateicon()
 	..()
+	add_self_to_holomap()
 
 /obj/machinery/light_switch/proc/updateicon()
 	if(!overlay)
@@ -72,8 +65,6 @@
 				if(do_after(user, src,10) && buildstage == 2)
 					to_chat(user, "<span class='notice'>You unscrew the cover blocking the inner wiring of \the [src].</span>")
 					buildstage = 1
-					var/area/this_area = get_area(src)
-					on = this_area.lightswitch
 			return
 		if(1)
 			if(W.is_screwdriver(user))
@@ -129,15 +120,21 @@
 /obj/machinery/light_switch/attack_hand(mob/user)
 	toggle_switch()
 
-/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null)
-	if(!isnull(newstate) && on == newstate)
-		return
+/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null, var/playsound = TRUE)
 	if(buildstage != 2)
 		return
-	on = !on
-	playsound(src,'sound/misc/click.ogg',30,0,-1)
+
+	if(isnull(newstate))
+		on = !on
+	else if(on != newstate)
+		on = newstate
+	else
+		return
+
+	if(playsound)
+		playsound(src,'sound/misc/click.ogg',30,0,-1)
+
 	var/area/this_area = get_area(src)
-	this_area.lightswitch = on
 	this_area.updateicon()
 
 	for(var/obj/machinery/light_switch/L in this_area)

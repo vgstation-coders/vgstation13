@@ -269,12 +269,13 @@ var/global/list/bombermangear = list()
 
 	var/fuel = 1
 
-/obj/structure/bomberflame/New(turf/loc, var/initial=1, var/power=1, var/flame_dir=SOUTH, var/destroy=0, var/hurt=0)
+/obj/structure/bomberflame/New(turf/loc, var/initial=1, var/power=1, var/flame_dir=SOUTH, var/destroy=0, var/hurt=0, var/arcane=0)
 	..()
 	fuel = power
 	dir = flame_dir
 	destroy_environnement = destroy
 	hurt_players = hurt
+	arcanetampered = arcane
 	var/turf/T1 = get_turf(src)
 	var/turf/T2 = null
 	if(!initial)
@@ -309,6 +310,14 @@ var/global/list/bombermangear = list()
 	bombermangear -= src
 
 /obj/structure/bomberflame/proc/collisions(var/turf/T)
+	if(arcanetampered)
+		if(fuel <= 2)
+			T.ex_act(3)
+		else if(fuel <= 10)
+			T.ex_act(2)
+		else
+			T.ex_act(1)
+		return
 
 	for(var/obj/item/weapon/bomberman/dispenser in T)
 		dispenser.lost()
@@ -341,6 +350,15 @@ var/global/list/bombermangear = list()
 
 
 /obj/structure/bomberflame/to_bump(atom/obstacle)	//if an explosion reaches a bomb, it detonates
+	if(arcanetampered)
+		if(fuel <= 2)
+			obstacle.ex_act(3)
+		else if(fuel <= 10)
+			obstacle.ex_act(2)
+		else
+			obstacle.ex_act(1)
+		return
+
 	if(istype(obstacle, /obj/structure/bomberman/))
 		var/obj/structure/bomberman/chained_explosion = obstacle
 		chained_explosion.detonate()
@@ -960,7 +978,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		A.power_environ = 0
 		A.always_unpowered = 0
 		A.jammed = SUPER_JAMMED	//lol telesci
-		A.addSorted()
 		arena = A
 
 		spawn(0)

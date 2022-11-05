@@ -43,7 +43,11 @@ var NanoTemplate = function () {
 					// Disabling caching using jQuery's hack seems to break Nano in some obscure cases on BYOND 512.
 					// Oh well.
 					//cache: false,
-					dataType: 'text',
+					// dataType forces the incoming data to be parsed a certain way and this breaks on certain PCs
+					// or so it seems. Commenting it out may fix the issue since it leaves it up to ajax itself
+					// to determine what the input data is, based on the data itself. Please port everything
+					// TO TGUI ALREADY PLEASE END THIS STUPID BUG AAAAA
+					//dataType: 'html',
 					timeout: 1000
 				}))
 				.done(function(templateMarkup) {
