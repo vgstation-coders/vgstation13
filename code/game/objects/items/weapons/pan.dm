@@ -250,7 +250,7 @@
 		//otherwise, say that the wielder spills it onto the target
 		else
 			dropper.visible_message( \
-					"<span class='[spanclass]'>[dropper] [splashverb][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? get_reflexive_pronoun(dropper) : target]" : ""][spanclass == "warning" ? "!" : "."]</span>", \
+					"<span class='[spanclass]'>[dropper] [splashverb][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? get_reflexive_pronoun(dropper.gender) : target]" : ""][spanclass == "warning" ? "!" : "."]</span>", \
 					"<span class='[spanclass]'>You [shift_verb_tense(splashverb)][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? "yourself" : target]" : ""].</span>")
 	else
 		visible_message("<span class='warning'>Everything [splashverb] out of [src] [target ? "onto [target]" : ""]!</span>")
