@@ -420,9 +420,6 @@
 	if(age < MINIMUM_NON_SUS_ACCOUNT_AGE)
 		message_admins("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age]  First seen = [player_age]")
 		log_admin(("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age] First seen = [player_age]"))
-		for(var/client/X in admins)
-			if(X.prefs.toggles & SOUND_ADMINHELP)
-				X << 'sound/effects/adminhelp.ogg'
 	testing("[src]/[ckey(key)] logged in with age of [age]/[player_age]/[Joined]")
 	account_age = age
 
