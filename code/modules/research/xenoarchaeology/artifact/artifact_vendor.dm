@@ -98,6 +98,8 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar,
 		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar,
 		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb,
@@ -106,6 +108,7 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko,
 	)
 	var/list/dubiousStock = list(
 		/obj/item/weapon/reagent_containers/food/snacks/danitos,
@@ -121,8 +124,6 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/snacks/oldempirebar,
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake,
 		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/clown,
-		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear,
-		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist,
 		/obj/item/weapon/reagent_containers/food/drinks/groans,
 		/obj/item/weapon/reagent_containers/food/drinks/filk,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo,
