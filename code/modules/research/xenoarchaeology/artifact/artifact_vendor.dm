@@ -73,6 +73,7 @@ var/static/list/badstuff2putin = list(
 	mech_flags = MECH_SCAN_FAIL
 	var/total_uses = 0
 	var/time_active = 0
+	var/insulted = FALSE
 	var/list/safeStock = list(
 		/obj/item/weapon/reagent_containers/food/snacks/candy,
 		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating,
@@ -137,7 +138,7 @@ var/static/list/badstuff2putin = list(
 /obj/machinery/vending/artifact/proc/decideStock()
 	premium.Cut()
 	for(var/i in 1 to rand(6, 18))
-		if(extended_inventory || emagged || arcanetampered)
+		if(extended_inventory || emagged || arcanetampered || insulted)
 			if(prob(50)/(total_uses+1))
 				premium.Add(buildDangerousStock())
 			else
@@ -161,13 +162,13 @@ var/static/list/badstuff2putin = list(
 	build_inventories()
 
 /obj/machinery/vending/artifact/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
-	..()
 	total_uses++
+	..()
 	decideStock()
 
 /obj/machinery/vending/artifact/throw_item()
-	..()
 	total_uses++
+	..()
 	decideStock()
 
 /obj/machinery/vending/artifact/emag_act(mob/user)
@@ -178,6 +179,15 @@ var/static/list/badstuff2putin = list(
 	. = ..()
 	decideStock()
 
+/obj/machinery/vending/artifact/malfunction()
+	var/lost_inventory = rand(1,12)
+	insulted = TRUE
+	while(lost_inventory>0)
+		throw_item()
+		lost_inventory--
+	stat |= BROKEN
+	update_vicon()
+
 /obj/machinery/vending/artifact/process()
 	..()
 	if(total_uses)
@@ -185,7 +195,11 @@ var/static/list/badstuff2putin = list(
 		if(time_active % 30 == 0)
 			total_uses-- // usage cooldown, one every minute or so
 			time_active = 0
+			if(total_uses < 3)
+				insulted = FALSE
 			decideStock()
+	else if(insulted)
+		insulted = FALSE
 
 /obj/machinery/vending/artifact/on_return_coin_detect(mob/user)
 	if(((src.last_reply + (src.vend_delay + 200)) <= world.time) && src.vend_reply)
@@ -320,9 +334,10 @@ var/static/list/badstuff2putin = list(
 		things2add += list(initial(R.id))
 	var/divisor = rand(1,10)
 	for(var/i in 1 to divisor)
-		reagents.add_reagent(pick(stuff2putin), volume/(divisor*2))
+		reagents.add_reagent(pick(stuff2putin), (volume-1)/(divisor*2))
 		if(prob(75))
 			reagents.add_reagent(pick(things2add), volume/(divisor*2))
+	reagents.add_reagent(BLACKCOLOR,1)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact/bad/New()
 	stuff2putin = badstuff2putin.Copy()
