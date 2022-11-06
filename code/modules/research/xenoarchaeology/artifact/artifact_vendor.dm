@@ -66,7 +66,7 @@ var/static/list/badstuff2putin = list(
 
 /obj/machinery/vending/artifact
 	name = "mysterious snack vendor"
-	desc = "A vending machine containing snacks, drinks and other assorted products."
+	desc = "A vending machine containing snacks, drinks and other assorted products. Insert coin to activate."
 	icon_state = "Cola_Machine"
 	icon_vend = "Cola_Machine-vend"
 	vend_delay = 50
@@ -74,24 +74,53 @@ var/static/list/badstuff2putin = list(
 	var/total_uses = 0
 	var/time_active = 0
 	var/list/safeStock = list(
-		/obj/item/weapon/reagent_containers/food/snacks/candy = 8,
-		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating = 10,
-		/obj/item/weapon/reagent_containers/food/snacks/chips = 20,
-		/obj/item/weapon/reagent_containers/food/snacks/sosjerky = 30,
-		/obj/item/weapon/reagent_containers/food/snacks/no_raisin = 35,
-		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie = 8,
-		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 30,
-		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 75,
-		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
-		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
-		/obj/item/weapon/storage/pill_bottle/lollipops = 10,
-		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 100,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 10,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 10,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 10,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 10,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 10,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola = 50,
+		/obj/item/weapon/reagent_containers/food/snacks/candy,
+		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating,
+		/obj/item/weapon/reagent_containers/food/snacks/chips,
+		/obj/item/weapon/reagent_containers/food/snacks/sosjerky,
+		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
+		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers,
+		/obj/item/weapon/reagent_containers/food/snacks/magbites,
+		/obj/item/weapon/storage/fancy/cigarettes/gum,
+		/obj/item/weapon/storage/pill_bottle/lollipops,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine,
+		/obj/item/weapon/reagent_containers/food/snacks/discountburger,
+		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
+	)
+	var/list/dubiousStock = list(
+		/obj/item/weapon/reagent_containers/food/snacks/danitos,
+		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen,
+		/obj/item/weapon/reagent_containers/food/snacks/discountburrito,
+		/obj/item/weapon/reagent_containers/food/snacks/pie/discount,
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped,
+		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins,
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky,
+		/obj/item/weapon/reagent_containers/food/drinks/groans,
+		/obj/item/weapon/reagent_containers/food/drinks/filk,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator,
+		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze,
+	)
+	var/list/dangerousStock = list(
+		/obj/item/weapon/reagent_containers/food/snacks/discountchocolate,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza,
 	)
 	var/list/insultingStock = list(
 		/obj/item/weapon/grenade/iedcasing/preassembled/artifact,
@@ -106,34 +135,47 @@ var/static/list/badstuff2putin = list(
 	decideStock()
 
 /obj/machinery/vending/artifact/proc/decideStock()
-	products.Cut()
-	prices.Cut()
-	if(extended_inventory || emagged || arcanetampered)
-		if(prob(50)/(total_uses+1))
-			buildDangerousStock()
+	premium.Cut()
+	for(var/i in 1 to rand(6, 18))
+		if(extended_inventory || emagged || arcanetampered)
+			if(prob(50)/(total_uses+1))
+				premium.Add(buildDangerousStock())
+			else
+				premium.Add(buildInsultingStock())
 		else
-			buildInsultingStock()
-	else
-		switch(total_uses)
-			if(0 to 2)
-				buildSafeStock()
-			if(3 to 6)
-				if(prob(50/(total_uses-2)))
-					buildSafeStock()
-				else
-					buildDubiousStock()
-			if(7 to INFINITY)
-				if(prob(50/(total_uses-2)))
-					buildSafeStock()
-				else if(prob(50/(total_uses-6)))
-					buildDubiousStock()
-				else
-					buildDangerousStock()
+			switch(total_uses)
+				if(0 to 2)
+					premium.Add(buildSafeStock())
+				if(3 to 6)
+					if(prob(50/(total_uses-2)))
+						premium.Add(buildSafeStock())
+					else
+						premium.Add(buildDubiousStock())
+				if(7 to INFINITY)
+					if(prob(50/(total_uses-2)))
+						premium.Add(buildSafeStock())
+					else if(prob(50/(total_uses-6)))
+						premium.Add(buildDubiousStock())
+					else
+						premium.Add(buildDangerousStock())
 	build_inventories()
 
 /obj/machinery/vending/artifact/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	..()
 	total_uses++
+	decideStock()
+
+/obj/machinery/vending/artifact/throw_item()
+	..()
+	total_uses++
+	decideStock()
+
+/obj/machinery/vending/artifact/emag_act(mob/user)
+	. = ..()
+	decideStock()
+
+/obj/machinery/vending/artifact/arcane_act(mob/user)
+	. = ..()
 	decideStock()
 
 /obj/machinery/vending/artifact/process()
@@ -168,41 +210,26 @@ var/static/list/badstuff2putin = list(
 
 /obj/machinery/vending/artifact/build_inventories()
 	..()
-	for(var/datum/data/vending_product/R in product_records)
+	for(var/datum/data/vending_product/R in coin_records)
 		R.product_name = "Unknown" //obscure it a lil
 
 /obj/machinery/vending/artifact/proc/buildSafeStock()
-	for(var/i in 1 to rand(6, 18))
-		var/theStock = rand(1, safeStock.len)
-		var/chosenStock = prob(67) ? safeStock[theStock] : pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/chips))
-		products.Add(chosenStock)
-		prices.Add(chosenStock)
-		prices[chosenStock] = (chosenStock in safeStock) ? rand(safeStock[chosenStock] * 0.7, safeStock[chosenStock] * 1.3) : rand(5,35)
+	return prob(67) ? pick(safeStock) : pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/chips))
 
 /obj/machinery/vending/artifact/proc/buildDubiousStock()
-	for(var/i in 1 to rand(6, 18))
-		var/chosenStock = pick(/obj/item/weapon/reagent_containers/food/snacks/artifact,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact)
-		products.Add(chosenStock)
-		prices.Add(chosenStock)
-		prices[chosenStock] = rand(10,70)
+	return prob(33) ? pick(dubiousStock): pick(/obj/item/weapon/reagent_containers/food/snacks/artifact,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact)
 
 /obj/machinery/vending/artifact/proc/buildDangerousStock()
-	for(var/i in 1 to rand(6, 18))
-		var/chosenStock = pick(/obj/item/weapon/reagent_containers/food/snacks/artifact/bad,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact/bad)
-		products.Add(chosenStock)
-		prices.Add(chosenStock)
-		prices[chosenStock] = rand(20,140)
+	return prob(16) ? pick(dangerousStock) : pick(/obj/item/weapon/reagent_containers/food/snacks/artifact/bad,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact/bad)
 
 /obj/machinery/vending/artifact/proc/buildInsultingStock()
-	for(var/i in 1 to rand(6, 18))
-		var/chosenStock = pick(insultingStock)
-		products.Add(chosenStock)
-		prices.Add(chosenStock)
-		prices[chosenStock] = rand(70,130)
+	return pick(insultingStock)
 
 /obj/machinery/vending/artifact/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
 	to_chat(user,"<span class='warning'>There is no circuitboard to pry out???</span>")
-	extended_inventory = TRUE
+	if(!extended_inventory)
+		extended_inventory = TRUE
+		decideStock()
 
 /obj/item/weapon/reagent_containers/food/snacks/artifact
 	name = "alien snack"
@@ -223,8 +250,21 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
 		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers,
-		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped,
 		/obj/item/weapon/reagent_containers/food/snacks/magbites,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine,
+		/obj/item/weapon/reagent_containers/food/snacks/discountburger,
+		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins,
+		/obj/item/weapon/reagent_containers/food/snacks/danitos,
+		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen,
+		/obj/item/weapon/reagent_containers/food/snacks/discountburrito,
+		/obj/item/weapon/reagent_containers/food/snacks/pie/discount,
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped,
+		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins,
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky,
+		/obj/item/weapon/reagent_containers/food/snacks/discountchocolate,
 	)
 	type = pick(picks)
 	var/obj/item/weapon/reagent_containers/food/snacks/icon2build = type
@@ -256,6 +296,15 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza,
 	)
 	type = pick(picks)
 	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/icon2build = type
@@ -268,7 +317,7 @@ var/static/list/badstuff2putin = list(
 	var/list/things2add
 	for(var/addtype in things_can_add)
 		var/datum/reagent/R = addtype
-		things2add += list(list(initial(R.id)))
+		things2add += list(initial(R.id))
 	var/divisor = rand(1,10)
 	for(var/i in 1 to divisor)
 		reagents.add_reagent(pick(stuff2putin), volume/(divisor*2))
@@ -278,6 +327,10 @@ var/static/list/badstuff2putin = list(
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact/bad/New()
 	stuff2putin = badstuff2putin.Copy()
 	..()
+
+/obj/item/weapon/grenade/chem_grenade/artifact
+	path = PATH_STAGE_CONTAINER_INSERTED
+	stage = GRENADE_STAGE_COMPLETE
 
 /obj/item/weapon/grenade/chem_grenade/artifact/New()
 	..()
@@ -321,8 +374,8 @@ var/static/list/badstuff2putin = list(
 		if(9)
 			B1.reagents.add_reagent(BLEACH,50) // a good idea
 			B2.reagents.add_reagent(AMMONIA,50)
-		//if(10)
-		//  be a dud and do nothing
+		if(10)
+			B1.reagents.add_reagent(NOTHING,0) // dud
 
 	detonator = new/obj/item/device/assembly_holder/timer_igniter(src)
 
@@ -363,14 +416,15 @@ var/static/list/badstuff2putin = list(
 			prime()
 
 /proc/generate_weird_stock_name()
-	var/name = capitalize(pick(pick(first_names_male,first_names_female,wizard_first,ninja_names,last_names,ai_names,hologram_names)))
+	var/name = capitalize(pick(pick(first_names_male,first_names_female,last_names)))
 	var/adjective = capitalize(pick(adjectives))
-	var/alliterative_adjective = "Discount"
-	while(uppertext(copytext(alliterative_adjective,1,2)) != uppertext(copytext(name,1,2)))
-		alliterative_adjective = capitalize(pick(adjectives))
+	var/alliterative = ""
+	if(uppertext(copytext(name,1,2) != "X") // only letter not in adjectives
+		while(uppertext(copytext(alliterative_adjective,1,2)) != uppertext(copytext(name,1,2)))
+			alliterative = capitalize(pick(adjectives))
 	var/verb1 = capitalize(pick(verbs))
 	var/verb2 = pick(verbs)
 	var/verb3 = capitalize(pick(verbs))
 	return "\improper \
-		[prob(50) ? "[prob(10) ? "[alliterative_adjective] " : ""][name][prob(80) ? "'s" : pick("Co","Corp","Pro","Mart","More","Way"," Bro's"," & Co")] " : ""]\
+		[prob(50) ? "[prob(10) && alliterative != "" ? "[alliterative] " : ""][name][prob(80) ? "'s" : pick("Co","Corp","Pro","Mart","More","Way"," Bro's"," & Co")] " : ""]\
 		[prob(50) ? "[adjective] " : ""][verb1][prob(20) ? verb2 : ""][prob(20) ? " of [verb3]" : ""][prob(5) ? "!" : ""]"

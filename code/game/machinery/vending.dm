@@ -167,6 +167,10 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/build_inventories()
 	product_records = new/list()
+	coin_records = new/list()
+	hidden_records = new/list()
+	voucher_records = new/list()
+	holiday_records = new/list()
 	build_inventory(products)
 	build_inventory(contraband, 1)
 	build_inventory(premium, 0, 1)
