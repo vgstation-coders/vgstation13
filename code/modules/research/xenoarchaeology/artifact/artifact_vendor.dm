@@ -175,7 +175,7 @@ var/static/list/badstuff2putin = list(
 						premium.Add(pick(dubiousStock))
 				if(7 to INFINITY)
 					if(prob(50/(total_uses-2)))
-						premium.Add(buildSafeStock())
+						premium.Add(pick(safeStock))
 					else if(prob(50/(total_uses-6)))
 						premium.Add(pick(dubiousStock))
 					else
@@ -258,6 +258,16 @@ var/static/list/badstuff2putin = list(
 	name = "alien snack"
 	desc = "A strange long lost brand of snack. You're not sure if this even ever existed."
 	var/list/stuff2putin = list()
+	var/list/objs2putin = list(
+		/obj/item/toy/gasha = 0,
+		/obj/item/weapon/coin = 0,
+		/obj/item/weapon/cartridge = 0,
+		/obj/item/weapon/spacecash = 0,
+		/obj/item/tool = 0,
+		/obj/item/weapon/kitchen/utensil = 0,
+		/mob/living/simple_animal/mouse/common = 1,
+	)
+	var/objprob = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/artifact/New(loc)
 	..(loc)
@@ -295,6 +305,22 @@ var/static/list/badstuff2putin = list(
 	var/divisor = rand(1,10)
 	for(var/i in 1 to divisor)
 		reagents.add_reagent(pick(stuff2putin), volume/divisor)
+	if(prob(objprob))
+		for(var/i in rand(objprob/10,(objprob*3)/10))
+			var/objpath = pick(objs2putin)
+			objpath = objs2putin[objpath] ? pick(existing_typesof(objpath)) : pick(subtypesof(objpath))
+			var/atom/movable/AM = new objpath(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/artifact/bad
+	objs2putin = list(
+		/mob/living/simple_animal/hostile/giant_spider/spiderling = 1,
+		/mob/living/simple_animal/hostile/carp/baby = 1,
+		/mob/living/simple_animal/bee/angry = 1,
+		/mob/living/simple_animal/bee/hornetgun = 1,
+		/mob/living/simple_animal/hostile/viscerator = 1,
+		/obj/item/supermatter_splinter = 1,
+	)
+	objprob = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/artifact/bad/New()
 	stuff2putin = badstuff2putin.Copy()
