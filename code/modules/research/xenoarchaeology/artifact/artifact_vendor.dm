@@ -153,9 +153,9 @@ var/static/list/badstuff2putin = list(
 	for(var/i in 1 to rand(6, 18))
 		if(extended_inventory || emagged || arcanetampered || insulted)
 			if(prob(50)/(total_uses+1))
-				premium.Add(buildDangerousStock())
+				premium.Add(pick(dangerousStock))
 			else
-				premium.Add(buildInsultingStock())
+				premium.Add(pick(insultingStock))
 		else
 			switch(total_uses)
 				if(0 to 2)
@@ -164,14 +164,14 @@ var/static/list/badstuff2putin = list(
 					if(prob(50/(total_uses-2)))
 						premium.Add(buildSafeStock())
 					else
-						premium.Add(buildDubiousStock())
+						premium.Add(pick(dubiousStock))
 				if(7 to INFINITY)
 					if(prob(50/(total_uses-2)))
 						premium.Add(buildSafeStock())
 					else if(prob(50/(total_uses-6)))
-						premium.Add(buildDubiousStock())
+						premium.Add(pick(dubiousStock))
 					else
-						premium.Add(buildDangerousStock())
+						premium.Add(pick(dangerousStock))
 	build_inventories()
 
 /obj/machinery/vending/artifact/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
@@ -242,15 +242,6 @@ var/static/list/badstuff2putin = list(
 
 /obj/machinery/vending/artifact/proc/buildSafeStock()
 	return prob(67) ? pick(safeStock) : pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/chips))
-
-/obj/machinery/vending/artifact/proc/buildDubiousStock()
-	return pick(dubiousStock)
-
-/obj/machinery/vending/artifact/proc/buildDangerousStock()
-	return pick(dangerousStock)
-
-/obj/machinery/vending/artifact/proc/buildInsultingStock()
-	return pick(insultingStock)
 
 /obj/machinery/vending/artifact/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
 	to_chat(user,"<span class='warning'>There is no circuitboard to pry out???</span>")
