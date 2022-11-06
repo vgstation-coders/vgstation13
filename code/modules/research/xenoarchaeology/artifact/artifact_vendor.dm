@@ -64,6 +64,8 @@ var/static/list/badstuff2putin = list(
 	CYANIDE,
 )
 
+// Mysterious vending machines, inspired by SCP-261: https://scp-wiki.wikidot.com/scp-261
+
 /obj/machinery/vending/artifact
 	name = "mysterious snack vendor"
 	desc = "A vending machine containing snacks, drinks and other assorted products. Insert coin to activate."
@@ -83,6 +85,10 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers,
 		/obj/item/weapon/reagent_containers/food/snacks/magbites,
+		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks,
+		/obj/item/weapon/reagent_containers/food/snacks/bustanuts,
+		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating,
+		/obj/item/weapon/cell/crap/worse, // shows up in the SCP so why not here too sometimes
 		/obj/item/weapon/storage/fancy/cigarettes/gum,
 		/obj/item/weapon/storage/pill_bottle/lollipops,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine,
@@ -108,6 +114,8 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins,
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky,
+		/obj/item/weapon/reagent_containers/food/snacks/oldempirebar,
+		/obj/item/weapon/reagent_containers/food/snacks/syndicake,
 		/obj/item/weapon/reagent_containers/food/drinks/groans,
 		/obj/item/weapon/reagent_containers/food/drinks/filk,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo,
