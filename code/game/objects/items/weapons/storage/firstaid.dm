@@ -222,10 +222,35 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		/obj/item/weapon/dice/fudge,
 	)
 
+/obj/item/weapon/storage/pill_bottle/dice/d6
+	name = "bag of d6"
+	items_to_spawn = list(
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+	)
+
 /obj/item/weapon/storage/pill_bottle/dice/New()
 	..()
 	overlays -= colour_overlay
 	colour_overlay = null
+	verbs -= /obj/item/weapon/storage/pill_bottle/verb/change
+
+/obj/item/weapon/storage/pill_bottle/dice/d6/New()
+	..()
+	var/colorchoice = pick(
+		300; "#ffffff", //white
+		100; "#00aedb", //teal
+		100; "#d11141", //red
+		100; "#00b159", //green
+		100; "#ffc425", //gold
+		)
+	for(var/obj/O in contents)
+		O.color = colorchoice
 
 /obj/item/weapon/storage/pill_bottle/dice/cup
 	name = "dice cup"

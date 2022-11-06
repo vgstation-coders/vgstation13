@@ -348,11 +348,11 @@
 	overlays += image(icon = icon, icon_state = "[src.icon_state][src.result]")
 
 /obj/item/weapon/dice/d20/e20/diceroll(mob/user as mob, thrown)
-	if(!istype(user))
-		return 0
-	if(triggered)
-		return
 	..()
+	if(!istype(user))
+		return result
+	if(triggered)
+		return result
 	message_admins("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled [result]")
 	log_game("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled [result]")
 	if(result == 1)
@@ -379,6 +379,7 @@
 				for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
 					if(bhangmeter)
 						bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
+	return result
 
 
 /obj/item/weapon/dice/d20/cursed

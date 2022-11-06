@@ -3517,6 +3517,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/cards/une = 5,
 		/obj/item/weapon/storage/pill_bottle/dice = 5,
 		/obj/item/weapon/storage/pill_bottle/dice/fudge = 5,
+		/obj/item/weapon/storage/pill_bottle/dice/d6 = 5,
 		/obj/item/weapon/storage/pill_bottle/dice/cup = 10
 		)
 	contraband = list(
@@ -3532,6 +3533,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/cards/une = 10,
 		/obj/item/weapon/storage/pill_bottle/dice = 10,
 		/obj/item/weapon/storage/pill_bottle/dice/fudge = 10,
+		/obj/item/weapon/storage/pill_bottle/dice/d6 = 10,
 		/obj/item/weapon/storage/pill_bottle/dice/cup = 5,
 		/obj/item/weapon/dice/loaded = 15,
 		/obj/item/weapon/dice/loaded/d20 = 15,
