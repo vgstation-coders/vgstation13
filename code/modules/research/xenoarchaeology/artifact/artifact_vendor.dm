@@ -63,6 +63,8 @@ var/static/list/badstuff2putin = list(
 	VOMIT,
 	LIQUIDPCP,
 	CYANIDE,
+	NANITES,
+	AUTISTNANITES,
 )
 
 // Mysterious vending machines, inspired by SCP-261: https://scp-wiki.wikidot.com/scp-261
