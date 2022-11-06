@@ -130,6 +130,7 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/snacks/discountchocolate,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza,
+		/obj/item/weapon/reagent_containers/food/drinks/groansbanned,
 	)
 	var/list/insultingStock = list(
 		/obj/item/weapon/grenade/iedcasing/preassembled/artifact,
