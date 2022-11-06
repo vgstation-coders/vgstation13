@@ -125,12 +125,16 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator,
 		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze,
+		/obj/item/weapon/reagent_containers/food/snacks/artifact,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact,
 	)
 	var/list/dangerousStock = list(
 		/obj/item/weapon/reagent_containers/food/snacks/discountchocolate,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza,
 		/obj/item/weapon/reagent_containers/food/drinks/groansbanned,
+		/obj/item/weapon/reagent_containers/food/snacks/artifact/bad,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact/bad,
 	)
 	var/list/insultingStock = list(
 		/obj/item/weapon/grenade/iedcasing/preassembled/artifact,
@@ -240,10 +244,10 @@ var/static/list/badstuff2putin = list(
 	return prob(67) ? pick(safeStock) : pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/chips))
 
 /obj/machinery/vending/artifact/proc/buildDubiousStock()
-	return prob(33) ? pick(dubiousStock): pick(/obj/item/weapon/reagent_containers/food/snacks/artifact,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact)
+	return pick(dubiousStock)
 
 /obj/machinery/vending/artifact/proc/buildDangerousStock()
-	return prob(16) ? pick(dangerousStock) : pick(/obj/item/weapon/reagent_containers/food/snacks/artifact/bad,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact/bad)
+	return pick(dangerousStock)
 
 /obj/machinery/vending/artifact/proc/buildInsultingStock()
 	return pick(insultingStock)
