@@ -53,11 +53,11 @@
 	advertisements = list("This injection was brought to you by Discount Dan!")
 	t1chems = list(
 		DISCOUNT = "Discount Dan's Sauce",
-		GRAPEJUICE = "Discount Raisin Juice"
+		GRAPEJUICE = "Discount Raisin Juice",
 		TENDIES = "Chicken Tenders"
 		)
 	t2chems = list(
-		REFRIEDBEANS = "Re-Fried Beans"
+		REFRIEDBEANS = "Re-Fried Beans",
 		OFFCOLORCHEESE = "American Cheese"
 		)
 	t3chems = list(
