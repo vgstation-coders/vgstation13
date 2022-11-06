@@ -144,6 +144,7 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator,
 		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze,
+		/obj/item/weapon/reagent_containers/glass/bottle/pcp,
 		/obj/item/weapon/reagent_containers/food/snacks/artifact,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact,
 	)
