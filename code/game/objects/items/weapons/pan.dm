@@ -437,24 +437,24 @@
 /////////////////////Areas for to consider for further expansion/////////////////////
 
 	//Plating directly to trays and robot trays.
-	//Grill sprite dynamically responding to power
-	//Setting chef var on_reagents_change as well
-	//Edge cases like recooking the same warm donk pocket over and over
+	//Grill sprite dynamically responding to power.
+	//Setting chef var on_reagents_change as well.
+	//Edge cases like recooking the same warm donk pocket over and over.
 	//Getting pans by crafting, cargo crates, and vending machines.
 	//Food being ready making a steam sprite that turns to smoke and fire if left on too long.
 	//Sizzling sound with hot reagents in the pan.
-	//Scooping hot oil out of the deepfryer
-	//Scalding people with hot reagents (the reagents are alread heated on the pan I'm just not sure if there's a way to scald someone with hot reagents)
+	//Scooping hot oil out of the deepfryer.
+	//Scalding people with hot reagents (the reagents are alread heated on the pan I'm just not sure if there's a way to scald someone with hot reagents).
 	//Body-part specific splash text and also when you dump it onto yourself upon equipping to the head.
-	//Pouring reagents from the pan into other reagent containers (need to consider what to do if it also contains items)
-	//Hot pans with glowing red sprite and extra damage
+	//Pouring reagents from the pan into other reagent containers (need to consider what to do if it also contains items).
+	//Hot pans with glowing red sprite and extra damage.
 	//Stuff dumping out of the pan when attacking a breakable object, window, camera, etc.
 	//Generalize thermal transfer parameter.
-	//Componentize cooking vessels
-	//Spilling (including onto people) when thrown impacting..
+	//Componentize cooking vessels.
+	//Spilling (including onto people) when thrown impacting.
 	//Different cook timings based on heat, or cooking with heat transfer (defined at the recipe level?) rather than a timer.
-	//Frying stuff in oil (could use recipes for this)
+	//Frying stuff in oil (could use recipes for this).
 	//Address cases with large ingredient sprites (see the note in update_icon()).
 	//Consider generating and storing the pan front blood overlay in the same manner as general blood overlays.
 	//Cooking automatically with high ambient heat.
-	//Change order of messages with eg. splashing acid on onesself when equipping the pan to the heat.
+	//Change order of messages with eg. splashing acid on onesself when equipping the pan to the head.
