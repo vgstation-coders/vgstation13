@@ -526,12 +526,36 @@
 	var/list/exiting = list() // Manages people leaving the barrel
 	health = 50
 	var/burning = FALSE
+	is_cooktop = TRUE
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood
 	name = "wooden barrel"
 	icon_state = "woodenbarrel"
 	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of wood."
 	health = 30
+	is_cooktop = FALSE
+
+/////////////////////Cooking stuff
+
+/obj/structure/reagent_dispensers/cauldron/barrel/can_cook()
+	return burning
+
+/obj/structure/reagent_dispensers/cauldron/barrel/on_cook_start()
+	update_icon()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/on_cook_stop()
+	update_icon()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/render_cookvessel(offset_x = -1, offset_y = 6)
+	..()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/cook_temperature()
+	var/temperature = get_max_temperature()
+	if(isnull(temperature))
+		return COOKTEMP_DEFAULT //Sanity in case the barrel runs out of fuel before this is called.
+	return temperature
+
+/////////////////////
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood/attackby(obj/item/weapon/W, mob/user)
 	if (iscrowbar(W))
@@ -547,7 +571,7 @@
 	..()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attack_hand(mob/user as mob)
-	if(burning)
+	if(burning && !cookvessel)
 		visible_message("<span class = 'warning'>You carefully snuff out \the [src] fire.</span>")
 		burning = FALSE
 		processing_objects.Remove(src)
@@ -555,13 +579,14 @@
 	..()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
+	overlays.len = 0
 	if(burning)
 		icon_state = "flamingmetalbarrel"
 		set_light(3,4,LIGHT_COLOR_FIRE)
 	else
 		icon_state = "metalbarrel"
 		set_light(0,0,LIGHT_COLOR_FIRE)
-	return
+	render_cookvessel()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/take_damage(incoming_damage, damage_type, skip_break, mute, var/sound_effect = 1) //Custom take_damage() proc because of sound_effect behavior.
 	health = max(0, health - incoming_damage)
@@ -585,20 +610,25 @@
 		AM.forceMove(loc)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_wrench(user) || istype(W,/obj/item/weapon/reagent_containers)) //what did irradiation mean by this
+	if(W.is_wrench(user) || (istype(W, /obj/item/weapon/reagent_containers) && !W.is_cookvessel)) //what did irradiation mean by this
 		return
 
-	if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
+	else if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
 		if(start_fire(user))
 			user.visible_message("<span class='notice'>[user] ignites \the [src]'s contents with \the [W].</span>")
 		return
 
-	if(istype(W,/obj/item/weapon/grab))
+	else if(istype(W,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
 		var/mob/living/target = G.affecting
 		user.visible_message("<span class='danger'>[user] begins to drag [target] into the barrel!</span>")
 		if(do_after_many(user,list(target,src),10)) //Twice the normal time
 			enter_barrel(target)
+
+	//Everything below here could probably be desnowflaked. As all parents of src except /obj/ itself lack INVOKE_EVENT on attackby, and there isn't a continuous supercall chain, we'll handle cooking vessels like this for now.
+	else if(is_cooktop)
+		INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = W)
+
 	else
 		take_damage(W.force)
 		user.delayNextAttack(10)
@@ -757,6 +787,16 @@
 		processing_objects.Remove(src)
 		update_icon()
 		return
+
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/get_max_temperature()
+	var/max_temperature
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			var/list/fuel_stats = possible_fuels[possible_fuel]
+			max_temperature = fuel_stats["max_temperature"]
+			break
+
+	return max_temperature
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood/start_fire(mob/user)
 	return 0 //nice try!

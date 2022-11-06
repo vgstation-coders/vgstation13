@@ -1830,3 +1830,15 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 //Muzzles
 #define MUZZLE_SOFT 1	//Muzzle causes muffled speech.
 #define MUZZLE_HARD	2	//Muzzle prevents speech.
+
+//Microwave-or-pan selective cookability of recipes
+#define COOKABLE_WITH_MICROWAVE (1<<0)
+#define COOKABLE_WITH_PAN (1<<1)
+#define COOKABLE_WITH_ALL ALL
+
+//Flags for the contents of a cooking vessel
+#define COOKVESSEL_CONTAINS_REAGENTS (1<<0) //The cooking vessel contains reagents
+#define COOKVESSEL_CONTAINS_CONTENTS (1<<1)	//The cooking vessel contains non-reagent contents (eg. items)
+
+//Default cooking temperature
+#define COOKTEMP_DEFAULT T0C + 316 //Around 600 F

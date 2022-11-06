@@ -251,4 +251,6 @@ var/const/SURROUND_CAP = 7
 			if ("trayhit")
 				soundin = pick(trayhit_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
+	else if(islist(soundin))
+		soundin = pick(soundin)
 	return soundin

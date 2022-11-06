@@ -755,13 +755,6 @@
 	reagents = list(RICE = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/riceball
 
-/datum/recipe/eggplantsushi
-	reagents = list(RICE = 10, VINEGAR = 2)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/chili
-				)
-	result = /obj/item/weapon/reagent_containers/food/snacks/eggplantsushi
-
 // American ////////////////////////////////////////////////////
 
 /datum/recipe/loadedbakedpotato
@@ -1048,6 +1041,7 @@
 		/obj/item/stack/sheet/cardboard
 		)
 	result = /obj/structure/popout_cake
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/fruitcake
 	reagents = list(MILK = 5, FLOUR = 15)
@@ -1084,7 +1078,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/clover
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie
-	
+
 /datum/recipe/applepie
 	reagents = list(FLOUR = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
@@ -1145,7 +1139,6 @@
 	reagents = list(FLOUR = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie
-
 
 /datum/recipe/mincepie
 	reagents = list(FLOUR = 10)
@@ -1574,6 +1567,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/moonsandwich //Alternate recipe using moon cheese
 	items = list(
@@ -1583,6 +1577,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/toastedsandwich
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/sandwich)
@@ -1621,6 +1616,7 @@
 		/obj/item/clothing/mask/fakemoustache,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/notasandwich
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/twobread
 	reagents = list(WINE = 5)
@@ -1629,6 +1625,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/twobread
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/slimesandwich
 	reagents = list(SLIMEJELLY = 5)
@@ -1637,6 +1634,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellysandwich/slime
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/cherrysandwich
 	reagents = list(CHERRYJELLY = 5)
@@ -1645,6 +1643,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/avocadotoast
 	reagents = list (SODIUMCHLORIDE = 2)
@@ -1662,6 +1661,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/peanutbutter,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pbj
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/polypwich
 	reagents = list (POLYPGELATIN = 5)
@@ -1671,6 +1671,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/polypwich
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 // Coder Snacks ///////////////////////////////////////////////////////
 
@@ -1748,7 +1749,10 @@
 
 // Salad ///////////////////////////////////////////////////////
 
-/datum/recipe/herbsalad
+/datum/recipe/salad
+	cookable_with = COOKABLE_WITH_MICROWAVE //No salad bowls.. for now.
+
+/datum/recipe/salad/herbsalad
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris,
@@ -1757,12 +1761,12 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/herbsalad
 
-/datum/recipe/herbsalad/make_food(var/obj/container, var/mob/user)
+/datum/recipe/salad/herbsalad/make_food(var/obj/container, var/mob/user)
 	var/obj/item/weapon/reagent_containers/food/snacks/herbsalad/being_cooked = ..(container)
 	being_cooked.reagents.del_reagent(TOXIN)
 	return being_cooked
 
-/datum/recipe/aesirsalad
+/datum/recipe/salad/aesirsalad
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus,
@@ -1772,7 +1776,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/aesirsalad
 	reagents_forbidden = SYNAPTIZINES
 
-/datum/recipe/validsalad
+/datum/recipe/salad/validsalad
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris,
@@ -1782,29 +1786,12 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/validsalad
 
-/datum/recipe/validsalad/make_food(var/obj/container, var/mob/user)
+/datum/recipe/salad/validsalad/make_food(var/obj/container, var/mob/user)
 	var/obj/item/weapon/reagent_containers/food/snacks/validsalad/being_cooked = ..(container)
 	being_cooked.reagents.del_reagent(TOXIN)
 	return being_cooked
 
-/datum/recipe/midnightsnack
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/glowberries
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/midnightsnack
-
-/datum/recipe/starrynight
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad
-
-/datum/recipe/chinesecoldsalad
+/datum/recipe/salad/chinesecoldsalad
 	reagents = list (VINEGAR = 5, SOYSAUCE = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
@@ -1813,7 +1800,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chinesecoldsalad
 
-/datum/recipe/confederatespirit
+/datum/recipe/salad/confederatespirit
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice,
 		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice,
@@ -1823,7 +1810,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/confederatespirit
 
-/datum/recipe/moonconfederatespirit //Alternate recipe using moon cheese
+/datum/recipe/salad/moonconfederatespirit //Alternate recipe using moon cheese
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice,
 		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice,
@@ -1833,7 +1820,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/confederatespirit
 
-/datum/recipe/fruitsalad
+/datum/recipe/salad/fruitsalad
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
@@ -1842,7 +1829,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fruitsalad
 
-/datum/recipe/nofruitsalad
+/datum/recipe/salad/nofruitsalad
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
@@ -1850,7 +1837,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/nofruitsalad
 
-/datum/recipe/chickensalad
+/datum/recipe/salad/chickensalad
 	reagents = list (VINEGAR = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
@@ -1859,7 +1846,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chickensalad
 
-/datum/recipe/grapesalad
+/datum/recipe/salad/grapesalad
 	reagents = list (SUGARS = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
@@ -1867,7 +1854,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/grapesalad
 
-/datum/recipe/moongrapesalad //Alternate recipe using moon cheese
+/datum/recipe/salad/moongrapesalad //Alternate recipe using moon cheese
 	reagents = list (SUGARS = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
@@ -1875,7 +1862,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/grapesalad
 
-/datum/recipe/orzosalad
+/datum/recipe/salad/orzosalad
 	reagents = list (RICE = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato,
@@ -1885,7 +1872,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/orzosalad
 
-/datum/recipe/mexicansalad
+/datum/recipe/salad/mexicansalad
 	reagents = list (LIMEJUICE = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
@@ -1895,7 +1882,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mexicansalad
 
-/datum/recipe/moonmexicansalad //Alternate recipe using moon cheese
+/datum/recipe/salad/moonmexicansalad //Alternate recipe using moon cheese
 	reagents = list (LIMEJUICE = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
@@ -1904,6 +1891,31 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mexicansalad
+
+/datum/recipe/salad/tontesdepelouse
+	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/grass,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/clover
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse
+
+/datum/recipe/salad/midnightsnack
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/glowberries
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/midnightsnack
+
+/datum/recipe/salad/starrynight
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad
 
 // Curry ///////////////////////////////////////////////////////
 
@@ -2042,6 +2054,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
 		)
 	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/guacamole
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/salsa
 	reagents = list(LIMEJUICE = 10)
@@ -2050,6 +2063,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic
 		)
 	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/salsa
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/hummus
 	reagents = list(LEMONJUICE = 10, HONEY = 5)
@@ -2057,7 +2071,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans
 		)
 	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/hummus
-
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 // Misc ////////////////////////////////////////////////////////
 
@@ -2161,6 +2175,7 @@
 	reagents = list(CREAM = 10, VIRUSFOOD = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes)
 	result = /obj/item/weapon/reagent_containers/food/snacks/yogurt
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/gelatin
 	reagents = list(WATER = 10)
@@ -2303,6 +2318,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/poissoncru
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/sashimi
 	reagents = list(SOYSAUCE = 5)
@@ -2311,6 +2327,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sashimi
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/cubancarp
 	reagents = list(FLOUR = 5)
@@ -2439,7 +2456,6 @@
 		)
 	result = /mob/living/simple_animal/puddi
 
-
 // END OF LIVING PUDDI SHIT THAT PROBABLY WON'T WORK
 
 /datum/recipe/flan
@@ -2549,15 +2565,18 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/corn
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/higashikata
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/sundae
 	reagents = list(CREAM = 10, ICE = 10, MILK = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/chocolatebar)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sundae
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/icecreamsandwich
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/icecream,/obj/item/weapon/reagent_containers/food/snacks/chocolatebar)
 	result = /obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/avocadomilkshake
 	reagents = list(MILK = 10)
@@ -2567,6 +2586,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/potatosalad
 	reagents = list(WATER = 10, MILK = 10, SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
@@ -2584,6 +2604,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/coleslaw
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/risotto
 	reagents = list(RICE = 10, WINE = 5)
@@ -2682,7 +2703,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom
 		)
 	result = /obj/item/weapon/reagent_containers/food/condiment/gravy
-
 
 /datum/recipe/gravybig
 	reagents = list(WATER = 50)
@@ -2846,10 +2866,12 @@
 /datum/recipe/bruisepack
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
 	result = /obj/item/stack/medical/bruise_pack
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/ointment
 	reagents = list(DERMALINES = 5)
 	result = /obj/item/stack/medical/ointment
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/poachedaloe
 	reagents = list(WATER = 5)
@@ -2910,6 +2932,7 @@
 		/obj/item/stack/sheet/snow
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mapleleaf
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/poutinesyrup
 	reagents = list (MAPLESYRUP = 5)
@@ -2938,7 +2961,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
 		)
 	result = /obj/structure/poutineocean/poutinecitadel
-
 
 /datum/recipe/mud_pie
 	reagents = list(WATER = 25)
@@ -2984,7 +3006,6 @@
 
 /*seafood!*/
 
-
 /datum/recipe/salmonsteak
 	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonmeat)
@@ -2997,35 +3018,38 @@
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/boiled_shrimp
 
-/datum/recipe/sushi_Ebi
+/datum/recipe/sushi
+	cookable_with = COOKABLE_WITH_MICROWAVE //No cooking sushi in a frying pan!
+
+/datum/recipe/sushi/Ebi
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiled_shrimp,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ebi
 
-/datum/recipe/sushi_Ikura
+/datum/recipe/sushi/Ikura
 	items = list(/obj/item/fish_eggs/salmon,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ikura
 
-/datum/recipe/sushi_Sake     // 100000 TIMES FOLDED SUSHI CAN CUT THROUGH DIAMONDS
+/datum/recipe/sushi/Sake     // 100000 TIMES FOLDED SUSHI CAN CUT THROUGH DIAMONDS
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonmeat,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Sake
 
-/datum/recipe/sushi_SmokedSalmon
+/datum/recipe/sushi/SmokedSalmon
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonsteak,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_SmokedSalmon // this shit sounds fucking delicous IRL
 
-/datum/recipe/sushi_Tamago
+/datum/recipe/sushi/Tamago
 	reagents = list(SAKE = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
 	/obj/item/weapon/reagent_containers/food/snacks/egg
@@ -3033,42 +3057,49 @@
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tamago
 
-/datum/recipe/sushi_Inari
+/datum/recipe/sushi/Inari
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
 	/obj/item/weapon/reagent_containers/food/snacks/tofu
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Inari
 
-/datum/recipe/sushi_Masago
+/datum/recipe/sushi/Masago
 	items = list(/obj/item/fish_eggs/goldfish,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Masago
 
-/datum/recipe/sushi_Tobiko
+/datum/recipe/sushi/Tobiko
 	items = list(/obj/item/fish_eggs/shark,                                                                                                                                                                                                                                              //Every night I watch the skies from inside my bunker. They'll come back. If I watch they'll come. I can hear their voices from the sky. Calling out my name. There's the ridge. The guns in the jungle. Screaming. Smoke. The blood. All over my hands.
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tobiko
 
-/datum/recipe/sushi_TobikoEgg
+/datum/recipe/sushi/TobikoEgg
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tobiko,
 	/obj/item/weapon/reagent_containers/food/snacks/egg
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_TobikoEgg
 
-/datum/recipe/sushi_Tai
+/datum/recipe/sushi/Tai
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/catfishmeat,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tai
 // this is a lot of fucking fish
 
-/datum/recipe/sushi_Unagi
+/datum/recipe/sushi/lobster
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat,
+		/obj/item/weapon/reagent_containers/food/snacks/boiledrice
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_sushi
+
+/datum/recipe/sushi/Unagi
 	reagents = list(SAKE = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
 	/obj/item/weapon/fish/electric_eel
@@ -3076,12 +3107,19 @@
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Unagi
 
-/datum/recipe/sushi_avocado
+/datum/recipe/sushi/avocado
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
 	/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_avocado
+
+/datum/recipe/sushi/eggplant
+	reagents = list(RICE = 10, VINEGAR = 2)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/chili
+				)
+	result = /obj/item/weapon/reagent_containers/food/snacks/eggplantsushi
 
 /datum/recipe/friedshrimp
 	reagents = list(CORNOIL = 5)
@@ -3175,6 +3213,7 @@
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/akutaq
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/carpcurry
 	reagents = list(VINEGAR = 5, RICE = 10)
@@ -3196,6 +3235,7 @@
 	/obj/item/stack/rods
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/butterstick
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/ambrosia_brownies
 	reagents = list(COCO = 10, SUGARS = 10, FLOUR = 15)
@@ -3250,6 +3290,7 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/sauerkraut
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/pickledpears
 	reagents = list(VINEGAR = 5)
@@ -3258,6 +3299,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pickledpears
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/bulgogi
 	reagents = list(SOYSAUCE = 10, SUGARS =5)
@@ -3313,6 +3355,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/saltednuts
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/grapejelly
 	reagents = list (SUGARS = 5)
@@ -3327,6 +3370,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/peanutbutter
+	//going to let this be made in a pan because the peanuts are roasted
 
 /datum/recipe/escargot
 	reagents = list (SODIUMCHLORIDE = 1)
@@ -3398,13 +3442,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_dumplings
 
-/datum/recipe/lobster_sushi
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat,
-		/obj/item/weapon/reagent_containers/food/snacks/boiledrice
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_sushi
-
 /datum/recipe/sweetroll
 	reagents = list(FLOUR = 5, SUGARS = 5)
 	items = list(
@@ -3463,14 +3500,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/dionaroast
-
-/datum/recipe/tontesdepelouse
-	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/grass,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/clover
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse
 
 ////////////////////////////////
 // YE ENTERING THE GUNK ZONE ///
@@ -3556,7 +3585,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
 
-/datum/recipe/roachsalad
+/datum/recipe/salad/roachsalad
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
@@ -3573,7 +3602,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/gunksoup
-	
+
 /datum/recipe/gunksoupcricket
 	reagents = list(WATER = 10, GUNKS = 5)
 	items = list(
@@ -3593,7 +3622,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkbread
-	
+
 /datum/recipe/moongunkbread
 	reagents = list(FLOUR = 15, GUNKS = 5)
 	items = list(
@@ -3610,12 +3639,12 @@
 	reagents = list(FLOUR = 5, GUNKS = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/roach)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/gunkpie
-	
+
 /datum/recipe/gunkpiecricket
 	reagents = list(FLOUR = 5, GUNKS = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/cricket)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/gunkpie
-	
+
 /datum/recipe/gunkcake
 	reagents = list(FLOUR = 15, GUNKS = 5)
 	items = list(
@@ -3626,7 +3655,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkcake
-	
+
 /datum/recipe/roachesonastick
 	reagents = list(GUNKS = 5)
 	items = list(
