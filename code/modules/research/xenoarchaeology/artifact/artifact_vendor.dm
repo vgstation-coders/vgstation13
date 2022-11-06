@@ -67,8 +67,8 @@ var/static/list/badstuff2putin = list(
 /obj/machinery/vending/artifact
 	name = "mysterious snack vendor"
 	desc = "A vending machine containing snacks, drinks and other assorted products."
-	icon_state = "snack"
-	icon_vend = "snack-vend"
+	icon_state = "Cola_Machine"
+	icon_vend = "Cola_Machine-vend"
 	vend_delay = 50
 	mech_flags = MECH_SCAN_FAIL
 	var/total_uses = 0
@@ -131,7 +131,7 @@ var/static/list/badstuff2putin = list(
 					buildDangerousStock()
 	build_inventories()
 
-/obj/machinery/vending/artifact/vend()
+/obj/machinery/vending/artifact/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	..()
 	total_uses++
 	decideStock()
