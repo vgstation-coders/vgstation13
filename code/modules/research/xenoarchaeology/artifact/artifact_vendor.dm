@@ -71,6 +71,8 @@ var/static/list/badstuff2putin = list(
 	UNTABLE_MUTAGEN,
 	ZOMBIEPOWDER,
 	AMINOCYPRINIDOL,
+	BICARODYNE,
+	HYPOZINE,
 )
 
 // Mysterious vending machines, inspired by SCP-261: https://scp-wiki.wikidot.com/scp-261
