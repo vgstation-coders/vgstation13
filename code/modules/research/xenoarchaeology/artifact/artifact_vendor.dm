@@ -310,7 +310,7 @@ var/static/list/badstuff2putin = list(
 		for(var/i in rand(objprob/10,(objprob*3)/10))
 			var/objpath = pick(objs2putin)
 			objpath = objs2putin[objpath] ? pick(existing_typesof(objpath)) : pick(subtypesof(objpath))
-			var/atom/movable/AM = new objpath(src)
+			new objpath(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/artifact/bad
 	objs2putin = list(
