@@ -151,7 +151,6 @@
 	if(rig.clothing_flags & PLASMAGUARD) //i think that's how it's done?
 		say_to_wearer("Existing plasma seal detected. Aborting.")
 		already_has=TRUE
-		deactivate()
 		return
 	say_to_wearer("Plasma seal initialized.")
 	rig.clothing_flags |= PLASMAGUARD
