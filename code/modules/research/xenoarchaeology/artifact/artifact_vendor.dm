@@ -267,6 +267,8 @@ var/static/list/badstuff2putin = list(
 		/obj/item/tool = 0,
 		/obj/item/weapon/kitchen/utensil = 0,
 		/mob/living/simple_animal/mouse/common = 1,
+		/mob/living/simple_animal/cockroach = 1,
+		/mob/living/simple_animal/cricket = 1,
 	)
 	var/objprob = 10
 
