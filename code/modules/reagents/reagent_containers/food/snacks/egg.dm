@@ -167,6 +167,13 @@
 	processing_objects.Remove(src)
 	qdel(src)
 
+/obj/item/weapon/reagent_containers/food/snacks/egg/chaos/instahatch/New()
+	..()
+	var/time = rand(3,10)
+	spawn(time)
+		if(!gcDestroyed)
+			hatch()
+
 var/snail_egg_count = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/snail

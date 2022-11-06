@@ -2523,6 +2523,7 @@
 #include "code\modules\research\xenoarchaeology\artifact\artifact_hoverpod.dm"
 #include "code\modules\research\xenoarchaeology\artifact\artifact_losetta.dm"
 #include "code\modules\research\xenoarchaeology\artifact\artifact_replicator.dm"
+#include "code\modules\research\xenoarchaeology\artifact\artifact_vendor.dm"
 #include "code\modules\research\xenoarchaeology\artifact\artifact_unknown.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effect.dm"
 #include "code\modules\research\xenoarchaeology\artifact\trigger.dm"
