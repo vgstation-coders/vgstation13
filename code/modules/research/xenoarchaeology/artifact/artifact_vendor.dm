@@ -94,6 +94,10 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine,
 		/obj/item/weapon/reagent_containers/food/snacks/discountburger,
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb,
@@ -116,6 +120,9 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky,
 		/obj/item/weapon/reagent_containers/food/snacks/oldempirebar,
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/clown,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist,
 		/obj/item/weapon/reagent_containers/food/drinks/groans,
 		/obj/item/weapon/reagent_containers/food/drinks/filk,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo,
@@ -159,10 +166,10 @@ var/static/list/badstuff2putin = list(
 		else
 			switch(total_uses)
 				if(0 to 2)
-					premium.Add(buildSafeStock())
+					premium.Add(pick(safeStock))
 				if(3 to 6)
 					if(prob(50/(total_uses-2)))
-						premium.Add(buildSafeStock())
+						premium.Add(pick(safeStock))
 					else
 						premium.Add(pick(dubiousStock))
 				if(7 to INFINITY)
@@ -239,9 +246,6 @@ var/static/list/badstuff2putin = list(
 	..()
 	for(var/datum/data/vending_product/R in coin_records)
 		R.product_name = "Unknown" //obscure it a lil
-
-/obj/machinery/vending/artifact/proc/buildSafeStock()
-	return prob(67) ? pick(safeStock) : pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/chips))
 
 /obj/machinery/vending/artifact/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
 	to_chat(user,"<span class='warning'>There is no circuitboard to pry out???</span>")
