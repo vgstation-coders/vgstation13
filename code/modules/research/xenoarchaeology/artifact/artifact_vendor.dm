@@ -65,6 +65,9 @@ var/static/list/badstuff2putin = list(
 	CYANIDE,
 	NANITES,
 	AUTISTNANITES,
+	MUTAGEN,
+	UNTABLE_MUTAGEN,
+	ZOMBIEPOWDER,
 )
 
 // Mysterious vending machines, inspired by SCP-261: https://scp-wiki.wikidot.com/scp-261
@@ -397,7 +400,7 @@ var/static/list/badstuff2putin = list(
 			B1.reagents.add_reagent(POTASSIUM,50) // boom
 			B2.reagents.add_reagent(WATER,50)
 		if(2)
-			var/thing2smoke = pick(SACID,PACID,CAPSAICIN,CONDENSEDCAPSAICIN,WATER,PLANTBGONE,MUTAGEN,INSECTICIDE) // smonkd
+			var/thing2smoke = pick(SACID,PACID,CAPSAICIN,CONDENSEDCAPSAICIN,WATER,PLANTBGONE,MUTAGEN,INSECTICIDE,UNTABLE_MUTAGEN) // smonkd
 			B1.reagents.add_reagent(SUGAR,5)
 			B1.reagents.add_reagent(POTASSIUM,5)
 			B1.reagents.add_reagent(thing2smoke,40)
