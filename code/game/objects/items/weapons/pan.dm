@@ -444,7 +444,7 @@
 	//Food being ready making a steam sprite that turns to smoke and fire if left on too long.
 	//Sizzling sound with hot reagents in the pan.
 	//Scooping hot oil out of the deepfryer.
-	//Scalding people with hot reagents (the reagents are alread heated on the pan I'm just not sure if there's a way to scald someone with hot reagents).
+	//Scalding people with hot reagents (the reagents are already heated on the pan I'm just not sure if there's a way to scald someone with hot reagents).
 	//Body-part specific splash text and also when you dump it onto yourself upon equipping to the head.
 	//Pouring reagents from the pan into other reagent containers (need to consider what to do if it also contains items).
 	//Hot pans with glowing red sprite and extra damage.
