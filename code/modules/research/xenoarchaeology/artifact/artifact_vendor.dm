@@ -29,6 +29,7 @@ var/static/list/okstuff2putin = list(
 	FLOUR,
 	MANNITOL,
 	TRICORDRAZINE,
+	HONKSERUM,
 )
 
 var/static/list/badstuff2putin = list(
