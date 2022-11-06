@@ -30,6 +30,8 @@ var/static/list/okstuff2putin = list(
 	MANNITOL,
 	TRICORDRAZINE,
 	HONKSERUM,
+	AMINOMICIN,
+	AMINOBLATELLA,
 )
 
 var/static/list/badstuff2putin = list(
@@ -68,6 +70,7 @@ var/static/list/badstuff2putin = list(
 	MUTAGEN,
 	UNTABLE_MUTAGEN,
 	ZOMBIEPOWDER,
+	AMINOCYPRINIDOL,
 )
 
 // Mysterious vending machines, inspired by SCP-261: https://scp-wiki.wikidot.com/scp-261
