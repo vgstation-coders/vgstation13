@@ -166,51 +166,25 @@ var/static/list/badstuff2putin = list(
 
 /obj/machinery/vending/artifact/New()
 	..()
-	decideStock()
-
-/obj/machinery/vending/artifact/proc/decideStock()
-	premium.Cut()
-	for(var/i in 1 to rand(6, 18))
-		if(extended_inventory || emagged || arcanetampered || insulted)
-			if(prob(50)/(total_uses+1))
-				premium.Add(pick(dangerousStock))
-			else
-				premium.Add(pick(insultingStock))
-		else
-			switch(total_uses)
-				if(0 to 2)
-					premium.Add(pick(safeStock))
-				if(3 to 6)
-					if(prob(50/(total_uses-2)))
-						premium.Add(pick(safeStock))
-					else
-						premium.Add(pick(dubiousStock))
-				if(7 to INFINITY)
-					if(prob(50/(total_uses-2)))
-						premium.Add(pick(safeStock))
-					else if(prob(50/(total_uses-6)))
-						premium.Add(pick(dubiousStock))
-					else
-						premium.Add(pick(dangerousStock))
 	build_inventories()
 
 /obj/machinery/vending/artifact/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	total_uses++
 	..()
-	decideStock()
+	build_inventories()
 
 /obj/machinery/vending/artifact/throw_item()
 	total_uses++
 	..()
-	decideStock()
+	build_inventories()
 
 /obj/machinery/vending/artifact/emag_act(mob/user)
 	. = ..()
-	decideStock()
+	build_inventories()
 
 /obj/machinery/vending/artifact/arcane_act(mob/user)
 	. = ..()
-	decideStock()
+	build_inventories()
 
 /obj/machinery/vending/artifact/malfunction()
 	var/lost_inventory = rand(1,12)
@@ -230,7 +204,7 @@ var/static/list/badstuff2putin = list(
 			time_active = 0
 			if(total_uses < 3)
 				insulted = FALSE
-			decideStock()
+			build_inventories()
 	else if(insulted)
 		insulted = FALSE
 
@@ -256,6 +230,29 @@ var/static/list/badstuff2putin = list(
 	return 1
 
 /obj/machinery/vending/artifact/build_inventories()
+	premium.Cut()
+	for(var/i in 1 to rand(6, 18))
+		if(extended_inventory || emagged || arcanetampered || insulted)
+			if(prob(50)/(total_uses+1))
+				premium.Add(pick(dangerousStock))
+			else
+				premium.Add(pick(insultingStock))
+		else
+			switch(total_uses)
+				if(0 to 2)
+					premium.Add(pick(safeStock))
+				if(3 to 6)
+					if(prob(50/(total_uses-2)))
+						premium.Add(pick(safeStock))
+					else
+						premium.Add(pick(dubiousStock))
+				if(7 to INFINITY)
+					if(prob(50/(total_uses-2)))
+						premium.Add(pick(safeStock))
+					else if(prob(50/(total_uses-6)))
+						premium.Add(pick(dubiousStock))
+					else
+						premium.Add(pick(dangerousStock))
 	..()
 	for(var/datum/data/vending_product/R in coin_records)
 		R.product_name = "Unknown" //obscure it a lil
@@ -264,7 +261,7 @@ var/static/list/badstuff2putin = list(
 	to_chat(user,"<span class='warning'>There is no circuitboard to pry out???</span>")
 	if(!extended_inventory)
 		extended_inventory = TRUE
-		decideStock()
+		build_inventories()
 
 /obj/item/weapon/reagent_containers/food/snacks/artifact
 	name = "alien snack"
