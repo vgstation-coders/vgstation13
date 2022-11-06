@@ -12,7 +12,7 @@
 	var/base_icon = "sleeper"
 	var/mob/living/occupant = null
 	var/available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
-	var/crit_injectables = list(INAPROVALINE = "Inaprovaline", NITROGEN = "Nitrogen")
+	var/crit_injectables = list(INAPROVALINE = "Inaprovaline", NITROGEN = "Nitrogen", LOCUTOGEN = "Locutogen")
 	var/amounts = list(5, 10)
 	var/sedativeblock = FALSE //To prevent people from being surprisesoporific'd
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE

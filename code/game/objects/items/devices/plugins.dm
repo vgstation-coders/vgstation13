@@ -54,9 +54,11 @@
 	t1chems = list(
 		DISCOUNT = "Discount Dan's Sauce",
 		GRAPEJUICE = "Discount Raisin Juice"
+		TENDIES = "Chicken Tenders"
 		)
 	t2chems = list(
 		REFRIEDBEANS = "Re-Fried Beans"
+		OFFCOLORCHEESE = "American Cheese"
 		)
 	t3chems = list(
 		BEFF = "Beff"
