@@ -85,6 +85,8 @@
 	var/luckiness //How much luck or unluck the item confers while held
 	var/luckiness_validity	//Flags for where the item has to be to confer its luckiness to the bearer. e.g. held in the hand, carried somewhere in the inventory, etc.: see luck.dm.
 
+	var/is_cookvessel //If true, the item is a cooking vessel.
+
 /obj/item/New()
 	..()
 	for(var/path in actions_types)

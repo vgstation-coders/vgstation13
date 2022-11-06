@@ -93,6 +93,8 @@
 	if(M_HULK in user.mutations)
 		power *= 2
 
+	power = I.modify_attack_power(power, M, user) //Apply any special modifiers to the power here.
+
 	if(!(ishuman(M) || ismonkey(M)))
 		if(istype(M, /mob/living/carbon/slime))
 			var/mob/living/carbon/slime/slime = M
@@ -164,7 +166,6 @@
 										step_away(slime, user)
 								slime.canmove = 1
 
-
 		var/showname = "."
 		if(user)
 			showname = "[user]"
@@ -180,13 +181,13 @@
 					else if(B.hostlimb == LIMB_LEFT_ARM)
 						showname = "[user]'s left arm"
 
-		//make not the same mistake as me, these messages are only for slimes
-		if(istype(I.attack_verb,/list) && I.attack_verb.len)
-			M.visible_message("<span class='danger'>[showname] [pick(I.attack_verb)] [M] with [I].</span>", \
-				"<span class='userdanger'>[showname] [pick(I.attack_verb)] you with [I].</span>")
-		else if(I.force == 0)
+		//make not the same mistake as me, these messages are only for slimes (not the case anymore, this applies to simple_animals as well)
+		if(I.force == 0)
 			M.visible_message("<span class='danger'>[showname] [pick("taps","pats")] [M] with [I].</span>", \
 				"<span class='userdanger'>[showname] [pick("taps","pats")] you with [I].</span>")
+		else if(istype(I.attack_verb,/list) && I.attack_verb.len)
+			M.visible_message("<span class='danger'>[showname] [pick(I.attack_verb)] [M] with [I].</span>", \
+				"<span class='userdanger'>[showname] [pick(I.attack_verb)] you with [I].</span>")
 		else
 			M.visible_message("<span class='danger'>[showname] attacks [M] with [I].</span>", \
 				"<span class='userdanger'>[showname] attacks you with [I].</span>")
@@ -242,13 +243,12 @@
 		take_damage(min(power, BREAKARMOR_MEDIUM), skip_break = TRUE, mute = FALSE) //Cap recoil damage at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used. Be verbose about the item being damaged if applicable.
 		try_break(hit_atom = M) //Break the item and spill any reagents onto the target.
 
-
-
 		. = TRUE //The attack always lands
 		M.updatehealth()
 	I.add_fingerprint(user)
 
-
+/obj/item/proc/modify_attack_power(power, mob/attackee, mob/attacker)
+	return power
 
 /obj/item/proc/on_attack(var/atom/attacked, var/mob/user)
 	. = NORMAL_HIT

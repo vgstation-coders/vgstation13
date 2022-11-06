@@ -2,7 +2,6 @@ var/datum/subsystem/obj/SSobj
 
 var/list/processing_objects = list()
 
-
 /datum/subsystem/obj
 	name          = "Objects"
 	init_order    = SS_INIT_OBJECT
@@ -13,10 +12,8 @@ var/list/processing_objects = list()
 	var/list/currentrun
 	var/list/bad_inits = list()
 
-
 /datum/subsystem/obj/New()
 	NEW_SS_GLOBAL(SSobj)
-
 
 /datum/subsystem/obj/Initialize()
 	for(var/atom/object in world)
