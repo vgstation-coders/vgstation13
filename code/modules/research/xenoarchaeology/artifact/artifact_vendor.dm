@@ -282,13 +282,11 @@ var/static/list/badstuff2putin = list(
 
 /obj/item/weapon/reagent_containers/food/snacks/artifact/New(loc)
 	..(loc)
-	name = generate_weird_stock_name()
 	if(!stuff2putin || !stuff2putin.len)
 		stuff2putin = okstuff2putin.Copy()
 	var/type = /obj/item/weapon/reagent_containers/food/drinks/soda_cans
 	var/static/list/picks = list(
 		/obj/item/weapon/reagent_containers/food/snacks/candy,
-		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating,
 		/obj/item/weapon/reagent_containers/food/snacks/chips,
 		/obj/item/weapon/reagent_containers/food/snacks/sosjerky,
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
@@ -299,7 +297,6 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/snacks/discountburger,
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins,
 		/obj/item/weapon/reagent_containers/food/snacks/danitos,
-		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen,
 		/obj/item/weapon/reagent_containers/food/snacks/discountburrito,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount,
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
@@ -310,6 +307,15 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky,
 		/obj/item/weapon/reagent_containers/food/snacks/discountchocolate,
 	)
+	if(prob(75))
+		var/desc_string = ""
+		var/name_string = ""
+		for(var/pick in picks)
+			var/obj/item/weapon/reagent_containers/food/snacks/S = pick
+			name_string += "[initial(S.name)] "
+			desc_string += "[initial(S.desc)] "
+		name = prob(50) ? generate_weird_stock_name() : "[capitalize(markov_chain(name_string, rand(2,3), rand(8,16)))]."
+		desc = prob(75) ? "[capitalize(markov_chain(desc_string, rand(2,5), rand(10,30)))]." : desc
 	type = pick(picks)
 	var/obj/item/weapon/reagent_containers/food/snacks/icon2build = type
 	icon_state = initial(icon2build.icon_state)
@@ -345,10 +351,9 @@ var/static/list/badstuff2putin = list(
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact/New(loc)
 	volume = rand(1,6)*50 // 50-300
 	..(loc)
-	name = generate_weird_stock_name()
 	if(!stuff2putin || !stuff2putin.len)
 		stuff2putin = okstuff2putin.Copy()
-	var/type = /obj/item/weapon/reagent_containers/food/snacks
+	var/type = /obj/item/weapon/reagent_containers/food/drinks/soda_cans
 	var/static/list/picks = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind,
@@ -366,6 +371,15 @@ var/static/list/badstuff2putin = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza,
 	)
+	if(prob(75))
+		var/desc_string = ""
+		var/name_string = ""
+		for(var/pick in picks)
+			var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/S = pick
+			name_string += "[initial(S.name)] "
+			desc_string += "[initial(S.desc)] "
+		name = prob(50) ? generate_weird_stock_name() : "[capitalize(markov_chain(name_string, rand(2,3), rand(8,16)))]."
+		desc = prob(75) ? "[capitalize(markov_chain(desc_string, rand(2,5), rand(10,30)))]." : desc
 	type = pick(picks)
 	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/icon2build = type
 	icon_state = initial(icon2build.icon_state)
