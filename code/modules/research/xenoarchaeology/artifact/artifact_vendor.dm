@@ -89,7 +89,7 @@ var/static/list/badstuff2putin = list(
 	icon_vend = "Cola_Machine-vend"
 	vend_delay = 50
 	mech_flags = MECH_SCAN_FAIL
-	use_power = MACHINE_POWER_USE_NONE
+	use_power = MACHINE_POWER_USE_NONE // works unpowered
 	var/total_uses = 0
 	var/time_active = 0
 	var/insulted = FALSE
@@ -246,16 +246,21 @@ var/static/list/badstuff2putin = list(
 		else
 			switch(total_uses)
 				if(0 to 2)
-					premium.Add(pickweight(safeStock))
-				if(3 to 6)
-					if(prob(50/(total_uses-2)))
+					if(!powered(power_check_anyways = TRUE))
+						premium.Add(pickweight(dubiousStock))
+					else
 						premium.Add(pickweight(safeStock))
+				if(3 to 6)
+					if(powered(power_check_anyways = TRUE) && prob(50/(total_uses-2)))
+						premium.Add(pickweight(safeStock))
+					else if(!powered(power_check_anyways = TRUE) && prob(50/(total_uses-2)))
+						premium.Add(pickweight(dangerousStock))
 					else
 						premium.Add(pickweight(dubiousStock))
 				if(7 to INFINITY)
-					if(prob(50/(total_uses-2)))
+					if(powered(power_check_anyways = TRUE) && prob(50/(total_uses-2)))
 						premium.Add(pickweight(safeStock))
-					else if(prob(50/(total_uses-6)))
+					else if(powered(power_check_anyways = TRUE) && prob(50/(total_uses-6)))
 						premium.Add(pickweight(dubiousStock))
 					else
 						premium.Add(pickweight(dangerousStock))
