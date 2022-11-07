@@ -9,6 +9,8 @@
 	force = 12
 	throwforce = 10
 	volume = 100
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*10)
+	w_type = RECYK_METAL
 	flags = FPRINT  | OPENCONTAINER
 	amount_per_transfer_from_this = 10
 	possible_transfer_amounts = list(10,20,50,100)
