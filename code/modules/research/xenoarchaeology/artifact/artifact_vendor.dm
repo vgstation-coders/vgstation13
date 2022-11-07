@@ -88,80 +88,80 @@ var/static/list/badstuff2putin = list(
 	var/time_active = 0
 	var/insulted = FALSE
 	var/list/safeStock = list(
-		/obj/item/weapon/reagent_containers/food/snacks/candy,
-		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating,
-		/obj/item/weapon/reagent_containers/food/snacks/chips,
-		/obj/item/weapon/reagent_containers/food/snacks/sosjerky,
-		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
-		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie,
-		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers,
-		/obj/item/weapon/reagent_containers/food/snacks/magbites,
-		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks,
-		/obj/item/weapon/reagent_containers/food/snacks/bustanuts,
-		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating,
-		/obj/item/weapon/cell/crap/worse, // shows up in the SCP so why not here too sometimes
-		/obj/item/weapon/storage/fancy/cigarettes/gum,
-		/obj/item/weapon/storage/pill_bottle/lollipops,
-		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine,
-		/obj/item/weapon/reagent_containers/food/snacks/discountburger,
-		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins,
-		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable,
-		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar,
-		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar,
-		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno,
-		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear,
-		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko,
+		/obj/item/weapon/reagent_containers/food/snacks/candy = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/chips = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/sosjerky = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/no_raisin = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/magbites = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/bustanuts = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating = 1,
+		/obj/item/weapon/cell/crap/worse = 1, // shows up in the SCP so why not here too sometimes
+		/obj/item/weapon/storage/fancy/cigarettes/gum = 5,
+		/obj/item/weapon/storage/pill_bottle/lollipops = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/discountburger = 3,
+		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 3,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno = 3,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear = 3,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist = 3,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola = 3,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink = 3,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink = 3,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko = 1,
 	)
 	var/list/dubiousStock = list(
-		/obj/item/weapon/reagent_containers/food/snacks/danitos,
-		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen,
-		/obj/item/weapon/reagent_containers/food/snacks/discountburrito,
-		/obj/item/weapon/reagent_containers/food/snacks/pie/discount,
-		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped,
-		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped,
-		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins,
-		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky,
-		/obj/item/weapon/reagent_containers/food/snacks/oldempirebar,
-		/obj/item/weapon/reagent_containers/food/snacks/syndicake,
-		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/clown,
-		/obj/item/weapon/reagent_containers/food/drinks/groans,
-		/obj/item/weapon/reagent_containers/food/drinks/filk,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator,
-		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze,
-		/obj/item/weapon/reagent_containers/glass/bottle/pcp,
-		/obj/item/weapon/reagent_containers/food/snacks/artifact,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact,
+		/obj/item/weapon/reagent_containers/food/snacks/danitos = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/oldempirebar = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/syndicake = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/clown = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/groans = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/filk = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 1,
+		/obj/item/weapon/reagent_containers/glass/bottle/pcp = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/artifact = 12,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact = 12,
 	)
 	var/list/dangerousStock = list(
-		/obj/item/weapon/reagent_containers/food/snacks/discountchocolate,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza,
-		/obj/item/weapon/reagent_containers/food/drinks/groansbanned,
-		/obj/item/weapon/reagent_containers/food/snacks/artifact/bad,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact/bad,
+		/obj/item/weapon/reagent_containers/food/snacks/discountchocolate = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza = 1,
+		/obj/item/weapon/reagent_containers/food/drinks/groansbanned = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/artifact/bad = 4,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact/bad = 4,
 	)
 	var/list/insultingStock = list(
-		/obj/item/weapon/grenade/iedcasing/preassembled/artifact,
-		/obj/item/weapon/grenade/chem_grenade/artifact,
-		/obj/item/weapon/reagent_containers/food/snacks/egg/chaos/instahatch,
-		/obj/machinery/apiary/wild/angry/hornet,
-		/obj/machinery/apiary/wild/angry,
+		/obj/item/weapon/grenade/iedcasing/preassembled/artifact = 4,
+		/obj/item/weapon/grenade/chem_grenade/artifact = 2,
+		/obj/item/weapon/reagent_containers/food/snacks/egg/chaos/instahatch = 1,
+		/obj/machinery/apiary/wild/angry/hornet = 1,
+		/obj/machinery/apiary/wild/angry = 4,
 	)
 
 /obj/machinery/vending/artifact/New()
@@ -220,7 +220,7 @@ var/static/list/badstuff2putin = list(
 	src.updateUsrDialog()
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	spawn(vend_delay)
-		var/path2use = pick(insultingStock)
+		var/path2use = pickweight(insultingStock)
 		if(arcanetampered && prob(90))
 			path2use = /obj/item/weapon/bikehorn/rubberducky  // BONUS DUCKS! refunds
 		new path2use(get_turf(src))
@@ -234,25 +234,25 @@ var/static/list/badstuff2putin = list(
 	for(var/i in 1 to rand(6, 18))
 		if(extended_inventory || emagged || arcanetampered || insulted)
 			if(prob(50)/(total_uses+1))
-				premium.Add(pick(dangerousStock))
+				premium.Add(pickweight(dangerousStock))
 			else
-				premium.Add(pick(insultingStock))
+				premium.Add(pickweight(insultingStock))
 		else
 			switch(total_uses)
 				if(0 to 2)
-					premium.Add(pick(safeStock))
+					premium.Add(pickweight(safeStock))
 				if(3 to 6)
 					if(prob(50/(total_uses-2)))
-						premium.Add(pick(safeStock))
+						premium.Add(pickweight(safeStock))
 					else
-						premium.Add(pick(dubiousStock))
+						premium.Add(pickweight(dubiousStock))
 				if(7 to INFINITY)
 					if(prob(50/(total_uses-2)))
-						premium.Add(pick(safeStock))
+						premium.Add(pickweight(safeStock))
 					else if(prob(50/(total_uses-6)))
-						premium.Add(pick(dubiousStock))
+						premium.Add(pickweight(dubiousStock))
 					else
-						premium.Add(pick(dangerousStock))
+						premium.Add(pickweight(dangerousStock))
 	..()
 	for(var/datum/data/vending_product/R in coin_records)
 		R.product_name = "Unknown" //obscure it a lil
