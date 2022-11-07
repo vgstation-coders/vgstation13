@@ -89,6 +89,7 @@ var/static/list/badstuff2putin = list(
 	icon_vend = "Cola_Machine-vend"
 	vend_delay = 50
 	mech_flags = MECH_SCAN_FAIL
+	use_power = MACHINE_POWER_USE_NONE
 	var/total_uses = 0
 	var/time_active = 0
 	var/insulted = FALSE
