@@ -273,7 +273,7 @@ var/list/all_doors = list()
 	for (var/obj/O in src.loc)
 		if (O.blocks_doors())
 			return 0
-	if(arcane_linked_door)
+	if(arcane_linked_door && arcane_linked_door.density)
 		arcane_linked_door.open()
 	if(!operating)
 		operating = 1
@@ -318,7 +318,7 @@ var/list/all_doors = list()
 		if (O.blocks_doors())
 			return 0
 
-	if(arcane_linked_door)
+	if(arcane_linked_door && !arcane_linked_door.density)
 		arcane_linked_door.close()
 
 	operating = 1
@@ -426,18 +426,13 @@ var/list/all_doors = list()
 	if(arcane_linked_door && !density && istype(AM,/atom/movable))
 		var/atom/movable/A = AM
 		var/turf/T = get_turf(arcane_linked_door)
-		if(T)
-			T = get_step(T,A.dir)
-			if(T && T.Cross())
-				A.forceMove(T)
-				return ..()
+		if(T & T.Cross())
 			for(var/dir in cardinal)
-				T = get_step(T,dir)
-				if(T && T.Cross())
-					A.forceMove(T)
-					return ..()
-			A.forceMove(T)
-			return ..()
+				var/turf/T2 = get_step(T,dir)
+				if(T2 && T2.Cross())
+					A.forceMove(T2)
+					if(A.dir != dir)
+						A.change_dir(dir)
 
 /obj/machinery/door/CanAStarPass(var/obj/item/weapon/card/id/ID)
 	return !density || check_access(ID)
