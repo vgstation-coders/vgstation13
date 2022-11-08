@@ -141,8 +141,10 @@
 			drop_ingredients(target, user)
 	else if(ismob(target))
 		drop_ingredients(target, user)
-	else if(isobj(target))
-		transfer(target, user)
+	else if(isobj(target) && (loc != target))
+		var/obj/O = target
+		if(!O.is_cooktop)
+			transfer(target, user)
 
 /obj/item/weapon/reagent_containers/pan/attackby(var/obj/item/I, var/mob/user)
 
