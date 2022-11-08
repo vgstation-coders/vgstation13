@@ -391,11 +391,12 @@ var/list/all_doors = list()
 
 /obj/machinery/door/arcane_act(mob/user)
 	..()
-	while(!arcane_linked_door || arcane_linked_door == src || arcane_linked_door.flow_flags & ON_BORDER || arcane_linked_door.z == map.zCentcomm) // no windoors or centcomm pls
-		arcane_linked_door = pick(all_doors)
-	arcane_linked_door.arcanetampered = arcanetampered
-	arcane_linked_door.arcane_linked_door = src
-	return "D'R ST'K!"
+	if(!(flow_flags & ON_BORDER))
+		while(!arcane_linked_door || arcane_linked_door == src || arcane_linked_door.flow_flags & ON_BORDER || arcane_linked_door.z == map.zCentcomm) // no windoors or centcomm pls
+			arcane_linked_door = pick(all_doors)
+		arcane_linked_door.arcanetampered = arcanetampered
+		arcane_linked_door.arcane_linked_door = src
+		return "D'R ST'K!"
 
 /obj/machinery/door/bless()
 	..()
