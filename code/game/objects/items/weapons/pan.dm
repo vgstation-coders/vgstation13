@@ -29,8 +29,13 @@
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
 	var/global/list/acceptable_items = list( // List of the items you can put in
 							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
-							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
-							)
+							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard)
+	var/global/list/accepts_reagents_from = list(/obj/item/weapon/reagent_containers/glass, //List of items that can be used to transfer reagents to the pan.
+												/obj/item/weapon/reagent_containers/food/drinks,
+												/obj/item/weapon/reagent_containers/food/condiment,
+												/obj/item/weapon/reagent_containers/syringe,
+												/obj/item/weapon/reagent_containers/dropper)
+
 
 /obj/item/weapon/reagent_containers/pan/New()
 	. = ..()
@@ -123,7 +128,7 @@
 	if (!adjacency_flag)
 		return
 
-	//we drop ingredients out of the pan here in three situations:
+	//we drop non-reagent ingredients out of the pan here in three situations:
 		//if we are on disarm intent and use it on a table
 		//if we use it on a non-dense turf
 		//if we use it on a mob
@@ -136,6 +141,8 @@
 			drop_ingredients(target, user)
 	else if(ismob(target))
 		drop_ingredients(target, user)
+	else if(isobj(target))
+		transfer(target, user)
 
 /obj/item/weapon/reagent_containers/pan/attackby(var/obj/item/I, var/mob/user)
 
@@ -179,11 +186,11 @@
 		cook_reboot(user) //Reset the cooking status.
 		update_icon()
 
-	else if(istype(I,/obj/item/weapon/grab))
+	else if(istype(I, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
 		to_chat(user, "<span class='notice'>The thought of stuffing [G.affecting] into [src] amuses you.</span>")
 
-	else
+	else if(!is_type_in_list(I, accepts_reagents_from))
 		to_chat(user, "<span class='notice'>You have no idea what you can cook with [I].</span>")
 
 /obj/item/weapon/reagent_containers/pan/attack_self(mob/user as mob)
@@ -444,10 +451,9 @@
 	//Getting pans by crafting, cargo crates, and vending machines.
 	//Food being ready making a steam sprite that turns to smoke and fire if left on too long.
 	//Sizzling sound with hot reagents in the pan.
-	//Scooping hot oil out of the deepfryer.
+	//Scooping hot oil out of the deepfryer (can scoop, but the oil isn't hot).
 	//Scalding people with hot reagents (the reagents are already heated on the pan I'm just not sure if there's a way to scald someone with hot reagents).
 	//Body-part specific splash text and also when you dump it onto yourself upon equipping to the head.
-	//Pouring reagents from the pan into other reagent containers (need to consider what to do if it also contains items).
 	//Hot pans with glowing red sprite and extra damage.
 	//Stuff dumping out of the pan when attacking a breakable object, window, camera, etc.
 	//Generalize thermal transfer parameter.
