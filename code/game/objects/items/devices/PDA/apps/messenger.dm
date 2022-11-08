@@ -160,7 +160,7 @@
 		return 0 //This sends its own error message
 	var/turf/U = get_turf(pda_device)
 	if(!silent)
-		playsound(U, ttone_sound_filepath, 50, 1)
+		playsound(U, ttone_sound_filepath, 50, 1) //we are the receiving PDA, so use our own sound filepath
 
 	for (var/mob/O in hearers(3, U))
 		if(!silent)
@@ -288,7 +288,7 @@
                     ai.show_message("<i>Intercepted message from <b>[who]</b>: [t]</i>")
 
         if (!P_app.silent)
-            playsound(P.loc, P_app.ttone_sound_filepath, 50, 1)
+            playsound(P.loc, P_app.ttone_sound_filepath, 50, 1) //we are the sender PDA, so we use the receiver(p_app)'s sound filepath and not our own
         for (var/mob/O in hearers(3, P.loc))
             if(!P_app.silent)
                 O.show_message(text("[bicon(P)] *[P_app.ttone]*"))
