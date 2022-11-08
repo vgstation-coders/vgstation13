@@ -8,6 +8,7 @@
     var/list/tnote = list() //Current Texts
     var/last_text //No text spamming
     var/ttone = "beep" //The ringtone!
+    var/ttone_sound_filepath = 'sound/machines/twobeep.ogg' //sound played when receiving messages/money
     var/list/icon/imglist = list() // Viewable message photos
     var/list/incoming_transactions = list()
 
@@ -159,7 +160,7 @@
 		return 0 //This sends its own error message
 	var/turf/U = get_turf(pda_device)
 	if(!silent)
-		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
+		playsound(U, ttone_sound_filepath, 50, 1)
 
 	for (var/mob/O in hearers(3, U))
 		if(!silent)
@@ -287,7 +288,7 @@
                     ai.show_message("<i>Intercepted message from <b>[who]</b>: [t]</i>")
 
         if (!P_app.silent)
-            playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
+            playsound(P.loc, P_app.ttone_sound_filepath, 50, 1)
         for (var/mob/O in hearers(3, P.loc))
             if(!P_app.silent)
                 O.show_message(text("[bicon(P)] *[P_app.ttone]*"))
