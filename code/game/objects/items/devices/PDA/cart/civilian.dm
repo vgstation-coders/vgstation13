@@ -166,6 +166,23 @@
         app.silent = 1
         app.ttone = "silence"
 
+/obj/item/weapon/cartridge/discord
+    name = "\improper Discordworks IV"
+    icon_state = "cart-discord"
+    starting_apps = list(
+        /datum/pda_app/cart/virus/discord
+    )
+/datum/pda_app/cart/virus/discord
+
+/datum/pda_app/cart/virus/discord/infect(var/obj/item/device/pda/P,var/mob/U)
+    charges--
+    U.show_message("<span class='notice'>Virus sent!</span>", 1)
+    var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in P.applications
+    if(app)
+        app.ttone_sound_filepath = "sound/effects/discord-notification.mp3"
+        app.ttone = "discord"
+
+
 /*
 /obj/item/weapon/cartridge/botanist
 	name = "\improper Green Thumb v4.20"
