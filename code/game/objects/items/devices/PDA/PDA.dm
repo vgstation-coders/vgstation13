@@ -32,6 +32,7 @@ var/global/msg_id = 0
 	var/list/accepted_viruses = list(
 		/datum/pda_app/cart/virus/honk,
 		/datum/pda_app/cart/virus/silent,
+		/datum/pda_app/cart/virus/discord,
 		/datum/pda_app/cart/virus/detonate,
 		/datum/pda_app/cart/virus/fake_uplink,
 	) //What kind of viruses can this PDA be sent?
