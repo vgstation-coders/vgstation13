@@ -3570,6 +3570,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket
 
 /datum/recipe/gunkkabobroach
+	reagents = list(GUNKS = 5)
 	items = list(
 		/obj/item/stack/rods,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
@@ -3578,6 +3579,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
 
 /datum/recipe/gunkkabobcricket
+	reagents = list(GUNKS = 5)
 	items = list(
 		/obj/item/stack/rods,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
@@ -3657,7 +3659,6 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkcake
 
 /datum/recipe/roachesonastick
-	reagents = list(GUNKS = 5)
 	items = list(
 		/obj/item/stack/rods,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
