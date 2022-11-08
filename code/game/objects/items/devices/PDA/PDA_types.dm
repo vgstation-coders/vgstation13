@@ -211,6 +211,7 @@
 	accepted_viruses = list(
 		/datum/pda_app/cart/virus/honk,
 		/datum/pda_app/cart/virus/silent,
+		/datum/pda_app/cart/virus/discord,
 		/datum/pda_app/cart/virus/fake_uplink,
 	)
 
@@ -362,6 +363,7 @@
 	accepted_viruses = list(
 		/datum/pda_app/cart/virus/honk,
 		/datum/pda_app/cart/virus/silent,
+		/datum/pda_app/cart/virus/discord
 	)
 
 /obj/item/device/pda/ai/New()
