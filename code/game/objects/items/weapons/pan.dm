@@ -128,7 +128,7 @@
 	if (!adjacency_flag)
 		return
 
-	//we drop non-reagent ingredients out of the pan here in three situations:
+	//we drop ingredients out of the pan here in three situations:
 		//if we are on disarm intent and use it on a table
 		//if we use it on a non-dense turf
 		//if we use it on a mob
