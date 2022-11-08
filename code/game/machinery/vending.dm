@@ -1641,6 +1641,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/cartridge/chef = 5,
 		/obj/item/weapon/cartridge/janitor = 5,
 		)
+	contraband = list(
+		/obj/item/weapon/cartridge/discord = 3
+		)
 
 	pack = /obj/structure/vendomatpack/undefined
 
