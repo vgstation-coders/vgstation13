@@ -312,16 +312,17 @@
 	minimum_distance = 3
 	pass_flags = PASSTABLE
 	hostile_interest = 15 //Very persistent
+	var/open_fire_type = /mob/living/simple_animal/hostile/asteroid/hivelordbrood
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/get_butchering_products()
 	return list(/datum/butchering_product/hivelord_core)
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/OpenFire(var/the_target)
-	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = new /mob/living/simple_animal/hostile/asteroid/hivelordbrood(src.loc)
-	A.GiveTarget(target)
-	A.friends = friends
-	A.faction = faction
-	return
+	var/mob/living/simple_animal/hostile/A = new open_fire_type(src.loc)
+	if(istype(A))
+		A.GiveTarget(target)
+		A.friends = friends
+		A.faction = faction
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/AttackingTarget()
 	OpenFire()
@@ -353,6 +354,28 @@
 		if(istype(core))
 			return core.amount
 	return 1
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/boss
+	name = "hivelord lord"
+	size = SIZE_HUGE
+	maxHealth = 300
+	health = 300
+	pixel_y = 16 * PIXEL_MULTIPLIER
+	status_flags = UNPACIFIABLE
+	move_to_delay = 30
+	harm_intent_damage = 10
+	hostile_interest = 5 //Less persistent
+	open_fire_type = /mob/living/simple_animal/hostile/asteroid/hivelord
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/boss/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/M = matrix()
+	M.Scale(2,2)
+	transform = M
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/boss/get_butchering_products()
+	return list(/datum/butchering_product/hivelord_core/heart)
 
 /obj/item/asteroid/hivelord_core
 	name = "hivelord remains"
@@ -466,6 +489,34 @@
 	user.drop_from_inventory(src)
 	qdel(src)
 	return TRUE
+
+/obj/item/organ/internal/heart/hivelord
+	name = "hivelord heart"
+	desc = "All that remains of a greater hivelord, works as a drop-in replacement for any species heart, granting protection from bone damage or internal bleeding, as well as boosting any healing processes. Try not to think about what's beating inside you."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "boiledrorocore"
+	prosthetic_name = "circulatory pump"
+	prosthetic_icon = "heart-prosthetic"
+	organ_tag = "heart"
+	fresh = 6 // Juicy.
+	dead_icon = "heart-off"
+	organ_type = /datum/organ/internal/heart/hivelord
+
+/datum/organ/internal/heart/hivelord
+	name = "hivelord heart"
+	removed_type = /obj/item/organ/internal/heart/hivelord
+	min_bruised_damage = 15
+	min_broken_damage = 30
+
+/datum/organ/internal/heart/hivelord/Life()
+	for(var/datum/organ/external/E in owner.organs)
+		if(prob(10))
+			E.status &= ~ORGAN_BROKEN
+			E.status &= ~ORGAN_SPLINTED
+		for(var/datum/wound/W in E.wounds)
+			if(W.internal && prob(10))
+				E.wounds -= W
+				E.update_damages()
 
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood
 	name = "hivelord brood"
@@ -827,7 +878,7 @@
 			if(Adjacent(M))
 				//Climb in
 				visible_message("<span class = 'warning'>\The [src] burrows itself into \the [M]!</span>")
-				M.rockernaut = istype(src, /mob/living/simple_animal/hostile/asteroid/rockernaut/boss) ? TURF_CONTAINS_BOSS_ROCKERNAUT : TURF_CONTAINS_REGULAR_ROCKERNAUT
+				M.rockernaut = istype(src, /mob/living/simple_animal/hostile/asteroid/rockernaut/boss) ? TURF_CONTAINS_BOSS : TURF_CONTAINS_ROCKERNAUT
 				qdel(src)
 				return
 			else

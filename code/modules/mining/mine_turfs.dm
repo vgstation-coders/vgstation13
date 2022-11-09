@@ -250,7 +250,7 @@ var/list/icon_state_to_appearance = list()
 				var/turf/unsimulated/mineral/random/target_turf = get_step(src, trydir)
 				if(istype(target_turf) && !target_turf.mineral)
 					if(prob(1) && prob(25)) //People wanted them rarer
-						rockernaut = TURF_CONTAINS_REGULAR_ROCKERNAUT
+						rockernaut = TURF_CONTAINS_ROCKERNAUT
 					target_turf.mineral = mineral
 					target_turf.UpdateMineral()
 					target_turf.MineralSpread()
@@ -482,14 +482,18 @@ var/list/icon_state_to_appearance = list()
 	if (mineral && mineral.result_amount)
 		DropMineral()
 	switch(rockernaut)
-		if(TURF_CONTAINS_REGULAR_ROCKERNAUT)
+		if(TURF_CONTAINS_ROCKERNAUT)
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/R = new(src)
 			if(mineral)
 				R.possessed_ore = mineral.ore
-		if(TURF_CONTAINS_BOSS_ROCKERNAUT)
-			var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
-			if(mineral)
-				R.possessed_ore = mineral.ore
+		if(TURF_CONTAINS_BOSS)
+			switch(rand(1,2))
+				if(1)
+					var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
+					if(mineral)
+						R.possessed_ore = mineral.ore
+				if(2)
+					new /mob/living/simple_animal/hostile/asteroid/hivelord/boss(src)
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)

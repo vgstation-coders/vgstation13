@@ -225,7 +225,10 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 //Heal MANY external organs, in random order
 /mob/living/carbon/human/heal_overall_damage(var/brute, var/burn)
 	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn)
-
+	var/datum/organ/internal/heart/hivelord/H = get_heart()
+	if(istype(H)) // hivelord hearts just heal better
+		brute *= 2
+		burn *= 2
 	var/update = 0
 	while(parts.len && (brute>0 || burn>0) )
 		var/datum/organ/external/picked = pick(parts)
