@@ -1271,15 +1271,16 @@ var/list/admin_verbs_mod = list(
 			M.forceMove(pick(turfs))
 			qdel(tempM)
 			qdel(O)
-			return
+			return M
 
 	var/datum/mind/mind = get_mind_by_key(O.key)
 	if (mind)
 		var/mob/living/carbon/human/prefM = new(pick(turfs))
 		prefM.status_flags ^= BUDDHAMODE
-		prefM.quick_copy_prefs()
+		//prefM.quick_copy_prefs()
 		mind.transfer_to(prefM)
 		qdel(O)
+		return prefM
 
 /client/proc/cmd_dectalk()
 	set name = "Dectalk"
