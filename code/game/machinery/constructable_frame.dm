@@ -182,7 +182,10 @@
 								break
 						if(component_check)
 							P.playtoolsound(src, 50)
-							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
+							var/type2build = src.circuit.build_path
+							if(arcanetampered || circuit.arcanetampered)
+								type2build = pick(typesof(/obj/machinery/cooking))
+							var/obj/machinery/new_machine = new type2build(src.loc)
 							for(var/obj/O in new_machine.component_parts)
 								qdel(O)
 							new_machine.component_parts = list()
@@ -200,6 +203,9 @@
 							new_machine.power_change()
 							circuit.finish_building(new_machine, user)
 							components = null
+							if(arcanetampered || circuit.arcanetampered)
+								new_machine.stat |= BROKEN
+								new_machine.update_icon()
 							qdel(src)
 					else
 						if(istype(P, /obj/item/weapon/storage/bag/gadgets/part_replacer) && P.contents.len && get_req_components_amt())
@@ -333,7 +339,7 @@ to destroy them and players will be able to make replacements.
 			return
 		S.playtoolsound(loc, 50)
 		soldering = 1
-		if(do_after(user, src,40))
+		if(do_after(user, src,4 SECONDS * S.work_speed))
 			var/boardType = allowed_boards[t]
 			var/obj/item/I = new boardType(get_turf(user))
 			to_chat(user, "<span class='notice'>You fashion a crude [I] from the blank circuitboard.</span>")

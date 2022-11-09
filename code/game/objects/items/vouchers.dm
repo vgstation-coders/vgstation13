@@ -6,6 +6,7 @@
 	w_class = W_CLASS_TINY
 	force = 0
 	throwforce = 0
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 	var/shred_on_use = 1
 
@@ -91,7 +92,7 @@
 
 /obj/item/voucher/free_item/glowing //This one gives you special voucher-only items!
 	name = "glowing voucher"
-	desc = "Don't bother appealing to a Vendomat without this!"
+	desc = "Don't bother appealing to a StockPro without this!"
 	icon_state = "glowingvoucher"
 	freebies = list(
 		/obj/item/weapon/glowstick,
@@ -149,4 +150,4 @@
 	vend_amount = 1
 	single_items = 1
 	shred_on_use = 1
-  
+

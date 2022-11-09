@@ -339,24 +339,23 @@
 	},
 /area/shack)
 "Od" = (
-/obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/structure/grille/broken,
+/obj/structure/window/reinforced,
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
+	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
 	},
 /area/shack)
 "QD" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
 	},
@@ -425,18 +424,21 @@
 /obj/machinery/door/mineral/wood{
 	name = "Wooden Door"
 	},
+/obj/machinery/door/mineral/wood{
+	name = "Wooden Door"
+	},
 /turf/simulated/floor/wood,
 /area/shack)
 "Yn" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 1;
-	on = 1
+/obj/structure/window/reinforced{
+	dir = 4
 	},
-/obj/machinery/door/window/brigdoor{
-	dir = 2
-	},
-/obj/machinery/door/window/brigdoor{
+/obj/structure/window/reinforced{
 	dir = 1
+	},
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
 	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
@@ -521,7 +523,7 @@ Zu
 uX
 Hg
 Cp
-lF
+Yn
 ZK
 "}
 (6,1,1) = {"
@@ -532,8 +534,8 @@ lF
 wK
 pC
 Rz
-lQ
-Yn
+mM
+lF
 ZK
 "}
 (7,1,1) = {"

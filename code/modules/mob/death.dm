@@ -48,6 +48,8 @@
 		client.color = initial(client.color)
 	for(var/obj/item/I in src)
 		I.OnMobDeath(src)
+	for(var/atom/A in arcane_tampered_atoms)
+		A.bless()
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.on_holder_death(src)

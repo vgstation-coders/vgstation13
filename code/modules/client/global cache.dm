@@ -458,6 +458,7 @@ var/list/asset_datums = list()
 /datum/asset/simple/other_fonts
 	assets = list(
 		"BLOODY.TTF"  = 'html/fonts/BLOODY.TTF',
+		"CRAYON.TTF"  = 'html/fonts/CRAYON.TTF',
 	)
 
 // spritesheet implementation - coalesces various icons into a single .png file

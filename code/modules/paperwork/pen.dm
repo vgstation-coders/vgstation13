@@ -233,6 +233,17 @@
 	to_chat(viewers(user), "<span class='danger'>[user] is jamming the [src.name] into \his ear! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
+/obj/item/weapon/pen/arcane_act(mob/user, recursive)
+	colour = "red" // for convincing blood effect
+	colour_rgb = "#ff0000"
+	return ..()
+
+/obj/item/weapon/pen/bless()
+	..()
+	if(arcanetampered)
+		colour = initial(colour)
+		colour_rgb = initial(colour_rgb)
+
 /obj/item/weapon/pen/blue
 	desc = "It's a normal blue ink pen."
 	icon_state = "pen_blue"

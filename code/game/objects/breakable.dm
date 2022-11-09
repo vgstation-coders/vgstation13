@@ -25,11 +25,6 @@
 	var/damaged_sound	//Audible sound when the object is damaged by an attack, but not fully broken. Defaults to glanced_sound if unset.
 	var/glanced_sound	//Audible sound when the object recives a glancing attack not strong enough to damage it.
 
-/obj/New()
-	..()
-	if(breakable_flags)
-		breakable_init()
-
 /obj/proc/breakable_init()
 	//Initialize health and maxHealth to the same value if only one is specified.
 	if(isnull(health) && maxHealth)
@@ -314,6 +309,11 @@
 
 /obj/kick_act/(mob/living/carbon/human/kicker)
 	if(breakable_flags & BREAKABLE_UNARMED && kicker.can_kick(src))
+		if(arcanetampered && density && anchored)
+			to_chat(kicker,"<span class='sinister'>[src] kicks YOU!</span>")
+			kicker.Knockdown(10)
+			kicker.Stun(10)
+			return
 		//Pick a random usable foot to perform the kick with
 		var/datum/organ/external/foot_organ = kicker.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
 		kicker.delayNextAttack(2 SECONDS) //Kicks are slow

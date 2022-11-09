@@ -22,9 +22,9 @@
 /obj/item/device/loic_remote/examine(mob/user)
 	..()
 	if(cooldown-world.time < 0)
-		to_chat(user, "<span class='notice'>It is ready to fire.</span>") 
+		to_chat(user, "<span class='notice'>It is ready to fire.</span>")
 	else
-		to_chat(user, "<span class='notice'>The Low Orbit Ion Cannon can fire again in [altFormatTimeDuration(cooldown-world.time)].</span>") 
+		to_chat(user, "<span class='notice'>The Low Orbit Ion Cannon can fire again in [altFormatTimeDuration(cooldown-world.time)].</span>")
 /obj/item/device/loic_remote/attack_self(var/mob/user)
 	if(cooldown - world.time > 0)
 		to_chat(user, "<span class='notice'>The Low Orbit Ion Cannon is still on cooldown.</span>")
@@ -57,7 +57,7 @@
 			C.messagetitle.Add("[command_name()] Update")
 			C.messagetext.Add(P.info)
 
-	
+
 
 
 

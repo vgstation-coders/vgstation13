@@ -144,13 +144,17 @@
 	var/lastcheck=last_beamchecks["\ref[B]"]
 	// Figure out how much damage to deal.
 	// Formula: (deciseconds_since_connect/10 deciseconds)*B.get_damage()
-	var/damage = ((world.time - lastcheck)/10)  * B.get_damage()
+	var/damage = ((world.time - lastcheck)/10)  * B.get_damage() * beam_defense(B)
 
 	// Actually apply damage
 	apply_damage(damage, B.damage_type, B.def_zone)
 
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
+
+//Return multiplier for damage
+/mob/living/proc/beam_defense(var/obj/effect/beam/B)
+	return 1
 
 /mob/living/verb/succumb()
 	set hidden = 1
@@ -1123,21 +1127,18 @@ Thanks.
 		var/mob/living/carbon/CM = L
 	//putting out a fire
 		if(CM.on_fire && CM.canmove && ((!locate(/obj/effect/fire) in loc) || !CM.handcuffed))	//No point in putting ourselves out if we'd just get set on fire again. Unless there's nothing more pressing to resist out of, in which case go nuts.
-			CM.fire_stacks -= 5
-			CM.Knockdown(3)
-			CM.Stun(3)
+			CM.Knockdown(5)
+			CM.Stun(5)
 			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
 			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>",
 							   "<span class='warning'>You stop, drop, and roll!</span>")
 
-			for(var/i = 1 to rand(8,12))
+			for(var/i = 1 to CM.fire_stacks + 7)
 				CM.dir = turn(CM.dir, pick(-90, 90))
-				sleep(2)
-
-			if(fire_stacks <= 0)
-				CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>",
-								   "<span class='notice'>You extinguish yourself.</span>")
-				ExtinguishMob()
+				sleep(1 SECONDS)
+			CM.fire_stacks = 0
+			CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>","<span class='notice'>You extinguish yourself.</span>")
+			ExtinguishMob()
 			return
 
 		CM.resist_restraints()

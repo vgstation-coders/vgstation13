@@ -24,6 +24,7 @@
 	`disabilities`			INTEGER,
 	`nanotrasen_relation`	TEXT,
 	`bank_security`			INTEGER,
+	`wage_ratio`			INTEGER,
 	UNIQUE(player_ckey, player_slot)
 );"}
 	if(!hasTable("players"))

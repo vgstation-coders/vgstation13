@@ -2444,15 +2444,13 @@
 
 	if(iscarbon(M))
 		var/mob/living/carbon/H = M
-		if((LIMB_LEFT_HAND in zone_sels) || (LIMB_RIGHT_HAND in zone_sels))
-			for(var/obj/item/I in H.held_items)
-				I.clean_blood()
+		for(var/obj/item/I in H.held_items)
+			I.clean_blood()
 
-		for(var/obj/item/clothing/C in M.get_equipped_items())
-			for(var/part in zone_sels)
-				if(C.body_parts_covered & limb_define_to_part_define(part))
-					if(C.clean_blood())
-						H.update_inv_by_slot(C.slot_flags)
+		for(var/obj/item/clothing/C in M.get_equipped_items())	
+			if(C.clean_blood())
+				H.update_inv_by_slot(C.slot_flags)
+
 		M.clean_blood()
 		M.color = ""
 
@@ -2935,20 +2933,31 @@
 /datum/reagent/simpolinol
 	name = "Simpolinol"
 	id = SIMPOLINOL
-	description = "A broad spectrum rejuvenant used to heal fauna with less complex cardiovascular systems. Not for human injestion."
+	description = "An experimental medication which has shown promising results in animal tests. Has not yet advanced to human trials."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A5A5FF" //rgb: 165, 165, 255
 	density = 1.58
 	specheatcap = 0.44
 
 /datum/reagent/simpolinol/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 	if(isanimal(M))
 		M.health = min(M.maxHealth, M.health + REM)
-	else
-		M.adjustToxLoss(5)
+		return
+
+	if(!ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+
+	if(!H.ckey)
+		H.adjustToxLoss(5)
+	if((!H.client) || H.client.is_afk())
+		if(prob(30))
+			H.vomit(0,1)
+		return
+
+	randomized_reagents[SIMPOLINOL].on_human_life(H, tick)
 
 //An OP chemical for admins and detecting exploits
 /datum/reagent/adminordrazine
@@ -4925,7 +4934,7 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	if(method == TOUCH && ishuman(M) && ((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels)))
+	if(method == TOUCH && ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/obj/item/mouth_covered = H.get_body_part_coverage(MOUTH)
 		var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
@@ -5103,6 +5112,7 @@ var/procizine_tolerance = 0
 	var/has_been_hulk = 0
 	var/has_ripped_and_torn = 0 //We've applied permanent damage.
 	var/hulked_at = 0 //world.time
+	var/has_mouse_bulked = 0
 	custom_metabolism = 0.1
 	density = 6.82
 	specheatcap = 678.67
@@ -5136,7 +5146,7 @@ var/procizine_tolerance = 0
 			if(prob(5) && M.feels_pain())
 				to_chat(M, "<span class='warning'>Oh god, the pain!</span>")
 		if(25 to INFINITY)
-			if(ishuman(M)) //Does nothing to non-humans.
+			if(ishuman(M)) //If human and not diona, hulk out
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona") //Dionae are broken as fuck
 					if(H.hulk_time<world.time && !has_been_hulk)
@@ -5153,6 +5163,22 @@ var/procizine_tolerance = 0
 						dehulk(H)
 					else if(prob(1))
 						H.say(pick("YOU TRYIN' BUILD SUM MUSSLE?", "TOO SWOLE TO CONTROL", "HEY MANG", "HEY MAAAANG"))
+			if(ismouse(M)) //If mouse, become a gym rat. With a 1 in 20 chance of becoming a roid rat
+				if(has_mouse_bulked == 0)
+					if(prob(95))
+						has_mouse_bulked = 1
+						if(prob(95))
+							M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand!</span>")
+							M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat)
+						else
+							M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand! A pomadour also sprouts from the top of its head!</span>")
+							M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat)
+					else
+						has_mouse_bulked = 1
+						M.visible_message("<span class='danger'>[M] grows to the size of a dog, and its muscles expand to ridiculous proportions! It's ripped!</span>")
+						M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat)
+				else //You only bulk once, fella. If you lose the bulk, you're outta luck
+					return
 
 /datum/reagent/creatine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -6972,10 +6998,10 @@ var/procizine_tolerance = 0
 					imageloc = M.current.loc
 					imagelocB = M.current.loc
 				var/image/I = image('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
-				I.plane = MISC_HUD_MARKERS_PLANE
+				I.plane = ANTAG_HUD_PLANE
 				M.current.client.images += I
 				var/image/J = image('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
-				J.plane = MISC_HUD_MARKERS_PLANE
+				J.plane = ANTAG_HUD_PLANE
 				new_buddy.current.client.images += J
 
 /datum/reagent/ethanol/waifu
@@ -6989,20 +7015,23 @@ var/procizine_tolerance = 0
 /datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	if(M.gender == MALE)
-		M.setGender(FEMALE)
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(!M.is_wearing_item(/obj/item/clothing/under/schoolgirl))
-			var/turf/T = get_turf(H)
-			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = MOB_PLANE)
-			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
-			var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
-			if(H.w_uniform)
-				H.u_equip(H.w_uniform, 1)
-			H.equip_to_slot(S, slot_w_uniform)
-			holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
-	M.regenerate_icons()
+	if(holder.has_reagent(TOMBOY))
+		return
+	else
+		if(M.gender == MALE)
+			M.setGender(FEMALE)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(!M.is_wearing_item(/obj/item/clothing/under/schoolgirl))
+				var/turf/T = get_turf(H)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = MOB_PLANE)
+				H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
+				var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
+				if(H.w_uniform)
+					H.u_equip(H.w_uniform, 1)
+				H.equip_to_slot(S, slot_w_uniform)
+				holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
+		M.regenerate_icons()
 
 /datum/reagent/ethanol/husbando
 	name = "Husbando"
@@ -7011,23 +7040,52 @@ var/procizine_tolerance = 0
 	color = "#2043D0"
 	glass_icon_state = "husbando"
 	glass_name = "\improper Husbando"
-
+	
 /datum/reagent/ethanol/husbando/on_mob_life(var/mob/living/M) //it's copypasted from waifu
 	if(..())
 		return 1
-	if(M.gender == FEMALE)
-		M.setGender(MALE)
+	if(holder.has_reagent(TOMBOY))
+		return
+	else
+		if(M.gender == FEMALE)
+			M.setGender(MALE)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(!M.is_wearing_item(/obj/item/clothing/under/callum))
+				var/turf/T = get_turf(H)
+				T.turf_animation('icons/effects/96x96.dmi',"manexplode",-32,0,MOB_LAYER+1,'sound/items/poster_ripped.ogg',anim_plane = MOB_PLANE)
+				H.visible_message("<span class='warning'>[H] reveals his true outfit in a vortex of ripped clothes!</span>")
+				var/obj/item/clothing/under/callum/C = new /obj/item/clothing/under/callum(get_turf(H))
+				if(H.w_uniform)
+					H.u_equip(H.w_uniform, 1)
+				H.equip_to_slot(C, slot_w_uniform)
+				holder.remove_reagent(HUSBANDO,4)
+		M.regenerate_icons()
+
+/datum/reagent/ethanol/tomboy
+	name = "Tomboy"
+	id = TOMBOY
+	description = "Best girl."
+	color = "#20D03B"
+	glass_icon_state = "tomboy"
+	glass_name = "\improper Tomboy"
+
+/datum/reagent/ethanol/tomboy/on_mob_life(var/mob/living/M) 
+	if(..())
+		return 1
+	if(M.gender == MALE)
+		M.setGender(FEMALE)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!M.is_wearing_item(/obj/item/clothing/under/callum))
 			var/turf/T = get_turf(H)
 			T.turf_animation('icons/effects/96x96.dmi',"manexplode",-32,0,MOB_LAYER+1,'sound/items/poster_ripped.ogg',anim_plane = MOB_PLANE)
-			H.visible_message("<span class='warning'>[H] reveals his true outfit in a vortex of ripped clothes!</span>")
+			H.visible_message("<span class='warning'>[H] reveals her true outfit in a vortex of ripped clothes!</span>")
 			var/obj/item/clothing/under/callum/C = new /obj/item/clothing/under/callum(get_turf(H))
 			if(H.w_uniform)
 				H.u_equip(H.w_uniform, 1)
 			H.equip_to_slot(C, slot_w_uniform)
-			holder.remove_reagent(HUSBANDO,4)
+			holder.remove_reagent(TOMBOY,4)
 	M.regenerate_icons()
 
 /datum/reagent/ethanol/scientists_serendipity
@@ -8788,6 +8846,20 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		var/mob/living/carbon/human/H = M
 		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
 			H.heal_organ_damage(1, 1) //liquid sprinkles!
+
+
+/datum/reagent/drink/coffee/engicoffee
+	name = "NT Standard Battery Acid"
+	id = ENGICOFFEE
+	description = "This Plasma Infused Brew, will fix what ails you."
+	mug_icon_state = "engicoffeee"
+	mug_name = "\improper Energizer"
+	mug_desc = "Taste that Triple A Goodness."
+
+/datum/reagent/drink/coffee/engicoffee/on_mob_life(var/mob/living/M)
+	..()
+	M.hallucination = 0
+	M.reagents.add_reagent (HYRONALIN, 0.1)
 
 /datum/reagent/drink/coffee/medcoffee
 	name = "Lifeline"

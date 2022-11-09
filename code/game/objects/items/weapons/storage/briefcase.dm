@@ -11,6 +11,7 @@
 	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 16
+	autoignition_temperature = AUTOIGNITION_ORGANIC //fancy leather briefcases
 	hitsound = "swing_hit"
 	var/obj/item/weapon/handcuffs/casecuff = null
 
@@ -238,9 +239,11 @@
 	var/released = FALSE
 
 /obj/item/weapon/storage/briefcase/bees/show_to(mob/user as mob)
+	..()
+	if(!isliving(user) || user.stat)
+		return
 	if(!released)
 		release(user)
-	..()
 
 //You can hit someone with the briefcase, and the bees will swarm at them
 /obj/item/weapon/storage/briefcase/bees/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)

@@ -734,6 +734,22 @@ var/list/tag_suits_list = list()
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/suit/storage/draculacoat
+	name = "Vampire Coat"
+	desc = "What is a man? A miserable little pile of secrets."
+	icon_state = "draculacoat"
+	blood_overlay_type = "coat"
+	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
+	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/suit/storage/draculacoat_fake
+	name = "Vampire Costume"
+	desc = "Smells faintly of pumpkins and bloody mary."
+	icon_state = "draculacoat"
+	blood_overlay_type = "coat"
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/suit/maidapron
 	name = "Apron"
 	desc = "Simple white apron."
@@ -1008,10 +1024,10 @@ var/list/tag_suits_list = list()
 		return
 	detonation_msg = "being touched by [toucher]"
 	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_attacked_by(mob/attacker, mob/attacked, mob/item)
+/obj/item/clothing/suit/bomber_vest/proc/on_attacked_by(mob/attacker, mob/attacked, obj/item/item)
 	detonation_msg = "being hit with \a [item] by [attacker]"
 	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/attacker, mob/attacked, mob/item)
+/obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/attacker, mob/attacked, obj/item/item)
 	detonation_msg = "being hit with a thrown [item]"
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_unarmed_attack(mob/attacker, mob/attacked)
@@ -1108,3 +1124,18 @@ var/list/tag_suits_list = list()
 	body_parts_covered = FULL_TORSO
 	icon_state = "syndiefootball"
 	flags = FPRINT
+
+/obj/item/clothing/suit/reticulatedvest
+	name = "reticulated vest"
+	desc = "A vest that makes use of reticulation to increase surface area and help disperse emitter particles. It was later discovered this also makes it effective against blobs organisms."
+	icon_state = "reticulated2"
+	item_state = "labgreen"
+	blood_overlay_type = "armor"
+	allowed = list(/obj/item/weapon/tank,
+	/obj/item/weapon/gun/energy/laser/liberator)
+	starting_materials = list(MAT_WOOD = 1*CC_PER_SHEET_MISC)
+	w_type = RECYK_WOOD
+	var/hits = 2
+
+/obj/item/clothing/suit/reticulatedvest/update_icon()
+	icon_state = "reticulated[hits]"

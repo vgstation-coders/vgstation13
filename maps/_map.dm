@@ -46,6 +46,8 @@
 
 	//nanoui stuff
 	var/map_dir = ""
+	//buildmode reset
+	var/file_dir = ""
 
 	//Fuck the preprocessor
 	var/dorf = 0

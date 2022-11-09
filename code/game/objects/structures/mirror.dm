@@ -69,6 +69,18 @@
 				return
 			else
 				//do nothing
+	if(arcanetampered)
+		to_chat(user, "<span class='sinister'>You feel different.</span>")
+		target.Humanize(pick("Unathi","Tajaran","Insectoid","Grey",/*and worst of all*/"Vox"))
+		var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, target.gender, target.species.name)
+		if(species_facial_hair.len)
+			target.my_appearance.f_style = pick(species_facial_hair)
+			target.update_hair()
+		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, target.species.name)
+		if(species_hair.len)
+			target.my_appearance.h_style = pick(species_hair)
+			target.update_hair()
+		return
 	var/which = alert(user, "What would you like to change?", "Appearance", "Hair", "Beard", "Undies")
 
 	if(!which || !can_use(user, target))

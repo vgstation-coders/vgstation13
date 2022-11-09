@@ -13,6 +13,7 @@
 	force = 5
 	throwforce = 5
 	origin_tech = Tc_BIOTECH + "=3"
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 	var/charges = 10
 	var/ready = 0

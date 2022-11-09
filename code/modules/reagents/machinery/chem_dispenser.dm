@@ -48,7 +48,7 @@
 	var/list/upgrade_chems = list(
 		PLASMA
 		)
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 /*
 USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 */
@@ -123,6 +123,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		spawn(rand(0, 15))
 			stat |= NOPOWER
 	nanomanager.update_uis(src) // update all UIs attached to src
+
+/obj/machinery/chem_dispenser/emag_act()
+	..()
+	dispensable_reagents = shuffle(dispensable_reagents)
 
 /obj/machinery/chem_dispenser/proc/can_use(var/mob/living/silicon/robot/R)
 	if(!R)

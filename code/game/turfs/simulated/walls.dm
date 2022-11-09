@@ -29,12 +29,6 @@
 
 /turf/simulated/wall/initialize()
 	..()
-	// SMOOTH US WITH OUR NEIGHBORS
-	relativewall()
-
-	// WE NEED TO TELL ALL OUR FRIENDS ABOUT THIS SCANDAL
-	relativewall_neighbours()
-
 	var/turf/simulated/open/OS = GetAbove(src)
 	if(istype(OS))
 		OS.ChangeTurf(/turf/simulated/floor/plating)
@@ -46,6 +40,12 @@
 		/obj/structure/falserwall,
 	)
 	return smoothables
+
+/turf/simulated/wall/cannotSmoothWith()
+	var/static/list/unsmoothables = list(
+		/turf/simulated/wall/shuttle
+	)
+	return unsmoothables
 
 /turf/simulated/wall/examine(mob/user)
 	..()

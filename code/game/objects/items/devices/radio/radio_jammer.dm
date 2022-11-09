@@ -14,6 +14,7 @@ var/global/list/obj/item/device/radio_jammer/radio_jammer_list = list()
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_PROGRAMMING + "=3;" + Tc_SYNDICATE + "=3;" + Tc_BLUESPACE + "=3"
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/on = 0
 	var/cover_open = 0
 	var/base_state = "radio_jammer"
@@ -53,19 +54,19 @@ var/global/list/obj/item/device/radio_jammer/radio_jammer_list = list()
 		user.put_in_hands(power_src)
 		power_src.add_fingerprint(user)
 		power_src.updateicon()
-		
+
 		// Don't rip out cells while the device is working
 		// Or at least if its still charged
 		if (on)
 			if (electrocute_mob(user, power_src, src))
 				user.visible_message("<span class='warning'>[user] gets shocked as [src] is still working!</span>", "<span class='warning'>You get shocked as [src] is still working!</span>")
 				spark(src)
-				
+
 		src.power_src = null
 		user.visible_message("<span class='notice'>[user] removes the cell from [src].</span>", "<span class='notice'>You remove the cell from [src].</span>")
 		return
 	..()
-	
+
 /obj/item/device/radio_jammer/attackby(obj/item/W as obj, mob/user as mob)
 	if (W.is_screwdriver(user))
 		cover_open = !cover_open
@@ -101,7 +102,7 @@ var/global/list/obj/item/device/radio_jammer/radio_jammer_list = list()
 		processing_objects.Remove(src)
 		radio_jammer_list -= src
 		return null
-		
+
 /obj/item/device/radio_jammer/examine(mob/user)
 	..()
 	to_chat(user, "The cover is [cover_open ? "open" : "closed"].")
@@ -112,7 +113,7 @@ var/global/list/obj/item/device/radio_jammer/radio_jammer_list = list()
 		to_chat(user, "There is [power_src ? "a" : "no"] power cell inside.")
 		if (power_src)
 			to_chat(user, "You can see that it's current charge is [round(power_src.percent())]%")
-	else 
+	else
 		if (on)
 			to_chat(user, "Current charge: [round(power_src.percent())]%")
 
@@ -125,13 +126,13 @@ var/global/list/obj/item/device/radio_jammer/radio_jammer_list = list()
 		if (dist < mindist)
 			mindist = dist
 	return mindist
-	
+
 // Returns the severity of jamming applied to parameter obj
 // 100 or more severity = silence.
 /proc/radio_jamming_severity(who)
 	// could multiply the effect of several jammers tbh but this is faster
 	var/mindist = get_min_radio_jammer_dist(who)
-	
+
 	if (mindist <= 1)
 		// ;HELP IN DORMS
 		return JAMMING_SILENCE_SEVERITY
@@ -147,7 +148,7 @@ var/global/list/obj/item/device/radio_jammer/radio_jammer_list = list()
 		return 25
 	if (mindist == 7)
 		return 12
-	
+
 	return 0
 
 // Returns true if severity is bad enough to completely silence the radio device
@@ -162,7 +163,7 @@ var/global/list/obj/item/device/radio_jammer/radio_jammer_list = list()
 /datum/jammed_radio_src/New(var/r, var/s)
 	radio = r
 	severity = s
-	
+
 /datum/jammed_mob_dst
 	var/atom/movable/attached
 	var/severity

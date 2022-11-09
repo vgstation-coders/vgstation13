@@ -239,6 +239,9 @@
 
 //Begin spoilers/////
 
+/obj/machinery/vending/old_vendotron/arcane_act(mob/user)
+	user.say("P'Y 'P!")
+	neoUltraCapitalismMode(user)
 
 /obj/machinery/vending/old_vendotron/emag_act(mob/user)
 	if(!emagged)

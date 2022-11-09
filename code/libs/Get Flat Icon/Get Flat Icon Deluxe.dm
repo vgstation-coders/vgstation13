@@ -81,8 +81,8 @@ cons:
 			var/dir = data[GFI_DX_DIR]
 			if (dir != SOUTH) // south-facing atoms shouldn't pose any problem
 				var/icon_directions = get_icon_dir_count(data[GFI_DX_ICON],data[3])
-				if ((icon_directions == 0) || (icon_directions == 1))
-					data[GFI_DX_DIR] = SOUTH // if the icon has only one direction we HAVE to face south. if we're not sure (something animated?), have it face south anyway.
+				if (icon_directions == 1)
+					data[GFI_DX_DIR] = SOUTH // if the icon has only one direction we HAVE to face south
 				else if (icon_directions == 4)
 					if (dir != NORTH && dir != EAST && dir != WEST)
 						data[GFI_DX_DIR] = SOUTH

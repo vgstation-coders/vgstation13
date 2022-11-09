@@ -101,7 +101,6 @@
 /event/clickon
 
 // Called when an atom is attacked with an empty hand.
-// Currently only used by xenoarch artifacts, should probably be moved to the base proc.
 // Arguments:
 // mob/user: the guy who is attacking.
 // atom/target: the atom that's being attacked.
@@ -168,7 +167,7 @@
 // Arguments:
 // mob/attacker: the mob doing the attack
 // mob/attacked: the victim of the attack
-// mob/item: the item being used to attack with
+// obj/item/item: the item being used to attack with
 /event/attacked_by
 
 // Called by unarmed_attack_mob
@@ -199,7 +198,7 @@
 /event/beam_power_change
 
 // Called by attackby
-// Currently only used by artifacts.
+// Used by artifacts and cooktops.
 // Arguments:
 // mob/living/attacker: the mob attacking the atom
 // obj/item/item: the item being used for the attack

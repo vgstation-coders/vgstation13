@@ -97,6 +97,10 @@
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
 
+/obj/item/trash/popcorn/hoppers
+	name = "hoppers"
+	icon_state = "hoppers"
+	
 /obj/item/trash/sosjerky
 	name = "\improper Scaredy's Private Reserve Beef Jerky"
 	icon_state = "sosjerky"
@@ -337,6 +341,11 @@ var/list/crushed_cans_cache = list()
 	name = "zam's spicy sauce packet"
 	desc = "A used Zam's spicy sauce packet."
 	icon_state	= "zamspicytoxin_small"
+	
+/obj/item/trash/discount_packet
+	name = "Discount Dan's Special Sauce"
+	desc = "Contained 40% less sauce than competing products!"
+	icon_state	= "discount_small"
 
 /obj/item/trash/emptybowl
 	name = "empty bowl"

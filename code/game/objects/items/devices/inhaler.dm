@@ -13,6 +13,7 @@
 	throw_range = 20
 	force = 0
 	var/last_puff = 0
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/device/inhaler/proc/puff_ready()
 	return last_puff < world.time - PUFF_COOLDOWN_TIME

@@ -18,6 +18,7 @@
 	source_string = "human"
 	origin_tech = ""
 	var/skin_color = DEFAULT_FLESH
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 /obj/item/stack/sheet/animalhide/human/New()
 	..()

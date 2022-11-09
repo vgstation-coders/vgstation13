@@ -329,7 +329,7 @@
 	desc = "A slightly armoured greatcoat. It looks like it's mostly ceremonial."
 	icon_state = "HoP_Coat"
 	item_state = "HoP_Coat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	blood_overlay_type = "coat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/lighter,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
