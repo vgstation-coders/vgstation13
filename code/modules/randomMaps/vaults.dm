@@ -107,7 +107,7 @@
 	file_path = "maps/misc/HELL.dmm"
 	unique = TRUE
 
-/datum/map_element/dungeon/hell/load_map(x, y, z, rotate=0, overwrite = FALSE, override_can_rotate = FALSE)
+/datum/map_element/dungeon/hell/load(x, y, z, rotate=0, overwrite = FALSE, override_can_rotate = FALSE)
 	. = ..()
 	if(islist(.))
 		var/list/L = .
@@ -149,7 +149,7 @@
 			message_admins("[ckey] had no character file, skipping")
 			return
 	else
-		message_admins("Player appearance file check error on populating hell: [check.ErrorMsg()]")
+		message_admins("Player appearance file check error: [check.ErrorMsg()]")
 		log_sql("Error: [check.ErrorMsg()]")
 		return
 	var/datum/DBQuery/q = SSdbcore.NewQuery({"
@@ -223,7 +223,7 @@
 			a++
 			preference_list[q.item[a]] = q.item[a]
 	else
-		message_admins("Player appearance loading error on populating hell: [q.ErrorMsg()]")
+		message_admins("Player appearance loading error: [q.ErrorMsg()]")
 		log_sql("Error: [q.ErrorMsg()]")
 		return
 	name = preference_list && preference_list.len && preference_list["real_name"] ? preference_list["real_name"] : ckey

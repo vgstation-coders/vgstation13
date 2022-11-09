@@ -1276,6 +1276,9 @@ var/list/admin_verbs_mod = list(
 	for(var/turf/T in H.spawned_atoms)
 		if(!T.density)
 			turfs += T
+	if(!turfs.len)
+		warning("No hell turfs to send a mob to!")
+		return
 	for(var/datum/body_archive/archive in body_archives)
 		if(archive.key == O.key)
 			var/mob/living/tempM = new archive.mob_type
