@@ -11,6 +11,7 @@ var/list/datum/map_element/map_elements = list()
 	var/load_at_once = TRUE //If true, lag reduction methods will not be applied when this is loaded, freezing atmos and mob simulations until the map element is loaded.
 
 	var/turf/location //Lower left turf of the map element
+	var/list/spawned_atoms = list()
 
 	var/width //Width of the map element, in turfs
 	var/height //Height of the map element, in turfs
@@ -53,9 +54,9 @@ var/list/datum/map_element/map_elements = list()
 	if(file_path)
 		var/file = file(file_path)
 		if(isfile(file))
-			var/list/L = maploader.load_map(file, z, x, y, src, rotation, overwrite)
-			initialize(L)
-			return L
+			spawned_atoms = maploader.load_map(file, z, x, y, src, rotation, overwrite)
+			initialize(spawned_atoms)
+			return spawned_atoms
 	else //No file specified - empty map element
 		//These variables are usually set by the map loader. Here we have to set them manually
 		initialize(list()) //Initialize with an empty list

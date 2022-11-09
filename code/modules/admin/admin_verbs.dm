@@ -1252,6 +1252,11 @@ var/list/admin_verbs_mod = list(
 		return
 	if(!(/datum/map_element/dungeon/hell in existing_dungeons))
 		load_dungeon(/datum/map_element/dungeon/hell)
+	var/datum/map_element/dungeon/hell/H = locate(/datum/map_element/dungeon/hell) in existing_dungeons
+	var/list/turf/turfs = list()
+	for(var/turf/T in H.spawned_atoms)
+		if(!T.density)
+			turfs += T
 	for(var/datum/body_archive/archive in body_archives)
 		if(archive.key == O.key)
 			var/mob/living/tempM = new archive.mob_type
@@ -1263,14 +1268,14 @@ var/list/admin_verbs_mod = list(
 				warning("Body archive to send to hell was not a living mob!")
 				break
 			M.status_flags ^= BUDDHAMODE
-			M.forceMove(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
+			M.forceMove(pick(turfs))
 			qdel(tempM)
 			qdel(O)
 			return
 
 	var/datum/mind/mind = get_mind_by_key(O.key)
 	if (mind)
-		var/mob/living/carbon/human/prefM = new(locate(rand(1,world.maxx),rand(1,world.maxy),world.maxz))
+		var/mob/living/carbon/human/prefM = new(pick(turfs))
 		prefM.status_flags ^= BUDDHAMODE
 		prefM.quick_copy_prefs()
 		mind.transfer_to(prefM)
