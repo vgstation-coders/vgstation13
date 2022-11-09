@@ -30,6 +30,7 @@
 			tries = 0
 			while(!istype(center,/turf/simulated/wall) && tries < 100)
 				center = pick(our_area.get_area_turfs())
+				tries++
 
 			if(center)
 				// Make sure at least one piece of wall rots!
