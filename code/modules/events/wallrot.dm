@@ -14,9 +14,8 @@
 
 /datum/event/wallrot/can_start()
 	for(var/area/A in the_station_areas)
-		for(var/turf/T in A.get_area_turfs())
-			if(istype(T,/turf/simulated/wall))
-				return 1
+		if(locate(/turf/simulated/wall) in A)
+			return 1
 	return 0
 
 /datum/event/wallrot/start()
