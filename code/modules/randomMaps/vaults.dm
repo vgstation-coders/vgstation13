@@ -118,8 +118,10 @@
 					turfs += spawned_turf
 			if(turfs.len && config.bans_shown_in_hell_limit)
 				var/time2make = world.time
-				var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE bantype = PERMABAN AND isnull(unbanned)")
-				if(!select_query.Execute())
+				var/database/db = ("players2.sqlite")
+				var/database/query/select_query = new
+				select_query.Add("SELECT ckey, reason FROM erro_ban WHERE bantype = PERMABAN AND isnull(unbanned)")
+				if(!select_query.Execute(db))
 					qdel(select_query)
 					message_admins("Banned player search error on populating hell: [select_query.ErrorMsg()]")
 					log_sql("Error: [select_query.ErrorMsg()]")
@@ -127,8 +129,9 @@
 
 				var/bancount = 0
 				while(select_query.NextRow() && bancount <= config.bans_shown_in_hell_limit)
-					var/ckey = select_query.item[1]
-					var/reason = select_query.item[2]
+					var/list/row = select_query.GetRowData()
+					var/ckey = row[1]
+					var/reason = row[2]
 					var/mob/living/carbon/human/H = new(pick(turfs))
 					H.quick_copy_prefs()
 					H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
@@ -139,20 +142,19 @@
 
 /mob/living/carbon/human/proc/quick_copy_prefs()
 	var/list/preference_list = new
-	var/datum/DBQuery/check = SSdbcore.NewQuery("SELECT player_ckey FROM players WHERE player_ckey = :ckey AND player_slot = :slot",
-		list(
-		"ckey" = ckey,
-		"slot" = 1,
-		))
-	if(check.Execute())
+	var/database/query/check = new
+	var/database/db = ("players2.sqlite")
+	check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, 1)
+	if(check.Execute(db))
 		if(!check.NextRow())
-			message_admins("[ckey] had no character file, skipping")
+			message_admins("[ckey] had no character file to load")
 			return
 	else
 		message_admins("Player appearance file check error: [check.ErrorMsg()]")
 		log_sql("Error: [check.ErrorMsg()]")
 		return
-	var/datum/DBQuery/q = SSdbcore.NewQuery({"
+	var/database/query/q = new
+	q.Add({"
 		SELECT
 			limbs.player_ckey,
 			limbs.player_slot,
@@ -215,13 +217,13 @@
 		AND (
 				jobs.player_slot = body.player_slot)
 		WHERE
-			players.player_ckey = :ckey
-		AND players.player_slot = :slot ;"}, list("ckey" = ckey, "slot" = 1))
-	if(q.Execute())
-		var/a = 0
+			players.player_ckey = ?
+		AND players.player_slot = ?"}, ckey, 1)
+	if(q.Execute(db))
 		while(q.NextRow())
-			a++
-			preference_list[q.item[a]] = q.item[a]
+			var/list/row = q.GetRowData()
+			for(var/a in row)
+				preference_list[a] = row[a]
 	else
 		message_admins("Player appearance loading error: [q.ErrorMsg()]")
 		log_sql("Error: [q.ErrorMsg()]")
@@ -307,6 +309,8 @@
 				I?.mechanize()
 			else
 				continue
+
+		regenerate_icons()
 
 /proc/asteroid_can_be_placed(var/datum/map_element/E, var/turf/start_turf)
 	if(!E.width || !E.height) //If the map element doesn't have its width/height calculated yet, do it now

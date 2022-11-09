@@ -1299,7 +1299,7 @@ var/list/admin_verbs_mod = list(
 	if (mind)
 		var/mob/living/carbon/human/prefM = new(pick(turfs))
 		prefM.status_flags ^= BUDDHAMODE
-		//prefM.quick_copy_prefs()
+		prefM.quick_copy_prefs()
 		mind.transfer_to(prefM)
 		qdel(O)
 		return prefM
