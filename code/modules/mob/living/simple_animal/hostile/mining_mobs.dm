@@ -356,7 +356,7 @@
 	return 1
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/boss
-	name = "hivelord lord"
+	name = "Maria"
 	size = SIZE_HUGE
 	maxHealth = 300
 	health = 300
