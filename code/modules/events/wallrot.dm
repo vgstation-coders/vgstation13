@@ -22,8 +22,9 @@
 	spawn()
 		for(var/i in 1 to severity)
 			var/tries = 0
+			var/area/our_area = null
 			while((!our_area || !(locate(/turf/simulated/wall) in our_area.get_area_turfs())) && tries < 100)
-				var/area/our_area = pick(the_station_areas)
+				our_area = pick(the_station_areas)
 				tries++
 			var/list/turf/simulated_area_turfs = list()
 			for(var/turf/T in our_area.get_area_turfs())
