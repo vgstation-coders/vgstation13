@@ -114,7 +114,8 @@
 		var/list/turf/turfs = list()
 		if(L.len)
 			for(var/turf/spawned_turf in L)
-				turfs += spawned_turf
+				if(!spawned_turf.density)
+					turfs += spawned_turf
 			if(turfs.len && config.bans_shown_in_hell_limit)
 				var/time2make = world.time
 				var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT ckey, reason FROM erro_ban WHERE bantype = PERMABAN AND isnull(unbanned)")
