@@ -84,7 +84,7 @@
 	var/in_capsule = istype(loc, /obj/item/device/mobcapsule)
 
 	//emps and lots of damage can temporarily shut us down
-	if(disabled > 0)
+	if(disabled > 0 && !(status_flags & BUDDHAMODE))
 		stat = UNCONSCIOUS
 		icon_state = "drone_dead"
 		disabled--
@@ -153,7 +153,7 @@
 			src.visible_message("<span class='warning'> [bicon(src)] [src] sparks and shakes like it's about to explode!</span>")
 		spark(src)
 
-	if(!exploding && !disabled && prob(explode_chance))
+	if(!exploding && !disabled && prob(explode_chance) && !(status_flags & BUDDHAMODE))
 		exploding = 1
 		stat = UNCONSCIOUS
 		wander = 1

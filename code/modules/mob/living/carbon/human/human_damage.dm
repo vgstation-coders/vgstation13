@@ -483,7 +483,7 @@ This function restores all organs.
 		reagents.clear_reagents()
 	restore_blood()
 	bodytemperature = 310
-	stat = UNCONSCIOUS
+	stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 	regenerate_icons()
 	flash_eyes(visual = 1)
 	apply_effect(10, EYE_BLUR)
