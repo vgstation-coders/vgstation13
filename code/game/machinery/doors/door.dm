@@ -274,7 +274,8 @@ var/list/all_doors = list()
 		if (O.blocks_doors())
 			return 0
 	if(arcane_linked_door && arcane_linked_door.density)
-		arcane_linked_door.open()
+		spawn(1)
+			arcane_linked_door.open()
 	if(!operating)
 		operating = 1
 
@@ -319,7 +320,8 @@ var/list/all_doors = list()
 			return 0
 
 	if(arcane_linked_door && !arcane_linked_door.density)
-		arcane_linked_door.close()
+		spawn(1)
+			arcane_linked_door.close()
 
 	operating = 1
 
@@ -427,7 +429,7 @@ var/list/all_doors = list()
 	if(arcane_linked_door && !density && istype(AM,/atom/movable))
 		var/atom/movable/A = AM
 		var/turf/T = get_turf(arcane_linked_door)
-		if(T & T.Cross())
+		if(T && T.Cross())
 			for(var/dir in cardinal)
 				var/turf/T2 = get_step(T,dir)
 				if(T2 && T2.Cross())
