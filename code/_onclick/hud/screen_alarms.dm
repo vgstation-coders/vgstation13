@@ -84,20 +84,24 @@ var/global/list/screen_alarms_locs = list(
 	5 = ui_alert5
 	)
 
-//Re-render all alerts - also called in /datum/hud/show_hud() because it's needed there
+//Re-render all alerts
 /datum/hud/proc/reorganize_alerts()
-	var/list/alerts = mymob.alerts
+	var/list/mobalerts = mymob.alerts
 	var/icon_pref
-	if(!alerts.len)
+	if(!mobalerts.len)
 		return FALSE
 	if(!hud_shown)
-		for(var/i = 1, i <= alerts.len, i++)
-			mymob.client.screen -= alerts[alerts[i]]
+		for(var/i = 1, i <= mobalerts.len, i++)
+			mymob.client.screen -= mobalerts[mobalerts[i]]
 		return TRUE
-	for(var/i = 1, i <= alerts.len, i++)
+	for(var/obj/abstract/screen/alert/A in mobalerts) 			//Sorting the alerts list before it's passed to the client's screen
+		if(istype(A, /obj/abstract/screen/alert/object/cryo))
+			mobalerts.Swap(A, 1) 								//Cryo alert goes on top because it's taller than all of the other alerts
+			continue 											//Surely you won't ever be in TWO cryopods at once... right?
+	for(var/i = 1, i <= mobalerts.len, i++)
 		if(i > screen_alarms_locs.len)
 			break
-		var/obj/abstract/screen/alert/alert = alerts[alerts[i]]
+		var/obj/abstract/screen/alert/alert = mobalerts[mobalerts[i]]
 		if(alert.icon_state == "template")
 			if(!icon_pref)
 				icon_pref = ui_style2icon(mymob.client.prefs.UI_style)
