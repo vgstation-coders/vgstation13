@@ -281,20 +281,6 @@ var/global/list/accessable_z_levels = list()
 		var/generator = pick(typesof(/obj/structure/radial_gen/movable/snow_nature/snow_forest) + typesof(/obj/structure/radial_gen/movable/snow_nature/snow_grass))
 		new generator(T)
 
-/datum/zLevel/hell
-	name = "HELL"
-	base_turf = /turf/unsimulated/floor/brimstone
-	base_area = /area/hell // for ease of admin jumps
-	teleJammed = TRUE
-	bluespace_jammed = TRUE
-	movementJammed = TRUE
-	transitionLoops = TRUE
-
-/datum/zLevel/hell/New()
-	..()
-	if(Holiday == APRIL_FOOLS_DAY)
-		base_turf = /turf/unsimulated/floor/snow // hell froze over
-
 // Debug ///////////////////////////////////////////////////////
 
 /*

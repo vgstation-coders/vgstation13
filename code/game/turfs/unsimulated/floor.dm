@@ -91,6 +91,9 @@
 
 /turf/unsimulated/floor/brimstone/New()
 	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		ChangeTurf(/turf/unsimulated/floor/snow) // hell froze over
+		return
 	icon_state = "ironsand[rand(1,15)]"
 	overlays.Cut()
 	var/image/fire = image('icons/effects/fire.dmi', "[rand(1,3)]")
