@@ -109,14 +109,14 @@
 
 /datum/map_element/dungeon/hell/load(x, y, z, rotate=0, overwrite = FALSE, override_can_rotate = FALSE)
 	. = ..()
-	if(islist(.))
+	if(islist(.) && config.bans_shown_in_hell_limit)
 		var/list/L = .
 		var/list/turf/turfs = list()
 		if(L.len)
 			for(var/turf/spawned_turf in L)
 				if(!spawned_turf.density)
 					turfs += spawned_turf
-			if(turfs.len && config.bans_shown_in_hell_limit)
+			if(turfs.len)
 				var/time2make = world.time
 				var/database/db = ("players2.sqlite")
 				var/database/query/select_query = new
