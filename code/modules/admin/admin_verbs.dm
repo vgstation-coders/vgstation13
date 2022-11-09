@@ -1250,8 +1250,8 @@ var/list/admin_verbs_mod = list(
 /proc/send_to_hedoublehockeysticks(mob/O)
 	if(!O || !O.key)
 		return
-	if(!(locate(/datum/zLevel/hell) in map.zLevels))
-		create_hell()
+	if(!(/datum/map_element/dungeon/hell in existing_dungeons))
+		load_dungeon(/datum/map_element/dungeon/hell)
 	for(var/datum/body_archive/archive in body_archives)
 		if(archive.key == O.key)
 			var/mob/living/tempM = new archive.mob_type

@@ -35,8 +35,6 @@ var/datum/subsystem/map/SSmap
 	if (rand(1,3) == 3)
 		generate_hoboshack()
 
-	create_hell()
-
 	log_startup_progress("Calling post on zLevels, letting them know they can do zlevel specific stuff...")
 	var/watch_prim = start_watch()
 	for(var/datum/zLevel/z in map.zLevels)
