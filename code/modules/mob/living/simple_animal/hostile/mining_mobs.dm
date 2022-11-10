@@ -510,7 +510,7 @@
 
 /datum/organ/internal/heart/hivelord/die()
 	..()
-	desc = "The remains of a hivelord that have become useless, having been left alone too long after being out of a body."
+	desc = "The remains of a greater hivelord that have become useless, having been left alone too long after being out of a body."
 
 /datum/organ/internal/heart/hivelord/revive()
 	..()
