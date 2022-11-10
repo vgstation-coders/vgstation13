@@ -79,6 +79,7 @@
 	layer = TURF_LAYER
 	anchored = 1
 	opacity = 1
+	is_on_mesons = TRUE
 
 /obj/structure/shuttle/diag_wall/initialize()
 	var/turf/T = get_turf(src)
