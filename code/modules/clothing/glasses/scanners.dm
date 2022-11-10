@@ -271,7 +271,7 @@ var/list/meson_images = list()
 			L.client.images -= meson_image
 	meson_images -= meson_image
 	if(is_on_mesons)
-		meson_image = image(icon,src,icon_state)
+		meson_image = image(icon,loc,icon_state)
 		meson_image.plane = plane
 		meson_image.layer = layer
 		meson_images += meson_image
