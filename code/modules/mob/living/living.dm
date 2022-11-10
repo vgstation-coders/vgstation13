@@ -275,7 +275,7 @@
 		if(H.species.tox_mod)
 			mult = H.species.tox_mod
 		var/datum/organ/internal/heart/hivelord/HL = H.get_heart()
-		if(istype(HL) && amount > 0) // hivelord hearts just heal better
+		if(istype(HL) && amount < 0) // hivelord hearts just heal better
 			mult *= 2
 
 	toxloss = min(max(toxloss + (amount * tox_damage_modifier * mult), 0),(maxHealth*2))
