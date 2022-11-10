@@ -1,9 +1,6 @@
 /datum/event/wallrot
 	var/severity = 1
 
-/datum/event/wallrot/can_start()
-	return 30
-
 /datum/event/wallrot/setup()
 	announceWhen = rand(0, 300)
 	endWhen = announceWhen + 1
@@ -15,7 +12,7 @@
 /datum/event/wallrot/can_start()
 	for(var/area/A in the_station_areas)
 		if(locate(/turf/simulated/wall) in A)
-			return 1
+			return 30
 	return 0
 
 /datum/event/wallrot/start()
