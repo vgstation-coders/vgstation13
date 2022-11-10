@@ -222,3 +222,6 @@ var/list/datum/randomized_reagent/randomized_reagents = list()
 /proc/create_randomized_reagents()
 	randomized_reagents.Cut()
 	randomized_reagents[SIMPOLINOL] = new /datum/randomized_reagent/all_effects
+	randomized_reagents[UNKNOWNALPHA] = new /datum/randomized_reagent/all_effects
+	randomized_reagents[UNKNOWNDELTA] = new /datum/randomized_reagent/all_effects
+	randomized_reagents[UNKNOWNOMEGA] = new /datum/randomized_reagent/all_effects

@@ -84,7 +84,21 @@
 	override_chems = TRUE
 	override_crit = TRUE
 	mech_flags = MECH_SCAN_FAIL
-	t1chems = list(SIMPOLINOL = "Simpolinol")
+	t1chems = list(
+		UNKNOWNALPHA = "Mystery1"
+		)
+	t2chems = list(
+		UNKNOWNDELTA = "Mystery2"
+		)
+	t3chems = list(
+		UNKNOWNOMEGA = "Mystery3"
+		)
+
+/obj/item/device/plugin/sleeper/alien/proc/genName()
+	var/button_desc = "[pick("a yellow","a purple","a green","a blue","a red","an orange","a white")], "
+		button_desc += "[pick("round","square","diamond","heart","dog","human")] shaped "
+		button_desc += "[pick("toggle","switch","lever","button","pad","hole")]"
+	return button_desc
 
 /obj/item/device/plugin/sleeper/clown
 	name = "funny looking device"

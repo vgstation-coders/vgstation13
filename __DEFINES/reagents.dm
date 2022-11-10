@@ -477,6 +477,12 @@
 #define BUMCIVILIAN		"bumcivilian"
 #define MAHKOEXPITOL		"mahkoexpitol"
 
+#define ALIENORIGIN		"alienorigin"
+#define UNKNOWNALPHA	"unknownalpha"
+#define UNKNOWNDELTA	"unknowndelta"
+#define UNKNOWNOMEGA	"unknownomega"
+
+
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
 #define KATHALAI		"kathalai"

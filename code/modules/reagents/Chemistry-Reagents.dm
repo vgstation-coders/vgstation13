@@ -2961,6 +2961,66 @@
 
 	randomized_reagents[SIMPOLINOL].on_human_life(H, tick)
 
+/datum/reagent/alienorigin
+	name = "Unknown Chemical"
+	id = ALIENORIGIN
+	description = "A chemical of alien nature, made of theoretically impossible elements"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#2121B9" //rgb: 33, 33, 185
+	density = 1.59
+	specheatcap = 1.244
+
+/datum/reagent/alienorigin/alpha
+	name = "Unknown Alpha"
+	id = UNKNOWNALPHA
+	description = "A chemical of alien nature, made of theoretically impossible elements"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#2121B9" //rgb: 33, 33, 185
+	density = 1.52
+	specheatcap = 1.167
+
+/datum/reagent/alienorigin/alpha/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(!ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+	randomized_reagents[UNKNOWNALPHA].on_human_life(H, tick)
+
+/datum/reagent/alienorigin/delta
+	name = "Unknown Delta"
+	id = UNKNOWNDELTA
+	description = "A chemical of alien nature, made of theoretically impossible elements"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#2121B9" //rgb: 33, 33, 185
+	density = 1.82
+	specheatcap = 1.62
+
+/datum/reagent/alienorigin/delta/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(!ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+	randomized_reagents[UNKNOWNDELTA].on_human_life(H, tick)
+
+/datum/reagent/alienorigin/omega
+	name = "Unknown Omega"
+	id = UNKNOWNOMEGA
+	description = "A chemical of alien nature, made of theoretically impossible elements"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#2121B9" //rgb: 33, 33, 185
+	density = 1.11
+	specheatcap = 1.111
+
+/datum/reagent/alienorigin/omega/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(!ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+	randomized_reagents[UNKNOWNOMEGA].on_human_life(H, tick)
+
 //An OP chemical for admins and detecting exploits
 /datum/reagent/adminordrazine
 	name = "Adminordrazine"
