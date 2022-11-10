@@ -508,6 +508,10 @@
 	min_bruised_damage = 15
 	min_broken_damage = 30
 
+/datum/organ/internal/heart/hivelord/die()
+	..()
+	desc = "The remains of a hivelord that have become useless, having been left alone too long after being out of a body."
+
 /datum/organ/internal/heart/hivelord/Life()
 	for(var/datum/organ/external/E in owner.organs)
 		if(prob(10))
