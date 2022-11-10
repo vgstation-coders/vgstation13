@@ -502,19 +502,19 @@
 	dead_icon = "heart-off"
 	organ_type = /datum/organ/internal/heart/hivelord
 
+/obj/item/organ/internal/heart/hivelord/die()
+	..()
+	desc = "The remains of a greater hivelord that have become useless, having been left alone too long after being out of a body."
+
+/obj/item/organ/internal/heart/hivelord/revive()
+	..()
+	desc = initial(desc)
+
 /datum/organ/internal/heart/hivelord
 	name = "hivelord heart"
 	removed_type = /obj/item/organ/internal/heart/hivelord
 	min_bruised_damage = 15
 	min_broken_damage = 30
-
-/datum/organ/internal/heart/hivelord/die()
-	..()
-	desc = "The remains of a greater hivelord that have become useless, having been left alone too long after being out of a body."
-
-/datum/organ/internal/heart/hivelord/revive()
-	..()
-	desc = initial(desc)
 
 /datum/organ/internal/heart/hivelord/Life()
 	for(var/datum/organ/external/E in owner.organs)
