@@ -464,7 +464,10 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/deepfryer/initialize()
 	..()
-	reagents.add_reagent(fry_reagent, 300, reagtemp = fry_reagent_temp)
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+		reagents.add_reagent(fry_reagent, 300)
+	else
+		reagents.add_reagent(fry_reagent, 300, reagtemp = fry_reagent_temp)
 
 /obj/machinery/cooking/deepfryer/process()
 	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
