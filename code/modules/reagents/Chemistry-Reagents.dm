@@ -2447,7 +2447,7 @@
 		for(var/obj/item/I in H.held_items)
 			I.clean_blood()
 
-		for(var/obj/item/clothing/C in M.get_equipped_items())	
+		for(var/obj/item/clothing/C in M.get_equipped_items())
 			if(C.clean_blood())
 				H.update_inv_by_slot(C.slot_flags)
 
@@ -5064,6 +5064,21 @@ var/procizine_tolerance = 0
 	for(var/mob/living/carbon/human/H in T)
 		if(isslimeperson(H))
 			H.adjustToxLoss(rand(5, 15))
+
+/datum/reagent/frostoil/reaction_obj(var/obj/O, var/volume)
+
+	if(..())
+		return 1
+
+	if(istype(O, /obj/item/organ/internal/heart/hivelord))
+		var/obj/item/organ/internal/heart/hivelord/I = O
+		if(I.health <= 0)
+			I.revive()
+			I.health = initial(I.health)
+		if(I.organ_data)
+			var/datum/organ/internal/OD = I.organ_data
+			if(OD.damage > 0)
+				OD.damage = 0
 
 /datum/reagent/sodiumchloride
 	name = "Table Salt"
