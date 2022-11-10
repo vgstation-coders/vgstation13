@@ -460,10 +460,16 @@ var/global/ingredientLimit = 10
 	cks_max_volume = 400
 	cooks_in_reagents = 1
 	var/fry_reagent = CORNOIL
+	var/fry_reagent_temp = T0C + 170 //target temperature of the frying reagent
 
 /obj/machinery/cooking/deepfryer/initialize()
 	..()
-	reagents.add_reagent(fry_reagent, 300)
+	reagents.add_reagent(fry_reagent, 300, reagtemp = fry_reagent_temp)
+
+/obj/machinery/cooking/deepfryer/process()
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+		return
+	reagents.heating(500, fry_reagent_temp) //thermal transfer is half that of fire_act()
 
 /obj/machinery/cooking/deepfryer/proc/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
