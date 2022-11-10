@@ -53,6 +53,7 @@ var/stacking_limit = 90
 	var/midround_injection_cooldown = 0
 
 	var/datum/dynamic_ruleset/latejoin/forced_latejoin_rule = null
+	var/datum/dynamic_ruleset/latejoin/roundstart_latejoin_rule = null
 
 	var/datum/stat/dynamic_mode/dynamic_stats = null
 	var/pop_last_updated = 0
@@ -715,6 +716,14 @@ var/stacking_limit = 90
 			if (forced_latejoin_rule.choose_candidates())
 				picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
+
+	else if (roundstart_latejoin_rule)
+		roundstart_latejoin_rule.candidates = list(newPlayer)
+		roundstart_latejoin_rule.trim_candidates()
+		if (roundstart_latejoin_rule.ready())
+			if (roundstart_latejoin_rule.choose_candidates())
+				picking_latejoin_rule(list(roundstart_latejoin_rule))
+		roundstart_latejoin_rule = null
 
 	else if (!latejoin_injection_cooldown && injection_attempt())
 		var/list/drafted_rules = list()
