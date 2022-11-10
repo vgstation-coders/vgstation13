@@ -512,6 +512,10 @@
 	..()
 	desc = "The remains of a hivelord that have become useless, having been left alone too long after being out of a body."
 
+/datum/organ/internal/heart/hivelord/revive()
+	..()
+	desc = initial(desc)
+
 /datum/organ/internal/heart/hivelord/Life()
 	for(var/datum/organ/external/E in owner.organs)
 		if(prob(10))
