@@ -1835,7 +1835,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 //Cooking vessel-selective cookability of recipes
 #define COOKABLE_WITH_MICROWAVE (1<<0)
 #define COOKABLE_WITH_PAN (1<<1)
-#define COOKABLE_WITH_MIXING (1<<2) //For things like salads and icecream that don't require heat to cook (when mixing bowls are implemented, for now this is just used to not heat those recipes when they're made in a microwave).
+#define COOKABLE_WITH_MIXING (1<<2) //For things like salads and ice cream that don't require heat to cook (when mixing bowls are implemented, for now this is just used to not heat those recipes when they're made in a microwave).
 #define COOKABLE_WITH_HEAT (COOKABLE_WITH_MICROWAVE | COOKABLE_WITH_PAN)
 #define COOKABLE_WITH_ALL ALL
 
