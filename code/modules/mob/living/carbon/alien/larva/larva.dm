@@ -150,7 +150,6 @@
 	return FALSE
 
 /mob/living/carbon/alien/larva/var/co2overloadtime = null
-/mob/living/carbon/alien/larva/var/temperature_resistance = T0C+75
 
 // new damage icon system
 // now constructs damage icon for each organ from mask * damage field
