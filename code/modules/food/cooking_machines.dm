@@ -516,7 +516,7 @@ var/global/ingredientLimit = 10
 	if(istype(ingredient,/obj/item/weapon/reagent_containers/food/snacks))
 		if(cooks_in_reagents)
 			transfer_reagents_to_food(ingredient)
-			if(ingredient.reagents.chem_temp > COOKTEMP_HUMANSAFE) //Since gradual cooling isn't implemented, make sure the food isn't scalding hot.
+			if(!arcanetampered && (ingredient.reagents.chem_temp > COOKTEMP_HUMANSAFE)) //Since gradual cooling isn't implemented, make sure the food isn't scalding hot.
 				ingredient.reagents.chem_temp = COOKTEMP_HUMANSAFE
 		ingredient.name = "deep fried [ingredient.name]"
 		ingredient.color = "#FFAD33"
@@ -527,7 +527,7 @@ var/global/ingredientLimit = 10
 		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(loc)
 		if(cooks_in_reagents)
 			transfer_reagents_to_food(D)
-			if(D.reagents.chem_temp > COOKTEMP_HUMANSAFE) //Same as above.
+			if(!arcanetampered && (D.reagents.chem_temp > COOKTEMP_HUMANSAFE)) //Same as above.
 				D.reagents.chem_temp = COOKTEMP_HUMANSAFE
 		D.name = "deep fried [ingredient.name]"
 		D.color = "#FFAD33"
@@ -724,7 +724,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/process()
 	if(ingredient)
-		ingredient.reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), COOKTEMP_HUMANSAFE) //Assume 90% efficiency. Could be expanded to depend on upgrades.
+		ingredient.reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), arcanetampered ? INFINITY : COOKTEMP_HUMANSAFE) //Assume 90% efficiency. Could be expanded to depend on upgrades.
 
 /obj/machinery/cooking/grill/spit
 	name = "spit"
