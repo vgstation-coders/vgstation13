@@ -868,7 +868,7 @@ var/global/ingredientLimit = 10
 	if(use_power == MACHINE_POWER_USE_NONE)
 		toggle()
 	if(within)
-		within.reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), COOKTEMP_HUMANSAFE) //Assume 90% efficiency. One area of exapansion could be to make this depend on upgrades.
+		within.reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), arcanetampered ? INFINITY : COOKTEMP_HUMANSAFE) //Assume 90% efficiency. One area of expansion could be to make this depend on upgrades.
 
 /obj/machinery/cooking/foodpress
 	name = "food press"
