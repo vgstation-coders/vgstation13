@@ -460,10 +460,20 @@ var/global/ingredientLimit = 10
 	cks_max_volume = 400
 	cooks_in_reagents = 1
 	var/fry_reagent = CORNOIL
+	var/fry_reagent_temp = T0C + 170 //target temperature of the frying reagent
 
 /obj/machinery/cooking/deepfryer/initialize()
 	..()
 	reagents.add_reagent(fry_reagent, 300)
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+		reagents.add_reagent(fry_reagent, 300)
+	else
+		reagents.add_reagent(fry_reagent, 300, reagtemp = fry_reagent_temp)
+
+/obj/machinery/cooking/deepfryer/process()
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+		return
+	reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), fry_reagent_temp) //Assume 90% efficiency. This could be expanded to depend on upgrades.
 
 /obj/machinery/cooking/deepfryer/proc/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
@@ -503,6 +513,8 @@ var/global/ingredientLimit = 10
 	if(istype(ingredient,/obj/item/weapon/reagent_containers/food/snacks))
 		if(cooks_in_reagents)
 			transfer_reagents_to_food(ingredient)
+			if(ingredient.reagents.chem_temp > COOKTEMP_HUMANSAFE) //Since gradual cooling isn't implemented, make sure the food isn't scalding hot.
+				ingredient.reagents.chem_temp = COOKTEMP_HUMANSAFE
 		ingredient.name = "deep fried [ingredient.name]"
 		ingredient.color = "#FFAD33"
 		ingredient.forceMove(loc)
@@ -512,6 +524,8 @@ var/global/ingredientLimit = 10
 		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(loc)
 		if(cooks_in_reagents)
 			transfer_reagents_to_food(D)
+			if(D.reagents.chem_temp > COOKTEMP_HUMANSAFE) //Same as above.
+				D.reagents.chem_temp = COOKTEMP_HUMANSAFE
 		D.name = "deep fried [ingredient.name]"
 		D.color = "#FFAD33"
 		D.icon = ingredient.icon
@@ -548,7 +562,6 @@ var/global/ingredientLimit = 10
 
 	takeIngredient(I, L, TRUE) //shove the item in, even if it can't be deepfried normally
 	empty_icon()
-
 
 // confectionator ///////////////////////////////////////
 // its like a deepfrier
@@ -706,6 +719,11 @@ var/global/ingredientLimit = 10
 	ingredient = null
 	return
 
+/obj/machinery/cooking/grill/process()
+	if(ingredient)
+		if(ingredient.reagents.total_volume > 0)
+			ingredient.reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), COOKTEMP_HUMANSAFE) //Assume 90% efficiency. Could be expanded to depend on upgrades.
+
 /obj/machinery/cooking/grill/spit
 	name = "spit"
 	desc = "the prime in clown cooking technology."
@@ -849,7 +867,8 @@ var/global/ingredientLimit = 10
 	if(use_power == MACHINE_POWER_USE_NONE)
 		toggle()
 	if(within)
-		within.attempt_heating(src)
+		if(within.reagents.total_volume > 0)
+			within.reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), COOKTEMP_HUMANSAFE) //Assume 90% efficiency. One area of exapansion could be to make this depend on upgrades.
 
 /obj/machinery/cooking/foodpress
 	name = "food press"

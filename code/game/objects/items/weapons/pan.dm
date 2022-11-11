@@ -360,6 +360,10 @@
 	if(!(O?.can_cook())) //if eg. the power went out on the grill, don't cook
 		return
 
+	//If there are any reagents in the pan, heat them.
+	if(reagents.total_volume)
+		reagents.heating(500, O ? O.cook_temperature() : COOKTEMP_DEFAULT) //Thermal transfer is half that of fire_act. Could be generalized based on the conditions of the cooktop. For example, like how bunsen burners work.
+
 	cookingprogress += (SS_WAIT_FAST_OBJECTS * speed_multiplier)
 
 	if(cookingprogress >= (currentrecipe ? currentrecipe.time : 10 SECONDS) && !burned) //it's done when it's cooked for the cooking time, or a default of 10 seconds if there's no valid recipe. also if it's already been burned, don't keep looping burned mess -> burned mess.
@@ -373,7 +377,7 @@
 			cooked = currentrecipe.make_food(src, chef)
 			visible_message("<span class='notice'>[cooked] looks done.</span>")
 			playsound(src, 'sound/effects/frying.ogg', 50, 1)
-		else if(contains_anything & COOKVESSEL_CONTAINS_CONTENTS) //Don't make a burned mess out of just reagents, even though recipes can call for only reagents (spaghetti). Just keep heating the reagents.
+		else if(contains_anything & COOKVESSEL_CONTAINS_CONTENTS) //Don't make a burned mess out of just reagents, even though recipes can call for only reagents (spaghetti). This allows using the pan to heat reagents.
 			cooked = cook_fail()
 
 		if(cooked)
@@ -384,10 +388,6 @@
 		if(contains_anything)
 			//re-check the recipe. generally this will return null because we'll continue cooking the previous result, which will lead to a burned mess
 			currentrecipe = select_recipe(available_recipes, src)
-
-	//If there are any reagents in the pan, heat them.
-	if(reagents.total_volume)
-		reagents.heating(500, O ? O.cook_temperature() : COOKTEMP_DEFAULT) //Thermal transfer is half that of fire_act. Could be generalized based on the conditions of the cooktop. For example, like how bunsen burners work.
 
 	//Hotspot expose
 	var/turf/T = get_turf(src)
