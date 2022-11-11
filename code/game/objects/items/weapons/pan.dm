@@ -30,7 +30,7 @@
 	var/global/list/acceptable_items = list( // List of the items you can put in
 							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
 							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard)
-	var/global/list/accepts_reagents_from = list(/obj/item/weapon/reagent_containers/glass, //List of items that can be used to transfer reagents to the pan.
+	var/global/list/accepts_reagents_from = list(/obj/item/weapon/reagent_containers/glass, //Used to suppress message when transferring from these to the pan.
 												/obj/item/weapon/reagent_containers/food/drinks,
 												/obj/item/weapon/reagent_containers/food/condiment,
 												/obj/item/weapon/reagent_containers/syringe,
