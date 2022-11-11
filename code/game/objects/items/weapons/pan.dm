@@ -379,6 +379,11 @@
 		var/obj/cooked
 		if(currentrecipe)
 			cooked = currentrecipe.make_food(src, chef)
+			//If we cooked successfully, don't make the reagents in the food too hot.
+			if(!arcanetampered)
+				if(cooked.reagents.total_volume)
+					if(cooked.reagents.chem_temp > COOKTEMP_HUMANSAFE)
+						cooked.reagents.chem_temp = COOKTEMP_HUMANSAFE
 			visible_message("<span class='notice'>[cooked] looks done.</span>")
 			playsound(src, 'sound/effects/frying.ogg', 50, 1)
 		else if(contains_anything & COOKVESSEL_CONTAINS_CONTENTS) //Don't make a burned mess out of just reagents, even though recipes can call for only reagents (spaghetti). This allows using the pan to heat reagents.
