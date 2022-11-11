@@ -126,7 +126,7 @@ var/global/ingredientLimit = 10
 	else
 		icon_state = initial(icon_state)
 
-/////////////////////Cooking stuff/////////////////////
+/////////////////////Cooking vessel stuff/////////////////////
 /obj/machinery/cooking/can_cook() //Whether or not we are in a valid state to cook the contents of a cooking vessel.
 	. = ..()
 	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
@@ -150,6 +150,9 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/render_cookvessel(offset_x, offset_y = 5)
 	overlays.len = 0
 	..()
+
+/obj/machinery/cooking/cook_energy()
+	return active_power_usage * SS_WAIT_FAST_OBJECTS * 0.9 / (1 SECONDS) //Assumes 90% efficiency. Could be expanded to depend on upgrades.
 
 // Interactions ////////////////////////////////////////////////
 
@@ -767,7 +770,6 @@ var/global/ingredientLimit = 10
 					. = "The campfire isn't lit."
 		if(!campfirefound)
 			. = "There's no campfire to cook on!"
-
 
 //=====Actual fucking sensible cooking machines that don't magic bullshit out of thin air
 

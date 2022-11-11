@@ -362,7 +362,7 @@
 
 	//If there are any reagents in the pan, heat them.
 	if(reagents.total_volume)
-		reagents.heating(500, O ? O.cook_temperature() : COOKTEMP_DEFAULT) //Thermal transfer is half that of fire_act. Could be generalized based on the conditions of the cooktop. For example, like how bunsen burners work.
+		reagents.heating(O.cook_energy(), O.cook_temperature())
 
 	cookingprogress += (SS_WAIT_FAST_OBJECTS * speed_multiplier)
 
