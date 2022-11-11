@@ -472,7 +472,7 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/deepfryer/process()
 	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		return
-	reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / 1 SECONDS, fry_reagent_temp) //Assume 90% efficiency. This could be expanded to depend on upgrades.
+	reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), fry_reagent_temp) //Assume 90% efficiency. This could be expanded to depend on upgrades.
 
 /obj/machinery/cooking/deepfryer/proc/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
