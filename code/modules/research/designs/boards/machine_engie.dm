@@ -198,6 +198,16 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/flatpacker
+	
+/datum/design/podfab
+	name = "Circuit board (Spacepod Fabricator)"
+	desc = "A circuit board used to run a spacepod fabricator."
+	id = "podfab"
+	req_tech = list(Tc_MATERIALS = 3, Tc_PROGRAMMING = 3, Tc_ENGINEERING = 3)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/podfab
 
 //BEAMS.
 
