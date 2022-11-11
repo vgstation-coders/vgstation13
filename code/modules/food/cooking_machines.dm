@@ -724,8 +724,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/process()
 	if(ingredient)
-		if(ingredient.reagents.total_volume > 0)
-			ingredient.reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), COOKTEMP_HUMANSAFE) //Assume 90% efficiency. Could be expanded to depend on upgrades.
+		ingredient.reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), COOKTEMP_HUMANSAFE) //Assume 90% efficiency. Could be expanded to depend on upgrades.
 
 /obj/machinery/cooking/grill/spit
 	name = "spit"
@@ -869,8 +868,7 @@ var/global/ingredientLimit = 10
 	if(use_power == MACHINE_POWER_USE_NONE)
 		toggle()
 	if(within)
-		if(within.reagents.total_volume > 0)
-			within.reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), COOKTEMP_HUMANSAFE) //Assume 90% efficiency. One area of exapansion could be to make this depend on upgrades.
+		within.reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), COOKTEMP_HUMANSAFE) //Assume 90% efficiency. One area of exapansion could be to make this depend on upgrades.
 
 /obj/machinery/cooking/foodpress
 	name = "food press"

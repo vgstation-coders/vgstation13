@@ -422,13 +422,11 @@
 			if(!istype(cooked, /obj/item/weapon/reagent_containers/food/snacks/badrecipe)) //Continue and heat up burned messes for valid, salad-like recipes in the case of emagged, etc.
 				return
 
-	if(cooked.reagents.total_volume > 0)
-		var/thermal_energy_transfer = cooktime * active_power_usage * 0.9 / (1 SECONDS) //Let's assume 90% efficiency. One area for expansion could be to have this depend on upgrades.
-		var/max_temperature = COOKTEMP_HUMANSAFE
-		if(emagged || arcanetampered)
-			max_temperature = INFINITY //If it's been messed with, let it heat more than that.
-		if(cooked.reagents.chem_temp < max_temperature)
-			cooked.reagents.heating(thermal_energy_transfer, max_temperature)
+	var/thermal_energy_transfer = cooktime * active_power_usage * 0.9 / (1 SECONDS) //Let's assume 90% efficiency. One area for expansion could be to have this depend on upgrades.
+	var/max_temperature = COOKTEMP_HUMANSAFE
+	if(emagged || arcanetampered)
+		max_temperature = INFINITY //If it's been messed with, let it heat more than that.
+	cooked.reagents.heating(thermal_energy_transfer, max_temperature)
 
 /obj/machinery/microwave/proc/running(var/seconds as num) // was called wzhzhzh, for some fucking reason
 	for (var/i=1 to seconds)

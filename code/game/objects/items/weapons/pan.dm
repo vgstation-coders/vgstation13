@@ -360,15 +360,19 @@
 	if(!(O?.can_cook())) //if eg. the power went out on the grill, don't cook
 		return
 
+	var/contains_anything = contains_anything()
+
 	//If there are any reagents in the pan, heat them.
-	if(reagents.total_volume)
+	if(contains_anything & COOKVESSEL_CONTAINS_REAGENTS)
 		reagents.heating(O.cook_energy(), O.cook_temperature())
+	//Otherwise if there are non-reagent contents, heat the reagents in those contents if possible.
+	else
+		for(var/atom/content in contents)
+			content.reagents.heating(O.cook_energy() / contents.len, O.cook_temperature())
 
 	cookingprogress += (SS_WAIT_FAST_OBJECTS * speed_multiplier)
 
 	if(cookingprogress >= (currentrecipe ? currentrecipe.time : 10 SECONDS) && !burned) //it's done when it's cooked for the cooking time, or a default of 10 seconds if there's no valid recipe. also if it's already been burned, don't keep looping burned mess -> burned mess.
-
-		var/contains_anything = contains_anything()
 
 		reset_cooking_progress() //reset the cooking progress
 
