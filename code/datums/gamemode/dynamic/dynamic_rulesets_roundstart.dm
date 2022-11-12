@@ -22,6 +22,7 @@
 /datum/dynamic_ruleset/roundstart/traitor/choose_candidates()
 	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
 	var/num_traitors = min(round(mode.roundstart_pop_ready / traitor_scaling_coeff) + 1, candidates.len)
+	var/extra_traitors = min(round(mode.roundstart_pop_ready+1 / traitor_scaling_coeff) + 1, candidates.len+1) - num_traitors
 	for (var/i = 1 to num_traitors)
 		var/mob/M = pick(candidates)
 		assigned += M
@@ -31,7 +32,7 @@
 				mode.spend_threat(additional_cost)
 			else
 				break
-	if(assigned.len > 0 && num_traitors - assigned.len > 0)
+	if(assigned.len > 0 && extra_traitors - assigned.len > 0 && mode.threat > additional_cost)
 		mode.roundstart_latejoin_rule = new /datum/dynamic_ruleset/latejoin/infiltrator()
 	return (assigned.len > 0)
 
