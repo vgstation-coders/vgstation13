@@ -1750,7 +1750,7 @@
 // Salad ///////////////////////////////////////////////////////
 
 /datum/recipe/salad
-	cookable_with = COOKABLE_WITH_MIXING //No salad bowls.. for now.
+	cookable_with = COOKABLE_WITH_MIXING
 
 /datum/recipe/salad/herbsalad
 	items = list(
