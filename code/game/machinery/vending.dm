@@ -167,6 +167,10 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/build_inventories()
 	product_records = new/list()
+	coin_records = new/list()
+	hidden_records = new/list()
+	voucher_records = new/list()
+	holiday_records = new/list()
 	build_inventory(products)
 	build_inventory(contraband, 1)
 	build_inventory(premium, 0, 1)
@@ -191,7 +195,7 @@ var/global/num_vending_terminals = 1
 		qdel(coinbox)
 		coinbox = null
 	..()
-	
+
 /obj/machinery/vending/splashable()
 	return FALSE
 
@@ -1088,6 +1092,9 @@ var/global/num_vending_terminals = 1
 
 		if(return_coin)
 			user.put_in_hands(coin)
+			if(on_return_coin_detect(user))
+				coin = null
+				return
 		else
 			if (!isnull(coinbox))
 				if (coinbox.can_be_inserted(coin, TRUE))
@@ -1125,6 +1132,9 @@ var/global/num_vending_terminals = 1
 		src.vend_ready = 1
 		update_vicon()
 		src.updateUsrDialog()
+
+/obj/machinery/vending/proc/on_return_coin_detect(mob/user)
+	return 0
 
 /obj/machinery/vending/process()
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
