@@ -1938,3 +1938,54 @@ Thanks.
 	if(B.host_brain.ckey)
 		to_chat(src, "<span class='danger'>You send a punishing spike of psychic agony lancing into your host's brain.</span>")
 		to_chat(B.host_brain, "<span class='danger'><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</FONT></span>")
+
+//Returns the total thermal mass of the mob
+/mob/living/proc/total_thermal_mass()
+
+	var/total_thermal_mass = 0
+	var/body_thermal_mass = 0
+	var/reagents_thermal_mass = 0
+
+	//Perhaps some of this could be defined at the species level and use more inheritance overall
+
+	if(ishuman(M)) //if it's a human, base the thermal mass of the human on: the size of the human, the amount of blood in the human, and the currently existing reagents in the human
+
+		//First, get the non-blood thermal mass of the body
+		var/mob/living/carbon/human/H = M
+		body_thermal_mass = (H.size * (M_FAT in H.mutations ? 1.5 : 1) * (4.121 / 3)) ** 3) //Approximately 70kg for a non-obese human, and 105kg (1.5 times the base) for an obese human.
+		body_thermal_mass *= 0.9 //Only consider the non-blood fraction of the body mass (90%)
+		//turn the body mass into thermal mass by multiplying by specific heat
+		if(isskellington(H) || isskelevox(H))
+			body_thermal_mass *= (0.15 * 1.313) //Multiply by 15% (bone fraction of the body), and then the specific heat of cortical bone.
+		else if(isgolem(H))
+			body_thermal_mass *= 0.5 //Make golems easier to heat as they're made of metal.
+		else if(isslimeperson(H))
+			body_thermal_mass *= 1.24 //Same as slime jelly.
+		else if(ismushroom(H))
+			body_thermal_mass *= 3.935 //Specific heat of mushrooms.
+		else
+			body_thermal_mass *= 3.47 //Specific heat capacity of the human body.
+
+		//Next, get the thermal mass of the blood in the body
+		var/blood_thermal_mass = H.vessel.get_overall_mass() * H.vessel.get_heat_capacity()
+
+		//Finally, get the thermal mass of the other reagents in the body.
+		reagents_thermal_mass = H.reagents.get_overall_mass() * H.reagents.get_heat_capacity()
+
+		//Sum all of the above for the total thermal mass of the human.
+		total_thermal_mass = body_thermal_mass + blood_thermal_mass + reagents_thermal_mass
+
+	else //if it's not a human, base the thermal mass of the mob on: the size of the mob, and the currently existing reagents in the mob
+
+		//First, get the non-blood thermal mass of the body
+		body_thermal_mass = (M.size * (4.121 / 3)) ** 3) //Based on approximately 70kg for a non-obese human.
+		//turn the body mass into thermal mass by multiplying by specific heat of blood (generalization, the mob might not actually have blood)
+		body_thermal_mass *= 3.49
+
+		//Then, get the thermal mass of the reagents in the body.
+		reagents_thermal_mass = H.reagents.get_overall_mass() * H.reagents.get_heat_capacity()
+
+		//Sum the above for the total thermal mass of the mob.
+		total_thermal_mass = body_thermal_mass + reagents_thermal_mass
+
+	return total_thermal_mass

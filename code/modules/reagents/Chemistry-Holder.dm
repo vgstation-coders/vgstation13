@@ -64,7 +64,6 @@ var/const/INGEST = 2
 				//now we no longer break because we didn't add all the reagents to reaction_ids - we want to add the reaction to everything in
 				//reaction_ids, which will be over everything in the first reagent in the table
 
-
 /datum/reagents/proc/remove_any(var/amount=1)
 	var/total_transfered = 0
 	var/current_list_element = 1
@@ -358,6 +357,30 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return total_transfered
 */
 
+/datum/reagents/proc/thermal_interaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
+	if(!isliving(M))
+		return
+
+	if(method == TOUCH)
+
+	else if(method == INGEST)
+
+	//Equalize the temperatures
+	equalize_temperature_with_mob(M)
+
+/datum/reagents/proc/equalize_temperature_with_mob(var/mob/living/M)
+	var/mob_thermal_mass = M.total_thermal_mass()
+	var/reagents_thermal_mass = get_thermal_mass()
+	if(!mob_thermal_mass || !reagents_thermal_mass)
+		return
+	var/new_equalized_temperature = ((M.bodytemperature * mob_thermal_mass) + (chem_temp * reagents_thermal_mass)) / (mob_thermal_mass + reagents_thermal_mass)
+	chem_temp = new_equalized_temperature
+	M.bodytemperature = new_equalized_temperature
+	M.reagents.chem_temp = new_equalized_temperature
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.vessel.chem_temp = new_equalized_temperature
+
 /datum/reagents/proc/metabolize(var/mob/living/M, var/alien)
 	if(M && chem_temp != M.bodytemperature)
 		chem_temp = M.bodytemperature
@@ -616,6 +639,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	update_total()
 	if(total_volume + amount > maximum_volume)
 		amount = (maximum_volume - total_volume) //Doesnt fit in. Make it disappear. Shouldn't happen. Will happen.
+	//this should be changed to account for specific heat:
 	chem_temp = round(((amount * reagtemp) + (total_volume * chem_temp)) / (total_volume + amount)) //equalize with new chems
 	for (var/datum/reagent/R in reagent_list)
 		if (R.id == reagent)
@@ -921,6 +945,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	return overall_mass
 
+/datum/reagents/proc/get_thermal_mass()
+	var/total_thermal_mass = 0
+	for(var/datum/reagent/R in reagent_list)
+		total_thermal_mass += R.volume * R.density * R.specheatcap
+	return total_thermal_mass
+
 /datum/reagents/proc/heating(var/power_transfer, var/received_temperature)
 	/*
 	Q/mc = deltaT
@@ -934,7 +964,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	var/heat_capacity = get_heatcapacity()
 	var/energy = power_transfer
 	var/mass = get_overall_mass()
-	var/temp_change = (energy / (mass * heat_capacity))* HEAT_TRANSFER_MULTIPLIER
+	var/temp_change = (energy / (mass * heat_capacity)) * HEAT_TRANSFER_MULTIPLIER
 	if(power_transfer > 0)
 		chem_temp = min(chem_temp + temp_change, received_temperature)
 	else
