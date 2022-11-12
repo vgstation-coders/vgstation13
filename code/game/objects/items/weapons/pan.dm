@@ -367,8 +367,10 @@
 		reagents.heating(O.cook_energy(), O.cook_temperature())
 	//Otherwise if there are non-reagent contents, heat the reagents in those contents if possible.
 	else
+		var/cook_energy = O.cook_energy()
+		var/cook_temperature = O.cook_temperature()
 		for(var/atom/content in contents)
-			content.reagents.heating(O.cook_energy() / contents.len, O.cook_temperature())
+			content.reagents.heating(cook_energy / contents.len, cook_temperature)
 
 	cookingprogress += (SS_WAIT_FAST_OBJECTS * speed_multiplier)
 
