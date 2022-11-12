@@ -31,6 +31,8 @@
 				mode.spend_threat(additional_cost)
 			else
 				break
+	if(assigned.len > 0 && num_traitors - assigned.len > 0)
+		mode.roundstart_latejoin_rule = new /datum/dynamic_ruleset/latejoin/infiltrator()
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
@@ -39,10 +41,6 @@
 		newTraitor.AssignToRole(M.mind,1)
 		newTraitor.Greet(GREET_ROUNDSTART)
 		// Above 3 traitors, we start to cost a bit more.
-	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
-	var/extra_traitors = assigned - clamp(round((mode.roundstart_pop_ready+1) / traitor_scaling_coeff) + 1, 0, mode.candidates.len+1)
-	if(extra_traitors)
-		mode.roundstart_latejoin_rule = new /datum/dynamic_ruleset/latejoin/infiltrator()
 	return 1
 
 /datum/dynamic_ruleset/roundstart/traitor/previous_rounds_odds_reduction(var/result)
