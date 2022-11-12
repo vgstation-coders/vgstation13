@@ -298,6 +298,8 @@ var/global/global_cricket_population = 0
 
 
 /proc/hydro_hud_scan(var/mob/living/carbon/human/user, var/obj/o)
+	if(!ishuman(user))
+		return
 	if(istype(user) && user.is_wearing_item(/obj/item/clothing/glasses/hud/hydro))
 		to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[user.glasses];scan=\ref[o]'>\[Scan\]</a>")
 
