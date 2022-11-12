@@ -525,7 +525,7 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/hydrovision(mob/user)
 	hydro_hud_scan(user, src)
-    return FALSE
+	return FALSE
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/close_lid()
 	set name = "Toggle Tray Lid"
