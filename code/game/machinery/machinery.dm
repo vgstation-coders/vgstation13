@@ -309,7 +309,7 @@ Class Procs:
 
 // returns true if the machine is powered (or doesn't require power).
 // performs basic checks every machine should do, then
-/obj/machinery/proc/powered(chan = power_channel)
+/obj/machinery/proc/powered(chan = power_channel, power_check_anyways = FALSE)
 	if(!src.loc)
 		return FALSE
 
@@ -322,7 +322,7 @@ Class Procs:
 		else
 			return FALSE
 
-	if(use_power == MACHINE_POWER_USE_NONE)
+	if(!power_check_anyways && use_power == MACHINE_POWER_USE_NONE)
 		return TRUE
 
 	if((machine_flags & FIXED2WORK) && !anchored)

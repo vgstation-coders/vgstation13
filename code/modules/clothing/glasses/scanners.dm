@@ -214,14 +214,14 @@ var/list/meson_wearers = list()
 	if (viewing)
 		meson_wearers -= viewing
 		if (viewing.client)
-			viewing.client.images -= false_wall_images
+			viewing.client.images -= meson_images
 
 /obj/item/clothing/glasses/scanner/meson/proc/apply()
 	if (!viewing || !viewing.client || !on)
 		return
 
 	meson_wearers += viewing
-	viewing.client.images += false_wall_images
+	viewing.client.images += meson_images
 
 /obj/item/clothing/glasses/scanner/meson/unequipped(var/mob/living/carbon/M)
 	update_mob()
@@ -245,6 +245,38 @@ var/list/meson_wearers = list()
 			viewing = new_mob
 			apply()
 
+
+var/list/meson_images = list()
+
+/atom/movable
+	var/image/meson_image
+	var/is_on_mesons = FALSE
+
+/atom/movable/New()
+	..()
+	if(is_on_mesons)
+		update_meson_image()
+
+/atom/movable/Destroy()
+	if(meson_image)
+		for (var/mob/L in meson_wearers)
+			if (L.client)
+				L.client.images -= meson_image
+		meson_images -= meson_image
+	..()
+
+/atom/movable/proc/update_meson_image()
+	for (var/mob/L in meson_wearers)
+		if (L.client)
+			L.client.images -= meson_image
+	meson_images -= meson_image
+	if(is_on_mesons)
+		meson_image = image(icon,loc,icon_state,layer,dir)
+		meson_image.plane = plane
+		meson_images += meson_image
+		for (var/mob/L in meson_wearers)
+			if (L.client)
+				L.client.images |= meson_image
 
 /obj/item/clothing/glasses/scanner/material
 	name = "optical material scanner"

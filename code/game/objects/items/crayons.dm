@@ -142,8 +142,8 @@ var/global/list/all_graffitis = list(
 				to_chat(user, "You start drawing graffiti on \the [target].")
 			if("rune")
 				to_chat(user, "You start drawing a rune on \the [target].")
-				pix_x = -16
-				pix_y = -16
+				pix_x = 0
+				pix_y = 0
 			if("text")
 				fontsize = input("How big should the text be, in pts?", "Crayon scribbles", "[CRAYON_MIN_FONTSIZE]") as num
 				if(!fontsize)

@@ -5478,6 +5478,8 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	density = 0.9185
+	specheatcap = 2.402	
 	var/has_had_heart_explode = 0
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)

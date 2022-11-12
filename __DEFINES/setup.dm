@@ -1321,9 +1321,11 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define ASTAR_DEBUG 0
 #if ASTAR_DEBUG == 1
 #warn "Astar debug is on. Don't forget to turn it off after you've done :)"
-#define astar_debug(text) to_chat(world, text)
+#define astar_debug(text) //to_chat(world, text)
+#define astar_debug_mulebots(text) to_chat(world, text)
 #else
 #define astar_debug(text)
+#define astar_debug_mulebots(text)
 #endif
 
 #define BSQL_DEBUG_CONNECTION 0

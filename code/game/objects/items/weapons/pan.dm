@@ -29,8 +29,13 @@
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
 	var/global/list/acceptable_items = list( // List of the items you can put in
 							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
-							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
-							)
+							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard)
+	var/global/list/accepts_reagents_from = list(/obj/item/weapon/reagent_containers/glass, //Used to suppress message when transferring from these to the pan.
+												/obj/item/weapon/reagent_containers/food/drinks,
+												/obj/item/weapon/reagent_containers/food/condiment,
+												/obj/item/weapon/reagent_containers/syringe,
+												/obj/item/weapon/reagent_containers/dropper)
+
 
 /obj/item/weapon/reagent_containers/pan/New()
 	. = ..()
@@ -136,6 +141,10 @@
 			drop_ingredients(target, user)
 	else if(ismob(target))
 		drop_ingredients(target, user)
+	else if(isobj(target) && (loc != target))
+		var/obj/O = target
+		if(!O.is_cooktop)
+			transfer(target, user)
 
 /obj/item/weapon/reagent_containers/pan/attackby(var/obj/item/I, var/mob/user)
 
@@ -179,11 +188,11 @@
 		cook_reboot(user) //Reset the cooking status.
 		update_icon()
 
-	else if(istype(I,/obj/item/weapon/grab))
+	else if(istype(I, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
 		to_chat(user, "<span class='notice'>The thought of stuffing [G.affecting] into [src] amuses you.</span>")
 
-	else
+	else if(!is_type_in_list(I, accepts_reagents_from))
 		to_chat(user, "<span class='notice'>You have no idea what you can cook with [I].</span>")
 
 /obj/item/weapon/reagent_containers/pan/attack_self(mob/user as mob)
@@ -195,7 +204,8 @@
 /obj/item/weapon/reagent_containers/pan/proc/take_something_out(mob/user as mob)
 	if(contents.len)
 		var/atom/movable/content = contents[contents.len]
-		if(user.put_in_hands(content))
+		user.put_in_hands(content)
+		if(content.loc != src) //If something was taken out successfully.
 			to_chat(user, "<span class='notice'>You take [content] out of [src].</span>")
 			cook_reboot(user)
 			update_icon()
@@ -250,7 +260,7 @@
 		//otherwise, say that the wielder spills it onto the target
 		else
 			dropper.visible_message( \
-					"<span class='[spanclass]'>[dropper] [splashverb][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? get_reflexive_pronoun(dropper) : target]" : ""][spanclass == "warning" ? "!" : "."]</span>", \
+					"<span class='[spanclass]'>[dropper] [splashverb][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? get_reflexive_pronoun(dropper.gender) : target]" : ""][spanclass == "warning" ? "!" : "."]</span>", \
 					"<span class='[spanclass]'>You [shift_verb_tense(splashverb)][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? "yourself" : target]" : ""].</span>")
 	else
 		visible_message("<span class='warning'>Everything [splashverb] out of [src] [target ? "onto [target]" : ""]!</span>")
@@ -448,24 +458,22 @@
 /////////////////////Areas for to consider for further expansion/////////////////////
 
 	//Plating directly to trays and robot trays.
-	//Grill sprite dynamically responding to power
-	//Setting chef var on_reagents_change as well
-	//Edge cases like recooking the same warm donk pocket over and over
+	//Grill sprite dynamically responding to power.
+	//Setting chef var on_reagents_change as well.
+	//Edge cases like recooking the same warm donk pocket over and over.
 	//Getting pans by crafting, cargo crates, and vending machines.
 	//Food being ready making a steam sprite that turns to smoke and fire if left on too long.
 	//Sizzling sound with hot reagents in the pan.
-	//Scooping hot oil out of the deepfryer
-	//Scalding people with hot reagents (the reagents are alread heated on the pan I'm just not sure if there's a way to scald someone with hot reagents)
+	//Scalding people with hot reagents (the reagents are already heated on the pan I'm just not sure if there's a way to scald someone with hot reagents).
 	//Body-part specific splash text and also when you dump it onto yourself upon equipping to the head.
-	//Pouring reagents from the pan into other reagent containers (need to consider what to do if it also contains items)
-	//Hot pans with glowing red sprite and extra damage
+	//Hot pans with glowing red sprite and extra damage.
 	//Stuff dumping out of the pan when attacking a breakable object, window, camera, etc.
 	//Generalize thermal transfer parameter.
-	//Componentize cooking vessels
-	//Spilling (including onto people) when thrown impacting..
+	//Componentize cooking vessels.
+	//Spilling (including onto people) when thrown impacting.
 	//Different cook timings based on heat, or cooking with heat transfer (defined at the recipe level?) rather than a timer.
-	//Frying stuff in oil (could use recipes for this)
+	//Frying stuff in oil (could use recipes for this).
 	//Address cases with large ingredient sprites (see the note in update_icon()).
 	//Consider generating and storing the pan front blood overlay in the same manner as general blood overlays.
 	//Cooking automatically with high ambient heat.
-	//Change order of messages with eg. splashing acid on onesself when equipping the pan to the heat.
+	//Change order of messages with eg. splashing acid on onesself when equipping the pan to the head.
