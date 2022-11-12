@@ -297,9 +297,9 @@ var/global/global_cricket_population = 0
 	//otherwise return null
 
 
-/proc/hydro_hud_scan(user, obj)
-	if(istype(user) && H.is_wearing_item(/obj/item/clothing/glasses/hud/hydro))
-		to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[user.glasses];scan=\ref[obj]'>\[Scan\]</a>")
+/proc/hydro_hud_scan(var/mob/living/carbon/human/user, var/obj/o)
+	if(istype(user) && user.is_wearing_item(/obj/item/clothing/glasses/hud/hydro))
+		to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[user.glasses];scan=\ref[o]'>\[Scan\]</a>")
 
 /obj/item/clothing/glasses/hud/hydro
 	name = "hydroHUD"
