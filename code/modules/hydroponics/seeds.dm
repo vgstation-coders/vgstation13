@@ -44,7 +44,6 @@
 	else
 		to_chat(user, "Plant Yield: <span class='info'>[(seed.yield != -1) ? seed.yield : "<span class='warning'> ERROR</span>"]</span>")
 		to_chat(user, "Plant Potency: <span class='info'>[(seed.potency != -1) ? seed.potency : "<span class='warning'> ERROR</span>"]</span>")
-	var/mob/living/carbon/human/H = user
 	hydro_hud_scan(user, src)
 
 /obj/item/seeds/random
