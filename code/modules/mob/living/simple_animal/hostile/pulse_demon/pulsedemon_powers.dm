@@ -27,20 +27,6 @@
 	host.update_glow()
 	return TRUE
 
-/datum/pulse_demon_upgrade/capacity
-	ability_name = "Increase Maximum Capacity"
-	ability_desc = "Increases the maximum amount of charge you can store. This is necessary for buying further upgrades."
-
-/datum/pulse_demon_upgrade/capacity/update_condition_and_cost()
-	condition = host.maxcharge < 10000000
-	upgrade_cost = host.maxcharge
-
-/datum/pulse_demon_upgrade/capacity/on_purchase()
-	if(..())
-		host.maxcharge = min(round(host.maxcharge * 2, 1), 10000000)
-		to_chat(host,"<span class='notice'>You can now store [host.maxcharge]W.</span>")
-		update_condition_and_cost()
-
 /datum/pulse_demon_upgrade/takeover
 	ability_name = "Faster takeover time"
 	ability_desc = "Allows hijacking of electronics in less time."
@@ -147,8 +133,6 @@
 			if(!S.invisible) //Do not list abilities that aren't meant to be shown, like drain toggling or abilities
 				var/icon/spellimg = icon('icons/mob/screen_spells.dmi', S.hud_state)
 				dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> <B>[S.name]</B> "
-				dat += "[S.can_improve(Sp_SPEED) ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken for [S.quicken_cost]W ([S.spell_levels[Sp_SPEED]]/[S.level_max[Sp_SPEED]])</A>" : "Quicken (MAXED)"] "
-				dat += "[S.can_improve(Sp_POWER) ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower for [S.empower_cost]W ([S.spell_levels[Sp_POWER]]/[S.level_max[Sp_POWER]])</A>" : "Empower (MAXED)"]<BR>"
 				if(show_desc)
 					dat += "<I>[S.desc]</I><BR>"
 		dat += "<HR>"
@@ -186,36 +170,6 @@
 	if(href_list["desc"])
 		show_desc = !show_desc
 
-	if(href_list["quicken"])
-		var/spell/pulse_demon/PDS = locate(href_list["spell"])
-		if(PDS.spell_flags & NO_BUTTON)
-			to_chat(src,"<span class='warning'>This cannot be cast, so cannot be quickened.</span>")
-			return
-		if(PDS.quicken_cost > charge)
-			to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-			return
-		if(PDS.spell_levels[Sp_SPEED] >= PDS.level_max[Sp_SPEED])
-			to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
-			return
-
-		charge -= PDS.quicken_cost
-		var/temp = PDS.quicken_spell()
-		if(temp)
-			to_chat(usr, "<span class='info'>[temp]</span>")
-
-	if(href_list["empower"])
-		var/spell/pulse_demon/PDS = locate(href_list["spell"])
-		if(PDS.empower_cost > charge)
-			to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-			return
-		if(PDS.spell_levels[Sp_POWER] >= PDS.level_max[Sp_POWER])
-			to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
-			return
-
-		charge -= PDS.empower_cost
-		var/temp = PDS.empower_spell()
-		if(temp)
-			to_chat(usr, "<span class='info'>[temp]</span>")
 
 	powerMenu()
 
@@ -228,7 +182,7 @@
 	user_type = USER_TYPE_PULSEDEMON
 	school = "pulse demon"
 	spell_flags = 0
-	level_max = list(Sp_TOTAL = 6, Sp_SPEED = 3, Sp_POWER = 3)
+	//level_max = list(Sp_TOTAL = 6, Sp_SPEED = 3, Sp_POWER = 3)
 
 	override_base = "pulsedemon"
 	hud_state = "pd_icon_base"
@@ -262,49 +216,7 @@
 		if (charge_cost)
 			to_chat(PD, "<span class='warning'>You use [charge_cost] to cast [name].</span>")
 
-/spell/pulse_demon/empower_spell() // Makes spells use less charge
-	if(!can_improve(Sp_POWER))
-		return 0
-	spell_levels[Sp_POWER]++
-	var/new_name = generate_name()
-	charge_cost = round(charge_cost/1.5, 1) // -33%/-56%/-70% charge cost
-	. = "You have improved [name] into [new_name]. It now costs [charge_cost]W to cast."
-	name = new_name
-	empower_cost = round(empower_cost * 1.5, 1)
 
-/spell/pulse_demon/quicken_spell()
-	if(!can_improve(Sp_SPEED))
-		return 0
-	spell_levels[Sp_SPEED]++
-	var/new_name = generate_name()
-	charge_max = round(charge_max/1.5, 1) // -33%/-56%/-70% cooldown reduction
-	. = "You have improved [name] into [new_name]. Its cooldown is now [round(charge_max/10, 1)] seconds."
-	name = new_name
-	quicken_cost = round(quicken_cost * 1.5, 1)
-
-/spell/pulse_demon/proc/generate_name()
-	var/original_name = initial(name)
-	var/power_name = ""
-	var/power_level = level_max[Sp_POWER] - spell_levels[Sp_POWER]
-	var/speed_name = ""
-	var/speed_level = level_max[Sp_SPEED] - spell_levels[Sp_SPEED]
-	if(power_level == 0 && speed_level == 0) //Spell is maxed out
-		return "Perfected [original_name]"
-	switch(power_level) //We add an extra space so that the words are properly separated in the name regardless of upgrade status.
-		if(2)
-			power_name = "Cheap "
-		if(1)
-			power_name = "Renewable "
-		if(0)
-			power_name = "Self-Sufficient "
-	switch(speed_level)
-		if(2)
-			speed_name = "Speedy "
-		if(1)
-			speed_name = "Flashy "
-		if(0)
-			speed_name = "Lightning-Fast "
-	return "[speed_name][power_name][original_name]"
 
 /spell/pulse_demon/is_valid_target(var/atom/target, mob/user, options)
 	return 1
@@ -608,29 +520,3 @@
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
 		PD.can_leave_cable = !PD.can_leave_cable
 		to_chat(user,"<span class='notice'>Leaving cables is [PD.can_leave_cable ? "on" : "off"].</span>")
-
-// Custom proc that instead allows less slowdown when off cable, while less than current max speed
-/spell/pulse_demon/sustaincharge/empower_spell()
-	if(!can_improve(Sp_POWER))
-		return 0
-	if(istype(usr,/mob/living/simple_animal/hostile/pulse_demon))
-		var/mob/living/simple_animal/hostile/pulse_demon/PD = usr
-		spell_levels[Sp_POWER]++
-
-		var/temp = ""
-		name = initial(name)
-		switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
-			if(2)
-				temp = "You have improved [name] into Ambulatory [name]."
-				name = "Ambulatory [name]"
-			if(1)
-				temp = "You have improved [name] into Walking [name]."
-				name = "Walking [name]"
-			if(0)
-				temp = "You have improved [name] into Running [name]."
-				name = "Running [name]"
-
-
-		if(PD.move_divide > 1)
-			PD.move_divide *= 0.75
-		return temp
