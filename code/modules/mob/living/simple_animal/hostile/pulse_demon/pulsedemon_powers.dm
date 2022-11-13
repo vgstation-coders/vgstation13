@@ -328,6 +328,70 @@
 	user.forceMove(target)
 	..()
 
+/spell/pulse_demon/remote_drain
+	name = "Remote Drain"
+	abbreviation = "RD"
+	desc = "Remotely drains a power source"
+
+	range = 10
+	spell_flags = WAIT_FOR_CLICK
+	duration = 20
+
+	hud_state = "pd_drain"
+	charge_cost = 100
+	purchase_cost = 5000
+	empower_cost = 10000
+	quicken_cost = 10000
+
+/spell/pulse_demon/remote_drain/is_valid_target(var/atom/target)
+	if(istype(target, /obj/machinery/power/apc) || istype(target, /obj/machinery/power/battery))
+		return 1
+	else
+		to_chat(holder, "That is not a valid drainable power source.")
+
+/spell/pulse_demon/remote_drain/cast(var/list/targets, mob/user)
+	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+		var/obj/machinery/power/P = targets[1]
+		if(istype(P,/obj/machinery/power/apc))
+			var/obj/machinery/power/apc/A = P
+			PD.drainAPC(A)
+		else if(istype(P,/obj/machinery/power/battery))
+			var/obj/machinery/power/battery/B = P
+			PD.suckBattery(B)
+		to_chat(user, "<span class='warning'>You absorb \the [P] for [PD.charge_absorb_amount]W!</span>")
+		
+/spell/pulse_demon/remote_hijack
+	name = "Remote Hijack"
+	abbreviation = "RH"
+	desc = "Remotely hijacks an APC"
+
+	range = 10
+	spell_flags = WAIT_FOR_CLICK
+	duration = 20
+
+	hud_state = "pd_hijack"
+	charge_cost = 10000
+	purchase_cost = 100000
+	empower_cost = 20000
+	quicken_cost = 20000
+
+/spell/pulse_demon/remote_hijack/is_valid_target(var/atom/target)
+	if(istype(target, /obj/machinery/power/apc))
+		var/obj/machinery/power/apc/A = target
+		if(!A.pulsecompromised)
+			return 1
+		else
+			to_chat(holder, "This APC is already hijacked.")
+	else
+		to_chat(holder, "That is not an APC.")
+
+/spell/pulse_demon/remote_hijack/cast(var/list/targets, mob/user)
+	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+		var/obj/machinery/power/apc/A = targets[1]
+		PD.hijackAPC(A)
+
 /spell/pulse_demon/emag
 	name = "Electromagnetic Tamper"
 	abbreviation = "ES"
@@ -438,69 +502,6 @@
 		qdel(M)
 	..()
 
-/spell/pulse_demon/remote_hijack
-	name = "Remote Hijack"
-	abbreviation = "RH"
-	desc = "Remotely hijacks an APC"
-
-	range = 10
-	spell_flags = WAIT_FOR_CLICK
-	duration = 20
-
-	hud_state = "pd_hijack"
-	charge_cost = 10000
-	purchase_cost = 100000
-	empower_cost = 20000
-	quicken_cost = 20000
-
-/spell/pulse_demon/remote_hijack/is_valid_target(var/atom/target)
-	if(istype(target, /obj/machinery/power/apc))
-		var/obj/machinery/power/apc/A = target
-		if(!A.pulsecompromised)
-			return 1
-		else
-			to_chat(holder, "This APC is already hijacked.")
-	else
-		to_chat(holder, "That is not an APC.")
-
-/spell/pulse_demon/remote_hijack/cast(var/list/targets, mob/user)
-	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
-		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-		var/obj/machinery/power/apc/A = targets[1]
-		PD.hijackAPC(A)
-
-/spell/pulse_demon/remote_drain
-	name = "Remote Drain"
-	abbreviation = "RD"
-	desc = "Remotely drains a power source"
-
-	range = 10
-	spell_flags = WAIT_FOR_CLICK
-	duration = 20
-
-	hud_state = "pd_drain"
-	charge_cost = 10000
-	purchase_cost = 50000
-	empower_cost = 10000
-	quicken_cost = 10000
-
-/spell/pulse_demon/remote_drain/is_valid_target(var/atom/target)
-	if(istype(target, /obj/machinery/power/apc) || istype(target, /obj/machinery/power/battery))
-		return 1
-	else
-		to_chat(holder, "That is not a valid drainable power source.")
-
-/spell/pulse_demon/remote_drain/cast(var/list/targets, mob/user)
-	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
-		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-		var/obj/machinery/power/P = targets[1]
-		if(istype(P,/obj/machinery/power/apc))
-			var/obj/machinery/power/apc/A = P
-			PD.drainAPC(A)
-		else if(istype(P,/obj/machinery/power/battery))
-			var/obj/machinery/power/battery/B = P
-			PD.suckBattery(B)
-		to_chat(user, "<span class='warning'>You absorb \the [P] for [PD.charge_absorb_amount]W!</span>")
 
 /spell/pulse_demon/sustaincharge
 	level_max = list(Sp_TOTAL = 3, Sp_POWER = 3) // Why would cooldown be here?
@@ -518,5 +519,9 @@
 /spell/pulse_demon/sustaincharge/cast(var/list/targets, mob/user)
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+		if(PD.can_leave_cable)
+			if(!(PD.current_power || PD.current_cable)) //prevent you from killing yourself instantly by turning the ability off
+				to_chat(user,"<span class='warning'>Find a cable or a piece of power machinery!</span>")
+				return
 		PD.can_leave_cable = !PD.can_leave_cable
 		to_chat(user,"<span class='notice'>Leaving cables is [PD.can_leave_cable ? "on" : "off"].</span>")
