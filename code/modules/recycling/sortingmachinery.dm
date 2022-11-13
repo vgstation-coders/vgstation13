@@ -753,19 +753,17 @@
 							/obj/item/weapon/stock_parts/manipulator = 2,
 						)
 
-/obj/machinery/wrapping_machine
-	name = "wrapping machine"
-	desc = "Wraps and tags items."
+/obj/machinery/autoprocessor
+	name = "autoprocessor"
+	desc = "Automatically processes things."
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "wrapper-4"
 	density = 1
 	anchored = 1
-	machine_flags = SCREWTOGGLE | CROWDESTROY
 	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
+	plane = ABOVE_HUMAN_PLANE
 
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
-	var/packagewrap = 0
-	var/syndiewrap = 0
 
 	var/next_sound = 0
 	var/sound_delay = 20
@@ -773,9 +771,91 @@
 	output_dir = 8 //WEST
 	var/input_dir = 4 //EAST
 
-	var/mode  = 0 //If the tagger is "hacked" so you can add extra tags.
-
 	var/max_items_moved = 100
+
+/obj/machinery/autoprocessor/New()
+	. = ..()
+
+	mover = new
+
+/obj/machinery/autoprocessor/Destroy()
+	. = ..()
+
+	qdel(mover)
+	mover = null
+
+/obj/machinery/autoprocessor/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
+		T += bin.rating//intentionally not doing '- 1' here, for the math below
+	max_items_moved = initial(max_items_moved) * (T / 3) //Usefull upgrade/10, that's an increase from 10 (base matter bins) to 30 (super matter bins)
+
+	T = 0//reusing T here because muh RAM
+	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+		T += C.rating - 1
+	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
+
+/obj/machinery/autoprocessor/process()
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
+		return
+
+	var/turf/in_T = get_step(src, input_dir)
+	var/turf/out_T = get_step(src, output_dir)
+
+	if(!out_T.Enter(mover, mover.loc, TRUE))
+		return
+
+	var/affecting = in_T.contents
+	var/items_moved = 0
+
+	for(var/atom/movable/A in affecting)
+
+		if(items_moved >= max_items_moved)
+			break
+
+		if(A.anchored)
+			continue
+
+		A.forceMove(get_turf(src))
+		spawn(1)
+			process_affecting(A)
+			A.forceMove(out_T)
+
+			items_moved++
+
+/obj/machinery/autoprocessor/proc/process_affecting(var/atom/movable/target)
+	return
+
+/obj/machinery/autoprocessor/attackby(var/obj/item/O, mob/user)
+	. = ..()
+	if(O.is_multitool(user))
+		setOutput(user)
+
+/obj/machinery/autoprocessor/proc/setOutput(user)
+	if(alert(user,"Set your location as output?","Output selection","Yes","No") == "Yes")
+		if(!Adjacent(user))
+			to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
+			return 1
+		output_dir = get_dir(src, user)
+		input_dir = opposite_dirs[output_dir]
+		if(!cardinal.Find(output_dir))
+			to_chat(user, "<span class='warning'>Cannot set this as the output location; cardinal directions only!</span>")
+			return 1
+		icon_state = "wrapper-[input_dir]"
+		update_icon()
+		to_chat(user, "<span class='notice'>Output set.</span>")
+		return 1
+
+/obj/machinery/autoprocessor/wrapping
+	name = "wrapping machine"
+	desc = "Wraps and tags items."
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
+
+	var/packagewrap = 0
+	var/syndiewrap = 0
+
+	var/mode  = 0 //If the tagger is "hacked" so you can add extra tags.
 
 	var/currTag = 0
 	var/list/destinations  = list()
@@ -802,61 +882,16 @@
 		/obj/structure/stackopacks
 		)
 
-/obj/machinery/wrapping_machine/New()
+/obj/machinery/autoprocessor/wrapping/New()
 	. = ..()
 
 	for(var/dest in map.default_tagger_locations)
 		if(dest)
 			destinations += dest
 
-	mover = new
-
-/obj/machinery/wrapping_machine/Destroy()
-	. = ..()
-
-	qdel(mover)
-	mover = null
-
-/obj/machinery/wrapping_machine/RefreshParts()
-	var/T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
-		T += bin.rating//intentionally not doing '- 1' here, for the math below
-	max_items_moved = initial(max_items_moved) * (T / 3) //Usefull upgrade/10, that's an increase from 10 (base matter bins) to 30 (super matter bins)
-
-	T = 0//reusing T here because muh RAM
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
-		T += C.rating - 1
-	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
-
-/obj/machinery/wrapping_machine/process()
-	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
+/obj/machinery/autoprocessor/wrapping/process_affecting(var/atom/movable/target)
+	if(is_type_in_list(target, cannot_wrap))
 		return
-
-	var/turf/in_T = get_step(src, input_dir)
-	var/turf/out_T = get_step(src, output_dir)
-
-	if(!out_T.Enter(mover, mover.loc, TRUE))
-		return
-
-	var/affecting = in_T.contents
-	var/items_moved = 0
-
-	for(var/atom/movable/A in affecting)
-
-		if(items_moved >= max_items_moved)
-			break
-
-		if(A.anchored)
-			continue
-
-		A.forceMove(out_T)
-
-		if(!is_type_in_list(A, cannot_wrap))
-			wrap(A)
-
-		items_moved++
-
-/obj/machinery/wrapping_machine/proc/wrap(var/atom/movable/target)
 	if(istype(target, /obj/item) && smallpath)
 		if (packagewrap >= 1)
 			var/obj/item/I = target
@@ -915,7 +950,7 @@
 			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
 			next_sound = world.time + sound_delay
 
-/obj/machinery/wrapping_machine/proc/tag_item(var/atom/movable/target)
+/obj/machinery/autoprocessor/wrapping/proc/tag_item(var/atom/movable/target)
 	if(istype(target,/obj/item/delivery))
 		var/obj/item/delivery/D = target
 		var/image/tag_overlay = image('icons/obj/storage/storage.dmi', D, "deliverytag")
@@ -929,7 +964,7 @@
 			D.overlays += tag_overlay
 			D.desc = "A small wrapped package. It has a label reading [tag]"
 
-/obj/machinery/wrapping_machine/attackby(var/obj/item/O, mob/user)
+/obj/machinery/autoprocessor/wrapping/attackby(var/obj/item/O, mob/user)
 	. = ..()
 	if(istype(O,/obj/item/stack/package_wrap))
 		var/obj/item/stack/package_wrap/P = O
@@ -938,30 +973,11 @@
 		packagewrap += P.amount
 		to_chat(user, "<span class='notice'>You add [P.amount] sheets of [O] to \the [src].</span>")
 		P.use(P.amount)
-	else if(O.is_multitool(user))
-		setOutput(user)
 
-/obj/machinery/wrapping_machine/proc/setOutput(user)
-	var/result = input("Set your location as output?") in list("Yes","No")
-	switch(result)
-		if("Yes")
-			if(!Adjacent(user))
-				to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
-				return 1
-			output_dir = get_dir(src, user)
-			input_dir = opposite_dirs[output_dir]
-			if(!cardinal.Find(output_dir))
-				to_chat(user, "<span class='warning'>Cannot set this as the output location; cardinal directions only!</span>")
-				return 1
-			icon_state = "wrapper-[input_dir]"
-			update_icon()
-			to_chat(user, "<span class='notice'>Output set.</span>")
-			return 1
-
-/obj/machinery/wrapping_machine/attack_hand(mob/user)
+/obj/machinery/autoprocessor/wrapping/attack_hand(mob/user)
 	interact(user)
 
-/obj/machinery/wrapping_machine/interact(mob/user as mob)
+/obj/machinery/autoprocessor/wrapping/interact(mob/user as mob)
 
 	var/dat = "<table style='width:100%; padding:4px;'><tr>"
 
@@ -981,7 +997,7 @@
 	popup.set_content(dat)
 	popup.open()
 
-/obj/machinery/wrapping_machine/Topic(href, href_list)
+/obj/machinery/autoprocessor/wrapping/Topic(href, href_list)
 	. = ..()
 	if(.)
 		return
@@ -1006,3 +1022,93 @@
 		destinations |= newtag
 		interact(usr)
 		return 1
+
+/obj/machinery/autoprocessor/clothing
+	name = "autoclother"
+	desc = "Automatically swaps clothes of people inside. Use machine with an empty hand to retrieve clothing, or with held clothing to place it inside."
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE
+	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
+	var/list/obj/item/held_clothing = list()
+	var/strip_items = FALSE
+
+/obj/machinery/autoprocessor/clothing/attack_hand(mob/user)
+	for(var/obj/item/I in held_clothing)
+		user.put_in_hands(I)
+		held_clothing -= I
+	to_chat(user, "<span class='notice'>You retrieve some clothing from \the [src].</span>")
+
+/obj/machinery/autoprocessor/clothing/attackby(var/obj/item/O, mob/user)
+	. = ..()
+	if(isitem(O))
+		held_clothing += O
+		user.drop_item(O,src)
+		to_chat(user, "<span class='notice'>You add \the [O] to \the [src].</span>")
+
+/obj/machinery/autoprocessor/clothing/process_affecting(var/atom/movable/target)
+	if(!isliving(target))
+		if(world.time > next_sound)
+			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
+			next_sound = world.time + sound_delay
+			visible_message("<span class='warning'>[src] buzzes: Can only apply or remove items from living beings.</span>")
+		return 0
+	var/mob/living/L = target
+	var/items_equipped = 0
+	for(var/slot in slot_equipment_priority)
+		if(emagged || strip_items)
+			var/obj/item/strip = L.get_item_by_slot(slot)
+			if(emagged && istype(strip,/obj/item/weapon/storage))
+				var/obj/item/weapon/storage/S = strip
+				for(var/obj/item/I3 in held_clothing)
+					if(S.can_be_inserted(I3,1))
+						S.handle_item_insertion(I3,1)
+						held_clothing -= I3
+						items_equipped++
+			else if(strip)
+				L.u_equip(strip)
+				strip.forceMove(src)
+				held_clothing += strip
+		for(var/obj/item/I in held_clothing)
+			if(I.mob_can_equip(L,slot))
+				var/obj/item/I2 = L.get_item_by_slot(slot)
+				if(I2)
+					L.u_equip(I2)
+					I2.forceMove(src)
+					held_clothing += I2
+				L.equip_to_slot(I,slot)
+				held_clothing -= I
+				items_equipped++
+	if(items_equipped && world.time > next_sound)
+		playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 1)
+		next_sound = world.time + sound_delay
+		visible_message("<span class='notice'>[src] beeps: [items_equipped] article\s of clothing applied successfully.</span>")
+
+/obj/machinery/autoprocessor/clothing/outfit
+	var/outfit_type = /datum/outfit/assistant
+
+/obj/machinery/autoprocessor/clothing/outfit/New()
+	..()
+	var/datum/outfit/outfit_datum = new outfit_type()
+	for(var/species in outfit_datum.items_to_spawn)
+		if(!islist(outfit_datum.items_to_spawn[species]))
+			continue
+		var/list/L = outfit_datum.items_to_spawn[species]
+		for (var/slot in L)
+			var/obj_type = L[slot]
+			if (islist(obj_type)) // Special objects for alt-titles.
+				var/list/L2 = obj_type
+				var/default_title = L2[1]
+				obj_type = L2[default_title]
+			if (isnull(obj_type))
+				continue
+			held_clothing += new obj_type(src)
+	for(var/bptype in outfit_datum.backpack_types)
+		if(outfit_datum.backpack_types[bptype])
+			var/backpack = outfit_datum.backpack_types[bptype]
+			held_clothing += new backpack(src)
+			break
+
+/obj/machinery/autoprocessor/clothing/outfit/prisoner
+	name = "prisoner clother"
+	desc = "Automatically applies prisoner clothes to people inside. Use machine with an empty hand to retrieve clothing, or with held clothing to place it inside."
+	outfit_type = /datum/outfit/special/prisoner
+	strip_items = TRUE

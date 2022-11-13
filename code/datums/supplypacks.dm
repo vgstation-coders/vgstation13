@@ -1411,7 +1411,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big			
+					/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
 					)
 	cost = 15
 	containertype = /obj/structure/closet/crate/secure/basic
@@ -2007,7 +2007,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/automation
 	name = "Automation supplies"
-	contains = list(/obj/item/weapon/circuitboard/wrapping_machine,
+	contains = list(/obj/item/weapon/circuitboard/autoprocessor/wrapping,
 					/obj/item/weapon/circuitboard/sorting_machine/item,
 					/obj/item/weapon/circuitboard/crate_opener,
 					/obj/item/weapon/circuitboard/crate_closer)

@@ -9,6 +9,7 @@ var/global/list/yantar_stuff = list(
 	//1 of a kind
 	/obj/item/weapon/storage/trader_chemistry,
 	/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer,
+	/obj/structure/closet/crate/flatpack/ancient/autoclother,
 	/obj/structure/largecrate/secure/frankenstein,
 	)
 

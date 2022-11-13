@@ -329,3 +329,13 @@
 	..()
 	name = "ancient flatpack (electrolytic chemmaster)"
 	machine = new /obj/machinery/chem_master/electrolytic(src)
+
+/obj/structure/closet/crate/flatpack/ancient/autoclother/New()
+	..()
+	name = "ancient flatpack (autoclother)"
+	machine = new /obj/machinery/autoprocessor/clothing(src)
+
+/obj/structure/closet/crate/flatpack/ancient/prisoner_autoclother/New()
+	..()
+	name = "ancient flatpack (prisoner autoclother)"
+	machine = new /obj/machinery/autoprocessor/clothing/outfit/prisoner(src)
