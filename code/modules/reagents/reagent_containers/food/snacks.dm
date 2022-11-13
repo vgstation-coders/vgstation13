@@ -8020,7 +8020,6 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy
 	name = "Gunk Soup Embassy"
 	desc = "Space Turkey's finest politicians are sent here."
-	icon_state = pick(list("gunksoup_embassy1", "gunksoup_embassy2")) //two flag waving styles
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_MEAT | FOOD_LIQUID
 	crumb_icon = "dribbles"
@@ -8029,6 +8028,10 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/New()
 	..()
+	if(prob(50))  //two flag waving styles
+		icon_state = "gunksoup_embassy_1"
+	else
+		icon_state = "gunksoup_embassy_2"
 	processing_objects += src
 	reagents.add_reagent(NUTRIMENT, 10) //we lobbied for extra nutriment for you!
 	reagents.add_reagent(ROACHSHELL, 8) //no roaches were harmed this time, it's all exoskeleton flakes
@@ -8037,7 +8040,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	
 /obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/process()
 	timer += 1
-	if(prob(20) && timer >= 20)
+	if(prob(20) && timer >= 10)
 		timer = 0
 		if(prob(50))
 			icon_state = "gunksoup_embassy_1"
