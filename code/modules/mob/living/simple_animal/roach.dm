@@ -328,3 +328,14 @@
 	qdel(src)
 
 	H.vomit()
+
+/mob/living/simple_animal/cockroach/turkish
+	name = "turk"
+	desc = "A turkish politician, straight from the Space Turkey embassy."
+	icon_state = "cockroachturk"
+	icon_living = "cockroachturk"
+	icon_dead = "cockroachturk_dead"
+	emote_hear = list("seethes")
+
+/mob/living/simple_animal/cockroach/turkish/death(var/gore = 1)
+	new /obj/item/clothing/head/fez(get_turf(src))
