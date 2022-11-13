@@ -187,11 +187,11 @@
 	override_base = "pulsedemon"
 	hud_state = "pd_icon_base"
 	charge_max = 20 SECONDS
-	cooldown_min = 1 SECONDS
+	//cooldown_min = 1 SECONDS
 	var/charge_cost = 0
 	var/purchase_cost = 0
-	var/empower_cost = 0
-	var/quicken_cost = 0
+	//var/empower_cost = 0
+	//var/quicken_cost = 0
 	var/invisible = 0 //Whether it appears in the ability list
 
 /spell/pulse_demon/cast_check(var/skipcharge = 0, var/mob/user = usr)
@@ -281,8 +281,8 @@
 	hud_state = "pd_cablehop"
 	charge_cost = 5000
 	purchase_cost = 15000
-	empower_cost = 10000
-	quicken_cost = 10000
+	//empower_cost = 10000
+	//quicken_cost = 10000
 
 // Must be a cable or a clicked on turf with a cable
 /spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
@@ -340,8 +340,8 @@
 	hud_state = "pd_drain"
 	charge_cost = 100
 	purchase_cost = 5000
-	empower_cost = 10000
-	quicken_cost = 10000
+	//empower_cost = 10000
+	//quicken_cost = 10000
 
 /spell/pulse_demon/remote_drain/is_valid_target(var/atom/target)
 	if(istype(target, /obj/machinery/power/apc) || istype(target, /obj/machinery/power/battery))
@@ -373,8 +373,8 @@
 	hud_state = "pd_hijack"
 	charge_cost = 10000
 	purchase_cost = 100000
-	empower_cost = 20000
-	quicken_cost = 20000
+	//empower_cost = 20000
+	//quicken_cost = 20000
 
 /spell/pulse_demon/remote_hijack/is_valid_target(var/atom/target)
 	if(istype(target, /obj/machinery/power/apc))
@@ -404,8 +404,8 @@
 	hud_state = "pd_emag"
 	charge_cost = 20000
 	purchase_cost = 200000
-	empower_cost = 50000
-	quicken_cost = 50000
+	//empower_cost = 50000
+	//quicken_cost = 50000
 
 
 /spell/pulse_demon/emag/is_valid_target(atom/target, mob/user)
@@ -439,8 +439,8 @@
 	hud_state = "wiz_tech"
 	charge_cost = 10000
 	purchase_cost = 150000
-	empower_cost = 50000
-	quicken_cost = 50000
+	//empower_cost = 50000
+	//quicken_cost = 50000
 
 /spell/pulse_demon/emp/is_valid_target(atom/target, mob/user)
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
@@ -473,8 +473,8 @@
 	hud_state = "overload"
 	charge_cost = 50000
 	purchase_cost = 300000
-	empower_cost = 100000
-	quicken_cost = 100000
+	//empower_cost = 100000
+	//quicken_cost = 100000
 
 /spell/pulse_demon/overload_machine/is_valid_target(var/atom/target, mob/user)
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
@@ -511,7 +511,7 @@
 	abbreviation = "SC"
 	desc = "Toggle that allows leaving cables for brief periods of time, while moving at a slower speed."
 	purchase_cost = 500000
-	empower_cost = 200000
+	//empower_cost = 200000
 
 /spell/pulse_demon/sustaincharge/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast
