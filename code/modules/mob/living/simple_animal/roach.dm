@@ -332,8 +332,8 @@
 	H.vomit()
 
 /mob/living/simple_animal/cockroach/turkish
-	name = "turk"
-	desc = "A turkish politician, straight from the Space Turkey embassy."
+	name = "Turk"
+	desc = "A Turkish politician, straight from the Space Turkey embassy."
 	icon_state = "turkroach"
 	icon_living = "turkroach"
 	icon_dead = "cockroach_dead"
