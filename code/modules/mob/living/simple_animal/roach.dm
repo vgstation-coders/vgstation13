@@ -56,6 +56,8 @@
 
 	var/const/max_unhatchable_eggs_in_world = 30
 	held_items = list()
+	
+	var/flyicon = "cockroach_fly" //here so the turk roach uses the proper fly icon
 
 /mob/living/simple_animal/cockroach/New()
 	..()
@@ -212,7 +214,7 @@
 	speed = 1
 	turns_since_move = 5 //Remove any delay
 
-	icon_state = "cockroach_fly"
+	icon_state = flyicon
 
 	flying = 1
 	speak_chance = 5
@@ -332,10 +334,11 @@
 /mob/living/simple_animal/cockroach/turkish
 	name = "turk"
 	desc = "A turkish politician, straight from the Space Turkey embassy."
-	icon_state = "cockroachturk"
-	icon_living = "cockroachturk"
-	icon_dead = "cockroachturk_dead"
+	icon_state = "turkroach"
+	icon_living = "turkroach"
+	icon_dead = "cockroach_dead"
 	emote_hear = list("seethes")
+	flyicon = "turkroach_fly" //so they use the proper flying icon
 
 /mob/living/simple_animal/cockroach/turkish/death(var/gore = 1)
 	new /obj/item/clothing/head/fez(get_turf(src))
