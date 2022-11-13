@@ -8047,6 +8047,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/Destroy()
 	processing_objects -= src
 	new /mob/living/simple_animal/roach/turkish(get_turf(src))
+	new /mob/living/simple_animal/roach/turkish(get_turf(src))
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkbread
