@@ -339,3 +339,4 @@
 
 /mob/living/simple_animal/cockroach/turkish/death(var/gore = 1)
 	new /obj/item/clothing/head/fez(get_turf(src))
+	..()
