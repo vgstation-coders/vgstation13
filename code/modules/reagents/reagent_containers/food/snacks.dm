@@ -8020,7 +8020,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy
 	name = "Gunk Soup Embassy"
 	desc = "Space Turkey's finest politicians are sent here."
-	icon_state = pick("gunksoup_embassy1", "gunksoup_embassy2") //two flag waving styles
+	icon_state = pick(list("gunksoup_embassy1", "gunksoup_embassy2")) //two flag waving styles
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_MEAT | FOOD_LIQUID
 	crumb_icon = "dribbles"
