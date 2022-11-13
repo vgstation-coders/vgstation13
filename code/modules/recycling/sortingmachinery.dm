@@ -1039,7 +1039,7 @@
 
 /obj/machinery/autoprocessor/clothing/attackby(var/obj/item/O, mob/user)
 	. = ..()
-	if(isitem(O))
+	if(isitem(O) && !O.is_multitool(user))
 		held_clothing += O
 		user.drop_item(O,src)
 		to_chat(user, "<span class='notice'>You add \the [O] to \the [src].</span>")
@@ -1082,33 +1082,36 @@
 		next_sound = world.time + sound_delay
 		visible_message("<span class='notice'>[src] beeps: [items_equipped] article\s of clothing applied successfully.</span>")
 
-/obj/machinery/autoprocessor/clothing/outfit
+/obj/machinery/autoprocessor/outfit
+	name = "autoclother"
+	desc = "Automatically applies an outfit to people inside."
 	var/outfit_type = /datum/outfit/assistant
+	var/datum/outfit/outfit_datum
 
-/obj/machinery/autoprocessor/clothing/outfit/New()
+/obj/machinery/autoprocessor/outfit/New()
 	..()
-	var/datum/outfit/outfit_datum = new outfit_type()
-	for(var/species in outfit_datum.items_to_spawn)
-		if(!islist(outfit_datum.items_to_spawn[species]))
-			continue
-		var/list/L = outfit_datum.items_to_spawn[species]
-		for (var/slot in L)
-			var/obj_type = L[slot]
-			if (islist(obj_type)) // Special objects for alt-titles.
-				var/list/L2 = obj_type
-				var/default_title = L2[1]
-				obj_type = L2[default_title]
-			if (isnull(obj_type))
-				continue
-			held_clothing += new obj_type(src)
-	for(var/bptype in outfit_datum.backpack_types)
-		if(outfit_datum.backpack_types[bptype])
-			var/backpack = outfit_datum.backpack_types[bptype]
-			held_clothing += new backpack(src)
-			break
+	outfit_datum = new outfit_type()
 
-/obj/machinery/autoprocessor/clothing/outfit/prisoner
+/obj/machinery/autoprocessor/outfit/Destroy()
+	qdel(outfit_datum)
+	outfit_datum = null
+	..()
+
+/obj/machinery/autoprocessor/outfit/process_affecting(var/atom/movable/target)
+	if(!isliving(target))
+		if(world.time > next_sound)
+			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
+			next_sound = world.time + sound_delay
+			visible_message("<span class='warning'>[src] buzzes: Can only apply or remove items from living beings.</span>")
+		return 0
+	var/mob/living/L = target
+	outfit_datum.equip(L, TRUE, strip = TRUE)
+	if(world.time > next_sound)
+		playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 1)
+		next_sound = world.time + sound_delay
+		visible_message("<span class='notice'>[src] beeps: [outfit_datum.outfit_name] outfit applied successfully.</span>")
+
+/obj/machinery/autoprocessor/outfit/prisoner
 	name = "prisoner clother"
-	desc = "Automatically applies prisoner clothes to people inside. Use machine with an empty hand to retrieve clothing, or with held clothing to place it inside."
+	desc = "Automatically applies prisoner clothes to people inside."
 	outfit_type = /datum/outfit/special/prisoner
-	strip_items = TRUE

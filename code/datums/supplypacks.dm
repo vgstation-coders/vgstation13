@@ -2008,6 +2008,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/automation
 	name = "Automation supplies"
 	contains = list(/obj/item/weapon/circuitboard/autoprocessor/wrapping,
+					/obj/item/weapon/circuitboard/autoprocessor/clothing,
 					/obj/item/weapon/circuitboard/sorting_machine/item,
 					/obj/item/weapon/circuitboard/crate_opener,
 					/obj/item/weapon/circuitboard/crate_closer)
