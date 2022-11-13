@@ -3613,21 +3613,11 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/gunksoup
 
-/datum/recipe/gunksoupembassyroach
+/datum/recipe/gunksoupembassy
 	reagents = list(WATER = 10, GUNKS = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
-		/obj/item/toy/crayon/red,
-		/obj/item/stack/sheet/cardboard
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy
-
-/datum/recipe/gunksoupembassycricket
-	reagents = list(WATER = 10, GUNKS = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
 		/obj/item/toy/crayon/red,
 		/obj/item/stack/sheet/cardboard
 		)
