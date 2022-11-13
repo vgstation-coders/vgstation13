@@ -1411,7 +1411,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big			
+					/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
 					)
 	cost = 15
 	containertype = /obj/structure/closet/crate/secure/basic
@@ -2222,6 +2222,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/circuitboard/destructive_analyzer,
 					/obj/item/weapon/stock_parts/matter_bin,
 					/obj/item/weapon/stock_parts/matter_bin,
+					/obj/item/weapon/stock_parts/matter_bin,
+					/obj/item/weapon/stock_parts/manipulator,
 					/obj/item/weapon/stock_parts/manipulator,
 					/obj/item/weapon/stock_parts/manipulator,
 					/obj/item/weapon/stock_parts/manipulator,
