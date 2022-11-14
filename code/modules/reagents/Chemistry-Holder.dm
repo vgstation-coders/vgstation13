@@ -642,8 +642,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if (R.id == reagent)
 
 			//Equalize temperatures
-			if(chem_temp != reagtemp)
-				chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap)
+			chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap)
 
 			R.volume += amount
 
@@ -670,8 +669,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/datum/reagent/R = new D.type()
 
 		//Equalize temperatures
-		if(chem_temp != reagtemp)
-			chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap)
+		chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap)
 
 		reagent_list += R
 		R.holder = src
