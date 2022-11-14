@@ -94,10 +94,9 @@ var/global/list/screen_alarms_locs = list(
 		for(var/i = 1, i <= mobalerts.len, i++)
 			mymob.client.screen -= mobalerts[mobalerts[i]]
 		return TRUE
-	for(var/obj/abstract/screen/alert/A in mobalerts) 			//Sorting the alerts list before it's passed to the client's screen
-		if(istype(A, /obj/abstract/screen/alert/object/cryo))
-			mobalerts.Swap(A, 1) 								//Cryo alert goes on top because it's taller than all of the other alerts
-			continue 											//Surely you won't ever be in TWO cryopods at once... right?
+	for(var/i in 1 to mobalerts.len)
+		if(mobalerts[i] == "mob_cryo")
+			mobalerts.Swap(i, 1)
 	for(var/i = 1, i <= mobalerts.len, i++)
 		if(i > screen_alarms_locs.len)
 			break
@@ -124,6 +123,7 @@ var/global/list/screen_alarms_locs = list(
 #define TEMP_ALARM_HEAT_STRONG 4
 
 #define SCREEN_ALARM_BUCKLE "mob_buckle"
+#define SCREEN_ALARM_CRYO "mob_cryo"
 #define SCREEN_ALARM_PRESSURE "mob_pressure"
 #define SCREEN_ALARM_TEMPERATURE "mob_temp"
 #define SCREEN_ALARM_FIRE "mob_fire"

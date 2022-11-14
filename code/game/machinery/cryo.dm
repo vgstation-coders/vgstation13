@@ -546,7 +546,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			if(B)
 				B.buckle_mob(occupant, ejector)
 				ejector.start_pulling(B)
-		occupant.clear_alert(SCREEN_ALARM_BUCKLE)
+		occupant.clear_alert(SCREEN_ALARM_CRYO)
 		occupant = null
 	update_icon()
 	nanomanager.update_uis(src)
@@ -613,7 +613,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	update_icon()
 	nanomanager.update_uis(src)
 	M.ExtinguishMob()
-	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/cryo, new_master = src)
+	M.throw_alert(SCREEN_ALARM_CRYO, /obj/abstract/screen/alert/object/cryo, new_master = src)
 	if(user)
 		if(M == user)
 			visible_message("[user] climbs into \the [src].")
