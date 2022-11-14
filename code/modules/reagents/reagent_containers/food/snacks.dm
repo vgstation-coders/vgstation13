@@ -8019,7 +8019,8 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy
 	name = "Gunk Soup Embassy"
-	desc = "Space Turkey's finest politicians are sent here."
+	desc = "Space Turkey's finest politicians are sent to this elite GunkCo facility."
+	icon_state = "gunksoup_embassy_2" //here so it isn't invisible on nofruit pie rolls, gets overwritten on new()
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_MEAT | FOOD_LIQUID
 	crumb_icon = "dribbles"
