@@ -625,8 +625,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(thermalmass_A + thermalmass_B)
 		return ((temperature_A * thermalmass_A) + (temperature_B * thermalmass_B)) / (thermalmass_A + thermalmass_B)
 	else
-		return T0C+20 //Sanity but this shouldn't happen.
 		warning("[usr] tried to equalize the temperature of a thermally-massless mixture.")
+		return T0C+20 //Sanity but this shouldn't happen.
 
 /datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
 	if(!my_atom)
