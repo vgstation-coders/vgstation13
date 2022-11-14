@@ -371,8 +371,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		H.vessel.chem_temp = new_equalized_temperature
 
 /datum/reagents/proc/metabolize(var/mob/living/M, var/alien)
-	equalize_temperature_with_mob(M)
-	handle_reactions()
+	if(M)
+		equalize_temperature_with_mob(M)
+		handle_reactions()
 	for(var/A in reagent_list)
 		var/datum/reagent/R = A
 		if(M && R)
