@@ -1950,7 +1950,7 @@ Thanks.
 
 		//First, get the non-blood thermal mass of the body
 		var/mob/living/carbon/human/H = src
-		body_thermal_mass = ((H.size * 4.121 / 3) ** 3) ** (M_FAT in H.mutations ? 1.5 : 1) //Approximately 70kg for a non-obese human, and 105kg (1.5 times the base) for an obese human.
+		body_thermal_mass = ((H.size * 4.121 / 3) ** 3) * (M_FAT in H.mutations ? 1.5 : 1) //Approximately 70kg for a non-obese human, and 105kg (1.5 times the base) for an obese human.
 		body_thermal_mass *= 0.9 //Only consider the non-blood fraction of the body mass (90%)
 		//turn the body mass into thermal mass by multiplying by specific heat
 		if(isskellington(H) || isskelevox(H))
