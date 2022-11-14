@@ -1956,7 +1956,7 @@ Thanks.
 		if(isskellington(H) || isskelevox(H))
 			body_thermal_mass *= (0.15 * 1.313) //Multiply by 15% (bone fraction of the body), and then the specific heat of cortical bone.
 		else if(isplasmaman(H))
-			body_thermal_mass *= (0.15 * (200 / 405)) //Skeleton made of plasma, values taken from XGM_gases.dm. It's gas phase there and solid here but should be okay. Plasmamen are very easy to heat.
+			body_thermal_mass *= (0.15 * (200 / 405)) //Skeleton made of plasma, values taken from XGM_gases.dm. It's gas phase there and solid here but should be okay.
 		else if(isgolem(H))
 			body_thermal_mass *= 0.5 //Make golems easier to heat as they're made of metal.
 		else if(isslimeperson(H))
