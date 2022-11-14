@@ -1946,13 +1946,13 @@ Thanks.
 
 	//Perhaps some of this could be defined at the species level and use more inheritance overall
 
-	if(ishuman(src)) //if it's a human, base the thermal mass of the human on: the size of the human, the amount of blood in the human, and the currently existing reagents in the human
+	if(ishuman(src))
 
 		//First, get the non-blood thermal mass of the body
 		var/mob/living/carbon/human/H = src
 		body_thermal_mass = ((H.size * 4.121 / 3) ** 3) * (M_FAT in H.mutations ? 1.5 : 1) //Approximately 70kg for a non-obese human, and 105kg (1.5 times the base) for an obese human.
 		body_thermal_mass *= 0.9 //Only consider the non-blood fraction of the body mass (90%)
-		//turn the body mass into thermal mass by multiplying by specific heat
+		//Turn the body mass into thermal mass by multiplying by specific heat
 		if(isskellington(H) || isskelevox(H))
 			body_thermal_mass *= (0.15 * 1.313) //Multiply by 15% (bone fraction of the body), and then the specific heat of cortical bone.
 		else if(isplasmaman(H))
@@ -1964,17 +1964,17 @@ Thanks.
 		else if(ismushroom(H))
 			body_thermal_mass *= 3.935 //Specific heat of mushrooms.
 		else
-			body_thermal_mass *= 3.47 //Specific heat capacity of the human body.
+			body_thermal_mass *= 3.47 //Specific heat capacity of the human body (does include blood, but it shouldn't be too much of a difference).
 
 		//Add blood thermal mass component
 		body_thermal_mass += H.vessel.get_thermal_mass()
 
-	else //if it's not a human, base the thermal mass of the mob on: the size of the mob, and the currently existing reagents in the mob
+	else
 
-		//First, get the non-blood thermal mass of the body
+		//Get the mass mass of the body
 		body_thermal_mass = (src.size * (4.121 / 3)) ** 3 //Based on approximately 70kg for a non-obese human.
-		//turn the body mass into thermal mass by multiplying by specific heat of blood (generalization, the mob might not actually have blood)
-		body_thermal_mass *= 3.49
+		//Turn the body mass into thermal mass by multiplying by specific heat of the human body (generalization).
+		body_thermal_mass *= 3.47
 
 	return body_thermal_mass
 
