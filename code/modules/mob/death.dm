@@ -1,6 +1,8 @@
 //This is the proc for gibbing a mob. Cannot gib ghosts.
 //added different sort of gibs and animations. N
 /mob/proc/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		return
 	death(1)
 	monkeyizing = 1
 	canmove = 0

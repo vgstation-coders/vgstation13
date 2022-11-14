@@ -1,4 +1,7 @@
 /mob/living/silicon/robot/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	//robots don't die when gibbed. instead they drop their MMI'd brain
 	if(!isUnconscious())
 		forcesay("-")
@@ -38,7 +41,7 @@
 
 
 /mob/living/silicon/robot/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	if(connected_ai)
 		if(connected_ai.explosive_cyborgs)

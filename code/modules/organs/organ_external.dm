@@ -1518,6 +1518,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return E
 
 /datum/organ/external/head/explode()
+	if(owner.status_flags & BUDDHAMODE) // can't lose your head like this
+		return
 	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
 	eject_eyes()
 	.=..()

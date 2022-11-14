@@ -615,6 +615,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define UNPACIFIABLE 16		//Immune to pacify effects.
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
+#define BUDDHAMODE	16384
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
 #define ALWAYS_CRIT 65536
 
@@ -1320,9 +1321,11 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define ASTAR_DEBUG 0
 #if ASTAR_DEBUG == 1
 #warn "Astar debug is on. Don't forget to turn it off after you've done :)"
-#define astar_debug(text) to_chat(world, text)
+#define astar_debug(text) //to_chat(world, text)
+#define astar_debug_mulebots(text) to_chat(world, text)
 #else
 #define astar_debug(text)
+#define astar_debug_mulebots(text)
 #endif
 
 #define BSQL_DEBUG_CONNECTION 0

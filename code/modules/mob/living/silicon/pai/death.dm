@@ -1,5 +1,5 @@
 /mob/living/silicon/pai/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	stat = DEAD
 	canmove = 0

@@ -195,6 +195,7 @@ var/list/special_fruits = list()
 		traits += "It seems to be spatially unstable. "
 	if(traits)
 		to_chat(user, traits)
+	hydro_hud_scan(user, src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
 	var/obj/effect/decal/cleanable/S = new seed.splat_type(T)

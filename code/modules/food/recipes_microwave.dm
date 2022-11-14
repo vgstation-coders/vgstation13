@@ -3458,7 +3458,7 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinnerclassic
 
-/datum/recipe/greygreens
+/datum/recipe/salad/greygreens
 	reagents = list(SOYSAUCE = 10)
 	items = list(
 		/obj/item/weapon/grown/nettle,

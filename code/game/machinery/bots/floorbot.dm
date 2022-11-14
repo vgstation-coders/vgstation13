@@ -53,7 +53,7 @@ var/global/list/floorbot_targets=list()
 	var/targetdirection
 	beacon_freq = 1445		// navigation beacon frequency
 	var/skin = null
-	commanding_radio = /obj/item/radio/integrated/signal/bot/floorbot
+	commanding_radios = list(/obj/item/radio/integrated/signal/bot/floorbot)
 
 /obj/machinery/bot/floorbot/New()
 	. = ..()
