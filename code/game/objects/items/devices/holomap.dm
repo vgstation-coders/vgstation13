@@ -6,7 +6,6 @@
 
 	icon = 'icons/obj/device.dmi'
 	icon_state = "holomap"
-	autoignition_temperature = AUTOIGNITION_METAL
 
 	var/list/image/showing = list()
 	var/client/viewing // Client that is using the device right now, also determines whether it's on or off.

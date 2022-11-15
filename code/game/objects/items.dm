@@ -9,6 +9,7 @@
 	var/hitsound = null
 	var/miss_sound = 'sound/weapons/punchmiss.ogg'
 	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
+	var/uncountable //TRUE means the item's examine description will use "It is" even if the item's gender is PLURAL.
 
 	w_class = W_CLASS_MEDIUM
 	var/attack_delay = 10 //Delay between attacking with this item, in 1/10s of a second (default = 1 second)
@@ -83,6 +84,8 @@
 
 	var/luckiness //How much luck or unluck the item confers while held
 	var/luckiness_validity	//Flags for where the item has to be to confer its luckiness to the bearer. e.g. held in the hand, carried somewhere in the inventory, etc.: see luck.dm.
+
+	var/is_cookvessel //If true, the item is a cooking vessel.
 
 /obj/item/New()
 	..()
@@ -308,11 +311,11 @@
 
 	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
-	if (gender == PLURAL)
+	if ((gender == PLURAL) && !uncountable)
 		pronoun = "They are"
 	else
 		pronoun = "It is"
-	size = " [pronoun] a [size] item."
+	size = " [pronoun] [size]."
 	..(user, size, show_name)
 	if(price && price > 0)
 		to_chat(user, "You read '[price] space bucks' on the tag.")

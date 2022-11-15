@@ -167,6 +167,10 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/build_inventories()
 	product_records = new/list()
+	coin_records = new/list()
+	hidden_records = new/list()
+	voucher_records = new/list()
+	holiday_records = new/list()
 	build_inventory(products)
 	build_inventory(contraband, 1)
 	build_inventory(premium, 0, 1)
@@ -191,6 +195,9 @@ var/global/num_vending_terminals = 1
 		qdel(coinbox)
 		coinbox = null
 	..()
+
+/obj/machinery/vending/splashable()
+	return FALSE
 
 /obj/machinery/vending/proc/dump_vendpack_and_coinbox()
 	if(product_records.len && cardboard) //Only spit out if we have slotted cardboard
@@ -887,6 +894,7 @@ var/global/num_vending_terminals = 1
 	if(is_custom_machine)
 		if(edit_mode)
 			dat += "Machine name: [src.name] <a href='?src=\ref[src];rename=1'>(Rename)</a><br>"
+			dat += "Currently [dont_render_OOS ? "not " : ""]showing out of stock items. <a href='?src=\ref[src];show_oos=1'>(Toggle)</a><br>"
 			dat += "Current slogans: " + (product_slogans.len >= CUSTOM_VENDING_MAX_SLOGANS ? "" : "<a href='?src=\ref[src];add_slogan=1'>(Add a Slogan)</a>") + "<br>"
 			for(var/i = 1, i <= product_slogans.len, i++) // list slogans
 				dat += "[product_slogans[i]] <a href='?src=\ref[src];delete_slogan_line=[i]'>(Delete)</a><br>"
@@ -1027,6 +1035,9 @@ var/global/num_vending_terminals = 1
 		if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
 			src.name = html_encode(newname)
 
+	else if (href_list["show_oos"] && edit_mode)
+		dont_render_OOS = !dont_render_OOS
+
 	else if (href_list["add_slogan"] && edit_mode)
 		var/newslogan = input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text
 		if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
@@ -1051,6 +1062,10 @@ var/global/num_vending_terminals = 1
 	product_records -= R
 	update_vicon()
 	qdel(R)
+
+/obj/machinery/vending/arcane_act(mob/user)
+	..()
+	return "B'NUS D'CKS!"
 
 /obj/machinery/vending/proc/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
 	if (!allowed(user) && !emagged && wires.IsIndexCut(VENDING_WIRE_IDSCAN)) //For SECURE VENDING MACHINES YEAH
@@ -1077,6 +1092,9 @@ var/global/num_vending_terminals = 1
 
 		if(return_coin)
 			user.put_in_hands(coin)
+			if(on_return_coin_detect(user))
+				coin = null
+				return
 		else
 			if (!isnull(coinbox))
 				if (coinbox.can_be_inserted(coin, TRUE))
@@ -1097,16 +1115,26 @@ var/global/num_vending_terminals = 1
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	spawn(vend_delay)
 		if(!R.custom)
-			new R.product_path(get_turf(src))
+			var/path2use = R.product_path
+			if(arcanetampered && prob(90))
+				path2use = /obj/item/weapon/bikehorn/rubberducky  // BONUS DUCKS! refunds
+			var/atom/A = new path2use(get_turf(src))
+			if(arcanetampered && path2use == R.product_path)
+				A.arcane_act(user)
 		else
 			for(var/obj/O in custom_stock)
 				if(O.product_name() == R.product_name)
 					O.forceMove(src.loc)
+					if(arcanetampered)
+						O.arcane_act(user)
 					custom_stock.Remove(O)
 					break
 		src.vend_ready = 1
 		update_vicon()
 		src.updateUsrDialog()
+
+/obj/machinery/vending/proc/on_return_coin_detect(mob/user)
+	return 0
 
 /obj/machinery/vending/process()
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
@@ -1487,6 +1515,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
 		)
 	contraband = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/bustanuts = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/oldempirebar = 4,
@@ -3403,6 +3432,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/sale/trader/link_to_account()
 	reconnect_database()
 	linked_account = trader_account
+	account_first_linked = TRUE
 
 /obj/machinery/vending/sale/trader/wrenchAnchor(var/mob/user, var/obj/item/I)
 	var/obj/item/weapon/card/C = user.get_card()
@@ -3499,7 +3529,10 @@ var/global/num_vending_terminals = 1
 	products = list(
 		/obj/item/toy/cards = 5,
 		/obj/item/toy/cards/une = 5,
-		/obj/item/weapon/storage/pill_bottle/dice = 5
+		/obj/item/weapon/storage/pill_bottle/dice = 5,
+		/obj/item/weapon/storage/pill_bottle/dice/fudge = 5,
+		/obj/item/weapon/storage/pill_bottle/dice/d6 = 5,
+		/obj/item/weapon/storage/pill_bottle/dice/cup = 10
 		)
 	contraband = list(
 		/obj/item/weapon/dice/loaded = 3,
@@ -3513,6 +3546,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/cards = 5,
 		/obj/item/toy/cards/une = 10,
 		/obj/item/weapon/storage/pill_bottle/dice = 10,
+		/obj/item/weapon/storage/pill_bottle/dice/fudge = 10,
+		/obj/item/weapon/storage/pill_bottle/dice/d6 = 10,
+		/obj/item/weapon/storage/pill_bottle/dice/cup = 5,
 		/obj/item/weapon/dice/loaded = 15,
 		/obj/item/weapon/dice/loaded/d20 = 15,
 		/obj/item/weapon/skull = 20,
@@ -3888,10 +3924,17 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		playsound(src, "buzz-sigh", 50, 1)
 		visible_message("<b>[src]</b>'s monitor flashes, \"The Central Command Lottery Fund is empty, and cannot dispense money.\"")
 		return
-	visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [amount] credits from the Central Command Lottery Fund!\"")
-	dispense_cash(amount, get_turf(src))
 	playsound(src, "polaroid", 50, 1)
-	station_jackpot -= (min(station_jackpot,amount))
+	if(arcanetampered)
+		var/total = 0
+		for(var/i in 0 to round(sqrt(sqrt(amount)))) // anywhere from about 1 to 118(!) ducks (thankfully that should be really really rare)
+			new /obj/item/weapon/bikehorn/rubberducky(get_turf(src))
+			total++
+		visible_message("<b>[src]</b>'s monitor flashes, <span class='sinister'>\"Withdrawing [total] ducks from the Central Command Bonus Duck Fund!\"</span>")
+	else
+		visible_message("<b>[src]</b>'s monitor flashes, \"Withdrawing [amount] credits from the Central Command Lottery Fund!\"")
+		dispense_cash(amount, get_turf(src))
+		station_jackpot -= (min(station_jackpot,amount))
 
 
 /obj/machinery/vending/lotto/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)

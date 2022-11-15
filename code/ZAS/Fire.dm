@@ -484,11 +484,16 @@ Attach to transfer valve and open. BOOM.
 	var/mx = 5 * firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier) * min(pressure / ONE_ATMOSPHERE, 1)
 
 	//Always check these damage procs first if fire damage isn't working. They're probably what's wrong.
+	var/fire_tile_modifier = 4 //multiplicative modifier for damage received while on fire and standing on a fire tile
+	apply_damage(fire_tile_modifier*HEAD_FIRE_DAMAGE_MULTIPLIER*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*CHEST_FIRE_DAMAGE_MULTIPLIER*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
+	apply_damage(fire_tile_modifier*GROIN_FIRE_DAMAGE_MULTIPLIER*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
+	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
 
-	apply_damage(2.5*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
-	apply_damage(2.5*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
-	apply_damage(2.0*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
-	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
-	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
-	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
-	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
+	if(head_exposure+chest_exposure+groin_exposure+legs_exposure+arms_exposure)
+		src.dizziness = 5
+		src.confused =  5
+		src.audible_scream()

@@ -10,7 +10,6 @@
 	storage_slots = 100
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	display_contents_with_number = TRUE
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/bluespace = FALSE
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace

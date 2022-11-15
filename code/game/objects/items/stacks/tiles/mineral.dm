@@ -15,7 +15,6 @@
 	material = "plasma"
 	starting_materials = list(MAT_PLASMA = CC_PER_SHEET_PLASMA / 4) // Recipe requires 1 sheet for 4 tiles
 	w_type = RECYK_METAL
-	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/stack/tile/mineral/uranium
 	name = "uranium tile"

@@ -2,8 +2,6 @@
  * False Walls
  */
 
-var/list/false_wall_images = list()
-
 // Minimum pressure difference to fail building falsewalls.
 // Also affects admin alerts.
 #define FALSEDOOR_MAX_PRESSURE_DIFF 25.0
@@ -108,7 +106,7 @@ var/list/false_wall_images = list()
 	icon = 'icons/turf/walls.dmi'
 	var/mineral = "metal"
 	var/opening = 0
-	var/image/meson_image
+	is_on_mesons = TRUE
 
 	// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
 /obj/structure/falsewall/canSmoothWith()
@@ -129,17 +127,7 @@ var/list/false_wall_images = list()
 	if(Adjacent(user))
 		to_chat(user, "<span class='rose'>Now that you're standing close to it, that wall appears a bit odd.</span>")
 
-/obj/structure/falsewall/New()
-	..()
-	relativewall()
-	relativewall_neighbours()
-	update_meson_image()
-
 /obj/structure/falsewall/Destroy()
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images -= meson_image
-	false_wall_images -= meson_image
 	var/temploc = src.loc
 	loc.mouse_opacity = 1
 
@@ -161,8 +149,7 @@ var/list/false_wall_images = list()
 		icon_state = "[mineral]fwall_open"
 		return
 
-	var/junction=findSmoothingNeighbors()
-	icon_state = "[mineral][junction]"
+	icon_state = "[mineral][..()]"
 
 /obj/structure/falsewall/attack_ai(mob/user as mob)
 	if(isMoMMI(user))
@@ -194,21 +181,6 @@ var/list/false_wall_images = list()
 		opening = 0
 		loc.mouse_opacity = 0
 		update_meson_image()
-
-
-/obj/structure/falsewall/proc/update_meson_image()
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images -= meson_image
-	false_wall_images -= meson_image
-	meson_image = image('icons/turf/walls.dmi',loc,icon_state)
-	meson_image.plane = plane
-	meson_image.layer = layer
-	false_wall_images |= meson_image
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images |= meson_image
-
 
 /obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
 	..()
@@ -287,7 +259,7 @@ var/list/false_wall_images = list()
 	anchored = 1
 	var/mineral = "metal"
 	var/opening = 0
-	var/image/meson_image
+	is_on_mesons = TRUE
 
 /obj/structure/falserwall/examine(var/mob/user)
 	..()
@@ -302,19 +274,9 @@ var/list/false_wall_images = list()
 	)
 	return smoothables
 
-/obj/structure/falserwall/New()
-	..()
-	relativewall()
-	relativewall_neighbours()
-	update_meson_image()
-
 /obj/structure/falserwall/Destroy()
 	var/temploc = src.loc
 	loc.mouse_opacity = 1
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images -= meson_image
-	false_wall_images -= meson_image
 
 	spawn(10)
 		for(var/turf/simulated/wall/W in range(temploc,1))
@@ -376,26 +338,12 @@ var/list/false_wall_images = list()
 		loc.mouse_opacity = 0
 		update_meson_image()
 
-/obj/structure/falserwall/proc/update_meson_image()
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images -= meson_image
-	false_wall_images -= meson_image
-	meson_image = image('icons/turf/walls.dmi',src,icon_state)
-	meson_image.plane = plane
-	meson_image.layer = layer
-	false_wall_images += meson_image
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images |= meson_image
-
 /obj/structure/falserwall/relativewall()
 
 	if(!density)
 		icon_state = "frwall_open"
 		return
-	var/junction=findSmoothingNeighbors()
-	icon_state = "rwall[junction]"
+	icon_state = "rwall[..()]"
 
 /obj/structure/falserwall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opening)

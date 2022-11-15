@@ -54,6 +54,8 @@ var/global/list/ghdel_profiling = list()
 	/// The chat color var, without alpha.
 	var/chat_color_hover
 
+	var/arcanetampered = 0 //A looot of things can be
+
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
 		last_beamchecks = list()
@@ -848,8 +850,28 @@ its easier to just keep the beam vertical.
 		return FALSE
 	return TRUE
 
+/mob/var/list/atom/arcane_tampered_atoms = list()
+
+/atom/proc/arcane_act(var/mob/user, var/recursive = FALSE)
+	if(user)
+		arcanetampered = user
+		user.arcane_tampered_atoms.Add(src)
+	else
+		arcanetampered = TRUE
+	if(recursive)
+		for(var/atom/A in contents)
+			A.arcane_act(user,TRUE)
+	return "E'MAGI!"
+
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
+	if(arcanetampered)
+		if(ismob(arcanetampered))
+			var/mob/M = arcanetampered
+			M.arcane_tampered_atoms.Remove(src)
+		arcanetampered = FALSE
+		for(var/atom/A in contents)
+			A.bless()
 	blessed = 1
 
 /atom/proc/update_icon()
@@ -908,6 +930,8 @@ its easier to just keep the beam vertical.
 			return C.mob
 
 /atom/initialize()
+	if(canSmoothWith())
+		relativewall()
 	flags |= ATOM_INITIALIZED
 
 /atom/proc/get_cell()

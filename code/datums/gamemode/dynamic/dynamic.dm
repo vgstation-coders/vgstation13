@@ -1,7 +1,7 @@
 var/list/forced_roundstart_ruleset = list()
 
 // -- Distribution parameters chosen prior to roundstart --
-var/dynamic_curve_centre = 0
+var/dynamic_curve_centre = 0 // 0 for LORENTZ 1 for EXPONENTIAL
 var/dynamic_curve_width = 1.8
 var/dynamic_chosen_mode = LORENTZ
 

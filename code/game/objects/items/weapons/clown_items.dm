@@ -10,9 +10,15 @@
 /obj/item/weapon/bananapeel/Crossed(AM as mob|obj)
 	if(..())  // Slipping if these are below a floor tile is nonsensical
 		return 1
-	handle_slip(AM)
+	if(!arcanetampered)
+		handle_slip(AM)
 
 /datum/locking_category/banana_peel
+
+/obj/item/weapon/bananapeel/dropped(mob/user)
+	..()
+	if(arcanetampered)
+		slip_n_slide(user,2,2,"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
 /obj/item/weapon/bananapeel/proc/handle_slip(atom/movable/AM)
 	if(iscarbon(AM) || istype(AM, /obj/structure/bed/chair/vehicle/gokart))
@@ -59,7 +65,6 @@
 	throw_range = 15
 	attack_verb = list("HONKS")
 	hitsound = 'sound/items/bikehorn.ogg'
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/honk_delay = 20
 	var/last_honk_time = 0
 	var/vary_pitch = 1
@@ -116,6 +121,17 @@
 		return 1
 	return 0
 
+/obj/item/weapon/bikehorn/arcane_act(mob/user) // ideally only on cast because this thing would be dummy broken if it was kept like that
+	visible_message("<span class='warning'>HONK</span>")
+	playsound(user, istype(src,/obj/item/weapon/bikehorn/skullhorn) ? hitsound : 'sound/items/AirHorn.ogg', 100, 1)
+	for(var/mob/living/carbon/M in hearers(4, src))
+		M.sleeping = 0
+		M.stuttering += 10
+		M.ear_deaf += 5
+		M.confused += 5
+		M.dizziness += 5
+		M.jitteriness += 5
+
 /obj/item/weapon/bikehorn/syndicate
 	var/super_honk_delay = 50 //5 seconds
 	var/last_super_honk_time
@@ -155,6 +171,12 @@
 	hitsound = 'sound/items/quack.ogg'
 	honk_delay = 10
 	can_honk_baton = 0
+
+/obj/item/weapon/bikehorn/rubberducky/arcane_act(mob/user)
+	to_chat(user,"<span class='danger'>You divide by zero!</span>")
+	var/obj/item/toy/spinningtoy/ST = new(loc)
+	ST.arcane_act(user)
+	qdel(src)
 
 /obj/item/weapon/bikehorn/baton
 	name = "honk baton"

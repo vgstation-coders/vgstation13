@@ -62,7 +62,7 @@ var/list/firstaid_exceptions = list(
 	var/last_spoke = 0
 
 	bot_type = MED_BOT
-	commanding_radio = /obj/item/radio/integrated/signal/bot/medbot
+	commanding_radios = list(/obj/item/radio/integrated/signal/bot/medbot)
 
 /obj/machinery/bot/medbot/splashable()
 	return FALSE

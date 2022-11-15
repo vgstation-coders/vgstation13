@@ -11,7 +11,6 @@
 	icon_state = "holdingpack"
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 28
-	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/storage/backpack/holding/miniblackhole
 	name = "miniature black hole"
@@ -32,38 +31,38 @@
 
 /obj/item/weapon/storage/backpack/holding/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	. = ..()
-	if(!.)
-		return
 	if(W == src)
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
 	if(istype(W, /obj/item/weapon/storage/backpack/holding/grinch))
 		return
-	var/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
-	if(length(recursive_list) > 0) // Placing a bag of holding into another will singuloose when stored inside other objects too, such as when on your back or on a diona's back and stuffed in
-		singulocreate(recursive_list[1], user)
+	var/list/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
+	if(recursive_list.len) // Placing a bag of holding into another will singuloose when stored inside other objects too, such as when on your back or on a diona's back and stuffed in
+		singulocreate(recursive_list, user)
 		return
 
 //BoH+BoH=Singularity, WAS commented out
-/obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)
+/obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/list/obj/item/weapon/storage/backpack/holding/Hs, var/mob/user)
 	user.Knockdown(10)
 	user.Stun(10)
 	to_chat(user, "<span class = 'danger'>The Bluespace interfaces of the two devices catastrophically malfunction, throwing you to the ground in the process!</span>")
 	to_chat(user, "<span class='danger'>FUCK!</span>")
 	var/turf/T = get_turf(src)
-	qdel(H)
+	if(Hs?.len)
+		for(var/obj/item/weapon/storage/backpack/holding/H in Hs)
+			qdel(H)
 	qdel(src)
 	var/datum/zLevel/ourzLevel = map.zLevels[user.z]
 	if(ourzLevel.bluespace_jammed && !is_on_shuttle(usr))
 		//Stop breaking into centcomm via dungeons you shits
-		message_admins("[key_name_admin(user)] detonated [H] and [src], creating an explosion.")
-		log_game("[key_name(user)] detonated [H] and [src], creating an explosion.")
+		message_admins("[key_name_admin(user)] detonated [counted_english_list(Hs)] and [src], creating an explosion.")
+		log_game("[key_name(user)] detonated [counted_english_list(Hs)] and [src], creating an explosion.")
 		empulse(T,(20),(40))
 		explosion(T, 5, 10, 20, 40, 1, whodunnit = user)
 		user.gib() //Just to be sure
 	else
 		investigation_log(I_SINGULO,"has become a singularity. Caused by [user.key]")
-		message_admins("[key_name_admin(user)] detonated [H] and [src], creating a singularity.")
-		log_game("[key_name(user)] detonated [H] and [src], creating a singularity.")
+		message_admins("[key_name_admin(user)] detonated [counted_english_list(Hs)] and [src], creating a singularity.")
+		log_game("[key_name(user)] detonated [counted_english_list(Hs)] and [src], creating a singularity.")
 		var/obj/machinery/singularity/S = new (T)
 		S.consume(user) //So the BoHolder can't run away from his wrongdoing
 

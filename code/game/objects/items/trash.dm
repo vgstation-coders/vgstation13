@@ -97,6 +97,10 @@
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
 
+/obj/item/trash/popcorn/hoppers
+	name = "hoppers"
+	icon_state = "hoppers"
+	
 /obj/item/trash/sosjerky
 	name = "\improper Scaredy's Private Reserve Beef Jerky"
 	icon_state = "sosjerky"

@@ -1218,16 +1218,18 @@ About the new airlock wires panel:
 		return
 	if(istype(I, /obj/item/tool/crowbar/halligan))
 		var/breaktime = 10 SECONDS
-		if(locked && !lifted)
-			to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
-			if(do_after(user,src,breaktime))
-				to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
-				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-				animate(src, pixel_y = pixel_y + 5, time = 1)
-				lifted = TRUE
-		else
-			pry(user)
-		return
+		if(!operating && density && src.arePowerSystemsOn() && !((stat) & NOPOWER) && !welded)
+			if(locked && !lifted)
+				to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
+				playsound(src, 'sound/effects/rustle-metal.ogg', 50, 1)
+				if(do_after(user,src,breaktime))
+					to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+					animate(src, pixel_y = pixel_y + 5, time = 1)
+					lifted = TRUE
+			else
+				pry(user)
+			return
 	if (iswelder(I))
 		if (density && !operating)
 			var/obj/item/tool/weldingtool/WT = I

@@ -12,6 +12,9 @@
 	standard_damage_overlay_updates()
 
 /mob/living/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	if(!isUnconscious())
 		forcesay("-")
 	death(1)

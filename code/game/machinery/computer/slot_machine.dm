@@ -281,16 +281,26 @@
 
 			spawn(10)
 				if(our_money_account.charge(win_value,null,"Victory","one-armed bandit #[id]"))
-					dispense_cash(win_value, get_turf(src))
+					if(arcanetampered)
+						var/total = 0
+						for(var/i in 0 to round(sqrt(sqrt(win_value)))) // anywhere from about 3 to 16 ducks
+							new /obj/item/weapon/bikehorn/rubberducky(get_turf(src))
+							total++
+						to_chat(user, "<span class='sinister'>You win [total] ducks!</span>")
+					else
+						dispense_cash(win_value, get_turf(src))
+						to_chat(user, "<span class='notice'>You win $[win_value]!</span>")
 					playsound(src, "polaroid", 50, 1)
-
-					to_chat(user, "<span class='notice'>You win $[win_value]!</span>")
 				else
 					src.visible_message("<span class='danger'>[src]'s screen flashes red.</span>")
 
 		sleep(50)
 
 		overlays -= win_image
+
+/obj/machinery/computer/slot_machine/arcane_act(mob/user)
+	. = ..()
+	return "B'NUS D'CKS!"
 
 //Broadcast something over the radio!
 /obj/machinery/computer/slot_machine/proc/broadcast(var/message)

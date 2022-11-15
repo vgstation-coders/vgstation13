@@ -240,9 +240,15 @@
 
 			if(emagged)
 				feedback_inc("arcade_win_emagged")
-				new /obj/item/clothing/head/collectable/petehat(holder.loc)
-				new /obj/item/device/maracas/cubanpete(holder.loc)
-				new /obj/item/device/maracas/cubanpete(holder.loc)
+				if(holder.arcanetampered)
+					new /obj/item/weapon/reagent_containers/glass/bottle/wizarditis(holder.loc)
+					new /obj/item/clothing/suit/wizrobe(holder.loc)
+					new /obj/item/clothing/head/wizard(holder.loc)
+					new /obj/item/clothing/shoes/sandal(holder.loc)
+				else
+					new /obj/item/clothing/head/collectable/petehat(holder.loc)
+					new /obj/item/device/maracas/cubanpete(holder.loc)
+					new /obj/item/device/maracas/cubanpete(holder.loc)
 				message_admins("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded explosive maracas.")
 				log_game("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded explosive maracas.")
 				holder.New()

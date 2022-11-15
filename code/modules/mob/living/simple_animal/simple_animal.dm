@@ -353,6 +353,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		temperature_alert = 0
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	if(icon_gib)
 		anim(target = src, a_icon = icon, flick_anim = icon_gib, sleeptime = 15)
 
@@ -539,6 +542,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return
 	if(supernatural && isholyweapon(O))
 		purge = 3
+	playsound(loc, O.hitsound, 50, 1, -1)
 	..()
 
 
@@ -558,7 +562,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		stat(null, "Health: [round((health / maxHealth) * 100)]%")
 
 /mob/living/simple_animal/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 
 	if(!gibbed)
@@ -881,3 +885,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return TRUE
 	else
 		return FALSE
+
+// Simplemobs do not have hands.
+/mob/living/simple_animal/put_in_hand_check(obj/item/W, index)
+	return 0

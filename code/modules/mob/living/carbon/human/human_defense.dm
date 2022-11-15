@@ -563,6 +563,16 @@ emp_act
 /mob/living/carbon/human/blob_act()
 	if(flags & INVULNERABLE)
 		return
+	var/obj/item/clothing/suit/reticulatedvest/RV = wear_suit
+	if(istype(RV) && RV.hits>0) //will fail if not wearing a suit or wearing one not of this type
+		RV.hits--
+		if(RV.hits)
+			to_chat(src, "<big><span class='good'>Your reticulated vest groans as it resists the blob!</span></big>")
+		else
+			to_chat(src, "<big><span class='danger'>Your reticulated vest rips apart as it resists the blob one last time!</span></big>")
+		RV.update_icon()
+		update_inv_wear_suit()
+		return
 	if(cloneloss < 120)
 		playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 		if(isDead(src))
@@ -581,3 +591,6 @@ emp_act
 		return WATER
 	else
 		return PACID
+
+/mob/living/carbon/human/beam_defense(var/obj/effect/beam/B)
+	return is_wearing_item(/obj/item/clothing/suit/reticulatedvest) ? 0.4 : 1

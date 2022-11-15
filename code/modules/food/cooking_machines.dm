@@ -120,13 +120,45 @@ var/global/ingredientLimit = 10
 		T += M.rating-1
 	cookTime = initial(cookTime)-(25 * T) //150 ticks minus 25 ticks per every laser tier, T4s make it 75 ticks.
 
+/obj/machinery/cooking/update_icon() //Used by some, but not all, cooking machines.
+	if(active)
+		icon_state = icon_state_on
+	else
+		icon_state = initial(icon_state)
+
+/////////////////////Cooking stuff/////////////////////
+/obj/machinery/cooking/can_cook() //Whether or not we are in a valid state to cook the contents of a cooking vessel.
+	. = ..()
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+		. = FALSE
+	return
+
+/obj/machinery/cooking/can_receive_cookvessel() //Whether or not we are in a valid state to receive a cooking vessel.
+	. = ..()
+	if(active)
+		. = FALSE
+	return
+
+/obj/machinery/cooking/on_cook_start()
+	active = TRUE
+	update_icon()
+
+/obj/machinery/cooking/on_cook_stop()
+	active = FALSE
+	update_icon()
+
+/obj/machinery/cooking/render_cookvessel(offset_x, offset_y = 5)
+	overlays.len = 0
+	..()
+
 // Interactions ////////////////////////////////////////////////
 
 /obj/machinery/cooking/examine(mob/user)
 	. = ..()
-	if(src.active)
-		to_chat(user, "<span class='info'>It's currently processing [src.ingredient ? src.ingredient.name : ""].</span>")
-	if(src.cooks_in_reagents)
+	if(active)
+		if(!cookvessel)
+			to_chat(user, "<span class='info'>It's currently processing [ingredient ? ingredient.name : ""].</span>")
+	if(cooks_in_reagents)
 		to_chat(user, "<span class='info'>It seems to have [reagents.total_volume] units left.</span>")
 
 /obj/machinery/cooking/attack_hand(mob/user)
@@ -135,28 +167,31 @@ var/global/ingredientLimit = 10
 	else if(isMoMMI(user))// *buzz
 		to_chat(user, "This is old analog equipment. You can't interface with it.")
 
-	else if(src.active)
-		if(alert(user,"Remove \the [src.ingredient.name]?",,"Yes","No") == "Yes")
-			if(src.ingredient && (get_turf(src.ingredient)==get_turf(src)))
+	else if(is_cooktop && cookvessel) //If there's currently a cooking vessel on the cooking machine.
+		return ..()
+
+	else if(active)
+		if(alert(user,"Remove \the [ingredient.name]?",,"Yes","No") == "Yes")
+			if(ingredient && (get_turf(ingredient)==get_turf(src)))
 				if(Adjacent(user))
-					src.active = 0
-					src.icon_state = initial(src.icon_state)
-					src.ingredient.mouse_opacity = 1
-					user.put_in_hands(src.ingredient)
-					to_chat(user, "<span class='notice'>You remove \the [src.ingredient.name] from \the [src.name].</span>")
-					src.ingredient = null
+					active = 0
+					update_icon()
+					ingredient.mouse_opacity = 1
+					user.put_in_hands(ingredient)
+					to_chat(user, "<span class='notice'>You remove \the [ingredient.name] from \the [name].</span>")
+					ingredient = null
 				else
-					to_chat(user, "You are too far away from [src.name].")
+					to_chat(user, "You are too far away from [name].")
 			else
-				src.active = 0
+				active = 0
 		else
-			to_chat(user, "You leave \the [src.name] alone.")
+			to_chat(user, "You leave \the [name] alone.")
 	else
-		. = ..()
+		return ..()
 
 /obj/machinery/cooking/attackby(obj/item/I, mob/user)
-	if(src.active)
-		to_chat(user, "<span class='warning'>[src.name] is currently busy.</span>")
+	if(active)
+		to_chat(user, "<span class='warning'>[name] is currently busy.</span>")
 		return
 	else if(..())
 		return TRUE
@@ -167,7 +202,7 @@ var/global/ingredientLimit = 10
 		to_chat(user, "<span class='warning'>That's a terrible idea.</span>")
 		return
 	else
-		src.takeIngredient(I,user)
+		takeIngredient(I,user)
 	return
 
 /obj/machinery/cooking/verb/flush_reagents()
@@ -183,8 +218,8 @@ var/global/ingredientLimit = 10
 		return
 
 	if(cooks_in_reagents)
-		if(do_after(usr, src, src.reagents.total_volume / 10))
-			src.reagents.clear_reagents()
+		if(do_after(usr, src, reagents.total_volume / 10))
+			reagents.clear_reagents()
 			if(usr)
 				to_chat(usr, "You clean \the [src] of any ingredients.")
 
@@ -213,60 +248,59 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/proc/takeIngredient(var/obj/item/I,mob/user,var/force_cook)
-	. = src.validateIngredient(I, force_cook)
+	. = validateIngredient(I, force_cook)
 	if(. == "transto")
 		return
 	if(. == "valid")
-		if(src.foodChoices)
-			. = src.foodChoices[(input("Select production.") in src.foodChoices)]
+		if(foodChoices)
+			. = foodChoices[(input("Select production.") in foodChoices)]
 		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != (I) && !isgripper(user.get_active_hand())) && !force_cook))
 			return FALSE
-
 		if(user.drop_item(I, src))
-			src.ingredient = I
-			spawn() src.cook(.)
-			to_chat(user, "<span class='notice'>You add \the [I.name] to \the [src.name].</span>")
+			ingredient = I
+			spawn() cook(.)
+			to_chat(user, "<span class='notice'>You add \the [I.name] to \the [name].</span>")
 			return TRUE
 	else
-		to_chat(user, "<span class='warning'>You can't put that in \the [src.name]. \n[.]</span>")
+		to_chat(user, "<span class='warning'>You can't put that in \the [name]. \n[.]</span>")
 	return FALSE
 
 /obj/machinery/cooking/proc/transfer_reagents_to_food(var/obj/item/I)
 	var/obj/item/target_food
 	if(I)
 		target_food = I
-	else if (src.ingredient)
+	else if (ingredient)
 		target_food = ingredient
 
-	if(!target_food || !src.reagents || !src.reagents.total_volume) //we have nothing to transfer to or nothing to transfer from
+	if(!target_food || !reagents || !reagents.total_volume) //we have nothing to transfer to or nothing to transfer from
 		return
 
 	if(istype(target_food,/obj/item/weapon/reagent_containers))
 		for(var/datum/reagent/reagent in reagents.reagent_list)
-			src.reagents.trans_id_to(target_food, reagent.id, max(5, target_food.w_class * 5) / reagents.reagent_list.len)
+			reagents.trans_id_to(target_food, reagent.id, max(5, target_food.w_class * 5) / reagents.reagent_list.len)
 	return
 
 /obj/machinery/cooking/proc/cook_after(var/delay, var/numticks = 5) //adaptation of do_after()
 	var/delayfraction = round(delay/numticks)
 	for (var/i = 1 to numticks)
 		sleep(delayfraction)
-		if (!src.ingredient || !active || get_turf(src.ingredient)!=get_turf(src))
+		if (!ingredient || !active || get_turf(ingredient)!=get_turf(src))
 			return FALSE
 	return TRUE
 
 /obj/machinery/cooking/proc/cook(var/foodType)
-	src.active = 1
-	src.icon_state = src.icon_state_on
-	if (cook_after(src.cookTime, 25))
-		src.makeFood(foodType)
-		playsound(src,src.cookSound,100,1)
-	src.active = 0
-	src.icon_state = initial(src.icon_state)
+	active = 1
+	update_icon()
+	if (cook_after(cookTime, 25))
+		makeFood(foodType)
+		playsound(src,cookSound,100,1)
+	active = 0
+	update_icon()
 	return
 
 /obj/machinery/cooking/proc/makeFood(var/foodType)
-	if(istype(src.ingredient, /obj/item/weapon/holder))
-		var/obj/item/weapon/holder/H = src.ingredient
+	if(istype(ingredient, /obj/item/weapon/holder))
+		var/obj/item/weapon/holder/H = ingredient
 		if(H.stored_mob)
 			H.stored_mob.ghostize()
 			H.stored_mob.death()
@@ -274,10 +308,10 @@ var/global/ingredientLimit = 10
 			qdel(H.stored_mob)
 			H.stored_mob = null
 
-	var/obj/item/I = src.ingredient
-	var/obj/item/weapon/reagent_containers/food/new_food = new foodType(src.loc,I)
+	var/obj/item/I = ingredient
+	var/obj/item/weapon/reagent_containers/food/new_food = new foodType(loc,I)
 	for(var/obj/item/embedded in I.contents)
-		embedded.forceMove(src.loc)
+		embedded.forceMove(loc)
 	if(cooks_in_reagents)
 		transfer_reagents_to_food(new_food)
 
@@ -289,12 +323,16 @@ var/global/ingredientLimit = 10
 		F.ingredients += I
 		F.updateName()
 		F.overlays += F.generateFilling(I)
+		F.luckiness += I.luckiness
+		I.luckiness = null
 	else if (istype(new_food, /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable))
 		var/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/F = new_food
 		F.ingredients += I
 		F.updateName()
 		F.overlays += F.generateFilling(I)
-	src.ingredient = null
+		F.luckiness += I.luckiness
+		I.luckiness = null
+	ingredient = null
 	return new_food
 
 // Candy Machine ///////////////////////////////////////////////
@@ -322,7 +360,7 @@ var/global/ingredientLimit = 10
 				break
 
 /*/obj/machinery/cooking/candy/makeFood(var/foodType)
-	var/old_food = src.ingredient.name
+	var/old_food = ingredient.name
 	var/obj/item/weapon/reagent_containers/food/new_food = ..()
 	new_food.name = "[old_food] [new_food.name]"
 	return new_food*/
@@ -377,28 +415,33 @@ var/global/ingredientLimit = 10
 	makeCereal()
 
 /obj/machinery/cooking/proc/makeCereal()
-	var/obj/item/weapon/reagent_containers/food/snacks/cereal/C = new(src.loc)
-	for(var/obj/item/embedded in src.ingredient.contents)
-		embedded.forceMove(src.loc)
-	if(src.ingredient.reagents)
-		src.ingredient.reagents.trans_to(C,src.ingredient.reagents.total_volume)
+	var/obj/item/weapon/reagent_containers/food/snacks/cereal/C = new(loc)
+	for(var/obj/item/embedded in ingredient.contents)
+		embedded.forceMove(loc)
+	if(ingredient.reagents)
+		ingredient.reagents.trans_to(C,ingredient.reagents.total_volume)
 	if(cooks_in_reagents)
-		src.transfer_reagents_to_food(C) //add the stuff from the machine
-	C.name = "[src.ingredient.name] cereal"
-	var/image/I = image(getFlatIcon(src.ingredient, src.ingredient.dir, 0))
+		transfer_reagents_to_food(C) //add the stuff from the machine
+	C.name = "[ingredient.name] cereal"
+	var/image/I = image(getFlatIcon(ingredient, ingredient.dir, 0))
 	I.transform *= 0.7
 	C.overlays += I
 
-	if(istype(src.ingredient, /obj/item/weapon/holder))
-		var/obj/item/weapon/holder/H = src.ingredient
+	if(istype(ingredient, /obj/item/weapon/holder))
+		var/obj/item/weapon/holder/H = ingredient
 		if(H.stored_mob)
 			H.stored_mob.ghostize()
 			H.stored_mob.death()
 
 			qdel(H.stored_mob)
 
-	qdel(src.ingredient)
-	src.ingredient = null
+	//Luck
+	if(isitem(ingredient))
+		var/obj/item/itemIngredient = ingredient
+		C.luckiness += itemIngredient.luckiness
+
+	qdel(ingredient)
+	ingredient = null
 
 	return
 
@@ -417,10 +460,19 @@ var/global/ingredientLimit = 10
 	cks_max_volume = 400
 	cooks_in_reagents = 1
 	var/fry_reagent = CORNOIL
+	var/fry_reagent_temp = T0C + 170 //target temperature of the frying reagent
 
 /obj/machinery/cooking/deepfryer/initialize()
 	..()
-	reagents.add_reagent(fry_reagent, 300)
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+		reagents.add_reagent(fry_reagent, 300)
+	else
+		reagents.add_reagent(fry_reagent, 300, reagtemp = fry_reagent_temp)
+
+/obj/machinery/cooking/deepfryer/process()
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
+		return
+	reagents.heating(active_power_usage * 0.9 * SS_WAIT_MACHINERY / (1 SECONDS), fry_reagent_temp) //Assume 90% efficiency. This could be expanded to depend on upgrades.
 
 /obj/machinery/cooking/deepfryer/proc/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
@@ -457,37 +509,37 @@ var/global/ingredientLimit = 10
 	empty_icon()
 
 /obj/machinery/cooking/deepfryer/makeFood(var/obj/item/I)
-	if(istype(src.ingredient,/obj/item/weapon/reagent_containers/food/snacks))
+	if(istype(ingredient,/obj/item/weapon/reagent_containers/food/snacks))
 		if(cooks_in_reagents)
-			src.transfer_reagents_to_food(src.ingredient)
-		src.ingredient.name = "deep fried [src.ingredient.name]"
-		src.ingredient.color = "#FFAD33"
-		src.ingredient.forceMove(src.loc)
-		for(var/obj/item/embedded in src.ingredient.contents)
+			transfer_reagents_to_food(ingredient)
+		ingredient.name = "deep fried [ingredient.name]"
+		ingredient.color = "#FFAD33"
+		ingredient.forceMove(loc)
+		for(var/obj/item/embedded in ingredient.contents)
 			embedded.forceMove(ingredient)
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
-		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
+		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(loc)
 		if(cooks_in_reagents)
-			src.transfer_reagents_to_food(D)
-		D.name = "deep fried [src.ingredient.name]"
+			transfer_reagents_to_food(D)
+		D.name = "deep fried [ingredient.name]"
 		D.color = "#FFAD33"
-		D.icon = src.ingredient.icon
-		D.icon_state = src.ingredient.icon_state
-		D.overlays = src.ingredient.overlays
+		D.icon = ingredient.icon
+		D.icon_state = ingredient.icon_state
+		D.overlays = ingredient.overlays
 
-		if(istype(src.ingredient, /obj/item/weapon/holder))
-			var/obj/item/weapon/holder/H = src.ingredient
+		if(istype(ingredient, /obj/item/weapon/holder))
+			var/obj/item/weapon/holder/H = ingredient
 			if(H.stored_mob)
 				H.stored_mob.ghostize()
 				H.stored_mob.death()
 				qdel(H.stored_mob)
 
-		for(var/obj/item/embedded in src.ingredient.contents)
+		for(var/obj/item/embedded in ingredient.contents)
 			embedded.forceMove(D)
 
-		qdel(src.ingredient)
+		qdel(ingredient)
 
-	src.ingredient = null
+	ingredient = null
 	empty_icon() //see if the icon needs updating from the loss of oil
 	return
 
@@ -567,12 +619,12 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/deepfryer/confectionator/makeFood(var/obj/item/I)
 
-	var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
+	var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(loc)
 	if(cooks_in_reagents)
-		src.transfer_reagents_to_food(D)
-	D.appearance = src.ingredient.appearance
-	D.name = "sugar [src.ingredient.name]"
-	D.desc = "It's \an [src.ingredient.name] made out of sugar!"
+		transfer_reagents_to_food(D)
+	D.appearance = ingredient.appearance
+	D.name = "sugar [ingredient.name]"
+	D.desc = "It's \an [ingredient.name] made out of sugar!"
 	D.color = list(
     				1, 0, 0, 0,
   					0, 1, 0, 0,
@@ -580,11 +632,16 @@ var/global/ingredientLimit = 10
    					0, 0, 0, 1,
    					0.18, 0.08, 0.08, 0
 					)
-	if(src.ingredient.inhand_states)
-		D.inhand_states = src.ingredient.inhand_states
+	if(ingredient.inhand_states)
+		D.inhand_states = ingredient.inhand_states
 
-	src.ingredient.forceMove(src.loc) // returns the item instead of destroying it, as the confectionator creates a sugar copy
-	src.ingredient = null
+	//Luck
+	if(isitem(ingredient))
+		var/obj/item/itemIngredient = ingredient
+		D.luckiness += itemIngredient.luckiness
+
+	ingredient.forceMove(loc) // returns the item instead of destroying it, as the confectionator creates a sugar copy
+	ingredient = null
 	empty_icon() //see if the icon needs updating from the loss of sugar
 	return
 
@@ -602,6 +659,8 @@ var/global/ingredientLimit = 10
 
 	cooks_in_reagents = 1
 
+	is_cooktop = TRUE //Allows frying pans to be placed on top of it.
+
 /obj/machinery/cooking/grill/validateIngredient(var/obj/item/I)
 	. = ..()
 	if((. == "valid") && (!foodNesting))
@@ -614,46 +673,46 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/grill/cook()
-	var/foodname = "rotisserie [src.ingredient.name]"
-	src.active = 1
-	src.icon_state = src.icon_state_on
-	src.ingredient.pixel_y += 5 * PIXEL_MULTIPLIER
-	src.ingredient.forceMove(src.loc)
-	src.ingredient.mouse_opacity = 0
-	if (cook_after(src.cookTime/3, 14))
-		src.ingredient.color = "#C28566"
-		if (cook_after(src.cookTime/3, 14))
-			src.ingredient.color = "#A34719"
-			if (cook_after(src.cookTime/3, 14))
-				src.makeFood()
+	var/foodname = "rotisserie [ingredient.name]"
+	active = 1
+	update_icon()
+	ingredient.pixel_y += 5 * PIXEL_MULTIPLIER
+	ingredient.forceMove(loc)
+	ingredient.mouse_opacity = 0
+	if (cook_after(cookTime/3, 14))
+		ingredient.color = "#C28566"
+		if (cook_after(cookTime/3, 14))
+			ingredient.color = "#A34719"
+			if (cook_after(cookTime/3, 14))
+				makeFood()
 				if(use_power != MACHINE_POWER_USE_NONE)
-					playsound(src,src.cookSound,100,1)
+					playsound(src,cookSound,100,1)
 				else
-					src.visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
-	src.icon_state = initial(src.icon_state)
-	src.active = 0
+					visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
+	active = 0
+	update_icon()
 	return
 
 /obj/machinery/cooking/grill/makeFood()
 	if(cooks_in_reagents)
-		src.transfer_reagents_to_food()
-	if(istype(src.ingredient,/obj/item/weapon/reagent_containers/food))
-		var/obj/item/weapon/reagent_containers/food/F = src.ingredient
+		transfer_reagents_to_food()
+	if(istype(ingredient,/obj/item/weapon/reagent_containers/food))
+		var/obj/item/weapon/reagent_containers/food/F = ingredient
 		F.reagents.add_reagent(NUTRIMENT,10)
-		F.reagents.trans_to(src.ingredient,src.ingredient.reagents.total_volume)
-	src.ingredient.mouse_opacity = 1
-	if(!(findtext(src.ingredient.name,"rotisserie")))
-		src.ingredient.name = "grilled [src.ingredient.name]"
-	src.ingredient.forceMove(src.loc)
+		F.reagents.trans_to(ingredient,ingredient.reagents.total_volume)
+	ingredient.mouse_opacity = 1
+	if(!(findtext(ingredient.name,"rotisserie")))
+		ingredient.name = "grilled [ingredient.name]"
+	ingredient.forceMove(loc)
 
-	if(istype(src.ingredient, /obj/item/weapon/holder))
-		var/obj/item/weapon/holder/H = src.ingredient
+	if(istype(ingredient, /obj/item/weapon/holder))
+		var/obj/item/weapon/holder/H = ingredient
 		if(H.stored_mob)
 			H.stored_mob.ghostize()
 			H.stored_mob.death()
 			qdel(H.stored_mob)
 
-	src.ingredient = null
+	ingredient = null
 	return
 
 /obj/machinery/cooking/grill/spit
@@ -665,21 +724,22 @@ var/global/ingredientLimit = 10
 	use_power = MACHINE_POWER_USE_NONE
 	cooks_in_reagents = 0
 	machine_flags = null
+	is_cooktop = FALSE
 
 /obj/machinery/cooking/grill/spit/cook()
-	src.ingredient.pixel_y += 7 * PIXEL_MULTIPLIER
+	ingredient.pixel_y += 7 * PIXEL_MULTIPLIER
 	..()
 /obj/machinery/cooking/grill/spit/makeFood()
-	src.ingredient.name = "rotisserie [src.ingredient.name]"
+	ingredient.name = "rotisserie [ingredient.name]"
 	..()
 
 /obj/machinery/cooking/grill/spit/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(30)
 	if(istype(I,/obj/item/tool/crowbar) && do_after(user,src,30))
 		user.visible_message("<span class='notice'>[user] dissassembles the [src].</span>", "<span class='notice'>You dissassemble \the [src].</span>")
-		if(src.ingredient)
-			ingredient.forceMove(src.loc)
-			src.ingredient = null
+		if(ingredient)
+			ingredient.forceMove(loc)
+			ingredient = null
 		new /obj/item/stack/sheet/wood(user.loc)
 		qdel(src)
 	else
@@ -824,14 +884,14 @@ var/global/ingredientLimit = 10
 			if((!which) || (!Adjacent(user)))
 				return
 			mode = which
-			to_chat(user, "You set \the [src.name] to [mode].")
+			to_chat(user, "You set \the [name] to [mode].")
 			foodChoices = list()
 			var/obj/item/food
 			for (var/path in getFoodChoices())
 				food = path
 				foodChoices.Add(list(initial(food.name) = path))
 		else
-			to_chat(user, "You are too far away from [src.name].")
+			to_chat(user, "You are too far away from [name].")
 	..()
 
 /obj/machinery/cooking/foodpress/makeFood()

@@ -16,10 +16,10 @@
 	starting_materials = list(MAT_IRON = 15000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
 	var/hmodule = null
 	var/index = 0
+	var/fakename = ""
 
 	//the colon separates the typepath from the name
 	var/list/obj/item/stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
@@ -83,7 +83,7 @@
 
 	if(deployed)
 		edit_deploy(0)
-		to_chat(user, "You store \the [deployed].")
+		to_chat(user, "You store \the [arcanetampered ? fakename : deployed].")
 		undeploy(user)
 	else
 		choose_deploy(user)
@@ -166,7 +166,7 @@
 		if(stored_modules[module] == deployed)
 			stored_modules[module] = null
 			break
-	to_chat(user, "You successfully remove \the [deployed] from \the [src].")
+	to_chat(user, "You successfully remove \the [arcanetampered ? fakename : deployed] from \the [src].")
 	playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 	undeploy(user)
 	return TRUE
@@ -199,6 +199,8 @@
 	user.update_inv_hands()
 
 /obj/item/weapon/switchtool/proc/deploy(var/module, mob/user)
+	if(arcanetampered)
+		module = pick(stored_modules)
 	if(!(module in stored_modules))
 		return FALSE
 	if(!stored_modules[module])
@@ -207,6 +209,8 @@
 		return FALSE
 	playsound(src, deploy_sound, 10, 1)
 	deployed = stored_modules[module]
+	if(arcanetampered)
+		module = pick(stored_modules)
 	hmodule = get_module_name(module)
 	var/image/inhand_overlayr = image('icons/mob/in-hand/right/switchtool.dmi', src, "[hmodule]")
 	var/image/inhand_overlayl = image('icons/mob/in-hand/left/switchtool.dmi', src, "[hmodule]")
@@ -216,10 +220,13 @@
 	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = inhand_overlayr
 	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = inhand_overlayl
 	user.update_inv_hands()
+	if(arcanetampered)
+		module = pick(stored_modules)
+		fakename = "[stored_modules[module]]"
 	return TRUE
 
 /obj/item/weapon/switchtool/proc/edit_deploy(var/doedit)
-	if(!deployed) 
+	if(!deployed)
 		return
 	if(doedit) //Makes the deployed item take on the features of the switchtool for attack animations and text. Other bandaid fixes for snowflake issues can go here.
 		sharpness = deployed.sharpness
@@ -229,7 +236,7 @@
 		deployed.overlays = overlays
 		deployed.cant_drop = TRUE
 	//Revert the changes to the deployed item.
-	else 
+	else
 		sharpness = initial(sharpness)
 		deployed.name = initial(deployed.name)
 		deployed.icon = initial(deployed.icon)
@@ -272,7 +279,7 @@
 					true_module = checkmodule
 					break
 			if(deploy(true_module,user))
-				to_chat(user, "You deploy \the [deployed].")
+				to_chat(user, "You deploy \the [arcanetampered ? fakename : deployed].")
 				edit_deploy(1)
 			return TRUE
 		return

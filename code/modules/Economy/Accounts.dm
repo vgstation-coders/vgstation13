@@ -59,7 +59,6 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 //worldtime2text()
 
 /proc/create_account(var/owner_name = "Default user", var/money = 0, var/virtual = 0, var/obj/machinery/account_database/source_db, var/wage_gain= 0, var/security_level = 1, var/hidden = FALSE, var/isStationAccount = TRUE)
-
 	//create a new account
 	var/datum/money_account/M = new()
 	M.owner_name = owner_name
@@ -139,6 +138,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 							//1 - require manual login / account number and pin
 							//2 - require card and manual login
 	var/virtual = 0
+	var/virtual_wallet_wage_ratio = 50
 	var/wage_gain = 0 // How much an account gains per 'wage' tick.
 	var/disabled = 0
 	var/hidden = FALSE

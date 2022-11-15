@@ -26,7 +26,6 @@
 	w_class = W_CLASS_MEDIUM
 	fits_max_w_class = W_CLASS_SMALL
 	max_combined_w_class = 14
-	autoignition_temperature = AUTOIGNITION_METAL
 
 /obj/item/weapon/storage/secure/examine(mob/user)
 	..()

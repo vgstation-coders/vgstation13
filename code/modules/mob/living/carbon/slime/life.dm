@@ -276,7 +276,7 @@
 			src.adjustOxyLoss(10)
 
 		if(src.stat != DEAD)
-			src.stat = UNCONSCIOUS
+			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 
 	if(prob(30))	//I think this is meant to allow slimes to starve to death -Deity Link
 		adjustOxyLoss(-1)

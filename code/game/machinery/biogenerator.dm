@@ -336,6 +336,12 @@
 	cost = 500
 	result = /obj/item/clothing/suit/mino
 
+/datum/biogen_recipe/misc/rvest
+	name = "Reticulated Vest"
+	id = "rvest"
+	cost = 500
+	result = /obj/item/clothing/suit/reticulatedvest
+
 /datum/biogen_recipe/flooring
 	category="Flooring"
 

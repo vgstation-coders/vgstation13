@@ -17,7 +17,6 @@
 	starting_materials = list(MAT_IRON = 3750)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	flags = FPRINT
 	siemens_coefficient = 1
 	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
@@ -181,7 +180,6 @@
 	desc = "Parts of a slightly beveled brass table."
 	icon_state = "brass_tableparts"
 	starting_materials = list(MAT_BRASS = 15000)
-	autoignition_temperature = AUTOIGNITION_METAL
 	table_type = /obj/structure/table/reinforced/clockwork
 	sheet_type = /obj/item/stack/sheet/brass
 	sheet_amount = 4
@@ -213,7 +211,6 @@
 	starting_materials = list(MAT_IRON = 3750)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/sheet_amount = 1
 
 /obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)

@@ -366,6 +366,12 @@ For vending packs, see vending_packs.dm*/
 			to_chat(usr, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
 
 		else if(SSsupply_shuttle.at_station)
+			//check to see if there are unprocessed forwards and warn if so
+			if(SSsupply_shuttle.cargo_forwards.len)
+				var/unfinished_forwards = check_forwards()
+				if(unfinished_forwards && alert(usr, "There are crate forwards that are not present, stamped, and weighed. Send the shuttle back anyway?", "Forwarding Warning", "Yes", "No") == "No")
+					return 1
+
 			SSsupply_shuttle.moving = -1
 			SSsupply_shuttle.sell()
 			SSsupply_shuttle.send()
@@ -506,6 +512,22 @@ For vending packs, see vending_packs.dm*/
 	status_signal.data["command"] = command
 
 	frequency.post_signal(src, status_signal)
+
+
+//helper function for sending the supply shuttle back, checks for commonly-missed crate forward mistakes
+/obj/machinery/computer/supplycomp/proc/check_forwards()
+	if(SSsupply_shuttle.cargo_forwards.len == 0)
+		return 0
+	for(var/datum/cargo_forwarding/CF in SSsupply_shuttle.cargo_forwards)
+		if(!CF.associated_crate || get_area(CF.associated_crate) != cargo_shuttle.linked_area)
+			return 1
+		if(!CF.weighed)
+			return 1
+		if(!CF.associated_manifest || get_area(CF.associated_manifest) != cargo_shuttle.linked_area)
+			return 1
+		if(CF.associated_manifest && (!CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len))
+			return 1
+	return 0
 
 /obj/machinery/computer/ordercomp
 	name = "Supply ordering console"

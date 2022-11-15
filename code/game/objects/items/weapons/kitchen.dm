@@ -29,7 +29,6 @@
 	shrapnel_amount = 1
 	shrapnel_size = 2
 	shrapnel_type = /obj/item/projectile/bullet/shrapnel
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/loaded_food = ""
 	var/image/food_overlay
 	var/food_type
@@ -143,7 +142,13 @@
 		if(do_surgery(M, user, src))
 			return
 
-	if (loaded_food)
+	if(arcanetampered && M.hasmouth())
+		M.visible_message("<span class='sinister'>[M] eats a delicious spoon!</span>")
+		feed_to(user, M)
+		playsound(M, 'sound/items/eatfood.ogg', 50, 0)
+		qdel(src)
+		return
+	else if (loaded_food)
 		reagents.update_total()
 		if(!M.hasmouth())
 			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")
@@ -209,7 +214,14 @@
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD && M != user && !loaded_food)
 		return ..()
 
-	if (loaded_food)
+	if(arcanetampered)
+		M.visible_message("<span class='sinister'>[M] eats a delicious fork!</span>")
+		playsound(M, 'sound/items/eatfood.ogg', 50, 0)
+		feed_to(user, M)
+		M.adjustBruteLoss(10)
+		qdel(src)
+		return
+	else if (loaded_food)
 		reagents.update_total()
 		if(!M.hasmouth())
 			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")
@@ -516,7 +528,6 @@
 	starting_materials = list(MAT_IRON = 3000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/list/carrying = list() // List of things on the tray. - Doohl
 	var/max_carry = 10 // w_class = W_CLASS_TINY -- takes up 1
 					   // w_class = W_CLASS_SMALL -- takes up 3

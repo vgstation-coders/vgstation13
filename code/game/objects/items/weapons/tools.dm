@@ -50,7 +50,6 @@
 	starting_materials = list(MAT_IRON = 150)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 	toolsounds = list('sound/items/Ratchet.ogg')
@@ -116,7 +115,6 @@
 	starting_materials = list(MAT_IRON = 75)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	attack_verb = list("stabs")
 	toolsounds = list('sound/items/Screwdriver.ogg', 'sound/items/Screwdriver2.ogg')
 	surgerysound = 'sound/items/Screwdriver.ogg'
@@ -212,7 +210,6 @@
 	starting_materials = list(MAT_IRON = 80)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("pinches", "nips at")
 	toolsounds = list('sound/items/Wirecutter.ogg')
@@ -412,22 +409,35 @@
 /obj/item/tool/weldingtool/afterattack(atom/A, mob/user as mob, proximity)
 	if(!proximity)
 		return
-	if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && !src.welding)
-		if(A.reagents.trans_to(src, max_fuel))
-			to_chat(user, "<span class='notice'>Welder refueled.</span>")
-			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
-		else if(!A.reagents)
-			to_chat(user, "<span class='notice'>\The [A] is empty.</span>")
+	if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1)
+		if (src.welding || A.arcanetampered)
+			if(ismob(A.arcanetampered))
+				message_admins("[key_name_admin(arcanetampered)] caused a fueltank explosion.")
+				log_game("[key_name(arcanetampered)] caused a fueltank explosion.")
+			else if(!A.arcanetampered)
+				message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
+				log_game("[key_name(user)] triggered a fueltank explosion.")
+			to_chat(user, "<span class='warning'>That was stupid of you.</span>")
+			var/obj/structure/reagent_dispensers/fueltank/tank = A
+			tank.explode()
 		else
-			to_chat(user, "<span class='notice'>\The [src] is already full.</span>")
+			if(A.reagents.trans_to(src, max_fuel))
+				to_chat(user, "<span class='notice'>Welder refueled.</span>")
+				playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+			else if(!A.reagents)
+				to_chat(user, "<span class='notice'>\The [A] is empty.</span>")
+			else
+				to_chat(user, "<span class='notice'>\The [src] is already full.</span>")
 		return
-	else if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && src.welding)
-		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
-		log_game("[key_name(user)] triggered a fueltank explosion.")
-		to_chat(user, "<span class='warning'>That was stupid of you.</span>")
-		var/obj/structure/reagent_dispensers/fueltank/tank = A
-		tank.explode()
-		return
+	if(arcanetampered && get_dist(src,A) <= 1)
+		if (!src.welding)
+			if(src.reagents.add_reagent(FUEL, max_fuel))
+				to_chat(user, "<span class='notice'>Welder refueled.</span>")
+				playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+		else
+			to_chat(user, "<span class='warning'>That was stupid of you.</span>")
+			explosion(get_turf(A),-1,0,3)
+			return
 	if (src.welding)
 		if(isliving(A))
 			var/mob/living/L = A
@@ -697,7 +707,6 @@
 	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 	toolsounds = list('sound/items/Crowbar.ogg')
@@ -753,6 +762,11 @@
 		return 1
 	return 0
 
+/obj/item/tool/crowbar/halligan/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+	. = do_after_default_checks(arglist(args))
+	if(.)
+		playsound(src,"sound/items/metal_impact.ogg",50,1)
+
 /obj/item/tool/irons
 	name = "set of irons"
 	desc = "Fireaxe and Halligan bar used for forcible entry."
@@ -788,7 +802,6 @@
 	w_class = W_CLASS_SMALL
 	w_type = RECYK_MISC
 	origin_tech = Tc_COMBAT + "=2"
-	autoignition_temperature = AUTOIGNITION_METAL
 	var/open = 0
 
 /obj/item/weapon/conversion_kit/New()
@@ -824,7 +837,6 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
 	var/work_speed = 1 //multiplier

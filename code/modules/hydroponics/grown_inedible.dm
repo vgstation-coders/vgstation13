@@ -154,7 +154,7 @@
 		to_chat(M, "<span class='warning'>You are heated by the warmth of the of the [name]!</span>")
 		M.bodytemperature += potency/2 * TEMPERATURE_DAMAGE_COEFFICIENT
 /obj/item/weapon/grown/novaflower/pickup(mob/living/carbon/human/user as mob)
-	if(!user.gloves)
+	if(!user.gloves || arcanetampered)
 		to_chat(user, "<span class='warning'>The [name] burns your bare hand!</span>")
 		user.adjustFireLoss(rand(1,5))
 
@@ -179,7 +179,7 @@
 
 /obj/item/weapon/grown/nettle/pickup(mob/living/carbon/human/user as mob) //todo this
 	if(istype(user))
-		if(!user.gloves)
+		if(!user.gloves || arcanetampered)
 			to_chat(user, "<span class='warning'>The nettle burns your bare hand!</span>")
 			var/datum/organ/external/affecting = user.get_active_hand_organ()
 			if(affecting && affecting.take_damage(0,force))

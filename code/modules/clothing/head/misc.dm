@@ -390,6 +390,8 @@
 	slot_flags = SLOT_ID|SLOT_HEAD
 
 /obj/item/clothing/head/bearpelt/real/spare/GetAccess()
+	if(arcanetampered)
+		return ..()
 	return get_all_accesses()
 
 /obj/item/clothing/head/bearpelt/black
@@ -604,12 +606,12 @@
 /obj/item/clothing/head/pajamahat/red
 	icon_state = "pajamahat_red"
 	item_state = "pajamahat_red"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/pajamahat/blue
 	icon_state = "pajamahat_blue"
 	item_state = "pajamahat_blue"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/mummy_rags
 	name = "mummy rags"
@@ -660,6 +662,14 @@
 	desc = "Take us to your leader/captain/clown."
 	icon_state = "antennae"
 	item_state = "antennae"
+	species_fit = list(INSECT_SHAPED)
+	flags = FPRINT
+
+/obj/item/clothing/head/devil_horns
+	name = "devil horns"
+	desc = "Might be slightly offensive to your local chaplain."
+	icon_state = "devil_horns"
+	item_state = "devil_horns"
 	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 

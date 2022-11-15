@@ -189,6 +189,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/debug_reagents,
 	/client/proc/create_awaymission,
 	/client/proc/make_invulnerable,
+	/client/proc/send_to_heck,
 	/client/proc/cmd_admin_dump_delprofile,
 	/client/proc/mob_list,
 	/client/proc/cure_disease,
@@ -1128,6 +1129,7 @@ var/list/admin_verbs_mod = list(
 	ML_INPUT_COORDS,
 	ML_LOAD_TO_Z2
 	)
+	var/dungeoning = FALSE
 
 	switch(input(usr, "Select a location for the new map element", "Map element loading") as null|anything in choices)
 		if(ML_CURRENT_LOC)
@@ -1160,28 +1162,48 @@ var/list/admin_verbs_mod = list(
 				to_chat(src, "<span class='warning'>Dungeon area not defined! This map is missing the /obj/effect/landmark/dungeon_area object.</span>")
 				return
 
-			var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading", "0") as null|num
-			if(rotate == null)
-				return
-
-			var/rotatetext = rotate ? " rotated by [rotate] degrees" : ""
-			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)[rotatetext].")
-			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)[rotatetext].")
-			load_dungeon(ME, rotate, TRUE)
-			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"][rotatetext].")
-			return
-
+			dungeoning = TRUE
 
 	var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading", "0") as null|num
 	if(rotate == null)
 		return
-	var/overwrite = alert("Overwrite original objects in area?","Map element loading","Yes","No") == "Yes"
+	var/overwrite = FALSE
+	if(!dungeoning)
+		overwrite = alert("Overwrite original objects in area?","Map element loading","Yes","No") == "Yes"
+	var/clipmin_x = 0
+	var/clipmax_x = INFINITY
+	var/clipmin_y = 0
+	var/clipmax_y = INFINITY
+	var/clipmin_z = 0
+	var/clipmax_z = INFINITY
+	if(alert("Clip map to bounds?","Map element loading","Yes","No") == "Yes")
+		clipmin_x = input(usr, "Minimum X to clip at", "Map element loading", "1") as null|num
+		if(clipmin_x == null)
+			return
+		clipmax_x = input(usr, "Maximum X to clip at", "Map element loading", "[world.maxx]") as null|num
+		if(clipmax_x == null)
+			return
+		clipmin_y = input(usr, "Minimum Y to clip at", "Map element loading", "1") as null|num
+		if(clipmin_y == null)
+			return
+		clipmax_y = input(usr, "Maximum Y to clip at", "Map element loading", "[world.maxy]") as null|num
+		if(clipmax_y == null)
+			return
+		clipmin_z = input(usr, "Minimum Z to clip at", "Map element loading", "1") as null|num
+		if(clipmin_z == null)
+			return
+		clipmax_z = input(usr, "Maximum Z to clip at", "Map element loading", "[world.maxz]") as null|num
+		if(clipmax_z == null)
+			return
 
 	var/rotatetext = rotate ? " rotated by [rotate] degrees" : ""
 	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
 	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord][rotatetext].")
-	//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
-	ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite, TRUE)
+	if(dungeoning)
+		load_dungeon(ME, rotate, TRUE, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
+	else
+		//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
+		ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite, TRUE, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
 	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"][rotatetext].")
 
 /client/proc/create_awaymission()
@@ -1230,6 +1252,57 @@ var/list/admin_verbs_mod = list(
 	to_chat(src, "Attempting to load [AM.name] ([AM.file_path])...")
 	createRandomZlevel(override, AM, usr)
 	to_chat(src, "The away mission has been generated on z-level [world.maxz] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")
+
+/client/proc/send_to_heck(var/mob/dead/observer/O in dead_mob_list)
+	set name = "Send to hell"
+	set desc = "Eternally damn this ghost for their sins."
+	set category = "Fun"
+
+	if(alert(usr, "Are you sure you want to do this?", "Confirm judgement", "Yes", "No") != "Yes")
+		return
+
+	var/mob/newmob = send_to_hedoublehockeysticks(O)
+	if(newmob)
+		log_admin("[ckey(key)]/([mob]) has damned [newmob] to HELL")
+		message_admins("[ckey(key)]/([mob]) has damned [newmob] [formatJumpTo(newmob,"(JMP)")] to HELL")
+
+/proc/send_to_hedoublehockeysticks(mob/O)
+	if(!O || !O.key)
+		return
+	if(!(/datum/map_element/dungeon/hell in existing_dungeons))
+		load_dungeon(/datum/map_element/dungeon/hell)
+	var/datum/map_element/dungeon/hell/H = locate(/datum/map_element/dungeon/hell) in existing_dungeons
+	var/list/turf/turfs = list()
+	for(var/turf/T in H.spawned_atoms)
+		if(!T.density)
+			turfs += T
+	if(!turfs.len)
+		warning("No hell turfs to send a mob to!")
+		return
+	for(var/datum/body_archive/archive in body_archives)
+		if(archive.key == O.key)
+			var/mob/living/tempM = new archive.mob_type
+			if(!istype(tempM))
+				warning("Body archive to send to hell was not a living mob!")
+				break
+			var/mob/living/M = tempM.actually_reset_body(archive = archive, our_mind = get_mind_by_key(O.key))
+			if(!istype(M))
+				warning("Body archive to send to hell was not a living mob!")
+				break
+			M.status_flags ^= BUDDHAMODE
+			M.forceMove(pick(turfs))
+			qdel(tempM)
+			qdel(O)
+			return M
+
+	var/datum/mind/mind = get_mind_by_key(O.key)
+	if (mind)
+		var/mob/living/carbon/human/prefM = new(pick(turfs))
+		prefM.status_flags ^= BUDDHAMODE
+		prefM.quick_copy_prefs()
+		mind.transfer_to(prefM)
+		qdel(O)
+		return prefM
 
 /client/proc/cmd_dectalk()
 	set name = "Dectalk"

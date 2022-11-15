@@ -16,7 +16,6 @@
 	w_type = RECYK_METAL
 	w_class = W_CLASS_LARGE
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_COMBAT + "=1"
 	attack_verb = list("robusts", "batters", "staves in")
 	fits_max_w_class = W_CLASS_MEDIUM
@@ -46,6 +45,16 @@
 	to_chat(viewers(user), "<span class='danger'>[user] is [pick("staving","robusting")] \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
+/obj/item/weapon/storage/toolbox/arcane_act(mob/user)
+	..()
+	force = 0
+	throwforce = 0
+	return "R'B'STO!"
+
+/obj/item/weapon/storage/toolbox/bless()
+	..()
+	force = initial(force)
+	throwforce = initial(throwforce)
 
 /obj/item/weapon/storage/toolbox/emergency
 	name = "emergency toolbox"
@@ -102,6 +111,12 @@
 		new /obj/item/clothing/gloves/yellow(src)
 	else
 		new /obj/item/stack/cable_coil(src,30,color)
+
+/obj/item/weapon/storage/toolbox/electrical/arcane_act(mob/user)
+	for(var/atom/A in contents)
+		qdel(A)
+		new /obj/item/clothing/gloves/fyellow(src)
+	return ..()
 
 /obj/item/weapon/storage/toolbox/syndicate
 	name = "suspicious looking toolbox"

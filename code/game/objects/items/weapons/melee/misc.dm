@@ -10,7 +10,6 @@
 	force = 10
 	throwforce = 7
 	w_class = W_CLASS_MEDIUM
-	autoignition_temperature = AUTOIGNITION_METAL
 	origin_tech = Tc_COMBAT + "=4"
 	attack_verb = list("flogs", "whips", "lashes", "disciplines")
 

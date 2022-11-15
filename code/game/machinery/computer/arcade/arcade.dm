@@ -68,6 +68,13 @@
 /obj/machinery/computer/arcade/emag_act(mob/user)
 	game.emag_act(user)
 
+/obj/machinery/computer/arcade/arcane_act(mob/user)
+	game.emag_act(user) // until i come up with something better, reward differs for now though
+	return ..()
+
+/obj/machinery/computer/arcade/bless()
+	return
+
 /obj/machinery/computer/arcade/emp_act(severity)
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		..(severity)

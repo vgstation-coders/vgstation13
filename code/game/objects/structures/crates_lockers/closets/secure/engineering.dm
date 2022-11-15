@@ -38,7 +38,8 @@
 		/obj/item/clothing/glasses/scanner/material,
 		/obj/item/weapon/card/debit/preferred/department/engineering,
 		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger,
-		/obj/item/tool/solder/screw
+		/obj/item/tool/solder/screw,
+		/obj/item/tool/crowbar/halligan
 	)
 
 /obj/structure/closet/secure_closet/engineering_electrical
