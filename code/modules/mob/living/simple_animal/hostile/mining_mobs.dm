@@ -313,16 +313,21 @@
 	pass_flags = PASSTABLE
 	hostile_interest = 15 //Very persistent
 	var/open_fire_type = /mob/living/simple_animal/hostile/asteroid/hivelordbrood
+	var/list/mob/living/simple_animal/hostile/broods = list()
+	var/brood_limit = 0
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/get_butchering_products()
 	return list(/datum/butchering_product/hivelord_core)
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/OpenFire(var/the_target)
-	var/mob/living/simple_animal/hostile/A = new open_fire_type(src.loc)
-	if(istype(A))
-		A.GiveTarget(target)
-		A.friends = friends
-		A.faction = faction
+	if(!brood_limit || broods.len < brood_limit)
+		var/mob/living/simple_animal/hostile/A = new open_fire_type(src.loc)
+		if(istype(A))
+			A.GiveTarget(target)
+			A.friends = friends
+			A.faction = faction
+			A.hivelord = src
+			broods.Add(A)
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/AttackingTarget()
 	OpenFire()
@@ -366,6 +371,7 @@
 	harm_intent_damage = 10
 	hostile_interest = 5 //Less persistent
 	open_fire_type = /mob/living/simple_animal/hostile/asteroid/hivelord
+	brood_limit = 5
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/boss/New()
 	..()
@@ -495,11 +501,11 @@
 	desc = "All that remains of a greater hivelord, works as a drop-in replacement for any species heart, granting protection from bone damage or internal bleeding, as well as boosting any healing processes. Try not to think about what's beating inside you."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "boiledrorocore"
-	prosthetic_name = "circulatory pump"
-	prosthetic_icon = "heart-prosthetic"
 	organ_tag = "heart"
+	prosthetic_name = null
+	prosthetic_icon = null
+	dead_icon = null
 	fresh = 6 // Juicy.
-	dead_icon = "heart-off"
 	organ_type = /datum/organ/internal/heart/hivelord
 
 /obj/item/organ/internal/heart/hivelord/die()
