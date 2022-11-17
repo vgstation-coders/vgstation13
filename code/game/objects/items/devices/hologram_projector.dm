@@ -25,8 +25,8 @@
 	var/obj/item/device/hologram_projector/projector = null
 	var/proj_turf = null
 	login_text = "You are a hologram. You can perform a few basic functions, and are unable to leave the vicinity of the projector.\
-	\n<span class='danger'>Do not damage the station. Do not harm crew members without their consent.</span>\
-	\nPrime Directive: <br> Serve your master"
+	\n<span class='danger'>Do not damage the station. Do not harm crew members without their consent. Serve your master.</span>"
+
 
 /mob/living/simple_animal/hologram/advanced/projector/Login()
 	if(projector?.integratedpai)
@@ -201,7 +201,6 @@
 		integratedpai.pai.real_name = holoperson.real_name
 		integratedpai.pai.name = holoperson.name
 		var/datum/mind/M = holoperson.mind
-		integratedpai.pai.mind.key = holoperson.mind.key
 		M.transfer_to(integratedpai.pai)
 		clear_holo()
 	..()
