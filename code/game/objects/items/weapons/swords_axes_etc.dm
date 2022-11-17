@@ -339,3 +339,70 @@
 	..()
 	explosion(get_turf(src), 0, 2, 3, whodunnit = user)
 	qdel(src)
+
+/obj/item/weapon/caber
+	name = "Ullapool Caber"
+	desc = "A potato-masher style hand grenade. Only explodes when swung against a target while the safety grip is on."
+	icon_state = "ullapoolcaber"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	siemens_coefficient = 0 //wooden handle
+	flags = FPRINT
+	force = 15 //moderately strong as a regular melee weapon, gets sharp when exploded
+	w_class = W_CLASS_MEDIUM //bigger than chem grenades
+	attack_verb = list("blasts", "smacks", "smashes")
+	var/exploded = FALSE
+	var/rechargetime = 30 //1 minute between each boom
+	var/timer = 0
+
+/obj/item/weapon/caber/New()
+	processing_objects += src
+
+/obj/item/weapon/caber/Destroy()
+	processing_objects -= src
+
+/obj/item/weapon/caber/attack_self(mob/user)
+	cant_drop = !cant_drop
+	to_chat(user,"<span class='notice'>You [cant_drop ? "activate" : "deactivate"] the safety grip and explosive mode.</span>")
+
+/obj/item/weapon/caber/process()
+	if(exploded)
+		timer += 1
+	if(!exploded && cant_drop)
+		attack_verb = list("blasts", "explodes")
+	if(!cant_drop)
+		attack_verb = list("smacks", "smashes")
+	if(timer == rechargetime)
+		timer = 0
+		exploded = FALSE
+		visible_message(src, "<span class='notice'>The [src] vibrates as the newly assembled explosive charge is deployed!</span>")
+		playsound(src, 'sound/misc/tf2critsound.ogg', 100, 0)
+		icon_state = initial(icon_state)
+		sharpness_flags = initial(sharpness_flags)
+		sharpness = initial(sharpness) //no longer exploded with metal edges so not sharp anymore
+
+/obj/item/weapon/caber/attack(atom/target, mob/living/user)
+	..()
+	if(cant_drop)
+		if(!exploded)
+			if(prob(50))
+				playsound(user, 'sound/misc/demomankaboom.ogg', 100, 0)
+			else
+				playsound(user, 'sound/misc/demomankablooie.ogg', 100, 0)
+			sleep(1)
+			explosion(target, 0, 1, 2, whodunnit = user) //moderate damage on the tile with the target, small damage on the surrounding tile (about 25 brute self harm per use, with chance for bleeding).
+			exploded = TRUE
+			icon_state = "ullapoolcaberexploded"
+			sharpness = 1.8 //ragged metal edges are kinda like a serrated knife
+			sharpness_flags = SHARP_BLADE //ever cut yourself when opening a can of whatever with a can opener? same deal here
+		else
+			playsound(target, 'sound/misc/caber_hitsound.ogg', 100, 0)
+	else
+		playsound(target, 'sound/misc/caber_hitsound.ogg', 100, 0)
+//TO DO: make inhand update properly when exploded or restored
+//TO DO: less self damage the more inebriated you are, with max immunity at or near liver death levels
+//TO DO: explosion when used against walls or windows
+
+/obj/item/weapon/caber/admin
+	name = "Demoman's Own Ullapool Caber"
+	desc = "I'm goin' ta blast ya into thin gruel!"
+	rechargetime = 1 //good luck surviving using this shit without the advanced EOD suit
