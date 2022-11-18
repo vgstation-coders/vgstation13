@@ -47,7 +47,7 @@
 	var/show_desc = FALSE											//For the ability menu
 	var/can_leave_cable = FALSE										//For the ability that lets you
 	var/draining = TRUE												//For draining power or not
-	var/move_divide = 4												//For slowing down of above
+	var/move_divide = 16											//when unlocked, ability lets you move out of cables with a BIG slowdown
 	var/powerloss_alerted = FALSE									//Prevent spam notifying
 	var/health_lock = 0												//Goes down every tick, while this is on it prevents the Pulse Demon from regenerating
 
