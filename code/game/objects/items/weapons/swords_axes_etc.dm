@@ -391,7 +391,7 @@
 				playsound(user, 'sound/misc/demomankablooie.ogg', 100, 0)
 			sleep(1)
 			explosion(target, 0, 1, 0, whodunnit = user) //moderate damage on the tile with the target
-			if(prob(50)
+			if(prob(50))
 				user.adjustBruteLoss(35)
 			else
 				user.adjustBruteLoss(45) //something something uhh fall damage
