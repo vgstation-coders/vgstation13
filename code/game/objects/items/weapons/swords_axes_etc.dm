@@ -359,6 +359,7 @@
 
 /obj/item/weapon/caber/Destroy()
 	processing_objects -= src
+	..()
 
 /obj/item/weapon/caber/attack_self(mob/user)
 	cant_drop = !cant_drop
