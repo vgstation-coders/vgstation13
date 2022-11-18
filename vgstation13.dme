@@ -2097,6 +2097,7 @@
 #include "code\modules\mob\living\simple_animal\hostile\heart_attack.dm"
 #include "code\modules\mob\living\simple_animal\hostile\hive_aliens.dm"
 #include "code\modules\mob\living\simple_animal\hostile\hivebot.dm"
+#include "code\modules\mob\living\simple_animal\hostile\hog.dm"
 #include "code\modules\mob\living\simple_animal\hostile\hostile.dm"
 #include "code\modules\mob\living\simple_animal\hostile\mannequin.dm"
 #include "code\modules\mob\living\simple_animal\hostile\mimic.dm"
