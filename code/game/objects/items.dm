@@ -323,18 +323,19 @@
 		if(reagents.total_volume)
 			//If the examiner is holding the item and can feel that the item contains hot or cold reagents, indicate that the item feels hot or cold.
 			var/can_feel_temperature = FALSE
+			var/nopain = FALSE
 			if(isliving(user))
 				can_feel_temperature = TRUE
 				var/mob/living/L = user
-				if(!L.feels_pain() || L.has_painkillers()) //It's possible that we could still want to feel temperature even if we can't feel pain, but for now this should be okay, especially while feels_pain() always returns TRUE.
-					can_feel_temperature = FALSE
+				if(!L.feels_pain() || L.has_painkillers())
+					nopain = TRUE
 			//If we have something covering our hands, we can't feel the searing heat of the beverage we're about to enjoy.
 			if(iscarbon(user))
 				var/mob/living/carbon/C = user
 				if(C.check_body_part_coverage(HANDS))
 					can_feel_temperature = FALSE
 			if(can_feel_temperature)
-				var/held_item_temperature_message = held_item_temperature_message(user)
+				var/held_item_temperature_message = held_item_temperature_message(user, nopain)
 				if(held_item_temperature_message)
 					to_chat(user, held_item_temperature_message)
 		if(cant_drop != FALSE) //Item can't be dropped, and is either in left or right hand!
@@ -342,7 +343,7 @@
 	if(daemon && daemon.flags & DAEMON_EXAMINE)
 		daemon.examine(user)
 
-/obj/item/proc/held_item_temperature_message(mob/living/L)
+/obj/item/proc/held_item_temperature_message(mob/living/L, nopain = FALSE)
 	var/safetemp_excession_level = 0
 	var/coldbound
 	var/hotbound
@@ -357,7 +358,7 @@
 	if(!safetemp_excession)
 		safetemp_excession = min(0, reagents.chem_temp - coldbound)
 	safetemp_excession_level = round(min(3, abs(safetemp_excession) / 50)) * (safetemp_excession > 0 ? 1 : -1)
-	if(safetemp_excession_level)
+	if(safetemp_excession_level && !nopain)
 		switch(safetemp_excession_level)
 			if(-3)
 				return "<span class='warning'>It feels piercingly cold.</span>"
