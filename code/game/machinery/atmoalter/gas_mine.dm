@@ -74,7 +74,7 @@
 	if(stat & BROKEN)
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Broken.</span>")
 		return
-	to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Functional and operating at a rate of [Ceiling(KW_TO_KPA_COEFFICIENT * power_load)] kPa per cycle.</span>")
+	to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Functional and operating at a rate of [Ceiling(WATT_TO_KPA_COEFFICIENT * power_load)] kPa per cycle.</span>")
 
 /obj/machinery/atmospherics/miner/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
