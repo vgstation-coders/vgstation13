@@ -134,6 +134,20 @@
 /obj/machinery/atmospherics/trinary/pressure_valve/proc/toggle_enabled()
 	enabled = !enabled
 	if (!enabled) close()
+	
+
+/obj/machinery/atmospherics/trinary/pressure_valve/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
+	..()
+
+	if(open)
+		if(reference == node1)
+			if(node3)
+				return node3.network_expand(new_network, src)
+		else if(reference == node3)
+			if(node1)
+				return node1.network_expand(new_network, src)
+
+	return null
 
 // --- Graphics ---
 
@@ -175,19 +189,6 @@
 	if(isMoMMI(user) && (user in (viewers(1, src) + loc))) // MoMMIs must be next to the valve to view and manipulate it
 		attack_hand(user)
 	return
-
-/obj/machinery/atmospherics/trinary/pressure_valve/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
-	..()
-
-	if(open)
-		if(reference == node1)
-			if(node3)
-				return node3.network_expand(new_network, src)
-		else if(reference == node3)
-			if(node1)
-				return node1.network_expand(new_network, src)
-
-	return null
 
 //-------------------------
 // Digital pressure valves
