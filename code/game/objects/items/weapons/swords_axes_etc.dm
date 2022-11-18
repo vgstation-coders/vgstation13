@@ -348,7 +348,7 @@
 	siemens_coefficient = 0 //wooden handle
 	flags = FPRINT
 	force = 15 //moderately strong as a regular melee weapon, gets sharp when exploded
-	w_class = W_CLASS_MEDIUM //bigger than chem grenades
+	w_class = W_CLASS_SMALL //fits in your pocket
 	attack_verb = list("blasts", "smacks", "smashes")
 	var/exploded = FALSE
 	var/rechargetime = 30 //1 minute between each boom
