@@ -27,20 +27,6 @@
 	host.update_glow()
 	return TRUE
 
-/datum/pulse_demon_upgrade/capacity
-	ability_name = "Increase Maximum Capacity"
-	ability_desc = "Increases the maximum amount of charge you can store. This is necessary for buying further upgrades."
-
-/datum/pulse_demon_upgrade/capacity/update_condition_and_cost()
-	condition = host.maxcharge < 10000000
-	upgrade_cost = host.maxcharge
-
-/datum/pulse_demon_upgrade/capacity/on_purchase()
-	if(..())
-		host.maxcharge = min(round(host.maxcharge * 2, 1), 10000000)
-		to_chat(host,"<span class='notice'>You can now store [host.maxcharge]W.</span>")
-		update_condition_and_cost()
-
 /datum/pulse_demon_upgrade/takeover
 	ability_name = "Faster takeover time"
 	ability_desc = "Allows hijacking of electronics in less time."
