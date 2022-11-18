@@ -272,9 +272,9 @@ var/list/uplink_items = list()
 	name = "Ullapool Caber"
 	desc = "A modern replica of the legendary weapon held by Tavish DeGroot, scanned after the DeGroot family so generously let us inspect them for mass production. This potato-masher grenade will explode when swung, but not when thrown. The safety grip makes dropping or throwing the Caber impossible whilst enabled and will not explode with the safeties disabled. The device 'recharges' itself via a nanomanufacturing assembly on the handle. EOD Suit not included."
 	item = /obj/item/weapon/caber/
-	cost = 8
-	discounted_cost = 6
-	jobs_with_discount = list("Assistant")
+	cost = 12
+	discounted_cost = 10
+	//jobs_with_discount = list("Assistant")
 	//would've liked to add a discount for dark skinned or nearsighted characters (closest to one eyed we have) but dunno how
 
 // STEALTHY WEAPONS
