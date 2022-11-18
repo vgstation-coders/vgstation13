@@ -1,4 +1,4 @@
-#define KW_TO_KPA_COEFFICIENT 0.5
+#define WATT_TO_KPA_COEFFICIENT 10
 
 /obj/machinery/atmospherics/miner
 	name = "gas miner"
@@ -110,8 +110,11 @@
 		return
 
 	PN = area_apc.terminal.powernet
-	PN.add_connection(src)
-	return TRUE
+	if(PN)
+		PN.add_connection(src)
+		return TRUE
+	else
+		return FALSE
 
 /obj/machinery/atmospherics/miner/attack_ghost(var/mob/user)
 	return
@@ -158,22 +161,17 @@
 	if(stat & BROKEN)
 		return
 
+	update_rate(Ceiling(WATT_TO_KPA_COEFFICIENT * power_load))		//scale mol output by arbitrary power load
 	//scale based on powernet, otherwise constant 4500
 	if(PN)
-		var/power_surplus = PN.get_satisfaction(power_priority)
 		use_power = MACHINE_POWER_USE_ACTIVE
-		update_rate(Ceiling(KW_TO_KPA_COEFFICIENT * power_load))		//scale mol output by arbitrary power load
-		if(power_surplus > 0.55)
-			power_load += 1000
-		else if (power_surplus < 0.45 && power_load > 0)
-			power_load -= 1000
-		else
-			power_load = 0
+		if(power_load < 900)
+			power_load += 100
+			active_power_usage = power_load
 	else
-		power_load = 0
 		use_power = MACHINE_POWER_USE_IDLE
-		update_rate(4500)
-	active_power_usage = power_load
+		power_load = 450
+
 	pumping.copy_from(air_contents)
 /*
 	//gas-related
