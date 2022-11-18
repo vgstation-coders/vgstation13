@@ -606,6 +606,10 @@
 /spell/pulse_demon/sustaincharge/cast(var/list/targets, mob/user)
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+		if(PD.can_leave_cable)
+			if(!(PD.current_power || PD.current_cable)) //prevent you from killing yourself instantly by turning the ability off
+				to_chat(user,"<span class='warning'>Find a cable or a piece of power machinery!</span>")
+				return
 		PD.can_leave_cable = !PD.can_leave_cable
 		to_chat(user,"<span class='notice'>Leaving cables is [PD.can_leave_cable ? "on" : "off"].</span>")
 
