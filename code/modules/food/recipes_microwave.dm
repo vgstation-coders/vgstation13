@@ -1917,6 +1917,14 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad
 
+/datum/recipe/salad/rosolli
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/rosolli
+
 // Curry ///////////////////////////////////////////////////////
 
 /datum/recipe/curry
@@ -3299,6 +3307,15 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/pear
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pickledpears
+	cookable_with = COOKABLE_WITH_MICROWAVE
+	
+/datum/recipe/pickledbeets
+	reagents = list(VINEGAR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pickledbeets
 	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/bulgogi
