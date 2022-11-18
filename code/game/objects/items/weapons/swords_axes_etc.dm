@@ -365,7 +365,7 @@
 	cant_drop = !cant_drop
 	to_chat(user,"<span class='notice'>You [cant_drop ? "activate" : "deactivate"] the safety grip and explosive mode.</span>")
 
-/obj/item/weapon/caber/process()
+/obj/item/weapon/caber/process(mob/user)
 	if(exploded)
 		timer += 1
 	if(!exploded && cant_drop)
@@ -375,7 +375,7 @@
 	if(timer == rechargetime)
 		timer = 0
 		exploded = FALSE
-		visible_message(src, "<span class='notice'>The [src] vibrates as the newly assembled explosive charge is deployed!</span>")
+		visible_message(user, "<span class='notice'>The [src] vibrates as the newly assembled explosive charge is deployed!</span>")
 		playsound(src, 'sound/misc/tf2critsound.ogg', 100, 0)
 		icon_state = initial(icon_state)
 		sharpness_flags = initial(sharpness_flags)
@@ -390,7 +390,11 @@
 			else
 				playsound(user, 'sound/misc/demomankablooie.ogg', 100, 0)
 			sleep(1)
-			explosion(target, 0, 1, 2, whodunnit = user) //moderate damage on the tile with the target, small damage on the surrounding tile (about 25 brute self harm per use, with chance for bleeding).
+			explosion(target, 0, 1, 0, whodunnit = user) //moderate damage on the tile with the target
+			if(prob(50)
+				user.adjustBruteLoss(35)
+			else
+				user.adjustBruteLoss(45) //something something uhh fall damage
 			exploded = TRUE
 			icon_state = "ullapoolcaberexploded"
 			sharpness = 1.3 //ragged metal edges are kinda like a serrated knife
