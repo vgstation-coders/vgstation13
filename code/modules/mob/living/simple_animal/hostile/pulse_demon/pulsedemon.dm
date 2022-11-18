@@ -430,13 +430,11 @@
 
 // Called in Life() per tick
 /mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
-	var/max_can_absorb = current_battery.outputlevel //only raise maxcharge up to the SMES' output level
-	var/amount_to_drain = charge_absorb_amount * 10 //so you don't need to idle for 10 minutes
+	var/amount_to_drain = charge_absorb_amount
+	// Cap conditions
 	if(current_battery.charge <= amount_to_drain)
 		amount_to_drain = current_battery.charge
-	if(maxcharge <= max_can_absorb && charge >= maxcharge)
-		maxcharge = min(maxcharge + amount_to_drain, max_can_absorb)
-	var/amount_added = min((maxcharge-charge),amount_to_drain)
+	var/amount_added = min(maxcharge-charge,amount_to_drain)
 	charge += amount_added
 	current_battery.charge -= amount_added
 	// Add to stats if any
@@ -452,7 +450,8 @@
 	// Cap conditions
 	if(current_apc.cell.charge <= amount_to_drain)
 		amount_to_drain = current_apc.cell.charge
-	maxcharge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER //multiplier to balance the pitiful powercells in APCs
+	amount_to_drain = min(maxcharge-charge, amount_to_drain)
+//	maxcharge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER //multiplier to balance the pitiful powercells in APCs
 	charge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER
 	current_apc.cell.use(amount_to_drain)
 
