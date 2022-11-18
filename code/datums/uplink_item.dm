@@ -771,7 +771,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/medical/antisocial
 	name = "Explosive Hug Chemical"
-	desc = "30 units of Bicarodyne, a special chemical that causes a devastating explosion when exposed to endorphins released in the body by a hug. Metabolizes quite slowly."
+	desc = "30 units of Bicarodyne, a special chemical that causes a devastating explosion when exposed to endorphins released in the body by a hug. Metabolizes quite slowly. Converts Bicaridine into more of this substance."
 	item = /obj/item/weapon/storage/box/syndie_kit/explosive_hug //Had to be put in a box because it didn't play well with reagent creation
 	cost = 9
 	discounted_cost = 8
@@ -779,7 +779,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/medical/hypozinebottle
 	name = "Lethal Speed Chemical"
-	desc = "30 units of Hypozine, a special chemical that causes the body to seamlessly synthesize Hyperzine, but also causes increases in muscle activity to levels that rapidly tear the user's body apart, causing catastrophic ligament failure. Metabolizes quite slowly."
+	desc = "30 units of Hypozine, a special chemical that causes the body to seamlessly synthesize Hyperzine, but also causes increases in muscle activity to levels that rapidly tear the user's body apart, causing catastrophic ligament failure. Metabolizes quite slowly. Converts Hyperzine into more of this substance."
 	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
 	cost = 5
 	discounted_cost = 4

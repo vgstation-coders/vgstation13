@@ -1013,6 +1013,22 @@
 	else
 		holder.clear_reagents()
 
+/datum/chemical_reaction/more_bicarodyne
+	name = "Bicarodyne"
+	id = BICARODYNE
+	result = BICARODYNE
+	required_reagents = list(BICARIDINES = 1)
+	required_catalysts = list(BICARODYNE = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/more_hypozine
+	name = "Hypozine"
+	id = HYPOZINE
+	result = HYPOZINE
+	required_reagents = list(HYPERZINES = 1)
+	required_catalysts = list(HYPOZINE = 1)
+	result_amount = 1
+
 /datum/chemical_reaction/nanobots
 	name = "Nanobots"
 	id = NANOBOTS
@@ -3631,7 +3647,7 @@
 	result = HUSBANDO
 	required_reagents = list(MANLYDORF = 1, KARMOTRINE = 4)
 	result_amount = 5
-	
+
 /datum/chemical_reaction/tomboy
 	name = "Tomboy"
 	id = TOMBOY

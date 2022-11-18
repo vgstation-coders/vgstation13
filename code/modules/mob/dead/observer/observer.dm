@@ -406,6 +406,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Ghost"
 	set desc = "Relinquish your life and enter the land of the dead."
 
+	if((client && !client.holder) && (status_flags & BUDDHAMODE))
+		to_chat(src,"<span class='notice'>You feel stuck on this plane.</span>")
+		return
+
 	var/timetocheck = timeofdeath
 	if (isbrain(src))
 		var/mob/living/carbon/brain/brainmob = src

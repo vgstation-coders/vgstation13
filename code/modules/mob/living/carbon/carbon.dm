@@ -72,6 +72,9 @@
 				user.delayNextMove(10) //no just holding the key for an instant gib
 
 /mob/living/carbon/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	dropBorers(1)
 	if(stomach_contents && stomach_contents.len)
 		drop_stomach_contents()
