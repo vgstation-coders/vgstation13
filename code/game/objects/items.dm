@@ -319,11 +319,64 @@
 	..(user, size, show_name)
 	if(price && price > 0)
 		to_chat(user, "You read '[price] space bucks' on the tag.")
-	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
-		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
+	if(user.is_holding_item(src))
+		if(reagents.total_volume)
+			//If the examiner is holding the item and can feel that the item contains hot or cold reagents, indicate that the item feels hot or cold.
+			var/can_feel_temperature = FALSE
+			if(isliving(user))
+				can_feel_temperature = TRUE
+				var/mob/living/L = user
+				if(!L.feels_pain() || L.has_painkillers()) //It's possible that we could still want to feel temperature even if we can't feel pain, but for now this should be okay, especially while feels_pain() always returns TRUE.
+					can_feel_temperature = FALSE
+			//If we have something covering our hands, we can't feel the searing heat of the beverage we're about to enjoy.
+			if(iscarbon(user))
+				var/mob/living/carbon/C = user
+				if(C.check_body_part_coverage(HANDS))
+					can_feel_temperature = FALSE
+			if(can_feel_temperature)
+				var/held_item_temperature_message = held_item_temperature_message(user)
+				if(held_item_temperature_message)
+					to_chat(user, held_item_temperature_message)
+		if(cant_drop != FALSE) //Item can't be dropped, and is either in left or right hand!
+			to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
 	if(daemon && daemon.flags & DAEMON_EXAMINE)
 		daemon.examine(user)
 
+/obj/item/proc/held_item_temperature_message(mob/living/L)
+	var/safetemp_excession_level = 0
+	var/coldbound
+	var/hotbound
+	if(iscarbon(L))
+		hotbound = BODYTEMP_HEAT_DAMAGE_LIMIT
+		coldbound = BODYTEMP_COLD_DAMAGE_LIMIT
+	else if(isanimal(L))
+		var/mob/living/simple_animal/S = L
+		coldbound = S.minbodytemp
+		hotbound = S.maxbodytemp
+	var/safetemp_excession = max(0, reagents.chem_temp - hotbound)
+	if(!safetemp_excession)
+		safetemp_excession = min(0, reagents.chem_temp - coldbound)
+	safetemp_excession_level = round(min(3, abs(safetemp_excession) / 50)) * (safetemp_excession > 0 ? 1 : -1)
+	if(safetemp_excession_level)
+		switch(safetemp_excession_level)
+			if(-3)
+				return "<span class='warning'>It feels piercingly cold.</span>"
+			if(-2)
+				return "<span class='warning'>It feels freezing cold.</span>"
+			if(-1)
+				return "<span class='warning'>It feels very cold.</span>"
+			if(1)
+				return "<span class='warning'>It feels very hot.</span>"
+			if(2)
+				return "<span class='warning'>It feels searing hot.</span>"
+			if(3)
+				return "<span class='warning'>It feels blisteringly hot.</span>"
+	else
+		var/temperature_difference = reagents.chem_temp - L.bodytemperature
+		if(temperature_difference >= 20)
+			return "<span class='notice'>It feels warm.</span>"
+		else if(temperature_difference <= -20)
+			return "<span class='notice'>It feels cool.</span>"
 
 /obj/item/attack_ai(mob/user as mob)
 	..()
