@@ -351,6 +351,7 @@
 	w_class = W_CLASS_SMALL //fits in your pocket
 	attack_verb = list("blasts", "smacks", "smashes")
 	var/exploded = FALSE
+	var/admintier = FALSE
 	var/rechargetime = 30 //1 minute between each boom
 	var/timer = 0
 
@@ -390,11 +391,12 @@
 			else
 				playsound(user, 'sound/misc/demomankablooie.ogg', 100, 0)
 			sleep(1)
-			explosion(target, 0, 1, 0, whodunnit = user) //moderate damage on the tile with the target
-			if(prob(50))
-				user.adjustBruteLoss(35)
+			if(!admintier)
+				explosion(target, 0, 0, 1, whodunnit = user) //no breach, 55 damage to unarmored targets
+				user.adjustBruteLoss(35) //something something uhh fall damage, you'll break a bone or something here
 			else
-				user.adjustBruteLoss(45) //something something uhh fall damage
+				explosion(target, 0, 1, 2, whodunnit = user)
+				user.adjustBruteLoss(5) //about 30 from the stronger explosion, 5 to equalize 
 			exploded = TRUE
 			icon_state = "ullapoolcaberexploded"
 			sharpness = 1.3 //ragged metal edges are kinda like a serrated knife
@@ -411,3 +413,4 @@
 	name = "Demoman's Own Ullapool Caber"
 	desc = "I'm goin' ta blast ya into thin gruel!"
 	rechargetime = 1 //good luck surviving using this shit without the advanced EOD suit
+	admintier = TRUE
