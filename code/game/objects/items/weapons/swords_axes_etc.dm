@@ -393,7 +393,7 @@
 			explosion(target, 0, 1, 2, whodunnit = user) //moderate damage on the tile with the target, small damage on the surrounding tile (about 25 brute self harm per use, with chance for bleeding).
 			exploded = TRUE
 			icon_state = "ullapoolcaberexploded"
-			sharpness = 1.8 //ragged metal edges are kinda like a serrated knife
+			sharpness = 1.3 //ragged metal edges are kinda like a serrated knife
 			sharpness_flags = SHARP_BLADE //ever cut yourself when opening a can of whatever with a can opener? same deal here
 		else
 			playsound(target, 'sound/misc/caber_hitsound.ogg', 100, 0)
