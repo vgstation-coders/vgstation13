@@ -110,11 +110,6 @@
 		return
 
 	PN = area_apc.terminal.powernet
-	if(PN)
-		PN.add_connection(src)
-		return TRUE
-	else
-		return FALSE
 
 /obj/machinery/atmospherics/miner/attack_ghost(var/mob/user)
 	return
