@@ -1942,42 +1942,38 @@ Thanks.
 //Returns the thermal mass of the mob's body, excluding reagents but including blood.
 /mob/living/proc/body_thermal_mass()
 
-	var/body_thermal_mass = 0
-
-	//Perhaps some of this could be defined at the species level and use more inheritance overall
+	//Start with the mass of the body.
+	var/body_thermal_mass = bodymass()
 
 	if(ishuman(src))
 
-		//First, get the non-blood thermal mass of the body
+		//First, get the non-blood thermal mass of the body.
 		var/mob/living/carbon/human/H = src
-		body_thermal_mass = ((H.size * 4.121 / 3) ** 3) * (M_FAT in H.mutations ? 1.5 : 1) //Approximately 70kg for a non-obese human, and 105kg (1.5 times the base) for an obese human.
-		body_thermal_mass *= 0.9 //Only consider the non-blood fraction of the body mass (90%)
-		//Turn the body mass into thermal mass by multiplying by specific heat
-		if(isskellington(H) || isskelevox(H))
-			body_thermal_mass *= (0.15 * 1.313) //Multiply by 15% (bone fraction of the body), and then the specific heat of cortical bone.
-		else if(isplasmaman(H))
-			body_thermal_mass *= (0.15 * (200 / 405)) //Skeleton made of plasma, values taken from XGM_gases.dm. It's gas phase there and solid here but should be okay.
-		else if(isgolem(H))
-			body_thermal_mass *= 0.5 //Make golems easier to heat as they're made of metal.
-		else if(isslimeperson(H))
-			body_thermal_mass *= 1.24 //Same as slime jelly.
-		else if(ismushroom(H))
-			body_thermal_mass *= 3.935 //Specific heat of mushrooms.
+		if(M_FAT in H.mutations)
+			body_thermal_mass *= 1.5
+		body_thermal_mass *= (1 - HUMANBODY_BLOOD_FRACTION) //First, only consider the non-blood fraction of the body mass.
+		//Turn the body mass into thermal mass by multiplying by specific heat.
+		if(H.species)
+			body_thermal_mass *= H.species.body_specheatcap
 		else
-			body_thermal_mass *= 3.47 //Specific heat capacity of the human body (does include blood, but it shouldn't be too much of a difference).
+			body_thermal_mass *= SPECHEATCAP_HUMANBODY //Value does include blood, but it shouldn't be too much of a difference.
 
 		//Add blood thermal mass component
 		body_thermal_mass += H.vessel.get_thermal_mass()
 
 	else
 
-		//Get the mass mass of the body
-		body_thermal_mass = (src.size * (4.121 / 3)) ** 3 //Based on approximately 70kg for a non-obese human.
 		//Turn the body mass into thermal mass by multiplying by specific heat of the human body (generalization).
-		body_thermal_mass *= 3.47
+		body_thermal_mass *= SPECHEATCAP_HUMANBODY
 
-	return body_thermal_mass
+	return body_thermal_mass * MOB_HEAT_MULT
 
 //Returns the thermal mass of the mob's body, including reagents.
 /mob/living/proc/total_thermal_mass()
 	return body_thermal_mass() + reagents.get_thermal_mass()
+
+/mob/living/proc/bodymass()
+	var/mult = 1
+	if(isskellington(src) || isskelevox(src) || isplasmaman(src))
+		mult *= HUMANBODY_BONE_FRACTION
+	return mult * ((size * 13.737) ** 3) //Approximately 70kg for a non-obese human.
