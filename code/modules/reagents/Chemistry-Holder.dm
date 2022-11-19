@@ -942,7 +942,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	var/total_thermal_mass = 0
 	for(var/datum/reagent/R in reagent_list)
 		total_thermal_mass += R.volume * R.density * R.specheatcap
-	return total_thermal_mass
+	return total_thermal_mass * 10 //multiply by 10 because 1 u = 10 mL
 
 /datum/reagents/proc/heating(var/power_transfer, var/received_temperature)
 	/*
