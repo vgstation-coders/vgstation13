@@ -347,7 +347,7 @@ var/list/sent_strike_teams = list()
 	new_commando.mind = new
 	new_commando.mind.current = new_commando
 	new_commando.mind.assigned_role = "MODE"
-	new_commando.mind.special_role = "Custom Team".
+	new_commando.mind.special_role = "Custom Team"
 
 	var/datum/faction/customsquad = find_active_faction_by_type(/datum/faction/strike_team/custom)
 	if(customsquad)
