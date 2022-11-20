@@ -73,10 +73,12 @@
 	//looping though carbons
 	var/list/crewlist = list()
 	for(var/mob/living/carbon/human/H in mob_list)
-
+		//Check if they're a map-spawned corpse vs an actual player corpse
 		if(H.iscorpse)
 			continue
-		if(H.z == 2)
+		//No ability to see Centcomm's level
+		var/datum/zLevel/L = get_z_level(H)
+		if(istype(L, /datum/zLevel/centcomm))
 			continue
 
 		var/name
@@ -162,15 +164,6 @@
 				data["count"] = crewlist.len + 1
 				crewlist += list(data)
 	return crewlist
-
-
-
-
-
-
-
-
-
 
 // Begin tgui
 /obj/item/device/pcmc/tgui_interact(mob/user, datum/tgui/ui)
