@@ -76,7 +76,6 @@
 		install_pai()
 	else
 		recruit_holoperson()
-		
 	to_chat(usr, "Generating hologram...")
 
 /obj/item/device/hologram_projector/proc/recruit_holoperson()
