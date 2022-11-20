@@ -233,7 +233,7 @@
 		blinded = 1
 		silent = 0
 	else				//ALIVE. LIGHTS ARE ON
-		if(health < -25 || !has_brain())
+		if((health < -25 || !has_brain()) && !(status_flags & BUDDHAMODE))
 			death()
 			blinded = 1
 			silent = 0
@@ -251,11 +251,11 @@
 		if(paralysis)
 			AdjustParalysis(-2)
 			blinded = 1
-			stat = UNCONSCIOUS
+			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 		else if(sleeping)
 			sleeping = max(sleeping-1, 0)
 			blinded = 1
-			stat = UNCONSCIOUS
+			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 			if( prob(10) && health )
 				spawn(0)
 					emote("hiss_")

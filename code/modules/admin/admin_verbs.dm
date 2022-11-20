@@ -189,6 +189,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/debug_reagents,
 	/client/proc/create_awaymission,
 	/client/proc/make_invulnerable,
+	/client/proc/send_to_heck,
 	/client/proc/cmd_admin_dump_delprofile,
 	/client/proc/mob_list,
 	/client/proc/cure_disease,
@@ -1251,6 +1252,57 @@ var/list/admin_verbs_mod = list(
 	to_chat(src, "Attempting to load [AM.name] ([AM.file_path])...")
 	createRandomZlevel(override, AM, usr)
 	to_chat(src, "The away mission has been generated on z-level [world.maxz] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")
+
+/client/proc/send_to_heck(var/mob/dead/observer/O in dead_mob_list)
+	set name = "Send to hell"
+	set desc = "Eternally damn this ghost for their sins."
+	set category = "Fun"
+
+	if(alert(usr, "Are you sure you want to do this?", "Confirm judgement", "Yes", "No") != "Yes")
+		return
+
+	var/mob/newmob = send_to_hedoublehockeysticks(O)
+	if(newmob)
+		log_admin("[ckey(key)]/([mob]) has damned [newmob] to HELL")
+		message_admins("[ckey(key)]/([mob]) has damned [newmob] [formatJumpTo(newmob,"(JMP)")] to HELL")
+
+/proc/send_to_hedoublehockeysticks(mob/O)
+	if(!O || !O.key)
+		return
+	if(!(/datum/map_element/dungeon/hell in existing_dungeons))
+		load_dungeon(/datum/map_element/dungeon/hell)
+	var/datum/map_element/dungeon/hell/H = locate(/datum/map_element/dungeon/hell) in existing_dungeons
+	var/list/turf/turfs = list()
+	for(var/turf/T in H.spawned_atoms)
+		if(!T.density)
+			turfs += T
+	if(!turfs.len)
+		warning("No hell turfs to send a mob to!")
+		return
+	for(var/datum/body_archive/archive in body_archives)
+		if(archive.key == O.key)
+			var/mob/living/tempM = new archive.mob_type
+			if(!istype(tempM))
+				warning("Body archive to send to hell was not a living mob!")
+				break
+			var/mob/living/M = tempM.actually_reset_body(archive = archive, our_mind = get_mind_by_key(O.key))
+			if(!istype(M))
+				warning("Body archive to send to hell was not a living mob!")
+				break
+			M.status_flags ^= BUDDHAMODE
+			M.forceMove(pick(turfs))
+			qdel(tempM)
+			qdel(O)
+			return M
+
+	var/datum/mind/mind = get_mind_by_key(O.key)
+	if (mind)
+		var/mob/living/carbon/human/prefM = new(pick(turfs))
+		prefM.status_flags ^= BUDDHAMODE
+		prefM.quick_copy_prefs()
+		mind.transfer_to(prefM)
+		qdel(O)
+		return prefM
 
 /client/proc/cmd_dectalk()
 	set name = "Dectalk"

@@ -36,6 +36,9 @@
 	sensor_augs = list("Mesons", "Disable")
 
 	fix_modules()
+	
+	if(Holiday == HALLOWEEN)
+		sprites["Spooky"] = "skullmommi"
 
 //Nanotrasen's MoMMI
 /obj/item/weapon/robot_module/mommi/nt

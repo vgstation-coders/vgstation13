@@ -8046,6 +8046,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	name = "gunk pie"
 	desc = "Surprisingly free of toxins!"
 	icon_state = "gunkpie"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/gunk_pie/New()
 	..()
@@ -8066,7 +8067,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	slices_num = 5
 	storage_slots = 3
 	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkcake/New()
 	..()
@@ -8079,7 +8080,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "Your nose hairs recoil at the fumes coming out of this."
 	icon_state = "gunkcakeslice"
 	bitesize = 2
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/roachesonstick
@@ -8102,6 +8103,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	base_crumb_chance = 30
 	valid_utensils = 0
 	base_crumb_chance = 0
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/grandpatiks/New()
 	..()

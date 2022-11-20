@@ -66,19 +66,15 @@ var/list/one_way_windows
 		return ..() && O.anchored && O.density
 
 /obj/structure/window/relativewall()
-	if(!anchored || !density)
-		var/icon/I = new('icons/obj/structures/window.dmi', initial(icon_state))
-		icon = I
-		return
-	icon_state = "[base_state][..()]"
+	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
+	var/icon/I = new('icons/obj/structures/window.dmi', icon_state)
 	if(!is_fulltile)
 		var/cmasknumber = findSmoothingOnTurf()
-		var/icon/I = new('icons/obj/structures/window.dmi', icon_state)
 		if(cmasknumber)
 			var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]")
 			I.Blend(mask, ICON_OVERLAY)
 			I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
-		icon = I
+	icon = I
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)

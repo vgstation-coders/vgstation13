@@ -1382,29 +1382,40 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_kitchen)
 	group = "Hospitality"
 
-/datum/supply_packs/randomised/assorted_meats
-	name = "Assorted meats"
+/datum/supply_packs/randomised/premium_meats
+	name = "Premium meats"
 	num_contained = 8
 	contains = list(/obj/item/weapon/reagent_containers/food/snacks/meat/mimic,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
-					/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/diona,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/polyp,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big)
+					/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/basic
-	containername = "assorted meats crate"
+	containername = "Premium meats crate"
+	access = list(access_kitchen)
+	group = "Hospitality"
+
+/datum/supply_packs/randomised/budget_meats
+	name = "Budget meats"
+	num_contained = 8
+	contains = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
+					/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
+					)
+	cost = 15
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "budget meats crate"
 	access = list(access_kitchen)
 	group = "Hospitality"
 
@@ -1996,7 +2007,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/automation
 	name = "Automation supplies"
-	contains = list(/obj/item/weapon/circuitboard/wrapping_machine,
+	contains = list(/obj/item/weapon/circuitboard/autoprocessor/wrapping,
+					/obj/item/weapon/circuitboard/autoprocessor/clothing,
 					/obj/item/weapon/circuitboard/sorting_machine/item,
 					/obj/item/weapon/circuitboard/crate_opener,
 					/obj/item/weapon/circuitboard/crate_closer)

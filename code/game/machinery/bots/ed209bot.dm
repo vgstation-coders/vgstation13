@@ -45,7 +45,7 @@
 		)
 
 	target_chasing_distance = 12
-	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
+	commanding_radios = list(/obj/item/radio/integrated/signal/bot/beepsky)
 
 /obj/item/weapon/ed209_assembly
 	name = "ED-209 assembly"

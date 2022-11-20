@@ -41,7 +41,7 @@
 					switch(direction)
 						if(WEST)
 							src.pixel_x = max(src.pixel_x, 0)
-						if(SOUTH || SOUTHEAST || SOUTHWEST)
+						if(SOUTH, SOUTHEAST, SOUTHWEST)
 							src.pixel_y = max(src.pixel_y, 0)
 						if(EAST)
 							if(istype(src,/obj/effect/decal/cleanable/crayon/text))
@@ -50,7 +50,7 @@
 								src.maptext_width = 32
 								src.update_icon()
 							src.pixel_x = min(src.pixel_x, 0)
-						if(NORTH || NORTHEAST || NORTHWEST)
+						if(NORTH, NORTHEAST, NORTHWEST)
 							if(istype(src,/obj/effect/decal/cleanable/crayon/text))
 								var/obj/effect/decal/cleanable/crayon/text/CT2 = src
 								src.pixel_y = min(src.pixel_y, max(0,src.maptext_height - (CT2.fontsize*1.5)))

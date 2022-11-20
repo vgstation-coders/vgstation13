@@ -1,4 +1,7 @@
 /mob/living/carbon/monkey/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	if(!isUnconscious())
 		forcesay("-")
 	death(1)
@@ -28,7 +31,7 @@
 
 
 /mob/living/carbon/monkey/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	if(healths)
 		healths.icon_state = "health5"

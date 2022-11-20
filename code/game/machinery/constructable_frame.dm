@@ -1297,10 +1297,10 @@ to destroy them and players will be able to make replacements.
 	desc = "A circuit board used to run a machine that sorts input into two outputs from pre-programmed settings. This one is programmed for items."
 	build_path = /obj/machinery/sorting_machine/item
 
-/obj/item/weapon/circuitboard/wrapping_machine
-	name = "Circuit Board (Wrapping Machine)"
-	desc = "A circuit board used to run a machine that wraps packages."
-	build_path = /obj/machinery/wrapping_machine
+/obj/item/weapon/circuitboard/autoprocessor
+	name = "Circuit Board (Autoprocessor)"
+	desc = "A circuit board used to run a machine that processes things."
+	build_path = /obj/machinery/autoprocessor/wrapping
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2"
 	req_components = list(
@@ -1308,6 +1308,16 @@ to destroy them and players will be able to make replacements.
 		/obj/item/weapon/stock_parts/manipulator = 1,
 		/obj/item/weapon/stock_parts/matter_bin = 2,
 	)
+
+/obj/item/weapon/circuitboard/autoprocessor/wrapping
+	name = "Circuit Board (Wrapping Machine)"
+	desc = "A circuit board used to run a machine that wraps packages."
+	build_path = /obj/machinery/autoprocessor/wrapping
+
+/obj/item/weapon/circuitboard/autoprocessor/clothing
+	name = "Circuit Board (Wrapping Machine)"
+	desc = "A circuit board used to run a machine that clothes living things."
+	build_path = /obj/machinery/autoprocessor/clothing
 
 /obj/item/weapon/circuitboard/processing_unit
 	name = "Circuit Board (Ore Processor)"
