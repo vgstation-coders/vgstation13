@@ -1,4 +1,4 @@
-#define WATT_TO_KPA_COEFFICIENT 10
+#define KW_TO_KPA_COEFFICIENT 0.5
 
 /obj/machinery/atmospherics/miner
 	name = "gas miner"
@@ -74,7 +74,7 @@
 	if(stat & BROKEN)
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Broken.</span>")
 		return
-	to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Functional and operating at a rate of [Ceiling(WATT_TO_KPA_COEFFICIENT * power_load)] kPa per cycle.</span>")
+	to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Functional and operating at a rate of [Ceiling(KW_TO_KPA_COEFFICIENT * power_load)] kPa per cycle.</span>")
 
 /obj/machinery/atmospherics/miner/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
@@ -110,11 +110,8 @@
 		return
 
 	PN = area_apc.terminal.powernet
-	if(PN)
-		PN.add_connection(src)
-		return TRUE
-	else
-		return FALSE
+	PN.add_connection(src)
+	return TRUE
 
 /obj/machinery/atmospherics/miner/attack_ghost(var/mob/user)
 	return
@@ -161,17 +158,22 @@
 	if(stat & BROKEN)
 		return
 
-	update_rate(Ceiling(WATT_TO_KPA_COEFFICIENT * power_load))		//scale mol output by arbitrary power load
 	//scale based on powernet, otherwise constant 4500
 	if(PN)
+		var/power_surplus = PN.get_satisfaction(power_priority)
 		use_power = MACHINE_POWER_USE_ACTIVE
-		if(power_load < 900)
-			power_load += 100
-			active_power_usage = power_load
+		update_rate(Ceiling(KW_TO_KPA_COEFFICIENT * power_load))		//scale mol output by arbitrary power load
+		if(power_surplus > 0.55)
+			power_load += 1000
+		else if (power_surplus < 0.45 && power_load > 0)
+			power_load -= 1000
+		else
+			power_load = 0
 	else
+		power_load = 0
 		use_power = MACHINE_POWER_USE_IDLE
-		power_load = 450
-
+		update_rate(4500)
+	active_power_usage = power_load
 	pumping.copy_from(air_contents)
 /*
 	//gas-related
