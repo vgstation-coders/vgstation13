@@ -81,6 +81,7 @@
 	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
 	obj_overlays[UNIFORM_LAYER]		= new /obj/abstract/Overlays/uniform_layer
 	obj_overlays[SUIT_LAYER]		= new /obj/abstract/Overlays/suit_layer
+	obj_overlays[SHOES_LAYER]		= new /obj/abstract/Overlays/shoes_layer
 
 /mob/living/simple_animal/hologram/advanced/Login()
 	..()
