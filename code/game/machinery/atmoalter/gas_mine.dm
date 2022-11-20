@@ -172,3 +172,15 @@
 	overlay_color = "#70DBDB"
 	gases = list(GAS_OXYGEN = 0.2, GAS_NITROGEN = 0.8)
 	on = 0
+
+/obj/machinery/atmospherics/miner/mixed_oxygen
+	name = "\improper Mixed Gas Miner"
+	desc = "Pumping oxygen and nitrous oxide."
+	overlay_color = "#70DBDB"
+	gases = list(GAS_OXYGEN = 0.5, GAS_SLEEPING = 0.5)
+
+/obj/machinery/atmospherics/miner/mixed_nitrogen
+	name = "\improper Mixed Gas Miner"
+	desc = "Pumping nitrogen, carbon dioxide, and plasma."
+	overlay_color = "#FF80BD"
+	gases = list(GAS_CARBON = 0.3, GAS_NITROGEN = 0.4, GAS_PLASMA = 0.3)
