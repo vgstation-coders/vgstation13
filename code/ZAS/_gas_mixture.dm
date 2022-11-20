@@ -33,7 +33,7 @@
 
 //Since gases not present in the mix are culled from the list, we use this to make sure a number is returned for any valid gas.
 /datum/gas_mixture/proc/operator[](idx)
-	return gas[idx] || (XGM?.gases[idx] ? 0 : null)
+	return gas[idx] || (XGM.gases[idx] ? 0 : null)
 
 //This just allows the [] operator to be used for writes as well as reads. The above proc means this WILL work with +=, etc., for any valid gas.
 /datum/gas_mixture/proc/operator[]=(idx, val)
