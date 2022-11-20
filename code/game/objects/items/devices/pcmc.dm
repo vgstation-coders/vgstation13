@@ -123,12 +123,13 @@
 				//Sensors are at least binary if you are in this block
 				life_status = H.stat //CONSCIOUS, UNCONSCIOUS, DEAD
 				//Crit is only when their damage exceeds their max health
-				if (life_status == 1)
+				if (life_status == UNCONSCIOUS)
 					//show critical if sensors are 2 or higher, only.
 					if (U.sensor_mode == 1)
-						life_status = 0
+						life_status = CONSCIOUS
+					//show critical if they are actually hurt, not just sleeping
 					else if (U.sensor_mode >= 2 && H.health > config.health_threshold_crit)
-						life_status = 0
+						life_status = CONSCIOUS
 
 				if(pos)
 					player_area = format_text(get_area(H).name)
@@ -148,7 +149,7 @@
 							if(H.health == H.maxHealth)
 								continue
 						if(1)
-							if(life_status == 0)
+							if(life_status == CONSCIOUS)
 								continue
 
 				var/list/data = list()
