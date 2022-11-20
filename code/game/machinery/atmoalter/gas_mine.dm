@@ -21,6 +21,10 @@
 
 /obj/machinery/atmospherics/miner/New()
 	..()
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
+
+/obj/machinery/atmospherics/miner/initialize()
 	pumping = new
 	air_contents = new
 	air_contents.volume = 1000
