@@ -39,11 +39,11 @@
 		recruiter.jobban_roles = list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
-	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+	recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
 	// Role set to No or Never
-	recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+	recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
 
-	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+	recruiter.recruited = new /callback(src, src::recruiter_recruited())
 	recruiter.request_player()
 
 /spell/changeling/split/proc/checkSplit(var/success)

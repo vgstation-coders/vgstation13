@@ -223,20 +223,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!cast_check(skipcharge, user))
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
-		if(spell_flags & NO_TURNING)
-			user.register_event(/event/clickon, src, .proc/memorize_user_direction)
-		user.register_event(/event/uattack, src, .proc/channeled_spell)
+		user.register_event(/event/uattack, src, src::channeled_spell())
 		user.spell_channeling = src
 		if(spell_flags & CAN_CHANNEL_RESTRAINED)
-			user.register_event(/event/ruattack, src, .proc/channeled_spell)
+			user.register_event(/event/ruattack, src, src::channeled_spell())
 			user.spell_channeling = src
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()
 	else
-		user.unregister_event(/event/clickon, src, .proc/memorize_user_direction)
-		user.unregister_event(/event/uattack, src, .proc/channeled_spell)
-		user.unregister_event(/event/ruattack, src, .proc/channeled_spell)
+		user.unregister_event(/event/uattack, src, src::channeled_spell())
+		user.unregister_event(/event/ruattack, src, src::channeled_spell())
 		user.spell_channeling = null
 		currently_channeled = 0
 		connected_button.remove_channeling()

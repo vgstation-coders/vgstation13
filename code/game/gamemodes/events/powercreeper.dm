@@ -179,9 +179,9 @@
 			else
 				P.growdirs &= ~get_dir(P, src)
 		if(dying)
-			T.unregister_event(/event/density_change, src, .proc/proxDensityChange)
+			T.unregister_event(/event/density_change, src, src::proxDensityChange())
 		else
-			T.register_event(/event/density_change, src, .proc/proxDensityChange)
+			T.register_event(/event/density_change, src, src::proxDensityChange())
 
 /obj/structure/cable/powercreeper/proc/proxDensityChange(atom/atom)
 	var/turf/T = get_turf(atom)
