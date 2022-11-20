@@ -41,13 +41,9 @@
 /obj/machinery/atmospherics/miner/proc/update_rate(var/internal_pressure)
 	//rate is in mols
 	var/rate = internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
-	//this is ugly
-	if(length(gases) == 1)
-		air_contents.adjust_multi(gases[1], rate)
-	else if(length(gases) == 2)
-		air_contents.adjust_multi(gases[1], gases[gases[1]]*rate, gases[2], gases[gases[2]]*rate)
-	else if(length(gases) == 3)
-		air_contents.adjust_multi(gases[1], gases[gases[1]]*rate, gases[2], gases[gases[2]]*rate, gases[3], gases[gases[3]]*rate)
+	for(var/i = 1, i < gases.len, i++)
+		air_contents.adjust_gas(gases[i], gases[gases[i]]*rate)
+
 	air_contents.update_values()
 
 /obj/machinery/atmospherics/miner/examine(mob/user)
@@ -176,7 +172,7 @@
 /obj/machinery/atmospherics/miner/mixed_oxygen
 	name = "\improper Mixed Gas Miner"
 	desc = "Pumping oxygen and nitrous oxide."
-	overlay_color = "#70DBDB"
+	overlay_color = "#7EA7E0"
 	gases = list(GAS_OXYGEN = 0.5, GAS_SLEEPING = 0.5)
 
 /obj/machinery/atmospherics/miner/mixed_nitrogen
