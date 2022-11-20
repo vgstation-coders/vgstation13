@@ -1,5 +1,3 @@
-#define WATT_TO_KPA_COEFFICIENT 10
-
 /obj/machinery/atmospherics/miner
 	name = "gas miner"
 	desc = "Gasses mined from the gas giant below (above?) flow out through this massive vent."
@@ -9,15 +7,12 @@
 
 	starting_materials = null
 	w_type = NOT_RECYCLABLE
-	var/datum/powernet/PN
-	var/power_priority = POWER_PRIORITY_EXCESS
-	var/power_load = 0
 	var/on = TRUE
-	var/datum/power_connection/consumer/cable/power_connection = null
 
 	var/datum/gas_mixture/air_contents
 	var/datum/gas_mixture/pumping //used in transfering air around
-	//var/max_external_pressure=10000 // 10,000kPa ought to do it.
+	var/max_external_pressure=10000 // 10,000kPa ought to do it.
+	var/internal_pressure=4500 //kPa
 	var/list/gases = list()
 
 	var/overlay_color = "#FFFFFF"
@@ -26,23 +21,15 @@
 
 /obj/machinery/atmospherics/miner/New()
 	..()
-	power_connection = new(src)
-	power_connection.monitoring_enabled = TRUE
-	power_connection.idle_usage = idle_power_usage
-	power_connection.active_usage = power_load
-
 	pumping = new
 	air_contents = new
 	air_contents.volume = 1000
 	pumping.volume = 1000 //Same as above so copying works correctly
 	air_contents.temperature = T20C
-	update_powernet()
+	update_rate(internal_pressure)
 	update_icon()
 
 /obj/machinery/atmospherics/miner/Destroy()
-	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
 	if(pumping)
 		qdel(pumping)
 		pumping = null
@@ -74,7 +61,7 @@
 	if(stat & BROKEN)
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Broken.</span>")
 		return
-	to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Functional and operating at a rate of [Ceiling(WATT_TO_KPA_COEFFICIENT * power_load)] kPa per cycle.</span>")
+	to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Functional and operating.</span>")
 
 /obj/machinery/atmospherics/miner/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
@@ -82,7 +69,6 @@
 		return
 	if(on)
 		on = 0
-		power_load = 0
 		update_icon()
 
 // Critical equipment.
@@ -95,21 +81,7 @@
 
 /obj/machinery/atmospherics/miner/power_change()
 	..()
-	power_load = 0
-	update_rate(0)
-	update_powernet()
 	update_icon()
-
-/obj/machinery/atmospherics/miner/proc/update_powernet()
-	var/area/A = get_area(src)
-	var/obj/machinery/power/apc/area_apc
-	if(!A)
-		return
-	area_apc = A.areaapc
-	if(!area_apc)
-		return
-
-	PN = area_apc.terminal.powernet
 
 /obj/machinery/atmospherics/miner/attack_ghost(var/mob/user)
 	return
@@ -143,7 +115,6 @@
 	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	if(!on)
-		use_power = MACHINE_POWER_USE_IDLE
 		return
 
 	var/oldstat=stat
@@ -156,19 +127,8 @@
 	if(stat & BROKEN)
 		return
 
-	update_rate(Ceiling(WATT_TO_KPA_COEFFICIENT * power_load))		//scale mol output by arbitrary power load
-	//scale based on powernet, otherwise constant 4500
-	if(PN)
-		use_power = MACHINE_POWER_USE_ACTIVE
-		if(power_load < 900)
-			power_load += 100
-			active_power_usage = power_load
-	else
-		use_power = MACHINE_POWER_USE_IDLE
-		power_load = 450
-
 	pumping.copy_from(air_contents)
-/*
+
 	//gas-related
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/environment_pressure = environment.return_pressure()
@@ -179,7 +139,7 @@
 	if(pressure_delta > 0.1)
 		var/transfer_moles = pressure_delta * CELL_VOLUME / (pumping.temperature * R_IDEAL_GAS_EQUATION)
 		var/datum/gas_mixture/removed = pumping.remove(transfer_moles)
-		loc.assume_air(removed)*/
+		loc.assume_air(removed)
 
 /obj/machinery/atmospherics/miner/sleeping_agent
 	name = "\improper N2O Gas Miner"
