@@ -41,7 +41,7 @@
 /obj/machinery/atmospherics/miner/proc/update_rate(var/internal_pressure)
 	//rate is in mols
 	var/rate = internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
-	for(var/i = 1, i < gases.len, i++)
+	for(var/i = 1, i <= gases.len, i++)
 		air_contents.adjust_gas(gases[i], gases[gases[i]]*rate)
 
 	air_contents.update_values()
