@@ -20,8 +20,8 @@ on:
   workflow_dispatch:
 
 env:
-  BYOND_MAJOR: 514
-  BYOND_MINOR: 1566
+  BYOND_MAJOR: 515
+  BYOND_MINOR: 1595
 
   #This can be declared here because build.py will ignore it if DM_UNIT_TESTS is true.
   ALL_MAPS: tgstation metaclub defficiency packedstation roidstation test_tiny test_vault snaxi tgstation-sec tgstation-snow LampreyStation xoq synergy bagelstation lowfatbagel Dorfstation waystation island line nervestation
