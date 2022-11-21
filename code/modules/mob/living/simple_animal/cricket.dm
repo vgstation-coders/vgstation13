@@ -52,8 +52,8 @@
 /mob/living/simple_animal/cricket/New()
 	..()
 
-	pixel_x = rand(-20, 20) * PIXEL_MULTIPLIER
-	pixel_y = rand(-20, 20) * PIXEL_MULTIPLIER
+	pixel_x = rand(-15, 15) * PIXEL_MULTIPLIER
+	pixel_y = rand(-15, 15) * PIXEL_MULTIPLIER
 
 	maxHealth = rand(1,6)
 	health = maxHealth
@@ -81,8 +81,8 @@
 /mob/living/simple_animal/cricket/Crossed(mob/living/O)
 	if(!istype(O))
 		return
-	if(O.a_intent == I_HELP)
-		return //Must be on harm intent to stomp
+	if(O.a_intent != I_HURT)
+		return
 	if(O.isUnconscious())
 		return
 
@@ -90,13 +90,11 @@
 		death(gore = 1)
 
 /mob/living/simple_animal/cricket/wander_move(turf/dest)
+	icon_state = "cricket-hop"
+	animate(src, pixel_x = rand(-8,8), time=4, loop=1, easing=ELASTIC_EASING)
 	..()
-	var/halfway = rand(-10,10)
-	//- moving left. + moving right.
-	do_flick(src, "cricket-hop", 5)
-	animate(src, pixel_x = pixel_x - halfway, pixel_y = pixel_y + 4 * PIXEL_MULTIPLIER, 2, 1, ELASTIC_EASING)
-	animate(src, pixel_x = pixel_x - halfway, pixel_y = pixel_y - 4 * PIXEL_MULTIPLIER, 3, 1, ELASTIC_EASING)
-
+	spawn(4)
+		icon_state = "cricket"
 
 /mob/living/simple_animal/cricket/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/newspaper))

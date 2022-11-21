@@ -4,8 +4,11 @@
 
 /atom
 	var/junction = 0 // THIS USED TO BE DEFINED TO THE TURF LEVEL BUT IT'S HERE NOW IN CASE ANYTHING ELSE (LIKE STRUCTURES) NEED IT, ALSO COMMENT IN CAPS IN THEME WITH THIS FILE
+	var/bordersmooth_override = 0 // SOME ON_BORDER ITEMS PREFER FULL TILE SMOOTHING OKAY?
 
 /atom/proc/canSmoothWith() // TYPE PATHS I CAN SMOOTH WITH~~~~~ (HAS TO BE THIS FUNCTION OR ELSE OBJECT INIT IS WAY WAY SLOWER)
+
+/atom/proc/cannotSmoothWith() // TYPE PATHS I CANNOT SMOOTH WITH~~~~~ (HAS TO BE THIS FUNCTION OR ELSE OBJECT INIT IS WAY WAY SLOWER)
 
 // MOVED INTO UTILITY FUNCTION FOR LESS DUPLICATED CODE.
 /atom/proc/findSmoothingNeighbors()
@@ -13,7 +16,7 @@
 	// DOESN'T FUCKING MAKE SENSE, BUT IT WORKS TO OUR ADVANTAGE
 	. = 0
 	for(var/cdir in cardinal)
-		if((flow_flags & ON_BORDER) && (dir == cdir || opposite_dirs[dir] == cdir))
+		if((flow_flags & ON_BORDER) && !bordersmooth_override && (dir == cdir || opposite_dirs[dir] == cdir))
 			continue
 		var/turf/T = get_step(src,cdir)
 		if(isSmoothableNeighbor(T))
@@ -24,17 +27,30 @@
 				. |= cdir
 				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 
-/atom/proc/isSmoothableNeighbor(atom/A)
+// OTHER FUNCTION SOME BORDER ITEMS MIGHT LIKE TO USE
+/atom/proc/findSmoothingOnTurf()
+	. = 0
+	for(var/cdir in cardinal)
+		if((flow_flags & ON_BORDER) && !bordersmooth_override && (dir == cdir || opposite_dirs[dir] == cdir))
+			continue
+		var/turf/T = get_turf(src)
+		if(isSmoothableNeighbor(T,0) && T.dir == cdir)
+			. |= cdir
+		for(var/atom/A in T)
+			if(isSmoothableNeighbor(A,0) && A.dir == cdir)
+				. |= cdir
+
+/atom/proc/isSmoothableNeighbor(atom/A, bordercheck = TRUE)
 	if(!A)
 		return 0
-	return is_type_in_list(A, canSmoothWith())
+	if(bordercheck && (flow_flags & ON_BORDER) && (A.flow_flags & ON_BORDER) && !bordersmooth_override && A.dir != dir)
+		return 0
+	return is_type_in_list(A, canSmoothWith()) && !(is_type_in_list(A, cannotSmoothWith()))
 
 /turf/simulated/wall/isSmoothableNeighbor(atom/A)
 	if(!A)
 		return 0
-	if(is_type_in_list(A, canSmoothWith()))
-		if(istype(A, /turf/simulated/wall/shuttle) && !istype(src, /turf/simulated/wall/shuttle))
-			return 0
+	if(is_type_in_list(A, canSmoothWith()) && !(is_type_in_list(A, cannotSmoothWith())))
 		if(istype(A, /turf/simulated/wall))
 			var/turf/simulated/wall/W = A
 			if(src.mineral == W.mineral)
@@ -83,6 +99,13 @@
 		at = get_turf(src)
 	// OPTIMIZE BY NOT CHECKING FOR NEIGHBORS IF WE DON'T FUCKING SMOOTH
 	if(canSmoothWith())
+		if((flow_flags & ON_BORDER) && !bordersmooth_override)
+			var/turf/OT = get_turf(src)
+			if(isSmoothableNeighbor(OT,0) && OT.canSmoothWith())
+				OT.relativewall()
+			for(var/atom/A in OT)
+				if(isSmoothableNeighbor(A,0))
+					A.relativewall()
 		for(var/cdir in cardinal)
 			var/turf/T = get_step(src,cdir)
 			if(isSmoothableNeighbor(T) && T.canSmoothWith())

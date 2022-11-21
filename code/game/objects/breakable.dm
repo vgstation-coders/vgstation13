@@ -25,11 +25,6 @@
 	var/damaged_sound	//Audible sound when the object is damaged by an attack, but not fully broken. Defaults to glanced_sound if unset.
 	var/glanced_sound	//Audible sound when the object recives a glancing attack not strong enough to damage it.
 
-/obj/New()
-	..()
-	if(breakable_flags)
-		breakable_init()
-
 /obj/proc/breakable_init()
 	//Initialize health and maxHealth to the same value if only one is specified.
 	if(isnull(health) && maxHealth)

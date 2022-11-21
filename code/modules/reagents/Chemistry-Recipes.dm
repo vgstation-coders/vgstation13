@@ -456,8 +456,16 @@
 	name = "Hyperzine"
 	id = HYPERZINE
 	result = HYPERZINE
-	required_reagents = list(SUGARS = 1, PHOSPHORUS = 1, SULFUR = 1,)
+	required_reagents = list(SUGARS = 1, PHOSPHORUS = 1, SULFUR = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/PCP
+	name = "Liquid PCP"
+	id = LIQUIDPCP
+	result = LIQUIDPCP
+	required_reagents = list(HYPERZINES = 5, MINDBREAKER = 5)
+	required_temp = T0C + 200
+	result_amount = 5
 
 /datum/chemical_reaction/ryetalyn
 	name = "Ryetalyn"
@@ -1004,6 +1012,22 @@
 		holder.del_reagent(PARACETAMOL)
 	else
 		holder.clear_reagents()
+
+/datum/chemical_reaction/more_bicarodyne
+	name = "Bicarodyne"
+	id = BICARODYNE
+	result = BICARODYNE
+	required_reagents = list(BICARIDINES = 1)
+	required_catalysts = list(BICARODYNE = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/more_hypozine
+	name = "Hypozine"
+	id = HYPOZINE
+	result = HYPOZINE
+	required_reagents = list(HYPERZINES = 1)
+	required_catalysts = list(HYPOZINE = 1)
+	result_amount = 1
 
 /datum/chemical_reaction/nanobots
 	name = "Nanobots"
@@ -3623,7 +3647,7 @@
 	result = HUSBANDO
 	required_reagents = list(MANLYDORF = 1, KARMOTRINE = 4)
 	result_amount = 5
-	
+
 /datum/chemical_reaction/tomboy
 	name = "Tomboy"
 	id = TOMBOY

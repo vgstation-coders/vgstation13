@@ -167,6 +167,10 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/build_inventories()
 	product_records = new/list()
+	coin_records = new/list()
+	hidden_records = new/list()
+	voucher_records = new/list()
+	holiday_records = new/list()
 	build_inventory(products)
 	build_inventory(contraband, 1)
 	build_inventory(premium, 0, 1)
@@ -191,6 +195,9 @@ var/global/num_vending_terminals = 1
 		qdel(coinbox)
 		coinbox = null
 	..()
+
+/obj/machinery/vending/splashable()
+	return FALSE
 
 /obj/machinery/vending/proc/dump_vendpack_and_coinbox()
 	if(product_records.len && cardboard) //Only spit out if we have slotted cardboard
@@ -1085,6 +1092,9 @@ var/global/num_vending_terminals = 1
 
 		if(return_coin)
 			user.put_in_hands(coin)
+			if(on_return_coin_detect(user))
+				coin = null
+				return
 		else
 			if (!isnull(coinbox))
 				if (coinbox.can_be_inserted(coin, TRUE))
@@ -1122,6 +1132,9 @@ var/global/num_vending_terminals = 1
 		src.vend_ready = 1
 		update_vicon()
 		src.updateUsrDialog()
+
+/obj/machinery/vending/proc/on_return_coin_detect(mob/user)
+	return 0
 
 /obj/machinery/vending/process()
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
@@ -1502,6 +1515,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
 		)
 	contraband = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/bustanuts = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/oldempirebar = 4,
@@ -3515,7 +3529,10 @@ var/global/num_vending_terminals = 1
 	products = list(
 		/obj/item/toy/cards = 5,
 		/obj/item/toy/cards/une = 5,
-		/obj/item/weapon/storage/pill_bottle/dice = 5
+		/obj/item/weapon/storage/pill_bottle/dice = 5,
+		/obj/item/weapon/storage/pill_bottle/dice/fudge = 5,
+		/obj/item/weapon/storage/pill_bottle/dice/d6 = 5,
+		/obj/item/weapon/storage/pill_bottle/dice/cup = 10
 		)
 	contraband = list(
 		/obj/item/weapon/dice/loaded = 3,
@@ -3529,6 +3546,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/cards = 5,
 		/obj/item/toy/cards/une = 10,
 		/obj/item/weapon/storage/pill_bottle/dice = 10,
+		/obj/item/weapon/storage/pill_bottle/dice/fudge = 10,
+		/obj/item/weapon/storage/pill_bottle/dice/d6 = 10,
+		/obj/item/weapon/storage/pill_bottle/dice/cup = 5,
 		/obj/item/weapon/dice/loaded = 15,
 		/obj/item/weapon/dice/loaded/d20 = 15,
 		/obj/item/weapon/skull = 20,

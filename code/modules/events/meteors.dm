@@ -209,6 +209,9 @@ var/global/list/thing_storm_types = list(
 	var/list/candidates = list()
 	var/started = FALSE
 
+/datum/event/thing_storm/blob_storm/can_start(var/list/active_with_role)
+	return 0 //disabled
+
 /datum/event/thing_storm/blob_storm/setup()
 	endWhen = rand(60, 90) + 10
 	storm_name="blob storm"

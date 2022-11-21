@@ -22,6 +22,15 @@
 	fire_temp_threshold = 100 //Wooden barricades REALLY don't like fire
 	fire_volume_mod = 10 //They REALLY DON'T
 
+/obj/structure/window/barricade/canSmoothWith()
+	return
+
+/obj/structure/window/barricade/relativewall()
+	return
+
+/obj/structure/window/barricade/isSmoothableNeighbor(atom/A)
+	return
+
 /obj/structure/window/barricade/examine_health(mob/user)
 	//Switch most likely can't take inequalities, so here's that if block
 	if(health >= initial(health)) //Sanity
@@ -111,18 +120,10 @@
 
 	..()
 
-//We don't want to update our icon, period
-/obj/structure/window/barricade/update_icon()
-
-	return
-
 /obj/structure/window/barricade/update_nearby_tiles()
 
 	return
 
-/obj/structure/window/barricade/update_nearby_icons()
-
-	return
 
 /obj/structure/window/barricade/full
 	name = "wood barricade"

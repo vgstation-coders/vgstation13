@@ -1511,76 +1511,6 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/skitter/ //if ye dish is a child of skitter it will move around after 30 ticks
-	name = "skittering burger"
-	desc = "A burger-shaped cockroach."
-	icon_state = "bugburger"
-	var/skitterdelay = 30
-	var/skitterchance = 50
-	
-/obj/item/weapon/reagent_containers/food/snacks/skitter/New()
-	..()
-	processing_objects += src
-	
-/obj/item/weapon/reagent_containers/food/snacks/skitter/pickup(mob/user)
-	timer = 0
-	
-/obj/item/weapon/reagent_containers/food/snacks/skitter/process()
-	timer += 1
-	if(timer > skitterdelay && istype(loc, /turf) && prob(skitterchance))
-		Move(get_step(loc, pick(cardinal)))
-
-/obj/item/weapon/reagent_containers/food/snacks/skitter/Destroy()
-	processing_objects -= src
-	..()
-
-/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger
-	name = "gunk burger"
-	desc = "A GunkCo classic! You will eat the bugs and you will enjoy them."
-	icon_state = "bugburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
-	
-/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	if(prob(30))
-		reagents.add_reagent(SALTWATER, 3) //the best non-karm emetic we have
-		desc = "Legs wriggling, bug juices oozing out and that rotten smell... Oh god, you're gonna THR-"
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger
-	name = "deluxe gunk burger"
-	desc = "GunkCo's latest innovation! You won't guess the special ingredient!"
-	icon_state = "deluxebugburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
-	
-/obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 12)
-	if(prob(30))
-		reagents.add_reagent(SALTWATER, 3)
-		desc = "You can't comprehend how much I regret biting into this thing. The disgusting texture, burning juices and terrible taste will never leave my mind."
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
-	name = "Super Gunk Burger"
-	desc = "The Cockroach King! Or matriarch actually. You can't even fathom eating that much cockroach."
-	icon_state = "supergunkburger"
-	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
-	base_crumb_chance = 20
-	skitterchance = 40
-	skitterdelay = 60 //takes longer for super gunkburgers to walk and they walk less, muh weight or something
-	
-/obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 40)
-	if(prob(30))
-		reagents.add_reagent(SALTWATER, 3)
-		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosias and blingpizzas must ever afterward be poison to me."
-	bitesize = 10
-
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
 	desc = "That's all you can say!"
@@ -1935,20 +1865,6 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/gunkkabob
-	name = "Gunk-kabob"
-	icon_state = "bugkabob"
-	desc = "Not as disgusting as you'd expect!"
-	trash = /obj/item/stack/rods
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/gunkkabob/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(SALINE, 0.5) //just a taste
-	bitesize = 2
-
 /obj/item/weapon/reagent_containers/food/snacks/cubancarp
 	name = "Cuban Carp"
 	desc = "A grifftastic sandwich that burns your tongue and then leaves it numb!"
@@ -1983,19 +1899,6 @@
 		to_chat(usr, "<span class='warning'>You bite down on an un-popped kernel, and it hurts your teeth!</span>")
 		unpopped = max(0, unpopped-1)
 		reagents.add_reagent(SACID, 0.1) //only a little tingle.
-
-/obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket
-	name = "hopcorn"
-	desc = "Surprisingly crunchy!"
-	icon_state = "hoppers"
-	trash = /obj/item/trash/popcorn/hoppers
-	filling_color = "#610000"
-
-/obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket/after_consume()
-	if(prob(unpopped))
-		to_chat(usr, "<span class='warning'>Just as you were going to bite down on the cricket, it jumps away from your hand. It was alive!</span>")
-		unpopped = max(0, unpopped-3) //max 3 crickets per hoppers bag
-		new /mob/living/simple_animal/cricket(get_turf(src))
 
 /obj/item/weapon/reagent_containers/food/snacks/sosjerky
 	name = "\improper Scaredy's Private Reserve Beef Jerky"
@@ -7976,3 +7879,233 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/ //if ye dish is a child of skitter it will move around after 30 ticks
+	name = "skittering burger"
+	desc = "A burger-shaped cockroach."
+	icon_state = "bugburger"
+	var/skitterdelay = 30
+	var/skitterchance = 50
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/New()
+	..()
+	processing_objects += src
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/pickup(mob/user)
+	timer = 0
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/process()
+	timer += 1
+	if(timer > skitterdelay && istype(loc, /turf) && prob(skitterchance))
+		Move(get_step(loc, pick(cardinal)))
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/Destroy()
+	processing_objects -= src
+	..()
+
+////////////////////////////////
+// YE ENTERING THE GUNK ZONE ///
+///////////////////////////////
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger
+	name = "gunk burger"
+	desc = "A GunkCo classic! You will eat the bugs and you will enjoy them."
+	icon_state = "bugburger"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(ROACHSHELL, 5)
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 3) //the best non-karm emetic we have
+		desc = "Legs wriggling, bug juices oozing out and that rotten smell... Oh god, you're gonna THR-"
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger
+	name = "deluxe gunk burger"
+	desc = "GunkCo's latest innovation! You won't guess the special ingredient!"
+	icon_state = "deluxebugburger"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(ROACHSHELL, 10)
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 3)
+		desc = "You can't comprehend how much I regret biting into this thing. The disgusting texture, burning juices and terrible taste will never leave my mind."
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
+	name = "Super Gunk Burger"
+	desc = "The Cockroach King! Or matriarch actually. You can't even fathom eating that much cockroach."
+	icon_state = "supergunkburger"
+	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
+	base_crumb_chance = 20
+	skitterchance = 40
+	skitterdelay = 60 //takes longer for super gunkburgers to walk and they walk less, muh weight or something
+	
+/obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 40)
+	reagents.add_reagent(ROACHSHELL, 15)
+	if(prob(30))
+		reagents.add_reagent(SALTWATER, 3)
+		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosias and blingpizzas must ever afterward be poison to me."
+	bitesize = 10
+
+/obj/item/weapon/reagent_containers/food/snacks/gunkkabob
+	name = "Gunk-kabob"
+	icon_state = "bugkabob"
+	desc = "Not as disgusting as you'd expect!"
+	trash = /obj/item/stack/rods
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/gunkkabob/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(ROACHSHELL, 5)
+	reagents.add_reagent(SALINE, 0.5) //just a taste
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket
+	name = "hopcorn"
+	desc = "Surprisingly crunchy!"
+	icon_state = "hoppers"
+	trash = /obj/item/trash/popcorn/hoppers
+	filling_color = "#610000"
+
+/obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket/after_consume()
+	if(prob(unpopped))
+		to_chat(usr, "<span class='warning'>Just as you were going to bite down on the cricket, it jumps away from your hand. It was alive!</span>")
+		unpopped = max(0, unpopped-3) //max 3 crickets per bag
+		new /mob/living/simple_animal/cricket(get_turf(src))
+
+/obj/item/weapon/reagent_containers/food/snacks/popcorn/roachsalad
+	name = "cockroach salad"
+	desc = "You're gonna be sick..."
+	icon_state = "cockroachsalad"
+	trash = /obj/item/trash/snack_bowl
+	food_flags = FOOD_MEAT
+	random_filling_colors = list("#610000", "#32AE32") 
+	base_crumb_chance = 0
+	
+/obj/item/weapon/reagent_containers/food/snacks/popcorn/roachsalad/after_consume()
+	if(prob(unpopped))
+		to_chat(usr, "<span class='warning'>A cockroach wriggles out of the bowl!</span>")
+		unpopped = max(0, unpopped-3) //max 3 roaches per roach salad
+		new /mob/living/simple_animal/cockroach(get_turf(src))
+
+/obj/item/weapon/reagent_containers/food/snacks/gunksoup
+	name = "Gunk Soup"
+	desc = "Smells like a garbage can."
+	icon_state = "gunksoup"
+	trash = /obj/item/trash/snack_bowl
+	food_flags = FOOD_MEAT | FOOD_LIQUID
+	crumb_icon = "dribbles"
+	filling_color = "#6D4930"
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/gunksoup/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(ROACHSHELL, 5)
+	reagents.add_reagent(WATER, 5)
+	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkbread
+	name = "gunkbread loaf"
+	desc = "At some point you have to wonder not if you COULD make bread with garbage, but rather if you SHOULD."
+	icon_state = "gunkbread"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/gunkbreadslice
+	slices_num = 5
+	storage_slots = 3
+	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkbread/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 30)
+	reagents.add_reagent(ROACHSHELL, 5)
+	reagents.add_reagent(CHEMICAL_WASTE, 5)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/gunkbreadslice
+	name = "gunkbread slice"
+	desc = "Ahh, the smell of the maintenance hallways in bread form."
+	icon_state = "gunkbreadslice"
+	bitesize = 2
+	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -4
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/gunkpie
+	name = "gunk pie"
+	desc = "Surprisingly free of toxins!"
+	icon_state = "gunkpie"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/gunk_pie/New()
+	..()
+	reagents.clear_reagents()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(ROACHSHELL, 5)
+	if(prob(30))
+		reagents.add_reagent(CHEMICAL_WASTE, 5)
+		reagents.add_reagent(SALINE, 1)
+		desc = "The flavour of the maintenance halls in pie form."
+	bitesize = 3
+	
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkcake
+	name = "gunk cake"
+	desc = "The apex of garbage-based confectionary research."
+	icon_state = "gunkcake"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/gunkcakeslice
+	slices_num = 5
+	storage_slots = 3
+	w_class = W_CLASS_MEDIUM
+	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkcake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 25)
+	reagents.add_reagent(ROACHSHELL, 10)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/gunkcakeslice
+	name = "gunk cake slice"
+	desc = "Your nose hairs recoil at the fumes coming out of this."
+	icon_state = "gunkcakeslice"
+	bitesize = 2
+	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
+
+/obj/item/weapon/reagent_containers/food/snacks/roachesonstick
+	name = "Roaches on a stick"
+	desc = "Literally two roaches a stick, man. Don't know what you were expecting."
+	icon_state = "roachesonastick"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/roachesonstick/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(ROACHSHELL, 5)
+	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/grandpatiks
+	name = "Grandpa Tik's Roasted 'Peanuts'"
+	icon_state = "nutsnbugs"
+	desc = "The unborn children of the insectoid colonies; processed, treated and mixed with love (and nuts!) for your enjoyment."
+	base_crumb_chance = 30
+	valid_utensils = 0
+	base_crumb_chance = 0
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/grandpatiks/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(ROACHSHELL, 1)

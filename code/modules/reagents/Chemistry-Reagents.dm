@@ -2444,15 +2444,13 @@
 
 	if(iscarbon(M))
 		var/mob/living/carbon/H = M
-		if((LIMB_LEFT_HAND in zone_sels) || (LIMB_RIGHT_HAND in zone_sels))
-			for(var/obj/item/I in H.held_items)
-				I.clean_blood()
+		for(var/obj/item/I in H.held_items)
+			I.clean_blood()
 
-		for(var/obj/item/clothing/C in M.get_equipped_items())
-			for(var/part in zone_sels)
-				if(C.body_parts_covered & limb_define_to_part_define(part))
-					if(C.clean_blood())
-						H.update_inv_by_slot(C.slot_flags)
+		for(var/obj/item/clothing/C in M.get_equipped_items())	
+			if(C.clean_blood())
+				H.update_inv_by_slot(C.slot_flags)
+
 		M.clean_blood()
 		M.color = ""
 
@@ -3585,17 +3583,17 @@ var/procizine_tolerance = 0
 		M.emote(pick("twitch","blink_r","shiver")) //See movement_tally_multiplier for the rest
 
 /datum/reagent/hyperzine/on_overdose(var/mob/living/M)
+	..() //calls parent to give everyone toxin damage
 	if(ishuman(M) && M.get_heart()) // Got a heart?
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/heart/damagedheart = H.get_heart()
 		if(H.species.name != "Diona" && damagedheart) // Not on dionae
-			if(prob(5) && M.stat == CONSCIOUS)
+			if(prob(15) && M.stat == CONSCIOUS)
 				to_chat(H, "<span class='danger'>You feel a sharp pain in your chest!</span>")
-			damagedheart.damage += 1
+				damagedheart.damage += 1
 		else
 			M.adjustFireLoss(1) // Burn damage for dionae
-	else
-		M.adjustToxLoss(1) // Toxins for everyone else
+
 
 /datum/reagent/hyperzine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -5540,6 +5538,8 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	density = 0.9185
+	specheatcap = 2.402	
 	var/has_had_heart_explode = 0
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)

@@ -309,7 +309,7 @@ Class Procs:
 
 // returns true if the machine is powered (or doesn't require power).
 // performs basic checks every machine should do, then
-/obj/machinery/proc/powered(chan = power_channel)
+/obj/machinery/proc/powered(chan = power_channel, power_check_anyways = FALSE)
 	if(!src.loc)
 		return FALSE
 
@@ -322,7 +322,7 @@ Class Procs:
 		else
 			return FALSE
 
-	if(use_power == MACHINE_POWER_USE_NONE)
+	if(!power_check_anyways && use_power == MACHINE_POWER_USE_NONE)
 		return TRUE
 
 	if((machine_flags & FIXED2WORK) && !anchored)
@@ -510,6 +510,7 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob, var/ignore_brain_damage = 0)
+	. = ..()
 	if(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
 		return 1
 
@@ -664,6 +665,9 @@ Class Procs:
 	..()
 
 	add_fingerprint(user)
+
+	if(O.is_cookvessel && is_cooktop)
+		return 1
 
 	if(isEmag(O) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O

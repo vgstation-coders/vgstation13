@@ -658,7 +658,7 @@
 			anchored = FALSE
 
 		H.update_canmove()
-	else if (istype(L,/mob/living/simple_animal/hostile/bear))
+	else if (istype(L,/mob/living/simple_animal/hostile/bear) || istype(L,/mob/living/simple_animal/hostile/spacehog))
 		trapped = 1
 		trappedbear = L
 		trappedbear.LostTarget()

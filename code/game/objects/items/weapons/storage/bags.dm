@@ -111,12 +111,6 @@
 	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_MISC) //Recipe calls for 3 sheets
 	w_type = RECYK_PLASTIC
 
-/obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
-	return can_be_inserted(I,1)
-
-/obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
-	return handle_item_insertion(I,0)
-
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)

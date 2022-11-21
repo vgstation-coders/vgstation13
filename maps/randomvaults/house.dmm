@@ -196,18 +196,18 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (EAST)"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (NORTH)"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (WEST)"
 	},
 /turf/simulated/floor/plating,
@@ -438,17 +438,17 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (EAST)"
 	},
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (NORTH)"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (WEST)"
 	},
 /turf/simulated/floor/plating,
@@ -489,12 +489,12 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (EAST)"
 	},
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (NORTH)"
 	},
 /turf/simulated/floor/plating,
@@ -515,13 +515,13 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (EAST)"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (WEST)"
 	},
 /turf/simulated/floor/plating,
@@ -646,12 +646,12 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (NORTH)"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow";
+	icon_state = "rwindow0";
 	tag = "icon-rwindow (WEST)"
 	},
 /turf/simulated/floor/plating,

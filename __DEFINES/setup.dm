@@ -615,6 +615,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define UNPACIFIABLE 16		//Immune to pacify effects.
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
+#define BUDDHAMODE	16384
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
 #define ALWAYS_CRIT 65536
 
@@ -1320,9 +1321,11 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define ASTAR_DEBUG 0
 #if ASTAR_DEBUG == 1
 #warn "Astar debug is on. Don't forget to turn it off after you've done :)"
-#define astar_debug(text) to_chat(world, text)
+#define astar_debug(text) //to_chat(world, text)
+#define astar_debug_mulebots(text) to_chat(world, text)
 #else
 #define astar_debug(text)
+#define astar_debug_mulebots(text)
 #endif
 
 #define BSQL_DEBUG_CONNECTION 0
@@ -1830,3 +1833,15 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 //Muzzles
 #define MUZZLE_SOFT 1	//Muzzle causes muffled speech.
 #define MUZZLE_HARD	2	//Muzzle prevents speech.
+
+//Microwave-or-pan selective cookability of recipes
+#define COOKABLE_WITH_MICROWAVE (1<<0)
+#define COOKABLE_WITH_PAN (1<<1)
+#define COOKABLE_WITH_ALL ALL
+
+//Flags for the contents of a cooking vessel
+#define COOKVESSEL_CONTAINS_REAGENTS (1<<0) //The cooking vessel contains reagents
+#define COOKVESSEL_CONTAINS_CONTENTS (1<<1)	//The cooking vessel contains non-reagent contents (eg. items)
+
+//Default cooking temperature
+#define COOKTEMP_DEFAULT T0C + 316 //Around 600 F

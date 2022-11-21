@@ -253,6 +253,7 @@ log transactions
 							<A href='?src=\ref[src];choice=view_screen;view_screen=1'>Change account security level</a><br>
 							<A href='?src=\ref[src];choice=view_screen;view_screen=2'>Make transfer to another bank account</a><br>
 							<A href='?src=\ref[src];choice=view_screen;view_screen=3'>View transaction log</a><br>
+							<A href='?src=\ref[src];choice=wage_percent'>Change virtual wallet wage payout percentage</a><br>
 							<A href='?src=\ref[src];choice=balance_statement'>Print balance statement</a><br>
 							<A href='?src=\ref[src];choice=create_debit_card'>Print new debit card ($5)</a><br>
 							<A href='?src=\ref[src];choice=toggle_account'>Toggle account status</a><br>
@@ -284,6 +285,12 @@ log transactions
 				if(authenticated_account && linked_db && authenticated_account.disabled < 2)
 					authenticated_account.disabled = !authenticated_account.disabled
 					to_chat(usr, "[bicon(src)]<span class='info'>Account [authenticated_account.disabled ? "disabled" : "enabled"].</span>")
+			if("wage_percent")
+				if(authenticated_account && linked_db && authenticated_account.disabled < 2)
+					var/new_wage_ratio = input(usr, "Input what % of wages end up in virtual wallets, from 0-100", "Wage Percentage",authenticated_account.virtual_wallet_wage_ratio) as num
+					if(!isnull(new_wage_ratio))
+						new_wage_ratio = clamp(new_wage_ratio,0,100)
+						authenticated_account.virtual_wallet_wage_ratio = new_wage_ratio
 			if("transfer")
 				if(CAN_INTERACT_WITH_ACCOUNT)
 					var/transfer_amount = text2num(href_list["funds_amount"])

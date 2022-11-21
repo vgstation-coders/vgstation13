@@ -41,6 +41,12 @@
 	)
 	return smoothables
 
+/turf/simulated/wall/cannotSmoothWith()
+	var/static/list/unsmoothables = list(
+		/turf/simulated/wall/shuttle
+	)
+	return unsmoothables
+
 /turf/simulated/wall/examine(mob/user)
 	..()
 	if(rotting)

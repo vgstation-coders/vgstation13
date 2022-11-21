@@ -458,9 +458,10 @@ var/global/datum/controller/occupations/job_master
 		var/balance_wallet = rand(100,250)
 		var/bank_pref_number = H.client.prefs.bank_security
 		var/bank_pref = bank_security_num2text(bank_pref_number)
+		var/pref_wage_ratio = H.client.prefs.wage_ratio
 		if(centcomm_account_db)
 			var/wage = job.get_wage()
-			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = wage, security_pref = bank_pref_number)
+			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = wage, security_pref = bank_pref_number, ratio_pref = pref_wage_ratio)
 
 			if (joined_late)
 				latejoiner_allowance += wage + round(wage/10)

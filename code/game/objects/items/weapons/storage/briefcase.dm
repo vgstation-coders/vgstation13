@@ -70,8 +70,9 @@
 				M.Paralyse(time)
 			else
 				M.Stun(time)
-			M.stat = UNCONSCIOUS
-			M.visible_message("<span class='danger'>\The [M] has been knocked unconscious by \the [user]!</span>", "<span class='danger'>You have been knocked unconscious!</span>", "<span class='warning'>You hear someone fall.</span>")
+			if(!(M.status_flags & BUDDHAMODE))
+				M.stat = UNCONSCIOUS
+				M.visible_message("<span class='danger'>\The [M] has been knocked unconscious by \the [user]!</span>", "<span class='danger'>You have been knocked unconscious!</span>", "<span class='warning'>You hear someone fall.</span>")
 		else
 			M.visible_message("<span class='warning'>\The [user] tried to knock \the [M] unconcious!</span>", "<span class='warning'>\The [user] tried to knock you unconcious!</span>")
 			M.eye_blurry += 3

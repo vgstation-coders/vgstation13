@@ -22,6 +22,7 @@ var/global/list/alcatraz_stuff = list(
 	/obj/item/weapon/secway_kit,
 	/obj/structure/largecrate/secure,
 	/obj/item/weapon/storage/lockbox/advanced/ricochettaser,
+	/obj/structure/closet/crate/flatpack/ancient/prisoner_autoclother,
 	/obj/item/weapon/storage/lockbox/advanced/energyshotgun
 	)
 
