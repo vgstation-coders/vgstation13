@@ -14,6 +14,7 @@
 	var/moles_outputted					//moles outputted last tick. used when examining
 	var/base_gas_production = 4500		//base KPa per tick - without external power
 	var/max_external_pressure = 10000	//max KPa output - without external power
+	var/output_temperature = T20C		
 	var/on = TRUE
 
 	var/list/gases = list()				//which gases the miner generates
@@ -31,7 +32,6 @@
 	air_contents = new
 	air_contents.volume = 1000
 	pumping.volume = 1000 //Same as above so copying works correctly
-	air_contents.temperature = T20C
 	set_rate(base_gas_production)
 	update_icon()
 
@@ -49,14 +49,12 @@
 /obj/machinery/atmospherics/miner/proc/set_rate(var/internal_pressure)
 	air_contents.remove(air_contents.total_moles)//set to 0
 	//rate is in mols
-	rate = internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature)
-	//this is ugly
-	if(length(gases) == 1)
-		air_contents.adjust_multi(gases[1], rate)
-	else if(length(gases) == 2)
-		air_contents.adjust_multi(gases[1], gases[gases[1]]*rate, gases[2], gases[gases[2]]*rate)
-	else if(length(gases) == 3)
-		air_contents.adjust_multi(gases[1], gases[gases[1]]*rate, gases[2], gases[gases[2]]*rate, gases[3], gases[gases[3]]*rate)
+	rate = internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * output_temperature)
+
+	for(var/current_gas in gases)
+		air_contents.adjust_gas(current_gas, gases[current_gas] * rate)
+	
+	air_contents.temperature = output_temperature
 	air_contents.update_values()
 
 //actually create the gas and pump it into the air
@@ -74,7 +72,7 @@
 		var/environment_pressure = environment.return_pressure()
 		var/pressure_delta = max(0, (max_external_pressure - environment_pressure))
 		if(pressure_delta > 0.1)
-			moles_outputted = pressure_delta * CELL_VOLUME / (pumping.temperature * R_IDEAL_GAS_EQUATION)
+			moles_outputted = pressure_delta * CELL_VOLUME / (output_temperature * R_IDEAL_GAS_EQUATION)
 			moles_outputted = min(moles_outputted, pumping.total_moles)
 			var/datum/gas_mixture/removed = pumping.remove(moles_outputted)
 			loc.assume_air(removed)
@@ -202,3 +200,15 @@
 	overlay_color = "#70DBDB"
 	gases = list(GAS_OXYGEN = 0.2, GAS_NITROGEN = 0.8)
 	on = 0
+	
+/obj/machinery/atmospherics/miner/mixed_nitrogen
+	name = "\improper Mixed Gas Miner"
+	desc = "Pumping nitrogen, carbon dioxide, and plasma."
+	overlay_color = "#FF80BD"
+	gases = list(GAS_CARBON = 0.3, GAS_NITROGEN = 0.4, GAS_PLASMA = 0.3)
+
+/obj/machinery/atmospherics/miner/mixed_oxygen
+	name = "\improper Mixed Gas Miner"
+	desc = "Pumping oxygen and nitrous oxide."
+	overlay_color = "#7EA7E0"
+	gases = list(GAS_OXYGEN = 0.5, GAS_SLEEPING = 0.5)
