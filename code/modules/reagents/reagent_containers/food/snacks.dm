@@ -717,6 +717,7 @@
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie
+	name = "Seasonal Cookies"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie/New()
@@ -749,6 +750,7 @@
 	icon_state = "[cookiecutter]"
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
+	name = "Candy Hearts"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/candyheart
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart/New()
@@ -6537,6 +6539,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ebi
+	name = "Ebi Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ebi/New()
@@ -6551,6 +6554,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ikura
+	name = "Ikura Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ikura/New()
@@ -6565,6 +6569,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Sake
+	name = "Sake Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Sake/New()
@@ -6579,6 +6584,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_SmokedSalmon
+	name = "Smoked Salmon Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_SmokedSalmon
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_SmokedSalmon/New()
@@ -6593,6 +6599,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tamago
+	name = "Tamago Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tamago
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tamago/New()
@@ -6607,6 +6614,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Inari
+	name = "Inari Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Inari
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Inari/New()
@@ -6621,6 +6629,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Masago
+	name = "Masago Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Masago/New()
@@ -6635,6 +6644,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tobiko
+	name = "Tobiko Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tobiko
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tobiko/New()
@@ -6662,6 +6672,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tai
+	name = "Tai Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tai
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tai/New()
@@ -6677,6 +6688,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Unagi
+	name = "Unagi Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Unagi
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Unagi/New()
@@ -6691,6 +6703,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_avocado
+	name = "Avocado Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_avocado
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_avocado/New()
