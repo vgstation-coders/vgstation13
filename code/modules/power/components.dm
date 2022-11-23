@@ -296,9 +296,17 @@
 			use_power(idle_usage, channel)
 		if (MACHINE_POWER_USE_ACTIVE)
 			use_power(active_usage, channel)
-
 	return 1
 
+/datum/power_connection/consumer/get_monitor_status_template()
+	var/template = ..()
+	if (template)
+		switch (use_power)
+			if (MACHINE_POWER_USE_IDLE)
+				template["demand"] = idle_usage
+			if (MACHINE_POWER_USE_ACTIVE)
+				template["demand"] = active_usage
+	return template
 
 //////////////////////
 /// TERMINAL RECEIVER
