@@ -73,7 +73,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	template["charge"] = round(100 * charge/max_charge)
 	if (charged_last_tick)
 		template["charging"] = MONITOR_STATUS_BATTERY_CHARGING
-	return list("\ref[src]" = get_monitor_status_template())
+	return list("\ref[src]" = template)
 
 /obj/machinery/power/antiquesynth/update_icon()
 	return
