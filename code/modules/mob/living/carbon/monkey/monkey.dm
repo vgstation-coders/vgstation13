@@ -356,7 +356,6 @@
 	return
 
 /mob/living/carbon/monkey/var/co2overloadtime = null
-/mob/living/carbon/monkey/var/temperature_resistance = T0C+75
 
 /mob/living/carbon/monkey/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
