@@ -87,6 +87,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/cook_temperature() //Returns the temperature the object cooks at.
 	return COOKTEMP_DEFAULT
 
+/obj/proc/cook_energy() //Returns the energy transferred to the reagents in the cooking vessel per process() tick of the cooking vessel. Cooking vessels use the fast objects subsystem.
+	return 500 //Half that of fire_act().
+
 /obj/proc/generate_available_recipes(flags = COOKABLE_WITH_ALL)
 	var/list/recipes = list()
 	for(var/type in (typesof(/datum/recipe) - /datum/recipe))

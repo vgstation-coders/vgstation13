@@ -552,8 +552,14 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/cook_temperature()
 	var/temperature = get_max_temperature()
 	if(isnull(temperature))
-		return COOKTEMP_DEFAULT //Sanity in case the barrel runs out of fuel before this is called.
+		return ..() //Sanity in case the barrel runs out of fuel before this is called.
 	return temperature
+
+/obj/structure/reagent_dispensers/cauldron/barrel/cook_energy()
+	var/cook_energy = get_thermal_transfer() * (SS_WAIT_FAST_OBJECTS / (2 SECONDS)) //Would be nice to change 2 SECONDS to a reference to the objects subsystem somehow.
+	if(isnull(cook_energy))
+		return ..() //Sanity in case the barrel runs out of fuel before this is called.
+	return cook_energy
 
 /////////////////////
 
@@ -795,8 +801,16 @@
 			var/list/fuel_stats = possible_fuels[possible_fuel]
 			max_temperature = fuel_stats["max_temperature"]
 			break
-
 	return max_temperature
+
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/get_thermal_transfer()
+	var/thermal_transfer
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			var/list/fuel_stats = possible_fuels[possible_fuel]
+			thermal_transfer = fuel_stats["thermal_transfer"]
+			break
+	return thermal_transfer
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood/start_fire(mob/user)
 	return 0 //nice try!

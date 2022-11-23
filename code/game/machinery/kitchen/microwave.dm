@@ -7,7 +7,7 @@
 	anchored = 1
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 5
-	active_power_usage = 100
+	active_power_usage = 500
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE
 	flags = OPENCONTAINER | NOREACT
 	pass_flags = PASSTABLE
@@ -64,7 +64,7 @@
 	create_reagents(100)
 
 	if (!available_recipes)
-		available_recipes = generate_available_recipes(flags = COOKABLE_WITH_MICROWAVE)
+		available_recipes = generate_available_recipes(flags = COOKABLE_WITH_MICROWAVE | COOKABLE_WITH_MIXING) //Allow things like salads to be made in a microwave while mixing bowls are unimplemented.
 		acceptable_reagents = new
 		for (var/datum/recipe/recipe in available_recipes)
 			for (var/item in recipe.items)
@@ -406,8 +406,27 @@
 			cooked = fail()
 		stop()
 		if(cooked)
+			adjust_cooked_food_reagents_temperature(cooked, recipe)
 			cooked.forceMove(src.loc)
 		return
+
+/obj/machinery/microwave/proc/adjust_cooked_food_reagents_temperature(atom/cooked, datum/recipe/cookedrecipe)
+	//Put the energy used during the cooking into heating the reagents of the food.
+
+	var/cooktime = 10 SECONDS //Use a default to account for burned messes, etc.
+
+	if(cookedrecipe)
+		cooktime = cookedrecipe.time
+		//If we cooked something like ice cream or salad, abort to avoid hot ice cream.
+		if(cookedrecipe.cookable_with == COOKABLE_WITH_MIXING)
+			if(!istype(cooked, /obj/item/weapon/reagent_containers/food/snacks/badrecipe)) //Continue and heat up burned messes for valid, salad-like recipes in the case of emagged, etc.
+				return
+
+	var/thermal_energy_transfer = cooktime * active_power_usage * 0.9 / (1 SECONDS) //Let's assume 90% efficiency. One area for expansion could be to have this depend on upgrades.
+	var/max_temperature = COOKTEMP_HUMANSAFE
+	if(emagged || arcanetampered)
+		max_temperature = INFINITY //If it's been messed with, let it heat more than that.
+	cooked.reagents.heating(thermal_energy_transfer, max_temperature)
 
 /obj/machinery/microwave/proc/running(var/seconds as num) // was called wzhzhzh, for some fucking reason
 	for (var/i=1 to seconds)
@@ -420,7 +439,7 @@
 /obj/machinery/microwave/proc/has_extra_item()
 	for (var/obj/O in contents)
 		if ( \
-				!istype(O,/obj/item/weapon/reagent_containers/food) && \
+				!istype(O, /obj/item/weapon/reagent_containers/food) && \
 				!istype(O, /obj/item/weapon/grown) \
 			)
 			return 1

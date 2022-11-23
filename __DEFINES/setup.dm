@@ -1834,14 +1834,17 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define MUZZLE_SOFT 1	//Muzzle causes muffled speech.
 #define MUZZLE_HARD	2	//Muzzle prevents speech.
 
-//Microwave-or-pan selective cookability of recipes
+//Cooking vessel-selective cookability of recipes
 #define COOKABLE_WITH_MICROWAVE (1<<0)
 #define COOKABLE_WITH_PAN (1<<1)
+#define COOKABLE_WITH_MIXING (1<<2) //For things like salads and ice cream that don't require heat to cook (when mixing bowls are implemented, for now this is just used to not heat those recipes when they're made in a microwave).
+#define COOKABLE_WITH_HEAT (COOKABLE_WITH_MICROWAVE | COOKABLE_WITH_PAN)
 #define COOKABLE_WITH_ALL ALL
 
 //Flags for the contents of a cooking vessel
 #define COOKVESSEL_CONTAINS_REAGENTS (1<<0) //The cooking vessel contains reagents
 #define COOKVESSEL_CONTAINS_CONTENTS (1<<1)	//The cooking vessel contains non-reagent contents (eg. items)
 
-//Default cooking temperature
-#define COOKTEMP_DEFAULT T0C + 316 //Around 600 F
+//Cooking-related temperatures
+#define COOKTEMP_DEFAULT (T0C + 316) //Default cooking temperature, around 600 F
+#define COOKTEMP_HUMANSAFE (BODYTEMP_HEAT_DAMAGE_LIMIT - 1) //Human-safe temperature for cooked food, 1 degree less than the threshold for burning a human.
