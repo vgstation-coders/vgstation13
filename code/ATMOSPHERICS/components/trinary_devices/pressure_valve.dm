@@ -134,6 +134,20 @@
 /obj/machinery/atmospherics/trinary/pressure_valve/proc/toggle_enabled()
 	enabled = !enabled
 	if (!enabled) close()
+	
+
+/obj/machinery/atmospherics/trinary/pressure_valve/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
+	..()
+
+	if(open)
+		if(reference == node1)
+			if(node3)
+				return node3.network_expand(new_network, src)
+		else if(reference == node3)
+			if(node1)
+				return node1.network_expand(new_network, src)
+
+	return null
 
 // --- Graphics ---
 
@@ -180,7 +194,6 @@
 // Digital pressure valves
 //-------------------------
 // Radio enabled, aka: can be multitooled and connected to consoles
-// TODO !JLVG Radio stuff
 /obj/machinery/atmospherics/trinary/pressure_valve/digital
 	icon_state = "pvalve_d"
 	icon_state_overlay_enabled = "pvalve_d_enabled"
