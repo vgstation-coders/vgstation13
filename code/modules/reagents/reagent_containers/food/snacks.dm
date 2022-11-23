@@ -8017,6 +8017,43 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(WATER, 5)
 	bitesize = 5
 
+/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy
+	name = "Gunk Soup Embassy"
+	desc = "Space Turkey's finest politicians are sent to this elite GunkCo facility."
+	icon_state = "gunksoup_embassy_2" //here so it isn't invisible on nofruit pie rolls, gets overwritten on new()
+	trash = /obj/item/trash/snack_bowl
+	food_flags = FOOD_MEAT | FOOD_LIQUID
+	crumb_icon = "dribbles"
+	filling_color = "#6D4930"
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/New()
+	..()
+	if(prob(50))  //two flag waving styles
+		icon_state = "gunksoup_embassy_1"
+	else
+		icon_state = "gunksoup_embassy_2"
+	processing_objects += src
+	reagents.add_reagent(NUTRIMENT, 10) //we lobbied for extra nutriment for you!
+	reagents.add_reagent(ROACHSHELL, 8) //no roaches were harmed this time, it's all exoskeleton flakes
+	reagents.add_reagent(WATER, 5)
+	bitesize = 5
+	
+/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/process()
+	timer += 1
+	if(prob(20) && timer >= 10)
+		timer = 0
+		if(prob(50))
+			icon_state = "gunksoup_embassy_1"
+		else
+			icon_state = "gunksoup_embassy_2"
+
+/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/Destroy()
+	processing_objects -= src
+	new /mob/living/simple_animal/cockroach/turkish(get_turf(src))
+	new /mob/living/simple_animal/cockroach/turkish(get_turf(src))
+	..()
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkbread
 	name = "gunkbread loaf"
 	desc = "At some point you have to wonder not if you COULD make bread with garbage, but rather if you SHOULD."
