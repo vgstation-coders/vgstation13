@@ -706,13 +706,12 @@
 		water_value += C.reagents.get_reagent_amount(WATER)
 		water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
 		water_value += C.reagents.get_reagent_amount(ICE) * 0.80
-	var/message = ""
 	if(water_value)
 		add_water(water_value)
 		C.reagents.clear_reagents()
-		message += "You add the contents of the container to \the [src]."
+		to_chat(user, "<span class='notice'>You add the contents of the container to \the [src].</span>")
 		if(water_level == water_capacity)
-			message += "You filled \the [src] to the brim!"
+			to_chat(user, "<span class='notice'>You filled \the [src] to the brim!</span>")
 		update_icon()
 	return TRUE
 
@@ -739,7 +738,7 @@
 		qdel(egg)
 		return FALSE
 	add_fish(egg.fish_type)
-	to_chat(user, "<span class='warning'>You add the fish eggs to \the [src].</span>")
+	to_chat(user, "<span class='notice'>You add the fish eggs to \the [src].</span>")
 	qdel(egg)
 	return TRUE
 
@@ -752,7 +751,7 @@
 		to_chat(user, "<span class='notice'>\The [src] already has plenty of food in it. You decide to not add more.<span>")
 		return FALSE
 	add_food(MAX_FOOD)
-	to_chat(user, "<span class='warning'>You add the fish food to \the [src].</span>")
+	to_chat(user, "<span class='notice'>You add the fish food to \the [src].</span>")
 
 	return TRUE
 
@@ -761,7 +760,7 @@
 
 /obj/machinery/fishtank/proc/handle_brush(var/obj/item/O, var/mob/user as mob)
 	if(filth_level == 0)
-		to_chat(user, "\The [src] is already spotless!")
+		to_chat(user, "<span class='notice'>\The [src] is already spotless!</span>")
 		return TRUE
 	filth_level = 0
 	user.visible_message("\The [user] scrubs the inside of \the [src], cleaning the filth.", "<span class='notice'>You scrub the inside of \the [src], cleaning the filth.</span>")
