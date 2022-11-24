@@ -256,7 +256,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	name = "dice cup"
 	icon = 'icons/obj/drinks.dmi'
 	icon_state = "sakeglass"
-	items_to_spawn = null
+	items_to_spawn = list()
 
 /obj/item/weapon/storage/pill_bottle/dice/cup/on_attack(atom/attacked, mob/user)
 	..()
