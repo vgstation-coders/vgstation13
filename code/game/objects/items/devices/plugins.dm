@@ -84,21 +84,33 @@
 	override_chems = TRUE
 	override_crit = TRUE
 	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/device/plugin/sleeper/alien/New()
 	t1chems = list(
-		UNKNOWNALPHA = "Mystery1"
+		UNKNOWNALPHA = gen_alienchem_name(),
+		gen_alienchem() = gen_alienchem_name()
 		)
 	t2chems = list(
-		UNKNOWNDELTA = "Mystery2"
+		UNKNOWNDELTA = gen_alienchem_name(),
+		gen_alienchem() = gen_alienchem_name()
 		)
 	t3chems = list(
-		UNKNOWNOMEGA = "Mystery3"
+		UNKNOWNOMEGA = gen_alienchem_name(),
+		gen_alienchem() = gen_alienchem_name()
 		)
 
-/obj/item/device/plugin/sleeper/alien/proc/genName()
-	var/button_desc = "[pick("a yellow","a purple","a green","a blue","a red","an orange","a white")], "
-		button_desc += "[pick("round","square","diamond","heart","dog","human")] shaped "
-		button_desc += "[pick("toggle","switch","lever","button","pad","hole")]"
-	return button_desc
+/obj/item/device/plugin/sleeper/alien/proc/gen_alienchem()
+	return SPIDERS
+
+
+/obj/item/device/plugin/sleeper/alien/proc/gen_alienchem_name()
+	var/genned = ""
+	var/list/syllables = list("sa","lu","to","n","bo","na","ve","spe","ro","no","non","ki","el","vi","far","tas",
+	"ne","da","dan","ko","kon","ka","kaj","kin","de","ami","ko","kio","vin","nen","ne","nio","mi","gi","gis","per",
+	"po","vas","va","he","min","mi","cu","dig","di","gi","gis","nu","ven","as","kie","re","ven","dau")
+	for(var/i = 1 to pick(2,3,3,4))
+		genned += pick(syllables)
+	return capitalize(genned)
 
 /obj/item/device/plugin/sleeper/clown
 	name = "funny looking device"
