@@ -1,4 +1,5 @@
-#define WATT_TO_KPA_COEFFICIENT 10
+#define WATT_TO_KPA_COEFFICIENT 1
+#define WATT_TO_KPA_OF_EXTERNAL_PRESSURE_LIMIT 0.1 //100KW to double the default pressure limit
 
 /obj/machinery/atmospherics/miner
 	name = "gas miner"
@@ -59,9 +60,14 @@
 	set category = "Object"
 	set name = "Set power consumption"
 	set src in oview(1)
-	power_load = input("moar power", "Set power consumption", power_load) as num
-	//todo prevent ghosts from messing with this
-	//todo sanitize negative inputs
+	if(!(isAdminGhost(usr) || ishuman(usr) || issilicon(usr)))
+		to_chat(usr, "You are not capable of such fine manipulation.")
+		return
+	var/power = input("moar power", "Set power consumption", power_load) as num
+	if(power < 0)
+		to_chat(usr, "You remember the tales of negative moles and pressures and reconsider.")
+		return
+	power_load = power
 
 //update gas creation speed into air_contents
 /obj/machinery/atmospherics/miner/proc/set_rate(var/internal_pressure)
@@ -76,30 +82,31 @@
 	air_contents.update_values()
 
 //actually create the gas and pump it into the air
-//if running on extra power, no pressure maximum
-//otherwise, max out at max_external_pressure
+//max out at max_external_pressure
+//unless running on exernal power, which raises the pressure limit the more power you add
 /obj/machinery/atmospherics/miner/proc/tranfer_gas()
 	pumping.copy_from(air_contents)
-	if(power_connection.get_satisfaction())
-		moles_outputted = pumping.total_moles
+	var/datum/gas_mixture/environment = loc.return_air()
+	var/environment_pressure = environment.return_pressure()
+	var/extra_power_pressure_bonus = 0
+	if(power_connection.connected)	//raise max pressure if powered
+		var/power_actually_consumed = power_connection.get_satisfaction() * power_load_last_tick
+		extra_power_pressure_bonus = power_actually_consumed * WATT_TO_KPA_OF_EXTERNAL_PRESSURE_LIMIT
+		
+	var/pressure_delta = max(0, (max_external_pressure + extra_power_pressure_bonus - environment_pressure))
+	if(pressure_delta > 0.1)
+		moles_outputted = pressure_delta * CELL_VOLUME / (output_temperature * R_IDEAL_GAS_EQUATION)
+		moles_outputted = min(moles_outputted, pumping.total_moles)
 		var/datum/gas_mixture/removed = pumping.remove(moles_outputted)
 		loc.assume_air(removed)
-		
-	else
-		var/datum/gas_mixture/environment = loc.return_air()
-		var/environment_pressure = environment.return_pressure()
-		var/pressure_delta = max(0, (max_external_pressure - environment_pressure))
-		if(pressure_delta > 0.1)
-			moles_outputted = pressure_delta * CELL_VOLUME / (output_temperature * R_IDEAL_GAS_EQUATION)
-			moles_outputted = min(moles_outputted, pumping.total_moles)
-			var/datum/gas_mixture/removed = pumping.remove(moles_outputted)
-			loc.assume_air(removed)
-		else 
-			moles_outputted = 0
+	else 
+		moles_outputted = 0
 
 /obj/machinery/atmospherics/miner/proc/draw_power()
 	if(power_connection.build_status)				//build_status means the connection needs rebuilding
+		power_load_last_tick = 0
 		if(power_connection.connect() == FALSE)		//try to re-connect to the powernet
+			set_rate(base_gas_production)
 			return 0								//there's no wire to connect to
 	var/power_actually_consumed = power_connection.get_satisfaction() * power_load_last_tick
 	power_connection.add_load(power_load)
@@ -113,7 +120,9 @@
 		return
 	if(power_connection.connected)
 		var/power_actually_consumed = power_connection.get_satisfaction() * power_load_last_tick
-		to_chat(user, "<span class='info'>Connected to external power and drawing [power_actually_consumed] of the requested [power_load]W.</span>")	
+		to_chat(user, "<span class='info'>Connected to wire network and drawing [power_actually_consumed] of the requested [power_load]W.</span>")
+	else
+		to_chat(user, "<span class='info'>Not connected to external power.</span>")
 	if (!on || (stat & FORCEDISABLE))
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Turned off.</span>")
 		return
@@ -194,7 +203,7 @@
 	if(stat & BROKEN)
 		return
 
-	if(power_connection.get_satisfaction())
+	if(power_connection.connected) //
 		var/extra_mined_gas = draw_power() * WATT_TO_KPA_COEFFICIENT //in KPa per tick
 		set_rate(base_gas_production + extra_mined_gas)	
 	tranfer_gas()
