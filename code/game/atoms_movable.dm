@@ -334,9 +334,9 @@
 
 /atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
 	locking_init()
-	. = locking_categories_name[category]
-
-	if (!.)
+	if(locking_categories_name[category])
+		. = locking_categories_name[category]
+	else
 		if (istext(category))
 			return
 
