@@ -5197,10 +5197,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/clown
 	name = "honky sliders"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/clown
+	child_volume = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/clown/New()
 	..()
-	reagents.add_reagent(HONKSERUM, 10) //spawns 4
+	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
+	reagents.add_reagent(HONKSERUM, 10)
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/clown
 	name = "honky slider"
@@ -5210,10 +5212,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/mime
 	name = "quiet sliders"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/mime
+	child_volume = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/mime/New()
 	..()
-	reagents.add_reagent(SILENCER, 10) //spawns 4
+	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
+	reagents.add_reagent(SILENCER, 10)
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/mime
 	name = "quiet slider"
