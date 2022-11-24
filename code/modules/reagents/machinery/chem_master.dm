@@ -423,12 +423,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			var/logged_message = " - [key_name(usr)] has made [count] pill[count > 1 ? "s, each" : ""] named '[name]' and containing "
 
 			//Bring the pills to room temperature, due to contact with the pilling machinery.
-			var/pill_temperature
-			var/turf/T = get_turf(src)
-			if(T)
-				pill_temperature = T.temperature
-			else
-				pill_temperature = T0C + 20
+			var/pill_temperature = get_loc_temp()
 
 			while(count--)
 				if(amount_per_pill == 0 || reagents.total_volume == 0)

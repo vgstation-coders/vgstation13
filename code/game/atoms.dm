@@ -988,3 +988,13 @@ its easier to just keep the beam vertical.
 	for(var/atom/location = A.loc, location, location = location.loc)
 		if(location == src)
 			return TRUE
+
+/atom/proc/get_loc_temp(var/datum/gas_mixture/environment)
+	var/loc_temp
+	if(!environment)
+		environment = loc.return_air()
+	if(environment)
+		loc_temp = environment.temperature
+	else
+		loc_temp = T0C + 20
+	return loc_temp
