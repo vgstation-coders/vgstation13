@@ -739,6 +739,7 @@
 		qdel(egg)
 		return FALSE
 	add_fish(egg.fish_type)
+	to_chat(user, "<span class='warning'>You add the fish eggs to \the [src].</span>")
 	qdel(egg)
 	return TRUE
 
@@ -751,6 +752,7 @@
 		to_chat(user, "<span class='notice'>\The [src] already has plenty of food in it. You decide to not add more.<span>")
 		return FALSE
 	add_food(MAX_FOOD)
+	to_chat(user, "<span class='warning'>You add the fish food to \the [src].</span>")
 
 	return TRUE
 
