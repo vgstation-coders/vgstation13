@@ -7,6 +7,7 @@
 	var/datum/arcade_game/game
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	emag_cost = 0 // because fun
+	computer_flags = NO_ONOFF_ANIMS
 	light_color = LIGHT_COLOR_GREEN
 	var/haunted = 0
 	var/mob/playerone
