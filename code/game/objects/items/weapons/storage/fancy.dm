@@ -689,70 +689,70 @@
 	return
 
 //SLIDER BOXES
-
-/obj/item/weapon/storage/fancy/food_box/slider_box
-	name = "slider box"
-	desc = "I wonder what's inside."
-	icon_type = "slider"
-	storage_slots = 4
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/slider")
-	var/slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider//set this as the spawn path of your slider
-	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
-
-/obj/item/weapon/storage/fancy/food_box/slider_box/New()
-	..()
-	for(var/i=1, i <= storage_slots; i++)
-		new slider_type(src)
-
-/obj/item/weapon/storage/fancy/food_box/slider_box/synth
-	name = "synth slider box"
-	icon_type = "synth slider"
-	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/synth
-
-/obj/item/weapon/storage/fancy/food_box/slider_box/xeno
-	name = "xeno slider box"
-	icon_type = "xeno slider"
-	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/xeno
-
-/obj/item/weapon/storage/fancy/food_box/slider_box/chicken
-	name = "chicken slider box"
-	icon_type = "chicken slider"
-	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/chicken
-
-/obj/item/weapon/storage/fancy/food_box/slider_box/toxiccarp
-	name = "carp slider box"
-	icon_type = "carp slider"
-	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/toxiccarp
-	storage_slots = 2
-
-/obj/item/weapon/storage/fancy/food_box/slider_box/carp
-	name = "carp slider box"
-	icon_type = "carp slider"
-	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/carp
-	storage_slots = 2
-
-/obj/item/weapon/storage/fancy/food_box/slider_box/spider
-	name = "spidey slidey box"
-	icon_type = "spider slider"
-	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/carp/spider
-
-/obj/item/weapon/storage/fancy/food_box/slider_box/clown
-	name = "honky slider box"
-	icon_type = "honky slider"
-	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/clown
-
-/obj/item/weapon/storage/fancy/food_box/slider_box/mime
-	name = "quiet slider box"
-	icon_type = "quiet slider"
-	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/mime
-
-/obj/item/weapon/storage/fancy/food_box/slider_box/slippery
-	name = "slippery slider box"
-	icon_type = "slippery slider"
-	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/slippery
-	storage_slots = 2
-
+/*
+ * /obj/item/weapon/storage/fancy/food_box/slider_box
+ * 	name = "slider box"
+ * 	desc = "I wonder what's inside."
+ *	icon_type = "slider"
+ *	storage_slots = 4
+ *	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/slider")
+ *	var/slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider//set this as the spawn path of your slider
+ *	starting_materials = list(MAT_CARDBOARD = 3750)
+ *	w_type=RECYK_MISC
+ *
+ * /obj/item/weapon/storage/fancy/food_box/slider_box/New()
+ *	..()
+ *	for(var/i=1, i <= storage_slots; i++)
+ *		new slider_type(src)
+ *
+ * /obj/item/weapon/storage/fancy/food_box/slider_box/synth
+ *	name = "synth slider box"
+ *	icon_type = "synth slider"
+ *	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/synth
+ *
+ * /obj/item/weapon/storage/fancy/food_box/slider_box/xeno
+ *	name = "xeno slider box"
+ *	icon_type = "xeno slider"
+ *	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/xeno
+ *
+ * /obj/item/weapon/storage/fancy/food_box/slider_box/chicken
+ *	name = "chicken slider box"
+ *	icon_type = "chicken slider"
+ *	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/chicken
+ *
+ * /obj/item/weapon/storage/fancy/food_box/slider_box/toxiccarp
+ *	name = "carp slider box"
+ *	icon_type = "carp slider"
+ *	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/toxiccarp
+ *	storage_slots = 2
+ *
+ * /obj/item/weapon/storage/fancy/food_box/slider_box/carp
+ *	name = "carp slider box"
+ *	icon_type = "carp slider"
+ *	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/carp
+ *	storage_slots = 2
+ *
+ * /obj/item/weapon/storage/fancy/food_box/slider_box/spider
+ *	name = "spidey slidey box"
+ *	icon_type = "spider slider"
+ *	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/carp/spider
+ *
+ * /obj/item/weapon/storage/fancy/food_box/slider_box/clown
+ *	name = "honky slider box"
+ *	icon_type = "honky slider"
+ *	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/clown
+ *
+ * /obj/item/weapon/storage/fancy/food_box/slider_box/mime
+ *	name = "quiet slider box"
+ *	icon_type = "quiet slider"
+ *	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/mime
+ *
+ * /obj/item/weapon/storage/fancy/food_box/slider_box/slippery
+ *	name = "slippery slider box"
+ *	icon_type = "slippery slider"
+ *	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/slippery
+ *	storage_slots = 2
+ */
 //SLIDER BOXES END
 
 ////////////
