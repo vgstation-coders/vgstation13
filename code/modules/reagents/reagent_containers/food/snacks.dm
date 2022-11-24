@@ -581,6 +581,13 @@
 //	and set your recipe's result to your spawner.
 //	reagents.add_reagent() should take place in your spawner's New() proc, not in its children's.
 //	Consult sushi types below for examples of usage.
+
+// Multispawners take the total amount of reagents, both the ones added by the recipe and the ingredients's ones, divides the number by the child volume and spawns that many of items.
+// For example: If the child volume is 1 and the total reagents, both from the ingredients and the extra upon cooking, add to 10u, then it would spawn 10 items. 
+// This means that "stronger" ingredients spawn more items.
+// If you have child volume 5, the recipe adds 10u reagents and the ingredients' reagents add 10 more, the multispawner would spawn 4 items, since (10+10):5=4.
+// Only the fooditem ingredient reagents get tallied, any "raw" reagents the recipe calls for, such as flour, don't get counted for multispawner purposes.
+
 /obj/item/weapon/reagent_containers/food/snacks/multispawner
 	name = "food spawner"
 	var/child_type = /obj/item/weapon/reagent_containers/food/snacks
@@ -5092,86 +5099,134 @@
 
 ////////////////SLIDERS////////////////
 
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider
+	name = "sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider
+	child_volume = 2.5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
+
 /obj/item/weapon/reagent_containers/food/snacks/slider
 	name = "slider"
 	desc = "It's so tiny!"
 	icon_state = "slider"
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/slider/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2.5)
 	bitesize = 1.5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/synth
+	name = "synth sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/synth
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/synth/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/synth
 	name = "synth slider"
 	desc = "It's made to be tiny!"
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/xeno
+	name = "xeno sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/xeno
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/xeno/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/xeno
 	name = "xeno slider"
 	desc = "It's green!"
 	icon_state = "slider_xeno"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/xeno/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/chicken
+	name = "chicken sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/chicken
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/chicken/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	bitesize = 2
+	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/chicken
 	name = "chicken slider"
 	desc = "Chicken sliders? That's new."
 	icon_state = "slider_chicken"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/chicken/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/carp
+	name = "carp sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/carp
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/carp/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	bitesize = 2
+	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/carp
 	name = "carp slider"
 	desc = "I wonder how it tastes!"
 	icon_state = "slider_carp"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/carp/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/toxiccarp
+	name = "carp sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/toxiccarp
+	child_volume = 4.5
+	
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/toxiccarp/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	bitesize = 2.5
+	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
+	reagents.add_reagent(CARPOTOXIN, 8)
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/toxiccarp
 	name = "carp slider"
 	desc = "I wonder how it tastes!"
 	icon_state = "slider_carp"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/toxiccarp/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	reagents.add_reagent(CARPOTOXIN, 2)
-	bitesize = 2.5
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/spider
+	name = "spidey slideys"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/spider
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/carp/spider
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/spider/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/spider
 	name = "spidey slidey"
 	desc = "I think there's still a leg in there!"
 	icon_state = "slider_spider"
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/clown
+	name = "honky sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/clown
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/clown/New()
+	..()
+	reagents.add_reagent(HONKSERUM, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/clown
 	name = "honky slider"
 	desc = "HONK!"
 	icon_state = "slider_clown"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/clown/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/mime
+	name = "quiet sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/mime
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/mime/New()
 	..()
-	reagents.add_reagent(HONKSERUM, 2.5)
-	bitesize = 2.5
+	reagents.add_reagent(SILENCER, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/mime
-	name = "quiet Slider"
+	name = "quiet slider"
 	desc = "..."
 	icon_state = "slider_mime"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/mime/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/slippery
+	name = "slippery sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/slippery
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/slippery/New()
 	..()
-	reagents.add_reagent(SILENCER, 2.5)
-	bitesize = 2.5
+	reagents.add_reagent(NUTRIMENT, 5) //spawns 2
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/slippery
 	name = "slippery slider"
