@@ -182,7 +182,7 @@
 		hgibs(loc, target.virus2, target.dna, target.species.flesh_color, target.species.blood_color)
 		qdel(target)
 		target = null
-		if(prob(80)
+		if(prob(80))
 			for(var/i = 1;i<=6;i++)
 				new /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets(loc)
 				sleep(2)
