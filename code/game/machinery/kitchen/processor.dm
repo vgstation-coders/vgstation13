@@ -188,7 +188,7 @@
 				sleep(2)
 		else
 			for(var/i = 1;i<=6;i++)
-				new /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
+				new /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets(loc)
 				sleep(2)
 		..()
 	else
