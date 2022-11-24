@@ -424,18 +424,17 @@
 	egg_list.len = 0
 
 /obj/machinery/fishtank/proc/harvest_fish(var/mob/user)
-	if(!fish_list.len)
+	if(fish_list.len)
+		var/caught_fish = input("Select a fish to catch.", "Fishing") as null|anything in fish_list
+		if(caught_fish)
+			remove_fish(caught_fish)
+			user.visible_message("[user.name] harvests \a [caught_fish] from \the [src].", "You scoop \a [caught_fish] out of \the [src].")
+			for(var/fish_path in subtypesof(/obj/item/weapon/fish/))
+				var/obj/item/weapon/fish = new fish_path
+				if(fish.name == caught_fish)
+					fish = new fish_path(get_turf(user))
+	else
 		to_chat(user, "There are no fish in \the [src] to catch!")
-		return
-
-	var/caught_fish = pick(fish_list)
-	if(caught_fish)
-		remove_fish(caught_fish)
-		user.visible_message("[user.name] harvests \a [caught_fish] from \the [src].", "You scoop \a [caught_fish] out of \the [src].")
-	for(var/fish_path in subtypesof(/obj/item/weapon/fish/))
-		var/obj/item/weapon/fish = new fish_path
-		if(fish.name == caught_fish)
-			fish = new fish_path(get_turf(user))
 
 /obj/machinery/fishtank/proc/destroy(var/deconstruct = FALSE)
 	if(!deconstruct)
@@ -711,6 +710,7 @@
 	if(water_value)
 		add_water(water_value)
 		C.reagents.clear_reagents()
+		message += "You add the contents of the container to \the [src]."
 		if(water_level == water_capacity)
 			message += "You filled \the [src] to the brim!"
 		update_icon()
