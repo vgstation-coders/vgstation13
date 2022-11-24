@@ -202,11 +202,7 @@ var/auxtools_path
 	stop_all_media()
 
 	end_credits.on_world_reboot_start()
-	testing("[time_stamp()] - World reboot is now sleeping.")
-
 	sleep(max(10, end_credits.audio_post_delay))
-
-	testing("[time_stamp()] - World reboot is done sleeping.")
 	end_credits.on_world_reboot_end()
 
 	for(var/client/C in clients)
