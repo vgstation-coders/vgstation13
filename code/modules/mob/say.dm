@@ -85,8 +85,7 @@ var/list/global_deadchat_listeners = list()
 		if(V && V.deadchat)
 			var/rendered = "<span class='game deadsay'><span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
 			to_chat(M, rendered)
-			continue
-		if(M.client.prefs.toggles & CHAT_DEAD)
+		else if(M.client.prefs.toggles & CHAT_DEAD)
 			var/rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a>"
 			rendered += "<span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
 			if(M.client.holder && M.client.holder.rights & R_ADMIN) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
