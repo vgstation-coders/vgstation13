@@ -81,9 +81,9 @@ var/list/global_deadchat_listeners = list()
 		if(istype(M, /mob/new_player))
 			continue
 		var/datum/role/vampire/V = isvampire(M)
-		if(V && V.deadchat && M.Stat != DEAD)	//must be dead or be a vampire
-			var/rendered = "<span class='game deadsay'><span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
-			to_chat(world, "VAMPIRE MESSAGE:"+rendered))
+		var/rendered = "<span class='game deadsay'><span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
+		if(V && V.deadchat)
+			to_chat(M, rendered)
 			continue
 		if(M.client.prefs.toggles & CHAT_DEAD)
 			var/rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a>"
