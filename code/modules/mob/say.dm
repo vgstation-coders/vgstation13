@@ -81,6 +81,10 @@ var/list/global_deadchat_listeners = list()
 		if(istype(M, /mob/new_player))
 			continue
 		var/datum/role/vampire/V = isvampire(M)
+		if(V && V.deadchat && M.Stat != DEAD)	//must be dead or be a vampire
+			var/rendered = "<span class='game deadsay'><span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
+			to_chat(world, "VAMPIRE MESSAGE:"+rendered))
+			continue
 		if(M.client.prefs.toggles & CHAT_DEAD)
 			var/rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a>"
 			rendered += "<span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
@@ -92,9 +96,6 @@ var/list/global_deadchat_listeners = list()
 				var/mob/living/carbon/brain/B = M
 				if(B.brain_dead_chat())
 					to_chat(M, rendered)
-		else if(V && V.deadchat)	//must be dead or be a vampire
-			var/rendered = "<span class='game deadsay'><span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
-			to_chat(M, rendered)
 
 /mob/proc/get_ear()
 	// returns an atom representing a location on the map from which this
