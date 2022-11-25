@@ -165,6 +165,7 @@
 	supervisors = "the head of personnel"
 	wage_payout = 20
 	selection_color = "#dddddd"
+	species_blacklist = list()
 	access = list(access_janitor, access_maint_tunnels)
 	minimal_access = list(access_janitor, access_maint_tunnels)
 	outfit_datum = /datum/outfit/janitor

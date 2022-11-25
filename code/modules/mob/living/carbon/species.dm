@@ -399,7 +399,7 @@ var/global/list/playable_species = list("Human")
 	heat_level_2 = 480 //Default 400
 	heat_level_3 = 1100 //Default 1000
 
-	flags = WHITELISTED
+	flags = WHITELISTED | PLAYABLE
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
 
 	default_mutations=list(M_CLAWS)
