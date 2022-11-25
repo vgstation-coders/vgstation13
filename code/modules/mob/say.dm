@@ -82,8 +82,7 @@ var/list/global_deadchat_listeners = list()
 			continue
 		var/datum/role/vampire/V = isvampire(M)
 		if(M.client.prefs.toggles & CHAT_DEAD)
-			var/rendered = ""
-			rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a>"
+			var/rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a>"
 			rendered += "<span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
 			if(M.client.holder && M.client.holder.rights & R_ADMIN) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
 				to_chat(M, rendered)//Admins can hear deadchat, if they choose to, no matter if they're blind/deaf or not.
@@ -94,7 +93,7 @@ var/list/global_deadchat_listeners = list()
 				if(B.brain_dead_chat())
 					to_chat(M, rendered)
 		else if(V && V.deadchat)	//must be dead or be a vampire
-			rendered = "<span class='game deadsay'><span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
+			var/rendered = "<span class='game deadsay'><span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
 			to_chat(M, rendered)
 
 /mob/proc/get_ear()
