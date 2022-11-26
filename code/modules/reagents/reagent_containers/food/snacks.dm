@@ -5121,7 +5121,6 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/synth/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/synth
 	name = "synth slider"
@@ -5130,10 +5129,11 @@
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/xeno
 	name = "xeno sliders"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/xeno
-
+	child_volume = 3.5
+	
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/xeno/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
+	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/xeno
 	name = "xeno slider"
@@ -5143,10 +5143,11 @@
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/chicken
 	name = "chicken sliders"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/chicken
-
+	child_volume = 3.5
+	
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/chicken/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
+	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/chicken
 	name = "chicken slider"
@@ -5156,10 +5157,11 @@
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/carp
 	name = "carp sliders"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/carp
+	child_volume = 3.5
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/carp/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
+	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/carp
 	name = "carp slider"
@@ -5169,11 +5171,11 @@
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/toxiccarp
 	name = "carp sliders"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/toxiccarp
-	child_volume = 4.5
-	
+	child_volume = 5.5
+
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/toxiccarp/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
+	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
 	reagents.add_reagent(CARPOTOXIN, 8)
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/toxiccarp
@@ -5184,10 +5186,11 @@
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/spider
 	name = "spidey slideys"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/spider
+	child_volume = 3.5
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/spider/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
+	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/spider
 	name = "spidey slidey"
@@ -5201,8 +5204,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/clown/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
-	reagents.add_reagent(HONKSERUM, 10)
+	reagents.add_reagent(HONKSERUM, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/clown
 	name = "honky slider"
@@ -5216,8 +5218,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/mime/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
-	reagents.add_reagent(SILENCER, 10)
+	reagents.add_reagent(SILENCER, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/mime
 	name = "quiet slider"
@@ -5227,10 +5228,10 @@
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/slippery
 	name = "slippery sliders"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/slippery
+	child_volume = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/slippery/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5) //spawns 2
+	..() //spawns 2
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/slippery
 	name = "slippery slider"
