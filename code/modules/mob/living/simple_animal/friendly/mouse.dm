@@ -59,7 +59,7 @@
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
 
 	var/turf/T = get_turf(src)
-	if (!client && istype(T.loc,/area/maintenance) && prob(20))
+	if (!client && (T ? istype(T.loc,/area/maintenance) : FALSE) && prob(20))
 		MaintInfection()
 
 /mob/living/simple_animal/mouse/can_be_infected()
