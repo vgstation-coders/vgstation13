@@ -277,6 +277,7 @@
 		return
 	comment_deposit(user,value)
 	trader_account.money += value
+	new /datum/transaction(trader_account, "Shoal fund addition", "[value]", "[user]", send2PDAs = FALSE)
 	for(var/obj/item/weapon/spacecash/C in loc.contents)
 		qdel(C)
 

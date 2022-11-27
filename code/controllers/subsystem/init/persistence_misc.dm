@@ -239,6 +239,21 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	data = list()
 	fdel(file(file_path))
 
+/datum/persistence_task/highscores/trader
+	execute = TRUE
+	name = "Trader shoal highscores"
+	file_path = "data/persistence/trader_highscores.json"
+
+/datum/persistence_task/highscores/trader/announce_new_highest_record(var/datum/record/money/record)
+	var/name = "Richest shoal haul ever"
+	var/desc = "You broke the record of the richest shoal haul! $[record.cash] chips accumulated."
+	give_award(record.ckey, /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
+
+/datum/persistence_task/highscores/trader/announce_new_record(var/datum/record/money/record)
+	var/name = "Good rich shoal haul"
+	var/desc = "You made it to the top 5! You accumulated $[record.cash]."
+	give_award(record.ckey, /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
+
 //stores map votes for code/modules/html_interface/voting/voting.dm
 /datum/persistence_task/vote
 	execute = TRUE

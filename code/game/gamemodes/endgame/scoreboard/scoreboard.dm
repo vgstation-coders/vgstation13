@@ -51,6 +51,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/richestjob			= null  //Kinda pointless if you dont have a money system i guess
 	var/richestcash			= 0
 	var/richestkey			= null
+	var/biggestshoalname	= null
+	var/biggestshoalcash	= 0
+	var/biggestshoalkey		= null
 	var/dmgestname			= null //Who had the most damage on the shuttle (but was still alive)
 	var/dmgestjob			= null
 	var/dmgestdamage		= 0
@@ -77,6 +80,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/bagelscooked		= 0
 	var/disease				= 0
 	var/list/money_leaderboard = list()
+	var/list/shoal_leaderboard = list()
 	var/list/implant_phrases = list()
 	var/list/global_paintings = list()
 
@@ -241,6 +245,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 			dat += "<B>Most Battered Escapee:</B> [score.dmgestname], [score.dmgestjob]: [score.dmgestdamage] damage ([score.dmgestkey])<BR>"
 		if(score.richestcash)
 			dat += "<B>Richest Escapee:</B> [score.richestname], [score.richestjob]: $[score.richestcash] ([score.richestkey])<BR>"
+		if(score.biggestshoalcash)
+			dat += "<B>Most Generous Shoal Funder:</B> [score.biggestshoalname]: $[score.biggestshoalcash] ([score.biggestshoalkey])<BR>"
 	else
 		dat += "The station wasn't evacuated or there were no survivors!<BR>"
 	dat += "<B>Department Leaderboard:</B><BR>"
@@ -303,6 +309,18 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 			break
 		else
 			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
+	var/datum/persistence_task/highscores/trader/leaderboard2 = score.shoal_leaderboard
+	dat += "<br><b>MONTHLY TOP 5 RICHEST TRADERS:</b><br>"
+	var/i = 1
+	for(var/datum/record/money/entry in leaderboard2.data)
+		var/cash = num2text(entry.cash, 12)
+		var/list/split_date = splittext(entry.date, "-")
+		if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
+			leaderboard2.clear_records()
+			dat += "No rich traders yet!"
+			break
+		else
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b>. That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 	return dat
 
 /mob/proc/display_round_end_scoreboard()

@@ -30,13 +30,13 @@
 				var/icon/flat = getFlatIcon(painting)
 				row1 += {"<td><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'></td>"}
 				row2 += {"<td>"[title]"</td>"}
-			
+
 			tooble += {"<tr>[row1]</tr><tr>[row2]</tr>"}
 			if(artistsandworks != currentartist)
 				currentartist = artistsandworks
 				painting_completions += {"<h3>[artistsandworks]</h3>"}
 				painting_completions += {"<table>[tooble]</table>"}
-	
+
 		completions += "<h2>Artisans and their artworks</h2>"
 		completions += painting_completions
 		completions += "<HR>"
@@ -48,7 +48,9 @@
 		completions += "<br>[achievement_declare_completion()]"
 
 	score.money_leaderboard = SSpersistence_misc.tasks[/datum/persistence_task/highscores]
+	score.shoal_leaderboard = SSpersistence_misc.tasks[/datum/persistence_task/highscores/trader]
 	var/list/rich_escapes = list()
+	var/list/rich_shoals = list()
 
 	for(var/mob/living/player in player_list)
 		if(player.stat == DEAD)
@@ -83,6 +85,17 @@
 				score.dmgestname = player.real_name
 				score.dmgestjob = player.job
 				score.dmgestkey = player.key
+		var/shoal_amount = 0
+		for(var/datum/transaction/T in trader_account.transaction_log)
+			if(T.source_terminal == "[player]")
+				shoal_amount += T.amount
+		if(shoal_amount > 0)
+			var/datum/record/money/record = new(player.key, player.job, shoal_amount)
+				rich_shoals += record
+			if(shoal_amount > score.biggestshoalfunder)
+				score.biggestshoalcash = shoal_amount
+				score.biggestshoalname = "[user]"
+				score.biggestshoalkey = "[user.key]"
 		if(player.hangman_score > score.hangmanrecord)
 			score.hangmanrecord = player.hangman_score
 			score.hangmanname = player.real_name
@@ -95,6 +108,8 @@
 	//Money
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
 	leaderboard.insert_records(rich_escapes)
+	var/datum/persistence_task/highscores/trader/leaderboard2 = score.shoal_leaderboard
+	leaderboard2.insert_records(rich_shoals)
 
 	var/transfer_total = 0
 	for(var/datum/money_account/A in all_money_accounts)
