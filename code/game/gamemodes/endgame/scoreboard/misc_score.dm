@@ -94,8 +94,8 @@
 			rich_shoals += record
 			if(shoal_amount > score.biggestshoalcash)
 				score.biggestshoalcash = shoal_amount
-				score.biggestshoalname = "[player]"
-				score.biggestshoalkey = "[player.key]"
+				score.biggestshoalname = player.real_name
+				score.biggestshoalkey = player.key
 		if(player.hangman_score > score.hangmanrecord)
 			score.hangmanrecord = player.hangman_score
 			score.hangmanname = player.real_name
