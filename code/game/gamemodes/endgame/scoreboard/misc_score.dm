@@ -91,7 +91,7 @@
 				shoal_amount += T.amount
 		if(shoal_amount > 0)
 			var/datum/record/money/record = new(player.key, player.job, shoal_amount)
-				rich_shoals += record
+			rich_shoals += record
 			if(shoal_amount > score.biggestshoalfunder)
 				score.biggestshoalcash = shoal_amount
 				score.biggestshoalname = "[user]"
