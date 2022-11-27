@@ -92,10 +92,10 @@
 		if(shoal_amount > 0)
 			var/datum/record/money/record = new(player.key, player.job, shoal_amount)
 			rich_shoals += record
-			if(shoal_amount > score.biggestshoalfunder)
+			if(shoal_amount > score.biggestshoalcash)
 				score.biggestshoalcash = shoal_amount
-				score.biggestshoalname = "[user]"
-				score.biggestshoalkey = "[user.key]"
+				score.biggestshoalname = "[player]"
+				score.biggestshoalkey = "[player.key]"
 		if(player.hangman_score > score.hangmanrecord)
 			score.hangmanrecord = player.hangman_score
 			score.hangmanname = player.real_name
