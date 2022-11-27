@@ -7,7 +7,7 @@
 	icon = 'icons/obj/atmospherics/miner.dmi'
 	icon_state = "miner"
 	power_channel=ENVIRON
-	active_power_usage = 100			//their base powerdraw, can be increased 
+	var/base_power_usage = 100			//their base powerdraw, can be increased 
 	idle_power_usage = 10				//draw when off, stays constant
 
 	starting_materials = null
@@ -19,9 +19,10 @@
 	var/output_temperature = T20C		
 	var/on = TRUE
 	
-/*	var/datum/power_connection/consumer/power_connection
-	var/power_load = 5000				//draw external power from a wire node
-	var/power_load_last_tick = 0*/
+/*	var/datum/power_connection/consumer/power_connection*/
+//	var/power_load = 5000				//draw external power from a wire node
+	var/power_load_last_tick = 0		//prevent cheeky way to make loadsa gas
+	var/power_load_two_ticks_ago = 0
 	
 	var/list/gases = list()				//which gases the miner generates
 	var/datum/gas_mixture/air_contents	//which gases the miner generates, and how fast (in KPa per tick)
@@ -73,7 +74,6 @@
 /*	power_load = power
 	power_connection.active_usage = power*/
 	active_power_usage = power
-	power_change()
 
 //update gas creation speed into air_contents
 /obj/machinery/atmospherics/miner/proc/set_rate(var/internal_pressure)
@@ -179,6 +179,9 @@
 /obj/machinery/atmospherics/miner/power_change()
 	..()
 	set_rate(base_gas_production)
+	active_power_usage = base_power_usage
+	power_load_last_tick = base_power_usage
+	power_load_two_ticks_ago = base_power_usage
 /*	power_load_last_tick = 0
 	if(!power_connection.connected)
 		power_connection.connect()*/
@@ -235,10 +238,11 @@
 	/*if(power_connection.connected)
 		var/extra_mined_gas = draw_power() * WATT_TO_KPA_COEFFICIENT
 		set_rate(base_gas_production + extra_mined_gas)	*/
-	var/extra_mined_gas = active_power_usage * WATT_TO_KPA_COEFFICIENT
+	var/extra_mined_gas = power_load_two_ticks_ago * WATT_TO_KPA_COEFFICIENT
+	power_load_two_ticks_ago = power_load_last_tick
+	power_load_last_tick = active_power_usage
 	set_rate(base_gas_production + extra_mined_gas)
 	tranfer_gas()
-
 
 /obj/machinery/atmospherics/miner/sleeping_agent
 	name = "\improper N2O Gas Miner"
