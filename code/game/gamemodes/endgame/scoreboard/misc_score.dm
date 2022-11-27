@@ -87,9 +87,9 @@
 				score.dmgestkey = player.key
 		if(trader_account)
 			var/shoal_amount = 0
-			for(var/datum/transaction/T in trader_account.transaction_log)
+			for(var/datum/transaction/TR in trader_account.transaction_log)
 				if(T.source_terminal == "[player]")
-					shoal_amount += T.amount
+					shoal_amount += TR.amount
 			if(shoal_amount > 0)
 				var/datum/record/money/record = new(player.key, player.job, shoal_amount)
 				rich_shoals += record

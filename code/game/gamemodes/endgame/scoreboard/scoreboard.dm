@@ -311,7 +311,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 	var/datum/persistence_task/highscores/trader/leaderboard2 = score.shoal_leaderboard
 	dat += "<br><b>MONTHLY TOP 5 RICHEST TRADERS:</b><br>"
-	var/i = 1
+	i = 1
 	for(var/datum/record/money/entry in leaderboard2.data)
 		var/cash = num2text(entry.cash, 12)
 		var/list/split_date = splittext(entry.date, "-")
