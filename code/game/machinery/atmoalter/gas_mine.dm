@@ -1,5 +1,5 @@
-#define WATT_TO_KPA_COEFFICIENT 1
-#define WATT_TO_KPA_OF_EXTERNAL_PRESSURE_LIMIT 0.1 //100KW to double the default pressure limit
+#define WATT_TO_KPA_COEFFICIENT 1					//4.5KW to double the default speed
+#define WATT_TO_KPA_OF_EXTERNAL_PRESSURE_LIMIT 1	//10KW to double the default pressure limit
 
 /obj/machinery/atmospherics/miner
 	name = "gas miner"
@@ -7,19 +7,21 @@
 	icon = 'icons/obj/atmospherics/miner.dmi'
 	icon_state = "miner"
 	power_channel=ENVIRON
+	active_power_usage = 100			//their base powerdraw, can be increased 
+	idle_power_usage = 10				//draw when off, stays constant
 
 	starting_materials = null
 	w_type = NOT_RECYCLABLE
 	var/rate							//moles generated last tick. used when examining
 	var/moles_outputted					//moles outputted last tick. used when examining
 	var/base_gas_production = 4500		//base KPa per tick - without external power
-	var/max_external_pressure = 10000	//max KPa output - without external power
+	var/max_external_pressure = 10000	//base KPa output - without external power
 	var/output_temperature = T20C		
 	var/on = TRUE
 	
-	var/datum/power_connection/consumer/power_connection
-	var/power_load = 1000				//draw external power from a wire node
-	var/power_load_last_tick = 0
+/*	var/datum/power_connection/consumer/power_connection
+	var/power_load = 5000				//draw external power from a wire node
+	var/power_load_last_tick = 0*/
 	
 	var/list/gases = list()				//which gases the miner generates
 	var/datum/gas_mixture/air_contents	//which gases the miner generates, and how fast (in KPa per tick)
@@ -33,15 +35,16 @@
 	..()	
 	pumping = new
 	air_contents = new
-	power_connection = new(src)
+/*	power_connection = new(src)
 	
 	power_connection.monitoring_enabled = TRUE
 	power_connection.power_priority = POWER_PRIORITY_EXCESS
-	power_connection.idle_usage = idle_power_usage
-	power_connection.active_usage = power_load
+	power_connection.use_power = MACHINE_POWER_USE_ACTIVE
+	power_connection.active_usage = power_load*/
 	air_contents.volume = 1000
 	pumping.volume = 1000 //Same as above so copying works correctly
-	set_rate(base_gas_production)
+	
+	power_change()
 	update_icon()
 
 /obj/machinery/atmospherics/miner/Destroy()
@@ -51,9 +54,9 @@
 	if(air_contents)
 		qdel(air_contents)
 		air_contents = null
-	if(power_connection)
+/*	if(power_connection)
 		qdel(power_connection)
-		power_connection = null
+		power_connection = null*/
 	..()
 
 /obj/machinery/atmospherics/miner/verb/set_power_consumption()
@@ -63,11 +66,14 @@
 	if(!(isAdminGhost(usr) || ishuman(usr) || issilicon(usr)))
 		to_chat(usr, "You are not capable of such fine manipulation.")
 		return
-	var/power = input("moar power", "Set power consumption", power_load) as num
+	var/power = input("moar power", "Set power consumption", active_power_usage) as num
 	if(power < 0)
 		to_chat(usr, "You remember the tales of negative moles and pressures and reconsider.")
 		return
-	power_load = power
+/*	power_load = power
+	power_connection.active_usage = power*/
+	active_power_usage = power
+	power_change()
 
 //update gas creation speed into air_contents
 /obj/machinery/atmospherics/miner/proc/set_rate(var/internal_pressure)
@@ -89,9 +95,10 @@
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/environment_pressure = environment.return_pressure()
 	var/extra_power_pressure_bonus = 0
-	if(power_connection.connected)	//raise max pressure if powered
+	extra_power_pressure_bonus = active_power_usage * WATT_TO_KPA_OF_EXTERNAL_PRESSURE_LIMIT
+/*	if(power_connection.connected)	//raise max pressure if powered
 		var/power_actually_consumed = power_connection.get_satisfaction() * power_load_last_tick
-		extra_power_pressure_bonus = power_actually_consumed * WATT_TO_KPA_OF_EXTERNAL_PRESSURE_LIMIT
+		extra_power_pressure_bonus = power_actually_consumed * WATT_TO_KPA_OF_EXTERNAL_PRESSURE_LIMIT*/
 		
 	var/pressure_delta = max(0, (max_external_pressure + extra_power_pressure_bonus - environment_pressure))
 	if(pressure_delta > 0.1)
@@ -102,33 +109,50 @@
 	else 
 		moles_outputted = 0
 
-/obj/machinery/atmospherics/miner/proc/draw_power()
+/*/obj/machinery/atmospherics/miner/proc/draw_power()
 	if(power_connection.build_status)				//build_status means the connection needs rebuilding
 		power_load_last_tick = 0
 		if(power_connection.connect() == FALSE)		//try to re-connect to the powernet
-			set_rate(base_gas_production)
-			return 0								//there's no wire to connect to
+			set_rate(base_gas_production)			//there's no wire to connect to
+			power_connection.disconnect()
+			return 0
 	var/power_actually_consumed = power_connection.get_satisfaction() * power_load_last_tick
 	power_connection.add_load(power_load)
 	power_load_last_tick = power_load
-	return power_actually_consumed
+	return power_actually_consumed*/
+
+//this is not used because no other machines draw power like this
+//the remote connect is also broken
+/*/obj/machinery/atmospherics/miner/proc/connect_to_apc_cable()
+	var/area/current_area = get_area(src)
+	if(!current_area)
+		return 0
+	var/obj/machinery/power/apc = current_area.areaapc
+	if(!apc)
+		return 0
+	var/obj/structure/cable/connected_cable = locate(/obj/structure/cable) in apc.loc
+	if(!connected_cable)
+		return 0
+	return power_connection.connect(connected_cable)*/
+	
 
 /obj/machinery/atmospherics/miner/examine(mob/user)
 	. = ..()
 	if(stat & NOPOWER)
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Lack of power.</span>")
 		return
-	if(power_connection.connected)
+/*	if(power_connection.connected)
 		var/power_actually_consumed = power_connection.get_satisfaction() * power_load_last_tick
 		to_chat(user, "<span class='info'>Connected to wire network and drawing [power_actually_consumed] of the requested [power_load]W.</span>")
 	else
-		to_chat(user, "<span class='info'>Not connected to external power.</span>")
+		to_chat(user, "<span class='info'>Not connected to external power.</span>")*/
 	if (!on || (stat & FORCEDISABLE))
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Turned off.</span>")
 		return
 	if(stat & BROKEN)
 		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Broken.</span>")
 		return
+	to_chat(user, "<span class='info'>Currently consuming [active_power_usage]W from the APC's environment channel.</span>")
 	to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Functional and outputting [moles_outputted] out of [rate] moles per cycle.</span>")
 
 /obj/machinery/atmospherics/miner/wrenchAnchor(var/mob/user, var/obj/item/I)
@@ -138,11 +162,11 @@
 	if(on)
 		on = 0
 		update_icon()
-	if(anchored)
+/*	if(anchored)
 		power_connection.connect()
 	else
 		power_connection.disconnect()
-	power_load_last_tick = 0
+	power_load_last_tick = 0*/
 
 // Critical equipment.
 /obj/machinery/atmospherics/miner/ex_act(severity)
@@ -155,9 +179,14 @@
 /obj/machinery/atmospherics/miner/power_change()
 	..()
 	set_rate(base_gas_production)
-	power_load_last_tick = 0
+/*	power_load_last_tick = 0
+	if(!power_connection.connected)
+		power_connection.connect()*/
+	if(on)
+		use_power = MACHINE_POWER_USE_ACTIVE
+	else
+		use_power = MACHINE_POWER_USE_IDLE
 	update_icon()
-
 
 /obj/machinery/atmospherics/miner/attack_ghost(var/mob/user)
 	return
@@ -203,9 +232,11 @@
 	if(stat & BROKEN)
 		return
 
-	if(power_connection.connected) //
-		var/extra_mined_gas = draw_power() * WATT_TO_KPA_COEFFICIENT //in KPa per tick
-		set_rate(base_gas_production + extra_mined_gas)	
+	/*if(power_connection.connected)
+		var/extra_mined_gas = draw_power() * WATT_TO_KPA_COEFFICIENT
+		set_rate(base_gas_production + extra_mined_gas)	*/
+	var/extra_mined_gas = active_power_usage * WATT_TO_KPA_COEFFICIENT
+	set_rate(base_gas_production + extra_mined_gas)
 	tranfer_gas()
 
 
