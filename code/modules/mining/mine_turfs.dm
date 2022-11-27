@@ -487,13 +487,9 @@ var/list/icon_state_to_appearance = list()
 			if(mineral)
 				R.possessed_ore = mineral.ore
 		if(TURF_CONTAINS_BOSS)
-			switch(rand(1,2))
-				if(1)
-					var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
-					if(mineral)
-						R.possessed_ore = mineral.ore
-				if(2)
-					new /mob/living/simple_animal/hostile/asteroid/hivelord/boss(src)
+			var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
+			if(mineral)
+				R.possessed_ore = mineral.ore
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)
