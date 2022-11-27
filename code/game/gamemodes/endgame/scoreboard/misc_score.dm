@@ -88,7 +88,7 @@
 		if(trader_account)
 			var/shoal_amount = 0
 			for(var/datum/transaction/TR in trader_account.transaction_log)
-				if(TR.source_terminal == "[player]")
+				if(TR.source_terminal == player.real_name)
 					shoal_amount += TR.amount
 			if(shoal_amount > 0)
 				var/datum/record/money/record = new(player.key, player.job, shoal_amount)
