@@ -1230,3 +1230,84 @@ var/list/icon_state_to_appearance = list()
 	if(locate(/obj/structure/lattice) in contents)
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
+
+//Maria's Hive//
+
+/turf/unsimulated/floor/asteroid/hive
+	name = "Corrupted Asteroid"
+	icon_state = "evilfloor"
+
+/turf/unsimulated/floor/asteroid/hive/living
+	icon_state = "breathingfloor_1"
+
+/turf/unsimulated/floor/asteroid/hive/living/New()
+	icon_state = pick("breathingfloor_1","breathingfloor_2","breathingfloor_3","breathingfloor_4","breathingfloor_5","breathingfloor_6")
+	..()
+
+/turf/unsimulated/mineral/random/hive
+	name = "Corrupted deposit"
+	icon_state = "mariahive"
+	base_icon_state = "mariahive"
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+	overlay_state = "corrupted_overlay"
+
+/turf/unsimulated/mineral/random/hive/high_chance
+	mineralChance = 25
+	mineralPool = "random_high"
+
+/turf/unsimulated/mineral/random/hive/high_chance_clown
+	mineralChance = 40
+	mineralPool = "clown"
+
+/turf/unsimulated/mineral/uranium/hive
+	name = "Corrupted Uranium deposit"
+	icon_state = "mariahive_Uranium"
+	mineral = new /mineral/uranium
+
+
+/turf/unsimulated/mineral/iron/hive
+	name = "Corrupted Iron deposit"
+	icon_state = "mariahive_Iron"
+	mineral = new /mineral/iron
+
+
+/turf/unsimulated/mineral/diamond/hive
+	name = "Corrupted Diamond deposit"
+	icon_state = "mariahive_Diamond"
+	mineral = new /mineral/diamond
+
+
+/turf/unsimulated/mineral/gold/hive
+	name = "Corrupted Gold deposit"
+	icon_state = "mariahive_Gold"
+	mineral = new /mineral/gold
+
+
+/turf/unsimulated/mineral/silver/hive
+	name = "Corrupted Silver deposit"
+	icon_state = "mariahive_Silver"
+	mineral = new /mineral/silver
+
+
+/turf/unsimulated/mineral/plasma/hive
+	name = "Corrupted Plasma deposit"
+	icon_state = "mariahive_Plasma"
+	mineral = new /mineral/plasma
+
+
+/turf/unsimulated/mineral/clown/hive
+	name = "Corrupted Bananium deposit"
+	icon_state = "mariahive_Clown"
+	mineral = new /mineral/clown
+
+
+/turf/unsimulated/mineral/phazon/hive
+	name = "Corrupted Phazite deposit"
+	icon_state = "mariahive_Phazon"
+	mineral = new /mineral/phazon
+
+/turf/unsimulated/mineral/hyperdense/hive
+	name = "Corrupted hyperdense rock"
+	icon_state = "mariahive"
+	mining_difficulty = MINE_DIFFICULTY_DENSE
+	minimum_mine_time = 99 SECONDS //GL HF
