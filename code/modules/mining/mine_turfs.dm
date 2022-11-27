@@ -1305,5 +1305,6 @@ var/list/icon_state_to_appearance = list()
 /turf/unsimulated/mineral/hyperdense/hive
 	name = "Corrupted hyperdense rock"
 	icon_state = "mariahive"
+	base_icon_state = "mariahive"
 	mining_difficulty = MINE_DIFFICULTY_DENSE
 	minimum_mine_time = 99 SECONDS //GL HF
