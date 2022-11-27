@@ -85,17 +85,18 @@
 				score.dmgestname = player.real_name
 				score.dmgestjob = player.job
 				score.dmgestkey = player.key
-		var/shoal_amount = 0
-		for(var/datum/transaction/T in trader_account.transaction_log)
-			if(T.source_terminal == "[player]")
-				shoal_amount += T.amount
-		if(shoal_amount > 0)
-			var/datum/record/money/record = new(player.key, player.job, shoal_amount)
-			rich_shoals += record
-			if(shoal_amount > score.biggestshoalcash)
-				score.biggestshoalcash = shoal_amount
-				score.biggestshoalname = player.real_name
-				score.biggestshoalkey = player.key
+		if(trader_account)
+			var/shoal_amount = 0
+			for(var/datum/transaction/T in trader_account.transaction_log)
+				if(T.source_terminal == "[player]")
+					shoal_amount += T.amount
+			if(shoal_amount > 0)
+				var/datum/record/money/record = new(player.key, player.job, shoal_amount)
+				rich_shoals += record
+				if(shoal_amount > score.biggestshoalcash)
+					score.biggestshoalcash = shoal_amount
+					score.biggestshoalname = player.real_name
+					score.biggestshoalkey = player.key
 		if(player.hangman_score > score.hangmanrecord)
 			score.hangmanrecord = player.hangman_score
 			score.hangmanname = player.real_name
