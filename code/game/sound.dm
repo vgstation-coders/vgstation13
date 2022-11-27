@@ -47,7 +47,9 @@ var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.
 /proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE, var/frequency = 0)
 	var/turf/turf_source = get_turf(source)
 
-	ASSERT(!isnull(turf_source))
+	if(isnull(turf_source)) //no one can hear you scream in space
+		WARNING("null turf_source")
+		return
 	ASSERT(!(isnull(soundin) && channel == 0)) // Unless a channel is specified, prevent null sounds.
 
 /* What's going on in this block?
@@ -60,13 +62,12 @@ var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.
 */
 	if(!extrarange)
 		extrarange = 0
-	if(!vol) //don't do that
+	if(vol)
+		vol *= turf_source.volume_mult
+	else
 		return
 
-	if(turf_source)
-		vol *= turf_source.volume_mult
-
-	if(gas_modified && turf_source && !turf_source.c_airblock(turf_source)) //if the sound is modified by air, and we are on an airflowing tile
+	if(gas_modified && !turf_source.c_airblock(turf_source)) //if the sound is modified by air, and we are on an airflowing tile
 		var/atmosphere = 0
 		var/datum/gas_mixture/current_air = turf_source.return_air()
 		if(current_air)
