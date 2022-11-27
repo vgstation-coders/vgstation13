@@ -603,8 +603,7 @@ var/list/one_way_windows
 	update_nearby_tiles()
 	relativewall_neighbours()
 	if(one_way)
-		one_way_windows.Remove(src)
-		update_oneway_nearby_clients()
+		toggle_one_way()
 	..()
 
 /obj/structure/window/proc/shatter()

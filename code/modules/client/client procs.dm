@@ -589,6 +589,23 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 				update_one_way_windows(view(view,mob))	//Updating the one-way window overlay if the client has one in the range of its view.
 				break
 
+/image/viewblock
+	render_source = "*viewblock"
+	layer = VIEWBLOCK_LAYER
+	plane = FULLSCREEN_PLANE
+	appearance_flags = PASS_MOUSE
+
+/obj/abstract/screen/nocontext/viewblock
+	icon = 'icons/turf/overlays.dmi'
+	icon_state = "black_box"
+	render_target = "*viewblock"
+	name = "black_box"
+	screen_loc = "1, 1"
+	globalscreen = TRUE
+
+/mob
+	var/static/obj/abstract/screen/nocontext/viewblock/viewblock = new()
+
 /client/proc/update_one_way_windows(var/list/v)		//Needed for one-way windows to work.
 	var/Image										//Code heavily cannibalized from a demo made by Byond member Shadowdarke.
 	var/turf/Oneway
@@ -612,7 +629,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		var/list/List = v - view(view,mob)
 		List += onewaylist
 		for(var/turf/T in List)
-			T.viewblock = image('icons/turf/overlays.dmi',T,"black_box",10)
+			T.viewblock = new /image/viewblock(null,T)
 			if(T in onewaylist)
 				for(W in T.contents)
 					if(W.one_way)
