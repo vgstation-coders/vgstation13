@@ -48,7 +48,7 @@ var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.
 	var/turf/turf_source = get_turf(source)
 
 	if(isnull(turf_source)) //no one can hear you scream in nullspace
-		warning("null turf_source in [__FILE__] at line [__LINE__] of proc playsound")
+		warning("proc playsound null turf_source:  [__FILE__] at line [__LINE__]")
 		return
 	ASSERT(!(isnull(soundin) && channel == 0)) // Unless a channel is specified, prevent null sounds.
 
