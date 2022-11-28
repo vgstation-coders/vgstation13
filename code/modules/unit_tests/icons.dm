@@ -19,6 +19,7 @@
         var/obj/item/weapon/reagent_containers/food/snacks/food = new type(centre)
         if(!has_icon(food.icon, food.icon_state))
             fail("FAILED FOR [type] :: \"[food.name]\" with icon state: \"[food.icon_state]\"")
+        qdel(food)
 
 /datum/unit_test/icons/seeds/start()
     // basically every seed packet
