@@ -633,8 +633,12 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			if(T in onewaylist)
 				for(W in T.contents)
 					if(W.one_way)
-						T.viewblock = image('icons/turf/overlays.dmi',T,"black_box[W.dir]",10)
+						T.viewblock = image('icons/turf/overlays.dmi',T,"black_box[W.dir]",VIEWBLOCK_LAYER)
 			T.viewblock.plane = FULLSCREEN_PLANE
+			if(mob.sight & SEE_MOBS)
+				T.viewblock.plane = LYING_MOB_PLANE
+			if(mob.sight & SEE_OBJS)
+				T.viewblock.plane = HIDING_MOB_PLANE
 			src << T.viewblock
 			newimages += T.viewblock
 			ObscuredTurfs += T

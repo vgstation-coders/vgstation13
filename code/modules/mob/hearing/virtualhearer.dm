@@ -87,6 +87,8 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 		var/mob/virtualhearer/VH = mob_hearers[src]
 		if(VH)
 			VH.sight = sight
+	if(client)
+		client.update_special_views()
 
 // This subtype does nothing by itself. Since overriding Hear() in a virtualhearer subtype is impossible (see comment above),
 // the only reason this subtype exists is so other procs can explicitly check its type and know to delete it themselves.
