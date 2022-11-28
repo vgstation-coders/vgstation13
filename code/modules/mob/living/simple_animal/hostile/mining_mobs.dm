@@ -360,8 +360,22 @@
 			return core.amount
 	return 1
 
+/mob/living/simple_animal/hostile/asteroid/hivelord/guardian
+	name = "Hivelord Guardian"
+	maxHealth = 100 //slighly tougher than regular hivelords
+	health = 100
+	desc = "A special breed of hivelord, this one will give its life to defend the queen and hive."
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/guardian/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/M = matrix()
+	M.Scale(1.5,1.5) //halfway between regular hivelords and the queen
+	transform = M
+
 /mob/living/simple_animal/hostile/asteroid/hivelord/boss
 	name = "Maria"
+	desc = "A hulking Hivelord Queen. When attacking, will create more hivelords to ensure the safety of her hive. Her core beats and glows with an eerie light."
 	size = SIZE_HUGE
 	maxHealth = 300
 	health = 300
