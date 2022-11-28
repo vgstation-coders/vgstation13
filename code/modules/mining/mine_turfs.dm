@@ -1258,49 +1258,72 @@ var/list/icon_state_to_appearance = list()
 /turf/unsimulated/mineral/uranium/hive
 	name = "Corrupted Uranium deposit"
 	icon_state = "mariahive_Uranium"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/uranium
 
 
 /turf/unsimulated/mineral/iron/hive
 	name = "Corrupted Iron deposit"
 	icon_state = "mariahive_Iron"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/iron
 
 
 /turf/unsimulated/mineral/diamond/hive
 	name = "Corrupted Diamond deposit"
 	icon_state = "mariahive_Diamond"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/diamond
 
 
 /turf/unsimulated/mineral/gold/hive
 	name = "Corrupted Gold deposit"
 	icon_state = "mariahive_Gold"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/gold
 
 
 /turf/unsimulated/mineral/silver/hive
 	name = "Corrupted Silver deposit"
 	icon_state = "mariahive_Silver"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/silver
 
 
 /turf/unsimulated/mineral/plasma/hive
 	name = "Corrupted Plasma deposit"
 	icon_state = "mariahive_Plasma"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/plasma
 
 
 /turf/unsimulated/mineral/clown/hive
 	name = "Corrupted Bananium deposit"
 	icon_state = "mariahive_Clown"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/clown
 
 
 /turf/unsimulated/mineral/phazon/hive
 	name = "Corrupted Phazite deposit"
 	icon_state = "mariahive_Phazon"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/phazon
+
+/turf/unsimulated/mineral/telecrystal/hive
+	name = "Corrupted Telecrystal deposit"
+	base_icon_state = "mariahive"
+	icon_state = "mariahive_Telecrystal"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/telecrystal
 
 /turf/unsimulated/mineral/hyperdense/hive
 	name = "Corrupted hyperdense rock"
