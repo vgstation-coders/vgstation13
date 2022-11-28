@@ -290,6 +290,7 @@ var/static/list/badstuff2putin = list(
 		/mob/living/simple_animal/cricket = 1,
 	)
 	var/objprob = 10
+	flags &= SILENTCONTAINER
 
 /obj/item/weapon/reagent_containers/food/snacks/artifact/New(loc)
 	..(loc)
