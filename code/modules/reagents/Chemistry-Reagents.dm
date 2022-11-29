@@ -10139,11 +10139,20 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 7.874
 	var/mute_duration = 300 //30 seconds
 
+//A type of chocolate made from vomit and corn syrup that has significantly less dietary value than corn syrup but is far less toxic than vomit.
 /datum/reagent/space_chocolate
 	name = "Space Chocolate"
 	id = SPACE_CHOCOLATE
-	description = "A liquid mix of chemicals that strongly resembles chocolate in everything but taste. Marketed as real chocolate in Space America."
+	description = "A liquid mix of stomach contents and corn sryup made in Space America that strongly resembles chocolate in everything but taste. Often marketed as real chocolate."
 	color = "#8C5935" // 140, 89, 53
-	nutriment_factor = 2 * REAGENTS_METABOLISM
+	nutriment_factor = 1 * REAGENTS_METABOLISM
 	density = 1.2 //      }
 	specheatcap = 4.18 // } - Similar to Hot Chocolate
+
+/datum/reagent/space_chocolate/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(ishuman(M))
+		if(!M_FAT in M.mutations)
+			if(prob(25))
+				M.adjustToxLoss(0.1)
