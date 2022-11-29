@@ -4040,7 +4040,7 @@
 	id = SPACE_CHOCOLATE
 	result = SPACE_CHOCOLATE
 	required_reagents = list(VOMIT = 1, CORNSYRUP = 1)
-	result_amount = 2
+	result_amount = 4
 
 /datum/chemical_reaction/random
 	name = "Random chemical"
