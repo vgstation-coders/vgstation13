@@ -28,5 +28,5 @@ var/global/list/alien_whitelist[] = list()
 	if(!(alien_whitelist && alien_whitelist[ckey]))
 		return 0
 	var/list/species = alien_whitelist[ckey]
-	if(chosen_species in species || "All" in species)
+	if(chosen_species in species)
 		return 1 
