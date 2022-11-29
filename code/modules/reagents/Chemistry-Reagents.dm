@@ -10153,6 +10153,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 	if(ishuman(M))
-		if(!M_FAT in M.mutations)
+		if(!(M_FAT in M.mutations))
 			if(prob(25))
 				M.adjustToxLoss(0.1)
