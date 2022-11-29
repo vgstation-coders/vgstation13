@@ -190,6 +190,10 @@
 
 	var/list/clothing = list() //If the previous corpse had clothing, it 'wears' it
 
+/mob/living/simple_animal/hostile/necro/zombie/update_perception()
+	M.dark_plane.alphas["zombie"] = 90
+	check_dark_vision()
+
 /mob/living/simple_animal/hostile/necro/zombie/New() //(mob/living/L)
 	..()
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudundead")
@@ -407,6 +411,7 @@
 		host.resurrect() //It's a miracle!
 		host.revive()
 		host.become_zombie = FALSE
+		host.update_perception()
 		visible_message("<span class='notice'>\The [src]'s eyes regain focus, and the smell of decay vanishes. [host] has come back to their senses!</span>")
 		host = null
 		qdel(src)
