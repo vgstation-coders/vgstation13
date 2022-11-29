@@ -89,6 +89,8 @@ var/auxtools_path
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()
+	if(config.usealienwhitelist)
+		load_alienwhitelist()
 
 	spawn() copy_logs() // Just copy the logs.
 	if(config && config.log_runtimes)

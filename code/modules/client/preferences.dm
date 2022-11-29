@@ -953,10 +953,16 @@ var/const/MAX_SAVE_SLOTS = 16
 						age = max(min( round(text2num(new_age)), AGE_MAX),AGE_MIN)
 				if("species")
 					var/prev_species = species
-					if(check_rights(R_ADMIN,0))
-						species = input("Please select a species", "Character Generation", null) in whitelisted_species
+					if(config.usealienwhitelist)	
+						if(check_rights(R_ADMIN,0))
+							species = input("Please select a species", "Character Generation", null) in whitelisted_species + get_player_whitelist(user.ckey)
+						else
+							species = input("Please select a species", "Character Generation", null) in playable_species + get_player_whitelist(user.ckey)
 					else
-						species = input("Please select a species", "Character Generation", null) in playable_species
+						if(check_rights(R_ADMIN,0))
+							species = input("Please select a species", "Character Generation", null) in whitelisted_species
+						else
+							species = input("Please select a species", "Character Generation", null) in playable_species
 
 					if(prev_species != species)
 						//grab one of the valid hair styles for the newly chosen species

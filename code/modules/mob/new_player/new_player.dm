@@ -661,10 +661,10 @@
 
 	if(prefs.species)
 		chosen_species = all_species[prefs.species]
-	if(chosen_species && (check_rights(R_ADMIN, 0) || chosen_species.flags & PLAYABLE || chosen_species.conditional_playable()))
+	if(chosen_species && (check_rights(R_ADMIN, 0) || chosen_species.flags & PLAYABLE || chosen_species.conditional_playable() || check_player_whitelist(prefs.client.ckey, chosen_species.name)))
 		new_character.set_species(prefs.species)
 	else
-		to_chat(usr, "Your preferences had a non-playable species, so you were reverted to the default species.")
+		to_chat(src, "Your preferences had a non-playable species, so you were reverted to the default species.")
 
 	var/datum/language/chosen_language
 	if(prefs.language)

@@ -662,6 +662,7 @@
 #include "code\game\jobs\access.dm"
 #include "code\game\jobs\job_controller.dm"
 #include "code\game\jobs\jobs.dm"
+#include "code\game\jobs\alien_whitelist.dm"
 #include "code\game\jobs\job\assistant.dm"
 #include "code\game\jobs\job\captain.dm"
 #include "code\game\jobs\job\civilian.dm"
