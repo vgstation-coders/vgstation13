@@ -464,6 +464,7 @@
 #define DSYRUP			"dsyrup"
 #define GRUE_BILE		"grue_bile"
 #define PINKLADY		"pinklady"
+#define SPACE_CHOCOLATE "space_chocolate"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

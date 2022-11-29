@@ -5494,7 +5494,7 @@ var/procizine_tolerance = 0
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 0.9185
-	specheatcap = 2.402	
+	specheatcap = 2.402
 	var/has_had_heart_explode = 0
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
@@ -10138,3 +10138,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	specheatcap = 0.45
 	density = 7.874
 	var/mute_duration = 300 //30 seconds
+
+/datum/reagent/space_chocolate
+	name = "Space Chocolate"
+	id = SPACE_CHOCOLATE
+	description = "A liquid mix of chemicals that strongly resembles chocolate in everything but taste. Marketed as real chocolate in Space America."
+	color = "#8C5935" // 140, 89, 53
+	nutriment_factor = 2 * REAGENTS_METABOLISM
+	density = 1.2 //      }
+	specheatcap = 4.18 // } - Similar to Hot Chocolate

@@ -4035,6 +4035,13 @@
 	for(var/turf/T in view(get_turf(holder.my_atom)))
 		T.mute_time = world.time + B.mute_duration
 
+/datum/chemical_reaction/space_chocolate
+	name = "Space Chocolate"
+	id = SPACE_CHOCOLATE
+	result = SPACE_CHOCOLATE
+	required_reagents = list(VOMIT = 1, CORNSYRUP = 1)
+	result_amount = 2
+
 /datum/chemical_reaction/random
 	name = "Random chemical"
 	id = "random"
