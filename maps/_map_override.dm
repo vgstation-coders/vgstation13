@@ -30,6 +30,10 @@
 		#undef MAP_OVERRIDE
 		#include "roidstation.dm"
 		#define MAP_OVERRIDE 4
+	#elif MAP_OVERRIDE == 5
+		#undef MAP_OVERRIDE
+		#include "berline.dm"
+		#define MAP_OVERRIDE 5
 	#elif MAP_OVERRIDE == 6
 		#undef MAP_OVERRIDE
 		#include "test_tiny.dm"
