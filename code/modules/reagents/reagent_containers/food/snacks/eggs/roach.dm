@@ -7,7 +7,7 @@ var/global/cockroach_egg_amount = 0
 	food_flags = FOOD_ANIMAL
 
 	icon_state = "roach_eggs1"
-
+	var/hatch_type = /mob/living/simple_animal/cockroach
 	var/amount_grown = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/New()
@@ -42,7 +42,7 @@ var/global/cockroach_egg_amount = 0
 	return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/proc/hatch()
-	new /mob/living/simple_animal/cockroach(get_turf(src))
+	new hatch_type(get_turf(src))
 
 	processing_objects.Remove(src)
 	qdel(src)
@@ -56,3 +56,21 @@ var/global/cockroach_egg_amount = 0
 	processing_objects.Remove(src)
 
 	amount_grown = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/turk
+	name = "turksih eggs"
+	desc = "A bunch of tiny, brown eggs, each of them housing a turkish politician."
+
+	icon_state = "turkish_eggs1"
+	var/hatch_type = /mob/living/simple_animal/cockroach/turkish
+	
+/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/turk/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(ROACHSHELL, rand(1,4))
+	reagents.add_reagent(TOXIN, 0.2)
+	src.bitesize = 1.1
+
+	icon_state = "roach_eggs[rand(1,3)]"
+
+	cockroach_egg_amount++
