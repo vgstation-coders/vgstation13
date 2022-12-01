@@ -339,7 +339,7 @@
 	icon_dead = "cockroach_dead"
 	emote_hear = list("seethes")
 	flyicon = "turkroach_fly" //so they use the proper flying icon
-	egg_type = /obj/item/weapon/reagent_containers/food/snacks/turkish_eggs
+	egg_type = /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/turk
 	
 /mob/living/simple_animal/cockroach/turkish/death(var/gore = 1)
 	new /obj/item/clothing/head/fez(get_turf(src))
