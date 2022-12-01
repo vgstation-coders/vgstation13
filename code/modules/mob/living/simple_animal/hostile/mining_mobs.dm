@@ -364,6 +364,7 @@
 	name = "Hivelord Guardian"
 	maxHealth = 100 //slighly tougher than regular hivelords
 	health = 100
+	treadmill_speed = 5
 	desc = "A special breed of hivelord, this one will give its life to defend the queen and hive."
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/guardian/New()
@@ -386,6 +387,7 @@
 	hostile_interest = 5 //Less persistent
 	open_fire_type = /mob/living/simple_animal/hostile/asteroid/hivelord
 	brood_limit = 5
+	treadmill_speed = 6
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/boss/New()
 	..()
