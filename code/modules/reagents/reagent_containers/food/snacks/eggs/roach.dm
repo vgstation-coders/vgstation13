@@ -58,19 +58,12 @@ var/global/cockroach_egg_amount = 0
 	amount_grown = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/turk
-	name = "turksih eggs"
-	desc = "A bunch of tiny, brown eggs, each of them housing a turkish politician."
+	name = "turkish eggs"
+	desc = "A bunch of tiny, brown eggs with a tiny little fez, each of them housing a turkish politician."
 
 	icon_state = "turkish_eggs1"
 	hatch_type = /mob/living/simple_animal/cockroach/turkish
 	
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/turk/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
-	reagents.add_reagent(ROACHSHELL, rand(1,4))
-	reagents.add_reagent(TOXIN, 0.2)
-	src.bitesize = 1.1
-
 	icon_state = "turkish_eggs[rand(1,3)]"
-
-	cockroach_egg_amount++
