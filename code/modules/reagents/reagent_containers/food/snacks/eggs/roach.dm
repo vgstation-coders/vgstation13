@@ -62,7 +62,7 @@ var/global/cockroach_egg_amount = 0
 	desc = "A bunch of tiny, brown eggs, each of them housing a turkish politician."
 
 	icon_state = "turkish_eggs1"
-	var/hatch_type = /mob/living/simple_animal/cockroach/turkish
+	hatch_type = /mob/living/simple_animal/cockroach/turkish
 	
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/turk/New()
 	..()
