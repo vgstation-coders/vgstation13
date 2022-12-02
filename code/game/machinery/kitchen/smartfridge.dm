@@ -261,7 +261,7 @@
 	icon_state = "bloodbank"
 	icon_on = "bloodbank"
 
-	accepted_types = list(/obj/item/weapon/reagent_containers/blood)	
+	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
 
 /obj/machinery/smartfridge/bloodbank/New()
 	. = ..()
@@ -336,7 +336,7 @@
 	if(istype(thisPile))
 		thisPile.addAmount(1)
 	else
-		piles[formatted_name] = new/datum/fridge_pile(formatted_name, src, 1, costly_bicon(O))
+		piles[formatted_name] = new/datum/fridge_pile(formatted_name, src, 1, bicon(O))
 
 
 /obj/machinery/smartfridge/proc/dump_bag(var/obj/item/weapon/storage/bag/B, var/mob/user)
