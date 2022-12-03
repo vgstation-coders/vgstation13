@@ -670,8 +670,7 @@
 	if(prefs.language)
 		chosen_language = all_languages["[prefs.language]"]
 	if(chosen_language)
-		if(chosen_language.flags & WHITELISTED)
-			new_character.add_language("[prefs.language]")
+		new_character.add_language("[prefs.language]")
 	if(ticker.random_players || appearance_isbanned(src)) //disabling ident bans for now
 		new_character.setGender(pick(MALE, FEMALE))
 		prefs.real_name = random_name(new_character.gender, new_character.species.name)
