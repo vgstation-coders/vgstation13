@@ -32,6 +32,7 @@
 #define SS_INIT_DAYNIGHT		  -200
 
 #define SS_PRIORITY_TIMER          1000
+#define FIRE_PRIORITY_RUNECHAT	   410
 #define SS_PRIORITY_WEATHER        210
 #define SS_PRIORITY_TICKER         200
 #define SS_PRIORITY_MOB            150
