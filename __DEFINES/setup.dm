@@ -1162,6 +1162,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 #define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
 
+//flags for computer behavior
+#define NO_ONOFF_ANIMS 1
 
 ///////////////////////
 ///////RESEARCH////////

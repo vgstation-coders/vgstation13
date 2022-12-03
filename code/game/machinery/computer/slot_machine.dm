@@ -24,6 +24,7 @@
 	icon_state = "slot"
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	computer_flags = NO_ONOFF_ANIMS
 
 	var/show_name
 

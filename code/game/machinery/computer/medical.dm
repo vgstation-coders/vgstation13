@@ -605,3 +605,5 @@
 	density = 0
 
 	light_color = LIGHT_COLOR_GREEN
+
+	computer_flags = NO_ONOFF_ANIMS

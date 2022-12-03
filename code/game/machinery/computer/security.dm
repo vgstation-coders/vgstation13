@@ -590,3 +590,4 @@ What a mess.*/
 	icon_state = "messyfiles"
 
 	light_color = null
+	computer_flags = NO_ONOFF_ANIMS
