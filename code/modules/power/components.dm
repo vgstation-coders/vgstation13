@@ -14,6 +14,7 @@
 	var/datum/powernet/powernet = null
 
 	var/power_priority = POWER_PRIORITY_NORMAL
+	var/is_priority_locked = FALSE // If true, do not allow priority to be changed
 
 	var/machine_flags = 0 // Emulate machinery flags.
 	var/inMachineList = 0
@@ -252,6 +253,7 @@
 		"name" = parent.name,
 
 		"priority" = power_priority,
+		"priority_locked" = is_priority_locked,
 		"demand" = monitor_demand,
 
 		"isbattery" = monitor_isbattery,
@@ -265,7 +267,7 @@
 	return list("\ref[src]" = get_monitor_status_template())
 
 /datum/power_connection/proc/change_priority(value, id)
-	if(id == "\ref[src]")
+	if(!is_priority_locked && id == "\ref[src]")
 		power_priority = value
 		return TRUE
 

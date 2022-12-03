@@ -40,6 +40,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 
 	use_power = MACHINE_POWER_USE_IDLE
 	power_priority = POWER_PRIORITY_EXCESS
+	is_priority_locked = TRUE
 	monitoring_enabled = TRUE
 	density = 1
 	anchored = 0
