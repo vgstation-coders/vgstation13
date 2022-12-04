@@ -735,7 +735,7 @@
 /obj/item/weapon/storage/fancy/food_box/slider_box/spider
 	name = "spidey slidey box"
 	icon_type = "spider slider"
-	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/carp/spider
+	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/spider
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/clown
 	name = "honky slider box"

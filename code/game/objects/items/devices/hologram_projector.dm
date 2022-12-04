@@ -5,7 +5,7 @@
 	can_take_pai = TRUE
 
 	var/mob/living/simple_animal/hologram/advanced/projector/holoperson = null
-	var/holo_range = 6
+	var/holo_range = 10 //if you run, you disappear with lower range
 	var/holo_mode = 0
 	var/obj/effect/overlay/holoray/ray	//The link between the projection and the projector.
 	var/datum/recruiter/recruiter = null
@@ -13,6 +13,7 @@
 
 /obj/item/device/hologram_projector/Destroy()
 	if(holoperson)
+		holoperson.unequip_everything()
 		qdel(holoperson)
 		holoperson = null
 	if(ray)
@@ -24,7 +25,8 @@
 	var/obj/item/device/hologram_projector/projector = null
 	var/proj_turf = null
 	login_text = "You are a hologram. You can perform a few basic functions, and are unable to leave the vicinity of the projector.\
-	\n<span class='danger'>Do not damage the station. Do not harm crew members without their consent.</span>"
+	\n<span class='danger'>Do not damage the station. Do not harm crew members without their consent. Serve your master.</span>"
+
 
 /mob/living/simple_animal/hologram/advanced/projector/Login()
 	if(projector?.integratedpai)
@@ -53,6 +55,7 @@
 			holoperson.set_light(0)
 			qdel(ray)
 			ray = null
+			holoperson.unequip_everything()
 			qdel(holoperson)
 			holoperson = null
 			icon_state = "shield0"
@@ -63,6 +66,8 @@
 		clear_holo()
 	
 /obj/item/device/hologram_projector/attack_self()
+	if(polling_ghosts)
+		return
 	if(holoperson)
 		to_chat(usr, "Shutting down hologram...")
 		clear_holo()

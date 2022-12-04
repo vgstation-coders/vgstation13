@@ -35,6 +35,7 @@
 	var/list/target_rules = list()
 
 	var/can_ventcrawl = FALSE // If the mob can ventcrawl
+	var/mob/living/simple_animal/hostile/asteroid/hivelord/hivelord = null
 
 /mob/living/simple_animal/hostile/New()
 	..()
@@ -44,6 +45,10 @@
 	for(var/datum/fuzzy_ruling/D in target_rules)
 		qdel(D)
 	target_rules = null
+	if(hivelord)
+		if(src in hivelord.broods)
+			hivelord.broods.Remove(src)
+		hivelord = null
 	..()
 
 /mob/living/simple_animal/hostile/proc/initialize_rules()
@@ -351,6 +356,10 @@
 /mob/living/simple_animal/hostile/death(var/gibbed = FALSE)
 	LoseAggro()
 	walk(src, 0)
+	if(hivelord)
+		if(src in hivelord.broods)
+			hivelord.broods.Remove(src)
+		hivelord = null
 	..(gibbed)
 
 /mob/living/simple_animal/hostile/inherit_mind(mob/living/simple_animal/from)

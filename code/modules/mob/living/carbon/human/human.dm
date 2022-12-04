@@ -295,7 +295,6 @@
 	return FALSE
 
 /mob/living/carbon/human/var/co2overloadtime = null
-/mob/living/carbon/human/var/temperature_resistance = T0C+75 //but why is this here
 
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
