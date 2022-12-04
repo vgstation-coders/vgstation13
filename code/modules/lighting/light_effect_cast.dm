@@ -5,8 +5,8 @@
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
 #define BLUR_SIZE 2 // integer, please
 
-// Shadows over light_range 5 haven't been done yet.
-#define MAX_LIGHT_RANGE 5
+// Shadows over light_range 9 haven't been done yet.
+#define MAX_LIGHT_RANGE 9
 
 #define NO_POST_PROCESSING 	0
 #define WALL_SHADOWS_ONLY  	1
@@ -176,18 +176,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 					icon = 'icons/lighting/light_range_8.dmi'
 				if (9)
 					icon = 'icons/lighting/light_range_9.dmi'
-		else
-			switch (light_range)
-				if (1)
-					icon = 'icons/lighting/shadow_range_1.dmi'
-				if (2)
-					icon = 'icons/lighting/shadow_range_2.dmi'
-				if (3)
-					icon = 'icons/lighting/shadow_range_3.dmi'
-				if (4)
-					icon = 'icons/lighting/shadow_range_4.dmi'
-				if (5)
-					icon = 'icons/lighting/shadow_range_5.dmi'
 
 	if (light_type != LIGHT_DIRECTIONAL)
 		pixel_x = -(world.icon_size * light_range) + holder.pixel_x
@@ -255,8 +243,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 /atom/movable/light/proc/CastShadow(var/turf/target_turf)
 	//get the x and y offsets for how far the target turf is from the light
-	var/x_offset = target_turf.x - x
-	var/y_offset = target_turf.y - y
+	var/x_offset = (target_turf.x - x)
+	var/y_offset = (target_turf.y - y)
 	cast_main_shadow(target_turf, x_offset, y_offset)
 
 	if ((target_turf in affected_shadow_walls) && is_valid_turf(target_turf))
@@ -264,9 +252,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 /atom/movable/light/proc/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 
-	var/num = 1
+	var/num = CORNER_SHADOW
 	if((abs(x_offset) > 0 && !y_offset) || (abs(y_offset) > 0 && !x_offset))
-		num = 2
+		num = FRONT_SHADOW
 
 	//due to only having one set of shadow templates, we need to rotate and flip them for up to 8 different directions
 	//first check is to see if we will need to "rotate" the shadow template
@@ -274,9 +262,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	if(abs(x_offset) > abs(y_offset))
 		xy_swap = 1
 
+	// Softer shadows if two bordering walls for now
 	var/two_bordering_walls = 0
-
-	if (num == 2)
+	if (num == FRONT_SHADOW)
 		if (xy_swap)
 			two_bordering_walls = check_wall_occlusion(get_step(target_turf, NORTH)) && check_wall_occlusion(get_step(target_turf, SOUTH))
 		else
@@ -317,67 +305,14 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
 		// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
 		// The downside is, of course, that you need to cover all the cases in your switch.
-		var/icon/shadowicon
-		if (!two_bordering_walls)
-			switch(light_range)
-				if(2)
-					if(num == 1)
-						shadowicon = 'icons/lighting/light_range_2_shadows1.dmi'
-					else
-						shadowicon = 'icons/lighting/light_range_2_shadows2.dmi'
-				if(3)
-					if(num == 1)
-						shadowicon = 'icons/lighting/light_range_3_shadows1.dmi'
-					else
-						shadowicon = 'icons/lighting/light_range_3_shadows2.dmi'
-				if(4)
-					if(num == 1)
-						shadowicon = 'icons/lighting/light_range_4_shadows1.dmi'
-					else
-						shadowicon = 'icons/lighting/light_range_4_shadows2.dmi'
-				if(5)
-					if(num == 1)
-						shadowicon = 'icons/lighting/light_range_5_shadows1.dmi'
-					else
-						shadowicon = 'icons/lighting/light_range_5_shadows2.dmi'
-				if(6)
-					if(num == 1)
-						shadowicon = 'icons/lighting/light_range_6_shadows1.dmi'
-					else
-						shadowicon = 'icons/lighting/light_range_6_shadows2.dmi'
-				if(7)
-					if(num == 1)
-						shadowicon = 'icons/lighting/light_range_7_shadows1.dmi'
-					else
-						shadowicon = 'icons/lighting/light_range_7_shadows2.dmi'
-				if(8)
-					if(num == 1)
-						shadowicon = 'icons/lighting/light_range_8_shadows1.dmi'
-					else
-						shadowicon = 'icons/lighting/light_range_8_shadows2.dmi'
-				if(9)
-					if(num == 1)
-						shadowicon = 'icons/lighting/light_range_9_shadows1.dmi'
-					else
-						shadowicon = 'icons/lighting/light_range_9_shadows2.dmi'
-		else
-			// Darker shadow icons if both adj. walls are occluded
-			switch(light_range)
-				if(2)
-					shadowicon = 'icons/lighting/fully_occl/light_range_2_shadows2.dmi'
-				if(3)
-					shadowicon = 'icons/lighting/fully_occl/light_range_3_shadows2.dmi'
-				if(4)
-					shadowicon = 'icons/lighting/fully_occl/light_range_4_shadows2.dmi'
-				if(5)
-					shadowicon = 'icons/lighting/fully_occl/light_range_5_shadows2.dmi'
+		var/icon/shadowicon = try_get_light_range_icon(two_bordering_walls, light_range, num)
 		I = image(shadowicon)
 
 		//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
 		if(xy_swap)
-			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
-		else
 			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+		else
+			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
 		//apply the transform matrix
 		I.transform = M
 		I.layer = LIGHTING_LAYER
@@ -388,7 +323,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	// We caclulate the offset
 	// This is basically a traduction of the old translate matrix big-bang-wahoo
 	// into something more sensible and render_source friendly
-	if(num == 1)
+	if(num == CORNER_SHADOW)
 		if((x_flip == 1 && y_flip == 1 && xy_swap == 0) || (x_flip == -1 && y_flip == 1 && xy_swap == 1))
 			I.pixel_x += shadowoffset
 			I.pixel_y += shadowoffset
@@ -738,6 +673,25 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 // Just explicitly checks if something is a wall... we don't want to cast the hard shadow if the neighbouring occluding obj. is a door, as it will force us to update it
 /proc/check_wall_occlusion(var/turf/T)
 	return iswallturf(T)
+
+/turf/proc/check_double_occluded(var/atom/movable/light/source)
+	var/x_offset = source.x - x
+	var/y_offset = source.y - y
+	var/xy_swap = 0
+	if(abs(x_offset) > abs(y_offset))
+		xy_swap = 1
+	if (xy_swap)
+		return check_wall_occlusion(get_step(src, NORTH)) && check_wall_occlusion(get_step(src, SOUTH))
+	else
+		return check_wall_occlusion(get_step(src, EAST)) && check_wall_occlusion(get_step(src, WEST))
+
+/proc/try_get_light_range_icon(two_bordering_walls, light_range, num)
+	if (lighting_engine)
+		lighting_engine.choose_light_range_icon(two_bordering_walls, light_range, num)
+	else
+		world.log << "Auto-init of the lighting engine datum..."
+		lighting_engine = new lighting_system_used
+		lighting_engine.choose_light_range_icon(two_bordering_walls, light_range, num)
 
 #undef MAX_LIGHT_RANGE
 #undef BASE_PIXEL_OFFSET

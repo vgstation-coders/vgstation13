@@ -46,6 +46,9 @@ var/auxtools_path
 /world/New()
 	world_startup_time = world.timeofday
 
+	// Lighting stuff
+	initialise_lights()
+
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
@@ -332,3 +335,7 @@ var/auxtools_path
 	/* does this help? I do not know */
 	if (src.status != s)
 		src.status = s
+
+/world/proc/initialise_lights()
+	if (!lighting_engine)
+		lighting_engine = new lighting_system_used

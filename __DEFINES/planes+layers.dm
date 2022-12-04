@@ -345,53 +345,20 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy
 
+
+// 515 has teething issues that needs to be resolved
+/*
 // OVERDARKNESS PLANEMASTER
 // Used to apply darkness over lights that the player isn't supposed to see when the lighting master is set to BLEND_ADD
 /obj/abstract/screen/plane_master/overdark_planemaster
 	plane = 0
 
-/obj/abstract/screen/plane_master/overdark_planemaster_target
-	appearance_flags = 0
-	plane = LIGHTING_PLANE
-	blend_mode = BLEND_ADD
-	mouse_opacity = 0
-	screen_loc = "CENTER,CENTER"
-
-// OVERDARKNESS PLANEMASTER
-// Used to apply darkness over lights that the player isn't supposed to see when the lighting master is set to BLEND_ADD
-/obj/abstract/screen/plane_master/overdark_planemaster
-	plane = 0
-
-/obj/abstract/screen/plane_master/overdark_planemaster_target
+/obj/abstract/screen/overdark_target
 	appearance_flags = 0
 	plane = ABOVE_LIGHTING_PLANE
 	mouse_opacity = 0
 	screen_loc = "CENTER,CENTER"
-
-
-// DARKNESS PLANEMASTER
-// One planemaster for each client, which they gain during mob/login()
-/obj/abstract/screen/plane_master/darkness_planemaster
-	plane = LIGHTING_PLANE
-	blend_mode = BLEND_MULTIPLY
-
-/obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	alpha = 0
-	appearance_flags = 0
-	plane = LIGHTING_PLANE
-
-/client/proc/initialize_darkness_planemaster()
-	if(darkness_planemaster)
-		screen -= darkness_planemaster
-		qdel(darkness_planemaster)
-	if(darkness_planemaster_dummy)
-		screen -= darkness_planemaster_dummy
-		qdel(darkness_planemaster_dummy)
-	darkness_planemaster = new /obj/abstract/screen/plane_master/darkness_planemaster
-	screen |= darkness_planemaster
-	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	screen |= darkness_planemaster_dummy
-
+*/
 
 /obj/abstract/screen/plane_master/fakecamera_planemaster
 	plane = FAKE_CAMERA_PLANE

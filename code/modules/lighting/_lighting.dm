@@ -12,7 +12,12 @@
 // The code for generating light sprites and masks can be found at :
 // https://gist.github.com/ShiftyRail/911f608f122c3ce355b3a67c16a23718
 
-#define LIGHTING_PLANEMASTER_COLOR list(null,null,null,"#0000","#000F")
-
 /turf/shadow_dummy
 	opacity = 0
+
+// GLOBAL VARIABLES
+var/lighting_system_used = /datum/lighting_system/europa_classic
+var/datum/lighting_system/lighting_engine
+
+/proc/check_light_engine()
+	to_chat(world, lighting_engine.name)

@@ -2,10 +2,23 @@
 	item_state = "glasses"
 	species_fit = list(GREY_SHAPED)
 	var/on = TRUE
+	var/list/color_matrix = null
+
+// Legacy code for 515 teething issues
+/obj/item/clothing/glasses/scanner/proc/apply_color(mob/living/carbon/user)	//for altering the color of the wearer's vision while active
+	if(color_matrix)
+		if(user.client)
+			var/client/C = user.client
+			C.color =  color_matrix
+
+/obj/item/clothing/glasses/scanner/proc/remove_color(mob/living/carbon/user)
+	if(color_matrix)
+		if(user.client)
+			var/client/C = user.client
+			C.color = initial(C.color)
 
 /obj/item/clothing/glasses/scanner/attack_self()
 	toggle()
-
 
 /obj/item/clothing/glasses/scanner/equipped(var/mob/living/carbon/M, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
@@ -20,7 +33,8 @@
 		return
 	if(on)
 		if(iscarbon(M))
-			M.update_perception()
+			apply_color(M)
+			//M.update_perception()
 			M.update_darkness()
 	..()
 
@@ -28,6 +42,8 @@
 	if(from_slot == slot_glasses)
 		if(on)
 			user.seedarkness = TRUE
+			if(iscarbon(user))
+				remove_color(user)
 	..()
 
 /obj/item/clothing/glasses/scanner/update_icon()
@@ -68,41 +84,71 @@
 	icon_state = "night"
 	item_state = "glasses"
 	origin_tech = Tc_MAGNETS + "=2"
-	see_invisible = 0
+
+	// Legacy code
+	see_invisible = SEE_INVISIBLE_MINIMUM
 	seedarkness = TRUE
+
+	//see_invisible = 0
+	//seedarkness = TRUE
+
 	see_in_dark = 8
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
-	my_dark_plane_alpha_override_value = 30
-	var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
-	var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_target
 
+	color_matrix = list(0.8, 0, 0  ,\
+						0  , 1, 0  ,\
+						0  , 0, 0.8) //equivalent to #CCFFCC
+	my_dark_plane_alpha_override = "night_vision"
+	my_dark_plane_alpha_override_value = 255
+
+	//my_dark_plane_alpha_override_value = 30
+	//var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
+	//var/obj/abstract/screen/overdark_target/overdark_target
+
+// 515 teething
+/*
 /obj/item/clothing/glasses/scanner/night/New()
 	..()
 	overdark_planemaster = new
 	overdark_planemaster.render_target = "night vision goggles (\ref[src])"
 	overdark_target = new
 	overdark_target.render_source = "night vision goggles (\ref[src])"
+*/
 
 /obj/item/clothing/glasses/scanner/night/enable(var/mob/C)
 	see_in_dark = initial(see_in_dark)
 	eyeprot = initial(eyeprot)
-	my_dark_plane_alpha_override = "night_vision"
-	add_overdark(C)
-	if (ishuman(C))
-		var/mob/living/carbon/human/H = C
-		if (H.glasses == src)
-			C.update_perception()
-	else if (ismonkey(C))
-		var/mob/living/carbon/monkey/M = C
-		if (M.glasses == src)
-			C.update_perception()
-	return ..()
+
+	seedarkness = TRUE
+	seedarkness = TRUE
+
+//	my_dark_plane_alpha_override = "night_vision"
+//	add_overdark(C)
+//	if (ishuman(C))
+//		var/mob/living/carbon/human/H = C
+//		if (H.glasses == src)
+//			C.update_perception()
+//	else if (ismonkey(C))
+//		var/mob/living/carbon/monkey/M = C
+//		if (M.glasses == src)
+//			C.update_perception()
+//	return ..()
 
 /obj/item/clothing/glasses/scanner/night/disable(var/mob/living/carbon/C)
 	. = ..()
+	see_invisible = 0
 	see_in_dark = 0
+	seedarkness = TRUE
+
+// 515 Teething issues
+/*
+/obj/item/clothing/glasses/scanner/night/disable(var/mob/living/carbon/C)
+	. = ..()
+	see_invisible = 0
+	see_in_dark = 0
+	seedarkness = TRUE
 	my_dark_plane_alpha_override = null
 	eyeprot = 0
 	remove_overdark(C)
@@ -166,7 +212,7 @@
 	if (istype(C) && C.client)
 		C.client.screen -= overdark_planemaster
 		C.client.screen -= overdark_target
-
+*/
 var/list/meson_wearers = list()
 
 /obj/item/clothing/glasses/scanner/meson

@@ -252,7 +252,7 @@
 	if(drawspower)
 		pwrconn = new(src)
 		pwrconn.channel = LIGHT
-		pwrconn.active_usage = 60 * brightness_on / 5 //power usage scales with brightness
+		pwrconn.active_usage = 60 * light_power / 5 //power usage scales with brightness
 	update_brightness(playsound = FALSE)
 
 /obj/item/device/flashlight/lamp/update_brightness(var/mob/user = null, var/playsound = TRUE)

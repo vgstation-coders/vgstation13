@@ -123,3 +123,8 @@
 #define MOVABLE_LIGHT 8
 
 #define LIGHTING_PLANEMASTER_COLOR list(null,null,null,"#0000","#000F")
+
+// Num for light icons
+
+#define CORNER_SHADOW 1
+#define FRONT_SHADOW 2

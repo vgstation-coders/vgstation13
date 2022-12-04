@@ -1397,7 +1397,8 @@
 					break
 
 	if (istype(glasses))
-		glasses.update_perception(src)
+		// teething issues
+		//glasses.update_perception(src)
 		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
 			dark_plane.alphas["[glasses.my_dark_plane_alpha_override]"] = glasses.my_dark_plane_alpha_override_value
 

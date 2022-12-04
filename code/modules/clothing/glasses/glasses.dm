@@ -27,8 +27,9 @@
 	var/my_dark_plane_alpha_override
 	var/my_dark_plane_alpha_override_value
 
-/obj/item/clothing/glasses/proc/update_perception(var/mob/living/carbon/human/M)
-	return
+// 515 teething issues
+///obj/item/clothing/glasses/proc/update_perception(var/mob/living/carbon/human/M)
+//	return
 
 /*
 SEE_SELF  // can see self, no matter what

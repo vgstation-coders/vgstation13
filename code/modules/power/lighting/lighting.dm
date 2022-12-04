@@ -630,7 +630,7 @@ var/list/light_source_images = list()
 	item_state = "c_tube"
 	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 60)
 	w_type = RECYK_GLASS
-	brightness_range = 5
+	brightness_range = 6
 	brightness_power = 3
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	cost = 4
@@ -682,7 +682,7 @@ var/list/light_source_images = list()
 	base_state = "bulb"
 	item_state = "contvapour"
 	fitting = "bulb"
-	brightness_range = 4
+	brightness_range = 5
 	brightness_power = 3
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 30)
