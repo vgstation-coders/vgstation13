@@ -1114,13 +1114,14 @@
 	..()
 	reagents.add_reagent(TRICORDRAZINE, rand(1,5))
 
-/obj/item/weapon/reagent_containers/food/snacks/tomatomeat
+/obj/item/weapon/reagent_containers/food/snacks/meat/tomatomeat
 	name = "tomato slice"
 	desc = "A slice from a huge tomato."
 	icon_state = "tomatomeat"
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/tomatomeat/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/tomatomeat/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	src.bitesize = 6
