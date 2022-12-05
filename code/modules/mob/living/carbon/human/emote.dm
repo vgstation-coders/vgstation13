@@ -310,6 +310,10 @@
 	else
 		to_chat(user, "<span class='warning'>You cannot [key] without both your arms.</span>")
 		return FALSE
+	if(user.reagents && user.reagents.has_reagent(PAROXETINE))
+		to_chat(user, "<span class='numb'>You're too medicated to wanna do that anymore.</span>")
+		return FALSE
+	
 	return ..()
 
 /datum/emote/living/carbon/human/dab/run_emote(mob/user, params, ignore_status = FALSE)
