@@ -1098,19 +1098,20 @@
 	reagents.add_reagent(CARPPHEROMONES, 3)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice
 	name = "huge mushroom slice"
 	desc = "A slice from a huge mushroom."
 	icon_state = "hugemushroomslice"
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(PSILOCYBIN, 3)
 	src.bitesize = 6
 
-/obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man/New()
 	..()
 	reagents.add_reagent(TRICORDRAZINE, rand(1,5))
 
