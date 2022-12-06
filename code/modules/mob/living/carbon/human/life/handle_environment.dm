@@ -57,10 +57,11 @@
 		pressure_alert = -1
 	else
 		if(!(M_RESIST_COLD in mutations))
-			adjustBruteLoss(LOW_PRESSURE_DAMAGE)
-			if(istype(src.loc, /turf/space))
-				adjustBruteLoss(LOW_PRESSURE_DAMAGE) //Space doubles damage (for some reason space vacuum is not station vacuum, nice snowflake)
-			pressure_alert = -2
+			if(getBruteLoss() < (maxHealth - config.health_threshold_dead)) //Stop damaging the body if the brute damage is equal to the difference between max health and dead health. As of 2022 this is 100 and -100 respectively, which means 200 damage.
+				adjustBruteLoss(LOW_PRESSURE_DAMAGE) //Spread across 7 limbs (arms, legs, upper/lower torso, head) this means ~28.5 brute damage to each limb. Should prevent gibbing from low pressure.
+				if(istype(src.loc, /turf/space))
+					adjustBruteLoss(LOW_PRESSURE_DAMAGE) //Space doubles damage (for some reason space vacuum is not station vacuum, nice snowflake)
+				pressure_alert = -2
 		else
 			pressure_alert = -1
 
