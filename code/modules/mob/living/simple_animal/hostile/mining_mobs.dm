@@ -415,7 +415,7 @@
 /obj/item/asteroid/hivelord_core/guardian
 	name = "hivelord guardian remains"
 	desc = "All that remains of a hivelord guardian, it seems to be what allows it to break pieces of itself off without being hurt... its healing properties will soon become inert if not used quickly. This one seems to last longer than usual."
-	var/time_left = 3000 //5 minutes
+	time_left = 3000 //5 minutes
 
 /obj/item/asteroid/hivelord_core/New()
 	..()
