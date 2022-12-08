@@ -290,8 +290,7 @@
 		new_human.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
 	new_human.randomise_appearance_for(new_human.gender)
 	if(!new_species || !(new_species in all_species))
-		var/list/restricted = list("Krampus", "Horror", "Manifested")
-		new_species = pick(all_species - restricted)
+		new_species = pick(whitelisted_species)
 	new_human.set_species(new_species)
 	if(isliving(src))
 		var/mob/living/L = src
