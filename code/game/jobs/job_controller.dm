@@ -512,8 +512,6 @@ var/global/datum/controller/occupations/job_master
 	else
 		to_chat(H, "<B>You are the [alt_title ? alt_title : rank].</B>")
 		to_chat(H, "<b>As the [alt_title ? alt_title : rank]. Special circumstances may change this.</b>")
-		if(job.req_admin_notify)
-			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
 	if(job.priority)
 		to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
