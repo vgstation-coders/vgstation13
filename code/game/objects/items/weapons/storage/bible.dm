@@ -31,28 +31,27 @@
 
 /obj/item/weapon/storage/bible/divine_retribution(var/mob/living/user, var/action = "doing something to")
 	if(isanycultist(user))
-		to_chat(user, "<span class='sinister'>Nar-Sie shields you from [B.my_rel.deity_name]'s wrath!</span>")
+		to_chat(user, "<span class='sinister'>Nar-Sie shields you from [my_rel.deity_name]'s wrath!</span>")
 	else
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			if(istype(H.head, /obj/item/clothing/head/fedora))
-				to_chat(H, "<span class='notice'>You feel incredibly enlightened after [action] [B]!</span>")
+				to_chat(H, "<span class='notice'>You feel incredibly enlightened after [action] [src]!</span>")
 				var/obj/item/clothing/head/fedora/F = H.head
 				F.tip_fedora()
 			else
-				to_chat(user, "<span class='danger'>You feel incredibly guilty for [action] [B]!</span>")
+				to_chat(user, "<span class='danger'>You feel incredibly guilty for [action] [src]!</span>")
 		else
-			to_chat(user, "<span class='danger'>You feel incredibly guilty for [action] [B]!</span>")
+			to_chat(user, "<span class='danger'>You feel incredibly guilty for [action] [src]!</span>")
 		if(prob(80)) //20% chance to escape God's justice
 			spawn(rand(10,30))
-				if(user && B)
-					user.show_message("<span class='game say'><span class='name'>[B.my_rel.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
+				if(user)
+					user.show_message("<span class='game say'><span class='name'>[my_rel.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
 					sleep(10)
-
-					if(user && B)
-						to_chat(user, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
-						user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[action] a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
-						explosion(get_turf(H),-1,-1,1,5, whodunnit = user) //Tiny explosion with flash
+					if(user)
+						to_chat(user, "<span class='danger'>You were disintegrated by [my_rel.deity_name]'s bolt of lightning.</span>")
+						user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[action] a bible and suffered [my_rel.deity_name]'s wrath.</font>")
+						explosion(get_turf(user),-1,-1,1,5, whodunnit = user) //Tiny explosion with flash
 						user.dust(TRUE)
 
 
