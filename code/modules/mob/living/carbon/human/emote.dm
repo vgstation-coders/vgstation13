@@ -267,26 +267,7 @@
 	var/obj/item/weapon/storage/bible/B = locate(/obj/item/weapon/storage/bible) in H.loc
 	if (!B)
 		return
-	if(isanycultist(H))
-		to_chat(H, "<span class='sinister'>Nar-Sie shields you from [B.my_rel.deity_name]'s wrath!</span>")
-	else
-		if(istype(H.head, /obj/item/clothing/head/fedora))
-			to_chat(H, "<span class='notice'>You feel incredibly enlightened after farting on [B]!</span>")
-			var/obj/item/clothing/head/fedora/F = H.head
-			F.tip_fedora()
-		else
-			to_chat(user, "<span class='danger'>You feel incredibly guilty for farting on [B]!</span>")
-		if(prob(80)) //20% chance to escape God's justice
-			spawn(rand(10,30))
-				if(H && B)
-					H.show_message("<span class='game say'><span class='name'>[B.my_rel.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
-					sleep(10)
-
-					if(H && B)
-						to_chat(H, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
-						H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
-						explosion(get_turf(H),-1,-1,1,5, whodunnit = H) //Tiny explosion with flash
-						H.dust(TRUE)
+	B.divine_retribution(H, "farting on")
 //Ayy lmao
 
 

@@ -29,6 +29,33 @@
 	user.audible_scream()
 	return SUICIDE_ACT_FIRELOSS //Set ablaze and burned to crisps
 
+/obj/item/weapon/storage/bible/divine_retribution(var/mob/living/user, var/action = "doing something to")
+	if(isanycultist(user))
+		to_chat(user, "<span class='sinister'>Nar-Sie shields you from [B.my_rel.deity_name]'s wrath!</span>")
+	else
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(istype(H.head, /obj/item/clothing/head/fedora))
+				to_chat(H, "<span class='notice'>You feel incredibly enlightened after [action] [B]!</span>")
+				var/obj/item/clothing/head/fedora/F = H.head
+				F.tip_fedora()
+			else
+				to_chat(user, "<span class='danger'>You feel incredibly guilty for [action] [B]!</span>")
+		else
+			to_chat(user, "<span class='danger'>You feel incredibly guilty for [action] [B]!</span>")
+		if(prob(80)) //20% chance to escape God's justice
+			spawn(rand(10,30))
+				if(user && B)
+					user.show_message("<span class='game say'><span class='name'>[B.my_rel.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
+					sleep(10)
+
+					if(user && B)
+						to_chat(user, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
+						user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[action] a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
+						explosion(get_turf(H),-1,-1,1,5, whodunnit = user) //Tiny explosion with flash
+						user.dust(TRUE)
+
+
 //"Special" Bible with a little gift on introduction
 /obj/item/weapon/storage/bible/booze
 
@@ -201,6 +228,11 @@
 /obj/item/weapon/storage/bible/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(!stealthy(user))
 		playsound(src, "rustle", 50, 1, -5)
+	if(W.is_hot())
+		if(do_after(user, src, 2 SECONDS))
+			visible_message("<span class='warning'>[user] lights [src] on fire with \the [W]!</span>")
+			ignite()
+			divine_retribution(user, "burning")
 	. = ..()
 
 /obj/item/weapon/storage/bible/pickup(mob/living/user as mob)
