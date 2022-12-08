@@ -245,7 +245,6 @@
 #include "code\controllers\subsystem\mob.dm"
 #include "code\controllers\subsystem\nanoui.dm"
 #include "code\controllers\subsystem\objects.dm"
-#include "code\controllers\subsystem\openport.dm"
 #include "code\controllers\subsystem\pathfinder.dm"
 #include "code\controllers\subsystem\pathing.dm"
 #include "code\controllers\subsystem\pipenet.dm"
