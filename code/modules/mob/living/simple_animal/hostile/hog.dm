@@ -274,7 +274,7 @@ if ungreased adult: l containers
 	for(var/mob/living/target in targets)
 		if (user.is_pacified(1,target))
 			return
-		playsound(src, "trayhit", 75, 1)
+		playsound(user, "trayhit", 75, 1)
 		target.Knockdown(5)
 		user.visible_message("<span class='danger'>\The [user] headbutts \the [target]!</span>")
 
