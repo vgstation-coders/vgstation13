@@ -125,5 +125,10 @@
 	if(src.req_admin_notify)
 		to_chat(M, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
+	if(job.priority)
+		to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
+	if(job.department_prioritized)
+		to_chat(H, "<span class='notice'>You've been granted a little bonus for because your department is prioritized. Enjoy!</span>")
+
 /datum/job/proc/get_wage()
 	return wage_payout
