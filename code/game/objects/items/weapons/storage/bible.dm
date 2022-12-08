@@ -29,7 +29,7 @@
 	user.audible_scream()
 	return SUICIDE_ACT_FIRELOSS //Set ablaze and burned to crisps
 
-/obj/item/weapon/storage/bible/divine_retribution(var/mob/living/user, var/action = "doing something to")
+/obj/item/weapon/storage/bible/proc/divine_retribution(var/mob/living/user, var/action = "doing something to")
 	if(isanycultist(user))
 		to_chat(user, "<span class='sinister'>Nar-Sie shields you from [my_rel.deity_name]'s wrath!</span>")
 	else
@@ -225,13 +225,14 @@
 			A.reagents.add_reagent(HOLYWATER, water2holy)
 
 /obj/item/weapon/storage/bible/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(!stealthy(user))
-		playsound(src, "rustle", 50, 1, -5)
 	if(W.is_hot())
 		if(do_after(user, src, 2 SECONDS))
 			visible_message("<span class='warning'>[user] lights [src] on fire with \the [W]!</span>")
 			ignite()
 			divine_retribution(user, "burning")
+			return
+	if(!stealthy(user))
+		playsound(src, "rustle", 50, 1, -5)
 	. = ..()
 
 /obj/item/weapon/storage/bible/pickup(mob/living/user as mob)
