@@ -86,6 +86,10 @@
 /mob/living/carbon/attempt_suicide(forced = 0, suicide_set = 1)
 
 	if(!forced)
+		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
+		if(confirm != "Yes")
+			return
+			
 		if(stat != CONSCIOUS)
 			to_chat(src, "<span class='warning'>You can't commit suicide in this state!</span>")
 			return
@@ -105,10 +109,6 @@
 
 		if(!canmove || restrained()) //Just while I finish up the new 'fun' suiciding verb. This is to prevent metagaming via suicide
 			to_chat(src, "<span class='warning'>You can't commit suicide whilst restrained!</span>")
-			return
-			
-		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
-		if(confirm != "Yes")
 			return
 
 		log_attack("<font color='red'>[key_name(src)] has committed suicide via the suicide verb.</font>")
