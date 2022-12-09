@@ -15,7 +15,7 @@
 			log_access("Failed Login: [key] - Guests not allowed")
 			message_admins("<span class='notice'>Failed Login: [key] - Guests not allowed</span>")
 			return list("reason"="guest", "desc"="\nReason: Guests not allowed. Please sign in with a byond account.")
-
+	log_debug("ISBANNED [ckey(key)] passed real login check")
 	if(config.ban_legacy_system)
 		//Ban Checking
 		. = CheckBan( ckey(key), computer_id, address )
@@ -48,7 +48,7 @@
 			world.log << "Ban database connection failure. Key [ckeytext] not checked"
 			diary << "Ban database connection failure. Key [ckeytext] not checked"
 			return
-
+		log_debug("ISBANNED [ckey(key)] dbcore connected.")
 		var/failedcid = 1
 		var/failedip = 1
 
@@ -64,12 +64,13 @@
 				"address" = "[address]",
 				"computer_id" = "[computer_id]"
 		))
-
+		log_debug("ISBANNED [ckey(key)] new query written")
 		if(!query.Execute())
 			message_admins("Error: [query.ErrorMsg()]")
 			log_sql("Error: [query.ErrorMsg()]")
 			qdel(query)
 			return
+		log_debug("ISBANNED [ckey(key)] query executed successfully")
 		while(query.NextRow())
 			var/pckey = query.item[1]
 			//var/pip = query.item[2]
@@ -94,13 +95,16 @@
 			qdel(query)
 			return list("reason"="[bantype]", "desc"="[desc]")
 			//return "[bantype][desc]"
+		log_debug("ISBANNED [ckey(key)] ban lookup loop finished")
 		qdel(query)
 		if(failedcid && real_login)
 			message_admins("[key] has logged in with a blank computer id in the ban check.")
 		if(failedip && real_login)
 			message_admins("[key] has logged in with a blank ip in the ban check.")
 		//sticky ban logging
+		log_debug("ISBANNED [ckey(key)] pre parent call")
 		. = ..()
+		log_debug("ISBANNED [ckey(key)] post parent call")
 		var/list/what = .
 		if(istype(what,/list))
 			message_admins("Attempted stickyban login key: [what["keys"]] IP: [what["IP"]] CID: [what["computer_id"]] Admin: [what["admin"]]")
@@ -113,4 +117,5 @@
 				what.Remove("message")
 				what["desc"] = "[desc]"
 				what["reason"] = "PERMABAN"
+		log_debug("ISBANNED [ckey(key)] returning [.]")
 		return .	//default pager ban stuff
