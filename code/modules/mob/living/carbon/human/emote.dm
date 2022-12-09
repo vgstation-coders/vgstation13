@@ -297,6 +297,13 @@
 
 /datum/emote/living/carbon/human/dab/can_run_emote(mob/user, var/status_check = TRUE)
 	var/mob/living/carbon/human/H = user
+	if(!(Holiday == APRIL_FOOLS_DAY))
+		//var/confirm = alert("Suffer for your sins.", "Confirm Suicide", "gladly", "ok")
+		//var/confirm = alert("Are you sure you want to do this? Nobody will want to revive you.", "Confirm Suicide", "Yes", "Yes")
+		//var/confirm = alert("Are you sure you want to [key]? This action will cause irreversable brain damage.", "Confirm Suicide", "Yes", "Yes")
+		var/confirm = alert("Are you sure you want to [key]? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
+		if(confirm != "Yes")
+			return FALSE
 	if (iswizard(H))
 		to_chat(user, "<span class='warning'>The Wizard Federation has banned usage of the [key].</span>")
 		return FALSE
@@ -323,12 +330,6 @@
 	if(!istype(H))
 		return
 	if(!(Holiday == APRIL_FOOLS_DAY))
-		//var/confirm = alert("Suffer for your sins.", "Confirm Suicide", "gladly", "ok")
-		//var/confirm = alert("Are you sure you want to do this? Nobody will want to revive you.", "Confirm Suicide", "Yes", "Yes")
-		//var/confirm = alert("Are you sure you want to [key]? This action will cause irreversable brain damage.", "Confirm Suicide", "Yes", "Yes")
-		var/confirm = alert("Are you sure you want to [key]? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
-		if(confirm != "Yes")
-			return
 		if(H.mind)
 			H.mind.suiciding = 1
 		H.visible_message("<span class='danger'>[H] holds one arm up and slams \his other arm into \his face! It looks like \he's trying to commit suicide.</span>",)
