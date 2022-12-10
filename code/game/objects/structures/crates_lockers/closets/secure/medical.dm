@@ -168,7 +168,8 @@
 		/obj/item/weapon/storage/fancy/vials,
 		/obj/item/weapon/storage/box/pillbottles = 2,
 		/obj/item/weapon/book/manual/chemistry_manual,
-		/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer = 2
+		/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer = 2,
+		/obj/item/weapon/thermometer/electronic
 	)
 
 /obj/structure/closet/secure_closet/medical_wall

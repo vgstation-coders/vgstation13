@@ -50,7 +50,6 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 	icon_state = "syndishuttle"
 
 	light_color = LIGHT_COLOR_RED
-	machine_flags = 0 //No screwtoggle because this computer can't be built
 	allow_silicons = 0 //no NT robots allowed
 
 /obj/machinery/computer/shuttle_control/syndicate/emag_act()

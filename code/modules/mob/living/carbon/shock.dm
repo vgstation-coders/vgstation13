@@ -46,7 +46,7 @@
 /mob/living/carbon/proc/handle_shock() //Currently only used for humans
 	update_pain_level()
 
-/mob/living/carbon/proc/has_painkillers()
+/mob/living/proc/has_painkillers()
 	if(reagents.has_reagent(PARACETAMOL))
 		return TRUE
 	if(reagents.has_reagent(TRAMADOL))
