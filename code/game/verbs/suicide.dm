@@ -86,12 +86,10 @@
 /mob/living/carbon/attempt_suicide(forced = 0, suicide_set = 1)
 
 	if(!forced)
-
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
-
 		if(confirm != "Yes")
 			return
-
+			
 		if(stat != CONSCIOUS)
 			to_chat(src, "<span class='warning'>You can't commit suicide in this state!</span>")
 			return
