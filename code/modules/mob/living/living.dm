@@ -1069,7 +1069,7 @@ Thanks.
 					SC.open()
 				else
 					C.welded = 0
-					L.visible_message("<span class='danger'>[L] successful breaks out of [C]!</span>",
+					L.visible_message("<span class='danger'>[L] successfully breaks out of [C]!</span>",
 									  "<span class='notice'>You successfully break out!</span>")
 					if(istype(C.loc, /obj/item/delivery/large)) //nullspace ect.. read the comment above
 						var/obj/item/delivery/large/BD = C.loc
