@@ -136,7 +136,7 @@ emp_act
 	return protection
 
 
-/mob/living/carbon/human/proc/check_body_part_coverage(var/body_part_flags=0, var/obj/item/ignored)
+/mob/living/carbon/proc/check_body_part_coverage(var/body_part_flags=0, var/obj/item/ignored)
 	if(!body_part_flags)
 		return 0
 	var/parts_to_check = body_part_flags

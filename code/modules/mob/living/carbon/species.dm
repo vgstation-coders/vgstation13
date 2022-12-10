@@ -155,6 +155,8 @@ var/global/list/playable_species = list("Human")
 
 	var/datum/speech_filter/speech_filter
 
+	var/body_specheatcap = SPECHEATCAP_HUMANBODY
+
 /datum/species/New()
 	..()
 	if(all_species[name])
@@ -445,6 +447,8 @@ var/global/list/playable_species = list("Human")
 					You have no skin, no blood, no lips, and only just enough brain to function.<br>\
 					You can not eat normally, as your necrotic state only permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe.<br>\
 					You are also incredibly weak to brute damage, but you're fast and don't need to breathe, so that's going for you."
+
+	body_specheatcap = SPECHEATCAP_BONE
 
 /datum/species/skellington/conditional_playable()
 	var/MM = text2num(time2text(world.timeofday, "MM"))
@@ -902,6 +906,8 @@ var/global/list/playable_species = list("Human")
 		"eyes" =     /datum/organ/internal/eyes
 	)
 
+	body_specheatcap = SPECHEATCAP_LEAF
+
 /datum/species/diona/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
@@ -952,6 +958,8 @@ var/global/list/playable_species = list("Human")
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain,
 		)
+
+	body_specheatcap = SPECHEATCAP_ADAMANTINE
 
 /datum/species/golem/makeName()
 	return capitalize(pick(golem_names))
@@ -1116,6 +1124,8 @@ var/list/has_died_as_golem = list()
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain/slime_core,
 		)
+
+	body_specheatcap = SPECHEATCAP_SLIME
 
 /datum/species/slime/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
 	H.dropBorers()
@@ -1329,6 +1339,9 @@ var/list/has_died_as_golem = list()
 					You have a resistance to burn and toxin, but you are vulnerable to brute attacks.<br>\
 					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
+
+	body_specheatcap = SPECHEATCAP_MUSHROOM
+
 	var/mob/living/telepathic_target[] = list()
 
 /datum/species/mushroom/makeName()

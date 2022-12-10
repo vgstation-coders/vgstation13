@@ -297,7 +297,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				B = null
 				return
 		var/space = R.maximum_volume - R.total_volume
-		var/reagent_temperature = dispensable_reagents[reagent] ? dispensable_reagents[reagent] : T0C+20
+		var/reagent_temperature = get_loc_temp()
 		R.add_reagent(reagent, min(amount, energy * 10, space), reagtemp = reagent_temperature)
 		energy = max(energy - min(amount, energy * 10, space) / 10, 0)
 

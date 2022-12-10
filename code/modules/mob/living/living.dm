@@ -1938,3 +1938,42 @@ Thanks.
 	if(B.host_brain.ckey)
 		to_chat(src, "<span class='danger'>You send a punishing spike of psychic agony lancing into your host's brain.</span>")
 		to_chat(B.host_brain, "<span class='danger'><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</FONT></span>")
+
+//Returns the thermal mass of the mob's body, excluding reagents but including blood.
+/mob/living/proc/body_thermal_mass()
+
+	//Start with the mass of the body.
+	var/body_thermal_mass = bodymass()
+
+	if(ishuman(src))
+
+		//First, get the non-blood thermal mass of the body.
+		var/mob/living/carbon/human/H = src
+		if(M_FAT in H.mutations)
+			body_thermal_mass *= 1.5
+		body_thermal_mass *= (1 - HUMANBODY_BLOOD_FRACTION) //First, only consider the non-blood fraction of the body mass.
+		//Turn the body mass into thermal mass by multiplying by specific heat.
+		if(H.species)
+			body_thermal_mass *= H.species.body_specheatcap
+		else
+			body_thermal_mass *= SPECHEATCAP_HUMANBODY //Value does include blood, but it shouldn't be too much of a difference.
+
+		//Add blood thermal mass component
+		body_thermal_mass += H.vessel.get_thermal_mass()
+
+	else
+
+		//Turn the body mass into thermal mass by multiplying by specific heat of the human body (generalization).
+		body_thermal_mass *= SPECHEATCAP_HUMANBODY
+
+	return body_thermal_mass * MOB_HEAT_MULT
+
+//Returns the thermal mass of the mob's body, including reagents.
+/mob/living/proc/total_thermal_mass()
+	return body_thermal_mass() + reagents.get_thermal_mass()
+
+/mob/living/proc/bodymass()
+	var/mult = 1
+	if(isskellington(src) || isskelevox(src) || isplasmaman(src))
+		mult *= HUMANBODY_BONE_FRACTION
+	return mult * ((size * 13.737) ** 3) //Approximately 70kg for a non-obese human.

@@ -422,6 +422,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 			var/logged_message = " - [key_name(usr)] has made [count] pill[count > 1 ? "s, each" : ""] named '[name]' and containing "
 
+			//Bring the pills to room temperature, due to contact with the pilling machinery.
+			var/pill_temperature = get_loc_temp()
+
 			while(count--)
 				if(amount_per_pill == 0 || reagents.total_volume == 0)
 					break
@@ -434,6 +437,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
 				P.icon_state = "pill"+pillsprite
 				reagents.trans_to(P,amount_per_pill)
+				//Avoid scalding hot pills
+				P.reagents.chem_temp = pill_temperature
 				if(src.loaded_pill_bottle)
 					if(loaded_pill_bottle.contents.len < loaded_pill_bottle.storage_slots)
 						P.forceMove(loaded_pill_bottle)
