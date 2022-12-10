@@ -22,6 +22,7 @@
 		if(.)
 			log_access("Failed Login: [key] [computer_id] [address] - Banned [.["reason"]]")
 			message_admins("<span class='notice'>Failed Login: [key] id:[computer_id] ip:[address] - Banned [.["reason"]]</span>")
+			log_debug("ISBANNED return value of [.]")
 			return .
 		//sticky ban logging
 		. = ..()
@@ -37,7 +38,7 @@
 				what.Remove("message")
 				what["desc"] = "[desc]"
 				what["reason"] = "PERMABAN"
-
+		log_debug("ISBANNED return value of [.]")
 		return .	//default pager ban stuff
 
 	else
@@ -113,4 +114,5 @@
 				what.Remove("message")
 				what["desc"] = "[desc]"
 				what["reason"] = "PERMABAN"
+		log_debug("ISBANNED return value of [.]")
 		return .	//default pager ban stuff
