@@ -262,7 +262,7 @@ if ungreased adult: l containers
 
 /spell/headbutt
 	name = "Headbutt"
-	desc = "Stuns the target."
+	desc = "Knocks the target down."
 	charge_max = 10 SECONDS
 	spell_flags = WAIT_FOR_CLICK
 	range = 1
@@ -274,8 +274,8 @@ if ungreased adult: l containers
 	for(var/mob/living/target in targets)
 		if (user.is_pacified(1,target))
 			return
-		playsound(src, "trayhit", 75, 1)
-		target.Stun(5)
+		playsound(user, "trayhit", 75, 1)
+		target.Knockdown(5)
 		user.visible_message("<span class='danger'>\The [user] headbutts \the [target]!</span>")
 
 
