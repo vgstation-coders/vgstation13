@@ -789,6 +789,9 @@
 				calculate_burn_strength(get_turf(src))
 				bullet_die()
 				return
+	for(var/obj/item/weapon/book/B in T)
+		if(!B.on_fire)
+			ignite()
 	calculate_burn_strength(get_turf(src))
 
 /obj/item/projectile/bullet/fire_plume/ex_act()
