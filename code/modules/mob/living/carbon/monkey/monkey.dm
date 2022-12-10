@@ -503,7 +503,7 @@
 	icon_state = "mushroom"
 	greaterform = "Mushroom"
 	species_type = /mob/living/carbon/monkey/mushroom
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man
 	canWearClothes = 0
 	canWearHats = 0
 	canWearGlasses = 0

@@ -1285,7 +1285,7 @@ var/list/has_died_as_golem = list()
 	deform = 'icons/mob/human_races/r_mushman.dmi'
 	eyes = "mushroom_eyes"
 	known_languages = list(LANGUAGE_VOX)
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man
 
 	flags = WHITELISTED | PLAYABLE | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
 	anatomy_flags = NO_BALD
