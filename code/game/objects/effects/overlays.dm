@@ -132,3 +132,42 @@
 	pixel_y += rand(-10, 10) * PIXEL_MULTIPLIER
 
 
+// Applies the open space overlay. //NOT FOR ACTUAL MULTI-Z
+/obj/effect/fake_open_space
+	icon = 'icons/turf/open_space.dmi'
+	icon_state = "black_open"
+	anchored = TRUE
+	density = TRUE
+	mouse_opacity = 0
+	plane = ABOVE_LIGHTING_PLANE
+
+// same as above, just darker
+/obj/effect/fake_open_space/deep
+	icon_state = "black_open_deep"
+
+/obj/effect/fake_open_space/New()
+	var/turf/T = get_turf(src)
+	T.filters += filter(type="drop_shadow", x=0, y=-2, size=4, color="#04080FAA")
+//	T.filters += filter(type="blur", size=1)
+
+	spawn()
+		for(var/obj/O in T)
+			O.filters += filter(type="drop_shadow", x=0, y=-2, size=4, color="#04080FAA")
+	//		O.filters += filter(type="blur", size=1)
+
+// Applies a drop shadow to shit on the tile and then deletes itself.
+/obj/effect/landmark/drop_shadow
+	layer = 100
+	plane = 100
+	//So that it's more visible in the map editor
+
+/obj/effect/landmark/drop_shadow/New()
+	var/turf/T = get_turf(src)
+	T.filters += filter(type="drop_shadow", x=0, y=-2, size=4, color="#04080FAA")
+
+	spawn()
+		for(var/obj/O in T)
+			O.filters += filter(type="drop_shadow", x=0, y=-2, size=4, color="#04080FAA")
+
+	qdel(src)
+

@@ -105,3 +105,11 @@
 /turf/unsimulated/floor/brimstone/Destroy()
 	overlays.Cut()
 	..()
+
+/turf/unsimulated/floor/vox
+	oxygen=0
+	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD
+	temperature = T20C
+
+/turf/unsimulated/floor/vox/plating
+	plane = PLATING_PLANE

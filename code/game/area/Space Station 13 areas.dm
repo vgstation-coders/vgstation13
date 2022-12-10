@@ -735,6 +735,10 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Traders Den"
 	icon_state = "tradeden"
 
+/area/shoal
+	name = "\improper Shoal"
+	icon_state = "tradeden"
+
 //PRISON
 /area/prison
 	name = "\improper Prison Station"

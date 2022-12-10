@@ -1,0 +1,394 @@
+"aa" = (/obj/effect/fake_open_space/deep,/turf/space,/area)
+"ad" = (/obj/effect/fake_open_space/deep,/turf/unsimulated/floor/vox/plating,/area)
+"af" = (/obj/effect/fake_open_space/deep,/obj/machinery/vending/discount,/obj/machinery/light/small{dir = 8},/turf/unsimulated/floor/vox,/area/awaymission)
+"ar" = (/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"aB" = (/turf/unsimulated/floor/vox/plating,/area)
+"aC" = (/obj/item/trash/plate,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"bg" = (/obj/structure/shuttle/engine/propulsion/right,/turf/space,/area/awaymission)
+"bk" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"bp" = (/obj/structure/table/woodentable,/obj/item/weapon/dice/d20{pixel_x = -3; pixel_y = 2},/obj/item/weapon/dice{pixel_x = 4; pixel_y = -2},/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/item/weapon/storage/pill_bottle/dice,/obj/item/stack/package_wrap,/obj/item/weapon/paper_bin{pixel_x = 1; pixel_y = 9},/turf/simulated/floor/wood,/area/awaymission)
+"bs" = (/obj/machinery/door/airlock/maintenance_hatch,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"bB" = (/obj/structure/railing{dir = 1},/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"bI" = (/obj/machinery/light,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"bO" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/glass/bottle/stoxin,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/glass/bottle/rezadone{pixel_x = 6; pixel_y = 4},/obj/item/weapon/reagent_containers/glass/bottle/alkysinesmall{pixel_x = -6; pixel_y = 8},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"bS" = (/obj/machinery/recharger{pixel_y = 26},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"ck" = (/obj/structure/rack,/obj/item/weapon/gun/dartgun/vox/raider,/obj/item/weapon/gun/dartgun/vox/raider{pixel_x = 6; pixel_y = -6},/obj/item/weapon/gun/dartgun/vox/raider{pixel_x = -6; pixel_y = 6},/obj/item/weapon/dart_cartridge,/obj/item/weapon/dart_cartridge,/obj/item/weapon/dart_cartridge{pixel_x = -5; pixel_y = -5},/obj/item/weapon/dart_cartridge,/obj/item/weapon/dart_cartridge{pixel_x = 7; pixel_y = 2},/obj/item/weapon/dart_cartridge,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"cm" = (/obj/machinery/sleeper,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"cu" = (/obj/structure/table/reinforced,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"cC" = (/obj/structure/railing{dir = 8},/obj/effect/fake_open_space,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"cH" = (/obj/structure/closet/crate{icon_state = "crateopen"; opened = 1},/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"db" = (/obj/effect/decal/warning_stripes{icon_state = "loading_area"; tag = "icon-loading_area"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"dg" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/full/reinforced,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"dj" = (/obj/effect/decal/cleanable/blood,/obj/structure/bed/chair{dir = 8},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"dn" = (/obj/machinery/light/small{dir = 1},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"dz" = (/obj/machinery/computer/crew{holomap_filter = 16},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"dR" = (/obj/item/weapon/storage/toolbox/mechanical,/obj/item/weapon/storage/toolbox/electrical{pixel_y = -6},/obj/item/clothing/glasses/welding,/obj/item/clothing/glasses/welding,/obj/structure/closet/toolcloset,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"dV" = (/turf/simulated/wall/shuttle/unsmoothed{dir = 1; icon_state = "wall3"},/area)
+"ea" = (/obj/structure/closet/wardrobe/pjs,/turf/unsimulated/floor/vox{icon_state = "wood"},/area/awaymission)
+"en" = (/obj/effect/fake_open_space/deep,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"et" = (/obj/machinery/door/airlock/hatch{aiControlDisabled = 1; req_access_txt = "150"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"eS" = (/obj/structure/shuttle/engine/propulsion,/obj/docking_port/shuttle{dir = 2},/turf/space,/area/awaymission)
+"fr" = (/obj/machinery/floodlight/on/infinite,/turf/unsimulated/floor/vox/plating,/area)
+"fy" = (/obj/structure/shuttle/diag_wall/black{dir = 1},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"fJ" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/greenglow,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"fQ" = (/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"fV" = (/obj/item/weapon/bedsheet,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"fY" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor/carpet,/area/awaymission)
+"gb" = (/obj/structure/railing,/turf/unsimulated/floor/vox/plating,/area)
+"gr" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"gt" = (/turf/unsimulated/floor/vox{icon_state = "wood-broken"},/area/awaymission)
+"gx" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/obj/structure/window/reinforced,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"gA" = (/obj/structure/closet/vox_raiders,/obj/item/weapon/storage/backpack,/obj/item/clothing/glasses/thermal/monocle,/obj/item/device/radio/headset/raider/pretuned,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"gI" = (/obj/structure/rack,/obj/item/weapon/gun/energy/taser{pixel_x = 6; pixel_y = -6},/obj/item/weapon/gun/energy/taser,/obj/item/weapon/gun/energy/taser{pixel_x = -6; pixel_y = 6},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"gM" = (/obj/structure/bed/chair{dir = 1},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"ha" = (/obj/structure/sign/securearea{pixel_y = 32},/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/obj/machinery/light/small{dir = 1},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"ho" = (/obj/structure/table/woodentable,/obj/effect/fake_open_space,/obj/machinery/light/small{dir = 8},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"hs" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning_corner"; tag = "icon-warning_corner (EAST)"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"hA" = (/obj/structure/railing,/obj/effect/fake_open_space,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"ik" = (/obj/item/trash/danitos,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"iH" = (/obj/structure/closet/emcloset/vox,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"iJ" = (/turf/space,/area/awaymission)
+"iK" = (/obj/structure/shuttle/diag_wall/black{dir = 8},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"iL" = (/obj/structure/rack,/obj/item/clothing/mask/breath,/obj/item/clothing/mask/breath,/obj/item/weapon/tank/oxygen,/obj/item/weapon/tank/oxygen,/obj/item/weapon/tank/oxygen,/obj/item/clothing/mask/breath,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"iV" = (/obj/machinery/door/airlock/hatch,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"jw" = (/obj/effect/fake_open_space/deep,/obj/item/folding_chair,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"jF" = (/obj/structure/flora/pottedplant/random,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"jJ" = (/turf/simulated/wall/shuttle/unsmoothed{dir = 1; icon_state = "wall3"},/area/awaymission)
+"jO" = (/obj/item/trash/sosjerky,/obj/machinery/computer/security,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"jZ" = (/obj/structure/table/reinforced,/obj/machinery/microwave/upgraded,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"ki" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"kl" = (/obj/structure/closet/emcloset/vox,/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"ks" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"kt" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"ky" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/generic,/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"kH" = (/obj/machinery/computer/fluff/starmap,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"kP" = (/obj/structure/shuttle/diag_wall/black,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"lH" = (/obj/machinery/light{dir = 1},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"lJ" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"me" = (/obj/effect/fake_open_space,/obj/structure/bed/chair{dir = 1},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"ml" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/blood/gibs/robot/up,/turf/unsimulated/floor/vox,/area/awaymission)
+"mz" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "loading_area"; tag = "icon-loading_area (NORTH)"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"mI" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"nb" = (/obj/structure/table,/obj/item/toy/cards/une,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"nc" = (/obj/structure/table/reinforced,/obj/item/weapon/c4{pixel_x = 3},/obj/item/weapon/c4,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"nh" = (/obj/item/weapon/paper/crumpled,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"no" = (/obj/effect/fake_open_space/deep,/obj/item/trash/waffles,/obj/machinery/light/small{dir = 8},/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"np" = (/turf/space,/area/awaymission{requires_power = 0})
+"nt" = (/obj/structure/railing{dir = 1},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"nI" = (/obj/structure/curtain/open/bed,/turf/unsimulated/floor/vox{icon_state = "wood-broken2"},/area/awaymission)
+"nT" = (/obj/effect/fake_open_space,/turf/space,/area)
+"nW" = (/obj/effect/fake_open_space/deep,/obj/item/weapon/paper/crumpled,/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"nZ" = (/obj/effect/fake_open_space,/obj/structure/table/woodentable,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"ok" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/firstaid/toxin,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"oo" = (/obj/effect/fake_open_space,/obj/structure/bed/chair/comfy/beige{dir = 4},/turf/space,/area)
+"op" = (/obj/machinery/cloning/clonepod/full,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"oq" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/soot,/obj/item/trash/discountchocolate,/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"ow" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"oF" = (/obj/effect/fake_open_space/deep,/obj/item/weapon/shard,/turf/unsimulated/floor/vox,/area/awaymission)
+"oG" = (/turf/space,/area)
+"oN" = (/obj/effect/fake_open_space/deep,/obj/item/weapon/paper/crumpled,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"oR" = (/obj/structure/railing{dir = 1},/obj/structure/railing{dir = 4},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"oS" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"oX" = (/obj/item/device/radio/off,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"pa" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/generic,/turf/unsimulated/floor/vox,/area/awaymission)
+"pz" = (/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"pA" = (/obj/effect/fake_open_space,/obj/machinery/light/small,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"pG" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/syringe/inaprovaline,/obj/item/weapon/reagent_containers/syringe/inaprovaline,/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline,/obj/item/stack/medical/splint,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"qh" = (/obj/structure/bed/chair{dir = 1},/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"qj" = (/obj/structure/closet/vox_raiders,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/clothing/head/helmet/space/vox/medic,/obj/item/clothing/suit/space/vox/medic,/obj/item/device/radio/headset/raider/pretuned,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"qm" = (/obj/structure/closet/emcloset/vox,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"qw" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/closet/crate/bin,/obj/item/weapon/paper/crumpled,/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"rx" = (/obj/effect/fake_open_space,/obj/structure/table/woodentable,/turf/space,/area)
+"rF" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"rS" = (/obj/effect/fake_open_space/deep,/obj/structure/bed/chair/comfy/beige{dir = 4},/turf/space,/area)
+"sa" = (/obj/structure/railing,/obj/effect/fake_open_space,/obj/machinery/light/small{dir = 8},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"sk" = (/obj/effect/fake_open_space,/obj/machinery/light/small,/obj/structure/bed/chair,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"sl" = (/obj/structure/closet/vox_raiders,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/radio/headset/raider/pretuned,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"sq" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/generic,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"st" = (/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"sA" = (/obj/structure/railing{dir = 8},/obj/structure/railing,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"sK" = (/obj/item/trash/oldempirebar,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"sQ" = (/obj/effect/fake_open_space/deep,/turf/unsimulated/floor/vox,/area/awaymission)
+"sR" = (/obj/effect/fake_open_space,/obj/machinery/light/small{dir = 8},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"sS" = (/obj/effect/fake_open_space,/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"ta" = (/obj/structure/table/reinforced,/obj/item/weapon/melee/classic_baton,/obj/item/clothing/mask/muzzle,/obj/item/clothing/glasses/sunglasses/blindfold,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"tf" = (/obj/machinery/vending/raider,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"th" = (/obj/effect/fake_open_space/deep,/obj/machinery/light/small{dir = 8},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"tn" = (/obj/effect/fake_open_space/deep,/obj/item/trash/candy,/obj/item/stack/rods,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"tG" = (/obj/structure/railing{dir = 4},/obj/structure/railing,/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"tJ" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/full/reinforced,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"tM" = (/obj/structure/closet/vox_raiders,/obj/item/weapon/storage/backpack,/obj/item/weapon/storage/belt/slim,/obj/item/device/radio/headset/raider/pretuned,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"tO" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/rack,/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"ug" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"um" = (/obj/effect/landmark{name = "voxstart"},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"uy" = (/obj/structure/bed/chair{dir = 1},/turf/simulated/floor/carpet,/area/awaymission)
+"uD" = (/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"uK" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink{pixel_y = 6},/obj/item/device/flashlight/lamp{pixel_x = -4; pixel_y = -4},/turf/unsimulated/floor/vox{icon_state = "wood"},/area/awaymission)
+"uU" = (/obj/effect/fake_open_space/deep,/obj/item/trash/candy,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"va" = (/obj/structure/table,/obj/item/weapon/paper,/obj/item/weapon/pen,/turf/simulated/floor/plating,/area/awaymission)
+"vb" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"vo" = (/obj/effect/fake_open_space,/obj/structure/bed/chair{dir = 8},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"vu" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/backpack/industrial,/obj/item/weapon/storage/backpack/industrial,/obj/item/weapon/storage/backpack/industrial,/obj/item/weapon/hatchet,/obj/machinery/light{dir = 4},/obj/item/weapon/tank/nitrogen{pixel_y = -12},/obj/item/weapon/tank/nitrogen,/obj/item/weapon/spacecash/c10,/obj/item/clothing/mask/breath/vox,/obj/item/clothing/mask/breath/vox,/obj/item/weapon/storage/bag/plasticbag,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"vy" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/firstaid/fire,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"vA" = (/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"vQ" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"vS" = (/obj/machinery/computer/shuttle_control/vox,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"vZ" = (/obj/effect/fake_open_space,/obj/machinery/light/small{dir = 4},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"wa" = (/obj/machinery/light/small{dir = 1},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"wy" = (/obj/structure/table/reinforced,/obj/machinery/recharger,/obj/item/weapon/storage/box/handcuffs{pixel_x = 6; pixel_y = 12},/obj/item/weapon/storage/bag/plasticbag,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"wz" = (/obj/effect/fake_open_space/deep,/obj/item/trash/bustanuts,/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"wG" = (/turf/unsimulated/floor/vox{icon_state = "wood"},/area/awaymission)
+"xb" = (/obj/structure/table/woodentable,/obj/item/weapon/newspaper,/obj/item/weapon/reagent_containers/food/drinks/coffee,/obj/item/binoculars,/turf/simulated/floor/carpet,/area/awaymission)
+"xr" = (/obj/item/trash/syndi_cakes,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"xy" = (/obj/machinery/door/poddoor/admin,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"xA" = (/obj/structure/bed/chair{dir = 8},/turf/simulated/floor/carpet,/area/awaymission)
+"xB" = (/obj/item/trash/semki,/obj/item/weapon/tank/oxygen,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"xD" = (/obj/item/trash/soda_cans,/obj/machinery/light/small{dir = 1},/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"xS" = (/obj/machinery/flasher{id_tag = "vox_flasher"; pixel_x = 23; pixel_y = 5},/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"xT" = (/obj/structure/bed,/obj/item/weapon/bedsheet/brown,/turf/unsimulated/floor/vox{icon_state = "wood"},/area/awaymission)
+"yL" = (/obj/effect/fake_open_space/deep,/obj/item/trash/donitos,/obj/effect/decal/cleanable/blood/drip,/obj/item/weapon/shard{icon_state = "small"},/turf/unsimulated/floor/vox,/area/awaymission)
+"yV" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning_corner"; tag = "icon-warning_corner (NORTH)"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"yW" = (/obj/machinery/computer/cloning,/obj/machinery/light,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"zy" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"zG" = (/obj/effect/decal/warning_stripes{dir = 8; icon_state = "loading_area"; tag = "icon-loading_area (WEST)"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"zT" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"zZ" = (/turf/simulated/wall/invulnerable/r_wall,/area/awaymission)
+"Ar" = (/obj/machinery/computer/shuttle_control/vox{req_access = null},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"Aw" = (/obj/effect/fake_open_space,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"AX" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/grille/broken,/obj/item/weapon/shard{icon_state = "small"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Bq" = (/obj/machinery/station_map/strategic,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"Bx" = (/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"By" = (/obj/structure/closet/secure_closet/personal,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"BK" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"BQ" = (/obj/structure/table/reinforced,/obj/item/device/multitool,/obj/item/clothing/gloves/yellow/vox,/obj/item/weapon/storage/bag/plasticbag,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"BU" = (/obj/effect/fake_open_space/deep,/obj/machinery/newscaster{dir = 4; pixel_x = -28},/obj/item/weapon/newspaper,/turf/unsimulated/floor/vox,/area/awaymission)
+"Cs" = (/obj/machinery/light,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"CD" = (/obj/structure/flora/pottedplant/random,/obj/structure/railing/glass{dir = 4},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"CI" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"CM" = (/obj/structure/bed/chair/shuttle/gamer{dir = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"CN" = (/obj/machinery/portable_atmospherics/canister/nitrogen,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"CU" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/generic,/obj/item/stack/rods,/turf/unsimulated/floor/vox,/area/awaymission)
+"CW" = (/obj/structure/shuttle/engine/heater,/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"Df" = (/obj/effect/fake_open_space/deep,/obj/machinery/vending/discount,/turf/unsimulated/floor/vox,/area/awaymission)
+"Dp" = (/obj/structure/rack,/obj/item/clothing/suit/unathi/robe,/obj/item/clothing/suit/unathi/robe,/obj/item/device/radio/electropack,/obj/item/clothing/suit/unathi/robe,/obj/machinery/light/small{dir = 1},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"Dq" = (/obj/effect/fake_open_space/deep,/obj/machinery/light/small,/turf/unsimulated/floor/vox,/area/awaymission)
+"Dv" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/full/reinforced,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"DH" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/broken_plate,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"DJ" = (/obj/structure/table/reinforced,/obj/item/clothing/mask/gas,/obj/item/weapon/handcuffs,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"DL" = (/obj/machinery/light/small,/obj/effect/fake_open_space/deep,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"DS" = (/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"Ef" = (/obj/machinery/door/airlock/maintenance_hatch,/obj/effect/fake_open_space,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Eh" = (/obj/effect/fake_open_space/deep,/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"Ev" = (/obj/effect/fake_open_space,/obj/structure/bed/chair{dir = 4},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"Fn" = (/obj/machinery/light/small,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Fx" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/vox,/area/awaymission)
+"FD" = (/obj/machinery/door/airlock/hatch{aiControlDisabled = 1; req_access_txt = "150"},/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"FG" = (/obj/machinery/light/small,/obj/effect/landmark/vox_locker,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"FO" = (/obj/effect/fake_open_space/deep,/obj/machinery/light/small,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Gc" = (/obj/effect/decal/cleanable/blood/stattrack,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Gk" = (/obj/effect/fake_open_space/deep,/obj/item/trash/donitos,/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"Gs" = (/obj/structure/railing{dir = 4},/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"Gy" = (/obj/structure/railing,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"GI" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning_corner"; tag = "icon-warning_corner (EAST)"},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"GX" = (/obj/structure/railing{dir = 1},/obj/effect/fake_open_space,/obj/structure/bed/chair,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"Hk" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning"},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"HF" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/item/weapon/storage/firstaid/regular,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"HI" = (/obj/structure/bed/chair{dir = 4},/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"HR" = (/obj/effect/decal/cleanable/generic,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Ih" = (/obj/effect/fake_open_space/deep,/obj/item/trash/soda_cans,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Ir" = (/obj/effect/fake_open_space/deep,/obj/item/stack/rods,/turf/unsimulated/floor/vox,/area/awaymission)
+"IR" = (/obj/structure/bed/chair,/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"IX" = (/obj/structure/closet/vox_raiders,/obj/item/weapon/storage/backpack,/obj/item/clothing/head/helmet/space/vox/stealth,/obj/item/clothing/suit/space/vox/stealth,/obj/item/device/radio/headset/raider/pretuned,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"Jc" = (/obj/effect/fake_open_space,/obj/machinery/light/small,/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"Jh" = (/obj/structure/shuttle/engine/propulsion/left,/turf/space,/area/awaymission)
+"Jt" = (/obj/structure/railing,/obj/structure/railing{dir = 8},/obj/effect/fake_open_space,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Kc" = (/obj/structure/railing{dir = 1},/obj/machinery/light/small{dir = 8},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"Km" = (/obj/effect/fake_open_space/deep,/obj/item/folding_chair,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Kt" = (/obj/machinery/light/small{dir = 4},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Kw" = (/obj/item/trash/pistachios,/obj/structure/table,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"KR" = (/obj/effect/fake_open_space,/obj/structure/railing{dir = 4},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Le" = (/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"Ly" = (/obj/machinery/door/airlock/hatch{aiControlDisabled = 1; req_access_txt = "150"},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"LX" = (/obj/machinery/light/small{dir = 4},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"Mg" = (/obj/docking_port/destination/vox/station,/obj/effect/fake_open_space/deep,/turf/unsimulated/floor/vox,/area/awaymission)
+"Mk" = (/obj/effect/fake_open_space,/obj/structure/bed/chair/comfy/beige{dir = 8},/turf/space,/area)
+"Mx" = (/obj/effect/fake_open_space/deep,/obj/item/trash/fries_punet,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Mz" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"MC" = (/obj/structure/railing{dir = 4},/obj/structure/railing{dir = 1},/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"ME" = (/obj/machinery/computer/arcade,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"MJ" = (/obj/effect/fake_open_space/deep,/obj/structure/table/woodentable,/turf/space,/area)
+"MU" = (/obj/machinery/door/airlock/hatch,/obj/effect/decal/cleanable/blood/stattrack,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"MX" = (/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"Nx" = (/obj/effect/fake_open_space/deep,/obj/item/trash/semki,/turf/unsimulated/floor/vox,/area/awaymission)
+"NV" = (/obj/structure/shuttle/diag_wall/black{dir = 4},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"NW" = (/obj/structure/table/reinforced,/obj/machinery/light{dir = 8},/obj/abstract/map/spawner/voxfood,/obj/item/weapon/storage/bag/plasticbag,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"Od" = (/obj/structure/bed/chair,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"OY" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Pa" = (/obj/structure/sign/securearea{pixel_y = 32},/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning"; tag = "icon-warning (EAST)"},/obj/machinery/light/small{dir = 1},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Pg" = (/obj/effect/fake_open_space/deep,/obj/item/stack/rods,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Pn" = (/turf/unsimulated/wall{icon_state = "r_wall"; name = "reinforced wall"; walltype = "rwall"},/area/awaymission)
+"PI" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/item/weapon/shard,/obj/item/weapon/shard{icon_state = "medium"},/obj/item/stack/rods,/obj/structure/grille/broken,/obj/effect/decal/cleanable/generic,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"PJ" = (/obj/machinery/computer/security,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"PW" = (/obj/effect/fake_open_space/deep,/obj/machinery/light/small{dir = 1},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"PZ" = (/obj/effect/fake_open_space,/turf/simulated/wall/invulnerable/r_wall,/area/awaymission)
+"Qs" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"QF" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"QG" = (/obj/structure/rack,/obj/item/weapon/gun/energy/ionrifle{pixel_x = -4; pixel_y = 6},/obj/item/weapon/gun/energy/ionrifle{pixel_x = 4; pixel_y = -6},/obj/item/weapon/gun/energy/ionrifle,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"QM" = (/obj/item/weapon/tank/oxygen,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"QV" = (/obj/structure/table,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"Rl" = (/turf/simulated/floor/carpet,/area/awaymission)
+"Rz" = (/obj/item/trash/popcorn,/obj/machinery/door_control{id_tag = "RAIDER_BRIG"; name = "Brig Door-Control"; normaldoorcontrol = 1; pixel_x = -25; specialfunctions = 4},/obj/item/clothing/suit/unathi/robe,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"RO" = (/obj/machinery/flasher_button{id_tag = "vox_flasher"; pixel_x = 25; pixel_y = -5},/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"Sa" = (/obj/effect/decal/cleanable/vomit,/obj/item/trash/candy,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"Su" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"Sw" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/grille/broken,/obj/item/stack/rods,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"SE" = (/obj/effect/fake_open_space/deep,/obj/machinery/light/small{dir = 8},/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"SF" = (/obj/machinery/door/airlock/glass{id_tag = "RAIDER_BRIG"; name = "Brig"},/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"SY" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"Ta" = (/obj/abstract/map/spawner/space/russian,/obj/structure/closet/crate,/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Tb" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"Th" = (/obj/structure/bed/chair/comfy/brown,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"Tr" = (/obj/structure/shuttle/diag_wall/black{dir = 8},/turf/unsimulated/floor/vox,/area/awaymission)
+"TB" = (/obj/machinery/newscaster{pixel_y = 30},/turf/simulated/floor/carpet,/area/awaymission)
+"TI" = (/obj/structure/railing{dir = 4},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"TO" = (/obj/structure/railing,/obj/effect/fake_open_space,/turf/space,/area)
+"TV" = (/obj/structure/curtain/open/bed,/turf/unsimulated/floor/vox{icon_state = "wood"},/area/awaymission)
+"Ue" = (/obj/machinery/light/small{dir = 4},/obj/item/clothing/mask/breath,/obj/item/stack/medical/bruise_pack/bandaid,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"UE" = (/obj/structure/bed/chair/shuttle/red{dir = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"UG" = (/obj/machinery/sleeper,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"UO" = (/obj/effect/fake_open_space/deep,/obj/structure/bed/chair/comfy/beige{dir = 8},/turf/space,/area)
+"UY" = (/obj/effect/fake_open_space/deep,/turf/simulated/wall/invulnerable/r_wall,/area/awaymission)
+"Va" = (/obj/structure/bed/chair,/turf/simulated/floor/carpet,/area/awaymission)
+"Vj" = (/obj/machinery/door/window/brigdoor{base_state = "left"; dir = 4; req_access = null},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"Vt" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"VG" = (/obj/structure/railing{dir = 4},/obj/effect/fake_open_space,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"VM" = (/obj/effect/fake_open_space/deep,/obj/item/trash/tray,/obj/effect/decal/cleanable/blood/gibs/robot/up,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"VZ" = (/obj/machinery/dna_scannernew,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"Wl" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"Wo" = (/obj/structure/grille/broken,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/item/weapon/shard{icon_state = "small"},/obj/item/stack/rods,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Wz" = (/obj/effect/decal/warning_stripes{icon_state = "warning_corner"; tag = "icon-warning_corner"},/turf/simulated/wall/invulnerable/r_wall,/area/awaymission)
+"WH" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/blood/drip,/obj/item/weapon/shard{icon_state = "small"},/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"WI" = (/obj/structure/table/woodentable,/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"WL" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"Xc" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"Xe" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/item/weapon/storage/firstaid/regular,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"Xl" = (/obj/effect/landmark/vox_locker,/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+"Xv" = (/obj/effect/fake_open_space,/obj/machinery/light/small{dir = 8},/obj/structure/bed/chair{dir = 8},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"Xw" = (/obj/machinery/light/small,/turf/simulated/floor/carpet,/area/awaymission)
+"XF" = (/obj/structure/bed/chair{dir = 8},/obj/effect/fake_open_space,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"XK" = (/obj/effect/fake_open_space/deep,/obj/effect/decal/cleanable/blood/drip,/turf/unsimulated/floor/vox,/area/awaymission)
+"XM" = (/obj/machinery/light{dir = 1},/obj/item/weapon/spacecash,/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"XX" = (/obj/machinery/telecomms/allinone{raider_allinone = 1},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"Yd" = (/obj/effect/fake_open_space/deep,/obj/machinery/light/small,/turf/unsimulated/floor/vox{icon_state = "floor"},/area/awaymission)
+"Yf" = (/obj/structure/railing{dir = 4},/obj/effect/fake_open_space,/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"Ys" = (/obj/machinery/computer/fluff/communications{name = "shoal communications console"},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"YB" = (/obj/machinery/light/small,/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"YP" = (/obj/structure/closet{name = "loot closet"},/turf/simulated/floor/shuttle/vox{icon_state = "floor4"},/area/awaymission)
+"YT" = (/obj/structure/railing/glass{dir = 4},/turf/unsimulated/floor/vox{icon_state = "dark"},/area/awaymission)
+"ZB" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"ZC" = (/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"ZU" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/full/reinforced,/turf/unsimulated/floor/vox/plating,/area/awaymission)
+"ZX" = (/obj/item/weapon/tank/oxygen{pixel_x = 12; pixel_y = -9},/obj/item/weapon/tank/oxygen{pixel_y = -6},/obj/item/clothing/mask/breath{pixel_y = 2},/obj/machinery/flasher{id_tag = "vox_flasher"; pixel_x = -25; pixel_y = 5},/turf/simulated/floor/shuttle/plating/vox,/area/awaymission)
+
+(1,1,1) = {"
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJiJiJiJiJiJiJiJeneneneneneneneneneneneniJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJAwAwAwAwAwAwAwzZiJiJiJeneneneneneneneneneneneniJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJAwAwAwAwAwAwAwzZiJiJiJeneneneneneneneneneneneniJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJPZPZPZPZPZPZPZzZiJiJiJAwPZPZPZPZPZeneneneneneniJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJAwAwAwAwAwAwPZzZiJiJiJAwMXMXAwAwPZPZeneneneneniJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGdVdVdVdVdVdVdVdVdVdVdVoGoGoGoGoGoGoGoGoGiJhAhAhAhAhAAwAwzZiJiJiJAwAwzZMXAwAwPZenEhenEheniJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGdVfraBaBaBaBaBaBaBfrdVoGoGoGoGoGoGoGoGoGiJenenenenencCvZzZzZzZzZzZzZzZMXMXAwVGOYEheneneniJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGdVaBaBaBaBaBaBaBaBaBdVoGoGoGoGoGoGoGoGoGiJenOYDHenenJthAzZdnYsArkHdnzZMXsSMXVGenEhenenEhiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGdVaBdVgbgbgbgbgbdVaBdVoGoGoGoGoGoGoGoGoGiJEhenEhEhOYenenZUstststststtJAwMXAwVGenEhOYeneniJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGdVaBaBnTnTnTnTnTaBaBdVoGoGoGoGoGoGoGoGoGiJenenFOenEhEhYddgstststststDvJcAwAwYfEheneneneniJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGdVaBaBoorxMknTnTaBaBdVoGoGoGoGoGoGoGoGoGiJzZzZzZzZzZzZzZzZzZstststzZzZzZAwpAKRenenenDLeniJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGdVaBdVTOTOTOTOTOdVaBdVoGoGoGoGoGoGoGoGoGiJiJiJiJiJiJzZjFdnstststststdnWzzZzZzZzZzZzZzZzZzZzZzZenEhEheneneneneneneneneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGdVaBaBaaaaaaaaaaaBaBdVoGoGoGoGoGoGoGoGoGiJiJzZzZzZzZzZststststOdThOdstHkbsfQstdnststststDpiLzZthenenEhEhEheneneneneneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGdVaBaBrSMJUOaaaaaBaBdVoGoGoGoGoGoGoGoGoGiJiJzZBydnststststststcuBqcustHkbsfQststststststararzZenenenenuUEhEheneneneneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGdVfraBadadadadadaBfrdVoGoGoGoGoGoGoGoGoGiJiJzZByststzZcustststgMgMgMstGIzZZUiVzZPIMUzZararKtzZbBbBbBMCenenenEheneneneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGdVdVdVdVdVdVdVdVdVdVdVoGoGoGoGoGoGoGoGoGiJiJzZByststzZjZcucuststststststzZQsarzZHRGczZDJararzZsRIRuDuDMCenenenEheneneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJzZzZTVnIzZzZzZzZCIstststWozZzZfVQszZQspzzZtaardjzZHIWIXFuDuDGXMCenEhEheneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJzZxTwGwGxTzZarPastststststhazZzZzZzZzZzZzZzZzZzZzZuDqhuDuDEvnZvoMCenEheneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJzZxTgtwGxTzZarhszTzTzTzTzTyVzZarararwaarararwaarPnKcntoRskuDmeuDGsenEheneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJnpzZxTwGwGxTzZararararararararlHararararararararstPnstststoRXvuDuDGsenEheneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJzZuKwGwGeazZFnarFnararzGvAvAvAvAvAzGararararststTBRlRlststoRIRuDGsenwzeneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJzZzZzZzZzZzZzZdbzZGyGyarvAcHvATavAarararFnmzFnstXwRlVaRlstTIhovoGsenEhOYeneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJPZsRuDtOsQzZzZZCzZPWensAGyGyGyGyGyGyGyGyPnZCzZzZzZfYxbxAstTIqhuDGsEheneneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJEfuDuDXcpaPWzyetrFenenPWenenPWenenPWenenzyetvbenzZzZuyRlLXzZzZuDGsenEheneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJPZsRQFsQEhyLowKtlJenVMeniKensqenfyOYenenAXKtlJenIhzZRlRlststzZsatGenEheneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJPZqwsQoqWHsQAXarlJenPgenjJWLTbvQjJenPgenSwarlJenKmzZzZstststzZenOYnWeneneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJPZXKNxXKIroFgxetbksQsQTrjJPJvSdzjJfyenPgZBetgrOYsqjwzZxyxyxyzZSEEheneneneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJUYUYafkyFxsQiKarfyeniKjJBxUEUEUEbSjJfysqiKarfyenPgenzZiJiJiJeneneneneneneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJUYDfsQEhiKjJFDjJenjJCNUEumBxumUECNjJMxjJFDjJfytnUYiJiJiJiJeneneneneneneneniJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJUYBUEhjJklLejJenSuBxBxumCMumBxoXSuenjJLeiHjJfJenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJUYnosQjJbILejJenmIXXCsumBxumCsqmmIenjJLebIjJenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJUYsQsQCUjJjJFDjJjJjJjJjJjJFDjJjJjJjJjJjJFDjJjJenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGzZzZzZzZzZEhsQjJLeLeLeBKLeFDLeLeLeLeLeFDLeBKLeLenhjJenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGststdnstCDEhsQWlcmDSXeLeLejJXlFGLeFGXljJBxBxpGbOHFkioNenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGRlRlRlRlYTEhsQVtBxBxVjLeLejJjJjJFDjJjJjJBxBxBxBxvyoSenenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGststYBstCDsQGkktUGBxMzbILejJgAksBxkssljJVZyWopBxokSYenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGzZzZzZzZzZmlEhjJCWCWjJjJFDjJtMBxBxBxsljJjJjJjJCWCWjJenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJUYsQEhmlkPJhbgjJBKLejJIXBxtfBxqjjJXMYPjJJhbgNVenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJUYsQDqEhenenenjJRzROjJdRBxBxBxBxLyBxgIjJenenenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJUYUYUYsQsQsQsQjJjJSFjJCNBxBxBxBxjJBxckjJenenenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJUYsQEhenenjJZXxSjJNWwyBQncvujJBxQGjJenenenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJUYsQenenenjJSaUejJjJjJjJjJjJjJjJjJjJenenenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJUYsQenenenjJikQMLeugLeLeLexDMEbpjOjJenenenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJUYsQenenenjJxBaCLeLeLeLeLeLeLesKxrjJenenenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJUYsQenenenkPjJjJjJvanbKwQVMEjJjJjJNVenenenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJUYsQsQsQsQsQsQsQkPjJCWCWCWjJNVenenenenenenenUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJUYsQsQsQsQsQsQsQenkPJheSbgNVensQsQsQsQsQsQsQUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJUYsQsQsQsQsQsQsQsQsQsQMgsQsQsQsQsQsQsQsQsQsQUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJUYsQsQsQsQsQsQsQsQsQsQsQsQsQsQsQsQsQsQsQsQsQUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJUYUYUYUYUYUYUYUYUYUYUYUYUYUYUYUYUYUYUYUYUYUYUYiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJiJoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+"}
