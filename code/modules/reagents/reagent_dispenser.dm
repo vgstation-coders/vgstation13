@@ -43,25 +43,32 @@
 		amount_per_transfer_from_this = N
 
 /obj/structure/reagent_dispensers/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				new /obj/effect/water(src.loc)
+	if(reagents.get_reagent_amount(FUEL))
+		explode()
+	else
+		switch(severity)
+			if(1.0)
 				qdel(src)
 				return
-		if(3.0)
-			if (prob(5))
-				new /obj/effect/water(src.loc)
-				qdel(src)
-				return
-		else
-	return
+			if(2.0)
+				if (prob(50))
+					new /obj/effect/water(src.loc)
+					qdel(src)
+					return
+			if(3.0)
+				if (prob(5))
+					new /obj/effect/water(src.loc)
+					qdel(src)
+					return
+
+/obj/structure/reagent_dispensers/singularity_act()
+	qdel(src)
+	return 2
 
 /obj/structure/reagent_dispensers/blob_act()
-	if(prob(50))
+	if(reagents.get_reagent_amount(FUEL))
+		explode()
+	else if(prob(50))
 		new /obj/effect/water(src.loc)
 		qdel(src)
 
@@ -169,7 +176,6 @@
 	..()
 	apply_beam_damage(B)
 
-
 /obj/structure/reagent_dispensers/fueltank/beam_disconnect(var/obj/effect/beam/B)
 	..()
 	apply_beam_damage(B)
@@ -207,21 +213,11 @@
 	reagents.trans_to(user, amount_per_transfer_from_this)
 	return(SUICIDE_ACT_TOXLOSS)
 
-/obj/structure/reagent_dispensers/fueltank/blob_act()
-	explode()
-
-/obj/structure/reagent_dispensers/fueltank/ex_act()
-	explode()
-
-/obj/structure/reagent_dispensers/fueltank/singularity_act()
-	qdel(src)
-	return  2
-
-/obj/structure/reagent_dispensers/fueltank/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/obj/structure/reagent_dispensers/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
 
-/obj/structure/reagent_dispensers/fueltank/Bumped(atom/movable/AM)
+/obj/structure/reagent_dispensers/Bumped(atom/movable/AM)
 	..()
 	if(istype(AM, /obj/structure/bed/chair/vehicle))
 		var/obj/structure/bed/chair/vehicle/car = AM
@@ -232,13 +228,16 @@
 				H.audible_scream("fueltank_crash")
 			explode(car.occupant)
 
-/obj/structure/reagent_dispensers/fueltank/proc/explode(var/mob/user)
-	if (reagents.total_volume > 500)
+/obj/structure/reagent_dispensers/proc/explode(var/mob/user)
+	var/fuel_amount = reagents.get_reagent_amount(FUEL)
+	if (fuel_amount  > 500)
 		explosion(src.loc,1,2,4, whodunnit = user)
-	else if (reagents.total_volume > 100)
+	else if (fuel_amount  > 100)
 		explosion(src.loc,0,1,3, whodunnit = user)
-	else
+	else if(fuel_amount > 0)
 		explosion(src.loc,-1,1,2, whodunnit = user)
+	else
+		return
 	if(src)
 		qdel(src)
 
