@@ -21,18 +21,18 @@
 			if(damagetype & SUICIDE_ACT_CUSTOM)
 				return 1
 
-			//Do 175 damage divided by the number of damage types applied.
+			//Do 125 amage divided by the number of damage types applied.
 			if(damagetype & SUICIDE_ACT_BRUTELOSS)
-				adjustBruteLoss(175/damage_mod)
+				adjustBruteLoss(125/damage_mod)
 
 			if(damagetype & SUICIDE_ACT_FIRELOSS)
-				adjustFireLoss(175/damage_mod)
+				adjustFireLoss(125/damage_mod)
 
 			if(damagetype & SUICIDE_ACT_TOXLOSS)
-				adjustToxLoss(175/damage_mod)
+				adjustToxLoss(125/damage_mod)
 
 			if(damagetype & SUICIDE_ACT_OXYLOSS)
-				adjustOxyLoss(175/damage_mod)
+				adjustOxyLoss(125/damage_mod)
 
 			updatehealth()
 			return 1
@@ -86,12 +86,10 @@
 /mob/living/carbon/attempt_suicide(forced = 0, suicide_set = 1)
 
 	if(!forced)
-
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
-
 		if(confirm != "Yes")
 			return
-
+			
 		if(stat != CONSCIOUS)
 			to_chat(src, "<span class='warning'>You can't commit suicide in this state!</span>")
 			return
@@ -153,7 +151,7 @@
 								"<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
 								"<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
 								"<span class='danger'>[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>"))
-		adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
+		adjustOxyLoss(max(12 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		updatehealth()
 
 /mob/living/carbon/brain/attempt_suicide(forced = 0, suicide_set = 1)
@@ -251,7 +249,7 @@
 
 	visible_message(pick("<span class='danger'>[src] suddenly starts thrashing around wildly! It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] suddenly starts mauling \himself! It looks like \he's trying to commit suicide.</span>"))
-	adjustOxyLoss(max(175 - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
+	adjustOxyLoss(max(125 - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 	updatehealth()
 
 /mob/living/carbon/slime/attempt_suicide(forced = 0, suicide_set = 1)

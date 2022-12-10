@@ -39,6 +39,8 @@
 
 	survival_gear = /obj/item/weapon/storage/box/survival/plasmaman
 
+	body_specheatcap = SPECHEATCAP_PLASMA
+
 /datum/species/plasmaman/New()
 	..()
 	speech_filter = new /datum/speech_filter/unathi

@@ -260,11 +260,14 @@
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
-			slot_wear_suit_str = /obj/item/clothing/suit/storage/paramedic,
-			slot_s_store_str = /obj/item/device/flashlight/pen,
+			slot_wear_suit_str = list(
+				"Paramedic" = /obj/item/clothing/suit/storage/paramedic,
+				"Brig Medic" = /obj/item/clothing/suit/armor/vest/security/medic
+			),
 			slot_head_str = /obj/item/clothing/head/soft/paramedic,
 			slot_wear_mask_str = /obj/item/clothing/mask/cigarette,
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
+			slot_r_store_str = /obj/item/device/flashlight/pen,
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = list(
