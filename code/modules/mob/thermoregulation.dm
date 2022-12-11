@@ -126,7 +126,7 @@
 /mob/living/proc/get_cold_protection(var/thermal_protection_flags)
 	return 0
 
-/mob/living/get_loc_temp(var/datum/gas_mixture/environment)
+/mob/living/proc/get_loc_temp(var/datum/gas_mixture/environment)
 	if(!environment)
 		environment = loc.return_air()
 	var/loc_temp = T0C
