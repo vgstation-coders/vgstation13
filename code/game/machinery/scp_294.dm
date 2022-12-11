@@ -77,7 +77,7 @@
 			detach()
 
 	if(href_list["input"])
-		var/input_reagent = input("Enter the name of any liquid", "Input") as text
+		var/input_reagent = copytext(sanitize(input("Enter the name of any liquid", "Input") as text),1,MAX_MESSAGE_LEN)
 		input_reagent = lowertext(input_reagent) // Lowercase for easier parsing
 		if(findtext(input_reagent,"a cup of ")) // These appear at the start of a lot of requests in the SCP so parse these properly too
 			input_reagent = replacetext(input_reagent,"a cup of ","")
