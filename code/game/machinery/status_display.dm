@@ -107,8 +107,8 @@ var/global/list/status_displays = list() //This list contains both normal status
 			if("Emergency shuttle timer")
 				mode = MODE_SHUTTLE_TIMER
 			if("Text message")
-				var/msg1 = input(A, "Write the first line: ", "Status display", message1) //First line
-				var/msg2 = input(A, "Write the second line: ", "Status display", message2) //Second line
+				var/msg1 = sanitize(input(A, "Write the first line: ", "Status display", message1)) //First line
+				var/msg2 = sanitize(input(A, "Write the second line: ", "Status display", message2)) //Second line
 				mode = MODE_MESSAGE
 
 				set_message(msg1, msg2)
