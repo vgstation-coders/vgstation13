@@ -1500,7 +1500,7 @@
 	if(M.incapacitated())
 		return
 
-	var/N = input("Enter a stock phrase for your decoy to say:","[src]") as null|text
+	var/N = copytext(sanitize(input("Enter a stock phrase for your decoy to say:","[src]") as null|text),1,MAX_MESSAGE_LEN)
 	if(N)
 		decoy_phrase = N
 
