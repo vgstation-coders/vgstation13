@@ -150,7 +150,7 @@ var/global/list/all_graffitis = list(
 					return
 				fontsize = clamp(fontsize,CRAYON_MIN_FONTSIZE,CRAYON_MAX_FONTSIZE)
 
-				preference = input("Write some text here (maximum ([CRAYON_MAX_LETTERS/(fontsize/CRAYON_MIN_FONTSIZE)]) letters).", "Crayon scribbles") as null|text
+				preference = sanitize(input("Write some text here (maximum ([CRAYON_MAX_LETTERS/(fontsize/CRAYON_MIN_FONTSIZE)]) letters).", "Crayon scribbles") as null|text)
 
 				var/letter_amount = length(replacetext(preference, " ", ""))
 				if(!letter_amount) //If there is no text

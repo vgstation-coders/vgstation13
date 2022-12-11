@@ -285,7 +285,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		if("verbs")
 			update_verbs(!isnull(host))
 		if("add_chem")
-			var/chemID = input("Chem name (ex: creatine):","Chemicals") as text|null
+			var/chemID = copytext(sanitize(input("Chem name (ex: creatine):","Chemicals") as text|null),1,MAX_NAME_LEN)
 			if(isnull(chemID))
 				return
 			var/datum/borer_chem/C = new /datum/borer_chem()
