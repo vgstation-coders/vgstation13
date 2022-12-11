@@ -47,7 +47,6 @@
 #include "__DEFINES\materials.dm"
 #include "__DEFINES\math_physics.dm"
 #include "__DEFINES\MC.dm"
-#include "__DEFINES\mob_material_defines.dm"
 #include "__DEFINES\mobs.dm"
 #include "__DEFINES\nanoui.dm"
 #include "__DEFINES\obj_defines.dm"
