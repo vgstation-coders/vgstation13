@@ -160,7 +160,7 @@
 			var/keepgoing = FALSE
 			var/list/outputs = list()
 			do
-				var/output =  input(user, "Enter an output phrase:", "Output phrase") as text
+				var/output =  html_encode(input(user, "Enter an output phrase:", "Output phrase") as text)
 				if(!output)
 					return
 				outputs.Add(output)
