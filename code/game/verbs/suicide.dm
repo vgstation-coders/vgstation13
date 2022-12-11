@@ -38,7 +38,7 @@
 			return 1
 
 /mob/living/proc/handle_suicide_bomb_cause(var/atom/suicide_object)
-	var/custom_message = input(src, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text
+	var/custom_message = copytext(sanitize(input(src, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text),1,MAX_MESSAGE_LEN)
 	if(!Adjacent(suicide_object)) // User moved or lost item, abort.
 		return
 
