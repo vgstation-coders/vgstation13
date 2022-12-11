@@ -243,7 +243,7 @@
 		freq_names.Remove(x)
 
 	if(href_list["input_name"])
-		var/newfreq = input(usr, "Specify a new frequency name.", src, network) as null|text
+		var/newfreq = copytext(reject_bad_text(input(usr, "Specify a new frequency name.", src, network) as null|text),1,MAX_MESSAGE_LEN)
 		if(newfreq && canAccess(usr))
 			if((!(newfreq == SYND || newfreq == RAIDER || newfreq == REV_COMM)) && (!(newfreq in freq_names)))
 				freq_names.Add(newfreq)
@@ -294,7 +294,7 @@
 					temp = "<font color = #666633>-% New ID assigned: \"[id]\" %-</font color>"
 
 			if("network")
-				var/newnet = reject_bad_text(input(usr, "Specify the new network for this machine. This will break all current links.", src, network) as null|text)
+				var/newnet = copytext(reject_bad_text(input(usr, "Specify the new network for this machine. This will break all current links.", src, network) as null|text),1,MAX_MESSAGE_LEN)
 				if(newnet && canAccess(usr))
 
 					if(length(newnet) > 15)
