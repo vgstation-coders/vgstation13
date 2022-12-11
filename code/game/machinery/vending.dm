@@ -1031,17 +1031,17 @@ var/global/num_vending_terminals = 1
 		src.shut_up = !src.shut_up
 
 	else if (href_list["rename"] && edit_mode)
-		var/newname = input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text
+		var/newname = sanitize(input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text)
 		if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
-			src.name = html_encode(newname)
+			src.name = newname
 
 	else if (href_list["show_oos"] && edit_mode)
 		dont_render_OOS = !dont_render_OOS
 
 	else if (href_list["add_slogan"] && edit_mode)
-		var/newslogan = input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text
+		var/newslogan = sanitize(input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text)
 		if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
-			product_slogans += html_encode(newslogan)
+			product_slogans += newslogan
 
 	else if (href_list["delete_slogan_line"] && edit_mode && product_slogans.len > 0)
 		product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
