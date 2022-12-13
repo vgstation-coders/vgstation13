@@ -186,7 +186,7 @@
 
 /obj/item/projectile/ricochet/proc/bounce()
 	bouncin += 1
-	if(bouncin > 100)
+	if(bouncin > 200)
 		bulletdies()
 		return
 	var/obj/structure/ricochet_bump/bump = new(loc)
