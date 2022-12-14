@@ -45,7 +45,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 	melt_temperature = 1643.15 // Melting point of steel
 
-	plane = FLOOR_PLANE
+	plane = TURF_PLANE
 
 	holomap_draw_override = HOLOMAP_DRAW_PATH
 
