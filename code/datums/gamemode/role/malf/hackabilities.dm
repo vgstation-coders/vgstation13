@@ -255,6 +255,7 @@
 /datum/malfhack_ability/oneuse/overload_quiet/activate(var/mob/living/silicon/A)
 	if(!..())
 		return
+	machine.visible_message("<span class='warning'>You hear a [pick("loud", "violent", "unsettling")], [pick("electrical","mechanical")] [pick("buzzing","rumbling","shaking")] sound!</span>")
 	playsound(machine, 'sound/effects/electricity_short_disruption.ogg', 80)
 	spawn(4 SECONDS)
 		if(machine)
