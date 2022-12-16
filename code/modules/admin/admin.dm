@@ -882,6 +882,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=switchon'>Flip all (ALL Z-LEVELS) light switches to on (Lags briefly)</A><BR>
 			<A href='?src=\ref[src];secretsfun=create_artifact'>Create custom artifact</A><BR>
 			<BR>
+			<A href='?src=\ref[src];secretsfun=athfthrowing'>Toggle thrown items exploding on stop</A><BR>
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
