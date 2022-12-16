@@ -215,7 +215,7 @@
 
 var/global/objects_thrown_when_explode = FALSE
 
-/obj/item/throw_at(atom/target, range, speed)
+/obj/item/throw_at(atom/target, range, speed, override = TRUE, var/fly_speed = 0)
 	..()
 	var/turf/T = get_turf(src)
 	if(objects_thrown_when_explode || T.arcanetampered)
