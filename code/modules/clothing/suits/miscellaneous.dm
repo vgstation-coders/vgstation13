@@ -1131,6 +1131,7 @@ var/list/tag_suits_list = list()
 	icon_state = "reticulated2"
 	item_state = "labgreen"
 	blood_overlay_type = "armor"
+	body_parts_covered = FULL_TORSO
 	allowed = list(/obj/item/weapon/tank,
 	/obj/item/weapon/gun/energy/laser/liberator)
 	starting_materials = list(MAT_WOOD = 1*CC_PER_SHEET_MISC)
