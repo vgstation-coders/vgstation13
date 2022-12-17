@@ -14,10 +14,10 @@
 /obj/item/clothing/under/chameleon/New()
 	..()
 	verbs += /obj/item/clothing/under/chameleon/proc/Change_Color
-	for(var/U in existing_typesof(/obj/item/clothing/under/color)-(/obj/item/clothing/under/color))
+	for(var/U in existing_typesof(/obj/item/clothing/under/color))
 		clothing_choices += new U
 
-	for(var/U in existing_typesof(/obj/item/clothing/under/rank)-(/obj/item/clothing/under/rank))
+	for(var/U in existing_typesof(/obj/item/clothing/under/rank))
 		clothing_choices += new U
 	return
 
@@ -70,11 +70,10 @@
 
 /obj/item/clothing/under/chameleon/all/New()
 	..()
-	var/blocked = list(/obj/item/clothing/under/chameleon, /obj/item/clothing/under/chameleon/all, /obj/item/clothing/under)
+	var/blocked = list(/obj/item/clothing/under/chameleon, /obj/item/clothing/under/chameleon/all)
 	//to prevent an infinite loop
 	for(var/U in existing_typesof(/obj/item/clothing/under)-blocked)
-		var/obj/item/clothing/under/V = new U
-		clothing_choices += V
+		clothing_choices += U
 
 /obj/item/clothing/under/chameleon/cold
 	heat_conductivity = 1000
