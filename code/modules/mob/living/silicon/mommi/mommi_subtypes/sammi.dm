@@ -30,7 +30,8 @@
 /mob/living/silicon/robot/mommi/sammi/proc/change_sammi_law(mob/user)
 	var/warning = "Yes"
 	if(user == src)
-		warning = alert(user, "This action is not allowed under normal circumstance, are you sure you want to continue reprogramming yourself?", "You sure?", "Yes", "No")
+		to_chat(user, "<span class='notice'>You may not reprogram your own laws.</span>")
+		return
 
 	if(warning == "Yes")
 		var/sammitask = reject_bad_text(input(user,"Enter a task for this SAMMI:","SAMMI Controller",""))
