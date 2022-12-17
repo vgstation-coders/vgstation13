@@ -379,7 +379,7 @@
 /obj/item/clothing/mask/gas/hecu/examine(var/mob/user)
 	..()
 	to_chat(user, "<span class='notice'>Alt-Click the mask to see the list of available words.</span>")
-	to_chat(user, "<span class='notice'>Charge: [mask_charge]/[max_charge] </span>")
+	to_chat(user, "<span class='notice'>Charge: [word_cost ? "[mask_charge]/[max_charge]" : "ENDLESS"] </span>")
 
 /obj/item/clothing/mask/gas/hecu/AltClick(var/mob/user)
 	var/message = "Known words: "
