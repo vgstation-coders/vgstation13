@@ -26,7 +26,9 @@
 	..()
 	verbs += /obj/item/clothing/shoes/syndigaloshes/verb/change_appearance_shoes
 	for(var/Type in typesof(/obj/item/clothing/shoes) - list(/obj/item/clothing/shoes, /obj/item/clothing/shoes/syndigaloshes))
-		clothing_choices += new Type
+		var/obj/item/clothing/shoes/S = new Type
+		if(S.icon_state)
+			clothing_choices += S
 	return
 
 /*	// the above 5 lines invalidate any purpose this block once had

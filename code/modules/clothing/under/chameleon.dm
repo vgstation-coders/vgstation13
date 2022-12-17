@@ -16,11 +16,13 @@
 	verbs += /obj/item/clothing/under/chameleon/proc/Change_Color
 	for(var/U in typesof(/obj/item/clothing/under/color)-(/obj/item/clothing/under/color))
 		var/obj/item/clothing/under/V = new U
-		clothing_choices += V
+		if(V.icon_state)
+			clothing_choices += V
 
 	for(var/U in typesof(/obj/item/clothing/under/rank)-(/obj/item/clothing/under/rank))
 		var/obj/item/clothing/under/V = new U
-		clothing_choices += V
+		if(V.icon_state)
+			clothing_choices += V
 	return
 
 
