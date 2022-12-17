@@ -17,6 +17,7 @@ var/anomaly_report_num = 0
 	icon_state = "xenoarch_console"
 	anchored = TRUE
 	density = TRUE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/scan_in_progress = FALSE
 	var/scan_num = 0
 	var/obj/machinery/artifact_scanpad/owned_scanner = null
@@ -28,6 +29,22 @@ var/anomaly_report_num = 0
 	..()
 	reconnect_scanner()
 	update_icon()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/anom/analyser,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module
+	)
+
+	RefreshParts()
+
+/obj/machinery/artifact_analyser/RefreshParts()
+	var/scancount = 0
+	for(var/obj/item/weapon/stock_parts/scanning_module/SP in component_parts)
+		scancount += SP.rating-1
+
+	scan_duration = initial(scan_duration) - scancount*10
 
 /obj/machinery/artifact_harvester/Destroy()
 	if (owned_scanner)

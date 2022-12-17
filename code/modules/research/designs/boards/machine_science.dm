@@ -103,6 +103,27 @@
 	id = "hyperspectral"
 	build_path = /obj/item/weapon/circuitboard/anom/hyper
 
+/datum/design/anom/analyser
+	name = "Circuit Design (Anomaly Analyzer)"
+	desc = "Allows for the construction of circuit boards used in Xenoarcheology."
+	id = "artifact"
+	req_tech = list(Tc_PROGRAMMING = 4)
+	build_path = /obj/item/weapon/circuitboard/anom/analyser
+
+/datum/design/anom/scanpad
+	name = "Circuit Design (Anomaly Scanner Pad)"
+	desc = "Allows for the construction of circuit boards used in Xenoarcheology."
+	id = "scanner"
+	req_tech = list(Tc_PROGRAMMING = 4)
+	build_path = /obj/item/weapon/circuitboard/anom/analyser/scanpad
+
+/datum/design/anom/harvester
+	name = "Circuit Design (Exotic Particle Harvester)"
+	desc = "Allows for the construction of circuit boards used in Xenoarcheology."
+	id = "harvester"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ANOMALY = 4)
+	build_path = /obj/item/weapon/circuitboard/anom/harvester
+
 /datum/design/suspensionfieldgen
 	name = "Circuit Design (Suspension Field Generator)"
 	desc = "The circuit board for a suspension field generator."
