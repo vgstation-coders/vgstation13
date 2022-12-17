@@ -443,3 +443,7 @@
 	if(slot == slot_wear_mask)
 		on_face = 0
 	..()
+
+/obj/item/clothing/mask/gas/hecu/deathsquad
+	desc = "An ancient gas mask with the letters HECU stamped on the side. Its circuitry seems to have been upgraded, permitting constant voice modulation."
+	word_cost = 0

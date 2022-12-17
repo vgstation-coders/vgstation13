@@ -592,6 +592,18 @@ var/list/science_goggles_wearers = list()
 	item_state = "syringe_kit"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/glasses/thermal/deathsquad
+	name = "Deathsquad Thermal Glasses"
+	desc = "Featuring state-of-the-art combat technology, these thermals not only permit the user to see through walls but also automatically protect the user from blinding flashes of light and are immune to EMPs."
+	vision_flags = SEE_MOBS | SEE_TURFS | SEE_OBJS
+	seedarkness = TRUE
+	see_invisible = SEE_INVISIBLE_LIVING //So the darkness overlay gets rendered
+	eyeprot = 1
+	my_dark_plane_alpha_override_value = 100
+
+/obj/item/clothing/glasses/thermal/deathsquad/emp_act(severity)
+	return
+
 /obj/item/clothing/glasses/simonglasses
 	name = "Simon's Glasses"
 	desc = "Just who the hell do you think I am?"

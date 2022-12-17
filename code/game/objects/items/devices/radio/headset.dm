@@ -238,6 +238,10 @@
 	freerange = 1
 	init_keyslot2_type = /obj/item/device/encryptionkey/deathsquad
 
+/obj/item/device/radio/headset/deathsquad/initialize()
+	. = ..()
+	set_frequency(DEATHSQUAD_COMM)
+
 /obj/item/device/radio/headset/ert
 	name = "CentCom Response Team headset"
 	desc = "The headset of the boss's boss. Channels are as follows: ':-' - Response Team :c - command, :s - security, :e - engineering, :d - mining, :q - cargo, :m - medical, :n - science."

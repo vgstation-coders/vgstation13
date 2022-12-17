@@ -17,7 +17,7 @@
 	var/commando_leader_rank = pick("Major", "Rescue Leader", "Commander")
 	var/commando_rank = pick("Corporal", "Sergeant", "Staff Sergeant", "Sergeant 1st Class", "Master Sergeant", "Sergeant Major")
 	var/commando_name = pick(last_names)
-	var/commando_leader_name = pick("Creed", "Dahl")
+	var/commando_leader_name = pick("Creed", "Dahl", "Shephard")
 
 	new_commando.gender = pick(MALE, FEMALE)
 

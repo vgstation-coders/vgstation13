@@ -34244,6 +34244,18 @@
 	},
 /turf/simulated/floor/plating,
 /area/solar/fport)
+"chd" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/machinery/camera{
+	name = "Assault Armor North";
+	network = list("CREED")
+	},
+/turf/unsimulated/floor{
+	icon_state = "dark"
+	},
+/area/centcom/specops)
 "chf" = (
 /obj/structure/cable{
 	d2 = 4;
@@ -50428,11 +50440,12 @@
 	},
 /area/centcom/striketeam)
 "doO" = (
-/obj/structure/lattice,
-/turf/space,
-/area)
+/obj/machinery/mech_bay_recharge_port,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor4"
+	},
+/area/shuttle/specops/centcom)
 "doP" = (
-/obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 4
 	},
@@ -50444,6 +50457,7 @@
 	dir = 8
 	},
 /obj/structure/window/full/reinforced,
+/obj/structure/grille/invulnerable,
 /turf/unsimulated/floor{
 	name = "plating"
 	},
@@ -50630,14 +50644,10 @@
 	},
 /area/centcom/specops)
 "dpp" = (
-/obj/machinery/camera{
-	name = "Assault Armor North";
-	network = list("CREED")
-	},
-/obj/mecha/combat/marauder/seraph,
 /obj/machinery/mech_bay_recharge_floor{
 	icon_state = "recharge_floor_dark"
 	},
+/obj/mecha/medical/odysseus/murdysseus,
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
@@ -51085,10 +51095,10 @@
 /turf/space,
 /area/centcom/specops)
 "dqr" = (
-/obj/mecha/combat/marauder,
 /obj/machinery/mech_bay_recharge_floor{
 	icon_state = "recharge_floor_dark"
 	},
+/obj/mecha/working/ripley/deathripley,
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
@@ -51428,23 +51438,19 @@
 	},
 /area/centcom/specops)
 "drd" = (
-/obj/machinery/door/airlock/external{
-	name = "Mech Bay"
+/obj/machinery/door/poddoor/admin{
+	id_tag = "Deathsquad Mecha";
+	desc = "These blast doors will only unlock if your superiors deemed it necessary for the mission.";
+	name = "Deathsquad Mecha Access"
 	},
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
 /area/centcom/specops)
 "dre" = (
-/obj/effect/decal{
-	alpha = 150;
-	icon = 'icons/logos.dmi';
-	icon_state = "death-logo";
-	pixel_x = 16;
-	pixel_y = -16
-	},
+/obj/structure/bed/chair/comfy/couch/mid/black,
 /turf/unsimulated/floor{
-	icon_state = "dark"
+	icon_state = "darkred"
 	},
 /area/centcom/specops)
 "drf" = (
@@ -51639,19 +51645,30 @@
 /turf/space,
 /area/centcom/specops)
 "drA" = (
+/obj/structure/bed/chair/comfy/couch/mid/black{
+	dir = 1
+	},
 /turf/unsimulated/floor{
-	icon_state = "darkredcorners"
+	dir = 1;
+	icon_state = "darkred"
 	},
 /area/centcom/specops)
 "drB" = (
+/obj/structure/bed/chair/comfy/couch/mid/black{
+	dir = 4
+	},
 /turf/unsimulated/floor{
+	dir = 4;
 	icon_state = "darkred"
 	},
 /area/centcom/specops)
 "drC" = (
+/obj/structure/bed/chair/comfy/couch/mid/black{
+	dir = 8
+	},
 /turf/unsimulated/floor{
 	dir = 8;
-	icon_state = "darkredcorners"
+	icon_state = "darkred"
 	},
 /area/centcom/specops)
 "drD" = (
@@ -51890,19 +51907,9 @@
 	},
 /area/centcom/specops)
 "dsc" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/structure/window/full/reinforced,
-/turf/unsimulated/floor{
-	name = "plating"
+/turf/unsimulated/wall/fakeglass{
+	dir = 1
 	},
 /area/centcom/specops)
 "dsd" = (
@@ -52112,36 +52119,28 @@
 	},
 /area)
 "dsC" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/structure/window/full/reinforced,
-/turf/unsimulated/floor{
-	name = "plating"
-	},
+/turf/unsimulated/wall/fakeglass,
 /area/centcom/specops)
 "dsD" = (
+/obj/structure/bed/chair/comfy/couch/turn/inward/black,
 /turf/unsimulated/floor{
-	dir = 4;
+	dir = 8;
 	icon_state = "darkredcorners"
 	},
 /area/centcom/specops)
 "dsE" = (
-/turf/unsimulated/floor{
-	dir = 1;
-	icon_state = "darkred"
+/obj/structure/bed/chair/comfy/couch/turn/inward/black{
+	dir = 8
 	},
-/area/centcom/specops)
-"dsF" = (
 /turf/unsimulated/floor{
 	dir = 1;
 	icon_state = "darkredcorners"
 	},
+/area/centcom/specops)
+"dsF" = (
+/obj/structure/lattice,
+/turf/space,
 /area/centcom/specops)
 "dsG" = (
 /obj/structure/table,
@@ -52306,14 +52305,13 @@
 	},
 /area/centcom/specops)
 "dsW" = (
-/obj/machinery/camera{
-	dir = 1;
-	name = "Assault Armor South";
-	network = list("CREED")
+/obj/machinery/mech_bay_recharge_floor{
+	icon_state = "recharge_floor_dark"
 	},
+/obj/mecha/combat/marauder,
 /turf/unsimulated/floor{
 	dir = 8;
-	icon_state = "dark loading"
+	icon_state = "dark-markings"
 	},
 /area/centcom/specops)
 "dsX" = (
@@ -52781,6 +52779,10 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/machinery/mech_bay_recharge_floor{
+	icon_state = "recharge_floor_dark"
+	},
+/obj/mecha/combat/marauder/seraph,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
 	},
@@ -52790,6 +52792,7 @@
 	name = "Spec. Ops. Shuttle";
 	network = list("CREED")
 	},
+/obj/machinery/computer/mech_bay_power_console,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
 	},
@@ -71871,6 +71874,14 @@
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/escape_pod2)
+"hji" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/unsimulated/floor{
+	icon_state = "dark"
+	},
+/area/centcom/specops)
 "hjl" = (
 /obj/structure/window/reinforced{
 	dir = 1
@@ -97867,6 +97878,17 @@
 "qkA" = (
 /turf/simulated/wall/r_wall,
 /area/derelict/research)
+"qkC" = (
+/obj/machinery/light,
+/obj/machinery/camera{
+	dir = 1;
+	name = "Assault Armor South";
+	network = list("CREED")
+	},
+/turf/unsimulated/floor{
+	icon_state = "dark"
+	},
+/area/centcom/specops)
 "qkN" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/catwalk,
@@ -98485,6 +98507,19 @@
 	icon_state = "floor3"
 	},
 /area/centcom/evac)
+"qvA" = (
+/obj/effect/decal{
+	alpha = 150;
+	icon = 'icons/logos.dmi';
+	icon_state = "death-logo";
+	pixel_x = 16;
+	pixel_y = -16
+	},
+/turf/unsimulated/floor{
+	icon_state = "engine";
+	name = "reinforced floor"
+	},
+/area/centcom/specops)
 "qvY" = (
 /obj/structure/grille,
 /obj/structure/cable{
@@ -102744,6 +102779,22 @@
 	icon_state = "L14"
 	},
 /area/hallway/primary/central)
+"scd" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/full/reinforced,
+/turf/unsimulated/floor{
+	name = "plating"
+	},
+/area/centcom/specops)
 "scf" = (
 /obj/machinery/power/apc{
 	dir = 1;
@@ -110906,6 +110957,15 @@
 	tag = "icon-caution (WEST)"
 	},
 /area/hallway/primary/aft)
+"uYC" = (
+/obj/structure/bed/chair/comfy/couch/turn/inward/black{
+	dir = 1
+	},
+/turf/unsimulated/floor{
+	dir = 4;
+	icon_state = "darkredcorners"
+	},
+/area/centcom/specops)
 "uYG" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
@@ -113692,6 +113752,14 @@
 	},
 /turf/simulated/floor,
 /area/crew_quarters/locker)
+"vZM" = (
+/obj/structure/bed/chair/comfy/couch/turn/inward/black{
+	dir = 4
+	},
+/turf/unsimulated/floor{
+	icon_state = "darkredcorners"
+	},
+/area/centcom/specops)
 "waa" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -313435,15 +313503,15 @@ cTl
 cTl
 cTl
 cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
+dpk
+dpk
+dpl
+dpk
+dpl
+dpk
+dpl
+dpk
+dpk
 cTl
 cTl
 cTl
@@ -313737,15 +313805,15 @@ cTl
 cTl
 cTl
 cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
+dpl
+dpM
+dpl
+dpM
+dpl
+dpM
+dpl
+dpM
+dpl
 cTl
 cTl
 cTl
@@ -314039,15 +314107,15 @@ cTl
 cTl
 cTl
 cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
+dpk
+dpN
+dpl
+dpN
+dpl
+dpN
+dpl
+dpN
+dpk
 cTl
 cTl
 cTl
@@ -314341,15 +314409,15 @@ cTl
 cTl
 cTl
 cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
+dpk
+dpN
+dpk
+dpN
+dpl
+dpN
+dpk
+dpN
+dpk
 cTl
 cTl
 cTl
@@ -314643,15 +314711,15 @@ cTl
 cTl
 cTl
 cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
+dpk
+dpN
+dpk
+dpN
+dpl
+dpN
+dpk
+dpN
+dpk
 cTl
 cTl
 cTl
@@ -314945,15 +315013,15 @@ cTl
 cTl
 cTl
 cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
-cTl
+dpk
+dpN
+dpk
+dpN
+dpl
+dpN
+dpk
+dpN
+dpk
 cTl
 cTl
 cTl
@@ -315247,15 +315315,15 @@ cTl
 cTl
 cTl
 cTl
-cTl
-cTl
-cTl
-cTl
-doO
-cTl
-cTl
-cTl
-cTl
+dpk
+dpN
+dpk
+dpN
+dpl
+dpN
+dpk
+dpN
+dpk
 cTl
 cTl
 cTl
@@ -315549,15 +315617,15 @@ cTl
 cTl
 cTl
 cTl
-cTl
-cTl
-cTl
-cTl
-doO
-cTl
-cTl
-cTl
-cTl
+dpk
+dpO
+dpk
+dpO
+dpl
+dpO
+dpk
+dpO
+dpk
 cTl
 cTl
 cTl
@@ -315852,13 +315920,13 @@ cTl
 cTl
 cTl
 dpk
+dpP
 dpk
+dqZ
 dpl
+dpP
 dpk
-dpl
-dpk
-dpl
-dpk
+dqZ
 dpk
 cTl
 cTl
@@ -316152,16 +316220,16 @@ cTl
 cTl
 cTl
 cTl
-cTl
+dsF
 dpl
-dpM
+dpP
+dpk
+dpP
 dpl
-dpM
-dpl
-dpM
-dpl
-dpM
-dpl
+dpP
+dpk
+dqZ
+dpk
 cTl
 cTl
 cTl
@@ -316456,13 +316524,13 @@ cTl
 cTl
 cTl
 dpk
-dpN
+dpP
+dpk
+dpP
 dpl
-dpN
-dpl
-dpN
-dpl
-dpN
+dpP
+dpk
+dpP
 dpk
 cTl
 cTl
@@ -316758,13 +316826,13 @@ cTl
 cTl
 cTl
 dpk
-dpN
+dpP
 dpk
-dpN
+dpP
 dpl
-dpN
+dpP
 dpk
-dpN
+dpP
 dpk
 cTl
 cTl
@@ -317058,16 +317126,16 @@ cTl
 cTl
 cTl
 cTl
-cTl
-dpk
-dpN
-dpk
-dpN
-dpl
-dpN
-dpk
-dpN
-dpk
+doq
+dpm
+dpP
+dpm
+dpP
+dpm
+dpP
+dpm
+dpP
+dpm
 cTl
 cTl
 cTl
@@ -317361,15 +317429,15 @@ cTl
 cTl
 don
 cTl
-dpk
-dpN
-dpk
-dpN
-dpl
-dpN
-dpk
-dpN
-dpk
+dpn
+dpQ
+dqq
+dpQ
+drz
+dpQ
+dqq
+dpQ
+dtl
 cTl
 cTl
 cTl
@@ -317663,15 +317731,15 @@ cTl
 cTl
 dcc
 cTl
-dpk
-dpN
-dpk
-dpN
-dpl
-dpN
-dpk
-dpN
-dpk
+dpn
+dpQ
+dqq
+dpQ
+drz
+dpQ
+dqq
+dpQ
+dtl
 cTl
 cTl
 cTl
@@ -317965,15 +318033,15 @@ cTl
 cTl
 dcc
 cTl
-dpk
-dpO
-dpk
-dpO
-dpl
-dpO
-dpk
-dpO
-dpk
+dpn
+dpQ
+dqq
+dpQ
+drz
+dpQ
+dqq
+dpQ
+dtl
 cTl
 cTl
 cTl
@@ -318267,15 +318335,15 @@ dki
 dki
 dcc
 cTl
-dpk
-dpP
-dpk
-dqZ
-dpl
-dpP
-dpk
-dqZ
-dpk
+dpn
+dpQ
+dqq
+dpQ
+drz
+dpQ
+dqq
+dpQ
+dtl
 cTl
 cTl
 cTl
@@ -318568,16 +318636,16 @@ dkj
 dkj
 dkj
 dcc
-doO
-dpl
-dpP
-dpk
-dpP
-dpl
-dpP
-dpk
-dqZ
-dpk
+cTl
+dpn
+dpQ
+dqq
+dpQ
+drz
+dpQ
+dqq
+dpQ
+dtl
 cTl
 cTl
 cTl
@@ -318871,15 +318939,15 @@ cTl
 cTl
 dcc
 cTl
-dpk
-dpP
-dpk
-dpP
-dpl
-dpP
-dpk
-dpP
-dpk
+dpn
+dpQ
+dqq
+dpQ
+drz
+dpQ
+dqq
+dpQ
+dtl
 cTl
 cTl
 cTl
@@ -319173,15 +319241,15 @@ dkI
 cTl
 dcc
 cTl
-dpk
-dpP
-dpk
-dpP
-dpl
-dpP
-dpk
-dpP
-dpk
+dpn
+dpQ
+dqq
+dpQ
+drz
+dpQ
+dqq
+dpQ
+dtl
 cTl
 cTl
 cTl
@@ -319474,16 +319542,16 @@ dmK
 dnu
 cTl
 dcc
-doq
-dpm
-dpP
-dpm
-dpP
-dpm
-dpP
-dpm
-dpP
-dpm
+cTl
+dpn
+dpR
+dqq
+dpR
+drz
+dpR
+dqq
+dpR
+dtl
 cTl
 cTl
 cTl
@@ -319776,16 +319844,16 @@ dln
 dnu
 cTl
 dcc
-cTl
-dpn
-dpQ
-dqq
-dpQ
-drz
-dpQ
-dqq
-dpQ
-dtl
+scd
+doq
+dpS
+doq
+dra
+doq
+dsa
+doq
+dsU
+doq
 cTl
 cTl
 cTl
@@ -320078,16 +320146,16 @@ dnu
 dnu
 cTl
 dcc
-cTl
-dpn
-dpQ
-dqq
-dpQ
-drz
-dpQ
-dqq
-dpQ
-dtl
+doQ
+dpo
+dpT
+dpo
+drb
+dpo
+dsb
+dpo
+dsV
+doq
 cTl
 cTl
 cTl
@@ -320380,16 +320448,16 @@ dmM
 dnu
 cTl
 dcc
-cTl
-dpn
-dpQ
-dqq
-dpQ
-drz
-dpQ
-dqq
-dpQ
-dtl
+doQ
+dsW
+dpU
+dsW
+dpU
+dsW
+dpU
+dsW
+dpU
+doq
 cTl
 cTl
 cTl
@@ -320682,16 +320750,16 @@ dmN
 dnu
 cTl
 dcc
-cTl
-dpn
-dpQ
-dqq
-dpQ
-drz
-dpQ
-dqq
-dpQ
-dtl
+doR
+dpq
+dpV
+dpq
+drc
+dpq
+drc
+dpq
+dsX
+doq
 cTl
 cTl
 cTl
@@ -320984,16 +321052,16 @@ dmO
 dnu
 cTl
 dcc
-cTl
-dpn
-dpQ
-dqq
-dpQ
-drz
-dpQ
-dqq
-dpQ
-dtl
+doS
+doS
+doS
+doS
+doS
+doS
+doS
+doS
+doS
+doq
 cTl
 cTl
 cTl
@@ -321286,16 +321354,16 @@ dmP
 dkJ
 cTl
 dcc
-cTl
-dpn
-dpQ
-dqq
-dpQ
-drz
-dpQ
-dqq
-dpQ
-dtl
+doS
+dpo
+doS
+dpo
+doS
+dpo
+doS
+dpo
+doS
+doq
 cTl
 cTl
 cTl
@@ -321588,16 +321656,16 @@ dmQ
 dnu
 cTl
 dcc
-cTl
-dpn
-dpQ
-dqq
-dpQ
-drz
-dpQ
-dqq
-dpQ
-dtl
+doS
+dpp
+doS
+dpp
+doS
+dpp
+doS
+dpp
+doS
+doq
 cTl
 cTl
 cTl
@@ -321890,16 +321958,16 @@ dmR
 dnu
 cTl
 dcc
-cTl
-dpn
-dpR
-dqq
-dpR
-drz
-dpR
-dqq
-dpR
-dtl
+chd
+dpq
+doS
+dpq
+doS
+dpq
+doS
+dpq
+qkC
+doq
 cTl
 cTl
 cTl
@@ -322192,15 +322260,15 @@ dmS
 dnu
 cTl
 dcc
-doP
-doq
-dpS
-doq
-dra
-doq
-dsa
-doq
-dsU
+doS
+doS
+doS
+doS
+doS
+doS
+doS
+doS
+doS
 doq
 cTl
 cTl
@@ -322494,15 +322562,15 @@ dmT
 dnv
 cTl
 dcc
-doQ
+doS
 dpo
-dpT
+doS
 dpo
-drb
+doS
 dpo
-dsb
+doS
 dpo
-dsV
+doS
 doq
 dtu
 dtu
@@ -322796,15 +322864,15 @@ dcc
 cTl
 cTl
 dcc
-doQ
-dpp
-dpU
+doS
 dqr
-dpU
+doS
 dqr
-dpU
+doS
 dqr
-dsW
+doS
+dqr
+doS
 doP
 cTl
 cTl
@@ -323098,15 +323166,15 @@ dkk
 dkL
 dlw
 dcc
-doR
+hji
 dpq
-dpV
+doS
 dpq
-drc
+doS
 dpq
-drc
+doS
 dpq
-dsX
+dtb
 doq
 cTl
 dtC
@@ -323714,7 +323782,7 @@ doq
 doq
 cTl
 dvl
-duk
+doO
 duk
 duk
 dvl
@@ -324009,9 +324077,9 @@ doq
 doq
 dqt
 dpU
-drA
-dpY
-dsD
+doS
+doS
+doS
 dsY
 doP
 cTl
@@ -324310,10 +324378,10 @@ doT
 dps
 doq
 dqu
-doS
+vZM
 drB
-dsd
-dsE
+uYC
+doS
 dsZ
 dqs
 doP
@@ -324613,9 +324681,9 @@ doS
 dpX
 doS
 dre
-drC
-dpV
-dsF
+dsd
+drA
+doS
 dta
 dtm
 dta
@@ -324914,9 +324982,9 @@ doS
 doS
 dpY
 doS
-doS
-doS
-doS
+dsD
+drC
+dsE
 doS
 dta
 dtm
@@ -327028,7 +327096,7 @@ doV
 dpu
 dpu
 dpu
-dpu
+qvA
 dpu
 dpu
 dpu
