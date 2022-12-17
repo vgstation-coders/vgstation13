@@ -14,15 +14,11 @@
 /obj/item/clothing/under/chameleon/New()
 	..()
 	verbs += /obj/item/clothing/under/chameleon/proc/Change_Color
-	for(var/U in typesof(/obj/item/clothing/under/color)-(/obj/item/clothing/under/color))
-		var/obj/item/clothing/under/V = new U
-		if(V.icon_state)
-			clothing_choices += V
+	for(var/U in existing_typesof(/obj/item/clothing/under/color)-(/obj/item/clothing/under/color))
+		clothing_choices += new U
 
-	for(var/U in typesof(/obj/item/clothing/under/rank)-(/obj/item/clothing/under/rank))
-		var/obj/item/clothing/under/V = new U
-		if(V.icon_state)
-			clothing_choices += V
+	for(var/U in existing_typesof(/obj/item/clothing/under/rank)-(/obj/item/clothing/under/rank))
+		clothing_choices += new U
 	return
 
 
@@ -76,7 +72,7 @@
 	..()
 	var/blocked = list(/obj/item/clothing/under/chameleon, /obj/item/clothing/under/chameleon/all, /obj/item/clothing/under)
 	//to prevent an infinite loop
-	for(var/U in typesof(/obj/item/clothing/under)-blocked)
+	for(var/U in existing_typesof(/obj/item/clothing/under)-blocked)
 		var/obj/item/clothing/under/V = new U
 		clothing_choices += V
 
