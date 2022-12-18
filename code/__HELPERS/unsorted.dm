@@ -256,8 +256,8 @@
 	var/list/sorted_output = list()
 	var/list/sortedplayers = list()
 	var/list/sortedmobs = list()
-	for(var/mob/M in mob_list) //divide every mob into either players (has a mind) or non-players (no mind). braindead/catatonic/etc. mobs included in players
-		if(isnull(M))
+	for(var/mob/M in mob_list) //Divide every mob into either players (has a mind) or non-players (no mind). Braindead/catatonic/etc. mobs included in players
+		if(isnull(M) || M.z == 0) //Ignore null entries or anything in nullspace
 			continue
 		if(M.mind || istype(M, /mob/camera))
 			sortedplayers |= M
@@ -289,8 +289,8 @@
 		sorted_output.Add(M)
 	for(var/mob/living/simple_animal/M in sortedplayers)
 		sorted_output.Add(M)
-	for(var/mob/living/M in sortedmobs) //mobs that have never been controlled by a player go last in the list. /mob/living to filter unwanted non-player non-world mobs (i.e. you'll nullspace if you observe them)
-		if(M.client)
+	for(var/mob/living/M in sortedmobs) //Mobs that have never been controlled by a player go last in the list. /mob/living to filter unwanted non-player non-world mobs (i.e. you'll nullspace if you observe them)
+		if(M.client || istype(M, /mob/living/captive_brain)) //Ignore the mob if it has a client or is a "captive brain" (borer nonsense)
 			continue
 		sorted_output.Add(M)
 		
