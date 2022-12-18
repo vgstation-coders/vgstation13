@@ -800,6 +800,7 @@
 		return
 	if(!isturf(loc)) //If it's inside a flatpack, for instance
 		return
+
 	var/turf/in_T = get_step(src, input_dir)
 	var/turf/out_T = get_step(src, output_dir)
 
