@@ -257,7 +257,7 @@
 	var/list/sortedplayers = list()
 	var/list/sortedmobs = list()
 	for(var/mob/M in mob_list) //Divide every mob into either players (has a mind) or non-players (no mind). Braindead/catatonic/etc. mobs included in players
-		if(isnull(M) || M.z == 0) //Ignore null entries or anything in nullspace
+		if(isnull(M) || (!M.loc)) //Ignore null entries or anything in nullspace
 			continue
 		if(M.mind || istype(M, /mob/camera))
 			sortedplayers |= M
