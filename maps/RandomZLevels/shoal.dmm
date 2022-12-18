@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 "aa" = (/obj/effect/fake_open_space/deep,/turf/space,/area)
 "ad" = (/obj/effect/fake_open_space/deep,/turf/unsimulated/floor/vox/plating,/area)
 "af" = (/obj/effect/fake_open_space/deep,/obj/machinery/vending/discount,/obj/machinery/light/small{dir = 8},/turf/unsimulated/floor/vox,/area/awaymission)
@@ -391,4 +392,10 @@ oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
 oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
 oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
 oGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoGoG
+=======
+"a" = ()
+
+(1,1,1) = {"
+a
+>>>>>>> Stashed changes
 "}
