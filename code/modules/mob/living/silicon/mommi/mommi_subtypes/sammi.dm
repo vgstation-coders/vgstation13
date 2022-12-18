@@ -6,7 +6,7 @@
 	icon_state = "sammi_offline"
 	maxHealth = 200
 	health = 200
-	keeper=1 // 0 = No, 1 = Yes (Disables speech and common radio.)
+	keeper=0 // 0 = No, 1 = Yes (Disables speech and common radio.)
 	prefix = "Stationary Assembler MMI"
 	canmove = 0
 	anchored = 0
