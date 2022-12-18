@@ -6,7 +6,7 @@
 	force = 10
 	fire_sound = 'sound/weapons/pulse.ogg'
 	charge_cost = 200
-	projectile_type = "/obj/item/projectile/beam/pulse/deathsquad"
+	projectile_type = "/obj/item/projectile/beam/pulse"
 	cell_type = "/obj/item/weapon/cell/super"
 	var/mode = 2
 	fire_delay = 2
@@ -30,7 +30,7 @@
 			charge_cost = 200
 			fire_sound = 'sound/weapons/pulse.ogg'
 			to_chat(user, "<span class='warning'>\The [src] is now set to DESTROY.</span>")
-			projectile_type = "/obj/item/projectile/beam/pulse/deathsquad"
+			projectile_type = "/obj/item/projectile/beam/pulse"
 
 /obj/item/weapon/gun/energy/pulse_rifle/cyborg/process_chambered()
 	if(in_chamber)

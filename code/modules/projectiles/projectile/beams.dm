@@ -793,10 +793,6 @@ var/list/beam_master = list()
 	destroy = 1
 	fire_sound = 'sound/weapons/pulse.ogg'
 
-/obj/item/projectile/beam/pulse/deathsquad/on_hit(atom/atarget, blocked)
-	target.emp_act(2)
-	..()
-
 /obj/item/projectile/beam/deathlaser
 	name = "death laser"
 	icon_state = "heavylaser"

@@ -172,12 +172,11 @@
 
 //Death squad
 /obj/item/clothing/shoes/magboots/deathsquad
-	desc = "Very expensive and advanced magnetic boots, these incorporate an extremely rare technology that essentially breaks down the extremely slippery space lube wherever the user treads, granting immunity to it."
+	desc = "Very expensive and advanced magnetic boots, used only by the elite during extravehicular activity to ensure the user remains safely attached to the vehicle."
 	name = "deathsquad magboots"
 	icon_state = "DS-magboots0"
 	base_state = "DS-magboots"
 	mag_slow = NO_SLOWDOWN
-	clothing_flags = IGNORE_LUBE //The pain is on
 
 //Syndicate
 /obj/item/clothing/shoes/magboots/syndie
