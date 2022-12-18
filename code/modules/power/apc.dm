@@ -663,21 +663,23 @@
 			..() //Sanity
 
 /obj/machinery/power/apc/exchange_parts(mob/user, obj/item/weapon/storage/bag/gadgets/part_replacer/W)
-	var/obj/item/weapon/cell/max_cell
-	for(var/obj/item/weapon/cell/component in W.contents)
-		if (!max_cell || max_cell.maxcharge < component.maxcharge)
-			max_cell = component
+	if (W.bluespace || wiresexposed || opened)
+		var/obj/item/weapon/cell/max_cell
+		for(var/obj/item/weapon/cell/component in W.contents)
+			if (!max_cell || max_cell.rating < component.rating)
+				max_cell = component
 
-	if (max_cell && max_cell.maxcharge > cell.maxcharge)
-		W.remove_from_storage(max_cell, src)
-		W.handle_item_insertion(cell, 1)
-		to_chat(user, "<span class='notice'>[cell.name] replaced with [max_cell.name].</span>")
-		cell = max_cell
-		cell_type = max_cell.maxcharge
-		max_cell.forceMove(null)
-		W.play_rped_sound()
-	else
-		to_chat(user, "<span class='notice'>No power cell of higher grade detected.</span>")
+
+		if (max_cell && max_cell.rating > cell.rating)
+			W.remove_from_storage(max_cell, src)
+			W.handle_item_insertion(cell, 1)
+			to_chat(user, "<span class='notice'>[cell.name] replaced with [max_cell.name].</span>")
+			cell = max_cell
+			cell_type = max_cell.maxcharge
+			max_cell.forceMove(null)
+			W.play_rped_sound()
+		else
+			to_chat(user, "<span class='notice'>No power cell of higher grade detected.</span>")
 
 // attack with hand - remove cell (if cover open) or interact with the APC
 
