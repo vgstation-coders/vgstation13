@@ -79,9 +79,14 @@
 			xeno_spawn += loc
 			qdel(src)
 
+		if("grue_spawn_manual")
+			grue_spawn_manual += loc
+			qdel(src)
+
 		if("endgame_exit")
 			endgame_safespawns += loc
 			qdel(src)
+
 		if("bluespacerift")
 			endgame_exits += loc
 			qdel(src)

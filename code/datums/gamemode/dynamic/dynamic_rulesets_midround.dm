@@ -874,6 +874,14 @@
 	var/list/found_vents = list()
 	var/turf/thisturf
 	var/vent_visible=0 //used to check if vent is visible by a living player
+	if(grue_spawn_manual.len) //AKA if a global list manual grue spawns exist
+		for(var/i in 1 to grue_spawn_manual.len) 
+			for(var/mob/living/M in view(7, grue_spawn_manual[i]) //If there are any active sentient mobs within range of the spawn, skip it
+				if(M && M.client)
+					continue
+				grue_spawn_spots.Add(grue_spawn_manual[i])
+		if(grue_spawn_spots.len) //If valid spawnpoints were successfully found, finish the proc
+			return
 	for(var/obj/machinery/atmospherics/unary/vent_pump/thisvent in atmos_machines)
 		thisturf=get_turf(thisvent)
 		if(!thisvent.welded && thisvent.z == map.zMainStation && thisvent.canSpawnMice==1&&thisturf.get_lumcount()<=0.1 && thisvent.network) // Check that the vent isn't welded, is on the main z-level, can spawn mice, is in the dark, and is connected to a pipe network.
