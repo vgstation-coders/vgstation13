@@ -184,6 +184,8 @@
 	standard_damage_overlay_updates()
 
 /mob/living/simple_animal/hostile/giant_spider/update_perception()
+	if(!client)
+		return
 	if(a_matrix_testing_override)	// setting to 1 lets you use spiders as a perception-testing mob
 		client.color = list(a_11,a_12,a_13,a_14,
 							a_21,a_22,a_23,a_24,

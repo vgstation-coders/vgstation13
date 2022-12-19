@@ -191,6 +191,8 @@
 	var/list/clothing = list() //If the previous corpse had clothing, it 'wears' it
 
 /mob/living/simple_animal/hostile/necro/zombie/update_perception()
+	if(!client)
+		return
 	if(dark_plane)
 		dark_plane.alphas["zombie"] = 90
 		see_in_dark = 8

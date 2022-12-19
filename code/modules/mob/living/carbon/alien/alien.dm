@@ -44,6 +44,8 @@
 	change_sight(adding = SEE_MOBS)
 
 /mob/living/carbon/alien/update_perception()
+	if(!client)
+		return
 	if(dark_plane)
 		dark_plane.alphas["alien"] = 200
 		dark_plane.colours = "#8C5E2F"
