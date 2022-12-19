@@ -762,7 +762,8 @@
 	anchored = 1
 	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
 	plane = ABOVE_HUMAN_PLANE
-
+	var/circuitpath = /obj/item/weapon/circuitboard/autoprocessor
+	
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
 
 	var/next_sound = 0
@@ -775,7 +776,13 @@
 
 /obj/machinery/autoprocessor/New()
 	. = ..()
-
+	component_parts = newlist(
+		circuitpath,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/capacitor
+	)
 	mover = new
 
 /obj/machinery/autoprocessor/Destroy()
@@ -853,6 +860,7 @@
 	desc = "Wraps and tags items."
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
+	circuitpath = /obj/item/weapon/circuitboard/autoprocessor/wrapping
 
 	var/packagewrap = 0
 	var/syndiewrap = 0
@@ -1030,6 +1038,8 @@
 	desc = "Automatically swaps clothes of people inside. Use machine with an empty hand to retrieve clothing, or with held clothing to place it inside."
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE
 	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
+	circuitpath = /obj/item/weapon/circuitboard/autoprocessor/clothing
+
 	var/list/obj/item/held_clothing = list()
 	var/strip_items = FALSE
 
@@ -1085,8 +1095,10 @@
 		visible_message("<span class='notice'>[src] beeps: [items_equipped] article\s of clothing applied successfully.</span>")
 
 /obj/machinery/autoprocessor/outfit
-	name = "autoclother"
+	name = "auto outfitter"
 	desc = "Automatically applies an outfit to people inside."
+	circuitpath = /obj/item/weapon/circuitboard/autoprocessor/outfit
+
 	var/outfit_type = /datum/outfit/assistant
 	var/datum/outfit/outfit_datum
 
@@ -1114,6 +1126,7 @@
 		visible_message("<span class='notice'>[src] beeps: [outfit_datum.outfit_name] outfit applied successfully.</span>")
 
 /obj/machinery/autoprocessor/outfit/prisoner
-	name = "prisoner clother"
+	name = "prisoner outfitter"
 	desc = "Automatically applies prisoner clothes to people inside."
+	circuitpath = /obj/item/weapon/circuitboard/autoprocessor/outfit/prisoner
 	outfit_type = /datum/outfit/special/prisoner
