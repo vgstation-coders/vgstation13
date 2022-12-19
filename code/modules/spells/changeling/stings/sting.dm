@@ -8,7 +8,6 @@
 
 	var/silent = 0      //dont show the "tiny prick!" message, takes priority if visible is also set to 1
 	var/visible = 0     //shows a visible message upon the sting
-	var/allowself = 1   //lets you target yourself
 	var/delay = 0 SECONDS
 
 /spell/changeling/sting/before_channel(mob/user)
@@ -21,7 +20,7 @@
 
 	if(!istype(L))
 		return FALSE
-	if(user == L && !allowself) 
+	if(user == L) 
 		to_chat(user, "<span class='warning'>We cannot target ourselves.</span>")
 		return FALSE
 
@@ -37,8 +36,6 @@
 		to_chat(L, "<span class='warning'>You feel a tiny prick!</span>")
 		user << 'sound/items/hypospray.ogg'
 		L << 'sound/items/hypospray.ogg'
-
-
 
 	..()
 
