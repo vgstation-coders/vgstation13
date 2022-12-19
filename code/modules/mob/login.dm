@@ -116,7 +116,7 @@
 		var/obj/location = loc
 		location.on_login(src)
 
-	if(client && client.haszoomed && !client.holder)
+	if(client && client.haszoomed)
 		client.changeView()
 		client.haszoomed = 0
 
