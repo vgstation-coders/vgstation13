@@ -56,6 +56,8 @@ var/anomaly_report_num = 0
 /obj/machinery/artifact_analyser/attack_hand(var/mob/user as mob)
 	if(..())
 		return
+	if(!isliving(user) || user.stat)
+		return
 	src.add_fingerprint(user)
 
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
