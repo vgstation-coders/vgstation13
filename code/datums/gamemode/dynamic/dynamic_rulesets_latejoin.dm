@@ -216,8 +216,8 @@
 	var/turf/thisturf
 	var/vent_visible=0 //used to check if vent is visible by a living player
 	if(grue_spawn_manual.len) //AKA if a global list manual grue spawns exist
-		for(var/i in 1 to grue_spawn_manual.len) 
-			for(var/mob/living/M in view(7, grue_spawn_manual[i]) //If there are any active sentient mobs within range of the spawn, skip it
+		for(var/i in 1 to grue_spawn_manual.len)
+			for(var/mob/living/M in view(7, grue_spawn_manual[i])) //If there are any active sentient mobs within range of the spawn, skip it
 				if(M && M.client)
 					continue
 				grue_spawn_spots.Add(grue_spawn_manual[i])
