@@ -75,7 +75,8 @@ var/list/potential_bonus_items = list(
 
 /datum/faction/vox_shoal/New()
 	..()
-	load_dungeon(/datum/map_element/dungeon/vox_shuttle)
+	if(voxstart.len == 0)	// Shoal isn't mapped in. Load the dungeon.
+		load_dungeon(/datum/map_element/dungeon/vox_shuttle)
 	vox_shuttle.initialize() //As the area isn't loaded until the above call, its docking ports aren't populated until we call this
 
 /datum/faction/vox_shoal/forgeObjectives()

@@ -297,6 +297,8 @@
 		actually_travel_to(D, broadcast, user)
 
 /datum/shuttle/proc/actually_travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
+	if(!pre_flight_checks(user, D))
+		return
 	//Handle the message
 	var/time = "as soon as possible"
 	switch(pre_flight_delay)
@@ -366,6 +368,10 @@
 
 		pre_flight()
 
+	return 1
+
+// Return 0 to abort shuttle transit
+/datum/shuttle/proc/pre_flight_checks(var/mob/user, var/obj/docking_port/D)
 	return 1
 
 /datum/shuttle/proc/pre_flight()

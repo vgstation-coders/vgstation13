@@ -61,7 +61,13 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 	.=..()
 */
 
-/datum/shuttle/vox/after_flight()
+/datum/shuttle/vox/pre_flight_checks(var/mob/user, var/obj/docking_port/D)
+	if(D == dock_home)
+		if(alert(user, "Are you sure you want to return to the shoal? This will end the raid!","Confirm","Yes","No") != "Yes")
+			return FALSE
+	return TRUE
+
+/datum/shuttle/vox/after_flight(var/mob/user)
 	.=..()
 
 	if(HOLOMAP_MARKER_SKIPJACK in holomap_markers)
@@ -111,6 +117,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 /obj/docking_port/destination/vox/station // ends the round
 	areaname = "the shoal"
 	base_turf_type = /turf/unsimulated/floor/vox
+	base_turf_override = TRUE
 
 /obj/docking_port/destination/vox/northeast_station
 	areaname = "north east solars"
