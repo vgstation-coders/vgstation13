@@ -382,6 +382,8 @@
 
 //Grue vision
 /mob/living/simple_animal/hostile/grue/update_perception()
+	if(!client)
+		return
 	if(dark_plane)
 		if (master_plane)
 			master_plane.blend_mode = BLEND_ADD
