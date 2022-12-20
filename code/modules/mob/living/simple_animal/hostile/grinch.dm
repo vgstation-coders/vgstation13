@@ -200,6 +200,7 @@
 				healths.icon_state = "health6"
 
 
+
 /mob/living/simple_animal/hostile/gremlin/grinch/canEnterVentWith()
 	var/list/allowed = ..()
 	allowed += /obj/item/weapon/storage/backpack/holding/grinch

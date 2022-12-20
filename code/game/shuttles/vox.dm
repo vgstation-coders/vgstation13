@@ -109,7 +109,8 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 //code/game/objects/structures/docking_port.dm
 
 /obj/docking_port/destination/vox/station // ends the round
-	areaname = "home base"
+	areaname = "the shoal"
+	base_turf_type = /turf/unsimulated/floor/vox
 
 /obj/docking_port/destination/vox/northeast_station
 	areaname = "north east solars"

@@ -735,11 +735,9 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Traders Den"
 	icon_state = "tradeden"
 
-<<<<<<< Updated upstream
 /area/shoal
 	name = "\improper Shoal"
 	icon_state = "tradeden"
-=======
 
 /area/shoal/station
 	name = "\improper Shoal"
@@ -747,7 +745,6 @@ var/global/list/adminbusteleportlocs = list()
 	requires_power = 0
 	dynamic_lighting = 1
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
->>>>>>> Stashed changes
 
 //PRISON
 /area/prison
