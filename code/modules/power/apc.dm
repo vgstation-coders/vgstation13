@@ -666,7 +666,7 @@
 	if (W.bluespace || wiresexposed || opened)
 		var/obj/item/weapon/cell/max_cell
 		for(var/obj/item/weapon/cell/component in W.contents)
-			if (!max_cell || max_cell.rating < component.rating)
+			if (!max_cell || (max_cell.rating < component.rating))
 				max_cell = component
 
 
