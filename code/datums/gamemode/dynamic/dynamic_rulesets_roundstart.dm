@@ -224,13 +224,14 @@
 	return ..()
 
 /datum/dynamic_ruleset/roundstart/wizard/execute()
-	var/mob/M = pick(assigned)
+	var/mob/new_player/M = pick(assigned)
 	if (M)
 		var/datum/role/wizard/newWizard = new
-		M.forceMove(pick(wizardstart))
-		if(!isjusthuman(M))
-			M = M.Humanize("Human")
-		newWizard.AssignToRole(M.mind,1)
+		var/mob/living/carbon/human/H = M.create_human(M.client.prefs)
+		H.forceMove(pick(wizardstart))
+		H.key = M.client.ckey
+		qdel(M)
+		newWizard.AssignToRole(H.mind,1)
 		roundstart_wizards += newWizard
 		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
 		if (!federation)
@@ -283,7 +284,7 @@
 
 /datum/dynamic_ruleset/roundstart/cwc/choose_candidates()
 	for(var/wizards_number = 1 to total_wizards)
-		var/mob/M = pick(candidates)
+		var/mob/new_player/M = pick(candidates)
 		assigned += M
 		candidates -= M
 	return (assigned.len > 0)
@@ -291,7 +292,7 @@
 /datum/dynamic_ruleset/roundstart/cwc/execute()
 	var/datum/faction/wizard/civilwar/wpf/WPF = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/wpf, null, 1)
 	var/datum/faction/wizard/civilwar/wpf/PFW = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
-	for(var/mob/M in assigned)
+	for(var/mob/new_player/M in assigned)
 		var/datum/role/wizard/newWizard = new
 		if (WPF.members.len < PFW.members.len)
 			WPF.HandleRecruitedRole(newWizard)
@@ -301,10 +302,11 @@
 			WPF.HandleRecruitedRole(newWizard)
 		else
 			PFW.HandleRecruitedRole(newWizard)
-		M.forceMove(pick(wizardstart))
-		if(!isjusthuman(M))
-			M = M.Humanize("Human")
-		newWizard.AssignToRole(M.mind,1)
+		var/mob/living/carbon/human/H = M.create_human(M.client.prefs)
+		H.forceMove(pick(wizardstart))
+		H.key = M.client.ckey
+		qdel(M)
+		newWizard.AssignToRole(H.mind,1)
 		newWizard.Greet(GREET_MIDROUND)
 	return 1
 
@@ -442,7 +444,7 @@ Assign your candidates in choose_candidates() instead.
 	for(var/operatives_number = 1 to operatives)
 		if(candidates.len <= 0)
 			break
-		var/mob/M = pick(candidates)
+		var/mob/new_player/M = pick(candidates)
 		assigned += M
 		candidates -= M
 	return (assigned.len > 0)
@@ -461,21 +463,22 @@ Assign your candidates in choose_candidates() instead.
 
 	var/spawnpos = 1
 	var/leader = 1
-	for(var/mob/M in assigned)
+	for(var/mob/new_player/M in assigned)
 		if(spawnpos > synd_spawn.len)
 			spawnpos = 1
-		M.forceMove(synd_spawn[spawnpos])
-		if(!ishuman(M))
-			M = M.Humanize("Human")
+		var/mob/living/carbon/human/H = M.create_human(M.client.prefs)
+		H.forceMove(synd_spawn[spawnpos])
+		H.key = M.client.ckey
+		qdel(M)
 		if(leader)
 			leader = 0
 			var/datum/role/nuclear_operative/leader/newCop = new
-			newCop.AssignToRole(M.mind, 1)
+			newCop.AssignToRole(H.mind, 1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
 		else
 			var/datum/role/nuclear_operative/newCop = new
-			newCop.AssignToRole(M.mind, 1)
+			newCop.AssignToRole(H.mind, 1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
 		spawnpos++
