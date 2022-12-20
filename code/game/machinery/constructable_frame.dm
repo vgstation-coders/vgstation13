@@ -1421,6 +1421,24 @@ to destroy them and players will be able to make replacements.
 	desc = "A circuit board used to run a machine used in xenoarcheology."
 	build_path = /obj/machinery/anomaly/hyperspectral
 
+/obj/item/weapon/circuitboard/anom/analyser
+	name = "Circuit Board (Anomaly Analyzer)"
+	desc = "A circuit board used to run a machine used in xenoarcheology."
+	build_path = /obj/machinery/artifact_analyser
+
+/obj/item/weapon/circuitboard/anom/analyser/scanpad
+	name = "Circuit Board (Anomaly Scanner Pad)"
+	desc = "A circuit board used to run a machine used in xenoarcheology."
+	build_path = /obj/machinery/artifact_scanpad
+
+/obj/item/weapon/circuitboard/anom/harvester
+	name = "Circuit Board (Exotic Particle Harvester)"
+	desc = "A circuit board used to run a machine used in xenoarcheology."
+	build_path = /obj/machinery/artifact_harvester
+	req_components = list (
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/capacitor = 2)
+
 /obj/item/weapon/circuitboard/confectionator
 	name = "circuit board (confectionator)"
 	desc = "A circuit board used to run a kitchen appliance."
