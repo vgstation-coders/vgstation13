@@ -85,7 +85,7 @@ var/list/station_holomaps = list()
 
 	floor_markings = image('icons/turf/overlays.dmi', "station_map")
 	floor_markings.dir = dir
-	floor_markings.plane = ABOVE_TURF_PLANE
+	floor_markings.plane = relative_plane(ABOVE_TURF_PLANE)
 	floor_markings.layer = DECAL_LAYER
 	update_icon()
 
