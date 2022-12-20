@@ -2,6 +2,7 @@
 #define PIXEL_MULTIPLIER WORLD_ICON_SIZE/32
 
 var/world_startup_time
+var/date_string
 
 /world
 	mob = /mob/new_player
@@ -51,7 +52,7 @@ var/auxtools_path
 		WORLD_Y_OFFSET += rand(-50,50)
 
 	// logs
-	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
+	date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
 
 	investigations[I_HREFS] = new /datum/log_controller(I_HREFS, filename="data/logs/[date_string] hrefs.htm", persist=TRUE)
 	investigations[I_ATMOS] = new /datum/log_controller(I_ATMOS, filename="data/logs/[date_string] atmos.htm", persist=TRUE)
