@@ -348,12 +348,14 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	siemens_coefficient = 0 //wooden handle
 	flags = FPRINT
+	origin_tech = Tc_SYNDICATE + "=3" + Tc_COMBAT + "=4" //it's a bomb
+	mech_flags = MECH_SCAN_ILLEGAL
 	force = 15 //moderately strong as a regular melee weapon, gets sharp when exploded
 	w_class = W_CLASS_SMALL //fits in your pocket
 	attack_verb = list("blasts", "smacks", "smashes")
 	var/exploded = FALSE
 	var/admintier = FALSE
-	var/rechargetime = 30 //1 minute between each boom
+	var/rechargetime = 30 //1 minute between each boom, only used by the admincaber
 	var/timer = 0
 
 /obj/item/weapon/caber/New()
