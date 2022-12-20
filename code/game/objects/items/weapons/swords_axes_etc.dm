@@ -7,6 +7,7 @@
  *		Energy Axe
  *		Energy Shield
  *		Bone Sword
+ *		Ullapool Caber
  */
 
 /*
@@ -361,19 +362,19 @@
 /obj/item/weapon/caber/Destroy()
 	processing_objects -= src
 	..()
-
+	
 /obj/item/weapon/caber/attack_self(mob/user)
 	cant_drop = !cant_drop
 	to_chat(user,"<span class='notice'>You [cant_drop ? "activate" : "deactivate"] the safety grip and explosive mode.</span>")
 
 /obj/item/weapon/caber/process(mob/user)
-	if(exploded)
-		timer += 1
 	if(!exploded && cant_drop)
 		attack_verb = list("blasts", "explodes")
 	if(!cant_drop)
 		attack_verb = list("smacks", "smashes")
-	if(timer == rechargetime)
+	if(admintier && exploded) //only admin tier cabers have a recharge timer
+		timer += 1
+	if(admintier && timer == rechargetime)
 		timer = 0
 		exploded = FALSE
 		visible_message(user, "<span class='notice'>The [src] vibrates as the newly assembled explosive charge is deployed!</span>")
@@ -391,12 +392,7 @@
 			else
 				playsound(user, 'sound/misc/demomankablooie.ogg', 100, 0)
 			sleep(1)
-			if(!admintier)
-				explosion(target, 0, 0, 1, whodunnit = user) //no breach, 55 damage to unarmored targets
-				user.adjustBruteLoss(35) //something something uhh fall damage, you'll break a bone or something here
-			else
-				explosion(target, 0, 1, 2, whodunnit = user)
-				user.adjustBruteLoss(5) //about 30 from the stronger explosion, 5 to equalize 
+			explosion(target, 0, 1, 2, whodunnit = user) //moderate damage on the tile with the target, small damage on the surrounding tile (about 25 brute self harm per use, with chance for bleeding).
 			exploded = TRUE
 			icon_state = "ullapoolcaberexploded"
 			sharpness = 1.3 //ragged metal edges are kinda like a serrated knife
@@ -412,5 +408,5 @@
 /obj/item/weapon/caber/admin
 	name = "Demoman's Own Ullapool Caber"
 	desc = "I'm goin' ta blast ya into thin gruel!"
-	rechargetime = 1 //good luck surviving using this shit without the advanced EOD suit
+	rechargetime = 10 SECONDS //good luck surviving using this shit without the advanced EOD suit
 	admintier = TRUE
