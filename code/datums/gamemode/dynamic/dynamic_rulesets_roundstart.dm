@@ -220,6 +220,9 @@
 	var/mob/new_player/M = pick(assigned)
 	if (M)
 		var/datum/role/wizard/newWizard = new
+		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
+		if (!federation)
+			federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
 		var/mob/living/carbon/human/H = M.create_human(M.client.prefs)
 		H.forceMove(pick(wizardstart))
 		H.key = M.client.ckey
