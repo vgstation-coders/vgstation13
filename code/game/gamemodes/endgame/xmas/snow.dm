@@ -615,6 +615,24 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	icon = 'icons/obj/flora/pinetrees.dmi'
 	icon_state = "pine_c"
 
+/obj/structure/snow_flora/tree/pine/xmas/attackby(obj/item/W,mob/user)
+	var/list/cutting = list(
+		/obj/item/weapon/hatchet,
+		/obj/item/weapon/fireaxe,
+		)
+	if(is_type_in_list(W,cutting))
+		playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
+		axe_hits++
+		user.visible_message("<span class='warning'>[user] hits \the [src] with \the [W].</span>")
+		if(axe_hits >= 5)
+			if (prob(20))
+				to_chat(user, "<span class='notice'>Something odd descends with the logs as you fell the christmas tree...</span>")
+				new/obj/item/weapon/spear/xmas(get_turf(src))
+			new/obj/item/weapon/grown/log(get_turf(src))
+			new/obj/item/weapon/grown/log(get_turf(src))
+			new/obj/item/weapon/grown/log(get_turf(src))
+			qdel(src)
+
 /obj/structure/snow_flora/tree/pine/xmas/New()
 	..()
 	icon_state = "pine_c"

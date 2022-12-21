@@ -225,6 +225,21 @@
 	force = 16
 	throwforce = 25
 
+/obj/item/weapon/spear/xmas
+	name = "The Christmas Spirit"
+	desc = "A fine spear honed from the logs of a true christmas tree. Only to be wielded by true guardians of the holiday spirit."
+	icon_state = "spear_xmas0"
+	base_state = "spear_xmas"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+
+	force = 20
+	throwforce = 25
+
+/obj/item/weapon/spear/xmas/attack(var/mob/living/M, var/mob/user)
+	if (istype(M, /mob/living/simple_animal/hostile/gremlin/grinch))
+		M.health -= 15 // bonus damage to grinches
+	..()
+
 /obj/item/binoculars
 	name = "binoculars"
 	desc = "Used for long-distance surveillance."
