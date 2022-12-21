@@ -37,6 +37,8 @@
 	var/gravity = get_gravity()
 	var/total_brute_loss = 0
 	var/obj/item/airbag/airbag = locate() in contents
+	if(mind && mind.suiciding)
+		airbag = null
 	if(gravity > 0.5 && !airbag)
 		visible_message("<span class='warning'>\The [src] falls from above and slams into \the [landing]!</span>", \
 			"<span class='danger'>You fall off and hit \the [landing]!</span>", \
@@ -62,7 +64,7 @@
 			log_debug("[src] has taken [total_brute_loss] damage after falling [zs_fallen] z levels with a gravity of [gravity] Gs!")
 		AdjustKnockdown((3 * min(zs_fallen,10)) * gravity)
 	else
-		if(airbag && gravity > 0.667)
+		if(airbag && gravity > 0.5)
 			airbag.deploy(src)
 		visible_message("\The [src] drops from above and onto \the [landing].", \
 			"You fall off and land on the \the [landing].", \
