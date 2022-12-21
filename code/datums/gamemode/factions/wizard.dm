@@ -71,4 +71,4 @@
 	unique = TRUE
 
 /datum/map_element/dungeon/wizard_den/pre_load()
-	file_path = "maps/misc/wizardden[rand(1,3)].dmm"
+	file_path = "maps/misc/wizardden[rand(1,4)].dmm"
