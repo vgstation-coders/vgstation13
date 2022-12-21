@@ -35,7 +35,7 @@
 	target.verbs |= /client/proc/getruntimelog
 	to_chat(target, "<span class='red'>You have been granted access to runtime logs. Please use them responsibly or risk being banned.</span>")
 	message_admins("[key_name_admin(src)] gave runtime log access to: [key_name(target)]")
-	log_admin("key_name(src) gave runtime log access to: [key_name(target)]")
+	log_admin("[key_name(src)] gave runtime log access to: [key_name(target)]")
 	return
 
 
@@ -125,7 +125,7 @@
 /proc/obtain_log(var/path = null, src)
 	if(path && src)
 		message_admins("[key_name_admin(src)] accessed file: [path]")
-		log_admin("key_name(src) accessed file: [path]")
+		log_admin("[key_name(src)] accessed file: [path]")
 		#ifdef RUNWARNING
 		#if DM_VERSION > 506 && DM_VERSION < 508
 			#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
