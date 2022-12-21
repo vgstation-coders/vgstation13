@@ -309,13 +309,6 @@
 	else
 		return ..()
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced = 0)
-	if(wizardstart.len == 0)
-		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
-		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
-		return 0
-	return ..()
-
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/setup_role(var/datum/role/new_role)
 	if (!created_a_faction)
 		new_role.OnPostSetup() //Each individual role to show up gets a postsetup

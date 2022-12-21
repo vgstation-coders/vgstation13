@@ -216,25 +216,18 @@
 	high_population_requirement = 40
 	var/list/roundstart_wizards = list()
 
-/datum/dynamic_ruleset/roundstart/wizard/acceptable(var/population=0,var/threat=0)
-	if(wizardstart.len == 0)
-		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
-		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
-		return 0
-	return ..()
-
 /datum/dynamic_ruleset/roundstart/wizard/execute()
 	var/mob/M = pick(assigned)
 	if (M)
 		var/datum/role/wizard/newWizard = new
+		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
+		if (!federation)
+			federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
 		M.forceMove(pick(wizardstart))
 		if(!isjusthuman(M))
 			M = M.Humanize("Human")
 		newWizard.AssignToRole(M.mind,1)
 		roundstart_wizards += newWizard
-		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
-		if (!federation)
-			federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
 		federation.HandleRecruitedRole(newWizard)//this will give the wizard their icon
 		newWizard.Greet(GREET_ROUNDSTART)
 	return 1
