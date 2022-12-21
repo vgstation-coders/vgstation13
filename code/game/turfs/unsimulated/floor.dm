@@ -2,7 +2,7 @@
 	name = "floor"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "Floor3"
-	plane = FLOOR_PLANE
+	plane = TURF_PLANE
 
 	holomap_draw_override = HOLOMAP_DRAW_PATH
 

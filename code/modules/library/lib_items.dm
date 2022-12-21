@@ -367,9 +367,10 @@
 			to_chat(user, "<span class='notice'>You slide the talisman between the pages.</span>")
 			qdel(talisman)
 			runestun = 1
-
-
-
+	else if(W.is_hot())
+		if(do_after(user, src, 2 SECONDS))
+			visible_message("<span class='warning'>[user] lights [src] on fire with \the [W]!</span>")
+			ignite()
 	else
 		..()
 

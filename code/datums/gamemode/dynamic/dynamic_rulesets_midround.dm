@@ -594,7 +594,6 @@
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
 	flags = MINOR_RULESET
-	makeBody = FALSE
 
 /datum/dynamic_ruleset/midround/from_ghosts/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)
@@ -607,6 +606,17 @@
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
 	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
 	return accepted
+
+
+/datum/dynamic_ruleset/midround/from_ghosts/grinch/generate_ruleset_body(var/mob/applicant)
+	var/mob/living/simple_animal/hostile/gremlin/grinch/G = new (pick(grinchstart))
+	G.key = applicant.key
+	return G
+
+/datum/dynamic_ruleset/midround/from_ghosts/grinch/setup_role(var/datum/role/new_role)
+	new_role.Greet(GREET_DEFAULT)
+	new_role.AnnounceObjectives()
+	new_role.OnPostSetup()
 
 //////////////////////////////////////////////
 //                                          //

@@ -487,13 +487,9 @@ var/list/icon_state_to_appearance = list()
 			if(mineral)
 				R.possessed_ore = mineral.ore
 		if(TURF_CONTAINS_BOSS)
-			switch(rand(1,2))
-				if(1)
-					var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
-					if(mineral)
-						R.possessed_ore = mineral.ore
-				if(2)
-					new /mob/living/simple_animal/hostile/asteroid/hivelord/boss(src)
+			var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
+			if(mineral)
+				R.possessed_ore = mineral.ore
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)
@@ -1230,3 +1226,109 @@ var/list/icon_state_to_appearance = list()
 	if(locate(/obj/structure/lattice) in contents)
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
+
+//Maria's Hive//
+
+/turf/unsimulated/floor/asteroid/hive
+	name = "Corrupted Asteroid"
+	icon_state = "evilfloor"
+
+/turf/unsimulated/floor/asteroid/hive/living
+	icon_state = "breathingfloor_1"
+
+/turf/unsimulated/floor/asteroid/hive/living/New()
+	icon_state = pick("breathingfloor_1","breathingfloor_2","breathingfloor_3","breathingfloor_4","breathingfloor_5","breathingfloor_6")
+	..()
+
+/turf/unsimulated/mineral/random/hive
+	name = "Corrupted deposit"
+	icon_state = "mariahive"
+	base_icon_state = "mariahive"
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+	overlay_state = "corrupted_overlay"
+
+/turf/unsimulated/mineral/random/hive/high_chance
+	mineralChance = 25
+	mineralPool = "random_high"
+
+/turf/unsimulated/mineral/random/hive/high_chance_clown
+	mineralChance = 40
+	mineralPool = "clown"
+
+/turf/unsimulated/mineral/uranium/hive
+	name = "Corrupted Uranium deposit"
+	icon_state = "mariahive_Uranium"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/uranium
+
+
+/turf/unsimulated/mineral/iron/hive
+	name = "Corrupted Iron deposit"
+	icon_state = "mariahive_Iron"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/iron
+
+
+/turf/unsimulated/mineral/diamond/hive
+	name = "Corrupted Diamond deposit"
+	icon_state = "mariahive_Diamond"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/diamond
+
+
+/turf/unsimulated/mineral/gold/hive
+	name = "Corrupted Gold deposit"
+	icon_state = "mariahive_Gold"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/gold
+
+
+/turf/unsimulated/mineral/silver/hive
+	name = "Corrupted Silver deposit"
+	icon_state = "mariahive_Silver"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/silver
+
+
+/turf/unsimulated/mineral/plasma/hive
+	name = "Corrupted Plasma deposit"
+	icon_state = "mariahive_Plasma"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/plasma
+
+
+/turf/unsimulated/mineral/clown/hive
+	name = "Corrupted Bananium deposit"
+	icon_state = "mariahive_Clown"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/clown
+
+
+/turf/unsimulated/mineral/phazon/hive
+	name = "Corrupted Phazite deposit"
+	icon_state = "mariahive_Phazon"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/phazon
+
+/turf/unsimulated/mineral/telecrystal/hive
+	name = "Corrupted Telecrystal deposit"
+	base_icon_state = "mariahive"
+	icon_state = "mariahive_Telecrystal"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/telecrystal
+
+/turf/unsimulated/mineral/hyperdense/hive
+	name = "Corrupted hyperdense rock"
+	icon_state = "mariahive"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mining_difficulty = MINE_DIFFICULTY_DENSE
+	minimum_mine_time = 99 SECONDS //GL HF

@@ -4663,7 +4663,6 @@
 	base_crumb_chance = 3
 	bitesize = 1
 
-
 /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -4681,6 +4680,18 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 
+/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_tenders
+	name = "Vox Tenders"
+	desc = "Respect has to be earned, Sweet - just like money."
+	icon_state = "vox_tendies"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 3
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_tenders/New()
+	..()
+	reagents.add_reagent(CORNOIL, 3)
+	reagents.add_reagent(TENDIES, 3)
 
 //////////////////CURRY//////////////////
 

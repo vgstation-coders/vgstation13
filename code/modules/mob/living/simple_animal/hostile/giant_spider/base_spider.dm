@@ -87,21 +87,9 @@
 	var/a_53 = 0
 	var/a_54 = 0
 
-	var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
-	var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_target
-
-/mob/living/simple_animal/hostile/giant_spider/New()
-	..()
-	overdark_planemaster = new
-	overdark_planemaster.render_target = "night vision goggles (\ref[src])"
-	overdark_target = new
-	overdark_target.render_source = "night vision goggles (\ref[src])"
-
 /mob/living/simple_animal/hostile/giant_spider/Login()
 	..()
 	//client.images += light_source_images
-	client.screen |= overdark_planemaster
-	client.screen |= overdark_target
 
 
 /mob/living/simple_animal/hostile/giant_spider/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
@@ -184,6 +172,8 @@
 	standard_damage_overlay_updates()
 
 /mob/living/simple_animal/hostile/giant_spider/update_perception()
+	if(!client)
+		return
 	if(a_matrix_testing_override)	// setting to 1 lets you use spiders as a perception-testing mob
 		client.color = list(a_11,a_12,a_13,a_14,
 							a_21,a_22,a_23,a_24,

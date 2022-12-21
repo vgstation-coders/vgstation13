@@ -267,27 +267,8 @@
 	var/obj/item/weapon/storage/bible/B = locate(/obj/item/weapon/storage/bible) in H.loc
 	if (!B)
 		return
-	if(isanycultist(H))
-		to_chat(H, "<span class='sinister'>Nar-Sie shields you from [B.my_rel.deity_name]'s wrath!</span>")
-	else
-		if(istype(H.head, /obj/item/clothing/head/fedora))
-			to_chat(H, "<span class='notice'>You feel incredibly enlightened after farting on [B]!</span>")
-			var/obj/item/clothing/head/fedora/F = H.head
-			F.tip_fedora()
-		else
-			to_chat(user, "<span class='danger'>You feel incredibly guilty for farting on [B]!</span>")
-		if(prob(80)) //20% chance to escape God's justice
-			spawn(rand(10,30))
-				if(H && B)
-					H.show_message("<span class='game say'><span class='name'>[B.my_rel.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
-					sleep(10)
+	B.divine_retribution(H, "farting on")
 
-					if(H && B)
-						to_chat(H, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
-						H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
-						log_attack("<font color='red'>[key_name(H)] was disintegrated for farting on a bible.</font>")
-						explosion(get_turf(H),-1,-1,1,5, whodunnit = H) //Tiny explosion with flash
-						H.dust(TRUE)
 //Ayy lmao
 
 
@@ -298,6 +279,13 @@
 
 /datum/emote/living/carbon/human/dab/can_run_emote(mob/user, var/status_check = TRUE)
 	var/mob/living/carbon/human/H = user
+	if(!(Holiday == APRIL_FOOLS_DAY))
+		//var/confirm = alert("Suffer for your sins.", "Confirm Suicide", "gladly", "ok")
+		//var/confirm = alert("Are you sure you want to do this? Nobody will want to revive you.", "Confirm Suicide", "Yes", "Yes")
+		//var/confirm = alert("Are you sure you want to [key]? This action will cause irreversable brain damage.", "Confirm Suicide", "Yes", "Yes")
+		var/confirm = alert("Are you sure you want to [key]? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
+		if(confirm != "Yes")
+			return FALSE
 	if (iswizard(H))
 		to_chat(user, "<span class='warning'>The Wizard Federation has banned usage of the [key].</span>")
 		return FALSE
@@ -311,6 +299,10 @@
 	else
 		to_chat(user, "<span class='warning'>You cannot [key] without both your arms.</span>")
 		return FALSE
+	if(user.reagents && user.reagents.has_reagent(PAROXETINE))
+		to_chat(user, "<span class='numb'>You're too medicated to wanna do that anymore.</span>")
+		return FALSE
+	
 	return ..()
 
 /datum/emote/living/carbon/human/dab/run_emote(mob/user, params, ignore_status = FALSE)
@@ -320,12 +312,6 @@
 	if(!istype(H))
 		return
 	if(!(Holiday == APRIL_FOOLS_DAY))
-		//var/confirm = alert("Suffer for your sins.", "Confirm Suicide", "gladly", "ok")
-		//var/confirm = alert("Are you sure you want to do this? Nobody will want to revive you.", "Confirm Suicide", "Yes", "Yes")
-		//var/confirm = alert("Are you sure you want to [key]? This action will cause irreversable brain damage.", "Confirm Suicide", "Yes", "Yes")
-		var/confirm = alert("Are you sure you want to [key]? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
-		if(confirm != "Yes")
-			return
 		if(H.mind)
 			H.mind.suiciding = 1
 		log_attack("<font color='red'>[key_name(H)] has committed suicide via dabbing.</font>")

@@ -1,0 +1,2496 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"bp" = (
+/obj/structure/lattice,
+/obj/effect/forcefield,
+/turf/space/void,
+/area)
+"bt" = (
+/obj/item/clothing/shoes/sandal/slippers,
+/obj/structure/painting/random{
+	pixel_x = -32
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"bD" = (
+/obj/machinery/door/mineral/wood,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"cW" = (
+/turf/unsimulated/wall{
+	icon_state = "cult3";
+	tag = "icon-cult3"
+	},
+/area/wizard_station)
+"du" = (
+/obj/structure/wizard/altar,
+/obj/item/weapon/kitchen/utensil/knife/large/ritual,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"dP" = (
+/obj/structure/bed/chair/comfy/black,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"ek" = (
+/obj/effect/decal/cleanable/wizrune,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"ex" = (
+/obj/structure/bed/chair/comfy/black{
+	dir = 4
+	},
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"fF" = (
+/obj/structure/bookcase,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"fM" = (
+/obj/structure/bed/chair/comfy/black{
+	dir = 4
+	},
+/mob/living/carbon/monkey{
+	name = "The Librarian";
+	real_name = "The Librarian"
+	},
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"gs" = (
+/obj/structure/bookcase,
+/obj/effect/decal/cleanable/cobweb2,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"gy" = (
+/turf/unsimulated/floor{
+	icon_state = "carpet"
+	},
+/area/wizard_station)
+"gC" = (
+/obj/structure/bed/chair/comfy/black{
+	dir = 1
+	},
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"he" = (
+/turf/unsimulated/floor{
+	icon_state = "cultdamage";
+	tag = "icon-cultdamage"
+	},
+/area)
+"hG" = (
+/turf/unsimulated/floor{
+	icon_state = "cultdamage";
+	tag = "icon-cultdamage"
+	},
+/area/wizard_station)
+"ih" = (
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area)
+"iF" = (
+/obj/structure/lattice,
+/turf/space/void,
+/area)
+"kD" = (
+/obj/effect/forcefield{
+	alpha = 0;
+	name = "invisible force wall"
+	},
+/obj/structure/lattice,
+/turf/space/void,
+/area)
+"kP" = (
+/turf/unsimulated/floor{
+	icon_state = "cultdamage4";
+	tag = "icon-cultdamage4"
+	},
+/area/wizard_station)
+"nV" = (
+/obj/structure/bookcase,
+/obj/item/weapon/tome_legacy,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"oN" = (
+/turf/unsimulated/wall{
+	icon_state = "cult2";
+	tag = "icon-cult2"
+	},
+/area/wizard_station)
+"pg" = (
+/obj/effect/decal/cleanable/cobweb,
+/turf/unsimulated/floor{
+	dir = 9;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"pi" = (
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"pv" = (
+/turf/unsimulated/wall{
+	icon_state = "cult10";
+	tag = "icon-cult10"
+	},
+/area/wizard_station)
+"pH" = (
+/obj/structure/wizard/scrying,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"qj" = (
+/obj/effect/forcefield,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area)
+"qJ" = (
+/obj/structure/grille/cult,
+/obj/effect/forcefield{
+	alpha = 0;
+	name = "invisible force wall"
+	},
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"qM" = (
+/obj/effect/decal/remains/human,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area)
+"tJ" = (
+/obj/machinery/computer/library/checkout,
+/obj/structure/table/woodentable,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"vz" = (
+/obj/structure/table/woodentable,
+/obj/item/toy/cards,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"wn" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/storage/bag/wiz_cards/full,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"wq" = (
+/mob/living/simple_animal/hostile/creature{
+	name = "Experiment 35b"
+	},
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area)
+"wt" = (
+/turf/unsimulated/floor{
+	icon_state = "cultdamage7";
+	tag = "icon-cultdamage7"
+	},
+/area)
+"wF" = (
+/obj/structure/bed/chair/comfy/black{
+	dir = 8
+	},
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"xL" = (
+/obj/structure/table/woodentable,
+/obj/structure/mirror/magic{
+	pixel_x = 28
+	},
+/turf/unsimulated/floor{
+	dir = 4;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"yc" = (
+/obj/effect/decal/cleanable/blood,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area)
+"zU" = (
+/turf/unsimulated/wall{
+	icon_state = "cult1";
+	tag = "icon-cult1"
+	},
+/area/wizard_station)
+"Bj" = (
+/obj/effect/forcefield,
+/turf/space/void,
+/area)
+"Bw" = (
+/obj/structure/closet{
+	icon_closed = "cabinet_closed";
+	icon_opened = "cabinet_open";
+	icon_state = "cabinet_closed"
+	},
+/obj/item/weapon/storage/wallet/random,
+/turf/unsimulated/floor{
+	dir = 5;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"BQ" = (
+/obj/effect/landmark/start{
+	name = "wizard"
+	},
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"Ct" = (
+/obj/structure/lattice,
+/obj/effect/forcefield{
+	alpha = 0;
+	name = "invisible force wall"
+	},
+/turf/space/void,
+/area)
+"CS" = (
+/turf/unsimulated/floor{
+	icon_state = "cultdamage3";
+	tag = "icon-cultdamage3"
+	},
+/area)
+"EU" = (
+/turf/space/void,
+/area)
+"Ic" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/storage/pill_bottle/dice,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"It" = (
+/turf/unsimulated/wall{
+	icon_state = "cult9";
+	tag = "icon-cult9"
+	},
+/area/wizard_station)
+"IQ" = (
+/turf/unsimulated/wall{
+	icon_state = "cult8";
+	tag = "icon-cult8"
+	},
+/area/wizard_station)
+"Ln" = (
+/turf/unsimulated/floor{
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"LY" = (
+/obj/effect/forcefield{
+	alpha = 0;
+	name = "invisible force wall"
+	},
+/turf/space/void,
+/area)
+"OZ" = (
+/obj/item/candle{
+	desc = "This strange candle is made of some mystery wax. It never seems to burn out.";
+	icon_state = "candle1_lit";
+	lit = 1;
+	name = "Blood Candle";
+	pixel_x = 2;
+	wax = 50000
+	},
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"PF" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/purple,
+/turf/unsimulated/floor{
+	dir = 10;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"PW" = (
+/turf/unsimulated/wall{
+	icon_state = "cult6";
+	tag = "icon-cult6"
+	},
+/area/wizard_station)
+"SU" = (
+/turf/unsimulated/wall{
+	icon_state = "cult4";
+	tag = "icon-cult4"
+	},
+/area/wizard_station)
+"Th" = (
+/turf/unsimulated/wall{
+	icon_state = "cult12";
+	tag = "icon-cult12"
+	},
+/area/wizard_station)
+"Vl" = (
+/turf/unsimulated/wall{
+	icon_state = "cult5";
+	tag = "icon-cult5"
+	},
+/area/wizard_station)
+"Vp" = (
+/obj/effect/step_trigger/teleporter/random{
+	affect_ghosts = 1;
+	name = "escapeshuttle_leave";
+	teleport_x = 25;
+	teleport_x_offset = 245;
+	teleport_y = 25;
+	teleport_y_offset = 245;
+	teleport_z = 6;
+	teleport_z_offset = 6
+	},
+/turf/space/void,
+/area)
+"Xg" = (
+/obj/machinery/vending/magivend,
+/turf/unsimulated/floor{
+	dir = 6;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"Yc" = (
+/obj/structure/cult_legacy/tome,
+/turf/unsimulated/floor{
+	icon_state = "cult";
+	tag = "icon-cult"
+	},
+/area/wizard_station)
+"YX" = (
+/turf/unsimulated/floor{
+	dir = 1;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+
+(1,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(2,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(3,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(4,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(5,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(6,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(7,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(8,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(9,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(10,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(11,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+Bj
+Bj
+Bj
+Bj
+Bj
+Bj
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(12,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+Bj
+qJ
+qJ
+qJ
+qJ
+qJ
+qJ
+Bj
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(13,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+Bj
+qJ
+qJ
+pi
+pi
+pi
+pi
+qJ
+qJ
+Bj
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(14,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+Bj
+qJ
+pi
+pi
+ex
+ex
+pi
+pi
+qJ
+bp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(15,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+Bj
+qJ
+pi
+dP
+vz
+Ic
+gC
+pi
+qJ
+bp
+bp
+bp
+Bj
+Bj
+Bj
+Bj
+Bj
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(16,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+Bj
+qJ
+pi
+pi
+pi
+wF
+pi
+pi
+qJ
+Bj
+Bj
+qj
+qj
+qj
+qj
+qj
+Bj
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(17,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+Bj
+qJ
+qJ
+pi
+pi
+pi
+pi
+qJ
+qJ
+Bj
+Bj
+qj
+qM
+he
+yc
+qj
+Bj
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(18,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+Bj
+qJ
+qJ
+wn
+pi
+pi
+qJ
+Bj
+EU
+Bj
+qj
+wt
+wq
+CS
+qj
+Bj
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(19,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+Bj
+LY
+kD
+pi
+pi
+LY
+EU
+iF
+bp
+qj
+qj
+qj
+qj
+qj
+Bj
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(20,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+iF
+kD
+pi
+pi
+kD
+iF
+Bj
+Bj
+Bj
+Bj
+Bj
+bp
+Bj
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(21,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+LY
+Ct
+iF
+kD
+pi
+pi
+LY
+LY
+kD
+iF
+ih
+EU
+iF
+iF
+iF
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(22,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+LY
+pi
+pi
+LY
+LY
+pi
+pi
+pi
+pi
+pi
+LY
+EU
+EU
+iF
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(23,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+LY
+pi
+pi
+OZ
+pi
+LY
+LY
+LY
+pi
+BQ
+pi
+hG
+LY
+LY
+kD
+LY
+PW
+cW
+cW
+cW
+Vl
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(24,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+LY
+pi
+OZ
+ek
+pi
+pi
+pi
+pi
+BQ
+BQ
+BQ
+pi
+pi
+pi
+pi
+pi
+IQ
+pg
+bt
+PF
+IQ
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(25,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+LY
+pi
+OZ
+pi
+LY
+pi
+pi
+pi
+pi
+pi
+pi
+pi
+LY
+pi
+pi
+bD
+YX
+gy
+Ln
+qJ
+Bj
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(26,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+LY
+pi
+pi
+LY
+Ct
+pi
+pi
+du
+pi
+pi
+LY
+EU
+Ct
+pi
+SU
+Bw
+xL
+Xg
+SU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(27,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+LY
+LY
+LY
+pi
+pi
+pi
+LY
+pi
+pi
+pi
+LY
+iF
+LY
+pv
+cW
+cW
+cW
+It
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(28,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+LY
+pi
+pi
+kP
+LY
+EU
+kD
+pi
+pi
+pi
+Ct
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(29,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+LY
+pi
+pi
+LY
+LY
+EU
+iF
+iF
+kD
+pi
+pi
+pi
+LY
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(30,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+iF
+Ct
+pi
+pi
+LY
+EU
+EU
+iF
+EU
+EU
+LY
+pi
+pi
+pi
+LY
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(31,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+ih
+LY
+pi
+pi
+pi
+LY
+EU
+ih
+EU
+PW
+cW
+zU
+bD
+oN
+Vl
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(32,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+LY
+pi
+pH
+pi
+pi
+Ct
+ih
+EU
+Th
+tJ
+pi
+pi
+fM
+Th
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(33,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+LY
+pi
+pi
+pi
+pi
+pi
+LY
+EU
+EU
+Th
+nV
+pi
+pi
+Yc
+Th
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(34,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+LY
+LY
+pi
+LY
+LY
+EU
+EU
+EU
+Th
+fF
+pi
+pi
+ex
+Th
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(35,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+LY
+EU
+EU
+EU
+EU
+EU
+Th
+gs
+pi
+pi
+Yc
+Th
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(36,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+pv
+zU
+qJ
+qJ
+oN
+It
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(37,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Bj
+Bj
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(38,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+Vp
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(39,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(40,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(41,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(42,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(43,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(44,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(45,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(46,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
+(47,1,1) = {"
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+EU
+"}
