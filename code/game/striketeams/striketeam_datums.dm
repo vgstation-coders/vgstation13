@@ -348,8 +348,6 @@ var/list/sent_strike_teams = list()
 	new_commando.mind.current = new_commando
 	new_commando.mind.assigned_role = "MODE"
 	new_commando.mind.special_role = "Custom Team"
-	if(!(new_commando.mind in ticker.minds))
-		ticker.minds += new_commando.mind//Adds them to regular mind list.
 
 	var/datum/faction/customsquad = find_active_faction_by_type(/datum/faction/strike_team/custom)
 	if(customsquad)

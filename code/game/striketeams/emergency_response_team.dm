@@ -66,8 +66,6 @@ var/list/response_team_members = list()
 	M.mind.current = M
 	M.mind.assigned_role = "MODE"
 	M.mind.special_role = "Response Team"
-	if(!(M.mind in ticker.minds))
-		ticker.minds += M.mind//Adds them to regular mind list.
 
 	var/datum/faction/ert = find_active_faction_by_type(/datum/faction/strike_team/ert)
 	if(ert)
