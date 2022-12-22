@@ -272,6 +272,16 @@
 						drop_from_inventory(crab)
 						crab.GoIdle(15 SECONDS)
 						visible_message("[M] pulls the headcrab off of [src]'s head!")
+			if(istype(head, /obj/item/clothing/mask/podapiida))
+				var/obj/item/clothing/mask/podapiida/poda = get_item_by_slot(slot_head)
+				if(do_after(M, src, 8 SECONDS))
+					if(head == poda)
+						drop_from_inventory(poda)
+						qdel(poda)
+						visible_message("[M] pulls \the [poda] off of [src]'s head!")
+						var/mob/living/simple_animal/hostile/podapiida/P = new /mob/living/simple_animal/hostile/podapiida(get_turf(src))
+						P.recover_start = world.time
+						P.recovering = TRUE
 			else if(health >= config.health_threshold_crit)
 				help_shake_act(M)
 				return 1

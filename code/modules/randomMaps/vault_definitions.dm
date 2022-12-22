@@ -240,3 +240,9 @@ var/list/existing_vaults = list()
 
 /datum/map_element/dungeon/research
 	file_path = "maps/randomvaults/dungeons/research.dmm"
+
+/datum/map_element/dungeon/upper_caves
+	file_path = "maps/RandomZLevels/valkorlevels/upper_caves.dmm"
+
+/datum/map_element/dungeon/deep_caves
+	file_path = "maps/RandomZLevels/valkorlevels/deep_caves.dmm"

@@ -1922,10 +1922,35 @@
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/zombify(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
+/mob/living/carbon/human/proc/zombify(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE, var/podazombie = FALSE)
 	if(crabzombie)
 		dropBorers()
 		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))
+		T.virus2 = virus_copylist(virus2)
+		T.get_clothes(src, T)
+		T.name = real_name
+		T.host = src
+		forceMove(null)
+		return T
+	if(podazombie)
+		dropBorers()
+		var/mob/living/simple_animal/hostile/necro/zombie/xeno_squid/T = new(get_turf(src), master, (retain_mind ? src : null))
+		if(isgrey(src))
+			T.icon_state = "squidzombie_grey"
+			T.icon_living = "squidzombie_grey"
+			T.icon_dead = "squidzombie_grey"
+		else if(isvox(src))
+			T.icon_state = "squidzombie_vox"
+			T.icon_living = "squidzombie_vox"
+			T.icon_dead = "squidzombie_vox"
+		else if(isinsectoid(src))
+			T.icon_state = "squidzombie_insectoid"
+			T.icon_living = "squidzombie_insectoid"
+			T.icon_dead = "squidzombie_insectoid"
+		else if(isdiona(src))
+			T.icon_state = "squidzombie_diona"
+			T.icon_living = "squidzombie_diona"
+			T.icon_dead = "squidzombie_diona"
 		T.virus2 = virus_copylist(virus2)
 		T.get_clothes(src, T)
 		T.name = real_name

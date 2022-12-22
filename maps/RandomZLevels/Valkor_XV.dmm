@@ -1,0 +1,353 @@
+"ak" = (/obj/structure/closet/secure_closet/hydroponics,/obj/item/weapon/pickaxe/shovel/spade,/obj/item/weapon/reagent_containers/glass/bucket,/obj/item/tool/wirecutters/clippers,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"aw" = (/obj/structure/table,/obj/structure/hanging_lantern{dir = 8},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"aD" = (/obj/structure/rack,/obj/item/clothing/gloves/yellow,/obj/item/clothing/gloves/yellow,/obj/item/clothing/gloves/yellow,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"aQ" = (/obj/machinery/cooking/grill,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"bb" = (/obj/structure/bed/chair/office/light{dir = 8},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"bH" = (/obj/structure/closet/walllocker/emerglocker{pixel_y = -30},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"bK" = (/obj/structure/flora/xeno_flora/blue,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"bS" = (/obj/structure/table/reinforced,/obj/item/weapon/gun/energy/gun/nuclear,/obj/machinery/light/he{dir = 4},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"bU" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/firstaid/toxin,/obj/item/weapon/storage/firstaid/toxin,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"bV" = (/obj/structure/table/reinforced,/obj/machinery/reagentgrinder,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"ce" = (/obj/structure/bed,/obj/structure/window/reinforced{dir = 4},/obj/item/weapon/bedsheet/black,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"cs" = (/turf/unsimulated/wall/grey_planet,/area/awaymission/planet_NTfob)
+"cI" = (/obj/structure/window/reinforced{dir = 1; pixel_y = 1},/obj/machinery/washing_machine,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"cJ" = (/obj/structure/rack,/obj/item/weapon/pickaxe/drill,/obj/item/weapon/pickaxe/drill,/obj/item/weapon/pickaxe/drill,/obj/item/weapon/pickaxe/drill,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"da" = (/obj/item/trash/cigbutt/cigarbutt,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"dt" = (/obj/structure/table,/obj/machinery/light/he{dir = 8},/obj/item/ashtray/plastic,/obj/item/trash/cigbutt,/obj/item/trash/cigbutt{pixel_x = -12; pixel_y = 8},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"dv" = (/obj/machinery/recharger/defibcharger/wallcharger{pixel_x = 5; pixel_y = 28},/obj/structure/bed/roller,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"dw" = (/obj/structure/bed/chair/shuttle{dir = 4},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"dO" = (/obj/structure/rack,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/obj/item/weapon/storage/bag/materials/crystal,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"dS" = (/obj/structure/closet/walllocker/defiblocker/north,/obj/item/tool/retractor{pixel_y = 6},/obj/item/tool/hemostat{pixel_y = 4},/obj/item/tool/bonesetter,/obj/structure/table/glass,/obj/item/tool/circular_saw,/obj/item/tool/scalpel,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"ed" = (/obj/structure/sink{pixel_y = 28},/obj/structure/mirror{pixel_x = 28},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"fi" = (/obj/machinery/door/airlock{name = "Kitchen"; req_access_txt = "28"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"fl" = (/obj/structure/closet/firecloset/full,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"fs" = (/obj/structure/rack,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/obj/item/weapon/pickaxe/hand,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"fK" = (/obj/structure/closet/crate/basic,/obj/structure/window/reinforced,/obj/item/weapon/storage/box/autoinjectors,/obj/item/weapon/storage/box/inflatables,/obj/item/weapon/storage/box/donkpockets,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"fT" = (/obj/structure/closet/crate/xeno_crystal,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"fX" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"fY" = (/obj/structure/grille,/obj/machinery/door/poddoor/preopen{name = "Bridge Blast Doors"; id_tag = "nt_shuttle"},/obj/structure/shuttle/window{icon_state = "17"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"gl" = (/obj/machinery/sleeper/upgraded,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"gt" = (/obj/structure/window/reinforced{dir = 1; pixel_y = 1},/obj/structure/bed,/obj/item/weapon/bedsheet/black,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"hm" = (/obj/machinery/light/he{dir = 1},/obj/structure/table/reinforced,/obj/item/weapon/storage/box/autoinjectors,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"hp" = (/obj/machinery/light/he{dir = 4},/obj/structure/table/reinforced,/obj/item/weapon/storage/bag/plants,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"hy" = (/obj/machinery/vending/hydroseeds,/obj/machinery/light/he,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"hF" = (/obj/machinery/door/airlock/silver{name = "Living Quarters"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"hG" = (/obj/structure/grille,/obj/structure/shuttle/window,/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"hT" = (/obj/machinery/computer/med_data,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"if" = (/obj/structure/table/reinforced,/obj/machinery/chem_dispenser/booze_dispenser,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"ih" = (/obj/structure/shuttle/diag_wall/smooth,/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"it" = (/obj/machinery/smartfridge,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"iw" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"iI" = (/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/obj/effect/decal/warning_stripes{icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/machinery/floodlight/on/infinite{anchored = 1},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"je" = (/obj/structure/grille,/obj/machinery/door/poddoor/preopen{name = "Bridge Blast Doors"; id_tag = "nt_shuttle"},/obj/structure/shuttle/window{icon_state = "9"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"ji" = (/obj/machinery/iv_drip,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"jt" = (/obj/structure/table/reinforced,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/obj/item/clothing/accessory/holster/handgun,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"jB" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"jI" = (/obj/machinery/door/airlock/glass_medical{id_tag = "MedbayFoyer"; name = "Medbay Entrance"; req_access_dir = 8; req_access_txt = "5"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"jP" = (/obj/structure/toilet{dir = 8},/obj/structure/curtain/open/privacy,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"jS" = (/obj/machinery/vending/discount,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"jT" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning"; tag = "icon-warning (EAST)"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"jX" = (/obj/item/tool/cautery{pixel_y = 4},/obj/item/tool/FixOVein{pixel_x = -6; pixel_y = 1},/obj/item/tool/bonegel{pixel_x = 4; pixel_y = 3},/obj/structure/table/glass,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"kb" = (/obj/item/weapon/storage/box/bodybags,/obj/item/weapon/storage/box/bodybags,/obj/item/weapon/storage/box/bodybags,/obj/item/weapon/storage/box/bodybags,/obj/structure/closet,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"ki" = (/obj/structure/table,/obj/item/weapon/storage/fancy/beer_box,/obj/structure/hanging_lantern{dir = 8},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"kr" = (/obj/structure/bed/roller,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"ks" = (/obj/structure/bed/chair{dir = 4},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"kx" = (/obj/machinery/door/airlock/silver{name = "Bathroom"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"kF" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/table/reinforced,/obj/structure/bedsheetbin,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"kH" = (/obj/structure/bed,/obj/item/weapon/bedsheet/black,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"kM" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"kX" = (/obj/machinery/vending/cola,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"la" = (/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "ammunition cabinet"; req_access = null; req_access_txt = "1"; req_one_access_txt = "1"},/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/item/ammo_storage/magazine/m380auto,/obj/machinery/recharger{pixel_x = -29},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"lo" = (/obj/structure/closet/secure_closet/guncabinet{anchored = 1; req_access = null; name = "shotgun cabinet"; req_access_txt = "1"; req_one_access_txt = "1"},/obj/item/weapon/gun/projectile/shotgun/pump/combat,/obj/item/weapon/gun/projectile/shotgun/pump/combat,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"lr" = (/obj/structure/window/reinforced,/obj/structure/closet/crate/basic,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"mf" = (/obj/structure/shuttle/diag_wall/smooth,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"ml" = (/obj/machinery/vending/wallmed1{name = "Emergency NanoMed"; pixel_y = -32},/obj/structure/table/reinforced,/obj/item/weapon/storage/firstaid/fire,/obj/item/weapon/storage/firstaid/fire,/obj/machinery/light/he,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"mo" = (/obj/machinery/botany/extractor,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"mO" = (/obj/structure/closet/crate/freezer/surgery,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"nc" = (/obj/structure/xeno_boulder,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"ne" = (/obj/structure/closet/crate/trashcart,/obj/item/trash/raisins,/obj/item/trash/mayo_packet,/obj/item/trash/mayo_packet,/obj/item/trash/fries_cone,/obj/item/trash/egg,/obj/item/trash/egg,/obj/item/trash/egg,/obj/item/trash/tray,/obj/item/weapon/storage/fancy/matchbox/empty,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"nh" = (/obj/structure/hanging_lantern{dir = 4},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"nw" = (/obj/structure/ore_box,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"ny" = (/obj/item/trash/cigbutt/ntstandardbutt,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"nB" = (/mob/living/simple_animal/hostile/quarmok,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"nG" = (/obj/item/weapon/reagent_containers/pill/skeet,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"ob" = (/obj/structure/table/glass,/obj/item/weapon/storage/firstaid/internalbleed{pixel_x = -5; pixel_y = 5},/obj/item/weapon/storage/firstaid/adv,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"oy" = (/obj/machinery/door_control{name = "Privacy Shutters"; id_tag = "pod_privacy3"; pixel_x = 28},/obj/item/weapon/reagent_containers/glass/beaker,/obj/item/weapon/reagent_containers/syringe,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"oI" = (/obj/machinery/computer/security,/obj/machinery/light/he{dir = 8},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"oW" = (/obj/effect/decal/warning_stripes{icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"pk" = (/obj/structure/closet/walllocker/defiblocker/north,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"pv" = (/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/machinery/floodlight/on/infinite{anchored = 1},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"pA" = (/obj/structure/rack,/obj/item/weapon/gun/projectile/flare,/obj/item/weapon/gun/projectile/flare,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"pV" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning"; tag = "icon-warning (EAST)"},/obj/machinery/floodlight/on/infinite{anchored = 1},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"qq" = (/obj/machinery/light/he{dir = 4},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"qx" = (/obj/machinery/portable_atmospherics/hydroponics,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"qD" = (/obj/machinery/light/he{dir = 1},/obj/structure/bed/chair,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"rb" = (/obj/structure/closet/walllocker/defiblocker{pixel_y = 30},/obj/machinery/recharger/defibcharger/wallcharger{pixel_x = 32},/obj/machinery/sleeper,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"rs" = (/obj/structure/closet/crate/trashcart,/obj/item/trash/danitos,/obj/item/trash/waffles,/obj/item/trash/candy,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"rt" = (/obj/structure/table/reinforced,/obj/machinery/computer/med_data/laptop,/obj/machinery/door_control{desc = "A remote control switch for the medbay foyer."; id_tag = "MedbayFoyer1"; name = "Medbay Doors Control"; normaldoorcontrol = 1; pixel_x = -32; pixel_y = 6; range = 3; req_access_txt = "5"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"rG" = (/obj/machinery/processor,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"rH" = (/obj/structure/window/reinforced{dir = 1; pixel_y = 1},/obj/structure/table/reinforced,/obj/structure/bedsheetbin,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"rI" = (/obj/structure/rack,/obj/item/tool/solder/pre_fueled,/obj/item/tool/solder/pre_fueled,/obj/item/tool/solder/pre_fueled,/obj/item/tool/solder/pre_fueled,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"rJ" = (/obj/machinery/computer/crew,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"rP" = (/obj/structure/xeno_crystals,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"sa" = (/obj/machinery/door/airlock/external,/obj/machinery/airshield,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"sv" = (/obj/machinery/door_control{name = "Privacy Shutters"; id_tag = "pod_privacy"; pixel_y = -28},/obj/structure/window/reinforced{dir = 8},/obj/structure/closet/crate/basic,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"sH" = (/obj/machinery/botany/editor,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"sI" = (/obj/structure/bed/roller/surgery,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"sS" = (/obj/structure/table,/obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk,/obj/item/weapon/reagent_containers/spray/plantbgone{pixel_y = 3},/obj/item/weapon/reagent_containers/spray/plantbgone{pixel_y = 3},/obj/item/weapon/reagent_containers/spray/plantbgone{pixel_y = 3},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"sY" = (/obj/structure/rack,/obj/item/device/analyzer,/obj/item/device/analyzer,/obj/item/device/analyzer,/obj/item/device/analyzer,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"te" = (/obj/structure/bed,/obj/item/weapon/bedsheet/black,/obj/structure/window/reinforced{dir = 4},/obj/effect/landmark/corpse/doctor,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"tx" = (/obj/machinery/light/he{dir = 8},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"tH" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/closet/crate/basic,/obj/item/weapon/storage/box/autoinjectors,/obj/item/weapon/storage/box/inflatables,/obj/item/weapon/storage/box/donkpockets,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"tO" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"tT" = (/obj/structure/closet/crate/freezer,/obj/item/weapon/reagent_containers/food/snacks/potatosalad,/obj/item/weapon/reagent_containers/food/snacks/potatosalad,/obj/item/weapon/reagent_containers/food/snacks/fruitsalad,/obj/item/weapon/reagent_containers/food/snacks/fruitsalad,/obj/item/weapon/reagent_containers/food/snacks/fruitsalad,/obj/item/weapon/reagent_containers/food/snacks/sandwich,/obj/item/weapon/reagent_containers/food/snacks/sandwich,/obj/item/weapon/reagent_containers/food/snacks/sandwich,/obj/item/weapon/reagent_containers/food/snacks/jellysandwich,/obj/item/weapon/reagent_containers/food/snacks/jellysandwich,/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger,/obj/item/weapon/reagent_containers/food/snacks/monkeyburger,/obj/item/weapon/reagent_containers/food/snacks/monkeyburger,/obj/item/weapon/reagent_containers/food/snacks/monkeyburger,/obj/item/weapon/reagent_containers/food/snacks/monkeyburger,/obj/item/weapon/reagent_containers/food/snacks/eggplantparm,/obj/item/weapon/reagent_containers/food/snacks/eggplantparm,/obj/item/weapon/reagent_containers/food/snacks/monkeykabob,/obj/item/weapon/reagent_containers/food/snacks/monkeykabob,/obj/item/weapon/reagent_containers/food/snacks/pastatomato,/obj/item/weapon/reagent_containers/food/snacks/pastatomato,/obj/item/weapon/reagent_containers/food/snacks/pastatomato,/obj/item/weapon/reagent_containers/food/snacks/plumphelmetbiscuit,/obj/item/weapon/reagent_containers/food/snacks/plumphelmetbiscuit,/obj/item/weapon/reagent_containers/food/snacks/plumphelmetbiscuit,/obj/item/weapon/reagent_containers/food/snacks/plumphelmetbiscuit,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"uh" = (/obj/structure/grille,/obj/machinery/door/poddoor/preopen{name = "Bridge Blast Doors"; id_tag = "nt_shuttle"},/obj/structure/shuttle/window,/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"uC" = (/obj/structure/closet/emcloset,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"uH" = (/obj/machinery/computer/shuttle_control,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"uI" = (/obj/machinery/optable,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"uK" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/closet/crate/basic,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"uQ" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "15"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"vD" = (/obj/structure/sign/botany,/turf/simulated/wall/shuttle,/area/awaymission/planet_NTfob)
+"vM" = (/obj/machinery/vending/wallmed1{name = "Emergency NanoMed"; pixel_y = -32},/obj/structure/table/reinforced,/obj/item/weapon/storage/firstaid/o2,/obj/item/weapon/storage/firstaid/o2,/obj/machinery/light/he,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"vP" = (/obj/machinery/light/he{dir = 4},/obj/structure/closet/radiation_armor{locked = 1},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"vQ" = (/obj/structure/filingcabinet/medical,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"vS" = (/obj/item/weapon/storage/bag/trash,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"vX" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning"; tag = "icon-warning (EAST)"},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"wa" = (/obj/structure/flora/xeno_flora,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"wx" = (/obj/machinery/computer/security_alerts,/obj/machinery/light/he,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"wC" = (/obj/machinery/door/airlock/glass_command{name = "Bridge"; req_access_txt = "19"},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"wE" = (/obj/structure/shuttle/window,/obj/structure/grille,/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"wH" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning"; tag = "icon-warning (EAST)"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"wV" = (/obj/machinery/shower{dir = 8},/obj/structure/curtain/open/shower/left,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"xn" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "8"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"xL" = (/obj/structure/grille,/obj/machinery/door/poddoor/shutters{name = "Privacy Shutters"; id_tag = "pod_privacy"},/obj/structure/shuttle/window{icon_state = "16"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"xS" = (/obj/structure/grille,/obj/machinery/door/poddoor/shutters{dir = 8; name = "Privacy Shutters"; id_tag = "pod_privacy"},/obj/structure/shuttle/window{icon_state = "15"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"xZ" = (/obj/structure/rack,/obj/item/weapon/storage/toolbox/mechanical,/obj/item/weapon/storage/toolbox/mechanical,/obj/item/weapon/storage/toolbox/mechanical,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"yi" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"yl" = (/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"yD" = (/obj/structure/dispenser/oxygen,/obj/structure/closet/walllocker/emerglocker{pixel_y = 30},/obj/machinery/light/he{dir = 1},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"yE" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "16"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"yL" = (/obj/structure/table/reinforced,/obj/item/weapon/paper_bin/white,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"zp" = (/obj/structure/table,/obj/item/weapon/folder/green,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"zw" = (/obj/structure/table/reinforced,/obj/item/weapon/soap/nanotrasen,/obj/item/weapon/reagent_containers/spray/cleaner,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"zz" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/firstaid/regular,/obj/item/weapon/storage/firstaid/regular,/obj/item/weapon/storage/firstaid/regular,/obj/item/weapon/storage/firstaid/regular,/obj/machinery/light/he,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"zQ" = (/obj/machinery/computer/operating,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Ad" = (/obj/machinery/light/he{dir = 4},/obj/machinery/vending/wallmed1{pixel_x = 28},/obj/machinery/sleeper,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"Aj" = (/obj/machinery/smartfridge/bloodbank/filled,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"Ap" = (/obj/structure/dispenser/oxygen,/obj/structure/closet/walllocker/emerglocker{pixel_y = 30},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Au" = (/obj/machinery/door/airlock/medical{name = "Overflow Operating Room"; req_access_txt = "45"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"AG" = (/obj/machinery/smartfridge/bloodbank/filled,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Be" = (/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"Bm" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/bedsheetbin,/obj/structure/table/reinforced,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Bw" = (/obj/machinery/chem_master,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"BC" = (/obj/structure/bed/chair{dir = 1},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"BD" = (/obj/structure/table/reinforced,/obj/item/weapon/folder/white,/obj/item/weapon/pen,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"BM" = (/obj/machinery/door/window{dir = 2; name = "Medbay Reception"; req_access_txt = "5"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Cd" = (/obj/machinery/iv_drip,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Cf" = (/obj/structure/table/reinforced,/obj/item/device/gps/mining,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"Cz" = (/obj/structure/table/reinforced,/obj/machinery/light/he{dir = 8},/obj/machinery/microwave/upgraded,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"CC" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"CF" = (/obj/structure/table/reinforced,/obj/machinery/recharger,/obj/machinery/light/he{dir = 8},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"CL" = (/obj/machinery/computer/med_data,/obj/machinery/light/he,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"CX" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'RADIOACTIVE AREA'"; icon_state = "radiation"; name = "RADIOACTIVE AREA"},/turf/unsimulated/wall/r_wall,/area/awaymission/planet_NTfob)
+"Db" = (/obj/structure/closet/secure_closet/hydroponics,/obj/item/weapon/pickaxe/shovel/spade,/obj/item/weapon/reagent_containers/glass/bucket,/obj/item/tool/wirecutters/clippers,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Dh" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "16"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"DJ" = (/obj/structure/bed/roller/surgery,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"DU" = (/obj/structure/grille,/obj/machinery/door/poddoor/shutters{name = "Privacy Shutters"; id_tag = "pod_privacy"},/obj/structure/shuttle/window{icon_state = "15"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"DX" = (/obj/structure/dispenser/oxygen,/obj/structure/closet/walllocker/emerglocker{pixel_y = -30},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Ej" = (/obj/structure/window/reinforced,/obj/structure/closet/crate/basic,/obj/machinery/door_control{name = "Privacy Shutters"; id_tag = "pod_privacy2"; pixel_x = 28},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Er" = (/obj/machinery/chem_master/condimaster,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"EF" = (/obj/machinery/vending/hydronutrients,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"ET" = (/obj/structure/table/reinforced,/obj/machinery/light/he,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"EU" = (/obj/structure/mirror{pixel_y = -32},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Fc" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/closet/crate/basic,/obj/item/clothing/under/rank/scientist,/obj/item/clothing/under/rank/scientist,/obj/item/clothing/under/rank/scientist,/obj/item/clothing/under/rank/scientist,/obj/item/clothing/under/rank/scientist,/obj/item/clothing/under/rank/scientist,/obj/item/clothing/shoes/white,/obj/item/clothing/shoes/white,/obj/item/clothing/shoes/white,/obj/item/clothing/shoes/white,/obj/item/clothing/shoes/white,/obj/item/clothing/shoes/white,/obj/item/clothing/suit/storage/labcoat/science,/obj/item/clothing/suit/storage/labcoat/science,/obj/item/clothing/suit/storage/labcoat/science,/obj/item/clothing/suit/storage/labcoat/science,/obj/item/clothing/suit/storage/labcoat/science,/obj/item/clothing/suit/storage/labcoat/science,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Fi" = (/obj/machinery/light/he,/obj/machinery/biogenerator,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Fk" = (/obj/structure/reagent_dispensers/watertank,/obj/item/weapon/reagent_containers/glass/bucket,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"FS" = (/obj/structure/table/reinforced,/obj/item/trash/plate/clean/stack,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Gg" = (/obj/structure/closet/crate/basic,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Gr" = (/obj/machinery/vending/boozeomat{req_access = null},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Gw" = (/obj/machinery/vending/snack,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"GF" = (/obj/machinery/iv_drip,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"GZ" = (/obj/structure/xeno_crystals/harvested,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"Hc" = (/obj/item/weapon/stool/bar,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Hz" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"HO" = (/obj/structure/ladder{height = 1; id = "mine_ladder_1"; name = "Mine Access"},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"HP" = (/obj/machinery/computer/crew,/obj/machinery/light/he{dir = 4},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"HQ" = (/obj/structure/grille,/obj/structure/shuttle/window,/obj/machinery/door/poddoor/shutters{dir = 2; name = "Privacy Shutters"; id_tag = "pod_privacy3"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Iv" = (/obj/structure/rack,/obj/item/ammo_storage/box/flare,/obj/item/ammo_storage/box/flare,/obj/item/ammo_storage/box/flare,/obj/structure/hanging_lantern{dir = 8},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"IA" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "15"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"ID" = (/obj/structure/hanging_lantern{dir = 8},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"IJ" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "9"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"IP" = (/obj/structure/closet/secure_closet/medical2,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"IT" = (/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"Jn" = (/obj/machinery/light/he{dir = 8},/obj/structure/table/reinforced,/obj/item/weapon/soap/nanotrasen,/obj/item/weapon/reagent_containers/spray/cleaner,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Jq" = (/obj/item/weapon/storage/box/drinkingglasses,/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/food/drinks/shaker,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"JA" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"JE" = (/obj/structure/ladder{height = 1; id = "mine_ladder_2"; name = "Mine Access"},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"JG" = (/obj/structure/table/reinforced,/obj/machinery/microwave/upgraded,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"JN" = (/obj/machinery/light/he,/obj/structure/closet/radiation_armor{locked = 1},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"JQ" = (/obj/structure/table/reinforced,/obj/item/ashtray/plastic,/obj/item/trash/cigbutt,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"JU" = (/obj/structure/closet/secure_closet/guncabinet{anchored = 1; req_access = null; req_access_txt = "1"; req_one_access_txt = "1"; name = "sidearm cabinet"},/obj/item/weapon/gun/energy/laser/pistol,/obj/item/weapon/gun/energy/laser/pistol,/obj/item/weapon/gun/energy/laser/pistol,/obj/item/weapon/gun/energy/laser/pistol,/obj/item/weapon/gun/projectile/glock,/obj/item/weapon/gun/projectile/glock,/obj/item/weapon/gun/projectile/glock,/obj/item/weapon/gun/projectile/glock,/obj/item/weapon/gun/projectile/glock,/obj/item/weapon/gun/projectile/glock,/obj/machinery/light/he{dir = 8},/obj/machinery/recharger{pixel_x = -29},/obj/item/weapon/gun/projectile/glock,/obj/item/weapon/gun/projectile/glock,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"Ki" = (/obj/structure/table/reinforced,/obj/item/weapon/lighter/zippo,/obj/item/weapon/storage/fancy/cigarettes/ntstandard,/obj/machinery/door_control{pixel_x = 28; name = "Blast Shield Control"; id_tag = "nt_shuttle"},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"Kn" = (/obj/structure/hanging_lantern,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"KF" = (/obj/machinery/bodyscanner,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"KI" = (/obj/machinery/portable_atmospherics/canister/nitrogen,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"KO" = (/obj/structure/bed/roller,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"KV" = (/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/obj/effect/decal/warning_stripes{icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"La" = (/obj/machinery/vending/dinnerware,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Lk" = (/turf/simulated/wall/shuttle,/area/awaymission/planet_NTfob)
+"Lw" = (/obj/machinery/optable,/obj/effect/landmark/corpse/miner/xeno_expedition_zombie/insectoid,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"LM" = (/obj/machinery/airshield,/obj/machinery/door/airlock{name = "Kitchen"; req_access_txt = "28"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"LT" = (/obj/machinery/light/he{dir = 1},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Mg" = (/obj/structure/curtain/open/privacy,/obj/structure/toilet{pixel_y = 8},/obj/effect/decal/cleanable/blood,/obj/effect/landmark/corpse/doctor,/obj/item/weapon/gun/projectile/russian/empty,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Mi" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "14"},/obj/machinery/door/poddoor/shutters{dir = 2; name = "Privacy Shutters"; id_tag = "pod_privacy2"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Ms" = (/obj/machinery/airshield,/obj/machinery/door/airlock/silver{name = "Medbay Pod"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"MZ" = (/obj/machinery/vending/meat,/obj/machinery/light/he,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Nl" = (/obj/structure/grille,/obj/structure/shuttle/window,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Np" = (/obj/structure/rack,/obj/item/weapon/storage/toolbox/emergency,/obj/item/weapon/storage/toolbox/emergency,/obj/item/weapon/storage/toolbox/emergency,/obj/item/weapon/storage/toolbox/emergency,/obj/item/weapon/storage/toolbox/emergency,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"Nq" = (/obj/structure/window/reinforced{dir = 8},/obj/machinery/washing_machine,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"NJ" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"NR" = (/obj/structure/bed,/obj/item/weapon/bedsheet/black,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"NS" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"NW" = (/obj/structure/shuttle/engine/heater{dir = 1},/obj/structure/window/reinforced/plasma,/turf/simulated/floor{icon_state = "old_enginewarn"; tag = "icon-old_enginewarn"},/area/awaymission/planet_NTfob)
+"Ov" = (/obj/structure/bed/chair/shuttle,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"Ox" = (/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"OC" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning"; tag = "icon-warning (EAST)"},/obj/effect/decal/warning_stripes{icon_state = "warning"; tag = "icon-warning (NORTH)"},/obj/machinery/floodlight/on/infinite{anchored = 1},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"OW" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "17"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Pf" = (/obj/structure/bed/chair/folding{dir = 4},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Pm" = (/obj/structure/table/reinforced,/obj/machinery/light/he{dir = 1},/obj/item/weapon/soap/nanotrasen,/obj/item/weapon/reagent_containers/spray/cleaner,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Pp" = (/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"Pq" = (/obj/structure/closet/crate/freezer,/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,/obj/item/weapon/reagent_containers/food/snacks/grown/potato,/obj/item/weapon/reagent_containers/food/snacks/grown/potato,/obj/item/weapon/reagent_containers/food/snacks/grown/potato,/obj/item/weapon/reagent_containers/food/snacks/grown/potato,/obj/item/weapon/reagent_containers/food/snacks/grown/potato,/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet,/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet,/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet,/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"Pr" = (/obj/structure/closet/crate/basic,/obj/item/weapon/storage/pill_bottle/skeet,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Pw" = (/obj/structure/noticeboard{pixel_y = -27},/obj/structure/kitchenspike,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"PG" = (/obj/machinery/door/airlock/medical{name = "Operating Theatre"; req_access_txt = "45"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"PN" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"PQ" = (/obj/structure/bed/chair{dir = 8},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"PZ" = (/obj/structure/hanging_lantern{dir = 4},/obj/structure/closet/crate/xeno_crystal,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"Ql" = (/obj/structure/table,/obj/machinery/light/he{dir = 1},/obj/machinery/reagentgrinder,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Qr" = (/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"Qw" = (/obj/structure/closet/radiation_armor{locked = 1},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"Qy" = (/obj/machinery/door/airlock/glass{name = "Hydroponics"; req_one_access_txt = "25;28;35"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"QC" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"QK" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "17"},/obj/machinery/door/poddoor/shutters{dir = 2; name = "Privacy Shutters"; id_tag = "pod_privacy2"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"QW" = (/obj/machinery/airshield,/obj/machinery/door/airlock/silver{name = "Dining Pod"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Rj" = (/obj/structure/table/reinforced,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Rq" = (/obj/structure/bed/chair/shuttle{dir = 8},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"Rr" = (/obj/machinery/door/airlock/silver{name = "Dining Pod"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"RC" = (/obj/structure/sink{pixel_y = 28},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"RQ" = (/obj/machinery/light/he,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Sa" = (/obj/structure/rack,/obj/item/stack/sheet/metal/bigstack,/obj/item/stack/sheet/metal/bigstack,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"Sm" = (/obj/structure/table,/obj/machinery/light/he{dir = 8},/obj/item/ashtray/plastic,/obj/item/trash/cigbutt{pixel_x = -1; pixel_y = 15},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Sn" = (/obj/machinery/airshield,/obj/machinery/door/airlock/glass{name = "Hydroponics Pod"; req_one_access_txt = "25;28;35"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Ss" = (/obj/structure/bed/chair/folding{dir = 4},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"ST" = (/obj/structure/closet/secure_closet/freezer{name = "secure freezer"},/obj/item/weapon/reagent_containers/food/drinks/flour,/obj/item/weapon/reagent_containers/food/drinks/flour,/obj/item/weapon/reagent_containers/food/drinks/flour,/obj/item/weapon/reagent_containers/food/drinks/milk,/obj/item/weapon/reagent_containers/food/drinks/milk,/obj/item/weapon/reagent_containers/food/drinks/milk,/obj/item/weapon/reagent_containers/food/drinks/milk,/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey,/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey,/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey,/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey,/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey,/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey,/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey,/obj/item/weapon/storage/fancy/egg_box,/obj/item/weapon/storage/fancy/egg_box,/obj/item/weapon/kitchen/utensil/knife/large/butch,/obj/item/weapon/reagent_containers/food/condiment/enzyme,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"SV" = (/obj/structure/rack,/obj/item/stack/sheet/glass/glass/bigstack,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"To" = (/obj/structure/curtain/open/privacy,/obj/structure/toilet{pixel_y = 8},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"TF" = (/obj/machinery/light/he{dir = 8},/obj/structure/closet/radiation_armor{locked = 1},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"TL" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/closet/crate/basic,/obj/item/clothing/under/rank/medical,/obj/item/clothing/under/rank/medical,/obj/item/clothing/shoes/white,/obj/item/clothing/shoes/white,/obj/item/clothing/suit/storage/labcoat,/obj/item/clothing/suit/storage/labcoat,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"TO" = (/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"Ue" = (/obj/item/weapon/storage/box/lethalshells,/obj/item/weapon/storage/box/lethalshells,/obj/item/weapon/storage/box/lethalshells,/obj/item/weapon/storage/box/lethalshells,/obj/structure/closet/secure_closet/guncabinet{anchored = 1; name = "ammunition cabinet"; req_access = null; req_access_txt = "1"; req_one_access_txt = "1"},/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"Ug" = (/obj/structure/grille,/obj/machinery/door/poddoor/preopen{name = "Bridge Blast Doors"; id_tag = "nt_shuttle"},/obj/structure/shuttle/window{icon_state = "14"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"Ut" = (/obj/structure/sink{dir = 4; pixel_x = 11},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"UM" = (/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/turf/simulated/floor/plating/grey_planet{icon_state = "asphalt"},/area/awaymission/planet_NTfob)
+"UP" = (/obj/structure/rack,/obj/item/weapon/storage/toolbox/electrical,/obj/item/weapon/storage/toolbox/electrical,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"Vl" = (/obj/structure/sign/xeno_warning_mining,/turf/unsimulated/wall/r_wall,/area/awaymission/planet_NTfob)
+"Vw" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Vz" = (/obj/structure/bed,/obj/item/weapon/bedsheet/black,/obj/machinery/light/he,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"VA" = (/obj/structure/rack,/obj/item/stack/sheet/wood/bigstack,/obj/item/stack/sheet/wood/bigstack,/obj/item/stack/sheet/wood/bigstack,/obj/item/stack/sheet/wood/bigstack,/obj/item/clothing/gloves/black,/obj/item/clothing/gloves/black,/obj/item/clothing/gloves/black,/obj/item/clothing/gloves/black,/obj/item/clothing/gloves/black,/obj/item/clothing/gloves/black,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"VE" = (/obj/machinery/vending/groans,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"VK" = (/obj/effect/decal/warning_stripes{dir = 4; icon_state = "warning"; tag = "icon-warning (EAST)"},/obj/effect/decal/warning_stripes{icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"VS" = (/obj/structure/rack,/obj/item/weapon/storage/belt/utility/complete,/obj/item/weapon/storage/belt/utility/complete,/obj/item/weapon/storage/belt/utility/complete,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"Wo" = (/obj/structure/closet/crate/basic,/obj/structure/window/reinforced,/obj/item/clothing/under/rank/miner,/obj/item/clothing/under/rank/miner,/obj/item/clothing/under/rank/miner,/obj/item/clothing/under/rank/miner,/obj/item/clothing/under/rank/miner,/obj/item/clothing/under/rank/miner,/obj/item/clothing/shoes/workboots,/obj/item/clothing/shoes/workboots,/obj/item/clothing/shoes/workboots,/obj/item/clothing/shoes/workboots,/obj/item/clothing/shoes/workboots,/obj/item/clothing/shoes/workboots,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Wu" = (/obj/machinery/airshield,/obj/machinery/door/airlock/silver{name = "Habitation Pod"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"WA" = (/obj/machinery/vending/cigarette,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"WQ" = (/obj/machinery/light/he{dir = 4},/obj/item/weapon/storage/pill_bottle,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"WV" = (/obj/structure/sign/greencross,/turf/simulated/wall/shuttle,/area/awaymission/planet_NTfob)
+"WY" = (/obj/structure/sink{dir = 4; pixel_x = 11},/obj/structure/mirror{pixel_x = 28},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Xf" = (/obj/structure/window/barricade/full,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"Xh" = (/obj/machinery/light/he,/obj/structure/mopbucket,/obj/item/weapon/mop,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Xk" = (/obj/machinery/gateway/away,/obj/effect/decal/warning_stripes{icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor/engine,/area/awaymission/planet_NTfob)
+"XE" = (/obj/structure/table,/obj/item/tool/wrench,/obj/item/tool/screwdriver,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"XS" = (/obj/structure/extinguisher_cabinet{pixel_y = 30},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"Ya" = (/obj/structure/closet/crate/freezer,/obj/item/weapon/storage/firstaid/adv,/obj/item/weapon/storage/firstaid/regular,/obj/item/weapon/storage/firstaid/o2,/obj/item/weapon/storage/firstaid/toxin,/obj/item/weapon/storage/firstaid/fire,/obj/machinery/light/he{dir = 1},/obj/item/stack/medical/splint,/obj/item/stack/medical/splint,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/awaymission/planet_NTfob)
+"Yb" = (/obj/structure/rack,/obj/item/weapon/storage/fancy/flares,/obj/item/weapon/storage/fancy/flares,/obj/item/weapon/storage/fancy/flares,/obj/item/weapon/storage/fancy/flares,/obj/item/device/flashlight,/obj/item/device/flashlight,/obj/item/device/flashlight,/obj/item/device/flashlight,/obj/item/device/flashlight,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"Yl" = (/obj/machinery/door/airlock/hatch,/turf/simulated/floor/plating/grey_planet,/area/awaymission/planet_NTfob)
+"Yn" = (/obj/machinery/light/he{dir = 4},/obj/machinery/vending/snack,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Yt" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "16"},/obj/machinery/door/poddoor/shutters{dir = 8; name = "Privacy Shutters"; id_tag = "pod_privacy"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"YN" = (/obj/machinery/bioprinter,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Zb" = (/obj/structure/curtain/open/shower/right,/obj/machinery/shower{dir = 4},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Zf" = (/obj/machinery/vending/medical,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Zo" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "14"},/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Zs" = (/obj/structure/table,/obj/item/weapon/paper_bin/green,/obj/item/weapon/pen,/turf/simulated/floor/plating,/area/awaymission/planet_NTfob)
+"Zx" = (/turf/unsimulated/wall/r_wall,/area/awaymission/planet_NTfob)
+"ZH" = (/obj/structure/closet/emcloset/vox,/turf/unsimulated/floor/grey_sand,/area/awaymission/planet_NTfob)
+"ZW" = (/turf/unsimulated/wall/grey_planet,/area/awaymission/deep_caves)
+
+(1,1,1) = {"
+ZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZW
+ZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZW
+ZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZW
+ZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZW
+ZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZW
+ZWZWZWZWZWZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZWZWZWZWZWZW
+ZWZWZWZWZWZxrsnevSJAylylylylylylJAylylylylylylJAylylylylylylJAylylylylylylJAylylylylylylJAylylylylJAylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxSsylylpvjBjBjBjBjBjBjBjBjBjBjBjBjBpVylylyiLkMiQKLkLkLkLkLkLkLkfXylylylylylyiLkLkLkLkLkLkfXylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxkiylylUMQrQrQrQrQrPNPNPNQrQrQrQrQrvXylylLkNRNqtHNRLkZbRCRCToToLkylylylylylLkNRLTuKkHLTNRLkylnhZxZWZWZWZWZWZW
+ZWZWZWZWZWZxSsdaylUMQrQrQrQrkMNWNWNWiwQrQrQrQrvXylylLkOxOxOxOxLkJnOxEUOxqqLkylylylylylYtrHOxOxOxOxcIxLylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylylUMQrQrQrkMLktONJwHLkiwQrQrQrvXylylLkgtOxOxgtLkLkkxLkLkLkLkylylylylylxSWoOxOxOxOxfKDUylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylylUMQrQrkMLkBePpTOjTYaLkiwQrQrvXylylLklrOxOxEjLkOxOxOxLTGwLkylylylylylLkVzOxsvkHOxVzLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxIDylylUMQrQrLkjtITKVXkVKITrbLkQrQrvXylylLkOxOxOxOxhFOxOxOxOxVELkylylylylylLkLkhFLkLkLkLkLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxsYylylUMQrkMLklaITITITITITjiAjiwQrvXylylLkNRkFFcNRLkksRjPQOxOxLkylylylylylLkqDOxOxLkPmwVLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxrIylylUMkMLkLkJUITITITITITAdLkLkiwvXylylmfLkMiQKLkLkLkNlLkWuLkCCylylylylylNlJQOxOxRrOxWYLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxVSylylUMDhApOxITITITITITITsIhGyDhGvXylylylylylylylylylylJAylJAylylylylylnhLkBCOxOxLkOxWYLkylnhZxZWZWZWZWZWZW
+ZWZWZWZWZWZxnwylylUMIADXOxITITITITITITITsabHsavXylylylylylylylylylylylylylylylylylylylWuOxOxqqLkOxjPLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxloylylUMihLkLkTFITQwITQwITvPLkLkNSvXylylylylylylylylylylylylylylylylylylnhLkOxkXWALkXhjPLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxUeylylUMQrihLkQwITQwITQwITQwLkNSQrvXylylylylylylylylylylylylylylylylylylylmfLkLkLkLkLkLkCCylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxIDylylUMQrQrLkQwITJNITJNITQwLkQrQrvXylylyiLkNlLkLkLkNlLkLkLkLkfXylylylylylylylylylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxHzylylUMQrQrLkLkwELkwCLkwELkLkQrQrvXylnhLkVwRjPQLTVwRjPQLTHcFSyEylylylylylylylylylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxNpylylUMQrQrLkoIRqITITXSdwHPLkQrQrvXylylLkVwRjPQOxVwRjPQOxHcRjxnylylylylylyiLkNlLkLkNlLkfXylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxUPylylUMQrQrihLkwxITITITCLLkNSQrQrvXylylQWOxOxOxOxOxOxOxOxHcJQuQylylylylnhvDLTqxqxqxqxFkLkylnhZxZWZWZWZWZWZW
+ZWZWZWZWZWZxxZylylUMQrQrQrihLkCfOvKiLkNSQrQrQrvXylylLkOxOxOxOxVwRjPQOxOxOxLkylylylylylSnOxOxOxOxOxUtLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxflylylUMQrQrQrQruhCFuHbSuhQrQrQrQrvXylnhLkRQOxOxOxVwETPQOxjSMZLkylylylylnhvDOxqxqxqxqxBwLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxZHylylUMQrQrQrQrihUgjefYNSQrQrQrQrvXylylLkLkQCRjQCLkLkLkfiLkLkLkylylylylylitOxOxOxOxOxEFLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxIDylyliIoWoWoWoWoWoWoWoWoWoWoWoWoWOCylylLktTOxOxOxLaGrSTOxOxErLkylylylylPqLkFiOxXEzpOxhyLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylylylylylylylylylylylylylylylylylylylLkCzOxOxOxOxOxOxOxOxhpLkylylylylylLkLkQyLkLkLkLkLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylylylylylylylylylylylylylylylylylylylLkJGOxPwJqrGaQifRQOxbVLkylylylylylLkDbOxmosHsSQlLkylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxuCuCHzKnylKnSaSVaDKnylylylylylylylylylylmfLkLkLkLkZoIJOWLkLMLkCCylylylylylLkakOxOxOxPfZsLkylnhZxZWZWZWZWZWZW
+ZWZWZWZWZWZxZxZxZxCXYlCXZxZxZxZxcsKIylylylylylylylylylylylylylylylylJAylJAylylylylylylmfLkLkZoOWLkLkCCylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxdOylylJAylJAylylVAZxcscsylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxYbylylylylylylylfsZxcscscsylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxpAylXfylylylXfylcJZxcscsIDylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxIvylylylylylylylPZZxcscsylylylylylKnylKnylylylylylylylylylylylylylylylylylylylylylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxcsylylylylylylylfTZxcsylylylylyiLkWVMsWVLkLkLkLkLkLkLkLkLkLkLkLkLkLkLkLkLkLkLkfXylylylylylylcsZxZWZWZWZWZWZW
+ZWZWZWZWZWZxcscsylylylylylylcsZxcsylylylylLkVwOxOxqqLkrtpkvQLkzQdSobIPLkIPobdSzQLkMgToRCedLkylylylylylnhcsZxZWZWZWZWZWZW
+ZWZWZWZWZWZxcsylXfylylylXfylcsZxcsylylylylLkVwOxOxOxBDbbOxhTLkLwOxOxjXLkjXOxOxuILktxOxOxqqLkylylylylylcscsZxZWZWZWZWZWZW
+ZWZWZWZWZWZxcsylylylylylylylylZxcscsylylylLkSmOxOxOxyLbbOxrJLkAGCdOxYNLkYNOxCdAGLkZbOxOxzwLkylylylylcscscsZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylylylylylylylylZxcscsylylylyEVwOxOxYnLkNlBMNlLkLkLkPGLkLkLkAuLkLkLkLkLkkxLkLkylylylylylylcsZxZWZWZWZWZWZW
+ZWZWZWZWZWZxawylylylylylylylnhZxcscsIDylyluQVwOxOxWALkDJOxOxdvdvhmOxkrKOkrOxGFCdLkTLBmOxnGLkylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxSsylXfylylylXfcsylZxcscsylylylLkdtOxOxOxjIOxOxOxOxOxOxOxOxOxOxOxOxOxhFOxOxOxWQLkylylylylylylnhZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylylylylylylylcsZxcscsylylylLkVwOxOxOxjIOxOxOxOxOxOxOxOxOxOxOxOxOxLktxOxnGoyLkylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylylylylylylylcsZxcscsylylylLkVwOxOxqqLkZfzzbUmOOxKFmlKFOxglvMglkbLkGgcePrteLkylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxncylylylylylylnycsZxcsylylylylmfLkZoOWLkLkLkLkLkLkLkLkLkLkLkLkLkLkLkLkLkHQLkHQCCylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxncncXfylylylXfylcsZxylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylylylylylylylylZxcsIDylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylylnhZxZWZWZWZWZWZW
+ZWZWZWZWZWZxIDylylylylylylylnhZxcscsylylylylylylylylylylKnylylylylylylylylylylylylylylylylylylylylylylylcsZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylylylylylncylylZxcscscscsylKnylylcscscscscscsylylylylylKnylcsylylylylKnylylylylylylKnylcscsZxZWZWZWZWZWZW
+ZWZWZWZWZWZxcsylXfylylylXfylylZxcscscscscscscscscscscscscscscsylcscscscscscscsylcscscscsylylcscscscscscscsZxZWZWZWZWZWZW
+ZWZWZWZWZWZxcsylylylylncylylylZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylcsylylncGZylylylcscscsJAylncncylylylJAbKylylylylylJAylylylylylylJAylylylylylJAylcscsncncylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylncylylylylylylbKcsXfylylylXfylylylXfylylylXfylylylXfylylylXfylncylXfylylylXfylylylylylVlZxZxZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylylylylylylylylylylylylylylylylylylylylbKylylylylylylylylylylcsncncylylylylylylylylylylylcsZxZWZWZWZWZWZW
+ZWZWZWZWZWZxIDylylylylylylylylcsylylylylylylnBylylylylylylbKylylylylylylylylylcsncGZylylylylylylylylylJEnhZxZWZWZWZWZWZW
+ZWZWZWZWZWZxbKylVlylylylVlylylcsylylylylylylylylylylylylylylylylylncylylylylylylylylylylylylnccsylylylylylZxZWZWZWZWZWZW
+ZWZWZWZWZWZxylylZxylHOylZxylylncXfylylwaXfylwaylXfylylylXfylylylXfylylylXfylylwaXfylylylXfylylylnccsVlZxZxZxZWZWZWZWZWZW
+ZWZWZWZWZWZxGZbKZxylKnylZxylnccsKnylylylylwaylKnylcscscsylylKnylylylylylylKnylylylylylylKnylylylylncylrPcsZxZWZWZWZWZWZW
+ZWZWZWZWZWZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZxZWZWZWZWZWZW
+ZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZW
+ZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZW
+ZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZW
+ZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZW
+ZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZW
+ZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZWZW
+"}

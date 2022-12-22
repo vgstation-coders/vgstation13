@@ -712,6 +712,138 @@
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/say(message, bubble_type)
 	return ..(reverse_text(message))
 
+//////////////////////////////
+// SQUID ZOMBIES
+//////////////////////////////
+// A distant cousin of headcrab zombies, made when a podapiida attaches itself to the head of a sentient creature
+
+///////////////// CLIENT SQUID ZOMBIE ////////////////////
+// Squid zombie with a client.
+/mob/living/simple_animal/hostile/necro/zombie/xeno_squid
+	icon_state = "squidzombie_human"
+	icon_living = "squidzombie_human"
+	desc = "What is that attached to their head?"
+	speak_emote = list("babbles", "gibbers")
+	can_evolve = FALSE
+	canRegenerate = 0
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART
+	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
+	var/obj/item/clothing/mask/podapiida/poda //The squid controlling it.
+
+	faction = "podapiida" // We're not a member of the necro faction, because we're not exactly dead
+	acidimmune = 1 // To keep them from getting owned by the acid lake
+
+	health_cap = 200 // Lower health cap than a typical zombie
+
+	move_to_delay = 4 // A bit faster than a normal zombie, though still easy to outrun
+
+	see_in_dark = 8 // It has no trouble seeing in the dark, thanks to the help of the squid on its head
+
+	ranged = 1
+	ranged_cooldown = 30
+	ranged_cooldown_cap = 30
+	ranged_message = "spits"
+	projectiletype = /obj/item/projectile/squidtox
+	projectilesound = 'sound/weapons/pierce.ogg'
+
+/mob/living/simple_animal/hostile/necro/zombie/xeno_squid/CanAttack(var/atom/the_target)
+	if(ismob(the_target))
+		var/mob/living/M = the_target
+		if(ishuman(the_target)) //Checking for food
+			var/mob/living/carbon/human/H = the_target
+			if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/mask/podapiida)) // If one of our friends is attached to the head already, don't bother attacking
+				return 0
+			if(H.isDead())
+				if(check_edibility(H))
+					return the_target
+				else
+					return 0
+			else
+				return ..(the_target)
+		else
+			if(M.isDead())
+				return 0
+	if(istype(the_target,/obj/machinery/light))
+		var/obj/machinery/light/L = the_target
+		return L.current_bulb && L.current_bulb.status != LIGHT_BROKEN
+
+	return ..(the_target)
+
+/mob/living/simple_animal/hostile/necro/zombie/xeno_squid/Life() // Does not come back from the dead, but enjoys accelerated healing while alive
+	..()
+	if(prob(15) && health<maxHealth)
+		health+=10
+		visible_message("<span class='warning'>[src]'s wounds heal slightly!</span>")
+
+/mob/living/simple_animal/hostile/necro/zombie/xeno_squid/death(var/gibbed = FALSE)
+	if(transmogged_from) // we're not a real zombie!
+		..(gibbed)
+		return
+	..(gibbed)
+	if(host) // If there is a host,
+		host.forceMove(get_turf(src))
+		if(mind)
+			visible_message("<span class='danger'>The creature releases it's grasp on [src]'s head!</span>")
+			mind.transfer_to(host)
+			var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
+			if(ghost && ghost.can_reenter_corpse)
+				key = mind.key
+		new /mob/living/simple_animal/hostile/podapiida(get_turf(src))
+		qdel(poda)
+	else // There is no host. Should only happen if it's an admeme spawn, hopefully
+		visible_message("<span class='danger'>The creature releases it's grasp on [src]'s head!</span>")
+		new /mob/living/simple_animal/hostile/podapiida(get_turf(src))
+		host = new /mob/living/carbon/human(get_turf(src))
+		host.death(0) // Ded
+		host = null
+	qdel(src)
+
+///////////////// HUMAN SQUID ZOMBIE ////////////////////
+// Human zombie with no client. Unlike most zombies it's alive, and quite capable of communicating about its unfortunate situation.
+/mob/living/simple_animal/hostile/necro/zombie/xeno_squid/human
+	name = "assimilated miner"
+	icon_state = "squidzombie_miner1"
+	icon_living = "squidzombie_miner1"
+	desc = "A human miner, a member of the NT expeditionary forces. There's something strange attached to their head."
+	speak = list("It hurts...", "I want... home...", "Someone, anyone... please.", "Why... me...", "Help...", "Just let me... sleep.", "Assimilate, consume...")
+	speak_chance = 3
+
+	attacktext = "pierces"
+	attack_sound = 'sound/weapons/genhit1.ogg'
+
+/mob/living/simple_animal/hostile/necro/zombie/xeno_squid/human/Aggro()
+	..()
+	say(pick("Help... here!","Won't you join us?","Come closer.","Don't be a... stranger.", "Stop hurting... us."))
+
+/mob/living/simple_animal/hostile/necro/zombie/xeno_squid/human/death(var/gibbed = FALSE) // When it dies, it spawns a custom corpse and a fresh squid
+	visible_message("<span class = 'warning'>The miner collapses, and the creature latched to their head detaches itself!</span>")
+	new /mob/living/simple_animal/hostile/podapiida(get_turf(src))
+	new /obj/effect/landmark/corpse/miner/xeno_expedition_zombie(get_turf(src))
+	qdel(src)
+
+///////////////// INSECTOID SQUID ZOMBIE ////////////////////
+// Insectoid zombie with no client. Unlike most zombies it's alive, and quite capable of communicating about its unfortunate situation.
+/mob/living/simple_animal/hostile/necro/zombie/xeno_squid/insectoid
+	name = "assimilated miner"
+	icon_state = "squidzombie_miner2"
+	icon_living = "squidzombie_miner2"
+	desc = "An insectoid miner, a member of the NT expeditionary forces. There's something strange attached to their head."
+	speak = list("It hurtz...", "I want... home...", "Zomeone, anyone... pleaze.", "Why... me...", "Help...", "Juzt let me... zleep.", "Azzimilate, conzume...")
+	speak_emote = list("whispers", "gibbers")
+	speak_chance = 3
+
+	attacktext = "pierces"
+	attack_sound = 'sound/weapons/genhit1.ogg'
+
+/mob/living/simple_animal/hostile/necro/zombie/xeno_squid/insectoid/Aggro()
+	..()
+	say(pick("Help... here!","Won't you join uz?","Come clozer.","Don't be a... ztranger.", "Ztop hurting... uz."))
+
+/mob/living/simple_animal/hostile/necro/zombie/xeno_squid/insectoid/death(var/gibbed = FALSE) // When it dies, it spawns a custom corpse and a fresh squid
+	visible_message("<span class = 'warning'>The miner collapses, and the creature latched to their head detaches itself!</span>")
+	new /mob/living/simple_animal/hostile/podapiida(get_turf(src))
+	new /obj/effect/landmark/corpse/miner/xeno_expedition_zombie/insectoid(get_turf(src))
+	qdel(src)
 
 /*Necromorphs
 	4 types

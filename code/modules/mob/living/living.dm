@@ -1092,6 +1092,30 @@ Thanks.
 					return
 			crab.is_being_resisted = 0 //If the do_after is cancelled.
 
+	//Removing a podapiida
+	if(ishuman(L))
+		var/on_head = L.get_item_by_slot(slot_head)
+		if(istype(on_head, /obj/item/clothing/mask/podapiida))
+			var/obj/item/clothing/mask/podapiida/poda = on_head
+			if(poda.is_being_resisted)
+				return
+			poda.is_being_resisted = 1
+			L.visible_message("<span class='danger'>[L.real_name] starts struggling to tear \the [poda] off of their head!</span>")
+			if(do_after(L, poda, 6 SECONDS))
+				if(prob(40)) // Only a 40% chance to succeed if it's the player alone.
+					if(L.get_item_by_slot(slot_head) == poda)
+						L.drop_from_inventory(poda)
+						qdel(poda)
+						L.visible_message("<span class='danger'>[L.real_name] successfully tears \the [poda] off of their head!</span>")
+						var/mob/living/simple_animal/hostile/podapiida/P = new /mob/living/simple_animal/hostile/podapiida(get_turf(src))
+						P.recover_start = world.time
+						P.recovering = TRUE
+				else
+					to_chat(L, "<span class='warning'>\The [poda] is latched on tight! Keep struggling!</span>")
+					poda.is_being_resisted = 0
+					return
+			poda.is_being_resisted = 0 //If the do_after is cancelled.
+
 	// Breaking out of a cage
 	if (src.locked_to && istype(src.locked_to, /obj/structure/cage))
 		locked_to.attack_hand(src)
