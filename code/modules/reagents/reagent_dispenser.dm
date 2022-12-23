@@ -313,7 +313,7 @@
 		var/matrix/M = matrix()
 		M.Scale(1, reagents.total_volume/reagents.maximum_volume)
 		reagentimg.transform = M
-		reagentimg.pixel_y = -1.5 - ((reagents.total_volume/reagents.maximum_volume)*1.5)
+		reagentimg.pixel_y = 1.5 - ((reagents.total_volume/reagents.maximum_volume)*1.5)
 		overlays += reagentimg
 
 /obj/structure/reagent_dispensers/beerkeg
