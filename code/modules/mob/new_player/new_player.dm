@@ -437,7 +437,6 @@
 	if(character.mind.assigned_role != "MODE")
 		if(character.mind.assigned_role != "Cyborg")
 			data_core.manifest_inject(character)
-			ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
 			if(character.mind.assigned_role == "Trader")
 				//If we're a trader, instead send a message to PDAs with the trader cartridge
 				for (var/obj/item/device/pda/P in PDAs)
@@ -729,7 +728,7 @@
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
 	var/rank = new_character.mind.assigned_role
-	if(!late_join)
+	if(!late_join && rank != "MODE")
 		var/obj/S = null
 		// Find a spawn point that wasn't given to anyone
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)

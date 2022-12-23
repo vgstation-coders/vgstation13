@@ -13,14 +13,9 @@
 // -- Transforms us into the devlish Grinch
 /datum/role/grinch/OnPostSetup(var/laterole = FALSE)
 	. = ..()
-	var/mob/living/simple_animal/hostile/gremlin/grinch/G = new
-	G.forceMove(pick(grinchstart))
-	if (antag.active)
-		to_chat(world, "active before transfer...")
-	antag.transfer_to(G)
-	var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = new(G)
+	var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = new(antag.current)
 	src.our_bag = our_bag
-	G.equip_to_slot(our_bag, slot_back)
+	antag.current.equip_to_slot(our_bag, slot_back)
 
 // -- Clearing references in case of deletion.
 /datum/role/grinch/Destroy()

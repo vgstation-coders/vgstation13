@@ -268,6 +268,15 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
 	cost = 6
 
+/datum/uplink_item/dangerous/caber //around 25 brute self damage and bleed if used without armor, generally crit if exploded against an unarmored victim
+	name = "Ullapool Caber"
+	desc = "A modern replica of the legendary weapon held by Tavish DeGroot, scanned after the DeGroot family so generously let us inspect them for mass production. This potato-masher grenade will explode when swung, but not when thrown. The safety grip makes dropping or throwing the Caber impossible whilst enabled and will not explode with the safeties disabled. EOD Suit not included."
+	item = /obj/item/weapon/caber/
+	cost = 10
+	discounted_cost = 8
+	//jobs_with_discount = list("Assistant")
+	//would've liked to add a discount for dark skinned or nearsighted characters (closest to one eyed we have) but dunno how
+
 // STEALTHY WEAPONS
 // Any Syndicate item with applying lethal force to people without being easily detected (Ex: Syndicate Soap, Parapen, E-Bow)
 

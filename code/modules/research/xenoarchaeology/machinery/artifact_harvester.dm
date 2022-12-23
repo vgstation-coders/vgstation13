@@ -9,6 +9,7 @@
 	idle_power_usage = 50
 	active_power_usage = 750
 	use_power = MACHINE_POWER_USE_IDLE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/harvesting = 0
 	var/obj/item/weapon/anobattery/inserted_battery
 	var/obj/machinery/artifact/cur_artifact
@@ -16,6 +17,7 @@
 	var/datum/artifact_effect/isolated_secondary
 	var/obj/machinery/artifact_scanpad/owned_scanner = null
 	var/chargerate = 0
+	var/chargemult = 1
 	var/harvester = "" // Logs who started a harvest.
 	var/obj/effect/artifact_field/artifact_field
 	light_color = "#E1C400"
@@ -24,6 +26,24 @@
 /obj/machinery/artifact_harvester/New()
 	..()
 	reconnect_scanner()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/anom/harvester,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/capacitor
+	)
+
+	RefreshParts()
+
+/obj/machinery/artifact_harvester/RefreshParts()
+	var/scancount = 0
+	var/scanamount = 0
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		scancount += SP.rating
+		scanamount++
+
+	chargemult = scancount/scanamount
+
 
 /obj/machinery/artifact_harvester/Destroy()
 	if (inserted_battery)
@@ -194,7 +214,7 @@
 				if(inserted_battery.battery_effect)
 					matching_effecttype = (inserted_battery.battery_effect.type == isolated_primary.type)
 				if(!inserted_battery.battery_effect || (matching_id && matching_effecttype))
-					chargerate = isolated_primary.chargelevelmax / isolated_primary.effectrange
+					chargerate = (isolated_primary.chargelevelmax / isolated_primary.effectrange) * chargemult
 					harvesting = 1
 					use_power = MACHINE_POWER_USE_ACTIVE
 					update_icon()
@@ -243,7 +263,7 @@
 				if(inserted_battery.battery_effect)
 					matching_effecttype = (inserted_battery.battery_effect.type == isolated_secondary.type)
 				if(!inserted_battery.battery_effect || (matching_id && matching_effecttype))
-					chargerate = isolated_secondary.chargelevelmax / isolated_secondary.effectrange
+					chargerate = (isolated_secondary.chargelevelmax / isolated_secondary.effectrange) * chargemult
 					harvesting = 1
 					use_power = MACHINE_POWER_USE_ACTIVE
 					update_icon()

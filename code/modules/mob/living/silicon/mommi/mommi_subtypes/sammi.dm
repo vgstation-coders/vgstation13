@@ -123,7 +123,7 @@
 	if (istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
 		if(wiresexposed)
 			to_chat(user, "Close the wiring panel first.")
-		else if(cell)
+		else if(cell || cellhold)
 			to_chat(user, "There is a power cell already installed.")
 		else
 			user.drop_item(W, src)
