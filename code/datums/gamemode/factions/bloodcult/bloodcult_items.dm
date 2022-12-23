@@ -1108,7 +1108,7 @@ var/list/arcane_tomes = list()
 		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 0, -2)
 		qdel(src)
 
-/obj/item/weapon/melee/blood_dagger/pre_throw()
+/obj/item/weapon/melee/blood_dagger/pre_throw(atom/movable/target)
 	absorbed = 1
 
 /obj/item/weapon/melee/blood_dagger/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
