@@ -219,7 +219,7 @@ var/global/objects_thrown_when_explode = FALSE
 	..()
 	if(isturf(loc))
 		var/turf/T = loc
-		if(objects_thrown_when_explode || T.arcanetampered)
+		if(objects_thrown_when_explode || (T.arcanetampered && T.arcanetampered != user))
 			playsound(T, get_sfx("explosion_small"), 100, 1, get_rand_frequency(), falloff = 5)
 			T.turf_animation('icons/effects/96x96.dmi',"explosion_small",-WORLD_ICON_SIZE, -WORLD_ICON_SIZE, 13)
 			qdel(src)
