@@ -42,6 +42,7 @@
 		icon = initial(icon)
 
 /turf/simulated/wall/shuttle/ex_act(severity)
+	..()
 	return
 
 /turf/simulated/wall/shuttle/mech_drill_act(severity)
@@ -152,6 +153,7 @@
 	nitrogen = 0.01
 
 /turf/simulated/floor/shuttle/ex_act(severity)
+	..()
 	switch(severity)
 		if(1.0)
 			if(!(locate(/obj/effect/decal/cleanable/soot) in src))
