@@ -398,6 +398,16 @@
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
 	add_component(/datum/component/coinflip)
+	if (prob(1))
+		// Something about this coin stands out...
+		luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
+		if (prob(20))
+			// Sometimes it's very lucky!
+			luckiness = 500 * credits
+		else
+			// But most of the time, it's just our imagination.
+			luckiness = 0
+
 
 /obj/item/weapon/coin/recycle(var/datum/materials/rec)
 	if(material==null)
@@ -533,6 +543,11 @@
 		to_chat(user, "<span class='notice'>You detach the string from the coin.</span>")
 	else
 		..()
+
+/obj/item/weapon/coin/examine(mob/user)
+	..()
+	if(!isnull(luckiness))
+		to_chat(user, "<span class='notice'>Something is [pick("peculiar", "exceptional", "interesting")] about it...</span>")
 
 ///////////////////////////////////////////////////////////
 
