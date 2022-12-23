@@ -66,21 +66,21 @@
 		imbibe(M)
 
 /obj/item/potion/throw_impact(atom/hit_atom)
-	..()
-	src.visible_message("<span  class='warning'>\The [src] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
-	var/turf/T = get_turf(src)
-	if(T)
-		playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-	if(prob(33))
-		new /obj/item/weapon/shard(get_turf(src))
-	if(full)
-		if(ismob(hit_atom))
-			impact_mob(hit_atom)
-		else
-			impact_atom(hit_atom)
-		full = FALSE
+	if(..())
+		src.visible_message("<span  class='warning'>\The [src] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
+		var/turf/T = get_turf(src)
+		if(T)
+			playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		if(prob(33))
+			new /obj/item/weapon/shard(get_turf(src))
+		if(full)
+			if(ismob(hit_atom))
+				impact_mob(hit_atom)
+			else
+				impact_atom(hit_atom)
+			full = FALSE
 
-	qdel(src)
+		qdel(src)
 
 /obj/item/potion/proc/imbibe_effect(mob/user)
 	return	//code for drinking effect

@@ -220,8 +220,8 @@
 	qdel(src)
 
 /obj/item/weapon/holder/animal/slime/throw_impact(atom/hit_atom)
-	..()
-	unfreeze()
+	if(..())
+		unfreeze()
 
 /obj/item/weapon/holder/animal/slime/attack_self(mob/user)
 	..()

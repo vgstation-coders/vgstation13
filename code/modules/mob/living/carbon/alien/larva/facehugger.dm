@@ -218,8 +218,7 @@
 				icon_state = "[initial(icon_state)]"
 
 /obj/item/clothing/mask/facehugger/throw_impact(atom/hit_atom)		//STOP LATCHING ONTO HEADLESS PEOPLE
-	..()
-	if(stat == CONSCIOUS)
+	if(..() && stat == CONSCIOUS)
 		icon_state = "[initial(icon_state)]"
 		if(ishuman(hit_atom))
 			var/mob/living/carbon/human/H = hit_atom

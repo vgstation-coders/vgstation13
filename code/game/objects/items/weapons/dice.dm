@@ -94,8 +94,8 @@
 	diceroll(user, 0)
 
 /obj/item/weapon/dice/throw_impact(atom/hit_atom, speed, user)
-	..()
-	diceroll(user, 1)
+	if(..())
+		diceroll(user, 1)
 
 /obj/item/weapon/dice/proc/show_roll(mob/user as mob, thrown, result)
 	var/comment = ""

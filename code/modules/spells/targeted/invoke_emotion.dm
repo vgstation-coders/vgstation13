@@ -133,7 +133,8 @@ var/global/list/invoked_emotions = list()
 	qdel(src)
 
 /obj/item/weapon/paper/emotion_invoker/throw_impact(atom/hit_atom)
-	..()
+	if(!..())
+		return
 	if(isActive)
 		if(hit_atom == curseTarget)
 			inflictCurse()

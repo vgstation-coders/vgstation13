@@ -160,26 +160,26 @@
 
 
 /obj/item/trash/plate/throw_impact(atom/hit_atom)
-	..()
-	for (var/obj/item/trash/plate/P in plates)
-		plates -= P
+	if(..())
+		for (var/obj/item/trash/plate/P in plates)
+			plates -= P
+			if(prob(70))
+				playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 75, 1)
+				new/obj/effect/decal/cleanable/broken_plate(loc)
+				visible_message("<span class='warning'>\The [src.name] [(plates.len > 0)?"have":"has"] been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
+				qdel(P)
+			else
+				P.forceMove(loc)
+				P.pixel_x = rand (-3,3) * PIXEL_MULTIPLIER
+				P.pixel_y = rand (-3,3) * PIXEL_MULTIPLIER
+
 		if(prob(70))
 			playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 75, 1)
 			new/obj/effect/decal/cleanable/broken_plate(loc)
-			visible_message("<span class='warning'>\The [src.name] [(plates.len > 0)?"have":"has"] been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
-			qdel(P)
+			visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
+			qdel(src)
 		else
-			P.forceMove(loc)
-			P.pixel_x = rand (-3,3) * PIXEL_MULTIPLIER
-			P.pixel_y = rand (-3,3) * PIXEL_MULTIPLIER
-
-	if(prob(70))
-		playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 75, 1)
-		new/obj/effect/decal/cleanable/broken_plate(loc)
-		visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
-		qdel(src)
-	else
-		update_icon()
+			update_icon()
 
 
 /obj/item/trash/plate/attack_hand(var/mob/user)

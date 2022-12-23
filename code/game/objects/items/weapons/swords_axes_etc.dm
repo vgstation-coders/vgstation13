@@ -336,6 +336,6 @@
 	explosion(target, 0, 0, 1, whodunnit = user)
 
 /obj/item/weapon/damocles/throw_impact(atom/hit_atom, speed, mob/user)
-	..()
-	explosion(get_turf(src), 0, 2, 3, whodunnit = user)
-	qdel(src)
+	if(..())
+		explosion(get_turf(src), 0, 2, 3, whodunnit = user)
+		qdel(src)

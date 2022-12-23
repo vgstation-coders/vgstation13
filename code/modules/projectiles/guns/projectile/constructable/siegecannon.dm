@@ -252,8 +252,7 @@
 	cannonAdjust()
 
 /obj/item/cannonball/iron/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
-	if(isliving(hit_atom) && cannonFired)
+	if(..() && isliving(hit_atom) && cannonFired)
 		siegeMob(hit_atom)
 
 /obj/item/cannonball/iron/proc/siegeMachine(var/obj/machinery/M)
@@ -507,19 +506,19 @@
 	honkBounce(cTarg)
 
 /obj/item/cannonball/bananium/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
-	if(!cannonFired)
-		lastBounceCount = 0
-		return
-	lastBounceCount++
-	if(isliving(hit_atom))
-		honkMob(hit_atom)
-		honkBounce(hit_atom)
-	else if(isitem(hit_atom) && hit_atom.density)
-		spawn(10)	//Give throwing time to stop bullying me
-			if(!throwing && cannonFired)
+	if(..())
+		if(!cannonFired)
+			lastBounceCount = 0
+			return
+		lastBounceCount++
+		if(isliving(hit_atom))
+			honkMob(hit_atom)
+			honkBounce(hit_atom)
+		else if(isitem(hit_atom) && hit_atom.density)
+			spawn(10)	//Give throwing time to stop bullying me
+				if(!throwing && cannonFired)
 
-				honkBounce(hit_atom,lastBounceCount)
+					honkBounce(hit_atom,lastBounceCount)
 
 
 /obj/item/cannonball/bananium/proc/honkMob(var/mob/living/L)
