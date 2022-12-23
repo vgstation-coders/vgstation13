@@ -253,7 +253,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
 				if (tx_amount > 0)
 					to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
-				S.update_icon()
 				return tx_amount
 		if(reagents && reagents.is_empty() && istype(target, /obj/machinery/cooking/deepfryer))
 			var/tx_amount = transfer_sub(target, src, reagents.maximum_volume, user)

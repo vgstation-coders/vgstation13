@@ -280,7 +280,6 @@
 	. = ..()
 	reagents.add_reagent(WATER, addedliquid)
 	desc = "[initial(desc)] There's [paper_cups] paper cups stored inside."
-	update_icon()
 
 /obj/structure/reagent_dispensers/water_cooler/wrenchable()
 	return 1
@@ -305,7 +304,7 @@
 	else
 		..()
 
-/obj/structure/reagent_dispensers/water_cooler/update_icon()
+/obj/structure/reagent_dispensers/water_cooler/on_reagent_change()
 	overlays.Cut()
 	if(reagents.total_volume)
 		var/image/reagentimg = image(src.icon, src, "wc_reagents")
