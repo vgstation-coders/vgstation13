@@ -526,7 +526,7 @@
 		user.update_inv_hands()
 	return
 
-/obj/item/weapon/baseball_bat
+/obj/item/weapon/bat
 	name = "baseball bat"
 	desc = "Good for reducing a doubleheader to a zeroheader."
 	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
