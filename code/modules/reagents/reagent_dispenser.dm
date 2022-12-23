@@ -280,6 +280,7 @@
 	. = ..()
 	reagents.add_reagent(WATER, addedliquid)
 	desc = "[initial(desc)] There's [paper_cups] paper cups stored inside."
+	update_icon()
 
 /obj/structure/reagent_dispensers/water_cooler/wrenchable()
 	return 1
@@ -303,6 +304,18 @@
 			return
 	else
 		..()
+
+/obj/structure/reagent_dispensers/water_cooler/update_icon()
+	overlays.Cut()
+	if(reagents.total_volume)
+		var/image/reagentimg = image(src.icon, src, "wc_reagents")
+		reagentimg.icon += mix_color_from_reagents(reagents.reagent_list)
+		reagentimg.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		var/matrix/M = matrix()
+		M.Scale(1, reagents.total_volume/reagents.maximum_volume)
+		reagentimg.transform = M
+		reagentimg.pixel_y = -1.5 - ((reagents.total_volume/reagents.maximum_volume)*1.5)
+		overlays += reagentimg
 
 /obj/structure/reagent_dispensers/beerkeg
 	name = "beer keg"
