@@ -1,5 +1,5 @@
 //Mob-reagent thermal interactions
-#define MOB_HEAT_MULT 0.05 //Multiplier to mob thermal mass to scale how drinking hot or cold reagents impacts the mob's body temperature. Lower causes the thermal shift to be higher.
+#define MOB_HEAT_MULT 1 //Multiplier to mob thermal mass to scale how drinking hot or cold reagents impacts the mob's body temperature. Lower causes the thermal shift to be higher.
 #define SPECHEATCAP_HUMANBODY 2.98 //Specific heat capacity of the human body.
 #define SPECHEATCAP_MUSHROOM 3.935 //Specific heat of mushrooms.
 #define SPECHEATCAP_LEAF 4.2 //Dionaea
