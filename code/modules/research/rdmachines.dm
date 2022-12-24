@@ -342,7 +342,7 @@ var/global/list/rnd_machines = list()
 
 // Returns the atom to output to.
 // Yes this can potentially return null, however that shouldn't be an issue for the code that uses it.
-/obj/machinery/r_n_d/proc/get_output()
+/obj/machinery/proc/get_output()
 	if(!output_dir)
 		return get_turf(loc)
 
