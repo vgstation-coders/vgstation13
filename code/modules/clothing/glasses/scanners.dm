@@ -247,7 +247,7 @@ var/list/meson_images = list()
 	meson_images -= meson_image
 	if(is_on_mesons)
 		meson_image = image(icon,loc,icon_state,layer,dir)
-		meson_image.plane = plane
+		meson_image.plane = relative_plane_to_plane(plane, loc.plane)
 		meson_images += meson_image
 		for (var/mob/L in meson_wearers)
 			if (L.client)
