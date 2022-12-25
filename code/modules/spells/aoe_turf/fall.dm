@@ -204,7 +204,7 @@ var/global/list/falltempoverlays = list()
 		var/matrix/original
 		if(!fallimage)
 			fallimage = image(icon = 'icons/effects/640x640.dmi', icon_state = "fall", layer = DECAL_LAYER)
-			fallimage.plane = ABOVE_TURF_PLANE
+			fallimage.plane = relative_plane_to_plane(ABOVE_TURF_PLANE, T_mob.plane)
 			original = fallimage.transform
 			fallimage.transform /= 50
 			fallimage.mouse_opacity = 0
