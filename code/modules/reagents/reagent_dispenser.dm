@@ -304,6 +304,18 @@
 	else
 		..()
 
+/obj/structure/reagent_dispensers/water_cooler/on_reagent_change()
+	overlays.Cut()
+	if(reagents.total_volume)
+		var/image/reagentimg = image(src.icon, src, "wc_reagents")
+		reagentimg.icon += mix_color_from_reagents(reagents.reagent_list)
+		reagentimg.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		var/matrix/M = matrix()
+		M.Scale(1, reagents.total_volume/reagents.maximum_volume)
+		reagentimg.transform = M
+		reagentimg.pixel_y = 1.5 - ((reagents.total_volume/reagents.maximum_volume)*1.5)
+		overlays += reagentimg
+
 /obj/structure/reagent_dispensers/beerkeg
 	name = "beer keg"
 	desc = "A massive keg with a bottle of beer painted on the front."
