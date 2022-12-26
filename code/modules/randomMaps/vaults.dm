@@ -120,7 +120,7 @@
 				var/time2make = world.time
 				var/database/db = ("players2.sqlite")
 				var/database/query/select_query = new
-				select_query.Add("SELECT ckey, reason FROM erro_ban WHERE bantype = PERMABAN AND isnull(unbanned)")
+				select_query.Add("SELECT ckey, reason FROM erro_ban WHERE bantype = 'PERMABAN' AND isnull(unbanned)")
 				if(!select_query.Execute(db))
 					qdel(select_query)
 					message_admins("Banned player search error on populating hell: [select_query.ErrorMsg()]")
