@@ -36,9 +36,9 @@
 /mob/living/fall_impact(var/turf/landing)
 	var/gravity = get_gravity()
 	var/total_brute_loss = 0
-	var/obj/item/airbag/airbag = locate() in contents
-	if(mind && mind.suiciding)
-		airbag = null
+	var/obj/item/airbag/airbag = null
+	if(!mind || !mind.suiciding)
+		airbag = locate() in contents
 	if(gravity > 0.5 && !airbag)
 		visible_message("<span class='warning'>\The [src] falls from above and slams into \the [landing]!</span>", \
 			"<span class='danger'>You fall off and hit \the [landing]!</span>", \
