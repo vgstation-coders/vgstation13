@@ -163,7 +163,7 @@ Pipelines + Other Objects -> Pipe network
 		var/image/nodecon = icon_node_con(con_dir)
 		if(nodecon)
 			nodecon.color = node_color_for(connected_node)
-			nodecon.plane = node_plane()
+			nodecon.plane = relative_plane(node_plane())
 			nodecon.layer = node_layer()
 			underlays += nodecon
 		if (!adjacent_procd && connected_node.update_icon_ready && !(istype(connected_node,/obj/machinery/atmospherics/pipe/simple)))

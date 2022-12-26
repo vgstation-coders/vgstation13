@@ -269,6 +269,10 @@ Why is FLOAT_PLANE added to a bunch of these?
 	plane = initial(plane)
 	layer = initial(layer)
 
+//Adjusts plane/layer for contained mobs when their reset_layer() is called. Should probably be extended to all movables at some point but I'm just making a quick fix right now
+/atom/proc/adjust_layer(mob/M)
+	return
+
 /obj/abstract/screen/plane_master
 	appearance_flags = PLANE_MASTER
 	screen_loc = "CENTER,CENTER"
