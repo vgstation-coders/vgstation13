@@ -35,13 +35,19 @@
 		return
 
 	fall_lock = TRUE
-	spawn((4 / gravity) / (min(z_velocity,1) / 4)) // Now we use a delay of 4 ticks divided by the gravity, affected by z velocity divided by 4
+	spawn(abs(4/(max(z_velocity,gravity)))) // Now we use a delay 4 divided by z velocity, with no possible zero
 		fall_lock = FALSE
 
 		var/turf/target = z_velocity < 0 ? check_above() : check_below()
 		// We're in a new loc most likely, so check all this again
 		if(!target)
-			return
+			if(z_velocity < 0)
+				z_velocity *= -1 // ceiling hit, no funni actions for this that seem workable yet
+				target = check_below()
+				if(!target)
+					return
+			else
+				return
 
 		if(!get_gravity())
 			return
@@ -159,7 +165,7 @@
 		return
 
 	if(z_velocity < 0)
-		z_velocity -= gravity
+		z_velocity += gravity
 	else if(z_velocity < (4/gravity))
 		z_velocity += (((gravity*4)-z_velocity)/2)
 
