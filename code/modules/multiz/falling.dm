@@ -35,7 +35,7 @@
 		return
 
 	fall_lock = TRUE
-	spawn(abs(4/(max(z_velocity,gravity)))) // Now we use a delay of 8 ticks divided by z velocity, with no possible zero
+	spawn(abs(4/(max(z_velocity,gravity)))) // Now we use a delay of 4 ticks divided by z velocity, with no possible zero
 		fall_lock = FALSE
 
 		var/turf/target = z_velocity < 0 ? check_above() : check_below()
