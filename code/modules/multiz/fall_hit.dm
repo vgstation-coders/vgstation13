@@ -27,7 +27,7 @@
 	for(var/atom/movable/AM in hit_atom.contents)
 		if(!AM.fall_act(src)) // FALSE breaks out of the normal actions
 			return FALSE
-	if(z_velocity > 2.5)
+	if(z_velocity > 2)
 		visible_message("<span class='warning'>\The [src] falls from above and slams into \the [hit_atom]!</span>", \
 			"<span class='danger'>You fall off and hit \the [hit_atom]!</span>", \
 			"You hear something slam into \the [hit_atom].")
@@ -49,8 +49,8 @@
 	var/obj/item/airbag/airbag = null
 	if(!mind || !mind.suiciding)
 		airbag = locate() in contents
-	if(old_z_velocity > 2.5 && !airbag)
-		if(old_z_velocity > 3.333)
+	if(old_z_velocity > 2 && !airbag)
+		if(old_z_velocity > 3)
 			playsound(loc, "sound/effects/pl_fallpain.ogg", 25, 1, -1)
 			// Bases at ten and scales with the number of Z levels fallen
 			// Because wounds heal rather quickly, 10 should be enough to discourage jumping off 1 ledge but not be enough to ruin you, at least for the first time.
@@ -69,7 +69,7 @@
 			log_debug("[src] has taken [total_brute_loss] damage after falling with a speed of [old_z_velocity] z-levels per second!")
 		AdjustKnockdown(3 * min(old_z_velocity,10))
 	else
-		if(airbag && old_z_velocity > 2.5)
+		if(airbag && old_z_velocity > 2)
 			airbag.deploy(src)
 	return TRUE
 
@@ -88,14 +88,13 @@
 	var/old_z_velocity = z_velocity
 	if(!..())
 		return FALSE
-	var/gravity = get_gravity()
-	if(old_z_velocity > 1.25)
+	if(old_z_velocity > 1)
 		// Tell the pilot that they just dropped down with a superheavy mecha.
 		if(occupant)
 			to_chat(occupant, "<span class='warning'>\The [src] crashed down onto \the [hit_atom]!</span>")
 
-		if(old_z_velocity > 2.5)
-			var/damage = ((10 * min(old_z_velocity,5)) * gravity)
+		if(old_z_velocity > 2)
+			var/damage = 10 * min(old_z_velocity,5)
 			// Anything on the same tile as the landing tile is gonna have a bad day.
 			for(var/mob/living/L in hit_atom.contents)
 				visible_message("<span class='danger'>\The [src] crushes \the [L] as it lands on them!</span>")
@@ -125,9 +124,8 @@ var/global/list/non_items = list(/obj/machinery,/obj/structure)
 	return TRUE
 
 /mob/living/fall_act(var/atom/hitting_atom)
-	var/gravity = get_gravity()
 	if(ismecha(hitting_atom))
-		var/damage = ((10 * min(hitting_atom.z_velocity,5)) * gravity)
+		var/damage = 10 * min(hitting_atom.z_velocity,5)
 		adjustBruteLoss(rand(3*damage, 5*damage))
 		AdjustKnockdown(damage / 2)
 	else if(isitem(hitting_atom))
@@ -139,7 +137,7 @@ var/global/list/non_items = list(/obj/machinery,/obj/structure)
 			gib()
 			return TRUE
 	else if(is_type_in_list(hitting_atom,non_items))
-		var/damage = ((3 * min(hitting_atom.z_velocity,5)) * gravity)
+		var/damage = 3 * min(hitting_atom.z_velocity,5)
 		if(hitting_atom.density)
 			damage *= 3
 		adjustBruteLoss(rand(damage, 2*damage))
