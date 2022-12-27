@@ -95,10 +95,6 @@
 
 		if(old_z_velocity > 2)
 			var/damage = 10 * min(old_z_velocity,5)
-			// Anything on the same tile as the landing tile is gonna have a bad day.
-			for(var/mob/living/L in hit_atom.contents)
-				visible_message("<span class='danger'>\The [src] crushes \the [L] as it lands on them!</span>")
-				L.fall_act(src)
 
 			// Now to hurt the mech.
 			take_damage(rand(damage, 3*damage))
@@ -107,10 +103,6 @@
 			if(istype(hit_atom, /turf/simulated/floor))
 				var/turf/simulated/floor/ground = hit_atom
 				ground.break_tile()
-	else
-		// Tell the pilot that they just plopped lightly onto the low-gravity ground with a superheavy mecha.
-		if(occupant)
-			to_chat(occupant, "<span class='warning'>\The [src] softly drops down onto \the [hit_atom]!</span>")
 	return TRUE
 
 /obj/machinery/power/supermatter/fall_impact(var/atom/hit_atom)
