@@ -16,7 +16,7 @@
 
 /atom
 	var/fall_lock = FALSE // Stops fall() being called during gravity spawn delay
-	var/zs_fallen = 0 // Gets reset if it hits something, for fall damage
+	var/z_velocity = 0 // Gets reset if it hits something, increases to max level determined by gravity
 
 //Holds fall checks that should not be overriden by children
 /atom/movable/proc/fall()
@@ -35,12 +35,12 @@
 		return
 
 	fall_lock = TRUE
-	spawn(4 / gravity) // Now we use a delay of 4 ticks divided by the gravity.
+	spawn((4 / gravity) / (min(z_velocity,1) / 4)) // Now we use a delay of 4 ticks divided by the gravity, affected by z velocity divided by 4
 		fall_lock = FALSE
 
-		var/turf/below = check_below()
+		var/turf/target = z_velocity < 0 ? check_above() : check_below()
 		// We're in a new loc most likely, so check all this again
-		if(!below)
+		if(!target)
 			return
 
 		if(!get_gravity())
@@ -57,7 +57,7 @@
 			var/is_client_moving = (ismob(M) && M.client && M.client.moving)
 			spawn(0)
 				if(is_client_moving) M.client.moving = 1
-				handle_fall(below)
+				handle_fall(target)
 				if(is_client_moving) M.client.moving = 0
 			// TODO - handle fall on damage!
 
@@ -92,6 +92,17 @@
 
 	return below
 
+/atom/movable/proc/check_above()
+	var/turf/above = GetAbove(src)
+	if(!above)
+		return 0
+
+	var/turf/T = loc
+	if(!T.CanZPass(src, UP) || !above.CanZPass(src, UP))
+		return 0
+
+	return above
+
 //For children to override
 /atom/movable/proc/can_fall()
 	if(anchored)
@@ -121,7 +132,7 @@
 	// Check if there is anything in our turf we are standing on to prevent falling.
 	for(var/obj/O in loc)
 		if(!O.CanFallThru(src, landing))
-			return FALSE
+			return
 
 	// Supermatter dusting things falling on them
 	var/obj/machinery/power/supermatter/SM = locate(/obj/machinery/power/supermatter) in landing
@@ -132,7 +143,8 @@
 	// See if something in turf below prevents us from falling into it.
 	for(var/atom/A in landing)
 		if(!A.Cross(src, src.loc, 1, 0))
-			return FALSE
+			A.CheckFall(src)
+			return
 
 	// Now lets move there!
 	if(!Move(landing))
@@ -141,7 +153,15 @@
 	if(isopenspace(oldloc))
 		oldloc.visible_message("\The [src] falls down through \the [oldloc]!", "You hear something falling through the air.")
 
-	zs_fallen++
+	var/gravity = get_gravity()
+	// No gravity in space, apparently.
+	if(!gravity) //Polaris uses a proc, has_gravity(), for this
+		return
+
+	if(z_velocity < 0)
+		z_velocity -= gravity
+	else if(z_velocity < (4/gravity))
+		z_velocity += (((gravity*4)-z_velocity)/2)
 
 	// If the turf has density, we give it first dibs
 	if (landing.density && landing.CheckFall(src))
