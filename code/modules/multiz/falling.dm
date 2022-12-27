@@ -35,7 +35,7 @@
 		return
 
 	fall_lock = TRUE
-	spawn(abs(4/(max(z_velocity,gravity)))) // Now we use a delay 4 divided by z velocity, with no possible zero
+	spawn(abs(8/(max(z_velocity,gravity)))) // Now we use a delay of 8 ticks divided by z velocity, with no possible zero
 		fall_lock = FALSE
 
 		var/turf/target = z_velocity < 0 ? check_above() : check_below()
@@ -164,10 +164,11 @@
 	if(!gravity) //Polaris uses a proc, has_gravity(), for this
 		return
 
-	if(z_velocity < 0)
+	// Velocity adjustment part goes here. TODO: Factor in air drag etc. eventually, maybe (or a more physics accurate formula)
+	if(z_velocity < 0) // Going upwards? Add gravity to the negative value until zero is reached
 		z_velocity += gravity
-	else if(z_velocity < (4/gravity))
-		z_velocity += (((gravity*4)-z_velocity)/2)
+	else if(z_velocity < (2/gravity)) // Down? Tend it towards a max of 2*gravity, halfway to the remainder each step
+		z_velocity += (((gravity*2)-z_velocity)/2)
 
 	// If the turf has density, we give it first dibs
 	if (landing.density && landing.CheckFall(src))
