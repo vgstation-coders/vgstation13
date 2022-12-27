@@ -1,0 +1,2014 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aW" = (
+/obj/structure/bookcase{
+	name = "bookcase (Tactics)"
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"bO" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/rd,
+/turf/unsimulated/floor{
+	dir = 5;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"cl" = (
+/obj/effect/decal/cleanable/blood,
+/turf/unsimulated/floor{
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"cD" = (
+/obj/structure/lattice,
+/obj/effect/forcefield,
+/turf/space/void,
+/area)
+"dR" = (
+/obj/item/trash/chips,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"dS" = (
+/obj/effect/forcefield{
+	alpha = 0;
+	invisibility = 0;
+	name = "invisible force wall"
+	},
+/obj/structure/grille/cult,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"dY" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/wizrobe/magusblue,
+/obj/item/clothing/head/wizard/magus,
+/obj/item/weapon/staff,
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+"eF" = (
+/obj/machinery/computer/library/checkout,
+/obj/structure/table/woodentable,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"hm" = (
+/obj/effect/forcefield,
+/turf/space/void,
+/area)
+"iO" = (
+/turf/space/void,
+/area)
+"jD" = (
+/obj/structure/mirror/magic{
+	pixel_y = 28
+	},
+/turf/unsimulated/floor{
+	dir = 1;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"kG" = (
+/obj/structure/rack,
+/obj/item/weapon/kitchen/utensil/knife/large/ritual,
+/turf/unsimulated/floor{
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"lZ" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/dice/d20,
+/obj/item/weapon/dice,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"nn" = (
+/obj/effect/decal/cleanable/molten_item,
+/turf/unsimulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/wizard_station)
+"np" = (
+/turf/unsimulated/wall,
+/area/wizard_station)
+"nJ" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/wizrobe/red,
+/obj/item/clothing/shoes/sandal,
+/obj/item/clothing/head/wizard/red,
+/obj/item/weapon/staff,
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+"nW" = (
+/obj/effect/landmark/start{
+	name = "wizard"
+	},
+/turf/unsimulated/floor{
+	icon_state = "carpet"
+	},
+/area/wizard_station)
+"pt" = (
+/obj/structure/table/reinforced,
+/obj/structure/kitchenspike,
+/turf/unsimulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"pG" = (
+/obj/structure/bookcase{
+	name = "Forbidden Knowledge"
+	},
+/obj/effect/decal/cleanable/cobweb,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"qu" = (
+/turf/unsimulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"so" = (
+/obj/structure/table/woodentable,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"ss" = (
+/obj/effect/landmark/start{
+	name = "wizard"
+	},
+/turf/unsimulated/floor{
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"tO" = (
+/obj/effect/landmark/start{
+	name = "wizard"
+	},
+/turf/unsimulated/floor{
+	dir = 4;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"tV" = (
+/obj/item/device/radio/intercom{
+	desc = "Talk through this. Evilly";
+	freerange = 1;
+	frequency = 1213;
+	name = "Syndicate Intercom";
+	pixel_x = 32;
+	subspace_transmission = 1;
+	syndie = 1
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"vz" = (
+/obj/item/trash/raisins,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"vC" = (
+/obj/effect/decal/cleanable/blood,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"vY" = (
+/turf/unsimulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/wizard_station)
+"wv" = (
+/obj/effect/decal/cleanable/cobweb2,
+/obj/machinery/showcase,
+/turf/unsimulated/floor{
+	dir = 4;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"zw" = (
+/obj/structure/table/woodentable,
+/obj/effect/landmark{
+	name = "Teleport-Scroll"
+	},
+/turf/unsimulated/floor{
+	dir = 6;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"Bh" = (
+/mob/living/carbon/monkey,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"BG" = (
+/obj/structure/table/reinforced,
+/obj/structure/kitchenspike,
+/turf/unsimulated/floor{
+	dir = 4;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"DZ" = (
+/obj/machinery/showcase,
+/turf/unsimulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"Fx" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/wizrobe/magusred,
+/obj/item/clothing/head/wizard/magus,
+/obj/item/weapon/staff,
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+"Ge" = (
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"HM" = (
+/obj/structure/bookcase{
+	name = "Forbidden Knowledge"
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Ie" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/wizrobe/necro,
+/obj/item/clothing/head/wizard/necro,
+/obj/item/clothing/shoes/sandal,
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+"Ij" = (
+/obj/structure/bed/chair,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"IL" = (
+/obj/effect/landmark/start{
+	name = "wizard"
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"Jl" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/wizrobe/marisa,
+/obj/item/clothing/shoes/sandal/marisa,
+/obj/item/clothing/head/wizard/marisa,
+/obj/item/weapon/staff/broom,
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+"Kj" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Km" = (
+/obj/structure/bookcase,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Ky" = (
+/obj/effect/step_trigger/teleporter/random/shuttle_transit,
+/obj/effect/forcefield,
+/turf/space/void,
+/area)
+"KA" = (
+/obj/machinery/vending/snack,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Lu" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/spacecash,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Mq" = (
+/obj/structure/rack,
+/obj/item/weapon/kitchen/utensil/knife/large/ritual,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"MO" = (
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+"Np" = (
+/obj/structure/wizard/scrying,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Pr" = (
+/turf/unsimulated/floor{
+	dir = 4;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"Qz" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"QZ" = (
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Rv" = (
+/obj/machinery/vending/magivend,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Tl" = (
+/obj/structure/table/woodentable,
+/obj/item/trash/tray,
+/turf/unsimulated/floor{
+	dir = 10;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"TT" = (
+/mob/living/simple_animal/hostile/creature{
+	name = "Experiment 35b"
+	},
+/turf/unsimulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/wizard_station)
+"Um" = (
+/obj/structure/closet{
+	icon_closed = "cabinet_closed";
+	icon_opened = "cabinet_open";
+	icon_state = "cabinet_closed"
+	},
+/obj/item/weapon/storage/backpack/satchel,
+/turf/unsimulated/floor{
+	dir = 9;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"Up" = (
+/turf/unsimulated/floor{
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"Ux" = (
+/obj/effect/forcefield,
+/turf/unsimulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/wizard_station)
+"WG" = (
+/obj/effect/step_trigger/teleporter/random/shuttle_transit,
+/turf/space/void,
+/area)
+"Xp" = (
+/obj/effect/decal/remains/human,
+/turf/unsimulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/wizard_station)
+"XB" = (
+/obj/structure/table/woodentable,
+/obj/item/trash/cheesie,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+
+(1,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(2,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(3,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(4,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(5,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(6,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(7,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(8,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(9,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(10,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+Ky
+Ky
+Ky
+Ky
+Ky
+Ky
+Ky
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(11,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+hm
+Ux
+Ux
+Ux
+Ux
+Ux
+Ky
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(12,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+hm
+Ux
+Xp
+TT
+Xp
+Ux
+Ky
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(13,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+hm
+hm
+hm
+hm
+Ux
+vY
+vY
+nn
+Ux
+Ky
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(14,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+np
+np
+np
+np
+np
+np
+dS
+dS
+cD
+cD
+Ux
+Ux
+Ux
+Ux
+Ux
+Ky
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(15,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+pG
+QZ
+aW
+QZ
+Km
+QZ
+QZ
+dS
+hm
+hm
+hm
+cD
+hm
+hm
+hm
+Ky
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(16,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+HM
+QZ
+aW
+QZ
+Km
+QZ
+QZ
+dS
+hm
+hm
+hm
+cD
+hm
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(17,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+Np
+QZ
+QZ
+QZ
+QZ
+QZ
+QZ
+dS
+dS
+dS
+dS
+dS
+hm
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(18,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+eF
+QZ
+QZ
+QZ
+Qz
+Qz
+QZ
+vz
+QZ
+QZ
+QZ
+dS
+hm
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(19,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+Rv
+QZ
+QZ
+Ij
+so
+XB
+QZ
+QZ
+QZ
+QZ
+dR
+np
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(20,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+KA
+QZ
+tV
+Ij
+lZ
+Lu
+np
+Kj
+QZ
+QZ
+Kj
+np
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(21,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+np
+QZ
+np
+np
+np
+np
+np
+DZ
+Ge
+qu
+Mq
+np
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(22,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+Um
+IL
+Tl
+np
+Jl
+nJ
+np
+BG
+cl
+Pr
+Up
+dS
+hm
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(23,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+jD
+nW
+ss
+MO
+MO
+Ie
+np
+pt
+Bh
+qu
+vC
+dS
+hm
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(24,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+bO
+tO
+zw
+np
+dY
+Fx
+np
+wv
+Up
+Pr
+kG
+np
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(25,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+np
+np
+np
+np
+np
+np
+np
+np
+np
+dS
+dS
+np
+np
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(26,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+hm
+hm
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(27,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(28,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(29,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+WG
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(30,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(31,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(32,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(33,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(34,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(35,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(36,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(37,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
+(38,1,1) = {"
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+iO
+"}
