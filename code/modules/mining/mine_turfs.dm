@@ -1261,7 +1261,7 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = "mariahive"
 	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/uranium
-
+	mined_type = /turf/unsimulated/floor/asteroid/hive
 
 /turf/unsimulated/mineral/iron/hive
 	name = "Corrupted Iron deposit"
@@ -1269,7 +1269,7 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = "mariahive"
 	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/iron
-
+	mined_type = /turf/unsimulated/floor/asteroid/hive
 
 /turf/unsimulated/mineral/diamond/hive
 	name = "Corrupted Diamond deposit"
@@ -1277,7 +1277,7 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = "mariahive"
 	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/diamond
-
+	mined_type = /turf/unsimulated/floor/asteroid/hive
 
 /turf/unsimulated/mineral/gold/hive
 	name = "Corrupted Gold deposit"
@@ -1285,7 +1285,7 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = "mariahive"
 	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/gold
-
+	mined_type = /turf/unsimulated/floor/asteroid/hive
 
 /turf/unsimulated/mineral/silver/hive
 	name = "Corrupted Silver deposit"
@@ -1293,7 +1293,7 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = "mariahive"
 	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/silver
-
+	mined_type = /turf/unsimulated/floor/asteroid/hive
 
 /turf/unsimulated/mineral/plasma/hive
 	name = "Corrupted Plasma deposit"
@@ -1301,7 +1301,7 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = "mariahive"
 	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/plasma
-
+	mined_type = /turf/unsimulated/floor/asteroid/hive
 
 /turf/unsimulated/mineral/clown/hive
 	name = "Corrupted Bananium deposit"
@@ -1309,7 +1309,7 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = "mariahive"
 	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/clown
-
+	mined_type = /turf/unsimulated/floor/asteroid/hive
 
 /turf/unsimulated/mineral/phazon/hive
 	name = "Corrupted Phazite deposit"
@@ -1317,6 +1317,7 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = "mariahive"
 	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/phazon
+	mined_type = /turf/unsimulated/floor/asteroid/hive
 
 /turf/unsimulated/mineral/telecrystal/hive
 	name = "Corrupted Telecrystal deposit"
@@ -1324,6 +1325,7 @@ var/list/icon_state_to_appearance = list()
 	icon_state = "mariahive_Telecrystal"
 	overlay_state = "corrupted_overlay"
 	mineral = new /mineral/telecrystal
+	mined_type = /turf/unsimulated/floor/asteroid/hive
 
 /turf/unsimulated/mineral/hyperdense/hive
 	name = "Corrupted hyperdense rock"
@@ -1332,3 +1334,4 @@ var/list/icon_state_to_appearance = list()
 	overlay_state = "corrupted_overlay"
 	mining_difficulty = MINE_DIFFICULTY_DENSE
 	minimum_mine_time = 99 SECONDS //GL HF
+	mined_type = /turf/unsimulated/floor/asteroid/hive

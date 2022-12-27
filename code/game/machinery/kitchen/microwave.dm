@@ -8,7 +8,7 @@
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 5
 	active_power_usage = 500
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE | MULTIOUTPUT
 	flags = OPENCONTAINER | NOREACT
 	pass_flags = PASSTABLE
 	log_reagents = 0 //transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd]. transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd]. transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd].
@@ -17,6 +17,7 @@
 	var/dirty = 0 // = {0..100} Does it need cleaning?
 	var/broken = 0 // ={0,1,2} How broken is it???
 	var/reagent_disposal = 1 //Does it empty out reagents when you eject? Default yes.
+	var/auto_make_on_detect = 0 //Default no, scan level >=2 only
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
 	var/global/list/acceptable_items = list(
 							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
@@ -98,6 +99,9 @@
 		var/obj/item/weapon/storage/bag/B = AM
 		for (var/obj/item/weapon/reagent_containers/food/snacks/G in AM.contents)
 			B.remove_from_storage(G,src)
+			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+				cook()
+				break
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
 				break
 	else if(is_type_in_list(AM,acceptable_items))
@@ -106,8 +110,12 @@
 			if(ST.amount > 1)
 				new ST.type (src)
 				ST.use(1)
+				if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+					cook()
 		else
 			AM.forceMove(src)
+			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+				cook()
 	else
 		return FALSE
 	src.updateUsrDialog()
@@ -180,6 +188,8 @@
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
 				to_chat(user, "<span class='notice'>You fill \the [src] to the brim.</span>")
 				break
+			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+				cook()
 		updateUsrDialog()
 
 		return 1
@@ -193,12 +203,16 @@
 					"<span class='notice'>[user] adds one of [O] to [src].</span>", \
 					"<span class='notice'>You add one of [O] to [src].</span>")
 				updateUsrDialog()
+				if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+					cook()
 				return 1
 		if(user.drop_item(O, src))
 			user.visible_message( \
 				"<span class='notice'>[user] adds [O] to [src].</span>", \
 				"<span class='notice'>You add [O] to [src].</span>")
 			updateUsrDialog()
+			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+				cook()
 			return 1
 	else if(is_type_in_list(O,accepts_reagents_from))
 		if (!O.reagents)
@@ -274,6 +288,8 @@
 					var/obj/O = recipe.result
 					var/display_name = initial(O.name)
 					dat += {"<b>Expected result: </b>[display_name]<br>"}
+		if (scanning_power >= 2 )
+			dat += {"<a href='?src=\ref[src];action=autotoggle'>Toggle auto-cooking [auto_make_on_detect ? "off" : "on"]<br>"}
 		dat += {"\
 <A href='?src=\ref[src];action=cook'>Turn on!<BR>\
 <A href='?src=\ref[src];action=dispose'>Eject ingredients!<BR><BR><BR>\
@@ -407,7 +423,7 @@
 		stop()
 		if(cooked)
 			adjust_cooked_food_reagents_temperature(cooked, recipe)
-			cooked.forceMove(src.loc)
+			cooked.forceMove(get_output())
 		return
 
 /obj/machinery/microwave/proc/adjust_cooked_food_reagents_temperature(atom/cooked, datum/recipe/cookedrecipe)
@@ -605,6 +621,10 @@
 
 		if ("reagenttoggle")
 			reagent_disposal = !reagent_disposal
+			updateUsrDialog()
+
+		if ("autotoggle")
+			auto_make_on_detect = !auto_make_on_detect
 			updateUsrDialog()
 	return
 

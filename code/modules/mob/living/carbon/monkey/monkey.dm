@@ -480,6 +480,7 @@
 		plane = LYING_MOB_PLANE
 	else
 		plane = MOB_PLANE
+	loc.adjust_layer(src)
 
 /mob/living/carbon/monkey/send_to_past(var/duration)
 	..()

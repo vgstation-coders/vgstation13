@@ -17,6 +17,7 @@
 	attack_mob_instead_of_feed = TRUE
 	attack_verb = list("smashes", "bludgeons", "batters", "pans")
 	hitsound = list('sound/weapons/pan_01.ogg', 'sound/weapons/pan_02.ogg', 'sound/weapons/pan_03.ogg', 'sound/weapons/pan_04.ogg')
+	throw_impact_sound = list('sound/weapons/pan_01.ogg', 'sound/weapons/pan_02.ogg', 'sound/weapons/pan_03.ogg', 'sound/weapons/pan_04.ogg')
 	miss_sound = list('sound/weapons/pan_miss_01.ogg', 'sound/weapons/pan_miss_02.ogg')
 	is_cookvessel = TRUE
 	slot_flags = SLOT_HEAD
@@ -158,14 +159,14 @@
 	if(is_type_in_list(I,acceptable_items))
 		if(contents.len >= limit)
 			to_chat(usr, "<span class='notice'>[src] is completely full!</span>")
-		else if (istype(I,/obj/item/stack))
+		else if(istype(I,/obj/item/stack))
 			var/obj/item/stack/ST = I
-			if(ST.amount > 1)
+			if(ST.amount >= 1)
+				user.visible_message( \
+					"<span class='notice'>[user] adds \an [ST.singular_name] to [src].</span>", \
+					"<span class='notice'>You add \an [ST.singular_name] to [src].</span>")
 				new ST.type (src)
 				ST.use(1)
-				user.visible_message( \
-					"<span class='notice'>[user] adds one of [I] to [src].</span>", \
-					"<span class='notice'>You add one of [I] to [src].</span>")
 				updateUsrDialog()
 				cook_reboot(user) //Reset the cooking status.
 				update_icon()
@@ -216,13 +217,13 @@
 	if(contents.len)
 		return contents[contents.len]
 
-/obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target, mob/dropper = usr)
+/obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target, mob/dropper)
 
 	var/contains = contains_anything()
 	if(!contains)
 		return FALSE //Return FALSE if there's nothing to drop.
 
-	if(!isturf(dropper.loc)) //No pouring the contents of a pan out while hiding inside of a locker. Let's just say its too cramped.
+	if(dropper ? !isturf(dropper.loc) : FALSE) //No pouring the contents of a pan out while hiding inside of a locker. Let's just say its too cramped.
 		return FALSE
 
 	var/splashverb
@@ -313,6 +314,11 @@
 	if(isturf(usr.loc))
 		usr.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
 		drop_ingredients(usr.loc, usr)
+
+/obj/item/weapon/reagent_containers/pan/throw_impact(hit_atom, speed, user)
+	if(ismob(hit_atom))
+		drop_ingredients(target = hit_atom, dropper = null)
+	return ..()
 
 /////////////////////Cooking-related stuff/////////////////////
 
@@ -479,3 +485,4 @@
 	//Consider generating and storing the pan front blood overlay in the same manner as general blood overlays.
 	//Cooking automatically with high ambient heat.
 	//Change order of messages with eg. splashing acid on onesself when equipping the pan to the head.
+	//Splashing walls or objs with wielded or thrown frying pans.

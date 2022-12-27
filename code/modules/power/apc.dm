@@ -792,6 +792,8 @@
 		"isOperating" = operating,
 		"externalPower" = main_status,
 		"powerCellStatus" = cell ? cell.percent() : null,
+		"powerCellCharge" = cell ? round(cell.charge) : null,
+		"powerCellMaxCharge" = cell ? cell.maxcharge : null,
 		"chargeMode" = chargemode,
 		"chargingStatus" = charging,
 		"totalLoad" = lastused_equip + lastused_light + lastused_environ,

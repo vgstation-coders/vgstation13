@@ -171,6 +171,7 @@
 /mob/living/carbon/alien/larva/reset_layer()
 	if(stat == DEAD)
 		plane = MOB_PLANE
+	loc.adjust_layer(src)
 
 /mob/living/carbon/alien/larva/proc/transfer_personality(var/client/candidate)
 	ckey = candidate.ckey
