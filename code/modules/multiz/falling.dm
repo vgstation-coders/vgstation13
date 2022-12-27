@@ -167,7 +167,7 @@
 	// Velocity adjustment part goes here. TODO: Factor in air drag etc. eventually, maybe (or a more physics accurate formula)
 	if(z_velocity < 0) // Going upwards? Add gravity to the negative value until zero is reached
 		z_velocity += gravity
-	else if(z_velocity < (5/gravity)) // Down? Tend it towards a max of 5*gravity, halfway to the remainder each step
+	else if(z_velocity < (5*gravity)) // Down? Tend it towards a max of 5*gravity, halfway to the remainder each step
 		z_velocity += (((gravity*5)-z_velocity)/2)
 
 	// If the turf has density, we give it first dibs
