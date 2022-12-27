@@ -65,5 +65,8 @@
 					step_towards(AM, src)
 
 /datum/map_element/dungeon/rift_beach
-	file_path = "maps/misc/riftbeach.dmm"
+	file_path = "maps/misc/riftbeach1.dmm"
 	unique = TRUE
+
+/datum/map_element/dungeon/rift_beach/pre_load()
+	file_path = "maps/misc/riftbeach[rand(1,3)].dmm"
