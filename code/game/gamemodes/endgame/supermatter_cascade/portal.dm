@@ -63,3 +63,7 @@
 
 				spawn (0)
 					step_towards(AM, src)
+
+/datum/map_element/dungeon/rift_beach
+	file_path = "maps/misc/riftbeach.dmm"
+	unique = TRUE
