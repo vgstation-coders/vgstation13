@@ -605,7 +605,7 @@
 	var/mob/camera/blob/M = GetUser()
 	if(!istype(M))
 		return
-	var/message = input(M,"Send a message to the crew.","Psionic Message") as null|text
+	var/message = copytext(sanitize(input(M,"Send a message to the crew.","Psionic Message") as null|text),1,MAX_MESSAGE_LEN)
 	if(message)
 		M.telepathy(message)
 

@@ -871,7 +871,7 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/scientist,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
-			slot_wear_mask_str = /obj/item/clothing/mask/gas/death_commando,
+			slot_wear_mask_str = /obj/item/clothing/mask/gas/grim_reaper/death_commando,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/time,
 			slot_s_store_str = /obj/item/weapon/tank/emergency_oxygen/double,
 			slot_belt_str = /obj/item/weapon/storage/belt/grenade/chrono,

@@ -129,7 +129,6 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	generate_radio_frequencies()
 	SetupHooks() // /N3X15 project from 8 years ago (WIP). The jukebox seems to be the only thing using this
 	createDatacore()
-	createPaiController()
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 	Holiday = Get_Holiday()
 	world.update_status()

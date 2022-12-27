@@ -224,13 +224,14 @@
 	return ..()
 
 /datum/dynamic_ruleset/roundstart/wizard/execute()
-	var/mob/M = pick(assigned)
+	var/mob/new_player/M = pick(assigned)
 	if (M)
 		var/datum/role/wizard/newWizard = new
-		M.forceMove(pick(wizardstart))
-		if(!isjusthuman(M))
-			M = M.Humanize("Human")
-		newWizard.AssignToRole(M.mind,1)
+		var/mob/living/carbon/human/H = M.create_human(M.client.prefs)
+		H.forceMove(pick(wizardstart))
+		H.key = M.client.ckey
+		qdel(M)
+		newWizard.AssignToRole(H.mind,1)
 		roundstart_wizards += newWizard
 		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
 		if (!federation)
@@ -283,7 +284,7 @@
 
 /datum/dynamic_ruleset/roundstart/cwc/choose_candidates()
 	for(var/wizards_number = 1 to total_wizards)
-		var/mob/M = pick(candidates)
+		var/mob/new_player/M = pick(candidates)
 		assigned += M
 		candidates -= M
 	return (assigned.len > 0)
@@ -291,7 +292,7 @@
 /datum/dynamic_ruleset/roundstart/cwc/execute()
 	var/datum/faction/wizard/civilwar/wpf/WPF = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/wpf, null, 1)
 	var/datum/faction/wizard/civilwar/wpf/PFW = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
-	for(var/mob/M in assigned)
+	for(var/mob/new_player/M in assigned)
 		var/datum/role/wizard/newWizard = new
 		if (WPF.members.len < PFW.members.len)
 			WPF.HandleRecruitedRole(newWizard)
@@ -301,10 +302,11 @@
 			WPF.HandleRecruitedRole(newWizard)
 		else
 			PFW.HandleRecruitedRole(newWizard)
-		M.forceMove(pick(wizardstart))
-		if(!isjusthuman(M))
-			M = M.Humanize("Human")
-		newWizard.AssignToRole(M.mind,1)
+		var/mob/living/carbon/human/H = M.create_human(M.client.prefs)
+		H.forceMove(pick(wizardstart))
+		H.key = M.client.ckey
+		qdel(M)
+		newWizard.AssignToRole(H.mind,1)
 		newWizard.Greet(GREET_MIDROUND)
 	return 1
 
@@ -329,7 +331,8 @@
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
-	flags = HIGHLANDER_RULESET
+	//Readd this once proper round ending rituals are added
+	//flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
@@ -441,7 +444,7 @@ Assign your candidates in choose_candidates() instead.
 	for(var/operatives_number = 1 to operatives)
 		if(candidates.len <= 0)
 			break
-		var/mob/M = pick(candidates)
+		var/mob/new_player/M = pick(candidates)
 		assigned += M
 		candidates -= M
 	return (assigned.len > 0)
@@ -460,21 +463,22 @@ Assign your candidates in choose_candidates() instead.
 
 	var/spawnpos = 1
 	var/leader = 1
-	for(var/mob/M in assigned)
+	for(var/mob/new_player/M in assigned)
 		if(spawnpos > synd_spawn.len)
 			spawnpos = 1
-		M.forceMove(synd_spawn[spawnpos])
-		if(!ishuman(M))
-			M = M.Humanize("Human")
+		var/mob/living/carbon/human/H = M.create_human(M.client.prefs)
+		H.forceMove(synd_spawn[spawnpos])
+		H.key = M.client.ckey
+		qdel(M)
 		if(leader)
 			leader = 0
 			var/datum/role/nuclear_operative/leader/newCop = new
-			newCop.AssignToRole(M.mind, 1)
+			newCop.AssignToRole(H.mind, 1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
 		else
 			var/datum/role/nuclear_operative/newCop = new
-			newCop.AssignToRole(M.mind, 1)
+			newCop.AssignToRole(H.mind, 1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
 		spawnpos++
@@ -559,9 +563,8 @@ Assign your candidates in choose_candidates() instead.
 	if(old_AI.mind.assigned_role=="AI" || old_AI.mind.assigned_role=="Cyborg" || old_AI.mind.assigned_role=="Mobile MMI")
 		old_AI.create_roundstart_silicon(old_AI.mind.assigned_role)
 	else
-		var/mob/living/carbon/human/new_character = old_AI.create_character(0)
-		new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
-		job_master.EquipRank(new_character, new_character.mind.assigned_role, 0)
+		var/mob/living/carbon/human/new_character = old_AI.create_human(old_AI.client.prefs)
+		job_master.PostJobSetup(new_character)
 		EquipCustomItems(new_character)
 	log_admin("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
 	message_admins("([old_AI.ckey]) was displaced by a malf AI and started the game as a [old_AI.mind.assigned_role].")
@@ -576,9 +579,10 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/blob
 	name = "Blob Conglomerate"
 	role_category = /datum/role/blob_overmind/
-	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel")
+	enemy_jobs = list("AI", "Cyborg", "Warden", "Head of Security", "Captain", "Quartermaster", "Head of Personnel", "Station Engineer", "Chief Engineer", "Atmospheric Technician")
 	required_pop = list(30,25,25,20,20,20,15,15,15,15)
+	required_enemies = list(4,4,4,4,4,4,4,3,2,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	weekday_rule_boost = list("Tue")

@@ -57,19 +57,6 @@
 	icon_state = "cyborg_upgrade"
 	w_class = W_CLASS_SMALL
 
-/obj/item/weapon/reagent_containers/food/snacks/shrimp
-	name = "shrimp"
-	desc = "A single raw shrimp."
-	icon = 'icons/obj/seafood.dmi'
-	icon_state = "shrimp_raw"
-	filling_color = "#FF1C1C"
-	bitesize = 1
-
-/obj/item/weapon/reagent_containers/food/snacks/shrimp/New()
-	..()
-	desc = pick("Anyway, like I was sayin', shrimp is the fruit of the sea.", "You can barbecue it, boil it, broil it, bake it, saute it.")
-	reagents.add_reagent(NUTRIMENT, 1)
-
 /obj/item/weapon/reagent_containers/food/snacks/feederfish
 	name = "feeder fish"
 	desc = "A tiny feeder fish. Sure doesn't look very filling..."
@@ -95,6 +82,13 @@
 	attack_verb = list("slapped", "humiliated", "hit", "rubbed")
 	hitsound = 'sound/effects/snap.ogg'
 	var/meat_type
+
+/obj/item/weapon/fish/shrimp
+	name = "shrimp"
+	desc = "Raw shrimp."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "shrimp_raw"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/shrimp
 
 /obj/item/weapon/fish/glofish
 	name = "glofish"
@@ -179,8 +173,15 @@
 		return
 	..()   removed because we already have babycarp */
 
+/obj/item/weapon/fish/clownfish
+	name = "clownfish"
+	desc = "Even underwater, you cannot escape HONKing."
+	icon = 'icons/obj/fish_items.dmi'
+	icon_state = "clownfish"
+	meat_type = /obj/item/weapon/bananapeel/clownfish
+
 /obj/item/weapon/bananapeel/clownfish
-	name = "clown fish"
+	name = "clownfish"
 	desc = "Even underwater, you cannot escape HONKing."
 	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "clownfish"
@@ -193,18 +194,17 @@
 	if(meat_type && O.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "You carefully clean and gut \the [src].")
 		new meat_type(get_turf(src))
-		new meat_type(get_turf(src))
 		qdel(src)
 		return TRUE
 	..()
 
-/obj/item/weapon/lobster
+/obj/item/weapon/fish/lobster
 	name = "lobster"
 	desc = "The cousin of the crab, genetically modified to be unable to snap at anyone. Its innate anger and hatred is kept intact."
 	icon_state = "lobster"
 	icon = 'icons/obj/fish_items.dmi'
 
-/obj/item/weapon/lobster/attackby(var/obj/item/O, var/mob/user) // extracting tail and claw meat from a sea cockroach
+/obj/item/weapon/fish/lobster/attackby(var/obj/item/O, var/mob/user) // extracting tail and claw meat from a sea cockroach
 	if(O.is_wirecutter(user))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src] and pull out the claw meat while separating the tail!")
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))

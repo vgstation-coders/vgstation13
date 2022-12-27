@@ -43,6 +43,7 @@ var/global/msg_id = 0
 
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
 	var/obj/item/weapon/photo/photo = null	// A slot for a photo
+	var/obj/item/weapon/pen/pen = null	// A slot for a pen
 
 	var/MM = null
 	var/DD = null
@@ -78,7 +79,7 @@ var/global/msg_id = 0
 		// PDA being given out to people during the cuck cube
 		if(ticker && ticker.current_state >= GAME_STATE_SETTING_UP)
 			cartridge.initialize()
-	new /obj/item/weapon/pen(src)
+	pen = new /obj/item/weapon/pen(src)
 	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
 
@@ -360,13 +361,13 @@ var/global/msg_id = 0
 		to_chat(user, "<span class='notice'>You are too far away.</span>")
 		return FALSE
 
-	var/obj/item/weapon/pen/O = locate() in src
-	if(!O)
+	if(!pen)
 		to_chat(user, "<span class='notice'>This PDA does not have a pen in it.</span>")
 		return FALSE
 
-	user.put_in_hands(O)
-	to_chat(user, "<span class='notice'>You remove \the [O] from \the [src].</span>")
+	user.put_in_hands(pen)
+	to_chat(user, "<span class='notice'>You remove \the [pen] from \the [src].</span>")
+	pen = null
 	return TRUE
 
 
@@ -452,22 +453,33 @@ var/global/msg_id = 0
 			photo = C
 			to_chat(user, "<span class='notice'>You slot \the [C] into [src].</span>")
 			updateUsrDialog()
-	else if(istype(C, /obj/item/weapon/pen))
-		var/obj/item/weapon/pen/O = locate() in src
-		if(O)
-			to_chat(user, "<span class='notice'>There is already a pen in \the [src].</span>")
-		else
-			if(user.drop_item(C, src))
-				to_chat(user, "<span class='notice'>You slide \the [C] into \the [src].</span>")
+	else if(istype(C, /obj/item/weapon/pen) && !src.pen)
+		if(user.drop_item(C, src))
+			pen = C
+			to_chat(user, "<span class='notice'>You slide \the [C] into \the [src].</span>")
 	else if(istype(C,/obj/item/weapon/spacecash))
 		if(!id)
 			to_chat(user, "[bicon(src)]<span class='warning'>There is no ID in the PDA!</span>")
 			return
 		var/obj/item/weapon/spacecash/dosh = C
-		if(add_to_virtual_wallet(dosh.worth * dosh.amount, user))
-			to_chat(user, "<span class='info'>You insert [dosh.worth * dosh.amount] credit\s into the PDA.</span>")
+		var/multiplier = dosh.arcanetampered ? rand(0,99) : 100
+		if(add_to_virtual_wallet(round(dosh.worth * dosh.amount * (multiplier/100)), user))
+			to_chat(user, "<span class='info'>You insert [round(dosh.worth * dosh.amount * (multiplier/100))] credit\s into the PDA.</span>")
 			qdel(dosh)
 		updateDialog()
+
+/obj/item/device/pda/can_quick_store(var/obj/item/I)
+	if(istype(I,/obj/item/weapon/card/id))
+		var/obj/item/weapon/card/id/idcard = I
+		return !id && idcard.registered_name
+	return (istype(I,/obj/item/weapon/cartridge) && !cartridge) ||\
+			(istype(I,/obj/item/device/paicard) && !pai) ||\
+			(istype(I,/obj/item/weapon/photo) && !photo) ||\
+			(istype(I,/obj/item/weapon/pen) && !pen) ||\
+			(istype(I,/obj/item/weapon/spacecash) && id && id.virtual_wallet)
+
+/obj/item/device/pda/quick_store(var/obj/item/I,mob/user)
+	return !(attackby(I,user))
 
 /obj/item/device/pda/proc/add_to_virtual_wallet(var/amount, var/mob/user, var/atom/giver)
 	if(!id)

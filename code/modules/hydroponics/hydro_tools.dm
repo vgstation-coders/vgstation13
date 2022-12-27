@@ -62,7 +62,8 @@
 		return
 
 	form_title = "[grown_seed.seed_name] (#[grown_seed.uid])"
-	user.visible_message("<span class='notice'>[user] runs the scanner over [target].</span>")
+	if(loc == user) //Don't show this message if we are not inhand
+		user.visible_message("<span class='notice'>[user] runs the scanner over [target].</span>")
 
 	var/dat = list()
 	dat += "<h3>Plant data for [form_title]</h3>"

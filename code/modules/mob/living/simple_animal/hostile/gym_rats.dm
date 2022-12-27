@@ -28,19 +28,22 @@
 	minbodytemp = 223		//Below -50 Degrees Celcius
 	maxbodytemp = 323	//Above 50 Degrees Celcius
 
+	attacktext = "headbutts"
 	attack_sound = 'sound/weapons/punch1.ogg'
 
 	melee_damage_lower = 1
 	melee_damage_upper = 5
 
-	var/health_cap = 75 // Eating protein can pack on a whopping 150% increase in max health. GAINZ
+	var/health_cap = 100 // Eating protein can pack on a whopping 233% increase in max health. GAINZ
 	var/icon_eat = "gymrat-eat"
 	var/obj/my_wheel
 	var/list/gym_equipments = list(/obj/structure/stacklifter, /obj/structure/punching_bag, /obj/structure/weightlifter, /obj/machinery/power/treadmill)
-
-	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks/cheesewedge, /obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel) // Gym rats are pickier than normal mice. Cheese and raw meat only
+	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks)
 
 	var/all_fours = TRUE
+
+	var/last_scavenge = 0
+	var/const/scavenge_cooldown = 15 SECONDS
 
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 
@@ -55,6 +58,34 @@
 		attacktext = "punches"
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/UnarmedAttack(var/atom/A)
+	if(istype(A, /obj/machinery/disposal)) // If we click on a disposal unit and 15 seconds have passed, let's look for meat or cheese
+		to_chat(src, text("<span class='notice'>You rummage through the [A].</span>"))
+
+		if((last_scavenge + scavenge_cooldown >= world.time))
+			to_chat(src, text("<span class='warning'>You just checked a disposal unit! You won't find anything new for now.</span>")) // If we scavenged too recently, we get told to wait
+
+		if((last_scavenge + scavenge_cooldown < world.time))
+			last_scavenge = world.time
+			if(prob(60))
+				to_chat(src, text("<span class='warning'>You don't find anything interesting.</span>"))
+			else
+				to_chat(src, text("<span class='warning'>You find something!</span>"))
+				new /obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps(src.loc)
+
+	if(istype(A, /obj/machinery/microwave))
+		to_chat(src, text("<span class='notice'>You rummage through the [A].</span>"))
+
+		if((last_scavenge + scavenge_cooldown >= world.time))
+			to_chat(src, text("<span class='warning'>You just checked a microwave! You won't find anything new for now.</span>")) // If we scavenged too recently, we get told to wait
+
+		if((last_scavenge + scavenge_cooldown < world.time))
+			last_scavenge = world.time
+			if(prob(60))
+				to_chat(src, text("<span class='warning'>You don't find anything interesting.</span>"))
+			else
+				to_chat(src, text("<span class='warning'>You find something!</span>"))
+				new /obj/item/weapon/reagent_containers/food/snacks/meat/scraps(src.loc)
+
 	if(is_type_in_list(A, edibles)) // If we click on something edible, it's time to chow down!
 		delayNextAttack(10)
 		chowdown(A)
@@ -62,32 +93,40 @@
 		A.attack_hand(src, 0, A.Adjacent(src))
 	else return ..()
 
-/mob/living/simple_animal/hostile/retaliate/gym_rat/proc/chowdown(var/atom/eat_this)
-	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) //Mmm, cheese wedge. Gives back a small amount of health upon consumption
-		health+=5
-		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
-		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-		flick(icon_eat, src)
-		qdel(eat_this)
-	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/meat)) //Protein! Gives back a smaller amount of health, but also packs on some extra max hp
-		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
+/mob/living/simple_animal/hostile/retaliate/gym_rat/proc/chowdown(var/obj/item/weapon/reagent_containers/food/snacks/F)
+	if(F.food_flags & FOOD_MEAT) // Meat will heal us, and also pack on some max hp!
+		visible_message("\The [name] gobbles up \the [F].", "<span class='notice'>You gobble up the [F].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
-			adjust_hp(3)
+			adjust_hp(5)
 		else
-			health+=3 // Otherwise we just get a little health back
+			health+=5 // Otherwise we just get a little health back
+			to_chat(src, text("<span class='warning'>The meat nourishes you, but your muscles don't grow. You've bulked all you can...</span>"))
 		flick(icon_eat, src)
-		qdel(eat_this)
-	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)) //A cheese wheel feast! Gives back a lot more health than just a slice
-		health+=25
-		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
+		qdel(F)
+	if(istype(F,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps)) //Half-eaten cheese wedge. Better than nothing
+		health+=4
+		visible_message("\The [name] gobbles up \the [F].", "<span class='notice'>You gobble up the [F].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
-		qdel(eat_this)
+		qdel(F)
+	if(istype(F,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) //Mmm, cheese wedge. Gives back a small amount of health upon consumption
+		health+=6
+		visible_message("\The [name] gobbles up \the [F].", "<span class='notice'>You gobble up the [F].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		flick(icon_eat, src)
+		qdel(F)
+	if(istype(F,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)) //A cheese wheel feast! Gives back a lot more health than just a slice
+		health+=30
+		visible_message("\The [name] gobbles up \the [F].", "<span class='notice'>You gobble up the [F].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		flick(icon_eat, src)
+		qdel(F)
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/adjust_hp(var/amount)
 	if(amount > 0 && maxHealth < health_cap) //below health_cap, increase maxHealth but no further than health_cap
 		maxHealth += amount
+		to_chat(src, text("<span class='warning'>You feel your muscles growing!</span>"))
 	health += amount
 	if(maxHealth < 60)
 		melee_damage_lower = 1
@@ -143,49 +182,15 @@
 /mob/living/simple_animal/hostile/retaliate/gym_rat/proc/Calm()
 	enemies.Cut()
 	LoseTarget()
-	src.say(pick("Yeah, you better run.","Not worth my time, anyways."))
-	src.visible_message("<span class='notice'>[src] squeaks softly and calms down.</span>")
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/Retaliate()
 	if(!stat)
 		..()
-		src.say(pick("You want to go? Let's go!","You can't beat me, nerd!","I'll break you in half!"))
 
-/mob/living/simple_animal/hostile/retaliate/gym_rat/attackby(var/obj/item/O as obj, var/mob/user as mob) // Feed the gym rat some food
+/mob/living/simple_animal/hostile/retaliate/gym_rat/attackby(var/obj/item/weapon/reagent_containers/food/snacks/F as obj, var/mob/user as mob) // Feed the gym rat some food
 	if(stat == CONSCIOUS)
-		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheesewedges heal it a bit
-			Calm()
-			health+=5
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			flick(icon_eat, src)
-			qdel(O)
-		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel))
-			Calm()
-			health+=25
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			flick(icon_eat, src)
-			qdel(O)
-		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on some extra maximum hp
-			Calm()
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
-				adjust_hp(3)
-			else
-				health+=3 // Otherwise we just get a little health back
-			flick(icon_eat, src)
-			qdel(O)
+		if(is_type_in_list(F, edibles)) // If it's something edible, chow down!
+			chowdown(F)
 		else
 			..()
 	else
@@ -194,7 +199,7 @@
 /mob/living/simple_animal/hostile/retaliate/gym_rat/verb/stand_up() // Allows the gym rat to toggle poses. They can stand upright, or walk around like a typical mouse
 	set name = "Stand Up / Lie Down"
 	set desc = "Stand up and show off your guns, or walk on all fours to not embarrass the nerds."
-	set category = "Gym_Rat"
+	set category = "GymRat"
 
 	if(all_fours == TRUE)
 		all_fours = FALSE
@@ -206,6 +211,16 @@
 		to_chat(src, text("<span class='notice'>You are now moving on all fours.</span>"))
 		update_icon()
 
+/mob/living/simple_animal/hostile/retaliate/gym_rat/verb/info() // Tells the gym rat how to gym rat
+	set name = "How 2 Gainz"
+	set desc = "How do become swole?"
+	set category = "GymRat"
+
+	to_chat(src, text("<span class='warning'>You are a gym rat, a much larger and stronger cousin of a normal mouse.</span>"))
+	to_chat(src, text("<span class='warning'>You need cheese and meaty foods. Cheese will heal you, and meat will increase your attack damage and maximum health.</span>"))
+	to_chat(src, text("<span class='warning'>If you're desperate, you can scavenge for meat or cheese from disposal units or microwaves.</span>"))
+	to_chat(src, text("<span class='warning'>Protect your gains, and avoid soy milk at all costs. If you lose your gains, there's no going back.</span>"))
+
 /mob/living/simple_animal/hostile/retaliate/gym_rat/reagent_act(id, method, volume) // Gym rats have to keep away from soymilk... it's bad for their gainz
 	if(isDead())
 		return
@@ -216,7 +231,7 @@
 		if(SOYMILK)
 			if(maxHealth >= 20)
 				visible_message("<span class='warning'>[src] seems to shrink as the soymilk washes over them! Its muscles look less visible...</span>")
-				maxHealth-=5
+				maxHealth-=10
 				adjustBruteLoss(1) // Here so that the mouse aggros. It won't be happy that you're cutting into its gainz!
 			if(maxHealth < 20)
 				visible_message("<span class='warning'>[src] shrinks back into a more appropriate size for a mouse.</span>")
@@ -245,7 +260,7 @@
 	melee_damage_lower = 1
 	melee_damage_upper = 6
 
-	health_cap = 90 // Eating protein can pack on a whopping 125% increase in max health. GAINZ
+	health_cap = 120 // Eating protein can pack on a whopping 200% increase in max health. GAINZ
 	icon_eat = "gymrat_pompadour-eat"
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat/update_icon()
@@ -261,8 +276,9 @@
 /mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat/adjust_hp(var/amount)
 	if(amount > 0 && maxHealth < health_cap) //below health_cap, increase maxHealth but no further than health_cap
 		maxHealth += amount
+		to_chat(src, text("<span class='warning'>You feel your muscles growing!</span>"))
 	health += amount
-	if(maxHealth < 75)
+	if(maxHealth < 80)
 		melee_damage_lower = 1
 		melee_damage_upper = 6
 		environment_smash_flags &= ~OPEN_DOOR_STRONG
@@ -288,17 +304,6 @@
 			else
 				wander = TRUE
 
-/mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat/Calm()
-	enemies.Cut()
-	LoseTarget()
-	src.say(pick("Yeah, get outta here.","Yeah, whatever."))
-	src.visible_message("<span class='notice'>[src] squeaks softly and calms down.</span>")
-
-/mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat/Retaliate()
-	if(!stat)
-		..()
-		src.say(pick("You're asking for a knuckle sandwich.","You're just embarrassing yourself, geek.","You've never seen guns like these, buster.", "I'm real pretty, but you won't be when I'm done."))
-
 ///////////////////////////////////////////////////////////////////ROID RAT///////////
 // That mouse is shredded! Has the science of bodybuilding gone too far? Possibly too swole to control!
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat
@@ -319,7 +324,7 @@
 	melee_damage_lower = 10
 	melee_damage_upper = 20
 
-	health_cap = 225 // Eating protein can pack on a 50% increase in max health. Less percentage-wise than gym rats who are working out the "natural" way, but the raw numbers are still pretty scary
+	health_cap = 250 // Eating protein can pack on a 66% increase in max health. Less percentage-wise than gym rats who are working out the "natural" way, but the raw numbers are still pretty scary
 	icon_eat = "roidrat-eat"
 
 	var/punch_throw_chance = 20 // Chance of sending a target flying a short distance with a punch
@@ -375,32 +380,40 @@
 				target_turf = get_ranged_target_turf(T, dir, punch_throw_range)
 			M.throw_at(target_turf,100,punch_throw_speed)
 
-/mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/chowdown(var/atom/eat_this)
-	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) //Mmm, cheese wedge. Gives back a small amount of health upon consumption
-		health+=10
-		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
-		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-		flick(icon_eat, src)
-		qdel(eat_this)
-	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/meat)) //Protein! Gives back a smaller amount of health, but also packs on some extra max hp
-		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
+/mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/chowdown(var/obj/item/weapon/reagent_containers/food/snacks/F)
+	if(F.food_flags & FOOD_MEAT) // Meat will heal us, and also pack on some max hp!
+		visible_message("\The [name] gobbles up \the [F].", "<span class='notice'>You gobble up the [F].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
-			adjust_hp(3)
+			adjust_hp(5)
 		else
-			health+=3 // Otherwise we just get a little health back
+			health+=5 // Otherwise we just get a little health back
+			to_chat(src, text("<span class='warning'>The meat nourishes you, but your muscles don't grow. You've bulked all you can...</span>"))
 		flick(icon_eat, src)
-		qdel(eat_this)
-	if(istype(eat_this,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)) //A cheese wheel feast! Gives back a lot more health than just a slice
-		health+=50
-		visible_message("\The [name] gobbles up \the [eat_this].", "<span class='notice'>You gobble up the [eat_this].</span>")
+		qdel(F)
+	if(istype(F,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps)) //Half-eaten cheese wedge. Better than nothing
+		health+=10
+		visible_message("\The [name] gobbles up \the [F].", "<span class='notice'>You gobble up the [F].</span>")
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		flick(icon_eat, src)
-		qdel(eat_this)
+		qdel(F)
+	if(istype(F,/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) //Mmm, cheese wedge. Gives back a small amount of health upon consumption
+		health+=15
+		visible_message("\The [name] gobbles up \the [F].", "<span class='notice'>You gobble up the [F].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		flick(icon_eat, src)
+		qdel(F)
+	if(istype(F,/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)) //A cheese wheel feast! Gives back a lot more health than just a slice
+		health+=75
+		visible_message("\The [name] gobbles up \the [F].", "<span class='notice'>You gobble up the [F].</span>")
+		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		flick(icon_eat, src)
+		qdel(F)
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/adjust_hp(var/amount) // Maximized gainz will grant roid rats incredible punching power, and the ability to smash through normal walls! Oh YEAAAAAAAAAAAAAAH
 	if(amount > 0 && maxHealth < health_cap) //below health_cap, increase maxHealth but no further than health_cap
 		maxHealth += amount
+		to_chat(src, text("<span class='warning'>You feel your muscles growing!</span>"))
 	health += amount
 	if(maxHealth < 200)
 		melee_damage_lower = 10
@@ -428,57 +441,6 @@
 			else
 				wander = TRUE
 				speed = 2
-
-/mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/Calm()
-	enemies.Cut()
-	LoseTarget()
-	src.say(pick("YOU AIN'T NUTHING.","BETTER RUN, TINY MAN."))
-	src.visible_message("<span class='notice'>[src] squeaks softly and calms down.</span>")
-
-/mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/Retaliate()
-	if(!stat)
-		..()
-		src.say(pick("TIME TO STEP INTO THE SQUARE CIRCLE, SON.","YOU CALLED DOWN THE THUNDER.","GET READY FOR THE BIG GUNS.","YOU EYEBALLING ME?"))
-
-/mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/attackby(var/obj/item/O as obj, var/mob/user as mob) // Feed the roid rat some food
-	if(stat == CONSCIOUS)
-		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/cheesewedge)) // Cheesewedges heal it a bit
-			Calm()
-			health+=10
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			flick(icon_eat, src)
-			qdel(O)
-		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel))
-			Calm()
-			health+=50
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			flick(icon_eat, src)
-			qdel(O)
-		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/meat)) // Meat heals less, but packs on some extra maximum hp
-			Calm()
-			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
-			visible_message("<span class='notice'>[user] feeds \the [O] to [src]. It squeaks loudly.</span>")
-			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-			heart.plane = ABOVE_HUMAN_PLANE
-			flick_overlay(heart, list(user.client), 20)
-			if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
-				adjust_hp(3)
-			else
-				health+=3 // Otherwise we just get a little health back
-			flick(icon_eat, src)
-			qdel(O)
-		else
-			..()
-	else
-		..()
 
 /mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat/New() // speaks mouse, and gets their punch spell added
 	..()

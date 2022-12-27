@@ -20,7 +20,7 @@
 				if(L.mind && L.mind.suiciding)	//Suicider
 					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<span class='red'><b>Suicide</b></span>)\n"
 					continue //Disconnected client
-				if(L.stat == UNCONSCIOUS)
+				if(L.stat == UNCONSCIOUS && L.sleeping == 0)
 					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (Dying)\n"
 					continue //Unconscious
 				if(L.stat == DEAD)
@@ -158,7 +158,7 @@
 /proc/equip_wizard(mob/living/carbon/human/wizard_mob, apprentice = FALSE)
 	if (!istype(wizard_mob))
 		return
-
+	wizard_mob.delete_all_equipped_items()
 	var/datum/faction/wizard/civilwar/wpf/WPF = find_active_faction_by_type(/datum/faction/wizard/civilwar/wpf)
 	var/datum/faction/wizard/civilwar/wpf/PFW = find_active_faction_by_type(/datum/faction/wizard/civilwar/pfw)
 	if(WPF && WPF.get_member_by_mind(wizard_mob.mind))  //WPF get red

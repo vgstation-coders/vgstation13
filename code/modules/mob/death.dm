@@ -1,6 +1,8 @@
 //This is the proc for gibbing a mob. Cannot gib ghosts.
 //added different sort of gibs and animations. N
 /mob/proc/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		return
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -46,6 +48,8 @@
 		client.color = initial(client.color)
 	for(var/obj/item/I in src)
 		I.OnMobDeath(src)
+	for(var/atom/A in arcane_tampered_atoms)
+		A.bless()
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.on_holder_death(src)

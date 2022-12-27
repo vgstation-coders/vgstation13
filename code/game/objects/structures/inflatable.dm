@@ -350,14 +350,18 @@
 	return TRUE
 
 /obj/structure/inflatable/shelter/update_icon()
-	overlays = list()
-	var/mob/living/carbon/human/occupant = locate(/mob/living/carbon/human) in contents
-	if(occupant)
-		var/image/occupant_overlay = occupant.appearance
-		overlays += occupant_overlay
-	var/image/cover_overlay = image('icons/obj/inflatable.dmi', icon_state = "shelter_top", layer = FLY_LAYER)
-	cover_overlay.plane = ABOVE_HUMAN_PLANE
-	overlays += cover_overlay
+	vis_contents.Cut()
+	overlays.Cut()
+	for(var/mob/living/L in contents)
+		L.reset_layer()
+		vis_contents.Add(L)
+	if(contents.len)
+		var/image/cover_overlay = image('icons/obj/inflatable.dmi', icon_state = "shelter_top", layer = FLY_LAYER)
+		cover_overlay.plane = relative_plane(ABOVE_HUMAN_PLANE)
+		overlays += cover_overlay
+
+/obj/structure/inflatable/shelter/adjust_layer(mob/M)
+	M.plane = relative_plane(M.plane)
 
 /obj/structure/inflatable/shelter/attack_hand(mob/user)
 	if(user.loc == src && ishuman(user))
@@ -451,17 +455,34 @@
 		exiting -= user
 		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
 		return
+	if(dest && !dest.Cross(user,dest))
+		exiting -= user
+		to_chat(user,"<span class='warning'>You cannot climb out here, the way is blocked.</span>")
+		return
+	var/turf/T = get_turf(src)
+	var/x_offset = 0
+	var/y_offset = 0
+	var/z_offset = 0
+	if(dest)
+		x_offset = dest.x-T.x
+		y_offset = dest.y-T.y
+		z_offset = dest.z-T.z
 	visible_message("<span class='warning'>[user] begins to climb free of the \the [src]!</span>")
 	exiting += user
 	spawn(6 SECONDS)
 		if(loc && exiting.Find(user)) //If not loc, it was probably deflated
-			if (dest)
-				user.forceMove(dest)
+			if(dest)
+				var/turf/T2 = get_turf(src)
+				if(user.Move(locate(T2.x+x_offset,T2.y+y_offset,T2.z+z_offset)))
+					update_icon()
+					to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
+				else
+					to_chat(user,"<span class='warning'>You cannot climb out here, the way is blocked.</span>")
 			else
 				user.forceMove(loc)
-			exiting -= user
-			update_icon()
-			to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
+				update_icon()
+				to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
+		exiting -= user
 
 /obj/structure/inflatable/shelter/MouseDropTo(atom/movable/O, mob/user) //copy pasted from cryo code
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
@@ -502,20 +523,13 @@
 
 
 /obj/structure/inflatable/shelter/MouseDropFrom(over_object, src_location, turf/over_location, src_control, over_control, params)
-	if(!Adjacent(over_location))
+	if(!Adjacent(over_location) || !istype(over_location) || usr.incapacitated())
 		return
-	if(!istype(over_location) || over_location.density)
-		return
-	if(usr.incapacitated())
-		return
-	for(var/atom/movable/A in over_location.contents)
-		if(A.density)
-			if((A == src) || istype(A, /mob))
-				continue
-			return
-	if(istype(over_location))
-		container_resist(usr,over_location)
+	container_resist(usr,over_location)
 
 /obj/structure/inflatable/shelter/Exited(var/atom/movable/mover)
 	update_icon()
+	var/mob/living/L = mover
+	if(istype(L))
+		L.reset_layer()
 	return ..()

@@ -4,7 +4,7 @@
 	icon_state = "red_pyjamas"
 	_color = "red_pyjamas"
 	item_state = "w_suit"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/pj/blue
 	name = "blue pj's"
@@ -12,7 +12,7 @@
 	icon_state = "blue_pyjamas"
 	_color = "blue_pyjamas"
 	item_state = "w_suit"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/captain_fly
 	name = "rogue captains uniform"
@@ -586,7 +586,8 @@
 	icon_state = "darkholme"
 	item_state = "darkholme"
 	_color = "darkholme"
-	species_fit = list(INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/under/gokugidown
 	name = "turtle hermit undershirt"
@@ -629,7 +630,7 @@
 	icon_state = "darkholme"
 	item_state = "darkholme"
 	_color = "darkholme"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/under/contortionist/proc/check_clothing(mob/user as mob)
 	//Allowed to wear: glasses, shoes, gloves, pockets, mask, and jumpsuit (obviously)
@@ -910,6 +911,14 @@
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
+
+/obj/item/clothing/suit/reaper_robes
+	name = "grim robes"
+	desc = "Tends to snag on tombstones"
+	icon_state = "reaper_hoodie" //edited version of chaplain_hoodie. 1px longer, and more open at the front
+	item_state = "reaper_hoodie"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	body_parts_covered = FULL_TORSO|LEGS|ARMS|IGNORE_INV
 
 /obj/item/clothing/under/clownpsyche
 	name = "Psychedelic clown outfit"

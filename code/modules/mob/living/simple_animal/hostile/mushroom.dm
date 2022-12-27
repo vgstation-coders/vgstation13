@@ -9,7 +9,7 @@
 	maxHealth = 10
 	health = 10
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice
 	size = SIZE_SMALL
 
 	response_help  = "pets"

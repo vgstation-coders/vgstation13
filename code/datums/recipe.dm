@@ -39,6 +39,8 @@
 	var/result //Result of a complete recipe. result = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 	var/time = 10 SECONDS //Length of time it takes to complete the recipe. In 10ths of a second
 	var/priority = 0 //To check which recipe takes priority if they share ingredients
+	var/cookable_with = COOKABLE_WITH_HEAT //How this recipe can be cooked, eg. COOKABLE_WITH_MICROWAVE (see setup.dm).
+
 /*
 	check_reagents function
 	Looks for reagents in the reagent container passed to it, and if this matches what we require.
@@ -51,6 +53,7 @@
 		1/TRUE: Able to find enough reagents to satisfy requirements
 		-1: Found what we require, but there is more reagents than just what we need
 */
+
 /datum/recipe/proc/check_reagents(var/datum/reagents/avail_reagents)
 	. = 1
 	for(var/r_r in reagents)
@@ -123,6 +126,10 @@
 /datum/recipe/proc/make_food(var/obj/container, var/mob/user)
 	var/obj/result_obj = new result(container)
 	for(var/obj/O in (container.contents - result_obj))
+		if(O.arcanetampered && istype(container,/obj/machinery/microwave))
+			var/obj/machinery/microwave/M = container
+			M.fail(O.arcanetampered)
+			return
 		if(O.reagents)
 			//Should we have forbidden reagents, purge them first.
 			for(var/r_r in reagents_forbidden)
@@ -133,6 +140,12 @@
 				O.reagents.del_reagent(r_r)
 			//Transfer any reagents found in the object, to the resulting object
 			O.reagents.trans_to(result_obj, O.reagents.total_volume)
+		//Transfer any luckiness from the ingredients, to the resulting item
+		if(isitem(result_obj) && isitem(O))
+			var/obj/item/I = O
+			var/obj/item/result_item = result_obj
+			if(I.luckiness)
+				result_item.luckiness += I.luckiness
 		qdel(O)
 	container.reagents.clear_reagents() //Clear all the reagents we haven't transfered, for instance if we need to cook in water
 	score.meals++

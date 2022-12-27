@@ -281,6 +281,11 @@
 	if(!amount)
 		return "Its core has been taken. "
 
+/datum/butchering_product/hivelord_core/guardian
+	result = /obj/item/asteroid/hivelord_core/guardian
+
+/datum/butchering_product/hivelord_core/heart
+	result = /obj/item/organ/internal/heart/hivelord
 
 //======deer head
 

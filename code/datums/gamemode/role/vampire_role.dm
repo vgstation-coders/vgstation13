@@ -253,6 +253,9 @@
 		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
 		H.update_perception()
 
+/datum/role/vampire/update_perception()
+	return
+
 /datum/role/vampire/proc/is_mature_or_has_vision()
 	return (locate(/datum/power/vampire/vision) in current_powers) || (locate(/datum/power/vampire/mature) in current_powers)
 
@@ -343,7 +346,7 @@
 		return
 	if(H.stat == DEAD)
 		return
-	if(locate(/datum/power/vampire/charisma) in current_powers && world.time > deadchat_timer)
+	if((locate(/datum/power/vampire/charisma) in current_powers) && world.time > deadchat_timer)
 		deadchat = TRUE
 		//have deadchat for 30 seconds every five minutes
 		spawn(rand(200, 400))

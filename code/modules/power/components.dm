@@ -14,6 +14,7 @@
 	var/datum/powernet/powernet = null
 
 	var/power_priority = POWER_PRIORITY_NORMAL
+	var/is_priority_locked = FALSE // If true, do not allow priority to be changed
 
 	var/machine_flags = 0 // Emulate machinery flags.
 	var/inMachineList = 0
@@ -66,7 +67,7 @@
 		turf.power_connections += src
 
 /datum/power_connection/proc/removeFromTurf()
-	if(!turf)
+	if(!turf || !turf.power_connections)
 		return
 	// We don't grab the current turf here because we're removing the reference from the turf that has it.
 	turf.power_connections -= src
@@ -252,6 +253,7 @@
 		"name" = parent.name,
 
 		"priority" = power_priority,
+		"priority_locked" = is_priority_locked,
 		"demand" = monitor_demand,
 
 		"isbattery" = monitor_isbattery,
@@ -265,7 +267,7 @@
 	return list("\ref[src]" = get_monitor_status_template())
 
 /datum/power_connection/proc/change_priority(value, id)
-	if(id == "\ref[src]")
+	if(!is_priority_locked && id == "\ref[src]")
 		power_priority = value
 		return TRUE
 
@@ -296,9 +298,17 @@
 			use_power(idle_usage, channel)
 		if (MACHINE_POWER_USE_ACTIVE)
 			use_power(active_usage, channel)
-
 	return 1
 
+/datum/power_connection/consumer/get_monitor_status_template()
+	var/template = ..()
+	if (template)
+		switch (use_power)
+			if (MACHINE_POWER_USE_IDLE)
+				template["demand"] = idle_usage
+			if (MACHINE_POWER_USE_ACTIVE)
+				template["demand"] = active_usage
+	return template
 
 //////////////////////
 /// TERMINAL RECEIVER

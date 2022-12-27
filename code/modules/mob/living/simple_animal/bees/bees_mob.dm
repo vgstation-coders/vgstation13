@@ -61,6 +61,13 @@ var/bee_mobs_count = 0
 
 	blooded = FALSE // certainly not enough blood there to matter
 
+	var/single_direction = TRUE
+
+/mob/living/simple_animal/bee/Move()
+	..()
+	if (single_direction)
+		dir = SOUTH
+
 ///////////////////////////////Basic Procs//////////////////////////////////
 
 /mob/living/simple_animal/bee/New(loc, var/obj/machinery/apiary/new_home)
@@ -89,6 +96,9 @@ var/bee_mobs_count = 0
 	qdel(src)
 
 /mob/living/simple_animal/bee/gib(var/animation = 0, var/meat = 1)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	death(1)
 	monkeyizing = 1
 	canmove = 0

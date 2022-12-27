@@ -327,8 +327,8 @@
 				if(prob(10))
 					playsound(src,'sound/items/bikehorn.ogg', 80, 1)
 			if("sea devil")
-				if(fish_list.len > 1 && prob(5))
-					//Small chance to eat a random fish that isn't itself.
+				if(filth_level > 2.5 && prob(5))
+					//Small chance to clear some filth, originally ate fish
 					seadevil_eat()
 				if(fish_list.len < max_fish && egg_list.len)
 					add_fish(egg_list[1])
@@ -391,11 +391,8 @@
 	update_icon()
 
 /obj/machinery/fishtank/proc/seadevil_eat()
-	var/list/fish_to_eat = fish_list.Copy()
-	fish_to_eat.Remove("sea devil")
-	var/eat_target = pick(fish_to_eat)
-	visible_message("<span class='notice'>The sea devil devours \an [eat_target].</span>")
-	remove_fish(eat_target)
+	remove_filth(1)
+	visible_message("<span class='notice'>The sea devil devours some algae.</span>")
 
 /obj/machinery/fishtank/proc/add_fish(var/fish_type)
 	if(!fish_type || fish_type == "dud")
@@ -427,18 +424,17 @@
 	egg_list.len = 0
 
 /obj/machinery/fishtank/proc/harvest_fish(var/mob/user)
-	if(!fish_list.len)
+	if(fish_list.len)
+		var/caught_fish = input("Select a fish to catch.", "Fishing") as null|anything in fish_list
+		if(caught_fish)
+			remove_fish(caught_fish)
+			user.visible_message("[user.name] harvests \a [caught_fish] from \the [src].", "You scoop \a [caught_fish] out of \the [src].")
+			for(var/fish_path in subtypesof(/obj/item/weapon/fish/))
+				var/obj/item/weapon/fish = new fish_path
+				if(fish.name == caught_fish)
+					fish = new fish_path(get_turf(user))
+	else
 		to_chat(user, "There are no fish in \the [src] to catch!")
-		return
-
-	var/caught_fish = pick(fish_list)
-	if(caught_fish)
-		remove_fish(caught_fish)
-		user.visible_message("[user.name] harvests \a [caught_fish] from \the [src].", "You scoop \a [caught_fish] out of \the [src].")
-	for(var/fish_path in subtypesof(/obj/item/weapon/fish/))
-		var/obj/item/weapon/fish = new fish_path
-		if(fish.name == caught_fish)
-			new fish(get_turf(user))
 
 /obj/machinery/fishtank/proc/destroy(var/deconstruct = FALSE)
 	if(!deconstruct)
@@ -710,12 +706,12 @@
 		water_value += C.reagents.get_reagent_amount(WATER)
 		water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1
 		water_value += C.reagents.get_reagent_amount(ICE) * 0.80
-	var/message = ""
 	if(water_value)
 		add_water(water_value)
 		C.reagents.clear_reagents()
+		to_chat(user, "<span class='notice'>You add the contents of the container to \the [src].</span>")
 		if(water_level == water_capacity)
-			message += "You filled \the [src] to the brim!"
+			to_chat(user, "<span class='notice'>You filled \the [src] to the brim!</span>")
 		update_icon()
 	return TRUE
 
@@ -742,6 +738,7 @@
 		qdel(egg)
 		return FALSE
 	add_fish(egg.fish_type)
+	to_chat(user, "<span class='notice'>You add the fish eggs to \the [src].</span>")
 	qdel(egg)
 	return TRUE
 
@@ -754,6 +751,7 @@
 		to_chat(user, "<span class='notice'>\The [src] already has plenty of food in it. You decide to not add more.<span>")
 		return FALSE
 	add_food(MAX_FOOD)
+	to_chat(user, "<span class='notice'>You add the fish food to \the [src].</span>")
 
 	return TRUE
 
@@ -762,7 +760,7 @@
 
 /obj/machinery/fishtank/proc/handle_brush(var/obj/item/O, var/mob/user as mob)
 	if(filth_level == 0)
-		to_chat(user, "\The [src] is already spotless!")
+		to_chat(user, "<span class='notice'>\The [src] is already spotless!</span>")
 		return TRUE
 	filth_level = 0
 	user.visible_message("\The [user] scrubs the inside of \the [src], cleaning the filth.", "<span class='notice'>You scrub the inside of \the [src], cleaning the filth.</span>")

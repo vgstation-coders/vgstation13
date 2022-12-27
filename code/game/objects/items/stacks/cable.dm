@@ -32,6 +32,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
 	flags =  FPRINT
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	siemens_coefficient = 1.5 //Extra conducting
 	slot_flags = SLOT_BELT
 	item_state = "coil_red"
@@ -241,7 +242,14 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 	use(1)
 
-	if(C.shock(user, 50))
+	if(arcanetampered && isliving(user))
+		var/mob/living/L = user
+		L.electrocute_act(30,src)
+		if(prob(50)) //Fail
+			new /obj/item/stack/cable_coil(C.loc, 1)
+			qdel(C)
+			return // let's not return the reference to a pooled cable
+	else if(C.shock(user, 50))
 		if(prob(50)) //Fail
 			new /obj/item/stack/cable_coil(C.loc, 1)
 			qdel(C)

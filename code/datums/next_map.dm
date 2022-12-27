@@ -59,7 +59,7 @@
 /datum/next_map/deff
 	name = "Defficiency"
 	path = "Defficiency"
-	min_players = 30
+	min_players = 25
 
 /datum/next_map/dorf
 	name = "DorfStation"
@@ -78,6 +78,11 @@
 /datum/next_map/island
 	name = "Island Station"
 	path = "Island"
+	min_players = 25
+	
+/datum/next_map/line
+	name = "Frankenline Station"
+	path = "line"
 	min_players = 25
 	
 /datum/next_map/line/is_votable()
@@ -110,7 +115,7 @@
 /datum/next_map/metaclub
 	name = "Meta Club"
 	path = "Metaclub"
-	min_players = 24
+	min_players = 20
 
 /datum/next_map/packed
 	name = "Packed Station"
@@ -140,6 +145,7 @@
 /datum/next_map/synergy
 	name = "Synergy Station"
 	path = "Synergy"
+	max_players = 30
 
 /datum/next_map/waystation
 	name = "Waystation"

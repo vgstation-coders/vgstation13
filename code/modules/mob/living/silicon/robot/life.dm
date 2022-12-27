@@ -32,7 +32,7 @@
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
-	
+
 	if(locked_to_z)
 		check_locked_zlevel()
 
@@ -91,7 +91,7 @@
 	if(!isDead()) //Alive.
 		blinded = !(paralysis || is_component_functioning("camera"))
 		stat = !(paralysis || stunned || knockdown) ? CONSCIOUS : UNCONSCIOUS
-	else //Dead.
+	else if(!(status_flags & BUDDHAMODE)) //Dead.
 		blinded = TRUE
 		stat = DEAD
 
@@ -152,13 +152,28 @@
 				 					0,0,0,1,
 				 					-0.2,0,-0.2,0)
 			see_invisible = SEE_INVISIBLE_MINIMUM
+			dark_plane.alphas["robot_night_vision"] = 255
+			dark_plane.alphas -= "robot_mesons"
+			dark_plane.alphas -= "robot_thermal"
 		if(MESON_VISION)
 			change_sight(adding = SEE_TURFS)
 			see_invisible = SEE_INVISIBLE_MINIMUM
+			dark_plane.alphas["robot_mesons"] = 255
+			dark_plane.alphas -= "robot_night_vision"
+			dark_plane.alphas -= "robot_thermal"
 		if(THERMAL_VISION)
 			change_sight(adding = SEE_MOBS)
 			see_invisible = SEE_INVISIBLE_MINIMUM
+			dark_plane.alphas["robot_thermal"] = 255
+			dark_plane.alphas -= "robot_mesons"
+			dark_plane.alphas -= "robot_night_vision"
 			see_in_dark = 4
+		else // nothing
+			dark_plane.alphas -= "robot_night_vision"
+			dark_plane.alphas -= "robot_mesons"
+			dark_plane.alphas -= "robot_thermal"
+
+	check_dark_vision()
 
 /mob/living/silicon/robot/proc/process_killswitch()
 	if(scrambledcodes)

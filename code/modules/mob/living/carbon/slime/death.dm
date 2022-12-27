@@ -1,5 +1,5 @@
 /mob/living/carbon/slime/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	stat = DEAD
 	icon_state = "[colour] baby slime dead"

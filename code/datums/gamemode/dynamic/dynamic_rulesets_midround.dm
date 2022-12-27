@@ -394,12 +394,13 @@
 	name = "Blob Overmind Storm"
 	role_category = /datum/role/blob_overmind/
 	my_fac = /datum/faction/blob_conglomerate/
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Station Engineer","Chief Engineer", "Roboticist","Head of Security", "Captain")
-	required_pop = list(25,20,20,15,15,15,10,10,10,10)
+	enemy_jobs = list("AI", "Cyborg", "Warden", "Head of Security", "Captain", "Quartermaster", "Head of Personnel", "Station Engineer", "Chief Engineer", "Atmospheric Technician")
+	required_pop = list(30,25,25,20,20,20,15,15,15,15)
+	required_enemies = list(4,4,4,4,4,4,4,3,2,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	weekday_rule_boost = list("Tue")
-	cost = 30
+	cost = 45
 	requirements = list(90,90,80,40,40,40,30,20,20,10)
 	high_population_requirement = 70
 	logo = "blob-logo"
@@ -600,7 +601,6 @@
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
 	flags = MINOR_RULESET
-	makeBody = FALSE
 
 /datum/dynamic_ruleset/midround/from_ghosts/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)
@@ -613,6 +613,17 @@
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
 	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
 	return accepted
+
+
+/datum/dynamic_ruleset/midround/from_ghosts/grinch/generate_ruleset_body(var/mob/applicant)
+	var/mob/living/simple_animal/hostile/gremlin/grinch/G = new (pick(grinchstart))
+	G.key = applicant.key
+	return G
+
+/datum/dynamic_ruleset/midround/from_ghosts/grinch/setup_role(var/datum/role/new_role)
+	new_role.Greet(GREET_DEFAULT)
+	new_role.AnnounceObjectives()
+	new_role.OnPostSetup()
 
 //////////////////////////////////////////////
 //                                          //
@@ -823,7 +834,7 @@
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	cost = 20
-	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	requirements = list(70,40,20,20,20,20,15,15,5,5)
 	high_population_requirement = 10
 	logo = "pulsedemon-logo"
 	var/list/cables_to_spawn_at = list()
@@ -914,11 +925,11 @@
 	restricted_from_jobs = list()
 	enemy_jobs = list("Warden","Head of Security")
 	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
-	required_pop = list(0,0,10,10,15,15,20,20,20,25)
+	required_pop = list(25,20,20,20,15,15,10,10,0,0)
 	required_candidates = 1
-	weight = 3
+	weight = 1
 	cost = 0
-	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	requirements = list(70,40,20,20,20,20,15,15,5,5)
 	high_population_requirement = 10
 	flags = MINOR_RULESET
 	makeBody = FALSE

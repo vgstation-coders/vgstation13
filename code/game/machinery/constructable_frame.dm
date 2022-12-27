@@ -182,7 +182,10 @@
 								break
 						if(component_check)
 							P.playtoolsound(src, 50)
-							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
+							var/type2build = src.circuit.build_path
+							if(arcanetampered || circuit.arcanetampered)
+								type2build = pick(typesof(/obj/machinery/cooking))
+							var/obj/machinery/new_machine = new type2build(src.loc)
 							for(var/obj/O in new_machine.component_parts)
 								qdel(O)
 							new_machine.component_parts = list()
@@ -200,6 +203,9 @@
 							new_machine.power_change()
 							circuit.finish_building(new_machine, user)
 							components = null
+							if(arcanetampered || circuit.arcanetampered)
+								new_machine.stat |= BROKEN
+								new_machine.update_icon()
 							qdel(src)
 					else
 						if(istype(P, /obj/item/weapon/storage/bag/gadgets/part_replacer) && P.contents.len && get_req_components_amt())
@@ -1291,17 +1297,38 @@ to destroy them and players will be able to make replacements.
 	desc = "A circuit board used to run a machine that sorts input into two outputs from pre-programmed settings. This one is programmed for items."
 	build_path = /obj/machinery/sorting_machine/item
 
-/obj/item/weapon/circuitboard/wrapping_machine
-	name = "Circuit Board (Wrapping Machine)"
-	desc = "A circuit board used to run a machine that wraps packages."
-	build_path = /obj/machinery/wrapping_machine
+/obj/item/weapon/circuitboard/autoprocessor
+	name = "Circuit Board (Autoprocessor)"
+	desc = "A circuit board used to run a machine that processes things."
+	build_path = /obj/machinery/autoprocessor/wrapping
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2"
 	req_components = list(
 		/obj/item/weapon/stock_parts/scanning_module = 1,
 		/obj/item/weapon/stock_parts/manipulator = 1,
-		/obj/item/weapon/stock_parts/matter_bin = 2,
+		/obj/item/weapon/stock_parts/matter_bin = 1,
+		/obj/item/weapon/stock_parts/capacitor = 1
 	)
+
+/obj/item/weapon/circuitboard/autoprocessor/wrapping
+	name = "Circuit Board (Wrapping Machine)"
+	desc = "A circuit board used to run a machine that wraps packages."
+	build_path = /obj/machinery/autoprocessor/wrapping
+
+/obj/item/weapon/circuitboard/autoprocessor/clothing
+	name = "Circuit Board (Clothing Machine)"
+	desc = "A circuit board used to run a machine that clothes living things."
+	build_path = /obj/machinery/autoprocessor/clothing
+
+/obj/item/weapon/circuitboard/autoprocessor/outfit
+	name = "Circuit Board (Auto Outfitter)"
+	desc = "A circuit board used to run a machine that automatically applies an outfit to people inside."
+	build_path = /obj/machinery/autoprocessor/outfit
+
+/obj/item/weapon/circuitboard/autoprocessor/outfit/prisoner
+	name = "Circuit Board (Prisoner Outfitter)"
+	desc = "A circuit board used to run a machine that automatically applies prisoner clothes to people inside."
+	build_path = /obj/machinery/autoprocessor/outfit/prisoner
 
 /obj/item/weapon/circuitboard/processing_unit
 	name = "Circuit Board (Ore Processor)"
@@ -1404,6 +1431,24 @@ to destroy them and players will be able to make replacements.
 	name = "Circuit Board (Hyperspectral Imager)"
 	desc = "A circuit board used to run a machine used in xenoarcheology."
 	build_path = /obj/machinery/anomaly/hyperspectral
+
+/obj/item/weapon/circuitboard/anom/analyser
+	name = "Circuit Board (Anomaly Analyzer)"
+	desc = "A circuit board used to run a machine used in xenoarcheology."
+	build_path = /obj/machinery/artifact_analyser
+
+/obj/item/weapon/circuitboard/anom/analyser/scanpad
+	name = "Circuit Board (Anomaly Scanner Pad)"
+	desc = "A circuit board used to run a machine used in xenoarcheology."
+	build_path = /obj/machinery/artifact_scanpad
+
+/obj/item/weapon/circuitboard/anom/harvester
+	name = "Circuit Board (Exotic Particle Harvester)"
+	desc = "A circuit board used to run a machine used in xenoarcheology."
+	build_path = /obj/machinery/artifact_harvester
+	req_components = list (
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/capacitor = 2)
 
 /obj/item/weapon/circuitboard/confectionator
 	name = "circuit board (confectionator)"

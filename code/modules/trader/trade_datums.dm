@@ -64,6 +64,20 @@
 	maxunits = 4
 	sales_category = TRADE_VARIETY
 
+/datum/trade_product/zincsaucier
+	name = "Zinc Saucier's crate"
+	path = /obj/structure/closet/crate/freezer/zincsaucier
+	baseprice = 160
+	maxunits = 3
+	sales_category = TRADE_VARIETY
+
+/datum/trade_product/babel
+	name = "Library of Babel shipment"
+	path = /obj/structure/closet/crate/library
+	baseprice = 100
+	maxunits = 5
+	sales_category = TRADE_VARIETY
+
 /datum/trade_product/mechagy
 	name = "Mecha Graveyard shuttle disk"
 	path = /obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard
@@ -100,11 +114,6 @@
 	baseprice = 160
 	maxunits = 1
 	sales_category = TRADE_VARIETY
-
-/datum/trade_product/condidisp
-	name = "condiment dispenser ancient flatpack"
-	path = /obj/structure/closet/crate/flatpack/ancient/condiment_dispenser
-	baseprice = 100
 
 /datum/trade_product/randommobs
 	name = "dehydrated friend cubes"

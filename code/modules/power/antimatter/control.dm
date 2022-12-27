@@ -83,7 +83,7 @@
 
 
 /obj/machinery/power/am_control_unit/proc/produce_power()
-	playsound(src, 'sound/effects/explosionsmallfar.ogg', 25, 1)
+	playsound(src, arcanetampered ? 'sound/effects/bang.ogg' : 'sound/effects/explosionsmallfar.ogg', 25, 1)
 	var/core_power = reported_core_efficiency//Effectively how much fuel we can safely deal with
 	if(core_power <= 0)
 		return 0//Something is wrong
@@ -320,13 +320,16 @@
 	for(var/obj/machinery/am_shielding/AMS in linked_cores)
 		stored_core_stability += AMS.stability
 	stored_core_stability/=linked_cores.len
-	switch(stored_core_stability)
-		if(0 to 24)
-			icon_mod="fuck"
-		if(25 to 49)
-			icon_mod="critical"
-		if(50 to INFINITY)
-			icon_mod="on"
+	if(arcanetampered)
+		icon_mod="fuck"
+	else
+		switch(stored_core_stability)
+			if(0 to 24)
+				icon_mod="fuck"
+			if(25 to 49)
+				icon_mod="critical"
+			if(50 to INFINITY)
+				icon_mod="on"
 	if(icon_mod!=old_icon_mod)
 		old_icon_mod=icon_mod
 		update_icon()

@@ -8,6 +8,7 @@
 	starting_materials = list(MAT_IRON = 60, MAT_GLASS = 30)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/emagged = 0.0
 	var/recording = 0.0
 	var/playing = 0.0

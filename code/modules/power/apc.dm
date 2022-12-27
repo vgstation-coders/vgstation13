@@ -633,6 +633,8 @@
 	else if(istype(W, /obj/item/weapon/kitchen/utensil/fork) && opened) // Sticking fork in open APC shocks you
 		to_chat(user, "<span class='warning'>That was really, really dumb of you.</span>") // Why would you even do this
 		shock(user, 75, W.siemens_coefficient)
+	else if (istype(W, /obj/item/weapon/storage/bag/gadgets/part_replacer))
+		exchange_parts(user, W)
 	else
 		// The extra crowbar thing fixes MoMMIs not being able to remove APCs.
 		// They can just pop them off with a crowbar.
@@ -659,6 +661,25 @@
 				"<span class='warning'>You hit the [src.name] with your [W.name]!</span>", \
 				"You hear bang")*/
 			..() //Sanity
+
+/obj/machinery/power/apc/exchange_parts(mob/user, obj/item/weapon/storage/bag/gadgets/part_replacer/W)
+	if (W.bluespace || wiresexposed || opened)
+		var/obj/item/weapon/cell/max_cell
+		for(var/obj/item/weapon/cell/component in W.contents)
+			if (!max_cell || (max_cell.rating < component.rating))
+				max_cell = component
+
+
+		if (max_cell && max_cell.rating > cell.rating)
+			W.remove_from_storage(max_cell, src)
+			W.handle_item_insertion(cell, 1)
+			to_chat(user, "<span class='notice'>[cell.name] replaced with [max_cell.name].</span>")
+			cell = max_cell
+			cell_type = max_cell.maxcharge
+			max_cell.forceMove(null)
+			W.play_rped_sound()
+		else
+			to_chat(user, "<span class='notice'>No power cell of higher grade detected.</span>")
 
 // attack with hand - remove cell (if cover open) or interact with the APC
 
@@ -771,6 +792,8 @@
 		"isOperating" = operating,
 		"externalPower" = main_status,
 		"powerCellStatus" = cell ? cell.percent() : null,
+		"powerCellCharge" = cell ? round(cell.charge) : null,
+		"powerCellMaxCharge" = cell ? cell.maxcharge : null,
 		"chargeMode" = chargemode,
 		"chargingStatus" = charging,
 		"totalLoad" = lastused_equip + lastused_light + lastused_environ,
@@ -833,6 +856,8 @@
 
 /obj/machinery/power/apc/proc/update()
 	var/area/this_area = get_area(src)
+	if(!this_area)
+		return
 	if(operating && !shorted)
 		this_area.power_light = (lighting > 1)
 		this_area.power_equip = (equipment > 1)

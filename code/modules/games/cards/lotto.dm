@@ -137,3 +137,14 @@
 					playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 					external.dust()
 				return 1
+
+//Unprinted card
+/obj/item/toy/lotto_ticket/unprinted
+	name = "unprinted lottery ticket"
+	desc = "A worthless, unprinted lotto ticket."
+	icon_state = "lotto_5"
+	autoignition_temperature = AUTOIGNITION_PAPER
+	fire_fuel = 1
+
+/obj/item/toy/lotto_ticket/unprinted/attackby(obj/item/weapon/S, mob/user)
+	return 0

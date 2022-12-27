@@ -343,7 +343,7 @@
 	set category = "Blob"
 	set name = "Psionic Message"
 	set desc = "Give a psionic message to all creatures on and around your 'local' vicinity."
-	var/text = input(src, "What message should we send?", "Message") as null|text
+	var/text = copytext(sanitize(input(src, "What message should we send?", "Message") as null|text),1,MAX_MESSAGE_LEN)
 	if (text)
 		telepathy(text)
 

@@ -58,7 +58,6 @@
 	stop_automated_movement = TRUE //has custom light-related wander movement
 	wander = FALSE
 
-
 /datum/grue_calc //used for light-related calculations
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
@@ -268,6 +267,10 @@
 	init_language = default_language
 	lifestage_updates() //update the grue's sprite and stats according to the current lifestage
 
+/mob/living/simple_animal/hostile/grue/Login()
+	..()
+	//client.images += light_source_images
+
 /mob/living/simple_animal/hostile/grue/UnarmedAttack(atom/A)
 	if(isturf(A))
 		var/turf/T = A
@@ -278,6 +281,7 @@
 					continue
 				UnarmedAttack(B)
 	..()
+
 
 /mob/living/simple_animal/hostile/grue/proc/get_ddl(var/turf/thisturf) //get the dark_dim_light status of a given turf
 	var/thisturf_brightness=10*thisturf.get_lumcount()
@@ -368,24 +372,20 @@
 
 //Grue vision
 /mob/living/simple_animal/hostile/grue/update_perception()
-
-	if(client)
-		if(client.darkness_planemaster)
-			client.darkness_planemaster.blend_mode = BLEND_ADD
-			client.darkness_planemaster.alpha = 255
-			client.darkness_planemaster.color = list(
-						1,0,0,0.5,
-						0,1,0,0.5,
-	 					0,0,1,0.5,
-		 				0,0,0,1,
-		 				0,0,0,1)
-
+	if(!client)
+		return
+	if(dark_plane)
+		if (master_plane)
+			master_plane.blend_mode = BLEND_ADD
+		dark_plane.alphas["grue"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
 		client.color = list(
-					1,0,0,0,
-					-1,0.2,0.2,0,
-	 				-1,0.2,0.2,0,
-		 			0,0,0,1,
-		 			0,0,0,0)
+				1,0,0,0,
+				-1,0.2,0.2,0,
+				-1,0.2,0.2,0,
+				0,0,0,1,
+				0,0,0,0)
+
+	check_dark_vision()
 
 /mob/living/simple_animal/hostile/grue/Stat()
 	..()
@@ -649,7 +649,7 @@
 	return FALSE
 
 /mob/living/simple_animal/hostile/grue/proc/drainlight_set()	//Set the strength of light drain.
-	set_light(7 + eatencount, -3 * eatencount, GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
+	set_light(7 + eatencount, -3 * eatencount - 3, GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
 
 //Ventcrawling and hiding, only for gruespawn
 /mob/living/simple_animal/hostile/grue/proc/ventcrawl()

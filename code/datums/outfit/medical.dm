@@ -260,11 +260,14 @@
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
-			slot_wear_suit_str = /obj/item/clothing/suit/storage/paramedic,
-			slot_s_store_str = /obj/item/device/flashlight/pen,
+			slot_wear_suit_str = list(
+				"Paramedic" = /obj/item/clothing/suit/storage/paramedic,
+				"Brig Medic" = /obj/item/clothing/suit/armor/vest/security/medic
+			),
 			slot_head_str = /obj/item/clothing/head/soft/paramedic,
 			slot_wear_mask_str = /obj/item/clothing/mask/cigarette,
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
+			slot_r_store_str = /obj/item/device/flashlight/pen,
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = list(
@@ -334,11 +337,12 @@
 		return
 	if(H.mind.role_alt_title == "Brig Medic") //Briggies get an implant
 		implant_types += /obj/item/weapon/implant/loyalty
+	else
+		H.put_in_hands(new /obj/item/device/pcmc/paramed)
 
 /datum/outfit/paramedic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
-	items_to_collect[/obj/item/tool/FixOVein/clot] = GRASP_RIGHT_HAND
-	return ..()
+	items_to_collect[/obj/item/tool/FixOVein/clot] = SURVIVAL_BOX
 
 // -- Orderly
 /datum/outfit/orderly

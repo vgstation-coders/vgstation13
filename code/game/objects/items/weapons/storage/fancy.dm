@@ -26,6 +26,7 @@
 	var/descriptive_type = "" //piece of, stick of, et cetera
 	var/plural_descriptive_type = "" //pieces of, sticks of
 	var/box_type = "box"
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 	foldable = /obj/item/stack/sheet/cardboard
 
@@ -233,7 +234,6 @@
 	storage_slots = 21 //3 rows of 7 items
 	max_combined_w_class = 21
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_PAPER
 	flags = 0
 	var/matchtype = /obj/item/weapon/match
 	can_only_hold = list("/obj/item/weapon/match", "/obj/item/weapon/p_folded/note_small", "/obj/item/weapon/coin", \
@@ -735,7 +735,7 @@
 /obj/item/weapon/storage/fancy/food_box/slider_box/spider
 	name = "spidey slidey box"
 	icon_type = "spider slider"
-	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/carp/spider
+	slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider/spider
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/clown
 	name = "honky slider box"

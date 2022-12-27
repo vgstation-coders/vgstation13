@@ -229,6 +229,7 @@
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
+	name = "mutated cockroach meat"
 	desc = "A chunk of meat from an above-average sized cockroach."
 	icon_state = "bigroachmeat"
 
@@ -236,6 +237,16 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 16)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket
+	name = "cricket meat"
+	desc = "Tastes a bit like nuts, very earthy. Not much of a serving, though."
+	icon_state = "roachmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/New()
+	..()
+	reagents.add_reagent(FLOUR, rand(4,10))
+	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
@@ -254,6 +265,7 @@
 	shapeshift()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/bless()
+	..()
 	visible_message("<span class='info'>\The [src] starts fizzling!</span>")
 	spawn(10)
 		shapeshift(/obj/item/weapon/storage/bible) //Turn into a bible
@@ -473,4 +485,11 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		reagents.add_reagent(ROACHSHELL,1) //Sometimes a roach gets in. No nutritional value
 	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/scraps
+	name = "meat scraps"
+	desc = "Some leftover scraps of meat, probably trimmed off a bigger slab."
+	icon_state = "meat_scraps"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/scraps/New()
+	..()
+	reagents.remove_reagent(NUTRIMENT, 1) // A bit less nutriment

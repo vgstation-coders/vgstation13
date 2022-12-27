@@ -65,6 +65,7 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 		src.inherent += law
 
 /datum/ai_laws/proc/add_ion_law(var/law)
+	log_game("An ion law has been added: [law]")
 	src.ion += law
 
 /datum/ai_laws/proc/clear_inherent_laws()

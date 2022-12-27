@@ -131,7 +131,7 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/Crossed(var/mob/living/carbon/M)
 	if(!seed || ..() || !istype(M) || !M.on_foot())
 		return
-	if(seed.thorny || seed.stinging)
+	if(seed.thorny || seed.stinging || arcanetampered)
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 			if(!H.check_body_part_coverage(FEET))
@@ -153,14 +153,14 @@ var/list/special_fruits = list()
 	..()
 	if(!seed)
 		return
-	if(seed.thorny || seed.stinging)
+	if(seed.thorny || seed.stinging || arcanetampered)
 		var/mob/living/carbon/human/H = user
 		if(!istype(H))
 			return
-		if(H.check_body_part_coverage(HANDS))
+		if(H.check_body_part_coverage(HANDS) && !arcanetampered)
 			return
 		var/datum/organ/external/affecting = H.get_organ(pick(LIMB_RIGHT_HAND,LIMB_LEFT_HAND))
-		if(!affecting || !affecting.is_organic())
+		if((!affecting || !affecting.is_organic()) && !arcanetampered)
 			return
 		if(stinging_apply_reagents(H))
 			to_chat(H, "<span class='danger'>You are stung by \the [src]!</span>")
@@ -172,7 +172,7 @@ var/list/special_fruits = list()
 					H.drop_item(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/after_consume(var/mob/living/carbon/human/H)
-	if(seed.thorny && istype(H))
+	if((seed.thorny || arcanetampered) && istype(H))
 		var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
 		if(affecting)
 			if(thorns_apply_damage(H, affecting))
@@ -195,6 +195,7 @@ var/list/special_fruits = list()
 		traits += "It seems to be spatially unstable. "
 	if(traits)
 		to_chat(user, traits)
+	hydro_hud_scan(user, src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
 	var/obj/effect/decal/cleanable/S = new seed.splat_type(T)
@@ -209,14 +210,14 @@ var/list/special_fruits = list()
 	return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/thorns_apply_damage(mob/living/carbon/human/H, datum/organ/external/affecting)
-	if(!seed.thorny || !affecting)
+	if((!seed.thorny || !affecting) && (!arcanetampered|| !affecting))
 		return 0
 	affecting.take_damage(5+seed.voracious*3, 0, 0, "plant thorns")
 	H.UpdateDamageIcon()
 	return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/stinging_apply_reagents(mob/living/carbon/human/H)
-	if(!seed.stinging)
+	if(!seed.stinging && !arcanetampered)
 		return 0
 	if(!reagents || reagents.total_volume <= 0)
 		return 0

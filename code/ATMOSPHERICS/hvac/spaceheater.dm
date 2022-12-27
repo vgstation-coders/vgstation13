@@ -64,6 +64,7 @@
 	density = 0
 	flags = null
 	machine_flags = null
+	is_cooktop = TRUE
 	var/lastcharge = null
 
 /obj/machinery/space_heater/campfire/stove
@@ -74,6 +75,7 @@
 	density = 1
 	nocell = 2
 	machine_flags = WRENCHMOVE
+	is_cooktop = FALSE
 
 /obj/machinery/space_heater/New()
 
@@ -113,7 +115,26 @@
 		set_temperature = 15 + 5*fireintensity
 	else icon_state = "[base_state][on]"
 	set_light(on ? light_r : 0, light_p)
+	render_cookvessel()
+
+/////////////////////Cooking stuff
+
+/obj/machinery/space_heater/can_cook()
+	. = ..()
+	if(!on)
+		. = FALSE
 	return
+
+/obj/machinery/space_heater/on_cook_start()
+	update_icon()
+
+/obj/machinery/space_heater/on_cook_stop()
+	update_icon()
+
+/obj/machinery/space_heater/campfire/render_cookvessel(offset_x, offset_y = 2)
+	..()
+
+/////////////////////
 
 /obj/machinery/space_heater/examine(mob/user)
 	..()
@@ -227,6 +248,8 @@
 
 /obj/machinery/space_heater/attack_hand(mob/user as mob)
 	src.add_fingerprint(user)
+	if(cookvessel)
+		return ..()
 	interact(user)
 
 /obj/machinery/space_heater/interact(mob/user as mob)
@@ -249,9 +272,6 @@
 		user.set_machine(src)
 		user << browse("<HEAD><TITLE>Space Heater Control Panel</TITLE></HEAD><TT>[dat]</TT>", "window=spaceheater")
 		onclose(user, "spaceheater")
-
-
-
 
 	else
 		on = !on
@@ -355,7 +375,6 @@
 			on = 0
 			update_icon()
 
-
 	return
 
 /obj/machinery/space_heater/campfire/process()
@@ -364,7 +383,6 @@
 		return
 	var/turf/simulated/T = loc
 	var/datum/gas_mixture/env = T.return_air()
-	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
 	if((!(cell && cell.charge > 0) && nocell != 2) || !istype(T) || (env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME))

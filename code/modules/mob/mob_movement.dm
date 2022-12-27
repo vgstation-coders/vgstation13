@@ -110,6 +110,8 @@
 							return
 						else
 							to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] [H.get_index_limb_name(OE.grasp_id)].</span>")
+			else if(isgrinch(usr))
+				drop_item()
 			else
 				to_chat(usr, "<span class='warning'>This mob type cannot drop items.</span>")
 

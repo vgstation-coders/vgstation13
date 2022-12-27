@@ -304,6 +304,18 @@
 	else
 		..()
 
+/obj/structure/reagent_dispensers/water_cooler/on_reagent_change()
+	overlays.Cut()
+	if(reagents.total_volume)
+		var/image/reagentimg = image(src.icon, src, "wc_reagents")
+		reagentimg.icon += mix_color_from_reagents(reagents.reagent_list)
+		reagentimg.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		var/matrix/M = matrix()
+		M.Scale(1, reagents.total_volume/reagents.maximum_volume)
+		reagentimg.transform = M
+		reagentimg.pixel_y = 1.5 - ((reagents.total_volume/reagents.maximum_volume)*1.5)
+		overlays += reagentimg
+
 /obj/structure/reagent_dispensers/beerkeg
 	name = "beer keg"
 	desc = "A massive keg with a bottle of beer painted on the front."
@@ -525,12 +537,43 @@
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
 	health = 50
+	var/burning = FALSE
+	is_cooktop = TRUE
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood
 	name = "wooden barrel"
 	icon_state = "woodenbarrel"
 	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of wood."
 	health = 30
+	is_cooktop = FALSE
+
+/////////////////////Cooking stuff
+
+/obj/structure/reagent_dispensers/cauldron/barrel/can_cook()
+	return burning
+
+/obj/structure/reagent_dispensers/cauldron/barrel/on_cook_start()
+	update_icon()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/on_cook_stop()
+	update_icon()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/render_cookvessel(offset_x = -1, offset_y = 6)
+	..()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/cook_temperature()
+	var/temperature = get_max_temperature()
+	if(isnull(temperature))
+		return ..() //Sanity in case the barrel runs out of fuel before this is called.
+	return temperature
+
+/obj/structure/reagent_dispensers/cauldron/barrel/cook_energy()
+	var/cook_energy = get_thermal_transfer() * (SS_WAIT_FAST_OBJECTS / (2 SECONDS)) //Would be nice to change 2 SECONDS to a reference to the objects subsystem somehow.
+	if(isnull(cook_energy))
+		return ..() //Sanity in case the barrel runs out of fuel before this is called.
+	return cook_energy
+
+/////////////////////
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood/attackby(obj/item/weapon/W, mob/user)
 	if (iscrowbar(W))
@@ -545,8 +588,23 @@
 		return
 	..()
 
+/obj/structure/reagent_dispensers/cauldron/barrel/attack_hand(mob/user as mob)
+	if(burning && !cookvessel)
+		visible_message("<span class = 'warning'>You carefully snuff out \the [src] fire.</span>")
+		burning = FALSE
+		processing_objects.Remove(src)
+		update_icon()
+	..()
+
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
-	return
+	overlays.len = 0
+	if(burning)
+		icon_state = "flamingmetalbarrel"
+		set_light(3,4,LIGHT_COLOR_FIRE)
+	else
+		icon_state = "metalbarrel"
+		set_light(0,0,LIGHT_COLOR_FIRE)
+	render_cookvessel()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/take_damage(incoming_damage, damage_type, skip_break, mute, var/sound_effect = 1) //Custom take_damage() proc because of sound_effect behavior.
 	health = max(0, health - incoming_damage)
@@ -570,14 +628,25 @@
 		AM.forceMove(loc)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_wrench(user) || istype(W,/obj/item/weapon/reagent_containers)) //what did irradiation mean by this
+	if(W.is_wrench(user) || (istype(W, /obj/item/weapon/reagent_containers) && !W.is_cookvessel)) //what did irradiation mean by this
 		return
-	if(istype(W,/obj/item/weapon/grab))
+
+	else if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
+		if(start_fire(user))
+			user.visible_message("<span class='notice'>[user] ignites \the [src]'s contents with \the [W].</span>")
+		return
+
+	else if(istype(W,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
 		var/mob/living/target = G.affecting
 		user.visible_message("<span class='danger'>[user] begins to drag [target] into the barrel!</span>")
 		if(do_after_many(user,list(target,src),10)) //Twice the normal time
 			enter_barrel(target)
+
+	//Everything below here could probably be desnowflaked. As all parents of src except /obj/ itself lack INVOKE_EVENT on attackby, and there isn't a continuous supercall chain, we'll handle cooking vessels like this for now.
+	else if(is_cooktop)
+		INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = W)
+
 	else
 		take_damage(W.force)
 		user.delayNextAttack(10)
@@ -599,6 +668,8 @@
 	if(O.locked_to)
 		return
 	else if(O.anchored)
+		return
+	if(burning)
 		return
 	if(issilicon(O)) //robutts dont fit
 		return
@@ -629,6 +700,12 @@
 	exiting += user
 	spawn(3 SECONDS)
 		if(loc && exiting.Remove(user))
+			if(burning)
+				if(istype(user,/mob/living))
+					var/mob/living/L = user
+					L.adjustFireLoss(10)
+					L.adjust_fire_stacks(1)
+					to_chat(L,"<span class='notice'>You set yourself on fire exiting the barrel!</span>")
 			user.forceMove(loc)
 			update_icon()
 			to_chat(user,"<span class='notice'>You climb free of the barrel.</span>")
@@ -663,3 +740,89 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/attack_alien(mob/user)
 	user.visible_message("<span class='danger'>[user] rips \the [src] apart!</span>")
 	Destroy()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/examine(mob/user)
+	..()
+	if(burning)
+		to_chat(user, "<span class='info'>The contents of \the [src] are burning.</span>")
+
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/start_fire(mob/user)
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/G = T.return_air()
+	if(!G || G.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
+		visible_message("<span class = 'warning'>\The [src] fails to ignite due to lack of oxygen.</span>")
+		return 0
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			burning = TRUE
+			processing_objects.Add(src)
+			update_icon()
+			return 1
+	visible_message("<span class = 'warning'>\The [src] fails to ignite due to lack of fuel.</span>")
+	return 0
+
+/obj/structure/reagent_dispensers/cauldron/barrel/process()
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/G = T.return_air()
+	if(!G || G.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
+		visible_message("<span class = 'warning'>\The [src] splutters out from lack of oxygen.</span>","<span class = 'warning'>You hear something cough.</span>")
+		burning = FALSE
+		processing_objects.Remove(src)
+		update_icon()
+		return
+
+	var/max_temperature
+//	var/thermal_energy_transfer to be used later if barrels should heat the room they're in
+	var/consumption_rate
+	var/unsafety = 0 //Possibility it lights things on its turf
+	var/o2_consumption
+	var/co2_consumption
+
+	playsound(src, pick(comfyfire), G.molar_density(GAS_OXYGEN)/MOLES_CELLSTANDARD,1)
+
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			burning = TRUE
+			var/list/fuel_stats = possible_fuels[possible_fuel]
+			max_temperature = fuel_stats["max_temperature"]
+//			thermal_energy_transfer = fuel_stats["thermal_energy_transfer"] to be used later if barrels should heat the room they're in
+			consumption_rate = fuel_stats["consumption_rate"]
+			unsafety = fuel_stats["unsafety"]
+			o2_consumption = fuel_stats["o2_cons"]
+			co2_consumption = fuel_stats["co2_cons"]
+
+			reagents.remove_reagent(possible_fuel, consumption_rate)
+			G.adjust_multi(
+				GAS_OXYGEN, -o2_consumption,
+				GAS_CARBON, -co2_consumption)
+			if(prob(unsafety) && T)
+				T.hotspot_expose(max_temperature, 5)
+			break
+
+	if(!max_temperature)
+		visible_message("<span class = 'warning'>\The [src] splutters out from lack of fuel.</span>","<span class = 'warning'>You hear something cough.</span>")
+		burning = FALSE
+		processing_objects.Remove(src)
+		update_icon()
+		return
+
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/get_max_temperature()
+	var/max_temperature
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			var/list/fuel_stats = possible_fuels[possible_fuel]
+			max_temperature = fuel_stats["max_temperature"]
+			break
+	return max_temperature
+
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/get_thermal_transfer()
+	var/thermal_transfer
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			var/list/fuel_stats = possible_fuels[possible_fuel]
+			thermal_transfer = fuel_stats["thermal_transfer"]
+			break
+	return thermal_transfer
+
+/obj/structure/reagent_dispensers/cauldron/barrel/wood/start_fire(mob/user)
+	return 0 //nice try!

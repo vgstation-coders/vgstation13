@@ -5,6 +5,7 @@
 	item_state = "radio"
 	w_class = W_CLASS_TINY
 	flags = HEAR | FPRINT
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/speak_cooldown = 0.6 SECONDS
 	var/tmp/last_speak
 	var/mobsonly = TRUE //Fuck off speaker assemblies

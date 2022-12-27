@@ -22,6 +22,7 @@
 	var/datum/data/record/upload_crimes = null //Will look for an associated datacore file and upload crimes
 	var/list/rapsheet = list()
 	var/total_time = 0
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/device/law_planner/attack_self(mob/user)
 	ui_interact(user)
