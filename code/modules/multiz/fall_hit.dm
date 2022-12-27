@@ -130,9 +130,9 @@ var/global/list/non_items = list(/obj/machinery,/obj/structure)
 		AdjustKnockdown(damage / 2)
 	else if(isitem(hitting_atom))
 		var/obj/item/I = hitting_atom
-		var/damage = (((I.throwforce * min(hitting_atom.z_velocity,5)) * gravity) * I.w_class)
+		var/damage = ((I.throwforce * min(hitting_atom.z_velocity,5)) * I.w_class)
 		adjustBruteLoss(rand(damage, 2*damage))
-		AdjustKnockdown(((2 * min(hitting_atom.z_velocity,5)) * gravity) * I.w_class)
+		AdjustKnockdown((2 * min(hitting_atom.z_velocity,5)) * I.w_class)
 		if(I.w_class == W_CLASS_GIANT)
 			gib()
 			return TRUE
