@@ -12,7 +12,6 @@
 /datum/role/traitor/OnPostSetup()
 	..()
 	antag.current.faction = "syndicate"
-	antag.mob_legacy_fac = "syndicate"
 	share_syndicate_codephrase(antag.current)
 	if(istype(antag.current, /mob/living/silicon))
 		can_be_smooth = FALSE //Can't buy anything
@@ -246,7 +245,6 @@
 /datum/role/nuclear_operative/OnPostSetup()
 	..()
 	antag.current.faction = "syndicate"
-	antag.mob_legacy_fac = "syndicate"
 
 /datum/role/nuclear_operative/leader
 	name = NUKE_OP_LEADER
