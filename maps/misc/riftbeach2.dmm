@@ -199,6 +199,12 @@
 /obj/item/weapon/bedsheet/rainbow,
 /turf/unsimulated/beach/sand,
 /area/beach)
+"S" = (
+/turf/unsimulated/floor{
+	icon_state = "sandwater";
+	density = 1
+	},
+/area/beach)
 "T" = (
 /obj/item/device/maracas,
 /turf/unsimulated/beach/sand,
@@ -881,7 +887,7 @@ Z
 Z
 Z
 Z
-Z
+S
 h
 g
 g
@@ -1391,7 +1397,7 @@ b
 b
 b
 c
-b
+N
 v
 u
 u
@@ -1442,7 +1448,7 @@ b
 W
 b
 b
-b
+N
 v
 u
 u
@@ -1493,7 +1499,7 @@ b
 b
 b
 d
-b
+N
 v
 u
 u
@@ -1544,7 +1550,7 @@ U
 e
 b
 b
-b
+N
 v
 u
 u
@@ -1595,7 +1601,7 @@ b
 b
 c
 b
-b
+N
 v
 u
 u
@@ -1697,7 +1703,7 @@ b
 b
 b
 b
-b
+N
 v
 u
 u
@@ -1799,7 +1805,7 @@ b
 b
 p
 b
-b
+N
 v
 u
 u
@@ -1850,7 +1856,7 @@ b
 b
 b
 b
-b
+N
 v
 u
 u
@@ -1901,7 +1907,7 @@ Z
 Z
 Z
 Z
-b
+S
 h
 g
 g

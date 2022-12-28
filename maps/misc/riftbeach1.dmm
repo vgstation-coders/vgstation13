@@ -29,6 +29,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/chips,
 /turf/unsimulated/beach/sand,
 /area/beach)
+"u" = (
+/turf/unsimulated/floor{
+	icon_state = "sandwater";
+	density = 1
+	},
+/area/beach)
 "w" = (
 /obj/item/clothing/head/collectable/paper,
 /turf/unsimulated/beach/sand,
@@ -828,7 +834,7 @@ J
 J
 J
 J
-J
+u
 A
 x
 x
@@ -1968,7 +1974,7 @@ J
 J
 J
 J
-J
+u
 A
 x
 x

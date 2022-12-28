@@ -2,6 +2,11 @@
 "a" = (
 /turf/simulated/floor/grass,
 /area/beach)
+"b" = (
+/turf/simulated/floor/grass{
+	density = 1
+	},
+/area/beach)
 "c" = (
 /turf/unsimulated/beach/water{
 	density = 1
@@ -849,8 +854,8 @@ g
 g
 g
 g
-g
-c
+a
+V
 c
 c
 c
@@ -3234,8 +3239,8 @@ g
 g
 g
 g
-g
-c
+b
+V
 c
 c
 c
