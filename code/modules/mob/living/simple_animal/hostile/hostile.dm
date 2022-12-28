@@ -215,6 +215,12 @@
 		for(var/datum/weakref/ref in friends)
 			if (ref.get() == L)
 				return 0
+
+		if(ishuman(L))
+			var/mob/living/carbon/human/H = L
+			if(istype(H.wear_suit, /obj/item/clothing/suit/storage/wintercoat/druid))
+				return 0
+
 		return 1
 	if(isobj(the_target))
 		//if(the_target.type in wanted_objects)
