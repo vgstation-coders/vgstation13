@@ -409,7 +409,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 								if(0 to 100)
 									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_health")
 								if(-100 to 0)
-									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_dead")
+									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_crit")
 								else //Shouldn't ever happen. I really hope it doesn't ever happen.
 									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_dead")
 							var/icon/mask = icon('icons/obj/cryogenics.dmi', "moverlay_mask")
