@@ -682,67 +682,59 @@
 
 //Shadow shunt, blinks to another nearby dark location.
 /mob/living/simple_animal/hostile/grue/proc/grueblink()
-	if(stat==UNCONSCIOUS)
-		to_chat(src, "<span class='notice'>You must be awake to do that.</span>")
-		return
-	else if(busy)
-		to_chat(src, "<span class='notice'>You are already doing something.</span>")
-		return
-	else if(lightparams.dark_dim_light != GRUE_DARK)
-		to_chat(src, "<span class='warning'>It's too bright here.</span>")
-		return
 //todo: add check for being close to a player (on both ends)
-//todo: add check for density and stuff and being able to enter normally (grilles, tables, etc)
-//todo: minimum range?
-//todo: handle/check z-levels?
-//todo: not blowing the spell if it failed to cast, cooldown, etc.
-//todo: sfx, vfx, spellbook sprites
-//todo: change to checking the get_ddl() of the loc?
+//todo: proper cooldown
+//todo: some kind of particle effect
+//todo: handle all todos
+
+//for later:
+//todo: change grue_calc thing to use fast processing
 //todo: optimize, change check  to allow for windows, etc? use raycasting instead? consider
+//todo: handle/check z-levels?
+//todo: optimize by stopping if it's the max distance and has sufficient O2
+
+	var/list/blinkcandidates = list()
+	//get all sufficiently dark spots in range
+	finding_blink_spots:
+		for(var/turf/thisfloor in orange(25))
+			if(thisfloor.density)
+				continue
+			if(get_ddl(thisfloor) > GRUE_DARK)
+				continue
+			for(var/atom/thiscontent in thisfloor.contents)
+				if(thiscontent.density)
+					continue finding_blink_spots
+				if(ismob(thiscontent))
+					continue finding_blink_spots
+				if(istable(thiscontent))
+					continue finding_blink_spots
+			blinkcandidates += thisfloor
+	if(blinkcandidates.len)
+		//check up to 50 random valid locations and pick the furthest one
+		var/turf/blinktarget
+		var/btdist = -1
+		var/oxy_lower_bound = min_oxy / CELL_VOLUME
+		for(var/bc_index in 1 to min(blinkcandidates.len, 50))
+			var/random_bc_index = rand(1, blinkcandidates.len)
+			var/turf/random_bc = blinkcandidates[random_bc_index]
+			var/thisdist = get_dist(random_bc, src)
+			//weight away from low oxygen spots
+			var/o2content = random_bc.air ? random_bc.air.molar_density(GAS_OXYGEN): 0
+			if(o2content < oxy_lower_bound)
+				thisdist *= o2content
+			else
+				thisdist *= oxy_lower_bound
+			if(thisdist > btdist)
+				btdist = thisdist
+				blinktarget = random_bc
+		playsound(src, 'sound/effects/grue_shadowshunt.ogg', 20, 1)
+		to_chat(src, "<span class='notice'>You [pick("shift", "step", "slide", "glide", "push")] [pick("comfortably", "easily", "effortlessly", "readily", "gracefully")] through the [pick("darkness", "dark", "shadows", "shade", "blackness")].</span>")
+		forceMove(blinktarget)
+		return TRUE
 	else
-		var/list/blinkcandidates = list()
-		message_admins("DEBUG 001 [blinkcandidates.len]")
-		//get all sufficiently dark spots in range
-		finding_blink_spots:
-			for(var/turf/thisfloor in orange(25))
-				if(thisfloor.density)
-					continue
-				if(get_ddl(thisfloor) > GRUE_DARK)
-					continue
-				for(var/atom/thiscontent in thisfloor.contents)
-					if(thiscontent.density)
-						continue finding_blink_spots
-					if(ismob(thiscontent))
-						continue finding_blink_spots
-					if(istable(thiscontent))
-						continue finding_blink_spots
-				blinkcandidates += thisfloor
-		message_admins("DEBUG 003 [blinkcandidates.len]")
-		if(blinkcandidates.len)
-			//check up 50 random valid locations and pick the furthest one
-			var/turf/blinktarget
-			var/btdist = -1
-			var/debugo2c = 0
-			var/oxy_lower_bound = min_oxy / CELL_VOLUME
-			for(var/bc_index in 1 to min(blinkcandidates.len, 50))
-				var/random_bc_index = rand(1, blinkcandidates.len)
-				var/turf/random_bc = blinkcandidates[random_bc_index]
-				var/thisdist = get_dist(random_bc, src)
-				//weight away from low oxygen spots
-				var/o2content = random_bc.air ? random_bc.air.molar_density(GAS_OXYGEN): 0
-				if(o2content < oxy_lower_bound)
-					thisdist *= o2content
-				else
-					thisdist *= oxy_lower_bound
-				if(thisdist > btdist)
-					btdist = thisdist
-					debugo2c = o2content //todo: remove
-					blinktarget = random_bc
-			message_admins("DEBUG 004 [btdist] | [debugo2c] ")
-			//todo: optimize by stopping if it's the max distance and has sufficient O2
-			forceMove(blinktarget)
-			return TRUE
-		else
-			to_chat(src, "<span class='warning'>You reach into the darkness, but can't seem to find a way.</span>")
-			return
+		to_chat(src, "<span class='warning'>You reach into the darkness, but can't seem to find a way.</span>")
+		//set the remaining cooldown to one second if no valid location was found
+		for(var/spell/aoe_turf/grue_blink/thisspell in spell_list)
+			thisspell.charge_counter = thisspell.charge_max - 1 SECONDS
+		return
 

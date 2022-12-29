@@ -111,12 +111,28 @@
 	desc = "Tunnel through the darkness to a nearby location."
 	user_type = USER_TYPE_GRUE
 	panel = "Grue"
-	hud_state = "grue_eat" //todo: sprite and change
+	hud_state = "grue_blink"
 	override_base = "grue"
 	range = 0
 	charge_type = Sp_RECHARGE
-	charge_max = 0
+	charge_max = 5 SECONDS
+	still_recharging_msg = "<span class='notice'>You need to reorient yourself before doing that again.</span>"
 
 /spell/aoe_turf/grue_blink/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
-	playsound(user, 'sound/effects/grue_drainlight.ogg', 50, 1) //todo: add new sound
 	user.grueblink(TRUE)
+
+/spell/aoe_turf/grue_blink/cast_check(skipcharge = 0, mob/user = usr)
+	if(user)
+		var/mob/living/simple_animal/hostile/grue/G = user
+		if(G.stat == UNCONSCIOUS)
+			to_chat(G, "<span class='notice'>You must be awake to do that.</span>")
+			return FALSE
+		else if(G.busy)
+			to_chat(G, "<span class='notice'>You are already doing something.</span>")
+			return FALSE
+		else if(G.get_ddl(get_turf(G)) != GRUE_DARK)
+			to_chat(G, "<span class='warning'>It's too bright here.</span>")
+			return FALSE
+	else
+		return FALSE
+	. = ..()
