@@ -115,7 +115,7 @@
 	override_base = "grue"
 	range = 0
 	charge_type = Sp_RECHARGE
-	charge_max = 5 SECONDS
+	charge_max = 45 SECONDS
 	still_recharging_msg = "<span class='notice'>You need to reorient yourself before doing that again.</span>"
 
 /spell/aoe_turf/grue_blink/cast(list/targets, mob/living/simple_animal/hostile/grue/user)

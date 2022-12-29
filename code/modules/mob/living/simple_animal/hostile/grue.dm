@@ -626,6 +626,11 @@
 	else
 		force_airlock_time=0
 
+	//shadow shunt cooldown
+	for(var/spell/aoe_turf/grue_blink/thisspell in spell_list)
+		var/newcooldown = max(45 SECONDS - eatencount * 2 SECONDS, 8 SECONDS)
+		thisspell.charge_max = newcooldown
+		thisspell.charge_counter = min(newcooldown, thisspell.charge_counter)
 
 //Drain the light from the surrounding area.
 
@@ -682,17 +687,6 @@
 
 //Shadow shunt, blinks to another nearby dark location.
 /mob/living/simple_animal/hostile/grue/proc/grueblink()
-//todo: add check for being close to a player (on both ends)
-//todo: proper cooldown
-//todo: some kind of particle effect
-//todo: handle all todos
-
-//for later:
-//todo: change grue_calc thing to use fast processing
-//todo: optimize, change check  to allow for windows, etc? use raycasting instead? consider
-//todo: handle/check z-levels?
-//todo: optimize by stopping if it's the max distance and has sufficient O2
-
 	var/list/blinkcandidates = list()
 	//get all sufficiently dark spots in range
 	finding_blink_spots:
@@ -729,7 +723,9 @@
 				blinktarget = random_bc
 		playsound(src, 'sound/effects/grue_shadowshunt.ogg', 20, 1)
 		to_chat(src, "<span class='notice'>You [pick("shift", "step", "slide", "glide", "push")] [pick("comfortably", "easily", "effortlessly", "readily", "gracefully")] through the [pick("darkness", "dark", "shadows", "shade", "blackness")].</span>")
+		new /obj/effect/gruesparkles (loc)
 		forceMove(blinktarget)
+		new /obj/effect/gruesparkles (loc)
 		return TRUE
 	else
 		to_chat(src, "<span class='warning'>You reach into the darkness, but can't seem to find a way.</span>")
@@ -738,3 +734,23 @@
 			thisspell.charge_counter = thisspell.charge_max - 1 SECONDS
 		return
 
+// Dark sparkles when a grue uses shadow shunt.
+/obj/effect/gruesparkles
+	name = "dark glimmers"
+	icon_state = "gruesparkles"
+	anchored = 1
+
+/obj/effect/gruesparkles/New()
+	..()
+	spawn(1.5 SECONDS)
+		fade()
+
+/obj/effect/gruesparkles/proc/fade()
+	if(!src)
+		return
+	if(alpha <= 0)
+		qdel(src)
+		return
+	spawn(0.5 SECONDS)
+		alpha -= 55
+		fade()
