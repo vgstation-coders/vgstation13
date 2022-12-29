@@ -63,7 +63,7 @@
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
 	var/hg_mult = 3										//base multiplier for health gained per tick when on dark tile
 	var/hd_mult = 3									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
-	var/dark_dim_light=GRUE_DARK //darkness level currently the grue is currently exposed to, GRUE_DARK=nice and dark (heals the grue), GRUE_DIM=passably dim, GRUE_LIGHT=too bright (burns the grue)
+	var/dark_dim_light = GRUE_DARK //darkness level currently the grue is currently exposed to, GRUE_DARK=nice and dark (heals the grue), GRUE_DIM=passably dim, GRUE_LIGHT=too bright (burns the grue)
 	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
 	var/accum_light_expos_mult= 1 //used to scale light damage the longer the grue is exposed to light
 	var/list/accum_light_expos_gain_dark_dim_light=list(-3,-1,1) //light damage rate increases the longer the grue is exposed to light, but this effect dissipates after going back into darkness
@@ -139,28 +139,28 @@
 		hud_used.grue_hud()
 
 //health indicator
-		if (health >= maxHealth)
+		if(health >= maxHealth)
 			healths.icon_state = "health0"
-		else if (health >= 4*maxHealth/5)
+		else if(health >= 4*maxHealth/5)
 			healths.icon_state = "health1"
-		else if (health >= 3*maxHealth/5)
+		else if(health >= 3*maxHealth/5)
 			healths.icon_state = "health2"
-		else if (health >= 2*maxHealth/5)
+		else if(health >= 2*maxHealth/5)
 			healths.icon_state = "health3"
-		else if (health >= 1*maxHealth/5)
+		else if(health >= 1*maxHealth/5)
 			healths.icon_state = "health4"
-		else if (health > 0)
+		else if(health > 0)
 			healths.icon_state = "health5"
 		else
 			healths.icon_state = "health6"
 //darkness level indicator
-		if (lightparams.dark_dim_light==GRUE_DARK)
+		if(lightparams.dark_dim_light==GRUE_DARK)
 			healths2.icon_state= "lightlevel_dark"
 			healths2.name="nice and dark"
-		else if (lightparams.dark_dim_light==GRUE_DIM)
+		else if(lightparams.dark_dim_light==GRUE_DIM)
 			healths2.icon_state= "lightlevel_dim"
 			healths2.name="adequately dim"
-		else if (lightparams.dark_dim_light==GRUE_LIGHT)
+		else if(lightparams.dark_dim_light==GRUE_LIGHT)
 			healths2.icon_state= "lightlevel_bright"
 			healths2.name="painfully bright"
 
@@ -168,7 +168,7 @@
 	..()
 
 	//process nutrienergy and health according to current tile brightness level
-	if (stat!=DEAD)
+	if(stat!=DEAD)
 
 		lightparams.ddl_update(src)
 
@@ -312,12 +312,13 @@
 		size = SIZE_SMALL
 		pass_flags = PASSTABLE
 		reagents.maximum_volume = 500
-		//Larval grue spells: moult, ventcrawl, and hide
+		//Larval grue spells: moult, ventcrawl, hide, and shadow shunt
 		add_spell(new /spell/aoe_turf/grue_hide, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_ventcrawl, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+		add_spell(new /spell/aoe_turf/grue_blink, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 
-	else if (lifestage==GRUE_JUVENILE)
+	else if(lifestage==GRUE_JUVENILE)
 		name = "grue"
 		desc = "A creeping thing that lives in the dark. It is still a juvenile."
 		icon_state = "grueling_living"
@@ -336,8 +337,9 @@
 		size = SIZE_BIG
 		pass_flags = 0
 		reagents.maximum_volume = 1000
-		//Juvenile grue spells: eat and moult
+		//Juvenile grue spells: eat, moult, and shadow shunt
 		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+		add_spell(new /spell/aoe_turf/grue_blink, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 
 	else
@@ -360,9 +362,10 @@
 		size = SIZE_BIG
 		pass_flags = 0
 		reagents.maximum_volume = 1500
-		//Adult grue spells: eat, lay eggs, and drain light
+		//Adult grue spells: eat, lay eggs, shadow shunt, and drain light
 		if(config.grue_egglaying)
 			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+		add_spell(new /spell/aoe_turf/grue_blink, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_drainlight/, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 
@@ -375,7 +378,7 @@
 	if(!client)
 		return
 	if(dark_plane)
-		if (master_plane)
+		if(master_plane)
 			master_plane.blend_mode = BLEND_ADD
 		dark_plane.alphas["grue"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
 		client.color = list(
@@ -407,20 +410,20 @@
 //Moulting into more mature forms.
 /mob/living/simple_animal/hostile/grue/proc/moult()
 	if(alert(src,"Would you like to moult? You will become a vulnerable and immobile chrysalis during the process.",,"Moult","Cancel") == "Moult")
-		if (lifestage<GRUE_ADULT)
-			if (nutrienergy<moultcost && (digest*digest_sp<(moultcost-nutrienergy)))
+		if(lifestage<GRUE_ADULT)
+			if(nutrienergy<moultcost && (digest*digest_sp<(moultcost-nutrienergy)))
 				to_chat(src, "<span class='notice'>You need to feed more first.</span>")
 				return
-			if (nutrienergy<moultcost && digest)
+			if(nutrienergy<moultcost && digest)
 				to_chat(src, "<span class='notice'>You are still digesting.</span>")
 				return
-			else if (!isturf(loc))
+			else if(!isturf(loc))
 				to_chat(src, "<span class='notice'>You need more room to moult.</span>")
 				return
-			else if (stat==UNCONSCIOUS)
+			else if(stat==UNCONSCIOUS)
 				to_chat(src, "<span class='notice'>You must be awake to moult.</span>")
 				return
-			else if (busy)
+			else if(busy)
 				to_chat(src, "<span class='notice'>You are already doing something.</span>")
 				return
 			else
@@ -489,17 +492,17 @@
 //Reproduction via egglaying.
 /mob/living/simple_animal/hostile/grue/proc/reproduce()
 
-	if (lifestage==GRUE_ADULT) //must be adult
-		if (eatencharge<=0)
+	if(lifestage==GRUE_ADULT) //must be adult
+		if(eatencharge<=0)
 			to_chat(src, "<span class='notice'>You need to feed more first.</span>")
 			return
-		else if (!isturf(loc))
+		else if(!isturf(loc))
 			to_chat(src, "<span class='notice'>You need more room to reproduce.</span>")
 			return
-		else if (stat==UNCONSCIOUS)
+		else if(stat==UNCONSCIOUS)
 			to_chat(src, "<span class='notice'>You must be awake to reproduce.</span>")
 			return
-		else if (busy)
+		else if(busy)
 			to_chat(src, "<span class='notice'>You are already doing something.</span>")
 			return
 		else
@@ -661,15 +664,14 @@
 		to_chat(src, "<span class='notice'>You are too big to do that.</span>")
 
 /mob/living/simple_animal/hostile/grue/proc/hide()
-
 	if(lifestage==GRUE_LARVA)
 		if(isUnconscious())
 			return
 
-		if (locked_to && istype(locked_to, /obj/item/critter_cage))
+		if(locked_to && istype(locked_to, /obj/item/critter_cage))
 			return
 
-		if (plane != HIDING_MOB_PLANE)
+		if(plane != HIDING_MOB_PLANE)
 			plane = HIDING_MOB_PLANE
 			to_chat(src, "<span class='notice'>You are now hiding.</span>")
 		else
@@ -677,3 +679,70 @@
 			to_chat(src, "<span class='notice'>You have stopped hiding.</span>")
 	else
 		to_chat(src, "<span class='notice'>You are too big to do that.</span>")
+
+//Shadow shunt, blinks to another nearby dark location.
+/mob/living/simple_animal/hostile/grue/proc/grueblink()
+	if(stat==UNCONSCIOUS)
+		to_chat(src, "<span class='notice'>You must be awake to do that.</span>")
+		return
+	else if(busy)
+		to_chat(src, "<span class='notice'>You are already doing something.</span>")
+		return
+	else if(lightparams.dark_dim_light != GRUE_DARK)
+		to_chat(src, "<span class='warning'>It's too bright here.</span>")
+		return
+//todo: add check for being close to a player (on both ends)
+//todo: add check for density and stuff and being able to enter normally (grilles, tables, etc)
+//todo: minimum range?
+//todo: handle/check z-levels?
+//todo: not blowing the spell if it failed to cast, cooldown, etc.
+//todo: sfx, vfx, spellbook sprites
+//todo: change to checking the get_ddl() of the loc?
+//todo: optimize, change check  to allow for windows, etc? use raycasting instead? consider
+	else
+		var/list/blinkcandidates = list()
+		message_admins("DEBUG 001 [blinkcandidates.len]")
+		//get all sufficiently dark spots in range
+		finding_blink_spots:
+			for(var/turf/thisfloor in orange(25))
+				if(thisfloor.density)
+					continue
+				if(get_ddl(thisfloor) > GRUE_DARK)
+					continue
+				for(var/atom/thiscontent in thisfloor.contents)
+					if(thiscontent.density)
+						continue finding_blink_spots
+					if(ismob(thiscontent))
+						continue finding_blink_spots
+					if(istable(thiscontent))
+						continue finding_blink_spots
+				blinkcandidates += thisfloor
+		message_admins("DEBUG 003 [blinkcandidates.len]")
+		if(blinkcandidates.len)
+			//check up 50 random valid locations and pick the furthest one
+			var/turf/blinktarget
+			var/btdist = -1
+			var/debugo2c = 0
+			var/oxy_lower_bound = min_oxy / CELL_VOLUME
+			for(var/bc_index in 1 to min(blinkcandidates.len, 50))
+				var/random_bc_index = rand(1, blinkcandidates.len)
+				var/turf/random_bc = blinkcandidates[random_bc_index]
+				var/thisdist = get_dist(random_bc, src)
+				//weight away from low oxygen spots
+				var/o2content = random_bc.air ? random_bc.air.molar_density(GAS_OXYGEN): 0
+				if(o2content < oxy_lower_bound)
+					thisdist *= o2content
+				else
+					thisdist *= oxy_lower_bound
+				if(thisdist > btdist)
+					btdist = thisdist
+					debugo2c = o2content //todo: remove
+					blinktarget = random_bc
+			message_admins("DEBUG 004 [btdist] | [debugo2c] ")
+			//todo: optimize by stopping if it's the max distance and has sufficient O2
+			forceMove(blinktarget)
+			return TRUE
+		else
+			to_chat(src, "<span class='warning'>You reach into the darkness, but can't seem to find a way.</span>")
+			return
+

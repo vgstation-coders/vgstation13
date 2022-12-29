@@ -106,3 +106,17 @@
 	playsound(user, null, 50, channel = CHANNEL_GRUE)
 	..()
 
+/spell/aoe_turf/grue_blink
+	name = "Shadow Shunt"
+	desc = "Tunnel through the darkness to a nearby location."
+	user_type = USER_TYPE_GRUE
+	panel = "Grue"
+	hud_state = "grue_eat" //todo: sprite and change
+	override_base = "grue"
+	range = 0
+	charge_type = Sp_RECHARGE
+	charge_max = 0
+
+/spell/aoe_turf/grue_blink/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
+	playsound(user, 'sound/effects/grue_drainlight.ogg', 50, 1) //todo: add new sound
+	user.grueblink(TRUE)
