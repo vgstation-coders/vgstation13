@@ -312,7 +312,7 @@
 		size = SIZE_SMALL
 		pass_flags = PASSTABLE
 		reagents.maximum_volume = 500
-		//Larval grue spells: moult, ventcrawl, and hide.
+		//Larval grue spells: moult, ventcrawl, and hide
 		add_spell(new /spell/aoe_turf/grue_hide, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_ventcrawl, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
