@@ -1,4 +1,7 @@
 var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_full"),\
+												"health" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_health"),\
+												"crit" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_crit"),\
+												"mask" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_mask"),\
 												"dead" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_dead"))
 /obj/machinery/atmospherics/unary/cryo_cell
 	name = "cryo cell"
@@ -397,25 +400,29 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 					overlays += "lid[on]" //re-add the overlay of the pod, they are inside it, not floating
 
 					if(occupant.stat == DEAD || !occupant.has_brain())
-						overlays += cryo_health_indicator["dead"]
+						overlays += "moverlay_dead"
 					else
 						if(occupant.health >= occupant.maxHealth)
-							overlays += cryo_health_indicator["full"]
+							overlays += "moverlay_full"
 						else
-							var/icon/healthoverlay
+							var/image/healthoverlay
 							switch((occupant.health / occupant.maxHealth) * 100) // Get a ratio of health to work with
 								if(100 to INFINITY) // No idea how we got here with the check above...
-									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_full")
+									healthoverlay = cryo_health_indicator["full"]
 								if(0 to 100)
-									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_health")
+									healthoverlay = cryo_health_indicator["health"]
 								if(-100 to 0)
-									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_crit")
+									healthoverlay = cryo_health_indicator["crit"]
 								else //Shouldn't ever happen. I really hope it doesn't ever happen.
-									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_dead")
-							var/icon/mask = icon('icons/obj/cryogenics.dmi', "moverlay_mask")
-							healthoverlay.Blend(mask, ICON_OVERLAY, max(3,3+(14*abs(occupant.health / occupant.maxHealth))), 1)
-							healthoverlay.SwapColor(rgb(255, 0, 255, 255), rgb(0, 0, 0, 0))
+									healthoverlay = cryo_health_indicator["dead"]
+							var/image/mask = cryo_health_indicator["mask"]
+							healthoverlay.appearance_flags = KEEP_TOGETHER
+							mask.blend_mode = BLEND_INSET_OVERLAY
+							mask.pixel_x = max(3,3+(14*abs(occupant.health / occupant.maxHealth)))
+							mask.color = "#000"
 							overlays += healthoverlay
+							healthoverlay.overlays.Cut()
+							healthoverlay.overlays += mask
 
 					if (beaker == null || beaker.reagents.total_volume == 0)
 						overlays += "nomix"
