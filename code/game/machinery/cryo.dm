@@ -1,12 +1,4 @@
 var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_full"),\
-												"good" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_good"),\
-												"average" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_average"),\
-												"bad" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_bad"),\
-												"worse" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_worse"),\
-												"critgood" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critgood"),\
-												"critaverage" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critaverage"),\
-												"critbad" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critbad"),\
-												"critworse" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critworse"),\
 												"dead" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_dead"))
 /obj/machinery/atmospherics/unary/cryo_cell
 	name = "cryo cell"
@@ -410,27 +402,20 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 						if(occupant.health >= occupant.maxHealth)
 							overlays += cryo_health_indicator["full"]
 						else
+							var/icon/healthoverlay
 							switch((occupant.health / occupant.maxHealth) * 100) // Get a ratio of health to work with
 								if(100 to INFINITY) // No idea how we got here with the check above...
-									overlays += cryo_health_indicator["full"]
-								if(75 to 100)
-									overlays += cryo_health_indicator["good"]
-								if(50 to 75)
-									overlays += cryo_health_indicator["average"]
-								if(25 to 50)
-									overlays += cryo_health_indicator["bad"]
-								if(0 to 25)
-									overlays += cryo_health_indicator["worse"]
-								if(-25 to 0)
-									overlays += cryo_health_indicator["critgood"]
-								if(-50 to -25)
-									overlays += cryo_health_indicator["critaverage"]
-								if(-75 to -50)
-									overlays += cryo_health_indicator["critbad"]
-								if(-100 to -75)
-									overlays += cryo_health_indicator["critworse"]
+									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_full")
+								if(0 to 100)
+									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_health")
+								if(-100 to 0)
+									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_dead")
 								else //Shouldn't ever happen. I really hope it doesn't ever happen.
-									overlays += cryo_health_indicator["dead"]
+									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_dead")
+							var/icon/mask = icon('icons/obj/cryogenics.dmi', "moverlay_mask")
+							healthoverlay.Blend(mask, ICON_OVERLAY, max(0,18*abs(occupant.health / occupant.maxHealth)), 1)
+							healthoverlay.SwapColor(rgb(255, 0, 255, 255), rgb(0, 0, 0, 0))
+							overlays += healthoverlay
 
 					if (beaker == null || beaker.reagents.total_volume == 0)
 						overlays += "nomix"
