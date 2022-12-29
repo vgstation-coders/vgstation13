@@ -413,7 +413,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 								else //Shouldn't ever happen. I really hope it doesn't ever happen.
 									healthoverlay = icon('icons/obj/cryogenics.dmi', "moverlay_dead")
 							var/icon/mask = icon('icons/obj/cryogenics.dmi', "moverlay_mask")
-							healthoverlay.Blend(mask, ICON_OVERLAY, max(1,1+(17*abs(occupant.health / occupant.maxHealth))), 1)
+							healthoverlay.Blend(mask, ICON_OVERLAY, max(3,3+(14*abs(occupant.health / occupant.maxHealth))), 1)
 							healthoverlay.SwapColor(rgb(255, 0, 255, 255), rgb(0, 0, 0, 0))
 							overlays += healthoverlay
 
