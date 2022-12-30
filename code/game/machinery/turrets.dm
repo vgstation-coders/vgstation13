@@ -423,6 +423,10 @@
 		return 1
 	return
 
+/obj/machinery/turretid/AltClick(mob/user)
+	src.attackby(user.get_active_hand(), user)
+
+
 /obj/machinery/turretid/attackby(obj/item/weapon/W, mob/user)
 	if(stat & (BROKEN|FORCEDISABLE))
 		return

@@ -71,6 +71,16 @@ var/list/all_GPS_list = list()
 	else
 		..()
 
+/obj/item/device/gps/AltClick(mob/user)
+	if(transmitting)
+		transmitting = FALSE
+		update_icon()
+		to_chat(usr, "Hi2")
+		return
+	to_chat(usr, "Hi")
+	transmitting = TRUE
+	update_icon()
+
 /obj/item/device/gps/proc/get_location_name()
 	var/turf/device_turf = get_turf(src)
 	var/area/device_area = get_area(src)
