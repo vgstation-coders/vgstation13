@@ -22,7 +22,7 @@
 	var/next_shock = 0
 
 /obj/item/clothing/gloves/yellow/power/Touch(var/atom/A, mob/living/user, prox)
-	if(prox == 0 && user.a_intent == I_HURT)
+	if(prox == 1 && user.a_intent == I_HURT)
 		var/time = 100
 		var/turf/T = get_turf(user)
 		var/turf/U = get_turf(A)
