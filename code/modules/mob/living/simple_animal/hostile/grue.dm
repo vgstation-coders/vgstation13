@@ -710,7 +710,7 @@
 		for(var/bc_index in 1 to min(blinkcandidates.len, 50))
 			var/random_bc_index = rand(1, blinkcandidates.len)
 			var/turf/random_bc = blinkcandidates[random_bc_index]
-			var/thisdist = get_dist(random_bc, src)
+			var/thisdist = sqrt(get_dist_squared(random_bc, src))
 			//weight away from low oxygen spots
 			var/o2content = random_bc.air ? random_bc.air.molar_density(GAS_OXYGEN): 0
 			if(o2content < oxy_lower_bound)
