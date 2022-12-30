@@ -23,6 +23,7 @@ var/global/list/ghdel_profiling = list()
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
 	var/throw_impact_sound = 'sound/weapons/genhit2.ogg'
+	var/admin_desc//Allows admins to see admin-exclusive examines, such as notifications for custom variables
 
 	///Chemistry.
 	var/datum/reagents/reagents = null
@@ -454,6 +455,9 @@ its easier to just keep the beam vertical.
 		to_chat(user, "[show_icon ? bicon(src) : ""] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
+	if(admin_desc && user.client.holder?.admin_examine)
+		spawn(1) //Adding this so that it ends up at the end of any examine because some things add their own examine text
+			to_chat(user, "<span class='rough'>Admin-only: [admin_desc]</span>")
 
 	if(reagents && is_open_container() && !ismob(src) && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
 		if(get_dist(user,src) > 3)
