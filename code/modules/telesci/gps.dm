@@ -72,12 +72,6 @@ var/list/all_GPS_list = list()
 		..()
 
 /obj/item/device/gps/AltClick(mob/user)
-	if(transmitting)
-		transmitting = FALSE
-		update_icon()
-		to_chat(usr, "Hi2")
-		return
-	to_chat(usr, "Hi")
 	transmitting = TRUE
 	update_icon()
 
