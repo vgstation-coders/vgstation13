@@ -76,10 +76,9 @@ var/list/one_way_windows
 			I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
 	icon = I
 
-/obj/structure/window/proc/update_oneway_nearby_clients()
+/obj/structure/window/proc/update_oneway_clients()
 	for(var/client/C in clients)
-		if(!(C.mob.sight & (SEE_TURFS|SEE_MOBS|SEE_OBJS)) && !(M_XRAY in C.mob.mutations))
-			C.update_one_way_windows()
+		C.update_one_way_windows()
 
 /obj/structure/window/projectile_check()
 	return PROJREACT_WINDOWS
@@ -324,12 +323,12 @@ var/list/one_way_windows
 		if(!one_way_windows)
 			one_way_windows = list()
 		one_way_windows.Add(src)
-		update_oneway_nearby_clients()
+		update_oneway_clients()
 		overlays += oneway_overlay
 	else
 		one_way = 0
 		one_way_windows.Remove(src)
-		update_oneway_nearby_clients()
+		update_oneway_clients()
 		overlays -= oneway_overlay
 
 /obj/structure/window/proc/smart_toggle() //For "smart" windows
