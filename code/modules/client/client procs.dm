@@ -584,10 +584,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			mob.hud_used.update_parallax_values()
 
 	if(!(mob.sight & (SEE_TURFS|SEE_MOBS|SEE_OBJS)) && !(M_XRAY in mob.mutations))	//If they do not have functional X-ray vision
-		for(var/obj/structure/window/W in one_way_windows)
-			if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
-				update_one_way_windows()	//Updating the one-way window overlay if the client has one in the range of its view.
-				break
+		update_one_way_windows()	//Updating the one-way window overlay if the client has one in the range of its view.
 
 /image/viewblock
 	render_source = "*viewblock"
@@ -619,12 +616,13 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 
 	ObscuredTurfs.len = 0
 
-	for(W in v)
-		if(W.one_way)
-			if(W.dir & get_dir(W,mob))
-				Oneway = get_turf(W)
-				Oneway.opacity = 1
-				onewaylist += Oneway
+	for(W in one_way_windows)
+		if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
+			if(W.one_way)
+				if(W.dir & get_dir(W,mob))
+					Oneway = get_turf(W)
+					Oneway.opacity = 1
+					onewaylist += Oneway
 
 	if(onewaylist.len)
 		var/list/List = v - view(view,mob)
@@ -634,6 +632,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			var/onewayfound = FALSE
 			turf_viewblock = new /image/viewblock(null,T)
 			if(T in onewaylist)
+				T.opacity = 0
 				for(W in T.contents)
 					if(W.one_way)
 						onewayfound = TRUE
