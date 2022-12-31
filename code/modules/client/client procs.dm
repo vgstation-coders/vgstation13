@@ -627,10 +627,10 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 					onewaylist += Oneway
 
 	if(onewaylist.len)
-		var/list/List = v - view(view,mob)
-		List += onewaylist
+		v -= view(view,mob)
+		v += onewaylist
 		var/image/turf_viewblock
-		for(var/turf/T in List)
+		for(var/turf/T in v)
 			var/onewayfound = FALSE
 			turf_viewblock = new /image/viewblock(null,T)
 			if(T in onewaylist)
