@@ -584,10 +584,9 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			mob.hud_used.update_parallax_values()
 
 	if(!(mob.sight & (SEE_TURFS|SEE_MOBS|SEE_OBJS)) && !(M_XRAY in mob.mutations))	//If they do not have functional X-ray vision
-		var/list/v = view(view,mob)
 		for(var/obj/structure/window/W in one_way_windows)
 			if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
-				update_one_way_windows(v)	//Updating the one-way window overlay if the client has one in the range of its view.
+				update_one_way_windows()	//Updating the one-way window overlay if the client has one in the range of its view.
 				break
 
 /image/viewblock
@@ -607,12 +606,13 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 /mob
 	var/static/obj/abstract/screen/nocontext/viewblock/viewblock = new()
 
-/client/proc/update_one_way_windows(var/list/v)		//Needed for one-way windows to work.
-	var/Image										//Code heavily cannibalized from a demo made by Byond member Shadowdarke.
+/client/proc/update_one_way_windows()		//Needed for one-way windows to work.
+	var/Image								//Code heavily cannibalized from a demo made by Byond member Shadowdarke.
 	var/turf/Oneway
 	var/obj/structure/window/W
 	var/list/newimages = list()
 	var/list/onewaylist = list()
+	var/list/v = view(view,mob)
 
 	if(!v)
 		return
