@@ -648,9 +648,6 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			newimages += T.viewblock
 			ObscuredTurfs += T
 
-		for(var/turf/I in onewaylist)
-			I.opacity = 0
-
 	for(Image in ViewFilter-newimages)
 		images -= Image
 	ViewFilter = newimages
