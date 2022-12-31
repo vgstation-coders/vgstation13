@@ -629,23 +629,24 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	if(onewaylist.len)
 		var/list/List = v - view(view,mob)
 		List += onewaylist
+		var/image/turf_viewblock
 		for(var/turf/T in List)
 			var/onewayfound = FALSE
-			T.viewblock = new /image/viewblock(null,T)
+			turf_viewblock = new /image/viewblock(null,T)
 			if(T in onewaylist)
 				for(W in T.contents)
 					if(W.one_way)
 						onewayfound = TRUE
-						T.viewblock = image('icons/turf/overlays.dmi',T,"black_box[W.dir]",VIEWBLOCK_LAYER)
+						turf_viewblock = image('icons/turf/overlays.dmi',T,"black_box[W.dir]",VIEWBLOCK_LAYER)
 			if((mob.sight & SEE_TURFS) && !onewayfound)
-				T.viewblock = image(T.icon,T,T.icon_state,VIEWBLOCK_LAYER)
-			T.viewblock.plane = FULLSCREEN_PLANE
+				turf_viewblock = image(T.icon,T,T.icon_state,VIEWBLOCK_LAYER)
+			turf_viewblock.plane = FULLSCREEN_PLANE
 			if(mob.sight & SEE_MOBS)
-				T.viewblock.plane = LYING_MOB_PLANE
+				turf_viewblock.plane = LYING_MOB_PLANE
 			if(mob.sight & SEE_OBJS)
-				T.viewblock.plane = HIDING_MOB_PLANE
-			src << T.viewblock
-			newimages += T.viewblock
+				turf_viewblock.plane = HIDING_MOB_PLANE
+			src << turf_viewblock
+			newimages += turf_viewblock
 			ObscuredTurfs += T
 
 	for(Image in ViewFilter-newimages)
