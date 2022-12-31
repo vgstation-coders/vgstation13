@@ -59,9 +59,20 @@
 	if(!score.powerloss) //No APCs with bad power
 		score.powerbonus = 2500
 
+	for(var/obj/machinery/alarm/A2 in air_alarms)
+		if(A2.z != map.zMainStation)
+			continue
+		var/area/this_area = get_area(A2)
+		if(max(A2.local_danger_level, this_area.atmosalm-1) > 0)
+			score.atmoloss++ //Red or yellow light means bad
+	if(!score.atmoloss) //No air alarms with issues
+		score.atmobonus = 2500
+
 	//crewscore
 	score.crewscore -= score.powerloss * 50 //Power issues are BAD, they mean the Engineers aren't doing their job at all
 	score.crewscore += score.powerbonus
+	score.crewscore -= score.atmoloss * 50 //You too, atmos techs
+	score.crewscore += score.atmobonus
 
 /datum/controller/gameticker/scoreboard/proc/service_score()
 	//Janitor
