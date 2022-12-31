@@ -622,21 +622,21 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	for(W in v)
 		if(W.one_way)
 			if(W.dir & get_dir(W,mob))
-				var/i = 1
 				Oneway = get_turf(W)
-				while(i <= view)
-					onewaylist += Oneway
-					Oneway = get_step_away(Oneway,mob)
-					i++
+				Oneway.opacity = 1
+				onewaylist += Oneway
 
 	if(onewaylist.len)
-		for(var/turf/T in onewaylist)
+		var/list/List = v - view(view,mob)
+		List += onewaylist
+		for(var/turf/T in List)
 			var/onewayfound = FALSE
 			T.viewblock = new /image/viewblock(null,T)
-			for(W in T.contents)
-				if(W.one_way)
-					onewayfound = TRUE
-					T.viewblock = image('icons/turf/overlays.dmi',T,"black_box[W.dir]",VIEWBLOCK_LAYER)
+			if(T in onewaylist)
+				for(W in T.contents)
+					if(W.one_way)
+						onewayfound = TRUE
+						T.viewblock = image('icons/turf/overlays.dmi',T,"black_box[W.dir]",VIEWBLOCK_LAYER)
 			if((mob.sight & SEE_TURFS) && !onewayfound)
 				T.viewblock = image(T.icon,T,T.icon_state,VIEWBLOCK_LAYER)
 			T.viewblock.plane = FULLSCREEN_PLANE
