@@ -619,7 +619,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 
 	ObscuredTurfs.len = 0
 
-	for(W in view(view,mob))
+	for(W in v)
 		if(W.one_way)
 			if(W.dir & get_dir(W,mob))
 				Oneway = get_turf(W)
