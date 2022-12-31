@@ -174,7 +174,7 @@
 		var/cur_stage = href_list["set_next_stage"]
 		if(!proceeding_stages.Find(cur_stage))
 			proceeding_stages.Add(cur_stage)
-		var/next_stage = input("Enter next stage ID", "Automated stage procession") as text|null
+		var/next_stage = copytext(sanitize(input("Enter next stage ID", "Automated stage procession") as text|null),1,MAX_NAME_LEN)
 		if(next_stage)
 			proceeding_stages[cur_stage] = next_stage
 		else

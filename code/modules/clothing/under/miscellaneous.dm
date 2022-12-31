@@ -586,7 +586,8 @@
 	icon_state = "darkholme"
 	item_state = "darkholme"
 	_color = "darkholme"
-	species_fit = list(INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/under/gokugidown
 	name = "turtle hermit undershirt"
@@ -629,7 +630,7 @@
 	icon_state = "darkholme"
 	item_state = "darkholme"
 	_color = "darkholme"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/under/contortionist/proc/check_clothing(mob/user as mob)
 	//Allowed to wear: glasses, shoes, gloves, pockets, mask, and jumpsuit (obviously)

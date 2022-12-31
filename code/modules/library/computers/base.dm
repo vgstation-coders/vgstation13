@@ -7,6 +7,7 @@
 	var/num_pages = 0
 	var/num_results = 0
 	var/datum/library_query/query = new()
+	computer_flags = NO_ONOFF_ANIMS
 	pass_flags = PASSTABLE
 	icon = 'icons/obj/library.dmi'
 	icon_state = "computer"

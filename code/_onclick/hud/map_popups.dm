@@ -14,8 +14,10 @@
 	// Map view has to be on the lowest plane to enable proper lighting.
 	// At least, that's what the comment on TG said.
 	// But even there, this thing wasn't on the *lowest* plane.
+
+	//That seems to be a lie because setting the plane to 0 seems to work and also fixes plane collisions due to FLOAT_PLANE
 	layer = PLATING_PLANE
-	plane = PLATING_PLANE
+	plane = 0
 	globalscreen = TRUE
 	icon = null
 

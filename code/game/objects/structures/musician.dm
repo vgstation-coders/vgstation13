@@ -268,13 +268,13 @@
 			playsong(usr)
 		return //no need to reload the window
 	else if(href_list["newline"])
-		var/newline = html_encode(input("Enter your line: ", instrumentObj.name) as text|null)
+		var/newline = input("Enter your line: ", instrumentObj.name) as text|null
 		if(!newline || !in_range(instrumentObj, usr))
 			return
 		if(lines.len > INSTRUMENT_MAX_LINE_NUMBER)
 			return
 		if(length(newline) > INSTRUMENT_MAX_LINE_LENGTH)
-			newline = copytext(newline, 1, INSTRUMENT_MAX_LINE_LENGTH)
+			newline = html_encode(copytext(newline, 1, INSTRUMENT_MAX_LINE_LENGTH))
 		lines.Add(newline)
 	else if(href_list["deleteline"])
 		if(alert(usr, "Are you sure you want to delete Line [href_list["deleteline"]]?",  "Delete Line" , "Yes" , "No") != "Yes")
@@ -285,11 +285,11 @@
 		lines.Cut(num, num+1)
 	else if(href_list["modifyline"])
 		var/num = round(text2num(href_list["modifyline"]),1)
-		var/content = html_encode(input("Enter your line: ", instrumentObj.name, lines[num]) as text|null)
+		var/content = input("Enter your line: ", instrumentObj.name, lines[num]) as text|null
 		if(!content || !in_range(instrumentObj, usr))
 			return
 		if(length(content) > INSTRUMENT_MAX_LINE_LENGTH)
-			content = copytext(content, 1, INSTRUMENT_MAX_LINE_LENGTH)
+			content = html_encode(copytext(content, 1, INSTRUMENT_MAX_LINE_LENGTH))
 		if(num > lines.len || num < 1)
 			return
 		lines[num] = content

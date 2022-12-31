@@ -127,16 +127,21 @@
 			color = ST._color
 
 		if(color)
+			var/new_jumpsuit_icon = ""
 			var/new_jumpsuit_icon_state = ""
 			var/new_jumpsuit_item_state = ""
 			var/new_jumpsuit_name = ""
+			var/new_glove_icon = ""
 			var/new_glove_icon_state = ""
 			var/new_glove_item_state = ""
 			var/new_glove_name = ""
+			var/new_shoe_icon = ""
 			var/new_shoe_icon_state = ""
 			var/new_shoe_name = ""
+			var/new_sheet_icon = ""
 			var/new_sheet_icon_state = ""
 			var/new_sheet_name = ""
+			var/new_softcap_icon = ""
 			var/new_softcap_icon_state = ""
 			var/new_softcap_name = ""
 			var/ccoil_test = null
@@ -144,6 +149,7 @@
 			for(var/T in typesof(/obj/item/clothing/under))
 				var/obj/item/clothing/under/J = new T
 				if(color == J._color)
+					new_jumpsuit_icon = J.icon //Fixes a bug where assistant suits (which have their own icon file) would make invisible suits
 					new_jumpsuit_icon_state = J.icon_state
 					new_jumpsuit_item_state = J.item_state
 					new_jumpsuit_name = J.name
@@ -155,6 +161,7 @@
 			for(var/T in typesof(/obj/item/clothing/gloves))
 				var/obj/item/clothing/gloves/G = new T
 				if(color == G._color)
+					new_glove_icon = G.icon
 					new_glove_icon_state = G.icon_state
 					new_glove_item_state = G.item_state
 					new_glove_name = G.name
@@ -166,6 +173,7 @@
 			for(var/T in typesof(/obj/item/clothing/shoes))
 				var/obj/item/clothing/shoes/S = new T
 				if(color == S._color)
+					new_shoe_icon = S.icon
 					new_shoe_icon_state = S.icon_state
 					new_shoe_name = S.name
 					qdel(S)
@@ -176,6 +184,7 @@
 			for(var/T in typesof(/obj/item/weapon/bedsheet))
 				var/obj/item/weapon/bedsheet/B = new T
 				if(color == B._color)
+					new_sheet_icon = B.icon
 					new_sheet_icon_state = B.icon_state
 					new_sheet_name = B.name
 					qdel(B)
@@ -186,6 +195,7 @@
 			for(var/T in typesof(/obj/item/clothing/head/soft))
 				var/obj/item/clothing/head/soft/H = new T
 				if(color == H._color)
+					new_softcap_icon = H.icon
 					new_softcap_icon_state = H.icon_state
 					new_softcap_name = H.name
 					qdel(H)
@@ -204,6 +214,7 @@
 				test = null
 			if(new_jumpsuit_icon_state && new_jumpsuit_name)
 				for(var/obj/item/clothing/under/J in contents)
+					J.icon = new_jumpsuit_icon
 					J.item_state = new_jumpsuit_item_state
 					J.icon_state = new_jumpsuit_icon_state
 					J._color = color
@@ -211,6 +222,7 @@
 					J.desc = new_desc
 			if(new_glove_icon_state && new_glove_name)
 				for(var/obj/item/clothing/gloves/G in contents)
+					G.icon = new_glove_icon
 					G.item_state = new_glove_item_state
 					G.icon_state = new_glove_icon_state
 					G._color = color
@@ -224,18 +236,21 @@
 						S.chain.forceMove(src)
 						S.chain = null
 						S.slowdown = NO_SLOWDOWN
+					S.icon = new_shoe_icon
 					S.icon_state = new_shoe_icon_state
 					S._color = color
 					S.name = new_shoe_name
 					S.desc = new_desc
 			if(new_sheet_icon_state && new_sheet_name)
 				for(var/obj/item/weapon/bedsheet/B in contents)
+					B.icon = new_sheet_icon
 					B.icon_state = new_sheet_icon_state
 					B._color = color
 					B.name = new_sheet_name
 					B.desc = new_desc
 			if(new_softcap_icon_state && new_softcap_name)
 				for(var/obj/item/clothing/head/soft/H in contents)
+					H.icon = new_softcap_icon
 					H.icon_state = new_softcap_icon_state
 					H._color = color
 					H.name = new_softcap_name

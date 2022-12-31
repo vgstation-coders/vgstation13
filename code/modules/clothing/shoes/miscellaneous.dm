@@ -25,7 +25,7 @@
 /obj/item/clothing/shoes/syndigaloshes/New()
 	..()
 	verbs += /obj/item/clothing/shoes/syndigaloshes/verb/change_appearance_shoes
-	for(var/Type in typesof(/obj/item/clothing/shoes) - list(/obj/item/clothing/shoes, /obj/item/clothing/shoes/syndigaloshes))
+	for(var/Type in existing_typesof(/obj/item/clothing/shoes) - (/obj/item/clothing/shoes/syndigaloshes))
 		clothing_choices += new Type
 	return
 

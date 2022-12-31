@@ -7,18 +7,27 @@
 	anchored = TRUE
 	density = FALSE
 	plane = ABOVE_OBJ_PLANE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/obj/machinery/artifact_analyser/analyser_console = null
 	var/obj/machinery/artifact_harvester/harvester_console = null
 
 /obj/machinery/artifact_scanpad/New()
 	..()
 	update_icon()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/anom/analyser/scanpad,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module
+	)
 
 /obj/machinery/artifact_scanpad/Destroy()
-	analyser_console.owned_scanner = null
-	analyser_console = null
-	harvester_console.owned_scanner = null
-	harvester_console = null
+	if(analyser_console)
+		analyser_console.owned_scanner = null
+		analyser_console = null
+	if(harvester_console)
+		harvester_console.owned_scanner = null
+		harvester_console = null
 	..()
 
 /obj/machinery/artifact_scanpad/power_change()

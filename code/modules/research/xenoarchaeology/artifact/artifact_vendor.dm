@@ -290,6 +290,7 @@ var/static/list/badstuff2putin = list(
 		/mob/living/simple_animal/cricket = 1,
 	)
 	var/objprob = 10
+	flags = FPRINT  | NOREACT | SILENTCONTAINER
 
 /obj/item/weapon/reagent_containers/food/snacks/artifact/New(loc)
 	..(loc)
@@ -358,6 +359,7 @@ var/static/list/badstuff2putin = list(
 	name = "alien drink"
 	desc = "A strange long lost brand of drink. You're not sure if this even ever existed."
 	var/list/stuff2putin = list()
+	flags = FPRINT  | OPENCONTAINER | NOREACT | SILENTCONTAINER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/artifact/New(loc)
 	volume = rand(1,6)*50 // 50-300

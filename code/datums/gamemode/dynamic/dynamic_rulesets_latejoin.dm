@@ -82,14 +82,6 @@
 	high_population_requirement = 40
 	repeatable = TRUE
 
-/datum/dynamic_ruleset/latejoin/raginmages/ready(var/forced = 0)
-	if(wizardstart.len == 0)
-		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
-		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
-		return 0
-
-	return ..()
-
 /datum/dynamic_ruleset/latejoin/raginmages/execute()
 	var/mob/M = pick(assigned)
 	if(!latejoinprompt(M))

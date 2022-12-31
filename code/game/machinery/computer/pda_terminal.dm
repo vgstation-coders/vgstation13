@@ -9,6 +9,7 @@
 	var/machine_id = ""
 
 	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | PURCHASER
+	computer_flags = NO_ONOFF_ANIMS
 
 /obj/machinery/computer/pda_terminal/New()
 	..()

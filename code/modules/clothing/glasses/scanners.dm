@@ -74,15 +74,6 @@
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
-	var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
-	var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_target
-
-/obj/item/clothing/glasses/scanner/night/New()
-	..()
-	overdark_planemaster = new
-	overdark_planemaster.render_target = "night vision goggles (\ref[src])"
-	overdark_target = new
-	overdark_target.render_source = "night vision goggles (\ref[src])"
 
 /obj/item/clothing/glasses/scanner/night/enable(var/mob/living/carbon/C)
 	see_in_dark = initial(see_in_dark)
@@ -92,12 +83,10 @@
 		var/mob/living/carbon/human/H = C
 		if (H.glasses == src)
 			C.update_perception()
-			add_overdark(C)
 	else if (ismonkey(C))
 		var/mob/living/carbon/monkey/M = C
 		if (M.glasses == src)
 			C.update_perception()
-			add_overdark(C)
 	return ..()
 
 /obj/item/clothing/glasses/scanner/night/disable(var/mob/living/carbon/C)
@@ -105,7 +94,6 @@
 	see_in_dark = 0
 	my_dark_plane_alpha_override = null
 	eyeprot = 0
-	remove_overdark(C)
 	if (ishuman(C))
 		var/mob/living/carbon/human/H = C
 		if (H.glasses == src)
@@ -125,8 +113,6 @@
 			M.master_plane.blend_mode = BLEND_ADD
 		if (M.client)
 			M.client.color = "#33FF33"
-			remove_overdark(M)
-			add_overdark(M)
 	else
 		my_dark_plane_alpha_override = null
 		if (M.master_plane)
@@ -135,21 +121,10 @@
 /obj/item/clothing/glasses/scanner/night/unequipped(mob/living/carbon/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
-			remove_overdark(user)
 			if (user.client)
 				user.client.color = null
 				user.update_perception()
 	..()
-
-/obj/item/clothing/glasses/scanner/night/proc/add_overdark(var/mob/living/carbon/C)
-	if (istype(C) && C.client)
-		C.client.screen |= overdark_planemaster
-		C.client.screen |= overdark_target
-
-/obj/item/clothing/glasses/scanner/night/proc/remove_overdark(var/mob/living/carbon/C)
-	if (istype(C) && C.client)
-		C.client.screen -= overdark_planemaster
-		C.client.screen -= overdark_target
 
 var/list/meson_wearers = list()
 
@@ -272,7 +247,7 @@ var/list/meson_images = list()
 	meson_images -= meson_image
 	if(is_on_mesons)
 		meson_image = image(icon,loc,icon_state,layer,dir)
-		meson_image.plane = plane
+		meson_image.plane = relative_plane_to_plane(plane, loc.plane)
 		meson_images += meson_image
 		for (var/mob/L in meson_wearers)
 			if (L.client)

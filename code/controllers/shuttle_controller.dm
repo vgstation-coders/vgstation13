@@ -423,7 +423,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		else
 			return 1
 
-/proc/shuttle_autocall(var/reason = "None")
+/proc/shuttle_autocall()
 	if (emergency_shuttle.departed)
 		return
 
@@ -431,7 +431,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		return
 
 	emergency_shuttle.incall(2)
-	log_game("[reason]. Shuttle called.")
-	message_admins("[reason]. Shuttle called.", 1)
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification: [reason]")
+	log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
+	message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
+	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
 	world << sound('sound/AI/shuttlecalled.ogg')

@@ -360,8 +360,27 @@
 			return core.amount
 	return 1
 
+/mob/living/simple_animal/hostile/asteroid/hivelord/guardian
+	name = "Hivelord Guardian"
+	maxHealth = 100 //slighly tougher than regular hivelords
+	health = 100
+	treadmill_speed = 5
+	desc = "A special breed of hivelord, this one will give its life to defend the queen and hive."
+	open_fire_type = /mob/living/simple_animal/hostile/asteroid/hivelordbrood/guardian
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/guardian/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/M = matrix()
+	M.Scale(1.5,1.5) //halfway between regular hivelords and the queen
+	transform = M
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/guardian/get_butchering_products()
+	return list(/datum/butchering_product/hivelord_core/guardian)
+
 /mob/living/simple_animal/hostile/asteroid/hivelord/boss
 	name = "Maria"
+	desc = "A hulking Hivelord Queen. When attacking, will create more hivelords to ensure the safety of her hive. Her core beats and glows with an eerie light."
 	size = SIZE_HUGE
 	maxHealth = 300
 	health = 300
@@ -372,6 +391,7 @@
 	hostile_interest = 5 //Less persistent
 	open_fire_type = /mob/living/simple_animal/hostile/asteroid/hivelord
 	brood_limit = 5
+	treadmill_speed = 6
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/boss/New()
 	..()
@@ -391,6 +411,11 @@
 	var/inert = 0
 	var/time_left = 1200 //deciseconds
 	var/last_process
+
+/obj/item/asteroid/hivelord_core/guardian
+	name = "hivelord guardian remains"
+	desc = "All that remains of a hivelord guardian, it seems to be what allows it to break pieces of itself off without being hurt... its healing properties will soon become inert if not used quickly. This one seems to last longer than usual."
+	time_left = 3000 //5 minutes
 
 /obj/item/asteroid/hivelord_core/New()
 	..()
@@ -510,7 +535,7 @@
 
 /obj/item/organ/internal/heart/hivelord/die()
 	..()
-	desc = "The remains of a greater hivelord that have become useless, having been left alone too long after being out of a body."
+	desc = "The remains of a greater hivelord that have become useless, having been left alone too long after being out of a body. Perhaps injecting it with something might help?"
 
 /obj/item/organ/internal/heart/hivelord/revive()
 	..()
@@ -564,6 +589,19 @@
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/death(var/gibbed = FALSE)
 	..(TRUE)
 	qdel(src)
+
+/mob/living/simple_animal/hostile/asteroid/hivelordbrood/guardian
+	name = "hivelord guardian brood"
+	desc = "A fragment of a Hivelord Guardian. It isn't much of a threat despite being stronger than a regular brood. Pretty weak by itself, but..."
+	melee_damage_lower = 4
+	melee_damage_upper = 4
+
+/mob/living/simple_animal/hostile/asteroid/hivelordbrood/guardian/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/M = matrix()
+	M.Scale(1.5,1.5) //halfway between regular hivelords and the queen
+	transform = M
 
 /mob/living/simple_animal/hostile/asteroid/goliath
 	name = "goliath"

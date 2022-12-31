@@ -40,6 +40,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 
 	use_power = MACHINE_POWER_USE_IDLE
 	power_priority = POWER_PRIORITY_EXCESS
+	is_priority_locked = TRUE
 	monitoring_enabled = TRUE
 	density = 1
 	anchored = 0
@@ -73,7 +74,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	template["charge"] = round(100 * charge/max_charge)
 	if (charged_last_tick)
 		template["charging"] = MONITOR_STATUS_BATTERY_CHARGING
-	return list("\ref[src]" = get_monitor_status_template())
+	return list("\ref[src]" = template)
 
 /obj/machinery/power/antiquesynth/update_icon()
 	return

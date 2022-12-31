@@ -154,13 +154,13 @@
 		var/uselevel = alert(user, "Which level of complexity do you want to work with? Basic is a simple word replacement with regex, advanced is an implementation of NTSL as found in telecomms servers.", "Level of vocal manipulation", "Basic", "Advanced")
 		if(uselevel == "Basic")
 			var/obj/item/weapon/implant/vocal/V = imp
-			var/input = input(user, "Enter an input phrase, regex works here:", "Input phrase") as text
+			var/input = html_encode(input(user, "Enter an input phrase, regex works here:", "Input phrase") as text)
 			if(!input)
 				return
 			var/keepgoing = FALSE
 			var/list/outputs = list()
 			do
-				var/output =  input(user, "Enter an output phrase:", "Output phrase") as text
+				var/output =  html_encode(input(user, "Enter an output phrase:", "Output phrase") as text)
 				if(!output)
 					return
 				outputs.Add(output)

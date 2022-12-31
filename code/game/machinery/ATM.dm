@@ -451,7 +451,7 @@ log transactions
 					if(world.timeofday < lastprint + PRINT_DELAY)
 						to_chat(usr, "<span class='notice'>The [src.name] flashes an error on its display.</span>")
 						return
-					var/desired_authorized_name = input(usr, "Enter authorized name", "Set Authorized Name", authenticated_account.owner_name) as text
+					var/desired_authorized_name = copytext(sanitize(input(usr, "Enter authorized name", "Set Authorized Name", authenticated_account.owner_name) as text),1,MAX_NAME_LEN)
 					if(authenticated_account.charge(DEBIT_CARD_COST, null, "New debit card", machine_id, null, "Terminal"))
 						lastprint = world.timeofday
 						var/obj/item/weapon/card/debit/debit_card = new(src.loc, authenticated_account.account_number, desired_authorized_name)

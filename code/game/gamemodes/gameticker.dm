@@ -180,7 +180,6 @@ var/datum/controller/gameticker/ticker
 	for(var/mob/M in player_list)
 		if(!istype(M, /mob/new_player/))
 			var/mob/living/L = M
-			ticker.minds += L.mind
 			L.store_position()
 			M.close_spawn_windows()
 			continue
@@ -196,7 +195,6 @@ var/datum/controller/gameticker/ticker
 		switch(np.mind.assigned_role)
 			if("Cyborg", "Mobile MMI", "AI")
 				var/mob/living/silicon/S = np.create_roundstart_silicon(prefs)
-				ticker.minds += S.mind
 				S.store_position()
 				log_admin("([key]) started the game as a [S.mind.assigned_role].")
 				new_characters[key] = S
@@ -204,7 +202,6 @@ var/datum/controller/gameticker/ticker
 				//antags aren't new players
 			else
 				var/mob/living/carbon/human/H = np.create_human(prefs)
-				ticker.minds += H.mind
 				H.store_position()
 				EquipCustomItems(H)
 				H.update_icons()

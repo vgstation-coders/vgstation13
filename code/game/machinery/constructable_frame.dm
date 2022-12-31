@@ -1306,7 +1306,8 @@ to destroy them and players will be able to make replacements.
 	req_components = list(
 		/obj/item/weapon/stock_parts/scanning_module = 1,
 		/obj/item/weapon/stock_parts/manipulator = 1,
-		/obj/item/weapon/stock_parts/matter_bin = 2,
+		/obj/item/weapon/stock_parts/matter_bin = 1,
+		/obj/item/weapon/stock_parts/capacitor = 1
 	)
 
 /obj/item/weapon/circuitboard/autoprocessor/wrapping
@@ -1315,9 +1316,19 @@ to destroy them and players will be able to make replacements.
 	build_path = /obj/machinery/autoprocessor/wrapping
 
 /obj/item/weapon/circuitboard/autoprocessor/clothing
-	name = "Circuit Board (Wrapping Machine)"
+	name = "Circuit Board (Clothing Machine)"
 	desc = "A circuit board used to run a machine that clothes living things."
 	build_path = /obj/machinery/autoprocessor/clothing
+
+/obj/item/weapon/circuitboard/autoprocessor/outfit
+	name = "Circuit Board (Auto Outfitter)"
+	desc = "A circuit board used to run a machine that automatically applies an outfit to people inside."
+	build_path = /obj/machinery/autoprocessor/outfit
+
+/obj/item/weapon/circuitboard/autoprocessor/outfit/prisoner
+	name = "Circuit Board (Prisoner Outfitter)"
+	desc = "A circuit board used to run a machine that automatically applies prisoner clothes to people inside."
+	build_path = /obj/machinery/autoprocessor/outfit/prisoner
 
 /obj/item/weapon/circuitboard/processing_unit
 	name = "Circuit Board (Ore Processor)"
@@ -1420,6 +1431,24 @@ to destroy them and players will be able to make replacements.
 	name = "Circuit Board (Hyperspectral Imager)"
 	desc = "A circuit board used to run a machine used in xenoarcheology."
 	build_path = /obj/machinery/anomaly/hyperspectral
+
+/obj/item/weapon/circuitboard/anom/analyser
+	name = "Circuit Board (Anomaly Analyzer)"
+	desc = "A circuit board used to run a machine used in xenoarcheology."
+	build_path = /obj/machinery/artifact_analyser
+
+/obj/item/weapon/circuitboard/anom/analyser/scanpad
+	name = "Circuit Board (Anomaly Scanner Pad)"
+	desc = "A circuit board used to run a machine used in xenoarcheology."
+	build_path = /obj/machinery/artifact_scanpad
+
+/obj/item/weapon/circuitboard/anom/harvester
+	name = "Circuit Board (Exotic Particle Harvester)"
+	desc = "A circuit board used to run a machine used in xenoarcheology."
+	build_path = /obj/machinery/artifact_harvester
+	req_components = list (
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/capacitor = 2)
 
 /obj/item/weapon/circuitboard/confectionator
 	name = "circuit board (confectionator)"

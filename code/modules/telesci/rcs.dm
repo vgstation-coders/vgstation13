@@ -164,7 +164,7 @@
 	var/obj/item/weapon/paper/P
 
 	if(send_note)
-		var/note = input("Would you like to attach a note?", "Autoletter") as null|text
+		var/note = copytext(sanitize(input("Would you like to attach a note?", "Autoletter") as null|text),1,MAX_MESSAGE_LEN)
 		if(note)
 			P = new(null) //This will be deleted if the teleport doesn't complete. Avoids generating extra notes.
 			P.name = "letter from [user]"

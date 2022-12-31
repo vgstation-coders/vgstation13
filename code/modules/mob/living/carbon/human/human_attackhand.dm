@@ -86,7 +86,7 @@
 	else
 		LAssailant = M
 		assaulted_by(M)
-	log_attack("[M.name] ([M.ckey]) bitten by [src.name] ([src.ckey])")
+	log_attack("[src.name] ([src.ckey]) bitten by [M.name] ([M.ckey])")
 
 	return
 

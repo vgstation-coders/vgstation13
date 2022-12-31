@@ -68,6 +68,8 @@
 	client.screen += catcher //Catcher of clicks
 	client.screen += clickmaster // click catcher planesmaster on plane 0 with mouse opacity 0 - allows click catcher to work with SEE_BLACKNESS
 	client.screen += clickmaster_dummy // honestly fuck you lummox
+	client.screen += overdark_planemaster
+	client.screen += overdark_planemaster_target
 	client.initialize_ghost_planemaster() //We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
 	client.initialize_darkness_planemaster()
 	client.initialize_fakecamera_planemaster()
@@ -116,7 +118,7 @@
 		var/obj/location = loc
 		location.on_login(src)
 
-	if(client && client.haszoomed && !client.holder)
+	if(client && client.haszoomed)
 		client.changeView()
 		client.haszoomed = 0
 

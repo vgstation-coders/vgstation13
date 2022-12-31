@@ -215,6 +215,9 @@
 /mob/living/simple_animal/hostile/gremlin/grinch/electrocute_act()
 	return
 
+/mob/living/simple_animal/hostile/gremlin/grinch/put_in_hand_check(obj/item/W, index)
+	return 1
+
 // -- Grinch items.
 
 // Modified BoH

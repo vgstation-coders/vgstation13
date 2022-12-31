@@ -726,7 +726,7 @@ var/list/shuttle_log = list()
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
-	shuttle_autocall("All the AIs, comm consoles and boards are destroyed")
+	shuttle_autocall()
 	..()
 
 // -- Blob defcon 1 things
@@ -828,6 +828,6 @@ var/list/shuttle_log = list()
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
-	shuttle_autocall("All the AIs, comm consoles and boards are destroyed")
+	shuttle_autocall()
 
 	..()

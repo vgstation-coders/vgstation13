@@ -237,35 +237,39 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat,
 		/obj/item/weapon/reagent_containers/food/snacks/meat
 		)
-	result = /obj/item/weapon/storage/fancy/food_box/slider_box
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider
 
 /datum/recipe/sliders/synth
+	priority = 1
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 		)
-	result = /obj/item/weapon/storage/fancy/food_box/slider_box/synth
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/synth
 
 /datum/recipe/sliders/xeno
+	priority = 1
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 		)
-	result = /obj/item/weapon/storage/fancy/food_box/slider_box/xeno
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/xeno
 
 /datum/recipe/sliders/chicken
+	priority = 1
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
 		)
-	result = /obj/item/weapon/storage/fancy/food_box/slider_box/chicken
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/chicken
 
 /datum/recipe/sliders/spider
+	priority = 1
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat
 		)
-	result = /obj/item/weapon/storage/fancy/food_box/slider_box/spider
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/spider
 
 /datum/recipe/sliders/clown
 	items = list(
@@ -273,7 +277,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat,
 		/obj/item/clothing/mask/gas/clown_hat
 		)
-	result = /obj/item/weapon/storage/fancy/food_box/slider_box/clown
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/clown
 
 /datum/recipe/sliders/mime
 	items = list(
@@ -281,7 +285,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat,
 		/obj/item/clothing/head/beret
 		)
-	result = /obj/item/weapon/storage/fancy/food_box/slider_box/mime
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/mime
 
 /datum/recipe/sliders/slippery
 	reagents = list(FLOUR = 10, LUBE = 5)
@@ -290,7 +294,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana
 		)
-	result = /obj/item/weapon/storage/fancy/food_box/slider_box/slippery
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/slippery
 
 // Eggs ////////////////////////////////////////////////////////
 
@@ -1917,6 +1921,14 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad
 
+/datum/recipe/salad/rosolli
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/rosolli
+
 // Curry ///////////////////////////////////////////////////////
 
 /datum/recipe/curry
@@ -2338,15 +2350,16 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/cubancarp
 
 /datum/recipe/sliders/carp
+	priority = 1
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
 		)
-	result = /obj/item/weapon/storage/fancy/food_box/slider_box/carp
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/carp
 
 /datum/recipe/sliders/carp/make_food(var/obj/container, var/mob/user)
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/C = locate() in container
 	if(C.poisonsacs)
-		result = /obj/item/weapon/storage/fancy/food_box/slider_box/toxiccarp
+		result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/toxiccarp
 	..()
 
 /datum/recipe/turkey
@@ -2398,6 +2411,36 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
 		)
 	result = /obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket
+
+/datum/recipe/vox_chicken_tenders
+	priority = 1
+	reagents = list(CORNOIL = 3)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken)
+	result = /obj/item/weapon/reagent_containers/food/snacks/vox_chicken_tenders
+
+/datum/recipe/vox_nuggets_pox
+	reagents = list(KETCHUP = 5)
+	priority = 1
+	items = list(
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
+
+/datum/recipe/vox_chicken_drumstick_pox
+	priority = 1
+	items = list(
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox,
+		)
+	result = /obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket
+
+/datum/recipe/vox_chicken_tenders_pox
+	priority = 1
+	reagents = list(CORNOIL = 3)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox)
+	result = /obj/item/weapon/reagent_containers/food/snacks/vox_chicken_tenders
 
 /datum/recipe/crab_sticks
 	reagents = list(SODIUMCHLORIDE = 1, SUGARS = 1)
@@ -3300,6 +3343,15 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pickledpears
 	cookable_with = COOKABLE_WITH_MIXING
+
+/datum/recipe/pickledbeets
+	reagents = list(VINEGAR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pickledbeets
+	cookable_with = COOKABLE_WITH_MICROWAVE
 
 /datum/recipe/bulgogi
 	reagents = list(SOYSAUCE = 10, SUGARS =5)

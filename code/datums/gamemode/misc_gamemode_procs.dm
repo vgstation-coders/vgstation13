@@ -20,7 +20,7 @@
 				if(L.mind && L.mind.suiciding)	//Suicider
 					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<span class='red'><b>Suicide</b></span>)\n"
 					continue //Disconnected client
-				if(L.stat == UNCONSCIOUS)
+				if(L.stat == UNCONSCIOUS && L.sleeping == 0)
 					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (Dying)\n"
 					continue //Unconscious
 				if(L.stat == DEAD)

@@ -233,7 +233,7 @@
 /datum/malfhack_ability/oneuse/overload_loud/activate(var/mob/living/silicon/A)
 	if(!..())
 		return
-	machine.visible_message("<span class='warning'>You hear a [pick("loud", "violent", "unsettling")], [pick("electrical","mechanical")] [pick("buzzing","rumbling","shaking")] sound!</span>") //highlight this, motherfucker
+	machine.visible_message("<span class='warning'>[machine] makes a [pick("loud", "violent", "unsettling")], [pick("electrical","mechanical")] [pick("buzzing","rumbling","shaking")] sound!</span>") //highlight this, motherfucker
 	if(istype(machine, /obj/machinery/turret))
 		var/obj/machinery/turret/T = machine
 		if(T.cover)
@@ -255,6 +255,7 @@
 /datum/malfhack_ability/oneuse/overload_quiet/activate(var/mob/living/silicon/A)
 	if(!..())
 		return
+	machine.visible_message("<span class='warning'>[machine] makes a [pick("loud", "violent", "unsettling")], [pick("electrical","mechanical")] [pick("buzzing","rumbling","shaking")] sound!</span>")
 	playsound(machine, 'sound/effects/electricity_short_disruption.ogg', 80)
 	spawn(4 SECONDS)
 		if(machine)
@@ -297,11 +298,11 @@
 /datum/malfhack_ability/fake_message/activate(mob/living/silicon/A)
 	if(!machine.hack_overlay) // shouldn't happen
 		return
-	var/fakename = copytext(input(A, "Please enter a name for the message.", "Name?", "") as text|null, 1, MAX_NAME_LEN)
+	var/fakename = copytext(sanitize(input(A, "Please enter a name for the message.", "Name?", "") as text|null, 1), MAX_NAME_LEN)
 	if(!fakename)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return
-	var/fakeid = copytext(input(A, "Please enter an ID for the message .", "Occupation?", "Assistant") as text|null, 1, MAX_NAME_LEN)
+	var/fakeid = copytext(sanitize(input(A, "Please enter an ID for the message .", "Occupation?", "Assistant") as text|null), 1, MAX_NAME_LEN)
 	if(!fakeid)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return
@@ -315,7 +316,7 @@
 	else
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return
-	var/message = copytext(input(usr, "Please enter a message.", "Message?", "") as text|null,1, MAX_BROADCAST_LEN)
+	var/message = copytext(sanitize(input(usr, "Please enter a message.", "Message?", "") as text|null,1), MAX_BROADCAST_LEN)
 	if(!message)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return
@@ -346,8 +347,8 @@
 
 	if(alert(A, "Would you like to create your own announcement or use a pre-existing one?","Confirm","Custom","Pre-Existing") == "Custom")
 
-		var/input = input(A, "Please enter anything you want. Anything.", "What?", "") as message|null
-		var/customname = input(A, "Pick a title for the report.", "Title") as text|null
+		var/input = copytext(sanitize(input(A, "Please enter anything you want. Anything.", "What?", "") as message|null),1,MAX_BROADCAST_LEN)
+		var/customname = copytext(sanitize(input(A, "Pick a title for the report.", "Title") as text|null),1,MAX_NAME_LEN)
 		if(!input)
 			to_chat(A, "<span class='warning'>Announcement cancelled.</span>")
 			return

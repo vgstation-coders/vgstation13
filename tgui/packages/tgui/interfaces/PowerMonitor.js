@@ -218,13 +218,15 @@ export const PowerMonitorContent = (props, context) => {
                       </td>
                       <td className="Table__cell text-center text-nowrap">
                         {/* Machine priority display/dropdown */}
-                        { data.engineer_access === 1 && (
+                        { data.engineer_access === 1
+                            && !machine.priority_locked && (
                           <Button
-                            icon="minus"
-                            compact
-                            mx="2px"
-                            disabled={machine.priority >= 10}
-                            onClick={() => act('priority', {
+                              icon="minus"
+                              compact
+                              mx="2px"
+                              disabled={!!machine.priority_locked
+                              || machine.priority >= 10}
+                              onClick={() => act('priority', {
                               'value': (machine.priority + 1),
                               'ref': machine.ref,
                               'id': key,
@@ -241,13 +243,14 @@ export const PowerMonitorContent = (props, context) => {
                             ? priorityText[machine.priority -2]
                             : "$^%!#%¿&"}
                         </Box>
-                        { data.engineer_access === 1 && (
+                        { data.engineer_access === 1
+                            && !machine.priority_locked && (
                           <Button
-                            icon="plus"
-                            compact
-                            mx="2px"
-                            disabled={machine.priority <= 2}
-                            onClick={() => act('priority', {
+                              icon="plus"
+                              compact
+                              mx="2px"
+                              disabled={machine.priority <= 2}
+                              onClick={() => act('priority', {
                               'value': (machine.priority - 1),
                               'ref': machine.ref,
                               'id': key,

@@ -380,7 +380,7 @@ var/global/mulebot_count = 0
 
 			if("destination")
 				refresh=0
-				var/new_dest = input("Enter new destination tag", "Mulebot [suffix ? "([suffix])" : ""]", destination) as text|null
+				var/new_dest = copytext(sanitize(input("Enter new destination tag", "Mulebot [suffix ? "([suffix])" : ""]", destination) as text|null),1,MAX_NAME_LEN)
 				refresh=1
 				if(new_dest && Adjacent(usr) && !usr.stat)
 					set_destination(new_dest)
@@ -396,7 +396,7 @@ var/global/mulebot_count = 0
 
 			if("sethome")
 				refresh=0
-				var/new_home = input("Enter new home tag", "Mulebot [suffix ? "([suffix])" : ""]", home_destination) as text|null
+				var/new_home = copytext(sanitize(input("Enter new home tag", "Mulebot [suffix ? "([suffix])" : ""]", home_destination) as text|null),1,MAX_MESSAGE_LEN)
 				refresh=1
 				if(new_home && Adjacent(usr) && !usr.stat)
 					home_destination = new_home
