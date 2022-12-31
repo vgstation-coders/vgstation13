@@ -583,7 +583,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		if(parallax_initialized)
 			mob.hud_used.update_parallax_values()
 
-	if(!(mob.sight & (SEE_TURFS|SEE_MOBS|SEE_OBJS)))	//If they do not have functional X-ray vision
+	if(!(mob.sight & (SEE_TURFS|SEE_MOBS|SEE_OBJS)) && !(M_XRAY in C.mob.mutations))	//If they do not have functional X-ray vision
 		var/list/v = view(view,mob)
 		for(var/obj/structure/window/W in one_way_windows)
 			if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
