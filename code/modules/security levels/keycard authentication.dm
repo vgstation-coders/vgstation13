@@ -102,7 +102,10 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		else
 			dat += "<li>Emergency Response Team (Disabled while below Code Red)</li>"
 		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>
-			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Maintenance Access'>Revoke Emergency Maintenance Access</A></li>
+			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Maintenance Access'>Revoke Emergency Maintenance Access</A></li> "}
+
+		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Department Access'>Grant Emergency Department Access</A></li>
+			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Department Access'>Revoke Emergency Department Access</A></li>
 			</ul>"}
 		user << browse(dat, "window=keycard_auth;size=500x300")
 	if(screen == 2)
@@ -187,6 +190,22 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		if("Revoke Emergency Maintenance Access")
 			revoke_doors_all_access(list(access_maint_tunnels))
 			feedback_inc("alert_keycard_auth_maintRevoke",1)
+
+		if("Grant Emergency Department Access")
+			make_doors_all_access(list(access_maint_tunnels, access_medical, access_chemistry, access_rnd, access_robotics,
+			access_engine_minor, access_mechanic, access_cargo, access_tech_storage, access_teleporter, access_eva, access_morgue,
+			access_external_airlocks, access_emergency_storage, access_chapel_office, access_bar, access_janitor, access_crematorium, access_kitchen,
+			access_construction, access_hydroponics, access_library, access_virology, access_court, access_clown, access_mime, access_surgery, access_theatre, access_mining, access_mining_office,
+			access_mailsorting, access_mint, access_mining_station, access_xenobiology, access_tcomsat, access_gateway, access_shop), "Departmental")
+			feedback_inc("alert_keycard_auth_deptGrant",1)
+		if("Revoke Emergency Department Access")
+			revoke_doors_all_access(list(access_maint_tunnels, access_medical, access_chemistry, access_rnd, access_robotics,
+			access_engine_minor, access_mechanic, access_cargo, access_tech_storage, access_teleporter, access_eva, access_morgue,
+			access_external_airlocks, access_emergency_storage, access_chapel_office, access_bar, access_janitor, access_crematorium, access_kitchen,
+			access_construction, access_hydroponics, access_library, access_virology, access_court, access_clown, access_mime, access_surgery, access_theatre, access_mining, access_mining_office,
+			access_mailsorting, access_mint, access_mining_station, access_xenobiology, access_tcomsat, access_gateway, access_shop), "Departmental")
+			feedback_inc("alert_keycard_auth_deptRevoke",1)
+
 		if("Emergency Response Team")
 			var/datum/striketeam/ert/response_team = new()
 			response_team.mission = ert_reason
@@ -204,15 +223,26 @@ var/global/list/all_access_list = list()
 
 /proc/make_doors_all_access(var/list/accesses, var/announce = TRUE)
 	all_access_list.Add(accesses)
+	if(announce = "Departmental")
+		to_chat(world, "<font size=4 color='red'>Attention!</font>")
+		to_chat(world, "<span class='red'>Basic Access requirements have been removed from all Departments except Security.</span>")
+		return 0
 	if(announce)
 		to_chat(world, "<font size=4 color='red'>Attention!</font>")
 		to_chat(world, "<span class='red'>The [get_access_desc_list(accesses)] access requirement has been revoked on all airlocks.</span>")
+		return 0
 
 /proc/revoke_doors_all_access(var/list/accesses, var/announce = TRUE)
 	all_access_list.Remove(accesses)
+	if(announce = "Departmental")
+		to_chat(world, "<font size=4 color='red'>Attention!</font>")
+		to_chat(world, "<span class='red'>Basic Access requirements have been re-enabled for all Departments.</span>")
+		return 0
+
 	if(announce)
 		to_chat(world, "<font size=4 color='red'>Attention!</font>")
 		to_chat(world, "<span class='red'>The [get_access_desc_list(accesses)] access requirement has been readded on all airlocks.</span>")
+		return 0
 
 /obj/machinery/door/airlock/allowed(mob/M)
 	if(check_access_list(all_access_list))
