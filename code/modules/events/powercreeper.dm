@@ -1,7 +1,9 @@
 /datum/event/powercreeper
 
 /datum/event/powercreeper/can_start()
-	return 15
+	if(active_with_role["Engineer"] > 1)
+		return 15
+	return 0
 
 /datum/event/powercreeper/start()
 	spawn()
