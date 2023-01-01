@@ -104,8 +104,8 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>
 			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Maintenance Access'>Revoke Emergency Maintenance Access</A></li> "}
 
-		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Department Access'>Grant Emergency Department Access</A></li>
-			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Department Access'>Revoke Emergency Department Access</A></li>
+		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Basic Departmental Access'>Grant Basic Departmental Access</A></li>
+			<li><A href='?src=\ref[src];triggerevent=Revoke Basic Departmental Access'>Revoke Basic Departmental Access</A></li>
 			</ul>"}
 		user << browse(dat, "window=keycard_auth;size=500x300")
 	if(screen == 2)
@@ -191,14 +191,14 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 			revoke_doors_all_access(list(access_maint_tunnels))
 			feedback_inc("alert_keycard_auth_maintRevoke",1)
 
-		if("Grant Emergency Department Access")
+		if("Grant Basic Departmental Access")
 			make_doors_all_access(list(access_maint_tunnels, access_medical, access_chemistry, access_rnd, access_robotics,
 			access_engine_minor, access_mechanic, access_cargo, access_tech_storage, access_teleporter, access_eva, access_morgue,
 			access_external_airlocks, access_emergency_storage, access_chapel_office, access_bar, access_janitor, access_crematorium, access_kitchen,
 			access_construction, access_hydroponics, access_library, access_virology, access_court, access_clown, access_mime, access_surgery, access_theatre, access_mining, access_mining_office,
 			access_mailsorting, access_mint, access_mining_station, access_xenobiology, access_tcomsat, access_gateway, access_shop), "Departmental")
 			feedback_inc("alert_keycard_auth_deptGrant",1)
-		if("Revoke Emergency Department Access")
+		if("Revoke Basic Departmental Access")
 			revoke_doors_all_access(list(access_maint_tunnels, access_medical, access_chemistry, access_rnd, access_robotics,
 			access_engine_minor, access_mechanic, access_cargo, access_tech_storage, access_teleporter, access_eva, access_morgue,
 			access_external_airlocks, access_emergency_storage, access_chapel_office, access_bar, access_janitor, access_crematorium, access_kitchen,
