@@ -223,7 +223,7 @@ var/global/list/all_access_list = list()
 
 /proc/make_doors_all_access(var/list/accesses, var/announce = TRUE)
 	all_access_list.Add(accesses)
-	if(announce = "Departmental")
+	if(announce == "Departmental")
 		to_chat(world, "<font size=4 color='red'>Attention!</font>")
 		to_chat(world, "<span class='red'>Basic Access requirements have been removed from all Departments except Security.</span>")
 		return 0
@@ -234,7 +234,7 @@ var/global/list/all_access_list = list()
 
 /proc/revoke_doors_all_access(var/list/accesses, var/announce = TRUE)
 	all_access_list.Remove(accesses)
-	if(announce = "Departmental")
+	if(announce == "Departmental")
 		to_chat(world, "<font size=4 color='red'>Attention!</font>")
 		to_chat(world, "<span class='red'>Basic Access requirements have been re-enabled for all Departments.</span>")
 		return 0
