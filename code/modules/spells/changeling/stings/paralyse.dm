@@ -1,6 +1,6 @@
 /spell/changeling/sting/paralyse
 	name = "Paralysis Sting (30)"
-	desc = "We quietly sting a human, paralyzing them for a short time."
+	desc = "We quietly sting a human, paralyzing them for 40 seconds. They can still communicate in this state."
 	abbreviation = "PS"
 	hud_state = "paralysis"
 

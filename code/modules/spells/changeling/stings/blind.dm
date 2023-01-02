@@ -1,6 +1,6 @@
 /spell/changeling/sting/blind
 	name = "Blind Sting (20)"
-	desc = "We quietly sting a human, completely blinding them for a short time."
+	desc = "We sting a human, worsening their vision for half a minute before amplifying its effect for 20 seconds. It is more potent against humans with bad vision."
 	abbreviation = "BS"
 	hud_state = "blindsting"
 

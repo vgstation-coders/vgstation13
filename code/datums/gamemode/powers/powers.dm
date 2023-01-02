@@ -1,4 +1,4 @@
-/datum/power			
+/datum/power
 	var/name = "Power"
 	var/desc = "Placeholder"
 	var/helptext = ""
@@ -6,7 +6,7 @@
 	var/passive = FALSE     //is this a spell or a passive effect?
 	var/spellpath           //Path to a verb that contains the effects.
 	var/cost                //the cost of this power
-	var/datum/role/role 
+	var/datum/role/role
 	var/obj/abstract/screen/movable/spell_master/spellmaster
 
 	var/store_in_memory = FALSE
@@ -306,7 +306,7 @@
 					<a id='link[i]'
 					onmouseover='expand("item[i]","[P.name]","[P.desc]","[P.helptext]","[P]",[ownsthis])'
 					>
-					<b id='search[i]'>[purchase_word] [P] - Cost: [ownsthis ? "Purchased" : P.cost]</b>
+					<b id='search[i]'>[purchase_word] [P] - Cost: [ownsthis ? P.cost ? "Purchased" : "Innate" : P.cost]</b>
 					</a>
 					<br><span id='item[i]'></span>
 				</td>
@@ -350,7 +350,7 @@
 			break
 
 	if(!thepower)		//ABORT!
-		return 
+		return
 
 	if(thepower in role.current_powers)
 		to_chat(M.current, "<span class='warning'>You have already purchased this power.</span>")
@@ -362,7 +362,7 @@
 
 	role.powerpoints -= thepower.cost
 	thepower.add_power(role)
-	
+
 
 
 

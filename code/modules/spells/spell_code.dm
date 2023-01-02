@@ -225,7 +225,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		user.spell_channeling = src
 		if(spell_flags & CAN_CHANNEL_RESTRAINED)
 			user.register_event(/event/ruattack, src, .proc/channeled_spell)
-			user.spell_channeling = src
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()

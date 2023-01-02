@@ -1,6 +1,6 @@
 /spell/changeling/absorbdna
 	name = "Absorb DNA"
-	desc = "Permits us to syphon the DNA from a human. They become one with us, and we become stronger."
+	desc = "Permits us to siphon the DNA from a human. They become one with us, and we become stronger."
 	abbreviation = "AD"
 	hud_state = "absorbdna"
 	spell_flags = NEEDSHUMAN
@@ -25,7 +25,7 @@
 		to_chat(user, "<span class='warning'>[T] is not compatible with our biology.</span>")
 		return FALSE
 	if(M_HUSK in T.mutations)	//No double-absorbing
-		to_chat(user, "<span class='warning'>This creature's DNA is ruined beyond useability!</span>")
+		to_chat(user, "<span class='warning'>This creature's DNA is ruined beyond usability!</span>")
 		return FALSE
 	if(!T.mind)						//No monkeymen
 		to_chat(user, "<span class='warning'>This creature's DNA is useless to us!</span>")
@@ -33,16 +33,18 @@
 	if(G.state != GRAB_KILL)		//Kill-Grabs only
 		to_chat(user, "<span class='warning'>We must have a tighter grip to absorb this creature.</span>")
 		return FALSE
-	if (T.dna == user.dna)
+	if(T.dna == user.dna)
 		to_chat(user, "<span class='warning'>We have already absorbed their DNA.</span>")
 		return FALSE
 	if(inuse)
 		return FALSE
 
 /spell/changeling/absorbdna/cast(var/list/targets, var/mob/living/carbon/human/user)
+	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
+	if(!changeling) //Not a changeling anymore
+		return
 	var/obj/item/weapon/grab/G = user.get_active_hand() //You need to be grabbing the target
 	var/mob/living/carbon/human/T = G.affecting
-	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	var/absorbtime = 15 SECONDS
 	inuse = TRUE
 	for(var/stage in 1 to 3)
@@ -52,12 +54,14 @@
 			if(2)
 				to_chat(user, "<span class='notice'>We extend a proboscis.</span>")
 				user.visible_message("<span class='warning'>[user] extends a proboscis!</span>")
-				playsound(user, 'sound/effects/lingextends.ogg', 50, 1)
+				for(var/mob/M in range(3, user))
+					M.playsound_local(user, 'sound/effects/lingextends.ogg', 50, 1)
 			if(3)
 				to_chat(user, "<span class='notice'>We stab [T] with the proboscis.</span>")
 				user.visible_message("<span class='danger'>[user] stabs [T] with the proboscis!</span>")
 				to_chat(T, "<span class='danger'>You feel a sharp stabbing pain!</span>")
-				playsound(user, 'sound/effects/lingstabs.ogg', 50, 1)
+				for(var/mob/M in range(3, user))
+					M.playsound_local(user, 'sound/effects/lingstabs.ogg', 50, 1)
 				var/datum/organ/external/affecting = T.get_organ(user.zone_sel.selecting)
 				if(affecting.take_damage(39,0,1, 0,"large organic needle"))
 					T.UpdateDamageIcon(1)
@@ -67,11 +71,13 @@
 			to_chat(user, "<span class='warning'>Our absorption of [T] has been interrupted!</span>")
 			return
 	usr.add_blood(T)
-
+	if(!changeling) //Just in case their ling-ness was removed mid-way, somehow.
+		return
 	to_chat(user, "<span class='notice'>We have absorbed [T]!</span>")
 	user.visible_message("<span class='danger'>[user] sucks the fluids from [T]!</span>")
 	to_chat(T, "<span class='danger'>You have been absorbed by the changeling!</span>")
-	playsound(user, 'sound/effects/lingabsorbs.ogg', 50, 1)
+	for(var/mob/M in range(3, user))
+		M.playsound_local(user, 'sound/effects/lingabsorbs.ogg', 50, 1)
 	add_attacklogs(user, T, "absorbed")
 
 	T.dna.real_name = T.real_name //Set this again, just to be sure that it's properly set.
@@ -126,6 +132,7 @@
 
 	T.death(0)
 	T.ChangeToHusk()
+	T.mutations |= M_NOCLONE
 
 	..()
 

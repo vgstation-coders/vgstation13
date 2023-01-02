@@ -1,6 +1,6 @@
 /spell/changeling/sting/dnaextract
 	name = "DNA Extraction Sting (40)"
-	desc = "We stealthily sting a target and extract the DNA from them."
+	desc = "We silently sting a target and extract the DNA from them."
 	abbreviation = "NS"
 	hud_state = "extractdna"
 

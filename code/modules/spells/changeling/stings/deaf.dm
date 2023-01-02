@@ -1,6 +1,6 @@
 /spell/changeling/sting/deaf
 	name = "Deaf Sting (5)"
-	desc = "We quietly sting a human, completely deafening them for a short time."
+	desc = "We sting a human, completely deafening them for half a minute."
 	abbreviation = "DS"
 	hud_state = "deafsting"
 

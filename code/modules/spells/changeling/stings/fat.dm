@@ -1,5 +1,5 @@
 /spell/changeling/sting/fat
-	name = "Fat Sting"
+	name = "Fat Sting (5)"
 	desc = "We silently sting a human or ourselves, forcing them to rapidly accumulate fat."
 	abbreviation = "FS"
 	hud_state = "fatsting"
@@ -20,8 +20,8 @@
 	feedback_add_details("changeling_powers", "FS")
 
 /spell/changeling/sting/unfat
-	name = "Unfat Sting"
-	desc = "We quietly sting a human or ourselves, forcing them to rapidly metabolize their fat."
+	name = "Unfat Sting (5)"
+	desc = "We silently sting a human or ourselves, forcing them to rapidly metabolize their fat."
 	abbreviation = "UF"
 	hud_state = "unfatsting"
 

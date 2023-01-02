@@ -1,6 +1,6 @@
 /spell/changeling/regenerate
 	name = "Regenerative Stasis (20)"
-	desc = "We become weakened to a death-like state, where we will rise again from death."
+	desc = "We become weakened to a death-like state, where we will rise again from death. This will take 2 minutes."
 	abbreviation = "RS"
 	hud_state = "regenstasis"
 
@@ -14,9 +14,9 @@
 	. = ..()
 	if (!.)
 		return FALSE
-	if(user.mind && user.mind.suiciding)			//no reviving from suicides
-		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?</span>")
-		return FALSE
+//	if(user.mind && user.mind.suiciding)			//no reviving from suicides
+//		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?</span>")
+//		return FALSE
 	if(M_HUSK in user.mutations)
 		to_chat(user, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
 		return FALSE
@@ -27,7 +27,7 @@
 	var/mob/living/carbon/C = user
 	var/delay = 0 SECONDS
 	inuse = TRUE
-	
+
 	if(C.stat != DEAD)
 		C.status_flags |= FAKEDEATH		//play dead
 		C.update_canmove()
@@ -44,7 +44,7 @@
 		to_chat(C, "<span class = 'notice'>Click the action button to revive.</span>")
 		var/datum/action/lingrevive/revive_action = new()
 		revive_action.Grant(C)
-		
+
 	feedback_add_details("changeling_powers","FD")
 
 	..()
@@ -59,6 +59,7 @@
 	var/datum/role/changeling/changeling = owner.mind.GetRole(CHANGELING)
 	var/mob/living/carbon/C = owner
 
+	owner.mind.suiciding = 0 //Just in case the ling wanted to do a funny with the suicide but owned themselves
 	C.rejuvenate(0)
 	C.visible_message("<span class='warning'>[owner] appears to wake from the dead, having healed all wounds.</span>")
 	if(M_HUSK in C.mutations) //Yes you can regenerate from being husked if you played dead beforehand, but unless you find a new body, you can not regenerate again.
