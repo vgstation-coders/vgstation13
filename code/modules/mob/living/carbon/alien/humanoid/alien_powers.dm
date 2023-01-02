@@ -227,7 +227,7 @@ Doesn't work on other aliens/AI.*/
 
 /spell/corrosive_acid/cast(list/targets, mob/user)
 	var/target = targets[1]
-	user.visible_message("<span class='alien'>\The [user] vomits globs of vile stuff all over [target]! It begins to sizzle and melt under the bubbling mess of acid!</span>")
+	user.visible_message("<span class='alien'>\The [user] vomits globs of vile stuff all over \the [target]! It begins to sizzle and melt under the bubbling mess of acid!</span>")
 	if(isobj(target))
 		var/obj/T = target
 		if(T.w_class && T.w_class <= W_CLASS_HUGE)

@@ -405,7 +405,7 @@
 					if(W_CLASS_LARGE)
 						melting_speed = 2 //8-10 seconds between ticks
 					else
-						melting_speed = 1
+						melting_speed = 1 //15-20 seconds between ticks
 	tick()
 
 /obj/effect/alien/acid/proc/tick()
