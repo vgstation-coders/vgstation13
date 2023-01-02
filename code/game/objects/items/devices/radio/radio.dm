@@ -119,9 +119,40 @@
 
 /obj/item/device/radio/proc/text_sec_channel(var/chan_name, var/chan_stat)
 	var/list = !!(chan_stat&FREQ_LISTENING)!=0
+	var/chan_prefix = fetch_prefix(chan_name)
 	return {"
-			<B>[chan_name]</B>: <A href='byond://?src=\ref[src];ch_name=[chan_name];listen=[!list]'>[list ? "Engaged" : "Disengaged"]</A><BR>
+			<B>[chan_name][chan_prefix ? " (:[chan_prefix]) " : ""]</B>: <A href='byond://?src=\ref[src];ch_name=[chan_name];listen=[!list]'>[list ? "Engaged" : "Disengaged"]</A><BR>
 			"}
+
+//Finds if there is a defined prefix for the channel noted in communications.
+//It's ugly but if it was as easy as slapping [chan_name]_PREFIX to call the associated prefix.
+//This way it also doesn't cause unforeseen consequences.
+/obj/item/device/radio/proc/fetch_prefix(var/chan_name)
+	switch(chan_name)
+		if("Common")
+			return COMMON_PREFIX
+		if("Security")
+			return SECURITY_PREFIX
+		if("Engineering")
+			return ENGINEERING_PREFIX
+		if("Command")
+			return COMMAND_PREFIX
+		if("Medical")
+			return MEDICAL_PREFIX
+		if("Science")
+			return SCIENCE_PREFIX
+		if("Service")
+			return SERVICE_PREFIX
+		if("Supply")
+			return CARGO_PREFIX
+		if("Deathsquad")
+			return DEATHSQUAD_PREFIX
+		if("Response Team")
+			return RESPONSE_PREFIX
+		if("AI Private")
+			return AIPRIVATE_PREFIX
+		if("Syndicate")
+			return SYNDICATE_PREFIX
 
 /obj/item/device/radio/Topic(href, href_list)
 	if (!isAdminGhost(usr) && (usr.stat || !on))
