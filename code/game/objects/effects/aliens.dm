@@ -395,17 +395,7 @@
 		if(isobj(target))
 			var/obj/O = target
 			if(O.w_class && O.w_class < W_CLASS_HUGE)
-				switch(O.w_class) //There has to be a math function for this
-					if(W_CLASS_TINY)
-						melting_speed = 5 //3-4 seconds between ticks
-					if(W_CLASS_SMALL)
-						melting_speed = 4 //4-5 seconds between ticks
-					if(W_CLASS_MEDIUM)
-						melting_speed = 3 //5-7 seconds between ticks
-					if(W_CLASS_LARGE)
-						melting_speed = 2 //8-10 seconds between ticks
-					else
-						melting_speed = 1 //15-20 seconds between ticks
+				melting_speed = 6 - O.w_class //Tiny w_class will melt 5x faster
 	tick()
 
 /obj/effect/alien/acid/proc/tick()
