@@ -25,7 +25,7 @@
 #define MEDICAL_PREFIX "m"
 #define SCIENCE_PREFIX "n"
 #define SERVICE_PREFIX "d"
-#define CARGO_PREFIX "u"
+#define SUPPLY_PREFIX "u"
 #define DEATHSQUAD_PREFIX "0"
 #define RESPONSE_PREFIX "-"
 #define AIPRIVATE_PREFIX "p"

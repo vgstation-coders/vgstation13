@@ -144,7 +144,7 @@
 		if("Service")
 			return SERVICE_PREFIX
 		if("Supply")
-			return CARGO_PREFIX
+			return SUPPLY_PREFIX
 		if("Deathsquad")
 			return DEATHSQUAD_PREFIX
 		if("Response Team")
