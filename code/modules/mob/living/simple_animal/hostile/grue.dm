@@ -721,6 +721,7 @@
 				btdist = thisdist
 				blinktarget = random_bc
 		playsound(src, 'sound/effects/grue_shadowshunt.ogg', 20, 1)
+		playsound(blinktarget, 'sound/effects/grue_shadowshunt.ogg', 20, 1)
 		to_chat(src, "<span class='notice'>You [pick("shift", "step", "slide", "glide", "push")] [pick("comfortably", "easily", "effortlessly", "readily", "gracefully")] through the [pick("darkness", "dark", "shadows", "shade", "blackness")].</span>")
 		new /obj/effect/gruesparkles (loc)
 		forceMove(blinktarget)
