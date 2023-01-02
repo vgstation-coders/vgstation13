@@ -370,6 +370,7 @@
 	var/atom/target
 	var/ticks = 0
 	var/target_strength = 0
+	var/melting_speed = 1 //A multiplier, divides the time between acid ticks by the number.
 
 /obj/effect/alien/acid/hyper
 	name = "hyper acid"
@@ -391,6 +392,20 @@
 		target_strength = 8
 	else
 		target_strength = 4
+		if(isobj(target))
+			var/obj/O = target
+			if(O.w_class && O.w_class < W_CLASS_HUGE)
+				switch(O.w_class) //There has to be a math function for this
+					if(W_CLASS_TINY)
+						melting_speed = 5 //3-4 seconds between ticks
+					if(W_CLASS_SMALL)
+						melting_speed = 4 //4-5 seconds between ticks
+					if(W_CLASS_MEDIUM)
+						melting_speed = 3 //5-7 seconds between ticks
+					if(W_CLASS_LARGE)
+						melting_speed = 2 //8-10 seconds between ticks
+					else
+						melting_speed = 1
 	tick()
 
 /obj/effect/alien/acid/proc/tick()
@@ -416,7 +431,8 @@
 			visible_message("<span class='good'><B>[src.target] is struggling to withstand the acid!</B></span>")
 		if(0 to 1)
 			visible_message("<span class='good'><B>[src.target] begins to crumble under the acid!</B></span>")
-	spawn(rand(150, 200)) tick()
+	spawn(round(rand(150, 200)/melting_speed, 1))
+		tick()
 
 /atom/proc/acid_act()
 

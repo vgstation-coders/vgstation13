@@ -196,9 +196,11 @@ Doesn't work on other aliens/AI.*/
 	spell_flags = IGNORESPACE|IGNOREDENSE|NODUPLICATE
 	full_list = list("Resin Door" = /obj/machinery/door/mineral/resin,"Resin Wall" = /obj/effect/alien/resin/wall,"Resin Membrane" = /obj/effect/alien/resin/membrane,"Resin Nest" = /obj/structure/bed/nest)
 
+#define ACID_COST 40
+
 /spell/corrosive_acid
 	name = "Corrosive Acid"
-	desc = "Drench an object in acid, destroying it over time."
+	desc = "Drench an object in acid, destroying it over time. It acts faster the smaller the object is and will also refund some plasma depending on the size of it, up to 160 plasma for tiny objects."
 	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_acid"
@@ -224,8 +226,17 @@ Doesn't work on other aliens/AI.*/
 	return FALSE
 
 /spell/corrosive_acid/cast(list/targets, mob/user)
-	user.visible_message("<span class='alien'>\The [user] vomits globs of vile stuff all over [targets[1]]! It begins to sizzle and melt under the bubbling mess of acid!</span>")
-	new /obj/effect/alien/acid(get_turf(targets[1]), targets[1])
+	var/target = targets[1]
+	user.visible_message("<span class='alien'>\The [user] vomits globs of vile stuff all over [target]! It begins to sizzle and melt under the bubbling mess of acid!</span>")
+	if(isobj(target))
+		var/obj/T = target
+		if(T.w_class && T.w_class <= W_CLASS_HUGE)
+			var/mob/living/carbon/alien/A = user
+			if(istype(A))
+				var/cost = ACID_COST * T.w_class
+				to_chat(user, "<span class='good'>You regain <b>[holder_var_amount - cost]</b> plasma.</span>")
+				A.plasma += holder_var_amount - cost
+	new /obj/effect/alien/acid(get_turf(target), target)
 
 /spell/aoe_turf/alienregurgitate
 	name = "Regurgitate"

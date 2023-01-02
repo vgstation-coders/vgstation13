@@ -9,7 +9,7 @@
 	health = 25
 	plasma = 50
 	max_plasma = 50
-	size = SIZE_TINY
+	size = SIZE_SMALL
 
 	var/growth = 0
 	var/time_of_birth
