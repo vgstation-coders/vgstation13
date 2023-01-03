@@ -252,7 +252,7 @@
 			can_eat = TRUE
 			just_gib = TRUE //by order of Chicken
 			nutriadd = 100 //TODO: Adjust to fit what they'd get via the old handle_stomach proc
-		else if(isalien(user) && iscarbon(affecting) && !isalien(affecting))
+		else if(isalien(user) && iscarbon(affecting))
 			can_eat = TRUE
 		if(can_eat)
 			var/mob/living/carbon/attacker = user
