@@ -7,6 +7,10 @@
 #define WINDOWUNSECUREFRAME 2
 #define WINDOWSECURE 3
 
+#define ONEWAY_OUT 1
+#define ONEWAY_IN 2
+#define BORDER_OPAQUE 3
+
 var/list/one_way_windows
 
 /obj/structure/window
@@ -49,8 +53,7 @@ var/list/one_way_windows
 	update_nearby_tiles()
 	oneway_overlay = image('icons/obj/structures/window.dmi', src, "one_way_overlay")
 	if(one_way)
-		one_way = !one_way
-		toggle_one_way()
+		toggle_one_way(one_way)
 
 /obj/structure/window/canSmoothWith()
 	var/static/list/smoothables = list(/obj/structure/window)
@@ -317,14 +320,15 @@ var/list/one_way_windows
 		return
 	attack_generic(user, rand(10, 15))
 
-/obj/structure/window/proc/toggle_one_way() //Toggle whether a window is a one-way window or not.
-	if(!one_way)
-		one_way = 1
-		if(!one_way_windows)
-			one_way_windows = list()
-		one_way_windows.Add(src)
+/obj/structure/window/proc/toggle_one_way(var/value) //Toggle whether a window is a one-way window or not.
+	if(value > FALSE && value <= BORDER_OPAQUE)
+		if(!one_way)
+			if(!one_way_windows)
+				one_way_windows = list()
+			one_way_windows.Add(src)
+			overlays += oneway_overlay
+		one_way = value
 		update_oneway_clients()
-		overlays += oneway_overlay
 	else
 		one_way = 0
 		one_way_windows.Remove(src)
@@ -378,7 +382,7 @@ var/list/one_way_windows
 			to_chat(user, "<span class='warning'>You can't pry the sheet of plastic off from this side of \the [src]!</span>")
 		else
 			to_chat(user, "<span class='notice'>You pry the sheet of plastic off \the [src].</span>")
-			toggle_one_way()
+			toggle_one_way(0)
 			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
 			return
     /* One-way windows have serious performance issues - N3X
@@ -396,7 +400,7 @@ var/list/one_way_windows
 					change_dir(turn(dir,315))
 			update_nearby_tiles()
 		var/obj/item/stack/sheet/mineral/plastic/P = W
-		toggle_one_way()
+		toggle_one_way(ONEWAY_OUT)
 		P.use(1)
 		to_chat(user, "<span class='notice'>You place a sheet of plastic over the window.</span>")
 		return
@@ -601,7 +605,7 @@ var/list/one_way_windows
 	update_nearby_tiles()
 	relativewall_neighbours()
 	if(one_way)
-		toggle_one_way()
+		toggle_one_way(0)
 	..()
 
 /obj/structure/window/proc/shatter()
@@ -643,7 +647,10 @@ var/list/one_way_windows
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/reinforced/clockwork, BRASS_WINDOW_GLOW)
 
 /obj/structure/window/oneway
-	one_way = 1
+	one_way = ONEWAY_OUT
+
+/obj/structure/window/oneway/inwards
+	one_way = ONEWAY_IN
 
 /obj/structure/window/loose
 	anchored = 0
@@ -663,7 +670,10 @@ var/list/one_way_windows
 	dmg_threshold = 5
 
 /obj/structure/window/reinforced/oneway
-	one_way = 1
+	one_way = ONEWAY_OUT
+
+/obj/structure/window/reinforced/oneway/inwards
+	one_way = ONEWAY_IN
 
 /obj/structure/window/reinforced/loose
 	anchored = 0
@@ -686,7 +696,10 @@ var/list/one_way_windows
 	dmg_threshold = 10
 
 /obj/structure/window/plasma/oneway
-	one_way = 1
+	one_way = ONEWAY_OUT
+
+/obj/structure/window/plasma/oneway/inwards
+	one_way = ONEWAY_IN
 
 /obj/structure/window/plasma/loose
 	anchored = 0
@@ -706,7 +719,10 @@ var/list/one_way_windows
 	dmg_threshold = 15
 
 /obj/structure/window/reinforced/plasma/oneway
-	one_way = 1
+	one_way = ONEWAY_OUT
+
+/obj/structure/window/reinforced/plasma/oneway/inwards
+	one_way = ONEWAY_IN
 
 /obj/structure/window/reinforced/plasma/loose
 	anchored = 0
