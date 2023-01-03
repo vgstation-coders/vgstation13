@@ -27,6 +27,7 @@
 
 	if(!sting_can_reach(L, range))
 		to_chat(user, "<span class='warning'>We cannot reach the target!</span>")
+		return FALSE
 	if(silent)
 		to_chat(user, "<span class='warning'>We stealthily sting [L.name].</span>")
 		user << 'sound/items/hypospray.ogg'
