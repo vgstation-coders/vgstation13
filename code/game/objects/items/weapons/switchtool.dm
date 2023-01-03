@@ -114,11 +114,11 @@
 		else
 			index--
 		if (index > stored_modules.len)
-			index = 0
-		if(index < 0)
+			index = 1
+		if(index < 1)
 			index = stored_modules.len
 		var/moduled = stored_modules[index]
-		undeploy()
+		undeploy(user)
 		deploy(moduled, user)
 		edit_deploy(1)
 
