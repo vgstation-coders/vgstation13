@@ -435,7 +435,7 @@
 /obj/structure/rack,
 /obj/item/clothing/mask/gas,
 /obj/machinery/light/small{
-	dir = 4;
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
@@ -674,7 +674,7 @@
 	pixel_y = 8
 	},
 /obj/machinery/light/small{
-	dir = 4;
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
@@ -856,7 +856,7 @@
 /area/vault/assistantlair)
 "cL" = (
 /obj/machinery/light/small{
-	dir = 4;
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
