@@ -619,19 +619,11 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	ObscuredTurfs.len = 0
 
 	for(W in one_way_windows)
-		if(W.one_way & ONEWAY_OUT)
-			if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
+		if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
+			if(W.one_way)
 				if(W.dir & get_dir(W,mob))
 					Oneway = get_turf(W)
 					Oneway.opacity = 1
-					Oneway.icon_state = ""
-					onewaylist += Oneway
-		if(W.one_way & ONEWAY_IN)
-			if(((W.x <= (mob.x - view)) && (W.x >= (mob.x + view))) && ((W.y <= (mob.y - view)) && (W.y >= (mob.y + view))))
-				if(W.dir & opposite_dirs[get_dir(W,mob)])
-					Oneway = get_step(W,W.dir)
-					Oneway.opacity = 1
-					Oneway.icon_state = ""
 					onewaylist += Oneway
 
 	if(onewaylist.len)
