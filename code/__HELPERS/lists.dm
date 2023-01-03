@@ -31,6 +31,8 @@
 
 		return "[output][and_text][input[index]]"
 
+#define unique_english_list(A) english_list(uniquenamelist(A))
+
 //Returns a counted list of atom names in plain english as a string
 /proc/counted_english_list(var/list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
 	var/list/names = uniquenamelist(input) // First, get the items to list

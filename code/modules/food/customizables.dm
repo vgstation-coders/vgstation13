@@ -432,25 +432,16 @@
 	return I
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/updateName()
-	var/i = 1
-	var/new_name
-	for(var/obj/item/S in src.ingredients)
-		if(i == 1)
-			new_name += "[S.name]"
-			if (fullyCustom)
-				desc = S.desc
-		else if(i == src.ingredients.len)
-			new_name += " and [S.name]"
-		else
-			new_name += ", [S.name]"
-		i++
+	. = unique_english_list(src.ingredients)
 	if (!fullyCustom)
-		new_name = "[new_name] [initial(src.name)]"
-	if(length(new_name) >= 150)
+		. = "[.] [initial(src.name)]"
+	else if(ingredients.len)
+		var/obj/item/S = ingredients[1]
+		desc = S.desc
+	if(length(.) >= 150)
 		name = "something yummy"
 	else
-		name = new_name
-	return new_name
+		name = .
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/Destroy()
 	for(. in src.ingredients) qdel(.)
