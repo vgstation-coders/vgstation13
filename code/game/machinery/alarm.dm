@@ -186,6 +186,7 @@ var/global/list/airalarm_presets = list(
 	"Plasmaman" = new /datum/airalarm_preset/plasmaman,
 	"Vacuum" = new /datum/airalarm_preset/vacuum,
 )
+var/global/list/air_alarms = list()
 
 /obj/machinery/alarm
 	desc = "An alarm used to control the area's atmospherics systems."
@@ -310,6 +311,7 @@ var/global/list/airalarm_presets = list(
 	var/area/this_area = get_area(src)
 	if(src in this_area.air_alarms)
 		this_area.air_alarms.Remove(src)
+	air_alarms -= src
 	..()
 
 /obj/machinery/alarm/proc/first_run()
@@ -317,6 +319,7 @@ var/global/list/airalarm_presets = list(
 	area_uid = this_area.uid
 	name = "[this_area.name] Air Alarm"
 	this_area.air_alarms.Add(src)
+	air_alarms += src
 
 	// breathable air according to human/Life()
 	/*
