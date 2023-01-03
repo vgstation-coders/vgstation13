@@ -50,13 +50,12 @@
 
 
 /spell/changeling/sting/proc/sting_can_reach(var/mob/M, sting_range = 1)
-	if(M.loc == holder.loc)
-		return 1 //target and source are in the same thing
 	if(!isturf(holder.loc) || !isturf(M.loc))
 		return 0 //One is inside, the other is outside something.
 	if(sting_range < 2)
 		return holder.Adjacent(M)
-	if(quick_AStar(holder.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, sting_range, reference="\ref[src]")) //If a path exists, good!
+	var/list/L = quick_AStar(get_turf(holder), get_turf(M), /turf/proc/AdjacentTurfs, /turf/proc/Distance, sting_range, reference="\ref[src]")
+	if(L.len) //AStar returns an empty list, but since the list is something that's actually returned we check for entries in the list instead.
 		return 1
 	return 0
 
