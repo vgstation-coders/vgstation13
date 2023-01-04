@@ -585,7 +585,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 
 	update_one_way_windows()	//Updating the one-way window overlay if the client has one in the range of its view.
 
-/image/viewblock
+/image/viewblock // Image that blocks clicks, just like darkness
 	render_source = "*viewblock"
 	layer = VIEWBLOCK_LAYER
 	plane = FULLSCREEN_PLANE
@@ -602,19 +602,19 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 /mob
 	var/static/obj/abstract/screen/nocontext/viewblock/viewblock = new()
 
-/client/proc/update_one_way_windows()		//Needed for one-way windows to work.
+/client/proc/update_one_way_windows() //Needed for one-way windows to work.
 	if((mob.sight & (SEE_TURFS|SEE_MOBS|SEE_OBJS)) || (M_XRAY in mob.mutations)) //If they do not have functional X-ray vision
 		return
 
-	var/Image								//Code heavily cannibalized from a demo made by Byond member Shadowdarke.
-	var/turf/Oneway
+	var/Image						//Code heavily cannibalized from a demo made by Byond member Shadowdarke.
+	var/turf/Oneway					//These are declared here to save doing them over and over later
+	var/turf/Oneway2
 	var/obj/structure/window/W
 	var/list/newimages = list()
 	var/list/onewaylist = list()
-	var/list/v = view(view,mob)
-
-	if(!v)
-		return
+	var/out
+	var/sides
+	var/direction
 
 	ObscuredTurfs.len = 0
 
@@ -623,23 +623,36 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			if(W.one_way)
 				if(W.dir & get_dir(W,mob))
 					Oneway = get_turf(W)
-					Oneway.opacity = 1
-					onewaylist += Oneway
+					if(Oneway in onewaylist) // Not needed if some other window view got this already (same with other breaks below)
+						continue
+					onewaylist += Oneway // The onewaylist built below roughly approximates what view() and opacity would block, saving actually calling it
+					for(out in 0 to view)
+						Oneway = get_step(Oneway,get_dir(mob,W)) // Go outwards to the view edge in the rough direction of the mob
+						if(Oneway in onewaylist)
+							break
+						onewaylist += Oneway
+						if(W.oneway_junction && get_dir(W,mob) == W.dir)
+							for(direction in sideways_dirs(W.dir))
+								if(W.oneway_junction & direction) // Fill in the sides if a one-way window is found adjacent
+									Oneway2 = Oneway
+									for(sides in 0 to out)
+										Oneway2 = get_step(Oneway2,W.oneway_junction & direction)
+										if(Oneway2 in onewaylist)
+											break
+										onewaylist += Oneway2
 
 	if(onewaylist.len)
-		v -= view(view,mob)
-		v += onewaylist
-		var/image/turf_viewblock
-		for(var/turf/T in v)
-			var/onewayfound = FALSE
+		var/image/turf_viewblock	//Same as above, declared to save on doing them below
+		var/onewayfound
+		for(var/turf/T in onewaylist)
+			onewayfound = FALSE
 			turf_viewblock = new /image/viewblock(null,T)
-			if(T in onewaylist)
-				T.opacity = 0
-				for(W in T.contents)
-					if(W.one_way)
-						onewayfound = TRUE
-						turf_viewblock = image('icons/turf/overlays.dmi',T,"black_box[W.dir]",VIEWBLOCK_LAYER)
-			if((mob.sight & SEE_TURFS) && !onewayfound)
+			for(W in T.contents)
+				if(W.one_way && W.dir == opposite_dirs[mob.dir])
+					onewayfound = TRUE
+					turf_viewblock = image('icons/turf/overlays.dmi',T,"black_box[W.dir]",VIEWBLOCK_LAYER)
+					break
+			if((mob.sight & SEE_TURFS) && !onewayfound) // Now to approximate how thermals and mesons work. Not the best, but doable.
 				turf_viewblock = image(T.icon,T,T.icon_state,VIEWBLOCK_LAYER)
 			turf_viewblock.plane = FULLSCREEN_PLANE
 			if(mob.sight & SEE_MOBS)
