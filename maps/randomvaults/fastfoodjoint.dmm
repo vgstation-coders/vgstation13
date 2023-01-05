@@ -455,13 +455,13 @@
 /obj/structure/noticeboard{
 	pixel_y = 27
 	},
-/mob/living/simple_animal/robot/NPC/fastfood{
-	dir = 8
-	},
 /obj/item/device/radio/intercom{
 	freerange = 1;
 	name = "drive thru order speaker";
 	pixel_y = -30
+	},
+/mob/living/simple_animal/robot/NPC/fastfood/drivethru{
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
