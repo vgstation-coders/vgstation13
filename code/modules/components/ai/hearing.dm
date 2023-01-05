@@ -2,6 +2,7 @@
 	var/hear_signal
 	var/list/required_messages = list()
 	var/list/hear_args
+	var/pass_speech = FALSE
 	var/response_delay = 10
 
 /datum/component/ai/hearing/initialize()
@@ -27,6 +28,8 @@
 			for(var/message in required_messages)
 				if(findtext(filtered_message,message))
 					sleep(response_delay)
+					if(pass_speech)
+						hear_args = list(filtered_message) + hear_args
 					INVOKE_EVENT(parent, hear_signal, hear_args)
 					return
 
@@ -42,3 +45,117 @@
 /datum/component/ai/hearing/say_response/time/on_hear(var/datum/speech/speech)
 	hear_args = list("The current time is [worldtime2text()].")
 	..()
+
+/datum/component/ai/hearing/order
+	hear_signal = /event/comp_ai_cmd_order
+	required_messages = list("can i get","do you have","can i have","id like","i want","give me","get me")
+	pass_speech = TRUE
+	var/list/blacklist_items = list()
+	var/list/whitelist_items = list()
+	var/notfoundmessage
+	var/price = 0
+	var/item2deliver
+
+/datum/component/ai/hearing/order/initialize()
+	..()
+	parent.register_event(/event/comp_ai_cmd_pay, src, .proc/on_pay)
+	parent.register_event(/event/comp_ai_cmd_order, src, .proc/on_order)
+	if(!notfoundmessage)
+		notfoundmessage = "ERROR-[Gibberish(rand(1000,9999),50)]: Item not found. Please try again."
+	return TRUE
+
+/datum/component/ai/hearing/order/Destroy()
+	parent.unregister_event(/event/comp_ai_cmd_pay, src, .proc/on_pay)
+	parent.register_event(/event/comp_ai_cmd_order, src, .proc/on_order)
+	..()
+
+/datum/component/ai/hearing/order/proc/on_order(var/message)
+	if(isliving(parent))
+		var/mob/living/M=parent
+		if(!M.isDead())
+			if(item2deliver)
+				M.say("Already covering another order at the moment, gimme a while!")
+				return
+			if(!whitelist_items.len)
+				M.say("ERROR-[Gibberish(rand(10000,99999),50)]: No items found. Please contact manufacturer for specifications.")
+				CRASH("Someone forgot to put whitelist items on this ordering AI component.")
+			for(var/item in whitelist_items)
+				var/list/items2workwith = subtypesof(whitelist_items)
+				if(!items2workwith.len)
+					continue
+				for(var/subitem in items2workwith)
+					var/isbad = FALSE
+					for(var/baditem in blacklist_items)
+						if(ispath(subitem,baditem))
+							isbad = TRUE
+							break
+					if(isbad)
+						continue
+					if(ispath(subitem,/atom/movable))
+						var/atom/movable/AM = subitem
+						if(findtext(message,initial(AM.name)))
+							item2deliver = subitem
+							break
+					if(ispath(subitem,/datum/reagent))
+						var/datum/reagent/R = subitem
+						if(findtext(message,initial(R.name)))
+							item2deliver = subitem
+							break
+				if(!item2deliver)
+					M.say(notfoundmessage)
+					return
+				if(!price)
+					spawn_item()
+				else
+					price = rand(initial(price)-(initial(price)/5),initial(price)+(initial(price)/5))
+					M.say("That will be [price] credits.")
+
+/datum/component/ai/hearing/order/proc/on_pay(var/list/bills)
+	if(price && isliving(parent))
+		var/mob/living/M=parent
+		if(!M.isDead())
+			var/amount = 0
+			for(var/obj/item/weapon/spacecash/C in bills)
+				amount += C.get_total()
+				if(amount > price)
+					break
+			if(amount < price)
+				M.say("Not enough money.")
+			else
+				playsound(M.loc, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 70, 1)
+				for(var/obj/O in bills)
+					bills -= O
+					qdel(O)
+				if(amount > price)
+					dispense_cash(amount-price,M.loc)
+			spawn_item()
+			M.say("Thank you for ordering!")
+
+/datum/component/ai/hearing/order/proc/spawn_item()
+	if(!item2deliver)
+		return
+	if(isliving(parent))
+		var/mob/living/M=parent
+		if(!M.isDead())
+			var/atom/movable/thing_spawned
+			M.emote("me", 1, "begins processing an order...")
+			if(ispath(item2deliver,/atom/movable))
+				thing_spawned = item2deliver
+				sleep(rand(5,10) SECONDS)
+				var/turf/T = get_step(M,M.dir)
+				thing_spawned = new item2deliver(T)
+			else if(ispath(item2deliver,/datum/reagent))
+				var/datum/reagent/R = item2deliver
+				sleep(rand(5,10) SECONDS)
+				var/turf/T = get_step(M,M.dir)
+				var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new(T)
+				D.reagents.add_reagent(initial(R.id),D.reagents.maximum_volume)
+				thing_spawned = D
+			M.say("One [thing_spawned.name] served!")
+			item2deliver = null
+
+/datum/component/ai/hearing/order/foodndrinks
+	whitelist_items = list(/obj/item/weapon/reagent_containers/food/snacks,/datum/reagent/drink)
+
+/datum/component/ai/hearing/order/bardrinks
+	whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink)
