@@ -1,7 +1,7 @@
 /datum/power/changeling
 	var/allowduringlesserform = 0
 	var/allowduringhorrorform = 1
-	spellmaster = /obj/abstract/screen/movable/spell_master/changeling	
+	spellmaster = /obj/abstract/screen/movable/spell_master/changeling
 
 /datum/power/changeling/can_use(var/mob/user)
 	if(ismonkey(user))
@@ -16,7 +16,7 @@
 			return FALSE
 	return TRUE
 
-/datum/power_holder/changeling 
+/datum/power_holder/changeling
 	menu_name = "Changeling Evolution Menu"
 	menu_desc = {"Hover over a power to see more information<br>
 				Absorb genomes to acquire more evolution points"}
@@ -44,7 +44,7 @@
 	cost = 0
 	allowduringlesserform = 1
 	spellpath = /spell/changeling/regenerate
-	
+
 /datum/power/changeling/split
 	name = "Split"
 	desc = "Split your body into two lifeforms."
@@ -52,7 +52,7 @@
 	cost = 0
 	spellpath = /spell/changeling/split
 	allowduringhorrorform = 0 //this would be terrifying otherwise
-	
+
 /datum/power/changeling/horror_form
 	name = "Horror Form"
 	desc = "This costly evolution allows us to transform into an all-consuming abomination. We are incredibly strong, to the point that we can force open airlocks, and are immune to conventional stuns."
@@ -156,8 +156,8 @@
 
 /datum/power/changeling/boost_range/add_power(var/datum/role/R)
 	. = ..()
-	if (!.) 
-		return 
+	if (!.)
+		return
 	var/datum/role/changeling/changeling = R
 	if(changeling)
 		changeling.sting_range = 2
@@ -177,8 +177,8 @@
 
 /datum/power/changeling/ChemicalSynth/add_power(var/datum/role/R)
 	. = ..()
-	if (!.) 
-		return 
+	if (!.)
+		return
 	var/datum/role/changeling/changeling = R
 	if(changeling)
 		changeling.chem_recharge_rate *= 2
@@ -191,8 +191,8 @@
 
 /datum/power/changeling/AdvChemicalSynth/add_power(var/datum/role/R)
 	. = ..()
-	if (!.) 
-		return 
+	if (!.)
+		return
 	var/datum/role/changeling/changeling = R
 	if(changeling)
 		changeling.chem_recharge_rate *= 2
@@ -205,8 +205,8 @@
 
 /datum/power/changeling/EngorgedGlands/add_power(var/datum/role/R)
 	. = ..()
-	if (!.) 
-		return 
+	if (!.)
+		return
 	var/datum/role/changeling/changeling = R
 	if(changeling)
 		changeling.chem_storage += 25
@@ -220,8 +220,8 @@
 
 /datum/power/changeling/DigitalCamouflage/add_power(var/datum/role/R)
 	. = ..()
-	if (!.) 
-		return 
+	if (!.)
+		return
 	var/mob/living/carbon/human/C = R.antag.current
 	to_chat(C, "<span class='notice'>We distort our form to prevent AI-tracking.</span>")
 
@@ -253,3 +253,10 @@
 // 	cost = 1
 // 	allowduringlesserform = 1
 // 	spellpath = /obj/item/verbs/changeling/proc/changeling_chemspit
+
+/datum/power/changeling/disease_immunity
+	name = "Immunity to Disease"
+	desc = "We become immune to the symptoms of any pathogen at will."
+	helptext = "It does not purge the diseases nor provides antigens, but instead causes the symptoms to never appear."
+	cost = 2
+	spellpath = /spell/changeling/disease_immunity
