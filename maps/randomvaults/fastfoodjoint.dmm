@@ -179,7 +179,8 @@
 	opacity = 0
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -234,7 +235,8 @@
 /area/vault/fastfood)
 "fZ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 5
+	dir = 5;
+	initialize_directions = 9
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -246,15 +248,17 @@
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
 "gl" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = 1
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker";
@@ -264,7 +268,8 @@
 "gJ" = (
 /obj/machinery/cooking/candy,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -281,7 +286,8 @@
 /area/vault/fastfood/kitchen)
 "hj" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 7
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -372,8 +378,8 @@
 	},
 /area/vault/fastfood/dining)
 "jf" = (
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 8
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -408,7 +414,8 @@
 "kY" = (
 /obj/item/weapon/stool/bar,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -418,7 +425,8 @@
 /area/vault/fastfood/dining)
 "kZ" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 1
+	dir = 1;
+	initialize_directions = 14
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -622,6 +630,10 @@
 /mob/living/simple_animal/cockroach,
 /obj/effect/decal/cleanable/blood,
 /obj/effect/decal/cleanable/blood,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -734,14 +746,6 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid/underground,
 /area/vault/fastfood)
-"tG" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/fastfood)
 "tS" = (
 /obj/structure/bed/chair/plastic{
 	dir = 4
@@ -777,7 +781,8 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -795,7 +800,8 @@
 /obj/item/weapon/reagent_containers/dropper/baster,
 /obj/structure/table,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -831,6 +837,10 @@
 	icon_state = "floor6"
 	},
 /obj/item/weapon/soap,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 10;
+	initialize_directions = 6
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -1016,7 +1026,8 @@
 "Bf" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -1086,7 +1097,8 @@
 /area/vault/fastfood/dining)
 "CT" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -1148,9 +1160,7 @@
 	},
 /area/vault/fastfood/dining)
 "DS" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = 1
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker";
@@ -1176,9 +1186,9 @@
 /area/vault/fastfood/kitchen)
 "Em" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/atmospherics/unary/vent_pump{
-	external_pressure_bound = 101;
-	on = 1
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 8;
+	initialize_directions = 11
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -1196,7 +1206,8 @@
 "ES" = (
 /obj/machinery/door/airlock,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -1227,7 +1238,8 @@
 /area/vault/fastfood)
 "Fj" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -1362,7 +1374,8 @@
 "JE" = (
 /obj/machinery/cooking,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 9
+	dir = 9;
+	initialize_directions = 5
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -1687,6 +1700,10 @@
 	locked = 1;
 	req_access_txt = "53"
 	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -1728,6 +1745,7 @@
 "RD" = (
 /obj/machinery/door/airlock/freezer,
 /obj/structure/window/barricade/full/block,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -1750,15 +1768,6 @@
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/fastfood/dining)
-"So" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 6
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/fastfood)
 "Sv" = (
 /obj/structure/table/reinforced,
 /obj/machinery/chem_dispenser/booze_dispenser/mapping,
@@ -1820,15 +1829,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
-"VE" = (
-/obj/machinery/atmospherics/unary/tank/air{
-	dir = 8
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/fastfood)
 "VX" = (
 /obj/structure/sink{
 	dir = 4;
@@ -1877,7 +1877,8 @@
 	opacity = 0
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -1914,6 +1915,11 @@
 "Xb" = (
 /mob/living/simple_animal/hostile/necro/zombie/headcrab{
 	environment_smash_flags = 160
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	external_pressure_bound = 101;
+	on = 1
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -1974,17 +1980,20 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/vault/fastfood/drivethru)
 "YQ" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+/obj/machinery/atmospherics/unary/tank/air{
 	dir = 4
 	},
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood)
+/area/vault/fastfood/kitchen)
 "Zy" = (
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor3"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1;
+	initialize_directions = 14
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -2848,7 +2857,7 @@ pC
 pC
 pC
 Tt
-So
+JQ
 KI
 jf
 DS
@@ -2900,7 +2909,7 @@ pC
 pC
 pC
 Tt
-tG
+ME
 am
 CT
 zB
@@ -2952,7 +2961,7 @@ pC
 pC
 pC
 Tt
-tG
+ME
 am
 ES
 am
@@ -3004,7 +3013,7 @@ pC
 pC
 pC
 Tt
-tG
+ME
 Nn
 cu
 wr
@@ -3056,7 +3065,7 @@ pC
 pC
 qa
 mX
-YQ
+JQ
 am
 Cb
 ED
@@ -3108,7 +3117,7 @@ pC
 pC
 Lt
 to
-VE
+JQ
 tz
 tz
 tz
@@ -3162,7 +3171,7 @@ CD
 mX
 JQ
 tz
-Li
+YQ
 bg
 jv
 hF
@@ -3319,7 +3328,7 @@ Yh
 ME
 tz
 Zy
-Li
+LZ
 dn
 bi
 tz
@@ -3370,7 +3379,7 @@ aJ
 Yh
 JQ
 tz
-Li
+Fj
 wE
 FY
 BJ
