@@ -626,6 +626,8 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 					if(Oneway in onewaylist) // Not needed if some other window view got this already (same with other breaks below)
 						continue
 					onewaylist += Oneway // The onewaylist built below roughly approximates what view() and opacity would block, saving actually calling it
+					if(!W.oneway_junction && get_dir(W,mob) != W.dir && abs(W.x - mob.x) != abs(W.y - mob.y)) // If in the direct diagonal of the window with no neighbours
+						continue // Don't block more than just the first square, approximates the behavior of normal opacity here
 					for(out in 0 to view)
 						Oneway = get_step(Oneway,get_dir(mob,W)) // Go outwards to the view edge in the rough direction of the mob
 						if(Oneway in onewaylist)
@@ -648,7 +650,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			onewayfound = FALSE
 			turf_viewblock = new /image/viewblock(null,T)
 			for(W in T.contents)
-				if(W.one_way && W.dir == opposite_dirs[mob.dir])
+				if(W.one_way && (get_dir(W,mob) & W.dir))
 					onewayfound = TRUE
 					turf_viewblock = image('icons/turf/overlays.dmi',T,"black_box[W.dir]",VIEWBLOCK_LAYER)
 					break
