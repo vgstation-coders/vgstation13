@@ -417,6 +417,12 @@
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/podstation)
+"mi" = (
+/obj/docking_port/destination/salvage/fast_food_joint{
+	dir = 2
+	},
+/turf/space,
+/area)
 "mr" = (
 /obj/structure/bed/chair/office{
 	dir = 4
@@ -2002,7 +2008,7 @@ mX
 Tt
 "}
 (7,1,1) = {"
-pC
+mi
 pC
 pC
 pC
