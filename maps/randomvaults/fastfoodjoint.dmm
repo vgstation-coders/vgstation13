@@ -101,10 +101,10 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/kitchen)
 "cb" = (
 /turf/simulated/wall,
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/kitchen)
 "ch" = (
 /obj/machinery/gibber,
 /obj/machinery/light/small{
@@ -502,7 +502,7 @@
 	name = "drive thru order speaker";
 	pixel_y = -30
 	},
-/mob/living/simple_animal/robot/NPC/fastfood/drivethru{
+/mob/living/simple_animal/robot/NPC/fastfood/kitchen{
 	dir = 8
 	},
 /turf/simulated/floor{
@@ -695,7 +695,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/kitchen)
 "sn" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
@@ -1525,7 +1525,7 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/kitchen)
 "ME" = (
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
@@ -1978,7 +1978,7 @@
 /area/vault/fastfood/kitchen)
 "YF" = (
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/kitchen)
 "YQ" = (
 /obj/machinery/atmospherics/unary/tank/air{
 	dir = 4
