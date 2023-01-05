@@ -1,0 +1,4291 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ak" = (
+/obj/item/weapon/kitchen/rollingpin,
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/kitchen/utensil/knife/large/butch,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"bf" = (
+/obj/structure/table/plastic,
+/obj/item/trash/fries_cone,
+/obj/item/trash/ketchup_packet,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"bg" = (
+/obj/structure/closet/secure_closet/freezer/money,
+/obj/item/weapon/reagent_containers/food/snacks/meat/grey,
+/obj/item/weapon/reagent_containers/food/snacks/meat/diona,
+/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"bi" = (
+/mob/living/simple_animal/hostile/monster/cyber_horror/Vox,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"bu" = (
+/obj/structure/bed/chair/comfy/couch/mid/red{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"bG" = (
+/obj/structure/kitchenspike,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor5"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"bX" = (
+/obj/structure/bed/chair/comfy/couch/left/red{
+	dir = 4
+	},
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"ch" = (
+/obj/machinery/gibber,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"ck" = (
+/obj/structure/table/plastic,
+/obj/item/trash/emptybowl,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"cu" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	external_pressure_bound = 101;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"cC" = (
+/obj/effect/decal/warning_stripes/pathmarkers{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/pathmarkers{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/podstation)
+"cD" = (
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"cG" = (
+/obj/machinery/light/small,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation)
+"cV" = (
+/obj/structure/table/reinforced,
+/obj/item/trash/plate,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "kitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"dm" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	external_pressure_bound = 101;
+	on = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"dn" = (
+/mob/living/simple_animal/cockroach,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor5"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"fy" = (
+/obj/effect/decal/warning_stripes/pathmarkers{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/podstation)
+"fA" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation)
+"fZ" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"ge" = (
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"gl" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"gJ" = (
+/obj/machinery/cooking/candy,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"gU" = (
+/obj/structure/kitchenspike,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor3"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"hj" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"hz" = (
+/obj/machinery/chem_master/condimaster,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"hB" = (
+/obj/structure/bed/chair/plastic{
+	dir = 4
+	},
+/obj/effect/landmark/corpse/russian,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"hF" = (
+/obj/structure/closet/secure_closet/freezer/money,
+/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/tomatomeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/slime,
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor3"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"hL" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"if" = (
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	external_pressure_bound = 101;
+	on = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"ig" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"iD" = (
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/podstation)
+"iP" = (
+/obj/machinery/chem_master/snackbar_machine,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"jf" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"jv" = (
+/obj/structure/closet/secure_closet/freezer/money,
+/obj/item/weapon/reagent_containers/food/snacks/meat/polyp,
+/obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman,
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic,
+/obj/item/weapon/reagent_containers/food/snacks/meat/insectoid,
+/obj/item/weapon/reagent_containers/food/snacks/meat/human,
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"ku" = (
+/obj/machinery/disposal/compactor,
+/obj/machinery/light/he/burned,
+/obj/machinery/light/he/burned{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"kY" = (
+/obj/item/weapon/stool/bar,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"kZ" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"ld" = (
+/obj/machinery/light/small{
+	dir = 8;
+	flickering = 1
+	},
+/turf/space,
+/area/vault/podstation)
+"li" = (
+/mob/living/simple_animal/robot/NPC/fastfood{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"mb" = (
+/mob/living/simple_animal/cockroach,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "gibbl4"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"mg" = (
+/obj/structure/bed/chair/comfy/couch/left/red,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/obj/effect/landmark/corpse/assistant,
+/obj/effect/landmark/corpse/assistant,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"mr" = (
+/obj/structure/bed/chair/office{
+	dir = 4
+	},
+/obj/structure/noticeboard{
+	pixel_y = 27
+	},
+/mob/living/simple_animal/robot/NPC/fastfood{
+	dir = 8
+	},
+/obj/item/device/radio/intercom{
+	freerange = 1;
+	name = "drive thru order speaker";
+	pixel_y = -30
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"mJ" = (
+/obj/machinery/vending/dinnerware,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"mS" = (
+/obj/structure/lattice,
+/obj/structure/lattice,
+/turf/space,
+/area/vault/podstation)
+"mX" = (
+/turf/unsimulated/floor/asteroid,
+/area/vault/podstation)
+"mZ" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/disposal/compactor,
+/obj/machinery/light/he,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"ns" = (
+/obj/machinery/door/window{
+	dir = 8
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "kitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"nP" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"oh" = (
+/obj/structure/bed/chair/comfy/couch/right/red{
+	dir = 4
+	},
+/obj/machinery/light/he/burned{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"oI" = (
+/obj/machinery/light/he/burned{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"pm" = (
+/obj/structure/table,
+/obj/machinery/microwave{
+	pixel_x = -3;
+	pixel_y = 6
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"pC" = (
+/turf/space,
+/area)
+"pR" = (
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"qa" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/space,
+/area/vault/podstation)
+"qs" = (
+/mob/living/simple_animal/cockroach,
+/obj/effect/decal/cleanable/blood,
+/obj/effect/decal/cleanable/blood,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"qJ" = (
+/obj/item/weapon/stool/bar,
+/obj/effect/landmark/corpse/clown,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"qO" = (
+/obj/machinery/door/airlock,
+/turf/simulated/wall,
+/area/vault/podstation)
+"qV" = (
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation)
+"rC" = (
+/obj/machinery/light/small/broken{
+	dir = 8
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation)
+"rP" = (
+/obj/structure/bed/chair/comfy/couch/left/red{
+	dir = 4
+	},
+/obj/effect/landmark/corpse/assistant,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"sg" = (
+/obj/item/device/radio/intercom{
+	freerange = 1;
+	name = "drive thru order speaker";
+	pixel_x = -30
+	},
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/podstation)
+"sv" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/wall/r_wall,
+/area/vault/podstation)
+"tb" = (
+/obj/machinery/light/small/broken,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation)
+"to" = (
+/obj/machinery/light/small{
+	dir = 1;
+	invisibility = 1
+	},
+/turf/unsimulated/floor/asteroid,
+/area/vault/podstation)
+"tz" = (
+/turf/simulated/wall/r_wall,
+/area/vault/podstation)
+"tG" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation)
+"tS" = (
+/obj/structure/bed/chair/plastic{
+	dir = 4
+	},
+/obj/effect/landmark/corpse/civilian,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"tT" = (
+/obj/machinery/light/he,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"tZ" = (
+/obj/item/weapon/reagent_containers/food/condiment/enzyme,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -3
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill,
+/obj/item/weapon/reagent_containers/glass/beaker{
+	pixel_x = 5
+	},
+/obj/item/weapon/reagent_containers/dropper/baster,
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"ub" = (
+/obj/item/weapon/reagent_containers/food/condiment/enzyme,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -3
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill,
+/obj/item/weapon/reagent_containers/glass/beaker{
+	pixel_x = 5
+	},
+/obj/item/weapon/reagent_containers/dropper/baster,
+/obj/structure/table,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"uy" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/podstation)
+"uA" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"uT" = (
+/mob/living/simple_animal/hostile/bigroach,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"vc" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor6"
+	},
+/obj/item/weapon/soap,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"vR" = (
+/obj/structure/bed/chair/comfy/couch/mid/red{
+	dir = 4
+	},
+/obj/machinery/light/he/burned{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"vZ" = (
+/obj/structure/bed/chair/comfy/couch/right/red{
+	dir = 4
+	},
+/obj/effect/landmark/corpse/russian,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"we" = (
+/obj/structure/table/plastic,
+/obj/item/trash/candy,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"wr" = (
+/obj/effect/decal/cleanable/crayon,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"wE" = (
+/obj/structure/closet/crate/freezer,
+/obj/item/weapon/reagent_containers/food/condiment/chillwax,
+/obj/item/weapon/reagent_containers/food/condiment/coldsauce,
+/obj/item/weapon/reagent_containers/food/condiment/exotic,
+/obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig,
+/obj/item/weapon/reagent_containers/food/condiment/honey,
+/obj/item/weapon/reagent_containers/food/condiment/maple_syrup,
+/obj/item/weapon/reagent_containers/food/condiment/polypgelatin,
+/obj/item/weapon/reagent_containers/food/condiment/royaljelly,
+/obj/item/weapon/reagent_containers/food/condiment/zammild,
+/obj/item/weapon/reagent_containers/food/condiment/zamspices,
+/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"xk" = (
+/obj/machinery/light/small/broken,
+/obj/machinery/light/small/broken,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation)
+"yh" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor4"
+	},
+/mob/living/simple_animal/hostile/giant_spider/spiderling,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"yH" = (
+/obj/structure/table/plastic,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/trash/plate,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"zj" = (
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"zB" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Ap" = (
+/obj/structure/rack,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/farwacube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/neaeracube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/stokcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/isopodcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"AT" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/glass/rag,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "kitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Bf" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"BJ" = (
+/obj/structure/closet/crate/freezer,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Cb" = (
+/obj/structure/toilet{
+	dir = 8
+	},
+/obj/structure/window/reinforced/tinted,
+/obj/effect/decal/cleanable/crayon,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Cy" = (
+/obj/structure/urinal{
+	dir = 8;
+	pixel_x = 30
+	},
+/obj/effect/decal/cleanable/crayon,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"CD" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/turf/space,
+/area/vault/podstation)
+"CG" = (
+/obj/structure/table/plastic,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/weapon/reagent_containers/food/condiment/ketchup{
+	pixel_x = -5;
+	pixel_y = -2
+	},
+/obj/item/weapon/reagent_containers/food/condiment/mustard{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/obj/item/trash/discountchocolate,
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"CT" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Dg" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Dm" = (
+/obj/structure/bed/chair/plastic{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Do" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"DI" = (
+/obj/structure/table/plastic,
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/weapon/reagent_containers/food/condiment/ketchup{
+	pixel_x = -5;
+	pixel_y = -2
+	},
+/obj/item/weapon/reagent_containers/food/condiment/mustard{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/obj/item/trash/chips,
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"DS" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"DT" = (
+/obj/item/weapon/stool/bar,
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Ee" = (
+/obj/machinery/cooking/cerealmaker,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Em" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/unary/vent_pump{
+	external_pressure_bound = 101;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"ED" = (
+/obj/structure/toilet{
+	dir = 8
+	},
+/obj/structure/window/reinforced/tinted,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"ES" = (
+/obj/machinery/door/airlock,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"EW" = (
+/obj/structure/table/reinforced,
+/obj/machinery/door/window/brigdoor,
+/obj/machinery/door/window{
+	dir = 8
+	},
+/obj/item/device/deskbell/signaler,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/podstation)
+"Fj" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Fu" = (
+/obj/machinery/cooking/deepfryer,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"FY" = (
+/obj/structure/closet/crate/freezer,
+/obj/item/slime_extract/silver,
+/obj/item/slime_extract/silver,
+/obj/item/slime_extract/silver,
+/obj/item/asteroid/hivelord_core,
+/obj/item/asteroid/hivelord_core,
+/obj/item/asteroid/hivelord_core,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Gb" = (
+/obj/effect/landmark/spacepod/random,
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/podstation)
+"Gf" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Gm" = (
+/obj/structure/closet/secure_closet/freezer/meat,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"He" = (
+/obj/machinery/light/small{
+	dir = 1;
+	invisibility = 1
+	},
+/turf/space,
+/area/vault/podstation)
+"Hj" = (
+/obj/machinery/processor,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Hs" = (
+/obj/structure/table,
+/obj/machinery/microwave{
+	pixel_x = -3;
+	pixel_y = 6
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Hv" = (
+/obj/structure/bed/chair/plastic{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Hx" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "gibbl4"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Ii" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "kitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"IQ" = (
+/obj/structure/closet/secure_closet/freezer/kitchen,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Je" = (
+/obj/structure/table/plastic,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/trash/used_tray,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"JE" = (
+/obj/machinery/cooking,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 9
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"JZ" = (
+/obj/structure/table/plastic,
+/obj/item/trash/donitos,
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/weapon/reagent_containers/food/condiment/mustard{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/obj/item/weapon/reagent_containers/food/condiment/ketchup{
+	pixel_x = -5;
+	pixel_y = -2
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Ka" = (
+/obj/machinery/power/apc{
+	pixel_y = 24
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Kf" = (
+/obj/item/weapon/kitchen/rollingpin,
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/kitchen/utensil/knife/large/butch,
+/obj/item/weapon/kitchen/utensil/knife/large/butch,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"KI" = (
+/obj/window_grille_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/podstation)
+"La" = (
+/obj/machinery/light/small,
+/turf/space,
+/area/vault/podstation)
+"Le" = (
+/obj/machinery/cooking/grill,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Li" = (
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Ln" = (
+/obj/machinery/light/small{
+	dir = 8;
+	flickering = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Lt" = (
+/turf/simulated/wall,
+/area/vault/podstation)
+"LC" = (
+/obj/machinery/door/airlock/external{
+	id_tag = "podstationclosing";
+	name = "Pod Station Airlock"
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"LK" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"LS" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"LU" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation)
+"LZ" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	external_pressure_bound = 101;
+	on = 1;
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"ME" = (
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation)
+"Nf" = (
+/obj/item/weapon/stool/bar,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Nn" = (
+/obj/window_grille_spawner/reinforced,
+/turf/simulated/wall,
+/area/vault/podstation)
+"NS" = (
+/obj/machinery/cooking/deepfryer,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Og" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid,
+/area/vault/podstation)
+"Or" = (
+/obj/structure/bed/chair/comfy/couch/turn/inward/red{
+	dir = 4
+	},
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Pp" = (
+/obj/structure/bed/chair/comfy/couch/right/red{
+	dir = 1
+	},
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Pt" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/landmark/corpse/janitor,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"PE" = (
+/mob/living/simple_animal/mouse/common/black,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"PV" = (
+/obj/effect/decal/cleanable/dirt,
+/mob/living/simple_animal/hostile/giant_spider,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Qf" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Qr" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"QH" = (
+/obj/structure/rack,
+/obj/item/weapon/reagent_containers/food/snacks/mint,
+/obj/item/weapon/reagent_containers/food/snacks/mint,
+/obj/item/weapon/reagent_containers/food/snacks/mint,
+/obj/item/weapon/reagent_containers/food/drinks/coloring,
+/obj/item/weapon/reagent_containers/food/condiment/syndisauce,
+/obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Ra" = (
+/obj/machinery/vending/boozeomat,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Rf" = (
+/obj/machinery/door/airlock/vault{
+	icon_state = "door_locked";
+	locked = 1;
+	req_access_txt = "53"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Rk" = (
+/obj/structure/table/reinforced,
+/obj/item/trash/plate,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "kitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Rl" = (
+/obj/structure/table/reinforced,
+/obj/machinery/pos,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "kitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"RD" = (
+/obj/machinery/door/airlock/freezer,
+/obj/structure/window/barricade/full/block,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"RY" = (
+/obj/structure/table/plastic,
+/obj/item/weapon/reagent_containers/food/condiment/mustard{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/obj/item/weapon/reagent_containers/food/condiment/ketchup{
+	pixel_x = -5;
+	pixel_y = -2
+	},
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/trash/popcorn,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"So" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation)
+"Sv" = (
+/obj/structure/table/reinforced,
+/obj/machinery/chem_dispenser/booze_dispenser/mapping,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "kitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"SC" = (
+/obj/item/weapon/stool/bar,
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"SP" = (
+/obj/structure/table/plastic,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/trash/pietin,
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/weapon/reagent_containers/food/condiment/ketchup{
+	pixel_x = -5;
+	pixel_y = -2
+	},
+/obj/item/weapon/reagent_containers/food/condiment/mustard{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Tt" = (
+/obj/structure/lattice,
+/turf/space,
+/area/vault/podstation)
+"VB" = (
+/obj/structure/closet/secure_closet/freezer/fridge,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"VE" = (
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 8
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation)
+"VX" = (
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/obj/structure/mirror{
+	pixel_x = 32
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Wn" = (
+/obj/structure/bed/chair/comfy/couch/turn/inward/red{
+	dir = 1
+	},
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"Wo" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/podstation)
+"WK" = (
+/obj/structure/table/reinforced,
+/obj/machinery/chem_dispenser/brewer/mapping,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "kitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"WO" = (
+/obj/structure/table/reinforced,
+/obj/machinery/chem_dispenser/soda_dispenser/mapping,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "kitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Xb" = (
+/mob/living/simple_animal/hostile/necro/zombie/headcrab,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Xr" = (
+/obj/structure/rack,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"XK" = (
+/mob/living/simple_animal/robot{
+	icon_state = "kodiak-service";
+	icon = 'icons/mob/robots.dmi';
+	name = "cook bot"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"XS" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Yz" = (
+/obj/machinery/light/he/burned,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+"Zy" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor3"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation)
+
+(1,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+qa
+pC
+pC
+pC
+pC
+pC
+qa
+pC
+pC
+"}
+(2,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+La
+Lt
+pC
+pC
+pC
+pC
+pC
+Lt
+He
+pC
+"}
+(3,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+CD
+pC
+Tt
+Tt
+pC
+Tt
+CD
+pC
+pC
+"}
+(4,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+CD
+Tt
+Tt
+Tt
+Tt
+Tt
+CD
+pC
+pC
+"}
+(5,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+mX
+Tt
+Tt
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mS
+pC
+"}
+(6,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mS
+mX
+mX
+mX
+mX
+mX
+mX
+Tt
+Tt
+Tt
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(7,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+Tt
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(8,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(9,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+ME
+Lt
+Lt
+Lt
+KI
+KI
+KI
+Lt
+Lt
+KI
+KI
+KI
+Lt
+Lt
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(10,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+ME
+Lt
+Or
+bu
+oh
+cD
+cD
+bX
+vZ
+cD
+cD
+rP
+vR
+Wn
+Lt
+ME
+ME
+ME
+iD
+iD
+fy
+iD
+iD
+tb
+Lt
+Tt
+"}
+(11,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+ME
+Lt
+mg
+yH
+CG
+Do
+cD
+we
+DI
+cD
+cD
+ck
+RY
+Pp
+Lt
+Lt
+Lt
+qV
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(12,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+ME
+KI
+cD
+ig
+LK
+Dg
+Dg
+LK
+LK
+cD
+cD
+ig
+ig
+cD
+KI
+LS
+KI
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(13,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+ME
+KI
+cD
+Do
+cD
+cD
+Do
+Do
+cD
+cD
+cD
+cD
+cD
+cD
+LC
+cD
+LC
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(14,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+ME
+KI
+cD
+Do
+zj
+hB
+Dm
+pR
+zj
+tS
+Hv
+pR
+Do
+cD
+KI
+oI
+KI
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(15,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+ME
+Lt
+ku
+Do
+nP
+bf
+JZ
+pR
+zj
+Je
+SP
+uA
+Do
+mZ
+Lt
+Lt
+Lt
+fA
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(16,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+ME
+Lt
+cD
+cD
+zj
+ig
+ig
+if
+Qr
+Wo
+Pt
+pR
+cD
+cD
+Lt
+ME
+ME
+ME
+iD
+iD
+fy
+iD
+iD
+cG
+Lt
+mX
+"}
+(17,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+So
+KI
+jf
+DS
+gl
+DS
+DS
+hj
+DS
+DS
+fZ
+cD
+cD
+cD
+KI
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(18,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+tG
+Lt
+CT
+zB
+cD
+Do
+cD
+DT
+qJ
+Nf
+kY
+Nf
+SC
+cD
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(19,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+tG
+Lt
+ES
+Lt
+Lt
+Lt
+Lt
+Ii
+Ii
+Rl
+cV
+AT
+Rk
+ns
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(20,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+tG
+Nn
+cu
+wr
+hL
+Ln
+Lt
+mJ
+cD
+dm
+li
+cD
+cD
+tT
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(21,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+qa
+pC
+pC
+pC
+pC
+pC
+qa
+mX
+tG
+Lt
+Cb
+ED
+VX
+Cy
+Lt
+hz
+cD
+cD
+Bf
+cD
+cD
+iP
+Lt
+ME
+Lt
+fA
+iD
+iD
+fy
+iD
+iD
+xk
+Lt
+Tt
+"}
+(22,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+La
+Lt
+pC
+pC
+pC
+pC
+pC
+Lt
+to
+VE
+tz
+tz
+tz
+tz
+tz
+tz
+Lt
+Sv
+WO
+WK
+Ra
+qO
+Lt
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mS
+"}
+(23,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+CD
+pC
+pC
+mS
+pC
+mS
+CD
+mX
+ME
+tz
+Ka
+bg
+jv
+hF
+tz
+Gm
+Li
+Li
+Fj
+Li
+Li
+VB
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(24,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+CD
+Tt
+Tt
+Tt
+Tt
+Tt
+CD
+mX
+ME
+tz
+qs
+PV
+uT
+mb
+tz
+Li
+Li
+Li
+Fj
+hL
+Li
+Li
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(25,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+ME
+tz
+ge
+QH
+Xr
+Ap
+tz
+hL
+Li
+pm
+tZ
+ak
+XK
+Li
+KI
+ME
+Lt
+fA
+iD
+iD
+fy
+iD
+iD
+tb
+Lt
+Tt
+"}
+(26,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+ME
+tz
+Zy
+Li
+dn
+bi
+tz
+hL
+Li
+Hs
+ub
+Kf
+hL
+Li
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(27,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mS
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+ME
+tz
+Li
+wE
+FY
+BJ
+tz
+Qf
+Li
+Li
+kZ
+LZ
+Li
+Yz
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(28,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+ME
+tz
+Rf
+sv
+sv
+sv
+tz
+hL
+XK
+NS
+gJ
+Ee
+PE
+Li
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(29,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+cG
+Lt
+ME
+Lt
+vc
+Em
+yh
+Hx
+RD
+XS
+Gf
+Fu
+JE
+Hj
+hL
+Li
+KI
+ME
+Lt
+fA
+iD
+iD
+fy
+iD
+iD
+cG
+Lt
+mX
+"}
+(30,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+ME
+Lt
+ch
+Xb
+bG
+gU
+Lt
+Li
+hL
+hL
+hL
+hL
+hL
+Li
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(31,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+ME
+Lt
+Lt
+Lt
+Lt
+Lt
+Lt
+IQ
+hL
+hL
+Li
+Li
+Li
+Le
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(32,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+ME
+ME
+ME
+ME
+ME
+ME
+Lt
+Lt
+KI
+Lt
+mr
+Lt
+KI
+Lt
+Lt
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(33,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+mX
+mX
+Og
+mX
+ME
+ME
+ME
+ME
+Lt
+EW
+Lt
+ME
+ME
+ME
+ME
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(34,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+ME
+ME
+ME
+cG
+Lt
+fA
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(35,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+sg
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(36,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(37,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+"}
+(38,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+Lt
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(39,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+tb
+Lt
+mX
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+rC
+ME
+ME
+ME
+ME
+ME
+ME
+mX
+Lt
+fA
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+Tt
+"}
+(40,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+ME
+uy
+fy
+iD
+Gb
+fy
+iD
+Gb
+fy
+iD
+Gb
+fy
+uy
+ME
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+Tt
+Tt
+"}
+(41,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+ME
+ME
+ME
+uy
+fy
+iD
+iD
+fy
+iD
+iD
+cC
+iD
+iD
+cC
+uy
+ME
+ME
+ME
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+Tt
+Tt
+"}
+(42,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+fy
+iD
+iD
+ME
+Tt
+Tt
+"}
+(43,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+iD
+fy
+iD
+iD
+ME
+Tt
+Tt
+"}
+(44,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+ME
+ME
+ME
+uy
+fy
+iD
+Gb
+fy
+iD
+Gb
+fy
+iD
+Gb
+fy
+uy
+ME
+ME
+ME
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+Tt
+Tt
+"}
+(45,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mS
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+mX
+mX
+ME
+uy
+fy
+iD
+iD
+fy
+iD
+iD
+fy
+iD
+iD
+fy
+uy
+ME
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+Tt
+Tt
+"}
+(46,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+ME
+iD
+iD
+cC
+iD
+iD
+ME
+mX
+mX
+ME
+ME
+ME
+ME
+ME
+ME
+ME
+LU
+ME
+ME
+ME
+ME
+ME
+ME
+mX
+mX
+ME
+iD
+iD
+fy
+iD
+iD
+ME
+Tt
+pC
+"}
+(47,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+CD
+Tt
+Tt
+Tt
+Tt
+Tt
+CD
+Tt
+mX
+mX
+Tt
+Tt
+Tt
+mX
+mX
+mX
+Lt
+Tt
+mX
+mX
+mX
+mX
+mX
+Tt
+Tt
+CD
+Tt
+Tt
+Tt
+Tt
+Tt
+CD
+pC
+pC
+"}
+(48,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+CD
+Tt
+pC
+Tt
+Tt
+pC
+CD
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+CD
+Tt
+Tt
+pC
+pC
+Tt
+CD
+pC
+pC
+"}
+(49,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+La
+Lt
+pC
+pC
+pC
+pC
+pC
+Lt
+He
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+La
+Lt
+pC
+pC
+pC
+pC
+pC
+Lt
+He
+pC
+"}
+(50,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+ld
+pC
+pC
+pC
+pC
+pC
+ld
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+ld
+pC
+pC
+pC
+pC
+pC
+ld
+pC
+pC
+"}
