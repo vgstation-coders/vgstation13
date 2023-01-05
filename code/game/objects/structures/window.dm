@@ -81,7 +81,6 @@ var/list/one_way_windows
 		if(!istype(C.mob, /mob/dead/observer) && !(M_XRAY in C.mob.mutations))
 			if(((x >= (C.mob.x - C.view)) && (x <= (C.mob.x + C.view))) && ((y >= (C.mob.y - C.view)) && (y <= (C.mob.y + C.view))))
 				C.update_one_way_windows(view(C.view,C.mob))
-		C.update_one_way_windows()
 
 /obj/structure/window/projectile_check()
 	return PROJREACT_WINDOWS
