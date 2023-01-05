@@ -48,9 +48,13 @@
 /area/vault/fastfood/drivethru
 	icon_state = "cafeteria"
 
-/area/vault/fastfood/interior
+/area/vault/fastfood/dining
 	requires_power = 1
 	icon_state = "cafeteria"
+
+/area/vault/fastfood/kitchen
+	requires_power = 1
+	icon_state = "kitchen"
 
 /area/vault/mechclubhouse
 	requires_power = 1
@@ -1005,7 +1009,7 @@
 	name = "restaurant service bot"
 	desc = "Serves food asked for by a customer."
 	icon_state = "kodiak-service"
-	var/entry_area = /area/vault/fastfood/interior
+	var/entry_area = /area/vault/fastfood/dining
 
 /mob/living/simple_animal/robot/NPC/fastfood/initialize_NPC_components()
 	..()
