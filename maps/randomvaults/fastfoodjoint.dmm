@@ -418,7 +418,7 @@
 	},
 /area/vault/podstation)
 "mi" = (
-/obj/docking_port/destination/salvage/fast_food_joint{
+/obj/docking_port/destination/salvage/fast_food{
 	dir = 2
 	},
 /turf/space,

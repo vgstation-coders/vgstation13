@@ -79,7 +79,7 @@ var/global/datum/shuttle/salvage/salvage_shuttle = new(starting_area=/area/shutt
 /obj/docking_port/destination/salvage/pod_station
 	areaname = "pod repair station"
 
-/obj/docking_port/destination/salvage/fast_food_joint
+/obj/docking_port/destination/salvage/fast_food
 	areaname = "greasy spoon"
 
 /obj/docking_port/destination/salvage/derelict
