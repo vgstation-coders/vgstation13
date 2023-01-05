@@ -39,7 +39,9 @@
 	},
 /area/vault/podstation)
 "bi" = (
-/mob/living/simple_animal/hostile/monster/cyber_horror/Vox,
+/mob/living/simple_animal/hostile/monster/cyber_horror/Vox{
+	environment_smash_flags = 0
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -710,7 +712,9 @@
 	},
 /area/vault/podstation)
 "uT" = (
-/mob/living/simple_animal/hostile/bigroach,
+/mob/living/simple_animal/hostile/bigroach{
+	environment_smash_flags = 0
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -889,6 +893,14 @@
 /area/vault/podstation)
 "BJ" = (
 /obj/structure/closet/crate/freezer,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -1394,7 +1406,9 @@
 /area/vault/podstation)
 "PV" = (
 /obj/effect/decal/cleanable/dirt,
-/mob/living/simple_animal/hostile/giant_spider,
+/mob/living/simple_animal/hostile/giant_spider{
+	environment_smash_flags = 64
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -1647,7 +1661,9 @@
 	},
 /area/vault/podstation)
 "Xb" = (
-/mob/living/simple_animal/hostile/necro/zombie/headcrab,
+/mob/living/simple_animal/hostile/necro/zombie/headcrab{
+	environment_smash_flags = 160
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
