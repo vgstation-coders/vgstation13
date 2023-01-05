@@ -43,8 +43,14 @@
 
 /area/vault/gingerbread_house
 
-/area/vault/podstation
+/area/vault/fastfood
+
+/area/vault/fastfood/drivethru
+	icon_state = "cafeteria"
+
+/area/vault/fastfood/interior
 	requires_power = 1
+	icon_state = "cafeteria"
 
 /area/vault/mechclubhouse
 	requires_power = 1
