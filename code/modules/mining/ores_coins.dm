@@ -401,6 +401,7 @@
 	if (prob(1))
 		// Something about this coin stands out...
 		luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
+		overlays += image('icons/obj/items.dmi', "shine")
 		if (prob(20))
 			// Sometimes it's very lucky!
 			luckiness = 500 * credits
