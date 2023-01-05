@@ -1009,7 +1009,7 @@
 
 /mob/living/simple_animal/robot/NPC/fastfood/initialize_NPC_components()
 	..()
-	var/datum/component/ai/hearing/order/fooddrinks/FD = add_component(/datum/component/ai/hearing/order/foodndrinks)
+	var/datum/component/ai/hearing/order/foodndrinks/FD = add_component(/datum/component/ai/hearing/order/foodndrinks)
 	FD.price = rand(5,10) * 5
 	add_component(/datum/component/ai/target_finder/payment)
 	var/datum/component/ai/area_territorial/say/AT = add_component(/datum/component/ai/area_territorial/say)
