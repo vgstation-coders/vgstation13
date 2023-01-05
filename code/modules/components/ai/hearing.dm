@@ -29,7 +29,7 @@
 				if(findtext(filtered_message,message))
 					sleep(response_delay)
 					if(pass_speech)
-						hear_args = list(filtered_message) + hear_args
+						hear_args = filtered_message
 					INVOKE_EVENT(parent, hear_signal, hear_args)
 					return
 
@@ -48,12 +48,16 @@
 
 /datum/component/ai/hearing/order
 	hear_signal = /event/comp_ai_cmd_order
-	required_messages = list("can i get","do you have","can i have","id like","i want","give me","get me")
+	required_messages = list("can i get","do you have","can i have","id like","i want","give me","get me","i would like")
 	pass_speech = TRUE
 	var/list/blacklist_items = list()
 	var/list/whitelist_items = list()
 	var/notfoundmessage
-	var/price = 0
+	var/freemessage = "Coming right up!"
+	var/notenoughmessage = "Not enough money."
+	var/paidmessage = "Thanks for ordering!"
+	var/baseprice = 0
+	var/currentprice = 0
 	var/item2deliver
 
 /datum/component/ai/hearing/order/initialize()
@@ -80,7 +84,7 @@
 				M.say("ERROR-[Gibberish(rand(10000,99999),50)]: No items found. Please contact manufacturer for specifications.")
 				CRASH("Someone forgot to put whitelist items on this ordering AI component.")
 			for(var/item in whitelist_items)
-				var/list/items2workwith = subtypesof(whitelist_items)
+				var/list/items2workwith = subtypesof(item)
 				if(!items2workwith.len)
 					continue
 				for(var/subitem in items2workwith)
@@ -101,35 +105,42 @@
 						if(findtext(message,initial(R.name)))
 							item2deliver = subitem
 							break
-				if(!item2deliver)
-					M.say(notfoundmessage)
-					return
-				if(!price)
+					if(item2deliver)
+						break
+			if(!item2deliver)
+				M.say(notfoundmessage)
+			else if(!baseprice)
+				M.say(freemessage)
+				spawn_item()
+			else
+				currentprice = rand(baseprice-(baseprice/5),baseprice+(baseprice/5))
+				if(!currentprice)
+					M.say(freemessage)
 					spawn_item()
 				else
-					price = rand(initial(price)-(initial(price)/5),initial(price)+(initial(price)/5))
-					M.say("That will be [price] credits.")
+					M.say("That will be [currentprice] credits.")
 
 /datum/component/ai/hearing/order/proc/on_pay(var/list/bills)
-	if(price && isliving(parent))
+	if(currentprice && bills.len && isliving(parent))
 		var/mob/living/M=parent
 		if(!M.isDead())
 			var/amount = 0
 			for(var/obj/item/weapon/spacecash/C in bills)
 				amount += C.get_total()
-				if(amount > price)
+				if(amount > currentprice)
 					break
-			if(amount < price)
-				M.say("Not enough money.")
+			if(amount < currentprice)
+				M.say(notenoughmessage)
 			else
 				playsound(M.loc, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 70, 1)
 				for(var/obj/O in bills)
 					bills -= O
 					qdel(O)
-				if(amount > price)
-					dispense_cash(amount-price,M.loc)
-			spawn_item()
-			M.say("Thank you for ordering!")
+				if(amount > currentprice)
+					dispense_cash(amount-currentprice,M.loc)
+				spawn_item()
+				M.say(paidmessage)
+				currentprice = 0
 
 /datum/component/ai/hearing/order/proc/spawn_item()
 	if(!item2deliver)
@@ -139,15 +150,14 @@
 		if(!M.isDead())
 			var/atom/movable/thing_spawned
 			M.emote("me", 1, "begins processing an order...")
+			var/turf/T = get_step(M,M.dir)
 			if(ispath(item2deliver,/atom/movable))
 				thing_spawned = item2deliver
 				sleep(rand(5,10) SECONDS)
-				var/turf/T = get_step(M,M.dir)
 				thing_spawned = new item2deliver(T)
 			else if(ispath(item2deliver,/datum/reagent))
 				var/datum/reagent/R = item2deliver
 				sleep(rand(5,10) SECONDS)
-				var/turf/T = get_step(M,M.dir)
 				var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new(T)
 				D.reagents.add_reagent(initial(R.id),D.reagents.maximum_volume)
 				thing_spawned = D
