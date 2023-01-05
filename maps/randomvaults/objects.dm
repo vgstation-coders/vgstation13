@@ -1000,3 +1000,17 @@
 
 /obj/item/device/pda/clown/broken/attack_self(mob/user)
 	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function
+
+/mob/living/simple_animal/robot/NPC/fastfood
+	name = "restaurant service bot"
+	desc = "Serves food asked for by a customer."
+	icon_state = "kodiak-service"
+
+/mob/living/simple_animal/robot/NPC/fastfood/initialize_NPC_components()
+	..()
+	var/datum/component/ai/hearing/order/fooddrinks/FD = add_component(/datum/component/ai/hearing/order/foodndrinks)
+	FD.price = rand(5,10) * 5
+	add_component(/datum/component/ai/target_finder/payment)
+	var/datum/component/ai/area_territorial/say/AT = add_component(/datum/component/ai/area_territorial/say)
+	AT.SetArea(locate(/area/vault/fastfood/drivethru))
+	AT.enter_args = list("Welcome to #&*£%£&%, how may I take your order?") // TODO: name here
