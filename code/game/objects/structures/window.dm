@@ -37,7 +37,6 @@ var/list/one_way_windows
 	var/dmg_threshold = 0 //Minimum amount of item damage to start damaging window
 
 	var/one_way = 0 //If set to 1, it will act as a one-way window.
-	var/oneway_junction = 0 //Windows to either side that are oneway or not.
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
 	var/disperse_coeff = 0.95
 	var/is_fulltile = FALSE
@@ -51,7 +50,7 @@ var/list/one_way_windows
 	oneway_overlay = image('icons/obj/structures/window.dmi', src, "one_way_overlay")
 	if(one_way)
 		one_way = !one_way
-		toggle_one_way(ticker && ticker.current_state >= GAME_STATE_PLAYING) // Speeds up initialization
+		toggle_one_way()
 
 /obj/structure/window/canSmoothWith()
 	var/static/list/smoothables = list(/obj/structure/window)
@@ -77,8 +76,11 @@ var/list/one_way_windows
 			I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
 	icon = I
 
-/obj/structure/window/proc/update_oneway_clients()
+/obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
+		if(!istype(C.mob, /mob/dead/observer) && !(M_XRAY in C.mob.mutations))
+			if(((x >= (C.mob.x - C.view)) && (x <= (C.mob.x + C.view))) && ((y >= (C.mob.y - C.view)) && (y <= (C.mob.y + C.view))))
+				C.update_one_way_windows(view(C.view,C.mob))
 		C.update_one_way_windows()
 
 /obj/structure/window/projectile_check()
@@ -318,32 +320,19 @@ var/list/one_way_windows
 		return
 	attack_generic(user, rand(10, 15))
 
-/obj/structure/window/proc/toggle_one_way(var/neighbors = TRUE) //Toggle whether a window is a one-way window or not.
+/obj/structure/window/proc/toggle_one_way() //Toggle whether a window is a one-way window or not.
 	if(!one_way)
 		one_way = 1
 		if(!one_way_windows)
 			one_way_windows = list()
 		one_way_windows.Add(src)
-		update_one_way_junction(neighbors)
-		update_oneway_clients()
+		update_oneway_nearby_clients()
 		overlays += oneway_overlay
 	else
 		one_way = 0
 		one_way_windows.Remove(src)
-		update_one_way_junction()
-		update_oneway_clients(neighbors)
+		update_oneway_nearby_clients()
 		overlays -= oneway_overlay
-
-/obj/structure/window/proc/update_one_way_junction(var/initial = TRUE) // Function to build junctions detecting adjacent one way windows, see update_one_way_windows() in client for why
-	oneway_junction = 0 // Reset to zero for below
-	for(var/direction in sideways_dirs(src.dir))
-		var/turf/T = get_step(src,direction)
-		for(var/obj/structure/window/W in T)
-			if(W.one_way)
-				if(src.one_way) // Where this reset comes in
-					oneway_junction |= direction
-				if(initial) // Means the recursive function can only be called once
-					W.update_one_way_junction(FALSE) // It can also be set false with the "neighbors" var in toggle_one_way, so that only this window is updated, see New()
 
 /obj/structure/window/proc/smart_toggle() //For "smart" windows
 	if(opacity)
@@ -615,7 +604,8 @@ var/list/one_way_windows
 	update_nearby_tiles()
 	relativewall_neighbours()
 	if(one_way)
-		toggle_one_way()
+		one_way_windows.Remove(src)
+		update_oneway_nearby_clients()
 	..()
 
 /obj/structure/window/proc/shatter()

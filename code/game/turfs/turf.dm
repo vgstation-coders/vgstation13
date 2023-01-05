@@ -63,6 +63,8 @@
 	// Map element which spawned this turf
 	var/datum/map_element/map_element
 
+	var/image/viewblock
+
 	var/volume_mult = 1 //how loud are things on this turf?
 
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL

@@ -245,7 +245,6 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define BLIND_LAYER					3
 	#define CRIT_LAYER 					4
 	#define HALLUCINATION_LAYER 		5
-	#define	VIEWBLOCK_LAYER				10
 
 #define HUD_PLANE 				23		// For the Head-Up Display
 

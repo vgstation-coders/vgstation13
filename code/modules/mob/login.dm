@@ -131,5 +131,3 @@
 		log_admin("Cluwnebanned player [key_name(src)] attempted to join and was kicked.")
 		message_admins("<span class='notice'>Cluwnebanned player [key_name(src)] attempted to join and was kicked.</span>", 1)
 		del(client)
-
-	client.screen += viewblock
