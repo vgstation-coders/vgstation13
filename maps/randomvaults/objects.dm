@@ -1005,6 +1005,7 @@
 	name = "restaurant service bot"
 	desc = "Serves food asked for by a customer."
 	icon_state = "kodiak-service"
+	var/entry_area = /area/vault/fastfood/interior
 
 /mob/living/simple_animal/robot/NPC/fastfood/initialize_NPC_components()
 	..()
@@ -1012,5 +1013,11 @@
 	FD.price = rand(5,10) * 5
 	add_component(/datum/component/ai/target_finder/payment)
 	var/datum/component/ai/area_territorial/say/AT = add_component(/datum/component/ai/area_territorial/say)
-	AT.SetArea(locate(/area/vault/fastfood/drivethru))
+	AT.SetArea(locate(entry_area))
 	AT.enter_args = list("Welcome to #&*£%£&%, how may I take your order?") // TODO: name here
+
+/mob/living/simple_animal/robot/NPC/fastfood/drivethru
+	name = "restaurant delivery bot"
+	desc = "Serves food asked for by a customer at the drive-thru."
+	icon_state = "kodiak-service"
+	entry_area = /area/vault/fastfood/drivethru
