@@ -102,9 +102,6 @@
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/vault/fastfood/kitchen)
-"cb" = (
-/turf/simulated/wall,
-/area/vault/fastfood/kitchen)
 "ch" = (
 /obj/machinery/gibber,
 /obj/machinery/light/small{
@@ -497,13 +494,13 @@
 /obj/structure/noticeboard{
 	pixel_y = 27
 	},
-/obj/item/device/radio/intercom{
-	freerange = 1;
-	name = "drive thru order speaker";
-	pixel_y = -30
-	},
 /mob/living/simple_animal/robot/NPC/fastfood/kitchen{
 	dir = 8
+	},
+/obj/item/device/radio/intercom/aiprivate,
+/obj/item/device/radio/intercom/aiprivate{
+	broadcasting = 1;
+	pixel_y = -28
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -688,12 +685,11 @@
 	},
 /area/vault/fastfood/dining)
 "sg" = (
-/obj/item/device/radio/intercom{
-	freerange = 1;
-	name = "drive thru order speaker";
-	pixel_x = -30
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/item/device/radio/intercom/aiprivate{
+	pixel_x = -28;
+	broadcasting = 1
+	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/vault/fastfood/kitchen)
 "sn" = (
@@ -3743,8 +3739,8 @@ sn
 iK
 iK
 UT
-cb
-cb
+Ka
+Ka
 wc
 lo
 lo
@@ -3899,8 +3895,8 @@ Aj
 FZ
 FZ
 Dp
-cb
-cb
+Ka
+Ka
 MU
 vi
 vi
