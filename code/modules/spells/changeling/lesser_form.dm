@@ -84,6 +84,9 @@
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		names += "[DNA.real_name]"
 
+	if(!names.len)
+		to_chat(user, "<span class='warning'>We cannot transform into anyone!</span>")
+		return
 	var/S = input("Select the target DNA: ", "Target DNA", null) as null|anything in names
 	if(!S)
 		return
