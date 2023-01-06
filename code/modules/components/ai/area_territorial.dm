@@ -31,3 +31,26 @@
 /datum/component/ai/area_territorial/say
 	enter_signal = /event/comp_ai_cmd_specific_say
 	exit_signal = /event/comp_ai_cmd_specific_say
+
+/datum/component/ai/area_territorial/signal
+	var/id_tag = ""
+
+/datum/component/ai/area_territorial/signal/area_enter(atom/movable/enterer)
+	for(var/obj/machinery/M in territory)
+		if(M.id_tag == src.id_tag)
+			enter_function()
+
+/datum/component/ai/area_territorial/signal/area_exit(atom/movable/enterer)
+	for(var/obj/machinery/M in territory)
+		if(M.id_tag == src.id_tag)
+			exit_function()
+
+/datum/component/ai/area_territorial/signal/proc/enter_function(obj/machinery/M)
+	return
+
+/datum/component/ai/area_territorial/signal/proc/exit_function(obj/machinery/M)
+	return
+
+/datum/component/ai/area_territorial/signal/doorshut/enter_function(obj/machinery/door/D)
+	if(istype(D) && !D.density)
+		D.close()

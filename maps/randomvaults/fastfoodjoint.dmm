@@ -33,15 +33,21 @@
 	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
+"aM" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "bf" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1;
 	initialize_directions = 14
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "bg" = (
@@ -72,9 +78,7 @@
 	icon_state = "1-2"
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "bu" = (
@@ -82,9 +86,7 @@
 	dir = 4
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "bG" = (
@@ -100,13 +102,12 @@
 /obj/structure/bed/chair/comfy/couch/left/red{
 	dir = 4
 	},
-/obj/machinery/light/he{
-	dir = 8
+/obj/machinery/light/small{
+	dir = 8;
+	flickering = 1
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "bY" = (
@@ -152,8 +153,7 @@
 "cD" = (
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "cG" = (
@@ -169,22 +169,25 @@
 "cV" = (
 /obj/structure/table/reinforced,
 /obj/item/trash/plate,
-/obj/machinery/door/poddoor/shutters{
-	density = 0;
-	dir = 8;
-	icon_state = "shutter0";
-	id_tag = "kitchen";
-	name = "Kitchen Shutters";
-	opacity = 0
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4;
 	initialize_directions = 12
 	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "dh" = (
@@ -206,8 +209,7 @@
 	},
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "dF" = (
@@ -221,14 +223,14 @@
 	},
 /area/vault/fastfood/kitchen)
 "eb" = (
-/obj/machinery/alarm{
-	dir = 1;
-	pixel_y = -22
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/kitchen)
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "eL" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light/small/broken{
@@ -268,9 +270,7 @@
 	on = 1
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/misc)
 "fZ" = (
@@ -301,9 +301,7 @@
 	dir = 1
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "gl" = (
@@ -317,14 +315,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
-"gw" = (
-/obj/docking_port/destination/salvage/fast_food{
-	dir = 2
-	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area/vault/fastfood)
 "gJ" = (
 /obj/machinery/cooking/candy,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -350,17 +340,14 @@
 	initialize_directions = 11
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "hz" = (
 /obj/machinery/chem_master/condimaster,
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "hB" = (
@@ -368,10 +355,9 @@
 	dir = 4
 	},
 /obj/effect/landmark/corpse/russian,
+/obj/effect/decal/cleanable/vomit,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "hF" = (
@@ -385,36 +371,53 @@
 	icon_state = "asteroidfloor"
 	},
 /area/vault/fastfood)
+"hT" = (
+/obj/effect/decal/cleanable/cobweb,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
 "if" = (
 /obj/structure/table/reinforced,
 /obj/item/trash/plate,
-/obj/machinery/door/poddoor/shutters{
-	density = 0;
-	dir = 8;
-	icon_state = "shutter0";
-	id_tag = "kitchen";
-	name = "Kitchen Shutters";
-	opacity = 0
-	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "ig" = (
 /obj/structure/bed/chair/plastic{
 	dir = 8
 	},
+/obj/effect/decal/cleanable/vomit,
+/obj/effect/decal/cleanable/vomit,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "iD" = (
@@ -435,8 +438,7 @@
 	},
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "jf" = (
@@ -449,11 +451,17 @@
 	on = 1
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
+"ju" = (
+/obj/docking_port/destination/salvage/fast_food{
+	dir = 2
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
 "jv" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -467,6 +475,16 @@
 /obj/item/weapon/tank/oxygen,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
+"jH" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
 "kg" = (
 /obj/machinery/light/small{
 	dir = 1
@@ -483,9 +501,7 @@
 	initialize_directions = 12
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "kZ" = (
@@ -511,22 +527,12 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "lo" = (
 /turf/unsimulated/floor/airless{
 	dir = 4;
-	icon_state = "asteroidwarning"
-	},
-/area/vault/fastfood)
-"lT" = (
-/obj/structure/railing{
-	dir = 8
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
 	icon_state = "asteroidwarning"
 	},
 /area/vault/fastfood)
@@ -556,6 +562,13 @@
 	dir = 1
 	},
 /area/vault/fastfood)
+"mh" = (
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
 "mi" = (
 /obj/machinery/door/airlock,
 /obj/effect/decal/cleanable/dirt,
@@ -565,6 +578,9 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/dining)
 "mr" = (
@@ -600,20 +616,9 @@
 /obj/machinery/vending/dinnerware,
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
-"mM" = (
-/obj/structure/railing{
-	dir = 8
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidwarning";
-	dir = 1
-	},
-/area/vault/fastfood)
 "mS" = (
 /obj/structure/lattice,
 /obj/structure/lattice,
@@ -625,30 +630,23 @@
 "mZ" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/disposal/compactor,
-/obj/machinery/light/he,
+/obj/machinery/light/small,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "ns" = (
 /obj/machinery/door/window{
 	dir = 8
 	},
-/obj/machinery/door/poddoor/shutters{
-	density = 0;
+/obj/machinery/light/small/broken,
+/obj/machinery/door/firedoor/border_only{
 	dir = 8;
-	icon_state = "shutter0";
-	id_tag = "kitchen";
-	name = "Kitchen Shutters";
-	opacity = 0
+	name = "Firelock West"
 	},
-/obj/machinery/light/he/burned,
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "nP" = (
@@ -664,6 +662,16 @@
 	icon_state = "asteroidwarning"
 	},
 /area/vault/fastfood)
+"pj" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
 "pm" = (
 /obj/structure/table,
 /obj/machinery/microwave{
@@ -683,9 +691,7 @@
 	dir = 1
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "qa" = (
@@ -694,6 +700,19 @@
 	},
 /turf/space,
 /area/vault/fastfood)
+"ql" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/structure/railing/glass,
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
 "qs" = (
 /obj/machinery/power/apc{
 	pixel_y = 24;
@@ -705,23 +724,28 @@
 	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
+"qA" = (
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -22
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
 "qJ" = (
 /obj/item/weapon/stool/bar,
 /obj/effect/landmark/corpse/clown,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "qO" = (
-/obj/machinery/light/he{
+/obj/machinery/light/small{
 	dir = 8
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/misc)
 "qV" = (
@@ -731,11 +755,18 @@
 	},
 /obj/structure/railing/glass,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
+"rr" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/effect/decal/cleanable/cockroach_remains,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "rB" = (
 /obj/structure/catwalk{
 	icon_state = "catwalk3"
@@ -756,9 +787,7 @@
 	},
 /obj/effect/landmark/corpse/assistant,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "sg" = (
@@ -800,12 +829,18 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/misc)
-"tb" = (
-/mob/living/simple_animal/robot{
-	icon_state = "kodiak-service";
-	icon = 'icons/mob/robots.dmi';
-	name = "cook bot"
+"sP" = (
+/obj/structure/railing{
+	dir = 8
 	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning";
+	dir = 1
+	},
+/area/vault/fastfood)
+"tb" = (
+/mob/living/simple_animal/hostile/cookbot,
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
@@ -816,17 +851,15 @@
 	},
 /area/vault/fastfood/kitchen)
 "to" = (
-/obj/machinery/light/he/burned{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9;
 	initialize_directions = 9
 	},
+/obj/machinery/light/small/broken{
+	dir = 4
+	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/misc)
 "tv" = (
@@ -856,9 +889,7 @@
 	},
 /obj/effect/landmark/corpse/civilian,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "tT" = (
@@ -873,9 +904,7 @@
 	icon_state = "4-8"
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "tZ" = (
@@ -935,6 +964,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/discountburger,
 /obj/item/weapon/reagent_containers/food/drinks/discount_ramen,
 /obj/item/weapon/reagent_containers/food/snacks/pie/discount,
+/obj/effect/decal/cleanable/cobweb,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "uT" = (
@@ -951,9 +981,7 @@
 	name = "Pod Station Airlock"
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/misc)
 "vi" = (
@@ -975,9 +1003,7 @@
 	},
 /obj/effect/landmark/corpse/russian,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "wc" = (
@@ -1007,9 +1033,13 @@
 /turf/simulated/wall/r_wall,
 /area/vault/fastfood/misc)
 "wE" = (
-/obj/structure/lattice,
-/turf/space,
-/area)
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
 "xk" = (
 /obj/structure/bed/chair/plastic{
 	dir = 8
@@ -1020,9 +1050,7 @@
 	icon_state = "4-8"
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "yh" = (
@@ -1035,6 +1063,14 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
+"yt" = (
+/obj/machinery/light/small/broken{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
 "yH" = (
 /obj/structure/closet/crate/freezer,
 /obj/item/slime_extract/silver,
@@ -1067,9 +1103,7 @@
 "zj" = (
 /obj/structure/railing/glass,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "zB" = (
@@ -1083,13 +1117,21 @@
 	initialize_directions = 9
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Af" = (
 /turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"Ag" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	dir = 8;
 	icon_state = "asteroidwarning"
 	},
 /area/vault/fastfood)
@@ -1117,36 +1159,7 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/misc)
-"AT" = (
-/obj/structure/table/reinforced,
-/obj/item/weapon/reagent_containers/glass/rag,
-/obj/machinery/door/poddoor/shutters{
-	density = 0;
-	dir = 8;
-	icon_state = "shutter0";
-	id_tag = "kitchen";
-	name = "Kitchen Shutters";
-	opacity = 0
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
-	},
-/area/vault/fastfood/dining)
-"Bf" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4;
-	initialize_directions = 12
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
-	},
-/area/vault/fastfood/dining)
-"BJ" = (
+"Az" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
@@ -1157,6 +1170,46 @@
 	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
+"AT" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/glass/rag,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"Bf" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"BJ" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/vomit,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
 "BT" = (
 /obj/machinery/power/apc{
 	pixel_y = -24
@@ -1164,8 +1217,7 @@
 /obj/structure/cable/yellow,
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "Cb" = (
@@ -1211,18 +1263,14 @@
 	initialize_directions = 12
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Dg" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Dm" = (
@@ -1230,17 +1278,13 @@
 	dir = 4
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Do" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Dp" = (
@@ -1255,9 +1299,7 @@
 	initialize_directions = 5
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "DI" = (
@@ -1275,17 +1317,13 @@
 	initialize_directions = 12
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "DS" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "DT" = (
@@ -1294,11 +1332,21 @@
 	dir = 1
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
+"DU" = (
+/obj/window_grille_spawner/reinforced,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 2;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/kitchen)
 "DW" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -1306,9 +1354,7 @@
 	icon_state = "1-2"
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Ee" = (
@@ -1336,9 +1382,7 @@
 	initialize_directions = 12
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "ED" = (
@@ -1350,11 +1394,21 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/misc)
+"EN" = (
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
 "ES" = (
 /obj/machinery/door/airlock,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4;
 	initialize_directions = 12
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -1441,12 +1495,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
-"Hn" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidwarning"
-	},
-/area/vault/fastfood)
 "Hr" = (
 /obj/structure/railing{
 	dir = 1
@@ -1471,10 +1519,9 @@
 	dir = 4
 	},
 /obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/vomit,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Hx" = (
@@ -1499,18 +1546,27 @@
 "Ii" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
 	dir = 8;
 	icon_state = "shutter0";
-	id_tag = "kitchen";
+	id_tag = "vaultkitchen";
 	name = "Kitchen Shutters";
 	opacity = 0
 	},
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"Iw" = (
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor{
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "ID" = (
@@ -1546,9 +1602,7 @@
 	pixel_y = 6
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Jw" = (
@@ -1574,8 +1628,21 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
+"JG" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
 "JJ" = (
 /obj/window_grille_spawner/reinforced,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/kitchen)
 "JK" = (
@@ -1615,14 +1682,21 @@
 	pixel_y = -2
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Ka" = (
 /turf/simulated/wall,
 /area/vault/fastfood/kitchen)
+"Kb" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
 "Kf" = (
 /obj/item/weapon/kitchen/rollingpin,
 /obj/structure/table,
@@ -1643,9 +1717,7 @@
 	initialize_directions = 7
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "La" = (
@@ -1677,9 +1749,7 @@
 	initialize_directions = 12
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Lt" = (
@@ -1691,9 +1761,7 @@
 	name = "Pod Station Airlock"
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "LK" = (
@@ -1702,9 +1770,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "LS" = (
@@ -1731,9 +1797,7 @@
 	initialize_directions = 6
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "LZ" = (
@@ -1766,9 +1830,7 @@
 	icon_state = "1-2"
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Mo" = (
@@ -1795,9 +1857,7 @@
 "Nf" = (
 /obj/item/weapon/stool/bar,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Nn" = (
@@ -1819,15 +1879,14 @@
 	icon_state = "1-2"
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Ny" = (
 /obj/machinery/atmospherics/unary/tank/air{
 	dir = 4
 	},
+/obj/effect/decal/cleanable/cobweb,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -1846,6 +1905,13 @@
 	dir = 1
 	},
 /obj/structure/airshield,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/kitchen)
 "NS" = (
@@ -1857,21 +1923,24 @@
 "NZ" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
 	dir = 8;
 	icon_state = "shutter0";
-	id_tag = "kitchen";
+	id_tag = "vaultkitchen";
 	name = "Kitchen Shutters";
 	opacity = 0
 	},
-/obj/machinery/light/he{
-	dir = 1
-	},
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "Od" = (
@@ -1892,9 +1961,7 @@
 	icon_state = "1-4"
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Og" = (
@@ -1916,9 +1983,7 @@
 	},
 /obj/structure/railing/glass,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Pt" = (
@@ -1928,9 +1993,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/landmark/corpse/janitor,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Py" = (
@@ -1938,6 +2001,9 @@
 	icon_state = "floor6"
 	},
 /obj/item/weapon/soap,
+/obj/effect/decal/cleanable/blood/gibs{
+	icon_state = "gib1"
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -1963,7 +2029,7 @@
 /area/vault/fastfood/misc)
 "Qf" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/light/he{
+/obj/machinery/light/small{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -1989,6 +2055,13 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/misc)
+"QU" = (
+/obj/effect/decal/cleanable/generic,
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
 "Ra" = (
 /obj/machinery/vending/boozeomat,
 /turf/simulated/floor{
@@ -2020,24 +2093,30 @@
 "Rl" = (
 /obj/structure/table/reinforced,
 /obj/machinery/pos,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
 	dir = 8;
 	icon_state = "shutter0";
-	id_tag = "kitchen";
+	id_tag = "vaultkitchen";
 	name = "Kitchen Shutters";
 	opacity = 0
 	},
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "RD" = (
 /obj/machinery/door/airlock/freezer,
 /obj/structure/window/barricade/full/block,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2050,18 +2129,21 @@
 	},
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "Sv" = (
 /obj/structure/table/reinforced,
 /obj/machinery/chem_dispenser/booze_dispenser/mapping,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
 	dir = 8;
 	icon_state = "shutter0";
-	id_tag = "kitchen";
+	id_tag = "vaultkitchen";
 	name = "Kitchen Shutters";
 	opacity = 0
 	},
@@ -2082,8 +2164,7 @@
 	},
 /turf/simulated/floor{
 	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
 "SP" = (
@@ -2101,9 +2182,7 @@
 	pixel_y = 2
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Tt" = (
@@ -2119,6 +2198,12 @@
 /area/vault/fastfood)
 "VB" = (
 /obj/structure/closet/secure_closet/freezer/fridge,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"VG" = (
+/obj/effect/decal/cleanable/generic,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2140,9 +2225,7 @@
 	},
 /obj/structure/railing/glass,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "Wo" = (
@@ -2152,9 +2235,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "WK" = (
@@ -2164,13 +2245,17 @@
 	density = 0;
 	dir = 8;
 	icon_state = "shutter0";
-	id_tag = "kitchen";
+	id_tag = "vaultkitchen";
 	name = "Kitchen Shutters";
 	opacity = 0
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4;
 	initialize_directions = 12
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -2179,11 +2264,15 @@
 "WO" = (
 /obj/structure/table/reinforced,
 /obj/machinery/chem_dispenser/soda_dispenser/mapping,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
 	dir = 8;
 	icon_state = "shutter0";
-	id_tag = "kitchen";
+	id_tag = "vaultkitchen";
 	name = "Kitchen Shutters";
 	opacity = 0
 	},
@@ -2241,11 +2330,7 @@
 	},
 /area/vault/fastfood/kitchen)
 "XK" = (
-/mob/living/simple_animal/robot{
-	icon_state = "kodiak-service";
-	icon = 'icons/mob/robots.dmi';
-	name = "cook bot"
-	},
+/mob/living/simple_animal/hostile/cookbot,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2257,13 +2342,31 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
+"XV" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "Yh" = (
-/obj/structure/lattice,
-/obj/structure/lattice,
-/turf/space,
-/area)
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Yx" = (
+/obj/machinery/media/jukebox,
+/obj/effect/decal/cleanable/cobweb,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
 "Yz" = (
-/obj/machinery/light/he/burned,
+/obj/machinery/light/small/broken,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2283,6 +2386,7 @@
 	locked = 1;
 	req_access_txt = "53"
 	},
+/obj/structure/falserwall,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2297,13 +2401,13 @@ VU
 Tt
 yX
 tv
-lT
+Kb
 Tt
 yX
 EW
 Tt
 yX
-mM
+sP
 EW
 Tt
 yX
@@ -2329,7 +2433,7 @@ Af
 Tt
 Tt
 ar
-Hn
+JG
 Tt
 Tt
 FX
@@ -2342,23 +2446,23 @@ pC
 pC
 pC
 pC
-wE
+Tt
 ID
 FZ
 FZ
 JQ
-ME
+yt
 vi
 FZ
 ME
 vi
-vi
+Ag
 ME
 ME
 vi
 FZ
 aa
-wE
+Tt
 pC
 pC
 pC
@@ -2367,7 +2471,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
 tT
 tT
@@ -2383,7 +2487,7 @@ CD
 CD
 CD
 aa
-Yh
+mS
 pC
 pC
 pC
@@ -2392,17 +2496,17 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
 uA
 uT
 am
-cD
-cD
+Yx
+Yh
 bX
 vZ
-cD
-cD
+Yh
+Yh
 rP
 bu
 Wn
@@ -2417,7 +2521,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
 LS
 JK
@@ -2442,7 +2546,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
 rC
 Rk
@@ -2451,11 +2555,11 @@ EA
 Dg
 LK
 LK
-cD
-cD
-ig
+Yh
+Yh
+BJ
 xk
-cD
+Yh
 KI
 qO
 Gb
@@ -2467,24 +2571,24 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
-rC
+XV
 Cb
 am
 CT
 Do
 Do
-cD
-cD
-cD
-cD
-RY
-cD
+Iw
+Yh
+Yh
+Yh
+jH
+Yh
 LC
 fA
 vc
-gw
+ju
 pC
 pC
 "}
@@ -2492,9 +2596,9 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
-rC
+eb
 jv
 am
 qV
@@ -2517,12 +2621,12 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
 rC
 cC
 nP
-qV
+ql
 ge
 JZ
 pR
@@ -2542,20 +2646,20 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
-rC
+rr
 Xr
 am
 qV
-ig
+wE
 ig
 pR
 jf
 Wo
 Pt
 Ln
-cD
+Yh
 am
 ME
 Fg
@@ -2567,10 +2671,10 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
-BJ
-Rk
+Az
+aM
 nP
 bf
 DS
@@ -2580,7 +2684,7 @@ hj
 KY
 DS
 zB
-cD
+Iw
 KI
 aa
 mX
@@ -2592,20 +2696,20 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
 qs
 aJ
 am
-Bf
-cD
+pj
+Yh
 DT
 qJ
 Nf
 kY
 Nf
 tV
-cD
+Yh
 am
 aa
 mX
@@ -2617,7 +2721,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
 tT
 tT
@@ -2642,9 +2746,9 @@ pC
 pC
 pC
 pC
-wE
+Tt
 FY
-Or
+hT
 YQ
 uy
 PE
@@ -2667,7 +2771,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tT
 Ap
 PW
@@ -2678,7 +2782,7 @@ hz
 cD
 cD
 Bf
-cD
+mh
 RY
 iP
 am
@@ -2692,7 +2796,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 wr
 wr
 wr
@@ -2717,7 +2821,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 wr
 Ny
 Em
@@ -2725,7 +2829,7 @@ yK
 CG
 tz
 Gm
-Li
+QU
 Li
 Fj
 Li
@@ -2733,7 +2837,7 @@ cG
 VB
 Ka
 aa
-wE
+Tt
 pC
 pC
 pC
@@ -2742,7 +2846,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 wr
 Og
 ED
@@ -2755,10 +2859,10 @@ Li
 Fj
 vR
 cG
-eb
+qA
 Ka
 aa
-wE
+Tt
 pC
 pC
 pC
@@ -2767,7 +2871,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 wr
 cu
 dh
@@ -2781,9 +2885,9 @@ tZ
 ak
 tb
 Li
-JJ
+DU
 JE
-wE
+Tt
 pC
 pC
 pC
@@ -2792,10 +2896,10 @@ pC
 pC
 pC
 pC
-wE
+Tt
 wr
 Cy
-Or
+EN
 QH
 ck
 tz
@@ -2805,7 +2909,7 @@ Hs
 ub
 Kf
 fy
-Li
+VG
 Ka
 JE
 mX
@@ -2817,7 +2921,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 wr
 Or
 sA
@@ -2826,7 +2930,7 @@ Aj
 tz
 Qf
 Li
-Li
+VG
 kZ
 LZ
 cG
@@ -2842,7 +2946,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 tz
 Zy
 sv
@@ -2867,7 +2971,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 Ka
 Py
 dF
@@ -2881,7 +2985,7 @@ WS
 Hj
 fy
 Li
-JJ
+DU
 aa
 mX
 mX
@@ -2892,7 +2996,7 @@ pC
 pC
 pC
 pC
-wE
+Tt
 Ka
 ch
 Xb
@@ -2917,7 +3021,7 @@ pC
 pC
 qa
 pC
-wE
+Tt
 Ka
 Ka
 Ka
@@ -3042,7 +3146,7 @@ He
 pC
 ld
 pC
-pC
+Tt
 Tt
 mX
 mX

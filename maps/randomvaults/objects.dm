@@ -1027,3 +1027,49 @@
 	name = "restaurant delivery bot"
 	desc = "Serves food asked for by a customer at the drive-thru."
 	icon_state = "kodiak-service"
+
+/mob/living/simple_animal/hostile/cookbot
+	name = "cook bot"
+	desc = "Cooks food for the restaurant."
+	icon_state = "kodiak-service"
+
+	melee_damage_lower = 10
+	melee_damage_upper = 25
+
+	maxHealth = 200
+	health = 200
+
+	attacktext = "electrocutes"
+	a_intent = I_HURT
+
+	attack_sound = 'sound/effects/eleczap.ogg'
+
+	ranged = 1
+	projectiletype = /obj/item/projectile/bullet
+	projectilesound = 'sound/weapons/Gunshot.ogg'
+	casingtype = /obj/item/ammo_casing/a357
+
+	unsuitable_atmos_damage = 0
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
+
+	mob_property_flags = MOB_ROBOTIC
+
+	idle_vision_range = 1
+
+/mob/living/simple_animal/hostile/cookbot/New()
+	..()
+	var/datum/component/ai/area_territorial/signal/AT = add_component(/datum/component/ai/area_territorial/signal)
+	AT.SetArea(get_area(src))
+	AT.id_tag = "vaultkitchen"
+	add_component(/datum/component/ai/conversation)
+	var/datum/component/ai/area_territorial/say/AT = add_component(/datum/component/ai/area_territorial/say)
+	AT.SetArea(get_area(src))
+	AT.enter_args = list("Stop! Intruder!")
