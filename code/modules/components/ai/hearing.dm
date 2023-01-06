@@ -119,7 +119,7 @@
 					spawn_items()
 				else
 					M.say("That will be [currentprice] credit\s.")
-					if(!src in active_components)
+					if(!(src in active_components))
 						active_components += src
 
 /datum/component/ai/hearing/order/process()
