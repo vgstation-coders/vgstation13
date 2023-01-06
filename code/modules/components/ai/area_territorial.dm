@@ -51,6 +51,10 @@
 /datum/component/ai/area_territorial/signal/proc/exit_function(obj/machinery/M)
 	return
 
-/datum/component/ai/area_territorial/signal/doorshut/enter_function(obj/machinery/door/D)
+/datum/component/ai/area_territorial/signal/door/enter_function(obj/machinery/door/D)
 	if(istype(D) && !D.density)
 		D.close()
+
+/datum/component/ai/area_territorial/signal/door/exit_function(obj/machinery/door/D)
+	if(istype(D) && D.density)
+		D.open()
