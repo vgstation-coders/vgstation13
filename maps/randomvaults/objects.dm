@@ -1066,7 +1066,7 @@
 
 /mob/living/simple_animal/hostile/cookbot/New()
 	..()
-	var/datum/component/ai/area_territorial/signal/AT = add_component(/datum/component/ai/area_territorial/signal)
+	var/datum/component/ai/area_territorial/signal/doorclose/AT = add_component(/datum/component/ai/area_territorial/signal/doorclose)
 	AT.SetArea(get_area(src))
 	AT.id_tag = "vaultkitchen"
 	add_component(/datum/component/ai/conversation)
