@@ -729,7 +729,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/space,
 					/obj/item/clothing/head/helmet/space,
 					/obj/item/weapon/tank/oxygen,
-					/obj/item/weapon/tank/emergency_oxygen/double,
+					/obj/item/weapon/tank/emergency_oxygen/engi,
 					/obj/item/clothing/mask/breath)
 	cost = 150
 	containertype = /obj/structure/closet/crate/basic
@@ -770,7 +770,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	var/researcher = list(/obj/item/clothing/suit/space/rig/grey/researcher)
 	var/soldier = list(/obj/item/clothing/suit/space/rig/grey/soldier)
 	contains = list(/obj/item/weapon/tank/oxygen/red,
-					/obj/item/weapon/tank/emergency_oxygen/double,
+					/obj/item/weapon/tank/emergency_oxygen/engi,
 					/obj/item/clothing/mask/breath)
 	cost = 200
 	containertype = /obj/structure/closet/crate/basic
