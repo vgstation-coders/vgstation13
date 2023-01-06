@@ -56,6 +56,10 @@
 	requires_power = 1
 	icon_state = "kitchen"
 
+/area/vault/fastfood/drivethru
+	requires_power = 1
+	icon_state = "cafeteria"
+
 /area/vault/fastfood/misc
 	requires_power = 1
 	icon_state = "fmaint"

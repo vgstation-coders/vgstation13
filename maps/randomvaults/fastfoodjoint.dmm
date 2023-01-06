@@ -124,7 +124,7 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/drivethru)
 "ch" = (
 /obj/machinery/gibber,
 /obj/machinery/light/small{
@@ -619,10 +619,18 @@
 	pixel_y = -28;
 	canhear_range = 1
 	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/apc{
+	pixel_y = 24;
+	dir = 1]
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/drivethru)
 "mx" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -825,7 +833,7 @@
 	broadcasting = 1
 	},
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/drivethru)
 "sn" = (
 /obj/structure/urinal{
 	dir = 8;
@@ -1068,6 +1076,9 @@
 	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
+"wH" = (
+/turf/simulated/wall,
+/area/vault/fastfood/drivethru)
 "xk" = (
 /obj/structure/bed/chair/plastic{
 	dir = 8
@@ -1248,6 +1259,22 @@
 	icon_state = "cafeteria"
 	},
 /area/vault/fastfood/dining)
+"BX" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
 "Cb" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -1859,7 +1886,7 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/drivethru)
 "ME" = (
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
@@ -1924,7 +1951,7 @@
 	},
 /obj/structure/airshield,
 /turf/simulated/floor/plating,
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/drivethru)
 "NS" = (
 /obj/machinery/cooking/deepfryer,
 /turf/simulated/floor{
@@ -2396,7 +2423,7 @@
 /area/vault/fastfood/kitchen)
 "YF" = (
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/drivethru)
 "YQ" = (
 /obj/effect/decal/cleanable/crayon,
 /turf/simulated/floor{
@@ -3029,7 +3056,7 @@ Ka
 XG
 mb
 mb
-mb
+BX
 mb
 IQ
 Le
@@ -3053,9 +3080,9 @@ Ka
 Ka
 Ka
 JJ
-Ka
+wH
 mr
-Ka
+wH
 JJ
 Ka
 Ka
@@ -3071,16 +3098,16 @@ Lt
 rB
 rB
 UT
-Ka
-Ka
+wH
+wH
 wc
 lo
 lo
 iK
 iK
-Ka
+wH
 ND
-Ka
+wH
 lo
 iK
 lo
@@ -3146,8 +3173,8 @@ Lt
 rB
 rB
 MU
-Ka
-Ka
+wH
+wH
 fZ
 Qr
 Qr
