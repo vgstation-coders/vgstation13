@@ -220,6 +220,15 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
+"eb" = (
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -22
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
 "eL" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light/small/broken{
@@ -308,6 +317,14 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
+"gw" = (
+/obj/docking_port/destination/salvage/fast_food{
+	dir = 2
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
 "gJ" = (
 /obj/machinery/cooking/candy,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -412,6 +429,10 @@
 /area/vault/fastfood)
 "iP" = (
 /obj/machinery/chem_master/snackbar_machine,
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -22
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker";
@@ -500,6 +521,15 @@
 	icon_state = "asteroidwarning"
 	},
 /area/vault/fastfood)
+"lT" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
 "mb" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/cable/yellow{
@@ -574,6 +604,16 @@
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/fastfood/dining)
+"mM" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning";
+	dir = 1
+	},
+/area/vault/fastfood)
 "mS" = (
 /obj/structure/lattice,
 /obj/structure/lattice,
@@ -1107,11 +1147,16 @@
 	},
 /area/vault/fastfood/dining)
 "BJ" = (
-/obj/docking_port/destination/salvage/fast_food{
-	dir = 2
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
-/turf/space,
-/area)
+/obj/machinery/alarm{
+	pixel_y = 24
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "BT" = (
 /obj/machinery/power/apc{
 	pixel_y = -24
@@ -1351,6 +1396,7 @@
 /area/vault/fastfood/kitchen)
 "FX" = (
 /obj/structure/railing,
+/obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidwarning";
 	dir = 1
@@ -1395,10 +1441,17 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
+"Hn" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
 "Hr" = (
 /obj/structure/railing{
 	dir = 1
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidwarning"
 	},
@@ -1464,6 +1517,7 @@
 /obj/structure/railing{
 	dir = 1
 	},
+/obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -2239,40 +2293,17 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 VU
 Tt
 yX
 tv
-EW
+lT
 Tt
 yX
 EW
 Tt
 yX
-tv
+mM
 EW
 Tt
 yX
@@ -2283,29 +2314,6 @@ pC
 pC
 "}
 (2,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -2321,7 +2329,7 @@ Af
 Tt
 Tt
 ar
-Af
+Hn
 Tt
 Tt
 FX
@@ -2331,29 +2339,6 @@ pC
 pC
 "}
 (3,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -2382,29 +2367,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 tT
 tT
@@ -2427,29 +2389,6 @@ pC
 pC
 "}
 (5,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -2478,29 +2417,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 tT
 LS
@@ -2526,29 +2442,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 tT
 rC
@@ -2566,34 +2459,11 @@ cD
 KI
 qO
 Gb
-JE
+JQ
 pC
 pC
 "}
 (8,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -2614,34 +2484,11 @@ cD
 LC
 fA
 vc
-aa
+gw
 pC
 pC
 "}
 (9,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -2662,34 +2509,11 @@ DS
 Jw
 to
 Gb
-aa
+ME
 pC
 pC
 "}
 (10,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -2718,29 +2542,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 tT
 rC
@@ -2766,32 +2567,9 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 tT
-rC
+BJ
 Rk
 nP
 bf
@@ -2811,29 +2589,6 @@ pC
 pC
 "}
 (13,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -2862,29 +2617,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 tT
 tT
@@ -2907,29 +2639,6 @@ pC
 pC
 "}
 (15,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -2958,29 +2667,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 tT
 Ap
@@ -3003,29 +2689,6 @@ pC
 pC
 "}
 (17,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -3054,29 +2717,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 wr
 Ny
@@ -3102,29 +2742,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 wr
 Og
@@ -3138,7 +2755,7 @@ Li
 Fj
 vR
 cG
-Li
+eb
 Ka
 aa
 wE
@@ -3147,29 +2764,6 @@ pC
 pC
 "}
 (20,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -3198,29 +2792,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 wr
 Cy
@@ -3243,29 +2814,6 @@ pC
 pC
 "}
 (22,1,1) = {"
-BJ
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -3294,29 +2842,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 tz
 Zy
@@ -3339,29 +2864,6 @@ pC
 pC
 "}
 (24,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -3390,29 +2892,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 wE
 Ka
 ch
@@ -3435,29 +2914,6 @@ pC
 pC
 "}
 (26,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 qa
 pC
@@ -3483,29 +2939,6 @@ qa
 pC
 "}
 (27,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 La
 Lt
 rB
@@ -3531,29 +2964,6 @@ Lt
 He
 "}
 (28,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 pC
 Tt
@@ -3582,29 +2992,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 mS
 iD
 YF
@@ -3627,29 +3014,6 @@ pC
 pC
 "}
 (30,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 La
 Lt
 rB
@@ -3675,29 +3039,6 @@ Lt
 He
 "}
 (31,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 pC
 ld
 pC
