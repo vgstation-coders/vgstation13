@@ -135,7 +135,7 @@
 				currentprice -= amount
 				if(currentprice <= 0)
 					if(currentprice < 0)
-						dispense_cash(abs(currentprice),M.loc)
+						dispense_cash(abs(currentprice),get_step(M,M.dir))
 						currentprice = 0
 					spawn_item()
 					active_components -= src
