@@ -28,16 +28,9 @@
 	},
 /area/vault/fastfood)
 "bf" = (
-/obj/structure/table/plastic,
-/obj/item/trash/fries_cone,
-/obj/item/trash/ketchup_packet,
-/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
-	pixel_x = -2;
-	pixel_y = 4
-	},
-/obj/item/weapon/reagent_containers/food/condiment/peppermill{
-	pixel_x = 2;
-	pixel_y = 6
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1;
+	initialize_directions = 14
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -46,24 +39,42 @@
 	},
 /area/vault/fastfood/dining)
 "bg" = (
-/obj/structure/closet/secure_closet/freezer/money,
-/obj/item/weapon/reagent_containers/food/snacks/meat/grey,
-/obj/item/weapon/reagent_containers/food/snacks/meat/diona,
-/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
-/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
-/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig,
+/obj/structure/rack,
+/obj/item/weapon/reagent_containers/food/snacks/mint,
+/obj/item/weapon/reagent_containers/food/snacks/mint,
+/obj/item/weapon/reagent_containers/food/snacks/mint,
+/obj/item/weapon/reagent_containers/food/drinks/coloring,
+/obj/item/weapon/reagent_containers/food/condiment/syndisauce,
+/obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
 "bi" = (
-/mob/living/simple_animal/hostile/monster/cyber_horror/Vox{
-	environment_smash_flags = 0
+/obj/structure/table/plastic,
+/obj/item/trash/emptybowl,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor{
-	icon_state = "freezerfloor"
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/dining)
 "bu" = (
 /obj/structure/bed/chair/comfy/couch/mid/red{
 	dir = 4
@@ -112,35 +123,17 @@
 	},
 /area/vault/fastfood/kitchen)
 "ck" = (
-/obj/structure/table/plastic,
-/obj/item/trash/emptybowl,
-/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
-	pixel_x = -2;
-	pixel_y = 4
-	},
-/obj/item/weapon/reagent_containers/food/condiment/peppermill{
-	pixel_x = 2;
-	pixel_y = 6
-	},
-/obj/structure/railing/glass{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
-	},
-/area/vault/fastfood/dining)
+/obj/structure/closet,
+/obj/item/weapon/reagent_containers/food/snacks/discountchocolate,
+/obj/item/weapon/reagent_containers/food/snacks/discountburrito,
+/obj/item/weapon/reagent_containers/food/snacks/discountburger,
+/obj/item/weapon/reagent_containers/food/drinks/discount_ramen,
+/obj/item/weapon/reagent_containers/food/snacks/pie/discount,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "cu" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 8;
-	external_pressure_bound = 101;
-	on = 1
-	},
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/dining)
+/turf/simulated/wall/r_wall,
+/area/vault/fastfood/misc)
 "cC" = (
 /obj/effect/decal/warning_stripes/pathmarkers{
 	dir = 8
@@ -202,20 +195,31 @@
 	},
 /area/vault/fastfood/dining)
 "dn" = (
-/mob/living/simple_animal/cockroach,
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor5"
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
 	},
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/kitchen)
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"dZ" = (
+/turf/simulated/wall,
+/area/vault/fastfood/misc)
 "eL" = (
 /obj/structure/fence/end{
 	dir = 4
 	},
 /turf/unsimulated/floor/asteroid,
 /area/vault/fastfood)
+"eQ" = (
+/mob/living/simple_animal/hostile/bigroach{
+	environment_smash_flags = 0
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
 "fy" = (
 /obj/effect/decal/warning_stripes/pathmarkers{
 	dir = 8
@@ -242,26 +246,30 @@
 	},
 /area/vault/fastfood/dining)
 "ge" = (
-/obj/machinery/light/small/broken{
+/obj/structure/table/plastic,
+/obj/item/trash/fries_cone,
+/obj/item/trash/ketchup_packet,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/obj/machinery/light/he/burned{
 	dir = 1
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4;
-	initialize_directions = 12
-	},
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/kitchen)
-"gl" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker";
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/fastfood/dining)
+"gl" = (
+/obj/window_grille_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "gJ" = (
 /obj/machinery/cooking/candy,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -312,33 +320,43 @@
 	},
 /area/vault/fastfood/dining)
 "hF" = (
-/obj/structure/closet/secure_closet/freezer/money,
-/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
-/obj/item/weapon/reagent_containers/food/snacks/meat/tomatomeat,
-/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
-/obj/item/weapon/reagent_containers/food/snacks/meat/slime,
-/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor3"
-	},
+/obj/structure/rack,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/farwacube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/neaeracube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/stokcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/isopodcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
 "hL" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
+/obj/machinery/light/small/broken,
+/turf/unsimulated/floor/airless{
+	dir = 1;
+	icon_state = "asteroidwarning"
 	},
-/area/vault/fastfood/dining)
+/area/vault/fastfood)
 "if" = (
-/obj/structure/railing/glass{
-	dir = 1
+/obj/structure/table/reinforced,
+/obj/item/trash/plate,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "kitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
 	},
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 4;
-	external_pressure_bound = 101;
-	on = 1
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -375,8 +393,13 @@
 	},
 /area/vault/fastfood/dining)
 "jf" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 6
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing/glass,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	external_pressure_bound = 101;
+	on = 1
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -385,22 +408,22 @@
 	},
 /area/vault/fastfood/dining)
 "jv" = (
-/obj/structure/closet/secure_closet/freezer/money,
-/obj/item/weapon/reagent_containers/food/snacks/meat/polyp,
-/obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman,
-/obj/item/weapon/reagent_containers/food/snacks/meat/mimic,
-/obj/item/weapon/reagent_containers/food/snacks/meat/insectoid,
-/obj/item/weapon/reagent_containers/food/snacks/meat/human,
-/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice,
+/obj/structure/rack,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
 "ku" = (
-/obj/machinery/disposal/compactor,
-/obj/machinery/light/he/burned,
-/obj/machinery/light/he/burned{
-	dir = 1
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -454,39 +477,37 @@
 	},
 /area/vault/fastfood)
 "mb" = (
-/mob/living/simple_animal/cockroach,
-/obj/effect/decal/cleanable/blood{
-	icon_state = "gibbl4"
+/mob/living/simple_animal/hostile/monster/cyber_horror/Vox{
+	environment_smash_flags = 0
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
 "md" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid/underground,
 /area/vault/fastfood)
 "mg" = (
-/obj/structure/bed/chair/comfy/couch/left/red,
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/railing/glass{
-	dir = 1
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
-/obj/effect/landmark/corpse/assistant,
-/obj/effect/landmark/corpse/assistant,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
-	},
-/area/vault/fastfood/dining)
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "mi" = (
-/obj/docking_port/destination/salvage/fast_food{
-	dir = 2
+/obj/machinery/door/airlock,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
-/turf/space,
-/area)
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/dining)
 "mr" = (
 /obj/structure/bed/chair/office{
 	dir = 4
@@ -559,23 +580,12 @@
 /area/vault/fastfood/dining)
 "nP" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/railing/glass,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
-	},
+/turf/simulated/wall,
 /area/vault/fastfood/dining)
 "oh" = (
-/obj/structure/bed/chair/comfy/couch/right/red{
-	dir = 4
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
-	},
-/area/vault/fastfood/dining)
+/obj/window_grille_spawner/reinforced,
+/turf/simulated/wall,
+/area/vault/fastfood/misc)
 "ol" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
@@ -584,15 +594,15 @@
 	},
 /area/vault/fastfood)
 "oI" = (
-/obj/machinery/light/he/burned{
-	dir = 4
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 8;
+	flickering = 1
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/dining)
+/area/vault/fastfood/misc)
 "pm" = (
 /obj/structure/table,
 /obj/machinery/microwave{
@@ -624,17 +634,13 @@
 /turf/space,
 /area/vault/fastfood)
 "qs" = (
-/mob/living/simple_animal/cockroach,
-/obj/effect/decal/cleanable/blood,
-/obj/effect/decal/cleanable/blood,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4;
-	initialize_directions = 12
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor3"
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
 "qJ" = (
 /obj/item/weapon/stool/bar,
 /obj/effect/landmark/corpse/clown,
@@ -645,19 +651,25 @@
 	},
 /area/vault/fastfood/dining)
 "qO" = (
-/obj/machinery/door/airlock,
+/mob/living/simple_animal/cockroach,
+/obj/effect/decal/cleanable/blood,
+/obj/effect/decal/cleanable/blood,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
 "qV" = (
-/obj/machinery/light/small/broken{
-	dir = 1
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
 	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidwarning"
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
 	},
-/area/vault/fastfood)
+/area/vault/fastfood/dining)
 "rB" = (
 /turf/unsimulated/floor/airless{
 	dir = 1;
@@ -754,8 +766,19 @@
 	},
 /area/vault/fastfood/dining)
 "tT" = (
-/obj/machinery/power/apc{
-	pixel_y = -24
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"tV" = (
+/obj/item/weapon/stool/bar,
+/obj/structure/railing/glass,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -810,37 +833,32 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/vault/fastfood)
 "uA" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/railing/glass{
-	dir = 1
+/obj/docking_port/destination/salvage/fast_food{
+	dir = 2
 	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+/obj/docking_port/destination/salvage/fast_food{
+	dir = 2
 	},
-/area/vault/fastfood/dining)
+/turf/space,
+/area)
 "uT" = (
-/mob/living/simple_animal/hostile/bigroach{
-	environment_smash_flags = 0
-	},
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/kitchen)
-"vc" = (
+/mob/living/simple_animal/cockroach,
 /obj/effect/decal/cleanable/blood{
-	icon_state = "floor6"
-	},
-/obj/item/weapon/soap,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 10;
-	initialize_directions = 6
+	icon_state = "floor5"
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
+"vc" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "vi" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
@@ -876,18 +894,52 @@
 	},
 /area/vault/fastfood)
 "we" = (
-/obj/structure/table/plastic,
-/obj/item/trash/candy,
-/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
-	pixel_x = -2;
-	pixel_y = 4
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
 	},
-/obj/item/weapon/reagent_containers/food/condiment/peppermill{
-	pixel_x = 2;
-	pixel_y = 6
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
 	},
-/obj/structure/railing/glass{
-	dir = 1
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"wr" = (
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/obj/structure/mirror{
+	pixel_x = 32
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"wE" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"xk" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -895,37 +947,6 @@
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/fastfood/dining)
-"wr" = (
-/obj/effect/decal/cleanable/crayon,
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/dining)
-"wE" = (
-/obj/structure/closet/crate/freezer,
-/obj/item/weapon/reagent_containers/food/condiment/chillwax,
-/obj/item/weapon/reagent_containers/food/condiment/coldsauce,
-/obj/item/weapon/reagent_containers/food/condiment/exotic,
-/obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig,
-/obj/item/weapon/reagent_containers/food/condiment/honey,
-/obj/item/weapon/reagent_containers/food/condiment/maple_syrup,
-/obj/item/weapon/reagent_containers/food/condiment/polypgelatin,
-/obj/item/weapon/reagent_containers/food/condiment/royaljelly,
-/obj/item/weapon/reagent_containers/food/condiment/zammild,
-/obj/item/weapon/reagent_containers/food/condiment/zamspices,
-/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin,
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/kitchen)
-"xk" = (
-/obj/machinery/light/small/broken,
-/obj/machinery/light/small/broken,
-/turf/unsimulated/floor/airless{
-	dir = 1;
-	icon_state = "asteroidwarning"
-	},
-/area/vault/fastfood)
 "yh" = (
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor4"
@@ -937,16 +958,24 @@
 	},
 /area/vault/fastfood/kitchen)
 "yH" = (
-/obj/structure/table/plastic,
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/plate,
-/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
-	pixel_x = -2;
-	pixel_y = 4
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
 	},
-/obj/item/weapon/reagent_containers/food/condiment/peppermill{
-	pixel_x = 2;
-	pixel_y = 6
+/obj/structure/rack,
+/obj/item/weapon/storage/box/lights/mixed,
+/obj/item/weapon/reagent_containers/spray/cleaner,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"yK" = (
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -954,10 +983,15 @@
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/fastfood/dining)
-"yK" = (
+"yX" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/space,
-/area)
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
 "zj" = (
 /obj/structure/railing/glass,
 /turf/simulated/floor{
@@ -967,15 +1001,11 @@
 	},
 /area/vault/fastfood/dining)
 "zB" = (
-/obj/machinery/light/he{
-	dir = 4
-	},
+/obj/effect/decal/cleanable/crayon,
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/dining)
+/area/vault/fastfood/misc)
 "Af" = (
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidwarning"
@@ -988,20 +1018,19 @@
 	},
 /area/vault/fastfood)
 "Ap" = (
-/obj/structure/rack,
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger,
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/farwacube,
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/neaeracube,
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/stokcube,
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/isopodcube,
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/obj/structure/closet/crate/freezer,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
 "AT" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/reagent_containers/glass/rag,
@@ -1032,39 +1061,46 @@
 	},
 /area/vault/fastfood/dining)
 "BJ" = (
-/obj/structure/closet/crate/freezer,
-/obj/abstract/map/spawner/allfood,
-/obj/abstract/map/spawner/allfood,
-/obj/abstract/map/spawner/allfood,
-/obj/abstract/map/spawner/allfood,
-/obj/abstract/map/spawner/allfood,
-/obj/abstract/map/spawner/allfood,
-/obj/abstract/map/spawner/allfood,
-/obj/abstract/map/spawner/allfood,
+/obj/structure/toilet{
+	dir = 8
+	},
+/obj/structure/window/reinforced/tinted,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"BT" = (
+/obj/machinery/power/apc{
+	pixel_y = 24;
+	dir = 1]
+	},
+/obj/structure/closet/secure_closet/freezer/kitchen,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
 "Cb" = (
-/obj/structure/toilet{
-	dir = 8
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 4
 	},
-/obj/structure/window/reinforced/tinted,
-/obj/effect/decal/cleanable/crayon,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/dining)
+/area/vault/fastfood/misc)
 "Cy" = (
-/obj/structure/urinal{
-	dir = 8;
-	pixel_x = 30
+/obj/structure/closet/secure_closet/freezer/money,
+/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/tomatomeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/slime,
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor3"
 	},
-/obj/effect/decal/cleanable/crayon,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/dining)
+/area/vault/fastfood/misc)
 "CD" = (
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
@@ -1072,25 +1108,14 @@
 /turf/space,
 /area/vault/fastfood)
 "CG" = (
-/obj/structure/table/plastic,
 /obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/kitchen/utensil/fork,
-/obj/item/weapon/reagent_containers/food/condiment/ketchup{
-	pixel_x = -5;
-	pixel_y = -2
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
 	},
-/obj/item/weapon/reagent_containers/food/condiment/mustard{
-	pixel_x = 5;
-	pixel_y = 2
-	},
-/obj/item/trash/discountchocolate,
-/obj/structure/railing/glass,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
-	},
-/area/vault/fastfood/dining)
+/obj/structure/reagent_dispensers/watertank,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "CT" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4;
@@ -1137,24 +1162,12 @@
 	},
 /area/vault/fastfood)
 "DI" = (
-/obj/structure/table/plastic,
-/obj/item/weapon/kitchen/utensil/fork,
-/obj/item/weapon/reagent_containers/food/condiment/ketchup{
-	pixel_x = -5;
-	pixel_y = -2
-	},
-/obj/item/weapon/reagent_containers/food/condiment/mustard{
-	pixel_x = 5;
-	pixel_y = 2
-	},
-/obj/item/trash/chips,
-/obj/structure/railing/glass,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker";
 	tag = "icon-checker (NORTHEAST)"
 	},
-/area/vault/fastfood/dining)
+/area/vault/fastfood/misc)
 "DS" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
@@ -1174,6 +1187,18 @@
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/fastfood/dining)
+"DW" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/fastfood/dining)
 "Ee" = (
 /obj/machinery/cooking/cerealmaker,
 /turf/simulated/floor{
@@ -1181,24 +1206,40 @@
 	},
 /area/vault/fastfood/kitchen)
 "Em" = (
+/obj/machinery/power/apc{
+	pixel_y = 24;
+	dir = 1]
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"EA" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 8;
-	initialize_directions = 7
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/kitchen)
-"ED" = (
-/obj/structure/toilet{
-	dir = 8
-	},
-/obj/structure/window/reinforced/tinted,
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/fastfood/dining)
+"ED" = (
+/obj/structure/closet/secure_closet/freezer/money,
+/obj/item/weapon/reagent_containers/food/snacks/meat/grey,
+/obj/item/weapon/reagent_containers/food/snacks/meat/diona,
+/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
 "ES" = (
 /obj/machinery/door/airlock,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -1249,17 +1290,14 @@
 	},
 /area/vault/fastfood/kitchen)
 "FY" = (
-/obj/structure/closet/crate/freezer,
-/obj/item/slime_extract/silver,
-/obj/item/slime_extract/silver,
-/obj/item/slime_extract/silver,
-/obj/item/asteroid/hivelord_core,
-/obj/item/asteroid/hivelord_core,
-/obj/item/asteroid/hivelord_core,
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
 	},
-/area/vault/fastfood/kitchen)
+/obj/structure/mopbucket,
+/obj/item/weapon/mop,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "FZ" = (
 /turf/unsimulated/floor/airless{
 	dir = 8;
@@ -1344,11 +1382,18 @@
 	},
 /area/vault/fastfood/dining)
 "IQ" = (
-/obj/structure/closet/secure_closet/freezer/kitchen,
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
 	},
-/area/vault/fastfood/kitchen)
+/obj/structure/rack,
+/obj/item/clothing/mask/gas,
+/obj/item/clothing/head/hardhat/red,
+/obj/item/weapon/extinguisher,
+/obj/item/weapon/tank/oxygen,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
 "Je" = (
 /obj/structure/table/plastic,
 /obj/effect/decal/cleanable/dirt,
@@ -1372,6 +1417,17 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9;
 	initialize_directions = 5
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"JF" = (
+/obj/machinery/door/airlock,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -1423,11 +1479,22 @@
 /turf/simulated/floor/plating,
 /area/vault/fastfood/dining)
 "KY" = (
-/obj/structure/fence/corner{
-	dir = 4
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
-/turf/unsimulated/floor/asteroid,
-/area/vault/fastfood)
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5;
+	initialize_directions = 9
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/fastfood/dining)
 "La" = (
 /obj/machinery/light/small,
 /turf/space,
@@ -1444,14 +1511,15 @@
 	},
 /area/vault/fastfood/kitchen)
 "Ln" = (
-/obj/machinery/light/small{
-	dir = 8;
-	flickering = 1
+/obj/machinery/light/he{
+	dir = 8
 	},
 /turf/simulated/floor{
-	icon_state = "freezerfloor"
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
 	},
-/area/vault/fastfood/dining)
+/area/vault/fastfood/misc)
 "Lt" = (
 /turf/simulated/wall,
 /area/vault/fastfood)
@@ -1478,15 +1546,15 @@
 	},
 /area/vault/fastfood/dining)
 "LS" = (
-/obj/machinery/light/he{
-	dir = 8
+/obj/machinery/light/he/burned{
+	dir = 4
 	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker";
 	tag = "icon-checker (NORTHEAST)"
 	},
-/area/vault/fastfood/dining)
+/area/vault/fastfood/misc)
 "LU" = (
 /obj/machinery/light/small{
 	dir = 4
@@ -1508,14 +1576,39 @@
 	},
 /area/vault/fastfood/kitchen)
 "Mg" = (
-/obj/machinery/light/small{
+/obj/effect/decal/cleanable/dirt,
+/mob/living/simple_animal/hostile/giant_spider{
+	environment_smash_flags = 64
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"Mk" = (
+/obj/structure/table/plastic,
+/obj/item/trash/candy,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/obj/structure/railing/glass{
 	dir = 1
 	},
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidwarning"
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
-/area/vault/fastfood)
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/fastfood/dining)
 "Mo" = (
 /obj/machinery/light/small{
 	dir = 4
@@ -1545,18 +1638,39 @@
 	},
 /area/vault/fastfood/dining)
 "Nn" = (
-/obj/window_grille_spawner/reinforced,
-/turf/simulated/wall,
+/obj/structure/table/plastic,
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/weapon/reagent_containers/food/condiment/ketchup{
+	pixel_x = -5;
+	pixel_y = -2
+	},
+/obj/item/weapon/reagent_containers/food/condiment/mustard{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/obj/item/trash/chips,
+/obj/structure/railing/glass,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
 /area/vault/fastfood/dining)
 "Ny" = (
-/obj/machinery/power/apc{
-	pixel_y = 24;
-	dir = 1]
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	external_pressure_bound = 101;
+	on = 1
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
 "ND" = (
 /obj/structure/fence{
 	dir = 8
@@ -1596,19 +1710,21 @@
 	},
 /area/vault/fastfood/dining)
 "Od" = (
-/obj/structure/fence/end,
-/turf/unsimulated/floor/asteroid,
-/area/vault/fastfood)
-"Og" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/asteroid,
-/area/vault/fastfood)
-"Or" = (
-/obj/structure/bed/chair/comfy/couch/turn/inward/red{
-	dir = 4
+/obj/structure/table/plastic,
+/obj/item/weapon/reagent_containers/food/condiment/mustard{
+	pixel_x = 5;
+	pixel_y = 2
 	},
-/obj/structure/railing/glass{
-	dir = 1
+/obj/item/weapon/reagent_containers/food/condiment/ketchup{
+	pixel_x = -5;
+	pixel_y = -2
+	},
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/trash/popcorn,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -1616,6 +1732,25 @@
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/fastfood/dining)
+"Og" = (
+/obj/structure/urinal{
+	dir = 8;
+	pixel_x = 30
+	},
+/obj/effect/decal/cleanable/crayon,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"Or" = (
+/mob/living/simple_animal/cockroach,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "gibbl4"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
 "Pp" = (
 /obj/structure/bed/chair/comfy/couch/right/red{
 	dir = 1
@@ -1639,6 +1774,15 @@
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/fastfood/dining)
+"Py" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor6"
+	},
+/obj/item/weapon/soap,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
 "PE" = (
 /mob/living/simple_animal/mouse/common/black,
 /turf/simulated/floor{
@@ -1646,14 +1790,21 @@
 	},
 /area/vault/fastfood/kitchen)
 "PV" = (
-/obj/effect/decal/cleanable/dirt,
-/mob/living/simple_animal/hostile/giant_spider{
-	environment_smash_flags = 64
-	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
+"PW" = (
+/obj/machinery/door/airlock/external{
+	id_tag = "podstationclosing";
+	name = "Pod Station Airlock"
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "checker";
+	tag = "icon-checker (NORTHEAST)"
+	},
+/area/vault/fastfood/misc)
 "Qf" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light/he{
@@ -1665,26 +1816,30 @@
 /area/vault/fastfood/kitchen)
 "Qr" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/railing/glass,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+/obj/machinery/light/small/broken{
+	dir = 1
 	},
-/area/vault/fastfood/dining)
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
 "QH" = (
-/obj/structure/rack,
-/obj/item/weapon/reagent_containers/food/snacks/mint,
-/obj/item/weapon/reagent_containers/food/snacks/mint,
-/obj/item/weapon/reagent_containers/food/snacks/mint,
-/obj/item/weapon/reagent_containers/food/drinks/coloring,
-/obj/item/weapon/reagent_containers/food/condiment/syndisauce,
-/obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver,
+/obj/structure/closet/crate/freezer,
+/obj/item/weapon/reagent_containers/food/condiment/chillwax,
+/obj/item/weapon/reagent_containers/food/condiment/coldsauce,
+/obj/item/weapon/reagent_containers/food/condiment/exotic,
+/obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig,
+/obj/item/weapon/reagent_containers/food/condiment/honey,
+/obj/item/weapon/reagent_containers/food/condiment/maple_syrup,
+/obj/item/weapon/reagent_containers/food/condiment/polypgelatin,
+/obj/item/weapon/reagent_containers/food/condiment/royaljelly,
+/obj/item/weapon/reagent_containers/food/condiment/zammild,
+/obj/item/weapon/reagent_containers/food/condiment/zamspices,
+/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
 "Ra" = (
 /obj/machinery/vending/boozeomat,
 /turf/simulated/floor{
@@ -1692,36 +1847,23 @@
 	},
 /area/vault/fastfood/kitchen)
 "Rf" = (
-/obj/machinery/door/airlock/vault{
-	icon_state = "door_locked";
-	locked = 1;
-	req_access_txt = "53"
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4;
-	initialize_directions = 12
+/obj/machinery/power/port_gen/pacman,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"Rk" = (
+/obj/structure/toilet{
+	dir = 8
 	},
+/obj/structure/window/reinforced/tinted,
+/obj/effect/decal/cleanable/crayon,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
-"Rk" = (
-/obj/structure/table/reinforced,
-/obj/item/trash/plate,
-/obj/machinery/door/poddoor/shutters{
-	density = 0;
-	dir = 8;
-	icon_state = "shutter0";
-	id_tag = "kitchen";
-	name = "Kitchen Shutters";
-	opacity = 0
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
-	},
-/area/vault/fastfood/dining)
+/area/vault/fastfood/misc)
 "Rl" = (
 /obj/structure/table/reinforced,
 /obj/machinery/pos,
@@ -1748,17 +1890,11 @@
 	},
 /area/vault/fastfood/kitchen)
 "RY" = (
-/obj/structure/table/plastic,
-/obj/item/weapon/reagent_containers/food/condiment/mustard{
-	pixel_x = 5;
-	pixel_y = 2
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
-/obj/item/weapon/reagent_containers/food/condiment/ketchup{
-	pixel_x = -5;
-	pixel_y = -2
-	},
-/obj/item/weapon/kitchen/utensil/fork,
-/obj/item/trash/popcorn,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker";
@@ -1781,8 +1917,16 @@
 	},
 /area/vault/fastfood/kitchen)
 "SC" = (
-/obj/item/weapon/stool/bar,
-/obj/structure/railing/glass,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "checker";
@@ -1827,18 +1971,17 @@
 	},
 /area/vault/fastfood/kitchen)
 "VX" = (
-/obj/structure/sink{
-	dir = 4;
-	pixel_x = 11
-	},
-/obj/structure/mirror{
-	pixel_x = 32
-	},
-/obj/effect/decal/cleanable/dirt,
+/obj/structure/closet/secure_closet/freezer/money,
+/obj/item/weapon/reagent_containers/food/snacks/meat/polyp,
+/obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman,
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic,
+/obj/item/weapon/reagent_containers/food/snacks/meat/insectoid,
+/obj/item/weapon/reagent_containers/food/snacks/meat/human,
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/dining)
+/area/vault/fastfood/misc)
 "Wn" = (
 /obj/structure/bed/chair/comfy/couch/turn/inward/red{
 	dir = 1
@@ -1927,16 +2070,17 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/vault/fastfood)
 "Xr" = (
-/obj/structure/rack,
-/obj/item/weapon/lazarus_injector/advanced,
-/obj/item/weapon/lazarus_injector/advanced,
-/obj/item/weapon/lazarus_injector/advanced,
-/obj/item/weapon/lazarus_injector/advanced,
-/obj/item/weapon/lazarus_injector/advanced,
+/obj/structure/closet/crate/freezer,
+/obj/item/slime_extract/silver,
+/obj/item/slime_extract/silver,
+/obj/item/slime_extract/silver,
+/obj/item/asteroid/hivelord_core,
+/obj/item/asteroid/hivelord_core,
+/obj/item/asteroid/hivelord_core,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
 "XG" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
@@ -1977,20 +2121,18 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/vault/fastfood/kitchen)
 "YQ" = (
-/obj/machinery/atmospherics/unary/tank/air{
-	dir = 4
+/obj/machinery/light/small/broken{
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/misc)
 "Zy" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor3"
-	},
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 1;
-	initialize_directions = 14
+/obj/machinery/door/airlock/vault{
+	icon_state = "door_locked";
+	locked = 1;
+	req_access_txt = "53"
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -1998,10 +2140,6 @@
 /area/vault/fastfood/kitchen)
 
 (1,1,1) = {"
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -2050,10 +2188,6 @@ pC
 pC
 "}
 (2,1,1) = {"
-pC
-pC
-pC
-pC
 pC
 pC
 pC
@@ -2139,10 +2273,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
 CD
 pC
 Tt
@@ -2177,6 +2307,8 @@ pC
 pC
 pC
 pC
+mX
+mX
 pC
 pC
 pC
@@ -2184,17 +2316,11 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
+mX
+mX
+mX
+Tt
+Tt
 CD
 Tt
 Tt
@@ -2202,8 +2328,8 @@ Tt
 Tt
 Tt
 CD
-pC
-pC
+mX
+Tt
 "}
 (5,1,1) = {"
 pC
@@ -2226,36 +2352,32 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
+mS
 mX
 mX
-pC
-pC
-pC
-pC
-pC
-pC
-pC
+mX
 mX
 mX
 mX
 Tt
 Tt
+Tt
+mX
+mX
+mX
+mX
+mX
+mX
+mX
 Af
 iD
 iD
-fy
-iD
-iD
+WX
+Xg
+Xg
 rB
-mS
-pC
+mX
+Tt
 "}
 (6,1,1) = {"
 pC
@@ -2277,40 +2399,36 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-mS
 mX
-mX
-mX
-mX
-mX
-mX
-Tt
-Tt
-Tt
-mX
-mX
-mX
-mX
-mX
-mX
+ME
+ME
+ME
+JQ
+ME
+ME
+JQ
+JQ
+JQ
+ME
+JQ
+JQ
+JQ
+ME
+ME
+JQ
 mX
 Af
 iD
+iD
+WX
 Xg
-fy
 iD
-iD
-rB
-mX
+tb
+Lt
 Tt
 "}
 (7,1,1) = {"
-mi
+uA
 pC
 pC
 pC
@@ -2329,32 +2447,28 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-Tt
-Tt
 mX
+JQ
+dZ
+dZ
+dZ
+am
+KI
+KI
+am
+am
+KI
+KI
+KI
+am
+am
+am
+JQ
 mX
-mX
-mX
-mX
-mX
-mX
-mX
-mX
-mX
-mX
-mX
-mX
-mX
-mX
-mX
-Fg
+Af
 iD
-Xg
-WX
+iD
+fy
 iD
 iD
 aJ
@@ -2381,37 +2495,33 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-Tt
-ME
-ME
-ME
-JQ
-ME
-ME
-JQ
-JQ
-JQ
-ME
-JQ
-JQ
-JQ
-ME
-ME
-ME
 mX
+JQ
+dZ
+ck
+Rf
+am
+cD
+cD
+bX
+vZ
+cD
+cD
+rP
+bu
+Wn
+am
+ME
+ME
 Fg
 iD
 iD
-WX
+fy
 iD
 iD
-aJ
+rB
 mX
-Tt
+mX
 "}
 (9,1,1) = {"
 pC
@@ -2433,35 +2543,31 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-mX
+Tt
 ME
+dZ
+dn
+we
+mi
+KY
+DW
+Mk
+Nn
+DW
+DW
+bi
+Od
+Pp
 am
-am
-am
-KI
-KI
-KI
-am
-am
-KI
-KI
-KI
-am
-am
-am
-JQ
-mX
-Af
+dZ
+dZ
+Qr
 iD
 iD
 WX
-Xg
-Xg
-rB
+iD
+iD
+aJ
 mX
 Tt
 "}
@@ -2485,36 +2591,32 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
+Tt
+ME
+dZ
+mg
+tT
+am
+EA
+Dg
+LK
+LK
+cD
+cD
+ig
+xk
+cD
+KI
+Ln
+gl
+Fg
+iD
+iD
+fy
+iD
+iD
+aJ
 mX
-ME
-am
-Or
-bu
-oh
-cD
-cD
-bX
-vZ
-cD
-cD
-rP
-bu
-Wn
-am
-JQ
-ME
-Af
-iD
-iD
-WX
-Xg
-iD
-tb
-Lt
 Tt
 "}
 (11,1,1) = {"
@@ -2537,37 +2639,33 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-mX
-JQ
-am
+Tt
+ME
+dZ
 mg
 yH
-CG
+am
+CT
+Do
 Do
 cD
-we
-DI
 cD
 cD
-ck
+cD
 RY
-Pp
-am
-am
-am
-qV
+cD
+LC
+DI
+PW
+Af
 iD
+Xg
+WX
+Xg
 iD
-fy
-iD
-iD
-aJ
+rB
 mX
-mX
+Tt
 "}
 (12,1,1) = {"
 pC
@@ -2589,36 +2687,32 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-mX
+Tt
 JQ
-KI
-cD
-ig
-LK
-Dg
-Dg
-LK
-LK
-cD
-cD
-ig
-ig
+dZ
+mg
+IQ
+am
+qV
+hB
+Dm
+pR
+zj
+tS
+Hv
+ku
 cD
 KI
 LS
-KI
-Fg
+gl
+Af
 iD
-iD
+Xg
 fy
-iD
-iD
-rB
-mX
+Xg
+Xg
+cG
+Lt
 mX
 "}
 (13,1,1) = {"
@@ -2641,37 +2735,33 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
 Tt
-ME
-KI
-cD
-Do
-cD
-cD
-Do
-Do
-cD
-cD
-cD
-cD
-cD
-cD
-LC
-cD
-LC
-Fg
+JQ
+dZ
+mg
+CG
+nP
+qV
+ge
+JZ
+pR
+zj
+Je
+SP
+ku
+mZ
+am
+dZ
+dZ
+fA
 iD
 iD
-WX
+fy
 iD
 iD
-aJ
+rB
 mX
-Tt
+mX
 "}
 (14,1,1) = {"
 pC
@@ -2693,37 +2783,33 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
 Tt
 ME
-KI
-cD
-Do
-zj
-hB
-Dm
+dZ
+mg
+FY
+am
+qV
+ig
+ig
 pR
-zj
-tS
-Hv
-pR
-Do
+jf
+Wo
+Pt
+RY
 cD
-KI
-oI
-KI
+am
+ME
+ME
 Fg
 iD
 iD
-fy
+WX
 iD
 iD
 aJ
 mX
-Tt
+mX
 "}
 (15,1,1) = {"
 pC
@@ -2745,33 +2831,29 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
 Tt
 ME
-am
-ku
-Do
+dZ
+mg
+tT
 nP
 bf
-JZ
-pR
-zj
-Je
-SP
-uA
-Do
-mZ
-am
-am
-am
-fA
+DS
+DS
+DS
+hj
+fZ
+cD
+RY
+cD
+KI
+ME
+eL
+Fg
 iD
-Xg
+iD
 WX
-Xg
+iD
 iD
 rB
 mX
@@ -2797,37 +2879,33 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
 Tt
-JQ
+ME
+dZ
+Em
+vc
 am
+Bf
 cD
-cD
-zj
-ig
-ig
-if
-Qr
-Wo
-Pt
-pR
-cD
+DT
+qJ
+Nf
+kY
+Nf
+tV
 cD
 am
 ME
-ME
-Af
+Yh
+Fg
 iD
-Xg
+iD
 fy
 Xg
 Xg
-cG
-Lt
+rB
 mX
+Tt
 "}
 (17,1,1) = {"
 pC
@@ -2842,258 +2920,42 @@ pC
 pC
 pC
 pC
+qa
 pC
 pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-Tt
+qa
+mX
 JQ
-KI
-jf
-DS
-gl
-DS
-DS
-hj
-DS
-DS
-fZ
-cD
-cD
-cD
-KI
-ME
-eL
-Af
-iD
-iD
-fy
-iD
-iD
-rB
-mX
-mX
-"}
-(18,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-Tt
-ME
-am
-CT
-zB
-cD
-Do
-cD
-DT
-qJ
-Nf
-kY
-Nf
-SC
-cD
-am
-JQ
-Yh
-Fg
-iD
-iD
-WX
-iD
-iD
-aJ
-mX
-mX
-"}
-(19,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-Tt
-ME
+dZ
+dZ
+dZ
 am
 ES
-am
-am
-am
 am
 NZ
 Ii
 Rl
 cV
 AT
-Rk
+if
 ns
 am
 ME
-Yh
-Fg
-iD
-iD
-WX
-iD
-iD
-rB
-mX
-Tt
-"}
-(20,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-Tt
-ME
-Nn
-cu
-wr
-hL
-Ln
-am
-mJ
-cD
-dm
-li
-cD
-cD
-tT
-am
-ME
 ND
-Fg
-iD
-iD
-fy
-Xg
-Xg
-rB
-mX
-Tt
-"}
-(21,1,1) = {"
-pC
-pC
-yK
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-qa
-pC
-pC
-pC
-pC
-pC
-qa
-mX
-JQ
-am
-Cb
-ED
-VX
-Cy
-am
-hz
-cD
-cD
-Bf
-cD
-cD
-iP
-am
-ME
-Lt
-fA
+Af
 iD
 iD
 WX
 Xg
 iD
-xk
-Lt
+rB
+mX
 Tt
 "}
-(22,1,1) = {"
-pC
-pC
-pC
-pC
+(18,1,1) = {"
 pC
 pC
 pC
@@ -3115,125 +2977,117 @@ pC
 Lt
 to
 JQ
-tz
-tz
-tz
-tz
-tz
+oh
+PV
+zB
+oI
+Ny
+am
+mJ
+cD
+dm
+li
+cD
+SC
+yK
+am
+ME
+Lt
+fA
+iD
+Xg
+WX
+iD
+iD
+hL
+Lt
+mS
+"}
+(19,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+CD
+pC
+pC
+mS
+pC
+mS
+CD
+mX
+JQ
+dZ
+Rk
+BJ
+wr
+Og
+am
+hz
+cD
+cD
+Bf
+cD
+RY
+iP
+am
+JQ
+Yh
+Af
+iD
+iD
+WX
+iD
+iD
+aJ
+mX
+Tt
+"}
+(20,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+CD
+Tt
+Tt
+Tt
+Tt
+Tt
+CD
+mX
+ME
+cu
+cu
+cu
+cu
+cu
 tz
 Ka
 Sv
 WO
 WK
 Ra
-qO
+JF
 Ka
 Ka
 JQ
-Yh
-Af
-iD
-Xg
-WX
-iD
-iD
-aJ
-mX
-mS
-"}
-(23,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-CD
-pC
-pC
-mS
-pC
-mS
-CD
-mX
-JQ
-tz
-YQ
-bg
-jv
-hF
-tz
-Gm
-Li
-Li
-Fj
-Li
-Li
-VB
-Ka
-JQ
-Yh
-Af
-iD
-iD
-WX
-iD
-iD
-aJ
-mX
-Tt
-"}
-(24,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-CD
-Tt
-Tt
-Tt
-Tt
-Tt
-CD
-mX
-ME
-tz
-qs
-PV
-uT
-mb
-tz
-Li
-Li
-Li
-Fj
-vR
-Li
-Li
-Ka
-ME
 Yh
 Af
 iD
@@ -3245,11 +3099,7 @@ rB
 mX
 Tt
 "}
-(25,1,1) = {"
-pC
-pC
-pC
-pC
+(21,1,1) = {"
 pC
 pC
 pC
@@ -3271,37 +3121,33 @@ iD
 rB
 eL
 ME
+cu
+Cb
+ED
+VX
+Cy
 tz
-ge
-QH
-Xr
-Ap
-tz
-vR
+Gm
 Li
-pm
-tZ
-ak
-XK
 Li
-JJ
+Fj
+Li
+Li
+VB
+Ka
 ME
-Lt
-Mg
+Yh
+Fg
 iD
 iD
 WX
 iD
 iD
-tb
-Lt
+rB
+mX
 Tt
 "}
-(26,1,1) = {"
-pC
-pC
-pC
-pC
+(22,1,1) = {"
 pC
 pC
 pC
@@ -3323,37 +3169,33 @@ iD
 rB
 Yh
 ME
+cu
+qO
+Mg
+eQ
+Or
 tz
-Zy
-LZ
-dn
-bi
-tz
+Li
+Li
+Li
+Fj
 vR
 Li
-Hs
-ub
-Kf
-vR
 Li
 Ka
-JQ
-Yh
-Af
+ME
+Lt
+fA
 iD
 iD
 fy
 iD
 iD
-rB
-mX
+tb
+Lt
 mX
 "}
-(27,1,1) = {"
-pC
-pC
-pC
-pC
+(23,1,1) = {"
 pC
 pC
 pC
@@ -3375,11 +3217,107 @@ iD
 aJ
 Yh
 JQ
+cu
+YQ
+bg
+jv
+hF
 tz
-Fj
-wE
-FY
-BJ
+vR
+Li
+pm
+tZ
+ak
+XK
+Li
+JJ
+JQ
+Yh
+Af
+iD
+iD
+fy
+iD
+Xg
+aJ
+mX
+mX
+"}
+(24,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+Fg
+iD
+iD
+fy
+Xg
+iD
+rB
+Yh
+JQ
+cu
+qs
+PV
+uT
+mb
+tz
+vR
+Li
+Hs
+ub
+Kf
+vR
+Li
+Ka
+JQ
+Yh
+Af
+iD
+Xg
+fy
+iD
+Xg
+rB
+mX
+mX
+"}
+(25,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+Fg
+iD
+iD
+fy
+Xg
+iD
+cG
+Lt
+JQ
+cu
+PV
+QH
+Xr
+Ap
 tz
 Qf
 Li
@@ -3392,12 +3330,108 @@ Ka
 JQ
 Yh
 Af
+Xg
+Xg
+fy
+iD
+iD
+rB
+mX
+mX
+"}
+(26,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+mX
+mX
+Fg
 iD
 iD
 fy
+Xg
+iD
+aJ
+Yh
+ME
+tz
+Zy
+sv
+sv
+sv
+tz
+vR
+XK
+NS
+gJ
+Ee
+PE
+Li
+Ka
+ME
+Lt
+yX
+Xg
+iD
+fy
+iD
+iD
+cG
+Lt
+mX
+"}
+(27,1,1) = {"
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+pC
+Tt
+mX
+Af
 iD
 Xg
+WX
+iD
+iD
 aJ
+Yh
+ME
+Ka
+Py
+wE
+yh
+Hx
+RD
+XS
+Gf
+Fu
+JE
+Hj
+vR
+Li
+JJ
+ME
+Yh
+Fg
+Xg
+iD
+fy
+iD
+iD
+rB
 mX
 mX
 "}
@@ -3412,44 +3446,40 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-mX
+Tt
 mX
 Fg
 iD
 iD
-fy
-Xg
+WX
+iD
 iD
 rB
 Yh
 JQ
-tz
-Rf
-sv
-sv
-sv
-tz
-vR
-XK
-NS
-gJ
-Ee
-PE
-Li
 Ka
-JQ
+ch
+Xb
+bG
+gU
+Ka
+BT
+vR
+vR
+vR
+vR
+vR
+Le
+Ka
+ME
 Yh
 Af
 iD
 Xg
-fy
-iD
+WX
 Xg
-rB
+Xg
+aJ
 mX
 mX
 "}
@@ -3464,166 +3494,6 @@ pC
 pC
 pC
 pC
-pC
-pC
-pC
-pC
-mX
-mX
-Fg
-iD
-iD
-fy
-Xg
-iD
-cG
-Lt
-JQ
-Ka
-vc
-Em
-yh
-Hx
-RD
-XS
-Gf
-Fu
-JE
-Hj
-vR
-Li
-JJ
-ME
-Lt
-fA
-Xg
-Xg
-fy
-iD
-iD
-cG
-Lt
-mX
-"}
-(30,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-mX
-mX
-Fg
-iD
-iD
-fy
-Xg
-iD
-aJ
-Yh
-ME
-Ka
-ch
-Xb
-bG
-gU
-Ka
-Ny
-vR
-vR
-vR
-vR
-vR
-Li
-Ka
-ME
-Yh
-Fg
-Xg
-iD
-fy
-iD
-iD
-rB
-mX
-mX
-"}
-(31,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-Tt
-mX
-Af
-iD
-Xg
-WX
-iD
-iD
-aJ
-Yh
-ME
-Ka
-Ka
-Ka
-Ka
-Ka
-Ka
-IQ
-vR
-vR
-Li
-Li
-Li
-Le
-Ka
-ME
-Yh
-Fg
-Xg
-iD
-fy
-iD
-iD
-rB
-mX
-mX
-"}
-(32,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
 Tt
 mX
 Fg
@@ -3633,13 +3503,13 @@ WX
 iD
 iD
 rB
-Yh
-JQ
-ME
-JQ
-JQ
-ME
-ME
+tv
+mX
+Ka
+Ka
+Ka
+Ka
+Ka
 Ka
 Ka
 JJ
@@ -3650,58 +3520,6 @@ JJ
 Ka
 Ka
 ME
-Yh
-Af
-iD
-Xg
-WX
-Xg
-Xg
-aJ
-mX
-mX
-"}
-(33,1,1) = {"
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-pC
-Tt
-mX
-Fg
-iD
-iD
-WX
-iD
-iD
-rB
-KY
-Og
-Og
-Og
-Og
-Od
-ME
-JQ
-JQ
-ME
-Ka
-EW
-Ka
-ME
-ME
-ME
-JQ
 tv
 Af
 iD
@@ -3713,11 +3531,7 @@ aJ
 mX
 Tt
 "}
-(34,1,1) = {"
-pC
-pC
-pC
-pC
+(30,1,1) = {"
 pC
 pC
 pC
@@ -3747,9 +3561,9 @@ lo
 lo
 iK
 iK
-lo
-lo
-lo
+Ka
+EW
+Ka
 lo
 iK
 lo
@@ -3765,11 +3579,7 @@ aJ
 mX
 Tt
 "}
-(35,1,1) = {"
-pC
-pC
-pC
-pC
+(31,1,1) = {"
 pC
 pC
 pC
@@ -3817,11 +3627,7 @@ rB
 mX
 Tt
 "}
-(36,1,1) = {"
-pC
-pC
-pC
-pC
+(32,1,1) = {"
 pC
 pC
 pC
@@ -3869,11 +3675,7 @@ aJ
 mX
 mX
 "}
-(37,1,1) = {"
-pC
-pC
-pC
-pC
+(33,1,1) = {"
 pC
 pC
 pC
@@ -3921,11 +3723,7 @@ aJ
 mX
 mX
 "}
-(38,1,1) = {"
-pC
-pC
-pC
-pC
+(34,1,1) = {"
 pC
 pC
 pC
@@ -3973,11 +3771,7 @@ rB
 mX
 Tt
 "}
-(39,1,1) = {"
-pC
-pC
-pC
-pC
+(35,1,1) = {"
 pC
 pC
 pC
@@ -4025,11 +3819,7 @@ rB
 mX
 Tt
 "}
-(40,1,1) = {"
-pC
-pC
-pC
-pC
+(36,1,1) = {"
 pC
 pC
 pC
@@ -4077,11 +3867,7 @@ rB
 Tt
 Tt
 "}
-(41,1,1) = {"
-pC
-pC
-pC
-pC
+(37,1,1) = {"
 pC
 pC
 pC
@@ -4129,11 +3915,7 @@ rB
 Tt
 Tt
 "}
-(42,1,1) = {"
-pC
-pC
-pC
-pC
+(38,1,1) = {"
 pC
 pC
 pC
@@ -4181,11 +3963,7 @@ aJ
 Tt
 Tt
 "}
-(43,1,1) = {"
-pC
-pC
-pC
-pC
+(39,1,1) = {"
 pC
 pC
 pC
@@ -4233,11 +4011,7 @@ aJ
 Tt
 Tt
 "}
-(44,1,1) = {"
-pC
-pC
-pC
-pC
+(40,1,1) = {"
 pC
 pC
 pC
@@ -4285,11 +4059,7 @@ aJ
 Tt
 Tt
 "}
-(45,1,1) = {"
-pC
-pC
-pC
-pC
+(41,1,1) = {"
 pC
 pC
 pC
@@ -4337,11 +4107,7 @@ rB
 Tt
 Tt
 "}
-(46,1,1) = {"
-pC
-pC
-pC
-pC
+(42,1,1) = {"
 pC
 pC
 pC
@@ -4389,11 +4155,7 @@ rB
 Tt
 pC
 "}
-(47,1,1) = {"
-pC
-pC
-pC
-pC
+(43,1,1) = {"
 pC
 pC
 pC
@@ -4441,11 +4203,7 @@ CD
 pC
 pC
 "}
-(48,1,1) = {"
-pC
-pC
-pC
-pC
+(44,1,1) = {"
 pC
 pC
 pC
@@ -4493,11 +4251,7 @@ CD
 pC
 pC
 "}
-(49,1,1) = {"
-pC
-pC
-pC
-pC
+(45,1,1) = {"
 pC
 pC
 pC
@@ -4545,11 +4299,7 @@ Lt
 He
 pC
 "}
-(50,1,1) = {"
-pC
-pC
-pC
-pC
+(46,1,1) = {"
 pC
 pC
 pC
