@@ -7801,6 +7801,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"source-map@npm:^0.7.4":
+  version: 0.7.4
+  resolution: "source-map@npm:0.7.4"
+  checksum: 01cc5a74b1f0e1d626a58d36ad6898ea820567e87f18dfc9d24a9843a351aaa2ec09b87422589906d6ff1deed29693e176194dc88bcae7c9a852dc74b311dbf5
+  languageName: node
+  linkType: hard
+
 "sprintf-js@npm:~1.0.2":
   version: 1.0.3
   resolution: "sprintf-js@npm:1.0.3"
@@ -8263,7 +8270,7 @@ resolve@^2.0.0-next.3:
   dependencies:
     axios: ^0.21.2
     glob: ^7.1.7
-    source-map: ^0.7.3
+    source-map: ^0.7.4
     stacktrace-parser: ^0.1.10
     ws: ^7.5.3
   languageName: unknown
