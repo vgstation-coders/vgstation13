@@ -1069,7 +1069,17 @@
 	var/datum/component/ai/area_territorial/signal/doorshut/AT = add_component(/datum/component/ai/area_territorial/signal/doorshut)
 	AT.SetArea(get_area(src))
 	AT.id_tag = "vaultkitchen"
+	AT.enter_signal = /event/comp_ai_cmd_aggro
+	AT.exit_signal = /event/comp_ai_cmd_loseaggro
+	register_event(/event/comp_ai_cmd_aggro, AT, .proc/Aggro)
+	register_event(/event/comp_ai_cmd_loseaggro, AT, .proc/LoseAggro)
 	add_component(/datum/component/ai/conversation)
 	var/datum/component/ai/area_territorial/say/AT2 = add_component(/datum/component/ai/area_territorial/say)
 	AT2.SetArea(get_area(src))
 	AT2.enter_args = list("Stop! Intruder!")
+	LoseAggro()
+
+/mob/living/simple_animal/hostile/cookbot/Destroy()
+	unregister_event(/event/comp_ai_cmd_aggro, AT, .proc/Aggro)
+	unregister_event(/event/comp_ai_cmd_loseaggro, AT, .proc/LoseAggro)
+	..()

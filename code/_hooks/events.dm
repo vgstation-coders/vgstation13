@@ -293,6 +293,9 @@
 
 /event/comp_ai_cmd_order
 
+/event/comp_ai_cmd_aggro
+/event/comp_ai_cmd_loseaggro
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.
