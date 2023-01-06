@@ -94,6 +94,15 @@
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor5"
 	},
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey,
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey{
+	pixel_y = 4;
+	pixel_x = -4
+	},
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey{
+	pixel_x = 4;
+	pixel_y = -4
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -329,6 +338,17 @@
 /obj/structure/kitchenspike,
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor3"
+	},
+/obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake{
+	pixel_y = 2;
+	pixel_x = -10
+	},
+/obj/item/weapon/reagent_containers/food/snacks/fries/cone{
+	pixel_x = -2
+	},
+/obj/item/weapon/reagent_containers/food/snacks/faggot{
+	pixel_x = 8;
+	pixel_y = -4
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"

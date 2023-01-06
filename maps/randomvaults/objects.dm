@@ -1022,6 +1022,7 @@
 	var/datum/component/ai/area_territorial/say/AT = add_component(/datum/component/ai/area_territorial/say)
 	AT.SetArea(get_area(src))
 	AT.enter_args = list("Welcome to #&*£%£&%, how may I take your order?") // TODO: name here
+	AT.typefilter = /mob/living/carbon/human
 
 /mob/living/simple_animal/robot/NPC/fastfood/kitchen
 	name = "restaurant delivery bot"
@@ -1072,15 +1073,18 @@
 	AT.id_tag = "vaultkitchen"
 	AT.enter_signal = /event/comp_ai_cmd_aggro
 	AT.exit_signal = /event/comp_ai_cmd_loseaggro
+	AT.typefilter = /mob/living/carbon/human
 	register_event(/event/comp_ai_cmd_aggro, AT, .proc/Aggro)
 	register_event(/event/comp_ai_cmd_loseaggro, AT, .proc/LoseAggro)
 	add_component(/datum/component/ai/conversation)
 	var/datum/component/ai/area_territorial/say/AT2 = add_component(/datum/component/ai/area_territorial/say)
 	AT2.SetArea(get_area(src))
 	AT2.enter_args = list("Stop! Intruder!")
+	AT2.typefilter = /mob/living/carbon/human
 	LoseAggro()
 
 /mob/living/simple_animal/hostile/cookbot/Destroy()
+	var/datum/component/ai/area_territorial/signal/door/AT = get_component(/datum/component/ai/area_territorial/signal/door)
 	unregister_event(/event/comp_ai_cmd_aggro, AT, .proc/Aggro)
 	unregister_event(/event/comp_ai_cmd_loseaggro, AT, .proc/LoseAggro)
 	..()

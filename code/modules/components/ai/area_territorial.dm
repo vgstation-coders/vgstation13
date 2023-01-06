@@ -4,6 +4,7 @@
 	var/exit_signal
 	var/list/exit_args
 	var/area/territory = null
+	var/typefilter = /mob/living // Whitelist for the trigger
 
 /datum/component/ai/area_territorial/proc/SetArea(var/area/new_area)
 	unset_area()
@@ -21,11 +22,11 @@
 	..()
 
 /datum/component/ai/area_territorial/proc/area_enter(atom/movable/enterer)
-	if(isliving(enterer)) // No ghosts
+	if(istype(enterer,typefilter))
 		INVOKE_EVENT(parent, enter_signal, enter_args)
 
 /datum/component/ai/area_territorial/proc/area_exit(atom/movable/exiter)
-	if(isliving(exiter)) // No ghosts
+	if(istype(exiter,typefilter))
 		INVOKE_EVENT(parent, exit_signal, exit_args)
 
 /datum/component/ai/area_territorial/say
