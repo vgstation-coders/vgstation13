@@ -1,10 +1,10 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "aa" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing{
+	dir = 1
+	},
 /turf/unsimulated/floor/airless{
-	dir = 4;
-	icon_state = "asteroidwarning"
+	icon_state = "asteroidfloor"
 	},
 /area/vault/fastfood)
 "ak" = (
@@ -207,10 +207,10 @@
 	},
 /area/vault/fastfood/dining)
 "eL" = (
-/obj/structure/fence/end{
-	dir = 4
+/obj/structure/railing,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
 	},
-/turf/unsimulated/floor/asteroid,
 /area/vault/fastfood)
 "eQ" = (
 /obj/structure/rack,
@@ -235,11 +235,10 @@
 	},
 /area/vault/fastfood/kitchen)
 "fA" = (
-/obj/machinery/light/small{
-	dir = 1
-	},
+/obj/structure/railing,
 /turf/unsimulated/floor/airless{
-	icon_state = "asteroidwarning"
+	icon_state = "asteroidwarning";
+	dir = 1
 	},
 /area/vault/fastfood)
 "fZ" = (
@@ -491,7 +490,14 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/vault/fastfood)
 "mg" = (
-/turf/space,
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning";
+	dir = 1
+	},
 /area/vault/fastfood)
 "mi" = (
 /obj/machinery/door/airlock,
@@ -524,9 +530,12 @@
 	},
 /area/vault/fastfood/kitchen)
 "mx" = (
+/obj/structure/railing{
+	dir = 8
+	},
 /turf/unsimulated/floor/airless{
-	dir = 6;
-	icon_state = "asteroidwarning"
+	icon_state = "asteroidwarning";
+	dir = 1
 	},
 /area/vault/fastfood)
 "mJ" = (
@@ -579,9 +588,11 @@
 /turf/simulated/wall,
 /area/vault/fastfood/dining)
 "ol" = (
-/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing{
+	dir = 4
+	},
 /turf/unsimulated/floor/airless{
-	dir = 10;
+	dir = 8;
 	icon_state = "asteroidwarning"
 	},
 /area/vault/fastfood)
@@ -609,6 +620,17 @@
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/fastfood/dining)
+"pT" = (
+/obj/structure/railing,
+/obj/structure/railing,
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
 "qa" = (
 /obj/machinery/light/small{
 	dir = 4
@@ -721,6 +743,14 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/misc)
+"sF" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
 "tb" = (
 /mob/living/simple_animal/robot{
 	icon_state = "kodiak-service";
@@ -737,17 +767,22 @@
 	},
 /area/vault/fastfood/kitchen)
 "to" = (
-/obj/machinery/light/small{
-	dir = 1;
-	invisibility = 1
-	},
-/turf/unsimulated/floor/asteroid,
-/area/vault/fastfood)
-"tv" = (
-/obj/structure/fence/end{
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"tv" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/fastfood)
 "tz" = (
 /turf/simulated/wall/r_wall,
@@ -977,11 +1012,12 @@
 /area/vault/fastfood/misc)
 "yX" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/light/small{
+/obj/machinery/light/small/broken{
 	dir = 1
 	},
+/obj/structure/railing,
 /turf/unsimulated/floor/airless{
-	icon_state = "asteroidwarning"
+	icon_state = "asteroidfloor"
 	},
 /area/vault/fastfood)
 "zj" = (
@@ -1122,6 +1158,18 @@
 	tag = "icon-checker (NORTHEAST)"
 	},
 /area/vault/fastfood/dining)
+"CU" = (
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
 "Dg" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
@@ -1150,10 +1198,9 @@
 	},
 /area/vault/fastfood/dining)
 "Dp" = (
-/obj/machinery/light/small,
 /turf/unsimulated/floor/airless{
-	dir = 8;
-	icon_state = "asteroidwarning"
+	icon_state = "asteroidwarning";
+	dir = 1
 	},
 /area/vault/fastfood)
 "DI" = (
@@ -1241,6 +1288,15 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/misc)
+"EQ" = (
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
 "ES" = (
 /obj/machinery/door/airlock,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -1254,22 +1310,19 @@
 	},
 /area/vault/fastfood/dining)
 "EW" = (
-/obj/structure/table/reinforced,
-/obj/machinery/door/window/brigdoor,
-/obj/machinery/door/window{
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"Fg" = (
+/obj/structure/railing{
 	dir = 8
 	},
-/obj/item/device/deskbell/signaler,
-/obj/machinery/light/small{
-	dir = 1
-	},
-/obj/machinery/light/small{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/vault/fastfood/kitchen)
-"Fg" = (
-/obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidwarning"
 	},
@@ -1611,8 +1664,9 @@
 	},
 /area/vault/fastfood)
 "MU" = (
-/obj/machinery/light/small/broken{
-	dir = 1
+/obj/machinery/light/small,
+/obj/structure/railing{
+	dir = 4
 	},
 /turf/unsimulated/floor/airless{
 	dir = 8;
@@ -1660,16 +1714,11 @@
 	},
 /area/vault/fastfood/misc)
 "ND" = (
-/obj/structure/fence{
-	dir = 8
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
 	},
-/obj/structure/fence{
-	dir = 8
-	},
-/obj/structure/fence{
-	dir = 8
-	},
-/turf/unsimulated/floor/asteroid,
 /area/vault/fastfood)
 "NS" = (
 /obj/machinery/cooking/deepfryer,
@@ -1733,6 +1782,22 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/misc)
+"OK" = (
+/obj/structure/table/reinforced,
+/obj/machinery/door/window/brigdoor,
+/obj/machinery/door/window{
+	dir = 8
+	},
+/obj/item/device/deskbell/signaler,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/structure/airshield,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/kitchen)
 "Pp" = (
 /obj/structure/bed/chair/comfy/couch/right/red{
 	dir = 1
@@ -1794,14 +1859,9 @@
 	},
 /area/vault/fastfood/kitchen)
 "Qr" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/light/small/broken{
-	dir = 1
-	},
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidwarning"
-	},
-/area/vault/fastfood)
+/obj/structure/lattice,
+/turf/space,
+/area)
 "QH" = (
 /mob/living/simple_animal/cockroach,
 /obj/effect/decal/cleanable/blood{
@@ -1932,6 +1992,14 @@
 /obj/structure/lattice,
 /turf/space,
 /area/vault/fastfood)
+"TV" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
 "UT" = (
 /obj/machinery/light/small/broken,
 /turf/unsimulated/floor/airless{
@@ -2003,10 +2071,9 @@
 	},
 /area/vault/fastfood/kitchen)
 "WS" = (
+/obj/effect/landmark/spacepod/random,
 /obj/structure/lattice,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidwarning"
-	},
+/turf/space,
 /area/vault/fastfood)
 "Xb" = (
 /mob/living/simple_animal/hostile/necro/zombie/headcrab{
@@ -2034,6 +2101,11 @@
 /obj/item/weapon/mop,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
+"Xu" = (
+/obj/structure/lattice,
+/obj/structure/lattice,
+/turf/space,
+/area)
 "XG" = (
 /obj/machinery/power/apc{
 	pixel_y = 24;
@@ -2065,10 +2137,15 @@
 	},
 /area/vault/fastfood/kitchen)
 "Yh" = (
-/obj/structure/fence{
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
 /area/vault/fastfood)
 "Yz" = (
 /obj/machinery/light/he/burned,
@@ -2123,23 +2200,23 @@ pC
 pC
 pC
 pC
-mX
-mX
 pC
-pC
-pC
-pC
-pC
-pC
-pC
-mX
-mX
-mX
+Yh
 Tt
+WS
+mx
+Fg
 Tt
+WS
+Fg
 Tt
+WS
+mx
+Fg
+Tt
+WS
 mg
-mg
+pC
 pC
 pC
 pC
@@ -2168,26 +2245,26 @@ pC
 pC
 pC
 pC
-mS
-mX
-mX
-mX
-mX
-mX
-mX
+pC
+pC
+pC
+pC
+sF
 Tt
 Tt
-Tt
-mX
-mX
-mX
-mX
-mX
-mX
-mX
-WS
+Dp
+Af
 Tt
 Tt
+Af
+Tt
+Tt
+Dp
+Af
+Tt
+Tt
+fA
+pC
 pC
 pC
 pC
@@ -2215,27 +2292,27 @@ pC
 pC
 pC
 pC
-mX
-ME
-ME
-ME
+pC
+pC
+pC
+pC
+Qr
+aa
+FZ
+FZ
 JQ
 ME
+vi
+FZ
 ME
-JQ
-JQ
-JQ
-ME
-JQ
-JQ
-JQ
+vi
+vi
 ME
 ME
-JQ
-mX
-Af
-mX
-Tt
+vi
+FZ
+eL
+Qr
 pC
 pC
 pC
@@ -2263,8 +2340,11 @@ pC
 pC
 pC
 pC
-mX
-JQ
+pC
+pC
+pC
+pC
+Qr
 tT
 tT
 tT
@@ -2279,11 +2359,8 @@ KI
 CD
 CD
 CD
-JQ
-mX
-Af
-mX
-mX
+eL
+Xu
 pC
 pC
 pC
@@ -2311,8 +2388,11 @@ pC
 pC
 pC
 pC
-mX
-JQ
+pC
+pC
+pC
+pC
+Qr
 tT
 uA
 uT
@@ -2327,12 +2407,9 @@ rP
 bu
 Wn
 CD
-ME
-ME
-Fg
-mX
-mX
-pC
+JQ
+to
+EQ
 pC
 pC
 "}
@@ -2359,8 +2436,11 @@ pC
 pC
 pC
 pC
-Tt
-ME
+pC
+pC
+pC
+pC
+Qr
 tT
 LS
 hF
@@ -2377,10 +2457,7 @@ Pp
 am
 tT
 tT
-Qr
-mX
-Tt
-pC
+yX
 pC
 pC
 "}
@@ -2407,8 +2484,11 @@ pC
 pC
 pC
 pC
-Tt
-ME
+pC
+pC
+pC
+pC
+Qr
 tT
 rC
 Rk
@@ -2425,10 +2505,7 @@ cD
 KI
 qO
 Gb
-Fg
-mX
-Tt
-pC
+ND
 pC
 pC
 "}
@@ -2455,8 +2532,11 @@ pC
 pC
 pC
 pC
-Tt
-ME
+pC
+pC
+pC
+pC
+Qr
 tT
 rC
 Cb
@@ -2473,10 +2553,7 @@ cD
 LC
 zB
 vc
-Af
-mX
-Tt
-pC
+eL
 pC
 pC
 "}
@@ -2503,8 +2580,11 @@ pC
 pC
 pC
 pC
-Tt
-JQ
+pC
+pC
+pC
+pC
+Qr
 tT
 rC
 jv
@@ -2521,10 +2601,7 @@ cD
 KI
 LU
 Gb
-Af
-mX
-mX
-pC
+eL
 pC
 pC
 "}
@@ -2551,8 +2628,11 @@ pC
 pC
 pC
 pC
-Tt
-JQ
+pC
+pC
+pC
+pC
+Qr
 tT
 rC
 cC
@@ -2569,10 +2649,7 @@ mZ
 am
 tT
 tT
-fA
-mX
-mX
-pC
+tv
 pC
 pC
 "}
@@ -2599,8 +2676,11 @@ pC
 pC
 pC
 pC
-Tt
-ME
+pC
+pC
+pC
+pC
+Qr
 tT
 rC
 Xr
@@ -2616,11 +2696,8 @@ DI
 cD
 am
 ME
-ME
-Fg
-mX
-mX
-pC
+TV
+pT
 pC
 pC
 "}
@@ -2647,8 +2724,11 @@ pC
 pC
 pC
 pC
-Tt
-ME
+pC
+pC
+pC
+pC
+Qr
 tT
 rC
 Rk
@@ -2663,12 +2743,9 @@ cD
 RY
 cD
 KI
-ME
 eL
-Fg
 mX
-Tt
-pC
+mX
 pC
 pC
 "}
@@ -2695,8 +2772,11 @@ pC
 pC
 pC
 pC
-Tt
-ME
+pC
+pC
+pC
+pC
+Qr
 tT
 qs
 aJ
@@ -2711,12 +2791,9 @@ Nf
 tV
 cD
 am
-ME
-Yh
-Fg
+eL
 mX
-Tt
-pC
+mX
 pC
 pC
 "}
@@ -2743,8 +2820,11 @@ pC
 pC
 pC
 pC
-mX
-JQ
+pC
+pC
+pC
+pC
+Qr
 tT
 tT
 tT
@@ -2759,12 +2839,9 @@ AT
 if
 ns
 am
-ME
-ND
-Af
+eL
 mX
-Tt
-pC
+mX
 pC
 pC
 "}
@@ -2791,8 +2868,11 @@ pC
 pC
 pC
 pC
-to
-JQ
+pC
+pC
+pC
+pC
+Qr
 FY
 Or
 YQ
@@ -2807,12 +2887,9 @@ cD
 SC
 BT
 am
-ME
-Lt
-fA
+eL
 mX
-mS
-pC
+mX
 pC
 pC
 "}
@@ -2839,8 +2916,11 @@ pC
 pC
 pC
 pC
-mX
-JQ
+pC
+pC
+pC
+pC
+Qr
 tT
 Ap
 PW
@@ -2855,11 +2935,8 @@ cD
 RY
 iP
 am
-JQ
-Yh
-Af
+ND
 mX
-Tt
 pC
 pC
 pC
@@ -2887,8 +2964,11 @@ pC
 pC
 pC
 pC
-mX
-ME
+pC
+pC
+pC
+pC
+Qr
 wr
 wr
 wr
@@ -2903,11 +2983,8 @@ Ra
 JF
 Ka
 Ka
-JQ
-Yh
-Af
+ND
 mX
-Tt
 pC
 pC
 pC
@@ -2935,8 +3012,11 @@ pC
 pC
 pC
 pC
-eL
-ME
+pC
+pC
+pC
+pC
+Qr
 wr
 Ny
 Em
@@ -2951,11 +3031,8 @@ Li
 cG
 VB
 Ka
-ME
-Yh
-Fg
-mX
-Tt
+eL
+Qr
 pC
 pC
 pC
@@ -2983,8 +3060,11 @@ pC
 pC
 pC
 pC
-Yh
-ME
+pC
+pC
+pC
+pC
+Qr
 wr
 Og
 ED
@@ -2999,11 +3079,8 @@ vR
 cG
 Li
 Ka
-ME
-Lt
-fA
-mX
-mX
+eL
+Qr
 pC
 pC
 pC
@@ -3031,8 +3108,11 @@ pC
 pC
 pC
 pC
-Yh
-JQ
+pC
+pC
+pC
+pC
+Qr
 wr
 cu
 dh
@@ -3047,11 +3127,8 @@ ak
 tb
 Li
 JJ
-JQ
-Yh
-Af
-mX
-mX
+ND
+Qr
 pC
 pC
 pC
@@ -3079,8 +3156,11 @@ pC
 pC
 pC
 pC
-Yh
-JQ
+pC
+pC
+pC
+pC
+Qr
 wr
 Cy
 Or
@@ -3095,10 +3175,7 @@ Kf
 fy
 Li
 Ka
-JQ
-Yh
-Af
-mX
+ND
 mX
 pC
 pC
@@ -3127,8 +3204,11 @@ pC
 pC
 pC
 pC
-Lt
-JQ
+pC
+pC
+pC
+pC
+Qr
 wr
 Or
 sA
@@ -3143,12 +3223,9 @@ LZ
 cG
 Yz
 Ka
-JQ
-Yh
-Af
+ND
 mX
 mX
-pC
 pC
 pC
 "}
@@ -3175,8 +3252,11 @@ pC
 pC
 pC
 pC
-Yh
-ME
+pC
+pC
+pC
+pC
+Qr
 tz
 Zy
 sv
@@ -3191,12 +3271,9 @@ Ee
 gl
 Li
 Ka
-ME
-Lt
-yX
+eL
 mX
 mX
-pC
 pC
 pC
 "}
@@ -3223,8 +3300,11 @@ pC
 pC
 pC
 pC
-Yh
-ME
+pC
+pC
+pC
+pC
+Qr
 Ka
 Py
 wE
@@ -3239,12 +3319,9 @@ Hj
 fy
 Li
 JJ
-ME
-Yh
-Fg
+eL
 mX
 mX
-pC
 pC
 pC
 "}
@@ -3271,8 +3348,11 @@ pC
 pC
 pC
 pC
-Yh
-JQ
+pC
+pC
+pC
+pC
+Qr
 Ka
 ch
 Xb
@@ -3287,10 +3367,7 @@ mb
 IQ
 Le
 Ka
-ME
-Yh
-Af
-mX
+eL
 mX
 pC
 pC
@@ -3317,10 +3394,13 @@ pC
 pC
 pC
 pC
+pC
+pC
+pC
+pC
 qa
 pC
-tv
-ME
+Qr
 Ka
 Ka
 Ka
@@ -3335,10 +3415,7 @@ Ka
 JJ
 Ka
 Ka
-ME
-tv
-Af
-mX
+eL
 Tt
 pC
 qa
@@ -3364,11 +3441,14 @@ pC
 pC
 pC
 pC
+pC
+pC
+pC
+pC
 La
 Lt
 rB
 rB
-iK
 UT
 Ka
 Ka
@@ -3378,15 +3458,12 @@ lo
 iK
 iK
 Ka
-EW
+OK
 Ka
 lo
 iK
 lo
 iK
-aa
-mx
-lo
 rB
 rB
 Lt
@@ -3414,9 +3491,12 @@ pC
 pC
 pC
 pC
+pC
+pC
+pC
+pC
 Tt
 Tt
-iD
 iD
 bY
 sg
@@ -3432,9 +3512,6 @@ iD
 iD
 Xg
 Xg
-iD
-iD
-iD
 Tt
 pC
 pC
@@ -3463,8 +3540,11 @@ pC
 pC
 pC
 pC
+pC
+pC
+pC
+pC
 mS
-iD
 iD
 YF
 Mo
@@ -3479,9 +3559,6 @@ iD
 iD
 Xg
 Xg
-iD
-iD
-iD
 iD
 Tt
 Tt
@@ -3508,29 +3585,29 @@ pC
 pC
 pC
 pC
+pC
+pC
+pC
+pC
 La
 Lt
 rB
 rB
-FZ
-Dp
-Ka
-Ka
 MU
-vi
-vi
-FZ
-FZ
-FZ
-FZ
-FZ
-vi
-vi
-FZ
-FZ
-FZ
+Ka
+Ka
+CU
+EW
+EW
 ol
-FZ
+ol
+ol
+ol
+ol
+EW
+EW
+ol
+ol
 rB
 rB
 Lt
@@ -3557,11 +3634,14 @@ pC
 pC
 pC
 pC
+pC
+pC
+pC
+pC
 ld
 pC
+pC
 Tt
-mX
-mX
 mX
 mX
 mX
@@ -3575,10 +3655,7 @@ Tt
 mX
 Tt
 Tt
-mX
-mX
-Fg
-mX
+Tt
 Tt
 pC
 ld
