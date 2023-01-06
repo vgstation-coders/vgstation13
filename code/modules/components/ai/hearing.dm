@@ -168,7 +168,7 @@
 					var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new(F)
 					D.reagents.add_reagent(initial(R.id),D.reagents.maximum_volume)
 					thing_spawned = D
-				M.say("One [thing_spawned.name] served!")
+			M.say("One bag of [counted_english_list(items2deliver)] served!")
 			F.update_icon()
 			items2deliver.Cut()
 
