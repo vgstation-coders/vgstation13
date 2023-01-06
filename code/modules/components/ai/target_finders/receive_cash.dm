@@ -6,5 +6,6 @@
 	for(var/atom/A in view(range, parent))
 		if(istype(A,/obj/item/weapon/spacecash))
 			o += A
-	INVOKE_EVENT(parent,/event/comp_ai_cmd_pay,o)
+	if(o.len)
+		INVOKE_EVENT(parent,/event/comp_ai_cmd_pay,"bills" = o)
 	return o
