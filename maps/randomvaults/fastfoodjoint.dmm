@@ -1949,7 +1949,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/structure/airshield,
+/obj/machinery/airshield,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/drivethru)
 "NS" = (
