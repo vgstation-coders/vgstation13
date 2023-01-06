@@ -59,9 +59,10 @@
 	var/list/whitelist_items = list()
 	var/notfoundmessage
 	var/freemessage = "Coming right up!"
+	var/toomuchmessage = "Too much stuff in your order, come collect it before ordering again."
 	var/baseprice = 0
-	var/currentprice = 0
-	var/item2deliver
+	var/currentprice
+	var/list/items2deliver = list()
 
 /datum/component/ai/hearing/order/initialize()
 	..()
@@ -78,12 +79,12 @@
 	if(isliving(parent))
 		var/mob/living/M=parent
 		if(!M.isDead())
-			if(item2deliver)
-				M.say("Already covering another order at the moment, gimme a while!")
-				return
+			if(items2deliver.len > 5)
+				M.say(toomuchmessage)
 			if(!whitelist_items.len)
 				M.say("ERROR-[Gibberish(rand(10000,99999),50)]: No items found. Please contact manufacturer for specifications.")
 				CRASH("Someone forgot to put whitelist items on this ordering AI component.")
+			var/found = FALSE
 			for(var/item in whitelist_items)
 				var/list/items2workwith = subtypesof(item)
 				if(!items2workwith.len)
@@ -99,24 +100,27 @@
 					if(ispath(subitem,/atom/movable))
 						var/atom/movable/AM = subitem
 						if(findtext(message,initial(AM.name)))
-							item2deliver = subitem
+							found = TRUE
+							items2deliver.Add(subitem)
 					if(ispath(subitem,/datum/reagent))
 						var/datum/reagent/R = subitem
 						if(findtext(message,initial(R.name)))
-							item2deliver = subitem
-			if(!item2deliver)
+							found = TRUE
+							items2deliver.Add(subitem)
+			if(!found)
 				M.say(notfoundmessage)
 			else if(!baseprice)
 				M.say(freemessage)
-				spawn_item()
+				spawn_items()
 			else
-				currentprice = rand(baseprice-(baseprice/5),baseprice+(baseprice/5))
+				currentprice += rand(baseprice-(baseprice/5),baseprice+(baseprice/5))
 				if(!currentprice)
 					M.say(freemessage)
-					spawn_item()
+					spawn_items()
 				else
-					M.say("That will be [currentprice] credits.")
-					active_components += src
+					M.say("That will be [currentprice] credit\s.")
+					if(!src in active_components)
+						active_components += src
 
 /datum/component/ai/hearing/order/process()
 	if(currentprice && isliving(parent))
@@ -138,11 +142,13 @@
 					if(currentprice < 0)
 						dispense_cash(abs(currentprice),get_step(M,M.dir))
 						currentprice = 0
-					spawn_item()
+					spawn_items()
 					active_components -= src
+				else
+					M.say("[currentprice] credit\s left to pay.")
 
-/datum/component/ai/hearing/order/proc/spawn_item()
-	if(!item2deliver)
+/datum/component/ai/hearing/order/proc/spawn_items()
+	if(!items2deliver.len)
 		return
 	if(isliving(parent))
 		var/mob/living/M=parent
@@ -150,21 +156,24 @@
 			var/atom/movable/thing_spawned
 			M.emote("me", 1, "begins processing an order...")
 			var/turf/T = get_step(M,M.dir)
-			if(ispath(item2deliver,/atom/movable))
-				thing_spawned = item2deliver
-				sleep(rand(5,10) SECONDS)
-				thing_spawned = new item2deliver(T)
-			else if(ispath(item2deliver,/datum/reagent))
-				var/datum/reagent/R = item2deliver
-				sleep(rand(5,10) SECONDS)
-				var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new(T)
-				D.reagents.add_reagent(initial(R.id),D.reagents.maximum_volume)
-				thing_spawned = D
-			M.say("One [thing_spawned.name] served!")
-			item2deliver = null
+			var/obj/item/weapon/storage/bag/food/F = new(T)
+			for(var/item2deliver in items2deliver)
+				if(ispath(item2deliver,/atom/movable))
+					thing_spawned = item2deliver
+					sleep(rand(5,10) SECONDS)
+					thing_spawned = new item2deliver(F)
+				else if(ispath(item2deliver,/datum/reagent))
+					var/datum/reagent/R = item2deliver
+					sleep(rand(5,10) SECONDS)
+					var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new(F)
+					D.reagents.add_reagent(initial(R.id),D.reagents.maximum_volume)
+					thing_spawned = D
+				M.say("One [thing_spawned.name] served!")
+			F.update_icon()
+			items2deliver.Cut()
 
 /datum/component/ai/hearing/order/foodndrinks
-	whitelist_items = list(/obj/item/weapon/reagent_containers/food/snacks,/datum/reagent/drink)
+	whitelist_items = list(/obj/item/weapon/reagent_containers/food/snacks,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks/soda_cans)
 
 /datum/component/ai/hearing/order/bardrinks
-	whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink)
+	whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks/soda_cans)
