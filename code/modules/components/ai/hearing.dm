@@ -153,15 +153,13 @@
 	if(isliving(parent))
 		var/mob/living/M=parent
 		if(!M.isDead())
-			var/atom/movable/thing_spawned
 			M.emote("me", 1, "begins processing an order...")
 			var/turf/T = get_step(M,M.dir)
 			var/obj/item/weapon/storage/bag/food/F = new(T)
 			for(var/item2deliver in items2deliver)
 				if(ispath(item2deliver,/atom/movable))
-					thing_spawned = item2deliver
 					sleep(rand(5,10) SECONDS)
-					thing_spawned = new item2deliver(F)
+					new item2deliver(F)
 				else if(ispath(item2deliver,/datum/reagent))
 					var/datum/reagent/R = item2deliver
 					sleep(rand(5,10) SECONDS)
