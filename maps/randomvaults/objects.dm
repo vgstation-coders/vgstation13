@@ -1070,6 +1070,6 @@
 	AT.SetArea(get_area(src))
 	AT.id_tag = "vaultkitchen"
 	add_component(/datum/component/ai/conversation)
-	var/datum/component/ai/area_territorial/say/AT = add_component(/datum/component/ai/area_territorial/say)
-	AT.SetArea(get_area(src))
-	AT.enter_args = list("Stop! Intruder!")
+	var/datum/component/ai/area_territorial/say/AT2 = add_component(/datum/component/ai/area_territorial/say)
+	AT2.SetArea(get_area(src))
+	AT2.enter_args = list("Stop! Intruder!")
