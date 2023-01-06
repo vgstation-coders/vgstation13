@@ -54,22 +54,18 @@
 	var/list/whitelist_items = list()
 	var/notfoundmessage
 	var/freemessage = "Coming right up!"
-	var/notenoughmessage = "Not enough money."
-	var/paidmessage = "Thanks for ordering!"
 	var/baseprice = 0
 	var/currentprice = 0
 	var/item2deliver
 
 /datum/component/ai/hearing/order/initialize()
 	..()
-	parent.register_event(/event/comp_ai_cmd_pay, src, .proc/on_pay)
 	parent.register_event(/event/comp_ai_cmd_order, src, .proc/on_order)
 	if(!notfoundmessage)
 		notfoundmessage = "ERROR-[Gibberish(rand(1000,9999),50)]: Item not found. Please try again."
 	return TRUE
 
 /datum/component/ai/hearing/order/Destroy()
-	parent.unregister_event(/event/comp_ai_cmd_pay, src, .proc/on_pay)
 	parent.register_event(/event/comp_ai_cmd_order, src, .proc/on_order)
 	..()
 
@@ -119,28 +115,30 @@
 					spawn_item()
 				else
 					M.say("That will be [currentprice] credits.")
+					active_components += src
 
-/datum/component/ai/hearing/order/proc/on_pay(var/list/bills)
-	if(currentprice && bills.len && isliving(parent))
+/datum/component/ai/hearing/order/process()
+	if(currentprice && isliving(parent))
 		var/mob/living/M=parent
 		if(!M.isDead())
 			var/amount = 0
-			for(var/obj/item/weapon/spacecash/C in bills)
+			var/list/bills = list()
+			for(var/obj/item/weapon/spacecash/C in get_step(M,M.dir))
 				amount += C.get_total()
+				bills += C
 				if(amount > currentprice)
 					break
-			if(amount < currentprice)
-				M.say(notenoughmessage)
-			else
+			if(amount)
 				playsound(M.loc, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 70, 1)
 				for(var/obj/O in bills)
-					bills -= O
 					qdel(O)
-				if(amount > currentprice)
-					dispense_cash(amount-currentprice,M.loc)
-				spawn_item()
-				M.say(paidmessage)
-				currentprice = 0
+				currentprice -= amount
+				if(currentprice <= 0)
+					if(currentprice < 0)
+						dispense_cash(abs(currentprice),M.loc)
+						currentprice = 0
+					spawn_item()
+					active_components -= src
 
 /datum/component/ai/hearing/order/proc/spawn_item()
 	if(!item2deliver)

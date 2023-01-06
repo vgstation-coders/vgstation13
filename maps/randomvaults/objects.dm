@@ -1019,7 +1019,6 @@
 	add_component(/datum/component/ai/conversation)
 	var/datum/component/ai/hearing/order/foodndrinks/FD = add_component(/datum/component/ai/hearing/order/foodndrinks)
 	FD.baseprice = rand(5,10) * 5
-	add_component(/datum/component/ai/target_finder/payment)
 	var/datum/component/ai/area_territorial/say/AT = add_component(/datum/component/ai/area_territorial/say)
 	AT.SetArea(get_area(src))
 	AT.enter_args = list("Welcome to #&*£%£&%, how may I take your order?") // TODO: name here

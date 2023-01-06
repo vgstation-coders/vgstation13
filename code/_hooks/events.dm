@@ -291,7 +291,6 @@
 /event/comp_ai_cmd_say
 /event/comp_ai_cmd_specific_say
 
-/event/comp_ai_cmd_pay
 /event/comp_ai_cmd_order
 
 /datum
