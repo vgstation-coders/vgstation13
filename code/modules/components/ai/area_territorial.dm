@@ -38,12 +38,12 @@
 /datum/component/ai/area_territorial/signal/area_enter(atom/movable/enterer)
 	for(var/obj/machinery/M in territory)
 		if(M.id_tag == src.id_tag)
-			enter_function()
+			enter_function(M)
 
 /datum/component/ai/area_territorial/signal/area_exit(atom/movable/enterer)
 	for(var/obj/machinery/M in territory)
 		if(M.id_tag == src.id_tag)
-			exit_function()
+			exit_function(M)
 
 /datum/component/ai/area_territorial/signal/proc/enter_function(obj/machinery/M)
 	return
