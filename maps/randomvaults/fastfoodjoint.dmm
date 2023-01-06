@@ -644,6 +644,14 @@
 	dir = 8;
 	name = "Firelock West"
 	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "cafeteria"
@@ -1335,18 +1343,6 @@
 	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
-"DU" = (
-/obj/window_grille_spawner/reinforced,
-/obj/machinery/door/poddoor/shutters{
-	density = 0;
-	dir = 2;
-	icon_state = "shutter0";
-	id_tag = "vaultkitchen";
-	name = "Kitchen Shutters";
-	opacity = 0
-	},
-/turf/simulated/floor/plating,
-/area/vault/fastfood/kitchen)
 "DW" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -1624,6 +1620,18 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -1636,13 +1644,6 @@
 /area/vault/fastfood)
 "JJ" = (
 /obj/window_grille_spawner/reinforced,
-/obj/machinery/door/poddoor/shutters{
-	density = 0;
-	icon_state = "shutter0";
-	id_tag = "vaultkitchen";
-	name = "Kitchen Shutters";
-	opacity = 0
-	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/kitchen)
 "JK" = (
@@ -1901,17 +1902,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/machinery/light/small{
-	dir = 1
-	},
 /obj/structure/airshield,
-/obj/machinery/door/poddoor/shutters{
-	density = 0;
-	icon_state = "shutter0";
-	id_tag = "vaultkitchen";
-	name = "Kitchen Shutters";
-	opacity = 0
-	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/kitchen)
 "NS" = (
@@ -2064,6 +2055,18 @@
 /area/vault/fastfood/kitchen)
 "Ra" = (
 /obj/machinery/vending/boozeomat,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2885,7 +2888,7 @@ tZ
 ak
 tb
 Li
-DU
+JJ
 JE
 Tt
 pC
@@ -2985,7 +2988,7 @@ WS
 Hj
 fy
 Li
-DU
+JJ
 aa
 mX
 mX

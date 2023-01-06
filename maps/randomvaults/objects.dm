@@ -1031,6 +1031,7 @@
 /mob/living/simple_animal/hostile/cookbot
 	name = "cook bot"
 	desc = "Cooks food for the restaurant."
+	icon = 'icons/mob/robots.dmi'
 	icon_state = "kodiak-service"
 
 	melee_damage_lower = 10
@@ -1066,7 +1067,7 @@
 
 /mob/living/simple_animal/hostile/cookbot/New()
 	..()
-	var/datum/component/ai/area_territorial/signal/doorshut/AT = add_component(/datum/component/ai/area_territorial/signal/doorshut)
+	var/datum/component/ai/area_territorial/signal/door/AT = add_component(/datum/component/ai/area_territorial/signal/door)
 	AT.SetArea(get_area(src))
 	AT.id_tag = "vaultkitchen"
 	AT.enter_signal = /event/comp_ai_cmd_aggro
