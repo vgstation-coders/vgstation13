@@ -11,7 +11,7 @@
 
 /spell/changeling/lesserform/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
-	if (!.) 
+	if (!.)
 		return FALSE
 	if(istype(user.loc, /obj/mecha))
 		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
@@ -27,7 +27,7 @@
 	if(M_HUSK in user.mutations)
 		to_chat(user, "<span class = 'warning'>This hosts genetic code is too scrambled. We can not change form until we have removed this burden.</span>")
 		return FALSE
-		
+
 
 /spell/changeling/lesserform/cast(var/list/targets, var/mob/living/carbon/human/user)
 	..()
@@ -36,7 +36,7 @@
 	user.visible_message("<span class='danger'>[user] transforms!</span>")
 	changeling.geneticdamage = 30
 	to_chat(user, "<span class='warning'>Our genes cry out!</span>")
-	
+
 	var/mob/living/carbon/monkey/O = user.monkeyize(ignore_primitive = 1) // stops us from becoming the monkey version of whoever we were pretending to be
 	O.make_changeling()
 	var/datum/role/changeling/Ochangeling = O.mind.GetRole(CHANGELING)
@@ -61,7 +61,7 @@
 
 /spell/changeling/higherform/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
-	if (!.) 
+	if (!.)
 		return FALSE
 	if(istype(user.loc, /obj/mecha))
 		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
@@ -135,6 +135,7 @@
 
 	O.UpdateAppearance()
 	domutcheck(O, null)
+	O.update_name()
 	O.setToxLoss(M.getToxLoss())
 	O.adjustBruteLoss(M.getBruteLoss())
 	O.setOxyLoss(M.getOxyLoss())
