@@ -165,7 +165,7 @@
 				else if(ispath(item2deliver,/datum/reagent))
 					var/datum/reagent/R = item2deliver
 					sleep(rand(5,10) SECONDS)
-					var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new(F)
+					var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new(T)
 					D.reagents.add_reagent(initial(R.id),D.reagents.maximum_volume)
 					thing_spawned = D
 			M.say("One bag of [counted_english_list(items2deliver)] served!")
