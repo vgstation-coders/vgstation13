@@ -100,14 +100,10 @@
 						var/atom/movable/AM = subitem
 						if(findtext(message,initial(AM.name)))
 							item2deliver = subitem
-							break
 					if(ispath(subitem,/datum/reagent))
 						var/datum/reagent/R = subitem
 						if(findtext(message,initial(R.name)))
 							item2deliver = subitem
-							break
-					if(item2deliver)
-						break
 			if(!item2deliver)
 				M.say(notfoundmessage)
 			else if(!baseprice)
