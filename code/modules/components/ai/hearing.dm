@@ -1,3 +1,6 @@
+#define WHOLE_MESSAGE 1
+#define WITH_FOUND_REMOVED 2
+
 /datum/component/ai/hearing
 	var/hear_signal
 	var/list/required_messages = list()
@@ -29,6 +32,8 @@
 				if(findtext(filtered_message,message))
 					sleep(response_delay)
 					if(pass_speech)
+						if(pass_speech == WITH_FOUND_REMOVED)
+							filtered_message = replacetext(message,"")
 						hear_args = filtered_message
 					INVOKE_EVENT(parent, hear_signal, hear_args)
 					return
@@ -49,7 +54,7 @@
 /datum/component/ai/hearing/order
 	hear_signal = /event/comp_ai_cmd_order
 	required_messages = list("can i get","do you have","can i have","id like","i want","give me","get me","i would like")
-	pass_speech = TRUE
+	pass_speech = WITH_FOUND_REMOVED
 	var/list/blacklist_items = list()
 	var/list/whitelist_items = list()
 	var/notfoundmessage
