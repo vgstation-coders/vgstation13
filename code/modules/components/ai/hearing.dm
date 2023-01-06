@@ -33,7 +33,7 @@
 					sleep(response_delay)
 					if(pass_speech)
 						if(pass_speech == WITH_FOUND_REMOVED)
-							filtered_message = replacetext(message,"")
+							filtered_message = replacetext(filtered_message,message,"")
 						hear_args = filtered_message
 					INVOKE_EVENT(parent, hear_signal, hear_args)
 					return
