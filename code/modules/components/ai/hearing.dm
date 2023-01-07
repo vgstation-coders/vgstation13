@@ -88,7 +88,7 @@
 			for(var/item in whitelist_items)
 				var/list/items2workwith = subtypesof(item)
 				if(!items2workwith.len)
-					continue
+					items2workwith = list(item)
 				for(var/subitem in items2workwith)
 					var/isbad = FALSE
 					for(var/baditem in blacklist_items)
