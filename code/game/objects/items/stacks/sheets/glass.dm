@@ -143,7 +143,7 @@
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=2"
 	perunit = 2875
 	reinforced = 1
-	glass_quality = 1.8
+	glass_quality = 2
 	shealth = 30
 	shard_type = /obj/item/weapon/shard/plasma
 
