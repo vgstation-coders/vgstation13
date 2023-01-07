@@ -15,9 +15,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
-"am" = (
-/turf/simulated/wall,
-/area/vault/fastfood/dining)
 "ar" = (
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidwarning";
@@ -52,7 +49,8 @@
 /area/vault/fastfood/dining)
 "bg" = (
 /mob/living/simple_animal/hostile/bigroach{
-	environment_smash_flags = 0
+	environment_smash_flags = 0;
+	faction = "hostile"
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -124,7 +122,7 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/dining)
 "ch" = (
 /obj/machinery/gibber,
 /obj/machinery/light/small{
@@ -409,14 +407,6 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/firedoor/border_only{
-	dir = 8;
-	name = "Firelock West"
-	},
-/obj/machinery/door/firedoor/border_only{
-	dir = 8;
-	name = "Firelock West"
-	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
 	dir = 8;
@@ -541,7 +531,7 @@
 /turf/space,
 /area/vault/fastfood)
 "li" = (
-/mob/living/simple_animal/robot/NPC/fastfood{
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter{
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
@@ -610,14 +600,8 @@
 /obj/structure/noticeboard{
 	pixel_y = 27
 	},
-/mob/living/simple_animal/robot/NPC/fastfood/kitchen{
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/kitchen{
 	dir = 4
-	},
-/obj/item/device/radio/intercom/aiprivate,
-/obj/item/device/radio/intercom/aiprivate{
-	broadcasting = 1;
-	pixel_y = -28;
-	canhear_range = 1
 	},
 /obj/structure/cable/yellow{
 	d2 = 8;
@@ -630,7 +614,7 @@
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/dining)
 "mx" = (
 /obj/structure/railing,
 /obj/structure/railing{
@@ -833,7 +817,7 @@
 	broadcasting = 1
 	},
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/dining)
 "sn" = (
 /obj/structure/urinal{
 	dir = 8;
@@ -876,7 +860,7 @@
 	},
 /area/vault/fastfood)
 "tb" = (
-/mob/living/simple_animal/hostile/cookbot,
+/mob/living/simple_animal/hostile/retaliate/cookbot,
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
@@ -911,7 +895,9 @@
 /turf/simulated/wall/r_wall,
 /area/vault/fastfood/kitchen)
 "tB" = (
-/mob/living/simple_animal/cockroach,
+/mob/living/simple_animal/cockroach{
+	faction = "hostile"
+	},
 /obj/effect/decal/cleanable/blood{
 	icon_state = "gibbl4"
 	},
@@ -1078,7 +1064,7 @@
 /area/vault/fastfood/dining)
 "wH" = (
 /turf/simulated/wall,
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/dining)
 "xk" = (
 /obj/structure/bed/chair/plastic{
 	dir = 8
@@ -1096,7 +1082,9 @@
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor4"
 	},
-/mob/living/simple_animal/hostile/giant_spider/spiderling,
+/mob/living/simple_animal/hostile/giant_spider/spiderling{
+	faction = "hostile"
+	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -1431,7 +1419,8 @@
 "ED" = (
 /obj/effect/decal/cleanable/dirt,
 /mob/living/simple_animal/hostile/giant_spider{
-	environment_smash_flags = 64
+	environment_smash_flags = 0;
+	faction = "hostile"
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -1648,6 +1637,15 @@
 	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
+"Jm" = (
+/obj/effect/decal/cleanable/dirt,
+/mob/living/simple_animal/hostile/giant_spider/spiderling,
+/mob/living/simple_animal/hostile/giant_spider/spiderling,
+/mob/living/simple_animal/hostile/giant_spider/spiderling,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
 "Jw" = (
 /obj/window_grille_spawner/reinforced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -1886,7 +1884,7 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/dining)
 "ME" = (
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
@@ -1949,9 +1947,11 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/machinery/airshield,
+/obj/machinery/airshield{
+	mouse_opacity = 0
+	},
 /turf/simulated/floor/plating,
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/dining)
 "NS" = (
 /obj/machinery/cooking/deepfryer,
 /turf/simulated/floor{
@@ -2003,9 +2003,11 @@
 	},
 /area/vault/fastfood/dining)
 "Og" = (
-/mob/living/simple_animal/cockroach,
 /obj/effect/decal/cleanable/blood,
 /obj/effect/decal/cleanable/blood,
+/mob/living/simple_animal/cockroach{
+	faction = "hostile"
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2085,9 +2087,11 @@
 	},
 /area/vault/fastfood)
 "QH" = (
-/mob/living/simple_animal/cockroach,
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor5"
+	},
+/mob/living/simple_animal/cockroach{
+	faction = "hostile"
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -2342,7 +2346,8 @@
 /area/vault/fastfood/kitchen)
 "Xb" = (
 /mob/living/simple_animal/hostile/necro/zombie/headcrab{
-	environment_smash_flags = 160
+	environment_smash_flags = 0;
+	faction = "hostile"
 	},
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
@@ -2380,7 +2385,7 @@
 	},
 /area/vault/fastfood/kitchen)
 "XK" = (
-/mob/living/simple_animal/hostile/cookbot,
+/mob/living/simple_animal/hostile/retaliate/cookbot,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2423,7 +2428,7 @@
 /area/vault/fastfood/kitchen)
 "YF" = (
 /turf/unsimulated/floor/asteroid/underground,
-/area/vault/fastfood/drivethru)
+/area/vault/fastfood/dining)
 "YQ" = (
 /obj/effect/decal/cleanable/crayon,
 /turf/simulated/floor{
@@ -2525,13 +2530,13 @@ Tt
 tT
 tT
 tT
-am
-am
-am
+wH
+wH
+wH
 CD
 CD
-am
-am
+wH
+wH
 KI
 CD
 CD
@@ -2550,7 +2555,7 @@ Tt
 tT
 uA
 uT
-am
+wH
 Yx
 Yh
 bX
@@ -2585,7 +2590,7 @@ DW
 bi
 Od
 Pp
-am
+wH
 tT
 tT
 eL
@@ -2600,7 +2605,7 @@ Tt
 tT
 rC
 Rk
-am
+wH
 EA
 Dg
 LK
@@ -2625,7 +2630,7 @@ Tt
 tT
 XV
 Cb
-am
+wH
 CT
 Do
 Do
@@ -2650,7 +2655,7 @@ Tt
 tT
 eb
 jv
-am
+wH
 qV
 hB
 Dm
@@ -2685,7 +2690,7 @@ Je
 SP
 DI
 mZ
-am
+wH
 tT
 tT
 kg
@@ -2700,7 +2705,7 @@ Tt
 tT
 rr
 Xr
-am
+wH
 qV
 wE
 ig
@@ -2710,7 +2715,7 @@ Wo
 Pt
 Ln
 Yh
-am
+wH
 ME
 Fg
 hF
@@ -2750,7 +2755,7 @@ Tt
 tT
 qs
 aJ
-am
+wH
 pj
 Yh
 DT
@@ -2760,7 +2765,7 @@ kY
 Nf
 tV
 Yh
-am
+wH
 aa
 mX
 mX
@@ -2775,9 +2780,9 @@ Tt
 tT
 tT
 tT
-am
+wH
 ES
-am
+wH
 NZ
 Ii
 Rl
@@ -2785,7 +2790,7 @@ cV
 AT
 if
 ns
-am
+wH
 aa
 mX
 mX
@@ -2802,7 +2807,7 @@ hT
 YQ
 uy
 PE
-am
+wH
 mJ
 cD
 dm
@@ -2810,7 +2815,7 @@ li
 cD
 SC
 BT
-am
+wH
 aa
 mX
 mX
@@ -2827,7 +2832,7 @@ Ap
 PW
 we
 sn
-am
+wH
 hz
 cD
 cD
@@ -2835,7 +2840,7 @@ Bf
 mh
 RY
 iP
-am
+wH
 JE
 mX
 pC
@@ -2953,7 +2958,7 @@ EN
 QH
 ck
 tz
-vR
+Jm
 Li
 Hs
 ub

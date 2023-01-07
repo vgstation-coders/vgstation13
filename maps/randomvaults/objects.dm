@@ -56,10 +56,6 @@
 	requires_power = 1
 	icon_state = "kitchen"
 
-/area/vault/fastfood/drivethru
-	requires_power = 1
-	icon_state = "cafeteria"
-
 /area/vault/fastfood/misc
 	requires_power = 1
 	icon_state = "fmaint"
@@ -1013,27 +1009,7 @@
 /obj/item/device/pda/clown/broken/attack_self(mob/user)
 	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function
 
-/mob/living/simple_animal/robot/NPC/fastfood
-	name = "restaurant service bot"
-	desc = "Serves food asked for by a customer."
-	icon_state = "kodiak-service"
-
-/mob/living/simple_animal/robot/NPC/fastfood/initialize_NPC_components()
-	..()
-	add_component(/datum/component/ai/conversation)
-	var/datum/component/ai/hearing/order/foodndrinks/FD = add_component(/datum/component/ai/hearing/order/foodndrinks)
-	FD.baseprice = rand(5,10) * 5
-	var/datum/component/ai/area_territorial/say/AT = add_component(/datum/component/ai/area_territorial/say)
-	AT.SetArea(get_area(src))
-	AT.enter_args = list("Welcome to #&*£%£&%, how may I take your order?") // TODO: name here
-	AT.typefilter = /mob/living/carbon/human
-
-/mob/living/simple_animal/robot/NPC/fastfood/kitchen
-	name = "restaurant delivery bot"
-	desc = "Serves food asked for by a customer at the drive-thru."
-	icon_state = "kodiak-service"
-
-/mob/living/simple_animal/hostile/cookbot
+/mob/living/simple_animal/hostile/retaliate/cookbot
 	name = "cook bot"
 	desc = "Cooks food for the restaurant."
 	icon = 'icons/mob/robots.dmi'
@@ -1068,27 +1044,53 @@
 
 	mob_property_flags = MOB_ROBOTIC
 
-	idle_vision_range = 1
+	environment_smash_flags = 0
 
-/mob/living/simple_animal/hostile/cookbot/New()
+/mob/living/simple_animal/hostile/retaliate/cookbot/New()
 	..()
 	var/datum/component/ai/area_territorial/signal/door/AT = add_component(/datum/component/ai/area_territorial/signal/door)
-	AT.SetArea(get_area(src))
+	AT.SetArea(locate(/area/vault/fastfood/kitchen))
 	AT.id_tag = "vaultkitchen"
-	AT.enter_signal = /event/comp_ai_cmd_aggro
-	AT.exit_signal = /event/comp_ai_cmd_loseaggro
+	AT.enter_signal = /event/comp_ai_cmd_retaliate
 	AT.typefilter = /mob/living/carbon/human
-	register_event(/event/comp_ai_cmd_aggro, src, .proc/Aggro)
-	register_event(/event/comp_ai_cmd_loseaggro, src, .proc/LoseAggro)
+	register_event(/event/comp_ai_cmd_retaliate, src, .proc/Retaliate)
 	add_component(/datum/component/ai/conversation)
 	var/datum/component/ai/area_territorial/say/AT2 = add_component(/datum/component/ai/area_territorial/say)
-	AT2.SetArea(get_area(src))
+	AT2.SetArea(locate(/area/vault/fastfood/kitchen))
 	AT2.enter_args = list("Stop! Intruder!")
 	AT2.typefilter = /mob/living/carbon/human
 	LoseAggro()
 
-/mob/living/simple_animal/hostile/cookbot/Destroy()
-	var/datum/component/ai/area_territorial/signal/door/AT = get_component(/datum/component/ai/area_territorial/signal/door)
-	unregister_event(/event/comp_ai_cmd_aggro, src, .proc/Aggro)
-	unregister_event(/event/comp_ai_cmd_loseaggro, src, .proc/LoseAggro)
+/mob/living/simple_animal/hostile/retaliate/cookbot/Destroy()
+	unregister_event(/event/comp_ai_cmd_retaliate, src, .proc/Retaliate)
 	..()
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter
+	name = "restaurant service bot"
+	desc = "Serves food asked for by a customer."
+	wander = FALSE
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/New()
+	..()
+	add_component(/datum/component/controller/movement/astar)
+	var/datum/component/ai/hearing/order/foodndrinks/FD = add_component(/datum/component/ai/hearing/order/foodndrinks)
+	FD.baseprice = rand(5,10) * 5
+	var/datum/component/ai/area_territorial/say/AT = add_component(/datum/component/ai/area_territorial/say)
+	AT.SetArea(locate(/area/vault/fastfood/dining))
+	AT.enter_args = list("Welcome to #&*£%£&%, how may I take your order?") // TODO: name here
+	AT.typefilter = /mob/living/carbon/human
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/examine(mob/user)
+	..()
+	var/datum/component/ai/hearing/order/foodndrinks/FD = get_component(/datum/component/ai/hearing/order/foodndrinks)
+	if(FD)
+		to_chat(user,"Current items in order: [counted_english_list(FD.items2deliver)]<br>Total credits due: [FD.currentprice] credit\s")
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/kitchen
+	name = "restaurant delivery bot"
+	desc = "Serves food asked for by a customer at the drive-thru."
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/kitchen/New()
+	..()
+	var/datum/component/ai/hearing/order/foodndrinks/FD = get_component(/datum/component/ai/hearing/order/foodndrinks)
+	FD.inbag = TRUE

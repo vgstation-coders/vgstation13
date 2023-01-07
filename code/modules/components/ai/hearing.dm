@@ -62,6 +62,7 @@
 	var/toomuchmessage = "Too much stuff in your order, come collect it before ordering again."
 	var/baseprice = 0
 	var/currentprice
+	var/inbag = FALSE
 	var/list/items2deliver = list()
 
 /datum/component/ai/hearing/order/initialize()
@@ -151,19 +152,19 @@
 		var/mob/living/M=parent
 		if(!M.isDead())
 			M.emote("me", 1, "begins processing an order...")
-			var/turf/T = get_step(M,M.dir)
-			var/obj/item/weapon/storage/bag/food/F = new(T)
+			var/atom/place2deliver = get_step(M,M.dir)
+			sleep(rand(5,10) SECONDS)
+			if(inbag)
+				place2deliver = new /obj/item/weapon/storage/bag/food(place2deliver)
 			for(var/item2deliver in items2deliver)
 				if(ispath(item2deliver,/atom/movable))
-					sleep(rand(5,10) SECONDS)
-					new item2deliver(F)
+					new item2deliver(place2deliver)
 				else if(ispath(item2deliver,/datum/reagent))
 					var/datum/reagent/R = item2deliver
-					sleep(rand(5,10) SECONDS)
-					var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new(T)
+					var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new(place2deliver)
 					D.reagents.add_reagent(initial(R.id),D.reagents.maximum_volume)
 			M.say("[counted_english_list(items2deliver)] served!")
-			F.update_icon()
+			place2deliver.update_icon()
 			items2deliver.Cut()
 
 /datum/component/ai/hearing/order/foodndrinks
