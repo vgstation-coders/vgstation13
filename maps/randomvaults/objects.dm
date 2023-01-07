@@ -1078,8 +1078,8 @@
 	AT.enter_signal = /event/comp_ai_cmd_aggro
 	AT.exit_signal = /event/comp_ai_cmd_loseaggro
 	AT.typefilter = /mob/living/carbon/human
-	register_event(/event/comp_ai_cmd_aggro, AT, .proc/Aggro)
-	register_event(/event/comp_ai_cmd_loseaggro, AT, .proc/LoseAggro)
+	register_event(/event/comp_ai_cmd_aggro, src, .proc/Aggro)
+	register_event(/event/comp_ai_cmd_loseaggro, src, .proc/LoseAggro)
 	add_component(/datum/component/ai/conversation)
 	var/datum/component/ai/area_territorial/say/AT2 = add_component(/datum/component/ai/area_territorial/say)
 	AT2.SetArea(get_area(src))
@@ -1089,6 +1089,6 @@
 
 /mob/living/simple_animal/hostile/cookbot/Destroy()
 	var/datum/component/ai/area_territorial/signal/door/AT = get_component(/datum/component/ai/area_territorial/signal/door)
-	unregister_event(/event/comp_ai_cmd_aggro, AT, .proc/Aggro)
-	unregister_event(/event/comp_ai_cmd_loseaggro, AT, .proc/LoseAggro)
+	unregister_event(/event/comp_ai_cmd_aggro, src, .proc/Aggro)
+	unregister_event(/event/comp_ai_cmd_loseaggro, src, .proc/LoseAggro)
 	..()

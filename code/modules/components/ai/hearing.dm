@@ -97,30 +97,27 @@
 							break
 					if(isbad)
 						continue
-					if(ispath(subitem,/atom/movable))
-						var/atom/movable/AM = subitem
-						if(findtext(message,initial(AM.name)))
+					if(ispath(subitem,/obj/item))
+						var/obj/item/I = subitem
+						if(findtext(message,initial(I.name)))
 							found = TRUE
 							items2deliver.Add(subitem)
+							currentprice += rand(baseprice-(baseprice/5),baseprice+(baseprice/5))
 					if(ispath(subitem,/datum/reagent))
 						var/datum/reagent/R = subitem
 						if(findtext(message,initial(R.name)))
 							found = TRUE
 							items2deliver.Add(subitem)
+							currentprice += rand(baseprice-(baseprice/5),baseprice+(baseprice/5))
 			if(!found)
 				M.say(notfoundmessage)
-			else if(!baseprice)
+			else if(!baseprice || !currentprice)
 				M.say(freemessage)
 				spawn_items()
 			else
-				currentprice += rand(baseprice-(baseprice/5),baseprice+(baseprice/5))
-				if(!currentprice)
-					M.say(freemessage)
-					spawn_items()
-				else
-					M.say("That will be [currentprice] credit\s.")
-					if(!(src in active_components))
-						active_components += src
+				M.say("That will be [currentprice] credit\s.")
+				if(!(src in active_components))
+					active_components += src
 
 /datum/component/ai/hearing/order/process()
 	if(currentprice && isliving(parent))

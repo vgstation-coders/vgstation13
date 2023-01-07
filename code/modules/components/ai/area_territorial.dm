@@ -43,7 +43,7 @@
 			if(M.id_tag == src.id_tag)
 				enter_function(M)
 
-/datum/component/ai/area_territorial/signal/area_exit(atom/movable/enterer)
+/datum/component/ai/area_territorial/signal/area_exit(atom/movable/exiter)
 	if(istype(enterer,typefilter))
 		..()
 		for(var/obj/machinery/M in territory)
