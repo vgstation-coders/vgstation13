@@ -117363,6 +117363,9 @@
 /obj/machinery/portable_atmospherics/canister/sleeping_agent{
 	pixel_x = 1
 	},
+/obj/effect/landmark{
+	name = "tdomepacks"
+	},
 /turf/unsimulated/floor{
 	dir = 5;
 	icon_state = "redyellowfull"
