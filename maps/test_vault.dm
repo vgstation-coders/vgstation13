@@ -31,7 +31,7 @@
 			continue
 		if(copytext(line,1,2) == "#")
 			continue
-		if(ispath(text2path(line),/datum/map_element))
+		if(copytext(line,1,2) == "/" && ispath(text2path(line),/datum/map_element))
 			var/ourpath = text2path(line)
 			vaults += new ourpath
 	if(!vaults.len)
