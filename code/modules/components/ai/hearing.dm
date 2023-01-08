@@ -73,7 +73,7 @@
 	return TRUE
 
 /datum/component/ai/hearing/order/Destroy()
-	parent.register_event(/event/comp_ai_cmd_order, src, .proc/on_order)
+	parent.unregister_event(/event/comp_ai_cmd_order, src, .proc/on_order)
 	..()
 
 /datum/component/ai/hearing/order/proc/on_order(var/message)
