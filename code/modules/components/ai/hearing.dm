@@ -206,7 +206,7 @@
 				var/datum/chemical_reaction/D = chemical_reactions_list[id]
 				if(D.result == initial(R.id))
 					var/include = TRUE
-					if(!D.required_reagents?len)
+					if(!D.required_reagents?.len)
 						include = FALSE
 					else
 						for(var/reagent in D.required_reagents)
