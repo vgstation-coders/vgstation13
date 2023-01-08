@@ -206,10 +206,13 @@
 				var/datum/chemical_reaction/D = chemical_reactions_list[id]
 				if(D.result == initial(R.id))
 					var/include = TRUE
-					for(var/reagent in D.required_reagents)
-						if(!(reagent in acceptable_recipe_reagents))
-							include = FALSE
-							break
+					if(!D.required_reagents?len)
+						include = FALSE
+					else
+						for(var/reagent in D.required_reagents)
+							if(!(reagent in acceptable_recipe_reagents))
+								include = FALSE
+								break
 					if(include)
 						var/datum/reagent/subR = chemical_reagents_list[D.result]
 						new_whitelist += subR.type
