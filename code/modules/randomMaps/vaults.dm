@@ -17,7 +17,7 @@
 #define POPULATION_SCARCE 2 //Performs less calculations by cheating a bit and assuming that every vault's size is 100x100. Vaults are farther away from each other - recommended with big areas
 
 
-#define SPAWN_ALL_VAULTS //Uncomment to spawn every hecking vault in the game
+//#define SPAWN_ALL_VAULTS //Uncomment to spawn every hecking vault in the game
 //#define SPAWN_MAX_VAULTS //Uncomment to spawn as many vaults as the code supports
 
 #ifdef SPAWN_MAX_VAULTS
