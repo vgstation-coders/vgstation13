@@ -455,9 +455,6 @@ its easier to just keep the beam vertical.
 		to_chat(user, "[show_icon ? bicon(src) : ""] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
-	if(admin_desc && user.client.holder?.admin_examine)
-		spawn(1) //Adding this so that it ends up at the end of any examine because some things add their own examine text
-			to_chat(user, "<span class='rough'>Admin-only: [admin_desc]</span>")
 
 	if(reagents && is_open_container() && !ismob(src) && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
 		if(get_dist(user,src) > 3)

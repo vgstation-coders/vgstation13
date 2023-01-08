@@ -4,9 +4,6 @@
 /mob/living/carbon/human/examine(mob/user)
 	var/msg = get_examine_text(user)
 	to_chat(user, msg)
-	if(admin_desc && user.client.holder?.admin_examine)
-		spawn(1) //To make sure it appears at the end of the examine
-			to_chat(user, "<span class='rough'>Admin-only: [admin_desc]</span>")
 	if(istype(user))
 		user.heard(src)
 
