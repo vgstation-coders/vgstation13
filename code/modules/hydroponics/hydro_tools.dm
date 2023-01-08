@@ -27,6 +27,7 @@
 
 	var/datum/seed/grown_seed
 	var/datum/reagents/grown_reagents
+	var/molecule_type
 	if(istype(target,/obj/structure/rack) || istype(target,/obj/structure/table))
 		return ..()
 	else if(istype(target,/obj/item/weapon/reagent_containers/food/snacks/grown))
@@ -34,6 +35,7 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/grown/G = target
 		grown_seed = SSplant.seeds[G.plantname]
 		grown_reagents = G.reagents
+		molecule_type = G.molecule_type
 
 	else if(istype(target,/obj/item/weapon/grown))
 
@@ -77,6 +79,8 @@
 	dat += "<tr><td><b>Maturation time</b></td><td>[round(grown_seed.maturation, 0.01)]</td></tr>"
 	dat += "<tr><td><b>Production time</b></td><td>[round(grown_seed.production, 0.01)]</td></tr>"
 	dat += "<tr><td><b>Potency</b></td><td>[round(grown_seed.potency, 0.01)]</td></tr>"
+	if (molecule_type)
+		dat += "<tr><td><b>Primary Molecule</b></td><td>[molecule_type]</td></tr>"
 	dat += "</table>"
 
 	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
