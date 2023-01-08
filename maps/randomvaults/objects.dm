@@ -1072,6 +1072,7 @@
 	name = "restaurant service bot"
 	desc = "Serves food asked for by a customer."
 	wander = FALSE
+	flags = HEAR_ALWAYS|PROXMOVE // for AI stuff
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/waiter/New()
 	..()
