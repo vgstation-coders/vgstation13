@@ -1634,15 +1634,6 @@
 	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
-"Jm" = (
-/obj/effect/decal/cleanable/dirt,
-/mob/living/simple_animal/hostile/giant_spider/spiderling,
-/mob/living/simple_animal/hostile/giant_spider/spiderling,
-/mob/living/simple_animal/hostile/giant_spider/spiderling,
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/kitchen)
 "Jw" = (
 /obj/window_grille_spawner/reinforced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -2435,7 +2426,9 @@
 	locked = 1;
 	req_access_txt = "53"
 	},
-/obj/structure/falserwall,
+/obj/structure/falserwall{
+	layer = 12
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2952,7 +2945,7 @@ EN
 QH
 ck
 tz
-Jm
+Li
 Li
 Hs
 ub
