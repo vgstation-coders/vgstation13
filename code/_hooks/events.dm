@@ -294,7 +294,6 @@
 /event/comp_ai_cmd_order
 
 /event/comp_ai_cmd_retaliate
-/event/comp_ai_cmd_loseaggro
 
 /datum
 	/// Associative list of type path -> list(),
