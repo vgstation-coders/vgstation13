@@ -176,7 +176,7 @@
 /datum/component/ai/hearing/order/foodndrinks
 	whitelist_items = list(/obj/item/weapon/reagent_containers/food/snacks,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks/soda_cans)
 
-/datum/component/ai/hearing/order/foodndrinks/select_menu/build_whitelist
+/datum/component/ai/hearing/order/foodndrinks/select_menu/build_whitelist()
 	var/list/new_whitelist = list()
 	for(var/item in whitelist_items)
 		var/list/stufftochoose = subtypesof(whitelist_items)
