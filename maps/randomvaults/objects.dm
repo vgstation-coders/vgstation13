@@ -1055,15 +1055,18 @@
 	AT.typefilter = /mob/living/carbon/human
 	register_event(/event/comp_ai_cmd_retaliate, src, .proc/Retaliate)
 	add_component(/datum/component/ai/conversation)
-	var/datum/component/ai/area_territorial/say/AT2 = add_component(/datum/component/ai/area_territorial/say)
+	var/datum/component/ai/area_territorial/say/fastfood/intruder/AT2 = add_component(/datum/component/ai/area_territorial/say/fastfood/intruder)
 	AT2.SetArea(locate(/area/vault/fastfood/kitchen))
-	AT2.enter_args = list("Stop! Intruder!")
-	AT2.typefilter = /mob/living/carbon/human
-	LoseAggro()
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/Destroy()
 	unregister_event(/event/comp_ai_cmd_retaliate, src, .proc/Retaliate)
 	..()
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/death(var/gibbed = FALSE)
+	..(gibbed)
+	visible_message("<b>[src]</b> blows apart!")
+	new /obj/effect/gibspawner/robot(src.loc)
+	qdel(src)
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/waiter
 	name = "restaurant service bot"
@@ -1075,10 +1078,8 @@
 	add_component(/datum/component/controller/movement/astar)
 	var/datum/component/ai/hearing/order/foodndrinks/FD = add_component(/datum/component/ai/hearing/order/foodndrinks)
 	FD.baseprice = rand(5,10) * 5
-	var/datum/component/ai/area_territorial/say/AT = add_component(/datum/component/ai/area_territorial/say)
+	var/datum/component/ai/area_territorial/say/fastfood/welcome/AT = add_component(/datum/component/ai/area_territorial/say/fastfood/welcome)
 	AT.SetArea(locate(/area/vault/fastfood/dining))
-	AT.enter_args = list("Welcome to #&*£%£&%, how may I take your order?") // TODO: name here
-	AT.typefilter = /mob/living/carbon/human
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/waiter/examine(mob/user)
 	..()
@@ -1094,3 +1095,12 @@
 	..()
 	var/datum/component/ai/hearing/order/foodndrinks/FD = get_component(/datum/component/ai/hearing/order/foodndrinks)
 	FD.inbag = TRUE
+
+/datum/component/ai/area_territorial/say/fastfood
+	typefilter = /mob/living/carbon/human
+
+/datum/component/ai/area_territorial/say/fastfood/welcome
+	enter_args = list("Welcome to #&*£%£&%, how may I take your order?") // TODO: name here
+
+/datum/component/ai/area_territorial/say/fastfood/intruder
+	enter_args = list("Stop! Intruder!")

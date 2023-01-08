@@ -1082,9 +1082,6 @@
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor4"
 	},
-/mob/living/simple_animal/hostile/giant_spider/spiderling{
-	faction = "hostile"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -1946,9 +1943,6 @@
 /obj/item/device/deskbell/signaler,
 /obj/machinery/light/small{
 	dir = 1
-	},
-/obj/machinery/airshield{
-	mouse_opacity = 0
 	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/dining)
