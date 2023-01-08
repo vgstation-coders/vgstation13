@@ -55,6 +55,7 @@
 	desc = "Looks chewy, might be good to eat."
 	plantname = "thaadra"
 	hydroflags = HYDRO_PREHISTORIC
+	molecule_type = XENOPHYLL
 
 /datum/seed/jurlmah
 	name = "jurlmah"
@@ -85,6 +86,7 @@
 	desc = "Bulbous and veiny, it appears to pulse slightly as you look at it."
 	plantname = "jurlmah"
 	hydroflags = HYDRO_PREHISTORIC
+	molecule_type = XENOPHYLL
 
 /datum/seed/amauri
 	name = "amauri"
@@ -117,6 +119,7 @@
 	desc = "It is small, round and hard. Its skin is a thick dark purple."
 	plantname = "amauri"
 	hydroflags = HYDRO_PREHISTORIC
+	molecule_type = XENOPHYLL
 
 /datum/seed/gelthi
 	name = "gelthi"
@@ -147,6 +150,7 @@
 	gender = PLURAL
 	plantname = "gelthi"
 	hydroflags = HYDRO_PREHISTORIC
+	molecule_type = XENOPHYLL
 
 /datum/seed/vale
 	name = "vale"
@@ -177,6 +181,7 @@
 	plantname = "vale"
 	hydroflags = HYDRO_PREHISTORIC
 	fragrance = INCENSE_CRAVE
+	molecule_type = XENOPHYLL
 
 /datum/seed/surik
 	name = "surik"
@@ -206,3 +211,4 @@
 	desc = "Multiple layers of blue skin peeling away to reveal a spongey core, vaguely resembling an ear."
 	plantname = "surik"
 	hydroflags = HYDRO_PREHISTORIC
+	molecule_type = XENOPHYLL
