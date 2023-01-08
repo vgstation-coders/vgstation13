@@ -85,7 +85,7 @@
 			if(!whitelist_items.len)
 				M.say("ERROR-[Gibberish(rand(10000,99999),50)]: No items found. Please contact manufacturer for specifications.")
 				CRASH("Someone forgot to put whitelist items on this ordering AI component.")
-			var/found = FALSE
+			var/list/found_items = list()
 			for(var/item in whitelist_items)
 				var/list/items2workwith = subtypesof(item)
 				if(!items2workwith.len)
@@ -101,16 +101,19 @@
 					if(ispath(subitem,/obj/item))
 						var/obj/item/I = subitem
 						if(findtext(message,initial(I.name)))
-							found = TRUE
-							items2deliver.Add(subitem)
-							currentprice += rand(baseprice-(baseprice/5),baseprice+(baseprice/5))
+							found_items.Add(subitem)
 					if(ispath(subitem,/datum/reagent))
 						var/datum/reagent/R = subitem
 						if(findtext(message,initial(R.name)))
-							found = TRUE
-							items2deliver.Add(subitem)
-							currentprice += rand(baseprice-(baseprice/5),baseprice+(baseprice/5))
-			if(!found)
+							found_items.Add(subitem)
+			/*for(var/founditem in found_items)
+				for(var/itemcheck in found_items)
+					if(findtext(initial(founditem.name),initial(itemcheck.name)) && !istype(founditem,itemcheck))
+						found_items -= founditem
+						break*/
+			items2deliver += found_items
+			currentprice += rand(baseprice-(baseprice/5),baseprice+(baseprice/5)) * found_items.len
+			if(!found_items.len)
 				M.say(notfoundmessage)
 			else if(!baseprice || !currentprice)
 				M.say(freemessage)
