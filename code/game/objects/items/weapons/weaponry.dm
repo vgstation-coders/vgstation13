@@ -526,7 +526,7 @@
 		user.update_inv_hands()
 	return
 
-/obj/item/weapon/baseball_bat
+/obj/item/weapon/bat
 	name = "baseball bat"
 	desc = "Good for reducing a doubleheader to a zeroheader."
 	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
@@ -541,37 +541,67 @@
 	throw_range = 7
 	w_class = W_CLASS_LARGE
 	w_type = RECYK_WOOD
+	var/spiked = 0
+	var/twohandforce = 16
 
-/obj/item/weapon/baseball_bat/update_wield(mob/user)
+/obj/item/weapon/bat/update_wield(mob/user)
 	..()
-	item_state = "baseball_bat[wielded ? 1 : 0]"
-	force = wielded ? 16 : initial(force)
+	item_state = "[icon_state][wielded ? 1 : 0]"
+	force = wielded ? twohandforce : initial(force)
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/baseball_bat/attackby(obj/item/weapon/W, mob/user)
+/obj/item/weapon/bat/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/stack/rods))
+	if(istype(W, /obj/item/stack/rods) && !spiked)
 		if(!ishammer(user.get_inactive_hand()))
 			to_chat(user, "<span class='info'>You need to be holding a toolbox or hammer to do that!</span>")
 			return
 		to_chat(user, "<span class='notice'>You hammer the [W.name] into \the [src].</span>")
 		var/obj/item/stack/rodstack = W
 		rodstack.use(1)
-		new /obj/item/weapon/spiked_bat(get_turf(src))
-		qdel(src)
+		spike()
+	if(W.is_wirecutter(user) && spiked)
+		var/obj/item/stack/rods/R = new(get_turf(src),1)
+		W.playtoolsound(src,50)
+		to_chat(user, "<span class='notice'>You remove \the [R] from \the [src].</span>")
+		unspike()
 
-/obj/item/weapon/baseball_bat/IsShield()
-	return TRUE
+/obj/item/weapon/bat/proc/spike()
+	name = "spiked [name]"
+	desc = "A classic among delinquent youths. Not very effective at hitting balls."
+	hitsound = "sound/weapons/spikebat_hit.ogg"
+	icon_state = "spikebat"
+	item_state = "spikebat0"
+	force = 10
+	sharpness = 0.3
+	sharpness_flags = SHARP_TIP
+	spiked = 1
+	twohandforce = 13
 
-/obj/item/weapon/baseball_bat/on_block(damage, atom/movable/blocked)
+/obj/item/weapon/bat/proc/unspike()
+	name = initial(name)
+	desc = initial(desc)
+	hitsound = initial(hitsound)
+	icon_state = initial(icon_state)
+	item_state = initial(item_state)
+	force = initial(force)
+	sharpness = 0
+	sharpness_flags = 0
+	spiked = 0
+	twohandforce = initial(twohandforce)
+
+/obj/item/weapon/bat/IsShield()
+	return !spiked
+
+/obj/item/weapon/bat/on_block(damage, atom/movable/blocked)
 	if(isliving(loc))
 		var/mob/living/H = loc
 		if(!H.in_throw_mode || !wielded || damage > 15)
 			return FALSE
 		if(IsShield() < blocked.ignore_blocking)
 			return FALSE
-		if (ismob(blocked) || prob(85 - round(damage * 5)))
+		if ((ismob(blocked) && prob(100 - (spiked * 90))) || prob((85 - round(damage * 5)) * (max(0, 1 - (spiked / 2)))))
 			visible_message("<span class='borange'>[loc] knocks away \the [blocked] with \the [src]!</span>")
 			playsound(loc, 'sound/weapons/baseball_hit.ogg', 75, 1)
 			if(ismovable(blocked))
@@ -593,29 +623,34 @@
 			return TRUE
 		return FALSE
 
+/obj/item/weapon/bat/pre_throw(atom/movable/target)
+	var/mob/living/carbon/human/user = usr
+	if(istype(user))
+		var/obj/item/I = user.get_inactive_hand()
+		if(istype(I) && I != src)
+			return hit_away(I,user,target)
+		else if(isturf(target.loc) && user.Adjacent(target))
+			return hit_away(target,user)
 
-/obj/item/weapon/spiked_bat
-	name = "spiked bat"
-	desc = "A classic among delinquent youths. Not very effective at hitting balls."
-	icon = 'icons/obj/weapons.dmi'
-	hitsound = "sound/weapons/spikebat_hit.ogg"
-	icon_state = "spikebat"
-	item_state = "spikebat0"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	autoignition_temperature = AUTOIGNITION_WOOD
-	flags = TWOHANDABLE
-	force = 10
-	sharpness = 0.3
-	sharpness_flags = SHARP_TIP
-	throwforce = 10
-	throw_speed = 1
-	throw_range = 7
-	w_class = W_CLASS_LARGE
-	w_type = RECYK_WOOD
+/obj/item/weapon/bat/proc/hit_away(obj/item/I, mob/living/carbon/human/user, atom/target)
+	if(istype(user) && istype(I) && !istype(I,/obj/item/offhand) && !istype(I,/obj/item/weapon/grab))
+		if(I.cant_drop && I.loc == user)
+			to_chat(user, "<span class='warning'>You can't hit away an item stuck to your hand!</span>")
+			return
+		visible_message("<span class='borange'>[user] hits \the [I] away with \the [src]!</span>")
+		playsound(user, 'sound/weapons/baseball_hit.ogg', 75, 1)
+		user.remove_from_mob(I)
+		I.forceMove(get_turf(user))
+		var/throw_mult = user.species.throw_mult
+		throw_mult += (user.get_strength()-1)/2 //For each level of strength above 1, add 0.5
+		throw_mult *= 2/(2**(I.w_class-1)) //multiplier of 2, 1, 0.5, 0.25 and 0.125 for each increasing w_class
+		throw_mult *= max(0,1-(spiked/2)) //spiked bats can hit, but less effectively
+		if(!target)
+			var/ourdir = get_dir(user,I) || user.dir
+			target = get_ranged_target_turf(get_turf(I), ourdir, I.throw_range*throw_mult)
+		I.throw_at(target, I.throw_range*throw_mult, I.throw_speed*throw_mult)
+		return 1
 
-/obj/item/weapon/spiked_bat/update_wield(mob/user)
+/obj/item/weapon/bat/spiked/New()
 	..()
-	item_state = "spikebat[wielded ? 1 : 0]"
-	force = wielded ? 13 : initial(force)
-	if(user)
-		user.update_inv_hands()
+	spike()

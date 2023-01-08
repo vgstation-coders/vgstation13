@@ -1046,7 +1046,7 @@
 		overlays += image(icon = icon, icon_state = "[icon_state]-shield")
 
 	if(base_icon)
-		if(module_active && istype(module_active,/obj/item/borg/combat/mobility) && has_icon(icon, "[icon_state]-roll"))
+		if(istype(module_active,/obj/item/borg/combat/mobility) && has_icon(icon, "[base_icon]-roll"))
 			icon_state = "[base_icon]-roll"
 		else
 			icon_state = base_icon

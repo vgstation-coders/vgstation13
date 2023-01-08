@@ -73,6 +73,43 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2023.01.06</h2>
+			<h3 class="author">DorainGrey updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Mechanics don&#39;t count towards Engineering Staff count for Engineering Events, such as rods &amp; meteors.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Baseball bats can now hit away items in the other user&#39;s hand or the ground.</li>
+				<li class="rscadd">Baseball bats can now have their nail removed with wirecutters.</li>
+				<li class="rscadd">Spiked bats now have a very small chance to hit anything instead of none, with limited effect.</li>
+				<li class="rscadd">Portals now invert vertical velocity if collided with, if there is room above. Otherwise, keep it downwards if there is room below.</li>
+				<li class="tweak">All movable atoms now have vertical velocity, which eventually reaches a maximum allowed by gravity if downwards. Damage calculations have been adjusted to suit this better.</li>
+			</ul>
+			<h2 class="date">2023.01.05</h2>
+			<h3 class="author">twirling-jesters updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added icon for AA batteries.</li>
+			</ul>
+			<h2 class="date">2023.01.03</h2>
+			<h3 class="author">DorainGrey updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes a bug that gets RND machines stuck in the busy state.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Bodies can now be dragged out of personal airbags.</li>
+				<li class="rscadd">Roundend scores now factor in atmospheric issues, with a bonus for none.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug where clicking people while restrained did not do anything even when it could. This doesn&#39;t affect anything currently.</li>
+			</ul>
+			<h2 class="date">2022.12.29</h2>
+			<h3 class="author">tinysaturn updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes a bug affecting mobility module&#39;s &#34;roll&#34; sprites</li>
+			</ul>
 			<h2 class="date">2022.12.27</h2>
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
@@ -1871,59 +1908,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">kane-f updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Asteroid floors now fade more smoothly against space.</li>
-			</ul>
-			<h2 class="date">2022.05.28</h2>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed a bug that prevented casting spells if the caster wasn&#39;t wearing a mask, and others.</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">Leprechauns, not leperchauns.</li>
-			</ul>
-			<h3 class="author">Optimism333 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The mothership lab vault&#39;s walls have been polished and smoothed to look nice once again</li>
-				<li class="tweak">The mothership lab vault&#39;s walls have been more accurately named and described</li>
-			</ul>
-			<h2 class="date">2022.05.27</h2>
-			<h3 class="author">ExpulsionSnooper updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Gave each of the vox raider loadout boxes have a unique name, allowing you to know what they contain before you purchase them.</li>
-			</ul>
-			<h3 class="author">Optimism333 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Some walls in the mothership lab vault have been reinforced AND riveted</li>
-				<li class="tweak">Some doors to areas where ayy/vox mobs weren&#39;t supposed to wander have been barricaded/bolted</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Suicides can no longer be done with invisible or non-mouse opaque items, or powered off machinery.</li>
-			</ul>
-			<h2 class="date">2022.05.26</h2>
-			<h3 class="author">Hinaichigo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Monkeys can use the equip hotkey.</li>
-				<li class="imageadd">In-mouth rag sprite for monkeys.</li>
-				<li class="bugfix">Fixed non-clothing mask slot item inventory icons not updating properly when equipped by monkeys.</li>
-				<li class="bugfix">Clovers have enough nutriment in them to count.</li>
-				<li class="bugfix">Fixed stripping messages saying &#34;face&#34; instead of &#34;mouth&#34; for mask slot goes-in-mouth items.</li>
-				<li class="rscadd">Slot machines are now affected by luck.</li>
-				<li class="tweak">Made lucky clovers a bit more rare.</li>
-				<li class="tweak">Scaled down scratchcard luck influence.</li>
-			</ul>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Mushrooms can&#39;t send messages while unconscious or dead</li>
-			</ul>
-			<h3 class="author">kane-f updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Railings are no longer wall-phasing devices.</li>
-			</ul>
-			<h2 class="date">2022.05.25</h2>
-			<h3 class="author">Optimism333 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Ayy simplemobs now have mothership access to open doors based on their role and rank</li>
 			</ul>
 		</div>
 		<!--

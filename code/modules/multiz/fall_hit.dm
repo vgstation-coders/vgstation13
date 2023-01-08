@@ -24,32 +24,37 @@
 
 // Called by CheckFall when we actually hit something.  Oof
 /atom/movable/proc/fall_impact(var/atom/hit_atom)
-	if(get_gravity() > 0.5)
-		visible_message("\The [src] falls from above and slams into \the [hit_atom]!", "You hear something slam into \the [hit_atom].")
-	else
-		visible_message("\The [src] drops from above onto \the [hit_atom]!", "You hear something drop onto \the [hit_atom].")
 	for(var/atom/movable/AM in hit_atom.contents)
-		AM.fall_act(src)
-	zs_fallen = 0
+		if(!AM.fall_act(src)) // FALSE breaks out of the normal actions
+			return FALSE
+	if(z_velocity > 2)
+		visible_message("<span class='warning'>\The [src] falls from above and slams into \the [hit_atom]!</span>", \
+			"<span class='danger'>You fall off and hit \the [hit_atom]!</span>", \
+			"You hear something slam into \the [hit_atom].")
+	else
+		visible_message("\The [src] drops from above and onto \the [hit_atom].", \
+			"You fall off and land on the \the [hit_atom].", \
+			"You hear something drop onto \the [hit_atom].")
+	z_velocity = 0
+	return TRUE
 
 // Take damage from falling and hitting the ground
-/mob/living/fall_impact(var/turf/landing)
-	var/gravity = get_gravity()
+/mob/living/fall_impact(var/atom/hit_atom)
+	var/old_z_velocity = z_velocity
+	if(!..())
+		return FALSE
+	if(!isturf(hit_atom))
+		return TRUE
 	var/total_brute_loss = 0
 	var/obj/item/airbag/airbag = null
 	if(!mind || !mind.suiciding)
 		airbag = locate() in contents
-	if(gravity > 0.5 && !airbag)
-		visible_message("<span class='warning'>\The [src] falls from above and slams into \the [landing]!</span>", \
-			"<span class='danger'>You fall off and hit \the [landing]!</span>", \
-			"You hear something slam into \the [landing].")
-		if(gravity > 0.667)
-			for(var/atom/movable/AM in landing.contents)
-				AM.fall_act(src)
+	if(old_z_velocity > 2 && !airbag)
+		if(old_z_velocity > 3)
 			playsound(loc, "sound/effects/pl_fallpain.ogg", 25, 1, -1)
 			// Bases at ten and scales with the number of Z levels fallen
 			// Because wounds heal rather quickly, 10 should be enough to discourage jumping off 1 ledge but not be enough to ruin you, at least for the first time.
-			var/damage = ((10 * min(zs_fallen,5)) * gravity)
+			var/damage = (10 * min(old_z_velocity,5))
 			var/old_brute_loss = getBruteLoss()
 			apply_damage(rand(0, damage), BRUTE, LIMB_HEAD)
 			apply_damage(rand(0, damage), BRUTE, LIMB_CHEST)
@@ -61,15 +66,12 @@
 			if(mind && mind.suiciding)
 				adjustBruteLoss(max(0,175 - total_brute_loss)) // Makes the act look real
 				total_brute_loss = getBruteLoss() - old_brute_loss
-			log_debug("[src] has taken [total_brute_loss] damage after falling [zs_fallen] z levels with a gravity of [gravity] Gs!")
-		AdjustKnockdown((3 * min(zs_fallen,10)) * gravity)
+			log_debug("[src] has taken [total_brute_loss] damage after falling with a speed of [old_z_velocity] z-levels per second!")
+		AdjustKnockdown(3 * min(old_z_velocity,10))
 	else
-		if(airbag && gravity > 0.5)
+		if(airbag && old_z_velocity > 2)
 			airbag.deploy(src)
-		visible_message("\The [src] drops from above and onto \the [landing].", \
-			"You fall off and land on the \the [landing].", \
-			"You hear something drop onto \the [landing].")
-	zs_fallen = 0
+	return TRUE
 
 /obj/mecha/handle_fall(var/turf/landing)
 	// First things first, break any lattice
@@ -83,18 +85,16 @@
 	return ..()
 
 /obj/mecha/fall_impact(var/atom/hit_atom)
-	var/gravity = get_gravity()
-	if(gravity > 0.25)
+	var/old_z_velocity = z_velocity
+	if(!..())
+		return FALSE
+	if(old_z_velocity > 1)
 		// Tell the pilot that they just dropped down with a superheavy mecha.
 		if(occupant)
 			to_chat(occupant, "<span class='warning'>\The [src] crashed down onto \the [hit_atom]!</span>")
 
-		if(gravity > 0.5)
-			var/damage = ((10 * min(zs_fallen,5)) * gravity)
-			// Anything on the same tile as the landing tile is gonna have a bad day.
-			for(var/mob/living/L in hit_atom.contents)
-				visible_message("<span class='danger'>\The [src] crushes \the [L] as it lands on them!</span>")
-				L.fall_act(src)
+		if(old_z_velocity > 2)
+			var/damage = 10 * min(old_z_velocity,5)
 
 			// Now to hurt the mech.
 			take_damage(rand(damage, 3*damage))
@@ -103,11 +103,7 @@
 			if(istype(hit_atom, /turf/simulated/floor))
 				var/turf/simulated/floor/ground = hit_atom
 				ground.break_tile()
-	else
-		// Tell the pilot that they just plopped lightly onto the low-gravity ground with a superheavy mecha.
-		if(occupant)
-			to_chat(occupant, "<span class='warning'>\The [src] softly drops down onto \the [hit_atom]!</span>")
-	zs_fallen = 0
+	return TRUE
 
 /obj/machinery/power/supermatter/fall_impact(var/atom/hit_atom)
 	..()
@@ -117,24 +113,36 @@ var/global/list/non_items = list(/obj/machinery,/obj/structure)
 
 // Opposite of fall_impact, called when something is dropped on someone
 /atom/movable/proc/fall_act(var/atom/hitting_atom)
-	return
+	return TRUE
 
 /mob/living/fall_act(var/atom/hitting_atom)
-	var/gravity = get_gravity()
 	if(ismecha(hitting_atom))
-		var/damage = ((10 * min(hitting_atom.zs_fallen,5)) * gravity)
+		var/damage = 10 * min(hitting_atom.z_velocity,5)
 		adjustBruteLoss(rand(3*damage, 5*damage))
 		AdjustKnockdown(damage / 2)
 	else if(isitem(hitting_atom))
 		var/obj/item/I = hitting_atom
-		var/damage = (((I.throwforce * min(hitting_atom.zs_fallen,5)) * gravity) * I.w_class)
+		var/damage = ((I.throwforce * min(hitting_atom.z_velocity,5)) * I.w_class)
 		adjustBruteLoss(rand(damage, 2*damage))
-		AdjustKnockdown(((2 * min(hitting_atom.zs_fallen,5)) * gravity) * I.w_class)
+		AdjustKnockdown((2 * min(hitting_atom.z_velocity,5)) * I.w_class)
 		if(I.w_class == W_CLASS_GIANT)
 			gib()
+			return TRUE
 	else if(is_type_in_list(hitting_atom,non_items))
-		var/damage = ((3 * min(hitting_atom.zs_fallen,5)) * gravity)
+		var/damage = 3 * min(hitting_atom.z_velocity,5)
 		if(hitting_atom.density)
 			damage *= 3
 		adjustBruteLoss(rand(damage, 2*damage))
 		AdjustKnockdown(damage / 2)
+	return TRUE
+
+/obj/effect/portal/fall_act(var/atom/hitting_atom)
+	if(ismovable(hitting_atom) && target)
+		var/atom/movable/AM = hitting_atom
+		teleport(AM)
+		var/turf/T = z_velocity > 0 ? AM.check_below() : AM.check_above()
+		if(T)
+			AM.z_velocity *= -1 // reverse the momentum here
+			AM.Move(T)
+		return FALSE
+	return TRUE

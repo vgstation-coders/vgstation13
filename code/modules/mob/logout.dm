@@ -10,7 +10,6 @@
 		if(virtualhearer)
 			qdel(virtualhearer)
 			virtualhearer = null
-	world.log << "[src] logout"
 
 	remove_spell_channeling() //remove spell channeling before we log out
 
