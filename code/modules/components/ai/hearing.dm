@@ -76,6 +76,9 @@
 	parent.unregister_event(/event/comp_ai_cmd_order, src, .proc/on_order)
 	..()
 
+/datum/component/ai/hearing/order/proc/build_whitelist()
+	return
+
 /datum/component/ai/hearing/order/proc/on_order(var/message)
 	if(isliving(parent))
 		var/mob/living/M=parent
@@ -172,6 +175,15 @@
 
 /datum/component/ai/hearing/order/foodndrinks
 	whitelist_items = list(/obj/item/weapon/reagent_containers/food/snacks,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks/soda_cans)
+
+/datum/component/ai/hearing/order/foodndrinks/select_menu/build_whitelist
+	var/list/new_whitelist = list()
+	for(var/item in whitelist_items)
+		var/list/stufftochoose = subtypesof(whitelist_items)
+		for(var/i in 1 to rand(5,10))
+			new_whitelist += pick_n_take(stufftochoose)
+	whitelist_items.Cut()
+	whitelist_items += new_whitelist
 
 /datum/component/ai/hearing/order/bardrinks
 	whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks/soda_cans)
