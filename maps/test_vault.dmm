@@ -55,6 +55,12 @@
 /obj/machinery/computer/teleporter,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
+"z" = (
+/obj/docking_port/destination/arrival/station{
+	dir = 2
+	},
+/turf/unsimulated/floor/grass,
+/area)
 "C" = (
 /obj/machinery/teleport/station,
 /turf/simulated/floor/shuttle,
@@ -90,7 +96,7 @@
 /area/shuttle/arrival/station)
 
 (1,1,1) = {"
-Q
+a
 a
 R
 R
@@ -101,7 +107,7 @@ R
 R
 "}
 (2,1,1) = {"
-a
+Q
 a
 R
 t
@@ -124,7 +130,7 @@ R
 "}
 (4,1,1) = {"
 a
-a
+z
 O
 M
 D
