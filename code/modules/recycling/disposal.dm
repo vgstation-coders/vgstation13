@@ -1550,12 +1550,15 @@
 	desc = "An outlet for the pneumatic disposal system."
 	icon = 'icons/obj/pipes/disposal.dmi'
 	icon_state = "outlet"
+	plane = ABOVE_HUMAN_PLANE
+	layer = DISPOSALS_CHUTE_LAYER
 	density = 1
 	anchored = 1
 	var/active = 0
 	var/turf/target	// this will be where the output objects are 'thrown' to.
 	var/mode = 0
 	var/obj/structure/disposalpipe/trunk/trunk
+	var/image/underneath
 	var/deconstructable = TRUE
 
 /obj/structure/disposaloutlet/supports_holomap()
@@ -1570,7 +1573,9 @@
 
 /obj/structure/disposaloutlet/New()
 	. = ..()
-
+	underneath = image(src.icon,src,"[icon_state]-under",src.layer,src.dir)
+	underneath.plane = OBJ_PLANE
+	overlays += underneath
 	spawn(1)
 		target = get_ranged_target_turf(src, dir, 10)
 
@@ -1602,6 +1607,7 @@
 	if(H)
 		H.active = 0
 	flick("outlet-open", src)
+	flick("outlet-under-open", underneath)
 	playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 0, 0)
 	sleep(20)	//wait until correct animation frame
 	playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)

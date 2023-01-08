@@ -115,6 +115,9 @@
 	desc = "A chute for big and small packages alike!"
 	density = 1
 	icon_state = "intake"
+	plane = ABOVE_HUMAN_PLANE
+	layer = DISPOSALS_CHUTE_LAYER
+	var/image/underneath
 	var/c_mode = 0
 	var/doFlushIn=0
 	var/num_contents=0
@@ -124,6 +127,9 @@
 
 /obj/machinery/disposal/deliveryChute/New()
 	..()
+	underneath = image(src.icon,src,"[icon_state]-under",src.layer,src.dir)
+	underneath.plane = OBJ_PLANE
+	overlays += underneath
 	processing_objects.Remove(src)
 	spawn(5)
 		trunk = locate() in src.loc
@@ -164,14 +170,17 @@
 
 
 /obj/machinery/disposal/deliveryChute/proc/receive_atom(var/atom/movable/AM)
-	AM.forceMove(src)
-	doFlushIn = 5
-	num_contents++
+	AM.forceMove(src.loc) // To make it look like it's moving into it better
+	spawn(1)
+		AM.forceMove(src)
+		doFlushIn = 5
+		num_contents++
 
 
 /obj/machinery/disposal/deliveryChute/flush()
 	flushing = 1
 	flick("intake-closing", src)
+	flick("intake-under-closing", underneath)
 	var/deliveryCheck = 0
 	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
 												// travels through the pipes.
@@ -763,7 +772,7 @@
 	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
 	plane = ABOVE_HUMAN_PLANE
 	var/circuitpath = /obj/item/weapon/circuitboard/autoprocessor
-	
+
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
 
 	var/next_sound = 0
