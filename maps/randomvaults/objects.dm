@@ -1009,6 +1009,9 @@
 /obj/item/device/pda/clown/broken/attack_self(mob/user)
 	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function
 
+/obj/structure/falserwall/doorobscurer
+	layer = ABOVE_DOOR_LAYER
+
 /mob/living/simple_animal/hostile/retaliate/cookbot
 	name = "cook bot"
 	desc = "Cooks food for the restaurant."

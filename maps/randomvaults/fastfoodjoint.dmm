@@ -2419,9 +2419,7 @@
 	locked = 1;
 	req_access_txt = "53"
 	},
-/obj/structure/falserwall{
-	layer = 12
-	},
+/obj/structure/falserwall/doorobscurer,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},

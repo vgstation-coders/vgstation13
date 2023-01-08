@@ -101,16 +101,16 @@
 					if(ispath(subitem,/obj/item))
 						var/obj/item/I = subitem
 						if(findtext(message,initial(I.name)))
-							found_items.Add(subitem)
+							found_items[subitem] = initial(I.name)
 					if(ispath(subitem,/datum/reagent))
 						var/datum/reagent/R = subitem
 						if(findtext(message,initial(R.name)))
-							found_items.Add(subitem)
-			/*for(var/founditem in found_items)
+							found_items[subitem] = initial(R.name)
+			for(var/founditem in found_items)
 				for(var/itemcheck in found_items)
-					if(findtext(initial(founditem.name),initial(itemcheck.name)) && !istype(founditem,itemcheck))
+					if(findtext(found_items[itemcheck],found_items[founditem]) && !ispath(founditem,itemcheck))
 						found_items -= founditem
-						break*/
+						break
 			items2deliver += found_items
 			currentprice += rand(baseprice-(baseprice/5),baseprice+(baseprice/5)) * found_items.len
 			if(!found_items.len)
