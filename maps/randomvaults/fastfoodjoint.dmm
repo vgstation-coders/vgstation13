@@ -1280,8 +1280,7 @@
 	},
 /area/vault/fastfood/misc)
 "CD" = (
-/obj/window_grille_spawner/reinforced,
-/turf/simulated/wall,
+/turf/simulated/wall/r_wall,
 /area/vault/fastfood/dining)
 "CG" = (
 /obj/structure/closet/secure_closet/freezer/money,
@@ -1440,9 +1439,7 @@
 	name = "Firelock West"
 	},
 /turf/simulated/floor{
-	dir = 5;
-	icon_state = "checker";
-	tag = "icon-checker (NORTHEAST)"
+	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
 "EW" = (
@@ -1485,10 +1482,6 @@
 	dir = 1
 	},
 /area/vault/fastfood)
-"FY" = (
-/obj/window_grille_spawner/reinforced,
-/turf/simulated/wall,
-/area/vault/fastfood/misc)
 "FZ" = (
 /turf/unsimulated/floor/airless{
 	dir = 8;
@@ -1668,7 +1661,7 @@
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/dining)
 "JG" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
@@ -2106,7 +2099,7 @@
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/dining)
 "Rf" = (
 /obj/structure/rack,
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger,
@@ -2189,7 +2182,7 @@
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/dining)
 "SC" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -2299,7 +2292,7 @@
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/dining)
 "WO" = (
 /obj/structure/table/reinforced,
 /obj/machinery/chem_dispenser/soda_dispenser/mapping,
@@ -2318,7 +2311,7 @@
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/fastfood/kitchen)
+/area/vault/fastfood/dining)
 "WS" = (
 /obj/machinery/cooking,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -2520,14 +2513,14 @@ tT
 wH
 wH
 wH
-CD
-CD
+KI
+KI
 wH
 wH
 KI
-CD
-CD
-CD
+KI
+KI
+KI
 aa
 mS
 pC
@@ -2552,7 +2545,7 @@ Yh
 rP
 bu
 Wn
-CD
+KI
 JQ
 HR
 mx
@@ -2789,7 +2782,7 @@ pC
 pC
 pC
 Tt
-FY
+Gb
 hT
 YQ
 uy
@@ -2844,15 +2837,15 @@ wr
 wr
 wr
 wr
-tz
-Ka
+CD
+wH
 Sv
 WO
 WK
 Ra
 JF
-Ka
-Ka
+wH
+wH
 JE
 mX
 pC
