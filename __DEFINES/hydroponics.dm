@@ -9,6 +9,7 @@
 
 // Definitions for genes (trait groupings)
 #define GENE_PHYTOCHEMISTRY "phytochemistry"
+#define GENE_BIOMOLECULES "biomolecules"
 #define GENE_MORPHOLOGY "morphology"
 #define GENE_BIOLUMINESCENCE "bioluminescence"
 #define GENE_ECOLOGY "ecology"
@@ -28,7 +29,9 @@
 //Phytochemistry
 #define PLANT_CHEMICAL (1<<0)
 #define PLANT_POTENCY (1<<1)
-#define PLANT_MOLECULES (1<<2)
+
+//Biomolecules
+#define PLANT_MOLECULE (1<<0)
 
 //Morphology
 #define PLANT_PRODUCTS (1<<0)

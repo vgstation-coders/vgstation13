@@ -621,9 +621,8 @@
 	var/S = 0
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/I in contents)
 		S += 5
-		if(I.reagents.get_reagent_amount(NUTRIMENT) > 0.1)
-			for (var/molecule in I.seed.molecule_type)
-				points[molecule] += round((I.reagents.get_reagent_amount(NUTRIMENT)*biomass_coefficient) / I.seed.molecule_type.len)
+		for (var/molecule in I.seed.molecule_type)
+			points[molecule] += round((min(I.seed.potency, 200)*biomass_coefficient) / I.seed.molecule_type.len)
 		qdel(I)
 	if(S)
 		processing = 1

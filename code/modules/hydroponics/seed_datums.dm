@@ -277,11 +277,16 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
 					potency 			= gene.values[2]
-					molecule_type       = gene.values[3]
 				if(GENEGUN_MODE_SPLICE)
 					potency 			= round(mix(gene.values[2], potency, rand(40, 60)/100), 0.1)
-					molecule_type      += gene.values[3]
 
+		if(GENE_BIOMOLECULES)
+			if (gene.values[1])
+				switch(mode)
+					if(GENEGUN_MODE_PURGE)
+						molecule_type 		= gene.values[1]
+					if(GENEGUN_MODE_SPLICE)
+						molecule_type 		+= gene.values[1]
 		if(GENE_MORPHOLOGY)
 			if(gene.values[1])
 				if(!products || mode == GENEGUN_MODE_PURGE)
@@ -410,7 +415,10 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(GENE_PHYTOCHEMISTRY)
 			P.values = list(
 				(chems                	? chems                	: 0),
-				(potency				? potency 				: 0),
+				(potency				? potency 				: 0)
+			)
+		if(GENE_BIOMOLECULES)
+			P.values = list(
 				(molecule_type          ? molecule_type         : 0)
 			)
 		if(GENE_MORPHOLOGY)

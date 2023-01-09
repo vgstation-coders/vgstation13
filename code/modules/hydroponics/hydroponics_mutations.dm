@@ -16,7 +16,7 @@
 	if(age < 3 && length(seed.mutants) && gene)
 		mutate_species()
 	if(!gene)
-		gene = pick(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
+		gene = pick(GENE_PHYTOCHEMISTRY, GENE_BIOMOLECULES, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
 
 	check_for_divergence()
 	//The scaling functions modify stats with diminishing returns, approaching the hardcap value
@@ -25,7 +25,7 @@
 	//Be aware the formulas are slightly different for lowering and increasing values inside log() and also min()
 	switch(gene)
 		if(GENE_PHYTOCHEMISTRY)
-			var/mutation_type = pick(60; PLANT_POTENCY, 25; PLANT_CHEMICAL, 15; PLANT_MOLECULES)
+			var/mutation_type = pick(85; PLANT_POTENCY, 15; PLANT_CHEMICAL)
 			switch(mutation_type)
 				if(PLANT_POTENCY)
 					if(seed.potency <= 0)
@@ -44,14 +44,15 @@
 						check_success = seed.add_random_chemical()
 						if(check_success)
 							visible_message("<span class='notice'>\The [seed.display_name] develops a strange-looking gland.</span>")
-				if(PLANT_MOLECULES)
-					var/new_molecule = pick(STARCH, CHITIN, PROTEIN, GLUCOSE, CELLULOSE, XENOPHYLL)
-					if (new_molecule in seed.molecule_type)
-						visible_message("<span class='notice'>\The [seed.display_name] has its phloem shrivel up.</span>")
-						seed.molecule_type -= new_molecule
-					else
-						visible_message("<span class='notice'>\The [seed.display_name] seems to have a new substance filling its phloem.</span>")
-						seed.molecule_type += new_molecule
+
+		if(GENE_BIOMOLECULES)
+			var/new_molecule = pick(STARCH, CHITIN, PROTEIN, GLUCOSE, CELLULOSE, XENOPHYLL)
+			if (new_molecule in seed.molecule_type)
+				visible_message("<span class='notice'>\The [seed.display_name] has its phloem shrivel up.</span>")
+				seed.molecule_type -= new_molecule
+			else
+				visible_message("<span class='notice'>\The [seed.display_name] seems to have a new substance filling its phloem.</span>")
+				seed.molecule_type += new_molecule
 
 		if(GENE_MORPHOLOGY)
 			var/mutation_type = pick(PLANT_PRODUCTS, PLANT_THORNY, PLANT_JUICY, PLANT_LIGNEOUS, PLANT_STINGING, PLANT_APPEARANCE)
