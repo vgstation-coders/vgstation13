@@ -14,9 +14,9 @@
 	. = ..()
 	if (!.)
 		return FALSE
-	if(user.mind && user.mind.suiciding)			//no reviving from suicides
-		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?</span>")
-		return FALSE
+//	if(user.mind && user.mind.suiciding)			//no reviving from suicides
+//		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?</span>")
+//		return FALSE
 	if(M_HUSK in user.mutations)
 		to_chat(user, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
 		return FALSE
@@ -59,6 +59,7 @@
 	var/datum/role/changeling/changeling = owner.mind.GetRole(CHANGELING)
 	var/mob/living/carbon/C = owner
 
+	C.mind.suiciding = 0
 	C.rejuvenate(0)
 	C.visible_message("<span class='warning'>[owner] appears to wake from the dead, having healed all wounds.</span>")
 	if(M_HUSK in C.mutations) //Yes you can regenerate from being husked if you played dead beforehand, but unless you find a new body, you can not regenerate again.
