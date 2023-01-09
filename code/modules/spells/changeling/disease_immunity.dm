@@ -1,5 +1,5 @@
 /spell/changeling/disease_immunity
-	name = "Immunity to Disease"
+	name = "Bioimmunity"
 	desc = "We become immune to the symptoms of any pathogen at will."
 	abbreviation = "ID"
 	hud_state = "disease_immunity"
