@@ -255,3 +255,10 @@
 // 	cost = 1
 // 	allowduringlesserform = 1
 // 	spellpath = /obj/item/verbs/changeling/proc/changeling_chemspit
+
+/datum/power/changeling/disease_immunity
+	name = "Bioimmunity"
+	desc = "We become immune to the symptoms of any pathogen at will."
+	helptext = "It does not purge the diseases nor provides antigens, but instead causes the symptoms to never appear."
+	cost = 2
+	spellpath = /spell/changeling/disease_immunity
