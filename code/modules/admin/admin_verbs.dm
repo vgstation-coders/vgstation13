@@ -88,7 +88,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/artifacts_panel,
 	/client/proc/body_archive_panel,
 	/client/proc/climate_panel,
-	/datum/admins/proc/ashInvokedEmotions	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
+	/datum/admins/proc/ashInvokedEmotions,	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
+	/client/proc/toggle_admin_examine
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -1360,4 +1361,14 @@ var/list/admin_verbs_mod = list(
 	if(holder)
 		holder.ViewAllRods()
 	feedback_add_details("admin_verb","V-ROD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return
+
+/client/proc/toggle_admin_examine()
+	set name = "Toggle Admin-only Descriptions"
+	set category = "Admin"
+	set desc = "See admin-only text for certain objects."
+	if(holder)
+		holder.admin_examine = !(holder.admin_examine)
+		to_chat(usr, "<span class='notice'>You toggle [holder.admin_examine ? "on" : "off"] admin examining.")
+	feedback_add_details("admin_verb","admin_examine")
 	return

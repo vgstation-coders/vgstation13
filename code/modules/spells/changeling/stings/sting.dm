@@ -3,7 +3,7 @@
 	desc = "We string our target."
 	abbreviation = "ST"
 
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK|CAN_CHANNEL_RESTRAINED
 	range = 1
 
 	var/silent = 0      //dont show the "tiny prick!" message, takes priority if visible is also set to 1
@@ -39,7 +39,6 @@
 		to_chat(user, "<span class='warning'>We sting [L.name].</span>")
 		to_chat(L, "<span class='warning'>You feel a tiny prick!</span>")
 		user << 'sound/items/hypospray.ogg'
-		L << 'sound/items/hypospray.ogg'
 
 
 
@@ -47,7 +46,6 @@
 
 	spawn(delay)
 		lingsting(user, L)
-
 
 /spell/changeling/sting/proc/sting_can_reach(var/mob/M, sting_range = 1)
 	if(!isturf(holder.loc) || !isturf(M.loc))

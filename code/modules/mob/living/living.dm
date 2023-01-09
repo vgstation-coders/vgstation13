@@ -1575,7 +1575,8 @@ Thanks.
 			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
 			return FAILED_THROW
 
-		I.pre_throw()
+		if(I.pre_throw(target))
+			return FAILED_THROW
 
 	remove_from_mob(item)
 
