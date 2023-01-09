@@ -124,7 +124,7 @@
 			<B>[chan_name][chan_prefix ? " (:[chan_prefix]) " : ""]</B>: <A href='byond://?src=\ref[src];ch_name=[chan_name];listen=[!list]'>[list ? "Engaged" : "Disengaged"]</A><BR>
 			"}
 
-//Finds if there is a defined prefix for the channel noted in communications.
+//Finds if there is a defined prefix for the channel noted in _DEFINES/communications.dm
 //It's ugly but if it was as easy as slapping [chan_name]_PREFIX to call the associated prefix.
 //This way it also doesn't cause unforeseen consequences.
 /obj/item/device/radio/proc/fetch_prefix(var/chan_name)
