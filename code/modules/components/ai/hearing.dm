@@ -184,37 +184,3 @@
 			new_whitelist += pick_n_take(stufftochoose)
 	whitelist_items.Cut()
 	whitelist_items += new_whitelist
-
-/datum/component/ai/hearing/order/bardrinks
-	whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks/soda_cans)
-
-/datum/component/ai/hearing/order/bardrinks/select_reagents
-	var/list/acceptable_recipe_reagents = list()
-	var/list/chem_dispenser_types = list(/obj/machinery/chem_dispenser/booze_dispenser,/obj/machinery/chem_dispenser/soda_dispenser,/obj/machinery/chem_dispenser/brewer)
-
-/datum/component/ai/hearing/order/bardrinks/select_reagents/build_whitelist()
-	var/list/new_whitelist = list()
-	for(var/dispensertype in chem_dispenser_types)
-		var/obj/machinery/chem_dispenser/C = new dispensertype
-		acceptable_recipe_reagents += C.dispensable_reagents // have to make the object because initial() can't grab lists, sadly
-		qdel(C)
-	acceptable_recipe_reagents = uniquelist(acceptable_recipe_reagents)
-	for(var/item in whitelist_items)
-		if(ispath(item,/datum/reagent))
-			var/datum/reagent/R = item
-			for(var/id in chemical_reactions_list)
-				var/datum/chemical_reaction/D = chemical_reactions_list[id]
-				if(D.result == initial(R.id))
-					var/include = TRUE
-					if(!D.required_reagents?.len)
-						include = FALSE
-					else
-						for(var/reagent in D.required_reagents)
-							if(!(reagent in acceptable_recipe_reagents))
-								include = FALSE
-								break
-					if(include)
-						var/datum/reagent/subR = chemical_reagents_list[D.result]
-						new_whitelist += subR.type
-	whitelist_items = prune_list_to_type(whitelist_items,/datum/reagent,TRUE)
-	whitelist_items += new_whitelist
