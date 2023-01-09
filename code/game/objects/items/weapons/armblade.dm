@@ -5,6 +5,7 @@
 	icon_state = "armblade"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 30
+	armor_penetration = 75
 	sharpness = 1.5
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD
 	throwforce = 0

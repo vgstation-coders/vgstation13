@@ -1384,7 +1384,7 @@ var/global/floorIsLava = 0
 /datum/admins/proc/toggletintedweldhelmets()
 	set category = "Debug"
 	set desc="Reduces view range when wearing welding helmets"
-	set name="Toggle tinted welding helmes"
+	set name="Toggle tinted welding helmets"
 
 	tinted_weldhelh = !( tinted_weldhelh )
 	if (tinted_weldhelh)

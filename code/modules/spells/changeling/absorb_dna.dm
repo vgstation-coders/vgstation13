@@ -1,6 +1,6 @@
 /spell/changeling/absorbdna
 	name = "Absorb DNA"
-	desc = "Permits us to syphon the DNA from a human. They become one with us, and we become stronger."
+	desc = "Permits us to siphon the DNA from a human. They become one with us, and we become stronger."
 	abbreviation = "AD"
 	hud_state = "absorbdna"
 	spell_flags = NEEDSHUMAN
@@ -25,7 +25,7 @@
 		to_chat(user, "<span class='warning'>[T] is not compatible with our biology.</span>")
 		return FALSE
 	if(M_HUSK in T.mutations)	//No double-absorbing
-		to_chat(user, "<span class='warning'>This creature's DNA is ruined beyond useability!</span>")
+		to_chat(user, "<span class='warning'>This creature's DNA is ruined beyond usability!</span>")
 		return FALSE
 	if(!T.mind)						//No monkeymen
 		to_chat(user, "<span class='warning'>This creature's DNA is useless to us!</span>")

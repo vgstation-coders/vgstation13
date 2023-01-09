@@ -99,7 +99,7 @@
 	// New equation : https://docs.google.com/spreadsheets/d/1qnQm5hDdwZoyVmBCtf6-jwwHKEaCnYa3ljmYPs7gkSE/edit#gid=0
 		if (LORENTZ)
 			relative_threat = lorentz_distribution(dynamic_curve_centre, dynamic_curve_width)
-			threat_level = lorentz2threat(relative_threat) * 0.85
+			threat_level = lorentz2threat(relative_threat)
 			threat = round(threat, 0.1)
 
 			curve_centre_of_round = dynamic_curve_centre
@@ -111,7 +111,7 @@
 			starting_threat = threat_level
 
 			relative_threat = lorentz_distribution(dynamic_curve_centre, dynamic_curve_width)
-			midround_threat_level = lorentz2threat(relative_threat) * 0.6
+			midround_threat_level = lorentz2threat(relative_threat)
 			midround_threat = midround_threat_level
 			midround_starting_threat = midround_threat_level
 

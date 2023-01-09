@@ -3,7 +3,7 @@
 	desc = "We string our target."
 	abbreviation = "ST"
 
-	spell_flags = WAIT_FOR_CLICK|NO_TURNING
+	spell_flags = WAIT_FOR_CLICK|CAN_CHANNEL_RESTRAINED|NO_TURNING
 	range = 1
 
 	var/silent = 0      //dont show the "tiny prick!" message, takes priority if visible is also set to 1
@@ -36,7 +36,6 @@
 		to_chat(user, "<span class='warning'>We sting [L.name].</span>")
 		to_chat(L, "<span class='warning'>You feel a tiny prick!</span>")
 		user << 'sound/items/hypospray.ogg'
-		L << 'sound/items/hypospray.ogg'
 
 
 
