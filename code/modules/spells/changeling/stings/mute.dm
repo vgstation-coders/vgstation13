@@ -1,6 +1,6 @@
 /spell/changeling/sting/mute
 	name = "Silence Sting (15)"
-	desc = "We silently sting a human, completely silencing them for a short time."
+	desc = "We silently sting a human, completely silencing them for a minute."
 	abbreviation = "MS"
 	hud_state = "mutesting"
 

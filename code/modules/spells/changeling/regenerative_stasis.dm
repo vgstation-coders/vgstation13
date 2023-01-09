@@ -1,6 +1,6 @@
 /spell/changeling/regenerate
 	name = "Regenerative Stasis (20)"
-	desc = "We become weakened to a death-like state, where we will rise again from death."
+	desc = "We become weakened to a death-like state, where we will rise again from death. This will take 2 minutes."
 	abbreviation = "RS"
 	hud_state = "regenstasis"
 
@@ -27,7 +27,7 @@
 	var/mob/living/carbon/C = user
 	var/delay = 0 SECONDS
 	inuse = TRUE
-	
+
 	if(C.stat != DEAD)
 		C.status_flags |= FAKEDEATH		//play dead
 		C.update_canmove()
@@ -44,7 +44,7 @@
 		to_chat(C, "<span class = 'notice'>Click the action button to revive.</span>")
 		var/datum/action/lingrevive/revive_action = new()
 		revive_action.Grant(C)
-		
+
 	feedback_add_details("changeling_powers","FD")
 
 	..()
