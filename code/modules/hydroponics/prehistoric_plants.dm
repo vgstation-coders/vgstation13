@@ -9,6 +9,7 @@
 	mutants = null
 	harvest_repeat = 1
 	chems = list(DIETHYLAMINE = list(0,10))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 60
 	maturation = 6
@@ -36,6 +37,7 @@
 	mutants = null
 	harvest_repeat = 1
 	chems = list(FROSTOIL = list(5,30))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 50
 	maturation = 3
@@ -55,7 +57,6 @@
 	desc = "Looks chewy, might be good to eat."
 	plantname = "thaadra"
 	hydroflags = HYDRO_PREHISTORIC
-	molecule_type = XENOPHYLL
 
 /datum/seed/jurlmah
 	name = "jurlmah"
@@ -65,7 +66,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/jurlmah)
 	mutants = null
 	chems = list(CLONEXADONE = list(1,10))
-
+	molecule_type = list(XENOPHYLL)
 	lifespan = 25
 	maturation = 6
 	production = 1
@@ -86,7 +87,6 @@
 	desc = "Bulbous and veiny, it appears to pulse slightly as you look at it."
 	plantname = "jurlmah"
 	hydroflags = HYDRO_PREHISTORIC
-	molecule_type = XENOPHYLL
 
 /datum/seed/amauri
 	name = "amauri"
@@ -97,6 +97,7 @@
 	mutants = null
 	noreact = 1
 	chems = list(POTASSIUM = list(0,10),SUGAR = list(0,10),PHOSPHORUS = list(0,10))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 25
 	maturation = 10
@@ -119,7 +120,6 @@
 	desc = "It is small, round and hard. Its skin is a thick dark purple."
 	plantname = "amauri"
 	hydroflags = HYDRO_PREHISTORIC
-	molecule_type = XENOPHYLL
 
 /datum/seed/gelthi
 	name = "gelthi"
@@ -130,6 +130,7 @@
 	mutants = null
 	harvest_repeat = 2
 	chems = list(NUTRIMENT = list(1,10))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 55
 	maturation = 6
@@ -150,7 +151,6 @@
 	gender = PLURAL
 	plantname = "gelthi"
 	hydroflags = HYDRO_PREHISTORIC
-	molecule_type = XENOPHYLL
 
 /datum/seed/vale
 	name = "vale"
@@ -161,6 +161,7 @@
 	mutants = null
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10),SPORTDRINK = list(0,2),THYMOL = list(0,5))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 100
 	maturation = 6
@@ -181,7 +182,6 @@
 	plantname = "vale"
 	hydroflags = HYDRO_PREHISTORIC
 	fragrance = INCENSE_CRAVE
-	molecule_type = XENOPHYLL
 
 /datum/seed/surik
 	name = "surik"
@@ -192,6 +192,7 @@
 	mutants = null
 	harvest_repeat = 1
 	chems = list(KARMOTRINE = list(2,2))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 55
 	maturation = 7
@@ -211,4 +212,3 @@
 	desc = "Multiple layers of blue skin peeling away to reveal a spongey core, vaguely resembling an ear."
 	plantname = "surik"
 	hydroflags = HYDRO_PREHISTORIC
-	molecule_type = XENOPHYLL
