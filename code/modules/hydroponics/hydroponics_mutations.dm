@@ -25,7 +25,7 @@
 	//Be aware the formulas are slightly different for lowering and increasing values inside log() and also min()
 	switch(gene)
 		if(GENE_PHYTOCHEMISTRY)
-			var/mutation_type = pick(85; PLANT_POTENCY, 15; PLANT_CHEMICAL)
+			var/mutation_type = pick(60; PLANT_POTENCY, 25; PLANT_CHEMICAL, 15; PLANT_MOLECULES)
 			switch(mutation_type)
 				if(PLANT_POTENCY)
 					if(seed.potency <= 0)
@@ -44,6 +44,14 @@
 						check_success = seed.add_random_chemical()
 						if(check_success)
 							visible_message("<span class='notice'>\The [seed.display_name] develops a strange-looking gland.</span>")
+				if(PLANT_MOLECULES)
+					var/new_molecule = pick(STARCH, CHITIN, PROTEIN, GLUCOSE, CELLULOSE, XENOPHYLL)
+					if (new_molecule in seed.molecule_type)
+						visible_message("<span class='notice'>\The [seed.display_name] has its phloem shrivel up.</span>")
+						seed.molecule_type -= new_molecule
+					else
+						visible_message("<span class='notice'>\The [seed.display_name] seems to have a new substance filling its phloem.</span>")
+						seed.molecule_type += new_molecule
 
 		if(GENE_MORPHOLOGY)
 			var/mutation_type = pick(PLANT_PRODUCTS, PLANT_THORNY, PLANT_JUICY, PLANT_LIGNEOUS, PLANT_STINGING, PLANT_APPEARANCE)
@@ -58,7 +66,7 @@
 					else
 						visible_message("<span class='notice'>\The [seed.display_name] sheds its thorns away...</span>")
 				if(PLANT_JUICY)
-					//clever way of going from 0 to 1 to 2. 
+					//clever way of going from 0 to 1 to 2.
 					seed.juicy = (seed.juicy + 1) % 3
 					generic_mutation_message("wobbles!")
 				if(PLANT_LIGNEOUS)
@@ -111,7 +119,7 @@
 						//lower better
 						var/hardcap = 0.1
 						var/max_change = 0.15 //percent
-						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.lowkpa_tolerance*100),0.01),max_change*seed.lowkpa_tolerance),0.1) 
+						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.lowkpa_tolerance*100),0.01),max_change*seed.lowkpa_tolerance),0.1)
 					//higher better
 					var/hardcap = 500
 					var/max_change = 0.15 //percent

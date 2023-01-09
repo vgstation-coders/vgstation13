@@ -569,7 +569,8 @@
 		dat += "<FONT COLOR=red>Biogenerator is processing! Please wait...</FONT>"
 	else
 		for (var/nutrient in points)
-			dat += "[nutrient]: [points[nutrient]] points.<BR>"
+			if (points[nutrient] > 0)
+				dat += "[nutrient]: [points[nutrient]] points.<BR>"
 		switch(menustat)
 			if("menu")
 				if (beaker)
@@ -621,7 +622,8 @@
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/I in contents)
 		S += 5
 		if(I.reagents.get_reagent_amount(NUTRIMENT) > 0.1)
-			points[I.molecule_type] += I.reagents.get_reagent_amount(NUTRIMENT)*biomass_coefficient
+			for (var/molecule in I.seed.molecule_type)
+				points[molecule] += round((I.reagents.get_reagent_amount(NUTRIMENT)*biomass_coefficient) / I.seed.molecule_type.len)
 		qdel(I)
 	if(S)
 		processing = 1

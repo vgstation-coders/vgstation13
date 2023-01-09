@@ -56,6 +56,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/teleporting = 0				// If 1, causes teleportation when thrown.
 	var/juicy = 0					// 0 = no, 1 = splatters when thrown, 2 = slips
 	var/noreact = 0					// If 1, chems do not react inside the plant.
+	var/list/molecule_type = list() // Types of organic molecules produced by this plant. Used for biogenerator.
 
 	// Cosmetics.
 	var/plant_dmi = 'icons/obj/hydroponics/apple.dmi'// DMI  to use for the plant growing in the tray.
@@ -276,8 +277,10 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			switch(mode)
 				if(GENEGUN_MODE_PURGE)
 					potency 			= gene.values[2]
+					molecule_type       = gene.values[3]
 				if(GENEGUN_MODE_SPLICE)
 					potency 			= round(mix(gene.values[2], potency, rand(40, 60)/100), 0.1)
+					molecule_type      += gene.values[3]
 
 		if(GENE_MORPHOLOGY)
 			if(gene.values[1])
@@ -408,6 +411,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			P.values = list(
 				(chems                	? chems                	: 0),
 				(potency				? potency 				: 0),
+				(molecule_type          ? molecule_type         : 0)
 			)
 		if(GENE_MORPHOLOGY)
 			P.values = list(
@@ -655,6 +659,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.alter_temp =			alter_temp
 	new_seed.plant_dmi =			plant_dmi
 	new_seed.mutation_log =			mutation_log
+	new_seed.molecule_type =        molecule_type
 	new_seed.mutation_log += "([timestamp()]) Diverged from seed with uid: [uid]."
 
 	ASSERT(istype(new_seed)) //something happened... oh no...

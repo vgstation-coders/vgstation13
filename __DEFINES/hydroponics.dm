@@ -27,7 +27,8 @@
 //Xenobotany mutations
 //Phytochemistry
 #define PLANT_CHEMICAL (1<<0)
-#define PLANT_POTENCY (1<<1) 
+#define PLANT_POTENCY (1<<1)
+#define PLANT_MOLECULES (1<<2)
 
 //Morphology
 #define PLANT_PRODUCTS (1<<0)

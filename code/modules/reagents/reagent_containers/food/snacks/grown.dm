@@ -14,7 +14,6 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
-	var/molecule_type
 
 	icon = 'icons/obj/hydroponics/apple.dmi'
 	icon_state = "produce"
@@ -274,7 +273,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#FFEE00"
 	trash = /obj/item/weapon/corncob
 	fragrance = INCENSE_CORNOIL
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/corn/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
@@ -289,7 +287,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	gender = PLURAL
 	plantname = "cherry"
 	slot_flags = SLOT_EARS
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cinnamon
 	name = "cinnamon sticks"
@@ -297,7 +294,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#D2691E"
 	gender = PLURAL
 	plantname = "cinnamomum"
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/poppy
 	name = "poppy"
@@ -306,7 +302,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#CC6464"
 	plantname = "poppies"
 	fragrance = INCENSE_POPPIES
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/harebell
 	name = "harebell"
@@ -315,7 +310,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#D4B2C9"
 	plantname = "harebells"
 	fragrance = INCENSE_HAREBELLS
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
 	name = "moonflower"
@@ -324,7 +318,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#E6E6FA"
 	plantname = "moonflowers"
 	fragrance = INCENSE_MOONFLOWERS
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato
 	name = "potato"
@@ -332,7 +325,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 25
 	filling_color = "#E6E8DA"
 	plantname = "potato"
-	molecule_type = STARCH
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -353,7 +345,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "Nutritious!"
 	filling_color = "#A332AD"
 	plantname = "grapes"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes
 	name = "bunch of green grapes"
@@ -361,7 +352,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 25
 	filling_color = "#A6FFA3"
 	plantname = "greengrapes"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/peanut
 	name = "peanut"
@@ -369,7 +359,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "857e27"
 	potency = 25
 	plantname = "peanut"
-	molecule_type = PROTEIN
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/rocknut
 	name = "rocknut"
@@ -378,7 +367,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 25
 	plantname = "rocknut"
 	force = 10
-	molecule_type = PROTEIN
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New(atom/loc, custom_plantname, mob/harvester)
 	..()
@@ -416,7 +404,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#A2B5A1"
 	plantname = "cabbage"
 	fragrance = INCENSE_LEAFY
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage
 	name = "plasma cabbage"
@@ -424,28 +411,24 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 25
 	filling_color = "#99335C"
 	plantname = "plasmacabbage"
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries
 	name = "bunch of berries"
 	desc = "Nutritious!"
 	filling_color = "#C2C9FF"
 	plantname = "berries"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/plastellium
 	name = "clump of plastellium"
 	desc = "Hmm, needs some processing."
 	filling_color = "#C4C4C4"
 	plantname = "plastic"
-	molecule_type = CHITIN
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/glowberries
 	name = "bunch of glow-berries"
 	desc = "Nutritious!"
 	filling_color = "#D3FF9E"
 	plantname = "glowberries"
-	molecule_type = XENOPHYLL
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cocoapod
 	name = "cocoa pod"
@@ -453,7 +436,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 50
 	filling_color = "#9C8E54"
 	plantname = "cocoa"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/sugarcane
 	name = "sugarcane"
@@ -461,7 +443,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 50
 	filling_color = "#C0C9AD"
 	plantname = "sugarcane"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries
 	name = "bunch of poison-berries"
@@ -470,7 +451,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	filling_color = "#B422C7"
 	plantname = "poisonberries"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/deathberries
 	name = "bunch of death-berries"
@@ -479,7 +459,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 50
 	filling_color = "#4E0957"
 	plantname = "deathberries"
-	molecule_type = XENOPHYLL
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris
 	name = "ambrosia vulgaris branch"
@@ -487,7 +466,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#125709"
 	plantname = "ambrosia"
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/cruciatus
 	name = "ambrosia vulgaris branch"
@@ -535,7 +513,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "apple"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned
 	filling_color = "#B3BD5E"
@@ -547,7 +524,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	filling_color = "#F5CB42"
 	plantname = "goldapple"
-	molecule_type = XENOPHYLL
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/watermelon
 	name = "watermelon"
@@ -558,7 +534,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	slices_num = 5
 	storage_slots = 3
 	plantname = "watermelon"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
 	name = "pumpkin"
@@ -566,7 +541,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#FAB728"
 	plantname = "pumpkin"
-	molecule_type = STARCH
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -582,7 +556,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#28FA59"
 	plantname = "lime"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/lemon
 	name = "lemon"
@@ -590,7 +563,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#FAF328"
 	plantname = "lemon"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/orange
 	name = "orange"
@@ -598,7 +570,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#FAAD28"
 	plantname = "orange"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus
 	name = "silicate citrus"
@@ -606,7 +577,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#C7FFFF"
 	plantname = "silicatecitrus"
-	molecule_type = XENOPHYLL
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
 	name = "white-beet"
@@ -614,7 +584,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	filling_color = "#FFFCCC"
 	plantname = "whitebeet"
-	molecule_type = STARCH
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/banana
 	name = "banana"
@@ -623,7 +592,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	trash = /obj/item/weapon/bananapeel
 	plantname = "banana"
 	fragrance = INCENSE_BANANA
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/banana/isHandgun()
 	return TRUE
@@ -639,7 +607,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "It's an excellent prop for a comedy."
 	filling_color = "#FCF695"
 	plantname = "bluespacebanana"
-	molecule_type = XENOPHYLL
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana/isHandgun()
 	return TRUE
@@ -655,14 +622,12 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "It's spicy! Wait... IT'S BURNING ME!!"
 	filling_color = "#FF0000"
 	plantname = "chili"
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/eggplant
 	name = "eggplant"
 	desc = "Maybe there's a chicken inside?"
 	filling_color = "#550F5C"
 	plantname = "eggplant"
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/soybeans
 	name = "soybeans"
@@ -670,7 +635,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	gender = PLURAL
 	filling_color = "#E6E8B7"
 	plantname = "soybean"
-	molecule_type = PROTEIN
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/koibeans
 	name = "koibean"
@@ -678,7 +642,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	gender = PLURAL
 	filling_color = "#F0E68C"
 	plantname = "koibean"
-	molecule_type = PROTEIN
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/tomato
 	name = "tomato"
@@ -686,7 +649,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#FF0000"
 	potency = 10
 	plantname = "tomato"
-	molecule_type = GLUCOSE // Tomatoes are fruit, not vegetables!
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato
 	name = "tomato" //"blue-space" is applied on new(), provided it's teleporting trait hasn't been removed
@@ -695,7 +657,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	origin_tech = Tc_BLUESPACE + "=3"
 	filling_color = "#91F8FF"
 	plantname = "bluespacetomato"
-	molecule_type = XENOPHYLL
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato/testing
 	potency = 100
@@ -706,7 +667,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#FF0000"
 	plantname = "killertomato"
-	molecule_type = XENOPHYLL
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/killertomato/attack_self(mob/user as mob)
 	if(istype(user.loc, /turf/space))
@@ -722,7 +682,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#FF0000"
 	plantname = "bloodtomato"
-	molecule_type = PROTEIN
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato
 	name = "blue-tomato"
@@ -730,7 +689,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#586CFC"
 	plantname = "bluetomato"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/wheat
 	name = "wheat"
@@ -738,7 +696,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	gender = PLURAL
 	filling_color = "#F7E186"
 	plantname = "wheat"
-	molecule_type = STARCH
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk
 	name = "rice stalk"
@@ -746,14 +703,12 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	gender = PLURAL
 	filling_color = "#FFF8DB"
 	plantname = "rice"
-	molecule_type = STARCH
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod
 	name = "kudzu pod"
 	desc = "<I>Pueraria Virallis</I>: An invasive species with vines that rapidly creep and wrap around whatever they contact."
 	filling_color = "#59691B"
 	plantname = "kudzu"
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/icepepper
 	name = "chilly pepper"
@@ -761,7 +716,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#66CEED"
 	plantname = "icechili"
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper
 	name = "ghost pepper"
@@ -769,7 +723,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#66CEED"
 	plantname = "ghostpepper"
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper/spook()
 	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
@@ -785,7 +738,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#FFC400"
 	plantname = "carrot"
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond
 	name = "diamond carrot"
@@ -793,10 +745,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#C4D4E0"
 	plantname = "diamondcarrot"
-	molecule_type = XENOPHYLL
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom
-	molecule_type = CHITIN
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/reishi
 	name = "reishi"
@@ -882,7 +830,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	fragrance = INCENSE_DENSE
 	var/stacktype = /obj/item/stack/tile/grass
 	var/tile_coefficient = 0.02 // 1/50
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/grass/attack_self(mob/user as mob)
 	to_chat(user, "<span class='notice'>You prepare the astroturf.</span>")
@@ -909,7 +856,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "EDEDE1"
 	plantname = "garlic"
 	hydroflags = HYDRO_VOX
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/breadfruit
 	name = "breadfruit"
@@ -917,7 +863,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "EDEDE1"
 	plantname = "breadfruit"
 	hydroflags = HYDRO_VOX
-	molecule_type = STARCH
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/woodapple
 	name = "woodapple"
@@ -928,7 +873,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "857663"
 	plantname = "woodapple"
 	hydroflags = HYDRO_VOX
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pitcher
 	name = "pitcher plant" //results in "slippery pitcher plant"
@@ -936,7 +880,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "7E8507"
 	plantname = "pitcher"
 	hydroflags = HYDRO_VOX
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/aloe
 	name = "aloe vera"
@@ -944,7 +887,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "77BA9F"
 	plantname = "aloe"
 	hydroflags = HYDRO_VOX
-	molecule_type = GLUCOSE
 
 // *************************************
 // Complex Grown Object Defines -
@@ -957,7 +899,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "A thin organic film bearing seeds, held slightly aloft by internal gasses and a reservoir of chemicals."
 	filling_color = "#FFFFFF"
 	fragrance = INCENSE_VAPOR
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/vaporsac/attack(mob/living/M, mob/user, def_zone, eat_override = 0)
 	pop(user)
@@ -991,7 +932,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	var/switching = 0
 	var/current_path = null
 	var/counter = 1
-	molecule_type = STARCH
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname, mob/harvester)
 	..()
@@ -1070,7 +1010,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	plantname = "avocado"
 	var/cant_eat_msg = "'s skin is much too tough to chew."
 	var/cut = FALSE
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/can_consume(mob/living/carbon/eater, mob/user)
 	if(cant_eat_msg)
@@ -1123,7 +1062,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "pear"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/silverpear
 	name = "silver pear"
@@ -1131,7 +1069,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "silverpear"
-	molecule_type = GLUCOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mustardplant
 	name = "mustard flowers"
@@ -1140,7 +1077,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#DFE88B"
 	plantname = "mustardplant"
 	fragrance = INCENSE_MUSTARDPLANT
-	molecule_type = CELLULOSE
 
 //Clovers
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover
@@ -1148,7 +1084,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
 	var/leaves
 	plantname = "clover"
-	molecule_type = CELLULOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/clover/zeroleaf
 	leaves = 0
