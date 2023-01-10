@@ -21,6 +21,7 @@
 #define CAN_CHANNEL_RESTRAINED 8192 //channeled spells that you can cast despite having handcuffs on
 #define LOSE_IN_TRANSFER 16384 //If your mind is transferred, you'll lose this spell.
 #define IS_HARMFUL 32768	//For pacify checks to determine whether the spell can be cast
+#define NO_TURNING 65536 //User does not turn around to face the target when using the spell
 
 //invocation
 #define SpI_SHOUT	"shout"

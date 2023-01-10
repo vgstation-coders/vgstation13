@@ -3,7 +3,7 @@
 	desc = "We string our target."
 	abbreviation = "ST"
 
-	spell_flags = WAIT_FOR_CLICK|CAN_CHANNEL_RESTRAINED
+	spell_flags = WAIT_FOR_CLICK|CAN_CHANNEL_RESTRAINED|NO_TURNING
 	range = 1
 
 	var/silent = 0      //dont show the "tiny prick!" message, takes priority if visible is also set to 1
