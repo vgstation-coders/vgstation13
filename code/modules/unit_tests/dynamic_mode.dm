@@ -58,7 +58,7 @@
 					M.stat = DEAD
 				else
 					dynamic_mode.candidates += M
-			dynamic_mode.roundstart_pop_ready = dynamic_mode.candidates.len || dynamic_mode.living_players.len
+			dynamic_mode.roundstart_pop_ready = max(dynamic_mode.candidates.len,dynamic_mode.living_players.len)
 			var/result = ruleset.check_enemy_jobs(dead_dont_count,FALSE)
 			if(result == dead_dont_count)
 				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [!dead_dont_count], got [result] with [enemies_count] out of [DR.required_enemies[threat]] enemies [!dead_dont_count ? "and [dynamic_mode.roundstart_pop_ready] out of [DR.required_pop[threat]] candidates" : ""])")
