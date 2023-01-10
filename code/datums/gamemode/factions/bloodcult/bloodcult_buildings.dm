@@ -242,7 +242,8 @@
 		if (loc)
 			blade.forceMove(loc)
 		else
-			QDEL_NULL(blade)
+			qdel(blade)
+	blade = null
 	flick("[icon_state]-break", src)
 
 	holomap_markers -= HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"
@@ -1121,7 +1122,8 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/forge/Destroy()
 	if (forging)
-		QDEL_NULL(forging)
+		qdel(forging)
+	forging = null
 	forger = null
 	processing_objects.Remove(src)
 	holomap_markers -= HOLOMAP_MARKER_CULT_FORGE+"_\ref[src]"

@@ -114,7 +114,8 @@
 	owner = null
 	if(target)
 		if(istype(target,/obj/effect/portal) && !istype(creator,/obj/item/weapon/gun/portalgun))
-			QDEL_NULL(target)
+			qdel(target)
+		target = null
 	if(creator)
 		if(istype(creator,/obj/item/weapon/hand_tele))
 			var/obj/item/weapon/hand_tele/H = creator

@@ -225,10 +225,12 @@ var/list/inserted_datadisk_cache = list()
 /obj/machinery/disk_duplicator/Destroy()
 	if (disk_source)
 		if (disk_source.loc == src)
-			QDEL_NULL(disk_source)
+			qdel(disk_source)
+		disk_source = null
 	if (disk_dest)
 		if (disk_dest.loc == src)
-			QDEL_NULL(disk_dest)
+			qdel(disk_dest)
+		disk_dest = null
 	..()
 
 /obj/machinery/disk_duplicator/crowbarDestroy(var/mob/user)

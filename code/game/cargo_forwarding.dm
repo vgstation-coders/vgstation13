@@ -84,11 +84,13 @@
 	if(associated_crate)
 		associated_crate.associated_forward = null
 		if(delete_crate)
-			QDEL_NULL(associated_crate)
+			qdel(associated_crate)
+		associated_crate = null
 	if(associated_manifest)
 		associated_manifest.associated_forward = null
 		if(delete_manifest)
-			QDEL_NULL(associated_manifest)
+			qdel(associated_manifest)
+		associated_manifest = null
 	..()
 
 /datum/cargo_forwarding/proc/Pay(var/reason) //Reason for crate denial
@@ -140,11 +142,13 @@
 	if(associated_crate)
 		associated_crate.associated_forward = null
 		if(delete_crate)
-			QDEL_NULL(associated_crate)
+			qdel(associated_crate)
+		associated_crate = null
 	if(associated_manifest)
 		associated_manifest.associated_forward = null
 		if(delete_manifest)
-			QDEL_NULL(associated_manifest)
+			qdel(associated_manifest)
+		associated_manifest = null
 	SSsupply_shuttle.cargo_forwards.Remove(src)
 
 /datum/cargo_forwarding/proc/post_creation() //Called after crate spawns in shuttle

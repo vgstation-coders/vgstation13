@@ -494,7 +494,8 @@
 /datum/rune_spell/communication/Destroy()
 	destroying_self = 1
 	if (comms)
-		QDEL_NULL(comms)
+		qdel(comms)
+	comms = null
 	..()
 
 /obj/effect/cult_ritual/cult_communication
@@ -1843,7 +1844,8 @@ var/list/confusion_victims = list()
 /datum/rune_spell/seer/Destroy()
 	destroying_self = 1
 	if (seer_ritual && !seer_ritual.talisman)
-		QDEL_NULL(seer_ritual)
+		qdel(seer_ritual)
+	seer_ritual = null
 	..()
 
 /datum/rune_spell/seer/cast()

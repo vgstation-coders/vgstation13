@@ -219,15 +219,18 @@
 /obj/machinery/atmospherics/trinary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
 		if(network1)
-			QDEL_NULL(network1)
+			qdel(network1)
+		node1 = null
 
 	else if(reference==node2)
 		if(network2)
-			QDEL_NULL(network2)
+			qdel(network2)
+		node1 = null
 
 	else if(reference==node3)
 		if(network3)
-			QDEL_NULL(network3)
+			qdel(network3)
+		node1 = null
 
 	return ..()
 

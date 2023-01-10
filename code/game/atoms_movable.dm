@@ -89,7 +89,8 @@
 		locked_to.unlock_atom(src)
 
 	for (var/datum/locking_category/category in locking_categories)
-		QDEL_NULL(category)
+		qdel(category)
+	locking_categories      = null
 	locking_categories_name = null
 
 	break_all_tethers()
@@ -747,7 +748,8 @@
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
 		AM.unlock_atom(src)
-		AM.unregister_event(/event/destroyed, src, .proc/QDEL_NULL_self)
+		AM.unregister_event(/event/destroyed, src, .proc/qdel_self)
+	master = null
 	return ..()
 
 /atom/movable/overlay/blob_act()

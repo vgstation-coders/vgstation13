@@ -38,7 +38,8 @@
 	if(projector)
 		projector.icon_state = "shield0"
 		if(projector.ray)
-			QDEL_NULL(projector.ray)
+			qdel(projector.ray)
+		projector = null
 	..()
 
 /obj/item/device/hologram_projector/proc/clear_holo()

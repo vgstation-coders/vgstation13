@@ -532,7 +532,8 @@ Assign your candidates in choose_candidates() instead.
 	var/mob/new_player/old_AI = new
 	old_AI.ckey = displaced.ckey
 	old_AI.name = displaced.ckey
-	QDEL_NULL(displaced)
+	qdel(displaced)
+	old_AI.mind.assigned_role = null
 	var/list/shuffledoccupations = shuffle(job_master.occupations)
 	for(var/level = 3 to 1 step -1)
 		if(old_AI.mind.assigned_role)

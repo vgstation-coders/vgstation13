@@ -263,9 +263,11 @@ List of hard deletions:"}
 	gcDestroyed = "Bye, world!"
 	tag = null
 	for(var/timer in active_timers)
-		QDEL_NULL(timer)
+		qdel(timer)
+	active_timers = null
 	for(var/component_type in datum_components)
-		QDEL_NULL(datum_components[component_type])
+		qdel(datum_components[component_type])
+	datum_components = null
 
 /datum/var/gcDestroyed
 

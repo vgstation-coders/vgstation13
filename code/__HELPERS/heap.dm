@@ -12,7 +12,8 @@
 
 /datum/heap/Destroy(force, ...)
 	for(var/i in L) // because this is before the list helpers are loaded
-		QDEL_NULL(i)
+		qdel(i)
+	L = null
 	return ..()
 
 /datum/heap/proc/is_empty()

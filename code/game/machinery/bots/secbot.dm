@@ -490,7 +490,8 @@ Auto Patrol: []"},
 /obj/machinery/bot/secbot/Destroy()
 	if(baton)
 		if(is_holder_of(src, baton))
-			QDEL_NULL(baton)
+			qdel(baton)
+		baton = null
 
 	return ..()
 

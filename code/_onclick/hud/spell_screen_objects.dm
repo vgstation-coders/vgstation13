@@ -287,7 +287,8 @@
 			spellmaster.spell_holder.client.screen -= src
 			remove_channeling()
 	if(spellmaster && !spellmaster.spell_objects.len)
-		QDEL_NULL(spellmaster)
+		qdel(spellmaster)
+	spellmaster = null
 
 /obj/abstract/screen/spell/proc/update_charge(var/forced_update = 0)
 	if(!spell)

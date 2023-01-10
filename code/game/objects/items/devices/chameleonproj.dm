@@ -94,7 +94,8 @@
 		spark(src, 5)
 		eject_all()
 		if(delete_dummy)
-			QDEL_NULL(active_dummy)
+			qdel(active_dummy)
+		active_dummy = null
 		can_use = 0
 		spawn(50)
 			can_use = 1

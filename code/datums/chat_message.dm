@@ -61,7 +61,8 @@ var/runechat_icon = null
 	if (owned_by)
 		owned_by.seen_messages.Remove(src)
 		owned_by.images.Remove(message)
-		owned_by.mob.unregister_event(/event/destroyed, src, .proc/QDEL_NULL_self)
+		owned_by.mob.unregister_event(/event/destroyed, src, .proc/qdel_self)
+	owned_by = null
 	message_loc = null
 	message = null
 	return ..()

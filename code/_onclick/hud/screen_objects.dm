@@ -624,7 +624,8 @@
 /client/proc/reset_screen()
 	for(var/obj/abstract/screen/objects in src.screen)
 		if(!objects.globalscreen)
-			QDEL_NULL(objects)
+			qdel(objects)
+	src.screen = null
 
 /obj/abstract/screen/dissolvable()
 	return 0
