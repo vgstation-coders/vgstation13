@@ -137,6 +137,7 @@
 
 	O.UpdateAppearance()
 	domutcheck(O, null)
+	O.update_name()
 	O.setToxLoss(M.getToxLoss())
 	O.adjustBruteLoss(M.getBruteLoss())
 	O.setOxyLoss(M.getOxyLoss())
