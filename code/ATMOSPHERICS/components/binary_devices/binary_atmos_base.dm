@@ -215,8 +215,8 @@
 
 	else if(reference==node2)
 		if(network2)
-			qdel(network1)
-		node1 = null
+			qdel(network2)
+		node2 = null
 
 	return ..()
 

@@ -225,12 +225,12 @@
 	else if(reference==node2)
 		if(network2)
 			qdel(network2)
-		node1 = null
+		node2 = null
 
 	else if(reference==node3)
 		if(network3)
 			qdel(network3)
-		node1 = null
+		node3 = null
 
 	return ..()
 
