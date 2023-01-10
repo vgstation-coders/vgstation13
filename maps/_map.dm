@@ -32,11 +32,6 @@
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
 
-	//Center of thunderdome admin room
-	var/tDomeX = 0
-	var/tDomeY = 0
-	var/tDomeZ = 0
-
 	//Holomap offsets
 	var/list/holomap_offset_x = list()
 	var/list/holomap_offset_y = list()

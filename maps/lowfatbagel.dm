@@ -7,9 +7,6 @@
 	nameShort = "lowfat"
 	nameLong = "Lowfat Bagel"
 	map_dir = "lowfatbagel"
-	tDomeX = 128
-	tDomeY = 58
-	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
 		/datum/zLevel/centcomm,

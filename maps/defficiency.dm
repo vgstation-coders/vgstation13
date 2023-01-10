@@ -7,9 +7,6 @@
 	nameShort = "deff"
 	nameLong = "Defficiency"
 	map_dir = "defficiency"
-	tDomeX = 128
-	tDomeY = 58
-	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
 		/datum/zLevel/centcomm,

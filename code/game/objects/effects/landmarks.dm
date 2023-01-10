@@ -59,6 +59,8 @@
 			tdomeadmin	+= loc
 		if("tdomeobserve")
 			tdomeobserve += loc
+		if("tdomepacks")
+			tdomepacks += loc
 		//not prisoners
 		if("prisonsecuritywarp")
 			prisonsecuritywarp += loc
@@ -97,7 +99,7 @@
 
 		if("voxlocker")
 			voxlocker += loc
-			
+
 		if("ninjastart")
 			ninjastart += loc
 
