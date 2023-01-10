@@ -100,7 +100,7 @@
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
 			adjust_hp(5)
-			if(initial(maxhealth) = 30) //regular gym rat
+			if(initial(maxHealth) = 30) //regular gym rat
 				SCALERATE += (1/14)
 			else						//pompadour
 				SCALERATE += (1/16)
@@ -244,7 +244,7 @@
 				maxHealth-=10
 				if(initial(maxhealth) = 30) //regular gym rat
 					SCALERATE -= (1/7)
-				else if(initial(maxhealth) = 40) //pompadour
+				else if(initial(maxHealth) = 40) //pompadour
 					SCALERATE -= (1/8)
 				else //roidrat
 					SCALERATE -= (1/10)
