@@ -40,7 +40,7 @@
 	var/list/gym_equipments = list(/obj/structure/stacklifter, /obj/structure/punching_bag, /obj/structure/weightlifter, /obj/machinery/power/treadmill)
 	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks)
 
-	var/SCALERATE = 1
+	var/scalerate = 1
 	var/all_fours = TRUE
 
 	var/last_scavenge = 0
@@ -101,13 +101,13 @@
 		if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
 			adjust_hp(5)
 			if(initial(maxHealth) == 30) //regular gym rat
-				SCALERATE += (1/14)
+				scalerate += (1/14)
 			else						//pompadour
-				SCALERATE += (1/16)
-			if(SCALERATE > 2) //to tame the float point inaccuracies
-				SCALERATE = 2
+				scalerate += (1/16)
+			if(scalerate > 2) //to tame the float point inaccuracies
+				scalerate = 2
 			var/matrix/M = matrix()
-			M.Scale(SCALERATE,SCALERATE)
+			M.Scale(scalerate,scalerate)
 			transform = M
 		else
 			health+=5 // Otherwise we just get a little health back
@@ -243,15 +243,15 @@
 				visible_message("<span class='warning'>[src] seems to shrink as the soymilk washes over them! Its muscles look less visible...</span>")
 				maxHealth-=10
 				if(initial(maxHealth) == 30) //regular gym rat
-					SCALERATE -= (1/7)
+					scalerate -= (1/7)
 				else if(initial(maxHealth) == 40) //pompadour
-					SCALERATE -= (1/8)
+					scalerate -= (1/8)
 				else //roidrat
-					SCALERATE -= (1/10)
-				if(SCALERATE < 1) //to tame the float point inaccuracies 
-					SCALERATE = 1
+					scalerate -= (1/10)
+				if(scalerate < 1) //to tame the float point inaccuracies 
+					scalerate = 1
 				var/matrix/M = matrix()
-				M.Scale(SCALERATE,SCALERATE)
+				M.Scale(scalerate,scalerate)
 				transform = M
 				adjustBruteLoss(1) // Here so that the mouse aggros. It won't be happy that you're cutting into its gainz!
 			if(maxHealth < 20)
@@ -405,11 +405,11 @@
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
 			adjust_hp(5)
-			SCALERATE += (1/20)
-			if(SCALERATE > 2) //to tame the float point inaccuracies
-				SCALERATE = 2
+			scalerate += (1/20)
+			if(scalerate > 2) //to tame the float point inaccuracies
+				scalerate = 2
 			var/matrix/M = matrix()
-			M.Scale(SCALERATE,SCALERATE)
+			M.Scale(scalerate,scalerate)
 			transform = M
 		else
 			health+=5 // Otherwise we just get a little health back
