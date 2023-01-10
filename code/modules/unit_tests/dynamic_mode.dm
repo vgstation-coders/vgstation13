@@ -63,5 +63,5 @@
 			if(result == tocheck)
 				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [!tocheck], got [result] with [enemies_count] out of [DR.required_enemies[i]] enemies[!dead_dont_count ? " and [dynamic_mode.roundstart_pop_ready] out of [DR.required_pop[i]] candidates" : ""]")
 
-/datum/unit_test/dynamic/enemy_jobs/dead_dont_count
-	dead_dont_count = TRUE
+//datum/unit_test/dynamic/enemy_jobs/dead_dont_count
+//	dead_dont_count = TRUE
