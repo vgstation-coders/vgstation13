@@ -35,8 +35,7 @@
 /datum/unit_test/dynamic/enemy_jobs/start()
 	..()
 	for(var/i in 1 to 10)
-		dynamic_mode.threat_level = i*10
-		var/threat = dynamic_mode.threat_level != 100 ? round(dynamic_mode.threat_level/10)+1 : 10
+		dynamic_mode.threat_level = (i-1)*10
 		var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
 		for(var/datum/dynamic_ruleset/DR in rules2check)
 			for(var/mob/oldM1 in dynamic_mode.living_players)
@@ -47,10 +46,10 @@
 			dynamic_mode.candidates.Cut()
 			var/mob/M
 			var/enemies_count = 0
-			for(var/j in 1 to max(DR.required_pop[threat],DR.required_enemies[threat]))
+			for(var/j in 1 to max(DR.required_pop[i],DR.required_enemies[i]))
 				M = new()
 				M.mind = new("fgsfds[i]")
-				if(j <= DR.required_enemies[threat])
+				if(j <= DR.required_enemies[i])
 					M.mind.assigned_role = pick(DR.enemy_jobs)
 					enemies_count++
 				if(dead_dont_count)
@@ -59,9 +58,10 @@
 				else
 					dynamic_mode.candidates += M
 			dynamic_mode.roundstart_pop_ready = max(dynamic_mode.candidates.len,dynamic_mode.living_players.len)
-			var/result = ruleset.check_enemy_jobs(dead_dont_count,FALSE)
-			if(result == dead_dont_count)
-				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [!dead_dont_count], got [result] with [enemies_count] out of [DR.required_enemies[threat]] enemies [!dead_dont_count ? "and [dynamic_mode.roundstart_pop_ready] out of [DR.required_pop[threat]] candidates" : ""])")
+			var/result = DR.check_enemy_jobs(dead_dont_count,FALSE)
+			var/tocheck = dead_dont_count && DR.required_enemies[i]
+			if(result == tocheck)
+				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [!tocheck], got [result] with [enemies_count] out of [DR.required_enemies[i]] enemies[!dead_dont_count ? " and [dynamic_mode.roundstart_pop_ready] out of [DR.required_pop[i]] candidates" : ""]")
 
 /datum/unit_test/dynamic/enemy_jobs/dead_dont_count
 	dead_dont_count = TRUE
