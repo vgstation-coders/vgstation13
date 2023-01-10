@@ -19,7 +19,7 @@
 	speak_emote = list("squeaks loudly")
 	emote_hear = list("squeaks loudly")
 	emote_see = list("flexes", "sweats", "does a rep")
-
+	appearance_flags = PIXEL_SCALE
 	size = SIZE_SMALL // If they're not at least small it doesn't seem like the treadmill works or makes sound
 	pass_flags = PASSTABLE
 	stop_automated_movement_when_pulled = TRUE
@@ -40,6 +40,7 @@
 	var/list/gym_equipments = list(/obj/structure/stacklifter, /obj/structure/punching_bag, /obj/structure/weightlifter, /obj/machinery/power/treadmill)
 	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks)
 
+	var/SCALERATE = 1
 	var/all_fours = TRUE
 
 	var/last_scavenge = 0
@@ -99,6 +100,15 @@
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
 			adjust_hp(5)
+			if(initial(maxhealth) = 30) //regular gym rat
+				SCALERATE += (1/14)
+			else						//pompadour
+				SCALERATE += (1/16)
+			if(SCALERATE > 2) //to tame the float point inaccuracies
+				SCALERATE = 2
+			var/matrix/M = matrix()
+			M.Scale(SCALERATE,SCALERATE)
+			transform = M
 		else
 			health+=5 // Otherwise we just get a little health back
 			to_chat(src, text("<span class='warning'>The meat nourishes you, but your muscles don't grow. You've bulked all you can...</span>"))
@@ -232,6 +242,17 @@
 			if(maxHealth >= 20)
 				visible_message("<span class='warning'>[src] seems to shrink as the soymilk washes over them! Its muscles look less visible...</span>")
 				maxHealth-=10
+				if(initial(maxhealth) = 30) //regular gym rat
+					SCALERATE -= (1/7)
+				else if(initial(maxhealth) = 40) //pompadour
+					SCALERATE -= (1/8)
+				else //roidrat
+					SCALERATE -= (1/10)
+				if(SCALERATE < 1) //to tame the float point inaccuracies 
+					SCALERATE = 1
+				var/matrix/M = matrix()
+				M.Scale(SCALERATE,SCALERATE)
+				transform = M
 				adjustBruteLoss(1) // Here so that the mouse aggros. It won't be happy that you're cutting into its gainz!
 			if(maxHealth < 20)
 				visible_message("<span class='warning'>[src] shrinks back into a more appropriate size for a mouse.</span>")
@@ -386,6 +407,12 @@
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
 			adjust_hp(5)
+			SCALERATE += (1/20)
+			if(SCALERATE > 2) //to tame the float point inaccuracies
+				SCALERATE = 2
+			var/matrix/M = matrix()
+			M.Scale(SCALERATE,SCALERATE)
+			transform = M
 		else
 			health+=5 // Otherwise we just get a little health back
 			to_chat(src, text("<span class='warning'>The meat nourishes you, but your muscles don't grow. You've bulked all you can...</span>"))
