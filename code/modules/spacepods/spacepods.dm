@@ -96,25 +96,16 @@
 		for(var/datum/action/A in actions)
 			actions.Remove(A)
 			qdel(A)
-	qdel(pr_int_temp_processor)
-	pr_int_temp_processor = null
-	qdel(pr_give_air)
-	pr_give_air = null
-	qdel(pr_lights_battery_use)
-	pr_lights_battery_use = null
-	qdel(ES)
-	ES = null
-	qdel(battery)
-	battery = null
-	qdel(cabin_air)
-	cabin_air = null
-	qdel(ion_trail)
-	ion_trail = null
+	QDEL_NULL(pr_int_temp_processor)
+	QDEL_NULL(pr_give_air)
+	QDEL_NULL(pr_lights_battery_use)
+	QDEL_NULL(ES)
+	QDEL_NULL(battery)
+	QDEL_NULL(cabin_air)
+	QDEL_NULL(ion_trail)
 	qdel(pod_overlays[DAMAGE])
-	qdel(pod_overlays[FIRE])
-	pod_overlays = null
-	qdel(internal_tank)
-	internal_tank = null
+	QDEL_NULL(pod_overlays[FIRE])
+	QDEL_NULL(internal_tank)
 	..()
 
 /obj/spacepod/proc/update_icons()
@@ -175,8 +166,7 @@
 				move_outside(H, get_turf(src))
 				H.ex_act(severity + 1)
 				to_chat(H, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
-			qdel(ion_trail)
-			ion_trail = null // Should be nulled by qdel src in next line but OH WELL
+			QDEL_NULL(ion_trail) // Should be nulled by qdel src in next line but OH WELL
 			qdel(src)
 		if(2)
 			adjust_health(100)

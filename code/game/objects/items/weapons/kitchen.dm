@@ -536,8 +536,7 @@
 
 /obj/item/weapon/tray/Destroy()
 	for(var/atom/thing in carrying)
-		qdel(thing)
-	carrying = null
+		QDEL_NULL(thing)
 	..()
 
 /obj/item/weapon/tray/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)

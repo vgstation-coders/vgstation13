@@ -225,12 +225,10 @@ var/list/inserted_datadisk_cache = list()
 /obj/machinery/disk_duplicator/Destroy()
 	if (disk_source)
 		if (disk_source.loc == src)
-			qdel(disk_source)
-		disk_source = null
+			QDEL_NULL(disk_source)
 	if (disk_dest)
 		if (disk_dest.loc == src)
-			qdel(disk_dest)
-		disk_dest = null
+			QDEL_NULL(disk_dest)
 	..()
 
 /obj/machinery/disk_duplicator/crowbarDestroy(var/mob/user)
@@ -322,8 +320,7 @@ var/list/inserted_datadisk_cache = list()
 
 	if (emagged)
 		qdel(disk_source)
-		qdel(disk_dest)
-		disk_dest = null
+		QDEL_NULL(disk_dest)
 		disk_source = new /obj/item/weapon/disk(src)
 		new /obj/item/weapon/disk(loc)
 		playsound(loc, 'sound/machines/click.ogg', 50, 1)
@@ -331,8 +328,7 @@ var/list/inserted_datadisk_cache = list()
 		return
 
 
-	qdel(disk_dest)
-	disk_dest = null
+	QDEL_NULL(disk_dest)
 
 	playsound(loc, 'sound/machines/click.ogg', 50, 1)
 	var/obj/item/weapon/disk/C = new disk_source.type(loc)

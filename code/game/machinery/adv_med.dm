@@ -35,8 +35,7 @@
 /obj/machinery/bodyscanner/Destroy()
 	go_out() //Eject everything
 	if (immune)
-		qdel(immune)
-		immune = null
+		QDEL_NULL(immune)
 	..()
 
 /obj/machinery/bodyscanner/update_icon()

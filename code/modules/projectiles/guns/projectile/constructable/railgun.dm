@@ -27,14 +27,11 @@
 
 /obj/item/weapon/gun/projectile/railgun/Destroy()
 	if(loadedassembly)
-		qdel(loadedassembly)
-		loadedassembly = null
+		QDEL_NULL(loadedassembly)
 	if(loadedcapacitor)
-		qdel(loadedcapacitor)
-		loadedcapacitor = null
+		QDEL_NULL(loadedcapacitor)
 	if(loadedammo)
-		qdel(loadedammo)
-		loadedammo = null
+		QDEL_NULL(loadedammo)
 	..()
 
 /obj/item/weapon/gun/projectile/railgun/attack_self(mob/user as mob)
@@ -256,22 +253,18 @@
 			if(strength >= 200)
 				to_chat(user, "<span class='warning'>\The [loadedassembly] inside \the [src] melts!</span>")
 				to_chat(user, "<span class='warning'>\The [loadedcapacitor] inside \the [src]'s capacitor bank melts!</span>")
-				qdel(loadedassembly)
-				loadedassembly = null
+				QDEL_NULL(loadedassembly)
 				rails_secure = 0
-				qdel(loadedcapacitor)
-				loadedcapacitor = null
+				QDEL_NULL(loadedcapacitor)
 			else
 				loadedassembly.durability -= strength
 				if(loadedassembly.durability <= 0)
 					to_chat(user, "<span class='warning'>\The [loadedassembly] inside \the [src] [strength > 100 ? "shatters under" : "finally fractures from"] the stress!</span>")
-					qdel(loadedassembly)
-					loadedassembly = null
+					QDEL_NULL(loadedassembly)
 					rails_secure = 0
 			fire_sound = initial(fire_sound)
 		else
-			qdel(B)
-			in_chamber = null
+			QDEL_NULL(B)
 
 		update_icon()
 

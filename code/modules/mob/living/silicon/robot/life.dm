@@ -227,6 +227,5 @@
 		to_chat(src, "<span class='userdanger'>Your hardware detects that you have left your intended location. Initiating self-destruct.</span>")
 		spawn(rand(2,7) SECONDS)
 			if(mmi) //no sneaking brains away
-				qdel(mmi)
-				mmi = null
+				QDEL_NULL(mmi)
 			gib()

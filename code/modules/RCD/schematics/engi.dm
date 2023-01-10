@@ -207,8 +207,7 @@
 
 /datum/rcd_schematic/con_airlock/Destroy()
 	for(var/datum/selection_schematic/thing in schematics)
-		qdel(thing)
-	schematics = null
+		QDEL_NULL(thing)
 	..()
 
 /datum/rcd_schematic/con_airlock/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
@@ -478,8 +477,7 @@
 
 /datum/rcd_schematic/con_window/Destroy()
 	for(var/datum/selection_schematic/thing in schematics)
-		qdel(thing)
-	schematics = null
+		QDEL_NULL(thing)
 	..()
 
 /datum/rcd_schematic/con_window/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
@@ -548,8 +546,7 @@
 /datum/selection_schematic/Destroy()
 	for(var/client/C in clients)
 		C.screen.Remove(ourobj)
-	qdel(ourobj)
-	ourobj = null
+	QDEL_NULL(ourobj)
 	..()
 
 /datum/selection_schematic/access_schematic

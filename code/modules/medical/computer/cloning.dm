@@ -45,8 +45,7 @@
 		if(loc)
 			diskette.forceMove(loc)
 		else
-			qdel(diskette)
-		diskette = null
+			QDEL_NULL(diskette)
 	records.Cut()
 	active_record = null
 
@@ -262,8 +261,7 @@
 		src.active_record = locate(href_list["view_rec"])
 		if(istype(src.active_record,/datum/dna2/record))
 			if ((isnull(src.active_record.ckey)))
-				qdel(src.active_record)
-				src.active_record = null
+				QDEL_NULL(src.active_record)
 				src.temp = "ERROR: Record Corrupt"
 			else
 				src.menu = 3
@@ -283,8 +281,7 @@
 			if (istype(C)||istype(C, /obj/item/device/pda))
 				if(src.check_access(C))
 					src.records.Remove(src.active_record)
-					qdel(src.active_record)
-					src.active_record = null
+					QDEL_NULL(src.active_record)
 					src.temp = "Record deleted."
 					src.menu = 2
 				else
@@ -358,8 +355,7 @@
 			if(success)
 				temp = "Initiating cloning cycle..."
 				records.Remove(C)
-				qdel(C)
-				C = null
+				QDEL_NULL(C)
 				menu = 1
 			else
 				//if growclone() failed, we can't clone the guy, so what is this even DOING here?

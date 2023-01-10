@@ -25,8 +25,7 @@
 /obj/item/stack/tile/metal/Destroy()
 	..()
 	if(active)
-		qdel(active)
-		active = null
+		QDEL_NULL(active)
 
 /obj/item/stack/tile/metal/attack_self(mob/user)
 	if(!active) //Start click drag construction
@@ -43,8 +42,7 @@
 			if(use(1)) //place and use rod
 				return 1
 			else
-				qdel(active) //otherwise remove the draggable screen
-				active = null
+				QDEL_NULL(active) //otherwise remove the draggable screen
 
 /obj/item/stack/tile/metal/drag_use(mob/user, turf/T)
 	if(T.canBuildPlating() == BUILD_SUCCESS) //This deletes lattices, only necessary for BUILD_SUCCESS
@@ -61,8 +59,7 @@
 /obj/item/stack/tile/metal/dropped()
 	..()
 	if(active)
-		qdel(active)
-		active = null
+		QDEL_NULL(active)
 
 /obj/item/stack/tile/metal/proc/build(turf/S as turf)
 	if(S.air)

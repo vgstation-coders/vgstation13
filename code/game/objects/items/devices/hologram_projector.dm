@@ -14,11 +14,9 @@
 /obj/item/device/hologram_projector/Destroy()
 	if(holoperson)
 		holoperson.unequip_everything()
-		qdel(holoperson)
-		holoperson = null
+		QDEL_NULL(holoperson)
 	if(ray)
-		qdel(ray)
-		ray = null
+		QDEL_NULL(ray)
 	..()
 
 /mob/living/simple_animal/hologram/advanced/projector
@@ -40,10 +38,9 @@
 	if(projector)
 		projector.icon_state = "shield0"
 		if(projector.ray)
-			qdel(projector.ray)
-		projector = null
+			QDEL_NULL(projector.ray)
 	..()
-	
+
 /obj/item/device/hologram_projector/proc/clear_holo()
 	set_light(0)
 	if(holoperson)
@@ -53,18 +50,16 @@
 		animate(holoperson, alpha = 0, time = 5)
 		spawn(5)
 			holoperson.set_light(0)
-			qdel(ray)
-			ray = null
+			QDEL_NULL(ray)
 			holoperson.unequip_everything()
-			qdel(holoperson)
-			holoperson = null
+			QDEL_NULL(holoperson)
 			icon_state = "shield0"
 	return 1
 
 /obj/item/device/hologram_projector/emp_act()
 	if(holoperson)
 		clear_holo()
-	
+
 /obj/item/device/hologram_projector/attack_self()
 	if(polling_ghosts)
 		return
@@ -105,8 +100,7 @@
 	if(!player)
 		to_chat(usr, "Hologram generation failed!")
 		polling_ghosts = FALSE
-		qdel(recruiter)
-		recruiter = null
+		QDEL_NULL(recruiter)
 		return
 	polling_ghosts = FALSE
 
@@ -143,7 +137,7 @@
 			return 1
 
 	projector.clear_holo() //If not, we want to get rid of the hologram.
-	
+
 /mob/living/simple_animal/hologram/advanced/projector/Move()
 	..()
 	if(!projector)

@@ -86,8 +86,7 @@
 	if(node1)
 		node1.disconnect(src)
 		if(network)
-			qdel(network)
-	node1 = null
+			QDEL_NULL(network)
 	..()
 
 /obj/machinery/atmospherics/unary/initialize()
@@ -124,8 +123,7 @@
 /obj/machinery/atmospherics/unary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
 		if(network)
-			qdel(network)
-		node1 = null
+			QDEL_NULL(network)
 	return ..()
 
 /obj/machinery/atmospherics/unary/unassign_network(datum/pipe_network/reference)

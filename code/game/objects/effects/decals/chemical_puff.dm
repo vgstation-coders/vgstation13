@@ -13,8 +13,7 @@
 		icon += color
 
 /obj/effect/decal/chemical_puff/Destroy()
-	qdel(reagents)
-	reagents = null
+	QDEL_NULL(reagents)
 	..()
 
 // Reacts with the current turf and its contents

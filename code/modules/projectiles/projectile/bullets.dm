@@ -565,8 +565,7 @@
 
 /obj/item/projectile/bullet/vial/Destroy()
 	if(vial)
-		qdel(vial)
-		vial = null
+		QDEL_NULL(vial)
 	if(user)
 		user = null
 	..()
@@ -597,8 +596,7 @@
 
 		splash_sub(V.reagents, atarget, V.reagents.total_volume)
 
-		qdel(V)
-		vial = null
+		QDEL_NULL(V)
 		user = null
 
 /obj/item/projectile/bullet/vial/OnDeath()

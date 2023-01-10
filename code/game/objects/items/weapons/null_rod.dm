@@ -324,7 +324,7 @@
 	name = "rewind rifle"
 	desc = "The incarnation of looping in gun form. The shooting mechanism has been replaced with looping machinery and will only fire when the Loop happens."
 	icon = 'icons/obj/gun.dmi'
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')	
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	icon_state = "xcomlasergun"
 	item_state = "xcomlasergun"
 	w_class = W_CLASS_MEDIUM
@@ -385,8 +385,7 @@
 /obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruited(mob/dead/observer/player)
 	if(player)
 		possessed = TRUE
-		qdel(recruiter)
-		recruiter = null
+		QDEL_NULL(recruiter)
 		awakening = FALSE
 		visible_message("<span class='notice'>\The [name] awakens!</span>")
 		var/mob/living/simple_animal/shade/sword/S = new(src)
@@ -415,8 +414,7 @@
 		to_chat(S, "You were destroyed!")
 		qdel(S)
 	if(recruiter)
-		qdel(recruiter)
-		recruiter = null
+		QDEL_NULL(recruiter)
 	..()
 
 /obj/item/weapon/nullrod/sword/chaos/attack_ghost(var/mob/dead/observer/O)

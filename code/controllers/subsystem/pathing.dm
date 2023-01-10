@@ -145,8 +145,7 @@ var/global/list/pathmakers = list()
 	for(var/turf/T in closed)
 		var/PathNode/PN = T.FindPathNode(PM_id)
 		closed -= T
-		qdel(PN)
-	owner = null
+		QDEL_NULL(PN)
 	start = null
 	end = null
 	target = null

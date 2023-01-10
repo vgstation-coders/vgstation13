@@ -30,8 +30,7 @@
 			icon_state = "rigframe_0" // shouldn't happen
 
 /obj/item/device/rigframe/Destroy()
-	qdel(cell)
-	cell = null
+	QDEL_NULL(cell)
 	..()
 
 /obj/item/device/rigframe/attackby(obj/item/weapon/W, mob/user)
@@ -106,8 +105,7 @@
 			to_chat(user, "You secure the plating on \the [src].")
 			W.playtoolsound(src, 50)
 			result = new result(get_turf(src.loc))
-			qdel(result.cell)
-			result.cell = null
+			QDEL_NULL(result.cell)
 			cell.forceMove(result)
 			result.cell = cell
 			cell = null

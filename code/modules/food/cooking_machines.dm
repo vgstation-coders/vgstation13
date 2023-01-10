@@ -308,8 +308,7 @@ var/global/ingredientLimit = 10
 			H.stored_mob.ghostize()
 			H.stored_mob.death()
 			H.contents -= H.stored_mob
-			qdel(H.stored_mob)
-			H.stored_mob = null
+			QDEL_NULL(H.stored_mob)
 
 	var/obj/item/I = ingredient
 	var/obj/item/weapon/reagent_containers/food/new_food = new foodType(loc,I)
@@ -443,8 +442,7 @@ var/global/ingredientLimit = 10
 		var/obj/item/itemIngredient = ingredient
 		C.luckiness += itemIngredient.luckiness
 
-	qdel(ingredient)
-	ingredient = null
+	QDEL_NULL(ingredient)
 
 	return
 
@@ -803,8 +801,7 @@ var/global/ingredientLimit = 10
 	..()
 
 /obj/machinery/oven/Destroy()
-	qdel(within)
-	within = null
+	QDEL_NULL(within)
 	..()
 
 /obj/machinery/oven/RefreshParts()

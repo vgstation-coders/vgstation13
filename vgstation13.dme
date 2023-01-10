@@ -56,6 +56,7 @@
 #include "__DEFINES\power.dm"
 #include "__DEFINES\preferences.dm"
 #include "__DEFINES\profile.dm"
+#include "__DEFINES\qdel.dm"
 #include "__DEFINES\rcd.dm"
 #include "__DEFINES\reagents.dm"
 #include "__DEFINES\research_levels.dm"

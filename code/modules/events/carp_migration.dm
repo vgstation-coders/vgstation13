@@ -24,5 +24,4 @@
 		if(!C.stat)
 			var/turf/T = get_turf(C)
 			if(istype(T, /turf/space))
-				qdel(C)
-				C = null
+				QDEL_NULL(C)

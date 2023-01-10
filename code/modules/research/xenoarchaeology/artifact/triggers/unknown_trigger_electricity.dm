@@ -12,8 +12,7 @@
 
 /datum/artifact_trigger/electricity/Destroy()
 	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
+		QDEL_NULL(power_connection)
 	. = ..()
 
 /datum/artifact_trigger/electricity/CheckTrigger()
@@ -25,10 +24,10 @@
 		if(my_effect.activated)
 			Triggered(0, "NOCABLE", 0)
 		return
-	
+
 	power_connection.connect(cable)
 	var/datum/powernet/PN = power_connection.get_powernet()
-	
+
 	if(!PN) //Powernet is dead
 		power_requested = FALSE
 		if(my_effect.activated)

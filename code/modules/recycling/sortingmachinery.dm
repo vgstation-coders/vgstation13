@@ -273,8 +273,7 @@
 /obj/machinery/sorting_machine/Destroy()
 	. = ..()
 
-	qdel(mover)
-	mover = null
+	QDEL_NULL(mover)
 
 /obj/machinery/sorting_machine/RefreshParts()
 	var/T = 0
@@ -763,7 +762,7 @@
 	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
 	plane = ABOVE_HUMAN_PLANE
 	var/circuitpath = /obj/item/weapon/circuitboard/autoprocessor
-	
+
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
 
 	var/next_sound = 0
@@ -788,8 +787,7 @@
 /obj/machinery/autoprocessor/Destroy()
 	. = ..()
 
-	qdel(mover)
-	mover = null
+	QDEL_NULL(mover)
 
 /obj/machinery/autoprocessor/RefreshParts()
 	var/T = 0
@@ -1107,8 +1105,7 @@
 	outfit_datum = new outfit_type()
 
 /obj/machinery/autoprocessor/outfit/Destroy()
-	qdel(outfit_datum)
-	outfit_datum = null
+	QDEL_NULL(outfit_datum)
 	..()
 
 /obj/machinery/autoprocessor/outfit/process_affecting(var/atom/movable/target)

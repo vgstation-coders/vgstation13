@@ -260,13 +260,11 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						S.materials.TransferPercent((1/S.amount)*100, linked_lathe.materials)
 					S.use(1)
 					if(!S.amount)
-						qdel(S)
-						linked_destroy.loaded_item = null
+						QDEL_NULL(S)
 				else
 					if(linked_lathe && linked_destroy.loaded_item.materials)
 						linked_destroy.loaded_item.materials.TransferAll(linked_lathe.materials)
-					qdel(linked_destroy.loaded_item)
-					linked_destroy.loaded_item = null
+					QDEL_NULL(linked_destroy.loaded_item)
 			if(linked_destroy.loaded_item) //It deconstructed something with stacks, make it show up full
 				linked_destroy.icon_state = "d_analyzer_l"
 			else
@@ -554,8 +552,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				sheet.amount = min(available_num_sheets, desired_num_sheets)
 				linked_lathe.materials.removeAmount(matID, sheet.amount * sheet.perunit)
 			else
-				qdel (sheet)
-				sheet = null
+				QDEL_NULL (sheet)
 	else if(href_list["imprinter_ejectsheet"] && linked_imprinter) //Causes the protolathe to eject a sheet of material
 		if(!src.allowed(usr))
 			to_chat(usr, "Unauthorized Access.")
@@ -574,8 +571,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				sheet.amount = min(available_num_sheets, desired_num_sheets)
 				linked_imprinter.materials.removeAmount(matID, sheet.amount * sheet.perunit)
 			else
-				qdel (sheet)
-				sheet = null
+				QDEL_NULL (sheet)
 
 	else if(href_list["find_device"]) //The R&D console looks for devices nearby to link up with.
 		screen = 0.0

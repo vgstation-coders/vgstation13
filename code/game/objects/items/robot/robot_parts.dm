@@ -77,18 +77,12 @@
 
 /obj/item/robot_parts/robot_suit/Destroy()
 	..()
-	qdel(l_arm)
-	l_arm = null
-	qdel(r_arm)
-	r_arm = null
-	qdel(l_leg)
-	l_leg = null
-	qdel(r_leg)
-	r_leg = null
-	qdel(chest)
-	chest = null
-	qdel(head)
-	head = null
+	QDEL_NULL(l_arm)
+	QDEL_NULL(r_arm)
+	QDEL_NULL(l_leg)
+	QDEL_NULL(r_leg)
+	QDEL_NULL(chest)
+	QDEL_NULL(head)
 
 /obj/item/robot_parts/robot_suit/proc/updateicon()
 	src.overlays.len = 0
@@ -306,8 +300,7 @@
 		if(user.drop_item(W))
 			to_chat(user, "<span class='notice'>You install some manipulators and modify the head, creating a functional spider-bot!</span>")
 			new /mob/living/simple_animal/spiderbot(get_turf(loc))
-			qdel(W)
-			W = null
+			QDEL_NULL(W)
 			qdel(src)
 			return
 	return

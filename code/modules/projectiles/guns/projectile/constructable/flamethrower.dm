@@ -38,14 +38,11 @@
 
 /obj/item/weapon/gun/projectile/flamethrower/Destroy()
 	if(weldtool)
-		qdel(weldtool)
-		weldtool = null
+		QDEL_NULL(weldtool)
 	if(igniter)
-		qdel(igniter)
-		igniter = null
+		QDEL_NULL(igniter)
 	if(ptank)
-		qdel(ptank)
-		ptank = null
+		QDEL_NULL(ptank)
 	..()
 	return
 
@@ -115,15 +112,13 @@
 		if(o2_concentration > 0.01)
 			B.has_O2_in_mix = 1
 	else
-		qdel(B)
-		in_chamber = null
+		QDEL_NULL(B)
 		return
 
 	if(pressure <= ONE_ATMOSPHERE)
 		to_chat(user, "\The [src] hisses.")
 		to_chat(user, "<span class='warning'>It sounds like the tank is empty.</span>")
-		qdel(B)
-		in_chamber = null
+		QDEL_NULL(B)
 		return
 
 	B.jet_pressure = pressure * (throw_percent/100)

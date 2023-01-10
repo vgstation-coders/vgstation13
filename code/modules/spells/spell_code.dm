@@ -180,13 +180,11 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(cast_delay && !spell_do_after(user, cast_delay))
 		block = 0
 		if (delay_animation)
-			qdel(delay_animation)
-		delay_animation = null
+			QDEL_NULL(delay_animation)
 		return
 	block = 0
 	if (delay_animation)
-		qdel(delay_animation)
-	delay_animation = null
+		QDEL_NULL(delay_animation)
 	if(before_target(user))
 		return
 
@@ -329,8 +327,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			spell.anchored = 1
 			spell.setDensity(FALSE)
 			spawn(overlay_lifespan)
-				qdel(spell)
-				spell = null
+				QDEL_NULL(spell)
 	return valid_targets
 
 /spell/proc/after_cast(list/targets)

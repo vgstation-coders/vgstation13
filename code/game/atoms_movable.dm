@@ -76,8 +76,7 @@
 		T.reconsider_lights()
 
 	if(materials)
-		qdel(materials)
-		materials = null
+		QDEL_NULL(materials)
 
 	remove_border_dummy()
 
@@ -90,8 +89,7 @@
 		locked_to.unlock_atom(src)
 
 	for (var/datum/locking_category/category in locking_categories)
-		qdel(category)
-	locking_categories      = null
+		QDEL_NULL(category)
 	locking_categories_name = null
 
 	break_all_tethers()
@@ -102,8 +100,7 @@
 		T.recalc_atom_opacity()
 
 	if(virtualhearer)
-		qdel(virtualhearer)
-		virtualhearer = null
+		QDEL_NULL(virtualhearer)
 
 	for(var/atom/movable/AM in src)
 		qdel(AM)
@@ -446,8 +443,7 @@
 /atom/movable/proc/remove_border_dummy()
 	if(border_dummy)
 		unlock_atom(border_dummy)
-		qdel(border_dummy)
-		border_dummy = null
+		QDEL_NULL(border_dummy)
 
 /atom/movable/proc/border_dummy_Cross(atom/movable/mover) //border_dummy calls this in its own Cross() to detect collision
 	if(istype(mover) && mover.checkpass(pass_flags_self))
@@ -751,8 +747,7 @@
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
 		AM.unlock_atom(src)
-		AM.unregister_event(/event/destroyed, src, .proc/qdel_self)
-	master = null
+		AM.unregister_event(/event/destroyed, src, .proc/QDEL_NULL_self)
 	return ..()
 
 /atom/movable/overlay/blob_act()
@@ -814,8 +809,7 @@
 /atom/movable/proc/removeHear()
 	flags &= ~HEAR
 	if(virtualhearer)
-		qdel(virtualhearer)
-		virtualhearer = null
+		QDEL_NULL(virtualhearer)
 
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)

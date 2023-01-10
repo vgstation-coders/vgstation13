@@ -10,7 +10,7 @@
 	// -- What we use to communicate with bots
 	var/obj/item/radio/integrated/radio = null
 	var/radio_type = null
-	
+
 	// -- For the IAA and etc
 	var/fax_pings = FALSE
 
@@ -53,24 +53,19 @@
 
 /obj/item/weapon/cartridge/Destroy()
 	if(radio)
-		qdel(radio)
-		radio = null
+		QDEL_NULL(radio)
 
 	if(atmos_analys)
-		qdel(atmos_analys)
-		atmos_analys = null
+		QDEL_NULL(atmos_analys)
 
 	if(robo_analys)
-		qdel(robo_analys)
-		robo_analys = null
+		QDEL_NULL(robo_analys)
 
 	if(dev_analys)
-		qdel(dev_analys)
-		dev_analys = null
+		QDEL_NULL(dev_analys)
 
 	if(integ_hailer)
-		qdel(integ_hailer)
-		dev_analys = null
+		QDEL_NULL(integ_hailer)
 	..()
 
 /datum/pda_app/cart

@@ -305,8 +305,7 @@
 						else
 							code = S.code
 
-						qdel(W)
-						W = null
+						QDEL_NULL(W)
 						has_signaler = 1
 						update_icon()
 						return

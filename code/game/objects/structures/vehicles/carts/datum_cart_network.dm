@@ -33,8 +33,7 @@
 	for(var/obj/machinery/cart/C in merged_net.members)
 		C.train_net = src
 		members += C
-	qdel(merged_net)
-	merged_net = null
+	QDEL_NULL(merged_net)
 
 /datum/train/proc/train_rebuild(obj/machinery/cart/base)
 	var/list/possible_expansions = list(base)

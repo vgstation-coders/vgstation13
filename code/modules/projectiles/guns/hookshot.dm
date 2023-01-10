@@ -50,8 +50,7 @@
 
 	for(var/i = 0;i <= maxlength; i++)
 		var/obj/effect/overlay/hookchain/HC = links["[i]"]
-		qdel(HC)
-		links["[i]"] = null
+		QDEL_NULL(HC)
 	..()
 
 /obj/item/weapon/gun/hookshot/attack_self(mob/user)//clicking on the hookshot while tethered rewinds the chain without pulling the target.

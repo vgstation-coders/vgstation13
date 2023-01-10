@@ -49,8 +49,7 @@
 		if (T)
 			burger.forceMove(T)
 		else
-			qdel(burger)
-		burger = null
+			QDEL_NULL(burger)
 	..()
 
 //SPACE BEARS! SQUEEEEEEEE~     OW! FUCK! IT BIT MY HAND OFF!!

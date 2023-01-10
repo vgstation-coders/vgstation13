@@ -277,15 +277,13 @@ Status: []<BR>"},
 	if((src.lasercolor == "b") && (enabled))
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/red))
 			enabled = 0
-			qdel (Proj)
-			Proj = null
+			QDEL_NULL (Proj)
 			sleep(100)
 			enabled = 1
 	if((src.lasercolor == "r") && (enabled))
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/blue))
 			enabled = 0
-			qdel (Proj)
-			Proj = null
+			QDEL_NULL (Proj)
 			sleep(100)
 			enabled = 1
 	return

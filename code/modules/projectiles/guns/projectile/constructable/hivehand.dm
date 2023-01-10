@@ -103,7 +103,6 @@
 		shots_remaining -= 1
 		has_shot = 1
 	else
-		qdel(S)
-		in_chamber = null
+		QDEL_NULL(S)
 
 	update_icon()

@@ -84,13 +84,11 @@
 	if(associated_crate)
 		associated_crate.associated_forward = null
 		if(delete_crate)
-			qdel(associated_crate)
-		associated_crate = null
+			QDEL_NULL(associated_crate)
 	if(associated_manifest)
 		associated_manifest.associated_forward = null
 		if(delete_manifest)
-			qdel(associated_manifest)
-		associated_manifest = null
+			QDEL_NULL(associated_manifest)
 	..()
 
 /datum/cargo_forwarding/proc/Pay(var/reason) //Reason for crate denial
@@ -142,13 +140,11 @@
 	if(associated_crate)
 		associated_crate.associated_forward = null
 		if(delete_crate)
-			qdel(associated_crate)
-		associated_crate = null
+			QDEL_NULL(associated_crate)
 	if(associated_manifest)
 		associated_manifest.associated_forward = null
 		if(delete_manifest)
-			qdel(associated_manifest)
-		associated_manifest = null
+			QDEL_NULL(associated_manifest)
 	SSsupply_shuttle.cargo_forwards.Remove(src)
 
 /datum/cargo_forwarding/proc/post_creation() //Called after crate spawns in shuttle
@@ -263,8 +259,7 @@
 		initialised_type = ispath(supply_type,/datum/supply_packs) ? supply_type : pick(subtypesof(/datum/supply_packs))
 		ourpack = new initialised_type
 		if(ourpack.require_holiday  && (Holiday != ourpack.require_holiday))
-			qdel(ourpack)
-			ourpack = null
+			QDEL_NULL(ourpack)
 	name = ourpack.name
 	contains = ourpack.contains.Copy()
 	amount = ourpack.amount

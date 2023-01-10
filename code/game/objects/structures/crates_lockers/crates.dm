@@ -655,8 +655,7 @@
 
 		if(user.drop_item(W))
 			to_chat(user, "<span class='notice'>You rig [src].</span>")
-			qdel(W)
-			W = null
+			QDEL_NULL(W)
 			rigged = 1
 		return
 	else if(istype(W, /obj/item/device/radio/electropack))

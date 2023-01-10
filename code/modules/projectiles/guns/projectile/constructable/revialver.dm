@@ -20,8 +20,7 @@
 
 /obj/item/weapon/gun/projectile/revialver/Destroy()
 	if(cylinder)
-		qdel(cylinder)
-		cylinder = null
+		QDEL_NULL(cylinder)
 	..()
 
 /obj/item/weapon/gun/projectile/revialver/attack_self(mob/user as mob)
@@ -153,5 +152,4 @@
 		V.vial = null
 		I.forceMove(C)
 		C.chambers[C.current_chamber] = I
-		qdel(V)
-		in_chamber = null
+		QDEL_NULL(V)

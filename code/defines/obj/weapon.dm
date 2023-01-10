@@ -387,8 +387,7 @@
 		unlock_atom(trappedbear)
 	trappedbear = null
 	if (IED)
-		qdel(IED)
-	IED = null
+		QDEL_NULL(IED)
 	..()
 
 /obj/item/weapon/beartrap/ex_act(var/severity, var/child = null, var/mob/whodunnit)

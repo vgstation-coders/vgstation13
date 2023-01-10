@@ -70,23 +70,19 @@
 
 	if(children)
 		for(var/datum/organ/external/O in children)
-			qdel(O)
-		children = null
+			QDEL_NULL(O)
 
 	if(internal_organs)
 		for(var/datum/organ/internal/O in internal_organs)
-			qdel(O)
-		internal_organs = null
+			QDEL_NULL(O)
 
 	if(implants)
 		for(var/obj/O in implants)
-			qdel(O)
-		implants = null
+			QDEL_NULL(O)
 
 	if(wounds)
 		for(var/datum/wound/W in wounds)
-			qdel(W)
-		wounds = null
+			QDEL_NULL(W)
 
 	if(owner)
 		owner.organs -= src
@@ -729,8 +725,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(istype(s))
 			implants -= s
 			owner.contents -= s
-			qdel(s)
-			s = null
+			QDEL_NULL(s)
 	amputated = 0
 	brute_dam = 0
 	burn_dam = 0
@@ -872,8 +867,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 					internal_organs -= O.organ_data
 					O.removed(owner,owner)
 					O.loc = headloc
-				qdel(organ)
-				organ = null
+				QDEL_NULL(organ)
 
 	return organ
 
@@ -1824,8 +1818,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /obj/item/organ/external/head/Destroy()
 	if(brainmob)
-		qdel(brainmob)
-		brainmob = null
+		QDEL_NULL(brainmob)
 	..()
 
 //obj/item/organ/external/head/with_teeth starts with 32 human teeth!
@@ -2024,8 +2017,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 /obj/item/organ/external/head/Destroy()
 	if(brainmob)
 		brainmob.ghostize()
-		qdel(brainmob)
-		brainmob = null
+		QDEL_NULL(brainmob)
 	..()
 
 /mob/living/carbon/human/find_organ_by_grasp_index(index)

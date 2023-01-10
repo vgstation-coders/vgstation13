@@ -75,8 +75,7 @@
 
 /obj/item/weapon/gun/Destroy()
 	if(in_chamber)
-		qdel(in_chamber)
-		in_chamber = null
+		QDEL_NULL(in_chamber)
 	..()
 
 /obj/item/weapon/gun/proc/ready_to_fire()
@@ -254,8 +253,7 @@
 
 	if(targloc == curloc)
 		target.bullet_act(in_chamber)
-		qdel(in_chamber)
-		in_chamber = null
+		QDEL_NULL(in_chamber)
 		update_icon()
 		play_firesound(user, reflex)
 		return
@@ -384,8 +382,7 @@
 			else
 				to_chat(user, "<span class = 'notice'>Ow...</span>")
 				user.apply_effect(110,AGONY,0)
-			qdel(in_chamber)
-			in_chamber = null
+			QDEL_NULL(in_chamber)
 			mouthshoot = 0
 			return
 		else

@@ -33,8 +33,7 @@
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-r", sleeptime = 15)
 	new /obj/effect/decal/remains/robot(loc)
 	if(mmi)
-		qdel(mmi)	//Delete the MMI first so that it won't go popping out.
-		mmi = null
+		QDEL_NULL(mmi)	//Delete the MMI first so that it won't go popping out.
 
 	dead_mob_list -= src
 	qdel(src)

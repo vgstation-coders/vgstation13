@@ -25,8 +25,7 @@
 	mech_parts.Add(hud)
 
 /obj/mecha/medical/odysseus/Destroy()
-	qdel(hud)
-	hud = null
+	QDEL_NULL(hud)
 	return ..()
 
 /obj/mecha/medical/odysseus/moved_inside(var/mob/living/carbon/human/H as mob)

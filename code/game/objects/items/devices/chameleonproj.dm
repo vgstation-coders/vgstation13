@@ -61,8 +61,7 @@
 	if(active_dummy)
 		eject_all()
 		//playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
-		qdel(active_dummy)
-		active_dummy = null
+		QDEL_NULL(active_dummy)
 		to_chat(usr, "<span class='notice'>You deactivate [src].</span>")
 		var/obj/effect/overlay/T = new/obj/effect/overlay(get_turf(src))
 		T.icon = 'icons/effects/effects.dmi'
@@ -79,8 +78,7 @@
 			return
 		var/obj/effect/dummy/chameleon/C = new/obj/effect/dummy/chameleon(usr.loc)
 		C.activate(O, usr, saved_icon, saved_icon_state, saved_overlays, src)
-		qdel(O)
-		O = null
+		QDEL_NULL(O)
 		to_chat(usr, "<span class='notice'>You activate [src].</span>")
 		var/obj/effect/overlay/T = new/obj/effect/overlay(get_turf(src))
 		T.icon = 'icons/effects/effects.dmi'
@@ -96,8 +94,7 @@
 		spark(src, 5)
 		eject_all()
 		if(delete_dummy)
-			qdel(active_dummy)
-		active_dummy = null
+			QDEL_NULL(active_dummy)
 		can_use = 0
 		spawn(50)
 			can_use = 1

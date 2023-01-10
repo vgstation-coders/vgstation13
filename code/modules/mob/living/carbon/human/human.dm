@@ -256,8 +256,7 @@
 
 		if (internal)
 			if (!internal.air_contents)
-				qdel(internal)
-				internal = null
+				QDEL_NULL(internal)
 			else
 				stat("Internal Atmosphere Info", internal.name)
 				stat("Tank Pressure", internal.air_contents.return_pressure())

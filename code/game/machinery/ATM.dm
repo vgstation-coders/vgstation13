@@ -45,8 +45,7 @@ log transactions
 
 /obj/machinery/atm/Destroy()
 	if(atm_card)
-		qdel(atm_card)
-		atm_card = null
+		QDEL_NULL(atm_card)
 	..()
 
 /obj/machinery/atm/process()

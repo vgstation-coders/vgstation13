@@ -219,8 +219,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 /obj/machinery/artifact/Destroy()
 	new /datum/artifact_postmortem_data(src)
 
-	qdel(primary_effect); primary_effect = null
-	qdel(secondary_effect); secondary_effect = null
+	QDEL_NULL(primary_effect); primary_effect = null
 	..()
 
 /proc/ArtifactRepercussion(var/atom/source, var/mob/mob_cause = null, var/other_cause = "", var/artifact_type = "")

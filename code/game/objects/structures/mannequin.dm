@@ -1469,8 +1469,7 @@
 /datum/construction/mannequin_frame/custom_action(step, atom/used_atom, mob/user)
 	user.visible_message("[user] has connected [used_atom] to [holder].", "You connect [used_atom] to [holder]")
 	holder.overlays += image(holder.icon, used_atom.icon_state)
-	qdel (used_atom)
-	used_atom = null
+	QDEL_NULL (used_atom)
 	return 1
 
 /datum/construction/mannequin_frame/action(atom/used_atom,mob/user as mob)
@@ -1548,8 +1547,7 @@
 		C.req_access = const_holder.req_access
 		C.req_one_access = const_holder.req_one_access
 
-		qdel (holder)
-		holder = null
+		QDEL_NULL (holder)
 
 	feedback_inc("cyber_mannequin_created",1)
 

@@ -24,8 +24,7 @@
 
 /obj/item/weapon/gun/projectile/blastcannon/Destroy()
 	if(bomb)
-		qdel(bomb)
-		bomb = null
+		QDEL_NULL(bomb)
 	bomb_appearance = null
 	bomb_air_contents_1 = null
 	bomb_air_contents_2 = null
@@ -213,5 +212,4 @@
 
 				bomb.damaged = 1
 			else
-				qdel(B)
-				in_chamber = null
+				QDEL_NULL(B)

@@ -145,8 +145,7 @@
 			src.forceMove(get_step(src,dir), step_x, step_y)
 	movement_range--
 	if(movement_range <= 0)
-		qdel(src)
-		loc = null
+		QDEL_NULL(src)
 		return 0
 	else
 		sleep(lag)

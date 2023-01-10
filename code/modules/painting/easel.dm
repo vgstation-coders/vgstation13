@@ -22,8 +22,7 @@
 
 /obj/structure/easel/Destroy()
 	if (painting)
-		qdel(painting)
-	painting = null
+		QDEL_NULL(painting)
 	..()
 
 /obj/structure/easel/attackby(obj/item/I, mob/user)

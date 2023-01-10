@@ -31,12 +31,9 @@
 	..()
 
 /obj/machinery/cooking/icemachine/Destroy()
-	qdel(reagents)
-	reagents = null
-	qdel(beaker)
-	beaker = null
-	qdel(to_add)
-	to_add = null
+	QDEL_NULL(reagents)
+	QDEL_NULL(beaker)
+	QDEL_NULL(to_add)
 	..()
 
 // Utilities ///////////////////////////////////////////////////

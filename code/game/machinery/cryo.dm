@@ -352,8 +352,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			return
 		var/mob/M = G:affecting
 		if(put_mob(M, user))
-			qdel(G)
-			G = null
+			QDEL_NULL(G)
 	updateUsrDialog()
 	return
 

@@ -19,8 +19,7 @@
 
 /obj/item/mounted/frame/trophy_mount/Destroy()
 	if(held_item)
-		qdel(held_item)
-		held_item = null
+		QDEL_NULL(held_item)
 	..()
 
 /obj/item/mounted/frame/trophy_mount/update_icon()
@@ -154,8 +153,7 @@
 
 /obj/structure/trophy_mount/Destroy()
 	if(held_item)
-		qdel(held_item)
-		held_item = null
+		QDEL_NULL(held_item)
 	..()
 
 /obj/structure/trophy_mount/examine(mob/user)

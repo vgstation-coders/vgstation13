@@ -458,8 +458,7 @@
 
 /obj/item/weapon/thurible/Destroy()
 	if (incense)
-		qdel(incense)
-		incense = null
+		QDEL_NULL(incense)
 	..()
 
 /obj/item/weapon/thurible/examine(mob/user)

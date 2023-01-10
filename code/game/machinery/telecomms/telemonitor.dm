@@ -201,8 +201,7 @@
 	spawn(1 SECONDS)
 		if(!trace_signal.data["done"])
 			tracert_report += "The operation timed out.<BR><font color = #D70B00>Last Known Machine:</font color> <a href='?src=\ref[src];viewmachine=[last_machine.id]'>\ref[last_machine] [last_machine.id]</a>"
-		qdel(trace_signal)
-		trace_signal = null
+		QDEL_NULL(trace_signal)
 		updateUsrDialog()
 
 /obj/machinery/computer/telecomms/monitor/proc/receive_trace(var/obj/machinery/telecomms/T, var/routeinfo)

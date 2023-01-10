@@ -20,8 +20,7 @@
 /obj/item/stack/rods/Destroy()
 	..()
 	if(active)
-		qdel(active)
-		active = null
+		QDEL_NULL(active)
 
 /obj/item/stack/rods/can_drag_use(mob/user, turf/T)
 	if(user.Adjacent(T) && T.canBuildLattice(src)) //can we place here
@@ -29,8 +28,7 @@
 		if(use(1)) //place and use rod
 			return 1
 		else
-			qdel(active) //otherwise remove the draggable screen
-			active = null
+			QDEL_NULL(active) //otherwise remove the draggable screen
 
 /obj/item/stack/rods/drag_use(mob/user, turf/T)
 	playsound(T, 'sound/weapons/Genhit.ogg', 25, 1)
@@ -42,8 +40,7 @@
 /obj/item/stack/rods/dropped()
 	..()
 	if(active)
-		qdel(active)
-		active = null
+		QDEL_NULL(active)
 
 /obj/item/stack/rods/afterattack(atom/Target, mob/user, adjacent, params)
 	var/busy = 0

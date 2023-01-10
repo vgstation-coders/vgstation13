@@ -90,8 +90,7 @@ var/list/barsigns = list()
 	if(viscon)
 		vis_contents -= viscon
 		viscon.filters = null
-		qdel(viscon)
-		viscon = null
+		QDEL_NULL(viscon)
 	current_preview = null
 	if(interval_mode)
 		processing_objects -= src
