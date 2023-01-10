@@ -264,7 +264,8 @@
 					rails_secure = 0
 			fire_sound = initial(fire_sound)
 		else
-			QDEL_NULL(B)
+			qdel(B)
+			in_chamber = null
 
 		update_icon()
 

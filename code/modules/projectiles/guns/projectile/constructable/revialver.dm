@@ -152,4 +152,5 @@
 		V.vial = null
 		I.forceMove(C)
 		C.chambers[C.current_chamber] = I
-		QDEL_NULL(V)
+		qdel(V)
+		in_chamber = null

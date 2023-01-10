@@ -55,7 +55,8 @@
 	world.update_status()
 
 	if(hud_used)
-		QDEL_NULL(hud_used)		//remove the hud objects				//remove the images such as AIs being unable to see runes
+		qdel(hud_used)		//remove the hud objects
+	client.images = null				//remove the images such as AIs being unable to see runes
 
 	if(spell_masters)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)

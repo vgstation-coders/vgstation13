@@ -37,7 +37,8 @@
 		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
 	if(client)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
-			QDEL_NULL(spell_master)
+			qdel(spell_master)
+		spell_masters = null
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
 			var/obj/abstract/screen/screenobj = AM
@@ -66,10 +67,12 @@
 		QDEL_NULL(transmogged_to)
 	if(control_object.len)
 		for(var/A in control_object)
-			QDEL_NULL(A)
+			qdel(A)
+		control_object = null
 	if(orient_object.len)
 		for(var/A in orient_object)
-			QDEL_NULL(A)
+			qdel(A)
+		orient_object = null
 
 	if (ticker && ticker.mode)
 		ticker.mode.mob_destroyed(src)

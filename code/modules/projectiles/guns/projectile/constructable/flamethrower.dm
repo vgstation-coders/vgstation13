@@ -112,13 +112,15 @@
 		if(o2_concentration > 0.01)
 			B.has_O2_in_mix = 1
 	else
-		QDEL_NULL(B)
+		qdel(B)
+		in_chamber = null
 		return
 
 	if(pressure <= ONE_ATMOSPHERE)
 		to_chat(user, "\The [src] hisses.")
 		to_chat(user, "<span class='warning'>It sounds like the tank is empty.</span>")
-		QDEL_NULL(B)
+		qdel(B)
+		in_chamber = null
 		return
 
 	B.jet_pressure = pressure * (throw_percent/100)

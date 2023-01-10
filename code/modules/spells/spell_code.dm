@@ -180,11 +180,13 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(cast_delay && !spell_do_after(user, cast_delay))
 		block = 0
 		if (delay_animation)
-			QDEL_NULL(delay_animation)
+			qdel(delay_animation)
+		delay_animation = null
 		return
 	block = 0
 	if (delay_animation)
-		QDEL_NULL(delay_animation)
+		qdel(delay_animation)
+	delay_animation = null
 	if(before_target(user))
 		return
 

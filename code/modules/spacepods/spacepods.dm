@@ -104,7 +104,8 @@
 	QDEL_NULL(cabin_air)
 	QDEL_NULL(ion_trail)
 	qdel(pod_overlays[DAMAGE])
-	QDEL_NULL(pod_overlays[FIRE])
+	qdel(pod_overlays[FIRE])
+	pod_overlays = null
 	QDEL_NULL(internal_tank)
 	..()
 

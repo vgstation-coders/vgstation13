@@ -43,7 +43,8 @@
 
 /mob/living/simple_animal/hostile/Destroy()
 	for(var/datum/fuzzy_ruling/D in target_rules)
-		QDEL_NULL(D)
+		qdel(D)
+	target_rules = null
 	if(hivelord)
 		if(src in hivelord.broods)
 			hivelord.broods.Remove(src)

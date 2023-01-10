@@ -35,7 +35,8 @@
 
 /obj/item/weapon/gun/stickybomb/Destroy()
 	for(var/obj/item/stickybomb/S in loaded)
-		QDEL_NULL(S)
+		qdel(S)
+	loaded = null
 	for(var/obj/item/stickybomb/B in fired)
 		B.deactivate()
 		B.unstick()

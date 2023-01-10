@@ -212,4 +212,5 @@
 
 				bomb.damaged = 1
 			else
-				QDEL_NULL(B)
+				qdel(B)
+				in_chamber = null

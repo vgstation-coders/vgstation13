@@ -319,7 +319,8 @@
 	if (side1)
 		qdel(side1)
 	if (side2)
-		QDEL_NULL(side2)
+		qdel(side2)
+	side1 = null
 	side2 = null
 	..()
 

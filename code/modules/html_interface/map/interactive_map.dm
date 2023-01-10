@@ -38,7 +38,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 /datum/interactive_map/Destroy()
 	if (src.interfaces)
 		for (var/datum/html_interface/hi in interfaces)
-			QDEL_NULL(hi)
+			qdel(hi)
+		src.interfaces = null
 
 	return ..()
 

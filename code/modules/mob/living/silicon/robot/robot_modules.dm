@@ -50,13 +50,15 @@
 		if(istype(A, /obj/item/weapon/storage) && loc)
 			var/obj/item/weapon/storage/S = A
 			S.empty_contents_to(loc)
-		QDEL_NULL(A)
+		qdel(A)
+	modules = null
 	if(emag)
 		QDEL_NULL(emag)
 	if(jetpack)
 		QDEL_NULL(jetpack)
 	for(var/obj/A in upgrades)
-		QDEL_NULL(upgrades)
+		qdel(upgrades)
+	upgrades = null
 	..()
 
 /obj/item/weapon/robot_module/proc/on_emag()

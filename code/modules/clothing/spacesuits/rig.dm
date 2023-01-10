@@ -187,14 +187,17 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	processing_objects -= src
 	for(var/obj/item/I in all_hardsuit_parts)
 		if(I && (I.loc == src || !I.loc))
-			QDEL_NULL(I)
+			qdel(I)
+	H = null
 	G = null
 	T = null
 	MB = null
 	for(var/obj/M in modules)
-		QDEL_NULL(M)
+		qdel(M)
+	modules = null
 	if(cell)
-		QDEL_NULL(cell)
+		qdel(cell)
+	cell = null
 	wearer = null
 	..()
 

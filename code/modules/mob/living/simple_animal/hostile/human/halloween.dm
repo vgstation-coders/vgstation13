@@ -573,7 +573,8 @@
 	if(prob(50))
 		cell.forceMove(T)
 	else
-		QDEL_NULL(cell)
+		qdel(cell)
+	cell = null
 	qdel(src)
 
 

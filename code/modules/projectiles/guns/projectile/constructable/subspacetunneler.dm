@@ -329,7 +329,8 @@
 	spark(src)
 	var/obj/item/bluespace_crystal/B = loaded_crystal
 	if(istype(B, /obj/item/bluespace_crystal/artificial))
-		QDEL_NULL(B)
+		qdel(B)
+		loaded_crystal = null
 	else
 		if(prob(50) || istype(B, /obj/item/bluespace_crystal/flawless))
 			if(istype(B, /obj/item/bluespace_crystal/flawless))
@@ -338,7 +339,8 @@
 					F.uses -= 1
 			to_chat(user, "<span class='notice'>\The [B] withstands the eruption of bluespace energy!</span>")
 		else
-			QDEL_NULL(B)
+			qdel(B)
+			loaded_crystal = null
 	if(!loaded_crystal)
 		to_chat(user, "<span class='notice'>\The [B] is consumed by the eruption of bluespace energy.</span>")
 

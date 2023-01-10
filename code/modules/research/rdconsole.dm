@@ -260,7 +260,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						S.materials.TransferPercent((1/S.amount)*100, linked_lathe.materials)
 					S.use(1)
 					if(!S.amount)
-						QDEL_NULL(S)
+						qdel(S)
+						linked_destroy.loaded_item = null
 				else
 					if(linked_lathe && linked_destroy.loaded_item.materials)
 						linked_destroy.loaded_item.materials.TransferAll(linked_lathe.materials)

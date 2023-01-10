@@ -45,7 +45,8 @@
 		if(loc)
 			diskette.forceMove(loc)
 		else
-			QDEL_NULL(diskette)
+			qdel(diskette)
+		diskette = null
 	records.Cut()
 	active_record = null
 

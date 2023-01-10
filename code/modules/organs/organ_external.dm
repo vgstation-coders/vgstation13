@@ -70,19 +70,23 @@
 
 	if(children)
 		for(var/datum/organ/external/O in children)
-			QDEL_NULL(O)
+			qdel(O)
+		children = null
 
 	if(internal_organs)
 		for(var/datum/organ/internal/O in internal_organs)
-			QDEL_NULL(O)
+			qdel(O)
+		internal_organs = null
 
 	if(implants)
 		for(var/obj/O in implants)
-			QDEL_NULL(O)
+			qdel(O)
+		implants = null
 
 	if(wounds)
 		for(var/datum/wound/W in wounds)
-			QDEL_NULL(W)
+			qdel(W)
+		wounds = null
 
 	if(owner)
 		owner.organs -= src

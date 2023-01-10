@@ -50,7 +50,8 @@
 		if (loc)
 			inserted_battery.forceMove(loc)
 		else
-			QDEL_NULL(inserted_battery)
+			qdel(inserted_battery)
+		inserted_battery = null
 	isolated_primary = null
 	isolated_secondary = null
 	cur_artifact = null
