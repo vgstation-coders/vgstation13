@@ -30,21 +30,38 @@
 	assert_eq(dynamic_mode.roundstart_pop_ready, 3)
 
 /datum/unit_test/dynamic/enemy_jobs
-	var/midround = FALSE
 	var/dead_dont_count = FALSE
 
 /datum/unit_test/dynamic/enemy_jobs/start()
 	..()
-	dynamic_mode.threat_level = 50
-	dynamic_mode.midround_threat_level = 50
-	var/mob/M
-	for(var/i in 1 to 5)
-		M = new()
-		M.mind = new("fgsfds[i]")
-		if(dead_dont_count)
-			dynamic_mode.living_players += M
-			if(i > 3)
-				M.stat = DEAD
-		else
-			dynamic_mode.candidates += M
-	assert_eq(ruleset.check_enemy_jobs(dead_dont_count,midround), TRUE)
+	for(var/i in 1 to 10)
+		dynamic_mode.threat_level = i*10
+		var/threat = dynamic_mode.threat_level != 100 ? round(dynamic_mode.threat_level/10)+1 : 10
+		var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
+		for(var/datum/dynamic_ruleset/DR in rules2check)
+			for(var/mob/oldM1 in dynamic_mode.living_players)
+				qdel(oldM1)
+			for(var/mob/oldM2 in dynamic_mode.candidates)
+				qdel(oldM2)
+			dynamic_mode.living_players.Cut()
+			dynamic_mode.candidates.Cut()
+			var/mob/M
+			var/enemies_count = 0
+			for(var/j in 1 to DR.required_pop[threat])
+				M = new()
+				M.mind = new("fgsfds[i]")
+				if(j <= DR.required_enemies[threat])
+					M.mind.assigned_role = pick(DR.enemy_jobs)
+					enemies_count++
+				if(dead_dont_count)
+					dynamic_mode.living_players += M
+					M.stat = DEAD
+				else
+					dynamic_mode.candidates += M
+			dynamic_mode.roundstart_pop_ready = dynamic_mode.candidates.len
+			var/result = ruleset.check_enemy_jobs(dead_dont_count,FALSE)
+			if(result == dead_dont_count)
+				fail("Enemy job test failed (expected [!dead_dont_count], got [result] with [enemies_count] out of [DR.required_enemies[threat]] enemies [!dead_dont_count ? "and [dynamic_mode.roundstart_pop_ready] out of [DR.required_pop[threat]] candidates" : ""])")
+
+/datum/unit_test/dynamic/enemy_jobs/dead_dont_count
+	dead_dont_count = TRUE
