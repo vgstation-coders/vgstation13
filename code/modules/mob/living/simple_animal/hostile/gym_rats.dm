@@ -41,7 +41,7 @@
 	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks)
 
 	var/SCALERATE = 1
-	var/rattype = regular
+	var/rattype = 1
 	var/all_fours = TRUE
 
 	var/last_scavenge = 0
@@ -101,7 +101,7 @@
 		playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		if(maxHealth < health_cap) // Are we below our max gainz level? Add on some max hp!
 			adjust_hp(5)
-			if(rattype = regular) //regular gym rat
+			if(rattype = 1) //regular gym rat
 				SCALERATE += (1/14)
 			else						//pompadour
 				SCALERATE += (1/16)
@@ -243,9 +243,9 @@
 			if(maxHealth >= 20)
 				visible_message("<span class='warning'>[src] seems to shrink as the soymilk washes over them! Its muscles look less visible...</span>")
 				maxHealth-=10
-				if(rattype = regular) //regular gym rat
+				if(rattype = 1) //regular gym rat
 					SCALERATE -= (1/7)
-				else if(rattype = pompadour) //pompadour
+				else if(rattype = 2) //pompadour
 					SCALERATE -= (1/8)
 				else //roidrat
 					SCALERATE -= (1/10)
@@ -281,7 +281,7 @@
 
 	melee_damage_lower = 1
 	melee_damage_upper = 6
-	rattype = pompadour
+	rattype = 2
 	health_cap = 120 // Eating protein can pack on a whopping 200% increase in max health. GAINZ
 	icon_eat = "gymrat_pompadour-eat"
 
@@ -348,7 +348,7 @@
 
 	health_cap = 250 // Eating protein can pack on a 66% increase in max health. Less percentage-wise than gym rats who are working out the "natural" way, but the raw numbers are still pretty scary
 	icon_eat = "roidrat-eat"
-	rattype = roidrat
+	rattype = 3
 	var/punch_throw_chance = 20 // Chance of sending a target flying a short distance with a punch
 	var/punch_throw_speed = 3
 	var/punch_throw_range = 6
