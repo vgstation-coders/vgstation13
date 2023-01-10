@@ -1,3 +1,6 @@
+/mob/living/carbon
+	admin_desc = "The 'manual_emote_sound_override' variable can be set to 1 to enable a character to scream audibly whenever they want."
+
 /mob/living/carbon/Login()
 	..()
 	update_hud()

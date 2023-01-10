@@ -309,7 +309,8 @@
 			for(var/obj/structure/cable/powercreeper/C in range(chassis,i == 4 ? 2 : 1))
 				if(get_dir(chassis,C)&chassis.dir || C.loc == get_turf(chassis))
 					if(istype(C, /obj/structure/cable/powercreeper))
-						C.die()
+						spawn(0)
+							C.die()
 						eradicated++
 			sleep(3)
 		if(eradicated)

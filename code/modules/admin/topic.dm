@@ -2183,17 +2183,13 @@
 			return
 
 		var/obj/item/packobelongings/pack = null
-
+		var/obj/effect/landmark/packmark = pick(tdomepacks)
+		var/turf/packspawn = tdomepacks.len ? get_turf(packmark) : get_turf(M) //the players' belongings are stored there, in the Thunderdome Admin lodge.
 		switch(team)
 			if("Green")
-				pack = new /obj/item/packobelongings/green(M.loc)
-				pack.x = map.tDomeX+2
+				pack = new /obj/item/packobelongings/green(get_step(get_step(packspawn,EAST),EAST))
 			if("Red")
-				pack = new /obj/item/packobelongings/red(M.loc)
-				pack.x = map.tDomeX-2
-
-		pack.z = map.tDomeZ //the players' belongings are stored there, in the Thunderdome Admin lodge.
-		pack.y = map.tDomeY
+				pack = new /obj/item/packobelongings/red(get_step(get_step(packspawn,WEST),WEST))
 
 		pack.name = "[M.real_name]'s belongings"
 

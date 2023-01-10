@@ -320,7 +320,7 @@
 
 /atom/proc/AltClick(var/mob/user)
 	var/turf/T = get_turf(src)
-	if(T && T.Adjacent(user))
+	if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
 		if(user.listed_turf == T)
 			user.listed_turf = null
 		else

@@ -57,7 +57,6 @@
 	max_genedamage = 0
 	horrorallowed = 0	//horrors shouldnt even have this spell available to them
 	chemcost = 1
-	required_dna = 1
 
 /spell/changeling/higherform/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
@@ -85,6 +84,9 @@
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		names += "[DNA.real_name]"
 
+	if(!names.len)
+		to_chat(user, "<span class='warning'>We cannot transform into anyone!</span>")
+		return
 	var/S = input("Select the target DNA: ", "Target DNA", null) as null|anything in names
 	if(!S)
 		return
@@ -134,6 +136,7 @@
 
 	O.UpdateAppearance()
 	domutcheck(O, null)
+	O.update_name()
 	O.setToxLoss(M.getToxLoss())
 	O.adjustBruteLoss(M.getBruteLoss())
 	O.setOxyLoss(M.getOxyLoss())

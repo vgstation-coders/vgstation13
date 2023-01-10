@@ -8,9 +8,6 @@
 	nameShort = "castle"
 	nameLong = "Castle Station"
 	map_dir = "castlestation"
-	tDomeX = 128
-	tDomeY = 58
-	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
 		/datum/zLevel/centcomm,

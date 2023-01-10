@@ -7,9 +7,6 @@
 	nameShort = "line"
 	nameLong = "Frankenline Station"
 	map_dir = "line"
-	tDomeX = 128
-	tDomeY = 58
-	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
 		/datum/zLevel/centcomm,

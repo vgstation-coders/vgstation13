@@ -1170,6 +1170,8 @@ Use this proc preferably at the end of an equipment loadout
 
 	face_atom(A)
 	A.examine(src)
+	if(A.admin_desc && src.client?.holder?.admin_examine)
+		to_chat(src, "<span class='rough'>Admin-only: [A.admin_desc]</span>")
 
 	if(istype(src,/mob/living))
 		var/mob/living/L = src
