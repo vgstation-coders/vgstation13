@@ -1,0 +1,174 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/floor/grass,
+/area)
+"b" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/obj/effect/landmark{
+	name = "JoinLate"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"c" = (
+/obj/item/device/flashlight/lantern/on,
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"g" = (
+/obj/machinery/teleport/hub,
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"h" = (
+/obj/structure/table/reinforced,
+/obj/item/clothing/suit/space/rig/atmos,
+/obj/item/clothing/mask/breath,
+/obj/item/weapon/tank/oxygen,
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"t" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/card/id/captains_spare,
+/obj/item/weapon/gun/energy/laser/admin,
+/obj/item/weapon/holo/esword,
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"u" = (
+/obj/effect/landmark/start,
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"w" = (
+/obj/item/beacon,
+/obj/item/beacon,
+/obj/item/beacon,
+/obj/item/beacon,
+/obj/item/beacon,
+/obj/item/beacon,
+/obj/item/beacon,
+/obj/item/beacon,
+/obj/item/beacon,
+/obj/item/beacon,
+/obj/structure/closet/crate,
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"y" = (
+/obj/machinery/computer/teleporter,
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"z" = (
+/obj/docking_port/destination/arrival/station{
+	dir = 2
+	},
+/turf/unsimulated/floor/grass,
+/area)
+"C" = (
+/obj/machinery/teleport/station,
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"D" = (
+/obj/effect/landmark{
+	name = "Observer-Start"
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"L" = (
+/obj/item/beacon,
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"M" = (
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+"O" = (
+/obj/docking_port/shuttle,
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor,
+/area/shuttle/arrival/station)
+"Q" = (
+/obj/effect/landmark/dungeon_area,
+/turf/unsimulated/floor/grass,
+/area)
+"R" = (
+/turf/simulated/wall/shuttle,
+/area/shuttle/arrival/station)
+"V" = (
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor/shuttle,
+/area/shuttle/arrival/station)
+
+(1,1,1) = {"
+a
+a
+R
+R
+R
+R
+R
+R
+R
+"}
+(2,1,1) = {"
+Q
+a
+R
+t
+b
+b
+b
+y
+R
+"}
+(3,1,1) = {"
+a
+a
+R
+h
+M
+M
+M
+C
+R
+"}
+(4,1,1) = {"
+a
+z
+O
+M
+D
+u
+c
+g
+R
+"}
+(5,1,1) = {"
+a
+a
+R
+M
+M
+M
+M
+L
+R
+"}
+(6,1,1) = {"
+a
+a
+R
+V
+b
+b
+b
+w
+R
+"}
+(7,1,1) = {"
+a
+a
+R
+R
+R
+R
+R
+R
+R
+"}
