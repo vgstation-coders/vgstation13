@@ -347,7 +347,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M)
 	if(..())
-		if(istype(M, /obj/mecha/working/ripley/firefighter) || istype(M, /obj/mecha/working/clarke))
+		if(istype(M, /obj/mecha/working/ripley/mk2/firefighter) || istype(M, /obj/mecha/working/clarke))
 			return 1
 	return 0
 

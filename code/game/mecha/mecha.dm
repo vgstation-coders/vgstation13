@@ -76,6 +76,9 @@
 
 	var/dash_dir = null
 	var/wreckage
+	var/enclosed = TRUE
+	var/silicon_pilot
+	var/silicon_icon_state = null
 
 	var/list/equipment = new
 	var/obj/item/mecha_parts/mecha_equipment/selected
@@ -104,7 +107,7 @@
 	..()
 	add_radio()
 	add_cabin()
-	if(!add_airtank()) //we check this here in case mecha does not have an internal tank available by default - WIP
+	if(!add_airtank() || !enclosed) //we check this here in case mecha does not have an internal tank available by default - WIP
 		removeVerb(/obj/mecha/verb/connect_to_port)
 		removeVerb(/obj/mecha/verb/toggle_internal_tank)
 	add_cell()
@@ -272,6 +275,21 @@
 		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
 			to_chat(user, "[bicon(ME)] [ME]")
 
+	if(enclosed)
+		return
+	if(silicon_pilot)
+		to_chat(user, "<span class='info'>[src] appears to be piloting itself..</span>")
+
+	else
+		to_chat(user, "<span class='info'>You can see [occupant] inside.</span>")
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		for(var/held_item in H.held_items)
+			if(!isgun(held_item))
+				continue
+			to_chat(user, "<span class='warning'>It looks like you can hit the pilot directly if you target the center or above.</span>")
+			break
+
 /obj/mecha/proc/drop_item()//Derpfix, but may be useful in future for engineering exosuits.
 	return
 
@@ -317,6 +335,16 @@
 /obj/mecha/proc/range_action(atom/target)
 	return
 
+//////////////////////////////////
+////////  Misc procs  ////////
+//////////////////////////////////
+
+/obj/mecha/proc/get_mecha_occupancy_state()
+	if((silicon_pilot) && silicon_icon_state)
+		return silicon_icon_state
+	if(occupant)
+		return icon_state
+	return "[icon_state]-open"
 
 //////////////////////////////////
 ////////  Movement procs  ////////
@@ -646,6 +674,10 @@
 
 
 /obj/mecha/bullet_act(var/obj/item/projectile/Proj) //wrapper
+	if(!enclosed && occupant && !silicon_pilot && (Proj.def_zone == LIMB_CHEST || Proj.def_zone == LIMB_HEAD))
+		for(var/m in occupant)
+			var/mob/living/hitmob = m
+			hitmob.bullet_act(Proj)
 	src.log_message("Hit by projectile. Type: [Proj.name]([Proj.flag]).",1)
 	call((proc_res["dynbulletdamage"]||src), "dynbulletdamage")(Proj) //calls equipment
 	return ..()
@@ -730,6 +762,14 @@
 		src.log_message("Exposed to dangerous temperature.",1)
 		src.take_damage(5, damage_type = "fire")
 		src.check_for_internal_damage(list(MECHA_INT_FIRE, MECHA_INT_TEMP_CONTROL))
+
+	if(enclosed)// || mecha_flags & SILICON_PILOT)
+		return
+	for(var/mob/living/cookedalive as anything in occupant)
+		if(cookedalive.fire_stacks < 5)
+			cookedalive.adjust_fire_stacks(1)
+			cookedalive.IgniteMob()
+
 	return
 
 /obj/mecha/proc/dynattackby(obj/item/weapon/W as obj, mob/living/user as mob)
@@ -1238,7 +1278,8 @@
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
 		src.Move(src.loc)
-		src.icon_state = src.initial_icon
+		src.silicon_pilot = TRUE
+		src.icon_state = src.silicon_icon_state
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
 			set_light(light_range_off)
