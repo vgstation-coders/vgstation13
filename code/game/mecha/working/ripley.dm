@@ -14,6 +14,7 @@
 	damage_absorption = list("brute"=0.65,"fire"=1.2,"bullet"=0.9,"laser"=1,"energy"=1,"bomb"=1)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley
 	enclosed = FALSE
+	enter_delay = 2
 	mech_sprites = list(
 		"ripley",
 		"ripley_glass",
@@ -44,6 +45,8 @@
 	health = 250
 	damage_absorption = list("brute"=0.6,"fire"=1.2,"bullet"=0.9,"laser"=1,"energy"=1,"bomb"=0.8)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/mk2
+	enclosed = TRUE
+	enter_delay = 4
 	mech_sprites = list(
 		"ripleymk2",
 		"titan",
@@ -70,7 +73,7 @@
 		"aluminizer"
 		)
 
-/obj/mecha/working/ripley/deathripley
+/obj/mecha/working/ripley/mk2/deathripley
 	desc = "OH SHIT IT'S THE DEATHSQUAD WE'RE ALL GONNA DIE"
 	name = "DEATH-RIPLEY"
 	icon_state = "deathripley"

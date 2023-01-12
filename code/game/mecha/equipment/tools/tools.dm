@@ -1609,6 +1609,12 @@
 	desc = "A pressurized canopy attachment kit for an Autonomous Power Loader Unit \"Ripley\" MK-I mecha, to convert it to the slower, but space-worthy MK-II design. This kit cannot be removed, once applied."
 	icon_state = "ripleyupgrade"
 
+/obj/item/mecha_parts/mecha_equipment/ripleyupgrade/can_attach(obj/mecha/working/ripley/R as obj)
+	if(..())
+		if(istype(R))
+			return 1
+	return 0
+
 /obj/item/mecha_parts/mecha_equipment/ripleyupgrade/can_attach(mob/user as mob, obj/mecha/working/ripley/M)
 	if(M.type != /obj/mecha/working/ripley)
 		to_chat(user, "<span class='warning'>This conversion kit can only be applied to APLU MK-I models.</span>")

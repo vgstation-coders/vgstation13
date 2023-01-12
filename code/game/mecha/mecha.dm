@@ -80,6 +80,7 @@
 	var/silicon_pilot
 	var/silicon_icon_state = null
 	var/mech_maints_ready = FALSE
+	var/enter_delay = 40
 
 	var/list/equipment = new
 	var/obj/item/mecha_parts/mecha_equipment/selected
@@ -1193,7 +1194,7 @@
 		visible_message("<span class='good'>[usr] is instantly lifted into \the [src] by the running board!</span>")
 	else
 		visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
-		if(do_after(usr, src, 40))
+		if(do_after(usr, src, enter_delay))
 			if(!src.occupant)
 				moved_inside(usr)
 				refresh_spells()
