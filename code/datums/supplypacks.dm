@@ -174,6 +174,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/office_supplies
 	name = "Office supplies"
 	contains = list(/obj/item/weapon/paper_pack,
+					/obj/item/weapon/paper_pack/nano,
 					/obj/item/weapon/folder/black,
 					/obj/item/weapon/folder/white,
 					/obj/item/weapon/folder/blue,
@@ -185,7 +186,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/pen/fountain,
 					/obj/item/device/flashlight/lamp,
 					/obj/item/device/flashlight/lamp)
-	cost = 15
+	cost = 25
 	containertype = /obj/structure/closet/crate/basic
 	containername = "office supply crate"
 	group = "Supplies"
