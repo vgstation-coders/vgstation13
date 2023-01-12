@@ -79,6 +79,7 @@
 	var/enclosed = TRUE
 	var/silicon_pilot
 	var/silicon_icon_state = null
+	var/mech_maints_ready = FALSE
 
 	var/list/equipment = new
 	var/obj/item/mecha_parts/mecha_equipment/selected
@@ -838,9 +839,11 @@
 		if(state==STATE_BOLTSEXPOSED)
 			state = STATE_BOLTSOPENED
 			to_chat(user, "You undo the securing bolts.")
+			mech_maints_ready = TRUE
 			W.playtoolsound(src, 50)
 		else if(state==STATE_BOLTSOPENED)
 			state = STATE_BOLTSEXPOSED
+			mech_maints_ready = FALSE
 			to_chat(user, "You tighten the securing bolts.")
 			W.playtoolsound(src, 50)
 		return
