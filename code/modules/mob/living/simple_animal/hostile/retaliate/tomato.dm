@@ -1,4 +1,4 @@
-/mob/living/simple_animal/tomato
+/mob/living/simple_animal/hostile/retaliate/tomato
 	name = "tomato"
 	desc = "It's a horrifyingly enormous beef tomato, and it's packing extra beef!"
 	icon_state = "tomato"
@@ -13,3 +13,4 @@
 	response_disarm = "pushes aside the"
 	response_harm   = "smacks the"
 	harm_intent_damage = 5
+	environment_smash_flags = 0
