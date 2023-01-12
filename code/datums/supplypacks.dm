@@ -186,7 +186,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/pen/fountain,
 					/obj/item/device/flashlight/lamp,
 					/obj/item/device/flashlight/lamp)
-	cost = 25
+	cost = 20
 	containertype = /obj/structure/closet/crate/basic
 	containername = "office supply crate"
 	group = "Supplies"
