@@ -58,8 +58,14 @@
 				else
 					dynamic_mode.candidates += M
 			dynamic_mode.roundstart_pop_ready = dynamic_mode.candidates.len
+			if(!ticker)
+				fail("[__FILE__]:[__LINE__]: enemy job test failed, no ticker")
+			var/old_game_state = ticker.current_state
+			if(dead_dont_count) // make roundstart act like it for the proc
+				ticker.current_state = GAME_STATE_SETTING_UP
 			var/result = DR.check_enemy_jobs(dead_dont_count,FALSE,!dead_dont_count)
-			var/tocheck = dead_dont_count && DR.required_enemies[i]
+			var/tocheck = dead_dont_count && DR.required_enemies[i] // only if there is actual enemy jobs here
+			ticker.current_state = old_game_state // and back again
 			if(result == tocheck)
 				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [!tocheck], got [result] with [enemies_count] out of [DR.required_enemies[i]] enemies[!dead_dont_count ? " and [dynamic_mode.roundstart_pop_ready] out of [DR.required_pop[i]] candidates" : ""]")
 
