@@ -1,12 +1,13 @@
 /datum/unit_test/dynamic
 	var/datum/gamemode/dynamic/dynamic_mode
 	var/datum/dynamic_ruleset/ruleset
-	var/ruletype = /datum/dynamic_ruleset/roundstart/traitor
+	var/ruletype
 
 /datum/unit_test/dynamic/start()
 	ticker.mode = new /datum/gamemode/dynamic
 	dynamic_mode = ticker.mode
-	ruleset = new ruletype
+	if(ruletype)
+		ruleset = new ruletype
 	dynamic_mode.can_start()
 	assert_eq(dynamic_mode.can_start(), 1)
 	if(dynamic_mode)
@@ -77,3 +78,18 @@
 
 /datum/unit_test/dynamic/enemy_jobs/dead_dont_count
 	dead_dont_count = TRUE
+
+/datum/unit_test/dynamic/can_spend/start()
+	var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
+	var/datum/dynamic_ruleset/D = new() // just the base types until we test subtypes some other time, is called as ..() in all of the subprocs anyways
+	for(var/i in 1 to 10)
+		dynamic_mode.threat_level = (i-1)*10
+		for(var/datum/dynamic_ruleset/DR in rules2check)
+			if(DR.cost < threat_level)
+				continue
+			for(var/requirement in DR.requirements)
+				if(threat_level >= requirement)
+					assert_eq(D.acceptable(requirement,dynamic_mode.threat_level),1)
+				else
+					assert_eq(D.acceptable(requirement,dynamic_mode.threat_level),0)
+	qdel(D)
