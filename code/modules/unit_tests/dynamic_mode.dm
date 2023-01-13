@@ -86,7 +86,7 @@
 	for(var/i in 1 to 10)
 		dynamic_mode.threat_level = (i-1)*10
 		for(var/datum/dynamic_ruleset/DR in rules2check)
-			if(DR.cost < threat_level)
+			if(DR.cost < dynamic_mode.threat_level)
 				continue
 			for(var/requirement in DR.requirements)
 				if(threat_level >= requirement)
