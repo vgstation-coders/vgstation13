@@ -89,7 +89,7 @@
 			if(DR.cost < dynamic_mode.threat_level)
 				continue
 			for(var/requirement in DR.requirements)
-				if(threat_level >= requirement)
+				if(dynamic_mode.threat_level >= requirement)
 					assert_eq(D.acceptable(requirement,dynamic_mode.threat_level),1)
 				else
 					assert_eq(D.acceptable(requirement,dynamic_mode.threat_level),0)
