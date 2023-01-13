@@ -38,7 +38,6 @@
 	var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
 	for(var/i in 1 to 10)
 		dynamic_mode.threat_level = (i-1)*10
-		dynamic_mode.midround_threat_level = (i-1)*10
 		for(var/datum/dynamic_ruleset/DR in rules2check)
 			for(var/mob/oldM1 in dynamic_mode.living_players)
 				qdel(oldM1)
@@ -66,7 +65,7 @@
 			var/old_game_state = ticker.current_state
 			if(!midround) // make roundstart act like it for the proc
 				ticker.current_state = GAME_STATE_SETTING_UP
-			var/result = DR.check_enemy_jobs(dead_dont_count,midround)
+			var/result = DR.check_enemy_jobs(midround,FALSE)
 			var/tocheck = dead_dont_count && DR.required_enemies[i] // only if there is actual enemy jobs here
 			ticker.current_state = old_game_state // and back again
 			if(result == tocheck)
