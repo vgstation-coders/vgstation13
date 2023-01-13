@@ -57,7 +57,7 @@
 					M.stat = DEAD
 				else
 					dynamic_mode.candidates += M
-			dynamic_mode.roundstart_pop_ready = max(dynamic_mode.candidates.len,dynamic_mode.living_players.len)
+			dynamic_mode.roundstart_pop_ready = dynamic_mode.candidates.len
 			var/result = DR.check_enemy_jobs(dead_dont_count,FALSE,!dead_dont_count)
 			var/tocheck = dead_dont_count && DR.required_enemies[i]
 			if(result == tocheck)
