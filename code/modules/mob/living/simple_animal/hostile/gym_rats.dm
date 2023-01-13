@@ -254,7 +254,7 @@
 					scalerate = 1
 				var/matrix/M = matrix()
 				M.Scale(scalerate,scalerate)
-			M.Translate(0, -translaterate*scalerate)
+				M.Translate(0, -translaterate*scalerate)
 				transform = M
 				adjustBruteLoss(1) // Here so that the mouse aggros. It won't be happy that you're cutting into its gainz!
 			if(maxHealth < 20)
