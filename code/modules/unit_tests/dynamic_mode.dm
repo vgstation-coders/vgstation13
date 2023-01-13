@@ -38,7 +38,8 @@
 
 /datum/unit_test/dynamic/enemy_jobs/start()
 	..()
-	var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
+	// no need to check roundstart rules in the dead check, not used there
+	var/list/rules2check = dead_dont_count ? dynamic_mode.latejoin_rules + dynamic_mode.midround_rules : dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
 	for(var/i in 1 to 10)
 		dynamic_mode.threat_level = (i-1)*10
 		for(var/datum/dynamic_ruleset/DR in rules2check)
