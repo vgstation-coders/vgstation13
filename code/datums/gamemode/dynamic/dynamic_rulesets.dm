@@ -134,9 +134,8 @@
 		return FALSE
 	if (pop_and_enemies >= required_pop[threat])
 		return TRUE
-	if (!dead_dont_count)//roundstart check only
-		message_admins("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs and pop ready ([enemies_count] and [mode.roundstart_pop_ready] out of [required_pop[threat]])")
-		log_admin("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs and pop ready ([enemies_count] and [mode.roundstart_pop_ready] out of [required_pop[threat]])")
+	message_admins("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs and pop ready ([enemies_count] and [pop_and_enemies] out of [required_pop[threat]])")
+	log_admin("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs and pop ready ([enemies_count] and [pop_and_enemies] out of [required_pop[threat]])")
 	return FALSE
 
 /datum/dynamic_ruleset/proc/get_weight()
