@@ -40,7 +40,7 @@
 	for(var/i in 1 to 10)
 		dynamic_mode.threat_level = (i-1)*10
 		for(var/datum/dynamic_ruleset/DR in rules2check)
-			var/midround = !istype(DR,/datum/dynamic_ruleset/roundstart)
+			var/midround = !(DR in dynamic_mode.roundstart_rules)
 			for(var/mob/oldM1 in dynamic_mode.living_players)
 				qdel(oldM1)
 			for(var/mob/oldM2 in dynamic_mode.candidates)
