@@ -19,3 +19,13 @@
 	melee_damage_lower = 5
 	melee_damage_upper = 5
 	environment_smash_flags = 0
+
+/mob/living/simple_animal/hostile/retaliate/tomato/reagent_act(id, method, volume)
+	if(isDead())
+		return
+
+	.=..()
+
+	switch(id)
+		if(PLANTBGONE)
+			death(FALSE)
