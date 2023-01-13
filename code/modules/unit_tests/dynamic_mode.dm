@@ -12,6 +12,8 @@
 	if(dynamic_mode)
 		assert_eq(dynamic_mode.Setup(), 1)
 	ASSERT(dynamic_mode.roundstart_rules.len)
+	ASSERT(dynamic_mode.midround_rules.len)
+	ASSERT(dynamic_mode.latejoin_rules.len)
 
 /datum/unit_test/dynamic/noplayers/start()
 	..()
@@ -40,7 +42,7 @@
 	for(var/i in 1 to 10)
 		dynamic_mode.threat_level = (i-1)*10
 		for(var/datum/dynamic_ruleset/DR in rules2check)
-			var/midround = !(DR in dynamic_mode.roundstart_rules)
+			var/midround = !istype(DR,/datum/dynamic_ruleset/roundstart)
 			for(var/mob/oldM1 in dynamic_mode.living_players)
 				qdel(oldM1)
 			for(var/mob/oldM2 in dynamic_mode.candidates)
@@ -62,13 +64,12 @@
 				else
 					dynamic_mode.candidates += M
 			dynamic_mode.roundstart_pop_ready = dynamic_mode.candidates.len
-			if(!ticker)
-				fail("[__FILE__]:[__LINE__]: enemy job test failed, no ticker")
+			ASSERT(ticker)
 			var/old_game_state = ticker.current_state
 			if(!midround) // make roundstart act like it for the proc
 				ticker.current_state = GAME_STATE_SETTING_UP
 			var/result = DR.check_enemy_jobs(midround,FALSE)
-			var/tocheck = !(dead_dont_count && DR.required_enemies[i]) // only if there is actual enemy jobs here
+			var/tocheck = !(dead_dont_count && midround && DR.required_enemies[i]) // only if there is actual enemy jobs here
 			ticker.current_state = old_game_state // and back again
 			if(result != tocheck)
 				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [tocheck], got [result] on rule [DR.name] with a threat of [dynamic_mode.threat_level] with [enemies_count] out of [DR.required_enemies[i]] enemies[!midround ? " and [!midround ? dynamic_mode.roundstart_pop_ready : dynamic_mode.living_players.len] out of [DR.required_pop[i]] candidates" : ""]")
