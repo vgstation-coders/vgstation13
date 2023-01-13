@@ -73,6 +73,12 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2023.01.14</h2>
+			<h3 class="author">dinnerwoerror updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">adds some of the medium sized emergency gas tanks to the Space Suit crate, Vox Pressure Suit crate, Plasmaman Suit crate, and Grey Space-Ex crate</li>
+				<li class="bugfix">/obj/item/clothing/suit allows emergency plasma tanks instead of only emergency oxygen and emergency nitrogen tanks</li>
+			</ul>
 			<h2 class="date">2023.01.11</h2>
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
@@ -1908,28 +1914,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="tweak">Prison breaks will no longer happen if there are no signs of life within cells without access to open them, but are now twice as common when there is.</li>
 				<li class="tweak">Godmode no longer allows bones or organs to become damaged.</li>
 				<li class="rscadd">Corn oil and similar reagents can now be scooped up with a beaker from deep fryers.</li>
-			</ul>
-			<h2 class="date">2022.06.04</h2>
-			<h3 class="author">Hinaichigo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Didn&#39;t you ever hear not to run with scissors? Slipping while holding a sharp object can result in injury.</li>
-				<li class="rscadd">Butter fingers can be slipped on.</li>
-			</ul>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Autoharvest stops working after a large number of harvests on the tile to prevent players and the server from crashing.</li>
-				<li class="tweak">Merge Changeling hive upload and download into one spell. You also send/receive all available DNA at once rather than one at a time.</li>
-				<li class="tweak">Changed some abilities and items to be more consistent related to tracking, viewing, and telepathy. For example, Changeling&#39;s Digital Camouflage is now like a tinfoil hat. Certain syndicate items now jam various technology and mind powers like a tinfoil hat.</li>
-			</ul>
-			<h3 class="author">jellyveggie2 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The power grid now works off a priority system. Consumers in higher priority tiers receive power before those on lower tiers. All consumers in the same tier receive the same amount of power proportional to how much each requested and how much power is left available for said tier.</li>
-				<li class="tweak">Current priority round-start is: Emitters &gt; APCs and machinery &gt; Recharging an APC &gt; recharging an SMES. So, the SMES won&#39;t recharge until there&#39;s enough power for all APCs to recharge, and APCs won&#39;t recharge until there&#39;s enough power to run</li>
-				<li class="tweak">Emitters can run at low power so long as you can meet at least 30% of their demand, albeit with reduced intensity. Intensity scales linearly with met demand, so 50% met demand means 50% intensity.</li>
-				<li class="tweak">&#34;Draw&#34; in power monitors is now more representative of how much power the station requires in that moment, rather than how much it is consuming</li>
-				<li class="rscadd">Power monitors will now display machines wired to the grid within an area, such as emitters and SMES units. Illegal or antiquated tech may not show at all.</li>
-				<li class="rscadd">Power monitors may be used to modify the priority of said machines, assuming you have engineering access. Feel free to redirect power from security to cargo or whatever.</li>
-				<li class="rscadd">SMES units can be given a name tag through their UI, to better identify them within the power monitor.</li>
 			</ul>
 		</div>
 		<!--
