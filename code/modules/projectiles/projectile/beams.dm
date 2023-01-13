@@ -31,9 +31,7 @@ var/list/beam_master = list()
 
 /ray/beam_ray/Destroy()
 	fired_beam = null
-	for(var/rayCastHit/H in hit_cache)
-		qdel(H)
-	hit_cache = null
+	QDEL_LIST_NULL(hit_cache)
 	..()
 
 /ray/beam_ray/cast(max_distance, max_hits, ignore_origin)
@@ -86,9 +84,7 @@ var/list/beam_master = list()
 	var/list/ray/past_rays = list() //full of rays
 
 /obj/item/projectile/beam/Destroy()
-	for(var/ray/R in past_rays)
-		qdel(R)
-	past_rays = null
+	QDEL_LIST_NULL(past_rays)
 	..()
 
 

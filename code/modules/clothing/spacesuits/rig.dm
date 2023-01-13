@@ -192,9 +192,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	G = null
 	T = null
 	MB = null
-	for(var/obj/M in modules)
-		qdel(M)
-	modules = null
+	QDEL_LIST_NULL(modules)
 	if(cell)
 		qdel(cell)
 	cell = null

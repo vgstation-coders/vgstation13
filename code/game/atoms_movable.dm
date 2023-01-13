@@ -88,9 +88,7 @@
 	if (locked_to)
 		locked_to.unlock_atom(src)
 
-	for (var/datum/locking_category/category in locking_categories)
-		qdel(category)
-	locking_categories      = null
+	QDEL_LIST_NULL(locking_categories)
 	locking_categories_name = null
 
 	break_all_tethers()

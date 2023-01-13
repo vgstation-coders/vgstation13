@@ -68,25 +68,10 @@
 		parent.children -= src
 		parent = null
 
-	if(children)
-		for(var/datum/organ/external/O in children)
-			qdel(O)
-		children = null
-
-	if(internal_organs)
-		for(var/datum/organ/internal/O in internal_organs)
-			qdel(O)
-		internal_organs = null
-
-	if(implants)
-		for(var/obj/O in implants)
-			qdel(O)
-		implants = null
-
-	if(wounds)
-		for(var/datum/wound/W in wounds)
-			qdel(W)
-		wounds = null
+	QDEL_LIST_NULL(children)
+	QDEL_LIST_NULL(internal_organs)
+	QDEL_LIST_NULL(implants)
+	QDEL_LIST_NULL(wounds)
 
 	if(owner)
 		owner.organs -= src

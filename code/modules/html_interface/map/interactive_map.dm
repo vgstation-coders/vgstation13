@@ -36,11 +36,7 @@ var/const/ALLOW_CENTCOMM = FALSE
 	src.data = list()
 
 /datum/interactive_map/Destroy()
-	if (src.interfaces)
-		for (var/datum/html_interface/hi in interfaces)
-			qdel(hi)
-		src.interfaces = null
-
+	QDEL_LIST_NULL(interfaces)
 	return ..()
 
 //Override this to show the user the interface

@@ -695,9 +695,7 @@
 		QDEL_NULL(closer)
 	if(xtra)
 		QDEL_NULL(xtra)
-	for(var/atom/movable/AM in contents)
-		qdel(AM)
-	contents = null
+	QDEL_LIST_NULL(contents)
 	..()
 
 /obj/item/weapon/storage/preattack(atom/target, mob/user, adjacent, params)

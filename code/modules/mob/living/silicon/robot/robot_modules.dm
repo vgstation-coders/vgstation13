@@ -56,9 +56,7 @@
 		QDEL_NULL(emag)
 	if(jetpack)
 		QDEL_NULL(jetpack)
-	for(var/obj/A in upgrades)
-		qdel(upgrades)
-	upgrades = null
+	QDEL_LIST_NULL(upgrades)
 	..()
 
 /obj/item/weapon/robot_module/proc/on_emag()

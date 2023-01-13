@@ -36,9 +36,7 @@
 		var/mob/living/carbon/Ca = src
 		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
 	if(client)
-		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
-			qdel(spell_master)
-		spell_masters = null
+		QDEL_LIST_NULL(spell_masters)
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
 			var/obj/abstract/screen/screenobj = AM
