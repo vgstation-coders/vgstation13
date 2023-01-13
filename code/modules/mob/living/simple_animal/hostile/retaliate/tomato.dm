@@ -4,6 +4,7 @@
 	icon_state = "tomato"
 	icon_living = "tomato"
 	icon_dead = "tomato_dead"
+	faction = "tomato"
 	speak_chance = 0
 	turns_per_move = 5
 	maxHealth = 15
@@ -12,5 +13,9 @@
 	response_help  = "prods the"
 	response_disarm = "pushes aside the"
 	response_harm   = "smacks the"
+	attacktext = "chomps"
+	attack_sound = 'sound/weapons/bite.ogg'
 	harm_intent_damage = 5
+	melee_damage_lower = 5
+	melee_damage_upper = 5
 	environment_smash_flags = 0
