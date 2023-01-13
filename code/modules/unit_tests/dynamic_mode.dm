@@ -40,7 +40,7 @@
 	for(var/i in 1 to 10)
 		dynamic_mode.threat_level = (i-1)*10
 		for(var/datum/dynamic_ruleset/DR in rules2check)
-			var/midround = !(istype(DR,/datum/dynamic_ruleset/roundstart) && !istype(DR,/datum/dynamic_ruleset/roundstart/delayed))
+			var/midround = !istype(DR,/datum/dynamic_ruleset/roundstart)
 			for(var/mob/oldM1 in dynamic_mode.living_players)
 				qdel(oldM1)
 			for(var/mob/oldM2 in dynamic_mode.candidates)
@@ -68,10 +68,10 @@
 			if(!midround) // make roundstart act like it for the proc
 				ticker.current_state = GAME_STATE_SETTING_UP
 			var/result = DR.check_enemy_jobs(midround,FALSE)
-			var/tocheck = dead_dont_count && DR.required_enemies[i] // only if there is actual enemy jobs here
+			var/tocheck = !(dead_dont_count && DR.required_enemies[i]) // only if there is actual enemy jobs here
 			ticker.current_state = old_game_state // and back again
-			if(result == tocheck)
-				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [!tocheck], got [result] on rule [DR.name] with a threat of [dynamic_mode.threat_level] with [enemies_count] out of [DR.required_enemies[i]] enemies[!midround ? " and [!midround ? dynamic_mode.roundstart_pop_ready : dynamic_mode.living_players.len] out of [DR.required_pop[i]] candidates" : ""]")
+			if(result != tocheck)
+				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [tocheck], got [result] on rule [DR.name] with a threat of [dynamic_mode.threat_level] with [enemies_count] out of [DR.required_enemies[i]] enemies[!midround ? " and [!midround ? dynamic_mode.roundstart_pop_ready : dynamic_mode.living_players.len] out of [DR.required_pop[i]] candidates" : ""]")
 
 /datum/unit_test/dynamic/enemy_jobs/dead_dont_count
 	dead_dont_count = TRUE
