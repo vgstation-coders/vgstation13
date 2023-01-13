@@ -28,10 +28,11 @@
 	..()
 	assert_eq(player_list.len, 5)
 	assert_eq(dynamic_mode.roundstart_pop_ready, 3)
+	for(var/mob/M in player_list)
+		qdel(M)
 
 /datum/unit_test/dynamic/enemy_jobs
 	var/dead_dont_count = FALSE
-	var/midround = FALSE
 
 /datum/unit_test/dynamic/enemy_jobs/start()
 	..()
@@ -39,6 +40,7 @@
 	for(var/i in 1 to 10)
 		dynamic_mode.threat_level = (i-1)*10
 		for(var/datum/dynamic_ruleset/DR in rules2check)
+			var/midround = !(istype(DR,/datum/dynamic_ruleset/roundstart) && !istype(DR,/datum/dynamic_ruleset/roundstart/delayed))
 			for(var/mob/oldM1 in dynamic_mode.living_players)
 				qdel(oldM1)
 			for(var/mob/oldM2 in dynamic_mode.candidates)
@@ -71,9 +73,5 @@
 			if(result == tocheck)
 				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [!tocheck], got [result] with [enemies_count] out of [DR.required_enemies[i]] enemies[!midround ? " and [!midround ? dynamic_mode.roundstart_pop_ready : dynamic_mode.living_players.len] out of [DR.required_pop[i]] candidates" : ""]")
 
-
-/datum/unit_test/dynamic/enemy_jobs/midround
-	midround = TRUE
-
-/datum/unit_test/dynamic/enemy_jobs/midround/dead_dont_count
+/datum/unit_test/dynamic/enemy_jobs/dead_dont_count
 	dead_dont_count = TRUE
