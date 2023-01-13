@@ -80,6 +80,7 @@
 	dead_dont_count = TRUE
 
 /datum/unit_test/dynamic/can_spend/start()
+	..()
 	var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
 	var/datum/dynamic_ruleset/D = new() // just the base types until we test subtypes some other time, is called as ..() in all of the subprocs anyways
 	for(var/i in 1 to 10)
