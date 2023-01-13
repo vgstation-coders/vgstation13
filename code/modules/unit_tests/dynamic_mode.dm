@@ -67,7 +67,7 @@
 			var/tocheck = dead_dont_count && DR.required_enemies[i] // only if there is actual enemy jobs here
 			ticker.current_state = old_game_state // and back again
 			if(result == tocheck)
-				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [!tocheck], got [result] with [enemies_count] out of [DR.required_enemies[i]] enemies[!dead_dont_count ? " and [dynamic_mode.roundstart_pop_ready] out of [DR.required_pop[i]] candidates" : ""]")
+				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [!tocheck], got [result] with [enemies_count] out of [DR.required_enemies[i]] enemies[!dead_dont_count ? " and [!dead_dont_count ? dynamic_mode.roundstart_pop_ready : dynamic_mode.living_players.len] out of [DR.required_pop[i]] candidates" : ""]")
 
 /datum/unit_test/dynamic/enemy_jobs/dead_dont_count
 	dead_dont_count = TRUE
