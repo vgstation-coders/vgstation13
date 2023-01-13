@@ -49,7 +49,7 @@
 			dynamic_mode.candidates.Cut()
 			var/mob/M
 			var/enemies_count = 0
-			for(var/j in 1 to max(DR.required_pop[i],DR.required_enemies[i]))
+			for(var/j in 1 to (DR.required_pop[i] + DR.required_enemies[i]))
 				M = new()
 				M.mind = new("fgsfds[i]")
 				if(j <= DR.required_enemies[i])
