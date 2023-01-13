@@ -41,6 +41,7 @@
 	var/static/list/edibles = list(/obj/item/weapon/reagent_containers/food/snacks)
 
 	var/scalerate = 1
+	var/translaterate = 4.5 //it is multiplied by the current scalerate, and we want a final value of 9
 	var/all_fours = TRUE
 
 	var/last_scavenge = 0
@@ -108,6 +109,7 @@
 				scalerate = 2
 			var/matrix/M = matrix()
 			M.Scale(scalerate,scalerate)
+			M.Translate(0, translaterate*scalerate)
 			transform = M
 		else
 			health+=5 // Otherwise we just get a little health back
@@ -252,6 +254,7 @@
 					scalerate = 1
 				var/matrix/M = matrix()
 				M.Scale(scalerate,scalerate)
+			M.Translate(0, -translaterate*scalerate)
 				transform = M
 				adjustBruteLoss(1) // Here so that the mouse aggros. It won't be happy that you're cutting into its gainz!
 			if(maxHealth < 20)
@@ -410,6 +413,7 @@
 				scalerate = 2
 			var/matrix/M = matrix()
 			M.Scale(scalerate,scalerate)
+			M.Translate(0, translaterate*scalerate)
 			transform = M
 		else
 			health+=5 // Otherwise we just get a little health back
