@@ -34,9 +34,9 @@
 
 /datum/unit_test/dynamic/enemy_jobs/start()
 	..()
+	var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
 	for(var/i in 1 to 10)
 		dynamic_mode.threat_level = (i-1)*10
-		var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
 		for(var/datum/dynamic_ruleset/DR in rules2check)
 			for(var/mob/oldM1 in dynamic_mode.living_players)
 				qdel(oldM1)
