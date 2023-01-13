@@ -3,8 +3,10 @@
 	endWhen = 450
 	var/list/spawned_carp = list()
 
-/datum/event/carp_migration/can_start()
-	return 40
+/datum/event/carp_migration/can_start(var/list/active_with_role)
+	if(active_with_role.len > 6)
+		return 40
+	return 0
 
 /datum/event/carp_migration/setup()
 	announceWhen = rand(15, 30)
