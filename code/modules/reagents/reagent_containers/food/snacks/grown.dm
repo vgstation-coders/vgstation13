@@ -677,6 +677,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	T.melee_damage_upper = potency/5
 	T.health = potency/2
 	T.maxHealth = potency/2
+	T.friends += user
 	qdel(src)
 
 	to_chat(user, "<span class='notice'>You plant the killer-tomato.</span>")
