@@ -58,7 +58,7 @@
 				else
 					dynamic_mode.candidates += M
 			dynamic_mode.roundstart_pop_ready = max(dynamic_mode.candidates.len,dynamic_mode.living_players.len)
-			var/result = DR.check_enemy_jobs(dead_dont_count,FALSE)
+			var/result = DR.check_enemy_jobs(dead_dont_count,FALSE,!dead_dont_count)
 			var/tocheck = dead_dont_count && DR.required_enemies[i]
 			if(result == tocheck)
 				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [!tocheck], got [result] with [enemies_count] out of [DR.required_enemies[i]] enemies[!dead_dont_count ? " and [dynamic_mode.roundstart_pop_ready] out of [DR.required_pop[i]] candidates" : ""]")

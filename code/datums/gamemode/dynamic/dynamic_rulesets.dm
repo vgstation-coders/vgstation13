@@ -102,7 +102,7 @@
 	return TRUE
 
 // Returns TRUE if there is enough pop to execute this ruleset
-/datum/dynamic_ruleset/proc/check_enemy_jobs(var/dead_dont_count = FALSE, var/midround = FALSE)
+/datum/dynamic_ruleset/proc/check_enemy_jobs(var/dead_dont_count = FALSE, var/midround = FALSE, var/roundstart = FALSE)
 	var/enemies_count = 0
 	if (dead_dont_count)
 		for (var/mob/M in mode.living_players)
@@ -116,7 +116,7 @@
 				enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
 
 	var/pop_and_enemies
-	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+	if (!roundstart)
 		pop_and_enemies += mode.living_players.len
 	else
 		pop_and_enemies += mode.roundstart_pop_ready
@@ -347,7 +347,7 @@
 
 /datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
 	if (!forced)
-		if(!check_enemy_jobs(FALSE))
+		if(!check_enemy_jobs(FALSE,roundstart = !istype(src,/datum/dynamic_ruleset/roundstart/delayed)))
 			return 0
 	return ..()
 

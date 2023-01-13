@@ -45,14 +45,14 @@
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this
-#define DEVELOPER_MODE 0
+#define DEVELOPER_MODE 1
 
 // If 1, unit tests will be compiled
-#define UNIT_TESTS_ENABLED 0
+#define UNIT_TESTS_ENABLED 1
 // If 1, unit tests run automatically
-#define UNIT_TESTS_AUTORUN 0
+#define UNIT_TESTS_AUTORUN 1
 // If 1, the server stops after the tests are done
-#define UNIT_TESTS_STOP_SERVER_WHEN_DONE 0
+#define UNIT_TESTS_STOP_SERVER_WHEN_DONE 1
 
 #if DEVELOPER_MODE
 // If defined, overrides the default lobby timer duration
