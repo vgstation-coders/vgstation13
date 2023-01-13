@@ -61,7 +61,7 @@
 			if(!ticker)
 				fail("[__FILE__]:[__LINE__]: enemy job test failed, no ticker")
 			var/old_game_state = ticker.current_state
-			if(dead_dont_count) // make roundstart act like it for the proc
+			if(!dead_dont_count) // make roundstart act like it for the proc
 				ticker.current_state = GAME_STATE_SETTING_UP
 			var/result = DR.check_enemy_jobs(dead_dont_count,FALSE,!dead_dont_count)
 			var/tocheck = dead_dont_count && DR.required_enemies[i] // only if there is actual enemy jobs here
