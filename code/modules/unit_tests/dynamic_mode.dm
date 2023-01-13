@@ -31,6 +31,7 @@
 
 /datum/unit_test/dynamic/enemy_jobs
 	var/dead_dont_count = FALSE
+	var/midround = FALSE
 
 /datum/unit_test/dynamic/enemy_jobs/start()
 	..()
@@ -52,9 +53,10 @@
 				if(j <= DR.required_enemies[i])
 					M.mind.assigned_role = pick(DR.enemy_jobs)
 					enemies_count++
-				if(dead_dont_count)
+				if(midround)
 					dynamic_mode.living_players += M
-					M.stat = DEAD
+					if(dead_dont_count)
+						M.stat = DEAD
 				else
 					dynamic_mode.candidates += M
 			dynamic_mode.roundstart_pop_ready = dynamic_mode.candidates.len
@@ -63,11 +65,15 @@
 			var/old_game_state = ticker.current_state
 			if(!dead_dont_count) // make roundstart act like it for the proc
 				ticker.current_state = GAME_STATE_SETTING_UP
-			var/result = DR.check_enemy_jobs(dead_dont_count,FALSE,!dead_dont_count)
+			var/result = DR.check_enemy_jobs(dead_dont_count,midround)
 			var/tocheck = dead_dont_count && DR.required_enemies[i] // only if there is actual enemy jobs here
 			ticker.current_state = old_game_state // and back again
 			if(result == tocheck)
 				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [!tocheck], got [result] with [enemies_count] out of [DR.required_enemies[i]] enemies[!dead_dont_count ? " and [!dead_dont_count ? dynamic_mode.roundstart_pop_ready : dynamic_mode.living_players.len] out of [DR.required_pop[i]] candidates" : ""]")
 
-/datum/unit_test/dynamic/enemy_jobs/dead_dont_count
+
+/datum/unit_test/dynamic/enemy_jobs/midround
+	midround = TRUE
+
+/datum/unit_test/dynamic/enemy_jobs/midround/dead_dont_count
 	dead_dont_count = TRUE
