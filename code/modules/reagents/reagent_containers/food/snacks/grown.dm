@@ -672,11 +672,11 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	if(istype(user.loc, /turf/space))
 		return
 	var/mob/living/simple_animal/hostile/retaliate/tomato/T = new(user.loc)
-	T.harm_intent_damage = potency/5
-	T.melee_damage_lower = potency/5 - potency/10
-	T.melee_damage_upper = potency/5
-	T.health = potency/2
-	T.maxHealth = potency/2
+	T.harm_intent_damage = potency/5 - potency/20
+	T.melee_damage_lower = potency/10
+	T.melee_damage_upper = potency/5 - potency/20
+	T.health = potency/2 - potency/8
+	T.maxHealth = potency/2 - potency/8
 	T.friends += user
 	qdel(src)
 
