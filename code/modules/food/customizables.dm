@@ -160,7 +160,7 @@
 
 
 /obj/item/trash/plate/throw_impact(atom/hit_atom)
-	if(!..())
+	if(..())
 		return
 	for (var/obj/item/trash/plate/P in plates)
 		plates -= P

@@ -622,7 +622,7 @@
 	w_class = W_CLASS_TINY
 
 /obj/item/toy/snappop/throw_impact(atom/hit_atom)
-	if(..())
+	if(!..())
 		pop()
 
 /obj/item/toy/snappop/Crossed(var/mob/living/M)

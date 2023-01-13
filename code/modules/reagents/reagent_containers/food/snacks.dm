@@ -1575,7 +1575,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/throw_impact(atom/hit_atom)
 	set waitfor = FALSE
-	if(!..())
+	if(..())
 		return
 	if(ismob(hit_atom))
 		var/mob/M = hit_atom

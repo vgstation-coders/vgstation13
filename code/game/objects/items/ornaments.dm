@@ -57,7 +57,7 @@
 	return ..()
 
 /obj/item/ornament/throw_impact(atom/hit_atom)
-	if(!..())
+	if(..())
 		return
 	src.visible_message("<span class='warning'>\The [src] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
 	if(get_turf(src))

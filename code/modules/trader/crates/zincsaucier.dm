@@ -162,7 +162,7 @@ var/global/global_cricket_population = 0
 	escape()
 
 /obj/item/cricketfarm/throw_impact(atom/hit_atom, var/speed, mob/user)
-	if(..())
+	if(!..())
 		escape()
 
 /obj/item/cricketfarm/kick_act(mob/user)

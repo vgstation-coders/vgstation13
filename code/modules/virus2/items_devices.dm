@@ -350,7 +350,7 @@ var/list/virusdishes = list()
 	processing_objects.Add(src)
 
 /obj/item/weapon/virusdish/throw_impact(atom/hit_atom, var/speed, mob/user)
-	if(..() && isturf(hit_atom))
+	if(!..() && isturf(hit_atom))
 		visible_message("<span class='danger'>The virus dish shatters on impact!</span>")
 		shatter(user)
 

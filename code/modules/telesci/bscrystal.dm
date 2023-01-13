@@ -37,7 +37,7 @@
 	do_teleport(L, get_turf(L), blink_range, asoundin = 'sound/effects/phasein.ogg')
 
 /obj/item/bluespace_crystal/throw_impact(atom/hit_atom)
-	if(!..())
+	if(..())
 		return
 	var/datum/zLevel/L = get_z_level(src)
 

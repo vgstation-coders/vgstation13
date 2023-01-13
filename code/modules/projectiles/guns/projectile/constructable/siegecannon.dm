@@ -252,7 +252,7 @@
 	cannonAdjust()
 
 /obj/item/cannonball/iron/throw_impact(atom/hit_atom, var/speed, mob/user)
-	if(..() && isliving(hit_atom) && cannonFired)
+	if(!..() && isliving(hit_atom) && cannonFired)
 		siegeMob(hit_atom)
 
 /obj/item/cannonball/iron/proc/siegeMachine(var/obj/machinery/M)
@@ -506,7 +506,7 @@
 	honkBounce(cTarg)
 
 /obj/item/cannonball/bananium/throw_impact(atom/hit_atom, var/speed, mob/user)
-	if(!..())
+	if(..())
 		return
 	if(!cannonFired)
 		lastBounceCount = 0

@@ -791,7 +791,7 @@
 	..()
 
 /obj/item/device/mobcapsule/throw_impact(atom/A, speed, mob/user)
-	if(..() && !tripped)
+	if(!..() && !tripped)
 		if(contained_mob)
 			dump_contents(user)
 			tripped = 1
