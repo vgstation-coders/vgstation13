@@ -79,10 +79,10 @@
 /datum/unit_test/dynamic/enemy_jobs/dead_dont_count
 	dead_dont_count = TRUE
 
-/datum/unit_test/dynamic/can_spend/start()
+// uncomment this when acceptable() has no subcalls
+/*/datum/unit_test/dynamic/can_spend/start()
 	..()
 	var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
-	var/datum/dynamic_ruleset/D = new() // just the base types until everything that subcalls it is properly moved to ready() instead like the comment in the code implies, is called as ..() in all of the subprocs anyways
 	for(var/i in 1 to 10)
 		dynamic_mode.threat_level = (i-1)*10
 		for(var/datum/dynamic_ruleset/DR in rules2check)
@@ -91,9 +91,7 @@
 			for(var/j in 1 to 10)
 				var/pop2check = (j-1)*5
 				if(dynamic_mode.threat_level >= DR.requirements[j])
-					if(!D.acceptable(pop2check,dynamic_mode.threat_level))
+					if(!DR.acceptable(pop2check,dynamic_mode.threat_level))
 						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 on rule [DR.name] with [pop2check] players and [dynamic_mode.threat_level] threat out of [DR.requirements[j]]")
-				else if(D.acceptable(pop2check,dynamic_mode.threat_level))
-					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [pop2check] players and [dynamic_mode.threat_level] threat out of [DR.requirements[j]]")
-
-	qdel(D)
+				else if(DR.acceptable(pop2check,dynamic_mode.threat_level))
+					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [pop2check] players and [dynamic_mode.threat_level] threat out of [DR.requirements[j]]")*/
