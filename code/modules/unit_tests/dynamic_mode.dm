@@ -92,9 +92,8 @@
 				var/pop2check = (j-1)*5
 				if(dynamic_mode.threat_level >= DR.requirements[j])
 					if(!D.acceptable(pop2check,dynamic_mode.threat_level))
-						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 with [pop2check] players and [dynamic_mode.threat_level] threat")
-				else
-					if(D.acceptable(pop2check,dynamic_mode.threat_level))
-						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 with [pop2check] players and [dynamic_mode.threat_level] threat")
+						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 on rule [DR.name] with [pop2check] players and [dynamic_mode.threat_level] threat")
+				else if(D.acceptable(pop2check,dynamic_mode.threat_level))
+					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [pop2check] players and [dynamic_mode.threat_level] threat")
 
 	qdel(D)
