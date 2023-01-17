@@ -202,9 +202,11 @@
 //It automatically updates damage overlays if necesary
 //It automatically updates health status
 /mob/living/carbon/human/heal_organ_damage(var/brute, var/burn)
-	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn)
+	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn,TRUE)
 	if(!parts.len)
-		return
+		var/list/datum/organ/external/parts = get_damaged_organs(brute,burn)
+		if(!parts.len)
+			return
 	var/datum/organ/external/picked = pick(parts)
 	if(picked.heal_damage(brute,burn))
 		UpdateDamageIcon()
