@@ -112,11 +112,11 @@
 
 /obj/item/weapon/thermometer/electronic/measure_human_temperature(mob/living/carbon/human/C)
 	last_temperature = C.bodytemperature
-	return "[last_temperature-273.15]°C | [last_temperature]K"
+	return "[last_temperature-273.15] °C | [last_temperature]K"
 
 /obj/item/weapon/thermometer/electronic/measure_obj_temperature(obj/target)
 	last_temperature = target.reagents.chem_temp
-	return "[last_temperature-273.15]°C | [last_temperature]K"
+	return "[last_temperature-273.15] °C | [last_temperature]K"
 
 
 /obj/item/weapon/broken_thermometer
