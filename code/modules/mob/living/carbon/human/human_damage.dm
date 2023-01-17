@@ -204,7 +204,7 @@
 /mob/living/carbon/human/heal_organ_damage(var/brute, var/burn)
 	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn,TRUE)
 	if(!parts.len)
-		var/list/datum/organ/external/parts = get_damaged_organs(brute,burn)
+		parts = get_damaged_organs(brute,burn)
 		if(!parts.len)
 			return
 	var/datum/organ/external/picked = pick(parts)
