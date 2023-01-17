@@ -1665,9 +1665,9 @@
 		var/mob/living/carbon/human/H = M
 		if(!holder)
 			return
-		if(H.getBruteLoss() && prob(60))
+		if(H.getBruteLoss(ignore_nonvital = FALSE) && prob(60))
 			H.heal_organ_damage(quality, 0)
-		if(H.getFireLoss() && prob(50))
+		if(H.getFireLoss(ignore_nonvital = FALSE) && prob(50))
 			H.heal_organ_damage(0, quality)
 		if(H.getToxLoss() && prob(50))
 			H.adjustToxLoss(-quality)
@@ -2279,9 +2279,9 @@
 	if(isgolem(M)) //golems metabolize the diamond into very expensive doctor's delight
 		if(M.getOxyLoss())
 			M.adjustOxyLoss(-2)
-		if(M.getBruteLoss())
+		if(M.getBruteLoss(ignore_nonvital = FALSE))
 			M.heal_organ_damage(2, 0)
-		if(M.getFireLoss())
+		if(M.getFireLoss(ignore_nonvital = FALSE))
 			M.heal_organ_damage(0, 2)
 		if(M.getToxLoss())
 			M.adjustToxLoss(-2)
@@ -2923,9 +2923,9 @@
 
 	if(M.getOxyLoss())
 		M.adjustOxyLoss(-REM)
-	if(M.getBruteLoss())
+	if(M.getBruteLoss(ignore_nonvital = FALSE))
 		M.heal_organ_damage(REM, 0)
-	if(M.getFireLoss())
+	if(M.getFireLoss(ignore_nonvital = FALSE))
 		M.heal_organ_damage(0, REM)
 	if(M.getToxLoss())
 		M.adjustToxLoss(-REM)
@@ -4234,7 +4234,7 @@ var/procizine_tolerance = 0
 			I.status &= ~ORGAN_BROKEN //What do I owe you?
 			I.status &= ~ORGAN_SPLINTED //Nothing, it's for free!
 			I.status &= ~ORGAN_BLEEDING //FOR FREE?!
-	if(M.getOxyLoss() || M.getBruteLoss(TRUE) || M.getToxLoss() || M.getFireLoss(TRUE) || M.getCloneLoss())
+	if(M.getOxyLoss() || M.getBruteLoss(TRUE,FALSE) || M.getToxLoss() || M.getFireLoss(TRUE,FALSE) || M.getCloneLoss())
 		M.adjustOxyLoss(-5)
 		M.heal_organ_damage(5, 5) //Heals Brute and Burn. It heals the mob, not individual organs.
 		M.adjustToxLoss(-5)
@@ -4800,7 +4800,7 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	if(M.getFireLoss() && prob(20))
+	if(M.getFireLoss(ignore_nonvital = FALSE) && prob(20))
 		M.heal_organ_damage(0, 1)
 
 /datum/reagent/polypgelatin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
@@ -5494,7 +5494,7 @@ var/procizine_tolerance = 0
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 0.9185
-	specheatcap = 2.402	
+	specheatcap = 2.402
 	var/has_had_heart_explode = 0
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
@@ -6027,7 +6027,7 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	if(M.getFireLoss() && prob(20))
+	if(M.getFireLoss(ignore_nonvital = FALSE) && prob(20))
 		M.heal_organ_damage(0, 1)
 
 /datum/reagent/drink/limejuice
@@ -6151,9 +6151,9 @@ var/procizine_tolerance = 0
         if(H.mind.miming)
             if(M.getOxyLoss() && prob(80))
                 M.adjustOxyLoss(-REM)
-            if(M.getBruteLoss() && prob(80))
+            if(M.getBruteLoss(ignore_nonvital = FALSE) && prob(80))
                 M.heal_organ_damage(REM, 0)
-            if(M.getFireLoss() && prob(80))
+            if(M.getFireLoss(ignore_nonvital = FALSE) && prob(80))
                 M.heal_organ_damage(0, REM)
             if(M.getToxLoss() && prob(80))
                 M.adjustToxLoss(-REM)
@@ -7366,9 +7366,9 @@ var/procizine_tolerance = 0
 			M.nutrition += nutriment_factor //double of nothing is still... nothing. Change in future PR.
 			if(M.getOxyLoss() && prob(50))
 				M.adjustOxyLoss(-2)
-			if(M.getBruteLoss() && prob(60))
+			if(M.getBruteLoss(ignore_nonvital = FALSE) && prob(60))
 				M.heal_organ_damage(2, 0)
-			if(M.getFireLoss() && prob(50))
+			if(M.getFireLoss(ignore_nonvital = FALSE) && prob(50))
 				M.heal_organ_damage(0, 2)
 			if(M.getToxLoss() && prob(50))
 				M.adjustToxLoss(-2)
@@ -7724,9 +7724,9 @@ var/procizine_tolerance = 0
 
 	if(M.getOxyLoss())
 		M.adjustOxyLoss(-2)
-	if(M.getBruteLoss())
+	if(M.getBruteLoss(ignore_nonvital = FALSE))
 		M.heal_organ_damage(2, 0)
-	if(M.getFireLoss())
+	if(M.getFireLoss(ignore_nonvital = FALSE))
 		M.heal_organ_damage(0, 2)
 	if(M.getToxLoss())
 		M.adjustToxLoss(-2)
@@ -8842,9 +8842,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		if(!holder)
 			return
 		H.sleeping = 0
-		if(H.getBruteLoss() && prob(60))
+		if(H.getBruteLoss(ignore_nonvital = FALSE) && prob(60))
 			H.heal_organ_damage(1, 0)
-		if(H.getFireLoss() && prob(50))
+		if(H.getFireLoss(ignore_nonvital = FALSE) && prob(50))
 			H.heal_organ_damage(0, 1)
 		if(H.getToxLoss() && prob(50))
 			H.adjustToxLoss(-1)
@@ -8896,7 +8896,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.adjustOxyLoss(-1)
 	if(M.getBruteLoss() && prob(30))
 		M.heal_organ_damage(1, 0)
-	if(M.getFireLoss() && prob(25))
+	if(M.getFireLoss(ignore_nonvital = FALSE) && prob(25))
 		M.heal_organ_damage(0, 1)
 	if(M.getToxLoss() && prob(25))
 		M.adjustToxLoss(-1)
@@ -9839,10 +9839,10 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		if(M.getOxyLoss())
 			M.adjustOxyLoss(-3)
 			holder.remove_reagent(ECTOPLASM, 0.1)
-		if(M.getBruteLoss())
+		if(M.getBruteLoss(ignore_nonvital = FALSE))
 			M.heal_organ_damage(3, 0)
 			holder.remove_reagent(ECTOPLASM, 0.1)
-		if(M.getFireLoss())
+		if(M.getFireLoss(ignore_nonvital = FALSE))
 			M.heal_organ_damage(0, 3)
 			holder.remove_reagent(ECTOPLASM, 0.1)
 		if(M.getToxLoss())

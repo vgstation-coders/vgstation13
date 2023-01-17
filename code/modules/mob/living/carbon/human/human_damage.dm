@@ -7,7 +7,7 @@
 	var/total_burn	= 0
 	var/total_brute	= 0
 	for(var/datum/organ/external/O in organs)	//hardcoded to streamline things a bit
-		if(O.is_organic() && O.is_existing())
+		if(O.is_organic() && O.is_existing() && O.internal_organs?.len)
 			total_brute	+= O.brute_dam
 			total_burn	+= O.burn_dam
 	var/prevhealth = health
@@ -35,18 +35,22 @@
 	return 0
 
 //These procs fetch a cumulative total damage from all organs
-/mob/living/carbon/human/getBruteLoss(var/ignore_inorganic = FALSE)
+/mob/living/carbon/human/getBruteLoss(var/ignore_inorganic = FALSE, var/ignore_nonvital = TRUE)
 	var/amount = 0
 	for(var/datum/organ/external/O in organs)
 		if(ignore_inorganic && !O.is_organic())
 			continue
+		if(ignore_nonvital && !O.internal_organs?.len)
+			continue
 		amount += O.brute_dam
 	return amount
 
-/mob/living/carbon/human/getFireLoss(var/ignore_inorganic = FALSE)
+/mob/living/carbon/human/getFireLoss(var/ignore_inorganic = FALSE, var/ignore_nonvital = TRUE)
 	var/amount = 0
 	for(var/datum/organ/external/O in organs)
 		if(ignore_inorganic && !O.is_organic())
+			continue
+		if(ignore_nonvital && !O.internal_organs?.len)
 			continue
 		amount += O.burn_dam
 	return amount
@@ -171,20 +175,24 @@
 ////////////////////////////////////////////
 
 //Returns a list of damaged organs
-/mob/living/carbon/human/proc/get_damaged_organs(var/brute, var/burn)
+/mob/living/carbon/human/proc/get_damaged_organs(var/brute, var/burn, var/ignore_nonvital = FALSE)
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
+		if(ignore_nonvital && !O.internal_organs?.len)
+			continue
 		if((brute && O.brute_dam) || (burn && O.burn_dam))
 			parts += O
 	return parts
 
 //Returns a list of damageable organs
-/mob/living/carbon/human/proc/get_damageable_organs(var/ignore_inorganics = FALSE)
+/mob/living/carbon/human/proc/get_damageable_organs(var/ignore_inorganics = FALSE, var/ignore_nonvital = FALSE)
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
 		if(!O.is_existing())
 			continue
 		if(ignore_inorganics && !O.is_organic())
+			continue
+		if(ignore_nonvital && !O.internal_organs?.len)
 			continue
 		if(O.brute_dam + O.burn_dam < O.max_damage)
 			parts += O
@@ -229,7 +237,11 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 	if(istype(H)) // hivelord hearts just heal better
 		brute *= 2
 		burn *= 2
+	var/list/datum/organ/external/organparts = get_damaged_organs(ignore_nonvital = TRUE)
 	var/update = 0
+	if(parts.len && organparts.len)
+		brute *= parts.len/organparts.len
+		burn *= parts.len/organparts.len
 	while(parts.len && (brute>0 || burn>0) )
 		var/datum/organ/external/picked = pick(parts)
 
@@ -250,10 +262,10 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 
 // damage MANY external organs, in random order
 /mob/living/carbon/human/take_overall_damage(var/brute, var/burn, var/sharp = 0, var/edge = 0, var/used_weapon = null)
-	if(species && species.burn_mod)
-		burn = burn*species.burn_mod
-	if(species && species.brute_mod)
-		brute = brute*species.brute_mod
+	if(species?.burn_mod)
+		burn *= species.burn_mod
+	if(species?.brute_mod)
+		brute *= species.brute_mod
 
 	if(status_flags & GODMODE)
 		return 0	//godmode
@@ -261,7 +273,11 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 	. = brute + burn
 
 	var/list/datum/organ/external/parts = get_damageable_organs()
+	var/list/datum/organ/external/organparts = get_damageable_organs(ignore_nonvital = TRUE)
 	var/update = 0
+	if(parts.len && organparts.len)
+		brute *= parts.len/organparts.len
+		burn *= parts.len/organparts.len
 	while(parts.len && (brute>0 || burn>0) )
 		var/datum/organ/external/picked = pick(parts)
 
