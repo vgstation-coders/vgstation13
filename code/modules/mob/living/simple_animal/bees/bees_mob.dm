@@ -290,7 +290,7 @@ var/bee_mobs_count = 0
 	//Making noise
 	if(prob(1))
 		if(prob(50))
-			src.emote("me",1,pick("buzzzz","hmmmmm","bzzz"))
+			src.emote("me",1,pick("buzzzz[bees.len <= 1 ? "es" : ""]","hmmmmm[bees.len <= 1 ? "s" : ""]","bzzz[bees.len <= 1 ? "es" : ""]"))
 		playsound(src, 'sound/effects/bees.ogg', min(20 * bees.len, 100), 1)
 
 
