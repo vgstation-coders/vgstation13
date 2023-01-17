@@ -290,7 +290,7 @@ var/bee_mobs_count = 0
 	//Making noise
 	if(prob(1))
 		if(prob(50))
-			src.visible_message("<span class='notice'>[pick("Buzzzz.","Hmmmmm.","Bzzz.")]</span>")
+			src.emote("me",1,pick("Buzzzz.","Hmmmmm.","Bzzz."))
 		playsound(src, 'sound/effects/bees.ogg', min(20 * bees.len, 100), 1)
 
 
