@@ -367,7 +367,7 @@ var/list/firstaid_exceptions = list(
 			playsound(src.loc, 'sound/medbot/Biohazard_detected.ogg', 35, channel = CHANNEL_MEDBOTS)
 			sleep(35)
 
-	if (!reagent_id && (C.getBruteLoss(ignore_nonvital = FALSE) >= heal_threshold))
+	if (!reagent_id && (C.getBruteLoss(FALSE,FALSE) >= heal_threshold))
 		if(!C.reagents.has_reagent(treatment_brute))
 			reagent_id = treatment_brute
 			if((C.getBruteLoss() <= 50) && (C.getBruteLoss() > 0) && (shut_up == 0))
@@ -387,7 +387,7 @@ var/list/firstaid_exceptions = list(
 				say("Blood loss detected!")
 				sleep(25)
 
-	if (!reagent_id && (C.getFireLoss(ignore_nonvital = FALSE) >= heal_threshold))
+	if (!reagent_id && (C.getFireLoss(FALSE,FALSE) >= heal_threshold))
 		if(!C.reagents.has_reagent(treatment_fire))
 			reagent_id = treatment_fire
 			if(shut_up == 0)
