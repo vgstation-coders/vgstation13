@@ -1604,36 +1604,30 @@
 		return "[..()] ERROR: Tank empty. \[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 	return "[..()] \[<a href='?src=\ref[src];toggle=0'>[collector.active ? "Deactivate" : "Activate"] radiation collector array</a>\]\[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 
-/obj/item/mecha_parts/mecha_equipment/ripleyupgrade
+/obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade
 	name = "Ripley MK-II Conversion Kit"
 	desc = "A pressurized canopy attachment kit for an Autonomous Power Loader Unit \"Ripley\" MK-I mecha, to convert it to the slower, but space-worthy MK-II design. This kit cannot be removed, once applied."
 	icon_state = "ripleyupgrade"
 
-/obj/item/mecha_parts/mecha_equipment/ripleyupgrade/can_attach(obj/mecha/working/ripley/R as obj)
-	if(..())
-		if(istype(R))
-			return 1
-	return 0
-
-/obj/item/mecha_parts/mecha_equipment/ripleyupgrade/can_attach(mob/user as mob, obj/mecha/working/ripley/M)
-	if(M.type != /obj/mecha/working/ripley)
-		to_chat(user, "<span class='warning'>This conversion kit can only be applied to APLU MK-I models.</span>")
-		return FALSE
+/obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade/can_attach(obj/mecha/working/ripley/M)
+	if(M.enclosed) // i'm dumb and missed why istype wasn't working :c
+		to_chat(src, "<span class='warning'>This conversion kit can only be applied to APLU MK-I models.</span>")
+		return 0
 	if(M.cargo.len)
-		to_chat(user, "<span class='warning'>[M]'s cargo hold must be empty before this conversion kit can be applied.</span>")
-		return FALSE
+		to_chat(src, "<span class='warning'>[M]'s cargo hold must be empty before this conversion kit can be applied.</span>")
+		return 0
 	if(!M.mech_maints_ready) //non-removable upgrade, so lets make sure the pilot or owner has their say.
-		to_chat(user, "<span class='warning'>[M] must have maintenance protocols active in order to allow this conversion kit.</span>")
-		return FALSE
+		to_chat(src, "<span class='warning'>[M] must have maintenance protocols active in order to allow this conversion kit.</span>")
+		return 0
 	if(M.occupant) //We're actualy making a new mech and swapping things over, it might get weird if players are involved
-		to_chat(user, "<span class='warning'>[M] must be unoccupied before this conversion kit can be applied.</span>")
-		return FALSE
+		to_chat(src, "<span class='warning'>[M] must be unoccupied before this conversion kit can be applied.</span>")
+		return 0
 	if(!M.cell) //Turns out things break if the cell is missing
-		to_chat(user, "<span class='warning'>The conversion process requires a cell installed.</span>")
-		return FALSE
-	return TRUE
+		to_chat(src, "<span class='warning'>The conversion process requires a cell installed.</span>")
+		return 0
+	return 1
 
-/obj/item/mecha_parts/mecha_equipment/ripleyupgrade/attach(obj/mecha/markone)
+/obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade/attach(obj/mecha/markone)
 	var/obj/mecha/working/ripley/mk2/marktwo = new (get_turf(markone),1)
 	if(!marktwo)
 		return
@@ -1643,16 +1637,19 @@
 		marktwo.cell = markone.cell
 		markone.cell.forceMove(marktwo)
 		markone.cell = null
+	qdel(marktwo.tracking)
+	marktwo.tracking = null
+	if (markone.tracking)
+		marktwo.tracking = markone.tracking
+		markone.tracking.forceMove(marktwo)
+		markone.tracking = null
 	for(var/obj/item/mecha_parts/mecha_equipment/equipment in markone.equipment) //Move the equipment over...
 		equipment.detach(marktwo)
 		equipment.attach(marktwo)
 	marktwo.dna = markone.dna
-//	marktwo.mecha_flags = markone.mecha_flags
-	//Integ set to the same percentage integ as the old mecha, rounded to be whole number
-//	marktwo.update_integrity(round((markone.get_health() / markone.initial(health)) * marktwo.get_integrity()))
-	if(markone.health < initial(health))
+	if(markone.get_health() < 100)
 		marktwo.health = markone.health
-	marktwo.health = initial(health)
+	marktwo.health = marktwo.health
 	if(markone.name != initial(markone.name))
 		marktwo.name = markone.name
 	markone.wreckage = FALSE
@@ -1661,3 +1658,4 @@
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED
+//src.health*100/initial(src.health)

@@ -135,7 +135,7 @@
 				W.cargo -= O
 				T.Entered(O, src)
 
-	if(prob(30))
+	if(prob(30 || src.enclosed)) // no enclosed space no explosion :)
 		explosion(T, 0, 0, 1, 3)
 	if(wreckage)
 		var/obj/effect/decal/mecha_wreckage/WR = new wreckage(T)
@@ -340,6 +340,9 @@
 //////////////////////////////////
 ////////  Misc procs  ////////
 //////////////////////////////////
+
+/obj/mecha/proc/get_health()
+	return (health/initial(health)*100)
 
 /obj/mecha/proc/get_mecha_occupancy_state()
 	if((silicon_pilot) && silicon_icon_state)
