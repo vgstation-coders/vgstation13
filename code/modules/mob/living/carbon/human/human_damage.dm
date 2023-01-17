@@ -198,7 +198,7 @@
 			parts += O
 	return parts
 
-//Heals ONE external organ, organ gets randomly selected from damaged ones.
+//Heals ONE external organ, organ gets randomly selected from damaged ones, with priority for vital ones if they have damage.
 //It automatically updates damage overlays if necesary
 //It automatically updates health status
 /mob/living/carbon/human/heal_organ_damage(var/brute, var/burn)
