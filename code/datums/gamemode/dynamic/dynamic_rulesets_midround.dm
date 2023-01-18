@@ -182,15 +182,6 @@
 	high_population_requirement = 10
 	flags = TRAITOR_RULESET
 
-/datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
-	var/player_count = mode.living_players.len
-	var/antag_count = mode.living_antags.len
-	var/max_traitors = round(player_count / 10) + 1
-	if ((antag_count < max_traitors) && prob(mode.midround_threat_level))//adding traitors if the antag population is getting low
-		return ..()
-	else
-		return 0
-
 /datum/dynamic_ruleset/midround/autotraitor/trim_candidates()
 	..()
 	for(var/mob/living/player in living_players)
@@ -210,7 +201,10 @@
 			living_players -= player//we don't autotator people with roles already
 
 /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0)
-	if (required_candidates > living_players.len)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if(required_candidates > player_count || antag_count >= max_traitors)
 		return 0
 	return ..()
 
@@ -301,7 +295,7 @@
 	logo = "raginmages-logo"
 	repeatable = TRUE
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced=0)
 	if(locate(/datum/dynamic_ruleset/roundstart/cwc) in mode.executed_rules)
 		message_admins("Rejected Ragin' Mages as there was a Civil War.")
 		return 0 //This is elegantly skipped by specific ruleset.
@@ -346,7 +340,7 @@
 		required_candidates = 1
 	return ..()
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/acceptable(var/population = 0,var/threat = 0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
 	if(locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
 		return 0 //Unavailable if nuke ops were already sent at roundstart
 	var/indice_pop = min(10,round(living_players.len/5) + 1)
@@ -401,7 +395,7 @@
 
 	makeBody = FALSE
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/acceptable(population, threat_level)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/ready(var/forced=0)
 	max_candidates = max(1, round(population/25))
 	return ..()
 
@@ -477,14 +471,13 @@
 	logo = "ninja-logo"
 	repeatable = TRUE
 
-/datum/dynamic_ruleset/midround/from_ghosts/ninja/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/ninja/ready(var/forced=0)
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
 	if ((antag_count < max_traitors) && prob(mode.midround_threat_level))
 		return ..()
-	else
-		return 0
+	return 0
 
 /datum/dynamic_ruleset/midround/from_ghosts/ninja/finish_setup(var/mob/new_character, var/index)
 	if (!find_active_faction_by_type(/datum/faction/spider_clan))
@@ -517,7 +510,7 @@
 	repeatable = FALSE //Listen, this psyche is not big enough for two metaphysical seekers.
 	flags = MINOR_RULESET
 
-/datum/dynamic_ruleset/midround/from_ghosts/rambler/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/rambler/ready(var/forced=0)
 	if(!mode.executed_rules)
 		return FALSE
 		//We have nothing to investigate!
@@ -550,24 +543,18 @@
 	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
 	logo = "time-logo"
 
-/datum/dynamic_ruleset/midround/from_ghosts/time_agent/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/latejoin/time_agent/ready(var/forced=0)
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
-	if (antag_count < max_traitors)
-		return ..()
-	else
+	if(required_candidates > (mode.dead_players.len + mode.list_observers.len) || antag_count >= max_traitors)
 		return 0
+	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent/setup_role(var/datum/role/newagent)
 	var/datum/faction/time_agent/agency = find_active_faction_by_type(/datum/faction/time_agent)
 	agency.HandleRecruitedRole(newagent)
 
-	return ..()
-
-/datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
-	if(required_candidates > (dead_players.len + list_observers.len))
-		return 0
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent/finish_setup(var/mob/new_character, var/index)
@@ -595,7 +582,7 @@
 	high_population_requirement = 10
 	flags = MINOR_RULESET
 
-/datum/dynamic_ruleset/midround/from_ghosts/grinch/acceptable(var/population=0, var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/grinch/ready(var/forced=0)
 	if(grinchstart.len == 0)
 		log_admin("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
 		message_admins("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
@@ -635,7 +622,7 @@
 	logo = "catbeast-logo"
 	flags = MINOR_RULESET
 
-/datum/dynamic_ruleset/midround/from_ghosts/catbeast/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/catbeast/ready(var/forced=0)
 	if(mode.midround_threat>50) //We're threatening enough!
 		message_admins("Rejected catbeast ruleset, [mode.midround_threat] threat was over 50.")
 		return FALSE
@@ -664,12 +651,9 @@
 	var/vox_cap = list(2,2,3,3,4,5,5,5,5,5)
 	logo = "vox-logo"
 
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/ready(var/forced = 0)
 	var/indice_pop = min(10,round(living_players.len/5)+1)
 	required_candidates = vox_cap[indice_pop]
-	return ..()
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/ready(var/forced = 0)
 	if (forced)
 		required_candidates = 1
 	if (required_candidates > (dead_players.len + list_observers.len))
