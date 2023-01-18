@@ -277,6 +277,7 @@
 			force = 25
 			sharpness = 2.0
 			sharpness_flags = SHARP_TIP | SHARP_BLADE
+			armor_penetration = 33
 			slot_flags = SLOT_BACK
 			attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cleaves")
 			complete = 1
