@@ -274,10 +274,11 @@
 			icon_state = "executioners_sword"
 			hitsound = "sound/weapons/bloodyslice.ogg"
 			w_class = W_CLASS_LARGE
-			force = 25
+			force = 28
 			sharpness = 2.0
 			sharpness_flags = SHARP_TIP | SHARP_BLADE
 			slot_flags = SLOT_BACK
+			armor_penetration = 33
 			attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cleaves")
 			complete = 1
 			if (istype(loc,/mob/living/carbon/human))
