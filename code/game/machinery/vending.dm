@@ -2228,6 +2228,7 @@ var/global/num_vending_terminals = 1
 		)//,/obj/item/seeds/synthbuttseed = 3)
 	premium = list(
 		/obj/item/toy/waterflower = 1,
+		/obj/item/seeds/mushroommanspore = 3
 		)
 
 	pack = /obj/structure/vendomatpack/hydroseeds
