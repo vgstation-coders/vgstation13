@@ -679,7 +679,7 @@
 
 
 /obj/mecha/bullet_act(var/obj/item/projectile/Proj) //wrapper
-	if(!enclosed && occupant && !silicon_pilot && (Proj.def_zone == LIMB_CHEST || Proj.def_zone == LIMB_HEAD))
+	if(!enclosed && occupant && !silicon_pilot)// && (Proj.def_zone == LIMB_CHEST || Proj.def_zone == LIMB_HEAD))
 		for(var/m in occupant)
 			var/mob/living/hitmob = m
 			hitmob.bullet_act(Proj)
@@ -1577,9 +1577,9 @@
 						[integrity<30?"<font color='red'><b>DAMAGE LEVEL CRITICAL</b></font><br>":null]
 						<b>Integrity: </b> [integrity]%<br>
 						<b>Powercell charge: </b>[isnull(cell_charge)?"No powercell installed":"[cell.percent()]%"]<br>
-						<b>Air source: </b>[use_internal_tank?"Internal Airtank":"Environment"]<br>
-						<b>Airtank pressure: </b>[tank_pressure]kPa<br>
-						<b>Airtank temperature: </b>[tank_temperature]K|[tank_temperature - T0C]&deg;C<br>
+						<b>Air source: </b>[internal_tank?"[use_internal_tank?"Internal Airtank":"Environment"]":"Environment"]
+						<b>Airtank pressure: </b>[internal_tank?"[tank_pressure]kPa":"N/A"]<br>
+						<b>Airtank temperature: </b>[internal_tank?"[tank_temperature]&deg;K|[tank_temperature - T0C]&deg;C":"N/A"]<br>
 						<b>Cabin pressure: </b>[cabin_pressure>WARNING_HIGH_PRESSURE ? "<font color='red'>[cabin_pressure]</font>": cabin_pressure]kPa<br>
 						<b>Cabin temperature: </b> [return_temperature()]K|[return_temperature() - T0C]&deg;C<br>
 						<b>Lights: </b>[lights?"on":"off"]<br>
@@ -1606,9 +1606,9 @@
 						</div>
 						</div>
 						<div class='wr'>
-						<div class='header'>Airtank</div>
+						[internal_tank?"<div class='header'>Airtank</div>":""]
 						<div class='links'>
-						<a href='?src=\ref[src];toggle_airtank=1'>Toggle Internal Airtank Usage</a><br>
+						[(/obj/mecha/verb/toggle_internal_tank in src.verbs)?"<a href='?src=\ref[src];toggle_airtank=1'>Toggle Internal Airtank Usage</a><br>":null]
 						[(/obj/mecha/verb/disconnect_from_port in src.verbs)?"<a href='?src=\ref[src];port_disconnect=1'>Disconnect from port</a><br>":null]
 						[(/obj/mecha/verb/connect_to_port in src.verbs)?"<a href='?src=\ref[src];port_connect=1'>Connect to port</a><br>":null]
 						</div>

@@ -1654,8 +1654,8 @@
 		marktwo.name = markone.name
 	markone.wreckage = FALSE
 	qdel(markone)
+	qdel(src)
 	playsound(get_turf(marktwo),'sound/items/ratchet.ogg',50,TRUE)
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED
-//src.health*100/initial(src.health)

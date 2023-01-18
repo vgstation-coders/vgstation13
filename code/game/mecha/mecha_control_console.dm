@@ -26,7 +26,7 @@
 
 /obj/machinery/computer/mecha/ui_data(mob/user)
 	var/list/data = list()
-	
+
 	data["mechas"] = list()
 	for(var/obj/item/mecha_parts/mecha_tracking/TR in mech_tracking_beacons)
 		var/obj/mecha/M = TR.in_mecha()
@@ -82,7 +82,7 @@
 				log_game("[key_name_admin(usr)] overloaded [M] using an exosuit control console.")
 				M.log_message("Exosuit tracking beacon overload activated.",1)
 				M.occupant_message("<span class='red'><b>The exosuit tracking beacon short-circuits!</b></span>")
-				M.use_power(M.cell.charge) 
+				M.use_power(M.cell.charge)
 				if (M.get_charge())
 					if (M.cell.charge < 5000 && M)
 						M.use_power(M.cell.charge/4)
