@@ -228,7 +228,8 @@
 			O.custom_name = created_name
 			if(O.client?.prefs)
 				O.custom_name = O.client.prefs.cyborg_name
-			O.updatename("Default")
+			else
+				O.updatename("Default")
 
 			M.brainmob.mind.transfer_to(O)
 
@@ -250,6 +251,9 @@
 				cell_component.installed = 1
 
 			feedback_inc("cyborg_birth",1)
+
+			spawn()
+				M.Namepick()
 
 			qdel(src)
 		else

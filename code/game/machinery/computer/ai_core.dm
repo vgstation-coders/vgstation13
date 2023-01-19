@@ -138,9 +138,11 @@
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/mob/living/silicon/ai/A = new /mob/living/silicon/ai ( loc, laws, brain )
 				A.show_intro_text()
-				if(A?.client?.prefs) //if there's no brain, the mob is deleted and a structure/AIcore is created
-					A.real_name = A.client.prefs.ai_name
-					A.name = A.real_name
+				if(A) //if there's no brain, the mob is deleted and a structure/AIcore is created
+					mob_rename_self(A,"ai", null, 1)
+					if(A.client?.prefs)
+						A.real_name = A.client.prefs.ai_name
+						A.name = A.real_name
 				feedback_inc("cyborg_ais_created",1)
 				qdel(src)
 				return // To avoid running update_icon

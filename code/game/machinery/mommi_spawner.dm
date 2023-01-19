@@ -168,6 +168,8 @@
 		M.real_name = M.client.prefs.mommi_name
 		M.name = M.real_name
 		M.custom_name = M.real_name
+	spawn()
+		M.Namepick()
 
 /obj/machinery/mommi_spawner/update_icon()
 	if(stat & (FORCEDISABLE|NOPOWER))

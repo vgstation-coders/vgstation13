@@ -164,7 +164,7 @@
 
 	O.show_intro_text()
 
-/mob/proc/Robotize(var/delete_items = FALSE, var/malfAI=null)
+/mob/proc/Robotize(var/delete_items = FALSE, var/skipnaming=FALSE, var/malfAI=null)
 	if(!Premorph(delete_items))
 		return
 	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(src), malfAI)
@@ -190,11 +190,14 @@
 	if(client?.prefs)
 		real_name = client.prefs.cyborg_name
 		name = client.prefs.cyborg_name
+	if(!skipnaming)
+		spawn()
+			O.Namepick()
 	O.mind.assigned_role = "Cyborg"
 	qdel(src)
 	return O
 
-/mob/proc/MoMMIfy(var/delete_items = FALSE, var/malfAI=null)
+/mob/proc/MoMMIfy(var/delete_items = FALSE, var/skipnaming=FALSE, var/malfAI=null)
 	if(!Premorph(delete_items))
 		return
 	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi/nt(get_turf(src), malfAI)
@@ -218,6 +221,9 @@
 	if(client?.prefs)
 		real_name = client.prefs.cyborg_name
 		name = client.prefs.cyborg_name
+	if(!skipnaming)
+		spawn()
+			O.Namepick()
 	O.mind.assigned_role = "Mobile MMI"
 	qdel(src)
 	return O
