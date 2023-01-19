@@ -76,7 +76,7 @@
 	// Sleep for a couple of ticks to allow the human to see the pain
 	sleep(5)
 
-	var/mob/living/silicon/robot/R = do_transform(H, 1, malfAI=belongstomalf)
+	var/mob/living/silicon/robot/R = do_transform(H, 1, skipnaming=TRUE, malfAI=belongstomalf)
 	if(!R) // The borging failed, due to job ban, player age, or something similar
 		src.visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
 		if (belongstomalf)
