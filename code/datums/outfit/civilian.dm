@@ -367,6 +367,7 @@
 	H.mutations.Add(M_CLUMSY)
 	H.dna.real_name = H.real_name
 	H.add_language(LANGUAGE_CLOWN)
+	mob_rename_self(H,"clown")
 	to_chat(H, "<span class = 'notice'>You can perfectly paint Her colourbook blindfolded and have learned how to communicate with in the holiest of languages, honk. Praise be her Honkmother.</span>")
 
 
@@ -446,6 +447,7 @@
 		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 		H.add_spell(new /spell/targeted/oathbreak/)
 		H.add_language(LANGUAGE_CLOWN)
+		mob_rename_self(H,"mime")
 		to_chat(H, "<span class = 'notice'>The Clown-Mime war may have ended, but you were still taught their language. You can understand clownspeak as well as speak it, but a Mime wouldn't stoop so low, right?</span>")
 		if (H.mind)
 			H.mind.miming = MIMING_OUT_OF_CHOICE
