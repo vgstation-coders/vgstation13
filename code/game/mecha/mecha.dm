@@ -215,6 +215,8 @@
 	verbs += verb_path
 
 /obj/mecha/proc/add_airtank()
+	if(!enclosed)
+		return
 	internal_tank = new /obj/machinery/portable_atmospherics/canister/air(src)
 	mech_parts.Add(internal_tank)
 	return internal_tank
@@ -567,6 +569,13 @@
 ////////  Health related procs  ////////
 ////////////////////////////////////////
 
+/obj/mecha/proc/take_flat_damage(amount, type="brute")
+	if(amount)
+		health -= amount
+		update_health()
+		log_append_to_last("Took [amount] points of damage.",1)
+	return
+
 /obj/mecha/take_damage(incoming_damage, damage_type = "brute", skip_break, mute)
 	if(incoming_damage)
 		var/damage = absorbDamage(incoming_damage, damage_type)
@@ -679,10 +688,12 @@
 
 
 /obj/mecha/bullet_act(var/obj/item/projectile/Proj) //wrapper
-	if(!enclosed && occupant && !silicon_pilot)// && (Proj.def_zone == LIMB_CHEST || Proj.def_zone == LIMB_HEAD))
-		for(var/m in occupant)
-			var/mob/living/hitmob = m
-			hitmob.bullet_act(Proj)
+	if(!enclosed && occupant && !silicon_pilot)
+		if(prob(75))
+			occupant.bullet_act(Proj)
+			visible_message("<span class='warning'>[occupant] is hit by \the [Proj]!")
+			Proj.on_hit(src,2)
+			return PROJECTILE_COLLISION_DEFAULT
 	src.log_message("Hit by projectile. Type: [Proj.name]([Proj.flag]).",1)
 	call((proc_res["dynbulletdamage"]||src), "dynbulletdamage")(Proj) //calls equipment
 	return ..()
@@ -719,11 +730,8 @@
 				src.take_damage(initial(src.health)/2)
 				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 		if(3.0)
-			if (prob(5))
-				qdel(src)
-			else
-				src.take_damage(initial(src.health)/5)
-				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
+			src.take_damage(initial(src.health)/5)
+			src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 	return
 
 /*Will fix later -Sieve
@@ -1577,7 +1585,7 @@
 						[integrity<30?"<font color='red'><b>DAMAGE LEVEL CRITICAL</b></font><br>":null]
 						<b>Integrity: </b> [integrity]%<br>
 						<b>Powercell charge: </b>[isnull(cell_charge)?"No powercell installed":"[cell.percent()]%"]<br>
-						<b>Air source: </b>[internal_tank?"[use_internal_tank?"Internal Airtank":"Environment"]":"Environment"]
+						<b>Air source: </b>[internal_tank?"[use_internal_tank?"Internal Airtank":"Environment"]":"Environment"]<br>
 						<b>Airtank pressure: </b>[internal_tank?"[tank_pressure]kPa":"N/A"]<br>
 						<b>Airtank temperature: </b>[internal_tank?"[tank_temperature]&deg;K|[tank_temperature - T0C]&deg;C":"N/A"]<br>
 						<b>Cabin pressure: </b>[cabin_pressure>WARNING_HIGH_PRESSURE ? "<font color='red'>[cabin_pressure]</font>": cabin_pressure]kPa<br>
@@ -1606,7 +1614,7 @@
 						</div>
 						</div>
 						<div class='wr'>
-						[internal_tank?"<div class='header'>Airtank</div>":""]
+						<div class='header'>Airtank</div>
 						<div class='links'>
 						[(/obj/mecha/verb/toggle_internal_tank in src.verbs)?"<a href='?src=\ref[src];toggle_airtank=1'>Toggle Internal Airtank Usage</a><br>":null]
 						[(/obj/mecha/verb/disconnect_from_port in src.verbs)?"<a href='?src=\ref[src];port_disconnect=1'>Disconnect from port</a><br>":null]

@@ -57,7 +57,7 @@
 	paintable = 1
 
 /obj/mecha/working/ripley/mk2/firefighter
-	desc = "Standard APLU chassis, refitted with additional thermal protection and cistern."
+	desc = "Standard APLU MK-II chassis, refitted with additional thermal protection and cistern."
 	name = "APLU \"Firefighter\""
 	icon_state = "firefighter"
 	initial_icon = "firefighter"
@@ -65,7 +65,7 @@
 	health = 300
 	light_range_on = 10
 	light_brightness_on = 3
-	damage_absorption = list("brute"=0.6,"fire"=0.5,"bullet"=0.8,"laser"=0.8, "bomb"=0.5)
+	damage_absorption = list("brute"=0.6,"fire"=0.5,"bullet"=0.8,"laser"=0.85, "bomb"=0.7)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/firefighter
 	paintable = 1
 	mech_sprites = list(
@@ -73,7 +73,7 @@
 		"aluminizer"
 		)
 
-/obj/mecha/working/ripley/mk2/deathripley
+/obj/mecha/working/ripley/mk2/firefighter/deathripley
 	desc = "OH SHIT IT'S THE DEATHSQUAD WE'RE ALL GONNA DIE"
 	name = "DEATH-RIPLEY"
 	icon_state = "deathripley"
@@ -82,6 +82,8 @@
 	opacity = 0
 	light_range_on = 12
 	light_brightness_on = 3
+	internal_damage_threshold = 35
+	damage_absorption = list("brute"=0.5,"fire"=0.5,"bullet"=0.6,"laser"=0.6, "energy"=0.75, "bomb"=0.5) // I mean, it's still a nukie mech
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/deathripley
 	step_energy_drain = 0
 	paintable = 0
@@ -136,24 +138,8 @@
 
 	if(low_atmos_pressure_check (T))
 		step_in = fast_pressure_step_in
-//		for(var/obj/item/mecha_parts/mecha_equipment/drill/drill in equipment)
-//			drill.equip_cooldown = initial(drill.equip_cooldown) * 0.5
-
 	else
 		step_in = slow_pressure_step_in
-//		for(var/obj/item/mecha_parts/mecha_equipment/drill/drill in equipment)
-//			drill.equip_cooldown = initial(drill.equip_cooldown)
-
-
-
-
-
-
-
-
-
-
-
 
 /proc/low_atmos_pressure_check(turf/T)
 	. = FALSE
