@@ -87,7 +87,10 @@
 		return
 	if(faction)
 		R.faction = faction
-	R.Namepick()
+	if(R.client?.prefs)
+		R.real_name = R.client.prefs.mommi_name
+		R.name = R.real_name
+		R.custom_name = R.real_name
 
 //Syndicate robot spawner
 /obj/item/weapon/robot_spawner/syndicate

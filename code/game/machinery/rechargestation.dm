@@ -23,7 +23,7 @@
 		/datum/malfhack_ability/oneuse/make_autoborger,
 		/datum/malfhack_ability/oneuse/overload_quiet,
 	)
-	
+
 	var/autoborger = FALSE
 	var/make_mommis = FALSE
 	var/is_borging = FALSE
@@ -253,7 +253,7 @@
 	if(!( src.occupant ))
 		return
 	if(ishuman(occupant) && is_borging) // No escaping!
-		return 
+		return
 	if(upgrading)
 		to_chat(occupant, "<span class='notice'>The upgrade hasn't completed yet, interface with \the [src] again to halt the process.</span>")
 		return
@@ -365,9 +365,9 @@
 	var/limbs_to_ignore = list(/datum/organ/external/head, /datum/organ/external/chest, /datum/organ/external/groin)
 	var/list/limbs = list()
 	for(var/datum/organ/external/E in H.organs)
-		if(!E.is_robotic() && !is_type_in_list(E, limbs_to_ignore)) 
+		if(!E.is_robotic() && !is_type_in_list(E, limbs_to_ignore))
 			limbs += E
-	
+
 	build_icon()
 	flick("borgchargerfuckstart", src)
 	H.AdjustKnockdown(10)
@@ -385,16 +385,16 @@
 		E.explode()
 		H.handle_regular_hud_updates()
 		sleep(10)
-	
+
 	if(!src)
 		return
-	
+
 	var/mob/living/silicon/robot/R
 	if(make_mommis)
 		R = H.MoMMIfy(TRUE, TRUE, aiowner)
-	else 
+	else
 		R = H.Robotize(TRUE , TRUE , aiowner)
-	
+
 	occupant = R
 
 	if(!R)
@@ -407,12 +407,11 @@
 		is_borging = FALSE
 		return
 
-	R.cell.maxcharge = 5000	
+	R.cell.maxcharge = 5000
 	R.cell.charge = 5000
 	R.SetKnockdown(3)
 
-	R.custom_name = pick(autoborg_silly_names) 
-	R.namepick_uses = 1
+	R.custom_name = pick(autoborg_silly_names)
 	R.updateicon()
 	R.updatename()
 	flick("borgchargerfuckend", src)
@@ -443,22 +442,22 @@
 				continue
 			return
 	go_out(T)
-	
+
 
 /obj/machinery/recharge_station/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if(!isliving(O) || !isliving(user))
 		return
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) 
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O))
 		return
-	if(user.incapacitated() || user.lying) 
+	if(user.incapacitated() || user.lying)
 		return
-	if(!Adjacent(user) || !user.Adjacent(src)) 
+	if(!Adjacent(user) || !user.Adjacent(src))
 		return
 	if(O.locked_to)
 		return
 	if(O.anchored)
 		return
-	if(!isrobot(O) && !ishuman(O)) 
+	if(!isrobot(O) && !ishuman(O))
 		return
 	if(!isrobot(user) && !ishuman(user))
 		return

@@ -194,6 +194,11 @@ SELECT
     players.player_slot,
     players.ooc_notes,
     players.real_name,
+    players.clown_name,
+    players.mime_name,
+    players.ai_name,
+    players.cyborg_name,
+    players.mommi_name,
     players.random_name,
     players.random_body,
     players.gender,
@@ -278,6 +283,11 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 	metadata 			= preference_list["ooc_notes"]
 	real_name 			= preference_list["real_name"]
+	clown_name 			= preference_list["clown_name"]
+	mime_name 			= preference_list["mime_name"]
+	ai_name 			= preference_list["ai_name"]
+	cyborg_name 		= preference_list["cyborg_name"]
+	mommi_name 			= preference_list["mommi_name"]
 	be_random_name 		= text2num(preference_list["random_name"])
 	be_random_body 		= text2num(preference_list["random_body"])
 	gender 				= preference_list["gender"]
@@ -334,6 +344,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		jobs = list()
 	metadata			= sanitize_text(metadata, initial(metadata))
 	real_name			= reject_bad_name(real_name)
+	clown_name			= reject_bad_name(clown_name)
+	mime_name			= reject_bad_name(mime_name)
 
 	if(isnull(species))
 		species = "Human"
@@ -347,6 +359,16 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		wage_ratio = initial(wage_ratio)
 	if(!real_name)
 		real_name = random_name(gender,species)
+	if(!clown_name)
+		clown_name = pick(clown_names)
+	if(!mime_name)
+		mime_name = pick(clown_names) //TODO: mime names
+	if(!ai_name)
+		ai_name = pick(ai_names)
+	if(!cyborg_name)
+		cyborg_name = pick(ai_names) // TODO: borg names
+	if(!mommi_name)
+		mommi_name = pick(ai_names) // TODO: mommi names
 	wage_ratio = clamp(wage_ratio,0,100)
 
 	be_random_name	= sanitize_integer(be_random_name, 0, 1, initial(be_random_name))
@@ -438,17 +460,17 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name, random_name,    gender, age, species, language, flavor_text, med_record, sec_record, gen_record, player_alt_titles, disabilities, nanotrasen_relation, bank_security, wage_ratio, random_body)\
-			                    VALUES (?,          ?,          ?,        ?,         ?,              ?,      ?,   ?,       ?,        ?,           ?,          ?,          ?,          ?,                 ?,            ?,                   ?,             ?,          ?)",
-			                            ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles,         disabilities, nanotrasen_relation, bank_security, wage_ratio, be_random_body)
+			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name, clown_name, mime_name, ai_name, cyborg_name, mommi_name, random_name,    gender, age, species, language, flavor_text, med_record, sec_record, gen_record, player_alt_titles, disabilities, nanotrasen_relation, bank_security, wage_ratio, random_body)\
+			                    VALUES (?,          ?,          ?,        ?,         ?,          ?,         ?,       ?,           ?,          ?,              ?,      ?,   ?,       ?,        ?,           ?,          ?,          ?,          ?,                 ?,            ?,                   ?,             ?,          ?)",
+			                            ckey,       slot,       metadata, real_name, clown_name, mime_name, ai_name, cyborg_name, mommi_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles,         disabilities, nanotrasen_relation, bank_security, wage_ratio, be_random_body)
 			if(!q.Execute(db))
 				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Character")
 		else
-			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,  gender=?,age=?,species=?,language=?,flavor_text=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=?,bank_security=?,wage_ratio=?,random_body=?   WHERE player_ckey = ? AND player_slot = ?",\
-									  metadata,   real_name,  be_random_name, gender,  age,  species,  language,  flavor_text,  med_record,  sec_record,  gen_record,  altTitles,          disabilities,  nanotrasen_relation,  bank_security,  wage_ratio,  be_random_body,       ckey,               slot)
+			q.Add("UPDATE players SET ooc_notes=?,real_name=?,clown_name=?,mime_name=?,ai_name=?,cyborg_name=?,mommi_name=?,random_name=?,  gender=?,age=?,species=?,language=?,flavor_text=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=?,bank_security=?,wage_ratio=?,random_body=?   WHERE player_ckey = ? AND player_slot = ?",\
+									  metadata,   real_name,  clown_name,  mime_name,  ai_name,  cyborg_name,  mommi_name,  be_random_name, gender,  age,  species,  language,  flavor_text,  med_record,  sec_record,  gen_record,  altTitles,          disabilities,  nanotrasen_relation,  bank_security,  wage_ratio,  be_random_body,       ckey,               slot)
 			if(!q.Execute(db))
 				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")

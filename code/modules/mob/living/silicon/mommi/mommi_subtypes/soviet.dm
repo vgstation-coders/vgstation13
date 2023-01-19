@@ -3,7 +3,6 @@
 	prefix="Remont Robot" // Ремонт робот - Repair Robot
 	desc = "This thing looks so Russian that you get the urge to wrestle bears and chug vodka."
 	damage_control_network = "Usherp" // ущерб - Contextual translation of "Damage Control"
-	namepick_uses = 0
 
 	startup_sound = 'sound/misc/soviet.ogg'
 	cell_type = /obj/item/weapon/cell/potato/soviet

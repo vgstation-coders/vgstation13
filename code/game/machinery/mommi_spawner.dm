@@ -164,8 +164,10 @@
 		var/turf/T = get_turf(src)
 		M.locked_to_z = T.z
 
-	spawn()
-		M.Namepick()
+	if(M.client?.prefs)
+		M.real_name = M.client.prefs.mommi_name
+		M.name = M.real_name
+		M.custom_name = M.real_name
 
 /obj/machinery/mommi_spawner/update_icon()
 	if(stat & (FORCEDISABLE|NOPOWER))

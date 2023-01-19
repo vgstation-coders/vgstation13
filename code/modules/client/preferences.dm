@@ -141,6 +141,11 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/hear_voicesound = 0				//Whether the player hears noises when somebody speaks.
 	//character preferences
 	var/real_name						//our character's name
+	var/clown_name						//our character's clown name
+	var/mime_name						//our character's mime name
+	var/ai_name							//our character's AI name
+	var/cyborg_name						//our character's cyborg name
+	var/mommi_name						//our character's mommi name
 	var/be_random_name = 0				//whether we are a random name every round
 	var/be_random_body = 0				//whether we'll have a random body every round
 	var/gender = MALE					//gender of character (well duh)
@@ -297,8 +302,13 @@ var/const/MAX_SAVE_SLOTS = 16
 	<h2>Identity</h2>
 	<table width='100%'><tr><td width='75%' valign='top'>
 	<a href='?_src_=prefs;preference=name;task=random'>Random Name</a>
-	<a href='?_src_=prefs;preference=name'>Always Random Name: [be_random_name ? "Yes" : "No"]</a><br>
-	<b>Name:</b> <a href='?_src_=prefs;preference=name;task=input'>[real_name]</a><BR>
+	<a href='?_src_=prefs;preference=name'>Always Random Names: [be_random_name ? "Yes" : "No"]</a><br>
+	<b>Name:</b> <a href='?_src_=prefs;preference=name;task=input;nametype=default'>[real_name]</a><BR>
+	<b>Clown Name:</b> <a href='?_src_=prefs;preference=name;task=input;nametype=clown'>[clown_name]</a><BR>
+	<b>Mime Name:</b> <a href='?_src_=prefs;preference=name;task=input;nametype=mime'>[mime_name]</a><BR>
+	<b>AI Name:</b> <a href='?_src_=prefs;preference=name;task=input;nametype=ai'>[ai_name]</a><BR>
+	<b>Cyborg Name:</b> <a href='?_src_=prefs;preference=name;task=input;nametype=cyborg'>[cyborg_name]</a><BR>
+	<b>MoMMI Name:</b> <a href='?_src_=prefs;preference=name;task=input;nametype=mommi'>[mommi_name]</a><BR>
 	<b>Gender:</b> <a href='?_src_=prefs;preference=gender'>[gender == MALE ? "Male" : "Female"]</a><BR>
 	<b>Age:</b> <a href='?_src_=prefs;preference=age;task=input'>[age]</a>
 	</td><td valign='center'>
@@ -898,6 +908,11 @@ var/const/MAX_SAVE_SLOTS = 16
 			switch(href_list["preference"])
 				if("name")
 					real_name = random_name(gender,species)
+					clown_name = pick(clown_names)
+					mime_name = pick(clown_names)
+					ai_name = pick(ai_names)
+					cyborg_name = pick(ai_names)
+					mommi_name = pick(ai_names)
 				if("age")
 					age = rand(AGE_MIN, AGE_MAX)
 				if("hair")
@@ -932,7 +947,19 @@ var/const/MAX_SAVE_SLOTS = 16
 				if("name")
 					var/new_name = reject_bad_name( input(user, "Choose your character's name:", "Character Preference")  as text|null )
 					if(new_name)
-						real_name = new_name
+						switch(href_list["nametype"])
+							if("default")
+								real_name = new_name
+							if("clown")
+								clown_name = new_name
+							if("mime")
+								mime_name = new_name
+							if("ai")
+								ai_name = new_name
+							if("cyborg")
+								cyborg_name = new_name
+							if("mommi")
+								mommi_name = new_name
 					else
 						to_chat(user, "<span class='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</span>")
 				if("next_hair_style")
@@ -1401,6 +1428,11 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 /datum/preferences/proc/copy_to(mob/living/carbon/human/character, safety = 0)
 	if(be_random_name)
 		real_name = random_name(gender,species)
+		clown_name = pick(clown_names)
+		mime_name = pick(clown_names)
+		ai_name = pick(ai_names)
+		cyborg_name = pick(ai_names)
+		mommi_name = pick(ai_names)
 	if(config.humans_need_surnames && species == "Human")
 		var/firstspace = findtext(real_name, " ")
 		var/name_length = length(real_name)
@@ -1409,7 +1441,16 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 		else if(firstspace == name_length)
 			real_name += "[pick(last_names)]"
 
-	character.real_name = real_name
+	if(character?.mind)
+		switch(character.mind.assigned_role)
+			if("Clown")
+				character.real_name = clown_name
+			if("Mime")
+				character.real_name = mime_name
+			else
+				character.real_name = real_name
+	else
+		character.real_name = real_name
 	character.name = character.real_name
 	character.flavor_text = flavor_text
 	if(character.dna)

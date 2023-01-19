@@ -22,7 +22,6 @@
 	// /vg/
 	var/force_borg_module=null
 	var/name_type=NAMETYPE_NORMAL
-	var/enable_namepick=TRUE
 	var/mob/living/silicon/ai/belongstomalf=null //malf AI that owns autoborger
 
 /obj/machinery/autoborger/New()
@@ -76,7 +75,7 @@
 	// Sleep for a couple of ticks to allow the human to see the pain
 	sleep(5)
 
-	var/mob/living/silicon/robot/R = do_transform(H, 1, skipnaming=TRUE, malfAI=belongstomalf)
+	var/mob/living/silicon/robot/R = do_transform(H, 1, malfAI=belongstomalf)
 	if(!R) // The borging failed, due to job ban, player age, or something similar
 		src.visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
 		if (belongstomalf)
@@ -88,7 +87,6 @@
 		return
 
 	// Delete the items or they'll all pile up in a single tile and lag
-	// skipnaming disables namepick on New(). It's annoying as fuck on malf.  Later on, we enable or disable namepick.
 	if(R)
 		R.cell.maxcharge = robot_cell_charge
 		R.cell.charge = robot_cell_charge
@@ -108,13 +106,6 @@
 			else
 				R.custom_name += "-[num2text(R.ident)]"
 
-
-		// /vg/: Allow AI to disable namepick.
-		R.namepick_uses=enable_namepick
-		if(enable_namepick)
-			to_chat(R, "<span class='info'><b>The AI has chosen to let you choose your name via the <em>Namepick</em> command.</b></span>")
-		else
-			to_chat(R, "<span class='danger'><b>The AI has chosen to disable your access to the <em>Namepick</em> command.</b></span>")
 		R.updateicon()
 		R.updatename()
 
@@ -128,8 +119,8 @@
 	cooldown_state = 1
 	update_icon()
 
-/obj/machinery/autoborger/proc/do_transform(var/mob/living/carbon/human/H, var/deleteItems=FALSE, var/skipnaming=FALSE, var/malfAI=null)
-	return H.Robotize(deleteItems,skipnaming,malfAI)
+/obj/machinery/autoborger/proc/do_transform(var/mob/living/carbon/human/H, var/deleteItems=FALSE, var/malfAI=null)
+	return H.Robotize(deleteItems,malfAI)
 
 /obj/machinery/autoborger/process()
 	..()
@@ -177,10 +168,6 @@
 				<a class="link[name_type==NAMETYPE_NORMAL ? "On" : "Off"]" href="?src=\ref[src];act=names;nametype=[NAMETYPE_NORMAL]">Default</a>
 				<a class="link[name_type==NAMETYPE_SILLY ? "On" : "Off"]" href="?src=\ref[src];act=names;nametype=[NAMETYPE_SILLY]">Silly (OBVIOUS)</a>
 			</li>
-			<li>
-				<b>Permit Name Picking:</b>
-				<a href="?src=\ref[src];act=enable_namepick">[enable_namepick ? "On":"Off"]</a>
-			</li>
 		</ul>
 	"}
 
@@ -202,8 +189,6 @@
 				to_chat(usr, "<span class='warning'>Invalid newnametype. Stop trying to make href exploits happen.</span>")
 				return 0
 			name_type=newnametype
-		if("enable_namepick")
-			enable_namepick=!enable_namepick
 		if("force_class")
 			var/list/modules = list("(Robot's Choice)")
 			modules += getAvailableRobotModules()
@@ -220,6 +205,6 @@
 /obj/machinery/autoborger/mommi
 	name = "Autimatic Crab Factory 5000"
 	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, silent crab comes out'. Human must be lying down and alive. Has to cooldown between each use."
-	
-/obj/machinery/autoborger/mommi/do_transform(var/mob/living/carbon/human/H, var/deleteItems=FALSE, var/skipnaming=FALSE, var/malfAI=null)
-	return H.MoMMIfy(deleteItems,skipnaming,malfAI)
+
+/obj/machinery/autoborger/mommi/do_transform(var/mob/living/carbon/human/H, var/deleteItems=FALSE, var/malfAI=null)
+	return H.MoMMIfy(deleteItems,malfAI)

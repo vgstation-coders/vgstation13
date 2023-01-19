@@ -137,7 +137,7 @@
 		R.updatename()
 		if(R.can_diagnose()) //Few know this verb exists, hence a message
 			to_chat(R, "<span class='info' style=\"font-family:Courier\">You may now change your name through the Namepick verb, under Robot Commands.</span>")
-		R.namepick_uses ++
+		//R.Namepick()
 	else
 		R.name = heldname
 		R.custom_name = heldname

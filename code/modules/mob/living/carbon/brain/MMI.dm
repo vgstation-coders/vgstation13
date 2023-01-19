@@ -79,7 +79,10 @@
 		//M.custom_name = created_name
 
 		brainmob.mind.transfer_to(M)
-		M.Namepick()
+		if(M.client?.prefs)
+			M.real_name = M.client.prefs.mommi_name
+			M.name = M.real_name
+			M.custom_name = M.real_name
 
 		if(M.mind && M.mind.special_role)
 			M.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")

@@ -8,7 +8,6 @@
 	flashed = FALSE
 
 	var/custom_name = ""
-	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
 	var/image/eyes = null
 

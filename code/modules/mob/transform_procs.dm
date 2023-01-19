@@ -154,14 +154,16 @@
 	O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
 	O.job = "AI"
 	O.mind.assigned_role = "AI"
-	mob_rename_self(O,"ai", null, 1)
+	if(client?.prefs)
+		real_name = client.prefs.ai_name
+		name = client.prefs.ai_name
 	. = O
 	if(del_mob)
 		qdel(src)
 
 	O.show_intro_text()
 
-/mob/proc/Robotize(var/delete_items = FALSE, var/skipnaming=FALSE, var/malfAI=null)
+/mob/proc/Robotize(var/delete_items = FALSE, var/malfAI=null)
 	if(!Premorph(delete_items))
 		return
 	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(src), malfAI)
@@ -184,14 +186,14 @@
 		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
 		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
 		return FALSE
-	if(!skipnaming)
-		spawn()
-			O.Namepick()
+	if(client?.prefs)
+		real_name = client.prefs.cyborg_name
+		name = client.prefs.cyborg_name
 	O.mind.assigned_role = "Cyborg"
 	qdel(src)
 	return O
 
-/mob/proc/MoMMIfy(var/delete_items = FALSE, var/skipnaming=FALSE, var/malfAI=null)
+/mob/proc/MoMMIfy(var/delete_items = FALSE, var/malfAI=null)
 	if(!Premorph(delete_items))
 		return
 	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi/nt(get_turf(src), malfAI)
@@ -212,9 +214,9 @@
 		O.self_destruct()
 		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
 		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
-	if(!skipnaming)
-		spawn()
-			O.Namepick()
+	if(client?.prefs)
+		real_name = client.prefs.cyborg_name
+		name = client.prefs.cyborg_name
 	O.mind.assigned_role = "Mobile MMI"
 	qdel(src)
 	return O
