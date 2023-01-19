@@ -253,7 +253,7 @@
 			feedback_inc("cyborg_birth",1)
 
 			spawn()
-				M.Namepick()
+				O.Namepick()
 
 			qdel(src)
 		else
