@@ -2,6 +2,7 @@
 	cell_type = /obj/item/weapon/cell/ultra
 	deny_client_move = 1
 	anchored = 1
+	namepick_uses = 0
 
 /mob/living/silicon/robot/starman/wearing_wiz_garb()
 	return 1

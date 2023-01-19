@@ -157,6 +157,7 @@
 	if(client?.prefs)
 		real_name = client.prefs.ai_name
 		name = client.prefs.ai_name
+	mob_rename_self(O,"ai", null, 1)
 	. = O
 	if(del_mob)
 		qdel(src)
