@@ -659,9 +659,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				return
 			if(isnull(msg))
 				msg = ""
-			msg = stripped_input(usr, "Write your Feed story", "Network Channel Handler", msg, MAX_BOOK_MESSAGE_LEN)
-			while (findtext(msg," ") == 1)
-				msg = copytext(msg,2,length(msg)+1)
+			msg = stripped_message(usr, "Write your Feed story", "Network Channel Handler", msg, MAX_BOOK_MESSAGE_LEN)
+	//		while (findtext(msg," ") == 1)
+	//			msg = copytext(msg,2,length(msg)+1)
+
 			updateUsrDialog()
 
 		else if(href_list["set_attachment"])
