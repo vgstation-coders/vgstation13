@@ -29,7 +29,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		suit_contamination()
 
 	if(!pl_head_protected())
-	head_contamination()
+		head_contamination()
 		if(prob(1))
 			suit_contamination() //Plasma can sometimes get through such an open suit.
 
