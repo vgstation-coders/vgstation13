@@ -48,7 +48,7 @@
 	enclosed = TRUE
 	enter_delay = 40
 	mech_sprites = list(
-		"ripleymk2",
+		"ripleymkii",
 		"titan",
 		"ripley_flames_red",
 		"ripley_flames_blue",

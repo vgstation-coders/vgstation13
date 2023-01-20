@@ -283,16 +283,8 @@
 		return
 	if(silicon_pilot)
 		to_chat(user, "<span class='info'>[src] appears to be piloting itself..</span>")
-
 	else
 		to_chat(user, "<span class='info'>You can see [occupant] inside.</span>")
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		for(var/held_item in H.held_items)
-			if(!isgun(held_item))
-				continue
-			to_chat(user, "<span class='warning'>It looks like you can hit the pilot directly if you target the center or above.</span>")
-			break
 
 /obj/mecha/proc/drop_item()//Derpfix, but may be useful in future for engineering exosuits.
 	return
