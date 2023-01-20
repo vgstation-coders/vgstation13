@@ -60,6 +60,7 @@ var/auxtools_path
 	investigations[I_WIRES] = new /datum/log_controller(I_WIRES, filename="data/logs/[date_string] wires.htm", persist=TRUE)
 	investigations[I_GHOST] = new /datum/log_controller(I_GHOST, filename="data/logs/[date_string] poltergeist.htm", persist=TRUE)
 	investigations[I_ARTIFACT] = new /datum/log_controller(I_ARTIFACT, filename="data/logs/[date_string] artifact.htm", persist=TRUE)
+	investigations[I_RCD] = new /datum/log_controller(I_RCD, filename="data/logs/[date_string] rcd.htm", persist=TRUE)
 
 	diary = file("data/logs/[date_string].log")
 	panicfile = new/savefile("data/logs/profiling/proclogs/[date_string].sav")

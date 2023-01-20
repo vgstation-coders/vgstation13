@@ -1219,6 +1219,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define I_WIRES    "wires"
 #define I_GHOST    "poltergeist"
 #define I_ARTIFACT "artifacts"
+#define I_RCD      "RCD"
 
 
 // delayNext() flags.
