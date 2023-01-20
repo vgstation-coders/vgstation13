@@ -1288,7 +1288,7 @@
 	else
 		triesleft--
 
-	var/icontype = input("Select an icon! [triesleft ? "You have [triesleft] more chances." : "This is your last try."]", "Robot", null, null) as null|anything in module_sprites
+	var/icontype = input(src,"Select an icon! [triesleft ? "You have [triesleft] more chances." : "This is your last try."]", "Robot", null) as null|anything in module_sprites
 
 	if(icontype)
 		icon_state = module_sprites[icontype]
@@ -1302,7 +1302,7 @@
 	updateicon()
 
 	if(triesleft)
-		var/choice = input("Look at your icon - is this what you want?") in list("Yes","No")
+		var/choice = input(src,"Look at your icon - is this what you want?") in list("Yes","No")
 		if(choice=="No")
 			choose_icon(triesleft)
 		else

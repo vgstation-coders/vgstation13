@@ -4,10 +4,10 @@
 	if(appearance_isbanned(src))
 		var/banreason = appearance_isbanned(src)
 		to_chat(src, "<span class='warning'>You have been appearance banned for the reason: [banreason]. You cannot change your name.</span>")
-		return
+		return FALSE
 
 	if(incapacitated())
-		return
+		return FALSE
 
 	if(!namepick_uses)
 		to_chat(src, "<span class='warning'>You cannot choose your name any more.<span>")
@@ -31,6 +31,11 @@
 		to_chat(src, "<span class='warning'>You have changed your name to [newname]. You can change your name [namepick_uses] more times.<span>")
 	else
 		to_chat(src, "<span class='warning'>You have reset your name. You can change your name [namepick_uses] more times.<span>")
+	return TRUE
+
+/mob/living/silicon/robot/mommi/nt/Namepick()
+	if(..())
+		choose_icon()
 
 /mob/living/silicon/robot/verb/cmd_robot_alerts()
 	set category = "Robot Commands"
