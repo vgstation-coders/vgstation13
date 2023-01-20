@@ -611,14 +611,15 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	var/obj/structure/window/W
 	var/list/newimages = list()
 	var/list/onewaylist = list()
-	var/list/v = view(view,mob)
+	var/list/v = oview(view,mob)
 
 	if(!v)
 		return
 
 	ObscuredTurfs.len = 0
 
-	for(W in one_way_windows)
+	var/list/list2use = v.len < one_way_windows.len ? v : one_way_windows
+	for(W in list2use)
 		if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
 			if(W.one_way)
 				if(W.dir & get_dir(W,mob))
@@ -627,7 +628,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 					onewaylist += Oneway
 
 	if(onewaylist.len)
-		v -= view(view,mob)
+		v -= oview(view,mob)
 		v += onewaylist
 		var/image/turf_viewblock
 		for(var/turf/T in v)
