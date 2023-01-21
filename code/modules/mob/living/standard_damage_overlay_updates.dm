@@ -117,12 +117,15 @@
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		var/datum/organ/internal/eyes = H.internal_organs_by_name["eyes"]
-		if(eyes.is_bruised())
+		if(eyes && eyes.is_bruised())
 			var/a = eyes.damage - eyes.min_bruised_damage
 			var/b = eyes.min_broken_damage - eyes.min_bruised_damage
 			total += Ceiling(10 * a / b) //10 is here because there's 10 different states in screen1_blindness.dmi
 		if(H.glasses)
 			total += H.glasses.nearsighted_modifier
+		if(H.head)
+			var/obj/item/clothing/hat = H.head
+			total += hat.nearsighted_modifier
 	
 	if(total <= 0)
 		return 0
