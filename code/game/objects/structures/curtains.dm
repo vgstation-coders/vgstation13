@@ -113,6 +113,19 @@
 	desc = "Pay no attention to the clo- I mean, person behind this."
 	var/closed_icon = 'icons/mob/AI.dmi'
 	var/closed_state = "ai"
+	var/affects_opacity = TRUE
+
+/obj/structure/curtain/open/clownai/toggle()
+	if(affects_opacity)
+		opacity = !opacity
+	if(icon_state != closed_state)
+		icon = closed_icon
+		icon_state = closed_state
+		layer = CLOSED_CURTAIN_LAYER
+	else
+		icon = initial(icon)
+		icon_state = "open_[ctype]"
+		layer = OPEN_CURTAIN_LAYER
 
 /obj/structure/curtain/open/clownai/AltClick(mob/user)
 	if(closed_icon == 'icons/mob/AI.dmi')
@@ -130,14 +143,4 @@
 	name = "floor"
 	closed_icon = 'icons/turf/floors.dmi'
 	closed_state = "bcircuit"
-
-/obj/structure/curtain/open/clownai/toggle()
-	opacity = !opacity
-	if(opacity)
-		icon = closed_icon
-		icon_state = closed_state
-		layer = CLOSED_CURTAIN_LAYER
-	else
-		icon = initial(icon)
-		icon_state = "open_[ctype]"
-		layer = OPEN_CURTAIN_LAYER
+	affects_opacity = FALSE
