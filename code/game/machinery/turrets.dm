@@ -108,6 +108,8 @@
 				return 0
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
+			if(MC.mind?.assigned_role == "AI") // honk honk
+				return 0
 			if( !MC.stat )
 				if( !MC.isStunned() )
 					return 1
