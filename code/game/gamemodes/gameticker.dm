@@ -210,6 +210,8 @@ var/datum/controller/gameticker/ticker
 					data_core.manifest_inject(H)
 		CHECK_TICK
 
+	var/list/clowns = list()
+	var/already_an_ai = FALSE
 	//Transfer characters to players
 	for(var/i = 1, i <= new_characters.len, i++)
 		var/mob/M = new_characters[new_characters[i]]
@@ -220,6 +222,10 @@ var/datum/controller/gameticker/ticker
 			job_master.PostJobSetup(H)
 		//minds are linked to accounts... And accounts are linked to jobs.
 		var/rank = M.mind.assigned_role
+		if(rank == "Clown")
+			clowns += M
+		if(rank == "AI" || isAI(M))
+			already_an_ai = TRUE
 		var/datum/job/job = job_master.GetJob(rank)
 		if(job)
 			job.equip(M, job.priority) // Outfit datum.
@@ -229,6 +235,11 @@ var/datum/controller/gameticker/ticker
 	//delete the new_player mob for those who readied
 	for(var/mob/np in new_players_ready)
 		qdel(np)
+
+	if(!already_an_ai && clowns.len >= 2 && prob(1))
+		var/mob/living/carbon/human/H = pick(clowns)
+		if(istype(H))
+			H.make_fake_ai()
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
 		for(var/mob/living/carbon/human/player in player_list)
@@ -266,6 +277,27 @@ var/datum/controller/gameticker/ticker
 	wageSetup()
 	post_roundstart()
 	return 1
+
+/mob/living/carbon/human/proc/make_fake_ai()
+	var/obj/effect/landmark/start/S = null
+	for(var/obj/effect/landmark/start/S2 in landmarks_list)
+		if(S2.name == "AI")
+			S = S2
+			break
+	if(!S)
+		message_admins("[formatJumpTo(key_name(src))] tried to become a clown AI but there was no AI spawn point to do it with!")
+		return
+	var/turf/T = get_turf(S)
+	ASSERT(T)
+	forceMove(T)
+	mind.assigned_role = "Clown AI"
+	new /obj/structure/curtain/open/clownai(T)
+	for(var/dir in cardinal)
+		var/turf/T2 = get_step(src,dir)
+		if(T2.Cross(src))
+			new /obj/structure/curtain/open/clownai/floor(T2)
+			new /obj/machinery/computer/security(T2)
+			break
 
 /datum/controller/gameticker
 	//station_explosion used to be a variable for every mob's hud. Which was a waste!

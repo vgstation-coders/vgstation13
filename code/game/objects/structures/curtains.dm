@@ -107,3 +107,25 @@
 
 /obj/structure/curtain/open/shower/security
 	color = "#AA0000"
+
+/obj/structure/curtain/open/clownai
+	name = "AI"
+	desc = "Pay no attention to the clo- I mean, person behind this."
+	var/closed_icon = 'icons/mob/AI.dmi'
+	var/closed_state = "ai"
+
+/obj/structure/curtain/open/clownai/floor
+	name = "floor"
+	closed_icon = 'icons/turf/floors.dmi'
+	closed_state = "bcircuit"
+
+/obj/structure/curtain/open/clownai/toggle()
+	opacity = !opacity
+	if(opacity)
+		icon = closed_icon
+		icon_state = closed_state
+		layer = CLOSED_CURTAIN_LAYER
+	else
+		icon = initial(icon)
+		icon_state = "open_[ctype]"
+		layer = OPEN_CURTAIN_LAYER
