@@ -186,12 +186,15 @@
 /mob/proc/RemoteClickOn(atom/A, params, obj/item/held_item, atom/movable/eye)
 	if(held_item)
 		held_item.remote_attack(A, src, eye)
-	else if(mind?.assigned_role == "AI" && ishuman(src) && istype(A,/obj/machinery/door/airlock)) // clown AI stuff
-		var/obj/machinery/door/airlock/D = A
-		if(D.density)
-			D.Topic("aiEnable=7", list("aiEnable"="7"), 1)
-		else
-			D.Topic("aiDisable=7", list("aiDisable"="7"), 1)
+	else if(mind?.assigned_role == "AI" && ishuman(src)) // clown AI stuff
+		if(spell_channeling)
+			spell_channeling.channeled_spell(A)
+		else if(istype(A,/obj/machinery/door/airlock))
+			var/obj/machinery/door/airlock/D = A
+			if(D.density)
+				D.Topic("aiEnable=7", list("aiEnable"="7"), 1)
+			else
+				D.Topic("aiDisable=7", list("aiDisable"="7"), 1)
 
 // Default behavior: ignore double clicks, consider them normal clicks instead
 /mob/proc/DblClickOn(var/atom/A, var/params)
