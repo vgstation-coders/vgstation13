@@ -134,5 +134,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		ears.contaminate()
 	if(wear_mask)
 		wear_mask.contaminate()
+		if(istype(wear_mask, /obj/item/clothing/mask/gas)
+			return
 	if(glasses)
 		glasses.contaminate()
