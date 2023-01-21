@@ -307,6 +307,7 @@ var/datum/controller/gameticker/ticker
 		ID = new(T)
 		equip_to_slot_or_drop(ID, slot_wear_id)
 	ID.assignment = "AI"
+	ID.UpdateName()
 	for(var/dir in cardinal)
 		var/turf/T2 = get_step(src,dir)
 		if(T2.Cross(src))
