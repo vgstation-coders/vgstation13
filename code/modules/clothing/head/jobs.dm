@@ -57,7 +57,7 @@
 	body_parts_covered = HEAD|EARS
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/HoS/NoiseDampening()
@@ -129,7 +129,7 @@
 	item_state = "hopcap"
 	icon_state = "hopcap"
 	body_parts_covered = HEAD
-	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 //Chaplain
 /obj/item/clothing/head/chaplain_hood
