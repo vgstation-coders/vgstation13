@@ -144,6 +144,14 @@
 
 /datum/dna/gene/disability/nearsighted/New()
 	block = GLASSESBLOCK
+	
+/datum/dna/gene/disability/nearsighted/activate(var/mob/M, var/connected, var/flags)
+	..(M,connected,flags)
+	M.nearsightedness += 3
+	
+/datum/dna/gene/disability/nearsighted/deactivate(var/mob/M, var/connected, var/flags)
+	..(M,connected,flags)
+	M.nearsightedness -= 3
 
 /datum/dna/gene/disability/lisp
 	name = "Lisp"
