@@ -296,6 +296,17 @@ var/datum/controller/gameticker/ticker
 	qdel(head)
 	head = null
 	equip_to_slot_or_drop(new /obj/item/clothing/head/cardborg(), slot_head)
+	var/obj/item/weapon/card/id/ID = null
+	var/obj/item/I = get_item_by_slot(slot_wear_id)
+	if(istype(I,/obj/item/weapon/card/id))
+		ID = I
+	else if(istype(I,/obj/item/device/pda))
+		var/obj/item/device/pda/P = I
+		ID = P.id
+	if(!ID)
+		ID = new(T)
+		equip_to_slot_or_drop(ID, slot_wear_id)
+	ID.assignment = "AI"
 	for(var/dir in cardinal)
 		var/turf/T2 = get_step(src,dir)
 		if(T2.Cross(src))
