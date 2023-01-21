@@ -660,7 +660,7 @@
 	icon_state = "cia"
 	item_state = "cia"
 	_color = "cia"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/greaser
 	name = "Greaser Outfit"
