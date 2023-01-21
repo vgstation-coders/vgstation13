@@ -186,7 +186,7 @@
 /mob/proc/RemoteClickOn(atom/A, params, obj/item/held_item, atom/movable/eye)
 	if(held_item)
 		held_item.remote_attack(A, src, eye)
-	else if(mind?.assigned_role == "Clown AI" && istype(A,/obj/machinery/door/airlock))
+	else if(mind?.assigned_role == "AI" && ishuman(src) && istype(A,/obj/machinery/door/airlock)) // clown AI stuff
 		var/obj/machinery/door/airlock/D = A
 		if(D.density)
 			D.Topic("aiEnable=7", list("aiEnable"="7"), 1)

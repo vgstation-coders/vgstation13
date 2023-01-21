@@ -290,8 +290,10 @@ var/datum/controller/gameticker/ticker
 	var/turf/T = get_turf(S)
 	ASSERT(T)
 	forceMove(T)
-	mind.assigned_role = "Clown AI"
+	mind.assigned_role = "AI"
 	new /obj/structure/curtain/open/clownai(T)
+	new /obj/item/clothing/head/cardborg(T)
+	equip_to_slot_or_drop(new /obj/item/clothing/head/cardborg(), slot_head)
 	for(var/dir in cardinal)
 		var/turf/T2 = get_step(src,dir)
 		if(T2.Cross(src))

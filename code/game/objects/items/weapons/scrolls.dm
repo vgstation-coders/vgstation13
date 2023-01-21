@@ -85,6 +85,24 @@
 	var/attempt = null
 	var/success = 0
 	var/prev_z = user.z
+	if(prob(10) && istype(thearea,/area/turret_protected/ai))
+		var/aifound = FALSE
+		for(var/mob/living/M in player_list)
+			if(isAI(M) || (M.mind && M.mind.assigned_role == "AI"))
+				aifound = TRUE
+				break
+		if(!aifound)
+			for(var/obj/effect/landmark/S in landmarks_list)
+				if(S.name == "AI" && get_area(S) == thearea)
+					var/turf/T = get_turf(S)
+					ASSERT(T)
+					var/aisuccess = user.Move(T)
+					INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
+					if(!aisuccess)
+						aisuccess = user.forceMove(T)
+						INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
+					if(aisuccess)
+						return
 	while(tempL.len)
 		attempt = pick(tempL)
 		success = user.Move(attempt)
