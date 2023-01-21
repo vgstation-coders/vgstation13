@@ -291,8 +291,10 @@ var/datum/controller/gameticker/ticker
 	ASSERT(T)
 	forceMove(T)
 	mind.assigned_role = "AI"
-	new /obj/structure/curtain/open/clownai(T)
-	new /obj/item/clothing/head/cardborg(T)
+	var/obj/structure/curtain/open/clownai/cc = new(T)
+	cc.name = src.name
+	qdel(head)
+	head = null
 	equip_to_slot_or_drop(new /obj/item/clothing/head/cardborg(), slot_head)
 	for(var/dir in cardinal)
 		var/turf/T2 = get_step(src,dir)

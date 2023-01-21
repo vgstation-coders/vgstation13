@@ -85,24 +85,22 @@
 	var/attempt = null
 	var/success = 0
 	var/prev_z = user.z
-	if(prob(10) && istype(thearea,/area/turret_protected/ai))
+	if(istype(thearea,/area/turret_protected/ai) && ishuman(user))
 		var/aifound = FALSE
 		for(var/mob/living/M in player_list)
 			if(isAI(M) || (M.mind && M.mind.assigned_role == "AI"))
 				aifound = TRUE
 				break
 		if(!aifound)
-			for(var/obj/effect/landmark/S in landmarks_list)
-				if(S.name == "AI" && get_area(S) == thearea)
-					var/turf/T = get_turf(S)
-					ASSERT(T)
-					var/aisuccess = user.Move(T)
-					INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
-					if(!aisuccess)
-						aisuccess = user.forceMove(T)
-						INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
-					if(aisuccess)
-						return
+			aifound = alert(user,"This room has no active AI, become a fake one here?","The wizard of...","Yea","Nay") == "Nay"
+		if(!aifound)
+			var/mob/living/carbon/human/H = user
+			H.make_fake_ai()
+			INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
+			smoke.start()
+			src.uses -= 1
+			log_game("[key_name(user)] teleported to [thearea.name] using a scroll.")
+			return
 	while(tempL.len)
 		attempt = pick(tempL)
 		success = user.Move(attempt)
