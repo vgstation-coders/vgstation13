@@ -114,6 +114,18 @@
 	var/closed_icon = 'icons/mob/AI.dmi'
 	var/closed_state = "ai"
 
+/obj/structure/curtain/open/clownai/AltClick(mob/user)
+	if(closed_icon == 'icons/mob/AI.dmi')
+		var/selected = input("Select an icon!", "AI curtain", null, null) as null|anything in ai_icon_states
+		if(!selected)
+			return
+		var/chosen_state = ai_icon_states[selected]
+		ASSERT(chosen_state)
+		closed_state = chosen_state
+		if(opacity)
+			icon_state = closed_state
+	return ..()
+
 /obj/structure/curtain/open/clownai/floor
 	name = "floor"
 	closed_icon = 'icons/turf/floors.dmi'
