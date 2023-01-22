@@ -126,6 +126,12 @@
 		if(H.head)
 			var/obj/item/clothing/hat = H.head
 			total += hat.nearsighted_modifier
+	if(ismonkey(src))
+		var/mob/living/carbon/monkey/M = src
+		if(M.hat)
+			total += M.hat.nearsighted_modifier
+		if(M.glasses)
+			total += M.glasses.nearsighted_modifier
 	
 	if(total <= 0)
 		return 0
