@@ -8,16 +8,9 @@
 	var/key_third_person = "" //This will also call the emote
 	var/key_shorthand = "" //This will also call the emote
 	var/message = "" //Message displayed when emote is used
+	var/list/message_mobtype = list() //Message displayed depending on mobtype. Please put subtypes below supertypes so this works right.
 	var/message_mime = "" //Message displayed if the user is a mime
-	var/message_alien = "" //Message displayed if the user is a grown alien
-	var/message_larva = "" //Message displayed if the user is an alien larva
-	var/message_pulsedemon = "" //Message displayed if the user is a pulse demon
-	var/message_robot = "" //Message displayed if the user is a robot
-	var/message_AI = "" //Message displayed if the user is an AI
-	var/message_monkey = "" //Message displayed if the user is a monkey
-	var/message_simple = "" //Message to display if the user is a simple_animal
 	var/message_param = "" //Message to display if a param was given
-	var/message_mommi = "" //Message to display if the user is a mommi. Defaults to message_robot if none specified
 	var/emote_type = EMOTE_VISIBLE //Whether the emote is visible or audible
 	var/restraint_check = FALSE //Checks if the mob is restrained before performing the emote
 	var/muzzle_ignore = FALSE //Will only work if the emote is EMOTE_AUDIBLE
@@ -38,8 +31,6 @@
 		emote_list[key_third_person] = src
 	if(key_shorthand)
 		emote_list[key_shorthand] = src
-	if(!message_mommi)
-		message_mommi = message_robot
 
 /datum/emote/proc/run_emote(mob/user, params, type_override, ignore_status = FALSE, var/arguments)
 	. = TRUE
@@ -132,22 +123,10 @@
 		return "makes a [pick("strong ", "weak ", "")]noise."
 	if(user.mind && ishuman(user) && user.mind.miming && message_mime)
 		. = message_mime
-	if(isalienadult(user) && message_alien)
-		. = message_alien
-	else if(islarva(user) && message_larva)
-		. = message_larva
-	else if(ispulsedemon(user) && message_pulsedemon)
-		. = message_pulsedemon
-	else if(isAI(user) && message_AI)
-		. = message_AI
-	else if(isMoMMI(user) && message_mommi)
-		. = message_mommi
-	else if(issilicon(user) && message_robot)
-		. = message_robot
-	else if(ismonkey(user) && message_monkey)
-		. = message_monkey
-	else if(isanimal(user) && message_simple)
-		. = message_simple
+	if(message_mobtype.len)
+		for(var/mobtype in message_mobtype)
+			if(istype(user,mobtype))
+				. = message_mobtype[mobtype]
 
 /datum/emote/proc/select_param(mob/user, params)
 	return replacetext(message_param, "%t", params)
