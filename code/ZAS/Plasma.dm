@@ -15,6 +15,11 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	if(!contaminated)
 		contaminated = 1
 		overlays.Add(contamination_overlay)
+		
+/obj/item/clothing/contaminate()
+	if(clothing_flags & PLASMAGUARD)
+		return
+	..()
 
 /obj/item/proc/decontaminate()
 	contaminated = 0
