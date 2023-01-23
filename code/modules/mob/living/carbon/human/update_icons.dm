@@ -693,6 +693,8 @@ var/global/list/damage_icon_parts = list()
 				switch(get_species())
 					if("Vox")
 						blood_icon_state = "bloodyhands-vox"
+					if("Insectoid")
+						blood_icon_state = "bloodyhands-vox"
 				var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
 				bloodsies.color = actual_gloves.blood_color
 				standing.overlays	+= bloodsies
@@ -716,6 +718,8 @@ var/global/list/damage_icon_parts = list()
 			var/blood_icon_state = "bloodyhands"
 			switch(get_species())
 				if("Vox")
+					blood_icon_state = "bloodyhands-vox"
+				if("Insectoid")
 					blood_icon_state = "bloodyhands-vox"
 			O.icon = 'icons/effects/blood.dmi'
 			O.icon_state = blood_icon_state
@@ -876,6 +880,8 @@ var/global/list/damage_icon_parts = list()
 			var/blood_icon_state = "shoeblood"
 			switch(get_species())
 				if("Vox")
+					blood_icon_state = "shoeblood-vox"
+				if("Insectoid")
 					blood_icon_state = "shoeblood-vox"
 			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
 			bloodsies.color = shoes.blood_color
