@@ -181,7 +181,7 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/proc/update_body(var/update_icons=1)
 	if(monkeyizing)
 		return
-		
+
 	var/husk_color_mod = rgb(96,88,80)
 	var/hulk_color_mod = rgb(48,224,40)
 	var/necrosis_color_mod = rgb(10,50,0)
@@ -587,7 +587,11 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += dyn_overlay
 
 		if(w_uniform.blood_DNA && w_uniform.blood_DNA.len)
-			var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "uniformblood")
+			var/blood_icon_state = "uniformblood"
+			switch(get_species())
+				if("Vox")
+					blood_icon_state = "uniformblood-vox"
+			var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
 			bloodsies.color		= w_uniform.blood_color
 			//standing.overlays	+= bloodsies
 			O.overlays += bloodsies
@@ -685,7 +689,11 @@ var/global/list/damage_icon_parts = list()
 		if (istype(gloves, /obj/item/clothing/gloves))
 			var/obj/item/clothing/gloves/actual_gloves = gloves
 			if(actual_gloves.transfer_blood > 0 && actual_gloves.blood_DNA?.len)
-				var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
+				var/blood_icon_state = "bloodyhands"
+				switch(get_species())
+					if("Vox")
+						blood_icon_state = "bloodyhands-vox"
+				var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
 				bloodsies.color = actual_gloves.blood_color
 				standing.overlays	+= bloodsies
 				O.overlays += bloodsies
@@ -705,8 +713,12 @@ var/global/list/damage_icon_parts = list()
 		obj_to_plane_overlay(O,GLOVES_LAYER)
 	else
 		if(bloody_hands > 0 && bloody_hands_data?.len)
+			var/blood_icon_state = "bloodyhands"
+			switch(get_species())
+				if("Vox")
+					blood_icon_state = "bloodyhands-vox"
 			O.icon = 'icons/effects/blood.dmi'
-			O.icon_state = "bloodyhands"
+			O.icon_state = blood_icon_state
 			O.color = bloody_hands_data["blood_colour"]
 			obj_to_plane_overlay(O,GLOVES_LAYER)
 	if(update_icons)
@@ -861,7 +873,11 @@ var/global/list/damage_icon_parts = list()
 				var/image/dyn_overlay = shoes.dynamic_overlay["[SHOES_LAYER]"]
 				O.overlays += dyn_overlay
 		if(shoes.blood_DNA && shoes.blood_DNA.len)
-			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "shoeblood")
+			var/blood_icon_state = "shoeblood"
+			switch(get_species())
+				if("Vox")
+					blood_icon_state = "shoeblood-vox"
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
 			bloodsies.color = shoes.blood_color
 			//standing.overlays	+= bloodsies
 			O.overlays += bloodsies
@@ -943,7 +959,11 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += dyn_overlay
 
 		if(head.blood_DNA && head.blood_DNA.len)
-			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+			var/blood_icon_state = "helmetblood"
+			switch(get_species())
+				if("Vox")
+					blood_icon_state = "helmetblood-vox"
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
 			bloodsies.color = head.blood_color
 			//standing.overlays	+= bloodsies
 			O.overlays	+= bloodsies
@@ -992,7 +1012,11 @@ var/global/list/damage_icon_parts = list()
 						O.overlays += dyn_overlay
 
 				if(above.blood_DNA && above.blood_DNA.len)
-					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+					var/blood_icon_state =  "[hat.blood_overlay_type]blood"
+					switch(get_species())
+						if("Vox")
+							blood_icon_state = "[blood_icon_state]-vox"
+					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
 					bloodsies.color = above.blood_color
 					//standing.overlays	+= bloodsies
 					bloodsies.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER
@@ -1102,7 +1126,11 @@ var/global/list/damage_icon_parts = list()
 		if(istype(wear_suit, /obj/item/clothing/suit))
 			var/obj/item/clothing/suit/C = wear_suit
 			if(C.blood_DNA && C.blood_DNA.len)
-				var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "[C.blood_overlay_type]blood")
+				var/blood_icon_state = "[C.blood_overlay_type]blood"
+				switch(get_species())
+					if("Vox")
+						blood_icon_state = "[blood_icon_state]-vox"
+				var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
 				bloodsies.color = wear_suit.blood_color
 				//standing.overlays	+= bloodsies
 				O.overlays	+= bloodsies
@@ -1169,7 +1197,11 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += dyn_overlay
 
 		if( !istype(wear_mask, /obj/item/clothing/mask/cigarette) && wear_mask.blood_DNA && wear_mask.blood_DNA.len )
-			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "maskblood")
+			var/blood_icon_state = "maskblood"
+			switch(get_species())
+				if("Vox")
+					blood_icon_state = "maskblood-vox"
+			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
 			bloodsies.color = wear_mask.blood_color
 			//standing.overlays	+= bloodsies
 			O.overlays += bloodsies
