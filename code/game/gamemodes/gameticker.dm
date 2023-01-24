@@ -295,7 +295,10 @@ var/datum/controller/gameticker/ticker
 	cc.name = src.name
 	qdel(head)
 	head = null
-	equip_to_slot_or_drop(new /obj/item/clothing/head/cardborg(), slot_head)
+	var/obj/item/clothing/head/cardborg/cb = new(T)
+	if(iswizard(src))
+		cb.wizard_garb = TRUE
+	equip_to_slot_or_drop(cb, slot_head)
 	var/obj/item/weapon/card/id/ID = null
 	var/obj/item/I = get_item_by_slot(slot_wear_id)
 	if(istype(I,/obj/item/weapon/card/id))
