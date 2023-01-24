@@ -328,8 +328,8 @@ var/datum/controller/gameticker/ticker
 			turf_found = TRUE
 			var/obj/structure/curtain/open/clownai/floor/F = new(T2)
 			F.closed_state = T2.icon_state // floor look consistency
-			var/obj/machinery/computer/security/S = new(T2)
-			S.density = 0 // makes exposing them a bit easier
+			var/obj/machinery/computer/security/SC = new(T2)
+			SC.density = 0 // makes exposing them a bit easier
 			break
 	if(!turf_found)
 		message_admins("[formatJumpTo(key_name(src))] tried to spawn a security cameras console nearby while becoming a fake AI but there was no room for one!")
