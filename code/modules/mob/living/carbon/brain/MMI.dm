@@ -70,8 +70,6 @@
 			to_chat(user, "<span class='warning'>This brain does not seem to fit.</span>")
 			return TRUE
 		//canmove = 0
-		icon = null
-		invisibility = 101
 		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi/nt(get_turf(loc))
 		if(!M)
 			return
@@ -79,17 +77,17 @@
 		//M.custom_name = created_name
 
 		brainmob.mind.transfer_to(M)
-		M.Namepick()
+		M.cell = locate(/obj/item/weapon/cell) in contents
+		M.cell.forceMove(M)
+		src.forceMove(M)//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
+		M.mmi = src
 
 		if(M.mind && M.mind.special_role)
 			M.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
 
 		M.job = "MoMMI"
 
-		M.cell = locate(/obj/item/weapon/cell) in contents
-		M.cell.forceMove(M)
-		src.forceMove(M)//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
-		M.mmi = src
+		M.Namepick() //this delays the return until after you're done namepicking so it may still cause nervegas further down the line
 		return TRUE
 	for(var/t in mommi_assembly_parts)
 		if(istype(O,t))
