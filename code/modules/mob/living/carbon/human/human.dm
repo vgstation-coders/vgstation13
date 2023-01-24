@@ -694,6 +694,9 @@
 	return
 
 /mob/living/carbon/human/proc/vomit(hairball = 0, instant = 0)
+	if(species && species.flags & SPECIES_NO_MOUTH)
+		return
+
 	if(!lastpuke)
 		lastpuke = 1
 		to_chat(src, "<spawn class='warning'>You feel nauseous...</span>")
