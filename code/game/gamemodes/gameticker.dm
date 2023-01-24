@@ -285,7 +285,7 @@ var/datum/controller/gameticker/ticker
 			S = S2
 			break
 	if(!S)
-		message_admins("[formatJumpTo(key_name(src))] tried to become a clown AI but there was no AI spawn point to do it with!")
+		message_admins("[formatJumpTo(key_name(src))] tried to become a fake AI but there was no AI spawn point to do it with!")
 		return
 	var/turf/T = get_turf(S)
 	ASSERT(T)
@@ -305,15 +305,34 @@ var/datum/controller/gameticker/ticker
 		ID = P.id
 	if(!ID)
 		ID = new(T)
+		ID.registered_name = src.name
 		equip_to_slot_or_drop(ID, slot_wear_id)
 	ID.assignment = "AI"
 	ID.UpdateName()
+	var/obj/item/device/radio/headset/H = get_item_by_slot(slot_ears)
+	if(!H)
+		H = new(T)
+		equip_to_slot_or_drop(H, slot_ears)
+	if(!iswizard(src)) // make it less unfair i guess
+		if(!H.keyslot1)
+			H.keyslot1 = new /obj/item/device/encryptionkey/ai(H)
+		else
+			if(H.keyslot2)
+				new /obj/item/device/encryptionkey/ai(T)
+			else
+				H.keyslot2 = new /obj/item/device/encryptionkey/ai(H)
+	var/turf_found = FALSE
 	for(var/dir in cardinal)
 		var/turf/T2 = get_step(src,dir)
-		if(T2.Cross(src))
-			new /obj/structure/curtain/open/clownai/floor(T2)
-			new /obj/machinery/computer/security(T2)
+		if(T2.Cross(src)) // something that this user can pass through gets the security console
+			turf_found = TRUE
+			var/obj/structure/curtain/open/clownai/floor/F = new(T2)
+			F.closed_state = T2.icon_state // floor look consistency
+			var/obj/machinery/computer/security/S = new(T2)
+			S.density = 0 // makes exposing them a bit easier
 			break
+	if(!turf_found)
+		message_admins("[formatJumpTo(key_name(src))] tried to spawn a security cameras console nearby while becoming a fake AI but there was no room for one!")
 
 /datum/controller/gameticker
 	//station_explosion used to be a variable for every mob's hud. Which was a waste!
