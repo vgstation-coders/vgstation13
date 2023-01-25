@@ -21,8 +21,7 @@
 	light_range_on = 3
 	light_power_on = 2
 	var/known_implants = list(/obj/item/weapon/implant/chem, /obj/item/weapon/implant/death_alarm, /obj/item/weapon/implant/loyalty, /obj/item/weapon/implant/tracking)
-	var/delete
-	var/temphtml
+
 	flags = FPRINT | HEAR
 
 /obj/machinery/bodyscanner/New()
@@ -46,7 +45,7 @@
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		T += SP.rating
-	scanning = round(T/3) //9 = Reagent details, Blood Type; 6 = Blood Type; 3 = basic. This value is also transformed into efficiency 1 to 1.
+	scanning = round(T/3) //At scanning = 3 and up, you get the detail of reagents inside the patients, and saying "print" near the machine triggers its printer, allowing solo use.
 
 /obj/machinery/bodyscanner/power_change()
 	..()
@@ -55,7 +54,7 @@
 	else
 		set_light(0)
 
-/obj/machinery/bodyscanner/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+/obj/machinery/bodyscanner/MouseDropTo(var/atom/movable/O, var/mob/user)
 	if(!ismob(O)) //humans only
 		return
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
@@ -161,7 +160,7 @@
 
 	if(usr.isUnconscious())
 		return
-	if(src.occupant)
+	if(occupant)
 		to_chat(usr, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
 	if(usr.locked_to)
@@ -169,22 +168,22 @@
 	usr.pulling = null
 	usr.forceMove(src)
 	usr.reset_view()
-	src.occupant = usr
+	occupant = usr
 	update_icon()
 	for(var/obj/O in src)
 		qdel(O)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
 	return
 
 /obj/machinery/bodyscanner/proc/go_out(var/exit = loc, var/mob/ejector)
-	if(!src.occupant)
+	if(!occupant)
 		return
-	for (var/atom/movable/x in src.contents)
+	for (var/atom/movable/x in contents)
 		if(x in component_parts)
 			continue
-		x.forceMove(src.loc)
+		x.forceMove(loc)
 
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
@@ -220,13 +219,32 @@
 		return FALSE
 	return ..()
 
-/obj/machinery/bodyscanner/attackby(obj/item/weapon/W as obj, user as mob)
+/obj/machinery/bodyscanner/attackby(var/obj/item/weapon/W, var/mob/user)
+	if (istype(W, /obj/item/weapon/card/id))
+		if(!occupant)
+			to_chat(user, "<span class='warning'>There needs to be an occupant inside the scanner before you can imprint biometric data on an ID card.</span>")
+			return
+		if(!ishuman(occupant))
+			to_chat(user, "<span class='warning'>This lifeform isn't compatible with this machine's biometric measurements.</span>")
+			return
+		var/mob/living/carbon/human/H = occupant
+		var/obj/item/weapon/card/id/ID_card = W
+		if (ID_card.dna_hash != "\[UNSET\]")
+			to_chat(user, "<span class='warning'>This ID card already has biometric data imprinted on it.</span>")
+		else
+			if (alert("Do you want to imprint the occupant's biometric data on this ID card?",,"Yes","No") == "Yes")
+				if (user && !user.incapacitated() && Adjacent(user) && (occupant == H) && ID_card && (ID_card == user.get_active_hand()) && !(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
+					ID_card.blood_type = H.dna.b_type
+					ID_card.dna_hash = H.dna.unique_enzymes
+					ID_card.fingerprint_hash = md5(H.dna.uni_identity)
+					alert_noise("beep")
+		return
 	if(!istype(W, /obj/item/weapon/grab))
 		return ..()
 	var/obj/item/weapon/grab/G = W
 	if((!( istype(G, /obj/item/weapon/grab) ) || !( ismob(G.affecting) )))
 		return
-	if(src.occupant)
+	if(occupant)
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
 
@@ -238,9 +256,9 @@
 	var/mob/M = G.affecting
 	M.forceMove(src)
 	M.reset_view()
-	src.occupant = M
+	occupant = M
 	update_icon()
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	qdel(G)
 	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
@@ -250,21 +268,21 @@
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.forceMove(src.loc)
+				A.forceMove(loc)
 				ex_act(severity)
 			qdel(src)
 			return
 		if(2.0)
 			if(prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.forceMove(src.loc)
+					A.forceMove(loc)
 					ex_act(severity)
 				qdel(src)
 				return
 		if(3.0)
 			if(prob(25))
 				for(var/atom/movable/A as mob|obj in src)
-					A.forceMove(src.loc)
+					A.forceMove(loc)
 					ex_act(severity)
 				qdel(src)
 				return
@@ -274,7 +292,7 @@
 /obj/machinery/bodyscanner/blob_act()
 	if(prob(50))
 		for(var/atom/movable/A as mob|obj in src)
-			A.forceMove(src.loc)
+			A.forceMove(loc)
 		qdel(src)
 
 
@@ -303,15 +321,9 @@
 	if(!isobserver(user) && (user.loc == src || (!Adjacent(user)&&!issilicon(user)) || user.incapacitated()))
 		return
 
-	var/dat
-	if(src.delete && src.temphtml) //Window in buffer but its just simple message, so nothing
-		src.delete = src.delete
-	else if(!src.delete && src.temphtml) //Window in buffer - its a menu, dont add clear message
-		dat = text("[]<BR><BR><A href='?src=\ref[];clear=1'>Main Menu</A>", src.temphtml, src)
-	else
-		dat = format_occupant_data(get_occupant_data(occupant),scanning)
-		dat += "<HR><a href='?src=\ref[src];immunity=1'>View Immune System scan</a><br>"
-		dat += "<HR><A href='?src=\ref[src];print=1'>Print</A><BR>"
+	var/dat = format_occupant_data(get_occupant_data(occupant),scanning)
+	dat += "<HR><a href='?src=\ref[src];immunity=1'>View Immune System scan</a><br>"
+	dat += "<HR><A href='?src=\ref[src];print=1'>Print</A><BR>"
 
 	dat += text("<BR><A href='?src=\ref[];mach_close=scanconsole'>Close</A>", user)
 	user << browse(dat, "window=scanconsole;size=430x600")
@@ -332,9 +344,7 @@
 		if(!istype(occupant,/mob/living/carbon/human))
 			to_chat(usr, "[bicon(src)]<span class='warning'>\The [src] cannot scan that lifeform.</span>")
 			return
-		var/obj/item/weapon/paper/R = new(loc)
-		R.name = "paper - 'body scan report'"
-		R.info = format_occupant_data(get_occupant_data(occupant),scanning)
+		print_diagnostic()
 
 	else if(href_list["immunity"])
 		if(!immune)
@@ -374,12 +384,14 @@
 		"dermaline_amount" = H.reagents.get_reagent_amount(DERMALINE),
 		"blood_amount" = H.vessel.get_reagent_amount(BLOOD),
 		"all_chems" = H.reagents.reagent_list,
-		"btype" = H.dna.b_type,
 		"disabilities" = H.sdisabilities,
 		"tg_diseases_list" = H.viruses,
 		"lung_ruptured" = H.is_lung_ruptured(),
 		"external_organs" = H.organs.Copy(),
-		"internal_organs" = H.internal_organs.Copy()
+		"internal_organs" = H.internal_organs.Copy(),
+		"blood_type" = H.dna.b_type,
+		"dna_hash" = H.dna.unique_enzymes,
+		"fingerprint_hash" = md5(H.dna.uni_identity)
 		)
 	if (H.status_flags & FAKEDEATH)
 		health_data["stat"] = 2
@@ -429,8 +441,10 @@
 	if(occ["borer_present_l_leg"])
 		dat += "Large growth detected in left leg, possibly cancerous. Surgical removal is recommended.<br>"
 
-	dat += text("[]\tBlood Level %: [] ([] units)</FONT><BR>", (occ["blood_amount"] > 448 ?"<font color='blue'>" : "<font color='red'>"), occ["blood_amount"]*100 / 560, occ["blood_amount"])
-	dat += text("<font color='blue'>\tBlood Type: []</FONT><BR>", occ["btype"])
+	dat += text("[]\tBlood Level: []% ([] units)</FONT><BR>", (occ["blood_amount"] > 448 ?"<font color='blue'>" : "<font color='red'>"), occ["blood_amount"]*100 / 560, occ["blood_amount"])
+	dat += text("<font color='blue'>\tBlood Type: []</FONT><BR>", occ["blood_type"])
+	dat += text("\tDNA hash: []<BR>", occ["dna_hash"])
+	dat += text("\tfingerprint hash: []<BR><HR>", occ["fingerprint_hash"])
 
 	dat += text("Inaprovaline: [] units<BR>", occ["inaprovaline_amount"])
 	dat += text("Soporific: [] units<BR>", occ["stoxin_amount"])
@@ -603,11 +617,16 @@
 		if(findtext(speech.message, "print"))
 			if(!occupant||!istype(occupant,/mob/living/carbon/human))
 				return
-			say("Now outputting diagnostic.")
-			var/obj/item/weapon/paper/R = new(src.loc)
-			R.name = "paper - 'body scan report'"
-			R.info = format_occupant_data(get_occupant_data(occupant),scanning)
+			print_diagnostic()
 
+/obj/machinery/bodyscanner/proc/print_diagnostic()
+	if (!occupant)
+		return
+	say("Outputting diagnostic.")
+	playsound(loc, "sound/effects/fax.ogg", 50, 1)
+	var/obj/item/weapon/paper/P = new(loc)
+	P.name = "paper - 'body scan report'"
+	P.info = format_occupant_data(get_occupant_data(occupant),scanning)
 
 /obj/machinery/bodyscanner/upgraded
 	name = "advanced body scanner"
