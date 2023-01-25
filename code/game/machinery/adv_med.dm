@@ -225,7 +225,7 @@
 			to_chat(user, "<span class='warning'>There needs to be an occupant inside the scanner before you can imprint biometric data on an ID card.</span>")
 			return
 		if(!ishuman(occupant))
-			to_chat(user, "<span class='warning'>This lifeform isn't compatible with this machine's biometric measurements.</span>")
+			to_chat(user, "<span class='warning'>This lifeform isn't compatible with this machine's biometric measuring tools.</span>")
 			return
 		var/mob/living/carbon/human/H = occupant
 		var/obj/item/weapon/card/id/ID_card = W
