@@ -672,7 +672,7 @@
 
 	if (beard_style)
 		var/datum/sprite_accessory/beard_style_icon = facial_hair_styles_list[beard_style]
-		var/icon/beard_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state][vox_suffix]_s")
+		var/icon/beard_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state]_s")
 		if(beard_style_icon.additional_accessories)
 			beard_s.Blend(icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state]_acc"), ICON_OVERLAY)
 		if (species && species.name != "Human")
