@@ -655,10 +655,14 @@
 	var/obj/abstract/Overlays/O = new /obj/abstract/Overlays/
 	O.layer = FLOAT_LAYER
 	O.overlays.len = 0
+	var/vox_suffix = ""
+
+	if (species && istype(species, /datum/species/vox))
+		vox_suffix = "_0"
 
 	if (hair_style)
 		var/datum/sprite_accessory/hair_style_icon = hair_styles_list[hair_style]
-		var/icon/hair_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state]_s")
+		var/icon/hair_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state][vox_suffix]_s")
 		if(hair_style_icon.additional_accessories)
 			hair_s.Blend(icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state]_acc"), ICON_OVERLAY)
 		if (species && species.name != "Human")
@@ -668,7 +672,7 @@
 
 	if (beard_style)
 		var/datum/sprite_accessory/beard_style_icon = facial_hair_styles_list[beard_style]
-		var/icon/beard_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state]_s")
+		var/icon/beard_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state][vox_suffix]_s")
 		if(beard_style_icon.additional_accessories)
 			beard_s.Blend(icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state]_acc"), ICON_OVERLAY)
 		if (species && species.name != "Human")
