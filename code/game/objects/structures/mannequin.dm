@@ -657,7 +657,7 @@
 	O.overlays.len = 0
 	var/vox_suffix = ""
 
-	if (species && istype(species, /datum/species/vox))
+	if (species && species.name == "Vox")
 		vox_suffix = "_0"
 
 	if (hair_style)
