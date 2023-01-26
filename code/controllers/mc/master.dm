@@ -132,7 +132,8 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 	Holiday = Get_Holiday()
 	world.update_status()
-	
+	initialize_beespecies()	//must be init before objects or pre-mapped bee packets will be borked
+
 	// Initialize subsystems.
 	// Sort subsystems by init_order, so they initialize in the correct order.
 	CURRENT_TICKLIMIT = TICK_LIMIT_MC_INIT_DEFAULT
