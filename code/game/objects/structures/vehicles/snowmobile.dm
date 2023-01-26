@@ -89,7 +89,7 @@ var/list/security_cruisers = list()
 	desc = "An armored syndicate snowmobile. Take note, it does not accept a universal key."
 	health = 200
 	max_health = 200
-	icon_state = "snowcurity"
+	icon_state = "snowsyndie"
 	light_color = "#FF0000"
 
 /obj/structure/bed/chair/vehicle/snowmobile/syndicate/set_keys()
