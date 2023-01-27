@@ -308,7 +308,7 @@ var/datum/controller/gameticker/ticker
 		ID = P.id
 	if(!ID)
 		ID = new(T)
-		ID.registered_name = src.name
+		ID.registered_name = src.real_name
 		equip_to_slot_or_drop(ID, slot_wear_id)
 	ID.assignment = "AI"
 	ID.UpdateName()
