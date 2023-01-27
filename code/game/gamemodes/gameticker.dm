@@ -324,6 +324,7 @@ var/datum/controller/gameticker/ticker
 				new /obj/item/device/encryptionkey/ai(T)
 			else
 				H.keyslot2 = new /obj/item/device/encryptionkey/ai(H)
+		H.recalculateChannels()
 	var/turf_found = FALSE
 	for(var/dir in cardinal)
 		var/turf/T2 = get_step(src,dir)
