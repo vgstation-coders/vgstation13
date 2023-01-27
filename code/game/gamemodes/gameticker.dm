@@ -317,13 +317,17 @@ var/datum/controller/gameticker/ticker
 		H = new(T)
 		equip_to_slot_or_drop(H, slot_ears)
 	if(!iswizard(src)) // make it less unfair i guess
+		var/obj/item/device/encryptionkey/ai/EK
 		if(!H.keyslot1)
 			H.keyslot1 = new /obj/item/device/encryptionkey/ai(H)
+			EK = H.keyslot1
 		else
 			if(H.keyslot2)
-				new /obj/item/device/encryptionkey/ai(T)
+				EK = new /obj/item/device/encryptionkey/ai(T)
 			else
 				H.keyslot2 = new /obj/item/device/encryptionkey/ai(H)
+				EK = H.keyslot2
+				EK.translate_binary = TRUE // helps too
 		H.recalculateChannels()
 	var/turf_found = FALSE
 	for(var/dir in cardinal)
