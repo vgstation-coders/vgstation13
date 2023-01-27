@@ -336,6 +336,10 @@ var/datum/controller/gameticker/ticker
 			break
 	if(!turf_found)
 		message_admins("[formatJumpTo(key_name(src))] tried to spawn a security cameras console nearby while becoming a fake AI but there was no room for one!")
+	to_chat(src,"<b>You have [!iswizard(src) ? "been assigned to be" : "are now"] the station's \"AI\"!</b>")
+	to_chat(src,"<b>You can open doors through the security cameras console in front of you by clicking on them. The curtains near you will also disguise you as the AI core itself. Alt-click the one on you to change the core appearance.</b>")
+	if(!iswizard(src))
+		to_chat(src,"<b>Since you are imitating a station AI, you are now more important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
 /datum/controller/gameticker
 	//station_explosion used to be a variable for every mob's hud. Which was a waste!
