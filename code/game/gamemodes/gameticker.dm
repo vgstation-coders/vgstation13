@@ -327,7 +327,7 @@ var/datum/controller/gameticker/ticker
 			else
 				H.keyslot2 = new /obj/item/device/encryptionkey/ai(H)
 				EK = H.keyslot2
-				EK.translate_binary = TRUE // helps too
+		EK.translate_binary = TRUE // helps too
 		H.recalculateChannels()
 	var/turf_found = FALSE
 	for(var/dir in cardinal)
