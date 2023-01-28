@@ -130,6 +130,11 @@
 		/obj/item/weapon/card/debit/preferred/department/security,
 		/obj/item/weapon/pinpointer,
 		/obj/item/weapon/storage/box/large/securitygear,
+		/obj/item/clothing/head/naziofficer,
+		/obj/item/clothing/suit/officercoat,
+		/obj/item/clothing/under/officeruniform,
+		/obj/item/clothing/suit/space/rig/nazi,
+		/obj/item/weapon/kitchen/utensil/knife/nazi,
 	)
 
 /obj/structure/closet/secure_closet/warden
@@ -161,6 +166,10 @@
 		/obj/item/weapon/storage/box/bolas,
 		/obj/item/weapon/batteringram,
 		/obj/item/weapon/storage/box/large/securitygear,
+		/obj/item/clothing/head/naziofficer,
+		/obj/item/clothing/suit/officercoat,
+		/obj/item/clothing/under/officeruniform,
+		/obj/item/weapon/kitchen/utensil/knife/nazi,
 	)
 
 /obj/structure/closet/secure_closet/security
@@ -183,6 +192,10 @@
 		/obj/item/clothing/suit/armor/vest/security,
 		/obj/item/clothing/head/helmet/tactical/sec/preattached,
 		/obj/item/weapon/storage/box/large/securitygear,
+		/obj/item/clothing/head/stalhelm,
+		/obj/item/clothing/suit/soldiercoat,
+		/obj/item/clothing/under/soldieruniform,
+		/obj/item/weapon/kitchen/utensil/knife/nazi,
 	)
 
 
@@ -256,6 +269,11 @@
 		/obj/item/clothing/accessory/holster/handgun/wornout,
 		/obj/item/weapon/gun/projectile/detective,
 		/obj/item/weapon/storage/box/large/detectivegear,
+		/obj/item/clothing/suit/soldiercoat,
+		/obj/item/clothing/under/soldieruniform,
+		/obj/item/weapon/kitchen/utensil/knife/nazi,
+		/obj/item/clothing/head/panzer,
+		/obj/item/clothing/shoes/jackboots,
 	)
 
 /obj/structure/closet/secure_closet/detective/update_icon()
