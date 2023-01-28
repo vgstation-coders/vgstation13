@@ -39,7 +39,7 @@
 /obj/item/stack/tile/metal/can_drag_use(mob/user, turf/T)
 	if(user.Adjacent(T)) //can we place here
 		var/canbuild = T.canBuildPlating()
-		if(canbuild == BUILD_SUCCESS || canbuild == BUILD_IGNORE)
+		if(canbuild == BUILD_SUCCESS || canbuild == BUILD_IGNORE || (T.canBuildFloortile() && !istype(src,/obj/item/stack/tile/metal/plasteel)))
 			if(use(1)) //place and use rod
 				return 1
 			else
@@ -47,6 +47,11 @@
 				active = null
 
 /obj/item/stack/tile/metal/drag_use(mob/user, turf/T)
+	if(T.canBuildFloortile() && !istype(src,/obj/item/stack/tile/metal/plasteel) && istype(T,/turf/simulated/floor))
+		var/turf/simulated/floor/F = T
+		F.make_tiled_floor(src)
+		playsound(T, 'sound/weapons/Genhit.ogg', 25, 1)
+		return
 	if(T.canBuildPlating() == BUILD_SUCCESS) //This deletes lattices, only necessary for BUILD_SUCCESS
 		var/L = locate(/obj/structure/lattice) in T
 		if(!L)

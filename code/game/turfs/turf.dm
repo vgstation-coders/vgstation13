@@ -610,6 +610,13 @@
 /turf/proc/canBuildPlating()
 	return BUILD_SILENT_FAILURE
 
+//Return true to allow floor tile coverings
+/turf/proc/canBuildFloortile()
+	return is_plating()
+
+/turf/simulated/floor/canBuildFloortile()
+	return ..() && !burnt && !broken
+
 /turf/proc/dismantle_wall()
 	return
 
