@@ -27,6 +27,8 @@
 		/obj/item/clothing/head/peaked = 3,
 		/obj/item/clothing/head/garrison = 2,
 		/obj/item/clothing/head/cowboy/sec = 3,
+		/obj/item/clothing/under/soldieruniform = 2,
+		/obj/item/clothing/head/panzer = 2,
 	)
 
 /obj/structure/closet/wardrobe/pink
