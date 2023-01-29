@@ -298,7 +298,7 @@
 
 		if(mode == MODE_DRAWING)
 			draw_graffiti(old_pos)
-		else if(mode == MODE_PEELS)
+		else if(mode == MODE_PEELS && !(locate(/obj/item/weapon/bananapeel) in src.loc.contents))
 			if(!emagged)
 				new /obj/item/weapon/bananapeel/(old_pos)
 				reagents.remove_reagent(BANANA,BANANA_FOR_NORMAL_PEEL)
