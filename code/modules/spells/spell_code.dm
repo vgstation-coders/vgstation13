@@ -101,6 +101,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/gradual_casting = FALSE //equals TRUE while a Sp_GRADUAL spell is actively being cast
 
 	var/list/holiday_required = list() // The holiday this spell is restricted to ! Leave empty if none.
+	var/civil_war_only = FALSE // Set true to only allow this spell during civil war
 	var/block = 0//prevents some spells from being spamed
 	var/obj/delay_animation = null
 	var/user_dir //Used by NO_TURNING to memorize the user's direction and turn them around
