@@ -174,11 +174,10 @@
 	if(!can_track_atom(target))
 		to_chat(src, "Target is not near any active camera.")
 		return
-	else
-		if(locked_to)
-			target.lock_atom(eyeobj,/datum/locking_category/ai_eye)
-		else
-			eyeobj.unlock_from()
+
+	stop_ai_tracking()
+	eyeobj.forceMove(get_turf(target))
+	target.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 
 	target.register_event(/event/cameranet_entered,src,.proc/on_camera_enter)
 	target.register_event(/event/cameranet_exited,src,.proc/on_camera_exit)
@@ -196,7 +195,8 @@
 		target.unlock_atom(eyeobj)
 
 /mob/living/silicon/ai/proc/stop_ai_tracking()
-	if(eyeobj.locked_to)
+	if(eyeobj?.locked_to)
+		to_chat(src, "No longer tracking [eyeobj.locked_to.name] on camera.")
 		eyeobj.locked_to.unregister_event(/event/cameranet_entered,src,.proc/on_camera_enter)
 		eyeobj.locked_to.unregister_event(/event/cameranet_exited,src,.proc/on_camera_exit)
 		eyeobj.unlock_from()

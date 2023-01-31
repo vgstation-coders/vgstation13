@@ -578,10 +578,7 @@ var/list/ai_list = list()
 
 
 /mob/living/silicon/ai/proc/switchCamera(var/obj/machinery/camera/C)
-
-
-	if(eyeobj.locked_to)
-		eyeobj.unlock_from()
+	stop_ai_tracking()
 
 	if(!C || isDead()) //C.can_use())
 		return FALSE

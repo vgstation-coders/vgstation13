@@ -168,8 +168,7 @@
 		T.malf_release_control()
 
 	current = null
-	if(eyeobj.locked_to)
-		eyeobj.unlock_from()
+	stop_ai_tracking()
 	unset_machine()
 
 	if(!loc)
