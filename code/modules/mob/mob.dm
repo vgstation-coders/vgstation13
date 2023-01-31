@@ -2236,21 +2236,15 @@ Use this proc preferably at the end of an equipment loadout
 		return null
 	if(isalien(target))
 		return null
-	if(target.is_wearing_item(/obj/item/clothing/mask/gas/voice))
-		return null
-	if(target.is_wearing_item(/obj/item/clothing/head/helmet/stun/))
-		return null
-	if(target.is_wearing_item(/obj/item/clothing/gloves/ninja))
-		return null
-	if(target.is_wearing_item(/obj/item/clothing/head/tinfoil))
-		return null
-	if(target.is_wearing_item(/obj/item/clothing/head/helmet/space/martian))
-		return null
+	for(var/obj/item/I in target.get_equipped_items())
+		if(I.blocks_tracking && !is_wearing_item(I,slot_wear_id))
+			return null
 	if(target.is_holding_item(/obj/item/device/megaphone/madscientist))
 		return null
-	var/mob/living/carbon/human/H = target
-	if(istype(H))
-		if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+	var/obj/item/ourID = get_item_by_slot(slot_wear_id)
+	if(ourID)
+		ourID = ourID.GetID()
+		if(ourID.blocks_tracking)
 			return null
 	if(istruevampire(H))
 		return null

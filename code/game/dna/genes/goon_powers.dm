@@ -23,6 +23,17 @@
 /datum/dna/gene/basic/jamsignals/New()
 	block = JAMSIGNALSBLOCK
 
+/datum/dna/gene/basic/jamsignals/activate(var/mob/M, var/connected, var/flags)
+	..()
+	INVOKE_EVENT(M, /event/cameranet_exited, "target" = M)
+	return 1
+
+/datum/dna/gene/basic/jamsignals/deactivate(var/mob/M, var/connected, var/flags)
+	if(!..())
+		return 0
+	INVOKE_EVENT(M, /event/cameranet_entered, "target" = M)
+	return 1
+
 /////////////////////////
 // Stealth Enhancers
 /////////////////////////
