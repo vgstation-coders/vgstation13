@@ -1,4 +1,5 @@
 var/const/ANIMAL_CHILD_CAP = 50
+var/const/ANIMAL_EXTENDED_CHILD_CAP = 100
 var/global/list/animal_count = list() //Stores types, and amount of animals of that type associated with the type (example: /mob/living/simple_animal/dog = 10)
 //Animals can't breed if amount of children exceeds 50
 
