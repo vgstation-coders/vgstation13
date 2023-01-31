@@ -162,6 +162,7 @@
 
 /turf/simulated/floor/engine/update_icon()
 	overlays.Cut()
+	icon_plating = "engine" //hotfix for now
 	..()
 	if(floor_tile)
 		if(secured)
