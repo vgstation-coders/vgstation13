@@ -53,6 +53,13 @@ var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
 	to_chat(speech.speaker, "\The [src] [pick("creaks", "whines", "crackles", "whirrs", 1;"makes an odd static/popping noise that you kind of recognize as similar to a geiger counter", 1;"squeaks")] \
 		as it transmits your voice into the set frequency...") //Since you may not be able to hear your own demands, some feedback that they're getting through
 
+/obj/item/device/megaphone/madscientist/pickup(mob/user)
+	INVOKE_EVENT(user, /event/cameranet_exited, "target" = user)
+
+/obj/item/device/megaphone/madscientist/dropped(mob/user)
+	..()
+	INVOKE_EVENT(user, /event/cameranet_entered, "target" = user)
+
 /obj/item/device/megaphone/madscientist/attack_self(mob/living/user as mob)
 	show_ui(user)
 
