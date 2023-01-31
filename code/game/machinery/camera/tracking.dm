@@ -187,6 +187,7 @@
 
 /mob/living/silicon/ai/proc/on_camera_enter(var/atom/movable/target)
 	if(eyeobj && !eyeobj.locked_to && near_camera(target))
+		to_chat(src, "Target is not near an active camera again.")
 		target.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 
 /mob/living/silicon/ai/proc/on_camera_exit(var/atom/movable/target)
