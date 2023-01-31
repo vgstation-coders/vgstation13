@@ -141,6 +141,11 @@
 			if(Obj.flags & PROXMOVE)
 				spawn( 0 )
 					Obj.HasProximity(A, 1)
+
+	if(cameranet.checkTurfVis(src))
+		INVOKE_EVENT(A, /event/cameranet_entered, "mover" = A, "location" = src, "oldloc" = OldLoc)
+	else
+		INVOKE_EVENT(A, /event/cameranet_exited, "mover" = A, "location" = src, "oldloc" = OldLoc)
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
 		return

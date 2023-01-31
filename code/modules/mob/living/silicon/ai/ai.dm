@@ -580,7 +580,8 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/proc/switchCamera(var/obj/machinery/camera/C)
 
 
-	src.cameraFollow = null
+	if(eyeobj.locked_to)
+		eyeobj.unlock_from()
 
 	if(!C || isDead()) //C.can_use())
 		return FALSE
@@ -663,7 +664,7 @@ var/list/ai_list = list()
 	set category = "AI Commands"
 	set name = "Jump To Network"
 	unset_machine()
-	src.cameraFollow = null
+	stop_ai_tracking()
 	var/cameralist[0]
 
 	if(usr.isDead())

@@ -253,7 +253,6 @@
 	return "<b>\The [pointer]</b> points its laser sight at <b>\the [pointed_at]</b>."
 
 /mob/living/silicon/pai/proc/switchCamera(var/obj/machinery/camera/C)
-	cameraFollow = null
 	if(!C)
 		unset_machine()
 		reset_view(null)
@@ -273,7 +272,6 @@
 	set name = "Cancel Camera View"
 	reset_view(null)
 	unset_machine()
-	cameraFollow = null
 
 /mob/living/silicon/pai/ClickOn(var/atom/A, var/params)
 	if(incapacitated())

@@ -168,33 +168,38 @@
 	return TRUE
 
 /mob/living/silicon/ai/proc/ai_actual_track(var/atom/target)
-	if(!istype(target))
+	if(!istype(target) || !eyeobj)
 		return
 
 	if(!can_track_atom(target))
 		to_chat(src, "Target is not near any active camera.")
 		return
+	else
+		if(locked_to)
+			target.lock_atom(eyeobj,/datum/locking_category/ai_eye)
+		else
+			eyeobj.unlock_from()
 
-	cameraFollow = target
-
+	target.register_event(event/cameranet_entered,src,.proc/on_camera_enter)
+	target.register_event(event/cameranet_exited,src,.proc/on_camera_exit)
 	to_chat(src, "Now tracking [target.name] on camera.")
 
-	spawn (0)
-		while (cameraFollow == target)
-			if (cameraFollow == null)
-				return
+/datum/locking_category/ai_eye
 
-			if(!can_track_atom(target))
-				to_chat(src, "Target is not near any active camera.")
-				sleep(10 SECONDS)
-				continue
+/mob/living/silicon/ai/proc/on_camera_enter(var/atom/target)
+	if(eyeobj && near_camera(target) && !locked_to)
+		target.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 
-			if(eyeobj)
-				eyeobj.forceMove(get_turf(target))
-			else
-				view_core()
-				return
-			sleep(1 SECONDS)
+/mob/living/silicon/ai/proc/on_camera_exit(var/atom/target)
+	if(eyeobj && !near_camera(target) && locked_to == target)
+		to_chat(src, "Target is not near any active camera.")
+		target.unlock_atom(eyeobj)
+
+/mob/living/silicon/ai/proc/stop_ai_tracking()
+	if(eyeobj.locked_to)
+		eyeobj.locked_to.unregister_event(event/cameranet_entered,src,.proc/on_camera_enter)
+		eyeobj.locked_to.unregister_event(event/cameranet_exited,src,.proc/on_camera_exit)
+		eyeobj.unlock_from()
 
 /proc/near_camera(var/mob/living/M)
 	if (!isturf(M.loc))

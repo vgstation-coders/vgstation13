@@ -1402,13 +1402,9 @@ Use this proc preferably at the end of an equipment loadout
 	set category = "IC"
 	unset_machine()
 	reset_view(null)
-	if(istype(src, /mob/living))
-		var/mob/living/M = src
-		if(M.cameraFollow)
-			M.cameraFollow = null
-		if(istype(src, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = M
-			H.handle_regular_hud_updates()
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = M
+		H.handle_regular_hud_updates()
 
 // http://www.byond.com/forum/?post=2219001#comment22205313
 // TODO: Clean up and identify the args, document

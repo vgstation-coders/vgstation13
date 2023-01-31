@@ -80,7 +80,6 @@ var/list/holopads = list()
 	/*There are pretty much only three ways to interact here.
 	I don't need to check for client since they're clicking on an object.
 	This may change in the future but for now will suffice.*/
-	user.cameraFollow = null // Stops tracking
 
 	if(master==user && holo)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
 		clear_holo()
@@ -135,7 +134,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			if(ol.loc == src)
 				ol.icon_state = "holopad1"
 				break
-		
+
 	return 1
 
 /obj/machinery/hologram/holopad/proc/create_advanced_holo(var/mob/living/silicon/ai/A)
@@ -172,14 +171,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			continue
 		newlist["[M.name]"] = M
 	return newlist
-		
+
 /obj/machinery/hologram/holopad/proc/clear_holo()
 	if(master && master.holopadoverlays.len)
 		for(var/image/ol in master.holopadoverlays)
 			if(ol.loc == src)
 				ol.icon_state = "holopad0"
 				break
-	
+
 	set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 	icon_state = "holopad0"
 	use_power = MACHINE_POWER_USE_IDLE//Passive power usage.
@@ -347,7 +346,7 @@ Holographic project of everything else.
 	density = 1
 	anchored = 0
 	var/mob/camera/aiEye/eye
-	var/obj/machinery/hologram/holopad/parent 
+	var/obj/machinery/hologram/holopad/parent
 
 /obj/effect/overlay/hologram/lifelike/New(var/loc, var/mob/living/mob_to_copy, var/mob/eyeobj, var/obj/machinery/hologram/holopad/H)
 	..()
@@ -358,12 +357,12 @@ Holographic project of everything else.
 	set_light(0)
 
 /obj/effect/overlay/hologram/lifelike/proc/steal_appearance(var/mob/living/M)
-	name = M.name 
+	name = M.name
 	appearance = M.appearance
 	if(M.lying)  // make them stand up if they were lying down
 		pixel_y += 6 * PIXEL_MULTIPLIER
 		transform = transform.Turn(-90)
-	var/datum/log/L = new 
+	var/datum/log/L = new
 	M.examine(L)
 	desc = L.log
 	qdel(L)
@@ -371,7 +370,7 @@ Holographic project of everything else.
 /obj/effect/overlay/hologram/lifelike/examine(mob/user, var/size = "")
 	if(desc)
 		to_chat(user, desc)
-	
+
 
 /obj/effect/overlay/hologram/lifelike/attack_hand(var/mob/living/M)
 	M.visible_message(\

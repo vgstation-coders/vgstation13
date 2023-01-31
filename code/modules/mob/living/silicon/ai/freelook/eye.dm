@@ -97,7 +97,8 @@
 	if(istype(usr, /mob/living/silicon/ai))
 		var/mob/living/silicon/ai/AI = usr
 		if(AI.eyeobj && AI.client.eye == AI.eyeobj)
-			AI.cameraFollow = null
+			if(eyeobj.locked_to)
+				eyeobj.unlock_from()
 			//AI.eyeobj.forceMove(src)
 			if (isturf(src.loc) || isturf(src))
 				AI.eyeobj.forceMove(src)
@@ -110,7 +111,7 @@
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50
 
-	var/obj/machinery/turret/T = user.current 
+	var/obj/machinery/turret/T = user.current
 	var/obj/machinery/hologram/holopad/H = user.current
 
 	if(istype(T))
@@ -123,7 +124,7 @@
 		CAN_MOVE_DIAGONALLY = FALSE
 		user.eyeobj.glide_size = DELAY2GLIDESIZE(1)
 		user.delayNextMove(1)
-	else 
+	else
 		user.eyeobj.glide_size = WORLD_ICON_SIZE
 		CAN_MOVE_DIAGONALLY = TRUE
 
@@ -154,7 +155,8 @@
 	else
 		user.sprint = initial
 
-	user.cameraFollow = null
+	if(eyeobj.locked_to)
+		eyeobj.unlock_from()
 
 	//user.unset_machine() //Uncomment this if it causes problems.
 	//user.lightNearbyCamera()
@@ -169,7 +171,8 @@
 		T.malf_release_control()
 
 	current = null
-	cameraFollow = null
+	if(eyeobj.locked_to)
+		eyeobj.unlock_from()
 	unset_machine()
 
 	if(!loc)
@@ -210,7 +213,7 @@
 	if(!T)
 		to_chat(src, "<span class='danger'>Nowhere to jump to!</span>")
 		return
-	cameraFollow = null
+	stop_ai_tracking()
 	eyeobj.forceMove(T)
 
 /mob/living/silicon/ai/proc/toggleholopadoverlays() //shows holopads above all static
