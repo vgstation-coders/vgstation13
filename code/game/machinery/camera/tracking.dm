@@ -186,13 +186,13 @@
 /datum/locking_category/ai_eye
 
 /mob/living/silicon/ai/proc/on_camera_enter(var/atom/movable/target)
-	if(eyeobj && !eyeobj.locked_to && near_camera(target))
-		to_chat(src, "Target is near an active camera again.")
+	if(eyeobj && !eyeobj.locked_to && can_track_atom(target))
+		to_chat(src, "Target is trackable again.")
 		target.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 
 /mob/living/silicon/ai/proc/on_camera_exit(var/atom/movable/target)
-	if(eyeobj?.locked_to == target && !near_camera(target))
-		to_chat(src, "Target is not near any active camera.")
+	if(eyeobj?.locked_to == target && !can_track_atom(target))
+		to_chat(src, "Target is no longer trackable.")
 		target.unlock_atom(eyeobj)
 
 /mob/living/silicon/ai/proc/stop_ai_tracking()
