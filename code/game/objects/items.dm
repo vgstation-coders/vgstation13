@@ -494,9 +494,9 @@
 	for(var/x in actions)
 		var/datum/action/A = x
 		A.Remove(user)
-	if(blocks_tracking)
+	if(blocks_tracking && !isID(src))
 		INVOKE_EVENT(user, /event/cameranet_entered, "target" = user)
-	else if(slot == slot_wear_id)
+	else if(from_slot == slot_wear_id)
 		var/obj/item/subID = GetID()
 		if(subID?.blocks_tracking)
 			INVOKE_EVENT(user, /event/cameranet_entered, "target" = user)
