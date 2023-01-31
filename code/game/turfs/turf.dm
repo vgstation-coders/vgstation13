@@ -618,7 +618,7 @@
 	return ..() && !burnt && !broken
 
 /turf/simulated/floor/engine/canBuildFloortile(var/tiletype)
-	return ispath(tiletype,/obj/item/stack/tile/metal/plasteel)
+	return ispath(tiletype,/obj/item/stack/tile/metal/plasteel) && is_plating()
 
 /turf/proc/dismantle_wall()
 	return
