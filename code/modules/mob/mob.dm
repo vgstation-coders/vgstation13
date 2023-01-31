@@ -1403,7 +1403,7 @@ Use this proc preferably at the end of an equipment loadout
 	unset_machine()
 	reset_view(null)
 	if(ishuman(src))
-		var/mob/living/carbon/human/H = M
+		var/mob/living/carbon/human/H = src
 		H.handle_regular_hud_updates()
 
 // http://www.byond.com/forum/?post=2219001#comment22205313

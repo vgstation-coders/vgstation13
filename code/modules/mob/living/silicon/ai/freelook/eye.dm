@@ -97,9 +97,7 @@
 	if(istype(usr, /mob/living/silicon/ai))
 		var/mob/living/silicon/ai/AI = usr
 		if(AI.eyeobj && AI.client.eye == AI.eyeobj)
-			if(eyeobj.locked_to)
-				eyeobj.unlock_from()
-			//AI.eyeobj.forceMove(src)
+			AI.stop_ai_tracking()
 			if (isturf(src.loc) || isturf(src))
 				AI.eyeobj.forceMove(src)
 
@@ -155,8 +153,7 @@
 	else
 		user.sprint = initial
 
-	if(eyeobj.locked_to)
-		eyeobj.unlock_from()
+	user.stop_ai_tracking()
 
 	//user.unset_machine() //Uncomment this if it causes problems.
 	//user.lightNearbyCamera()
