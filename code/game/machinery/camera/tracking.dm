@@ -167,7 +167,7 @@
 
 	return TRUE
 
-/mob/living/silicon/ai/proc/ai_actual_track(var/atom/target)
+/mob/living/silicon/ai/proc/ai_actual_track(var/atom/movable/target)
 	if(!istype(target) || !eyeobj)
 		return
 
