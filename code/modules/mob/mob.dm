@@ -2237,16 +2237,16 @@ Use this proc preferably at the end of an equipment loadout
 	if(isalien(target))
 		return null
 	for(var/obj/item/I in target.get_equipped_items())
-		if(I.blocks_tracking && !is_wearing_item(I,slot_wear_id))
+		if(I.blocks_tracking && !target.is_wearing_item(I,slot_wear_id))
 			return null
 	if(target.is_holding_item(/obj/item/device/megaphone/madscientist))
 		return null
-	var/obj/item/ourID = get_item_by_slot(slot_wear_id)
+	var/obj/item/ourID = target.get_item_by_slot(slot_wear_id)
 	if(ourID)
 		ourID = ourID.GetID()
 		if(ourID.blocks_tracking)
 			return null
-	if(istruevampire(H))
+	if(istruevampire(target))
 		return null
 	var/datum/role/changeling/C = target.mind.GetRole(CHANGELING)
 	if(istype(C))
