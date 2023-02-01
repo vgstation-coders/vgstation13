@@ -115,6 +115,7 @@
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 	req_access = list(access_security)
+	holds_armory_items = TRUE
 
 /obj/machinery/suit_storage_unit/captain
 	name = "Command Suit Storage Unit"

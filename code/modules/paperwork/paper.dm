@@ -771,9 +771,9 @@ var/global/list/paper_folding_results = list ( \
 		if(wardenarea)
 			stufftocheck += wardenarea.contents
 		for(var/obj/O in stufftocheck)
-			if(isitem(O) || is_type_in_list(O,list(/obj/machinery/flasher/portable,/obj/machinery/detector,/obj/machinery/deployable/barrier)))
+			if(O.on_armory_manifest)
 				manifest_stuff += O
-			else if(is_type_in_list(O,list(/obj/structure/closet,/obj/machinery/suit_storage_unit)))
+			if(O.holds_armory_items)
 				for(var/obj/item/I in O.contents)
 					manifest_stuff += O
 		info += counted_english_list(manifest_stuff,"No items found.","","<br>","<br>")
