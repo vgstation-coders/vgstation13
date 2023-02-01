@@ -141,7 +141,6 @@
 			if(Obj.flags & PROXMOVE)
 				spawn( 0 )
 					Obj.HasProximity(A, 1)
-
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
 		return
