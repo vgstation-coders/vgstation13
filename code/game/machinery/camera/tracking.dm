@@ -191,12 +191,12 @@
 /datum/locking_category/ai_eye
 
 /mob/living/silicon/ai/proc/on_camera_enter(var/atom/movable/target)
-	if(currently_tracking)
+	if(eyeobj && currently_tracking)
 		var/cantrack = can_track_atom(target)
-		if(eyeobj && !eyeobj.locked_to && cantrack)
+		if(!eyeobj.locked_to && cantrack)
 			to_chat(src, "Target is trackable again.")
 			target.lock_atom(eyeobj,/datum/locking_category/ai_eye)
-		else if(!cantrack && eyeobj?.locked_to == target)
+		else if(!cantrack && eyeobj.locked_to == target)
 			to_chat(src, "Target is no longer trackable.")
 			target.unlock_atom(eyeobj)
 
