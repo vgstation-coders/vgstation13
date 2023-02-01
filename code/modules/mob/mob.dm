@@ -2237,7 +2237,7 @@ Use this proc preferably at the end of an equipment loadout
 	if(isalien(target))
 		return null
 	for(var/obj/item/I in target.get_equipped_items())
-		if(I.blocks_tracking && !target.is_wearing_item(I,slot_wear_id))
+		if(I.blocks_tracking)
 			return null
 	if(target.is_holding_item(/obj/item/device/megaphone/madscientist))
 		return null
