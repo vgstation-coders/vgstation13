@@ -183,14 +183,15 @@
 	eyeobj.forceMove(get_turf(currently_tracking))
 	currently_tracking.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 
-	currently_tracking.register_event(/event/entered,src,.proc/on_camera_enter)
-	currently_tracking.register_event(/event/cameranet_entered,src,.proc/on_camera_enter)
-	currently_tracking.register_event(/event/cameranet_exited,src,.proc/on_camera_exit)
+	currently_tracking.register_event(/event/entered,src,.proc/on_camera_change)
+	currently_tracking.register_event(/event/equipped,src,.proc/on_camera_change)
+	currently_tracking.register_event(/event/unequipped,src,.proc/on_camera_change)
+	currently_tracking.register_event(/event/cameranet_changed,src,.proc/on_camera_change)
 	to_chat(src, "Now tracking [currently_tracking.name] on camera.")
 
 /datum/locking_category/ai_eye
 
-/mob/living/silicon/ai/proc/on_camera_enter(var/atom/movable/target)
+/mob/living/silicon/ai/proc/on_camera_change(var/atom/movable/target)
 	if(eyeobj && currently_tracking)
 		var/cantrack = can_track_atom(target)
 		if(!eyeobj.locked_to && cantrack)
@@ -200,17 +201,13 @@
 			to_chat(src, "Target is no longer trackable.")
 			target.unlock_atom(eyeobj)
 
-/mob/living/silicon/ai/proc/on_camera_exit(var/atom/movable/target)
-	if(currently_tracking && eyeobj?.locked_to == target && !can_track_atom(target))
-		to_chat(src, "Target is no longer trackable.")
-		target.unlock_atom(eyeobj)
-
 /mob/living/silicon/ai/proc/stop_ai_tracking()
 	if(currently_tracking)
 		to_chat(src, "No longer tracking [currently_tracking.name] on camera.")
-		currently_tracking.unregister_event(/event/entered,src,.proc/on_camera_enter)
-		currently_tracking.unregister_event(/event/cameranet_entered,src,.proc/on_camera_enter)
-		currently_tracking.unregister_event(/event/cameranet_exited,src,.proc/on_camera_exit)
+		currently_tracking.unregister_event(/event/entered,src,.proc/on_camera_change)
+		currently_tracking.unregister_event(/event/equipped,src,.proc/on_camera_change)
+		currently_tracking.unregister_event(/event/unequipped,src,.proc/on_camera_change)
+		currently_tracking.unregister_event(/event/cameranet_changed,src,.proc/on_camera_change)
 		if(eyeobj?.locked_to == currently_tracking)
 			currently_tracking.unlock_from()
 

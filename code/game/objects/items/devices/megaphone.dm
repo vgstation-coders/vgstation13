@@ -54,11 +54,11 @@ var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
 		as it transmits your voice into the set frequency...") //Since you may not be able to hear your own demands, some feedback that they're getting through
 
 /obj/item/device/megaphone/madscientist/pickup(mob/user)
-	INVOKE_EVENT(user, /event/cameranet_exited, "target" = user)
+	INVOKE_EVENT(user, /event/cameranet_changed, "target" = user)
 
 /obj/item/device/megaphone/madscientist/dropped(mob/user)
 	..()
-	INVOKE_EVENT(user, /event/cameranet_entered, "target" = user)
+	INVOKE_EVENT(user, /event/cameranet_changed, "target" = user)
 
 /obj/item/device/megaphone/madscientist/attack_self(mob/living/user as mob)
 	show_ui(user)

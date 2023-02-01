@@ -262,9 +262,7 @@
 // atom/movable/exiter: the movable exiting the area
 /event/area_exited
 
-/event/cameranet_entered
-
-/event/cameranet_exited
+/event/cameranet_changed
 
 // Note: the following are used by datum/component/ai subtypes to give instructions to each other.
 // AI components are expected to INVOKE_EVENT these to send commands to other components

@@ -479,12 +479,7 @@
 		if(item_action_slot_check(slot, user)) //some items only give their actions buttons when in a specific slot.
 			A.Grant(user)
 	INVOKE_EVENT(src, /event/equipped, "user" = user)
-	if(blocks_tracking && !isID(src))
-		INVOKE_EVENT(user, /event/cameranet_exited, "target" = user)
-	else if(slot == slot_wear_id)
-		var/obj/item/subID = GetID()
-		if(subID?.blocks_tracking)
-			INVOKE_EVENT(user, /event/cameranet_exited, "target" = user)
+	return
 
 /obj/item/proc/item_action_slot_check(slot, mob/user)
 	return 1
@@ -494,12 +489,6 @@
 	for(var/x in actions)
 		var/datum/action/A = x
 		A.Remove(user)
-	if(blocks_tracking && !isID(src))
-		INVOKE_EVENT(user, /event/cameranet_entered, "target" = user)
-	else if(from_slot == slot_wear_id)
-		var/obj/item/subID = GetID()
-		if(subID?.blocks_tracking)
-			INVOKE_EVENT(user, /event/cameranet_entered, "target" = user)
 	return
 
 //the mob M is attempting to equip this item into the slot passed through as 'slot'. Return 1 if it can do this and 0 if it can't.
