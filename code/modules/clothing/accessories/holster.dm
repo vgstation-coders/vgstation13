@@ -6,6 +6,7 @@
 	var/obj/item/holstered = null
 	accessory_exclusion = HOLSTER
 	autoignition_temperature = AUTOIGNITION_ORGANIC //leather
+	on_armory_manifest = TRUE
 	var/holster_verb_name = "Holster"
 
 /obj/item/clothing/accessory/holster/proc/can_holster(obj/item/weapon/gun/W)

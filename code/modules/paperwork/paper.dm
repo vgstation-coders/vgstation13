@@ -774,7 +774,7 @@ var/global/list/paper_folding_results = list ( \
 					for(var/obj/item/I in O.contents)
 						if(O.on_armory_manifest)
 							manifest_stuff += O
-			info += "[counted_english_list(manifest_stuff,"No items found.","","<br>","<br>")]<br>"
+			info += counted_english_list(manifest_stuff,"No items found.","","<br>","<br>")
 	else
 		info = "This station has been inspected by Nanotrasen Officers and has been found to not have any kind of [english_list(areastocheck,and_text = "or")]. If you believe to have received this manifest by mistake, contact Central Command."
 	update_icon()
