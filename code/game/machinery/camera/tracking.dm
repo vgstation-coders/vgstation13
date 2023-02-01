@@ -1,3 +1,6 @@
+/mob/living/silicon/ai
+	var/atom/movable/currently_tracking = null
+
 /mob/living/silicon/ai/proc/get_camera_list()
 
 
@@ -176,13 +179,14 @@
 		return
 
 	stop_ai_tracking()
-	eyeobj.forceMove(get_turf(target))
-	target.lock_atom(eyeobj,/datum/locking_category/ai_eye)
+	currently_tracking = target
+	eyeobj.forceMove(get_turf(currently_tracking))
+	currently_tracking.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 
-	target.register_event(/event/entered,src,.proc/on_camera_enter)
-	target.register_event(/event/cameranet_entered,src,.proc/on_camera_enter)
-	target.register_event(/event/cameranet_exited,src,.proc/on_camera_exit)
-	to_chat(src, "Now tracking [target.name] on camera.")
+	currently_tracking.register_event(/event/entered,src,.proc/on_camera_enter)
+	currently_tracking.register_event(/event/cameranet_entered,src,.proc/on_camera_enter)
+	currently_tracking.register_event(/event/cameranet_exited,src,.proc/on_camera_exit)
+	to_chat(src, "Now tracking [currently_tracking.name] on camera.")
 
 /datum/locking_category/ai_eye
 
@@ -199,12 +203,13 @@
 		target.unlock_atom(eyeobj)
 
 /mob/living/silicon/ai/proc/stop_ai_tracking()
-	if(eyeobj?.locked_to)
-		to_chat(src, "No longer tracking [eyeobj.locked_to.name] on camera.")
-		eyeobj.locked_to.unregister_event(/event/entered,src,.proc/on_camera_enter)
-		eyeobj.locked_to.unregister_event(/event/cameranet_entered,src,.proc/on_camera_enter)
-		eyeobj.locked_to.unregister_event(/event/cameranet_exited,src,.proc/on_camera_exit)
-		eyeobj.unlock_from()
+	if(currently_tracking)
+		to_chat(src, "No longer tracking [currently_tracking.name] on camera.")
+		currently_tracking.unregister_event(/event/entered,src,.proc/on_camera_enter)
+		currently_tracking.unregister_event(/event/cameranet_entered,src,.proc/on_camera_enter)
+		currently_tracking.unregister_event(/event/cameranet_exited,src,.proc/on_camera_exit)
+		if(eyeobj?.locked_to == currently_tracking)
+			currently_tracking.unlock_from()
 
 /proc/near_camera(var/mob/living/M)
 	if (!isturf(M.loc))
