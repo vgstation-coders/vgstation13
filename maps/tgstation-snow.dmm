@@ -57889,10 +57889,7 @@
 "ege" = (
 /obj/structure/table,
 /obj/item/weapon/storage/bag/clipboard,
-/obj/item/weapon/paper{
-	info = "<h1> Secure Armory </h1> <br>1 Laser Rifle <br>1 Mysterious Armor Suit<br>2 Mr. V.A.L.I.D. Portable Threat Detectors <br>2 Portable Flashers <br>4 Nanotrasen Universal Self-loading Pistols <br>4 .45 magazines (lethal) <br>3 sets of Security Hardsuits <br>3 sets of Riot Armor <br>3 Shotguns <br>3 Stun Batons <br>3 Riot Shields <br>3 Bandoliers <br>3 Energy Guns <br>3 Laser Guns <br>3 Ion Rifles <br>3 Bulletproof Vests <br>3 Armor Vests <br>1 Ablative Vest <br>4 Portable Barriers <br><h1> Armory </h1> <br>1 Box of spare Handcuffs <br>1 Box of spare R.O.B.U.S.T. cartridges <br>1 Box of Flashbangs <br>1 Box of Smoke Bombs <br>3 Gas Masks <br>1 Box of Shotgun Buckshot Shells <br>1 Box of Shotgun Slug Shells <br>1 Box of Shotgun Beanbag Shells <br>1 Box of Shotgun Dart Shells <br>1 Box of Shotgun Stun Shells <br>1 EOD Suit <br>1 Biohazard Suit <br>1 Lockbox with Loyalty Implants <br>1 Chemical Implant Kit <br>1 Tracking Implant Kit";
-	name = "Armory Inventory"
-	},
+/obj/item/weapon/paper/armory,
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;

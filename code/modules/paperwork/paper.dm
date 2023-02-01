@@ -754,3 +754,23 @@ var/global/list/paper_folding_results = list ( \
                           <B>NOTICE.</B> Notice of intent to dissolve relationship must be given by fax with at least one day advance notice.<BR>
                           <B>FORCE MAJEURE.</B> This contract may be voided if the trade outpost is destroyed.
                          </h2> <BR></body></html>"}
+
+/obj/item/weapon/paper/armory
+	name = "\improper Armory Iventory Manifest"
+
+/obj/item/weapon/paper/armory/initialize()
+	..()
+	var/area/armoryarea = locate(/area/security/armory) in areas
+	if(armoryarea)
+		info = "<h1> Secure Armory Item List </h1><br>"
+		var/list/obj/manifest_stuff = list()
+		for(var/obj/O in armoryarea)
+			if(isitem(O) || is_type_in_list(O,list(/obj/machinery/flasher/portable,/obj/machinery/detector,/obj/machinery/deployable/barrier)))
+				manifest_stuff += O
+			else if(is_type_in_list(O,list(/obj/structure/closet,/obj/machinery/suit_storage_unit)))
+				for(var/obj/item/I in O.contents)
+					manifest_stuff += O
+		info += counted_english_list(manifest_stuff,"No items found.","","<br>","<br>")
+	else
+		info = "This station has been inspected by Nanotrasen Officers and has been found to not have any kind of secure armory. If you believe to have received this manifest by mistake, contact Central Command."
+	update_icon()
