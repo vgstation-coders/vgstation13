@@ -142,11 +142,6 @@
 				spawn( 0 )
 					Obj.HasProximity(A, 1)
 
-	if(ismob(A) || ismecha(A))
-		if(cameranet.checkTurfVis(src))
-			INVOKE_EVENT(A, /event/cameranet_entered, "target" = A)
-		else
-			INVOKE_EVENT(A, /event/cameranet_exited, "target" = A)
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
 		return

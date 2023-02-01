@@ -179,6 +179,7 @@
 	eyeobj.forceMove(get_turf(target))
 	target.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 
+	target.register_event(/event/entered,src,.proc/on_camera_enter)
 	target.register_event(/event/cameranet_entered,src,.proc/on_camera_enter)
 	target.register_event(/event/cameranet_exited,src,.proc/on_camera_exit)
 	to_chat(src, "Now tracking [target.name] on camera.")
@@ -189,6 +190,8 @@
 	if(eyeobj && !eyeobj.locked_to && can_track_atom(target))
 		to_chat(src, "Target is trackable again.")
 		target.lock_atom(eyeobj,/datum/locking_category/ai_eye)
+	else
+		on_camera_exit(target)
 
 /mob/living/silicon/ai/proc/on_camera_exit(var/atom/movable/target)
 	if(eyeobj?.locked_to == target && !can_track_atom(target))
@@ -198,6 +201,7 @@
 /mob/living/silicon/ai/proc/stop_ai_tracking()
 	if(eyeobj?.locked_to)
 		to_chat(src, "No longer tracking [eyeobj.locked_to.name] on camera.")
+		eyeobj.locked_to.unregister_event(/event/entered,src,.proc/on_camera_enter)
 		eyeobj.locked_to.unregister_event(/event/cameranet_entered,src,.proc/on_camera_enter)
 		eyeobj.locked_to.unregister_event(/event/cameranet_exited,src,.proc/on_camera_exit)
 		eyeobj.unlock_from()
