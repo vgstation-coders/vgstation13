@@ -33,6 +33,7 @@
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
 	autoignition_temperature = AUTOIGNITION_PAPER
+	on_armory_manifest = TRUE
 
 /obj/item/weapon/storage/box/large
 	name = "large box"

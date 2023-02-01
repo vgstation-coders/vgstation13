@@ -20,7 +20,6 @@
 	var/obj/item/offhand/wielded = null
 	pass_flags = PASSTABLE
 	pressure_resistance = 5
-	on_armory_manifest = TRUE
 //	causeerrorheresoifixthis
 	var/obj/item/master = null//apparently used by device assemblies to track the object they are attached to.
 

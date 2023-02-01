@@ -762,24 +762,19 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/inventory/initialize()
 	..()
-	var/list/stufftocheck = list()
-	var/areafound = FALSE
 	for(var/areatype in areastocheck)
 		var/area/A = locate(areatype) in areas
 		if(A)
-			areafound = TRUE
-			stufftocheck += A.contents
-	if(areafound)
-		info = "<h1> Secure Armory Item List </h1><br>"
-		var/list/obj/manifest_stuff = list()
-		for(var/obj/O in stufftocheck)
-			if(O.on_armory_manifest)
-				manifest_stuff += O
-			if(O.holds_armory_items)
-				for(var/obj/item/I in O.contents)
-					if(O.on_armory_manifest)
-						manifest_stuff += O
-		info += counted_english_list(manifest_stuff,"No items found.","","<br>","<br>")
+			info = "<h1>[A.name] Item List</h1><br>"
+			var/list/obj/manifest_stuff = list()
+			for(var/obj/O in A.contents)
+				if(O.on_armory_manifest)
+					manifest_stuff += O
+				if(O.holds_armory_items)
+					for(var/obj/item/I in O.contents)
+						if(O.on_armory_manifest)
+							manifest_stuff += O
+			info += "[counted_english_list(manifest_stuff,"No items found.","","<br>","<br>")]<br>"
 	else
 		info = "This station has been inspected by Nanotrasen Officers and has been found to not have any kind of [english_list(areastocheck,and_text = "or")]. If you believe to have received this manifest by mistake, contact Central Command."
 	update_icon()

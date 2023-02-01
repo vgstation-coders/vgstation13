@@ -28,6 +28,7 @@
 	harm_label_examine = list("<span class='info'>A label is stuck to the trigger, but it is too small to get in the way.</span>", "<span class='warning'>A label firmly sticks the trigger to the guard!</span>")
 	ghost_read = 0
 	hitsound = 'sound/weapons/smash.ogg'
+	on_armory_manifest = TRUE
 	var/fire_sound = 'sound/weapons/Gunshot.ogg'
 	var/fire_action = "fire"
 	var/empty_sound = 'sound/weapons/empty.ogg'
