@@ -57889,7 +57889,7 @@
 "ege" = (
 /obj/structure/table,
 /obj/item/weapon/storage/bag/clipboard,
-/obj/item/weapon/paper/armory,
+/obj/item/weapon/paper/inventory/armory,
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;

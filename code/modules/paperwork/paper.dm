@@ -755,21 +755,23 @@ var/global/list/paper_folding_results = list ( \
                           <B>FORCE MAJEURE.</B> This contract may be voided if the trade outpost is destroyed.
                          </h2> <BR></body></html>"}
 
-/obj/item/weapon/paper/armory
-	name = "\improper Armory Iventory Manifest"
+/obj/item/weapon/paper/inventory
+	name = "\improper Iventory Manifest"
+	desc = "A list of objects in an area to check against the current inventory for misplacement."
+	var/list/areastocheck = list()
 
-/obj/item/weapon/paper/armory/initialize()
+/obj/item/weapon/paper/inventory/initialize()
 	..()
-	var/area/armoryarea = locate(/area/security/armory) in areas
-	var/area/wardenarea = locate(/area/security/warden) in areas
-	if(armoryarea || wardenarea)
+	var/list/stufftocheck = list()
+	var/areafound = FALSE
+	for(var/areatype in areastocheck)
+		var/area/A = locate(areatype) in areas
+		if(A)
+			areafound = TRUE
+			stufftocheck += A.contents
+	if(areafound)
 		info = "<h1> Secure Armory Item List </h1><br>"
 		var/list/obj/manifest_stuff = list()
-		var/list/stufftocheck = list()
-		if(armoryarea)
-			stufftocheck += armoryarea.contents
-		if(wardenarea)
-			stufftocheck += wardenarea.contents
 		for(var/obj/O in stufftocheck)
 			if(O.on_armory_manifest)
 				manifest_stuff += O
@@ -779,5 +781,9 @@ var/global/list/paper_folding_results = list ( \
 						manifest_stuff += O
 		info += counted_english_list(manifest_stuff,"No items found.","","<br>","<br>")
 	else
-		info = "This station has been inspected by Nanotrasen Officers and has been found to not have any kind of secure armory. If you believe to have received this manifest by mistake, contact Central Command."
+		info = "This station has been inspected by Nanotrasen Officers and has been found to not have any kind of [english_list(areastocheck,and_text = "or")]. If you believe to have received this manifest by mistake, contact Central Command."
 	update_icon()
+
+/obj/item/weapon/paper/inventory/armory
+	name = "\improper Armory Iventory Manifest"
+	areastocheck = list(/area/security/armory,/area/security/warden)
