@@ -765,7 +765,11 @@ var/global/list/paper_folding_results = list ( \
 	if(armoryarea || wardenarea)
 		info = "<h1> Secure Armory Item List </h1><br>"
 		var/list/obj/manifest_stuff = list()
-		var/list/stufftocheck = armoryarea.contents + wardenarea.contents
+		var/list/stufftocheck = list()
+		if(armoryarea)
+			stufftocheck += armoryarea.contents
+		if(wardenarea)
+			stufftocheck += wardenarea.contents
 		for(var/obj/O in stufftocheck)
 			if(isitem(O) || is_type_in_list(O,list(/obj/machinery/flasher/portable,/obj/machinery/detector,/obj/machinery/deployable/barrier)))
 				manifest_stuff += O
