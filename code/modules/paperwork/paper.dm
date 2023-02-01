@@ -762,9 +762,11 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/inventory/initialize()
 	..()
+	var/areafound = FALSE
 	for(var/areatype in areastocheck)
 		var/area/A = locate(areatype) in areas
 		if(A)
+			areafound = TRUE
 			info = "<h1>[A.name] Item List</h1><br>"
 			var/list/obj/manifest_stuff = list()
 			for(var/obj/O in A.contents)
@@ -774,8 +776,8 @@ var/global/list/paper_folding_results = list ( \
 					for(var/obj/item/I in O.contents)
 						if(O.on_armory_manifest)
 							manifest_stuff += O
-			info += counted_english_list(manifest_stuff,"No items found.","","<br>","<br>")
-	else
+			info += "[counted_english_list(manifest_stuff,"No items found.","","<br>","<br>")]<br>"
+	if(!areafound)
 		info = "This station has been inspected by Nanotrasen Officers and has been found to not have any kind of [english_list(areastocheck,and_text = "or")]. If you believe to have received this manifest by mistake, contact Central Command."
 	update_icon()
 
