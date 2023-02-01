@@ -50,8 +50,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	//Does this item have a slime installed?
 	var/has_slime = 0
 
-	var/on_armory_manifest = FALSE
-	var/holds_armory_items = FALSE
+	var/on_armory_manifest = FALSE // Does this get included in the armory manifest paper?
+	var/holds_armory_items = FALSE // Does this check inside the object for stuff to include?
 
 	//Cooking stuff:
 	var/is_cooktop //If true, the object can be used in conjunction with a cooking vessel, eg. a frying pan, to cook food.
