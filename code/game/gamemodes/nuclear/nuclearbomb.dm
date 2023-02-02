@@ -184,7 +184,7 @@ var/list/nuclear_bombs = list()
 		to_chat(usr, "<span class='notice'>You adjust some panels to make [src] deployable.</span>")
 		src.deployable = 1
 
-obj/machinery/nuclearbomb/proc/nuke_disarmed()
+/obj/machinery/nuclearbomb/proc/nuke_disarmed()
 	icon_state = "nuclearbomb1"
 	bomb_set = 0
 	score.nukedefuse = min(src.timeleft, score.nukedefuse)
