@@ -64,6 +64,7 @@
 					CC.post_status("alert", "redalert")*/
 
 			if(SEC_LEVEL_DELTA)
+				world << sound('sound/misc/imperial_alert.ogg')
 				to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")
 				to_chat(world, "<span class='red'>[config.alert_desc_delta]</span>")
 				security_level = SEC_LEVEL_DELTA
