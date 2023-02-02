@@ -184,6 +184,16 @@ var/list/nuclear_bombs = list()
 		to_chat(usr, "<span class='notice'>You adjust some panels to make [src] deployable.</span>")
 		src.deployable = 1
 
+obj/machinery/nuclearbomb/proc/nuke_disarmed()
+	icon_state = "nuclearbomb1"
+	bomb_set = 0
+	score.nukedefuse = min(src.timeleft, score.nukedefuse)
+	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+	if (istype(dynamic_mode))
+		dynamic_mode.update_stillborn_rulesets()
+	if(nt_aligned)
+		set_security_level("red")
+
 /obj/machinery/nuclearbomb/Topic(href, href_list)
 	if(..())
 		return 1
@@ -234,26 +244,16 @@ var/list/nuclear_bombs = list()
 					src.timing = !( src.timing )
 					if (src.timing)
 						src.icon_state = "nuclearbomb2"
-						if(!src.safety)
-							bomb_set = 1//There can still be issues with this reseting when there are multiple bombs. Not a big deal tho for Nuke/N
-						else
-							bomb_set = 0
+						bomb_set = 1//There can still be issues with this reseting when there are multiple bombs. Not a big deal tho for Nuke/N
+						if(src.nt_aligned)
+							set_security_level("delta")
 					else
-						src.icon_state = "nuclearbomb1"
-						bomb_set = 0
-						score.nukedefuse = min(src.timeleft, score.nukedefuse)
-						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
-						if (istype(dynamic_mode))
-							dynamic_mode.update_stillborn_rulesets()
+						src.nuke_disarmed()
 				if (href_list["safety"])
 					src.safety = !( src.safety )
 					if(safety)
 						src.timing = 0
-						bomb_set = 0
-						score.nukedefuse = min(src.timeleft, score.nukedefuse)
-						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
-						if (istype(dynamic_mode))
-							dynamic_mode.update_stillborn_rulesets()
+						src.nuke_disarmed()
 				if (href_list["anchor"])
 
 					if(removal_stage == 5)
