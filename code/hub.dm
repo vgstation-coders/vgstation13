@@ -31,7 +31,7 @@ var/global/byond_hub_playercount = OPEN_TO_HUB_PLAYERCOUNT_DEFAULT
 		<b><font color='red'>Changes persist between rounds!</font></b><br>
 		<i>Changes may take a few minutes to take effect.</i><br><br>
 
-		BYOND Hub availability is are <A href='?src=\ref[src];edit_hub=toggle'>[byond_hub_open ? "ENABLED" : "DISABLED"]</A><br>
+		BYOND Hub availability is <A href='?src=\ref[src];edit_hub=toggle'>[byond_hub_open ? "ENABLED" : "DISABLED"]</A><br>
 		Server is available on hub when playercount is less than: <A href='?src=\ref[src];edit_hub=playercount'>[byond_hub_playercount]</A><br><br>
 
 		<b>Hub Entry</b> <A href='?src=\ref[src];edit_hub=name'>(Edit Name)</a> <A href='?src=\ref[src];edit_hub=desc'>(Edit Desc)</a><br>
