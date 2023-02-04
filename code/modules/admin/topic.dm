@@ -688,6 +688,35 @@
 		message_admins("<span class='notice'>[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].</span>", 1)
 		href_list["secretsadmin"] = "check_antagonist"
 
+	else if(href_list["edit_hub"])
+		if(!check_rights(R_SERVER))
+			return
+		var/choice = href_list["edit_hub"]
+		switch(choice)
+			if("toggle")
+				byond_hub_open = !byond_hub_open
+				message_admins("<span class='notice'>[key_name(usr)] has turned byond hub availability [byond_hub_open ? "ON" : "OFF"]</span>")
+				log_admin("[key_name(usr)] has turned byond hub availability [byond_hub_open ? "ON" : "OFF"]")
+			if("playercount")
+				byond_hub_playercount = input("Hub access closes at how many players?", "Hub Playercount", byond_hub_playercount) as num
+				message_admins("<span class='notice'>[key_name(usr)] has set the max hub playercount to [byond_hub_playercount]</span>")
+				log_admin("[key_name(usr)] has set the max hub playercount to [byond_hub_playercount]")
+			if("name")
+				var/newname = input(usr, "Specify the new Server Name", "Server Name", byond_server_name) as null|text
+				byond_server_name = newname ?  newname : DEFAULT_SERVER_NAME
+				message_admins("<span class='notice'>[key_name(usr)] changed the hub name to [byond_server_name]</span>")
+				log_admin("[key_name(usr)] changed the hub name to [byond_server_name]")
+			if("desc")
+				byond_server_desc = input(usr, "Specify the new Server Description", "Server Desc", byond_server_desc) as null|message
+				message_admins("<span class='notice'>[key_name(usr)] edited the hub description.</span>")
+				log_admin("[key_name(usr)] edited the hub description.")
+
+		var/datum/persistence_task/task = SSpersistence_misc.tasks[/datum/persistence_task/hub_settings]
+		task.on_shutdown()
+		world.update_status()
+		HubPanel()
+
+
 	else if(href_list["simplemake"])
 		if(!check_rights(R_SPAWN))
 			return
