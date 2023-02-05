@@ -131,7 +131,7 @@
 	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest.</span>", \
 	"<span class='notice'>You start setting up the paddles on [target]'s chest</span>")
 	if(target.mind && !target.client && target.get_heart() && target.get_organ(LIMB_HEAD) && target.has_brain() && !target.mind.suiciding && target.health+target.getOxyLoss() > config.health_threshold_dead)
-		target.ghost_reenter_message("Someone is about to try to defibrilate your body. Return to it if you want to be resurrected!")
+		target.ghost_reenter_alert("Someone is about to try to defibrilate your body. Return to it if you want to be resurrected!")
 	if(do_after(user,target,30))
 		spark(src, 5, FALSE)
 		playsound(src,'sound/items/defib.ogg',50,1)
