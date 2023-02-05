@@ -210,6 +210,7 @@
 		currently_tracking.unregister_event(/event/cameranet_changed,src,.proc/on_camera_change)
 		if(eyeobj?.locked_to == currently_tracking)
 			currently_tracking.unlock_from()
+		currently_tracking = null
 
 /proc/near_camera(var/mob/living/M)
 	if (!isturf(M.loc))
