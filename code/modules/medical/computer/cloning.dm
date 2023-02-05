@@ -445,10 +445,7 @@
 
 	//There's nothing wrong with the corpse itself past this point
 	if(!subject.client) //There is not a player "in control" of this corpse, maybe they ghosted, maybe they logged out
-		if(subject.ghost_reenter_alert("Someone is trying to clone your corpse. Return to your body if you want to be cloned!"))
-			scantemp = "Error: Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds."
-		else //No ghost matching this corpse. Guy probably either logged out or was revived by out-of-body means.
-			scantemp = "Error: Mental interface failure."
+		scantemp = "Error: [subject.ghost_reenter_alert("Someone is trying to clone your corpse. Return to your body if you want to be cloned!") ? "Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds" : "Mental interface failure"]."
 		return
 
 	//Past this point, we know for sure the corpse is cloneable and has a ghost inside.
