@@ -445,18 +445,11 @@
 
 	//There's nothing wrong with the corpse itself past this point
 	if(!subject.client) //There is not a player "in control" of this corpse, maybe they ghosted, maybe they logged out
-		var/mob/dead/observer/ghost = mind_can_reenter(subject.mind)
-		if(ghost)
-			var/mob/ghostmob = ghost.get_top_transmogrification()
-			if(ghostmob) //Found this guy's ghost, and it still belongs to this corpse. There's nothing preventing this guy from being cloned, except them being ghosted
-				scantemp = "Error: Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds."
-				ghostmob << 'sound/effects/adminhelp.ogg'
-				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to clone your corpse. Return to your body if you want to be cloned!</span> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-				return
+		if(subject.ghost_reenter_alert("Someone is trying to clone your corpse. Return to your body if you want to be cloned!"))
+			scantemp = "Error: Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds."
 		else //No ghost matching this corpse. Guy probably either logged out or was revived by out-of-body means.
 			scantemp = "Error: Mental interface failure."
-			return
+		return
 
 	//Past this point, we know for sure the corpse is cloneable and has a ghost inside.
 	if(!subject.ckey) //ideally would never happen but a check never hurts

@@ -159,7 +159,7 @@
 		// Checking to see if the ghost has been moused/borer'd/etc since death.
 		var/mob/living/carbon/brain/BM = BO.brainmob
 		if(!BM.client)
-			if(ghost_reenter_alert("Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!"))
+			if(BM.ghost_reenter_alert("Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!"))
 				to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] seems slow to respond. Try again in a few seconds.</span>")
 				return TRUE
 			to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] is completely unresponsive; there's no point.</span>")

@@ -165,17 +165,10 @@
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 		if(target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
-			var/mob/dead/observer/ghost = mind_can_reenter(target.mind)
-			if(ghost)
-				var/mob/ghostmob = ghost.get_top_transmogrification()
-				if(ghostmob)
-					ghostmob << 'sound/effects/adminhelp.ogg'
-					to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone has tried to defibrilate your body. Return to it if you want to be resurrected!</span> \
-						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-					target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Vital signs are too weak, please try again in five seconds.</span>")
-					return
-			//we couldn't find a suitable ghost.
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No brainwaves detected.</span>")
+			if(target.ghost_reenter_alert("Someone has tried to defibrilate your body. Return to it if you want to be resurrected!"))
+				target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Vital signs are too weak, please try again in five seconds.</span>")
+			else //we couldn't find a suitable ghost.
+				target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No brainwaves detected.</span>")
 			return
 		target.apply_damage(-target.getOxyLoss(),OXY)
 		target.updatehealth()
