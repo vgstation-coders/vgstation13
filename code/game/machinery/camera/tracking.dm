@@ -175,7 +175,7 @@
 		return
 
 	if(!can_track_atom(target))
-		to_chat(src, "Target is not near any active camera.")
+		to_chat(src, "Target is not trackable by any means.")
 		return
 
 	stop_ai_tracking()
