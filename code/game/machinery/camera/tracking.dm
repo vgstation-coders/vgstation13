@@ -191,15 +191,15 @@
 
 /datum/locking_category/ai_eye
 
-/mob/living/silicon/ai/proc/on_camera_change(var/atom/movable/target)
+/mob/living/silicon/ai/proc/on_camera_change()
 	if(eyeobj && currently_tracking)
-		var/cantrack = can_track_atom(target)
+		var/cantrack = can_track_atom(currently_tracking)
 		if(!eyeobj.locked_to && cantrack)
 			to_chat(src, "Target is trackable again.")
-			target.lock_atom(eyeobj,/datum/locking_category/ai_eye)
-		else if(!cantrack && eyeobj.locked_to == target)
+			currently_tracking.lock_atom(eyeobj,/datum/locking_category/ai_eye)
+		else if(!cantrack && eyeobj.locked_to == currently_tracking)
 			to_chat(src, "Target is no longer trackable.")
-			target.unlock_atom(eyeobj)
+			currently_tracking.unlock_atom(eyeobj)
 
 /mob/living/silicon/ai/proc/stop_ai_tracking()
 	if(currently_tracking)
