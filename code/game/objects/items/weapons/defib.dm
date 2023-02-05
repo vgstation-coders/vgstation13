@@ -130,6 +130,14 @@
 /obj/item/weapon/melee/defibrillator/proc/attemptDefib(mob/living/carbon/human/target,mob/user)
 	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest.</span>", \
 	"<span class='notice'>You start setting up the paddles on [target]'s chest</span>")
+	if(target.mind && !target.client && target.get_heart() && target.get_organ(LIMB_HEAD) && target.has_brain() && !target.mind.suiciding && target.health > config.health_threshold_dead)
+		var/mob/dead/observer/ghost = mind_can_reenter(target.mind)
+		if(ghost)
+			var/mob/ghostmob = ghost.get_top_transmogrification()
+			if(ghostmob)
+				ghostmob << 'sound/effects/adminhelp.ogg'
+				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is about to try to defibrilate your body. Return to it if you want to be resurrected!</span> \
+					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 	if(do_after(user,target,30))
 		spark(src, 5, FALSE)
 		playsound(src,'sound/items/defib.ogg',50,1)
@@ -168,7 +176,7 @@
 				var/mob/ghostmob = ghost.get_top_transmogrification()
 				if(ghostmob)
 					ghostmob << 'sound/effects/adminhelp.ogg'
-					to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to revive your body. Return to it if you want to be resurrected!</span> \
+					to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone has tried to defibrilate your body. Return to it if you want to be resurrected!</span> \
 						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 					target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Vital signs are too weak, please try again in five seconds.</span>")
 					return
