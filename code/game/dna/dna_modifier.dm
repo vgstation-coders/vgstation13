@@ -308,6 +308,8 @@
 				ghostmob << 'sound/effects/adminhelp.ogg'
 				to_chat(ghostmob, "<span class='interface big'><span class='bold'>[message]</span> \
 					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+				return TRUE
+	return FALSE
 
 /obj/machinery/dna_scannernew/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(isliving(AM))
