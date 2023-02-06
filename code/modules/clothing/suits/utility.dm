@@ -25,6 +25,7 @@
 	pressure_resistance = 3 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	autoignition_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/fire/firefighter
 	icon_state = "firesuit"
