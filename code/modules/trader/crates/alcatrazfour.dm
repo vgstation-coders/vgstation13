@@ -265,7 +265,7 @@ var/global/list/alcatraz_stuff = list(
 	armor = list(melee = 10, bullet = 10, laser = 10,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED) //Unlike normal skirts this is not VOX_SHAPED
+	species_fit = list(GREY_SHAPED, VOX_SHAPED) /
 	body_parts_covered = FULL_TORSO|ARMS
 	autoignition_temperature = AUTOIGNITION_PROTECTIVE
 
