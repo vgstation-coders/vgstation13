@@ -184,7 +184,7 @@
 	
 /datum/next_map/rehab
 	name = "Rehab Station"
-	path = "Rehab"
+	path = "rehab"
 
 /datum/next_map/rehab/is_votable()
 	if(score.crewscore > -10000)
