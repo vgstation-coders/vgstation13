@@ -111,6 +111,7 @@
 	desc = "A pair of rather plain, wooden sandals."
 	name = "sandals"
 	icon_state = "wizard"
+	species_fit = list(VOX_SHAPED)
 
 	wizard_garb = 1
 
@@ -118,6 +119,7 @@
 	name = "magic slippers"
 	icon_state = "slippers"
 	desc = "For the wizard that puts comfort first. Who's going to laugh?"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/sandal/marisa
 	desc = "A pair of magic, black shoes."
@@ -358,6 +360,7 @@
 	desc = "No snake in these boots."
 	icon_state = "cowboy"
 	item_state = "cowboy"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/jackboots/steeltoe
 	name = "steel-toed boots"
@@ -391,12 +394,14 @@
 	desc = "Fluffy!"
 	icon_state = "slippers"
 	item_state = "slippers"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/slippers_worn
 	name = "worn bunny slippers"
 	desc = "Fluffy..."
 	icon_state = "slippers_worn"
 	item_state = "slippers_worn"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/laceup
 	name = "laceup shoes"
@@ -415,6 +420,7 @@
 	desc = "Sandals with buckled leather straps on it."
 	icon_state = "roman"
 	item_state = "roman"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/simonshoes
 	name = "Simon's Shoes"
