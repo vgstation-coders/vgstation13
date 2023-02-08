@@ -775,6 +775,7 @@ Suit and assorted
 	permeability_coefficient = 0.01
 	mag_slow = NO_SLOWDOWN
 	clothing_flags = NOSLIP | MAGPULSE
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/ninja/redsun
 	name = "sundowner boots"

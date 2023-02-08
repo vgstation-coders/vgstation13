@@ -93,6 +93,7 @@
 	desc = "Very gay shoes."
 	icon_state = "rain_bow"
 	_color = "rainbow"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/orange
 	name = "orange shoes"
