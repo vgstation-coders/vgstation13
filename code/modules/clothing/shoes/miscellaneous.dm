@@ -434,7 +434,7 @@
 	desc = "A pair of girly knee-high socks."
 	icon_state = "kneesock"
 	item_state = "kneesock"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/kneesocks/attackby(obj/item/weapon/W, mob/user)
 	..()
