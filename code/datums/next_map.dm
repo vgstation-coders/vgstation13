@@ -181,6 +181,18 @@
 	name = "Nerve Station"
 	path = "nervestation"
 	min_players = 20
+	
+/datum/next_map/rehab
+	name = "Rehab Station"
+	path = "Rehab"
+
+/datum/next_map/rehab/is_votable()
+	if(score.crewscore > -10000)
+		var/msg = "Skipping map [name], station requires lower than -10000 score (is [score.crewscore])."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	return ..()
 
 /proc/get_votable_maps()
 	var/list/votable_maps = list()
