@@ -207,6 +207,7 @@
 	desc = "For these tense combat situations when you just have to pick your nose."
 	icon_state = "nr_fgloves"
 	item_state = "nr_fgloves"
+	species_fit = list(VOX_SHAPED)
 
 //Like powerfist from fallout, but NUCLEAR. It throws people back and adds 50 damage every 15 seconds. Also it irradiates you
 /obj/item/clothing/gloves/powerfist
