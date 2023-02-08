@@ -127,7 +127,7 @@
 /obj/item/clothing/shoes/sandal/marisa/leather
 	icon_state = "laceups"
 	item_state = "laceups"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/galoshes
 	name = "galoshes"
@@ -153,7 +153,7 @@
 	icon_state = "clown"
 	item_state = "clown_shoes"
 	_color = "clown"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 
 	step_sound = "clownstep"
@@ -602,6 +602,7 @@
 	item_state = "clownshoespsyche"
 	_color = "clownshoespsyche"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
+	species_fit = list(VOX_SHAPED)
 
 	step_sound = "clownstep"
 
