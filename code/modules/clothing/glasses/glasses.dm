@@ -259,6 +259,20 @@ var/list/science_goggles_wearers = list()
 	item_state = "tracking"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/glasses/regular/tracking/detective
+	name = "investigation glasses"
+	desc = "A SecurityHUD with built-in eye tracking glasses which allow the wearer to see what others are looking at."
+	icon_state = "investigation"
+	item_state = "investigation"
+	var/obj/item/clothing/glasses/hud/security/hud = null
+	darkness_view = -1
+	eyeprot = 1
+
+/obj/item/clothing/glasses/regular/tracking/detective/New()
+	..()
+	src.hud = new/obj/item/clothing/glasses/hud/security(src)
+	return
+
 /obj/item/clothing/glasses/gglasses
 	name = "Green Glasses"
 	desc = "Forest green glasses, like the kind you'd wear when hatching a nasty scheme."
