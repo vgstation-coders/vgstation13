@@ -83,3 +83,17 @@ var/list/security_cruisers = list()
 		var/list/dragsounds = list('sound/misc/metal_drag1.ogg', 'sound/misc/metal_drag2.ogg', 'sound/misc/metal_drag3.ogg')
 		playsound(src, pick(dragsounds), 10, 1) //The scratching sound is VERY loud, obnoxious and repeats often, so make sure the volume is low
 		return 5 //It's not designed to move this way!
+
+/obj/structure/bed/chair/vehicle/snowmobile/syndicate
+	name = "blood red snowmobile"
+	desc = "An armored syndicate snowmobile. Take note, it does not accept a universal key."
+	health = 200
+	max_health = 200
+	icon_state = "snowsyndie"
+	light_color = "#FF0000"
+
+/obj/structure/bed/chair/vehicle/snowmobile/syndicate/set_keys()
+	..()
+	name += " (#[vehicle_list.Find(src)])"
+	mykey.name = "blood red snowmobile key (#[vehicle_list.Find(src)])"
+	mykey.icon_state = "keysec"
