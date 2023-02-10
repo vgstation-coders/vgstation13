@@ -14,7 +14,8 @@
 		return
 	if(world.time < next_pain_time && !force)
 		return
-	if(amount > 50 && prob(amount / 5))
+	if(amount > 50 && prob(amount / 5) && get_active_hand())
+		to_chat(src, "<span class='danger'>The pain in your [partname] causes you to wince and drop [get_active_hand()]!</span>")
 		src.drop_item()
 	var/msg
 	if(burning)
