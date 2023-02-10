@@ -15,8 +15,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/passive/rack/Destroy()
 	rack.empty_contents_to(chassis)
-	qdel(rack)
-	rack = null
+	QDEL_NULL(rack)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/passive/rack/detach(atom/moveto=null)

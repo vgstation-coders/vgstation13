@@ -98,8 +98,7 @@
 
 /obj/item/weapon/rcs/Destroy()
 	if (cell)
-		qdel(cell)
-		cell = null
+		QDEL_NULL(cell)
 	..()
 
 /obj/item/weapon/rcs/attack_self(mob/user)

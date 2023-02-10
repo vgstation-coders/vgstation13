@@ -699,18 +699,15 @@
 				occupant.paralysis = 0
 				go_out()
 			if("Rare")
-				qdel(occupant)
-				occupant = null
+				QDEL_NULL(occupant)
 				for(var/i = 1;i < 5;i++)
 					new /obj/item/weapon/reagent_containers/food/snacks/soylentgreen(loc)
 			if("Medium")
-				qdel(occupant)
-				occupant = null
+				QDEL_NULL(occupant)
 				for(var/i = 1;i < 5;i++)
 					new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(loc)
 			if("Well Done")
-				qdel(occupant)
-				occupant = null
+				QDEL_NULL(occupant)
 				var/obj/effect/decal/cleanable/ash/ashed = new /obj/effect/decal/cleanable/ash(loc)
 				ashed.layer = layer + 0.01
 		playsound(src, 'sound/machines/ding.ogg', 50, 1)

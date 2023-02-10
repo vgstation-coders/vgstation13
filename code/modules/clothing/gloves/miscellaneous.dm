@@ -247,8 +247,7 @@
 	update_icon()
 
 /obj/item/clothing/gloves/powerfist/Destroy()
-	qdel(vial)
-	vial = null
+	QDEL_NULL(vial)
 
 	..()
 

@@ -26,8 +26,7 @@
 		else
 			src.amount += W.amount
 			//W = null
-			qdel(W)
-			W = null
+			QDEL_NULL(W)
 		add_fingerprint(user)
 		if (W)
 			W.add_fingerprint(user)
@@ -56,8 +55,7 @@
 	if ( !M.blood_DNA || !M.blood_DNA.len )
 		to_chat(user, "<span class='notice'>No blood found on [M]</span>")
 		if(M.blood_DNA)
-			qdel(M.blood_DNA)
-			M.blood_DNA = null
+			QDEL_NULL(M.blood_DNA)
 	else
 		to_chat(user, "<span class='notice'>Blood found on [M]. Analysing...</span>")
 		spawn(15)
@@ -69,8 +67,7 @@
 	var/list/extracted_prints=list()
 	if(!A.fingerprints || !A.fingerprints.len)
 		if(A.fingerprints)
-			qdel(A.fingerprints)
-			A.fingerprints = null
+			QDEL_NULL(A.fingerprints)
 	else
 		for(var/i in A.fingerprints)
 			extracted_prints[i]=A.fingerprints[i]
@@ -341,8 +338,7 @@
 	//PRINTS
 	if(!A.fingerprints || !A.fingerprints.len)
 		if(A.fingerprints)
-			qdel(A.fingerprints)
-			A.fingerprints = null
+			QDEL_NULL(A.fingerprints)
 	if(custom_finger.len)
 		to_chat(user, "<span class='notice'>Isolated [custom_finger.len] fingerprints: Data Stored: Scan with Hi-Res Forensic Scanner to retrieve.</span>")
 		to_chat(user, "<span class='notice'>&nbsp;&nbsp;Found [custom_finger.len] intact prints</span>")

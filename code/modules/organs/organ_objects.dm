@@ -56,8 +56,7 @@
 /obj/item/organ/internal/Destroy()
 	if(!robotic)
 		processing_objects -= src
-	qdel(organ_data)
-	organ_data = null
+	QDEL_NULL(organ_data)
 	..()
 
 /obj/item/organ/internal/examine(var/mob/user, var/size = "")

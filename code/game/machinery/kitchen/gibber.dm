@@ -267,8 +267,7 @@
 	src.occupant.death(1)
 	src.occupant.ghostize(0)
 
-	qdel(src.occupant)
-	src.occupant = null
+	QDEL_NULL(src.occupant)
 
 	spawn(src.gibtime)//finally we throw both the meat and gibs in front of the gibber.
 		playsound(src, 'sound/effects/gib2.ogg', 50, 1)

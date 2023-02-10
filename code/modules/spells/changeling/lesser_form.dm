@@ -113,8 +113,7 @@
 	var/anim_name = M.get_unmonkey_anim()
 	flick(anim_name, animation)
 	sleep(20)
-	qdel(animation)
-	animation = null
+	QDEL_NULL(animation)
 
 	var/mob/living/carbon/human/O = new /mob/living/carbon/human( user, delay_ready_dna=1 )
 	if (M.dna.GetUIState(DNA_UI_GENDER))

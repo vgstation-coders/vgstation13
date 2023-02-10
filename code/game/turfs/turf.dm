@@ -294,8 +294,7 @@
 /turf/proc/RemoveLattice()
 	var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
 	if(L)
-		qdel (L)
-		L = null
+		QDEL_NULL (L)
 
 /turf/proc/add_dust()
 	return
@@ -349,8 +348,7 @@
 		if(F.material=="phazon")
 			phazontiles -= src
 		if(F.floor_tile)
-			qdel(F.floor_tile)
-			F.floor_tile = null
+			QDEL_NULL(F.floor_tile)
 		F = null
 
 	if(ispath(N, /turf/simulated/floor))

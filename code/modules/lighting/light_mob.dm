@@ -8,18 +8,15 @@
 
 	if (dark_plane)
 		client.screen -= dark_plane
-		qdel(dark_plane)
-		dark_plane = null
+		QDEL_NULL(dark_plane)
 
 	if (master_plane)
 		client.screen -= master_plane
-		qdel(master_plane)
-		master_plane = null
+		QDEL_NULL(master_plane)
 
 	if (self_vision)
 		client.screen -= self_vision
-		qdel(self_vision)
-		self_vision = null
+		QDEL_NULL(self_vision)
 
 	dark_plane = new(client)
 	master_plane = new(client)

@@ -65,11 +65,9 @@
 /obj/item/weapon/subspacetunneler/Destroy()
 	var/turf/currturf = get_turf(src)
 	if(loaded_crystal)
-		qdel(loaded_crystal)
-		loaded_crystal = null
+		QDEL_NULL(loaded_crystal)
 	if(loaded_matter_bin)
-		qdel(loaded_matter_bin)
-		loaded_matter_bin = null
+		QDEL_NULL(loaded_matter_bin)
 	if(stored_items.len)
 		for(var/atom/movable/AM in stored_items)
 			AM.forceMove(null)

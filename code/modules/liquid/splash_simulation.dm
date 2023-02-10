@@ -25,8 +25,7 @@ var/list/datum/puddle/puddles = list()
 /datum/puddle/Del()
 	puddles -= src
 	for(var/obj/O in liquid_objects)
-		qdel(O)
-		O = null
+		QDEL_NULL(O)
 	..()
 
 /client/proc/splash()
@@ -74,8 +73,7 @@ var/list/datum/puddle/puddles = list()
 
 	for( var/obj/effect/liquid/L in loc )
 		if(L != src)
-			qdel(L)
-			L = null
+			QDEL_NULL(L)
 
 /obj/effect/liquid/proc/spread()
 

@@ -137,8 +137,7 @@ var/list/potential_bonus_items = list(
 		if (A.name == "vox_locker")
 			var/obj/structure/closet/loot/L = new(get_turf(A))
 			our_bounty_lockers += L
-			qdel(A)
-			A = null
+			QDEL_NULL(A)
 			continue
 
 	var/spawn_count = 1

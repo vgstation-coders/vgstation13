@@ -31,8 +31,7 @@
 
 /obj/item/clothing/suit/storage/wintercoat/Destroy()
 	if(hood)
-		qdel(hood)
-		hood = null
+		QDEL_NULL(hood)
 	..()
 
 /obj/item/clothing/head/winterhood

@@ -681,8 +681,7 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/disable()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 	if (emitter)
 		emitter.unregister_event(/event/before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
 		emitter.unregister_event(/event/after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
@@ -694,15 +693,13 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/emitter/proc/update_emitter()
 	if (!emitter || !isturf(emitter.loc))
 		if (beam)
-			qdel(beam)
-			beam = null
+			QDEL_NULL(beam)
 		return
 	if (ismob(emitter))
 		var/mob/M = emitter
 		if (M.lying)
 			if(beam)
-				qdel(beam)
-				beam = null
+				QDEL_NULL(beam)
 			return
 	if (!beam)
 		beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
@@ -716,8 +713,7 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_start()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_end()
 	if (!emitter || !isturf(emitter.loc))

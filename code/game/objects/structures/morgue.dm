@@ -122,8 +122,7 @@
 		connected.icon_state = "morguet"
 		connected.dir = src.dir
 	else
-		qdel(connected)
-		connected = null
+		QDEL_NULL(connected)
 
 /obj/structure/morgue/proc/close_up()
 	if(!connected)
@@ -309,8 +308,7 @@
 			if (!( A.anchored ))
 				A.forceMove(src)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-		qdel(src.connected)
-		src.connected = null
+		QDEL_NULL(src.connected)
 	else if (src.locked == 0)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		src.connected = new /obj/structure/c_tray( src.loc )
@@ -323,8 +321,7 @@
 				A.forceMove(src.connected.loc)
 			src.connected.icon_state = "cremat"
 		else
-			qdel(src.connected)
-			src.connected = null
+			QDEL_NULL(src.connected)
 	src.add_fingerprint(user)
 	update()
 
@@ -347,8 +344,7 @@
 			//Foreach goto(106)
 		src.connected.icon_state = "cremat"
 	else
-		qdel(src.connected)
-		src.connected = null
+		QDEL_NULL(src.connected)
 
 /obj/structure/crematorium/proc/cremate(mob/user)
 //	for(var/obj/machinery/crema_switch/O in src) //trying to figure a way to call the switch, too drunk to sort it out atm
@@ -391,8 +387,7 @@
 			//log_attack("\[[time_stamp()]\] <b>[user]/[user.ckey]</b> cremated <b>[M]/[M.ckey]</b>")
 			M.death(1)
 			M.ghostize()
-			qdel(M)
-			M = null
+			QDEL_NULL(M)
 
 		for (var/obj/O in inside) //obj instead of obj/item so that bodybags and ashes get destroyed. We dont want tons and tons of ash piling up
 			qdel(O)

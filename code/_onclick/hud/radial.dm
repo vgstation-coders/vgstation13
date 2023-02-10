@@ -133,8 +133,7 @@
 	hide()
 	current_user.radial_menus -= src
 	if(custom_check)
-		qdel(custom_check)
-		custom_check = null
+		QDEL_NULL(custom_check)
 	. = ..()
 
 /////////////////////
@@ -274,8 +273,7 @@
 	for(var/element in elements)
 		qdel(element)
 	elements.Cut()
-	qdel(close_button)
-	close_button = null
+	QDEL_NULL(close_button)
 	current_page = 1
 
 /datum/radial_menu/proc/element_chosen(choice_id,mob/user)
@@ -429,7 +427,7 @@
 	if(anchor in current_user.radial_menu_anchors)
 		return
 
-	if(close_other_menus)	
+	if(close_other_menus)
 		for(var/datum/radial_menu/R in current_user.radial_menus)
 			R.finish()
 

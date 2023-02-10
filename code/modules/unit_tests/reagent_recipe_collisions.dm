@@ -2,8 +2,7 @@
 
 /datum/unit_test/reagent_recipe_collisions/start()
 	var/datum/reagents/r = new // Builds chemical_reactions_list
-	qdel(r)
-	r = null
+	QDEL_NULL(r)
 	var/list/reactions = list()
 	for(var/V in global.chemical_reactions_list)
 		reactions += global.chemical_reactions_list[V]

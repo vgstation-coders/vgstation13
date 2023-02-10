@@ -293,8 +293,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			if(!B.gcDestroyed)
 				B.create_reagents(B.volume)
 			else
-				qdel(B)
-				B = null
+				QDEL_NULL(B)
 				return
 		var/space = R.maximum_volume - R.total_volume
 		var/reagent_temperature = dispensable_reagents[reagent] ? dispensable_reagents[reagent] : T0C+20

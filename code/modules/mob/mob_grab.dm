@@ -292,8 +292,7 @@
 			assailant.client.screen -= hud
 		assailant = null
 	if(hud)
-		qdel(hud)
-		hud = null
+		QDEL_NULL(hud)
 	..()
 
 /mob/proc/grab_check(mob/victim)

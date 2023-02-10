@@ -62,8 +62,7 @@
 		for(var/obj/effect/landmark/A in landmarks_list)
 			if(A.name == "RevSq-Spawn")
 				revsq_spawn += get_turf(A)
-				qdel(A)
-				A = null
+				QDEL_NULL(A)
 				continue
 
 		var/spawnpos = 1

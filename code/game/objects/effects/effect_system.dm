@@ -265,8 +265,7 @@ steam.start() -- spawns the effect
 /obj/effect/smoke/Destroy()
 	if(reagents)
 		reagents.my_atom = null
-		qdel(reagents)
-		reagents = null
+		QDEL_NULL(reagents)
 	..()
 
 /////////////////////////////////////////////
@@ -548,8 +547,7 @@ steam.start() -- spawns the effect
 				step(smoke,direction)
 			spawn(150+rand(10,30))
 				if(smoke)
-					qdel(smoke)
-					smoke = null
+					QDEL_NULL(smoke)
 				src.total_smoke--
 
 // Goon compat.

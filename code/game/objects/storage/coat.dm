@@ -21,8 +21,7 @@
 
 /obj/item/clothing/suit/storage/Destroy()
 	if(hold)
-		qdel(hold)
-		hold = null
+		QDEL_NULL(hold)
 	return ..()
 
 /obj/item/clothing/suit/storage/can_quick_store(var/obj/item/I)

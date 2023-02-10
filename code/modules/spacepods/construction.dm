@@ -20,8 +20,7 @@
 	dir = EAST
 
 /obj/structure/spacepod_frame/Destroy()
-	qdel(construct)
-	construct = null
+	QDEL_NULL(construct)
 	..()
 
 /obj/structure/spacepod_frame/attack_hand()
@@ -38,8 +37,7 @@
 
 /obj/structure/spacepod_frame/unarmored/New()
 	..()
-	qdel(construct)
-	construct = null
+	QDEL_NULL(construct)
 
 /obj/structure/spacepod_frame/unarmored/attackby(obj/item/W, mob/user)
 	if(!construct || !construct.action(W, user))

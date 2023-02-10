@@ -98,8 +98,7 @@
 /obj/machinery/bot/Destroy()
 	. = ..()
 	if(botcard)
-		qdel(botcard)
-		botcard = null
+		QDEL_NULL(botcard)
 	if (waiting_for_patrol || waiting_for_path)
 		for (var/datum/path_maker/PM in pathmakers)
 			if (PM.owner == src)

@@ -53,8 +53,7 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/clothing/head/helmet/stun/Destroy()
 	if (bcell)
-		qdel(bcell)
-		bcell = null
+		QDEL_NULL(bcell)
 
 	return ..()
 
@@ -117,8 +116,7 @@ var/global/list/alcatraz_stuff = list(
 	S = new(src)
 
 /obj/item/clothing/accessory/bangerboy/Destroy()
-	qdel(S)
-	S = null
+	QDEL_NULL(S)
 	..()
 
 /obj/item/clothing/accessory/bangerboy/attackby(obj/item/W, mob/user)
@@ -543,8 +541,7 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/weapon/autocuffer/Destroy()
 	if(stored)
-		qdel(stored)
-		stored = null
+		QDEL_NULL(stored)
 	..()
 
 /obj/item/weapon/autocuffer/restraint_apply_intent_check(mob/user)

@@ -18,8 +18,7 @@
 	//delayer = new(0, ARBITRARILY_LARGE_NUMBER)
 
 /obj/item/device/holomap/Destroy()
-	//qdel(delayer)
-	//delayer = null
+	//QDEL_NULL(delayer)
 
 	if (viewing)
 		viewing.mob.unregister_event(/event/logout, src, .proc/mob_logout)

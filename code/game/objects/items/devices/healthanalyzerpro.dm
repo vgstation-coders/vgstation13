@@ -231,5 +231,4 @@
 	if(do_mob(user, O, 1 SECONDS))
 		immune.attack(O,user)
 		last_scantime = world.time
-		qdel(immune)
-		immune = null
+		QDEL_NULL(immune)

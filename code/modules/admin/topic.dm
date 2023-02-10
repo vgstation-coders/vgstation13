@@ -5125,8 +5125,7 @@
 		message_admins("<span class='notice'>[key_name_admin(usr)] has deleted [capitalize(S.name)] ([S.type]). Objects and turfs [(killed_objs) ? "deleted" : "not deleted"].</span>")
 		log_admin("[key_name(usr)]  has deleted [capitalize(S.name)]! Objects and turfs [(killed_objs) ? "deleted" : "not deleted"].")
 
-		qdel(S)
-		selected_shuttle = null
+		QDEL_NULL(S)
 
 		shuttle_magic() //Update the window!
 
