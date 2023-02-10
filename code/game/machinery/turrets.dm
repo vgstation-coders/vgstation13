@@ -210,6 +210,8 @@
 	return
 
 /obj/machinery/turret/proc/shootAt(var/atom/movable/target)
+	if(stat & BROKEN)
+		return
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(target)
 	if (!istype(T) || !istype(U))
