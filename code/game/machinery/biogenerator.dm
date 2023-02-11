@@ -636,13 +636,14 @@
 	else
 		menustat = "void"
 
-/obj/machinery/biogenerator/proc/check_cost(var/cost)
+//Cost is a copy of recipe.cost, where num is the number of that recipe to make
+/obj/machinery/biogenerator/proc/check_cost(var/cost, var/num)
 	for (var/nutrient in cost)
-		if (cost[nutrient] > points[nutrient])
+		if (cost[nutrient]*num > points[nutrient])
 			menustat = "nopoints"
 			return 1
 	for (var/nutrient in cost)
-		points[nutrient] -= cost[nutrient]
+		points[nutrient] -= cost[nutrient]*num
 	processing = 1
 	update_icon()
 	updateUsrDialog()
@@ -656,11 +657,7 @@
 	if(!(num in (recipe.other_amounts + 1)))
 		return 0
 
-	if(num > 1)
-		for (var/molecule in recipe.cost)
-			recipe.cost[molecule] *= num
-
-	if(check_cost(recipe.cost))
+	if(check_cost(recipe.cost, num))
 		return 0
 
 	if(recipe.reagent)
