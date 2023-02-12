@@ -84,13 +84,14 @@
 	var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
 	for(var/i in 1 to 10)
 		dynamic_mode.threat_level = (i-1)*10
+		dynamic_mode.midround_threat_level = dynamic_mode.threat_level
 		for(var/datum/dynamic_ruleset/DR in rules2check)
 			if(DR.cost < dynamic_mode.threat_level)
 				continue
 			for(var/j in 1 to 10)
 				var/pop2check = (j-1)*5
 				if(dynamic_mode.threat_level >= DR.requirements[j])
-					if(!DR.acceptable(pop2check,dynamic_mode.threat_level))
-						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 on rule [DR.name] with [pop2check] players and [dynamic_mode.threat_level] threat out of [DR.requirements[j]]")
-				else if(DR.acceptable(pop2check,dynamic_mode.threat_level))
-					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [pop2check] players and [dynamic_mode.threat_level] threat out of [DR.requirements[j]]")
+					if(!DR.acceptable(pop2check))
+						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 on rule [DR.name] with [pop2check] players and [istype(DR,/datum/dynamic_ruleset/roundstart) ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.requirements[j]]")
+				else if(DR.acceptable(pop2check))
+					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [pop2check] players and [istype(DR,/datum/dynamic_ruleset/roundstart) ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.requirements[j]]")

@@ -60,7 +60,7 @@
 
 /datum/dynamic_ruleset/latejoin//Can be drafted when a player joins the server
 
-/datum/dynamic_ruleset/proc/acceptable(var/population=0,var/threat_level=0)
+/datum/dynamic_ruleset/proc/acceptable(var/population=0)
 	//by default, a rule is acceptable if it satisfies the threat level/population requirements.
 	//If your rule has extra checks, such as counting security officers, do that in ready() instead
 	if (!map.map_ruleset(src))
@@ -68,6 +68,7 @@
 		log_admin("Dynamic Mode: Skipping [name] due to map blacklist")
 		return 0
 
+	var/threat_level = istype(src,/datum/dynamic_ruleset/roundstart) ? mode.threat_level : mode.midround_threat_level
 	if (player_list.len >= mode.high_pop_limit)
 		return (threat_level >= high_population_requirement)
 	else
