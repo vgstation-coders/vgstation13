@@ -234,6 +234,34 @@
 		else
 			clear_fullscreen("science",0)
 
+		var/masked = 0
+
+		if(head)
+			if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi) || (/datum/action/item_action/toggle_helmet_mask in head.actions_types))
+				var/enable_mask = TRUE
+
+				var/datum/action/item_action/toggle_helmet_mask/action = locate(/datum/action/item_action/toggle_helmet_mask) in head.actions
+
+				if(action)
+					enable_mask = !action.up
+				else if(istype(head, /obj/item/clothing/head/welding))
+					var/obj/item/clothing/head/welding/O = head
+					enable_mask = !O.up
+				if(enable_mask && tinted_weldhelh)
+					overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
+					masked = 1
+
+		if(!masked && istype(glasses, /obj/item/clothing/glasses/welding) && !istype(glasses, /obj/item/clothing/glasses/welding/superior))
+			var/obj/item/clothing/glasses/welding/O = glasses
+			if(!O.up && tinted_weldhelh)
+				overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
+				masked = 1
+
+		var/clear_tint = !masked
+
+		if(clear_tint)
+			clear_fullscreen("tint")
+
 		if(machine)
 			if(!machine.check_eye(src))
 				reset_view(null)

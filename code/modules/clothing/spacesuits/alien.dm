@@ -1,10 +1,3 @@
-/obj/item/clothing/head/helmet/space/unathi
-	name = "unathi space helmet"
-	nearsighted_modifier = 5
-
-/obj/item/clothing/suit/space/unathi
-	name = "unathi space suit"
-
 /obj/item/clothing/head/helmet/space/unathi/breacher
 	name = "unathi breacher helmet"
 	desc = "Some sort of ancient Unathi power helmet with ridiculous armor plating."
