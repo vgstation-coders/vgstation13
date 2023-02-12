@@ -74,7 +74,7 @@
 	if (player_list.len >= mode.high_pop_limit)
 		return (threat_level >= high_population_requirement)
 	else
-		var/population = !midround ? roundstart_pop_ready.len : mode.living_players.len
+		var/population = !midround ? mode.roundstart_pop_ready : mode.living_players.len
 		var/indice_pop = min(10,round(population/5)+1)
 		return (threat_level >= requirements[indice_pop])
 
