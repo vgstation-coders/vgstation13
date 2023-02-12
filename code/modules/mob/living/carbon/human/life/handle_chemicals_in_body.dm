@@ -28,6 +28,9 @@
 		var/total_plasmaloss = 0
 		for(var/obj/item/I in src)
 			if(I.contaminated)
+				if(I == src.glasses && zas_settings.Get(/datum/ZAS_Setting/EYE_BURNS))
+					burn_eyes()
+					to_chat(src, "<span class='warning'>The contaminated glasses burn your eyes!</span>")
 				total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
 			I.OnMobLife(src)
 		adjustToxLoss(total_plasmaloss)

@@ -15,6 +15,11 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	if(!contaminated)
 		contaminated = 1
 		overlays.Add(contamination_overlay)
+		
+/obj/item/clothing/contaminate()
+	if(clothing_flags & PLASMAGUARD)
+		return
+	..()
 
 /obj/item/proc/decontaminate()
 	contaminated = 0
@@ -29,6 +34,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		suit_contamination()
 
 	if(!pl_head_protected())
+		head_contamination()
 		if(prob(1))
 			suit_contamination() //Plasma can sometimes get through such an open suit.
 
@@ -100,10 +106,10 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
 			if(head.clothing_flags & PLASMAGUARD)
 				return 1
-			else if(check_body_part_coverage(EYES))
-				head.contaminate()
-				return 1
-		else if(check_body_part_coverage(EYES))
+			head.contaminate()
+			if(head.pressure_resistance >= ONE_ATMOSPHERE)
+				return 1				
+		else
 			return 1
 	return 0
 
@@ -113,12 +119,11 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
 			if(wear_suit.clothing_flags & PLASMAGUARD)
 				return 1
-			else if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
-				wear_suit.contaminate()
+			wear_suit.contaminate()
+			if(wear_suit.pressure_resistance >= ONE_ATMOSPHERE)
 				return 1
 		else
-			if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
-				return 1
+			return 1
 	return 0
 
 /mob/living/carbon/human/proc/suit_contamination()
@@ -129,3 +134,13 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		shoes.contaminate()
 	if(gloves)
 		gloves.contaminate()
+		
+/mob/living/carbon/human/proc/head_contamination()
+	if(ears)
+		ears.contaminate()
+	if(wear_mask)
+		wear_mask.contaminate()
+		if(istype(wear_mask, /obj/item/clothing/mask/gas))
+			return
+	if(glasses)
+		glasses.contaminate()

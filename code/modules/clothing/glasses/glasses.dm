@@ -118,6 +118,7 @@ var/list/science_goggles_wearers = list()
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
+	clothing_flags = PLASMAGUARD
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 
@@ -359,6 +360,7 @@ var/list/science_goggles_wearers = list()
 	desc = "Protects the eyes from welders, approved by the mad scientist association."
 	icon_state = "welding-g"
 	item_state = "welding-g"
+	clothing_flags = PLASMAGUARD
 	origin_tech = Tc_ENGINEERING + "=1;" + Tc_MATERIALS + "=2"
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	var/up = 0
@@ -380,12 +382,14 @@ var/list/science_goggles_wearers = list()
 			src.up = !src.up
 			eyeprot = 3
 			body_parts_covered |= EYES
+			clothing_flags |= PLASMAGUARD
 			icon_state = initial(icon_state)
 			to_chat(C, "You flip the [src] down to protect your eyes.")
 		else
 			src.up = !src.up
 			eyeprot = 0
 			body_parts_covered &= ~EYES
+			clothing_flags &= ~PLASMAGUARD
 			icon_state = "[initial(icon_state)]up"
 			to_chat(C, "You push the [src] up out of your face.")
 
@@ -518,6 +522,7 @@ var/list/science_goggles_wearers = list()
 	species_fit = list(GREY_SHAPED)
 	origin_tech = Tc_MAGNETS + "=3"
 	vision_flags = SEE_MOBS
+	clothing_flags = PLASMAGUARD
 	see_invisible = SEE_INVISIBLE_MINIMUM
 	invisa_view = 2
 	eyeprot = -2 //prepare for your eyes to get shit on
@@ -551,6 +556,7 @@ var/list/science_goggles_wearers = list()
 	icon_state = "thermoncle"
 	species_fit = list(GREY_SHAPED)
 	flags = 0 //doesn't protect eyes because it's a monocle, duh
+	clothing_flags = 0
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
 

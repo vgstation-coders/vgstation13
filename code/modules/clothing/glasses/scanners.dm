@@ -68,6 +68,7 @@
 	icon_state = "night"
 	item_state = "glasses"
 	origin_tech = Tc_MAGNETS + "=2"
+	clothing_flags = PLASMAGUARD
 	see_invisible = 0
 	seedarkness = TRUE
 	see_in_dark = 8
@@ -134,6 +135,7 @@ var/list/meson_wearers = list()
 	icon_state = "meson"
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2"
 	vision_flags = SEE_TURFS
+	clothing_flags = PLASMAGUARD
 	eyeprot = -1
 	see_invisible = SEE_INVISIBLE_MINIMUM
 	seedarkness = FALSE
@@ -257,6 +259,7 @@ var/list/meson_images = list()
 	name = "optical material scanner"
 	desc = "Allows one to see the original layout of the pipe and cable network."
 	icon_state = "material"
+	clothing_flags = PLASMAGUARD
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
 	actions_types = list(/datum/action/item_action/toggle_goggles)

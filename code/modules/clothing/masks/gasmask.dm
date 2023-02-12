@@ -180,6 +180,7 @@
 	icon_state = "clown"
 	item_state = "clown_hat"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	clothing_flags = PLASMAGUARD //the plasma slips away because of the lube coating
 	can_flip = 0
 	canstage = 0
 
@@ -224,6 +225,7 @@
 	desc = "A feminine clown mask for the dabbling crossdressers or female entertainers."
 	icon_state = "sexyclown"
 	item_state = "sexyclown"
+	clothing_flags = PLASMAGUARD
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
@@ -243,6 +245,7 @@
 	icon_state = "mime"
 	item_state = "mime"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	clothing_flags = PLASMAGUARD
 	can_flip = 0
 	canstage = 0
 	var/muted = 0
@@ -273,6 +276,7 @@
 	icon_state = "sexymime"
 	item_state = "sexymime"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	clothing_flags = PLASMAGUARD
 	can_flip = 0
 	canstage = 0
 
