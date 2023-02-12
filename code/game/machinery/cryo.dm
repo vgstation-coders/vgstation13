@@ -1,12 +1,7 @@
 var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_full"),\
-												"good" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_good"),\
-												"average" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_average"),\
-												"bad" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_bad"),\
-												"worse" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_worse"),\
-												"critgood" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critgood"),\
-												"critaverage" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critaverage"),\
-												"critbad" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critbad"),\
-												"critworse" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critworse"),\
+												"health" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_health"),\
+												"crit" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_crit"),\
+												"mask" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_mask"),\
 												"dead" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_dead"))
 /obj/machinery/atmospherics/unary/cryo_cell
 	name = "cryo cell"
@@ -404,32 +399,29 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 					overlays += "lid[on]" //re-add the overlay of the pod, they are inside it, not floating
 
 					if(occupant.stat == DEAD || !occupant.has_brain())
-						overlays += cryo_health_indicator["dead"]
+						overlays += "moverlay_dead"
 					else
 						if(occupant.health >= occupant.maxHealth)
-							overlays += cryo_health_indicator["full"]
+							overlays += "moverlay_full"
 						else
+							var/image/healthoverlay
 							switch((occupant.health / occupant.maxHealth) * 100) // Get a ratio of health to work with
 								if(100 to INFINITY) // No idea how we got here with the check above...
-									overlays += cryo_health_indicator["full"]
-								if(75 to 100)
-									overlays += cryo_health_indicator["good"]
-								if(50 to 75)
-									overlays += cryo_health_indicator["average"]
-								if(25 to 50)
-									overlays += cryo_health_indicator["bad"]
-								if(0 to 25)
-									overlays += cryo_health_indicator["worse"]
-								if(-25 to 0)
-									overlays += cryo_health_indicator["critgood"]
-								if(-50 to -25)
-									overlays += cryo_health_indicator["critaverage"]
-								if(-75 to -50)
-									overlays += cryo_health_indicator["critbad"]
-								if(-100 to -75)
-									overlays += cryo_health_indicator["critworse"]
+									healthoverlay = cryo_health_indicator["full"]
+								if(0 to 100)
+									healthoverlay = cryo_health_indicator["health"]
+								if(-100 to 0)
+									healthoverlay = cryo_health_indicator["crit"]
 								else //Shouldn't ever happen. I really hope it doesn't ever happen.
-									overlays += cryo_health_indicator["dead"]
+									healthoverlay = cryo_health_indicator["dead"]
+							var/image/mask = cryo_health_indicator["mask"]
+							healthoverlay.appearance_flags = KEEP_TOGETHER
+							mask.blend_mode = BLEND_INSET_OVERLAY
+							mask.pixel_x = max(3,3+(14*abs(occupant.health / occupant.maxHealth)))
+							mask.color = "#000"
+							overlays += healthoverlay
+							healthoverlay.overlays.Cut()
+							healthoverlay.overlays += mask
 
 					if (beaker == null || beaker.reagents.total_volume == 0)
 						overlays += "nomix"
