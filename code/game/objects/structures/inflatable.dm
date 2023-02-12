@@ -385,8 +385,7 @@
 /obj/structure/inflatable/shelter/Destroy()
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
-	qdel(cabin_air)
-	cabin_air = null
+	QDEL_NULL(cabin_air)
 	..()
 
 /obj/structure/inflatable/shelter/remove_air(amount)

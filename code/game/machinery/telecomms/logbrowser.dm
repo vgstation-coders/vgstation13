@@ -207,8 +207,7 @@
 			temp = "<font color = #336699>- DELETED ENTRY: [D.name] -</font color>"
 
 			SelectedServer.log_entries.Remove(D)
-			qdel(D)
-			D = null
+			QDEL_NULL(D)
 
 		else
 			temp = "<font color = #D70B00>- FAILED: NO SELECTED MACHINE -</font color>"

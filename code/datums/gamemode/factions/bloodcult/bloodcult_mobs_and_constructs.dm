@@ -201,8 +201,7 @@
 		heal_target.healers.Remove(src)
 		heal_target = null
 	if (ray)
-		qdel(ray)
-		ray = null
+		QDEL_NULL(ray)
 
 /obj/effect/overlay/artificerray
 	name = "ray"
@@ -628,7 +627,7 @@ var/list/astral_projections = list()
 		canmove = 0
 		incorporeal_move = 1
 		flying = 1
-		flags = HEAR | TIMELESS | INVULNERABLE	
+		flags = HEAR | TIMELESS | INVULNERABLE
 		speed = 0.5
 		client.CAN_MOVE_DIAGONALLY = 1
 		overlay_fullscreen("astralborder", /obj/abstract/screen/fullscreen/astral_border)

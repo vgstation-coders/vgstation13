@@ -339,6 +339,9 @@
 /mob/living/simple_animal/hostile/pulse_demon/electrocute_act() //don't get killed by powercreeper vines
 	return
 
+/mob/living/simple_animal/hostile/pulse_demon/check_airflow_movable()
+	return FALSE
+
 // Our one weakness
 /mob/living/simple_animal/hostile/pulse_demon/emp_act(severity)
 	visible_message("<span class ='danger'>[src] [pick("fizzles","wails","flails")] in anguish!</span>")

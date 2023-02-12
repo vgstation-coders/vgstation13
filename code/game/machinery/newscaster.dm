@@ -30,7 +30,7 @@
 	var/headline = ""
 	var/body =""
 	//var/parent_channel
-	
+
 	//Backup variables are used to store the details of the message if it's redacted so it can be unredacted safely
 	var/backup_author =""
 	var/backup_headline = ""
@@ -641,7 +641,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					available_channels += F.channel_name
 			channel_name = input(usr, "Choose receiving Feed Channel", "Network Channel Handler") in available_channels
 			updateUsrDialog()
-		
+
 		else if(href_list["set_new_headline"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"set the headline of a new feed story"))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")
@@ -659,9 +659,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				return
 			if(isnull(msg))
 				msg = ""
-			msg = stripped_input(usr, "Write your Feed story", "Network Channel Handler", msg)
-			while (findtext(msg," ") == 1)
-				msg = copytext(msg,2,length(msg)+1)
+			msg = stripped_message(usr, "Write your Feed story", "Network Channel Handler", msg, MAX_BOOK_MESSAGE_LEN)
+	//		while (findtext(msg," ") == 1)
+	//			msg = copytext(msg,2,length(msg)+1)
+
 			updateUsrDialog()
 
 		else if(href_list["set_attachment"])

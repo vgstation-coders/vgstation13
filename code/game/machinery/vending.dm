@@ -189,11 +189,9 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/Destroy()
 	if(wires)
-		qdel(wires)
-		wires = null
+		QDEL_NULL(wires)
 	if(coinbox)
-		qdel(coinbox)
-		coinbox = null
+		QDEL_NULL(coinbox)
 	..()
 
 /obj/machinery/vending/splashable()

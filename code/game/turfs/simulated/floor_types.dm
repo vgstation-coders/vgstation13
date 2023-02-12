@@ -130,8 +130,7 @@
 		var/obj/item/stack/tile/T = C
 		if(T.use(1))
 			if(floor_tile)
-				qdel(floor_tile)
-			floor_tile = null
+				QDEL_NULL(floor_tile)
 			floor_tile = new T.type(null)
 			material = floor_tile.material
 			intact = 1

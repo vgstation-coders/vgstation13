@@ -454,8 +454,7 @@
 	labels.Cut()
 	buffers.Cut()
 	if(disk)
-		qdel(disk)
-		disk = null
+		QDEL_NULL(disk)
 	..()
 
 /datum/block_label

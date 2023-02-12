@@ -11,7 +11,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	icon = 'icons/effects/effects.dmi'
 	mouse_opacity = 0
 	flags = 0
-	w_type=NOT_RECYCLABLE
+	w_type = NOT_RECYCLABLE
 	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE
 
 /obj/effect/dissolvable()
@@ -265,8 +265,7 @@ steam.start() -- spawns the effect
 /obj/effect/smoke/Destroy()
 	if(reagents)
 		reagents.my_atom = null
-		qdel(reagents)
-		reagents = null
+		QDEL_NULL(reagents)
 	..()
 
 /////////////////////////////////////////////
@@ -548,8 +547,7 @@ steam.start() -- spawns the effect
 				step(smoke,direction)
 			spawn(150+rand(10,30))
 				if(smoke)
-					qdel(smoke)
-					smoke = null
+					QDEL_NULL(smoke)
 				src.total_smoke--
 
 // Goon compat.

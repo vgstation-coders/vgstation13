@@ -21,8 +21,7 @@
 	if(ourobj)
 		for(var/client/C in clients)
 			C.screen.Remove(ourobj)
-		qdel(ourobj)
-		ourobj = null
+		QDEL_NULL(ourobj)
 	selected = null
 	..()
 

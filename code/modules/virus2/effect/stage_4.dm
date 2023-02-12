@@ -894,8 +894,7 @@
 			H.my_appearance.b_eyes = old_b_eyes
 			H.update_body()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 	if (emitter)
 		emitter.unregister_event(/event/before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
 		emitter.unregister_event(/event/after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
@@ -908,8 +907,7 @@
 
 /datum/disease2/effect/emitter/on_death(var/mob/living/carbon/mob)
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 
 /datum/disease2/effect/emitter/proc/ready()
 	if (!emitter || !isturf(emitter.loc) || emitter.lying || emitter.stat != CONSCIOUS)
@@ -943,8 +941,7 @@
 /datum/disease2/effect/emitter/proc/update_emitter()
 	if (!ready())
 		if (beam)
-			qdel(beam)
-			beam = null
+			QDEL_NULL(beam)
 		return
 	if (!beam)
 		if (!ismouse(emitter))
@@ -966,8 +963,7 @@
 
 /datum/disease2/effect/emitter/proc/update_emitter_start()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 
 /datum/disease2/effect/emitter/proc/update_emitter_end()
 	if (!ready())
@@ -1181,7 +1177,7 @@
 			F.melee_damage_lower = 20
 			F.melee_damage_upper = 20
 			F.name = H.name
-			qdel(H)		
+			qdel(H)
 			flick("cult_jaunt_land",landing_animation)
 			return
 
@@ -1193,5 +1189,5 @@
 		H.update_mutantrace()
 		H.update_body()
 		H.handle_regular_hud_updates()
-	
+
 

@@ -117800,6 +117800,12 @@
 	},
 /turf/simulated/floor/carpet,
 /area/library)
+"xNR" = (
+/obj/structure/bed/chair/vehicle/snowmobile/syndicate,
+/turf/unsimulated/floor{
+	icon_state = "floor4"
+	},
+/area/shuttle/nuclearops)
 "xOn" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -376186,8 +376192,8 @@ dwE
 dwE
 xSK
 dzo
-dwE
-dwE
+xNR
+xNR
 dwE
 dwE
 dwE
@@ -376790,8 +376796,8 @@ dwE
 dxP
 xSK
 dzv
-dwE
-dwE
+xNR
+xNR
 dwE
 dwE
 lzx

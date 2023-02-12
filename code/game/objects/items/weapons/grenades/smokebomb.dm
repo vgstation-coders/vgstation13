@@ -17,8 +17,7 @@
 
 /obj/item/weapon/grenade/smokebomb/Destroy()
 	if(smoke)
-		qdel(smoke)
-		smoke = null
+		QDEL_NULL(smoke)
 	..()
 
 /obj/item/weapon/grenade/smokebomb/prime()

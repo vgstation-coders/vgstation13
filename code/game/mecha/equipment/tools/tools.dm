@@ -552,12 +552,9 @@
 	red_tool_list += src
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Destroy()
-	qdel(RPD)
-	RPD = null
-	qdel(RCD)
-	RCD = null
-	qdel(sock)
-	sock = null
+	QDEL_NULL(RPD)
+	QDEL_NULL(RCD)
+	QDEL_NULL(sock)
 	red_tool_list -= src
 	..()
 
@@ -923,8 +920,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/Destroy()
 	chassis.overlays -= droid_overlay
-	qdel(pr_repair_droid)
-	pr_repair_droid = null
+	QDEL_NULL(pr_repair_droid)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/detach()
@@ -1021,8 +1017,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/Destroy()
-	qdel(pr_energy_relay)
-	pr_energy_relay = null
+	QDEL_NULL(pr_energy_relay)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/detach()
@@ -1161,8 +1156,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/generator/Destroy()
-	qdel(pr_mech_generator)
-	pr_mech_generator = null
+	QDEL_NULL(pr_mech_generator)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/generator/proc/init()
@@ -1431,10 +1425,8 @@
 	pr_switchtool.toggle()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/Destroy()
-	qdel(switchtool)
-	switchtool = null
-	qdel(pr_switchtool)
-	pr_switchtool = null
+	QDEL_NULL(switchtool)
+	QDEL_NULL(pr_switchtool)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/action(atom/target)
@@ -1572,8 +1564,7 @@
 	collector.connected_module = src
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/Destroy()
-	qdel(collector)
-	collector = null
+	QDEL_NULL(collector)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/action(atom/target)

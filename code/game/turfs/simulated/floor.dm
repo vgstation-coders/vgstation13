@@ -387,8 +387,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 //this proc.
 /turf/simulated/floor/proc/make_tiled_floor(var/obj/item/stack/tile/metal/T = null)
 	if(floor_tile)
-		qdel(floor_tile)
-	floor_tile = null
+		QDEL_NULL(floor_tile)
 	floor_tile = new T.type(null)
 	material = floor_tile.material
 	//Becomes a teleport destination for other phazon tiles

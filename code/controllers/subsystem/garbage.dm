@@ -262,9 +262,7 @@ List of hard deletions:"}
 	registered_events = null
 	gcDestroyed = "Bye, world!"
 	tag = null
-	for(var/timer in active_timers)
-		qdel(timer)
-	active_timers = null
+	QDEL_LIST_NULL(active_timers)
 	for(var/component_type in datum_components)
 		qdel(datum_components[component_type])
 	datum_components = null

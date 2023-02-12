@@ -10,8 +10,7 @@
 		user.put_in_hands(W)
 		to_chat(user, "<span  class='notice'>You stuff the [I] into the [src], emptying the contents beforehand.</span>")
 		W.underlays += image(src.icon, icon_state = src.icon_state)
-		qdel(I)
-		I = null
+		QDEL_NULL(I)
 		qdel(src)
 	else if(I.is_wirecutter(user))
 		to_chat(user, "You cut out the top and bottom of \the [src] with \the [I].")
@@ -161,8 +160,7 @@
 				if(leg && !(leg.status & ORGAN_DESTROYED))
 					leg.droplimb(1,0)
 
-				qdel(H.legcuffed)
-				H.legcuffed = null
+				QDEL_NULL(H.legcuffed)
 				unlock_atom(H)
 				boomtrap.IED = null
 	qdel(src)

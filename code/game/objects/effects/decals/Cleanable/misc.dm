@@ -190,8 +190,7 @@
 	name = "dry [src.name]"
 	icon_state = "vomit_[rand(1,4)]_dry"
 	amount = 0
-	qdel(reagents)
-	reagents = null
+	QDEL_NULL(reagents)
 
 /obj/effect/decal/cleanable/tomato_smudge
 	name = "tomato smudge"

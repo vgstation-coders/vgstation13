@@ -115,8 +115,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		processing_objects -= src
 
 	if(integratedpai)
-		qdel(integratedpai)
-		integratedpai = null
+		QDEL_NULL(integratedpai)
 
 	material_type = null //Don't qdel, they're held globally
 	if(associated_forward)
@@ -240,8 +239,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		verbs -= /obj/proc/remove_pai
 		var/obj/item/device/paicard/P = integratedpai
 		integratedpai = null
-		qdel(pAImove_delayer)
-		pAImove_delayer = null
+		QDEL_NULL(pAImove_delayer)
 		return P
 	return 0
 

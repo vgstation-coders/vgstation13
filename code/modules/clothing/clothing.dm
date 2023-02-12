@@ -409,6 +409,7 @@
 	var/gave_out_gifts = FALSE //for snowman animation
 	var/obj/item/clothing/head/on_top = null //for stacking
 	var/stack_depth = 0
+	var/blood_overlay_type = "hat"
 
 var/global/hatStacking = 0
 var/global/maxStackDepth = 10

@@ -232,8 +232,7 @@
 			break
 	scanning = DISEASE_SPLICER_SCANNING_TICKS
 	analysed = dish.analysed
-	qdel(dish)
-	dish = null
+	QDEL_NULL(dish)
 	update_icon()
 	anim(target = src, a_icon = icon, flick_anim = "splicer_scan", sleeptime = 15)
 

@@ -758,8 +758,7 @@ Assign your candidates in choose_candidates() instead.
 	for(var/obj/effect/landmark/A in landmarks_list)
 		if(A.name in valid_landmark_lists)
 			tag_mode_spawns += get_turf(A)
-			qdel(A)
-			A = null
+			QDEL_NULL(A)
 			continue
 
 	init_tag_mode_spawns()

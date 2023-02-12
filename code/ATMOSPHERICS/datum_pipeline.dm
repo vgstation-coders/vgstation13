@@ -13,13 +13,11 @@
 
 /datum/pipeline/Destroy()
 	if(network) //For the pipenet rebuild
-		qdel(network)
-		network = null
+		QDEL_NULL(network)
 	if(air) //For the pipeline rebuild next tick
 		if(air.total_moles)
 			temporarily_store_air()
-		qdel(air)
-		air = null
+		QDEL_NULL(air)
 	//Null the fuck out of all these references
 	for(var/obj/machinery/atmospherics/pipe/M in members) //Edges are a subset of members
 		M.parent = null

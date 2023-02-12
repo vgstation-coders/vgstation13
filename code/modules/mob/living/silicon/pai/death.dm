@@ -17,11 +17,9 @@
 	mind = null
 	living_mob_list -= src
 	if(pps_device)
-		qdel(pps_device)
-		pps_device = null
+		QDEL_NULL(pps_device)
 	if(holomap_device)
 		holomap_device.stopWatching()
-		qdel(holomap_device)
-		holomap_device = null
+		QDEL_NULL(holomap_device)
 	ghostize()
 	qdel(src)

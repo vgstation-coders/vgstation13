@@ -319,8 +319,7 @@
 /obj/structure/fakecargoposter/Destroy()
 	for(var/atom/movable/A in cash.contents)
 		A.forceMove(loc)
-	qdel(cash)
-	cash = null
+	QDEL_NULL(cash)
 	..()
 
 /obj/structure/fakecargoposter/attackby(var/obj/item/weapon/W, mob/user)

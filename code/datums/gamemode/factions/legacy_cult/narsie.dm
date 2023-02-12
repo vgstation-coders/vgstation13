@@ -428,8 +428,7 @@ var/global/mr_clean_targets = list(
 			var/mob/living/silicon/robot/R = L
 
 			if (R.mmi)
-				qdel(R.mmi) // Nuke MMI.
-				R.mmi = null
+				QDEL_NULL(R.mmi) // Nuke MMI.
 		qdel(L) // Just delete it.
 	else if (is_type_in_list(A, mr_clean_targets))
 		qdel(A)

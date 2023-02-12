@@ -21,8 +21,7 @@
 	processing_objects.Add(src)
 
 /obj/item/weapon/reagent_containers/glass/jar/Destroy()
-	qdel(held_item)
-	held_item = null
+	QDEL_NULL(held_item)
 	processing_objects.Remove(src)
 	..()
 

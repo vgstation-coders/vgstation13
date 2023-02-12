@@ -681,8 +681,7 @@
 			//for(var/obj/O in src)
 			//	O.loc = loc
 			add_fingerprint(user)
-			qdel(G)
-			G = null
+			QDEL_NULL(G)
 			updateUsrDialog()
 			update_icon()
 			return

@@ -31,8 +31,7 @@ var/list/pda_multicasters = list()
 /obj/machinery/pda_multicaster/Destroy()
 	pda_multicasters.Remove(src)
 	if(CAMO)
-		qdel(CAMO)
-		CAMO = null
+		QDEL_NULL(CAMO)
 	..()
 
 /obj/machinery/pda_multicaster/update_icon()

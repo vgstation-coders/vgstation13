@@ -423,8 +423,7 @@ var/global/list/juice_items = list (
 
 /obj/machinery/reagentgrinder/proc/remove_object(var/obj/item/O)
 	holdingitems -= O
-	qdel(O)
-	O = null
+	QDEL_NULL(O)
 
 /obj/machinery/reagentgrinder/proc/juice()
 	power_change()

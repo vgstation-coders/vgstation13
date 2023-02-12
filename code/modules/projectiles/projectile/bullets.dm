@@ -565,8 +565,7 @@
 
 /obj/item/projectile/bullet/vial/Destroy()
 	if(vial)
-		qdel(vial)
-		vial = null
+		QDEL_NULL(vial)
 	if(user)
 		user = null
 	..()

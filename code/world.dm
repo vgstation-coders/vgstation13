@@ -60,6 +60,7 @@ var/auxtools_path
 	investigations[I_WIRES] = new /datum/log_controller(I_WIRES, filename="data/logs/[date_string] wires.htm", persist=TRUE)
 	investigations[I_GHOST] = new /datum/log_controller(I_GHOST, filename="data/logs/[date_string] poltergeist.htm", persist=TRUE)
 	investigations[I_ARTIFACT] = new /datum/log_controller(I_ARTIFACT, filename="data/logs/[date_string] artifact.htm", persist=TRUE)
+	investigations[I_RCD] = new /datum/log_controller(I_RCD, filename="data/logs/[date_string] rcd.htm", persist=TRUE)
 
 	diary = file("data/logs/[date_string].log")
 	panicfile = new/savefile("data/logs/profiling/proclogs/[date_string].sav")
@@ -275,57 +276,3 @@ var/auxtools_path
 				var/datum/admins/D = new /datum/admins("Moderator", rights, ckey)
 				D.associate(directory[ckey])
 
-/world/proc/update_status()
-	var/s = ""
-
-	if (config && config.server_name)
-		s += "<b>[config.server_name]</b> &#8212; "
-
-
-	s += {"<b>[station_name()]</b>"
-		(
-		<a href=\"http://\">" //Change this to wherever you want the hub to link to
-		Default"  //Replace this with something else. Or ever better, delete it and uncomment the game version
-		</a>
-		)"}
-	var/list/features = list()
-
-	if(ticker)
-		if(master_mode)
-			features += master_mode
-	else
-		features += "<b>STARTING</b>"
-
-	if (!enter_allowed)
-		features += "closed"
-
-	features += abandon_allowed ? "respawn" : "no respawn"
-
-	if (config && config.allow_ai)
-		features += "AI allowed"
-
-	var/n = 0
-	for (var/mob/M in player_list)
-		if (M.client)
-			n++
-
-	if (n > 1)
-		features += "~[n] players"
-	else if (n > 0)
-		features += "~[n] player"
-
-	/*
-	is there a reason for this? the byond site shows 'hosted by X' when there is a proper host already.
-	if (host)
-		features += "hosted by <b>[host]</b>"
-	*/
-
-	if (!host && config && config.hostedby)
-		features += "hosted by <b>[config.hostedby]</b>"
-
-	if (features)
-		s += ": [jointext(features, ", ")]"
-
-	/* does this help? I do not know */
-	if (src.status != s)
-		src.status = s

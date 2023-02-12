@@ -174,8 +174,7 @@ var/global/list/ghdel_profiling = list()
 
 /atom/Destroy()
 	if(reagents)
-		qdel(reagents)
-		reagents = null
+		QDEL_NULL(reagents)
 
 	if(density)
 		densityChanged()

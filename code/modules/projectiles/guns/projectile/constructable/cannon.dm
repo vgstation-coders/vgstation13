@@ -18,8 +18,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/Destroy()
 	if(loaded_item)
-		qdel(loaded_item)
-		loaded_item = null
+		QDEL_NULL(loaded_item)
 	..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/proc/update_verbs()

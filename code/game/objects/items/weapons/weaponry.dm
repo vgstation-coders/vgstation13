@@ -182,8 +182,7 @@
 			user.visible_message("<span class='danger'>[user] creates a spear with \a [I] and \a [src]!</span>",\
 			"<span class='notice'>You fasten \the [I] to the top of \the [src], creating \a [S].</span>")
 
-			qdel(I)
-			I = null
+			QDEL_NULL(I)
 			qdel(src)
 
 	else if(I.is_wirecutter(user))
@@ -371,8 +370,7 @@
 		for(var/i in blades)
 			var/blade = blades[i]
 			blades.Remove(i)
-			qdel(blade)
-			blade = null
+			QDEL_NULL(blade)
 	..()
 
 /obj/item/weapon/macuahuitl/proc/get_current_blade_count()
