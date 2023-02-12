@@ -123,21 +123,15 @@
 					to_chat(user, "<span class='warning'>Unsecure the [floor_tile.name] first!</span>")
 				else
 					to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
+					floor_tile.forceMove(src)
+					floor_tile = null
 					make_plating()
 					// Can't play sounds from areas. - N3X
 					C.playtoolsound(src, 80)
 	if(istype(C, /obj/item/stack/tile/metal/plasteel) && !floor_tile)
 		var/obj/item/stack/tile/T = C
 		if(T.use(1))
-			if(floor_tile)
-				QDEL_NULL(floor_tile)
-			floor_tile = new T.type(null)
-			material = floor_tile.material
-			intact = 1
-			plane = TURF_PLANE
-			update_icon()
-			levelupdate()
-			playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+			make_tiled_floor(T)
 	if(C.is_screwdriver(user) && floor_tile)
 		to_chat(user, "<span class='notice'>You start [secured ? "unsecuring" : "securing"] the [floor_tile.name].</span>")
 		C.playtoolsound(src, 80)
@@ -166,21 +160,9 @@
 		if(3.0)
 			return
 
-/turf/simulated/floor/engine/make_plating()
-	if(floor_tile)
-		floor_tile.forceMove(src)
-		floor_tile = null
-	intact = 0
-	broken = 0
-	burnt = 0
-	material = "metal"
-	plane = PLATING_PLANE
-
-	update_icon()
-	levelupdate()
-
 /turf/simulated/floor/engine/update_icon()
 	overlays.Cut()
+	icon_plating = "engine" //hotfix for now
 	..()
 	if(floor_tile)
 		if(secured)
