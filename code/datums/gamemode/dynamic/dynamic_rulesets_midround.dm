@@ -396,7 +396,7 @@
 	makeBody = FALSE
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/ready(var/forced=0)
-	max_candidates = max(1, round(population/25))
+	max_candidates = max(1, round(living_players.len/25))
 	return ..()
 
 // -- The offsets are here so that the cone of meteors always meet the station. Blob meteors shouldn't miss the station, else a blob would spawn outside of the main z-level.
@@ -514,8 +514,8 @@
 	if(!mode.executed_rules)
 		return FALSE
 		//We have nothing to investigate!
-	if(population>0)
-		weight = clamp(300/(population^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
+	if(living_players.len)
+		weight = clamp(300/(living_players.len^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
 	//We don't cotton to freaks in highpop
 	return ..()
 

@@ -624,7 +624,7 @@ Assign your candidates in choose_candidates() instead.
 
 // 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance.
 /datum/dynamic_ruleset/roundstart/extended/ready(var/forced=0)
-	var/probability = clamp(threat_level, 30, 100)
+	var/probability = clamp(mode.threat_level, 30, 100)
 	return !prob(probability)
 
 /datum/dynamic_ruleset/roundstart/extended/choose_candidates()
