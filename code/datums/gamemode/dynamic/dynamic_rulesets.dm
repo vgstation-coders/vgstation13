@@ -74,15 +74,6 @@
 		var/indice_pop = min(10,round(population/5)+1)
 		return (threat_level >= requirements[indice_pop])
 
-/datum/dynamic_ruleset/roundstart/acceptable(var/population=0,var/threat_level=0)
-	return mode ? ..(mode.roundstart_pop_ready,mode.threat_level) : 0
-
-/datum/dynamic_ruleset/latejoin/acceptable(var/population=0,var/threat_level=0)
-	return mode ? ..(mode.living_players.len,mode.midround_threat_level) : 0
-
-/datum/dynamic_ruleset/midround/acceptable(var/population=0,var/threat_level=0)
-	return mode ? ..(mode.living_players.len,mode.midround_threat_level) : 0
-
 // -- Choosing the candidate(s) for a rule which is otherwise guarenteed to be executed.
 // This generic proc works for a solo candidate.
 // returns: 0 or 1 depending on success. (failure meaning something runtimed mid-code.)
