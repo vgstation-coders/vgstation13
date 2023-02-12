@@ -80,7 +80,7 @@
 	dead_dont_count = TRUE
 
 // uncomment this when acceptable() has no subcalls
-/*/datum/unit_test/dynamic/can_spend/start()
+/datum/unit_test/dynamic/can_spend/start()
 	..()
 	var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules
 	for(var/i in 1 to 10)
@@ -94,4 +94,4 @@
 					if(!DR.acceptable(pop2check,dynamic_mode.threat_level))
 						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 on rule [DR.name] with [pop2check] players and [dynamic_mode.threat_level] threat out of [DR.requirements[j]]")
 				else if(DR.acceptable(pop2check,dynamic_mode.threat_level))
-					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [pop2check] players and [dynamic_mode.threat_level] threat out of [DR.requirements[j]]")*/
+					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [pop2check] players and [dynamic_mode.threat_level] threat out of [DR.requirements[j]]")
