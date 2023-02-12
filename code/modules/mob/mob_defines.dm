@@ -78,6 +78,7 @@
 	var/other = 0.0
 	var/eye_blind = null	//Carbon
 	var/eye_blurry = null	//Carbon
+	var/nearsightedness = 0
 	var/ear_deaf = null		//Carbon
 	var/say_mute = null
 	var/ear_damage = null	//Carbon

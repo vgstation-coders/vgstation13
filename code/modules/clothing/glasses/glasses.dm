@@ -92,6 +92,7 @@ BLIND     // can't see anything
 	name = "prescription mesons"
 	desc = "Optical Meson Scanner with prescription lenses."
 	prescription = 1
+	nearsighted_modifier = -3
 	eyeprot = -1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
@@ -99,12 +100,14 @@ BLIND     // can't see anything
 	name = "prescription health scanner HUD"
 	desc = "A Health Scanner HUD with prescription lenses."
 	prescription = 1
+	nearsighted_modifier = -3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/sechud/prescription
 	name = "prescription security HUD"
 	desc = "A Security HUD with prescription lenses."
 	prescription = 1
+	nearsighted_modifier = -3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /*
@@ -128,6 +131,7 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/science/prescription
 	name = "prescription science goggles"
 	prescription = 1
+	nearsighted_modifier = -3
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/science/attack_self(mob/user)
@@ -233,6 +237,7 @@ var/list/science_goggles_wearers = list()
 	icon_state = "glasses"
 	item_state = "glasses"
 	prescription = 1
+	nearsighted_modifier = -3
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	w_class = W_CLASS_TINY
 
@@ -365,6 +370,8 @@ var/list/science_goggles_wearers = list()
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	var/up = 0
 	eyeprot = 3
+	var/visionworsen = 5
+	nearsighted_modifier = 5
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/welding/attack_self()
@@ -381,6 +388,7 @@ var/list/science_goggles_wearers = list()
 		if(src.up)
 			src.up = !src.up
 			eyeprot = 3
+			nearsighted_modifier = visionworsen
 			body_parts_covered |= EYES
 			clothing_flags |= PLASMAGUARD
 			icon_state = initial(icon_state)
@@ -388,6 +396,7 @@ var/list/science_goggles_wearers = list()
 		else
 			src.up = !src.up
 			eyeprot = 0
+			nearsighted_modifier = 0
 			body_parts_covered &= ~EYES
 			clothing_flags &= ~PLASMAGUARD
 			icon_state = "[initial(icon_state)]up"
@@ -402,6 +411,8 @@ var/list/science_goggles_wearers = list()
 	item_state = "rwelding-g"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MATERIALS + "=3"
+	visionworsen = 1
+	nearsighted_modifier = 1
 
 /obj/item/clothing/glasses/sunglasses/blindfold
 	name = "blindfold"
@@ -417,6 +428,7 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/sunglasses/prescription
 	name = "prescription sunglasses"
 	prescription = 1
+	nearsighted_modifier = -3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/big
@@ -620,6 +632,7 @@ var/list/science_goggles_wearers = list()
 	icon = 'icons/obj/items.dmi'
 	icon_state = "contact"
 	prescription = 1
+	nearsighted_modifier = -3
 	body_parts_covered = null
 
 /obj/item/clothing/glasses/contacts/polarized
@@ -628,6 +641,7 @@ var/list/science_goggles_wearers = list()
 	icon_state = "polarized_contact"
 	darkness_view = -1
 	prescription = 1
+	nearsighted_modifier = -3
 	eyeprot = 1
 
 //////////////////
