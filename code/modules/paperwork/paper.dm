@@ -756,7 +756,7 @@ var/global/list/paper_folding_results = list ( \
                          </h2> <BR></body></html>"}
 
 /obj/item/weapon/paper/inventory
-	name = "\improper Iventory Manifest"
+	name = "\improper Inventory Manifest"
 	desc = "A list of objects in an area to check against the current inventory for misplacement."
 	var/list/areastocheck = list()
 
@@ -782,5 +782,5 @@ var/global/list/paper_folding_results = list ( \
 	update_icon()
 
 /obj/item/weapon/paper/inventory/armory
-	name = "\improper Armory Iventory Manifest"
+	name = "\improper Armory Inventory Manifest"
 	areastocheck = list(/area/security/armory,/area/security/warden)
