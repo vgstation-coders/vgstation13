@@ -79,7 +79,6 @@
 /datum/unit_test/dynamic/enemy_jobs/dead_dont_count
 	dead_dont_count = TRUE
 
-// uncomment this when acceptable() has no subcalls
 /datum/unit_test/dynamic/can_spend/start()
 	..()
 	var/list/rules2check = dynamic_mode.roundstart_rules + dynamic_mode.latejoin_rules + dynamic_mode.midround_rules

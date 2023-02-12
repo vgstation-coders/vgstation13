@@ -543,7 +543,7 @@
 	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
 	logo = "time-logo"
 
-/datum/dynamic_ruleset/latejoin/time_agent/ready(var/forced=0)
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
