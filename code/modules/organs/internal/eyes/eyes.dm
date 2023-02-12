@@ -15,10 +15,8 @@
 /datum/organ/internal/eyes/process() //Eye damage replaces the old eye_stat var.
 	if(is_broken())
 		owner.eye_blind = max(2, owner.eye_blind)
-//	if(is_bruised())
-//		owner.eye_blurry = max(2, owner.eye_blurry)
-//  stop eyeblur because we're already shortening the vision
-//  the overlay gets applied in standard_damage_overlay_updates.dm
+	if(is_bruised())
+		owner.eye_blurry = max(2, owner.eye_blurry)
 
 /datum/organ/internal/eyes/tajaran
 	name = "feline eyes"
