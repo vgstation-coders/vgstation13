@@ -1,3 +1,6 @@
+/obj/item/weapon/melee
+	on_armory_manifest = TRUE
+
 /obj/item/weapon/melee/energy
 	var/active = 0
 	sharpness = 1.5 //very very sharp
