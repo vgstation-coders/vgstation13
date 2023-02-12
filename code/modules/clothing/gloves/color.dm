@@ -131,8 +131,7 @@
 
 /obj/item/clothing/gloves/black/thief/storage/Destroy()
 	if(hold)
-		qdel(hold)
-		hold = null
+		QDEL_NULL(hold)
 	return ..()
 
 /obj/item/clothing/gloves/black/thief/storage/attack_hand(mob/user)
@@ -251,8 +250,7 @@
 		return
 	if(current_gun)
 		to_chat(M, "<span class ='notice'>Your gun evaporates into thin air!</span>")
-		qdel(current_gun)
-		current_gun = null
+		QDEL_NULL(current_gun)
 		charging = TRUE
 		spawn(50)
 			charging = FALSE

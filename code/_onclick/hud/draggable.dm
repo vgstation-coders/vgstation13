@@ -62,8 +62,7 @@
 		attachedmob.client.screen -= fuckbyond
 	attachedmob = null
 	if(fuckbyond)
-		qdel(fuckbyond)
-		fuckbyond = null
+		QDEL_NULL(fuckbyond)
 
 /obj/abstract/screen/draggable/MouseDown(turf/location,control,params)
 	mouse_opacity = 0 //Because dragging wont occur when you are inside of your own src, we hide the src to mouses
@@ -93,8 +92,7 @@
 		centerdist_x = over_location.x - attachedmob.x //maintains distance from usr in case usr moves
 		centerdist_y = over_location.y - attachedmob.y
 	if(fuckbyond) //This isn't a single click, therefore we can remove the FUCK BYOND object
-		qdel(fuckbyond)
-		fuckbyond = null
+		QDEL_NULL(fuckbyond)
 
 /obj/abstract/screen/draggable/MouseDrop(over_object,src_location,over_location,src_control,over_control,params)
 	if(attachedobject)

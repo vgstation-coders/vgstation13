@@ -76,12 +76,10 @@
 			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
 
 	if(species)
-		qdel(species)
-		species = null
+		QDEL_NULL(species)
 
 	if(vessel)
-		qdel(vessel)
-		vessel = null
+		QDEL_NULL(vessel)
 
 	my_appearance = null
 

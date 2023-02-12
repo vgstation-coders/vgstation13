@@ -1074,8 +1074,7 @@
 		wielded.wielding = null
 		user.u_equip(wielded,1)
 		if(wielded)
-			qdel(wielded)
-			wielded = null
+			QDEL_NULL(wielded)
 	update_wield(user)
 
 /obj/item/proc/update_wield(mob/user)

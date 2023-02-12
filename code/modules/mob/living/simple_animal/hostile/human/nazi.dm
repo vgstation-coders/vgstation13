@@ -84,8 +84,7 @@
 /mob/living/simple_animal/hostile/humanoid/nazi/proc/droploot()
 	var/obj/item/weapon/gun/projectile/luger/dropgun = new(loc)
 	if(!ammo)
-		qdel(dropgun.chambered)
-		dropgun.chambered = null
+		QDEL_NULL(dropgun.chambered)
 		qdel(dropgun.stored_magazine)
 	else
 		ammo--

@@ -199,8 +199,7 @@
 
 /obj/item/pocketwatch/luna_dial/Destroy()
 	fall = null
-	qdel(caster)
-	caster = null
+	QDEL_NULL(caster)
 	..()
 
 /obj/item/pocketwatch/luna_dial/attack_self(var/mob/user)

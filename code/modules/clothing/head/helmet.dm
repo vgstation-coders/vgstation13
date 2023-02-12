@@ -11,6 +11,7 @@
 	siemens_coefficient = 0.7
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	autoignition_temperature = AUTOIGNITION_PROTECTIVE
+	blood_overlay_type = "helmet"
 
 /obj/item/clothing/head/helmet/NoiseDampening()	// checked on headwear by flashbangs
 	return TRUE

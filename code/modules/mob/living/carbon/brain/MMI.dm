@@ -33,8 +33,7 @@
 
 /obj/item/device/mmi/Destroy()
 	if(brainmob)
-		qdel(brainmob)
-		brainmob = null
+		QDEL_NULL(brainmob)
 	..()
 
 	// Return true if handled
@@ -46,8 +45,7 @@
 			if(cc<req)
 				var/temppart = new t(src)
 				to_chat(user, "<span class='warning'>You're short [req-cc] [temppart]\s.</span>")
-				qdel(temppart)
-				temppart = null
+				QDEL_NULL(temppart)
 				return TRUE
 		if(!istype(loc,/turf))
 			to_chat(user, "<span class='warning'>You can't assemble the MoMMI, \the [src] has to be standing on the ground (or a table) to be perfectly precise.</span>")
@@ -183,8 +181,7 @@
 		brainmob.stat = 0
 		brainmob.resurrect()
 
-		qdel(O)
-		O = null
+		QDEL_NULL(O)
 
 		name = "[initial(name)]: [brainmob.real_name]"
 		icon_state = "mmi_full"
@@ -222,8 +219,7 @@
 		to_chat(user, "<span class='notice'>You upend \the [src], spilling the brain onto the floor.</span>")
 		var/obj/item/organ/internal/brain/brain = new(user.loc)
 		brain.transfer_identity(brainmob)
-		qdel(brainmob)
-		brainmob = null//Set mmi brainmob var to null
+		QDEL_NULL(brainmob)//Set mmi brainmob var to null
 
 		icon_state = "mmi_empty"
 		name = initial(name)
@@ -275,8 +271,7 @@
 
 /obj/item/device/mmi/radio_enabled/Destroy()
 	..()
-	qdel(radio)
-	radio = null
+	QDEL_NULL(radio)
 
 /obj/item/device/mmi/radio_enabled/verb/Toggle_Broadcasting()
 	set name = "Toggle Broadcasting"

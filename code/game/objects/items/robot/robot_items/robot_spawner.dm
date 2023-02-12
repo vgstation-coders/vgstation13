@@ -66,8 +66,7 @@
 
 /obj/item/weapon/robot_spawner/proc/recruiter_recruited(mob/dead/observer/player)
 	if(player)
-		qdel(recruiter)
-		recruiter = null
+		QDEL_NULL(recruiter)
 		busy = FALSE
 		charge--
 		spark(src, 4)

@@ -19,16 +19,13 @@
 	if(butchering_drops)
 		for(var/datum/butchering_product/B in butchering_drops)
 			butchering_drops -= B
-			qdel(B)
-			B = null
+			QDEL_NULL(B)
 
 	if(immune_system)
-		qdel(immune_system)
-		immune_system = null
+		QDEL_NULL(immune_system)
 
 	if(addicted_chems)
-		qdel(addicted_chems)
-		addicted_chems = null
+		QDEL_NULL(addicted_chems)
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -586,8 +583,7 @@ Thanks.
 				if(istype(s))
 					O.implants -= s
 					H.contents -= s
-					qdel(s)
-					s = null
+					QDEL_NULL(s)
 			O.amputated = 0
 			O.brute_dam = 0
 			O.burn_dam = 0
@@ -826,8 +822,7 @@ Thanks.
 		if(istype(H.loc, /mob/living))
 			var/mob/living/Location = H.loc
 			Location.drop_from_inventory(H)
-		qdel(H)
-		H = null
+		QDEL_NULL(H)
 		return
 	else if(istype(src.loc, /obj/structure/strange_present))
 		var/obj/structure/strange_present/present = src.loc
@@ -914,8 +909,7 @@ Thanks.
 		var/resisting = 0
 		for(var/obj/O in L.requests)
 			L.requests.Remove(O)
-			qdel(O)
-			O = null
+			QDEL_NULL(O)
 			resisting++
 		for(var/obj/item/weapon/grab/G in usr.grabbed_by)
 			resisting++

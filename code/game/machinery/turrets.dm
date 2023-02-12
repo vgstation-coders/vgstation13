@@ -210,6 +210,8 @@
 	return
 
 /obj/machinery/turret/proc/shootAt(var/atom/movable/target)
+	if(stat & BROKEN)
+		return
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(target)
 	if (!istype(T) || !istype(U))
@@ -353,8 +355,7 @@
 	flick("explosion", src)
 	src.setDensity(TRUE)
 	if (cover!=null) // deletes the cover - no need on keeping it there!
-		qdel(cover)
-		cover = null
+		QDEL_NULL(cover)
 
 
 /obj/machinery/turret/proc/malf_take_control(mob/living/silicon/ai/A)
@@ -731,8 +732,7 @@
 /obj/machinery/turret/Destroy()
 	// deletes its own cover with it
 	if(cover)
-		qdel(cover)
-		cover = null
+		QDEL_NULL(cover)
 	..()
 
 /obj/machinery/turret/centcomm

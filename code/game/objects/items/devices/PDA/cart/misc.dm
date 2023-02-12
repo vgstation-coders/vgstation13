@@ -200,8 +200,7 @@
 	cart_cam = new /obj/item/device/camera/cartridge(src)
 
 /obj/item/weapon/cartridge/camera/Destroy()
-	qdel(cart_cam)
-	cart_cam = null
+	QDEL_NULL(cart_cam)
 	for(var/obj/item/weapon/photo/PH in stored_photos)
 		qdel(PH)
 	stored_photos = list()

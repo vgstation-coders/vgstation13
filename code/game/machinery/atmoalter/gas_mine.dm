@@ -7,7 +7,7 @@
 	icon = 'icons/obj/atmospherics/miner.dmi'
 	icon_state = "miner"
 	power_channel=ENVIRON
-	var/base_power_usage = 100			//their base powerdraw, can be increased 
+	var/base_power_usage = 100			//their base powerdraw, can be increased
 	idle_power_usage = 10				//draw when off, stays constant
 
 	starting_materials = null
@@ -16,14 +16,14 @@
 	var/moles_outputted					//moles outputted last tick. used when examining
 	var/base_gas_production = 4500		//base KPa per tick - without external power
 	var/max_external_pressure = 10000	//base KPa output - without external power
-	var/output_temperature = T20C		
+	var/output_temperature = T20C
 	var/on = TRUE
-	
+
 /*	var/datum/power_connection/consumer/power_connection*/
 //	var/power_load = 5000				//draw external power from a wire node
 	var/power_load_last_tick = 0		//prevent cheeky way to make loadsa gas
 	var/power_load_two_ticks_ago = 0
-	
+
 	var/list/gases = list()				//which gases the miner generates
 	var/datum/gas_mixture/air_contents	//which gases the miner generates, and how fast (in KPa per tick)
 	var/datum/gas_mixture/pumping 		//used in transfering air around
@@ -33,31 +33,28 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/atmospherics/miner/New()
-	..()	
+	..()
 	pumping = new
 	air_contents = new
 /*	power_connection = new(src)
-	
+
 	power_connection.monitoring_enabled = TRUE
 	power_connection.power_priority = POWER_PRIORITY_EXCESS
 	power_connection.use_power = MACHINE_POWER_USE_ACTIVE
 	power_connection.active_usage = power_load*/
 	air_contents.volume = 1000
 	pumping.volume = 1000 //Same as above so copying works correctly
-	
+
 	power_change()
 	update_icon()
 
 /obj/machinery/atmospherics/miner/Destroy()
 	if(pumping)
-		qdel(pumping)
-		pumping = null
+		QDEL_NULL(pumping)
 	if(air_contents)
-		qdel(air_contents)
-		air_contents = null
+		QDEL_NULL(air_contents)
 /*	if(power_connection)
-		qdel(power_connection)
-		power_connection = null*/
+		QDEL_NULL(power_connection)*/
 	..()
 
 /obj/machinery/atmospherics/miner/verb/set_power_consumption()
@@ -83,7 +80,7 @@
 
 	for(var/current_gas in gases)
 		air_contents.adjust_gas(current_gas, gases[current_gas] * rate)
-	
+
 	air_contents.temperature = output_temperature
 	air_contents.update_values()
 
@@ -99,14 +96,14 @@
 /*	if(power_connection.connected)	//raise max pressure if powered
 		var/power_actually_consumed = power_connection.get_satisfaction() * power_load_last_tick
 		extra_power_pressure_bonus = power_actually_consumed * WATT_TO_KPA_OF_EXTERNAL_PRESSURE_LIMIT*/
-		
+
 	var/pressure_delta = max(0, (max_external_pressure + extra_power_pressure_bonus - environment_pressure))
 	if(pressure_delta > 0.1)
 		moles_outputted = pressure_delta * CELL_VOLUME / (output_temperature * R_IDEAL_GAS_EQUATION)
 		moles_outputted = min(moles_outputted, pumping.total_moles)
 		var/datum/gas_mixture/removed = pumping.remove(moles_outputted)
 		loc.assume_air(removed)
-	else 
+	else
 		moles_outputted = 0
 
 /*/obj/machinery/atmospherics/miner/proc/draw_power()
@@ -134,7 +131,7 @@
 	if(!connected_cable)
 		return 0
 	return power_connection.connect(connected_cable)*/
-	
+
 
 /obj/machinery/atmospherics/miner/examine(mob/user)
 	. = ..()
@@ -275,7 +272,7 @@
 	overlay_color = "#70DBDB"
 	gases = list(GAS_OXYGEN = 0.2, GAS_NITROGEN = 0.8)
 	on = 0
-	
+
 /obj/machinery/atmospherics/miner/mixed_nitrogen
 	name = "\improper Mixed Gas Miner"
 	desc = "Pumping nitrogen, carbon dioxide, and plasma."

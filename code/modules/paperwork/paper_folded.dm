@@ -26,8 +26,7 @@
 
 /obj/item/weapon/p_folded/Destroy()
 	if (unfolded)
-		qdel(unfolded)
-		unfolded = null
+		QDEL_NULL(unfolded)
 	return ..()
 
 /obj/item/weapon/p_folded/attack_self(mob/user as mob)

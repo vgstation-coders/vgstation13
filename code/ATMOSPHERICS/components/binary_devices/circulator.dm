@@ -32,7 +32,7 @@
 
 /obj/machinery/atmospherics/binary/circulator/New()
 	. = ..()
-	create_reagents(25)
+	create_reagents(100)
 
 /obj/machinery/atmospherics/binary/circulator/Destroy()
 	. = ..()

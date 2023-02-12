@@ -127,8 +127,7 @@ var/creating_arena = FALSE
 
 /mob/dead/observer/Destroy()
 	..()
-	qdel(station_holomap)
-	station_holomap = null
+	QDEL_NULL(station_holomap)
 	ghostMulti = null
 	observers.Remove(src)
 

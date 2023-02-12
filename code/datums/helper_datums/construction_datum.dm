@@ -124,8 +124,7 @@
 
 		new result(get_turf(holder))
 		spawn()
-			qdel (holder)
-			holder = null
+			QDEL_NULL (holder)
 	return
 
 /datum/construction/proc/set_desc(index as num)

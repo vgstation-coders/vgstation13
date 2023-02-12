@@ -39,8 +39,7 @@
 		if(G.affecting)
 			visible_message("<span class='danger'>[src] has broken [target]'s grip on [G.affecting]!</span>")
 		spawn(1)
-			qdel(G)
-			G = null
+			QDEL_NULL(G)
 
 		. = TRUE
 

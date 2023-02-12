@@ -16,8 +16,7 @@
 /obj/item/stack/conveyor_assembly/dropped()
 	..()
 	if(active)
-		qdel(active)
-		active = null
+		QDEL_NULL(active)
 
 /obj/item/stack/conveyor_assembly/attack_self(mob/user)
 	if(!active) //Start click drag construction
@@ -25,8 +24,7 @@
 		to_chat(user, "Beginning conveyor construction mode, click and drag screen in direction you wish conveyor to go.")
 		return
 	else
-		qdel(active)
-		active = null
+		QDEL_NULL(active)
 
 /obj/item/stack/conveyor_assembly/drag_mousedown(mob/user, turf/origin)
 	if(istype(origin) && user.Adjacent(origin) && (!locate(/obj/structure/conveyor_assembly) in origin) && (!locate(/obj/machinery/conveyor) in origin) && !origin.density)
@@ -35,8 +33,7 @@
 		user.client.images += placeimage
 		placeloc = origin
 	else
-		qdel(active)
-		active = null
+		QDEL_NULL(active)
 
 /obj/item/stack/conveyor_assembly/can_drag_use(mob/user, turf/T)
 	return placeimage.dir != get_dir(placeloc, T)

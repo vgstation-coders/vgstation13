@@ -460,8 +460,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 			usr.client.screen -= S
 		//S.dropped(usr)
 		if(!S.amount)
-			qdel (S)
-			S = null
+			QDEL_NULL (S)
 		else
 			S.forceMove(src)
 
@@ -506,8 +505,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 			N.amount = stacksize
 			S.amount -= stacksize
 		if(!S.amount)
-			qdel (S) // todo: there's probably something missing here
-			S = null
+			QDEL_NULL (S) // todo: there's probably something missing here
 	orient2hud(usr)
 	if(usr.s_active)
 		usr.s_active.show_to(usr)

@@ -371,8 +371,7 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/Destroy()
 	if(host)
-		qdel(host)
-		host = null
+		QDEL_NULL(host)
 	..()
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/attackby(var/obj/item/weapon/W, var/mob/user)
@@ -687,8 +686,7 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/Destroy()
 	if(host)
-		qdel(host)
-		host = null
+		QDEL_NULL(host)
 	..()
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/death(var/gibbed = FALSE)

@@ -53,14 +53,11 @@
 
 /obj/structure/headpole/Destroy()
 	if(head)
-		qdel(head)
-		head = null
+		QDEL_NULL(head)
 	if(spear)
-		qdel(spear)
-		spear = null
+		QDEL_NULL(spear)
 	if(display_head)
-		qdel(display_head)
-		display_head = null
+		QDEL_NULL(display_head)
 	..()
 
 /obj/structure/headpole/with_head/New(atom/A)

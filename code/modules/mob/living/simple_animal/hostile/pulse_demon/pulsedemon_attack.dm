@@ -302,8 +302,7 @@
 		if(user.current_bot)
 			user.current_bot.PD_occupant = null
 			if(user.current_bot.pAImove_delayer && !user.current_bot.integratedpai)
-				qdel(user.current_bot.pAImove_delayer)
-				user.current_bot.pAImove_delayer = null
+				QDEL_NULL(user.current_bot.pAImove_delayer)
 		user.current_robot = null
 		user.current_bot = null
 		user.current_weapon = null

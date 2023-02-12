@@ -67,8 +67,7 @@ var/global/list/wizard_cards_normal = list(
 
 /obj/item/toy/singlecard/wizard/Destroy()
 	if(card_use)
-		qdel(card_use)
-		card_use = null
+		QDEL_NULL(card_use)
 	..()
 
 /obj/item/toy/singlecard/wizard/update_icon()

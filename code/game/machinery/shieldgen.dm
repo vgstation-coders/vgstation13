@@ -336,8 +336,7 @@
 	cleanup(EAST)
 	cleanup(WEST)
 	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
+		QDEL_NULL(power_connection)
 	..()
 
 /obj/machinery/shieldwallgen/free_access

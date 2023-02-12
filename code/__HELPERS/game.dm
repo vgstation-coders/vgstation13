@@ -3,7 +3,6 @@
 	var/href
 	href_list = params2list("src=\ref[src]&[target]=1")
 	href = "src=\ref[src];[target]=1"
-	src:temphtml = null
 	src:Topic(href, href_list)
 	return null
 

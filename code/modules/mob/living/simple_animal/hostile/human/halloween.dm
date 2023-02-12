@@ -476,8 +476,7 @@
 
 /mob/living/simple_animal/hostile/syphoner/Destroy()
 	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
+		QDEL_NULL(power_connection)
 	. = ..()
 
 /mob/living/simple_animal/hostile/syphoner/get_cell()
