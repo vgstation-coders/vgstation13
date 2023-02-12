@@ -204,9 +204,11 @@
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
-	if(required_candidates > player_count || antag_count >= max_traitors)
+	if(required_candidates > player_count)
 		return 0
-	return ..()
+	if(antag_count < max_traitors && prob(mode.midround_threat_level))//adding traitors if the antag population is getting low
+		return ..()
+	return 0
 
 /datum/dynamic_ruleset/midround/autotraitor/choose_candidates()
 	var/mob/M = pick(living_players)
