@@ -295,17 +295,21 @@
 		if(C)
 			C.update_icon()
 			C.updateUsrDialog()
-			if(!M.client && M.mind)
-				var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
-				if(ghost)
-					var/mob/ghostmob = ghost.get_top_transmogrification()
-					if(ghostmob)
-						ghostmob << 'sound/effects/adminhelp.ogg'
-						to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
-							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-				break
+			M.ghost_reenter_alert("Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!")
 			break
 	return TRUE
+
+/mob/proc/ghost_reenter_alert(var/message) //!M.client = mob has ghosted out of their body
+	if(!client && mind)
+		var/mob/dead/observer/ghost = mind_can_reenter(mind)
+		if(ghost)
+			var/mob/ghostmob = ghost.get_top_transmogrification()
+			if(ghostmob)
+				ghostmob << 'sound/effects/adminhelp.ogg'
+				to_chat(ghostmob, "<span class='interface big'><span class='bold'>[message]</span> \
+					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+				return TRUE
+	return FALSE
 
 /obj/machinery/dna_scannernew/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(isliving(AM))
@@ -363,14 +367,8 @@
 	return 0
 
 /obj/machinery/dna_scannernew/on_login(var/mob/M)
-	if(M.mind && !M.client && locate(/obj/machinery/computer/cloning) in range(src, 1)) //!M.client = mob has ghosted out of their body
-		var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
-		if(ghost)
-			var/mob/ghostmob = ghost.get_top_transmogrification()
-			if(ghostmob)
-				ghostmob << 'sound/effects/adminhelp.ogg'
-				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+	if(locate(/obj/machinery/computer/cloning) in range(src, 1))
+		M.ghost_reenter_alert("Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
 	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.

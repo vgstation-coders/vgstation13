@@ -425,35 +425,14 @@
 			scantemp = "Error: Unable to locate valid genetic data. However, mental interface initialized successfully."
 			to_chat(subject, "<span class='interface'><span class='big bold'>Someone is trying to clone your corpse.</span> \
 				You cannot be cloned as your body has been husked. However, your brain may still be used. Your ghost has been displayed as active and inside your body.</span>")
-			return
 		else
-			var/mob/dead/observer/ghost = mind_can_reenter(subject.mind)
-			if(ghost)
-				var/mob/ghostmob = ghost.get_top_transmogrification()
-				if(ghostmob)
-					scantemp = "Error: Unable to locate valid genetic data. Additionally, subject's brain is not responding to scanning stimuli."
-					ghostmob << 'sound/effects/adminhelp.ogg'
-					to_chat(ghostmob, "<span class='interface'><span class='big bold'>Someone is trying to clone your corpse.</span> \
-						You cannot be cloned as your body has been husked. However, your brain may still be used. To show you're still active, return to your body! (Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-					return
-			else
-				scantemp = "Error: Unable to locate valid genetic data. Additionally, mental interface failed to initialize."
-				return
+			scantemp = "Error: Unable to locate valid genetic data. Additionally, [subject.ghost_reenter_alert("Someone is trying to clone your corpse. You cannot be cloned as your body has been husked. However, your brain may still be used. To show you're still active, return to your body!") ? "subject's brain is not responding to scanning stimuli" : "mental interface failed to initialize"]."
+		return
 
 	//There's nothing wrong with the corpse itself past this point
 	if(!subject.client) //There is not a player "in control" of this corpse, maybe they ghosted, maybe they logged out
-		var/mob/dead/observer/ghost = mind_can_reenter(subject.mind)
-		if(ghost)
-			var/mob/ghostmob = ghost.get_top_transmogrification()
-			if(ghostmob) //Found this guy's ghost, and it still belongs to this corpse. There's nothing preventing this guy from being cloned, except them being ghosted
-				scantemp = "Error: Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds."
-				ghostmob << 'sound/effects/adminhelp.ogg'
-				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to clone your corpse. Return to your body if you want to be cloned!</span> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-				return
-		else //No ghost matching this corpse. Guy probably either logged out or was revived by out-of-body means.
-			scantemp = "Error: Mental interface failure."
-			return
+		scantemp = "Error: [subject.ghost_reenter_alert("Someone is trying to clone your corpse. Return to your body if you want to be cloned!") ? "Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds" : "Mental interface failure"]."
+		return
 
 	//Past this point, we know for sure the corpse is cloneable and has a ghost inside.
 	if(!subject.ckey) //ideally would never happen but a check never hurts
