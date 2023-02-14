@@ -43,8 +43,6 @@
 	for(var/n in 1 to 10)
 		dynamic_mode.threat_level = (n-1)*10
 		for(var/datum/dynamic_ruleset/DR in rules2check)
-			QDEL_LIST_CUT(dynamic_mode.living_players)
-			QDEL_LIST_CUT(dynamic_mode.candidates)
 			var/mob/M
 			var/enemies_count = 0
 			for(var/j in 1 to max(DR.required_pop[n],DR.required_enemies[n]))
@@ -69,9 +67,14 @@
 			ticker.current_state = old_game_state // and back again
 			if(result != tocheck)
 				fail("[__FILE__]:[__LINE__]: enemy job test failed. expected [tocheck], got [result] on rule [DR.name] with a threat of [dynamic_mode.threat_level] with [enemies_count] out of [DR.required_enemies[n]] enemies[!DR.midround ? " and [!DR.midround ? dynamic_mode.roundstart_pop_ready : dynamic_mode.living_players.len] out of [DR.required_pop[n]] candidates" : ""]")
+			QDEL_LIST_CUT(dynamic_mode.living_players)
+			QDEL_LIST_CUT(dynamic_mode.candidates)
 
 /datum/unit_test/dynamic/enemy_jobs/dead_dont_count
 	dead_dont_count = TRUE
+
+/datum/unit_test/dynamic/can_spend
+	var/high_pop = FALSE
 
 /datum/unit_test/dynamic/can_spend/start()
 	..()
@@ -86,15 +89,28 @@
 				if(DR.acceptable())
 					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [!DR.midround ? dynamic_mode.threat : dynamic_mode.midround_threat] threat out of [DR.cost] rule cost.")
 				continue
-			var/pop2check
-			for(var/j in 1 to 10)
-				dynamic_mode.living_players.Cut()
-				pop2check = (j-1)*5
-				for(var/k in 1 to pop2check)
+			if(high_pop)
+				for(var/j in 1 to dynamic_mode.high_pop_limit)
 					dynamic_mode.living_players.Add(list("fgsfds" = null))
-				dynamic_mode.roundstart_pop_ready = pop2check
-				if(dynamic_mode.threat_level >= DR.requirements[j])
+				dynamic_mode.roundstart_pop_ready = dynamic_mode.high_pop_limit
+				if(dynamic_mode.threat_level >= DR.high_population_requirement)
 					if(!DR.acceptable())
-						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 on rule [DR.name] with [pop2check] players and [!DR.midround ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.requirements[j]] required.")
+						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 on rule [DR.name] with [dynamic_mode.high_pop_limit] players and [!DR.midround ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.high_population_requirement] required.")
 				else if(DR.acceptable())
-					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [pop2check] players and [!DR.midround ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.requirements[j]] required.")
+					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [dynamic_mode.high_pop_limit] players and [!DR.midround ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.high_population_requirement] required.")
+			else
+				var/pop2check
+				for(var/j in 1 to 10)
+					pop2check = (j-1)*5
+					for(var/k in 1 to pop2check)
+						dynamic_mode.living_players.Add(list("fgsfds" = null))
+					dynamic_mode.roundstart_pop_ready = pop2check
+					if(dynamic_mode.threat_level >= DR.requirements[j])
+						if(!DR.acceptable())
+							fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 on rule [DR.name] with [pop2check] players and [!DR.midround ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.requirements[j]] required.")
+					else if(DR.acceptable())
+						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [pop2check] players and [!DR.midround ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.requirements[j]] required.")
+			dynamic_mode.living_players.Cut()
+
+/datum/unit_test/dynamic/can_spend/high_pop
+	high_pop = TRUE
