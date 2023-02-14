@@ -91,8 +91,7 @@
 				continue
 			if(high_pop)
 				for(var/j in 1 to dynamic_mode.high_pop_limit)
-					dynamic_mode.living_players.Add(list("fgsfds" = null))
-				dynamic_mode.roundstart_pop_ready = dynamic_mode.high_pop_limit
+					player_list.Add(list("fgsfds" = null))
 				if(dynamic_mode.threat_level >= DR.high_population_requirement)
 					if(!DR.acceptable())
 						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 on rule [DR.name] with [dynamic_mode.high_pop_limit] players and [!DR.midround ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.high_population_requirement] required.")
