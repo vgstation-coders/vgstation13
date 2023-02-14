@@ -70,6 +70,12 @@
 		log_admin("Dynamic Mode: Skipping [name] due to map blacklist")
 		return 0
 
+	var/threat = !midround ? mode.threat : mode.midround_threat
+	if(threat < cost)
+		message_admins("Dynamic Mode: Skipping [name] due to not meeting threat cost.")
+		log_admin("Dynamic Mode: Skipping [name] due to not meeting threat cost.")
+		return 0
+
 	var/threat_level = !midround ? mode.threat_level : mode.midround_threat_level
 	if (player_list.len >= mode.high_pop_limit)
 		return (threat_level >= high_population_requirement)
