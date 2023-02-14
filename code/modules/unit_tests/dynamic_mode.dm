@@ -81,13 +81,14 @@
 		dynamic_mode.threat_level = (i-1)*10
 		dynamic_mode.midround_threat_level = dynamic_mode.threat_level
 		for(var/datum/dynamic_ruleset/DR in rules2check)
-			QDEL_LIST_CUT(dynamic_mode.living_players)
 			if(DR.cost < dynamic_mode.threat_level)
 				continue
+			var/pop2check
 			for(var/j in 1 to 10)
-				var/pop2check = (j-1)*5
+				dynamic_mode.living_players.Cut()
+				pop2check = (j-1)*5
 				for(var/k in 1 to pop2check)
-					dynamic_mode.living_players.Add(new /mob)
+					dynamic_mode.living_players.Add(list("fgsfds" = null))
 				dynamic_mode.roundstart_pop_ready = pop2check
 				if(dynamic_mode.threat_level >= DR.requirements[j])
 					if(!DR.acceptable())
