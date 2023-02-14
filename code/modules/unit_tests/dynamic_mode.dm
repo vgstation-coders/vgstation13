@@ -8,7 +8,6 @@
 	dynamic_mode = ticker.mode
 	if(ruletype)
 		ruleset = new ruletype
-	dynamic_mode.can_start()
 	assert_eq(dynamic_mode.can_start(), 1)
 	if(dynamic_mode)
 		assert_eq(dynamic_mode.Setup(), 1)
