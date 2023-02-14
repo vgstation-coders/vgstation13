@@ -98,6 +98,7 @@
 						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 on rule [DR.name] with [dynamic_mode.high_pop_limit] players and [!DR.midround ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.high_population_requirement] required.")
 				else if(DR.acceptable())
 					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [dynamic_mode.high_pop_limit] players and [!DR.midround ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.high_population_requirement] required.")
+				dynamic_mode.living_players.Cut()
 			else
 				var/pop2check
 				for(var/j in 1 to 10)
@@ -110,7 +111,7 @@
 							fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 1, got 0 on rule [DR.name] with [pop2check] players and [!DR.midround ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.requirements[j]] required.")
 					else if(DR.acceptable())
 						fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [pop2check] players and [!DR.midround ? dynamic_mode.threat_level : dynamic_mode.midround_threat_level] threat out of [DR.requirements[j]] required.")
-			dynamic_mode.living_players.Cut()
+					dynamic_mode.living_players.Cut()
 
 /datum/unit_test/dynamic/can_spend/high_pop
 	high_pop = TRUE
