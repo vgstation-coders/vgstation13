@@ -83,7 +83,7 @@
 		dynamic_mode.threat = dynamic_mode.threat_level
 		dynamic_mode.midround_threat = dynamic_mode.threat_level
 		for(var/datum/dynamic_ruleset/DR in rules2check)
-			if(DR.cost >= dynamic_mode.threat)
+			if(dynamic_mode.threat < DR.cost)
 				if(DR.acceptable())
 					fail("[__FILE__]:[__LINE__]: threat spending acceptability test failed. expected 0, got 1 on rule [DR.name] with [!DR.midround ? dynamic_mode.threat : dynamic_mode.midround_threat] threat out of [DR.cost] rule cost.")
 				continue
