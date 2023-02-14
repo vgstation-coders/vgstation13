@@ -5,12 +5,13 @@
 
 /datum/unit_test/dynamic/start()
 	ticker.mode = new /datum/gamemode/dynamic
+	ASSERT(ticker.mode)
 	dynamic_mode = ticker.mode
+	ASSERT(dynamic_mode)
 	if(ruletype)
 		ruleset = new ruletype
-	assert_eq(dynamic_mode.can_start(), 1)
-	if(dynamic_mode)
-		assert_eq(dynamic_mode.Setup(), 1)
+	ASSERT(dynamic_mode.can_start())
+	ASSERT(dynamic_mode.Setup())
 	ASSERT(dynamic_mode.roundstart_rules.len)
 	ASSERT(dynamic_mode.midround_rules.len)
 	ASSERT(dynamic_mode.latejoin_rules.len)
