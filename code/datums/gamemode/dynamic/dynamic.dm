@@ -355,7 +355,7 @@ var/stacking_limit = 90
 	var/list/drafted_rules = list()
 
 	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
-		if (rule.acceptable() && threat >= rule.cost)	//if we got the population and threat required
+		if (rule.acceptable())	//if we got the population and threat required
 			i++											//we check whether we've got eligible players
 			rule.candidates = candidates.Copy()
 			rule.trim_candidates()
