@@ -105,8 +105,7 @@
 
 /obj/item/weapon/paper/envelope/Destroy()
 	if(contained_item)
-		qdel(contained_item)
-		contained_item = null
+		QDEL_NULL(contained_item)
 	..()
 
 /obj/item/weapon/paper/envelope/attack_self(mob/living/user)

@@ -168,8 +168,7 @@
 			node1.disconnect(src)
 			node1 = null
 		if(network)
-			qdel(network)
-			network = null
+			QDEL_NULL(network)
 		update_icon()
 
 /obj/machinery/atmospherics/unary/tank/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)

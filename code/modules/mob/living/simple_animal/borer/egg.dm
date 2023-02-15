@@ -109,8 +109,7 @@
 		to_chat(O, "The egg is recovering. Try again in a few moments.")
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/Destroy()
-	qdel(recruiter)
-	recruiter = null
+	QDEL_NULL(recruiter)
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/defected

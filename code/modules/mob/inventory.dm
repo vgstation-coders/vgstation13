@@ -549,8 +549,7 @@
 	else
 		switch(act_on_fail)
 			if(EQUIP_FAILACTION_DELETE)
-				qdel(W)
-				W = null
+				QDEL_NULL(W)
 			if(EQUIP_FAILACTION_DROP)
 				W.forceMove(get_turf(src)) // I think.
 	return equipped

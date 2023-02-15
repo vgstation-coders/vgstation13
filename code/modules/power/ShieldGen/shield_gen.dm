@@ -233,8 +233,7 @@
 /obj/machinery/shield_gen/proc/destroy_field()
 	for(var/obj/effect/energy_field/D in field)
 		field.Remove(D)
-		qdel(D)
-		D = null
+		QDEL_NULL(D)
 
 /obj/machinery/shield_gen/proc/stop()
 	if(!active)

@@ -15,8 +15,7 @@
 	song.instrumentExt = instrumentExt
 
 /obj/item/device/instrument/Destroy()
-	qdel(song)
-	song = null
+	QDEL_NULL(song)
 	..()
 
 /obj/item/device/instrument/initialize()

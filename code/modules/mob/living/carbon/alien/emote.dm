@@ -10,8 +10,8 @@
 /datum/emote/living/alien/hiss
 	key = "hiss"
 	key_third_person = "hisses"
-	message_alien = "hisses."
-	message_larva = "hisses softly."
+	message = "hisses."
+	message_mobtype = list(/mob/living/carbon/alien/larva = "hisses softly.")
 
 /datum/emote/living/alien/hiss/run_emote(mob/user, params)
 	. = ..()
@@ -21,8 +21,8 @@
 /datum/emote/living/alien/roar
 	key = "roar"
 	key_third_person = "roars"
-	message_alien = "roars."
-	message_larva = "softly roars."
+	message = "roars."
+	message_mobtype = list(/mob/living/carbon/alien/larva = "softly roars.")
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/alien/roar/run_emote(mob/user, params)

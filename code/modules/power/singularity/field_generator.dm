@@ -281,8 +281,7 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 	for (var/obj/machinery/containment_field/F in fields)
 		if (isnull(F))
 			continue
-		qdel(F)
-		F = null
+		QDEL_NULL(F)
 	fields = list()
 	for(var/obj/machinery/field_generator/FG in connected_gens)
 		if (isnull(FG))

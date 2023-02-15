@@ -566,16 +566,14 @@
 			user.visible_message(\
 				"<span class='warning'>[user.name] cut the cables and dismantled the power terminal.</span>",\
 				"You cut the cables and dismantle the power terminal.")
-			qdel(terminal)
-			terminal = null
+			QDEL_NULL(terminal)
 	else if (istype(W, /obj/item/weapon/circuitboard/power_control) && opened && has_electronics==0 && !((stat & BROKEN) || malfhack))
 		to_chat(user, "You begin to insert the power control board into the frame...")
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if (do_after(user, src, 10) && opened && has_electronics == 0 && !((stat & BROKEN) || malfhack))
 			has_electronics = 1
 			to_chat(user, "You place the power control board inside the frame.")
-			qdel(W)
-			W = null
+			QDEL_NULL(W)
 	else if (istype(W, /obj/item/weapon/circuitboard/power_control) && opened && has_electronics==0 && ((stat & BROKEN) || malfhack))
 		to_chat(user, "<span class='warning'>You cannot put the board inside, the frame is damaged.</span>")
 		return
@@ -607,8 +605,7 @@
 		user.visible_message(\
 			"<span class='warning'>[user.name] has replaced the damaged APC frontal panel with a new one.</span>",\
 			"You replace the damaged APC frontal panel with a new one.")
-		qdel(W)
-		W = null
+		QDEL_NULL(W)
 		update_icon()
 	else if (istype(W, /obj/item/mounted/frame/apc_frame) && opened && ((stat & BROKEN) || malfhack))
 		if (has_electronics)
@@ -619,8 +616,7 @@
 			user.visible_message(\
 				"<span class='warning'>[user.name] has replaced the damaged APC frame with new one.</span>",\
 				"You replace the damaged APC frame with new one.")
-			qdel(W)
-			W = null
+			QDEL_NULL(W)
 			stat &= ~BROKEN
 			if(malfai)
 				var/datum/role/malfAI/M = malfai.mind.GetRole(MALF)
@@ -1027,8 +1023,7 @@
 	malf.mind.transfer_to(src.occupant)
 	src.occupant.eyeobj.name = "[src.occupant.name] (AI Eye)"
 	if(malf.parent)
-		qdel(malf)
-		malf = null
+		QDEL_NULL(malf)
 	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 	src.occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
@@ -1408,12 +1403,10 @@
 		malfvacate(1)
 
 	if(cell)
-		qdel(cell)
-		cell = null
+		QDEL_NULL(cell)
 
 	if(wires)
-		qdel(wires)
-		wires = null
+		QDEL_NULL(wires)
 
 	if(malfimage)
 		qdel(malfimage)

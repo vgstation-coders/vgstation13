@@ -162,8 +162,7 @@
 /obj/item/weapon/hatchet/tomahawk/pipe/Destroy()
 	if(current_blunt)
 		current_blunt.unregister_event(/event/destroyed, src, .proc/burnout)
-		qdel(current_blunt)
-		current_blunt = null
+		QDEL_NULL(current_blunt)
 	..()
 
 /obj/item/weapon/hatchet/tomahawk/pipe/examine(mob/user)
@@ -243,8 +242,7 @@
 	if(current_blunt)
 		to_chat(usr, "<span class='notice'>You empty the crushed [blunt_name] out of \the [src].</span>")
 		not_burned_out = 1
-		qdel(current_blunt)
-		current_blunt = null
+		QDEL_NULL(current_blunt)
 		verbs -= /obj/item/weapon/hatchet/tomahawk/pipe/verb/empty_pipe
 
 /obj/item/weapon/hatchet/tomahawk/pipe/proc/burnout()
@@ -378,8 +376,7 @@
 	if(current_blunt)
 		to_chat(usr, "<span class='notice'>You empty the crushed [blunt_name] out of \the [src].</span>")
 		not_burned_out = 1
-		qdel(current_blunt)
-		current_blunt = null
+		QDEL_NULL(current_blunt)
 		verbs -= /obj/item/weapon/broken_pipe_tomahawk/verb/empty_pipe
 
 /obj/item/weapon/broken_pipe_tomahawk/proc/burnout(datum/thing)

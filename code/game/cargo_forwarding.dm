@@ -263,8 +263,7 @@
 		initialised_type = ispath(supply_type,/datum/supply_packs) ? supply_type : pick(subtypesof(/datum/supply_packs))
 		ourpack = new initialised_type
 		if(ourpack.require_holiday  && (Holiday != ourpack.require_holiday))
-			qdel(ourpack)
-			ourpack = null
+			QDEL_NULL(ourpack)
 	name = ourpack.name
 	contains = ourpack.contains.Copy()
 	amount = ourpack.amount

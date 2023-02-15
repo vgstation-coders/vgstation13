@@ -96,8 +96,7 @@
 
 	switch (act_on_fail)
 		if(EQUIP_FAILACTION_DELETE)
-			qdel(W)
-			W = null
+			QDEL_NULL(W)
 		if(EQUIP_FAILACTION_DROP)
 			W.forceMove(get_turf(src)) // I think.
 	return null
@@ -358,8 +357,7 @@
 		if(CANNOT_EQUIP)
 			switch(act_on_fail)
 				if(EQUIP_FAILACTION_DELETE)
-					qdel(W)
-					W = null
+					QDEL_NULL(W)
 				if(EQUIP_FAILACTION_DROP)
 					W.forceMove(get_turf(src)) //Should this be using drop_from_inventory instead?
 				else

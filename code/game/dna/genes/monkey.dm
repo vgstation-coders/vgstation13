@@ -110,8 +110,7 @@
 	O.update_name()
 //		O.update_icon = 1	//queue a full icon update at next life() call
 	Mo.monkeyizing = 0
-	qdel(M)
-	M = null
+	QDEL_NULL(M)
 	return
 
 /mob/proc/get_unmonkey_anim()

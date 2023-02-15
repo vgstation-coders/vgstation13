@@ -25,6 +25,7 @@
 	powerpoints = 4	//evolve points
 
 	var/mimicing = ""
+	var/disease_immunity = 0 //If on, the changeling doesn't suffer any symptoms from diseases
 
 /datum/role/changeling/OnPostSetup(var/laterole = FALSE)
 	. = ..()

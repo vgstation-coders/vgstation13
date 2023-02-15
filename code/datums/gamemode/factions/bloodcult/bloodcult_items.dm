@@ -1692,8 +1692,7 @@ var/list/arcane_tomes = list()
 			stored_gear.Remove(I)
 			I.forceMove(T)
 	if (remaining)
-		qdel(remaining)
-		remaining = null
+		QDEL_NULL(remaining)
 	..()
 
 /obj/item/weapon/blood_tesseract/throw_impact(atom/hit_atom)

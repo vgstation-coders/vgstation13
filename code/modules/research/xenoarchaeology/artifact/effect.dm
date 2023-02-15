@@ -211,8 +211,7 @@
 
 /datum/artifact_effect/Destroy()
 	if(trigger)
-		qdel(trigger)
-		trigger = null
+		QDEL_NULL(trigger)
 	copy_for_battery = null
 	holder = null
 	..()

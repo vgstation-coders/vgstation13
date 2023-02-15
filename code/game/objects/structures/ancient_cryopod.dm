@@ -53,8 +53,7 @@
 
 /obj/machinery/cryopod/proc/recruiter_recruited(mob/dead/observer/player, controls)
 	if(player)
-		qdel(recruiter)
-		recruiter = null
+		QDEL_NULL(recruiter)
 		visible_message("<span class='notice'>\The [name] opens with a hiss of frigid air!</span>")
 		playsound(src, 'sound/machines/pressurehiss.ogg', 30, 1)
 		icon_state = "ancientpod_used"

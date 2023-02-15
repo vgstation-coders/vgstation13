@@ -46,7 +46,10 @@
 		"/obj/item/device/device_analyser",
 		"/obj/item/device/silicate_sprayer",
 		"/obj/item/device/geiger_counter",
-		"/obj/item/airshield_projector"
+		"/obj/item/airshield_projector",
+		"/obj/item/device/radio",
+		"/obj/item/device/gps",
+		"/obj/item/blueprints/construction_permit"
 		)
 
 /obj/item/weapon/storage/belt/utility/complete/New()
@@ -114,7 +117,10 @@
 		"/obj/item/device/silicate_sprayer",
 		"/obj/item/device/geiger_counter",
 		"/obj/item/weapon/inflatable_dispenser",
-		"/obj/item/airshield_projector"
+		"/obj/item/airshield_projector",
+		"/obj/item/tool/irons",
+		"/obj/item/device/radio",
+		"/obj/item/device/gps"
 		)
 
 /obj/item/weapon/storage/belt/utility/chief/full/New() //This is mostly for testing I guess
@@ -341,8 +347,8 @@
 	fits_max_w_class = 4
 	max_combined_w_class = 28
 	can_only_hold = list(
- 		/obj/item/device/aicard,
- 		/obj/item/device/mmi,
+ 		"/obj/item/device/aicard",
+ 		"/obj/item/device/mmi",
  	)
 
 /obj/item/weapon/storage/belt/silicon/New()

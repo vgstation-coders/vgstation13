@@ -9,6 +9,7 @@
 	mutants = null
 	harvest_repeat = 1
 	chems = list(DIETHYLAMINE = list(0,10))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 60
 	maturation = 6
@@ -36,6 +37,7 @@
 	mutants = null
 	harvest_repeat = 1
 	chems = list(FROSTOIL = list(5,30))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 50
 	maturation = 3
@@ -64,7 +66,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/jurlmah)
 	mutants = null
 	chems = list(CLONEXADONE = list(1,10))
-
+	molecule_type = list(XENOPHYLL)
 	lifespan = 25
 	maturation = 6
 	production = 1
@@ -95,6 +97,7 @@
 	mutants = null
 	noreact = 1
 	chems = list(POTASSIUM = list(0,10),SUGAR = list(0,10),PHOSPHORUS = list(0,10))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 25
 	maturation = 10
@@ -127,6 +130,7 @@
 	mutants = null
 	harvest_repeat = 2
 	chems = list(NUTRIMENT = list(1,10))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 55
 	maturation = 6
@@ -157,6 +161,7 @@
 	mutants = null
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10),SPORTDRINK = list(0,2),THYMOL = list(0,5))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 100
 	maturation = 6
@@ -187,6 +192,7 @@
 	mutants = null
 	harvest_repeat = 1
 	chems = list(KARMOTRINE = list(2,2))
+	molecule_type = list(XENOPHYLL)
 
 	lifespan = 55
 	maturation = 7

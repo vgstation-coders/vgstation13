@@ -31,8 +31,7 @@
 	mech_parts.Add(scrubber)
 
 /obj/mecha/working/clarke/Destroy()
-	qdel(scrubber)
-	scrubber = null
+	QDEL_NULL(scrubber)
 	..()
 
 /obj/mecha/working/clarke/check_for_support()

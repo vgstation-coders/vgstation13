@@ -9,7 +9,7 @@
 	if(!ishorrorform(C.antag.current) && !(locate(/spell/changeling/evolve) in C.antag.current.spell_list))
 		C.antag.current.add_spell(new /spell/changeling/evolve, "changeling_spell_ready", /obj/abstract/screen/movable/spell_master/changeling	)
 
-	if(ismonkey(C.antag.current) && !(locate(/spell/changeling/higherform) in C.antag.current.spell_list))	//let them un-monkey themself. If they don't have any spare genomes theyre screwed, though
+	if(ismonkey(C.antag.current) && !(locate(/spell/changeling/higherform) in C.antag.current.spell_list))
 		C.antag.current.add_spell(new /spell/changeling/higherform, "changeling_spell_base", /obj/abstract/screen/movable/spell_master/changeling)
 
 	C.refreshpowers()
@@ -19,12 +19,12 @@
 		H.species.fireloss_mult = 2
 		dna.flavor_text = H.flavor_text
 		if(!(M_HUSK in H.mutations))
-			C.absorbed_dna |= dna		
+			C.absorbed_dna |= dna
 			C.absorbed_species |= H.species.name
 
 	for(var/language in languages)
 		C.absorbed_languages |= language
-		
+
 	updateChangelingHUD()
 	return 1
 

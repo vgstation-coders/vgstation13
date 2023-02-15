@@ -28,8 +28,7 @@
 /obj/item/device/assembly/infra/Destroy(var/turf/loc)
 	processing_objects.Remove(src)
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 	..()
 
 /obj/item/device/assembly/infra/examine(var/mob/user)
@@ -51,8 +50,7 @@
 		process()
 	else
 		if (beam)
-			qdel(beam)
-			beam = null
+			QDEL_NULL(beam)
 		processing_objects.Remove(src)
 		playsound(T,'sound/weapons/egun_toggle_taser.ogg',70,0,-5)
 	update_icon()
@@ -63,8 +61,7 @@
 	if(!secured)
 		on = FALSE
 		if(beam)
-			qdel(beam)
-			beam = null
+			QDEL_NULL(beam)
 		processing_objects.Remove(src)
 	update_icon()
 	return secured
@@ -88,8 +85,7 @@
 /obj/item/device/assembly/infra/process()
 	if(!on)
 		if (beam)
-			qdel(beam)
-			beam = null
+			QDEL_NULL(beam)
 		return
 	if(beam || !secured)
 		return
@@ -114,8 +110,7 @@
 
 /obj/item/device/assembly/infra/attack_hand()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 	..()
 
 
@@ -124,8 +119,7 @@
 	..()
 	dir = t
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 
 
 /obj/item/device/assembly/infra/holder_movement()
@@ -134,8 +128,7 @@
 	dir = holder.dir
 	holder.update_icon()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 	return 1
 
 
@@ -190,8 +183,7 @@
 			dir = text2dir(choice)
 			update_icon()
 			if (beam)
-				qdel(beam)
-				beam = null
+				QDEL_NULL(beam)
 			process()
 
 	if(usr)

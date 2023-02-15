@@ -52,8 +52,7 @@
 	if (src.output && loc)
 		new src.output(loc)
 	if (what)
-		qdel(what)
-		what = null
+		QDEL_NULL(what)
 
 /* objs */
 /datum/food_processor_process/poison/process(loc, atom/movable/what)
@@ -180,8 +179,7 @@
 			I.forceMove(loc)
 			I.throw_at(pick(throwzone),rand(2,5),0)
 		hgibs(loc, target.virus2, target.dna, target.species.flesh_color, target.species.blood_color)
-		qdel(target)
-		target = null
+		QDEL_NULL(target)
 		for(var/i = 1;i<=6;i++)
 			new /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets(loc)
 			sleep(2)

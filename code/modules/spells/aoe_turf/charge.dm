@@ -50,8 +50,7 @@
 		var/obj/item/weapon/spellbook/oneuse/I = target
 		if(prob(50))
 			I.visible_message("<span class='warning'>[I] catches fire!</span>")
-			qdel(I)
-			I = null
+			QDEL_NULL(I)
 		else
 			I.used = 0
 			charged_item = I

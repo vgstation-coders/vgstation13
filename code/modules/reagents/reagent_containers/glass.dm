@@ -435,8 +435,7 @@
 /obj/item/weapon/reagent_containers/glass/bucket/attackby(var/obj/D, mob/user as mob)
 	if(isprox(D))
 		to_chat(user, "You add \the [D] to \the [src].")
-		qdel(D)
-		D = null
+		QDEL_NULL(D)
 		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
 		user.drop_from_inventory(src)
 		qdel(src)

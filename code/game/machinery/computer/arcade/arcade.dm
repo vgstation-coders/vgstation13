@@ -32,8 +32,7 @@
 
 /obj/machinery/computer/arcade/Destroy()
 	if(game)
-		qdel(game)
-		game = null
+		QDEL_NULL(game)
 	..()
 
 /obj/machinery/computer/arcade/proc/import_game_data(var/obj/item/weapon/circuitboard/arcade/A)

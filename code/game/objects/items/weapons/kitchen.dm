@@ -535,9 +535,7 @@
 	var/cooldown = 0	//shield bash cooldown. based on world.time
 
 /obj/item/weapon/tray/Destroy()
-	for(var/atom/thing in carrying)
-		qdel(thing)
-	carrying = null
+	QDEL_LIST_NULL(carrying)
 	..()
 
 /obj/item/weapon/tray/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)

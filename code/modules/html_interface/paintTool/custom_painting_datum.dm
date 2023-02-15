@@ -133,11 +133,9 @@
 	..()
 	parent = null
 
-	qdel(interface)
-	interface = null
+	QDEL_NULL(interface)
 
-	qdel(mp_handler)
-	mp_handler = null
+	QDEL_NULL(mp_handler)
 
 /datum/custom_painting/proc/Copy()
 	var/datum/custom_painting/copy = new(parent, bitmap_width, bitmap_height, offset_x, offset_y, base_color)

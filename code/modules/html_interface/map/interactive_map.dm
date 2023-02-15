@@ -36,11 +36,7 @@ var/const/ALLOW_CENTCOMM = FALSE
 	src.data = list()
 
 /datum/interactive_map/Destroy()
-	if (src.interfaces)
-		for (var/datum/html_interface/hi in interfaces)
-			qdel(hi)
-		src.interfaces = null
-
+	QDEL_LIST_NULL(interfaces)
 	return ..()
 
 //Override this to show the user the interface
@@ -100,7 +96,7 @@ var/const/ALLOW_CENTCOMM = FALSE
 
 	testing(fdel(last_git_hash_path))
 	text2file(current_git_hash, last_git_hash_path)
-	
+
 	testing("MINIMAP: All minimaps have been generated.")
 	minimapinit = 1
 	// some idiot put HTML asset sending here.  In a spawn.  After a long wait for minimap generation.

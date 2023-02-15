@@ -316,8 +316,7 @@
 		if(usr)
 			to_chat(usr, "<span class='warning'>\The [src] doesn't have enough glass to make that!</span>")
 		if(L)
-			qdel(L)
-			L = null
+			QDEL_NULL(L)
 		return 1
 	glass -= (L.starting_materials[MAT_GLASS] * prod_eff)
 	L.switchcount = prod_quality
@@ -345,8 +344,7 @@
 						recycledglass += (L.materials.storage[MAT_GLASS] * 0.25)
 					if(LIGHT_BURNED)
 						recycledglass += (L.materials.storage[MAT_GLASS] * 0.50)
-				qdel(L)
-				L = null
+				QDEL_NULL(L)
 		if(recycledglass)
 			to_chat(usr, "<span class='notice'>\The [src] recycles its waste box, producing [recycledglass] units of glass.</span>")
 			add_glass(recycledglass, force_fill = 2)

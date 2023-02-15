@@ -259,6 +259,20 @@ var/list/science_goggles_wearers = list()
 	item_state = "tracking"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/glasses/regular/tracking/detective
+	name = "investigation glasses"
+	desc = "A SecurityHUD with built-in eye tracking glasses which allow the wearer to see what others are looking at."
+	icon_state = "investigation"
+	item_state = "investigation"
+	var/obj/item/clothing/glasses/hud/security/hud = null
+	darkness_view = -1
+	eyeprot = 1
+
+/obj/item/clothing/glasses/regular/tracking/detective/New()
+	..()
+	src.hud = new/obj/item/clothing/glasses/hud/security(src)
+	return
+
 /obj/item/clothing/glasses/gglasses
 	name = "Green Glasses"
 	desc = "Forest green glasses, like the kind you'd wear when hatching a nasty scheme."
@@ -681,8 +695,7 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/disable()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 	if (emitter)
 		emitter.unregister_event(/event/before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
 		emitter.unregister_event(/event/after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
@@ -694,15 +707,13 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/emitter/proc/update_emitter()
 	if (!emitter || !isturf(emitter.loc))
 		if (beam)
-			qdel(beam)
-			beam = null
+			QDEL_NULL(beam)
 		return
 	if (ismob(emitter))
 		var/mob/M = emitter
 		if (M.lying)
 			if(beam)
-				qdel(beam)
-				beam = null
+				QDEL_NULL(beam)
 			return
 	if (!beam)
 		beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
@@ -716,8 +727,7 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_start()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_end()
 	if (!emitter || !isturf(emitter.loc))

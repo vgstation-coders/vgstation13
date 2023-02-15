@@ -42,8 +42,7 @@
 	var/list/gallery = score.global_paintings
 	if(gallery.len && gallery.Find(src))
 		gallery -= src
-	qdel(painting_data)
-	painting_data = null
+	QDEL_NULL(painting_data)
 	..()
 
 /obj/structure/painting/custom/attackby(obj/item/W, mob/user)
@@ -241,8 +240,7 @@
 	..()
 
 /obj/item/mounted/frame/painting/custom/Destroy()
-	qdel(painting_data)
-	painting_data = null
+	QDEL_NULL(painting_data)
 	..()
 
 /obj/item/mounted/frame/painting/custom/attackby(obj/item/W, mob/user)

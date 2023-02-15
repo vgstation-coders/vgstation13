@@ -59,7 +59,7 @@
 	if (!src||!loc)
 		return
 	init_angle()
-	
+
 	ma = new(src)
 	ma.invisibility = 0
 	rider.client.images |= ma
@@ -68,8 +68,7 @@
 
 /obj/effect/malf_jaunt/Destroy()
 	if (rider)
-		qdel(rider)
-		rider = null
+		QDEL_NULL(rider)
 	..()
 
 /obj/effect/malf_jaunt/cultify()

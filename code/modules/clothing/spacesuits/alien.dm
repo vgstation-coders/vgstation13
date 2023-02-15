@@ -138,6 +138,7 @@
 	item_state = "vox-carapace"
 	desc = "A glowing visor, perhaps stolen from a depressed Cylon."
 	eyeprot = 3
+	blood_overlay_type = "mask"
 
 /obj/item/clothing/suit/space/vox/carapace
 	name = "alien carapace armor"
@@ -283,6 +284,7 @@
 	item_state = "vox-carapace"
 	desc = "A glowing visor, perhaps stolen from a depressed Cylon."
 	eyeprot = 3
+	blood_overlay_type = "mask"
 
 /obj/item/clothing/suit/space/vox/civ/trader/medic // aquasuit
 	name = "alien armor"

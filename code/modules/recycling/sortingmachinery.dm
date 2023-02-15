@@ -282,8 +282,7 @@
 /obj/machinery/sorting_machine/Destroy()
 	. = ..()
 
-	qdel(mover)
-	mover = null
+	QDEL_NULL(mover)
 
 /obj/machinery/sorting_machine/RefreshParts()
 	var/T = 0
@@ -797,8 +796,7 @@
 /obj/machinery/autoprocessor/Destroy()
 	. = ..()
 
-	qdel(mover)
-	mover = null
+	QDEL_NULL(mover)
 
 /obj/machinery/autoprocessor/RefreshParts()
 	var/T = 0
@@ -1116,8 +1114,7 @@
 	outfit_datum = new outfit_type()
 
 /obj/machinery/autoprocessor/outfit/Destroy()
-	qdel(outfit_datum)
-	outfit_datum = null
+	QDEL_NULL(outfit_datum)
 	..()
 
 /obj/machinery/autoprocessor/outfit/process_affecting(var/atom/movable/target)

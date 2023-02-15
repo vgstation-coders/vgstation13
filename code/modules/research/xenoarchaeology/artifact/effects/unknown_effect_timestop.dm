@@ -32,8 +32,7 @@
 
 /datum/artifact_effect/timestop/Destroy()
 	fall = null
-	qdel(caster)
-	caster = null
+	QDEL_NULL(caster)
 	..()
 
 /datum/artifact_effect/timestop/DoEffectTouch(var/mob/user)

@@ -45,8 +45,7 @@
 
 /obj/item/clothing/accessory/storage/Destroy()
 	if(hold)
-		qdel(hold)
-		hold = null
+		QDEL_NULL(hold)
 	return ..()
 
 /obj/item/weapon/storage/internal
@@ -89,14 +88,14 @@
 	icon_state = "vest_brown"
 	_color = "vest_brown"
 	storage_slots = 5
-	
+
 /obj/item/clothing/accessory/storage/fannypack
 	name = "fanny pack"
 	desc = "Extremely lame, but it's nice to have an extra pocket."
 	icon_state = "fannypack"
 	_color = "fannypack"
 	storage_slots = 1
-	
+
 /obj/item/clothing/accessory/storage/fannypack/preloaded/assistant/New()
 	..()
 	new /obj/item/clothing/accessory/assistantcard(hold)
@@ -108,6 +107,7 @@
 	_color = "bandolier"
 	storage_slots = 8
 	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/stack/rcd_ammo", "/obj/item/weapon/grenade")
+	on_armory_manifest = TRUE
 
 /obj/item/clothing/accessory/storage/knifeharness
 	name = "decorated harness"

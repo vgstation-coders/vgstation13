@@ -161,36 +161,26 @@
 	mech_parts.Cut() //We don't need this list anymore, too.
 	mechas_list -= src //global mech list
 	if(cell)
-		qdel(cell)
-		cell = null
+		QDEL_NULL(cell)
 	if(internal_tank)
-		qdel(internal_tank)
-		internal_tank = null
+		QDEL_NULL(internal_tank)
 	if(cabin_air)
-		qdel(cabin_air)
-		cabin_air = null
+		QDEL_NULL(cabin_air)
 	connected_port = null
 	if(radio)
-		qdel(radio)
-		radio = null
+		QDEL_NULL(radio)
 	if(electropack)
-		qdel(electropack)
-		electropack = null
+		QDEL_NULL(electropack)
 	if(tracking)
-		qdel(tracking)
-		tracking = null
+		QDEL_NULL(tracking)
 	if(pr_int_temp_processor)
-		qdel(pr_int_temp_processor)
-		pr_int_temp_processor = null
+		QDEL_NULL(pr_int_temp_processor)
 	if(pr_inertial_movement)
-		qdel(pr_inertial_movement)
-		pr_inertial_movement = null
+		QDEL_NULL(pr_inertial_movement)
 	if(pr_give_air)
-		qdel(pr_give_air)
-		pr_give_air = null
+		QDEL_NULL(pr_give_air)
 	if(pr_internal_damage)
-		qdel(pr_internal_damage)
-		pr_internal_damage = null
+		QDEL_NULL(pr_internal_damage)
 	selected = null
 	..()
 
@@ -2192,8 +2182,7 @@
 				if(t_air)
 					t_air.merge(removed)
 				else //just delete the cabin gas, we're in space or some shit
-					qdel(removed)
-					removed = null
+					QDEL_NULL(removed)
 	else
 		return stop()
 
@@ -2234,8 +2223,7 @@
 			if(mecha.loc && hascall(mecha.loc,"assume_air"))
 				mecha.loc.assume_air(leaked_gas)
 			else
-				qdel(leaked_gas)
-				leaked_gas = null
+				QDEL_NULL(leaked_gas)
 	if(mecha.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
 		if(mecha.get_charge())
 			spark(mecha, 2, FALSE)

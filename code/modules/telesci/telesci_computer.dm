@@ -313,8 +313,7 @@ var/list/telesci_warnings = list(
 			return
 
 		if(prob(25))
-			qdel(telepad.amplifier)
-			telepad.amplifier = null
+			QDEL_NULL(telepad.amplifier)
 			src.visible_message("[bicon(src)]<span class='notice'>You hear something shatter.</span>","[bicon(src)]<span class='notice'>You hear something shatter.</span>")
 
 	spark(telepad, 5)

@@ -7,6 +7,7 @@ var/creating_arena = FALSE
 /mob/dead/observer
 	name = "ghost"
 	desc = "It's a g-g-g-g-ghooooost!" //jinkies!
+	admin_desc = "The 'manual_poltergeist_cooldown' variable allows the cooldown of the ghost's poltergeist activities (such as flicking lightswitches) to be modified in a decisecond format (10 is 1 second). Set it to null to restore the cooldown to the global poltergeist variable (by default 30 seconds)."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "ghost1"
 	stat = DEAD
@@ -126,8 +127,7 @@ var/creating_arena = FALSE
 
 /mob/dead/observer/Destroy()
 	..()
-	qdel(station_holomap)
-	station_holomap = null
+	QDEL_NULL(station_holomap)
 	ghostMulti = null
 	observers.Remove(src)
 

@@ -32,6 +32,7 @@
 
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			add_gamelogs(user, "deconstructed \the [T] with \the [master]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
+			T.investigation_log(I_RCD,"was deconstructed by [user]")
 			T.ChangeTurf(T.get_underlying_turf())
 			return 0
 
@@ -43,6 +44,7 @@
 				return 1
 
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+			D.investigation_log(I_RCD,"was deconstructed by [user]")
 			qdel(D)
 			return 0
 
@@ -58,12 +60,15 @@
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			for(var/obj/structure/grille/G in W.loc)
 				if(!istype(G,/obj/structure/grille/invulnerable)) // No more breaking out in places like lamprey
+					G.investigation_log(I_RCD,"was deconstructed by [user]")
 					qdel(G)
 			for(var/obj/structure/window/WI in W.loc)
 				if(is_type_in_list(W, list(/obj/structure/window/plasma,/obj/structure/window/reinforced/plasma,/obj/structure/window/full/plasma,/obj/structure/window/full/reinforced/plasma)) && !can_r_wall)
 					continue
 				if(WI != W)
+					WI.investigation_log(I_RCD,"was deconstructed by [user]")
 					qdel(WI)
+			W.investigation_log(I_RCD,"was deconstructed by [user]")
 			qdel(W)
 			return 0
 	return 1
@@ -85,6 +90,7 @@
 
 	to_chat(user, "Building floor...")
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+	S.investigation_log(I_RCD,"was made into a floor by [user]")
 	S.ChangeTurf(/turf/simulated/floor/plating/airless)
 	return 0
 
@@ -115,6 +121,7 @@
 
 
 		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+		T.investigation_log(I_RCD,"was made into a reinforced floor by [user]")
 		T.ChangeTurf(/turf/simulated/floor/engine/plated/airless)
 	return 0
 
@@ -137,6 +144,7 @@
 			return 1
 
 		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+		T.investigation_log(I_RCD,"had a wall built on it by [user]")
 		T.ChangeTurf(/turf/simulated/wall)
 		return 0
 
@@ -161,6 +169,7 @@
 			return 1
 
 		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+		T.investigation_log(I_RCD,"had a reinforced wall built on it by [user]")
 		T.ChangeTurf(/turf/simulated/wall/r_wall)
 		return 0
 
@@ -207,8 +216,7 @@
 
 /datum/rcd_schematic/con_airlock/Destroy()
 	for(var/datum/selection_schematic/thing in schematics)
-		qdel(thing)
-	schematics = null
+		QDEL_NULL(thing)
 	..()
 
 /datum/rcd_schematic/con_airlock/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
@@ -445,6 +453,7 @@
 			D.req_access = selected_access.Copy()
 
 	D.autoclose	= 1
+	A.investigation_log(I_RCD,"had \a [D] built on it by [user]")
 
 /datum/rcd_schematic/con_window
 	name						= "Build window"
@@ -478,8 +487,7 @@
 
 /datum/rcd_schematic/con_window/Destroy()
 	for(var/datum/selection_schematic/thing in schematics)
-		qdel(thing)
-	schematics = null
+		QDEL_NULL(thing)
 	..()
 
 /datum/rcd_schematic/con_window/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
@@ -527,6 +535,7 @@
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	new selected.build_type(A)
+	A.investigation_log(I_RCD,"had \a [selected.name] built on it by [user]")
 
 /datum/selection_schematic
 	var/name			= "Selection"
@@ -548,8 +557,7 @@
 /datum/selection_schematic/Destroy()
 	for(var/client/C in clients)
 		C.screen.Remove(ourobj)
-	qdel(ourobj)
-	ourobj = null
+	QDEL_NULL(ourobj)
 	..()
 
 /datum/selection_schematic/access_schematic

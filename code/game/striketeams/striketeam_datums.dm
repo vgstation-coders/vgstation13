@@ -83,6 +83,7 @@ var/list/sent_strike_teams = list()
 
 		to_chat(O, "[bicon(team_logo)]<span class='recruit'>[faction_name] needs YOU to become part of its upcoming [striketeam_name]. (<a href='?src=\ref[src];signup=\ref[O]'>Apply now!</a>)</span>[bicon(team_logo)]")
 		to_chat(O, "[bicon(team_logo)]<span class='recruit'>Their mission: [mission]</span>[bicon(team_logo)]")
+		window_flash(O)
 
 	spawn(1 MINUTES)
 		searching = FALSE
@@ -312,8 +313,7 @@ var/list/sent_strike_teams = list()
 		for(var/x in all_hairs)
 			var/datum/sprite_accessory/hair/H = new x // create new hair datum based on type x
 			hairs.Add(H.name) // add hair name to hairs
-			qdel(H) // delete the hair after it's all done
-			H = null
+			QDEL_NULL(H) // delete the hair after it's all done
 
 		//hair
 		var/new_hstyle = input(user, "Select a hair style", "Grooming")  as null|anything in hair_styles_list

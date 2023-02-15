@@ -356,8 +356,7 @@
 		icon_state = "minimoog"
 
 /obj/structure/piano/Destroy()
-	qdel(song)
-	song = null
+	QDEL_NULL(song)
 	..()
 
 /obj/structure/piano/initialize()

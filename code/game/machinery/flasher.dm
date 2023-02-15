@@ -37,6 +37,7 @@ var/list/obj/machinery/flasher/flashers = list()
 	base_state = "pflash"
 	density = 1
 	min_harm_label = 35 //A lot. Has to wrap around the bulb, after all.
+	on_armory_manifest = TRUE
 
 /obj/machinery/flasher/power_change()
 	if ( powered() )
