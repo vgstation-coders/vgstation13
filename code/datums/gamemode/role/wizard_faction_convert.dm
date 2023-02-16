@@ -9,14 +9,12 @@
 	. = ..()
 	if(antag?.current)
 		var/factioncolor = istype(faction,/datum/faction/wizard/civilwar/wpf) ? "#f00" : "#00f"
-		for(var/image/I in antag.current.overlays)
-			I.color = factioncolor
+		antag.current.color = factioncolor
 
 /datum/role/wizard_convert/RemoveFromRole(datum/mind/M, msg_admins)
 	..()
 	if(antag?.current)
-		for(var/image/I in antag.current.overlays)
-			I.color = initial(I.color)
+		antag.current.color = initial(antag.current.color)
 
 /datum/role/wizard_convert/Greet(var/greeting,var/custom)
 	if(!greeting)
