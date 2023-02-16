@@ -127,9 +127,9 @@
 
 /obj/machinery/disposal/deliveryChute/New()
 	..()
-	underneath = image(src.icon,src,"[icon_state]-under",src.layer,src.dir)
-	underneath.plane = OBJ_PLANE
-	overlays += underneath
+	underneath = image(src.icon,src,"intake-under",src.layer,src.dir)
+	underneath.plane = relative_plane(OBJ_PLANE)
+	underlays += underneath
 	processing_objects.Remove(src)
 	spawn(5)
 		trunk = locate() in src.loc
@@ -180,7 +180,9 @@
 /obj/machinery/disposal/deliveryChute/flush()
 	flushing = 1
 	flick("intake-closing", src)
-	flick("intake-under-closing", underneath)
+	for(var/image/I in underlays)
+		if(I.icon_state = "intake-under")
+			flick("intake-under-closing", I)
 	var/deliveryCheck = 0
 	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
 												// travels through the pipes.

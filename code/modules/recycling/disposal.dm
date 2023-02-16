@@ -1573,9 +1573,9 @@
 
 /obj/structure/disposaloutlet/New()
 	. = ..()
-	underneath = image(src.icon,src,"[icon_state]-under",src.layer,src.dir)
-	underneath.plane = OBJ_PLANE
-	overlays += underneath
+	underneath = image(src.icon,src,"outlet-under",src.layer,src.dir)
+	underneath.plane = relative_plane(OBJ_PLANE)
+	underlays += underneath
 	spawn(1)
 		target = get_ranged_target_turf(src, dir, 10)
 
@@ -1607,7 +1607,9 @@
 	if(H)
 		H.active = 0
 	flick("outlet-open", src)
-	flick("outlet-under-open", underneath)
+	for(var/image/I in underlays)
+		if(I.icon_state = "outlet-under")
+			flick("outlet-under-open", I)
 	playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 0, 0)
 	sleep(20)	//wait until correct animation frame
 	playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
