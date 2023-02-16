@@ -18,7 +18,8 @@
 	civil_war_only = TRUE
 	compatible_mobs = list(/mob/living/carbon/human)
 	cast_sound = 'sound/effects/aoe2/30 wololo.ogg'
-	hud_state = ""
+	hud_state = "apprentice-logo"
+	override_icon = 'icons/logos.dmi'
 
 /spell/targeted/civilwarconvert/cast_check(skipcharge = 0,mob/user = usr)
 	return ..() && find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, user.mind)
