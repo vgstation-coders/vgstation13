@@ -28,15 +28,19 @@
 		var/mob/living/carbon/human/H = target
 		var/datum/faction/ourfact = find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, user.mind)
 		var/datum/faction/theirfact = find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, H.mind)
-		return !iswizard(H) && ourfact != theirfact
+		return !iswizard(H) && H.mind && ourfact != theirfact
 
 /spell/targeted/civilwarconvert/cast(list/targets, mob/user = user)
 	..()
 	var/datum/faction/F = find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, user.mind)
 	if(F)
 		for(var/mob/living/carbon/human/target in targets)
-			var/datum/role/wizard_convert/WC = new
-			WC.AssignToRole(target.mind,1)
+			var/datum/role/wizard_convert/WC = target.mind.GetRole(WIZARD_CONVERT)
+			if(!WC)
+				WC = new
+				WC.AssignToRole(target.mind,1)
+			if(WC.faction != F)
+				WC.faction.HandleRemovedRole(WC)
 			F.HandleRecruitedRole(WC)
 			WC.Greet()
 			WC.OnPostSetup()
