@@ -65,7 +65,7 @@
 		var/spell/S = new wizard_spell
 		all_spells += wizard_spell
 		if(!S.holiday_required.len || (Holiday in S.holiday_required))
-			if(!find_active_faction_by_type(/datum/faction/wizard/civilwar) && S.civil_war_only)
+			if(S.civil_war_only && !find_active_faction_by_type(/datum/faction/wizard/civilwar))
 				continue
 			switch(S.specialization)
 				if(SSOFFENSIVE)
