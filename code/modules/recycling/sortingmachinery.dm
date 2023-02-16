@@ -181,7 +181,7 @@
 	flushing = 1
 	flick("intake-closing", src)
 	for(var/image/I in underlays)
-		if(I.icon_state = "intake-under")
+		if(I.icon_state == "intake-under")
 			flick("intake-under-closing", I)
 	var/deliveryCheck = 0
 	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually

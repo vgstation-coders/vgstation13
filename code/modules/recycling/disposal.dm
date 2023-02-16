@@ -1608,7 +1608,7 @@
 		H.active = 0
 	flick("outlet-open", src)
 	for(var/image/I in underlays)
-		if(I.icon_state = "outlet-under")
+		if(I.icon_state == "outlet-under")
 			flick("outlet-under-open", I)
 	playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 0, 0)
 	sleep(20)	//wait until correct animation frame
