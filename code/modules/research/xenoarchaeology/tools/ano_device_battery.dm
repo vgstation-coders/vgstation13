@@ -303,6 +303,5 @@ var/list/anomaly_power_utilizers = list()
 	processing_objects.Remove(src)
 	anomaly_power_utilizers -= src
 	if (inserted_battery)
-		qdel(inserted_battery)
-		inserted_battery = null
+		QDEL_NULL(inserted_battery)
 	..()

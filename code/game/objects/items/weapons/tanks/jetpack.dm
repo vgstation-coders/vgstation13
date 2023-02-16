@@ -45,8 +45,7 @@
 	if(allgases >= 0.005)
 		return 1
 
-	qdel(G)
-	G = null
+	QDEL_NULL(G)
 	return
 
 /datum/action/item_action/toggle_jetpack

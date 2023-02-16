@@ -191,8 +191,7 @@ var/list/gravpults = list()
 
 /obj/structure/deathsquad_gravpult/proc/hud_off()
 	if (user)
-		qdel(button_launch)
-		button_launch = null
+		QDEL_NULL(button_launch)
 		user.client.screen -= button_launch
 		user.hud_used.holomap_obj.mouse_opacity = 0
 		user.client.images -= holomap_images

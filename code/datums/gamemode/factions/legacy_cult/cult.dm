@@ -361,8 +361,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	if (!S.target) // No targets still ? Time to reroll the objective.
 		log_admin("LEGACY CULT: qdeling the objective...")
 		objective_holder.objectives -= current_objective
-		qdel(current_objective)
-		current_objective = null
+		QDEL_NULL(current_objective)
 		getNewObjective(debug = TRUE) // This objective never happened.
 		return
 	for (var/datum/role/R in members)

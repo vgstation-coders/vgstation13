@@ -23,11 +23,9 @@
 
 /obj/item/device/blinder/Destroy()
 	if(cell)
-		qdel(cell)
-		cell = null
+		QDEL_NULL(cell)
 	if(flashbulb)
-		qdel(flashbulb)
-		flashbulb = null
+		QDEL_NULL(flashbulb)
 	..()
 
 /obj/item/device/blinder/New(var/empty = FALSE)

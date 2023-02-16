@@ -31,8 +31,7 @@
 
 /obj/machinery/vaporizer/Destroy()
 	..()
-	qdel(mixing_chamber)
-	mixing_chamber = null
+	QDEL_NULL(mixing_chamber)
 
 /obj/machinery/vaporizer/proc/toggle_power()
 	on = !on

@@ -96,8 +96,7 @@
 
 /obj/machinery/atmospherics/pipe/Destroy()
 	if(parent)
-		qdel(parent)
-		parent = null
+		QDEL_NULL(parent)
 	for(var/obj/machinery/meter/M in src.loc)
 		if(M.target == src)
 			new /obj/item/pipe_meter(src.loc)

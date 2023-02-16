@@ -104,8 +104,7 @@
 			var/obj/structure/window/W = A
 			W.shatter()
 		else
-			qdel(A)
-			A = null
+			QDEL_NULL(A)
 
 /obj/item/weapon/fireaxe/attackby(obj/item/I, mob/user)
 	if(istype(I,/obj/item/tool/crowbar/halligan))

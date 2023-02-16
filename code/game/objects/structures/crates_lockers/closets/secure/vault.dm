@@ -29,7 +29,8 @@
 /obj/structure/closet/secure_closet/vault/armory
 	name = "\improper Armory vault locker"
 	req_access = list(access_armory)
-	
+	holds_armory_items = TRUE
+
 /obj/structure/closet/secure_closet/vault/armory/atoms_to_spawn()
 	if(Holiday == APRIL_FOOLS_DAY)
 		return list(

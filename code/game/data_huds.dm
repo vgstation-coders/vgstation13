@@ -310,6 +310,12 @@ the HUD updates properly! */
 			O.hud.process_hud(src)
 		if(!druggy)
 			see_invisible = SEE_INVISIBLE_LIVING
+	else if(istype(G, /obj/item/clothing/glasses/regular/tracking/detective))
+		var/obj/item/clothing/glasses/regular/tracking/detective/O = G
+		if(O.hud)
+			O.hud.process_hud(src)
+		if(!druggy)
+			see_invisible = SEE_INVISIBLE_LIVING
 	else if(istype(G, /obj/item/clothing/glasses/hud))
 		var/obj/item/clothing/glasses/hud/O = G
 		O.process_hud(src)

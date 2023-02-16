@@ -356,8 +356,7 @@
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
 		tray.add_nutrientlevel(10)
 		fert.reagents.trans_to(tray, fert.reagents.total_volume)
-		qdel (fert)
-		fert = null
+		QDEL_NULL (fert)
 		//tray.updateicon()
 		icon_state = "[src.icon_initial]_fertile"
 		mode = FARMBOT_MODE_WAITING
@@ -484,8 +483,7 @@
 	to_chat(user, "You add the robot arm to the [src]")
 	src.forceMove(A) //Place the water tank into the assembly, it will be needed for the finished bot
 
-	qdel(S)
-	S = null
+	QDEL_NULL(S)
 
 /obj/item/weapon/farmbot_arm_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -493,22 +491,19 @@
 		src.build_step++
 		to_chat(user, "You add the plant analyzer to [src]!")
 		src.name = "farmbot assembly"
-		qdel(W)
-		W = null
+		QDEL_NULL(W)
 
 	else if(( istype(W, /obj/item/weapon/reagent_containers/glass/bucket)) && (src.build_step == 1))
 		src.build_step++
 		to_chat(user, "You add a bucket to [src]!")
 		src.name = "farmbot assembly with bucket"
-		qdel(W)
-		W = null
+		QDEL_NULL(W)
 
 	else if(( istype(W, /obj/item/weapon/minihoe)) && (src.build_step == 2))
 		src.build_step++
 		to_chat(user, "You add a minihoe to [src]!")
 		src.name = "farmbot assembly with bucket and minihoe"
-		qdel(W)
-		W = null
+		QDEL_NULL(W)
 
 	else if((isprox(W)) && (src.build_step == 3))
 		src.build_step++
@@ -519,8 +514,7 @@
 			S.tank = wTank
 		S.forceMove(get_turf(src))
 		S.name = src.created_name
-		qdel(W)
-		W = null
+		QDEL_NULL(W)
 		qdel(src)
 
 	else if(istype(W, /obj/item/weapon/pen))

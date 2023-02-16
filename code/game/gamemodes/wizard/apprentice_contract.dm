@@ -75,8 +75,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 
 /obj/item/wizard_apprentice_contract/Destroy()
 	owner = null
-	qdel(recruiter)
-	recruiter = null
+	QDEL_NULL(recruiter)
 	..()
 
 /obj/item/wizard_apprentice_contract/attack_self(mob/user)

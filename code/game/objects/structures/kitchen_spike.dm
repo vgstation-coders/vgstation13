@@ -101,8 +101,7 @@
 /obj/structure/kitchenspike/proc/clean()
 	icon_state = initial(icon_state)
 	if(occupant)
-		qdel(occupant)
-		occupant = null
+		QDEL_NULL(occupant)
 
 /obj/structure/kitchenspike/suicide_act(var/mob/living/user)
 	user.forceMove(get_turf(src))

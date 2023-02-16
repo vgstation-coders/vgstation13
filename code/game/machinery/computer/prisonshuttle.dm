@@ -176,8 +176,7 @@ var/prison_shuttle_timeleft = 0
 			for(var/atom/movable/AM as mob|obj in T)
 				AM.Move(D)
 			if(istype(T, /turf/simulated))
-				qdel(T)
-				T = null
+				QDEL_NULL(T)
 		start_location.move_contents_to(end_location)
 
 	else

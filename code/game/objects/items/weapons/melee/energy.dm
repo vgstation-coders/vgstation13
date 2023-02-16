@@ -1,3 +1,6 @@
+/obj/item/weapon/melee
+	on_armory_manifest = TRUE
+
 /obj/item/weapon/melee/energy
 	var/active = 0
 	sharpness = 1.5 //very very sharp
@@ -423,8 +426,7 @@
 	if(machete_combined || HF.machete_combined) //Adding a variable to separate the bloodlust from the machete is a lot less lines than copypasting most of the machete code
 		return
 	to_chat(user, "<span class='notice'>You combine the two [HF] together, making a single scissor-bladed weapon! You feel fucking invincible!</span>")
-	qdel(HF)
-	W = null
+	QDEL_NULL(W)
 	qdel(src)
 	var/B = new /obj/item/weapon/melee/energy/hfmachete/bloodlust(user.loc)
 	user.put_in_hands(B)

@@ -129,8 +129,7 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
 
-	qdel(tracker_datum)
-	tracker_datum = null
+	QDEL_NULL(tracker_datum)
 
 	if(blocked >= 100)
 		return 0//Full block
@@ -170,8 +169,7 @@ var/list/impact_master = list()
 	in_chamber.firer = user
 	var/output = in_chamber.process() //Test it!
 	//del(in_chamber) //No need for it anymore
-	qdel(in_chamber)
-	in_chamber = null
+	QDEL_NULL(in_chamber)
 	return output //Send it back to the gun!
 
 /obj/item/projectile/proc/admin_warn(mob/living/M)

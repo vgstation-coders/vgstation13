@@ -2122,8 +2122,7 @@
 						M.client.screen += blueeffect
 						sleep(20)
 						M.client.screen -= blueeffect
-						qdel(blueeffect)
-						blueeffect = null
+						QDEL_NULL(blueeffect)
 	..()
 
 /datum/chemical_reaction/slime_extract/slimecrystal

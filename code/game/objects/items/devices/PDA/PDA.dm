@@ -539,8 +539,7 @@ var/global/msg_id = 0
 	if(cartridge)
 		if (cartridge.radio)
 			cartridge.radio.hostpda = null
-		qdel(cartridge)
-		cartridge = null
+		QDEL_NULL(cartridge)
 
 	for(var/A in applications)
 		qdel(A)

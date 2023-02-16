@@ -26,8 +26,7 @@
 
 /obj/item/device/core_sampler/Destroy()
 	if (extracted)
-		qdel(extracted)
-		extracted = null
+		QDEL_NULL(extracted)
 	..()
 
 /obj/item/device/core_sampler/examine(mob/user)

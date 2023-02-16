@@ -103,8 +103,7 @@
 
 /obj/effect/unloader_grabber/Destroy()
 	if (stack_of_items)
-		qdel(stack_of_items)
-		stack_of_items = null
+		QDEL_NULL(stack_of_items)
 	unloader = null
 	if (loc)
 		for (var/atom/movable/AM in contents)

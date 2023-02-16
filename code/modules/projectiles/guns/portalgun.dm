@@ -26,11 +26,9 @@
 
 /obj/item/weapon/gun/portalgun/Destroy()
 	if(blue_portal)
-		qdel(blue_portal)
-		blue_portal = null
+		QDEL_NULL(blue_portal)
 	if(red_portal)
-		qdel(red_portal)
-		red_portal = null
+		QDEL_NULL(red_portal)
 	..()
 
 /obj/item/weapon/gun/portalgun/process_chambered()
@@ -68,15 +66,13 @@
 	switch(setting)
 		if(0)
 			if(blue_portal)
-				qdel(blue_portal)
-				blue_portal = null
+				QDEL_NULL(blue_portal)
 			blue_portal = new_portal
 			blue_portal.creator = src
 			blue_portal.owner = firer
 		if(1)
 			if(red_portal)
-				qdel(red_portal)
-				red_portal = null
+				QDEL_NULL(red_portal)
 			red_portal = new_portal
 			red_portal.icon_state = "portal1"
 			red_portal.creator = src

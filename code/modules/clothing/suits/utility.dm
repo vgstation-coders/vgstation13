@@ -70,6 +70,7 @@
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	autoignition_temperature = AUTOIGNITION_PROTECTIVE
+	on_armory_manifest = TRUE
 
 /obj/item/clothing/suit/bomb_suit
 	name = "bomb suit"
@@ -86,6 +87,7 @@
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
+	on_armory_manifest = TRUE
 
 /obj/item/clothing/head/bomb_hood/security
 	icon_state = "bombsuitsec"

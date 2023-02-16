@@ -210,7 +210,6 @@ var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", 
 			b.name = "Print Job #[rand(100, 999)]"
 			b.icon_state = "book[rand(1,9)]"
 			b.item_state = b.icon_state
-			qdel(O)
-			O = null
+			QDEL_NULL(O)
 	else
 		return ..()

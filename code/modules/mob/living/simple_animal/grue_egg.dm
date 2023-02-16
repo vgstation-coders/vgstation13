@@ -62,8 +62,7 @@
 	name = "grue egg remnants"
 	desc = "The remnants of a grue egg."
 	gender = "plural"
-	qdel(recruiter)
-	recruiter = null
+	QDEL_NULL(recruiter)
 	..()
 
 // Amount of time between retries for recruits. As to not spam ghosts every minute.

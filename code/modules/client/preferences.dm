@@ -270,8 +270,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	for(var/entry in subsections)
 		var/datum/preferences_subsection/prefs_ss = subsections[entry]
 		if(prefs_ss && !prefs_ss.gcDestroyed)
-			qdel(prefs_ss)
-	subsections = null
+			QDEL_NULL(prefs_ss)
 	..()
 
 /datum/preferences/proc/try_load_save_sqlite(var/theckey, var/theclient, var/theslot)

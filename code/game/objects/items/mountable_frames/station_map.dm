@@ -109,7 +109,6 @@
 		S.dir = holder.dir
 		S.update_icon()
 
-		qdel (holder)
-		holder = null
+		QDEL_NULL (holder)
 
 	feedback_inc("station_map_created",1)

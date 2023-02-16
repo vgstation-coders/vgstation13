@@ -162,6 +162,7 @@ var/list/admin_verbs_server = list(
 	/client/proc/dump_chemreactions,
 	/client/proc/save_coordinates,
 	/datum/admins/proc/mass_delete_in_zone,
+	/client/proc/hub_panel,
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
@@ -801,6 +802,14 @@ var/list/admin_verbs_mod = list(
 		else
 			config.log_hrefs = 1
 			to_chat(src, "<b>Started logging hrefs</b>")
+
+/client/proc/hub_panel()
+	set name = "Hub Panel"
+	set category = "Server"
+	if(holder)
+		holder.HubPanel()
+	feedback_add_details("admin_verb","HP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return
 
 /client/proc/check_ai_laws()
 	set name = "Check AI Laws"

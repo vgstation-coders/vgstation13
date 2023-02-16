@@ -1563,7 +1563,7 @@ var/list/confusion_victims = list()
 			M.update_fullscreen_alpha("deafborder", 0, 5)
 			sleep(8)
 			M.clear_fullscreen("deafborder", animate = 0)
-	if(activator && ritual_victim_count > 0)	
+	if(activator && ritual_victim_count > 0)
 		TriggerCultRitual(/datum/bloodcult_ritual/silence_lambs, activator, list("victimcount" = ritual_victim_count))
 	qdel(spell_holder)
 
@@ -2891,12 +2891,12 @@ var/list/bloodcult_exitportals = list()
 			vessel.my_appearance.g_eyes = 21
 			vessel.my_appearance.b_eyes = 21
 			vessel.my_appearance.s_tone = 45 // super duper albino
-			
+
 			// purely cosmetic tattoos. giving cultists some way to have tattoos until those get reworked
 			newCultist.tattoos[TATTOO_POOL] = new /datum/cult_tattoo/bloodpool()
 			newCultist.tattoos[TATTOO_HOLY] = new /datum/cult_tattoo/holy()
 			newCultist.tattoos[TATTOO_MANIFEST] = new /datum/cult_tattoo/manifest()
-			
+
 			vessel.equip_or_collect(new /obj/item/clothing/under/rags(vessel), slot_w_uniform)
 
 		M.regenerate_icons()

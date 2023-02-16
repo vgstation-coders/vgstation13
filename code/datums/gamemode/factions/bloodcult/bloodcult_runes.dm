@@ -65,8 +65,7 @@ var/list/rune_appearances_cache = list()
 	for(var/mob/living/silicon/ai/AI in player_list)
 		if (AI.client)
 			AI.client.images -= blood_image
-	qdel(blood_image)
-	blood_image = null
+	QDEL_NULL(blood_image)
 
 	if (word1)
 		erase_word(word1.english,blood1)

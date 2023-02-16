@@ -568,8 +568,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	else
 		// If the pipe's still around, nuke it.
 		if(P)
-			qdel(P)
-			P = null
+			QDEL_NULL(P)
 	return 1
 	 //TODO: DEFERRED
 
