@@ -40,6 +40,7 @@ var/list/ai_list = list()
 	var/datum/intercom_settings/intercom_clipboard = null //Clipboard for copy/pasting intercom settings
 	var/mentions_on = FALSE
 	var/list/holopadoverlays = list()
+	var/obj/item/device/mmi/brain = null
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
@@ -900,6 +901,26 @@ var/list/ai_list = list()
 			user.visible_message("<span class='notice'>\The [user] finishes fastening down \the [src]!</span>")
 			anchored = TRUE
 			return
+	else if (W.is_screwdriver(user) && user.a_intent == I_HELP)
+		if(health < maxHealth)
+			to_chat(user, "<span class='warning'>Repair \the [src] before deconstructing it!</span>")
+			return
+		user.visible_message("<span class='notice'>\The [user] begins carefully unscrewing \the [src]'s panel...</span>")
+		if(!do_after(user, src,100))
+			user.visible_message("<span class='notice'>\The [user] decides not to deconstruct \the [src].</span>")
+			return
+		user.visible_message("<span class='notice'>\The [user] finishes unfastening \the [src]'s panel!</span>")
+		message_admins("deconstruct AI here")
+		var/obj/structure/AIcore/core = new /obj/structure/AIcore/(src.loc)
+		core.state = 4 
+		core.circuit = new /obj/item/weapon/circuitboard/aicore
+		if(brain)
+			brain.forceMove(core)
+			core.brain = brain
+			if(ckey)
+				core.brain.brainmob.ckey = ckey
+		core.update_icon()
+		qdel(src)
 	else
 		return ..()
 
