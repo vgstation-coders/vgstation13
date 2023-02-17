@@ -56,7 +56,7 @@
 				WC = new
 				WC.AssignToRole(target.mind,1)
 				WC.ForgeObjectives()
-			if(WC.faction != F)
+			if(WC.faction && WC.faction != F)
 				WC.faction.HandleRemovedRole(WC)
 			F.HandleRecruitedRole(WC)
 			WC.Greet()
