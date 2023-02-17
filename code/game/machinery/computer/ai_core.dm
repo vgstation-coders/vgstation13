@@ -137,6 +137,8 @@
 				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/mob/living/silicon/ai/A = new /mob/living/silicon/ai ( loc, laws, brain )
+				brain.forceMove(A)
+				A.brain = brain
 				A.show_intro_text()
 				if(A) //if there's no brain, the mob is deleted and a structure/AIcore is created
 					mob_rename_self(A,"ai", null, 1)
