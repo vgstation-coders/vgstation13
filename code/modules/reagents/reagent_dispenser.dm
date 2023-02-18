@@ -233,6 +233,8 @@
 			explode(car.occupant)
 
 /obj/structure/reagent_dispensers/proc/explode(var/mob/user)
+	if(is_open_container())
+		return
 	var/volume = reagents.get_reagent_amount(FUEL)
 	if(!volume)
 		return
@@ -483,6 +485,7 @@
 	name = "cauldron"
 	icon_state = "cauldron"
 	desc = "Double, double, toil and trouble. Fire burn, and cauldron bubble."
+	flags = OPENCONTAINER
 
 /obj/structure/reagent_dispensers/cauldron/update_icon()
 	overlays.len = 0
@@ -510,9 +513,6 @@
 	update_icon()
 
 /obj/structure/reagent_dispensers/cauldron/wrenchable()
-	return TRUE
-
-/obj/structure/reagent_dispensers/cauldron/is_open_container()
 	return TRUE
 
 /obj/structure/reagent_dispensers/cauldron/hide_own_reagents()
