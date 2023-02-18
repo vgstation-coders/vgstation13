@@ -24,6 +24,8 @@
 	w_type = RECYK_MISC
 	var/up = 1
 	eyeprot = 0
+	var/visionworsen = 5
+	nearsighted_modifier = 0
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	body_parts_covered = HEAD
 	actions_types = list(/datum/action/item_action/toggle_helmet)
@@ -43,6 +45,7 @@
 			src.up = !src.up
 			src.body_parts_covered = FACE
 			eyeprot = 3
+			nearsighted_modifier = visionworsen
 			icon_state = "welding"
 			to_chat(usr, "You flip the [src] down to protect your eyes.")
 		else
@@ -50,6 +53,7 @@
 			src.body_parts_covered = HEAD
 			icon_state = "weldingup"
 			eyeprot = 0
+			nearsighted_modifier = 0
 			to_chat(usr, "You push the [src] up out of your face.")
 		usr.update_inv_head()	//so our mob-overlays update
 		usr.update_inv_wear_mask()

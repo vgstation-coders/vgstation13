@@ -5,6 +5,7 @@
 	var/list/species_restricted = null //Only these species can wear this kit.
 	var/wizard_garb = 0 // Wearing this empowers a wizard.
 	var/eyeprot = 0 //for head and eyewear
+	var/nearsighted_modifier = 0 //positive values impair vision(welding goggles), negative values improve vision(prescription glasses)
 
 	//temperatures in Kelvin. These default values won't affect protections in any way.
 	var/cold_breath_protection = 300 //that cloth protects its wearer's breath from cold air down to that temperature
