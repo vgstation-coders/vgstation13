@@ -151,7 +151,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	if(!(get_turf(src) == get_turf(user)))
 		return
-
+	..()
 	if(lit)
 		return
 
@@ -904,12 +904,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/afterattack(obj/O, mob/user, proximity)
 	if(!proximity)
 		return 0
-	if(istype(O, /obj/structure/reagent_dispensers/fueltank))
-		fuel += O.reagents.remove_any(initial(fuel) - fuel)
+	..()
+	if(istype(O, /obj/structure/reagent_dispensers) && O.reagents.has_reagent(FUEL))
+		fuel += O.reagents.remove_reagent(FUEL,initial(fuel) - fuel)
 		user.visible_message("<span class='notice'>[user] refuels \the [src].</span>", \
 		"<span class='notice'>You refuel \the [src].</span>")
 		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
-		return
 
 /obj/item/weapon/lighter/attack_self(mob/living/user)
 	var/turf/T = get_turf(src)

@@ -175,12 +175,12 @@
 	apply_beam_damage(B)
 
 /obj/structure/reagent_dispensers/fueltank/apply_beam_damage(var/obj/effect/beam/B)
-	if(isturf(get_turf(src)) && B.get_damage() >= 15)
+	if(isturf(get_turf(src)) && B.get_damage() >= 15 && reagents.get_reagent_amount(FUEL))
 		explode()
 
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(Proj.get_damage())
+		if(Proj.get_damage() && reagents.get_reagent_amount(FUEL))
 			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
 			if(Proj.firer)//turrets don't have "firers"
 				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
@@ -232,10 +232,13 @@
 				H.audible_scream("fueltank_crash")
 			explode(car.occupant)
 
-/obj/structure/reagent_dispensers/fueltank/proc/explode(var/mob/user)
-	if (reagents.total_volume > 500)
+/obj/structure/reagent_dispensers/proc/explode(var/mob/user)
+	var/volume = reagents.get_reagent_amount(FUEL)
+	if(!volume)
+		return
+	if (volume > 500)
 		explosion(src.loc,1,2,4, whodunnit = user)
-	else if (reagents.total_volume > 100)
+	else if (volume > 100)
 		explosion(src.loc,0,1,3, whodunnit = user)
 	else
 		explosion(src.loc,-1,1,2, whodunnit = user)

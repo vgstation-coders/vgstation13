@@ -78,6 +78,7 @@
 #define ALUMINUM 			"aluminum"
 #define SILICON 			"silicon"
 #define FUEL 			"fuel"
+#define FUELBOMB 			"fuelbomb"
 #define VOMIT 			"vomit"
 #define CLEANER 			"cleaner"
 #define BLEACH 				"bleach"

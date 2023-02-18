@@ -576,6 +576,43 @@
 	required_catalysts = list(NITROGEN = 5)
 	result_amount = 5
 
+/datum/chemical_reaction/fuelbomb
+	name = "Fuel bomb"
+	id = FUELBOMB
+	result = null
+	required_reagents = list(FUEL = 1)
+	required_temp = T0C + 235 //this is the temperature it takes gasoline to ignite, close enough
+	result_amount = 1
+
+/datum/chemical_reaction/fuelbomb/on_reaction(var/datum/reagents/holder, var/created_volume)
+	if(holder.my_atom.is_open_container())
+		if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
+			var/turf/location = get_turf(holder.my_atom.loc)
+
+			for(var/turf/simulated/floor/target_tile in range(0,location))
+				spawn(0)
+					target_tile.hotspot_expose(235, created_volume, surfaces = 1)
+
+		holder.del_reagent(FUEL)
+	else
+		var/datum/effect/system/reagents_explosion/e = new()
+		var/amounttosend = 0
+		if(created_volume > 500)
+			amounttosend = 15
+		else if(created_volume > 100)
+			amounttosend = 12
+		else
+			amounttosend = 9
+		e.set_up(amounttosend, holder.my_atom, 0, 0)
+		e.holder_damage(holder.my_atom)
+		if(isliving(holder.my_atom))
+			e.amount *= 0.5
+			var/mob/living/L = holder.my_atom
+			if(L.stat!=DEAD)
+				e.amount *= 0.5
+		e.start()
+		holder.clear_reagents()
+
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"
 	id = SODIUMCHLORIDE
