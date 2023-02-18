@@ -236,7 +236,7 @@
 	if(is_open_container())
 		return
 	var/volume = reagents.get_reagent_amount(FUEL)
-	if(!volume)
+	if(!volume && !istype(src,/obj/structure/reagent_dispensers/fueltank))
 		return
 	if (volume > 500)
 		explosion(src.loc,1,2,4, whodunnit = user)
