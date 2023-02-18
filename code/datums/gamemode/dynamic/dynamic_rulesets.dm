@@ -2,6 +2,7 @@
 	var/name = ""//For admin logging, and round end scoreboard
 	var/persistent = 0//if set to 1, the rule won't be discarded after being executed, and /gamemode/dynamic will call process() every MC tick
 	var/repeatable = 0//if set to 1, dynamic mode will be able to draft this ruleset again later on. (doesn't apply for roundstart rules)
+	var/midround = 1//if set to 1, is a midround rule
 	var/list/candidates = list()//list of players that are being drafted for this rule
 	var/list/assigned = list()//list of players that were selected for this rule
 	var/datum/role/role_category = /datum/role/traitor //rule will only accept candidates with "Yes" or "Always" in the preferences for this role
@@ -52,6 +53,7 @@
 		qdel(src)
 
 /datum/dynamic_ruleset/roundstart//One or more of those drafted at roundstart
+	midround = FALSE
 
 /datum/dynamic_ruleset/roundstart/delayed/ // Executed with a 30 seconds delay
 	var/delay = 30 SECONDS
@@ -60,7 +62,7 @@
 
 /datum/dynamic_ruleset/latejoin//Can be drafted when a player joins the server
 
-/datum/dynamic_ruleset/proc/acceptable(var/population=0,var/threat_level=0)
+/datum/dynamic_ruleset/proc/acceptable()
 	//by default, a rule is acceptable if it satisfies the threat level/population requirements.
 	//If your rule has extra checks, such as counting security officers, do that in ready() instead
 	if (!map.map_ruleset(src))
@@ -68,9 +70,17 @@
 		log_admin("Dynamic Mode: Skipping [name] due to map blacklist")
 		return 0
 
+	var/threat = !midround ? mode.threat : mode.midround_threat
+	if(threat < cost)
+		message_admins("Dynamic Mode: Skipping [name] due to not meeting threat cost.")
+		log_admin("Dynamic Mode: Skipping [name] due to not meeting threat cost.")
+		return 0
+
+	var/threat_level = !midround ? mode.threat_level : mode.midround_threat_level
 	if (player_list.len >= mode.high_pop_limit)
 		return (threat_level >= high_population_requirement)
 	else
+		var/population = !midround ? mode.roundstart_pop_ready : mode.living_players.len
 		var/indice_pop = min(10,round(population/5)+1)
 		return (threat_level >= requirements[indice_pop])
 

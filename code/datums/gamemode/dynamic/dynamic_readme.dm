@@ -30,7 +30,7 @@ Nothing at root level. As of 2/14 only ruleset to use this is roundstart autotra
 
 LATEJOIN
 latespawn(newPlayer) -> injection_attempt() -> [For each latespawn rule...]
--> acceptable(living players, threat_level) -> trim_candidates() -> ready(forced=FALSE) **If true, add to drafted rules
+-> acceptable() -> trim_candidates() -> ready(forced=FALSE) **If true, add to drafted rules
 **NOTE that acceptable uses threat_level not threat! 				 **NOTE Latejoin timer is ONLY reset if at least one rule was drafted.
 **NOTE the new_player.dm AttemptLateSpawn() calls OnPostSetup for all roles (unless assigned role is MODE)
 
@@ -40,7 +40,7 @@ latespawn(newPlayer) -> injection_attempt() -> [For each latespawn rule...]
 
 MIDROUND
 process() -> injection_attempt() -> [For each midround rule...]
--> acceptable(living players, threat_level) -> trim_candidates() -> ready(forced=FALSE)
+-> acceptable() -> trim_candidates() -> ready(forced=FALSE)
 [After collecting all draftble rules...]
 -> picking_midround_ruleset(drafted_rules) -> spend threat -> ruleset.execute()
 
@@ -50,12 +50,12 @@ For latejoin, it simply sets forced_latejoin_rule
 latespawn(newPlayer) -> trim_candidates() -> ready(forced=TRUE) **NOTE no acceptable() call
 
 For midround, calls the below proc with forced = TRUE
-picking_specific_rule(ruletype,forced) -> forced OR acceptable(living_players, threat_level) -> trim_candidates() -> ready(forced) -> spend threat -> execute()
+picking_specific_rule(ruletype,forced) -> forced OR acceptable() -> trim_candidates() -> ready(forced) -> spend threat -> execute()
 **NOTE specific rule can be called by RS traitor->MR autotraitor w/ forced=FALSE
 **NOTE that due to short circuiting acceptable() need not be called if forced.
 
 RULESET
-acceptable(population,threat) just checks if enough threat_level for population indice.
+acceptable(p) just checks if enough threat_level for population indice.
 **NOTE that we currently only send threat_level as the second arg, not threat.
 ready(forced) checks if enough candidates and calls the map's map_ruleset(dynamic_ruleset) at the parent level
 logo_state: if creating a non-faction role, name should be the same for both the role (for role_HUD_icons.dmi) and the ruleset (for logos.dmi) to prevent scoreboard bugs

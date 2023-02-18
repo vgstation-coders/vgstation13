@@ -623,8 +623,8 @@ Assign your candidates in choose_candidates() instead.
 	high_population_requirement = 101
 
 // 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance.
-/datum/dynamic_ruleset/roundstart/extended/acceptable(population, threat_level)
-	var/probability = clamp(threat_level, 30, 100)
+/datum/dynamic_ruleset/roundstart/extended/ready(var/forced=0)
+	var/probability = clamp(mode.threat_level, 30, 100)
 	return !prob(probability)
 
 /datum/dynamic_ruleset/roundstart/extended/choose_candidates()
@@ -713,7 +713,7 @@ Assign your candidates in choose_candidates() instead.
 	high_population_requirement = 10
 	flags = MINOR_RULESET
 
-/datum/dynamic_ruleset/roundstart/grinch/acceptable(var/population=0, var/threat=0)
+/datum/dynamic_ruleset/roundstart/grinch/ready(var/forced=0)
 	if(grinchstart.len == 0)
 		log_admin("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
 		message_admins("Cannot accept Grinch ruleset. Couldn't find any grinch spawn points.")
