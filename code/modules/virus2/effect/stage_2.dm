@@ -203,17 +203,30 @@
 	name = "Bearding"
 	desc = "Causes the infected to spontaneously grow a beard, regardless of gender. Only affects humans."
 	stage = 2
+	max_multiplier = 5
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/beard/activate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
-		if(H.species.name == "Human" && !(H.my_appearance.f_style == "Full Beard"))
-			to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
+		if(H.species.name == "Human")
 			spawn(50)
-				H.my_appearance.f_style = "Full Beard"
-				H.update_hair()
-
+				if(multiplier >= 1 && multiplier <= 1.9 && !(H.my_appearance.f_style == "Full Beard"))
+					H.my_appearance.f_style = "Full Beard"
+					to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
+					H.update_hair()
+				if(multiplier >= 2 && multiplier <= 2.9  && !(H.my_appearance.f_style == "Long Beard"))
+					H.my_appearance.f_style = "Long Beard"
+					to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
+					H.update_hair()
+				if(multiplier >= 3 && multiplier <= 3.9 && !(H.my_appearance.f_style == "Very Long Beard"))
+					H.my_appearance.f_style = "Very Long Beard"
+					to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
+					H.update_hair()
+				if(multiplier >= 4 && !(H.my_appearance.f_style == "Dwarf Beard"))
+					H.my_appearance.f_style = "Dwarf Beard"
+					to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
+					H.update_hair()
 
 /datum/disease2/effect/bloodynose
 	name = "Intranasal Hemorrhage"
