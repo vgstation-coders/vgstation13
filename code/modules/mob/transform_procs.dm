@@ -143,6 +143,8 @@
 	var/mob/living/silicon/ai/O = new (get_turf(src), base_law_type,,1)//No MMI but safety is in effect.
 	O.invisibility = 0
 	O.aiRestorePowerRoutine = 0
+	O.brain = new /obj/item/device/mmi(O)
+	O.brain.transfer_identity(src)
 	if(!spawn_here)
 		for (var/obj/item/device/radio/intercom/comm in O.loc)
 			comm.ai += O
@@ -290,7 +292,8 @@
 		new_human.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
 	new_human.randomise_appearance_for(new_human.gender)
 	if(!new_species || !(new_species in all_species))
-		new_species = pick(whitelisted_species)
+		var/list/restricted = list("Krampus", "Horror", "Manifested")
+		new_species = pick(all_species - restricted)
 	new_human.set_species(new_species)
 	if(isliving(src))
 		var/mob/living/L = src
