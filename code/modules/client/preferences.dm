@@ -166,7 +166,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/credits_volume = 75
 	var/window_flashing = 1
 	var/antag_objectives = 0 //If set to 1, solo antag roles will get the standard objectives. If set to 0, will give them a freeform objective instead.
-	var/typing_indicator = 0
+	var/typing_indicator = 1
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -233,13 +233,13 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/jingle = JINGLE_CLASSIC
 
 	// Runscape-like chat
-	var/mob_chat_on_map = FALSE
+	var/mob_chat_on_map = TRUE
 	var/max_chat_length = CHAT_MESSAGE_MAX_LENGTH
 	var/obj_chat_on_map = FALSE
 	var/no_goonchat_for_obj = FALSE
 
 	var/tgui_fancy = TRUE
-	var/fps = 0
+	var/fps = -1
 
 	var/client/client
 	var/saveloaded = 0
