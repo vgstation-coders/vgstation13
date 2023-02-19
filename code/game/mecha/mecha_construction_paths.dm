@@ -14,7 +14,7 @@
 
 	steps = list(
 					//1
-					list(Co_DESC="Cockpit wire mesh is installed.",
+					list(Co_DESC="Cockpit wire mesh is installed. It requires welding into place.",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
 					 		Co_VIS_MSG = "{USER} weld{s} external armor layer to {HOLDER}."),
@@ -22,7 +22,7 @@
 					 		Co_VIS_MSG = "{USER} unfasten{s} the cockpit wire screen.")
 					 	),
 					//2
-					 list(Co_DESC="Cockpit wire mesh is installed.",
+					 list(Co_DESC="Cockpit wire mesh is installed. It requires securing with a screwdriver.",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
 					 		Co_VIS_MSG = "{USER} secure{s} external armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
