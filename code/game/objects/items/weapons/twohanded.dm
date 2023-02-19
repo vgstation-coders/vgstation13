@@ -74,6 +74,7 @@
 	sharpness = 1.2
 	sharpness_flags = SHARP_BLADE | CHOPWOOD
 	force = 10
+	var/force_wielded = 40
 	slot_flags = SLOT_BACK
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
@@ -82,7 +83,7 @@
 /obj/item/weapon/fireaxe/update_wield(mob/user)
 	..()
 	item_state = "fireaxe[wielded ? 1 : 0]"
-	force = wielded ? 40 : initial(force)
+	force = wielded ? force_wielded : initial(force)
 	if(user)
 		user.update_inv_hands()
 
