@@ -31,7 +31,7 @@
 					 		Co_DELAY = 30,)
 					 	),
 					 //3
-					 list(Co_DESC="Internal armor is welded.",
+					 list(Co_DESC="Internal armor is welded. The unsealed cabin requires metal rods, for a screen. ",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/rods,
 					 		Co_AMOUNT = 10,
 					 		Co_VIS_MSG = "{USER} install{s} a steel wire mesh to {HOLDER}'s cabin.",
@@ -157,7 +157,7 @@
 	result = "/obj/mecha/working/ripley"
 
 /datum/construction/reversible/mecha/firefighter
-	result = "/obj/mecha/working/ripley/firefighter"
+	result = "/obj/mecha/working/ripley/mk2/firefighter"
 	steps = list(
 					//1
 					list(Co_DESC="External armor is wrenched.",
