@@ -1597,24 +1597,19 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade
 	name = "Ripley MK-II Conversion Kit"
-	desc = "A pressurized canopy attachment kit for an Autonomous Power Loader Unit \"Ripley\" MK-I mecha, to convert it to the slower, but space-worthy MK-II design. This kit cannot be removed, once applied."
+	desc = "A pressurized canopy attachment kit for an Autonomous Power Loader Unit \"Ripley\" MK-I mecha, to convert it to the slower, but space-worthy MK-II design. Requires access to the internal compartments, and that the mech has a power source, is unoccupied and the cargo compartment is empty."
 	icon_state = "ripleyupgrade"
 
 /obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade/can_attach(obj/mecha/working/ripley/M)
 	if(M.enclosed) // i'm dumb and missed why istype wasn't working :c
-		to_chat(src, "<span class='warning'>This conversion kit can only be applied to APLU MK-I models.</span>")
 		return 0
 	if(M.cargo.len)
-		to_chat(src, "<span class='warning'>[M]'s cargo hold must be empty before this conversion kit can be applied.</span>")
 		return 0
 	if(!M.mech_maints_ready) //non-removable upgrade, so lets make sure the pilot or owner has their say.
-		to_chat(src, "<span class='warning'>[M] must have maintenance protocols active in order to allow this conversion kit.</span>")
 		return 0
 	if(M.occupant) //We're actualy making a new mech and swapping things over, it might get weird if players are involved
-		to_chat(src, "<span class='warning'>[M] must be unoccupied before this conversion kit can be applied.</span>")
 		return 0
 	if(!M.cell) //Turns out things break if the cell is missing
-		to_chat(src, "<span class='warning'>The conversion process requires a cell installed.</span>")
 		return 0
 	return 1
 
