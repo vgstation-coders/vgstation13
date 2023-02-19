@@ -135,7 +135,7 @@
 				W.cargo -= O
 				T.Entered(O, src)
 
-	if(prob(30 || src.enclosed)) // no enclosed space no explosion :)
+	if(prob(30) && src.enclosed) // no enclosed space no explosion :)
 		explosion(T, 0, 0, 1, 3)
 	if(wreckage)
 		var/obj/effect/decal/mecha_wreckage/WR = new wreckage(T)
