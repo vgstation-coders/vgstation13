@@ -23,7 +23,7 @@
 					 	),
 					//2
 					 list(Co_DESC="Cockpit wire mesh is installed. It requires securing with a screwdriver.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
 					 		Co_VIS_MSG = "{USER} secure{s} external armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} external armor layer from {HOLDER}.",
