@@ -142,8 +142,8 @@
 		"ticklag" = world.tick_lag,
 		"bpm" = round(600 / tempo),
 		"lines" = json_encode(lines),
-		"src" = "\ref[src]" //needed to create buttons in the js
-		"ocatve" = live_octave_base
+		"src" = "\ref[src]", //needed to create buttons in the js
+		"octave" = live_octave_base
 	)
 
 	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
