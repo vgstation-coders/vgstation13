@@ -117,7 +117,12 @@ function messageReceived(){
 
 $(function() {
     $(window).keypress(function(e) {
-        window.location = "byond://?src="+src_ref+"&play_note="+keyWhichToNote(e.which)+"&play_sharp="+keyWhichToSharp(e.which)+"&play_oct="+keyWhichToOctave(e.which);
+		if(e.which == "45" || e.which == 45)
+			window.location = "byond://?src="+src_ref+"&decrease_octave=1;
+		else if(e.which == "61" || e.which == 61)
+			window.location = "byond://?src="+src_ref+"&increase_octave=1;
+		else
+        	window.location = "byond://?src="+src_ref+"&play_note="+keyWhichToNote(e.which)+"&play_sharp="+keyWhichToSharp(e.which)+"&play_oct="+keyWhichToOctave(e.which);
     });
 });
 
@@ -243,6 +248,8 @@ function keyWhichToSharp(which) {
 
 function keyWhichToOctave(which) {
     which = +which;
+	var octave = "{{:data.octave}}";
+	octave = +octave;
     switch(which) {
         case 113:
         case 119:
@@ -257,7 +264,7 @@ function keyWhichToOctave(which) {
         case 54:
         case 55:
         case 44:
-            return 5;
+            return octave;
             break;
         case 122:
         case 120:
@@ -271,10 +278,10 @@ function keyWhichToOctave(which) {
         case 103:
         case 104:
         case 106:
-            return 4;
+            return octave-1;
             break;
         case 105:
-            return 6;
+            return octave+1;
             break;
         default:
             return 0;

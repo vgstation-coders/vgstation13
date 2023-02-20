@@ -14,6 +14,8 @@
 	var/instrumentExt = "ogg"		// the file extension
 	var/obj/instrumentObj = null	// the associated obj playing the sound
 
+	var/live_octave_base = 5 // the base octave of playing live with keyboard
+
 /datum/song/New(dir, obj)
 	tempo = sanitize_tempo(tempo)
 	instrumentDir = dir
@@ -141,6 +143,7 @@
 		"bpm" = round(600 / tempo),
 		"lines" = json_encode(lines),
 		"src" = "\ref[src]" //needed to create buttons in the js
+		"ocatve" = live_octave_base
 	)
 
 	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
@@ -271,6 +274,14 @@
 		if(href_list["play_sharp"] == "s")
 			href_list["play_sharp"] = "#"
 		playnote(text2num(href_list["play_note"]), href_list["play_sharp"], text2num(href_list["play_oct"]), usr)
+		return //no need to reload the window
+	else if(href_list["increase_octave"])
+		if(live_octave_base < 8)
+			live_octave_base++
+		return //no need to reload the window
+	else if(href_list["decrease_octave"])
+		if(live_octave_base > 1)
+			live_octave_base--
 		return //no need to reload the window
 	else if(href_list["newline"])
 		var/newline = input("Enter your line: ", instrumentObj.name) as text|null
