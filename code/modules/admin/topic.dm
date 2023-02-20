@@ -698,18 +698,25 @@
 				message_admins("<span class='notice'>[key_name(usr)] has turned byond hub availability [byond_hub_open ? "ON" : "OFF"]</span>")
 				log_admin("[key_name(usr)] has turned byond hub availability [byond_hub_open ? "ON" : "OFF"]")
 			if("playercount")
-				byond_hub_playercount = input("Hub access closes at how many players?", "Hub Playercount", byond_hub_playercount) as num
-				message_admins("<span class='notice'>[key_name(usr)] has set the max hub playercount to [byond_hub_playercount]</span>")
-				log_admin("[key_name(usr)] has set the max hub playercount to [byond_hub_playercount]")
+				var/tempcount = input("Hub access closes at how many players?", "Hub Playercount", byond_hub_playercount) as null|num
+				if(tempcount)
+					var/oldcount = byond_hub_playercount
+					byond_hub_playercount = tempcount
+					message_admins("<span class='notice'>[key_name(usr)] has set the max hub playercount to [byond_hub_playercount]</span>")
+					log_admin("[key_name(usr)] has set the max hub playercount from [oldcount] to [byond_hub_playercount]")
 			if("name")
 				var/newname = input(usr, "Specify the new Server Name", "Server Name", byond_server_name) as null|text
+				var/oldname = byond_server_name
 				byond_server_name = newname ?  newname : DEFAULT_SERVER_NAME
 				message_admins("<span class='notice'>[key_name(usr)] changed the hub name to [byond_server_name]</span>")
-				log_admin("[key_name(usr)] changed the hub name to [byond_server_name]")
+				log_admin("[key_name(usr)] changed the hub name from [oldname] to [byond_server_name]")
 			if("desc")
-				byond_server_desc = input(usr, "Specify the new Server Description", "Server Desc", byond_server_desc) as null|message
-				message_admins("<span class='notice'>[key_name(usr)] edited the hub description.</span>")
-				log_admin("[key_name(usr)] edited the hub description.")
+				var/temp_desc = input(usr, "Specify the new Server Description", "Server Desc", byond_server_desc) as null|message
+				if(temp_desc)
+					var/old_desc = byond_server_desc
+					byond_server_desc = temp_desc
+					message_admins("<span class='notice'>[key_name(usr)] edited the hub description.</span>")
+					log_admin("[key_name(usr)] edited the hub description from [old_desc] to [temp_desc]")
 
 		var/datum/persistence_task/task = SSpersistence_misc.tasks[/datum/persistence_task/hub_settings]
 		task.on_shutdown()
