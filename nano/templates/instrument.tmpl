@@ -117,12 +117,14 @@ function messageReceived(){
 
 $(function() {
     $(window).keypress(function(e) {
-        if(e.which == "45" || e.which == 45) {
+        var numwhich = e.which;
+        numwhich = +numwhich; // number typecasting
+        if(numwhich == 45) {
             window.location = "byond://?src="+src_ref+"&decrease_octave=1";
-        } else if(e.which == "61" || e.which == 61) {
+        } else if(numwhich == 61) {
             window.location = "byond://?src="+src_ref+"&increase_octave=1";
         } else {
-            window.location = "byond://?src="+src_ref+"&play_note="+keyWhichToNote(e.which)+"&play_sharp="+keyWhichToSharp(e.which)+"&play_oct="+keyWhichToOctave(e.which);
+            window.location = "byond://?src="+src_ref+"&play_note="+keyWhichToNote(numwhich)+"&play_sharp="+keyWhichToSharp(numwhich)+"&play_oct="+keyWhichToOctave(numwhich);
         }
     });
 });
@@ -178,7 +180,6 @@ m = 109
 */
 
 function keyWhichToNote(which) {
-    which = +which;
     switch(which) {
         case 113:
         case 122:
@@ -227,7 +228,6 @@ function keyWhichToNote(which) {
 }
 
 function keyWhichToSharp(which) {
-    which = +which;
     switch(which) {
         case 50:
         case 115:
@@ -248,7 +248,6 @@ function keyWhichToSharp(which) {
 }
 
 function keyWhichToOctave(which) {
-    which = +which;
 	var octave = "{{:data.octave}}";
 	octave = +octave;
     switch(which) {
