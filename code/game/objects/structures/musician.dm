@@ -278,11 +278,9 @@
 	else if(href_list["increase_octave"])
 		if(live_octave_base < 8)
 			live_octave_base++
-		return //no need to reload the window
 	else if(href_list["decrease_octave"])
 		if(live_octave_base > 1)
 			live_octave_base--
-		return //no need to reload the window
 	else if(href_list["newline"])
 		var/newline = input("Enter your line: ", instrumentObj.name) as text|null
 		if(!newline || !in_range(instrumentObj, usr))
