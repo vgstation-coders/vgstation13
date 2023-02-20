@@ -117,7 +117,7 @@ function messageReceived(){
 
 $(function() {
     $(window).keypress(function(e) {
-        window.location = "byond://?src="+src_ref+"&play_note="+keyWhichToNote(e.which)+"&play_sharp="+keyWhichToSharpFlat(e.which)+"&play_oct="+keyWhichToOctave(e.which);
+        window.location = "byond://?src="+src_ref+"&play_note="+keyWhichToNote(e.which)+"&play_sharp="+keyWhichToSharp(e.which)+"&play_oct="+keyWhichToOctave(e.which);
     });
 });
 
@@ -172,51 +172,61 @@ m = 109
 */
 
 function keyWhichToNote(which) {
+    which = +which;
     switch(which) {
         case 113:
         case 122:
         case 50:
         case 115:
-		case 105:
-		case 44:
+        case 105:
+        case 44:
             return 3;
+            break;
         case 119:
         case 120:
         case 51:
-        case 110:
+        case 100:
             return 4;
+            break;
         case 101:
         case 99:
             return 5;
+            break;
         case 114:
         case 118:
         case 53:
         case 103:
             return 6;
+            break;
         case 116:
         case 98:
         case 54:
         case 104:
             return 7;
+            break;
         case 121:
         case 110:
         case 55:
         case 106:
             return 1;
+            break;
         case 117:
         case 109:
             return 2;
+            break;
         default:
             return 0;
+            break;
     }
 }
 
-function keyWhichToSharpFlat(which) {
+function keyWhichToSharp(which) {
+	which = +which;
     switch(which) {
         case 50:
         case 115:
         case 51:
-        case 110:
+        case 100:
         case 53:
         case 103:
         case 54:
@@ -224,18 +234,53 @@ function keyWhichToSharpFlat(which) {
         case 55:
         case 106:
             return "#";
+            break;
         default:
             return "n";
+            break;
     }
 }
 
 function keyWhichToOctave(which) {
+    which = +which;
     switch(which) {
-        default:
+        case 113:
+        case 119:
+        case 101:
+        case 114:
+        case 116:
+        case 121:
+        case 117:
+        case 50:
+        case 51:
+        case 53:
+        case 54:
+        case 55:
+        case 44:
             return 5;
+            break;
+        case 122:
+        case 120:
+        case 99:
+        case 118:
+        case 98:
+        case 110:
+        case 109:
+        case 115:
+        case 100:
+        case 103:
+        case 104:
+        case 106:
+            return 4;
+            break;
+        case 105:
+            return 6;
+            break;
+        default:
+            return 0;
+            break;
     }
 }
-
 
 var lines = $.parseJSON($("#lines").text());
 renderLines(lines);

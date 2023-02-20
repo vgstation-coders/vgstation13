@@ -268,8 +268,8 @@
 			playsong(usr)
 		return //no need to reload the window
 	else if(href_list["play_note"])
-		to_chat(usr,"Note is [href_list["play_note"]][href_list["play_sharpflat"]]-[href_list["play_oct"]]")
-		playnote(text2num(href_list["play_note"]), href_list["play_sharpflat"], text2num(href_list["play_oct"]), usr)
+		to_chat(usr,"Note is [href_list["play_note"]][href_list["play_sharp"]]-[href_list["play_oct"]]")
+		playnote(text2num(href_list["play_note"]), href_list["play_sharp"], text2num(href_list["play_oct"]), usr)
 		return //no need to reload the window
 	else if(href_list["newline"])
 		var/newline = input("Enter your line: ", instrumentObj.name) as text|null
