@@ -325,12 +325,11 @@
 
 /obj/item/cannonball/fuse_bomb/afterattack(atom/target, mob/user , flag) //Filling up the bomb
 	if(assembled == 0)
-		if(istype(target, /obj/structure/reagent_dispensers/fueltank) && target.Adjacent(user))
-			if(target.reagents.total_volume < 200)
+		if(istype(target, /obj/structure/reagent_dispensers/fueltank) !target.is_open_container() && target.Adjacent(user))
+			if(target.reagents.get_reagent_amount(FUEL) < 200)
 				to_chat(user, "<span  class='notice'>There's not enough fuel left to work with.</span>")
 				return
-			var/obj/structure/reagent_dispensers/fueltank/F = target
-			F.reagents.remove_reagent(FUEL, 200, 1)//Deleting 200 fuel from the welding fuel tank,
+			target.reagents.remove_reagent(FUEL, 200, 1)//Deleting 200 fuel from the welding fuel tank,
 			assembled = 1
 			to_chat(user, "<span  class='notice'>You've filled the [src] with welding fuel.</span>")
 			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
