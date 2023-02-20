@@ -60,7 +60,7 @@ var src_ref = "{{:data.src}}";
 
 function renderLines(lines){
     var result = "<table>";
-    for (i = 0; i < lines.length; i++) { 
+    for (i = 0; i < lines.length; i++) {
         var curLine = lines[i].split(",");
         var htmlLine = [];
         for(j = 0; j < curLine.length; j++){
@@ -114,6 +114,13 @@ function messageReceived(){
     $('.buttonActive').stopTime('linkPending');
     $('.buttonActive').removeClass('linkPending');
 }
+
+$(function() {
+    $(window).keypress(function(e) {
+		$("#lines").html(e.which);
+        window.location = "byond://?src="+src_ref+"&play_note=1";
+    });
+});
 
 var lines = $.parseJSON($("#lines").text());
 renderLines(lines);

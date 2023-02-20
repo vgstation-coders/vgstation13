@@ -267,6 +267,9 @@
 		spawn()
 			playsong(usr)
 		return //no need to reload the window
+	else if(href_list["play_note"])
+		playnote(5, "n", 3, usr)
+		return //no need to reload the window
 	else if(href_list["newline"])
 		var/newline = input("Enter your line: ", instrumentObj.name) as text|null
 		if(!newline || !in_range(instrumentObj, usr))
