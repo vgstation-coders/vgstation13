@@ -325,7 +325,7 @@
 
 /obj/item/cannonball/fuse_bomb/afterattack(atom/target, mob/user , flag) //Filling up the bomb
 	if(assembled == 0)
-		if(istype(target, /obj/structure/reagent_dispensers) !target.is_open_container() && target.Adjacent(user))
+		if(istype(target, /obj/structure/reagent_dispensers) && !target.is_open_container() && target.Adjacent(user))
 			if(target.reagents.get_reagent_amount(FUEL) < 200)
 				to_chat(user, "<span  class='notice'>There's not enough fuel left to work with.</span>")
 				return
