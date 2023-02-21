@@ -81,7 +81,7 @@
 		else if(recorded_line != "")
 			recorded_line += ","
 			if(world.time - time_since_last_note > 5)
-				var/intervals = round(world.time - time_since_last_note/5)
+				var/intervals = round(world.time - time_since_last_note/5) - 1
 				for(var/i in 1 to intervals)
 					recorded_line += ","
 		recorded_line += "[ascii2text(note+64)][acc][oct]"
