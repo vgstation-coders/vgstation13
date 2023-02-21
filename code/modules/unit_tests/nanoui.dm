@@ -10,3 +10,5 @@
 			fail("[__FILE__]:[__LINE__]: nanoui test failed: template [uifile] does not exist.")
 		if(findtext(ui.get_html(),"<h2>Template error (failed to compile)</h2>"))
 			fail("[__FILE__]:[__LINE__]: nanoui test failed: template [uifile] does not compile.")
+		qdel(ui)
+	qdel(user)
