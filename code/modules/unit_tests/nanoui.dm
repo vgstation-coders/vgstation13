@@ -1,6 +1,6 @@
 /datum/unit_test/nanoui/start()
 	var/datum/nanoui/ui
-	var/list/uis = flist("nano/templates")
+	var/list/uis = flist("nano/templates/")
 	var/i = 0
 	var/mob/user = new
 	for(var/uifile in uis)
