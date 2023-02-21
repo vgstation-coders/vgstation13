@@ -44,7 +44,7 @@
 		return
 
 	user.set_machine(src)
-	song.interact(user,ui_key,ui,force_open)
+	song.ui_interact(user,ui_key,ui,force_open)
 
 /obj/item/device/instrument/proc/OnPlayed(mob/user,mob/M)
 	return
