@@ -21,6 +21,44 @@ Used In File(s): /code/game/objects/structures/musician.dm
     </div>
 </div>
 <div class="item">
+	{{if data.show_playhelp}}
+		{{:helper.link('Hide Help', '', { 'toggle_playhelp' : 1 })}}
+		<div class="line">Press - to decrease playing octave and = to increase it.<br>
+		The following keys represent these notes:<br>
+		<table style="height:50px; background:black">
+			<tr>
+				<td style="background:white; color:black">Z</td>
+				<td style="background:black; color:white">S</td>
+				<td style="background:white; color:black">X</td>
+				<td style="background:black; color:white">D</td>
+				<td style="background:white; color:black">C</td>
+				<td style="background:white; color:black">V</td>
+				<td style="background:black; color:white">G</td>
+				<td style="background:white; color:black">B</td>
+				<td style="background:black; color:white">H</td>
+				<td style="background:white; color:black">N</td>
+				<td style="background:black; color:white">J</td>
+				<td style="background:white; color:black">M</td>
+				<td style="background:white; color:black">,/Q</td>
+				<td style="background:black; color:white">2</td>
+				<td style="background:white; color:black">W</td>
+				<td style="background:black; color:white">3</td>
+				<td style="background:white; color:black">E</td>
+				<td style="background:white; color:black">R</td>
+				<td style="background:black; color:white">5</td>
+				<td style="background:white; color:black">T</td>
+				<td style="background:black; color:white">6</td>
+				<td style="background:white; color:black">Y</td>
+				<td style="background:black; color:white">7</td>
+				<td style="background:white; color:black">U</td>
+				<td style="background:white; color:black">I</td>
+			</tr>
+		</table></div>
+	{{else}}
+		{{:helper.link('Show Help', '', { 'toggle_playhelp' : 1 })}}
+	{{/if}}
+</div>
+<div class="item">
     <H3>Editing</H3>
     <div class="item">
         {{:helper.link('New Song', '', { 'newsong' : 1 })}}
@@ -32,25 +70,27 @@ Used In File(s): /code/game/objects/structures/musician.dm
     {{:helper.link('Add Line', '', { 'newline' : 1 })}}
 </div>
 <div class="item">
-    <B><button id="help_btn" onclick="helpVisibility()">Hide Help</button></B>
-    <span id="help">
-    <BR>
-    Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
-    Every note in a chord will play together, with chord timed by the tempo.<br>
-    <br>
-    Notes are played by the names of the note, and optionally, the accidental, and/or the octave number.<br>
-    By default, every note is natural and in octave 3. Defining otherwise is remembered for each note.<br>
-    Example: <i>C,D,E,F,G,A,B</i> will play a C major scale.<br>
-    After a note has an accidental placed, it will be remembered: <i>C,C4,C,C3</i> is C3,C4,C4,C3</i><br>
-    Chords can be played simply by seperating each note with a hyphon: <i>A-C#,Cn-E,E-G#,Gn-B</i><br>
-    A pause may be denoted by an empty chord: <i>C,E,,C,G</i><br>
-    To make a chord be a different time, end it with /x, where the chord length will be length<br>
-    defined by tempo / x: <i>C,G/2,E/4</i><br>
-    Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
-    <br>
-    Lines may be up to 50 characters.<br>
-    A song may only contain up to 50 lines.<br>
-    </span>
+	{{if data.show_edithelp}}
+		{{:helper.link('Hide Help', '', { 'toggle_edithelp' : 1 })}}
+		<div class="line">
+		Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
+		Every note in a chord will play together, with chord timed by the tempo.<br>
+		<br>
+		Notes are played by the names of the note, and optionally, the accidental, and/or the octave number.<br>
+		By default, every note is natural and in octave 3. Defining otherwise is remembered for each note.<br>
+		Example: <i>C,D,E,F,G,A,B</i> will play a C major scale.<br>
+		After a note has an accidental placed, it will be remembered: <i>C,C4,C,C3</i> is C3,C4,C4,C3</i><br>
+		Chords can be played simply by seperating each note with a hyphon: <i>A-C#,Cn-E,E-G#,Gn-B</i><br>
+		A pause may be denoted by an empty chord: <i>C,E,,C,G</i><br>
+		To make a chord be a different time, end it with /x, where the chord length will be length<br>
+		defined by tempo / x: <i>C,G/2,E/4</i><br>
+		Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
+		<br>
+		Lines may be up to 50 characters.<br>
+		A song may only contain up to 50 lines.</div>
+	{{else}}
+		{{:helper.link('Show Help', '', { 'toggle_edithelp' : 1 })}}
+	{{/if}}
 </div>
 <script>
 var prevChord = "";
@@ -93,18 +133,6 @@ function activeChord(lineIndex, chordIndex){
         $(prevChord).removeClass(highlightClass);
         $(id).addClass(highlightClass);
         prevChord = id;
-    }
-}
-
-function helpVisibility(){
-    if(helpvis == 1){
-        $("#help").show();
-        $("#help_btn").text("Hide Help");
-        helpvis = 0;
-    }else{
-        $("#help").hide();
-        $("#help_btn").text("Show Help");
-        helpvis = 1;
     }
 }
 

@@ -14,6 +14,8 @@
 	var/instrumentExt = "ogg"		// the file extension
 	var/obj/instrumentObj = null	// the associated obj playing the sound
 
+	var/show_edithelp = TRUE
+	var/show_playhelp = FALSE
 	var/live_octave_base = 5 // the base octave of playing live with keyboard
 
 /datum/song/New(dir, obj)
@@ -143,7 +145,9 @@
 		"bpm" = round(600 / tempo),
 		"lines" = json_encode(lines),
 		"src" = "\ref[src]", //needed to create buttons in the js
-		"octave" = live_octave_base
+		"octave" = live_octave_base,
+		"show_playhelp" = show_playhelp,
+		"show_edithelp" = show_edithelp
 	)
 
 	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
@@ -281,6 +285,10 @@
 	else if(href_list["decrease_octave"])
 		if(live_octave_base > 1)
 			live_octave_base--
+	else if(href_list["toggle_playhelp"])
+		show_playhelp = !show_playhelp
+	else if(href_list["toggle_edithelp"])
+		show_edithelp = !show_edithelp
 	else if(href_list["newline"])
 		var/newline = input("Enter your line: ", instrumentObj.name) as text|null
 		if(!newline || !in_range(instrumentObj, usr))
