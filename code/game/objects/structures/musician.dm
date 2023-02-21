@@ -82,8 +82,9 @@
 			recorded_line += ","
 			if(world.time - time_since_last_note > 5)
 				var/intervals = round((world.time - time_since_last_note)/5) - 1
-				for(var/i in 1 to intervals)
-					recorded_line += ","
+				if(intervals)
+					for(var/i in 1 to intervals)
+						recorded_line += ","
 		recorded_line += "[ascii2text(note+64)][acc][oct]"
 		if(world.time - time_since_last_note <= 3)
 			recorded_line += "/2"
@@ -311,6 +312,9 @@
 			if(length(recorded_line) > INSTRUMENT_MAX_LINE_LENGTH)
 				recorded_line = html_encode(copytext(recorded_line, 1, INSTRUMENT_MAX_LINE_LENGTH))
 			lines.Add(recorded_line)
+		else if(recording)
+			recorded_line = ""
+			time_since_last_note = world.time
 	else if(href_list["newline"])
 		var/newline = input("Enter your line: ", instrumentObj.name) as text|null
 		if(!newline || !in_range(instrumentObj, usr))
