@@ -12,6 +12,7 @@
 #include "icons.dm"
 #include "events.dm"
 #include "names.dm"
+#include "nanoui.dm"
 #include "reagent_recipe_collisions.dm"
 #include "turretid.dm"
 #include "outfit_datums.dm"
