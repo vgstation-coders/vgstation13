@@ -171,7 +171,7 @@
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, "instrument", "instrument.tmpl", instrumentObj.name, 800, 600, nstatus_proc = /proc/nanoui_instrument_status_proc)
-		ui.add_stylesheet("instrument.css"
+		ui.add_stylesheet("instrument.css")
 		ui.set_initial_data(data)
 		ui.open()
 
