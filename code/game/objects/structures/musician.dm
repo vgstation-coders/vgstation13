@@ -294,8 +294,7 @@
 		if(href_list["play_sharp"] == "s")
 			href_list["play_sharp"] = "#"
 		playnote(text2num(href_list["play_note"]), href_list["play_sharp"], text2num(href_list["play_oct"]), usr, TRUE)
-		if(!recording)
-			return //no need to reload the window
+		return //no need to reload the window
 	else if(href_list["increase_octave"])
 		if(live_octave_base < 8)
 			live_octave_base++
