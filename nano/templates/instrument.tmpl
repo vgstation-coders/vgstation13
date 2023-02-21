@@ -12,6 +12,10 @@ Used In File(s): /code/game/objects/structures/musician.dm
 		{{else}}
 			{{:helper.link('Start recording', '', { 'toggle_recording' : 1 })}}
 		{{/if}}
+		0ctave:
+        {{:helper.link('-', '', { 'decrease_octave' : 1 })}}
+		{{:data.octave}}
+        {{:helper.link('+', '', { 'increase_octave' : 1 })}}
     </div>
     <div class="item">
         Repeat Song:
@@ -28,7 +32,7 @@ Used In File(s): /code/game/objects/structures/musician.dm
 <div class="item">
 	{{if data.show_playhelp}}
 		{{:helper.link('Hide Help', '', { 'toggle_playhelp' : 1 })}}
-		<div class="line">Press - to decrease playing octave and = to increase it. (Currently {{:data.octave}})<br>
+		<div class="line">Press - to decrease playing octave and = to increase it.<br>
 		Click "Start recording" to record keyboard inputs. The new line will be added when you click "Stop recording".<br>
 		The following keys represent these notes:<br>
 		<table style="height:50px; background:black">
