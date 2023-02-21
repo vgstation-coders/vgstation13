@@ -17,7 +17,7 @@
 		fail("[__FILE__]:[__LINE__]: nanoui test failed: template nonexistantfiledonotmakethis.tmpl exists.")
 	qdel(ui)
 	//ui = new(user, src, i, "brokentemplateexample.tmpl", "", 200, 200)
-	//if(!findtext(html,"<h2>Template error (failed to compile)</h2>"))
+	//if(!findtext(ui.get_html(),"<h2>Template error (failed to compile)</h2>"))
 		//fail("[__FILE__]:[__LINE__]: nanoui test failed: template brokentemplateexample.tmpl compiles.")
 	//qdel(ui)
 	qdel(user)
