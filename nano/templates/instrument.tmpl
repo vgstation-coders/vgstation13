@@ -23,7 +23,7 @@ Used In File(s): /code/game/objects/structures/musician.dm
 <div class="item">
 	{{if data.show_playhelp}}
 		{{:helper.link('Hide Help', '', { 'toggle_playhelp' : 1 })}}
-		<div class="line">Press - to decrease playing octave and = to increase it.<br>
+		<div class="line">Press - to decrease playing octave and = to increase it. (Currently {{:data.octave}})<br>
 		The following keys represent these notes:<br>
 		<table style="height:50px; background:black">
 			<tr>
@@ -155,7 +155,7 @@ $(function() {
     });
 });
 
-/*
+/* KEYBOARD KEYS TO EVENT.WHICH
 1 = 49
 2 = 50
 3 = 51
