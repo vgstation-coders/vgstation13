@@ -77,10 +77,11 @@
 		M.playsound_local(source, soundfile, 100, falloff = 5)
 	if(recording && live)
 		if(time_since_last_note - world.time <= 0 && last_note != "")
-			last_note += "-[ascii2text(note+64)][acc][oct]"
-		else
-			last_note += ",[ascii2text(note+64)][acc][oct]"
-	time_since_last_note = world.time
+			last_note += "-"
+		else if(last_note != "")
+			last_note += ","
+		last_note += "[ascii2text(note+64)][acc][oct]"
+		time_since_last_note = world.time
 
 /datum/song/proc/shouldStopPlaying(mob/user)
 	if(instrumentObj)
