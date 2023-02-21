@@ -153,10 +153,9 @@
 		repeat--
 	playing = 0
 	repeat = 0
-	interact(user)
+	ui_interact(user)
 
-//convert this to nanoui
-/datum/song/proc/interact(mob/user)
+/datum/song/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null, var/force_open=NANOUI_FOCUS)
 	var/data = list(
 		"repeat" = repeat,
 		"ticklag" = world.tick_lag,
@@ -169,14 +168,11 @@
 		"recording" = recording
 	)
 
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, "instrument", "instrument.tmpl", instrumentObj.name, 800, 600, nstatus_proc = /proc/nanoui_instrument_status_proc)
-		ui.add_stylesheet("instrument.css")
+		ui = new(user, src, ui_key, "pda_terminal.tmpl", src.name, 800, 700)
 		ui.set_initial_data(data)
 		ui.open()
-	else
-		ui.push_data(data)
 
 //copypaste but the src_object is the instrument
 //constants dont work for some reason
@@ -275,7 +271,7 @@
 					lines.Remove(l)
 				else
 					linenum++
-			interact(usr)		// make sure updates when complete
+			ui_interact(usr)		// make sure updates when complete
 	if(href_list["repeat"]) //Changing this from a toggle to a number of repeats to avoid infinite loops.
 		if(playing)
 			return //So that people cant keep adding to repeat. If the do it intentionally, it could result in the server crashing.
@@ -361,7 +357,7 @@
 			return
 
 		lines.Swap(index, index+dir)
-	interact(usr)
+	ui_interact(usr)
 
 	return
 /datum/song/proc/sanitize_tempo(new_tempo)
@@ -418,17 +414,17 @@
 	if(broken)
 		to_chat(user, "<span class='warning'>\The [src] is broken for good.</span>")
 		return 1
-	interact(user)
+	ui_interact(user)
 
 /obj/structure/piano/attack_paw(mob/user)
 	return src.attack_hand(user)
 
-/obj/structure/piano/interact(mob/user)
+/obj/structure/piano/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null, var/force_open=NANOUI_FOCUS)
 	if(!user || !anchored)
 		return
 
 	user.set_machine(src)
-	song.interact(user)
+	song.ui_interact(user,ui_key,ui,force_open)
 
 /obj/structure/piano/attackby(obj/item/O, mob/user, params)
 	if (O.is_wrench(user))
