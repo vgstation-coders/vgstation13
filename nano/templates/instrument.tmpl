@@ -7,6 +7,11 @@ Used In File(s): /code/game/objects/structures/musician.dm
     <div class="item">
         {{:helper.link('Play', '', { 'play' : 1 })}}
         {{:helper.link('Stop', '', { 'stop' : 1 })}}
+		{{if data.recording}}
+        	{{:helper.link('Stop recording', '', { 'toggle_recording' : 1 })}}
+		{{else}}
+			{{:helper.link('Start recording', '', { 'toggle_recording' : 1 })}}
+		{{/if}}
     </div>
     <div class="item">
         Repeat Song:

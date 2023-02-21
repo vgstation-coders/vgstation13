@@ -14,9 +14,12 @@
 	var/instrumentExt = "ogg"		// the file extension
 	var/obj/instrumentObj = null	// the associated obj playing the sound
 
-	var/show_edithelp = TRUE
-	var/show_playhelp = FALSE
-	var/live_octave_base = 5 // the base octave of playing live with keyboard
+	var/show_edithelp = TRUE		// show help for editing
+	var/show_playhelp = FALSE		// show help for keyboard playback
+	var/live_octave_base = 5		// the base octave of playing live with keyboard
+	var/recording = FALSE			// if recording keyboard notes to play back
+	var/last_note = ""				// if recording, put this into the last line at the end
+	var/time_since_last_note = 0	// for chords
 
 /datum/song/New(dir, obj)
 	tempo = sanitize_tempo(tempo)
@@ -30,7 +33,7 @@
 // note is a number from 1-7 for A-G
 // acc is either "b", "n", or "#"
 // oct is 1-8 (or 9 for C)
-/datum/song/proc/playnote(note, acc as text, oct, mob/user)
+/datum/song/proc/playnote(note, acc as text, oct, mob/user, live = FALSE)
 	// handle accidental -> B<>C of E<>F
 	if(acc == "b" && (note == 3 || note == 6)) // C or F
 		if(note == 3)
@@ -72,6 +75,12 @@
 		if(!M.client.prefs.hear_instruments)
 			continue
 		M.playsound_local(source, soundfile, 100, falloff = 5)
+	if(recording && live)
+		if(time_since_last_note - world.time <= 0 && last_note != "")
+			last_note += "-[ascii2text(note+64)][acc][oct]"
+		else
+			last_note += ",[ascii2text(note+64)][acc][oct]"
+	time_since_last_note = world.time
 
 /datum/song/proc/shouldStopPlaying(mob/user)
 	if(instrumentObj)
@@ -147,7 +156,8 @@
 		"src" = "\ref[src]", //needed to create buttons in the js
 		"octave" = live_octave_base,
 		"show_playhelp" = show_playhelp,
-		"show_edithelp" = show_edithelp
+		"show_edithelp" = show_edithelp,
+		"recording" = recording
 	)
 
 	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
@@ -277,8 +287,9 @@
 	else if(href_list["play_note"])
 		if(href_list["play_sharp"] == "s")
 			href_list["play_sharp"] = "#"
-		playnote(text2num(href_list["play_note"]), href_list["play_sharp"], text2num(href_list["play_oct"]), usr)
-		return //no need to reload the window
+		playnote(text2num(href_list["play_note"]), href_list["play_sharp"], text2num(href_list["play_oct"]), usr, TRUE)
+		if(!recording)
+			return //no need to reload the window
 	else if(href_list["increase_octave"])
 		if(live_octave_base < 8)
 			live_octave_base++
@@ -289,6 +300,12 @@
 		show_playhelp = !show_playhelp
 	else if(href_list["toggle_edithelp"])
 		show_edithelp = !show_edithelp
+	else if(href_list["toggle_recording"])
+		recording = !recording
+		if(!recording && lines.len <= INSTRUMENT_MAX_LINE_NUMBER)
+			if(length(last_note) > INSTRUMENT_MAX_LINE_LENGTH)
+				last_note = html_encode(copytext(last_note, 1, INSTRUMENT_MAX_LINE_LENGTH))
+			lines.Add(last_note)
 	else if(href_list["newline"])
 		var/newline = input("Enter your line: ", instrumentObj.name) as text|null
 		if(!newline || !in_range(instrumentObj, usr))
