@@ -6,9 +6,10 @@
 	for(var/uifile in uis)
 		i++
 		ui = new(user, src, i, uifile, "", 200, 200)
-		if(findtext(ui.get_html(),"<h2>Template error (does not exist)</h2>"))
+		var/html = ui.get_html()
+		if(findtext(html,"<h2>Template error (does not exist)</h2>"))
 			fail("[__FILE__]:[__LINE__]: nanoui test failed: template [uifile] does not exist.")
-		if(findtext(ui.get_html(),"<h2>Template error (failed to compile)</h2>"))
+		if(findtext(html,"<h2>Template error (failed to compile)</h2>"))
 			fail("[__FILE__]:[__LINE__]: nanoui test failed: template [uifile] does not compile.")
 		qdel(ui)
 	qdel(user)
