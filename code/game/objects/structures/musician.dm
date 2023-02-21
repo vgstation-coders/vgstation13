@@ -18,7 +18,7 @@
 	var/show_playhelp = FALSE		// show help for keyboard playback
 	var/live_octave_base = 5		// the base octave of playing live with keyboard
 	var/recording = FALSE			// if recording keyboard notes to play back
-	var/last_note = ""				// if recording, put this into the last line at the end
+	var/recorded_line = ""			// if recording, put this into the last line at the end
 	var/time_since_last_note = 0	// for chords
 
 /datum/song/New(dir, obj)
@@ -76,11 +76,19 @@
 			continue
 		M.playsound_local(source, soundfile, 100, falloff = 5)
 	if(recording && live)
-		if(time_since_last_note - world.time <= 0 && last_note != "")
-			last_note += "-"
-		else if(last_note != "")
-			last_note += ","
-		last_note += "[ascii2text(note+64)][acc][oct]"
+		if(world.time - time_since_last_note <= 0 && recorded_line != "")
+			recorded_line += "-"
+		else if(recorded_line != "")
+			recorded_line += ","
+			if(world.time - time_since_last_note > 5)
+				var/intervals = round(world.time - time_since_last_note/5)
+				for(var/i in 1 to intervals)
+					recorded_line += ","
+		recorded_line += "[ascii2text(note+64)][acc][oct]"
+		if(world.time - time_since_last_note <= 3)
+			recorded_line += "/2"
+		else if(world.time - time_since_last_note == 1)
+			recorded_line += "/4"
 		time_since_last_note = world.time
 
 /datum/song/proc/shouldStopPlaying(mob/user)
@@ -304,9 +312,9 @@
 	else if(href_list["toggle_recording"])
 		recording = !recording
 		if(!recording && lines.len <= INSTRUMENT_MAX_LINE_NUMBER)
-			if(length(last_note) > INSTRUMENT_MAX_LINE_LENGTH)
-				last_note = html_encode(copytext(last_note, 1, INSTRUMENT_MAX_LINE_LENGTH))
-			lines.Add(last_note)
+			if(length(recorded_line) > INSTRUMENT_MAX_LINE_LENGTH)
+				recorded_line = html_encode(copytext(recorded_line, 1, INSTRUMENT_MAX_LINE_LENGTH))
+			lines.Add(recorded_line)
 	else if(href_list["newline"])
 		var/newline = input("Enter your line: ", instrumentObj.name) as text|null
 		if(!newline || !in_range(instrumentObj, usr))
