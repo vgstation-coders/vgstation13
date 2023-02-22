@@ -45,7 +45,7 @@ var/global/list/boo_phrases_silicon=list(
 	spell_flags = STATALLOWED | GHOSTCAST
 
 	school = "transmutation"
-	charge_max = 60 SECONDS
+	charge_max = 30 SECONDS
 	invocation = ""
 	invocation_type = SpI_NONE
 	range = 1 // Or maybe 3?
