@@ -1071,7 +1071,7 @@ steam.start() -- spawns the effect
 	var/flashing_factor = 0		// factor of how powerful the flash effect relatively to the explosion
 	var/mob/user //for investigation
 
-/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit, light_over = 0, heavy_over = 0, dev_over = 0)
+/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit, light_over = null, heavy_over = null, dev_over = null)
 	amount = amt
 	dev_override = dev_over
 	heavy_override = heavy_over
@@ -1108,9 +1108,9 @@ steam.start() -- spawns the effect
 		var/range = 0
 		// Clamp all values to MAX_EXPLOSION_RANGE
 		range = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
-		devastation = dev_override || round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
-		heavy = heavy_override || round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
-		light = light_override || min(7, range) // clamps to 7 light range for grenades
+		devastation = !isnull(dev_override) ? dev_override : round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
+		heavy = !isnull(heavy_override) ? heavy_override : round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
+		light = !isnull(light_override) ? light_override : min(7, range) // clamps to 7 light range for grenades
 		flash = range * 1.5
 		for(var/mob/M in viewers(8, location))
 			to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
