@@ -596,14 +596,12 @@
 		holder.del_reagent(FUEL)
 	else
 		var/datum/effect/system/reagents_explosion/e = new()
-		var/amounttosend = 0
 		if(created_volume > 500)
-			amounttosend = 15
+			e.set_up(15, holder.my_atom, 0, 0, null, 1, 2, 4)
 		else if(created_volume > 100)
-			amounttosend = 12
+			e.set_up(12, holder.my_atom, 0, 0, null, 0, 1, 3)
 		else
-			amounttosend = 9
-		e.set_up(amounttosend, holder.my_atom, 0, 0)
+			e.set_up(9, holder.my_atom, 0, 0, null, -1, 1, 2)
 		e.holder_damage(holder.my_atom)
 		if(isliving(holder.my_atom))
 			e.amount *= 0.5

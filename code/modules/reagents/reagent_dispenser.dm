@@ -1,8 +1,3 @@
-// Assuming this is http://en.wikipedia.org/wiki/Butane
-// (Autoignition temp 288°C, or 561.15°K)
-// Used in fueltanks exploding.
-#define AUTOIGNITION_WELDERFUEL 561.15
-
 /obj/structure/reagent_dispensers
 	name = "Dispenser"
 	desc = "..."
