@@ -248,7 +248,7 @@
 	else if(donewith && ismob(donewith.arcanetampered))
 		message_admins("[key_name_admin(donewith.arcanetampered)] caused a fueltank explosion.")
 		log_game("[key_name(donewith.arcanetampered)] caused a fueltank explosion.")
-	else if(!donewith || (!donewith.arcanetampered && !arcanetampered))
+	else if((!donewith || !donewith.arcanetampered) && !arcanetampered)
 		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
 		log_game("[key_name(user)] triggered a fueltank explosion.")
 	if(Adjacent(user))
