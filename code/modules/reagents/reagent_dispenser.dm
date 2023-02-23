@@ -221,38 +221,47 @@
 	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
 
-/obj/structure/reagent_dispensers/fueltank/Bumped(atom/movable/AM)
+/obj/structure/reagent_dispensers/Bumped(atom/movable/AM)
 	..()
 	if(istype(AM, /obj/structure/bed/chair/vehicle))
 		var/obj/structure/bed/chair/vehicle/car = AM
-		if(car.explodes_fueltanks)
+		if(car.explodes_fueltanks && can_explode())
 			visible_message("<span class='danger'>\The [car] crashes into \the [src]!</span>")
 			if(car.occupant && istype(car.occupant, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = car.occupant
 				H.audible_scream("fueltank_crash")
-			explode(car.occupant)
+			explode(car.occupant,TRUE)
 
 /obj/structure/reagent_dispensers/attempt_heating(atom/A, mob/user)
-	if(A.is_hot() || ((arcanetampered || A.arcanetampered) && iswelder(A) && !A.is_hot()))
-		explode(user,A)
-
-/obj/structure/reagent_dispensers/proc/explode(var/mob/user,var/atom/movable/donewith)
-	if(is_open_container())
-		return
-	var/volume = reagents.get_reagent_amount(FUEL)
-	if(!volume && !istype(src,/obj/structure/reagent_dispensers/fueltank))
-		return
-	if(ismob(arcanetampered) && donewith)
-		message_admins("[key_name_admin(arcanetampered)] caused a fueltank explosion.")
-		log_game("[key_name(arcanetampered)] caused a fueltank explosion.")
-	else if(donewith && ismob(donewith.arcanetampered))
-		message_admins("[key_name_admin(donewith.arcanetampered)] caused a fueltank explosion.")
-		log_game("[key_name(donewith.arcanetampered)] caused a fueltank explosion.")
-	else if((!donewith || !donewith.arcanetampered) && !arcanetampered)
-		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
-		log_game("[key_name(user)] triggered a fueltank explosion.")
-	if(Adjacent(user))
+	if((A.is_hot() || ((arcanetampered || A.arcanetampered) && iswelder(A) && !A.is_hot())) && can_explode())
+		if(ismob(arcanetampered))
+			message_admins("[key_name_admin(arcanetampered)] caused a fueltank explosion.")
+			log_game("[key_name(arcanetampered)] caused a fueltank explosion.")
+		else if(ismob(A.arcanetampered))
+			message_admins("[key_name_admin(A.arcanetampered)] caused a fueltank explosion.")
+			log_game("[key_name(A.arcanetampered)] caused a fueltank explosion.")
+		else if(!A.arcanetampered && !arcanetampered)
+			message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
+			log_game("[key_name(user)] triggered a fueltank explosion.")
 		to_chat(user, "<span class='warning'>That was stupid of you.</span>")
+		explode(user,TRUE)
+
+/obj/structure/reagent_dispensers/proc/can_explode()
+	if(!reagents.has_reagent(FUEL))
+		return FALSE
+	return TRUE
+
+/obj/structure/reagent_dispensers/fueltank/can_explode()
+	return TRUE
+
+/obj/structure/reagent_dispensers/cauldron/can_explode()
+	return FALSE
+
+/obj/structure/reagent_dispensers/proc/explode(var/mob/user,var/explodechecked = FALSE)
+	if(!explodechecked)
+		if(!can_explode())
+			return
+	var/volume = reagents.get_reagent_amount(FUEL)
 	if (volume > 500)
 		explosion(src.loc,1,2,4, whodunnit = user)
 	else if (volume > 100)
