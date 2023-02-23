@@ -940,7 +940,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	else
 		chem_temp = max(chem_temp + temp_change, received_temperature, 0)
 	handle_reactions()
-	return chem_temp
 
 /datum/reagents/proc/get_examine(var/mob/user, var/vis_override, var/blood_type)
 	if(obscured && !vis_override)

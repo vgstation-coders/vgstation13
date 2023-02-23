@@ -266,13 +266,10 @@
 	if(!explodechecked)
 		if(!can_explode())
 			return
-	var/volume = reagents.get_reagent_amount(FUEL)
-	if (volume > 500)
-		explosion(src.loc,1,2,4, whodunnit = user)
-	else if (volume > 100)
-		explosion(src.loc,0,1,3, whodunnit = user)
-	else
+	if(!reagents.has_reagent(FUEL))
 		explosion(src.loc,-1,1,2, whodunnit = user)
+	else
+		reagents.heating(received_temperature = AUTOIGNITION_WELDERFUEL)
 	if(src)
 		qdel(src)
 
