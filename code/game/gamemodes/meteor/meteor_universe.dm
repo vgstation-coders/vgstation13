@@ -28,7 +28,7 @@
 
 // Egalitarian mode A.K.A no access requirements except prison and bridge
 	for(var/obj/machinery/door/airlock/W in all_doors)
-		if(W.z == STATION_Z  && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
+		if(W.z == 1  && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
 			W.backup_access = W.req_access
 			W.req_access = list()
 
