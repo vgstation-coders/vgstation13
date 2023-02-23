@@ -8,6 +8,7 @@
 	flags = FPRINT
 	pressure_resistance = 2*ONE_ATMOSPHERE
 
+	var/exploded = FALSE // we gotta have a var like this now for it, akin to supermatter shards
 	var/amount_per_transfer_from_this = 10
 	var/possible_transfer_amounts = list(10,25,50,100)
 
@@ -38,28 +39,24 @@
 		amount_per_transfer_from_this = N
 
 /obj/structure/reagent_dispensers/ex_act(severity)
+	explode()
 	switch(severity)
 		if(1.0)
 			qdel(src)
-			return
 		if(2.0)
 			if (prob(50))
 				new /obj/effect/water(src.loc)
 				qdel(src)
-				return
 		if(3.0)
 			if (prob(5))
 				new /obj/effect/water(src.loc)
 				qdel(src)
-				return
-	explode()
-	return
 
 /obj/structure/reagent_dispensers/blob_act()
+	explode()
 	if(prob(50))
 		new /obj/effect/water(src.loc)
 		qdel(src)
-	explode()
 
 /obj/structure/reagent_dispensers/beam_connect(var/obj/effect/beam/B)
 	..()
@@ -263,9 +260,12 @@
 	return FALSE
 
 /obj/structure/reagent_dispensers/proc/explode(var/mob/user,var/explodechecked = FALSE)
+	if(exploded)
+		return // already hit this proc, don't do it again
 	if(!explodechecked)
 		if(!can_explode())
 			return
+	exploded = TRUE
 	if(!reagents.has_reagent(FUEL))
 		explosion(src.loc,-1,1,2, whodunnit = user)
 	else
