@@ -581,7 +581,7 @@
 	id = FUELBOMB
 	result = null
 	required_reagents = list(FUEL = 1)
-	required_temp = T0C + 235 //this is the temperature it takes gasoline to ignite, close enough
+	required_temp = AUTOIGNITION_WELDERFUEL
 	result_amount = 1
 
 /datum/chemical_reaction/fuelbomb/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -591,7 +591,7 @@
 
 			for(var/turf/simulated/floor/target_tile in range(0,location))
 				spawn(0)
-					target_tile.hotspot_expose(235, created_volume, surfaces = 1)
+					target_tile.hotspot_expose(AUTOIGNITION_WELDERFUEL, created_volume, surfaces = 1)
 
 		holder.del_reagent(FUEL)
 	else

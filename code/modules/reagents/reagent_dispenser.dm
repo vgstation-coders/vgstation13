@@ -57,13 +57,57 @@
 				new /obj/effect/water(src.loc)
 				qdel(src)
 				return
-		else
+	explode()
 	return
 
 /obj/structure/reagent_dispensers/blob_act()
 	if(prob(50))
 		new /obj/effect/water(src.loc)
 		qdel(src)
+	explode()
+
+/obj/structure/reagent_dispensers/beam_connect(var/obj/effect/beam/B)
+	..()
+	apply_beam_damage(B)
+
+
+/obj/structure/reagent_dispensers/beam_disconnect(var/obj/effect/beam/B)
+	..()
+	apply_beam_damage(B)
+
+/obj/structure/reagent_dispensers/apply_beam_damage(var/obj/effect/beam/B)
+	if(isturf(get_turf(src)) && B.get_damage() >= 15)
+		explode()
+
+/obj/structure/reagent_dispensers/bullet_act(var/obj/item/projectile/Proj)
+	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
+		if(Proj.get_damage() && can_explode())
+			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
+			if(Proj.firer)//turrets don't have "firers"
+				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
+				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
+			else
+				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
+			explode(Proj.firer,TRUE)
+	return ..()
+
+/obj/structure/reagent_dispensers/suicide_act(var/mob/living/user)
+	var/has_welder = user.find_held_item_by_type(/obj/item/tool/weldingtool)
+	if(has_welder && can_explode())
+		var/obj/item/tool/weldingtool/welder = user.held_items[has_welder]
+		welder.setWelding(1)
+		if(welder.welding)
+			var/message_say = user.handle_suicide_bomb_cause(src)
+			if(!message_say)
+				return
+			to_chat(viewers(user), "<span class='danger'>[user] presses the warm lit welder against the cold body of a welding fuel tank! It looks like \he's going out with a bang!</span>")
+			user.say(message_say)
+			welder.afterattack(src,user,1)
+			return(SUICIDE_ACT_BRUTELOSS)
+	if(!is_open_container() && reagents.total_volume)
+		to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+		reagents.trans_to(user, amount_per_transfer_from_this)
+		return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/New()
 	. = ..()
@@ -164,48 +208,6 @@
 			overlays += test
 
 	return ..()
-
-/obj/structure/reagent_dispensers/fueltank/beam_connect(var/obj/effect/beam/B)
-	..()
-	apply_beam_damage(B)
-
-
-/obj/structure/reagent_dispensers/fueltank/beam_disconnect(var/obj/effect/beam/B)
-	..()
-	apply_beam_damage(B)
-
-/obj/structure/reagent_dispensers/fueltank/apply_beam_damage(var/obj/effect/beam/B)
-	if(isturf(get_turf(src)) && B.get_damage() >= 15 && reagents.get_reagent_amount(FUEL))
-		explode()
-
-/obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(Proj.get_damage() && reagents.get_reagent_amount(FUEL))
-			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
-			if(Proj.firer)//turrets don't have "firers"
-				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
-				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
-			else
-				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
-			explode(Proj.firer)
-	return ..()
-
-/obj/structure/reagent_dispensers/fueltank/suicide_act(var/mob/living/user)
-	var/has_welder = user.find_held_item_by_type(/obj/item/tool/weldingtool)
-	if(has_welder)
-		var/obj/item/tool/weldingtool/welder = user.held_items[has_welder]
-		welder.setWelding(1)
-		if(welder.welding)
-			var/message_say = user.handle_suicide_bomb_cause(src)
-			if(!message_say)
-				return
-			to_chat(viewers(user), "<span class='danger'>[user] presses the warm lit welder against the cold body of a welding fuel tank! It looks like \he's going out with a bang!</span>")
-			user.say(message_say)
-			welder.afterattack(src,user,1)
-			return(SUICIDE_ACT_BRUTELOSS)
-	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
-	reagents.trans_to(user, amount_per_transfer_from_this)
-	return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/fueltank/blob_act()
 	explode()
