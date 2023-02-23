@@ -1071,7 +1071,7 @@ steam.start() -- spawns the effect
 	var/flashing_factor = 0		// factor of how powerful the flash effect relatively to the explosion
 	var/mob/user //for investigation
 
-/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit, light_over = null, heavy_over = null, dev_over = null)
+/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit, dev_over = null, heavy_over = null, light_over = null)
 	amount = amt
 	dev_override = dev_over
 	heavy_override = heavy_over
