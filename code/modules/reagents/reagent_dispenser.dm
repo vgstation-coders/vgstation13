@@ -40,21 +40,22 @@
 
 /obj/structure/reagent_dispensers/ex_act(severity)
 	explode()
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			if (prob(50))
-				new /obj/effect/water(src.loc)
+	if(src)
+		switch(severity)
+			if(1.0)
 				qdel(src)
-		if(3.0)
-			if (prob(5))
-				new /obj/effect/water(src.loc)
-				qdel(src)
+			if(2.0)
+				if (prob(50))
+					new /obj/effect/water(src.loc)
+					qdel(src)
+			if(3.0)
+				if (prob(5))
+					new /obj/effect/water(src.loc)
+					qdel(src)
 
 /obj/structure/reagent_dispensers/blob_act()
 	explode()
-	if(prob(50))
+	if(src && prob(50))
 		new /obj/effect/water(src.loc)
 		qdel(src)
 
@@ -69,6 +70,10 @@
 
 /obj/structure/reagent_dispensers/apply_beam_damage(var/obj/effect/beam/B)
 	if(isturf(get_turf(src)) && B.get_damage() >= 15)
+		explode()
+
+/obj/structure/reagent_dispensers/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
 
 /obj/structure/reagent_dispensers/bullet_act(var/obj/item/projectile/Proj)
@@ -219,9 +224,6 @@
 	qdel(src)
 	return  2
 
-/obj/structure/reagent_dispensers/fueltank/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
-		explode()
 
 /obj/structure/reagent_dispensers/Bumped(atom/movable/AM)
 	..()
