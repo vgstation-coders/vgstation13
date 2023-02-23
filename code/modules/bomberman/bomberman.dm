@@ -406,8 +406,9 @@ var/global/list/bombermangear = list()
 			if(prob(35))
 				T.spawn_powerup()
 
-		else if(istype(obstacle, /obj/structure/reagent_dispensers/fueltank) || (istype(obstacle, /obj/structure/reagent_dispensers) && !obstacle.is_open_container() && obstacle.reagents.has_reagent(FUEL)))
-			obstacle.ex_act(1)
+		else if(istype(obstacle, /obj/structure/reagent_dispensers))
+			var/obj/structure/reagent_dispensers/R = obstacle
+			R.explode()
 
 		else if(istype(obstacle, /obj/machinery/portable_atmospherics/canister))
 			var/obj/machinery/portable_atmospherics/canister/canister = obstacle

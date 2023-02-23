@@ -232,12 +232,27 @@
 				H.audible_scream("fueltank_crash")
 			explode(car.occupant)
 
-/obj/structure/reagent_dispensers/proc/explode(var/mob/user)
+/obj/structure/reagent_dispensers/attempt_heating(atom/A, mob/user)
+	if(A.is_hot() || ((arcanetampered || A.arcanetampered) && iswelder(A) && !A.is_hot()))
+		explode(user,A)
+
+/obj/structure/reagent_dispensers/proc/explode(var/mob/user,var/atom/movable/donewith)
 	if(is_open_container())
 		return
 	var/volume = reagents.get_reagent_amount(FUEL)
 	if(!volume && !istype(src,/obj/structure/reagent_dispensers/fueltank))
 		return
+	if(ismob(arcanetampered) && donewith)
+		message_admins("[key_name_admin(arcanetampered)] caused a fueltank explosion.")
+		log_game("[key_name(arcanetampered)] caused a fueltank explosion.")
+	else if(donewith && ismob(donewith.arcanetampered))
+		message_admins("[key_name_admin(A.arcanetampered)] caused a fueltank explosion.")
+		log_game("[key_name(A.arcanetampered)] caused a fueltank explosion.")
+	else if(!donewith || (!donewith.arcanetampered && !arcanetampered))
+		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
+		log_game("[key_name(user)] triggered a fueltank explosion.")
+	if(Adjacent(user))
+		to_chat(user, "<span class='warning'>That was stupid of you.</span>")
 	if (volume > 500)
 		explosion(src.loc,1,2,4, whodunnit = user)
 	else if (volume > 100)
@@ -486,6 +501,9 @@
 	icon_state = "cauldron"
 	desc = "Double, double, toil and trouble. Fire burn, and cauldron bubble."
 	flags = OPENCONTAINER
+
+/obj/structure/reagent_dispensers/cauldron/attempt_heating()
+	return // for now
 
 /obj/structure/reagent_dispensers/cauldron/update_icon()
 	overlays.len = 0

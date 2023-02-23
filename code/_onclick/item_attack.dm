@@ -39,19 +39,8 @@
 // Proximity_flag is 1 if this afterattack was called on something adjacent, in your square, or on your person.
 // Click parameters is the params string from byond Click() code, see that documentation.
 /obj/item/proc/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if((is_hot() || (source_temperature && (arcanetampered || target.arcanetampered))) && istype(target, /obj/structure/reagent_dispensers) && user.Adjacent(target))
-		var/obj/structure/reagent_dispensers/tank = target
-		if(tank.explode())
-			if(ismob(target.arcanetampered))
-				message_admins("[key_name_admin(target.arcanetampered)] caused a fueltank explosion.")
-				log_game("[key_name(target.arcanetampered)] caused a fueltank explosion.")
-			else if(ismob(arcanetampered))
-				message_admins("[key_name_admin(arcanetampered)] caused a fueltank explosion.")
-				log_game("[key_name(arcanetampered)] caused a fueltank explosion.")
-			else if(!target.arcanetampered)
-				message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
-				log_game("[key_name(user)] triggered a fueltank explosion.")
-			to_chat(user, "<span class='warning'>That was stupid of you.</span>")
+	if(istype(target, /obj/structure/reagent_dispensers) && user.Adjacent(target))
+		target.attempt_heating(src,user)
 	if(daemon && daemon.flags & DAEMON_AFTATT)
 		daemon.afterattack(target, user, proximity_flag, click_parameters)
 	return

@@ -433,8 +433,9 @@
 		qdel(obstacle)
 		breakthrough = 1
 
-	else if(istype(obstacle, /obj/structure/reagent_dispensers/fueltank) || (istype(obstacle, /obj/structure/reagent_dispensers) && !obstacle.is_open_container() && obstacle.reagents.has_reagent(FUEL)))
-		obstacle.ex_act(1)
+	else if(istype(obstacle, /obj/structure/reagent_dispensers))
+		var/obj/structure/reagent_dispensers/R = obstacle
+		R.explode(src.occupant)
 
 	else if(istype(obstacle, /mob/living))
 		var/mob/living/L = obstacle
