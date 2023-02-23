@@ -92,11 +92,19 @@
 	return ..()
 
 /obj/structure/reagent_dispensers/suicide_act(var/mob/living/user)
-	var/has_welder = user.find_held_item_by_type(/obj/item/tool/weldingtool)
-	if(has_welder && can_explode())
-		var/obj/item/tool/weldingtool/welder = user.held_items[has_welder]
-		welder.setWelding(1)
-		if(welder.welding)
+	if(user.held_items.len && can_explode())
+		var/hotfound = FALSE
+		var/obj/item/tool/weldingtool/welder
+		for(var/obj/item/i in user.held_items)
+			if(I.is_hot())
+				hotfound = TRUE
+			if(iswelder(I))
+				welder = I
+		if(welder)
+			welder.setWelding(1)
+			if(welder.welding || welder.is_hot())
+				hotfound = TRUE
+		if(hotfound)
 			var/message_say = user.handle_suicide_bomb_cause(src)
 			if(!message_say)
 				return
