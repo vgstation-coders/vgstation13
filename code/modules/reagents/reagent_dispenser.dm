@@ -95,7 +95,7 @@
 	if(user.held_items.len && can_explode())
 		var/hotfound = FALSE
 		var/obj/item/tool/weldingtool/welder
-		for(var/obj/item/i in user.held_items)
+		for(var/obj/item/I in user.held_items)
 			if(I.is_hot())
 				hotfound = TRUE
 			if(iswelder(I))
