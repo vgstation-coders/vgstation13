@@ -25,7 +25,7 @@
 	..()
 	reagents.get_examine(user)
 	if (modded)
-		to_chat(user, "<span class='warning'>Fuel faucet is wrenched open, leaking the fuel!</span>")
+		to_chat(user, "<span class='warning'>The faucet is wrenched open, leaking the contents!</span>")
 	if(rig)
 		to_chat(user, "<span class='notice'>There is some kind of device rigged to the tank.</span>")
 
