@@ -29,6 +29,7 @@
 	if(real_snow_tile && !ignore_blizzard_updates)
 		environment_snowtiles -= src
 	ClearSnowprints()
+	vis_contents.Cut()
 	..()
 
 /turf/unsimulated/floor/snow/New()
