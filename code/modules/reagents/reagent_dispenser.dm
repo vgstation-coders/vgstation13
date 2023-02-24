@@ -12,19 +12,73 @@
 	var/amount_per_transfer_from_this = 10
 	var/possible_transfer_amounts = list(10,25,50,100)
 
+	var/modded = 0
+	var/obj/item/device/assembly_holder/rig = null
+
 /obj/structure/reagent_dispensers/AltClick(mob/user)
 	if(!user.incapacitated() && user.Adjacent(get_turf(src)) && possible_transfer_amounts)
 		set_APTFT()
 		return
 	return ..()
 
-/obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_wrench(user) && wrenchable())
-		return wrenchAnchor(user, W)
-
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
 	reagents.get_examine(user)
+	if (modded)
+		to_chat(user, "<span class='warning'>Fuel faucet is wrenched open, leaking the fuel!</span>")
+	if(rig)
+		to_chat(user, "<span class='notice'>There is some kind of device rigged to the tank.</span>")
+
+
+/*/obj/structure/reagent_dispensers/hear_talk(mob/living/M, text)
+	if(rig)
+		rig.hear_talk(M,text)
+*/
+
+/obj/structure/reagent_dispensers/attack_hand()
+	if (rig)
+		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src].")
+		if(do_after(usr, src, 20))
+			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src].</span>")
+			if(rig)
+				rig.forceMove(get_turf(usr))
+				rig.master = null
+				rig = null
+			overlays = new/list()
+
+/obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(W.is_wrench(user))
+		if(wrenchable())
+			return wrenchAnchor(user, W)
+		else
+			user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
+				"You wrench [src]'s faucet [modded ? "closed" : "open"].")
+			modded = modded ? 0 : 1
+	if (istype(W,/obj/item/device/assembly_holder))
+		if (rig)
+			to_chat(user, "<span class='warning'>There is another device in the way.</span>")
+			return ..()
+		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src].")
+		if(do_after(user, src, 20))
+			if(rig)
+				to_chat(user, "<span class='warning'>Somebody already attached something to \the [src].</span>")
+				return
+			if(!user.drop_item(W, src))
+				to_chat(user,"<span class='warning'>Oops! You can't let go of \the [W]!</span>")
+				return
+
+			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src].</span>")
+
+			var/obj/item/device/assembly_holder/H = W
+			if (istype(H.a_left,/obj/item/device/assembly/igniter) || istype(H.a_right,/obj/item/device/assembly/igniter))
+				message_admins("[key_name_admin(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
+				log_game("[key_name(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
+
+			rig = W
+			rig.master = src
+
+			var/image/test = image(W.appearance, src, "pixel_x" = 6, "pixel_y" = -1)
+			overlays += test
 
 /obj/structure/reagent_dispensers/cultify()
 	new /obj/structure/reagent_dispensers/bloodkeg(get_turf(src))
@@ -155,64 +209,6 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "weldtank"
 	amount_per_transfer_from_this = 10
-	var/modded = 0
-	var/obj/item/device/assembly_holder/rig = null
-
-/*/obj/structure/reagent_dispensers/fueltank/hear_talk(mob/living/M, text)
-	if(rig)
-		rig.hear_talk(M,text)
-*/
-
-/obj/structure/reagent_dispensers/fueltank/examine(mob/user)
-	..()
-	if (modded)
-		to_chat(user, "<span class='warning'>Fuel faucet is wrenched open, leaking the fuel!</span>")
-	if(rig)
-		to_chat(user, "<span class='notice'>There is some kind of device rigged to the tank.</span>")
-
-/obj/structure/reagent_dispensers/fueltank/attack_hand()
-	if (rig)
-		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src].")
-		if(do_after(usr, src, 20))
-			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src].</span>")
-			if(rig)
-				rig.forceMove(get_turf(usr))
-				rig.master = null
-				rig = null
-			overlays = new/list()
-
-/obj/structure/reagent_dispensers/fueltank/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (W.is_wrench(user))
-		user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
-			"You wrench [src]'s faucet [modded ? "closed" : "open"].")
-		modded = modded ? 0 : 1
-	if (istype(W,/obj/item/device/assembly_holder))
-		if (rig)
-			to_chat(user, "<span class='warning'>There is another device in the way.</span>")
-			return ..()
-		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src].")
-		if(do_after(user, src, 20))
-			if(rig)
-				to_chat(user, "<span class='warning'>Somebody already attached something to \the [src].</span>")
-				return
-			if(!user.drop_item(W, src))
-				to_chat(user,"<span class='warning'>Oops! You can't let go of \the [W]!</span>")
-				return
-
-			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src].</span>")
-
-			var/obj/item/device/assembly_holder/H = W
-			if (istype(H.a_left,/obj/item/device/assembly/igniter) || istype(H.a_right,/obj/item/device/assembly/igniter))
-				message_admins("[key_name_admin(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
-				log_game("[key_name(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
-
-			rig = W
-			rig.master = src
-
-			var/image/test = image(W.appearance, src, "pixel_x" = 6, "pixel_y" = -1)
-			overlays += test
-
-	return ..()
 
 /obj/structure/reagent_dispensers/fueltank/blob_act()
 	explode()
