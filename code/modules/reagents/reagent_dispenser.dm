@@ -53,7 +53,7 @@
 		else if(!is_open_container())
 			user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
 				"You wrench [src]'s faucet [modded ? "closed" : "open"].")
-			modded = modded ? 0 : 1
+			modded = !modded
 	if (!is_open_container() && istype(W,/obj/item/device/assembly_holder))
 		if (rig)
 			to_chat(user, "<span class='warning'>There is another device in the way.</span>")
