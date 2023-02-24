@@ -45,7 +45,7 @@
 /obj/effect/landmark/corpse/initialize()
 	var/mob/living/carbon/human/H = createCorpse()
 	equipCorpse(H)
-
+	qdel(src)
 
 /obj/effect/landmark/corpse/proc/createCorpse() //Creates a mob and checks for gear in each slot before attempting to equip it.
 	var/mob/living/carbon/human/M = new /mob/living/carbon/human(loc, mutantrace)
@@ -66,10 +66,11 @@
 	else if(islist(possible_names))
 		M.real_name = pick(possible_names)
 
-	M.adjustOxyLoss(oxy_dmg) //Kills the new mob
-	M.adjustBruteLoss(brute_dmg)
-	M.adjustFireLoss(burn_dmg)
-	M.adjustToxLoss(toxin_dmg)
+	M.oxyloss = min(max(M.oxyloss + oxy_dmg, 0),(M.maxHealth*2)) //Kills the new mob
+	brute_dmg = max(0,brute_dmg)
+	burn_dmg = max(0,burn_dmg)
+	M.take_overall_damage(brute_dmg,burn_dmg)
+	M.toxloss = min(max(M.toxloss + toxin_dmg, 0),(M.maxHealth*2))
 
 	M.iscorpse = 1
 
@@ -77,7 +78,8 @@
 	M.pixel_y = src.pixel_y
 
 	M.lying = 1
-	M.updatehealth()
+	if(brute_dmg <= 0 && burn_dmg <= 0) // already called in take_overall_damage
+		M.updatehealth()
 	M.regenerate_icons()
 	M.update_transform()
 
@@ -100,12 +102,12 @@
 	if(husk)
 		M.ChangeToHusk()
 
-	qdel(src)
 	return M
 
 /obj/effect/landmark/corpse/proc/equipCorpse(mob/living/carbon/human/M)
+	var/list/L
 	if(src.corpseuniform)
-		var/list/L = src.corpseuniform
+		L = src.corpseuniform
 
 		if(istype(L))
 			src.corpseuniform = pick(L)
@@ -118,7 +120,7 @@
 		M.equip_to_slot_or_del(U, slot_w_uniform)
 
 	if(src.corpsesuit)
-		var/list/L = src.corpsesuit
+		L = src.corpsesuit
 
 		if(istype(L))
 			src.corpsesuit = pick(L)
@@ -128,42 +130,42 @@
 			R.initialize_suit()
 
 	if(src.corpseshoes)
-		var/list/L = src.corpseshoes
+		L = src.corpseshoes
 
 		if(istype(L))
 			src.corpseshoes = pick(L)
 		M.equip_to_slot_or_del(new src.corpseshoes(M), slot_shoes)
 
 	if(src.corpsegloves)
-		var/list/L = src.corpsegloves
+		L = src.corpsegloves
 
 		if(istype(L))
 			src.corpsegloves = pick(L)
 		M.equip_to_slot_or_del(new src.corpsegloves(M), slot_gloves)
 
 	if(src.corpseradio)
-		var/list/L = src.corpseradio
+		L = src.corpseradio
 
 		if(istype(L))
 			src.corpseradio = pick(L)
 		M.equip_to_slot_or_del(new src.corpseradio(M), slot_ears)
 
 	if(src.corpseglasses)
-		var/list/L = src.corpseglasses
+		L = src.corpseglasses
 
 		if(istype(L))
 			src.corpseglasses = pick(L)
 		M.equip_to_slot_or_del(new src.corpseglasses(M), slot_glasses)
 
 	if(src.corpsemask)
-		var/list/L = src.corpsemask
+		L = src.corpsemask
 
 		if(istype(L))
 			src.corpsemask = pick(L)
 		M.equip_to_slot_or_del(new src.corpsemask(M), slot_wear_mask)
 
 	if(src.corpsehelmet)
-		var/list/L = src.corpsehelmet
+		L = src.corpsehelmet
 
 		if(istype(L))
 			src.corpsehelmet = pick(L)
@@ -171,28 +173,28 @@
 		M.equip_to_slot_or_del(new src.corpsehelmet(M), slot_head)
 
 	if(src.corpsebelt)
-		var/list/L = src.corpsebelt
+		L = src.corpsebelt
 
 		if(istype(L))
 			src.corpsebelt = pick(L)
 		M.equip_to_slot_or_del(new src.corpsebelt(M), slot_belt)
 
 	if(src.corpsepocket1)
-		var/list/L = src.corpsepocket1
+		L = src.corpsepocket1
 
 		if(istype(L))
 			src.corpsepocket1 = pick(L)
 		M.equip_to_slot_or_del(new src.corpsepocket1(M), slot_r_store)
 
 	if(src.corpsepocket2)
-		var/list/L = src.corpsepocket2
+		L = src.corpsepocket2
 
 		if(istype(L))
 			src.corpsepocket2 = pick(L)
 		M.equip_to_slot_or_del(new src.corpsepocket2(M), slot_l_store)
 
 	if(src.corpseback)
-		var/list/L = src.corpseback
+		L = src.corpseback
 
 		if(istype(L))
 			src.corpseback = pick(L)
@@ -202,19 +204,17 @@
 	if(src.corpseid == 1)
 		var/obj/item/weapon/card/id/W = new(M)
 		W.name = "[M.real_name]'s ID Card"
-		var/datum/job/jobdatum
-		for(var/jobtype in typesof(/datum/job))
-			var/datum/job/J = new jobtype
-			if(J.title == corpseidaccess)
-				jobdatum = J
-				break
 		if(src.corpseidicon)
 			W.icon_state = corpseidicon
 		if(src.corpseidaccess)
-			if(jobdatum)
-				W.access = jobdatum.get_access()
-			else
-				W.access = list()
+			var/datum/job/jobdatum
+			var/datum/job/J
+			for(var/jobtype in subtypesof(/datum/job))
+				J = jobtype
+				if(initial(J.title) == corpseidaccess)
+					jobdatum = new J
+					break
+			W.access = jobdatum ? jobdatum.get_access() : list()
 		if(corpseidjob)
 			W.assignment = corpseidjob
 			W.name = "[W.name] ([W.assignment])"
@@ -1284,6 +1284,39 @@
 
 	corpsemask = /obj/item/clothing/mask/breath
 
+/obj/effect/landmark/corpse/civilian/New()
+	var/list/L = corpseuniform
+	if(istype(L))
+		L += existing_typesof(/obj/item/clothing/under/color)
+		corpseuniform = L
+	L = corpsehelmet
+	if(istype(L))
+		L += existing_typesof(/obj/item/clothing/head/soft)
+		corpsehelmet = L
+
+	return ..()
+
+/obj/effect/landmark/corpse/civilian/createCorpse()
+	. = ..()
+
+	var/mob/M = .
+	if(M.gender == FEMALE)
+		var/list/L = corpseuniform
+		if(istype(L))
+			L += existing_typesof(/obj/item/clothing/under/dress)
+			corpseuniform = L
+
+	if(prob(50))
+		corpsemask = null
+	if(prob(60))
+		corpsesuit = null
+	if(prob(60))
+		corpsehelmet = null
+	if(prob(70))
+		corpsegloves = null
+	if(prob(80))
+		corpseglasses = null
+
 /obj/effect/landmark/corpse/stripper
 	name = "Stripper"
 	corpsegender = G_FEMALE
@@ -1300,30 +1333,6 @@
 	possible_names = list("Konfetka", "Florida", "Matilda", "Ogonjok", "Almaz", "Kisulja")
 
 	corpsehelmet = list(/obj/item/clothing/head/ushanka, /obj/item/clothing/head/squatter_hat) //heh
-
-/obj/effect/landmark/corpse/civilian/New()
-	corpseuniform += existing_typesof(/obj/item/clothing/under/color)
-	corpsehelmet += existing_typesof(/obj/item/clothing/head/soft)
-
-	return ..()
-
-/obj/effect/landmark/corpse/civilian/createCorpse()
-	. = ..()
-
-	var/mob/M = .
-	if(M.gender == FEMALE)
-		corpseuniform += existing_typesof(/obj/item/clothing/under/dress)
-
-	if(prob(50))
-		corpsemask = null
-	if(prob(60))
-		corpsesuit = null
-	if(prob(60))
-		corpsehelmet = null
-	if(prob(70))
-		corpsegloves = null
-	if(prob(80))
-		corpseglasses = null
 
 /obj/effect/landmark/corpse/mutilated
 	husk = 1
