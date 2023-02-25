@@ -14,7 +14,7 @@
 
 	steps = list(
 					//1
-					list(Co_DESC="Cockpit wire mesh is installed.",
+					list(Co_DESC="Cockpit wire mesh is installed. It requires welding into place.",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
 					 		Co_VIS_MSG = "{USER} weld{s} external armor layer to {HOLDER}."),
@@ -22,8 +22,8 @@
 					 		Co_VIS_MSG = "{USER} unfasten{s} the cockpit wire screen.")
 					 	),
 					//2
-					 list(Co_DESC="Cockpit wire mesh is installed.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 list(Co_DESC="Cockpit wire mesh is installed. It requires securing with a screwdriver.",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
 					 		Co_VIS_MSG = "{USER} secure{s} external armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} external armor layer from {HOLDER}.",
@@ -31,7 +31,7 @@
 					 		Co_DELAY = 30,)
 					 	),
 					 //3
-					 list(Co_DESC="Internal armor is welded.",
+					 list(Co_DESC="Internal armor is welded. The unsealed cabin requires metal rods, for a screen. ",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/rods,
 					 		Co_AMOUNT = 10,
 					 		Co_VIS_MSG = "{USER} install{s} a steel wire mesh to {HOLDER}'s cabin.",
@@ -157,7 +157,7 @@
 	result = "/obj/mecha/working/ripley"
 
 /datum/construction/reversible/mecha/firefighter
-	result = "/obj/mecha/working/ripley/firefighter"
+	result = "/obj/mecha/working/ripley/mk2/firefighter"
 	steps = list(
 					//1
 					list(Co_DESC="External armor is wrenched.",
