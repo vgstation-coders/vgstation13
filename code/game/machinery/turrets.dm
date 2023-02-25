@@ -351,11 +351,11 @@
 	src.stat |= BROKEN // enables the BROKEN bit
 	src.icon_state = "destroyed_target_prism"
 	invisibility = 0
-	sleep(3)
-	flick("explosion", src)
-	src.setDensity(TRUE)
-	if (cover!=null) // deletes the cover - no need on keeping it there!
-		QDEL_NULL(cover)
+	spawn(3)
+		flick("explosion", src)
+		src.setDensity(TRUE)
+		if (cover!=null) // deletes the cover - no need on keeping it there!
+			QDEL_NULL(cover)
 
 
 /obj/machinery/turret/proc/malf_take_control(mob/living/silicon/ai/A)
