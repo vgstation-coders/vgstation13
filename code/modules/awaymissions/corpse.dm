@@ -75,13 +75,15 @@
 	M.iscorpse = 1
 
 	M.pixel_x = src.pixel_x
-	M.pixel_y = src.pixel_y
+	M.pixel_y = src.pixel_y - (6 * PIXEL_MULTIPLIER)
 
 	M.lying = 1
 	if(brute_dmg <= 0 && burn_dmg <= 0) // already called in take_overall_damage
 		M.updatehealth()
 	M.regenerate_icons()
-	M.update_transform()
+	var/matrix/final_transform = M.transform
+	final_transform.Turn(90)
+	M.transform = final_transform
 
 	if(generate_random_appearance)
 		M.dna.ResetSE()
