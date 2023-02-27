@@ -481,44 +481,48 @@
 	for(var/mob/living/carbon/human/H in player_list)
 		var/list/nameparts = splittext(H.real_name," ")
 		for(var/part in nameparts)
-			if(findtext(scrambled_text_pieces[scrambled_text_pieces.len],part)) // human player name in world?
+			if(findtext(lowertext(scrambled_text_pieces[scrambled_text_pieces.len]),lowertext(part))) // human player name in world?
 				var/oldtext = scrambled_text_pieces[scrambled_text_pieces.len]
 				scrambled_text_pieces.Remove(scrambled_text_pieces[scrambled_text_pieces.len]) // take out last element
-				scrambled_text_pieces += splittext(oldtext,part,include_delimiters=TRUE) // replace with split
-				found_names += part
+				scrambled_text_pieces += splittext(oldtext,part,1,0,TRUE) // replace with split
+				found_names += lowertext(part)
 
-	var/scrambled_text = ""
+	. = ""
+	var/capitalize = 1
 	for(var/piece in scrambled_text_pieces)
-		if(piece in found_names)
-			scrambled_text = piece // human name shows up here unscrambled
+		var/scramble_bit = ""
+		if(lowertext(piece) in found_names)
+			if(!capitalize && prob(95))
+				scramble_bit += " "
+			scramble_bit += piece // human name shows up here unscrambled
+			if(prob(95))
+				scramble_bit += " "
 		else
-			var/capitalize = 1
-
-			while(length(scrambled_text) < length(piece))
+			while(length(scramble_bit) < length(piece))
 				var/next = pick(syllables)
 				if(capitalize)
 					next = capitalize(next)
 					capitalize = 0
-				scrambled_text += next
+				scramble_bit += next
 				var/chance = rand(100)
 				if(chance <= 5)
-					scrambled_text += ". "
+					scramble_bit += ". "
 					capitalize = 1
 				else if(chance > 5 && chance <= space_chance)
-					scrambled_text += " "
+					scramble_bit += " "
+		. += scramble_bit
 
-	scrambled_text = trim(scrambled_text)
-	var/ending = copytext(scrambled_text, length(scrambled_text))
+	. = trim(.)
+	var/ending = copytext(., length(.))
 	if(ending == ".")
-		scrambled_text = copytext(scrambled_text,1,length(scrambled_text)-1)
+		. = copytext(.,1,length(.)-1)
 	var/input_ending = copytext(input, length(input))
 	if(input_ending in list("!","?","."))
-		scrambled_text += input_ending
+		. += input_ending
 
 	// Add it to cache, cutting old entries if the list is too long
-	scramble_cache[input] = scrambled_text
+	scramble_cache[input] = .
 	if(scramble_cache.len > SCRAMBLE_CACHE_LEN)
 		scramble_cache.Cut(1, scramble_cache.len-SCRAMBLE_CACHE_LEN-1)
 
-	return scrambled_text
 #undef SCRAMBLE_CACHE_LEN
