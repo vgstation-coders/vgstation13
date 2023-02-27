@@ -476,28 +476,39 @@
 		scramble_cache[input] = n
 		return n
 
-	var/input_size = length(input)
-	var/scrambled_text = ""
-	var/capitalize = 1
+	var/list/scrambled_text_pieces = list(input)
+	for(var/mob/living/carbon/human/H in player_list)
+		if(findtext(scrambled_text_pieces[scrambled_text_pieces.len],H.real_name)) // human player name in world?
+			scrambled_text_pieces.Remove(scrambled_text_pieces[scrambled_text_pieces.len]) // take out last element
+			scrambled_text_pieces += splittext(scrambled_text_pieces[scrambled_text_pieces.len],H.real_name) // replace with split
 
-	while(length(scrambled_text) < input_size)
-		var/next = pick(syllables)
-		if(capitalize)
-			next = capitalize(next)
-			capitalize = 0
-		scrambled_text += next
-		var/chance = rand(100)
-		if(chance <= 5)
-			scrambled_text += ". "
-			capitalize = 1
-		else if(chance > 5 && chance <= space_chance)
-			scrambled_text += " "
+	var/scrambled_text = ""
+	var/i = 0
+	for(var/piece in scrambled_text_pieces)
+		i++
+		if(!i%2)
+			scrambled_text = piece // human name shows up here unscrambled
+		else
+			var/capitalize = 1
+
+			while(length(scrambled_text) < length(piece))
+				var/next = pick(syllables)
+				if(capitalize)
+					next = capitalize(next)
+					capitalize = 0
+				scrambled_text += next
+				var/chance = rand(100)
+				if(chance <= 5)
+					scrambled_text += ". "
+					capitalize = 1
+				else if(chance > 5 && chance <= space_chance)
+					scrambled_text += " "
 
 	scrambled_text = trim(scrambled_text)
 	var/ending = copytext(scrambled_text, length(scrambled_text))
 	if(ending == ".")
 		scrambled_text = copytext(scrambled_text,1,length(scrambled_text)-1)
-	var/input_ending = copytext(input, input_size)
+	var/input_ending = copytext(input, length(input))
 	if(input_ending in list("!","?","."))
 		scrambled_text += input_ending
 
