@@ -477,16 +477,19 @@
 		return n
 
 	var/list/scrambled_text_pieces = list(input)
+	var/list/found_names = list()
 	for(var/mob/living/carbon/human/H in player_list)
-		if(findtext(scrambled_text_pieces[scrambled_text_pieces.len],H.real_name)) // human player name in world?
-			scrambled_text_pieces.Remove(scrambled_text_pieces[scrambled_text_pieces.len]) // take out last element
-			scrambled_text_pieces += splittext(scrambled_text_pieces[scrambled_text_pieces.len],H.real_name) // replace with split
+		var/list/nameparts = splittext(H.real_name," ")
+		for(var/part in nameparts)
+			if(findtext(scrambled_text_pieces[scrambled_text_pieces.len],part)) // human player name in world?
+				var/oldtext = scrambled_text_pieces[scrambled_text_pieces.len]
+				scrambled_text_pieces.Remove(scrambled_text_pieces[scrambled_text_pieces.len]) // take out last element
+				scrambled_text_pieces += splittext(oldtext,part,include_delimiters=TRUE) // replace with split
+				found_names += part
 
 	var/scrambled_text = ""
-	var/i = 0
 	for(var/piece in scrambled_text_pieces)
-		i++
-		if(!i%2)
+		if(piece in found_names)
 			scrambled_text = piece // human name shows up here unscrambled
 		else
 			var/capitalize = 1
