@@ -480,6 +480,8 @@
 	var/list/found_names = list()
 	for(var/mob/living/carbon/human/H in player_list)
 		var/list/nameparts = splittext(H.real_name," ")
+		if(nameparts.len > 3) // so the clown or borgs can't abuse this to reveal languages with common words
+			continue
 		for(var/part in nameparts)
 			if(findtext(lowertext(scrambled_text_pieces[scrambled_text_pieces.len]),lowertext(part))) // human player name in world?
 				var/oldtext = scrambled_text_pieces[scrambled_text_pieces.len]
