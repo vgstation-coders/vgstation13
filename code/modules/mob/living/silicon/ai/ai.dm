@@ -948,7 +948,7 @@ var/list/ai_list = list()
 			user.visible_message("<span class='notice'>\The [user] decides not to deconstruct \the [src].</span>")
 			return
 		user.visible_message("<span class='notice'>\The [user] finishes unfastening \the [src]'s panel!</span>")
-		message_admins("deconstruct AI here")
+		log_attack("AI [src]([src.ckey]) has been deconstructed by [user.name]([user.ckey])")
 		var/obj/structure/AIcore/core = new /obj/structure/AIcore/(src.loc)
 		core.state = 4 
 		core.circuit = new /obj/item/weapon/circuitboard/aicore
