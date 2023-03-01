@@ -417,6 +417,10 @@
 		qdel(query_age)
 	if(!isnum(player_age))
 		player_age = 0
+	if(player_age == 0)
+		message_admins("[ckey(key)]/([src]) failed connection (age 0)")
+		log_admin(("[ckey(key)]/([src]) failed connection (age 0)"))
+		qdel(src)
 	if(age < MINIMUM_NON_SUS_ACCOUNT_AGE)
 		message_admins("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age]  First seen = [player_age]")
 		log_admin(("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age] First seen = [player_age]"))
