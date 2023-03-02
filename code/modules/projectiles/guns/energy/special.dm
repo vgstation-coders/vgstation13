@@ -638,6 +638,10 @@
 	icon_charge_multiple = 20
 	var/overheat = 0
 	var/recent_reload = 1
+
+/obj/item/weapon/gun/energy/kinetic_accelerator/dmod
+	projectile_type = "/obj/item/projectile/kinetic/dmod"
+
 /*
 /obj/item/weapon/gun/energy/kinetic_accelerator/shoot_live_shot()
 	overheat = 1

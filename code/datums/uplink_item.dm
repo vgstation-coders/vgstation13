@@ -924,6 +924,14 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/cargo/mastertrainer/new_uplink_item(var/new_item, var/turf/location, mob/user)
 	return new new_item(location, user)
 
+/datum/uplink_item/jobspecific/cargo/pkamodifier
+	name = "Proto-Kinetic Accelerator Conversion Kit"
+	desc = "A weapon modkit for proto-kinetic accelerators that removes the pressure checks for them, causing low pressure damage to be done at normal atmospheric conditions. Also increases damage with higher pressure, at a rate of 1 per extra bar."
+	item = /obj/item/weapon/device/modkit/syndi_pka
+	cost = 12
+	discounted_cost = 10
+	jobs_with_discount = list("Shaft Miner")
+
 /datum/uplink_item/jobspecific/service
 	category = "Service Specials"
 

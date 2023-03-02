@@ -129,8 +129,11 @@
 	damage = 15
 	damage_type = BRUTE
 	flag = "energy"
-	var/range = 2
+	var/damagemodded = FALSE
 	fire_sound = 'sound/weapons/Taser.ogg'
+
+/obj/item/projectile/kinetic/dmod
+	damagemodded = TRUE
 
 /obj/item/projectile/kinetic/New()
 	var/turf/proj_turf = get_turf(src)
@@ -138,18 +141,10 @@
 		return
 	var/datum/gas_mixture/environment = proj_turf.return_air()
 	var/pressure = environment.return_pressure()
-	if(pressure < 50)
+	if(pressure < 50 || damagemodded)
 		name = "full strength kinetic force"
-		damage += 15
+		damage += (15 + (damagemodded * (max(1,pressure/ONE_ATMOSPHERE) - 1)))
 	..()
-
-/* wat - N3X
-/obj/item/projectile/kinetic/Range()
-	range--
-	if(range <= 0)
-		new /obj/item/effect/kinetic_blast(src.loc)
-		qdel(src)
-*/
 
 /obj/item/projectile/kinetic/on_hit(var/atom/target, var/blocked = 0)
 	if(!loc)
