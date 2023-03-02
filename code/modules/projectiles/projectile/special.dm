@@ -143,7 +143,7 @@
 	var/pressure = environment.return_pressure()
 	if(pressure < 50 || damagemodded)
 		name = "full strength kinetic force"
-		damage += (15 + (damagemodded * (max(1,pressure/ONE_ATMOSPHERE) - 1)))
+		damage += (15 + (damagemodded * min(30,max(1,pressure/ONE_ATMOSPHERE) - 1)))
 	..()
 
 /obj/item/projectile/kinetic/on_hit(var/atom/target, var/blocked = 0)
