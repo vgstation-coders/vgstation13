@@ -46,7 +46,7 @@ var/adminbus_ooc_color
 			message_admins("[key_name_admin(src)] has attempted to advertise in OOC: [msg]")
 			return
 		*/
-		if(!isnewplayer(src) && ((copytext(msg, 1, 2) in list(".",";",":","#")) || (findtext(lowertext(copytext(msg, 1, 5)), "say"))))
+		if(!isnewplayer(mob) && ((copytext(msg, 1, 2) in list(".",";",":","#")) || (findtext(lowertext(copytext(msg, 1, 5)), "say"))))
 			if(alert("Your message \"[msg]\" looks like it was meant for in game communication, say it in OOC?", "Meant for OOC?", "No", "Yes") != "Yes")
 				return
 	log_ooc("[mob.name]/[key] (@[mob.x],[mob.y],[mob.z]): [msg]")
