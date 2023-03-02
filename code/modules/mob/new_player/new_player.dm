@@ -835,4 +835,4 @@
 
 /mob/new_player/say(message, datum/language/speaking, atom/movable/radio, class)
 	if(client)
-		client.OOC(message)
+		client.ooc(message)
