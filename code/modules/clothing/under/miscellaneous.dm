@@ -146,7 +146,7 @@
 	icon_state = "rainbow"
 	item_state = "rainbow"
 	_color = "rainbow"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/cloud
 	name = "cloud"
