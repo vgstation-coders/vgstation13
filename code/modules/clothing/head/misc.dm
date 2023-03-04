@@ -557,7 +557,7 @@
 	desc = "Perfect for the closet botanist."
 	icon_state = "cowboy"
 	item_state = "cowboy"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 10, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/head/cowboy/dimma
