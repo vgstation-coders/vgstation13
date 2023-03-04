@@ -568,6 +568,7 @@ var/list/tag_suits_list = list()
 	_color = "mankini"
 	siemens_coefficient = 1
 	body_parts_covered = 0
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/xenos
 	name = "xenos suit"
@@ -590,7 +591,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_black"
 	_color = "swim_black"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/blue
 	name = "blue swimsuit"
@@ -598,7 +599,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_blue"
 	_color = "swim_blue"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/purple
 	name = "purple swimsuit"
@@ -606,7 +607,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_purp"
 	_color = "swim_purp"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/green
 	name = "green swimsuit"
@@ -614,7 +615,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_green"
 	_color = "swim_green"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/red
 	name = "red swimsuit"
@@ -622,7 +623,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_red"
 	_color = "swim_red"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/simonjacket
 	name = "Simon's Jacket"
