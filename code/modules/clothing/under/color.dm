@@ -21,7 +21,7 @@
 	item_state = "b_suit"
 	_color = "blue"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED,V OX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/green
 	name = "green jumpsuit"
