@@ -144,6 +144,7 @@
 	icon_state = "vox-carapace"
 	item_state = "vox-carapace"
 	desc = "An armored, segmented carapace with glowing purple lights. It looks pretty run-down."
+	body_parts_visible_override = HANDS|FEET
 
 /obj/item/clothing/head/helmet/space/vox/stealth
 	name = "alien stealth helmet"
@@ -276,6 +277,7 @@
 	icon_state = "vox-carapace"
 	item_state = "vox-carapace"
 	desc = "An armored, segmented carapace with glowing purple lights. It looks like someone stripped most of the armor off."
+	body_parts_visible_override = HANDS|FEET
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace //carapace helmet
 	name = "alien visor"
