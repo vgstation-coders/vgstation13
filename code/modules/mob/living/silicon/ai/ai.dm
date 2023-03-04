@@ -247,6 +247,7 @@ var/list/ai_list = list()
 		"Boy Malf" = "ai-boy-malf",
 		"Boy" = "ai-boy",
 		"Broken Output" = "ai-static",
+		"Chud" = "ai-chud",
 		"Clown" = "ai-clown2",
 		"Dancing Hotdog" = "ai-hotdog",
 		"Database" = "ai-database",
