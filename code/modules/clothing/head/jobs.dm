@@ -190,7 +190,7 @@
 	desc = "A squat garrison cap, for officers made of sterner stuff."
 	icon_state = "garrison"
 	item_state = "garrison"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/cowboy/sec
 	name = "deputy hat"
