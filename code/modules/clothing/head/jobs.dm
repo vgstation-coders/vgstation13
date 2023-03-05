@@ -170,7 +170,7 @@
 	name = "security beret"
 	desc = "A beret with the security insignia emblazoned on it. For officers that are more inclined towards style than safety."
 	icon_state = "beret_badge"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/beret/officer
 	name = "formal security officer beret"
@@ -183,7 +183,7 @@
 	desc = "A red peaked cap, with a corporate logo on it."
 	icon_state = "peaked"
 	item_state = "peaked"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/garrison
 	name = "garrison cap"
