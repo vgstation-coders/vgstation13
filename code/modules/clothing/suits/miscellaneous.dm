@@ -450,6 +450,7 @@ var/list/tag_suits_list = list()
 	icon_state = "highlanderkilt"
 	item_state = "highlanderkilt"
 	clothing_flags = ONESIZEFITSALL
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	wizard_garb = 1 //required for the spell in the highlander syndicate bundle
 
 /obj/item/clothing/suit/cardborg

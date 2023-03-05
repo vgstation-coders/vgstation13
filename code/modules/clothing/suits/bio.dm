@@ -11,7 +11,7 @@
 	body_parts_visible_override = EYES|BEARD
 	siemens_coefficient = 0.9
 	sterility = 100
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	autoignition_temperature = AUTOIGNITION_PROTECTIVE
 
 /obj/item/clothing/suit/bio_suit
@@ -19,7 +19,7 @@
 	desc = "A suit that protects against biological contamination."
 	icon_state = "bio"
 	item_state = "bio_suit"
-	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
