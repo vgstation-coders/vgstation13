@@ -55,6 +55,7 @@
 	flags = FPRINT
 	body_parts_covered = BEARD
 	hides_identity = HIDES_IDENTITY_ALWAYS
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 //scarves (fit in in mask slot)
 /obj/item/clothing/mask/scarf

@@ -203,7 +203,7 @@ var/list/science_goggles_wearers = list()
 	name = "eyepatch"
 	desc = "Yarr."
 	icon_state = "eyepatch0"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	item_state = "eyepatch0"
 	min_harm_label = 0
 	var/flipped = FALSE
@@ -211,7 +211,7 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/eyepatch/attack_self(mob/user)
 	flipped = !flipped
 	icon_state = "eyepatch[flipped]"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	item_state = "eyepatch[flipped]"
 	to_chat(user, "You flip \the [src] to your [flipped ? "left" : "right"] eye.")
 
@@ -515,7 +515,7 @@ var/list/science_goggles_wearers = list()
 	desc = "Thermals in the shape of glasses."
 	icon_state = "thermal"
 	item_state = "glasses"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	origin_tech = Tc_MAGNETS + "=3"
 	vision_flags = SEE_MOBS
 	see_invisible = SEE_INVISIBLE_MINIMUM
@@ -549,7 +549,7 @@ var/list/science_goggles_wearers = list()
 	name = "Thermonocle"
 	desc = "A monocle thermal."
 	icon_state = "thermoncle"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	flags = 0 //doesn't protect eyes because it's a monocle, duh
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")

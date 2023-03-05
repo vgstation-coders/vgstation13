@@ -740,7 +740,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	icon_state = "pipe"
 	slot_flags = SLOT_MASK
 	overlay_on = "pipelit"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	smoketime = 100
 
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
@@ -806,6 +806,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A nicotine delivery system popularized by folksy backwoodsmen and kept popular in the modern age and beyond by space hipsters."
 	icon_state = "cobpipe"
 	smoketime = 400
+	species_fit = list(VOX_SHAPED)
 
 /////////////////
 //CHEAP LIGHTER//

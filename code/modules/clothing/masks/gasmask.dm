@@ -172,7 +172,7 @@
 	icon_state = "fake-moustache"
 	w_class = W_CLASS_TINY
 	actions_types = list(/datum/action/item_action/toggle_voicechanger)
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/gas/clown_hat
 	name = "clown wig and mask"
