@@ -1607,9 +1607,12 @@
 	if(H)
 		H.active = 0
 	flick("outlet-open", src)
+	var/image/img2workwith = null
 	for(var/image/I in underlays)
 		if(I.icon_state == "outlet-under")
-			flick("outlet-under-open", I)
+			I.icon_state = "outlet-under-open" // has to be like this since not sure if flick() works on them
+			img2workwith = I
+			break
 	playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 0, 0)
 	sleep(20)	//wait until correct animation frame
 	playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
@@ -1623,6 +1626,10 @@
 					AM.throw_at(target, 3, 1)
 		H.vent_gas(src.loc)
 		qdel(H)
+
+	if(img2workwith)
+		sleep(22)
+		img2workwith.icon_state = "outlet-under"
 
 /obj/structure/disposaloutlet/attackby(var/obj/item/I, var/mob/user)
 	if(!I || !user || !deconstructable)

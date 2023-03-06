@@ -180,9 +180,12 @@
 /obj/machinery/disposal/deliveryChute/flush()
 	flushing = 1
 	flick("intake-closing", src)
+	var/image/img2workwith = null
 	for(var/image/I in underlays)
 		if(I.icon_state == "intake-under")
-			flick("intake-under-closing", I)
+			I.icon_state = "intake-under-closing" // has to be like this since not sure if flick() works on them
+			img2workwith = I
+			break
 	var/deliveryCheck = 0
 	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
 												// travels through the pipes.
@@ -201,7 +204,10 @@
 
 	sleep(10)
 	playsound(src, 'sound/machines/disposalflush.ogg', 50, 0, 0)
-	sleep(5) // wait for animation to finish
+	sleep(2)
+	if(img2workwith)
+		img2workwith.icon_state = "intake-under"
+	sleep(3) // wait for animation to finish
 
 	H.init(src)	// copy the contents of disposer to holder
 	num_contents=0
