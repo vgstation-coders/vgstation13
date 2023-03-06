@@ -514,7 +514,7 @@ var/list/icon_state_to_appearance = list()
 			polarstar_found_at = src
 			visible_message("<span class='notice'>A gun was buried within!</span>")
 		if(1)
-			if(get_dist(src,polarstar_found_at) > max(world.maxx,world.maxy)/4) // don't find this too near the polar star
+			if(get_dist(src,polarstar_found_at) > max(world.maxx,world.maxy)/5) // don't find this too near the polar star
 				new/obj/item/device/modkit/spur_parts(src)
 				visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
 				polarstar = 2
