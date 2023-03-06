@@ -136,17 +136,14 @@ Class Procs:
 	to_chat(world, "<span class='danger'>Processing Geometry...</span>")
 	sleep(-1)
 
-	var/simulated_turf_count = 0
-
 	for(var/turf/simulated/S in initial_simturfs)
-		simulated_turf_count++
 		S.update_air_properties()
 
-	to_chat(world, {"<span class='info'>Total Simulated Turfs: [simulated_turf_count]
+	to_chat(world, {"<span class='info'>Total Simulated Turfs: [initial_simturfs.len]
 Total Zones: [zones.len]
 Total Edges: [edges.len]
 Total Active Edges: [length(processing_parts[SSAIR_EDGES]) ? "<span class='danger'>[length(processing_parts[SSAIR_EDGES])]</span>" : "None"]
-Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_count]</span>"})
+Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - initial_simturfs.len]</span>"})
 
 	..()
 
