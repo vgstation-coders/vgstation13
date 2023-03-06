@@ -1572,9 +1572,6 @@
 
 /obj/structure/disposaloutlet/New()
 	. = ..()
-	var/image/underneath = image(src.icon,src,"outlet-under",src.layer,src.dir)
-	underneath.plane = relative_plane(OBJ_PLANE)
-	underlays += underneath
 	spawn(1)
 		target = get_ranged_target_turf(src, dir, 10)
 
@@ -1606,10 +1603,6 @@
 	if(H)
 		H.active = 0
 	flick("outlet-open", src)
-	underlays.Cut()
-	var/image/underneath = image(src.icon,src,"outlet-under-open",src.layer,src.dir) // has to be like this since not sure if flick() or modifying works on them
-	underneath.plane = relative_plane(OBJ_PLANE)
-	underlays += underneath
 	playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 0, 0)
 	sleep(20)	//wait until correct animation frame
 	playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
@@ -1623,12 +1616,6 @@
 					AM.throw_at(target, 3, 1)
 		H.vent_gas(src.loc)
 		qdel(H)
-
-	sleep(22)
-	underlays.Cut()
-	underneath = image(src.icon,src,"outlet-under",src.layer,src.dir) // has to be like this since not sure if flick() or modifying works on them
-	underneath.plane = relative_plane(OBJ_PLANE)
-	underlays += underneath
 
 /obj/structure/disposaloutlet/attackby(var/obj/item/I, var/mob/user)
 	if(!I || !user || !deconstructable)

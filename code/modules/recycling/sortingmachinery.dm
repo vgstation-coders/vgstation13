@@ -126,9 +126,6 @@
 
 /obj/machinery/disposal/deliveryChute/New()
 	..()
-	var/image/underneath = image(src.icon,src,"intake-under",src.layer,src.dir)
-	underneath.plane = relative_plane(OBJ_PLANE)
-	underlays += underneath
 	processing_objects.Remove(src)
 	spawn(5)
 		trunk = locate() in src.loc
@@ -179,10 +176,6 @@
 /obj/machinery/disposal/deliveryChute/flush()
 	flushing = 1
 	flick("intake-closing", src)
-	underlays.Cut()
-	var/image/underneath = image(src.icon,src,"intake-under-closing",src.layer,src.dir) // has to be like this since not sure if flick() or modifying works on them
-	underneath.plane = relative_plane(OBJ_PLANE)
-	underlays += underneath
 	var/deliveryCheck = 0
 	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
 												// travels through the pipes.
@@ -201,12 +194,7 @@
 
 	sleep(10)
 	playsound(src, 'sound/machines/disposalflush.ogg', 50, 0, 0)
-	sleep(2)
-	underlays.Cut()
-	underneath = image(src.icon,src,"intake-under",src.layer,src.dir) // has to be like this since not sure if flick() or modifying works on them
-	underneath.plane = relative_plane(OBJ_PLANE)
-	underlays += underneath
-	sleep(3) // wait for animation to finish
+	sleep(5) // wait for animation to finish
 
 	H.init(src)	// copy the contents of disposer to holder
 	num_contents=0
