@@ -66,24 +66,21 @@
 	else if(islist(possible_names))
 		M.real_name = pick(possible_names)
 
-	M.oxyloss = min(max(M.oxyloss + oxy_dmg, 0),(M.maxHealth*2)) //Kills the new mob
-	brute_dmg = max(0,brute_dmg)
-	burn_dmg = max(0,burn_dmg)
-	M.take_overall_damage(brute_dmg,burn_dmg)
-	M.toxloss = min(max(M.toxloss + toxin_dmg, 0),(M.maxHealth*2))
+	M.adjustOxyLoss(oxy_dmg) //Kills the new mob
+	M.adjustBruteLoss(brute_dmg)
+	M.adjustFireLoss(burn_dmg)
+	M.adjustToxLoss(toxin_dmg)
 
 	M.iscorpse = 1
 
 	M.pixel_x = src.pixel_x
-	M.pixel_y = src.pixel_y - (6 * PIXEL_MULTIPLIER)
+	M.pixel_y = src.pixel_y
 
 	M.lying = 1
 	if(brute_dmg <= 0 && burn_dmg <= 0) // already called in take_overall_damage
 		M.updatehealth()
 	M.regenerate_icons()
-	var/matrix/final_transform = M.transform
-	final_transform.Turn(90)
-	M.transform = final_transform
+	M.update_transform()
 
 	if(generate_random_appearance)
 		M.dna.ResetSE()
