@@ -1,3 +1,5 @@
+var/global/list/turf/simulated/initial_simturfs = list()
+
 /turf/simulated
 	name = "station"
 
@@ -15,6 +17,7 @@
 	if(istype(loc, /area/chapel))
 		holy = 1
 	levelupdate()
+	initial_simturfs.Add(src)
 
 /turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD)
 	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src
