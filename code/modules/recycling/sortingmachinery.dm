@@ -117,7 +117,6 @@
 	icon_state = "intake"
 	plane = ABOVE_HUMAN_PLANE
 	layer = DISPOSALS_CHUTE_LAYER
-	var/image/underneath
 	var/c_mode = 0
 	var/doFlushIn=0
 	var/num_contents=0
@@ -127,7 +126,7 @@
 
 /obj/machinery/disposal/deliveryChute/New()
 	..()
-	underneath = image(src.icon,src,"intake-under",src.layer,src.dir)
+	var/image/underneath = image(src.icon,src,"intake-under",src.layer,src.dir)
 	underneath.plane = relative_plane(OBJ_PLANE)
 	underlays += underneath
 	processing_objects.Remove(src)
@@ -180,12 +179,10 @@
 /obj/machinery/disposal/deliveryChute/flush()
 	flushing = 1
 	flick("intake-closing", src)
-	var/image/img2workwith = null
-	for(var/image/I in underlays)
-		if(I.icon_state == "intake-under")
-			I.icon_state = "intake-under-closing" // has to be like this since not sure if flick() works on them
-			img2workwith = I
-			break
+	underlays.Cut()
+	var/image/underneath = image(src.icon,src,"intake-under-closing",src.layer,src.dir) // has to be like this since not sure if flick() or modifying works on them
+	underneath.plane = relative_plane(OBJ_PLANE)
+	underlays += underneath
 	var/deliveryCheck = 0
 	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
 												// travels through the pipes.
@@ -205,8 +202,10 @@
 	sleep(10)
 	playsound(src, 'sound/machines/disposalflush.ogg', 50, 0, 0)
 	sleep(2)
-	if(img2workwith)
-		img2workwith.icon_state = "intake-under"
+	underlays.Cut()
+	underneath = image(src.icon,src,"intake-under",src.layer,src.dir) // has to be like this since not sure if flick() or modifying works on them
+	underneath.plane = relative_plane(OBJ_PLANE)
+	underlays += underneath
 	sleep(3) // wait for animation to finish
 
 	H.init(src)	// copy the contents of disposer to holder

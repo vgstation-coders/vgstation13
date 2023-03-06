@@ -1558,7 +1558,6 @@
 	var/turf/target	// this will be where the output objects are 'thrown' to.
 	var/mode = 0
 	var/obj/structure/disposalpipe/trunk/trunk
-	var/image/underneath
 	var/deconstructable = TRUE
 
 /obj/structure/disposaloutlet/supports_holomap()
@@ -1573,7 +1572,7 @@
 
 /obj/structure/disposaloutlet/New()
 	. = ..()
-	underneath = image(src.icon,src,"outlet-under",src.layer,src.dir)
+	var/image/underneath = image(src.icon,src,"outlet-under",src.layer,src.dir)
 	underneath.plane = relative_plane(OBJ_PLANE)
 	underlays += underneath
 	spawn(1)
@@ -1607,12 +1606,10 @@
 	if(H)
 		H.active = 0
 	flick("outlet-open", src)
-	var/image/img2workwith = null
-	for(var/image/I in underlays)
-		if(I.icon_state == "outlet-under")
-			I.icon_state = "outlet-under-open" // has to be like this since not sure if flick() works on them
-			img2workwith = I
-			break
+	underlays.Cut()
+	var/image/underneath = image(src.icon,src,"outlet-under-open",src.layer,src.dir) // has to be like this since not sure if flick() or modifying works on them
+	underneath.plane = relative_plane(OBJ_PLANE)
+	underlays += underneath
 	playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 0, 0)
 	sleep(20)	//wait until correct animation frame
 	playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
@@ -1627,9 +1624,11 @@
 		H.vent_gas(src.loc)
 		qdel(H)
 
-	if(img2workwith)
-		sleep(22)
-		img2workwith.icon_state = "outlet-under"
+	sleep(22)
+	underlays.Cut()
+	underneath = image(src.icon,src,"outlet-under",src.layer,src.dir) // has to be like this since not sure if flick() or modifying works on them
+	underneath.plane = relative_plane(OBJ_PLANE)
+	underlays += underneath
 
 /obj/structure/disposaloutlet/attackby(var/obj/item/I, var/mob/user)
 	if(!I || !user || !deconstructable)
