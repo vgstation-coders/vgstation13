@@ -341,6 +341,7 @@
 		var/turf/simulated/S = src
 		if(S.zone)
 			S.zone.rebuild()
+		simturfs -= src
 
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
