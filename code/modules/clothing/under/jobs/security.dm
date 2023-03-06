@@ -241,7 +241,7 @@
 	item_state = "jensencoat"
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.6
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/hos/sundowner
 	name = "armoured greatcoat"
