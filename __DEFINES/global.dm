@@ -171,6 +171,7 @@ var/gravity_is_on = 1
 var/join_motd = null
 
 var/polarstar = 0 //1 means that the polar star has been found, 2 means that the spur modification kit has been found
+var/turf/polarstar_found_at //the turf the polar star was found at, for spur part distance calculations
 
 // nanomanager, the manager for Nano UIs
 var/datum/nanomanager/nanomanager = new()

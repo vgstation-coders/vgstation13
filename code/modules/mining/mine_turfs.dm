@@ -399,18 +399,8 @@ var/list/icon_state_to_appearance = list()
 
 				return
 
-			if(finds && finds.len)
-				var/I = rand(1,100)
-				if(I == 1)
-					switch(polarstar)
-						if(0)
-							new/obj/item/weapon/gun/energy/polarstar(src)
-							polarstar = 1
-							visible_message("<span class='notice'>A gun was buried within!</span>")
-						if(1)
-							new/obj/item/device/modkit/spur_parts(src)
-							visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
-							polarstar = 2
+			if(finds && finds.len && prob(1))
+				DropPolarStarSpur()
 
 			excavation_level += P.excavation_amount
 
@@ -503,27 +493,30 @@ var/list/icon_state_to_appearance = list()
 		razed_large_artifacts[artifact_find.artifact_id] += destroyed
 		ArtifactRepercussion(src, usr, "", "[artifact_find.artifact_find_type]")
 
-	if(artifact_fail && !mineral)
-		if(prob(1))
-			switch(polarstar)
-				if(0)
-					new/obj/item/weapon/gun/energy/polarstar(src)
-					polarstar = 1
-					visible_message("<span class='notice'>A gun was buried within!</span>")
-				if(1)
-					new/obj/item/device/modkit/spur_parts(src)
-					visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
-					polarstar = 2
+	if(artifact_fail && !mineral && prob(1))
+		DropPolarStarSpur()
 
 	if(rand(1,500) == 1)
-		visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
 		DropAbandonedCrate()
 
 	ChangeTurf(mined_type)
 
 /turf/unsimulated/mineral/proc/DropAbandonedCrate()
+	visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
 	var/crate_type = pick(valid_abandoned_crate_types)
 	new crate_type(src)
+
+/turf/unsimulated/mineral/proc/DropPolarStarSpur()
+	switch(polarstar)
+		if(0)
+			new/obj/item/weapon/gun/energy/polarstar(src)
+			polarstar = 1
+			polarstar_found_at = src
+			visible_message("<span class='notice'>A gun was buried within!</span>")
+		if(1 && get_dist(src,polarstar_found_at) > max(world.maxx,world.maxy)/4) // don't find this too near the polar star
+			new/obj/item/device/modkit/spur_parts(src)
+			visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
+			polarstar = 2
 
 /turf/unsimulated/mineral/proc/GetScanState()
 	if(mineral)
