@@ -269,6 +269,7 @@ var/list/ai_list = list()
 		"Helios" = "ai-helios",
 		"Hourglass" = "ai-hourglass",
 		"Inverted" = "ai-u",
+		"JaCobson" = "ai-cobson",
 		"Jack Frost" = "ai-jack",
 		"Matrix" = "ai-matrix",
 		"Metaclub" = "ai-terminal",
