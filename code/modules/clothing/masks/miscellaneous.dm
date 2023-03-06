@@ -180,7 +180,7 @@
 /obj/item/clothing/mask/bandana/red
 	name = "red bandana"
 	icon_state = "bandred"
-	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/mask/joy
 	name = "joy mask"

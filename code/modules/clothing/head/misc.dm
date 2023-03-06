@@ -159,7 +159,7 @@
 	desc = "It's a green bandana with some fine nanotech lining."
 	icon_state = "greenbandana"
 	item_state = "greenbandana"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/beret/highlander
