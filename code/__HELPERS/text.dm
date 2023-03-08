@@ -133,6 +133,7 @@ var/list/whitelist_name_diacritics_min = list(
 		return //Rejects the input if it is null or if it is longer then the max length allowed
 
 	var/current_space = TRUE
+	var/length = 0
 
 	t_in = trim(t_in)
 	var/t_out = ""
@@ -143,6 +144,7 @@ var/list/whitelist_name_diacritics_min = list(
 			if(65 to 90)			//Uppercase Letters
 				current_space = 0
 				t_out += t_in[i]
+				length++
 			// a  .. z
 			if(97 to 122)			//Lowercase Letters
 				if (current_space)
@@ -151,6 +153,7 @@ var/list/whitelist_name_diacritics_min = list(
 				else
 					current_space = 0
 					t_out += t_in[i]
+				length++
 
 			// 0  .. 9
 			if(48 to 57)			//Numbers
@@ -159,6 +162,7 @@ var/list/whitelist_name_diacritics_min = list(
 						continue
 					current_space = 0
 					t_out += t_in[i]
+					length++
 				else
 					continue
 
@@ -192,16 +196,19 @@ var/list/whitelist_name_diacritics_min = list(
 				if (t_in[i] in whitelist_name_diacritics_cap)
 					t_out += t_in[i]
 					i++ // Those are two-bytes letters
+					length++
 					current_space = 0
 				else if (t_in[i] in whitelist_name_diacritics_min)
 					if (current_space)
 						var/index = whitelist_name_diacritics_min.Find(t_in[i])
 						t_out += whitelist_name_diacritics_cap[index]
 						i++ // Those are two-bytes letters
+						length++
 						current_space = 0
 					else
 						t_out += t_in[i]
 						i++ // Those are two-bytes letters
+						length++
 						current_space = 0
 				else
 					return
@@ -212,7 +219,7 @@ var/list/whitelist_name_diacritics_min = list(
 
 	t_out = trim(t_out)
 
-	if (length(t_out) < 2)
+	if (length < 2)
 		return
 
 	return t_out
