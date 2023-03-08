@@ -132,7 +132,7 @@ var/list/whitelist_name_diacritics_min = list(
 	if(!t_in || length(t_in) > max_length)
 		return //Rejects the input if it is null or if it is longer then the max length allowed
 
-	var/current_space = FALSE
+	var/current_space = TRUE
 
 	t_in = trim(t_in)
 	var/t_out = ""
@@ -155,6 +155,8 @@ var/list/whitelist_name_diacritics_min = list(
 			// 0  .. 9
 			if(48 to 57)			//Numbers
 				if(allow_numbers)
+					if (i == 1)
+						continue
 					current_space = 0
 					t_out += t_in[i]
 				else
@@ -162,11 +164,10 @@ var/list/whitelist_name_diacritics_min = list(
 
 			// '  -  .
 			if(39,45,46)			//Common name punctuation
-				if(allow_numbers)
-					current_space = 0
-					t_out += t_in[i]
-				else
-					return
+				if (i == 1)
+					continue
+				current_space = 0
+				t_out += t_in[i]
 
 
 			// ~   |   @  :  #  $  %  &  *  +
@@ -202,6 +203,10 @@ var/list/whitelist_name_diacritics_min = list(
 						current_space = 0
 				else
 					return
+
+	for(var/bad_name in list("space","floor","wall","r-wall","monkey","unknown","inactive ai","plating"))	//prevents these common metagamey names
+		if(cmptext(t_out,bad_name))
+			return	//(not case sensitive)
 	return t_out
 
 //checks text for html tags
