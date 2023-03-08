@@ -134,6 +134,7 @@ var/list/whitelist_name_diacritics_min = list(
 
 	var/current_space = TRUE
 	var/length = 0
+	var/started = FALSE
 
 	t_in = trim(t_in)
 	var/t_out = ""
@@ -142,25 +143,27 @@ var/list/whitelist_name_diacritics_min = list(
 		switch(ascii_char)
 			// A  .. Z
 			if(65 to 90)			//Uppercase Letters
-				current_space = 0
+				started = TRUE
+				current_space = FALSE
 				t_out += t_in[i]
 				length++
 			// a  .. z
 			if(97 to 122)			//Lowercase Letters
+				started = TRUE
 				if (current_space)
-					current_space = 0
+					current_space = FALSE
 					t_out += ascii2text(ascii_char - 32)
 				else
-					current_space = 0
+					current_space = FALSE
 					t_out += t_in[i]
 				length++
 
 			// 0  .. 9
 			if(48 to 57)			//Numbers
 				if(allow_numbers)
-					if (i == 1)
+					if (!started)
 						continue
-					current_space = 0
+					current_space = FALSE
 					t_out += t_in[i]
 					length++
 				else
@@ -168,18 +171,18 @@ var/list/whitelist_name_diacritics_min = list(
 
 			// '  -  .
 			if(39,45,46)			//Common name punctuation
-				if (i == 1)
+				if (!started)
 					continue
-				current_space = 0
+				current_space = FALSE
 				t_out += t_in[i]
 
 
 			// ~   |   @  :  #  $  %  &  *  +
 			if(126,124,64,58,35,36,37,38,42,43)			//Other symbols that we'll allow (mainly for AI)
 				if(allow_numbers)
-					if (i == 1)
+					if (!started)
 						continue
-					current_space = 0
+					current_space = FALSE
 					t_out += t_in[i]
 				else
 					continue
@@ -190,26 +193,28 @@ var/list/whitelist_name_diacritics_min = list(
 				if (current_space)
 					continue
 				else
-					current_space = 1
+					current_space = TRUE
 					t_out += t_in[i]
 			else
 				if (t_in[i] in whitelist_name_diacritics_cap)
+					started = TRUE
 					t_out += t_in[i]
 					i++ // Those are two-bytes letters
 					length++
-					current_space = 0
+					current_space = FALSE
 				else if (t_in[i] in whitelist_name_diacritics_min)
+					started = TRUE
 					if (current_space)
 						var/index = whitelist_name_diacritics_min.Find(t_in[i])
 						t_out += whitelist_name_diacritics_cap[index]
 						i++ // Those are two-bytes letters
 						length++
-						current_space = 0
+						current_space = FALSE
 					else
 						t_out += t_in[i]
 						i++ // Those are two-bytes letters
 						length++
-						current_space = 0
+						current_space = FALSE
 				else
 					return
 
