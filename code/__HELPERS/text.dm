@@ -129,7 +129,7 @@ var/list/whitelist_name_diacritics_min = list(
 )
 
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
-	if(!t_in || length(t_in) > max_length)
+	if(!t_in || length(t_in) > max_length || length(t_in) < 2)
 		return //Rejects the input if it is null or if it is longer then the max length allowed
 
 	var/current_space = TRUE
@@ -160,7 +160,7 @@ var/list/whitelist_name_diacritics_min = list(
 					current_space = 0
 					t_out += t_in[i]
 				else
-					return
+					continue
 
 			// '  -  .
 			if(39,45,46)			//Common name punctuation
@@ -176,7 +176,7 @@ var/list/whitelist_name_diacritics_min = list(
 					current_space = 0
 					t_out += t_in[i]
 				else
-					return
+					continue
 
 
 			//Space
