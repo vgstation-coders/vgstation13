@@ -24,6 +24,7 @@
 	var/last_sound = 0
 	var/template_path = "disposalsbin.tmpl"
 	var/deconstructable = TRUE	//Set to FALSE for disposal machinery that can be used for transporting players or things, but not tinkered with by players.
+	var/out_at_dir = FALSE // Goes out at the direction this faces if true
 
 /obj/machinery/disposal/splashable()
 	return FALSE
@@ -200,7 +201,7 @@
 // leave the disposal
 /obj/machinery/disposal/proc/go_out(mob/user)
 	var/turf/outturf = get_step(src,src.dir)
-	if(!outturf)
+	if(!out_at_dir || !outturf)
 		user.forceMove(src.loc)
 	else if(!user.Move(outturf))
 		return // needs no density

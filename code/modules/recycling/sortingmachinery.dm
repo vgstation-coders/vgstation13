@@ -115,6 +115,7 @@
 	desc = "A chute for big and small packages alike!"
 	density = 1
 	icon_state = "intake"
+	out_at_dir = TRUE
 	var/c_mode = 0
 	var/doFlushIn=0
 	var/num_contents=0
