@@ -199,15 +199,15 @@
 
 // leave the disposal
 /obj/machinery/disposal/proc/go_out(mob/user)
-
-
+	var/turf/outturf = get_step(src,src.dir)
+	if(!outturf)
+		user.forceMove(src.loc)
+	else if(!user.Move(outturf))
+		return // needs no density
 	if (user.client)
 		user.client.eye = user.client.mob
 		user.client.perspective = MOB_PERSPECTIVE
-	user.forceMove(src.loc)
 	update_icon()
-	return
-
 
 // monkeys can only pull the flush lever
 /obj/machinery/disposal/attack_paw(mob/user as mob)
