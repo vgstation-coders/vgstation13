@@ -129,7 +129,7 @@ var/list/whitelist_name_diacritics_min = list(
 )
 
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
-	if(!t_in || length(t_in) > max_length || length(t_in) < 2)
+	if(!t_in || length(t_in) > max_length)
 		return //Rejects the input if it is null or if it is longer then the max length allowed
 
 	var/current_space = TRUE
@@ -173,6 +173,8 @@ var/list/whitelist_name_diacritics_min = list(
 			// ~   |   @  :  #  $  %  &  *  +
 			if(126,124,64,58,35,36,37,38,42,43)			//Other symbols that we'll allow (mainly for AI)
 				if(allow_numbers)
+					if (i == 1)
+						continue
 					current_space = 0
 					t_out += t_in[i]
 				else
@@ -195,11 +197,11 @@ var/list/whitelist_name_diacritics_min = list(
 					if (current_space)
 						var/index = whitelist_name_diacritics_min.Find(t_in[i])
 						t_out += whitelist_name_diacritics_cap[index]
-						i++
+						i++ // Those are two-bytes letters
 						current_space = 0
 					else
 						t_out += t_in[i]
-						i++
+						i++ // Those are two-bytes letters
 						current_space = 0
 				else
 					return
@@ -207,6 +209,12 @@ var/list/whitelist_name_diacritics_min = list(
 	for(var/bad_name in list("space","floor","wall","r-wall","monkey","unknown","inactive ai","plating"))	//prevents these common metagamey names
 		if(cmptext(t_out,bad_name))
 			return	//(not case sensitive)
+
+	t_out = trim(t_out)
+
+	if (length(t_out) < 2)
+		return
+
 	return t_out
 
 //checks text for html tags
