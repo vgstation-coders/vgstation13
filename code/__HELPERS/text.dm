@@ -117,78 +117,91 @@
 	var/name = input(user, message, title, default) as null|message
 	return strip_html_simple(name, max_length)
 
-//Filters out undesirable characters from names
+/proc/test_ascii(var/text)
+	for(var/i=1, i<=length(text), i++)
+		world.log << text2ascii(text, i)
+
+var/list/whitelist_name_diacritics_cap = list(
+	"À", "Á", "Â", "Ã", "Ä", "Ä", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï", "Ð", "Ñ", "Ò", "Ó", "Ô", "Ö", "Ø", "Ù", "Ú", "Û", "Ü", "Ý",
+)
+var/list/whitelist_name_diacritics_min = list(
+	"à", "á", "â", "ã", "ä", "ä", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "ö", "ø", "ù", "ú", "û", "ü", "ý",
+)
+
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
 	if(!t_in || length(t_in) > max_length)
 		return //Rejects the input if it is null or if it is longer then the max length allowed
 
-	var/number_of_alphanumeric	= 0
-	var/last_char_group			= 0
-	var/t_out = ""
+	var/current_space = FALSE
 
+	t_in = trim(t_in)
+	var/t_out = ""
 	for(var/i=1, i<=length(t_in), i++)
 		var/ascii_char = text2ascii(t_in,i)
 		switch(ascii_char)
 			// A  .. Z
 			if(65 to 90)			//Uppercase Letters
-				t_out += ascii2text(ascii_char)
-				number_of_alphanumeric++
-				last_char_group = 4
-
+				current_space = 0
+				t_out += t_in[i]
 			// a  .. z
 			if(97 to 122)			//Lowercase Letters
-				if(last_char_group<2)
-					t_out += ascii2text(ascii_char-32)	//Force uppercase first character
+				if (current_space)
+					current_space = 0
+					t_out += ascii2text(ascii_char - 32)
 				else
-					t_out += ascii2text(ascii_char)
-				number_of_alphanumeric++
-				last_char_group = 4
+					current_space = 0
+					t_out += t_in[i]
 
 			// 0  .. 9
 			if(48 to 57)			//Numbers
-				if(!last_char_group)
-					continue	//suppress at start of string
-				if(!allow_numbers)
-					continue
-				t_out += ascii2text(ascii_char)
-				number_of_alphanumeric++
-				last_char_group = 3
+				if(allow_numbers)
+					current_space = 0
+					t_out += t_in[i]
+				else
+					return
 
 			// '  -  .
 			if(39,45,46)			//Common name punctuation
-				if(!last_char_group)
-					continue
-				t_out += ascii2text(ascii_char)
-				last_char_group = 2
+				if(allow_numbers)
+					current_space = 0
+					t_out += t_in[i]
+				else
+					return
+
 
 			// ~   |   @  :  #  $  %  &  *  +
 			if(126,124,64,58,35,36,37,38,42,43)			//Other symbols that we'll allow (mainly for AI)
-				if(!last_char_group)
-					continue	//suppress at start of string
-				if(!allow_numbers)
-					continue
-				t_out += ascii2text(ascii_char)
-				last_char_group = 2
+				if(allow_numbers)
+					current_space = 0
+					t_out += t_in[i]
+				else
+					return
+
 
 			//Space
 			if(32)
-				if(last_char_group <= 1)
-					continue	//suppress double-spaces and spaces at start of string
-				t_out += ascii2text(ascii_char)
-				last_char_group = 1
+				if (current_space)
+					continue
+				else
+					current_space = 1
+					t_out += t_in[i]
 			else
-				return
-
-	if(number_of_alphanumeric < 2)
-		return		//protects against tiny names like "A" and also names like "' ' ' ' ' ' ' '"
-
-	if(last_char_group == 1)
-		t_out = copytext(t_out,1,length(t_out))	//removes the last character (in this case a space)
-
-	for(var/bad_name in list("space","floor","wall","r-wall","monkey","unknown","inactive ai","plating"))	//prevents these common metagamey names
-		if(cmptext(t_out,bad_name))
-			return	//(not case sensitive)
-
+				if (t_in[i] in whitelist_name_diacritics_cap)
+					t_out += t_in[i]
+					i++ // Those are two-bytes letters
+					current_space = 0
+				else if (t_in[i] in whitelist_name_diacritics_min)
+					if (current_space)
+						var/index = whitelist_name_diacritics_min.Find(t_in[i])
+						t_out += whitelist_name_diacritics_cap[index]
+						i++
+						current_space = 0
+					else
+						t_out += t_in[i]
+						i++
+						current_space = 0
+				else
+					return
 	return t_out
 
 //checks text for html tags
