@@ -12,6 +12,8 @@
 		luck += base_luck.base_luck()
 	//adjust based on borne items
 	luck += borne_item_luckiness()
+	if(Holiday == FRIDAY_THE_13TH)
+		luck -= 250
 	return luck
 
 /mob
@@ -32,8 +34,6 @@
 	if(blesscurse.len)
 		for(var/datum/blesscurse/this_blesscurse in blesscurse)
 			base_luck += this_blesscurse.blesscurse_strength
-	if(Holiday == FRIDAY_THE_13TH)
-		base_luck -= 250
 	return base_luck
 
 //Add a blessing or curse to a mob.
