@@ -153,15 +153,15 @@ var/explosion_shake_message_cooldown = 0
 		var/severity = dist
 		var/pushback = 0
 		for(var/turf/Trajectory = T, Trajectory != epicenter, Trajectory = get_step_towards(Trajectory,epicenter))
-			dist += cached_exp_block[Trajectory]
+			severity += cached_exp_block[Trajectory]
 
-		if(dist < devastation_range)
+		if(severity < devastation_range)
 			severity = 1
 			pushback = 5
-		else if(dist < heavy_impact_range)
+		else if(severity < heavy_impact_range)
 			severity = 2
 			pushback = 3
-		else if(dist < light_impact_range)
+		else if(severity < light_impact_range)
 			severity = 3
 			pushback = 1
 		else
