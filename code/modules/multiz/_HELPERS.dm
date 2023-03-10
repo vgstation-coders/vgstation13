@@ -120,6 +120,6 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 
 	var/turf/epicenter = get_turf(usr)
 	var/max_range = input("Set the max range") as num
-	var/shape_txt = alert("What shape?","Spiral Block", "Cube","Octahedron")
-	var/shape = shape_txt == "Cube" ? 1 : 0
-	multi_z_spiral_block(epicenter,max_range,shape)
+	var/diff = input("What size to increase or decrease by while further away?","Spiral Block") as num
+	var/mult = input("What size to multiply by while further away?","Spiral Block") as num
+	multi_z_spiral_block(epicenter,max_range,1,diff,mult)

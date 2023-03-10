@@ -152,7 +152,7 @@ var/explosion_shake_message_cooldown = 0
 		var/dist = cheap_pythag(T.x - x0, T.y - y0) / (2**abs(T.z - z0))
 		var/severity = dist
 		var/pushback = 0
-		for(var/turf/Trajectory = T, Trajectory != epicenter, Trajectory = get_step_towards(Trajectory,epicenter))
+		for(var/turf/Trajectory = T, Trajectory != epicenter, Trajectory = get_zstep_towards(Trajectory,epicenter))
 			severity += cached_exp_block[Trajectory]
 
 		if(severity < devastation_range)

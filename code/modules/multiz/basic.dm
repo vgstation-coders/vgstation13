@@ -60,3 +60,19 @@
 		. = GetBelow(ref)
 	else
 		. = get_step(ref, dir)
+
+/proc/get_zstep_towards(atom/ref, atom/trg)
+	if(trg.z > ref.z)
+		. = GetAbove(ref)
+	else if (trg.z < ref.z)
+		. = GetBelow(ref)
+	else
+		. = get_step_towards(ref, trg)
+
+/proc/get_zstep_away(atom/ref, atom/trg)
+	if(trg.z > ref.z)
+		. = GetAbove(ref)
+	else if (trg.z < ref.z)
+		. = GetBelow(ref)
+	else
+		. = get_step_away(ref, trg)
