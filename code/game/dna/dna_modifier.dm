@@ -376,7 +376,7 @@
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
 			A.ex_act(severity)
-		. += A
+			. += A
 		qdel(src)
 	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.
 	/*switch(severity)

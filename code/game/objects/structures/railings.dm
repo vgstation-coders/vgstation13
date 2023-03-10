@@ -274,10 +274,12 @@
 	break_glass(damage)
 	if(wired)
 		wired = FALSE
-		. += var/obj/item/stack/cable_coil/CC = new /obj/item/stack/cable_coil(get_turf(src),2)
+		var/obj/item/stack/cable_coil/CC = new /obj/item/stack/cable_coil(get_turf(src),2)
+		. += CC
 		CC._color = wire_color
 		CC.update_icon()
-	. += var/obj/item/stack/sheet/M = new sheettype(loc)
+	var/obj/item/stack/sheet/M = new sheettype(loc)
+	. += M
 	M.amount = 2
 	qdel(src)
 
