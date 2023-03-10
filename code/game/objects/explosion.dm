@@ -143,8 +143,7 @@ var/explosion_shake_message_cooldown = 0
 	var/z0 = epicenter.z
 
 	var/list/affected_turfs = multi_z_spiral_block(epicenter,max_range,0,0,0.5)
-	// does not actually affect the explosion as severity gets overriden in the dist check, so commented out
-	//var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs)
+	var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs,z0)
 
 	var/destroytime = world.time
 	for(var/turf/T in affected_turfs)
@@ -153,8 +152,8 @@ var/explosion_shake_message_cooldown = 0
 		var/dist = cheap_pythag(T.x - x0, T.y - y0) / (2**(T.z - z0))
 		var/severity = dist
 		var/pushback = 0
-		//for(var/turf/Trajectory = T, Trajectory != epicenter, Trajectory = get_step_towards(Trajectory,epicenter))
-			//severity += cached_exp_block[Trajectory]
+		for(var/turf/Trajectory = T, Trajectory != epicenter, Trajectory = get_step_towards(Trajectory,epicenter))
+			dist += cached_exp_block[Trajectory]
 
 		if(dist < devastation_range)
 			severity = 1
@@ -207,12 +206,12 @@ var/explosion_shake_message_cooldown = 0
 	destroytime = world.time - destroytime
 	log_debug("Explosion at [epicenter.x],[epicenter.y],[epicenter.z] took [destroytime/10] seconds.")
 
-/proc/CalculateExplosionBlock(list/affected_turfs)
+/proc/CalculateExplosionBlock(list/affected_turfs,var/epicenter_z)
 	. = list()
 	// we cache the explosion block rating of every turf in the explosion area
 	//explosion block reduces explosion distance based on path from epicentre
 	for(var/turf/T as anything in affected_turfs)
-		var/current_exp_block = T.density ? T.explosion_block : 0
+		var/current_exp_block = T.density || T.z != epicenter_z ? T.explosion_block : 0
 		for (var/obj/machinery/door/D in T)
 			if(D.density && D.explosion_block)
 				current_exp_block += D.explosion_block
