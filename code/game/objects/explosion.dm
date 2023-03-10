@@ -91,7 +91,7 @@ var/explosion_shake_message_cooldown = 0
 		//Double check for client
 		if(M && M.client)
 			var/turf/M_turf = get_turf(M)
-			if(M_turf && (M_turf.z == epicenter.z || AreConnectedZLevels(M_turf.z,epicenter.z)) && (M_turf.z - epicenter.z <= max_range) && (epicenter.z - M_turf.z <= max_range))
+			if(M_turf && AreConnectedZLevels(M_turf.z,epicenter.z) && abs(M_turf.z - epicenter.z) <= max_range)
 				var/dist = get_dist(M_turf, epicenter)
 				//If inside the blast radius + world.view - 2
 				if((dist <= round(max_range + world.view - 2, 1)) && (M_turf.z == epicenter.z))
