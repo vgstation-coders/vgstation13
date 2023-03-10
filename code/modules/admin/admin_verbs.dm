@@ -676,7 +676,7 @@ var/list/admin_verbs_mod = list(
 	set desc = "Cause an EMP of varying strength at your location."
 
 	var/turf/epicenter = mob.loc
-	var/list/choices = list("Small EMP (1,2)", "Medium EMP (2,4)", "Big EMP (4,8)", "Custom EMP")
+	var/list/choices = list("Small EMP (1,2)", "Medium EMP (2,4)", "Big EMP (4,8)", "Supermatter EMP (100,200)", "Custom EMP")
 	var/choice = input("What size EMP would you like to produce?") in choices | null
 	switch(choice)
 		if(null)
@@ -687,6 +687,8 @@ var/list/admin_verbs_mod = list(
 			empulse(epicenter, 2, 4)
 		if("Big EMP (4,8)")
 			empulse(epicenter, 4, 8)
+		if("Supermatter EMP (100,200)")
+			empulse(epicenter, 100, 200)
 		if("Custom EMP")
 			var/heavy_impact_range = input("Heavy impact range (in tiles):") as num
 			var/light_impact_range = input("Light impact range (in tiles):") as num
