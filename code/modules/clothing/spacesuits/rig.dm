@@ -24,6 +24,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
+	nearsighted_modifier = 1
 	species_fit = list(GREY_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	autoignition_temperature = null //fireproofing is covered elsewhere
