@@ -371,40 +371,37 @@
 		M.ghost_reenter_alert("Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
+	. = list()
+	if (prob(100 / (2**(severity-1)))) //1 = 100, 2 = 50, 3 = 25
+		for(var/atom/movable/A as mob|obj in src)
+			A.forceMove(src.loc)
+			A.ex_act(severity)
+		. += A
+		qdel(src)
 	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.
-	switch(severity)
+	/*switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				//A.loc = src.loc
-				A.forceMove(src.loc)
-				//ex_act(severity)
-				A.ex_act(severity)
-				//Foreach goto(35)
-			//SN src = null
-			qdel(src)
-			return
+				A.loc = src.loc
+				ex_act(severity)
+				Foreach goto(35)
+			SN src = null
 		if(2.0)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					//A.loc = src.loc
-					A.forceMove(src.loc)
-					//ex_act(severity)
-					A.ex_act(severity)
-					//Foreach goto(108)
-				//SN src = null
-				qdel(src)
-				return
+					A.loc = src.loc
+					ex_act(severity)
+					Foreach goto(108)
+				SN src = null
 		if(3.0)
 			if (prob(25))
 				for(var/atom/movable/A as mob|obj in src)
-					A.forceMove(src.loc)
+					A.loc = src.loc
 					ex_act(severity)
-					//Foreach goto(181)
-				//SN src = null
-				qdel(src)
-				return
-		//else
-	//return
+					Foreach goto(181)
+				SN src = null
+		else
+	return*/
 
 
 /obj/machinery/dna_scannernew/blob_act()
@@ -489,14 +486,8 @@
 		connected.connected = src
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
+	if(prob(100 / (min(2,severity)))) // 1 = 100, 2 = 50
+		qdel(src)
 
 /obj/machinery/computer/scan_consolenew/blob_act()
 	if(prob(75))

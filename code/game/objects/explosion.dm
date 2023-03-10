@@ -89,7 +89,7 @@ var/explosion_shake_message_cooldown = 0
 
 	for (var/mob/M in player_list)
 		//Double check for client
-		if(M && M.client)
+		if(M?.client)
 			var/turf/M_turf = get_turf(M)
 			if(M_turf && AreConnectedZLevels(M_turf.z,epicenter.z) && abs(M_turf.z - epicenter.z) <= max_range)
 				var/dist = get_dist(M_turf, epicenter)
