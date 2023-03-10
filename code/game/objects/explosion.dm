@@ -169,10 +169,13 @@ var/explosion_shake_message_cooldown = 0
 			//invulnerable therefore no further explosion
 			continue
 
+		// this was previously a loop that got the steps away to the desired position for each atom,
+		// now moved up to the turf level and changed to a slope-ish function that gets it just the same
 		var/divisor = pushback/(max(1,dist))
 		var/rise = round((T.y - y0) * divisor)
 		var/run = round((T.x - x0) * divisor)
 		var/turf/throwT = locate(T.x+run,T.y+rise,T.z) || (get_step_away(T,epicenter,dist+pushback) || T)
+
 		var/turftime = world.time
 		for(var/atom/movable/A in T)
 			var/atomtime = world.time
