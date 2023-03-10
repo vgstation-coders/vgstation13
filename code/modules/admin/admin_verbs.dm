@@ -646,7 +646,7 @@ var/list/admin_verbs_mod = list(
 	set desc = "Cause an explosion of varying strength at your location."
 
 	var/turf/epicenter = mob.loc
-	var/list/choices = list("Small Bomb (1,3,4)", "Medium Bomb (3,7,14)", "Big Bomb (7,14,28)", "Custom Bomb")
+	var/list/choices = list("Small Bomb (1,3,4)", "Medium Bomb (3,7,14)", "Big Bomb (7,14,28)", "Nuclear Bomb (30,60,120)" "Custom Bomb")
 	var/choice = input("What size explosion would you like to produce?") in choices | null
 	switch(choice)
 		if(null)
@@ -657,6 +657,8 @@ var/list/admin_verbs_mod = list(
 			explosion(epicenter, 3, 7, 14, 14, whodunnit = usr)
 		if("Big Bomb (7,14,28)")
 			explosion(epicenter, 7, 14, 28, 28, whodunnit = usr)
+		if("Nuclear Bomb (30,60,120)")
+			explosion(epicenter, 30, 60, 120, 120, whodunnit = usr)
 		if("Custom Bomb")
 			var/devastation_range = input("Devastation range (in tiles):") as num
 			var/heavy_impact_range = input("Heavy impact range (in tiles):") as num

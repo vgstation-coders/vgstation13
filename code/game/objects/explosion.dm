@@ -59,7 +59,7 @@ var/explosion_shake_message_cooldown = 0
 		var/z0 = epicenter.z
 
 
-		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist)
+		explosion_destroy(epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist)
 
 		var/took = stop_watch(watch)
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
@@ -135,78 +135,74 @@ var/explosion_shake_message_cooldown = 0
 	else
 		epicenter.turf_animation('icons/effects/96x96.dmi',"explosion_small",-WORLD_ICON_SIZE, -WORLD_ICON_SIZE, 13)
 
-/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit, var/list/whitelist)
+/proc/explosion_destroy(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit, var/list/whitelist)
 	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
 
-	var/x0 = offcenter.x
-	var/y0 = offcenter.y
-	//var/z0 = offcenter.z
+	var/x0 = epicenter.x
+	var/y0 = epicenter.y
+	var/z0 = epicenter.z
 
-	var/list/affected_turfs = spiral_block(offcenter,max_range)
-	var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs)
+	var/list/affected_turfs = multi_z_spiral_block(epicenter,max_range,0,0,0.5)
+	// does not actually affect the explosion as severity gets overriden in the dist check, so commented out
+	//var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs)
 
+	var/destroytime = world.time
 	for(var/turf/T in affected_turfs)
 		if(whitelist && (T in whitelist))
 			continue
-		var/dist = cheap_pythag(T.x - x0, T.y - y0)
-		var/_dist = dist
+		var/dist = cheap_pythag(T.x - x0, T.y - y0) / (2**(T.z - z0))
+		var/severity = dist
 		var/pushback = 0
-		var/turf/Trajectory = T
-		while(Trajectory != offcenter)
-			Trajectory = get_step_towards(Trajectory,offcenter)
-			dist += cached_exp_block[Trajectory]
+		//for(var/turf/Trajectory = T, Trajectory != epicenter, Trajectory = get_step_towards(Trajectory,epicenter))
+			//severity += cached_exp_block[Trajectory]
 
 		if(dist < devastation_range)
-			dist = 1
+			severity = 1
 			pushback = 5
 		else if(dist < heavy_impact_range)
-			dist = 2
+			severity = 2
 			pushback = 3
 		else if(dist < light_impact_range)
-			dist = 3
+			severity = 3
 			pushback = 1
 		else
 			//invulnerable therefore no further explosion
 			continue
 
-
+		var/divisor = pushback/(max(1,dist))
+		var/rise = round((T.y - y0) * divisor)
+		var/run = round((T.x - x0) * divisor)
+		var/turf/throwT = locate(T.x+run,T.y+rise,T.z) || (get_step_away(T,epicenter,dist+pushback) || T)
 		var/turftime = world.time
 		for(var/atom/movable/A in T)
 			var/atomtime = world.time
 			if(whitelist && (A in whitelist))
 				continue
-			if(T != offcenter && !A.anchored && A.last_explosion_push != explosion_time)
-				A.last_explosion_push = explosion_time
+			var/list/atom/movable/atoms2throw = list(A)
+			atoms2throw += A.ex_act(severity,null,whodunnit)
+			if(T != epicenter && throwT != T)
+				for(var/atom/movable/thrown in atoms2throw)
+					if(!thrown.anchored && thrown.last_explosion_push != explosion_time)
+						thrown.last_explosion_push = explosion_time
+						if(!isturf(throwT))
+							log_debug("Bad turf [throwT], could not throw atom [thrown] at.")
+							continue
+						if(ismob(thrown))
+							to_chat(thrown, "<span class='warning'>You are blown away by the explosion!</span>")
 
-				var/max_dist = _dist+(pushback)
-				var/max_count = pushback
-				var/turf/throwT = get_step_away(A,offcenter,max_dist)
-				for(var/i = 1 to max_count)
-					var/turf/newT = get_step_away(throwT, offcenter, max_dist)
-					if(!newT || newT == 0 || !isturf(newT))
-						break
-					throwT = newT
-				if(!isturf(throwT))
-					//world.log << "FUCK OUR TURF IS BAD"
-					continue
-				if(ismob(A))
-					to_chat(A, "<span class='warning'>You are blown away by the explosion!</span>")
-
-				A.throw_at(throwT,pushback+2,500)
-			A.ex_act(dist,null,whodunnit)
+						thrown.throw_at(throwT,pushback+2,500)
 			atomtime = world.time - atomtime
 			if(atomtime > 0)
 				log_debug("Slow explosion effect on [A]: Took [atomtime/10] seconds.")
 		turftime = world.time - turftime
 		if(turftime > 0)
-			log_debug("Slow turf explosion processing at [formatJumpTo(T)]: Took [turftime/10] seconds.")
+			log_debug("Slow turf explosion processing at [T.x],[T.y],[T.z]: Took [turftime/10] seconds.")
 
-		T.ex_act(dist,null,whodunnit)
+		T.ex_act(severity,null,whodunnit)
 
 		CHECK_TICK
-
-	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
-	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time, whodunnit)
+	destroytime = world.time - destroytime
+	log_debug("Explosion at [epicenter.x],[epicenter.y],[epicenter.z] took [destroytime/10] seconds.")
 
 /proc/CalculateExplosionBlock(list/affected_turfs)
 	. = list()

@@ -83,6 +83,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/ex_act(severity)
 	//set src in oview(1)
+	. = list()
 	switch(severity)
 		if(1.0)
 			src.ChangeTurf(get_underlying_turf())
@@ -93,6 +94,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 					if(prob(33))
 						var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 						M.amount = 1
+						. += M
 				if(2)
 					src.ChangeTurf(get_underlying_turf())
 				if(3)
@@ -104,11 +106,11 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 					if(prob(33))
 						var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 						M.amount = 1
+						. += M
 		if(3.0)
 			if (prob(50))
 				src.break_tile()
 				src.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
-	return
 
 /turf/simulated/floor/blob_act()
 	return
