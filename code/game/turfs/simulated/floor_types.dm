@@ -94,6 +94,7 @@
 
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
+	explosion_block = 2
 	var/secured = FALSE
 
 /turf/simulated/floor/engine/create_floor_tile()

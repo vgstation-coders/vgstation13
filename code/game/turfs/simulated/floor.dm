@@ -49,6 +49,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 	holomap_draw_override = HOLOMAP_DRAW_PATH
 
+	explosion_block = 1
 
 /turf/simulated/floor/New()
 	create_floor_tile()
