@@ -149,7 +149,7 @@ var/explosion_shake_message_cooldown = 0
 	for(var/turf/T in affected_turfs)
 		if(whitelist && (T in whitelist))
 			continue
-		var/dist = cheap_pythag(T.x - x0, T.y - y0) * (2**abs(T.z - z0))
+		var/dist = cheap_pythag(T.x - x0, T.y - y0) * (1<<abs(T.z - z0))
 		var/severity = dist
 		var/pushback = 0
 		for(var/turf/Trajectory = T, Trajectory != epicenter, Trajectory = get_zstep_towards(Trajectory,epicenter))
@@ -204,7 +204,8 @@ var/explosion_shake_message_cooldown = 0
 
 		CHECK_TICK
 	destroytime = world.time - destroytime
-	log_debug("Explosion at [epicenter.x],[epicenter.y],[epicenter.z] took [destroytime/10] seconds.")
+	if(destroytime > 0)
+		log_debug("Explosion at [epicenter.x],[epicenter.y],[epicenter.z] took [destroytime/10] seconds.")
 
 /proc/CalculateExplosionBlock(list/affected_turfs,var/epicenter_z)
 	. = list()

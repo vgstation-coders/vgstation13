@@ -776,7 +776,7 @@
 /obj/structure/rack/ex_act(severity)
 	// previously 3 severity had a higher chance of deleting the parts than 2 severity, made no sense so reversed it. fits in the formula well too.
 	. = list()
-	if (prob(100 / (2**(severity-1)))) //1 = 100, 2 = 50, 3 = 25
+	if (prob(100 / (1<<(severity-1)))) //1 = 100, 2 = 50, 3 = 25
 		. += destroy(FALSE)
 	else
 		. += destroy(TRUE)
