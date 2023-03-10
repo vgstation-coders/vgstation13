@@ -115,7 +115,7 @@ var/explosion_shake_message_cooldown = 0
 						skip_shake = 1
 
 				if(!explosion_shake_message_cooldown && !skip_shake)
-					to_chat(M, "<span class='danger'>You feel the station's structure shaking all around you.</span>")
+					to_chat(M, "<span class='danger'>You feel everything shaking all around you.</span>")
 					explosion_shake_message_cooldown = 1
 					spawn(50)
 						explosion_shake_message_cooldown = 0
