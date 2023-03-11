@@ -607,7 +607,7 @@
 	var/d2 = 0
 	var/distcheck = dist_x > dist_y
 	var/error = distcheck ? dist_x/2 - dist_y : dist_y/2 - dist_x
-	var/condition = distcheck ? (src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST) : (src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH)
+	var/condition = distcheck ? ((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) : ((src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH))
 
 	while(src && target &&((condition && dist_travelled < range) || (a?.gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && isturf(src.loc))
 		// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
