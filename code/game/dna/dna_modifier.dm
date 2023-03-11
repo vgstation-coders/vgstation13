@@ -372,7 +372,7 @@
 
 /obj/machinery/dna_scannernew/ex_act(severity)
 	. = list()
-	if (prob(100 / (1<<(severity-1)))) //1 = 100, 2 = 50, 3 = 25
+	if (prob(100 / (2**(severity-1)))) //1 = 100, 2 = 50, 3 = 25
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
 			A.ex_act(severity)
