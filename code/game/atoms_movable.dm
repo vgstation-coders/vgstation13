@@ -585,17 +585,9 @@
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
 
-	var/dx
-	if (target.x > src.x)
-		dx = EAST
-	else
-		dx = WEST
+	var/dx = target.x > src.x ? EAST : WEST
+	var/dy = target.y > src.y ? NORTH : SOUTH
 
-	var/dy
-	if (target.y > src.y)
-		dy = NORTH
-	else
-		dy = SOUTH
 	var/dist_travelled = 0
 	var/dist_since_sleep = 0
 	var/area/a = get_area(src.loc)
@@ -649,8 +641,7 @@
 	src.throwing = 0
 	kinetic_acceleration = 0
 	if(isobj(src))
-		src.throw_impact(get_turf(src), speed, usr)
-
+		throw_impact(get_turf(src), speed, usr)
 //Overlays
 
 /datum/locking_category/overlay
