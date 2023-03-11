@@ -32,6 +32,7 @@ var/explosion_shake_message_cooldown = 0
 	var/explosion_time = world.time
 
 	spawn()
+		var/watch = start_watch()
 		epicenter = get_turf(epicenter)
 		if(!epicenter)
 			return
@@ -57,6 +58,8 @@ var/explosion_shake_message_cooldown = 0
 		var/z0 = epicenter.z
 
 		explosion_destroy(epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist)
+
+		var/took = stop_watch(watch)
 
 		//Machines which report explosions.
 		if(!ignored)
