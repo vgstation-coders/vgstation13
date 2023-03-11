@@ -50,9 +50,8 @@ var/explosion_shake_message_cooldown = 0
 			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([formatJumpTo(epicenter,"JMP")]) [whodunnit ? " caused by [whodunnit] [whodunnit.ckey ? "([whodunnit.ckey])" : "(no key)"] ([formatJumpTo(whodunnit,"JMP")])" : ""]")
 			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] [whodunnit ? " caused by [whodunnit] [whodunnit.ckey ? "([whodunnit.ckey])" : "(no key)"]" : ""]")
 
-		//Pause the lighting updates for a bit.
-		var/postponeCycles = max(round(devastation_range/8),1)
-		SSlighting.postpone(postponeCycles)
+		SSlighting.postpone(max(round(devastation_range/8),1)) //Pause the lighting updates for a bit.
+		//SSair.postpone(max(round(heavy_impact_range/8),1)) //And air.
 
 		var/x0 = epicenter.x
 		var/y0 = epicenter.y
