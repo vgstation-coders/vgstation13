@@ -60,6 +60,8 @@ var/explosion_shake_message_cooldown = 0
 		explosion_destroy(epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist)
 
 		var/took = stop_watch(watch)
+		if(took > 0.1)
+			log_debug("Explosion at [epicenter.x],[epicenter.y],[epicenter.z] took [took] seconds.")
 
 		//Machines which report explosions.
 		if(!ignored)
@@ -140,7 +142,6 @@ var/explosion_shake_message_cooldown = 0
 	var/list/affected_turfs = multi_z_spiral_block(epicenter,max_range,0,0,0.5)
 	var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs,z0)
 
-	var/destroytime = world.time
 	for(var/turf/T in affected_turfs)
 		if(whitelist && (T in whitelist))
 			continue
@@ -198,9 +199,6 @@ var/explosion_shake_message_cooldown = 0
 		T.ex_act(severity,null,whodunnit)
 
 		CHECK_TICK
-	destroytime = world.time - destroytime
-	if(destroytime > 0)
-		log_debug("Explosion at [epicenter.x],[epicenter.y],[epicenter.z] took [destroytime/10] seconds.")
 
 /proc/CalculateExplosionBlock(list/affected_turfs,var/epicenter_z)
 	. = list()
