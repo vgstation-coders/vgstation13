@@ -51,7 +51,7 @@ var/explosion_shake_message_cooldown = 0
 			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] [whodunnit ? " caused by [whodunnit] [whodunnit.ckey ? "([whodunnit.ckey])" : "(no key)"]" : ""]")
 
 		SSlighting.postpone(max(round(devastation_range/8),1)) //Pause the lighting updates for a bit.
-		//SSair.postpone(max(round(heavy_impact_range/8),1)) //And air.
+		SSair.postpone(max(round(heavy_impact_range/8),1)) //And air.
 
 		var/x0 = epicenter.x
 		var/y0 = epicenter.y
