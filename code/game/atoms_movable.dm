@@ -590,7 +590,6 @@
 
 	var/dist_travelled = 0
 	var/dist_since_sleep = 0
-	var/area/a = get_area(src.loc)
 
 	. = 1
 
@@ -601,7 +600,7 @@
 	var/error = distcheck ? dist_x/2 - dist_y : dist_y/2 - dist_x
 	var/condition = distcheck ? ((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) : ((src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH))
 
-	while(src && target &&((condition && dist_travelled < range) || (a?.gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && isturf(src.loc))
+	while(src && target && ((condition && dist_travelled < range) || (get_gravity() == 0) || istype(src.loc, /turf/space)) && src.throwing && isturf(src.loc))
 		// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
 		if(tS && dist_travelled)
 			timestopped = loc.timestopped
@@ -635,7 +634,6 @@
 		if(dist_since_sleep >= fly_speed)
 			dist_since_sleep = 0
 			sleep(1)
-		a = get_area(src.loc)
 
 	//done throwing, either because it hit something or it finished moving
 	src.throwing = 0
