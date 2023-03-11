@@ -24,7 +24,13 @@ Obviously, requires DNA2.
 
 	spelltype = /spell/targeted/genetic/hulk
 
+/datum/dna/gene/basic/grant_spell/activate(var/mob/M, var/connected, var/flags)
+	M.strongthrow = TRUE
+	return ..()
+
 /datum/dna/gene/basic/grant_spell/hulk/deactivate(var/mob/M, var/connected, var/flags)
+	if(!initial(M.strongthrow))
+		M.strongthrow = FALSE
 	M.mutations.Remove(M_HULK)
 	M.update_mutations()
 	if (ishuman(M))
