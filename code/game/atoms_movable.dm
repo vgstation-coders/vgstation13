@@ -594,8 +594,8 @@
 	. = 1
 
 	var/tS = 0
-	var/d1 = 0
-	var/d2 = 0
+	var/d_used = 0
+	var/dist_used = 0
 	var/distcheck = dist_x > dist_y
 	var/error = distcheck ? dist_x/2 - dist_y : dist_y/2 - dist_x
 	var/condition = distcheck ? ((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) : ((src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH))
@@ -616,19 +616,19 @@
 		if(afterimage)
 			new afterimage(loc,src)
 		if(error < 0)
-			d1 = distcheck ? dy : dx
-			d2 = distcheck ? dist_x : dist_y
+			d_used = distcheck ? dy : dx
+			dist_used = distcheck ? dist_x : dist_y
 		else
-			d1 = distcheck ? dx : dy
-			d2 = distcheck ? -dist_y : -dist_x
-		var/atom/step = get_step(src, d1)
+			d_used = distcheck ? dx : dy
+			dist_used = distcheck ? -dist_y : -dist_x
+		var/atom/step = get_step(src, d_used)
 		if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 			. = 0
 			break
 
-		src.Move(step, d1, glide_size_override = DELAY2GLIDESIZE(fly_speed))
+		src.Move(step, d_used, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 		. = hit_check(speed, usr)
-		error += d2
+		error += dist_used
 		dist_travelled++
 		dist_since_sleep++
 		if(dist_since_sleep >= fly_speed)
