@@ -609,7 +609,7 @@
 	var/error = distcheck ? dist_x/2 - dist_y : dist_y/2 - dist_x
 	var/condition = distcheck ? (src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST) : (src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH)
 
-	while(src && target &&((contiditon && dist_travelled < range) || (a?.gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && isturf(src.loc))
+	while(src && target &&((condition && dist_travelled < range) || (a?.gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && isturf(src.loc))
 		// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
 		if(tS && dist_travelled)
 			timestopped = loc.timestopped
@@ -636,7 +636,7 @@
 			break
 
 		src.Move(step, d1, glide_size_override = DELAY2GLIDESIZE(fly_speed))
-		. = hit_check(speed, user)
+		. = hit_check(speed, usr)
 		error += d2
 		dist_travelled++
 		dist_since_sleep++
@@ -649,7 +649,7 @@
 	src.throwing = 0
 	kinetic_acceleration = 0
 	if(isobj(src))
-		src.throw_impact(get_turf(src), speed, user)
+		src.throw_impact(get_turf(src), speed, usr)
 
 //Overlays
 
