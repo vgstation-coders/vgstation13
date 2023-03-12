@@ -26,6 +26,12 @@
 
 /datum/universal_state/meteor_storm/OnEnter()
 
+// Egalitarian mode A.K.A no access requirements except prison and bridge
+	for(var/obj/machinery/door/airlock/W in all_doors)
+		if(W.z == 1  && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
+			W.backup_access = W.req_access
+			W.req_access = list()
+
 	sleep(meteor_extra_announce_delay) //Pause everything as according to the extra delay
 
 	world << sound('sound/machines/warning.ogg') //The same chime as the Delta countdown, just twice
@@ -40,7 +46,7 @@
 	CA.supply_delay = supply_delay
 	command_alert(CA)
 
-	message_admins("Meteor Storm announcement given. Meteors will arrive in approximately [round(meteor_delay/600)] minutes. Shuttle will take [10*meteor_shuttle_multiplier] minutes to arrive and supplies are about to be dispatched in the Bar.")
+	message_admins("Meteor Storm announcement given. Meteors will arrive in approximately [round(meteor_delay/600)] minutes. Shuttle will take [10*meteor_shuttle_multiplier] minutes to arrive and supplies are about to be dispatched in the Bar. Egalitarian mode enabled.")
 
 	spawn(100) //Time for the announcement to spell out)
 
