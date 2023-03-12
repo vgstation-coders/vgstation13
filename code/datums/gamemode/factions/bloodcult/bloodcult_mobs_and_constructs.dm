@@ -47,8 +47,9 @@
 				src.throwing = 0
 				src.crashing = null
 
-		else if(istype(obstacle, /obj/structure/reagent_dispensers/fueltank))
-			obstacle.ex_act(1)
+		else if(istype(obstacle, /obj/structure/reagent_dispensers))
+			var/obj/structure/reagent_dispensers/R = obstacle
+			R.explode(src)
 
 		else if(istype(obstacle, /mob/living))
 			var/mob/living/L = obstacle

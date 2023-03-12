@@ -1597,20 +1597,6 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/pre_throw(atom/movable/target)
 	return
 
-/**
-	Attempt to heat this object from a presumed heat source.
-	@args:
-		A: Atom: The source of the heat
-		user: mob: Whomever may be trying to heat this object
-
-	@return:
-		TRUE if succesful
-		FALSE if not succesful
-		NULL if override not defined
-**/
-/obj/item/proc/attempt_heating(atom/A, mob/user)
-	return
-
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
 	return
 

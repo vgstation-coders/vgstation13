@@ -22,7 +22,7 @@
 		/obj/machinery/turret,
 		/obj/machinery/turretcover,
 		/obj/mecha,
-		/obj/structure/reagent_dispensers/fueltank,
+		/obj/structure/reagent_dispensers,
 		/obj/structure/bed/chair/vehicle,
 		)
 
