@@ -84,8 +84,7 @@ var/list/special_fruits = list()
 
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
-	if(!seed || !src)
+	if(..() || !seed || !src)
 		return
 	//if(seed.stinging)   			//we do NOT want to transfer reagents on throw, as it would mean plantbags full of throwable chloral injectors
 	//	stinging_apply_reagents(M)  //plus all sorts of nasty stuff like throw_impact not targeting a specific bodypart to check for protection.

@@ -618,8 +618,8 @@
 	w_class = W_CLASS_TINY
 
 /obj/item/toy/snappop/throw_impact(atom/hit_atom)
-	..()
-	pop()
+	if(!..())
+		pop()
 
 /obj/item/toy/snappop/Crossed(var/mob/living/M)
 	if(istype(M) && M.size > SIZE_SMALL) //i guess carp and shit shouldn't set them off

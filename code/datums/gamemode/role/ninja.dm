@@ -166,8 +166,7 @@ var/list/valid_ninja_suits = list(
 
 //This can stick into silicons and humans
 /obj/item/stack/shuriken/throw_impact(atom/impacted_atom, speed, mob/user)
-	..()
-	if(isliving(impacted_atom))
+	if(!..() && isliving(impacted_atom))
 		var/mob/living/L = impacted_atom
 		forceMove(L)
 		visible_message("<span class='warning'>The [src] sticks to \the [L]!</span>")

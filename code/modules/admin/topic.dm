@@ -3948,6 +3948,11 @@
 				if(choice == "Nar-Singulo")
 					message_admins("[key_name_admin(usr)] has set narsie's behaviour to \"Nar-Singulo\".")
 					narsie_behaviour = "Nar-Singulo"
+			if("athfthrowing")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","TE")
+				objects_thrown_when_explode = !objects_thrown_when_explode
+				message_admins("[key_name_admin(usr)] has toggled items exploding when thrown [objects_thrown_when_explode ? "ON" : "OFF"].")
 			if("hellonearth")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","NS")

@@ -337,9 +337,9 @@
 	explosion(target, 0, 0, 1, whodunnit = user)
 
 /obj/item/weapon/damocles/throw_impact(atom/hit_atom, speed, mob/user)
-	..()
-	explosion(get_turf(src), 0, 2, 3, whodunnit = user)
-	qdel(src)
+	if(..())
+		explosion(get_turf(src), 0, 2, 3, whodunnit = user)
+		qdel(src)
 
 /obj/item/weapon/caber
 	name = "Ullapool Caber"
@@ -364,7 +364,7 @@
 /obj/item/weapon/caber/Destroy()
 	processing_objects -= src
 	..()
-	
+
 /obj/item/weapon/caber/attack_self(mob/user)
 	cant_drop = !cant_drop
 	to_chat(user,"<span class='notice'>You [cant_drop ? "activate" : "deactivate"] the safety grip and explosive mode.</span>")
