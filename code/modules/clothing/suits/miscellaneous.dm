@@ -450,6 +450,7 @@ var/list/tag_suits_list = list()
 	icon_state = "highlanderkilt"
 	item_state = "highlanderkilt"
 	clothing_flags = ONESIZEFITSALL
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	wizard_garb = 1 //required for the spell in the highlander syndicate bundle
 
 /obj/item/clothing/suit/cardborg
@@ -568,6 +569,7 @@ var/list/tag_suits_list = list()
 	_color = "mankini"
 	siemens_coefficient = 1
 	body_parts_covered = 0
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/xenos
 	name = "xenos suit"
@@ -590,7 +592,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_black"
 	_color = "swim_black"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/blue
 	name = "blue swimsuit"
@@ -598,7 +600,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_blue"
 	_color = "swim_blue"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/purple
 	name = "purple swimsuit"
@@ -606,7 +608,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_purp"
 	_color = "swim_purp"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/green
 	name = "green swimsuit"
@@ -614,7 +616,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_green"
 	_color = "swim_green"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/red
 	name = "red swimsuit"
@@ -622,7 +624,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_red"
 	_color = "swim_red"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/simonjacket
 	name = "Simon's Jacket"
@@ -732,16 +734,7 @@ var/list/tag_suits_list = list()
 	blood_overlay_type = "coat"
 	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
-
-/obj/item/clothing/suit/storage/draculacoat
-	name = "Vampire Coat"
-	desc = "What is a man? A miserable little pile of secrets."
-	icon_state = "draculacoat"
-	blood_overlay_type = "coat"
-	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
-	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/draculacoat_fake
 	name = "Vampire Costume"

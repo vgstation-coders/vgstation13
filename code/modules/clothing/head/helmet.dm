@@ -115,7 +115,7 @@
 	name = "gladiator helmet"
 	desc = "Ave, Imperator, morituri te salutant."
 	icon_state = "gladiator"
-	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	flags = FPRINT
 	item_state = "gladiator"
 	siemens_coefficient = 1
@@ -126,7 +126,7 @@
 	armor = list(melee = 20, bullet = 0, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "roman"
 	item_state = "roman"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/roman/legionaire

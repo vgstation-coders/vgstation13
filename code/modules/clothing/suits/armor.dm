@@ -389,6 +389,7 @@
 
 /obj/item/clothing/suit/armor/tdome
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/tdome/red
 	name = "Thunderdome suit (red)"

@@ -43,32 +43,32 @@
 	name = "blue shoes"
 	icon_state = "blue"
 	_color = "blue"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/green
 	name = "green shoes"
 	icon_state = "green"
 	_color = "green"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/yellow
 	name = "yellow shoes"
 	icon_state = "yellow"
 	_color = "yellow"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/purple
 	name = "purple shoes"
 	icon_state = "purple"
 	_color = "purple"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/red
 	name = "red shoes"
 	desc = "Stylish red shoes."
 	icon_state = "red"
 	_color = "red"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/red/redcoat
 	_color = "redcoat"	//Exists for washing machines. Is not different from normal shoes in any way.
@@ -86,13 +86,14 @@
 	desc = "A sturdy pair of leather shoes."
 	icon_state = "leather"
 	_color = "leather"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/rainbow
 	name = "rainbow shoes"
 	desc = "Very gay shoes."
 	icon_state = "rain_bow"
 	_color = "rainbow"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/orange
 	name = "orange shoes"

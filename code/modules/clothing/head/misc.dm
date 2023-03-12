@@ -159,7 +159,7 @@
 	desc = "It's a green bandana with some fine nanotech lining."
 	icon_state = "greenbandana"
 	item_state = "greenbandana"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/beret/highlander
@@ -346,7 +346,7 @@
 	desc = "Eeeee~heheheheheheh!"
 	icon_state = "witch"
 	item_state = "witch"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
@@ -356,7 +356,7 @@
 	icon_state = "chickenhead"
 	item_state = "chickenhead"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
 
@@ -374,7 +374,7 @@
 	desc = "Not as fuzzy as the real thing."
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
@@ -503,7 +503,7 @@
 	desc = "A hat fit for a fool."
 	icon_state = "jesterhat"
 	item_state = "jesterhat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/libertyhat
@@ -549,7 +549,7 @@
 	desc = "You wear this around your head."
 	icon_state = "headband"
 	item_state = "headband"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/metalgear.dmi', "right_hand" = 'icons/mob/in-hand/right/metalgear.dmi')
 
 /obj/item/clothing/head/cowboy
@@ -557,7 +557,7 @@
 	desc = "Perfect for the closet botanist."
 	icon_state = "cowboy"
 	item_state = "cowboy"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 10, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/head/cowboy/dimma
@@ -690,7 +690,7 @@
 	desc = "Welcome to the rice fields, motherfucker."
 	icon_state = "rice_hat"
 	item_state = "rice_hat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/rice_hat/ronin
 	name = "roningasa"
