@@ -115,6 +115,8 @@
 	desc = "A chute for big and small packages alike!"
 	density = 1
 	icon_state = "intake"
+	plane = ABOVE_HUMAN_PLANE
+	layer = DISPOSALS_CHUTE_LAYER
 	var/c_mode = 0
 	var/doFlushIn=0
 	var/num_contents=0
@@ -164,9 +166,11 @@
 
 
 /obj/machinery/disposal/deliveryChute/proc/receive_atom(var/atom/movable/AM)
-	AM.forceMove(src)
-	doFlushIn = 5
-	num_contents++
+	AM.forceMove(src.loc) // To make it look like it's moving into it better
+	spawn(1)
+		AM.forceMove(src)
+		doFlushIn = 5
+		num_contents++
 
 
 /obj/machinery/disposal/deliveryChute/flush()
