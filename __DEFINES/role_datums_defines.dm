@@ -46,6 +46,7 @@
 #define REV "revolutionary"
 #define WIZAPP_MASTER "wizard's master"
 #define WIZAPP "wizard's apprentice"
+#define WIZARD_CONVERT "wizard's faction convert"
 #define MADMONKEY "monkey fever infected"
 #define NINJA "Space Ninja"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
