@@ -7,15 +7,6 @@ Used In File(s): /code/game/objects/structures/musician.dm
     <div class="item">
         {{:helper.link('Play', '', { 'play' : 1 })}}
         {{:helper.link('Stop', '', { 'stop' : 1 })}}
-		{{if data.recording}}
-        	{{:helper.link('Stop recording', '', { 'toggle_recording' : 1 })}}
-		{{else}}
-			{{:helper.link('Start recording', '', { 'toggle_recording' : 1 })}}
-		{{/if}}
-		Input octave:
-        {{:helper.link('-', '', { 'decrease_octave' : 1 })}}
-		{{:data.octave}}
-        {{:helper.link('+', '', { 'increase_octave' : 1 })}}
     </div>
     <div class="item">
         Repeat Song:
@@ -30,45 +21,6 @@ Used In File(s): /code/game/objects/structures/musician.dm
     </div>
 </div>
 <div class="item">
-	{{if data.show_playhelp}}
-		{{:helper.link('Hide Help', '', { 'toggle_playhelp' : 1 })}}
-		<div class="line">Press - to decrease playing octave and = to increase it.<br>
-		Click "Start recording" to record keyboard inputs. The new line will be added when you click "Stop recording".<br>
-		The following keys represent these notes:<br>
-		<table style="height:50px; background:black">
-			<tr>
-				<td style="background:white; color:black">C<br>(Z)</td>
-				<td style="background:black; color:white">C#<br>(S)</td>
-				<td style="background:white; color:black">D<br>(X)</td>
-				<td style="background:black; color:white">D#<br>(D)</td>
-				<td style="background:white; color:black">E<br>(C)</td>
-				<td style="background:white; color:black">F<br>(V)</td>
-				<td style="background:black; color:white">F#<br>(G)</td>
-				<td style="background:white; color:black">G<br>(B)</td>
-				<td style="background:black; color:white">G#<br>(H)</td>
-				<td style="background:white; color:black">A<br>(N)</td>
-				<td style="background:black; color:white">A#<br>(J)</td>
-				<td style="background:white; color:black">B<br>(M)</td>
-				<td style="background:white; color:black">C<br>(,/Q)</td>
-				<td style="background:black; color:white">C#<br>(2)</td>
-				<td style="background:white; color:black">D<br>(W</td>
-				<td style="background:black; color:white">D#<br>(3)</td>
-				<td style="background:white; color:black">E<br>(E)</td>
-				<td style="background:white; color:black">F<br>(R)</td>
-				<td style="background:black; color:white">F#<br>(5)</td>
-				<td style="background:white; color:black">G<br>(T)</td>
-				<td style="background:black; color:white">G#<br>(6)</td>
-				<td style="background:white; color:black">A<br>(Y)</td>
-				<td style="background:black; color:white">A#<br>(7)</td>
-				<td style="background:white; color:black">B<br>(U)</td>
-				<td style="background:white; color:black">C<br>(I)</td>
-			</tr>
-		</table></div>
-	{{else}}
-		{{:helper.link('Show Help', '', { 'toggle_playhelp' : 1 })}}
-	{{/if}}
-</div>
-<div class="item">
     <H3>Editing</H3>
     <div class="item">
         {{:helper.link('New Song', '', { 'newsong' : 1 })}}
@@ -80,27 +32,25 @@ Used In File(s): /code/game/objects/structures/musician.dm
     {{:helper.link('Add Line', '', { 'newline' : 1 })}}
 </div>
 <div class="item">
-	{{if data.show_edithelp}}
-		{{:helper.link('Hide Help', '', { 'toggle_edithelp' : 1 })}}
-		<div class="line">
-		Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
-		Every note in a chord will play together, with chord timed by the tempo.<br>
-		<br>
-		Notes are played by the names of the note, and optionally, the accidental, and/or the octave number.<br>
-		By default, every note is natural and in octave 3. Defining otherwise is remembered for each note.<br>
-		Example: <i>C,D,E,F,G,A,B</i> will play a C major scale.<br>
-		After a note has an accidental placed, it will be remembered: <i>C,C4,C,C3</i> is C3,C4,C4,C3</i><br>
-		Chords can be played simply by seperating each note with a hyphon: <i>A-C#,Cn-E,E-G#,Gn-B</i><br>
-		A pause may be denoted by an empty chord: <i>C,E,,C,G</i><br>
-		To make a chord be a different time, end it with /x, where the chord length will be length<br>
-		defined by tempo / x: <i>C,G/2,E/4</i><br>
-		Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
-		<br>
-		Lines may be up to 50 characters.<br>
-		A song may only contain up to 50 lines.</div>
-	{{else}}
-		{{:helper.link('Show Help', '', { 'toggle_edithelp' : 1 })}}
-	{{/if}}
+    <B><button id="help_btn" onclick="helpVisibility()">Hide Help</button></B>
+    <span id="help">
+    <BR>
+    Lines are a series of chords, separated by commas (,), each with notes seperated by hyphens (-).<br>
+    Every note in a chord will play together, with chord timed by the tempo.<br>
+    <br>
+    Notes are played by the names of the note, and optionally, the accidental, and/or the octave number.<br>
+    By default, every note is natural and in octave 3. Defining otherwise is remembered for each note.<br>
+    Example: <i>C,D,E,F,G,A,B</i> will play a C major scale.<br>
+    After a note has an accidental placed, it will be remembered: <i>C,C4,C,C3</i> is C3,C4,C4,C3</i><br>
+    Chords can be played simply by seperating each note with a hyphon: <i>A-C#,Cn-E,E-G#,Gn-B</i><br>
+    A pause may be denoted by an empty chord: <i>C,E,,C,G</i><br>
+    To make a chord be a different time, end it with /x, where the chord length will be length<br>
+    defined by tempo / x: <i>C,G/2,E/4</i><br>
+    Combined, an example is: <i>E-E4/4,F#/2,G#/8,B/8,E3-E4/4</i>
+    <br>
+    Lines may be up to 50 characters.<br>
+    A song may only contain up to 50 lines.<br>
+    </span>
 </div>
 <script>
 var prevChord = "";
@@ -110,7 +60,7 @@ var src_ref = "{{:data.src}}";
 
 function renderLines(lines){
     var result = "<table>";
-    for (i = 0; i < lines.length; i++) {
+    for (i = 0; i < lines.length; i++) { 
         var curLine = lines[i].split(",");
         var htmlLine = [];
         for(j = 0; j < curLine.length; j++){
@@ -146,186 +96,23 @@ function activeChord(lineIndex, chordIndex){
     }
 }
 
+function helpVisibility(){
+    if(helpvis == 1){
+        $("#help").show();
+        $("#help_btn").text("Hide Help");
+        helpvis = 0;
+    }else{
+        $("#help").hide();
+        $("#help_btn").text("Show Help");
+        helpvis = 1;
+    }
+}
+
 function messageReceived(){
     $('.linkActive').stopTime('linkPending');
     $('.linkActive').removeClass('linkPending');
     $('.buttonActive').stopTime('linkPending');
     $('.buttonActive').removeClass('linkPending');
-}
-
-$(function() {
-    $(window).keypress(function(e) {
-        if(e.which == "45" || e.which == 45) {
-            window.location = "byond://?src="+src_ref+"&decrease_octave=1";
-        } else if(e.which == "61" || e.which == 61) {
-            window.location = "byond://?src="+src_ref+"&increase_octave=1";
-        } else {
-            window.location = "byond://?src="+src_ref+"&play_note="+keyWhichToNote(e.which)+"&play_sharp="+keyWhichToSharp(e.which)+"&play_oct="+keyWhichToOctave(e.which);
-        }
-    });
-});
-
-/* KEYBOARD KEYS TO EVENT.WHICH
-1 = 49
-2 = 50
-3 = 51
-4 = 52
-5 = 53
-6 = 54
-7 = 55
-8 = 56
-9 = 57
-0 = 48
-- = 45
-= = 61
-q = 113
-w = 119
-e = 101
-r = 114
-t = 116
-y = 121
-u = 117
-i = 105
-o = 111
-p = 112
-[ = 91
-] = 93
-a = 97
-s = 115
-d = 100
-f = 102
-g = 103
-h = 104
-j = 106
-k = 107
-l = 108
-; = 59
-' = 39
-# = 35
-\ = 92
-z = 122
-x = 120
-c = 99
-v = 118
-b = 98
-n = 110
-m = 109
-, = 44
-. = 46
-/ = 47
-*/
-
-function keyWhichToNote(which) {
-    which = +which;
-    switch(which) {
-        case 113:
-        case 122:
-        case 50:
-        case 115:
-        case 105:
-        case 44:
-            return 3;
-            break;
-        case 119:
-        case 120:
-        case 51:
-        case 100:
-            return 4;
-            break;
-        case 101:
-        case 99:
-            return 5;
-            break;
-        case 114:
-        case 118:
-        case 53:
-        case 103:
-            return 6;
-            break;
-        case 116:
-        case 98:
-        case 54:
-        case 104:
-            return 7;
-            break;
-        case 121:
-        case 110:
-        case 55:
-        case 106:
-            return 1;
-            break;
-        case 117:
-        case 109:
-            return 2;
-            break;
-        default:
-            return 0;
-            break;
-    }
-}
-
-function keyWhichToSharp(which) {
-    which = +which;
-    switch(which) {
-        case 50:
-        case 115:
-        case 51:
-        case 100:
-        case 53:
-        case 103:
-        case 54:
-        case 104:
-        case 55:
-        case 106:
-            return "s";
-            break;
-        default:
-            return "n";
-            break;
-    }
-}
-
-function keyWhichToOctave(which) {
-    which = +which;
-	var octave = "{{:data.octave}}";
-	octave = +octave;
-    switch(which) {
-        case 113:
-        case 119:
-        case 101:
-        case 114:
-        case 116:
-        case 121:
-        case 117:
-        case 50:
-        case 51:
-        case 53:
-        case 54:
-        case 55:
-        case 44:
-            return octave;
-            break;
-        case 122:
-        case 120:
-        case 99:
-        case 118:
-        case 98:
-        case 110:
-        case 109:
-        case 115:
-        case 100:
-        case 103:
-        case 104:
-        case 106:
-            return octave-1;
-            break;
-        case 105:
-            return octave+1;
-            break;
-        default:
-            return 0;
-            break;
-    }
 }
 
 var lines = $.parseJSON($("#lines").text());
