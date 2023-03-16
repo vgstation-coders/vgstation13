@@ -1230,7 +1230,7 @@
 	name = "Ammonium Nitrate"
 	id = AMMONIUMNITRATE
 	result = AMMONIUMNITRATE
-	required_reagents = list(AMMONIA = 8, WATER = 3, NITROGEN = 2, OXYGEN = 5)
+	required_reagents = list(AMMONIA = 5, CLEANER = 3, NITROGEN = 2, OXYGEN = 5)
 	result_amount = 18
 
 /datum/chemical_reaction/diethylamine
