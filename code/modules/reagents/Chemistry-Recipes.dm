@@ -623,17 +623,10 @@
 	fire_temp = AUTOIGNITION_WELDERFUEL
 	power = 1
 
-/datum/chemical_reaction/anfo
-	name = "Ammonium Nitrate/Fuel Oil"
-	id = ANFO
-	result = ANFO
-	required_reagents = list(AMMONIA = 8, WATER = 3, NITROGEN = 2, OXYGEN = 5, FUEL = 1) // rough approximation of the 94%-6% mix
-	result_amount = 19
-
 /datum/chemical_reaction/fuelbomb/anfo
 	name = "AN/FO bomb"
 	id = ANFOBOMB
-	required_reagents = list(ANFO = 1)
+	required_reagents = list(AMMONIUMNITRATE = 16, FUEL = 1)  // rough approximation of the 94%-6% mix
 	required_temp = AUTOIGNITION_WELDERFUEL
 	fire_temp = AUTOIGNITION_WELDERFUEL
 	power = 1
@@ -1232,6 +1225,13 @@
 	result = AMMONIA
 	required_reagents = list(HYDROGEN = 3, NITROGEN = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/ammoniumnitrate
+	name = "Ammonium Nitrate"
+	id = AMMONIUMNITRATE
+	result = AMMONIUMNITRATE
+	required_reagents = list(AMMONIA = 8, WATER = 3, NITROGEN = 2, OXYGEN = 5)
+	result_amount = 18
 
 /datum/chemical_reaction/diethylamine
 	name = "Diethylamine"
