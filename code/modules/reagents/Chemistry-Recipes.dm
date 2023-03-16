@@ -583,6 +583,8 @@
 	required_reagents = list(FUEL = 1)
 	required_temp = AUTOIGNITION_WELDERFUEL
 	result_amount = 1
+	var/fire_temp = AUTOIGNITION_WELDERFUEL
+	var/power = 0
 
 /datum/chemical_reaction/fuelbomb/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(holder.my_atom.is_open_container())
@@ -591,17 +593,18 @@
 
 			for(var/turf/simulated/floor/target_tile in range(0,location))
 				spawn(0)
-					target_tile.hotspot_expose(AUTOIGNITION_WELDERFUEL, created_volume, surfaces = 1)
+					target_tile.hotspot_expose(fire_temp, created_volume, surfaces = 1)
 
-		holder.del_reagent(FUEL)
+		for(var/reagent in required_reagents)
+			holder.del_reagent(reagent)
 	else
 		var/datum/effect/system/reagents_explosion/e = new()
 		if(created_volume > 500)
-			e.set_up(15, holder.my_atom, 0, 0, null, 1, 2, 4)
+			e.set_up(15, holder.my_atom, 0, 0, null, 1+power, 2+(power*2), 4+(power*2))
 		else if(created_volume > 100)
-			e.set_up(9, holder.my_atom, 0, 0, null, 0, 1, 3)
+			e.set_up(9, holder.my_atom, 0, 0, null, 0+power, 1+power, 3+power)
 		else
-			e.set_up(9, holder.my_atom, 0, 0, null, -1, 1, 2)
+			e.set_up(9, holder.my_atom, 0, 0, null, -1+power, 1, 2+power)
 		e.holder_damage(holder.my_atom)
 		if(isliving(holder.my_atom))
 			e.amount *= 0.5
@@ -610,6 +613,28 @@
 				e.amount *= 0.5
 		e.start()
 		holder.clear_reagents()
+
+
+/datum/chemical_reaction/fuelbomb/plasma
+	name = "Plasma bomb"
+	id = PLASMABOMB
+	required_reagents = list(PLASMA = 1)
+	required_temp = AUTOIGNITION_WELDERFUEL
+	fire_temp = AUTOIGNITION_WELDERFUEL
+	power = 1
+
+/datum/chemical_reaction/anfo
+	name = "Ammonium Nitrate/Fuel Oil"
+	id = ANFO
+	required_reagents = (AMMONIA = 8, HYDROGEN = 2, NITROGEN = 2, OXYGEN = 6, FUEL = 1) // rough approximation of the 94%-6% mix
+
+/datum/chemical_reaction/fuelbomb/anfo
+	name = "AN/FO bomb"
+	id = ANFOBOMB
+	required_reagents = list(ANFO = 1)
+	required_temp = AUTOIGNITION_WELDERFUEL
+	fire_temp = AUTOIGNITION_WELDERFUEL
+	power = 1
 
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"
