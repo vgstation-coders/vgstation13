@@ -627,7 +627,7 @@
 	name = "Ammonium Nitrate/Fuel Oil"
 	id = ANFO
 	result = ANFO
-	required_reagents = list(AMMONIA = 8, HYDROGEN = 2, NITROGEN = 2, OXYGEN = 6, FUEL = 1) // rough approximation of the 94%-6% mix
+	required_reagents = list(AMMONIA = 8, WATER = 3, NITROGEN = 2, OXYGEN = 5, FUEL = 1) // rough approximation of the 94%-6% mix
 	result_amount = 19
 
 /datum/chemical_reaction/fuelbomb/anfo
