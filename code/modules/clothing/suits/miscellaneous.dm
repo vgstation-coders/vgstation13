@@ -741,7 +741,7 @@ var/list/tag_suits_list = list()
 	desc = "Smells faintly of pumpkins and bloody mary."
 	icon_state = "draculacoat"
 	blood_overlay_type = "coat"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/maidapron
 	name = "Apron"
