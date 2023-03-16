@@ -4452,6 +4452,15 @@ var/procizine_tolerance = 0
 	T.add_nutrientlevel(10)
 	T.add_planthealth(1)
 
+/datum/reagent/anfo
+	name = "Ammonium Nitrate/Fuel Oil"
+	id = ANFO
+	description = "A mixture of fuel oil and ammonium nitrate, with the latter acting as an oxidizer in explosions."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#404030" //rgb: 64, 64, 48
+	density = 0.51
+	specheatcap = 14.38
+
 /datum/reagent/ultraglue
 	name = "Ultra Glue"
 	id = GLUE
