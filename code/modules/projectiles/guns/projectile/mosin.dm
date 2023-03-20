@@ -18,6 +18,8 @@
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
+	var/scope_toggled = 0
+	gun_flags = SCOPED
 	recoil = 4
 
 	gun_flags = 0
@@ -60,6 +62,42 @@
 	current_shell = AC
 	update_icon()	//I.E. fix the desc
 	return 1
+
+/obj/item/weapon/gun/projectile/mosin/proc/scoping()
+	if(is_holder_of(usr, src))
+		if(scoped)
+			if(scope_toggled)
+				scope_toggled = 0
+			else
+				scope_toggled = 1
+		else
+	return ..()
+
+/obj/item/weapon/gun/projectile/mosin/AltClick()
+	scoping()
+	
+/datum/action/item_action/toggle_scope
+	name = "Toggle Scope"
+
+/datum/action/item_action/toggle_scope/Trigger()
+	if(IsAvailable() && owner && target && istype(target,/obj/item/weapon/gun/projectile/mosin))
+		var/obj/item/weapon/gun/projectile/mosin/W = target
+		W.scoping(owner)
+		
+/obj/item/weapon/gun/projectile/mosin/update_icon()
+	AttachOverlays()
+	..()
+
+/obj/item/weapon/gun/projectile/mosin/proc/AttachOverlays() //to prevent overlaying issues
+	var scope_overlay = image("icon" = 'icons/obj/biggun.dmi', "icon_state" = "pu_scope")
+	if(scoped)
+		if("/obj/item/gun_part/scope" in gun_overlay)
+		else
+			overlays += scope_overlay
+			gun_overlay += "/obj/item/gun_part/scope"
+	else
+		overlays -= scope_overlay
+		gun_overlay -= "/obj/item/gun_part/scope"
 
 /obj/item/weapon/gun/projectile/mosin/attackby(var/obj/item/A as obj, mob/living/user as mob)
 	..()
