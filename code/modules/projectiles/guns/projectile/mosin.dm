@@ -21,6 +21,7 @@
 	var/scope_toggled = 0
 	gun_flags = SCOPED
 	recoil = 4
+	var/backup_view = 7
 
 	gun_flags = 0
 
@@ -84,13 +85,13 @@
 		var/obj/item/weapon/gun/projectile/mosin/W = target
 		W.scoping(owner)
 
-/obj/item/weapon/gun/projectile/mosin/update_wield(mob/user)
+/obj/item/weapon/gun/projectile/mosin/update(mob/user)
 	if(user && user.client)
 		if(scoped && scope_toggled)
 			user.regenerate_icons()
 			//var/client/C = user.client
 			backup_view = C.view
-			C.changeView(C.view * 1.5)
+			C.changeView(C.view * 2)
 	else
 		if(user && user.client)
 			user.regenerate_icons()
