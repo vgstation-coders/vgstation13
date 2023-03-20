@@ -83,6 +83,19 @@
 	if(IsAvailable() && owner && target && istype(target,/obj/item/weapon/gun/projectile/mosin))
 		var/obj/item/weapon/gun/projectile/mosin/W = target
 		W.scoping(owner)
+
+/obj/item/weapon/gun/projectile/mosin/update_wield(mob/user)
+	if(user && user.client)
+		if(scoped && scope_toggled)
+			user.regenerate_icons()
+			//var/client/C = user.client
+			backup_view = C.view
+			C.changeView(C.view * 1.5)
+	else
+		if(user && user.client)
+			user.regenerate_icons()
+			var/client/C = user.client
+			C.changeView(backup_view)
 		
 /obj/item/weapon/gun/projectile/mosin/update_icon()
 	AttachOverlays()
