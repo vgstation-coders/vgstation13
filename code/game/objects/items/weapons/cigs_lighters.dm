@@ -439,7 +439,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/attack_self(mob/user as mob)
 	if(lit)
-		user.visible_message("<span class='notice'>[user] calmly drops and treads on the lit [name], putting it out.</span>")
+		user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
 		var/turf/T = get_turf(src)
 		var/atom/new_butt = new type_butt(T)
 		transfer_fingerprints_to(new_butt)
@@ -542,7 +542,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/bugged/attack_self(mob/user as mob)
 	if(lit)
-		user.visible_message("<span class='notice'>[user] calmly drops and treads on the lit [name], putting it out.</span>")
+		user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
 		var/turf/T = get_turf(src)
 		var/obj/item/trash/cigbutt/bugged/new_butt = new /obj/item/trash/cigbutt/bugged(T)
 		new_butt.cigbug.radio_tag = cig_tag
