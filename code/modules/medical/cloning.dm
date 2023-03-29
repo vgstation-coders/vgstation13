@@ -183,19 +183,18 @@
 //Start growing a human clone in the pod!
 /obj/machinery/cloning/clonepod/proc/growclone(var/datum/dna2/record/R)
 	if(mess || working)
-		return "Clonepod malfunction"
+		return FALSE
 	var/datum/mind/clonemind = locate(R.mind)
 	if(!clonemind) //no mind
-		return "Consciousness unretrievable"
+		return FALSE
 	if(!istype(clonemind,/datum/mind)) //not a mind
-		return "Unknown consciousness type detected"
+		return FALSE
 	if(clonemind.current)
-		message_admins("CURRENT MIND FOUND")
 		if(clonemind.current.stat != DEAD)	//mind is associated with a non-dead body
-			return "Consciousness retrieval error"
+			return FALSE
 	if(clonemind.active) //somebody is using that mind
 		if( ckey(clonemind.key)!=R.ckey )
-			return "Consciousness retrieval conflict"
+			return FALSE
 	else
 		for(var/mob/G in player_list)
 			if(G.ckey == R.ckey)
@@ -203,14 +202,15 @@
 					if(G:can_reenter_corpse)
 						break
 					else
-						return "Backup consciousness unretrievable"
+						return FALSE
 				else if(G)
 					if(!G.mind)
-						return "Backup consciousness unretrievable"
-					if(G.mind.current?.stat != DEAD)
-						return "Backup consciousness retrieval error"
+						return FALSE
+					if(G.mind.current)
+						if(G.mind.current.stat != DEAD)
+							return FALSE
 					if(G.mind != clonemind)
-						return "Backup consciousness retrieval conflict"
+						return FALSE
 
 	heal_level = upgraded ? 100 : rand(10,40) //Randomizes what health the clone is when ejected
 	working = TRUE //One at a time!!

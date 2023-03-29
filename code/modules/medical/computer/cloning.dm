@@ -347,8 +347,7 @@
 			else if(!config.revival_cloning)
 				temp = "Error: Unable to initiate cloning cycle."
 			else
-				var/result = pod1.growclone(C)
-				if(result == TRUE)
+				if(pod1.growclone(C))
 					temp = "Initiating cloning cycle..."
 					records.Remove(C)
 					QDEL_NULL(C)
@@ -357,21 +356,17 @@
 					//if growclone() failed, we can't clone the guy, so what is this even DOING here?
 					var/mob/selected = find_dead_player("[C.ckey]")
 					if(!selected)
-						temp = "Initiating cloning cycle...<br>Error: [result]. Cloning cycle aborted."
+						temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
 						src.updateUsrDialog()
 						return
 					selected << 'sound/effects/adminhelp.ogg'
-					if(alert(selected,"Your DNA has been selected for cloning. Do you want to return to life?","Cloning","Yes","No") == "Yes")
-						result = pod1.growclone(C)
-						if(result == TRUE)
-							temp = "Initiating cloning cycle..."
-							records.Remove(C)
-							QDEL_NULL(C)
-							menu = 1
-						else
-							temp = "Initiating cloning cycle...<br>Error: [result]. Cloning cycle aborted."
+					if(alert(selected,"Your DNA has been selected for cloning. Do you want to return to life?","Cloning","Yes","No") == "Yes" && pod1.growclone(C))
+						temp = "Initiating cloning cycle..."
+						records.Remove(C)
+						QDEL_NULL(C)
+						menu = 1
 					else
-						temp = "Initiating cloning cycle...<br>Error: Consciousness access denied. Cloning cycle aborted."
+						temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
 		else
 			temp = "Error: Data corruption."
 
