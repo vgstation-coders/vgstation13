@@ -640,3 +640,35 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	message_admins("[key_name(L)] has dispensed [reagent] ([amount]u)! [formatJumpTo(src)]")
 
 	dispense_reagent(reagent, amount)
+
+// Poot dispenser here.
+/obj/machinery/chem_dispenser/portable
+	name = "deployed portable dispenser"
+	desc = "It dispenses chemicals. It's portable, so the chemist can put dispenser here."
+	var/undeploy_path = /obj/item/dispenser
+
+/obj/machinery/chem_dispenser/portable/verb/undeploy()
+	set name = "Undeploy portable dispenser"
+	set category = "Object"
+	set src in oview(1)
+
+	if(!anchored)
+		var/obj/item/dispenser/undeployed = new undeploy_path(get_turf(src))
+		transfer_fingerprints_to(undeployed)
+		visible_message("<span class='notice'>\The [src] undeploys!</span>")
+		qdel(src)
+	else
+		to_chat(usr, "<span class='warning'>\The [src] is <b>wrenched</b> to the ground.</span>")
+
+/obj/item/dispenser
+	name = "undeployed portable dispenser"
+	desc = "It dispenses chemicals. It's portable, so the chemist can put dispenser here."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "dispenser"
+	var/deploy_path = /obj/machinery/chem_dispenser/portable
+
+/obj/item/dispenser/attack_self()
+	var/obj/machinery/chem_dispenser/deployed = new deploy_path(get_turf(src))
+	transfer_fingerprints_to(deployed)
+	visible_message("<span class='notice'>\The [src] deploys, bolting to the floor!</span>")
+	qdel(src)
