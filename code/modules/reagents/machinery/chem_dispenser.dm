@@ -645,30 +645,54 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/portable
 	name = "deployed portable dispenser"
 	desc = "It dispenses chemicals. It's portable, so the chemist can put dispenser here."
-	var/undeploy_path = /obj/item/dispenser
+	icon_state = "portable_dispenser"
+	anchored = FALSE
+	machine_flags = FIXED2WORK | EMAGGABLE
+	var/undeploy_path = /obj/item/dispenser // Ot spawns this when it gets undeployed.
+	var/deployed = 0 // Numerical value between one and three.
+
+/obj/machinery/chem_dispenser/portable/attackby(obj/item/weapon/attack_item as obj, mob/user as mob, params)
+	if(attack_item.is_wrench(user))
+		user.visible_message(
+		"\The [user] thwacks \the [src] with \the [attack_item]!",
+		"You [deployed < 1 ? "partially" : "fully"] deploy \the [src]."
+	)
+		deployed = max(deployed + 1, 2)
+		playsound(src, 'sound/weapons/pan_01.ogg', 100, 1)
+		if(deployed == 2)
+			anchored = TRUE
+	else
+		..()
+
+/obj/machinery/chem_dispenser/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+	if(!anchored)
+		return
+	else
+		..()
 
 /obj/machinery/chem_dispenser/portable/verb/undeploy()
 	set name = "Undeploy portable dispenser"
 	set category = "Object"
 	set src in oview(1)
 
-	if(!anchored)
-		var/obj/item/dispenser/undeployed = new undeploy_path(get_turf(src))
-		transfer_fingerprints_to(undeployed)
-		visible_message("<span class='notice'>\The [src] undeploys!</span>")
-		qdel(src)
-	else
-		to_chat(usr, "<span class='warning'>\The [src] is <b>wrenched</b> to the ground.</span>")
+	var/obj/item/dispenser/undeployed = new undeploy_path(get_turf(src))
+	transfer_fingerprints_to(undeployed)
+	visible_message("<span class='notice'>\The [src] undeploys!</span>")
+	qdel(src)
 
 /obj/item/dispenser
 	name = "undeployed portable dispenser"
 	desc = "It dispenses chemicals. It's portable, so the chemist can put dispenser here."
 	icon = 'icons/obj/chemical.dmi'
-	icon_state = "dispenser"
+	icon_state = "dispenser_toolbox"
+	item_state = "toolbox_grey"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
+	w_class = W_CLASS_HUGE
 	var/deploy_path = /obj/machinery/chem_dispenser/portable
 
-/obj/item/dispenser/attack_self()
-	var/obj/machinery/chem_dispenser/deployed = new deploy_path(get_turf(src))
-	transfer_fingerprints_to(deployed)
-	visible_message("<span class='notice'>\The [src] deploys, bolting to the floor!</span>")
-	qdel(src)
+/obj/item/dispenser/attack_self(mob/living/user)
+	if(do_after(user, src, 5 SECONDS))
+		var/obj/machinery/chem_dispenser/deployed = new deploy_path(get_turf(src))
+		transfer_fingerprints_to(deployed)
+		visible_message("<span class='notice'>\The [src] deploys!</span>")
+		qdel(src)
