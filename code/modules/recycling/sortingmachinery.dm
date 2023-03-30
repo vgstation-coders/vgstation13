@@ -828,11 +828,11 @@
 			continue
 
 		A.forceMove(get_turf(src))
-		spawn(1)
-			process_affecting(A)
-			A.forceMove(out_T)
+//		spawn(1)
+		process_affecting(A)
+//		A.forceMove(out_T)
 
-			items_moved++
+		items_moved++
 
 /obj/machinery/autoprocessor/proc/process_affecting(var/atom/movable/target)
 	return
@@ -907,7 +907,7 @@
 	if(istype(target, /obj/item) && smallpath)
 		if (packagewrap >= 1)
 			var/obj/item/I = target
-			var/obj/item/P = new smallpath(get_turf(target.loc),target,round(I.w_class))
+			var/obj/item/P = new smallpath(get_turf(src.loc),target,round(I.w_class))
 			target.forceMove(P)
 			packagewrap += -1
 			if(syndiewrap)
@@ -930,7 +930,7 @@
 			if(MC.angry)
 				return
 		if(packagewrap >= 3)
-			var/obj/item/P = new bigpath(get_turf(target.loc),target)
+			var/obj/item/P = new bigpath(get_turf(src.loc),target)
 			target.forceMove(P)
 			packagewrap += -3
 			if(syndiewrap)
