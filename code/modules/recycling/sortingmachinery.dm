@@ -828,11 +828,9 @@
 			continue
 
 		A.forceMove(get_turf(src))
-		spawn(1)
-			process_affecting(A)
-			A.forceMove(out_T)
+		process_affecting(A)
 
-			items_moved++
+		items_moved++
 
 /obj/machinery/autoprocessor/proc/process_affecting(var/atom/movable/target)
 	return
@@ -907,9 +905,11 @@
 	if(istype(target, /obj/item) && smallpath)
 		if (packagewrap >= 1)
 			var/obj/item/I = target
-			var/obj/item/P = new smallpath(get_turf(target.loc),target,round(I.w_class))
+			var/obj/item/P = new smallpath(get_turf(src.loc),target,round(I.w_class))
 			target.forceMove(P)
 			packagewrap += -1
+			if(syndiewrap)
+				syndiewrap += -1
 			tag_item(P)
 		else
 			if(world.time > next_sound)
@@ -928,9 +928,11 @@
 			if(MC.angry)
 				return
 		if(packagewrap >= 3)
-			var/obj/item/P = new bigpath(get_turf(target.loc),target)
+			var/obj/item/P = new bigpath(get_turf(src.loc),target)
 			target.forceMove(P)
 			packagewrap += -3
+			if(syndiewrap)
+				syndiewrap += -3
 			tag_item(P)
 		else
 			if(world.time > next_sound)
@@ -944,11 +946,11 @@
 		if(syndiewrap >= 2)
 			syndiewrap += -2
 			packagewrap += -2
-			var/obj/present = new manpath(get_turf(src),H)
+			var/obj/present = new /obj/item/delivery/large(get_turf(src),H)
 			if (H.client)
 				H.client.perspective = EYE_PERSPECTIVE
 				H.client.eye = present
-			H.visible_message("<span class='warning'>[src] wraps [H]!</span>")
+			H.visible_message("<span class='warning'>\The [src] wraps [H]!</span>")
 			H.forceMove(present)
 		else
 			if(world.time > next_sound)
