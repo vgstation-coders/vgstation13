@@ -27,6 +27,9 @@
 	)
 
 	RefreshParts()
+	
+	if(Holiday != APRIL_FOOLS_DAY)
+		verbs.Remove(/obj/machinery/pipedispenser/verb/undeploy)
 
 /obj/machinery/pipedispenser/attack_hand(user as mob)
 	if(..())
@@ -273,3 +276,13 @@ Nah
 			spawn(15)
 				wait = 0
 	return
+
+/obj/machinery/pipedispenser/verb/undeploy()
+	set name = "Undeploy machine"
+	set category = "Object"
+	set src in oview(1)
+
+	if(!istype(usr, /mob/living/carbon/human/))
+		to_chat(usr,"<span class='notice'>You do not have the dexterity to do this!</span>")
+		return 0	
+	src.movethatgearup()
