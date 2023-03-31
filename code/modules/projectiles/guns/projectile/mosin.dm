@@ -22,6 +22,7 @@
 	gun_flags = SCOPED
 	recoil = 4
 	var/backup_view = 7
+	var/list/gun_overlay = list()
 
 	gun_flags = 0
 
@@ -71,12 +72,13 @@
 				scope_toggled = 0
 			else
 				scope_toggled = 1
+			update_scope(usr)
 		else
 	return ..()
 
 /obj/item/weapon/gun/projectile/mosin/AltClick()
 	scoping()
-	
+
 /datum/action/item_action/toggle_scope
 	name = "Toggle Scope"
 
@@ -85,11 +87,11 @@
 		var/obj/item/weapon/gun/projectile/mosin/W = target
 		W.scoping(owner)
 
-/obj/item/weapon/gun/projectile/mosin/update(mob/user)
+/obj/item/weapon/gun/projectile/mosin/update_scope(mob/user)
 	if(user && user.client)
 		if(scoped && scope_toggled)
 			user.regenerate_icons()
-			//var/client/C = user.client
+			var/client/C = user.client
 			backup_view = C.view
 			C.changeView(C.view * 2)
 	else
@@ -97,7 +99,7 @@
 			user.regenerate_icons()
 			var/client/C = user.client
 			C.changeView(backup_view)
-		
+
 /obj/item/weapon/gun/projectile/mosin/update_icon()
 	AttachOverlays()
 	..()

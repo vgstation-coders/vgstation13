@@ -19,7 +19,7 @@
 
 /obj/item/gun_part/scope
 	name = "telescopic sight"
-	desc = "In the close quarters of a space station, a telescopic sight may be more cumbersome than useful. Ideal for exploring alien worlds."
+	desc = "In the close quarters of a space station, a telescopic sight may be more cumbersome than useful. Ideal for exploring alien worlds and knocking off noisy neighbors alike."
 	icon_state = "scope"
 	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 1000)
 
