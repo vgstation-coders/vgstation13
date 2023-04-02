@@ -21,7 +21,7 @@ on:
 
 env:
   BYOND_MAJOR: 515
-  BYOND_MINOR: 1595
+  BYOND_MINOR: 1603
 
   #This can be declared here because build.py will ignore it if DM_UNIT_TESTS is true.
   ALL_MAPS: tgstation metaclub defficiency packedstation roidstation test_tiny test_vault snaxi tgstation-sec tgstation-snow LampreyStation xoq synergy bagelstation lowfatbagel Dorfstation waystation island line nervestation
@@ -45,7 +45,7 @@ jobs:
         #TODO: Cache Dreamchecker install
       - name: Run dreamchecker
         run: |
-          SPACEMAN_DMM_GIT_TAG="suite-1.7.2" tools/travis/install_spaceman_dmm.sh dreamchecker
+          SPACEMAN_DMM_GIT_TAG="suite-1.7.3" tools/travis/install_spaceman_dmm.sh dreamchecker
           ~/dreamchecker
       - name: Run map checker
         run: python tools/travis/check_map_files.py maps/
