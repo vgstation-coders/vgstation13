@@ -136,7 +136,7 @@ var/runechat_icon = null
 	if(!TICK_CHECK)
 		return finish_image_generation(mheight, target, owner, complete_text, lifespan)
 
-	var/callback/our_callback = new /callback(src, .proc/finish_image_generation, mheight, target, owner, complete_text, lifespan)
+	var/callback/our_callback = new /callback(src, src::finish_image_generation(), mheight, target, owner, complete_text, lifespan)
 	SSrunechat.message_queue += our_callback
 	return
 
