@@ -643,56 +643,60 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 // Poot dispenser here.
 /obj/machinery/chem_dispenser/portable
-	name = "deployed portable dispenser"
+	name = "portable Chem Dispenser"
 	desc = "It dispenses chemicals. It's portable, so the chemist can put dispenser here."
 	icon_state = "portable_dispenser"
-	anchored = FALSE
-	machine_flags = FIXED2WORK | EMAGGABLE
-	var/undeploy_path = /obj/item/dispenser // Ot spawns this when it gets undeployed.
-	var/deployed = 0 // Numerical value between one and three.
 
-/obj/machinery/chem_dispenser/portable/attackby(obj/item/weapon/attack_item as obj, mob/user as mob, params)
+/obj/item/weapon/storage/toolbox/machine
+	name = "portable machine toolbox"
+	desc = "It's a toolbox that can store machinery."
+	icon_state = "toolbox_machine"
+	var/deploy_path = /obj/machinery
+	var/obj/machinery/deployed
+	var/deploy_state = 0
+	var/emagged = FALSE
+
+/obj/item/weapon/storage/toolbox/machine/emag_act(mob/user)
+	to_chat(user, "<span class='notice'>You hijack \the [src]'s setup sequence.</span>")
+	emagged = TRUE
+
+/obj/item/weapon/storage/toolbox/machine/attackby(obj/item/weapon/attack_item as obj, mob/user as mob, params)
 	if(attack_item.is_wrench(user))
+		deploy_state = deploy_state + rand(1, 3)
 		user.visible_message(
-		"\The [user] thwacks \the [src] with \the [attack_item]!",
-		"You [deployed < 1 ? "partially" : "fully"] deploy \the [src]."
+		"<span class='notice'>\The [user] thwacks \the [src] with \the [attack_item]!</span>",
+		"<span class='notice'>You [deploy_state <= 10 ? "partially" : "fully"] deploy \the [src].</span>"
 	)
-		deployed = max(deployed + 1, 2)
 		playsound(src, 'sound/weapons/pan_01.ogg', 100, 1)
-		if(deployed == 2)
-			anchored = TRUE
+		if(deploy_state >= 10)
+			deploy()
 	else
 		..()
 
-/obj/machinery/chem_dispenser/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(!anchored)
-		return
-	else
-		..()
-
-/obj/machinery/chem_dispenser/portable/verb/undeploy()
-	set name = "Undeploy portable dispenser"
-	set category = "Object"
+/obj/machinery/proc/undeploy()
+	set name = "Undeploy portable machine"
+	set category = "Machinery"
 	set src in oview(1)
 
-	var/obj/item/dispenser/undeployed = new undeploy_path(get_turf(src))
-	transfer_fingerprints_to(undeployed)
 	visible_message("<span class='notice'>\The [src] undeploys!</span>")
+
+	for(var/obj/item/weapon/storage/toolbox/machine/undeployed in contents)
+		undeployed.forceMove(loc)
+
 	qdel(src)
 
-/obj/item/dispenser
-	name = "undeployed portable dispenser"
-	desc = "It dispenses chemicals. It's portable, so the chemist can put dispenser here."
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "dispenser_toolbox"
-	item_state = "toolbox_grey"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
-	w_class = W_CLASS_HUGE
-	var/deploy_path = /obj/machinery/chem_dispenser/portable
+/obj/item/weapon/storage/toolbox/machine/proc/deploy()
+	deployed = new deploy_path(get_turf(src))
+	transfer_fingerprints_to(deployed)
+	visible_message("<span class='notice'>\The [src] deploys!</span>")
+	forceMove(deployed)
+	deploy_state = 0
+	deployed.verbs +=/obj/machinery/proc/undeploy
+	deployed.machine_flags = 0
+	if(emagged)
+		deployed.emag_act()
 
-/obj/item/dispenser/attack_self(mob/living/user)
-	if(do_after(user, src, 5 SECONDS))
-		var/obj/machinery/chem_dispenser/deployed = new deploy_path(get_turf(src))
-		transfer_fingerprints_to(deployed)
-		visible_message("<span class='notice'>\The [src] deploys!</span>")
-		qdel(src)
+/obj/item/weapon/storage/toolbox/machine/chem_dispenser
+	name = "portable dispenser toolbox"
+	desc = "It's a toolbox that deploys to become a Nanotrasen-brand Chem Dispenser. The chemist can finally put dispenser here."
+	deploy_path = /obj/machinery/chem_dispenser/portable
