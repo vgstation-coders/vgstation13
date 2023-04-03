@@ -36,7 +36,7 @@ var/auxtools_path
 	#if AUXTOOLS_DEBUGGER
 	auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	if(fexists(auxtools_path))
-		call(auxtools_path, "auxtools_init")()
+		call_ext(auxtools_path, "auxtools_init")()
 		enable_debugging()
 	else
 		// warn on missing library
@@ -215,7 +215,7 @@ var/auxtools_path
 			C << link("byond://[world.address]:[world.port]")
 
 	#if AUXTOOLS_DEBUGGER
-	call(auxtools_path, "auxtools_shutdown")()
+	call_ext(auxtools_path, "auxtools_shutdown")()
 	#endif
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
