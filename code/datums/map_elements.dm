@@ -93,7 +93,7 @@ var/list/datum/map_element/map_elements = list()
 	if(!istype(A))
 		return
 
-	A.register_event(/event/destroyed, src, .proc/clear_references)
+	A.register_event(/event/destroyed, src, src::clear_references())
 	return A
 
 

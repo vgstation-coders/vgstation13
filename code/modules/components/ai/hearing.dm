@@ -5,11 +5,11 @@
 	var/response_delay = 10
 
 /datum/component/ai/hearing/initialize()
-	parent.register_event(/event/hear, src, .proc/on_hear)
+	parent.register_event(/event/hear, src, src::on_hear())
 	return TRUE
 
 /datum/component/ai/hearing/Destroy()
-	parent.unregister_event(/event/hear, src, .proc/on_hear)
+	parent.unregister_event(/event/hear, src, src::on_hear())
 	..()
 
 /datum/component/ai/hearing/proc/on_hear(datum/speech/speech)

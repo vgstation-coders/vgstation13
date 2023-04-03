@@ -369,13 +369,13 @@
 	to_chat(user, active ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
 	playsound(user, active ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0)
 	if(active)
-		user.register_event(/event/moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, src::mob_moved())
 	else
-		user.unregister_event(/event/moved, src, .proc/mob_moved)
+		user.unregister_event(/event/moved, src, src::mob_moved())
 	update_icon()
 
 /obj/item/weapon/melee/energy/hfmachete/dropped(mob/user)
-	user.unregister_event(/event/moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, src::mob_moved())
 
 /obj/item/weapon/melee/energy/hfmachete/throw_at(atom/target, range, speed, override = 1)
 	if(!usr)
@@ -474,9 +474,9 @@
 	to_chat(user, active ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
 	playsound(user, active ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0 )
 	if(active)
-		user.register_event(/event/moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, src::mob_moved())
 	else
-		user.unregister_event(/event/moved, src, .proc/mob_moved)
+		user.unregister_event(/event/moved, src, src::mob_moved())
 
 /obj/item/weapon/melee/energy/hfmachete/bloodlust/IsShield()
 	if(active)
