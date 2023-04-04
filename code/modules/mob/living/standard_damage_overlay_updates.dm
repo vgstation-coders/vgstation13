@@ -121,17 +121,17 @@
 			var/a = eyes.damage - eyes.min_bruised_damage
 			var/b = eyes.min_broken_damage - eyes.min_bruised_damage
 			total += Ceiling(10 * a / b) //10 is here because there's 10 different states in screen1_blindness.dmi
-		if(H.glasses && H.glasses.nearsighted_modifier)
+		if(H.glasses && istype(H.glasses, /obj/item/clothing))
 			total += H.glasses.nearsighted_modifier
-		if(H.head)
+		if(H.head && istype(H.head, /obj/item/clothing))
 			var/obj/item/clothing/hat = H.head
-			if(hat.nearsighted_modifier)
-				total += hat.nearsighted_modifier
+			total += hat.nearsighted_modifier
+
 	if(ismonkey(src))
 		var/mob/living/carbon/monkey/M = src
-		if(M.hat && M.hat.nearsighted_modifier)
+		if(M.hat && istype(M.hat, /obj/item/clothing))
 			total += M.hat.nearsighted_modifier
-		if(M.glasses && M.glasses.nearsighted_modifier)
+		if(M.glasses && istype(M.glasses, /obj/item/clothing))
 			total += M.glasses.nearsighted_modifier
 	
 	if(total <= 0)
