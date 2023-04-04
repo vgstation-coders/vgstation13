@@ -620,7 +620,7 @@
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attack_hand(mob/user as mob)
 	if(burning && !cookvessel)
-		user.visible_message("<span class = 'warning'>[user] carefully snuffs out \the [src] fire.</span>", "<span class='notice'>You carefully snuff out \the [src] fire.</span>")
+		user.visible_message("<span class = 'notice'>[user] carefully snuffs out \the [src] fire.</span>", "<span class='warning'>You carefully snuff out \the [src] fire.</span>")
 		burning = FALSE
 		processing_objects.Remove(src)
 		update_icon()
