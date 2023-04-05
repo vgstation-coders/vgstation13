@@ -436,15 +436,10 @@ var/datum/controller/gameticker/ticker
 					to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")
 					delay_end = 2
 			else if(!delay_end)
-				world.log << "before sleep"
 				sleep(restart_timeout)
-				world.log << "after sleep"
 				if(!delay_end)
-					world.log << "before hook"
 					CallHook("Reboot",list())
-					world.log << "after hook"
 					world.Reboot()
-					world.log << "after reboot (???)"
 				else
 					to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")
 					delay_end = 2
