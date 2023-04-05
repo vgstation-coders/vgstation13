@@ -225,6 +225,26 @@
 
 	R.illegal_weapons = TRUE
 	R.SetEmagged()
+	
+/obj/item/borg/upgrade/bootyborg
+	name = "cyborg booty expansion upgrade"
+	icon_state = "gooncode"
+	
+/obj/item/borg/upgrade/bootyborg/New()
+	..()
+	required_modules = default_nanotrasen_robot_modules + emergency_nanotrasen_robot_modules
+	
+/obj/item/borg/upgrade/bootyborg/attempt_action(var/mob/living/silicon/robot/R, var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+	var/bootylist = list(	"Blue"		= "booty-blue",
+							"Yellow"	= "booty-yellow",
+							"Flower"	= "booty-flower",
+							"Green"		= "booty-green",
+							"Red"		= "booty-red",
+							"White"		= "booty-white")
+	R.set_module_sprites(bootylist)
+	R.choose_icon()
 
 //Medical Stuff
 /obj/item/borg/upgrade/medical_upgrade
@@ -508,5 +528,5 @@
 	required_upgrades = list(/obj/item/borg/upgrade/xenoarch)
 	modules_to_add = list(/obj/item/weapon/pickaxe/excavationdrill/adv,/obj/item/device/xenoarch_scanner/adv,/obj/item/device/artifact_finder)
 	modules_to_remove = list(/obj/item/weapon/pickaxe/excavationdrill)
-
+	
 #undef FAILED_TO_ADD
