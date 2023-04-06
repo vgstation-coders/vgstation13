@@ -227,7 +227,7 @@
 	R.SetEmagged()
 	
 /obj/item/borg/upgrade/bootyborg
-	name = "cyborg booty expansion upgrade"
+	name = "cyborg Backdoor Rearranging Activation Protocol upgrade"
 	icon_state = "gooncode"
 	
 /obj/item/borg/upgrade/bootyborg/New()
@@ -237,14 +237,20 @@
 /obj/item/borg/upgrade/bootyborg/attempt_action(var/mob/living/silicon/robot/R, var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
-	var/bootylist = list(	"Blue"		= "booty-blue",
-							"Yellow"	= "booty-yellow",
-							"Flower"	= "booty-flower",
-							"Green"		= "booty-green",
-							"Red"		= "booty-red",
-							"White"		= "booty-white")
-	R.set_module_sprites(bootylist)
-	R.choose_icon()
+	
+	if(R.modtype == SECURITY_MODULE || R.modtype == COMBAT_MODULE)
+		R.base_icon = "booty-red"
+	else if(R.modtype == ENGINEERING_MODULE || R.modtype == SUPPLY_MODULE)
+		R.base_icon = "booty-yellow"
+	else if(R.modtype == SERVICE_MODULE)
+		R.base_icon = "booty-flower"
+	else if(R.modtype == MEDICAL_MODULE)
+		R.base_icon = "booty-white"
+	else if(R.modtype == JANITOR_MODULE)
+		R.base_icon = "booty-green"
+	else
+		R.base_icon = "booty-blue"		
+	R.icon_state = R.base_icon
 
 //Medical Stuff
 /obj/item/borg/upgrade/medical_upgrade
