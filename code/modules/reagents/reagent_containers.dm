@@ -206,7 +206,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(user)
 			to_chat(user, "<span class='warning'>There's nothing to splash with!</span>")
 		return -1
-
+	if(user && user.a_intent && user.a_intent == I_HELP)
+		return -1
+	
 	var/datum/organ/external/affecting = user && user.zone_sel ? user.zone_sel.selecting : null //Find what the player is aiming at
 
 	reagents.reaction(target, TOUCH, amount_override = max(0,amount), zone_sels = affecting ? list(affecting) : ALL_LIMBS)
