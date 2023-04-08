@@ -521,6 +521,7 @@
 		return 0
 	I.block = id
 	I.buf = buffer
+	I.name += " (block [id])"
 	return 1
 
 /obj/machinery/computer/scan_consolenew/proc/ejectDisk()
