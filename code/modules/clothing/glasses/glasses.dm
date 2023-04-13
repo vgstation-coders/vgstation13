@@ -421,7 +421,6 @@ var/list/science_goggles_wearers = list()
 	item_state = "rwelding-g"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MATERIALS + "=3"
-	visionworsen = 1
 	nearsighted_modifier = 1
 
 /obj/item/clothing/glasses/sunglasses/blindfold
