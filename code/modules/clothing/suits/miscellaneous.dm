@@ -324,7 +324,7 @@ var/list/tag_suits_list = list()
 	icon_state = "overalls"
 	item_state = "overalls"
 	body_parts_covered = FULL_TORSO|LEGS
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/syndicatefake
