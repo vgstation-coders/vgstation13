@@ -272,6 +272,7 @@ var/list/science_goggles_wearers = list()
 	var/obj/item/clothing/glasses/hud/security/hud = null
 	darkness_view = -1
 	eyeprot = 1
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/glasses/regular/tracking/detective/New()
 	..()
