@@ -84,3 +84,4 @@
 	item_state = "antichrist"
 	icon_state = "antichrist"
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
+	species_fit = list(VOX_SHAPED)
