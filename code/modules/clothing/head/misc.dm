@@ -365,7 +365,7 @@
 	desc = "Caw!"
 	icon_state = "chickenhead_white"
 	item_state = "chickenhead_white"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
 

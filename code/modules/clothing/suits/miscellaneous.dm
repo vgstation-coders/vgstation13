@@ -418,8 +418,8 @@ var/list/tag_suits_list = list()
 	icon_state = "chickensuit"
 	item_state = "chickensuit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
-	species_fit = list(INSECT_SHAPED)
-	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/suit/chickensuit/white
@@ -427,6 +427,7 @@ var/list/tag_suits_list = list()
 	desc = "Silky smooth. The feathers of legend...could it be..."
 	icon_state = "chickensuit_white"
 	item_state = "chickensuit_white"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/monkeysuit
 	name = "Monkey Suit"
