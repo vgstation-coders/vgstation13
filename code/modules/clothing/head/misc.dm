@@ -444,7 +444,7 @@
 	name = "xenos helmet"
 	icon_state = "xenos"
 	item_state = "xenos_helm"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	desc = "A helmet made out of chitinous alien hide."
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0

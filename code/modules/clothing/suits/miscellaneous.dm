@@ -577,7 +577,7 @@ var/list/tag_suits_list = list()
 	desc = "A suit made out of chitinous alien hide."
 	icon_state = "xenos"
 	item_state = "xenos_helm"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	siemens_coefficient = 2.0
 
@@ -646,12 +646,14 @@ var/list/tag_suits_list = list()
 	desc = "Ein Mantel gemacht, um die Juden zu bestrafen."
 	icon_state = "officersuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/soldiercoat
 	name = "Soldier's Coat"
 	desc = "Und das heißt: Erika."
 	icon_state = "soldiersuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/russofurcoat
 	name = "russian fur coat"
