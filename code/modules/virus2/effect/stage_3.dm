@@ -194,12 +194,13 @@
 	if(ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
 		if(multiplier >=2) //clown shoes added
-			var/obj/item/clothing/shoes/clown_shoes/virusshoes = new /obj/item/clothing/shoes/clown_shoes
-			virusshoes.canremove = 0
-			if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes/))
+			if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes))
+				var/obj/item/clothing/shoes/clown_shoes/virusshoes = new /obj/item/clothing/shoes/clown_shoes
+				virusshoes.canremove = 0
 				affected.u_equip(affected.shoes,1)
 				affected.equip_to_slot(virusshoes, slot_shoes)
 			if(!affected.shoes)
+				var/obj/item/clothing/shoes/clown_shoes/virusshoes = new /obj/item/clothing/shoes/clown_shoes
 				affected.equip_to_slot(virusshoes, slot_shoes)
 		if(multiplier >=3) //clown suit added
 			var/obj/item/clothing/under/rank/clown/virussuit = new /obj/item/clothing/under/rank/clown
