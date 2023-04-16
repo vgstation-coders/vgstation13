@@ -480,7 +480,7 @@ var/list/tag_suits_list = list()
 	name = "worn shirt"
 	desc = "A worn out, curiously comfortable t-shirt with a picture of Ian. You wouldn't go so far as to say it feels like being hugged when you wear it but it's pretty close. Good for sleeping in."
 	icon_state = "ianshirt"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	body_parts_covered = ARMS|FULL_TORSO
 
 //Blue suit jacket toggle
