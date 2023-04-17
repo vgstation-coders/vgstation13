@@ -242,6 +242,8 @@ var/list/global/id_cards = list()
 			user.show_message("Blood Type: [blood_type].",1)
 			user.show_message("DNA: [dna_hash].",1)
 			user.show_message("Fingerprint: [fingerprint_hash].",1)
+		if(dchip && dchip.stamped.len)
+			to_chat(user,"<span class='bad'>It has a demotion modchip with the following stamps: [english_list(uniquenamelist(dchip.stamped))].</span>")
 
 /obj/item/weapon/card/id/attack_self(var/mob/user)
 	if(user.attack_delayer.blocked())
