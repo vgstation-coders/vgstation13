@@ -330,6 +330,7 @@
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/reactive/IsShield()
 	if(active)

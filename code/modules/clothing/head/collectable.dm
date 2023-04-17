@@ -22,6 +22,7 @@
 	desc = "Hiss hiss hiss!"
 	icon_state = "xenos"
 	item_state = "xenos_helm"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/collectable/chef
 	name = "collectable chef's hat"

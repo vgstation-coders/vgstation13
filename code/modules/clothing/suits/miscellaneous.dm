@@ -324,7 +324,7 @@ var/list/tag_suits_list = list()
 	icon_state = "overalls"
 	item_state = "overalls"
 	body_parts_covered = FULL_TORSO|LEGS
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/syndicatefake
@@ -418,8 +418,8 @@ var/list/tag_suits_list = list()
 	icon_state = "chickensuit"
 	item_state = "chickensuit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
-	species_fit = list(INSECT_SHAPED)
-	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/suit/chickensuit/white
@@ -427,6 +427,7 @@ var/list/tag_suits_list = list()
 	desc = "Silky smooth. The feathers of legend...could it be..."
 	icon_state = "chickensuit_white"
 	item_state = "chickensuit_white"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/monkeysuit
 	name = "Monkey Suit"
@@ -479,7 +480,7 @@ var/list/tag_suits_list = list()
 	name = "worn shirt"
 	desc = "A worn out, curiously comfortable t-shirt with a picture of Ian. You wouldn't go so far as to say it feels like being hugged when you wear it but it's pretty close. Good for sleeping in."
 	icon_state = "ianshirt"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	body_parts_covered = ARMS|FULL_TORSO
 
 //Blue suit jacket toggle
@@ -576,7 +577,7 @@ var/list/tag_suits_list = list()
 	desc = "A suit made out of chitinous alien hide."
 	icon_state = "xenos"
 	item_state = "xenos_helm"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	siemens_coefficient = 2.0
 
@@ -645,12 +646,14 @@ var/list/tag_suits_list = list()
 	desc = "Ein Mantel gemacht, um die Juden zu bestrafen."
 	icon_state = "officersuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/soldiercoat
 	name = "Soldier's Coat"
 	desc = "Und das heißt: Erika."
 	icon_state = "soldiersuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/russofurcoat
 	name = "russian fur coat"
@@ -741,7 +744,7 @@ var/list/tag_suits_list = list()
 	desc = "Smells faintly of pumpkins and bloody mary."
 	icon_state = "draculacoat"
 	blood_overlay_type = "coat"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/maidapron
 	name = "Apron"
