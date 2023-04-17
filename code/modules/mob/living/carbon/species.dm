@@ -776,7 +776,7 @@ var/global/list/playable_species = list("Human")
 //	belt_icons      = 'icons/mob/belt.dmi'
 	wear_suit_icons = 'icons/mob/species/vox/suit.dmi'
 	wear_mask_icons = 'icons/mob/species/vox/masks.dmi'
-	back_icons      = 'icons/mob/back.dmi'
+	back_icons      = 'icons/mob/species/vox/back.dmi'
 
 	has_mutant_race = 0
 	has_organ = list(
