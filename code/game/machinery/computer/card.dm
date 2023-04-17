@@ -78,6 +78,13 @@
 
 	return formatted
 
+/obj/machinery/computer/card/proc/format_banned_departments()
+	if(modify)
+		. = list()
+		if(modify.dchip)
+			for(var/stamptype in modify.dchip.stamped)
+				. += list(list("stamptype" = "[stamptype]", "department" = "[stamptype2region[stamptype]]"))
+
 /obj/machinery/computer/card/verb/eject_id()
 	set category = "Object"
 	set name = "Eject ID Card"
@@ -156,6 +163,7 @@
 	data["authenticated"] = is_authenticated()
 	data["has_modify"] = !!modify
 	data["account_number"] = modify ? modify.associated_account_number : null
+	data["banned_departments"] = modify ? format_banned_departments() : null
 	data["centcom_access"] = is_centcom()
 	data["all_centcom_access"] = null
 	data["regions"] = null
