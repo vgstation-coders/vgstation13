@@ -1,3 +1,4 @@
+#define CAN_AUTOMAKE_SOMETHING (auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
 
 /obj/machinery/microwave
 	name = "Microwave"
@@ -99,7 +100,7 @@
 		var/obj/item/weapon/storage/bag/B = AM
 		for (var/obj/item/weapon/reagent_containers/food/snacks/G in AM.contents)
 			B.remove_from_storage(G,src)
-			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+			if(CAN_AUTOMAKE_SOMETHING)
 				cook()
 				break
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
@@ -110,11 +111,11 @@
 			if(ST.amount > 1)
 				new ST.type (src)
 				ST.use(1)
-				if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+				if(CAN_AUTOMAKE_SOMETHING)
 					cook()
 		else
 			AM.forceMove(src)
-			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+			if(CAN_AUTOMAKE_SOMETHING)
 				cook()
 	else
 		return FALSE
@@ -188,7 +189,7 @@
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
 				to_chat(user, "<span class='notice'>You fill \the [src] to the brim.</span>")
 				break
-			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+			if(CAN_AUTOMAKE_SOMETHING)
 				cook()
 		updateUsrDialog()
 
@@ -203,7 +204,7 @@
 					"<span class='notice'>[user] adds one of [O] to [src].</span>", \
 					"<span class='notice'>You add one of [O] to [src].</span>")
 				updateUsrDialog()
-				if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+				if(CAN_AUTOMAKE_SOMETHING)
 					cook()
 				return 1
 		if(user.drop_item(O, src))
@@ -211,7 +212,7 @@
 				"<span class='notice'>[user] adds [O] to [src].</span>", \
 				"<span class='notice'>You add [O] to [src].</span>")
 			updateUsrDialog()
-			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+			if(CAN_AUTOMAKE_SOMETHING)
 				cook()
 			return 1
 	else if(is_type_in_list(O,accepts_reagents_from))
@@ -221,7 +222,7 @@
 			if (!(R.id in acceptable_reagents))
 				to_chat(user, "<span class='warning'>[O] contains substances unsuitable for cookery.</span>")
 				return 1
-		if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+		if(CAN_AUTOMAKE_SOMETHING)
 			cook()
 		//G.reagents.trans_to(src,G.amount_per_transfer_from_this)
 	else if(istype(O,/obj/item/weapon/grab))
@@ -649,3 +650,5 @@
 
 	if(prob(50))
 		cook()
+
+#undef CAN_AUTOMAKE_SOMETHING
