@@ -59,7 +59,11 @@
 /obj/machinery/computer/card/proc/get_target_rank()
 	return modify && modify.assignment ? modify.assignment : "Unassigned"
 
-/obj/machinery/computer/card/proc/format_jobs(list/jobs)
+/obj/machinery/computer/card/proc/format_jobs(list/jobs,region)
+	if(modify && modify.dchip && modify.dchip.stamped.len)
+		for(var/stamptype in modify.dchip.stamped)
+			if(region == stamptype2region[stamptype])
+				return list()
 	var/list/formatted = list()
 	for(var/job in jobs)
 		formatted.Add(list(list(
@@ -72,18 +76,13 @@
 /obj/machinery/computer/card/proc/format_card_skins(list/card_skins)
 	var/list/formatted = list()
 	for(var/skin in card_skins)
+		if(modify && modify.dchip && modify.dchip.stamped.len && skin == "gold")
+			continue
 		formatted.Add(list(list(
 			"display_name" = replacetext(skin, " ", "&nbsp;"),
 			"skin" = skin)))
 
 	return formatted
-
-/obj/machinery/computer/card/proc/format_banned_departments()
-	if(modify)
-		. = list()
-		if(modify.dchip)
-			for(var/stamptype in modify.dchip.stamped)
-				. += list(list("department" = "[stamptype2region[stamptype]]"))
 
 /obj/machinery/computer/card/verb/eject_id()
 	set category = "Object"
@@ -163,18 +162,17 @@
 	data["authenticated"] = is_authenticated()
 	data["has_modify"] = !!modify
 	data["account_number"] = modify ? modify.associated_account_number : null
-	data["banned_departments"] = modify ? format_banned_departments() : null
 	data["centcom_access"] = is_centcom()
 	data["all_centcom_access"] = null
 	data["regions"] = null
 
-	data["head_jobs"] = format_jobs(command_positions)
-	data["engineering_jobs"] = format_jobs(engineering_positions)
-	data["medical_jobs"] = format_jobs(medical_positions)
-	data["science_jobs"] = format_jobs(science_positions)
-	data["security_jobs"] = format_jobs(security_positions)
-	data["cargo_jobs"] = format_jobs(cargo_positions)
-	data["civilian_jobs"] = format_jobs(civilian_positions)
+	data["head_jobs"] = format_jobs(command_positions,5)
+	data["engineering_jobs"] = format_jobs(engineering_positions,4)
+	data["medical_jobs"] = format_jobs(medical_positions,2)
+	data["science_jobs"] = format_jobs(science_positions,3)
+	data["security_jobs"] = format_jobs(security_positions,1)
+	data["cargo_jobs"] = format_jobs(cargo_positions,6)
+	data["civilian_jobs"] = format_jobs(civilian_positions,7)
 	data["centcom_jobs"] = format_jobs(get_all_centcom_jobs())
 	data["card_skins"] = format_card_skins(card_skins)
 	data["cent_card_skins"] = format_card_skins(cent_card_skins)
@@ -196,12 +194,19 @@
 		var/list/regions = list()
 		for(var/i = 1; i <= 7; i++)
 			var/list/accesses = list()
-			for(var/access in get_region_accesses(i))
-				if (get_access_desc(access))
-					accesses.Add(list(list(
-						"desc" = replacetext(get_access_desc(access), " ", "&nbsp"),
-						"ref" = access,
-						"allowed" = (access in modify.access) ? 1 : 0)))
+			var/addaccess = TRUE
+			if(modify.dchip && modify.dchip.stamped.len)
+				for(var/stamptype in modify.dchip.stamped)
+					if(i == stamptype2region[stamptype])
+						addaccess = FALSE
+						break
+			if(addaccess)
+				for(var/access in get_region_accesses(i))
+					if (get_access_desc(access))
+						accesses.Add(list(list(
+							"desc" = replacetext(get_access_desc(access), " ", "&nbsp"),
+							"ref" = access,
+							"allowed" = (access in modify.access) ? 1 : 0)))
 
 			regions.Add(list(list(
 				"name" = get_region_accesses_name(i),
