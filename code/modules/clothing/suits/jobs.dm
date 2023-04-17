@@ -85,6 +85,11 @@
 	body_parts_covered = FULL_TORSO|ARMS
 	allowed = list (/obj/item/weapon/kitchen/utensil/knife/large,/obj/item/weapon/kitchen/utensil/knife/large/butch)
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
+	sound_change = list(CLOTHING_SOUND_SCREAM)
+	sound_priority = CLOTHING_SOUND_LOW_PRIORITY
+	sound_file = list('sound/misc/chefscream1.ogg', 'sound/misc/chefscream2.ogg', 'sound/misc/chefscream3.ogg')
+	sound_species_whitelist = list("Human")
+	sound_genders_allowed = list(MALE)
 	clothing_flags = ONESIZEFITSALL
 
 //Chef

@@ -18,6 +18,11 @@
 	flags = FPRINT
 	siemens_coefficient = 0.9
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	sound_change = list(CLOTHING_SOUND_SCREAM)
+	sound_priority = CLOTHING_SOUND_MED_PRIORITY
+	sound_file = list('sound/misc/chefscream1.ogg', 'sound/misc/chefscream2.ogg', 'sound/misc/chefscream3.ogg')
+	sound_species_whitelist = list("Human")
+	sound_genders_allowed = list(MALE)
 
 //Captain: This probably shouldn't be space-worthy
 /obj/item/clothing/head/caphat
