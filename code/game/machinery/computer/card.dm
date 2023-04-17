@@ -257,7 +257,14 @@
 					if(access_type in (is_centcom() ? get_all_centcom_access() : get_all_accesses()))
 						modify.access -= access_type
 						if(!access_allowed)
-							modify.access += access_type
+							var/canadd = TRUE
+							if(modify.dchip && modify.dchip.stamped.len)
+								for(var/stamptype in modify.dchip.stamped)
+									if(access_type in get_region_accesses(stamptype2region[stamptype]))
+										canadd = FALSE
+										break
+							if(canadd)
+								modify.access += access_type
 		if("skin")
 			modify.icon_state = href_list["skin_target"]
 
