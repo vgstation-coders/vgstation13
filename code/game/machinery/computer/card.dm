@@ -305,9 +305,16 @@
 
 						access = jobdatum.get_access()
 
-					modify.access = access
-					modify.assignment = t1
-					modify.rank = t1
+					var/canadd = TRUE
+					if(modify.dchip && modify.dchip.stamped.len)
+						for(var/stamptype in modify.dchip.stamped)
+							if(J.title in get_region_accesses_positions(stamptype2region[stamptype]))
+								canadd = FALSE
+								break
+					if(canadd)
+						modify.access = access
+						modify.assignment = t1
+						modify.rank = t1
 
 		if ("reg")
 			if (is_authenticated())
