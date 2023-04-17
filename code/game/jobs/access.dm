@@ -364,7 +364,7 @@
 		if(6) //station general
 			return civilian_positions
 		if(7) //supply
-			return supply_positions
+			return cargo_positions
 
 /proc/get_access_desc_list(var/list/L)
 	var/list/names = list()

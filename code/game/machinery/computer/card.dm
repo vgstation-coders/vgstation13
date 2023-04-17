@@ -83,7 +83,7 @@
 		. = list()
 		if(modify.dchip)
 			for(var/stamptype in modify.dchip.stamped)
-				. += list(list("stamptype" = "[stamptype]", "department" = "[stamptype2region[stamptype]]"))
+				. += list(list("department" = "[stamptype2region[stamptype]]"))
 
 /obj/machinery/computer/card/verb/eject_id()
 	set category = "Object"
@@ -290,6 +290,7 @@
 
 				else
 					var/list/access = list()
+					var/canadd = TRUE
 					if(is_centcom())
 						access = get_centcom_access(t1)
 					else
@@ -304,13 +305,12 @@
 							return
 
 						access = jobdatum.get_access()
+						if(modify.dchip && modify.dchip.stamped.len)
+							for(var/stamptype in modify.dchip.stamped)
+								if(J.title in get_region_accesses_positions(stamptype2region[stamptype]))
+									canadd = FALSE
+									break
 
-					var/canadd = TRUE
-					if(modify.dchip && modify.dchip.stamped.len)
-						for(var/stamptype in modify.dchip.stamped)
-							if(J.title in get_region_accesses_positions(stamptype2region[stamptype]))
-								canadd = FALSE
-								break
 					if(canadd)
 						modify.access = access
 						modify.assignment = t1
