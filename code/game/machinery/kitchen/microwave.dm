@@ -221,6 +221,8 @@
 			if (!(R.id in acceptable_reagents))
 				to_chat(user, "<span class='warning'>[O] contains substances unsuitable for cookery.</span>")
 				return 1
+		if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+			cook()
 		//G.reagents.trans_to(src,G.amount_per_transfer_from_this)
 	else if(istype(O,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
