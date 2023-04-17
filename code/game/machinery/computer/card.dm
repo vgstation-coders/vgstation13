@@ -266,7 +266,8 @@
 							if(canadd)
 								modify.access += access_type
 		if("skin")
-			modify.icon_state = href_list["skin_target"]
+			if(!(modify.dchip && modify.dchip.stamped.len && href_list["skin_target"] == "gold"))
+				modify.icon_state = href_list["skin_target"]
 
 
 		if ("assign")
@@ -307,7 +308,7 @@
 						access = jobdatum.get_access()
 						if(modify.dchip && modify.dchip.stamped.len)
 							for(var/stamptype in modify.dchip.stamped)
-								if(J.title in get_region_accesses_positions(stamptype2region[stamptype]))
+								if(jobdatum.title in get_region_accesses_positions(stamptype2region[stamptype]))
 									canadd = FALSE
 									break
 
