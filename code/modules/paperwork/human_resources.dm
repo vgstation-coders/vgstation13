@@ -97,7 +97,7 @@ var/list/stamptype2region = list(
 			D.forceMove(src)
 			dchip = D
 			to_chat(user, "<span class='notice'>You apply \the [D] to \the [src].</span>")
-	if(dchip && (I.type in dchip.stamped))
+	if(dchip && (istype(I,/obj/item/weapon/stamp/captain) || istype(I,/obj/item/weapon/stamp/hop) || (I.type in dchip.stamped)))
 		to_chat(user, "<span class='notice'>You remove \the [dchip] from \the [src] by stamping it.</span>")
 		user.put_in_hands(dchip)
 		dchip = null
