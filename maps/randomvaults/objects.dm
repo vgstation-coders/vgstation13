@@ -46,6 +46,20 @@
 /area/vault/podstation
 	requires_power = 1
 
+/area/vault/fastfood
+
+/area/vault/fastfood/dining
+	requires_power = 1
+	icon_state = "cafeteria"
+
+/area/vault/fastfood/kitchen
+	requires_power = 1
+	icon_state = "kitchen"
+
+/area/vault/fastfood/misc
+	requires_power = 1
+	icon_state = "fmaint"
+
 /area/vault/mechclubhouse
 	requires_power = 1
 
@@ -994,3 +1008,103 @@
 
 /obj/item/device/pda/clown/broken/attack_self(mob/user)
 	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function
+
+/obj/structure/falserwall/doorobscurer
+	layer = ABOVE_DOOR_LAYER
+
+/mob/living/simple_animal/hostile/retaliate/cookbot
+	name = "cook bot"
+	desc = "Cooks food for the restaurant."
+	icon = 'icons/mob/robots.dmi'
+	icon_state = "kodiak-service"
+
+	melee_damage_lower = 10
+	melee_damage_upper = 25
+
+	maxHealth = 200
+	health = 200
+
+	attacktext = "electrocutes"
+	a_intent = I_HURT
+
+	attack_sound = 'sound/effects/eleczap.ogg'
+
+	ranged = 1
+	projectiletype = /obj/item/projectile/bullet
+	projectilesound = 'sound/weapons/Gunshot.ogg'
+	casingtype = /obj/item/ammo_casing/a357
+
+	unsuitable_atmos_damage = 0
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
+
+	mob_property_flags = MOB_ROBOTIC
+
+	environment_smash_flags = 0
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/New()
+	..()
+	var/datum/component/ai/area_territorial/signal/door/AT = add_component(/datum/component/ai/area_territorial/signal/door)
+	AT.SetArea(locate(/area/vault/fastfood/kitchen))
+	AT.id_tag = "vaultkitchen"
+	AT.enter_signal = /event/comp_ai_cmd_retaliate
+	AT.typefilter = /mob/living/carbon/human
+	register_event(/event/comp_ai_cmd_retaliate, src, .proc/Retaliate)
+	add_component(/datum/component/ai/conversation)
+	var/datum/component/ai/area_territorial/say/fastfood/intruder/AT2 = add_component(/datum/component/ai/area_territorial/say/fastfood/intruder)
+	AT2.SetArea(locate(/area/vault/fastfood/kitchen))
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/Destroy()
+	unregister_event(/event/comp_ai_cmd_retaliate, src, .proc/Retaliate)
+	..()
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/death(var/gibbed = FALSE)
+	..(gibbed)
+	visible_message("<b>[src]</b> blows apart!")
+	new /obj/effect/gibspawner/robot(src.loc)
+	qdel(src)
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter
+	name = "restaurant service bot"
+	desc = "Serves food asked for by a customer."
+	wander = FALSE
+	flags = HEAR_ALWAYS|PROXMOVE // for AI stuff
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/New()
+	..()
+	add_component(/datum/component/controller/movement/astar)
+	var/datum/component/ai/hearing/order/foodndrinks/FD = add_component(/datum/component/ai/hearing/order/foodndrinks)
+	FD.baseprice = rand(5,10) * 5
+	var/datum/component/ai/area_territorial/say/fastfood/welcome/AT = add_component(/datum/component/ai/area_territorial/say/fastfood/welcome)
+	AT.SetArea(locate(/area/vault/fastfood/dining))
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/examine(mob/user)
+	..()
+	var/datum/component/ai/hearing/order/foodndrinks/FD = get_component(/datum/component/ai/hearing/order/foodndrinks)
+	if(FD)
+		to_chat(user,"Current items in order: [counted_english_list(FD.items2deliver)]<br>Total credits due: [FD.currentprice] credit\s")
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/kitchen
+	name = "restaurant delivery bot"
+	desc = "Serves food asked for by a customer at the drive-thru."
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/kitchen/New()
+	..()
+	var/datum/component/ai/hearing/order/foodndrinks/FD = get_component(/datum/component/ai/hearing/order/foodndrinks)
+	FD.inbag = TRUE
+
+/datum/component/ai/area_territorial/say/fastfood
+	typefilter = /mob/living/carbon/human
+
+/datum/component/ai/area_territorial/say/fastfood/welcome
+	enter_args = list("Welcome to #&*£%£&%, how may I take your order?") // TODO: name here
+
+/datum/component/ai/area_territorial/say/fastfood/intruder
+	enter_args = list("Stop! Intruder!")
