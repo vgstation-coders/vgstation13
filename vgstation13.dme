@@ -959,6 +959,7 @@
 #include "code\game\objects\items\devices\megaphone.dm"
 #include "code\game\objects\items\devices\modkit.dm"
 #include "code\game\objects\items\devices\multitool.dm"
+#include "code\game\objects\items\devices\nuclear_challenge.dm"
 #include "code\game\objects\items\devices\paicard.dm"
 #include "code\game\objects\items\devices\pcmc.dm"
 #include "code\game\objects\items\devices\pipe_painter.dm"

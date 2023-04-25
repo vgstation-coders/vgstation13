@@ -364,6 +364,11 @@ var/list/corrupt_mobs = list(
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
 
+// Whether Nuclear Operatives have declared war on station.__vox_sound_meta_init
+var/war_declared = FALSE
+
+var/war_declared_time = 0
+
 //Malf AI global variables
 var/malf_radio_blackout = FALSE
 var/malf_rcd_disable = FALSE
