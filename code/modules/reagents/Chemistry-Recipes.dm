@@ -4078,17 +4078,17 @@
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGARS = 1)
 	result_amount = 3
 
-/datum/chemical_reaction/bumcivilian
+/datum/chemical_reaction/bumcivilian //same reaction type as midazoline, you must dunk the iron sheet on sacid to get bumcivillian
 	name = "Bumcivilian"
 	id = BUMCIVILIAN
 	result = BUMCIVILIAN
-	required_reagents = list(IRON = 1, SACIDS = 1) //..5.05 Mg
+	required_reagents = list(SACIDS = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/bumcivilian/required_condition_check(datum/reagents/holder)
-	for(var/obj/item/device/deskbell/B in view(3,get_turf(holder.my_atom)))
-		if(world.time - B.last_ring_time <= 30)
-			return 1
+	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers))
+		return (locate(/obj/item/stack/sheet/metal) in holder.my_atom.contents)
+	return 0
 
 /datum/chemical_reaction/bumcivilian/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
