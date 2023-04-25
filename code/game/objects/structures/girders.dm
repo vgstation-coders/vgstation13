@@ -341,39 +341,42 @@
 	return ..()
 
 /obj/structure/girder/ex_act(severity)
-	. = list()
 	switch(severity)
 		if(1.0)
 			if(prob(25) && state == 2) //Strong enough to have a chance to stand if finished, but not in one piece
-				. += new /obj/item/stack/rods(get_turf(src)) //Lose one rod
+				new /obj/item/stack/rods(get_turf(src)) //Lose one ro)
 				state = 0
 				update_icon()
 			else //Not finished or not lucky
 				qdel(src) //No scraps
+			return
 		if(2.0)
 			if(prob(50))
 				if(state == 2)
 					state = 1
 					update_icon()
 				if(state == 1)
-					. += new /obj/item/stack/rods(get_turf(src))
+					new /obj/item/stack/rods(get_turf(src))
 					state = 0
 					update_icon()
 				else
-					. += new /obj/item/stack/sheet/metal(get_turf(src))
+					new /obj/item/stack/sheet/metal(get_turf(src))
 					qdel(src)
+			return
 		if(3.0)
 			if((state == 0) && prob(5))
-				. += new /obj/item/stack/sheet/metal(get_turf(src))
+				new /obj/item/stack/sheet/metal(get_turf(src))
 				qdel(src)
 			else if(prob(15))
 				if(state == 2)
 					state = 1
 					update_icon()
 				if(state == 1)
-					. += new /obj/item/stack/rods(get_turf(src), 2)
+					new /obj/item/stack/rods(get_turf(src), 2)
 					state = 0
 					update_icon()
+			return
+	return
 
 /obj/structure/girder/mech_drill_act(severity)
 	new /obj/item/stack/sheet/metal(get_turf(src))
@@ -473,18 +476,21 @@
 		qdel(src)
 
 /obj/structure/cultgirder/ex_act(severity)
-	. = list()
 	switch(severity)
 		if(1.0)
 			qdel(src)
+			return
 		if(2.0)
 			if (prob(30))
-				. += new /obj/effect/decal/remains/human(loc)
+				new /obj/effect/decal/remains/human(loc)
 				qdel(src)
+			return
 		if(3.0)
 			if (prob(5))
-				. += new /obj/effect/decal/remains/human(loc)
+				new /obj/effect/decal/remains/human(loc)
 				qdel(src)
+			return
+	return
 
 /obj/structure/cultgirder/mech_drill_act(severity)
 	new /obj/effect/decal/remains/human(loc)

@@ -283,11 +283,19 @@ By design, d1 is the smallest direction and d2 is the highest
 		var/turf/T = loc
 		if(T.protect_infrastructure)
 			return
-	. = list()
-	if (prob(100 / (2**(severity-1)))) //1 = 100, 2 = 50, 3 = 25
-		if(severity > 1)
-			. += new /obj/item/stack/cable_coil(src.loc, src.d1 ? 2 : 1, light_color)
-		qdel(src)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+		if(2.0)
+			if(prob(50))
+				new /obj/item/stack/cable_coil(src.loc, src.d1 ? 2 : 1, light_color)
+				qdel(src)
+
+		if(3.0)
+			if(prob(25))
+				new /obj/item/stack/cable_coil(src.loc, src.d1 ? 2 : 1, light_color)
+				qdel(src)
+	return
 
 /obj/structure/cable/proc/cableColor(var/colorC = "red")
 	light_color = colorC

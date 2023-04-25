@@ -60,18 +60,22 @@
 	return
 
 /obj/structure/ore_box/proc/dump_everything()
-	. = list()
 	for(var/ore_id in stored_ores)
 		var/amount = stored_ores[ore_id]
 		if(amount > 0)
-			. += drop_stack(ore_id, get_turf(src), amount)
+			drop_stack(ore_id, get_turf(src), amount)
 
 	stored_ores.Cut()
 
 /obj/structure/ore_box/ex_act(severity)
-	if(prob(100-((severity-1)*50))) // 1= 100, 2 = 50, 3 = 0
-		. += dump_everything()
-		qdel(src)
+	switch(severity)
+		if(1.0)
+			dump_everything()
+			qdel(src)
+		if(2.0)
+			if (prob(50))
+				dump_everything()
+				qdel(src)
 
 /obj/structure/ore_box/proc/try_add_ore(var/obj/item/stack/ore/O)
 	if (!O.can_orebox)

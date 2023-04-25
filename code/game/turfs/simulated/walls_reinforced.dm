@@ -363,13 +363,12 @@
 			dismantle_wall()
 
 /turf/simulated/wall/r_wall/dismantle_wall(devastated = 0, explode = 0)
-	. = list()
 	if(!devastated)
-		. += new /obj/item/stack/sheet/plasteel(src)//Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rod)
-		. += new girder_type(src)
+		new /obj/item/stack/sheet/plasteel(src)//Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rod)
+		new girder_type(src)
 	else
-		. += new /obj/item/stack/rods(src, 2)
-		. += new /obj/item/stack/sheet/plasteel(src)
+		new /obj/item/stack/rods(src, 2)
+		new /obj/item/stack/sheet/plasteel(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
@@ -380,28 +379,28 @@
 	update_near_walls()
 
 /turf/simulated/wall/r_wall/ex_act(severity)
-	. = list()
 	if(rotting)
 		severity = 1.0
 	switch(severity)
 		if(1.0)
 			if(prob(66)) //It's "bomb-proof"
-				. += dismantle_wall(0,1) //So it isn't completely destroyed, nice uh ?
+				dismantle_wall(0,1) //So it isn't completely destroyed, nice uh ?
 			else
-				. += dismantle_wall(1,1) //Fuck it up nicely
+				dismantle_wall(1,1) //Fuck it up nicely
 		if(2.0)
 			if(prob(75) && (d_state == WALLCOMPLETED))//No more infinite plasteel generation!
 				src.d_state = WALLCOVERREMOVED
 				update_icon()
-				. += new /obj/item/stack/sheet/plasteel(get_turf(src)) //Lose the plasteel needed to get ther)
+				new /obj/item/stack/sheet/plasteel(get_turf(src)) //Lose the plasteel needed to get ther)
 			else
-				. += dismantle_wall(0,1)
+				dismantle_wall(0,1)
 		if(3.0)
 			if(prob(15))
-				. += dismantle_wall(0,1)
+				dismantle_wall(0,1)
 			else //If prob fails, break the outer safety grille to look like scrap damage
 				src.d_state = WALLCOVEREXPOSED
 				update_icon()
+	return
 
 /turf/simulated/wall/r_wall/dissolvable()
 	return 0

@@ -270,39 +270,35 @@
 	return 1
 
 /obj/structure/railing/proc/make_into_sheets(var/damage = FALSE)
-	. = list()
 	break_glass(damage)
 	if(wired)
 		wired = FALSE
 		var/obj/item/stack/cable_coil/CC = new /obj/item/stack/cable_coil(get_turf(src),2)
-		. += CC
 		CC._color = wire_color
 		CC.update_icon()
 	var/obj/item/stack/sheet/M = new sheettype(loc)
-	. += M
 	M.amount = 2
 	qdel(src)
 
 /obj/structure/railing/proc/break_glass(var/damage = FALSE)
-	. = list()
 	if(glasstype)
 		if(damage && railingtype == "plasteel")
 			new /obj/item/stack/rods(get_turf(src),2)
 		switch(glasstype)
 			if(NORMAL_GLASS)
 				if(damage)
-					. += new /obj/item/weapon/shard(get_turf(src))
-					. += new /obj/item/weapon/shard(get_turf(src))
+					new /obj/item/weapon/shard(get_turf(src))
+					new /obj/item/weapon/shard(get_turf(src))
 				else
 					var/glasstospawn = railingtype == "plasteel" ? /obj/item/stack/sheet/glass/rglass : /obj/item/stack/sheet/glass/glass
-					. += new glasstospawn(get_turf(src),railingtype == "wooden" ? 1 : 2)
+					new glasstospawn(get_turf(src),railingtype == "wooden" ? 1 : 2)
 			if(PLASMA_GLASS)
 				if(damage)
-					. += new /obj/item/weapon/shard/plasma(get_turf(src))
-					. += new /obj/item/weapon/shard/plasma(get_turf(src))
+					new /obj/item/weapon/shard/plasma(get_turf(src))
+					new /obj/item/weapon/shard/plasma(get_turf(src))
 				else
 					var/glasstospawn = railingtype == "plasteel" ? /obj/item/stack/sheet/glass/plasmarglass : /obj/item/stack/sheet/glass/plasmaglass
-					. += new glasstospawn(get_turf(src),railingtype == "wooden" ? 1 : 2)
+					new glasstospawn(get_turf(src),railingtype == "wooden" ? 1 : 2)
 		if(damage)
 			playsound(src, "shatter", 70, 1)
 		glasstype = NO_GLASS
@@ -344,7 +340,6 @@
 			make_into_sheets(TRUE)
 
 /obj/structure/railing/ex_act(severity)
-	. = list()
 	switch(severity)
 		if(1)
 			qdel(src)
@@ -352,12 +347,12 @@
 			if(prob(50))
 				qdel(src)
 			else
-				. += make_into_sheets(TRUE)
+				make_into_sheets(TRUE)
 		if(3)
 			if(prob(50))
-				. += make_into_sheets(TRUE)
+				make_into_sheets(TRUE)
 			else
-				. += break_glass(TRUE)
+				break_glass(TRUE)
 
 /obj/structure/railing/suicide_act(mob/living/user)
 	var/turf/T = hurdle(user)
@@ -389,11 +384,10 @@
 	min_damage_force = 15
 
 /obj/structure/railing/plasteel/ex_act(severity)
-	. = list()
 	var/nu_severity = severity + 1
-	. += ..(nu_severity)
+	..(nu_severity)
 	if(nu_severity == 4 && prob(50))
-		. += break_glass(TRUE)
+		break_glass(TRUE)
 
 /obj/structure/railing/plasteel/loose
 	anchored = 0
@@ -417,7 +411,7 @@
 
 /obj/structure/railing/wood/ex_act(severity)
 	var/nu_severity = max(1,severity - 1)
-	. = ..(nu_severity)
+	..(nu_severity)
 
 /obj/structure/railing/wood/loose
 	anchored = 0

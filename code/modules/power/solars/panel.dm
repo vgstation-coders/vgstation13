@@ -140,17 +140,16 @@
 		health = 1 //Only holding up on shards and scrap
 
 /obj/machinery/power/solar/panel/ex_act(severity)
-	. = list()
 	switch(severity)
 		if(1.0)
 			solar_assembly.glass_type = null //The glass you're looking for is below pal
 			if(prob(15))
-				. += new /obj/item/weapon/shard(loc)
+				new /obj/item/weapon/shard(loc)
 			kill()
 		if(2.0)
 			if(prob(25))
 				solar_assembly.glass_type = null //The glass you're looking for is below pal
-				. += new /obj/item/weapon/shard(loc)
+				new /obj/item/weapon/shard(loc)
 				kill()
 			else
 				broken()

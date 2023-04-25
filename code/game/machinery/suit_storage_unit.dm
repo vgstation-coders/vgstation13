@@ -198,16 +198,19 @@
 
 
 /obj/machinery/suit_storage_unit/ex_act(severity)
-	. = list()
 	switch(severity)
 		if(1.0)
 			if(prob(50))
-				. += dump_everything() //So suits dont survive all the time
+				dump_everything() //So suits dont survive all the time
 			qdel(src)
+			return
 		if(2.0)
 			if(prob(50))
-				. += dump_everything()
+				dump_everything()
 				qdel(src)
+			return
+		else
+			return
 
 /obj/machinery/suit_storage_unit/emag_act(var/mob/user)
 	emagged = TRUE
@@ -427,14 +430,12 @@
 
 
 /obj/machinery/suit_storage_unit/proc/dump_everything(var/include_suit=TRUE)
-	. = list()
 	islocked = 0 //locks go free
 	var/list/objects_allowed = list(suit,mask,helmet,boots)
 	for(var/obj/O in contents)
 		if(!include_suit && (O in objects_allowed))
 			continue
 		O.forceMove(get_turf(src))
-		. += O
 	if(include_suit)
 		suit = null
 		helmet = null

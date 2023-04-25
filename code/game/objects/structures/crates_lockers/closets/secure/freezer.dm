@@ -47,22 +47,25 @@
 //However, the door will be blown off its hinges, permanently breaking the fridge
 //And of course, if the bomb is IN the fridge, you're fucked
 /obj/structure/closet/secure_closet/freezer/ex_act(var/severity)
-	. = list()
+
 	//Bomb in here? (using same search as space transits searching for nuke disk)
 	var/list/bombs = search_contents_for(/obj/item/device/transfer_valve)
 	if(!isemptylist(bombs)) // You're fucked.
-		. = ..(severity)
-	else if(severity == 1)
+		..(severity)
+
+	if(severity == 1)
 		//If it's not open, we need to override the normal open proc and set everything ourselves
 		//Otherwise, you can cheese this by simply welding it shut, or if the lock is engaged
 		if(!opened)
 			opened = 1
 			setDensity(FALSE)
-			. += dump_contents()
+			dump_contents()
 
 		//Now, set our special variables
 		exploded = 1
 		update_icon()
+
+	return
 
 /obj/structure/closet/secure_closet/freezer/can_close()
 	if(exploded) //Door blew off, can't close it anymore

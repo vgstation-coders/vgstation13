@@ -152,17 +152,16 @@
 	update_icons()
 
 /obj/spacepod/ex_act(severity)
-	. = list()
 	switch(severity)
 		if(1)
 			if(has_passengers())
 				for(var/mob/living/L in get_passengers())
-					. += move_outside(L, get_turf(src))
+					move_outside(L, get_turf(src))
 					L.ex_act(severity + 1)
 					to_chat(L, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
 			var/mob/living/carbon/human/H = get_pilot()
 			if(H)
-				. += move_outside(H, get_turf(src))
+				move_outside(H, get_turf(src))
 				H.ex_act(severity + 1)
 				to_chat(H, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
 			QDEL_NULL(ion_trail) // Should be nulled by qdel src in next line but OH WELL
@@ -659,7 +658,6 @@
 		exit_turf = get_turf(src)
 	adjust_occupants(occupant, STATUS_REMOVE)
 	occupant.forceMove(exit_turf)
-	return occupant
 
 /obj/spacepod/proc/adjust_occupants(var/mob/user, var/status)
 	if(status == STATUS_REMOVE)

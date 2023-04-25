@@ -40,8 +40,7 @@
 	icon_state = "log0"
 
 /turf/simulated/wall/mineral/wood/log/dismantle_wall()
-	. = list()
-	. += new /obj/item/weapon/grown/log/tree(src)
+	new /obj/item/weapon/grown/log/tree(src)
 	for(var/obj/O in src.contents)
 		if(istype(O,/obj/effect/cult_shortcut))
 			qdel(O)

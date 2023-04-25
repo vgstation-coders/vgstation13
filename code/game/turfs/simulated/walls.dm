@@ -57,21 +57,20 @@
 		to_chat(user, src.engraving)
 
 /turf/simulated/wall/dismantle_wall(devastated = 0, explode = 0)
-	. = list()
 	if(mineral == "metal")
-		. += new /obj/item/stack/sheet/metal(src, 2)
+		new /obj/item/stack/sheet/metal(src, 2)
 	else if(mineral == "wood")
-		. += new /obj/item/stack/sheet/wood(src, 2)
+		new /obj/item/stack/sheet/wood(src, 2)
 	else
 		var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
 		if(M)
-			. += new M(src, 2)
+			new M(src, 2)
 
 	if(devastated)
-		. += new /obj/item/stack/sheet/metal(src)
+		new /obj/item/stack/sheet/metal(src)
 	else
 		if(girder_type)
-			. += new girder_type(src)
+			new girder_type(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/effect/cult_shortcut))
@@ -90,14 +89,18 @@
 	switch(severity)
 		if(1.0)
 			src.ChangeTurf(get_underlying_turf()) //You get NOTHING, you LOSE
+			return
 		if(2.0)
 			if(prob(50))
-				. += dismantle_wall(0,1)
+				dismantle_wall(0,1)
 			else
-				. += dismantle_wall(1,1)
+				dismantle_wall(1,1)
+			return
 		if(3.0)
 			if(prob(40))
-				. += dismantle_wall(0,1)
+				dismantle_wall(0,1)
+			return
+	return
 
 /turf/simulated/wall/mech_drill_act(severity)
 	return dismantle_wall()
