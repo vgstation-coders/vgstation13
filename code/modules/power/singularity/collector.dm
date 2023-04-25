@@ -112,9 +112,9 @@ var/global/list/rad_collectors = list()
 	return FALSE
 
 /obj/machinery/power/rad_collector/ex_act(severity)
-	switch(severity)
-		if(2, 3)
-			eject()
+	. = list()
+	if(severity > 1)
+		. += eject()
 
 	return ..()
 
@@ -127,6 +127,7 @@ var/global/list/rad_collectors = list()
 
 	P.forceMove(get_turf(src))
 	P.reset_plane_and_layer()
+	. = P
 	P = null
 
 	if(active)

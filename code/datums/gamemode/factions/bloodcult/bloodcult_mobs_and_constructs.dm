@@ -9,7 +9,8 @@
 		/spell/juggerdash,
 		)
 	see_in_dark = 7
-	var/dash_dir = null
+	afterimage = /obj/effect/afterimage/red
+	strongthrow = TRUE
 	var/turf/crashing = null
 	spell_on_use_inhand = /spell/juggerdash //standard jug gets forcewall, but this seems better for perfect
 

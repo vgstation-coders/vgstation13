@@ -176,11 +176,8 @@
 	return TRUE
 
 /obj/machinery/power/supermatter/ex_act(severity,var/mob/whodunnit)
-	switch(severity)
-		if(3.0)
-			return //Should be improved
-		else
-			return explode(whodunnit)
+	if(severity < 3)
+		return explode(whodunnit)
 
 /obj/machinery/power/supermatter/shard/singularity_act(current_size, obj/machinery/singularity/S)
 	var/super = FALSE

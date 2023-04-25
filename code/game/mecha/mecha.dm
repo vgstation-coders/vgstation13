@@ -21,6 +21,7 @@
 	layer = MOB_LAYER //icon draw layer
 	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged. This is supposedly infrared brightness. Lower for combat mechs.
+	strongthrow = TRUE
 	var/list/hud_list = list()
 	var/initial_icon
 	var/can_move = 1
@@ -74,7 +75,6 @@
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/datum/global_iterator/pr_internal_damage //processes internal damage
 
-	var/dash_dir = null
 	var/wreckage
 	var/enclosed = TRUE
 	var/silicon_pilot

@@ -177,6 +177,7 @@
 	return 1
 
 /obj/structure/flora/tree/proc/fall_down()
+	. = list()
 	if(!falling_dir)
 		falling_dir = pick(cardinal)
 
@@ -185,8 +186,6 @@
 
 	playsound(loc, 'sound/effects/woodcutting.ogg', 50, 1)
 
-	qdel(src)
-
 	if(!holo)
 		spawn()
 			while(height > 0)
@@ -194,6 +193,7 @@
 					break //If the turf in which to spawn a log doesn't exist, stop the thing
 
 				var/obj/item/I = new log_type(our_turf) //Spawn a log and throw it at the "current_turf"
+				. += I
 				I.throw_at(current_turf, 10, 10)
 
 				current_turf = get_step(current_turf, falling_dir)
@@ -201,6 +201,8 @@
 				height--
 
 				sleep(1)
+
+	qdel(src)
 
 /obj/structure/flora/tree/proc/update_health()
 	if(health < 40 && !falling_dir)
@@ -212,12 +214,13 @@
 		fall_down()
 
 /obj/structure/flora/tree/ex_act(severity)
+	. = list()
 	switch(severity)
 		if(1) //Epicentre
 			return qdel(src)
 		if(2) //Major devastation
 			height -= rand(1,4) //Some logs are lost
-			fall_down()
+			. += fall_down()
 		if(3) //Minor devastation (IED)
 			health -= rand(10,30)
 			update_health()

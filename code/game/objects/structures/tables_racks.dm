@@ -68,7 +68,7 @@
 
 /obj/structure/table/proc/destroy()
 	if(parts)
-		new parts(loc)
+		. = new parts(loc)
 	setDensity(FALSE)
 	qdel(src)
 
@@ -242,6 +242,7 @@
 			change_dir(SOUTH)
 
 /obj/structure/table/ex_act(severity)
+	. = list()
 	switch(severity)
 		if(1.0)
 			qdel(src)
@@ -252,7 +253,7 @@
 				return
 		if(3.0)
 			if (prob(25))
-				destroy()
+				. += destroy()
 		else
 	return
 
@@ -760,7 +761,7 @@
 
 /obj/structure/rack/proc/destroy(var/dropParts = TRUE)
 	if(parts && dropParts)
-		new parts(loc)
+		. = new parts(loc)
 	setDensity(FALSE)
 	qdel(src)
 
@@ -773,19 +774,12 @@
 	return ..()
 
 /obj/structure/rack/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			destroy(FALSE)
-		if(2.0)
-			if(prob(50))
-				destroy(TRUE)
-			else
-				destroy(FALSE)
-		if(3.0)
-			if(prob(25))
-				destroy(TRUE)
-			else
-				destroy(FALSE)
+	// previously 3 severity had a higher chance of deleting the parts than 2 severity, made no sense so reversed it. fits in the formula well too.
+	. = list()
+	if (prob(100 / (2**(severity-1)))) //1 = 100, 2 = 50, 3 = 25
+		. += destroy(FALSE)
+	else
+		. += destroy(TRUE)
 
 /obj/structure/rack/proc/checkhealth()
 	if(health <= 0)

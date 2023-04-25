@@ -97,19 +97,22 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 
 	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((get_zs_away(a,b))**2)
 
-/proc/multi_z_spiral_block(var/turf/epicenter,var/max_range,var/draw_red=0,var/cube=1)
+/proc/multi_z_spiral_block(var/turf/epicenter,var/max_range,var/draw_red=0,var/difference=0,var/multiple=1)
 	var/turf/upturf = epicenter
 	var/turf/downturf = epicenter
 	. = spiral_block(epicenter,max_range,draw_red)
+	var/current_size = max_range
 	for(var/i = 1, i < max_range, i++)
+		current_size += difference
+		current_size *= multiple
 		if(HasAbove(upturf.z))
 			upturf = GetAbove(upturf)
-			log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [upturf.loc.name] ([upturf.x],[upturf.y],[upturf.z])")
-			. += spiral_block(upturf, cube ? max_range : max_range - i, draw_red)
+			log_debug("Spiralling block of size [current_size] in [upturf.loc.name] ([upturf.x],[upturf.y],[upturf.z])")
+			. += spiral_block(upturf, current_size, draw_red)
 		if(HasBelow(downturf.z))
 			downturf = GetBelow(downturf)
-			log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
-			. += spiral_block(downturf, cube ? max_range : max_range - i, draw_red)
+			log_debug("Spiralling block of size [current_size] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
+			. += spiral_block(downturf, current_size, draw_red)
 
 /client/proc/check_multi_z_spiral()
 	set name = "Check Multi-Z Spiral Block"
@@ -117,17 +120,6 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 
 	var/turf/epicenter = get_turf(usr)
 	var/max_range = input("Set the max range") as num
-	var/shape_txt = alert("What shape?","Spiral Block", "Cube","Octahedron")
-	var/shape = shape_txt == "Cube" ? 1 : 0
-	multi_z_spiral_block(epicenter,max_range,shape)
-
-// Halves above and below, as per suggestion by deity on how to handle multi-z explosions
-/proc/explosion_destroy_multi_z(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit)
-	if(HasAbove(offcenter.z) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
-		var/turf/upcenter = GetAbove(offcenter)
-		if(upcenter.z > epicenter.z)
-			explosion_destroy(epicenter, upcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time, whodunnit)
-	if(HasBelow(offcenter.z) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
-		var/turf/downcenter = GetBelow(offcenter)
-		if(downcenter.z < epicenter.z)
-			explosion_destroy(epicenter, downcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time, whodunnit)
+	var/diff = input("What size to increase or decrease by while further away?","Spiral Block") as num
+	var/mult = input("What size to multiply by while further away?","Spiral Block") as num
+	multi_z_spiral_block(epicenter,max_range,1,diff,mult)

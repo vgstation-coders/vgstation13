@@ -509,29 +509,13 @@
 	..()
 
 /obj/machinery/cloning/clonepod/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/atom/movable/A as mob|obj in src)
-				A.forceMove(loc)
-				ex_act(severity)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				for(var/atom/movable/A as mob|obj in src)
-					A.forceMove(loc)
-					ex_act(severity)
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(25))
-				for(var/atom/movable/A as mob|obj in src)
-					A.forceMove(loc)
-					ex_act(severity)
-				qdel(src)
-				return
-		else
-	return
+	. = list()
+	if (prob(100 / (2**(severity-1)))) //1 = 100, 2 = 50, 3 = 25
+		for(var/atom/movable/A as mob|obj in src)
+			A.forceMove(loc)
+			A.ex_act(severity)
+			. += A
+		qdel(src)
 
 /obj/machinery/cloning/clonepod/MouseDropTo(obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
 	var/busy = FALSE

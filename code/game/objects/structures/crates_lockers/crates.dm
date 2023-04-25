@@ -696,6 +696,7 @@
 
 
 /obj/structure/closet/crate/ex_act(severity)
+	. = list()
 	switch(severity)
 		if(1)
 			qdel(src)
@@ -703,20 +704,20 @@
 			broken = TRUE
 			if(has_electronics)
 				if (prob(50))
-					dump_electronics()
+					. += dump_electronics()
 				else
 					qdel(electronics)
 			for(var/atom/movable/thing in contents)
 				if(prob(50))
 					qdel(thing)
-			dump_contents()
+			. += dump_contents()
 			qdel(src)
 		if(3)
 			if(prob(50))
 				broken = TRUE
 				if(has_electronics)
-					dump_electronics()
-				dump_contents()
+					. += dump_electronics()
+				. += dump_contents()
 				qdel(src)
 
 /obj/structure/closet/crate/secure/weapon/experimental
