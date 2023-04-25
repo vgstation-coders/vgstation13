@@ -123,7 +123,7 @@ var/list/one_way_windows
 
 //Allows us to quickly check if we should break the window, can handle not having an user
 /obj/structure/window/proc/healthcheck(var/mob/M, var/sound = 1)
-	. = list()
+
 
 	if(health <= 0)
 		if(M) //Did someone pass a mob ? If so, perform a pressure check
@@ -136,7 +136,7 @@ var/list/one_way_windows
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				if(M.ckey) //Only send an admin message if it's an actual players, admins don't need to know what the carps are doing
 					message_admins("\The [src] with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
-		. += shatter()
+		shatter()
 	else
 		if(sound)
 			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
@@ -172,11 +172,16 @@ var/list/one_way_windows
 	switch(severity)
 		if(1.0)
 			adjustHealthLoss(rand(100, 150))
+			healthcheck()
+			return
 		if(2.0)
 			adjustHealthLoss(rand(20, 50))
+			healthcheck()
+			return
 		if(3.0)
 			adjustHealthLoss(rand(5, 15))
-	. += healthcheck()
+			healthcheck()
+			return
 
 /obj/structure/window/blob_act()
 	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
@@ -601,18 +606,16 @@ var/list/one_way_windows
 	..()
 
 /obj/structure/window/proc/shatter()
-	. = list()
 	if(loc)
 		playsound(src, "shatter", 70, 1)
-	. += spawnBrokenPieces()
+	spawnBrokenPieces()
 	qdel(src)
 
 /obj/structure/window/proc/spawnBrokenPieces()
-	. = list()
 	if(shardtype)
-		. += new shardtype(loc, sheetamount)
+		new shardtype(loc, sheetamount)
 	if(reinforced)
-		. += new reinforcetype(loc, sheetamount)
+		new reinforcetype(loc, sheetamount)
 
 /obj/structure/window/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 

@@ -19,9 +19,7 @@
 
 
 /obj/structure/sign/ex_act(severity)
-	qdel(src)
-	// old code preserved below for fun. just why.
-	/*switch(severity)
+	switch(severity)
 		if(1.0)
 			qdel(src)
 			return
@@ -32,7 +30,7 @@
 			qdel(src)
 			return
 		else
-	return*/
+	return
 
 /obj/structure/sign/blob_act()
 	qdel(src)

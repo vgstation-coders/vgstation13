@@ -12,14 +12,13 @@
 	return
 
 /turf/simulated/wall/cult/dismantle_wall(devastated = 0, explode = 0)
-	. = list()
 	if(!devastated)
-		. += new /obj/effect/decal/cleanable/blood(src)
-		. += new girder_type(src)
+		new /obj/effect/decal/cleanable/blood(src)
+		new girder_type(src)
 	else
 		if(prob(10))
-			. += new /obj/effect/decal/cleanable/blood(src)
-		//	. += new /obj/effect/decal/remains/human(src) //Commented out until remains are cleanable
+			new /obj/effect/decal/cleanable/blood(src)
+		//	new /obj/effect/decal/remains/human(src) //Commented out until remains are cleanable
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))

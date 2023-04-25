@@ -51,9 +51,7 @@
 	var/obj/shadow/shadow
 
 	var/ignore_blocking = 0
-	var/dash_dir = null
-	var/afterimage = FALSE
-	var/strongthrow = FALSE
+
 	var/last_explosion_push = 0
 	var/mob/virtualhearer/virtualhearer
 
@@ -578,68 +576,142 @@
 	if(!fly_speed)
 		fly_speed = speed
 
-	if(strongthrow)
-		src.throwing = 2// will crash through windows, grilles, tables, people, you name it
+	var/mob/user
+	if(usr)
+		user = usr
+		if(M_HULK in usr.mutations)
+			src.throwing = 2 // really strong throw!
 
-	dash_dir = dir
+	if(istype(src,/obj/mecha))
+		var/obj/mecha/M = src
+		M.dash_dir = dir
+		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
+
+	var/afterimage = 0
+	if(istype(src,/mob/living/simple_animal/construct/armoured/perfect))
+		var/mob/living/simple_animal/construct/armoured/perfect/M = src
+		M.dash_dir = dir
+		src.throwing = 2
+		afterimage = 1
+
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
 
-	var/dx = target.x > src.x ? EAST : WEST
-	var/dy = target.y > src.y ? NORTH : SOUTH
+	var/dx
+	if (target.x > src.x)
+		dx = EAST
+	else
+		dx = WEST
 
+	var/dy
+	if (target.y > src.y)
+		dy = NORTH
+	else
+		dy = SOUTH
 	var/dist_travelled = 0
 	var/dist_since_sleep = 0
+	var/area/a = get_area(src.loc)
 
 	. = 1
 
-	var/tS = 0
-	var/d_used = 0
-	var/dist_used = 0
-	var/distcheck = dist_x > dist_y
-	var/error = distcheck ? dist_x/2 - dist_y : dist_y/2 - dist_x
-	var/condition = distcheck ? ((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) : ((src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH))
+	if(dist_x > dist_y)
+		var/error = dist_x/2 - dist_y
 
-	while(src && target && ((condition && dist_travelled < range) || (get_gravity() == 0) || istype(src.loc, /turf/space)) && src.throwing && isturf(src.loc))
-		// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
-		if(tS && dist_travelled)
-			timestopped = loc.timestopped
-			tS = 0
-		if(timestopped && !dist_travelled)
-			timestopped = 0
-			tS = 1
-		while((loc.timestopped || timestopped) && dist_travelled)
-			sleep(3)
-		if(kinetic_acceleration>kinetic_sum)
-			fly_speed += kinetic_acceleration-kinetic_sum
-			kinetic_sum = kinetic_acceleration
-		if(afterimage)
-			new afterimage(loc,src)
-		if(error < 0)
-			d_used = distcheck ? dy : dx
-			dist_used = distcheck ? dist_x : dist_y
-		else
-			d_used = distcheck ? dx : dy
-			dist_used = distcheck ? -dist_y : -dist_x
-		var/atom/step = get_step(src, d_used)
-		if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
-			. = 0
-			break
 
-		src.Move(step, d_used, glide_size_override = DELAY2GLIDESIZE(fly_speed))
-		. = hit_check(speed, usr)
-		error += dist_used
-		dist_travelled++
-		dist_since_sleep++
-		if(dist_since_sleep >= fly_speed)
-			dist_since_sleep = 0
-			sleep(1)
+		var/tS = 0
+		while(src && target &&((((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) && dist_travelled < range) || (a && a.gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
+			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
+			if(tS && dist_travelled)
+				timestopped = loc.timestopped
+				tS = 0
+			if(timestopped && !dist_travelled)
+				timestopped = 0
+				tS = 1
+			while((loc.timestopped || timestopped) && dist_travelled)
+				sleep(3)
+			if(kinetic_acceleration>kinetic_sum)
+				fly_speed += kinetic_acceleration-kinetic_sum
+				kinetic_sum = kinetic_acceleration
+			if(afterimage)
+				new /obj/effect/afterimage/red(loc,src)
+			if(error < 0)
+				var/atom/step = get_step(src, dy)
+				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
+					break
+
+				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
+				. = hit_check(speed, user)
+				error += dist_x
+				dist_travelled++
+				dist_since_sleep++
+				if(dist_since_sleep >= fly_speed)
+					dist_since_sleep = 0
+					sleep(1)
+			else
+				var/atom/step = get_step(src, dx)
+				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
+					break
+
+				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
+				. = hit_check(speed, user)
+				error -= dist_y
+				dist_travelled++
+				dist_since_sleep++
+				if(dist_since_sleep >= fly_speed)
+					dist_since_sleep = 0
+					sleep(1)
+			a = get_area(src.loc)
+	else
+		var/error = dist_y/2 - dist_x
+		while(src && target &&((((src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH)) && dist_travelled < range) || (a && a.gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
+			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
+			if(timestopped)
+				sleep(1)
+				continue
+			if(kinetic_acceleration>0)
+				fly_speed += kinetic_acceleration
+				kinetic_acceleration = 0
+			if(afterimage)
+				new /obj/effect/afterimage/red(loc,src)
+			if(error < 0)
+				var/atom/step = get_step(src, dx)
+				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
+					break
+
+				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
+				. = hit_check(speed, user)
+				error += dist_y
+				dist_travelled++
+				dist_since_sleep++
+				if(dist_since_sleep >= fly_speed)
+					dist_since_sleep = 0
+					sleep(1)
+			else
+				var/atom/step = get_step(src, dy)
+				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
+					break
+
+				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
+				. = hit_check(speed, user)
+				error -= dist_x
+				dist_travelled++
+				dist_since_sleep++
+				if(dist_since_sleep >= fly_speed)
+					dist_since_sleep = 0
+					sleep(1)
+
+			a = get_area(src.loc)
 
 	//done throwing, either because it hit something or it finished moving
 	src.throwing = 0
 	kinetic_acceleration = 0
 	if(isobj(src))
-		throw_impact(get_turf(src), speed, usr)
+		src.throw_impact(get_turf(src), speed, user)
+
 //Overlays
 
 /datum/locking_category/overlay
