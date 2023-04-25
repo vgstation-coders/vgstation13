@@ -185,11 +185,14 @@
 	if(mess || working)
 		return FALSE
 	var/datum/mind/clonemind = locate(R.mind)
-	if(!istype(clonemind,/datum/mind))	//not a mind
+	if(!clonemind) //no mind
 		return FALSE
-	if( clonemind.current && clonemind.current.stat != DEAD )	//mind is associated with a non-dead body
+	if(!istype(clonemind,/datum/mind)) //not a mind
 		return FALSE
-	if(clonemind.active)	//somebody is using that mind
+	if(clonemind.current)
+		if(clonemind.current.stat != DEAD)	//mind is associated with a non-dead body
+			return FALSE
+	if(clonemind.active) //somebody is using that mind
 		if( ckey(clonemind.key)!=R.ckey )
 			return FALSE
 	else
@@ -200,8 +203,13 @@
 						break
 					else
 						return FALSE
-				else
-					if((G.mind && (G.mind.current.stat != DEAD) ||  G.mind != clonemind))
+				else if(G)
+					if(!G.mind)
+						return FALSE
+					if(G.mind.current)
+						if(G.mind.current.stat != DEAD)
+							return FALSE
+					if(G.mind != clonemind)
 						return FALSE
 
 	heal_level = upgraded ? 100 : rand(10,40) //Randomizes what health the clone is when ejected
