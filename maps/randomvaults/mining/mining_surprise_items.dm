@@ -44,6 +44,14 @@
 				"Welcome to Armok's Bar and Grill. Have a nice stay!",
 				"Welcome to Armok's Bar and Grill. Don't drag the roid dirt in on them boots, leave em at the door.")
 	AT.exit_args = list("Seeya, space dorf","Happy trails.","Anytime, feller.")
+	var/datum/component/ai/hearing/order/bardrinks/BD = add_component(/datum/component/ai/hearing/order/bardrinks)
+	BD.baseprice = rand(1,5) * 5
+
+/mob/living/simple_animal/robot/NPC/dusky/examine(mob/user)
+	..()
+	var/datum/component/ai/hearing/order/bardrinks/BD = get_component(/datum/component/ai/hearing/order/bardrinks)
+	if(BD)
+		to_chat(user,"Current items in order: [counted_english_list(BD.items2deliver)]<br>Total credits due: [BD.currentprice] credit\s")
 
 /datum/component/ai/hearing/say_response/dusky_hi
 	required_messages = list("hello","hi","greetings","howdy")
