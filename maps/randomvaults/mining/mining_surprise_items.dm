@@ -44,14 +44,16 @@
 				"Welcome to Armok's Bar and Grill. Have a nice stay!",
 				"Welcome to Armok's Bar and Grill. Don't drag the roid dirt in on them boots, leave em at the door.")
 	AT.exit_args = list("Seeya, space dorf","Happy trails.","Anytime, feller.")
-	var/datum/component/ai/hearing/order/bardrinks/BD = add_component(/datum/component/ai/hearing/order/bardrinks)
+	var/datum/component/ai/hearing/order/bardrinks/select_reagents/BD = add_component(/datum/component/ai/hearing/order/bardrinks/select_reagents)
 	BD.baseprice = rand(1,5) * 5
 	BD.freemessages =list("For you, on the house, fella!", "I s'pose I could fix up a free servin' for ya, just cus I like ya and all.", "Y'know, today I'm feelin extra generous, so ya get this one free!")
 	BD.toomuchmessages = list("Easy pal, I can only hold so many glasses in my ol' compartments. Try gettin' your stuff first and then orderin' again.","Look, I ain't made to carry the world on my shoulders here, get your stuff before orderin' again.","Sorry, inventory's full, come get yer stuff first.")
+	BD.acceptable_recipe_reagents = list(PLASMA,RADIUM)
+	BD.build_whitelist()
 
 /mob/living/simple_animal/robot/NPC/dusky/examine(mob/user)
 	..()
-	var/datum/component/ai/hearing/order/bardrinks/BD = get_component(/datum/component/ai/hearing/order/bardrinks)
+	var/datum/component/ai/hearing/order/bardrinks/select_reagents/BD = get_component(/datum/component/ai/hearing/order/bardrinks/select_reagents)
 	if(BD)
 		to_chat(user,"Current items in order: [counted_english_list(BD.items2deliver)]<br>Total credits due: [BD.currentprice] credit\s")
 

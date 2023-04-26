@@ -199,22 +199,25 @@
 		acceptable_recipe_reagents += C.dispensable_reagents // have to make the object because initial() can't grab lists, sadly
 		qdel(C)
 	acceptable_recipe_reagents = uniquelist(acceptable_recipe_reagents)
+	new_whitelist += acceptable_recipe_reagents
 	for(var/item in whitelist_items)
 		if(ispath(item,/datum/reagent))
-			var/datum/reagent/R = item
-			for(var/id in chemical_reactions_list)
-				var/datum/chemical_reaction/D = chemical_reactions_list[id]
-				if(D.result == initial(R.id))
-					var/include = TRUE
-					if(!D.required_reagents?.len)
-						include = FALSE
-					else
-						for(var/reagent in D.required_reagents)
-							if(!(reagent in acceptable_recipe_reagents))
-								include = FALSE
-								break
-					if(include)
-						var/datum/reagent/subR = chemical_reagents_list[D.result]
-						new_whitelist += subR.type
+			for(var/subitem in subtypesof(item))
+				var/datum/reagent/R = subitem
+				for(var/id in chemical_reactions_list)
+					var/datum/chemical_reaction/D = chemical_reactions_list[id]
+					if(D.result == initial(R.id))
+						var/include = TRUE
+						if(!D.required_reagents?.len)
+							include = FALSE
+						else
+							for(var/reagent in D.required_reagents)
+								if(!(reagent in acceptable_recipe_reagents))
+									include = FALSE
+									break
+						if(include)
+							var/datum/reagent/subR = chemical_reagents_list[D.result]
+							new_whitelist += subR.type
+	new_whitelist = uniquelist(new_whitelist)
 	whitelist_items = prune_list_to_type(whitelist_items,/datum/reagent,TRUE)
 	whitelist_items += new_whitelist
