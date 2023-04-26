@@ -87,14 +87,13 @@ var/list/stamptype2region = list(
 		else if(!D.stamped.len)
 			to_chat(user, "<span class='notice'>You require at least one stamp.</span>")
 			return
-		else
+		else if(user.drop_item(D,src))
 			for(var/stamptype in D.stamped)
 				if(isnum(stamptype2region[stamptype]))
 					access -= get_region_accesses(stamptype2region[stamptype])
 					if(stamptype2region[stamptype] == 6)
 						access -= get_region_accesses(7)
 			icon_state = "centcom_old"
-			D.forceMove(src)
 			dchip = D
 			to_chat(user, "<span class='notice'>You apply \the [D] to \the [src].</span>")
 	if(dchip && (istype(I,/obj/item/weapon/stamp/captain) || istype(I,/obj/item/weapon/stamp/hop) || (I.type in dchip.stamped)))
