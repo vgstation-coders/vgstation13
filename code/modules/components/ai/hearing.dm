@@ -58,8 +58,8 @@
 	var/list/blacklist_items = list()
 	var/list/whitelist_items = list()
 	var/notfoundmessage
-	var/freemessage = "Coming right up!"
-	var/toomuchmessage = "Too much stuff in your order, come collect it before ordering again."
+	var/list/freemessages = list("Coming right up!")
+	var/list/toomuchmessages = list("Too much stuff in your order, come collect it before ordering again.")
 	var/baseprice = 0
 	var/currentprice
 	var/inbag = FALSE
@@ -84,7 +84,7 @@
 		var/mob/living/M=parent
 		if(!M.isDead())
 			if(items2deliver.len > 5)
-				M.say(toomuchmessage)
+				M.say(pick(toomuchmessages))
 			if(!whitelist_items.len)
 				M.say("ERROR-[Gibberish(rand(10000,99999),50)]: No items found. Please contact manufacturer for specifications.")
 				CRASH("Someone forgot to put whitelist items on this ordering AI component.")
@@ -119,7 +119,7 @@
 			if(!found_items.len)
 				M.say(notfoundmessage)
 			else if(!baseprice || !currentprice)
-				M.say(freemessage)
+				M.say(pick(freemessages))
 				spawn_items()
 			else
 				M.say("That will be [currentprice] credit\s.")
