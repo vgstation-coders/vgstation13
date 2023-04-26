@@ -67,9 +67,8 @@ var/list/stamptype2region = list(
 			to_chat(user, "<span class='notice'>Failed to apply, names do not match.</span>")
 		else if(dchip)
 			to_chat(user, "<span class='notice'>This card already has a microchip applied</span>")
-		else
+		else if(user.drop_item(DE,src))
 			icon_state = "centcom_old"
-			DE.forceMove(src)
 			dchip = DE
 	else
 		return ..()
