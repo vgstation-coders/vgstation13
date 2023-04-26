@@ -46,6 +46,8 @@
 	AT.exit_args = list("Seeya, space dorf","Happy trails.","Anytime, feller.")
 	var/datum/component/ai/hearing/order/bardrinks/BD = add_component(/datum/component/ai/hearing/order/bardrinks)
 	BD.baseprice = rand(1,5) * 5
+	BD.freemessage = "For you, on the house, fella!"
+	BD.toomuchmessage = "Easy pal, I can only hold so many glasses in my ol' compartments. Try gettin' your stuff first and then orderin' again."
 
 /mob/living/simple_animal/robot/NPC/dusky/examine(mob/user)
 	..()
