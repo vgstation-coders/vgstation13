@@ -145,22 +145,22 @@
 						M.say(pick("This ore form stuff is no good, gotta refine it with some heat before I can go brewin' with it.",
 								"The ore won't cut it son. It's gotta be that real refined stuff.",
 								"Ore stuff ain't any use to me, send it to a furnace and get those rock impurities out so it's not mixed in yer drinks."))
-								return
+						return
 					else if(istype(O,/obj/item/weapon/coin/plasma))
 						M.say(pick("A coin, really son? This ain't useful for brewin' and I only pay in cash.",
 								"I don't know if you got them wires crossed with the idea of payin' and givin' plasma, but you can't do both at once, and not with no coins.",
 								"Coins are a lil' too hard to crack for me with brewin, and not much use as payment either, unlike cash."))
-								return
+						return
 					else if(istype(O,/obj/item/stack/sheet/plasteel))
 						M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there metal in it to be any use to me.",
 								"Nah son, I'm lookin fer PLASMA, not PLASTEEL, maybe you need to clean out these ears boy.",
 								"Nah, this is plasteel and useless to me, and I like my walls more wooden 'round these parts anyways."))
-								return
+						return
 					else if(istype(O,/obj/item/stack/sheet/glass/plasmaglass) || istype(O,/obj/item/stack/sheet/glass/plasmarglass))
 						M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there glass in it to be any use to me.",
 								"This plasma could use a lil' less sand in it to me, even if it's all hardened and crystallized.",
 								"Plasma ain't much good to me in glass form, unless it's window fixin' I need."))
-								return
+						return
 				var/datum/gas_mixture/current_air = checkloc.return_air()
 				if(current_air[GAS_PLASMA])
 					M.say(pick("Dangit when I said get some plasma, I meant in solid form! Now how's this place gonna get customers that ain't purple boney men!",
