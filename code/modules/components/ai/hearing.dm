@@ -57,7 +57,7 @@
 	pass_speech = WITH_FOUND_REMOVED
 	var/list/blacklist_items = list()
 	var/list/whitelist_items = list()
-	var/notfoundmessage
+	var/list/notfoundmessages = list()
 	var/list/freemessages = list("Coming right up!")
 	var/list/toomuchmessages = list("Too much stuff in your order, come collect it before ordering again.")
 	var/baseprice = 0
@@ -68,8 +68,9 @@
 /datum/component/ai/hearing/order/initialize()
 	..()
 	parent.register_event(/event/comp_ai_cmd_order, src, .proc/on_order)
-	if(!notfoundmessage)
-		notfoundmessage = "ERROR-[Gibberish(rand(1000,9999),50)]: Item not found. Please try again."
+	if(!notfoundmessages.len)
+		notfoundmessages = list("ERROR-[Gibberish(rand(1000,9999),50)]: Item not found. Please try again.")
+	build_whitelist()
 	return TRUE
 
 /datum/component/ai/hearing/order/Destroy()
@@ -85,6 +86,7 @@
 		if(!M.isDead())
 			if(items2deliver.len > 5)
 				M.say(pick(toomuchmessages))
+				return
 			if(!whitelist_items.len)
 				M.say("ERROR-[Gibberish(rand(10000,99999),50)]: No items found. Please contact manufacturer for specifications.")
 				CRASH("Someone forgot to put whitelist items on this ordering AI component.")
@@ -117,7 +119,7 @@
 			items2deliver += found_items
 			currentprice += rand(baseprice-(baseprice/5),baseprice+(baseprice/5)) * found_items.len
 			if(!found_items.len)
-				M.say(notfoundmessage)
+				M.say(pick(notfoundmessages))
 			else if(!baseprice || !currentprice)
 				M.say(pick(freemessages))
 				spawn_items()
@@ -205,19 +207,20 @@
 			for(var/subitem in subtypesof(item))
 				var/datum/reagent/R = subitem
 				for(var/id in chemical_reactions_list)
-					var/datum/chemical_reaction/D = chemical_reactions_list[id]
-					if(D.result == initial(R.id))
-						var/include = TRUE
-						if(!D.required_reagents?.len)
-							include = FALSE
-						else
-							for(var/reagent in D.required_reagents)
-								if(!(reagent in acceptable_recipe_reagents))
-									include = FALSE
-									break
-						if(include)
-							var/datum/reagent/subR = chemical_reagents_list[D.result]
-							new_whitelist += subR.type
+					for(var/id2 in chemical_reactions_list[id])
+						var/datum/chemical_reaction/D = id2
+						if(D.result == initial(R.id))
+							var/include = TRUE
+							if(!D.required_reagents?.len)
+								include = FALSE
+							else
+								for(var/reagent in D.required_reagents)
+									if(!(reagent in acceptable_recipe_reagents))
+										include = FALSE
+										break
+							if(include)
+								var/datum/reagent/subR = chemical_reagents_list[D.result]
+								new_whitelist += subR.type
 	new_whitelist = uniquelist(new_whitelist)
 	whitelist_items = prune_list_to_type(whitelist_items,/datum/reagent,TRUE)
 	whitelist_items += new_whitelist
