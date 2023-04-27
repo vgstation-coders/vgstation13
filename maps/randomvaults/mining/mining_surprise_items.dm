@@ -156,7 +156,7 @@
 								"Nah son, I'm lookin fer PLASMA, not PLASTEEL, maybe you need to clean out these ears boy.",
 								"Nah, this is plasteel and useless to me, and I like my walls more wooden 'round these parts anyways."))
 						return
-					else if(istype(O,/obj/item/stack/sheet/glass/plasmaglass) || istype(O,/obj/item/stack/sheet/glass/plasmarglass))
+					else if(istype(O,/obj/item/stack/sheet/glass/plasmaglass) || istype(O,/obj/item/stack/sheet/glass/plasmarglass) || istype(O,/obj/item/weapon/shard/plasma))
 						M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there glass in it to be any use to me.",
 								"This plasma could use a lil' less sand in it to me, even if it's all hardened and crystallized.",
 								"Plasma ain't much good to me in glass form, unless it's window fixin' I need."))
