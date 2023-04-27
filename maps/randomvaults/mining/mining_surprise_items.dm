@@ -127,7 +127,9 @@
 					baseprice /= 2 // happy hour
 			else if(world.time > lastwrongitemtime + 5 SECONDS)
 				lastwrongitemtime = world.time
-				for(var/obj/O in checkloc)
+				for(var/atom/movable/O in checkloc)
+					if(O.anchored)
+						continue
 					if(istype(O,/obj/item/weapon/reagent_containers/glass/beaker/large/plasma))
 						if(!(PLASMA in acceptable_recipe_reagents))
 							qdel(O)
@@ -165,6 +167,17 @@
 						M.say(pick("Sorry, I ain't no arms dealer, even if the stuff fired from 'em is plasma derived.",
 								"This gun might be plasma tech n' all but I'd rather you be keepin' all arms off the premises here.",
 								"I don't know if this some sort of thematic duel challenge you're pointin' at me with here but I ain't takin' it."))
+						return
+					else if(isplasmaman(O))
+						var/mob/living/carbon/human/H = O
+						if(H.isDead())
+							M.say(pick("Nah I don't take plasma off no bodies, even if they're cadaver types.",
+									"I ain't seein' no organ donor card on this, 'sides even if there was, I ain't the kinda guy to just take plasma off 'em'.",
+									"I think I'm just a bit too respectful of the dead to go pickin' plasma from their flesh."))
+						else
+							M.say(pick("I don't think I wanna harvest plasma right off yer friend here, I ain't that gruesome.",
+									"Who do you think I am? I ain't no crazed organ harvestin' blood sucker, I got standards here.",
+									"I ain't pickin plasma outta the scabs of your buddy here, go lookin' in the mines for some."))
 						return
 				var/datum/gas_mixture/current_air = checkloc.return_air()
 				if(current_air[GAS_PLASMA])
