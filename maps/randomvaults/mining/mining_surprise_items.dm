@@ -80,6 +80,7 @@
 							"Look, I ain't made to carry the world on my shoulders here, get your stuff before orderin' again.",
 							"Sorry, inventory's full, come get yer stuff first.")
 	acceptable_recipe_reagents = list(RADIUM)
+	var/lastwrongitemtime
 
 /datum/component/ai/hearing/order/bardrinks/select_reagents/dusky/process()
 	..()
@@ -115,19 +116,21 @@
 					whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks)
 					build_whitelist()
 					baseprice /= 2 // happy hour
-			else if(locate(/obj/item/stack/ore/plasma) in checkloc)
-				M.say(pick("This ore form stuff is no good, gotta refine it with some heat before I can go brewin' with it.",
-						"The ore won't cut it son. It's gotta be that real refined stuff.",
-						"Ore stuff ain't any use to me, send it to a furnace and get those rock impurities out so it's not mixed in yer drinks."))
-			else if(locate(/obj/item/weapon/coin/plasma) in checkloc)
-				M.say(pick("A coin, really son? This ain't useful for brewin' and I only pay in cash.",
-						"I don't know if you got them wires crossed with the idea of payin' and givin' plasma, but you can't do both at once, and not with no coins.",
-						"Coins are a lil' too hard to crack for me with brewin, and not much use as payment either, unlike cash."))
-			else if(locate(/obj/item/stack/sheet/plasteel) in checkloc)
-				M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there metal in it to be any use to me.",
-						"Nah son, I'm lookin fer PLASMA, not PLASTEEL, maybe you need to clean out these ears boy.",
-						"Nah, this is plasteel and useless to me, and I like my walls more wooden 'round these parts anyways."))
-			else if((locate(/obj/item/stack/sheet/glass/plasmaglass) in checkloc) || (locate(/obj/item/stack/sheet/glass/plasmarglass) in checkloc))
-				M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there glass in it to be any use to me.",
-						"This plasma could use a lil' less sand in it to me, even if it's all hardened and crystallized.",
-						"Plasma ain't much good to me in glass form, unless it's window fixin' I need."))
+			else if(world.time > lastwrongitemtime + 5 SECONDS)
+				lastwrongitemtime = world.time
+				if(locate(/obj/item/stack/ore/plasma) in checkloc)
+					M.say(pick("This ore form stuff is no good, gotta refine it with some heat before I can go brewin' with it.",
+							"The ore won't cut it son. It's gotta be that real refined stuff.",
+							"Ore stuff ain't any use to me, send it to a furnace and get those rock impurities out so it's not mixed in yer drinks."))
+				else if(locate(/obj/item/weapon/coin/plasma) in checkloc)
+					M.say(pick("A coin, really son? This ain't useful for brewin' and I only pay in cash.",
+							"I don't know if you got them wires crossed with the idea of payin' and givin' plasma, but you can't do both at once, and not with no coins.",
+							"Coins are a lil' too hard to crack for me with brewin, and not much use as payment either, unlike cash."))
+				else if(locate(/obj/item/stack/sheet/plasteel) in checkloc)
+					M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there metal in it to be any use to me.",
+							"Nah son, I'm lookin fer PLASMA, not PLASTEEL, maybe you need to clean out these ears boy.",
+							"Nah, this is plasteel and useless to me, and I like my walls more wooden 'round these parts anyways."))
+				else if((locate(/obj/item/stack/sheet/glass/plasmaglass) in checkloc) || (locate(/obj/item/stack/sheet/glass/plasmarglass) in checkloc))
+					M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there glass in it to be any use to me.",
+							"This plasma could use a lil' less sand in it to me, even if it's all hardened and crystallized.",
+							"Plasma ain't much good to me in glass form, unless it's window fixin' I need."))
