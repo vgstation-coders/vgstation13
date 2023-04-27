@@ -89,10 +89,16 @@
 		if(!M.isDead())
 			var/amount = 0
 			var/list/sheets = list()
+			var/list/containers = list()
 			var/turf/checkloc = get_step(M,M.dir)
 			for(var/obj/item/stack/sheet/mineral/plasma/P in checkloc)
 				amount += P.amount
 				sheets += P
+				if(amount >= 50)
+					break
+			for(var/obj/item/weapon/reagent_containers/RC in checkloc)
+				amount += RC.reagents.get_reagent_amount(PLASMA)
+				containers += RC
 				if(amount >= 50)
 					break
 			if(amount)
@@ -102,6 +108,8 @@
 				playsound(M.loc, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 70, 1)
 				for(var/obj/O in sheets)
 					qdel(O)
+				for(var/obj/O2 in containers)
+					O2.reagents.del_reagent(PLASMA)
 				for(var/i in 1 to round(clamp(amount/10,1,5)))
 					// i could write something that finds every bar drink that has plasma in its recipe but let's face it,
 					// it's just this stuff and it's less expensive to look for these
