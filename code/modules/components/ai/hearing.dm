@@ -201,7 +201,9 @@
 		acceptable_recipe_reagents += C.dispensable_reagents // have to make the object because initial() can't grab lists, sadly
 		qdel(C)
 	acceptable_recipe_reagents = uniquelist(acceptable_recipe_reagents)
-	new_whitelist += acceptable_recipe_reagents
+	for(var/reag in acceptable_recipe_reagents)
+		var/datum/reagent/R = chemical_reagents_list[reag]
+		new_whitelist += R.type
 	for(var/item in whitelist_items)
 		if(ispath(item,/datum/reagent))
 			for(var/subitem in subtypesof(item))
