@@ -127,43 +127,42 @@
 					baseprice /= 2 // happy hour
 			else if(world.time > lastwrongitemtime + 5 SECONDS)
 				lastwrongitemtime = world.time
-					for(var/obj/O in checkloc)
-						if(istype(O,/obj/item/weapon/reagent_containers/glass/beaker/large/plasma))
-							if(!(PLASMA in acceptable_recipe_reagents))
-								qdel(O)
-								acceptable_recipe_reagents += PLASMA
-								M.say("It ain't no sheet but I guess it helps. Be sure to try the [pick("Toxins Special","Boysenberry Blizzard","Plasma Pekoe")]!")
-								// again, no initial with lists here...
-								whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks)
-								build_whitelist() // no happy hour for this
-							else
-								M.say(pick("I appreciate the gesture but I already got myself one of these things. Now with sheets I can get you some drinks for nothin'!",
-										"I already got myself one of these, but now I need some ol' plasma to actually get you some drinks this time.",
-										"I ain't particular to stockin' up on these when I got a workin' one just fine, so bring some actual plasma for free drinks."))
-							return
-						if(istype(O,/obj/item/stack/ore/plasma))
-							M.say(pick("This ore form stuff is no good, gotta refine it with some heat before I can go brewin' with it.",
-									"The ore won't cut it son. It's gotta be that real refined stuff.",
-									"Ore stuff ain't any use to me, send it to a furnace and get those rock impurities out so it's not mixed in yer drinks."))
-									return
-						else if(istype(O,/obj/item/weapon/coin/plasma))
-							M.say(pick("A coin, really son? This ain't useful for brewin' and I only pay in cash.",
-									"I don't know if you got them wires crossed with the idea of payin' and givin' plasma, but you can't do both at once, and not with no coins.",
-									"Coins are a lil' too hard to crack for me with brewin, and not much use as payment either, unlike cash."))
-									return
-						else if(istype(O,/obj/item/stack/sheet/plasteel))
-							M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there metal in it to be any use to me.",
-									"Nah son, I'm lookin fer PLASMA, not PLASTEEL, maybe you need to clean out these ears boy.",
-									"Nah, this is plasteel and useless to me, and I like my walls more wooden 'round these parts anyways."))
-									return
-						else if(istype(O,/obj/item/stack/sheet/glass/plasmaglass) || istype(O,/obj/item/stack/sheet/glass/plasmarglass))
-							M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there glass in it to be any use to me.",
-									"This plasma could use a lil' less sand in it to me, even if it's all hardened and crystallized.",
-									"Plasma ain't much good to me in glass form, unless it's window fixin' I need."))
-									return
-				else
-					var/datum/gas_mixture/current_air = checkloc.return_air()
-					if(current_air[GAS_PLASMA])
-						M.say(pick("Dangit when I said get some plasma, I meant in solid form! Now how's this place gonna get customers that ain't purple boney men!",
-								"Did you let GASEOUS plasma get all over my bar? I asked ya for solid plasma and you let it get dispersin' everywhere like this!",
-								"Aw heck no, you didn't just let that plasma out as gas right? Solid stuff I can work with, but when you're gettin' it in the air like this it's no good for nobody."))
+				for(var/obj/O in checkloc)
+					if(istype(O,/obj/item/weapon/reagent_containers/glass/beaker/large/plasma))
+						if(!(PLASMA in acceptable_recipe_reagents))
+							qdel(O)
+							acceptable_recipe_reagents += PLASMA
+							M.say("It ain't no sheet but I guess it helps. Be sure to try the [pick("Toxins Special","Boysenberry Blizzard","Plasma Pekoe")]!")
+							// again, no initial with lists here...
+							whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks)
+							build_whitelist() // no happy hour for this
+						else
+							M.say(pick("I appreciate the gesture but I already got myself one of these things. Now with sheets I can get you some drinks for nothin'!",
+									"I already got myself one of these, but now I need some ol' plasma to actually get you some drinks this time.",
+									"I ain't particular to stockin' up on these when I got a workin' one just fine, so bring some actual plasma for free drinks."))
+						return
+					if(istype(O,/obj/item/stack/ore/plasma))
+						M.say(pick("This ore form stuff is no good, gotta refine it with some heat before I can go brewin' with it.",
+								"The ore won't cut it son. It's gotta be that real refined stuff.",
+								"Ore stuff ain't any use to me, send it to a furnace and get those rock impurities out so it's not mixed in yer drinks."))
+								return
+					else if(istype(O,/obj/item/weapon/coin/plasma))
+						M.say(pick("A coin, really son? This ain't useful for brewin' and I only pay in cash.",
+								"I don't know if you got them wires crossed with the idea of payin' and givin' plasma, but you can't do both at once, and not with no coins.",
+								"Coins are a lil' too hard to crack for me with brewin, and not much use as payment either, unlike cash."))
+								return
+					else if(istype(O,/obj/item/stack/sheet/plasteel))
+						M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there metal in it to be any use to me.",
+								"Nah son, I'm lookin fer PLASMA, not PLASTEEL, maybe you need to clean out these ears boy.",
+								"Nah, this is plasteel and useless to me, and I like my walls more wooden 'round these parts anyways."))
+								return
+					else if(istype(O,/obj/item/stack/sheet/glass/plasmaglass) || istype(O,/obj/item/stack/sheet/glass/plasmarglass))
+						M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there glass in it to be any use to me.",
+								"This plasma could use a lil' less sand in it to me, even if it's all hardened and crystallized.",
+								"Plasma ain't much good to me in glass form, unless it's window fixin' I need."))
+								return
+				var/datum/gas_mixture/current_air = checkloc.return_air()
+				if(current_air[GAS_PLASMA])
+					M.say(pick("Dangit when I said get some plasma, I meant in solid form! Now how's this place gonna get customers that ain't purple boney men!",
+							"Did you let GASEOUS plasma get all over my bar? I asked ya for solid plasma and you let it get dispersin' everywhere like this!",
+							"Aw heck no, you didn't just let that plasma out as gas right? Solid stuff I can work with, but when you're gettin' it in the air like this it's no good for nobody."))
