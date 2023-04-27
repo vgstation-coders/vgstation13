@@ -151,7 +151,7 @@
 				for(var/atom/movable/O in checkloc)
 					if(O.anchored)
 						continue
-					if(istype(O,/obj/item/weapon/reagent_containers/glass/beaker/large/plasma))
+					if(is_type_in_list(O,list(/obj/item/weapon/reagent_containers/glass/beaker/large/plasma,/obj/item/weapon/pickaxe/plasmacutter)))
 						if(!(PLASMA in acceptable_recipe_reagents))
 							qdel(O)
 							acceptable_recipe_reagents += PLASMA
