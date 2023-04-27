@@ -114,3 +114,15 @@
 					whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks)
 					build_whitelist()
 					baseprice /= 2 // happy hour
+			else if(locate(var/obj/item/stack/ore/plasma/P2) in get_step(M,M.dir))
+				M.say(pick("This ore form stuff is no good, gotta refine it with some heat before I can go brewin' with it.",
+						"The ore won't cut it son. It's gotta be that real refined stuff.",
+						"Ore stuff ain't any use to me, send it to a furnace and get those rock impurities out so it's not mixed in yer drinks."))
+			else if(locate(var/obj/item/weapon/coin/plasma/P3) in get_step(M,M.dir))
+				M.say(pick("A coin, really son? This ain't useful for brewin' and I only pay in cash.",
+						"I don't know if you got them wires crossed with the idea of payin' and givin' plasma, but you can't do both at once, and not with no coins.",
+						"Coins are a lil' too hard to crack for me with brewin, and not much use as payment either, unlike cash."))
+			else if(locate(var/obj/item/stack/sheet/plasteel/P4) in get_step(M,M.dir))
+				M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there metal in it to be any use to me.",
+						"Nah son, I'm lookin fer PLASMA, not PLASTEEL, maybe you need to clean out these ears boy.",
+						"Nah, this is plasteel and useless to me, and I like my walls more wooden 'round these parts anyways."))
