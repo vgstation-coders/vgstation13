@@ -96,11 +96,12 @@
 				sheets += P
 				if(amount >= 50)
 					break
-			for(var/obj/item/weapon/reagent_containers/RC in checkloc)
-				amount += RC.reagents.get_reagent_amount(PLASMA)
-				containers += RC
-				if(amount >= 50)
-					break
+			if(amount < 50)
+				for(var/obj/item/weapon/reagent_containers/RC in checkloc)
+					amount += RC.reagents.get_reagent_amount(PLASMA)
+					containers += RC
+					if(amount >= 50)
+						break
 			if(amount)
 				M.say(pick("Well how about that, you found some plasma for me to fix up. Let's see if I can make somethin' for ya.",
 						"Aw, my favorite, I love brewin' with plasma. I think I'll make something here with it.",
