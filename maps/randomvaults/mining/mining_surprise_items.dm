@@ -88,7 +88,8 @@
 		if(!M.isDead())
 			var/amount = 0
 			var/list/sheets = list()
-			for(var/obj/item/stack/sheet/mineral/plasma/P in get_step(M,M.dir))
+			var/turf/checkloc = get_step(M,M.dir)
+			for(var/obj/item/stack/sheet/mineral/plasma/P in checkloc)
 				amount += P.amount
 				sheets += P
 				if(amount >= 50)
@@ -114,19 +115,19 @@
 					whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks)
 					build_whitelist()
 					baseprice /= 2 // happy hour
-			else if(locate(/obj/item/stack/ore/plasma) in get_step(M,M.dir))
+			else if(locate(/obj/item/stack/ore/plasma) in checkloc)
 				M.say(pick("This ore form stuff is no good, gotta refine it with some heat before I can go brewin' with it.",
 						"The ore won't cut it son. It's gotta be that real refined stuff.",
 						"Ore stuff ain't any use to me, send it to a furnace and get those rock impurities out so it's not mixed in yer drinks."))
-			else if(locate(/obj/item/weapon/coin/plasma) in get_step(M,M.dir))
+			else if(locate(/obj/item/weapon/coin/plasma) in checkloc)
 				M.say(pick("A coin, really son? This ain't useful for brewin' and I only pay in cash.",
 						"I don't know if you got them wires crossed with the idea of payin' and givin' plasma, but you can't do both at once, and not with no coins.",
 						"Coins are a lil' too hard to crack for me with brewin, and not much use as payment either, unlike cash."))
-			else if(locate(/obj/item/stack/sheet/plasteel) in get_step(M,M.dir))
+			else if(locate(/obj/item/stack/sheet/plasteel) in checkloc)
 				M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there metal in it to be any use to me.",
 						"Nah son, I'm lookin fer PLASMA, not PLASTEEL, maybe you need to clean out these ears boy.",
 						"Nah, this is plasteel and useless to me, and I like my walls more wooden 'round these parts anyways."))
-			else if((locate(/obj/item/stack/sheet/glass/plasmaglass) in get_step(M,M.dir)) || (locate(/obj/item/stack/sheet/glass/plasmarglass) in get_step(M,M.dir)))
+			else if((locate(/obj/item/stack/sheet/glass/plasmaglass) in checkloc) || (locate(/obj/item/stack/sheet/glass/plasmarglass) in checkloc))
 				M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there glass in it to be any use to me.",
 						"This plasma could use a lil' less sand in it to me, even if it's all hardened and crystallized.",
 						"Plasma ain't much good to me in glass form, unless it's window fixin' I need."))
