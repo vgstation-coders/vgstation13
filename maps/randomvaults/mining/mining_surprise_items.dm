@@ -134,3 +134,9 @@
 					M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there glass in it to be any use to me.",
 							"This plasma could use a lil' less sand in it to me, even if it's all hardened and crystallized.",
 							"Plasma ain't much good to me in glass form, unless it's window fixin' I need."))
+				else
+					var/datum/gas_mixture/current_air = T.return_air()
+					if(current_air[GAS_PLASMA])
+						M.say(pick("Dangit when I said get some plasma, I meant in solid form! Now how's this place gonna get customers that ain't purple boney men!",
+								"Did you let GASEOUS plasma get all over my bar? I asked ya for solid plasma and you let it get dispersin' everywhere like this!",
+								"Aw heck no, you didn't just let that plasma out as gas right? Solid stuff I can work with, but when you're gettin' it in the air like this it's no good for nobody."))
