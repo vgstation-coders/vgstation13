@@ -169,27 +169,41 @@
 								"The ore won't cut it son. It's gotta be that real refined stuff.",
 								"Ore stuff ain't any use to me, send it to a furnace and get those rock impurities out so it's not mixed in yer drinks."))
 						return
-					else if(istype(O,/obj/item/weapon/coin/plasma))
+					if(istype(O,/obj/item/stack/tile/mineral/plasma))
+						M.say(pick("Tiles are too compressed to go brewin' plasma with, and I'd much rather use wood for floors.",
+								"If I were to believe these were plasma sheets I'd tell you these are an awful lot too square n' flat to be.",
+								"Tiles are too small, compressed n' thin to be any use for brewin', try gettin a bunch of em back into sheets first before you offer 'em to me."))
+					if(istype(O,/obj/item/weapon/coin/plasma))
 						M.say(pick("A coin, really son? This ain't useful for brewin' and I only pay in cash.",
 								"I don't know if you got them wires crossed with the idea of payin' and givin' plasma, but you can't do both at once, and not with no coins.",
 								"Coins are a lil' too hard to crack for me with brewin, and not much use as payment either, unlike cash."))
 						return
-					else if(istype(O,/obj/item/stack/sheet/plasteel))
+					if(istype(O,/obj/item/stack/sheet/plasteel))
 						M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there metal in it to be any use to me.",
 								"Nah son, I'm lookin fer PLASMA, not PLASTEEL, maybe you need to clean out these ears boy.",
 								"Nah, this is plasteel and useless to me, and I like my walls more wooden 'round these parts anyways."))
 						return
-					else if(istype(O,/obj/item/stack/sheet/glass/plasmaglass) || istype(O,/obj/item/stack/sheet/glass/plasmarglass) || istype(O,/obj/item/weapon/shard/plasma))
+					if(is_type_in_list(O,list(/obj/item/stack/sheet/glass/plasmaglass,
+											/obj/item/stack/sheet/glass/plasmarglass,
+											/obj/item/weapon/shard/plasma,
+											/obj/item/stack/glass_tile/rglass/plasma,
+											/obj/item/weapon/stock_parts/console_screen/reinforced/plasma)))
+						// not bothered to write plasma glass tile lines
 						M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there glass in it to be any use to me.",
 								"This plasma could use a lil' less sand in it to me, even if it's all hardened and crystallized.",
 								"Plasma ain't much good to me in glass form, unless it's window fixin' I need."))
 						return
-					else if(istype(O,/obj/item/weapon/gun/energy/plasma))
+					if(istype(O,/obj/item/weapon/gun/energy/plasma))
 						M.say(pick("Sorry, I ain't no arms dealer, even if the stuff fired from 'em is plasma derived.",
 								"This gun might be plasma tech n' all but I'd rather you be keepin' all arms off the premises here.",
 								"I don't know if this some sort of thematic duel challenge you're pointin' at me with here but I ain't takin' it."))
 						return
-					else if(isplasmaman(O))
+					if(istype(O,/obj/item/weapon/table_parts/glass/plasma))
+						M.say(pick("Thanks for the offer, but this place is fine for decor, and it ain't much use for brewin' like this.",
+								"I don't even know what yer thinkin' offerin' plasma to me like this, it's just gettin' absurd at this point.",
+								"Plasma certainly ain't much use for brewin' in table form more than anythin' else would be."))
+						return
+					if(isplasmaman(O))
 						var/mob/living/carbon/human/H = O
 						if(H.isDead())
 							M.say(pick("Nah I don't take plasma off no bodies, even if they're cadaver types.",
