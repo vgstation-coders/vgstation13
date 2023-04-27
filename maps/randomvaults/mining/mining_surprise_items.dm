@@ -161,6 +161,11 @@
 								"This plasma could use a lil' less sand in it to me, even if it's all hardened and crystallized.",
 								"Plasma ain't much good to me in glass form, unless it's window fixin' I need."))
 						return
+					else if(istype(O,/obj/item/weapon/gun/energy/plasma))
+						M.say(pick("Sorry, I ain't no arms dealer, even if the stuff fired from 'em is plasma derived.",
+								"This gun might be plasma tech n' all but I'd rather you be keepin' all arms off the premises here.",
+								"I don't know if this some sort of thematic duel challenge you're pointin' at me with here but I ain't takin' it."))
+						return
 				var/datum/gas_mixture/current_air = checkloc.return_air()
 				if(current_air[GAS_PLASMA])
 					M.say(pick("Dangit when I said get some plasma, I meant in solid form! Now how's this place gonna get customers that ain't purple boney men!",
