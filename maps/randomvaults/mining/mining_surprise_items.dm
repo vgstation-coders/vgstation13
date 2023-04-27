@@ -88,24 +88,45 @@
 		var/mob/living/M=parent
 		if(!M.isDead())
 			var/amount = 0
+			var/meatfound = FALSE
+			var/plantfound = FALSE
 			var/list/sheets = list()
 			var/list/containers = list()
 			var/turf/checkloc = get_step(M,M.dir)
-			for(var/obj/item/stack/sheet/mineral/plasma/P in checkloc)
-				amount += P.amount
-				sheets += P
-				if(amount >= 50)
-					break
-			if(amount < 50)
-				for(var/obj/item/weapon/reagent_containers/RC in checkloc)
+			for(var/obj/item/I in checkloc)
+				if(istype(I,/obj/item/stack/sheet/mineral/plasma))
+					var/obj/item/stack/sheet/mineral/plasma/P = I
+					amount += P.amount
+					sheets += P
+				else if(istype(I,obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman))
+					var/obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman/PM = I
+					amount += 5
+					sheets += PM
+					meatfound = TRUE
+				else if(istype(I,obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage))
+					var/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage/PC = I
+					amount += PC.potency/2
+					sheets += PC
+					plantfound = TRUE
+				else if(istype(I,obj/item/weapon/reagent_containers))
+					var/obj/item/weapon/reagent_containers/RC = I
 					amount += RC.reagents.get_reagent_amount(PLASMA)
 					containers += RC
-					if(amount >= 50)
-						break
+				if(amount >= 50)
+					break
 			if(amount)
-				M.say(pick("Well how about that, you found some plasma for me to fix up. Let's see if I can make somethin' for ya.",
-						"Aw, my favorite, I love brewin' with plasma. I think I'll make something here with it.",
-						"You found me some plasma? Well thank ya, here's a little something..."))
+				if(meatfound)
+					M.say(pick("I see you brought yerself some meaty plasma this time. Not the biggest fan but it'll have to do. Shame it means I can't label these drinks vegan anymore...",
+							"Plasma meat's no specialty of mine but it does make a drink fine eitherhow. Let's see what I can brew up...",
+							"Meat ain't the cleanest source of plasma in these parts of the roid but I guess plasma is plasma. Let's get some drinks out of it..."))
+				else if(plantfound)
+					M.say(pick("Dang, I didn't know you could turn plants into plasma makin' factories! I guess those stations yonder do have ways of makin drink products out of anythin'...",
+							"A cabbage with flakes of plasma on it? Now ain't that the strangest thing I done seen. Hope it's juicy for a good few rounds...",
+							"A plant with the texture and feel of a smooth sheet of plasma, I ain't seen nothin' like it! And it looks ripe n' juicy for some good recipes too..."))
+				else
+					M.say(pick("Well how about that, you found some plasma for me to fix up. Let's see if I can make somethin' for ya...",
+							"Aw, my favorite, I love brewin' with plasma. I think I'll make something here with it...",
+							"You found me some plasma? Well thank ya, here's a little something..."))
 				playsound(M.loc, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 70, 1)
 				for(var/obj/O in sheets)
 					qdel(O)
