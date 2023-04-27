@@ -79,4 +79,38 @@
 	toomuchmessages = list("Easy pal, I can only hold so many glasses in my ol' compartments. Try gettin' your stuff first and then orderin' again.",
 							"Look, I ain't made to carry the world on my shoulders here, get your stuff before orderin' again.",
 							"Sorry, inventory's full, come get yer stuff first.")
-	acceptable_recipe_reagents = list(PLASMA,RADIUM)
+	acceptable_recipe_reagents = list(RADIUM)
+
+/datum/component/ai/hearing/order/bardrinks/select_reagents/dusky/process()
+	..()
+	if(!items2deliver.len && isliving(parent))
+		var/mob/living/M=parent
+		if(!M.isDead())
+			var/amount = 0
+			var/list/sheets = list()
+			for(var/obj/item/stack/sheet/mineral/plasma/P in get_step(M,M.dir))
+				amount += P.amount
+				sheets += P
+				if(amount >= 50)
+					break
+			if(amount)
+				M.say(pick("Well how about that, you found some plasma for me to fix up. Let's see if I can make somethin' for ya.",
+						"Aw, my favorite, I love brewin' with plasma. I think I'll make something here with it.",
+						"You found me some plasma? Well thank ya, here's a little something..."))
+				playsound(M.loc, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 70, 1)
+				for(var/obj/O in sheets)
+					qdel(O)
+				for(var/i in 1 to round(clamp(amount/10,1,5)))
+					// i could write something that finds every bar drink that has plasma in its recipe but let's face it,
+					// it's just this stuff and it's less expensive to look for these
+					items2deliver += pick(/datum/reagent/ethanol/drink/toxins_special,
+										/datum/reagent/ethanol/drink/boysenberry_blizzard,
+										/datum/reagent/drink/tea/plasmatea)
+				spawn_items()
+				if(!(PLASMA in acceptable_recipe_reagents))
+					acceptable_recipe_reagents += PLASMA
+					M.say("I think I could get used to brewin' this now today. Be sure to try the [pick("toxins special","boysenberry blizzard","plasma pekoe")]!")
+					// again, no initial with lists here...
+					whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks)
+					build_whitelist()
+					baseprice /= 2 // happy hour

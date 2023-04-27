@@ -70,11 +70,14 @@
 	parent.register_event(/event/comp_ai_cmd_order, src, .proc/on_order)
 	if(!notfoundmessages.len)
 		notfoundmessages = list("ERROR-[Gibberish(rand(1000,9999),50)]: Item not found. Please try again.")
+	if(!(src in active_components))
+		active_components += src
 	build_whitelist()
 	return TRUE
 
 /datum/component/ai/hearing/order/Destroy()
 	parent.unregister_event(/event/comp_ai_cmd_order, src, .proc/on_order)
+	active_components -= src
 	..()
 
 /datum/component/ai/hearing/order/proc/build_whitelist()
@@ -125,8 +128,6 @@
 				spawn_items()
 			else
 				M.say("That will be [currentprice] credit\s.")
-				if(!(src in active_components))
-					active_components += src
 
 /datum/component/ai/hearing/order/process()
 	if(currentprice && isliving(parent))
@@ -149,7 +150,6 @@
 						dispense_cash(abs(currentprice),get_step(M,M.dir))
 						currentprice = 0
 					spawn_items()
-					active_components -= src
 				else
 					M.say("[currentprice] credit\s left to pay.")
 
@@ -188,11 +188,12 @@
 	whitelist_items += new_whitelist
 
 /datum/component/ai/hearing/order/bardrinks
-	whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks/soda_cans)
+	whitelist_items = list(/datum/reagent/ethanol/drink,/datum/reagent/drink,/obj/item/weapon/reagent_containers/food/drinks)
 
 /datum/component/ai/hearing/order/bardrinks/select_reagents
 	var/list/acceptable_recipe_reagents = list()
 	var/list/chem_dispenser_types = list(/obj/machinery/chem_dispenser/booze_dispenser,/obj/machinery/chem_dispenser/soda_dispenser,/obj/machinery/chem_dispenser/brewer)
+	var/list/vendor_types = list(/obj/machinery/vending/offlicence,/obj/machinery/vending/boozeomat)
 
 /datum/component/ai/hearing/order/bardrinks/select_reagents/build_whitelist()
 	var/list/new_whitelist = list()
@@ -200,6 +201,10 @@
 		var/obj/machinery/chem_dispenser/C = new dispensertype
 		acceptable_recipe_reagents += C.dispensable_reagents // have to make the object because initial() can't grab lists, sadly
 		qdel(C)
+	for(var/vendortype in vendor_types)
+		var/obj/machinery/vending/V = new vendortype
+		new_whitelist += get_list_of_keys(V.products) // see above
+		qdel(V)
 	acceptable_recipe_reagents = uniquelist(acceptable_recipe_reagents)
 	for(var/reag in acceptable_recipe_reagents)
 		var/datum/reagent/R = chemical_reagents_list[reag]
@@ -224,5 +229,5 @@
 								var/datum/reagent/subR = chemical_reagents_list[D.result]
 								new_whitelist += subR.type
 	new_whitelist = uniquelist(new_whitelist)
-	whitelist_items = prune_list_to_type(whitelist_items,/datum/reagent,TRUE)
-	whitelist_items += new_whitelist
+	whitelist_items.Cut()
+	whitelist_items = new_whitelist
