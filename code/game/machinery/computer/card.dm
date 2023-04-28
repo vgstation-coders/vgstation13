@@ -62,7 +62,7 @@
 /obj/machinery/computer/card/proc/format_jobs(list/jobs,region)
 	if(modify && modify.dchip && modify.dchip.stamped.len)
 		for(var/stamptype in modify.dchip.stamped)
-			if(region == stamptype2region[stamptype])
+			if(region == stamptype2region[stamptype] || (stamptype2region[stamptype] == 6 && region == 7))
 				return list()
 	var/list/formatted = list()
 	for(var/job in jobs)
@@ -197,7 +197,7 @@
 			var/addaccess = TRUE
 			if(modify.dchip && modify.dchip.stamped.len)
 				for(var/stamptype in modify.dchip.stamped)
-					if(i == stamptype2region[stamptype])
+					if(i == stamptype2region[stamptype] || (stamptype2region[stamptype] == 6 && i == 7))
 						addaccess = FALSE
 						break
 			if(addaccess)
