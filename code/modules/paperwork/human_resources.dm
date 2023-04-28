@@ -54,7 +54,7 @@ var/list/stamptype2region = list(
 			DE.target_dna = dna_hash
 			to_chat(user, "<span class='notice'>DNA on microchip locked to ID.</span>")
 			return
-		if(dna_hash && dna_hash != DE.target_dna)
+		if(dna_hash && DE.target_dna && dna_hash != DE.target_dna)
 			to_chat(user, "<span class='notice'>Failed to apply, DNA does not match.</span>")
 		else if(!DE.stamped.len)
 			to_chat(user, "<span class='notice'>You require at least one stamp.</span>")
