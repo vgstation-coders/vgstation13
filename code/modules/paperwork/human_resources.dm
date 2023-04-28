@@ -45,7 +45,7 @@ var/list/stamptype2region = list(
 			return
 		target_dna = str
 		name = "programmed demotion microchip"
-		desc = "A microchip that removes certain access when applied to ID cards.\nDNA: [D.target_dna]"
+		desc = "A microchip that removes certain access when applied to ID cards.\nDNA: [target_dna]"
 		to_chat(user, "<span class='notice'>The demotion microchip is now ready to be stamped.</span>")
 
 /obj/item/demote_chip/attackby(obj/item/I as obj, mob/user as mob)
