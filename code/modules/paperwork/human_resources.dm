@@ -78,6 +78,7 @@ var/list/stamptype2region = list(
 		else if(user.drop_item(DE,src))
 			icon_state = "centcom_old"
 			dchip = DE
+			DE.name = "programmed demotion microchip"
 			to_chat(user, "<span class='notice'>You apply \the [DE] to \the [src].</span>")
 	else
 		return ..()
