@@ -45,7 +45,7 @@ var/list/stamptype2region = list(
 			return
 		target_dna = str
 		name = "programmed demotion microchip"
-		desc = "A microchip that removes certain access when applied to ID cards.\nDNA: [target_dna]"
+		desc = "A microchip that removes certain access when applied to ID cards.[target_dna ? "\nDNA: [target_dna]" : ""][stamped.len ? "\nStamped by: [english_list(uniquenamelist(stamped), "Nobody", "/", "/")]" : ""]"
 		to_chat(user, "<span class='notice'>The demotion microchip is now ready to be stamped.</span>")
 
 /obj/item/demote_chip/attackby(obj/item/I as obj, mob/user as mob)
@@ -53,7 +53,7 @@ var/list/stamptype2region = list(
 		var/obj/item/weapon/stamp/S = I
 		stamped += S.type
 		to_chat(user, "<span class='notice'>You stamp the demotion microchip with \the [S].</span>")
-		desc = "A microchip that removes certain access when applied to ID cards.\nStamped by: [english_list(uniquenamelist(stamped), "Nobody", "/", "/")]"
+		desc = "A microchip that removes certain access when applied to ID cards.[target_dna ? "\nDNA: [target_dna]" : ""][stamped.len ? "\nStamped by: [english_list(uniquenamelist(stamped), "Nobody", "/", "/")]" : ""]"
 	else
 		return ..()
 
@@ -67,7 +67,7 @@ var/list/stamptype2region = list(
 			to_chat(user, "<span class='notice'>This microchip cannot apply to this card type.</span>")
 		else if(!DE.target_dna && dna_hash)
 			DE.name = "programmed demotion microchip"
-			DE.desc = "A microchip that removes certain access when applied to ID cards.\nDNA: [DE.target_dna]\nStamped by: [english_list(uniquenamelist(DE.stamped), "Nobody", "/", "/")]"
+			DE.desc = "A microchip that removes certain access when applied to ID cards.[DE.target_dna ? "\nDNA: [DE.target_dna]" : ""][DE.stamped.len ? "\nStamped by: [english_list(uniquenamelist(DE.stamped), "Nobody", "/", "/")]" : ""]"
 			DE.target_dna = dna_hash
 			to_chat(user, "<span class='notice'>DNA on microchip locked to ID.</span>")
 			return
@@ -95,8 +95,8 @@ var/list/stamptype2region = list(
 			to_chat(user, "<span class='notice'>Failed to apply, no DNA on ID.</span>")
 		else if(!D.target_dna)
 			D.name = "programmed demotion microchip"
-			D.desc = "A microchip that removes certain access when applied to ID cards.\nDNA: [D.target_dna]\nStamped by: [english_list(uniquenamelist(D.stamped), "Nobody", "/", "/")]"
 			D.target_dna = dna_hash
+			D.desc = "A microchip that removes certain access when applied to ID cards.[D.target_dna ? "\nDNA: [D.target_dna]" : ""][D.stamped.len ? "\nStamped by: [english_list(uniquenamelist(D.stamped), "Nobody", "/", "/")]" : ""]"
 			to_chat(user, "<span class='notice'>DNA on microchip locked to ID.</span>")
 			return
 		if(dna_hash != D.target_dna)
