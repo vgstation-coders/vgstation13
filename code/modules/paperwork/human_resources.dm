@@ -48,15 +48,15 @@ var/list/stamptype2region = list(
 			to_chat(user, "<span class='notice'>This card already has a microchip applied</span>")
 		else if(icon_state == "gold")
 			to_chat(user, "<span class='notice'>This microchip cannot apply to this card type.</span>")
-		else if(!D.target_dna && dna_hash)
-			D.name = "programmed demotion microchip"
-			D.desc = "A microchip that removes certain access when applied to ID cards.\nDNA: [D.target_dna]\nStamped by: [english_list(uniquenamelist(stamped), "Nobody", "/", "/")]"
-			D.target_dna = dna_hash
+		else if(!DE.target_dna && dna_hash)
+			DE.name = "programmed demotion microchip"
+			DE.desc = "A microchip that removes certain access when applied to ID cards.\nDNA: [DE.target_dna]\nStamped by: [english_list(uniquenamelist(stamped), "Nobody", "/", "/")]"
+			DE.target_dna = dna_hash
 			to_chat(user, "<span class='notice'>DNA on microchip locked to ID.</span>")
 			return
 		if(dna_hash && dna_hash != DE.target_dna)
 			to_chat(user, "<span class='notice'>Failed to apply, DNA does not match.</span>")
-		else if(!D.stamped.len)
+		else if(!DE.stamped.len)
 			to_chat(user, "<span class='notice'>You require at least one stamp.</span>")
 		else if(user.drop_item(DE,src))
 			icon_state = "centcom_old"
