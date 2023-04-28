@@ -9,7 +9,7 @@ var/list/stamptype2region = list(
 
 /obj/item/weapon/paper/demotion_key
 	name = "Human Resources: Demotion Fax Key"
-	info = "<center><B>Fax Machine Demotion Key</B></center><BR><BR>This document is intended for use in the station fax machines sent to NANOTRASEN HR.  Demotion keys sent to Centcomm will result in insults and allegations of incompetence.<br><ol><li>Insert into fax with your Internal Affairs ID.</li><li>Select NANOTRASEN HR to send to; Requires official Agent authorization.</li></ol> Acquire Heads of Staff stamps to bar respective access, and once you have completed gathering authorizations you can apply the chip to the intended ID card.<br><br>In case of a mistake, stamp the ID card with any authorization stamp previously used to deactivate the chip. The demotion key is DNA-linked to the card it is applied on and cannot be applied to another."
+	info = "<center><B>Fax Machine Demotion Key</B></center><BR><BR>This document is intended for use in the station fax machines sent to NANOTRASEN HR.  Demotion keys sent to Centcomm will result in insults and allegations of incompetence.<br><ol><li>Insert into fax with your Internal Affairs ID.</li><li>Select NANOTRASEN HR to send to; Requires official Agent authorization.</li><li>Use the printed chip to carefully set the matching DNA hash of the card, or scan it directly.</li></ol> Acquire Heads of Staff stamps to bar respective access, and once you have completed gathering authorizations you can apply the chip to the intended ID card.<br><br>In case of a mistake, stamp the ID card with any authorization stamp previously used to deactivate the chip. The demotion key is DNA-linked to the card it is applied on and cannot be applied to another."
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "paper"
 	stamps = "<br><br><i>This document has an intricate Nanontrasen logo in magnetic ink. It looks impossible to forge.</i>"
@@ -30,6 +30,23 @@ var/list/stamptype2region = list(
 	w_class = W_CLASS_TINY
 	var/target_dna = null
 	var/list/stamped = list()
+
+/obj/item/demote_chip/attack_self(mob/user as mob)
+	if(target_dna) //Used hand-labeler as example
+		to_chat(user, "<span class='notice'>The target DNA cannot be reset!</span>")
+		return
+	else
+		var/str = sanitize(input(user,"Enter the DNA hash for demotion","Set DNA","") as text|null)
+		if (!Adjacent(user) || user.stat)
+			return
+		if(!str)
+			alert("Invalid name.")
+			target_dna = null
+			return
+		target_dna = str
+		name = "programmed demotion microchip"
+		desc = "A microchip that removes certain access when applied to ID cards.\nDNA: [DE.target_dna]"
+		to_chat(user, "<span class='notice'>The demotion microchip is now ready to be stamped.</span>")
 
 /obj/item/demote_chip/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/stamp))
