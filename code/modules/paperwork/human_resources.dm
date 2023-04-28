@@ -40,7 +40,7 @@ var/list/stamptype2region = list(
 		if (!Adjacent(user) || user.stat)
 			return
 		if(!str)
-			alert("Invalid name.")
+			alert("Invalid DNA.")
 			target_dna = null
 			return
 		target_dna = str
