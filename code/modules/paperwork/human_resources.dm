@@ -67,8 +67,8 @@ var/list/stamptype2region = list(
 			to_chat(user, "<span class='notice'>This microchip cannot apply to this card type.</span>")
 		else if(!DE.target_dna && dna_hash)
 			DE.name = "programmed demotion microchip"
-			DE.desc = "A microchip that removes certain access when applied to ID cards.[DE.target_dna ? "\nDNA: [DE.target_dna]" : ""][DE.stamped.len ? "\nStamped by: [english_list(uniquenamelist(DE.stamped), "Nobody", "/", "/")]" : ""]"
 			DE.target_dna = dna_hash
+			DE.desc = "A microchip that removes certain access when applied to ID cards.[DE.target_dna ? "\nDNA: [DE.target_dna]" : ""][DE.stamped.len ? "\nStamped by: [english_list(uniquenamelist(DE.stamped), "Nobody", "/", "/")]" : ""]"
 			to_chat(user, "<span class='notice'>DNA on microchip locked to ID.</span>")
 			return
 		if(dna_hash && DE.target_dna && dna_hash != DE.target_dna)
