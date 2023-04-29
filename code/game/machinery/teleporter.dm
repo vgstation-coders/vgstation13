@@ -221,6 +221,15 @@
 		src.id = t
 	return
 
+/obj/machinery/computer/teleporter/syndie
+	. = ..()
+
+/obj/machinery/computer/teleporter/syndie/attack_hand(var/mob/user)
+	if(war_declared && (world.time / 10 < war_declared_time + CHALLENGE_SYNDIE_SHUTTLE_DELAY))
+		to_chat(usr, "Shuttle Cannot Leave Until 10 Minutes After Call")
+		return FALSE
+	..()
+
 /obj/machinery/teleport
 	name = "teleport"
 	icon = 'icons/obj/stationobjs.dmi'
