@@ -748,10 +748,17 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	theme = "nukesquad"
 	alertlevel = "red"
 
-/datum/command_alert/nuclear_operatives_war/announce(msg)
-	message = msg
+/datum/command_alert/nuclear_operatives_war/announce()
+	message = war_declaration
 	..()
 
+/datum/command_alert/shuttle_jamming
+	alert_title = "Emergency Shuttle Jammed."
+	message = "The Syndicate is Jamming the Emergency shuttle's guidance systems, please be patient it will take 10 minutes for Centcomm to break through this Jamming."
+
+/datum/command_alert/shuttle_jamming_end
+	alert_title = "Shuttle Jamming Cleared."
+	message = "NT Technical staff have bypassed the Jamming, the shuttle may now be called."
 
 /datum/command_alert/blizzard_end
 	alert_title = "Blizzard Status"

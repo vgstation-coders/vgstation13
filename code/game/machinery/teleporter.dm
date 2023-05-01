@@ -222,11 +222,11 @@
 	return
 
 /obj/machinery/computer/teleporter/syndie
-	. = ..()
+	circuit = "/obj/item/weapon/circuitboard/teleporter/syndie"
 
 /obj/machinery/computer/teleporter/syndie/attack_hand(var/mob/user)
 	if(war_declared && (world.time / 10 < war_declared_time + CHALLENGE_SYNDIE_SHUTTLE_DELAY))
-		to_chat(usr, "Shuttle Cannot Leave Until 10 Minutes After Call")
+		to_chat(usr, "This Teleporter is Disabled. While the station responds to your challenge.")
 		return FALSE
 	..()
 

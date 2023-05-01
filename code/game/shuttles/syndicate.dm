@@ -1,7 +1,3 @@
-#define SYNDICATE_SHUTTLE_TRANSIT_DELAY 240
-#define SYNDICATE_SHUTTLE_COOLDOWN 200
-#define CHALLENGE_SYNDIE_SHUTTLE_DELAY 600
-
 var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area/shuttle/nuclearops)
 
 /datum/shuttle/syndicate
@@ -85,17 +81,13 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 	if(!selected_port && shuttle.docking_ports.len >= 2)
 		selected_port = pick(shuttle.docking_ports - shuttle.current_port)
 
-	to_chat(usr, "THE FUCK")
-	to_chat(usr, war_declared_time)
-	to_chat(usr, world.time / 10)
-	to_chat(usr,war_declared)
 	if(war_declared && (world.time / 10 < war_declared_time + CHALLENGE_SYNDIE_SHUTTLE_DELAY))
 		to_chat(usr, "Shuttle Cannot Leave Until 10 Minutes After Call")
 		return FALSE
 
 	//Send a message to the shuttle to move
 	syndicate_shuttle.travel_to(selected_port, src, user)
-	syndicate_shuttle.moved = TRUE
+	can_war_be_declared = TRUE
 	selected_port = null
 	updateUsrDialog()
 
