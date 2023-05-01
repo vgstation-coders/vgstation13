@@ -114,13 +114,14 @@
 	else
 		..()
 
-/obj/item/weapon/vacuumcleaner/dropped(mob/wearer as mob)
+/obj/item/weapon/vacuumcleaner/dropped(mob/user as mob)
+	if (user)
+		user.unregister_event(/event/moved, src, src::mob_moved())
 	..()
 	if (active)
 		switchOff()
 		// should it? i find the idea of a mid-ZAS vacuum cleaner pulling in
 		//  important things pretty funny
-	mob.unregister_event(/event/moved, src, src::mob_moved())
 
 /obj/item/weapon/vacuumcleaner/proc/switchOff(mob/user)
 	active = 0
