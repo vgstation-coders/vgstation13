@@ -1116,6 +1116,7 @@
 #include "code\game\objects\items\weapons\teleportation.dm"
 #include "code\game\objects\items\weapons\tools.dm"
 #include "code\game\objects\items\weapons\twohanded.dm"
+#include "code\game\objects\items\weapons\vacuumcleaner.dm"
 #include "code\game\objects\items\weapons\weaponry.dm"
 #include "code\game\objects\items\weapons\wires.dm"
 #include "code\game\objects\items\weapons\ai_modules\AI_modules.dm"
