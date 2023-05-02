@@ -846,7 +846,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		return ..()
 
-/mob/living/simple_animal/log_say_message(var/datum/speech/speech, var/message_mode)
+/mob/living/simple_animal/log_say_message(var/datum/speech/speech, var/message_mode, var/message)
 	if(client)
 		..()
 
