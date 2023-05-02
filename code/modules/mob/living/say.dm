@@ -246,7 +246,7 @@ var/list/headset_modes = list(
 	else
 		send_speech(speech, message_range, bubble_type)
 	radio(speech, message_mode) //Sends the radio signal
-	log_say_message(speech, message_mode)
+	log_say_message(speech, message_mode, message)
 	qdel(speech)
 	return 1
 
