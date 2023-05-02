@@ -546,7 +546,7 @@ var/list/uplink_items = list()
 	cost = 8
 
 // EXTRATERRESTRIAL BLACK MARKET
-// Weapons and gadgets from a spacefaring alien power that the Syndicate has acquired through unknown means (Only one item for now, more to come soon)
+// Weapons and gadgets from a spacefaring alien power that the Syndicate has acquired through unknown means
 
 /datum/uplink_item/ayylmao
 	category = "Extraterrestrial Black Market"
@@ -582,6 +582,14 @@ var/list/uplink_items = list()
 	cost = 6
 	discounted_cost = 4
 	jobs_with_discount = list("Grey")
+	
+/datum/uplink_item/turkmen/throwingbox
+	name = "Throwing Weapons Box"
+	desc = "A discount from our partner Karatemart.com containing 5 throwing knives and 2 throwing bolas, two of the most versatile and convenient weapons - these particular blades designed to be thrown from hard and chunky exoskeleton fingers of Insectoids.
+	item = /obj/item/weapon/storage/box/syndie_kit/throwingkit
+	cost = 5
+	discounted_cost = 3
+	jobs_with_discount = list("Insectoid")
 
 // IMPLANTS
 // Any Syndicate item that gets implanted into the body goes here
