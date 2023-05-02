@@ -18,12 +18,13 @@
 	var/power_usage = 75
 
 	var/obj/item/weapon/storage/bag/trash/bag = null //only trash bag for now
+	var/obj/item/weapon/storage/bag/trash/internal = new/obj/item/weapon/storage/bag/trash()
+
 	var/obj/item/weapon/cell/cell = null
-	//var/upgraded = 0 //upgraded status - can do liquids, can fit beaker?
 	var/active = 0
 	var/cover_open = 0
+	var/emagged = 0
 	var/held = 0
-	//make it emaggable??? "blow" setting?
 
 /obj/item/weapon/vacuumcleaner/New()
 	. = ..()
@@ -32,6 +33,13 @@
 /obj/item/weapon/vacuumcleaner/Destroy()
 	vacuumcleaner_list.Remove(src)
 	..()
+
+/obj/item/weapon/vacuumcleaner/emag_act(mob/user)
+	if (emagged)
+		return
+	emagged = 1
+	playsound(src, "sparks", 100, 1)
+	to_chat(user, "<span class='warning'>The emag fries \the [src]'s safety circuits!</span>")
 
 /obj/item/weapon/vacuumcleaner/update_icon()
 	..()
@@ -55,10 +63,13 @@
 	if (active)
 		switchOff()
 	else
-		if (cell)
-			switchOn(user)
-		else
-			to_chat(user, "<span class='warning'>It won't turn on without a cell installed!</span>")
+		if (!cell || !cell.charge)
+			to_chat(user, "<span class='warning'>It won't turn on without a charged cell installed!</span>")
+			return
+		if (!bag && !emagged)
+			to_chat(user, "<span class='warning'>It won't turn on without a bag attached!</span>")
+			return
+		switchOn(user)
 	src.add_fingerprint(user)
 
 /obj/item/weapon/vacuumcleaner/attackby(obj/item/W, mob/user)
@@ -86,9 +97,7 @@
 			if (user.drop_item(W, src))
 				to_chat(user, "<span class='notice'>You install \the [W] into the battery compartment.</span>")
 				cell = W
-	//else if is upgrade
 
-//lovingly stolen from janicart
 /obj/item/weapon/vacuumcleaner/verb/remove_trashbag()
 	set name = "Remove Trash Bag"
 	set category = "Object"
@@ -124,10 +133,14 @@
 		//  important things pretty funny
 
 /obj/item/weapon/vacuumcleaner/proc/switchOff(mob/user)
+	if (!active)
+		return
 	active = 0
-	playsound(src, 'sound/effects/vacuumcleaner_off.ogg', 50, wait = 0, channel = 764)
+	playsound(src, 'sound/effects/vacuumcleaner_off.ogg', 50, wait = 0, channel = 0)
 
 /obj/item/weapon/vacuumcleaner/proc/switchOn(mob/user)
+	if (active)
+		return
 	if (cell.charge)
 		active = 1
 		// Arbitrarily picking channel 764 so the "running"
@@ -143,25 +156,30 @@
 
 /obj/item/weapon/vacuumcleaner/proc/update_sound(var/a_wait = 0)
 	if (!active) //thanks byond
-		playsound(src, null, 0, wait = 1, channel = 764) //dead cleaners tell no .oggs
+		playsound(src, null, 100, wait = 1, channel = 764) //dead cleaners tell no .oggs
 		return
-	if (!bag.is_full())
-		//regular idling sound
-		playsound(src, 'sound/effects/vacuumcleaner_running.ogg', 50, wait = a_wait, channel = 764, repeat = 1)
-	else
-		//play at higher pitch if bag is full
-		playsound(src, 'sound/effects/vacuumcleaner_running.ogg', 50, wait = a_wait, channel = 764, repeat = 1, frequency = 45500, vary = 1)
+	if (active)
+		if (bag)
+			if (bag.is_full())
+				//play at higher pitch if bag is full
+				playsound(src, 'sound/effects/vacuumcleaner_running.ogg', 50, wait = a_wait, channel = 764, repeat = 2, frequency = 45500, vary = 1)
+		else
+			//regular idling sound
+			playsound(src, 'sound/effects/vacuumcleaner_running.ogg', 50, wait = a_wait, channel = 764, repeat = 2)
 
 /obj/item/weapon/vacuumcleaner/proc/mob_moved(atom/movable/mover)
 	if (usr) //only play wheels sound if someones using it
 		playsound(src, 'sound/effects/vacuumcleaner_wheels.ogg', 70, vary = 1, frequency = rand(42000, 46000)) //too much frequency variation sounds really bad
-	if(active)
+	if (active)
 		vacuum()
-		update_sound(a_wait = 0) //directional sound/volume needs recalculation when moving
+	update_sound(a_wait = 0) //directional sound/volume needs recalculation when moving
+
 
 /obj/item/weapon/vacuumcleaner/proc/vacuum()
-	//todo sanity checks
-	if (!use_power())
+	if (!active)
+		return
+	//todo more sanity checks
+	if (!use_power() || (!bag && !emagged)) //you need a bag if you arent emagged
 		switchOff()
 		return
 	var/turf/tile = get_turf(src)
@@ -169,12 +187,33 @@
 		for (var/atom/A in tile)
 			if (istype(A, /obj/item))
 				var/obj/item/i = A
-				if (bag.can_quick_store(i))
-					if (usr)
+				if (internal.can_quick_store(i)) //if any garbage bag can even store it
+					if (bag)
+						if (bag.can_quick_store(i))
+							if (usr)
+								playsound(src, "rustle", 50, wait = 0)
+								bag.handle_item_insertion(i, 1)
+					if (!bag && emagged)
+						to_chat(usr, "calling shoot_backwards")
 						playsound(src, "rustle", 50, wait = 0)
-						bag.handle_item_insertion(i, 1)
-			//else if we're upgraded for liquids or something
-				//upgrade behaviour, whatever that'll be
+						shoot_backwards(i)
+					else
+						switchOff() //technically we should never reach here
+
+/obj/item/weapon/vacuumcleaner/proc/shoot_backwards(obj/item/projectile)
+	if (!usr)
+		return
+	var/back_dir = usr/dir
+	var/shoot_velocity = 2 //arbitrary for now
+	var/distance = 3 //its meant to be weak as shit
+	to_chat(usr, "calculating back_dir")
+	back_dir = turn(back_dir, 180)
+	to_chat(usr, "calculating target")
+	var/target = get_step(usr.loc, back_dir)
+	to_chat(usr, "forcemove call")
+	projectile.forceMove(usr.loc)
+	to_chat(usr, "throw_at call")
+	projectile.throw_at(target, distance, shoot_velocity)
 
 /obj/item/weapon/vacuumcleaner/proc/use_power()
 	if (cell.charge > 0)
