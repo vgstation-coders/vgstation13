@@ -365,6 +365,13 @@
 		/obj/item/clothing/under/grey/grey_soldier,
 		/obj/item/clothing/shoes/jackboots/mothership
 	)
+	
+/obj/item/weapon/storage/box/syndie_kit/throwingkit
+	name = "Throwing Weapons Kit"
+	items_to_spawn = list(
+	/obj/item/weapon/kitchen/utensil/knife/throwing = 5,
+	/obj/item/weapon/legcuffs/bolas = 2,
+	)
 
 //Syndicate Experimental Gear
 //Contains unique gear not found anywhere else
