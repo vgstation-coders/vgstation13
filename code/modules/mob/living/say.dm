@@ -250,7 +250,7 @@ var/list/headset_modes = list(
 	qdel(speech)
 	return 1
 
-/mob/living/proc/log_say_message(var/datum/speech/speech, var/message_mode)
+/mob/living/proc/log_say_message(var/datum/speech/speech, var/message_mode, var/message)
 	var/turf/T = get_turf(src)
 	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message_mode ? "([message_mode]):":""] [message]")
 
