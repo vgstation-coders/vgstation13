@@ -583,7 +583,7 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Grey")
 	
-/datum/uplink_item/turkmen/throwingbox
+/datum/uplink_item/ayylmao/throwingbox
 	name = "Throwing Weapons Box"
 	desc = "A discount from our partner Karatemart.com containing 5 throwing knives and 2 throwing bolas, two of the most versatile and convenient weapons - these particular blades designed to be thrown from hard and chunky exoskeleton fingers of Insectoids.
 	item = /obj/item/weapon/storage/box/syndie_kit/throwingkit
