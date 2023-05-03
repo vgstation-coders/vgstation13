@@ -582,6 +582,14 @@ var/list/uplink_items = list()
 	cost = 6
 	discounted_cost = 4
 	jobs_with_discount = list("Grey")
+	
+/datum/uplink_item/ayylmao/pirate_cutlass
+	name = "Energy Cutlass"
+	desc = "An energy sword with a broader blade at a slight curve, making it simpler to use when cutting, but the rather conspicuous hand guard means it can't be attached to a second sword at the handles like a typical straight-bladed energy sword."
+	item = /obj/item/weapon/melee/energy/sword/pirate
+	cost = 8
+	discounted_cost = 6
+	jobs_with_discount = list("Vox")
 
 // IMPLANTS
 // Any Syndicate item that gets implanted into the body goes here
