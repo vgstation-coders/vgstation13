@@ -167,18 +167,15 @@
 	//normal plating
 	if(!layers)
 		return
-	var/obj/structure/cable/C = locate(/obj/structure/cable/) in loc
-	var/obj/machinery/atmospherics/pipe/P = locate(/obj/machinery/atmospherics/pipe) in loc
-	var/obj/structure/disposalpipe/D = locate(/obj/structure/disposalpipe) in loc
+		
 	var/severity = 2
 	if(layers > 1)
 		severity = 1
-	
-	if(C)
+	for(var/obj/structure/cable/C in src)
 		C.ex_act(severity)
-	if(P)
+	for(var/obj/machinery/atmospherics/pipe/P in src)
 		P.ex_act(severity)
-	if(D)
+	for(var/obj/structure/disposalpipe/D in src)
 		D.ex_act(severity)
 	src.ex_act(severity)
 
