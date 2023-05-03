@@ -21,10 +21,11 @@
 	var/obj/item/weapon/storage/bag/trash/internal = new/obj/item/weapon/storage/bag/trash()
 
 	var/obj/item/weapon/cell/cell = null
-	var/active = 0
+	var/active = 0 //means the cleaner is powered in any capacity
 	var/cover_open = 0
 	var/emagged = 0
 	var/held = 0
+	var/turning_on = 0 //means the cleaner is turning on (this is for sound control)
 
 /obj/item/weapon/vacuumcleaner/New()
 	. = ..()
@@ -63,8 +64,8 @@
 	if (active)
 		switchOff()
 	else
-		if (!cell || !cell.charge)
-			to_chat(user, "<span class='warning'>It won't turn on without a charged cell installed!</span>")
+		if (!cell || !cell.charge || cover_open)
+			to_chat(user, "<span class='warning'>It won't turn on without a charged cell properly installed!</span>")
 			return
 		if (!bag && !emagged)
 			to_chat(user, "<span class='warning'>It won't turn on without a bag attached!</span>")
@@ -82,7 +83,7 @@
 			to_chat(user, "<span class='notice'>You tie \the [W] to the outlet port.</span>")
 			bag = W
 	else if (istype(W, /obj/item/tool/screwdriver))
-		//play screwdriver sound
+		playsound(src, 'sound/items/Screwdriver.ogg', 75)
 		if (!cover_open)
 			to_chat(user, "<span class='notice'>You open the vacuum cleaner's battery cover.</span>")
 			cover_open = 1
@@ -116,6 +117,8 @@
 
 /obj/item/weapon/vacuumcleaner/AltClick()
 	if (bag)
+		if (active && !emagged)
+			switchOff()
 		remove_trashbag()
 	else if (cover_open)
 		if (cell)
@@ -133,15 +136,13 @@
 		//  important things pretty funny
 
 /obj/item/weapon/vacuumcleaner/proc/switchOff(mob/user)
-	if (!active)
-		return
+	turning_on = 0 //definitely shouldnt be doing this right now
 	active = 0
-	playsound(src, 'sound/effects/vacuumcleaner_off.ogg', 50, wait = 0, channel = 0)
+	playsound(src, null, 100, wait = 0, channel = 764) //this should not be here - i'm trying to purge the channel, the way it queues looping stuff is
+	playsound(src, 'sound/effects/vacuumcleaner_off.ogg', 50, wait = 0, channel = 764)
 
 /obj/item/weapon/vacuumcleaner/proc/switchOn(mob/user)
-	if (active)
-		return
-	if (cell.charge)
+	if (!active && cell.charge)
 		active = 1
 		// Arbitrarily picking channel 764 so the "running"
 		//  sound can loop after this sound finishes and
@@ -150,19 +151,21 @@
 		// Is there a way to reserve an arbitrary available sound channel?
 		//  then "free" the channel after switchOff sound
 		//  or is this C-brain
+		turning_on = 1
 		playsound(src, 'sound/effects/vacuumcleaner_on.ogg', 50, wait = 0, channel = 764)
-		update_sound(a_wait = 1) //queue looping running sound
-		vacuum() //clean the tile we're standing on
+		sleep(10) //length of uninterruptible section of above sound (1 sec)
+		turning_on = 0 //you may now interrupt and work and stuff
+		if (active && cell.charge) //this is necessary because we slept
+			update_sound(a_wait = 1) //queue looping running sound, try to wait if you can
+			vacuum() //clean the tile we're standing on
 
 /obj/item/weapon/vacuumcleaner/proc/update_sound(var/a_wait = 0)
-	if (!active) //thanks byond
-		playsound(src, null, 100, wait = 1, channel = 764) //dead cleaners tell no .oggs
-		return
 	if (active)
-		if (bag)
-			if (bag.is_full())
-				//play at higher pitch if bag is full
-				playsound(src, 'sound/effects/vacuumcleaner_running.ogg', 50, wait = a_wait, channel = 764, repeat = 2, frequency = 45500, vary = 1)
+		if (turning_on)
+			a_wait = 1 //overridden for length of uninterruptible section
+		if (bag && bag.is_full())
+			//play at higher pitch if bag is full
+			playsound(src, 'sound/effects/vacuumcleaner_running.ogg', 50, wait = a_wait, channel = 764, repeat = 2, frequency = 45500, vary = 1)
 		else
 			//regular idling sound
 			playsound(src, 'sound/effects/vacuumcleaner_running.ogg', 50, wait = a_wait, channel = 764, repeat = 2)
@@ -172,8 +175,7 @@
 		playsound(src, 'sound/effects/vacuumcleaner_wheels.ogg', 70, vary = 1, frequency = rand(42000, 46000)) //too much frequency variation sounds really bad
 	if (active)
 		vacuum()
-	update_sound(a_wait = 0) //directional sound/volume needs recalculation when moving
-
+		update_sound(a_wait = 0) //directional sound/volume needs recalculation when moving
 
 /obj/item/weapon/vacuumcleaner/proc/vacuum()
 	if (!active)
@@ -185,6 +187,7 @@
 	var/turf/tile = get_turf(src)
 	if (isturf(tile))
 		for (var/atom/A in tile)
+			//handle crumbs, ash?
 			if (istype(A, /obj/item))
 				var/obj/item/i = A
 				if (internal.can_quick_store(i)) //if any garbage bag can even store it
@@ -193,27 +196,23 @@
 							if (usr)
 								playsound(src, "rustle", 50, wait = 0)
 								bag.handle_item_insertion(i, 1)
+								continue
 					if (!bag && emagged)
-						to_chat(usr, "calling shoot_backwards")
 						playsound(src, "rustle", 50, wait = 0)
 						shoot_backwards(i)
 					else
 						switchOff() //technically we should never reach here
 
-/obj/item/weapon/vacuumcleaner/proc/shoot_backwards(obj/item/projectile)
+/obj/item/weapon/vacuumcleaner/proc/shoot_backwards(obj/item/W as obj)
 	if (!usr)
 		return
-	var/back_dir = usr/dir
-	var/shoot_velocity = 2 //arbitrary for now
-	var/distance = 3 //its meant to be weak as shit
-	to_chat(usr, "calculating back_dir")
+	var/back_dir = usr.dir
+	var/shoot_velocity = 3
+	var/distance = 8
 	back_dir = turn(back_dir, 180)
-	to_chat(usr, "calculating target")
 	var/target = get_step(usr.loc, back_dir)
-	to_chat(usr, "forcemove call")
-	projectile.forceMove(usr.loc)
-	to_chat(usr, "throw_at call")
-	projectile.throw_at(target, distance, shoot_velocity)
+	W.forceMove(usr.loc)
+	W.throw_at(target, distance, shoot_velocity)
 
 /obj/item/weapon/vacuumcleaner/proc/use_power()
 	if (cell.charge > 0)
