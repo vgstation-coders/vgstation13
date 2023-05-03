@@ -321,7 +321,7 @@ var/list/potential_bonus_items = list(
 	..()
 	new /obj/item/clothing/suit/space/vox/carapace(src)
 	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
-	new /obj/item/weapon/melee/telebaton(src)
+	new /obj/item/weapon/melee/energy/sword/pirate(src)
 	new /obj/item/clothing/glasses/thermal/monocle(src)
 	new /obj/item/device/chameleon(src)
 	var/obj/item/weapon/crossbow/W = new(src)
@@ -354,6 +354,7 @@ var/list/potential_bonus_items = list(
 	new /obj/item/weapon/storage/belt/utility/full(src)
 	new /obj/item/clothing/glasses/thermal/monocle(src)
 	new /obj/item/weapon/card/emag(src)
+	new /obj/item/weapon/melee/telebaton(src)
 	new /obj/item/weapon/gun/dartgun/vox/raider(src)
 	new /obj/item/device/multitool(src)
 
