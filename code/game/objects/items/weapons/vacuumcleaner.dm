@@ -207,12 +207,13 @@
 	if (!usr)
 		return
 	var/back_dir = usr.dir
-	var/shoot_velocity = 3
-	var/distance = 8
+	var/distance = 4
+	var/shoot_velocity = 1
 	back_dir = turn(back_dir, 180)
-	var/target = get_step(usr.loc, back_dir)
+	var/target = get_step(get_step(get_step(usr.loc, back_dir), back_dir), back_dir) //ye
 	W.forceMove(usr.loc)
-	W.throw_at(target, distance, shoot_velocity)
+	spawn(0)
+		W.throw_at(target, distance, shoot_velocity)
 
 /obj/item/weapon/vacuumcleaner/proc/use_power()
 	if (cell.charge > 0)
