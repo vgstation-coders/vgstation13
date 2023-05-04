@@ -49,11 +49,15 @@
 /obj/item/weapon/vacuumcleaner/examine(mob/user)
 	..()
 	if (bag)
-		to_chat(user, "\A [bag] is tied to it's outlet port.")
+		to_chat(user, "\A [bag] is tied to its outlet port.")
 	else
 		to_chat(user, "It doesn't appear to have a bag attached.")
 	if (cell)
 		to_chat(user, "<span class='info'>The battery meter reads [round(cell.percent())]%.</span>")
+	else
+		to_chat(user, "<span class='info'>The battery meter is dark.</span>")
+	if (cover_open)
+		to_chat(user, "Its cover is open.")
 
 /obj/item/weapon/vacuumcleaner/attack_hand(var/mob/user)
 	..()
@@ -64,12 +68,8 @@
 	if (active)
 		switchOff()
 	else
-		if (!cell || !cell.charge || cover_open)
-			to_chat(user, "<span class='warning'>It won't turn on without a charged cell properly installed!</span>")
-			return
-		if (!bag && !emagged)
-			to_chat(user, "<span class='warning'>It won't turn on without a bag attached!</span>")
-			return
+		if (!cell || cover_open || !cell.charge || (!bag && !emagged))
+			to_chat(user, "<span class='warning'>It won't turn on!")
 		switchOn(user)
 	src.add_fingerprint(user)
 
@@ -138,7 +138,7 @@
 /obj/item/weapon/vacuumcleaner/proc/switchOff(mob/user)
 	turning_on = 0 //definitely shouldnt be doing this right now
 	active = 0
-	playsound(src, null, 100, wait = 0, channel = 764) //this should not be here - i'm trying to purge the channel, the way it queues looping stuff is
+	playsound(src, null, 100, wait = 0, channel = 764) //purge channel before we leave
 	playsound(src, 'sound/effects/vacuumcleaner_off.ogg', 50, wait = 0, channel = 764)
 
 /obj/item/weapon/vacuumcleaner/proc/switchOn(mob/user)
@@ -200,8 +200,6 @@
 					if (!bag && emagged)
 						playsound(src, "rustle", 50, wait = 0)
 						shoot_backwards(i)
-					else
-						switchOff() //technically we should never reach here
 
 /obj/item/weapon/vacuumcleaner/proc/shoot_backwards(obj/item/W as obj)
 	if (!usr)
