@@ -30,6 +30,7 @@
 	var/mob/living/carbon/brain/brainmob = null//The current occupant.
 	var/mob/living/silicon/robot = null//Appears unused.
 	var/obj/mecha = null//This does not appear to be used outside of reference in mecha.dm.
+	var/list/camera_access = list()
 
 /obj/item/device/mmi/Destroy()
 	if(brainmob)

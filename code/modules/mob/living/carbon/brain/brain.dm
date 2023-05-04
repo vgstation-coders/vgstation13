@@ -119,5 +119,5 @@
 	else
 		return ..()
 
-//mob/living/simple_animal/hostile/pulse_demon/GetAccess()
-	//return can_ai_click() ? get_all_accesses() : ..()
+/mob/living/carbon/brain/GetAccess()
+	return can_ai_click() ? camera_access : ..()

@@ -278,6 +278,19 @@ var/list/camera_messages = list()
 
 			return
 
+	// ID swiping for adding access to MMIs put in the camera
+	else if (istype(W, /obj/item/weapon/card) && assembly && assembly.upgrades.len)
+		var/obj/item/device/mmi/MMI = locate(/obj/item/device/mmi) in assembly.upgrades
+		if(MMI)
+			if(isEmag(W))
+				to_chat(user, "You short out [MMI]'s access requirements, overriding them.")
+				spark(src,5)
+				MMI.camera_access = get_all_accesses()
+			else if(isID(W))
+				var/obj/item/weapon/card/id/ID = W
+				to_chat(user, "You add the access on [ID] to [MMI].")
+				MMI.camera_access |= ID.
+
 	// OTHER
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
