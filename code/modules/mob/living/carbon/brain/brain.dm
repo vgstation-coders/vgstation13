@@ -120,4 +120,7 @@
 		return ..()
 
 /mob/living/carbon/brain/GetAccess()
-	return can_ai_click() ? container.camera_access : ..()
+	if(can_ai_click() && istype(container,/obj/item/device/mmi))
+		var/obj/item/device/mmi/MMI = container
+		return MMI.camera_access
+	return ..()
