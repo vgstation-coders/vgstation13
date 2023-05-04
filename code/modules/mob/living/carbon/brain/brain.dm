@@ -120,4 +120,4 @@
 		return ..()
 
 /mob/living/carbon/brain/GetAccess()
-	return can_ai_click() ? camera_access : ..()
+	return can_ai_click() ? container.camera_access : ..()
