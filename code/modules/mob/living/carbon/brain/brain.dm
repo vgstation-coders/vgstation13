@@ -78,3 +78,46 @@
 
 /mob/living/carbon/brain/dexterity_check()
 	return 1 //This is so certain mech tools work for MMIs and posibrains.
+
+/mob/living/carbon/brain/proc/can_ai_click()
+	if(container && istype(container.loc,/obj/machinery/camera))
+		var/obj/machinery/camera/C = container.loc
+		if(container in C.assembly.upgrades)
+			return TRUE
+	return FALSE
+
+/mob/living/carbon/brain/ClickOn(var/atom/A, params)
+	if(can_ai_click())
+		A.add_hiddenprint(src)
+		A.attack_ai(src)
+	else
+		return ..()
+
+/mob/living/carbon/brain/ShiftClickOn(var/atom/A)
+	if(can_ai_click())
+		A.AIShiftClick(src)
+	else
+		return ..()
+/mob/living/carbon/brain/CtrlClickOn(var/atom/A)
+	if(can_ai_click())
+		A.AICtrlClick(src)
+	else
+		return ..()
+/mob/living/carbon/brain/AltClickOn(var/atom/A)
+	if(can_ai_click())
+		A.AIAltClick(src)
+	else
+		return ..()
+/mob/living/carbon/brain/MiddleShiftClickOn(var/atom/A)
+	if(can_ai_click())
+		A.AIMiddleShiftClick(src)
+	else
+		return ..()
+/mob/living/carbon/brain/RightClickOn(var/atom/A)
+	if(can_ai_click())
+		A.AIRightClick(src)
+	else
+		return ..()
+
+//mob/living/simple_animal/hostile/pulse_demon/GetAccess()
+	//return can_ai_click() ? get_all_accesses() : ..()

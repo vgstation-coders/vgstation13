@@ -16,6 +16,7 @@
 		/obj/item/stack/sheet/mineral/plasma,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot,
 		/obj/item/device/assembly/voice,
+		/obj/item/device/mmi/posibrain,
 		)
 
 	var/list/upgrades = list()
