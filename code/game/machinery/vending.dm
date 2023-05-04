@@ -4099,4 +4099,161 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		playsound(loc, hiddenmousesound, 50, 1)
 	new hiddenmouse(get_turf(src))
 
+////////////////////////////////////////
+//			LIBERATION STATION FUCK YEA
+////////////////////////////////////////
 
+/obj/machinery/vending/america
+	name = "\improper AmmuStation"
+	desc = "An overwhelming amount of trans fats and neoliberalism washes over you just by looking at the machine."
+	icon_state = "liberationstation"
+	vend_reply = "Remember the name: AmmuStation!"
+	product_ads = list(
+		"AmmuStation: Your one-stop shop for all things Second Amendment!",
+		"Be an American, get a gun!",
+		"Quality arms for cheap prices!",
+		"During the 10 minute waiting period, fire off a few rounds!",
+		"Better dead than red!",
+		"Everything you need to protect your co-workers from the evils of a liberal society!",
+		"The only vending machine that lets you try it before you buy it!",
+		"Real men don't own a gun: They own 5 or more!",
+		"Don't forget the AmmuStation Endangered Species BBQ each Saturday!"
+	)
+	product_slogans = list(
+		"Float like an astronaut, sting like a bullet!",
+		"Express your rights today!",
+		"Guns don't kill people, but you totally can!",
+		"Who needs responsibilities when you have guns?",
+		"It's vital that you protect yourself: the American way.",
+		"DON'T dial 911: Dial .357!",
+		"AmmuStation: Whooping liberal pinkos since 2054!"
+	)
+	products = list(
+		/obj/item/weapon/reagent_containers/food/snacks/monkeyburger = 8, //O say can you see, by the dawn's early light
+		/obj/item/weapon/reagent_containers/food/snacks/fries = 5, //What so proudly we hailed at the twilight's last gleaming
+		/obj/item/weapon/reagent_containers/food/snacks/chickenburger = 5, //Whose broad stripes and bright stars through the perilous fight
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 10, //O'er the ramparts we watched, were so gallantly streaming?
+		/obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/hotdog = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/corndog = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 24, //Obesity is badass
+		/obj/item/weapon/reagent_containers/food/drinks/beer = 12,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser = 12,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon = 12,
+		/obj/item/weapon/gun/projectile/pistol/NT22 = 4, //The NT-22 is an actual peashooter so I don't mind it being in the basic products
+		/obj/item/ammo_storage/magazine/lr22 = 6,
+		/obj/item/ammo_storage/box/a22 = 2,
+		/obj/item/weapon/gun/projectile/shotgun/pump = 2, //grandpappys shotgun will be ok
+		/obj/item/weapon/storage/box/lethalshells = 2,
+		/obj/item/weapon/storage/box/buckshotshells = 2,
+		)
+	contraband = list(
+		/obj/item/weapon/storage/fancy/donut_box = 4,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesyfries = 3,
+		/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger = 3, //They don't call it burgerland for nothing
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 6,
+		/obj/item/clothing/under/misc/patriotsuit = 6,
+		/obj/item/clothing/accessory/holster/handgun/waist = 4, //just an empty holster
+		/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical = 4, //A set of survival knives and machetes with the "slicer and dicer" holster kit
+		/obj/item/weapon/gun/projectile/pistol = 2, //9 millimeter blows the lung out of the body so it must be regulated
+		/obj/item/ammo_storage/magazine/mc9mm = 3,
+		/obj/item/ammo_storage/box/c9mm = 3,
+		/obj/item/ammo_storage/box/a50 = 1, //Some surprise tools that will help us later
+		/obj/item/ammo_storage/magazine/a50 = 3,
+		)
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger = 2,
+		/obj/item/bedsheet/patriot = 4,
+		/obj/item/weapon/gun/projectile/deagle = 1, //ok now we're getting a bit heavy
+		/obj/item/weapon/gun/projectile/deagle/gold = 1,
+		/obj/item/weapon/gun/projectile/deagle/camo = 1,
+		) //Enough burgers, donuts, hot dogs, and beer to make a 40 player crew obese three times over, yes I did the math
+
+	pack = /obj/structure/vendomatpack/america
+
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
+
+/obj/machinery/vending/america/emag_act(mob/user)
+	if(!emagged)
+		if(user)
+			to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
+			message_admins("[key_name_admin(user)] unlocked an AmmuStation's DANGERMODE!")
+		contraband[/obj/item/clothing/head/helmet/space/freedom] = 4
+		contraband[/obj/item/clothing/suit/space/freedom] = 4
+		contraband[/obj/item/weapon/gun/projectile/shotgun/nt12] = 2
+		contraband[/obj/item/weapon/storage/box/lethalshells] = 2
+		contraband[/obj/item/weapon/storage/box/buckshotshells] = 2
+		contraband[/obj/item/weapon/gun/projectile/automatic] = 2
+		contraband[/obj/item/ammo_storage/magazine/smg9mm] = 2
+		contraband[/obj/item/ammo_storage/box/c9mm] = 2
+		contraband[/obj/item/weapon/gun/projectile/colt] = 1
+		contraband[/obj/item/weapon/gun/projectile/automag] = 1
+		contrbaand[/obj/item/weapon/gun/projectile/automag/prestige] = 1
+		contraband[/obj/item/ammo_storage/magazine/a357] = 2
+		contraband[/obj/item/ammo_storage/box/a357] = 4
+		src.build_inventory(contraband, 1)
+		emagged = 1
+		overlays = 0
+		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
+		dangerlay.plane = ABOVE_LIGHTING_PLANE
+		overlays_vending[2] = dangerlay
+		update_icon()
+		return 1
+
+/obj/machinery/vending/america/DANGERMODE
+	products = list(
+		/obj/item/weapon/reagent_containers/food/snacks/monkeyburger = 8,
+		/obj/item/weapon/reagent_containers/food/snacks/fries = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/chickenburger = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 12,
+		/obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/hotdog = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/corndog = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 24,
+		/obj/item/weapon/reagent_containers/food/drinks/beer = 12,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser = 12,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon = 12,
+		/obj/item/weapon/gun/projectile/pistol/NT22 = 4,
+		/obj/item/ammo_storage/magazine/lr22 = 4,
+		/obj/item/ammo_storage/box/a22 = 2,
+		/obj/item/weapon/gun/projectile/shotgun/pump = 2,
+		/obj/item/weapon/storage/box/lethalshells = 2,
+		/obj/item/weapon/storage/box/buckshotshells = 2,
+		)
+	contraband = list(
+		/obj/item/weapon/storage/fancy/donut_box = 4,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesyfries = 3,
+		/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger = 3,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 6,
+		/obj/item/clothing/under/misc/patriotsuit = 6,
+		/obj/item/clothing/accessory/holster/handgun/waist = 4,
+		/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical = 4,
+		/obj/item/weapon/gun/projectile/pistol = 2,
+		/obj/item/ammo_storage/magazine/mc9mm = 2,
+		/obj/item/ammo_storage/box/c9mm = 2,
+		/obj/item/ammo_storage/box/a50 = 1,
+		/obj/item/ammo_storage/magazine/a50 = 3,
+		/obj/item/clothing/head/helmet/space/freedom = 4
+		/obj/item/clothing/suit/space/freedom = 4
+		/obj/item/weapon/gun/projectile/shotgun/nt12 = 2
+		/obj/item/weapon/storage/box/lethalshells = 2,
+		/obj/item/weapon/storage/box/buckshotshells = 2,
+		/obj/item/weapon/gun/projectile/automatic = 2 //full autos get grabbed all the time
+		/obj/item/ammo_storage/magazine/smg9mm = 2
+		/obj/item/ammo_storage/box/c9mm = 2
+		/obj/item/weapon/gun/projectile/colt = 1, //it's the gun that alec baldin
+		/obj/item/weapon/gun/projectile/automag = 1
+		/obj/item/weapon/gun/projectile/automag/prestige = 1
+		/obj/item/ammo_storage/magazine/a357 = 2
+		/obj/item/ammo_storage/box/a357 = 4
+		)
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger = 3,
+		/obj/item/bedsheet/patriot = 4,
+		/obj/item/weapon/gun/projectile/deagle = 1,
+		/obj/item/weapon/gun/projectile/deagle/gold = 1,
+		/obj/item/weapon/gun/projectile/deagle/camo = 1,
+		)
+
+	pack = /obj/structure/vendomatpack/america //can be reloaded with the same packs as the regular non-emagged one
+	
