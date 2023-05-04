@@ -289,7 +289,7 @@ var/list/camera_messages = list()
 			else if(isID(W))
 				var/obj/item/weapon/card/id/ID = W
 				to_chat(user, "You add the access on [ID] to [MMI].")
-				MMI.camera_access |= ID.
+				MMI.camera_access |= ID.access
 
 	// OTHER
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
