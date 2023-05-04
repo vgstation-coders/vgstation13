@@ -148,3 +148,11 @@
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a762"
 	max_ammo = 100
+
+/obj/item/ammo_storage/box/a22
+	name = "ammo box (.22 Long Rifle)"
+	icon_state = "9mmwhite"
+	origin_tech = Tc_COMBAT + "=2"
+	ammo_type = "/obj/item/ammo_casing/lr22"
+	caliber = NTLR22
+	max_ammo = 50 //bro have you even held a .22? 50 rounds is like a handfull and not even a full one
