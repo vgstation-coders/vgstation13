@@ -119,6 +119,12 @@ LINEN BINS
 
 /obj/item/weapon/bedsheet/brown/cargo
 	_color = "cargo"		//exists for washing machines, is not different from brown bedsheet in any way
+	
+/obj/item/weapon/bedsheet/patriot
+	name = "patriotic bedsheet"
+	desc = "You've never felt more free than when sleeping on this."
+	icon_state = "sheetUSA"
+	_color = "sheetUSA"
 
 /obj/structure/bedsheetbin
 	name = "linen bin"
