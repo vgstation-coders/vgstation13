@@ -126,3 +126,36 @@
 	item_state = "syndicate-orange"
 	species_fit = list(VOX_SHAPED)
 	desc = "A Orange Space Suit meant to provide minimal space protection."
+
+/obj/item/clothing/head/helmet/space/freedom
+	name = "eagle helmet"
+	desc = "An advanced, space-proof helmet. It appears to be modeled after an eagle."
+	icon_state = "griffinhat"
+	item_state = "griffinhat"
+	armor = list(melee = 40, bullet = 40, laser = 30, energy = 25, bomb = 90, bio = 100, rad = 100) //90 bomb armor so you can do the action movie thing of getting thrown away from the explosion by the shockwave, not sure how it will interact with fragmentation
+	species_restricted = list("exclude",VOX_SHAPED) //you're already a bird dumb fuck
+	siemens_coefficient = 0.7
+	pressure_resistance = 40 * ONE_ATMOSPHERE
+
+/obj/item/clothing/suit/space/freedom
+	name = "eagle suit"
+	desc = "An advanced, light suit, fabricated from a mixture of synthetic feathers and space-resistant material. A gun holster appears to be intergrated into the suit and the wings are stuck in 'freedom' mode."
+	icon_state = "freedom"
+	item_state = "freedom"
+		allowed = list(
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+	)
+	species_restricted = list("exclude",VOX_SHAPED)
+	armor = list(melee = 40, bullet = 40, laser = 30, energy = 25, bomb = 90, bio = 100, rad = 100) //otherwise only slightly more powerful than the nazi and soviet hardsuit and still incomparable to the advanced eod suit
+	siemens_coefficient = 0.7
+	pressure_resistance = 40 * ONE_ATMOSPHERE
