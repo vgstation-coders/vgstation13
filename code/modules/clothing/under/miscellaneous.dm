@@ -1006,3 +1006,13 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
+	
+/obj/item/clothing/under/patriotsuit
+	name = "Patriotic Suit"
+	desc = "Motorcycle not included."
+	icon_state = "ek"
+	item_state = "ek"
+	_color = "ek"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	
