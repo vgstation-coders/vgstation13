@@ -1014,5 +1014,3 @@
 	item_state = "ek"
 	_color = "ek"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
-	
