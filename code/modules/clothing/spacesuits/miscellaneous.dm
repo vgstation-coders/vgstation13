@@ -132,7 +132,7 @@
 	desc = "An advanced, space-proof helmet. It appears to be modeled after an eagle."
 	icon_state = "griffinhat"
 	item_state = "griffinhat"
-	armor = list(melee = 40, bullet = 40, laser = 30, energy = 25, bomb = 90, bio = 100, rad = 100) //90 bomb armor so you can do the action movie thing of getting thrown away from the explosion by the shockwave, not sure how it will interact with fragmentation
+	armor = list(melee = 40, bullet = 40, laser = 30, energy = 25, bomb = 90, bio = 100, rad = 20) //90 bomb armor so you can do the action movie thing of getting thrown away from the explosion by the shockwave, not sure how it will interact with fragmentation
 	species_restricted = list("exclude",VOX_SHAPED) //you're already a bird dumb fuck
 	siemens_coefficient = 0.7
 	pressure_resistance = 40 * ONE_ATMOSPHERE
@@ -156,6 +156,6 @@
 		/obj/item/weapon/legcuffs/bolas,
 	)
 	species_restricted = list("exclude",VOX_SHAPED)
-	armor = list(melee = 40, bullet = 40, laser = 30, energy = 25, bomb = 90, bio = 100, rad = 100) //otherwise only slightly more powerful than the nazi and soviet hardsuit and still incomparable to the advanced eod suit
+	armor = list(melee = 40, bullet = 40, laser = 30, energy = 25, bomb = 90, bio = 100, rad = 20) //otherwise only slightly more powerful than the nazi and soviet hardsuit and still incomparable to the advanced eod suit
 	siemens_coefficient = 0.7
 	pressure_resistance = 40 * ONE_ATMOSPHERE
