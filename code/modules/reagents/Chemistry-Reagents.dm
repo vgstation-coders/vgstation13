@@ -1240,6 +1240,7 @@
 	density = 5.23
 	specheatcap = 0.62
 
+
 /datum/reagent/space_drugs/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -1253,24 +1254,7 @@
 
 	if(prob(7))
 		M.emote(pick("twitch", "drool", "moan", "giggle"), null, null, TRUE)
-		
-/datum/reagent/space_drugs/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	if(!holder)
-		return
-	if(!T)
-		T = holder.my_atom //Try to find the mob through the holder
-	if(!istype(T)) //Still can't find it, abort
-		return
-	var/amount = T.reagents.get_reagent_amount(id)
-	if(amount >= 1)
-		if(prob(15))
-			T.mutate(GENE_BIOMOLECULES)
-			T.reagents.remove_reagent(id, 1)
-		if(prob(15))
-			T.mutate(GENE_BIOMOLECULES)
-	else if(amount > 0)
-		T.reagents.remove_reagent(id, amount)
-		
+
 /datum/reagent/holywater
 	name = "Holy Water"
 	id = HOLYWATER
@@ -2585,8 +2569,6 @@
 	if(T.reagents.get_reagent_amount(id) >= 1)
 		if(prob(1))
 			T.mutate(GENE_PHYTOCHEMISTRY)
-		if(prob(1))
-			T.mutate(GENE_BIOMOLECULES)
 		if(prob(1))
 			T.mutate(GENE_MORPHOLOGY)
 		if(prob(1))
