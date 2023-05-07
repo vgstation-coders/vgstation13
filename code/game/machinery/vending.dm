@@ -4104,12 +4104,12 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 ////////////////////////////////////////
 
 /obj/machinery/vending/america
-	name = "\improper AmmuStation"
+	name = "\improper Ammu-Station"
 	desc = "An overwhelming amount of trans fats and neoliberalism washes over you just by looking at the machine."
 	icon_state = "liberationstation"
-	vend_reply = "Remember the name: AmmuStation!"
+	vend_reply = "Remember the name: Ammu-Station!"
 	product_ads = list(
-		"AmmuStation: Your one-stop shop for all things Second Amendment!",
+		"Ammu-Station: Your one-stop shop for all things Second Amendment!",
 		"Be an American, get a gun!",
 		"Quality arms for cheap prices!",
 		"During the 10 minute waiting period, fire off a few rounds!",
@@ -4117,7 +4117,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		"Everything you need to protect your co-workers from the evils of a liberal society!",
 		"The only vending machine that lets you try it before you buy it!",
 		"Real men don't own a gun: They own 5 or more!",
-		"Don't forget the AmmuStation Endangered Species BBQ each Saturday!"
+		"Don't forget the Ammu-Station Endangered Species BBQ each Saturday!"
 	)
 	product_slogans = list(
 		"Float like an astronaut, sting like a bullet!",
@@ -4126,7 +4126,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		"Who needs responsibilities when you have guns?",
 		"It's vital that you protect yourself: the American way.",
 		"DON'T dial 911: Dial .357!",
-		"AmmuStation: Whooping liberal pinkos since 2054!"
+		"Ammu-Station: Whooping liberal pinkos since 2054!"
 	)
 	products = list(
 		/obj/item/weapon/reagent_containers/food/snacks/monkeyburger = 8, //O say can you see, by the dawn's early light
@@ -4177,7 +4177,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 	if(!emagged)
 		if(user)
 			to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
-			message_admins("[key_name_admin(user)] unlocked an AmmuStation's DANGERMODE!")
+			message_admins("[key_name_admin(user)] unlocked an Ammu-Station's DANGERMODE!")
 		contraband[/obj/item/clothing/head/helmet/space/freedom] = 4
 		contraband[/obj/item/clothing/suit/space/freedom] = 4
 		contraband[/obj/item/weapon/gun/projectile/shotgun/nt12] = 2
