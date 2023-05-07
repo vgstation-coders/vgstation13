@@ -4233,19 +4233,19 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		/obj/item/ammo_storage/box/c9mm = 2,
 		/obj/item/ammo_storage/box/a50 = 1,
 		/obj/item/ammo_storage/magazine/a50 = 3,
-		/obj/item/clothing/head/helmet/space/freedom = 4
-		/obj/item/clothing/suit/space/freedom = 4
-		/obj/item/weapon/gun/projectile/shotgun/nt12 = 2
+		/obj/item/clothing/head/helmet/space/freedom = 4,
+		/obj/item/clothing/suit/space/freedom = 4,
+		/obj/item/weapon/gun/projectile/shotgun/nt12 = 2,
 		/obj/item/weapon/storage/box/lethalshells = 2,
 		/obj/item/weapon/storage/box/buckshotshells = 2,
-		/obj/item/weapon/gun/projectile/automatic = 2 //full autos get grabbed all the time
-		/obj/item/ammo_storage/magazine/smg9mm = 2
-		/obj/item/ammo_storage/box/c9mm = 2
+		/obj/item/weapon/gun/projectile/automatic = 2, //full autos get grabbed all the time
+		/obj/item/ammo_storage/magazine/smg9mm = 2,
+		/obj/item/ammo_storage/box/c9mm = 2,
 		/obj/item/weapon/gun/projectile/colt = 1, //it's the gun that alec baldin
-		/obj/item/weapon/gun/projectile/automag = 1
-		/obj/item/weapon/gun/projectile/automag/prestige = 1
-		/obj/item/ammo_storage/magazine/a357 = 2
-		/obj/item/ammo_storage/box/a357 = 4
+		/obj/item/weapon/gun/projectile/automag = 1,
+		/obj/item/weapon/gun/projectile/automag/prestige = 1,
+		/obj/item/ammo_storage/magazine/a357 = 2,
+		/obj/item/ammo_storage/box/a357 = 4,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger = 3,
@@ -4256,4 +4256,4 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		)
 
 	pack = /obj/structure/vendomatpack/america //can be reloaded with the same packs as the regular non-emagged one
-	
+
