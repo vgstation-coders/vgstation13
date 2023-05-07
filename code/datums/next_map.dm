@@ -112,6 +112,12 @@
 	path = "lowfatbagel"
 	min_players = 25
 
+/datum/next_map/horizon
+	name = "NRV Horizon"
+	path = "NRV Horizon"
+	min_players = 5
+	max_players = 25
+
 /datum/next_map/metaclub
 	name = "Meta Club"
 	path = "Metaclub"
