@@ -4,6 +4,9 @@
 var/world_startup_time
 var/date_string
 
+#if DM_VERSION < 515
+#error You need at least version 515 to compile
+#endif
 /world
 	mob = /mob/new_player
 	turf = /turf/space
