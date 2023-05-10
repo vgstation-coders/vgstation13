@@ -70,7 +70,8 @@
 	..()
 	for(var/i in 1 to rand(3,9))
 		var/type = pick(possible_spawns)
-		new type(src)
+		var/obj/item/weapon/stock_parts/SP = new type(src)
+		SP.starting_materials -= MAT_PHAZON
 
 /obj/structure/closet/crate/secure/loot/vg_stockparts/tier3
 	attempts = 2
