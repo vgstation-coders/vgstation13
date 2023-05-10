@@ -2,6 +2,10 @@
 	..()
 	new/obj/item/mounted/frame/painting(src)
 
+/obj/structure/closet/crate/secure/loot/vg_plasmabeaker/New()
+	..()
+	new/obj/item/weapon/reagent_containers/glass/beaker/large/plasma(src)
+
 /obj/structure/closet/crate/secure/loot/vg_oreloader
 	attempts = 2
 
