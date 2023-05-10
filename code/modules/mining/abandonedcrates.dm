@@ -31,7 +31,12 @@
 				lastattempt = input
 				attempts--
 				if (attempts == 0)
-					antitamper()
+					visible_message("<span class='danger'>The crate's anti-tamper system activates!</span>")
+					var/turf/T = get_turf(src.loc)
+					explosion(T, 0, 0, 0, 1)
+					for(var/item in contents)
+						qdel(item)
+					qdel(src)
 					return
 		else
 			to_chat(user, "<span class='notice'>You attempt to interact with the device using a hand gesture, but it appears this crate is from before the DECANECT came out.</span>")
@@ -55,43 +60,7 @@
 				to_chat(user, "<span class='notice'>* Last access attempt lower than expected code.</span>")
 			else
 				to_chat(user, "<span class='notice'>* Last access attempt higher than expected code.</span>")
-		else if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
-			antitamper()
-			return
 		else
 			..()
 	else
 		..()
-
-/obj/structure/closet/crate/secure/loot/emp_act(severity)
-	antitamper()
-
-/obj/structure/closet/crate/secure/loot/ex_act(severity)
-	switch(severity)
-		if(1)
-			antitamper()
-		if(2)
-			if(prob(50))
-				antitamper()
-		if(3)
-			if(prob(5))
-				antitamper()
-
-/obj/structure/closet/crate/secure/loot/bullet_act(var/obj/item/projectile/Proj)
-	if(Proj.damage)
-		antitamper()
-
-/obj/structure/closet/crate/secure/loot/process()
-	for(var/obj/effect/beam/B in beams)
-		health -= B.get_damage()
-
-	if(health <= 0)
-		antitamper()
-
-/obj/structure/closet/crate/secure/loot/proc/antitamper()
-	visible_message("<span class='danger'>The crate's anti-tamper system activates!</span>")
-	var/turf/T = get_turf(src.loc)
-	explosion(T, 0, 0, 0, 1)
-	for(var/item in contents)
-		qdel(item)
-	qdel(src)
