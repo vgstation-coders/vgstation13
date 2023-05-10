@@ -317,6 +317,13 @@ var/global/num_vending_terminals = 1
 		D.amount = D.original_amount
 	for (var/datum/data/vending_product/D in hidden_records)
 		D.amount = D.original_amount
+	for (var/datum/data/vending_product/D in coin_records)
+		D.amount = D.original_amount
+	for (var/datum/data/vending_product/D in voucher_records)
+		D.amount = D.original_amount
+	for (var/datum/data/vending_product/D in holiday_records)
+		D.amount = D.original_amount	
+		
 	new /obj/item/stack/sheet/cardboard(P.loc, 4)
 	qdel(P)
 	if(user.machine==src)
