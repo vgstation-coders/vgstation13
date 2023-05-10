@@ -69,6 +69,13 @@
 /obj/structure/closet/crate/secure/loot/ex_act(severity)
 	antitamper()
 
+/obj/structure/closet/crate/secure/loot/process()
+	for(var/obj/effect/beam/B in beams)
+		health -= B.get_damage()
+
+	if(health <= 0)
+		antitamper()
+
 /obj/structure/closet/crate/secure/loot/proc/antitamper()
 	to_chat(user, "<span class='danger'>The crate's anti-tamper system activates!</span>")
 	var/turf/T = get_turf(src.loc)
