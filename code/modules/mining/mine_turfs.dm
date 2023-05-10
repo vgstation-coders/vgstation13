@@ -522,7 +522,11 @@ var/list/icon_state_to_appearance = list()
 	ChangeTurf(mined_type)
 
 /turf/unsimulated/mineral/proc/DropAbandonedCrate()
-	var/crate_type = pick(valid_abandoned_crate_types)
+	var/list/crate_types = list()
+	for(var/type in subtypesof(/obj/structure/closet/crate/secure/loot))
+		var/obj/structure/closet/crate/secure/loot/L = type
+		crate_types[type] = initial(L.attempts)
+	var/crate_type = pickweight(crate_types)
 	new crate_type(src)
 
 /turf/unsimulated/mineral/proc/GetScanState()

@@ -1,5 +1,3 @@
-var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crate/secure/loot)-/obj/structure/closet/crate/secure/loot
-
 /obj/structure/closet/crate/secure/loot
 	name = "abandoned crate"
 	desc = "What could be inside?"
