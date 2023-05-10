@@ -846,6 +846,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		return ..()
 
+/mob/living/simple_animal/log_say_message(var/datum/speech/speech, var/message_mode, var/message)
+	if(client)
+		..()
 
 /mob/living/simple_animal/proc/name_mob(mob/user)
 	var/n_name = copytext(sanitize(input(user, "What would you like to name \the [src]?", "Renaming \the [src]", null) as text|null), 1, MAX_NAME_LEN)
