@@ -81,7 +81,7 @@
 		antitamper()
 
 /obj/structure/closet/crate/secure/loot/proc/antitamper()
-	to_chat(user, "<span class='danger'>The crate's anti-tamper system activates!</span>")
+	visible_message("<span class='danger'>The crate's anti-tamper system activates!</span>")
 	var/turf/T = get_turf(src.loc)
 	explosion(T, 0, 0, 0, 1)
 	for(var/item in contents)
