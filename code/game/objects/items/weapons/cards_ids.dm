@@ -206,7 +206,7 @@ var/list/global/id_cards = list()
 	var/blood_type = "\[UNSET\]"
 	var/dna_hash = "\[UNSET\]"
 	var/fingerprint_hash = "\[UNSET\]"
-	var/bans = null
+	var/obj/item/demote_chip/dchip = null
 	//alt titles are handled a bit weirdly in order to unobtrusively integrate into existing ID system
 	var/assignment = null	//can be alt title or the actual job
 	var/rank = null			//actual job
@@ -242,6 +242,8 @@ var/list/global/id_cards = list()
 			user.show_message("Blood Type: [blood_type].",1)
 			user.show_message("DNA: [dna_hash].",1)
 			user.show_message("Fingerprint: [fingerprint_hash].",1)
+		if(dchip && dchip.stamped.len)
+			to_chat(user,"<span class='bad'>It has a demotion modchip with the following stamps: [english_list(uniquenamelist(dchip.stamped))].</span>")
 
 /obj/item/weapon/card/id/attack_self(var/mob/user)
 	if(user.attack_delayer.blocked())
