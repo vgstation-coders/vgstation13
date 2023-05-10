@@ -28,7 +28,7 @@
 	new/obj/item/device/modkit/plasmacutter(src)
 
 /obj/structure/closet/crate/secure/loot/vg_hivecores
-	attempts = 2
+	attempts = 1
 
 /obj/structure/closet/crate/secure/loot/vg_hivecores/New()
 	..()
