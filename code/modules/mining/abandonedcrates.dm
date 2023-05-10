@@ -69,6 +69,9 @@
 /obj/structure/closet/crate/secure/loot/ex_act(severity)
 	antitamper()
 
+/obj/structure/closet/crate/secure/loot/bullet_act(severity)
+	antitamper()
+
 /obj/structure/closet/crate/secure/loot/process()
 	for(var/obj/effect/beam/B in beams)
 		health -= B.get_damage()
