@@ -28,16 +28,11 @@
 	new/obj/item/weapon/pickaxe/plasmacutter/accelerator(src)
 
 /obj/structure/closet/crate/secure/loot/vg_phazbananium
-	attempts = 2
+	attempts = 1
 
 /obj/structure/closet/crate/secure/loot/vg_phazbananium/New()
 	..()
-	attempts = rand(1,2)
-	if(attempts == 2)
-		drop_stack(pick(/obj/item/stack/ore/phazon,/obj/item/stack/ore/clown), src, rand(10,20))
-	else
-		drop_stack(/obj/item/stack/ore/phazon, src, rand(5,10))
-		drop_stack(/obj/item/stack/ore/clown, src, rand(5,10))
+	drop_stack(pick(/obj/item/stack/ore/phazon,/obj/item/stack/ore/clown), src, rand(10,20))
 
 /obj/structure/closet/crate/secure/loot/vg_cash/New()
 	..()
