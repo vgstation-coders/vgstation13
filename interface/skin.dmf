@@ -1206,7 +1206,6 @@ window "browserwindow"
 		size = 640x480
 		anchor1 = none
 		anchor2 = none
-		is-visible = true
 		saved-params = "pos;size;is-minimized;is-maximized"
 		title = "Browser"
 		is-pane = true
