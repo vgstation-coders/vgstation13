@@ -67,7 +67,15 @@
 	antitamper()
 
 /obj/structure/closet/crate/secure/loot/ex_act(severity)
-	antitamper()
+	switch(severity)
+		if(1)
+			antitamper()
+		if(2)
+			if(prob(50))
+				antitamper()
+		if(3)
+			if(prob(5))
+				antitamper()
 
 /obj/structure/closet/crate/secure/loot/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.damage)
