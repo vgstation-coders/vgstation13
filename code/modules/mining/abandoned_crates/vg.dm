@@ -25,7 +25,7 @@
 
 /obj/structure/closet/crate/secure/loot/vg_bestdrill/New()
 	..()
-	new/obj/item/weapon/pickaxe/plasmacutter/accelerator(src)
+	new/obj/item/device/modkit/plasmacutter(src)
 
 /obj/structure/closet/crate/secure/loot/vg_hivecores
 	attempts = 2
