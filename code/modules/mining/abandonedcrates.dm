@@ -31,12 +31,7 @@
 				lastattempt = input
 				attempts--
 				if (attempts == 0)
-					to_chat(user, "<span class='danger'>The crate's anti-tamper system activates!</span>")
-					var/turf/T = get_turf(src.loc)
-					explosion(T, 0, 0, 0, 1)
-					for(var/item in contents)
-						qdel(item)
-					qdel(src)
+					antitamper()
 					return
 		else
 			to_chat(user, "<span class='notice'>You attempt to interact with the device using a hand gesture, but it appears this crate is from before the DECANECT came out.</span>")
@@ -60,7 +55,24 @@
 				to_chat(user, "<span class='notice'>* Last access attempt lower than expected code.</span>")
 			else
 				to_chat(user, "<span class='notice'>* Last access attempt higher than expected code.</span>")
+		else if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
+			antitamper()
+			return
 		else
 			..()
 	else
 		..()
+
+/obj/structure/closet/crate/secure/loot/emp_act(severity)
+	antitamper()
+
+/obj/structure/closet/crate/secure/loot/ex_act(severity)
+	antitamper()
+
+/obj/structure/closet/crate/secure/loot/proc/antitamper()
+	to_chat(user, "<span class='danger'>The crate's anti-tamper system activates!</span>")
+	var/turf/T = get_turf(src.loc)
+	explosion(T, 0, 0, 0, 1)
+	for(var/item in contents)
+		qdel(item)
+	qdel(src)
