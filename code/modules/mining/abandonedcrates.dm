@@ -71,7 +71,7 @@
 
 /obj/structure/closet/crate/secure/loot/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.damage)
-	antitamper()
+		antitamper()
 
 /obj/structure/closet/crate/secure/loot/process()
 	for(var/obj/effect/beam/B in beams)
