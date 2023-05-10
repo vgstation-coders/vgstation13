@@ -71,9 +71,6 @@
 	for(var/i in 1 to rand(3,9))
 		var/type = pick(possible_spawns)
 		var/obj/item/weapon/stock_parts/SP = new type(src)
-		if(MAT_PHAZON in SP.starting_materials)
-			SP.starting_materials[MAT_PHAZON] = 0
-			SP.starting_materials -= MAT_PHAZON
 
 /obj/structure/closet/crate/secure/loot/vg_stockparts/tier3
 	attempts = 2
@@ -84,16 +81,6 @@
 			/obj/item/weapon/stock_parts/manipulator/nano/pico,
 			/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
 			/obj/item/weapon/stock_parts/matter_bin/adv/super)
-
-/obj/structure/closet/crate/secure/loot/vg_stockparts/tier4
-	attempts = 3
-	possible_spawns = list(
-//			/obj/item/weapon/stock_parts/console_screen/reinforced/plasma/rplasma,
-			/obj/item/weapon/stock_parts/capacitor/adv/super/ultra,
-			/obj/item/weapon/stock_parts/micro_laser/high/ultra/giga,
-			/obj/item/weapon/stock_parts/manipulator/nano/pico/femto,
-			/obj/item/weapon/stock_parts/scanning_module/adv/phasic/bluespace,
-			/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace)
 
 /obj/structure/closet/crate/secure/loot/vg_lazinjectors/New()
 	..()
