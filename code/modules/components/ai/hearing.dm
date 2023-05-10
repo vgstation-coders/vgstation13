@@ -60,6 +60,10 @@
 	var/list/notfoundmessages = list()
 	var/list/freemessages = list("Coming right up!")
 	var/list/toomuchmessages = list("Too much stuff in your order, come collect it before ordering again.")
+	var/list/servedmessages = list("<ITEMLIST> served!")
+	var/list/pricemessages = list("That will be <PRICE> credits.")
+	var/list/priceleftmessages = list("<PRICE> credits left to pay.")
+	var/list/ordermake_emotes = list("begins processing an order...")
 	var/baseprice = 0
 	var/currentprice
 	var/inbag = FALSE
@@ -127,7 +131,7 @@
 				M.say(pick(freemessages))
 				spawn_items()
 			else
-				M.say("That will be [currentprice] credit\s.")
+				M.say(replacetext(pick(pricemessages),"<PRICE>",currentprice))
 
 /datum/component/ai/hearing/order/process()
 	if(currentprice && isliving(parent))
@@ -151,7 +155,7 @@
 						currentprice = 0
 					spawn_items()
 				else
-					M.say("[currentprice] credit\s left to pay.")
+					M.say(replacetext(pick(priceleftmessages),"<PRICE>",currentprice))
 
 /datum/component/ai/hearing/order/proc/spawn_items()
 	if(!items2deliver.len)
@@ -159,7 +163,7 @@
 	if(isliving(parent))
 		var/mob/living/M=parent
 		if(!M.isDead())
-			M.emote("me", 1, "begins processing an order...")
+			M.emote("me", 1, pick(ordermake_emotes))
 			var/atom/place2deliver = get_step(M,M.dir)
 			sleep(rand(5,10) SECONDS)
 			if(inbag)
@@ -171,7 +175,7 @@
 					var/datum/reagent/R = item2deliver
 					var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new(place2deliver)
 					D.reagents.add_reagent(initial(R.id),D.reagents.maximum_volume)
-			M.say("[counted_english_list(items2deliver)] served!")
+			M.say(replacetext(pick(servedmessages),"<ITEMLIST>",counted_english_list(items2deliver)))
 			place2deliver.update_icon()
 			items2deliver.Cut()
 

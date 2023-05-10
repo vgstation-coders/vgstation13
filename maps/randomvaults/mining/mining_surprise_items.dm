@@ -79,6 +79,16 @@
 	toomuchmessages = list("Easy pal, I can only hold so many glasses in my ol' compartments. Try gettin' your stuff first and then orderin' again.",
 							"Look, I ain't made to carry the world on my shoulders here, get your stuff before orderin' again.",
 							"Sorry, inventory's full, come get yer stuff first.")
+	pricemessages = list("That'll be <PRICE> credits for one servin'.",
+						"<PRICE> credits for today's amount.",
+						"That's <PRICE> credits up front.")
+	priceleftmessages = list("Still need about <PRICE> left.",
+							"Just <PRICE> credits more for this batch.",
+							"Now it just needs about <PRICE> credits.")
+	servedmessages = list("<ITEMLIST> served n' poured fresh!",
+						"<ITEMLIST> straight from the presses!",
+						"<ITEMLIST> on the table, drink it cool!")
+	ordermake_emotes = list("begins brewing its drinks...")
 	acceptable_recipe_reagents = list(RADIUM)
 	var/lastwrongitemtime
 
