@@ -1,6 +1,6 @@
 /datum/biogen_recipe
 	var/id=""
-	var/cost=list()
+	var/cost=0
 	var/category=""
 	var/name=""
 	var/amount_per_unit=1
@@ -9,12 +9,7 @@
 	var/result=null
 
 /datum/biogen_recipe/proc/Render(var/context)
-	var/html = "<li><a href='?src=\ref[context];action=create;item=[id];num=1'>[name][(amount_per_unit > 1) ? " [amount_per_unit] units" : ""]</a> (<FONT COLOR=blue>"
-	var/cost_list = list()
-	for(var/molecule in cost)
-		cost_list += "[cost[molecule]] [molecule]"
-	html += jointext(cost_list, ", ")
-	html += ")</FONT>"
+	var/html = "<li><a href='?src=\ref[context];action=create;item=[id];num=1'>[name][(amount_per_unit > 1) ? " [amount_per_unit] units" : ""]</a> <FONT COLOR=blue>([cost])</FONT>"
 	if(other_amounts.len)
 		var/first=1
 		html += " ("
@@ -34,35 +29,35 @@
 	id=MILK
 	name=MILK
 	reagent=MILK
-	cost=list(GLUCOSE = 20)
+	cost=20
 	amount_per_unit=10
 	other_amounts=list(5)
 
 /datum/biogen_recipe/food/cheese
 	id="cheese"
 	name="Cheese Wheel"
-	cost=list(GLUCOSE = 100) //Making milk and reacting it with enzyme costs 80, so this is 25% more expensive
+	cost=100 //Making milk and reacting it with enzyme costs 80, so this is 25% more expensive
 	other_amounts=list(5)
 	result=/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
 
 /datum/biogen_recipe/food/butter
 	id="butter"
 	name="Butter"
-	cost=list(GLUCOSE = 150) //The 40u milk for 20u cream costs 80, so this is about 87% more expensive
+	cost=150 //The 40u milk for 20u cream costs 80, so this is about 87% more expensive
 	other_amounts=list(5)
 	result=/obj/item/weapon/reagent_containers/food/snacks/butter
 
 /datum/biogen_recipe/food/meat
 	id="meat"
 	name="Slab of meat"
-	cost=list(PROTEIN = 50)
+	cost=50
 	other_amounts=list(5)
 	result=/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 
 /datum/biogen_recipe/food/monkeycube
 	id="monkeycube"
 	name="Monkey cube"
-	cost=list(PROTEIN = 250)
+	cost=250
 	other_amounts=list(5)
 	result=/obj/item/weapon/reagent_containers/food/snacks/monkeycube
 
@@ -73,7 +68,7 @@
 	id="ez"
 	name="E-Z-Nutrient"
 	reagent=EZNUTRIENT
-	cost=list(STARCH = 5, GLUCOSE = 5)
+	cost=10
 	amount_per_unit=10
 	other_amounts=list(5)
 
@@ -81,7 +76,7 @@
 	id="l4z"
 	name="Left 4 Zed"
 	reagent=LEFT4ZED
-	cost=list(CHITIN = 10, GLUCOSE = 10)
+	cost=20
 	amount_per_unit=10
 	other_amounts=list(5)
 
@@ -89,12 +84,12 @@
 	id="rh"
 	name="Robust Harvest"
 	reagent=ROBUSTHARVEST
-	cost=list(PROTEIN = 15, GLUCOSE = 10)
+	cost=25
 	amount_per_unit=10
 	other_amounts=list(5)
 
 /datum/biogen_recipe/nutrient/beez
-	cost=list(PROTEIN = 10, GLUCOSE = 30)
+	cost=40
 	id="beez"
 	name="Bottle of BeezEez"
 	other_amounts=list(5)
@@ -104,134 +99,133 @@
 	category="Leather"
 
 /datum/biogen_recipe/leather/bee_net
-	cost=list(STARCH = 30, CELLULOSE = 70)
+	cost = 100
 	id="bee_net"
 	name = "Bee Net"
 	result=/obj/item/weapon/bee_net
 
 /datum/biogen_recipe/leather/wallet
-	cost=list(CELLULOSE = 100)
+	cost=100
 	id="wallet"
 	name="Wallet"
 	result=/obj/item/weapon/storage/wallet
 
 /datum/biogen_recipe/leather/gloves
-	cost=list(CELLULOSE = 200, CHITIN = 50)
+	cost=250
 	id="gloves"
 	name="Botanical Gloves"
 	result=/obj/item/clothing/gloves/botanic_leather
 
 /datum/biogen_recipe/leather/knifeholster
-	cost=list(CELLULOSE = 150, CHITIN = 100)
+	cost=250
 	id="knifeholster"
 	name="Boot Knife Holster"
 	result=/obj/item/clothing/accessory/holster/knife/boot
 
 /datum/biogen_recipe/leather/ammo_pouch
-	cost=list(CELLULOSE = 100, CHITIN = 150)
+	cost = 250
 	id="ammopouch"
 	name = "Ammo Pouch"
 	result=/obj/item/weapon/storage/bag/ammo_pouch
 
 /datum/biogen_recipe/leather/moneybag
-	cost=list(CELLULOSE = 300)
+	cost=300
 	id="moneybag"
 	name="Money Bag"
 	result=/obj/item/weapon/storage/bag/money
 
 /datum/biogen_recipe/leather/belt/slim
-	cost=list(CELLULOSE = 100, CHITIN = 100, STARCH = 100)
+	cost=300
 	id="slim-belt"
 	name="Slim Belt"
 	result=/obj/item/weapon/storage/belt/slim
 
 /datum/biogen_recipe/leather/belt
-	cost=list(CELLULOSE = 200, STARCH = 100)
+	cost=300
 	id="belt"
 	name="Tool-belt"
 	result=/obj/item/weapon/storage/belt/utility
 
-//TODO
 /datum/biogen_recipe/leather/bandolier
-	cost=list(CELLULOSE = 100, STARCH = 100, GLUCOSE = 100)
+	cost = 300
 	id="bandolier"
 	name = "Bandolier"
 	result=/obj/item/clothing/accessory/storage/bandolier
 
 /datum/biogen_recipe/leather/handgunholster
-	cost=list(CELLULOSE = 150, STARCH = 150, GLUCOSE = 50)
+	cost=350
 	id="handgunholster"
 	name="Handgun Holster"
 	result=/obj/item/clothing/accessory/holster/handgun/biogenerator
 
 /datum/biogen_recipe/leather/fannypack
-	cost=list(CELLULOSE = 75, CHITIN = 25)
+	cost=100
 	id="fannypack"
 	name="Fanny Pack"
 	result=/obj/item/clothing/accessory/storage/fannypack
 
 /datum/biogen_recipe/leather/ore
-	cost=list(CELLULOSE = 100, PROTEIN = 250)
+	cost=350
 	id="ore"
 	name="Mining Satchel"
 	result=/obj/item/weapon/storage/bag/ore
 
 /datum/biogen_recipe/leather/gadget
-	cost=list(CELLULOSE = 100, CHITIN = 250)
+	cost=350
 	id="gadget"
 	name="Gadget Bag"
 	result=/obj/item/weapon/storage/bag/gadgets
 
 /datum/biogen_recipe/leather/slime
-	cost=list(STARCH = 100, CHITIN = 250)
+	cost=350
 	id="slime"
 	name="Slime Bag"
 	result=/obj/item/weapon/storage/bag/xenobio
 
 /datum/biogen_recipe/leather/plants
-	cost=list(CELLULOSE = 200, STARCH = 150)
+	cost=350
 	id="plants"
 	name="Plant Bag"
 	result=/obj/item/weapon/storage/bag/plants
 
 /datum/biogen_recipe/leather/materials
-	cost=list(CELLULOSE = 100, STARCH = 100, GLUCOSE = 100, CHITIN = 100, PROTEIN = 100)
+	cost=500
 	id="materials"
 	name="Materials Bag"
 	result=/obj/item/weapon/storage/bag/materials
 
 /datum/biogen_recipe/leather/secbelt
-	cost=list(PROTEIN = 400)
+	cost=400
 	id="secbelt"
 	name="Security Belt"
 	result=/obj/item/weapon/storage/belt/security
 
 /datum/biogen_recipe/leather/minebelt
-	cost=list(CELLULOSE = 200, PROTEIN = 150)
+	cost=350
 	id="minebelt"
 	name="Mining Gear Belt"
 	result=/obj/item/weapon/storage/belt/mining
 
 /datum/biogen_recipe/leather/janibelt
-	cost=list(CELLULOSE = 200, STARCH = 100, GLUCOSE=50)
+	cost=350
 	id="janibelt"
 	name="Janibelt"
 	result=/obj/item/weapon/storage/belt/janitor
 
 /datum/biogen_recipe/leather/hydrobelt
-	cost=list(CELLULOSE = 100, STARCH = 100, GLUCOSE = 100, CHITIN = 50)
+	cost=350
 	id="hydrobelt"
 	name="Botany Gear Belt"
 	result=/obj/item/weapon/storage/belt/botanist
 
 /datum/biogen_recipe/leather/briefcase
-	cost=list(CELLULOSE = 200, STARCH = 200)
+	cost=400
 	id="briefcase"
 	name="Leather Briefcase"
 	result=/obj/item/weapon/storage/briefcase/biogen
 
 /datum/biogen_recipe/leather/satchel
-	cost=list(CELLULOSE = 200, STARCH = 200)
+	cost=400
 	id="satchel"
 	name="Leather Satchel"
 	result=/obj/item/weapon/storage/backpack/satchel
@@ -240,41 +234,41 @@
 	category="Paper"
 
 /datum/biogen_recipe/paper/papersheet
-	cost=list(CELLULOSE = 15)
+	cost=15
 	id="papersheet"
 	name="Paper Sheet"
 	other_amounts=list(5,10)
 	result=/obj/item/weapon/paper
 
 /datum/biogen_recipe/paper/cardboard
-	cost=list(CELLULOSE = 15, STARCH = 10)
+	cost=25
 	id="cardboard"
 	name="Cardboard Sheet"
 	other_amounts=list(5,10,50)
 	result=/obj/item/stack/sheet/cardboard
 
 /datum/biogen_recipe/paper/giftwrap
-	cost=list(CELLULOSE = 5, STARCH = 20)
+	cost=25
 	id="giftwrap"
 	name="Gift Wrap"
 	amount_per_unit = 24
 	result=/obj/item/stack/package_wrap/gift
 
 /datum/biogen_recipe/paper/packagewrap
-	cost=list(CELLULOSE = 5, STARCH = 20)
+	cost=30
 	id="packagewrap"
 	name="Package Wrap"
 	amount_per_unit = 24
 	result=/obj/item/stack/package_wrap
 
 /datum/biogen_recipe/paper/clipboard
-	cost=list(CELLULOSE = 75)
+	cost=75
 	id="clipboard"
 	name="Clipboard"
 	result=/obj/item/weapon/storage/bag/clipboard
 
 /datum/biogen_recipe/paper/paperbin
-	cost=list(CELLULOSE = 465, STARCH = 10) //25 from the cardboard, 30*15=450 from the paper
+	cost=475 //25 from the cardboard, 30*15=450 from the paper
 	id="paperbin"
 	name="Paper Bin (30 sheets)"
 	result=/obj/item/weapon/paper_bin
@@ -285,7 +279,7 @@
 /datum/biogen_recipe/misc/insecticide
 	id = "insecticide"
 	name = "Insecticide"
-	cost=list(PROTEIN = 10, STARCH = 10, CHITIN = 15)
+	cost=35
 	reagent=INSECTICIDE
 	amount_per_unit=10
 	other_amounts=list(5)
@@ -294,32 +288,32 @@
 	id="plantbgone"
 	name="Plant-B-Gone"
 	reagent=PLANTBGONE
-	cost=list(CHITIN = 30, CELLULOSE = 5)
+	cost=35
 	amount_per_unit=10
 	other_amounts=list(5)
 
 /datum/biogen_recipe/misc/candle
-	cost=list(STARCH = 40, GLUCOSE = 10)
+	cost=50
 	id="candle"
 	name="Red Candle"
 	other_amounts=list(5)
 	result=/obj/item/candle
 
 /datum/biogen_recipe/misc/charcoal
-	cost=list(CELLULOSE = 100)
+	cost=100
 	id="charcoal"
 	name="Charcoal Sheet"
 	other_amounts=list(5,10)
 	result=/obj/item/stack/sheet/charcoal
 
 /datum/biogen_recipe/misc/soap
-	cost=list(GLUCOSE = 150, STARCH = 100)
+	cost=250
 	id="soap"
 	name="Bar of Soap"
 	result=/obj/item/weapon/soap/nanotrasen
 
 /datum/biogen_recipe/misc/crayons
-	cost=list(CELLULOSE = 200, STARCH = 200)
+	cost=400
 	id="crayons"
 	name="Box of Crayons"
 	result=/obj/item/weapon/storage/fancy/crayons
@@ -327,39 +321,39 @@
 /datum/biogen_recipe/misc/rice_hat
 	name = "Rice Hat"
 	id = "rice_hat"
-	cost=list(STARCH = 300)
+	cost = 300
 	result = /obj/item/clothing/head/rice_hat
 
 /datum/biogen_recipe/misc/roningasa
 	name = "Wickerwork Hat"
 	id = "wickerwork_hat"
-	cost=list(CELLULOSE = 300)
+	cost = 300
 	result = /obj/item/clothing/head/rice_hat/ronin
 
 /datum/biogen_recipe/misc/mino
 	name = "Grass Coat"
 	id = "grass_coat"
-	cost=list(CELLULOSE = 300)
+	cost = 500
 	result = /obj/item/clothing/suit/mino
 
 /datum/biogen_recipe/misc/rvest
 	name = "Reticulated Vest"
 	id = "rvest"
-	cost=list(CELLULOSE = 200, STARCH = 300)
+	cost = 500
 	result = /obj/item/clothing/suit/reticulatedvest
 
 /datum/biogen_recipe/flooring
 	category="Flooring"
 
 /datum/biogen_recipe/flooring/carpet
-	cost=list(CELLULOSE = 5, STARCH = 5)
+	cost=10
 	id="carpet"
 	name="Piece of Carpet"
 	other_amounts=list(5,10,20)
 	result=/obj/item/stack/tile/carpet
 
 /datum/biogen_recipe/flooring/arcade
-	cost=list(CELLULOSE = 5, STARCH = 5)
+	cost=10
 	id="arcadecarpet"
 	name="Piece of Arcade Carpet"
 	other_amounts=list(5,10,20)
@@ -378,7 +372,7 @@
 	var/biomass_coefficient = 9
 	var/tmp/processing = 0
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
-	var/points = list(STARCH = 0, CHITIN = 0, GLUCOSE = 0, PROTEIN = 0, CELLULOSE = 0, XENOPHYLL = 0)
+	var/points = 0
 	var/menustat = "menu"
 	var/tmp/list/recipes[0]
 	var/tmp/list/recipe_categories[0]
@@ -568,9 +562,7 @@
 	if (processing)
 		dat += "<FONT COLOR=red>Biogenerator is processing! Please wait...</FONT>"
 	else
-		for (var/nutrient in points)
-			if (points[nutrient] > 0)
-				dat += "[nutrient]: [points[nutrient]] points.<BR>"
+		dat += "Biomass: [points] points.<HR>"
 		switch(menustat)
 			if("menu")
 				if (beaker)
@@ -621,8 +613,10 @@
 	var/S = 0
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/I in contents)
 		S += 5
-		for (var/molecule in I.seed.molecule_type)
-			points[molecule] += round((min(I.seed.potency, 200)*biomass_coefficient) / I.seed.molecule_type.len)
+		if(I.reagents.get_reagent_amount(NUTRIMENT) < 0.1)
+			points += 1
+		else
+			points += I.reagents.get_reagent_amount(NUTRIMENT)*biomass_coefficient
 		qdel(I)
 	if(S)
 		processing = 1
@@ -636,18 +630,16 @@
 	else
 		menustat = "void"
 
-//Cost is a copy of recipe.cost, where num is the number of that recipe to make
-/obj/machinery/biogenerator/proc/check_cost(var/cost, var/num)
-	for (var/nutrient in cost)
-		if (cost[nutrient]*num > points[nutrient])
-			menustat = "nopoints"
-			return 1
-	for (var/nutrient in cost)
-		points[nutrient] -= cost[nutrient]*num
-	processing = 1
-	update_icon()
-	updateUsrDialog()
-	sleep(30)
+/obj/machinery/biogenerator/proc/check_cost(var/cost)
+	if (cost > points)
+		menustat = "nopoints"
+		return 1
+	else
+		points -= cost
+		processing = 1
+		update_icon()
+		updateUsrDialog()
+		sleep(30)
 
 /obj/machinery/biogenerator/proc/create_product(var/item, var/num)
 	var/datum/biogen_recipe/recipe=recipes[item]
@@ -657,7 +649,7 @@
 	if(!(num in (recipe.other_amounts + 1)))
 		return 0
 
-	if(check_cost(recipe.cost, num))
+	if(check_cost(recipe.cost*num))
 		return 0
 
 	if(recipe.reagent)

@@ -575,10 +575,3 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_CRAVE		"vales"
 #define INCENSE_CORNOIL 	"cornoils"
 #define INCENSE_MUSTARDPLANT "mustardplant"
-
-#define GLUCOSE "Glucose"
-#define CELLULOSE "Cellulose"
-#define PROTEIN "Protein"
-#define STARCH "Starch"
-#define CHITIN "Chitin"
-#define XENOPHYLL "Xenophyll"
