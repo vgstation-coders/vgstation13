@@ -88,7 +88,9 @@
 	servedmessages = list("<ITEMLIST> served n' poured fresh!",
 						"<ITEMLIST> straight from the presses!",
 						"<ITEMLIST> on the table, drink it cool!")
-	ordermake_emotes = list("begins brewing its drinks...")
+	ordermake_emotes = list("begins brewing its drinks...",
+						"starts pouring juices into a glass...",
+						"is pulping some fluids...")
 	acceptable_recipe_reagents = list(RADIUM)
 	var/lastwrongitemtime
 
