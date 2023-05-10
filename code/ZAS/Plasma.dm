@@ -87,11 +87,12 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	if(E)
 		if(prob(20))
 			to_chat(src, "<span class='warning'>Your eyes burn!</span>")
-		E.damage += 2.5
+		if(E.damage+5 < E.min_broken_damage)
+			E.damage += 1
 		eye_blurry = min(eye_blurry+1.5,50)
 		if (prob(max(0,E.damage - 15) + 1) && !eye_blind)
 			to_chat(src, "<span class='warning'>You are blinded!</span>")
-			eye_blind += 20
+			eye_blind += 5
 
 /mob/living/carbon/human/proc/pl_head_protected()
 	//Checks if the head is adequately sealed.
