@@ -114,14 +114,6 @@
 		var/type = pick_n_take(tospawn)
 		new type(src)
 
-/obj/structure/closet/crate/secure/loot/vg_borgupgrades/xenoarch
-	attempts = 2
-	tospawn = list(/obj/item/borg/upgrade/hook,/obj/item/borg/upgrade/portosmelter,/obj/item/borg/upgrade/xenoarch)
-
-/obj/structure/closet/crate/secure/loot/vg_borgupgrades/xenoarch_adv
-	attempts = 1
-	tospawn = list(/obj/item/borg/upgrade/hook,/obj/item/borg/upgrade/portosmelter,/obj/item/borg/upgrade/xenoarch_adv)
-
 /obj/structure/closet/crate/secure/loot/vg_seeds
 	attempts = 2
 
