@@ -4093,7 +4093,7 @@
 /datum/chemical_reaction/bumcivilian/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
 	var/atom/A = get_holder_at_turf_level(holder.my_atom)
-	holder.my_atom.visible_message("<span class='warning'>Suddenly, everything around [A ? "\the [A]" : "\the [my_holder.atom] "]becomes perfectly silent...</span>")
+	holder.my_atom.visible_message("<span class='warning'>Suddenly, everything around [A ? "\the [A] " : "\the [holder.my_atom] "]becomes perfectly silent...</span>")
 	var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in holder.reagent_list
 	for(var/turf/T in view(get_turf(holder.my_atom)))
 		T.mute_time = world.time + B.mute_duration
