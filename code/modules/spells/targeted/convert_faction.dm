@@ -1,5 +1,5 @@
 /spell/targeted/civilwarconvert
-	name = "Convert to Faction"
+	name = "Conversion"
 	desc = "This spell allows you to convert someone to your side of the civil war."
 	abbreviation = "CF"
 	user_type = USER_TYPE_WIZARD
