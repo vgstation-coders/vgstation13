@@ -6,14 +6,13 @@
 	specialization = SSUTILITY
 	price = 40
 	school = "evocation"
-	charge_type = Sp_RECHARGE
 	charge_max = 150
 	invocation = "WOLOLO!"
 	invocation_type = SpI_SHOUT
 	range = 1
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
-	cooldown_min = 20
+	cooldown_min = 10
 	selection_type = "view"
 	civil_war_only = TRUE
 	compatible_mobs = list(/mob/living/carbon/human)
