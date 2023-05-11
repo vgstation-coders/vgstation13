@@ -13,7 +13,6 @@
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
 	cooldown_min = 10
-	selection_type = "view"
 	civil_war_only = TRUE
 	compatible_mobs = list(/mob/living/carbon/human)
 	cast_sound = 'sound/effects/aoe2/30 wololo.ogg'
