@@ -10,25 +10,17 @@
 	charge_max = 150
 	invocation = "WOLOLO!"
 	invocation_type = SpI_SHOUT
-	range = 7
+	range = 1
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
-	cooldown_min = 10
-	selection_type = "range"
+	cooldown_min = 20
+	selection_type = "view"
 	civil_war_only = TRUE
 	compatible_mobs = list(/mob/living/carbon/human)
 	cast_sound = 'sound/effects/aoe2/30 wololo.ogg'
 	hud_state = "apprentice-logo"
 	override_icon = 'icons/logos.dmi'
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
-	var/bypass_implant = FALSE
-
-/spell/targeted/civilwarconvert/empower_spell()
-	spell_levels[Sp_POWER]++
-	if(spell_levels[Sp_POWER] >= 1)
-		bypass_implant = TRUE
-		name = "Implant-Agnostic Convert to Faction"
-		return "You have improved Convert to Faction into [name]. It will now bypass loyalty implants."
+	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3)
 
 /spell/targeted/civilwarconvert/cast_check(skipcharge = 0,mob/user = usr)
 	return ..() && find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, user.mind)
@@ -38,10 +30,9 @@
 		var/mob/living/carbon/human/H = target
 		if(!istype(H))
 			return FALSE
-		if(!bypass_implant)
-			for(var/obj/item/weapon/implant/loyalty/L in H) // check loyalty implant in the contents
-				if(L.imp_in == H) // a check if it's actually implanted
-					return FALSE
+		for(var/obj/item/weapon/implant/loyalty/L in H) // check loyalty implant in the contents
+			if(L.imp_in == H) // a check if it's actually implanted
+				return FALSE
 		var/datum/faction/ourfact = find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, user.mind)
 		var/datum/faction/theirfact = find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, H.mind)
 		return !iswizard(H) && H.mind && ourfact != theirfact
