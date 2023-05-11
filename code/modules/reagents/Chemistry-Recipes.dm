@@ -628,6 +628,7 @@
 	id = ANFOBOMB
 	required_reagents = list(AMMONIUMNITRATE = 16, FUEL = 1)  // rough approximation of the 94%-6% mix
 	required_temp = AUTOIGNITION_WELDERFUEL-1 // just for priority and to stop recipe conflicts
+	result_amount = 17
 	fire_temp = AUTOIGNITION_WELDERFUEL
 	power = 1
 
