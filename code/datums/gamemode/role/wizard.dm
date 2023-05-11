@@ -84,7 +84,7 @@
 			. += "<BR>The wizard knew:<BR>"
 			for(var/spell/S in H.spell_list)
 				var/icon/tempimage
-				if(S.override_icon && S.override_icon != S.icon)
+				if(S.override_icon != "")
 					tempimage = icon(S.override_icon, S.hud_state)
 				else
 					tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
