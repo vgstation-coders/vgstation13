@@ -10,7 +10,6 @@
 	invocation = "WOLOLO!"
 	invocation_type = SpI_SHOUT
 	range = 1
-	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
 	cooldown_min = 10
 	civil_war_only = TRUE
