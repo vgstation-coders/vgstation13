@@ -52,11 +52,11 @@
 			WC.AnnounceObjectives()
 
 /spell/targeted/civilwarconvert/on_added(mob/user)
-	var/datum/faction/ourfact = find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, user.mind)
+	var/datum/faction/wizard/civilwar/ourfact = find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, user.mind)
 	if(ourfact)
 		var/datum/faction/enemyfaction = ourfact.enemy_faction
 		if(enemyfaction)
-			for(var/datum/role/wizard/W in enemyfaction)
+			for(var/datum/role/wizard/W in enemyfaction.members)
 				if(W.antag?.current && !(locate(src.type) in W.antag.current.spell_list))
 					var/obj/item/weapon/spellbook/S = locate() in get_contents_in_object(W.antag.current)
 					if(S && S.uses >= price && (src.type in S.all_spells))
