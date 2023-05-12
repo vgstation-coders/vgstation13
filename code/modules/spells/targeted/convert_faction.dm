@@ -57,7 +57,7 @@
 		var/datum/faction/enemyfaction = ourfact.enemy_faction
 		if(enemyfaction)
 			for(var/datum/role/wizard/W in enemyfaction)
-				if(W.antag?.current && (locate(src.type) in W.antag.current.spell_list))
+				if(W.antag?.current && !(locate(src.type) in W.antag.current.spell_list))
 					var/obj/item/weapon/spellbook/S = locate() in get_contents_in_object(W.antag.current)
 					if(S && S.uses >= price && (src.type in S.all_spells))
 						var/confirm = alert(W.antag.current, "A member of [ourfact] has just purchased the Conversion spell! They will be able to send converted crew members to attack your team! Do you wish to purchase it yourself to counter this?", "Civil War Converter","Purchase","Do not") == "Purchase"
