@@ -50,3 +50,9 @@
 			WC.Greet()
 			WC.OnPostSetup()
 			WC.AnnounceObjectives()
+
+/spell/targeted/civilwarconvert/on_added(mob/user)
+	var/datum/faction/ourfact = find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, user.mind)
+	var/datum/faction/enemyfaction = ourfact.enemy_faction
+	for(var/datum/role/wizard/W in enemyfaction)
+		alert(W.antag.current, "A memeber of [ourfact] has just purchased the Conversion spell! They will be able to send converted crew members to attack your team!", "Civil War Converter","Understood")
