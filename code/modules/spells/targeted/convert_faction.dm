@@ -53,6 +53,23 @@
 
 /spell/targeted/civilwarconvert/on_added(mob/user)
 	var/datum/faction/ourfact = find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, user.mind)
-	var/datum/faction/enemyfaction = ourfact.enemy_faction
-	for(var/datum/role/wizard/W in enemyfaction)
-		alert(W.antag.current, "A memeber of [ourfact] has just purchased the Conversion spell! They will be able to send converted crew members to attack your team!", "Civil War Converter","Understood")
+	if(ourfact)
+		var/datum/faction/enemyfaction = ourfact.enemy_faction
+		if(enemyfaction)
+			for(var/datum/role/wizard/W in enemyfaction)
+				if(W.antag?.current && (locate(src.type) in W.antag.current.spell_list))
+					var/obj/item/weapon/spellbook/S = locate() in get_contents_in_object(W.antag.current)
+					if(S && S.uses >= price && (src.type in S.all_spells))
+						var/confirm = alert(W.antag.current, "A member of [ourfact] has just purchased the Conversion spell! They will be able to send converted crew members to attack your team! Do you wish to purchase it yourself to counter this?", "Civil War Converter","Purchase","Do not") == "Purchase"
+						if(confirm)
+							if(S.use(price))
+								var/spell/added = new src.type
+								added.refund_price = added.price
+								S.add_spell(added, W.antag.current)
+								to_chat(W.antag.current, "<span class='info'>You have learned [added.name].</span>")
+								feedback_add_details("wizard_spell_learned", added.abbreviation)
+								if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
+									var/datum/stat/role/wizard/WD = W.stat_datum
+									WD.spellbook_purchases.Add(added.name)
+					else
+						alert(W.antag.current, "A member of [ourfact] has just purchased the Conversion spell! They will be able to send converted crew members to attack your team!", "Civil War Converter","Understood")
