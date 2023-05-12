@@ -9116,7 +9116,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())
 		return 1
-	if(!iswizconvert(M))
+	if(!iswizconvert(H))
 		H.color = "#12A7C9"
 	return
 
