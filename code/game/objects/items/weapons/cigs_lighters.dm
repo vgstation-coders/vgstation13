@@ -145,6 +145,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	name = "strike-anywhere match"
 	desc = "An improved match stick, used to start fires easily, preferably at the end of a smoke. Can be lit against any surface."
 
+/obj/item/weapon/match/strike_anywhere/s_a_k/process()
+	..()
+	smoketime = 10//never burning out, extra swiss quality matches
+
 /obj/item/weapon/match/strike_anywhere/afterattack(atom/target, mob/user, prox_flags)
 	if(!prox_flags == 1)
 		return
@@ -159,6 +163,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		light()
 		user.visible_message("[user] strikes \the [src] on \the [target].", \
 		"You strike \the [src] on \the [target].")
+		playsound(src, 'sound/items/lighter1.ogg', 50, 1)
 
 //////////////////
 //FINE SMOKABLES//
