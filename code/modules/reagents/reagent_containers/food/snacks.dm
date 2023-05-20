@@ -410,6 +410,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/examine(mob/user)
 	..()
+	if (dip && dip.total_volume)
+		to_chat(user, "<span class='info'>\The [src] appears to have been dipped in [dip.get_master_reagent_name()].</span>")
 	if (bitecount)
 		if(bitecount == 1)
 			to_chat(user, "<span class='info'>\The [src] was bitten by someone!</span>")
