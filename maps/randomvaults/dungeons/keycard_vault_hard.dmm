@@ -6,6 +6,15 @@
 /obj/machinery/door/mineral/gold,
 /turf/simulated/floor/engine,
 /area/vault/keycard)
+"d" = (
+/obj/effect/decal/warning_stripes/siding{
+	dir = 8
+	},
+/obj/structure/sign/poster{
+	pixel_y = 32
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
 "e" = (
 /turf/simulated/wall/r_wall,
 /area/vault/keycard)
@@ -54,6 +63,9 @@
 /area/vault/keycard)
 "m" = (
 /obj/machinery/media/jukebox/superjuke,
+/obj/structure/painting/random{
+	pixel_y = 32
+	},
 /turf/simulated/floor/mineral/diamond,
 /area/vault/keycard)
 "n" = (
@@ -107,6 +119,9 @@
 	dir = 1
 	},
 /obj/effect/decal/warning_stripes/siding/gold,
+/obj/structure/painting/random{
+	pixel_y = -32
+	},
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "z" = (
@@ -167,6 +182,9 @@
 	dir = 1
 	},
 /obj/effect/decal/warning_stripes/siding/gold,
+/obj/structure/sign/poster{
+	pixel_y = -32
+	},
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "P" = (
@@ -342,7 +360,7 @@ H
 "}
 (10,1,1) = {"
 H
-x
+d
 x
 x
 z
