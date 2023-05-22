@@ -30,6 +30,8 @@
 "h" = (
 /obj/structure/rack,
 /obj/structure/vendomatpack/offlicence,
+/obj/structure/vendomatpack/sovietsoda,
+/obj/structure/vendomatpack/nuka,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "i" = (
@@ -74,9 +76,9 @@
 /turf/simulated/floor/light,
 /area/vault/keycard)
 "o" = (
-/obj/effect/decal/warning_stripes/siding/gold,
-/obj/machinery/computer/teleporter,
-/turf/simulated/floor/wood,
+/obj/structure/table/glass/plasma,
+/obj/machinery/computer/security/telescreen/entertainment/wooden_tv,
+/turf/simulated/floor/light,
 /area/vault/keycard)
 "p" = (
 /obj/structure/railing/pglass{
@@ -85,6 +87,8 @@
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 1
 	},
+/obj/structure/table/glass/plasma,
+/obj/item/pizzabox/meat,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "q" = (
@@ -98,6 +102,17 @@
 "s" = (
 /obj/structure/table/glass/plasma,
 /turf/simulated/floor/light,
+/area/vault/keycard)
+"t" = (
+/obj/structure/railing/pglass{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 1
+	},
+/obj/structure/table/glass/plasma,
+/obj/item/toy/cards,
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "u" = (
 /obj/machinery/gashapon,
@@ -139,24 +154,32 @@
 /obj/machinery/vending/boozeomat,
 /turf/simulated/floor/mineral/gold,
 /area/vault/keycard)
+"E" = (
+/obj/machinery/vending/artifact,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
 "F" = (
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 1
 	},
+/obj/machinery/computer/teleporter,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "G" = (
-/obj/machinery/teleport/hub{
-	anchored = 0
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 1
 	},
-/turf/simulated/floor/plating,
+/obj/machinery/teleport/station,
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "H" = (
 /turf/simulated/wall/invulnerable/r_wall,
 /area/vault/keycard)
 "I" = (
-/obj/machinery/teleport/station,
-/obj/effect/decal/warning_stripes/siding/gold,
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 1
+	},
+/obj/machinery/teleport/hub,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "J" = (
@@ -170,10 +193,11 @@
 /obj/structure/railing/pglass{
 	dir = 1
 	},
-/obj/structure/table/glass/plasma,
-/obj/item/pizzabox/meat,
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 9
+	},
+/obj/structure/bed/chair/comfy/couch/left/teal{
+	dir = 4
 	},
 /turf/simulated/floor/wood,
 /area/vault/keycard)
@@ -191,20 +215,20 @@
 /turf/portal,
 /area/vault/keycard)
 "Q" = (
-/obj/structure/bed/chair/comfy/couch/left/teal{
-	dir = 1
-	},
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 10
+	},
+/obj/structure/bed/chair/comfy/couch/turn/inward/teal{
+	dir = 1
 	},
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "R" = (
-/obj/structure/bed/chair/comfy/couch/right/lime{
-	dir = 1
-	},
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 6
+	},
+/obj/structure/bed/chair/comfy/couch/turn/inward/lime{
+	dir = 8
 	},
 /turf/simulated/floor/wood,
 /area/vault/keycard)
@@ -244,10 +268,11 @@
 /obj/structure/railing/pglass{
 	dir = 1
 	},
-/obj/structure/table/glass/plasma,
-/obj/item/toy/cards,
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 5
+	},
+/obj/structure/bed/chair/comfy/couch/right/lime{
+	dir = 8
 	},
 /turf/simulated/floor/wood,
 /area/vault/keycard)
@@ -278,18 +303,18 @@ H
 H
 k
 H
-H
+E
 H
 "}
 (3,1,1) = {"
 H
 T
-G
+a
 H
 a
 P
 H
-H
+a
 H
 "}
 (4,1,1) = {"
@@ -300,7 +325,7 @@ H
 B
 H
 H
-H
+e
 H
 "}
 (5,1,1) = {"
@@ -333,7 +358,7 @@ s
 Z
 C
 F
-o
+g
 H
 "}
 (8,1,1) = {"
@@ -343,18 +368,18 @@ K
 s
 Z
 C
-F
-I
+G
+g
 H
 "}
 (9,1,1) = {"
 H
 J
 n
-s
+o
 Z
 C
-F
+I
 g
 H
 "}
@@ -365,7 +390,7 @@ x
 x
 z
 C
-p
+t
 y
 H
 "}
