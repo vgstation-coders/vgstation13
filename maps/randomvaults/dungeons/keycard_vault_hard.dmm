@@ -37,18 +37,11 @@
 /obj/item/slime_extract/adamantine,
 /obj/item/slime_extract/adamantine,
 /obj/item/slime_extract/adamantine,
-/obj/item/clothing/accessory/storage/bandolier{
-	pixel_x = -4
-	},
-/obj/item/tool/wrench{
-	pixel_x = -4
-	},
+/obj/item/clothing/accessory/storage/bandolier,
+/obj/item/tool/wrench,
 /obj/item/tool/screwdriver,
 /obj/item/weapon/reagent_containers/food/drinks/shaker,
-/obj/item/device/rcd/matter/rsf{
-	pixel_x = 5;
-	pixel_y = 8
-	},
+/obj/item/device/rcd/matter/rsf,
 /obj/item/weapon/storage/box/beanbagshells,
 /obj/item/weapon/storage/box/drinkingglasses,
 /obj/item/weapon/gun/projectile/shotgun/nt12{
