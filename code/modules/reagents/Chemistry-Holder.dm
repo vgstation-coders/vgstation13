@@ -922,8 +922,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	//M = DV
 	var/overall_mass = 0
 	for(var/datum/reagent/R in reagent_list)
-		overall_mass += R.density * R.volume * CC_PER_U
-	return overall_mass
+		overall_mass += R.density * R.volume
+	return overall_mass * CC_PER_U
 
 /datum/reagents/proc/get_thermal_mass()
 	var/total_thermal_mass = 0
