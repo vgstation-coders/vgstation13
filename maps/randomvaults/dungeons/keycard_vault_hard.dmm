@@ -2,30 +2,58 @@
 "a" = (
 /turf/simulated/floor/plating,
 /area/vault/keycard)
+"c" = (
+/obj/machinery/door/mineral/gold,
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"e" = (
+/turf/simulated/wall/r_wall,
+/area/vault/keycard)
 "f" = (
-/obj/structure/table,
-/obj/item/weapon/cell/infinite,
-/turf/simulated/floor/plating,
+/obj/machinery/computer/arcade,
+/obj/machinery/computer/arcade,
+/turf/simulated/floor/engine,
 /area/vault/keycard)
 "g" = (
-/obj/structure/rack,
-/obj/abstract/map/spawner/safe/medical,
-/turf/simulated/floor/plating,
+/obj/machinery/teleport/hub,
+/obj/effect/decal/warning_stripes/siding/gold,
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "h" = (
-/obj/structure/table,
-/obj/item/weapon/storage/box/mystery_upgrade,
+/obj/structure/rack,
+/obj/structure/vendomatpack/offlicence,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "i" = (
-/obj/structure/rack,
-/obj/item/weapon/gun/energy/staff/change,
-/turf/simulated/floor/plating,
+/obj/structure/table/glass/plasma,
+/obj/structure/table/glass/plasma,
+/obj/item/weapon/lighter/zippo{
+	pixel_y = 7
+	},
+/obj/item/ashtray/bronze,
+/turf/simulated/floor/light,
 /area/vault/keycard)
 "j" = (
-/obj/structure/rack,
-/obj/abstract/map/spawner/safe/medal,
-/turf/simulated/floor/plating,
+/obj/structure/closet/crate,
+/obj/item/weapon/gun/projectile/shotgun/pump/combat,
+/obj/item/slime_extract/adamantine,
+/obj/item/slime_extract/adamantine,
+/obj/item/slime_extract/adamantine,
+/obj/item/clothing/accessory/storage/bandolier{
+	pixel_x = -4
+	},
+/obj/item/tool/wrench{
+	pixel_x = -4
+	},
+/obj/item/tool/screwdriver,
+/obj/item/weapon/reagent_containers/food/drinks/shaker,
+/obj/item/device/rcd/matter/rsf{
+	pixel_x = 5;
+	pixel_y = 8
+	},
+/obj/item/weapon/storage/box/beanbagshells,
+/obj/item/weapon/storage/box/drinkingglasses,
+/turf/simulated/floor/mineral/diamond,
 /area/vault/keycard)
 "k" = (
 /turf/portal{
@@ -33,151 +61,185 @@
 	},
 /area/vault/keycard)
 "m" = (
-/obj/structure/table,
-/obj/item/weapon/gun/projectile/flamethrower/full,
-/turf/simulated/floor/plating,
+/obj/machinery/media/jukebox/superjuke,
+/turf/simulated/floor/mineral/diamond,
 /area/vault/keycard)
 "n" = (
-/obj/structure/table,
-/obj/item/weapon/cloakingcloak,
-/turf/simulated/floor/plating,
+/obj/machinery/door/window/plasma,
+/obj/machinery/door/window/plasma,
+/turf/simulated/floor/light,
 /area/vault/keycard)
 "o" = (
-/obj/structure/rack,
-/obj/abstract/map/spawner/safe/clothing,
-/turf/simulated/floor/plating,
+/obj/machinery/computer/teleporter,
+/obj/effect/decal/warning_stripes/siding/gold,
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "p" = (
-/obj/structure/rack,
-/obj/item/weapon/melee/energy/sword/dualsaber,
-/obj/item/weapon/gun/projectile/mateba,
-/turf/simulated/floor/plating,
+/obj/structure/railing/pglass{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "q" = (
-/obj/structure/table,
-/obj/item/weapon/dice/d20/cursed/infinite,
-/turf/simulated/floor/plating,
+/obj/machinery/chem_dispenser/scp_294,
+/turf/simulated/floor/mineral/diamond,
 /area/vault/keycard)
 "r" = (
-/obj/structure/table,
-/obj/item/stack/sheet/mineral/phazon{
-	amount = 10
-	},
-/turf/simulated/floor/plating,
+/obj/machinery/computer/slot_machine,
+/turf/simulated/floor/engine,
 /area/vault/keycard)
 "s" = (
-/obj/structure/table,
-/obj/item/weapon/storage/box/mystery_circuit,
-/turf/simulated/floor/plating,
+/obj/structure/table/glass/plasma,
+/turf/simulated/floor/light,
 /area/vault/keycard)
 "u" = (
-/obj/structure/rack,
-/obj/item/soulstone/gem,
-/turf/simulated/floor/plating,
+/obj/machinery/gashapon,
+/turf/simulated/floor/engine,
 /area/vault/keycard)
 "v" = (
-/obj/structure/rack,
-/obj/item/weapon/storage/box{
-	name = "mystery DNA powers box";
-	items_to_spawn = list(/obj/item/weapon/dnainjector/nofail/randompower = 5)
-	},
-/turf/simulated/floor/plating,
+/obj/effect/decal/warning_stripes/siding,
+/obj/effect/decal/warning_stripes/siding,
+/turf/simulated/floor/engine,
 /area/vault/keycard)
 "x" = (
-/obj/structure/table,
-/obj/item/weapon/gun/projectile/deagle/gold,
-/turf/simulated/floor/plating,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 8
+	},
+/turf/simulated/floor/engine,
 /area/vault/keycard)
 "y" = (
-/obj/structure/table,
-/obj/item/weapon/gun/energy/pulse_rifle/destroyer,
-/turf/simulated/floor/plating,
+/obj/structure/bed/chair/comfy/couch/left/lime{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding/gold,
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "z" = (
-/obj/structure/table,
-/obj/item/weapon/storage/box/mysterycubes,
-/turf/simulated/floor/plating,
+/turf/simulated/floor/engine,
 /area/vault/keycard)
 "B" = (
 /obj/machinery/door/airlock/highsecurity,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "C" = (
-/obj/structure/table,
-/obj/item/weapon/storage/box/mystery_vial,
-/turf/simulated/floor/plating,
+/obj/effect/decal/warning_stripes/siding,
+/turf/simulated/floor/engine,
 /area/vault/keycard)
 "D" = (
-/obj/structure/rack,
-/obj/abstract/map/spawner/safe/any,
-/turf/simulated/floor/plating,
+/obj/machinery/vending/boozeomat,
+/turf/simulated/floor/mineral/gold,
 /area/vault/keycard)
 "F" = (
-/obj/structure/table,
-/obj/item/weapon/storage/trader_chemistry,
-/turf/simulated/floor/plating,
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "H" = (
 /turf/simulated/wall/invulnerable/r_wall,
 /area/vault/keycard)
 "I" = (
-/obj/structure/rack,
-/obj/abstract/map/spawner/safe/food,
-/turf/simulated/floor/plating,
+/obj/machinery/teleport/station,
+/obj/effect/decal/warning_stripes/siding/gold,
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "J" = (
-/obj/structure/rack,
-/obj/abstract/map/spawner/safe/weapon,
-/turf/simulated/floor/plating,
+/obj/machinery/vending/cigarette,
+/turf/simulated/floor/light,
 /area/vault/keycard)
 "K" = (
-/obj/structure/table,
-/obj/item/weapon/glue,
-/turf/simulated/floor/plating,
+/turf/simulated/floor/mineral/gold,
 /area/vault/keycard)
 "L" = (
-/obj/structure/table,
-/obj/item/weapon/invisible_spray/permanent,
-/turf/simulated/floor/plating,
+/obj/structure/railing/pglass{
+	dir = 1
+	},
+/obj/structure/table/glass/plasma,
+/obj/item/pizzabox/meat,
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 9
+	},
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "M" = (
-/obj/structure/table,
-/obj/item/clothing/glasses/emitter,
-/turf/simulated/floor/plating,
+/obj/structure/bed/chair/comfy/couch/right/teal{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding/gold,
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "P" = (
 /turf/portal,
 /area/vault/keycard)
 "Q" = (
-/obj/structure/table,
-/obj/effect/spawner/newbomb/timer,
-/turf/simulated/floor/plating,
+/obj/structure/bed/chair/comfy/couch/left/teal{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 10
+	},
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "R" = (
-/obj/structure/table,
-/obj/item/stack/sheet/mineral/clown{
-	amount = 10
+/obj/structure/bed/chair/comfy/couch/right/lime{
+	dir = 1
 	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 6
+	},
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"T" = (
+/obj/structure/closet/secure_closet/bar,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "U" = (
-/obj/structure/table,
-/obj/item/weapon/storage/box/large/mystery_material,
-/turf/simulated/floor/plating,
+/obj/item/weapon/stool/bar,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding{
+	dir = 1
+	},
+/turf/simulated/floor/engine,
 /area/vault/keycard)
 "V" = (
-/obj/structure/rack,
-/obj/item/weapon/card/emag,
+/obj/machinery/sweet,
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"W" = (
+/turf/simulated/floor/mineral/phazon,
+/area/vault/keycard)
+"X" = (
+/obj/structure/reagent_dispensers/beerkeg{
+	desc = "One of the more successful achievements of the NanoTrasen Corporate Warfare Division, their nuclear fission explosives are renowned for being cheap to produce and devestatingly effective. Signs explain that though this is just a model, every NanoTrasen station is equipped with one, just in case. All Captains carefully guard the disk needed to detonate them - at least, the sign says they do. There seems to be a tap on the back.";
+	icon = 'icons/obj/stationobjs.dmi';
+	icon_state = "nuclearbomb0";
+	name = "NanoTrasen-brand nuclear fission explosive"
+	},
+/obj/effect/decal/cleanable/cobweb,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "Y" = (
-/obj/structure/table,
-/obj/item/weapon/gun/energy/crossbow/largecrossbow,
-/turf/simulated/floor/plating,
+/obj/structure/railing/pglass{
+	dir = 1
+	},
+/obj/structure/table/glass/plasma,
+/obj/item/toy/cards,
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 5
+	},
+/turf/simulated/floor/wood,
 /area/vault/keycard)
 "Z" = (
-/obj/structure/cage/random_mob,
-/turf/simulated/floor/plating,
+/obj/item/weapon/stool/bar,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 1
+	},
+/turf/simulated/floor/engine,
 /area/vault/keycard)
 
 (1,1,1) = {"
@@ -193,8 +255,8 @@ H
 "}
 (2,1,1) = {"
 H
-H
-H
+X
+h
 H
 H
 k
@@ -204,8 +266,8 @@ H
 "}
 (3,1,1) = {"
 H
-H
-H
+T
+a
 H
 a
 P
@@ -215,8 +277,8 @@ H
 "}
 (4,1,1) = {"
 H
-H
-H
+e
+c
 H
 B
 H
@@ -229,7 +291,7 @@ H
 q
 K
 i
-a
+W
 v
 L
 Q
@@ -238,55 +300,55 @@ H
 (6,1,1) = {"
 H
 m
-a
-a
-a
-a
-a
+K
+s
+U
+C
+p
 M
 H
 "}
 (7,1,1) = {"
 H
 j
-a
+K
 s
-a
+Z
 C
-a
+F
 o
 H
 "}
 (8,1,1) = {"
 H
 D
-a
-U
+K
+s
 Z
-n
-a
+C
+F
 I
 H
 "}
 (9,1,1) = {"
 H
 J
-a
+n
+s
+Z
+C
 F
-h
-z
-a
 g
 H
 "}
 (10,1,1) = {"
 H
 x
-a
-a
-a
-a
-a
+x
+x
+z
+C
+p
 y
 H
 "}
@@ -296,7 +358,7 @@ r
 f
 u
 V
-p
+v
 Y
 R
 H

@@ -3,74 +3,53 @@
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "c" = (
-/obj/structure/table,
-/obj/item/weapon/dice/d20/cursed,
+/obj/item/device/radio/headset/headset_earmuffs,
+/obj/structure/table/plastic,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "i" = (
-/obj/structure/rack,
-/obj/item/weapon/storage/box/mystery_vial,
+/obj/machinery/computer/crew,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "l" = (
-/obj/structure/rack,
-/obj/item/soulstone,
+/obj/machinery/computer/telecomms/traffic,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "n" = (
-/obj/structure/table,
-/obj/abstract/map/spawner/safe/weapon,
+/obj/machinery/station_map/strategic,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "q" = (
-/obj/structure/rack,
-/obj/abstract/map/spawner/safe/food,
-/turf/simulated/floor/plating,
-/area/vault/keycard)
-"s" = (
-/obj/structure/table,
-/obj/item/weapon/cell/infinite,
+/obj/machinery/telecomms/relay,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "v" = (
-/obj/structure/rack,
-/obj/item/weapon/storage/box/mystery_circuit,
+/obj/machinery/computer/security,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "z" = (
-/obj/structure/table,
-/obj/item/weapon/glue,
-/turf/simulated/floor/plating,
+/obj/structure/bed/chair/comfy/black{
+	dir = 1
+	},
+/turf/simulated/floor/bluegrid,
 /area/vault/keycard)
 "B" = (
 /obj/machinery/door/airlock/highsecurity,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
-"C" = (
-/obj/structure/table,
-/obj/item/weapon/invisible_spray/permanent,
-/turf/simulated/floor/plating,
-/area/vault/keycard)
 "F" = (
-/obj/structure/table,
-/obj/item/weapon/gun/energy/crossbow/largecrossbow,
-/turf/simulated/floor/plating,
+/turf/simulated/floor/bluegrid,
 /area/vault/keycard)
 "H" = (
 /turf/simulated/wall/invulnerable/r_wall,
 /area/vault/keycard)
 "L" = (
-/obj/structure/table,
-/obj/item/stack/sheet/mineral/clown{
-	amount = 10
-	},
+/obj/machinery/vending/offlicence,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "N" = (
-/obj/structure/table,
-/obj/item/stack/sheet/mineral/phazon{
-	amount = 10
-	},
+/obj/item/binoculars,
+/obj/structure/table/plastic,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "O" = (
@@ -82,23 +61,24 @@
 /turf/portal,
 /area/vault/keycard)
 "R" = (
-/obj/structure/rack,
-/obj/item/weapon/storage/box/large/mystery_material,
+/obj/structure/computerframe,
+/obj/machinery/light/he{
+	dir = 1
+	},
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "S" = (
-/obj/structure/rack,
-/obj/abstract/map/spawner/safe/clothing,
+/obj/machinery/sleeper{
+	dir = 1
+	},
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "V" = (
-/obj/structure/table,
-/obj/item/weapon/storage/box/mysterycubes,
+/obj/machinery/vending/discount,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "W" = (
-/obj/structure/rack,
-/obj/abstract/map/spawner/safe/medical,
+/obj/machinery/bodyscanner,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 
@@ -141,45 +121,45 @@ H
 (5,1,1) = {"
 H
 c
-z
 a
-C
+a
+a
 V
 H
 "}
 (6,1,1) = {"
 H
 v
-a
-a
-a
+F
+F
+F
 S
 H
 "}
 (7,1,1) = {"
 H
 R
-a
+z
 n
-a
+F
 q
 H
 "}
 (8,1,1) = {"
 H
 i
-a
-a
-a
+F
+F
+F
 W
 H
 "}
 (9,1,1) = {"
 H
 N
-s
+a
 l
-F
+a
 L
 H
 "}

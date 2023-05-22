@@ -3,8 +3,24 @@
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "d" = (
-/obj/structure/table,
-/obj/item/weapon/gun/energy/laser/captain/alien,
+/obj/item/weapon/cell/infinite,
+/obj/item/pod_parts/pod_frame/aft_port,
+/obj/item/pod_parts/pod_frame/aft_starboard,
+/obj/item/pod_parts/pod_frame/fore_port,
+/obj/item/pod_parts/pod_frame/fore_starboard,
+/obj/item/pod_parts/core,
+/obj/structure/rack,
+/obj/effect/decal/warning_stripes{
+	dir = 5;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHEAST)"
+	},
+/obj/effect/decal/cleanable/cobweb2,
+/obj/structure/curtain/black,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"j" = (
+/obj/effect/decal/cleanable/soot,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "m" = (
@@ -13,13 +29,16 @@
 	},
 /area/vault/keycard)
 "o" = (
-/obj/structure/table,
-/obj/item/soulstone,
+/obj/structure/reagent_dispensers/fueltank,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "u" = (
-/obj/structure/rack,
-/obj/abstract/map/spawner/safe/food,
+/obj/effect/decal/warning_stripes{
+	dir = 10;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHWEST)"
+	},
+/obj/structure/computerframe,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "B" = (
@@ -27,8 +46,14 @@
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "F" = (
-/obj/structure/table,
-/obj/item/weapon/gun/hookshot,
+/obj/structure/rack,
+/obj/item/stack/rods,
+/obj/item/tool/wrench/socket,
+/obj/effect/decal/warning_stripes{
+	dir = 6;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHEAST)"
+	},
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "H" = (
@@ -38,18 +63,24 @@
 /turf/portal,
 /area/vault/keycard)
 "Q" = (
-/obj/structure/rack,
-/obj/item/weapon/storage/box/large/mystery_material,
+/obj/effect/decal/cleanable/soot,
+/obj/item/weapon/circuitboard/circuit_imprinter,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "U" = (
-/obj/structure/rack,
-/obj/item/weapon/storage/box/mystery_vial,
+/obj/structure/reagent_dispensers/fueltank,
+/obj/machinery/light/small{
+	dir = 1
+	},
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "V" = (
-/obj/structure/rack,
-/obj/abstract/map/spawner/safe/clothing,
+/obj/machinery/r_n_d/fabricator/pod,
+/obj/effect/decal/warning_stripes{
+	dir = 9;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHWEST)"
+	},
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 
@@ -84,7 +115,7 @@ H
 (5,1,1) = {"
 H
 V
-a
+j
 u
 H
 "}
