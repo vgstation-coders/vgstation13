@@ -4,26 +4,83 @@
 /area)
 "b" = (
 /obj/effect/landmark/keycard/easy,
-/turf/simulated/floor/plating/airless,
+/obj/effect/decal/warning_stripes/pathmarkers,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"d" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"e" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/weapon/cell/empty,
+/obj/item/weapon/cell/empty,
+/obj/item/weapon/cell/empty,
+/turf/unsimulated/floor/asteroid/underground,
 /area)
 "f" = (
 /turf/space,
 /area)
+"j" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/device/crank_charger,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"l" = (
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area)
 "p" = (
 /obj/structure/lattice,
-/obj/structure/grille,
+/obj/machinery/docklight,
 /turf/space,
+/area)
+"r" = (
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area)
+"s" = (
+/turf/unsimulated/floor/airless{
+	dir = 1;
+	icon_state = "asteroidwarning"
+	},
 /area)
 "t" = (
 /turf/simulated/floor/plating/airless/damaged,
 /area)
+"u" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
 "v" = (
 /obj/structure/lattice,
-/turf/simulated/floor/plating/airless/damaged,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
 /area)
 "x" = (
 /obj/structure/grille,
 /turf/space,
+/area)
+"B" = (
+/obj/machinery/docklight,
+/turf/unsimulated/floor/airless{
+	dir = 1;
+	icon_state = "asteroidwarning"
+	},
 /area)
 "C" = (
 /obj/structure/grille,
@@ -46,12 +103,43 @@
 /obj/structure/lattice,
 /turf/space,
 /area)
+"M" = (
+/obj/machinery/docklight,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area)
 "N" = (
 /obj/structure/lattice,
 /turf/simulated/floor/plating/airless,
 /area)
+"Q" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/stack/rods,
+/obj/item/stack/sheet/metal/bigstack,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"R" = (
+/turf/unsimulated/floor/airless{
+	dir = 4;
+	icon_state = "asteroidwarning"
+	},
+/area)
+"S" = (
+/turf/unsimulated/floor/asteroid/underground,
+/area)
 "T" = (
 /turf/simulated/floor/plating/airless,
+/area)
+"V" = (
+/obj/effect/decal/warning_stripes/pathmarkers,
+/turf/unsimulated/floor/asteroid/underground,
 /area)
 "X" = (
 /obj/structure/grille/broken,
@@ -83,13 +171,13 @@ T
 T
 N
 v
-T
-T
-T
-T
-T
-T
-T
+S
+S
+S
+S
+d
+S
+u
 f
 "}
 (3,1,1) = {"
@@ -99,14 +187,14 @@ T
 f
 f
 f
-t
-t
+r
+S
 f
 H
-t
-t
-t
-T
+S
+S
+S
+j
 f
 "}
 (4,1,1) = {"
@@ -116,14 +204,14 @@ t
 H
 T
 T
-T
-t
-t
+r
+S
+S
 H
 f
-T
-T
-T
+V
+V
+V
 a
 "}
 (5,1,1) = {"
@@ -133,14 +221,14 @@ T
 H
 t
 t
-T
-T
-t
-t
+r
+d
+S
+B
 f
 f
-T
-t
+l
+l
 a
 "}
 (6,1,1) = {"
@@ -151,8 +239,8 @@ f
 T
 a
 f
-a
-a
+S
+d
 a
 T
 H
@@ -166,11 +254,11 @@ T
 H
 T
 T
-T
-t
-t
-T
-t
+r
+S
+S
+S
+s
 T
 H
 f
@@ -184,10 +272,10 @@ a
 T
 a
 a
-T
+V
 b
-T
-t
+V
+s
 T
 f
 T
@@ -201,9 +289,9 @@ f
 t
 T
 a
-T
-T
-T
+S
+S
+d
 a
 T
 a
@@ -218,9 +306,9 @@ f
 G
 T
 a
-a
-T
-a
+d
+S
+S
 a
 T
 T
@@ -230,13 +318,13 @@ f
 "}
 (11,1,1) = {"
 a
-T
-T
+R
+R
 H
 f
-T
-t
-t
+M
+S
+S
 a
 T
 T
@@ -247,10 +335,10 @@ t
 "}
 (12,1,1) = {"
 E
-T
-t
-T
-T
+V
+V
+V
+V
 H
 H
 f
@@ -264,13 +352,13 @@ a
 "}
 (13,1,1) = {"
 f
-T
-t
-t
-t
-t
-T
-T
+e
+d
+S
+S
+S
+S
+S
 a
 t
 t
@@ -281,13 +369,13 @@ a
 "}
 (14,1,1) = {"
 H
-T
-t
-t
-T
-N
-t
-T
+Q
+S
+S
+S
+r
+S
+d
 a
 T
 t
@@ -302,8 +390,8 @@ E
 a
 a
 T
-H
-C
+p
+S
 f
 a
 a

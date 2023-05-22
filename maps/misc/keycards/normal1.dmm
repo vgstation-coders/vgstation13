@@ -4,8 +4,10 @@
 /turf/space,
 /area)
 "e" = (
-/obj/structure/catwalk,
-/turf/space,
+/obj/item/trash/popcorn,
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
 /area)
 "k" = (
 /obj/structure/lattice,
@@ -16,50 +18,59 @@
 /obj/structure/lattice,
 /turf/space,
 /area)
+"r" = (
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area)
 "v" = (
-/obj/structure/catwalk,
 /obj/effect/landmark/keycard,
-/turf/space,
+/turf/simulated/floor/engine/acoustic,
 /area)
 "A" = (
 /turf/space,
 /area)
+"N" = (
+/obj/structure/grille,
+/obj/structure/lattice,
+/turf/space,
+/area)
 
 (1,1,1) = {"
-o
-A
-o
+k
+a
+k
 o
 a
-A
 a
+N
 "}
 (2,1,1) = {"
 a
+o
 A
 A
-e
 A
 o
-o
+k
 "}
 (3,1,1) = {"
 a
 A
-e
+r
 o
-e
+r
 A
 a
 "}
 (4,1,1) = {"
 A
 o
-e
+r
 v
 o
 A
-k
+o
 "}
 (5,1,1) = {"
 a
@@ -67,24 +78,24 @@ A
 o
 o
 e
-e
 A
+a
 "}
 (6,1,1) = {"
+k
+o
 o
 A
 o
-A
 o
-A
 a
 "}
 (7,1,1) = {"
-o
+k
 a
 a
 A
-A
-o
-o
+a
+k
+k
 "}

@@ -5,11 +5,21 @@
 "f" = (
 /turf/space,
 /area)
+"g" = (
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area)
+"r" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless/damaged,
+/area)
 "t" = (
 /turf/simulated/floor/plating/airless/damaged,
 /area)
 "x" = (
 /obj/structure/grille,
+/obj/structure/lattice,
 /turf/space,
 /area)
 "C" = (
@@ -17,8 +27,7 @@
 /turf/simulated/floor/plating/airless,
 /area)
 "E" = (
-/obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless,
+/turf/simulated/floor/engine/acoustic,
 /area)
 "H" = (
 /obj/structure/lattice,
@@ -26,9 +35,13 @@
 /area)
 "N" = (
 /obj/effect/landmark/keycard,
-/turf/simulated/floor/plating/airless,
+/turf/simulated/floor/engine/acoustic,
 /area)
 "T" = (
+/turf/simulated/floor/plating/airless,
+/area)
+"Y" = (
+/obj/item/trash/popcorn,
 /turf/simulated/floor/plating/airless,
 /area)
 
@@ -36,59 +49,59 @@
 a
 a
 a
-E
+T
 a
-t
-f
+r
+x
 "}
 (2,1,1) = {"
 a
-T
+E
 H
 T
 T
-T
+E
 a
 "}
 (3,1,1) = {"
 C
-T
+Y
+g
+g
+g
 t
-t
-T
-t
-T
+C
 "}
 (4,1,1) = {"
-a
 T
 T
+g
 N
-T
+g
 t
-x
+f
 "}
 (5,1,1) = {"
+C
 T
-T
-f
-T
-T
+H
+g
+g
 T
 a
 "}
 (6,1,1) = {"
 a
-f
+H
 T
 T
 H
-T
+E
 a
 "}
 (7,1,1) = {"
 x
-T
+C
 a
 t
 a

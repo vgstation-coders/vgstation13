@@ -5,74 +5,95 @@
 "f" = (
 /turf/unsimulated/mineral,
 /area)
+"h" = (
+/obj/structure/grille,
+/turf/space,
+/area)
+"A" = (
+/obj/structure/grille,
+/turf/unsimulated/floor/asteroid,
+/area)
+"G" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
 "H" = (
 /turf/space,
 /area)
+"K" = (
+/obj/item/trash/popcorn,
+/turf/unsimulated/floor/asteroid,
+/area)
+"N" = (
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area)
 "Z" = (
 /obj/effect/landmark/keycard,
-/turf/unsimulated/floor/asteroid,
+/turf/simulated/floor/engine/acoustic,
 /area)
 
 (1,1,1) = {"
+A
+A
+h
 a
-a
-H
-a
-a
-H
-a
+A
+h
+A
 "}
 (2,1,1) = {"
-H
-H
+h
+G
 H
 f
 f
-H
-H
+G
+h
 "}
 (3,1,1) = {"
-a
+A
 a
 f
 f
+N
 a
-a
-H
+h
 "}
 (4,1,1) = {"
 a
 a
-a
+N
 Z
-a
+N
 a
 a
 "}
 (5,1,1) = {"
-H
+h
 a
 f
 f
-a
+N
 H
-H
+h
 "}
 (6,1,1) = {"
-H
-H
-a
+h
+G
+K
 f
 f
-H
-a
+G
+A
 "}
 (7,1,1) = {"
+A
+h
+h
 a
-H
-H
-a
-H
-H
-a
+h
+h
+A
 "}

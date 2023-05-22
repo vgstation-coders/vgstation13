@@ -3,20 +3,83 @@
 /obj/structure/grille,
 /turf/space,
 /area)
+"c" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
 "e" = (
 /obj/structure/catwalk,
 /turf/space,
 /area)
+"g" = (
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area)
 "k" = (
 /obj/effect/landmark/keycard/easy,
-/obj/structure/catwalk,
-/turf/space,
+/obj/effect/decal/warning_stripes/pathmarkers,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"n" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/stack/rods,
+/obj/item/stack/sheet/metal/bigstack,
+/turf/unsimulated/floor/asteroid/underground,
 /area)
 "o" = (
 /obj/structure/lattice,
 /turf/space,
 /area)
 "A" = (
+/turf/space,
+/area)
+"D" = (
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"K" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/weapon/cell/empty,
+/obj/item/weapon/cell/empty,
+/obj/item/weapon/cell/empty,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"L" = (
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "asteroidwarning"
+	},
+/area)
+"O" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"S" = (
+/obj/effect/decal/warning_stripes/pathmarkers,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"X" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/device/crank_charger,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"Z" = (
+/obj/structure/lattice,
+/obj/machinery/docklight,
 /turf/space,
 /area)
 
@@ -76,7 +139,7 @@ a
 A
 A
 A
-o
+Z
 o
 o
 A
@@ -94,7 +157,7 @@ A
 A
 A
 A
-e
+L
 o
 o
 A
@@ -111,11 +174,11 @@ o
 A
 A
 A
-e
+O
 A
-e
-e
-e
+c
+D
+c
 A
 A
 o
@@ -128,11 +191,11 @@ o
 A
 A
 A
-e
-e
-e
-e
-e
+X
+A
+c
+D
+D
 A
 o
 o
@@ -146,10 +209,10 @@ A
 A
 A
 o
-e
+A
 k
-e
-e
+S
+S
 o
 A
 A
@@ -162,11 +225,11 @@ A
 A
 o
 o
-e
+K
 o
-e
-e
-e
+D
+c
+c
 A
 A
 A
@@ -176,12 +239,12 @@ A
 (10,1,1) = {"
 A
 A
-e
+c
 o
 o
-e
+n
 o
-e
+D
 o
 o
 A
@@ -193,13 +256,13 @@ A
 (11,1,1) = {"
 A
 A
-e
+g
 A
 o
-e
-e
-e
-e
+g
+g
+g
+g
 o
 o
 o
@@ -212,7 +275,7 @@ A
 A
 A
 A
-o
+Z
 o
 A
 A
