@@ -630,7 +630,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if (R.id == reagent)
 
 			//Equalize temperatures
-			chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap)		
+			chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
 
 			R.volume += amount
 			update_total()
@@ -656,7 +656,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/datum/reagent/R = new D.type()
 
 		//Equalize temperatures
-		chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap)
+		chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
 
 		reagent_list += R
 		R.holder = src
@@ -918,18 +918,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/is_full()
 	return total_volume >= maximum_volume
 
-/datum/reagents/proc/get_overall_mass()
+/datum/reagents/proc/get_overall_mass() //currently unused
 	//M = DV
 	var/overall_mass = 0
 	for(var/datum/reagent/R in reagent_list)
-		overall_mass += R.density*R.volume
+		overall_mass += R.density * R.volume * CC_PER_U
 	return overall_mass
 
 /datum/reagents/proc/get_thermal_mass()
 	var/total_thermal_mass = 0
 	for(var/datum/reagent/R in reagent_list)
 		total_thermal_mass += R.volume * R.density * R.specheatcap
-	return total_thermal_mass * 10 //multiply by 10 because 1 u = 10 mL
+	return total_thermal_mass * CC_PER_U
 
 /datum/reagents/proc/heating(var/power_transfer, var/received_temperature)
 	/*
@@ -942,7 +942,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(received_temperature == chem_temp || !total_volume || !reagent_list.len)
 		return
 	var/energy = power_transfer
-	var/temp_change = (energy / (get_thermal_mass())) * HEAT_TRANSFER_MULTIPLIER
+	var/temp_change = (energy / (get_thermal_mass()))
 	if(power_transfer > 0)
 		chem_temp = min(chem_temp + temp_change, received_temperature)
 	else
