@@ -20,7 +20,6 @@
 /area/vault/keycard)
 "f" = (
 /obj/machinery/computer/arcade,
-/obj/machinery/computer/arcade,
 /turf/simulated/floor/engine,
 /area/vault/keycard)
 "g" = (
@@ -71,7 +70,6 @@
 /turf/simulated/floor/mineral/diamond,
 /area/vault/keycard)
 "n" = (
-/obj/machinery/door/window/plasma,
 /obj/machinery/door/window/plasma,
 /turf/simulated/floor/light,
 /area/vault/keycard)
@@ -162,25 +160,21 @@
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 1
 	},
-/obj/machinery/computer/teleporter,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "G" = (
 /obj/effect/decal/warning_stripes/siding/gold{
 	dir = 1
 	},
-/obj/machinery/teleport/station,
+/obj/machinery/telepad,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "H" = (
 /turf/simulated/wall/invulnerable/r_wall,
 /area/vault/keycard)
 "I" = (
-/obj/effect/decal/warning_stripes/siding/gold{
-	dir = 1
-	},
-/obj/machinery/teleport/hub,
-/turf/simulated/floor/wood,
+/obj/machinery/computer/telescience,
+/turf/simulated/wall/invulnerable/r_wall,
 /area/vault/keycard)
 "J" = (
 /obj/machinery/vending/cigarette,
@@ -209,6 +203,11 @@
 /obj/structure/sign/poster{
 	pixel_y = -32
 	},
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"O" = (
+/obj/effect/decal/warning_stripes/siding/gold,
+/obj/machinery/computer/telescience,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "P" = (
@@ -369,17 +368,17 @@ s
 Z
 C
 G
-g
+O
 H
 "}
 (9,1,1) = {"
-H
+I
 J
 n
 o
 Z
 C
-I
+F
 g
 H
 "}
