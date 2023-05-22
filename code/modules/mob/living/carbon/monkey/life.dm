@@ -228,7 +228,7 @@
 				if(!block)
 					for(var/obj/effect/smoke/chem/smoke in view(1, src))
 						if(smoke.reagents.total_volume)
-							smoke.reagents.reaction(src, INGEST)
+							smoke.reagents.reaction(src, INGEST, amount_override = min(smoke.reagents.total_volume,10)/(smoke.reagents.reagent_list.len))
 							spawn(5)
 								if(smoke)
 									smoke.reagents.copy_to(src, 10) // I dunno, maybe the reagents enter the blood stream through the lungs?
@@ -521,7 +521,7 @@
 		silent = 0
 	else				//ALIVE. LIGHTS ARE ON
 		updatehealth()
-		if(health < config.health_threshold_dead || !has_brain())
+		if((health < config.health_threshold_dead || !has_brain()) && !(status_flags & BUDDHAMODE))
 			death()
 			blinded = 1
 			stat = DEAD
@@ -529,7 +529,7 @@
 			return 1
 
 		//UNCONSCIOUS. NO-ONE IS HOME
-		if( (getOxyLoss() > 25) || (config.health_threshold_crit > health) )
+		if((getOxyLoss() > 25 || config.health_threshold_crit > health) && !(status_flags & BUDDHAMODE))
 			if( health <= 20 && prob(1) )
 				spawn(0)
 					emote("gasp")
@@ -546,7 +546,7 @@
 		if(paralysis)
 			AdjustParalysis(-1)
 			blinded = 1
-			stat = UNCONSCIOUS
+			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 			if(halloss > 0)
 				adjustHalLoss(-3)
 		else if(sleeping)
@@ -554,7 +554,7 @@
 			adjustHalLoss(-3)
 			sleeping = max(sleeping-1, 0)
 			blinded = 1
-			stat = UNCONSCIOUS
+			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 			if( prob(10) && health && !hal_crit )
 				spawn(0)
 					emote("snore")
@@ -563,7 +563,7 @@
 				adjustHalLoss(-3)
 		//CONSCIOUS
 		else if(undergoing_hypothermia() >= SEVERE_HYPOTHERMIA)
-			stat = UNCONSCIOUS
+			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 		else
 			stat = CONSCIOUS
 			if(halloss > 0)

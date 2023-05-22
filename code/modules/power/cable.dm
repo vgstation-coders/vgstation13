@@ -38,7 +38,6 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/d2 = 1								// cable direction 2 (see above)
 	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in New()
 	layer = WIRE_LAYER
-	var/obj/item/device/powersink/attached	// holding this here for qdel
 	var/_color = "red"
 	color = "red"
 
@@ -46,7 +45,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/build_status = 0 //1 means it needs rebuilding during the next tick or on usage
 	var/oldavail = 0
 	var/oldnewavail = 0
-	var/oldload = 0
+	var/list/oldload[TOTAL_PRIORITY_SLOTS]
 
 /obj/structure/cable/supports_holomap()
 	return TRUE
@@ -101,6 +100,9 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	cable_list += src		//add it to the global cable list
 
+	for (var/i in 1 to oldload.len)
+		oldload[i] = 0
+
 /obj/structure/cable/initialize()
 	..()
 	add_self_to_holomap()
@@ -111,15 +113,6 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	cable_list -= src
 
-	if(istype(attached))
-		attached.set_light(0)
-		attached.icon_state = "powersink0"
-		attached.mode = 0
-		processing_objects.Remove(attached)
-		attached.anchored = 0
-		attached.attached = null
-
-	attached = null
 
 	..()								// then go ahead and delete the cable
 
@@ -223,7 +216,7 @@ By design, d1 is the smallest direction and d2 is the highest
 
 /obj/structure/cable/proc/report_load(mob/user)
 	if((powernet) && (powernet.avail > 0))		// is it powered?
-		to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(powernet.load)] - Available: [format_watts(powernet.avail)].</SPAN>")
+		to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(powernet.get_load())] - Available: [format_watts(powernet.avail)].</SPAN>")
 	else
 		to_chat(user, "<SPAN CLASS='notice'>The cable is not powered.</SPAN>")
 
@@ -257,17 +250,17 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/message = "A wire has been cut "
 	var/area/my_area = user ? get_area(user) : get_area(T)
 
-	if(powernet.load)
-		message += "with a load of [powernet.load] and avail of [powernet.avail] spanning [powernet.cables.len] cables "
+	if(powernet.get_load())
+		message += "with a load of [powernet.get_load()] and avail of [powernet.avail] spanning [powernet.cables.len] cables "
 
 	if(my_area)
 		message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) [user ? "(<A HREF='?_src_=vars;Vars=\ref[user]'>VV</A>)" : ""]"}
 
 	if(user)
 		message += " - Cut By: [user.real_name] ([user.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[user]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)"
-		log_game("[user.real_name] ([user.key]) cut a wire in [my_area.name] with a load of [powernet.load] and avail of [powernet.avail] spanning [powernet.cables.len] cables ([T.x],[T.y],[T.z])")
+		log_game("[user.real_name] ([user.key]) cut a wire in [my_area.name] with a load of [powernet.get_load()] and avail of [powernet.avail] spanning [powernet.cables.len] cables ([T.x],[T.y],[T.z])")
 
-	if(powernet.load)
+	if(powernet.get_load())
 		message_admins(message, 0, 1)
 
 	qdel(src)
@@ -322,19 +315,25 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(get_powernet())
 		powernet.newavail += amount
 
-/obj/structure/cable/proc/add_load(var/amount)
+/obj/structure/cable/proc/add_load(var/amount, var/priority = POWER_PRIORITY_NORMAL)
 	if(get_powernet())
-		powernet.load += amount
+		powernet.add_load(amount, priority)
 
 /obj/structure/cable/proc/surplus()
 	if(get_powernet())
-		return powernet.avail-powernet.load
+		return powernet.avail-powernet.get_load()
 	else
 		return 0
 
 /obj/structure/cable/proc/avail()
 	if(get_powernet())
 		return powernet.avail
+	else
+		return 0
+
+/obj/structure/cable/proc/get_satisfaction(var/priority = POWER_PRIORITY_NORMAL)
+	if (get_powernet())
+		return powernet.get_satisfaction(priority)
 	else
 		return 0
 

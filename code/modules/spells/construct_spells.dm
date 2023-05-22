@@ -21,7 +21,7 @@
 	override_base = "cult"
 	charge_max = 150
 	spell_flags = 0
-	var/dash_range = 4
+	range = 4
 
 /spell/juggerdash/choose_targets(var/mob/user = usr)
 	return list(user)
@@ -36,8 +36,8 @@
 	playsound(user, 'sound/effects/juggerdash.ogg', 100, 1)
 	var/mob/living/simple_animal/construct/armoured/perfect/jugg = user
 	jugg.crashing = null
-	var/landing = get_distant_turf(get_turf(user), jugg.dir, dash_range)
-	jugg.throw_at(landing, dash_range , 2)
+	var/landing = get_distant_turf(get_turf(user), jugg.dir, range)
+	jugg.throw_at(landing, range , 2)
 
 ///////////////////////////////////WRAITH///////////////////////////////////////
 

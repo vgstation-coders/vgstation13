@@ -5,7 +5,7 @@
 	icon_state = "ccharger0"
 	icon_state_open = "ccharger_open"
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 10 //Power is already drained to charge batteries
 	power_channel = EQUIP
@@ -198,8 +198,7 @@
 
 		new result(get_turf(holder))
 
-		qdel (holder)
-		holder = null
+		QDEL_NULL (holder)
 
 	feedback_inc("crank_charger_created",1)
 
@@ -271,8 +270,7 @@
 
 /obj/item/device/crank_charger/Destroy()
 	if(stored)
-		qdel(stored)
-		stored = null
+		QDEL_NULL(stored)
 	..()
 
 /obj/item/device/crank_charger/generous

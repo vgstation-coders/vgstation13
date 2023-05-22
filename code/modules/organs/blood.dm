@@ -131,15 +131,15 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 						var/word = pick("dizzy","woosey","faint")
 						to_chat(src, "<span class='danger'>You feel very [word].</span>")
 				if(oxyloss < 20)
-					oxyloss += 2
+					adjustOxyLoss(2)
 			if(BLOOD_VOLUME_BAD to BLOOD_VOLUME_OKAY)
 				if(!pale)
 					pale = 1
 					//update_body()
 				eye_blurry = max(eye_blurry,2)
 				if(oxyloss < 40)
-					oxyloss += 3
-				oxyloss += 3
+					adjustOxyLoss(3)
+				adjustOxyLoss(3)
 				if(prob(15))
 					Paralyse(1)
 					var/word = pick("dizzy","woosey","faint")
@@ -150,9 +150,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 					//update_body()
 				eye_blurry = max(eye_blurry,4)
 				if(oxyloss < 60)
-					oxyloss += 5
-				oxyloss += 5
-				toxloss += 1
+					adjustOxyLoss(5)
+				adjustOxyLoss(5)
+				adjustToxLoss(1)
 				if(prob(15))
 					Paralyse(rand(1,3))
 					var/word = pick("dizzy","woosey","faint")
@@ -163,8 +163,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				if(!pale) //Somehow
 					pale = 1
 					//update_body()
-				oxyloss += 8
-				toxloss += 2
+				adjustOxyLoss(8)
+				adjustToxLoss(2)
 				//cloneloss += 1
 				Paralyse(5) //Keep them on the ground, that'll teach them
 

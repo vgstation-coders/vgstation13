@@ -61,19 +61,18 @@
 /obj/structure/bed/chair/vehicle/clowncart/examine(mob/user)
 	..()
 	if(max_health > 100)
-		to_chat(user, "<span class='info'>It is reinforced with [(max_health-100)/20] bananium sheets.</span>")
+		to_chat(user, "<span class='info'>It is reinforced with [(max_health - 100) / 20] bananium sheets.</span>")
 	switch(mode)
 		if(MODE_DRAWING)
 			to_chat(user, "Currently in drawing mode.")
 		if(MODE_PEELS)
 			to_chat(user, "Currently in banana mode.")
-	switch(health)
-		if(max_health*0.5 to max_health)
-			to_chat(user, "<span class='notice'>It appears slightly dented.</span>")
-		if(1 to max_health*0.5)
-			to_chat(user, "<span class='warning'>It appears heavily dented.</span>")
-		if((INFINITY * -1) to 0)
-			to_chat(user, "<span class='danger'>It appears completely unsalvageable.</span>")
+	if(health in max_health * 0.5 to max_health)
+		to_chat(user, "<span class='notice'>It appears slightly dented.</span>")
+	else if(health in 1 to max_health * 0.5)
+		to_chat(user, "<span class='warning'>It appears heavily dented.</span>")
+	else if(health <= 0)
+		to_chat(user, "<span class='danger'>It appears completely unsalvageable.</span>")
 
 /obj/structure/bed/chair/vehicle/clowncart/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/weapon/bikehorn))
@@ -178,11 +177,10 @@
 					playsound(src, 'sound/machines/ping.ogg', 50, 1)
 					visible_message("<span class='notice'>You hear a ping as [src]'s SynthPeel Generator starts transforming banana juice into slippery peels.</span>")
 					playsound(src, 'sound/machines/ping.ogg', 50, 1)
-		qdel(W)
-		W = null
+		QDEL_NULL(W)
 	else if(istype(W, /obj/item/toy/crayon/)) //Any crayon
 		if(mode == MODE_DRAWING)
-			printing_text = lowertext(input(user, "Enter a message to print. Possible options: 'rune', 'graffiti', 'paint', 'nothing'", "Message", printing_text))
+			printing_text = copytext(sanitize(lowertext(input(user, "Enter a message to print. Possible options: 'rune', 'graffiti', 'paint', 'nothing'", "Message", printing_text))),1,MAX_MESSAGE_LEN)
 			printing_pos = 0
 			switch(printing_text)
 				if("graffiti")
@@ -332,7 +330,7 @@
 		return
 	reagents.remove_reagent(BANANA, BANANA_FOR_DRAWING)//"graffiti" and "rune" will draw graffiti and runes
 	if(printing_text == "graffiti" || printing_text == "rune") //"paint" will paint floor tiles with selected colour
-		new /obj/effect/decal/cleanable/crayon(pos, main = colour1, shade = colour2, type = printing_text)
+		new /obj/effect/decal/cleanable/crayon(pos, color = colour1, shade = colour2, type = printing_text)
 	else
 		if(printing_text == "paint")
 			var/turf/T = pos
@@ -351,7 +349,7 @@
 				if(printing_pos >= 0)
 					printing_pos = -length(printing_text)-1 //indian code magic
 			printing_pos++
-			new /obj/effect/decal/cleanable/crayon(pos, main = colour1, shade = colour2, type = copytext(printing_text, abs(printing_pos), 1+abs(printing_pos)))
+			new /obj/effect/decal/cleanable/crayon(pos, color = colour1, shade = colour2, type = copytext(printing_text, abs(printing_pos), 1+abs(printing_pos)))
 			if(printing_pos > length(printing_text) - 1 || printing_pos == - 1)
 				printing_text = ""
 				printing_pos = 0

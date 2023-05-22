@@ -12,8 +12,9 @@ var/list/one_way_windows
 /obj/structure/window
 	name = "window"
 	desc = "A silicate barrier, used to keep things out and in sight. Fragile."
-	icon = 'icons/obj/structures.dmi'
-	icon_state = "window"
+	icon = 'icons/obj/structures/window.dmi'
+	icon_state = "window0"
+	var/base_state = "window" //Base icon for update_icon
 	density = 1
 	layer = SIDE_WINDOW_LAYER
 	pressure_resistance = 4*ONE_ATMOSPHERE
@@ -46,13 +47,34 @@ var/list/one_way_windows
 	setup_border_dummy()
 
 	update_nearby_tiles()
-	update_nearby_icons()
-	update_icon()
-	oneway_overlay = image('icons/obj/structures.dmi', src, "one_way_overlay")
+	oneway_overlay = image('icons/obj/structures/window.dmi', src, "one_way_overlay")
 	if(one_way)
 		one_way = !one_way
 		toggle_one_way()
 
+/obj/structure/window/canSmoothWith()
+	var/static/list/smoothables = list(/obj/structure/window)
+	return smoothables
+
+/obj/structure/window/cannotSmoothWith()
+	var/static/list/unsmoothables = list(/obj/structure/window/full)
+	return unsmoothables
+
+/obj/structure/window/isSmoothableNeighbor(atom/A)
+	if(isobj(A))
+		var/obj/O = A
+		return ..() && O.anchored && O.density
+
+/obj/structure/window/relativewall()
+	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
+	var/icon/I = new('icons/obj/structures/window.dmi', icon_state)
+	if(!is_fulltile)
+		var/cmasknumber = findSmoothingOnTurf()
+		if(cmasknumber)
+			var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]")
+			I.Blend(mask, ICON_OVERLAY)
+			I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
+	icon = I
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
@@ -120,7 +142,7 @@ var/list/one_way_windows
 			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 		if(!damage_overlay)
 			damage_overlay = new(src)
-			damage_overlay.icon = icon('icons/obj/structures.dmi')
+			damage_overlay.icon = icon('icons/obj/structures/window.dmi')
 			damage_overlay.dir = src.dir
 
 		overlays -= damage_overlay
@@ -449,11 +471,10 @@ var/list/one_way_windows
 					d_state = WINDOWLOOSE
 					anchored = 0
 					update_nearby_tiles() //Needed if it's a full window, since unanchored windows don't link
-					update_nearby_icons()
-					update_icon()
+					relativewall()
+					relativewall_neighbours()
 					if(smartwindow)
-						qdel(smartwindow)
-						smartwindow = null
+						QDEL_NULL(smartwindow)
 						if (opacity)
 							smart_toggle()
 						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
@@ -477,11 +498,10 @@ var/list/one_way_windows
 					d_state = WINDOWLOOSEFRAME
 					anchored = 1
 					update_nearby_tiles() //Ditto above, but in reverse
-					update_nearby_icons()
-					update_icon()
+					relativewall()
+					relativewall_neighbours()
 					if(smartwindow)
-						qdel(smartwindow)
-						smartwindow = null
+						QDEL_NULL(smartwindow)
 						if (opacity)
 							smart_toggle()
 						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
@@ -510,7 +530,8 @@ var/list/one_way_windows
 			d_state = !d_state
 			anchored = !anchored
 			update_nearby_tiles() //Ditto above
-			update_nearby_icons()
+			relativewall()
+			relativewall_neighbours()
 			update_icon()
 			return
 
@@ -578,7 +599,7 @@ var/list/one_way_windows
 /obj/structure/window/Destroy()
 	setDensity(FALSE) //Sanity while we do the rest
 	update_nearby_tiles()
-	update_nearby_icons()
+	relativewall_neighbours()
 	if(one_way)
 		one_way_windows.Remove(src)
 		update_oneway_nearby_clients()
@@ -602,32 +623,15 @@ var/list/one_way_windows
 	. = ..()
 	update_nearby_tiles()
 
-//This proc is used to update the icons of nearby windows. It should not be confused with update_nearby_tiles(), which is an atmos proc!
-/obj/structure/window/proc/update_nearby_icons(var/turf/T)
-
-
-	if(!loc)
-		return 0
-	if(!T)
-		T = get_turf(src)
-
-	update_icon()
-
-	for(var/direction in cardinal)
-		for(var/obj/structure/window/W in get_step(T,direction))
-			W.update_icon()
-
 /obj/structure/window/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = loc
-	..()
-	update_nearby_icons(T)
-	update_nearby_icons()
+	relativewall()
+	relativewall_neighbours()
 	update_nearby_tiles(T)
+	..()
+	relativewall()
+	relativewall_neighbours()
 	update_nearby_tiles()
-
-/obj/structure/window/update_icon()
-
-	return
 
 /obj/structure/window/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 
@@ -649,7 +653,8 @@ var/list/one_way_windows
 /obj/structure/window/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrix. It looks more solid than the average window."
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
+	base_state = "rwindow"
 	sheet_type = /obj/item/stack/sheet/glass/rglass
 	health = 40
 	d_state = WINDOWSECURE
@@ -669,7 +674,8 @@ var/list/one_way_windows
 
 	name = "plasma window"
 	desc = "A window made out of a plasma-silicate alloy. It looks insanely tough to break and burn through."
-	icon_state = "plasmawindow"
+	icon_state = "plasmawindow0"
+	base_state = "plasmawindow"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
@@ -691,7 +697,8 @@ var/list/one_way_windows
 
 	name = "reinforced plasma window"
 	desc = "A window made out of a plasma-silicate alloy and a rod matrix. It looks hopelessly tough to break and is most likely nigh fireproof."
-	icon_state = "plasmarwindow"
+	icon_state = "plasmarwindow0"
+	base_state = "plasmarwindow"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
@@ -720,7 +727,8 @@ var/list/one_way_windows
 
 	name = "tinted window"
 	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
-	icon_state = "twindow"
+	icon_state = "twindow0"
+	base_state = "twindow"
 	opacity = 1
 	sheet_type = /obj/item/stack/sheet/glass/rglass //A glass type for this window doesn't seem to exist, so here's to you
 
@@ -728,14 +736,16 @@ var/list/one_way_windows
 
 	name = "frosted window"
 	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
-	icon_state = "fwindow"
+	icon_state = "rwindow0"
+	base_state = "rwindow"
 	health = 30
 	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
 
 /obj/structure/window/reinforced/clockwork
 	name = "brass window"
 	desc = "A paper-thin pane of translucent yet reinforced brass."
-	icon_state = "clockworkwindow"
+	icon_state = "clockworkwindow0"
+	base_state = "clockworkwindow"
 	shardtype = null
 	sheet_type = /obj/item/stack/sheet/brass
 	reinforcetype = /obj/item/stack/sheet/ralloy

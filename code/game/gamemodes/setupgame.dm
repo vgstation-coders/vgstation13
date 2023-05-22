@@ -21,7 +21,7 @@ var/NOBREATHBLOCK = 0
 var/REMOTEVIEWBLOCK = 0
 var/REGENERATEBLOCK = 0
 var/INCREASERUNBLOCK = 0
-var/REMOTETALKBLOCK = 0
+var/TELEPATHYBLOCK = 0
 var/MORPHBLOCK = 0
 var/COLDBLOCK = 0
 var/HALLUCINATIONBLOCK = 0
@@ -33,6 +33,7 @@ var/SMALLSIZEBLOCK = 0
 // Goon Stuff
 ///////////////////////////////
 // Disabilities
+var/EHSBLOCK = 0
 var/ANEMIABLOCK = 0
 var/LISPBLOCK = 0
 var/MUTEBLOCK = 0
@@ -48,7 +49,7 @@ var/ELVISBLOCK = 0
 
 // Powers
 var/SOBERBLOCK = 0
-var/PSYRESISTBLOCK = 0
+var/JAMSIGNALSBLOCK = 0
 var/STRONGBLOCK = 0
 //var/SHADOWBLOCK = 0
 var/FARSIGHTBLOCK = 0
@@ -129,7 +130,7 @@ var/LACTOSEBLOCK = 0
 	REMOTEVIEWBLOCK    = getAssignedBlock("REMOTEVIEW",    numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	REGENERATEBLOCK    = getAssignedBlock("REGENERATE",    numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	INCREASERUNBLOCK   = getAssignedBlock("INCREASERUN",   numsToAssign, DNA_HARDER_BOUNDS, good=1)
-	REMOTETALKBLOCK    = getAssignedBlock("REMOTETALK",    numsToAssign, DNA_HARDER_BOUNDS, good=1)
+	TELEPATHYBLOCK     = getAssignedBlock("TELEPATHY",      numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	MORPHBLOCK         = getAssignedBlock("MORPH",         numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	COLDBLOCK          = getAssignedBlock("COLD",          numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	HALLUCINATIONBLOCK = getAssignedBlock("HALLUCINATION", numsToAssign)
@@ -142,6 +143,7 @@ var/LACTOSEBLOCK = 0
 	/////////////////////////////////////////////
 
 	// Disabilities
+	EHSBLOCK   	   = getAssignedBlock("ELECTROSENSE",     numsToAssign)
 	ANEMIABLOCK    = getAssignedBlock("ANEMIA",     numsToAssign)
 	LISPBLOCK      = getAssignedBlock("LISP",       numsToAssign)
 	MUTEBLOCK      = getAssignedBlock("MUTE",       numsToAssign)
@@ -157,7 +159,7 @@ var/LACTOSEBLOCK = 0
 
 	// Powers
 	SOBERBLOCK     = getAssignedBlock("SOBER",      numsToAssign, DNA_HARD_BOUNDS, good=1)
-	PSYRESISTBLOCK = getAssignedBlock("PSYRESIST",  numsToAssign, DNA_HARD_BOUNDS, good=1)
+	JAMSIGNALSBLOCK = getAssignedBlock("JAMSIGNALS",  numsToAssign, DNA_HARD_BOUNDS, good=1)
 	//SHADOWBLOCK  = getAssignedBlock("SHADOW",     numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	FARSIGHTBLOCK  = getAssignedBlock("FARSIGHT",   numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	CHAMELEONBLOCK = getAssignedBlock("CHAMELEON",  numsToAssign, DNA_HARDER_BOUNDS, good=1)

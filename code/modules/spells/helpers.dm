@@ -32,6 +32,8 @@
 	return getAllSpellsByType(USER_TYPE_PULSEDEMON)
 /proc/getAllXenoSpells()
 	return getAllSpellsByType(USER_TYPE_XENOMORPH)
+/proc/getAllZombieSpells()
+	return getAllSpellsByType(USER_TYPE_ZOMBIE)
 /proc/getAllVampSpells()
 	return getAllSpellsByType(USER_TYPE_VAMPIRE)
 

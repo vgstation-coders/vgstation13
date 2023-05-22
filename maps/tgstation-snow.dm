@@ -7,14 +7,10 @@
 	nameShort = "snowbox"
 	nameLong = "Snowbox Station"
 	map_dir = "snowstation"
-	tDomeX = 128
-	tDomeY = 58
-	tDomeZ = 3
 	zAsteroid = 1
 	zMainStation = 2
 	zCentcomm = 3
 	zTCommSat = 5
-	multiz = TRUE
 	zLevels = list(
 		/datum/zLevel/snowmine{
 			z_above = 2

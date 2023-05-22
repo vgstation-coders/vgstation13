@@ -50,12 +50,12 @@
 /obj/effect/plantsegment/proc/before_moving()
 	for(var/direc in cardinal)
 		var/turf/T = get_step(src, direc)
-		T.unregister_event(/event/density_change, src, .proc/proxDensityChange)
+		T.unregister_event(/event/density_change, src, src::proxDensityChange())
 
 /obj/effect/plantsegment/proc/after_moving()
 	for(var/direc in cardinal)
 		var/turf/T = get_step(src, direc)
-		T.register_event(/event/density_change, src, .proc/proxDensityChange)
+		T.register_event(/event/density_change, src, src::proxDensityChange())
 
 /obj/effect/plantsegment/New(var/newloc, var/datum/seed/newseed, var/turf/newepicenter, var/start_fully_mature = 0)
 	..()
@@ -108,7 +108,7 @@
 	if(!seed)
 		return
 	var/traits = ""
-	if(seed.carnivorous == 2)
+	if(seed.voracious == 2)
 		traits += "<span class='alert'>It's quivering viciously.</span> "
 	if(seed.stinging)
 		traits += "<span class='alert'>It's covered in tiny stingers.</span> "
@@ -195,7 +195,9 @@
 			return
 		if(prob(70))
 			sampled = 1
-		seed.spawn_seed_packet(get_turf(user))
+		var/obj/item/seeds/seeds = seed.spawn_seed_packet(get_turf(user))
+		if(arcanetampered)
+			seeds.arcanetampered = arcanetampered
 		health -= (rand(3,5)*5)
 		sampled = 1
 		SSplant.add_plant(src)

@@ -56,7 +56,7 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-/mob/living/carbon/human/plasma/New(var/new_loc, delay_ready_dna = 0)
+/mob/living/carbon/human/plasmaman/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Plasmaman")
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
@@ -76,9 +76,8 @@
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
-/mob/living/carbon/human/umbra/New(var/new_loc, delay_ready_dna = 0)
-	..(new_loc, "Umbra")
-	faction = "grue" //Umbras are friendly with grues
+/mob/living/carbon/human/vampire/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Vampire")
 	my_appearance.h_style = "Bald"
 	regenerate_icons()
 
@@ -213,8 +212,8 @@
 
 	update_mutantrace()
 
-	register_event(/event/equipped, src, .proc/update_name)
-	register_event(/event/unequipped, src, .proc/update_name)
+	register_event(/event/equipped, src, src::update_name())
+	register_event(/event/unequipped, src, src::update_name())
 
 /mob/living/carbon/human/proc/update_name()
 	name = get_visible_name()
@@ -257,8 +256,7 @@
 
 		if (internal)
 			if (!internal.air_contents)
-				qdel(internal)
-				internal = null
+				QDEL_NULL(internal)
 			else
 				stat("Internal Atmosphere Info", internal.name)
 				stat("Tank Pressure", internal.air_contents.return_pressure())
@@ -296,7 +294,6 @@
 	return FALSE
 
 /mob/living/carbon/human/var/co2overloadtime = null
-/mob/living/carbon/human/var/temperature_resistance = T0C+75 //but why is this here
 
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
@@ -367,8 +364,7 @@
 		return get_worn_id_name("Unknown")
 	if( head && head.is_hidden_identity())
 		return get_worn_id_name("Unknown")	//Likewise for hats
-	var/datum/role/vampire/V = isvampire(src)
-	if(V && (locate(/datum/power/vampire/shadow) in V.current_powers) && V.ismenacing)
+	if(istruevampire(src))
 		return get_worn_id_name("Unknown")
 	var/face_name = get_face_name()
 	var/id_name = get_worn_id_name("")
@@ -697,6 +693,9 @@
 	return
 
 /mob/living/carbon/human/proc/vomit(hairball = 0, instant = 0)
+	if(species && species.flags & SPECIES_NO_MOUTH)
+		return
+
 	if(!lastpuke)
 		lastpuke = 1
 		to_chat(src, "<spawn class='warning'>You feel nauseous...</span>")
@@ -1378,7 +1377,15 @@
 	return id
 
 /mob/living/carbon/human/update_perception()
-	if(client && client.darkness_planemaster)
+	if (dark_plane)
+		dark_plane.alphas = list()
+		dark_plane.colours = null
+		dark_plane.blend_mode = BLEND_ADD
+
+	if (master_plane)
+		master_plane.blend_mode = BLEND_MULTIPLY
+
+	if(client && dark_plane)
 		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 		if(E)
 			E.update_perception(src)
@@ -1386,9 +1393,21 @@
 		for(var/ID in virus2)
 			var/datum/disease2/disease/D = virus2[ID]
 			for (var/datum/disease2/effect/catvision/catvision in D.effects)
-				if (catvision.count)//if catulism has activated at least once, we can see much better in the dark.
-					client.darkness_planemaster.alpha = min(100, client.darkness_planemaster.alpha)
+				if (catvision.count)
+					dark_plane.alphas["cattulism"] = clamp(15 + (catvision.count * 20),15,155) // The more it activates, the better we see, until we see as well as a tajaran would.
 					break
+
+	if (istype(glasses))
+		glasses.update_perception(src)
+		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
+			dark_plane.alphas["[glasses.my_dark_plane_alpha_override]"] = glasses.my_dark_plane_alpha_override_value
+
+	if (mind)
+		for (var/key in mind.antag_roles)
+			var/datum/role/R = mind.antag_roles[key]
+			R.update_perception()
+
+	check_dark_vision()
 
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
@@ -1697,6 +1716,7 @@
 	var/area/this_area = get_area(src)
 	if(istype(this_area) && this_area.project_shadows)
 		update_shadow()
+	loc.adjust_layer(src)
 
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some
 	if(new_amount > held_items.len)
@@ -1924,9 +1944,9 @@
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
-	dropBorers()
+/mob/living/carbon/human/proc/zombify(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
 	if(crabzombie)
+		dropBorers()
 		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))
 		T.virus2 = virus_copylist(virus2)
 		T.get_clothes(src, T)
@@ -1934,14 +1954,32 @@
 		T.host = src
 		forceMove(null)
 		return T
-	else
+	else if(stat == DEAD || InCritical())
+		dropBorers()
 		var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
+		if(master && master.faction)
+			T.faction = "\ref[master]"
+		T.add_spell(/spell/aoe_turf/necro/zombie/evolve)
+		if(isgrey(src))
+			T.icon_state = "mauled_laborer"
+			T.icon_living = "mauled_laborer"
+			T.icon_dead = "mauled_laborer"
+		else if(isvox(src))
+			T.icon_state = "rotting_raider1"
+			T.icon_living = "rotting_raider1"
+			T.icon_dead = "rotting_raider1"
+		else if(isinsectoid(src))
+			T.icon_state = "zombie_turned"
+			T.icon_living = "zombie_turned"
+			T.icon_dead = "zombie_turned"
 		T.virus2 = virus_copylist(virus2)
 		T.get_clothes(src, T)
 		T.name = real_name
 		T.host = src
 		forceMove(null)
 		return T
+	else
+		become_zombie = TRUE
 
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()
@@ -2253,7 +2291,7 @@
 			return list(
 		if ("Golem")
 			return list(
-		if ("Umbra")
+		if ("Vampire")
 			return list(
 		if ("Slime")
 			return list(

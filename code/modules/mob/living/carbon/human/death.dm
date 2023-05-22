@@ -1,4 +1,7 @@
 /mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	if(!isUnconscious())
 		forcesay("-")
 	if(species)
@@ -29,7 +32,6 @@
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
 	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
 	qdel(src)
-
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
 	death(1)
@@ -74,12 +76,10 @@
 			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
 
 	if(species)
-		qdel(species)
-		species = null
+		QDEL_NULL(species)
 
 	if(vessel)
-		qdel(vessel)
-		vessel = null
+		QDEL_NULL(vessel)
 
 	my_appearance = null
 
@@ -91,7 +91,7 @@
 	obj_overlays = null
 
 /mob/living/carbon/human/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	if(healths)
 		healths.icon_state = "health7"
@@ -115,28 +115,27 @@
 //		to_chat(world, "Vox kills: [vox_kills]")
 		//vox_kills++ //Bad vox. Shouldn't be killing humans.
 	if(ishuman(LAssailant))
-		var/mob/living/carbon/human/H=LAssailant
-		if(H.mind)
-			H.mind.kills += "[name] ([ckey])"
+		var/mob/living/carbon/human/A=LAssailant
+		if(A.mind)
+			A.mind.kills += "[name] ([ckey])"
 
 	if(!gibbed)
 		update_canmove()
 	stat = DEAD
-	tod = worldtime2text() //Weasellos time of death patch
+	tod = worldtime2text()
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
 		if(!(mind && mind.suiciding)) //Cowards don't count
-			score.deadcrew++ //Someone died at this point, and that's terrible
+			score.deadcrew++
 	if (dorfpod)
 		dorfpod.scan_body(src)
 	if(ticker && ticker.mode)
 		sql_report_death(src)
 	species.handle_death(src)
-
-	if(become_zombie_after_death && isjusthuman(src))
-		spawn(30 SECONDS)
+	if(become_zombie)
+		spawn(20 SECONDS)
 			if(!gcDestroyed)
-				make_zombie(retain_mind = become_zombie_after_death-1)
+				zombify()
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()

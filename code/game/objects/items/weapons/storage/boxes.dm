@@ -32,6 +32,8 @@
 	w_type=RECYK_MISC
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
+	autoignition_temperature = AUTOIGNITION_PAPER
+	on_armory_manifest = TRUE
 
 /obj/item/weapon/storage/box/large
 	name = "large box"
@@ -424,10 +426,10 @@
 	desc = "Drymate brand neaera cubes, shipped from Jargon 4. Just add water!"
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube = 6)
 
-/obj/item/weapon/storage/box/monkeycubes/roachcubes
-	name = "roach cube box"
-	desc = "Drymate brand roach cubes, shipped from Secto 4. Just add water!"
-	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/roachcube = 6)
+/obj/item/weapon/storage/box/monkeycubes/isopodcubes
+	name = "isopod cube box"
+	desc = "Drymate brand isopod cubes, shipped from Secto 4. Just add water!"
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/isopodcube = 6)
 
 /obj/item/weapon/storage/box/monkeycubes/mousecubes
 	name = "lab mouse cube box"
@@ -508,7 +510,7 @@
 	can_add_combinedwclass = TRUE
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-		list(/obj/item/clothing/glasses/sunglasses/sechud/prescription,/obj/item/clothing/glasses/sunglasses/sechud),
+			/obj/item/clothing/glasses/regular/tracking/detective,
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/detective,
 		/obj/item/weapon/switchtool/switchblade,
@@ -1317,3 +1319,10 @@
 	new /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit(src)
 	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
+
+/obj/item/weapon/storage/box/demolition
+	icon_state = "box_of_doom"
+	items_to_spawn = list(
+		/obj/item/device/modkit/demolition,
+		/obj/item/ammo_storage/magazine/lawgiver/demolition = 2,
+	)

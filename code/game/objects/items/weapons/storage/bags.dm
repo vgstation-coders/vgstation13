@@ -21,6 +21,7 @@
 	use_to_pickup = TRUE
 	slot_flags = SLOT_BELT
 	flags = FPRINT
+	autoignition_temperature = AUTOIGNITION_FABRIC
 
 // -----------------------------
 //          Trash bag
@@ -110,12 +111,6 @@
 	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_MISC) //Recipe calls for 3 sheets
 	w_type = RECYK_PLASTIC
 
-/obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
-	return can_be_inserted(I,1)
-
-/obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
-	return handle_item_insertion(I,0)
-
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
@@ -197,10 +192,10 @@
 
 /obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
 	if(handling)
-		user.register_event(/event/moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, src::mob_moved())
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
-	user.unregister_event(/event/moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, src::mob_moved())
 
 // -----------------------------
 //          Plant bag
@@ -216,7 +211,6 @@
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
 	display_contents_with_number = TRUE
-
 
 /obj/item/weapon/storage/bag/plants/CtrlClick()
 	if(isturf(loc))
@@ -272,6 +266,22 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 /obj/item/weapon/storage/bag/plants/portactor/CtrlClick()
 	return
+
+// -----------------------------
+//          Materials bag
+// -----------------------------
+
+/obj/item/weapon/storage/bag/materials
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
+	icon_state = "matsbag"
+	name = "Materials Bag"
+	desc = "Can hold most materials and shards."
+	storage_slots = 50; //the number of plant pieces it can carry.
+	fits_max_w_class = 3
+	max_combined_w_class = 200
+	w_class = W_CLASS_TINY
+	can_only_hold = list("/obj/item/stack/sheet","/obj/item/weapon/shard")
+	display_contents_with_number = TRUE
 
 // -----------------------------
 //          Food bag
@@ -450,8 +460,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 			usr.client.screen -= S
 		//S.dropped(usr)
 		if(!S.amount)
-			qdel (S)
-			S = null
+			QDEL_NULL (S)
 		else
 			S.forceMove(src)
 
@@ -496,8 +505,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 			N.amount = stacksize
 			S.amount -= stacksize
 		if(!S.amount)
-			qdel (S) // todo: there's probably something missing here
-			S = null
+			QDEL_NULL (S) // todo: there's probably something missing here
 	orient2hud(usr)
 	if(usr.s_active)
 		usr.s_active.show_to(usr)
@@ -510,7 +518,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 		return FALSE
 
 	//I would prefer to drop a new stack, but the item/attack_hand code
-	// that calls this can't recieve a different object than you clicked on.
+	// that calls this can't receive a different object than you clicked on.
 	//Therefore, make a new stack internally that has the remainder.
 	// -Sayu
 
@@ -540,20 +548,20 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	slot_flags = SLOT_BELT
 	name = "gadget bag"
 	desc = "This bag can be used to store many machine components."
-	storage_slots = 25;
+	storage_slots = 50;
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell")
+	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell", "/obj/item/weapon/circuitboard")
 	display_contents_with_number = TRUE
 
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
 	var/lowest_rating = INFINITY //Get the lowest rating, so only mass drop the lowest parts.
 	for(var/obj/item/B in contents)
-		if(B.rped_rating() < lowest_rating)
-			lowest_rating = B.rped_rating()
+		if(B.get_rating() < lowest_rating)
+			lowest_rating = B.get_rating()
 
 	for(var/obj/item/B in contents) //Now that we have the lowest rating we can dump only parts at the lowest rating.
-		if(B.rped_rating() > lowest_rating)
+		if(B.get_rating() > lowest_rating)
 			continue
 		remove_from_storage(B, A)
 
@@ -701,4 +709,4 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/book","/obj/item/weapon/tome","/obj/item/weapon/tome_legacy","/obj/item/weapon/spellbook","/obj/item/weapon/paper","/obj/item/weapon/paper/nano","/obj/item/weapon/barcodescanner","obj/item/weapon/pen","obj/item/weapon/folder")
-	
+

@@ -8,11 +8,26 @@
 	var/minsides = 1
 	var/result = null
 	var/multiplier = 0 //For modifying the result (d00 etc)
+	var/activated = 0 //Eventually the dice runs out of power, if cursed
+	var/infinite = 0 //dice with 1 will not run out
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/weapon/dice/New()
 	..()
 	result = rand(minsides, sides)
 	update_icon()
+
+/obj/item/weapon/dice/arcane_act(mob/user)
+	..()
+	activated = 1
+	sides = min(sides,12) // always cursed if a wiz made it, shmuck bait
+	return "'RE Y' F'LIN L'KY!?"
+
+/obj/item/weapon/dice/bless()
+	..()
+	if(!istype(src,/obj/item/weapon/dice/d20/cursed))
+		activated = initial(activated)
+	sides = initial(sides)
 
 /obj/item/weapon/dice/d2
 	name = "d2"
@@ -57,6 +72,12 @@
 	icon_state = "d20"
 	sides = 20
 
+/obj/item/weapon/dice/fudge
+	name = "fudge dice"
+	desc = "A d6 with pluses and minuses on it."
+	icon_state = "df"
+	var/list/result_names = list("-", "-", "a blank side", "a blank side", "+", "+")
+
 /obj/item/weapon/dice/loaded
 	desc = "A die with six even sides. Basic and servicable."
 
@@ -73,8 +94,8 @@
 	diceroll(user, 0)
 
 /obj/item/weapon/dice/throw_impact(atom/hit_atom, speed, user)
-	..()
-	diceroll(user, 1)
+	if(!..())
+		diceroll(user, 1)
 
 /obj/item/weapon/dice/proc/show_roll(mob/user as mob, thrown, result)
 	var/comment = ""
@@ -83,7 +104,6 @@
 			comment = "Nat 20!"
 		else if(result == 1)
 			comment = "Ouch, bad luck."
-	update_icon()
 	if(multiplier)
 		result = (result - 1) * multiplier
 	if(!thrown) //Dice was rolled in someone's hand
@@ -93,75 +113,21 @@
 	else if(src.throwing == 0) //Dice was thrown and is coming to rest
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result]. [comment]</span>")
 
-/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown)
+/obj/item/weapon/dice/fudge/show_roll(mob/user as mob, thrown, result)
+	if(!thrown) //Dice was rolled in someone's hand
+		user.visible_message("<span class='notice'>[user] has thrown [src]. It lands on [result_names[result]].</span>", \
+							 "<span class='notice'>You throw [src]. It lands on [result_names[result]].</span>", \
+							 "<span class='notice'>You hear [src] landing on [result_names[result]].</span>")
+	else if(src.throwing == 0) //Dice was thrown and is coming to rest
+		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result_names[result]].</span>")
+
+
+/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown, silent = FALSE)
 	result = rand(minsides, sides)
-	show_roll(user, thrown, result)
-
-/obj/item/weapon/dice/loaded/diceroll(mob/user as mob, thrown)
-	result = rand(minsides, sides * 1.5)
-	result = min(result, sides)
-	show_roll(user, thrown, result)
-
-/obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
-	if(istype(H) && !H.shoes)
-		to_chat(H, "<span class='danger'>You step on the D4!</span>")
-		H.apply_damage(4,BRUTE,(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)))
-		H.Knockdown(3)
-		H.Stun(3)
-
-/obj/item/weapon/dice/update_icon()
-	overlays.len = 0
-	overlays += image(icon = icon, icon_state = "[src.icon_state][src.result]")
-
-/obj/item/weapon/dice/d20/e20/diceroll(mob/user as mob, thrown)
-	if(!istype(user))
-		return 0
-	if(triggered)
-		return
-	..()
-	message_admins("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled [result]")
-	log_game("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled [result]")
-	if(result == 1)
-		to_chat(user, "<span class='danger'>Rocks fall, you die.</span>")
-		user.gib()
-		user.drop_item(src, force_drop = 1)
-	else
-		triggered = 1
-		visible_message("<span class='notice'>You hear a quiet click.</span>")
-		spawn(40)
-			var/cap = 0
-			var/uncapped = result
-			if(result > MAX_EXPLOSION_RANGE && result != 20)
-				cap = 1
-				result = min(result, MAX_EXPLOSION_RANGE) //Apply the bombcap
-				if(result > 14)
-					sleep(20)
-			else if(result == 20) //Roll a nat 20, screw the bombcap
-				result = 24
-				sleep(40)
-			var/turf/epicenter = get_turf(src)
-			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, cap, whodunnit = user)
-			if(cap)
-				for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
-					if(bhangmeter)
-						bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
-
-
-/obj/item/weapon/dice/d20/cursed
-	name = "\improper Mysterious d20"
-	desc = "Something about this dice seems wrong."
-	var/deactivated = 0 //Eventually the dice runs out of power
-	var/infinite = 0 //dice with 1 will not run out
-	mech_flags = MECH_SCAN_ILLEGAL
-
-/obj/item/weapon/dice/d20/cursed/pickup(mob/user as mob)
-	..()
-	if(deactivated == 0)
-		to_chat(user, "<span class='sinister'>Are you feeling lucky?</span>")
-
-/obj/item/weapon/dice/d20/cursed/diceroll(mob/user as mob, thrown)
-	..()
-	if(deactivated == 0) //If the dice has power then something will happen
+	update_icon()
+	if(!silent)
+		show_roll(user, thrown, result)
+	if(activated) //If the dice has power then something will happen
 		if(istype(user,/mob/living/carbon/human)) //check that a humanoid is rolling the dice; Xenomorphs / Sillicons need not apply.
 			message_admins("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled [result]")
 			log_game("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled [result]")
@@ -177,6 +143,10 @@
 					else
 						for(var/datum/organ/external/E in h.organs) //Being a catbeast doesn't exempt you from getting a curse just because you cannot turn into a catbeast again.
 							E.droplimb(1)
+					if(prob(1))
+						to_chat(user, "<span class=sinister><B>You have been damned directly to hell! </span></B>")
+						h.death()
+						send_to_hedoublehockeysticks(h)
 				if(2 to 5)
 					to_chat(user, "<span class=sinister><B>It could be worse, but not much worse! Enjoy your curse! </span></B>")
 					h.flash_eyes(visual = 1)
@@ -220,7 +190,7 @@
 									E.droplimb(1) //Catbeasts lose limbs
 
 				if(6 to 9)
-					to_chat(user, "<span class=sinister></B>You have rolled low and shall recieve a curse! It could be a lot worse however! </span></B>")
+					to_chat(user, "<span class=sinister></B>You have rolled low and shall receive a curse! It could be a lot worse however! </span></B>")
 					h.flash_eyes(visual = 1)
 					switch(pick(1,2,3,4))
 						if(1)
@@ -244,7 +214,7 @@
 												h.regenerate_icons()
 											to_chat(user, "<span class=danger><B>You have been turned into a disgusting lizard! </span></B>")
 										else
-											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a lizard can't get out of recieving a curse and so they lose their arms instead
+											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a lizard can't get out of receiving a curse and so they lose their arms instead
 												E.droplimb(1)
 									if(2)
 										if(h.species.name != "Skrell")
@@ -252,7 +222,7 @@
 												h.regenerate_icons()
 											to_chat(user, "<span class=danger><B>You have been turned into a disgusting squidman! </span></B>")
 										else
-											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a squid can't get out of recieving a curse and so they lose their arms instead
+											for(var/datum/organ/external/E in h.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)) //Someone who has already become a squid can't get out of receiving a curse and so they lose their arms instead
 												E.droplimb(1)
 									if(3)
 										if(h.species.name != "Vox")
@@ -329,7 +299,7 @@
 							new /obj/item/weapon/storage/bag/potion/dice_potion_bundle(user.loc, user)
 
 
-				if(20)
+				if(20 to INFINITY)
 					to_chat(user, "<span class=sinister><B>A perfect roll! enjoy your reward! </span></B>")
 					new /obj/item/stack/sheet/mineral/phazon(user.loc, 10)
 					new /obj/item/stack/sheet/mineral/diamond(user.loc, 10)
@@ -353,14 +323,79 @@
 
 			if(prob(15))
 				if(!infinite)
-					deactivated = 1
+					activated = 0
 					user.visible_message("<span class=danger><B>The dice shudders and loses its power! </span></B>")
 					name = "d20"
 					desc = "A die with twenty sides. The prefered die to throw at the GM."
-				else
-					return 0
+	return result
+
+/obj/item/weapon/dice/fudge/diceroll(mob/user as mob, thrown)
+	return result_names[..()]
+
+/obj/item/weapon/dice/loaded/diceroll(mob/user as mob, thrown)
+	result = rand(minsides, sides * 1.5)
+	result = min(result, sides)
+	update_icon()
+	show_roll(user, thrown, result)
+
+/obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
+	if(..())
+		return 1
+	if(istype(H) && !H.shoes)
+		to_chat(H, "<span class='danger'>You step on the D4!</span>")
+		H.apply_damage(4,BRUTE,(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)))
+		H.Knockdown(3)
+		H.Stun(3)
+
+/obj/item/weapon/dice/update_icon()
+	overlays.len = 0
+	overlays += image(icon = icon, icon_state = "[src.icon_state][src.result]")
+
+/obj/item/weapon/dice/d20/e20/diceroll(mob/user as mob, thrown)
+	..()
+	if(!istype(user))
+		return result
+	if(triggered)
+		return result
+	message_admins("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled [result]")
+	log_game("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled [result]")
+	if(result == 1)
+		to_chat(user, "<span class='danger'>Rocks fall, you die.</span>")
+		user.gib()
+		user.drop_item(src, force_drop = 1)
 	else
-		return 0
+		triggered = 1
+		visible_message("<span class='notice'>You hear a quiet click.</span>")
+		spawn(40)
+			var/cap = 0
+			var/uncapped = result
+			if(result > 19) //Roll a nat 20
+				result = 24
+				sleep(40)
+			else
+				cap = 1
+				if(result > 14)
+					sleep(20)
+
+			var/turf/epicenter = get_turf(src)
+			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, cap, whodunnit = user)
+			if(cap)
+				for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
+					if(bhangmeter)
+						bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
+	return result
+
+
+/obj/item/weapon/dice/d20/cursed
+	name = "\improper Mysterious d20"
+	desc = "Something about this dice seems wrong."
+	mech_flags = MECH_SCAN_ILLEGAL
+	activated = 1
+
+/obj/item/weapon/dice/d20/pickup(mob/user as mob)
+	..()
+	if(activated)
+		to_chat(user, "<span class='sinister'>Are you feeling lucky?</span>")
 
 /obj/item/weapon/dice/d20/cursed/infinite
 	infinite = 1

@@ -9,6 +9,7 @@
 	var/hitsound = null
 	var/miss_sound = 'sound/weapons/punchmiss.ogg'
 	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
+	var/uncountable //TRUE means the item's examine description will use "It is" even if the item's gender is PLURAL.
 
 	w_class = W_CLASS_MEDIUM
 	var/attack_delay = 10 //Delay between attacking with this item, in 1/10s of a second (default = 1 second)
@@ -42,8 +43,8 @@
 	var/cant_drop_msg = " sticks to your hand!"
 	var/laying_pickup = FALSE //Allows things to be placed in hands while the owner of those hands is laying
 
-	var/list/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	var/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+	var/list/armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+	var/list/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 	var/list/allowed = null //suit storage stuff.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
@@ -63,6 +64,8 @@
 	var/restraint_resist_time = 0	//When set, allows the item to be applied as restraints, which take this amount of time to resist out of
 	var/restraint_apply_time = 3 SECONDS
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
+	var/goes_in_mouth //Whether or not the item is described as "on his/her face" or "in his/her mouth" when worn on the face slot.
+	var/is_muzzle	//Whether or not the item is a muzzle, and how strong the muzzling effect is. See setup.dm.
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
 
@@ -79,8 +82,10 @@
 
 	var/datum/speech_filter/speech_filter
 
-/obj/item/proc/return_thermal_protection()
-	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
+	var/luckiness //How much luck or unluck the item confers while held
+	var/luckiness_validity	//Flags for where the item has to be to confer its luckiness to the bearer. e.g. held in the hand, carried somewhere in the inventory, etc.: see luck.dm.
+
+	var/is_cookvessel //If true, the item is a cooking vessel.
 
 /obj/item/New()
 	..()
@@ -108,11 +113,53 @@
 	*/
 	//var/list/sprite_sheets_obj = null
 
+
+/obj/item/proc/get_armor(var/type)
+	return armor[type]
+
+/obj/item/proc/get_armor_absorb(var/type)
+	return armor_absorb[type]
+
+/obj/item/proc/return_thermal_protection()
+	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
+
 /obj/item/acid_melt()
-	if (acidable())
-		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
-		I.desc = "Looks like this was \a [src] some time ago."
-		qdel(src)
+	var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
+	I.desc = "Looks like this was \a [src] some time ago."
+	visible_message("<span class='warning'>\The [src] melts.</span>")
+	qdel(src)
+
+/obj/item/hide(i)
+	if(isturf(loc))
+		level = i ? LEVEL_BELOW_FLOOR : LEVEL_ABOVE_FLOOR
+		invisibility = i ? 101 : 0
+		plane = i ? ABOVE_PLATING_PLANE : initial(plane)
+		layer = i ? FLOORBOARD_ITEM_LAYER : initial(layer)
+		anchored = i
+
+/obj/item/Crossed(atom/movable/AM)
+	if(level < LEVEL_ABOVE_FLOOR)
+		return 1
+	return 0
+
+/obj/item/t_scanner_expose()
+	if (level > LEVEL_BELOW_FLOOR)
+		..()
+	else
+		var/old_alpha = alpha
+		var/old_invisibility = invisibility
+		invisibility = 0
+		alpha = 127
+		plane = initial(plane)
+		layer = initial(layer)
+
+		spawn(1 SECONDS)
+			var/turf/U = loc
+			if(istype(U) && U.intact)
+				invisibility = old_invisibility
+				plane = ABOVE_PLATING_PLANE
+				layer = FLOORBOARD_ITEM_LAYER
+			alpha = old_alpha
 
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
@@ -166,6 +213,19 @@
 	..()
 	qdel(src)
 
+var/global/objects_thrown_when_explode = FALSE
+
+/obj/item/throw_impact(atom/impacted_atom, speed, mob/user)
+	..()
+	if(isturf(impacted_atom))
+		var/turf/T = impacted_atom
+		if(objects_thrown_when_explode || (T.arcanetampered && T.arcanetampered != user))
+			playsound(T, get_sfx("explosion_small"), 100, 1, get_rand_frequency(), falloff = 5)
+			T.turf_animation('icons/effects/96x96.dmi',"explosion_small",-WORLD_ICON_SIZE, -WORLD_ICON_SIZE, 13)
+			qdel(src)
+			return 1
+	return 0
+
 /obj/item/Topic(href, href_list)
 	.=..()
 	if(href_list["close"])
@@ -187,6 +247,59 @@
 	return
 
 /obj/item/proc/SlipDropped(var/mob/living/user, var/slip_dir, var/slipperiness = TURF_WET_WATER)
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		if(sharpness_flags & (SHARP_BLADE | SERRATED_BLADE | SHARP_TIP | HOT_EDGE)) //Running with sharp objects is dangerous!
+			var/severity = 0
+			var/saving_prob = C.lucky_probability(60, luckfactor = 1/50)
+
+			if(M_CLUMSY in C.mutations)
+				severity += 1
+
+			for(var/i in 1 to 3) //Three saving throws. One failed means a near miss. Two failed means a normal attack. Three failed means a critical attack.
+				if(prob(saving_prob))
+					break
+				severity += 1
+			if(severity >= 2)
+				var/list/attackable_zones = list("head")
+				if(C.has_eyes())
+					attackable_zones += "eyes"
+				if(C.hasmouth())
+					attackable_zones += "mouth"
+				var/attackable_zone = pick(attackable_zones)
+
+				//Temporarily switch C to harm intent and make them target their head.
+				var/previntent = C.a_intent
+				var/prevzone
+				if(C.zone_sel)
+					prevzone = C.zone_sel.selecting
+					C.zone_sel.selecting = attackable_zone //For proper afterattack() behavior, otherwise we chould just pass attackable_zone into attacked_by().
+				C.a_intent = I_HURT
+
+				//Do the attack.
+				C.attacked_by(src, C, def_zone = attackable_zone, crit = severity >= 3, flavor = "accidentally")
+				afterattack(C, C)
+
+				//Switch them back to their previous intent and targeting.
+				C.a_intent = previntent
+				if(C.zone_sel)
+					C.zone_sel.selecting = prevzone
+
+			else if(severity >= 1)
+				var/list/possibles = list("face", "neck")
+				if(C.has_eyes())
+					possibles += "eye"
+				if(C.hasmouth())
+					possibles += "throat"
+				var/list/possible_edgepoints = list()
+				if(sharpness_flags & SHARP_BLADE)
+					possible_edgepoints += "sharp edge"
+				if(sharpness_flags & SERRATED_BLADE)
+					possible_edgepoints += "serrated edge"
+				if(sharpness_flags & SHARP_TIP)
+					possible_edgepoints += "sharp point"
+				to_chat(C, "<span class = 'warning'>[possible_edgepoints.len ? "The [pick(possible_edgepoints)] of \the [src]" : "\The [src]"] just misses your [pick(possibles)]... close one!</span>")
+
 	return
 
 /obj/item/projectile_check()
@@ -211,11 +324,11 @@
 
 	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
-	if (gender == PLURAL)
+	if ((gender == PLURAL) && !uncountable)
 		pronoun = "They are"
 	else
 		pronoun = "It is"
-	size = " [pronoun] a [size] item."
+	size = " [pronoun] [size]."
 	..(user, size, show_name)
 	if(price && price > 0)
 		to_chat(user, "You read '[price] space bucks' on the tag.")
@@ -325,6 +438,7 @@
 
 // called when this item is added into a storage item, which is passed on as S. The loc variable is already set to the storage item.
 /obj/item/proc/on_enter_storage(obj/item/weapon/storage/S as obj)
+	invisibility = 0
 	return
 
 // called when "found" in pockets and storage items. Returns 1 if the search should end.
@@ -375,6 +489,7 @@
 		var/datum/action/A = X
 		if(item_action_slot_check(slot, user)) //some items only give their actions buttons when in a specific slot.
 			A.Grant(user)
+	INVOKE_EVENT(src, /event/equipped, "user" = user)
 	return
 
 /obj/item/proc/item_action_slot_check(slot, mob/user)
@@ -458,6 +573,11 @@
 						return CAN_EQUIP_BUT_SLOT_TAKEN
 					else
 						return CANNOT_EQUIP
+
+				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
+					to_chat(H, "<span class='warning'>You have no mouth.</span>")
+					return CANNOT_EQUIP
+
 				return CAN_EQUIP
 			if(slot_back)
 				if( !(slot_flags & SLOT_BACK) )
@@ -967,8 +1087,7 @@
 		wielded.wielding = null
 		user.u_equip(wielded,1)
 		if(wielded)
-			qdel(wielded)
-			wielded = null
+			QDEL_NULL(wielded)
 	update_wield(user)
 
 /obj/item/proc/update_wield(mob/user)
@@ -1260,10 +1379,6 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/get_rating()
 	return FALSE
 
-// Like the above, but used for RPED sorting of parts.
-/obj/item/proc/rped_rating()
-	return get_rating()
-
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
 	var/datum/organ/external/kickingfoot = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
@@ -1284,16 +1399,16 @@ var/global/list/image/blood_overlays = list()
 	//Attempt to damage the item if it's breakable here.
 	var/glanced = TRUE
 	var/broken = FALSE
-	
+
 	if(breakable_flags & BREAKABLE_UNARMED)
 		glanced=!take_damage(get_obj_kick_damage(H, kickingfoot), skip_break = TRUE, mute = TRUE)
-		
+
 	H.visible_message("<span class='danger'>[H] kicks \the [src][generate_break_text(glanced, TRUE)]</span>", "<span class='danger'>You kick \the [src][generate_break_text(glanced, TRUE)]</span>")
-	
+
 	if(breakable_flags & BREAKABLE_UNARMED)
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
 		broken = try_break(propelparams = thispropel)
-		
+
 	if(kick_power >= 6 && !broken) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y
@@ -1479,21 +1594,7 @@ var/global/list/image/blood_overlays = list()
 		usr.put_in_hand(OI.hand_index, src)
 		add_fingerprint(usr)
 
-/obj/item/proc/pre_throw()
-	return
-
-/**
-	Attempt to heat this object from a presumed heat source.
-	@args:
-		A: Atom: The source of the heat
-		user: mob: Whomever may be trying to heat this object
-
-	@return:
-		TRUE if succesful
-		FALSE if not succesful
-		NULL if override not defined
-**/
-/obj/item/proc/attempt_heating(atom/A, mob/user)
+/obj/item/proc/pre_throw(atom/movable/target)
 	return
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)

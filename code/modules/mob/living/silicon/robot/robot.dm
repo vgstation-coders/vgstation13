@@ -534,6 +534,8 @@
 /mob/living/silicon/robot/cancelAlarm(var/class, area/A as area, obj/origin)
 	var/list/L = alarms[class]
 	var/cleared = FALSE
+	if(!A)
+		return FALSE
 	for (var/I in L)
 		if(I == A.name)
 			var/list/alarm = L[I]
@@ -1044,7 +1046,7 @@
 		overlays += image(icon = icon, icon_state = "[icon_state]-shield")
 
 	if(base_icon)
-		if(module_active && istype(module_active,/obj/item/borg/combat/mobility) && has_icon(icon, "[icon_state]-roll"))
+		if(istype(module_active,/obj/item/borg/combat/mobility) && has_icon(icon, "[base_icon]-roll"))
 			icon_state = "[base_icon]-roll"
 		else
 			icon_state = base_icon
@@ -1200,7 +1202,7 @@
 		to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE
-	to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Self-Destruct signal recieved.</span>")
+	to_chat(src, "<span style=\"font-family:Courier\">\[<span class='danger'>ALERT</span>\]Self-Destruct signal received.</span>")
 	gib()
 	return TRUE
 
@@ -1272,7 +1274,7 @@
 		return FALSE
 	lockdown = state
 	if(lockdown)
-		to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Lockdown signal recieved. Halting all activity.</b></span>")
+		to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Lockdown signal received. Halting all activity.</b></span>")
 		src << 'sound/machines/twobeep.ogg'
 	else
 		to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='notice'>INFO</span>\] Your lockdown has been lifted.</b></span>")

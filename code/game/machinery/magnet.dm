@@ -12,7 +12,7 @@
 	desc = "A device that uses station power to create points of magnetic energy."
 	level = 1		// underfloor
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 50
 
 	var/freq = 1449		// radio frequency
@@ -158,24 +158,12 @@
 
 	// Update power usage:
 	if(on)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 		active_power_usage = electricity_level*15
 	else
-		use_power = 0
-
-
-	// Overload conditions:
-	/* // Eeeehhh kinda stupid
-	if(on)
-		if(electricity_level > 11)
-			if(prob(electricity_level))
-				explosion(loc, 0, 1, 2, 3) // ooo dat shit EXPLODES son
-				spawn(2)
-					del(src)
-	*/
+		use_power = MACHINE_POWER_USE_NONE
 
 	updateicon()
-
 
 /obj/machinery/magnetic_module/proc/magnetic_process() // proc that actually does the pulling
 	if(pulling)
@@ -208,7 +196,7 @@
 	icon_state = "airlock_control_standby"
 	density = 1
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 45
 	var/frequency = 1449
 	var/code = 0
@@ -371,8 +359,7 @@
 			// N, S, E, W are directional
 			// C is center
 			// R is random (in magnetic field's bounds)
-			qdel(signal)
-			signal = null
+			QDEL_NULL(signal)
 			break // break the loop if the character located is invalid
 
 		signal.data["command"] = nextmove

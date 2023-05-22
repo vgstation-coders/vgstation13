@@ -25,7 +25,7 @@
 	pressure_resistance = 7*ONE_ATMOSPHERE
 	var/temperature_resistance = 1000 + T0C
 	volume = 1000
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	var/release_log = ""
 	var/busy = 0
 	starting_materials = list(MAT_IRON = 10*CC_PER_SHEET_METAL)
@@ -33,10 +33,7 @@
 	melt_temperature = MELTPOINT_STEEL
 
 	//Icon Update Code
-	var/global/list/status_overlays_pressure = list()
-	var/global/list/status_overlays_other = list()
 	var/overlay_status = 0
-
 	var/log="" // Bad boys, bad boys.
 
 /obj/machinery/portable_atmospherics/canister/New()
@@ -125,18 +122,18 @@
 
 /obj/machinery/portable_atmospherics/canister/proc/pressure_overlays(var/state)
 	var/static/list/status_overlays_pressure = list(
-		image(icon, "can-o0"),
-		image(icon, "can-o1"),
-		image(icon, "can-o2"),
-		image(icon, "can-o3")
+		image('icons/obj/atmos.dmi', "can-o0"), //Should be able to use icon as an arg here, but BYOND (as of v514) makes it null for some reason. null actually works fine here though because it uses src.icon by default. But for the sake of clarity we'll keep the explicit path here for now. Same situation with the vintage canisters in randomvaults/objects.dm.
+		image('icons/obj/atmos.dmi', "can-o1"),
+		image('icons/obj/atmos.dmi', "can-o2"),
+		image('icons/obj/atmos.dmi', "can-o3")
 	)
 
 	return status_overlays_pressure[state]
 
 /obj/machinery/portable_atmospherics/canister/proc/other_overlays(var/state)
 	var/static/list/status_overlays_other = list(
-		image(icon, "can-open"),
-		image(icon, "can-connector")
+		image('icons/obj/atmos.dmi', "can-open"),
+		image('icons/obj/atmos.dmi', "can-connector")
 	)
 
 	return status_overlays_other[state]
@@ -195,7 +192,7 @@
 	if(valve_open)
 		var/datum/gas_mixture/environment
 		var/transfer_vol //A band-aid fix for the fact the equation used below doesn't work as intended
-		if(holding)
+		if(holding && !arcanetampered)
 			environment = holding.air_contents
 			transfer_vol = holding.volume
 		else
@@ -213,7 +210,7 @@
 			//Actually transfer the gas
 			var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 
-			if(holding)
+			if(holding && !arcanetampered)
 				environment.merge(removed)
 			else
 				loc.assume_air(removed)
@@ -349,30 +346,30 @@
 		return .
 
 	if(href_list["toggle"])
-		if (valve_open)
+		if (valve_open && !arcanetampered)
 			if (holding)
 				investigation_log(I_ATMOS, "had its valve <b>closed</b> by [key_name(usr)], stopping transfer into \the [holding].")
 			else
 				investigation_log(I_ATMOS, "had its valve <b>closed</b> by [key_name(usr)], stopping transfer into the <font color='red'><b>air</b></font>")
 		else
-			if (holding)
+			if (holding && !arcanetampered)
 				investigation_log(I_ATMOS, "had its valve <b>OPENED</b> by [key_name(usr)], starting transfer into \the [holding]")
 			else
 				var/naughty_stuff = air_contents.loggable_contents()
 				investigation_log(I_ATMOS, "had its valve <b>OPENED</b> by [key_name(usr)], starting transfer into the <font color='red'><b>air</b></font> ([naughty_stuff])")
 				if(naughty_stuff)
-					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a canister that contains [naughty_stuff] at [formatJumpTo(loc)]!")
-					log_admin("[usr]([ckey(usr.key)]) opened a canister that contains [naughty_stuff] at [loc.x], [loc.y], [loc.z]")
+					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a[arcanetampered ? "n arcane tampered" : ""] canister that contains [naughty_stuff] at [formatJumpTo(loc)]!")
+					log_admin("[usr]([ckey(usr.key)]) opened a[arcanetampered ? "n arcane tampered" : ""] canister that contains [naughty_stuff] at [loc.x], [loc.y], [loc.z]")
 
 		valve_open = !valve_open
 
 	if (href_list["remove_tank"])
 		if(holding)
-			if(valve_open)
+			if(valve_open || arcanetampered)
 				var/naughty_stuff = air_contents.loggable_contents()
 				if(naughty_stuff)
-					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a canister that contains [naughty_stuff] at [formatJumpTo(loc)]!")
-					log_admin("[usr]([ckey(usr.key)]) opened a canister that contains [naughty_stuff] at [loc.x], [loc.y], [loc.z]")
+					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a[arcanetampered ? "n arcane tampered" : ""] canister that contains [naughty_stuff] at [formatJumpTo(loc)]!")
+					log_admin("[usr]([ckey(usr.key)]) opened a[arcanetampered ? "n arcane tampered" : ""] canister that contains [naughty_stuff] at [loc.x], [loc.y], [loc.z]")
 
 			if(istype(holding, /obj/item/weapon/tank))
 				holding.manipulated_by = usr.real_name

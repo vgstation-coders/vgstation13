@@ -26,7 +26,7 @@
 	for (var/mob/living/carbon/cuffed_mob in mutual_handcuffed_mobs)
 		src.remove_mutual_cuff_events(cuffed_mob)
 	. = ..()
-	
+
 /obj/item/weapon/handcuffs/restraint_apply_intent_check(mob/user)
 	return 1
 

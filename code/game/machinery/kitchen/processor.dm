@@ -11,7 +11,7 @@
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	active_power_usage = 500
 	var/time_coeff = 1
@@ -52,8 +52,7 @@
 	if (src.output && loc)
 		new src.output(loc)
 	if (what)
-		qdel(what)
-		what = null
+		QDEL_NULL(what)
 
 /* objs */
 /datum/food_processor_process/poison/process(loc, atom/movable/what)
@@ -83,6 +82,10 @@
 /datum/food_processor_process/food/potato
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/potato
 	output = /obj/item/weapon/reagent_containers/food/snacks/fries/processed
+
+/datum/food_processor_process/food/diamondcarrot
+	input = /obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond
+	output = /obj/item/weapon/reagent_containers/food/snacks/diamondfries/processed
 
 /datum/food_processor_process/food/carrot
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/carrot
@@ -176,8 +179,7 @@
 			I.forceMove(loc)
 			I.throw_at(pick(throwzone),rand(2,5),0)
 		hgibs(loc, target.virus2, target.dna, target.species.flesh_color, target.species.blood_color)
-		qdel(target)
-		target = null
+		QDEL_NULL(target)
 		for(var/i = 1;i<=6;i++)
 			new /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets(loc)
 			sleep(2)

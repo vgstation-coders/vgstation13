@@ -5,7 +5,7 @@
 /obj/item/clothing/head/collectable
 	name = "collectable hat"
 	desc = "A rare collectable hat."
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/head/collectable/petehat
 	name = "ultra rare Pete's hat!"
@@ -22,6 +22,7 @@
 	desc = "Hiss hiss hiss!"
 	icon_state = "xenos"
 	item_state = "xenos_helm"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/collectable/chef
 	name = "collectable chef's hat"
@@ -61,7 +62,7 @@
 	desc = "A Collectable Welding Helmet. Now with 80% less lead! Not for actual welding. Any welding done while wearing this Helmet is done so at the owner's own risk!"
 	icon_state = "welding"
 	item_state = "welding"
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/head/collectable/slime
 	name = "collectable slime hat"

@@ -237,7 +237,7 @@
 	desc = "This generates the portal through which you step through to teleport elsewhere."
 	icon_state = "tele0"
 	//var/accurate = 0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 2000
 	var/teleport_power_usage = 5000
@@ -347,7 +347,7 @@
 	name = "teleporter controller"
 	desc = "This co-ordinates nearby teleporter horizon generators."
 	icon_state = "controller"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 2000
 	var/teleport_power_usage = 5000

@@ -5,7 +5,7 @@
 	icon_state = "hoff"
 	name = "Air Scrubber"
 	desc = "Has a valve and pump attached to it."
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 
 	level				= 1
 
@@ -23,6 +23,7 @@
 	var/volume_rate		= 1000 // 120
 	var/panic			= 0 //is this scrubber panicked?
 	var/welded			= 0
+	var/stalled			= 0 //used to make the sprite red if the pipe is at MAX_PRESSURE and the scrubber stops working
 
 	var/external_pressure_bound = ONE_ATMOSPHERE
 	var/internal_pressure_bound = 0
@@ -79,15 +80,18 @@
 
 	if (node1 && on && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 		var/state = ""
+		var/state_postfix = ""
 		if (scrubbing)
 			state = "on"
-			if (scrub_O2)
-				state += "1"
-			else if(reducing_pressure)
-				state += "1"
+			if (scrub_O2 || reducing_pressure)
+				state_postfix += "1"
 		else
 			state = "in"
 
+		if(stalled)
+			state_postfix = "_stalled" //overrides instead of appends, i didn't sprite on1_stalled
+	
+		state += state_postfix
 		overlays += state
 
 	..()
@@ -147,12 +151,31 @@
 
 	return 1
 
+//Ideally it should turn red when the pipe is full AND it tries to scrub more gas
+//currently it turns red the moment the pipe is full, updating ~150 scrubbers at once once the waste pipeloop fills
+/obj/machinery/atmospherics/unary/vent_scrubber/proc/handle_stalling()
+	if(!stalled)
+		if(air_contents.return_pressure() >= MAX_PRESSURE)//not stalled but too much pressure, make stalled
+			stalled = TRUE
+			update_icon()
+		else //not stalled and good pressure, do nothing
+			return
+			
+	else 
+		if(air_contents.return_pressure() < MAX_PRESSURE) //stalled but good pressure, make unstalled
+			stalled = FALSE	
+			update_icon()
+		else //stalled and too much pressure, do nothing
+			return
+
+
 /obj/machinery/atmospherics/unary/vent_scrubber/initialize()
 	..()
 	radio_filter_in = frequency==initial(frequency)?(RADIO_FROM_AIRALARM):null
 	radio_filter_out = frequency==initial(frequency)?(RADIO_TO_AIRALARM):null
 	if (frequency)
 		set_frequency(frequency)
+
 
 /obj/machinery/atmospherics/unary/vent_scrubber/process()
 	. = ..()
@@ -172,17 +195,14 @@
 
 
 	var/datum/gas_mixture/environment = loc.return_air()
+	handle_stalling()
+	if(stalled)
+		return //if we're at max pressure we don't do anything
 
 	//scrubbing mode
 	if(scrubbing)
 		//if internal pressure limit is enabled and met, we don't do anything
 		if((pressure_checks & 2) && (internal_pressure_bound - air_contents.return_pressure()) <= 0.05)
-			if(reducing_pressure)
-				reducing_pressure = 0
-				update_icon()
-			return
-		//if we're at max pressure we also don't do anything
-		if(air_contents.return_pressure() >= MAX_PRESSURE)
 			if(reducing_pressure)
 				reducing_pressure = 0
 				update_icon()
@@ -260,9 +280,8 @@
 		if(reducing_pressure)
 			reducing_pressure = 0
 			update_icon()
-		if (air_contents.return_pressure()>=MAX_PRESSURE)
-			return
-
+			
+			
 		var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles
 
 		var/datum/gas_mixture/removed = loc.remove_air(transfer_moles)

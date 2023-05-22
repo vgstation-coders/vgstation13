@@ -10,6 +10,8 @@
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	autoignition_temperature = AUTOIGNITION_PROTECTIVE
+	blood_overlay_type = "helmet"
 
 /obj/item/clothing/head/helmet/NoiseDampening()	// checked on headwear by flashbangs
 	return TRUE
@@ -113,7 +115,7 @@
 	name = "gladiator helmet"
 	desc = "Ave, Imperator, morituri te salutant."
 	icon_state = "gladiator"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	flags = FPRINT
 	item_state = "gladiator"
 	siemens_coefficient = 1
@@ -124,7 +126,7 @@
 	armor = list(melee = 20, bullet = 0, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "roman"
 	item_state = "roman"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/roman/legionaire
@@ -259,7 +261,7 @@
 	desc = "A classic metal helmet."
 	icon_state = "knight_green"
 	item_state = "knight_green"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	armor = list(melee = 20, bullet = 5, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
 	flags = FPRINT
@@ -268,24 +270,24 @@
 /obj/item/clothing/head/helmet/knight/blue
 	icon_state = "knight_blue"
 	item_state = "knight_blue"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/yellow
 	icon_state = "knight_yellow"
 	item_state = "knight_yellow"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/red
 	icon_state = "knight_red"
 	item_state = "knight_red"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/templar
 	name = "crusader helmet"
 	desc = "Deus Vult."
 	icon_state = "knight_templar"
 	item_state = "knight_templar"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/interrogator
 	name = "interrogator helmet"

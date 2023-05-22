@@ -61,6 +61,13 @@ var/bee_mobs_count = 0
 
 	blooded = FALSE // certainly not enough blood there to matter
 
+	var/single_direction = TRUE
+
+/mob/living/simple_animal/bee/Move()
+	..()
+	if (single_direction)
+		dir = SOUTH
+
 ///////////////////////////////Basic Procs//////////////////////////////////
 
 /mob/living/simple_animal/bee/New(loc, var/obj/machinery/apiary/new_home)
@@ -89,6 +96,9 @@ var/bee_mobs_count = 0
 	qdel(src)
 
 /mob/living/simple_animal/bee/gib(var/animation = 0, var/meat = 1)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -381,7 +391,7 @@ var/bee_mobs_count = 0
 			if (pollinating == 0)
 				for (var/datum/bee/B in bees)
 					B.pollens += target_plant.seed
-					B.toxins += target_plant.toxins
+					B.toxins += target_plant.get_toxinlevel()
 					B.fatigue += FATIGUE_PER_POLLINATIONS
 					if (B.fatigue > FATIGUE_TO_RETURN)
 						B.homeCall()

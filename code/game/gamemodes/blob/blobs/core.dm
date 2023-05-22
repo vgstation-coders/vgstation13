@@ -59,8 +59,7 @@
 			if(R.overmind == overmind)
 				R.overmind = null
 				R.update_icon()
-		qdel(overmind)
-		overmind = null
+		QDEL_NULL(overmind)
 	processing_objects.Remove(src)
 	..()
 
@@ -159,8 +158,7 @@
 		return 0
 
 	if(overmind)
-		qdel(overmind)
-		overmind = null
+		QDEL_NULL(overmind)
 
 	var/mob/camera/blob/B = new(src.loc)
 	B.key = new_overmind.key

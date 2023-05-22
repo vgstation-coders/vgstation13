@@ -22,14 +22,16 @@
 
 
 //Checks armor, special attackby of object instances, and miss chance
-/mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
+/mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!I || !user)
 		return FALSE
 	target_zone = null
 	var/power = I.force
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		power = power * H.species?.power_multiplier
 	if (crit)
 		power *= CRIT_MULTIPLIER
-
 	if(def_zone)
 		target_zone = get_zone_with_miss_chance(def_zone, src)
 	else if(originator)
@@ -40,7 +42,11 @@
 		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
 
 	if(user == src) // Attacking yourself can't miss
-		target_zone = user.zone_sel.selecting
+		if(isnull(user.zone_sel)) //If the mob attacks itself without a client controlling it and therefore has no zone select active. This could happen if a catatonic person wielding a sword slips.
+			target_zone = pick("head", "eyes", "mouth")
+		else
+			target_zone = user.zone_sel.selecting
+
 	if(!target_zone && !src.stat)
 		visible_message("<span class='borange'>[user] misses [src] with \the [I]!</span>")
 		add_logs(user, src, "missed", admin=1, object=I, addition="intended damage: [power]")
@@ -108,6 +114,12 @@
 		to_chat(src, "<span class='warning'>You need more footing to do that!</span>")
 		return
 	if(restrained() || lying || locked_to || stat)
+		return
+	if(src.mind.special_role == BOMBERMAN)
+		visible_message("<span class='sinister'>[src] attempted to tackle! DISQUALIFIED!</span>")
+		message_admins("[src] tried to tackle as a [src.mind.special_role] and was gibbed.")
+		playsound(src, 'sound/effects/superfart.ogg', 50, -1)
+		gib(src)
 		return
 	var/tRange = calcTackleRange()
 	isTackling = TRUE
@@ -196,6 +208,8 @@
 	tForce += get_strength()*10
 	tForce += offenseMutTackle()
 	tForce += bonusTackleForce()
+	if(is_real_champion(src)) //Wearing championship belt and luchador mask
+		tForce *= 2
 	return max(0, tForce)
 
 /mob/living/carbon/proc/offenseMutTackle(var/tF = 0)
@@ -217,6 +231,8 @@
 		tDef += 35
 	tDef += defenseMutTackle()
 	tDef += bonusTackleDefense()
+	if(is_real_champion(src)) //Wearing championship belt and luchador mask
+		tDef *= 2
 	return max(0, tDef)
 
 /mob/living/carbon/proc/defenseMutTackle(var/tD = 0)

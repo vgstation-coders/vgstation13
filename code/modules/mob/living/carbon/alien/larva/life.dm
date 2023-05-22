@@ -111,7 +111,7 @@
 				// Handle chem smoke effect  -- Doohl
 				for(var/obj/effect/smoke/chem/smoke in view(1, src))
 					if(smoke.reagents.total_volume)
-						smoke.reagents.reaction(src, INGEST)
+						smoke.reagents.reaction(src, INGEST, amount_override = min(smoke.reagents.total_volume,10)/(smoke.reagents.reagent_list.len))
 						spawn(5)
 							if(smoke)
 								smoke.reagents.copy_to(src, 10) // I dunno, maybe the reagents enter the blood stream through the lungs?
@@ -233,7 +233,7 @@
 		blinded = 1
 		silent = 0
 	else				//ALIVE. LIGHTS ARE ON
-		if(health < -25 || !has_brain())
+		if((health < -25 || !has_brain()) && !(status_flags & BUDDHAMODE))
 			death()
 			blinded = 1
 			silent = 0
@@ -251,11 +251,11 @@
 		if(paralysis)
 			AdjustParalysis(-2)
 			blinded = 1
-			stat = UNCONSCIOUS
+			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 		else if(sleeping)
 			sleeping = max(sleeping-1, 0)
 			blinded = 1
-			stat = UNCONSCIOUS
+			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 			if( prob(10) && health )
 				spawn(0)
 					emote("hiss_")

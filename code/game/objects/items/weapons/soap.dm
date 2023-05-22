@@ -11,6 +11,7 @@
 	throw_speed = 4
 	throw_range = 20
 	flags = FPRINT | NO_ATTACK_MSG
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 /obj/item/weapon/soap/nanotrasen
 	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
@@ -47,11 +48,11 @@
 
 
 /obj/item/weapon/soap/Crossed(var/atom/movable/AM)
-	if (istype(AM, /mob/living/carbon))
+	if(..())
+		return 1
+	if(iscarbon(AM))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(3, 2, 1))
-			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
-				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+		if(M.Slip(3, 2, 1, slipped_on = src, drugged_message = "<span class='userdanger'>Something is scratching at your feet! Oh god!</span>"))
 			on_successful_use()
 
 /obj/item/weapon/soap/afterattack(var/atom/target, var/mob/user)

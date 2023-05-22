@@ -104,7 +104,7 @@
 	spawn(0)
 		for (var/i = 0, i < 3, i++)
 			step_towards(D, target)
-			D.react()
+			D.react(zones = user?.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS)
 			sleep(3)
 
 		qdel(D)
@@ -157,7 +157,7 @@
 	reagents.add_reagent(LUMINOL, 250)
 
 // Plant-B-Gone
-/obj/item/weapon/reagent_containers/spray/plantbgone // -- Skie
+/obj/item/weapon/reagent_containers/spray/plantbgone
 	name = "Plant-B-Gone"
 	desc = "Kills those pesky weeds!"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
@@ -173,8 +173,8 @@
 	name = "Bug Zapper"
 	desc = "Kills those pesky bugs!"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-	icon_state = "plantbgone"
-	item_state = "plantbgone"
+	icon_state = "pestspray"
+	item_state = "pestspray"
 	volume = 250
 
 /obj/item/weapon/reagent_containers/spray/bugzapper/New()
@@ -265,7 +265,7 @@
 			step_towards(D, target)
 			if(i > 1)
 				D.flags &= ~NOREACT
-			D.react()
+			D.react(zones = user && user.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS)
 			sleep(3)
 
 		qdel(D)

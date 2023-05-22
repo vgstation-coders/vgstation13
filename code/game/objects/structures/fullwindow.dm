@@ -5,8 +5,7 @@
 
 /obj/structure/window/full
 	name = "window"
-	var/base_state = "window" //Base icon for update_icon
-	icon_state = "window0" //Specifically for the map
+	icon_state = "fwindow0" //Specifically for the map
 	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
 	layer = FULL_WINDOW_LAYER
@@ -15,11 +14,19 @@
 	is_fulltile = TRUE
 	disperse_coeff = 0.95
 	pass_flags_self = PASSGLASS
+	bordersmooth_override = 1
 
 /obj/structure/window/full/New(loc)
 
 	..(loc)
 	flow_flags |= ON_BORDER
+
+/obj/structure/window/full/canSmoothWith()
+	var/static/list/smoothables = list(/obj/structure/window/full)
+	return smoothables
+
+/obj/structure/window/full/cannotSmoothWith()
+	return
 
 /obj/structure/window/full/setup_border_dummy()
 	return
@@ -34,24 +41,6 @@
 /obj/structure/window/full/can_be_reached(mob/user)
 
 	return 1 //That about it Captain
-
-//Merges adjacent full-tile windows into one (blatant ripoff from game/smoothwall.dm)
-/obj/structure/window/full/update_icon()
-
-	//A little cludge here, since I don't know how it will work with slim windows. Most likely VERY wrong.
-	//This way it will only update full-tile ones
-	//This spawn is here so windows get properly updated when one gets deleted.
-	spawn()
-		if(!src)
-			return
-		var/junction = 0 //Will be used to determine from which side the window is connected to other windows
-		if(anchored)
-			for(var/obj/structure/window/full/W in orange(src, 1))
-				if(W.anchored && W.density) //Only counts anchored, not-destroyed full-tile windows.
-					if(abs(x-W.x)-abs(y-W.y)) 	//Doesn't count windows, placed diagonally to src
-						junction |= get_dir(src,W)
-		icon_state = "[base_state][junction]"
-		return
 
 /obj/structure/window/full/verb/set_direction() //Full windows get this because it's possible for them to face diagonally
 	set name = "Set Window Direction"			//Diagonal facing matters in the use of one-way windows
@@ -88,15 +77,6 @@
 				dir = NORTHWEST
 		update_nearby_tiles()
 
-/obj/structure/window/full/AltClick(var/mob/user)
-	. = ..()
-	var/turf/T = loc
-	if (istype(T))
-		if (user.listed_turf == T)
-			user.listed_turf = null
-		else
-			user.listed_turf = T
-			user.client.statpanel = T.name
 
 /obj/structure/window/full/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/full/reinforced/clockwork, BRASS_FULL_WINDOW_GLOW)
@@ -108,8 +88,8 @@
 /obj/structure/window/full/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrix. It looks more solid than the average window."
-	icon_state = "rwindow0"
-	base_state = "rwindow"
+	icon_state = "frwindow0"
+	base_state = "frwindow"
 	sheet_type = /obj/item/stack/sheet/glass/rglass
 	health = 40
 	penetration_dampening = 3
@@ -126,8 +106,8 @@
 
 	name = "plasma window"
 	desc = "A window made out of a plasma-silicate alloy. It looks insanely tough to break and burn through."
-	icon_state = "plasmawindow0"
-	base_state = "plasmawindow"
+	icon_state = "fplasmawindow0"
+	base_state = "fplasmawindow"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
@@ -146,8 +126,8 @@
 /obj/structure/window/full/reinforced/plasma
 	name = "reinforced plasma window"
 	desc = "A window made out of a plasma-silicate alloy and a rod matrix. It looks hopelessly tough to break and is most likely nigh fireproof."
-	icon_state = "plasmarwindow0"
-	base_state = "plasmarwindow"
+	icon_state = "fplasmarwindow0"
+	base_state = "fplasmarwindow"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
@@ -167,8 +147,8 @@
 
 	name = "tinted window"
 	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
-	icon_state = "twindow0"
-	base_state = "twindow"
+	icon_state = "ftwindow0"
+	base_state = "ftwindow"
 	opacity = 1
 	sheet_type = /obj/item/stack/sheet/glass/rglass //A glass type for this window doesn't seem to exist, so here's to you
 
@@ -176,16 +156,16 @@
 
 	name = "frosted window"
 	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
-	icon_state = "fwindow0"
-	base_state = "fwindow"
+	icon_state = "frwindow0"
+	base_state = "frwindow"
 	health = 30
 	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
 
 /obj/structure/window/full/reinforced/clockwork
 	name = "brass window"
 	desc = "A paper-thin pane of translucent yet reinforced brass."
-	icon_state = "clockworkwindow0"
-	base_state = "clockworkwindow"
+	icon_state = "fclockworkwindow0"
+	base_state = "fclockworkwindow"
 	shardtype = null
 	sheet_type = /obj/item/stack/sheet/brass
 	reinforcetype = /obj/item/stack/sheet/ralloy
@@ -195,10 +175,6 @@
 /obj/structure/window/full/reinforced/clockwork/loose
 	anchored = 0
 	d_state = 0
-
-
-/obj/structure/window/full/reinforced/clockwork/update_icon()
-	return
 
 /obj/structure/window/full/reinforced/clockwork/cultify()
 	return

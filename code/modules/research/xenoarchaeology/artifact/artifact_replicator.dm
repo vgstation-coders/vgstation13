@@ -8,7 +8,7 @@
 
 	idle_power_usage = 100
 	active_power_usage = 1000
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 
 	machine_flags = WRENCHMOVE
 
@@ -130,7 +130,7 @@
 			max_spawn_ticks = rand(5,30)
 
 			if(!spawning_types.len)
-				use_power = 1
+				use_power = MACHINE_POWER_USE_IDLE
 				icon_state = "borgcharger0(old)"
 
 			playsound(src, 'sound/machines/heps.ogg', 50, 0)
@@ -190,6 +190,6 @@
 			spawning_types.Add(construction[construction[index]])
 			src.investigation_log(I_ARTIFACT, "|| [spawning_types[1]] || added to replication queue by [key_name(usr)][isobserver(usr) ? "'s ghostly hands" : ""].")
 			spawn_progress = 0
-			use_power = 2
+			use_power = MACHINE_POWER_USE_ACTIVE
 			icon_state = "borgcharger1(old)"
 			playsound(src, 'sound/machines/click.ogg', 50, 0)

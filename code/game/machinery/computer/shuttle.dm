@@ -82,3 +82,12 @@
 				if("Cancel")
 					return
 	return
+
+
+/obj/machinery/computer/shuttle/arcane_act(mob/user as mob)
+	if(!arcanetampered)
+		var/newtimeleft = rand(10,SHUTTLELEAVETIME)
+		to_chat(world, "<span class='notice'><B>Alert: Shuttle launch time shortened to [newtimeleft] seconds!</B></span>")
+		emergency_shuttle.settimeleft(newtimeleft)
+		emergency_shuttle.was_early_launched = TRUE
+		return ..()

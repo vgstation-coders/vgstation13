@@ -2,8 +2,7 @@
 
 /datum/unit_test/reagent_recipe_collisions/start()
 	var/datum/reagents/r = new // Builds chemical_reactions_list
-	qdel(r)
-	r = null
+	QDEL_NULL(r)
 	var/list/reactions = list()
 	for(var/V in global.chemical_reactions_list)
 		reactions += global.chemical_reactions_list[V]
@@ -27,6 +26,11 @@
 		var/datum/chemical_reaction/warm_one = r1.is_cold_recipe ? r2 : r1
 		if(warm_one.required_temp == 0 || cold_one.required_temp < warm_one.required_temp)
 			// the warm reaction doesn't require any particular temperature or the range of temperatures does not overlap, so there is no conflict
+			return FALSE
+
+	//test if the recipes are aliases - important if one of the reagents is a list
+	if(r1.result == r2.result)
+		if(r1.required_reagents == r2.required_reagents)
 			return FALSE
 
 	//find the reactions with the shorter and longer required_reagents list

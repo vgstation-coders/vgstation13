@@ -9,7 +9,7 @@
 
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 50
 
 	light_color = LIGHT_COLOR_CYAN

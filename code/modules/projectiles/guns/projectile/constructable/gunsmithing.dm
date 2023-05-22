@@ -258,11 +258,13 @@
 		)
 	var/current_chamber = 1
 
+/obj/item/weapon/cylinder/splashable()
+	return FALSE
+
 /obj/item/weapon/cylinder/Destroy()
 	for(var/i = 1; i < chambers.len; i++)
 		if(chambers[i])
-			qdel(chambers[i])
-			chambers[i] = null
+			QDEL_NULL(chambers[i])
 	..()
 
 /obj/item/weapon/cylinder/proc/cycle()

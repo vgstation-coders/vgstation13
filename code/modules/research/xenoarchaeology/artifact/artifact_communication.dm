@@ -5,7 +5,7 @@
 	icon_state = "communication"
 	stat = NOPOWER //Niggers you will wrench this shit down or else
 	density = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	active_power_usage = 4000
 	idle_power_usage = 1000
 	var/list/obj/item/commstone/allstones = list()

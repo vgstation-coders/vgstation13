@@ -82,14 +82,6 @@
 	high_population_requirement = 40
 	repeatable = TRUE
 
-/datum/dynamic_ruleset/latejoin/raginmages/ready(var/forced = 0)
-	if(wizardstart.len == 0)
-		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
-		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
-		return 0
-
-	return ..()
-
 /datum/dynamic_ruleset/latejoin/raginmages/execute()
 	var/mob/M = pick(assigned)
 	if(!latejoinprompt(M))
@@ -155,7 +147,7 @@
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	cost = 25
-	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	requirements = list(70,40,20,20,20,20,15,15,5,5)
 	high_population_requirement = 10
 	logo = "pulsedemon-logo"
 
@@ -311,17 +303,11 @@
 	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
 	logo = "time-logo"
 
-/datum/dynamic_ruleset/latejoin/time_agent/acceptable(var/population=0,var/threat=0)
+/datum/dynamic_ruleset/latejoin/time_agent/ready(var/forced=0)
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
-	if (antag_count < max_traitors)
-		return ..()
-	else
-		return 0
-
-/datum/dynamic_ruleset/latejoin/time_agent/ready(var/forced=0)
-	if(required_candidates > (mode.dead_players.len + mode.list_observers.len))
+	if(required_candidates > (mode.dead_players.len + mode.list_observers.len) || antag_count >= max_traitors)
 		return 0
 	return ..()
 

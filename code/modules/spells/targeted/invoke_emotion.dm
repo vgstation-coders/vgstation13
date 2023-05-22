@@ -95,7 +95,7 @@ var/global/list/invoked_emotions = list()
 /obj/item/weapon/paper/emotion_invoker/canfold(mob/user)
 	return FALSE
 
-/obj/item/weapon/paper/emotion_invoker/acidable()
+/obj/item/weapon/paper/emotion_invoker/dissolvable()
 	return FALSE
 
 /obj/item/weapon/paper/emotion_invoker/ashify_item(mob/user)
@@ -133,7 +133,8 @@ var/global/list/invoked_emotions = list()
 	qdel(src)
 
 /obj/item/weapon/paper/emotion_invoker/throw_impact(atom/hit_atom)
-	..()
+	if(..())
+		return
 	if(isActive)
 		if(hit_atom == curseTarget)
 			inflictCurse()

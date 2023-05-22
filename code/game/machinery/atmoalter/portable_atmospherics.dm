@@ -1,6 +1,6 @@
 /obj/machinery/portable_atmospherics
 	name = "atmoalter"
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	var/datum/gas_mixture/air_contents = new
 
 	var/obj/machinery/atmospherics/unary/portables_connector/connected_port
@@ -35,8 +35,7 @@
 
 /obj/machinery/portable_atmospherics/Destroy()
 	disconnect()
-	qdel(air_contents)
-	air_contents = null
+	QDEL_NULL(air_contents)
 	..()
 
 /obj/machinery/portable_atmospherics/update_icon()

@@ -10,6 +10,7 @@
 	throw_range = 10
 	flags = FPRINT
 	siemens_coefficient = 1
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_COMBAT + "=1"
 	min_harm_label = 15 //Multiple layers?
 	harm_label_examine = list("<span class='info'>A label is on the bulb, but doesn't cover it.</span>", "<span class='warning'>A label covers the bulb!</span>")
@@ -189,8 +190,7 @@
 			animation.master = user
 			flick("blspell", animation)
 			sleep(5)
-			qdel(animation)
-			animation = null
+			QDEL_NULL(animation)
 
 	for(var/mob/living/carbon/M in oviewers(3, null))
 		if(prob(50))

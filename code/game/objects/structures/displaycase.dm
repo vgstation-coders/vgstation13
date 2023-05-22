@@ -24,8 +24,7 @@
 /obj/structure/displaycase/Destroy()
 	..()
 	if(circuit)
-		qdel(circuit)
-		circuit = null
+		QDEL_NULL(circuit)
 	dump()
 
 /obj/structure/displaycase/proc/setContent()
@@ -243,7 +242,7 @@
 				"You gently run your hands over \the [src] in appreciation of its contents.", \
 				"You hear someone streaking glass with their greasy hands.")
 
-/obj/structure/displaycase/acidable()
+/obj/structure/displaycase/dissolvable()
 	return 0
 
 

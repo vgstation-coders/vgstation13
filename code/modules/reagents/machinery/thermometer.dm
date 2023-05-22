@@ -85,11 +85,11 @@
 
 /obj/item/weapon/thermometer/proc/measure_human_temperature(mob/living/carbon/human/C)
 	last_temperature = C.bodytemperature
-	return "[round(last_temperature-273.15,5)] C"
+	return "[round(last_temperature-273.15,5)] °C"
 
 /obj/item/weapon/thermometer/proc/measure_obj_temperature(obj/target)
 	last_temperature = target.reagents.chem_temp
-	return "[round(last_temperature-273.15, 5)] C"
+	return "[round(last_temperature-273.15, 5)] °C"
 
 /obj/item/weapon/thermometer/electronic
 	name = "electronic thermometer"
@@ -112,11 +112,11 @@
 
 /obj/item/weapon/thermometer/electronic/measure_human_temperature(mob/living/carbon/human/C)
 	last_temperature = C.bodytemperature
-	return "[last_temperature-273.15] C"
+	return "[last_temperature-273.15] °C | [last_temperature]K"
 
 /obj/item/weapon/thermometer/electronic/measure_obj_temperature(obj/target)
 	last_temperature = target.reagents.chem_temp
-	return "[last_temperature-273.15] C"
+	return "[last_temperature-273.15] °C | [last_temperature]K"
 
 
 /obj/item/weapon/broken_thermometer

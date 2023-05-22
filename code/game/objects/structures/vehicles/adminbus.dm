@@ -86,12 +86,9 @@
 
 	if (busjuke)
 		busjuke.disconnect_media_source()
-	qdel(busjuke)
-	busjuke = null
-	qdel(warp)
-	warp = null
-	qdel(lightsource)
-	lightsource = null
+	QDEL_NULL(busjuke)
+	QDEL_NULL(warp)
+	QDEL_NULL(lightsource)
 
 	var/turf/T = get_turf(src)
 	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-WORLD_ICON_SIZE*2,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg', anim_plane = EFFECTS_PLANE)
@@ -662,5 +659,5 @@
 		bus.remove_HUD(M)
 		M.unregister_event(/event/living_login, bus, /obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD)
 
-/obj/structure/bed/chair/vehicle/adminbus/acidable()
+/obj/structure/bed/chair/vehicle/adminbus/dissolvable()
 	return 0

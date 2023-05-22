@@ -43,6 +43,8 @@
 	var/eatencharge=0												//power charged by eating sentient carbons, increments with eatencount but is spent on upgrades
 	var/spawncount=0												//how many eggs laid by this grue have successfully hatched
 
+	var/number = 1 //Appends a number to the grue to keep it distinguishable, the compiler doesn't play nicely with putting rand(1, 1000) here so it goes in New()
+
 	var/busy=FALSE //busy attempting to lay an egg or eat
 
 	var/eattime= 3.5 SECONDS //how long it takes to eat someone
@@ -56,13 +58,12 @@
 	stop_automated_movement = TRUE //has custom light-related wander movement
 	wander = FALSE
 
-
 /datum/grue_calc //used for light-related calculations
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
 	var/hg_mult = 3										//base multiplier for health gained per tick when on dark tile
 	var/hd_mult = 3									 //base multiplier for health drained per tick on bright tile (subject to further modification by how long the grue is exposed via accum_light_expos_mult)
-	var/dark_dim_light=GRUE_DARK //darkness level currently the grue is currently exposed to, GRUE_DARK=nice and dark (heals the grue), GRUE_DIM=passably dim, GRUE_LIGHT=too bright (burns the grue)
+	var/dark_dim_light = GRUE_DARK //darkness level currently the grue is currently exposed to, GRUE_DARK=nice and dark (heals the grue), GRUE_DIM=passably dim, GRUE_LIGHT=too bright (burns the grue)
 	var/current_brightness = 0									   //light level of current tile, range from 0 to 10
 	var/accum_light_expos_mult= 1 //used to scale light damage the longer the grue is exposed to light
 	var/list/accum_light_expos_gain_dark_dim_light=list(-3,-1,1) //light damage rate increases the longer the grue is exposed to light, but this effect dissipates after going back into darkness
@@ -138,28 +139,28 @@
 		hud_used.grue_hud()
 
 //health indicator
-		if (health >= maxHealth)
+		if(health >= maxHealth)
 			healths.icon_state = "health0"
-		else if (health >= 4*maxHealth/5)
+		else if(health >= 4*maxHealth/5)
 			healths.icon_state = "health1"
-		else if (health >= 3*maxHealth/5)
+		else if(health >= 3*maxHealth/5)
 			healths.icon_state = "health2"
-		else if (health >= 2*maxHealth/5)
+		else if(health >= 2*maxHealth/5)
 			healths.icon_state = "health3"
-		else if (health >= 1*maxHealth/5)
+		else if(health >= 1*maxHealth/5)
 			healths.icon_state = "health4"
-		else if (health > 0)
+		else if(health > 0)
 			healths.icon_state = "health5"
 		else
 			healths.icon_state = "health6"
 //darkness level indicator
-		if (lightparams.dark_dim_light==GRUE_DARK)
+		if(lightparams.dark_dim_light==GRUE_DARK)
 			healths2.icon_state= "lightlevel_dark"
 			healths2.name="nice and dark"
-		else if (lightparams.dark_dim_light==GRUE_DIM)
+		else if(lightparams.dark_dim_light==GRUE_DIM)
 			healths2.icon_state= "lightlevel_dim"
 			healths2.name="adequately dim"
-		else if (lightparams.dark_dim_light==GRUE_LIGHT)
+		else if(lightparams.dark_dim_light==GRUE_LIGHT)
 			healths2.icon_state= "lightlevel_bright"
 			healths2.name="painfully bright"
 
@@ -167,7 +168,7 @@
 	..()
 
 	//process nutrienergy and health according to current tile brightness level
-	if (stat!=DEAD)
+	if(stat!=DEAD)
 
 		lightparams.ddl_update(src)
 
@@ -262,8 +263,25 @@
 	..()
 	add_language(LANGUAGE_GRUE)
 	default_language = all_languages[LANGUAGE_GRUE]
+	number = rand(1, 1000)
 	init_language = default_language
 	lifestage_updates() //update the grue's sprite and stats according to the current lifestage
+
+/mob/living/simple_animal/hostile/grue/Login()
+	..()
+	//client.images += light_source_images
+
+/mob/living/simple_animal/hostile/grue/UnarmedAttack(atom/A)
+	if(isturf(A))
+		var/turf/T = A
+		for(var/atom/B in T)
+			if(istype(B, /obj/machinery/light))
+				var/obj/machinery/light/L = B
+				if(!L.current_bulb || L.current_bulb.status == LIGHT_BROKEN)
+					continue
+				UnarmedAttack(B)
+	..()
+
 
 /mob/living/simple_animal/hostile/grue/proc/get_ddl(var/turf/thisturf) //get the dark_dim_light status of a given turf
 	var/thisturf_brightness=10*thisturf.get_lumcount()
@@ -275,7 +293,6 @@
 		return GRUE_DIM
 
 /mob/living/simple_animal/hostile/grue/proc/lifestage_updates() //Initialize or update lifestage-dependent stats
-	var/tempHealth=health/maxHealth
 	if(lifestage==GRUE_LARVA)
 		name = "grue larva"
 		desc = "A scurrying thing that lives in the dark. It is still a larva."
@@ -285,7 +302,7 @@
 		base_melee_dam_up = 5				//base melee damage upper
 		base_melee_dam_lw = 3				//base melee damage lower
 		attacktext = "bites"
-		maxHealth=50
+		rescaleHealth(50)
 		nutrienergy=50 //starts out ready to moult
 		maxnutrienergy = 50
 		moultcost=50
@@ -300,7 +317,7 @@
 		add_spell(new /spell/aoe_turf/grue_ventcrawl, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 
-	else if (lifestage==GRUE_JUVENILE)
+	else if(lifestage==GRUE_JUVENILE)
 		name = "grue"
 		desc = "A creeping thing that lives in the dark. It is still a juvenile."
 		icon_state = "grueling_living"
@@ -309,7 +326,7 @@
 		base_melee_dam_up = 20				//base melee damage upper
 		base_melee_dam_lw = 15				//base melee damage lower
 		attacktext = "chomps"
-		maxHealth=150
+		rescaleHealth(150)
 		nutrienergy=0 //starts out hungry
 		maxnutrienergy = 500
 		moultcost = 100
@@ -319,8 +336,9 @@
 		size = SIZE_BIG
 		pass_flags = 0
 		reagents.maximum_volume = 1000
-		//Juvenile grue spells: eat and moult
+		//Juvenile grue spells: eat, moult, and shadow shunt
 		add_spell(new /spell/aoe_turf/grue_moult, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+		add_spell(new /spell/aoe_turf/grue_blink, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 
 	else
@@ -330,7 +348,7 @@
 		icon_living = "grue_living"
 		icon_dead = "grue_dead"
 		attacktext = "gnashes"
-		maxHealth = 250
+		rescaleHealth(250)
 		maxnutrienergy = 1000
 		moultcost=0 //not needed for adults
 		base_melee_dam_up = 30				//base melee damage upper
@@ -343,35 +361,33 @@
 		size = SIZE_BIG
 		pass_flags = 0
 		reagents.maximum_volume = 1500
-		//Adult grue spells: eat, lay eggs, and drain light
+		//Adult grue spells: eat, lay eggs, shadow shunt, and drain light
 		if(config.grue_egglaying)
 			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
+		add_spell(new /spell/aoe_turf/grue_blink, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_drainlight/, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/targeted/grue_eat, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 
-	health=tempHealth*maxHealth
+	name = "[name] ([number])"
+	real_name = name
 	grue_stat_updates()
 
 //Grue vision
 /mob/living/simple_animal/hostile/grue/update_perception()
-
-	if(client)
-		if(client.darkness_planemaster)
-			client.darkness_planemaster.blend_mode = BLEND_ADD
-			client.darkness_planemaster.alpha = 255
-			client.darkness_planemaster.color = list(
-						1,0,0,0.5,
-						0,1,0,0.5,
-	 					0,0,1,0.5,
-		 				0,0,0,1,
-		 				0,0,0,1)
-
+	if(!client)
+		return
+	if(dark_plane)
+		if(master_plane)
+			master_plane.blend_mode = BLEND_ADD
+		dark_plane.alphas["grue"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
 		client.color = list(
-					1,0,0,0,
-					-1,0.2,0.2,0,
-	 				-1,0.2,0.2,0,
-		 			0,0,0,1,
-		 			0,0,0,0)
+				1,0,0,0,
+				-1,0.2,0.2,0,
+				-1,0.2,0.2,0,
+				0,0,0,1,
+				0,0,0,0)
+
+	check_dark_vision()
 
 /mob/living/simple_animal/hostile/grue/Stat()
 	..()
@@ -393,20 +409,20 @@
 //Moulting into more mature forms.
 /mob/living/simple_animal/hostile/grue/proc/moult()
 	if(alert(src,"Would you like to moult? You will become a vulnerable and immobile chrysalis during the process.",,"Moult","Cancel") == "Moult")
-		if (lifestage<GRUE_ADULT)
-			if (nutrienergy<moultcost && (digest*digest_sp<(moultcost-nutrienergy)))
+		if(lifestage<GRUE_ADULT)
+			if(nutrienergy<moultcost && (digest*digest_sp<(moultcost-nutrienergy)))
 				to_chat(src, "<span class='notice'>You need to feed more first.</span>")
 				return
-			if (nutrienergy<moultcost && digest)
+			if(nutrienergy<moultcost && digest)
 				to_chat(src, "<span class='notice'>You are still digesting.</span>")
 				return
-			else if (!isturf(loc))
+			else if(!isturf(loc))
 				to_chat(src, "<span class='notice'>You need more room to moult.</span>")
 				return
-			else if (stat==UNCONSCIOUS)
+			else if(stat==UNCONSCIOUS)
 				to_chat(src, "<span class='notice'>You must be awake to moult.</span>")
 				return
-			else if (busy)
+			else if(busy)
 				to_chat(src, "<span class='notice'>You are already doing something.</span>")
 				return
 			else
@@ -425,7 +441,6 @@
 		ismoulting=TRUE
 		moulttimer=moulttime//reset moulting timer
 		plane = MOB_PLANE //In case grue somehow moulted while hiding
-		var/tempHealth=health/maxHealth //to scale health level
 		if(lifestage==GRUE_LARVA)
 			lifestage=GRUE_JUVENILE
 			desc = "A small grue chrysalis."
@@ -433,7 +448,7 @@
 			icon_state = "moult1"
 			icon_living = "moult1"
 			icon_dead = "moult1"
-			maxHealth=25 //vulnerable while moulting
+			rescaleHealth(25) //vulnerable while moulting
 		else if(lifestage==GRUE_JUVENILE)
 			lifestage=GRUE_ADULT
 			desc = "A grue chrysalis."
@@ -441,8 +456,7 @@
 			icon_state = "moult2"
 			icon_living = "moult2"
 			icon_dead = "moult2"
-			maxHealth=50 //vulnerable while moulting
-		health=tempHealth*maxHealth //keep same health percentage
+			rescaleHealth(50) //vulnerable while moulting
 		//Remove spells to prepare for new lifestage spell list
 		var/list/current_spells = src.spell_list.Copy()
 		for(var/spell/S in current_spells)
@@ -452,9 +466,7 @@
 
 /mob/living/simple_animal/hostile/grue/proc/complete_moult()
 	if(ismoulting && stat!=DEAD)
-		var/tempHealth=health/maxHealth //to scale health level
 		lifestage_updates()
-		health=tempHealth*maxHealth //keep same health percent
 		stat=CONSCIOUS //wake up
 		ismoulting=FALSE //is no longer moulting
 		var/hintstring=""
@@ -479,17 +491,17 @@
 //Reproduction via egglaying.
 /mob/living/simple_animal/hostile/grue/proc/reproduce()
 
-	if (lifestage==GRUE_ADULT) //must be adult
-		if (eatencharge<=0)
+	if(lifestage==GRUE_ADULT) //must be adult
+		if(eatencharge<=0)
 			to_chat(src, "<span class='notice'>You need to feed more first.</span>")
 			return
-		else if (!isturf(loc))
+		else if(!isturf(loc))
 			to_chat(src, "<span class='notice'>You need more room to reproduce.</span>")
 			return
-		else if (stat==UNCONSCIOUS)
+		else if(stat==UNCONSCIOUS)
 			to_chat(src, "<span class='notice'>You must be awake to reproduce.</span>")
 			return
-		else if (busy)
+		else if(busy)
 			to_chat(src, "<span class='notice'>You are already doing something.</span>")
 			return
 		else
@@ -557,7 +569,7 @@
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
 		digest+=10 //add 10 life ticks (20 seconds) of increased healing + nutrition gain
-		
+
 		//Transfer any reagents inside the creature to the grue
 		E.reagents.trans_to(src, E.reagents.total_volume)
 
@@ -613,6 +625,11 @@
 	else
 		force_airlock_time=0
 
+	//shadow shunt cooldown
+	for(var/spell/aoe_turf/grue_blink/thisspell in spell_list)
+		var/newcooldown = max(45 SECONDS - eatencount * 2 SECONDS, 8 SECONDS)
+		thisspell.charge_max = newcooldown
+		thisspell.charge_counter = min(newcooldown, thisspell.charge_counter)
 
 //Drain the light from the surrounding area.
 
@@ -639,7 +656,7 @@
 	return FALSE
 
 /mob/living/simple_animal/hostile/grue/proc/drainlight_set()	//Set the strength of light drain.
-	set_light(7 + eatencount, -3 * eatencount, GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
+	set_light(7 + eatencount, -3 * eatencount - 3, GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
 
 //Ventcrawling and hiding, only for gruespawn
 /mob/living/simple_animal/hostile/grue/proc/ventcrawl()
@@ -651,15 +668,14 @@
 		to_chat(src, "<span class='notice'>You are too big to do that.</span>")
 
 /mob/living/simple_animal/hostile/grue/proc/hide()
-
 	if(lifestage==GRUE_LARVA)
 		if(isUnconscious())
 			return
 
-		if (locked_to && istype(locked_to, /obj/item/critter_cage))
+		if(locked_to && istype(locked_to, /obj/item/critter_cage))
 			return
 
-		if (plane != HIDING_MOB_PLANE)
+		if(plane != HIDING_MOB_PLANE)
 			plane = HIDING_MOB_PLANE
 			to_chat(src, "<span class='notice'>You are now hiding.</span>")
 		else
@@ -667,3 +683,74 @@
 			to_chat(src, "<span class='notice'>You have stopped hiding.</span>")
 	else
 		to_chat(src, "<span class='notice'>You are too big to do that.</span>")
+
+//Shadow shunt, blinks to another nearby dark location.
+/mob/living/simple_animal/hostile/grue/proc/grueblink()
+	var/list/blinkcandidates = list()
+	//get all sufficiently dark spots in range
+	finding_blink_spots:
+		for(var/turf/thisfloor in orange(25))
+			if(thisfloor.density)
+				continue
+			if(get_ddl(thisfloor) > GRUE_DARK)
+				continue
+			for(var/atom/thiscontent in thisfloor.contents)
+				if(thiscontent.density)
+					continue finding_blink_spots
+				if(ismob(thiscontent))
+					continue finding_blink_spots
+				if(istable(thiscontent))
+					continue finding_blink_spots
+			blinkcandidates += thisfloor
+	if(blinkcandidates.len)
+		//check up to 50 random valid locations and pick the furthest one
+		var/turf/blinktarget
+		var/btdist = -1
+		var/oxy_lower_bound = min_oxy / CELL_VOLUME
+		for(var/bc_index in 1 to min(blinkcandidates.len, 50))
+			var/random_bc_index = rand(1, blinkcandidates.len)
+			var/turf/random_bc = blinkcandidates[random_bc_index]
+			var/thisdist = get_dist(random_bc, src)
+			//weight away from low oxygen spots
+			var/o2content = random_bc.air ? random_bc.air.molar_density(GAS_OXYGEN): 0
+			if(o2content < oxy_lower_bound)
+				thisdist *= o2content
+			else
+				thisdist *= oxy_lower_bound
+			if(thisdist > btdist)
+				btdist = thisdist
+				blinktarget = random_bc
+		playsound(src, 'sound/effects/grue_shadowshunt.ogg', 20, 1)
+		playsound(blinktarget, 'sound/effects/grue_shadowshunt.ogg', 20, 1)
+		to_chat(src, "<span class='notice'>You [pick("shift", "step", "slide", "glide", "push")] [pick("comfortably", "easily", "effortlessly", "readily", "gracefully")] through the [pick("darkness", "dark", "shadows", "shade", "blackness")].</span>")
+		new /obj/effect/gruesparkles (loc)
+		forceMove(blinktarget)
+		new /obj/effect/gruesparkles (loc)
+		return TRUE
+	else
+		to_chat(src, "<span class='warning'>You reach into the darkness, but can't seem to find a way.</span>")
+		//set the remaining cooldown to one second if no valid location was found
+		for(var/spell/aoe_turf/grue_blink/thisspell in spell_list)
+			thisspell.charge_counter = thisspell.charge_max - 1 SECONDS
+		return
+
+// Dark sparkles when a grue uses shadow shunt.
+/obj/effect/gruesparkles
+	name = "dark glimmers"
+	icon_state = "gruesparkles"
+	anchored = 1
+
+/obj/effect/gruesparkles/New()
+	..()
+	spawn(1.5 SECONDS)
+		fade()
+
+/obj/effect/gruesparkles/proc/fade()
+	if(!src)
+		return
+	if(alpha <= 0)
+		qdel(src)
+		return
+	spawn(0.5 SECONDS)
+		alpha -= 55
+		fade()

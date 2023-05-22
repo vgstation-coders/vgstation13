@@ -22,6 +22,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	attack_verb = list("attacks", "baps", "hits")
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 	var/header = "<small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small>"
 
@@ -308,8 +309,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 		edit_area(user)
 
-	newarea.addSorted()
-
 	ghostteleportlocs[newarea.name] = newarea
 
 	sleep(5)
@@ -526,7 +525,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	to_chat(user, "<span class = 'notice'>Checks complete. Turning area into shuttle.</span>")
 
-	var/name = input(user, "Please name the new shuttle", "Shuttlify", A.name) as text|null
+	var/name = copytext(sanitize(input(user, "Please name the new shuttle", "Shuttlify", A.name) as text|null),1,MAX_NAME_LEN)
 
 	if(!name)
 		to_chat(user, "Shuttlifying cancelled.")

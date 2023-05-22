@@ -22,7 +22,7 @@
 	req_one_access = list(access_security, access_engine_major) // For locking/unlocking controls
 	density = 1
 	anchored = TRUE
-	use_power = 1			//0 use nothing
+	use_power = MACHINE_POWER_USE_IDLE			//0 use nothing
 							//1 use idle power
 							//2 use active power
 	idle_power_usage = 20
@@ -233,8 +233,7 @@
 /obj/machinery/shield_gen/proc/destroy_field()
 	for(var/obj/effect/energy_field/D in field)
 		field.Remove(D)
-		qdel(D)
-		D = null
+		QDEL_NULL(D)
 
 /obj/machinery/shield_gen/proc/stop()
 	if(!active)

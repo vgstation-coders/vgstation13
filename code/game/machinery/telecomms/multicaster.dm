@@ -7,7 +7,7 @@ var/list/pda_multicasters = list()
 	icon_state = "pda_server-on"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 750
 	var/obj/item/device/pda/camo/CAMO
 	var/on = TRUE
@@ -31,8 +31,7 @@ var/list/pda_multicasters = list()
 /obj/machinery/pda_multicaster/Destroy()
 	pda_multicasters.Remove(src)
 	if(CAMO)
-		qdel(CAMO)
-		CAMO = null
+		QDEL_NULL(CAMO)
 	..()
 
 /obj/machinery/pda_multicaster/update_icon()

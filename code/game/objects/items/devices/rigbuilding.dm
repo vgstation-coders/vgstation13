@@ -22,7 +22,7 @@
 			desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. Though the wiring is secure, it lacks a power source."
 		if(RIG_CELL)
 			icon_state = "rigframe_2"
-			desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. This frame is ready to recieve its plating."
+			desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. This frame is ready to receive its plating."
 		if(RIG_PLATE)
 			icon_state = "rigframe_3"
 			desc = "A nearly-complete hardsuit frame. The plates are installed, but not yet fastened. You couldn't wear it without it falling apart around you."
@@ -30,8 +30,7 @@
 			icon_state = "rigframe_0" // shouldn't happen
 
 /obj/item/device/rigframe/Destroy()
-	qdel(cell)
-	cell = null
+	QDEL_NULL(cell)
 	..()
 
 /obj/item/device/rigframe/attackby(obj/item/weapon/W, mob/user)
@@ -106,8 +105,7 @@
 			to_chat(user, "You secure the plating on \the [src].")
 			W.playtoolsound(src, 50)
 			result = new result(get_turf(src.loc))
-			qdel(result.cell)
-			result.cell = null
+			QDEL_NULL(result.cell)
 			cell.forceMove(result)
 			result.cell = cell
 			cell = null

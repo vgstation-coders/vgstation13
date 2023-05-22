@@ -2,7 +2,8 @@
 "af" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 6
+	dir = 6;
+	initialize_directions = 6
 	},
 /obj/effect/decal/cleanable/cobweb,
 /turf/simulated/floor/plating{
@@ -20,6 +21,14 @@
 /obj/item/stack/rods,
 /obj/item/stack/sheet/wood/bigstack,
 /turf/simulated/floor/wood,
+/area/shack)
+"cE" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
 /area/shack)
 "gK" = (
 /obj/structure/toilet{
@@ -46,7 +55,8 @@
 /area/shack)
 "kz" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /obj/machinery/portable_atmospherics/canister/nitrogen,
 /turf/simulated/floor/plating{
@@ -125,17 +135,19 @@
 "pC" = (
 /obj/effect/decal/cleanable/generic,
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 1
+	dir = 1;
+	initialize_directions = 14
 	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
 	},
 /area/shack)
 "rN" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -160,16 +172,14 @@
 /area/shack)
 "uX" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
 /area/shack)
 "vp" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = 1
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
 	},
@@ -215,7 +225,8 @@
 /area/shack)
 "zr" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 5
+	dir = 5;
+	initialize_directions = 5
 	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
@@ -266,6 +277,9 @@
 /obj/item/weapon/reagent_containers/food/drinks/beer,
 /obj/item/weapon/reagent_containers/food/drinks/beer,
 /obj/item/toy/cards,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -311,13 +325,18 @@
 	},
 /area/shack)
 "Kr" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1;
+	initialize_directions = 14
+	},
 /turf/simulated/floor/plating{
-	icon_state = "asteroidplating"
+	icon_state = "asteroidfloor"
 	},
 /area/shack)
 "Lo" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 1
+	dir = 1;
+	initialize_directions = 14
 	},
 /obj/structure/reagent_dispensers/fueltank,
 /turf/simulated/floor/plating{
@@ -325,23 +344,26 @@
 	},
 /area/shack)
 "Od" = (
-/obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/structure/grille/broken,
+/obj/structure/window/reinforced,
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
+	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
 	},
 /area/shack)
 "QD" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/window/reinforced{
-	dir = 4
+/obj/structure/window/reinforced,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
 	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
@@ -351,9 +373,8 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 1;
-	on = 1
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
 	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
@@ -361,7 +382,8 @@
 /area/shack)
 "Ts" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /obj/effect/decal/cleanable/generic,
 /obj/item/blueprints/construction_permit,
@@ -405,7 +427,8 @@
 /area/shack)
 "XL" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+	dir = 4;
+	initialize_directions = 12
 	},
 /obj/machinery/door/mineral/wood{
 	name = "Wooden Door"
@@ -413,11 +436,15 @@
 /turf/simulated/floor/wood,
 /area/shack)
 "Yn" = (
-/obj/machinery/door/window{
-	dir = 2
+/obj/structure/window/reinforced{
+	dir = 4
 	},
-/obj/machinery/door/window{
+/obj/structure/window/reinforced{
 	dir = 1
+	},
+/obj/machinery/door/mineral/wood/log/towercap{
+	name = "towercap log door";
+	opacity = 0
 	},
 /turf/simulated/floor/plating{
 	icon_state = "asteroidplating"
@@ -487,9 +514,9 @@ Lo
 mM
 lF
 WD
-uX
+Kr
 EH
-Cp
+cE
 QD
 ZK
 "}
@@ -502,7 +529,7 @@ Zu
 uX
 Hg
 Cp
-lF
+Yn
 ZK
 "}
 (6,1,1) = {"
@@ -513,8 +540,8 @@ lF
 wK
 pC
 Rz
-Kr
-Yn
+mM
+lF
 ZK
 "}
 (7,1,1) = {"

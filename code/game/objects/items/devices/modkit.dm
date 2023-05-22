@@ -167,3 +167,33 @@
 	else if(proximity_flag && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
 		parts[1] = 1
 		qdel(target)
+
+
+/obj/item/device/modkit/demolition
+	name = "Lawgiver modkit"
+	desc = "A kit containing all the needed tools and parts to modify the Lawgiver into the demolition variant, granting it access to high explosive and double whammy rounds."
+	icon_state = "modkit"
+
+/obj/item/device/modkit/demolition/New()
+	..()
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
+
+	parts[1] =	1
+	original[1] = /obj/item/weapon/gun/lawgiver
+	finished[1] = /obj/item/weapon/gun/lawgiver/demolition
+
+/obj/item/device/modkit/antiaxe_kit
+	name = "antimatter axe kit"
+	desc = "A matter inverter from the secret labs of the Cloud IX engineering facility. It will turn your ordinary axe into an antimatter axe."
+
+/obj/item/device/modkit/antiaxe_kit/New()
+	..()
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
+
+	parts[1] =	1
+	original[1] = /obj/item/weapon/fireaxe
+	finished[1] = /obj/item/weapon/fireaxe/antimatter

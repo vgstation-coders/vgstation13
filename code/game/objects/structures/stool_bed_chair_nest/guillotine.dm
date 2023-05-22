@@ -20,8 +20,7 @@
 
 /obj/structure/bed/guillotine/Destroy()
 	if(victim)
-		qdel(victim)
-		victim = null
+		QDEL_NULL(victim)
 	..()
 
 /obj/structure/bed/guillotine/update_icon()

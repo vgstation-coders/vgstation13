@@ -9,7 +9,7 @@
 	endWhen			= 30
 
 /datum/event/meteor_wave/can_start(var/list/active_with_role)
-	if(active_with_role["Engineer"] > 1)
+	if(active_with_role["Engineer"] > 1 && active_with_role.len > 6)
 		return 15
 	return 0
 
@@ -34,7 +34,7 @@
 	endWhen 		= 30
 
 /datum/event/meteor_shower/can_start(var/list/active_with_role)
-	if(active_with_role["Engineer"] > 1)
+	if(active_with_role["Engineer"] > 1 && active_with_role.len > 6)
 		return 40
 	return 0
 
@@ -67,20 +67,19 @@
 
 var/global/list/thing_storm_types = list(
 	"meaty gore storm" = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/human,
-		/obj/item/organ/internal/eyes,
-		/obj/item/organ/internal/kidneys,
-		/obj/item/organ/internal/heart,
-		/obj/item/organ/internal/liver,
 		/obj/item/projectile/meteor/gib,
-		/obj/item/organ/external/r_arm,
-		/obj/item/organ/external/l_arm,
-		/obj/item/organ/external/r_leg,
-		/obj/item/organ/external/l_leg,
-		/obj/item/organ/external/r_hand,
-		/obj/item/organ/external/l_hand,
-		/obj/item/organ/external/r_foot,
-		/obj/item/organ/external/l_foot,
+		/obj/item/projectile/meteor/gib,
+		/obj/item/projectile/meteor/gib,
+		/obj/item/projectile/meteor/gib,
+		/obj/item/projectile/meteor/gib,
+		/obj/item/projectile/meteor/gib,
+		/obj/item/projectile/meteor/gib,
+		/obj/item/projectile/meteor/gib,
+		/obj/item/projectile/meteor/gib,
+		/obj/item/projectile/meteor/gib,
+		/obj/item/projectile/meteor/gib,
+		/obj/item/projectile/meteor/gib,
+		/obj/item/projectile/meteor/gib,
 	),
 	"sausage party" = list(
 		/obj/item/weapon/reagent_containers/food/snacks/sausage,
@@ -209,6 +208,9 @@ var/global/list/thing_storm_types = list(
 	var/cores_spawned = 0
 	var/list/candidates = list()
 	var/started = FALSE
+
+/datum/event/thing_storm/blob_storm/can_start(var/list/active_with_role)
+	return 0 //disabled
 
 /datum/event/thing_storm/blob_storm/setup()
 	endWhen = rand(60, 90) + 10

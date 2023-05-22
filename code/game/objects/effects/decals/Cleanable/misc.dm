@@ -190,8 +190,7 @@
 	name = "dry [src.name]"
 	icon_state = "vomit_[rand(1,4)]_dry"
 	amount = 0
-	qdel(reagents)
-	reagents = null
+	QDEL_NULL(reagents)
 
 /obj/effect/decal/cleanable/tomato_smudge
 	name = "tomato smudge"
@@ -319,6 +318,13 @@
 /obj/effect/decal/cleanable/cockroach_remains/New()
 	..()
 	icon_state = "cockroach_remains[rand(1,2)]"
+
+/obj/effect/decal/cleanable/cricket_remains
+	name = "cricket remains"
+	desc = "A disgusting mess."
+	icon = 'icons/mob/animal.dmi'
+	icon_state = "cockroach_remains1"
+	reagent = FLOUR
 
 /obj/effect/decal/cleanable/wizrune
 	name = "rune"

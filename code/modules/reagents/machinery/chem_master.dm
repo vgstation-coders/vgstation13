@@ -11,7 +11,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	anchored = 1
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "mixer"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	var/obj/item/weapon/reagent_containers/container = null
 	var/list/accepted_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks)
@@ -124,6 +124,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 		src.updateUsrDialog()
 		return TRUE
+	return FALSE
+
+/obj/machinery/chem_master/splashable()
 	return FALSE
 
 /obj/machinery/chem_master/attackby(var/obj/item/weapon/B as obj, var/mob/user as mob)

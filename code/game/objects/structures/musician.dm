@@ -14,6 +14,13 @@
 	var/instrumentExt = "ogg"		// the file extension
 	var/obj/instrumentObj = null	// the associated obj playing the sound
 
+	var/show_edithelp = TRUE		// show help for editing
+	var/show_playhelp = FALSE		// show help for keyboard playback
+	var/live_octave_base = 5		// the base octave of playing live with keyboard
+	var/recording = FALSE			// if recording keyboard notes to play back
+	var/recorded_line = ""			// if recording, put this into the last line at the end
+	var/time_since_last_note = 0	// for chords
+
 /datum/song/New(dir, obj)
 	tempo = sanitize_tempo(tempo)
 	instrumentDir = dir
@@ -26,7 +33,7 @@
 // note is a number from 1-7 for A-G
 // acc is either "b", "n", or "#"
 // oct is 1-8 (or 9 for C)
-/datum/song/proc/playnote(note, acc as text, oct, mob/user)
+/datum/song/proc/playnote(note, acc as text, oct, mob/user, live = FALSE)
 	// handle accidental -> B<>C of E<>F
 	if(acc == "b" && (note == 3 || note == 6)) // C or F
 		if(note == 3)
@@ -68,6 +75,22 @@
 		if(!M.client.prefs.hear_instruments)
 			continue
 		M.playsound_local(source, soundfile, 100, falloff = 5)
+	if(recording && live)
+		if(world.time - time_since_last_note <= 0 && recorded_line != "")
+			recorded_line += "-"
+		else if(recorded_line != "")
+			recorded_line += ","
+			if(world.time - time_since_last_note > 5)
+				var/intervals = round((world.time - time_since_last_note)/5) - 1
+				if(intervals)
+					for(var/i in 1 to intervals)
+						recorded_line += ","
+		recorded_line += "[ascii2text(note+64)][acc][oct]"
+		if(world.time - time_since_last_note <= 3)
+			recorded_line += "/2"
+		else if(world.time - time_since_last_note == 1)
+			recorded_line += "/4"
+		time_since_last_note = world.time
 
 /datum/song/proc/shouldStopPlaying(mob/user)
 	if(instrumentObj)
@@ -131,26 +154,27 @@
 		repeat--
 	playing = 0
 	repeat = 0
-	interact(user)
+	ui_interact(user)
 
-//convert this to nanoui
-/datum/song/proc/interact(mob/user)
+/datum/song/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null, var/force_open=NANOUI_FOCUS)
 	var/data = list(
 		"repeat" = repeat,
 		"ticklag" = world.tick_lag,
 		"bpm" = round(600 / tempo),
 		"lines" = json_encode(lines),
-		"src" = "\ref[src]" //needed to create buttons in the js
+		"src" = "\ref[src]", //needed to create buttons in the js
+		"octave" = live_octave_base,
+		"show_playhelp" = show_playhelp,
+		"show_edithelp" = show_edithelp,
+		"recording" = recording
 	)
 
-	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "instrument")
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, "instrument", "instrument.tmpl", instrumentObj.name, 800, 600, nstatus_proc = /proc/nanoui_instrument_status_proc)
 		ui.add_stylesheet("instrument.css")
 		ui.set_initial_data(data)
 		ui.open()
-	else
-		ui.push_data(data)
 
 //copypaste but the src_object is the instrument
 //constants dont work for some reason
@@ -249,7 +273,7 @@
 					lines.Remove(l)
 				else
 					linenum++
-			interact(usr)		// make sure updates when complete
+			ui_interact(usr)		// make sure updates when complete
 	if(href_list["repeat"]) //Changing this from a toggle to a number of repeats to avoid infinite loops.
 		if(playing)
 			return //So that people cant keep adding to repeat. If the do it intentionally, it could result in the server crashing.
@@ -267,14 +291,38 @@
 		spawn()
 			playsong(usr)
 		return //no need to reload the window
+	else if(href_list["play_note"])
+		if(href_list["play_sharp"] == "s")
+			href_list["play_sharp"] = "#"
+		playnote(text2num(href_list["play_note"]), href_list["play_sharp"], text2num(href_list["play_oct"]), usr, TRUE)
+		return //no need to reload the window
+	else if(href_list["increase_octave"])
+		if(live_octave_base < 8)
+			live_octave_base++
+	else if(href_list["decrease_octave"])
+		if(live_octave_base > 1)
+			live_octave_base--
+	else if(href_list["toggle_playhelp"])
+		show_playhelp = !show_playhelp
+	else if(href_list["toggle_edithelp"])
+		show_edithelp = !show_edithelp
+	else if(href_list["toggle_recording"])
+		recording = !recording
+		if(!recording && lines.len <= INSTRUMENT_MAX_LINE_NUMBER)
+			if(length(recorded_line) > INSTRUMENT_MAX_LINE_LENGTH)
+				recorded_line = html_encode(copytext(recorded_line, 1, INSTRUMENT_MAX_LINE_LENGTH))
+			lines.Add(recorded_line)
+		else if(recording)
+			recorded_line = ""
+			time_since_last_note = world.time
 	else if(href_list["newline"])
-		var/newline = html_encode(input("Enter your line: ", instrumentObj.name) as text|null)
+		var/newline = input("Enter your line: ", instrumentObj.name) as text|null
 		if(!newline || !in_range(instrumentObj, usr))
 			return
 		if(lines.len > INSTRUMENT_MAX_LINE_NUMBER)
 			return
 		if(length(newline) > INSTRUMENT_MAX_LINE_LENGTH)
-			newline = copytext(newline, 1, INSTRUMENT_MAX_LINE_LENGTH)
+			newline = html_encode(copytext(newline, 1, INSTRUMENT_MAX_LINE_LENGTH))
 		lines.Add(newline)
 	else if(href_list["deleteline"])
 		if(alert(usr, "Are you sure you want to delete Line [href_list["deleteline"]]?",  "Delete Line" , "Yes" , "No") != "Yes")
@@ -285,11 +333,11 @@
 		lines.Cut(num, num+1)
 	else if(href_list["modifyline"])
 		var/num = round(text2num(href_list["modifyline"]),1)
-		var/content = html_encode(input("Enter your line: ", instrumentObj.name, lines[num]) as text|null)
+		var/content = input("Enter your line: ", instrumentObj.name, lines[num]) as text|null
 		if(!content || !in_range(instrumentObj, usr))
 			return
 		if(length(content) > INSTRUMENT_MAX_LINE_LENGTH)
-			content = copytext(content, 1, INSTRUMENT_MAX_LINE_LENGTH)
+			content = html_encode(copytext(content, 1, INSTRUMENT_MAX_LINE_LENGTH))
 		if(num > lines.len || num < 1)
 			return
 		lines[num] = content
@@ -313,7 +361,7 @@
 			return
 
 		lines.Swap(index, index+dir)
-	interact(usr)
+	ui_interact(usr)
 
 	return
 /datum/song/proc/sanitize_tempo(new_tempo)
@@ -356,8 +404,7 @@
 		icon_state = "minimoog"
 
 /obj/structure/piano/Destroy()
-	qdel(song)
-	song = null
+	QDEL_NULL(song)
 	..()
 
 /obj/structure/piano/initialize()
@@ -371,17 +418,17 @@
 	if(broken)
 		to_chat(user, "<span class='warning'>\The [src] is broken for good.</span>")
 		return 1
-	interact(user)
+	ui_interact(user)
 
 /obj/structure/piano/attack_paw(mob/user)
 	return src.attack_hand(user)
 
-/obj/structure/piano/interact(mob/user)
+/obj/structure/piano/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null, var/force_open=NANOUI_FOCUS)
 	if(!user || !anchored)
 		return
 
 	user.set_machine(src)
-	song.interact(user)
+	song.ui_interact(user,ui_key,ui,force_open)
 
 /obj/structure/piano/attackby(obj/item/O, mob/user, params)
 	if (O.is_wrench(user))

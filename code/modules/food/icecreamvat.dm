@@ -17,6 +17,9 @@
 	var/soda
 	var/alcohol
 
+/obj/machinery/cooking/icemachine/splashable()
+	return FALSE
+
 /obj/machinery/cooking/icemachine/New()
 	create_reagents(500)
 	flags |= NOREACT
@@ -28,12 +31,9 @@
 	..()
 
 /obj/machinery/cooking/icemachine/Destroy()
-	qdel(reagents)
-	reagents = null
-	qdel(beaker)
-	beaker = null
-	qdel(to_add)
-	to_add = null
+	QDEL_NULL(reagents)
+	QDEL_NULL(beaker)
+	QDEL_NULL(to_add)
 	..()
 
 // Utilities ///////////////////////////////////////////////////

@@ -22,11 +22,11 @@
 	manual_unbuckle(user)
 
 /obj/effect/plantsegment/proc/harvest(var/mob/user)
-	seed.harvest(user, yield_mod = 0.5)
+	seed.harvest(user, 0.5)
 	after_harvest()
 
 /obj/effect/plantsegment/proc/autoharvest()
-	seed.autoharvest(get_turf(src), yield_mod = 0.5)
+	seed.autoharvest(get_turf(src), 0.5)
 	after_harvest()
 
 /obj/effect/plantsegment/proc/after_harvest()
@@ -73,7 +73,7 @@
 
 /obj/effect/plantsegment/proc/do_carnivorous_bite(var/mob/living/carbon/human/victim, var/chance)
 	// http://i.imgur.com/Xt6rM4P.png
-	if(!seed || !seed.carnivorous || !prob(chance))
+	if(!seed || !seed.voracious || !prob(chance))
 		return
 	if(victim.vine_protected())
 		return
@@ -145,7 +145,7 @@
 	if(!istype(M))
 		return
 
-	M.register_event(/event/resist, src, .proc/manual_unbuckle)
+	M.register_event(/event/resist, src, src::manual_unbuckle())
 
 	last_special = world.time
 
@@ -157,7 +157,7 @@
 	if(!istype(M))
 		return
 
-	M.unregister_event(/event/resist, src, .proc/manual_unbuckle)
+	M.unregister_event(/event/resist, src, src::manual_unbuckle())
 
 /obj/effect/plantsegment/proc/entangle_mob(var/mob/living/victim)
 	if(!victim || victim.locked_to || !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment)) //How much of this is actually necessary, I wonder

@@ -13,6 +13,7 @@
 	force = 5
 	throwforce = 5
 	origin_tech = Tc_BIOTECH + "=3"
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 	var/charges = 10
 	var/ready = 0
@@ -88,7 +89,7 @@
 
 /obj/item/weapon/melee/defibrillator/attack(mob/M,mob/user)
 	if(!ishuman(M))
-		to_chat(user, "<span class='warning'>You can't defibrilate [M]. You don't even know where to put the paddles!</span>")
+		to_chat(user, "<span class='warning'>You can't defibrillate [M]. You don't even know where to put the paddles!</span>")
 	else if(!charges)
 		to_chat(user, "<span class='warning'>[src] is out of charges.</span>")
 	else if(!ready)
@@ -129,6 +130,8 @@
 /obj/item/weapon/melee/defibrillator/proc/attemptDefib(mob/living/carbon/human/target,mob/user)
 	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest.</span>", \
 	"<span class='notice'>You start setting up the paddles on [target]'s chest</span>")
+	if(target.mind && !target.client && target.get_heart() && target.get_organ(LIMB_HEAD) && target.has_brain() && !target.mind.suiciding && target.health+target.getOxyLoss() > config.health_threshold_dead)
+		target.ghost_reenter_alert("Someone is about to try to defibrillate your body. Return to it if you want to be resurrected!")
 	if(do_after(user,target,30))
 		spark(src, 5, FALSE)
 		playsound(src,'sound/items/defib.ogg',50,1)
@@ -162,17 +165,7 @@
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 		if(target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
-			var/mob/dead/observer/ghost = mind_can_reenter(target.mind)
-			if(ghost)
-				var/mob/ghostmob = ghost.get_top_transmogrification()
-				if(ghostmob)
-					ghostmob << 'sound/effects/adminhelp.ogg'
-					to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to revive your body. Return to it if you want to be resurrected!</span> \
-						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-					target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Vital signs are too weak, please try again in five seconds.</span>")
-					return
-			//we couldn't find a suitable ghost.
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No brainwaves detected.</span>")
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. [target.ghost_reenter_alert("Someone has tried to defibrillate your body. Return to it if you want to be resurrected!") ? "Vital signs are too weak, please try again in five seconds" : "No brainwaves detected"].</span>")
 			return
 		target.apply_damage(-target.getOxyLoss(),OXY)
 		target.updatehealth()
@@ -184,7 +177,7 @@
 			target.resurrect()
 
 			target.tod = null
-			target.stat = UNCONSCIOUS
+			target.stat = target.status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 			target.regenerate_icons()
 			target.update_canmove()
 			target.flash_eyes(visual = 1)

@@ -16,8 +16,7 @@
 /obj/item/stack/conveyor_assembly/dropped()
 	..()
 	if(active)
-		qdel(active)
-		active = null
+		QDEL_NULL(active)
 
 /obj/item/stack/conveyor_assembly/attack_self(mob/user)
 	if(!active) //Start click drag construction
@@ -25,8 +24,7 @@
 		to_chat(user, "Beginning conveyor construction mode, click and drag screen in direction you wish conveyor to go.")
 		return
 	else
-		qdel(active)
-		active = null
+		QDEL_NULL(active)
 
 /obj/item/stack/conveyor_assembly/drag_mousedown(mob/user, turf/origin)
 	if(istype(origin) && user.Adjacent(origin) && (!locate(/obj/structure/conveyor_assembly) in origin) && (!locate(/obj/machinery/conveyor) in origin) && !origin.density)
@@ -35,8 +33,7 @@
 		user.client.images += placeimage
 		placeloc = origin
 	else
-		qdel(active)
-		active = null
+		QDEL_NULL(active)
 
 /obj/item/stack/conveyor_assembly/can_drag_use(mob/user, turf/T)
 	return placeimage.dir != get_dir(placeloc, T)
@@ -78,6 +75,7 @@
 		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
 			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
+			M.amount = 2
 			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
 			"<span class='warning'>You shape the [src] into metal with the welding tool.</span>", \
 			"<span class='warning'>You hear welding.</span>")
@@ -114,10 +112,10 @@
 			return
 	else if(istype(P, /obj/item/stack/sheet/metal))
 		var/obj/item/stack/S = P
-		if(S.amount > 4)
+		if(S.amount > 2)
 			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
-			if(do_after(user, src, 30) && S.amount > 4)
-				S.use(4)
+			if(do_after(user, src, 30) && S.amount > 2)
+				S.use(2)
 				to_chat(user, "<span class='notice'>You add the plates to \the [src].</span>")
 				new /obj/machinery/conveyor(src.loc, src.dir)
 				qdel(src)

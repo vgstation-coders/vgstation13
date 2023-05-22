@@ -4,7 +4,7 @@
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "wrecharger0"
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 150
 	has_beeped = FALSE
@@ -29,15 +29,6 @@
 
 	RefreshParts()
 
-/obj/machinery/recharger/defibcharger/wallcharger/attack_hand(mob/user)
-	add_fingerprint(user)
-
-	if(charging)
-		user.put_in_hands(charging)
-		charging.update_icon()
-		charging = null
-		use_power = 1
-		update_icon()
 
 /obj/machinery/recharger/defibcharger/wallcharger/emp_act(severity)
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
@@ -98,7 +89,7 @@
 			return
 		if(user.drop_item(G, src))
 			charging = G
-			use_power = 2
+			use_power = MACHINE_POWER_USE_ACTIVE
 			update_icon()
 			has_beeped = FALSE
 	else if (G.is_screwdriver(user) || iscrowbar(G))

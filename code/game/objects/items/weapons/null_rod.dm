@@ -320,6 +320,18 @@
     else
         return ..()
 
+/obj/item/weapon/nullrod/loop //loop religion
+	name = "rewind rifle"
+	desc = "The incarnation of looping in gun form. The shooting mechanism has been replaced with looping machinery and will only fire when the Loop happens."
+	icon = 'icons/obj/gun.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	icon_state = "xcomlasergun"
+	item_state = "xcomlasergun"
+	w_class = W_CLASS_MEDIUM
+	hitsound = 'sound/effects/fall.ogg'
+	attack_verb = list("loops")
+	fluff_pickup = "loop"
+
 // The chaos blade, a ghost role talking sword. Unlike the nullrod skins this thing works as a proper shield and has sharpness.
 /obj/item/weapon/nullrod/sword/chaos
 	name = "chaos blade"
@@ -355,11 +367,11 @@
 		recruiter.jobban_roles = list("pAI") // pAI/Borers share the same jobban check so here we go too.
 
 	// Role set to Yes or Always
-	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+	recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
 	// Role set to No or Never
-	recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+	recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
 
-	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+	recruiter.recruited = new /callback(src, src::recruiter_recruited())
 
 	recruiter.request_player()
 
@@ -373,8 +385,7 @@
 /obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruited(mob/dead/observer/player)
 	if(player)
 		possessed = TRUE
-		qdel(recruiter)
-		recruiter = null
+		QDEL_NULL(recruiter)
 		awakening = FALSE
 		visible_message("<span class='notice'>\The [name] awakens!</span>")
 		var/mob/living/simple_animal/shade/sword/S = new(src)
@@ -403,8 +414,7 @@
 		to_chat(S, "You were destroyed!")
 		qdel(S)
 	if(recruiter)
-		qdel(recruiter)
-		recruiter = null
+		QDEL_NULL(recruiter)
 	..()
 
 /obj/item/weapon/nullrod/sword/chaos/attack_ghost(var/mob/dead/observer/O)

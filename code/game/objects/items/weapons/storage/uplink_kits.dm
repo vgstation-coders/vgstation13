@@ -2,12 +2,12 @@
 	..()
 	var/tagname
 	if(!forced_bundle)
-		tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 25, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 25, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "sith" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100, "clown" = 50, "druid" = 50, "actor" = 100, "jackpot" = 7, "Eugenics" = 50, "Alchemist" = 50, "Killtheking" = 50))
+		tagname = pickweight(list("Bloody Spy" = 100, "Stealth" = 100, "Screwed" = 25, "Guns" = 100, "Murder" = 100, "Freedom" = 100, "Hacker" = 100, "Lord Singulo" = 25, "Smooth Operator" = 100, "Psycho" = 100, "Hotline" = 100, "Ocelot" = 100, "Sith" = 100, "Anarchist" = 50, "Emags and Glue" = 10, "Balloon" = 10, "Bangerboy" = 100, "Highlander" = 100, "Clown" = 50, "Druid" = 50, "Actor" = 100, "Jackpot" = 7, "Eugenics" = 50, "Alchemist" = 50, "Kill the King" = 50))
 	else
 		tagname = forced_bundle
 
 	switch (tagname)
-		if("bloodyspai")//2+5+2+2+4+4+4=23
+		if("Bloody Spy")//2+5+2+2+4+4+4=23
 			new /obj/item/clothing/under/chameleon(src)
 			new /obj/item/clothing/mask/gas/voice(src)
 			new /obj/item/weapon/card/id/syndicate(src)
@@ -16,33 +16,33 @@
 			new /obj/item/weapon/dnascrambler(src)
 			new /obj/item/weapon/dnascrambler(src)
 
-		if("stealth")//12+8+6+1=27
+		if("Stealth")//12+8+6+1=27
 			new /obj/item/weapon/gun/energy/crossbow(src)
 			new /obj/item/weapon/pen/paralysis(src)
 			new /obj/item/device/chameleon(src)
 			new /obj/item/weapon/soap/syndie(src)
 
-		if("screwed")//6?+6?+10+4=26
+		if("Screwed")//6?+6?+10+4=26
 			new /obj/effect/spawner/newbomb/timer(src)
 			new /obj/effect/spawner/newbomb/timer(src)
 			new /obj/item/device/powersink(src)
 			new /obj/item/clothing/suit/space/syndicate(src)
 			new /obj/item/clothing/head/helmet/space/syndicate(src)
 
-		if("guns")//13+4+6+4=27
+		if("Guns")//13+4+6+4=27
 			new /obj/item/weapon/gun/projectile/revolver(src)
 			new /obj/item/ammo_storage/box/a357(src)
 			new /obj/item/weapon/card/emag(src)
 			new /obj/item/weapon/c4(src)
 
-		if("murder")//8+6+6+2+4=26
+		if("Murder")//8+6+6+2+4=26
 			new /obj/item/weapon/melee/energy/sword(src)
 			new /obj/item/clothing/glasses/thermal/syndi(src)
 			new /obj/item/weapon/card/emag(src)
 			new /obj/item/clothing/shoes/syndigaloshes(src)
 			new /obj/item/weapon/storage/belt/skull(src)
 
-		if("freedom")//18+5=23
+		if("Freedom")//18+5=23
 			var/obj/item/weapon/implanter/O = new /obj/item/weapon/implanter(src)
 			O.imp = new /obj/item/weapon/implant/freedom(O)
 			O.update()
@@ -52,19 +52,19 @@
 			U.update()
 			U.name = "Uplink"
 
-		if("hacker")//14+6+5+3=28
+		if("Hacker")//14+6+5+3=28
 			new /obj/item/weapon/aiModule/freeform/syndicate(src)
 			new /obj/item/weapon/card/emag(src)
 			new /obj/item/device/encryptionkey/binary(src)
 			new /obj/item/device/multitool/ai_detect(src)
 
-		if("lordsingulo")//14+4+6=24
+		if("Lord Singulo")//14+4+6=24
 			new /obj/item/beacon/syndicate(src)
 			new /obj/item/clothing/suit/space/syndicate(src)
 			new /obj/item/clothing/head/helmet/space/syndicate(src)
 			new /obj/item/weapon/card/emag(src)
 
-		if("smoothoperator")//6?+2+2?+1+1?+1?+4+4=21
+		if("Smooth Operator")//6?+2+2?+1+1?+1?+4+4=21
 			new /obj/item/weapon/gun/projectile/pistol(src)
 			new /obj/item/gun_part/silencer(src)
 			new /obj/item/clothing/gloves/knuckles/spiked(src)
@@ -78,7 +78,7 @@
 			new /obj/item/device/encryptionkey/syndicate/hacked(src)
 			new /obj/item/weapon/c4(src)
 
-		if("psycho")//1+1+5+2+6+(fireaxe, 6?)+2=23
+		if("Psycho")//1+1+5+2+6+(fireaxe, 6?)+2=23
 			new /obj/item/clothing/suit/raincoat(src)
 			new /obj/item/clothing/under/suit_jacket(src)
 			new /obj/item/weapon/soap/syndie(src)
@@ -89,7 +89,7 @@
 			new /obj/item/weapon/fireaxe(src)
 			new /obj/item/clothing/shoes/syndigaloshes(src)
 
-		if("hotline")//5+10+2+(hyperzine pills, 2x2?)=22
+		if("Hotline")//5+10+2+(hyperzine pills, 2x2?)=22
 			new /obj/item/clothing/under/bikersuit(src)
 			new /obj/item/clothing/head/helmet/biker(src)
 			new /obj/item/clothing/shoes/mime/biker(src)
@@ -101,7 +101,7 @@
 			new /obj/item/weapon/card/id/syndicate(src)
 			new /obj/item/weapon/soap/syndie(src)
 
-		if("balloon")//20+20+20+20+20+20+20+20=160
+		if("Balloon")//20+20+20+20+20+20+20+20=160
 			new /obj/item/toy/syndicateballoon(src)
 			new /obj/item/toy/syndicateballoon(src)
 			new /obj/item/toy/syndicateballoon(src)
@@ -111,7 +111,7 @@
 			new /obj/item/toy/syndicateballoon(src)
 			new /obj/item/toy/syndicateballoon(src)
 
-		if("ocelot")
+		if("Ocelot")
 			new /obj/item/weapon/gun/projectile/colt(src)
 			new /obj/item/weapon/gun/projectile/colt(src)
 			new /obj/item/ammo_storage/speedloader/a357(src)
@@ -122,7 +122,7 @@
 			new /obj/item/clothing/gloves/red(src)
 			new /obj/item/clothing/accessory/storage/bandolier(src)
 
-		if ("sith")
+		if ("Sith")
 			if("plasmaman" in conditions) //General Veers, you're too close to me
 				new /obj/item/weapon/melee/energy/sword/red(src)
 				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
@@ -139,7 +139,7 @@
 				new /obj/item/clothing/suit/sith(src)
 				new /obj/item/clothing/shoes/sandal(src)
 
-		if("anarchist")//14+14+6=34, plus molotovs
+		if("Anarchist")//14+14+6=34, plus molotovs
 			new /obj/item/weapon/implanter/traitor(src)
 			new /obj/item/weapon/implanter/traitor(src)
 			new /obj/item/clothing/mask/bandana/red(src)
@@ -148,14 +148,14 @@
 			new /obj/item/weapon/card/emag(src)
 			new /obj/item/weapon/storage/box/syndie_kit/molotovs(src)
 
-		if("emagsandglue")//(4+6+4+6+4+6+4)*5=memes
+		if("Emags and Glue")//(4+6+4+6+4+6+4)*5=memes
 			new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
 			new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
 			new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
 			new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
 			new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
 
-		if("bangerboy")//5?*6+12+0+3?=45
+		if("Bangerboy")//5?*6+12+0+3?=45
 			new /obj/item/weapon/grenade/flashbang/clusterbang(src)
 			new /obj/item/weapon/grenade/flashbang/clusterbang(src)
 			new /obj/item/weapon/grenade/flashbang/clusterbang(src)
@@ -166,7 +166,7 @@
 			new /obj/item/clothing/glasses/sunglasses(src)
 			new /obj/item/device/radio/headset/headset_earmuffs(src)
 
-		if("highlander")//SCOTLAND
+		if("Highlander")//SCOTLAND
 			new /obj/item/clothing/head/beret/highlander(src)
 			new /obj/item/clothing/suit/highlanderkilt(src)
 			new /obj/item/clothing/shoes/jackboots/highlander(src)
@@ -175,7 +175,7 @@
 			new /obj/item/weapon/vinyl/scotland(src)
 			new /obj/item/weapon/spellbook/oneuse/mutate/highlander(src)
 
-		if("clown") //4 + 4 + 6 + 14 + 6 + ? = 34?
+		if("Clown") //4 + 4 + 6 + 14 + 6 + ? = 34?
 			new /obj/item/weapon/invisible_spray/permanent(src)
 			new /obj/item/weapon/glue(src)
 			new /obj/item/weapon/glue(src)
@@ -185,7 +185,7 @@
 				new /obj/item/toy/balloon/long/living(src)
 			new /obj/item/weapon/spellbook/oneuse/shoesnatch(src)
 
-		if("druid")	//bear*viscerator to the power of carp
+		if("Druid")	//bear*viscerator to the power of carp
 			var/list/druidSummon = list(
 					/obj/item/weapon/grenade/spawnergrenade/spesscarp,
 					/obj/item/weapon/grenade/spawnergrenade/beenade,
@@ -197,7 +197,7 @@
 				new /obj/item/weapon/reagent_containers/food/snacks/egg/chaos(src)
 			new /obj/item/clothing/suit/storage/wintercoat/druid(src)
 
-		if("actor")	//6*5 + 1 + 5 + 2 + 6 + mask = 44^mask
+		if("Actor")	//6*5 + 1 + 5 + 2 + 6 + mask = 44^mask
 			for(var/i = 1 to 5)
 				new /obj/item/device/reportintercom(src)
 			new /obj/item/device/megaphone/madscientist(src)
@@ -207,7 +207,7 @@
 			new /obj/item/device/chameleon(src)
 
 
-		if("jackpot") //14*2 = 28
+		if("Jackpot") //14*2 = 28
 			new /obj/item/weapon/storage/box/syndicate(src)
 			new /obj/item/weapon/storage/box/syndicate(src)
 
@@ -227,7 +227,7 @@
 			new /obj/item/weapon/storage/box/mystery_vial(src)
 			new /obj/item/weapon/storage/box/mystery_vial(src)
 
-		if("Killtheking")//weight 50, same as anarchist. We found a witch!
+		if("Kill the King")//weight 50, same as anarchist. We found a witch!
 			new /obj/item/weapon/implanter/traitor(src)
 			new /obj/item/weapon/implanter/traitor(src)
 			new /obj/item/weapon/implanter/traitor(src)
@@ -259,6 +259,10 @@
 /obj/item/weapon/storage/box/syndie_kit/imp_explosive
 	name = "box (E)"
 	items_to_spawn = list(/obj/item/weapon/implanter/explosive)
+
+/obj/item/weapon/storage/box/syndie_kit/imp_vocal
+	name = "box (V)"
+	items_to_spawn = list(/obj/item/weapon/implanter/vocal)
 
 /obj/item/weapon/storage/box/syndie_kit/imp_uplink
 	name = "Uplink Implant (with injector)"
@@ -347,10 +351,20 @@
 /obj/item/weapon/storage/box/syndie_kit/emags_and_glue/ //Exactly what it sounds like.
 	name = "box (E&G)"
 	items_to_spawn = list(
-		/obj/item/weapon/glue = 4,
+		/obj/item/weapon/glue = 3,
 		/obj/item/weapon/card/emag = 3,
 	)
 
+//Syndicate Ayy Lmao Gear
+//The mothership sends its warmest regards
+/obj/item/weapon/storage/box/syndie_kit/ayylmao_harmor
+	name = "MDF Heavy Armor"
+	items_to_spawn = list(
+		/obj/item/clothing/suit/armor/mothership_heavy,
+		/obj/item/clothing/head/helmet/mothership_visor_heavy,
+		/obj/item/clothing/under/grey/grey_soldier,
+		/obj/item/clothing/shoes/jackboots/mothership
+	)
 
 //Syndicate Experimental Gear
 //Contains unique gear not found anywhere else

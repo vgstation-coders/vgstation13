@@ -1,0 +1,1731 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aG" = (
+/obj/item/device/radio/intercom{
+	desc = "Talk through this. Evilly";
+	freerange = 1;
+	frequency = 1213;
+	name = "Syndicate Intercom";
+	pixel_x = 32;
+	subspace_transmission = 1;
+	syndie = 1
+	},
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"aS" = (
+/obj/effect/landmark/start{
+	name = "wizard"
+	},
+/turf/unsimulated/floor{
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"cb" = (
+/obj/structure/bookcase,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"dm" = (
+/obj/structure/mirror/magic{
+	pixel_x = 28
+	},
+/turf/unsimulated/floor{
+	dir = 4;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"dt" = (
+/obj/machinery/door/poddoor{
+	id_tag = "";
+	name = "Airlock"
+	},
+/turf/unsimulated/wall/cult,
+/area/wizard_station)
+"ed" = (
+/obj/structure/table/woodentable,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"fg" = (
+/obj/structure/lattice,
+/turf/space/void,
+/area)
+"fj" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/wizrobe/red,
+/obj/item/clothing/shoes/sandal,
+/obj/item/clothing/head/wizard/red,
+/obj/item/weapon/staff,
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+"fm" = (
+/obj/effect/landmark/start{
+	name = "wizard"
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"fz" = (
+/obj/effect/landmark/start{
+	name = "wizard"
+	},
+/turf/unsimulated/floor{
+	icon_state = "carpet"
+	},
+/area/wizard_station)
+"fB" = (
+/obj/effect/forcefield{
+	alpha = 0;
+	invisibility = 0;
+	name = "invisible force wall"
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"gG" = (
+/mob/living/carbon/monkey,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"iw" = (
+/obj/machinery/vending/magivend,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"iH" = (
+/obj/effect/landmark/start{
+	name = "wizard"
+	},
+/turf/unsimulated/floor{
+	dir = 1;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"jB" = (
+/obj/structure/table/woodentable,
+/obj/effect/landmark{
+	name = "Teleport-Scroll"
+	},
+/turf/unsimulated/floor{
+	dir = 6;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"kH" = (
+/obj/structure/sign/map/meta/right{
+	pixel_y = 34
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"lv" = (
+/obj/effect/forcefield,
+/turf/unsimulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/wizard_station)
+"lX" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/dice,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"mb" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"mw" = (
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"mU" = (
+/obj/structure/rack,
+/obj/item/weapon/kitchen/utensil/knife/large/ritual,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"ne" = (
+/obj/effect/decal/cleanable/blood,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"nw" = (
+/obj/item/trash/pistachios,
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"on" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/wizrobe/magusblue,
+/obj/item/clothing/head/wizard/magus,
+/obj/item/weapon/staff,
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+"oG" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/wizrobe/magusred,
+/obj/item/clothing/head/wizard/magus,
+/obj/item/weapon/staff,
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+"pt" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/dice/d20,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"pE" = (
+/turf/unsimulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/wizard_station)
+"qH" = (
+/obj/effect/step_trigger/teleporter/random/shuttle_transit,
+/turf/space/void,
+/area)
+"si" = (
+/turf/space/void,
+/area)
+"ts" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/rd,
+/turf/unsimulated/floor{
+	dir = 5;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"uc" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/wizrobe/necro,
+/obj/item/clothing/head/wizard/necro,
+/obj/item/clothing/shoes/sandal,
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+"va" = (
+/obj/structure/flora/pottedplant/random{
+	icon_state = "plant-10";
+	tag = "icon-plant-10"
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"vc" = (
+/obj/effect/decal/remains/xeno,
+/turf/unsimulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/wizard_station)
+"vY" = (
+/turf/space,
+/turf/unsimulated/wall/cult,
+/area/wizard_station)
+"wG" = (
+/obj/structure/closet{
+	icon_closed = "cabinet_closed";
+	icon_opened = "cabinet_open";
+	icon_state = "cabinet_closed"
+	},
+/obj/item/weapon/storage/backpack/satchel,
+/turf/unsimulated/floor{
+	dir = 9;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"xd" = (
+/obj/effect/decal/remains/human,
+/turf/unsimulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/wizard_station)
+"zC" = (
+/obj/machinery/vending/snack,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"zR" = (
+/mob/living/simple_animal/hostile/creature{
+	name = "Experiment 35b"
+	},
+/turf/unsimulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/wizard_station)
+"AF" = (
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Cj" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/wizrobe/marisa,
+/obj/item/clothing/shoes/sandal/marisa,
+/obj/item/clothing/head/wizard/marisa,
+/obj/item/weapon/staff/broom,
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+"Cu" = (
+/obj/structure/rack,
+/obj/item/weapon/kitchen/utensil/knife/large/ritual,
+/turf/unsimulated/floor{
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"Ei" = (
+/obj/structure/sign/map/meta/left{
+	pixel_y = 34
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"EU" = (
+/obj/structure/closet/athletic_mixed{
+	name = "wizard closet"
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Fk" = (
+/obj/effect/decal/cleanable/molten_item,
+/turf/unsimulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/wizard_station)
+"FW" = (
+/obj/effect/forcefield,
+/turf/space/void,
+/area)
+"GF" = (
+/obj/structure/lattice,
+/obj/effect/forcefield,
+/turf/space/void,
+/area)
+"Hx" = (
+/turf/unsimulated/floor{
+	dir = 4;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"KW" = (
+/obj/structure/table/reinforced,
+/obj/structure/kitchenspike,
+/turf/unsimulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"Mr" = (
+/obj/structure/table/reinforced,
+/obj/structure/kitchenspike,
+/turf/unsimulated/floor{
+	dir = 4;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"MW" = (
+/obj/item/trash/bustanuts,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Os" = (
+/turf/unsimulated/wall/cult,
+/area/wizard_station)
+"OU" = (
+/obj/effect/decal/cleanable/cobweb2,
+/obj/machinery/showcase,
+/turf/unsimulated/floor{
+	dir = 4;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"Pf" = (
+/obj/machinery/showcase,
+/turf/unsimulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"Qb" = (
+/obj/machinery/computer/library/checkout,
+/obj/structure/table/woodentable,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Rd" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"SF" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/paper{
+	info = "<p><b>LIST OF SPELLS AVAILABLE</b></p><p>Magic Missile:<br>This spell fires several, slow moving, magic projectiles at nearby targets. If they hit a target, it is paralyzed and takes minor damage.</p><p>Fireball:<br>This spell fires a fireball at a target and does not require wizard garb. Be careful not to fire it at people that are standing next to you.</p><p>Disintegrate:</br>This spell instantly kills somebody adjacent to you with the vilest of magick. It has a long cooldown.</p><p>Disable Technology:<br>This spell disables all weapons, cameras and most other technology in range.</p><p>Smoke:<br>This spell spawns a cloud of choking smoke at your location and does not require wizard garb.</p><p>Blind:<br>This spell temporarly blinds a single person and does not require wizard garb.<p>Forcewall:<br>This spell creates an unbreakable wall that lasts for 30 seconds and does not require wizard garb.</p><p>Blink:<br>This spell randomly teleports you a short distance. Useful for evasion or getting into areas if you have patience.</p><p>Teleport:<br>This spell teleports you to a type of area of your selection. Very useful if you are in danger, but has a decent cooldown, and is unpredictable.</p><p>Mutate:<br>This spell causes you to turn into a hulk, and gain telekinesis for a short while.</p><p>Ethereal Jaunt:<br>This spell creates your ethereal form, temporarily making you invisible and able to pass through walls.</p><p>Knock:<br>This spell opens nearby doors and does not require wizard garb.</p>";
+	name = "List of Available Spells (READ)"
+	},
+/obj/item/trash/tray,
+/turf/unsimulated/floor{
+	dir = 10;
+	icon_state = "carpetside"
+	},
+/area/wizard_station)
+"SZ" = (
+/obj/item/trash/waffles,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"TT" = (
+/obj/effect/decal/cleanable/blood,
+/turf/unsimulated/floor{
+	dir = 4;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"Ur" = (
+/turf/unsimulated/floor{
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"Vj" = (
+/obj/item/trash/candy,
+/turf/unsimulated/floor{
+	dir = 8;
+	icon_state = "wood"
+	},
+/area/wizard_station)
+"Xm" = (
+/turf/unsimulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/wizard_station)
+"Ym" = (
+/turf/unsimulated/floor{
+	icon_state = "grimy"
+	},
+/area/wizard_station)
+
+(1,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(2,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(3,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(4,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(5,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(6,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(7,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+si
+si
+si
+si
+"}
+(8,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(9,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(10,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+fg
+vY
+vY
+Os
+Os
+Os
+Os
+Os
+vY
+vY
+fg
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(11,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+fg
+fg
+si
+Os
+Vj
+AF
+AF
+Os
+si
+fg
+fg
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(12,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+fg
+si
+FW
+fB
+AF
+cb
+AF
+fB
+FW
+si
+fg
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(13,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+fg
+si
+FW
+fB
+AF
+cb
+AF
+fB
+FW
+si
+fg
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(14,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+fg
+si
+FW
+fB
+AF
+cb
+AF
+fB
+FW
+si
+fg
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(15,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+fg
+si
+si
+Os
+AF
+AF
+AF
+Os
+FW
+FW
+GF
+GF
+GF
+FW
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(16,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+vY
+vY
+vY
+vY
+vY
+AF
+vY
+vY
+lv
+lv
+lv
+lv
+lv
+FW
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(17,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+Os
+Qb
+AF
+AF
+EU
+AF
+EU
+AF
+lv
+Fk
+zR
+xd
+lv
+FW
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(18,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+FW
+fB
+iw
+AF
+AF
+AF
+AF
+SZ
+AF
+lv
+vc
+pE
+pE
+lv
+FW
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(19,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+FW
+fB
+zC
+AF
+AF
+AF
+ed
+Ei
+AF
+lv
+lv
+lv
+lv
+lv
+FW
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(20,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+FW
+fB
+Rd
+nw
+AF
+AF
+ed
+kH
+AF
+AF
+AF
+AF
+va
+fB
+FW
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(21,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+FW
+fB
+pt
+lX
+mb
+AF
+AF
+AF
+AF
+AF
+MW
+AF
+AF
+fB
+FW
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(22,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+Os
+ed
+ed
+aG
+AF
+AF
+AF
+Os
+Os
+AF
+AF
+Os
+vY
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(23,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+Os
+Os
+Os
+Os
+Os
+AF
+Os
+Os
+Pf
+mw
+Xm
+mU
+vY
+fg
+fg
+fg
+fg
+si
+qH
+si
+si
+si
+si
+"}
+(24,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+FW
+fB
+Cj
+fj
+Os
+wG
+fm
+SF
+Os
+Mr
+Ur
+Hx
+Ur
+fB
+FW
+fg
+si
+fg
+si
+qH
+si
+si
+si
+si
+"}
+(25,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+FW
+fB
+uc
+Ym
+Ym
+iH
+fz
+aS
+Os
+KW
+gG
+Xm
+ne
+fB
+FW
+si
+si
+fg
+si
+qH
+si
+si
+si
+si
+"}
+(26,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+FW
+fB
+on
+oG
+Os
+ts
+dm
+jB
+Os
+OU
+Ur
+TT
+Cu
+fB
+FW
+si
+si
+fg
+si
+qH
+si
+si
+si
+si
+"}
+(27,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+Os
+Os
+Os
+Os
+Os
+Os
+Os
+Os
+Os
+dt
+dt
+Os
+Os
+si
+si
+si
+fg
+si
+qH
+si
+si
+si
+si
+"}
+(28,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+si
+si
+si
+si
+si
+Os
+Os
+Os
+Os
+fg
+fg
+fg
+fg
+fg
+si
+qH
+si
+si
+si
+si
+"}
+(29,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+qH
+si
+si
+si
+si
+"}
+(30,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+si
+si
+si
+si
+"}
+(31,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(32,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(33,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(34,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(35,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(36,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}
+(37,1,1) = {"
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+si
+"}

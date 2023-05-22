@@ -9,6 +9,7 @@
 	armor = list(melee = 30, bullet = 10, laser = 20, energy = 10, bomb = 20, bio = 0, rad = 0)
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 	siemens_coefficient = 0.6
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 /obj/item/clothing/head/leather/attackby(obj/W, mob/user)
 	if(istype (W, /obj/item/stack/sheet/animalhide))
@@ -71,5 +72,5 @@
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 40, bullet = 25, laser = 30, energy = 25, bomb = 15, bio = 20, rad = 20)
 
-/obj/item/clothing/head/leather/xeno/acidable()
+/obj/item/clothing/head/leather/xeno/dissolvable()
 	return 0

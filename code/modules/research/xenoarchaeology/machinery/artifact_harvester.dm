@@ -8,7 +8,8 @@
 	density = 1
 	idle_power_usage = 50
 	active_power_usage = 750
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/harvesting = 0
 	var/obj/item/weapon/anobattery/inserted_battery
 	var/obj/machinery/artifact/cur_artifact
@@ -16,6 +17,7 @@
 	var/datum/artifact_effect/isolated_secondary
 	var/obj/machinery/artifact_scanpad/owned_scanner = null
 	var/chargerate = 0
+	var/chargemult = 1
 	var/harvester = "" // Logs who started a harvest.
 	var/obj/effect/artifact_field/artifact_field
 	light_color = "#E1C400"
@@ -24,6 +26,24 @@
 /obj/machinery/artifact_harvester/New()
 	..()
 	reconnect_scanner()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/anom/harvester,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/capacitor
+	)
+
+	RefreshParts()
+
+/obj/machinery/artifact_harvester/RefreshParts()
+	var/scancount = 0
+	var/scanamount = 0
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		scancount += SP.rating
+		scanamount++
+
+	chargemult = scancount/scanamount
+
 
 /obj/machinery/artifact_harvester/Destroy()
 	if (inserted_battery)
@@ -39,8 +59,7 @@
 		owned_scanner.harvester_console = null
 		owned_scanner = null
 	if (artifact_field)
-		qdel(artifact_field)
-		artifact_field = null
+		QDEL_NULL(artifact_field)
 	..()
 
 /obj/machinery/artifact_harvester/proc/reconnect_scanner()
@@ -139,7 +158,7 @@
 		//check if we've finished
 		if(inserted_battery.stored_charge >= inserted_battery.capacity)
 			inserted_battery.stored_charge = inserted_battery.capacity //Prevents overcharging
-			use_power = 1
+			use_power = MACHINE_POWER_USE_IDLE
 			harvesting = 0
 			src.visible_message("<b>[name]</b> states, \"Battery is full.\"")
 			src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id] harvested by [key_name(harvester)]")
@@ -162,7 +181,7 @@
 
 		//if there's no charge left, finish
 		if(inserted_battery.stored_charge <= 0)
-			use_power = 1
+			use_power = MACHINE_POWER_USE_IDLE
 			inserted_battery.stored_charge = 0
 			harvesting = 0
 			if(inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
@@ -183,8 +202,7 @@
 				//see if we can clear out an old effect
 				//delete it when the ids match to account for duplicate ids having different effects
 				if(inserted_battery.battery_effect && inserted_battery.stored_charge <= 0)
-					qdel(inserted_battery.battery_effect)
-					inserted_battery.battery_effect = null
+					QDEL_NULL(inserted_battery.battery_effect)
 
 				//only charge up
 				var/matching_id = 0
@@ -194,9 +212,9 @@
 				if(inserted_battery.battery_effect)
 					matching_effecttype = (inserted_battery.battery_effect.type == isolated_primary.type)
 				if(!inserted_battery.battery_effect || (matching_id && matching_effecttype))
-					chargerate = isolated_primary.chargelevelmax / isolated_primary.effectrange
+					chargerate = (isolated_primary.chargelevelmax / isolated_primary.effectrange) * chargemult
 					harvesting = 1
-					use_power = 2
+					use_power = MACHINE_POWER_USE_ACTIVE
 					update_icon()
 					var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
 					src.visible_message(message)
@@ -232,8 +250,7 @@
 				//see if we can clear out an old effect
 				//delete it when the ids match to account for duplicate ids having different effects
 				if(inserted_battery.battery_effect && inserted_battery.stored_charge <= 0)
-					qdel(inserted_battery.battery_effect)
-					inserted_battery.battery_effect = null
+					QDEL_NULL(inserted_battery.battery_effect)
 
 				//only charge up
 				var/matching_id = 0
@@ -243,9 +260,9 @@
 				if(inserted_battery.battery_effect)
 					matching_effecttype = (inserted_battery.battery_effect.type == isolated_secondary.type)
 				if(!inserted_battery.battery_effect || (matching_id && matching_effecttype))
-					chargerate = isolated_secondary.chargelevelmax / isolated_secondary.effectrange
+					chargerate = (isolated_secondary.chargelevelmax / isolated_secondary.effectrange) * chargemult
 					harvesting = 1
-					use_power = 2
+					use_power = MACHINE_POWER_USE_ACTIVE
 					update_icon()
 					var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
 					src.visible_message(message)
@@ -322,8 +339,7 @@
 	if (href_list["alockoff"])
 		if (artifact_field)
 			src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] deactivates with a gentle shudder.</span>")
-			qdel(artifact_field)
-			artifact_field = null
+			QDEL_NULL(artifact_field)
 			if(cur_artifact)
 				cur_artifact.anchored = 0
 				cur_artifact.being_used = 0
@@ -368,7 +384,7 @@
 					if(!inserted_battery.battery_effect.activated)
 						inserted_battery.battery_effect.ToggleActivate(0)
 					harvesting = -1
-					use_power = 2
+					use_power = MACHINE_POWER_USE_ACTIVE
 					update_icon()
 					var/message = "<b>[src]</b> states, \"Warning, battery charge dump commencing.\""
 					src.visible_message(message)

@@ -268,6 +268,15 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
 	cost = 6
 
+/datum/uplink_item/dangerous/caber //around 25 brute self damage and bleed if used without armor, generally crit if exploded against an unarmored victim
+	name = "Ullapool Caber"
+	desc = "A modern replica of the legendary weapon held by Tavish DeGroot, scanned after the DeGroot family so generously let us inspect them for mass production. This potato-masher grenade will explode when swung, but not when thrown. The safety grip makes dropping or throwing the Caber impossible whilst enabled and will not explode with the safeties disabled. EOD Suit not included."
+	item = /obj/item/weapon/caber/
+	cost = 10
+	discounted_cost = 8
+	//jobs_with_discount = list("Assistant")
+	//would've liked to add a discount for dark skinned or nearsighted characters (closest to one eyed we have) but dunno how
+
 // STEALTHY WEAPONS
 // Any Syndicate item with applying lethal force to people without being easily detected (Ex: Syndicate Soap, Parapen, E-Bow)
 
@@ -550,6 +559,30 @@ var/list/uplink_items = list()
 	discounted_cost = 12
 	jobs_with_discount = list("Grey")
 
+/datum/uplink_item/ayylmao/harmor
+	name = "MDF Heavy Armor"
+	desc = "A set of cumbersome but sturdy alien armor that excels at protecting the wearer from energy weapons and melee attacks. The armor plates were measured for a grey, but can be adjusted to fit a human as well. Not guaranteed to fit any other species. A soldier's uniform and boots are included with the kit."
+	item = /obj/item/weapon/storage/box/syndie_kit/ayylmao_harmor
+	cost = 4
+	discounted_cost = 3
+	jobs_with_discount = list("Grey")
+
+/datum/uplink_item/ayylmao/mdfbelt
+	name = "MDF Gear Belt"
+	desc = "A mothership soldier's belt. Loaded with an ion pistol, first aid supplies, binoculars, and an extended oxygen supply tank for operating in breached areas. Keep away from water."
+	item = /obj/item/weapon/storage/belt/mothership/partial_gear
+	cost = 5
+	discounted_cost = 4
+	jobs_with_discount = list("Grey")
+
+/datum/uplink_item/ayylmao/sdrone_grenade
+	name = "Saucer Drone Grenade"
+	desc = "A single grenade containing a payload of four mothership saucer drones. The drones are fragile, but equipped with a small cannon capable of firing scorch bolts. The drones will attack all unidentified lifeforms in the area except the grenade operator."
+	item = /obj/item/weapon/grenade/spawnergrenade/mothershipdrone
+	cost = 6
+	discounted_cost = 4
+	jobs_with_discount = list("Grey")
+
 // IMPLANTS
 // Any Syndicate item that gets implanted into the body goes here
 
@@ -652,7 +685,7 @@ var/list/uplink_items = list()
 		return I
 
 /datum/uplink_item/jobspecific/command_security
-	category = "Command and Security Specials"
+	category = "Security Specials"
 
 /datum/uplink_item/jobspecific/command_security/syndicuffs
 	name = "Syndicate Cuffs"
@@ -710,27 +743,6 @@ var/list/uplink_items = list()
 	discounted_cost = 10
 	jobs_with_discount = list("Detective")
 
-/datum/uplink_item/jobspecific/command_security/briefcase_smg
-	name = "Briefcase SMG"
-	desc = "A modified briefcase capable of storing and firing a gun under a false bottom, while still allowing regular storage functions. Starts with a 9mm SMG loaded with 18 rounds that can be fired by holding the briefcase. Use a screwdriver to pry away the false bottom and either retrieve the gun or insert a new one. Distinguishable upon close examination due to the added weight."
-	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
-	cost = 14
-	discounted_cost = 10
-	jobs_with_discount = list("Internal Affairs Agent")
-
-/datum/uplink_item/jobspecific/command_security/briefcase_smg/on_item_spawned(var/obj/I, var/mob/user)
-	if(gives_discount(user.job) || gives_discount(user.dna.species))
-		I.icon_state = "briefcase-centcomm"
-	return
-
-/datum/uplink_item/jobspecific/command_security/knifeboot
-	name = "Concealed knife shoes"
-	desc = "Lace-up shoes with a knife concealed in the toecap. Tap your heels together to reveal the small knife. Remember to kick the target to stab them. Knife will be visible when pulled out, but kicking with the knife will not be directly obvious to observers."
-	item = /obj/item/clothing/shoes/knifeboot
-	cost = 4
-	discounted_cost = 2
-	jobs_with_discount = list("Internal Affairs Agent")
-
 /datum/uplink_item/jobspecific/medical
 	category = "Medical Specials"
 
@@ -768,7 +780,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/medical/antisocial
 	name = "Explosive Hug Chemical"
-	desc = "30 units of Bicarodyne, a special chemical that causes a devastating explosion when exposed to endorphins released in the body by a hug. Metabolizes quite slowly."
+	desc = "30 units of Bicarodyne, a special chemical that causes a devastating explosion when exposed to endorphins released in the body by a hug. Metabolizes quite slowly. Converts Bicaridine into more of this substance."
 	item = /obj/item/weapon/storage/box/syndie_kit/explosive_hug //Had to be put in a box because it didn't play well with reagent creation
 	cost = 9
 	discounted_cost = 8
@@ -776,7 +788,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/medical/hypozinebottle
 	name = "Lethal Speed Chemical"
-	desc = "30 units of Hypozine, a special chemical that causes the body to seamlessly synthesize Hyperzine, but also causes increases in muscle activity to levels that rapidly tear the user's body apart, causing catastrophic ligament failure. Metabolizes quite slowly."
+	desc = "30 units of Hypozine, a special chemical that causes the body to seamlessly synthesize Hyperzine, but also causes increases in muscle activity to levels that rapidly tear the user's body apart, causing catastrophic ligament failure. Metabolizes quite slowly. Converts Hyperzine into more of this substance."
 	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
 	cost = 5
 	discounted_cost = 4
@@ -836,9 +848,9 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/engineering/powercreeper_packet
 	name = "Powercreep Packet"
 	desc = "A packet that creates a dangerous mutated version of kudzu vines. The vines will repeatedly shock people and connect themselves to any cables near them, rapidly growing and spreading out of control if left unchecked."
-	item = /obj/item/powercreeper_packet
-	cost = 16
-	discounted_cost = 10
+	item = /obj/item/deployable_packet/powercreeper
+	cost = 10
+	discounted_cost = 5
 	jobs_with_discount = list("Botanist", "Station Engineer", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/engineering/syndietape_engineering
@@ -880,6 +892,15 @@ var/list/uplink_items = list()
 	cost = 9
 	discounted_cost = 6
 	jobs_with_discount = list("Mechanic")
+
+// A telecomms technician traitor item
+/datum/uplink_item/jobspecific/engineering/vocal
+	name = "Vocal Implant"
+	desc = "An implant usable after being injected into one's body. Settings can be input to modify speech patterns in the affected's voice once implanted."
+	item = /obj/item/weapon/storage/box/syndie_kit/imp_vocal
+	cost = 8
+	discounted_cost = 6
+	jobs_with_discount = list("Mechanic", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/cargo
 	category = "Cargo and Mining Specials"
@@ -1087,6 +1108,14 @@ var/list/uplink_items = list()
 	jobs_with_discount = list("Clown")
 	jobs_excluded = list("Mime")
 
+/datum/uplink_item/jobspecific/clown_mime/piebomb
+	name = "Pie Bomb"
+	desc = "These aren't homemade, they were made in a factory. A bomb factory. They're bombs."
+	item = /obj/item/weapon/reagent_containers/food/snacks/explosive_pie
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Clown", "Mime")
+
 /datum/uplink_item/jobspecific/assistant
 	category = "Assistant Specials"
 
@@ -1122,6 +1151,14 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Assistant")
 
+/datum/uplink_item/jobspecific/assistant/biomasspacket
+	name = "Biomass Packet"
+	desc = "A packet containing cryo-stabilized biomass tissue. Shake and throw for your very own interdimensional space barf."
+	item = /obj/item/deployable_packet/biomass
+	cost = 8
+	discounted_cost = 5
+	jobs_with_discount = list("Assistant", "Janitor") //There originally was a discount for mechanics too due to them being Assistant+, but it felt like a cheap joke
+
 /datum/uplink_item/jobspecific/command
 	category = "Command Specials"
 
@@ -1132,6 +1169,34 @@ var/list/uplink_items = list()
 	cost = 12
 	discounted_cost = 8
 	jobs_with_discount = list("Captain", "Head of Personnel")
+
+/datum/uplink_item/jobspecific/command/lawgivermk2
+	name = "Lawgiver Demolition Kit"
+	desc = "A container that comes with a Lawgiver modification kit, converting it into a Demolition variant Lawgiver. Also comes with two spare demolition magazines."
+	item = /obj/item/weapon/storage/box/demolition
+	cost = 12
+	jobs_exclusive = list("Head of Security")
+
+/datum/uplink_item/jobspecific/command/briefcase_smg
+	name = "Briefcase SMG"
+	desc = "A modified briefcase capable of storing and firing a gun under a false bottom, while still allowing regular storage functions. Starts with a 9mm SMG loaded with 18 rounds that can be fired by holding the briefcase. Use a screwdriver to pry away the false bottom and either retrieve the gun or insert a new one. Distinguishable upon close examination due to the added weight."
+	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Internal Affairs Agent")
+
+/datum/uplink_item/jobspecific/command/briefcase_smg/on_item_spawned(var/obj/I, var/mob/user)
+	if(gives_discount(user.job) || gives_discount(user.dna.species))
+		I.icon_state = "briefcase-centcomm"
+	return
+
+/datum/uplink_item/jobspecific/command/knifeboot
+	name = "Concealed knife shoes"
+	desc = "Lace-up shoes with a knife concealed in the toecap. Tap your heels together to reveal the small knife. Remember to kick the target to stab them. Knife will be visible when pulled out, but kicking with the knife will not be directly obvious to observers."
+	item = /obj/item/clothing/shoes/knifeboot
+	cost = 4
+	discounted_cost = 2
+	jobs_with_discount = list("Internal Affairs Agent")
 
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"

@@ -1,9 +1,9 @@
 //BITES
-/mob/living/carbon/human/bite_act(mob/living/carbon/human/M as mob)
+/mob/living/carbon/human/bite_act(mob/living/carbon/human/M as mob, arcaneoverride = FALSE)
 
 	var/dam_check = !(istype(loc, /turf) && istype(loc.loc, /area/start)) // 0 or 1
 
-	if(M == src)
+	if(M == src && !arcaneoverride)
 		return //Can't bite yourself
 
 	//Vampire code
@@ -22,9 +22,14 @@
 					return 0
 			//we're good to suck the blood, blaah
 
-			playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-			src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
-			V.handle_bloodsucking(src)
+			if(!V.silentbite)
+				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
+				src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
+			else
+				to_chat(M, "<span class='danger'>You start to slowly reach for [src]'s neck to bite it!.</span>")
+			var/mature = (locate(/datum/power/vampire/mature) in V.current_powers) ? 2 : 1
+			if(!V.silentbite || do_mob(M, src, (30 SECONDS) / mature))
+				V.handle_bloodsucking(src)
 			return
 	//end vampire code
 
@@ -81,7 +86,7 @@
 	else
 		LAssailant = M
 		assaulted_by(M)
-	log_attack("[M.name] ([M.ckey]) bitten by [src.name] ([src.ckey])")
+	log_attack("[src.name] ([src.ckey]) bitten by [M.name] ([M.ckey])")
 
 	return
 
@@ -285,7 +290,7 @@
 				if (punch_zone == TARGET_EYES || punch_zone == TARGET_MOUTH)
 					punch_zone = LIMB_HEAD
 				var/datum/organ/external/limb = organs_by_name[punch_zone]
-				if(limb.status & ORGAN_BLEEDING)
+				if(limb.status & ORGAN_BLEEDING && istype(M))
 					M.bloody_hands(src,1)
 				return punch_damage
 			else // dodged

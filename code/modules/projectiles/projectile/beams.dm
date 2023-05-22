@@ -31,9 +31,7 @@ var/list/beam_master = list()
 
 /ray/beam_ray/Destroy()
 	fired_beam = null
-	for(var/rayCastHit/H in hit_cache)
-		qdel(H)
-	hit_cache = null
+	QDEL_LIST_NULL(hit_cache)
 	..()
 
 /ray/beam_ray/cast(max_distance, max_hits, ignore_origin)
@@ -86,9 +84,7 @@ var/list/beam_master = list()
 	var/list/ray/past_rays = list() //full of rays
 
 /obj/item/projectile/beam/Destroy()
-	for(var/ray/R in past_rays)
-		qdel(R)
-	past_rays = null
+	QDEL_LIST_NULL(past_rays)
 	..()
 
 
@@ -348,8 +344,7 @@ var/list/beam_master = list()
 		if(TT == firer.loc)
 			continue
 		if(TT.density)
-			qdel(X)
-			X = null
+			QDEL_NULL(X)
 			break
 		for(var/atom/movable/O in TT)
 			if(!O.Cross(src))
@@ -359,14 +354,12 @@ var/list/beam_master = list()
 		for(var/mob/living/O in TT.contents)
 			if(istype(O, /mob/living))
 				if(O.density)
-					qdel(X)
-					X = null
+					QDEL_NULL(X)
 					broke = 1
 					break
 		if(broke)
 			if(X)
-				qdel(X)
-				X = null
+				QDEL_NULL(X)
 			break
 	spawn(10)
 		for(var/atom/thing in ouroverlays)
@@ -835,7 +828,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 						taggun.score()
 				M.Knockdown(2)
 				M.Stun(2)
-			else // We've got a game on the reciever, let's check if we've got a game on the wearer.
+			else // We've got a game on the receiver, let's check if we've got a game on the wearer.
 				if (!firer_tag || !firer_tag.my_laser_tag_game || (target_tag.my_laser_tag_game != firer_tag.my_laser_tag_game))
 					return 1
 				if (!target_tag.player || !firer_tag.player)

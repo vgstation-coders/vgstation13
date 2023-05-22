@@ -36,6 +36,9 @@ var/global/list/mineralSpawnChance[]
 		"Phazon"  = 10
 	)
 /**********************Mineral deposits**************************/
+/turf
+	var/overlay_state = ""
+
 /turf/unsimulated/mineral //wall piece
 	name = "Rock"
 	icon = 'icons/turf/walls.dmi'
@@ -47,6 +50,7 @@ var/global/list/mineralSpawnChance[]
 	density = 1
 	blocks_air = 1
 	holomap_draw_override = HOLOMAP_DRAW_FULL
+	overlay_state = "rock_overlay"
 	//temperature = TCMB
 	var/mineral/mineral
 	var/last_act = 0
@@ -60,7 +64,6 @@ var/global/list/mineralSpawnChance[]
 	var/busy = 0 //Used for a bunch of do_after actions, because we can walk into the rock to trigger them
 	var/mineral_overlay
 	var/mined_type = /turf/unsimulated/floor/asteroid
-	var/overlay_state = "rock_overlay"
 	var/no_finds = 0 //whether or not we want xenoarchaeology stuff here
 	var/rockernaut = NONE
 	var/minimum_mine_time = 0
@@ -101,21 +104,17 @@ var/global/list/mineralSpawnChance[]
 	dismantle_type = /turf/unsimulated/mineral
 	girder_type = null
 	walltype = "rock_rf"
+	//overlay_state = "rock_overlay"
 
-/*turf/simulated/wall/r_rock/New()
+/*/turf/simulated/wall/r_rock/New()
 	..()
-	add_rock_overlay()
-
-/turf/simulated/wall/r_rock/proc/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', "rock_overlay",layer = SIDE_LAYER),var/offset=-4)
-	img.pixel_x = offset*PIXEL_MULTIPLIER
-	img.pixel_y = offset*PIXEL_MULTIPLIER
-	img.plane = BELOW_TURF_PLANE
-	overlays += img*/
+	add_rock_overlay()*/
 
 /turf/simulated/wall/r_rock/porous
 	name = "reinforced porous rock"
 	desc = "This rock is filled with pockets of breathable air. It has metal struts to protect it from mining."
 	dismantle_type = /turf/unsimulated/mineral/internal/air
+	//overlay_state = ""
 
 /turf/unsimulated/mineral/internal/air
 	name = "porous rock"
@@ -166,7 +165,9 @@ var/list/icon_state_to_appearance = list()
 		add_rock_overlay()
 		icon_state_to_appearance["[base_icon_state]-[mineral_name]"] = appearance
 
-/turf/unsimulated/mineral/proc/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', overlay_state,layer = SIDE_LAYER),var/offset=-4)
+/turf/proc/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', overlay_state,layer = SIDE_LAYER),var/offset=-4)
+	if(!overlay_state || overlay_state == "")
+		return
 	img.pixel_x = offset*PIXEL_MULTIPLIER
 	img.pixel_y = offset*PIXEL_MULTIPLIER
 	img.plane = BELOW_TURF_PLANE
@@ -249,7 +250,7 @@ var/list/icon_state_to_appearance = list()
 				var/turf/unsimulated/mineral/random/target_turf = get_step(src, trydir)
 				if(istype(target_turf) && !target_turf.mineral)
 					if(prob(1) && prob(25)) //People wanted them rarer
-						rockernaut = TURF_CONTAINS_REGULAR_ROCKERNAUT
+						rockernaut = TURF_CONTAINS_ROCKERNAUT
 					target_turf.mineral = mineral
 					target_turf.UpdateMineral()
 					target_turf.MineralSpread()
@@ -481,11 +482,11 @@ var/list/icon_state_to_appearance = list()
 	if (mineral && mineral.result_amount)
 		DropMineral()
 	switch(rockernaut)
-		if(TURF_CONTAINS_REGULAR_ROCKERNAUT)
+		if(TURF_CONTAINS_ROCKERNAUT)
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/R = new(src)
 			if(mineral)
 				R.possessed_ore = mineral.ore
-		if(TURF_CONTAINS_BOSS_ROCKERNAUT)
+		if(TURF_CONTAINS_BOSS)
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
 			if(mineral)
 				R.possessed_ore = mineral.ore
@@ -607,6 +608,7 @@ var/list/icon_state_to_appearance = list()
 	var/dug = 0       //0 = has not yet been dug, 1 = has already been dug
 	var/sand_type = /obj/item/stack/ore/glass
 	plane = PLATING_PLANE
+	overlay_state = "roidfloor_overlay"
 
 /turf/unsimulated/floor/asteroid/air
 	oxygen = MOLES_O2STANDARD
@@ -629,7 +631,15 @@ var/list/icon_state_to_appearance = list()
 	..()
 	if(prob(20) && icon_state == "asteroid")
 		icon_state = "asteroid[rand(0,12)]"
+	add_rock_overlay()
 
+/turf/unsimulated/floor/asteroid/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', overlay_state,layer = SIDE_LAYER),var/offset=-4)
+	if(!overlay_state || overlay_state == "")
+		return
+	img.pixel_x = offset*PIXEL_MULTIPLIER
+	img.pixel_y = offset*PIXEL_MULTIPLIER
+	img.plane = BELOW_PLATING_PLANE
+	overlays += img
 
 /turf/unsimulated/floor/asteroid/ex_act(severity)
 	switch(severity)
@@ -693,6 +703,7 @@ var/list/icon_state_to_appearance = list()
 	nitrogen = 0.01
 	temperature = TCMB
 	plane = PLATING_PLANE
+	overlay_state = "roidfloor_overlay"
 	var/dug
 	var/sand_type = /obj/item/stack/ore/glass
 
@@ -709,6 +720,15 @@ var/list/icon_state_to_appearance = list()
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
 	icon_regular_floor = initial(icon_state)
+	add_rock_overlay()
+
+/turf/simulated/floor/asteroid/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', overlay_state,layer = SIDE_LAYER),var/offset=-4)
+	if(!overlay_state || overlay_state == "")
+		return
+	img.pixel_x = offset*PIXEL_MULTIPLIER
+	img.pixel_y = offset*PIXEL_MULTIPLIER
+	img.plane = BELOW_PLATING_PLANE
+	overlays += img
 
 /turf/simulated/floor/asteroid/is_plating()
 	return 0
@@ -1206,3 +1226,112 @@ var/list/icon_state_to_appearance = list()
 	if(locate(/obj/structure/lattice) in contents)
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
+
+//Maria's Hive//
+
+/turf/unsimulated/floor/asteroid/hive
+	name = "Corrupted Asteroid"
+	icon_state = "evilfloor"
+
+/turf/unsimulated/floor/asteroid/hive/living
+	icon_state = "breathingfloor_1"
+
+/turf/unsimulated/floor/asteroid/hive/living/New()
+	icon_state = pick("breathingfloor_1","breathingfloor_2","breathingfloor_3","breathingfloor_4","breathingfloor_5","breathingfloor_6")
+	..()
+
+/turf/unsimulated/mineral/random/hive
+	name = "Corrupted deposit"
+	icon_state = "mariahive"
+	base_icon_state = "mariahive"
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+	overlay_state = "corrupted_overlay"
+
+/turf/unsimulated/mineral/random/hive/high_chance
+	mineralChance = 25
+	mineralPool = "random_high"
+
+/turf/unsimulated/mineral/random/hive/high_chance_clown
+	mineralChance = 40
+	mineralPool = "clown"
+
+/turf/unsimulated/mineral/uranium/hive
+	name = "Corrupted Uranium deposit"
+	icon_state = "mariahive_Uranium"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/uranium
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+
+/turf/unsimulated/mineral/iron/hive
+	name = "Corrupted Iron deposit"
+	icon_state = "mariahive_Iron"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/iron
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+
+/turf/unsimulated/mineral/diamond/hive
+	name = "Corrupted Diamond deposit"
+	icon_state = "mariahive_Diamond"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/diamond
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+
+/turf/unsimulated/mineral/gold/hive
+	name = "Corrupted Gold deposit"
+	icon_state = "mariahive_Gold"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/gold
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+
+/turf/unsimulated/mineral/silver/hive
+	name = "Corrupted Silver deposit"
+	icon_state = "mariahive_Silver"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/silver
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+
+/turf/unsimulated/mineral/plasma/hive
+	name = "Corrupted Plasma deposit"
+	icon_state = "mariahive_Plasma"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/plasma
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+
+/turf/unsimulated/mineral/clown/hive
+	name = "Corrupted Bananium deposit"
+	icon_state = "mariahive_Clown"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/clown
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+
+/turf/unsimulated/mineral/phazon/hive
+	name = "Corrupted Phazite deposit"
+	icon_state = "mariahive_Phazon"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/phazon
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+
+/turf/unsimulated/mineral/telecrystal/hive
+	name = "Corrupted Telecrystal deposit"
+	base_icon_state = "mariahive"
+	icon_state = "mariahive_Telecrystal"
+	overlay_state = "corrupted_overlay"
+	mineral = new /mineral/telecrystal
+	mined_type = /turf/unsimulated/floor/asteroid/hive
+
+/turf/unsimulated/mineral/hyperdense/hive
+	name = "Corrupted hyperdense rock"
+	icon_state = "mariahive"
+	base_icon_state = "mariahive"
+	overlay_state = "corrupted_overlay"
+	mining_difficulty = MINE_DIFFICULTY_DENSE
+	minimum_mine_time = 99 SECONDS //GL HF
+	mined_type = /turf/unsimulated/floor/asteroid/hive

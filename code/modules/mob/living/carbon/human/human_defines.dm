@@ -64,6 +64,7 @@
 
 	var/last_shush = 0 // disarm intent shushing cooldown
 	var/lastFart = 0 // Toxic fart cooldown.
+	var/lastDeathgasp = 0	// Deathgasp cooldown (only for clown trombones atm)
 	var/lastDab = 0 //Dab cooldown.
 	var/lastAnemia = 0 //Anemia rest cooldown
 	var/last_emote_sound = 0 // Prevent scream spam in some situations
@@ -78,7 +79,7 @@
 
 	var/show_client_status_on_examine = TRUE //If false, don't display catatonic/braindead messages to non-admins
 
-	var/become_zombie_after_death = FALSE
+	var/become_zombie = FALSE
 	var/calorie_burn_rate = HUNGER_FACTOR
 	var/time_last_speech = 0 //When was the last time we talked?
 	var/manual_emote_sound_override = 0 //If toggled on, allows humans to make audible emotes

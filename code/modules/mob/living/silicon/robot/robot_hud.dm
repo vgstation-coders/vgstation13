@@ -119,20 +119,21 @@
 	if(healths)
 		if(!isDead())
 			var/current_health = health/maxHealth
-			switch(current_health)
-				if(0.9 to 1)
-					healths.icon_state = "health0"
-				if(0.75 to 0.9)
-					healths.icon_state = "health1"
-				if(0.5 to 0.75)
-					healths.icon_state = "health2"
-				if(0.25 to 0.5)
-					healths.icon_state = "health3"
-				if(0 to 0.25)
-					healths.icon_state = "health4"
-				if(config.health_threshold_dead to 0)
-					healths.icon_state = "health5"
-				else
-					healths.icon_state = "health6"
+			if(current_health in config.health_threshold_dead to 0)
+				healths.icon_state = "health5"
+			else
+				switch(current_health)
+					if(0.9 to 1)
+						healths.icon_state = "health0"
+					if(0.75 to 0.9)
+						healths.icon_state = "health1"
+					if(0.5 to 0.75)
+						healths.icon_state = "health2"
+					if(0.25 to 0.5)
+						healths.icon_state = "health3"
+					if(0 to 0.25)
+						healths.icon_state = "health4"
+					else
+						healths.icon_state = "health6"
 		else
 			healths.icon_state = "health7"

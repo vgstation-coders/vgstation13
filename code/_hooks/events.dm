@@ -101,7 +101,6 @@
 /event/clickon
 
 // Called when an atom is attacked with an empty hand.
-// Currently only used by xenoarch artifacts, should probably be moved to the base proc.
 // Arguments:
 // mob/user: the guy who is attacking.
 // atom/target: the atom that's being attacked.
@@ -154,7 +153,7 @@
 // Currently only implemented for humans.
 // Arguments:
 // atom/movable/bumper: the atom that is bumping.
-// atom/target: the atom that's being bumped into.
+// atom/bumped: the atom that's being bumped into.
 /event/to_bump
 
 // Called by hitby
@@ -168,7 +167,7 @@
 // Arguments:
 // mob/attacker: the mob doing the attack
 // mob/attacked: the victim of the attack
-// mob/item: the item being used to attack with
+// obj/item/item: the item being used to attack with
 /event/attacked_by
 
 // Called by unarmed_attack_mob
@@ -199,11 +198,23 @@
 /event/beam_power_change
 
 // Called by attackby
-// Currently only used by artifacts.
+// Used by artifacts and cooktops.
 // Arguments:
 // mob/living/attacker: the mob attacking the atom
 // obj/item/item: the item being used for the attack
 /event/attackby
+
+// Called by throw_impact
+// Arguments:
+// atom/hit_atom: the atom hit by the throw impact
+// speed: the speed at which the thrown atom was thrown
+// mob/living/user: the mob who threw the atom, if any
+/event/throw_impact
+
+//Called by examine
+//Arguments:
+//mob/user: the mob doing the examining
+/event/examined
 
 /event/ui_act
 
@@ -279,6 +290,10 @@
 
 /event/comp_ai_cmd_say
 /event/comp_ai_cmd_specific_say
+
+/event/comp_ai_cmd_order
+
+/event/comp_ai_cmd_retaliate
 
 /datum
 	/// Associative list of type path -> list(),

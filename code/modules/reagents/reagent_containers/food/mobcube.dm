@@ -13,8 +13,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/Destroy()
 	if(contained_mob && isdatum(contained_mob))
-		qdel(contained_mob)
-		contained_mob = null
+		QDEL_NULL(contained_mob)
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/afterattack(obj/O, mob/user,proximity)
@@ -124,8 +123,8 @@
 	name = "neaera cube"
 	contained_mob = /mob/living/carbon/monkey/skrell
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/roachcube
-	name = "roach cube"
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/isopodcube
+	name = "isopod cube"
 	contained_mob = /mob/living/carbon/monkey/roach
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube
@@ -144,3 +143,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube
 	name = "space carp cube"
 	contained_mob = /mob/living/simple_animal/hostile/carp/baby
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cowcube
+	name = "cow cube"
+	contained_mob = /mob/living/simple_animal/cow

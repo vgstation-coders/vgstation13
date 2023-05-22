@@ -6,7 +6,7 @@
 	var/enabled = 1
 	var/obj/item/weapon/gun/installed = null	// the type of weapon installed
 	anchored = 1
-	invisibility = INVISIBILITY_LEVEL_TWO		// the turret is invisible if it's inside its cover
+	invisibility = INVISIBILITY_LEVEL_ONE		// the turret is invisible if it's inside its cover
 	density = 1
 	var/faction = null 							//No shooting our buddies!
 	var/shootsilicons = 0						//You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
@@ -21,7 +21,7 @@
 	var/last_shot
 	var/fire_twice = 0
 
-	use_power = 1								// this turret uses and requires power
+	use_power = MACHINE_POWER_USE_IDLE			// this turret uses and requires power
 	idle_power_usage = 50						// when inactive, this turret takes up constant 50 Equipment power
 	active_power_usage = 300					// when active, this turret takes up constant 300 Equipment power
 //	var/list/targets
@@ -184,7 +184,7 @@
 		if(!raising)
 			if(!raised)
 				popUp()
-				use_power = 2
+				use_power = MACHINE_POWER_USE_ACTIVE
 			else
 				spawn()
 					if(!targeting_active)
@@ -199,7 +199,7 @@
 				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
 	else if(!raising || raised)//else, pop down
 		popDown()
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 	return
 
 /obj/machinery/turret/proc/target()
@@ -210,6 +210,8 @@
 	return
 
 /obj/machinery/turret/proc/shootAt(var/atom/movable/target)
+	if(stat & BROKEN)
+		return
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(target)
 	if (!istype(T) || !istype(U))
@@ -272,7 +274,7 @@
 	raising=0
 	cover.icon_state="turretCover"
 	raised=0
-	invisibility = INVISIBILITY_LEVEL_TWO
+	invisibility = INVISIBILITY_LEVEL_ONE
 
 /obj/machinery/turret/bullet_act(var/obj/item/projectile/Proj)
 	src.health -= Proj.damage
@@ -349,12 +351,11 @@
 	src.stat |= BROKEN // enables the BROKEN bit
 	src.icon_state = "destroyed_target_prism"
 	invisibility = 0
-	sleep(3)
-	flick("explosion", src)
-	src.setDensity(TRUE)
-	if (cover!=null) // deletes the cover - no need on keeping it there!
-		qdel(cover)
-		cover = null
+	spawn(3)
+		flick("explosion", src)
+		src.setDensity(TRUE)
+		if (cover!=null) // deletes the cover - no need on keeping it there!
+			QDEL_NULL(cover)
 
 
 /obj/machinery/turret/proc/malf_take_control(mob/living/silicon/ai/A)
@@ -731,8 +732,7 @@
 /obj/machinery/turret/Destroy()
 	// deletes its own cover with it
 	if(cover)
-		qdel(cover)
-		cover = null
+		QDEL_NULL(cover)
 	..()
 
 /obj/machinery/turret/centcomm
@@ -747,3 +747,6 @@
 
 /obj/machinery/turretcover/malf_disrupt(var/duration, var/bypassafter = FALSE)
 	return
+
+/obj/machinery/turret/centcomm/syndie
+	faction = "syndicate"

@@ -350,7 +350,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 				if(collision_imminent)
 					playsound(shuttle.linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
-				
+
 				if(timeleft>0)
 					return 0
 

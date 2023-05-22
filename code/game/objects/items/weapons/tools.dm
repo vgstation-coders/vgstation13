@@ -82,6 +82,7 @@
 	icon_state = "socket_wrench"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	w_class = W_CLASS_LARGE //big shit, to balance its power
+	starting_materials = list(MAT_IRON = 150)
 	force = 15.0
 	throwforce = 12.0
 
@@ -273,6 +274,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 	//R&D tech level
 	origin_tech = Tc_ENGINEERING + "=1"
@@ -407,22 +409,25 @@
 /obj/item/tool/weldingtool/afterattack(atom/A, mob/user as mob, proximity)
 	if(!proximity)
 		return
-	if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && !src.welding)
-		if(A.reagents.trans_to(src, max_fuel))
-			to_chat(user, "<span class='notice'>Welder refueled.</span>")
-			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
-		else if(!A.reagents)
-			to_chat(user, "<span class='notice'>\The [A] is empty.</span>")
+	..()
+	if (istype(A, /obj/structure/reagent_dispensers) && user.Adjacent(A))
+		if(!src.welding && !A.arcanetampered)
+			if(A.reagents.trans_id_to(src, FUEL, max_fuel))
+				to_chat(user, "<span class='notice'>Welder refueled.</span>")
+				playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+			else if(!A.reagents.has_reagent(FUEL))
+				to_chat(user, "<span class='notice'>\The [A] does not have any fuel left.</span>")
+			else
+				to_chat(user, "<span class='notice'>\The [src] is already full.</span>")
+	else if(arcanetampered && user.Adjacent(A))
+		if (!src.welding)
+			if(src.reagents.add_reagent(FUEL, max_fuel))
+				to_chat(user, "<span class='notice'>Welder refueled.</span>")
+				playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		else
-			to_chat(user, "<span class='notice'>\The [src] is already full.</span>")
-		return
-	else if (istype(A, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,A) <= 1 && src.welding)
-		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
-		log_game("[key_name(user)] triggered a fueltank explosion.")
-		to_chat(user, "<span class='warning'>That was stupid of you.</span>")
-		var/obj/structure/reagent_dispensers/fueltank/tank = A
-		tank.explode()
-		return
+			to_chat(user, "<span class='warning'>That was stupid of you.</span>")
+			explosion(get_turf(A),-1,0,3)
+			return
 	if (src.welding)
 		if(isliving(A))
 			var/mob/living/L = A
@@ -716,9 +721,65 @@
 		force = 1.0 // To compensate
 
 /obj/item/tool/crowbar/red/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for Half-Life 3!</span>")
 	playsound(get_turf(src), 'sound/medbot/Flatline_custom.ogg', 35)
 	return (SUICIDE_ACT_BRUTELOSS)
+
+/obj/item/tool/crowbar/halligan
+	name = "Halligan bar"
+	desc = "Combination pick, crowbar, and adze used for forcible entry."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "halligan"
+	item_state = "halligan"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	hitsound = "sound/weapons/toolhit.ogg"
+	item_state = "halligan"
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("pries", "slashes", "stabs", "bludgeons", "whacks")
+
+/obj/item/tool/crowbar/halligan/attackby(obj/item/I, mob/user)
+	if(istype(I,/obj/item/weapon/fireaxe))
+		var/obj/item/weapon/fireaxe/F = I
+		to_chat(user, "<span class='notice'>You attach \the [F] and [src] to carry them easier.</span>")
+		var/obj/item/tool/irons/SI = new (user.loc)
+		SI.fireaxe = F
+		SI.halligan = src
+		user.drop_item(F)
+		F.forceMove(SI)
+		user.drop_item(src)
+		forceMove(SI)
+		user.put_in_hands(SI)
+		return 1
+	return 0
+
+/obj/item/tool/crowbar/halligan/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+	. = do_after_default_checks(arglist(args))
+	if(.)
+		playsound(src,"sound/items/metal_impact.ogg",50,1)
+
+/obj/item/tool/irons
+	name = "set of irons"
+	desc = "Fireaxe and Halligan bar used for forcible entry."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "irons"
+	hitsound = "sound/weapons/toolhit.ogg"
+	item_state = "irons"
+	w_class = W_CLASS_LARGE
+	force = 5.0
+	throwforce = 7.0
+	sharpness = 1
+	sharpness_flags = SHARP_TIP
+	slot_flags = SLOT_BACK
+
+	var/obj/item/tool/crowbar/halligan/halligan = new /obj/item/tool/crowbar/halligan
+	var/obj/item/weapon/fireaxe/fireaxe = new /obj/item/weapon/fireaxe
+
+/obj/item/tool/irons/attack_self(mob/user)
+	to_chat(user, "<span class='notice'>You separate \the [src].</span>")
+	user.drop_item(src, force_drop = 1)
+	user.put_in_hands(src.fireaxe)
+	user.put_in_hands(src.halligan)
+	qdel(src)
 
 
 /obj/item/weapon/conversion_kit
@@ -768,7 +829,11 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
+	var/work_speed = 1 //multiplier
 	toolsounds = list('sound/items/Welder.ogg')
+
+/obj/item/tool/solder/splashable()
+	return FALSE
 
 /obj/item/tool/solder/New()
 	. = ..()
@@ -839,6 +904,37 @@
 	reagents.add_reagent(SACID, 50)
 	update_icon()
 
+/obj/item/tool/solder/screw
+	name = "screwsolder"
+	desc = "An advanced soldering tool with a screwdriver head. Use in hand to swap to and from the screwhead."
+	max_fuel = 32
+	work_speed = 0.5 //2x faster
+	icon_state = "ssolder-0"
+	origin_tech = Tc_ENGINEERING + "=6"
+	var/screwmode = TRUE
+
+/obj/item/tool/solder/screw/attack_self(mob/user)
+	playsound(src,'sound/items/Screwdriver.ogg',40, 1)
+	screwmode = !screwmode
+	to_chat(user, "<span class='notice'>You toggle the screwhead [screwmode ? "on":"off"].</span>")
+
+/obj/item/tool/solder/screw/is_screwdriver(mob/user)
+	return screwmode
+
+/obj/item/tool/solder/screw/update_icon()
+	..()
+	switch(reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID))
+		if(22 to INFINITY)
+			icon_state = "ssolder-20"
+		if(15 to 21)
+			icon_state = "ssolder-15"
+		if(8 to 14)
+			icon_state = "ssolder-10"
+		if(1 to 7)
+			icon_state = "ssolder-5"
+		if(0)
+			icon_state = "ssolder-0"
+
 /*
 * Fuel Can
 * A special, large container that fits on the belt
@@ -861,6 +957,7 @@
 	slotone = new/datum/reagents(volume)
 	slotone.my_atom = src
 	reagents.add_reagent(FUEL, 50)
+	slotone.add_reagent(SACID, 50)
 
 /obj/item/weapon/reagent_containers/glass/fuelcan/attack_self(mob/user as mob)
 	if(!slot)

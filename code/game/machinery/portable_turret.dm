@@ -230,7 +230,7 @@ Status: []<BR>"},
 			// This code handles moving the turret around. After all, it's a portable turret!
 
 			if(anchored)
-				invisibility = INVISIBILITY_LEVEL_TWO
+				invisibility = INVISIBILITY_LEVEL_ONE
 				icon_state = "[lasercolor]grey_target_prism"
 				cover=new/obj/machinery/turretcover/portable(src.loc) // create a new turret cover. While this is handled in process(), this is to workaround a bug where the turret becomes invisible for a split second
 				cover.host = src // make the cover's parent src
@@ -277,15 +277,13 @@ Status: []<BR>"},
 	if((src.lasercolor == "b") && (enabled))
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/red))
 			enabled = 0
-			qdel (Proj)
-			Proj = null
+			QDEL_NULL (Proj)
 			sleep(100)
 			enabled = 1
 	if((src.lasercolor == "r") && (enabled))
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/blue))
 			enabled = 0
-			qdel (Proj)
-			Proj = null
+			QDEL_NULL (Proj)
 			sleep(100)
 			enabled = 1
 	return

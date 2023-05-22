@@ -89,8 +89,7 @@ the HUD updates properly! */
 
 	for(var/mob/living/carbon/patient in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if (ishuman(patient))
-			var/mob/living/carbon/human/H = patient
-			if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
+			if(!can_mind_interact(patient.mind)) //Tinfoil hat? Move along.
 				continue
 		if(!check_HUD_visibility(patient, M))
 			continue
@@ -109,7 +108,10 @@ the HUD updates properly! */
 		holder = patient.hud_list[STATUS_HUD]
 		if(holder)
 			if(patient.isDead())
-				holder.icon_state = "huddead"
+				if(patient.check_can_revive() == CAN_REVIVE_IN_BODY)
+					holder.icon_state = "huddead_revivable"
+				else
+					holder.icon_state = "huddead"
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
 			else if(has_recorded_disease(patient))
@@ -181,7 +183,7 @@ the HUD updates properly! */
 		if(!holder)
 			continue
 		holder.icon_state = "hudno_id"
-		if(perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
+		if(!can_mind_interact(perp.mind)) //Tinfoil hat? Move along.
 			C.images += holder
 			continue
 		var/obj/item/weapon/card/id/card = perp.get_id_card()
@@ -295,12 +297,21 @@ the HUD updates properly! */
 		if(G.see_invisible)
 			see_invisible = G.see_invisible
 
+	seedarkness = G.seedarkness
+	update_darkness()
+
 	/* HUD shit goes here, as long as it doesn't modify sight flags
 	 * The purpose of this is to stop xray and w/e from preventing you from using huds -- Love, Doohl
 	 */
 
 	if(istype(G, /obj/item/clothing/glasses/sunglasses/sechud))
 		var/obj/item/clothing/glasses/sunglasses/sechud/O = G
+		if(O.hud)
+			O.hud.process_hud(src)
+		if(!druggy)
+			see_invisible = SEE_INVISIBLE_LIVING
+	else if(istype(G, /obj/item/clothing/glasses/regular/tracking/detective))
+		var/obj/item/clothing/glasses/regular/tracking/detective/O = G
 		if(O.hud)
 			O.hud.process_hud(src)
 		if(!druggy)
@@ -334,4 +345,5 @@ the HUD updates properly! */
 				holder.icon_state = "consthealth0"
 			else
 				holder.icon_state = "consthealth[10*round((construct.health/construct.maxHealth)*10)]"
+			holder.plane = ABOVE_LIGHTING_PLANE
 			C.images += holder

@@ -7,9 +7,10 @@
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = MOUTH
+	is_muzzle = MUZZLE_HARD
 
 //Monkeys can not take the muzzle off of themself! Call PETA!
 /obj/item/clothing/mask/muzzle/attack_paw(mob/user as mob)
@@ -54,6 +55,7 @@
 	flags = FPRINT
 	body_parts_covered = BEARD
 	hides_identity = HIDES_IDENTITY_ALWAYS
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 //scarves (fit in in mask slot)
 /obj/item/clothing/mask/scarf
@@ -178,7 +180,7 @@
 /obj/item/clothing/mask/bandana/red
 	name = "red bandana"
 	icon_state = "bandred"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/mask/joy
 	name = "joy mask"
@@ -241,6 +243,7 @@
 	icon_state = "goldenmask"
 	item_state = "goldenmask"
 	species_fit = list(INSECT_SHAPED)
+	autoignition_temperature = null
 
 /obj/item/clothing/mask/goldface/equipped()
 	..()

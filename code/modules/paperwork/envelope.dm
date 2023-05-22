@@ -37,21 +37,21 @@
 
 /obj/item/weapon/paper/envelope/proc/reapply_stamps()
 	if(!src.stamped)
-		return	
+		return
 	for(var/typepath in src.stamped)
 		var/suffix = ""
 		if(typepath == /obj/item/weapon/stamp/denied)
 			suffix = "deny"
 		else if(typepath == /obj/item/weapon/stamp/judge || typepath == /obj/item/weapon/stamp/captain)
 			suffix = "cap"
-		else if(typepath == /obj/item/weapon/stamp)		
+		else if(typepath == /obj/item/weapon/stamp)
 			suffix = "qm"
 		else
-			suffix = copytext("[typepath]", 24)			
+			suffix = copytext("[typepath]", 24)
 		var/image/overlay = image('icons/obj/bureaucracy.dmi', "paper_stamp-[suffix]")
 		overlay.pixel_x = 5 * PIXEL_MULTIPLIER
 		overlay.pixel_y = -2 * PIXEL_MULTIPLIER
-		overlays += overlay;		
+		overlays += overlay;
 
 /obj/item/weapon/paper/envelope/attackby(obj/item/weapon/P, mob/user)
 	. = ..()
@@ -76,7 +76,7 @@
 			to_chat(user, "<span class='notice'>*[tag]*</span>")
 			sortTag = tag
 			update_icon()
-			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)			
+			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
 			desc = "It has a label reading [tag]."
 
 /obj/item/weapon/paper/envelope/AltClick(mob/user)
@@ -105,8 +105,7 @@
 
 /obj/item/weapon/paper/envelope/Destroy()
 	if(contained_item)
-		qdel(contained_item)
-		contained_item = null
+		QDEL_NULL(contained_item)
 	..()
 
 /obj/item/weapon/paper/envelope/attack_self(mob/living/user)
@@ -120,6 +119,19 @@
 			playsound(src, 'sound/effects/paper_tear.ogg', 50, 1)
 	else
 		AltClick(user)
+
+/obj/item/weapon/paper/envelope/arcane_act(mob/user)
+	..()
+	throwforce = 10 // i forget if this is a reference to something
+	throw_speed = 2
+	throw_range = 7
+	return "I W'S F'Z'N T'DAY!"
+
+/obj/item/weapon/paper/envelope/bless()
+	..()
+	throwforce = initial(throwforce)
+	throw_speed = initial(throw_speed)
+	throw_range = initial(throw_range)
 
 /obj/item/weapon/paper/envelope/proc/seal()
 	open = FALSE

@@ -207,14 +207,13 @@
 			temp = "<font color = #336699>- DELETED ENTRY: [D.name] -</font color>"
 
 			SelectedServer.log_entries.Remove(D)
-			qdel(D)
-			D = null
+			QDEL_NULL(D)
 
 		else
 			temp = "<font color = #D70B00>- FAILED: NO SELECTED MACHINE -</font color>"
 
 	if(href_list["network"])
-		var/newnet = input(usr, "Which network do you want to view?", "Comm Monitor", network) as null|text
+		var/newnet = sanitize(input(usr, "Which network do you want to view?", "Comm Monitor", network) as null|text)
 		if(newnet && (usr in range(1, src) || issilicon(usr)))
 			if(length(newnet) > 15)
 				temp = "<font color = #D70B00>- FAILED: NETWORK TAG STRING TOO LENGHTLY -</font color>"

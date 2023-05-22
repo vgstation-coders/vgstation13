@@ -32,7 +32,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		//add the account
 		all_money_accounts.Add(station_account)
 
-/proc/create_department_account(department, var/recieves_wage = 0)
+/proc/create_department_account(department, var/receives_wage = 0)
 	next_account_number = rand(111111, 999999)
 
 	var/datum/money_account/department_account = new()
@@ -40,7 +40,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	department_account.account_number = rand(11111, 99999)
 	department_account.remote_access_pin = rand(1111, 9999)
 	department_account.money = DEPARTMENT_START_FUNDS
-	if(recieves_wage == 1)
+	if(receives_wage == 1)
 		department_account.wage_gain = DEPARTMENT_START_WAGE
 		station_allowance += DEPARTMENT_START_WAGE + round(DEPARTMENT_START_WAGE/10)//overhead of 10%
 
@@ -58,7 +58,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 //the current ingame time (hh:mm) can be obtained by calling:
 //worldtime2text()
 
-/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0, var/security_pref = 1, var/makehidden = FALSE, var/isStationAccount = TRUE)
+/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0, var/security_pref = 1, var/ratio_pref = 0.5, var/makehidden = FALSE, var/isStationAccount = TRUE)
 
 	//create a new account
 	var/datum/money_account/M = new()
@@ -68,6 +68,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	M.wage_gain = wage_payout
 	M.security_level = security_pref
 	M.hidden = makehidden
+	M.virtual_wallet_wage_ratio = ratio_pref
 
 	var/ourdate = ""
 	var/ourtime = ""
@@ -130,6 +131,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 							//1 - require manual login / account number and pin
 							//2 - require card and manual login
 	var/virtual = 0
+	var/virtual_wallet_wage_ratio = 50
 	var/wage_gain = 0 // How much an account gains per 'wage' tick.
 	var/disabled = 0
 	var/hidden = FALSE
@@ -204,7 +206,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 
 	if(department_accounts.len == 0)
 		for(var/department in station_departments)
-			create_department_account(department, recieves_wage = 1)
+			create_department_account(department, receives_wage = 1)
 	if(!vendor_account)
 		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE, FALSE)
 

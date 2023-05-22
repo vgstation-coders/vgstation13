@@ -74,6 +74,7 @@
 	sharpness = 1.2
 	sharpness_flags = SHARP_BLADE | CHOPWOOD
 	force = 10
+	var/force_wielded = 40
 	slot_flags = SLOT_BACK
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
@@ -82,17 +83,9 @@
 /obj/item/weapon/fireaxe/update_wield(mob/user)
 	..()
 	item_state = "fireaxe[wielded ? 1 : 0]"
-	force = wielded ? 40 : initial(force)
+	force = wielded ? force_wielded : initial(force)
 	if(user)
 		user.update_inv_hands()
-
-/obj/item/weapon/fireaxe/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(istype(W,/obj/item/weapon/antiaxe_kit))
-		playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
-		new /obj/item/weapon/fireaxe/antimatter(loc)
-		qdel(W)
-		qdel(src)
 
 /obj/item/weapon/fireaxe/suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is smashing \himself in the head with the [src.name]! It looks like \he's commit suicide!</span>")
@@ -112,8 +105,27 @@
 			var/obj/structure/window/W = A
 			W.shatter()
 		else
-			qdel(A)
-			A = null
+			QDEL_NULL(A)
+
+/obj/item/weapon/fireaxe/attackby(obj/item/I, mob/user)
+	if(istype(I,/obj/item/tool/crowbar/halligan))
+		var/obj/item/tool/crowbar/halligan/H = I
+		to_chat(user, "<span class='notice'>You attach \the [src] and [H] to carry them easier.</span>")
+		var/obj/item/tool/irons/SI = new (user.loc)
+		SI.fireaxe = H
+		SI.halligan = src
+		user.drop_item(H)
+		H.forceMove(SI)
+		user.drop_item(src)
+		forceMove(SI)
+		user.put_in_hands(SI)
+		return 1
+	return ..()
+
+/obj/item/weapon/fireaxe/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+	. = do_after_default_checks(arglist(args))
+	if(.)
+		playsound(src,"sound/misc/clang.ogg",50,1)
 
 /*
  * High-Frequency Blade
@@ -230,7 +242,7 @@
 
 /obj/item/binoculars/update_wield(mob/user)
 	if(wielded)
-		user.register_event(/event/moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, src::mob_moved())
 		user.visible_message("\The [user] holds \the [src] up to \his eyes.","You hold \the [src] up to your eyes.")
 		item_state = "binoculars_wielded"
 		user.regenerate_icons()
@@ -239,7 +251,7 @@
 			var/client/C = user.client
 			C.changeView(C.view + 7)
 	else
-		user.unregister_event(/event/moved, src, .proc/mob_moved)
+		user.unregister_event(/event/moved, src, src::mob_moved())
 		user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
 		item_state = "binoculars"
 		user.regenerate_icons()

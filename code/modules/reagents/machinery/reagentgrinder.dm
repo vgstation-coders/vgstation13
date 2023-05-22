@@ -21,7 +21,7 @@ var/global/list/juice_items = list (
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "juicer1"
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 5
 	active_power_usage = 100
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
@@ -120,6 +120,9 @@ var/global/list/juice_items = list (
 		to_chat(user, "You can't do that while \the [src] has a beaker loaded!")
 		return FALSE
 	return ..()
+
+/obj/machinery/reagentgrinder/splashable()
+	return FALSE
 
 /obj/machinery/reagentgrinder/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
@@ -344,7 +347,7 @@ var/global/list/juice_items = list (
 			list("Detach Beaker", "radial_detachbeaker")
 		)
 
-		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
+		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, src::radial_check(), user))
 		if(!radial_check(user))
 			return
 
@@ -420,8 +423,7 @@ var/global/list/juice_items = list (
 
 /obj/machinery/reagentgrinder/proc/remove_object(var/obj/item/O)
 	holdingitems -= O
-	qdel(O)
-	O = null
+	QDEL_NULL(O)
 
 /obj/machinery/reagentgrinder/proc/juice()
 	power_change()

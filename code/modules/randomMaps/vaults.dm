@@ -102,6 +102,216 @@
 
 	message_admins("<span class='info'>Loaded space hobo shack [result ? "" : "un"]successfully.</span>")
 
+/datum/map_element/dungeon/hell
+	name = "HELL"
+	file_path = "maps/misc/HELL.dmm"
+	unique = TRUE
+
+/datum/map_element/dungeon/hell/load(x, y, z, rotate=0, overwrite = FALSE, override_can_rotate = FALSE)
+	. = ..()
+	if(islist(.) && config.bans_shown_in_hell_limit)
+		var/list/L = .
+		var/list/turf/turfs = list()
+		if(L.len)
+			for(var/turf/spawned_turf in L)
+				if(!spawned_turf.density)
+					turfs += spawned_turf
+			if(turfs.len)
+				var/time2make = world.time
+				var/database/db = ("players2.sqlite")
+				var/database/query/select_query = new
+				select_query.Add("SELECT ckey, reason FROM erro_ban WHERE bantype = 'PERMABAN' AND isnull(unbanned)")
+				if(!select_query.Execute(db))
+					qdel(select_query)
+					message_admins("Banned player search error on populating hell: [select_query.ErrorMsg()]")
+					log_sql("Error: [select_query.ErrorMsg()]")
+					return
+
+				var/bancount = 0
+				while(select_query.NextRow() && bancount <= config.bans_shown_in_hell_limit)
+					var/list/row = select_query.GetRowData()
+					var/ckey = row[1]
+					var/reason = row[2]
+					var/mob/living/carbon/human/H = new(pick(turfs))
+					H.quick_copy_prefs()
+					H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
+					bancount++
+				time2make = world.time - time2make
+				log_admin("Hell was populated successfully with [bancount] banned players out of a max of [config.bans_shown_in_hell_limit] in [time2make/10] seconds.")
+				message_admins("Hell was populated successfully with [bancount] banned players out of a max of [config.bans_shown_in_hell_limit] in [time2make/10] seconds.")
+
+/mob/living/carbon/human/proc/quick_copy_prefs()
+	var/list/preference_list = new
+	var/database/query/check = new
+	var/database/db = ("players2.sqlite")
+	check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, 1)
+	if(check.Execute(db))
+		if(!check.NextRow())
+			message_admins("[ckey] had no character file to load")
+			return
+	else
+		message_admins("Player appearance file check error: [check.ErrorMsg()]")
+		log_sql("Error: [check.ErrorMsg()]")
+		return
+	var/database/query/q = new
+	q.Add({"
+		SELECT
+			limbs.player_ckey,
+			limbs.player_slot,
+			limbs.l_arm,
+			limbs.r_arm,
+			limbs.l_leg,
+			limbs.r_leg,
+			limbs.l_foot,
+			limbs.r_foot,
+			limbs.l_hand,
+			limbs.r_hand,
+			limbs.heart,
+			limbs.eyes,
+			limbs.lungs,
+			limbs.liver,
+			limbs.kidneys,
+			players.player_ckey,
+			players.player_slot,
+			players.real_name,
+			players.random_name,
+			players.random_body,
+			players.gender,
+			players.species,
+			players.disabilities,
+			body.player_ckey,
+			body.player_slot,
+			body.hair_red,
+			body.hair_green,
+			body.hair_blue,
+			body.facial_red,
+			body.facial_green,
+			body.facial_blue,
+			body.skin_tone,
+			body.hair_style_name,
+			body.facial_style_name,
+			body.eyes_red,
+			body.eyes_green,
+			body.eyes_blue
+		FROM
+			players
+		INNER JOIN
+			limbs
+		ON
+			(
+				players.player_ckey = limbs.player_ckey)
+		AND (
+				players.player_slot = limbs.player_slot)
+		INNER JOIN
+			jobs
+		ON
+			(
+				limbs.player_ckey = jobs.player_ckey)
+		AND (
+				limbs.player_slot = jobs.player_slot)
+		INNER JOIN
+			body
+		ON
+			(
+				jobs.player_ckey = body.player_ckey)
+		AND (
+				jobs.player_slot = body.player_slot)
+		WHERE
+			players.player_ckey = ?
+		AND players.player_slot = ?"}, ckey, 1)
+	if(q.Execute(db))
+		while(q.NextRow())
+			var/list/row = q.GetRowData()
+			for(var/a in row)
+				preference_list[a] = row[a]
+	else
+		message_admins("Player appearance loading error: [q.ErrorMsg()]")
+		log_sql("Error: [q.ErrorMsg()]")
+		return
+	name = preference_list && preference_list.len && preference_list["real_name"] ? preference_list["real_name"] : ckey
+	real_name = name
+	if(dna)
+		dna.real_name = real_name
+	if(preference_list && preference_list.len)
+		var/disabilities = text2num(preference_list["disabilities"])
+		if(!isnull(preference_list["species"]))
+			set_species(preference_list["species"])
+			var/datum/species/chosen_species = all_species[preference_list["species"]]
+			if( (disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
+				mutations += M_FAT
+		setGender(sanitize_gender(preference_list["gender"]))
+
+		my_appearance.r_eyes = sanitize_integer(preference_list["eyes_red"], 0, 255)
+		my_appearance.g_eyes = sanitize_integer(preference_list["eyes_green"], 0, 255)
+		my_appearance.b_eyes = sanitize_integer(preference_list["eyes_blue"], 0, 255)
+
+		my_appearance.r_hair = sanitize_integer(preference_list["hair_red"], 0, 255)
+		my_appearance.g_hair = sanitize_integer(preference_list["hair_green"], 0, 255)
+		my_appearance.b_hair = sanitize_integer(preference_list["hair_blue"], 0, 255)
+
+		my_appearance.r_facial = sanitize_integer(preference_list["facial_red"], 0, 255)
+		my_appearance.g_facial = sanitize_integer(preference_list["facial_green"], 0, 255)
+		my_appearance.b_facial = sanitize_integer(preference_list["facial_blue"], 0, 255)
+
+		my_appearance.s_tone = sanitize_integer(preference_list["skin_tone"], -185, 34)
+
+		my_appearance.h_style = sanitize_inlist(preference_list["hair_style_name"], hair_styles_list)
+		my_appearance.f_style = sanitize_inlist(preference_list["facial_style_name"], facial_hair_styles_list)
+
+		dna.ResetUIFrom(src)
+
+		if(disabilities & DISABILITY_FLAG_NEARSIGHTED)
+			disabilities|=NEARSIGHTED
+		if(disabilities & DISABILITY_FLAG_EPILEPTIC)
+			disabilities|=EPILEPSY
+		if(disabilities & DISABILITY_FLAG_EHS)
+			disabilities|=ELECTROSENSE
+		if(disabilities & DISABILITY_FLAG_DEAF)
+			sdisabilities|=DEAF
+		if(disabilities & DISABILITY_FLAG_BLIND)
+			sdisabilities|=BLIND
+
+		var/list/organ_data = list()
+		organ_data[LIMB_LEFT_ARM] = preference_list[LIMB_LEFT_ARM]
+		organ_data[LIMB_RIGHT_ARM] = preference_list[LIMB_RIGHT_ARM]
+		organ_data[LIMB_LEFT_LEG] = preference_list[LIMB_LEFT_LEG]
+		organ_data[LIMB_RIGHT_LEG] = preference_list[LIMB_RIGHT_LEG]
+		organ_data[LIMB_LEFT_FOOT]= preference_list[LIMB_LEFT_FOOT]
+		organ_data[LIMB_RIGHT_FOOT]= preference_list[LIMB_RIGHT_FOOT]
+		organ_data[LIMB_LEFT_HAND]= preference_list[LIMB_LEFT_HAND]
+		organ_data[LIMB_RIGHT_HAND]= preference_list[LIMB_RIGHT_HAND]
+		organ_data["heart"] = preference_list["heart"]
+		organ_data["eyes"] 	= preference_list["eyes"]
+		organ_data["lungs"] = preference_list["lungs"]
+		organ_data["kidneys"]=preference_list["kidneys"]
+		organ_data["liver"] = preference_list["liver"]
+
+		for(var/name in organ_data)
+			var/datum/organ/external/O = organs_by_name[name]
+			var/datum/organ/internal/I = internal_organs_by_name[name]
+			var/status = organ_data[name]
+
+			if(status == "amputated")
+				O.status &= ~ORGAN_ROBOT
+				O.status &= ~ORGAN_PEG
+				O.amputated = 1
+				O.status |= ORGAN_DESTROYED
+				O.destspawn = 1
+			else if(status == "cyborg")
+				O.status &= ~ORGAN_PEG
+				O.status |= ORGAN_ROBOT
+			else if(status == "peg")
+				O.status &= ~ORGAN_ROBOT
+				O.status |= ORGAN_PEG
+			else if(status == "assisted")
+				I?.mechassist()
+			else if(status == "mechanical")
+				I?.mechanize()
+			else
+				continue
+
+		regenerate_icons()
+
 /proc/asteroid_can_be_placed(var/datum/map_element/E, var/turf/start_turf)
 	if(!E.width || !E.height) //If the map element doesn't have its width/height calculated yet, do it now
 		E.assign_dimensions()
@@ -144,6 +354,7 @@
 
 	var/list/spawned = list()
 	var/successes = 0
+	var/list/invalid_bounds = list() // Previously we just removed everything in these bounds from valid_spawn_points, which costed about a second or two during placement, now totally eliminated.
 
 	while(map_element_objects.len)
 		var/datum/map_element/ME = pick(map_element_objects)
@@ -177,7 +388,7 @@
 					var/turf/t2 = locate(T.x + conflict.width, T.y + conflict.height, T.z) //Corner #2: Old vault's coordinates plus old vault's dimensions
 
 					//A rectangle defined by corners #1 and #2 is marked as invalid spawn area
-					valid_spawn_points.Remove(block(t1, t2))
+					invalid_bounds[t1] = t2
 
 			if(POPULATION_SCARCE)
 				//This method is much cheaper but results in less accuracy. Bad spawn areas will be removed later - when the new vault is created
@@ -198,7 +409,13 @@
 			sanity++
 			new_spawn_point = pick(valid_spawn_points)
 			valid_spawn_points.Remove(new_spawn_point)
-			if(filter_function && !call(filter_function)(ME, new_spawn_point))
+			var/inbounds = FALSE
+			for(var/turf/start in invalid_bounds) // And begin the invalid bounds checking. Might look like extra work, but is much faster than just removing blocks of spawn points.
+				var/turf/end = invalid_bounds[start]
+				if(start && end && new_spawn_point.x >= start.x && new_spawn_point.y >= start.y && new_spawn_point.x <= end.x && new_spawn_point.y <= end.y)
+					inbounds = TRUE
+					break
+			if(inbounds || (filter_function && !call(filter_function)(ME, new_spawn_point)))
 				new_spawn_point = null
 				filter_counter++
 				continue
@@ -215,11 +432,14 @@
 		if(population_density == POPULATION_SCARCE)
 			var/turf/t1 = locate(max(1, vault_x - MAX_VAULT_WIDTH - 1), max(1, vault_y - MAX_VAULT_HEIGHT - 1), vault_z)
 			var/turf/t2 = locate(vault_x + new_width, vault_y + new_height, vault_z)
-			valid_spawn_points.Remove(block(t1, t2))
+			invalid_bounds[t1] = t2
 
+		var/timestart = world.timeofday
 		if(ME.load(vault_x, vault_y, vault_z, vault_rotate, overwrites))
+			var/timetook2load = world.timeofday - timestart
 			spawned.Add(ME)
-			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].")
+			log_debug("Loaded [ME.file_path] in [timetook2load / 10] seconds at ([vault_x],[vault_y],[vault_z])[(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].",FALSE)
+			message_admins("<span class='info'>Loaded [ME.file_path] in [timetook2load / 10] seconds: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].</span>")
 			if(!ME.can_rotate)
 				message_admins("<span class='info'>[ME.file_path] was not rotated, can_rotate was set to FALSE.</span>")
 			else if(config.disable_vault_rotation)

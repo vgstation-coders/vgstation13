@@ -13,6 +13,7 @@
 	var/carbon_dioxide = 0
 	var/nitrogen = 0
 	var/toxins = 0
+	var/list/misc_gases //associative list of gas names and amounts. eg. to add N2O to a turf: misc_gases = list(GAS_SLEEPING = 36000)
 
 	//properties for airtight tiles (/wall)
 	var/thermal_conductivity = 0.05
@@ -54,7 +55,7 @@
 
 	var/turf_speed_multiplier = 1
 
-	var/explosion_block = 0
+	var/explosion_block = 0 //efficacy at blocking explosions. Invulnerable walls set to 9999
 
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data
@@ -64,13 +65,13 @@
 
 	var/image/viewblock
 
-	var/junction = 0
-
 	var/volume_mult = 1 //how loud are things on this turf?
 
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
 	var/last_beam_damage = 0
+
+	var/mute_time = 0
 
 /turf/examine(mob/user)
 	..()
@@ -293,8 +294,7 @@
 /turf/proc/RemoveLattice()
 	var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
 	if(L)
-		qdel (L)
-		L = null
+		QDEL_NULL (L)
 
 /turf/proc/add_dust()
 	return
@@ -348,8 +348,7 @@
 		if(F.material=="phazon")
 			phazontiles -= src
 		if(F.floor_tile)
-			qdel(F.floor_tile)
-			F.floor_tile = null
+			QDEL_NULL(F.floor_tile)
 		F = null
 
 	if(ispath(N, /turf/simulated/floor))
@@ -608,6 +607,16 @@
 //Return a lattice to allow plating building, return 0 for error message, return -1 for silent fail.
 /turf/proc/canBuildPlating()
 	return BUILD_SILENT_FAILURE
+
+//Return true to allow floor tile coverings
+/turf/proc/canBuildFloortile(var/tiletype)
+	return !ispath(tiletype,/obj/item/stack/tile/metal/plasteel) && is_plating()
+
+/turf/simulated/floor/canBuildFloortile(var/tiletype)
+	return ..() && !burnt && !broken
+
+/turf/simulated/floor/engine/canBuildFloortile(var/tiletype)
+	return ispath(tiletype,/obj/item/stack/tile/metal/plasteel) && is_plating()
 
 /turf/proc/dismantle_wall()
 	return

@@ -228,7 +228,7 @@
 	if(stat & (FORCEDISABLE|NOPOWER))
 		operating = 0
 	var/disp_op = operating
-	if(in_reverse && disp_op!=0)
+	if((in_reverse && disp_op!=0 && !arcanetampered) || ((!in_reverse || disp_op==0) && arcanetampered))
 		disp_op = -operating
 	icon_state = "conveyor[disp_op]"
 
@@ -317,7 +317,6 @@
 		<li>To quickly copy configuration: Add a Conveyor or a Conveyor Switch into buffer, activate the Multitool in your hand to enable Cloning Mode, then use it on another Conveyor.</li>
 		<li>To make counter-clockwise corners: Use the Reverse Direction button in this menu. Diagonals will attempt to auto set direction based on connected straight line segments.</li>
 	</ul>"}
-
 
 /obj/machinery/conveyor/DuplicateObject(var/location)
 	var/obj/machinery/conveyor/duplicate = ..()

@@ -1,7 +1,7 @@
 /obj/machinery/atmospherics/unary/outlet_injector
 	icon = 'icons/obj/atmospherics/outlet_injector.dmi'
 	icon_state = "off"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 
 	name = "Air Injector"
 	desc = "Has a valve and pump attached to it."
@@ -9,8 +9,8 @@
 	var/on = 0
 	var/injecting = 0
 
-	var/volume_rate = 50
-	var/max_rate=50
+	var/volume_rate = CELL_VOLUME //1 tile worth of air by default
+	var/max_rate= 4*CELL_VOLUME // 10000L
 
 	var/frequency = 0
 	var/datum/radio_frequency/radio_connection
@@ -23,7 +23,7 @@
 	name = "Acid-Proof Air Injector"
 	desc = "Has a valve and pump attached to it. This one has an acid proof coating."
 
-/obj/machinery/atmospherics/unary/outlet_injector/acid_proof/acidable()
+/obj/machinery/atmospherics/unary/outlet_injector/acid_proof/dissolvable()
 	return 0
 
 /obj/machinery/atmospherics/unary/outlet_injector/update_icon()
@@ -53,7 +53,7 @@
 		return
 
 	if(air_contents.temperature > 0)
-		var/transfer_moles = (air_contents.return_pressure()) * volume_rate / (air_contents.temperature * R_IDEAL_GAS_EQUATION)
+		var/transfer_moles = (ONE_ATMOSPHERE) * volume_rate / (air_contents.temperature * R_IDEAL_GAS_EQUATION)
 
 		var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 
@@ -71,7 +71,7 @@
 	injecting = 1
 
 	if(air_contents.temperature > 0)
-		var/transfer_moles = (air_contents.return_pressure()) * volume_rate / (air_contents.temperature * R_IDEAL_GAS_EQUATION)
+		var/transfer_moles = (ONE_ATMOSPHERE) * volume_rate / (air_contents.temperature * R_IDEAL_GAS_EQUATION)
 
 		var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 
@@ -130,7 +130,7 @@
 
 	if("set_volume_rate" in signal.data)
 		var/number = text2num(signal.data["set_volume_rate"])
-		volume_rate = clamp(number, 0, air_contents.volume)
+		volume_rate = clamp(number, 0, max_rate)
 
 	if("status" in signal.data)
 		spawn(2)

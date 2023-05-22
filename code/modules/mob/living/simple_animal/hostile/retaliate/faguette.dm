@@ -43,7 +43,7 @@
 	maxbodytemp = 370
 	heat_damage_per_tick = 15	//amount of damage applied if animal's body temperature is higher than maxbodytemp
 	cold_damage_per_tick = 10	//same as heat_damage_per_tick, only if the bodytemperature it's lower than minbodytemp
-	unsuitable_atoms_damage = 10
+	unsuitable_atmos_damage = 10
 
 	disabilities=EPILEPSY|MUTE
 	mutations = list(M_CLUMSY)
@@ -54,7 +54,7 @@
 		return
 	if(ismob(AM))
 		var/mob/M = AM
-		to_chat(src, "<span class='danger'>You are too depressed to push [M] out of \the way.</span>")
+		to_chat(src, "<span class='danger'>You are too depressed to push [M] out of the way.</span>")
 		M.LAssailant = src
 		M.assaulted_by(src)
 		return

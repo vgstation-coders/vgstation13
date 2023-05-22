@@ -47,8 +47,7 @@ var/runedec = 0 // Rune cap ?
 	for(var/mob/living/silicon/ai/AI in player_list)
 		if(AI.client)
 			AI.client.images -= blood_image
-	qdel(blood_image)
-	blood_image = null
+	QDEL_NULL(blood_image)
 	rune_list_legacy.Remove(src)
 	..()
 
@@ -83,7 +82,7 @@ var/runedec = 0 // Rune cap ?
 	if(!islegacycultist(user))
 		to_chat(user, "You can't mouth the arcane scratchings without fumbling over them.")
 		return
-	if(istype(user.wear_mask, /obj/item/clothing/mask/muzzle))
+	if(user.wear_mask?.is_muzzle)
 		to_chat(user, "You are unable to speak the words of the rune.")
 		return
 	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))

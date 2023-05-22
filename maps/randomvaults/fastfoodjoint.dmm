@@ -1,0 +1,3202 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/obj/structure/railing,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"ak" = (
+/obj/item/weapon/kitchen/rollingpin,
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/kitchen/utensil/knife/large/butch,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"ar" = (
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning";
+	dir = 1
+	},
+/area/vault/fastfood)
+"aJ" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"aM" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"bf" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1;
+	initialize_directions = 14
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"bg" = (
+/mob/living/simple_animal/hostile/bigroach{
+	environment_smash_flags = 0;
+	faction = "hostile"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"bi" = (
+/obj/structure/table/plastic,
+/obj/item/trash/emptybowl,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"bu" = (
+/obj/structure/bed/chair/comfy/couch/mid/red{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"bG" = (
+/obj/structure/kitchenspike,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor5"
+	},
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey,
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey{
+	pixel_y = 4;
+	pixel_x = -4
+	},
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey{
+	pixel_x = 4;
+	pixel_y = -4
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"bX" = (
+/obj/structure/bed/chair/comfy/couch/left/red{
+	dir = 4
+	},
+/obj/machinery/light/small{
+	dir = 8;
+	flickering = 1
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"bY" = (
+/obj/machinery/light/small/broken{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/fastfood/dining)
+"ch" = (
+/obj/machinery/gibber,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"ck" = (
+/mob/living/simple_animal/hostile/monster/cyber_horror/Vox{
+	environment_smash_flags = 0
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"cu" = (
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"cC" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/structure/reagent_dispensers/watertank,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"cD" = (
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"cG" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"cV" = (
+/obj/structure/table/reinforced,
+/obj/item/trash/plate,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"dh" = (
+/obj/structure/rack,
+/obj/item/weapon/reagent_containers/food/snacks/mint,
+/obj/item/weapon/reagent_containers/food/snacks/mint,
+/obj/item/weapon/reagent_containers/food/snacks/mint,
+/obj/item/weapon/reagent_containers/food/drinks/coloring,
+/obj/item/weapon/reagent_containers/food/condiment/syndisauce,
+/obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"dm" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	external_pressure_bound = 101;
+	on = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"dF" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6;
+	initialize_directions = 6
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"eb" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"eL" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"eQ" = (
+/obj/structure/rack,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
+/obj/item/weapon/lazarus_injector/advanced,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"fy" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"fA" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	external_pressure_bound = 101;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/misc)
+"fZ" = (
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"ge" = (
+/obj/structure/table/plastic,
+/obj/item/trash/fries_cone,
+/obj/item/trash/ketchup_packet,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/obj/machinery/light/he/burned{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"gl" = (
+/mob/living/simple_animal/mouse/common/black,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"gJ" = (
+/obj/machinery/cooking/candy,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"gU" = (
+/obj/structure/kitchenspike,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor3"
+	},
+/obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake{
+	pixel_y = 2;
+	pixel_x = -10
+	},
+/obj/item/weapon/reagent_containers/food/snacks/fries/cone{
+	pixel_x = -2
+	},
+/obj/item/weapon/reagent_containers/food/snacks/faggot{
+	pixel_x = 8;
+	pixel_y = -4
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"hj" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4;
+	initialize_directions = 11
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"hz" = (
+/obj/machinery/chem_master/condimaster,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"hB" = (
+/obj/structure/bed/chair/plastic{
+	dir = 4
+	},
+/obj/effect/landmark/corpse/russian,
+/obj/effect/decal/cleanable/vomit,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"hF" = (
+/obj/structure/railing,
+/obj/structure/railing,
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"hT" = (
+/obj/effect/decal/cleanable/cobweb,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"if" = (
+/obj/structure/table/reinforced,
+/obj/item/trash/plate,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"ig" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/vomit,
+/obj/effect/decal/cleanable/vomit,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"iD" = (
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/fastfood)
+"iK" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	dir = 4;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"iP" = (
+/obj/machinery/chem_master/snackbar_machine,
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -22
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"jf" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing/glass,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	external_pressure_bound = 101;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"ju" = (
+/obj/docking_port/destination/salvage/fast_food{
+	dir = 2
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"jv" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/structure/rack,
+/obj/item/clothing/mask/gas,
+/obj/item/clothing/head/hardhat/red,
+/obj/item/weapon/extinguisher,
+/obj/item/weapon/tank/oxygen,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"jH" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"kg" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/structure/railing,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"kY" = (
+/obj/item/weapon/stool/bar,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"kZ" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1;
+	initialize_directions = 14
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"ld" = (
+/obj/machinery/light/small{
+	dir = 8;
+	flickering = 1
+	},
+/turf/space,
+/area/vault/fastfood)
+"li" = (
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"lo" = (
+/turf/unsimulated/floor/airless{
+	dir = 4;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"mb" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"md" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/fastfood)
+"mg" = (
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning";
+	dir = 1
+	},
+/area/vault/fastfood)
+"mh" = (
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"mi" = (
+/obj/machinery/door/airlock,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/dining)
+"mr" = (
+/obj/structure/bed/chair/office{
+	dir = 4
+	},
+/obj/structure/noticeboard{
+	pixel_y = 27
+	},
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/kitchen{
+	dir = 4
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/apc{
+	pixel_y = 24;
+	dir = 1]
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/dining)
+"mx" = (
+/obj/structure/railing,
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"mJ" = (
+/obj/machinery/vending/dinnerware,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"mS" = (
+/obj/structure/lattice,
+/obj/structure/lattice,
+/turf/space,
+/area/vault/fastfood)
+"mX" = (
+/turf/unsimulated/floor/asteroid,
+/area/vault/fastfood)
+"mZ" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/disposal/compactor,
+/obj/machinery/light/small,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"ns" = (
+/obj/machinery/door/window{
+	dir = 8
+	},
+/obj/machinery/light/small/broken,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"nP" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/wall,
+/area/vault/fastfood/dining)
+"ol" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"pj" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"pm" = (
+/obj/structure/table,
+/obj/machinery/microwave{
+	pixel_x = -3;
+	pixel_y = 6
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"pC" = (
+/turf/space,
+/area)
+"pR" = (
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"qa" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/space,
+/area/vault/fastfood)
+"ql" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/structure/railing/glass,
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"qs" = (
+/obj/machinery/power/apc{
+	pixel_y = 24;
+	dir = 1]
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"qA" = (
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -22
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"qJ" = (
+/obj/item/weapon/stool/bar,
+/obj/effect/landmark/corpse/clown,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"qO" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/misc)
+"qV" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"rr" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/effect/decal/cleanable/cockroach_remains,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"rB" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk3"
+	},
+/turf/space,
+/area/vault/fastfood)
+"rC" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"rP" = (
+/obj/structure/bed/chair/comfy/couch/left/red{
+	dir = 4
+	},
+/obj/effect/landmark/corpse/assistant,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"sg" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/device/radio/intercom/aiprivate{
+	pixel_x = -28;
+	broadcasting = 1
+	},
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/fastfood/dining)
+"sn" = (
+/obj/structure/urinal{
+	dir = 8;
+	pixel_x = 30
+	},
+/obj/effect/decal/cleanable/crayon,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"sv" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/wall/r_wall,
+/area/vault/fastfood/kitchen)
+"sA" = (
+/obj/structure/closet/crate/freezer,
+/obj/item/weapon/reagent_containers/food/condiment/chillwax,
+/obj/item/weapon/reagent_containers/food/condiment/coldsauce,
+/obj/item/weapon/reagent_containers/food/condiment/exotic,
+/obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig,
+/obj/item/weapon/reagent_containers/food/condiment/honey,
+/obj/item/weapon/reagent_containers/food/condiment/maple_syrup,
+/obj/item/weapon/reagent_containers/food/condiment/polypgelatin,
+/obj/item/weapon/reagent_containers/food/condiment/royaljelly,
+/obj/item/weapon/reagent_containers/food/condiment/zammild,
+/obj/item/weapon/reagent_containers/food/condiment/zamspices,
+/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"sP" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning";
+	dir = 1
+	},
+/area/vault/fastfood)
+"tb" = (
+/mob/living/simple_animal/hostile/retaliate/cookbot,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"to" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 9;
+	initialize_directions = 9
+	},
+/obj/machinery/light/small/broken{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/misc)
+"tv" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning";
+	dir = 1
+	},
+/area/vault/fastfood)
+"tz" = (
+/turf/simulated/wall/r_wall,
+/area/vault/fastfood/kitchen)
+"tB" = (
+/mob/living/simple_animal/cockroach{
+	faction = "hostile"
+	},
+/obj/effect/decal/cleanable/blood{
+	icon_state = "gibbl4"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"tS" = (
+/obj/structure/bed/chair/plastic{
+	dir = 4
+	},
+/obj/effect/landmark/corpse/civilian,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"tT" = (
+/turf/simulated/wall,
+/area/vault/fastfood/misc)
+"tV" = (
+/obj/item/weapon/stool/bar,
+/obj/structure/railing/glass,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"tZ" = (
+/obj/item/weapon/reagent_containers/food/condiment/enzyme,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -3
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill,
+/obj/item/weapon/reagent_containers/glass/beaker{
+	pixel_x = 5
+	},
+/obj/item/weapon/reagent_containers/dropper/baster,
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"ub" = (
+/obj/item/weapon/reagent_containers/food/condiment/enzyme,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -3
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill,
+/obj/item/weapon/reagent_containers/glass/beaker{
+	pixel_x = 5
+	},
+/obj/item/weapon/reagent_containers/dropper/baster,
+/obj/structure/table,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"uy" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 8;
+	flickering = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"uA" = (
+/obj/structure/closet,
+/obj/item/weapon/reagent_containers/food/snacks/discountchocolate,
+/obj/item/weapon/reagent_containers/food/snacks/discountburrito,
+/obj/item/weapon/reagent_containers/food/snacks/discountburger,
+/obj/item/weapon/reagent_containers/food/drinks/discount_ramen,
+/obj/item/weapon/reagent_containers/food/snacks/pie/discount,
+/obj/effect/decal/cleanable/cobweb,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"uT" = (
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/power/port_gen/pacman,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"vc" = (
+/obj/machinery/door/airlock/external{
+	id_tag = "podstationclosing";
+	name = "Pod Station Airlock"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/misc)
+"vi" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"vR" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"vZ" = (
+/obj/structure/bed/chair/comfy/couch/right/red{
+	dir = 4
+	},
+/obj/effect/landmark/corpse/russian,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"wc" = (
+/obj/machinery/light/small{
+	dir = 1;
+	invisibility = 1
+	},
+/turf/unsimulated/floor/airless{
+	dir = 4;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"we" = (
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/obj/structure/mirror{
+	pixel_x = 32
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"wr" = (
+/turf/simulated/wall/r_wall,
+/area/vault/fastfood/misc)
+"wE" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"wH" = (
+/turf/simulated/wall,
+/area/vault/fastfood/dining)
+"xk" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"yh" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor4"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"yt" = (
+/obj/machinery/light/small/broken{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"yH" = (
+/obj/structure/closet/crate/freezer,
+/obj/item/slime_extract/silver,
+/obj/item/slime_extract/silver,
+/obj/item/slime_extract/silver,
+/obj/item/asteroid/hivelord_core,
+/obj/item/asteroid/hivelord_core,
+/obj/item/asteroid/hivelord_core,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"yK" = (
+/obj/structure/closet/secure_closet/freezer/money,
+/obj/item/weapon/reagent_containers/food/snacks/meat/polyp,
+/obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman,
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic,
+/obj/item/weapon/reagent_containers/food/snacks/meat/insectoid,
+/obj/item/weapon/reagent_containers/food/snacks/meat/human,
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"yX" = (
+/obj/effect/landmark/spacepod/random,
+/obj/structure/lattice,
+/turf/space,
+/area/vault/fastfood)
+"zj" = (
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"zB" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 9;
+	initialize_directions = 9
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Af" = (
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"Ag" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"Aj" = (
+/obj/structure/closet/crate/freezer,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/obj/abstract/map/spawner/allfood,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"Ap" = (
+/obj/structure/toilet{
+	dir = 8
+	},
+/obj/structure/window/reinforced/tinted,
+/obj/effect/decal/cleanable/crayon,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"Az" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/alarm{
+	pixel_y = 24
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"AT" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/glass/rag,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"Bf" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"BJ" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/vomit,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"BT" = (
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/obj/structure/cable/yellow,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"BX" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Cb" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/structure/rack,
+/obj/item/weapon/storage/box/lights/mixed,
+/obj/item/weapon/reagent_containers/spray/cleaner,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"Cy" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor3"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"CD" = (
+/turf/simulated/wall/r_wall,
+/area/vault/fastfood/dining)
+"CG" = (
+/obj/structure/closet/secure_closet/freezer/money,
+/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/tomatomeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/slime,
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor3"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"CT" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Dg" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Dm" = (
+/obj/structure/bed/chair/plastic{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Do" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Dp" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5;
+	initialize_directions = 5
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"DI" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"DS" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"DT" = (
+/obj/item/weapon/stool/bar,
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"DW" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Ee" = (
+/obj/machinery/cooking/cerealmaker,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Em" = (
+/obj/structure/closet/secure_closet/freezer/money,
+/obj/item/weapon/reagent_containers/food/snacks/meat/grey,
+/obj/item/weapon/reagent_containers/food/snacks/meat/diona,
+/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"EA" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"ED" = (
+/obj/effect/decal/cleanable/dirt,
+/mob/living/simple_animal/hostile/giant_spider{
+	environment_smash_flags = 0;
+	faction = "hostile"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"EN" = (
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"ES" = (
+/obj/machinery/door/airlock,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"EW" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"Fg" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"Fj" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Fu" = (
+/obj/machinery/cooking/deepfryer,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"FX" = (
+/obj/structure/railing,
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning";
+	dir = 1
+	},
+/area/vault/fastfood)
+"FZ" = (
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"Gb" = (
+/obj/window_grille_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"Gf" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Gm" = (
+/obj/structure/closet/secure_closet/freezer/meat,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"He" = (
+/obj/machinery/light/small{
+	dir = 1;
+	invisibility = 1
+	},
+/turf/space,
+/area/vault/fastfood)
+"Hj" = (
+/obj/machinery/processor,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Hr" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"Hs" = (
+/obj/structure/table,
+/obj/machinery/microwave{
+	pixel_x = -3;
+	pixel_y = 6
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Hv" = (
+/obj/structure/bed/chair/plastic{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/vomit,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Hx" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "gibbl4"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"HR" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"Ii" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"Iw" = (
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"ID" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"IQ" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Je" = (
+/obj/structure/table/plastic,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/trash/used_tray,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Jw" = (
+/obj/window_grille_spawner/reinforced,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/dining)
+"JE" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"JF" = (
+/obj/machinery/door/airlock,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/dining)
+"JG" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"JJ" = (
+/obj/window_grille_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/kitchen)
+"JK" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6;
+	initialize_directions = 6
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"JQ" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"JZ" = (
+/obj/structure/table/plastic,
+/obj/item/trash/donitos,
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/weapon/reagent_containers/food/condiment/mustard{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/obj/item/weapon/reagent_containers/food/condiment/ketchup{
+	pixel_x = -5;
+	pixel_y = -2
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Ka" = (
+/turf/simulated/wall,
+/area/vault/fastfood/kitchen)
+"Kb" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"Kf" = (
+/obj/item/weapon/kitchen/rollingpin,
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/kitchen/utensil/knife/large/butch,
+/obj/item/weapon/kitchen/utensil/knife/large/butch,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"KI" = (
+/obj/window_grille_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/dining)
+"KY" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 8;
+	initialize_directions = 7
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"La" = (
+/obj/machinery/light/small,
+/turf/space,
+/area/vault/fastfood)
+"Le" = (
+/obj/machinery/cooking/grill,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Li" = (
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Ln" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Lt" = (
+/turf/simulated/wall,
+/area/vault/fastfood)
+"LC" = (
+/obj/machinery/door/airlock/external{
+	id_tag = "podstationclosing";
+	name = "Pod Station Airlock"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"LK" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"LS" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"LU" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6;
+	initialize_directions = 6
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"LZ" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	external_pressure_bound = 101;
+	on = 1;
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Mk" = (
+/obj/structure/table/plastic,
+/obj/item/trash/candy,
+/obj/item/weapon/reagent_containers/food/condiment/saltshaker{
+	pixel_x = -2;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/food/condiment/peppermill{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/obj/structure/railing/glass{
+	dir = 1
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Mo" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/fastfood/dining)
+"ME" = (
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/fastfood)
+"MU" = (
+/obj/machinery/light/small,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"Nf" = (
+/obj/item/weapon/stool/bar,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Nn" = (
+/obj/structure/table/plastic,
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/weapon/reagent_containers/food/condiment/ketchup{
+	pixel_x = -5;
+	pixel_y = -2
+	},
+/obj/item/weapon/reagent_containers/food/condiment/mustard{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/obj/item/trash/chips,
+/obj/structure/railing/glass,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Ny" = (
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/cobweb,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"ND" = (
+/obj/structure/table/reinforced,
+/obj/machinery/door/window/brigdoor,
+/obj/machinery/door/window{
+	dir = 8
+	},
+/obj/item/device/deskbell/signaler,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/dining)
+"NS" = (
+/obj/machinery/cooking/deepfryer,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"NZ" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"Od" = (
+/obj/structure/table/plastic,
+/obj/item/weapon/reagent_containers/food/condiment/mustard{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/obj/item/weapon/reagent_containers/food/condiment/ketchup{
+	pixel_x = -5;
+	pixel_y = -2
+	},
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/trash/popcorn,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Og" = (
+/obj/effect/decal/cleanable/blood,
+/obj/effect/decal/cleanable/blood,
+/mob/living/simple_animal/cockroach{
+	faction = "hostile"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"Or" = (
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"Pp" = (
+/obj/structure/bed/chair/comfy/couch/right/red{
+	dir = 1
+	},
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Pt" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/landmark/corpse/janitor,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Py" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor6"
+	},
+/obj/item/weapon/soap,
+/obj/effect/decal/cleanable/blood/gibs{
+	icon_state = "gib1"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"PE" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	external_pressure_bound = 101;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"PW" = (
+/obj/structure/toilet{
+	dir = 8
+	},
+/obj/structure/window/reinforced/tinted,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"Qf" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Qr" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"QH" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor5"
+	},
+/mob/living/simple_animal/cockroach{
+	faction = "hostile"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"QU" = (
+/obj/effect/decal/cleanable/generic,
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Ra" = (
+/obj/machinery/vending/boozeomat,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/dining)
+"Rf" = (
+/obj/structure/rack,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/farwacube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/neaeracube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/stokcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/isopodcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"Rk" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"Rl" = (
+/obj/structure/table/reinforced,
+/obj/machinery/pos,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"RD" = (
+/obj/machinery/door/airlock/freezer,
+/obj/structure/window/barricade/full/block,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"RY" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"Sv" = (
+/obj/structure/table/reinforced,
+/obj/machinery/chem_dispenser/booze_dispenser/mapping,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/dining)
+"SC" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/vault/fastfood/dining)
+"SP" = (
+/obj/structure/table/plastic,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/trash/pietin,
+/obj/item/weapon/kitchen/utensil/fork,
+/obj/item/weapon/reagent_containers/food/condiment/ketchup{
+	pixel_x = -5;
+	pixel_y = -2
+	},
+/obj/item/weapon/reagent_containers/food/condiment/mustard{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Tt" = (
+/obj/structure/lattice,
+/turf/space,
+/area/vault/fastfood)
+"UT" = (
+/obj/machinery/light/small/broken,
+/turf/unsimulated/floor/airless{
+	dir = 4;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"VB" = (
+/obj/structure/closet/secure_closet/freezer/fridge,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"VG" = (
+/obj/effect/decal/cleanable/generic,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"VU" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/fastfood)
+"Wn" = (
+/obj/structure/bed/chair/comfy/couch/turn/inward/red{
+	dir = 1
+	},
+/obj/structure/railing/glass,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Wo" = (
+/obj/structure/bed/chair/plastic{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"WK" = (
+/obj/structure/table/reinforced,
+/obj/machinery/chem_dispenser/brewer/mapping,
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/dining)
+"WO" = (
+/obj/structure/table/reinforced,
+/obj/machinery/chem_dispenser/soda_dispenser/mapping,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/shutters{
+	density = 0;
+	dir = 8;
+	icon_state = "shutter0";
+	id_tag = "vaultkitchen";
+	name = "Kitchen Shutters";
+	opacity = 0
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/dining)
+"WS" = (
+/obj/machinery/cooking,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 9;
+	initialize_directions = 9
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Xb" = (
+/mob/living/simple_animal/hostile/necro/zombie/headcrab{
+	environment_smash_flags = 0;
+	faction = "hostile"
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	external_pressure_bound = 101;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"Xg" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/fastfood)
+"Xr" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4;
+	initialize_directions = 12
+	},
+/obj/structure/mopbucket,
+/obj/item/weapon/mop,
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"XG" = (
+/obj/machinery/power/apc{
+	pixel_y = 24;
+	dir = 1]
+	},
+/obj/structure/closet/secure_closet/freezer/kitchen,
+/obj/structure/cable/yellow{
+	icon_state = "0-2"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"XK" = (
+/mob/living/simple_animal/hostile/retaliate/cookbot,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"XS" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"XV" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/misc)
+"Yh" = (
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Yx" = (
+/obj/machinery/media/jukebox,
+/obj/effect/decal/cleanable/cobweb,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/vault/fastfood/dining)
+"Yz" = (
+/obj/machinery/light/small/broken,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+"YF" = (
+/turf/unsimulated/floor/asteroid/underground,
+/area/vault/fastfood/dining)
+"YQ" = (
+/obj/effect/decal/cleanable/crayon,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/misc)
+"Zy" = (
+/obj/machinery/door/airlock/vault{
+	icon_state = "door_locked";
+	locked = 1;
+	req_access_txt = "53"
+	},
+/obj/structure/falserwall/doorobscurer,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/fastfood/kitchen)
+
+(1,1,1) = {"
+pC
+pC
+pC
+pC
+VU
+Tt
+yX
+tv
+Kb
+Tt
+yX
+EW
+Tt
+yX
+sP
+EW
+Tt
+yX
+mg
+pC
+pC
+pC
+pC
+"}
+(2,1,1) = {"
+pC
+pC
+pC
+pC
+Hr
+Tt
+Tt
+ar
+Af
+Tt
+Tt
+Af
+Tt
+Tt
+ar
+JG
+Tt
+Tt
+FX
+pC
+pC
+pC
+pC
+"}
+(3,1,1) = {"
+pC
+pC
+pC
+Tt
+ID
+FZ
+FZ
+JQ
+yt
+vi
+FZ
+ME
+vi
+Ag
+ME
+ME
+vi
+FZ
+aa
+Tt
+pC
+pC
+pC
+"}
+(4,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+tT
+tT
+wH
+wH
+wH
+KI
+KI
+wH
+wH
+KI
+KI
+KI
+KI
+aa
+mS
+pC
+pC
+pC
+"}
+(5,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+uA
+uT
+wH
+Yx
+Yh
+bX
+vZ
+Yh
+Yh
+rP
+bu
+Wn
+KI
+JQ
+HR
+mx
+pC
+pC
+"}
+(6,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+LS
+JK
+mi
+Dp
+DW
+Mk
+Nn
+DW
+DW
+bi
+Od
+Pp
+wH
+tT
+tT
+eL
+pC
+pC
+"}
+(7,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+rC
+Rk
+wH
+EA
+Dg
+LK
+LK
+Yh
+Yh
+BJ
+xk
+Yh
+KI
+qO
+Gb
+JQ
+pC
+pC
+"}
+(8,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+XV
+Cb
+wH
+CT
+Do
+Do
+Iw
+Yh
+Yh
+Yh
+jH
+Yh
+LC
+fA
+vc
+ju
+pC
+pC
+"}
+(9,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+eb
+jv
+wH
+qV
+hB
+Dm
+pR
+zj
+tS
+Hv
+LU
+DS
+Jw
+to
+Gb
+ME
+pC
+pC
+"}
+(10,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+rC
+cC
+nP
+ql
+ge
+JZ
+pR
+zj
+Je
+SP
+DI
+mZ
+wH
+tT
+tT
+kg
+pC
+pC
+"}
+(11,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+rr
+Xr
+wH
+qV
+wE
+ig
+pR
+jf
+Wo
+Pt
+Ln
+Yh
+wH
+ME
+Fg
+hF
+pC
+pC
+"}
+(12,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+Az
+aM
+nP
+bf
+DS
+DS
+DS
+hj
+KY
+DS
+zB
+Iw
+KI
+aa
+mX
+mX
+pC
+pC
+"}
+(13,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+qs
+aJ
+wH
+pj
+Yh
+DT
+qJ
+Nf
+kY
+Nf
+tV
+Yh
+wH
+aa
+mX
+mX
+pC
+pC
+"}
+(14,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+tT
+tT
+wH
+ES
+wH
+NZ
+Ii
+Rl
+cV
+AT
+if
+ns
+wH
+aa
+mX
+mX
+pC
+pC
+"}
+(15,1,1) = {"
+pC
+pC
+pC
+Tt
+Gb
+hT
+YQ
+uy
+PE
+wH
+mJ
+cD
+dm
+li
+cD
+SC
+BT
+wH
+aa
+mX
+mX
+pC
+pC
+"}
+(16,1,1) = {"
+pC
+pC
+pC
+Tt
+tT
+Ap
+PW
+we
+sn
+wH
+hz
+cD
+cD
+Bf
+mh
+RY
+iP
+wH
+JE
+mX
+pC
+pC
+pC
+"}
+(17,1,1) = {"
+pC
+pC
+pC
+Tt
+wr
+wr
+wr
+wr
+wr
+CD
+wH
+Sv
+WO
+WK
+Ra
+JF
+wH
+wH
+JE
+mX
+pC
+pC
+pC
+"}
+(18,1,1) = {"
+pC
+pC
+pC
+Tt
+wr
+Ny
+Em
+yK
+CG
+tz
+Gm
+QU
+Li
+Fj
+Li
+cG
+VB
+Ka
+aa
+Tt
+pC
+pC
+pC
+"}
+(19,1,1) = {"
+pC
+pC
+pC
+Tt
+wr
+Og
+ED
+bg
+tB
+tz
+Li
+Li
+Li
+Fj
+vR
+cG
+qA
+Ka
+aa
+Tt
+pC
+pC
+pC
+"}
+(20,1,1) = {"
+pC
+pC
+pC
+Tt
+wr
+cu
+dh
+eQ
+Rf
+tz
+vR
+Li
+pm
+tZ
+ak
+tb
+Li
+JJ
+JE
+Tt
+pC
+pC
+pC
+"}
+(21,1,1) = {"
+pC
+pC
+pC
+Tt
+wr
+Cy
+EN
+QH
+ck
+tz
+Li
+Li
+Hs
+ub
+Kf
+fy
+VG
+Ka
+JE
+mX
+pC
+pC
+pC
+"}
+(22,1,1) = {"
+pC
+pC
+pC
+Tt
+wr
+Or
+sA
+yH
+Aj
+tz
+Qf
+Li
+VG
+kZ
+LZ
+cG
+Yz
+Ka
+JE
+mX
+mX
+pC
+pC
+"}
+(23,1,1) = {"
+pC
+pC
+pC
+Tt
+tz
+Zy
+sv
+sv
+sv
+tz
+vR
+XK
+NS
+gJ
+Ee
+gl
+Li
+Ka
+aa
+mX
+mX
+pC
+pC
+"}
+(24,1,1) = {"
+pC
+pC
+pC
+Tt
+Ka
+Py
+dF
+yh
+Hx
+RD
+XS
+Gf
+Fu
+WS
+Hj
+fy
+Li
+JJ
+aa
+mX
+mX
+pC
+pC
+"}
+(25,1,1) = {"
+pC
+pC
+pC
+Tt
+Ka
+ch
+Xb
+bG
+gU
+Ka
+XG
+mb
+mb
+BX
+mb
+IQ
+Le
+Ka
+aa
+mX
+pC
+pC
+pC
+"}
+(26,1,1) = {"
+pC
+qa
+pC
+Tt
+Ka
+Ka
+Ka
+Ka
+Ka
+Ka
+Ka
+JJ
+wH
+mr
+wH
+JJ
+Ka
+Ka
+aa
+Tt
+pC
+qa
+pC
+"}
+(27,1,1) = {"
+La
+Lt
+rB
+rB
+UT
+wH
+wH
+wc
+lo
+lo
+iK
+iK
+wH
+ND
+wH
+lo
+iK
+lo
+iK
+rB
+rB
+Lt
+He
+"}
+(28,1,1) = {"
+pC
+pC
+Tt
+Tt
+iD
+bY
+sg
+iD
+Xg
+iD
+iD
+Xg
+Xg
+iD
+iD
+iD
+iD
+Xg
+Xg
+Tt
+pC
+pC
+pC
+"}
+(29,1,1) = {"
+pC
+pC
+pC
+mS
+iD
+YF
+Mo
+iD
+iD
+iD
+iD
+iD
+md
+Xg
+iD
+iD
+Xg
+Xg
+iD
+Tt
+Tt
+pC
+pC
+"}
+(30,1,1) = {"
+La
+Lt
+rB
+rB
+MU
+wH
+wH
+fZ
+Qr
+Qr
+ol
+ol
+ol
+ol
+ol
+Qr
+Qr
+ol
+ol
+rB
+rB
+Lt
+He
+"}
+(31,1,1) = {"
+pC
+ld
+pC
+Tt
+Tt
+mX
+mX
+mX
+Tt
+Tt
+mX
+Lt
+mX
+mX
+Tt
+mX
+Tt
+Tt
+Tt
+Tt
+pC
+ld
+pC
+"}

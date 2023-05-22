@@ -33,8 +33,7 @@
 
 /obj/item/weapon/tank/Destroy()
 	if(air_contents)
-		qdel(air_contents)
-		air_contents = null
+		QDEL_NULL(air_contents)
 
 	if(istype(loc, /obj/machinery/portable_atmospherics))
 		var/obj/machinery/portable_atmospherics/holder = loc

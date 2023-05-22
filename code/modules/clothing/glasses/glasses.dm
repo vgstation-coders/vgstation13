@@ -7,12 +7,14 @@
 	w_class = W_CLASS_SMALL
 	body_parts_covered = EYES
 	slot_flags = SLOT_EYES
+	autoignition_temperature = null
 	var/vision_flags = 0
 	var/darkness_view = 0//Base human is 2
 	var/invisa_view = 0
 	var/cover_hair = 0
 	var/see_invisible = 0
 	var/see_in_dark = 0
+	var/seedarkness = TRUE
 	var/prescription = 0
 	min_harm_label = 12
 	harm_label_examine = list("<span class='info'>A label is covering one lens, but doesn't reach the other.</span>","<span class='warning'>A label covers the lenses!</span>")
@@ -25,6 +27,9 @@
 	var/my_dark_plane_alpha_override
 	var/my_dark_plane_alpha_override_value
 
+/obj/item/clothing/glasses/proc/update_perception(var/mob/living/carbon/human/M)
+	return
+
 /*
 SEE_SELF  // can see self, no matter what
 SEE_MOBS  // can see all mobs, no matter what
@@ -34,7 +39,6 @@ SEE_PIXELS// if an object is located on an unlit area, but some of its pixels ar
           // in a lit area (via pixel_x,y or smooth movement), can see those pixels
 BLIND     // can't see anything
 */
-
 /obj/item/clothing/glasses/mob_can_equip(mob/living/carbon/human/user, slot, disable_warning = 0)
 	var/mob/living/carbon/human/H = user
 	if(!istype(H) || stored_glasses || !glasses_fit || slot == slot_l_store || slot == slot_r_store)
@@ -88,6 +92,7 @@ BLIND     // can't see anything
 	name = "prescription mesons"
 	desc = "Optical Meson Scanner with prescription lenses."
 	prescription = 1
+	nearsighted_modifier = -3
 	eyeprot = -1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
@@ -95,12 +100,14 @@ BLIND     // can't see anything
 	name = "prescription health scanner HUD"
 	desc = "A Health Scanner HUD with prescription lenses."
 	prescription = 1
+	nearsighted_modifier = -3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/sechud/prescription
 	name = "prescription security HUD"
 	desc = "A Security HUD with prescription lenses."
 	prescription = 1
+	nearsighted_modifier = -3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /*
@@ -123,6 +130,7 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/science/prescription
 	name = "prescription science goggles"
 	prescription = 1
+	nearsighted_modifier = -3
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/science/attack_self(mob/user)
@@ -199,7 +207,7 @@ var/list/science_goggles_wearers = list()
 	name = "eyepatch"
 	desc = "Yarr."
 	icon_state = "eyepatch0"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	item_state = "eyepatch0"
 	min_harm_label = 0
 	var/flipped = FALSE
@@ -207,7 +215,7 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/eyepatch/attack_self(mob/user)
 	flipped = !flipped
 	icon_state = "eyepatch[flipped]"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	item_state = "eyepatch[flipped]"
 	to_chat(user, "You flip \the [src] to your [flipped ? "left" : "right"] eye.")
 
@@ -228,6 +236,7 @@ var/list/science_goggles_wearers = list()
 	icon_state = "glasses"
 	item_state = "glasses"
 	prescription = 1
+	nearsighted_modifier = -3
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	w_class = W_CLASS_TINY
 
@@ -248,6 +257,28 @@ var/list/science_goggles_wearers = list()
 	item_state = "hipster_glasses"
 	species_fit = list(GREY_SHAPED)
 
+/obj/item/clothing/glasses/regular/tracking
+	name = "eye tracking glasses"
+	desc = "Eye tracking glasses which allow the wearer to see what others are looking at."
+	icon_state = "tracking"
+	item_state = "tracking"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/glasses/regular/tracking/detective
+	name = "investigation glasses"
+	desc = "A SecurityHUD with built-in eye tracking glasses which allow the wearer to see what others are looking at."
+	icon_state = "investigation"
+	item_state = "investigation"
+	var/obj/item/clothing/glasses/hud/security/hud = null
+	darkness_view = -1
+	eyeprot = 1
+	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/glasses/regular/tracking/detective/New()
+	..()
+	src.hud = new/obj/item/clothing/glasses/hud/security(src)
+	return
+
 /obj/item/clothing/glasses/gglasses
 	name = "Green Glasses"
 	desc = "Forest green glasses, like the kind you'd wear when hatching a nasty scheme."
@@ -264,6 +295,16 @@ var/list/science_goggles_wearers = list()
 	darkness_view = -1
 	eyeprot = 1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/glasses/sunglasses/equipped(mob/M, slot)
+	if (M.self_vision)
+		M.self_vision.target_alpha = SUNGLASSES_TARGET_ALPHA // You see almost nothing with those on!
+	return ..()
+
+/obj/item/clothing/glasses/sunglasses/unequipped(mob/living/carbon/human/M, from_slot)
+	if (M.self_vision)
+		M.self_vision.target_alpha = initial(M.self_vision.target_alpha)
+	return ..()
 
 /obj/item/clothing/glasses/sunglasses/virus
 
@@ -342,6 +383,8 @@ var/list/science_goggles_wearers = list()
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	var/up = 0
 	eyeprot = 3
+	var/visionworsen = 5
+	nearsighted_modifier = 5
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/welding/attack_self()
@@ -358,12 +401,14 @@ var/list/science_goggles_wearers = list()
 		if(src.up)
 			src.up = !src.up
 			eyeprot = 3
+			nearsighted_modifier = visionworsen
 			body_parts_covered |= EYES
 			icon_state = initial(icon_state)
 			to_chat(C, "You flip the [src] down to protect your eyes.")
 		else
 			src.up = !src.up
 			eyeprot = 0
+			nearsighted_modifier = 0
 			body_parts_covered &= ~EYES
 			icon_state = "[initial(icon_state)]up"
 			to_chat(C, "You push the [src] up out of your face.")
@@ -377,6 +422,9 @@ var/list/science_goggles_wearers = list()
 	item_state = "rwelding-g"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MATERIALS + "=3"
+	nearsighted_modifier = 0
+	visionworsen = 0
+
 
 /obj/item/clothing/glasses/sunglasses/blindfold
 	name = "blindfold"
@@ -392,6 +440,7 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/sunglasses/prescription
 	name = "prescription sunglasses"
 	prescription = 1
+	nearsighted_modifier = -3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/big
@@ -494,7 +543,7 @@ var/list/science_goggles_wearers = list()
 	desc = "Thermals in the shape of glasses."
 	icon_state = "thermal"
 	item_state = "glasses"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	origin_tech = Tc_MAGNETS + "=3"
 	vision_flags = SEE_MOBS
 	see_invisible = SEE_INVISIBLE_MINIMUM
@@ -528,7 +577,7 @@ var/list/science_goggles_wearers = list()
 	name = "Thermonocle"
 	desc = "A monocle thermal."
 	icon_state = "thermoncle"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	flags = 0 //doesn't protect eyes because it's a monocle, duh
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
@@ -537,10 +586,12 @@ var/list/science_goggles_wearers = list()
 	if(harm_labeled < min_harm_label)
 		vision_flags |= SEE_MOBS
 		see_invisible |= SEE_INVISIBLE_MINIMUM
+		seedarkness = FALSE
 		invisa_view = 2
 	else
 		vision_flags &= ~SEE_MOBS
 		see_invisible &= ~SEE_INVISIBLE_MINIMUM
+		seedarkness = TRUE
 		invisa_view = 0
 
 /obj/item/clothing/glasses/thermal/eyepatch
@@ -591,6 +642,7 @@ var/list/science_goggles_wearers = list()
 	icon = 'icons/obj/items.dmi'
 	icon_state = "contact"
 	prescription = 1
+	nearsighted_modifier = -3
 	body_parts_covered = null
 
 /obj/item/clothing/glasses/contacts/polarized
@@ -599,6 +651,7 @@ var/list/science_goggles_wearers = list()
 	icon_state = "polarized_contact"
 	darkness_view = -1
 	prescription = 1
+	nearsighted_modifier = -3
 	eyeprot = 1
 
 //////////////////
@@ -658,8 +711,7 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/disable()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 	if (emitter)
 		emitter.unregister_event(/event/before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
 		emitter.unregister_event(/event/after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
@@ -671,15 +723,13 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/emitter/proc/update_emitter()
 	if (!emitter || !isturf(emitter.loc))
 		if (beam)
-			qdel(beam)
-			beam = null
+			QDEL_NULL(beam)
 		return
 	if (ismob(emitter))
 		var/mob/M = emitter
 		if (M.lying)
 			if(beam)
-				qdel(beam)
-				beam = null
+				QDEL_NULL(beam)
 			return
 	if (!beam)
 		beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
@@ -693,8 +743,7 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_start()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_end()
 	if (!emitter || !isturf(emitter.loc))

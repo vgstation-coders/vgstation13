@@ -18,8 +18,7 @@
 
 /obj/item/weapon/reagent_containers/borghypo/New(loc)
 	..(loc)
-	qdel(reagents)
-	reagents = null
+	QDEL_NULL(reagents)
 
 	for(var/reagent in reagent_ids)
 		var/datum/reagents/reagents = new(volume)
@@ -75,7 +74,7 @@
 		"<span class='warning'>[user] injects [M] with [src].</span>",\
 		"<span class='info'>You inject [M] with with [src].<span>")
 	to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
-	reagents.reaction(M, INGEST)
+	reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,amount_per_transfer_from_this)/(reagents.reagent_list.len))
 
 	if(M.reagents)
 		var/transferred = reagents.trans_to(M, amount_per_transfer_from_this)

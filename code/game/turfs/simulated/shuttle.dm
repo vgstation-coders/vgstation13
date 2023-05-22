@@ -18,6 +18,9 @@
 	)
 	return smoothables
 
+/turf/simulated/wall/shuttle/cannotSmoothWith()
+	return
+
 /turf/simulated/wall/shuttle/isSmoothableNeighbor(atom/A)
 	if (get_area(A) != get_area(src))
 		return 0
@@ -72,10 +75,9 @@
 	desc = "A huge chunk of metal used to separate rooms."
 	icon_state = "diagonalWall"
 	density = 1
-	plane = TURF_PLANE
-	layer = TURF_LAYER
 	anchored = 1
 	opacity = 1
+	is_on_mesons = TRUE
 
 /obj/structure/shuttle/diag_wall/initialize()
 	var/turf/T = get_turf(src)
@@ -187,16 +189,17 @@
 	icon_state = "floor4"
 
 
-/obj/machinery/podcomputer 
+/obj/machinery/podcomputer
 	name = "pod computer"
 	desc = "A computer for piloting escape pods. The software hasn't been updated since the autopilot system was installed and is mostly non-functional."
 	use_power = 0
 	icon = 'icons/obj/computer.dmi'
+	anchored = TRUE
 	icon_state = "podcomputer"
 	icon_state_open = "podcomputer_maint"
 
 	var/datum/shuttle/escape/pod/linked_pod
-	machine_flags = SCREWTOGGLE
+	machine_flags = SCREWTOGGLE | EMAGGABLE
 
 	hack_abilities = list(
 		/datum/malfhack_ability/oneuse/emag,
@@ -207,7 +210,7 @@
 /obj/machinery/podcomputer/Destroy()
 	linked_pod?.podcomputer = null
 	..()
-	
+
 /obj/machinery/podcomputer/process()
 	..()
 	update_icon()
@@ -228,7 +231,7 @@
 	..()
 	if(panel_open && emagged)
 		to_chat(user, "<span class='danger'>Some of the wires have been shorted out!</span>")
-	
+
 /obj/machinery/podcomputer/attackby(obj/item/O, mob/user)
 	..()
 	if(issolder(O) && emagged && panel_open)
@@ -248,7 +251,7 @@
 		icon_state = "podcomputer_shuttle"
 	else if(emagged)
 		icon_state = "podcomputer_error"
-	else 
+	else
 		icon_state = "podcomputer"
 
 

@@ -11,7 +11,7 @@
 	maxHealth = 200
 	health = 200 //The shield can only take so much beating (prevents perma-prisons)
 
-/obj/machinery/shield/acidable()
+/obj/machinery/shield/dissolvable()
 	return 0
 
 /obj/machinery/shield/New()
@@ -314,47 +314,68 @@
 		var/recalc = 0
 		var/locked = 1
 		var/destroyed = 0
+		var/shieldload = 0
 //		var/maxshieldload = 200
-		var/obj/structure/cable/attached		// the attached cable
+		var/datum/power_connection/consumer/cable/power_connection = null
 		var/storedpower = 0
+		var/storedpower_consumption = 50
 		flags = FPRINT
 		siemens_coefficient = 1
-		use_power = 0
+		use_power = MACHINE_POWER_USE_NONE
 
 		machine_flags = WRENCHMOVE | FIXED2WORK
+
+/obj/machinery/shieldwallgen/New()
+	power_connection = new(src)
+	power_connection.monitoring_enabled = TRUE
+	..()
+
+/obj/machinery/shieldwallgen/Destroy()
+	cleanup(NORTH)
+	cleanup(SOUTH)
+	cleanup(EAST)
+	cleanup(WEST)
+	if(power_connection)
+		QDEL_NULL(power_connection)
+	..()
 
 /obj/machinery/shieldwallgen/free_access
 	req_access = null
 
 /obj/machinery/shieldwallgen/proc/power()
-	if(!anchored)
-		power = 0
-		return 0
-	var/turf/T = src.loc
-
-	if(!T)
+	if (!anchored)
+		power = FALSE
 		return
-	var/obj/structure/cable/C = T.get_cable_node()
-	var/datum/powernet/PN
-	if(C)
-		PN = C.powernet		// find the powernet of the connected cable
 
-	if(!PN)
-		power = 0
-		return 0
+	if((power_connection.connected || power_connection.connect()))
+		// Store whatever power we've received this tick
+		storedpower += shieldload * power_connection.get_satisfaction()
 
-	var/surplus = max(PN.avail-PN.load, 0)
-	var/shieldload = min(rand(50,200), surplus)
-	if(shieldload==0 && storedpower <= 0)		// no cable or no power, and no power stored
-		power = 0
-		return 0
+		// Request power for next tick
+		shieldload = rand(storedpower_consumption, storedpower_consumption * 4)
+		power_connection.add_load(shieldload)
+		power_connection.monitor_demand = shieldload
+
+	// Attemp to consume stored power. If enough, we're powered,
+	if (storedpower >= storedpower_consumption)
+		storedpower -= storedpower_consumption
+		storedpower = clamp(storedpower, 0, maxstoredpower)
+		power = TRUE
 	else
-		power = 1	// IVE GOT THE POWER!
-		if(PN) //runtime errors fixer. They were caused by PN.newload trying to access missing network in case of working on stored power.
-			storedpower += shieldload
-			PN.load += shieldload //uses powernet power.
-//		message_admins("[PN.load]", 1)
-//		use_power(250) //uses APC power
+		power = FALSE
+
+/obj/machinery/shieldwallgen/proc/get_status_text()
+	if(!anchored)
+		return "<span class='warning'>It is not secured to the floor.</span>"
+	if(!power_connection.connected)
+		return "<span class='warning'>It is not connected to power.</span>"
+
+	. = "It is <span class='[storedpower>=storedpower_consumption?"info":"warning"]'>"
+	. += "[round((storedpower/maxstoredpower)*100)]%</span> charged. "
+	if(power_connection.get_satisfaction()>0)
+		. += "It is charging at at rate of [round(power_connection.get_satisfaction()*100)]%."
+	else
+		. += "<span class='warning'>It is not charging.</span>"
 
 /obj/machinery/shieldwallgen/attack_hand(mob/user as mob)
 	if(!anchored)
@@ -363,8 +384,8 @@
 	if(src.locked && !istype(user, /mob/living/silicon))
 		to_chat(user, "<span class='warning'>The controls are locked!</span>")
 		return 1
-	if(power != 1)
-		to_chat(user, "<span class='warning'>The shield generator needs to be powered by wire underneath.</span>")
+	if(!power)
+		to_chat(user, "<span class='warning'>The shield generator's status display flashes: [src.get_status_text()]</span>")
 		return 1
 
 	if(src.active)
@@ -383,15 +404,13 @@
 			"You hear heavy droning.")
 	src.add_fingerprint(user)
 
+/obj/machinery/shieldwallgen/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>[src.get_status_text()]</span>")
+
 /obj/machinery/shieldwallgen/process()
 	spawn(100)
 		power()
-		if(power)
-			storedpower -= 50 //this way it can survive longer and survive at all
-	if(storedpower >= maxstoredpower)
-		storedpower = maxstoredpower
-	if(storedpower <= 0)
-		storedpower = 0
 //	if(shieldload >= maxshieldload) //there was a loop caused by specifics of process(), so this was needed.
 //		shieldload = maxshieldload
 
@@ -471,9 +490,10 @@
 		to_chat(user, "Turn off the field generator first.")
 		return FALSE
 	. = ..()
-	if(!.)
-		return
-	power()
+	if(anchored)
+		power_connection.connect()
+	else
+		power_connection.disconnect()
 
 /obj/machinery/shieldwallgen/attack_ghost(mob/user)
 	if(isAdminGhost(user))
@@ -506,14 +526,6 @@
 			if(!G.active)
 				return
 
-/obj/machinery/shieldwallgen/Destroy()
-	src.cleanup(1)
-	src.cleanup(2)
-	src.cleanup(4)
-	src.cleanup(8)
-	attached = null
-	..()
-
 /obj/machinery/shieldwallgen/bullet_act(var/obj/item/projectile/Proj)
 	storedpower -= Proj.damage
 	return ..()
@@ -533,7 +545,7 @@
 	var/obj/machinery/shieldwallgen/gen_primary
 	var/obj/machinery/shieldwallgen/gen_secondary
 
-/obj/machinery/shieldwall/acidable()
+/obj/machinery/shieldwall/dissolvable()
 	return 0
 
 /obj/machinery/shieldwall/can_overload()

@@ -15,6 +15,7 @@
 	icon_state = "firstaid"
 	throw_speed = 2
 	throw_range = 8
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 
 /obj/item/weapon/storage/firstaid/fire
@@ -209,10 +210,97 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		/obj/item/weapon/dice/d20,
 	)
 
+/obj/item/weapon/storage/pill_bottle/dice/fudge
+	name = "bag of fudge dice"
+	items_to_spawn = list(
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/fudge,
+	)
+
+/obj/item/weapon/storage/pill_bottle/dice/d6
+	name = "bag of d6"
+	items_to_spawn = list(
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/dice,
+	)
+
 /obj/item/weapon/storage/pill_bottle/dice/New()
 	..()
 	overlays -= colour_overlay
 	colour_overlay = null
+	verbs -= /obj/item/weapon/storage/pill_bottle/verb/change
+
+/obj/item/weapon/storage/pill_bottle/dice/d6/New()
+	..()
+	var/colorchoice = pick(
+		300; "#ffffff", //white
+		100; "#00aedb", //teal
+		100; "#d11141", //red
+		100; "#00b159", //green
+		100; "#ffc425", //gold
+		)
+	for(var/obj/O in contents)
+		O.color = colorchoice
+
+/obj/item/weapon/storage/pill_bottle/dice/cup
+	name = "dice cup"
+	icon = 'icons/obj/drinks.dmi'
+	icon_state = "sakeglass"
+	items_to_spawn = list()
+
+/obj/item/weapon/storage/pill_bottle/dice/cup/on_attack(atom/attacked, mob/user)
+	..()
+	if(contents.len)
+		empty_contents_to(get_turf(attacked))
+
+/obj/item/weapon/storage/pill_bottle/dice/cup/throw_impact(atom/impacted_atom, speed, mob/user)
+	if(..() && contents.len)
+		empty_contents_to(get_turf(src))
+
+/obj/item/weapon/storage/pill_bottle/dice/cup/empty_contents_to(var/atom/place)
+	var/turf = get_turf(place)
+	if(contents.len)
+		visible_message("<span class='notice'>Everything goes flying out of \the [src]!</span>")
+	var/list/results_list = list()
+	var/total_result = 0
+	var/has_dice = 0
+	for(var/obj/item/weapon/dice/objects in contents)
+		has_dice = 1
+		remove_from_storage(objects, turf)
+		objects.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+		objects.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
+		var/result = objects.diceroll(usr, TRUE, TRUE)
+		results_list += result
+		//fudge dice are -1 -1 0 0 1 1
+		if(istype(objects,/obj/item/weapon/dice/fudge))
+			switch(result)
+				if("+")
+					total_result += 1
+				if("-")
+					total_result += -1
+				if("a blank side")
+					total_result += 0
+		else
+			total_result += result
+	if(has_dice)
+		var/result_string = jointext(results_list, ", ")
+		if(usr) //Dice was rolled in someone's hand
+			usr.visible_message("<span class='notice'>[usr] has rolled dice out of \the [src]. The results were <i>[result_string]</i>, totaling <b>[total_result]</b>.</span>", \
+								 "<span class='notice'>You roll the dice. The results were <i>[result_string]</i>, totaling <b>[total_result]</b>.</span>", \
+								 "<span class='notice'>You hear the rolling of dice.</span>")
+		else
+			visible_message("<span class='notice'>Dice roll out of \the [src]. The results were <i>[result_string]</i>, totaling <b>[total_result]</b>.</span>")
+	..()
 
 /obj/item/weapon/storage/pill_bottle/dice/with_die/New()
 	. = ..()

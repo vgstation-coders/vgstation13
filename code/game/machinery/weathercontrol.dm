@@ -3,7 +3,7 @@
 	desc = "A device which uses weather control techniques such as cloud seeding to manipulate atmospheric conditions. It runs on bluespace crystals."
 	icon = 'icons/obj/stationobjs_32x64.dmi'
 	icon_state = "wcd0"
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	density = 1
 	anchored = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK

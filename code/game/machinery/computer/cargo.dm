@@ -303,15 +303,18 @@ For vending packs, see vending_packs.dm*/
 		var/mm = text2num(time2text(timeleft, "mm")) // Set the minute
 		var/ss = text2num(time2text(timeleft, "ss")) // Set the second
 		var/weighedtext = CF.weighed ? "Yes" : "No"
-		var/stampedtext = CF.associated_manifest.stamped && CF.associated_manifest.stamped.len ? "Yes" : "No"
-		forward_list.Add(list(list("name" = CF.name, "origin_station_name" = CF.origin_station_name, "origin_sender_name" = CF.origin_sender_name, "worth" = displayworth, "mm" = mm, "ss" = ss, "weighed" = weighedtext, "stamped" = stampedtext)))
+		var/stampedtext = "No"
+		if(CF.associated_manifest)
+			stampedtext = CF.associated_manifest.stamped ? "Yes" : "No"
+		forward_list.Add(list(list("name" = CF.name, "origin_station_name" = CF.origin_station_name, "origin_sender_name" = CF.origin_sender_name, "worth" = displayworth, "mm" = mm, "ss" = ss, "weighed" = weighedtext, "associated manifest" = CF.associated_manifest ? "Yes" : "No", "stamped" = stampedtext)))
 	data["forwards"] = forward_list
 	data["are_forwards"] = SSsupply_shuttle.cargo_forwards.len
 
 	var/datum/money_account/account = current_acct["account"]
-	data["name_of_source_account"] = account.owner_name
-	data["authorized_name"] = current_acct["authorized_name"]
-	data["money"] = account.fmtBalance()
+	if(account)
+		data["name_of_source_account"] = account.owner_name
+		data["authorized_name"] = current_acct["authorized_name"]
+		data["money"] = account.fmtBalance()
 	data["send"] = list("send" = 1)
 	data["forward"] = list("forward" = 1)
 	data["moving"] = SSsupply_shuttle.moving
@@ -365,6 +368,12 @@ For vending packs, see vending_packs.dm*/
 			to_chat(usr, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
 
 		else if(SSsupply_shuttle.at_station)
+			//check to see if there are unprocessed forwards and warn if so
+			if(SSsupply_shuttle.cargo_forwards.len)
+				var/unfinished_forwards = check_forwards()
+				if(unfinished_forwards && alert(usr, "There are crate forwards that are not present, stamped, and weighed. Send the shuttle back anyway?", "Forwarding Warning", "Yes", "No") == "No")
+					return 1
+
 			SSsupply_shuttle.moving = -1
 			SSsupply_shuttle.sell()
 			SSsupply_shuttle.send()
@@ -412,7 +421,7 @@ For vending packs, see vending_packs.dm*/
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
 		var/timeout = world.time + 600
-		var/reason = stripped_input(usr,"Reason:","Why do you require this item?","",REASON_LEN)
+		var/reason = stripped_input(usr,"Why do you want this crate and where/to whom would you like it sent?","Reason/Destination:","",REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)
@@ -505,6 +514,22 @@ For vending packs, see vending_packs.dm*/
 	status_signal.data["command"] = command
 
 	frequency.post_signal(src, status_signal)
+
+
+//helper function for sending the supply shuttle back, checks for commonly-missed crate forward mistakes
+/obj/machinery/computer/supplycomp/proc/check_forwards()
+	if(SSsupply_shuttle.cargo_forwards.len == 0)
+		return 0
+	for(var/datum/cargo_forwarding/CF in SSsupply_shuttle.cargo_forwards)
+		if(!CF.associated_crate || get_area(CF.associated_crate) != cargo_shuttle.linked_area)
+			return 1
+		if(!CF.weighed)
+			return 1
+		if(!CF.associated_manifest || get_area(CF.associated_manifest) != cargo_shuttle.linked_area)
+			return 1
+		if(CF.associated_manifest && (!CF.associated_manifest.stamped || !CF.associated_manifest.stamped.len))
+			return 1
+	return 0
 
 /obj/machinery/computer/ordercomp
 	name = "Supply ordering console"
@@ -650,7 +675,7 @@ For vending packs, see vending_packs.dm*/
 			var/max_crates = round((account.money - total_money_req) / P.cost)
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
-		var/reason = stripped_input(usr,"Reason:","Why do you require this item?","",REASON_LEN)
+		var/reason = stripped_input(usr,"Why do you want this crate and where/to whom would you like it sent?","Reason/Destination:","",REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)

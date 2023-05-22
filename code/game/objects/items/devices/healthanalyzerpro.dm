@@ -21,6 +21,7 @@
 	starting_materials = list(MAT_IRON = 700, MAT_PLASTIC = 200, MAT_URANIUM = 50, MAT_SILVER = 50, MAT_GOLD = 50)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=4"
 	attack_delay = 0
 	var/last_scantime = 0
@@ -163,7 +164,7 @@
 		if(!scan_success)
 			to_chat(user, "<span class='warning'>Insuffient data retrieved. Please ensure that subject has proper surgical incisions.</span>")
 		else
-			to_chat(user, "<span class='info'>Autopsy analysis of [M] cocluded.</span>")
+			to_chat(user, "<span class='info'>Autopsy analysis of [M] concluded.</span>")
 			user << browse(dat, "window=borerscan;size=430x600")
 			last_reading = dat
 			last_scantime = world.time
@@ -230,5 +231,4 @@
 	if(do_mob(user, O, 1 SECONDS))
 		immune.attack(O,user)
 		last_scantime = world.time
-		qdel(immune)
-		immune = null
+		QDEL_NULL(immune)

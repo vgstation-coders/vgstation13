@@ -53,6 +53,7 @@
 		if (istype(O, /obj/machinery/door/firedoor))
 			var/obj/machinery/door/firedoor/FD = O
 			if (!FD.operating)
+				playsound(FD, 'sound/mecha/hydraulic.ogg', 100, 1)
 				FD.force_open(chassis.occupant, src)
 			return
 		if(!O.anchored)
@@ -69,6 +70,7 @@
 			else if(W.cargo.len < W.cargo_capacity)
 				occupant_message("You lift [target] and start to load it into cargo compartment.")
 				chassis.visible_message("[chassis] lifts [target] and starts to load it into cargo compartment.")
+				playsound(chassis, 'sound/mecha/hydraulic.ogg', 100, 1)
 				set_ready_state(0)
 				chassis.use_power(energy_drain)
 				O.anchored = 1 //Why
@@ -101,6 +103,8 @@
 			if(istype(chassis, /obj/mecha/working/clarke))
 				to_chat(chassis.occupant, "<span class='warning'>WARNING: OSHA regulations prohibit use of \the [src] in that way.</span>")
 				return
+			playsound(chassis, 'sound/mecha/hydraulic.ogg', 100, 1)
+			playsound(target, pick('sound/effects/squelch1.ogg', 'sound/effects/flesh_squelch.ogg'), 100, 1)
 			M.take_overall_damage(dam_force)
 			if(!M)
 				return //we killed some sort of simple animal and the corpse was deleted.
@@ -129,6 +133,18 @@
 	force = 15
 	var/dig_walls = 0 //probably a better way to do this through bitflags but I don't really know how
 
+/obj/item/mecha_parts/mecha_equipment/tool/drill/proc/effects_pre(atom/target)
+	playsound(target, 'sound/items/surgicaldrill.ogg', 100, 1)
+	if(!istype(target, /mob/living))
+		spark(target)
+
+/obj/item/mecha_parts/mecha_equipment/tool/drill/proc/effects_post(atom/target)
+	playsound(target, 'sound/mecha/mechdrill.ogg', 100, 1)
+	if(!istype(target, /mob/living))
+		spark(target)
+	else
+		playsound(target, pick('sound/effects/squelch1.ogg', 'sound/effects/flesh_squelch.ogg'), 100, 1)
+
 /obj/item/mecha_parts/mecha_equipment/tool/drill/action(atom/target)
 	if(!action_checks(target))
 		return
@@ -146,22 +162,27 @@
 
 	else if(istype(target, /turf/simulated/wall))
 		if(dig_walls)
+			effects_pre(target)
 			var/delay = istype(target, /turf/simulated/wall/r_wall) ? 10 : 2
 			if(do_after_cooldown(target, delay) && C == chassis.loc && src == chassis.selected)
 				log_message("Drilled through [target]")
 				occupant_message("<span class='red'><b>Your powerful drill screeches as it tears through the last of \the [target], leaving nothing but a girder!</b></span>")
 				chassis.visible_message("<span class='red'><b>[chassis] drills through \the [target]!</b></span>", "You hear a drill tearing through plating.")
+				effects_post(target)
 				//target.ex_act(3) //Why
 				target.mech_drill_act(3)
 		else
+			effects_pre(target)
 			if(do_after_cooldown(target, 1) && C == chassis.loc && src == chassis.selected)
 				occupant_message("<span class='red'>[target] is too durable to drill through.</span>")
 
 	else if(istype(target, /obj/structure/girder))
+		effects_pre(target)
 		if(do_after_cooldown(target) && C == chassis.loc && src == chassis.selected)
 			log_message("Drilled through [target]")
 			occupant_message("<span class='red'><b>Your drill destroys \the [target]!</b></span>")
 			chassis.visible_message("<span class='red'><b>[chassis] destroys \the [target]!</b></span>", "You hear a drill breaking something.")
+			effects_post(target)
 			target.mech_drill_act(2)
 
 	else if(istype(target, /turf/unsimulated/mineral))
@@ -203,7 +224,9 @@
 				occupant_message("<span class='notice'>[count] sand successfully loaded into cargo compartment.</span>")
 
 	else
+		effects_pre(target)
 		if(do_after_cooldown(target, 1) && C == chassis.loc && src == chassis.selected && target.loc == T) //also check that our target hasn't moved
+			effects_post(target)
 			if(istype(target, /mob/living))
 				var/mob/living/M = target
 				M.attack_log +="\[[time_stamp()]\]<font color='orange'> Mech Drilled by [chassis.occupant.name] ([chassis.occupant.ckey]) with [src.name]</font>"
@@ -286,7 +309,8 @@
 			for(var/obj/structure/cable/powercreeper/C in range(chassis,i == 4 ? 2 : 1))
 				if(get_dir(chassis,C)&chassis.dir || C.loc == get_turf(chassis))
 					if(istype(C, /obj/structure/cable/powercreeper))
-						C.die()
+						spawn(0)
+							C.die()
 						eradicated++
 			sleep(3)
 		if(eradicated)
@@ -323,7 +347,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M)
 	if(..())
-		if(istype(M, /obj/mecha/working/ripley/firefighter) || istype(M, /obj/mecha/working/clarke))
+		if(istype(M, /obj/mecha/working/ripley/mk2/firefighter) || istype(M, /obj/mecha/working/clarke))
 			return 1
 	return 0
 
@@ -528,12 +552,9 @@
 	red_tool_list += src
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Destroy()
-	qdel(RPD)
-	RPD = null
-	qdel(RCD)
-	RCD = null
-	qdel(sock)
-	sock = null
+	QDEL_NULL(RPD)
+	QDEL_NULL(RCD)
+	QDEL_NULL(sock)
 	red_tool_list -= src
 	..()
 
@@ -899,8 +920,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/Destroy()
 	chassis.overlays -= droid_overlay
-	qdel(pr_repair_droid)
-	pr_repair_droid = null
+	QDEL_NULL(pr_repair_droid)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/detach()
@@ -997,8 +1017,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/Destroy()
-	qdel(pr_energy_relay)
-	pr_energy_relay = null
+	QDEL_NULL(pr_energy_relay)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/detach()
@@ -1137,8 +1156,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/generator/Destroy()
-	qdel(pr_mech_generator)
-	pr_mech_generator = null
+	QDEL_NULL(pr_mech_generator)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/generator/proc/init()
@@ -1250,7 +1268,7 @@
 		EG.log_message("Deactivated - no fuel.")
 		EG.set_ready_state(1)
 		return 0
-	if(anyprob(EG.reliability))
+	if(prob(EG.reliability))
 		EG.critfail()
 		stop()
 		return 0
@@ -1407,10 +1425,8 @@
 	pr_switchtool.toggle()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/Destroy()
-	qdel(switchtool)
-	switchtool = null
-	qdel(pr_switchtool)
-	pr_switchtool = null
+	QDEL_NULL(switchtool)
+	QDEL_NULL(pr_switchtool)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/action(atom/target)
@@ -1548,8 +1564,7 @@
 	collector.connected_module = src
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/Destroy()
-	qdel(collector)
-	collector = null
+	QDEL_NULL(collector)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/action(atom/target)
@@ -1579,6 +1594,54 @@
 	if(collector.P.air_contents[GAS_PLASMA] <= 0)
 		return "[..()] ERROR: Tank empty. \[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 	return "[..()] \[<a href='?src=\ref[src];toggle=0'>[collector.active ? "Deactivate" : "Activate"] radiation collector array</a>\]\[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
+
+/obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade
+	name = "Ripley MK-II Conversion Kit"
+	desc = "A pressurized canopy attachment kit for an Autonomous Power Loader Unit \"Ripley\" MK-I mecha, to convert it to the slower, but space-worthy MK-II design. Requires access to the internal compartments, and that the mech has a power source, is unoccupied and the cargo compartment is empty."
+	icon_state = "ripleyupgrade"
+
+/obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade/can_attach(obj/mecha/working/ripley/M)
+	if(M.enclosed) // i'm dumb and missed why istype wasn't working :c
+		return 0
+	if(M.cargo.len)
+		return 0
+	if(!M.mech_maints_ready) //non-removable upgrade, so lets make sure the pilot or owner has their say.
+		return 0
+	if(M.occupant) //We're actualy making a new mech and swapping things over, it might get weird if players are involved
+		return 0
+	if(!M.cell) //Turns out things break if the cell is missing
+		return 0
+	return 1
+
+/obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade/attach(obj/mecha/markone)
+	var/obj/mecha/working/ripley/mk2/marktwo = new (get_turf(markone),1)
+	if(!marktwo)
+		return
+	qdel(marktwo.cell)
+	marktwo.cell = null
+	if (markone.cell)
+		marktwo.cell = markone.cell
+		markone.cell.forceMove(marktwo)
+		markone.cell = null
+	qdel(marktwo.tracking)
+	marktwo.tracking = null
+	if (markone.tracking)
+		marktwo.tracking = markone.tracking
+		markone.tracking.forceMove(marktwo)
+		markone.tracking = null
+	for(var/obj/item/mecha_parts/mecha_equipment/equipment in markone.equipment) //Move the equipment over...
+		equipment.detach(marktwo)
+		equipment.attach(marktwo)
+	marktwo.dna = markone.dna
+	if(markone.get_health() < 100)
+		marktwo.health = markone.health
+	marktwo.health = marktwo.health
+	if(markone.name != initial(markone.name))
+		marktwo.name = markone.name
+	markone.wreckage = FALSE
+	qdel(markone)
+	qdel(src)
+	playsound(get_turf(marktwo),'sound/items/ratchet.ogg',50,TRUE)
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED

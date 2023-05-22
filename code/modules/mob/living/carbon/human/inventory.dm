@@ -1,18 +1,3 @@
-/mob/living/carbon/human/verb/quick_equip()
-	set name = "quick-equip"
-	set hidden = 1
-
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		var/obj/item/I = H.get_active_hand()
-		if(!I)
-			to_chat(H, "<span class='notice'>You are not holding anything to equip.</span>")
-			return
-		if(H.equip_to_appropriate_slot(I))
-			update_inv_hand(active_hand)
-		else
-			to_chat(H, "<span class='warning'>You are unable to equip that.</span>")
-
 /mob/living/carbon/human/get_all_slots()
 	. = get_head_slots() | get_body_slots()
 
@@ -111,8 +96,7 @@
 
 	switch (act_on_fail)
 		if(EQUIP_FAILACTION_DELETE)
-			qdel(W)
-			W = null
+			QDEL_NULL(W)
 		if(EQUIP_FAILACTION_DROP)
 			W.forceMove(get_turf(src)) // I think.
 	return null
@@ -373,8 +357,7 @@
 		if(CANNOT_EQUIP)
 			switch(act_on_fail)
 				if(EQUIP_FAILACTION_DELETE)
-					qdel(W)
-					W = null
+					QDEL_NULL(W)
 				if(EQUIP_FAILACTION_DROP)
 					W.forceMove(get_turf(src)) //Should this be using drop_from_inventory instead?
 				else

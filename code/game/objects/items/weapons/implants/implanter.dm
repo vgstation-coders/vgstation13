@@ -142,3 +142,37 @@
 		c.scanned = I
 		c.scanned.forceMove(c)
 		update()
+
+/obj/item/weapon/implanter/vocal
+	name = "implanter (V)"
+	desc = "A small device used to apply implants to people."
+	imp_type = /obj/item/weapon/implant/vocal
+	var/storedcode = ""			// code stored
+
+/obj/item/weapon/implanter/vocal/attack_self(mob/user)
+	if(istype(imp,imp_type))
+		var/uselevel = alert(user, "Which level of complexity do you want to work with? Basic is a simple word replacement with regex, advanced is an implementation of NTSL as found in telecomms servers.", "Level of vocal manipulation", "Basic", "Advanced")
+		if(uselevel == "Basic")
+			var/obj/item/weapon/implant/vocal/V = imp
+			var/input = html_encode(input(user, "Enter an input phrase, regex works here:", "Input phrase") as text)
+			if(!input)
+				return
+			var/keepgoing = FALSE
+			var/list/outputs = list()
+			do
+				var/output =  html_encode(input(user, "Enter an output phrase:", "Output phrase") as text)
+				if(!output)
+					return
+				outputs.Add(output)
+				keepgoing = alert(user, "Add another output?", "Output phrase", "Yes", "No") == "Yes"
+			while(keepgoing)
+			var/casesense = alert(user, "Case sensitive?", "Case sensitivity","Yes","No") == "Yes"
+			if(input && outputs.len)
+				V.filter.addPickReplacement(input,outputs,casesense)
+		else if(uselevel == "Advanced")
+			winshow(user, "Vocal Implant IDE", 1) // show the IDE
+			winset(user, "vicode", "is-disabled=false")
+			winset(user, "vicode", "text=\"\"")
+			var/showcode = replacetext(storedcode, "\\\"", "\\\\\"")
+			showcode = replacetext(storedcode, "\"", "\\\"")
+			winset(user, "vicode", "text=\"[showcode]\"")

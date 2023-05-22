@@ -75,8 +75,12 @@
 	T = 0
 	if(total >= 16)
 		upgraded = 1
+		name = "Advanced Cloning Pod"
+		desc = "An electronically-lockable pod for growing organic tissue. This one is extremely advanced, and can output perfectly fine clones that do not need treatment of any kind."
 	else
 		upgraded = 0
+		name = initial(name)
+		desc = initial(desc)
 
 //The return of data disks?? Just for transferring between genetics machine/cloning machine.
 //TO-DO: Make the genetics machine accept them.
@@ -181,11 +185,14 @@
 	if(mess || working)
 		return FALSE
 	var/datum/mind/clonemind = locate(R.mind)
-	if(!istype(clonemind,/datum/mind))	//not a mind
+	if(!clonemind) //no mind
 		return FALSE
-	if( clonemind.current && clonemind.current.stat != DEAD )	//mind is associated with a non-dead body
+	if(!istype(clonemind,/datum/mind)) //not a mind
 		return FALSE
-	if(clonemind.active)	//somebody is using that mind
+	if(clonemind.current)
+		if(clonemind.current.stat != DEAD)	//mind is associated with a non-dead body
+			return FALSE
+	if(clonemind.active) //somebody is using that mind
 		if( ckey(clonemind.key)!=R.ckey )
 			return FALSE
 	else
@@ -196,8 +203,13 @@
 						break
 					else
 						return FALSE
-				else
-					if((G.mind && (G.mind.current.stat != DEAD) ||  G.mind != clonemind))
+				else if(G)
+					if(!G.mind)
+						return FALSE
+					if(G.mind.current)
+						if(G.mind.current.stat != DEAD)
+							return FALSE
+					if(G.mind != clonemind)
 						return FALSE
 
 	heal_level = upgraded ? 100 : rand(10,40) //Randomizes what health the clone is when ejected
@@ -233,7 +245,7 @@
 	H.adjustCloneLoss(150) //new damage var so you can't eject a clone early then stab them to abuse the current damage system --NeoFite
 	H.adjustBrainLoss(upgraded ? 0 : (heal_level + 50 + rand(10, 30))) // The rand(10, 30) will come out as extra brain damage
 	H.Paralyse(4)
-	H.stat = UNCONSCIOUS //There was a bug which allowed you to talk for a few seconds after being cloned, because your stat wasn't updated until next Life() tick. This is a fix for this!
+	H.stat = H.status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS //There was a bug which allowed you to talk for a few seconds after being cloned, because your stat wasn't updated until next Life() tick. This is a fix for this!
 
 	//Here let's calculate their health so the pod doesn't immediately eject them!!!
 	H.updatehealth()

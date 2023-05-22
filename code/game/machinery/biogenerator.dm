@@ -33,6 +33,20 @@
 	amount_per_unit=10
 	other_amounts=list(5)
 
+/datum/biogen_recipe/food/cheese
+	id="cheese"
+	name="Cheese Wheel"
+	cost=100 //Making milk and reacting it with enzyme costs 80, so this is 25% more expensive
+	other_amounts=list(5)
+	result=/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
+
+/datum/biogen_recipe/food/butter
+	id="butter"
+	name="Butter"
+	cost=150 //The 40u milk for 20u cream costs 80, so this is about 87% more expensive
+	other_amounts=list(5)
+	result=/obj/item/weapon/reagent_containers/food/snacks/butter
+
 /datum/biogen_recipe/food/meat
 	id="meat"
 	name="Slab of meat"
@@ -174,6 +188,12 @@
 	name="Plant Bag"
 	result=/obj/item/weapon/storage/bag/plants
 
+/datum/biogen_recipe/leather/materials
+	cost=500
+	id="materials"
+	name="Materials Bag"
+	result=/obj/item/weapon/storage/bag/materials
+
 /datum/biogen_recipe/leather/secbelt
 	cost=400
 	id="secbelt"
@@ -256,11 +276,11 @@
 /datum/biogen_recipe/misc
 	category="Misc."
 
-/datum/biogen_recipe/misc/pest
-	id="pest"
-	name="Insecticide"
-	reagent=INSECTICIDE
+/datum/biogen_recipe/misc/insecticide
+	id = "insecticide"
+	name = "Insecticide"
 	cost=35
+	reagent=INSECTICIDE
 	amount_per_unit=10
 	other_amounts=list(5)
 
@@ -316,6 +336,12 @@
 	cost = 500
 	result = /obj/item/clothing/suit/mino
 
+/datum/biogen_recipe/misc/rvest
+	name = "Reticulated Vest"
+	id = "rvest"
+	cost = 500
+	result = /obj/item/clothing/suit/reticulatedvest
+
 /datum/biogen_recipe/flooring
 	category="Flooring"
 
@@ -340,7 +366,7 @@
 	icon_state = "biogen-stand"
 	density = 1
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 40
 	var/speed_coefficient = 15
 	var/biomass_coefficient = 9

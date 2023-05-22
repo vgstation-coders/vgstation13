@@ -22,6 +22,7 @@
 	var/electronics_damage = 0 //Used by cyborgs
 	var/starch_cell = 0
 	var/mob/living/simple_animal/hostile/pulse_demon/occupant
+	var/rating = 4
 
 /obj/item/weapon/cell/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -36,8 +37,10 @@
 	name = "\improper Nanotrasen brand rechargeable AA battery"
 	desc = "You can't top the plasma top." //TOTALLY TRADEMARK INFRINGEMENT
 	origin_tech = Tc_POWERSTORAGE + "=0"
+	icon_state = "crapcell"
 	maxcharge = 500
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
+	rating = 1
 
 /obj/item/weapon/cell/crap/empty/New()
 	..()
@@ -46,16 +49,19 @@
 /obj/item/weapon/cell/crap/better
 	name = "\improper Nanotrasen brand rechargeable D battery"
 	maxcharge = 700 //for the ion carbine
+	rating = 3
 
 /obj/item/weapon/cell/crap/worse
 	name = "\improper Nanotrasen brand rechargeable AAA battery"
 	maxcharge = 250
+	rating = 0
 
 /obj/item/weapon/cell/secborg
 	name = "\improper Security borg rechargeable D battery"
 	origin_tech = Tc_POWERSTORAGE + "=0"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
+	rating = 2
 
 
 /obj/item/weapon/cell/secborg/empty/New()
@@ -67,6 +73,7 @@
 	origin_tech = Tc_POWERSTORAGE + "=0"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
+	rating = 2
 
 
 /obj/item/weapon/cell/miningborg/empty/New()
@@ -80,14 +87,17 @@
 	icon_state = "hcell"
 	maxcharge = 10000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 60)
+	rating = 6
 
 /obj/item/weapon/cell/high/cyborg
 	name = "cyborg rechargeable power cell"
 	maxcharge = 7500
+	rating = 5
 
 /obj/item/weapon/cell/high/mecha
 	name = "custom high-capacity power cell"
 	maxcharge = 15000
+	rating = 9
 
 /obj/item/weapon/cell/high/empty/New()
 	..()
@@ -99,6 +109,7 @@
 	icon_state = "scell"
 	maxcharge = 20000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 70)
+	rating = 10
 
 /obj/item/weapon/cell/super/empty/New()
 	..()
@@ -110,6 +121,7 @@
 	icon_state = "hpcell"
 	maxcharge = 30000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
+	rating = 11
 
 /obj/item/weapon/cell/hyper/empty/New()
 	..()
@@ -127,11 +139,13 @@
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
 	starch_cell = 1
+	rating = 0
 
 /obj/item/weapon/cell/potato/soviet
 	charge = 15000
 	maxcharge = 15000
 	minor_fault = 0
+	rating = 7
 
 /obj/item/weapon/cell/crepe
 	name = "power crêpe"
@@ -143,11 +157,13 @@
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
 	starch_cell = 1
+	rating = 8
 
 /obj/item/weapon/cell/crepe/mommi
 	maxcharge = 10000
 	charge = 10000
 	minor_fault = 0
+	rating = 6
 
 /obj/item/weapon/cell/crepe/attack_self(var/mob/living/user)
 	if(charge)
@@ -174,6 +190,7 @@
 	maxcharge = 30000
 	starting_materials =  null
 	w_type = RECYK_BIOLOGICAL
+	rating = 11
 
 
 /obj/item/weapon/cell/temperaturegun
@@ -181,6 +198,7 @@
 	desc = "A specially designed power cell for heating and cooling projectiles."
 	icon_state = "icell"
 	maxcharge = 900
+	rating = 3
 
 /obj/item/weapon/cell/send_to_past(var/duration)
 	..()
@@ -200,6 +218,7 @@
 	origin_tech = null
 	maxcharge = 35000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
+	rating = 15
 
 /obj/item/weapon/cell/infinite/New()
 	..()
@@ -216,6 +235,7 @@
 	icon_state = "ucell"
 	maxcharge = 50000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
+	rating = 12
 
 /obj/item/weapon/cell/ultra/empty/New()
 	..()
@@ -229,6 +249,7 @@
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
 	var/charge_rate = 100
 	var/damaged = FALSE
+	rating = 13
 
 /obj/item/weapon/cell/rad/empty/New()
 	..()
@@ -246,17 +267,22 @@
 	return
 
 /obj/item/weapon/cell/rad/process()
-	if(!maxcharge && prob(5)) //5% chance to explode every 2 seconds if the cell is broken
-		explosion(loc, 0, 1, 2, 2)
-		qdel(src)
+	if(!maxcharge) //Cell is broken, make it dangerous
+		if(prob(5)) //5% chance to explode every 2 seconds
+			explosion(loc, 0, 1, 2, 2)
+			qdel(src)
+		if(prob(25)) //25% chance to leak radiation every 2 seconds
+			for(var/mob/living/L in view(get_turf(src), 5))
+				L.apply_radiation(initial(charge_rate)/10, RAD_EXTERNAL)
+
 	if(maxcharge <= charge)
 		return 0
 	var/power_used = min(maxcharge-charge,charge_rate)
 	charge += power_used
-	if(prob(5))
-		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
-			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
-	if(charge_rate < (initial(charge_rate)/10))	//turns into a broken cell with no charge rate, 0 max charge and a 5% chance to explode every 2s
+//	if(prob(5))
+//		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
+//			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
+	if(charge_rate && charge_rate < (initial(charge_rate)/10))	//turns into a broken cell with no charge rate, 0 max charge, a 5% chance to explode every 2s and 25% chance to leak radiation equal to 1/10th of its charge rate
 		name = "broken cell"
 		icon_state = "cell"
 		starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30)
@@ -265,6 +291,14 @@
 		charge_rate = 0
 		damaged = FALSE //so you don't get the damaged examine if the cell is broken
 		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
+		for(var/mob/living/L in view(get_turf(src), 7)) //Oh, and irradiate everyone nearby in a bigger burst of radiation.
+			L.apply_radiation(initial(charge_rate)/5, RAD_EXTERNAL)
+		if(!isturf(loc))
+			loc.visible_message("<span class='warning'>\The [loc] starts sparking and sizzling, emitting a foul faint smoke!")
+		else
+			visible_message("<span class='warning'>\The [src] breaks and starts leaking radioactive material!</span>")
+		if(prob(25))
+			spark(get_turf(src), 1)
 
 
 /obj/item/weapon/cell/rad/emp_act(severity)
@@ -295,6 +329,7 @@
 	maxcharge = 2500
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_PHAZON = 100)
 	charge_rate = 250
+	rating = 14
 
 /obj/item/weapon/cell/rad/large/empty/New()
 	..()

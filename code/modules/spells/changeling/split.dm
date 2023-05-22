@@ -13,11 +13,10 @@
 	var/datum/mind/owner = null // The mind of the user, to be used by the recruiter
 	var/datum/recruiter/recruiter = null
 	var/polling_ghosts = FALSE
-	
+
 /spell/changeling/split/Destroy()
 	owner = null
-	qdel(recruiter)
-	recruiter = null
+	QDEL_NULL(recruiter)
 	..()
 
 /spell/changeling/split/cast(var/list/targets, var/mob/living/carbon/human/user)
@@ -40,11 +39,11 @@
 		recruiter.jobban_roles = list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
-	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+	recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
 	// Role set to No or Never
-	recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+	recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
 
-	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+	recruiter.recruited = new /callback(src, src::recruiter_recruited())
 	recruiter.request_player()
 
 /spell/changeling/split/proc/checkSplit(var/success)
@@ -65,7 +64,7 @@
 
 /spell/changeling/split/proc/recruiter_recruited(mob/dead/observer/player)
 	if(!player)
-		checkSplit(FALSE) 
+		checkSplit(FALSE)
 		polling_ghosts = FALSE
 		qdel(recruiter)
 		return
@@ -97,7 +96,7 @@
 
 	newChangeling.ForgeObjectives()
 	newChangeling.Greet(GREET_DEFAULT)
-	
+
 	checkSplit(TRUE) //handles counting splits
 	update_faction_icons()
 

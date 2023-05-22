@@ -24,7 +24,8 @@ var/global/list/investigations=list(
 	I_CHEMS   = null, // Set on world.New()
 	I_WIRES   = null, // Set on world.New()
 	I_GHOST   = null, // Set on world.New()
-	I_ARTIFACT= null  // Set on world.New()
+	I_ARTIFACT= null, // Set on world.New()
+	I_RCD     = null  // Set on world.New()
 )
 
 // Handles appending shit to log.

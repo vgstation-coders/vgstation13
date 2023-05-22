@@ -131,7 +131,8 @@
 
 /datum/centcomm_order/department/medical/harmful_disease/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
 	if (istype(V))
-		var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
+		// Bacteria and memetics are blacklisted as their combined badness can never be 13 or over
+		var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined) - /datum/disease2/disease/bacteria - /datum/disease2/disease/meme)
 		var/datum/disease2/disease/new_virus = new virus_choice
 
 		var/list/anti = list(
@@ -386,10 +387,10 @@
 /datum/centcomm_order/department/medical/telepathy/ExtraChecks(var/obj/item/weapon/dnainjector/I)
 	if (!istype(I))
 		return 0
-	if (I.block == REMOTETALKBLOCK && I.buf)//Block Injector
+	if (I.block == TELEPATHYBLOCK && I.buf)//Block Injector
 		var/datum/dna2/record/R = I.buf
 		if (R.types & 4)//SE Injector
-			var/bstate = R.dna.GetSEState(REMOTETALKBLOCK)
+			var/bstate = R.dna.GetSEState(TELEPATHYBLOCK)
 			return bstate
 	return 0
 
@@ -399,7 +400,7 @@
 		I.buf.dna=new
 		I.buf.types = DNA2_BUF_SE
 		I.buf.dna.ResetSE()
-		I.SetValue(0xFFF,REMOTETALKBLOCK)
+		I.SetValue(0xFFF,TELEPATHYBLOCK)
 
 /datum/centcomm_order/department/medical/remoteview/New()
 	..()

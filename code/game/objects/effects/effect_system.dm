@@ -11,10 +11,10 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	icon = 'icons/effects/effects.dmi'
 	mouse_opacity = 0
 	flags = 0
-	w_type=NOT_RECYCLABLE
+	w_type = NOT_RECYCLABLE
 	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE
 
-/obj/effect/acidable()
+/obj/effect/dissolvable()
 	return 0
 
 /obj/effect/water
@@ -265,8 +265,7 @@ steam.start() -- spawns the effect
 /obj/effect/smoke/Destroy()
 	if(reagents)
 		reagents.my_atom = null
-		qdel(reagents)
-		reagents = null
+		QDEL_NULL(reagents)
 	..()
 
 /////////////////////////////////////////////
@@ -362,6 +361,36 @@ steam.start() -- spawns the effect
 	R.burn_skin(2)
 	R.bodytemperature = min(60, R.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
+/////////////////////////////////////////////
+// Fire Smoke
+/////////////////////////////////////////////
+
+
+/obj/effect/smoke/fire
+	name = "fire smoke"
+	icon_state = "firesmoke"
+
+/obj/effect/smoke/fire/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	..()
+	for(var/mob/living/carbon/human/R in get_turf(src))
+		affect(R)
+
+/obj/effect/smoke/fire/affect(var/mob/living/carbon/human/R)
+	if (!..())
+		return 0
+	if (R.wear_suit != null)
+		return 0
+	R.burn_skin(0.75)
+	if (R.resting)	//crawling prevents suffocation but not burning
+		return 0
+	R.adjustOxyLoss(1)
+	if (R.coughedtime != 1)
+		R.coughedtime = 1
+		R.emote("gasp", null, null, TRUE)
+		spawn (20)
+			R.coughedtime = 0
+	R.updatehealth()
+	return
 
 /obj/effect/smoke/transparent
 	opacity = FALSE
@@ -428,6 +457,9 @@ steam.start() -- spawns the effect
 
 /datum/effect/system/smoke_spread/transparent
 	smoke_type = /obj/effect/smoke/transparent
+
+/datum/effect/system/smoke_spread/fire
+	smoke_type = /obj/effect/smoke/fire
 
 /////////////////////////////////////////////
 // Chem smoke
@@ -515,8 +547,7 @@ steam.start() -- spawns the effect
 				step(smoke,direction)
 			spawn(150+rand(10,30))
 				if(smoke)
-					qdel(smoke)
-					smoke = null
+					QDEL_NULL(smoke)
 				src.total_smoke--
 
 // Goon compat.
@@ -839,11 +870,9 @@ steam.start() -- spawns the effect
 			reagents.reaction(M)
 		return
 
-	if (istype(AM, /mob/living/carbon))
+	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(5, 2, 1))
-			to_chat(M, "<span class='notice'>You slipped on the foam!</span>")
-
+		M.Slip(5, 2, 1, onwhat = "the foam")
 
 /datum/effect/system/foam_spread
 	var/amount = 5				// the size of the foam spread.
@@ -1035,12 +1064,18 @@ steam.start() -- spawns the effect
 
 /datum/effect/system/reagents_explosion
 	var/amount 						// TNT equivalent
+	var/dev_override = 0
+	var/heavy_override = 0
+	var/light_override = 0		// overrides for each value
 	var/flashing = 0			// does explosion creates flash effect?
 	var/flashing_factor = 0		// factor of how powerful the flash effect relatively to the explosion
 	var/mob/user //for investigation
 
-/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit)
+/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit, dev_over = null, heavy_over = null, light_over = null)
 	amount = amt
+	dev_override = dev_over
+	heavy_override = heavy_over
+	light_override = light_over
 	if(istype(loc, /turf/))
 		location = loc
 	else
@@ -1073,9 +1108,9 @@ steam.start() -- spawns the effect
 		var/range = 0
 		// Clamp all values to MAX_EXPLOSION_RANGE
 		range = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
-		devastation = round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
-		heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
-		light = min(7, range) // clamps to 7 light range for grenades
+		devastation = !isnull(dev_override) ? dev_override : round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
+		heavy = !isnull(heavy_override) ? heavy_override : round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
+		light = !isnull(light_override) ? light_override : min(7, range) // clamps to 7 light range for grenades
 		flash = range * 1.5
 		for(var/mob/M in viewers(8, location))
 			to_chat(M, "<span class='warning'>The solution violently explodes.</span>")

@@ -227,7 +227,7 @@
 	icon_state_open = "shower_t"
 	density = 0
 	anchored = 1
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	var/on = 0
 	var/obj/effect/mist/mymist = null
 	var/ismist = 0 //Needs a var so we can make it linger~
@@ -318,12 +318,11 @@
 /obj/machinery/shower/update_icon()	//This is terribly unreadable, but basically it makes the shower mist up
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
 	if(mymist)
-		qdel(mymist)
-		mymist = null
+		QDEL_NULL(mymist)
 
 	if(on)
 		var/image/water = image('icons/obj/watercloset.dmi', src, "water", BELOW_OBJ_LAYER, dir)
-		water.plane = ABOVE_HUMAN_PLANE
+		water.plane = relative_plane(ABOVE_HUMAN_PLANE)
 		overlays += water
 		if(watertemp == "freezing") //No mist if the water is really cold
 			return
@@ -340,8 +339,7 @@
 		mymist = new /obj/effect/mist(get_turf(src))
 		spawn(250)
 			if(src && !on)
-				qdel(mymist)
-				mymist = null
+				QDEL_NULL(mymist)
 				ismist = 0
 
 /obj/machinery/shower/Crossed(atom/movable/O)
@@ -476,6 +474,9 @@
 	desc = "A sink used for washing one's hands and face."
 	anchored = 1
 	var/busy = 0 	//Something's being washed at the moment
+
+/obj/structure/sink/splashable()
+	return FALSE
 
 /obj/structure/sink/verb/empty_container_into()
 	set name = "Empty container into"

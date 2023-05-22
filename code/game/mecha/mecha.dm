@@ -76,6 +76,11 @@
 
 	var/dash_dir = null
 	var/wreckage
+	var/enclosed = TRUE
+	var/silicon_pilot
+	var/silicon_icon_state = null
+	var/mech_maints_ready = FALSE
+	var/enter_delay = 40
 
 	var/list/equipment = new
 	var/obj/item/mecha_parts/mecha_equipment/selected
@@ -104,7 +109,7 @@
 	..()
 	add_radio()
 	add_cabin()
-	if(!add_airtank()) //we check this here in case mecha does not have an internal tank available by default - WIP
+	if(!add_airtank() || !enclosed) //we check this here in case mecha does not have an internal tank available by default - WIP
 		removeVerb(/obj/mecha/verb/connect_to_port)
 		removeVerb(/obj/mecha/verb/toggle_internal_tank)
 	add_cell()
@@ -130,7 +135,7 @@
 				W.cargo -= O
 				T.Entered(O, src)
 
-	if(prob(30))
+	if(prob(30) && src.enclosed) // no enclosed space no explosion :)
 		explosion(T, 0, 0, 1, 3)
 	if(wreckage)
 		var/obj/effect/decal/mecha_wreckage/WR = new wreckage(T)
@@ -161,36 +166,26 @@
 	mech_parts.Cut() //We don't need this list anymore, too.
 	mechas_list -= src //global mech list
 	if(cell)
-		qdel(cell)
-		cell = null
+		QDEL_NULL(cell)
 	if(internal_tank)
-		qdel(internal_tank)
-		internal_tank = null
+		QDEL_NULL(internal_tank)
 	if(cabin_air)
-		qdel(cabin_air)
-		cabin_air = null
+		QDEL_NULL(cabin_air)
 	connected_port = null
 	if(radio)
-		qdel(radio)
-		radio = null
+		QDEL_NULL(radio)
 	if(electropack)
-		qdel(electropack)
-		electropack = null
+		QDEL_NULL(electropack)
 	if(tracking)
-		qdel(tracking)
-		tracking = null
+		QDEL_NULL(tracking)
 	if(pr_int_temp_processor)
-		qdel(pr_int_temp_processor)
-		pr_int_temp_processor = null
+		QDEL_NULL(pr_int_temp_processor)
 	if(pr_inertial_movement)
-		qdel(pr_inertial_movement)
-		pr_inertial_movement = null
+		QDEL_NULL(pr_inertial_movement)
 	if(pr_give_air)
-		qdel(pr_give_air)
-		pr_give_air = null
+		QDEL_NULL(pr_give_air)
 	if(pr_internal_damage)
-		qdel(pr_internal_damage)
-		pr_internal_damage = null
+		QDEL_NULL(pr_internal_damage)
 	selected = null
 	..()
 
@@ -210,6 +205,8 @@
 	verbs += verb_path
 
 /obj/mecha/proc/add_airtank()
+	if(!enclosed)
+		return
 	internal_tank = new /obj/machinery/portable_atmospherics/canister/air(src)
 	mech_parts.Add(internal_tank)
 	return internal_tank
@@ -272,6 +269,13 @@
 		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
 			to_chat(user, "[bicon(ME)] [ME]")
 
+	if(enclosed)
+		return
+	if(silicon_pilot)
+		to_chat(user, "<span class='info'>[src] appears to be piloting itself..</span>")
+	else
+		to_chat(user, "<span class='info'>You can see [occupant] inside.</span>")
+
 /obj/mecha/proc/drop_item()//Derpfix, but may be useful in future for engineering exosuits.
 	return
 
@@ -317,6 +321,19 @@
 /obj/mecha/proc/range_action(atom/target)
 	return
 
+//////////////////////////////////
+////////  Misc procs  ////////
+//////////////////////////////////
+
+/obj/mecha/proc/get_health()
+	return (health/initial(health)*100)
+
+/obj/mecha/proc/get_mecha_occupancy_state()
+	if((silicon_pilot) && silicon_icon_state)
+		return silicon_icon_state
+	if(occupant)
+		return icon_state
+	return "[icon_state]-open"
 
 //////////////////////////////////
 ////////  Movement procs  ////////
@@ -443,8 +460,9 @@
 		qdel(obstacle)
 		breakthrough = 1
 
-	else if(istype(obstacle, /obj/structure/reagent_dispensers/fueltank))
-		obstacle.ex_act(1)
+	else if(istype(obstacle, /obj/structure/reagent_dispensers))
+		var/obj/structure/reagent_dispensers/R = obstacle
+		R.explode(src.occupant)
 
 	else if(istype(obstacle, /mob/living))
 		var/mob/living/L = obstacle
@@ -533,6 +551,13 @@
 ////////////////////////////////////////
 ////////  Health related procs  ////////
 ////////////////////////////////////////
+
+/obj/mecha/proc/take_flat_damage(amount, type="brute")
+	if(amount)
+		health -= amount
+		update_health()
+		log_append_to_last("Took [amount] points of damage.",1)
+	return
 
 /obj/mecha/take_damage(incoming_damage, damage_type = "brute", skip_break, mute)
 	if(incoming_damage)
@@ -646,6 +671,12 @@
 
 
 /obj/mecha/bullet_act(var/obj/item/projectile/Proj) //wrapper
+	if(!enclosed && occupant && !silicon_pilot)
+		if(prob(75))
+			occupant.bullet_act(Proj)
+			visible_message("<span class='warning'>[occupant] is hit by \the [Proj]!")
+			Proj.on_hit(src,2)
+			return PROJECTILE_COLLISION_DEFAULT
 	src.log_message("Hit by projectile. Type: [Proj.name]([Proj.flag]).",1)
 	call((proc_res["dynbulletdamage"]||src), "dynbulletdamage")(Proj) //calls equipment
 	return ..()
@@ -682,11 +713,8 @@
 				src.take_damage(initial(src.health)/2)
 				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 		if(3.0)
-			if (prob(5))
-				qdel(src)
-			else
-				src.take_damage(initial(src.health)/5)
-				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
+			src.take_damage(initial(src.health)/5)
+			src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 	return
 
 /*Will fix later -Sieve
@@ -730,6 +758,14 @@
 		src.log_message("Exposed to dangerous temperature.",1)
 		src.take_damage(5, damage_type = "fire")
 		src.check_for_internal_damage(list(MECHA_INT_FIRE, MECHA_INT_TEMP_CONTROL))
+
+	if(enclosed)// || mecha_flags & SILICON_PILOT)
+		return
+	for(var/mob/living/cookedalive as anything in occupant)
+		if(cookedalive.fire_stacks < 5)
+			cookedalive.adjust_fire_stacks(1)
+			cookedalive.IgniteMob()
+
 	return
 
 /obj/mecha/proc/dynattackby(obj/item/weapon/W as obj, mob/living/user as mob)
@@ -798,9 +834,11 @@
 		if(state==STATE_BOLTSEXPOSED)
 			state = STATE_BOLTSOPENED
 			to_chat(user, "You undo the securing bolts.")
+			mech_maints_ready = TRUE
 			W.playtoolsound(src, 50)
 		else if(state==STATE_BOLTSOPENED)
 			state = STATE_BOLTSEXPOSED
+			mech_maints_ready = FALSE
 			to_chat(user, "You tighten the securing bolts.")
 			W.playtoolsound(src, 50)
 		return
@@ -1150,7 +1188,7 @@
 		visible_message("<span class='good'>[usr] is instantly lifted into \the [src] by the running board!</span>")
 	else
 		visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
-		if(do_after(usr, src, 40))
+		if(do_after(usr, src, enter_delay))
 			if(!src.occupant)
 				moved_inside(usr)
 				refresh_spells()
@@ -1209,6 +1247,8 @@
 
 	if(do_after(user, src, 40))
 		if(!occupant)
+			log_admin("[key_name(usr)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src] at X=[src.x];Y=[src.y];Z=[src.z]")
+			message_admins("[key_name(usr)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 			return mmi_moved_inside(mmi_as_oc,user)
 		else
 			to_chat(user, "Occupant detected.")
@@ -1236,7 +1276,8 @@
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
 		src.Move(src.loc)
-		src.icon_state = src.initial_icon
+		src.silicon_pilot = TRUE
+		src.icon_state = src.silicon_icon_state
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
 			set_light(light_range_off)
@@ -1527,9 +1568,9 @@
 						[integrity<30?"<font color='red'><b>DAMAGE LEVEL CRITICAL</b></font><br>":null]
 						<b>Integrity: </b> [integrity]%<br>
 						<b>Powercell charge: </b>[isnull(cell_charge)?"No powercell installed":"[cell.percent()]%"]<br>
-						<b>Air source: </b>[use_internal_tank?"Internal Airtank":"Environment"]<br>
-						<b>Airtank pressure: </b>[tank_pressure]kPa<br>
-						<b>Airtank temperature: </b>[tank_temperature]K|[tank_temperature - T0C]&deg;C<br>
+						<b>Air source: </b>[internal_tank?"[use_internal_tank?"Internal Airtank":"Environment"]":"Environment"]<br>
+						<b>Airtank pressure: </b>[internal_tank?"[tank_pressure]kPa":"N/A"]<br>
+						<b>Airtank temperature: </b>[internal_tank?"[tank_temperature]&deg;K|[tank_temperature - T0C]&deg;C":"N/A"]<br>
 						<b>Cabin pressure: </b>[cabin_pressure>WARNING_HIGH_PRESSURE ? "<font color='red'>[cabin_pressure]</font>": cabin_pressure]kPa<br>
 						<b>Cabin temperature: </b> [return_temperature()]K|[return_temperature() - T0C]&deg;C<br>
 						<b>Lights: </b>[lights?"on":"off"]<br>
@@ -1558,7 +1599,7 @@
 						<div class='wr'>
 						<div class='header'>Airtank</div>
 						<div class='links'>
-						<a href='?src=\ref[src];toggle_airtank=1'>Toggle Internal Airtank Usage</a><br>
+						[(/obj/mecha/verb/toggle_internal_tank in src.verbs)?"<a href='?src=\ref[src];toggle_airtank=1'>Toggle Internal Airtank Usage</a><br>":null]
 						[(/obj/mecha/verb/disconnect_from_port in src.verbs)?"<a href='?src=\ref[src];port_disconnect=1'>Disconnect from port</a><br>":null]
 						[(/obj/mecha/verb/connect_to_port in src.verbs)?"<a href='?src=\ref[src];port_connect=1'>Connect to port</a><br>":null]
 						</div>
@@ -2078,7 +2119,7 @@
 		return 1
 	return 0
 
-/obj/mecha/acidable()
+/obj/mecha/dissolvable()
 	return 0
 
 /obj/mecha/beam_connect(var/obj/effect/beam/B)
@@ -2190,8 +2231,7 @@
 				if(t_air)
 					t_air.merge(removed)
 				else //just delete the cabin gas, we're in space or some shit
-					qdel(removed)
-					removed = null
+					QDEL_NULL(removed)
 	else
 		return stop()
 
@@ -2232,8 +2272,7 @@
 			if(mecha.loc && hascall(mecha.loc,"assume_air"))
 				mecha.loc.assume_air(leaked_gas)
 			else
-				qdel(leaked_gas)
-				leaked_gas = null
+				QDEL_NULL(leaked_gas)
 	if(mecha.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
 		if(mecha.get_charge())
 			spark(mecha, 2, FALSE)

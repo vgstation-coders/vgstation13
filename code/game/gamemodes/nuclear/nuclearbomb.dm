@@ -22,10 +22,10 @@ var/list/nuclear_bombs = list()
 	                      // 3 is sealant open, 4 is unwrenched, 5 is removed from bolts.
 	var/nt_aligned = 1
 	flags = FPRINT
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 
 	hack_abilities = list(
-		/datum/malfhack_ability/oneuse/nuke_detonate,
+//		/datum/malfhack_ability/oneuse/nuke_detonate,
 		/datum/malfhack_ability/oneuse/nuke_bolt,
 	)
 
@@ -284,8 +284,8 @@ var/list/nuclear_bombs = list()
 /obj/machinery/nuclearbomb/blob_act()
 	return
 
-#define NUKERANGE 80
-/obj/machinery/nuclearbomb/proc/explode()
+#define NUKERANGE 120
+/obj/machinery/nuclearbomb/proc/explode(var/sound = TRUE)
 	if (src.safety)
 		src.timing = 0
 		return
@@ -293,7 +293,8 @@ var/list/nuclear_bombs = list()
 	src.yes_code = 0
 	src.safety = 1
 	src.icon_state = "nuclearbomb3"
-	world << sound('sound/machines/Alarm.ogg')
+	if(sound)
+		world << sound('sound/machines/Alarm.ogg')
 	if (ticker)
 		ticker.explosion_in_progress = 1
 
@@ -331,8 +332,8 @@ var/list/nuclear_bombs = list()
 
 	reset_vars_after_duration(resettable_vars, duration)
 
-/obj/machinery/nuclearbomb/isacidhardened() // Requires Aliens to channel acidspit on the nuke.
-	return TRUE
+/obj/machinery/nuclearbomb/dissolvable()
+	return FALSE
 
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"

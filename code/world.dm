@@ -2,7 +2,11 @@
 #define PIXEL_MULTIPLIER WORLD_ICON_SIZE/32
 
 var/world_startup_time
+var/date_string
 
+#if DM_VERSION < 515
+#error You need at least version 515 to compile
+#endif
 /world
 	mob = /mob/new_player
 	turf = /turf/space
@@ -35,7 +39,7 @@ var/auxtools_path
 	#if AUXTOOLS_DEBUGGER
 	auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	if(fexists(auxtools_path))
-		call(auxtools_path, "auxtools_init")()
+		call_ext(auxtools_path, "auxtools_init")()
 		enable_debugging()
 	else
 		// warn on missing library
@@ -45,13 +49,13 @@ var/auxtools_path
 
 /world/New()
 	world_startup_time = world.timeofday
-	// Honk honk, fuck you science
+
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
 
 	// logs
-	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
+	date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
 
 	investigations[I_HREFS] = new /datum/log_controller(I_HREFS, filename="data/logs/[date_string] hrefs.htm", persist=TRUE)
 	investigations[I_ATMOS] = new /datum/log_controller(I_ATMOS, filename="data/logs/[date_string] atmos.htm", persist=TRUE)
@@ -59,6 +63,7 @@ var/auxtools_path
 	investigations[I_WIRES] = new /datum/log_controller(I_WIRES, filename="data/logs/[date_string] wires.htm", persist=TRUE)
 	investigations[I_GHOST] = new /datum/log_controller(I_GHOST, filename="data/logs/[date_string] poltergeist.htm", persist=TRUE)
 	investigations[I_ARTIFACT] = new /datum/log_controller(I_ARTIFACT, filename="data/logs/[date_string] artifact.htm", persist=TRUE)
+	investigations[I_RCD] = new /datum/log_controller(I_RCD, filename="data/logs/[date_string] rcd.htm", persist=TRUE)
 
 	diary = file("data/logs/[date_string].log")
 	panicfile = new/savefile("data/logs/profiling/proclogs/[date_string].sav")
@@ -75,8 +80,6 @@ var/auxtools_path
 
 	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
 
-	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
-
 	load_configuration()
 	SSdbcore.Initialize(world.timeofday) // Get a database running, first thing
 
@@ -85,19 +88,12 @@ var/auxtools_path
 	load_admins()
 	load_mods()
 	LoadBansjob()
-	if(config.usewhitelist)
-		load_whitelist()
-	if(config.usealienwhitelist)
-		load_alienwhitelist()
 	jobban_loadbanfile()
 	oocban_loadbanfile()
 	paxban_loadbanfile()
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()
-	SetupHooks() // /vg/
-
-	library_catalog.initialize()
 
 	spawn() copy_logs() // Just copy the logs.
 	if(config && config.log_runtimes)
@@ -106,26 +102,10 @@ var/auxtools_path
 		// dumb and hardcoded but I don't care~
 		config.server_name += " #[(world.port % 1000) / 100]"
 
-	Get_Holiday()	//~Carn, needs to be here when the station is named so :P
-
-	src.update_status()
-
-	initialize_rune_words()
-
-	initialize_beespecies()
-	generate_radio_frequencies()
-
-	data_core = new /obj/effect/datacore()
-	paiController = new /datum/paiController()
-
-	src.update_status()
-
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
 	Master.Setup()
-
-	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
 	return ..()
 
@@ -151,7 +131,6 @@ var/auxtools_path
 		s["mode"] = master_mode
 		s["respawn"] = config ? abandon_allowed : 0
 		s["enter"] = enter_allowed
-		s["vote"] = config.allow_vote_mode
 		s["ai"] = config.allow_ai
 		s["host"] = host ? host : null
 		s["players"] = list()
@@ -228,11 +207,7 @@ var/auxtools_path
 	stop_all_media()
 
 	end_credits.on_world_reboot_start()
-	testing("[time_stamp()] - World reboot is now sleeping.")
-
 	sleep(max(10, end_credits.audio_post_delay))
-
-	testing("[time_stamp()] - World reboot is done sleeping.")
 	end_credits.on_world_reboot_end()
 
 	for(var/client/C in clients)
@@ -243,7 +218,7 @@ var/auxtools_path
 			C << link("byond://[world.address]:[world.port]")
 
 	#if AUXTOOLS_DEBUGGER
-	call(auxtools_path, "auxtools_shutdown")()
+	call_ext(auxtools_path, "auxtools_shutdown")()
 	#endif
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
@@ -304,60 +279,3 @@ var/auxtools_path
 				var/datum/admins/D = new /datum/admins("Moderator", rights, ckey)
 				D.associate(directory[ckey])
 
-/world/proc/update_status()
-	var/s = ""
-
-	if (config && config.server_name)
-		s += "<b>[config.server_name]</b> &#8212; "
-
-
-	s += {"<b>[station_name()]</b>"
-		(
-		<a href=\"http://\">" //Change this to wherever you want the hub to link to
-		Default"  //Replace this with something else. Or ever better, delete it and uncomment the game version
-		</a>
-		)"}
-	var/list/features = list()
-
-	if(ticker)
-		if(master_mode)
-			features += master_mode
-	else
-		features += "<b>STARTING</b>"
-
-	if (!enter_allowed)
-		features += "closed"
-
-	features += abandon_allowed ? "respawn" : "no respawn"
-
-	if (config && config.allow_vote_mode)
-		features += "vote"
-
-	if (config && config.allow_ai)
-		features += "AI allowed"
-
-	var/n = 0
-	for (var/mob/M in player_list)
-		if (M.client)
-			n++
-
-	if (n > 1)
-		features += "~[n] players"
-	else if (n > 0)
-		features += "~[n] player"
-
-	/*
-	is there a reason for this? the byond site shows 'hosted by X' when there is a proper host already.
-	if (host)
-		features += "hosted by <b>[host]</b>"
-	*/
-
-	if (!host && config && config.hostedby)
-		features += "hosted by <b>[config.hostedby]</b>"
-
-	if (features)
-		s += ": [jointext(features, ", ")]"
-
-	/* does this help? I do not know */
-	if (src.status != s)
-		src.status = s

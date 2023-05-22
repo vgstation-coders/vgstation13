@@ -18,8 +18,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/Destroy()
 	if(loaded_item)
-		qdel(loaded_item)
-		loaded_item = null
+		QDEL_NULL(loaded_item)
 	..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/proc/update_verbs()
@@ -192,14 +191,15 @@
 
 	var/obj/item/object = loaded_item
 	var/speed
+	var/wclasstouse = object.arcanetampered || src.arcanetampered ? (W_CLASS_HUGE+1)-object.w_class : object.w_class
 	if(object.w_class > W_CLASS_TINY)
-		speed = (((fire_force*(4/object.w_class))/5)*2) //projectile speed.
+		speed = (((fire_force*(4/wclasstouse))/5)*2) //projectile speed.
 	else
 		speed = (((fire_force*2)/5)*2)
 
 	speed = speed * damage_multiplier
 
-	var/distance = round(((20/object.w_class)*(fuel_level/10))*1.5)
+	var/distance = round(((20/wclasstouse)*(fuel_level/10))*1.5)
 
 	user.visible_message("<span class='danger'>[user] fires \the [object] from \the [src]!</span>","<span class='danger'>You fire \the [object] from \the [src]!</span>")
 	log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[object.name]) at coordinates ([x],[y],[z])" )

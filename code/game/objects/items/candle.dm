@@ -8,6 +8,7 @@
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
+	autoignition_temperature = AUTOIGNITION_FABRIC //idk the wick lmao
 
 	var/wax = 200
 	var/lit = 0
@@ -96,6 +97,8 @@
 	return 0
 
 /obj/item/candle/Crossed(var/obj/Proj)
+	if(..())
+		return 1
 	if(isbeam(Proj))
 		var/obj/item/projectile/beam/P = Proj//could be a laser beam or an emitter beam, both feature the get_damage() proc, for now...
 		if(P.get_damage() != 0)

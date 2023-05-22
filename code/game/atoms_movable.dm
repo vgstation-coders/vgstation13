@@ -76,8 +76,7 @@
 		T.reconsider_lights()
 
 	if(materials)
-		qdel(materials)
-		materials = null
+		QDEL_NULL(materials)
 
 	remove_border_dummy()
 
@@ -89,9 +88,7 @@
 	if (locked_to)
 		locked_to.unlock_atom(src)
 
-	for (var/datum/locking_category/category in locking_categories)
-		qdel(category)
-	locking_categories      = null
+	QDEL_LIST_NULL(locking_categories)
 	locking_categories_name = null
 
 	break_all_tethers()
@@ -102,8 +99,7 @@
 		T.recalc_atom_opacity()
 
 	if(virtualhearer)
-		qdel(virtualhearer)
-		virtualhearer = null
+		QDEL_NULL(virtualhearer)
 
 	for(var/atom/movable/AM in src)
 		qdel(AM)
@@ -334,9 +330,9 @@
 
 /atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
 	locking_init()
-	. = locking_categories_name[category]
-
-	if (!.)
+	if(locking_categories_name[category])
+		. = locking_categories_name[category]
+	else
 		if (istext(category))
 			return
 
@@ -410,7 +406,7 @@
 		airflow_speed = 0
 		airflow_time = 0
 		if(src.throwing)
-			src.throw_impact(Obstacle)
+			src.throw_impact(Obstacle, null, usr) // TODO: Find a way to pass the speed. Or remove the speed parameter.
 			src.throwing = 0
 		if(Obstacle)
 			Obstacle.Bumped(src)
@@ -446,8 +442,7 @@
 /atom/movable/proc/remove_border_dummy()
 	if(border_dummy)
 		unlock_atom(border_dummy)
-		qdel(border_dummy)
-		border_dummy = null
+		QDEL_NULL(border_dummy)
 
 /atom/movable/proc/border_dummy_Cross(atom/movable/mover) //border_dummy calls this in its own Cross() to detect collision
 	if(istype(mover) && mover.checkpass(pass_flags_self))
@@ -741,7 +736,7 @@
 		AM.lock_atom(src, /datum/locking_category/overlay)
 	if (istype(master, /atom/movable))
 		var/atom/movable/AM = master
-		AM.register_event(/event/destroyed, src, .proc/qdel_self)
+		AM.register_event(/event/destroyed, src, src::qdel_self())
 	verbs.len = 0
 
 /atom/movable/overlay/proc/qdel_self(datum/thing)
@@ -751,7 +746,7 @@
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
 		AM.unlock_atom(src)
-		AM.unregister_event(/event/destroyed, src, .proc/qdel_self)
+		AM.unregister_event(/event/destroyed, src, src::qdel_self())
 	master = null
 	return ..()
 
@@ -814,8 +809,7 @@
 /atom/movable/proc/removeHear()
 	flags &= ~HEAR
 	if(virtualhearer)
-		qdel(virtualhearer)
-		virtualhearer = null
+		QDEL_NULL(virtualhearer)
 
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)
@@ -1021,7 +1015,7 @@
 /atom/proc/attack_icon()
 	return appearance
 
-/atom/movable/proc/do_attack_animation(atom/target, atom/tool)
+/atom/movable/proc/do_attack_animation(atom/target, atom/tool, var/icon/I)
 	set waitfor = 0
 
 	ASSERT(tool) //If no tool, shut down the proc and call the coder police
@@ -1068,7 +1062,7 @@
 	spawn()
 		//Attack Animation for ghost object being pixel shifted onto person
 		var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
-		item.appearance = tool.attack_icon()
+		item.appearance = I ? I : tool.attack_icon()
 		item.alpha = 128
 		item.loc = target
 		item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
@@ -1100,9 +1094,6 @@
 			sleep(3)
 			for(var/client/C in clients)
 				C.images -= hitmarker
-
-/atom/movable/proc/make_invisible(var/source_define, var/time, var/include_clothing)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
-	return invisibility || alpha <= 1	//already invisible
 
 /atom/movable/proc/break_all_tethers()	//Breaks all tethers
 	if(current_tethers)
@@ -1231,8 +1222,8 @@
 
 /atom/movable/border_dummy
 	#ifdef DEBUG_BORDER_DUMMY
-	icon = 'icons/obj/structures.dmi'
-	icon_state = "window"
+	icon = 'icons/obj/structures/window.dmi'
+	icon_state = "window0"
 	color = "red"
 	#else
 	invisibility = 101
@@ -1286,7 +1277,7 @@
 // -- trackers
 
 /atom/movable/proc/add_tracker(var/datum/tracker/T)
-	register_event(T, /datum/tracker/proc/recieve_position)
+	register_event(T, /datum/tracker/proc/receive_position)
 
 /datum/tracker
 	var/name = "Tracker"
@@ -1301,7 +1292,7 @@
 	var/lost_position_probability = 0 // Probability of losing the target
 	var/lost_position_distance = 0 // Distance at which the tracker loses the target
 
-/datum/tracker/proc/recieve_position(var/list/loc)
+/datum/tracker/proc/receive_position(var/list/loc)
 
 	ASSERT(loc)
 

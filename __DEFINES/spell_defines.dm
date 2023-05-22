@@ -21,6 +21,7 @@
 #define CAN_CHANNEL_RESTRAINED 8192 //channeled spells that you can cast despite having handcuffs on
 #define LOSE_IN_TRANSFER 16384 //If your mind is transferred, you'll lose this spell.
 #define IS_HARMFUL 32768	//For pacify checks to determine whether the spell can be cast
+#define NO_TURNING 65536 //User does not turn around to face the target when using the spell
 
 //invocation
 #define SpI_SHOUT	"shout"
@@ -60,6 +61,7 @@
 #define USER_TYPE_CULT "cult"
 #define USER_TYPE_GENETIC "genetic"
 #define USER_TYPE_XENOMORPH "xeno"
+#define USER_TYPE_ZOMBIE "zombie"
 #define USER_TYPE_NOUSER "no_user"
 #define USER_TYPE_OTHER "other"
 #define USER_TYPE_SPELLBOOK "spellbook"
@@ -70,6 +72,7 @@
 #define USER_TYPE_CHANGELING "changeling"
 #define USER_TYPE_PULSEDEMON "pulsedemon"
 #define USER_TYPE_GRUE "grue"
+#define USER_TYPE_GYMRAT "gymrat"
 
 //Spell aspect flags
 #define SPELL_FIRE 1 //Fire based spells

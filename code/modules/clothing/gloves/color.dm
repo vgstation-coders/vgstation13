@@ -9,6 +9,15 @@
 	_color = "yellow"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/gloves/yellow/arcane_act(mob/user)
+	..()
+	siemens_coefficient = pick(0,0.5,0.5,0.5,0.5,0.75,1.5)
+	return "GR'Y T'DE!"
+
+/obj/item/clothing/gloves/yellow/bless()
+	..()
+	siemens_coefficient = initial(siemens_coefficient)
+
 /obj/item/clothing/gloves/yellow/power //fuck you don't relative path this
 	var/next_shock = 0
 
@@ -122,8 +131,7 @@
 
 /obj/item/clothing/gloves/black/thief/storage/Destroy()
 	if(hold)
-		qdel(hold)
-		hold = null
+		QDEL_NULL(hold)
 	return ..()
 
 /obj/item/clothing/gloves/black/thief/storage/attack_hand(mob/user)
@@ -242,8 +250,7 @@
 		return
 	if(current_gun)
 		to_chat(M, "<span class ='notice'>Your gun evaporates into thin air!</span>")
-		qdel(current_gun)
-		current_gun = null
+		QDEL_NULL(current_gun)
 		charging = TRUE
 		spawn(50)
 			charging = FALSE

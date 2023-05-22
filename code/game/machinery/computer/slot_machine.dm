@@ -4,7 +4,7 @@
 #endif
 
 #define SEVEN		1
-#define DIAMOND	2
+#define DIAMOND		2
 #define CHERRY		3
 #define HEART		4
 #define MELON		5
@@ -24,6 +24,7 @@
 	icon_state = "slot"
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	computer_flags = NO_ONOFF_ANIMS
 
 	var/show_name
 
@@ -97,7 +98,8 @@
 
 		icon_state = initial_icon
 
-/obj/machinery/computer/slot_machine/proc/spin_wheels(win = -1) //If win=-1, the result is pure randomness. If win=0, you NEVER win. If win is 1 to 10, you win.
+/obj/machinery/computer/slot_machine/proc/spin_wheels(win = -1, var/mob/spinner) //If win=-1, the result is pure randomness. If win=0, you NEVER win. If win is 1 to 10, you win.
+
 	while(1)
 		value_1 = rand(1,10)
 		value_2 = rand(1,10)
@@ -105,6 +107,17 @@
 
 		switch(win)
 			if(-1)
+				//Take luck into account.
+				if(spinner)
+					var/spinnerluck = spinner.luck()
+					var/jostlepower = 25
+					for(var/i in 1 to 3)
+						jostlepower = max(jostlepower, rand(25, i * 1000))
+					var/jostles = min(round(abs(spinnerluck), jostlepower) / jostlepower, 1000)
+					while(jostles)
+						if(jostle(spinnerluck > 0))
+							break
+						jostles -= 1
 				return //Pure randomness!
 			if(0)
 				if(!(value_1 == value_2 && value_2 == value_3)) //If we're NOT winning
@@ -116,6 +129,32 @@
 				return
 			else
 				return
+
+/obj/machinery/computer/slot_machine/proc/jostle(towin = TRUE)
+	if((value_1 != value_2 || value_2 != value_3 || value_1 != value_3) && towin)		//Lucky people get jostles on unaligned wheels.
+		switch(rand(1,3))
+			if(1)
+				if(value_1 != value_2 && value_1 != value_3)
+					value_1 = rand(1,10)
+			if(2)
+				if(value_1 != value_2 && value_2 != value_3)
+					value_2 = rand(1,10)
+			if(3)
+				if(value_1 != value_3 && value_2 != value_3)
+					value_3 = rand(1,10)
+	else if((value_1 == value_2 || value_2 == value_3 || value_1 == value_3) && !towin)	//Unlucky people get jostles on aligned wheels.
+		switch(rand(1,3))
+			if(1)
+				if(value_1 == value_2 || value_1 == value_3)
+					value_1 = rand(1,10)
+			if(2)
+				if(value_1 == value_2 || value_2 == value_3)
+					value_2 = rand(1,10)
+			if(3)
+				if(value_1 == value_3 || value_2 == value_3)
+					value_3 = rand(1,10)
+	else
+		return TRUE
 
 /obj/machinery/computer/slot_machine/proc/spin(mob/user)
 	if(spinning)
@@ -150,9 +189,9 @@
 
 		switch(victory)
 			if(1) //1 in 10 for a guaranteed small reward
-				spin_wheels(win = pick(BELL, MUSHROOM, TREE))
+				spin_wheels(win = pick(BELL, MUSHROOM, TREE), spinner = user)
 			if(2 to 10) //Otherwise, a fully random spin (1/1000 to get jackpot, 1/100 to get other reward)
-				spin_wheels(win = -1)
+				spin_wheels(win = -1, spinner = user)
 
 	//If there's only one icon_state for spinning, everything looks weird
 	var/list/spin_states = list("spin1","spin2","spin3")
@@ -243,16 +282,26 @@
 
 			spawn(10)
 				if(our_money_account.charge(win_value,null,"Victory","one-armed bandit #[id]"))
-					dispense_cash(win_value, get_turf(src))
+					if(arcanetampered)
+						var/total = 0
+						for(var/i in 0 to round(sqrt(sqrt(win_value)))) // anywhere from about 3 to 16 ducks
+							new /obj/item/weapon/bikehorn/rubberducky(get_turf(src))
+							total++
+						to_chat(user, "<span class='sinister'>You win [total] ducks!</span>")
+					else
+						dispense_cash(win_value, get_turf(src))
+						to_chat(user, "<span class='notice'>You win $[win_value]!</span>")
 					playsound(src, "polaroid", 50, 1)
-
-					to_chat(user, "<span class='notice'>You win $[win_value]!</span>")
 				else
 					src.visible_message("<span class='danger'>[src]'s screen flashes red.</span>")
 
 		sleep(50)
 
 		overlays -= win_image
+
+/obj/machinery/computer/slot_machine/arcane_act(mob/user)
+	. = ..()
+	return "B'NUS D'CKS!"
 
 //Broadcast something over the radio!
 /obj/machinery/computer/slot_machine/proc/broadcast(var/message)

@@ -93,7 +93,8 @@ var/global/floorIsLava = 0
 		<br><br>
 		<A href='?src=\ref[src];traitor=\ref[M]'>Role panel</A> |
 		<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
-		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
+		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A> |
+		<A href='?src=\ref[src];sound_reply=\ref[M]'>Direct sound</A>
 	"}
 
 	if(istype(M, /mob/living/carbon/human))
@@ -860,6 +861,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
+			<A href='?src=\ref[src];secretsfun=money_lotto'>Start a lotto draw</A><BR>
 			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a random event from all possible random events (WARNING, NOT ALL ARE GUARANTEED TO WORK).</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
@@ -880,6 +882,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=switchon'>Flip all (ALL Z-LEVELS) light switches to on (Lags briefly)</A><BR>
 			<A href='?src=\ref[src];secretsfun=create_artifact'>Create custom artifact</A><BR>
 			<BR>
+			<A href='?src=\ref[src];secretsfun=athfthrowing'>Toggle thrown items exploding on stop</A><BR>
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
@@ -1382,7 +1385,7 @@ var/global/floorIsLava = 0
 /datum/admins/proc/toggletintedweldhelmets()
 	set category = "Debug"
 	set desc="Reduces view range when wearing welding helmets"
-	set name="Toggle tinted welding helmes"
+	set name="Toggle tinted welding helmets"
 
 	tinted_weldhelh = !( tinted_weldhelh )
 	if (tinted_weldhelh)

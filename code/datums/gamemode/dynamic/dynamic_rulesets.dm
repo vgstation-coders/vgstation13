@@ -2,6 +2,7 @@
 	var/name = ""//For admin logging, and round end scoreboard
 	var/persistent = 0//if set to 1, the rule won't be discarded after being executed, and /gamemode/dynamic will call process() every MC tick
 	var/repeatable = 0//if set to 1, dynamic mode will be able to draft this ruleset again later on. (doesn't apply for roundstart rules)
+	var/midround = 1//if set to 1, is a midround rule
 	var/list/candidates = list()//list of players that are being drafted for this rule
 	var/list/assigned = list()//list of players that were selected for this rule
 	var/datum/role/role_category = /datum/role/traitor //rule will only accept candidates with "Yes" or "Always" in the preferences for this role
@@ -30,7 +31,7 @@
 
 	var/list/requirements = list(40,30,20,10,10,10,10,10,10,10)
 	//requirements are the threat level requirements per pop range. The ranges are as follow:
-	//0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39, 40-54, 45+
+	//0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39, 40-44, 45+
 	//so with the above default values, The rule will never get drafted below 10 threat level (aka: "peaceful extended"), and it requires a higher threat level at lower pops.
 	//for reminder: the threat level is rolled at roundstart and tends to hover around 50 https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
 	var/high_population_requirement = 10
@@ -52,6 +53,7 @@
 		qdel(src)
 
 /datum/dynamic_ruleset/roundstart//One or more of those drafted at roundstart
+	midround = FALSE
 
 /datum/dynamic_ruleset/roundstart/delayed/ // Executed with a 30 seconds delay
 	var/delay = 30 SECONDS
@@ -60,7 +62,7 @@
 
 /datum/dynamic_ruleset/latejoin//Can be drafted when a player joins the server
 
-/datum/dynamic_ruleset/proc/acceptable(var/population=0,var/threat_level=0)
+/datum/dynamic_ruleset/proc/acceptable()
 	//by default, a rule is acceptable if it satisfies the threat level/population requirements.
 	//If your rule has extra checks, such as counting security officers, do that in ready() instead
 	if (!map.map_ruleset(src))
@@ -68,9 +70,17 @@
 		log_admin("Dynamic Mode: Skipping [name] due to map blacklist")
 		return 0
 
+	var/threat = !midround ? mode.threat : mode.midround_threat
+	if(threat < cost)
+		message_admins("Dynamic Mode: Skipping [name] due to not meeting threat cost.")
+		log_admin("Dynamic Mode: Skipping [name] due to not meeting threat cost.")
+		return 0
+
+	var/threat_level = !midround ? mode.threat_level : mode.midround_threat_level
 	if (player_list.len >= mode.high_pop_limit)
 		return (threat_level >= high_population_requirement)
 	else
+		var/population = !midround ? mode.roundstart_pop_ready : mode.living_players.len
 		var/indice_pop = min(10,round(population/5)+1)
 		return (threat_level >= requirements[indice_pop])
 

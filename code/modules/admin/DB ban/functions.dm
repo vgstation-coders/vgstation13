@@ -36,6 +36,13 @@
 		if(BANTYPE_OOC_TEMP)
 			bantype_str = "OOC_TEMPBAN"
 			bantype_pass = 1
+		if(BANTYPE_PAX_PERMA)
+			bantype_str = "PAX_PERMABAN"
+			duration = -1
+			bantype_pass = 1
+		if(BANTYPE_PAX_TEMP)
+			bantype_str = "PAX_TEMPBAN"
+			bantype_pass = 1
 	if( !bantype_pass )
 		return
 	if( !istext(reason) )
@@ -149,6 +156,12 @@
 				bantype_pass = 1
 			if(BANTYPE_ANY_FULLBAN)
 				bantype_str = "ANY"
+				bantype_pass = 1
+			if(BANTYPE_PAX_PERMA)
+				bantype_str = "PAX_PERMABAN"
+				bantype_pass = 1
+			if(BANTYPE_PAX_TEMP)
+				bantype_str = "PAX_TEMPBAN"
 				bantype_pass = 1
 		if( !bantype_pass )
 			return
@@ -372,6 +385,8 @@
 		<option value='[BANTYPE_APPEARANCE]'>APPEARANCE BAN</option>
 		<option value='[BANTYPE_OOC_PERMA]'>OOC_PERMABAN</option>
 		<option value='[BANTYPE_OOC_TEMP]'>OOC_TEMPBAN</option>
+		<option value='[BANTYPE_PAX_PERMA]'>PAX_PERMABAN</option>
+		<option value='[BANTYPE_PAX_TEMP]'>PAX_TEMPBAN</option>
 		</select></td>
 		<td><b>Ckey:</b> <input type='text' name='dbbanaddckey'></td></tr>
 		<tr><td><b>Duration:</b> <input type='text' name='dbbaddduration'></td>
@@ -471,6 +486,10 @@
 					typedesc = "<b>PERMA OOCBAN</b>"
 				if("OOC_TEMPBAN")
 					typedesc = "<b>TEMP OOCBAN</b>"
+				if("PAX_PERMABAN")
+					typedesc = "<b>PERMA PAXBAN</b>"
+				if("PAX_TEMPBAN")
+					typedesc = "<b>TEMP PAXBAN</b>"
 
 
 			output += {"<tr bgcolor='[dcolor]'>

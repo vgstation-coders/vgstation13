@@ -3,7 +3,7 @@
 
 /obj/machinery/gashapon
 	name = "\improper Gashapon Machine"
-	desc = "Insert coin, recieve capsule!"
+	desc = "Insert coin, receive capsule!"
 	icon = 'icons/obj/gashapon.dmi'
 	icon_state = "gashapon"
 	anchored = 1

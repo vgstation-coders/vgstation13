@@ -322,9 +322,16 @@
 
 
 
-/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
+/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!..())
 		return
+
+	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
+		visible_message("<span class='danger'>\The [user] [flavor ? "[flavor] " : ""][pick(I.attack_verb)] [user == src ? "[get_reflexive_pronoun(user.gender)]" : "\the [src]"] with \the [I]!</span>", \
+			"<span class='userdanger'>[user == src ? "You" : "\The [user]"] [flavor ? "[flavor] " : ""][user == src ? "[shift_verb_tense(pick(I.attack_verb))] yourself": "[pick(I.attack_verb)] you"] with \the [I]!</span>")
+	else if(!(I.flags & NO_ATTACK_MSG))
+		visible_message("<span class='danger'>\The [user] [flavor ? "[flavor] " : ""]attacks [user == src ? "[get_reflexive_pronoun(user.gender)]" : "\the [src]"] with \the [I.name]!</span>", \
+			"<span class='userdanger'>[user == src ? "You" : "\The [user]"] [flavor ? "[flavor] " : ""]attack[user == src ? " yourself" : "s you"] with \the [I.name]!</span>")
 
 	I.disease_contact(src,get_part_from_limb(def_zone))
 
@@ -349,7 +356,6 @@
 	return
 
 /mob/living/carbon/monkey/var/co2overloadtime = null
-/mob/living/carbon/monkey/var/temperature_resistance = T0C+75
 
 /mob/living/carbon/monkey/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
@@ -474,6 +480,7 @@
 		plane = LYING_MOB_PLANE
 	else
 		plane = MOB_PLANE
+	loc.adjust_layer(src)
 
 /mob/living/carbon/monkey/send_to_past(var/duration)
 	..()
@@ -497,7 +504,7 @@
 	icon_state = "mushroom"
 	greaterform = "Mushroom"
 	species_type = /mob/living/carbon/monkey/mushroom
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man
 	canWearClothes = 0
 	canWearHats = 0
 	canWearGlasses = 0

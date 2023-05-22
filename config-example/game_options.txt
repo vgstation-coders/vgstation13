@@ -57,8 +57,8 @@ METROID_DELAY 0
 ANIMAL_DELAY 0
 
 # Define how large an explosion can be.
-## DEFAULT: 14
-MAX_EXPLOSION_RANGE 14
+## DEFAULT: 32
+MAX_EXPLOSION_RANGE 32
 
 #################
 ### EMAG SHIT ###

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////FERAL GREY///////////
-
+//Previously found in Blacksite Prism
 /mob/living/simple_animal/hostile/humanoid/grey
 	name = "Grey"
 	desc = "A thin alien humanoid. This one seems to be feral."
@@ -34,15 +34,110 @@
 	languages += all_languages[LANGUAGE_GREY]
 
 //////////////////////////////
+// GREY PRISONERS
+//////////////////////////////
+//Found in Blacksite Prism
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner // Boring default prisoner, for inheritance
+	name = "Grey Prisoner"
+	desc = "A thin alien humanoid. This is wearing a prisoner's uniform and seems to be hostile."
+
+	icon_state = "grey_testsubject"
+	icon_living = "grey_testsubject"
+
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART
+	stat_attack = UNCONSCIOUS // No mercy in the big house
+
+	melee_damage_lower = 4
+	melee_damage_upper = 6 // Very weak melee attacks
+
+	attacktext = "kicks"
+	attack_sound = 'sound/weapons/punch1.ogg'
+
+	speak = list("I don't remember who I am... why? I must be someone.","Praise the... praise the... what? What was so important?","I don't remember how I arrived here, just red suits and pain. So much pain...","I will escape. I will.","So thirsty. There must be a drop of acid somewhere.","I cannot feel other minds anymore. I am alone.")
+	speak_chance = 1
+
+	corpse = /obj/effect/landmark/corpse/grey/prisoner
+	faction = "prisoner" // We're all brothers and sisters in binds now
+
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner/Aggro()
+	..()
+	say(pick("No, no more experiments!","I'll eviscerate you!","Greeeeeeeeeee!","You won't take me again!","Ngaaaaah! Die!"), all_languages[LANGUAGE_GREY])
+
+///////////////////////////////////////////////////////////////////Melee Prisoner///////////
+//Prisoner with a makeshift spear. Can occasionally do a piercing attack that bypasses armor damage resistance
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner/melee
+	desc = "A thin alien humanoid. This one is armed with a makeshift spear and seems to be hostile."
+
+	icon_state = "grey_testsubject_melee"
+	icon_living = "grey_testsubject_melee"
+
+	melee_damage_lower = 14
+	melee_damage_upper = 18 // Speermin
+
+	attacktext = "jabs"
+	attack_sound = 'sound/weapons/bladeslice.ogg'
+
+	items_to_drop = list(/obj/item/weapon/spear)
+
+	retreat_distance = 2 // Will attempt to kite/avoid incoming melee attacks
+	minimum_distance = 1
+
+	var/pierceattack_chance = 10
+
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner/melee/AttackingTarget()
+	if(prob(pierceattack_chance)) // Attack that does the mob's max damage and ignores damage resistance
+		var/mob/living/carbon/human/H = target
+		if(ishuman(H))
+			visible_message("<b><span class='warning'>[src] gores [H] with a carefully aimed spear thrust!</span>")
+			playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1)
+			var/datum/organ/external/chest/C = H.get_organ(LIMB_CHEST)
+			if(C)
+				C.take_damage(18) // If human, damage targets the chest
+		else
+			visible_message("<b><span class='warning'>[src] gores [H] with a carefully aimed spear thrust!</span>")
+			playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1)
+			H.adjustBruteLoss(18) // Otherwise just adjust bruteloss on the mob
+	else // A regular spear stabbin'
+		..()
+
+///////////////////////////////////////////////////////////////////Ranged Prisoner///////////
+//Prisoner with a makeshift laser musket. Decent ranged damage, but has to crank between shots
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner/ranged
+	desc = "A thin alien humanoid. This one is armed with a makeshift laser musket and seems to be hostile."
+
+	icon_state = "grey_testsubject_musket"
+	icon_living = "grey_testsubject_musket"
+
+	items_to_drop = list(/obj/item/weapon/gun/energy/lasmusket)
+
+	projectiletype = /obj/item/projectile/beam/lightlaser
+	projectilesound = 'sound/weapons/Laser.ogg'
+	retreat_distance = 4
+	minimum_distance = 4
+	ranged = 1
+
+	var/last_musketshot = 0
+	var/const/musketshot_cooldown = 6 SECONDS // Gotta crank it after firing!
+
+/mob/living/simple_animal/hostile/humanoid/grey/prisoner/ranged/Shoot() // This doesn't work as well as I'd hoped. Ideally it would only go on cooldown after they fire at a target, but what can you do. It works well enough, I suppose
+	if(last_musketshot + musketshot_cooldown > world.time)
+		visible_message("<b><span class='warning'>[src] cranks their laser musket!</span>")
+		playsound(src, 'sound/items/crank.ogg', 50, 1)
+	else
+		last_musketshot = world.time
+		..()
+
+//////////////////////////////
 // GREY EXPLORERS
 //////////////////////////////
 /mob/living/simple_animal/hostile/humanoid/grey/explorer
 	name = "Grey Explorer"
-	desc = "A thin alien humanoid. This one seems to be hostile."
+	desc = "A thin alien humanoid. This is wearing a mothership explorer uniform and seems to be hostile."
 
 	icon_state = "greyexplorer"
 	icon_living = "greyexplorer"
 
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
 
 	melee_damage_lower = 5
@@ -54,6 +149,9 @@
 	faction = "mothership"
 
 	corpse = /obj/effect/landmark/corpse/grey/explorer
+
+/mob/living/simple_animal/hostile/humanoid/grey/explorer/GetAccess()
+	return list(access_mothership_general, access_mothership_military)
 
 ///////////////////////////////////////////////////////////////////SPACEWORTHY EXPLORERS///////////
 /mob/living/simple_animal/hostile/humanoid/grey/explorer/space
@@ -168,6 +266,7 @@
 	icon_state = "greysoldier_base"
 	icon_living = "greysoldier_base"
 
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
 
 	health = 125
@@ -182,6 +281,9 @@
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_sentry
 
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/GetAccess()
+	return list(access_mothership_general, access_mothership_military)
+
 ///////////////////////////////////////////////////////////////////GREY GUARD///////////
 //Baseline soldier. Has an additional 25 HP and a disintegrator ranged weapon. They can also change firing modes in combat!
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/sentry
@@ -190,8 +292,6 @@
 
 	icon_state = "greysentry"
 	icon_living = "greysentry"
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
@@ -240,8 +340,6 @@
 
 	icon_state = "greysoldier"
 	icon_living = "greysoldier"
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	corpse = /obj/effect/landmark/corpse/grey/soldier_regular
 
@@ -304,8 +402,6 @@
 	attacktext = "beats"
 	attack_sound = 'sound/weapons/genhit1.ogg'
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // He is well-versed in the art of forced entry
-
 	corpse = /obj/effect/landmark/corpse/grey/soldier_pacifier
 
 	speak = list("Pacification unit reporting.","Stun probe ready.","Fortune favors the bold.","Praise the mothership.","I am ready for anything.")
@@ -337,56 +433,76 @@
 	say(pick("Enemy of the mothership!","Pacifying target!","Engaging!","Attack!"), all_languages[LANGUAGE_GREY])
 
 ///////////////////////////////////////////////////////////////////GREY GRENADIER///////////
-//Soldier that can throw grenades
+//Soldier that can launch grenades, very dangerous. Slightly better vision than the average soldier
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier
 	name = "MDF Grenadier"
-	desc = "A thin alien humanoid. This one is armed with a disintegrator and several strange-looking grenades."
+	desc = "A thin alien humanoid. This one is armed with a grenade launcher and several strange-looking grenades."
 
 	icon_state = "greygrenadier"
 	icon_living = "greygrenadier"
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
-
 	corpse = /obj/effect/landmark/corpse/grey/soldier_grenadier
 
-	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/weapon/grenade/chem_grenade/mothershipacid, /obj/item/weapon/grenade/spawnergrenade/mothershipdrone)
+	items_to_drop = list(/obj/item/weapon/gun/grenadelauncher, /obj/item/weapon/grenade/chem_grenade/mothershipacid, /obj/item/weapon/grenade/spawnergrenade/mothershipdrone)
 
 	speak = list("Grenade belt loaded, standing by.","A few grenades never fail to soften the enemy up.","When are we due for rotation?")
 	speak_chance = 1
 
-	projectiletype = /obj/item/projectile/beam/scorchray
-	projectilesound = 'sound/weapons/ray1.ogg'
-	retreat_distance = 5
-	minimum_distance = 5
+	vision_range = 10
+	aggro_vision_range = 10
+	idle_vision_range = 10 // Keeping an eye open for a target to launch a grenade towards at all times
+
 	ranged = 1
+	retreat_distance = 6
+	minimum_distance = 6
+	ranged_cooldown_cap = 8 // Launching grenades is pretty powerful, gotta give it a cooldown
+
+	var/reloading = 0 // Grenadier will move further away or closer depending on if cooling down from a grenade launch, or ready to fire
+	var/loaded = 1
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier/Life()
+	..()
+	if(reloading == 1) // We're cooling down or "reloading" after the last shot. Run farther away!
+		retreat_distance = 9
+		minimum_distance = 9
+		spawn(8 SECONDS)
+			loaded = 1
+			reloading = 0
+	if(loaded == 1) // Locked and loaded. Back into the fray!
+		retreat_distance = 6
+		minimum_distance = 6
 
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier/Shoot(var/atom/target, var/atom/start, var/mob/user)
-	if(prob(15)) // This weird mess creates a small chance to throw and prime one of two grenade types
-		switch(rand(1,2))
-			if(1)
-				visible_message("<span class = 'warning'>\The [src] primes a grenade and hurls it towards \the [target]!</span>")
-				say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
-				var/atom/movable/grenade_to_throw = new /obj/item/weapon/grenade/spawnergrenade/mothershipdrone(get_turf(src))
-				var/obj/item/weapon/grenade/F = grenade_to_throw
-				grenade_to_throw.throw_at(target,10,2)
-				F.activate()
-			if(2)
-				visible_message("<span class = 'warning'>\The [src] primes a grenade and hurls it towards \the [target]!</span>")
-				say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
-				var/atom/movable/grenade_to_throw = new /obj/item/weapon/grenade/chem_grenade/mothershipacid(get_turf(src))
-				var/obj/item/weapon/grenade/F = grenade_to_throw
-				grenade_to_throw.throw_at(target,10,2)
-				F.activate()
-
-	else // Otherwise just fire a projectile normally
-		..()
+	switch(rand(1,2))
+		if(1)
+			visible_message("<span class = 'warning'>\The [src] launches a grenade towards \the [target]!</span>")
+			say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
+			playsound(src, 'sound/weapons/grenadelauncher.ogg', 50, 1)
+			var/atom/movable/grenade_to_throw = new /obj/item/weapon/grenade/spawnergrenade/mothershipdrone(get_turf(src))
+			var/obj/item/weapon/grenade/F = grenade_to_throw
+			grenade_to_throw.throw_at(target,10,2)
+			F.activate()
+			ranged_cooldown = 8
+			loaded = 0
+			reloading = 1
+		if(2)
+			visible_message("<span class = 'warning'>\The [src] launches a grenade towards \the [target]!</span>")
+			say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
+			playsound(src, 'sound/weapons/grenadelauncher.ogg', 50, 1)
+			var/atom/movable/grenade_to_throw = new /obj/item/weapon/grenade/chem_grenade/mothershipacid(get_turf(src))
+			var/obj/item/weapon/grenade/F = grenade_to_throw
+			grenade_to_throw.throw_at(target,10,2)
+			F.activate()
+			ranged_cooldown = 8
+			loaded = 0
+			reloading = 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier/Aggro()
 	..()
 	say(pick("Hostile target!","Prepping grenade.","Open fire!","For the mothership!"), all_languages[LANGUAGE_GREY])
 
 ///////////////////////////////////////////////////////////////////GREY HEAVY SOLDIER///////////
-//A much tankier but slower grey soldier. Can throw a grenade like the grenadier, and when health gets low will deploy an energy shield to protect himself
+//A much tankier but slower grey soldier. Has a small chance to throw a grenade, and when health gets low will deploy an energy shield to protect himself
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/heavy
 	name = "MDF Heavy"
 	desc = "A thin alien humanoid. This one is heavily armored from head to toe and armed with a heavy disintegrator."
@@ -406,8 +522,6 @@
 
 	move_to_delay = 3 // Being densely armored means slow going
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash things open
-
 	corpse = /obj/effect/landmark/corpse/grey/soldier_heavy
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/heavydisintegrator, /obj/item/weapon/shield/energy/red)
@@ -425,9 +539,6 @@
 	ranged = 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/heavy/Shoot(var/atom/target, var/atom/start, var/mob/user)
-	if(shield_up == 1) // If the shield is up shoot a bit less often, we're focusing on defense
-		ranged_cooldown = 2
-		..()
 	if(shield_up == 0 && prob(5)) // If the shield isn't up, maybe we throw a grenade
 		visible_message("<span class = 'warning'>\The [src] primes a grenade and hurls it towards \the [target]!</span>")
 		say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
@@ -489,6 +600,76 @@
 	..()
 	say(pick("For the Administration!","Report, target marked for disintegration.","Sterilizing target.","For the mothership!","You cannot stand against us."), all_languages[LANGUAGE_GREY])
 
+///////////////////////////////////////////////////////////////////GREY TROOPER BASE///////////
+//Baseline unarmed spaceworthy ayy soldier, here for the sake of inheritance. Has a slightly larger vision range than the average soldier
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space
+	name = "MDF Trooper"
+	desc = "A thin alien humanoid. This one is wearing an armored rigsuit and seems to be hostile."
+
+	icon_state = "greytrooper"
+	icon_living = "greytrooper"
+
+	vision_range = 10
+	aggro_vision_range = 10
+	idle_vision_range = 10
+
+	maxHealth = 140 // More hp than a standard soldier, less than the heavy soldier
+	health = 140
+
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
+	maxbodytemp = 1000 // Spess protection stats
+
+	corpse = /obj/effect/landmark/corpse/grey/soldier_space
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/Process_Spacemove(var/check_drift = 0) // They can follow enemies into space, and won't just drift off
+	return 1
+
+///////////////////////////////////////////////////////////////////GREY TROOPER///////////
+//Less tanky than the heavy soldier, but spaceworthy. A little more clever than a regular soldier with its tactics, will back off and shoot from further away if his health gets low
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged
+	name = "MDF Trooper"
+	desc = "A thin alien humanoid. This one is wearing an armored rigsuit and armed with a heavy disintegrator."
+
+	icon_state = "greytrooper_laser"
+	icon_living = "greytrooper_laser"
+
+	var/defensive_stance = 0
+
+	items_to_drop = list(/obj/item/weapon/gun/energy/heavydisintegrator)
+
+	speak = list("Sweeping sector, be prepared for EVA.","Praise the mothership, and all hail the Chairman.","Air supply capacity check is green.","Terminate all unauthorized personnel and unidentified xenofauna.")
+	speak_chance = 1
+
+	projectiletype = /obj/item/projectile/beam/immolationray
+	projectilesound = 'sound/weapons/ray1.ogg'
+	retreat_distance = 5
+	minimum_distance = 5
+	ranged = 1
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged/Life()
+	..()
+	if(health <= 70 && defensive_stance == 0) // Health is getting low, lets back off and try to use range to our advantage
+		defensive_stance = 1
+		retreat_distance = 7
+		minimum_distance = 7
+		say("[pick("Trooper under heavy fire! Moving to reserve position.", "Hostile is proving resilient. Backup required.", "Covering fire! Now!")]")
+	if(health > 70 && defensive_stance == 1) // Health has somehow been restored, lets get closer and be more aggressive
+		defensive_stance = 0
+		retreat_distance = 5
+		minimum_distance = 5
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged/Aggro()
+	..()
+	say(pick("Hostile sighted, my sector.","Report, target marked for disintegration.","Sterilizing target.","For the mothership!","Target acquired. Disintegrate with extreme prejudice."), all_languages[LANGUAGE_GREY])
+
 //////////////////////////////
 // GREY RESEARCHERS
 //////////////////////////////
@@ -500,6 +681,7 @@
 	icon_state = "greyresearcher_base"
 	icon_living = "greyresearcher_base"
 
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash things open, nerd rage
 	stat_attack = UNCONSCIOUS // Grey hostile humanoids are too smart to think that someone is dead just because they fell over
 
 	melee_damage_lower = 4
@@ -512,6 +694,9 @@
 
 	corpse = /obj/effect/landmark/corpse/grey/researcher
 
+/mob/living/simple_animal/hostile/humanoid/grey/researcher/GetAccess()
+	return list(access_mothership_general, access_mothership_research)
+
 ///////////////////////////////////////////////////////////////////GREY SCIENTIST///////////
 //Grey ranged researcher. Less hit points than a soldier, will shoot their disintegrator at targets and occasionally change firing modes
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/laser
@@ -520,8 +705,6 @@
 
 	icon_state = "greyresearcher_laser"
 	icon_living = "greyresearcher_laser"
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Lesson learned, don't leave just an OPEN_DOOR_STRONG flag on a ranged mob. It doesn't work!
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator)
 
@@ -571,8 +754,6 @@
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/chemist
 	name = "Mothership Chemist"
 	desc = "A thin alien humanoid. This one doesn't seemed armed, but has several flasks of unknown chemicals sticking out of their labcoat pockets."
-
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash things open, nerd rage
 
 	items_to_drop = list(/obj/item/toy/snappop/virus, /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer)
 
@@ -625,8 +806,6 @@
 	attacktext = "slices"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash things open
-
 	corpse = /obj/effect/landmark/corpse/grey/surgeon
 
 	items_to_drop = list(/obj/item/tool/scalpel/laser)
@@ -641,32 +820,31 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Shoot()
 	var/mob/living/carbon/human/H = target
-	if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+	if(can_mind_interact(H.mind)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 		return
-	else
-		switch(rand(0,4))
-			if(0) //Minor brain damage
-				to_chat(H, "<span class='userdanger'>You get a blindingly painful headache.</span>")
-				H.adjustBrainLoss(10)
-				H.eye_blurry = max(H.eye_blurry, 5)
-			if(1) //Brief knockdown
-				to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
-				H.emote("me", 1, "collapses!")
-				H.Knockdown(2)
-			if(2) //Target gets put to sleep for a few seconds
-				to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
-				H.drowsyness += 4
-				spawn(2 SECONDS)
-					H.sleeping += 3
-			if(3) //Minor hallucinations and jittering
-				to_chat(H, "<span class='userdanger'>Your mind feels less stable, and you feel nervous.</span>")
-				H.hallucination += 60 // For some reason it has to be this high at least or seemingly nothing happens
-				H.Jitter(20)
-				H.stuttering += 20
-			if(4) //Ranged disarm
-				to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
-				H.drop_item()
-		return 1
+	switch(rand(0,4))
+		if(0) //Minor brain damage
+			to_chat(H, "<span class='userdanger'>You get a blindingly painful headache.</span>")
+			H.adjustBrainLoss(10)
+			H.eye_blurry = max(H.eye_blurry, 5)
+		if(1) //Brief knockdown
+			to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
+			H.emote("me", 1, "collapses!")
+			H.Knockdown(2)
+		if(2) //Target gets put to sleep for a few seconds
+			to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
+			H.drowsyness += 4
+			spawn(2 SECONDS)
+				H.sleeping += 3
+		if(3) //Minor hallucinations and jittering
+			to_chat(H, "<span class='userdanger'>Your mind feels less stable, and you feel nervous.</span>")
+			H.hallucination += 60 // For some reason it has to be this high at least or seemingly nothing happens
+			H.Jitter(20)
+			H.stuttering += 20
+		if(4) //Ranged disarm
+			to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
+			H.drop_item()
+	return 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Aggro()
 	..()
@@ -779,64 +957,48 @@
 			M.throw_at(target_turf,100,telekinesis_throw_speed)
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Shoot()
-	if(last_psychicattack + psychicattack_cooldown < world.time)
-		var/list/victims = list()
-		for(var/mob/living/carbon/human/H in view(src, psychic_range))
-			victims.Add(H)
-
-		if(!victims.len)
-			return
-		switch(rand(0,4))
-			if(0) //Brain damage, confusion, and dizziness
-				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
-						continue
-					to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
-					H.adjustBrainLoss(20)
-					H.eye_blurry = max(H.eye_blurry, 10)
-					H.confused += 10
-					H.dizziness += 10
-					last_psychicattack = world.time
-					if(prob(25))
-						H.audible_scream()
-			if(1) //A knockdown, with some dizziness
-				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
-						continue
-					to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
-					H.emote("me", 1, "collapses!")
-					H.Knockdown(4)
-					H.confused += 6
-					H.dizziness += 6
-					last_psychicattack = world.time
-			if(2) //Naptime
-				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
-						continue
-					to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
-					H.drowsyness += 6
-					last_psychicattack = world.time
-					spawn(2 SECONDS)
-						H.sleeping += 5
-			if(3) //Serious hallucinations and jittering
-				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
-						continue
-					to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
-					H.hallucination += 75
-					H.Jitter(30)
-					H.stuttering += 30
-					last_psychicattack = world.time
-			if(4) //Brief period of pacification
-				for(var/mob/living/carbon/human/H in victims)
-					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
-						continue
-					to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
-					H.reagents.add_reagent(CHILLWAX, 1)
-					last_psychicattack = world.time
-
-	if(!last_psychicattack + psychicattack_cooldown < world.time) // If not done cooling down from the previous psychic attack, just shoot a laser beem
+	// If not done cooling down from the previous psychic attack, just shoot a laser beem
+	if(last_psychicattack + psychicattack_cooldown > world.time)
 		..()
+		return
+	var/list/victims = list()
+	for(var/mob/living/carbon/human/H in view(src, psychic_range))
+		victims.Add(H)
+	if(!victims.len)
+		return
+	var/shot_choice = rand(0,4)
+	for(var/mob/living/carbon/human/H in victims)
+		if(!can_mind_interact(H.mind))
+			continue
+		switch(shot_choice)
+			if(0) //Brain damage, confusion, and dizziness
+				to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
+				H.adjustBrainLoss(20)
+				H.eye_blurry = max(H.eye_blurry, 10)
+				H.confused += 10
+				H.dizziness += 10
+				if(prob(25))
+					H.audible_scream()
+			if(1) //A knockdown, with some dizziness
+				to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
+				H.emote("me", 1, "collapses!")
+				H.Knockdown(4)
+				H.confused += 6
+				H.dizziness += 6
+			if(2) //Naptime
+				to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
+				H.drowsyness += 6
+				spawn(2 SECONDS)
+					H.sleeping += 5
+			if(3) //Serious hallucinations and jittering
+				to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
+				H.hallucination += 75
+				H.Jitter(30)
+				H.stuttering += 30
+			if(4) //Brief period of pacification
+				to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
+				H.reagents.add_reagent(CHILLWAX, 1)
+	last_psychicattack = world.time
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/bullet_act(var/obj/item/projectile/P) // Lasers have a 50% chance to reflect off the armor, which matches up if the player takes it and puts it on
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
@@ -855,3 +1017,9 @@
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Aggro()
 	..()
 	say(pick("You came this far, even after being warned not to? So be it.","You are clearly too intellectually inferior to understand anything but force.","Attacking a mothership administrator? I almost pity your stupidity.","What do you even hope to accomplish from this?","What a grand and intoxicating insolence.","Once I've disintegrated your body I will keep your brain to study your unnatural behavior."), all_languages[LANGUAGE_GREY])
+
+/mob/living/simple_animal/hostile/humanoid/grey/leader/GetAccess()
+	return list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
+
+/mob/living/simple_animal/hostile/humanoid/grey/leader/Process_Spacemove(var/check_drift = 0) // The ayy leader can follow enemies into space, and won't just drift off
+	return 1

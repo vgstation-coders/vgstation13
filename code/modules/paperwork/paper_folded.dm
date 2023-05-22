@@ -26,8 +26,7 @@
 
 /obj/item/weapon/p_folded/Destroy()
 	if (unfolded)
-		qdel(unfolded)
-		unfolded = null
+		QDEL_NULL(unfolded)
 	return ..()
 
 /obj/item/weapon/p_folded/attack_self(mob/user as mob)
@@ -108,8 +107,7 @@
 	throw_range = 12
 	throw_speed = 1
 /obj/item/weapon/p_folded/plane/throw_impact(var/atom/target, speed, mob/user)
-	..()
-	if(user) //runtimes not allowed
+	if(!..() && user) //runtimes not allowed
 		if(ishuman(target) && (user.zone_sel.selecting == "eyes" || prob(20)))
 			var/mob/living/carbon/human/H = target
 			if (H.check_body_part_coverage(EYES))

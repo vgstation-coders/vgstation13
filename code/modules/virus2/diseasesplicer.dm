@@ -103,9 +103,9 @@
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(scanning || splicing || burning)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 	if(scanning)
 		scanning -= 1
@@ -232,8 +232,7 @@
 			break
 	scanning = DISEASE_SPLICER_SCANNING_TICKS
 	analysed = dish.analysed
-	qdel(dish)
-	dish = null
+	QDEL_NULL(dish)
 	update_icon()
 	anim(target = src, a_icon = icon, flick_anim = "splicer_scan", sleeptime = 15)
 

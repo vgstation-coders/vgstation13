@@ -1,3 +1,6 @@
+/obj/item/weapon/melee
+	on_armory_manifest = TRUE
+
 /obj/item/weapon/melee/energy
 	var/active = 0
 	sharpness = 1.5 //very very sharp
@@ -316,11 +319,11 @@
 			sleep(1)
 
 /obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
+	if(..())
+		return 1
+	if(iscarbon(AM))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(2, 2, 1))
-			M.simple_message("<span class='notice'>You slipped on [src]!</span>",
-				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+		M.Slip(2, 2, 1, slipped_on = src, drugged_message = "<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
 /obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/clumsy_check(mob/living/user)
 	return 0
@@ -366,13 +369,13 @@
 	to_chat(user, active ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
 	playsound(user, active ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0)
 	if(active)
-		user.register_event(/event/moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, src::mob_moved())
 	else
-		user.unregister_event(/event/moved, src, .proc/mob_moved)
+		user.unregister_event(/event/moved, src, src::mob_moved())
 	update_icon()
 
 /obj/item/weapon/melee/energy/hfmachete/dropped(mob/user)
-	user.unregister_event(/event/moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, src::mob_moved())
 
 /obj/item/weapon/melee/energy/hfmachete/throw_at(atom/target, range, speed, override = 1)
 	if(!usr)
@@ -423,8 +426,7 @@
 	if(machete_combined || HF.machete_combined) //Adding a variable to separate the bloodlust from the machete is a lot less lines than copypasting most of the machete code
 		return
 	to_chat(user, "<span class='notice'>You combine the two [HF] together, making a single scissor-bladed weapon! You feel fucking invincible!</span>")
-	qdel(HF)
-	W = null
+	QDEL_NULL(W)
 	qdel(src)
 	var/B = new /obj/item/weapon/melee/energy/hfmachete/bloodlust(user.loc)
 	user.put_in_hands(B)
@@ -472,9 +474,9 @@
 	to_chat(user, active ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
 	playsound(user, active ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0 )
 	if(active)
-		user.register_event(/event/moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, src::mob_moved())
 	else
-		user.unregister_event(/event/moved, src, .proc/mob_moved)
+		user.unregister_event(/event/moved, src, src::mob_moved())
 
 /obj/item/weapon/melee/energy/hfmachete/bloodlust/IsShield()
 	if(active)

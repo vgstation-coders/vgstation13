@@ -5,7 +5,7 @@
  * Remote Controlled from QM's PDA
  *
  * Hello, the path algorithm now uses
- *
+ * NOW USES WHAT??? UH???? UH????
  *
  *
  *
@@ -78,7 +78,11 @@ var/global/mulebot_count = 0
 	var/run_over_cooldown = 3 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
 	var/coolingdown = FALSE
 
-	commanding_radio = /obj/item/radio/integrated/signal/bot/mule
+	// Technically if we were true to form, the navbeacon should've an insider radio which would be sending the signal rather than sending the signal itself
+	// The gain in functionality if it were to be implented is negligeble for a lot of confusing code
+	// Maybe I will implement it in a saner one day.
+	// https://www.youtube.com/watch?v=w_yPZfHJSaY
+	commanding_radios = list(/obj/item/radio/integrated/signal/bot/mule, /obj/machinery/navbeacon, /obj/machinery/bot/mulebot)
 
 	var/datum/bot/order/mule/current_order // where we're going and what we have to do once we arrive to destination
 
@@ -114,11 +118,9 @@ var/global/mulebot_count = 0
 		radio_controller.remove_object(src, control_freq)
 		radio_controller.remove_object(src, beacon_freq)
 	if(wires)
-		qdel(wires)
-		wires = null
+		QDEL_NULL(wires)
 	if(cell)
-		qdel(cell)
-		cell = null
+		QDEL_NULL(cell)
 
 	..()
 
@@ -303,8 +305,12 @@ var/global/mulebot_count = 0
 	switch (command)
 		if ("return_home")
 			start_home()
+		if ("") // empty
+			astar_debug_mulebots("Empty command")
+			return
 		else // It's a new destination !
-			set_destination(command)
+			astar_debug_mulebots("New destination started: [command]")
+			start()
 
 // returns the wire panel text
 /obj/machinery/bot/mulebot/proc/wires()
@@ -372,7 +378,7 @@ var/global/mulebot_count = 0
 
 			if("destination")
 				refresh=0
-				var/new_dest = input("Enter new destination tag", "Mulebot [suffix ? "([suffix])" : ""]", destination) as text|null
+				var/new_dest = copytext(sanitize(input("Enter new destination tag", "Mulebot [suffix ? "([suffix])" : ""]", destination) as text|null),1,MAX_NAME_LEN)
 				refresh=1
 				if(new_dest && Adjacent(usr) && !usr.stat)
 					set_destination(new_dest)
@@ -388,7 +394,7 @@ var/global/mulebot_count = 0
 
 			if("sethome")
 				refresh=0
-				var/new_home = input("Enter new home tag", "Mulebot [suffix ? "([suffix])" : ""]", home_destination) as text|null
+				var/new_home = copytext(sanitize(input("Enter new home tag", "Mulebot [suffix ? "([suffix])" : ""]", home_destination) as text|null),1,MAX_MESSAGE_LEN)
 				refresh=1
 				if(new_home && Adjacent(usr) && !usr.stat)
 					home_destination = new_home
@@ -492,7 +498,7 @@ var/global/mulebot_count = 0
 
 	//I'm sure someone will come along and ask why this is here... well people were dragging screen items onto the mule, and that was not cool.
 	//So this is a simple fix that only allows a selection of item types to be considered. Further narrowing-down is below.
-	if(!istype(C,/obj/item) && !istype(C,/obj/machinery) && !istype(C,/obj/structure) && !ismob(C))
+	if(!can_load(C))
 		return
 	if(!isturf(C.loc)) //To prevent the loading from stuff from someone's inventory, which wouldn't get handled properly.
 		return
@@ -511,6 +517,18 @@ var/global/mulebot_count = 0
 		crate.close()
 
 	lock_atom(C, /datum/locking_category/mulebot)
+
+/obj/machinery/bot/mulebot/proc/can_load(var/atom/movable/C)
+	if (C.anchored)
+		return FALSE
+	if (!istype(C,/obj/item) && !istype(C,/obj/machinery) && !istype(C,/obj/structure) && !ismob(C))
+		return FALSE
+	if (!emagged)
+		if (istype(C,/obj/machinery/door))
+			return check_access(botcard)
+		if (istype(C, /obj/structure/grille) || istype(C, /obj/structure/window))
+			return FALSE
+	return TRUE
 
 // called to unload the bot
 // argument is optional direction to unload
@@ -577,6 +595,7 @@ var/global/mulebot_count = 0
 
 // starts bot moving to current destination
 /obj/machinery/bot/mulebot/proc/start()
+	astar_debug_mulebots("Moving out toward [destination]")
 	if(destination == home_destination)
 		mode = MODE_RETURNING
 	else
@@ -584,7 +603,7 @@ var/global/mulebot_count = 0
 	icon_state = "[icon_initial][(wires.MobAvoid() != 0)]"
 
 /obj/machinery/bot/mulebot/set_destination(var/new_dest)
-	log_astar_beacon("new_destination [new_dest]")
+	astar_debug_mulebots("new_destination is now [new_dest]")
 	new_destination = new_dest
 	request_path(new_dest)
 
@@ -594,15 +613,16 @@ var/global/mulebot_count = 0
 	signal.source = src
 	signal.transmission_method = 1
 	var/list/keyval = list(
-		"findbeacon" = new_dest
+		"findbeacon" = new_dest,
 	)
 	signal.data = keyval
 	frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
+	astar_debug_mulebots("requesting path on freq [frequency.frequency]")
 
 /obj/machinery/bot/mulebot/receive_signal(datum/signal/signal)
 	var/recv = signal.data["beacon"]
 	if(recv && recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
-		log_astar_beacon("new destination chosen, [recv]")
+		astar_debug_mulebots("new destination recieved and acknoweldged from navbeacons, [recv]")
 		destination = new_destination
 		new_destination = ""
 		target = signal.source.loc
@@ -815,6 +835,7 @@ var/global/mulebot_count = 0
 	qdel(src)
 
 /obj/machinery/bot/mulebot/process_pathing()
+	astar_debug_mulebots("process_pathing mulebot")
 	if(path.len)
 		set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
 		if(!process_astar_path()) // either end of path or couldn't move
@@ -833,13 +854,18 @@ var/global/mulebot_count = 0
 				return
 		spawn(SS_WAIT_BOTS/steps_per)
 			process_pathing()
-	else if(destinations_queue.len)
-		current_order = shift(destinations_queue)
-		var/stop_a_tile_before = current_order.thing_to_load != null
-		path = get_path_to(src, current_order.destination, 30, stop_a_tile_before, botcard)
-		if(path.len)
-			bots_list.Remove(src)
-			process_pathing()
+	else
+		if (destination && !(destinations_queue.len))
+			var/datum/bot/order/mule/new_order = new(get_turf(target), null, FALSE)
+			destinations_queue.Add(new_order)
+		if(destinations_queue.len)
+			astar_debug_mulebots("destination_queue non empty")
+			current_order = shift(destinations_queue)
+			var/stop_a_tile_before = current_order.thing_to_load != null
+			path = get_path_to(src, current_order.destination, 30, stop_a_tile_before, botcard)
+			if(path.len)
+				bots_list.Remove(src)
+				process_pathing()
 
 /obj/machinery/bot/mulebot/process_astar_path()
 	if(gcDestroyed)
@@ -931,8 +957,7 @@ var/global/mulebot_count = 0
 /obj/item/mulebot_laser/Destroy()
 	. = ..()
 	laser_pointers_list -= src
-	qdel(radio)
-	radio = null
+	QDEL_NULL(radio)
 	my_mulebot = null
 
 /obj/item/mulebot_laser/attack_self(mob/user)

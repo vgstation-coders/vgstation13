@@ -12,6 +12,7 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FACE
 	pressure_resistance = ONE_ATMOSPHERE
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/canstage = 1
 	var/stage = 0
 
@@ -68,7 +69,7 @@
 	desc = "A close-fitting tactical mask that can be connected to an air supply."
 	icon_state = "swat"
 	siemens_coefficient = 0.7
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -77,7 +78,7 @@
 	desc = "A face-covering mask that can be connected to an air supply."
 	icon_state = "ert"
 	siemens_coefficient = 0.7
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	w_class = W_CLASS_SMALL
 	can_flip = 0
 	canstage = 0
@@ -87,7 +88,7 @@
 	desc = "A close-fitting tactical mask that can be connected to an air supply."
 	icon_state = "swat"
 	siemens_coefficient = 0.7
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -171,7 +172,7 @@
 	icon_state = "fake-moustache"
 	w_class = W_CLASS_TINY
 	actions_types = list(/datum/action/item_action/toggle_voicechanger)
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/gas/clown_hat
 	name = "clown wig and mask"
@@ -192,7 +193,7 @@
 /obj/item/clothing/mask/gas/clown_hat/stickymagic
 	canremove = 0
 
-/obj/item/clothing/mask/gas/clown_hat/stickymagic/acidable()
+/obj/item/clothing/mask/gas/clown_hat/stickymagic/dissolvable()
 	return 0
 
 /obj/item/clothing/mask/gas/clown_hat/wiz
@@ -254,7 +255,7 @@
 	canremove = 0
 	muted = 1
 
-/obj/item/clothing/mask/gas/mime/stickymagic/acidable()
+/obj/item/clothing/mask/gas/mime/stickymagic/dissolvable()
 	return 0
 
 /obj/item/clothing/mask/gas/monkeymask
@@ -275,11 +276,25 @@
 	can_flip = 0
 	canstage = 0
 
-/obj/item/clothing/mask/gas/death_commando
-	name = "Death Commando Mask"
+/obj/item/clothing/mask/gas/grim_reaper
+	name = "grim reaper mask"
+	desc = "Spare a coin for the ferryman, or brave the Styx on your own?"
 	icon_state = "death"
 	item_state = "death"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	can_flip = 0
+	canstage = 0
+
+/obj/item/clothing/mask/gas/grim_reaper/death_commando
+	name = "Death Commando Mask"
+	desc = "A face-covering mask that can be connected to an air supply."
 	siemens_coefficient = 0.2
+
+/obj/item/clothing/mask/gas/slasher
+	name = "hockey mask"
+	desc = "Maybe don't wear this near a lake on unlucky days."
+	icon_state = "jason"
+	item_state = "jason"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
@@ -329,7 +344,7 @@
 	name = "HECU gas mask"
 	desc = "An ancient gas mask with the letters HECU stamped on the side. Comes with a shouting-activated voice modulator that slowly recharges."
 	icon_state = "hecu"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 	ignore_flip = 1

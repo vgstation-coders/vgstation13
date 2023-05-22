@@ -7,9 +7,6 @@
 	nameShort = "lamprey"
 	nameLong = "Lamprey Station"
 	map_dir = "lampreystation"
-	tDomeX = 128
-	tDomeY = 58
-	tDomeZ = 2
 	zDerelict = 3
 	zAsteroid = 4
 	zTCommSat = 5

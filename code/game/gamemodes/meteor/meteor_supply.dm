@@ -135,13 +135,13 @@
 //Power to run all that fancy shit. Partially at least, evacuating the AME isn't a bad idea
 /obj/structure/closet/crate/secure/large/meteor_power
 	name = "\improper Space Weather Inc. emergency generator"
-	desc = "Uranium-powered SUPERPACMAN emergency generator. Keep away from meteors."
+	desc = "Diamond-powered MRSPACMAN emergency generator. Keep away from meteors."
 
 /obj/structure/closet/crate/secure/large/meteor_power/New()
 
 	..()
-	new /obj/machinery/power/port_gen/pacman/super(src)
-	new /obj/item/stack/sheet/mineral/uranium(src, 50)
+	new /obj/machinery/power/port_gen/pacman/mrs(src)
+	new /obj/item/stack/sheet/mineral/diamond(src, 50)
 
 /obj/structure/closet/crate/engi/meteor_breach
 	name = "\improper Space Weather Inc. anti-breach kit"

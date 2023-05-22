@@ -11,6 +11,9 @@
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey
 	initial_modules = list(/obj/item/rig_module/rad_shield)
 
+/obj/item/clothing/suit/space/rig/grey/dissolvable()
+	return WATER
+
 /obj/item/clothing/head/helmet/space/rig/grey
 	name = "worker pressure helmet"
 	desc = " A grey laborer's pressure helmet. It protects the cranium from common work hazards in vacuum. Safety first!"
@@ -20,6 +23,9 @@
 	armor = list(melee = 30, bullet = 5, laser = 20, energy = 5, bomb = 25, bio = 100, rad = 50)
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/head/helmet/space/rig/grey/dissolvable()
+	return WATER
 
 
 //Researcher//
@@ -32,6 +38,9 @@
 	armor = list(melee = 30, bullet = 5, laser = 20, energy = 5, bomb = 40, bio = 100, rad = 40)
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey/researcher
 
+/obj/item/clothing/suit/space/rig/grey/researcher/dissolvable()
+	return WATER
+
 /obj/item/clothing/head/helmet/space/rig/grey/researcher
 	name = "researcher pressure helmet"
 	desc = "A grey researcher's pressure helmet. The brightest minds will lead the way!"
@@ -39,6 +48,9 @@
 	item_state = "rig0_grey_researcher_dome"
 	_color = "grey_researcher_dome"
 	armor = list(melee = 30, bullet = 5, laser = 20, energy = 5, bomb = 40, bio = 100, rad = 40)
+
+/obj/item/clothing/head/helmet/space/rig/grey/researcher/dissolvable()
+	return WATER
 
 //Soldier//
 
@@ -52,6 +64,9 @@
 	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/handcuffs, /obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/weapon/gun/energy/heavydisintegrator)
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey/soldier
 
+/obj/item/clothing/suit/space/rig/grey/soldier/dissolvable()
+	return WATER
+
 /obj/item/clothing/head/helmet/space/rig/grey/soldier
 	name = "soldier pressure helmet"
 	desc = "A grey soldier's pressure helmet. All enemies of the mothership must be disintegrated!"
@@ -59,6 +74,9 @@
 	item_state = "rig0_grey_soldier_dome"
 	_color = "grey_soldier_dome"
 	armor = list(melee = 40, bullet = 15, laser = 50, energy = 15, bomb = 30, bio = 100, rad = 20)
+
+/obj/item/clothing/head/helmet/space/rig/grey/soldier/dissolvable()
+	return WATER
 
 //Leader//
 
@@ -70,9 +88,10 @@
 	armor = list(melee = 50, bullet = 25, laser = 70, energy = 25, bomb = 40, bio = 100, rad = 50)
 	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/weapon/gun/energy/heavydisintegrator, /obj/item/weapon/gun/energy/advdisintegrator)
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey/leader
+	clothing_flags = PLASMAGUARD
 
-/obj/item/clothing/suit/space/rig/grey/leader/acidable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
-	return 0
+/obj/item/clothing/suit/space/rig/grey/leader/dissolvable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
+	return FALSE
 
 /obj/item/clothing/head/helmet/space/rig/grey/leader
 	name = "Administrator Pressure Helmet"
@@ -81,6 +100,7 @@
 	item_state = "rig0_grey_leader_dome"
 	_color = "grey_leader_dome"
 	armor = list(melee = 50, bullet = 25, laser = 70, energy = 25, bomb = 40, bio = 100, rad = 50)
+	clothing_flags = PLASMAGUARD
 
-/obj/item/clothing/head/helmet/space/rig/grey/leader/acidable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
-	return 0
+/obj/item/clothing/head/helmet/space/rig/grey/leader/dissolvable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
+	return FALSE

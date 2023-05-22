@@ -15,6 +15,7 @@
 	w_class = W_CLASS_MEDIUM
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_MATERIALS + "=4"
 	var/max_amount = 90
 	var/active = 0
@@ -57,8 +58,7 @@
 		to_chat(user, "<span class='info'>It contains [loaded.amount]/90 cables.</span>")
 
 /obj/item/weapon/rcl/Destroy()
-	qdel(loaded)
-	loaded = null
+	QDEL_NULL(loaded)
 	last = null
 	active = 0
 	set_move_event()
@@ -87,8 +87,7 @@
 	update_icon()
 	if(loaded && !loaded.amount)
 		to_chat(user, "<span class='notice'>The last of the cables unreel from \the [src].</span>")
-		qdel(loaded)
-		loaded = null
+		QDEL_NULL(loaded)
 		active = 0
 		return 1
 	return 0
@@ -102,9 +101,9 @@
 	if(user)
 		if(active)
 			trigger(user)
-			user.register_event(/event/moved, src, .proc/holder_moved)
+			user.register_event(/event/moved, src, src::holder_moved())
 			return
-		user.unregister_event(/event/moved, src, .proc/holder_moved)
+		user.unregister_event(/event/moved, src, src::holder_moved())
 
 /obj/item/weapon/rcl/attack_self(mob/user as mob)
 	active = !active

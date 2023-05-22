@@ -21,6 +21,8 @@
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.6
+	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
+	on_armory_manifest = TRUE
 
 
 /obj/item/clothing/suit/armor/vest
@@ -176,7 +178,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
-	clothing_flags = GOLIATHREINFORCE
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
 
 
 /obj/item/clothing/suit/armor/samurai
@@ -321,13 +323,14 @@
 //When the wearer gets hit, this armor will teleport the user a short distance away (to safety or to more danger, no one knows. That's the fun of it!)
 /obj/item/clothing/suit/armor/reactive
 	name = "Reactive Teleport Armor"
-	desc = "Someone seperated our Research Director from his own head!"
+	desc = "Someone separated our Research Director from his own head!"
 	var/active = 0.0
 	icon_state = "reactiveoff"
 	item_state = "reactiveoff"
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/reactive/IsShield()
 	if(active)
@@ -387,6 +390,7 @@
 
 /obj/item/clothing/suit/armor/tdome
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/tdome/red
 	name = "Thunderdome suit (red)"

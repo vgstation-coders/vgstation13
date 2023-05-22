@@ -22,5 +22,4 @@
 /mob/living/carbon/alien/humanoid/sentinel/add_spells_and_verbs()
 	..()
 	add_spell(new /spell/targeted/projectile/alienneurotoxin, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
-	add_spell(new /spell/alienacid, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
-	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
+	add_spell(new /spell/corrosive_acid, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)

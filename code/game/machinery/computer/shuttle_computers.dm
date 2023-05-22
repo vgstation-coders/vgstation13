@@ -165,8 +165,7 @@
 
 /obj/machinery/computer/shuttle_control/Destroy()
 	if(disk)
-		qdel(disk)
-		disk = null
+		QDEL_NULL(disk)
 
 	..()
 
@@ -425,8 +424,7 @@
 			if(istype(disk.destination, /obj/docking_port/destination/coord))
 				if(shuttle.current_port == disk.destination)
 					shuttle.current_port = null
-				qdel(disk.destination)
-				disk.destination = null
+				QDEL_NULL(disk.destination)
 			disk.destination = new /obj/docking_port/destination/coord(dest)
 			disk.destination.dir = angle2dir( dir2angle(shuttle.linked_port.dir) + custom_rot + 180)
 			//For instance, COURSE:06:06:2600:12:00
@@ -569,7 +567,7 @@
 
 /obj/machinery/computer/shuttle_control/kick_act(mob/user)
 	..()
-	if(is_operational() && prob(5))
+	if(is_operational() && (user ? user.lucky_prob(5, luckfactor = 1/5) : prob(5)))
 		try_move()
 
 /obj/machinery/computer/shuttle_control/emp_act(severity)

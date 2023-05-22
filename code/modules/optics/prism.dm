@@ -6,7 +6,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	icon='icons/obj/machines/optical/prism.dmi'
 	icon_state="prism_off"
 
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	anchored = 0
 	density = 1
 
@@ -33,6 +33,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		to_chat(world, "[src] \ref[src] found [get_dir(src, B)] its dir is [dir]")
 		if(get_dir(src, B) != dir)
 			return 1
+
 /obj/machinery/prism/verb/rotate_cw()
 	set name = "Rotate (Clockwise)"
 	set category = "Object"
@@ -61,6 +62,12 @@ var/list/obj/machinery/prism/prism_list = list()
 	update_beams()
 	return 1
 
+
+/obj/machinery/prism/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate_cw()
+
 /obj/machinery/prism/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
@@ -73,7 +80,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		B.register_event(/event/beam_power_change, src, .proc/on_power_change)
+		B.register_event(/event/beam_power_change, src, src::on_power_change())
 		update_beams(B)
 
 /obj/machinery/prism/beam_disconnect(var/obj/effect/beam/emitter/B)
@@ -81,7 +88,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		B.unregister_event(/event/beam_power_change, src, .proc/on_power_change)
+		B.unregister_event(/event/beam_power_change, src, src::on_power_change())
 		update_beams(B)
 
 // When beam power changes

@@ -11,6 +11,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	var/possible_transfer_amounts = list(5,10,15,25,30)
 	var/volume = 30
 	var/amount_per_imbibe = 5
+	var/attack_mob_instead_of_feed //If true, the reagent container will be used as a melee weapon rather than as a vessel to feed another mob with (in attack()).
 
 /obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
@@ -87,6 +88,10 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return
 
 /obj/item/weapon/reagent_containers/attack(mob/M as mob, mob/user as mob, def_zone)
+
+	if(attack_mob_instead_of_feed)
+		return ..()
+
 	//If harm intent, splash it on em, else try to feed em it
 	if(!M.reagents)
 		return
@@ -195,6 +200,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /**
  * Helper proc to handle reagent splashes. A negative `amount` will splash all the reagents.
  */
+
 /proc/splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user = null)
 	if (amount == 0 || reagents.is_empty())
 		if(user)
@@ -215,6 +221,11 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(user.Adjacent(target))
 			user.visible_message("<span class='warning'>\The [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""] has been splashed with something by [user]!</span>",
 								"<span class='notice'>You splash [amount > 0 ? "some of " : ""]the solution onto \the [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""].</span>")
+
+//Define this wrapper as well to allow for proc overrides eg. for frying pan
+/obj/item/weapon/reagent_containers/proc/container_splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user = null)
+	return splash_sub(reagents, target, amount, user)
+
 /**
  * Transfers reagents to other containers/from dispensers. Handles splashing as well.
  *
@@ -234,11 +245,17 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return -1
 
 	var/success
-	// Transfer from dispenser
-	if (can_receive && istype(target, /obj/structure/reagent_dispensers))
-		var/obj/structure/reagent_dispensers/S = target
-		if(S.can_transfer(src, user))
-			var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
+	// Transfer from dispenser or cooking machine
+	if (can_receive)
+		if(istype(target, /obj/structure/reagent_dispensers))
+			var/obj/structure/reagent_dispensers/S = target
+			if(S.can_transfer(src, user))
+				var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
+				if (tx_amount > 0)
+					to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
+				return tx_amount
+		if(reagents && reagents.is_empty() && istype(target, /obj/machinery/cooking/deepfryer))
+			var/tx_amount = transfer_sub(target, src, reagents.maximum_volume, user)
 			if (tx_amount > 0)
 				to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
 			return tx_amount
@@ -247,7 +264,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		var/obj/container = target
 		if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers) && !istype(container,/obj/item/weapon/reagent_containers/food/snacks))
 			return -1
-
 		if(target.is_open_container())
 			success = transfer_sub(src, target, amount_per_transfer_from_this, user, log_transfer = TRUE)
 
@@ -271,7 +287,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				add_logs(user, M, "splashed", admin = TRUE, object = src, addition = "Reagents: [splashed_reagents]")
 
 				// Splash the target
-				splash_sub(reagents, M, splashable_units, user)
+				container_splash_sub(reagents, M, splashable_units, user)
 				return (to_splash)
 			// Non-mob splashing
 			else
@@ -281,7 +297,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 							add_gamelogs(user, "poured '[reagent_id]' onto \the [target]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
 
 					// Splash the thing
-					splash_sub(reagents, target, splashable_units, user)
+					container_splash_sub(reagents, target, splashable_units, user)
 					return (to_splash)
 	return 0
 
@@ -338,7 +354,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.reaction(user, TOUCH)
 		return 1
 	if(reagents.total_volume)
-		reagents.reaction(user, INGEST)
+		reagents.reaction(user, INGEST, amount_override = min(reagents.total_volume,amount_per_imbibe)/(reagents.reagent_list.len))
 		spawn(5)
 			if(reagents)
 				reagents.trans_to(user, amount_per_imbibe)

@@ -148,6 +148,7 @@
 		body += {"<option value='?_src_=vars;give_spell=\ref[D]'>Give Spell</option>
 			<option value='?_src_=vars;give_disease2=\ref[D]'>Give New Disease</option>
 			<option value='?_src_=vars;godmode=\ref[D]'>Toggle Godmode</option>
+			<option value='?_src_=vars;buddhamode=\ref[D]'>Toggle Buddha Mode</option>
 			<option value='?_src_=vars;build_mode=\ref[D]'>Toggle Build Mode</option>
 			<option value='?_src_=vars;drop_everything=\ref[D]'>Drop Everything</option>
 			<option value='?_src_=vars;regenerateicons=\ref[D]'>Regenerate Icons</option>
@@ -601,7 +602,7 @@ function loadPage(list) {
 		href_list["datumrefresh"] = href_list["give_disease2"]
 
 	else if(href_list["godmode"])
-		if(!check_rights(R_REJUVINATE))
+		if(!check_rights(R_REJUVENATE))
 			return
 
 		var/mob/M = locate(href_list["godmode"])
@@ -611,6 +612,18 @@ function loadPage(list) {
 
 		src.cmd_admin_godmode(M)
 		href_list["datumrefresh"] = href_list["godmode"]
+
+	else if(href_list["buddhamode"])
+		if(!check_rights(R_REJUVENATE))
+			return
+
+		var/mob/M = locate(href_list["buddhamode"])
+		if(!istype(M))
+			to_chat(usr, "This can only be used on instances of type /mob")
+			return
+
+		src.cmd_admin_buddhamode(M)
+		href_list["datumrefresh"] = href_list["buddhamode"]
 
 	else if(href_list["gib"])
 		if(!check_rights(0))

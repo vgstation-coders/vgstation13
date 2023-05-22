@@ -36,10 +36,16 @@ emp_act
 
 				return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
 
-
 	if(check_shields(P.damage, P))
 		P.on_hit(src, 100)
 		return PROJECTILE_COLLISION_BLOCKED
+
+	var/obj/structure/railing/R = locate(/obj/structure/railing) in get_turf(src)
+	if(R)
+		var/turf/T = get_step(R,R.dir)
+		if(isopenspace(T) && P.get_damage())
+			R.hurdle(src) // Railing kill!
+
 	return (..(P , def_zone))
 
 
@@ -50,7 +56,7 @@ emp_act
 	if(def_zone)
 		if(isorgan(def_zone))
 			return checkarmor(def_zone, type)
-		var/datum/organ/external/affecting = get_organ(ran_zone(def_zone))
+		var/datum/organ/external/affecting = get_organ(check_zone(def_zone))
 		return checkarmor(affecting, type)
 		//If a specific bodypart is targetted, check how that bodypart is protected and return the value.
 
@@ -84,7 +90,7 @@ emp_act
 	var/siemens_coefficient = 1.0
 	var/list/clothing_items = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes) // What all are we checking?
 
-	for(var/obj/item/clothing/C in clothing_items)
+	for(var/obj/item/C in clothing_items)
 		if(istype(C) && (C.body_parts_covered & def_zone.body_part)) // Is that body part being targeted covered?
 			siemens_coefficient *= C.siemens_coefficient
 
@@ -98,13 +104,15 @@ emp_act
 	for(var/bp in body_parts)
 		if(!bp)
 			continue
-		if(bp && istype(bp ,/obj/item/clothing))
-			var/obj/item/clothing/C = bp
+		if(isitem(bp))
+			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor(type)
-			for(var/obj/item/clothing/accessory/A in C.accessories)
-				if(A.body_parts_covered & def_zone.body_part)
-					protection += A.get_armor(type)
+			if(istype(C, /obj/item/clothing))
+				var/obj/item/clothing/CC = C
+				for(var/obj/item/clothing/accessory/A in CC.accessories)
+					if(A.body_parts_covered & def_zone.body_part)
+						protection += A.get_armor(type)
 	if(istype(loc, /obj/mecha))
 		var/obj/mecha/M = loc
 		protection += M.rad_protection
@@ -116,13 +124,15 @@ emp_act
 	var/protection = 0
 	var/list/body_parts = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
 	for(var/bp in body_parts)
-		if(istype(bp, /obj/item/clothing))
-			var/obj/item/clothing/C = bp
+		if(isitem(bp))
+			var/obj/item/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor_absorb(type)
-			for(var/obj/item/clothing/accessory/A in C.accessories)
-				if(A.body_parts_covered & def_zone.body_part)
-					protection += A.get_armor_absorb(type)
+			if(istype(C, /obj/item/clothing))
+				var/obj/item/clothing/CC = C
+				for(var/obj/item/clothing/accessory/A in CC.accessories)
+					if(A.body_parts_covered & def_zone.body_part)
+						protection += A.get_armor_absorb(type)
 	return protection
 
 
@@ -130,7 +140,7 @@ emp_act
 	if(!body_part_flags)
 		return 0
 	var/parts_to_check = body_part_flags
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		if(ignored && C == ignored)
@@ -145,7 +155,7 @@ emp_act
 /mob/living/carbon/human/proc/get_body_part_coverage(var/body_part_flags=0)
 	if(!body_part_flags)
 		return null
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		 //Check if this piece of clothing contains ALL of the flags we want to check.
@@ -157,7 +167,7 @@ emp_act
 	//Because get_body_part_coverage(FULL_BODY) would only return true if the human has one piece of clothing that covers their whole body by itself.
 	var/body_coverage = FULL_BODY | FULL_HEAD
 
-	for(var/obj/item/clothing/C in get_clothing_items())
+	for(var/obj/item/C in get_clothing_items())
 		if(!C)
 			continue
 		body_coverage &= ~(C.body_parts_covered)
@@ -197,15 +207,18 @@ emp_act
 	..()
 
 
-/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
+/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!..())
 		return
-
 	var/power = I.force
 	if (crit)
 		power *= CRIT_MULTIPLIER
 
+	if(def_zone)
+		target_zone = def_zone
+
 	var/datum/organ/external/affecting = get_organ(target_zone)
+
 	if (!affecting)
 		return FALSE
 	if(affecting.status & ORGAN_DESTROYED)
@@ -217,11 +230,11 @@ emp_act
 	var/hit_area = affecting.display_name
 
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
-		visible_message("<span class='danger'>\The [user] [pick(I.attack_verb)] \the [src] in \the [hit_area] with \the [I]!</span>", \
-			"<span class='userdanger'>\The [user] [pick(I.attack_verb)] you in \the [hit_area] with \the [I]!</span>")
+		visible_message("<span class='danger'>\The [user] [flavor ? "[flavor] " : ""][pick(I.attack_verb)] [user == src ? "[get_reflexive_pronoun(user.gender)]" : "\the [src]"] in \the [hit_area] with \the [I]!</span>", \
+			"<span class='userdanger'>[user == src ? "You" : "\The [user]"] [flavor ? "[flavor] " : ""][user == src ? "[shift_verb_tense(pick(I.attack_verb))] yourself": "[pick(I.attack_verb)] you"] in \the [hit_area] with \the [I]!</span>")
 	else if(!(I.flags & NO_ATTACK_MSG))
-		visible_message("<span class='danger'>\The [user] attacks \the [src] in \the [hit_area] with \the [I.name]!</span>", \
-			"<span class='userdanger'>\The [user] attacks you in \the [hit_area] with \the [I.name]!</span>")
+		visible_message("<span class='danger'>\The [user] [flavor ? "[flavor] " : ""]attacks [user == src ? "[get_reflexive_pronoun(user.gender)]" : "\the [src]"] in \the [hit_area] with \the [I.name]!</span>", \
+			"<span class='userdanger'>[user == src ? "You" : "\The [user]"] [flavor ? "[flavor] " : ""]attack[user == src ? " yourself" : "s you"] in \the [hit_area] with \the [I.name]!</span>")
 
 	//Contact diseases on the weapon?
 	I.disease_contact(src,get_part_from_limb(target_zone))
@@ -247,7 +260,7 @@ emp_act
 				knock_out_teeth(user)
 
 	var/bloody = FALSE
-	if(final_force && ((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (final_force * 2)))
+	if(final_force && ((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && (affecting.status & ORGAN_BLEEDING))
 		if(!(src.species.anatomy_flags & NO_BLOOD))
 			I.add_blood(src)	//Make the weapon bloody, not the person.
 			if(prob(33))
@@ -550,6 +563,16 @@ emp_act
 /mob/living/carbon/human/blob_act()
 	if(flags & INVULNERABLE)
 		return
+	var/obj/item/clothing/suit/reticulatedvest/RV = wear_suit
+	if(istype(RV) && RV.hits>0) //will fail if not wearing a suit or wearing one not of this type
+		RV.hits--
+		if(RV.hits)
+			to_chat(src, "<big><span class='good'>Your reticulated vest groans as it resists the blob!</span></big>")
+		else
+			to_chat(src, "<big><span class='danger'>Your reticulated vest rips apart as it resists the blob one last time!</span></big>")
+		RV.update_icon()
+		update_inv_wear_suit()
+		return
 	if(cloneloss < 120)
 		playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 		if(isDead(src))
@@ -563,5 +586,11 @@ emp_act
 
 			apply_damage(run_armor_absorb(affecting, "melee", rand(30,40)), BRUTE, affecting, run_armor_check(affecting, "melee"))
 
-/mob/living/carbon/human/acidable()
-	return !(species && species.anatomy_flags & ACID4WATER)
+/mob/living/carbon/human/dissolvable()
+	if(species && species.anatomy_flags & ACID4WATER)
+		return WATER
+	else
+		return PACID
+
+/mob/living/carbon/human/beam_defense(var/obj/effect/beam/B)
+	return is_wearing_item(/obj/item/clothing/suit/reticulatedvest) ? 0.4 : 1

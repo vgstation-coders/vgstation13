@@ -81,8 +81,8 @@
 	colour = "clown"
 	native=1
 	key = "!"
-	space_chance = 65
-	syllables = list("honk", "henk", "nk", "ho", "ha", "hunke", "hunk", "hu", "ba", "nana", "bwo", "bwoink", "ink", "fart", "peel", "banana", "poot", "toot", "cluwn", "!", "?")
+	space_chance = 45
+	syllables = list("honk", "henk", "nk", "ho", "ha", "hunke", "hunk", "hu", "ba", "nana", "bwo", "bwoink", "ink", "fart", "peel", "banana", "poot", "toot", "cluwn")
 
 /datum/language/tajaran
 	name = LANGUAGE_CATBEAST
@@ -138,6 +138,7 @@
 	exclaim_verb = "rustles"
 	colour = "soghun"
 	key = "q"
+	flags = NONORAL
 	syllables = list("hs","zt","kr","st","sh")
 
 /datum/language/common
@@ -221,6 +222,7 @@
 	colour = "sinister"
 	native=1
 	space_chance = 95
+	flags = NONORAL
 	syllables = list("CLICK", "CLACK")
 
 /datum/language/golem
@@ -233,6 +235,7 @@
 	colour = "golem"
 	native = 1
 	key = "8"
+	flags = NONORAL
 	syllables = list("oa","ur","ae","um","tu","gor","an","lo","ag","oon","po")
 
 /datum/language/slime
@@ -245,6 +248,7 @@
 	colour = "slime"
 	native = 1
 	key = "f"
+	flags = NONORAL
 	syllables = list("ba","ab","be","eb","bi","ib","bo","ob","bu","ub")
 
 /datum/language/skellington/say_misunderstood(mob/M, message)
@@ -472,35 +476,55 @@
 		scramble_cache[input] = n
 		return n
 
-	var/input_size = length(input)
-	var/scrambled_text = ""
+	var/list/scrambled_text_pieces = list(input)
+	var/list/found_names = list()
+	for(var/mob/living/carbon/human/H in player_list)
+		var/list/nameparts = splittext(H.real_name," ")
+		if(nameparts.len > 3) // so the clown or borgs can't abuse this to reveal languages with common words
+			continue
+		for(var/part in nameparts)
+			if(findtext(lowertext(scrambled_text_pieces[scrambled_text_pieces.len]),lowertext(part))) // human player name in world?
+				var/oldtext = scrambled_text_pieces[scrambled_text_pieces.len]
+				scrambled_text_pieces.Remove(scrambled_text_pieces[scrambled_text_pieces.len]) // take out last element
+				scrambled_text_pieces += splittext(oldtext,part,1,0,TRUE) // replace with split
+				found_names += lowertext(part)
+
+	. = ""
 	var/capitalize = 1
+	for(var/piece in scrambled_text_pieces)
+		var/scramble_bit = ""
+		if(lowertext(piece) in found_names)
+			if(!capitalize && prob(95))
+				scramble_bit += " "
+			scramble_bit += piece // human name shows up here unscrambled
+			if(prob(95))
+				scramble_bit += " "
+		else
+			while(length(scramble_bit) < length(piece))
+				var/next = pick(syllables)
+				if(capitalize)
+					next = capitalize(next)
+					capitalize = 0
+				scramble_bit += next
+				var/chance = rand(100)
+				if(chance <= 5)
+					scramble_bit += ". "
+					capitalize = 1
+				else if(chance > 5 && chance <= space_chance)
+					scramble_bit += " "
+		. += scramble_bit
 
-	while(length(scrambled_text) < input_size)
-		var/next = pick(syllables)
-		if(capitalize)
-			next = capitalize(next)
-			capitalize = 0
-		scrambled_text += next
-		var/chance = rand(100)
-		if(chance <= 5)
-			scrambled_text += ". "
-			capitalize = 1
-		else if(chance > 5 && chance <= space_chance)
-			scrambled_text += " "
-
-	scrambled_text = trim(scrambled_text)
-	var/ending = copytext(scrambled_text, length(scrambled_text))
+	. = trim(.)
+	var/ending = copytext(., length(.))
 	if(ending == ".")
-		scrambled_text = copytext(scrambled_text,1,length(scrambled_text)-1)
-	var/input_ending = copytext(input, input_size)
+		. = copytext(.,1,length(.)-1)
+	var/input_ending = copytext(input, length(input))
 	if(input_ending in list("!","?","."))
-		scrambled_text += input_ending
+		. += input_ending
 
 	// Add it to cache, cutting old entries if the list is too long
-	scramble_cache[input] = scrambled_text
+	scramble_cache[input] = .
 	if(scramble_cache.len > SCRAMBLE_CACHE_LEN)
 		scramble_cache.Cut(1, scramble_cache.len-SCRAMBLE_CACHE_LEN-1)
 
-	return scrambled_text
 #undef SCRAMBLE_CACHE_LEN

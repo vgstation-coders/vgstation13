@@ -6,7 +6,7 @@
 	icon_state = "sammi_offline"
 	maxHealth = 200
 	health = 200
-	keeper=1 // 0 = No, 1 = Yes (Disables speech and common radio.)
+	keeper=0 // 0 = No, 1 = Yes (Disables speech and common radio.)
 	prefix = "Stationary Assembler MMI"
 	canmove = 0
 	anchored = 0
@@ -18,6 +18,8 @@
 	var/mob/ghost_body
 	var/cellhold = null
 	var/unsafe = 0
+	var/searching = 0
+	var/datum/recruiter/recruiter = null
 
 /mob/living/silicon/robot/mommi/sammi/proc/check_law(var/check)
 	var/regexstr = "overri|preced|superce|define|equal|sentien|bein|harm|kill|strik|injur|whac|hit|slam|shoo|shot|smash|blug|hamm|deat|zap|shoc|shok"
@@ -28,7 +30,8 @@
 /mob/living/silicon/robot/mommi/sammi/proc/change_sammi_law(mob/user)
 	var/warning = "Yes"
 	if(user == src)
-		warning = alert(user, "This action is not allowed under normal circumstance, are you sure you want to continue reprogramming yourself?", "You sure?", "Yes", "No")
+		to_chat(user, "<span class='notice'>You may not reprogram your own laws.</span>")
+		return
 
 	if(warning == "Yes")
 		var/sammitask = reject_bad_text(input(user,"Enter a task for this SAMMI:","SAMMI Controller",""))
@@ -40,6 +43,7 @@
 			return
 		var/hold = list(src.laws.inherent[1], sammitask)
 		src.laws.inherent = hold
+		src << sound('sound/machines/lawsync.ogg')
 		src.show_laws()
 		message_admins("<span class='warning'>[src.name] updated with: <span class='notice'>[sammitask]</span> -by: [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a></span>)",0,1)
 		user.visible_message("<span class='notice'>[user.name] enters commands into [src.name].</span>")
@@ -121,7 +125,7 @@
 	if (istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
 		if(wiresexposed)
 			to_chat(user, "Close the wiring panel first.")
-		else if(cell)
+		else if(cell || cellhold)
 			to_chat(user, "There is a power cell already installed.")
 		else
 			user.drop_item(W, src)
@@ -195,20 +199,23 @@
 /mob/living/silicon/robot/mommi/sammi/attack_hand(mob/user)
 	add_fingerprint(user)
 
-	if(opened && !wiresexposed && user != src)
-
-		if(cell || cellhold)
-			if(cellhold)
-				cell = cellhold
-				cellhold = null
-			if(cell)
-				cell.updateicon()
-				cell.add_fingerprint(user)
-				user.put_in_active_hand(cell)
-				to_chat(user, "You remove \the [cell].")
-				cell = null
-				updateicon()
-				return
+	if(user != src)
+		if(opened && !wiresexposed)
+			if(cell || cellhold)
+				if(cellhold)
+					cell = cellhold
+					cellhold = null
+				if(cell)
+					cell.updateicon()
+					cell.add_fingerprint(user)
+					user.put_in_active_hand(cell)
+					to_chat(user, "You remove \the [cell].")
+					cell = null
+					updateicon()
+					return
+		else if(!opened && !key)
+			to_chat(user, "<span class='notice'>You carefully locate the manual activation switch and start \the [src]'s boot process.</span>")
+			ping()
 
 /mob/living/silicon/robot/mommi/sammi/New(loc)
 	..()
@@ -216,17 +223,6 @@
 	module = new /obj/item/weapon/robot_module/sammi(src)
 	cellhold = cell
 	cell = null
-
-
-/mob/living/silicon/robot/mommi/sammi/proc/transfer_personality(var/client/candidate)
-
-	if(!candidate)
-		return
-
-	src.mind = candidate.mob.mind
-	src.ckey = candidate.ckey
-	if(src.mind)
-		src.mind.assigned_role = "SAMMI"
 
 /mob/living/silicon/robot/mommi/sammi/ghost()
 	//if(src.subtype == "sammi")
@@ -257,18 +253,72 @@
 		var/response = alert(O,"Do you want to take it over?","This SAMMI is mindless","Yes","No")
 		if(response == "Yes")
 			if(!(src.key))
-				ghost_name = O.mind.name
-				ghost_gender = O.gender
-				ghost_icon = O.icon
-				ghost_icon_state = O.icon_state
-				ghost_overlays = O.overlays
-				ghost_body = O.mind.current
-				src.transfer_personality(O.client)
-				src.visible_message("<span class=\"warning\">[src] is connected to the SAMMI network!</span>")
-				if(icon_state == "sammi_offline_a")
-					icon_state = "sammi_online_a"
-				else
-					icon_state = "sammi_online"
-				updateicon()
+				transfer_personality(O)
+				searching = 0
 			else if(src.key)
 				to_chat(src, "<span class='notice'>Someone has already began controlling this SAMMI. Try another! </span>")
+
+
+/mob/living/silicon/robot/mommi/sammi/proc/ping()
+	if(!recruiter)
+		searching = 1
+		recruiter = new(src)
+		recruiter.display_name = "sammi"
+		recruiter.role = ROLE_POSIBRAIN // keep it same for these
+		recruiter.jobban_roles = list(ROLE_POSIBRAIN)
+		recruiter.logging = TRUE
+
+		// A player has their role set to Yes or Always
+		recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
+		// ", but No or Never
+		recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
+
+		recruiter.recruited = new /callback(src, src::recruiter_recruited())
+
+	recruiter.request_player()
+
+
+/mob/living/silicon/robot/mommi/sammi/proc/recruiter_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. ([controls])</span>")
+	investigation_log(I_GHOST, "|| had a ghost automatically sign up to become its personality: [key_name(player)][player.locked_to ? ", who was haunting [player.locked_to]" : ""]")
+
+/mob/living/silicon/robot/mommi/sammi/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
+	if(player.client && get_role_desire_str(player.client.prefs.roles[ROLE_POSIBRAIN]) != "Never")
+		to_chat(player, "<span class=\"recruit\">Someone is requesting a personality for \a [src]. ([controls])</span>")
+
+/mob/living/silicon/robot/mommi/sammi/proc/recruiter_recruited(mob/dead/observer/player)
+	if(player)
+		transfer_personality(player)
+
+	reset_ping()
+
+/mob/living/silicon/robot/mommi/sammi/proc/transfer_personality(mob/dead/observer/O)
+	if(src.key || !O?.client)
+		return
+	ghost_name = O.mind.name
+	ghost_gender = O.gender
+	ghost_icon = O.icon
+	ghost_icon_state = O.icon_state
+	ghost_overlays = O.overlays
+	ghost_body = O.mind.current
+	src.mind = O.client.mob.mind
+	src.ckey = O.client.ckey
+	if(src.mind)
+		src.mind.assigned_role = "SAMMI"
+	src.visible_message("<span class=\"warning\">[src] is connected to the SAMMI network!</span>")
+	if(icon_state == "sammi_offline_a")
+		icon_state = "sammi_online_a"
+	else
+		icon_state = "sammi_online"
+	updateicon()
+
+/mob/living/silicon/robot/mommi/sammi/proc/reset_ping() //We give the players sixty seconds to decide, then reset the timer.
+	if(!searching)
+		return
+	searching = 0
+	if(src.key)
+		return
+
+	var/turf/T = get_turf(src.loc)
+	for (var/mob/M in viewers(T))
+		M.show_message("<span class='notice'>\The [src] buzzes quietly, and the golden lights fade away. Perhaps you could try again?</span>")

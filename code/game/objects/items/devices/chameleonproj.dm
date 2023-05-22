@@ -11,6 +11,7 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	origin_tech = Tc_SYNDICATE + "=4;" + Tc_MAGNETS + "=4"
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/cham_proj_scan = 1 //Scanning function starts on
 	var/can_use = 1
 	var/obj/effect/dummy/chameleon/active_dummy = null
@@ -60,8 +61,7 @@
 	if(active_dummy)
 		eject_all()
 		//playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
-		qdel(active_dummy)
-		active_dummy = null
+		QDEL_NULL(active_dummy)
 		to_chat(usr, "<span class='notice'>You deactivate [src].</span>")
 		var/obj/effect/overlay/T = new/obj/effect/overlay(get_turf(src))
 		T.icon = 'icons/effects/effects.dmi'
@@ -78,8 +78,7 @@
 			return
 		var/obj/effect/dummy/chameleon/C = new/obj/effect/dummy/chameleon(usr.loc)
 		C.activate(O, usr, saved_icon, saved_icon_state, saved_overlays, src)
-		qdel(O)
-		O = null
+		QDEL_NULL(O)
 		to_chat(usr, "<span class='notice'>You activate [src].</span>")
 		var/obj/effect/overlay/T = new/obj/effect/overlay(get_turf(src))
 		T.icon = 'icons/effects/effects.dmi'
@@ -115,6 +114,7 @@
 	desc = ""
 	density = 0
 	anchored = 0
+	mouse_opacity = 1
 	var/can_move = 1
 	var/obj/item/device/chameleon/master = null
 

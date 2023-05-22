@@ -649,7 +649,7 @@ Pressure: [env.pressure]"}
 		var/obj/machinery/power/battery/smes/infinite/magic = new(T)
 		// Manually set up our powernets since stupid seems to reign in the powernet code.
 		magic.connect_to_network()
-		magic.output=200000 // AKA rape
+		magic.outputlevel=200000 // AKA rape
 		magic.online=1
 
 //	to_chat(world, "<b>LET THERE BE JUICE</b>")
@@ -720,8 +720,7 @@ Pressure: [env.pressure]"}
 	if(!holder)
 		return
 	message_admins("[src] used find broken blood tracks")
-	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
-	var/F =file("data/logs/profiling/[date_string]_broken_blood.log")
+	var/F = file("data/logs/profiling/[date_string]_broken_blood.log")
 	fdel(F)
 	for(var/obj/effect/decal/cleanable/blood/tracks/T in blood_list)
 		if(!T.loc)
@@ -748,8 +747,7 @@ Pressure: [env.pressure]"}
 	if(!machines.len && !power_machines.len)
 		to_chat(usr, "Machines has no length!")
 		return
-	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
-	var/F =file("data/logs/profiling/[date_string]_machine_instances.csv")
+	var/F = file("data/logs/profiling/[date_string]_machine_instances.csv")
 	fdel(F)
 	F << "type,count"
 	var/list/machineinstances = list()
@@ -762,7 +760,7 @@ Pressure: [env.pressure]"}
 		F << "[T],[count]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
-	F =file("data/logs/profiling/[date_string]_power_machine_instances.csv")
+	F = file("data/logs/profiling/[date_string]_power_machine_instances.csv")
 	fdel(F)
 	F << "type,count"
 	machineinstances.len = 0
@@ -781,8 +779,7 @@ Pressure: [env.pressure]"}
 	set category = "Debug"
 	set name = "Dump Del Profiling"
 
-	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
-	var/F =file("data/logs/profiling/[date_string]_del_profiling.csv")
+	var/F = file("data/logs/profiling/[date_string]_del_profiling.csv")
 	fdel(F)
 	F << "type,deletes"
 	for(var/typepath in del_profiling)
@@ -790,7 +787,7 @@ Pressure: [env.pressure]"}
 		F << "[typepath],[ns]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
-	F =file("data/logs/profiling/[date_string]_gdel_profiling.csv")
+	F = file("data/logs/profiling/[date_string]_gdel_profiling.csv")
 	fdel(F)
 	F << "type,soft deletes"
 	for(var/typepath in gdel_profiling)
@@ -799,7 +796,7 @@ Pressure: [env.pressure]"}
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
 
-	F =file("data/logs/profiling/[date_string]_ghdel_profiling.csv")
+	F = file("data/logs/profiling/[date_string]_ghdel_profiling.csv")
 	fdel(F)
 	F << "type,hard deletes"
 	for(var/typepath in ghdel_profiling)
@@ -1319,11 +1316,7 @@ var/global/blood_virus_spreading_disabled = 0
 
 	var/turf/epicenter = get_turf(usr)
 	var/max_range = input("Set the max range") as num
-	var/inward = alert("Which way?","Spiral Block", "Inward","Outward")
-	if(inward == "Inward")
-		spiral_block(epicenter,max_range,1,1)
-	else
-		spiral_block(epicenter,max_range,0,1)
+	spiral_block(epicenter,max_range,1)
 
 /client/proc/check_striketeams()
 	set name = "Check StrikeTeams"

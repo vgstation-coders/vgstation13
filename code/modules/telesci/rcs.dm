@@ -7,7 +7,7 @@
 	icon = 'icons/obj/telescience.dmi'
 	icon_state = "pad-idle"
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	active_power_usage = 500
 	var/stage = 0
@@ -98,8 +98,7 @@
 
 /obj/item/weapon/rcs/Destroy()
 	if (cell)
-		qdel(cell)
-		cell = null
+		QDEL_NULL(cell)
 	..()
 
 /obj/item/weapon/rcs/attack_self(mob/user)
@@ -164,7 +163,7 @@
 	var/obj/item/weapon/paper/P
 
 	if(send_note)
-		var/note = input("Would you like to attach a note?", "Autoletter") as null|text
+		var/note = copytext(sanitize(input("Would you like to attach a note?", "Autoletter") as null|text),1,MAX_MESSAGE_LEN)
 		if(note)
 			P = new(null) //This will be deleted if the teleport doesn't complete. Avoids generating extra notes.
 			P.name = "letter from [user]"

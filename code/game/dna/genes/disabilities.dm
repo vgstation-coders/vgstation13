@@ -144,6 +144,14 @@
 
 /datum/dna/gene/disability/nearsighted/New()
 	block = GLASSESBLOCK
+	
+/datum/dna/gene/disability/nearsighted/activate(var/mob/M, var/connected, var/flags)
+	..(M,connected,flags)
+	M.nearsightedness += 3
+	
+/datum/dna/gene/disability/nearsighted/deactivate(var/mob/M, var/connected, var/flags)
+	..(M,connected,flags)
+	M.nearsightedness -= 3
 
 /datum/dna/gene/disability/lisp
 	name = "Lisp"
@@ -168,3 +176,13 @@
 /datum/dna/gene/disability/anemia/New()
 	..()
 	block = ANEMIABLOCK
+
+/datum/dna/gene/disability/ehs
+	name = "Electromagnetic Hypersensitivity"
+	activation_message = "You feel like electricity burns you."
+	deactivation_message = "Electricity no longer hurts to be around."
+	disability = ELECTROSENSE
+
+/datum/dna/gene/disability/ehs/New()
+	..()
+	block = EHSBLOCK

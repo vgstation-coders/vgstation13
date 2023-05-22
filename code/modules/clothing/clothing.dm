@@ -1,9 +1,11 @@
 /obj/item/clothing
 	name = "clothing"
 	sterility = 5
+	autoignition_temperature = AUTOIGNITION_FABRIC
 	var/list/species_restricted = null //Only these species can wear this kit.
 	var/wizard_garb = 0 // Wearing this empowers a wizard.
 	var/eyeprot = 0 //for head and eyewear
+	var/nearsighted_modifier = 0 //positive values impair vision(welding goggles), negative values improve vision(prescription glasses)
 
 	//temperatures in Kelvin. These default values won't affect protections in any way.
 	var/cold_breath_protection = 300 //that cloth protects its wearer's breath from cold air down to that temperature
@@ -29,6 +31,16 @@
 		accessories.Remove(A)
 		qdel(A)
 	..()
+
+/obj/item/clothing/can_quick_store(var/obj/item/I)
+	for(var/obj/item/clothing/accessory/storage/A in accessories)
+		if(A.hold && A.hold.can_be_inserted(I,1))
+			return 1
+
+/obj/item/clothing/quick_store(var/obj/item/I,mob/user)
+	for(var/obj/item/clothing/accessory/storage/A in accessories)
+		if(A.hold && A.hold.handle_item_insertion(I,0))
+			return 1
 
 /obj/item/clothing/CtrlClick(var/mob/user)
 	if(isturf(loc))
@@ -278,12 +290,6 @@
 				visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
 		return
 
-/obj/item/clothing/proc/get_armor(var/type)
-	return armor[type]
-
-/obj/item/clothing/proc/get_armor_absorb(var/type)
-	return armor_absorb[type]
-
 /obj/item/clothing/proc/offenseTackleBonus()
 	return
 
@@ -404,6 +410,7 @@
 	var/gave_out_gifts = FALSE //for snowman animation
 	var/obj/item/clothing/head/on_top = null //for stacking
 	var/stack_depth = 0
+	var/blood_overlay_type = "hat"
 
 var/global/hatStacking = 0
 var/global/maxStackDepth = 10
@@ -616,7 +623,7 @@ var/global/maxStackDepth = 10
 	name = "suit"
 	var/fire_resist = T0C+100
 	flags = FPRINT
-	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/tank/emergency_plasma)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_OCLOTHING
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY

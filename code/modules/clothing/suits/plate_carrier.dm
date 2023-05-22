@@ -26,12 +26,12 @@
 /obj/item/clothing/suit/armor/plate_carrier/equipped(var/mob/user, var/slot)
 	..()
 	if(slot == slot_wear_suit)
-		user.register_event(/event/damaged, src, .proc/handle_user_damage)
+		user.register_event(/event/damaged, src, src::handle_user_damage())
 
 
 /obj/item/clothing/suit/armor/plate_carrier/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_wear_suit)
-		user.unregister_event(/event/damaged, src, .proc/handle_user_damage)
+		user.unregister_event(/event/damaged, src, src::handle_user_damage())
 	..()
 
 /obj/item/clothing/suit/armor/plate_carrier/attack_self(mob/user)
@@ -99,13 +99,12 @@
 
 /obj/item/weapon/armor_plate/examine(var/mob/user)
 	..()
-	switch(health)
-		if(initial(health) to initial(health)/2)
-			to_chat(user, "<span class = 'notice'>\The [src] is hard.</span>")
-		if(initial(health)/2-1 to initial(health)/4)
-			to_chat(user, "<span class = 'warning'>\The [src] is brittle.</span>")
-		if(initial(health)/4-1 to 0)
-			to_chat(user, "<span class = 'warning'>\The [src] is falling apart!</span>")
+	if(health in initial(health) to initial(health)/2)
+		to_chat(user, "<span class = 'notice'>\The [src] is hard.</span>")
+	else if(health in initial(health)/2-1 to initial(health)/4)
+		to_chat(user, "<span class = 'warning'>\The [src] is brittle.</span>")
+	else if(health in initial(health)/4-1 to 0)
+		to_chat(user, "<span class = 'warning'>\The [src] is falling apart!</span>")
 
 /obj/item/weapon/armor_plate/bullet_resistant
 	name = "plasteel armor plate"

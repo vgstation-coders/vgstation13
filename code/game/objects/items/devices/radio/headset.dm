@@ -3,7 +3,7 @@
 	desc = "An updated, modular intercom that fits over the head. Takes encryption keys."
 	icon_state = "headset"
 	item_state = "headset"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	starting_materials = list(MAT_IRON = 75)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
@@ -12,6 +12,7 @@
 	flags = FPRINT // No HEAR. Headsets should only work when being used explicitly.
 	broadcasting = TRUE
 	slot_flags = SLOT_EARS
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/translate_binary = 0
 	var/translate_hive = 0
 	var/obj/item/device/encryptionkey/keyslot1 = null
@@ -34,7 +35,7 @@
 /obj/item/device/radio/headset/talk_into(datum/speech/speech_orig, channel=null)
 	if(!broadcasting)
 		return
-	if(usr.client && usr.client.prefs.headset_sound)
+	if(usr?.client?.prefs.headset_sound)
 		playsound(usr, 'sound/effects/radio_chatter.ogg', 100, 1, vary = 0)
 	return ..()
 

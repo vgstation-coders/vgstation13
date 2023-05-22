@@ -19,16 +19,7 @@ Possible to do for anyone motivated enough:
 	Itegrate EMP effect to disable the unit.
 */
 
-
-/*
- * Holopad
- */
-
-// HOLOPAD MODE
-// 0 = RANGE BASED
-// 1 = AREA BASED
-var/const/HOLOPAD_MODE = 0
-
+//Holopad
 var/list/holopads = list()
 
 /obj/machinery/hologram/holopad
@@ -38,6 +29,7 @@ var/list/holopads = list()
 	var/mob/living/silicon/ai/master  //Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
 	var/last_request = 0 //to prevent request spam. ~Carn
 	var/holo_range = 6 // Change to change how far the AI can move away from the holopad before deactivating.
+	var/holopad_mode = 0	//0 = RANGE BASED, 1 = AREA BASED
 	flags = HEAR
 	plane = ABOVE_TURF_PLANE
 	layer = ABOVE_TILE_LAYER
@@ -99,7 +91,7 @@ var/list/holopads = list()
 	return
 
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/living/silicon/ai/user)
-	if(!(stat & (FORCEDISABLE|NOPOWER)) && user.eyeobj.loc == src.loc)//If the projector has power and client eye is on it.
+	if(!(stat & (FORCEDISABLE|NOPOWER)) && user.eyeobj.loc == loc)//If the projector has power and client eye is on it.
 		if(!holo)//If there is not already a hologram.
 			create_holo(user)//Create one.
 			src.visible_message("A holographic image of [user] flicks to life right before your eyes!")
@@ -135,7 +127,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	icon_state = "holopad1"
 	A.current = src
 	master = A//AI is the master.
-	use_power = 2//Active power usage.
+	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
 	holo.set_glide_size(DELAY2GLIDESIZE(1))
 	move_hologram()
 	if(A && A.holopadoverlays.len)
@@ -143,7 +135,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			if(ol.loc == src)
 				ol.icon_state = "holopad1"
 				break
-		
+
 	return 1
 
 /obj/machinery/hologram/holopad/proc/create_advanced_holo(var/mob/living/silicon/ai/A)
@@ -180,24 +172,23 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			continue
 		newlist["[M.name]"] = M
 	return newlist
-		
+
 /obj/machinery/hologram/holopad/proc/clear_holo()
 	if(master && master.holopadoverlays.len)
 		for(var/image/ol in master.holopadoverlays)
 			if(ol.loc == src)
 				ol.icon_state = "holopad0"
 				break
-	
+
 	set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 	icon_state = "holopad0"
-	use_power = 1//Passive power usage.
+	use_power = MACHINE_POWER_USE_IDLE//Passive power usage.
 	advancedholo = FALSE
 	if(master)
 		if(master.current == src)
 			master.current = null
 		master = null //Null the master, since no-one is using it now.
-	qdel(ray)
-	ray = null
+	QDEL_NULL(ray)
 	if(holo)
 		var/obj/effect/overlay/hologram/H = holo
 		visible_message("<span class='warning'>The image of [holo] fades away.</span>")
@@ -218,20 +209,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 				var/turf/T = get_turf(holo)
 				if(T.obscured)
 					clear_holo()
-				if((HOLOPAD_MODE == 0 && (get_dist(master.eyeobj, src) <= holo_range)) || advancedholo)
+				if((holopad_mode == 0 && (get_dist(master.eyeobj, src) <= holo_range)) || advancedholo)
 					return 1
-
-				else if (HOLOPAD_MODE == 1)
-
+				else if (holopad_mode == 1)
 					var/area/holo_area = get_area(src)
 					var/area/eye_area = get_area(master.eyeobj)
-
 					if(eye_area == holo_area || advancedholo)
 						return 1
-
 		clear_holo()//If not, we want to get rid of the hologram.
-
-
 	return 1
 
 /obj/machinery/hologram/holopad/proc/move_hologram(var/forced = 0 )
@@ -294,7 +279,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 /obj/machinery/hologram
 	anchored = 1
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 5
 	active_power_usage = 100
 	var/obj/effect/overlay/hologram/holo 	//The projection itself. If there is one, the instrument is on, off otherwise.
@@ -305,7 +290,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if (powered())
 		stat &= ~NOPOWER
 	else
-		stat |= ~NOPOWER
+		stat |= NOPOWER
 
 //Destruction procs.
 /obj/machinery/hologram/ex_act(severity)
@@ -352,12 +337,6 @@ Holographic project of everything else.
 /*
  * Other Stuff: Is this even used?
  */
-/obj/machinery/hologram/projector
-	name = "hologram projector"
-	desc = "It makes a hologram appear...with magnets or something..."
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "hologram0"
-
 
 /obj/effect/overlay/hologram/lifelike
 	plane = HUMAN_PLANE
@@ -367,7 +346,7 @@ Holographic project of everything else.
 	density = 1
 	anchored = 0
 	var/mob/camera/aiEye/eye
-	var/obj/machinery/hologram/holopad/parent 
+	var/obj/machinery/hologram/holopad/parent
 
 /obj/effect/overlay/hologram/lifelike/New(var/loc, var/mob/living/mob_to_copy, var/mob/eyeobj, var/obj/machinery/hologram/holopad/H)
 	..()
@@ -378,12 +357,12 @@ Holographic project of everything else.
 	set_light(0)
 
 /obj/effect/overlay/hologram/lifelike/proc/steal_appearance(var/mob/living/M)
-	name = M.name 
+	name = M.name
 	appearance = M.appearance
 	if(M.lying)  // make them stand up if they were lying down
 		pixel_y += 6 * PIXEL_MULTIPLIER
 		transform = transform.Turn(-90)
-	var/datum/log/L = new 
+	var/datum/log/L = new
 	M.examine(L)
 	desc = L.log
 	qdel(L)
@@ -391,7 +370,7 @@ Holographic project of everything else.
 /obj/effect/overlay/hologram/lifelike/examine(mob/user, var/size = "")
 	if(desc)
 		to_chat(user, desc)
-	
+
 
 /obj/effect/overlay/hologram/lifelike/attack_hand(var/mob/living/M)
 	M.visible_message(\

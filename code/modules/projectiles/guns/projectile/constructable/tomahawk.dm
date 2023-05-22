@@ -157,12 +157,12 @@
 	var/is_lit = 0
 	var/not_burned_out = 0 //prevent the going-out message from qdel()s other than the blunt's own qdel().
 	slot_flags = SLOT_MASK
+	goes_in_mouth = TRUE
 
 /obj/item/weapon/hatchet/tomahawk/pipe/Destroy()
 	if(current_blunt)
-		current_blunt.unregister_event(/event/destroyed, src, .proc/burnout)
-		qdel(current_blunt)
-		current_blunt = null
+		current_blunt.unregister_event(/event/destroyed, src, src::burnout())
+		QDEL_NULL(current_blunt)
 	..()
 
 /obj/item/weapon/hatchet/tomahawk/pipe/examine(mob/user)
@@ -179,7 +179,7 @@
 			return
 		to_chat(user, "<span class='notice'>You crush \the [W] into \the [src].</span>")
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src)
-		B.register_event(/event/destroyed, src, .proc/burnout)
+		B.register_event(/event/destroyed, src, src::burnout())
 		B.inside_item = 1
 		W.reagents.trans_to(B, (W.reagents.total_volume))
 		B.update_brightness()
@@ -242,8 +242,7 @@
 	if(current_blunt)
 		to_chat(usr, "<span class='notice'>You empty the crushed [blunt_name] out of \the [src].</span>")
 		not_burned_out = 1
-		qdel(current_blunt)
-		current_blunt = null
+		QDEL_NULL(current_blunt)
 		verbs -= /obj/item/weapon/hatchet/tomahawk/pipe/verb/empty_pipe
 
 /obj/item/weapon/hatchet/tomahawk/pipe/proc/burnout()
@@ -322,7 +321,7 @@
 			return
 		to_chat(user, "<span class='notice'>You crush \the [W] into \the [src].</span>")
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src)
-		B.register_event(/event/destroyed, src, .proc/burnout)
+		B.register_event(/event/destroyed, src, src::burnout())
 		B.inside_item = 1
 		W.reagents.trans_to(B, (W.reagents.total_volume))
 		B.update_brightness()
@@ -377,8 +376,7 @@
 	if(current_blunt)
 		to_chat(usr, "<span class='notice'>You empty the crushed [blunt_name] out of \the [src].</span>")
 		not_burned_out = 1
-		qdel(current_blunt)
-		current_blunt = null
+		QDEL_NULL(current_blunt)
 		verbs -= /obj/item/weapon/broken_pipe_tomahawk/verb/empty_pipe
 
 /obj/item/weapon/broken_pipe_tomahawk/proc/burnout(datum/thing)

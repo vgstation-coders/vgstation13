@@ -1,6 +1,6 @@
 /spell/changeling/absorbdna
 	name = "Absorb DNA"
-	desc = "Permits us to syphon the DNA from a human. They become one with us, and we become stronger."
+	desc = "Permits us to siphon the DNA from a human. They become one with us, and we become stronger."
 	abbreviation = "AD"
 	hud_state = "absorbdna"
 	spell_flags = NEEDSHUMAN
@@ -25,7 +25,7 @@
 		to_chat(user, "<span class='warning'>[T] is not compatible with our biology.</span>")
 		return FALSE
 	if(M_HUSK in T.mutations)	//No double-absorbing
-		to_chat(user, "<span class='warning'>This creature's DNA is ruined beyond useability!</span>")
+		to_chat(user, "<span class='warning'>This creature's DNA is ruined beyond usability!</span>")
 		return FALSE
 	if(!T.mind)						//No monkeymen
 		to_chat(user, "<span class='warning'>This creature's DNA is useless to us!</span>")
@@ -59,7 +59,7 @@
 				to_chat(T, "<span class='danger'>You feel a sharp stabbing pain!</span>")
 				playsound(user, 'sound/effects/lingstabs.ogg', 50, 1)
 				var/datum/organ/external/affecting = T.get_organ(user.zone_sel.selecting)
-				if(affecting.take_damage(39,0,1,"large organic needle"))
+				if(affecting.take_damage(39,0,1, 0,"large organic needle"))
 					T.UpdateDamageIcon(1)
 
 		feedback_add_details("changeling_powers","A[stage]")

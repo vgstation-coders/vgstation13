@@ -89,7 +89,7 @@
 	name = "cultist"
 	corpseshoes = /obj/item/clothing/shoes/cult
 	corpsesuit = /obj/item/clothing/suit/legacy_cultrobes
-	corpsemask = /obj/item/clothing/mask/gas/death_commando
+	corpsemask = /obj/item/clothing/mask/gas/grim_reaper/death_commando
 	corpseback = /obj/item/weapon/storage/backpack/cultpack
 
 /obj/effect/landmark/corpse/cult/New()

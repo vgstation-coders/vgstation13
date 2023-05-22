@@ -24,8 +24,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 
 /obj/machinery/holosign/Destroy()
 	if (overlay)
-		qdel(overlay)
-		overlay = null
+		QDEL_NULL(overlay)
 	..()
 
 /obj/machinery/holosign/proc/toggle(var/active)
@@ -100,7 +99,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 	var/active = 0
 	var/image/overlay
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 4
 
@@ -110,8 +109,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 
 /obj/machinery/holosign_switch/Destroy()
 	if (overlay)
-		qdel(overlay)
-		overlay = null
+		QDEL_NULL(overlay)
 	..()
 
 /obj/machinery/holosign_switch/attack_paw(mob/user as mob)

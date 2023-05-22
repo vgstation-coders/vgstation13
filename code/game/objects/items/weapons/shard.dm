@@ -99,5 +99,6 @@
 	return ..()
 
 /obj/item/weapon/shard/Crossed(var/mob/living/AM)
+	if(..())
+		return 1
 	FeetStab(AM)
-	..()

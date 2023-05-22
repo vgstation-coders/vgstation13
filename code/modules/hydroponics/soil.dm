@@ -3,7 +3,7 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "soil"
 	density = 0
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	draw_warnings = 0
 
 	machine_flags = 0 // THIS SHOULD NOT EVER BE UNWRENCHED AND IT SHOULD NOT EVER SPAWN MACHINE FRAMES, MY GOD

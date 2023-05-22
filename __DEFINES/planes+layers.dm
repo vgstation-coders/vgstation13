@@ -74,10 +74,11 @@ Why is FLOAT_PLANE added to a bunch of these?
 	------
 	FLOAT_PLANE = -32767
 */
+#define BELOW_PLATING_PLANE 			(-5 + FLOAT_PLANE)
 
-#define PLATING_PLANE 			(-5 + FLOAT_PLANE)
+#define PLATING_PLANE 			(-4 + FLOAT_PLANE)
 
-#define ABOVE_PLATING_PLANE		(-4 + FLOAT_PLANE)
+#define ABOVE_PLATING_PLANE		(-3 + FLOAT_PLANE)
 
 	#define CATWALK_LAYER				2
 	#define DISPOSALS_PIPE_LAYER		3
@@ -87,8 +88,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define VENT_BEZEL_LAYER			7
 	#define WIRE_TERMINAL_LAYER			8
 	#define PULSEDEMON_LAYER			9
-
-#define FLOOR_PLANE 			(-3 + FLOAT_PLANE)
+	#define FLOORBOARD_ITEM_LAYER		10
 
 #define BELOW_TURF_PLANE 		(-2 + FLOAT_PLANE)		// objects that are below turfs and darkness but above platings. Useful for asteroid smoothing or other such magic.
 	#define CORNER_LAYER 				2
@@ -99,7 +99,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define GLASSTILE_PLANE			-1						// Another one that won't behave, since it's an overlay
 
-#define ABOVE_TURF_PLANE 		(0 + FLOAT_PLANE)			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
+#define ABOVE_TURF_PLANE 		(1 + FLOAT_PLANE)			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
 	#define HOLOMAP_LAYER				1 //Note: Holomap images are not actually on ABOVE_TURF_PLANE. They are explicitly one plane above the parent turf.
 	#define RUNE_LAYER					2
@@ -122,11 +122,11 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define CREEPER_LAYER				19
 	#define WEED_LAYER					420
 
-#define NOIR_BLOOD_PLANE 		(1 + FLOAT_PLANE)		 	// Contains BLOOD, (ALSO) will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
+#define NOIR_BLOOD_PLANE 		(2 + FLOAT_PLANE)		 	// Contains BLOOD, (ALSO) will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
 
-#define HIDING_MOB_PLANE 		(2 + FLOAT_PLANE)			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
+#define HIDING_MOB_PLANE 		(3 + FLOAT_PLANE)			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
 
-#define OBJ_PLANE 				(3 + FLOAT_PLANE)			// For objects which appear below humans.
+#define OBJ_PLANE 				(4 + FLOAT_PLANE)			// For objects which appear below humans.
 
 	#define BELOW_TABLE_LAYER			0
 	#define TABLE_LAYER					0.5
@@ -147,26 +147,30 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define ABOVE_DOOR_LAYER			12
 	#define CHAIR_LEG_LAYER				13
 
-#define LYING_MOB_PLANE			(4 + FLOAT_PLANE)			// other mobs that are lying down.
+#define LYING_MOB_PLANE			(5 + FLOAT_PLANE)			// other mobs that are lying down.
 
-#define LYING_HUMAN_PLANE 		(5 + FLOAT_PLANE)			// humans that are lying down
+#define LYING_HUMAN_PLANE 		(6 + FLOAT_PLANE)			// humans that are lying down
 
-#define ABOVE_OBJ_PLANE			(6 + FLOAT_PLANE)			// for objects that are below humans when they are standing but above them when they are not. - eg, blankets.
+#define ABOVE_OBJ_PLANE			(7 + FLOAT_PLANE)			// for objects that are below humans when they are standing but above them when they are not. - eg, blankets.
 	#define BLANKIES_LAYER				0
 	#define FACEHUGGER_LAYER			1
 
-#define HUMAN_PLANE 			(7 + FLOAT_PLANE)			// For Humans that are standing up.
+#define HUMAN_PLANE 			(8 + FLOAT_PLANE)			// For Humans that are standing up.
 
-#define MOB_PLANE 				(8 + FLOAT_PLANE)			// For Mobs.
+#define MOB_PLANE 				(9 + FLOAT_PLANE)			// For Mobs.
 
 //	#define MOB_LAYER					4
 	#define SLIME_LAYER					5
 
-#define ABOVE_HUMAN_PLANE 		(9 + FLOAT_PLANE)			// For things that should appear above humans.
+#define ABOVE_HUMAN_PLANE 		(10 + FLOAT_PLANE)			// For things that should appear above humans.
 
 	#define SHADOW_LAYER				0
 	#define VEHICLE_LAYER 				0
 	#define CHAIR_ARMREST_LAYER 		0
+	#define DISPOSALS_CHUTE_LAYER 		0
+	#define RAILING_BACK_LAYER 			0.1
+	#define RAILING_MID_LAYER 			0.2
+	#define RAILING_FRONT_LAYER 		0.3
 	#define WINDOOR_LAYER 				1
 	#define OPEN_CURTAIN_LAYER			2
 	// BELOW_OBJ_LAYER					2
@@ -176,7 +180,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define CLOSED_FIREDOOR_LAYER		6
 	#define CHAT_LAYER					7
 
-#define BLOB_PLANE 				(10 + FLOAT_PLANE)			// For Blobs, which are above humans.
+#define BLOB_PLANE 				(11 + FLOAT_PLANE)			// For Blobs, which are above humans.
 
 	#define BLOB_ROOTS_LAYER			-1
 	#define BLOB_BASE_LAYER				0
@@ -187,7 +191,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define BLOB_CORE_LAYER				5
 	#define BLOB_SPORE_LAYER			6
 
-#define EFFECTS_PLANE 			(11 + FLOAT_PLANE)			// For special effects.
+#define EFFECTS_PLANE 			(12 + FLOAT_PLANE)			// For special effects.
 
 	#define BELOW_PROJECTILE_LAYER 		3
 	#define PROJECTILE_LAYER 			4
@@ -199,18 +203,19 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define HORIZON_EXHAUST_LAYER		10
 	#define POINTER_LAYER 				11
 
-#define GAS_PLANE 				11					// Gas overlays really hate being in anything except vis_contents when FLOAT_PLANE'D, don't ask
+#define GAS_PLANE 				12					// Gas overlays really hate being in anything except vis_contents when FLOAT_PLANE'D, don't ask
 
-#define GHOST_PLANE 			(12 + FLOAT_PLANE)			// Ghosts show up under lighting, HUD etc.
+#define GHOST_PLANE 			(13 + FLOAT_PLANE)			// Ghosts show up under lighting, HUD etc.
 
 	#define GHOST_LAYER 				1
 
-#define FAKE_CAMERA_PLANE		(13)
+#define FAKE_CAMERA_PLANE		(14)
 
-#define LIGHTING_PLANE 			(14)	// Don't put anything other than lighting_overlays in there please
+#define LIGHTING_PLANE 			(15)	// Don't put anything other than lighting_overlays in there please
+	#define SELF_VISION_LAYER 		   -1
 	#define LIGHTING_LAYER 				0
 
-#define ABOVE_LIGHTING_PLANE	(15)
+#define ABOVE_LIGHTING_PLANE	(16)
 	#define ABOVE_LIGHTING_LAYER		0
 	#define SUPERMATTER_WALL_LAYER 		1
 	#define SUPER_PORTAL_LAYER			2
@@ -219,21 +224,21 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
-#define OPEN_OVERLAY_PLANE	(16 + FLOAT_PLANE) // This one won't behave either
+#define OPEN_OVERLAY_PLANE	(17 + FLOAT_PLANE) // This one won't behave either
 
-#define BASE_PLANE 				(17 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
+#define BASE_PLANE 				(18 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
-#define MISC_HUD_MARKERS_PLANE	18
+#define MISC_HUD_MARKERS_PLANE	19
 
-#define ANTAG_HUD_PLANE		 	19
+#define ANTAG_HUD_PLANE		 	20
 
-#define STATIC_PLANE 			20		// For AI's static.
+#define STATIC_PLANE 			21		// For AI's static.
 
 	#define HACK_LAYER 					1
 	#define STATIC_LAYER				2
 	#define REACTIVATE_CAMERA_LAYER		3
 
-#define FULLSCREEN_PLANE		21		// for fullscreen overlays that do not cover the hud.
+#define FULLSCREEN_PLANE		22		// for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER	 		0
 	#define DAMAGE_HUD_LAYER 			1
@@ -242,7 +247,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define CRIT_LAYER 					4
 	#define HALLUCINATION_LAYER 		5
 
-#define HUD_PLANE 				22		// For the Head-Up Display
+#define HUD_PLANE 				23		// For the Head-Up Display
 
 	#define UNDER_HUD_LAYER 			0
 	#define HUD_BASE_LAYER		 		1
@@ -254,7 +259,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define MIND_UI_BUTTON 				11
 	#define MIND_UI_FRONT 				12
 
-#define ABOVE_HUD_PLANE 		23		// For being above the Head-Up Display
+#define ABOVE_HUD_PLANE 		24		// For being above the Head-Up Display
 
 
 /atom/proc/hud_layerise()
@@ -264,6 +269,10 @@ Why is FLOAT_PLANE added to a bunch of these?
 /atom/proc/reset_plane_and_layer()
 	plane = initial(plane)
 	layer = initial(layer)
+
+//Adjusts plane/layer for contained mobs when their reset_layer() is called. Should probably be extended to all movables at some point but I'm just making a quick fix right now
+/atom/proc/adjust_layer(mob/M)
+	return
 
 /obj/abstract/screen/plane_master
 	appearance_flags = PLANE_MASTER
@@ -333,6 +342,22 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy
 
+// OVERDARKNESS PLANEMASTER
+// Used to move the BYOND darkness plane from SEE_BLACKNESS to a different plane so it covers things on desired planes above 0
+/obj/abstract/screen/plane_master/overdark_planemaster
+	plane = 0
+	render_target = "*overdark"
+
+var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster = new()
+
+/obj/abstract/screen/plane_master/overdark_planemaster_target
+	appearance_flags = 0
+	plane = BASE_PLANE
+	mouse_opacity = 0
+	screen_loc = "CENTER,CENTER"
+	render_source = "*overdark"
+
+var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planemaster_target = new()
 
 // DARKNESS PLANEMASTER
 // One planemaster for each client, which they gain during mob/login()

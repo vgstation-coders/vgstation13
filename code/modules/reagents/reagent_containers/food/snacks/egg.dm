@@ -41,12 +41,11 @@
 		self_message = "<span class='notice'>You crack open \the [src] into \the [target].[target.reagents.is_full()? " It is now full." : ""]</span>", range = 2)
 	qdel(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/throw_impact(atom/hit_atom)
-	..()
-	if(isturf(hit_atom))
+/obj/item/weapon/reagent_containers/food/snacks/egg/throw_impact(atom/hit_atom, var/speed, mob/user)
+	if(!..() && isturf(hit_atom))
 		new/obj/effect/decal/cleanable/egg_smudge(loc)
 		new/obj/item/trash/egg(loc)
-		splat_reagent_reaction(hit_atom)
+		splat_reagent_reaction(hit_atom,user)
 		visible_message("<span class='warning'>\The [src] has been squashed.</span>","<span class='warning'>You hear a smack.</span>")
 		playsound(loc, 'sound/items/egg_squash.ogg', 50, 1)
 		qdel(src)
@@ -160,12 +159,21 @@
 	can_color = FALSE
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/chaos/hatch()
-	playsound(src, 'sound/effects/phasein.ogg', 100, 1)
-	visible_message("\The [src] cracks open, revealing a realm of the unknown within. From that realm, something emerges.")
-	var/choice = pick(existing_typesof(/mob/living/simple_animal) - (boss_mobs + blacklisted_mobs))
-	new choice(get_turf(src))
+	var/turf/T = get_turf(src)
+	if(T)
+		playsound(src, 'sound/effects/phasein.ogg', 100, 1)
+		visible_message("\The [src] cracks open, revealing a realm of the unknown within. From that realm, something emerges.")
+		var/choice = pick(existing_typesof(/mob/living/simple_animal) - (boss_mobs + blacklisted_mobs))
+		new choice(T)
 	processing_objects.Remove(src)
 	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/chaos/instahatch/New()
+	..()
+	var/time = rand(3,10)
+	spawn(time)
+		if(!gcDestroyed)
+			hatch()
 
 var/snail_egg_count = 0
 

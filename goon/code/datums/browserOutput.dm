@@ -188,6 +188,9 @@ For the main html chat area
 
 			//Uh oh this fucker has a history of playing on a banned account!!
 			if (found.len > 0)
+				if(owner.ckey == found["ckey"]) //If the banned ckey is the same as the one that successfully connected, ignore it. This happens when someone tries to join as a guest account at some point.
+					cookieSent = 1
+					return
 				//TODO: add a new evasion ban for the CURRENT client details, using the matched row details
 				message_admins("<span class='danger big'>[key_name(src.owner)] has a cookie from a banned account! (Matched: [found["ckey"]], [found["ip"]], [found["compid"]])</span>")
 				log_admin("[key_name(src.owner)] has a cookie from a banned account! (Matched: [found["ckey"]], [found["ip"]], [found["compid"]])")

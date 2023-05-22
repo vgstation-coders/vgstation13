@@ -284,7 +284,7 @@ What a mess.*/
 						screen = 1
 //RECORD FUNCTIONS
 			if("Search Records")
-				var/t1 = input("Search String: (Partial Name or ID or Fingerprints or Rank)", "Secure. records", null, null)  as text
+				var/t1 = copytext(sanitize(input("Search String: (Partial Name or ID or Fingerprints or Rank)", "Secure. records", null, null)  as text),1,MAX_NAME_LEN)
 				if ((!( t1 ) || usr.stat || !( authenticated ) || usr.restrained() || !in_range(src, usr)))
 					return
 				Perp = new/list()
@@ -326,7 +326,7 @@ What a mess.*/
 					screen = 3
 
 /*			if ("Search Fingerprints")
-				var/t1 = input("Search String: (Fingerprint)", "Secure. records", null, null)  as text
+				var/t1 = copytext(sanitize(input("Search String: (Fingerprint)", "Secure. records", null, null)  as text),1,MAX_NAME_LEN)
 				if ((!( t1 ) || usr.stat || !( authenticated ) || usr.restrained() || (!in_range(src, usr)) && (!istype(usr, /mob/living/silicon))))
 					return
 				active1 = null
@@ -373,8 +373,7 @@ What a mess.*/
 					<a href='?src=\ref[src];choice=Clear Screen'>No</a>"}
 			if ("Purge All Records")
 				for(var/datum/data/record/R in data_core.security)
-					qdel(R)
-					R = null
+					QDEL_NULL(R)
 				temp = "All Security records deleted."
 
 			if ("Add Entry")
@@ -440,7 +439,7 @@ What a mess.*/
 				switch(href_list["field"])
 					if("name")
 						if (istype(active1, /datum/data/record))
-							var/t1 = copytext(sanitize(input("Please input name:", "Secure. records", active1.fields["name"], null)  as text),1,MAX_MESSAGE_LEN)
+							var/t1 = copytext(sanitize(input("Please input name:", "Secure Records", active1.fields["name"], null)  as text),1,MAX_MESSAGE_LEN)
 							if ((!( t1 ) || !length(trim(t1)) || !( authenticated ) || usr.stat || usr.restrained() || (!in_range(src, usr) && (!istype(usr, /mob/living/silicon)))) || active1 != a1)
 								return
 							active1.fields["name"] = t1
@@ -470,7 +469,7 @@ What a mess.*/
 							active1.fields["age"] = t1
 					if("notes")
 						if (istype(active2, /datum/data/record))
-							var/t1 = copytext(sanitize(input("Please summarize notes:", "Secure. records", active2.fields["notes"], null)  as message),1,MAX_MESSAGE_LEN)
+							var/t1 = copytext(sanitize(input("Please summarize notes:", "Secure Records", active2.fields["notes"], null)  as message),1,MAX_MESSAGE_LEN)
 							if ((!( t1 ) || !( authenticated ) || usr.stat || usr.restrained() || (!in_range(src, usr) && (!istype(usr, /mob/living/silicon))) || active2 != a2))
 								return
 							active2.fields["notes"] = t1
@@ -534,21 +533,17 @@ What a mess.*/
 
 					if ("Delete Record (Security) Execute")
 						if (active2)
-							qdel(active2)
-							active2 = null
+							QDEL_NULL(active2)
 
 					if ("Delete Record (ALL) Execute")
 						if (active1)
 							for(var/datum/data/record/R in data_core.medical)
 								if ((R.fields["name"] == active1.fields["name"] || R.fields["id"] == active1.fields["id"]))
-									qdel(R)
-									R = null
+									QDEL_NULL(R)
 								else
-							qdel(active1)
-							active1 = null
+							QDEL_NULL(active1)
 						if (active2)
-							qdel(active2)
-							active2 = null
+							QDEL_NULL(active2)
 					else
 						temp = "This function does not appear to be working at the moment. Our apologies."
 
@@ -579,8 +574,7 @@ What a mess.*/
 			continue
 
 		else if(prob(1))
-			qdel(R)
-			R = null
+			QDEL_NULL(R)
 			continue
 
 	..(severity)
@@ -590,3 +584,4 @@ What a mess.*/
 	icon_state = "messyfiles"
 
 	light_color = null
+	computer_flags = NO_ONOFF_ANIMS

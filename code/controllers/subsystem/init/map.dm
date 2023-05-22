@@ -29,12 +29,12 @@ var/datum/subsystem/map/SSmap
 
 	for(var/i = 0, i < max_secret_rooms, i++)
 		make_mining_asteroid_secret()
-	
+
 	//hobo shack generation, one shack will spawn, 1/3 chance of two shacks
 	generate_hoboshack()
 	if (rand(1,3) == 3)
 		generate_hoboshack()
-		
+
 	log_startup_progress("Calling post on zLevels, letting them know they can do zlevel specific stuff...")
 	var/watch_prim = start_watch()
 	for(var/datum/zLevel/z in map.zLevels)

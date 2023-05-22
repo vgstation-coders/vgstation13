@@ -169,7 +169,7 @@
 	var/frequency = 1449 //seems to be the frequency used for all the controllers on /vg/ so why not make it default
 	var/datum/radio_frequency/radio_connection
 
-/obj/machinery/embedded_controller/radio/acidable()
+/obj/machinery/embedded_controller/radio/dissolvable()
 	return 0
 
 /obj/machinery/embedded_controller/radio/initialize()
@@ -206,8 +206,7 @@
 	if(radio_connection)
 		return radio_connection.post_signal(src, signal)
 	else
-		qdel(signal)
-		signal = null
+		QDEL_NULL(signal)
 
 /obj/machinery/embedded_controller/radio/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)

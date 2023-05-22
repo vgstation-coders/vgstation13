@@ -99,8 +99,7 @@
 
 /datum/pda_app/station_map/Destroy()
 	if (holomap)
-		qdel(holomap)
-		holomap = null
+		QDEL_NULL(holomap)
 	..()
 
 /datum/pda_app/newsreader
@@ -138,7 +137,7 @@
 					var/i = 0
 					for(var/datum/feed_message/message in viewing_channel.messages)
 						i++
-						dat+="-[message.body] <br>"
+						dat+="<b><u>[message.headline]</u></b><BR>[message.body] <BR>"
 						if(message.img)
 							usr << browse_rsc(message.img_pda, "tmp_photo_pda[i].png")
 

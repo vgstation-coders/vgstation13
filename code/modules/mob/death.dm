@@ -1,6 +1,8 @@
 //This is the proc for gibbing a mob. Cannot gib ghosts.
 //added different sort of gibs and animations. N
 /mob/proc/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		return
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -46,6 +48,8 @@
 		client.color = initial(client.color)
 	for(var/obj/item/I in src)
 		I.OnMobDeath(src)
+	for(var/atom/A in arcane_tampered_atoms)
+		A.bless()
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.on_holder_death(src)
@@ -57,7 +61,7 @@
 	var/mob/living/L = C.contained_mob
 	transmogrify()
 	L.visible_message("<span class='danger'>\The [L]'s body shifts and contorts!</span>")
-	if(istype(L))
+	if(C.kill_on_death && istype(L))
 		L.adjustOxyLoss(max(L.health,200))	//if you die while transmogrified, you die for real
 		L.updatehealth()
 
@@ -66,5 +70,6 @@
 /mob/proc/resurrect()
 	living_mob_list |= src
 	dead_mob_list -= src
-
+	if(src.client)
+		clear_fullscreens()
 	verbs -= /mob/living/proc/butcher

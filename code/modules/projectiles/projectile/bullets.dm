@@ -131,7 +131,7 @@
 
 /obj/item/projectile/bullet/midbullet/bouncebullet
 	bounce_type = PROJREACT_WALLS|PROJREACT_WINDOWS
-	bounces = -1
+	bounces = 200
 
 /obj/item/projectile/bullet/midbullet/bouncebullet/lawgiver
 	damage = 30
@@ -140,13 +140,11 @@
 
 /obj/item/projectile/bullet/fourtyfive
 	damage = 35 //buffed up for antag usage
-	drowsy = 2
 	agony = 2
 	penetration = 3
 
 /obj/item/projectile/bullet/fourtyfive/practice
 	damage = 3
-	drowsy = 1
 	agony = 1
 	embed = 0
 	penetration = 0
@@ -160,13 +158,11 @@
 
 /obj/item/projectile/bullet/auto380 //new sec pistol ammo, reverse name because lol compiler
 	damage = 15
-	drowsy = 1
-	agony = 1
+	agony = 15
 	penetration = 2
 
 /obj/item/projectile/bullet/auto380/practice
 	damage = 2
-	drowsy = 0
 	agony = 0
 	embed = 0
 	penetration = 0
@@ -569,8 +565,7 @@
 
 /obj/item/projectile/bullet/vial/Destroy()
 	if(vial)
-		qdel(vial)
-		vial = null
+		QDEL_NULL(vial)
 	if(user)
 		user = null
 	..()

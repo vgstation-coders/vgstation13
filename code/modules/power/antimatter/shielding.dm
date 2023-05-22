@@ -17,7 +17,7 @@
 	anchored = 1
 	density = 1
 	dir = 1
-	use_power = 0//Living things generally dont use power
+	use_power = MACHINE_POWER_USE_NONE//Living things generally dont use power
 	idle_power_usage = 0
 	active_power_usage = 0
 	mech_flags = MECH_SCAN_FAIL
@@ -100,16 +100,14 @@
 			if(AMC.add_shielding(src))
 				break
 		if(!mapped) // Prevent suicide if it's part of the map
-			if(!priorscan)
-				sleep(20)
-				controllerscan(1)//Last chance
-				return
-			qdel(src)
-		else
-			if(!priorscan)
-				sleep(20)
+			if(priorscan)
+				qdel(src)
+			else
+				spawn(20)
+					controllerscan(1)//Last chance
+		else if(!priorscan)
+			spawn(20)
 				controllerscan(1)
-				return
 
 // Find surrounding unconnected shielding and add them to our controller
 /obj/machinery/am_shielding/proc/assimilate()

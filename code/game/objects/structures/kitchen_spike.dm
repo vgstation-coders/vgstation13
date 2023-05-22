@@ -84,7 +84,11 @@
 
 	if(occupant)
 		if(occupant.meat_amount > occupant.meat_taken)
-			occupant.drop_meat(get_turf(src))
+			if(arcanetampered || occupant.arcanetampered)
+				new /obj/item/weapon/reagent_containers/food/snacks/tofu(get_turf(src))
+				occupant.meat_taken++
+			else
+				occupant.drop_meat(get_turf(src))
 
 			if(occupant.meat_amount > occupant.meat_taken)
 				to_chat(user, "You remove some meat from \the [occupant].")
@@ -97,8 +101,7 @@
 /obj/structure/kitchenspike/proc/clean()
 	icon_state = initial(icon_state)
 	if(occupant)
-		qdel(occupant)
-		occupant = null
+		QDEL_NULL(occupant)
 
 /obj/structure/kitchenspike/suicide_act(var/mob/living/user)
 	user.forceMove(get_turf(src))

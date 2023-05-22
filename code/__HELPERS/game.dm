@@ -3,7 +3,6 @@
 	var/href
 	href_list = params2list("src=\ref[src]&[target]=1")
 	href = "src=\ref[src];[target]=1"
-	src:temphtml = null
 	src:Topic(href, href_list)
 	return null
 
@@ -223,6 +222,10 @@
 
 			if(((G.client.inactivity/10)/60) > buffer + i) // the most active players are more likely to become an alien
 				roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Skipping [G]  - Inactive.")
+				continue
+
+			if(isAdminGhost(G)) // don't do this to admins
+				roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Skipping [G]  - Is adminned.")
 				continue
 
 			roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Selected [G] as candidate.")

@@ -154,6 +154,8 @@
 /obj/machinery/computer/general_air_control/atmos_automation/Topic(href,href_list)
 	if(..())
 		return 1
+	if(secret_check_two(usr, href_list))
+		return 1
 	if(href_list["on"])
 		on = !on
 		updateUsrDialog()
@@ -342,18 +344,17 @@
 	var/output_tag="inc_out"
 	var/sensor_tag="inc_sensor"
 	frequency=1449
-	var/temperature=1000
+	var/temperature=400
 /obj/machinery/computer/general_air_control/atmos_automation/burnchamber/New()
 	..()
 
 	// On State
 	// Pretty much this:
 	/*
-		if(get_sensor("inc_sensor","temperature") < 200)
+		if(get_sensor("inc_sensor","temperature") < 400)
 			set_injector_state("inc_in",1)
-			set_vent_pump_power("inc_out",0)
 		else
-			set_vent_pump_power("inc_out",1
+			set_injector_state("inc_in",0)
 	*/
 
 	var/datum/automation/get_sensor_data/sensor=new(src)
@@ -361,7 +362,7 @@
 	sensor.field="temperature"
 
 	var/datum/automation/static_value/val = new(src)
-	val.value=temperature - 800
+	val.value= temperature
 
 	var/datum/automation/compare/compare=new(src)
 	compare.comparator = "Less Than"
@@ -371,49 +372,16 @@
 	var/datum/automation/set_injector_power/inj_on=new(src)
 	inj_on.injector=injector_tag
 	inj_on.state=1
-
-	var/datum/automation/set_vent_pump_power/vp_on=new(src)
-	vp_on.vent_pump=output_tag
-	vp_on.state=1
-
-	var/datum/automation/set_vent_pump_power/vp_off=new(src)
-	vp_off.vent_pump=output_tag
-	vp_off.state=0
+	
+	var/datum/automation/set_injector_power/inj_off=new(src)
+	inj_off.injector=injector_tag
+	inj_off.state=0
 
 	var/datum/automation/if_statement/i = new (src)
 	i.label = "Fuel Injector On"
 	i.condition = compare
 	i.children_then.Add(inj_on)
-	i.children_then.Add(vp_off)
-	i.children_else.Add(vp_on)
-
-	automations += i
-
-	// Off state
-	/*
-		if(get_sensor("inc_sensor","temperature") > 1000)
-			set_injector_state("inc_in",0)
-	*/
-	sensor=new(src)
-	sensor.sensor=sensor_tag
-	sensor.field="temperature"
-
-	val = new(src)
-	val.value=temperature
-
-	compare=new(src)
-	compare.comparator = "Greater Than"
-	compare.children[1] = sensor
-	compare.children[2] = val
-
-	var/datum/automation/set_injector_power/inj_off=new(src)
-	inj_off.injector=injector_tag
-	inj_off.state=0
-
-	i = new (src)
-	i.label = "Fuel Injector Off"
-	i.condition = compare
-	i.children_then.Add(inj_off)
+	i.children_else.Add(inj_off)
 
 	automations += i
 

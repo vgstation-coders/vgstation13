@@ -32,26 +32,36 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 	//event arguement list format (user, "context", item)
 
 	if(generate_effect)
-		//setup primary effect
-		var/effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
-		primary_effect = new effecttype(src, 1) //pass the 1 so that the effect knows to generate a trigger
-		primary_effect.artifact_id = "[artifact_id]a"
-		spawn(1)	//delay logging so if admin tools override/other fuckery occurs the logs still end up correct
-			src.investigation_log(I_ARTIFACT, "|| spawned with a primary effect [primary_effect.artifact_id]: [primary_effect] || range: [primary_effect.effectrange] || charge time: [primary_effect.chargelevelmax] || trigger: [primary_effect.trigger].")
-
-		//75% chance to have a secondary effect
-		if(prob(75))
-			effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
-			secondary_effect = new effecttype(src, 1, FALSE)
-			secondary_effect.artifact_id = "[artifact_id]b"
-			spawn(1)
-				if(secondary_effect)	//incase admin tools or something deleted the secondary
-					src.investigation_log(I_ARTIFACT, "|| spawned with a secondary effect [secondary_effect.artifact_id]: [secondary_effect] || range: [secondary_effect.effectrange] || charge time: [secondary_effect.chargelevelmax] || trigger: [secondary_effect.trigger].")
-					if(prob(75) && secondary_effect.effect != ARTIFACT_EFFECT_TOUCH)
-						src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
-						secondary_effect.ToggleActivate(2)
-
+		generate_effect()
 		generate_icon()
+
+/obj/machinery/artifact/arcane_act(mob/user)
+	. = ..()
+	generate_effect()
+	return "XEN'RCH' R'GE!"
+
+/obj/machinery/artifact/proc/generate_effect()
+	//setup primary effect
+	var/effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
+	primary_effect = new effecttype(src, 1) //pass the 1 so that the effect knows to generate a trigger
+	primary_effect.artifact_id = "[artifact_id]a"
+	spawn(1)	//delay logging so if admin tools override/other fuckery occurs the logs still end up correct
+		src.investigation_log(I_ARTIFACT, "|| was given a primary effect [primary_effect.artifact_id]: [primary_effect] || range: [primary_effect.effectrange] || charge time: [primary_effect.chargelevelmax] || trigger: [primary_effect.trigger].")
+		if(arcanetampered)
+			src.investigation_log(I_ARTIFACT, "|| primary effect [secondary_effect.artifact_id] starts triggered by default.")
+			secondary_effect.ToggleActivate(2)
+
+	//75% chance to have a secondary effect
+	if(prob(75))
+		effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
+		secondary_effect = new effecttype(src, 1, FALSE)
+		secondary_effect.artifact_id = "[artifact_id]b"
+		spawn(1)
+			if(secondary_effect)	//incase admin tools or something deleted the secondary
+				src.investigation_log(I_ARTIFACT, "|| was given a secondary effect [secondary_effect.artifact_id]: [secondary_effect] || range: [secondary_effect.effectrange] || charge time: [secondary_effect.chargelevelmax] || trigger: [secondary_effect.trigger].")
+				if(arcanetampered || (prob(75) && secondary_effect.effect != ARTIFACT_EFFECT_TOUCH))
+					src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
+					secondary_effect.ToggleActivate(2)
 
 /obj/machinery/artifact/proc/generate_icon()
 	prefix = pick(primary_effect.valid_style_types)
@@ -209,8 +219,8 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 /obj/machinery/artifact/Destroy()
 	new /datum/artifact_postmortem_data(src)
 
-	qdel(primary_effect); primary_effect = null
-	qdel(secondary_effect); secondary_effect = null
+	QDEL_NULL(primary_effect)
+	QDEL_NULL(secondary_effect)
 	..()
 
 /proc/ArtifactRepercussion(var/atom/source, var/mob/mob_cause = null, var/other_cause = "", var/artifact_type = "")

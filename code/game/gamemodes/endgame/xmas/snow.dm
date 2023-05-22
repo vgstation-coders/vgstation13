@@ -280,6 +280,11 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 /obj/item/stack/sheet/snow/emag_act(mob/user)
 	to_chat(user, "<span class='warning'>You slide the emag across the snowball. Holy fuck. You are probably the most stupid person you've ever met.</span>")
 
+// making it do something funny like severing limbs would be a good idea
+// but i prefer this king of consistency with the above
+/obj/item/stack/sheet/snow/arcane_act(mob/user)
+	to_chat(user, "<span class='warning'>Doing this to a snowball is just as useless as using an emag. Give up.</span>")
+
 /obj/item/stack/sheet/snow/proc/remove_snowball()
 	if(src && (src.loc == spawn_loc) && istype(src.loc,/turf))
 		qdel(src)
@@ -574,13 +579,6 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		"pine_2",
 		"pine_3",
 		)
-	/* No
-	if((snow_tiles >= COSMICFREEZE_LEVEL_3) && prob(20))
-		new /mob/living/simple_animal/hostile/giant_spider/spiderling(get_turf(src))
-
-	if((snow_tiles >= COSMICFREEZE_LEVEL_5) && prob(20))
-		new /mob/living/simple_animal/hostile/bear(get_turf(src))
-	*/
 
 /obj/structure/snow_flora/tree/pine/attackby(obj/item/W,mob/user)
 	var/list/cutting = list(

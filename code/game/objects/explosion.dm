@@ -28,15 +28,10 @@
 
 var/explosion_shake_message_cooldown = 0
 
-/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit)
+/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist)
 	var/explosion_time = world.time
 
 	spawn()
-		if(config.use_recursive_explosions)
-			var/power = devastation_range * 2 + heavy_impact_range + light_impact_range //The ranges add up, ie light 14 includes both heavy 7 and devestation 3. So this calculation means devestation counts for 4, heavy for 2 and light for 1 power, giving us a cap of 27 power.
-			explosion_rec(epicenter, power)
-			return
-
 		var/watch = start_watch()
 		epicenter = get_turf(epicenter)
 		if(!epicenter)
@@ -64,7 +59,7 @@ var/explosion_shake_message_cooldown = 0
 		var/z0 = epicenter.z
 
 
-		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit)
+		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist)
 
 		var/took = stop_watch(watch)
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
@@ -140,37 +135,26 @@ var/explosion_shake_message_cooldown = 0
 	else
 		epicenter.turf_animation('icons/effects/96x96.dmi',"explosion_small",-WORLD_ICON_SIZE, -WORLD_ICON_SIZE, 13)
 
-/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit)
+/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit, var/list/whitelist)
 	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
 
 	var/x0 = offcenter.x
 	var/y0 = offcenter.y
-	var/z0 = offcenter.z
+	//var/z0 = offcenter.z
 
-	if(epicenter != offcenter) // Not relevant if not in multi-z
-		log_debug("Destroying size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [offcenter.loc.name] ([x0],[y0],[z0])")
+	var/list/affected_turfs = spiral_block(offcenter,max_range)
+	var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs)
 
-	for(var/turf/T in spiral_block(offcenter,max_range,1))
+	for(var/turf/T in affected_turfs)
+		if(whitelist && (T in whitelist))
+			continue
 		var/dist = cheap_pythag(T.x - x0, T.y - y0)
 		var/_dist = dist
 		var/pushback = 0
-
-		if(explosion_newmethod)	//Realistic explosions that take obstacles into account
-			var/turf/Trajectory = T
-			while(Trajectory != offcenter)
-				Trajectory = get_step_towards(Trajectory,offcenter)
-				if(Trajectory.density && Trajectory.explosion_block)
-					dist += Trajectory.explosion_block
-
-				for (var/obj/machinery/door/D in Trajectory.contents)
-					if(D.density && D.explosion_block)
-						dist += D.explosion_block
-
-				for (var/obj/effect/forcefield/F in Trajectory.contents)
-					dist += F.explosion_block
-
-				for (var/obj/effect/energy_field/E in Trajectory.contents)
-					dist += E.explosion_block
+		var/turf/Trajectory = T
+		while(Trajectory != offcenter)
+			Trajectory = get_step_towards(Trajectory,offcenter)
+			dist += cached_exp_block[Trajectory]
 
 		if(dist < devastation_range)
 			dist = 1
@@ -182,12 +166,18 @@ var/explosion_shake_message_cooldown = 0
 			dist = 3
 			pushback = 1
 		else
+			//invulnerable therefore no further explosion
 			continue
 
-		for(var/atom/movable/A in T.contents)
+
+		var/turftime = world.time
+		for(var/atom/movable/A in T)
+			var/atomtime = world.time
+			if(whitelist && (A in whitelist))
+				continue
 			if(T != offcenter && !A.anchored && A.last_explosion_push != explosion_time)
 				A.last_explosion_push = explosion_time
-				//world.log << "FOUND [A] NOT ANCHORED AT [T] ([T.x],[T.y])"
+
 				var/max_dist = _dist+(pushback)
 				var/max_count = pushback
 				var/turf/throwT = get_step_away(A,offcenter,max_dist)
@@ -199,15 +189,17 @@ var/explosion_shake_message_cooldown = 0
 				if(!isturf(throwT))
 					//world.log << "FUCK OUR TURF IS BAD"
 					continue
-				//world.log << "FOUND [throwT] ([throwT.x],[throwT.y]) using get_step_away([offcenter](([offcenter.x],[offcenter.y])),[A],[pushback])"
-				//if(istype(throwT, /turf/space))
 				if(ismob(A))
 					to_chat(A, "<span class='warning'>You are blown away by the explosion!</span>")
 
 				A.throw_at(throwT,pushback+2,500)
-				//else A.GotoExplosionThrowDest(throwT, 50)
-				//world.log << "THROWING [A] AT [throwT]"
 			A.ex_act(dist,null,whodunnit)
+			atomtime = world.time - atomtime
+			if(atomtime > 0)
+				log_debug("Slow explosion effect on [A]: Took [atomtime/10] seconds.")
+		turftime = world.time - turftime
+		if(turftime > 0)
+			log_debug("Slow turf explosion processing at [formatJumpTo(T)]: Took [turftime/10] seconds.")
 
 		T.ex_act(dist,null,whodunnit)
 
@@ -215,3 +207,22 @@ var/explosion_shake_message_cooldown = 0
 
 	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
 	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time, whodunnit)
+
+/proc/CalculateExplosionBlock(list/affected_turfs)
+	. = list()
+	// we cache the explosion block rating of every turf in the explosion area
+	//explosion block reduces explosion distance based on path from epicentre
+	for(var/turf/T as anything in affected_turfs)
+		var/current_exp_block = T.density ? T.explosion_block : 0
+		for (var/obj/machinery/door/D in T)
+			if(D.density && D.explosion_block)
+				current_exp_block += D.explosion_block
+				continue
+		for (var/obj/effect/forcefield/F in T)
+			current_exp_block += F.explosion_block
+			continue
+		for (var/obj/effect/energy_field/E in T)
+			current_exp_block += E.explosion_block
+			continue
+
+		.[T] = current_exp_block

@@ -203,17 +203,27 @@
 	name = "Bearding"
 	desc = "Causes the infected to spontaneously grow a beard, regardless of gender. Only affects humans."
 	stage = 2
+	max_multiplier = 5
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/beard/activate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
-		if(H.species.name == "Human" && !(H.my_appearance.f_style == "Full Beard"))
-			to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
+		if(H.species.name == "Human")
+			var/beard_name = ""
 			spawn(50)
-				H.my_appearance.f_style = "Full Beard"
-				H.update_hair()
-
+				if(multiplier >= 1 && multiplier < 2)
+					beard_name = "Full Beard"
+				if(multiplier >= 2 && multiplier < 3)
+					beard_name = "Long Beard"
+				if(multiplier >= 3 && multiplier < 4)
+					beard_name = "Very Long Beard"
+				if(multiplier >= 4)
+					beard_name = "Dwarf Beard"
+				if(beard_name != "" && H.my_appearance.f_style != beard_name)
+					H.my_appearance.f_style = beard_name
+					to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
+					H.update_hair()
 
 /datum/disease2/effect/bloodynose
 	name = "Intranasal Hemorrhage"
@@ -337,7 +347,7 @@
 						glass_hand.rejuvenate()
 					else
 						to_chat(H, "<span class='warning'>Your [glass_hand.display_name] deresonates, sustaining burns!</span>")
-						glass_hand.take_damage(0, 30 * multiplier)
+						glass_hand.take_damage(0, 15 * multiplier)
 			qdel(glass_to_shatter)
 		else if (prob(1))
 			to_chat(H, "Your [glass_hand.display_name] aches for the cold, smooth feel of container-grade glass...")
@@ -552,22 +562,18 @@
 				H.adjustCloneLoss(5 * multiplier)
 
 	for(var/obj/machinery/portable_atmospherics/hydroponics/H in range(3*multiplier,mob))
-		if(H.seed && !H.dead) // Get your xenobotanist/vox trader/hydroponist mad with you in less than 1 minute with this simple trick.
-			switch(rand(1,3))
-				if(1)
-					if(H.waterlevel >= 10)
-						H.waterlevel -= rand(1,10)
-					if(H.nutrilevel >= 5)
-						H.nutrilevel -= rand(1,5)
-				if(2)
-					if(H.toxins <= 50)
-						H.toxins += rand(1,50)
-				if(3)
-					H.weed_coefficient++
-					H.weedlevel++
-					H.pestlevel++
-					if(prob(5))
-						H.dead = 1
+		switch(rand(1,3))
+			if(1)
+				H.add_waterlevel(-rand(1,10))
+				H.add_nutrientlevel(-rand(1,5))
+			if(2)
+				H.add_toxinlevel(rand(1,50))
+			if(3)
+				H.weed_coefficient += WEEDLEVEL_MAX / 10
+				H.add_weedlevel(10)
+				H.add_pestlevel(10)
+				if(prob(5))
+					H.die()
 
 
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in range(2*multiplier,mob))

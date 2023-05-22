@@ -59,7 +59,7 @@
 	icon_state = "scanner_0"
 	density = 1
 	anchored = 1.0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 50
 	active_power_usage = 300
 	var/locked = 0
@@ -74,6 +74,9 @@
 	use_auto_lights = 1
 	light_range_on = 3
 	light_power_on = 2
+
+/obj/machinery/dna_scannernew/splashable()
+	return FALSE
 
 /obj/machinery/dna_scannernew/New()
 	. = ..()
@@ -90,7 +93,9 @@
 
 /obj/machinery/dna_scannernew/RefreshParts()
 	var/efficiency = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts) efficiency += SP.rating-1
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		if(!istype(SP,/obj/item/weapon/stock_parts/console_screen))
+			efficiency += SP.rating-1
 	injector_cooldown = initial(injector_cooldown) - 15*(efficiency)
 
 /obj/machinery/dna_scannernew/allow_drop()
@@ -290,17 +295,21 @@
 		if(C)
 			C.update_icon()
 			C.updateUsrDialog()
-			if(!M.client && M.mind)
-				var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
-				if(ghost)
-					var/mob/ghostmob = ghost.get_top_transmogrification()
-					if(ghostmob)
-						ghostmob << 'sound/effects/adminhelp.ogg'
-						to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
-							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-				break
+			M.ghost_reenter_alert("Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!")
 			break
 	return TRUE
+
+/mob/proc/ghost_reenter_alert(var/message) //!M.client = mob has ghosted out of their body
+	if(!client && mind)
+		var/mob/dead/observer/ghost = mind_can_reenter(mind)
+		if(ghost)
+			var/mob/ghostmob = ghost.get_top_transmogrification()
+			if(ghostmob)
+				ghostmob << 'sound/effects/adminhelp.ogg'
+				to_chat(ghostmob, "<span class='interface big'><span class='bold'>[message]</span> \
+					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+				return TRUE
+	return FALSE
 
 /obj/machinery/dna_scannernew/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(isliving(AM))
@@ -358,14 +367,8 @@
 	return 0
 
 /obj/machinery/dna_scannernew/on_login(var/mob/M)
-	if(M.mind && !M.client && locate(/obj/machinery/computer/cloning) in range(src, 1)) //!M.client = mob has ghosted out of their body
-		var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
-		if(ghost)
-			var/mob/ghostmob = ghost.get_top_transmogrification()
-			if(ghostmob)
-				ghostmob << 'sound/effects/adminhelp.ogg'
-				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+	if(locate(/obj/machinery/computer/cloning) in range(src, 1))
+		M.ghost_reenter_alert("Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
 	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.
@@ -449,8 +452,7 @@
 	labels.Cut()
 	buffers.Cut()
 	if(disk)
-		qdel(disk)
-		disk = null
+		QDEL_NULL(disk)
 	..()
 
 /datum/block_label
@@ -529,9 +531,9 @@
 
 /obj/machinery/computer/scan_consolenew/process()
 	if (connected && connected.occupant)
-		use_power = 2
+		use_power = MACHINE_POWER_USE_ACTIVE
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 /obj/machinery/computer/scan_consolenew/attack_hand(user as mob)
 	if(!..())
@@ -1078,6 +1080,8 @@
 
 				var/success = 1
 				var/obj/item/weapon/dnainjector/I = new /obj/item/weapon/dnainjector
+				if(arcanetampered)
+					I.arcanetampered = arcanetampered
 				var/datum/dna2/record/buf = src.buffers[bufferId]
 				if(href_list["createBlockInjector"])
 					waiting_for_user_input=1

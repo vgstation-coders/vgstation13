@@ -5,7 +5,7 @@
 	density = 1
 	anchored = 0
 
-	use_power = 0
+	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 100 //Watts, I hope.  Just enough to do the computer and display things.
 
 	var/thermal_efficiency = 0.65
@@ -130,9 +130,9 @@
 
 			//If our circulators are lubed get extra power
 			if(circ1.reagents.get_reagent_amount(LUBE)>=1)
-				last_gen *= 1 + (circ1.volume_capacity_used/16.5) //Up to x3 if flow capacity is 33%
+				last_gen *= 1 + ((circ1.volume_capacity_used * 100) / 16.5) //Up to x3 if flow capacity is 33%
 			if(circ2.reagents.get_reagent_amount(LUBE)>=1)
-				last_gen *= 1 + (circ2.volume_capacity_used/16.5)
+				last_gen *= 1 + ((circ2.volume_capacity_used * 100) / 16.5)
 
 			if(air2.temperature > air1.temperature)
 				air2.temperature = air2.temperature - energy_transfer/air2_heat_capacity

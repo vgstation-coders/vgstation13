@@ -15,11 +15,10 @@
 
 
 /obj/item/projectile/change/proc/wabbajack(var/mob/living/M,var/type) //WHY: as mob in living_mob_list
-	if(istype(M, /mob/living) && M.stat != DEAD)
+	if(istype(M) && M.stat != DEAD)
 		if(ismanifested(M) || iscluwnebanned(M))
 			visible_message("<span class='caution'>The bolt of change doesn't seem to affect [M] in any way.</span>")
 			return
-		var/mob/living/new_mob
 		// Random chance of fucking up
 		if(type!=null && prob(10))
 			type = null
@@ -31,29 +30,75 @@
 
 		switch(randomize)
 			if(SOC_MONKEY)
-				new_mob = M.monkeyize()
+				M.monkeyize()
 			if(SOC_MARTIAN)
-				new_mob = M.Martianize()
+				M.Martianize()
 			if(SOC_CYBORG)
-				new_mob = M.Robotize()
+				M.Robotize()
 			if(SOC_MOMMI) //It really makes you think.
-				new_mob = M.MoMMIfy()
+				M.MoMMIfy()
 			if(SOC_SLIME)
-				new_mob = M.slimeize()
+				M.slimeize()
 			if(SOC_XENO)
-				new_mob = M.Alienize(pick("Hunter", "Sentinel"))
+				M.Alienize(pick("Hunter", "Sentinel"))
 			if(SOC_HUMAN)
-				new_mob = M.Humanize()
+				M.Humanize()
 			if(SOC_CATBEAST)
-				new_mob = M.Humanize("Tajaran")
+				M.Humanize("Tajaran")
 			if(SOC_FRANKENSTEIN)
-				new_mob = M.Frankensteinize()
+				M.Frankensteinize()
 			else
 				return
-		if(new_mob)
-			var/mob/living/carbon/human/H = new_mob
-			to_chat(new_mob, "<B>Your form morphs into that of a [(istype(H) && H.species && H.species.name) ? H.species.name : randomize].</B>")
-			return new_mob
+		var/mob/living/carbon/human/H = M
+		if(istype(H) && H.species && H.species.name)
+			to_chat(H, "<B>Your form morphs into that of a [H.species.name].</B>")
+		else
+			to_chat(M, "<B>Your form morphs into that of a [randomize].</B>")
+
+/obj/item/projectile/polymorph
+	name = "bolt of polymorph"
+	icon_state = "ice_1"
+	damage = 0
+	nodamage = TRUE
+	flag = "energy"
+	fire_sound = 'sound/weapons/radgun.ogg'
+	var/status = MAJOR
+
+/obj/item/projectile/polymorph/on_hit(var/atom/hit)
+	if(hit == firer)
+		var/mob/living/M = new /mob/living/simple_animal/pollywog(firer.loc)
+		M.ckey = firer.ckey
+		firer.Premorph()
+		qdel(firer)
+		return
+	var/stat = status
+	bullet_die()
+	polymorph(hit,stat)
+
+/obj/item/projectile/polymorph/proc/polymorph(var/mob/living/M, var/status)
+	if(istype(M) && M.stat != DEAD)
+		if(ismanifested(M))
+			visible_message("<span class='caution'>The bolt of change doesn't seem to affect [M] in any way.</span>")
+			return
+
+		var/list/available_mobs = list()
+		var/time_to_untransmog = 0
+		var/kill = FALSE
+		switch(status)
+			if(MINOR)
+				available_mobs = minor_mobs - (boss_mobs+blacklisted_mobs)
+				time_to_untransmog = rand(10 SECONDS, 20 SECONDS)
+			if(MAJOR)
+				available_mobs = major_mobs - (boss_mobs+blacklisted_mobs)
+				time_to_untransmog = rand(16 SECONDS, 32 SECONDS)
+			if(DEFECTIVE)
+				available_mobs = (major_mobs + corrupt_mobs) - (boss_mobs+blacklisted_mobs)
+				kill = TRUE
+
+		M.transmogrify(pick(available_mobs), kill_on_death = kill)
+		if(time_to_untransmog)
+			spawn(time_to_untransmog)
+				M.completely_untransmogrify()
 
 /obj/item/projectile/zwartepiet
 	name = "bolt of zwarte piet"

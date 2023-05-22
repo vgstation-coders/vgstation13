@@ -36,6 +36,7 @@
 	minimal_access = list(access_hydroponics, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
 	alt_titles = list("Hydroponicist", "Beekeeper", "Gardener")
 	outfit_datum = /datum/outfit/hydro
+	species_blacklist = list()
 
 //Cargo
 /datum/job/qm
@@ -151,6 +152,9 @@
 		for(var/spell/targeted/oathbreak/spell in M.spell_list)
 			M.remove_spell(spell)
 		message_admins("[M.name] ([M.ckey]) has broken their oath of silence. (<A HREF='?_src_=holder;adminplayerobservejump=\ref[M]'>JMP</a>)")
+		//Curse the mime with bad luck.
+		var/datum/blesscurse/mimevowbreak/mimecurse = new /datum/blesscurse/mimevowbreak
+		M.add_blesscurse(mimecurse)
 		to_chat(M, "<span class = 'notice'>An unsettling feeling surrounds you...</span>")
 		return
 
@@ -165,6 +169,7 @@
 	access = list(access_janitor, access_maint_tunnels)
 	minimal_access = list(access_janitor, access_maint_tunnels)
 	outfit_datum = /datum/outfit/janitor
+	species_blacklist = list()//Mop it up, shroomie.
 
 /datum/job/janitor/get_wage()
 	if(Holiday == APRIL_FOOLS_DAY)

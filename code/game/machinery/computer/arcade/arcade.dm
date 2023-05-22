@@ -7,6 +7,7 @@
 	var/datum/arcade_game/game
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	emag_cost = 0 // because fun
+	computer_flags = NO_ONOFF_ANIMS
 	light_color = LIGHT_COLOR_GREEN
 	var/haunted = 0
 	var/mob/playerone
@@ -31,8 +32,7 @@
 
 /obj/machinery/computer/arcade/Destroy()
 	if(game)
-		qdel(game)
-		game = null
+		QDEL_NULL(game)
 	..()
 
 /obj/machinery/computer/arcade/proc/import_game_data(var/obj/item/weapon/circuitboard/arcade/A)
@@ -67,6 +67,13 @@
 
 /obj/machinery/computer/arcade/emag_act(mob/user)
 	game.emag_act(user)
+
+/obj/machinery/computer/arcade/arcane_act(mob/user)
+	game.emag_act(user) // until i come up with something better, reward differs for now though
+	return ..()
+
+/obj/machinery/computer/arcade/bless()
+	return
 
 /obj/machinery/computer/arcade/emp_act(severity)
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))

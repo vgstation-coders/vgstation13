@@ -2,7 +2,7 @@
 	name = "floor"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "Floor3"
-	plane = FLOOR_PLANE
+	plane = TURF_PLANE
 
 	holomap_draw_override = HOLOMAP_DRAW_PATH
 
@@ -85,3 +85,23 @@
 	..()
 
 	color = "#FFFFFF"
+
+/turf/unsimulated/floor/brimstone
+	icon_state = "ironsand1"
+
+/turf/unsimulated/floor/brimstone/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		ChangeTurf(/turf/unsimulated/floor/snow) // hell froze over
+		return
+	icon_state = "ironsand[rand(1,15)]"
+	overlays.Cut()
+	var/image/fire = image('icons/effects/fire.dmi', "[rand(1,3)]")
+	fire.blend_mode = BLEND_ADD
+	fire.layer = TURF_FIRE_LAYER
+	fire.plane = ABOVE_TURF_PLANE
+	overlays += fire
+
+/turf/unsimulated/floor/brimstone/Destroy()
+	overlays.Cut()
+	..()

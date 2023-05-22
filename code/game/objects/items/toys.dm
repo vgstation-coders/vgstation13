@@ -21,6 +21,7 @@
 	throw_speed = 4
 	throw_range = 20
 	force = 0
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 
 /*
@@ -138,6 +139,21 @@
 	desc = "\"Singulo\" brand spinning toy."
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
+
+/obj/item/toy/spinningtoy/arcane_act(mob/user)
+	..()
+	processing_objects.Add(src)
+	return "I'S LO'SE!"
+
+/obj/item/toy/spinningtoy/bless()
+	..()
+	if(src in processing_objects)
+		processing_objects.Remove(src)
+
+/obj/item/toy/spinningtoy/process()
+	if(arcanetampered)
+		for(var/atom/X in orange(4, src))
+			X.singularity_pull(src, 1)
 
 /obj/item/toy/spinningtoy/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
@@ -278,8 +294,7 @@
 	if(istype(I, /obj/item/toy/ammo/crossbow))
 		if(bullets <= 4)
 			if(user.drop_item(I))
-				qdel(I)
-				I = null
+				QDEL_NULL(I)
 				bullets++
 				to_chat(user, "<span class = 'info'>You load the foam dart into \the [src].</span>")
 		else
@@ -316,8 +331,7 @@
 					for(var/mob/O in viewers(world.view, D))
 						O.show_message(text("<span class = 'danger'>[] was hit by the foam dart!</span>", M), 1)
 					new /obj/item/toy/ammo/crossbow(M.loc)
-					qdel(D)
-					D = null
+					QDEL_NULL(D)
 					return
 
 				for(var/atom/A in D.loc)
@@ -325,16 +339,14 @@
 						continue
 					if(A.density)
 						new /obj/item/toy/ammo/crossbow(A.loc)
-						qdel(D)
-						D = null
+						QDEL_NULL(D)
 
 			sleep(1)
 
 		spawn(10)
 			if(D)
 				new /obj/item/toy/ammo/crossbow(D.loc)
-				qdel(D)
-				D = null
+				QDEL_NULL(D)
 
 		return
 	else if (bullets == 0)
@@ -479,6 +491,44 @@
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("attacks", "slashes", "stabs", "slices")
 
+/obj/item/toy/scythe
+	name = "plastic scythe"
+	desc = "A blunt and curved plastic blade on a long plastic handle, this tool makes it hard for kids to hurt themselves while trick-or-treating."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "scythe0"
+	w_class = W_CLASS_LARGE
+	slot_flags = SLOT_BACK
+	attack_verb = list("chops", "slices", "cuts", "reaps")
+
+/obj/item/toy/pitchfork
+	name = "plastic pitchfork"
+	desc = "Great for harassing sinners in the fiery depths of Heck."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "devil_pitchfork"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	w_class = W_CLASS_LARGE
+	slot_flags = SLOT_BACK
+	attack_verb = list("stabs", "prongs", "pokes")
+
+/obj/item/toy/chainsaw
+	name = "plastic chainsaw"
+	desc = "Won't cut down anything, except maybe some horny teens' make-out session in your cabin in the woods."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "chainsaw"
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("attacks", "slashes", "saws", "cuts")
+	hitsound = 'sound/items/circularsaw.ogg' //Maybe find a better sfx?
+	var/last_revv_time = 0
+	var/revv_delay = 60
+
+/obj/item/toy/chainsaw/attack_self(mob/user as mob)
+	..()
+	if(world.time - last_revv_time >= revv_delay)
+		last_revv_time = world.time
+		playsound(src, hitsound, 50, 1)
+		to_chat(viewers(user), "<span class='danger'>[user] revvs up \the [src.name] </span>")
+		add_fingerprint(user)
+
 /*
  * Foam armblade
  */
@@ -568,8 +618,8 @@
 	w_class = W_CLASS_TINY
 
 /obj/item/toy/snappop/throw_impact(atom/hit_atom)
-	..()
-	pop()
+	if(!..())
+		pop()
 
 /obj/item/toy/snappop/Crossed(var/mob/living/M)
 	if(istype(M) && M.size > SIZE_SMALL) //i guess carp and shit shouldn't set them off
@@ -683,8 +733,7 @@
 					if(ismob(T) && T:client)
 						to_chat(T:client, "<span class = 'danger'>[user] has sprayed you with \the [src]!</span>")
 				sleep(4)
-			qdel(D)
-			D = null
+			QDEL_NULL(D)
 
 		return
 
@@ -1446,7 +1495,7 @@
 	if(M.incapacitated())
 		return
 
-	var/N = input("Enter a stock phrase for your decoy to say:","[src]") as null|text
+	var/N = copytext(sanitize(input("Enter a stock phrase for your decoy to say:","[src]") as null|text),1,MAX_MESSAGE_LEN)
 	if(N)
 		decoy_phrase = N
 

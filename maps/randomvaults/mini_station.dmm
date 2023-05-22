@@ -58,13 +58,13 @@
 "al" = (
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_engineering)
@@ -73,7 +73,7 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_engineering)
@@ -83,13 +83,13 @@
 "ao" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_engineering)
@@ -488,11 +488,11 @@
 "bk" = (
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/grille,
 /turf/simulated/floor/plating,
@@ -529,17 +529,17 @@
 "bu" = (
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_medbay)
@@ -567,15 +567,15 @@
 "bx" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -838,7 +838,7 @@
 "ci" = (
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -984,15 +984,15 @@
 "cA" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/grille,
 /turf/simulated/floor/plating,
@@ -1057,7 +1057,7 @@
 "cH" = (
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -1076,13 +1076,13 @@
 "cJ" = (
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_entrance)
@@ -1134,30 +1134,30 @@
 "cO" = (
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_entrance)
 "cP" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station)
@@ -1175,11 +1175,11 @@
 "cR" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -1434,17 +1434,17 @@
 "fw" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_engineering)
@@ -1525,11 +1525,11 @@
 "iQ" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -1701,11 +1701,11 @@
 "pY" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -1832,13 +1832,13 @@
 "sT" = (
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_medbay)
@@ -2166,11 +2166,11 @@
 "Bt" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/grille,
 /turf/simulated/floor/plating,
@@ -2241,17 +2241,17 @@
 "ES" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_construction)
@@ -2298,17 +2298,17 @@
 "FM" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_medbay)
@@ -2323,11 +2323,11 @@
 "GH" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -2487,7 +2487,7 @@
 "Nn" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/table/glass,
 /obj/item/tool/bonesetter/bone_mender{
@@ -2507,16 +2507,16 @@
 "NL" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station)
@@ -2526,7 +2526,7 @@
 "Oc" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_medbay)
@@ -2682,11 +2682,11 @@
 "TE" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/grille,
 /turf/simulated/floor/plating,
@@ -2702,17 +2702,17 @@
 "Uj" = (
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow"
+	icon_state = "rwindow0"
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_kitchen)

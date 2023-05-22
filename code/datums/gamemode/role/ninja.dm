@@ -115,14 +115,25 @@ var/list/valid_ninja_suits = list(
 	singular_name = "shuriken"
 	throw_range = 20
 	force = 4
-	throwforce = 30
+	throwforce = 20
+	throw_speed = 5 //Converts into 30 thrown damage due to damage formula being throwforce * (throw_speed/5)
 	flags = NO_THROW_MSG //No fingerprints, no throw message
+	sharpness_flags = SHARP_TIP
 	w_class = W_CLASS_SMALL
 	max_amount = 10
 
 /obj/item/stack/shuriken/examine(mob/user)
 	..()
-	to_chat(user,"<span class='info'>They are specially designed for use one-handed. Attempting to throw the entire stack will throw only one.")
+	if(isninja(user))
+		to_chat(user,"<span class='info'>They are specially designed for one-handed use. Attempting to throw the entire stack will throw only one, and you can just click anything you want to throw it without having the intent to throw. They have a special adhesive coating that allows them to stick to targets for 5 seconds before falling off.</span>")
+
+/obj/item/stack/shuriken/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(can_stack_with(target) || proximity_flag || istype(target, /obj/abstract/screen)) //We're using this on the sheet, the target is right next to us or we're clicking a screen like a backpack
+		return ..()
+	if(isninja(user))
+		var/mob/living/L = user
+		L.throw_item(target)
+		return 1
 
 /obj/item/stack/shuriken/throw_at(var/atom/A, throw_range, throw_speed)
 	if(ishuman(usr))
@@ -152,6 +163,17 @@ var/list/valid_ninja_suits = list(
 		if(ismob(usr))
 			to_chat(usr,"<span class='warning'>You fumble with \the [src]!</span>")
 		//Sometimes things are thrown by objects like vending machines or pneumatic cannons
+
+//This can stick into silicons and humans
+/obj/item/stack/shuriken/throw_impact(atom/impacted_atom, speed, mob/user)
+	if(!..() && isliving(impacted_atom))
+		var/mob/living/L = impacted_atom
+		forceMove(L)
+		visible_message("<span class='warning'>The [src] sticks to \the [L]!</span>")
+		sleep(5 SECONDS)
+		if(!gcDestroyed)
+			forceMove(L.loc)
+			visible_message("<span class='warning'>The [src] falls off \the [L].", "<span class='warning'>You hear something clattering on the floor.</span>")
 
 /obj/item/stack/shuriken/pickup(mob/user)
 	var/datum/role/ninja/weeb = isninja(user)
@@ -386,7 +408,7 @@ var/list/valid_ninja_suits = list(
 				list("Charge Sword", "radial_zap", "Reset the cooldown on your blade's teleport. Cost: [CHARGE_COST_MULTIPLIER]0 per second."),
 			)
 
-			var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
+			var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, src::radial_check(), user))
 			if(!radial_check(user))
 				return
 			switch(task)
@@ -752,6 +774,7 @@ Suit and assorted
 	permeability_coefficient = 0.01
 	mag_slow = NO_SLOWDOWN
 	clothing_flags = NOSLIP | MAGPULSE
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/ninja/redsun
 	name = "sundowner boots"

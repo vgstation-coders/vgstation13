@@ -125,5 +125,5 @@
 	update_icon()
 	return 1
 
-/obj/item/weapon/gun/energy/advdisintegrator/acidable() // Can't be destroyed by polyacid
+/obj/item/weapon/gun/energy/advdisintegrator/dissolvable() // Can't be destroyed by polyacid
 	return 0

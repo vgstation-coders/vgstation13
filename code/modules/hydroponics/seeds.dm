@@ -44,6 +44,7 @@
 	else
 		to_chat(user, "Plant Yield: <span class='info'>[(seed.yield != -1) ? seed.yield : "<span class='warning'> ERROR</span>"]</span>")
 		to_chat(user, "Plant Potency: <span class='info'>[(seed.potency != -1) ? seed.potency : "<span class='warning'> ERROR</span>"]</span>")
+	hydro_hud_scan(user, src)
 
 /obj/item/seeds/random
 	seed_type = null
@@ -102,7 +103,7 @@
 	name = "packet of cabbage seeds"
 	seed_type = "cabbage"
 	vending_cat = "vegetables"
-	
+
 /obj/item/seeds/plasmacabbageseed
 	name = "packet of plasma cabbage seeds"
 	seed_type = "plasmacabbage"
@@ -378,6 +379,14 @@
 	seed_type = "silicatecitrus"
 	vending_cat = "fruits"
 
+/obj/item/seeds/shardlime
+	name = "packet of shardlime seeds"
+	seed_type = "shardlime"
+
+/obj/item/seeds/purpleshardlime
+	name = "packet of purple shardlime seeds"
+	seed_type = "purpleshardlime"
+
 /obj/item/seeds/poisonberryseed
 	name = "packet of poison berry seeds"
 	seed_type = "poisonberries"
@@ -495,7 +504,10 @@
 	seed_type = "silverpear"
 	vending_cat = "fruits"
 
-
+/obj/item/seeds/cloverseed
+	name = "packet of clover seeds"
+	seed_type = "clover"
+	vending_cat = "weeds"
 
 // Chili plants/variants.
 /datum/seed/chili
@@ -556,8 +568,8 @@
 	production = 5
 	yield = 2
 	potency = 10
-	water_consumption = 6
-	nutrient_consumption = 0.15
+	fluid_consumption = 6
+	nutrient_consumption = 2
 
 /datum/seed/berry/glow
 	name = "glowberries"
@@ -573,8 +585,8 @@
 	production = 5
 	yield = 2
 	potency = 10
-	water_consumption = 3
-	nutrient_consumption = 0.25
+	fluid_consumption = 3
+	nutrient_consumption = 3
 	biolum = 1
 	biolum_colour = "#00ff00"
 
@@ -644,8 +656,8 @@
 	production = 6
 	yield = 2
 	potency = 10
-	water_consumption = 6
-	nutrient_consumption = 0.25
+	fluid_consumption = 6
+	nutrient_consumption = 3
 	ideal_light = 8
 	ideal_heat = 298
 	juicy = 1
@@ -823,7 +835,7 @@
 	yield = 5
 	potency = 1
 	growth_stages = 3
-	water_consumption = 6
+	fluid_consumption = 6
 	light_tolerance = 6
 	ideal_heat = 288
 
@@ -962,7 +974,7 @@
 	plant_dmi = 'icons/obj/hydroponics/plastellium.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plastellium)
 	mutants = null
-	chems = list(PLASTICIDE = list(3,12))
+	chems = list(PLASTICIDE = list(0,1))
 
 	lifespan = 15
 	maturation = 5
@@ -984,7 +996,7 @@
 	production = 1
 	yield = 2
 	growth_stages = 4
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 
 /datum/seed/flower/poppy
 	name = "poppies"
@@ -1001,8 +1013,8 @@
 	yield = 6
 	growth_stages = 3
 	ideal_light = 8
-	water_consumption = 0.5
-	nutrient_consumption = 0.15
+	fluid_consumption = 0.5
+	nutrient_consumption = 2
 
 	large = 0
 
@@ -1018,8 +1030,8 @@
 	maturation = 6
 	growth_stages = 3
 	ideal_light = 8
-	water_consumption = 6
-	nutrient_consumption = 0.15
+	fluid_consumption = 6
+	nutrient_consumption = 2
 	large = 0
 
 /datum/seed/flower/sunflower/moonflower
@@ -1070,7 +1082,7 @@
 	maturation = 6
 	growth_stages = 3
 	ideal_light = 8
-	water_consumption = 6
+	fluid_consumption = 6
 	nutrient_consumption = 0 //these are a bunch of flowers, not an actual food
 	large = 0
 
@@ -1092,7 +1104,7 @@
 	yield = 4
 	potency = 10
 	ideal_light = 8
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 	large = 0
 
 /datum/seed/grapes/green
@@ -1154,8 +1166,8 @@
 	potency = 10
 	growth_stages = 1
 	ideal_light = 8
-	water_consumption = 6
-	nutrient_consumption = 0.15
+	fluid_consumption = 6
+	nutrient_consumption = 2
 
 /datum/seed/plasmacabbage
 	name = "plasmacabbage"
@@ -1173,8 +1185,8 @@
 	potency = 10
 	growth_stages = 1
 	ideal_light = 8
-	water_consumption = 6
-	nutrient_consumption = 0.15
+	fluid_consumption = 6
+	nutrient_consumption = 2
 
 /datum/seed/shand
 	name = "shand"
@@ -1221,7 +1233,7 @@
 	production = 6
 	yield = 3
 	ideal_light = 9
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 298
 
 /datum/seed/banana/bluespace
@@ -1248,7 +1260,7 @@
 	potency = 20
 	growth_stages = 3
 	ideal_light = 8
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 298
 	large = 0
 
@@ -1266,7 +1278,7 @@
 	yield = 4
 	potency = 10
 	growth_stages = 4
-	water_consumption = 6
+	fluid_consumption = 6
 
 /datum/seed/soybean
 	name = "soybean"
@@ -1313,7 +1325,7 @@
 	yield = 4
 	potency = 5
 	ideal_light = 8
-	nutrient_consumption = 0.15
+	nutrient_consumption = 2
 
 /datum/seed/rice
 	name = "rice"
@@ -1329,8 +1341,8 @@
 	yield = 4
 	potency = 5
 	growth_stages = 4
-	water_consumption = 6
-	nutrient_consumption = 0.15
+	fluid_consumption = 6
+	nutrient_consumption = 2
 
 /datum/seed/carrots
 	name = "carrot"
@@ -1347,7 +1359,7 @@
 	yield = 5
 	potency = 10
 	growth_stages = 3
-	water_consumption = 6
+	fluid_consumption = 6
 
 /datum/seed/carrots/diamond
 	name = "diamondcarrot"
@@ -1388,7 +1400,7 @@
 	production = 6
 	yield = 6
 	potency = 10
-	water_consumption = 6
+	fluid_consumption = 6
 
 /datum/seed/sugarcane
 	name = "sugarcane"
@@ -1421,7 +1433,7 @@
 	production = 6
 	yield = 3
 	potency = 10
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 298
 	ideal_light = 8
 
@@ -1440,7 +1452,7 @@
 	yield = 3
 	potency = 10
 	growth_stages = 3
-	water_consumption = 6
+	fluid_consumption = 6
 
 /datum/seed/lime
 	name = "lime"
@@ -1503,13 +1515,47 @@
 	plant_dmi = 'icons/obj/hydroponics/silicatecitrus.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus)
 	harvest_repeat = 1
-	mutants = null
+	mutants = list("shardlime")
 	chems = list(SILICATE = list(3,5))
 
 	lifespan = 55
 	maturation = 6
 	production = 6
 	yield = 5
+
+/datum/seed/shardlime
+	name = "shardlime"
+	seed_name = "shardlime"
+	display_name = "shardlime"
+	plant_dmi = 'icons/obj/hydroponics/shardlime.dmi'
+	products = list(/obj/item/weapon/shard)
+	mutants = list("purpleshardlime")
+	harvest_repeat = 1
+
+	lifespan = 70
+	maturation = 4
+	production = 5
+	yield = 5
+	biolum = 1
+	biolum_colour = "#FFFFFF"
+	thorny = 1
+
+/datum/seed/purpleshardlime
+	name = "purpleshardlime"
+	seed_name = "purple shardlime"
+	display_name = "purple shardlime"
+	plant_dmi = 'icons/obj/hydroponics/purpleshardlime.dmi'
+	products = list(/obj/item/weapon/shard/plasma)
+	harvest_repeat = 1
+	mutants = null
+
+	lifespan = 70
+	maturation = 4
+	production = 5
+	yield = 5
+	biolum = 1
+	biolum_colour = "#DBBEF0"
+	thorny = 1
 
 /datum/seed/grass
 	name = "grass"
@@ -1524,8 +1570,8 @@
 	production = 5
 	yield = 5
 	growth_stages = 2
-	water_consumption = 0.5
-	nutrient_consumption = 0.15
+	fluid_consumption = 0.5
+	nutrient_consumption = 2
 
 /datum/seed/cocoa
 	name = "cocoa"
@@ -1542,7 +1588,7 @@
 	yield = 2
 	potency = 10
 	growth_stages = 5
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 298
 	large = 0
 
@@ -1598,7 +1644,7 @@
 	potency = 20
 	growth_stages = 4
 	spread = 2
-	water_consumption = 0.5
+	fluid_consumption = 0.5
 
 /datum/seed/diona
 	name = "diona"
@@ -1669,8 +1715,8 @@
 	production = 5
 	yield = 1
 	potency = 10
-	water_consumption = 6
-	nutrient_consumption = 1
+	fluid_consumption = 6
+	nutrient_consumption = 10
 	growth_stages = 4
 
 /datum/seed/avocado
@@ -1770,7 +1816,7 @@
 	production = 6
 	yield = 3
 	ideal_light = 9
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 298
 
 /datum/seed/garlic
@@ -1787,7 +1833,7 @@
 	growth_stages = 3
 	production = 6
 	yield = 4
-	water_consumption = 2
+	fluid_consumption = 2
 	ideal_heat = 298
 
 /datum/seed/pitcher
@@ -1804,11 +1850,11 @@
 	growth_stages = 3
 	maturation = 12
 	production = 1
-	water_consumption = 6
+	fluid_consumption = 6
 	ideal_heat = 310
-	pest_tolerance = 10
+	pest_tolerance = 100
 	endurance = 25 //Fragile...
-	carnivorous = 1 //Eats pests!
+	voracious = 1 //Eats pests!
 	juicy = 2 //And here's where the slipperiness comes in
 
 /datum/seed/aloe
@@ -1842,3 +1888,21 @@
 	yield = 1
 	potency = 30
 	growth_stages = 3
+
+/datum/seed/clover/
+	name = "clover"
+	seed_name = "clover"
+	display_name = "clover"
+	plant_dmi = 'icons/obj/hydroponics/clover.dmi'
+	plant_icon_state = "clover"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover)
+	chems = list(NUTRIMENT = list(1,25))
+	harvest_repeat = 1
+	lifespan = 60
+	maturation = 2
+	production = 5
+	yield = 5
+	growth_stages = 2
+	fluid_consumption = 0.5
+	nutrient_consumption = 0.15
+

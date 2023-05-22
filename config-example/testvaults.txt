@@ -1,0 +1,7 @@
+# List of map elements to load for the map "test_vault.dmm", leave the file below this line blank to load vault types only.
+
+#/datum/map_element/vault/clownroid
+#/datum/map_element/vault/sokoban
+#/datum/map_element/vault/black_site_prism
+#/datum/map_element/dungeon/ninja_dojo
+#/datum/map_element/dungeon/wizard_den

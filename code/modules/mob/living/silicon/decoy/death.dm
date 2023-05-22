@@ -1,5 +1,5 @@
 /mob/living/silicon/decoy/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	stat = DEAD
 	icon_state = "ai-crash"

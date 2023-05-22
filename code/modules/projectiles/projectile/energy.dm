@@ -65,7 +65,7 @@
 						taggun.score()
 				M.Knockdown(2)
 				M.Stun(2)
-			else // We've got a game on the reciever, let's check if we've got a game on the wearer.
+			else // We've got a game on the receiver, let's check if we've got a game on the wearer.
 				if (!firer_tag || !firer_tag.my_laser_tag_game || (target_tag.my_laser_tag_game != firer_tag.my_laser_tag_game))
 					return 1
 				if (!target_tag.player || !firer_tag.player)
@@ -270,6 +270,8 @@
 			P.starting = starting
 			P.shot_from = shot_from
 			P.current = current
+			P.target = target
+			P.original = original
 			var/turf/T = get_step(proj_target, pick_n_take(vdirs))
 			P.OnFired(T)
 			P.process()

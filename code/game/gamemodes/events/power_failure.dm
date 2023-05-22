@@ -77,7 +77,7 @@
 		if(S.z != map.zMainStation)
 			continue
 		S.charge = S.capacity
-		S.output = 200000
+		S.outputlevel = 200000
 		S.online = 1
 		S.update_icon()
 		S.power_change()

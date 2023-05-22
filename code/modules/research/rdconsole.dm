@@ -30,7 +30,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 
 */
-#define RESEARCH_MAX_Q_LEN 50
+#define RESEARCH_MAX_Q_LEN 100
 /obj/machinery/computer/rdconsole
 	name = "R&D Console"
 	icon_state = "rdcomp"
@@ -265,8 +265,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				else
 					if(linked_lathe && linked_destroy.loaded_item.materials)
 						linked_destroy.loaded_item.materials.TransferAll(linked_lathe.materials)
-					qdel(linked_destroy.loaded_item)
-					linked_destroy.loaded_item = null
+					QDEL_NULL(linked_destroy.loaded_item)
 			if(linked_destroy.loaded_item) //It deconstructed something with stacks, make it show up full
 				linked_destroy.icon_state = "d_analyzer_l"
 			else
@@ -554,8 +553,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				sheet.amount = min(available_num_sheets, desired_num_sheets)
 				linked_lathe.materials.removeAmount(matID, sheet.amount * sheet.perunit)
 			else
-				qdel (sheet)
-				sheet = null
+				QDEL_NULL (sheet)
 	else if(href_list["imprinter_ejectsheet"] && linked_imprinter) //Causes the protolathe to eject a sheet of material
 		if(!src.allowed(usr))
 			to_chat(usr, "Unauthorized Access.")
@@ -574,8 +572,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				sheet.amount = min(available_num_sheets, desired_num_sheets)
 				linked_imprinter.materials.removeAmount(matID, sheet.amount * sheet.perunit)
 			else
-				qdel (sheet)
-				sheet = null
+				QDEL_NULL (sheet)
 
 	else if(href_list["find_device"]) //The R&D console looks for devices nearby to link up with.
 		screen = 0.0
@@ -606,6 +603,15 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			screen = 0.0
 			qdel(files)
 			files = new /datum/research(src)
+			spawn(20)
+				screen = 1.6
+				updateUsrDialog()
+
+	else if(href_list["alphatoggle"]) //Reset the R&D console's database.
+		griefProtection()
+		if(files)
+			screen = 0.0
+			files.alphabetsort = !files.alphabetsort
 			spawn(20)
 				screen = 1.6
 				updateUsrDialog()
@@ -814,6 +820,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 			dat += {"<A href='?src=\ref[src];menu=1.7'>Device Linkage Menu</A><BR>
 				<A href='?src=\ref[src];lock=0.2'>Lock Console</A><BR>
+				<A href='?src=\ref[src];alphatoggle=1'>[files?.alphabetsort ? "Dis" : "En"]able alphabetical sorting.</A><BR>
 				<A href='?src=\ref[src];reset=1'>Reset R&D Database.</A><BR>"}
 		if(1.7) //R&D device linkage
 
@@ -895,7 +902,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					if(!(D.build_type & PROTOLATHE) || D.category != name_set)
 						continue
 					var/temp_dat = "[D.name] [linked_lathe.output_part_cost(D)]"
-					var/upTo=10
+					var/upTo=20
 					for(var/M in D.materials)
 						var/num_units_avail=linked_lathe.check_mat(D,M)
 						if(num_units_avail)
@@ -909,6 +916,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							dat += "<A href='?src=\ref[src];build=[D.id];n=5'>(&times;5)</A>"
 						if(upTo>=10)
 							dat += "<A href='?src=\ref[src];build=[D.id];n=10'>(&times;10)</A>"
+						if(upTo>=20)
+							dat += "<A href='?src=\ref[src];build=[D.id];n=20'>(&times;20)</A>"
 						dat += "<A href='?src=\ref[src];build=[D.id];customamt=1'>(Custom)</A>"
 						dat += "</li>"
 					else

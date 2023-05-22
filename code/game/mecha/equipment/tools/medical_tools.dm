@@ -271,14 +271,14 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/attach()
 	..()
-	chassis.register_event(/event/moved, src, .proc/layCable)
+	chassis.register_event(/event/moved, src, src::layCable())
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/detach()
-	chassis.unregister_event(/event/moved, src, .proc/layCable)
+	chassis.unregister_event(/event/moved, src, src::layCable())
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/Destroy()
-	chassis.unregister_event(/event/moved, src, .proc/layCable)
+	chassis.unregister_event(/event/moved, src, src::layCable())
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/action(var/obj/item/stack/cable_coil/target)
@@ -694,7 +694,7 @@
 		S.occupant_message("<span class=\"alert\">Reagent processing stopped.</a>")
 		S.log_message("Reagent processing stopped.")
 		return stop()
-	if(anyprob(S.reliability))
+	if(prob(S.reliability))
 		S.critfail()
 	var/amount = S.synth_speed / S.processed_reagents.len
 	for(var/reagent in S.processed_reagents)

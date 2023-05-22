@@ -115,15 +115,15 @@
 
 	for(var/turf/T in circlerange(src,2))
 		if(T.y > y)
-			T.register_event(/event/entered, src, .proc/give_transparency)
-			T.register_event(/event/exited, src, .proc/remove_transparency)
+			T.register_event(/event/entered, src, src::give_transparency())
+			T.register_event(/event/exited, src, src::remove_transparency())
 
 
 /obj/structure/flora/tree/Destroy()
 	for(var/turf/T in circlerange(src,2))
 		if(T.y > y)
-			T.unregister_event(/event/entered, src, .proc/give_transparency)
-			T.unregister_event(/event/exited, src, .proc/remove_transparency)
+			T.unregister_event(/event/entered, src, src::give_transparency())
+			T.unregister_event(/event/exited, src, src::remove_transparency())
 	..()
 
 /obj/structure/flora/tree/proc/update_transparency()
@@ -346,6 +346,41 @@
 	if(user.drop_item(I, src))
 		user.visible_message("<span class='notice'>[user] stuffs something into the pot.</span>", "You stuff \the [I] into the [src].")
 		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
+		if(arcanetampered)
+			var/area/thearea
+			var/area/prospective = pick(areas)
+			while(!thearea)
+				if(prospective.type != /area)
+					var/turf/T = pick(get_area_turfs(prospective.type))
+					if(T.z == user.z)
+						thearea = prospective
+						break
+				prospective = pick(areas)
+			var/list/L = list()
+			for(var/turf/T in get_area_turfs(thearea.type))
+				if(!T.density)
+					var/clear = 1
+					for(var/obj/O in T)
+						if(O.density)
+							clear = 0
+							break
+					if(clear)
+						L+=T
+			if(!L.len)
+				return
+
+			var/list/backup_L = L
+			var/attempt = null
+			var/success = 0
+			while(L.len)
+				attempt = pick(L)
+				success = I.Move(attempt)
+				if(!success)
+					L.Remove(attempt)
+				else
+					break
+			if(!success)
+				I.forceMove(pick(backup_L))
 
 /obj/structure/flora/pottedplant/attack_hand(mob/user)
 	if(contents.len)

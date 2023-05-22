@@ -31,12 +31,6 @@
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
-	var/multiz = FALSE //Don't even boot up multiz if we don't need it.
-
-	//Center of thunderdome admin room
-	var/tDomeX = 0
-	var/tDomeY = 0
-	var/tDomeZ = 0
 
 	//Holomap offsets
 	var/list/holomap_offset_x = list()
@@ -47,6 +41,8 @@
 
 	//nanoui stuff
 	var/map_dir = ""
+	//buildmode reset
+	var/file_dir = ""
 
 	//Fuck the preprocessor
 	var/dorf = 0
@@ -103,8 +99,7 @@
 	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
 	var/datum/climate/climate = null //use for weather cycle
 	var/has_engines = FALSE // Is the map a space ship with big engines?
-
-	var/lights_always_ok = FALSE //should all lights be on and working at roundstart
+	var/broken_lights = TRUE //broken lights roundstart
 	var/can_have_robots = TRUE
 
 /datum/map/New()
@@ -133,7 +128,7 @@
 		var/path = levelPaths[i]
 		addZLevel(new path, i)
 
-/datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0)
+/datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0, make_base_turf = FALSE, fast_base_turf = FALSE)
 
 
 	if(!istype(level))
@@ -146,8 +141,9 @@
 	zLevels[z_to_use] = level
 	if(!level.movementJammed)
 		accessable_z_levels += list("[z_to_use]" = level.movementChance)
-
 	level.z = z_to_use
+	if(!istype(level.base_turf,/turf/space) && make_base_turf)
+		level.reset_base_turf(/turf/space,fast_base_turf)
 
 var/global/list/accessable_z_levels = list()
 
@@ -195,6 +191,15 @@ var/global/list/accessable_z_levels = list()
 
 /datum/zLevel/proc/post_mapload()
 	return
+
+/datum/zLevel/proc/reset_base_turf(old_type, fast_base_turf = FALSE)
+	for(var/turf/T in block(locate(1,1,z),locate(world.maxx,world.maxy,z)))
+		if(istype(T,old_type))
+			if(fast_base_turf)
+				new base_turf(T)
+			else
+				T.set_area(base_area)
+				T.ChangeTurf(base_turf)
 
 ////////////////////////////////
 

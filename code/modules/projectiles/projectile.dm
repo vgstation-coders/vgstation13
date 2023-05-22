@@ -129,8 +129,7 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
 
-	qdel(tracker_datum)
-	tracker_datum = null
+	QDEL_NULL(tracker_datum)
 
 	if(blocked >= 100)
 		return 0//Full block
@@ -170,8 +169,7 @@ var/list/impact_master = list()
 	in_chamber.firer = user
 	var/output = in_chamber.process() //Test it!
 	//del(in_chamber) //No need for it anymore
-	qdel(in_chamber)
-	in_chamber = null
+	QDEL_NULL(in_chamber)
 	return output //Send it back to the gun!
 
 /obj/item/projectile/proc/admin_warn(mob/living/M)
@@ -453,6 +451,10 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/OnFired(var/proj_target = original)	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(proj_target)
+
+	if(!original || !target)
+		qdel(src) //If for some reason the target stops existing as the weapon is fired, just delete the projectile
+		return
 
 	// 2 % chance to crit
 	if (firer && is_ranged_crit(src, firer))
@@ -833,7 +835,7 @@ var/list/impact_master = list()
 	if(ismob(A) || isturf(A) || isobj(A))
 		impact = get_hit_atom(A)
 
-/obj/item/projectile/acidable()
+/obj/item/projectile/dissolvable()
 	return 0
 
 /obj/item/projectile/proc/launch_at(var/atom/target,var/tar_zone = "chest",var/atom/curloc = get_turf(src),var/from = null,var/variance_angle = 0) // doot doot shitcode alert

@@ -1,4 +1,3 @@
-
 /datum/organ/internal/eyes
 	name = "eyes"
 	parent_organ = LIMB_HEAD
@@ -10,20 +9,16 @@
 	var/see_in_dark=2
 	var/list/colourmatrix = list()
 
-
-
-/datum/organ/internal/eyes/proc/init_perception(var/mob/living/carbon/human/M)
-	return
-
 /datum/organ/internal/eyes/proc/update_perception(var/mob/living/carbon/human/M)
-	return
+	M.dark_plane.alphas["human"] = 5
 
 /datum/organ/internal/eyes/process() //Eye damage replaces the old eye_stat var.
 	if(is_broken())
 		owner.eye_blind = max(2, owner.eye_blind)
-	if(is_bruised())
-		owner.eye_blurry = max(2, owner.eye_blurry)
-
+//	if(is_bruised())
+//		owner.eye_blurry = max(2, owner.eye_blurry)
+//  stop eyeblur because we're already shortening the vision
+//  the overlay gets applied in standard_damage_overlay_updates.dm
 
 /datum/organ/internal/eyes/tajaran
 	name = "feline eyes"
@@ -31,7 +26,7 @@
 	removed_type = /obj/item/organ/internal/eyes/tajaran
 
 /datum/organ/internal/eyes/tajaran/update_perception(var/mob/living/carbon/human/M)
-	M.client.darkness_planemaster.alpha = 100
+	M.dark_plane.alphas["tajaran"] = 155
 
 /datum/organ/internal/eyes/grey
 	name = "huge eyes"
@@ -52,14 +47,13 @@
 	name = "bird eyes"
 	removed_type = /obj/item/organ/internal/eyes/vox
 
-/datum/organ/internal/eyes/umbra
+/datum/organ/internal/eyes/monstrous
 	name = "monstrous eyes"
-	see_in_dark=8
-	colourmatrix = list(-1, 0, 0,
-						 0,-1, 0,
-						 0, 0,-1,
-						 1, 1, 1)
-	removed_type = /obj/item/organ/internal/eyes/umbra
+	see_in_dark= 9
+	removed_type = /obj/item/organ/internal/eyes/monstrous
+
+/datum/organ/internal/eyes/monstrous/update_perception(var/mob/living/carbon/human/M)
+	M.dark_plane.alphas["monstrous_vision"] = 150
 
 /datum/organ/internal/eyes/mushroom
 	name = "mushroom eyes"
@@ -69,9 +63,10 @@
 
 /datum/organ/internal/eyes/mushroom/update_perception(var/mob/living/carbon/human/M)
 	if (dark_mode)
-		M.client.darkness_planemaster.blend_mode = BLEND_SUBTRACT
-		M.client.darkness_planemaster.alpha = 100
-		M.client.darkness_planemaster.color = "#FF0000"
+		M.master_plane.blend_mode = BLEND_SUBTRACT
+		M.dark_plane.alphas["mushroom_inverted"] = 100
+		M.dark_plane.blend_mode = BLEND_MULTIPLY
+		M.dark_plane.colours = "#FF0000"
 		M.client.color = list(
 			1,0,0,0,
 			0,1,0,0,
@@ -79,9 +74,9 @@
 			0,-0.1,0,1,
 			0,0,0,0)
 	else
-		M.client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
-		M.client.darkness_planemaster.alpha = 150
-		M.client.darkness_planemaster.color = null
+		M.master_plane.blend_mode = BLEND_MULTIPLY
+		M.dark_plane.blend_mode = BLEND_ADD
+		M.dark_plane.colours = null
 		M.client.color = list(
 			1,0,0,0,
 			0,1,0,0,

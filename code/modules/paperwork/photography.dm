@@ -193,8 +193,7 @@
 		flashbulb = new(src)
 
 /obj/item/device/camera/Destroy()
-	qdel(flashbulb)
-	flashbulb = null
+	QDEL_NULL(flashbulb)
 	..()
 
 /obj/item/device/camera/sepia
@@ -767,7 +766,7 @@
 	ghost_read=0
 	ghost_write=0
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 10
 	var/background = "white"

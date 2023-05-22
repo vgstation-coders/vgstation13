@@ -12,8 +12,8 @@
 
 //Attempt to perform suicide with an item nearby or in-hand
 //Return 0 if the suicide failed, return 1 if successful. Returning 1 does not perform the default suicide afterwards
-/mob/living/proc/attempt_object_suicide(var/obj/suicide_object)
-	if(suicide_object) //We need the item to be there to begin, otherwise abort
+/mob/living/proc/attempt_atom_suicide(var/atom/suicide_object)
+	if(suicide_object && suicide_object.mouse_opacity && !suicide_object.invisibility) //We need the item to be there and tangible to begin, otherwise abort
 		var/damagetype = suicide_object.suicide_act(src)
 		if(damagetype)
 			var/damage_mod = count_set_bitflags(damagetype) // How many damage types are to be applied
@@ -21,24 +21,26 @@
 			if(damagetype & SUICIDE_ACT_CUSTOM)
 				return 1
 
-			//Do 175 damage divided by the number of damage types applied.
+			//Do 125 amage divided by the number of damage types applied.
 			if(damagetype & SUICIDE_ACT_BRUTELOSS)
-				adjustBruteLoss(175/damage_mod)
+				adjustBruteLoss(125/damage_mod)
 
 			if(damagetype & SUICIDE_ACT_FIRELOSS)
-				adjustFireLoss(175/damage_mod)
+				adjustFireLoss(125/damage_mod)
 
 			if(damagetype & SUICIDE_ACT_TOXLOSS)
-				adjustToxLoss(175/damage_mod)
+				adjustToxLoss(125/damage_mod)
 
 			if(damagetype & SUICIDE_ACT_OXYLOSS)
-				adjustOxyLoss(175/damage_mod)
+				adjustOxyLoss(125/damage_mod)
 
 			updatehealth()
 			return 1
 
-/mob/living/proc/handle_suicide_bomb_cause()
-	var/custom_message = input(src, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text
+/mob/living/proc/handle_suicide_bomb_cause(var/atom/suicide_object)
+	var/custom_message = copytext(sanitize(input(src, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text),1,MAX_MESSAGE_LEN)
+	if(!Adjacent(suicide_object)) // User moved or lost item, abort.
+		return
 
 	if(custom_message)
 		return "FOR [uppertext(custom_message)]!"
@@ -84,12 +86,10 @@
 /mob/living/carbon/attempt_suicide(forced = 0, suicide_set = 1)
 
 	if(!forced)
-
 		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
-
 		if(confirm != "Yes")
 			return
-
+			
 		if(stat != CONSCIOUS)
 			to_chat(src, "<span class='warning'>You can't commit suicide in this state!</span>")
 			return
@@ -120,25 +120,25 @@
 	if(!held_item)
 		held_item = get_inactive_hand()
 
-	if(!attempt_object_suicide(held_item)) //Failed that, attempt alternate methods
-		var/list/obj/nearbystuff = list() //Check stuff in front of us
-		for(var/obj/O in get_step(loc,dir))
-			nearbystuff += O
+	if(!attempt_atom_suicide(held_item)) //Failed that, attempt alternate methods
+		var/list/atom/nearbystuff = list() //Check stuff in front of us
+		for(var/atom/A in get_step(loc,dir))
+			nearbystuff += A
 		log_debug("Nearby stuff in front of [src]: [counted_english_list(nearbystuff)]")
 		while(nearbystuff.len)
-			var/obj/chosen_item = pick_n_take(nearbystuff)
-			if(attempt_object_suicide(chosen_item))
+			var/atom/chosen_item = pick_n_take(nearbystuff)
+			if(attempt_atom_suicide(chosen_item))
 				if(istype(chosen_item,/obj/item))
 					var/obj/item/I = chosen_item
 					put_in_hands(I)
 				return
 		nearbystuff = list()
-		for(var/obj/O in adjacent_atoms(src)) //Failed that, check anything around us
-			nearbystuff += O
+		for(var/atom/A in adjacent_atoms(src)) //Failed that, check anything around us
+			nearbystuff += A
 		log_debug("Nearby stuff around [src]: [counted_english_list(nearbystuff)]")
 		while(nearbystuff.len)
-			var/obj/chosen_item = pick_n_take(nearbystuff)
-			if(attempt_object_suicide(chosen_item))
+			var/atom/chosen_item = pick_n_take(nearbystuff)
+			if(attempt_atom_suicide(chosen_item))
 				if(istype(chosen_item,/obj/item))
 					var/obj/item/I = chosen_item
 					put_in_hands(I)
@@ -151,7 +151,7 @@
 								"<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
 								"<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
 								"<span class='danger'>[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>"))
-		adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
+		adjustOxyLoss(max(12 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		updatehealth()
 
 /mob/living/carbon/brain/attempt_suicide(forced = 0, suicide_set = 1)
@@ -249,7 +249,7 @@
 
 	visible_message(pick("<span class='danger'>[src] suddenly starts thrashing around wildly! It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] suddenly starts mauling \himself! It looks like \he's trying to commit suicide.</span>"))
-	adjustOxyLoss(max(175 - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
+	adjustOxyLoss(max(125 - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 	updatehealth()
 
 /mob/living/carbon/slime/attempt_suicide(forced = 0, suicide_set = 1)

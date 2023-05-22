@@ -22,7 +22,7 @@
 		/obj/machinery/turret,
 		/obj/machinery/turretcover,
 		/obj/mecha,
-		/obj/structure/reagent_dispensers/fueltank,
+		/obj/structure/reagent_dispensers,
 		/obj/structure/bed/chair/vehicle,
 		)
 
@@ -185,7 +185,10 @@
 				dir = SOUTHWEST
 
 /obj/item/projectile/ricochet/proc/bounce()
-	bouncin = 1
+	bouncin += 1
+	if(bouncin > 200)
+		bulletdies()
+		return
 	var/obj/structure/ricochet_bump/bump = new(loc)
 	if(nodamage)
 		bump.icon_state += "_t"
@@ -376,7 +379,7 @@
 	anchored = 1
 	layer = BELOW_PROJECTILE_LAYER
 
-/obj/structure/ricochet_trail/acidable()
+/obj/structure/ricochet_trail/dissolvable()
 	return 0
 
 /obj/structure/ricochet_trail/New()
@@ -393,7 +396,7 @@
 	anchored = 1
 	layer = ABOVE_PROJECTILE_LAYER
 
-/obj/structure/ricochet_bump/acidable()
+/obj/structure/ricochet_bump/dissolvable()
 	return 0
 
 /obj/structure/ricochet_bump/New()

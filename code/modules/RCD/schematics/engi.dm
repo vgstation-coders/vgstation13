@@ -32,6 +32,7 @@
 
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			add_gamelogs(user, "deconstructed \the [T] with \the [master]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
+			T.investigation_log(I_RCD,"was deconstructed by [user]")
 			T.ChangeTurf(T.get_underlying_turf())
 			return 0
 
@@ -43,9 +44,10 @@
 				return 1
 
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+			D.investigation_log(I_RCD,"was deconstructed by [user]")
 			qdel(D)
 			return 0
-	
+
 	else if(istype(A,/obj/structure/window))
 		var/obj/structure/window/W = A
 		if(is_type_in_list(W, list(/obj/structure/window/plasma,/obj/structure/window/reinforced/plasma,/obj/structure/window/full/plasma,/obj/structure/window/full/reinforced/plasma)) && !can_r_wall)
@@ -58,12 +60,15 @@
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			for(var/obj/structure/grille/G in W.loc)
 				if(!istype(G,/obj/structure/grille/invulnerable)) // No more breaking out in places like lamprey
+					G.investigation_log(I_RCD,"was deconstructed by [user]")
 					qdel(G)
 			for(var/obj/structure/window/WI in W.loc)
 				if(is_type_in_list(W, list(/obj/structure/window/plasma,/obj/structure/window/reinforced/plasma,/obj/structure/window/full/plasma,/obj/structure/window/full/reinforced/plasma)) && !can_r_wall)
 					continue
 				if(WI != W)
+					WI.investigation_log(I_RCD,"was deconstructed by [user]")
 					qdel(WI)
+			W.investigation_log(I_RCD,"was deconstructed by [user]")
 			qdel(W)
 			return 0
 	return 1
@@ -85,7 +90,39 @@
 
 	to_chat(user, "Building floor...")
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+	S.investigation_log(I_RCD,"was made into a floor by [user]")
 	S.ChangeTurf(/turf/simulated/floor/plating/airless)
+	return 0
+
+/datum/rcd_schematic/con_rfloors
+	name				= "Build reinforced floors"
+	icon				= 'icons/turf/floors.dmi'
+	icon_state			= "engine"
+	category			= "Construction"
+	energy_cost			= 2
+
+	flags		= RCD_GET_TURF
+
+/datum/rcd_schematic/con_rfloors/attack(var/atom/A, var/mob/user)
+	if(!(istype(A,/turf/simulated/floor)))
+		return "it can only create floors on plating!"
+	else
+		var/turf/simulated/floor/F = A
+		if(F.floor_tile)
+			return "it can only create floors on plating!"
+
+	var/turf/T = A
+
+	to_chat(user, "Building floor...")
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+	if(master.delay(user, A, 2 SECONDS))
+		if(master.get_energy(user) < energy_cost)
+			return 1
+
+
+		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+		T.investigation_log(I_RCD,"was made into a reinforced floor by [user]")
+		T.ChangeTurf(/turf/simulated/floor/engine/plated/airless)
 	return 0
 
 /datum/rcd_schematic/con_walls
@@ -107,7 +144,33 @@
 			return 1
 
 		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+		T.investigation_log(I_RCD,"had a wall built on it by [user]")
 		T.ChangeTurf(/turf/simulated/wall)
+		return 0
+
+	return 1
+
+/datum/rcd_schematic/con_rwalls
+	name				= "Build reinforced walls"
+	icon				= 'icons/turf/walls.dmi'
+	icon_state			= "r_wall"
+	category			= "Construction"
+	energy_cost			= 5
+
+/datum/rcd_schematic/con_rwalls/attack(var/atom/A, var/mob/user)
+	if(A?.type != /turf/simulated/wall) // Only one with strict type like this for now
+		return "it can only reinforce existing walls!"
+
+	var/turf/simulated/floor/T = A
+	to_chat(user, "Building wall...")
+	playsound(master, 'sound/machines/click.ogg', 50, 1)
+	if(master.delay(user, A, 2 SECONDS))
+		if(master.get_energy(user) < energy_cost)
+			return 1
+
+		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+		T.investigation_log(I_RCD,"had a reinforced wall built on it by [user]")
+		T.ChangeTurf(/turf/simulated/wall/r_wall)
 		return 0
 
 	return 1
@@ -153,8 +216,7 @@
 
 /datum/rcd_schematic/con_airlock/Destroy()
 	for(var/datum/selection_schematic/thing in schematics)
-		qdel(thing)
-	schematics = null
+		QDEL_NULL(thing)
 	..()
 
 /datum/rcd_schematic/con_airlock/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
@@ -391,6 +453,7 @@
 			D.req_access = selected_access.Copy()
 
 	D.autoclose	= 1
+	A.investigation_log(I_RCD,"had \a [D] built on it by [user]")
 
 /datum/rcd_schematic/con_window
 	name						= "Build window"
@@ -424,8 +487,7 @@
 
 /datum/rcd_schematic/con_window/Destroy()
 	for(var/datum/selection_schematic/thing in schematics)
-		qdel(thing)
-	schematics = null
+		QDEL_NULL(thing)
 	..()
 
 /datum/rcd_schematic/con_window/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
@@ -473,6 +535,7 @@
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	new selected.build_type(A)
+	A.investigation_log(I_RCD,"had \a [selected.name] built on it by [user]")
 
 /datum/selection_schematic
 	var/name			= "Selection"
@@ -494,8 +557,7 @@
 /datum/selection_schematic/Destroy()
 	for(var/client/C in clients)
 		C.screen.Remove(ourobj)
-	qdel(ourobj)
-	ourobj = null
+	QDEL_NULL(ourobj)
 	..()
 
 /datum/selection_schematic/access_schematic
@@ -520,7 +582,7 @@
 		master.selected = src
 // Schematics for schematics, I know, but it's OOP!
 /datum/selection_schematic/airlock_schematic
-	name			= "airlock"						//Name of the airlock for the tooltip.
+	name			= "Airlock"						//Name of the airlock for the tooltip.
 	build_type		= /obj/machinery/door/airlock	//Type of the airlock.
 	icon_state		= "door_closed"
 	icon			= 'icons/obj/doors/Doorint.dmi'
@@ -533,93 +595,92 @@
 
 // ALL THE AIRLOCK TYPES.
 /datum/selection_schematic/airlock_schematic/engie
-	name			= "\improper Engineering Airlock"
+	name			= "Engineering Airlock"
 	build_type	= /obj/machinery/door/airlock/engineering
 	icon			= 'icons/obj/doors/Dooreng.dmi'
 
 /datum/selection_schematic/airlock_schematic/atmos
-	name			= "\improper Atmospherics Airlock"
+	name			= "Atmospherics Airlock"
 	build_type	= /obj/machinery/door/airlock/atmos
 	icon			= 'icons/obj/doors/Dooratmo.dmi'
 
 /datum/selection_schematic/airlock_schematic/sec
-	name			= "\improper Security Airlock"
+	name			= "Security Airlock"
 	build_type	= /obj/machinery/door/airlock/security
 	icon			= 'icons/obj/doors/Doorsec.dmi'
 
 /datum/selection_schematic/airlock_schematic/command
-	name			= "\improper Command Airlock"
+	name			= "Command Airlock"
 	build_type	= /obj/machinery/door/airlock/command
 	icon			= 'icons/obj/doors/Doorcom.dmi'
 
 /datum/selection_schematic/airlock_schematic/med
-	name			= "\improper Medical Airlock"
+	name			= "Medical Airlock"
 	build_type	= /obj/machinery/door/airlock/medical
 	icon			= 'icons/obj/doors/Doormed.dmi'
 
 /datum/selection_schematic/airlock_schematic/sci
-	name			= "\improper Research Airlock"
+	name			= "Research Airlock"
 	build_type	= /obj/machinery/door/airlock/research
 	icon			= 'icons/obj/doors/doorresearch.dmi'
 
 /datum/selection_schematic/airlock_schematic/mining
-	name			= "\improper Mining Airlock"
+	name			= "Mining Airlock"
 	build_type	= /obj/machinery/door/airlock/mining
 	icon			= 'icons/obj/doors/Doormining.dmi'
 
 /datum/selection_schematic/airlock_schematic/maint
-	name			= "\improper Maintenance Access"
+	name			= "Maintenance Access"
 	build_type	= /obj/machinery/door/airlock/maintenance
 	icon			= 'icons/obj/doors/Doormaint.dmi'
 
 /datum/selection_schematic/airlock_schematic/ext
-	name			= "\improper External Airlock"
+	name			= "External Airlock"
 	build_type	= /obj/machinery/door/airlock/external
 	icon			= 'icons/obj/doors/Doorext.dmi'
 
 /datum/selection_schematic/airlock_schematic/high_sec
-	name			= "\improper High-Tech Security Airlock"
+	name			= "High-Tech Security Airlock"
 	build_type	= /obj/machinery/door/airlock/highsecurity
 	icon			= 'icons/obj/doors/hightechsecurity.dmi'
 
-
 /datum/selection_schematic/airlock_schematic/glass
-	name			= "\improper Glass Airlock"
+	name			= "Glass Airlock"
 	build_type	= /obj/machinery/door/airlock/glass
 	icon			= 'icons/obj/doors/Doorglass.dmi'
 
 /datum/selection_schematic/airlock_schematic/glass_eng
-	name			= "\improper Glass Engineering Airlock"
+	name			= "Glass Engineering Airlock"
 	build_type	= /obj/machinery/door/airlock/glass_engineering
 	icon			= 'icons/obj/doors/Doorengglass.dmi'
 
 /datum/selection_schematic/airlock_schematic/glass_atmos
-	name			= "\improper Glass Atmospherics Airlock"
+	name			= "Glass Atmospherics Airlock"
 	build_type	= /obj/machinery/door/airlock/glass_atmos
 	icon			= 'icons/obj/doors/Dooratmoglass.dmi'
 
 /datum/selection_schematic/airlock_schematic/glass_sec
-	name			= "\improper Glass Security Airlock"
+	name			= "Glass Security Airlock"
 	build_type	= /obj/machinery/door/airlock/glass_security
 	icon			= 'icons/obj/doors/Doorsecglass.dmi'
 
 /datum/selection_schematic/airlock_schematic/glass_command
-	name			= "\improper Glass Command Airlock"
+	name			= "Glass Command Airlock"
 	build_type	= /obj/machinery/door/airlock/glass_command
 	icon			= 'icons/obj/doors/Doorcomglass.dmi'
 
 /datum/selection_schematic/airlock_schematic/glass_med
-	name			= "\improper Glass Medical Airlock"
+	name			= "Glass Medical Airlock"
 	build_type	= /obj/machinery/door/airlock/glass_medical
 	icon			= 'icons/obj/doors/doormedglass.dmi'
 
 /datum/selection_schematic/airlock_schematic/glass_sci
-	name			= "\improper Glass Research Airlock"
+	name			= "Glass Research Airlock"
 	build_type	= /obj/machinery/door/airlock/glass_research
 	icon			= 'icons/obj/doors/doorresearchglass.dmi'
 
 /datum/selection_schematic/airlock_schematic/glass_mining
-	name			= "\improper Glass Mining Airlock"
+	name			= "Glass Mining Airlock"
 	build_type	= /obj/machinery/door/airlock/glass_mining
 	icon			= 'icons/obj/doors/Doorminingglass.dmi'
 
@@ -628,18 +689,18 @@
 	name			= "window"						//Name of the window for the tooltip.
 	build_type		= /obj/effect/spawner/window	//Type of the window.
 	icon = 'icons/obj/structures.dmi'
-	icon_state = "grille"
+	icon_state = "grille0"
 	var/list/dirs = list(NORTH,EAST,WEST,SOUTH)
 
 /datum/selection_schematic/window_schematic/New()
 	for(var/d in dirs)
-		overlays += image(icon,icon_state="rwindow",dir=d)
+		overlays += image('icons/obj/structures/window.dmi',icon_state="rwindow0",dir=d)
 	..()
 
 /datum/selection_schematic/window_schematic/Destroy()
 	overlays = list()
 	..()
-	
+
 /datum/selection_schematic/window_schematic/clicked(var/mob/user)
 	master.selected = src
 
@@ -718,7 +779,7 @@
 	build_type	= /obj/effect/spawner/window/full
 
 /datum/selection_schematic/window_schematic/full/New()
-	overlays += image(icon,icon_state="rwindow0")
+	overlays += image('icons/obj/structures/window.dmi',icon_state="frwindow0")
 	..()
 
 /datum/selection_schematic/window_schematic/full/northend

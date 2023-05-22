@@ -12,16 +12,16 @@
 	block = SOBERBLOCK
 
 //WAS: /datum/bioEffect/psychic_resist
-/datum/dna/gene/basic/psychic_resist
-	name = "Psy-Resist"
-	desc = "Boosts efficiency in sectors of the brain commonly associated with meta-mental energies."
-	activation_messages = list("Your mind feels closed.")
+/datum/dna/gene/basic/jamsignals
+	name = "Signal Jam"
+	desc = "Creates an invisible shield around your body, protecting you from harmful electromagnetic radiation."
+	activation_messages = list("Your body and mind feel shielded.")
 	deactivation_messages = list("You feel oddly exposed.")
 
-	mutation = M_PSY_RESIST
+	mutation = M_JAMSIGNALS
 
-/datum/dna/gene/basic/psychic_resist/New()
-	block = PSYRESISTBLOCK
+/datum/dna/gene/basic/jamsignals/New()
+	block = JAMSIGNALSBLOCK
 
 /////////////////////////
 // Stealth Enhancers
@@ -53,13 +53,13 @@
 
 /datum/dna/gene/basic/stealth/chameleon/activate(var/mob/M, var/connected, var/flags)
 	..()
-	M.register_event(/event/moved, src, .proc/mob_moved)
+	M.register_event(/event/moved, src, src::mob_moved())
 	return 1
 
 /datum/dna/gene/basic/stealth/chameleon/deactivate(var/mob/M, var/connected, var/flags)
 	if(!..())
 		return 0
-	M.unregister_event(/event/moved, src, .proc/mob_moved)
+	M.unregister_event(/event/moved, src, src::mob_moved())
 	return 1
 
 /datum/dna/gene/basic/stealth/chameleon/proc/mob_moved(var/mob/mover)
@@ -227,7 +227,7 @@
 		/mob/living/carbon/slime,
 		/mob/living/carbon/alien/larva,
 		/mob/living/simple_animal/slime,
-		/mob/living/simple_animal/tomato,
+		/mob/living/simple_animal/hostile/retaliate/tomato,
 		/mob/living/simple_animal/chick,
 		/mob/living/simple_animal/chicken,
 		/mob/living/simple_animal/hostile/lizard,
@@ -614,7 +614,7 @@
 		to_chat(user, "<span class='warning'>This can only be used on carbon beings.</span>")
 		return 1
 
-	if (M_PSY_RESIST in M.mutations)
+	if (!can_mind_interact(M.mind))
 		to_chat(user, "<span class='warning'>You can't see into [M.name]'s mind at all!</span>")
 		return 1
 

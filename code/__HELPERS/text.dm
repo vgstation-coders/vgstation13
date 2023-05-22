@@ -1,4 +1,5 @@
 #define HTMLTAB "&nbsp;&nbsp;&nbsp;&nbsp;"
+#define UTF_LIMIT (1 << 20) + (1 << 16) - 1
 #define string2charlist(string) (splittext(string, regex("(.)")) - splittext(string, ""))
 
 /*
@@ -110,83 +111,121 @@
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
 	var/name = input(user, message, title, default) as null|text
 	return strip_html_simple(name, max_length)
-	
+
 //As above, but for full-size paragraph textboxes
 /proc/stripped_message(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
 	var/name = input(user, message, title, default) as null|message
 	return strip_html_simple(name, max_length)
 
-//Filters out undesirable characters from names
+/proc/test_ascii(var/text)
+	for(var/i=1, i<=length(text), i++)
+		world.log << text2ascii(text, i)
+
+var/list/whitelist_name_diacritics_cap = list(
+	"À", "Á", "Â", "Ã", "Ä", "Ä", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï", "Ð", "Ñ", "Ò", "Ó", "Ô", "Ö", "Ø", "Ù", "Ú", "Û", "Ü", "Ý",
+)
+var/list/whitelist_name_diacritics_min = list(
+	"à", "á", "â", "ã", "ä", "ä", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "ö", "ø", "ù", "ú", "û", "ü", "ý",
+)
+
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
 	if(!t_in || length(t_in) > max_length)
 		return //Rejects the input if it is null or if it is longer then the max length allowed
 
-	var/number_of_alphanumeric	= 0
-	var/last_char_group			= 0
-	var/t_out = ""
+	var/current_space = TRUE
+	var/length = 0
+	var/started = FALSE
 
+	t_in = trim(t_in)
+	var/t_out = ""
 	for(var/i=1, i<=length(t_in), i++)
 		var/ascii_char = text2ascii(t_in,i)
 		switch(ascii_char)
 			// A  .. Z
 			if(65 to 90)			//Uppercase Letters
-				t_out += ascii2text(ascii_char)
-				number_of_alphanumeric++
-				last_char_group = 4
-
+				started = TRUE
+				current_space = FALSE
+				t_out += t_in[i]
+				length++
 			// a  .. z
 			if(97 to 122)			//Lowercase Letters
-				if(last_char_group<2)
-					t_out += ascii2text(ascii_char-32)	//Force uppercase first character
+				started = TRUE
+				if (current_space)
+					current_space = FALSE
+					t_out += ascii2text(ascii_char - 32)
 				else
-					t_out += ascii2text(ascii_char)
-				number_of_alphanumeric++
-				last_char_group = 4
+					current_space = FALSE
+					t_out += t_in[i]
+				length++
 
 			// 0  .. 9
 			if(48 to 57)			//Numbers
-				if(!last_char_group)
-					continue	//suppress at start of string
-				if(!allow_numbers)
+				if(allow_numbers)
+					if (!started)
+						continue
+					current_space = FALSE
+					t_out += t_in[i]
+					length++
+				else
 					continue
-				t_out += ascii2text(ascii_char)
-				number_of_alphanumeric++
-				last_char_group = 3
 
 			// '  -  .
 			if(39,45,46)			//Common name punctuation
-				if(!last_char_group)
+				if (!started)
 					continue
-				t_out += ascii2text(ascii_char)
-				last_char_group = 2
+				current_space = FALSE
+				t_out += t_in[i]
+
 
 			// ~   |   @  :  #  $  %  &  *  +
 			if(126,124,64,58,35,36,37,38,42,43)			//Other symbols that we'll allow (mainly for AI)
-				if(!last_char_group)
-					continue	//suppress at start of string
-				if(!allow_numbers)
+				if(allow_numbers)
+					if (!started)
+						continue
+					current_space = FALSE
+					t_out += t_in[i]
+				else
 					continue
-				t_out += ascii2text(ascii_char)
-				last_char_group = 2
+
 
 			//Space
 			if(32)
-				if(last_char_group <= 1)
-					continue	//suppress double-spaces and spaces at start of string
-				t_out += ascii2text(ascii_char)
-				last_char_group = 1
+				if (current_space)
+					continue
+				else
+					current_space = TRUE
+					t_out += t_in[i]
 			else
-				return
-
-	if(number_of_alphanumeric < 2)
-		return		//protects against tiny names like "A" and also names like "' ' ' ' ' ' ' '"
-
-	if(last_char_group == 1)
-		t_out = copytext(t_out,1,length(t_out))	//removes the last character (in this case a space)
+				if (t_in[i] in whitelist_name_diacritics_cap)
+					started = TRUE
+					t_out += t_in[i]
+					i++ // Those are two-bytes letters
+					length++
+					current_space = FALSE
+				else if (t_in[i] in whitelist_name_diacritics_min)
+					started = TRUE
+					if (current_space)
+						var/index = whitelist_name_diacritics_min.Find(t_in[i])
+						t_out += whitelist_name_diacritics_cap[index]
+						i++ // Those are two-bytes letters
+						length++
+						current_space = FALSE
+					else
+						t_out += t_in[i]
+						i++ // Those are two-bytes letters
+						length++
+						current_space = FALSE
+				else
+					return
 
 	for(var/bad_name in list("space","floor","wall","r-wall","monkey","unknown","inactive ai","plating"))	//prevents these common metagamey names
 		if(cmptext(t_out,bad_name))
 			return	//(not case sensitive)
+
+	t_out = trim(t_out)
+
+	if (length < 2)
+		return
 
 	return t_out
 
@@ -266,14 +305,14 @@
 //Returns a string with reserved characters and spaces before the first letter removed
 /proc/trim_left(text)
 	for (var/i = 1 to length(text))
-		if (text2ascii(text, i) > 32)
+		if (text2ascii(text, i) > 32 && text2ascii(text, i) <= UTF_LIMIT)
 			return copytext(text, i)
 	return ""
 
 //Returns a string with reserved characters and spaces after the last letter removed
 /proc/trim_right(text)
 	for (var/i = length(text), i > 0, i--)
-		if (text2ascii(text, i) > 32)
+		if (text2ascii(text, i) > 32 && text2ascii(text, i) <= UTF_LIMIT)
 			return copytext(text, 1, i + 1)
 
 	return ""
@@ -384,12 +423,13 @@
  */
 var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
 
-/proc/format_units(var/number)
+/proc/format_units(var/number, var/decimals=2)
 	if (number<0)
 		return "-[format_units(abs(number))]"
 	if (number==0)
 		return "0 "
 
+	// Figure out suffix
 	var/max_unit_suffix = unit_suffixes.len
 	var/i=1
 	while (round(number/1000) >= 1)
@@ -397,6 +437,10 @@ var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
 		i++
 		if (i == max_unit_suffix)
 			break
+
+	// Remove excess decimals
+	decimals = 10 ** decimals
+	number = round(number * decimals)/decimals
 
 	return "[format_num(number)] [unit_suffixes[i]]"
 
@@ -716,3 +760,36 @@ var/quote = ascii2text(34)
 			count++
 	while(last_index)
 	return count
+
+/proc/get_reflexive_pronoun(var/gender) //For when \himself won't work.
+	switch(gender)
+		if(MALE)
+			return "himself"
+		if(FEMALE)
+			return "herself"
+		if(PLURAL) //Can be used in conjunction with shift_verb_tense(). eg. "The bees cleans themselves." -> "The bees clean themselves."
+			return "themselves"
+		else
+			return "itself"
+
+/proc/shift_verb_tense(var/input) //Turns "slashes" into "slash" and "hits" into "hit".
+	//Check if there's more than one word in the input, and if so, separate the first word from the rest, eg. "looks over at" separates into "looks" and " over at".
+	var/space = findtext(input, " ")
+	var/fromspace
+	if(space)
+		fromspace = copytext(input, space)
+		input = copytext(input, 1, space)
+	//Check if input ends in "es" or "s" and chop those off if so.
+	var/inputlength = length(input)
+	if(inputlength > 2)
+		if(copytext(input, inputlength - 1, inputlength + 1) == "es") //If it ends in "es"
+			var/third_to_last = copytext(input, inputlength - 2, inputlength - 1)
+			if(findtext("cdefgklmnprstuvxz", third_to_last)) //If the third-to-last letter is any of the given letters, remove only the "s".
+				input = copytext(input, 1, inputlength) //"smiles" becomes "smile"
+			else if(third_to_last == "i")
+				input = copytext(input, 1, inputlength - 2) + "y" //"parries" becomes "parry"
+			else
+				input = copytext(input, 1, inputlength - 1) //Otherwise remove the "es".
+		else if(copytext(input, inputlength, inputlength + 1) == "s") //If the second-to-last letter isn't "e", and the last letter is "s", remove the "s".
+			input = copytext(input, 1, inputlength)	//"gets" becomes "get"
+	return input + fromspace

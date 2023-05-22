@@ -1,5 +1,6 @@
 /obj/item/weapon/shield
 	name = "shield"
+	on_armory_manifest = TRUE
 
 /obj/item/weapon/shield/riot
 	name = "riot shield"
@@ -216,6 +217,7 @@
 	w_class = 5
 	mech_flags = MECH_SCAN_ILLEGAL
 	cant_drop = 1
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 	var/mob/living/simple_animal/borer/parent_borer = null
 
 /obj/item/weapon/shield/riot/bone/New(atom/A, var/p_borer = null)

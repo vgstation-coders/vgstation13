@@ -36,9 +36,7 @@
 		var/mob/living/carbon/Ca = src
 		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
 	if(client)
-		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
-			qdel(spell_master)
-		spell_masters = null
+		QDEL_LIST_NULL(spell_masters)
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
 			var/obj/abstract/screen/screenobj = AM
@@ -57,17 +55,14 @@
 	attack_delayer = null
 	special_delayer = null
 	throw_delayer = null
-	qdel(hud_used)
-	hud_used = null
+	QDEL_NULL(hud_used)
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
 
 	if(transmogged_from)
-		qdel(transmogged_from)
-		transmogged_from = null
+		QDEL_NULL(transmogged_from)
 	if(transmogged_to)
-		qdel(transmogged_to)
-		transmogged_to = null
+		QDEL_NULL(transmogged_to)
 	if(control_object.len)
 		for(var/A in control_object)
 			qdel(A)
@@ -247,14 +242,14 @@
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
 		if(virtualhearer)
-			qdel(virtualhearer)
-			virtualhearer = null
+			QDEL_NULL(virtualhearer)
 	..()
 
 /mob/proc/is_muzzled()
 	return 0
 
 /mob/proc/store_position()
+	//updates the players' origin_ vars so they retain their location when the round starts.
 	origin_x = x
 	origin_y = y
 	origin_z = z
@@ -421,6 +416,11 @@
 		if (world.time > num2text(time) + 20 SECONDS) // clear out the items older than 20 seconds
 			crit_rampup -= time
 
+	if(base_luck ? base_luck.temporary_luckiness : FALSE)
+		base_luck.temporary_luckiness *= LUCKINESS_DRAINFACTOR
+		if(abs(base_luck.temporary_luckiness) < 1)
+			base_luck.temporary_luckiness = 0
+
 /mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N, var/dir)
 	if(N.chained)
 		if(narsimage)
@@ -559,8 +559,7 @@
 	if(!W.mob_can_equip(src, slot, disable_warning))
 		switch(act_on_fail)
 			if(EQUIP_FAILACTION_DELETE)
-				qdel(W)
-				W = null
+				QDEL_NULL(W)
 			if(EQUIP_FAILACTION_DROP)
 				W.forceMove(get_turf(src)) //Should this be using drop_from_inventory instead?
 			else
@@ -606,11 +605,8 @@
 		B.handle_item_insertion(W,1)
 
 //The list of slots by priority. equip_to_appropriate_slot() uses this list. Doesn't matter if a mob type doesn't have a slot.
-var/list/slot_equipment_priority = list( \
-		slot_back,\
+var/static/list/slot_equipment_priority = list( \
 		slot_wear_id,\
-		slot_w_uniform,\
-		slot_wear_suit,\
 		slot_wear_mask,\
 		slot_head,\
 		slot_shoes,\
@@ -620,7 +616,10 @@ var/list/slot_equipment_priority = list( \
 		slot_belt,\
 		slot_s_store,\
 		slot_l_store,\
-		slot_r_store\
+		slot_r_store,\
+		slot_w_uniform,\
+		slot_wear_suit,\
+		slot_back\
 	)
 
 /*Equips accessories.
@@ -645,14 +644,23 @@ Use this proc preferably at the end of an equipment loadout
 	if(!istype(W))
 		return 0
 
+	var/list/backup_slots = list()
 	for(var/slot in slot_equipment_priority)
 		if(!is_holding_item(W) && !override)
 			return 0
 		var/obj/item/S = get_item_by_slot(slot)
 		if(S && S.can_quick_store(W))
-			return S.quick_store(W)
+			return S.quick_store(W,src)
+		if((slot in list(slot_l_store,slot_r_store)) && W.mob_can_equip(src, slot, 1) == CAN_EQUIP_BUT_SLOT_TAKEN)
+			backup_slots.Add(slot)
+		else if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 0)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
+			return 1
+	for(var/slot in backup_slots)
 		if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 0)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
 			return 1
+	for(var/obj/item/I in held_items)
+		if(I.can_quick_store(W))
+			return I.quick_store(W,src)
 
 	return 0
 
@@ -1160,7 +1168,25 @@ Use this proc preferably at the end of an equipment loadout
 
 	face_atom(A)
 	A.examine(src)
+	if(A.admin_desc && src.client?.holder?.admin_examine)
+		to_chat(src, "<span class='rough'>Admin-only: [A.admin_desc]</span>")
 
+	if(istype(src,/mob/living))
+		var/mob/living/L = src
+		if(!isobserver(L) && !L.eyecheck() && !L.invisibility && L.alpha >= 1)
+			if(A.loc != L || A == L.get_active_hand() || A == L.get_inactive_hand())
+				for(var/mob/M in viewers(4, L))
+					if(M == L)
+						continue
+					if(istype(M.get_item_by_slot(slot_glasses),/obj/item/clothing/glasses/regular/tracking))
+						if(M.is_blind())
+							continue
+						if(isobj(A.loc))
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks inside \the [A.loc].</span>")
+						else if(A == L)
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks at \the [A].</span>")
+						else
+							to_chat(M, "<span class='info'><b>\The [L]</b> looks at [A].</span>")
 
 /mob/living/verb/verb_pickup(obj/I in acquirable_objects_in_view(usr, 1))
 	set name = "Pick up"
@@ -1245,8 +1271,7 @@ Use this proc preferably at the end of an equipment loadout
 	var/mob/new_player/M = new /mob/new_player()
 	if(!client)
 		log_game("[usr.key] AM failed due to disconnect.")
-		qdel(M)
-		M = null
+		QDEL_NULL(M)
 		return
 
 	M.key = key
@@ -1589,6 +1614,23 @@ Use this proc preferably at the end of an equipment loadout
 	set hidden = 1
 	return directionface(SOUTH)
 
+/mob/proc/check_dark_vision()
+	if (dark_plane && dark_plane.alphas.len)
+		var/max_alpha = 0
+		for (var/key in dark_plane.alphas)
+			max_alpha = max(dark_plane.alphas[key], max_alpha)
+		animate(dark_plane, alpha = max_alpha, color = dark_plane.colours, time = 10)
+	else if (dark_plane)
+		animate(dark_plane, alpha = initial(dark_plane.alpha), color = dark_plane.colours, time = 10)
+
+	if (self_vision)
+		if (isturf(loc))
+			var/turf/T = loc
+			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY))
+				animate(self_vision, alpha = self_vision.target_alpha, time = 10)
+			else
+				animate(self_vision, alpha = 0, time = 10)
+
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
 	INVOKE_EVENT(src, /event/before_move)
@@ -1842,14 +1884,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/attack_pai(mob/user as mob)
 	ShiftClick(user)
 
-/mob/proc/handle_alpha()
-	if(alphas.len < 1)
-		alpha = 255
-	else
-		var/lowest_alpha = 255
-		for(var/alpha_modification in alphas)
-			lowest_alpha = min(lowest_alpha,alphas[alpha_modification])
-		alpha = lowest_alpha
+
 
 /mob/proc/teleport_to(var/atom/A)
 	forceMove(get_turf(A))
@@ -1898,8 +1933,8 @@ Use this proc preferably at the end of an equipment loadout
 			mind.heard_before[M.name] = M.mind
 			M.heard_by |= mind
 
-/mob/acidable()
-	return 1
+/mob/dissolvable()
+	return PACID
 
 /mob/proc/get_view_range()
 	if(client)
@@ -1988,7 +2023,7 @@ Use this proc preferably at the end of an equipment loadout
 	spawn(duration + 1)
 		regenerate_icons()
 
-/mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
+/mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE, var/kill_on_death = TRUE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
 	if(!target_type)
 		if(transmogged_from)
 			var/obj/transmog_body_container/tC = transmogged_from
@@ -2016,8 +2051,10 @@ Use this proc preferably at the end of an equipment loadout
 		return
 	var/mob/M = new target_type(loc)
 	var/obj/transmog_body_container/C = new (M)
+	C.kill_on_death = kill_on_death
 	M.transmogged_from = C
 	transmogged_to = M
+	C.set_contained_mob(src)
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
@@ -2027,7 +2064,6 @@ Use this proc preferably at the end of an equipment loadout
 		else
 			change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
-	C.set_contained_mob(src)
 	timestopped = 1
 	return M
 
@@ -2073,6 +2109,7 @@ Use this proc preferably at the end of an equipment loadout
 	desc = "You should not be seeing this."
 	flags = TIMELESS
 	var/mob/contained_mob
+	var/kill_on_death = TRUE
 
 /obj/transmog_body_container/proc/set_contained_mob(var/mob/M)
 	ASSERT(M)
@@ -2095,16 +2132,34 @@ Use this proc preferably at the end of an equipment loadout
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
-/mob/make_invisible(var/source_define, var/time, var/include_clothing)
-	if(..() || !source_define)
+/mob/proc/make_invisible(var/source_define, var/time, var/include_clothing, var/alpha_value = 1, var/invisibility_value = 0)
+	if(invisibility || alpha <= 1 || !source_define)
 		return
-	alpha = 1	//to cloak immediately instead of on the next Life() tick
-	alphas[source_define] = 1
+	invisibility = invisibility_value
+	alphas[source_define] = alpha_value
+	handle_alpha()
+	regenerate_icons()
 	if(time > 0)
 		spawn(time)
-			if(src)
-				alpha = initial(alpha)
-				alphas.Remove(source_define)
+			make_visible(source_define)
+
+/mob/proc/make_visible(var/source_define)
+	if(!invisibility && alpha == 255 || !source_define)
+		return
+	if(src && alphas[source_define])
+		invisibility = 0
+		alphas.Remove(source_define)
+		handle_alpha()
+		regenerate_icons()
+
+/mob/proc/handle_alpha()	//uses the lowest alpha on the mob
+	if(alpha_override == TRUE)
+		return
+	if(alphas.len < 1)
+		alpha = 255
+	else
+		sortTim(alphas, /proc/cmp_numeric_asc,1)
+		alpha = alphas[alphas[1]]
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
 	if(paxban_isbanned(ckey))
@@ -2163,7 +2218,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/attempt_crawling(var/turf/target)
 	return FALSE
 
-/mob/proc/can_mind_interact(var/datum/mind/target_mind)
+/proc/can_mind_interact(var/datum/mind/target_mind)
 	var/mob/living/target
 	if(isliving(target_mind))
 		target = target_mind
@@ -2173,26 +2228,34 @@ Use this proc preferably at the end of an equipment loadout
 		target = target_mind.current
 	if (!istype(target))
 		return null
-	var/turf/target_turf = get_turf(target)
-	var/turf/our_turf = get_turf(src)
-	if(!target_turf)
+	if(M_JAMSIGNALS in target.mutations)
 		return null
-	if (target.isDead())
-		to_chat(src, "You cannot sense the target mind anymore, that's not good...")
+	if(isalien(target))
 		return null
-	if(target_turf.z != our_turf.z) //Not on the same zlevel as us
-		to_chat(src, "The target mind is too faint, they must be quite far from you...")
+	if(target.is_wearing_item(/obj/item/clothing/mask/gas/voice))
 		return null
-	if(target.stat != CONSCIOUS)
-		to_chat(src, "The target mind is too faint, but still close, they must be unconscious...")
+	if(target.is_wearing_item(/obj/item/clothing/head/helmet/stun/))
 		return null
-	if(M_PSY_RESIST in target.mutations)
-		to_chat(src, "The target mind is resisting!")
+	if(target.is_wearing_item(/obj/item/clothing/gloves/ninja))
 		return null
-	if(target.is_wearing_any(list(/obj/item/clothing/head/helmet/space/martian,/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
-		to_chat(src, "Interference is disrupting the connection with the target mind.")
+	if(target.is_wearing_item(/obj/item/clothing/head/tinfoil))
 		return null
-	return target
+	if(target.is_wearing_item(/obj/item/clothing/head/helmet/space/martian))
+		return null
+	if(target.is_holding_item(/obj/item/device/megaphone/madscientist))
+		return null
+	var/mob/living/carbon/human/H = target
+	if(istype(H))
+		if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+			return null
+	if(istruevampire(H))
+		return null
+	var/datum/role/changeling/C = target.mind.GetRole(CHANGELING)
+	if(istype(C))
+		if(locate(/datum/power/changeling/DigitalCamouflage) in C.current_powers)
+			return null
+
+	return TRUE
 
 /mob/proc/canMouseDrag()//used mostly to check if the mob can drag'and'drop stuff in/out of various other stuff, such as disposals, cryo tubes, etc.
 	return TRUE

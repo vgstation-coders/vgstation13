@@ -885,7 +885,6 @@
 "cd" = (
 /obj/machinery/light/small{
 	dir = 4;
-	on = 1
 	},
 /obj/item/clothing/mask/breath,
 /obj/item/stack/medical/bruise_pack/bandaid,

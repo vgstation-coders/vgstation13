@@ -7,7 +7,7 @@ var/list/station_holomaps = list()
 	icon_state = "station_map"
 	anchored = 1
 	density = 0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 10
 	dir = NORTH
@@ -85,7 +85,7 @@ var/list/station_holomaps = list()
 
 	floor_markings = image('icons/turf/overlays.dmi', "station_map")
 	floor_markings.dir = dir
-	floor_markings.plane = ABOVE_TURF_PLANE
+	floor_markings.plane = relative_plane(ABOVE_TURF_PLANE)
 	floor_markings.layer = DECAL_LAYER
 	update_icon()
 

@@ -11,6 +11,7 @@
 	force = 2.5 //A big book, solely used for non-Chaplains trying to use it on people
 	flags = FPRINT
 	attack_verb = list("whacks", "slaps", "slams", "forcefully blesses")
+	autoignition_temperature = AUTOIGNITION_PAPER //bible-burning heathen
 	var/mob/affecting = null
 	var/datum/religion/my_rel = new /datum/religion
 	actions_types = list(/datum/action/item_action/convert)
@@ -27,6 +28,32 @@
 	user.IgniteMob()
 	user.audible_scream()
 	return SUICIDE_ACT_FIRELOSS //Set ablaze and burned to crisps
+
+/obj/item/weapon/storage/bible/proc/divine_retribution(var/mob/living/user, var/action = "doing something to")
+	if(isanycultist(user))
+		to_chat(user, "<span class='sinister'>Nar-Sie shields you from [my_rel.deity_name]'s wrath!</span>")
+	else
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(istype(H.head, /obj/item/clothing/head/fedora))
+				to_chat(H, "<span class='notice'>You feel incredibly enlightened after [action] [src]!</span>")
+				var/obj/item/clothing/head/fedora/F = H.head
+				F.tip_fedora()
+			else
+				to_chat(user, "<span class='danger'>You feel incredibly guilty for [action] [src]!</span>")
+		else
+			to_chat(user, "<span class='danger'>You feel incredibly guilty for [action] [src]!</span>")
+		if(prob(80)) //20% chance to escape God's justice
+			spawn(rand(10,30))
+				if(user)
+					user.show_message("<span class='game say'><span class='name'>[my_rel.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
+					sleep(10)
+					if(user)
+						to_chat(user, "<span class='danger'>You were disintegrated by [my_rel.deity_name]'s bolt of lightning.</span>")
+						user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[action] a bible and suffered [my_rel.deity_name]'s wrath.</font>")
+						explosion(get_turf(user),-1,-1,1,5, whodunnit = user) //Tiny explosion with flash
+						user.dust(TRUE)
+
 
 //"Special" Bible with a little gift on introduction
 /obj/item/weapon/storage/bible/booze
@@ -198,6 +225,12 @@
 			A.reagents.add_reagent(HOLYWATER, water2holy)
 
 /obj/item/weapon/storage/bible/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(W.is_hot())
+		if(do_after(user, src, 2 SECONDS))
+			visible_message("<span class='warning'>[user] lights [src] on fire with \the [W]!</span>")
+			ignite()
+			divine_retribution(user, "burning")
+			return
 	if(!stealthy(user))
 		playsound(src, "rustle", 50, 1, -5)
 	. = ..()

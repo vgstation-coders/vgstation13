@@ -97,6 +97,10 @@
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
 
+/obj/item/trash/popcorn/hoppers
+	name = "hoppers"
+	icon_state = "hoppers"
+
 /obj/item/trash/sosjerky
 	name = "\improper Scaredy's Private Reserve Beef Jerky"
 	icon_state = "sosjerky"
@@ -181,7 +185,7 @@
 /obj/item/trash/chicken_bucket
 	name = "chicken bucket"
 	icon_state = "kfc_bucket"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 	armor = list(melee = 1, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
@@ -294,7 +298,7 @@ var/list/crushed_cans_cache = list()
 	icon_state	= "ketchup_small"
 
 /obj/item/trash/mayo_packet
-	name = "mayonaise packet"
+	name = "mayonnaise packet"
 	desc = "A used mayonnaise packet."
 	icon_state	= "mayo_small"
 
@@ -337,6 +341,11 @@ var/list/crushed_cans_cache = list()
 	name = "zam's spicy sauce packet"
 	desc = "A used Zam's spicy sauce packet."
 	icon_state	= "zamspicytoxin_small"
+
+/obj/item/trash/discount_packet
+	name = "Discount Dan's Special Sauce"
+	desc = "Contained 40% less sauce than competing products!"
+	icon_state	= "discount_small"
 
 /obj/item/trash/emptybowl
 	name = "empty bowl"

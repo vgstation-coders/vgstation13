@@ -30,10 +30,10 @@
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/swat
-	desc = "These tactical gloves are somewhat fire and impact-resistant."
+	desc = "These fingerless gloves make you look, and feel tactical."
 	name = "\improper SWAT Gloves"
-	icon_state = "black"
-	item_state = "black"
+	icon_state = "swat"
+	item_state = "swat"
 	siemens_coefficient = 0.6
 	permeability_coefficient = 0.05
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
@@ -86,10 +86,10 @@
 		to_chat(M,"<span class='notice'>[user] makes strange hand symbols.</span>")
 
 /obj/item/clothing/gloves/combat //Combined effect of SWAT gloves and insulated gloves
-	desc = "These tactical gloves are somewhat fire and impact resistant."
+	desc = "These combat gloves are somewhat fire and impact resistant."
 	name = "combat gloves"
-	icon_state = "black"
-	item_state = "black"
+	icon_state = "combat"
+	item_state = "combat"
 	siemens_coefficient = 0
 	permeability_coefficient = 0.05
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
@@ -207,6 +207,7 @@
 	desc = "For these tense combat situations when you just have to pick your nose."
 	icon_state = "nr_fgloves"
 	item_state = "nr_fgloves"
+	species_fit = list(VOX_SHAPED)
 
 //Like powerfist from fallout, but NUCLEAR. It throws people back and adds 50 damage every 15 seconds. Also it irradiates you
 /obj/item/clothing/gloves/powerfist
@@ -235,6 +236,9 @@
 /obj/item/clothing/gloves/powerfist/full
 	vial = /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium
 
+/obj/item/clothing/gloves/powerfist/splashable()
+	return FALSE
+
 /obj/item/clothing/gloves/powerfist/New()
 	..()
 
@@ -244,8 +248,7 @@
 	update_icon()
 
 /obj/item/clothing/gloves/powerfist/Destroy()
-	qdel(vial)
-	vial = null
+	QDEL_NULL(vial)
 
 	..()
 

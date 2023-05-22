@@ -1,5 +1,5 @@
 /mob/living/silicon/ai/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	if(!gibbed)
 		emote("deathgasp", message = TRUE)

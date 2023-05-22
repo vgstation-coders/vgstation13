@@ -118,6 +118,8 @@
 				if(!block) //isolated block?
 					M.dna.SE = buf.dna.SE.Copy()
 					M.dna.UpdateSE()
+				else if(arcanetampered)
+					M.dna.GiveRandomSE(genetype = GENETYPE_BAD)
 				else
 					M.dna.SetSEValue(block,src.GetValue())
 				spawn() //domutcheck can include monkeyization which is long and stops the proc until it's done, this fixes it
@@ -500,27 +502,27 @@
 	block = SOBERBLOCK
 	..()
 
-/obj/item/weapon/dnainjector/nofail/psychic_resist
-	name = "DNA-Injector (Psychic Resist)"
-	desc = "Not today, mind hippies."
+/obj/item/weapon/dnainjector/nofail/jamsignals
+	name = "DNA-Injector (Jam Signals)"
+	desc = "Hidden in plain sight"
 	datatype = DNA2_BUF_SE
 	value = 0xFFF
 	//block = 2
 
-/obj/item/weapon/dnainjector/nofail/psychic_resist/initialize()
-	block = PSYRESISTBLOCK
+/obj/item/weapon/dnainjector/nofail/JAMSIGNALS/initialize()
+	block = JAMSIGNALSBLOCK
 	..()
 
 
-/obj/item/weapon/dnainjector/nofail/antipsychic_resist
-	name = "DNA-Injector (Anti-Psychic Resist)"
-	desc = "Im thinking about furry porn 24/7. Come at me, faggots."
+/obj/item/weapon/dnainjector/nofail/antijamsignals
+	name = "DNA-Injector (Anti-Jamming)"
+	desc = "There are eyes everywhere"
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 2
 
-/obj/item/weapon/dnainjector/nofail/antipsychic_resist/initialize()
-	block = PSYRESISTBLOCK
+/obj/item/weapon/dnainjector/nofail/antijamsignals/initialize()
+	block = JAMSIGNALSBLOCK
 	..()
 
 /*/obj/item/weapon/dnainjector/nofail/darkcloak
@@ -1335,24 +1337,34 @@
 	block = FARSIGHTBLOCK
 	..()
 
-/obj/item/weapon/dnainjector/nofail/remotesay
-	name = "DNA-Injector (Remote Say)"
+/obj/item/weapon/dnainjector/nofail/telepathy
+	name = "DNA-Injector (Telepathy)"
 	desc = "Share it with the world."
 	datatype = DNA2_BUF_SE
 	value = 0xFFF
 
-/obj/item/weapon/dnainjector/nofail/remotesay/initialize()
-	block = REMOTETALKBLOCK
+/obj/item/weapon/dnainjector/nofail/telepathy/initialize()
+	block = TELEPATHYBLOCK
 	..()
 
-/obj/item/weapon/dnainjector/nofail/antiremotesay
-	name = "DNA-Injector (Remote Say)"
+/obj/item/weapon/dnainjector/nofail/antitelepathy
+	name = "DNA-Injector (Telepathy)"
 	desc = "Keep it to yourself."
 	datatype = DNA2_BUF_SE
 	value = 0x001
 
-/obj/item/weapon/dnainjector/nofail/antiremotesay/initialize()
-	block = REMOTETALKBLOCK
+/obj/item/weapon/dnainjector/nofail/telepathy/initialize()
+	block = TELEPATHYBLOCK
+	..()
+
+/obj/item/weapon/dnainjector/nofail/ehs
+	name = "DNA-Injector (Electromagnetic Hypersensitivity)"
+	desc = "And he gets to be an IAA? What a sick joke!"
+	datatype = DNA2_BUF_SE
+	value = 0xFFF
+
+/obj/item/weapon/dnainjector/nofail/ehs/initialize()
+	block = EHSBLOCK
 	..()
 
 /obj/item/weapon/dnainjector/nofail/randompower/New(newloc)
@@ -1370,7 +1382,7 @@
         /obj/item/weapon/dnainjector/nofail/insulation,
         /obj/item/weapon/dnainjector/nofail/midgit,
         /obj/item/weapon/dnainjector/nofail/sober,
-        /obj/item/weapon/dnainjector/nofail/psychic_resist,
+        /obj/item/weapon/dnainjector/nofail/jamsignals,
         /obj/item/weapon/dnainjector/nofail/chameleon,
         /obj/item/weapon/dnainjector/nofail/cryo,
         /obj/item/weapon/dnainjector/nofail/mattereater,
@@ -1383,6 +1395,6 @@
         /obj/item/weapon/dnainjector/nofail/immolate,
         /obj/item/weapon/dnainjector/nofail/melt,
         /obj/item/weapon/dnainjector/nofail/farsightmut,
-        /obj/item/weapon/dnainjector/nofail/remotesay)
+        /obj/item/weapon/dnainjector/nofail/telepathy)
     new type(loc)
     qdel(src)

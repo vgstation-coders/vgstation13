@@ -60,6 +60,7 @@ var/list/all_doors = list()
 
 	var/being_cut = FALSE
 	var/explosion_block = 0 //regular airlocks are 1, blast doors are 3, higher values mean increasingly effective at blocking explosions.
+	var/obj/machinery/door/arcane_linked_door = null
 
 /obj/machinery/door/proc/bashed_in(mob/user)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -272,13 +273,17 @@ var/list/all_doors = list()
 	for (var/obj/O in src.loc)
 		if (O.blocks_doors())
 			return 0
+	if(arcane_linked_door && arcane_linked_door.density)
+		spawn(1)
+			arcane_linked_door.open()
 	if(!operating)
 		operating = 1
 
 	if(makes_noise)
 		playsound(src, soundeffect, soundpitch, 1)
 
-	set_opacity(0)
+	if(!arcane_linked_door)
+		set_opacity(0)
 	door_animate("opening")
 	if (animation_delay_predensity_opening)
 		sleep(animation_delay_predensity_opening)
@@ -288,11 +293,11 @@ var/list/all_doors = list()
 	layer = open_layer
 	setDensity(FALSE)
 	update_nearby_tiles()
-	explosion_resistance = 0
 	if (animation_delay_predensity_opening)
 		sleep(animation_delay - animation_delay_predensity_opening)
 	update_icon()
-	set_opacity(0)
+	if(!arcane_linked_door)
+		set_opacity(0)
 	//update_freelook_sight()
 
 	if(operating == 1)
@@ -313,6 +318,10 @@ var/list/all_doors = list()
 	for (var/obj/O in src.loc)
 		if (O.blocks_doors())
 			return 0
+
+	if(arcane_linked_door && !arcane_linked_door.density)
+		spawn(1)
+			arcane_linked_door.close()
 
 	operating = 1
 
@@ -361,12 +370,9 @@ var/list/all_doors = list()
 		// above most items if closed
 		plane = closed_plane
 		layer = closed_layer
-		explosion_resistance = initial(explosion_resistance)
 	else
 		plane = open_plane
 		layer = open_layer
-
-		explosion_resistance = 0
 
 	if(width > 1)
 		if(dir in list(EAST, WEST))
@@ -384,6 +390,23 @@ var/list/all_doors = list()
 		setDensity(FALSE)
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "breakdoor", sleeptime = 10)
 		qdel(src)
+
+/obj/machinery/door/arcane_act(mob/user)
+	..()
+	if(!(flow_flags & ON_BORDER))
+		while(!arcane_linked_door || arcane_linked_door == src || arcane_linked_door.flow_flags & ON_BORDER || arcane_linked_door.z == map.zCentcomm) // no windoors or centcomm pls
+			arcane_linked_door = pick(all_doors)
+		arcane_linked_door.arcanetampered = arcanetampered
+		arcane_linked_door.arcane_linked_door = src
+		return "D'R ST'K!"
+
+/obj/machinery/door/bless()
+	..()
+	if(arcane_linked_door)
+		arcane_linked_door.bless()
+		arcane_linked_door = null
+		if(!density)
+			set_opacity(0)
 
 /obj/machinery/door/Destroy()
 	update_nearby_tiles()
@@ -403,7 +426,16 @@ var/list/all_doors = list()
 /obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
 	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird)) //Which is not 100% correct for things like windoors but it's close enough.
 		open()
-	return ..()
+	if(arcane_linked_door && !density && istype(AM,/atom/movable))
+		var/atom/movable/A = AM
+		var/turf/T = get_turf(arcane_linked_door)
+		if(T && T.Cross())
+			for(var/dir in cardinal)
+				var/turf/T2 = get_step(T,dir)
+				if(T2 && T2.Cross())
+					A.forceMove(T2)
+					if(A.dir != dir)
+						A.change_dir(dir)
 
 /obj/machinery/door/CanAStarPass(var/obj/item/weapon/card/id/ID)
 	return !density || check_access(ID)
@@ -479,9 +511,16 @@ var/list/all_doors = list()
 /obj/machinery/door/can_overload()
 	return 0
 
+/obj/machinery/door/spook()
+	if(..())
+		denied()
+
 // Flash denied and such.
 /obj/machinery/door/proc/denied()
-	playsound(loc, 'sound/machines/denied.ogg', 50, 1)
+	if((Holiday == APRIL_FOOLS_DAY) && prob(10) || (prob(1) && prob(10))) // 1/1000 any time or 1/10 during April Fools to play the Half-Life "Access Denied" voiceover
+		playsound(loc, 'sound/machines/access_denied.ogg', 75)
+	else
+		playsound(loc, 'sound/machines/denied.ogg', 50, 1)
 	if (density) //Why are we playing a denied animation on an OPEN DOOR
 		door_animate("deny")
 

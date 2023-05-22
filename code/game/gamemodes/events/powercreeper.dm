@@ -13,8 +13,9 @@
 	desc = "A strange alien fruit that passively generates electricity. Best not to touch it."
 	icon = 'icons/obj/structures/powercreeper.dmi'
 	icon_state = "neutral"
+	plane = OBJ_PLANE
+	layer = OBJ_LAYER
 	level = LEVEL_ABOVE_FLOOR
-	plane = ABOVE_TURF_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
 	slowdown_modifier = 2
 	autoignition_temperature = AUTOIGNITION_PAPER
@@ -23,27 +24,27 @@
 	var/growdirs = 0
 	var/zapdirs = 0
 
-/obj/structure/cable/powercreeper/New(loc, growdir, packet_override)
+/obj/structure/cable/powercreeper/New(loc, growdir) //packet_override var removed to fix a runtime
 	//did we get created by a packet?
 	var/anim_length = 0
-	if(packet_override)
-		flick("creation_packet", src)
-		anim_length = 39
-		add_state = ""
-	else
-		//are we growing from another powercreeper?
-		if(growdir)
-			if(prob(LEAVES_CHANCE))
-				add_state = ""
-			icon_state = initial(icon_state) + add_state
-			dir = growdir
-			flick("growing[add_state]", src)
-			anim_length = 18
-		else
-			//we just kinda spawned i guess
-			flick("creation", src)
+//	if(packet_override)
+//		flick("creation_packet", src)
+//		anim_length = 39
+//		add_state = ""
+//	else
+	//are we growing from another powercreeper?
+	if(growdir)
+		if(prob(LEAVES_CHANCE))
 			add_state = ""
-			anim_length = 20
+		icon_state = initial(icon_state) + add_state
+		dir = growdir
+		flick("growing[add_state]", src)
+		anim_length = 18
+	else
+		//we just kinda spawned i guess
+		flick("creation", src)
+		add_state = ""
+		anim_length = 20
 	spawn(anim_length)
 		grown = 1
 
@@ -178,9 +179,9 @@
 			else
 				P.growdirs &= ~get_dir(P, src)
 		if(dying)
-			T.unregister_event(/event/density_change, src, .proc/proxDensityChange)
+			T.unregister_event(/event/density_change, src, src::proxDensityChange())
 		else
-			T.register_event(/event/density_change, src, .proc/proxDensityChange)
+			T.register_event(/event/density_change, src, src::proxDensityChange())
 
 /obj/structure/cable/powercreeper/proc/proxDensityChange(atom/atom)
 	var/turf/T = get_turf(atom)

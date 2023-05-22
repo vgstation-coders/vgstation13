@@ -225,7 +225,7 @@
 
 /obj/item/clothing/accessory/medal/gold/heroism
 	name = "medal of exceptional heroism"
-	desc = "An extremely rare golden medal awarded only by CentComm. To recieve such a medal is the highest honor and as such, very few exist. This medal is almost never awarded to anybody but commanders."
+	desc = "An extremely rare golden medal awarded only by CentComm. To receive such a medal is the highest honor and as such, very few exist. This medal is almost never awarded to anybody but commanders."
 
 /obj/item/clothing/accessory/medal/byond
 	name = "\improper BYOND support pin"
@@ -440,17 +440,17 @@
 		update_icon()
 		to_chat(user, "<span class = 'warning'>You hear \the [src] tick!</span>")
 
-		user.unregister_event(/event/irradiate, src, .proc/check_rads)
+		user.unregister_event(/event/irradiate, src, src::check_rads())
 
 /obj/item/clothing/accessory/rad_patch/on_attached(obj/item/clothing/C)
 	..()
 	if(ismob(C.loc) && !triggered)
 		var/mob/user = C.loc
-		user.register_event(/event/irradiate, src, .proc/check_rads)
+		user.register_event(/event/irradiate, src, src::check_rads())
 
 /obj/item/clothing/accessory/rad_patch/on_removed(mob/user)
 	..()
-	user?.unregister_event(/event/irradiate, src, .proc/check_rads)
+	user?.unregister_event(/event/irradiate, src, src::check_rads())
 
 /obj/item/clothing/accessory/rad_patch/examine(mob/user)
 	..(user)
@@ -469,8 +469,9 @@
 	desc = "The hind left foot from a rabbit. It makes you feel lucky."
 	icon_state = "rabbit_foot"
 	_color = "rabbit_foot"
-	var/thisvarmakesyoulucky = TRUE //Note: Luck is a mental construct and doesn't actually exist.
 	var/wired = FALSE
+	luckiness = 50
+	luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
 
 /obj/item/clothing/accessory/rabbit_foot/attackby(obj/item/I, mob/user)
 	..()

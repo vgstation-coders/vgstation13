@@ -19,6 +19,7 @@
 	_color = "wristwatch"
 	accessory_exclusion = WRISTWATCH
 	w_class = W_CLASS_TINY
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/last_hour = 12
 	var/last_minute = 12
 	var/luminescent = TRUE
@@ -198,8 +199,7 @@
 
 /obj/item/pocketwatch/luna_dial/Destroy()
 	fall = null
-	qdel(caster)
-	caster = null
+	QDEL_NULL(caster)
 	..()
 
 /obj/item/pocketwatch/luna_dial/attack_self(var/mob/user)

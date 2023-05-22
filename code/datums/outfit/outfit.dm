@@ -90,7 +90,7 @@
 	return
 
 // -- Equip mindless: if we're going to give the outfit to a mob without a mind
-/datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = FALSE, var/priority = FALSE, var/strip = FALSE, var/delete = FALSE)
+/datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = TRUE, var/priority = FALSE, var/strip = FALSE, var/delete = FALSE)
 	if (!H || (!H.mind && !equip_mindless) )
 		return
 
@@ -206,7 +206,7 @@
 			else // More abstract thing
 				new item_type(H.back)
 		// -- Special surival gear for that species
-		if (equip_survival_gear.len)
+		if (islist(equip_survival_gear) && equip_survival_gear.len)
 			if (ispath(equip_survival_gear[my_species]))
 				var/path = equip_survival_gear[my_species]
 				H.equip_or_collect(new path(H.back), slot_in_backpack)
@@ -228,7 +228,7 @@
 
 	else
 		var/obj/item/weapon/storage/box/survival/pack
-		if (equip_survival_gear.len)
+		if (islist(equip_survival_gear) && equip_survival_gear.len)
 			if (ispath(equip_survival_gear[species]))
 				pack = new equip_survival_gear(H)
 				H.put_in_hand(GRASP_RIGHT_HAND, pack)
@@ -333,7 +333,7 @@
 	return
 
 // Strike teams have 2 particularities : a leader, and several specialised roles.
-// Give the concrete (instancied) outfit datum the right "specialisation" after the player made his choice.
+// Give the concrete (instanced) outfit datum the right "specialisation" after the player made his choice.
 // Then, call "equip_special_items(player)" to give him the items associated.
 
 /datum/outfit/striketeam/

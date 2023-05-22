@@ -329,6 +329,28 @@
 
 		new_text = replacetext(new_text, "\n", "<BR>")
 
+		var/mob/living/M = usr
+		if(istype(M))
+			var/obj/item/weapon/pen/P = M.get_active_hand()
+			if(istype(P) && P.arcanetampered)
+				if(ishuman(M))
+					var/mob/living/carbon/human/H = M
+					H.vessel.remove_reagent(BLOOD,length(new_text))
+				else
+					M.adjustBruteLoss(length(new_text))
+
+		if(arcanetampered)
+			switch(rand(1,4))
+				if(1)
+					new_text = slur(new_text)
+				if(2)
+					new_text = derpspeech(new_text)
+				if(3)
+					new_text = tumblrspeech(new_text)
+					new_text = nekospeech(new_text)
+				if(4)
+					new_text = markov_chain(new_text, rand(2,5), rand(100,700))
+
 		spawn()
 			new_text = parsepencode(usr, usr.get_active_hand() ,new_text)
 
@@ -356,7 +378,10 @@
 				C.update_icon()
 
 	if(href_list["help"])
-		openhelp(usr)
+		if(arcanetampered)
+			to_chat(usr, "<span class='sinister'>REAL SPESSMEN DON'T NEED INSTRUCTIONS!</span>")
+		else
+			openhelp(usr)
 
 
 /obj/item/weapon/paper/attackby(obj/item/weapon/P as obj, mob/user as mob)
@@ -614,6 +639,10 @@ var/global/list/paper_folding_results = list ( \
 	name = "paper- 'OUT OF ORDER'"
 	info = "<B>OUT OF ORDER</B>"
 
+/obj/item/weapon/paper/time_agent
+	name = "paper- 'Personal Log - John Beckett'"
+	info = "This timeline is doomed. No matter how many alternatives I explore, they all point <b>Back to the Future</b> we must avoid at all costs. Thus, only one solution remains - I must take a <b>Quantum Leap</b> and <b>TimeShift</b> back to the point before the activation of the <b>Chrono Trigger</b> that set us on this calamitous course of history. It may just be a <b>Final Fantasy</b> of mine, but I believe that if I can change the past, I can stop the <b>Doctor Who</b> opened <b>Steins Gate</b> and restore hope to the <b>Outer Wilds</b>, even if it means becoming a <b>Timesplitter</b> in doing so. - <i>John Beckett</i>"
+
 /obj/item/weapon/paper/manifest
 	name = "Supply Manifest"
 
@@ -725,3 +754,33 @@ var/global/list/paper_folding_results = list ( \
                           <B>NOTICE.</B> Notice of intent to dissolve relationship must be given by fax with at least one day advance notice.<BR>
                           <B>FORCE MAJEURE.</B> This contract may be voided if the trade outpost is destroyed.
                          </h2> <BR></body></html>"}
+
+/obj/item/weapon/paper/inventory
+	name = "\improper Inventory Manifest"
+	desc = "A list of objects in an area to check against the current inventory for misplacement."
+	var/list/areastocheck = list()
+
+/obj/item/weapon/paper/inventory/initialize()
+	..()
+	var/areafound = FALSE
+	for(var/areatype in areastocheck)
+		var/area/A = locate(areatype) in areas
+		if(A)
+			areafound = TRUE
+			info = "<h1>[A.name] Item List</h1><br>"
+			var/list/obj/manifest_stuff = list()
+			for(var/obj/O in A.contents)
+				if(O.on_armory_manifest)
+					manifest_stuff += O
+				if(O.holds_armory_items)
+					for(var/obj/item/I in O.contents)
+						if(O.on_armory_manifest)
+							manifest_stuff += O
+			info += "[counted_english_list(manifest_stuff,"No items found.","","<br>","<br>")]<br>"
+	if(!areafound)
+		info = "This station has been inspected by Nanotrasen Officers and has been found to not have any kind of [english_list(areastocheck,and_text = "or")]. If you believe to have received this manifest by mistake, contact Central Command."
+	update_icon()
+
+/obj/item/weapon/paper/inventory/armory
+	name = "\improper Armory Inventory Manifest"
+	areastocheck = list(/area/security/armory,/area/security/warden)

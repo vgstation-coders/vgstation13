@@ -395,6 +395,12 @@
 	refresh_all()
 	return 1
 
+/obj/item/weapon/storage/can_quick_store(var/obj/item/I)
+	return can_be_inserted(I,1)
+
+/obj/item/weapon/storage/quick_store(var/obj/item/I,mob/user)
+	return handle_item_insertion(I,0)
+
 //Call this proc to handle the removal of an item from the storage item. The item will be moved to the atom sent as new_target
 //force needs to be 1 if you want to override the can_be_inserted() if the target's a storage item.
 /obj/item/weapon/storage/proc/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
@@ -479,7 +485,10 @@
 		return
 
 	if(!can_be_inserted(W))
-		return TRUE
+		if(istype(W, /obj/item/weapon/glue))
+			return
+		else
+			return TRUE
 
 	if(istype(W, /obj/item/weapon/tray))
 		var/obj/item/weapon/tray/T = W
@@ -681,17 +690,12 @@
 /obj/item/weapon/storage/Destroy()
 	close_all()
 	if(boxes)
-		qdel(boxes)
-		boxes = null
+		QDEL_NULL(boxes)
 	if(closer)
-		qdel(closer)
-		closer = null
+		QDEL_NULL(closer)
 	if(xtra)
-		qdel(xtra)
-		xtra = null
-	for(var/atom/movable/AM in contents)
-		qdel(AM)
-	contents = null
+		QDEL_NULL(xtra)
+	QDEL_LIST_NULL(contents)
 	..()
 
 /obj/item/weapon/storage/preattack(atom/target, mob/user, adjacent, params)

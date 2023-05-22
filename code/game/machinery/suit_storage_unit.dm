@@ -29,7 +29,7 @@
 	var/image/openimage
 	var/image/closeimage
 
-	machine_flags = SCREWTOGGLE
+	machine_flags = SCREWTOGGLE | EMAGGABLE
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
@@ -115,6 +115,7 @@
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 	req_access = list(access_security)
+	holds_armory_items = TRUE
 
 /obj/machinery/suit_storage_unit/captain
 	name = "Command Suit Storage Unit"
@@ -517,10 +518,8 @@
 						if(rigsuit.MB) //Internal Boots
 							rigsuit.MB.clean_blood()
 							rigsuit.MB.decontaminate()
-						for(var/module in rigsuit.modules)
-							if(istype(module, /obj/item/rig_module/rad_shield))
-								var/obj/item/rig_module/rad_shield/rad = module
-								rad.current_capacity = initial(rad.current_capacity)
+						for(var/obj/item/rig_module/module in rigsuit.modules)
+							module.suit_storage_act()
 				if(mask)
 					mask.clean_blood()
 					mask.decontaminate()
@@ -620,7 +619,6 @@
 		usr.client.perspective = EYE_PERSPECTIVE
 		usr.client.eye = src
 		usr.forceMove(src)
-//		usr.metabslow = 1
 		occupant = usr
 		isopen = 0 //Close the thing after the guy gets inside
 		update_icon()
@@ -641,7 +639,7 @@
 		if(!S.remove_fuel(4,user))
 			return
 		S.playtoolsound(loc, 100)
-		if(do_after(user, src,40))
+		if(do_after(user, src,4 SECONDS * S.work_speed))
 			S.playtoolsound(loc, 100)
 			stat &= !BROKEN
 			emagged = FALSE
@@ -684,8 +682,7 @@
 			//for(var/obj/O in src)
 			//	O.loc = loc
 			add_fingerprint(user)
-			qdel(G)
-			G = null
+			QDEL_NULL(G)
 			updateUsrDialog()
 			update_icon()
 			return

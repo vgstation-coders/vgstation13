@@ -7,9 +7,7 @@
 	nameShort = "box"
 	nameLong = "Box Station"
 	map_dir = "boxstation"
-	tDomeX = 128
-	tDomeY = 58
-	tDomeZ = 2
+	file_dir = "tgstation"
 	zLevels = list(
 		/datum/zLevel/station,
 		/datum/zLevel/centcomm,

@@ -174,7 +174,7 @@
 
 /////////////////
 
-/obj/structure/bed/chair/vehicle/adminbus/proc/mass_rejuvinate(mob/bususer)
+/obj/structure/bed/chair/vehicle/adminbus/proc/mass_rejuvenate(mob/bususer)
 	for(var/mob/living/M in orange(src,3))
 		M.revive(1)
 		if(M.mind)
@@ -591,17 +591,13 @@
 		freed(M)
 
 		var/obj/item/packobelongings/pack = null
-
+		var/obj/effect/landmark/packmark = pick(tdomepacks)
+		var/turf/packspawn = tdomepacks.len ? get_turf(packmark) : get_turf(src) //the players' belongings are stored there, in the Thunderdome Admin lodge.
 		switch(team)
 			if("Green")
-				pack = new /obj/item/packobelongings/green(src.loc)
-				pack.x = map.tDomeX+2
+				pack = new /obj/item/packobelongings/green(get_step(get_step(packspawn,EAST),EAST))
 			if("Red")
-				pack = new /obj/item/packobelongings/red(src.loc)
-				pack.x = map.tDomeX-2
-
-		pack.z = map.tDomeZ			//the players' belongings are stored there, in the Thunderdome Admin lodge.
-		pack.y = map.tDomeY
+				pack = new /obj/item/packobelongings/red(get_step(get_step(packspawn,WEST),WEST))
 
 		pack.name = "[M.real_name]'s belongings"
 

@@ -11,7 +11,7 @@
 
 /spell/changeling/lesserform/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
-	if (!.) 
+	if (!.)
 		return FALSE
 	if(istype(user.loc, /obj/mecha))
 		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
@@ -27,7 +27,7 @@
 	if(M_HUSK in user.mutations)
 		to_chat(user, "<span class = 'warning'>This hosts genetic code is too scrambled. We can not change form until we have removed this burden.</span>")
 		return FALSE
-		
+
 
 /spell/changeling/lesserform/cast(var/list/targets, var/mob/living/carbon/human/user)
 	..()
@@ -36,10 +36,9 @@
 	user.visible_message("<span class='danger'>[user] transforms!</span>")
 	changeling.geneticdamage = 30
 	to_chat(user, "<span class='warning'>Our genes cry out!</span>")
-	
+
 	var/mob/living/carbon/monkey/O = user.monkeyize(ignore_primitive = 1) // stops us from becoming the monkey version of whoever we were pretending to be
-	O.add_spell(new /spell/changeling/higherform, "changeling_spell_base", master_type = /obj/abstract/screen/movable/spell_master/changeling)
-	O.make_changeling(1)
+	O.make_changeling()
 	var/datum/role/changeling/Ochangeling = O.mind.GetRole(CHANGELING)
 	O.changeling_update_languages(Ochangeling.absorbed_languages)
 	feedback_add_details("changeling_powers","LF")
@@ -58,11 +57,10 @@
 	max_genedamage = 0
 	horrorallowed = 0	//horrors shouldnt even have this spell available to them
 	chemcost = 1
-	required_dna = 1
 
 /spell/changeling/higherform/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
-	if (!.) 
+	if (!.)
 		return FALSE
 	if(istype(user.loc, /obj/mecha))
 		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
@@ -86,6 +84,9 @@
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		names += "[DNA.real_name]"
 
+	if(!names.len)
+		to_chat(user, "<span class='warning'>We cannot transform into anyone!</span>")
+		return
 	var/S = input("Select the target DNA: ", "Target DNA", null) as null|anything in names
 	if(!S)
 		return
@@ -112,8 +113,7 @@
 	var/anim_name = M.get_unmonkey_anim()
 	flick(anim_name, animation)
 	sleep(20)
-	qdel(animation)
-	animation = null
+	QDEL_NULL(animation)
 
 	var/mob/living/carbon/human/O = new /mob/living/carbon/human( user, delay_ready_dna=1 )
 	if (M.dna.GetUIState(DNA_UI_GENDER))
@@ -136,6 +136,7 @@
 
 	O.UpdateAppearance()
 	domutcheck(O, null)
+	O.update_name()
 	O.setToxLoss(M.getToxLoss())
 	O.adjustBruteLoss(M.getBruteLoss())
 	O.setOxyLoss(M.getOxyLoss())

@@ -130,6 +130,7 @@
 /obj/structure/trade_window/attack_hand(mob/user)
 	if(!isobserver(user) && (!Adjacent(user) || user.incapacitated()))
 		return
+	user.delayNextAttack(8)
 	ui_interact(user)
 
 /obj/structure/trade_window/ui_interact(mob/living/carbon/human/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -152,6 +153,8 @@
 
 	var/data[0]
 	if(!aghost)
+		if(closed)
+			say(pick("I'm not opening back up until you fix the air out there!", "Fix the air out there, then we'll talk!"))
 		if(user.get_face_name() == "Unknown")
 			var/datum/organ/external/head/head_organ = user.get_organ(LIMB_HEAD)
 			if(head_organ.disfigured)
@@ -165,7 +168,7 @@
 				return
 
 		else if(!(user.get_face_name() in SStrade.loyal_customers))
-			say("I don't know you. You want to join up? You need someone to vouch for you. Bring a fresh ID and an inkpad to my table when you do.")
+			say(pick("I don't know you. You want to join up? You need someone to vouch for you. Bring a fresh ID and an inkpad to my table when you do.", "You don't look like a member. Bring a fresh ID and an inkpad to my table if you want to do business."))
 			return
 		else
 			greet(user)

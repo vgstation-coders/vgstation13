@@ -135,6 +135,10 @@
 		techdifference = 0
 	return techdifference
 
+/obj/machinery/r_n_d/reverse_engine/kick_act(mob/living/H)
+	..()
+	researchQueue()
+
 /obj/machinery/r_n_d/reverse_engine/proc/researchQueue()
 	if(!research_queue.len)
 		return
@@ -229,8 +233,7 @@
 		var/datum/design/design = research_queue[text2num(href_list["remove_tosearch"])]
 		if(design)
 			research_queue -= design
-			qdel(design)
-			design = null
+			QDEL_NULL(design)
 		ui_interact(usr)
 		return 1
 

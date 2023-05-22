@@ -9,11 +9,11 @@
 #define LIGHTING_FALLOFF        1 // type of falloff to use for lighting; 1 for circular, 2 for square
 #define LIGHTING_LAMBERTIAN     0 // use lambertian shading for light sources
 #define LIGHTING_HEIGHT         1 // height off the ground of light sources on the pseudo-z-axis, you should probably leave this alone
-#define LIGHTING_ROUND_VALUE    1 / 128 //Value used to round lumcounts, values smaller than 1/255 don't matter (if they do, thanks sinking points), greater values will make lighting less precise, but in turn increase performance, VERY SLIGHTLY.
+#define LIGHTING_ROUND_VALUE    (1 / 64) //Value used to round lumcounts, values smaller than 1/129 don't matter (if they do, thanks sinking points), greater values will make lighting less precise, but in turn increase performance, VERY SLIGHTLY.
 
 #define LIGHTING_ICON 'icons/effects/lighting_overlay.dmi' // icon used for lighting shading effects
 
-#define LIGHTING_SOFT_THRESHOLD 0.05 // If the max of the lighting lumcounts of each spectrum drops below this, disable luminosity on the lighting overlays.
+#define LIGHTING_SOFT_THRESHOLD 0.005 // If the max of the lighting lumcounts of each spectrum drops below this, disable luminosity on the lighting overlays.
 
 // If I were you I'd leave this alone.
 #define LIGHTING_BASE_MATRIX \
@@ -73,3 +73,19 @@
 #define LIGHT_EMPTY  1
 #define LIGHT_BROKEN 2
 #define LIGHT_BURNED 3
+
+#define FOR_DVIEW(type, range, center, invis_flags) \
+	dview_mob.loc = center; \
+	dview_mob.see_invisible = invis_flags; \
+	for(type in view(range, dview_mob))
+
+#define END_FOR_DVIEW dview_mob.loc = null
+
+// Alpha levels
+
+#define MINIMUM_ALPHA_DARK_PLANE 255
+#define HUMAN_TARGET_ALPHA 20
+
+#define SUNGLASSES_TARGET_ALPHA 5
+
+#define LIGHTING_PLANEMASTER_COLOR list(null,null,null,"#0000","#000F")

@@ -23,6 +23,7 @@ var/global/list/ghdel_profiling = list()
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
 	var/throw_impact_sound = 'sound/weapons/genhit2.ogg'
+	var/admin_desc //Allows admins to see admin-exclusive examines, such as notifications for custom variables
 
 	///Chemistry.
 	var/datum/reagents/reagents = null
@@ -53,6 +54,8 @@ var/global/list/ghdel_profiling = list()
 	var/chat_color_darkened
 	/// The chat color var, without alpha.
 	var/chat_color_hover
+
+	var/arcanetampered = 0 //A looot of things can be
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
@@ -167,11 +170,11 @@ var/global/list/ghdel_profiling = list()
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
 				M.take_organ_damage(10)
+	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user)
 
 /atom/Destroy()
 	if(reagents)
-		qdel(reagents)
-		reagents = null
+		QDEL_NULL(reagents)
 
 	if(density)
 		densityChanged()
@@ -476,6 +479,7 @@ its easier to just keep the beam vertical.
 			to_chat(user, "<a href='?src=\ref[src];bug=\ref[bug]'>There's something hidden in there.</a>")
 		else if(isobserver(user) || prob(100 / (distance + 2)))
 			to_chat(user, "There's something hidden in there.")
+	INVOKE_EVENT(src, /event/examined, "user" = user)
 
 /atom/Topic(href, href_list)
 	. = ..()
@@ -510,7 +514,7 @@ its easier to just keep the beam vertical.
 	return ex_act(severity, child)
 
 /atom/proc/can_mech_drill()
-	return acidable()
+	return dissolvable()
 
 /atom/proc/blob_act(destroy = 0, var/obj/effect/blob/source = null)
 	if(flags & INVULNERABLE)
@@ -564,6 +568,16 @@ its easier to just keep the beam vertical.
 /atom/proc/supermatter_act(atom/source, severity)
 	qdel(src)
 	return 1
+
+//user: The mob that is suiciding
+//damagetype: The type of damage the item will inflict on the user
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
+//Output a creative message and then return the damagetype done
+/atom/proc/suicide_act(var/mob/living/user)
+	return
 
 // Returns TRUE if it's been handled, children should return if parent has already handled
 /atom/proc/hitby(var/atom/movable/AM)
@@ -836,17 +850,40 @@ its easier to just keep the beam vertical.
 		return FALSE
 	return TRUE
 
+/mob/var/list/atom/arcane_tampered_atoms = list()
+
+/atom/proc/arcane_act(var/mob/user, var/recursive = FALSE)
+	if(user)
+		arcanetampered = user
+		user.arcane_tampered_atoms.Add(src)
+	else
+		arcanetampered = TRUE
+	if(recursive)
+		for(var/atom/A in contents)
+			A.arcane_act(user,TRUE)
+	return "E'MAGI!"
+
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
+	if(arcanetampered)
+		if(ismob(arcanetampered))
+			var/mob/M = arcanetampered
+			M.arcane_tampered_atoms.Remove(src)
+		arcanetampered = FALSE
+		for(var/atom/A in contents)
+			A.bless()
 	blessed = 1
 
 /atom/proc/update_icon()
 
-/atom/proc/acidable()
-	return 0
+/atom/proc/splashable()
+	return TRUE
 
-/atom/proc/isacidhardened()
+/obj/item/weapon/storage/splashable() // I don't know where to put this, aaaaaaaaaaaaaa
 	return FALSE
+
+/atom/proc/dissolvable()
+	return 0
 
 /atom/proc/salt_act()
 	return
@@ -893,6 +930,8 @@ its easier to just keep the beam vertical.
 			return C.mob
 
 /atom/initialize()
+	if(canSmoothWith())
+		relativewall()
 	flags |= ATOM_INITIALIZED
 
 /atom/proc/get_cell()
@@ -949,3 +988,17 @@ its easier to just keep the beam vertical.
 	for(var/atom/location = A.loc, location, location = location.loc)
 		if(location == src)
 			return TRUE
+
+/**
+	Attempt to heat this object from a presumed heat source.
+	@args:
+		A: Atom: The source of the heat
+		user: mob: Whomever may be trying to heat this object
+
+	@return:
+		TRUE if succesful
+		FALSE if not succesful
+		NULL if override not defined
+**/
+/atom/proc/attempt_heating(atom/A, mob/user)
+	return

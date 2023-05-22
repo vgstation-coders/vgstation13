@@ -25,7 +25,7 @@
 	var/y_co = 1         // Y coordinate
 	var/z_co = 1         // Z coordinate
 
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 300
 	power_channel = EQUIP
@@ -313,8 +313,7 @@ var/list/telesci_warnings = list(
 			return
 
 		if(prob(25))
-			qdel(telepad.amplifier)
-			telepad.amplifier = null
+			QDEL_NULL(telepad.amplifier)
 			src.visible_message("[bicon(src)]<span class='notice'>You hear something shatter.</span>","[bicon(src)]<span class='notice'>You hear something shatter.</span>")
 
 	spark(telepad, 5)
@@ -328,6 +327,14 @@ var/list/telesci_warnings = list(
 		dest = target
 
 	var/things = 0
+	var/breadtype
+	for(var/i in rand(1,3))
+		if(telepad.arcanetampered) // i have done nothing but arcane tamper telepads for 3 days!
+			breadtype = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread))
+			new breadtype(dest)
+		if(arcanetampered)
+			breadtype = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread))
+			new breadtype(dest)
 	for(var/atom/movable/ROI in source)
 		if(ROI.anchored)
 			continue
@@ -338,6 +345,12 @@ var/list/telesci_warnings = list(
 
 		log_admin(log)
 		do_teleport(ROI, dest, 0)
+		if(telepad.arcanetampered) // i have done nothing but arcane tamper telepads for 3 days!
+			breadtype = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread))
+			new breadtype(dest)
+		if(arcanetampered)
+			breadtype = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread))
+			new breadtype(dest)
 		if (++things > 10)
 			break
 

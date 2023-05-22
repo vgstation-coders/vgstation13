@@ -116,16 +116,16 @@
 	name = "Creatine"
 	id = CREATINE
 	result = CREATINE
-	required_reagents = list(NUTRIMENT = 1, BICARIDINES = 1, HYPERZINES = 1, MUTAGEN = 1)
+	required_reagents = list(NUTRIMENT = 1, BICARIDINES = 1, HYPERZINES = 1, MUTAGENS = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/discount
 	name = "Discount Dan's Special Sauce"
 	id = DISCOUNT
 	result = DISCOUNT
-	required_reagents = list(IRRADIATEDBEANS = 1, TOXICWASTE = 1, REFRIEDBEANS = 1, MUTATEDBEANS = 1, BEFF = 1, HORSEMEAT = 1, \
+	required_reagents = list(IRRADIATEDBEANS = 1, TOXICWASTE = 1, REFRIEDBEANS = 1, MUTATEDBEANS = 1, BEFF = 1, HORSEMEAT = 1, CORNSYRUP = 1, \
 							 MOONROCKS = 1, OFFCOLORCHEESE = 1, BONEMARROW = 1, GREENRAMEN = 1, GLOWINGRAMEN = 1, DEEPFRIEDRAMEN = 1)
-	result_amount = 12
+	result_amount = 13
 
 /datum/chemical_reaction/peptobismol
 	name = "Peptobismol"
@@ -166,7 +166,7 @@
 	name = "Sleep Toxin"
 	id = STOXIN
 	result = STOXIN
-	required_reagents = list(CHLORALHYDRATE = 1, SUGAR = 4)
+	required_reagents = list(CHLORALHYDRATE = 1, SUGARS = 4)
 	result_amount = 5
 
 /datum/chemical_reaction/sterilizine
@@ -180,7 +180,7 @@
 	name = "Inaprovaline"
 	id = INAPROVALINE
 	result = INAPROVALINE
-	required_reagents = list(OXYGEN = 1, CARBON = 1, SUGAR = 1)
+	required_reagents = list(OXYGEN = 1, CARBON = 1, SUGARS = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/anti_toxin
@@ -259,7 +259,7 @@
 	name = "Space Drugs"
 	id = SPACE_DRUGS
 	result = SPACE_DRUGS
-	required_reagents = list(MERCURY = 1, SUGAR = 1, LITHIUM = 1)
+	required_reagents = list(MERCURY = 1, SUGARS = 1, LITHIUM = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/lube
@@ -318,7 +318,7 @@
 	name = "Synaptizine"
 	id = SYNAPTIZINE
 	result = SYNAPTIZINE
-	required_reagents = list(SUGAR = 1, LITHIUM = 1, WATER = 1)
+	required_reagents = list(SUGARS = 1, LITHIUM = 1, WATER = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/hyronalin
@@ -339,7 +339,7 @@
 	name = "Impedrezene"
 	id = IMPEDREZENE
 	result = IMPEDREZENE
-	required_reagents = list(MERCURY = 1, OXYGEN = 1, SUGAR = 1)
+	required_reagents = list(MERCURY = 1, OXYGEN = 1, SUGARS = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/kelotane
@@ -375,7 +375,7 @@
 	name = "Cryptobiolin"
 	id = CRYPTOBIOLIN
 	result = CRYPTOBIOLIN
-	required_reagents = list(POTASSIUM = 1, OXYGEN = 1, SUGAR = 1)
+	required_reagents = list(POTASSIUM = 1, OXYGEN = 1, SUGARS = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/tricordrazine
@@ -456,8 +456,16 @@
 	name = "Hyperzine"
 	id = HYPERZINE
 	result = HYPERZINE
-	required_reagents = list(SUGAR = 1, PHOSPHORUS = 1, SULFUR = 1,)
+	required_reagents = list(SUGARS = 1, PHOSPHORUS = 1, SULFUR = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/PCP
+	name = "Liquid PCP"
+	id = LIQUIDPCP
+	result = LIQUIDPCP
+	required_reagents = list(HYPERZINES = 5, MINDBREAKER = 5)
+	required_temp = T0C + 200
+	result_amount = 5
 
 /datum/chemical_reaction/ryetalyn
 	name = "Ryetalyn"
@@ -499,7 +507,7 @@
 	name = "Vaccine"
 	id = VACCINE
 	result = VACCINE
-	required_reagents = list(ALUMINUM = 1, SUGAR = 1, WATER = 1)
+	required_reagents = list(ALUMINUM = 1, SUGARS = 1, WATER = 1)
 	result_amount = 3
 	data = list(
 		"antigen" = list(),
@@ -567,6 +575,62 @@
 	required_reagents = list(GLYCEROL = 1, SACIDS = 1, WATER = 3)
 	required_catalysts = list(NITROGEN = 5)
 	result_amount = 5
+
+/datum/chemical_reaction/fuelbomb
+	name = "Fuel bomb"
+	id = FUELBOMB
+	result = null
+	required_reagents = list(FUEL = 1)
+	required_temp = AUTOIGNITION_WELDERFUEL
+	result_amount = 1
+	var/fire_temp = AUTOIGNITION_WELDERFUEL
+	var/power = 0
+
+/datum/chemical_reaction/fuelbomb/on_reaction(var/datum/reagents/holder, var/created_volume)
+	if(holder.my_atom.is_open_container())
+		if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
+			var/turf/location = get_turf(holder.my_atom.loc)
+
+			for(var/turf/simulated/floor/target_tile in range(0,location))
+				spawn(0)
+					target_tile.hotspot_expose(fire_temp, created_volume, surfaces = 1)
+
+		for(var/reagent in required_reagents)
+			holder.del_reagent(reagent)
+	else
+		var/datum/effect/system/reagents_explosion/e = new()
+		if(created_volume > 500)
+			e.set_up(15, holder.my_atom, 0, 0, null, 1+power, 2+(power*2), 4+(power*2))
+		else if(created_volume > 100)
+			e.set_up(9, holder.my_atom, 0, 0, null, 0+power, 1+power, 3+power)
+		else
+			e.set_up(9, holder.my_atom, 0, 0, null, -1+power, 1, 2+power)
+		e.holder_damage(holder.my_atom)
+		if(isliving(holder.my_atom))
+			e.amount *= 0.5
+			var/mob/living/L = holder.my_atom
+			if(L.stat!=DEAD)
+				e.amount *= 0.5
+		e.start()
+		holder.clear_reagents()
+
+
+/datum/chemical_reaction/fuelbomb/plasma
+	name = "Plasma bomb"
+	id = PLASMABOMB
+	required_reagents = list(PLASMA = 1)
+	required_temp = AUTOIGNITION_WELDERFUEL
+	fire_temp = AUTOIGNITION_WELDERFUEL
+	power = 1
+
+/datum/chemical_reaction/fuelbomb/anfo
+	name = "AN/FO bomb"
+	id = ANFOBOMB
+	required_reagents = list(AMMONIUMNITRATE = 16, FUEL = 1)  // rough approximation of the 94%-6% mix
+	required_temp = AUTOIGNITION_WELDERFUEL-1 // just for priority and to stop recipe conflicts
+	result_amount = 17
+	fire_temp = AUTOIGNITION_WELDERFUEL
+	power = 1
 
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"
@@ -679,7 +743,7 @@
 	name = "Chemsmoke"
 	id = "chemsmoke"
 	result = null
-	required_reagents = list(POTASSIUM = 1, SUGAR = 1, PHOSPHORUS = 1)
+	required_reagents = list(POTASSIUM = 1, SUGARS = 1, PHOSPHORUS = 1)
 	result_amount = null
 	secondary = 1
 	alert_admins = ALERT_ALL_REAGENTS
@@ -921,6 +985,26 @@
 /datum/chemical_reaction/solidification/phazon/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/phazon
 
+/datum/chemical_reaction/solidification/glass
+	name = "Solid Glass"
+	id = "solidglass"
+	result = null
+	required_reagents = list(SILICATE = 20, CAPSAICIN = 10) //You melt the silicate to make glass
+	result_amount = 1 //amount of sheets created per the above reagents
+
+/datum/chemical_reaction/solidification/glass/product_to_spawn()
+	return /obj/item/stack/sheet/glass/glass
+
+/datum/chemical_reaction/solidification/plasmaglass
+	name = "Solid Plasma Glass"
+	id = "solidplasmaglass"
+	result = null
+	required_reagents = list(SILICATE = 20, CONDENSEDCAPSAICIN = 10, PLASMA = 20) //You need even stronger heat to make plasmaglass
+	result_amount = 1 //amount of sheets created per the above reagents
+
+/datum/chemical_reaction/solidification/plasmaglass/product_to_spawn()
+	return /obj/item/stack/sheet/glass/plasmaglass
+
 /datum/chemical_reaction/solidification/plasteel
 	name = "Solid Plasteel"
 	id = "solidplasteel"
@@ -984,6 +1068,22 @@
 		holder.del_reagent(PARACETAMOL)
 	else
 		holder.clear_reagents()
+
+/datum/chemical_reaction/more_bicarodyne
+	name = "Bicarodyne"
+	id = BICARODYNE
+	result = BICARODYNE
+	required_reagents = list(BICARIDINES = 1)
+	required_catalysts = list(BICARODYNE = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/more_hypozine
+	name = "Hypozine"
+	id = HYPOZINE
+	result = HYPOZINE
+	required_reagents = list(HYPERZINES = 1)
+	required_catalysts = list(HYPOZINE = 1)
+	result_amount = 1
 
 /datum/chemical_reaction/nanobots
 	name = "Nanobots"
@@ -1126,6 +1226,13 @@
 	result = AMMONIA
 	required_reagents = list(HYDROGEN = 3, NITROGEN = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/ammoniumnitrate
+	name = "Ammonium Nitrate"
+	id = AMMONIUMNITRATE
+	result = AMMONIUMNITRATE
+	required_reagents = list(AMMONIA = 5, CLEANER = 3, NITROGEN = 2, OXYGEN = 5)
+	result_amount = 18
 
 /datum/chemical_reaction/diethylamine
 	name = "Diethylamine"
@@ -1806,7 +1913,7 @@
 /datum/chemical_reaction/slime_extract/slimejam
 	name = "Slime Jam"
 	id = "m_jam"
-	required_reagents = list(SUGAR = 5)
+	required_reagents = list(SUGARS = 5)
 	required_container = /obj/item/slime_extract/purple
 	alert_admins = ALERT_ALL_REAGENTS
 	reagent = SLIMEJELLY
@@ -1838,7 +1945,7 @@
 /datum/chemical_reaction/slime_extract/slimeres
 	name = "Slime Res"
 	id = "m_nutrient"
-	required_reagents = list(SUGAR = 5)
+	required_reagents = list(SUGARS = 5)
 	required_container = /obj/item/slime_extract/red
 
 /datum/chemical_reaction/slime_extract/slimeres/on_reaction(var/datum/reagents/holder)
@@ -1905,7 +2012,7 @@
 /datum/chemical_reaction/slime_extract/slimesdelight
 	name = "Slime Doctor's Delight"
 	id = "m_doctordelight"
-	required_reagents = list(SUGAR = 5)
+	required_reagents = list(SUGARS = 5)
 	required_container = /obj/item/slime_extract/black
 	reagent = DOCTORSDELIGHT
 	reagent_amount = 10
@@ -2078,8 +2185,7 @@
 						M.client.screen += blueeffect
 						sleep(20)
 						M.client.screen -= blueeffect
-						qdel(blueeffect)
-						blueeffect = null
+						QDEL_NULL(blueeffect)
 	..()
 
 /datum/chemical_reaction/slime_extract/slimecrystal
@@ -2204,7 +2310,7 @@
 	name = "Chocolate Bar"
 	id = "chocolate_bar"
 	result = null
-	required_reagents = list(SOYMILK = 2, COCO = 2, SUGAR = 2)
+	required_reagents = list(SOYMILK = 2, COCO = 2, SUGARS = 2)
 	result_amount = 1
 
 /datum/chemical_reaction/chocolate_bar/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -2216,7 +2322,7 @@
 	name = "Chocolate Bar"
 	id = "chocolate_bar"
 	result = null
-	required_reagents = list(MILK = 2, COCO = 2, SUGAR = 2)
+	required_reagents = list(MILK = 2, COCO = 2, SUGARS = 2)
 	result_amount = 1
 
 /datum/chemical_reaction/chocolate_bar2/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -2318,7 +2424,7 @@
 	name = "Sprinkles"
 	id = SPRINKLES
 	result = SPRINKLES
-	required_reagents = list(SUGAR = 5, WATER = 5)
+	required_reagents = list(SUGARS = 5, WATER = 5)
 	required_catalysts = list(ENZYME = 1)
 	result_amount = 5
 
@@ -2369,7 +2475,7 @@
 	name = "Pancake Mix"
 	id = PANCAKE
 	result = PANCAKE
-	required_reagents = list(FLOUR = 10, MILK = 30, LIQUIDBUTTER = 2, EGG_YOLK = 8, SODIUMCHLORIDE = 1, SUGAR = 5)
+	required_reagents = list(FLOUR = 10, MILK = 30, LIQUIDBUTTER = 2, EGG_YOLK = 8, SODIUMCHLORIDE = 1, SUGARS = 5)
 	result_amount = 56 // 1:1
 
 //Jesus christ how horrible
@@ -2498,6 +2604,14 @@
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 10
 
+/datum/chemical_reaction/cornsyrup
+	name = "Corn Syrup"
+	id = CORNSYRUP
+	result = CORNSYRUP
+	required_reagents = list(MOONSHINE = 10, SUGAR = 2)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 12
+
 /datum/chemical_reaction/wine
 	name = "Wine"
 	id = WINE
@@ -2579,7 +2693,7 @@
 	name = "Kahlua"
 	id = KAHLUA
 	result = KAHLUA
-	required_reagents = list(COFFEE = 5, SUGAR = 5)
+	required_reagents = list(COFFEE = 5, SUGARS = 5)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 5
 
@@ -2675,7 +2789,7 @@
 	result_amount = 5
 
 /datum/chemical_reaction/beepsky_smash
-	name = "Beepksy Smash"
+	name = "Beepsky Smash"
 	id = BEEPSKYSMASH
 	result = BEEPSKYSMASH
 	required_reagents = list(LIMEJUICE = 2, WHISKEY = 2, IRON = 1)
@@ -2713,7 +2827,7 @@
 	name = "Hooch"
 	id = HOOCH
 	result = HOOCH
-	required_reagents = list (SUGAR = 1, ETHANOL = 2, FUEL = 1)
+	required_reagents = list (SUGARS = 1, ETHANOL = 2, FUEL = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/irish_coffee
@@ -3052,7 +3166,7 @@
 	name = "Banana Honk"
 	id = BANANAHONK
 	result = BANANAHONK
-	required_reagents = list(BANANA = 1, CREAM = 1, SUGAR = 1)
+	required_reagents = list(BANANA = 1, CREAM = 1, SUGARS = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/honkserum
@@ -3066,7 +3180,7 @@
 	name = "Silencer"
 	id = SILENCER
 	result = SILENCER
-	required_reagents = list(NOTHING = 1, CREAM = 1, SUGAR = 1)
+	required_reagents = list(NOTHING = 1, CREAM = 1, SUGARS = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/driestmartini
@@ -3080,7 +3194,7 @@
 	name = "Lemonade"
 	id = LEMONADE
 	result = LEMONADE
-	required_reagents = list(LEMONJUICE = 1, SUGAR = 1, WATER = 1)
+	required_reagents = list(LEMONJUICE = 1, SUGARS = 1, WATER = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/kiraspecial
@@ -3178,7 +3292,7 @@
 	name = "Champagne Cocktail"
 	id = CHAMPAGNECOCKTAIL
 	result = CHAMPAGNECOCKTAIL
-	required_reagents = list(CHAMPAGNE = 2, COGNAC = 1, BITTERS = 1, SUGAR = 1)
+	required_reagents = list(CHAMPAGNE = 2, COGNAC = 1, BITTERS = 1, SUGARS = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/espressomartini
@@ -3199,7 +3313,7 @@
 	name = "Mojito"
 	id = MOJITO
 	result = MOJITO
-	required_reagents = list(RUM = 2, SUGAR = 1, SODAWATER = 1, LIMEJUICE = 1)
+	required_reagents = list(RUM = 2, SUGARS = 1, SODAWATER = 1, LIMEJUICE = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/whiskeytonic
@@ -3371,6 +3485,13 @@
 	required_reagents = list(COFFEE = 5, SPRINKLES = 1, BEEPSKYSMASH = 5)
 	result_amount = 10
 
+/datum/chemical_reaction/engicoffee
+	name = "NT Standard Battery Acid"
+	id = ENGICOFFEE
+	result = ENGICOFFEE
+	required_reagents = list(COFFEE = 5, FUEL = 1, SULFURIC = 5)
+	result_amount = 10
+
 /datum/chemical_reaction/medcoffee
 	name = "Lifeline"
 	id = MEDCOFFEE
@@ -3475,7 +3596,7 @@
 	name = "Heated Sugar"
 	id = CARAMEL
 	result = CARAMEL
-	required_reagents = list(SUGAR = 1)
+	required_reagents = list(SUGARS = 1)
 	required_temp = T0C + 170
 	result_amount = 1
 
@@ -3588,6 +3709,13 @@
 	result = HUSBANDO
 	required_reagents = list(MANLYDORF = 1, KARMOTRINE = 4)
 	result_amount = 5
+
+/datum/chemical_reaction/tomboy
+	name = "Tomboy"
+	id = TOMBOY
+	result = TOMBOY
+	required_reagents = list(HUSBANDO = 1, WAIFU = 1)
+	result_amount = 2
 
 /datum/chemical_reaction/beepskyclassic
 	name = "Beepsky Classic"
@@ -3739,7 +3867,7 @@
 		sleep(rand(5 SECONDS, 10 SECONDS))
 		H.vomit(instant = TRUE) //mouse spawning continues below
 	var/location = get_turf(holder.my_atom)
-	for(var/i=1 to created_volume)	
+	for(var/i=1 to created_volume)
 		new mob2spawn(location)
 
 /datum/chemical_reaction/synthmobhostile //to cut down in duplicate code
@@ -3790,7 +3918,7 @@
 			new mob2spawnA(location)
 		else
 			new mob2spawnB(location)
-			
+
 /datum/chemical_reaction/synthmob/synthmouse
 	name = "Synthmouse"
 	id = "synthmouse"
@@ -3948,9 +4076,29 @@
 	name = "Locutogen"
 	id = LOCUTOGEN
 	result = LOCUTOGEN
-	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGAR = 1)
+	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGARS = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/bumcivilian //same reaction type as midazoline, you must dunk the iron sheet on sacid to get bumcivillian
+	name = "Bumcivilian"
+	id = BUMCIVILIAN
+	result = BUMCIVILIAN
+	required_reagents = list(SACIDS = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/bumcivilian/required_condition_check(datum/reagents/holder)
+	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers))
+		return (locate(/obj/item/stack/sheet/metal) in holder.my_atom.contents)
+	return 0
+
+/datum/chemical_reaction/bumcivilian/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	var/atom/A = get_holder_at_turf_level(holder.my_atom)
+	holder.my_atom.visible_message("<span class='warning'>Suddenly, everything around [A ? "\the [A] " : "\the [holder.my_atom] "]becomes perfectly silent...</span>")
+	var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in holder.reagent_list
+	for(var/turf/T in view(get_turf(holder.my_atom)))
+		T.mute_time = world.time + B.mute_duration
+	
 /datum/chemical_reaction/random
 	name = "Random chemical"
 	id = "random"

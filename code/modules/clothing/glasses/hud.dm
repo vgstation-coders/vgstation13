@@ -30,6 +30,7 @@
 	prescription = 1
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status as well as reveals pathogens in sight. The tinted glass protects the wearer from bright flashes of light."
 	icon_state = "cmohud"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	eyeprot = 1
 	mech_flags = MECH_SCAN_ILLEGAL
 	actions_types = list(/datum/action/item_action/toggle_goggles)
@@ -135,7 +136,7 @@
 /obj/item/clothing/glasses/hud/diagnostic
 	name = "diagnostic HUD"
 	icon_state = "diagnostichud"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	desc = "A heads-up display that displays diagnostic information for compatible cyborgs and exosuits."
 
 /obj/item/clothing/glasses/hud/diagnostic/prescription
