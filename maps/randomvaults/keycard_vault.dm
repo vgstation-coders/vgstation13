@@ -53,10 +53,7 @@
 		if(KEYCARD_DIFFICULTY_HARD)
 			offset = 1
 	for(var/turf/portal/PT in turfs)
-		PT.teleport_x = (thevault.location.x - location.x)
-		PT.teleport_y = (thevault.location.y - location.y) + offset
-		PT.teleport_z = thevault.location.z - location.z
-		PT.update_icon() //second pass just in case
+		PT.update_teleport(thevault.location.x - location.x, (thevault.location.y - location.y) + offset,thevault.location.z - location.z)
 
 // Preset kinds for testing and debugging,
 // note that distribution to select these is split 4 ways with the normal and presets anyways,
@@ -87,10 +84,7 @@
 		if(KEYCARD_DIFFICULTY_HARD)
 			offset = 1
 	for(var/turf/portal/PT in turfs)
-		PT.teleport_x = (parent.location.x - location.x)
-		PT.teleport_y = (parent.location.y - location.y) - offset
-		PT.teleport_z = parent.location.z - location.z
-		PT.update_icon() //second pass just in case
+		PT.update_teleport(parent.location.x - location.x, (parent.location.y - location.y) - offset, parent.location.z - location.z)
 
 /datum/map_element/keycard_find_easy
 	name = "Easy difficulty keycard find"
