@@ -1108,3 +1108,24 @@
 
 /datum/component/ai/area_territorial/say/fastfood/intruder
 	enter_args = list("Stop! Intruder!")
+
+/obj/machinery/computer/allvaults
+	name = "space structure locator"
+	desc = "A console that shows a list of all coordinates of mysterious structures found in this sector of space."
+	icon_state = "comm_serv"
+	light_color = LIGHT_COLOR_GREEN
+
+/obj/machinery/computer/allvaults/attack_hand(mob/user)
+	add_fingerprint(user)
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		return
+	interact(user)
+
+/obj/machinery/computer/allvaults/interact(mob/user)
+	usr.set_machine(src)
+	var/dat = ""
+	for (var/datum/map_element/vault/V in map_elements)
+		dat += "[V.name ? V.name : V.file_path], located at [V.location ? "[V.location.x],[V.location.y],[V.location.z]" : "UNKNOWN"]<BR>"
+	var/datum/browser/popup = new(user, "allvaults", "List of found mysterious structures", 300, 400)
+	popup.set_content(dat)
+	popup.open()

@@ -12,7 +12,7 @@
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "l" = (
-/obj/machinery/computer/telecomms/traffic,
+/obj/machinery/computer/message_monitor,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "n" = (
@@ -43,8 +43,17 @@
 "H" = (
 /turf/simulated/wall/invulnerable/r_wall,
 /area/vault/keycard)
+"J" = (
+/obj/structure/table/plastic,
+/obj/item/weapon/paper/monitorkey,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
 "L" = (
 /obj/machinery/vending/offlicence,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"M" = (
+/obj/structure/falserwall,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "N" = (
@@ -61,10 +70,10 @@
 /turf/portal,
 /area/vault/keycard)
 "R" = (
-/obj/structure/computerframe,
 /obj/machinery/light/he{
 	dir = 1
 	},
+/obj/machinery/computer/allvaults,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "S" = (
@@ -93,7 +102,7 @@ H
 "}
 (2,1,1) = {"
 H
-H
+J
 H
 H
 O
@@ -102,7 +111,7 @@ H
 "}
 (3,1,1) = {"
 H
-H
+a
 H
 a
 P
@@ -111,7 +120,7 @@ H
 "}
 (4,1,1) = {"
 H
-H
+M
 H
 B
 H
