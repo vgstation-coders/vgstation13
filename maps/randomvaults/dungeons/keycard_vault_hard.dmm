@@ -44,9 +44,7 @@
 /obj/item/device/rcd/matter/rsf,
 /obj/item/weapon/storage/box/beanbagshells,
 /obj/item/weapon/storage/box/drinkingglasses,
-/obj/item/weapon/gun/projectile/shotgun/nt12{
-	icon_state = "dshotgun"
-	},
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel,
 /turf/simulated/floor/mineral/diamond,
 /area/vault/keycard)
 "k" = (
