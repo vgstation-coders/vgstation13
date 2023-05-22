@@ -15,7 +15,6 @@
 /turf/simulated/floor/engine,
 /area/vault/keycard)
 "g" = (
-/obj/machinery/teleport/hub,
 /obj/effect/decal/warning_stripes/siding/gold,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
@@ -35,7 +34,6 @@
 /area/vault/keycard)
 "j" = (
 /obj/structure/closet/crate,
-/obj/item/weapon/gun/projectile/shotgun/pump/combat,
 /obj/item/slime_extract/adamantine,
 /obj/item/slime_extract/adamantine,
 /obj/item/slime_extract/adamantine,
@@ -53,6 +51,9 @@
 	},
 /obj/item/weapon/storage/box/beanbagshells,
 /obj/item/weapon/storage/box/drinkingglasses,
+/obj/item/weapon/gun/projectile/shotgun/nt12{
+	icon_state = "dshotgun"
+	},
 /turf/simulated/floor/mineral/diamond,
 /area/vault/keycard)
 "k" = (
@@ -71,8 +72,7 @@
 /area/vault/keycard)
 "o" = (
 /obj/effect/decal/warning_stripes/siding/gold,
-/obj/structure/computerframe,
-/obj/item/weapon/circuitboard/teleporter,
+/obj/machinery/computer/teleporter,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "p" = (
@@ -138,6 +138,12 @@
 	dir = 1
 	},
 /turf/simulated/floor/wood,
+/area/vault/keycard)
+"G" = (
+/obj/machinery/teleport/hub{
+	anchored = 0
+	},
+/turf/simulated/floor/plating,
 /area/vault/keycard)
 "H" = (
 /turf/simulated/wall/invulnerable/r_wall,
@@ -268,7 +274,7 @@ H
 (3,1,1) = {"
 H
 T
-a
+G
 H
 a
 P
