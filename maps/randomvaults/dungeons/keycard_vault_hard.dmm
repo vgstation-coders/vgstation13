@@ -70,8 +70,9 @@
 /turf/simulated/floor/light,
 /area/vault/keycard)
 "o" = (
-/obj/machinery/computer/teleporter,
 /obj/effect/decal/warning_stripes/siding/gold,
+/obj/structure/computerframe,
+/obj/item/weapon/circuitboard/teleporter,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "p" = (
