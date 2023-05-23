@@ -46,7 +46,7 @@
 	restraint_check = FALSE
 
 /datum/emote/me/run_emote(mob/user, params, m_type)
-
+	. = TRUE
 	if (user.stat)
 		return
 
