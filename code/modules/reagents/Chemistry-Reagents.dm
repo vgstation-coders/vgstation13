@@ -3716,10 +3716,15 @@ var/procizine_tolerance = 0
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-1)
 		M.adjustOxyLoss(-1)
 		M.heal_organ_damage(1,1)
 		M.adjustToxLoss(-1)
+		if(M.bodytemperature < 50)
+			M.adjustCloneLoss(-1)
+		else
+			var/clone_to_heal = M.getGeneDegredation() - M.getCloneLoss()
+			if(clone_to_heal < 0)
+				M.adjustCloneLoss(max(-1, clone_to_heal))
 
 /datum/reagent/cryoxadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
@@ -3740,10 +3745,15 @@ var/procizine_tolerance = 0
 		return 1
 
 	if(M.bodytemperature < 170)
-		M.adjustCloneLoss(-3)
 		M.adjustOxyLoss(-3)
 		M.heal_organ_damage(3,3)
 		M.adjustToxLoss(-3)
+		if(M.bodytemperature < 50)
+			M.adjustCloneLoss(-3)
+		else
+			var/clone_to_heal = M.getGeneDegredation() - M.getCloneLoss()
+			if(clone_to_heal < 0)
+				M.adjustCloneLoss(max(-3, clone_to_heal))
 
 /datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
@@ -5498,7 +5508,7 @@ var/procizine_tolerance = 0
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 0.9185
-	specheatcap = 2.402	
+	specheatcap = 2.402
 	var/has_had_heart_explode = 0
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
