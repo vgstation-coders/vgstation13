@@ -386,7 +386,6 @@ var/list/animals_with_wings = list(
 		if(message.len > 1)
 			message += ", [emote]"
 		else
-			to_chat(user, "Adding first elem, curr message: [jointext(message, "")]; key 1.: [keys[1]], all keys: [jointext(keys, ",")]")
 			message += "[emote]"
 
 	message += "."
