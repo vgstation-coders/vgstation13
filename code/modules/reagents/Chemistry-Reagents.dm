@@ -3722,7 +3722,7 @@ var/procizine_tolerance = 0
 		if(M.bodytemperature < 50)
 			M.adjustCloneLoss(-1)
 		else
-			var/clone_to_heal = M.getGeneDegredation() - M.getCloneLoss()
+			var/clone_to_heal = M.getGeneDegradation() - M.getCloneLoss()
 			if(clone_to_heal < 0)
 				M.adjustCloneLoss(max(-1, clone_to_heal))
 
@@ -3751,7 +3751,7 @@ var/procizine_tolerance = 0
 		if(M.bodytemperature < 50)
 			M.adjustCloneLoss(-3)
 		else
-			var/clone_to_heal = M.getGeneDegredation() - M.getCloneLoss()
+			var/clone_to_heal = M.getGeneDegradation() - M.getCloneLoss()
 			if(clone_to_heal < 0)
 				M.adjustCloneLoss(max(-3, clone_to_heal))
 

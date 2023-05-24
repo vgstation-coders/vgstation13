@@ -1856,6 +1856,6 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define COOKTEMP_DEFAULT (T0C + 316) //Default cooking temperature, around 600 F
 #define COOKTEMP_HUMANSAFE (BODYTEMP_HEAT_DAMAGE_LIMIT - 1) //Human-safe temperature for cooked food, 1 degree less than the threshold for burning a human.
 
-//Genetic degredation from repeated clonings
-#define GENDEG_SAFECLONINGS 1 //How many times someone can be cloned before genetic degredation begins to affect their ability to recover from clone damage.
+//Genetic degradation from repeated clonings
+#define GENDEG_SAFECLONINGS 1 //How many times someone can be cloned before genetic degradation begins to affect their ability to recover from clone damage.
 #define GENDEG_DAMAGE 7 //How much sticky clone damage is accrued per cloning beyond GENDEG_SAFECLONINGS.

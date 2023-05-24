@@ -315,7 +315,7 @@
 			amount = min(amount, 0)
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
-/mob/living/proc/getGeneDegredation() //more persistent clone damage that's harder to heal from due to repeated clonings
+/mob/living/proc/getGeneDegradation() //more persistent clone damage that's harder to heal from due to repeated clonings
 	return max(0, (times_cloned - GENDEG_SAFECLONINGS) * GENDEG_DAMAGE)
 
 /mob/living/proc/setCloneLoss(var/amount)
