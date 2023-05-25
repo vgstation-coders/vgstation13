@@ -301,6 +301,8 @@
 
 #define isapprentice(H) (H.mind && H.mind.GetRole(WIZAPP))
 
+#define iswizconvert(H) (H.mind && H.mind.GetRole(WIZARD_CONVERT))
+
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
 
 #define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUADIE))
