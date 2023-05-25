@@ -475,8 +475,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(!occupant)
 		return
 	if(!ejecting)
-		occupant.bodytemperature += (air_contents.temperature - occupant.bodytemperature) * (current_heat_capacity + air_contents.heat_capacity()) / current_heat_capacity
-		occupant.bodytemperature = max(occupant.bodytemperature, air_contents.temperature) // this is so ugly i'm sorry for doing it i'll fix it later i promise
+		occupant.bodytemperature += (air_contents.temperature - occupant.bodytemperature) * (1 - current_heat_capacity / (current_heat_capacity + air_contents.heat_capacity()))
 	else
 		occupant.bodytemperature = mix(occupant.bodytemperature, T0C + 37, 0.6)
 
