@@ -162,7 +162,7 @@
 
 #define isfood(A) istype(A, /obj/item/weapon/reagent_containers/food)
 
-#define iswirecutter(A) istype(A, /obj/item/tool/wirecutters)
+#define iswirecutter(A) istype(A, /obj/item/tool/wirecutters) || (istype(A, /obj/item/weapon/switchtool) && istype(A:deployed, /obj/item/tool/wirecutters))
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
 
@@ -176,11 +176,11 @@
 
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
 
-#define iscrowbar(A) istype(A, /obj/item/tool/crowbar)
+#define iscrowbar(A) istype(A, /obj/item/tool/crowbar) || (istype(A, /obj/item/weapon/switchtool) && istype(A:deployed, /obj/item/tool/crowbar))
 
 #define issolder(A) istype(A, /obj/item/tool/solder)
 
-#define iswrench(A) istype(A, /obj/item/tool/wrench)
+#define iswrench(A) istype(A, /obj/item/tool/wrench) || (istype(A, /obj/item/weapon/switchtool) && istype(A:deployed, /obj/item/tool/wrench))
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
@@ -300,6 +300,8 @@
 #define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 
 #define isapprentice(H) (H.mind && H.mind.GetRole(WIZAPP))
+
+#define iswizconvert(H) (H.mind && H.mind.GetRole(WIZARD_CONVERT))
 
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
 

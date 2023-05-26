@@ -1409,7 +1409,8 @@ var/proccalls = 1
 #define FOOD_SWEET	4
 #define FOOD_LIQUID	8
 #define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
-#define FOOD_LACTOSE 32 //Contains MILK
+#define FOOD_LACTOSE	32 //Contains MILK
+#define FOOD_DIPPABLE	64 //Can be dipped in non-empty open reagent containers
 
 #define UTENSILE_FORK	1
 #define UTENSILE_SPOON	2
