@@ -207,7 +207,7 @@
 /area/vault/keycard)
 "O" = (
 /obj/effect/decal/warning_stripes/siding/gold,
-/obj/machinery/computer/telescience,
+/obj/machinery/computer/telescience/centcomm,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "P" = (
