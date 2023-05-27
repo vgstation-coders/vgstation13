@@ -1194,7 +1194,7 @@ var/list/cult_spires = list()
 						QDEL_NULL(forging)
 						var/obj/item/I = new template(L)
 						if (istype(I))
-							I.plane = relative_plane(EFFECTS_PLANE)
+							I.plane = EFFECTS_PLANE
 							I.layer = PROJECTILE_LAYER
 							I.pixel_y = 12
 						else
