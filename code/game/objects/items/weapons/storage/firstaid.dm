@@ -352,7 +352,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/syndiemints
 	name = "box of mints"
-	desc = "Gets rid of halitosis and satisfied costumers in one go!"
+	desc = "Gets rid of halitosis and satisfied customers in one go!"
 	icon = 'icons/obj/candymachine.dmi'
 	icon_state = "mintbox"
 	storage_slots = 50
