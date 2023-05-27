@@ -117,7 +117,7 @@
 	icon = 'icons/obj/chemical.dmi'
 	item_state = "contsolid"
 	w_class = W_CLASS_SMALL
-	can_only_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper", "/obj/item/weapon/reagent_containers/food/snacks/sweet")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper", "/obj/item/weapon/reagent_containers/food/snacks/sweet", "/obj/item/weapon/reagent_containers/food/snacks/syndiemint")
 	allow_quick_gather = 1
 	use_to_pickup = 1
 	storage_slots = 14
@@ -349,6 +349,14 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/sweets/strange
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/sweet/strange = 10)
+
+/obj/item/weapon/storage/pill_bottle/syndiemints
+	name = "box of mints"
+	desc = "Gets rid of halitosis and satisfied costumers in one go!"
+	icon = 'icons/obj/candymachine.dmi
+	icon_state = "mintbox"
+	storage_slots = 50
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/syndiemints = 50)
 
 /obj/item/weapon/storage/pill_bottle/lollipops
 	name = "bag of lollipops"
