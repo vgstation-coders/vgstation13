@@ -3264,6 +3264,11 @@
 	reagents.add_reagent(MINTTOXIN, 1)
 	bitesize = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint
+	name = "mint candy"
+	desc = "It not just a mint!"
+	icon_state = "syndiemint"
+
 /obj/item/weapon/reagent_containers/food/snacks/mushroomsoup
 	name = "chanterelle soup"
 	desc = "A delicious and hearty mushroom soup."
