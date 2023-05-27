@@ -44,9 +44,6 @@
 /area/vault/keycard)
 "j" = (
 /obj/structure/closet/crate,
-/obj/item/slime_extract/adamantine,
-/obj/item/slime_extract/adamantine,
-/obj/item/slime_extract/adamantine,
 /obj/item/clothing/accessory/storage/bandolier,
 /obj/item/tool/wrench,
 /obj/item/tool/screwdriver,
@@ -55,6 +52,9 @@
 /obj/item/weapon/storage/box/beanbagshells,
 /obj/item/weapon/storage/box/drinkingglasses,
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/barbot,
+/obj/item/slime_extract/adamantine,
+/obj/item/slime_extract/adamantine,
 /turf/simulated/floor/mineral/diamond,
 /area/vault/keycard)
 "k" = (

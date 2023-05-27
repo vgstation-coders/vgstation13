@@ -1129,3 +1129,32 @@
 	var/datum/browser/popup = new(user, "allvaults", "List of found mysterious structures", 300, 400)
 	popup.set_content(dat)
 	popup.open()
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/barbot
+	name = "barbot cube"
+	contained_mob = /mob/living/simple_animal/robot/NPC/barbot
+
+/mob/living/simple_animal/robot/NPC/barbot
+	name = "bar service bot"
+	desc = "Serves drinks asked for by a customer."
+	icon_state = "kodiak-service"
+
+/mob/living/simple_animal/robot/NPC/barbot/New()
+	add_component(/datum/component/ai/conversation)
+	var/datum/component/ai/target_finder/simple_view/SV = add_component(/datum/component/ai/target_finder/simple_view)
+	SV.range = 3
+	var/datum/component/ai/hearing/order/bardrinks/select_reagents/BD = add_component(/datum/component/ai/hearing/order/bardrinks/select_reagents)
+	BD.baseprice = rand(5,10) * 5
+
+/mob/living/simple_animal/robot/NPC/barbot/examine(mob/user)
+	..()
+	var/datum/component/ai/hearing/order/bardrinks/select_reagents/BD = get_component(/datum/component/ai/hearing/order/bardrinks/select_reagents)
+	if(BD)
+		to_chat(user,"Current items in order: [counted_english_list(BD.items2deliver)]<br>Total credits due: [BD.currentprice] credit\s")
+
+/mob/living/simple_animal/robot/NPC/barbot/attackby(obj/item/O, mob/user, no_delay, originator)
+	..()
+	if(ismultitool(O))
+		var/datum/component/ai/hearing/order/bardrinks/select_reagents/BD = get_component(/datum/component/ai/hearing/order/bardrinks/select_reagents)
+		if(BD)
+			BD.baseprice = input(user,"Set a base price to serve at","Base price",BD.baseprice) as num
