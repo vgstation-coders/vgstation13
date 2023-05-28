@@ -113,11 +113,6 @@
 	build_path = /obj/machinery/computer/teleporter
 	desc = "A circuit board for running a computer used for selecting teleporter locations."
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BLUESPACE + "=2"
-/obj/item/weapon/circuitboard/teleporter/syndie
-	name = "Circuit board (Teleporter)"
-	build_path = /obj/machinery/computer/teleporter/syndie
-	desc = "A circuit board for running a computer used for selecting teleporter locations."
-	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BLUESPACE + "=2"
 /obj/item/weapon/circuitboard/secure_data
 	name = "Circuit board (Security Records)"
 	desc = "A circuit board for running a computer used for viewing security records."

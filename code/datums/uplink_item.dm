@@ -191,7 +191,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/nukeprice/teleporter
 	name = "Teleporter Circuit Board"
 	desc = "A printed circuit board that completes the teleporter onboard the mothership, allowing deployment onto any activated bluespace beacon. It is advised to test fire the teleporter before entering it or sending items through as malfunctions can occur."
-	item = /obj/item/weapon/circuitboard/teleporter/syndie
+	item = /obj/item/weapon/circuitboard/teleporter
 	cost = 40
 
 /datum/uplink_item/nukeprice/gatling

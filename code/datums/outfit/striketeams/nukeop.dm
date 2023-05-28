@@ -103,7 +103,7 @@
 				/obj/item/device/encryptionkey/binary = 1,
 				/obj/item/device/megaphone/madscientist = 1,
 			),
-			slot_l_store_str = /obj/item/weapon/circuitboard/teleporter/syndie,
+			slot_l_store_str = /obj/item/weapon/circuitboard/teleporter,
 		),
 	) // End of the specs.
 
