@@ -375,6 +375,7 @@ var/list/one_way_windows
 			log_attack("[user.name] ([user.ckey]) window slammed [M.name] ([M.ckey]) ([gstate]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			return
 
+    /* One-way windows have serious performance issues - N3X
 	if(iscrowbar(W) && one_way)
 		if(!is_fulltile && get_turf(user) != get_turf(src))
 			to_chat(user, "<span class='warning'>You can't pry the sheet of plastic off from this side of \the [src]!</span>")
@@ -383,7 +384,6 @@ var/list/one_way_windows
 			toggle_one_way()
 			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
 			return
-    /* One-way windows have serious performance issues - N3X
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
 		if(one_way)
 			to_chat(user, "<span class='notice'>This window already has one-way tint on it.</span>")
