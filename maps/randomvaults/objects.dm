@@ -1138,6 +1138,7 @@
 	name = "bar service bot"
 	desc = "Serves drinks asked for by a customer."
 	icon_state = "kodiak-service"
+	var/panelopen = FALSE
 
 /mob/living/simple_animal/robot/NPC/barbot/New()
 	add_component(/datum/component/ai/conversation)
@@ -1158,3 +1159,15 @@
 		var/datum/component/ai/hearing/order/bardrinks/select_reagents/BD = get_component(/datum/component/ai/hearing/order/bardrinks/select_reagents)
 		if(BD)
 			BD.baseprice = input(user,"Set a base price to serve at","Base price",BD.baseprice) as num
+	if(O.is_screwdriver(user))
+		panelopen = !panelopen
+		to_chat(user,"<span class='notice'>You [panelopen ? "open" : "close"] a panel on the back.</span>")
+	if(iscrowbar(O) && panelopen)
+		to_chat(user,"<span class='notice'>You attempt to pry out the cash storage system.</span>")
+		if(do_after(user,src,3 SECONDS))
+			var/datum/component/ai/hearing/order/bardrinks/select_reagents/BD = get_component(/datum/component/ai/hearing/order/bardrinks/select_reagents)
+			if(BD && BD.profits)
+				dispense_cash(BD.profits,loc)
+				BD.profits = 0
+			else
+				to_chat(user,"<span class='notice'>No cash found inside.</span>")
