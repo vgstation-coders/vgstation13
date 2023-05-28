@@ -979,7 +979,7 @@ var/list/uplink_items = list()
 	name = "Box of Mints"
 	desc = "Fifty of the highest quality mint candies this side of the galaxy. Has no effect on regular people, but will kill any obese person that consumes it." //It was this or just making a lame 50u bottle of mint toxin, and that's no fun.
 	item = /obj/item/weapon/storage/pill_bottle/syndiemints
-	cost = 8
+	cost = 5
 	discounted_cost = 3
 	jobs_with_discount = list("Chef")
 
