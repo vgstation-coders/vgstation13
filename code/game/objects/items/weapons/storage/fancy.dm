@@ -272,6 +272,7 @@
 /obj/item/weapon/storage/fancy/matchbox/attackby(obj/item/weapon/match/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/match) && !W.lit)
 		W.light()
+		playsound(src, 'sound/items/lighter1.ogg', 50, 1)
 		return
 	return ..()
 

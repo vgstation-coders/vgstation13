@@ -537,6 +537,10 @@ var/global/list/juice_items = list (
 			break
 		var/amount = O.reagents.total_volume
 		O.reagents.trans_to(beaker, amount)
+		if (istype (O, /obj/item/weapon/reagent_containers/food/snacks))
+			var/obj/item/weapon/reagent_containers/food/snacks/S = O
+			if (S.dip && S.dip.total_volume)
+				S.dip.trans_to(beaker, S.dip.total_volume)
 		if(!O.reagents.total_volume)
 			remove_object(O)
 

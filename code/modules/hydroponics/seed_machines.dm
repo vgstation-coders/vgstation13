@@ -191,7 +191,6 @@
 	var/list/data = list()
 	var/static/list/gene_tag_list = list(
 		list("tag" = GENE_PHYTOCHEMISTRY),
-		list("tag" = GENE_BIOMOLECULES),
 		list("tag" = GENE_MORPHOLOGY),
 		list("tag" = GENE_BIOLUMINESCENCE),
 		list("tag" = GENE_ECOLOGY),

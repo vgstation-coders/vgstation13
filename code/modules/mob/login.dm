@@ -44,7 +44,7 @@
 					var/available_admins = admins_number - admin_number_afk
 					//Dunno if it's okay to log IP or ID here
 					send2adminirc("Notice: [key_name(src)] has the same IP and ID as [key_name(M)][M.client ? "" : " (no longer logged in)"].  [available_admins ? "" : "No non-AFK admins online"]")
-					send2admindiscord("**Notice: [key_name(src)] has the same IP and ID as [key_name(M)][M.client ? "" : " (no longer logged in)"].  [available_admins ? "" : "No non-AFK admins online"]**", !available_admins)
+					send2admindiscord("**Notice: [key_name(src)] has the same IP and ID as [key_name(M)][M.client ? "" : " (no longer logged in)"].  [available_admins ? "" : "No non-AFK admins online"]**")
 
 // Do not call ..()
 // If you do so and the mob is in nullspace BYOND will attempt to move the mob a gorillion times

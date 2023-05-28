@@ -79,6 +79,8 @@
 #define SILICON 			"silicon"
 #define FUEL 			"fuel"
 #define FUELBOMB 			"fuelbomb"
+#define PLASMABOMB 			"plasmabomb"
+#define ANFOBOMB 			"anfobomb"
 #define VOMIT 			"vomit"
 #define CLEANER 			"cleaner"
 #define BLEACH 				"bleach"
@@ -144,6 +146,7 @@
 #define SALINE				"saline"
 #define GLUE 			"glue"
 #define DIETHYLAMINE 			"diethylamine"
+#define AMMONIUMNITRATE         "ammoniumnitrate"
 #define ETHYLREDOXRAZINE 			"ethylredoxrazine"
 #define CHLORALHYDRATE 			"chloralhydrate"
 #define SUX					"suxameth"
@@ -519,7 +522,7 @@
 #define TEMPERATURE_WELDER 3480
 #define TEMPERATURE_PLASMA 4500
 #define TEMPERATURE_ETHANOL (T0C+1560)
-#define HEAT_TRANSFER_MULTIPLIER 7 //Multiplies the numbers above when heating a reagent container. A truly magical number.
+#define HEAT_TRANSFER_MULTIPLIER 7 //Multiplies the numbers above when heating a reagent container. A truly magical number. Not currently used anywhere due to a bug with reagent heating being fixed.
 
 // By defining the effect multiplier this way, it'll exactly adjust
 // all effects according to how they originally were with the 0.4 metabolism
@@ -572,10 +575,3 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_CRAVE		"vales"
 #define INCENSE_CORNOIL 	"cornoils"
 #define INCENSE_MUSTARDPLANT "mustardplant"
-
-#define GLUCOSE "Glucose"
-#define CELLULOSE "Cellulose"
-#define PROTEIN "Protein"
-#define STARCH "Starch"
-#define CHITIN "Chitin"
-#define XENOPHYLL "Xenophyll"

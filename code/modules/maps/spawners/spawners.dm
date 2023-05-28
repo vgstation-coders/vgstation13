@@ -1318,6 +1318,14 @@
 	/obj/item/weapon/reagent_containers/food/snacks/bacon,
 	/obj/item/weapon/reagent_containers/food/snacks/bacon
 )
+/obj/abstract/map/spawner/allfood
+	name = "all food spawner"
+	icon_state = "food"
+
+/obj/abstract/map/spawner/allfood/perform_spawn()
+	var/type = pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks))
+	new type(src.loc)
+
 //Syndiecargo loot spawners////////////////////////
 /obj/abstract/map/spawner/misc/syndiecargo
 	name = "syndiecargo loot spawner"

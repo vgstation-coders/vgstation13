@@ -1240,6 +1240,7 @@
 	density = 5.23
 	specheatcap = 0.62
 
+
 /datum/reagent/space_drugs/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -1253,24 +1254,7 @@
 
 	if(prob(7))
 		M.emote(pick("twitch", "drool", "moan", "giggle"), null, null, TRUE)
-		
-/datum/reagent/space_drugs/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	if(!holder)
-		return
-	if(!T)
-		T = holder.my_atom //Try to find the mob through the holder
-	if(!istype(T)) //Still can't find it, abort
-		return
-	var/amount = T.reagents.get_reagent_amount(id)
-	if(amount >= 1)
-		if(prob(15))
-			T.mutate(GENE_BIOMOLECULES)
-			T.reagents.remove_reagent(id, 1)
-		if(prob(15))
-			T.mutate(GENE_BIOMOLECULES)
-	else if(amount > 0)
-		T.reagents.remove_reagent(id, amount)
-		
+
 /datum/reagent/holywater
 	name = "Holy Water"
 	id = HOLYWATER
@@ -2468,7 +2452,8 @@
 				H.update_inv_by_slot(C.slot_flags)
 
 		M.clean_blood()
-		M.color = ""
+		if(!iswizconvert(M))
+			M.color = ""
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2513,7 +2498,8 @@
 					H.drip(10)
 				else if(prob(5))
 					H.vomit()
-	M.color = ""
+	if(!iswizconvert(M))
+		M.color = ""
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.species.anatomy_flags & MULTICOLOR && !(initial(H.species.anatomy_flags) & MULTICOLOR))
@@ -2526,7 +2512,8 @@
 	if(..())
 		return 1
 
-	M.color = ""
+	if(!iswizconvert(M))
+		M.color = ""
 
 	if(method == TOUCH && ((TARGET_EYES in zone_sels) || (LIMB_HEAD in zone_sels)))
 		if(ishuman(M))
@@ -2585,8 +2572,6 @@
 	if(T.reagents.get_reagent_amount(id) >= 1)
 		if(prob(1))
 			T.mutate(GENE_PHYTOCHEMISTRY)
-		if(prob(1))
-			T.mutate(GENE_BIOMOLECULES)
 		if(prob(1))
 			T.mutate(GENE_MORPHOLOGY)
 		if(prob(1))
@@ -4467,6 +4452,10 @@ var/procizine_tolerance = 0
 	density = 0.65
 	specheatcap = 35.37
 
+/datum/reagent/diethylamine/ammoniumnitrate
+	name = "Ammonium Nitrate"
+	id = AMMONIUMNITRATE
+
 /datum/reagent/diethylamine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
 		return
@@ -4853,7 +4842,7 @@ var/procizine_tolerance = 0
 			if(prob(50))
 				H.Mute(1)
 			else
-				H.visible_message("<span class='notice'>[src] spills their spaghetti.</span>","<span class='notice'>You spill your spaghetti.</span>")
+				H.visible_message("<span class='notice'>[H] spills their spaghetti.</span>","<span class='notice'>You spill your spaghetti.</span>")
 				var/turf/T = get_turf(M)
 				new /obj/effect/decal/cleanable/spaghetti_spill(T)
 				playsound(M, 'sound/effects/splat.ogg', 50, 1)
@@ -5512,7 +5501,7 @@ var/procizine_tolerance = 0
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 0.9185
-	specheatcap = 2.402	
+	specheatcap = 2.402
 	var/has_had_heart_explode = 0
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
@@ -9127,7 +9116,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())
 		return 1
-	H.color = "#12A7C9"
+	if(!iswizconvert(H))
+		H.color = "#12A7C9"
 	return
 
 /datum/reagent/roach_shell
@@ -9629,12 +9619,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 
 /datum/reagent/colorful_reagent/on_mob_life(mob/living/M)
-	if(M && isliving(M))
+	if(M && isliving(M) && !iswizconvert(M))
 		M.color = pick(random_color_list)
 	..()
 
 /datum/reagent/colorful_reagent/reaction_mob(mob/living/M, reac_volume)
-	if(M && isliving(M))
+	if(M && isliving(M) && !iswizconvert(M))
 		M.color = pick(random_color_list)
 	..()
 
