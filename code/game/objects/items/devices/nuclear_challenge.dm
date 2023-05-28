@@ -6,9 +6,7 @@
 /obj/item/device/nuclear_challenge
 	name = "Declaration of War (Challenge Mode)"
 	icon_state = "multitool"
-	desc = "Use to send a declaration of hostilities to the target, delaying your shuttle departure for 20 minutes while they prepare for your assault.  \
-			Such a brazen move will attract the attention of powerful benefactors within the Syndicate, who will supply your team with a massive amount of bonus telecrystals.  \
-			Must be used within five minutes, or your benefactors will lose interest."
+	desc = "Use this to request reinforcements from the syndicate. This will delay your departure and the insecure line means neighbouring stations will hear your request."
 	var/declaring_war = FALSE
 
 /obj/item/device/nuclear_challenge/attack_self(mob/living/user)
@@ -16,7 +14,7 @@
 		return
 
 	declaring_war = TRUE
-	var/are_you_sure = alert(user, "Consult your team carefully before you declare war on [station_name()]. Are you sure you want to alert the enemy crew?", "Declare war?", "Yes", "No")
+	var/are_you_sure = alert(user, "Consult your team carefully request reinforcements. This will alert the enemy crew?", "Declare war?", "Yes", "No")
 	declaring_war = FALSE
 
 	if(!check_allowed(user))
@@ -26,17 +24,8 @@
 		to_chat(user, "On second thought, the element of surprise isn't so bad after all.")
 		return
 
-	declaring_war = TRUE
-	var/custom_threat = alert(user, "Do you want to customize your declaration?", "Customize?", "Yes", "No")
-	declaring_war = FALSE
-
 	if(!check_allowed(user))
 		return
-
-	if(custom_threat == "Yes")
-		declaring_war = TRUE
-		war_declaration = input(user, "Insert your custom declaration", "Declaration")
-		declaring_war = FALSE
 
 	if(!check_allowed(user) || !war_declaration)
 		return
@@ -60,15 +49,12 @@
 
 
 /obj/item/device/nuclear_challenge/proc/check_allowed(mob/living/user)
-	if(declaring_war)
-		to_chat(user, "You are already in the process of declaring war! Make your mind up.")
-		return FALSE
 	var/turf/device_turf = get_turf(usr)
 	if(device_turf.z != map.zCentcomm)
 		to_chat(user, "You have to be at your base to use this.")
 		return FALSE
 	if(syndicate_shuttle.moved)
-		to_chat(user, "Your Comrades have already gone to the station! You have forfeit the right to declare war.")
+		to_chat(user, "Your Comrades have already gone to the station! You cannot request reinforcements now.")
 		return FALSE
 	return TRUE
 

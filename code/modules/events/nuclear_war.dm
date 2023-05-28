@@ -5,10 +5,10 @@
 	return 0
 
 /datum/event/nuclear_war/start()
-	command_alert(/datum/command_alert/shuttle_jamming)
+	command_alert(/datum/command_alert/command_link_lost)
 	ticker.StartThematic("nukesquad")
 	unlink_from_centcomm()
 
 /datum/event/nuclear_war/end()
-	command_alert(/datum/command_alert/shuttle_jamming_end)
+	command_alert(/datum/command_alert/command_link_restored)
 	link_to_centcomm()
