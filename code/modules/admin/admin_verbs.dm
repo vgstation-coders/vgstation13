@@ -215,6 +215,7 @@ var/list/admin_verbs_debug = list(
 #endif
 	/client/proc/update_all_open_spaces,
 	/client/proc/update_all_area_portals,
+	/client/proc/spam_blend_calls,
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,

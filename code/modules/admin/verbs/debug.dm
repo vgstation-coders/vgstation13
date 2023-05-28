@@ -1443,3 +1443,45 @@ var/global/blood_virus_spreading_disabled = 0
 		return
 	sort = sortlist[sort]
 	profile_show(src, sort)
+
+var/blend_calling = FALSE
+var/obj/blend_test = null
+
+/client/proc/spam_blend_calls()
+	set category = "Debug"
+	set name = "Spam Blend Calls"
+	set desc = "There is no testing like stress testing."
+
+	if (!check_rights(R_DEBUG))
+		return
+	blend_calling = FALSE
+	var/blendlist = list(
+		"ICON_ADD"		=	ICON_ADD,
+		"ICON_SUBTRACT"	=	ICON_SUBTRACT,
+		"ICON_MULTIPLY"	=	ICON_MULTIPLY,
+		"ICON_OVERLAY"		=	ICON_OVERLAY,
+		"ICON_AND"	=	ICON_AND,
+		"ICON_OR"	=	ICON_OR,
+		"ICON_UNDERLAY"	=	ICON_UNDERLAY
+	)
+	var/blendmode = input(src, "Blend type?", "Blend Type", "ICON_ADD") as null|anything in blendlist
+	if (!blendmode)
+		return
+	blend_calling = TRUE
+	if (!blend_test)
+		blend_test = new (mob.loc)
+	blend_test.loc = mob.loc
+	message_admins("<span class='adminnotice'>[key_name_admin(src)] started spamming icon.Blend() calls with blend mode [blendmode].</span>")
+	feedback_add_details("admin_verb","Start blend spamming")
+	log_admin("[key_name(src)] started blend spamming.")
+	blendmode = blendlist[blendmode]
+	spawn()
+		while(blend_calling)
+			var/icon/I = icon('icons/obj/food.dmi',"first")
+			var/icon/J = icon('icons/obj/food.dmi',"second")
+			I.Blend(J,blendmode,rand(-3,3),rand(-3,3))
+			blend_test.icon = I
+			sleep(1)
+		message_admins("<span class='adminnotice'>icon.Blend() spamming ended.</span>")
+		feedback_add_details("admin_verb","Finish blend spamming")
+		log_admin("[key_name(src)] finished blend spamming.")
