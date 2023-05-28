@@ -7,11 +7,11 @@
 /turf/simulated/floor/engine,
 /area/vault/keycard)
 "d" = (
-/obj/effect/decal/warning_stripes/siding{
-	dir = 8
-	},
 /obj/structure/sign/poster{
 	pixel_y = 32
+	},
+/obj/effect/decal/warning_stripes/siding{
+	dir = 9
 	},
 /turf/simulated/floor/engine,
 /area/vault/keycard)
@@ -20,6 +20,9 @@
 /area/vault/keycard)
 "f" = (
 /obj/machinery/computer/arcade,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 4
+	},
 /turf/simulated/floor/engine,
 /area/vault/keycard)
 "g" = (
@@ -62,6 +65,13 @@
 	opacity = 1
 	},
 /area/vault/keycard)
+"l" = (
+/obj/effect/decal/warning_stripes/siding,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 6
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
 "m" = (
 /obj/machinery/media/jukebox/superjuke,
 /obj/structure/painting/random{
@@ -91,10 +101,19 @@
 /area/vault/keycard)
 "q" = (
 /obj/machinery/chem_dispenser/scp_294,
+/obj/machinery/light/he{
+	dir = 1
+	},
 /turf/simulated/floor/mineral/diamond,
 /area/vault/keycard)
 "r" = (
 /obj/machinery/computer/slot_machine,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding{
+	dir = 5
+	},
 /turf/simulated/floor/engine,
 /area/vault/keycard)
 "s" = (
@@ -114,11 +133,15 @@
 /area/vault/keycard)
 "u" = (
 /obj/machinery/gashapon,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 4
+	},
 /turf/simulated/floor/engine,
 /area/vault/keycard)
 "v" = (
-/obj/effect/decal/warning_stripes/siding,
-/obj/effect/decal/warning_stripes/siding,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 10
+	},
 /turf/simulated/floor/engine,
 /area/vault/keycard)
 "x" = (
@@ -140,6 +163,10 @@
 "z" = (
 /turf/simulated/floor/engine,
 /area/vault/keycard)
+"A" = (
+/obj/effect/decal/cleanable/blood,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
 "B" = (
 /obj/machinery/door/airlock/highsecurity,
 /turf/simulated/floor/plating,
@@ -154,6 +181,8 @@
 /area/vault/keycard)
 "E" = (
 /obj/machinery/vending/artifact,
+/obj/effect/decal/cleanable/cobweb,
+/obj/effect/decal/cleanable/greenglow,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "F" = (
@@ -220,6 +249,7 @@
 /obj/structure/bed/chair/comfy/couch/turn/inward/teal{
 	dir = 1
 	},
+/obj/machinery/light/he,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "R" = (
@@ -229,6 +259,7 @@
 /obj/structure/bed/chair/comfy/couch/turn/inward/lime{
 	dir = 8
 	},
+/obj/machinery/light/he,
 /turf/simulated/floor/wood,
 /area/vault/keycard)
 "T" = (
@@ -247,6 +278,9 @@
 /area/vault/keycard)
 "V" = (
 /obj/machinery/sweet,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 4
+	},
 /turf/simulated/floor/engine,
 /area/vault/keycard)
 "W" = (
@@ -313,7 +347,7 @@ H
 a
 P
 H
-a
+A
 H
 "}
 (4,1,1) = {"
@@ -399,7 +433,7 @@ r
 f
 u
 V
-v
+l
 Y
 R
 H
