@@ -368,7 +368,6 @@ var/station_does_not_tip = FALSE
 var/war_declared = FALSE
 var/war_declared_time = 0
 var/can_war_be_declared = TRUE
-var/war_declaration = "A syndicate fringe group has declared their intent to utterly destroy [station_name()] with a nuclear device, and dares the crew to try and stop them."
 
 //Malf AI global variables
 var/malf_radio_blackout = FALSE

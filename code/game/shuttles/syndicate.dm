@@ -15,7 +15,6 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 	stable = 1 //Don't stun everyone and don't throw anything when moving
 	can_rotate = 0 //Sleepers, body scanners and multi-tile airlocks aren't rotated properly
 
-	var/moved = FALSE
 
 	req_access = list(access_syndicate)
 
@@ -82,12 +81,12 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 		selected_port = pick(shuttle.docking_ports - shuttle.current_port)
 
 	if(war_declared && (world.time / 10 < war_declared_time + CHALLENGE_SYNDIE_SHUTTLE_DELAY))
-		to_chat(usr, "Shuttle Cannot Leave Until 10 Minutes After Call")
+		to_chat(usr, "Shuttle Cannot leave due to bluespace inteference.")
 		return FALSE
 
 	//Send a message to the shuttle to move
 	syndicate_shuttle.travel_to(selected_port, src, user)
-	can_war_be_declared = TRUE
+	can_war_be_declared = FALSE
 	selected_port = null
 	updateUsrDialog()
 

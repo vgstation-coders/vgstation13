@@ -226,7 +226,7 @@
 
 /obj/machinery/computer/teleporter/syndie/attack_hand(var/mob/user)
 	if(war_declared && (world.time / 10 < war_declared_time + CHALLENGE_SYNDIE_SHUTTLE_DELAY))
-		to_chat(usr, "This Teleporter is Disabled. While the station responds to your challenge.")
+		to_chat(usr, "This Teleporter is Disabled, due to bluespace inteference.")
 		return FALSE
 	..()
 
@@ -351,6 +351,29 @@
 	if(com && com.one_time_use) //one-time-use cards
 		com.one_time_use = 0
 		com.locked = null
+
+/obj/machinery/teleport/hub/syndicate
+	name = "teleporter horizon generator"
+	desc = "This generates the portal through which you step through to teleport elsewhere."
+	icon_state = "tele0"
+
+/obj/machinery/teleport/hub/proc/get_target_lock()
+	var/obj/machinery/teleport/station/st = locate(/obj/machinery/teleport/station, orange(1,src))
+	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter/syndie, orange(1, st))
+	if (!com)
+		visible_message("<span class='warning'>Failure: Cannot identify linked computer.</span>")
+		return
+	if (!com.locked || com.locked.gcDestroyed)
+		com.locked = null
+		visible_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
+		return
+	return com.locked
+
+/obj/machinery/teleport/hub/proc/after_teleport()
+	var/obj/machinery/teleport/station/st = locate(/obj/machinery/teleport/station, orange(1,src))
+	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter/syndie, orange(1, st))
+	can_war_be_declared = FALSE
+
 
 /obj/machinery/teleport/station
 	name = "teleporter controller"

@@ -1,11 +1,9 @@
-#define CHALLENGE_TELECRYSTALS 280
-#define CHALLENGE_SHUTTLE_DELAY 1800
 #define CHALLENGE_TC_PER_OP 60
 
 
 /obj/item/device/nuclear_challenge
-	name = "Declaration of War (Challenge Mode)"
-	icon_state = "multitool"
+	name = "Syndicate Communications Device"
+	icon_state = "radio"
 	desc = "Use this to request reinforcements from the syndicate. This will delay your departure and the insecure line means neighbouring stations will hear your request."
 	var/declaring_war = FALSE
 
@@ -14,7 +12,7 @@
 		return
 
 	declaring_war = TRUE
-	var/are_you_sure = alert(user, "Consult your team carefully request reinforcements. This will alert the enemy crew?", "Declare war?", "Yes", "No")
+	var/are_you_sure = alert(user, "Consult your team carefully before requesting reinforcements. This will alert the enemy crew?", "Request Reinforcments?", "Yes", "No")
 	declaring_war = FALSE
 
 	if(!check_allowed(user))
@@ -25,9 +23,6 @@
 		return
 
 	if(!check_allowed(user))
-		return
-
-	if(!check_allowed(user) || !war_declaration)
 		return
 
 	war_was_declared(user)
@@ -53,11 +48,9 @@
 	if(device_turf.z != map.zCentcomm)
 		to_chat(user, "You have to be at your base to use this.")
 		return FALSE
-	if(syndicate_shuttle.moved)
+	if(!can_war_be_declared)
 		to_chat(user, "Your Comrades have already gone to the station! You cannot request reinforcements now.")
 		return FALSE
 	return TRUE
 
-#undef CHALLENGE_TELECRYSTALS
-#undef CHALLENGE_SHUTTLE_DELAY
 #undef CHALLENGE_TC_PER_OP
