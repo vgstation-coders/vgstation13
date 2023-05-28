@@ -1477,8 +1477,8 @@ var/obj/blend_test = null
 	blendmode = blendlist[blendmode]
 	spawn()
 		while(blend_calling)
-			var/icon/I = icon('icons/obj/food.dmi',"first")
-			var/icon/J = icon('icons/obj/food.dmi',"second")
+			var/icon/I = icon('icons/debug.dmi',"first")
+			var/icon/J = icon('icons/debug.dmi',"second")
 			I.Blend(J,blendmode,rand(-3,3),rand(-3,3))
 			blend_test.icon = I
 			sleep(1)
