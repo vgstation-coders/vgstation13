@@ -6,6 +6,7 @@
 /obj/structure/window/full
 	name = "window"
 	icon_state = "fwindow0" //Specifically for the map
+	base_state = "fwindow"
 	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
 	layer = FULL_WINDOW_LAYER
