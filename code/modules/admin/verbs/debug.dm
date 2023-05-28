@@ -1468,7 +1468,7 @@ var/obj/blend_test = null
 	if (!blendmode)
 		return
 	blend_calling = TRUE
-	if (!blend_test)
+	if (!blend_test || blend_test.gcDestroyed)
 		blend_test = new (mob.loc)
 	blend_test.loc = mob.loc
 	message_admins("<span class='adminnotice'>[key_name_admin(src)] started spamming icon.Blend() calls with blend mode [blendmode].</span>")
