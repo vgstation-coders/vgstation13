@@ -144,6 +144,12 @@
 	},
 /turf/simulated/floor/engine,
 /area/vault/keycard)
+"w" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/keycard)
 "x" = (
 /obj/effect/decal/warning_stripes/siding{
 	dir = 8
@@ -344,7 +350,7 @@ H
 T
 a
 H
-a
+w
 P
 H
 A

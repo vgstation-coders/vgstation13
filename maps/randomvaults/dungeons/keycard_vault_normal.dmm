@@ -11,6 +11,10 @@
 /obj/machinery/computer/crew,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
+"j" = (
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
 "l" = (
 /obj/machinery/computer/message_monitor,
 /turf/simulated/floor/plating,
@@ -46,6 +50,12 @@
 "J" = (
 /obj/structure/table/plastic,
 /obj/item/weapon/paper/monitorkey,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"K" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "L" = (
@@ -111,9 +121,9 @@ H
 "}
 (3,1,1) = {"
 H
-a
+j
 H
-a
+K
 P
 H
 H

@@ -123,7 +123,6 @@
 	file_path = "maps/misc/keycards/hard3.dmm"
 
 /area/vault/keycard
-	dynamic_lighting = FALSE // Area portals don't look good in this for now
 	mysterious = TRUE
 
 /obj/machinery/door/airlock/highsecurity/keycard

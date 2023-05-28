@@ -39,6 +39,13 @@
 	tag = "icon-warning (SOUTHWEST)"
 	},
 /obj/structure/computerframe,
+/obj/item/stack/cable_coil{
+	amount = 2
+	},
+/obj/item/stack/sheet/glass/glass{
+	amount = 2
+	},
+/obj/item/weapon/circuitboard/rdconsole/pod,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "B" = (
@@ -59,11 +66,27 @@
 "H" = (
 /turf/simulated/wall/invulnerable/r_wall,
 /area/vault/keycard)
+"M" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/keycard)
 "P" = (
 /turf/portal,
 /area/vault/keycard)
 "Q" = (
 /obj/effect/decal/cleanable/soot,
+/obj/item/stack/sheet/metal{
+	amount = 5
+	},
+/obj/item/stack/cable_coil{
+	amount = 5
+	},
+/obj/item/weapon/reagent_containers/glass/beaker,
+/obj/item/weapon/reagent_containers/glass/beaker,
+/obj/item/weapon/stock_parts/matter_bin,
+/obj/item/weapon/stock_parts/manipulator,
 /obj/item/weapon/circuitboard/circuit_imprinter,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
@@ -101,7 +124,7 @@ H
 (3,1,1) = {"
 H
 H
-a
+M
 P
 H
 "}

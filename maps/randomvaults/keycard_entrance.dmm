@@ -23,6 +23,7 @@
 /turf/space,
 /area)
 "M" = (
+/obj/machinery/light/he,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 
