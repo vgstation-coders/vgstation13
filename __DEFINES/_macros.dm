@@ -148,7 +148,7 @@
 
 #define isEmag(A) istype(A, /obj/item/weapon/card/emag)
 
-#define istool(A) iswrench(A) || iswelder(A) || isshovel(A) || ishammer(A) || iscablecoil(A) || iswiretool(A) || iscrowbar(A)
+#define istool(A) (iswrench(A) || iswelder(A) || isshovel(A) || ishammer(A) || iscablecoil(A) || iswiretool(A) || iscrowbar(A))
 
 #define iswelder(A) istype(A, /obj/item/tool/weldingtool)
 
@@ -162,7 +162,7 @@
 
 #define isfood(A) istype(A, /obj/item/weapon/reagent_containers/food)
 
-#define iswirecutter(A) istype(A, /obj/item/tool/wirecutters) || (istype(A, /obj/item/weapon/switchtool) && istype(A:deployed, /obj/item/tool/wirecutters))
+#define iswirecutter(A) (istype(A, /obj/item/tool/wirecutters) || (istype(A, /obj/item/weapon/switchtool) && istype(A:deployed, /obj/item/tool/wirecutters)))
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
 
@@ -176,11 +176,11 @@
 
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
 
-#define iscrowbar(A) istype(A, /obj/item/tool/crowbar) || (istype(A, /obj/item/weapon/switchtool) && istype(A:deployed, /obj/item/tool/crowbar))
+#define iscrowbar(A) (istype(A, /obj/item/tool/crowbar) || (istype(A, /obj/item/weapon/switchtool) && istype(A:deployed, /obj/item/tool/crowbar)))
 
 #define issolder(A) istype(A, /obj/item/tool/solder)
 
-#define iswrench(A) istype(A, /obj/item/tool/wrench) || (istype(A, /obj/item/weapon/switchtool) && istype(A:deployed, /obj/item/tool/wrench))
+#define iswrench(A) (istype(A, /obj/item/tool/wrench) || (istype(A, /obj/item/weapon/switchtool) && istype(A:deployed, /obj/item/tool/wrench)))
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
