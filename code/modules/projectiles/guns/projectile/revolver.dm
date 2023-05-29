@@ -347,8 +347,7 @@
 		playsound(user, fire_sound, fire_volume, 1)
 		in_chamber.on_hit(user)
 		user.apply_damage(in_chamber.damage*1.5, in_chamber.damage_type, LIMB_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]")
-		qdel(in_chamber)
-		in_chamber = null
+		QDEL_NULL(in_chamber)
 		make_peel(user)
 		user.visible_message("<span class='danger'>\The [src] explodes as \the [user] bites into it!</span>","<span class='danger'>\The [src] explodes as you bite into it!</span>")
 

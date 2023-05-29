@@ -159,7 +159,7 @@
 	desc = "It's a green bandana with some fine nanotech lining."
 	icon_state = "greenbandana"
 	item_state = "greenbandana"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/beret/highlander
@@ -346,7 +346,7 @@
 	desc = "Eeeee~heheheheheheh!"
 	icon_state = "witch"
 	item_state = "witch"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
@@ -356,7 +356,7 @@
 	icon_state = "chickenhead"
 	item_state = "chickenhead"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
 
@@ -365,7 +365,7 @@
 	desc = "Caw!"
 	icon_state = "chickenhead_white"
 	item_state = "chickenhead_white"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
 
@@ -374,7 +374,7 @@
 	desc = "Not as fuzzy as the real thing."
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
@@ -388,6 +388,7 @@
 	icon_state = "sparebearpelt"
 	item_state = "sparebearpelt"
 	slot_flags = SLOT_ID|SLOT_HEAD
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/bearpelt/real/spare/GetAccess()
 	if(arcanetampered)
@@ -399,30 +400,35 @@
 	desc = "Just like the pelt of a space bear without as much space."
 	icon_state = "blackbearpelt"
 	item_state = "blackbearpelt"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/bearpelt/brown
 	name = "brown bear pelt hat"
 	desc = "Faded and rough, it almost passes as a real pelt."
 	icon_state = "brownbearpeltfake"
 	item_state = "brownbearpeltfake"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/bearpelt/brown/real
 	name = "brown bear pelt hat"
 	desc = "Now that's what I call fuzzy."
 	icon_state = "brownbearpelt"
 	item_state = "brownbearpelt"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/bearpelt/polar
 	name = "bear pelt hat"
 	desc = "For those polar chills."
 	icon_state = "polarbearpelt"
 	item_state = "polarbearpelt"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/bearpelt/panda
 	name = "panda pelt hat"
 	desc = "Makes you want to chew on bamboo sticks."
 	icon_state = "pandbearpelt"
 	item_state = "pandbearpelt"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/wolfpelt
 	name = "wolf pelt hat"
@@ -431,13 +437,14 @@
 	item_state = "wolfpelt"
 	armor = list(melee = 10, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
 	body_parts_covered =  EARS|HEAD|HIDEHEADHAIR
+	species_fit = list(VOX_SHAPED)
 
 
 /obj/item/clothing/head/xenos
 	name = "xenos helmet"
 	icon_state = "xenos"
 	item_state = "xenos_helm"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	desc = "A helmet made out of chitinous alien hide."
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
@@ -488,7 +495,7 @@
 	desc = "Russian winter got you down? Maybe your enemy, but not you!"
 	icon_state = "russofurhat"
 	item_state = "russofurhat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/lordadmiralhat
@@ -503,7 +510,7 @@
 	desc = "A hat fit for a fool."
 	icon_state = "jesterhat"
 	item_state = "jesterhat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/libertyhat
@@ -549,7 +556,7 @@
 	desc = "You wear this around your head."
 	icon_state = "headband"
 	item_state = "headband"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/metalgear.dmi', "right_hand" = 'icons/mob/in-hand/right/metalgear.dmi')
 
 /obj/item/clothing/head/cowboy
@@ -557,7 +564,7 @@
 	desc = "Perfect for the closet botanist."
 	icon_state = "cowboy"
 	item_state = "cowboy"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 10, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/head/cowboy/dimma
@@ -690,13 +697,14 @@
 	desc = "Welcome to the rice fields, motherfucker."
 	icon_state = "rice_hat"
 	item_state = "rice_hat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/rice_hat/ronin
 	name = "roningasa"
 	desc = "A conical amigasa with a flat top, often worn by ronin."
 	icon_state = "kasa"
 	item_state = "kasa"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/inquisitor
 	name = "cappello romano"
@@ -728,7 +736,7 @@
 	desc = "Meanwhile in Neo Space Mexico."
 	icon_state = "sombrero"
 	item_state = "sombrero"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/head/donitos_pope
 	name = "\improper Donitos Pope hat"

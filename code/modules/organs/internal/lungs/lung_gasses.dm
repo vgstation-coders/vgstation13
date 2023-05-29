@@ -16,8 +16,7 @@
 		lungs.gasses -= src
 		lungs = null
 
-	qdel(breath)
-	breath = null
+	QDEL_NULL(breath)
 	..()
 
 /datum/lung_gas/proc/get_pp()

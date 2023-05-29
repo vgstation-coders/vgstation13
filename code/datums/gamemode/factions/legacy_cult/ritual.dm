@@ -47,8 +47,7 @@ var/runedec = 0 // Rune cap ?
 	for(var/mob/living/silicon/ai/AI in player_list)
 		if(AI.client)
 			AI.client.images -= blood_image
-	qdel(blood_image)
-	blood_image = null
+	QDEL_NULL(blood_image)
 	rune_list_legacy.Remove(src)
 	..()
 

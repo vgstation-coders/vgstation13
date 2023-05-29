@@ -323,6 +323,7 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/mechahitler,					// Sieg heil!
 	/mob/living/simple_animal/hostile/alien/queen/large,			// The bigger and beefier version of queens.
 	/mob/living/simple_animal/hostile/asteroid/rockernaut/boss, 	// Angie
+	/mob/living/simple_animal/hostile/asteroid/hivelord/boss,	 	// Maria
 	/mob/living/simple_animal/hostile/humanoid/surgeon/boss, 		// First stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times

@@ -24,8 +24,7 @@
 /obj/structure/displaycase/Destroy()
 	..()
 	if(circuit)
-		qdel(circuit)
-		circuit = null
+		QDEL_NULL(circuit)
 	dump()
 
 /obj/structure/displaycase/proc/setContent()

@@ -89,8 +89,7 @@
 /mob/living/silicon/ai/Destroy()
 	if(eyeobj)
 		eyeobj.ai = null
-		qdel(eyeobj) // No AI, no Eye
-		eyeobj = null
+		QDEL_NULL(eyeobj) // No AI, no Eye
 	..()
 
 /atom/proc/move_camera_by_click()
@@ -110,7 +109,7 @@
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50
 
-	var/obj/machinery/turret/T = user.current 
+	var/obj/machinery/turret/T = user.current
 	var/obj/machinery/hologram/holopad/H = user.current
 
 	if(istype(T))
@@ -123,7 +122,7 @@
 		CAN_MOVE_DIAGONALLY = FALSE
 		user.eyeobj.glide_size = DELAY2GLIDESIZE(1)
 		user.delayNextMove(1)
-	else 
+	else
 		user.eyeobj.glide_size = WORLD_ICON_SIZE
 		CAN_MOVE_DIAGONALLY = TRUE
 

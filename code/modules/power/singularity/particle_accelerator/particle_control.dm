@@ -34,8 +34,7 @@
 		toggle_power()
 
 	if(wires)
-		qdel(wires)
-		wires = null
+		QDEL_NULL(wires)
 
 	..()
 

@@ -250,8 +250,7 @@
 
 /obj/effect/bloodcult_jaunt/Destroy()
 	if (rider)
-		qdel(rider)
-		rider = null
+		QDEL_NULL(rider)
 	if (packed.len > 0)
 		for(var/atom/A in packed)
 			qdel(A)

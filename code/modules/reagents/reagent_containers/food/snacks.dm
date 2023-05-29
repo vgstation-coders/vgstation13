@@ -43,7 +43,7 @@
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
 	var/timer = 0 //currently only used on skittering food
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	var/turf/T = get_turf(src)
 	if(contents.len)
@@ -583,7 +583,7 @@
 //	Consult sushi types below for examples of usage.
 
 // Multispawners take the total amount of reagents, both the ones added by the recipe and the ingredients's ones, divides the number by the child volume and spawns that many of items.
-// For example: If the child volume is 1 and the total reagents, both from the ingredients and the extra upon cooking, add to 10u, then it would spawn 10 items. 
+// For example: If the child volume is 1 and the total reagents, both from the ingredients and the extra upon cooking, add to 10u, then it would spawn 10 items.
 // This means that "stronger" ingredients spawn more items.
 // If you have child volume 5, the recipe adds 10u reagents and the ingredients' reagents add 10 more, the multispawner would spawn 4 items, since (10+10):5=4.
 // Only the fooditem ingredient reagents get tallied, any "raw" reagents the recipe calls for, such as flour, don't get counted for multispawner purposes.
@@ -1575,7 +1575,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/throw_impact(atom/hit_atom)
 	set waitfor = FALSE
-	..()
+	if(..())
+		return
 	if(ismob(hit_atom))
 		var/mob/M = hit_atom
 		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
@@ -3238,7 +3239,7 @@
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/mushroomsoup
-	name = "chantrelle soup"
+	name = "chanterelle soup"
 	desc = "A delicious and hearty mushroom soup."
 	icon_state = "mushroomsoup"
 	trash = /obj/item/trash/snack_bowl
@@ -5145,7 +5146,7 @@
 	name = "xeno sliders"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/xeno
 	child_volume = 3.5
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/xeno/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
@@ -5159,7 +5160,7 @@
 	name = "chicken sliders"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/chicken
 	child_volume = 3.5
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/chicken/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
@@ -5642,6 +5643,7 @@
 	autoignition_temperature = 0
 	w_type = RECYK_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 100)
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/weapon/reagent_containers/food/snacks/eucharist
 	name = "\improper Eucharist Wafer"
@@ -7996,14 +7998,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "bugburger"
 	var/skitterdelay = 30
 	var/skitterchance = 50
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/New()
 	..()
 	processing_objects += src
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/pickup(mob/user)
 	timer = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/process()
 	timer += 1
 	if(timer > skitterdelay && istype(loc, /turf) && prob(skitterchance))
@@ -8023,7 +8025,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "bugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -8039,7 +8041,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "deluxebugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 12)
@@ -8057,7 +8059,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	base_crumb_chance = 20
 	skitterchance = 40
 	skitterdelay = 60 //takes longer for super gunkburgers to walk and they walk less, muh weight or something
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 40)
@@ -8101,9 +8103,9 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "cockroachsalad"
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_MEAT
-	random_filling_colors = list("#610000", "#32AE32") 
+	random_filling_colors = list("#610000", "#32AE32")
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/roachsalad/after_consume()
 	if(prob(unpopped))
 		to_chat(usr, "<span class='warning'>A cockroach wriggles out of the bowl!</span>")
@@ -8148,7 +8150,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(ROACHSHELL, 8) //no roaches were harmed this time, it's all exoskeleton flakes
 	reagents.add_reagent(WATER, 5)
 	bitesize = 5
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/process()
 	timer += 1
 	if(prob(20) && timer >= 10)
@@ -8205,7 +8207,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		reagents.add_reagent(SALINE, 1)
 		desc = "The flavour of the maintenance halls in pie form."
 	bitesize = 3
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkcake
 	name = "gunk cake"
 	desc = "The apex of garbage-based confectionary research."

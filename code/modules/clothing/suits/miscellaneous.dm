@@ -324,7 +324,7 @@ var/list/tag_suits_list = list()
 	icon_state = "overalls"
 	item_state = "overalls"
 	body_parts_covered = FULL_TORSO|LEGS
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/syndicatefake
@@ -418,8 +418,8 @@ var/list/tag_suits_list = list()
 	icon_state = "chickensuit"
 	item_state = "chickensuit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
-	species_fit = list(INSECT_SHAPED)
-	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/suit/chickensuit/white
@@ -427,6 +427,7 @@ var/list/tag_suits_list = list()
 	desc = "Silky smooth. The feathers of legend...could it be..."
 	icon_state = "chickensuit_white"
 	item_state = "chickensuit_white"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/monkeysuit
 	name = "Monkey Suit"
@@ -450,6 +451,7 @@ var/list/tag_suits_list = list()
 	icon_state = "highlanderkilt"
 	item_state = "highlanderkilt"
 	clothing_flags = ONESIZEFITSALL
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	wizard_garb = 1 //required for the spell in the highlander syndicate bundle
 
 /obj/item/clothing/suit/cardborg
@@ -478,7 +480,7 @@ var/list/tag_suits_list = list()
 	name = "worn shirt"
 	desc = "A worn out, curiously comfortable t-shirt with a picture of Ian. You wouldn't go so far as to say it feels like being hugged when you wear it but it's pretty close. Good for sleeping in."
 	icon_state = "ianshirt"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	body_parts_covered = ARMS|FULL_TORSO
 
 //Blue suit jacket toggle
@@ -568,13 +570,14 @@ var/list/tag_suits_list = list()
 	_color = "mankini"
 	siemens_coefficient = 1
 	body_parts_covered = 0
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/xenos
 	name = "xenos suit"
 	desc = "A suit made out of chitinous alien hide."
 	icon_state = "xenos"
 	item_state = "xenos_helm"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	siemens_coefficient = 2.0
 
@@ -590,7 +593,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_black"
 	_color = "swim_black"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/blue
 	name = "blue swimsuit"
@@ -598,7 +601,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_blue"
 	_color = "swim_blue"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/purple
 	name = "purple swimsuit"
@@ -606,7 +609,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_purp"
 	_color = "swim_purp"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/green
 	name = "green swimsuit"
@@ -614,7 +617,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_green"
 	_color = "swim_green"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/red
 	name = "red swimsuit"
@@ -622,7 +625,7 @@ var/list/tag_suits_list = list()
 	icon_state = "swim_red"
 	_color = "swim_red"
 	siemens_coefficient = 1
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/simonjacket
 	name = "Simon's Jacket"
@@ -643,12 +646,14 @@ var/list/tag_suits_list = list()
 	desc = "Ein Mantel gemacht, um die Juden zu bestrafen."
 	icon_state = "officersuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/soldiercoat
 	name = "Soldier's Coat"
 	desc = "Und das heißt: Erika."
 	icon_state = "soldiersuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/russofurcoat
 	name = "russian fur coat"
@@ -732,23 +737,14 @@ var/list/tag_suits_list = list()
 	blood_overlay_type = "coat"
 	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
-
-/obj/item/clothing/suit/storage/draculacoat
-	name = "Vampire Coat"
-	desc = "What is a man? A miserable little pile of secrets."
-	icon_state = "draculacoat"
-	blood_overlay_type = "coat"
-	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
-	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/draculacoat_fake
 	name = "Vampire Costume"
 	desc = "Smells faintly of pumpkins and bloody mary."
 	icon_state = "draculacoat"
 	blood_overlay_type = "coat"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/maidapron
 	name = "Apron"
@@ -1012,12 +1008,12 @@ var/list/tag_suits_list = list()
 		return
 	active = 1
 	canremove = 0
-	H.register_event(/event/touched, src, .proc/on_touched)
-	H.register_event(/event/attacked_by, src, .proc/on_attacked_by)
-	H.register_event(/event/hitby, src, .proc/on_hitby)
-	H.register_event(/event/unarmed_attack, src, .proc/on_unarmed_attack)
-	H.register_event(/event/to_bump, src, .proc/on_to_bump)
-	H.register_event(/event/bumped, src, .proc/on_bumped)
+	H.register_event(/event/touched, src, src::on_touched())
+	H.register_event(/event/attacked_by, src, src::on_attacked_by())
+	H.register_event(/event/hitby, src, src::on_hitby())
+	H.register_event(/event/unarmed_attack, src, src::on_unarmed_attack())
+	H.register_event(/event/to_bump, src, src::on_to_bump())
+	H.register_event(/event/bumped, src, src::on_bumped())
 
 /obj/item/clothing/suit/bomber_vest/proc/on_touched(mob/toucher, mob/touched)
 	if(toucher == touched) //No bombing ourselves by checking ourselves
@@ -1044,12 +1040,12 @@ var/list/tag_suits_list = list()
 	active = 0
 	var/mob/living/carbon/human/H = loc
 	if(H)
-		H.unregister_event(/event/touched, src, .proc/on_touched)
-		H.unregister_event(/event/attacked_by, src, .proc/on_attacked_by)
-		H.unregister_event(/event/hitby, src, .proc/on_hitby)
-		H.unregister_event(/event/unarmed_attack, src, .proc/on_unarmed_attack)
-		H.unregister_event(/event/to_bump, src, .proc/on_to_bump)
-		H.unregister_event(/event/bumped, src, .proc/on_bumped)
+		H.unregister_event(/event/touched, src, src::on_touched())
+		H.unregister_event(/event/attacked_by, src, src::on_attacked_by())
+		H.unregister_event(/event/hitby, src, src::on_hitby())
+		H.unregister_event(/event/unarmed_attack, src, src::on_unarmed_attack())
+		H.unregister_event(/event/to_bump, src, src::on_to_bump())
+		H.unregister_event(/event/bumped, src, src::on_bumped())
 
 /obj/item/clothing/suit/bomber_vest/examine(mob/user)
 	..()

@@ -151,7 +151,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	if(!(get_turf(src) == get_turf(user)))
 		return
-
+	..()
 	if(lit)
 		return
 
@@ -439,7 +439,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/attack_self(mob/user as mob)
 	if(lit)
-		user.visible_message("<span class='notice'>[user] calmly drops and treads on the lit [name], putting it out.</span>")
+		user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
 		var/turf/T = get_turf(src)
 		var/atom/new_butt = new type_butt(T)
 		transfer_fingerprints_to(new_butt)
@@ -542,7 +542,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/bugged/attack_self(mob/user as mob)
 	if(lit)
-		user.visible_message("<span class='notice'>[user] calmly drops and treads on the lit [name], putting it out.</span>")
+		user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
 		var/turf/T = get_turf(src)
 		var/obj/item/trash/cigbutt/bugged/new_butt = new /obj/item/trash/cigbutt/bugged(T)
 		new_butt.cigbug.radio_tag = cig_tag
@@ -740,7 +740,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	icon_state = "pipe"
 	slot_flags = SLOT_MASK
 	overlay_on = "pipelit"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	smoketime = 100
 
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
@@ -806,6 +806,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A nicotine delivery system popularized by folksy backwoodsmen and kept popular in the modern age and beyond by space hipsters."
 	icon_state = "cobpipe"
 	smoketime = 400
+	species_fit = list(VOX_SHAPED)
 
 /////////////////
 //CHEAP LIGHTER//
@@ -904,12 +905,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/afterattack(obj/O, mob/user, proximity)
 	if(!proximity)
 		return 0
-	if(istype(O, /obj/structure/reagent_dispensers/fueltank))
-		fuel += O.reagents.remove_any(initial(fuel) - fuel)
+	..()
+	if(istype(O, /obj/structure/reagent_dispensers) && O.reagents.has_reagent(FUEL))
+		fuel += O.reagents.remove_reagent(FUEL,initial(fuel) - fuel)
 		user.visible_message("<span class='notice'>[user] refuels \the [src].</span>", \
 		"<span class='notice'>You refuel \the [src].</span>")
 		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
-		return
 
 /obj/item/weapon/lighter/attack_self(mob/living/user)
 	var/turf/T = get_turf(src)

@@ -47,8 +47,9 @@
 				src.throwing = 0
 				src.crashing = null
 
-		else if(istype(obstacle, /obj/structure/reagent_dispensers/fueltank))
-			obstacle.ex_act(1)
+		else if(istype(obstacle, /obj/structure/reagent_dispensers))
+			var/obj/structure/reagent_dispensers/R = obstacle
+			R.explode(src)
 
 		else if(istype(obstacle, /mob/living))
 			var/mob/living/L = obstacle
@@ -201,8 +202,7 @@
 		heal_target.healers.Remove(src)
 		heal_target = null
 	if (ray)
-		qdel(ray)
-		ray = null
+		QDEL_NULL(ray)
 
 /obj/effect/overlay/artificerray
 	name = "ray"
@@ -628,7 +628,7 @@ var/list/astral_projections = list()
 		canmove = 0
 		incorporeal_move = 1
 		flying = 1
-		flags = HEAR | TIMELESS | INVULNERABLE	
+		flags = HEAR | TIMELESS | INVULNERABLE
 		speed = 0.5
 		client.CAN_MOVE_DIAGONALLY = 1
 		overlay_fullscreen("astralborder", /obj/abstract/screen/fullscreen/astral_border)

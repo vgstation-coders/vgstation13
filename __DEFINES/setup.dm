@@ -1128,6 +1128,10 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define AUTOIGNITION_FABRIC 523.15
 #define AUTOIGNITION_PROTECTIVE 573.15 //autoignition temperature of protective clothing like firesuits or kevlar vests
 #define AUTOIGNITION_ORGANIC 633.15 //autoignition temperature of animal fats
+// Assuming this is http://en.wikipedia.org/wiki/Butane
+// (Autoignition temp 288°C, or 561.15°K)
+// Used in fueltanks exploding.
+#define AUTOIGNITION_WELDERFUEL 561.15
 
 // snow business
 #define SNOWBALL_MINIMALTEMP 265	//about -10°C, the minimal temperature at which a thrown snowball can cool you down.
@@ -1219,6 +1223,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define I_WIRES    "wires"
 #define I_GHOST    "poltergeist"
 #define I_ARTIFACT "artifacts"
+#define I_RCD      "RCD"
 
 
 // delayNext() flags.

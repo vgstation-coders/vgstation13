@@ -83,7 +83,7 @@
 	item_state = "clown"
 	_color = "clown"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/head_of_personnel

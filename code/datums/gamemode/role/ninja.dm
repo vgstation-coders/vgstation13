@@ -166,8 +166,7 @@ var/list/valid_ninja_suits = list(
 
 //This can stick into silicons and humans
 /obj/item/stack/shuriken/throw_impact(atom/impacted_atom, speed, mob/user)
-	..()
-	if(isliving(impacted_atom))
+	if(!..() && isliving(impacted_atom))
 		var/mob/living/L = impacted_atom
 		forceMove(L)
 		visible_message("<span class='warning'>The [src] sticks to \the [L]!</span>")
@@ -409,7 +408,7 @@ var/list/valid_ninja_suits = list(
 				list("Charge Sword", "radial_zap", "Reset the cooldown on your blade's teleport. Cost: [CHARGE_COST_MULTIPLIER]0 per second."),
 			)
 
-			var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
+			var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, src::radial_check(), user))
 			if(!radial_check(user))
 				return
 			switch(task)
@@ -775,6 +774,7 @@ Suit and assorted
 	permeability_coefficient = 0.01
 	mag_slow = NO_SLOWDOWN
 	clothing_flags = NOSLIP | MAGPULSE
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/ninja/redsun
 	name = "sundowner boots"

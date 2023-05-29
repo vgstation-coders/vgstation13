@@ -37,8 +37,7 @@
 		var/b = new src.type
 		o.contents.Add(a)
 		o.contents.Add(b)
-		qdel (W)
-		W = null
+		QDEL_NULL (W)
 		qdel (src)
 
 /obj/structure/skeleton
@@ -60,8 +59,7 @@
 		if(!bstate)
 			bnum++
 			src.contents.Add(new/obj/item/weapon/fossil/bone)
-			qdel (W)
-			W = null
+			QDEL_NULL (W)
 			if(bnum==breq)
 				usr = user
 				icon_state = "skel"

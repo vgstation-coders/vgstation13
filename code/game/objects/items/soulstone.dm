@@ -176,8 +176,7 @@
 	surgerysound = 'sound/items/scalpel.ogg'
 
 /obj/item/soulstone/gem/throw_impact(var/atom/hit_atom, var/speed, var/mob/user)
-	..()
-	if (isturf(loc))
+	if (!..() && isturf(loc))
 		var/obj/item/soulstone/S = new(loc)
 		if (shade)
 			shade.forceMove(S)

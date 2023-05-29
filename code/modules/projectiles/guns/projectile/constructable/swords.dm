@@ -68,8 +68,7 @@
 
 /obj/item/weapon/sword/weaponcraft/Destroy()
 	if(hypo)
-		qdel(hypo)
-		hypo = null
+		QDEL_NULL(hypo)
 	..()
 
 /obj/item/weapon/sword/venom
@@ -110,11 +109,9 @@
 
 /obj/item/weapon/sword/venom/Destroy()
 	if(beaker)
-		qdel(beaker)
-		beaker = null
+		QDEL_NULL(beaker)
 	if(HY)
-		qdel(HY)
-		HY = null
+		QDEL_NULL(HY)
 	..()
 
 /obj/item/weapon/sword/venom/proc/update_color()

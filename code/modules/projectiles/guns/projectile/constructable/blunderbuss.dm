@@ -32,8 +32,7 @@
 
 /obj/item/weapon/blunderbuss/Destroy()
 	if(loaded_item)
-		qdel(loaded_item)
-		loaded_item = null
+		QDEL_NULL(loaded_item)
 	..()
 
 /obj/item/weapon/blunderbuss/proc/update_verbs()

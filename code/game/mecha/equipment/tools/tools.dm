@@ -347,7 +347,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M)
 	if(..())
-		if(istype(M, /obj/mecha/working/ripley/firefighter) || istype(M, /obj/mecha/working/clarke))
+		if(istype(M, /obj/mecha/working/ripley/mk2/firefighter) || istype(M, /obj/mecha/working/clarke))
 			return 1
 	return 0
 
@@ -552,12 +552,9 @@
 	red_tool_list += src
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Destroy()
-	qdel(RPD)
-	RPD = null
-	qdel(RCD)
-	RCD = null
-	qdel(sock)
-	sock = null
+	QDEL_NULL(RPD)
+	QDEL_NULL(RCD)
+	QDEL_NULL(sock)
 	red_tool_list -= src
 	..()
 
@@ -923,8 +920,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/Destroy()
 	chassis.overlays -= droid_overlay
-	qdel(pr_repair_droid)
-	pr_repair_droid = null
+	QDEL_NULL(pr_repair_droid)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/detach()
@@ -1021,8 +1017,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/Destroy()
-	qdel(pr_energy_relay)
-	pr_energy_relay = null
+	QDEL_NULL(pr_energy_relay)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/detach()
@@ -1161,8 +1156,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/generator/Destroy()
-	qdel(pr_mech_generator)
-	pr_mech_generator = null
+	QDEL_NULL(pr_mech_generator)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/generator/proc/init()
@@ -1431,10 +1425,8 @@
 	pr_switchtool.toggle()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/Destroy()
-	qdel(switchtool)
-	switchtool = null
-	qdel(pr_switchtool)
-	pr_switchtool = null
+	QDEL_NULL(switchtool)
+	QDEL_NULL(pr_switchtool)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/action(atom/target)
@@ -1572,8 +1564,7 @@
 	collector.connected_module = src
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/Destroy()
-	qdel(collector)
-	collector = null
+	QDEL_NULL(collector)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/action(atom/target)
@@ -1603,6 +1594,54 @@
 	if(collector.P.air_contents[GAS_PLASMA] <= 0)
 		return "[..()] ERROR: Tank empty. \[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 	return "[..()] \[<a href='?src=\ref[src];toggle=0'>[collector.active ? "Deactivate" : "Activate"] radiation collector array</a>\]\[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
+
+/obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade
+	name = "Ripley MK-II Conversion Kit"
+	desc = "A pressurized canopy attachment kit for an Autonomous Power Loader Unit \"Ripley\" MK-I mecha, to convert it to the slower, but space-worthy MK-II design. Requires access to the internal compartments, and that the mech has a power source, is unoccupied and the cargo compartment is empty."
+	icon_state = "ripleyupgrade"
+
+/obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade/can_attach(obj/mecha/working/ripley/M)
+	if(M.enclosed) // i'm dumb and missed why istype wasn't working :c
+		return 0
+	if(M.cargo.len)
+		return 0
+	if(!M.mech_maints_ready) //non-removable upgrade, so lets make sure the pilot or owner has their say.
+		return 0
+	if(M.occupant) //We're actualy making a new mech and swapping things over, it might get weird if players are involved
+		return 0
+	if(!M.cell) //Turns out things break if the cell is missing
+		return 0
+	return 1
+
+/obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade/attach(obj/mecha/markone)
+	var/obj/mecha/working/ripley/mk2/marktwo = new (get_turf(markone),1)
+	if(!marktwo)
+		return
+	qdel(marktwo.cell)
+	marktwo.cell = null
+	if (markone.cell)
+		marktwo.cell = markone.cell
+		markone.cell.forceMove(marktwo)
+		markone.cell = null
+	qdel(marktwo.tracking)
+	marktwo.tracking = null
+	if (markone.tracking)
+		marktwo.tracking = markone.tracking
+		markone.tracking.forceMove(marktwo)
+		markone.tracking = null
+	for(var/obj/item/mecha_parts/mecha_equipment/equipment in markone.equipment) //Move the equipment over...
+		equipment.detach(marktwo)
+		equipment.attach(marktwo)
+	marktwo.dna = markone.dna
+	if(markone.get_health() < 100)
+		marktwo.health = markone.health
+	marktwo.health = marktwo.health
+	if(markone.name != initial(markone.name))
+		marktwo.name = markone.name
+	markone.wreckage = FALSE
+	qdel(markone)
+	qdel(src)
+	playsound(get_turf(marktwo),'sound/items/ratchet.ogg',50,TRUE)
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED

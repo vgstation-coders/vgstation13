@@ -1411,7 +1411,7 @@ var/list/arcane_tomes = list()
 	name = "magus helm"
 	icon_state = "magus"
 	item_state = "magus"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	desc = "A helm."
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
@@ -1692,8 +1692,7 @@ var/list/arcane_tomes = list()
 			stored_gear.Remove(I)
 			I.forceMove(T)
 	if (remaining)
-		qdel(remaining)
-		remaining = null
+		QDEL_NULL(remaining)
 	..()
 
 /obj/item/weapon/blood_tesseract/throw_impact(atom/hit_atom)

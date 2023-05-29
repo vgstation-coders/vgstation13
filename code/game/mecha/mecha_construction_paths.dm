@@ -14,28 +14,28 @@
 
 	steps = list(
 					//1
-					list(Co_DESC="External armor is wrenched.",
+					list(Co_DESC="Cockpit wire mesh is installed. It requires welding into place.",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
 					 		Co_VIS_MSG = "{USER} weld{s} external armor layer to {HOLDER}."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the external armor layer.")
+					 		Co_VIS_MSG = "{USER} unfasten{s} the cockpit wire screen.")
 					 	),
 					//2
-					 list(Co_DESC="External armor is installed.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 list(Co_DESC="Cockpit wire mesh is installed. It requires securing with a screwdriver.",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
 					 		Co_VIS_MSG = "{USER} secure{s} external armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} external armor layer from {HOLDER}.",
-					 		Co_START_MSG = "{USER} begin{s} removing the external reinforced armor...",
+					 		Co_START_MSG = "{USER} begin{s} removing the cockpit's wire screen...",
 					 		Co_DELAY = 30,)
 					 	),
 					 //3
-					 list(Co_DESC="Internal armor is welded.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/plasteel,
-					 		Co_AMOUNT = 5,
-					 		Co_VIS_MSG = "{USER} install{s} external reinforced armor layer to {HOLDER}.",
-					 		Co_START_MSG = "{USER} begin{s} installing the external reinforced armor...",
+					 list(Co_DESC="Internal armor is welded. The unsealed cabin requires metal rods, for a screen. ",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/rods,
+					 		Co_AMOUNT = 10,
+					 		Co_VIS_MSG = "{USER} install{s} a steel wire mesh to {HOLDER}'s cabin.",
+					 		Co_START_MSG = "{USER} begin{s} installing the wire mesh...",
 					 		Co_DELAY = 30),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
@@ -157,7 +157,7 @@
 	result = "/obj/mecha/working/ripley"
 
 /datum/construction/reversible/mecha/firefighter
-	result = "/obj/mecha/working/ripley/firefighter"
+	result = "/obj/mecha/working/ripley/mk2/firefighter"
 	steps = list(
 					//1
 					list(Co_DESC="External armor is wrenched.",

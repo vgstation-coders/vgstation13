@@ -33,8 +33,7 @@
 	if(!current_ammo)
 		return click_empty(user)
 	if(in_chamber)
-		qdel(in_chamber)
-		in_chamber = null
+		QDEL_NULL(in_chamber)
 	in_chamber = new/obj/item/projectile/bullet/mahoganut(src)
 	if(Fire(A,user,params, "struggle" = struggle))
 		current_ammo--

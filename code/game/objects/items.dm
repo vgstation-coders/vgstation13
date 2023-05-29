@@ -213,6 +213,19 @@
 	..()
 	qdel(src)
 
+var/global/objects_thrown_when_explode = FALSE
+
+/obj/item/throw_impact(atom/impacted_atom, speed, mob/user)
+	..()
+	if(isturf(impacted_atom))
+		var/turf/T = impacted_atom
+		if(objects_thrown_when_explode || (T.arcanetampered && T.arcanetampered != user))
+			playsound(T, get_sfx("explosion_small"), 100, 1, get_rand_frequency(), falloff = 5)
+			T.turf_animation('icons/effects/96x96.dmi',"explosion_small",-WORLD_ICON_SIZE, -WORLD_ICON_SIZE, 13)
+			qdel(src)
+			return 1
+	return 0
+
 /obj/item/Topic(href, href_list)
 	.=..()
 	if(href_list["close"])
@@ -1074,8 +1087,7 @@
 		wielded.wielding = null
 		user.u_equip(wielded,1)
 		if(wielded)
-			qdel(wielded)
-			wielded = null
+			QDEL_NULL(wielded)
 	update_wield(user)
 
 /obj/item/proc/update_wield(mob/user)
@@ -1583,20 +1595,6 @@ var/global/list/image/blood_overlays = list()
 		add_fingerprint(usr)
 
 /obj/item/proc/pre_throw(atom/movable/target)
-	return
-
-/**
-	Attempt to heat this object from a presumed heat source.
-	@args:
-		A: Atom: The source of the heat
-		user: mob: Whomever may be trying to heat this object
-
-	@return:
-		TRUE if succesful
-		FALSE if not succesful
-		NULL if override not defined
-**/
-/obj/item/proc/attempt_heating(atom/A, mob/user)
 	return
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)

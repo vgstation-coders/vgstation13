@@ -28,8 +28,7 @@
 	pipe_networks -= src
 
 	if(air_transient)
-		qdel(air_transient)
-		air_transient = null
+		QDEL_NULL(air_transient)
 
 	radiate = null //This is a ref to an external gas_mixture, so it should not be deleted
 

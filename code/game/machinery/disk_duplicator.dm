@@ -322,8 +322,7 @@ var/list/inserted_datadisk_cache = list()
 
 	if (emagged)
 		qdel(disk_source)
-		qdel(disk_dest)
-		disk_dest = null
+		QDEL_NULL(disk_dest)
 		disk_source = new /obj/item/weapon/disk(src)
 		new /obj/item/weapon/disk(loc)
 		playsound(loc, 'sound/machines/click.ogg', 50, 1)
@@ -331,8 +330,7 @@ var/list/inserted_datadisk_cache = list()
 		return
 
 
-	qdel(disk_dest)
-	disk_dest = null
+	QDEL_NULL(disk_dest)
 
 	playsound(loc, 'sound/machines/click.ogg', 50, 1)
 	var/obj/item/weapon/disk/C = new disk_source.type(loc)

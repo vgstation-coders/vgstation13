@@ -711,8 +711,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	..()
 
 /obj/item/weapon/light/throw_impact(atom/hit_atom)
-	..()
-	shatter()
+	if(!..())
+		shatter()
 
 /obj/item/weapon/light/bulb/fire
 	name = "fire bulb"

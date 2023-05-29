@@ -568,6 +568,7 @@
 	badness = EFFECT_DANGER_HARMFUL
 	chance = 10
 	max_chance = 20
+	max_multiplier = 4
 	var/old_r_hair = 0
 	var/old_g_hair = 0
 	var/old_b_hair = 0
@@ -654,15 +655,20 @@
 				var/list/possible_invocations = list(
 					"By Merlins beard!",
 					"Feel the power of the Dark Side!",
-					"NEC CANTIO!",
 					"AULIE OXIN FIERA!",
 					"STI KALY!",
 					"TARCOL MINTI ZHERI!")
 
-				if (count >= 40)
+				if (multiplier >= 1.5)
+					possible_invocations += "NEC CANTIO!"
+
+				if (multiplier >= 2)
+					possible_invocations += "E'MAGI!"
+
+				if (multiplier >= 3)
 					possible_invocations += "SCYAR NILA!"
 
-				if (count >= 60)
+				if (multiplier >= 3.5)
 					possible_invocations += "EI NATH!"//may the gods forgive me
 
 				var/spell_to_cast = pick(possible_invocations)
@@ -737,7 +743,7 @@
 										L+=T
 							if(L?.len)
 								mob.forceMove(pick(L))
-					if ("EI NATH!")//at least it's 1 out of 7, in a 2% chance to happen of an effect with a 10% (max 20%) to proc.
+					if ("EI NATH!")
 						var/list/targets = list()
 						for(var/mob/living/L in range(1, get_turf(mob)))
 							if (L != mob)
@@ -751,6 +757,11 @@
 										var/obj/item/organ/internal/brain/B = new(C.loc)
 										B.transfer_identity(C)
 								target.gib()
+					if ("E'MAGI!")
+						for(var/atom/AM in range (7, get_turf(mob)))
+							AM.arcane_act()
+
+
 
 			if(count >= 60)
 				spawn_wizard_clothes(mob)
@@ -894,8 +905,7 @@
 			H.my_appearance.b_eyes = old_b_eyes
 			H.update_body()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 	if (emitter)
 		emitter.unregister_event(/event/before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
 		emitter.unregister_event(/event/after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
@@ -908,8 +918,7 @@
 
 /datum/disease2/effect/emitter/on_death(var/mob/living/carbon/mob)
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 
 /datum/disease2/effect/emitter/proc/ready()
 	if (!emitter || !isturf(emitter.loc) || emitter.lying || emitter.stat != CONSCIOUS)
@@ -943,8 +952,7 @@
 /datum/disease2/effect/emitter/proc/update_emitter()
 	if (!ready())
 		if (beam)
-			qdel(beam)
-			beam = null
+			QDEL_NULL(beam)
 		return
 	if (!beam)
 		if (!ismouse(emitter))
@@ -966,8 +974,7 @@
 
 /datum/disease2/effect/emitter/proc/update_emitter_start()
 	if (beam)
-		qdel(beam)
-		beam = null
+		QDEL_NULL(beam)
 
 /datum/disease2/effect/emitter/proc/update_emitter_end()
 	if (!ready())
@@ -1152,6 +1159,32 @@
 		H.set_species("Unathi")
 		H.regenerate_icons()
 
+/datum/disease2/effect/insectoid
+	name = "Kafkaesque Syndrome"
+	desc =  "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into an Insectoid."
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY
+
+/datum/disease2/effect/insectoid/activate(var/mob/living/mob)
+	if(ishuman(mob) && !isinsectoid(mob))
+		var/mob/living/carbon/human/H = mob
+		H.set_species("Insectoid")
+		H.regenerate_icons()
+		if(prob(5))
+			mob.say("How about if I sleep a little bit longer and forget all this nonsense.")
+
+/datum/disease2/effect/grey
+	name = "Grey Anatomy"
+	desc =  "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Grey."
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY
+
+/datum/disease2/effect/grey/activate(var/mob/living/mob)
+	if(ishuman(mob) && !isgrey(mob))
+		var/mob/living/carbon/human/H = mob
+		H.set_species("Grey")
+		H.regenerate_icons()
+
 
 /datum/disease2/effect/faithless
 	name = "Curse of the Faithless"
@@ -1181,7 +1214,7 @@
 			F.melee_damage_lower = 20
 			F.melee_damage_upper = 20
 			F.name = H.name
-			qdel(H)		
+			qdel(H)
 			flick("cult_jaunt_land",landing_animation)
 			return
 
@@ -1193,5 +1226,5 @@
 		H.update_mutantrace()
 		H.update_body()
 		H.handle_regular_hud_updates()
-	
+
 

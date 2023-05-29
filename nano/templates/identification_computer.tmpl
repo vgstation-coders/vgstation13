@@ -138,12 +138,14 @@
                 <td>
                   {{:helper.link("Custom", '', {'choice' : 'assign', 'assign_target' : 'Custom'})}}
                 </td>
-              </tr>             
+              </tr>
 			  <tr>
                 <th>Command</th>
 				<td>
 				  {{for data.head_jobs}}
 				    {{:helper.link(value.display_name, '', {'choice' : 'assign', 'assign_target' : value.job}, data.target_rank == value.job ? 'disabled' : null)}}
+				  {{empty}}
+					(Blocked by demotion chip)
 				  {{/for}}
 				</td>
               </tr>
@@ -152,7 +154,9 @@
                 <td>
                   {{for data.cargo_jobs}}
                     {{:helper.link(value.display_name, '', {'choice' : 'assign', 'assign_target' : value.job}, data.target_rank == value.job ? 'disabled' : null)}}
-                  {{/for}}
+                  {{empty}}
+					(Blocked by demotion chip)
+				  {{/for}}
                 </td>
               </tr>
               <tr>
@@ -160,7 +164,9 @@
                 <td>
                   {{for data.engineering_jobs}}
                     {{:helper.link(value.display_name, '', {'choice' : 'assign', 'assign_target' : value.job}, data.target_rank == value.job ? 'disabled' : null)}}
-                  {{/for}}
+                  {{empty}}
+					(Blocked by demotion chip)
+				  {{/for}}
                 </td>
               </tr>
               <tr>
@@ -168,7 +174,9 @@
                 <td>
                   {{for data.medical_jobs}}
                     {{:helper.link(value.display_name, '', {'choice' : 'assign', 'assign_target' : value.job}, data.target_rank == value.job ? 'disabled' : null)}}
-                  {{/for}}
+                  {{empty}}
+					(Blocked by demotion chip)
+				  {{/for}}
                 </td>
               </tr>
               <tr>
@@ -176,7 +184,9 @@
                 <td>
                   {{for data.science_jobs}}
                     {{:helper.link(value.display_name, '', {'choice' : 'assign', 'assign_target' : value.job}, data.target_rank == value.job ? 'disabled' : null)}}
-                  {{/for}}
+                  {{empty}}
+					(Blocked by demotion chip)
+				  {{/for}}
                 </td>
               </tr>
               <tr>
@@ -184,7 +194,9 @@
                 <td>
                   {{for data.security_jobs}}
                     {{:helper.link(value.display_name, '', {'choice' : 'assign', 'assign_target' : value.job}, data.target_rank == value.job ? 'disabled' : null)}}
-                  {{/for}}
+                  {{empty}}
+					(Blocked by demotion chip)
+				  {{/for}}
                 </td>
               </tr>
               <tr>
@@ -195,7 +207,9 @@
                       </td></tr><tr><th></th><td>
                     {{/if}}
                     {{:helper.link(value.display_name, '', {'choice' : 'assign', 'assign_target' : value.job}, data.target_rank == value.job ? 'disabled' : null)}}
-                  {{/for}}
+                  {{empty}}
+					(Blocked by demotion chip)
+				  {{/for}}
                 </td>
               </tr>
               {{if data.centcom_access}}
@@ -207,7 +221,9 @@
                         </td></tr><tr><th></th><td>
                       {{/if}}
                       {{:helper.link(value.display_name, '', {'choice' : 'assign', 'assign_target' : value.job}, data.target_rank == value.job ? 'disabled' : null)}}
-                    {{/for}}
+                    {{empty}}
+					  (Blocked by demotion chip)
+				  	{{/for}}
                   </td>
                 </tr>
              {{/if}}
@@ -246,6 +262,8 @@
                   <div class='itemContentWide'>
                     {{:helper.link(accessValue.desc, '', {'choice' : 'access', 'access_target' : accessValue.ref, 'allowed' : accessValue.allowed}, null, accessValue.allowed ? 'selected' : null)}}
                   </div>
+				{{empty}}
+					(Blocked by demotion chip)
                 {{/for}}
               </div>
             {{/for}}

@@ -45,8 +45,7 @@
 	for(var/obj/machinery/am_shielding/AMS in linked_cores)
 		AMS.control_unit = null
 		qdel(AMS)
-	qdel(fueljar)
-	fueljar = null
+	QDEL_NULL(fueljar)
 	..()
 
 

@@ -634,8 +634,7 @@
 
 /obj/item/weapon/melee/stunprobe/Destroy()
 	if (bcell)
-		qdel(bcell)
-		bcell = null
+		QDEL_NULL(bcell)
 
 	return ..()
 
@@ -1068,8 +1067,7 @@
 /obj/machinery/acidshower/update_icon()	//This handles the acid overlay when the shower is on, and makes the vapor appear after a while
 	overlays.len = 0
 	if(myvapor)
-		qdel(myvapor)
-		myvapor = null
+		QDEL_NULL(myvapor)
 
 	if(on)
 		var/image/acid = image('icons/obj/acidcloset.dmi', src, "acid", BELOW_OBJ_LAYER, dir)
@@ -1090,8 +1088,7 @@
 		myvapor = new /obj/effect/acidvapor(get_turf(src))
 		spawn(250)
 			if(src && !on)
-				qdel(myvapor)
-				myvapor = null
+				QDEL_NULL(myvapor)
 				isvapor = 0
 
 /obj/machinery/acidshower/Crossed(atom/movable/O)

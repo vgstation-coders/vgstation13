@@ -206,8 +206,7 @@
 	if(radio_connection)
 		return radio_connection.post_signal(src, signal)
 	else
-		qdel(signal)
-		signal = null
+		QDEL_NULL(signal)
 
 /obj/machinery/embedded_controller/radio/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)

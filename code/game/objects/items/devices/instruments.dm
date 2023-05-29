@@ -15,8 +15,7 @@
 	song.instrumentExt = instrumentExt
 
 /obj/item/device/instrument/Destroy()
-	qdel(song)
-	song = null
+	QDEL_NULL(song)
 	..()
 
 /obj/item/device/instrument/initialize()
@@ -32,12 +31,12 @@
 		if(istype(C) && !C.hasmouth())
 			to_chat(user, "<span class='warning'>You need a mouth to play this instrument!</span>")
 			return 1
-	interact(user)
+	ui_interact(user)
 
 /obj/item/device/instrument/drum/drum_makeshift/bongos/attack_self(mob/user as mob)
-	interact(user)
+	ui_interact(user)
 
-/obj/item/device/instrument/interact(mob/user as mob)
+/obj/item/device/instrument/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null, var/force_open=NANOUI_FOCUS)
 	if(!user)
 		return
 
@@ -45,7 +44,7 @@
 		return
 
 	user.set_machine(src)
-	song.interact(user)
+	song.ui_interact(user,ui_key,ui,force_open)
 
 /obj/item/device/instrument/proc/OnPlayed(mob/user,mob/M)
 	return

@@ -1,8 +1,3 @@
-// Assuming this is http://en.wikipedia.org/wiki/Butane
-// (Autoignition temp 288°C, or 561.15°K)
-// Used in fueltanks exploding.
-#define AUTOIGNITION_WELDERFUEL 561.15
-
 /obj/structure/reagent_dispensers
 	name = "Dispenser"
 	desc = "..."
@@ -13,8 +8,12 @@
 	flags = FPRINT
 	pressure_resistance = 2*ONE_ATMOSPHERE
 
+	var/exploded = FALSE // we gotta have a var like this now for it, akin to supermatter shards
 	var/amount_per_transfer_from_this = 10
 	var/possible_transfer_amounts = list(10,25,50,100)
+
+	var/modded = 0
+	var/obj/item/device/assembly_holder/rig = null
 
 /obj/structure/reagent_dispensers/AltClick(mob/user)
 	if(!user.incapacitated() && user.Adjacent(get_turf(src)) && possible_transfer_amounts)
@@ -22,13 +21,64 @@
 		return
 	return ..()
 
-/obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_wrench(user) && wrenchable())
-		return wrenchAnchor(user, W)
-
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
 	reagents.get_examine(user)
+	if (modded)
+		to_chat(user, "<span class='warning'>The faucet is wrenched open, leaking the contents!</span>")
+	if(rig)
+		to_chat(user, "<span class='notice'>There is some kind of device rigged to the tank.</span>")
+
+
+/*/obj/structure/reagent_dispensers/hear_talk(mob/living/M, text)
+	if(rig)
+		rig.hear_talk(M,text)
+*/
+
+/obj/structure/reagent_dispensers/attack_hand()
+	if (rig)
+		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src].")
+		if(do_after(usr, src, 20))
+			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src].</span>")
+			if(rig)
+				rig.forceMove(get_turf(usr))
+				rig.master = null
+				rig = null
+			overlays = new/list()
+
+/obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(W.is_wrench(user))
+		if(wrenchable())
+			return wrenchAnchor(user, W)
+		else if(!is_open_container())
+			user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
+				"You wrench [src]'s faucet [modded ? "closed" : "open"].")
+			modded = !modded
+	if (!is_open_container() && istype(W,/obj/item/device/assembly_holder))
+		if (rig)
+			to_chat(user, "<span class='warning'>There is another device in the way.</span>")
+			return ..()
+		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src].")
+		if(do_after(user, src, 20))
+			if(rig)
+				to_chat(user, "<span class='warning'>Somebody already attached something to \the [src].</span>")
+				return
+			if(!user.drop_item(W, src))
+				to_chat(user,"<span class='warning'>Oops! You can't let go of \the [W]!</span>")
+				return
+
+			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src].</span>")
+
+			var/obj/item/device/assembly_holder/H = W
+			if (istype(H.a_left,/obj/item/device/assembly/igniter) || istype(H.a_right,/obj/item/device/assembly/igniter))
+				message_admins("[key_name_admin(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
+				log_game("[key_name(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
+
+			rig = W
+			rig.master = src
+
+			var/image/test = image(W.appearance, src, "pixel_x" = 6, "pixel_y" = -1)
+			overlays += test
 
 /obj/structure/reagent_dispensers/cultify()
 	new /obj/structure/reagent_dispensers/bloodkeg(get_turf(src))
@@ -43,27 +93,80 @@
 		amount_per_transfer_from_this = N
 
 /obj/structure/reagent_dispensers/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				new /obj/effect/water(src.loc)
+	explode()
+	if(src)
+		switch(severity)
+			if(1.0)
 				qdel(src)
-				return
-		if(3.0)
-			if (prob(5))
-				new /obj/effect/water(src.loc)
-				qdel(src)
-				return
-		else
-	return
+			if(2.0)
+				if (prob(50))
+					new /obj/effect/water(src.loc)
+					qdel(src)
+			if(3.0)
+				if (prob(5))
+					new /obj/effect/water(src.loc)
+					qdel(src)
 
 /obj/structure/reagent_dispensers/blob_act()
-	if(prob(50))
+	explode()
+	if(src && prob(50))
 		new /obj/effect/water(src.loc)
 		qdel(src)
+
+/obj/structure/reagent_dispensers/beam_connect(var/obj/effect/beam/B)
+	..()
+	apply_beam_damage(B)
+
+
+/obj/structure/reagent_dispensers/beam_disconnect(var/obj/effect/beam/B)
+	..()
+	apply_beam_damage(B)
+
+/obj/structure/reagent_dispensers/apply_beam_damage(var/obj/effect/beam/B)
+	if(isturf(get_turf(src)) && B.get_damage() >= 15)
+		explode()
+
+/obj/structure/reagent_dispensers/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
+		explode()
+
+/obj/structure/reagent_dispensers/bullet_act(var/obj/item/projectile/Proj)
+	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
+		if(Proj.get_damage() && can_explode())
+			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
+			if(Proj.firer)//turrets don't have "firers"
+				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
+				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
+			else
+				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
+			explode(Proj.firer,TRUE)
+	return ..()
+
+/obj/structure/reagent_dispensers/suicide_act(var/mob/living/user)
+	if(user.held_items.len && can_explode())
+		var/hotfound = FALSE
+		var/obj/item/tool/weldingtool/welder
+		for(var/obj/item/I in user.held_items)
+			if(I.is_hot())
+				hotfound = TRUE
+			if(iswelder(I))
+				welder = I
+		if(welder)
+			welder.setWelding(1)
+			if(welder.welding || welder.is_hot())
+				hotfound = TRUE
+		if(hotfound)
+			var/message_say = user.handle_suicide_bomb_cause(src)
+			if(!message_say)
+				return
+			to_chat(viewers(user), "<span class='danger'>[user] presses the warm lit welder against the cold body of a welding fuel tank! It looks like \he's going out with a bang!</span>")
+			user.say(message_say)
+			welder.afterattack(src,user,1)
+			return(SUICIDE_ACT_BRUTELOSS)
+	if(!is_open_container() && reagents.total_volume)
+		to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+		reagents.trans_to(user, amount_per_transfer_from_this)
+		return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/New()
 	. = ..()
@@ -106,106 +209,6 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "weldtank"
 	amount_per_transfer_from_this = 10
-	var/modded = 0
-	var/obj/item/device/assembly_holder/rig = null
-
-/*/obj/structure/reagent_dispensers/fueltank/hear_talk(mob/living/M, text)
-	if(rig)
-		rig.hear_talk(M,text)
-*/
-
-/obj/structure/reagent_dispensers/fueltank/examine(mob/user)
-	..()
-	if (modded)
-		to_chat(user, "<span class='warning'>Fuel faucet is wrenched open, leaking the fuel!</span>")
-	if(rig)
-		to_chat(user, "<span class='notice'>There is some kind of device rigged to the tank.</span>")
-
-/obj/structure/reagent_dispensers/fueltank/attack_hand()
-	if (rig)
-		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src].")
-		if(do_after(usr, src, 20))
-			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src].</span>")
-			if(rig)
-				rig.forceMove(get_turf(usr))
-				rig.master = null
-				rig = null
-			overlays = new/list()
-
-/obj/structure/reagent_dispensers/fueltank/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (W.is_wrench(user))
-		user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
-			"You wrench [src]'s faucet [modded ? "closed" : "open"].")
-		modded = modded ? 0 : 1
-	if (istype(W,/obj/item/device/assembly_holder))
-		if (rig)
-			to_chat(user, "<span class='warning'>There is another device in the way.</span>")
-			return ..()
-		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src].")
-		if(do_after(user, src, 20))
-			if(rig)
-				to_chat(user, "<span class='warning'>Somebody already attached something to \the [src].</span>")
-				return
-			if(!user.drop_item(W, src))
-				to_chat(user,"<span class='warning'>Oops! You can't let go of \the [W]!</span>")
-				return
-
-			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src].</span>")
-
-			var/obj/item/device/assembly_holder/H = W
-			if (istype(H.a_left,/obj/item/device/assembly/igniter) || istype(H.a_right,/obj/item/device/assembly/igniter))
-				message_admins("[key_name_admin(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
-				log_game("[key_name(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
-
-			rig = W
-			rig.master = src
-
-			var/image/test = image(W.appearance, src, "pixel_x" = 6, "pixel_y" = -1)
-			overlays += test
-
-	return ..()
-
-/obj/structure/reagent_dispensers/fueltank/beam_connect(var/obj/effect/beam/B)
-	..()
-	apply_beam_damage(B)
-
-
-/obj/structure/reagent_dispensers/fueltank/beam_disconnect(var/obj/effect/beam/B)
-	..()
-	apply_beam_damage(B)
-
-/obj/structure/reagent_dispensers/fueltank/apply_beam_damage(var/obj/effect/beam/B)
-	if(isturf(get_turf(src)) && B.get_damage() >= 15)
-		explode()
-
-/obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(Proj.get_damage())
-			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
-			if(Proj.firer)//turrets don't have "firers"
-				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
-				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
-			else
-				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
-			explode(Proj.firer)
-	return ..()
-
-/obj/structure/reagent_dispensers/fueltank/suicide_act(var/mob/living/user)
-	var/has_welder = user.find_held_item_by_type(/obj/item/tool/weldingtool)
-	if(has_welder)
-		var/obj/item/tool/weldingtool/welder = user.held_items[has_welder]
-		welder.setWelding(1)
-		if(welder.welding)
-			var/message_say = user.handle_suicide_bomb_cause(src)
-			if(!message_say)
-				return
-			to_chat(viewers(user), "<span class='danger'>[user] presses the warm lit welder against the cold body of a welding fuel tank! It looks like \he's going out with a bang!</span>")
-			user.say(message_say)
-			welder.afterattack(src,user,1)
-			return(SUICIDE_ACT_BRUTELOSS)
-	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
-	reagents.trans_to(user, amount_per_transfer_from_this)
-	return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/fueltank/blob_act()
 	explode()
@@ -217,28 +220,54 @@
 	qdel(src)
 	return  2
 
-/obj/structure/reagent_dispensers/fueltank/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
-		explode()
 
-/obj/structure/reagent_dispensers/fueltank/Bumped(atom/movable/AM)
+/obj/structure/reagent_dispensers/Bumped(atom/movable/AM)
 	..()
 	if(istype(AM, /obj/structure/bed/chair/vehicle))
 		var/obj/structure/bed/chair/vehicle/car = AM
-		if(car.explodes_fueltanks)
+		if(car.explodes_fueltanks && can_explode())
 			visible_message("<span class='danger'>\The [car] crashes into \the [src]!</span>")
 			if(car.occupant && istype(car.occupant, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = car.occupant
 				H.audible_scream("fueltank_crash")
-			explode(car.occupant)
+			explode(car.occupant,TRUE)
 
-/obj/structure/reagent_dispensers/fueltank/proc/explode(var/mob/user)
-	if (reagents.total_volume > 500)
-		explosion(src.loc,1,2,4, whodunnit = user)
-	else if (reagents.total_volume > 100)
-		explosion(src.loc,0,1,3, whodunnit = user)
-	else
+/obj/structure/reagent_dispensers/attempt_heating(atom/A, mob/user)
+	if((A.is_hot() || ((arcanetampered || A.arcanetampered) && iswelder(A) && !A.is_hot())) && can_explode())
+		if(ismob(arcanetampered))
+			message_admins("[key_name_admin(arcanetampered)] caused a fueltank explosion.")
+			log_game("[key_name(arcanetampered)] caused a fueltank explosion.")
+		else if(ismob(A.arcanetampered))
+			message_admins("[key_name_admin(A.arcanetampered)] caused a fueltank explosion.")
+			log_game("[key_name(A.arcanetampered)] caused a fueltank explosion.")
+		else if(!A.arcanetampered && !arcanetampered)
+			message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
+			log_game("[key_name(user)] triggered a fueltank explosion.")
+		to_chat(user, "<span class='warning'>That was stupid of you.</span>")
+		explode(user,TRUE)
+
+/obj/structure/reagent_dispensers/proc/can_explode()
+	if(!reagents.has_reagent(FUEL))
+		return FALSE
+	return TRUE
+
+/obj/structure/reagent_dispensers/fueltank/can_explode()
+	return TRUE
+
+/obj/structure/reagent_dispensers/cauldron/can_explode()
+	return FALSE
+
+/obj/structure/reagent_dispensers/proc/explode(var/mob/user,var/explodechecked = FALSE)
+	if(exploded)
+		return // already hit this proc, don't do it again
+	if(!explodechecked)
+		if(!can_explode())
+			return
+	exploded = TRUE
+	if(!reagents.has_reagent(FUEL))
 		explosion(src.loc,-1,1,2, whodunnit = user)
+	else
+		reagents.heating(received_temperature = AUTOIGNITION_WELDERFUEL)
 	if(src)
 		qdel(src)
 
@@ -480,6 +509,10 @@
 	name = "cauldron"
 	icon_state = "cauldron"
 	desc = "Double, double, toil and trouble. Fire burn, and cauldron bubble."
+	flags = OPENCONTAINER
+
+/obj/structure/reagent_dispensers/cauldron/attempt_heating()
+	return // for now
 
 /obj/structure/reagent_dispensers/cauldron/update_icon()
 	overlays.len = 0
@@ -507,9 +540,6 @@
 	update_icon()
 
 /obj/structure/reagent_dispensers/cauldron/wrenchable()
-	return TRUE
-
-/obj/structure/reagent_dispensers/cauldron/is_open_container()
 	return TRUE
 
 /obj/structure/reagent_dispensers/cauldron/hide_own_reagents()
@@ -590,7 +620,7 @@
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attack_hand(mob/user as mob)
 	if(burning && !cookvessel)
-		visible_message("<span class = 'warning'>You carefully snuff out \the [src] fire.</span>")
+		user.visible_message("<span class = 'notice'>[user] carefully snuffs out \the [src] fire.</span>", "<span class='warning'>You carefully snuff out \the [src] fire.</span>")
 		burning = FALSE
 		processing_objects.Remove(src)
 		update_icon()

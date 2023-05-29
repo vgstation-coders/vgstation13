@@ -167,6 +167,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define SHADOW_LAYER				0
 	#define VEHICLE_LAYER 				0
 	#define CHAIR_ARMREST_LAYER 		0
+	#define DISPOSALS_CHUTE_LAYER 		0
 	#define RAILING_BACK_LAYER 			0.1
 	#define RAILING_MID_LAYER 			0.2
 	#define RAILING_FRONT_LAYER 		0.3

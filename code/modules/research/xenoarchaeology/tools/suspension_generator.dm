@@ -334,8 +334,7 @@
 		M.SetStunned(min(M.stunned, 3))
 
 	src.visible_message("<span class='notice'>[bicon(src)] \the [src] deactivates with a gentle shudder.</span>")
-	qdel(suspension_field)
-	suspension_field = null
+	QDEL_NULL(suspension_field)
 	icon_state = "suspension2"
 
 /obj/machinery/suspension_gen/Destroy()
