@@ -186,7 +186,7 @@
 /mob/proc/RemoteClickOn(atom/A, params, obj/item/held_item, atom/movable/eye)
 	if(held_item)
 		held_item.remote_attack(A, src, eye)
-	else if(mind?.assigned_role == "AI" && ishuman(src)) // clown AI stuff
+	else if(mind && mind.assigned_role == "AI") // clown AI stuff
 		to_chat(src,"test 1")
 		if(spell_channeling)
 			to_chat(src,"test 2")
