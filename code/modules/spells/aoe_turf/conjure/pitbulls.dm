@@ -38,5 +38,5 @@ var/list/pitbulls_exclude_kinlist = list() //all pitbulls go in here so pitbulls
 		locs += user.loc
 	return locs
 
-/spell/aoe_turf/conjure/pitbull/before_cast(list/targets, user)
+/spell/aoe_turf/conjure/pitbull/before_cast(list/targets, user, bypass_range = 0)
 	return targets

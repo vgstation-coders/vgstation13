@@ -84,7 +84,7 @@
 	targets += user
 	return targets
 
-/spell/regen_limbs/is_valid_target(var/target, mob/user, options)
+/spell/regen_limbs/is_valid_target(var/target, mob/user, options, bypass_range = 0)
 	return(target == user)
 
 /spell/targeted/transfer_reagents
@@ -103,7 +103,7 @@
 
 	invocation_type = SpI_NONE
 
-/spell/targeted/transfer_reagents/is_valid_target(target, mob/user, options)
+/spell/targeted/transfer_reagents/is_valid_target(var/target, mob/user, options, bypass_range = 0)
 	if(!istype(target, /obj/machinery/portable_atmospherics/hydroponics))
 		to_chat(holder, "<span class='warning'>That's neither soil nor an hydroponic tray!</span>")
 		return FALSE

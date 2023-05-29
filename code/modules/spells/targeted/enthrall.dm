@@ -25,7 +25,7 @@
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 
-/spell/targeted/enthrall/is_valid_target(var/target, var/mob/user, var/list/options)
+/spell/targeted/enthrall/is_valid_target(var/target, mob/user, options, bypass_range = 0)
 	if (!ismob(target)) // Can only enthrall humans
 		return FALSE
 

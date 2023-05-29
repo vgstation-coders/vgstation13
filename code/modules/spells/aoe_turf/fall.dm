@@ -84,7 +84,7 @@ var/global/list/falltempoverlays = list()
 		invocation(user, targets)
 		take_charge(user, skipcharge)
 
-		targets = before_cast(targets, user)
+		targets = before_cast(list/targets, user, bypass_range = 0)
 		if(!targets.len)
 			return
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")

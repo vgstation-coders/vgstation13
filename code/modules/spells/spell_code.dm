@@ -201,7 +201,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return //Prevent queueing of spells by opening several choose target windows.
 
 	if(targets && targets.len)
-		targets = before_cast(targets, user) //applies any overlays and effects
+		targets = before_cast(list/targets, user, bypass_range) //applies any overlays and effects
 		if(!targets.len) //before cast has rechecked what we can target
 			return
 		invocation(user, targets)

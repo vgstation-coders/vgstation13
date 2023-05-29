@@ -292,7 +292,7 @@
 			speed_name = "Lightning-Fast "
 	return "[speed_name][power_name][original_name]"
 
-/spell/pulse_demon/is_valid_target(var/atom/target, mob/user, options)
+/spell/pulse_demon/is_valid_target(var/target, mob/user, options, bypass_range = 0)
 	return 1
 
 /spell/pulse_demon/generate_tooltip()
@@ -342,7 +342,7 @@
 /spell/pulse_demon/toggle_drain/generate_tooltip()
 	var/dat = "<BR>[desc]"
 	return dat
-	
+
 /spell/pulse_demon/remote_drain
 	name = "Remote Drain"
 	abbreviation = "RD"
@@ -359,7 +359,7 @@
 	empower_cost = 10000
 	quicken_cost = 100000
 
-/spell/pulse_demon/remote_drain/is_valid_target(var/atom/target)
+/spell/pulse_demon/remote_drain/is_valid_target(var/target, mob/user, options, bypass_range = 0)
 	if(istype(target, /obj/machinery/power/apc) || istype(target, /obj/machinery/power/battery))
 		return 1
 	else
@@ -394,7 +394,7 @@
 	quicken_cost = 75000
 
 // Must be a cable or a clicked on turf with a cable
-/spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
+/spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options, bypass_range = 0)
 	if(options)
 		return (target in options)
 	var/turf/T = get_turf(target)
@@ -436,7 +436,7 @@
 	spawn L.process()
 	user.forceMove(target)
 	..()
-	
+
 /spell/pulse_demon/remote_hijack
 	name = "Remote Hijack"
 	abbreviation = "RH"
@@ -453,7 +453,7 @@
 	empower_cost = 20000
 	quicken_cost = 20000
 
-/spell/pulse_demon/remote_hijack/is_valid_target(var/atom/target)
+/spell/pulse_demon/remote_hijack/is_valid_target(var/target, mob/user, options, bypass_range = 0)
 	if(istype(target, /obj/machinery/power/apc))
 		var/obj/machinery/power/apc/A = target
 		if(!A.pulsecompromised)
@@ -487,7 +487,7 @@
 	quicken_cost = 200000
 
 
-/spell/pulse_demon/emag/is_valid_target(atom/target, mob/user)
+/spell/pulse_demon/emag/is_valid_target(var/target, mob/user, options, bypass_range = 0)
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
 		if(PD.controlling_area == get_area(target))
@@ -522,7 +522,7 @@
 	empower_cost = 50000
 	quicken_cost = 200000
 
-/spell/pulse_demon/emp/is_valid_target(atom/target, mob/user)
+/spell/pulse_demon/emp/is_valid_target(var/target, mob/user, options, bypass_range = 0)
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
 		if(PD.controlling_area == get_area(target))
@@ -587,7 +587,7 @@
 		if(PD.move_divide >= 2) //prevent going under 1 incase you upgrade it too much somehow
 			PD.move_divide *= 0.5
 		return temp
-		
+
 // Similar to malf one
 /spell/pulse_demon/overload_machine
 	name = "Overload Machine"
@@ -605,7 +605,7 @@
 	empower_cost = 100000
 	quicken_cost = 500000
 
-/spell/pulse_demon/overload_machine/is_valid_target(var/atom/target, mob/user)
+/spell/pulse_demon/overload_machine/is_valid_target(var/target, mob/user, options, bypass_range = 0)
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
 		if(PD.controlling_area == get_area(target))

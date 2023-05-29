@@ -48,7 +48,7 @@
 		)
 
 
-/spell/targeted/bound_object/is_valid_target(var/obj/target)
+/spell/targeted/bound_object/is_valid_target(var/target, mob/user, options, bypass_range = 0)
 	if(!istype(target))
 		return 0
 	var/datum/zLevel/L = get_z_level(target)
