@@ -261,7 +261,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		holder.dir = user_dir
 		holder.update_dir()
 	if(cast_check(1, holder) && is_valid_target(atom, user, bypass_range = bypassrange))
-		target = before_cast(target, user, bypass_range = bypassrange) //applies any overlays and effects
+		target = before_cast(target, user, bypassrange) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
 			return
 		invocation(user, target)
