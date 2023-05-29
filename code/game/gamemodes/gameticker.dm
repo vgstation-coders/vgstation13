@@ -291,8 +291,6 @@ var/datum/controller/gameticker/ticker
 	ASSERT(T)
 	forceMove(T)
 	mind.assigned_role = "AI"
-	dna.SetSEState(REMOTEVIEWBLOCK,1)
-	domutcheck(src, null, 1)
 	var/obj/structure/curtain/open/clownai/cc = new(T)
 	cc.name = src.name
 	qdel(head)
