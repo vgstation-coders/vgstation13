@@ -32,7 +32,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 
 	var/list/compatible_mobs = list()
 
-/spell/targeted/is_valid_target(var/target, mob/user, options, bypass_range = 0)
+/spell/targeted/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(!(spell_flags & INCLUDEUSER) && target == user)
 		return 0
 	if(!(range == GLOBALCAST) && !(range == SELFCAST && target == user) && (options && !(target in options))) //Shouldn't be necessary but a good check in case of overrides

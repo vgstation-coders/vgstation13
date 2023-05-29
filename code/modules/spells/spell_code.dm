@@ -154,7 +154,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/choose_targets(mob/user = usr) //depends on subtype - see targeted.dm, aoe_turf.dm, dumbfire.dm, or code in general folder
 	return
 
-/spell/proc/is_valid_target(var/target, mob/user, options, bypass_range = 0)
+/spell/proc/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(bypass_range && istype(target, /mob/living))
 		return TRUE
 	if(options)

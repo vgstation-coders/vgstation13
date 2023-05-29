@@ -30,7 +30,7 @@
 	..()
 	chargeoverlay = image("icon" = 'icons/mob/mob.dmi', "icon_state" = "sithlord")
 
-/spell/lightning/is_valid_target(var/target, mob/user, options, bypass_range = 0)
+/spell/lightning/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(options)
 		return (target in options)
 	return ((target in view_or_range(range, user, selection_type)) && (istype(target, /mob/living) || istype(target, /obj/machinery/bot) || istype(target, /obj/mecha)))
