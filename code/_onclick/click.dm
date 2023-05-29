@@ -187,9 +187,12 @@
 	if(held_item)
 		held_item.remote_attack(A, src, eye)
 	else if(mind?.assigned_role == "AI" && ishuman(src)) // clown AI stuff
+		to_chat(src,"test 1")
 		if(spell_channeling)
-			spell_channeling.channeled_spell(A)
+			to_chat(src,"test 2")
+			spell_channeling.channeled_spell(A, bypassrange = TRUE)
 		else if(istype(A,/obj/machinery/door/airlock))
+			to_chat(src,"test 3")
 			var/obj/machinery/door/airlock/D = A
 			if(D.density)
 				D.Topic("aiEnable=7", list("aiEnable"="7"), 1)
