@@ -521,6 +521,11 @@
 	return ..()
 
 /obj/machinery/turretid/CtrlClick(mob/user) //Lock the device
+	if(!(user) || !isliving(user)) //BS12 EDIT
+		return FALSE
+	if(user.incapacitated() || !Adjacent(user))
+		return FALSE
+
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(allowed(user))

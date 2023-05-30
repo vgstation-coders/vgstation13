@@ -72,6 +72,10 @@ var/list/all_GPS_list = list()
 		..()
 
 /obj/item/device/gps/AltClick(mob/user)
+	if(!(user) || !isliving(user)) //BS12 EDIT
+		return FALSE
+	if(user.incapacitated() || !Adjacent(user))
+		return FALSE
 	transmitting = TRUE
 	update_icon()
 
