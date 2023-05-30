@@ -3,7 +3,9 @@
 
 /obj/item/device/nuclear_challenge
 	name = "Syndicate Communications Device"
-	icon_state = "radio"
+	icon = 'icons/obj/radio.dmi'
+	item_state = "walkietalkie"
+	icon_state = "walkietalkie"
 	desc = "Use this to request reinforcements from the syndicate. This will delay your departure and the insecure line means neighbouring stations will hear your request."
 	var/declaring_war = FALSE
 

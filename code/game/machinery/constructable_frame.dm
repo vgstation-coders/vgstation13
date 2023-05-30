@@ -988,6 +988,21 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/subspace/crystal = 2,
 							/obj/item/weapon/stock_parts/subspace/transmitter = 4)
 
+/obj/item/weapon/circuitboard/telehub/syndicate
+	name = "Circuit Board (Teleporter Generator)"
+	desc = "A circuit board used to run a machine that generates a teleporter horizon."
+	build_path = /obj/machinery/teleport/hub/syndicate
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
+	req_components = list(
+							/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 2,
+							/obj/item/weapon/stock_parts/capacitor/adv/super = 3,
+							/obj/item/weapon/stock_parts/subspace/ansible = 2,
+							/obj/item/weapon/stock_parts/subspace/filter = 2,
+							/obj/item/weapon/stock_parts/subspace/treatment = 1,
+							/obj/item/weapon/stock_parts/subspace/crystal = 2,
+							/obj/item/weapon/stock_parts/subspace/transmitter = 4)
+
 /obj/item/weapon/circuitboard/telestation
 	name = "Circuit Board (Teleporter Controller)"
 	desc = "A circuit board used to co-ordinate teleporter generators."
