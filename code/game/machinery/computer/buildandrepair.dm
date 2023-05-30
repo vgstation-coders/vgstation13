@@ -14,8 +14,7 @@
 
 /obj/structure/computerframe/Destroy()
 	..()
-	qdel(circuit)
-	circuit = null
+	QDEL_NULL(circuit)
 
 /obj/item/weapon/circuitboard
 	density = 0

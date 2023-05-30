@@ -186,8 +186,7 @@
 								syncuff.charge_detonated = TRUE
 								sleep(3)
 								explosion(get_turf(target), 0, 1, 3, 0)
-								qdel(casecuff)
-								casecuff = null
+								QDEL_NULL(casecuff)
 								return
 						canremove = 0 //can't drop the case
 						cant_drop = 1

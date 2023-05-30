@@ -174,8 +174,7 @@ var/global/list/ghdel_profiling = list()
 
 /atom/Destroy()
 	if(reagents)
-		qdel(reagents)
-		reagents = null
+		QDEL_NULL(reagents)
 
 	if(density)
 		densityChanged()
@@ -989,3 +988,17 @@ its easier to just keep the beam vertical.
 	for(var/atom/location = A.loc, location, location = location.loc)
 		if(location == src)
 			return TRUE
+
+/**
+	Attempt to heat this object from a presumed heat source.
+	@args:
+		A: Atom: The source of the heat
+		user: mob: Whomever may be trying to heat this object
+
+	@return:
+		TRUE if succesful
+		FALSE if not succesful
+		NULL if override not defined
+**/
+/atom/proc/attempt_heating(atom/A, mob/user)
+	return

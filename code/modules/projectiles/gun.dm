@@ -28,6 +28,7 @@
 	harm_label_examine = list("<span class='info'>A label is stuck to the trigger, but it is too small to get in the way.</span>", "<span class='warning'>A label firmly sticks the trigger to the guard!</span>")
 	ghost_read = 0
 	hitsound = 'sound/weapons/smash.ogg'
+	on_armory_manifest = TRUE
 	var/fire_sound = 'sound/weapons/Gunshot.ogg'
 	var/fire_action = "fire"
 	var/empty_sound = 'sound/weapons/empty.ogg'
@@ -75,8 +76,7 @@
 
 /obj/item/weapon/gun/Destroy()
 	if(in_chamber)
-		qdel(in_chamber)
-		in_chamber = null
+		QDEL_NULL(in_chamber)
 	..()
 
 /obj/item/weapon/gun/proc/ready_to_fire()
@@ -254,8 +254,7 @@
 
 	if(targloc == curloc)
 		target.bullet_act(in_chamber)
-		qdel(in_chamber)
-		in_chamber = null
+		QDEL_NULL(in_chamber)
 		update_icon()
 		play_firesound(user, reflex)
 		return
@@ -384,8 +383,7 @@
 			else
 				to_chat(user, "<span class = 'notice'>Ow...</span>")
 				user.apply_effect(110,AGONY,0)
-			qdel(in_chamber)
-			in_chamber = null
+			QDEL_NULL(in_chamber)
 			mouthshoot = 0
 			return
 		else

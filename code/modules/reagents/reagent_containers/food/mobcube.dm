@@ -13,8 +13,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/Destroy()
 	if(contained_mob && isdatum(contained_mob))
-		qdel(contained_mob)
-		contained_mob = null
+		QDEL_NULL(contained_mob)
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/afterattack(obj/O, mob/user,proximity)

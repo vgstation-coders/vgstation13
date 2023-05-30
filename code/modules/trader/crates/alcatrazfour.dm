@@ -54,8 +54,7 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/clothing/head/helmet/stun/Destroy()
 	if (bcell)
-		qdel(bcell)
-		bcell = null
+		QDEL_NULL(bcell)
 
 	return ..()
 
@@ -118,8 +117,7 @@ var/global/list/alcatraz_stuff = list(
 	S = new(src)
 
 /obj/item/clothing/accessory/bangerboy/Destroy()
-	qdel(S)
-	S = null
+	QDEL_NULL(S)
 	..()
 
 /obj/item/clothing/accessory/bangerboy/attackby(obj/item/W, mob/user)
@@ -266,7 +264,7 @@ var/global/list/alcatraz_stuff = list(
 	armor = list(melee = 10, bullet = 10, laser = 10,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED) //Unlike normal skirts this is not VOX_SHAPED
+	species_fit = list(GREY_SHAPED, VOX_SHAPED)
 	body_parts_covered = FULL_TORSO|ARMS
 	autoignition_temperature = AUTOIGNITION_PROTECTIVE
 
@@ -544,8 +542,7 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/weapon/autocuffer/Destroy()
 	if(stored)
-		qdel(stored)
-		stored = null
+		QDEL_NULL(stored)
 	..()
 
 /obj/item/weapon/autocuffer/restraint_apply_intent_check(mob/user)
@@ -585,11 +582,11 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/pedometer/pickup(mob/user)
 	..()
-	user.register_event(/event/moved, src, .proc/mob_moved)
+	user.register_event(/event/moved, src, src::mob_moved())
 
 /obj/item/pedometer/dropped(mob/user)
 	..()
-	user.unregister_event(/event/moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, src::mob_moved())
 
 /obj/item/pedometer/proc/mob_moved(atom/movable/mover)
 	var/turf/T = get_turf(src)

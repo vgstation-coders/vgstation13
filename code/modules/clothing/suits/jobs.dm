@@ -128,13 +128,13 @@
 	name = "red jacket"
 	desc = "A red forensics technician jacket."
 	icon_state = "forensics_red"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/forensics/blue
 	name = "blue jacket"
 	desc = "A blue forensics technician jacket."
 	icon_state = "forensics_blue"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/secdressjacket
 	body_parts_covered = FULL_TORSO|ARMS
@@ -236,7 +236,7 @@
 	icon_state = "suitjacket_blue_open"
 	item_state = "suitjacket_blue_open"
 	blood_overlay_type = "coat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/lawyer/purpjacket
 	name = "Purple Suit Jacket"
@@ -244,7 +244,7 @@
 	icon_state = "suitjacket_purp"
 	item_state = "suitjacket_purp"
 	blood_overlay_type = "coat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 //Bridge Officer
 /obj/item/clothing/suit/storage/lawyer/bridgeofficer
@@ -290,7 +290,7 @@
 	desc = "A high-visibility jacket worn by medical first responders."
 	icon_state = "fr_jacket_open"
 	item_state = "fr_jacket"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	blood_overlay_type = "armor"
 	allowed = list(/obj/item/stack/medical, /obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/hypospray, /obj/item/weapon/reagent_containers/syringe, \
 	/obj/item/device/healthanalyzer, /obj/item/device/flashlight, /obj/item/device/radio, /obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/roller, /obj/item/weapon/autopsy_scanner/healthanalyzerpro)

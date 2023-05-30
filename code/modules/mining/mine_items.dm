@@ -37,7 +37,7 @@
 		/obj/item/device/gps/mining,
 		/obj/item/weapon/storage/belt/mining,
 	)
-	
+
 /******************************Lantern*******************************/
 
 /obj/item/device/flashlight/lantern
@@ -791,8 +791,7 @@
 	..()
 
 /obj/item/device/mobcapsule/throw_impact(atom/A, speed, mob/user)
-	..()
-	if(!tripped)
+	if(!..() && !tripped)
 		if(contained_mob)
 			dump_contents(user)
 			tripped = 1

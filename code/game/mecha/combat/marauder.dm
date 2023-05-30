@@ -80,8 +80,7 @@
 	if(equipment.len)//Now to remove it and equip anew.
 		for(ME in equipment)
 			equipment -= ME
-			qdel(ME)
-			ME = null
+			QDEL_NULL(ME)
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot(src)
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
 	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)

@@ -247,8 +247,7 @@
 			to_chat(user, "<span class='notice'>You removed \the [electronics.name]!</span>")
 			make_assembly()
 			if(smartwindow)
-				qdel(smartwindow)
-				smartwindow = null
+				QDEL_NULL(smartwindow)
 				if(window_is_opaque)
 					window_is_opaque = !window_is_opaque
 					smart_toggle()

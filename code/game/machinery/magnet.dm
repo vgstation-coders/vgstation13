@@ -162,7 +162,7 @@
 		active_power_usage = electricity_level*15
 	else
 		use_power = MACHINE_POWER_USE_NONE
-		
+
 	updateicon()
 
 /obj/machinery/magnetic_module/proc/magnetic_process() // proc that actually does the pulling
@@ -359,8 +359,7 @@
 			// N, S, E, W are directional
 			// C is center
 			// R is random (in magnetic field's bounds)
-			qdel(signal)
-			signal = null
+			QDEL_NULL(signal)
 			break // break the loop if the character located is invalid
 
 		signal.data["command"] = nextmove

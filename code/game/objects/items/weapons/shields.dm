@@ -1,5 +1,6 @@
 /obj/item/weapon/shield
 	name = "shield"
+	on_armory_manifest = TRUE
 
 /obj/item/weapon/shield/riot
 	name = "riot shield"

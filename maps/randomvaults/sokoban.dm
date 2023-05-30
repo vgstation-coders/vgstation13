@@ -74,8 +74,7 @@
 			cheater_trophy.name = "cheater's trophy"
 			cheater_trophy.desc = "No prize for you!"
 
-			qdel(L.reward)
-			L.reward = null
+			QDEL_NULL(L.reward)
 
 	if(!cheated)
 		if(usr)

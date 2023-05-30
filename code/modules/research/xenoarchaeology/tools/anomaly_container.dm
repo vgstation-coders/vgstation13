@@ -13,11 +13,9 @@
 
 /obj/structure/anomaly_container/Destroy()
 	if (contained)
-		qdel(contained)
-		contained = null
+		QDEL_NULL(contained)
 	if (report)
-		qdel(report)
-		report = null
+		QDEL_NULL(report)
 	..()
 
 

@@ -100,8 +100,7 @@
 /obj/machinery/suit_modifier/Destroy()
 	..()
 	vis_contents.Cut()
-	qdel(suit_overlay)
-	suit_overlay = null
+	QDEL_NULL(suit_overlay)
 
 /obj/machinery/suit_modifier/examine(mob/user)
 	..()

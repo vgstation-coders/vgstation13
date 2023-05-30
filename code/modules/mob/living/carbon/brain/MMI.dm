@@ -33,8 +33,7 @@
 
 /obj/item/device/mmi/Destroy()
 	if(brainmob)
-		qdel(brainmob)
-		brainmob = null
+		QDEL_NULL(brainmob)
 	..()
 
 	// Return true if handled
@@ -46,8 +45,7 @@
 			if(cc<req)
 				var/temppart = new t(src)
 				to_chat(user, "<span class='warning'>You're short [req-cc] [temppart]\s.</span>")
-				qdel(temppart)
-				temppart = null
+				QDEL_NULL(temppart)
 				return TRUE
 		if(!istype(loc,/turf))
 			to_chat(user, "<span class='warning'>You can't assemble the MoMMI, \the [src] has to be standing on the ground (or a table) to be perfectly precise.</span>")
@@ -159,16 +157,7 @@
 		// Checking to see if the ghost has been moused/borer'd/etc since death.
 		var/mob/living/carbon/brain/BM = BO.brainmob
 		if(!BM.client)
-			var/mob/dead/observer/ghost = mind_can_reenter(BM.mind)
-			if(ghost)
-				var/mob/ghostmob = ghost.get_top_transmogrification()
-				if(ghostmob)
-					to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] seems slow to respond. Try again in a few seconds.</span>")
-					ghostmob << 'sound/effects/adminhelp.ogg'
-					to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!</span> \
-						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-					return TRUE
-			to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] is completely unresponsive; there's no point.</span>")
+			to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] [BM.ghost_reenter_alert("Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!") ? "seems slow to respond. Try again in a few seconds" : "is completely unresponsive; there's no point"].</span>")
 			return TRUE
 		if(!user.drop_item(O))
 			to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
@@ -183,8 +172,7 @@
 		brainmob.stat = 0
 		brainmob.resurrect()
 
-		qdel(O)
-		O = null
+		QDEL_NULL(O)
 
 		name = "[initial(name)]: [brainmob.real_name]"
 		icon_state = "mmi_full"
@@ -222,8 +210,7 @@
 		to_chat(user, "<span class='notice'>You upend \the [src], spilling the brain onto the floor.</span>")
 		var/obj/item/organ/internal/brain/brain = new(user.loc)
 		brain.transfer_identity(brainmob)
-		qdel(brainmob)
-		brainmob = null//Set mmi brainmob var to null
+		QDEL_NULL(brainmob)//Set mmi brainmob var to null
 
 		icon_state = "mmi_empty"
 		name = initial(name)
@@ -275,8 +262,7 @@
 
 /obj/item/device/mmi/radio_enabled/Destroy()
 	..()
-	qdel(radio)
-	radio = null
+	QDEL_NULL(radio)
 
 /obj/item/device/mmi/radio_enabled/verb/Toggle_Broadcasting()
 	set name = "Toggle Broadcasting"

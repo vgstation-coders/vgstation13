@@ -14,6 +14,7 @@
 	pass_flags_self = PASSTABLE
 	health = 140
 	maxHealth = 140
+	on_armory_manifest = TRUE
 
 	machine_flags = EMAGGABLE
 

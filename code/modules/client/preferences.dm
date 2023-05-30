@@ -166,7 +166,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/credits_volume = 75
 	var/window_flashing = 1
 	var/antag_objectives = 0 //If set to 1, solo antag roles will get the standard objectives. If set to 0, will give them a freeform objective instead.
-	var/typing_indicator = 0
+	var/typing_indicator = 1
 
 		//Mob preview
 	var/icon/preview_icon = null
@@ -233,13 +233,13 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/jingle = JINGLE_CLASSIC
 
 	// Runscape-like chat
-	var/mob_chat_on_map = FALSE
+	var/mob_chat_on_map = TRUE
 	var/max_chat_length = CHAT_MESSAGE_MAX_LENGTH
 	var/obj_chat_on_map = FALSE
 	var/no_goonchat_for_obj = FALSE
 
 	var/tgui_fancy = TRUE
-	var/fps = 0
+	var/fps = -1
 
 	var/client/client
 	var/saveloaded = 0
@@ -270,8 +270,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	for(var/entry in subsections)
 		var/datum/preferences_subsection/prefs_ss = subsections[entry]
 		if(prefs_ss && !prefs_ss.gcDestroyed)
-			qdel(prefs_ss)
-	subsections = null
+			QDEL_NULL(prefs_ss)
 	..()
 
 /datum/preferences/proc/try_load_save_sqlite(var/theckey, var/theclient, var/theslot)
@@ -934,7 +933,7 @@ var/const/MAX_SAVE_SLOTS = 16
 					if(new_name)
 						real_name = new_name
 					else
-						to_chat(user, "<span class='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</span>")
+						to_chat(user, "<span class='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ', some diacritics, and .</span>")
 				if("next_hair_style")
 					h_style = next_list_item(h_style, valid_sprite_accessories(hair_styles_list, null, species)) //gender intentionally left null so speshul snowflakes can cross-hairdress
 				if("previous_hair_style")

@@ -240,3 +240,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/dungeon/research
 	file_path = "maps/randomvaults/dungeons/research.dmm"
+
+/datum/map_element/vault/fastfoodjoint
+	name = "Fast food joint"
+	file_path = "maps/randomvaults/fastfoodjoint.dmm"

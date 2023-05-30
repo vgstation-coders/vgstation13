@@ -212,8 +212,8 @@
 
 	update_mutantrace()
 
-	register_event(/event/equipped, src, .proc/update_name)
-	register_event(/event/unequipped, src, .proc/update_name)
+	register_event(/event/equipped, src, src::update_name())
+	register_event(/event/unequipped, src, src::update_name())
 
 /mob/living/carbon/human/proc/update_name()
 	name = get_visible_name()
@@ -256,8 +256,7 @@
 
 		if (internal)
 			if (!internal.air_contents)
-				qdel(internal)
-				internal = null
+				QDEL_NULL(internal)
 			else
 				stat("Internal Atmosphere Info", internal.name)
 				stat("Tank Pressure", internal.air_contents.return_pressure())

@@ -264,8 +264,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		empty_contents_to(get_turf(attacked))
 
 /obj/item/weapon/storage/pill_bottle/dice/cup/throw_impact(atom/impacted_atom, speed, mob/user)
-	..()
-	if(contents.len)
+	if(..() && contents.len)
 		empty_contents_to(get_turf(src))
 
 /obj/item/weapon/storage/pill_bottle/dice/cup/empty_contents_to(var/atom/place)

@@ -302,8 +302,7 @@ var/global/list/air_alarms = list()
 
 /obj/machinery/alarm/Destroy()
 	if(wires)
-		qdel(wires)
-		wires = null
+		QDEL_NULL(wires)
 	for(var/obj/machinery/computer/atmoscontrol/AC in atmos_controllers)
 		if(AC.current == src)
 			AC.current = null

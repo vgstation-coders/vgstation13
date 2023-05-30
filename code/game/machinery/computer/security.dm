@@ -373,8 +373,7 @@ What a mess.*/
 					<a href='?src=\ref[src];choice=Clear Screen'>No</a>"}
 			if ("Purge All Records")
 				for(var/datum/data/record/R in data_core.security)
-					qdel(R)
-					R = null
+					QDEL_NULL(R)
 				temp = "All Security records deleted."
 
 			if ("Add Entry")
@@ -534,21 +533,17 @@ What a mess.*/
 
 					if ("Delete Record (Security) Execute")
 						if (active2)
-							qdel(active2)
-							active2 = null
+							QDEL_NULL(active2)
 
 					if ("Delete Record (ALL) Execute")
 						if (active1)
 							for(var/datum/data/record/R in data_core.medical)
 								if ((R.fields["name"] == active1.fields["name"] || R.fields["id"] == active1.fields["id"]))
-									qdel(R)
-									R = null
+									QDEL_NULL(R)
 								else
-							qdel(active1)
-							active1 = null
+							QDEL_NULL(active1)
 						if (active2)
-							qdel(active2)
-							active2 = null
+							QDEL_NULL(active2)
 					else
 						temp = "This function does not appear to be working at the moment. Our apologies."
 
@@ -579,8 +574,7 @@ What a mess.*/
 			continue
 
 		else if(prob(1))
-			qdel(R)
-			R = null
+			QDEL_NULL(R)
 			continue
 
 	..(severity)

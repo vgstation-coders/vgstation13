@@ -36,8 +36,7 @@
 	reagents.clear_reagents()
 	to_chat(usr, "<span class='notice'>You flush out the contents of \the [src].</span>")
 	if(in_chamber)
-		qdel(in_chamber)
-		in_chamber = null
+		QDEL_NULL(in_chamber)
 
 /obj/item/weapon/gun/siren/examine(mob/user)
 	..()
@@ -78,8 +77,7 @@
 					for(var/datum/reagent/R in in_chamber.reagents.reagent_list)
 						in_chamber.reagents.remove_reagent(R.id, reagents.get_reagent_amount(R.id)*4)
 			in_chamber.reagents.trans_to(src, in_chamber.reagents.total_volume)
-		qdel(in_chamber)
-		in_chamber = null
+		QDEL_NULL(in_chamber)
 	in_chamber = new projectile_type(src, hard)
 	reagents.trans_to(in_chamber, 10)
 	if(!hard) //When set to no-damage mode, each shot has five times the reagents.
@@ -182,5 +180,4 @@
 	reagents.clear_reagents()
 	to_chat(user, "<span class='notice'>You flush out the contents of \the [src].</span>")
 	if(in_chamber)
-		qdel(in_chamber)
-		in_chamber = null
+		QDEL_NULL(in_chamber)

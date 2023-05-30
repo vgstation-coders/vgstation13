@@ -68,6 +68,7 @@
 		/obj/item/weapon/stock_parts/manipulator/nano/pico = 150,
 		/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 150,
 		/obj/item/weapon/stock_parts/capacitor/adv/super = 150,
+		/obj/item/borg/upgrade/bootyborg = 250,
 		/obj/item/slime_extract/grey = 100,
 		/obj/item/slime_extract/silver = 130,
 		/obj/item/slime_extract/pink = 150,

@@ -776,7 +776,7 @@ var/global/list/playable_species = list("Human")
 //	belt_icons      = 'icons/mob/belt.dmi'
 	wear_suit_icons = 'icons/mob/species/vox/suit.dmi'
 	wear_mask_icons = 'icons/mob/species/vox/masks.dmi'
-//	back_icons      = 'icons/mob/back.dmi'
+	back_icons      = 'icons/mob/species/vox/back.dmi'
 
 	has_mutant_race = 0
 	has_organ = list(
@@ -1003,13 +1003,7 @@ var/list/has_died_as_golem = list()
 			else
 				if(!client)
 					to_chat(user, "<span class='notice'>As you press \the [A] into \the [src], it shudders briefly, but falls still.</span>")
-					var/mob/dead/observer/ghost = mind_can_reenter(mind)
-					if(ghost)
-						var/mob/ghostmob = ghost.get_top_transmogrification()
-						if(ghostmob)
-							ghostmob << 'sound/effects/adminhelp.ogg'
-							to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to resurrect you. Return to your body if you want to live again!</span> \
-								(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+					ghost_reenter_alert("Someone is trying to resurrect you. Return to your body if you want to live again!")
 				else
 					anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "reverse-dust-g", sleeptime = 15)
 					var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem

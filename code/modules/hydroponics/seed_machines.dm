@@ -282,8 +282,7 @@
 		if(loaded_seed && loaded_seed.seed)
 			genetics = loaded_seed.seed
 
-		qdel(loaded_seed)
-		loaded_seed = null
+		QDEL_NULL(loaded_seed)
 
 	if(href_list["get_gene"])
 

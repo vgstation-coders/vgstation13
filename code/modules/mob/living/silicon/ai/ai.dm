@@ -269,6 +269,7 @@ var/list/ai_list = list()
 		"Helios" = "ai-helios",
 		"Hourglass" = "ai-hourglass",
 		"Inverted" = "ai-u",
+		"JaCobson" = "ai-cobson",
 		"Jack Frost" = "ai-jack",
 		"Matrix" = "ai-matrix",
 		"Metaclub" = "ai-terminal",
@@ -767,8 +768,7 @@ var/list/ai_list = list()
 		)
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)
-			qdel(holo_icon)
-			holo_icon = null
+			QDEL_NULL(holo_icon)
 			switch(input)
 				if("Default")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo1"))

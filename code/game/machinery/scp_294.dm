@@ -91,8 +91,7 @@
 			if(!X.gcDestroyed)
 				X.create_reagents(X.volume)
 			else
-				qdel(X)
-				X = null
+				QDEL_NULL(X)
 				return
 		var/space = U.maximum_volume - U.total_volume
 

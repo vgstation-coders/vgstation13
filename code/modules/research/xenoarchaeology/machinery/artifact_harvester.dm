@@ -59,8 +59,7 @@
 		owned_scanner.harvester_console = null
 		owned_scanner = null
 	if (artifact_field)
-		qdel(artifact_field)
-		artifact_field = null
+		QDEL_NULL(artifact_field)
 	..()
 
 /obj/machinery/artifact_harvester/proc/reconnect_scanner()
@@ -203,8 +202,7 @@
 				//see if we can clear out an old effect
 				//delete it when the ids match to account for duplicate ids having different effects
 				if(inserted_battery.battery_effect && inserted_battery.stored_charge <= 0)
-					qdel(inserted_battery.battery_effect)
-					inserted_battery.battery_effect = null
+					QDEL_NULL(inserted_battery.battery_effect)
 
 				//only charge up
 				var/matching_id = 0
@@ -252,8 +250,7 @@
 				//see if we can clear out an old effect
 				//delete it when the ids match to account for duplicate ids having different effects
 				if(inserted_battery.battery_effect && inserted_battery.stored_charge <= 0)
-					qdel(inserted_battery.battery_effect)
-					inserted_battery.battery_effect = null
+					QDEL_NULL(inserted_battery.battery_effect)
 
 				//only charge up
 				var/matching_id = 0
@@ -342,8 +339,7 @@
 	if (href_list["alockoff"])
 		if (artifact_field)
 			src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] deactivates with a gentle shudder.</span>")
-			qdel(artifact_field)
-			artifact_field = null
+			QDEL_NULL(artifact_field)
 			if(cur_artifact)
 				cur_artifact.anchored = 0
 				cur_artifact.being_used = 0

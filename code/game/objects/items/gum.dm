@@ -157,8 +157,7 @@
 			target.ex_act(1)
 		if(isobj(target))
 			if(target)
-				qdel(target)
-				target = null
+				QDEL_NULL(target)
 	qdel(src)
 
 /obj/item/gum/proc/chew(mob/user)

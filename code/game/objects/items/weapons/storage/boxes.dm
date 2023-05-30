@@ -33,6 +33,7 @@
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
 	autoignition_temperature = AUTOIGNITION_PAPER
+	on_armory_manifest = TRUE
 
 /obj/item/weapon/storage/box/large
 	name = "large box"
@@ -509,7 +510,7 @@
 	can_add_combinedwclass = TRUE
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-		list(/obj/item/clothing/glasses/sunglasses/sechud/prescription,/obj/item/clothing/glasses/sunglasses/sechud),
+			/obj/item/clothing/glasses/regular/tracking/detective,
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/detective,
 		/obj/item/weapon/switchtool/switchblade,

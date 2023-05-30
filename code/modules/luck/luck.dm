@@ -12,6 +12,8 @@
 		luck += base_luck.base_luck()
 	//adjust based on borne items
 	luck += borne_item_luckiness()
+	if(Holiday == FRIDAY_THE_13TH)
+		luck -= 250
 	return luck
 
 /mob

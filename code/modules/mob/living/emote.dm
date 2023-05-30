@@ -15,7 +15,7 @@
 	key_third_person = "crosses"
 	key_shorthand = "cro"
 	message = "crosses their arms."
-	message_mommi = "crosses their utility arms."
+	message_mobtype = list(/mob/living/silicon/robot/mommi = "crosses their utility arms.")
 	restraint_check = TRUE
 
 /datum/emote/living/collapse
@@ -30,7 +30,7 @@
 	key_third_person = "glares"
 	key_shorthand = "gla"
 	message = "glares."
-	message_mommi = "glares as best a robot spider can glare."
+	message_mobtype = list(/mob/living/silicon/robot/mommi = "glares as best a robot spider can glare.")
 	message_param = "glares at %t."
 	emote_type = EMOTE_AUDIBLE
 
@@ -75,13 +75,15 @@
 	key = "deathgasp"
 	key_third_person = "deathgasps"
 	message = "seizes up and falls limp, their eyes dead and lifeless..."
-	message_robot = "shudders violently for a moment before falling still, its eyes slowly darkening."
-	message_AI = "lets out a flurry of sparks, its screen flickering as its systems slowly halt."
-	message_alien = "lets out a waning guttural screech, green blood bubbling from its maw..."
-	message_larva = "lets out a sickly hiss of air and falls limply to the floor..."
-	message_pulsedemon = "fizzles out into faint sparks, leaving only a slight trail of smoke..."
-	message_monkey = "lets out a faint chimper as it collapses and stops moving..."
-	message_simple =  "stops moving..."
+	message_mobtype = list(
+		/mob/living/silicon/robot = "shudders violently for a moment before falling still, its eyes slowly darkening.",
+		/mob/living/silicon/ai = "lets out a flurry of sparks, its screen flickering as its systems slowly halt.",
+		/mob/living/carbon/alien = "lets out a waning guttural screech, green blood bubbling from its maw...",
+		/mob/living/carbon/alien/larva = "lets out a sickly hiss of air and falls limply to the floor...",
+		/mob/living/simple_animal =  "stops moving...",
+		/mob/living/simple_animal/hostile/pulse_demon = "fizzles out into faint sparks, leaving only a slight trail of smoke...",
+		/mob/living/carbon/monkey = "lets out a faint chimper as it collapses and stops moving..."
+	)
 	stat_allowed = UNCONSCIOUS
 	mob_type_blacklist_typelist = list(/mob/living/carbon/brain) // Everyone can deathgasp
 
@@ -148,14 +150,14 @@ var/list/animals_with_wings = list(
 	key = "flap"
 	key_third_person = "flaps"
 	message = "flaps their wings."
-	message_mommi = "flaps its utility arms as though they were wings."
+	message_mobtype = list(/mob/living/silicon/robot/mommi = "flaps its utility arms as though they were wings.")
 	restraint_check = TRUE
 
 /datum/emote/living/flap/aflap
 	key = "aflap"
 	key_third_person = "aflaps"
 	message = "flaps their wings ANGRILY!"
-	message_mommi = "flaps its utility arms ANGRILY!"
+	message_mobtype = list(/mob/living/silicon/robot/mommi = "flaps its utility arms ANGRILY!")
 
 /datum/emote/living/flap/can_run_emote(var/mob/user, var/status_check)
 	if (isMoMMI(user))
@@ -214,7 +216,7 @@ var/list/animals_with_wings = list(
 	key = "nod"
 	key_third_person = "nods"
 	message = "nods."
-	message_mommi = "bobs its body in a rough approximation of nodding."
+	message_mobtype = list(/mob/living/silicon/robot/mommi = "bobs its body in a rough approximation of nodding.")
 	message_param = "nods at %t."
 
 /datum/emote/living/point

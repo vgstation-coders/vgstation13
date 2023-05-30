@@ -246,9 +246,13 @@ var/list/headset_modes = list(
 	else
 		send_speech(speech, message_range, bubble_type)
 	radio(speech, message_mode) //Sends the radio signal
-	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message_mode ? "([message_mode]):":""] [message]")
+	log_say_message(speech, message_mode, message)
 	qdel(speech)
 	return 1
+
+/mob/living/proc/log_say_message(var/datum/speech/speech, var/message_mode, var/message)
+	var/turf/T = get_turf(src)
+	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message_mode ? "([message_mode]):":""] [message]")
 
 /mob/living/proc/resist_memes(var/datum/speech/speech)
 	if(stat || ear_deaf || speech.frequency || speech.speaker == src || !isliving(speech.speaker))

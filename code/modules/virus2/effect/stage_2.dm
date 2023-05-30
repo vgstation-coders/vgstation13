@@ -203,17 +203,27 @@
 	name = "Bearding"
 	desc = "Causes the infected to spontaneously grow a beard, regardless of gender. Only affects humans."
 	stage = 2
+	max_multiplier = 5
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/beard/activate(var/mob/living/mob)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
-		if(H.species.name == "Human" && !(H.my_appearance.f_style == "Full Beard"))
-			to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
+		if(H.species.name == "Human")
+			var/beard_name = ""
 			spawn(50)
-				H.my_appearance.f_style = "Full Beard"
-				H.update_hair()
-
+				if(multiplier >= 1 && multiplier < 2)
+					beard_name = "Full Beard"
+				if(multiplier >= 2 && multiplier < 3)
+					beard_name = "Long Beard"
+				if(multiplier >= 3 && multiplier < 4)
+					beard_name = "Very Long Beard"
+				if(multiplier >= 4)
+					beard_name = "Dwarf Beard"
+				if(beard_name != "" && H.my_appearance.f_style != beard_name)
+					H.my_appearance.f_style = beard_name
+					to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
+					H.update_hair()
 
 /datum/disease2/effect/bloodynose
 	name = "Intranasal Hemorrhage"

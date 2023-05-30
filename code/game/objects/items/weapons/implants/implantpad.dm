@@ -26,7 +26,7 @@
 		return ..()
 
 /obj/item/weapon/implantpad/proc/eject(mob/user)
-	user.put_in_active_hand(case)
+	user.put_in_hands(case)
 
 	case.add_fingerprint(user)
 	case = null

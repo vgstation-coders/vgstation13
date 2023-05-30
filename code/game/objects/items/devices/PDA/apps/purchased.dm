@@ -99,8 +99,7 @@
 
 /datum/pda_app/station_map/Destroy()
 	if (holomap)
-		qdel(holomap)
-		holomap = null
+		QDEL_NULL(holomap)
 	..()
 
 /datum/pda_app/newsreader

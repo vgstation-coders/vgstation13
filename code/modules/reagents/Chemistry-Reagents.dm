@@ -4449,6 +4449,10 @@ var/procizine_tolerance = 0
 	density = 0.65
 	specheatcap = 35.37
 
+/datum/reagent/diethylamine/ammoniumnitrate
+	name = "Ammonium Nitrate"
+	id = AMMONIUMNITRATE
+
 /datum/reagent/diethylamine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
 		return

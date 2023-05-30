@@ -193,8 +193,7 @@
 		flashbulb = new(src)
 
 /obj/item/device/camera/Destroy()
-	qdel(flashbulb)
-	flashbulb = null
+	QDEL_NULL(flashbulb)
 	..()
 
 /obj/item/device/camera/sepia

@@ -178,6 +178,7 @@
 	name = "Pierrot's Throat"
 	desc = "Overinduces a sense of humor in the infected, causing them to be overcome by the spirit of a clown."
 	stage = 3
+	max_multiplier = 4
 	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/pthroat/activate(var/mob/living/mob)
@@ -190,6 +191,31 @@
 		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
 	mob.reagents.add_reagent(PSILOCYBIN, 20)
 	mob.say(pick("HONK!", "Honk!", "Honk.", "Honk?", "Honk!!", "Honk?!", "Honk..."))
+	if(ishuman(mob))
+		var/mob/living/carbon/human/affected = mob
+		if(multiplier >=2) //clown shoes added
+			if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes))
+				var/obj/item/clothing/shoes/clown_shoes/virusshoes = new /obj/item/clothing/shoes/clown_shoes
+				virusshoes.canremove = 0
+				affected.u_equip(affected.shoes,1)
+				affected.equip_to_slot(virusshoes, slot_shoes)
+			if(!affected.shoes)
+				var/obj/item/clothing/shoes/clown_shoes/virusshoes = new /obj/item/clothing/shoes/clown_shoes
+				affected.equip_to_slot(virusshoes, slot_shoes)
+		if(multiplier >=3) //clown suit added
+			var/obj/item/clothing/under/rank/clown/virussuit = new /obj/item/clothing/under/rank/clown
+			virussuit.canremove = 0
+			if(affected.w_uniform && !istype(affected.w_uniform, /obj/item/clothing/under/rank/clown/))
+				affected.u_equip(affected.w_uniform,1)
+				affected.equip_to_slot(virussuit, slot_w_uniform)
+			if(!affected.w_uniform)
+				affected.equip_to_slot(virussuit, slot_w_uniform)
+		if(multiplier >=3.5) //makes you clumsy
+			affected.dna.SetSEState(CLUMSYBLOCK,1)
+			genemutcheck(affected,CLUMSYBLOCK,null,MUTCHK_FORCED)
+			affected.update_mutations()
+
+
 
 /datum/disease2/effect/horsethroat
 	name = "Horse Throat"
@@ -856,12 +882,12 @@
 	)
 	// Getting sent to one of these areas would probably kill the person, so let's exclude them.
 	var/list/blacklisted_areas = list(
-		/area/engineering/engine_smes,		
+		/area/engineering/engine_smes,
 		/area/engineering/engine,
 		/area/science/xenobiology,
 	)
 	var/list/valid_areas = list()
-	var/active = 0 
+	var/active = 0
 
 /datum/disease2/effect/cult_teleport/activate(mob/living/carbon/mob)
 	if(valid_areas.len == 0)

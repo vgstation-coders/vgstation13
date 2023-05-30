@@ -576,6 +576,62 @@
 	required_catalysts = list(NITROGEN = 5)
 	result_amount = 5
 
+/datum/chemical_reaction/fuelbomb
+	name = "Fuel bomb"
+	id = FUELBOMB
+	result = null
+	required_reagents = list(FUEL = 1)
+	required_temp = AUTOIGNITION_WELDERFUEL
+	result_amount = 1
+	var/fire_temp = AUTOIGNITION_WELDERFUEL
+	var/power = 0
+
+/datum/chemical_reaction/fuelbomb/on_reaction(var/datum/reagents/holder, var/created_volume)
+	if(holder.my_atom.is_open_container())
+		if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
+			var/turf/location = get_turf(holder.my_atom.loc)
+
+			for(var/turf/simulated/floor/target_tile in range(0,location))
+				spawn(0)
+					target_tile.hotspot_expose(fire_temp, created_volume, surfaces = 1)
+
+		for(var/reagent in required_reagents)
+			holder.del_reagent(reagent)
+	else
+		var/datum/effect/system/reagents_explosion/e = new()
+		if(created_volume > 500)
+			e.set_up(15, holder.my_atom, 0, 0, null, 1+power, 2+(power*2), 4+(power*2))
+		else if(created_volume > 100)
+			e.set_up(9, holder.my_atom, 0, 0, null, 0+power, 1+power, 3+power)
+		else
+			e.set_up(9, holder.my_atom, 0, 0, null, -1+power, 1, 2+power)
+		e.holder_damage(holder.my_atom)
+		if(isliving(holder.my_atom))
+			e.amount *= 0.5
+			var/mob/living/L = holder.my_atom
+			if(L.stat!=DEAD)
+				e.amount *= 0.5
+		e.start()
+		holder.clear_reagents()
+
+
+/datum/chemical_reaction/fuelbomb/plasma
+	name = "Plasma bomb"
+	id = PLASMABOMB
+	required_reagents = list(PLASMA = 1)
+	required_temp = AUTOIGNITION_WELDERFUEL
+	fire_temp = AUTOIGNITION_WELDERFUEL
+	power = 1
+
+/datum/chemical_reaction/fuelbomb/anfo
+	name = "AN/FO bomb"
+	id = ANFOBOMB
+	required_reagents = list(AMMONIUMNITRATE = 16, FUEL = 1)  // rough approximation of the 94%-6% mix
+	required_temp = AUTOIGNITION_WELDERFUEL-1 // just for priority and to stop recipe conflicts
+	result_amount = 17
+	fire_temp = AUTOIGNITION_WELDERFUEL
+	power = 1
+
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"
 	id = SODIUMCHLORIDE
@@ -1170,6 +1226,13 @@
 	result = AMMONIA
 	required_reagents = list(HYDROGEN = 3, NITROGEN = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/ammoniumnitrate
+	name = "Ammonium Nitrate"
+	id = AMMONIUMNITRATE
+	result = AMMONIUMNITRATE
+	required_reagents = list(AMMONIA = 5, CLEANER = 3, NITROGEN = 2, OXYGEN = 5)
+	result_amount = 18
 
 /datum/chemical_reaction/diethylamine
 	name = "Diethylamine"
@@ -2122,8 +2185,7 @@
 						M.client.screen += blueeffect
 						sleep(20)
 						M.client.screen -= blueeffect
-						qdel(blueeffect)
-						blueeffect = null
+						QDEL_NULL(blueeffect)
 	..()
 
 /datum/chemical_reaction/slime_extract/slimecrystal
@@ -2727,7 +2789,7 @@
 	result_amount = 5
 
 /datum/chemical_reaction/beepsky_smash
-	name = "Beepksy Smash"
+	name = "Beepsky Smash"
 	id = BEEPSKYSMASH
 	result = BEEPSKYSMASH
 	required_reagents = list(LIMEJUICE = 2, WHISKEY = 2, IRON = 1)
@@ -4017,24 +4079,26 @@
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGARS = 1)
 	result_amount = 3
 
-/datum/chemical_reaction/bumcivilian
+/datum/chemical_reaction/bumcivilian //same reaction type as midazoline, you must dunk the iron sheet on sacid to get bumcivillian
 	name = "Bumcivilian"
 	id = BUMCIVILIAN
 	result = BUMCIVILIAN
-	required_reagents = list(IRON = 1, SACIDS = 1) //..5.05 Mg
+	required_reagents = list(SACIDS = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/bumcivilian/required_condition_check(datum/reagents/holder)
-	for(var/obj/item/device/deskbell/B in view(3,get_turf(holder.my_atom)))
-		if(world.time - B.last_ring_time <= 30)
-			return 1
+	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers))
+		return (locate(/obj/item/stack/sheet/metal) in holder.my_atom.contents)
+	return 0
 
 /datum/chemical_reaction/bumcivilian/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
+	var/atom/A = get_holder_at_turf_level(holder.my_atom)
+	holder.my_atom.visible_message("<span class='warning'>Suddenly, everything around [A ? "\the [A] " : "\the [holder.my_atom] "]becomes perfectly silent...</span>")
 	var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in holder.reagent_list
 	for(var/turf/T in view(get_turf(holder.my_atom)))
 		T.mute_time = world.time + B.mute_duration
-
+	
 /datum/chemical_reaction/random
 	name = "Random chemical"
 	id = "random"

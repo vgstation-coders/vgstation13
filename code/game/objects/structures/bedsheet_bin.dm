@@ -20,6 +20,7 @@ LINEN BINS
 	_color = "white"
 	restraint_resist_time = 20 SECONDS
 	toolsounds = list("rustle")
+	species_fit = list(VOX_SHAPED)
 
 //cutting the bedsheet into rags
 /obj/item/weapon/bedsheet/attackby(var/obj/item/I, mob/user as mob)
@@ -134,8 +135,7 @@ LINEN BINS
 		qdel(sheet)
 	sheets.Cut()
 	if(hidden)
-		qdel(hidden)
-		hidden = null
+		QDEL_NULL(hidden)
 	..()
 
 

@@ -1,6 +1,7 @@
 var/const/ANIMAL_CHILD_CAP = 50
+var/const/ANIMAL_EXTENDED_CHILD_CAP = 100
 var/global/list/animal_count = list() //Stores types, and amount of animals of that type associated with the type (example: /mob/living/simple_animal/dog = 10)
-//Animals can't breed if amount of children exceeds 50
+//Animals can't breed if amount of children exceeds 50, except cockroaches, who can breed up to 100 children
 
 /mob/living/simple_animal
 	name = "animal"
@@ -845,6 +846,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		return ..()
 
+/mob/living/simple_animal/log_say_message(var/datum/speech/speech, var/message_mode, var/message)
+	if(client)
+		..()
 
 /mob/living/simple_animal/proc/name_mob(mob/user)
 	var/n_name = copytext(sanitize(input(user, "What would you like to name \the [src]?", "Renaming \the [src]", null) as text|null), 1, MAX_NAME_LEN)

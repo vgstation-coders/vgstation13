@@ -474,8 +474,7 @@ var/list/one_way_windows
 					relativewall()
 					relativewall_neighbours()
 					if(smartwindow)
-						qdel(smartwindow)
-						smartwindow = null
+						QDEL_NULL(smartwindow)
 						if (opacity)
 							smart_toggle()
 						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
@@ -502,8 +501,7 @@ var/list/one_way_windows
 					relativewall()
 					relativewall_neighbours()
 					if(smartwindow)
-						qdel(smartwindow)
-						smartwindow = null
+						QDEL_NULL(smartwindow)
 						if (opacity)
 							smart_toggle()
 						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
