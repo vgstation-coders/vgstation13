@@ -34,7 +34,7 @@
 	war_declared = TRUE
 	war_declared_time = world.time / 10
 	command_alert(/datum/command_alert/nuclear_operatives_war)
-	new /datum/event/nuclear_war
+	new /datum/event/unlink_from_centcomm
 	if(user)
 		to_chat(user, "You've attracted the attention of powerful forces within the syndicate. \
 			A bonus bundle of telecrystals has been granted to your team. Great things await you if you complete the mission.")
