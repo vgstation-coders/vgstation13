@@ -363,6 +363,7 @@
 	if(doedit)
 		if(istype(deployed, /obj/item/weapon/lighter/zippo))
 			var/obj/item/weapon/lighter/lighter = deployed
+			lighter.lit = 1
 			processing_objects.Add(deployed)
 			light_color = LIGHT_COLOR_FIRE
 			set_light(lighter.brightness_on)
@@ -370,6 +371,8 @@
 			undeploy_sound = 'sound/items/zippo_close.ogg'
 	else
 		if(istype(deployed, /obj/item/weapon/lighter/zippo))
+			var/obj/item/weapon/lighter/lighter = deployed
+			lighter.lit = 0
 			processing_objects.Remove(deployed)
 			set_light(0)
 			light_color = initial(light_color)
