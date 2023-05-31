@@ -131,7 +131,7 @@
 
 /obj/item/projectile/bullet/midbullet/bouncebullet
 	bounce_type = PROJREACT_WALLS|PROJREACT_WINDOWS
-	bounces = 200
+	bounces = -1
 
 /obj/item/projectile/bullet/midbullet/bouncebullet/lawgiver
 	damage = 30

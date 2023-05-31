@@ -185,10 +185,7 @@
 				dir = SOUTHWEST
 
 /obj/item/projectile/ricochet/proc/bounce()
-	bouncin += 1
-	if(bouncin > 200)
-		bulletdies()
-		return
+	bouncin = 1
 	var/obj/structure/ricochet_bump/bump = new(loc)
 	if(nodamage)
 		bump.icon_state += "_t"
