@@ -521,6 +521,18 @@
 		return
 	return ..()
 
+/obj/machinery/turretid/CtrlClick(mob/user) //Lock the device
+	if(!(user) || !isliving(user)) //BS12 EDIT
+		return FALSE
+	if(user.incapacitated() || !Adjacent(user))
+		return FALSE
+
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	if(allowed(user))
+		locked = !locked
+		to_chat(usr, "<span class='notice'>You [locked ? "lock" : "unlock"] the switchboard panel.</span>")
+
 //All AI shortcuts. Basing this on what airlocks do, so slight clash with user (Alt is dangerous so toggle stun/lethal, Ctrl is bolts so lock, Shift is 'open' so toggle turrets)
 /obj/machinery/turretid/AIAltClick(mob/living/silicon/ai/user) //Stun/lethal toggle
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
