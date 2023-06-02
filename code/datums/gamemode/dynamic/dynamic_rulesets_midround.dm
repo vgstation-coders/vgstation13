@@ -291,7 +291,7 @@
 	required_pop = list(20,20,15,15,15,15,15,10,10,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT/2
-	cost = 40
+	cost = 25
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 50
 	logo = "raginmages-logo"
