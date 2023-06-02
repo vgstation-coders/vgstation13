@@ -977,7 +977,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/service/boxofmints
 	name = "Box of Mints"
-	desc = "Fifty of the highest quality mint candies this side of the galaxy. Has no effect on regular people, but will kill any obese person that consumes it." //It was this or just making a lame 50u bottle of mint toxin, and that's no fun.
+	desc = "Fifty of the highest quality mint candies this side of the galaxy. Recalled by all producers soon after their immediately lethal efects on fat people were discovered. Harmless to fit people." //It was this or just making a lame 50u bottle of mint toxin, and that's no fun.
 	item = /obj/item/weapon/storage/pill_bottle/syndiemints
 	cost = 5
 	discounted_cost = 3
