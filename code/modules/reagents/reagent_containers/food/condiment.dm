@@ -210,7 +210,8 @@
 			if(CHEFSPECIAL)
 				name = "\improper Chef Excellence's Special Sauce"
 				desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"
-				icon_state = "emptycondiment"
+				icon_state = "chefspecial"
+				condiment_overlay = CHEFSPECIAL
 			if(VINEGAR)
 				name = "malt vinegar bottle"
 				desc = "Perfect for fish and chips!"
