@@ -352,11 +352,36 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/syndiemints
 	name = "box of mints"
-	desc = "Gets rid of halitosis and satisfied customers in one go!"
+	desc = "Gets rid of halitosis and satisfied customers in one go! You shouldn't be seeing this."
 	icon = 'icons/obj/candymachine.dmi'
-	icon_state = "mintbox"
+	icon_state = "mintboxgeneric"
 	storage_slots = 50
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint = 50)
+
+/obj/item/weapon/storage/pill_bottle/sweets/New()
+	..()
+	switch(3)
+		if(0)
+			name = "NanoFresh"
+			desc = "An explosion of freshness in each candy!"
+			icon_state = "mintboxnanotrasen"
+			items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/nano = 50)
+		if(1)
+			name = "Synd-Sacs"
+			desc = "Freshen your fate!"
+			icon_state = "mintboxsyndie"
+			items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/syndie = 50)
+		if(2)
+			name = "Discount Dan's Minty Delight"
+			desc = "Toxin 'Free'!"
+			icon_state = "mintboxgeneric"
+			items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/discount = 50)
+		if(3)
+			name = "Uncle Ian's homemade mints"
+			desc = "Graphic Design is my passion!"
+			icon_state = "mintboxgraphicdesign"
+			items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade = 50)
+
 
 /obj/item/weapon/storage/pill_bottle/lollipops
 	name = "bag of lollipops"
