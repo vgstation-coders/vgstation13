@@ -48,6 +48,20 @@
 	gender = FEMALE
 	is_pet = TRUE
 
+/mob/living/simple_animal/cat/Runtime/New()
+	if(prob(20))
+		desc = "The product of alien DNA and bored geneticists."
+		icon_state = "original"
+		icon_living = "original"
+		icon_dead = "original_dead"
+
+/mob/living/simple_animal/pet/cat/original
+	name = "Batsy"
+	desc = "The product of alien DNA and bored geneticists."
+	icon_state = "original"
+	icon_living = "original"
+	icon_dead = "original_dead"
+
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"
 
