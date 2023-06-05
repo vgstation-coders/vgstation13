@@ -14,6 +14,7 @@
 					//FOOD_ANIMAL	- stuff that is made from (or contains) animal products other than meat (eggs, honey, ...). Anything that vegans won't eat!
 					//FOOD_SWEET	- sweet stuff like chocolate and candy
 					//FOOD_LACTOSE  - contains milk
+					//FOOD_DIPPABLE - can be dipped once per bite in an open reagent container, adding 1u of its content to the next bite
 
 					//Example: food_flags = FOOD_SWEET | FOOD_ANIMAL
 					//Unfortunately, food created by cooking doesn't inherit food_flags!
@@ -43,7 +44,8 @@
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
 	var/timer = 0 //currently only used on skittering food
-	
+	var/datum/reagents/dip
+
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	var/turf/T = get_turf(src)
 	if(contents.len)
@@ -184,6 +186,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/New()
 	..()
+	dip = new/datum/reagents(1)
+	dip.my_atom = src
 	if (random_filling_colors?.len > 0)
 		filling_color = pick(random_filling_colors)
 
@@ -282,6 +286,8 @@
 			"<span class='notice'>You unwillingly [eatverb] some of \the [src].</span>")
 
 	var/datum/reagents/reagentreference = reagents //Even when the object is qdeleted, the reagents exist until this ref gets removed
+	var/datum/reagents/dipreference = dip
+
 	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
 		if(sounds)
 			playsound(eater, 'sound/items/eatfood.ogg', rand(10,50), 1)
@@ -321,6 +327,9 @@
 			for (var/ID in virus2)
 				var/datum/disease2/disease/D = virus2[ID]
 				eater.infect_disease2(D, 1, notes="(Ate an infected [src])")//eating infected food means 100% chance of infection.
+		if (dipreference && dipreference.total_volume)
+			dipreference.reaction(eater, INGEST, amount_override = 1)
+			dipreference.trans_to(eater, 1)
 		if(reagentreference.total_volume)
 			reagentreference.reaction(eater, INGEST, amount_override = min(reagentreference.total_volume,bitesize*bitesizemod)/(reagentreference.reagent_list.len))
 			spawn() //WHY IS THIS SPAWN() HERE
@@ -401,6 +410,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/examine(mob/user)
 	..()
+	if (dip && dip.total_volume)
+		to_chat(user, "<span class='info'>\The [src] appears to have been dipped in [dip.get_master_reagent_name()].</span>")
 	if (bitecount)
 		if(bitecount == 1)
 			to_chat(user, "<span class='info'>\The [src] was bitten by someone!</span>")
@@ -511,6 +522,20 @@
 		contents += W
 		return 1 //No afterattack here
 
+/obj/item/weapon/reagent_containers/food/snacks/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	..()
+	if (food_flags & FOOD_DIPPABLE)
+		if (target.is_open_container() && user.Adjacent(target))
+			var/obj/item/weapon/reagent_containers/container = target
+			if (dip && dip.total_volume)
+				to_chat(user, "<span class='warning'>\The [src] is already dipped in [dip.get_master_reagent_name()]. Take a bite before you can dip it further.</span>")
+				return
+			if (container.is_empty())
+				to_chat(user, "<span class='warning'>\The [container] is empty.</span>")
+				return
+			container.reagents.trans_to(dip, 1)
+			to_chat(user, "<span class='notice'>You dip \the [src] in [dip.get_master_reagent_name()] from \the [container].</span>")
+
 //For slipping solid junk inside food items, like hiding a PDA inside a loaf of bread or something.
 /obj/item/weapon/reagent_containers/food/snacks/proc/can_hold(obj/item/weapon/W)
 	if(storage_slots < 1)
@@ -581,6 +606,13 @@
 //	and set your recipe's result to your spawner.
 //	reagents.add_reagent() should take place in your spawner's New() proc, not in its children's.
 //	Consult sushi types below for examples of usage.
+
+// Multispawners take the total amount of reagents, both the ones added by the recipe and the ingredients's ones, divides the number by the child volume and spawns that many of items.
+// For example: If the child volume is 1 and the total reagents, both from the ingredients and the extra upon cooking, add to 10u, then it would spawn 10 items.
+// This means that "stronger" ingredients spawn more items.
+// If you have child volume 5, the recipe adds 10u reagents and the ingredients' reagents add 10 more, the multispawner would spawn 4 items, since (10+10):5=4.
+// Only the fooditem ingredient reagents get tallied, any "raw" reagents the recipe calls for, such as flour, don't get counted for multispawner purposes.
+
 /obj/item/weapon/reagent_containers/food/snacks/multispawner
 	name = "food spawner"
 	var/child_type = /obj/item/weapon/reagent_containers/food/snacks
@@ -710,6 +742,7 @@
 	desc = "COOKIE!!!"
 	icon_state = "COOKIE!!!"
 	base_crumb_chance = 20
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/cookie/New()
 	..()
@@ -717,6 +750,7 @@
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie
+	name = "Seasonal Cookies"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie/New()
@@ -749,6 +783,7 @@
 	icon_state = "[cookiecutter]"
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart
+	name = "Candy Hearts"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/candyheart
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/candyheart/New()
@@ -868,7 +903,7 @@
 	name = "donut"
 	desc = "Goes great with Robust Coffee."
 	icon_state = "donut1"
-	food_flags = FOOD_SWEET | FOOD_ANIMAL //eggs are used
+	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_DIPPABLE //eggs are used
 	var/soggy = 0
 	base_crumb_chance = 30
 
@@ -1089,29 +1124,31 @@
 	reagents.add_reagent(CARPPHEROMONES, 3)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice
 	name = "huge mushroom slice"
 	desc = "A slice from a huge mushroom."
 	icon_state = "hugemushroomslice"
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(PSILOCYBIN, 3)
 	src.bitesize = 6
 
-/obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man/New()
 	..()
 	reagents.add_reagent(TRICORDRAZINE, rand(1,5))
 
-/obj/item/weapon/reagent_containers/food/snacks/tomatomeat
+/obj/item/weapon/reagent_containers/food/snacks/meat/tomatomeat
 	name = "tomato slice"
 	desc = "A slice from a huge tomato."
 	icon_state = "tomatomeat"
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/tomatomeat/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/tomatomeat/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	src.bitesize = 6
@@ -1564,7 +1601,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/throw_impact(atom/hit_atom)
 	set waitfor = FALSE
-	..()
+	if(..())
+		return
 	if(ismob(hit_atom))
 		var/mob/M = hit_atom
 		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
@@ -3227,7 +3265,7 @@
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/mushroomsoup
-	name = "chantrelle soup"
+	name = "chanterelle soup"
 	desc = "A delicious and hearty mushroom soup."
 	icon_state = "mushroomsoup"
 	trash = /obj/item/trash/snack_bowl
@@ -4298,7 +4336,7 @@
 	name = "sugar cookie"
 	desc = "Just like your little sister used to make."
 	icon_state = "sugarcookie"
-	food_flags = FOOD_SWEET
+	food_flags = FOOD_SWEET | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/sugarcookie/New()
 	..()
@@ -4310,7 +4348,7 @@
 	name = "caramel cookie"
 	desc = "Just like your little sister used to make."
 	icon_state = "caramelcookie"
-	food_flags = FOOD_SWEET
+	food_flags = FOOD_SWEET | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/caramelcookie/New()
 	..()
@@ -4652,7 +4690,6 @@
 	base_crumb_chance = 3
 	bitesize = 1
 
-
 /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -4670,6 +4707,18 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 
+/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_tenders
+	name = "Vox Tenders"
+	desc = "Respect has to be earned, Sweet - just like money."
+	icon_state = "vox_tendies"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 3
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_tenders/New()
+	..()
+	reagents.add_reagent(CORNOIL, 3)
+	reagents.add_reagent(TENDIES, 3)
 
 //////////////////CURRY//////////////////
 
@@ -5092,86 +5141,139 @@
 
 ////////////////SLIDERS////////////////
 
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider
+	name = "sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider
+	child_volume = 2.5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10) //spawns 4
+
 /obj/item/weapon/reagent_containers/food/snacks/slider
 	name = "slider"
 	desc = "It's so tiny!"
 	icon_state = "slider"
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/slider/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2.5)
 	bitesize = 1.5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/synth
+	name = "synth sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/synth
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/synth/New()
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/synth
 	name = "synth slider"
 	desc = "It's made to be tiny!"
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/xeno
+	name = "xeno sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/xeno
+	child_volume = 3.5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/xeno/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/xeno
 	name = "xeno slider"
 	desc = "It's green!"
 	icon_state = "slider_xeno"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/xeno/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/chicken
+	name = "chicken sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/chicken
+	child_volume = 3.5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/chicken/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	bitesize = 2
+	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/chicken
 	name = "chicken slider"
 	desc = "Chicken sliders? That's new."
 	icon_state = "slider_chicken"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/chicken/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/carp
+	name = "carp sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/carp
+	child_volume = 3.5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/carp/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	bitesize = 2
+	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/carp
 	name = "carp slider"
 	desc = "I wonder how it tastes!"
 	icon_state = "slider_carp"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/carp/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/toxiccarp
+	name = "carp sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/toxiccarp
+	child_volume = 5.5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/toxiccarp/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	bitesize = 2.5
+	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
+	reagents.add_reagent(CARPOTOXIN, 8)
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/toxiccarp
 	name = "carp slider"
 	desc = "I wonder how it tastes!"
 	icon_state = "slider_carp"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/toxiccarp/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	reagents.add_reagent(CARPOTOXIN, 2)
-	bitesize = 2.5
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/spider
+	name = "spidey slideys"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/spider
+	child_volume = 3.5
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/carp/spider
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/spider/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4) //spawns 4
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/spider
 	name = "spidey slidey"
 	desc = "I think there's still a leg in there!"
 	icon_state = "slider_spider"
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/clown
+	name = "honky sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/clown
+	child_volume = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/clown/New()
+	..()
+	reagents.add_reagent(HONKSERUM, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/clown
 	name = "honky slider"
 	desc = "HONK!"
 	icon_state = "slider_clown"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/clown/New()
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/mime
+	name = "quiet sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/mime
+	child_volume = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/mime/New()
 	..()
-	reagents.add_reagent(HONKSERUM, 2.5)
-	bitesize = 2.5
+	reagents.add_reagent(SILENCER, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/mime
-	name = "quiet Slider"
+	name = "quiet slider"
 	desc = "..."
 	icon_state = "slider_mime"
 
-/obj/item/weapon/reagent_containers/food/snacks/slider/mime/New()
-	..()
-	reagents.add_reagent(SILENCER, 2.5)
-	bitesize = 2.5
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/slippery
+	name = "slippery sliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/slippery
+	child_volume = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/slippery/New()
+	..() //spawns 2
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/slippery
 	name = "slippery slider"
@@ -5567,6 +5669,7 @@
 	autoignition_temperature = 0
 	w_type = RECYK_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 100)
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/weapon/reagent_containers/food/snacks/eucharist
 	name = "\improper Eucharist Wafer"
@@ -5972,6 +6075,19 @@
 	..()
 	reagents.add_reagent(NUTRIMENT,4)
 	reagents.add_reagent(INACUSIATE,1)
+
+/obj/item/weapon/reagent_containers/food/snacks/rosolli
+	name = "rosolli"
+	desc = "A salad of root vegetables from Space Finland."
+	icon_state = "rosolli"
+	bitesize = 2
+	trash = /obj/item/trash/snack_bowl
+	filling_color = "#E00000"
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/rosolli/New()
+	..()
+	reagents.add_reagent(NUTRIMENT,6)
 
 /obj/item/weapon/reagent_containers/food/snacks/fruitsalad
 	name = "fruit salad"
@@ -6537,6 +6653,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ebi
+	name = "Ebi Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ebi/New()
@@ -6551,6 +6668,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ikura
+	name = "Ikura Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ikura/New()
@@ -6565,6 +6683,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Sake
+	name = "Sake Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Sake/New()
@@ -6579,6 +6698,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_SmokedSalmon
+	name = "Smoked Salmon Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_SmokedSalmon
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_SmokedSalmon/New()
@@ -6593,6 +6713,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tamago
+	name = "Tamago Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tamago
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tamago/New()
@@ -6607,6 +6728,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Inari
+	name = "Inari Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Inari
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Inari/New()
@@ -6621,6 +6743,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Masago
+	name = "Masago Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Masago/New()
@@ -6635,6 +6758,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tobiko
+	name = "Tobiko Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tobiko
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tobiko/New()
@@ -6662,6 +6786,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tai
+	name = "Tai Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tai
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tai/New()
@@ -6677,6 +6802,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Unagi
+	name = "Unagi Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Unagi
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Unagi/New()
@@ -6691,6 +6817,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_avocado
+	name = "Avocado Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_avocado
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_avocado/New()
@@ -7020,6 +7147,17 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 5
 
+/obj/item/weapon/reagent_containers/food/snacks/pickledbeets
+	name = "pickled beets"
+	desc = "A jar of pickled whitebeets. How did they become so red, then?"
+	icon_state = "pickledbeets"
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/pickledbeets/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/bulgogi
 	name = "bulgogi"
 	desc = "Thin grilled beef marinated with grated pear juice."
@@ -7175,6 +7313,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	name = "cookie"
 	desc = "Oh god, it's self-replicating!"
 	icon = 'icons/obj/food2.dmi'
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/PAIcookie/New()
 	..()
@@ -7886,14 +8025,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "bugburger"
 	var/skitterdelay = 30
 	var/skitterchance = 50
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/New()
 	..()
 	processing_objects += src
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/pickup(mob/user)
 	timer = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/process()
 	timer += 1
 	if(timer > skitterdelay && istype(loc, /turf) && prob(skitterchance))
@@ -7913,7 +8052,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "bugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -7929,7 +8068,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "deluxebugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 12)
@@ -7947,7 +8086,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	base_crumb_chance = 20
 	skitterchance = 40
 	skitterdelay = 60 //takes longer for super gunkburgers to walk and they walk less, muh weight or something
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 40)
@@ -7991,9 +8130,9 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "cockroachsalad"
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_MEAT
-	random_filling_colors = list("#610000", "#32AE32") 
+	random_filling_colors = list("#610000", "#32AE32")
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/roachsalad/after_consume()
 	if(prob(unpopped))
 		to_chat(usr, "<span class='warning'>A cockroach wriggles out of the bowl!</span>")
@@ -8016,6 +8155,43 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(ROACHSHELL, 5)
 	reagents.add_reagent(WATER, 5)
 	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy
+	name = "Gunk Soup Embassy"
+	desc = "Space Turkey's finest politicians are sent to this elite GunkCo facility."
+	icon_state = "gunksoup_embassy_2" //here so it isn't invisible on nofruit pie rolls, gets overwritten on new()
+	trash = /obj/item/trash/snack_bowl
+	food_flags = FOOD_MEAT | FOOD_LIQUID
+	crumb_icon = "dribbles"
+	filling_color = "#6D4930"
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/New()
+	..()
+	if(prob(50))  //two flag waving styles
+		icon_state = "gunksoup_embassy_1"
+	else
+		icon_state = "gunksoup_embassy_2"
+	processing_objects += src
+	reagents.add_reagent(NUTRIMENT, 10) //we lobbied for extra nutriment for you!
+	reagents.add_reagent(ROACHSHELL, 8) //no roaches were harmed this time, it's all exoskeleton flakes
+	reagents.add_reagent(WATER, 5)
+	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/process()
+	timer += 1
+	if(prob(20) && timer >= 10)
+		timer = 0
+		if(prob(50))
+			icon_state = "gunksoup_embassy_1"
+		else
+			icon_state = "gunksoup_embassy_2"
+
+/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/Destroy()
+	processing_objects -= src
+	new /mob/living/simple_animal/cockroach/turkish(get_turf(src))
+	new /mob/living/simple_animal/cockroach/turkish(get_turf(src))
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkbread
 	name = "gunkbread loaf"
@@ -8058,7 +8234,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		reagents.add_reagent(SALINE, 1)
 		desc = "The flavour of the maintenance halls in pie form."
 	bitesize = 3
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkcake
 	name = "gunk cake"
 	desc = "The apex of garbage-based confectionary research."

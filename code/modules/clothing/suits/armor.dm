@@ -22,6 +22,7 @@
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.6
 	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
+	on_armory_manifest = TRUE
 
 
 /obj/item/clothing/suit/armor/vest
@@ -329,6 +330,7 @@
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/reactive/IsShield()
 	if(active)
@@ -388,6 +390,7 @@
 
 /obj/item/clothing/suit/armor/tdome
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/armor/tdome/red
 	name = "Thunderdome suit (red)"

@@ -167,8 +167,7 @@
 		if(istype(M, /mob/living/silicon/robot))
 			var/mob/living/silicon/robot/Robot = M
 			if(Robot.mmi)
-				qdel(Robot.mmi)
-				Robot.mmi = null
+				QDEL_NULL(Robot.mmi)
 		else
 			for(var/obj/item/W in M)
 				if(istype(W, /obj/item/weapon/implant))	//TODO: Carn. give implants a dropped() or something

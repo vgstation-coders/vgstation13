@@ -8,16 +8,6 @@
 	var/input_dir = 1
 	output_dir = 2
 
-/obj/machinery/patient_processor/proc/notify_ghost(var/mob/M)
-	if(!M.client)
-		var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
-		if(ghost)
-			var/mob/ghostmob = ghost.get_top_transmogrification()
-			if(ghostmob)
-				ghostmob << 'sound/effects/adminhelp.ogg'
-				to_chat(ghostmob, "<span class='interface big'><span class='bold'>You've been healed by the patient processor! Return to your body to get back into the round like you deserve.</span> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-
 /obj/machinery/patient_processor/process()
 	if((!(output_dir in cardinal) || !(input_dir in cardinal)) || output_dir == input_dir || !anchored)
 		return
@@ -25,7 +15,7 @@
 	var/output = get_step(src, output_dir)
 	var/mob/living/M = locate(/mob/living, input)
 	if(M)
-		notify_ghost(M)
+		M.ghost_reenter_alert("You've been healed by the patient processor! Return to your body to get back into the round like you deserve.")
 		M.forceMove(output)
 		M.rejuvenate(animation = TRUE)
 		return
@@ -43,7 +33,7 @@
 		brainmob = brain.brainmob
 	if(!brainmob)
 		return
-	notify_ghost(brainmob)
+	brainmob.ghost_reenter_alert("You've been healed by the patient processor! Return to your body to get back into the round like you deserve.")
 
 	//produce a new body
 	var/datum/dna/new_dna = brainmob.dna.Clone()

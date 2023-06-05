@@ -31,9 +31,7 @@ var/list/beam_master = list()
 
 /ray/beam_ray/Destroy()
 	fired_beam = null
-	for(var/rayCastHit/H in hit_cache)
-		qdel(H)
-	hit_cache = null
+	QDEL_LIST_NULL(hit_cache)
 	..()
 
 /ray/beam_ray/cast(max_distance, max_hits, ignore_origin)
@@ -96,9 +94,7 @@ var/list/beam_master = list()
 	. = ..()
 
 /obj/item/projectile/beam/Destroy()
-	for(var/ray/R in past_rays)
-		qdel(R)
-	past_rays = null
+	QDEL_LIST_NULL(past_rays)
 	..()
 
 
@@ -364,8 +360,7 @@ var/list/beam_master = list()
 		if(TT == firer.loc)
 			continue
 		if(TT.density)
-			qdel(X)
-			X = null
+			QDEL_NULL(X)
 			break
 		for(var/atom/movable/O in TT)
 			if(!O.Cross(src))
@@ -375,14 +370,12 @@ var/list/beam_master = list()
 		for(var/mob/living/O in TT.contents)
 			if(istype(O, /mob/living))
 				if(O.density)
-					qdel(X)
-					X = null
+					QDEL_NULL(X)
 					broke = 1
 					break
 		if(broke)
 			if(X)
-				qdel(X)
-				X = null
+				QDEL_NULL(X)
 			break
 	spawn(10)
 		for(var/atom/thing in ouroverlays)

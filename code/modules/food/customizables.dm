@@ -160,7 +160,8 @@
 
 
 /obj/item/trash/plate/throw_impact(atom/hit_atom)
-	..()
+	if(..())
+		return
 	for (var/obj/item/trash/plate/P in plates)
 		plates -= P
 		if(prob(70))

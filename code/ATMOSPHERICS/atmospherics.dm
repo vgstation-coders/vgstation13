@@ -139,7 +139,7 @@ Pipelines + Other Objects -> Pipe network
 	return PIPING_LAYER(new_layer, piping_layer)
 
 /obj/machinery/atmospherics/proc/node_plane()
-	return level == LEVEL_BELOW_FLOOR ? ABOVE_PLATING_PLANE : ABOVE_TURF_PLANE
+	return relative_plane(level == LEVEL_BELOW_FLOOR ? ABOVE_PLATING_PLANE : ABOVE_TURF_PLANE)
 
 /obj/machinery/atmospherics/update_icon(var/adjacent_procd,node_list)
 	update_planes_and_layers()

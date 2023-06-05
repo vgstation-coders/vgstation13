@@ -615,6 +615,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define UNPACIFIABLE 16		//Immune to pacify effects.
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
+#define BUDDHAMODE	16384
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
 #define ALWAYS_CRIT 65536
 
@@ -1127,6 +1128,10 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define AUTOIGNITION_FABRIC 523.15
 #define AUTOIGNITION_PROTECTIVE 573.15 //autoignition temperature of protective clothing like firesuits or kevlar vests
 #define AUTOIGNITION_ORGANIC 633.15 //autoignition temperature of animal fats
+// Assuming this is http://en.wikipedia.org/wiki/Butane
+// (Autoignition temp 288°C, or 561.15°K)
+// Used in fueltanks exploding.
+#define AUTOIGNITION_WELDERFUEL 561.15
 
 // snow business
 #define SNOWBALL_MINIMALTEMP 265	//about -10°C, the minimal temperature at which a thrown snowball can cool you down.
@@ -1161,6 +1166,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 #define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
 
+//flags for computer behavior
+#define NO_ONOFF_ANIMS 1
 
 ///////////////////////
 ///////RESEARCH////////
@@ -1216,6 +1223,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define I_WIRES    "wires"
 #define I_GHOST    "poltergeist"
 #define I_ARTIFACT "artifacts"
+#define I_RCD      "RCD"
 
 
 // delayNext() flags.
@@ -1320,9 +1328,11 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define ASTAR_DEBUG 0
 #if ASTAR_DEBUG == 1
 #warn "Astar debug is on. Don't forget to turn it off after you've done :)"
-#define astar_debug(text) to_chat(world, text)
+#define astar_debug(text) //to_chat(world, text)
+#define astar_debug_mulebots(text) to_chat(world, text)
 #else
 #define astar_debug(text)
+#define astar_debug_mulebots(text)
 #endif
 
 #define BSQL_DEBUG_CONNECTION 0
@@ -1399,7 +1409,8 @@ var/proccalls = 1
 #define FOOD_SWEET	4
 #define FOOD_LIQUID	8
 #define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
-#define FOOD_LACTOSE 32 //Contains MILK
+#define FOOD_LACTOSE	32 //Contains MILK
+#define FOOD_DIPPABLE	64 //Can be dipped in non-empty open reagent containers
 
 #define UTENSILE_FORK	1
 #define UTENSILE_SPOON	2
@@ -1831,14 +1842,17 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define MUZZLE_SOFT 1	//Muzzle causes muffled speech.
 #define MUZZLE_HARD	2	//Muzzle prevents speech.
 
-//Microwave-or-pan selective cookability of recipes
+//Cooking vessel-selective cookability of recipes
 #define COOKABLE_WITH_MICROWAVE (1<<0)
 #define COOKABLE_WITH_PAN (1<<1)
+#define COOKABLE_WITH_MIXING (1<<2) //For things like salads and ice cream that don't require heat to cook (when mixing bowls are implemented, for now this is just used to not heat those recipes when they're made in a microwave).
+#define COOKABLE_WITH_HEAT (COOKABLE_WITH_MICROWAVE | COOKABLE_WITH_PAN)
 #define COOKABLE_WITH_ALL ALL
 
 //Flags for the contents of a cooking vessel
 #define COOKVESSEL_CONTAINS_REAGENTS (1<<0) //The cooking vessel contains reagents
 #define COOKVESSEL_CONTAINS_CONTENTS (1<<1)	//The cooking vessel contains non-reagent contents (eg. items)
 
-//Default cooking temperature
-#define COOKTEMP_DEFAULT T0C + 316 //Around 600 F
+//Cooking-related temperatures
+#define COOKTEMP_DEFAULT (T0C + 316) //Default cooking temperature, around 600 F
+#define COOKTEMP_HUMANSAFE (BODYTEMP_HEAT_DAMAGE_LIMIT - 1) //Human-safe temperature for cooked food, 1 degree less than the threshold for burning a human.

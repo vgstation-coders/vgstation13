@@ -221,8 +221,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/Destroy()
 	if(wires)
-		qdel(wires)
-		wires = null
+		QDEL_NULL(wires)
 	..()
 
 /obj/machinery/media/jukebox/attack_paw(var/mob/user)

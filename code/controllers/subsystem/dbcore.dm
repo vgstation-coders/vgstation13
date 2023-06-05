@@ -224,9 +224,9 @@ var/datum/subsystem/dbcore/SSdbcore
 	for (var/thing in querys)
 		var/datum/DBQuery/query = thing
 		if (warn)
-			call(query, /datum/DBQuery.proc/warn_execute)()
+			call(query, /datum/DBQuery::warn_execute())()
 		else
-			call(query, /datum/DBQuery.proc/Execute)()
+			call(query, /datum/DBQuery::Execute())()
 
 	for (var/thing in querys)
 		var/datum/DBQuery/query = thing

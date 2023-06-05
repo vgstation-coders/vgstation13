@@ -115,6 +115,7 @@
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 	req_access = list(access_security)
+	holds_armory_items = TRUE
 
 /obj/machinery/suit_storage_unit/captain
 	name = "Command Suit Storage Unit"
@@ -618,7 +619,6 @@
 		usr.client.perspective = EYE_PERSPECTIVE
 		usr.client.eye = src
 		usr.forceMove(src)
-//		usr.metabslow = 1
 		occupant = usr
 		isopen = 0 //Close the thing after the guy gets inside
 		update_icon()
@@ -682,8 +682,7 @@
 			//for(var/obj/O in src)
 			//	O.loc = loc
 			add_fingerprint(user)
-			qdel(G)
-			G = null
+			QDEL_NULL(G)
 			updateUsrDialog()
 			update_icon()
 			return

@@ -34,8 +34,7 @@
 	set_light(0)
 	processing_objects.Remove(src)
 	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
+		QDEL_NULL(power_connection)
 	. = ..()
 
 /obj/item/device/powersink/attackby(var/obj/item/I, var/mob/user)

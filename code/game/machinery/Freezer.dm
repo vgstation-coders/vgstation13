@@ -85,8 +85,7 @@
 			node1.disconnect(src)
 			node1 = null
 		if(network)
-			qdel(network)
-			network = null
+			QDEL_NULL(network)
 		update_icon()
 
 
@@ -257,8 +256,7 @@
 			node1.disconnect(src)
 			node1 = null
 		if(network)
-			qdel(network)
-			network = null
+			QDEL_NULL(network)
 
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_hand(mob/user as mob)

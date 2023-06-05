@@ -72,8 +72,7 @@
 /atom/movable/Destroy()
 
 	if(materials)
-		qdel(materials)
-		materials = null
+		QDEL_NULL(materials)
 
 	remove_border_dummy()
 
@@ -89,9 +88,7 @@
 	if (locked_to)
 		locked_to.unlock_atom(src)
 
-	for (var/datum/locking_category/category in locking_categories)
-		qdel(category)
-	locking_categories      = null
+	QDEL_LIST_NULL(locking_categories)
 	locking_categories_name = null
 
 	break_all_tethers()
@@ -102,8 +99,7 @@
 		T.check_blocks_light()
 
 	if(virtualhearer)
-		qdel(virtualhearer)
-		virtualhearer = null
+		QDEL_NULL(virtualhearer)
 
 	for(var/atom/movable/AM in src)
 		qdel(AM)
@@ -334,9 +330,9 @@
 
 /atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
 	locking_init()
-	. = locking_categories_name[category]
-
-	if (!.)
+	if(locking_categories_name[category])
+		. = locking_categories_name[category]
+	else
 		if (istext(category))
 			return
 
@@ -446,8 +442,7 @@
 /atom/movable/proc/remove_border_dummy()
 	if(border_dummy)
 		unlock_atom(border_dummy)
-		qdel(border_dummy)
-		border_dummy = null
+		QDEL_NULL(border_dummy)
 
 /atom/movable/proc/border_dummy_Cross(atom/movable/mover) //border_dummy calls this in its own Cross() to detect collision
 	if(istype(mover) && mover.checkpass(pass_flags_self))
@@ -742,7 +737,7 @@
 		AM.lock_atom(src, /datum/locking_category/overlay)
 	if (istype(master, /atom/movable))
 		var/atom/movable/AM = master
-		AM.register_event(/event/destroyed, src, .proc/qdel_self)
+		AM.register_event(/event/destroyed, src, src::qdel_self())
 	verbs.len = 0
 
 /atom/movable/overlay/proc/qdel_self(datum/thing)
@@ -752,7 +747,7 @@
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
 		AM.unlock_atom(src)
-		AM.unregister_event(/event/destroyed, src, .proc/qdel_self)
+		AM.unregister_event(/event/destroyed, src, src::qdel_self())
 	master = null
 	return ..()
 
@@ -815,8 +810,7 @@
 /atom/movable/proc/removeHear()
 	flags &= ~HEAR
 	if(virtualhearer)
-		qdel(virtualhearer)
-		virtualhearer = null
+		QDEL_NULL(virtualhearer)
 
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)

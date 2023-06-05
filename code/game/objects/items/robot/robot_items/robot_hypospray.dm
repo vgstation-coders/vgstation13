@@ -18,8 +18,7 @@
 
 /obj/item/weapon/reagent_containers/borghypo/New(loc)
 	..(loc)
-	qdel(reagents)
-	reagents = null
+	QDEL_NULL(reagents)
 
 	for(var/reagent in reagent_ids)
 		var/datum/reagents/reagents = new(volume)

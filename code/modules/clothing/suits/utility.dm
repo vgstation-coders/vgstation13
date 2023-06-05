@@ -25,6 +25,7 @@
 	pressure_resistance = 3 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	autoignition_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/fire/firefighter
 	icon_state = "firesuit"
@@ -70,6 +71,7 @@
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	autoignition_temperature = AUTOIGNITION_PROTECTIVE
+	on_armory_manifest = TRUE
 
 /obj/item/clothing/suit/bomb_suit
 	name = "bomb suit"
@@ -86,6 +88,7 @@
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
+	on_armory_manifest = TRUE
 
 /obj/item/clothing/head/bomb_hood/security
 	icon_state = "bombsuitsec"

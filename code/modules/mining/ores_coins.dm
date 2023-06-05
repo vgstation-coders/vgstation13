@@ -1,13 +1,20 @@
 /**********************Mineral ores**************************/
 
 /obj/item/stack/ore
-	name = "Rock"
+	name = "rock"
+	singular_name = "piece of "
+	irregular_plural = "pieces of "
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "ore2"
 	w_type = RECYK_MISC
 	max_amount = 100
 	var/datum/geosample/geologic_data
 	var/can_orebox = TRUE
+
+/obj/item/stack/ore/New()
+	singular_name += name
+	irregular_plural += name
+	..()
 
 /obj/item/stack/ore/recycle(var/datum/materials/rec)
 	if(!materials)
@@ -16,21 +23,21 @@
 	return ..()
 
 /obj/item/stack/ore/uranium
-	name = "Uranium ore"
+	name = "\improper uranium ore"
 	icon_state = "Uranium ore"
 	origin_tech = Tc_MATERIALS + "=5"
 	melt_temperature = 1070+T0C
 	starting_materials = list(MAT_URANIUM = CC_PER_SHEET_URANIUM)
 
 /obj/item/stack/ore/iron
-	name = "Iron ore"
+	name = "\improper iron ore"
 	icon_state = "Iron ore"
 	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_STEEL
 	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
 
 /obj/item/stack/ore/glass
-	name = "Sand"
+	name = "\improper sand"
 	icon_state = "Glass ore"
 	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_GLASS
@@ -82,55 +89,55 @@
 	use(1)
 
 /obj/item/stack/ore/plasma
-	name = "Plasma ore"
+	name = "\improper plasma ore"
 	icon_state = "Plasma ore"
 	origin_tech = Tc_MATERIALS + "=2"
 	melt_temperature = MELTPOINT_STEEL+500
 	starting_materials = list(MAT_PLASMA = CC_PER_SHEET_PLASMA)
 
 /obj/item/stack/ore/nanotrasite
-	name = "Nanotrasite ore"
+	name = "\improper nanotrasite ore"
 	icon_state = "Nanotrasite ore"
 	origin_tech = Tc_MATERIALS + "=3"
 	melt_temperature = MELTPOINT_STEEL+700
 	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL/2, MAT_PLASMA = CC_PER_SHEET_PLASMA/2)
 
 /obj/item/stack/ore/silver
-	name = "Silver ore"
+	name = "\improper silver ore"
 	icon_state = "Silver ore"
 	origin_tech = Tc_MATERIALS + "=3"
 	starting_materials = list(MAT_SILVER = CC_PER_SHEET_SILVER)
 	melt_temperature = 961+T0C
 
 /obj/item/stack/ore/gold
-	name = "Gold ore"
+	name = "\improper gold ore"
 	icon_state = "Gold ore"
 	origin_tech = Tc_MATERIALS + "=4"
 	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD)
 	melt_temperature = 1064+T0C
 
 /obj/item/stack/ore/electrum
-	name = "Electrum ore"
+	name = "\improper electrum ore"
 	icon_state = "Electrum ore"
 	starting_materials = list(MAT_GOLD = CC_PER_SHEET_MISC*0.6, MAT_SILVER = CC_PER_SHEET_MISC*0.4)
 	origin_tech = Tc_MATERIALS + "=4"
 	melt_temperature = 1023.22+T0C //60% gold, 40% silver
 
 /obj/item/stack/ore/diamond
-	name = "Diamond ore"
+	name = "\improper diamond ore"
 	icon_state = "Diamond ore"
 	origin_tech = Tc_MATERIALS + "=6"
 	starting_materials = list(MAT_DIAMOND = CC_PER_SHEET_DIAMOND)
 
 /obj/item/stack/ore/clown
-	name = "Bananium ore"
+	name = "\improper bananium ore"
 	icon_state = "Clown ore"
 	origin_tech = Tc_MATERIALS + "=4"
 	melt_temperature = MELTPOINT_POTASSIUM
 	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_CLOWN)
 
 /obj/item/stack/ore/phazon
-	name = "Phazite"
+	name = "\improper phazite"
 	desc = "What the fuck?"
 	icon_state = "Phazon ore"
 	origin_tech = Tc_MATERIALS + "=7"
@@ -138,7 +145,7 @@
 	starting_materials = list(MAT_PHAZON = CC_PER_SHEET_PHAZON)
 
 /obj/item/stack/ore/slag
-	name = "Slag"
+	name = "\improper slag"
 	desc = "Completely useless unless recycled."
 	icon_state = "slag"
 	melt_temperature=MELTPOINT_PLASTIC
@@ -270,7 +277,7 @@
 	starting_materials = list(MAT_TELECRYSTAL = CC_PER_SHEET_TELECRYSTAL)
 
 /obj/item/stack/ore/mythril
-	name = "mythril ore"
+	name = "\improper mythril ore"
 	desc = "A naturally-occuring silver steel alloy."
 	icon_state = "cobryl"
 	starting_materials = list(MAT_MYTHRIL = CC_PER_SHEET_MYTHRIL)
@@ -398,6 +405,17 @@
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
 	add_component(/datum/component/coinflip)
+	if (prob(1))
+		// Something about this coin stands out...
+		luckiness_validity = LUCKINESS_WHEN_GENERAL_RECURSIVE
+		overlays += image('icons/obj/items.dmi', "shine")
+		if (prob(20))
+			// Sometimes it's very lucky!
+			luckiness = 500 * credits
+		else
+			// But most of the time, it's just our imagination.
+			luckiness = 0
+
 
 /obj/item/weapon/coin/recycle(var/datum/materials/rec)
 	if(material==null)
@@ -512,8 +530,7 @@
 
 		if(CC.amount <= 0)
 			to_chat(user, "<span class='notice'>This cable coil appears to be empty.</span>")
-			qdel(CC)
-			CC = null
+			QDEL_NULL(CC)
 			return
 
 		overlays += image('icons/obj/items.dmi',"coin_string_overlay")
@@ -533,6 +550,11 @@
 		to_chat(user, "<span class='notice'>You detach the string from the coin.</span>")
 	else
 		..()
+
+/obj/item/weapon/coin/examine(mob/user)
+	..()
+	if(!isnull(luckiness))
+		to_chat(user, "<span class='notice'>Something is [pick("peculiar", "exceptional", "interesting")] about it...</span>")
 
 ///////////////////////////////////////////////////////////
 

@@ -7,9 +7,6 @@
 	nameShort = "bagel"
 	nameLong = "Bagelstation"
 	map_dir = "bagelstation"
-	tDomeX = 128
-	tDomeY = 58
-	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
 		/datum/zLevel/centcomm,

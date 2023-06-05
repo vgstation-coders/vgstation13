@@ -1818,8 +1818,7 @@
 
 //smashing when thrown
 /obj/item/weapon/reagent_containers/food/drinks/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
-	if(isGlass && isturf(loc)) // don't shatter if we got caught mid-flight
+	if(!..() && isGlass && isturf(loc)) // don't shatter if we got caught mid-flight
 		isGlass = 0 //to avoid it from hitting the wall, then hitting the floor, which would cause two broken bottles to appear
 		visible_message("<span  class='warning'>The [smashtext][name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
@@ -1874,8 +1873,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/attackby(var/obj/item/I, mob/user as mob)
 	if(istype(I, /obj/item/weapon/reagent_containers/glass/rag) && molotov == -1)  //check if it is a molotovable drink - just beer and ale for now - other bottles require different rag overlay positions - if you can figure this out then go for it
 		to_chat(user, "<span  class='notice'>You stuff the [I] into the mouth of the [src].</span>")
-		qdel(I)
-		I = null //??
+		QDEL_NULL(I) //??
 		var/obj/item/weapon/reagent_containers/food/drinks/dummy = /obj/item/weapon/reagent_containers/food/drinks/molotov
 		molotov = initial(dummy.molotov)
 		flags = initial(dummy.flags)

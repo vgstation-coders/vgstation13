@@ -10,10 +10,8 @@
 	health = 40
 
 /obj/structure/snowman/Destroy()
-	qdel(hat)
-	hat = null
-	qdel(carrot)
-	carrot = null
+	QDEL_NULL(hat)
+	QDEL_NULL(carrot)
 	..()
 
 /obj/structure/snowman/attackby(obj/item/weapon/W, mob/user)

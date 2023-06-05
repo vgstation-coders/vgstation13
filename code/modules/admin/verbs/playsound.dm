@@ -60,7 +60,7 @@
 	if(!M)
 		return
 
-	var/sound/S = input("Sound file?", "Sound") as sound
+	var/sound/S = input("Sound file?", "Sound") as null|sound
 
 	var/prompt = alert(src, "Are you sure you want to play this sound to [M]?","Are you sure?","Yes","Cancel")
 	if(prompt == "Cancel")

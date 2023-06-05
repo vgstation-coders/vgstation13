@@ -174,14 +174,14 @@
 	..()   removed because we already have babycarp */
 
 /obj/item/weapon/fish/clownfish
-	name = "clown fish"
+	name = "clownfish"
 	desc = "Even underwater, you cannot escape HONKing."
 	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "clownfish"
 	meat_type = /obj/item/weapon/bananapeel/clownfish
 
 /obj/item/weapon/bananapeel/clownfish
-	name = "clown fish"
+	name = "clownfish"
 	desc = "Even underwater, you cannot escape HONKing."
 	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "clownfish"

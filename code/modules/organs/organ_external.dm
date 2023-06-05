@@ -68,25 +68,10 @@
 		parent.children -= src
 		parent = null
 
-	if(children)
-		for(var/datum/organ/external/O in children)
-			qdel(O)
-		children = null
-
-	if(internal_organs)
-		for(var/datum/organ/internal/O in internal_organs)
-			qdel(O)
-		internal_organs = null
-
-	if(implants)
-		for(var/obj/O in implants)
-			qdel(O)
-		implants = null
-
-	if(wounds)
-		for(var/datum/wound/W in wounds)
-			qdel(W)
-		wounds = null
+	QDEL_LIST_NULL(children)
+	QDEL_LIST_NULL(internal_organs)
+	QDEL_LIST_NULL(implants)
+	QDEL_LIST_NULL(wounds)
 
 	if(owner)
 		owner.organs -= src
@@ -729,8 +714,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(istype(s))
 			implants -= s
 			owner.contents -= s
-			qdel(s)
-			s = null
+			QDEL_NULL(s)
 	amputated = 0
 	brute_dam = 0
 	burn_dam = 0
@@ -872,8 +856,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 					internal_organs -= O.organ_data
 					O.removed(owner,owner)
 					O.loc = headloc
-				qdel(organ)
-				organ = null
+				QDEL_NULL(organ)
 
 	return organ
 
@@ -1518,6 +1501,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return E
 
 /datum/organ/external/head/explode()
+	if(owner.status_flags & BUDDHAMODE) // can't lose your head like this
+		return
 	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
 	eject_eyes()
 	.=..()
@@ -1822,8 +1807,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /obj/item/organ/external/head/Destroy()
 	if(brainmob)
-		qdel(brainmob)
-		brainmob = null
+		QDEL_NULL(brainmob)
 	..()
 
 //obj/item/organ/external/head/with_teeth starts with 32 human teeth!
@@ -2001,16 +1985,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(brainmob.client)
 				mind_found = 1
 				to_chat(user, "<span class='notice'>[pick("The eyes","The jaw","The ears")] of \the [src] twitch ever so slightly.</span>")
-			else
-				var/mob/dead/observer/ghost = mind_can_reenter(brainmob.mind)
-				if(ghost)
-					var/mob/ghostmob = ghost.get_top_transmogrification()
-					if(ghostmob)//Lights are on but no-one's home
-						mind_found = 1
-						to_chat(user, "<span class='notice'>\The [src] stares blankly forward. The pupils dilate but otherwise it does not react to stimuli.</span>")
-						ghostmob << 'sound/effects/adminhelp.ogg'
-						to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone has found your head. Return to it if you want to be resurrected!</span> \
-							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+			else if(brainmob.ghost_reenter_alert("Someone has found your head. Return to it if you want to be resurrected!"))
+				mind_found = 1 //Lights are on but no-one's home
+				to_chat(user, "<span class='notice'>\The [src] stares blankly forward. The pupils dilate but otherwise it does not react to stimuli.</span>")
 			if(!mind_found)
 				to_chat(user, "<span class='danger'>\The [src] seems unresponsive to shock stimuli.</span>")
 		else
@@ -2022,8 +1999,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 /obj/item/organ/external/head/Destroy()
 	if(brainmob)
 		brainmob.ghostize()
-		qdel(brainmob)
-		brainmob = null
+		QDEL_NULL(brainmob)
 	..()
 
 /mob/living/carbon/human/find_organ_by_grasp_index(index)

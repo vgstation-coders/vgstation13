@@ -6,6 +6,7 @@
 /obj/structure/window/full
 	name = "window"
 	icon_state = "fwindow0" //Specifically for the map
+	base_state = "fwindow"
 	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
 	layer = FULL_WINDOW_LAYER
@@ -77,15 +78,6 @@
 				dir = NORTHWEST
 		update_nearby_tiles()
 
-/obj/structure/window/full/AltClick(var/mob/user)
-	. = ..()
-	var/turf/T = loc
-	if (istype(T))
-		if (user.listed_turf == T)
-			user.listed_turf = null
-		else
-			user.listed_turf = T
-			user.client.statpanel = T.name
 
 /obj/structure/window/full/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/full/reinforced/clockwork, BRASS_FULL_WINDOW_GLOW)

@@ -56,6 +56,8 @@
 
 	var/const/max_unhatchable_eggs_in_world = 30
 	held_items = list()
+	
+	var/flyicon = "cockroach_fly" //here so the turk roach uses the proper fly icon
 
 /mob/living/simple_animal/cockroach/New()
 	..()
@@ -212,7 +214,7 @@
 	speed = 1
 	turns_since_move = 5 //Remove any delay
 
-	icon_state = "cockroach_fly"
+	icon_state = flyicon
 
 	flying = 1
 	speak_chance = 5
@@ -246,7 +248,7 @@
 		animate(src, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1, ELASTIC_EASING)
 
 /mob/living/simple_animal/cockroach/proc/lay_eggs()
-	if((cockroach_egg_amount >= max_unhatchable_eggs_in_world) && (animal_count[src.type] >= ANIMAL_CHILD_CAP)) //If roaches can't breed anymore (too many of them), and there are more than 30 eggs in the world, don't create eggs
+	if((cockroach_egg_amount >= max_unhatchable_eggs_in_world) && (animal_count[src.type] >= ANIMAL_EXTENDED_CHILD_CAP)) //If roaches can't breed anymore (too many of them), and there are more than 30 eggs in the world, don't create eggs
 		last_laid_eggs = world.time
 		return
 
@@ -257,7 +259,7 @@
 	E.pixel_x = src.pixel_x
 	E.pixel_y = src.pixel_y
 
-	if((animal_count[src.type] < ANIMAL_CHILD_CAP))
+	if((animal_count[src.type] < ANIMAL_EXTENDED_CHILD_CAP))
 		last_laid_eggs = world.time //If the eggs can hatch, cooldown is 30 seconds
 		E.fertilize()
 
@@ -328,3 +330,17 @@
 	qdel(src)
 
 	H.vomit()
+
+/mob/living/simple_animal/cockroach/turkish
+	name = "Turk"
+	desc = "A Turkish politician, straight from the Space Turkey embassy."
+	icon_state = "turkroach"
+	icon_living = "turkroach"
+	icon_dead = "cockroach_dead"
+	emote_hear = list("seethes")
+	flyicon = "turkroach_fly" //so they use the proper flying icon
+	egg_type = /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/turk
+	
+/mob/living/simple_animal/cockroach/turkish/death(var/gore = 1)
+	new /obj/item/clothing/head/fez(get_turf(src))
+	..()

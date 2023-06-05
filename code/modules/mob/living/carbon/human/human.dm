@@ -212,8 +212,8 @@
 
 	update_mutantrace()
 
-	register_event(/event/equipped, src, .proc/update_name)
-	register_event(/event/unequipped, src, .proc/update_name)
+	register_event(/event/equipped, src, src::update_name())
+	register_event(/event/unequipped, src, src::update_name())
 
 /mob/living/carbon/human/proc/update_name()
 	name = get_visible_name()
@@ -256,8 +256,7 @@
 
 		if (internal)
 			if (!internal.air_contents)
-				qdel(internal)
-				internal = null
+				QDEL_NULL(internal)
 			else
 				stat("Internal Atmosphere Info", internal.name)
 				stat("Tank Pressure", internal.air_contents.return_pressure())
@@ -295,7 +294,6 @@
 	return FALSE
 
 /mob/living/carbon/human/var/co2overloadtime = null
-/mob/living/carbon/human/var/temperature_resistance = T0C+75 //but why is this here
 
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
@@ -695,6 +693,9 @@
 	return
 
 /mob/living/carbon/human/proc/vomit(hairball = 0, instant = 0)
+	if(species && species.flags & SPECIES_NO_MOUTH)
+		return
+
 	if(!lastpuke)
 		lastpuke = 1
 		to_chat(src, "<spawn class='warning'>You feel nauseous...</span>")
@@ -1716,6 +1717,7 @@
 	var/area/this_area = get_area(src)
 	if(istype(this_area) && this_area.project_shadows)
 		update_shadow()
+	loc.adjust_layer(src)
 
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some
 	if(new_amount > held_items.len)

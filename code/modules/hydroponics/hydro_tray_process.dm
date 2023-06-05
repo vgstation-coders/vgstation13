@@ -101,7 +101,7 @@
 				harvest = 0
 				lastproduce = age
 
-	var/turf/T = loc
+	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/environment
 	// If we're closed, take from our internal sources.
 	if(closed_system && (connected_port || holding))

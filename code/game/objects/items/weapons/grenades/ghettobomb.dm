@@ -10,8 +10,7 @@
 		user.put_in_hands(W)
 		to_chat(user, "<span  class='notice'>You stuff the [I] into the [src], emptying the contents beforehand.</span>")
 		W.underlays += image(src.icon, icon_state = src.icon_state)
-		qdel(I)
-		I = null
+		QDEL_NULL(I)
 		qdel(src)
 	else if(I.is_wirecutter(user))
 		to_chat(user, "You cut out the top and bottom of \the [src] with \the [I].")
@@ -50,12 +49,11 @@
 
 /obj/item/weapon/grenade/iedcasing/afterattack(atom/target, mob/user , flag) //Filling up the can
 	if(assembled == 0)
-		if(istype(target, /obj/structure/reagent_dispensers/fueltank) && target.Adjacent(user))
-			if(target.reagents.total_volume < 50)
+		if(istype(target, /obj/structure/reagent_dispensers) && !target.is_open_container() && target.Adjacent(user))
+			if(target.reagents.get_reagent_amount(FUEL) < 50)
 				to_chat(user, "<span  class='notice'>There's not enough fuel left to work with.</span>")
 				return
-			var/obj/structure/reagent_dispensers/fueltank/F = target
-			F.reagents.remove_reagent(FUEL, 50, 1)//Deleting 50 fuel from the welding fuel tank,
+			target.reagents.remove_reagent(FUEL, 50, 1)//Deleting 50 fuel from the welding fuel tank,
 			assembled = 1
 			to_chat(user, "<span  class='notice'>You've filled the makeshift explosive with welding fuel.</span>")
 			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
@@ -161,8 +159,7 @@
 				if(leg && !(leg.status & ORGAN_DESTROYED))
 					leg.droplimb(1,0)
 
-				qdel(H.legcuffed)
-				H.legcuffed = null
+				QDEL_NULL(H.legcuffed)
 				unlock_atom(H)
 				boomtrap.IED = null
 	qdel(src)

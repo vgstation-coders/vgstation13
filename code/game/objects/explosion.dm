@@ -169,7 +169,10 @@ var/explosion_shake_message_cooldown = 0
 			//invulnerable therefore no further explosion
 			continue
 
+
+		var/turftime = world.time
 		for(var/atom/movable/A in T)
+			var/atomtime = world.time
 			if(whitelist && (A in whitelist))
 				continue
 			if(T != offcenter && !A.anchored && A.last_explosion_push != explosion_time)
@@ -191,6 +194,12 @@ var/explosion_shake_message_cooldown = 0
 
 				A.throw_at(throwT,pushback+2,500)
 			A.ex_act(dist,null,whodunnit)
+			atomtime = world.time - atomtime
+			if(atomtime > 0)
+				log_debug("Slow explosion effect on [A]: Took [atomtime/10] seconds.")
+		turftime = world.time - turftime
+		if(turftime > 0)
+			log_debug("Slow turf explosion processing at [formatJumpTo(T)]: Took [turftime/10] seconds.")
 
 		T.ex_act(dist,null,whodunnit)
 

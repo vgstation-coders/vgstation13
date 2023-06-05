@@ -281,6 +281,11 @@
 	if(!amount)
 		return "Its core has been taken. "
 
+/datum/butchering_product/hivelord_core/guardian
+	result = /obj/item/asteroid/hivelord_core/guardian
+
+/datum/butchering_product/hivelord_core/heart
+	result = /obj/item/organ/internal/heart/hivelord
 
 //======deer head
 
@@ -446,7 +451,7 @@
 
 
 /mob/living/proc/butcherChooseStep(mob/user, var/list/butcherOptions, butcherTool)
-	var/choice = show_radial_menu(user,loc,butcherOptions,custom_check = new /callback(src, .proc/radial_check, user))
+	var/choice = show_radial_menu(user,loc,butcherOptions,custom_check = new /callback(src, src::radial_check(), user))
 	if(!radial_check(user))
 		return
 	if(!butcherCheck(user, butcherTool))

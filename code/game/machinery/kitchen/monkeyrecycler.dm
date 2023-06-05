@@ -85,8 +85,7 @@
 			else
 				user.drop_item(G, force_drop = 1)
 				var/ourtype = target.type
-				qdel(target)
-				target = null
+				QDEL_NULL(target)
 				to_chat(user, "<span class='notice'>You stuff \the [target] in the machine.")
 				playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 				use_power(500)
@@ -107,8 +106,7 @@
 			return
 		else
 			var/ourtype = target.type
-			qdel(target)
-			target = null
+			QDEL_NULL(target)
 			to_chat(user, "<span class='notice'>You stuff \the [target] in the machine.</span>")
 			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 			use_power(500)

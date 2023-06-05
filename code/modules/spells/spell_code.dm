@@ -101,8 +101,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/gradual_casting = FALSE //equals TRUE while a Sp_GRADUAL spell is actively being cast
 
 	var/list/holiday_required = list() // The holiday this spell is restricted to ! Leave empty if none.
+	var/civil_war_only = FALSE // Set true to only allow this spell during civil war
 	var/block = 0//prevents some spells from being spamed
 	var/obj/delay_animation = null
+	var/user_dir //Used by NO_TURNING to memorize the user's direction and turn them around
 
 ///////////////////////
 ///SETUP AND PROCESS///
@@ -221,28 +223,41 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!cast_check(skipcharge, user))
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
-		user.register_event(/event/uattack, src, .proc/channeled_spell)
+		user.register_event(/event/uattack, src, src::channeled_spell())
 		user.spell_channeling = src
 		if(spell_flags & CAN_CHANNEL_RESTRAINED)
-			user.register_event(/event/ruattack, src, .proc/channeled_spell)
+			user.register_event(/event/ruattack, src, src::channeled_spell())
 			user.spell_channeling = src
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()
 	else
-		user.unregister_event(/event/uattack, src, .proc/channeled_spell)
-		user.unregister_event(/event/ruattack, src, .proc/channeled_spell)
+		user.unregister_event(/event/uattack, src, src::channeled_spell())
+		user.unregister_event(/event/ruattack, src, src::channeled_spell())
 		user.spell_channeling = null
 		currently_channeled = 0
 		connected_button.remove_channeling()
 		connected_button.name = name
 	return 1
 
+//Used by NO_TURNING to turn the user around
+//Due to the way the code is structured (/event/uattack happens after the user has turned around)
+//we have to check for the only thing that happens before turning, /event/clickon.
+//but since that has no way of directly interfering with face_atom() we instead memorize the direction of the user at the time
+//and then flip them around at the start of proper spellcasting.
+//Unfortunately this means that the user is still technically turning around.
+//The only viable solution would be restructuring click.dm code to support not turning around but that might break too many things.
+/spell/proc/memorize_user_direction(mob/user, list/modifiers, atom/target)
+	if(holder)
+		user_dir = holder.dir
+
 /spell/proc/channeled_spell(atom/atom)
 	var/list/target = list(atom)
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
-
+	if(spell_flags & NO_TURNING)
+		holder.dir = user_dir
+		holder.update_dir()
 	if(cast_check(1, holder) && is_valid_target(atom, user))
 		target = before_cast(target, user) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
@@ -329,8 +344,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			spell.anchored = 1
 			spell.setDensity(FALSE)
 			spawn(overlay_lifespan)
-				qdel(spell)
-				spell = null
+				QDEL_NULL(spell)
 	return valid_targets
 
 /spell/proc/after_cast(list/targets)

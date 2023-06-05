@@ -82,8 +82,8 @@
 				burn_mob(L,adjusted_fire_damage, origin)
 
 			for(var/obj/O in get_turf(A))
-				if(istype(O, /obj/structure/reagent_dispensers/fueltank))
-					var/obj/structure/reagent_dispensers/fueltank/F = O
+				if(istype(O, /obj/structure/reagent_dispensers))
+					var/obj/structure/reagent_dispensers/F = O
 					if(blast_temperature >= 561.15) //561.15 is welderfuel's autoignition temperature.
 						F.explode()
 				else if(O.autoignition_temperature)

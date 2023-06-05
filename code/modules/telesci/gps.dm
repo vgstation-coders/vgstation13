@@ -71,6 +71,14 @@ var/list/all_GPS_list = list()
 	else
 		..()
 
+/obj/item/device/gps/AltClick(mob/user)
+	if(!(user) || !isliving(user)) //BS12 EDIT
+		return FALSE
+	if(user.incapacitated() || !Adjacent(user))
+		return FALSE
+	transmitting = TRUE
+	update_icon()
+
 /obj/item/device/gps/proc/get_location_name()
 	var/turf/device_turf = get_turf(src)
 	var/area/device_area = get_area(src)
@@ -194,7 +202,7 @@ var/list/all_GPS_list = list()
 			to_chat(usr, "<span class = 'caution'>You need to have the GPS in your hand to do that!</span>")
 			return TRUE
 
-		var/a = input("Please enter desired tag.", name, gpstag) as text|null
+		var/a = sanitize(input("Please enter desired tag.", name, gpstag) as text|null)
 
 		if(!builtin && (usr.get_active_hand() != src || usr.incapacitated())) //second check in case some chucklefuck drops the GPS while typing the tag
 			to_chat(usr, "<span class = 'caution'>The GPS needs to be kept in your active hand!</span>")

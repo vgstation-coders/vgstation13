@@ -1,3 +1,10 @@
+/obj/item/clothing/head/helmet/space/unathi
+	name = "unathi space helmet"
+	nearsighted_modifier = 5
+
+/obj/item/clothing/suit/space/unathi
+	name = "unathi space suit"
+
 /obj/item/clothing/head/helmet/space/unathi/breacher
 	name = "unathi breacher helmet"
 	desc = "Some sort of ancient Unathi power helmet with ridiculous armor plating."
@@ -138,12 +145,14 @@
 	item_state = "vox-carapace"
 	desc = "A glowing visor, perhaps stolen from a depressed Cylon."
 	eyeprot = 3
+	blood_overlay_type = "mask"
 
 /obj/item/clothing/suit/space/vox/carapace
 	name = "alien carapace armor"
 	icon_state = "vox-carapace"
 	item_state = "vox-carapace"
 	desc = "An armored, segmented carapace with glowing purple lights. It looks pretty run-down."
+	body_parts_visible_override = HANDS|FEET
 
 /obj/item/clothing/head/helmet/space/vox/stealth
 	name = "alien stealth helmet"
@@ -276,6 +285,7 @@
 	icon_state = "vox-carapace"
 	item_state = "vox-carapace"
 	desc = "An armored, segmented carapace with glowing purple lights. It looks like someone stripped most of the armor off."
+	body_parts_visible_override = HANDS|FEET
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace //carapace helmet
 	name = "alien visor"
@@ -283,6 +293,7 @@
 	item_state = "vox-carapace"
 	desc = "A glowing visor, perhaps stolen from a depressed Cylon."
 	eyeprot = 3
+	blood_overlay_type = "mask"
 
 /obj/item/clothing/suit/space/vox/civ/trader/medic // aquasuit
 	name = "alien armor"
@@ -557,7 +568,7 @@
 	name = "vox paramedic pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for paramedics."
 	icon_state = "vox-civ-paramedic"
-	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
+	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller,/obj/item/device/pcmc)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
 	name = "vox paramedic pressure helmet"

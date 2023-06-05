@@ -7,9 +7,6 @@
 	nameShort = "xoq"
 	nameLong = "noitatS xoq"
 	map_dir = "xoqstation"
-	tDomeX = 128
-	tDomeY = 58
-	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
 		/datum/zLevel/centcomm,

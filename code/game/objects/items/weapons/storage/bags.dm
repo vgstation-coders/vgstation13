@@ -192,10 +192,10 @@
 
 /obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
 	if(handling)
-		user.register_event(/event/moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, src::mob_moved())
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
-	user.unregister_event(/event/moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, src::mob_moved())
 
 // -----------------------------
 //          Plant bag
@@ -460,8 +460,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 			usr.client.screen -= S
 		//S.dropped(usr)
 		if(!S.amount)
-			qdel (S)
-			S = null
+			QDEL_NULL (S)
 		else
 			S.forceMove(src)
 
@@ -506,8 +505,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 			N.amount = stacksize
 			S.amount -= stacksize
 		if(!S.amount)
-			qdel (S) // todo: there's probably something missing here
-			S = null
+			QDEL_NULL (S) // todo: there's probably something missing here
 	orient2hud(usr)
 	if(usr.s_active)
 		usr.s_active.show_to(usr)

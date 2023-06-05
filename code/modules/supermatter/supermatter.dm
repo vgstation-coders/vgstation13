@@ -132,8 +132,7 @@
 
 /obj/machinery/power/supermatter/Destroy()
 	new /datum/artifact_postmortem_data(src,TRUE)//we only archive those that were excavated
-	qdel(radio)
-	radio = null
+	QDEL_NULL(radio)
 	radio_controller.remove_object(src, frequency)
 	radio_connection = null
 	. = ..()

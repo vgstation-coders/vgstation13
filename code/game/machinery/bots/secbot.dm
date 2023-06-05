@@ -48,7 +48,7 @@
 	var/baton_type = /obj/item/weapon/melee/baton/
 	var/secbot_assembly_type = /obj/item/weapon/secbot_assembly/
 
-	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
+	commanding_radios = list(/obj/item/radio/integrated/signal/bot/beepsky, /obj/machinery/navbeacon)
 
 	hack_abilities = list(
 		/datum/malfhack_ability/oneuse/emag,

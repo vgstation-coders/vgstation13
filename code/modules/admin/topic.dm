@@ -688,6 +688,42 @@
 		message_admins("<span class='notice'>[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].</span>", 1)
 		href_list["secretsadmin"] = "check_antagonist"
 
+	else if(href_list["edit_hub"])
+		if(!check_rights(R_SERVER))
+			return
+		var/choice = href_list["edit_hub"]
+		switch(choice)
+			if("toggle")
+				byond_hub_open = !byond_hub_open
+				message_admins("<span class='notice'>[key_name(usr)] has turned byond hub availability [byond_hub_open ? "ON" : "OFF"]</span>")
+				log_admin("[key_name(usr)] has turned byond hub availability [byond_hub_open ? "ON" : "OFF"]")
+			if("playercount")
+				var/tempcount = input("Hub access closes at how many players?", "Hub Playercount", byond_hub_playercount) as null|num
+				if(tempcount)
+					var/oldcount = byond_hub_playercount
+					byond_hub_playercount = tempcount
+					message_admins("<span class='notice'>[key_name(usr)] has set the max hub playercount to [byond_hub_playercount]</span>")
+					log_admin("[key_name(usr)] has set the max hub playercount from [oldcount] to [byond_hub_playercount]")
+			if("name")
+				var/newname = input(usr, "Specify the new Server Name", "Server Name", byond_server_name) as null|text
+				var/oldname = byond_server_name
+				byond_server_name = newname ?  newname : DEFAULT_SERVER_NAME
+				message_admins("<span class='notice'>[key_name(usr)] changed the hub name to [byond_server_name]</span>")
+				log_admin("[key_name(usr)] changed the hub name from [oldname] to [byond_server_name]")
+			if("desc")
+				var/temp_desc = input(usr, "Specify the new Server Description", "Server Desc", byond_server_desc) as null|message
+				if(temp_desc)
+					var/old_desc = byond_server_desc
+					byond_server_desc = temp_desc
+					message_admins("<span class='notice'>[key_name(usr)] edited the hub description.</span>")
+					log_admin("[key_name(usr)] edited the hub description from [old_desc] to [temp_desc]")
+
+		var/datum/persistence_task/task = SSpersistence_misc.tasks[/datum/persistence_task/hub_settings]
+		task.on_shutdown()
+		world.update_status()
+		HubPanel()
+
+
 	else if(href_list["simplemake"])
 		if(!check_rights(R_SPAWN))
 			return
@@ -2183,17 +2219,13 @@
 			return
 
 		var/obj/item/packobelongings/pack = null
-
+		var/obj/effect/landmark/packmark = pick(tdomepacks)
+		var/turf/packspawn = tdomepacks.len ? get_turf(packmark) : get_turf(M) //the players' belongings are stored there, in the Thunderdome Admin lodge.
 		switch(team)
 			if("Green")
-				pack = new /obj/item/packobelongings/green(M.loc)
-				pack.x = map.tDomeX+2
+				pack = new /obj/item/packobelongings/green(get_step(get_step(packspawn,EAST),EAST))
 			if("Red")
-				pack = new /obj/item/packobelongings/red(M.loc)
-				pack.x = map.tDomeX-2
-
-		pack.z = map.tDomeZ //the players' belongings are stored there, in the Thunderdome Admin lodge.
-		pack.y = map.tDomeY
+				pack = new /obj/item/packobelongings/red(get_step(get_step(packspawn,WEST),WEST))
 
 		pack.name = "[M.real_name]'s belongings"
 
@@ -3916,6 +3948,11 @@
 				if(choice == "Nar-Singulo")
 					message_admins("[key_name_admin(usr)] has set narsie's behaviour to \"Nar-Singulo\".")
 					narsie_behaviour = "Nar-Singulo"
+			if("athfthrowing")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","TE")
+				objects_thrown_when_explode = !objects_thrown_when_explode
+				message_admins("[key_name_admin(usr)] has toggled items exploding when thrown [objects_thrown_when_explode ? "ON" : "OFF"].")
 			if("hellonearth")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","NS")
@@ -5100,8 +5137,7 @@
 		message_admins("<span class='notice'>[key_name_admin(usr)] has deleted [capitalize(S.name)] ([S.type]). Objects and turfs [(killed_objs) ? "deleted" : "not deleted"].</span>")
 		log_admin("[key_name(usr)]  has deleted [capitalize(S.name)]! Objects and turfs [(killed_objs) ? "deleted" : "not deleted"].")
 
-		qdel(S)
-		selected_shuttle = null
+		QDEL_NULL(S)
 
 		shuttle_magic() //Update the window!
 

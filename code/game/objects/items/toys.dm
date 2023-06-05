@@ -294,8 +294,7 @@
 	if(istype(I, /obj/item/toy/ammo/crossbow))
 		if(bullets <= 4)
 			if(user.drop_item(I))
-				qdel(I)
-				I = null
+				QDEL_NULL(I)
 				bullets++
 				to_chat(user, "<span class = 'info'>You load the foam dart into \the [src].</span>")
 		else
@@ -332,8 +331,7 @@
 					for(var/mob/O in viewers(world.view, D))
 						O.show_message(text("<span class = 'danger'>[] was hit by the foam dart!</span>", M), 1)
 					new /obj/item/toy/ammo/crossbow(M.loc)
-					qdel(D)
-					D = null
+					QDEL_NULL(D)
 					return
 
 				for(var/atom/A in D.loc)
@@ -341,16 +339,14 @@
 						continue
 					if(A.density)
 						new /obj/item/toy/ammo/crossbow(A.loc)
-						qdel(D)
-						D = null
+						QDEL_NULL(D)
 
 			sleep(1)
 
 		spawn(10)
 			if(D)
 				new /obj/item/toy/ammo/crossbow(D.loc)
-				qdel(D)
-				D = null
+				QDEL_NULL(D)
 
 		return
 	else if (bullets == 0)
@@ -622,8 +618,8 @@
 	w_class = W_CLASS_TINY
 
 /obj/item/toy/snappop/throw_impact(atom/hit_atom)
-	..()
-	pop()
+	if(!..())
+		pop()
 
 /obj/item/toy/snappop/Crossed(var/mob/living/M)
 	if(istype(M) && M.size > SIZE_SMALL) //i guess carp and shit shouldn't set them off
@@ -737,8 +733,7 @@
 					if(ismob(T) && T:client)
 						to_chat(T:client, "<span class = 'danger'>[user] has sprayed you with \the [src]!</span>")
 				sleep(4)
-			qdel(D)
-			D = null
+			QDEL_NULL(D)
 
 		return
 
@@ -1500,7 +1495,7 @@
 	if(M.incapacitated())
 		return
 
-	var/N = input("Enter a stock phrase for your decoy to say:","[src]") as null|text
+	var/N = copytext(sanitize(input("Enter a stock phrase for your decoy to say:","[src]") as null|text),1,MAX_MESSAGE_LEN)
 	if(N)
 		decoy_phrase = N
 

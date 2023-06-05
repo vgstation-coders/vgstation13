@@ -729,6 +729,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/space,
 					/obj/item/clothing/head/helmet/space,
 					/obj/item/weapon/tank/oxygen,
+					/obj/item/weapon/tank/emergency_oxygen/engi,
 					/obj/item/clothing/mask/breath)
 	cost = 150
 	containertype = /obj/structure/closet/crate/basic
@@ -740,6 +741,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/space/vox/civ,
 					/obj/item/clothing/head/helmet/space/vox/civ,
 					/obj/item/weapon/tank/nitrogen,
+					/obj/item/weapon/tank/emergency_nitrogen/engi,
 					/obj/item/clothing/mask/breath/vox)
 	cost = 100
 	containertype = /obj/structure/closet/crate/basic
@@ -751,6 +753,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/space/plasmaman,
 					/obj/item/clothing/head/helmet/space/plasmaman,
 					/obj/item/weapon/tank/plasma/plasmaman,
+					/obj/item/weapon/tank/emergency_plasma/engi,
 					/obj/item/clothing/mask/breath)
 	cost = 100
 	containertype = /obj/structure/closet/crate/basic
@@ -767,6 +770,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	var/researcher = list(/obj/item/clothing/suit/space/rig/grey/researcher)
 	var/soldier = list(/obj/item/clothing/suit/space/rig/grey/soldier)
 	contains = list(/obj/item/weapon/tank/oxygen/red,
+					/obj/item/weapon/tank/emergency_oxygen/engi,
 					/obj/item/clothing/mask/breath)
 	cost = 200
 	containertype = /obj/structure/closet/crate/basic
@@ -1411,7 +1415,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big			
+					/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
 					)
 	cost = 15
 	containertype = /obj/structure/closet/crate/secure/basic
@@ -2007,7 +2011,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/automation
 	name = "Automation supplies"
-	contains = list(/obj/item/weapon/circuitboard/wrapping_machine,
+	contains = list(/obj/item/weapon/circuitboard/autoprocessor/wrapping,
+					/obj/item/weapon/circuitboard/autoprocessor/clothing,
 					/obj/item/weapon/circuitboard/sorting_machine/item,
 					/obj/item/weapon/circuitboard/crate_opener,
 					/obj/item/weapon/circuitboard/crate_closer)
@@ -2222,6 +2227,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/circuitboard/destructive_analyzer,
 					/obj/item/weapon/stock_parts/matter_bin,
 					/obj/item/weapon/stock_parts/matter_bin,
+					/obj/item/weapon/stock_parts/matter_bin,
+					/obj/item/weapon/stock_parts/manipulator,
 					/obj/item/weapon/stock_parts/manipulator,
 					/obj/item/weapon/stock_parts/manipulator,
 					/obj/item/weapon/stock_parts/manipulator,

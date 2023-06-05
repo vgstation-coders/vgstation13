@@ -169,17 +169,27 @@ var/list/map_dimension_cache = list()
 		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : map_height + y_offset
 		var/y_check = rotate == 0 || rotate == 180 ? map_height + y_offset : map_width + x_offset
 		if(world.maxx < x_check)
+			var/old_max_x = world.maxx + 1
 			if(!map.can_enlarge)
 				WARNING("Cancelled load of [map_element] due to map bounds.")
 				return list()
 			world.maxx = x_check
+			if(get_base_turf(zcrd+z_offset) != /turf/space)
+				WARNING("Base turf in map enlargement is not /turf/space. New base turf = [get_base_turf(zcrd+z_offset)]")
+				for(var/turf/T in block(locate(old_max_x,1,zcrd+z_offset),locate(world.maxx,world.maxy,zcrd+z_offset)))
+					T.ChangeTurf(get_base_turf(zcrd+z_offset))
 			WARNING("Loading [map_element] enlarged the map. New max x = [world.maxx]")
 
 		if(world.maxy < y_check)
+			var/old_max_y = world.maxy + 1
 			if(!map.can_enlarge)
 				WARNING("Cancelled load of [map_element] due to map bounds.")
 				return list()
 			world.maxy = y_check
+			if(get_base_turf(zcrd+z_offset) != /turf/space)
+				WARNING("Base turf in map enlargement is not /turf/space. New base turf = [get_base_turf(zcrd+z_offset)]")
+				for(var/turf/T in block(locate(1,old_max_y,zcrd+z_offset),locate(world.maxx,world.maxy,zcrd+z_offset)))
+					T.ChangeTurf(get_base_turf(zcrd+z_offset))
 			WARNING("Loading [map_element] enlarged the map. New max y = [world.maxy]")
 
 		//then proceed it line by line, starting from top

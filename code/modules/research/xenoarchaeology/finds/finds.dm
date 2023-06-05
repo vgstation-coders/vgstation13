@@ -1121,8 +1121,7 @@
 
 /obj/item/weapon/strangerock/Destroy()
 	..()
-	qdel(inside)
-	inside = null
+	QDEL_NULL(inside)
 
 /*/obj/item/weapon/strangerock/ex_act(var/severity)
 	if(severity && prob(30))

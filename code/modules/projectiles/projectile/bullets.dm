@@ -131,7 +131,7 @@
 
 /obj/item/projectile/bullet/midbullet/bouncebullet
 	bounce_type = PROJREACT_WALLS|PROJREACT_WINDOWS
-	bounces = -1
+	bounces = 200
 
 /obj/item/projectile/bullet/midbullet/bouncebullet/lawgiver
 	damage = 30
@@ -565,8 +565,7 @@
 
 /obj/item/projectile/bullet/vial/Destroy()
 	if(vial)
-		qdel(vial)
-		vial = null
+		QDEL_NULL(vial)
 	if(user)
 		user = null
 	..()
@@ -903,6 +902,7 @@
 /obj/item/projectile/bullet/buckshot/OnFired()
 	for(var/I = 1; I <=total_amount_to_fire; I++)
 		var/obj/item/projectile/P = new type_to_fire(src.loc)
+		P.firer = firer
 		P.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
 	bullet_die() // otherwise the buckshot bullet is an extra projectile in addition to the pellets.
 

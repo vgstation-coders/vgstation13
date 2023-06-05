@@ -88,7 +88,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/artifacts_panel,
 	/client/proc/body_archive_panel,
 	/client/proc/climate_panel,
-	/datum/admins/proc/ashInvokedEmotions	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
+	/datum/admins/proc/ashInvokedEmotions,	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
+	/client/proc/toggle_admin_examine
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -161,6 +162,7 @@ var/list/admin_verbs_server = list(
 	/client/proc/dump_chemreactions,
 	/client/proc/save_coordinates,
 	/datum/admins/proc/mass_delete_in_zone,
+	/client/proc/hub_panel,
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
@@ -189,6 +191,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/debug_reagents,
 	/client/proc/create_awaymission,
 	/client/proc/make_invulnerable,
+	/client/proc/send_to_heck,
 	/client/proc/cmd_admin_dump_delprofile,
 	/client/proc/mob_list,
 	/client/proc/cure_disease,
@@ -801,6 +804,14 @@ var/list/admin_verbs_mod = list(
 			config.log_hrefs = 1
 			to_chat(src, "<b>Started logging hrefs</b>")
 
+/client/proc/hub_panel()
+	set name = "Hub Panel"
+	set category = "Server"
+	if(holder)
+		holder.HubPanel()
+	feedback_add_details("admin_verb","HP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return
+
 /client/proc/check_ai_laws()
 	set name = "Check AI Laws"
 	set category = "Admin"
@@ -1253,6 +1264,57 @@ var/list/admin_verbs_mod = list(
 	createRandomZlevel(override, AM, usr)
 	to_chat(src, "The away mission has been generated on z-level [world.maxz] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")
 
+/client/proc/send_to_heck(var/mob/dead/observer/O in dead_mob_list)
+	set name = "Send to hell"
+	set desc = "Eternally damn this ghost for their sins."
+	set category = "Fun"
+
+	if(alert(usr, "Are you sure you want to do this?", "Confirm judgement", "Yes", "No") != "Yes")
+		return
+
+	var/mob/newmob = send_to_hedoublehockeysticks(O)
+	if(newmob)
+		log_admin("[ckey(key)]/([mob]) has damned [newmob] to HELL")
+		message_admins("[ckey(key)]/([mob]) has damned [newmob] [formatJumpTo(newmob,"(JMP)")] to HELL")
+
+/proc/send_to_hedoublehockeysticks(mob/O)
+	if(!O || !O.key)
+		return
+	if(!(/datum/map_element/dungeon/hell in existing_dungeons))
+		load_dungeon(/datum/map_element/dungeon/hell)
+	var/datum/map_element/dungeon/hell/H = locate(/datum/map_element/dungeon/hell) in existing_dungeons
+	var/list/turf/turfs = list()
+	for(var/turf/T in H.spawned_atoms)
+		if(!T.density)
+			turfs += T
+	if(!turfs.len)
+		warning("No hell turfs to send a mob to!")
+		return
+	for(var/datum/body_archive/archive in body_archives)
+		if(archive.key == O.key)
+			var/mob/living/tempM = new archive.mob_type
+			if(!istype(tempM))
+				warning("Body archive to send to hell was not a living mob!")
+				break
+			var/mob/living/M = tempM.actually_reset_body(archive = archive, our_mind = get_mind_by_key(O.key))
+			if(!istype(M))
+				warning("Body archive to send to hell was not a living mob!")
+				break
+			M.status_flags ^= BUDDHAMODE
+			M.forceMove(pick(turfs))
+			qdel(tempM)
+			qdel(O)
+			return M
+
+	var/datum/mind/mind = get_mind_by_key(O.key)
+	if (mind)
+		var/mob/living/carbon/human/prefM = new(pick(turfs))
+		prefM.status_flags ^= BUDDHAMODE
+		prefM.quick_copy_prefs()
+		mind.transfer_to(prefM)
+		qdel(O)
+		return prefM
+
 /client/proc/cmd_dectalk()
 	set name = "Dectalk"
 	set category = "Special Verbs"
@@ -1327,3 +1389,13 @@ var/list/admin_verbs_mod = list(
 		usr.dark_plane.alphas -= "light_map"
 
 	holder.see_lightmap = !holder.see_lightmap
+
+/client/proc/toggle_admin_examine()
+	set name = "Toggle Admin-only Descriptions"
+	set category = "Admin"
+	set desc = "See admin-only text for certain objects."
+	if(holder)
+		holder.admin_examine = !(holder.admin_examine)
+		to_chat(usr, "<span class='notice'>You toggle [holder.admin_examine ? "on" : "off"] admin examining.")
+	feedback_add_details("admin_verb","admin_examine")
+	return

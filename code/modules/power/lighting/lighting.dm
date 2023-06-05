@@ -246,7 +246,7 @@ var/list/light_source_images = list()
 		icon_state = "l[fitting]-empty"
 		on = 0
 	source_image = image(icon,src,icon_state)
-	source_image.plane = LIGHT_SOURCE_PLANE
+	source_image.plane = LIGHTING_PLANE
 	light_source_images += source_image
 	for (var/mob/living/simple_animal/hostile/giant_spider/GS in player_list)
 		if (GS.client)
@@ -720,8 +720,8 @@ var/list/light_source_images = list()
 	..()
 
 /obj/item/weapon/light/throw_impact(atom/hit_atom)
-	..()
-	shatter()
+	if(!..())
+		shatter()
 
 /obj/item/weapon/light/bulb/fire
 	name = "fire bulb"

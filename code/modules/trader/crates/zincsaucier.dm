@@ -162,8 +162,8 @@ var/global/global_cricket_population = 0
 	escape()
 
 /obj/item/cricketfarm/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
-	escape()
+	if(!..())
+		escape()
 
 /obj/item/cricketfarm/kick_act(mob/user)
 	..()
@@ -295,6 +295,13 @@ var/global/global_cricket_population = 0
 			continue
 		return P //return any plate with less than 9 plates stacked in it
 	//otherwise return null
+
+
+/proc/hydro_hud_scan(var/mob/living/carbon/human/user, var/obj/o)
+	if(!ishuman(user))
+		return
+	if(istype(user) && user.is_wearing_item(/obj/item/clothing/glasses/hud/hydro))
+		to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[user.glasses];scan=\ref[o]'>\[Scan\]</a>")
 
 /obj/item/clothing/glasses/hud/hydro
 	name = "hydroHUD"

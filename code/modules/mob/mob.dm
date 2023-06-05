@@ -36,9 +36,7 @@
 		var/mob/living/carbon/Ca = src
 		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
 	if(client)
-		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
-			qdel(spell_master)
-		spell_masters = null
+		QDEL_LIST_NULL(spell_masters)
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
 			var/obj/abstract/screen/screenobj = AM
@@ -57,17 +55,14 @@
 	attack_delayer = null
 	special_delayer = null
 	throw_delayer = null
-	qdel(hud_used)
-	hud_used = null
+	QDEL_NULL(hud_used)
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
 
 	if(transmogged_from)
-		qdel(transmogged_from)
-		transmogged_from = null
+		QDEL_NULL(transmogged_from)
 	if(transmogged_to)
-		qdel(transmogged_to)
-		transmogged_to = null
+		QDEL_NULL(transmogged_to)
 	if(control_object.len)
 		for(var/A in control_object)
 			qdel(A)
@@ -247,8 +242,7 @@
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
 		if(virtualhearer)
-			qdel(virtualhearer)
-			virtualhearer = null
+			QDEL_NULL(virtualhearer)
 	..()
 
 /mob/proc/is_muzzled()
@@ -565,8 +559,7 @@
 	if(!W.mob_can_equip(src, slot, disable_warning))
 		switch(act_on_fail)
 			if(EQUIP_FAILACTION_DELETE)
-				qdel(W)
-				W = null
+				QDEL_NULL(W)
 			if(EQUIP_FAILACTION_DROP)
 				W.forceMove(get_turf(src)) //Should this be using drop_from_inventory instead?
 			else
@@ -1175,6 +1168,8 @@ Use this proc preferably at the end of an equipment loadout
 
 	face_atom(A)
 	A.examine(src)
+	if(A.admin_desc && src.client?.holder?.admin_examine)
+		to_chat(src, "<span class='rough'>Admin-only: [A.admin_desc]</span>")
 
 	if(istype(src,/mob/living))
 		var/mob/living/L = src
@@ -1276,8 +1271,7 @@ Use this proc preferably at the end of an equipment loadout
 	var/mob/new_player/M = new /mob/new_player()
 	if(!client)
 		log_game("[usr.key] AM failed due to disconnect.")
-		qdel(M)
-		M = null
+		QDEL_NULL(M)
 		return
 
 	M.key = key

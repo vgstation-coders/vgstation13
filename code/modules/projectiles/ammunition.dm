@@ -63,6 +63,7 @@
 	w_class = W_CLASS_TINY
 	throw_speed = 4
 	throw_range = 5
+	on_armory_manifest = TRUE
 	var/list/stored_ammo = list()
 	var/ammo_type = "/obj/item/ammo_casing/a357"
 	var/exact = 1 //whether or not the item only takes ammo_type, or also subtypes. Set to 1 to only take the specified ammo

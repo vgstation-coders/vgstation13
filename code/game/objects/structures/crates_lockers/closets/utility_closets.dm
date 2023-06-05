@@ -170,6 +170,7 @@
 	icon_state = "bombsuit"
 	icon_closed = "bombsuit"
 	icon_opened = "bombsuitopen"
+	holds_armory_items = TRUE
 
 /obj/structure/closet/bombcloset/atoms_to_spawn()
 	return list(

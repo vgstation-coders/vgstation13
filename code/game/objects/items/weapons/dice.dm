@@ -72,6 +72,12 @@
 	icon_state = "d20"
 	sides = 20
 
+/obj/item/weapon/dice/fudge
+	name = "fudge dice"
+	desc = "A d6 with pluses and minuses on it."
+	icon_state = "df"
+	var/list/result_names = list("-", "-", "a blank side", "a blank side", "+", "+")
+
 /obj/item/weapon/dice/loaded
 	desc = "A die with six even sides. Basic and servicable."
 
@@ -88,8 +94,8 @@
 	diceroll(user, 0)
 
 /obj/item/weapon/dice/throw_impact(atom/hit_atom, speed, user)
-	..()
-	diceroll(user, 1)
+	if(!..())
+		diceroll(user, 1)
 
 /obj/item/weapon/dice/proc/show_roll(mob/user as mob, thrown, result)
 	var/comment = ""
@@ -98,7 +104,6 @@
 			comment = "Nat 20!"
 		else if(result == 1)
 			comment = "Ouch, bad luck."
-	update_icon()
 	if(multiplier)
 		result = (result - 1) * multiplier
 	if(!thrown) //Dice was rolled in someone's hand
@@ -108,9 +113,20 @@
 	else if(src.throwing == 0) //Dice was thrown and is coming to rest
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result]. [comment]</span>")
 
-/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown)
+/obj/item/weapon/dice/fudge/show_roll(mob/user as mob, thrown, result)
+	if(!thrown) //Dice was rolled in someone's hand
+		user.visible_message("<span class='notice'>[user] has thrown [src]. It lands on [result_names[result]].</span>", \
+							 "<span class='notice'>You throw [src]. It lands on [result_names[result]].</span>", \
+							 "<span class='notice'>You hear [src] landing on [result_names[result]].</span>")
+	else if(src.throwing == 0) //Dice was thrown and is coming to rest
+		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result_names[result]].</span>")
+
+
+/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown, silent = FALSE)
 	result = rand(minsides, sides)
-	show_roll(user, thrown, result)
+	update_icon()
+	if(!silent)
+		show_roll(user, thrown, result)
 	if(activated) //If the dice has power then something will happen
 		if(istype(user,/mob/living/carbon/human)) //check that a humanoid is rolling the dice; Xenomorphs / Sillicons need not apply.
 			message_admins("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled [result]")
@@ -127,6 +143,10 @@
 					else
 						for(var/datum/organ/external/E in h.organs) //Being a catbeast doesn't exempt you from getting a curse just because you cannot turn into a catbeast again.
 							E.droplimb(1)
+					if(prob(1))
+						to_chat(user, "<span class=sinister><B>You have been damned directly to hell! </span></B>")
+						h.death()
+						send_to_hedoublehockeysticks(h)
 				if(2 to 5)
 					to_chat(user, "<span class=sinister><B>It could be worse, but not much worse! Enjoy your curse! </span></B>")
 					h.flash_eyes(visual = 1)
@@ -307,14 +327,15 @@
 					user.visible_message("<span class=danger><B>The dice shudders and loses its power! </span></B>")
 					name = "d20"
 					desc = "A die with twenty sides. The prefered die to throw at the GM."
-				else
-					return 0
-	else
-		return 0
+	return result
+
+/obj/item/weapon/dice/fudge/diceroll(mob/user as mob, thrown)
+	return result_names[..()]
 
 /obj/item/weapon/dice/loaded/diceroll(mob/user as mob, thrown)
 	result = rand(minsides, sides * 1.5)
 	result = min(result, sides)
+	update_icon()
 	show_roll(user, thrown, result)
 
 /obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
@@ -331,11 +352,11 @@
 	overlays += image(icon = icon, icon_state = "[src.icon_state][src.result]")
 
 /obj/item/weapon/dice/d20/e20/diceroll(mob/user as mob, thrown)
-	if(!istype(user))
-		return 0
-	if(triggered)
-		return
 	..()
+	if(!istype(user))
+		return result
+	if(triggered)
+		return result
 	message_admins("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled [result]")
 	log_game("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled [result]")
 	if(result == 1)
@@ -362,6 +383,7 @@
 				for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
 					if(bhangmeter)
 						bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
+	return result
 
 
 /obj/item/weapon/dice/d20/cursed

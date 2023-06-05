@@ -145,7 +145,7 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/under/rank/collar
 	name = "security officer's uniform"
@@ -241,7 +241,7 @@
 	item_state = "jensencoat"
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.6
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/hos/sundowner
 	name = "armoured greatcoat"

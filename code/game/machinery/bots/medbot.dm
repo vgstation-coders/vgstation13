@@ -62,7 +62,7 @@ var/list/firstaid_exceptions = list(
 	var/last_spoke = 0
 
 	bot_type = MED_BOT
-	commanding_radio = /obj/item/radio/integrated/signal/bot/medbot
+	commanding_radios = list(/obj/item/radio/integrated/signal/bot/medbot)
 
 /obj/machinery/bot/medbot/splashable()
 	return FALSE
@@ -571,8 +571,7 @@ var/list/firstaid_exceptions = list(
 
 	var/obj/item/weapon/firstaid_arm_assembly/A = new /obj/item/weapon/firstaid_arm_assembly(get_turf(src),icon_state)
 
-	qdel(S)
-	S = null
+	QDEL_NULL(S)
 	user.put_in_hands(A)
 	to_chat(user, "<span class='notice'>You add the robot arm to the first aid kit.</span>")
 	user.drop_from_inventory(src)

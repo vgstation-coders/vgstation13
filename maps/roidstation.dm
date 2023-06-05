@@ -7,9 +7,6 @@
 	nameShort = "roid"
 	nameLong = "Asteroid Station"
 	map_dir = "roidstation"
-	tDomeX = 128
-	tDomeY = 58
-	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
 		/datum/zLevel/centcomm,

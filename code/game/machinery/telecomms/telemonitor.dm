@@ -164,7 +164,7 @@
 
 	if(href_list["network"])
 
-		var/newnet = input(usr, "Which network do you want to view?", "Comm Monitor", network) as null|text
+		var/newnet = sanitize(input(usr, "Which network do you want to view?", "Comm Monitor", network) as null|text)
 		if(newnet && ((usr in range(1, src) || issilicon(usr))))
 			if(length(newnet) > 15)
 				temp = "<font color = #D70B00>- FAILED: NETWORK TAG STRING TOO LENGHTLY -</font color>"
@@ -201,8 +201,7 @@
 	spawn(1 SECONDS)
 		if(!trace_signal.data["done"])
 			tracert_report += "The operation timed out.<BR><font color = #D70B00>Last Known Machine:</font color> <a href='?src=\ref[src];viewmachine=[last_machine.id]'>\ref[last_machine] [last_machine.id]</a>"
-		qdel(trace_signal)
-		trace_signal = null
+		QDEL_NULL(trace_signal)
 		updateUsrDialog()
 
 /obj/machinery/computer/telecomms/monitor/proc/receive_trace(var/obj/machinery/telecomms/T, var/routeinfo)

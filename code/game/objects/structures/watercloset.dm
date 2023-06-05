@@ -318,12 +318,11 @@
 /obj/machinery/shower/update_icon()	//This is terribly unreadable, but basically it makes the shower mist up
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
 	if(mymist)
-		qdel(mymist)
-		mymist = null
+		QDEL_NULL(mymist)
 
 	if(on)
 		var/image/water = image('icons/obj/watercloset.dmi', src, "water", BELOW_OBJ_LAYER, dir)
-		water.plane = ABOVE_HUMAN_PLANE
+		water.plane = relative_plane(ABOVE_HUMAN_PLANE)
 		overlays += water
 		if(watertemp == "freezing") //No mist if the water is really cold
 			return
@@ -340,8 +339,7 @@
 		mymist = new /obj/effect/mist(get_turf(src))
 		spawn(250)
 			if(src && !on)
-				qdel(mymist)
-				mymist = null
+				QDEL_NULL(mymist)
 				ismist = 0
 
 /obj/machinery/shower/Crossed(atom/movable/O)

@@ -14,6 +14,10 @@
 	default_admin_voice = "Wizard Federation"
 	admin_voice_style = "notice"
 
+/datum/faction/wizard/New()
+	..()
+	load_dungeon(/datum/map_element/dungeon/wizard_den)
+
 /datum/faction/wizard/civilwar
 	var/enemy_faction
 
@@ -25,6 +29,19 @@
 	O.targetfaction = target
 	AppendObjective(O)
 	..()
+
+/datum/faction/wizard/civilwar/process()
+	..()
+	var/anywiz = FALSE
+	var/converts = FALSE
+	for(var/datum/role/R in members)
+		if(istype(R,/datum/role/wizard_convert))
+			converts = TRUE // still converts in the game
+		if(istype(R,/datum/role/wizard) && R.antag.current && !R.antag.current.stat)
+			anywiz = TRUE //If one wizard is still not incapacitated
+	if(!anywiz && converts)
+		for(var/datum/role/wizard_convert/WC in members)
+			WC.Drop()
 
 /datum/faction/wizard/civilwar/wpf
 	name = "The Wizardly Peoples' Front"
@@ -61,3 +78,10 @@
 /datum/faction/wizard/ragin/check_win()
 	if(members.len == max_roles)
 		return 1
+
+/datum/map_element/dungeon/wizard_den
+	file_path = "maps/misc/wizardden1.dmm"
+	unique = TRUE
+
+/datum/map_element/dungeon/wizard_den/pre_load()
+	file_path = "maps/misc/wizardden[rand(1,5)].dmm"

@@ -5,7 +5,7 @@
 	can_take_pai = TRUE
 
 	var/mob/living/simple_animal/hologram/advanced/projector/holoperson = null
-	var/holo_range = 6
+	var/holo_range = 10 //if you run, you disappear with lower range
 	var/holo_mode = 0
 	var/obj/effect/overlay/holoray/ray	//The link between the projection and the projector.
 	var/datum/recruiter/recruiter = null
@@ -13,18 +13,18 @@
 
 /obj/item/device/hologram_projector/Destroy()
 	if(holoperson)
-		qdel(holoperson)
-		holoperson = null
+		holoperson.unequip_everything()
+		QDEL_NULL(holoperson)
 	if(ray)
-		qdel(ray)
-		ray = null
+		QDEL_NULL(ray)
 	..()
 
 /mob/living/simple_animal/hologram/advanced/projector
 	var/obj/item/device/hologram_projector/projector = null
 	var/proj_turf = null
 	login_text = "You are a hologram. You can perform a few basic functions, and are unable to leave the vicinity of the projector.\
-	\n<span class='danger'>Do not damage the station. Do not harm crew members without their consent.</span>"
+	\n<span class='danger'>Do not damage the station. Do not harm crew members without their consent. Serve your master.</span>"
+
 
 /mob/living/simple_animal/hologram/advanced/projector/Login()
 	if(projector?.integratedpai)
@@ -41,7 +41,7 @@
 			qdel(projector.ray)
 		projector = null
 	..()
-	
+
 /obj/item/device/hologram_projector/proc/clear_holo()
 	set_light(0)
 	if(holoperson)
@@ -51,18 +51,19 @@
 		animate(holoperson, alpha = 0, time = 5)
 		spawn(5)
 			holoperson.set_light(0)
-			qdel(ray)
-			ray = null
-			qdel(holoperson)
-			holoperson = null
+			QDEL_NULL(ray)
+			holoperson.unequip_everything()
+			QDEL_NULL(holoperson)
 			icon_state = "shield0"
 	return 1
 
 /obj/item/device/hologram_projector/emp_act()
 	if(holoperson)
 		clear_holo()
-	
+
 /obj/item/device/hologram_projector/attack_self()
+	if(polling_ghosts)
+		return
 	if(holoperson)
 		to_chat(usr, "Shutting down hologram...")
 		clear_holo()
@@ -83,11 +84,11 @@
 		recruiter.jobban_roles = list(ROLE_POSIBRAIN)
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
-	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+	recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
 	// Role set to No or Never
-	recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+	recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
 
-	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+	recruiter.recruited = new /callback(src, src::recruiter_recruited())
 	recruiter.request_player()
 
 /obj/item/device/hologram_projector/proc/recruiter_recruiting(mob/dead/observer/player, controls)
@@ -100,8 +101,7 @@
 	if(!player)
 		to_chat(usr, "Hologram generation failed!")
 		polling_ghosts = FALSE
-		qdel(recruiter)
-		recruiter = null
+		QDEL_NULL(recruiter)
 		return
 	polling_ghosts = FALSE
 
@@ -138,7 +138,7 @@
 			return 1
 
 	projector.clear_holo() //If not, we want to get rid of the hologram.
-	
+
 /mob/living/simple_animal/hologram/advanced/projector/Move()
 	..()
 	if(!projector)

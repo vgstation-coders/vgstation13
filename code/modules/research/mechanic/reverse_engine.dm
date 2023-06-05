@@ -233,8 +233,7 @@
 		var/datum/design/design = research_queue[text2num(href_list["remove_tosearch"])]
 		if(design)
 			research_queue -= design
-			qdel(design)
-			design = null
+			QDEL_NULL(design)
 		ui_interact(usr)
 		return 1
 

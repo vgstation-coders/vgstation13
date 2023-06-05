@@ -252,8 +252,7 @@
 	cannonAdjust()
 
 /obj/item/cannonball/iron/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
-	if(isliving(hit_atom) && cannonFired)
+	if(!..() && isliving(hit_atom) && cannonFired)
 		siegeMob(hit_atom)
 
 /obj/item/cannonball/iron/proc/siegeMachine(var/obj/machinery/M)
@@ -325,12 +324,11 @@
 
 /obj/item/cannonball/fuse_bomb/afterattack(atom/target, mob/user , flag) //Filling up the bomb
 	if(assembled == 0)
-		if(istype(target, /obj/structure/reagent_dispensers/fueltank) && target.Adjacent(user))
-			if(target.reagents.total_volume < 200)
+		if(istype(target, /obj/structure/reagent_dispensers) && !target.is_open_container() && target.Adjacent(user))
+			if(target.reagents.get_reagent_amount(FUEL) < 200)
 				to_chat(user, "<span  class='notice'>There's not enough fuel left to work with.</span>")
 				return
-			var/obj/structure/reagent_dispensers/fueltank/F = target
-			F.reagents.remove_reagent(FUEL, 200, 1)//Deleting 200 fuel from the welding fuel tank,
+			target.reagents.remove_reagent(FUEL, 200, 1)//Deleting 200 fuel from the welding fuel tank,
 			assembled = 1
 			to_chat(user, "<span  class='notice'>You've filled the [src] with welding fuel.</span>")
 			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
@@ -507,7 +505,8 @@
 	honkBounce(cTarg)
 
 /obj/item/cannonball/bananium/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
+	if(..())
+		return
 	if(!cannonFired)
 		lastBounceCount = 0
 		return

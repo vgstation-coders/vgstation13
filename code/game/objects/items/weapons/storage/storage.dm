@@ -702,17 +702,12 @@
 /obj/item/weapon/storage/Destroy()
 	close_all()
 	if(boxes)
-		qdel(boxes)
-		boxes = null
+		QDEL_NULL(boxes)
 	if(closer)
-		qdel(closer)
-		closer = null
+		QDEL_NULL(closer)
 	if(xtra)
-		qdel(xtra)
-		xtra = null
-	for(var/atom/movable/AM in contents)
-		qdel(AM)
-	contents = null
+		QDEL_NULL(xtra)
+	QDEL_LIST_NULL(contents)
 	..()
 
 /obj/item/weapon/storage/preattack(atom/target, mob/user, adjacent, params)

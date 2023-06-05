@@ -53,7 +53,7 @@ var/global/list/floorbot_targets=list()
 	var/targetdirection
 	beacon_freq = 1445		// navigation beacon frequency
 	var/skin = null
-	commanding_radio = /obj/item/radio/integrated/signal/bot/floorbot
+	commanding_radios = list(/obj/item/radio/integrated/signal/bot/floorbot)
 
 /obj/machinery/bot/floorbot/New()
 	. = ..()
@@ -459,8 +459,7 @@ var/global/list/floorbot_targets=list()
 	if(!istype(T, /obj/item/stack/tile/metal) || contents.len >= 1 || floorbot_type() == "no_build") //Only do this if the thing is empty
 		return ..()
 	user.remove_from_mob(T)
-	qdel(T)
-	T = null
+	QDEL_NULL(T)
 	var/obj/item/weapon/toolbox_tiles/B = new /obj/item/weapon/toolbox_tiles
 	B.skin = floorbot_type()
 	B.icon_state = "[B.skin]toolbox_tiles"
@@ -472,8 +471,7 @@ var/global/list/floorbot_targets=list()
 /obj/item/weapon/toolbox_tiles/attackby(var/obj/item/W, mob/user as mob)
 	..()
 	if(isprox(W))
-		qdel(W)
-		W = null
+		QDEL_NULL(W)
 		var/obj/item/weapon/toolbox_tiles_sensor/B = new /obj/item/weapon/toolbox_tiles_sensor()
 		B.created_name = created_name
 		B.skin = skin

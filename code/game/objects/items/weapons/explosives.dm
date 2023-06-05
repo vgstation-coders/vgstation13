@@ -22,8 +22,7 @@
 
 /obj/item/weapon/c4/Destroy()
 	if(wires)
-		qdel(wires)
-		wires = null
+		QDEL_NULL(wires)
 
 	..()
 
@@ -120,8 +119,7 @@
 			target.ex_act(1)
 		//if (isobj(target))
 		//	if (target)
-		//		qdel(target)	If it survives ex_act(1) it's possible that it's not something that's meant to be destroyable.
-		//		target = null
+		//		QDEL_NULL(target)	If it survives ex_act(1) it's possible that it's not something that's meant to be destroyable.
 	qdel(src)
 
 /obj/item/weapon/c4/attack(mob/M as mob, mob/user as mob, def_zone)

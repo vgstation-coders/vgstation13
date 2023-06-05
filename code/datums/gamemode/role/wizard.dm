@@ -83,7 +83,11 @@
 			bought_nothing = FALSE
 			. += "<BR>The wizard knew:<BR>"
 			for(var/spell/S in H.spell_list)
-				var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+				var/icon/tempimage
+				if(S.override_icon != "")
+					tempimage = icon(S.override_icon, S.hud_state)
+				else
+					tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
 				. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
 		if(artifacts_bought || potions_bought)
 			bought_nothing = FALSE

@@ -27,14 +27,14 @@
 		general_area_name = A.general_area_name
 
 		for(var/areatype in typesof(A.general_area))
-			var/area/B = locate(areatype)
+			var/area/B = locate(areatype) in areas
 
 			covered_areas += B
 
 	else//very ugly fix until all the main station's areas inherit from /area/station/
 		var/blockedtypes = typesof(/area/research_outpost,/area/mine,/area/derelict,/area/djstation,/area/vox_trading_post,/area/tcommsat)
 		for(var/atype in (typesof(/area) - blockedtypes))
-			var/area/B = locate(atype)
+			var/area/B = locate(atype) in areas
 
 			covered_areas += B
 

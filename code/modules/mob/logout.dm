@@ -8,9 +8,7 @@
 
 	if((flags & HEAR) && !(flags & HEAR_ALWAYS))
 		if(virtualhearer)
-			qdel(virtualhearer)
-			virtualhearer = null
-	world.log << "[src] logout"
+			QDEL_NULL(virtualhearer)
 
 	remove_spell_channeling() //remove spell channeling before we log out
 
@@ -23,7 +21,7 @@
 	clear_fullscreens(FALSE, 0)
 
 	RemoveAllUIs() // Removes mind UIs
-	
+
 	if(client)
 		for(var/datum/radial_menu/R in client.radial_menus)
 			R.finish()

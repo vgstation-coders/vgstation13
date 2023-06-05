@@ -72,12 +72,10 @@
 					if(istype(A, /obj/machinery/singularity))
 						continue
 					if(istype(A,/mob/living))
-						qdel(A)
-						A = null
+						QDEL_NULL(A)
 					else if(istype(A,/mob)) // Observers, AI cameras.
 						continue
-					qdel(A)
-					A = null
+					QDEL_NULL(A)
 				CHECK_TICK
 			T.ChangeTurf(type)
 			var/turf/unsimulated/wall/supermatter/SM = T

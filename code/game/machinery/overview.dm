@@ -181,10 +181,8 @@
 		HI.Insert(I, frame=1, delay = 5)
 		HI.Insert(J, frame=2, delay = 5)
 
-		qdel(I)
-		I = null
-		qdel(J)
-		J = null
+		QDEL_NULL(I)
+		QDEL_NULL(J)
 		H.icon = HI
 		H.layer = 25
 		usr.mapobjs += H
@@ -309,8 +307,7 @@
 		var/icon/I = imap[i+1]
 
 		H.icon = I
-		qdel(I)
-		I = null
+		QDEL_NULL(I)
 		H.layer = 25
 		usr.mapobjs += H
 

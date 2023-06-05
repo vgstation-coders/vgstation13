@@ -120,7 +120,7 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 
 	switch(choice)
 		if("Name")
-			baby.name = input(user, "What will you call it?", "Secway Name", baby.name) as null|text
+			baby.name = copytext(sanitize(input(user, "What will you call it?", "Secway Name", baby.name) as null|text),1,MAX_NAME_LEN)
 			named = TRUE
 
 		if("Appearance")

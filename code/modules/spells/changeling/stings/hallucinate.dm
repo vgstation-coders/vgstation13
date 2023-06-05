@@ -1,6 +1,6 @@
 /spell/changeling/sting/hallucinate
 	name = "Hallucination Sting (15)"
-	desc = "We silently sting the victim with powerful hallucinogen, causing them to hallucinate after roughly 45 seconds."
+	desc = "We silently sting the victim with powerful hallucinogen, causing them to hallucinate after roughly 45 seconds for more than 10 minutes."
 	abbreviation = "HS"
 	hud_state = "hallucinatesting"
 

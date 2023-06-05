@@ -67,6 +67,8 @@
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /mob/living/simple_animal/construct/update_perception()
+	if(!client)
+		return
 	if(dark_plane)
 		dark_plane.alphas["construct"] = 75
 		client.color = list(
@@ -124,6 +126,9 @@
 	return 0
 
 /mob/living/simple_animal/construct/gib(var/animation = 0, var/meat = 1)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	if(!isUnconscious())
 		forcesay("-")
 	death(1)

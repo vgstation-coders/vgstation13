@@ -9,7 +9,7 @@
 	maxHealth = 10
 	health = 10
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice
 	size = SIZE_SMALL
 
 	response_help  = "pets"
@@ -131,8 +131,7 @@
 	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom))
 		if(stat == DEAD && !recovery_cooldown)
 			Recover()
-			qdel(I)
-			I = null
+			QDEL_NULL(I)
 		else
 			to_chat(user, "<span class='notice'>[src] won't eat it!</span>")
 		return

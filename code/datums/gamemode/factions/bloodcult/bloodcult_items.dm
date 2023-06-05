@@ -1108,7 +1108,7 @@ var/list/arcane_tomes = list()
 		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 0, -2)
 		qdel(src)
 
-/obj/item/weapon/melee/blood_dagger/pre_throw()
+/obj/item/weapon/melee/blood_dagger/pre_throw(atom/movable/target)
 	absorbed = 1
 
 /obj/item/weapon/melee/blood_dagger/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
@@ -1411,7 +1411,7 @@ var/list/arcane_tomes = list()
 	name = "magus helm"
 	icon_state = "magus"
 	item_state = "magus"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	desc = "A helm."
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
@@ -1692,8 +1692,7 @@ var/list/arcane_tomes = list()
 			stored_gear.Remove(I)
 			I.forceMove(T)
 	if (remaining)
-		qdel(remaining)
-		remaining = null
+		QDEL_NULL(remaining)
 	..()
 
 /obj/item/weapon/blood_tesseract/throw_impact(atom/hit_atom)

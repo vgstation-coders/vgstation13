@@ -15,6 +15,7 @@
 	idle_power_usage = 0
 	active_power_usage = 0
 	var/power_priority = POWER_PRIORITY_NORMAL
+	var/is_priority_locked = FALSE // If true, do not allow priority to be changed
 
 	//For powernet rebuilding
 	var/build_status = 0 //1 means it needs rebuilding during the next tick or on usage
@@ -152,6 +153,7 @@
 		"name" = name,
 
 		"priority" = power_priority,
+		"priority_locked" = is_priority_locked,
 		"demand" = 0,  //How much power is being requested. Override this proc and fill this in manually.
 
 		"isbattery" = FALSE, // If true, a charge meter will be displayed
@@ -160,7 +162,7 @@
 	)
 
 /obj/machinery/power/proc/change_priority(value, id)
-	if(id == "\ref[src]")
+	if(!is_priority_locked && id == "\ref[src]")
 		power_priority = value
 		return TRUE
 

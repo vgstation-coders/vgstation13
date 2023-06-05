@@ -524,11 +524,8 @@
 			to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[H.glasses];scan=\ref[src]'>\[Scan\]</a>")
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/hydrovision(mob/user)
-    if(ishuman(user))
-        var/mob/living/carbon/human/H = user
-        if(H.is_wearing_item(/obj/item/clothing/glasses/hud/hydro))
-            return TRUE
-    return FALSE
+	hydro_hud_scan(user, src)
+	return FALSE
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/close_lid()
 	set name = "Toggle Tray Lid"

@@ -7,7 +7,7 @@
 		act = copytext(act, 1, custom_param)
 
 	var/datum/emote/E
-	E = E.emote_list[act]
+	E = E.emote_list[lowertext(act)]
 	if(!E)
 		to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
 		return

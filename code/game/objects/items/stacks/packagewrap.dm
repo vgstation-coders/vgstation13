@@ -37,7 +37,7 @@
 /obj/item/stack/package_wrap/preattack(var/obj/target, var/mob/user, var/proximity_flag)
 	if(!istype(target, /atom/movable) || !proximity_flag)
 		return
-	if(istype(target,/obj/machinery/wrapping_machine))
+	if(istype(target,/obj/machinery/autoprocessor/wrapping))
 		return
 	if(!is_type_in_list(target, cannot_wrap))
 		if(istype(target, /obj/item/weapon/storage))
@@ -54,7 +54,7 @@
 	var/atom/movable/target = attacked
 	if(!istype(target))
 		return
-	if(istype(target,/obj/machinery/wrapping_machine))
+	if(istype(target,/obj/machinery/autoprocessor/wrapping))
 		return
 	if(is_type_in_list(target, cannot_wrap))
 		to_chat(user, "<span class='notice'>You can't wrap that.</span>")

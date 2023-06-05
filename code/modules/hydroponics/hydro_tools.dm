@@ -358,8 +358,7 @@
 		to_chat(user, "<span class='warning'>You cannot plant \the [O] in \the [src].</span>")
 
 /obj/item/claypot/throw_impact(atom/hit_atom)
-	..()
-	if(prob(40))
+	if(!..() && prob(40))
 		playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 75, 1)
 		new/obj/effect/decal/cleanable/clay_fragments(src.loc)
 		src.visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")

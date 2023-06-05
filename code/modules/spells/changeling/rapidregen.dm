@@ -15,9 +15,9 @@
 	. = ..()
 	if (!.)
 		return FALSE
-	if(user.mind && user.mind.suiciding)			//no reviving from suicides
-		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?</span>")
-		return FALSE
+//	if(user.mind && user.mind.suiciding)			//no reviving from suicides
+//		to_chat(user, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?</span>")
+//		return FALSE
 	if(M_HUSK in user.mutations)
 		to_chat(user, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
 		return FALSE
@@ -34,8 +34,9 @@
 			C.adjustOxyLoss(-5)
 			C.adjustFireLoss(-5)
 			sleep(10)
+	C.mind.suiciding = 0
 	C.rejuvenate(0)
 	feedback_add_details("changeling_powers","RR")
 	..()
 
-	
+

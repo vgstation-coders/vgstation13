@@ -30,8 +30,7 @@
 
 /obj/machinery/singularity_beacon/Destroy()
 	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
+		QDEL_NULL(power_connection)
 	. = ..()
 
 /obj/machinery/singularity_beacon/get_cell()
@@ -117,8 +116,7 @@
 	if(active)
 		deactivate()
 	if(cell)
-		qdel(cell)
-		cell = null
+		QDEL_NULL(cell)
 	..()
 
 /*

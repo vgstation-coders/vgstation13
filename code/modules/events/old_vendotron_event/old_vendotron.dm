@@ -68,6 +68,7 @@
 		/obj/item/weapon/stock_parts/manipulator/nano/pico = 150,
 		/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 150,
 		/obj/item/weapon/stock_parts/capacitor/adv/super = 150,
+		/obj/item/borg/upgrade/bootyborg = 250,
 		/obj/item/slime_extract/grey = 100,
 		/obj/item/slime_extract/silver = 130,
 		/obj/item/slime_extract/pink = 150,
@@ -345,11 +346,7 @@
 	visible_message("<span class='big danger'>\The [src] vends some peculiar eggs!</span>")
 	for(var/i = 1 to eggAmount)
 		var/turf/eggT = get_turf(pick(orange(5, get_turf(src))))
-		var/obj/item/weapon/reagent_containers/food/snacks/egg/cEgg = new /obj/item/weapon/reagent_containers/food/snacks/egg/chaos(eggT)
-		var/eggTimer = rand(3, 10)
-		spawn(eggTimer SECONDS)
-			if(!cEgg.gcDestroyed)
-				cEgg.hatch()
+		new /obj/item/weapon/reagent_containers/food/snacks/egg/chaos/instahatch(eggT)
 
 /obj/machinery/vending/old_vendotron/proc/ghettoNightmare(var/nightmareLevel = 8, mob/user)	//This is a sin
 	visible_message("<span class='big danger'>Even \the [src] looks afraid!</span>")

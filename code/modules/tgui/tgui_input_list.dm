@@ -105,8 +105,7 @@
 
 /datum/tgui_list_input/Destroy()
 	SStgui.close_uis(src)
-	qdel(buttons)
-	buttons = null
+	QDEL_NULL(buttons)
 	. = ..()
 
 /**
@@ -175,8 +174,7 @@
 	src.callback = callback
 
 /datum/tgui_list_input/async/Destroy(force, ...)
-	qdel(callback)
-	callback = null
+	QDEL_NULL(callback)
 	. = ..()
 
 /datum/tgui_list_input/async/set_choice(choice)

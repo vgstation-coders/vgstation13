@@ -239,10 +239,10 @@
 
 /obj/item/vachandle/pickup(mob/user)
 	..()
-	user.register_event(/event/moved, src, .proc/mob_moved)
+	user.register_event(/event/moved, src, src::mob_moved())
 
 /obj/item/vachandle/dropped(mob/user)
-	user.unregister_event(/event/moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, src::mob_moved())
 	if(loc != myvac)
 		retract()
 
@@ -319,8 +319,7 @@
 /obj/structure/fakecargoposter/Destroy()
 	for(var/atom/movable/A in cash.contents)
 		A.forceMove(loc)
-	qdel(cash)
-	cash = null
+	QDEL_NULL(cash)
 	..()
 
 /obj/structure/fakecargoposter/attackby(var/obj/item/weapon/W, mob/user)

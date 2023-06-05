@@ -98,8 +98,7 @@
 					A.loc.Entered(A)
 	else if (src.x >= world.maxx)
 		if(istype(A, /obj/item/projectile/meteor))
-			qdel(A)
-			A = null
+			QDEL_NULL(A)
 			return
 
 		var/list/cur_pos = src.get_global_map_pos()
@@ -125,8 +124,7 @@
 					A.loc.Entered(A)
 	else if (src.y <= 1)
 		if(istype(A, /obj/item/projectile/meteor))
-			qdel(A)
-			A = null
+			QDEL_NULL(A)
 			return
 		var/list/cur_pos = src.get_global_map_pos()
 		if(!cur_pos)
@@ -152,8 +150,7 @@
 
 	else if (src.y >= world.maxy)
 		if(istype(A, /obj/item/projectile/meteor)||istype(A, /obj/effect/space_dust))
-			qdel(A)
-			A = null
+			QDEL_NULL(A)
 			return
 		var/list/cur_pos = src.get_global_map_pos()
 		if(!cur_pos)

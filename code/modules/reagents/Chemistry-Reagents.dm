@@ -2447,12 +2447,13 @@
 		for(var/obj/item/I in H.held_items)
 			I.clean_blood()
 
-		for(var/obj/item/clothing/C in M.get_equipped_items())	
+		for(var/obj/item/clothing/C in M.get_equipped_items())
 			if(C.clean_blood())
 				H.update_inv_by_slot(C.slot_flags)
 
 		M.clean_blood()
-		M.color = ""
+		if(!iswizconvert(M))
+			M.color = ""
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2497,7 +2498,8 @@
 					H.drip(10)
 				else if(prob(5))
 					H.vomit()
-	M.color = ""
+	if(!iswizconvert(M))
+		M.color = ""
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.species.anatomy_flags & MULTICOLOR && !(initial(H.species.anatomy_flags) & MULTICOLOR))
@@ -2510,7 +2512,8 @@
 	if(..())
 		return 1
 
-	M.color = ""
+	if(!iswizconvert(M))
+		M.color = ""
 
 	if(method == TOUCH && ((TARGET_EYES in zone_sels) || (LIMB_HEAD in zone_sels)))
 		if(ishuman(M))
@@ -3523,17 +3526,17 @@ var/procizine_tolerance = 0
 		M.emote(pick("twitch","blink_r","shiver")) //See movement_tally_multiplier for the rest
 
 /datum/reagent/hyperzine/on_overdose(var/mob/living/M)
+	..() //calls parent to give everyone toxin damage
 	if(ishuman(M) && M.get_heart()) // Got a heart?
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/heart/damagedheart = H.get_heart()
 		if(H.species.name != "Diona" && damagedheart) // Not on dionae
-			if(prob(5) && M.stat == CONSCIOUS)
+			if(prob(15) && M.stat == CONSCIOUS)
 				to_chat(H, "<span class='danger'>You feel a sharp pain in your chest!</span>")
-			damagedheart.damage += 1
+				damagedheart.damage += 1
 		else
 			M.adjustFireLoss(1) // Burn damage for dionae
-	else
-		M.adjustToxLoss(1) // Toxins for everyone else
+
 
 /datum/reagent/hyperzine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -4449,6 +4452,10 @@ var/procizine_tolerance = 0
 	density = 0.65
 	specheatcap = 35.37
 
+/datum/reagent/diethylamine/ammoniumnitrate
+	name = "Ammonium Nitrate"
+	id = AMMONIUMNITRATE
+
 /datum/reagent/diethylamine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
 		return
@@ -4835,7 +4842,7 @@ var/procizine_tolerance = 0
 			if(prob(50))
 				H.Mute(1)
 			else
-				H.visible_message("<span class='notice'>[src] spills their spaghetti.</span>","<span class='notice'>You spill your spaghetti.</span>")
+				H.visible_message("<span class='notice'>[H] spills their spaghetti.</span>","<span class='notice'>You spill your spaghetti.</span>")
 				var/turf/T = get_turf(M)
 				new /obj/effect/decal/cleanable/spaghetti_spill(T)
 				playsound(M, 'sound/effects/splat.ogg', 50, 1)
@@ -5064,6 +5071,21 @@ var/procizine_tolerance = 0
 	for(var/mob/living/carbon/human/H in T)
 		if(isslimeperson(H))
 			H.adjustToxLoss(rand(5, 15))
+
+/datum/reagent/frostoil/reaction_obj(var/obj/O, var/volume)
+
+	if(..())
+		return 1
+
+	if(istype(O, /obj/item/organ/internal/heart/hivelord))
+		var/obj/item/organ/internal/heart/hivelord/I = O
+		if(I.health <= 0)
+			I.revive()
+			I.health = initial(I.health)
+		if(I.organ_data)
+			var/datum/organ/internal/OD = I.organ_data
+			if(OD.damage > 0)
+				OD.damage = 0
 
 /datum/reagent/sodiumchloride
 	name = "Table Salt"
@@ -5478,6 +5500,8 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	density = 0.9185
+	specheatcap = 2.402
 	var/has_had_heart_explode = 0
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
@@ -7040,7 +7064,7 @@ var/procizine_tolerance = 0
 	color = "#2043D0"
 	glass_icon_state = "husbando"
 	glass_name = "\improper Husbando"
-	
+
 /datum/reagent/ethanol/husbando/on_mob_life(var/mob/living/M) //it's copypasted from waifu
 	if(..())
 		return 1
@@ -7070,7 +7094,7 @@ var/procizine_tolerance = 0
 	glass_icon_state = "tomboy"
 	glass_name = "\improper Tomboy"
 
-/datum/reagent/ethanol/tomboy/on_mob_life(var/mob/living/M) 
+/datum/reagent/ethanol/tomboy/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	if(M.gender == MALE)
@@ -9092,7 +9116,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())
 		return 1
-	H.color = "#12A7C9"
+	if(!iswizconvert(H))
+		H.color = "#12A7C9"
 	return
 
 /datum/reagent/roach_shell
@@ -9594,12 +9619,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 
 /datum/reagent/colorful_reagent/on_mob_life(mob/living/M)
-	if(M && isliving(M))
+	if(M && isliving(M) && !iswizconvert(M))
 		M.color = pick(random_color_list)
 	..()
 
 /datum/reagent/colorful_reagent/reaction_mob(mob/living/M, reac_volume)
-	if(M && isliving(M))
+	if(M && isliving(M) && !iswizconvert(M))
 		M.color = pick(random_color_list)
 	..()
 

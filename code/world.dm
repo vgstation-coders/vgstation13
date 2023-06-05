@@ -2,7 +2,11 @@
 #define PIXEL_MULTIPLIER WORLD_ICON_SIZE/32
 
 var/world_startup_time
+var/date_string
 
+#if DM_VERSION < 515
+#error You need at least version 515 to compile
+#endif
 /world
 	mob = /mob/new_player
 	turf = /turf/space
@@ -35,7 +39,7 @@ var/auxtools_path
 	#if AUXTOOLS_DEBUGGER
 	auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	if(fexists(auxtools_path))
-		call(auxtools_path, "auxtools_init")()
+		call_ext(auxtools_path, "auxtools_init")()
 		enable_debugging()
 	else
 		// warn on missing library
@@ -54,7 +58,7 @@ var/auxtools_path
 		WORLD_Y_OFFSET += rand(-50,50)
 
 	// logs
-	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
+	date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
 
 	investigations[I_HREFS] = new /datum/log_controller(I_HREFS, filename="data/logs/[date_string] hrefs.htm", persist=TRUE)
 	investigations[I_ATMOS] = new /datum/log_controller(I_ATMOS, filename="data/logs/[date_string] atmos.htm", persist=TRUE)
@@ -62,6 +66,7 @@ var/auxtools_path
 	investigations[I_WIRES] = new /datum/log_controller(I_WIRES, filename="data/logs/[date_string] wires.htm", persist=TRUE)
 	investigations[I_GHOST] = new /datum/log_controller(I_GHOST, filename="data/logs/[date_string] poltergeist.htm", persist=TRUE)
 	investigations[I_ARTIFACT] = new /datum/log_controller(I_ARTIFACT, filename="data/logs/[date_string] artifact.htm", persist=TRUE)
+	investigations[I_RCD] = new /datum/log_controller(I_RCD, filename="data/logs/[date_string] rcd.htm", persist=TRUE)
 
 	diary = file("data/logs/[date_string].log")
 	panicfile = new/savefile("data/logs/profiling/proclogs/[date_string].sav")
@@ -205,11 +210,7 @@ var/auxtools_path
 	stop_all_media()
 
 	end_credits.on_world_reboot_start()
-	testing("[time_stamp()] - World reboot is now sleeping.")
-
 	sleep(max(10, end_credits.audio_post_delay))
-
-	testing("[time_stamp()] - World reboot is done sleeping.")
 	end_credits.on_world_reboot_end()
 
 	for(var/client/C in clients)
@@ -220,7 +221,7 @@ var/auxtools_path
 			C << link("byond://[world.address]:[world.port]")
 
 	#if AUXTOOLS_DEBUGGER
-	call(auxtools_path, "auxtools_shutdown")()
+	call_ext(auxtools_path, "auxtools_shutdown")()
 	#endif
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)

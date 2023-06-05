@@ -75,10 +75,9 @@
 	desc = "A huge chunk of metal used to separate rooms."
 	icon_state = "diagonalWall"
 	density = 1
-	plane = TURF_PLANE
-	layer = TURF_LAYER
 	anchored = 1
 	opacity = 1
+	is_on_mesons = TRUE
 
 /obj/structure/shuttle/diag_wall/initialize()
 	var/turf/T = get_turf(src)

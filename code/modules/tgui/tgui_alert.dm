@@ -88,8 +88,7 @@
 
 /datum/tgui_modal/Destroy(force, ...)
 	SStgui.close_uis(src)
-	qdel(buttons)
-	buttons = null
+	QDEL_NULL(buttons)
 	. = ..()
 
 /**
@@ -153,8 +152,7 @@
 	src.callback = callback
 
 /datum/tgui_modal/async/Destroy(force, ...)
-	qdel(callback)
-	callback = null
+	QDEL_NULL(callback)
 	. = ..()
 
 /datum/tgui_modal/async/set_choice(choice)

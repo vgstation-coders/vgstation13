@@ -84,20 +84,23 @@ var/global/list/screen_alarms_locs = list(
 	5 = ui_alert5
 	)
 
-//Re-render all alerts - also called in /datum/hud/show_hud() because it's needed there
+//Re-render all alerts
 /datum/hud/proc/reorganize_alerts()
-	var/list/alerts = mymob.alerts
+	var/list/mobalerts = mymob.alerts
 	var/icon_pref
-	if(!alerts.len)
+	if(!mobalerts.len)
 		return FALSE
 	if(!hud_shown)
-		for(var/i = 1, i <= alerts.len, i++)
-			mymob.client.screen -= alerts[alerts[i]]
+		for(var/i = 1, i <= mobalerts.len, i++)
+			mymob.client.screen -= mobalerts[mobalerts[i]]
 		return TRUE
-	for(var/i = 1, i <= alerts.len, i++)
+	for(var/i in 1 to mobalerts.len)
+		if(mobalerts[i] == "mob_cryo")
+			mobalerts.Swap(i, 1)
+	for(var/i = 1, i <= mobalerts.len, i++)
 		if(i > screen_alarms_locs.len)
 			break
-		var/obj/abstract/screen/alert/alert = alerts[alerts[i]]
+		var/obj/abstract/screen/alert/alert = mobalerts[mobalerts[i]]
 		if(alert.icon_state == "template")
 			if(!icon_pref)
 				icon_pref = ui_style2icon(mymob.client.prefs.UI_style)
@@ -120,6 +123,7 @@ var/global/list/screen_alarms_locs = list(
 #define TEMP_ALARM_HEAT_STRONG 4
 
 #define SCREEN_ALARM_BUCKLE "mob_buckle"
+#define SCREEN_ALARM_CRYO "mob_cryo"
 #define SCREEN_ALARM_PRESSURE "mob_pressure"
 #define SCREEN_ALARM_TEMPERATURE "mob_temp"
 #define SCREEN_ALARM_FIRE "mob_fire"
@@ -156,7 +160,7 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/New()
 	..()
 	if(timeout)
-		add_timer(new /callback(src, .proc/qdel_self), timeout)
+		add_timer(new /callback(src, src::qdel_self()), timeout)
 	if(emph)
 		overlays.Add(image('icons/mob/screen_alarms.dmi', icon_state = "emph_outline"))
 
@@ -193,6 +197,18 @@ var/global/list/screen_alarms_locs = list(
 //Object Alarms
 /obj/abstract/screen/alert/object
 	icon_state = "template" // We'll set the icon to the client's ui pref in reorganize_alerts()
+
+/obj/abstract/screen/alert/object/cryo
+	name = "Cryogenics"
+	desc = "You're frozen inside a cryogenics tube. Click on this alert to engage the release sequence."
+
+/obj/abstract/screen/alert/object/cryo/Click(location, control, params)
+	. = ..()
+	var/obj/machinery/atmospherics/unary/cryo_cell/C = master
+	if(C)
+		if(!C.on)
+			return C.go_out(ejector = usr) //If the cryo tube is off, exit normally.
+		return C.AltClick(usr) //Otherwise, use the 30 second exit method.
 
 /obj/abstract/screen/alert/object/buckled
 	name = "Buckled"

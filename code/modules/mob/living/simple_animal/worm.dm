@@ -178,19 +178,16 @@
 				if(!istype(stomachContent,/obj/item/stack/sheet/mineral/plasma))
 					var/obj/item/stack/oldStack = stomachContent
 					new /obj/item/stack/sheet/mineral/plasma(src, oldStack.amount)
-					qdel(oldStack)
-					oldStack = null
+					QDEL_NULL(oldStack)
 					continue
 			else if(istype(stomachContent,/obj/item)) //converts to plasma, keeping the w_class
 				var/obj/item/oldItem = stomachContent
 				new /obj/item/stack/sheet/mineral/plasma(src, oldItem.w_class)
-				qdel(oldItem)
-				oldItem = null
+				QDEL_NULL(oldItem)
 				continue
 			else
 				new /obj/item/stack/sheet/mineral/plasma(src, flatPlasmaValue) //just flat amount
-				qdel(stomachContent)
-				stomachContent = null
+				QDEL_NULL(stomachContent)
 				continue
 
 	if(previous)

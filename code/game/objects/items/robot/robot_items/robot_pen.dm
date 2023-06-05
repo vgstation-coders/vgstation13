@@ -21,7 +21,7 @@
 /obj/item/weapon/pen/robopen/proc/RenamePaper(mob/user as mob,obj/paper as obj)
 	if ( !user || !paper )
 		return
-	var/n_name = input(user, "What would you like to label the paper?", "Paper Labelling", null)  as text
+	var/n_name = sanitize(input(user, "What would you like to label the paper?", "Paper Labelling", null) as text)
 	if ( !user || !paper )
 		return
 

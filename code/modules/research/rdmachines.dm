@@ -203,6 +203,9 @@ var/global/list/rnd_machines = list()
 		icon_state = "[base_state]"
 
 		var/datum/material/material = materials.getMaterial(found)
+		if(material == 0)
+			busy = FALSE
+			return 1
 		materials.addAmount(found, amount * material.cc_per_sheet)
 		spawn(ANIM_LENGTH)
 			busy = FALSE
@@ -290,6 +293,9 @@ var/global/list/rnd_machines = list()
 		icon_state = "[base_state]"
 
 		var/datum/material/material = materials.getMaterial(found)
+		if(material == 0)
+			busy = FALSE
+			return 1
 		materials.addAmount(found, amount * material.cc_per_sheet)
 		spawn(ANIM_LENGTH)
 			busy = FALSE
@@ -342,7 +348,7 @@ var/global/list/rnd_machines = list()
 
 // Returns the atom to output to.
 // Yes this can potentially return null, however that shouldn't be an issue for the code that uses it.
-/obj/machinery/r_n_d/proc/get_output()
+/obj/machinery/proc/get_output()
 	if(!output_dir)
 		return get_turf(loc)
 

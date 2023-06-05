@@ -53,13 +53,13 @@
 
 /datum/dna/gene/basic/stealth/chameleon/activate(var/mob/M, var/connected, var/flags)
 	..()
-	M.register_event(/event/moved, src, .proc/mob_moved)
+	M.register_event(/event/moved, src, src::mob_moved())
 	return 1
 
 /datum/dna/gene/basic/stealth/chameleon/deactivate(var/mob/M, var/connected, var/flags)
 	if(!..())
 		return 0
-	M.unregister_event(/event/moved, src, .proc/mob_moved)
+	M.unregister_event(/event/moved, src, src::mob_moved())
 	return 1
 
 /datum/dna/gene/basic/stealth/chameleon/proc/mob_moved(var/mob/mover)
@@ -227,7 +227,7 @@
 		/mob/living/carbon/slime,
 		/mob/living/carbon/alien/larva,
 		/mob/living/simple_animal/slime,
-		/mob/living/simple_animal/tomato,
+		/mob/living/simple_animal/hostile/retaliate/tomato,
 		/mob/living/simple_animal/chick,
 		/mob/living/simple_animal/chicken,
 		/mob/living/simple_animal/hostile/lizard,

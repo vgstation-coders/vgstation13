@@ -437,7 +437,6 @@
 	if(character.mind.assigned_role != "MODE")
 		if(character.mind.assigned_role != "Cyborg")
 			data_core.manifest_inject(character)
-			ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
 			if(character.mind.assigned_role == "Trader")
 				//If we're a trader, instead send a message to PDAs with the trader cartridge
 				for (var/obj/item/device/pda/P in PDAs)
@@ -670,8 +669,7 @@
 	if(prefs.language)
 		chosen_language = all_languages["[prefs.language]"]
 	if(chosen_language)
-		if(chosen_language.flags & WHITELISTED)
-			new_character.add_language("[prefs.language]")
+		new_character.add_language("[prefs.language]")
 	if(ticker.random_players || appearance_isbanned(src)) //disabling ident bans for now
 		new_character.setGender(pick(MALE, FEMALE))
 		prefs.real_name = random_name(new_character.gender, new_character.species.name)
@@ -730,7 +728,7 @@
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
 	var/rank = new_character.mind.assigned_role
-	if(!late_join)
+	if(!late_join && rank != "MODE")
 		var/obj/S = null
 		// Find a spawn point that wasn't given to anyone
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
@@ -834,3 +832,7 @@
 
 /mob/new_player/cultify()
 	return
+
+/mob/new_player/say(message, datum/language/speaking, atom/movable/radio, class)
+	if(client)
+		client.ooc(message)

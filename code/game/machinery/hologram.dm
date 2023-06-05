@@ -187,8 +187,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		if(master.current == src)
 			master.current = null
 		master = null //Null the master, since no-one is using it now.
-	qdel(ray)
-	ray = null
+	QDEL_NULL(ray)
 	if(holo)
 		var/obj/effect/overlay/hologram/H = holo
 		visible_message("<span class='warning'>The image of [holo] fades away.</span>")

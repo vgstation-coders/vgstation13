@@ -6,7 +6,14 @@
 #define CHAT_MESSAGE_APPROX_LHEIGHT	11 // Approximate height in pixels of an 'average' line, used for height decay
 #define CHAT_MESSAGE_WIDTH			96 // pixels
 #define CHAT_MESSAGE_MAX_LENGTH		68 // characters
-#define WXH_TO_HEIGHT(x)			text2num(copytext((x), findtextEx((x), "x") + 1)) // thanks lummox
+
+/// Macro from Lummox used to get height from a MeasureText proc.
+/// resolves the MeasureText() return value once, then resolves the height, then sets return_var to that.
+/// TG uses this a macro - there's no real reason for this not to be a proc, it defies all logic
+/proc/WXH_TO_HEIGHT(measurement, return_var)
+	var/_measurement = measurement
+	return_var = text2num(copytext(_measurement, findtextEx(_measurement, "x") + 1))
+	return return_var
 
 /**
   * # Chat Message Overlay
@@ -54,7 +61,7 @@ var/runechat_icon = null
 	if (owned_by)
 		owned_by.seen_messages.Remove(src)
 		owned_by.images.Remove(message)
-		owned_by.mob.unregister_event(/event/destroyed, src, .proc/qdel_self)
+		owned_by.mob.unregister_event(/event/destroyed, src, src::qdel_self())
 	owned_by = null
 	message_loc = null
 	message = null
@@ -74,7 +81,7 @@ var/runechat_icon = null
 	set waitfor = FALSE
 	// Register client who owns this message
 	owned_by = owner.client
-	owner.register_event(/event/destroyed, src, .proc/qdel_self)
+	owner.register_event(/event/destroyed, src, src::qdel_self())
 
 	// Clip message
 	var/maxlen = owned_by.prefs.max_chat_length
@@ -122,7 +129,20 @@ var/runechat_icon = null
 	// Construct text
 	var/static/regex/html_metachars = new(@"&[A-Za-z]{1,7};", "g")
 	var/complete_text = "<span class='center maptext [extra_classes != null ? extra_classes.Join(" ") : ""]' style='color: [tgt_color];'>[text]</span>"
-	var/mheight = WXH_TO_HEIGHT(owned_by.MeasureText(replacetext(complete_text, html_metachars, "m"), null, CHAT_MESSAGE_WIDTH))
+
+	var/mheight = WXH_TO_HEIGHT(owned_by.MeasureText(complete_text, null, CHAT_MESSAGE_WIDTH))
+
+
+	if(!TICK_CHECK)
+		return finish_image_generation(mheight, target, owner, complete_text, lifespan)
+
+	var/callback/our_callback = new /callback(src, src::finish_image_generation(), mheight, target, owner, complete_text, lifespan)
+	SSrunechat.message_queue += our_callback
+	return
+
+///finishes the image generation after the MeasureText() call in generate_image().
+///necessary because after that call the proc can resume at the end of the tick and cause overtime.
+/datum/chatmessage/proc/finish_image_generation(mheight, atom/target, mob/owner, complete_text, lifespan)
 	approx_lines = max(1, mheight / CHAT_MESSAGE_APPROX_LHEIGHT)
 
 	// Translate any existing messages upwards, apply exponential decay factors to timers
@@ -130,16 +150,15 @@ var/runechat_icon = null
 	if (owned_by?.seen_messages)
 		var/idx = 1
 		var/combined_height = approx_lines
-		for(var/msg in owned_by.seen_messages)
-			var/datum/chatmessage/m = msg
-			animate(m.message, pixel_y = m.message.pixel_y + mheight, time = CHAT_MESSAGE_SPAWN_TIME)
-			combined_height += m.approx_lines
-			var/sched_remaining = m.scheduled_destruction - world.time
+		for(var/datum/chatmessage/msg in owned_by.seen_messages)
+			animate(msg.message, pixel_y = msg.message.pixel_y + mheight, time = CHAT_MESSAGE_SPAWN_TIME)
+			combined_height += msg.approx_lines
+			var/sched_remaining = msg.scheduled_destruction - world.time
 			if (sched_remaining > CHAT_MESSAGE_SPAWN_TIME)
 				var/remaining_time = (sched_remaining) * (CHAT_MESSAGE_EXP_DECAY ** idx++) * (CHAT_MESSAGE_HEIGHT_DECAY ** combined_height)
-				m.scheduled_destruction = world.time + remaining_time
+				msg.scheduled_destruction = world.time + remaining_time
 				spawn(remaining_time)
-					m.end_of_life()
+					msg.end_of_life()
 
 	// Build message image
 	message = image(loc = message_loc, layer = CHAT_LAYER)
@@ -166,8 +185,9 @@ var/runechat_icon = null
 	spawn(lifespan - CHAT_MESSAGE_EOL_FADE)
 		end_of_life()
 
-/datum/chatmessage/proc/qdel_self(datum/thing)
+/datum/chatmessage/proc/qdel_self(var/datum/thing)
 	qdel(src)
+
 
 /**
   * Applies final animations to overlay CHAT_MESSAGE_EOL_FADE deciseconds prior to message deletion

@@ -105,8 +105,7 @@
 		mykey.paired_to = null
 		mykey = null
 	if(heldkey)
-		qdel(heldkey)
-		heldkey = null
+		QDEL_NULL(heldkey)
 	..()
 
 /obj/structure/bed/chair/vehicle/proc/set_keys()

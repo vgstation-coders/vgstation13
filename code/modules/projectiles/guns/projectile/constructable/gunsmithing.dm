@@ -264,8 +264,7 @@
 /obj/item/weapon/cylinder/Destroy()
 	for(var/i = 1; i < chambers.len; i++)
 		if(chambers[i])
-			qdel(chambers[i])
-			chambers[i] = null
+			QDEL_NULL(chambers[i])
 	..()
 
 /obj/item/weapon/cylinder/proc/cycle()

@@ -468,7 +468,6 @@
 
 
 /mob/living/carbon/slime/var/co2overloadtime = null
-/mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 
 /mob/living/carbon/slime/show_inv(mob/user)
@@ -691,8 +690,7 @@
 	to_chat(user, "You feed \the [M] the potion, removing its powers and calming it.")
 	if(M.mind)
 		M.mind.transfer_to(pet)
-	qdel (M)
-	M = null
+	QDEL_NULL (M)
 	var/newname = ""
 	if(pet.client)//leaving the player-controlled slimes the ability to choose their new name
 		newname = copytext(sanitize(input(pet, "You have been fed a docility potion, what shall we call you?", "Give yourself a new name", "pet slime") as null|text),1,MAX_NAME_LEN)
@@ -727,8 +725,7 @@
 	to_chat(user, "You feed \the [M] the potion, removing its powers and calming it.")
 	if(M.mind)
 		M.mind.transfer_to(pet)
-	qdel (M)
-	M = null
+	QDEL_NULL (M)
 	var/newname = ""
 	if(pet.client)//leaving the player-controlled slimes the ability to choose their new name
 		newname = copytext(sanitize(input(pet, "You have been fed an advanced docility potion, what shall we call you?", "Give yourself a new name", "pet slime") as null|text),1,MAX_NAME_LEN)

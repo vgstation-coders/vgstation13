@@ -336,8 +336,7 @@
 	cleanup(EAST)
 	cleanup(WEST)
 	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
+		QDEL_NULL(power_connection)
 	..()
 
 /obj/machinery/shieldwallgen/free_access
@@ -355,6 +354,7 @@
 		// Request power for next tick
 		shieldload = rand(storedpower_consumption, storedpower_consumption * 4)
 		power_connection.add_load(shieldload)
+		power_connection.monitor_demand = shieldload
 
 	// Attemp to consume stored power. If enough, we're powered,
 	if (storedpower >= storedpower_consumption)

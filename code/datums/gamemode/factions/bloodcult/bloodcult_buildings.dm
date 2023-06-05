@@ -1197,8 +1197,7 @@ var/list/cult_spires = list()
 						playsound(L, 'sound/effects/forge_over.ogg', 50, 0, -3)
 						if (forger.client)
 							forger.client.images -= progbar
-						qdel(forging)
-						forging = null
+						QDEL_NULL(forging)
 						var/obj/item/I = new template(L)
 						if (istype(I))
 							I.plane = relative_plane(EFFECTS_PLANE)

@@ -198,8 +198,7 @@
 
 		new result(get_turf(holder))
 
-		qdel (holder)
-		holder = null
+		QDEL_NULL (holder)
 
 	feedback_inc("crank_charger_created",1)
 
@@ -271,8 +270,7 @@
 
 /obj/item/device/crank_charger/Destroy()
 	if(stored)
-		qdel(stored)
-		stored = null
+		QDEL_NULL(stored)
 	..()
 
 /obj/item/device/crank_charger/generous

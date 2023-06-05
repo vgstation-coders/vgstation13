@@ -1,3 +1,6 @@
+/mob/living/carbon
+	admin_desc = "The 'manual_emote_sound_override' variable can be set to 1 to enable a character to scream audibly whenever they want."
+
 /mob/living/carbon/Login()
 	..()
 	update_hud()
@@ -72,6 +75,9 @@
 				user.delayNextMove(10) //no just holding the key for an instant gib
 
 /mob/living/carbon/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	dropBorers(1)
 	if(stomach_contents && stomach_contents.len)
 		drop_stomach_contents()
@@ -643,9 +649,9 @@
 	. = ..()
 	if(!istype(loc, /turf/space))
 		for(var/obj/item/I in get_all_slots())
-			if(I.flags & SLOWDOWN_WHEN_CARRIED)
+			if(I == src.back)
 				. *= max(1,I.slowdown / 2) // heavy items worn on the back. those shouldn't slow you down as much.
-			else
+			else if(!isclothing(I) || (isclothing(I) && (I in get_clothing_items())))
 				. *= I.slowdown
 
 		for(var/obj/item/I in held_items)

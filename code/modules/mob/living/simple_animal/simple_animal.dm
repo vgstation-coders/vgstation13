@@ -1,6 +1,7 @@
 var/const/ANIMAL_CHILD_CAP = 50
+var/const/ANIMAL_EXTENDED_CHILD_CAP = 100
 var/global/list/animal_count = list() //Stores types, and amount of animals of that type associated with the type (example: /mob/living/simple_animal/dog = 10)
-//Animals can't breed if amount of children exceeds 50
+//Animals can't breed if amount of children exceeds 50, except cockroaches, who can breed up to 100 children
 
 /mob/living/simple_animal
 	name = "animal"
@@ -34,6 +35,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/stop_automated_movement = 0 //Use this to temporarely stop random movement or to if you write special movement code for animals.
 	var/wander = 1	// Does the mob wander around when idle?
+	var/must_wander = FALSE //if true, the mob will try all cardinals when wandering if boxed in
 	var/stop_automated_movement_when_pulled = 1 //When set to 1 this stops the animal from moving when someone is pulling it.
 	//Interaction
 	var/response_help   = "pokes"
@@ -248,7 +250,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
 					INVOKE_EVENT(src, /event/before_move)
-					var/destination = get_step(src, pick(cardinal))
+					var/attempts = 3
+					var/our_options = cardinal.Copy()
+					var/destination = get_step(src, pick_n_take(our_options))
+					while(must_wander && destination == loc && attempts > 0)
+						destination = get_step(src, pick_n_take(our_options))
+						attempts--
 					wander_move(destination)
 					turns_since_move = 0
 					INVOKE_EVENT(src, /event/after_move)
@@ -353,6 +360,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		temperature_alert = 0
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	if(icon_gib)
 		anim(target = src, a_icon = icon, flick_anim = icon_gib, sleeptime = 15)
 
@@ -559,7 +569,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		stat(null, "Health: [round((health / maxHealth) * 100)]%")
 
 /mob/living/simple_animal/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 
 	if(!gibbed)
@@ -836,6 +846,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		return ..()
 
+/mob/living/simple_animal/log_say_message(var/datum/speech/speech, var/message_mode, var/message)
+	if(client)
+		..()
 
 /mob/living/simple_animal/proc/name_mob(mob/user)
 	var/n_name = copytext(sanitize(input(user, "What would you like to name \the [src]?", "Renaming \the [src]", null) as text|null), 1, MAX_NAME_LEN)

@@ -356,7 +356,6 @@
 	return
 
 /mob/living/carbon/monkey/var/co2overloadtime = null
-/mob/living/carbon/monkey/var/temperature_resistance = T0C+75
 
 /mob/living/carbon/monkey/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
@@ -481,6 +480,7 @@
 		plane = LYING_MOB_PLANE
 	else
 		plane = MOB_PLANE
+	loc.adjust_layer(src)
 
 /mob/living/carbon/monkey/send_to_past(var/duration)
 	..()
@@ -504,7 +504,7 @@
 	icon_state = "mushroom"
 	greaterform = "Mushroom"
 	species_type = /mob/living/carbon/monkey/mushroom
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man
 	canWearClothes = 0
 	canWearHats = 0
 	canWearGlasses = 0

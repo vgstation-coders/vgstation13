@@ -306,6 +306,7 @@
 	siemens_coefficient = 0.7
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/security
+	on_armory_manifest = TRUE
 
 /obj/item/clothing/suit/space/rig/security/fat
 	name = "expanded security hardsuit"

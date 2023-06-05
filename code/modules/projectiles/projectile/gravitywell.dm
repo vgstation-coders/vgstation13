@@ -104,13 +104,13 @@
 		var/dist = get_dist_euclidian(src,A)
 		var/pull_force = size/max(1,round(dist))
 		if(istype(A,/atom/movable) && (size >= 4) && (get_dist(src,A) == 1))
-			A.singularity_pull(src, (pull_force * 3), 1)
+			A.singularity_pull(src, (pull_force * 3), 0, 1)
 			var/atom/movable/AM = A
 			if (z != map.zCentcomm || emergency_shuttle.location == 2)//preventing exploits, unless the round is over
 				AM.forceMove(loc)//KATAMARI DAMACYYyyYYyyYY
 		else if(get_dist(src,A) >= 1)
 			if(dist <= size)
-				A.singularity_pull(src, (pull_force * 3), 1)
+				A.singularity_pull(src, (pull_force * 3), 0, 1)
 				if(istype(A,/mob/living))
 					var/mob/living/M = A
 					M.take_overall_damage(5,0)

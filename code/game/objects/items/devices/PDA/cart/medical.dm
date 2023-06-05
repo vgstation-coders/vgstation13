@@ -86,7 +86,7 @@
 /datum/pda_app/cart/scanner/medical/attack(mob/living/carbon/C, mob/living/user as mob)
     if(istype(C))
         healthanalyze(C,user,1)
-            
+
 /datum/pda_app/cart/medbot
 	name = "Medical Bot Access"
 	desc = "Used to control a medbot."
@@ -129,12 +129,22 @@
 	if(!A.Adjacent(user))
 		return
 	if(!isnull(A.reagents))
+		var/found = 0
 		if(A.reagents.reagent_list.len > 0)
+			found = 1
 			var/reagents_length = A.reagents.reagent_list.len
 			to_chat(user, "<span class='notice'>[reagents_length] chemical agent[reagents_length > 1 ? "s" : ""] found.</span>")
 			for (var/datum/reagent/re in A.reagents.reagent_list)
 				to_chat(user, "<span class='notice'>\t [re]: [re.volume] units</span>")
-		else
+		if (istype (A, /obj/item/weapon/reagent_containers/food/snacks))
+			var/obj/item/weapon/reagent_containers/food/snacks/S = A
+			if(S.dip && S.dip.reagent_list.len > 0)
+				found = 1
+				var/reagents_length = S.dip.reagent_list.len
+				to_chat(user, "<span class='notice'>[reagents_length] additional chemical agent[reagents_length > 1 ? "s" : ""] found in trace amounts.</span>")
+				for (var/datum/reagent/re in S.dip.reagent_list)
+					to_chat(user, "<span class='notice'>\t [re]: [re.volume] units</span>")
+		if (!found)
 			to_chat(user, "<span class='notice'>No active chemical agents found in [A].</span>")
 	else
 		to_chat(user, "<span class='notice'>No significant chemical agents found in [A].</span>")

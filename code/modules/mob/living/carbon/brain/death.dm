@@ -1,23 +1,5 @@
 /mob/living/carbon/brain/death(gibbed)
-	if(stat == DEAD)
-		return
-	if(!gibbed && container && istype(container, /obj/item/device/mmi))//If not gibbed but in a container.
-		container.OnMobDeath(src)
-
-	stat = DEAD
-
-	change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-	see_in_dark = 8
-	see_invisible = SEE_INVISIBLE_LEVEL_TWO
-
-	tod = worldtime2text() //weasellos time of death patch
-	if(mind)
-		mind.store_memory("Time of death: [tod]", 0)	//mind. ?
-
-	return ..(gibbed)
-
-/mob/living/carbon/brain/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	if(!gibbed && container && istype(container, /obj/item/device/mmi))//If not gibbed but in a container.
 		container.OnMobDeath(src)
@@ -80,6 +62,9 @@
 		..()
 
 /mob/living/carbon/brain/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	if(!isUnconscious())
 		forcesay("-")
 	death(1)

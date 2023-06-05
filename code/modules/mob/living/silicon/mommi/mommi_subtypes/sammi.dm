@@ -6,7 +6,7 @@
 	icon_state = "sammi_offline"
 	maxHealth = 200
 	health = 200
-	keeper=1 // 0 = No, 1 = Yes (Disables speech and common radio.)
+	keeper=0 // 0 = No, 1 = Yes (Disables speech and common radio.)
 	prefix = "Stationary Assembler MMI"
 	canmove = 0
 	anchored = 0
@@ -30,7 +30,8 @@
 /mob/living/silicon/robot/mommi/sammi/proc/change_sammi_law(mob/user)
 	var/warning = "Yes"
 	if(user == src)
-		warning = alert(user, "This action is not allowed under normal circumstance, are you sure you want to continue reprogramming yourself?", "You sure?", "Yes", "No")
+		to_chat(user, "<span class='notice'>You may not reprogram your own laws.</span>")
+		return
 
 	if(warning == "Yes")
 		var/sammitask = reject_bad_text(input(user,"Enter a task for this SAMMI:","SAMMI Controller",""))
@@ -42,6 +43,7 @@
 			return
 		var/hold = list(src.laws.inherent[1], sammitask)
 		src.laws.inherent = hold
+		src << sound('sound/machines/lawsync.ogg')
 		src.show_laws()
 		message_admins("<span class='warning'>[src.name] updated with: <span class='notice'>[sammitask]</span> -by: [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a></span>)",0,1)
 		user.visible_message("<span class='notice'>[user.name] enters commands into [src.name].</span>")
@@ -123,7 +125,7 @@
 	if (istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
 		if(wiresexposed)
 			to_chat(user, "Close the wiring panel first.")
-		else if(cell)
+		else if(cell || cellhold)
 			to_chat(user, "There is a power cell already installed.")
 		else
 			user.drop_item(W, src)
@@ -267,11 +269,11 @@
 		recruiter.logging = TRUE
 
 		// A player has their role set to Yes or Always
-		recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+		recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
 		// ", but No or Never
-		recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+		recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
 
-		recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+		recruiter.recruited = new /callback(src, src::recruiter_recruited())
 
 	recruiter.request_player()
 

@@ -55,11 +55,11 @@
 
 	if(cover_state == C_CLOSED)
 		var/image/cover_overlay = image('icons/obj/cage.dmi', icon_state = "cage_cover", layer = OBJ_LAYER)
-		cover_overlay.plane = OBJ_PLANE
+		cover_overlay.plane = FLOAT_PLANE
 		overlays += cover_overlay
 	else if(door_state == C_CLOSED) //Door is only visible when the cover is open
 		var/image/door_overlay = image('icons/obj/cage.dmi', icon_state = "cage_door")
-		door_overlay.plane = ABOVE_HUMAN_PLANE
+		door_overlay.plane = relative_plane(ABOVE_HUMAN_PLANE)
 		overlays += door_overlay
 
 /obj/structure/cage/attack_animal(mob/living/simple_animal/user)

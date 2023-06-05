@@ -40,11 +40,11 @@
 		recruiter.jobban_roles = list("pAI")
 
 		// A player has their role set to Yes or Always
-		recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+		recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
 		// ", but No or Never
-		recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+		recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
 
-		recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+		recruiter.recruited = new /callback(src, src::recruiter_recruited())
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/Hatch()
 	if(hatching)
@@ -109,8 +109,7 @@
 		to_chat(O, "The egg is recovering. Try again in a few moments.")
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/Destroy()
-	qdel(recruiter)
-	recruiter = null
+	QDEL_NULL(recruiter)
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/defected

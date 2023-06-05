@@ -3,6 +3,7 @@
 	body_parts_covered = HEAD|EARS|EYES|MASKHEADHAIR
 	species_fit = list()
 	autoignition_temperature = AUTOIGNITION_PROTECTIVE
+	on_armory_manifest = TRUE
 
 /obj/item/clothing/head/helmet/tactical/New()
 	..()
@@ -83,3 +84,4 @@
 	item_state = "antichrist"
 	icon_state = "antichrist"
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
+	species_fit = list(VOX_SHAPED)

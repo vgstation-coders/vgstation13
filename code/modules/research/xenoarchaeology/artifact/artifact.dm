@@ -23,6 +23,7 @@
 	25;/obj/machinery/singularity_beacon,
 	25;/obj/machinery/power/supermatter,
 	50;/obj/structure/constructshell,
+	50;/obj/machinery/vending/artifact,
 	100;/obj/machinery/cryopod,
 	100;/obj/machinery/auto_cloner,
 	100;/obj/structure/bed/chair/vehicle/gigadrill,

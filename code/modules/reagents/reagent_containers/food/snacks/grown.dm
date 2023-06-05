@@ -84,8 +84,7 @@ var/list/special_fruits = list()
 
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
-	if(!seed || !src)
+	if(..() || !seed || !src)
 		return
 	//if(seed.stinging)   			//we do NOT want to transfer reagents on throw, as it would mean plantbags full of throwable chloral injectors
 	//	stinging_apply_reagents(M)  //plus all sorts of nasty stuff like throw_impact not targeting a specific bodypart to check for protection.
@@ -195,6 +194,7 @@ var/list/special_fruits = list()
 		traits += "It seems to be spatially unstable. "
 	if(traits)
 		to_chat(user, traits)
+	hydro_hud_scan(user, src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
 	var/obj/effect/decal/cleanable/S = new seed.splat_type(T)
@@ -670,7 +670,13 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 /obj/item/weapon/reagent_containers/food/snacks/grown/killertomato/attack_self(mob/user as mob)
 	if(istype(user.loc, /turf/space))
 		return
-	new /mob/living/simple_animal/tomato(user.loc)
+	var/mob/living/simple_animal/hostile/retaliate/tomato/T = new(user.loc)
+	T.harm_intent_damage = potency/5 - potency/20
+	T.melee_damage_lower = potency/10
+	T.melee_damage_upper = potency/5 - potency/20
+	T.health = potency/2 - potency/8
+	T.maxHealth = potency/2 - potency/8
+	T.friends += user
 	qdel(src)
 
 	to_chat(user, "<span class='notice'>You plant the killer-tomato.</span>")

@@ -21,8 +21,7 @@
 	processing_objects.Add(src)
 
 /obj/item/weapon/reagent_containers/glass/jar/Destroy()
-	qdel(held_item)
-	held_item = null
+	QDEL_NULL(held_item)
 	processing_objects.Remove(src)
 	..()
 
@@ -115,8 +114,7 @@
 	reagents.reaction(held_item)
 
 /obj/item/weapon/reagent_containers/glass/jar/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
-	if(hit_atom)
+	if(!..() && hit_atom)
 		src.visible_message("<span  class='warning'>The [src.name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		reagents.reaction(loc, TOUCH)

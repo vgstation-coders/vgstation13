@@ -167,6 +167,10 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/build_inventories()
 	product_records = new/list()
+	coin_records = new/list()
+	hidden_records = new/list()
+	voucher_records = new/list()
+	holiday_records = new/list()
 	build_inventory(products)
 	build_inventory(contraband, 1)
 	build_inventory(premium, 0, 1)
@@ -185,13 +189,11 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/Destroy()
 	if(wires)
-		qdel(wires)
-		wires = null
+		QDEL_NULL(wires)
 	if(coinbox)
-		qdel(coinbox)
-		coinbox = null
+		QDEL_NULL(coinbox)
 	..()
-	
+
 /obj/machinery/vending/splashable()
 	return FALSE
 
@@ -315,6 +317,13 @@ var/global/num_vending_terminals = 1
 		D.amount = D.original_amount
 	for (var/datum/data/vending_product/D in hidden_records)
 		D.amount = D.original_amount
+	for (var/datum/data/vending_product/D in coin_records)
+		D.amount = D.original_amount
+	for (var/datum/data/vending_product/D in voucher_records)
+		D.amount = D.original_amount
+	for (var/datum/data/vending_product/D in holiday_records)
+		D.amount = D.original_amount	
+		
 	new /obj/item/stack/sheet/cardboard(P.loc, 4)
 	qdel(P)
 	if(user.machine==src)
@@ -1027,17 +1036,17 @@ var/global/num_vending_terminals = 1
 		src.shut_up = !src.shut_up
 
 	else if (href_list["rename"] && edit_mode)
-		var/newname = input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text
+		var/newname = sanitize(input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text)
 		if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
-			src.name = html_encode(newname)
+			src.name = newname
 
 	else if (href_list["show_oos"] && edit_mode)
 		dont_render_OOS = !dont_render_OOS
 
 	else if (href_list["add_slogan"] && edit_mode)
-		var/newslogan = input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text
+		var/newslogan = sanitize(input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text)
 		if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
-			product_slogans += html_encode(newslogan)
+			product_slogans += newslogan
 
 	else if (href_list["delete_slogan_line"] && edit_mode && product_slogans.len > 0)
 		product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
@@ -1088,6 +1097,9 @@ var/global/num_vending_terminals = 1
 
 		if(return_coin)
 			user.put_in_hands(coin)
+			if(on_return_coin_detect(user))
+				coin = null
+				return
 		else
 			if (!isnull(coinbox))
 				if (coinbox.can_be_inserted(coin, TRUE))
@@ -1125,6 +1137,9 @@ var/global/num_vending_terminals = 1
 		src.vend_ready = 1
 		update_vicon()
 		src.updateUsrDialog()
+
+/obj/machinery/vending/proc/on_return_coin_detect(mob/user)
+	return 0
 
 /obj/machinery/vending/process()
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
@@ -3519,7 +3534,10 @@ var/global/num_vending_terminals = 1
 	products = list(
 		/obj/item/toy/cards = 5,
 		/obj/item/toy/cards/une = 5,
-		/obj/item/weapon/storage/pill_bottle/dice = 5
+		/obj/item/weapon/storage/pill_bottle/dice = 5,
+		/obj/item/weapon/storage/pill_bottle/dice/fudge = 5,
+		/obj/item/weapon/storage/pill_bottle/dice/d6 = 5,
+		/obj/item/weapon/storage/pill_bottle/dice/cup = 10
 		)
 	contraband = list(
 		/obj/item/weapon/dice/loaded = 3,
@@ -3533,6 +3551,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/cards = 5,
 		/obj/item/toy/cards/une = 10,
 		/obj/item/weapon/storage/pill_bottle/dice = 10,
+		/obj/item/weapon/storage/pill_bottle/dice/fudge = 10,
+		/obj/item/weapon/storage/pill_bottle/dice/d6 = 10,
+		/obj/item/weapon/storage/pill_bottle/dice/cup = 5,
 		/obj/item/weapon/dice/loaded = 15,
 		/obj/item/weapon/dice/loaded/d20 = 15,
 		/obj/item/weapon/skull = 20,

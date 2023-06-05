@@ -29,8 +29,14 @@
 /obj/machinery/bunsen_burner/cook_temperature()
 	var/temperature = get_max_temperature()
 	if(isnull(temperature))
-		return COOKTEMP_DEFAULT //Sanity in case the burner runs out of fuel before this is called.
+		return ..() //Sanity in case the burner runs out of fuel before this is called.
 	return temperature
+
+/obj/machinery/bunsen_burner/cook_energy()
+	var/cook_energy = get_thermal_transfer() * (SS_WAIT_FAST_OBJECTS / SS_WAIT_MACHINERY)
+	if(isnull(cook_energy))
+		return ..() //Sanity in case the burner runs out of fuel before this is called.
+	return cook_energy
 
 /////////////////////
 
@@ -156,8 +162,16 @@
 			var/list/fuel_stats = possible_fuels[possible_fuel]
 			max_temperature = fuel_stats["max_temperature"]
 			break
-
 	return max_temperature
+
+/obj/machinery/bunsen_burner/proc/get_thermal_transfer()
+	var/thermal_transfer
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			var/list/fuel_stats = possible_fuels[possible_fuel]
+			thermal_transfer = fuel_stats["thermal_transfer"]
+			break
+	return thermal_transfer
 
 /obj/machinery/bunsen_burner/proc/try_refill_nearby()
 	for(var/obj/machinery/chem_dispenser/CD in view(1))
@@ -230,7 +244,7 @@
 		list("Examine", "radial_examine")
 	)
 
-	var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
+	var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, src::radial_check(), user))
 	if(!radial_check(user))
 		return
 

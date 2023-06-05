@@ -25,7 +25,7 @@
 /obj/item/clothing/shoes/syndigaloshes/New()
 	..()
 	verbs += /obj/item/clothing/shoes/syndigaloshes/verb/change_appearance_shoes
-	for(var/Type in typesof(/obj/item/clothing/shoes) - list(/obj/item/clothing/shoes, /obj/item/clothing/shoes/syndigaloshes))
+	for(var/Type in existing_typesof(/obj/item/clothing/shoes) - (/obj/item/clothing/shoes/syndigaloshes))
 		clothing_choices += new Type
 	return
 
@@ -111,6 +111,7 @@
 	desc = "A pair of rather plain, wooden sandals."
 	name = "sandals"
 	icon_state = "wizard"
+	species_fit = list(VOX_SHAPED)
 
 	wizard_garb = 1
 
@@ -118,6 +119,7 @@
 	name = "magic slippers"
 	icon_state = "slippers"
 	desc = "For the wizard that puts comfort first. Who's going to laugh?"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/sandal/marisa
 	desc = "A pair of magic, black shoes."
@@ -127,7 +129,7 @@
 /obj/item/clothing/shoes/sandal/marisa/leather
 	icon_state = "laceups"
 	item_state = "laceups"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/galoshes
 	name = "galoshes"
@@ -153,7 +155,7 @@
 	icon_state = "clown"
 	item_state = "clown_shoes"
 	_color = "clown"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 
 	step_sound = "clownstep"
@@ -358,6 +360,7 @@
 	desc = "No snake in these boots."
 	icon_state = "cowboy"
 	item_state = "cowboy"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/jackboots/steeltoe
 	name = "steel-toed boots"
@@ -391,12 +394,14 @@
 	desc = "Fluffy!"
 	icon_state = "slippers"
 	item_state = "slippers"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/slippers_worn
 	name = "worn bunny slippers"
 	desc = "Fluffy..."
 	icon_state = "slippers_worn"
 	item_state = "slippers_worn"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/laceup
 	name = "laceup shoes"
@@ -415,6 +420,7 @@
 	desc = "Sandals with buckled leather straps on it."
 	icon_state = "roman"
 	item_state = "roman"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/simonshoes
 	name = "Simon's Shoes"
@@ -428,7 +434,7 @@
 	desc = "A pair of girly knee-high socks."
 	icon_state = "kneesock"
 	item_state = "kneesock"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/shoes/kneesocks/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -602,6 +608,7 @@
 	item_state = "clownshoespsyche"
 	_color = "clownshoespsyche"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
+	species_fit = list(VOX_SHAPED)
 
 	step_sound = "clownstep"
 

@@ -30,8 +30,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()
 	if(poisonsacs)
-		qdel(poisonsacs)
-		poisonsacs = null
+		QDEL_NULL(poisonsacs)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal //This meat spawns when an animal is butchered, and its name is set to '[animal.species_name] meat' (like "cat meat")
 	var/animal_name = "animal"

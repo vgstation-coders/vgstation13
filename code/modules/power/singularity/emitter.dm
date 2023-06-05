@@ -108,9 +108,7 @@
 	else
 		if(beam)
 			beam._re_emit = 0
-			qdel(beam)
-			beam = null
-			kill_light()
+			QDEL_NULL(beam)
 
 /obj/machinery/power/emitter/receive_signal(datum/signal/signal)
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag))

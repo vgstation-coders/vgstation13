@@ -138,8 +138,7 @@ var/list/camera_names=list()
 /obj/machinery/camera/Destroy()
 	deactivate(null, 0) //kick anyone viewing out
 	if(assembly)
-		qdel(assembly)
-		assembly = null
+		QDEL_NULL(assembly)
 	wires = null
 	cameranet.cameras -= src
 	cameranet.removeCamera(src) //Will handle removal from the camera network and the chunks, so we don't need to worry about that

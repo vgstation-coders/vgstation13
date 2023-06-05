@@ -60,8 +60,7 @@
 
 		for (var/datum/playingcard/P in H.cards) src.cards.Add(P)
 
-		qdel (O)
-		O = null
+		QDEL_NULL (O)
 
 		user.show_message("You place your cards on the bottom of the deck.")
 	else
@@ -137,8 +136,7 @@
 
 /obj/item/weapon/hand/Del()
 	if (src.hi)
-		qdel (src.hi)
-		src.hi = null
+		QDEL_NULL (src.hi)
 
 	return ..()
 

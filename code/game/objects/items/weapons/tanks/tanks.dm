@@ -33,8 +33,7 @@
 
 /obj/item/weapon/tank/Destroy()
 	if(air_contents)
-		qdel(air_contents)
-		air_contents = null
+		QDEL_NULL(air_contents)
 
 	if(istype(loc, /obj/machinery/portable_atmospherics))
 		var/obj/machinery/portable_atmospherics/holder = loc
@@ -260,8 +259,6 @@
 		air_contents.react()
 		pressure = air_contents.return_pressure()
 		var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
-		if(range > 14)
-			range = (pressure-TANK_FRAGMENT_PRESSURE+14000)/(2*TANK_FRAGMENT_SCALE)
 		if(range > MAX_EXPLOSION_RANGE)
 			cap = 1
 			uncapped = range

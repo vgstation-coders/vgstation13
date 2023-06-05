@@ -44,7 +44,7 @@
 					var/available_admins = admins_number - admin_number_afk
 					//Dunno if it's okay to log IP or ID here
 					send2adminirc("Notice: [key_name(src)] has the same IP and ID as [key_name(M)][M.client ? "" : " (no longer logged in)"].  [available_admins ? "" : "No non-AFK admins online"]")
-					send2admindiscord("**Notice: [key_name(src)] has the same IP and ID as [key_name(M)][M.client ? "" : " (no longer logged in)"].  [available_admins ? "" : "No non-AFK admins online"]**", !available_admins)
+					send2admindiscord("**Notice: [key_name(src)] has the same IP and ID as [key_name(M)][M.client ? "" : " (no longer logged in)"].  [available_admins ? "" : "No non-AFK admins online"]**")
 
 // Do not call ..()
 // If you do so and the mob is in nullspace BYOND will attempt to move the mob a gorillion times
@@ -68,6 +68,8 @@
 	client.screen += catcher //Catcher of clicks
 	client.screen += clickmaster // click catcher planesmaster on plane 0 with mouse opacity 0 - allows click catcher to work with SEE_BLACKNESS
 	client.screen += clickmaster_dummy // honestly fuck you lummox
+	//client.screen += overdark_planemaster
+	//client.screen += overdark_planemaster_target
 	client.initialize_ghost_planemaster() //We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
 	client.initialize_fakecamera_planemaster()
 	update_perception()
@@ -115,7 +117,7 @@
 		var/obj/location = loc
 		location.on_login(src)
 
-	if(client && client.haszoomed && !client.holder)
+	if(client && client.haszoomed)
 		client.changeView()
 		client.haszoomed = 0
 

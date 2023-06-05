@@ -81,14 +81,14 @@
 		to_chat(user, "<span class='notice'>The multilayering mode is currently [build_all ? "enabled" : "disabled"].</span>")
 	if(has_yellow_slime)
 		to_chat(user, "<span class='notice'>The automatic wrenching mode is currently [autowrench ? "enabled" : "disabled"].</span>")
-		
+
 /obj/item/device/rcd/rpd/pickup(var/mob/living/L)
 	..()
-	L.register_event(/event/clickon, src, .proc/mob_onclickon)
+	L.register_event(/event/clickon, src, src::mob_onclickon())
 
 /obj/item/device/rcd/rpd/dropped(var/mob/living/L)
 	..()
-	L.unregister_event(/event/clickon, src, .proc/mob_onclickon)
+	L.unregister_event(/event/clickon, src, src::mob_onclickon())
 	hook_key = null
 
 // If the RPD is held, some modifiers are removed.

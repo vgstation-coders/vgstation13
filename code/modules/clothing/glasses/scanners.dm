@@ -97,44 +97,19 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
 
-	color_matrix = list(0.8, 0, 0  ,\
-						0  , 1, 0  ,\
-						0  , 0, 0.8) //equivalent to #CCFFCC
-	my_dark_plane_alpha_override = "night_vision"
-	my_dark_plane_alpha_override_value = 255
-
-	//my_dark_plane_alpha_override_value = 30
-	//var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
-	//var/obj/abstract/screen/overdark_target/overdark_target
-
-// 515 teething
-/*
-/obj/item/clothing/glasses/scanner/night/New()
-	..()
-	overdark_planemaster = new
-	overdark_planemaster.render_target = "night vision goggles (\ref[src])"
-	overdark_target = new
-	overdark_target.render_source = "night vision goggles (\ref[src])"
-*/
-
 /obj/item/clothing/glasses/scanner/night/enable(var/mob/C)
 	see_in_dark = initial(see_in_dark)
 	eyeprot = initial(eyeprot)
-
-	seedarkness = TRUE
-	seedarkness = TRUE
-
-//	my_dark_plane_alpha_override = "night_vision"
-//	add_overdark(C)
-//	if (ishuman(C))
-//		var/mob/living/carbon/human/H = C
-//		if (H.glasses == src)
-//			C.update_perception()
-//	else if (ismonkey(C))
-//		var/mob/living/carbon/monkey/M = C
-//		if (M.glasses == src)
-//			C.update_perception()
-//	return ..()
+	my_dark_plane_alpha_override = "night_vision"
+	if (ishuman(C))
+		var/mob/living/carbon/human/H = C
+		if (H.glasses == src)
+			C.update_perception()
+	else if (ismonkey(C))
+		var/mob/living/carbon/monkey/M = C
+		if (M.glasses == src)
+			C.update_perception()
+	return ..()
 
 /obj/item/clothing/glasses/scanner/night/disable(var/mob/living/carbon/C)
 	. = ..()
@@ -151,7 +126,6 @@
 	seedarkness = TRUE
 	my_dark_plane_alpha_override = null
 	eyeprot = 0
-	remove_overdark(C)
 	if (ishuman(C))
 		var/mob/living/carbon/human/H = C
 		if (H.glasses == src)
@@ -171,8 +145,6 @@
 			M.master_plane.blend_mode = BLEND_ADD
 		if (M.client)
 			M.client.color = "#33FF33"
-			remove_overdark(M)
-			add_overdark(M)
 	else
 		my_dark_plane_alpha_override = null
 		if (M.master_plane)
@@ -197,7 +169,6 @@
 /obj/item/clothing/glasses/scanner/night/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
-			remove_overdark(user)
 			if (user.client)
 				user.client.color = null
 				user.update_perception()
@@ -276,14 +247,14 @@ var/list/meson_wearers = list()
 	if (viewing)
 		meson_wearers -= viewing
 		if (viewing.client)
-			viewing.client.images -= false_wall_images
+			viewing.client.images -= meson_images
 
 /obj/item/clothing/glasses/scanner/meson/proc/apply()
 	if (!viewing || !viewing.client || !on)
 		return
 
 	meson_wearers += viewing
-	viewing.client.images += false_wall_images
+	viewing.client.images += meson_images
 
 /obj/item/clothing/glasses/scanner/meson/unequipped(var/mob/living/carbon/M)
 	update_mob()
@@ -307,6 +278,38 @@ var/list/meson_wearers = list()
 			viewing = new_mob
 			apply()
 
+
+var/list/meson_images = list()
+
+/atom/movable
+	var/image/meson_image
+	var/is_on_mesons = FALSE
+
+/atom/movable/New()
+	..()
+	if(is_on_mesons)
+		update_meson_image()
+
+/atom/movable/Destroy()
+	if(meson_image)
+		for (var/mob/L in meson_wearers)
+			if (L.client)
+				L.client.images -= meson_image
+		meson_images -= meson_image
+	..()
+
+/atom/movable/proc/update_meson_image()
+	for (var/mob/L in meson_wearers)
+		if (L.client)
+			L.client.images -= meson_image
+	meson_images -= meson_image
+	if(is_on_mesons)
+		meson_image = image(icon,loc,icon_state,layer,dir)
+		meson_image.plane = relative_plane_to_plane(plane, loc.plane)
+		meson_images += meson_image
+		for (var/mob/L in meson_wearers)
+			if (L.client)
+				L.client.images |= meson_image
 
 /obj/item/clothing/glasses/scanner/material
 	name = "optical material scanner"
@@ -378,11 +381,11 @@ var/list/meson_wearers = list()
 	clear()
 
 	if (viewing)
-		viewing.unregister_event(/event/logout, src, .proc/mob_logout)
+		viewing.unregister_event(/event/logout, src, src::mob_logout())
 		viewing = null
 
 	if (new_mob)
-		new_mob.register_event(/event/logout, src, .proc/mob_logout)
+		new_mob.register_event(/event/logout, src, src::mob_logout())
 		viewing = new_mob
 
 /obj/item/clothing/glasses/scanner/material/proc/mob_logout(mob/living/carbon/user)
@@ -390,7 +393,7 @@ var/list/meson_wearers = list()
 		return
 
 	clear()
-	viewing.unregister_event(/event/logout, src, .proc/mob_logout)
+	viewing.unregister_event(/event/logout, src, src::mob_logout())
 	viewing = null
 
 /obj/item/clothing/glasses/scanner/material/proc/get_images(var/turf/T, var/view)

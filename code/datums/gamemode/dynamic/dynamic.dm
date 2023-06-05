@@ -47,7 +47,6 @@ var/stacking_limit = 90
 	var/list/dead_players = list()
 	var/list/list_observers = list()
 	var/last_time_of_population = 0
-	var/last_time_of_late_shuttle_call = 0
 
 	var/latejoin_injection_cooldown = 0
 	var/midround_injection_cooldown = 0
@@ -356,8 +355,8 @@ var/stacking_limit = 90
 	var/list/drafted_rules = list()
 
 	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
-		if (rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
-			i++																			//we check whether we've got eligible players
+		if (rule.acceptable())	//if we got the population and threat required
+			i++											//we check whether we've got eligible players
 			rule.candidates = candidates.Copy()
 			rule.trim_candidates()
 			if (rule.ready())
@@ -534,7 +533,7 @@ var/stacking_limit = 90
 	current_players[CURRENT_LIVING_ANTAGS] = living_antags.Copy()
 	current_players[CURRENT_DEAD_PLAYERS] = dead_players.Copy()
 	current_players[CURRENT_OBSERVERS] = list_observers.Copy()
-	if (new_rule && (forced || (new_rule.acceptable(living_players.len,threat_level) && new_rule.cost <= threat)))
+	if (new_rule && (forced || new_rule.acceptable()))
 		new_rule.candidates = current_players.Copy()
 		new_rule.trim_candidates()
 		if (new_rule.ready(forced))
@@ -594,7 +593,7 @@ var/stacking_limit = 90
 			current_players[CURRENT_DEAD_PLAYERS] = dead_players.Copy()
 			current_players[CURRENT_OBSERVERS] = list_observers.Copy()
 			for (var/datum/dynamic_ruleset/midround/rule in midround_rules)
-				if (rule.acceptable(living_players.len,midround_threat_level) && midround_threat >= rule.cost)
+				if (rule.acceptable())
 					// Classic secret : only autotraitor/minor roles
 					if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
 						message_admins("[rule] was refused because we're on classic secret mode.")
@@ -656,9 +655,6 @@ var/stacking_limit = 90
 		last_time_of_population = world.time
 	else if(last_time_of_population && world.time - last_time_of_population > 1 HOURS) //if enough time has passed without it
 		ticker.station_nolife_cinematic()
-	if(world.time > (7 HOURS + 40 MINUTES) && world.time - last_time_of_late_shuttle_call > 1 HOURS && emergency_shuttle.direction == 0) // 8 hour work shift, with time for shuttle to arrive and leave. If recalled, do every hour
-		shuttle_autocall("Shift due to end")
-		last_time_of_late_shuttle_call = world.time
 
 /datum/gamemode/dynamic/proc/GetInjectionChance()
 	var/chance = 0
@@ -719,7 +715,7 @@ var/stacking_limit = 90
 	else if (!latejoin_injection_cooldown && injection_attempt())
 		var/list/drafted_rules = list()
 		for (var/datum/dynamic_ruleset/latejoin/rule in latejoin_rules)
-			if (rule.acceptable(living_players.len,midround_threat_level) && midround_threat >= rule.cost)
+			if (rule.acceptable())
 				// Classic secret : only autotraitor/minor roles
 				if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
 					message_admins("[rule] was refused because we're on classic secret mode.")

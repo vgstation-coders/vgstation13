@@ -1,4 +1,7 @@
 /mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
+	if(status_flags & BUDDHAMODE)
+		adjustBruteLoss(200)
+		return
 	if(!isUnconscious())
 		forcesay("-")
 	if(species)
@@ -29,7 +32,6 @@
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
 	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
 	qdel(src)
-
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
 	death(1)
@@ -74,12 +76,10 @@
 			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
 
 	if(species)
-		qdel(species)
-		species = null
+		QDEL_NULL(species)
 
 	if(vessel)
-		qdel(vessel)
-		vessel = null
+		QDEL_NULL(vessel)
 
 	my_appearance = null
 
@@ -91,7 +91,7 @@
 	obj_overlays = null
 
 /mob/living/carbon/human/death(gibbed)
-	if(stat == DEAD)
+	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
 	if(healths)
 		healths.icon_state = "health7"

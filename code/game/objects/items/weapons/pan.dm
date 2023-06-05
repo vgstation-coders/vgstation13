@@ -9,12 +9,15 @@
 	force = 12
 	throwforce = 10
 	volume = 100
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*10)
+	w_type = RECYK_METAL
 	flags = FPRINT  | OPENCONTAINER
 	amount_per_transfer_from_this = 10
 	possible_transfer_amounts = list(10,20,50,100)
 	attack_mob_instead_of_feed = TRUE
 	attack_verb = list("smashes", "bludgeons", "batters", "pans")
 	hitsound = list('sound/weapons/pan_01.ogg', 'sound/weapons/pan_02.ogg', 'sound/weapons/pan_03.ogg', 'sound/weapons/pan_04.ogg')
+	throw_impact_sound = list('sound/weapons/pan_01.ogg', 'sound/weapons/pan_02.ogg', 'sound/weapons/pan_03.ogg', 'sound/weapons/pan_04.ogg')
 	miss_sound = list('sound/weapons/pan_miss_01.ogg', 'sound/weapons/pan_miss_02.ogg')
 	is_cookvessel = TRUE
 	slot_flags = SLOT_HEAD
@@ -29,8 +32,13 @@
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
 	var/global/list/acceptable_items = list( // List of the items you can put in
 							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
-							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
-							)
+							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard)
+	var/global/list/accepts_reagents_from = list(/obj/item/weapon/reagent_containers/glass, //Used to suppress message when transferring from these to the pan.
+												/obj/item/weapon/reagent_containers/food/drinks,
+												/obj/item/weapon/reagent_containers/food/condiment,
+												/obj/item/weapon/reagent_containers/syringe,
+												/obj/item/weapon/reagent_containers/dropper)
+
 
 /obj/item/weapon/reagent_containers/pan/New()
 	. = ..()
@@ -136,6 +144,10 @@
 			drop_ingredients(target, user)
 	else if(ismob(target))
 		drop_ingredients(target, user)
+	else if(isobj(target) && (loc != target))
+		var/obj/O = target
+		if(!O.is_cooktop)
+			transfer(target, user)
 
 /obj/item/weapon/reagent_containers/pan/attackby(var/obj/item/I, var/mob/user)
 
@@ -147,14 +159,14 @@
 	if(is_type_in_list(I,acceptable_items))
 		if(contents.len >= limit)
 			to_chat(usr, "<span class='notice'>[src] is completely full!</span>")
-		else if (istype(I,/obj/item/stack))
+		else if(istype(I,/obj/item/stack))
 			var/obj/item/stack/ST = I
-			if(ST.amount > 1)
+			if(ST.amount >= 1)
+				user.visible_message( \
+					"<span class='notice'>[user] adds \an [ST.singular_name] to [src].</span>", \
+					"<span class='notice'>You add \an [ST.singular_name] to [src].</span>")
 				new ST.type (src)
 				ST.use(1)
-				user.visible_message( \
-					"<span class='notice'>[user] adds one of [I] to [src].</span>", \
-					"<span class='notice'>You add one of [I] to [src].</span>")
 				updateUsrDialog()
 				cook_reboot(user) //Reset the cooking status.
 				update_icon()
@@ -179,11 +191,11 @@
 		cook_reboot(user) //Reset the cooking status.
 		update_icon()
 
-	else if(istype(I,/obj/item/weapon/grab))
+	else if(istype(I, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
 		to_chat(user, "<span class='notice'>The thought of stuffing [G.affecting] into [src] amuses you.</span>")
 
-	else
+	else if(!is_type_in_list(I, accepts_reagents_from))
 		to_chat(user, "<span class='notice'>You have no idea what you can cook with [I].</span>")
 
 /obj/item/weapon/reagent_containers/pan/attack_self(mob/user as mob)
@@ -195,7 +207,8 @@
 /obj/item/weapon/reagent_containers/pan/proc/take_something_out(mob/user as mob)
 	if(contents.len)
 		var/atom/movable/content = contents[contents.len]
-		if(user.put_in_hands(content))
+		user.put_in_hands(content)
+		if(content.loc != src) //If something was taken out successfully.
 			to_chat(user, "<span class='notice'>You take [content] out of [src].</span>")
 			cook_reboot(user)
 			update_icon()
@@ -204,13 +217,13 @@
 	if(contents.len)
 		return contents[contents.len]
 
-/obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target, mob/dropper = usr)
+/obj/item/weapon/reagent_containers/pan/proc/drop_ingredients(atom/target, mob/dropper)
 
 	var/contains = contains_anything()
 	if(!contains)
 		return FALSE //Return FALSE if there's nothing to drop.
 
-	if(!isturf(dropper.loc)) //No pouring the contents of a pan out while hiding inside of a locker. Let's just say its too cramped.
+	if(dropper ? !isturf(dropper.loc) : FALSE) //No pouring the contents of a pan out while hiding inside of a locker. Let's just say its too cramped.
 		return FALSE
 
 	var/splashverb
@@ -250,7 +263,7 @@
 		//otherwise, say that the wielder spills it onto the target
 		else
 			dropper.visible_message( \
-					"<span class='[spanclass]'>[dropper] [splashverb][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? get_reflexive_pronoun(dropper) : target]" : ""][spanclass == "warning" ? "!" : "."]</span>", \
+					"<span class='[spanclass]'>[dropper] [splashverb][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? get_reflexive_pronoun(dropper.gender) : target]" : ""][spanclass == "warning" ? "!" : "."]</span>", \
 					"<span class='[spanclass]'>You [shift_verb_tense(splashverb)][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? "yourself" : target]" : ""].</span>")
 	else
 		visible_message("<span class='warning'>Everything [splashverb] out of [src] [target ? "onto [target]" : ""]!</span>")
@@ -301,6 +314,11 @@
 	if(isturf(usr.loc))
 		usr.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
 		drop_ingredients(usr.loc, usr)
+
+/obj/item/weapon/reagent_containers/pan/throw_impact(hit_atom, speed, user)
+	if(ismob(hit_atom))
+		drop_ingredients(target = hit_atom, dropper = null)
+	return ..()
 
 /////////////////////Cooking-related stuff/////////////////////
 
@@ -360,20 +378,35 @@
 	if(!(O?.can_cook())) //if eg. the power went out on the grill, don't cook
 		return
 
+	var/contains_anything = contains_anything()
+
+	//If there are any reagents in the pan, heat them.
+	if(contains_anything & COOKVESSEL_CONTAINS_REAGENTS)
+		reagents.heating(O.cook_energy(), O.cook_temperature())
+	//Otherwise if there are non-reagent contents, heat the reagents in those contents if possible.
+	else
+		var/cook_energy = O.cook_energy()
+		var/cook_temperature = O.cook_temperature()
+		for(var/atom/content in contents)
+			content.reagents.heating(cook_energy / contents.len, cook_temperature)
+
 	cookingprogress += (SS_WAIT_FAST_OBJECTS * speed_multiplier)
 
 	if(cookingprogress >= (currentrecipe ? currentrecipe.time : 10 SECONDS) && !burned) //it's done when it's cooked for the cooking time, or a default of 10 seconds if there's no valid recipe. also if it's already been burned, don't keep looping burned mess -> burned mess.
-
-		var/contains_anything = contains_anything()
 
 		reset_cooking_progress() //reset the cooking progress
 
 		var/obj/cooked
 		if(currentrecipe)
 			cooked = currentrecipe.make_food(src, chef)
+			//If we cooked successfully, don't make the reagents in the food too hot.
+			if(!arcanetampered)
+				if(cooked.reagents.total_volume)
+					if(cooked.reagents.chem_temp > COOKTEMP_HUMANSAFE)
+						cooked.reagents.chem_temp = COOKTEMP_HUMANSAFE
 			visible_message("<span class='notice'>[cooked] looks done.</span>")
 			playsound(src, 'sound/effects/frying.ogg', 50, 1)
-		else if(contains_anything & COOKVESSEL_CONTAINS_CONTENTS) //Don't make a burned mess out of just reagents, even though recipes can call for only reagents (spaghetti). Just keep heating the reagents.
+		else if(contains_anything & COOKVESSEL_CONTAINS_CONTENTS) //Don't make a burned mess out of just reagents, even though recipes can call for only reagents (spaghetti). This allows using the pan to heat reagents.
 			cooked = cook_fail()
 
 		if(cooked)
@@ -384,10 +417,6 @@
 		if(contains_anything)
 			//re-check the recipe. generally this will return null because we'll continue cooking the previous result, which will lead to a burned mess
 			currentrecipe = select_recipe(available_recipes, src)
-
-	//If there are any reagents in the pan, heat them.
-	if(reagents.total_volume)
-		reagents.heating(500, O ? O.cook_temperature() : COOKTEMP_DEFAULT) //Thermal transfer is half that of fire_act. Could be generalized based on the conditions of the cooktop. For example, like how bunsen burners work.
 
 	//Hotspot expose
 	var/turf/T = get_turf(src)
@@ -437,24 +466,23 @@
 /////////////////////Areas for to consider for further expansion/////////////////////
 
 	//Plating directly to trays and robot trays.
-	//Grill sprite dynamically responding to power
-	//Setting chef var on_reagents_change as well
-	//Edge cases like recooking the same warm donk pocket over and over
+	//Grill sprite dynamically responding to power.
+	//Setting chef var on_reagents_change as well.
+	//Edge cases like recooking the same warm donk pocket over and over.
 	//Getting pans by crafting, cargo crates, and vending machines.
 	//Food being ready making a steam sprite that turns to smoke and fire if left on too long.
 	//Sizzling sound with hot reagents in the pan.
-	//Scooping hot oil out of the deepfryer
-	//Scalding people with hot reagents (the reagents are alread heated on the pan I'm just not sure if there's a way to scald someone with hot reagents)
+	//Scalding people with hot reagents (the reagents are already heated on the pan I'm just not sure if there's a way to scald someone with hot reagents).
 	//Body-part specific splash text and also when you dump it onto yourself upon equipping to the head.
-	//Pouring reagents from the pan into other reagent containers (need to consider what to do if it also contains items)
-	//Hot pans with glowing red sprite and extra damage
+	//Hot pans with glowing red sprite and extra damage.
 	//Stuff dumping out of the pan when attacking a breakable object, window, camera, etc.
 	//Generalize thermal transfer parameter.
-	//Componentize cooking vessels
-	//Spilling (including onto people) when thrown impacting..
+	//Componentize cooking vessels.
+	//Spilling (including onto people) when thrown impacting.
 	//Different cook timings based on heat, or cooking with heat transfer (defined at the recipe level?) rather than a timer.
-	//Frying stuff in oil (could use recipes for this)
+	//Frying stuff in oil (could use recipes for this).
 	//Address cases with large ingredient sprites (see the note in update_icon()).
 	//Consider generating and storing the pan front blood overlay in the same manner as general blood overlays.
 	//Cooking automatically with high ambient heat.
-	//Change order of messages with eg. splashing acid on onesself when equipping the pan to the heat.
+	//Change order of messages with eg. splashing acid on onesself when equipping the pan to the head.
+	//Splashing walls or objs with wielded or thrown frying pans.

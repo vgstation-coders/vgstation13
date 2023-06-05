@@ -31,8 +31,7 @@
 
 /obj/item/weapon/melee/baton/Destroy()
 	if (bcell)
-		qdel(bcell)
-		bcell = null
+		QDEL_NULL(bcell)
 
 	return ..()
 

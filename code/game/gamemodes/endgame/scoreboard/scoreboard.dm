@@ -10,6 +10,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/oremined			= 0 //How many chunks of ore were smelted
 	var/eventsendured		= 0 //How many random events did the station endure?
 	var/powerloss			= 0 //How many APCs have alarms (under 30 %)?
+	var/atmoloss			= 0 //How many air alarms are giving issues?
 	var/maxpower			= 0 //Most watts in grid on any of the world's powergrids.
 	var/escapees			= 0 //How many people got out alive?
 	var/deadcrew			= 0 //Humans who died during the round
@@ -30,6 +31,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 
 	//These ones are mainly for the stat panel
 	var/powerbonus			= 0 //If all APCs on the station are running optimally, big bonus
+	var/atmobonus			= 0 //If all air alarms on the station are running optimally, big bonus
 	var/messbonus			= 0 //If there are no messes on the station anywhere, huge bonus
 	var/deadaipenalty		= 0 //AIs who died during the round
 	var/foodeaten			= 0 //How much food was consumed
@@ -137,6 +139,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	if(score.oremined > 0)
 		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
+	dat += "<B>Whole Station Airtight:</B> [score.atmobonus ? "Yes" : "No"] ([score.atmobonus] Points)<BR>"
 	if (score.disease_vaccine_score > 0)
 		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
 	if (score.disease_extracted > 0)
@@ -161,6 +164,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Cargo Crates Not Forwarded:</B> [score.stuffnotforwarded] (-[score.stuffnotforwarded * 25] Points)<BR>"
 	if (score.powerloss > 0)
 		dat += "<B>Station Power Issues:</B> [score.powerloss] (-[score.powerloss * 50] Points)<BR>"
+	if (score.atmoloss > 0)
+		dat += "<B>Station Atmospheric Issues:</B> [score.atmoloss] (-[score.atmoloss * 50] Points)<BR>"
 	if(score.turfssingulod > 0)
 		dat += "<B>Tiles destroyed by a singularity:</B> [score.turfssingulod] (-[round(score.turfssingulod/2)] Points)<BR>"
 	if(score.disease_bad > 0)

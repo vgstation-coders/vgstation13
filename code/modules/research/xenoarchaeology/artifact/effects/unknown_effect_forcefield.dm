@@ -11,8 +11,7 @@
 	spawn(0)
 		if(trigger && !istype(trigger,/datum/artifact_trigger/touch/))
 			var/trigger_override = /datum/artifact_trigger/touch
-			qdel(trigger)
-			trigger = null
+			QDEL_NULL(trigger)
 			trigger = new trigger_override(src)
 
 /datum/artifact_effect/forcefield/ToggleActivate()

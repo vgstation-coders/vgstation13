@@ -11,7 +11,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	icon = 'icons/effects/effects.dmi'
 	mouse_opacity = 0
 	flags = 0
-	w_type=NOT_RECYCLABLE
+	w_type = NOT_RECYCLABLE
 	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE
 
 /obj/effect/dissolvable()
@@ -267,8 +267,7 @@ steam.start() -- spawns the effect
 /obj/effect/smoke/Destroy()
 	if(reagents)
 		reagents.my_atom = null
-		qdel(reagents)
-		reagents = null
+		QDEL_NULL(reagents)
 	..()
 
 /////////////////////////////////////////////
@@ -550,8 +549,7 @@ steam.start() -- spawns the effect
 				step(smoke,direction)
 			spawn(150+rand(10,30))
 				if(smoke)
-					qdel(smoke)
-					smoke = null
+					QDEL_NULL(smoke)
 				src.total_smoke--
 
 // Goon compat.
@@ -1068,12 +1066,18 @@ steam.start() -- spawns the effect
 
 /datum/effect/system/reagents_explosion
 	var/amount 						// TNT equivalent
+	var/dev_override = 0
+	var/heavy_override = 0
+	var/light_override = 0		// overrides for each value
 	var/flashing = 0			// does explosion creates flash effect?
 	var/flashing_factor = 0		// factor of how powerful the flash effect relatively to the explosion
 	var/mob/user //for investigation
 
-/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit)
+/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit, dev_over = null, heavy_over = null, light_over = null)
 	amount = amt
+	dev_override = dev_over
+	heavy_override = heavy_over
+	light_override = light_over
 	if(istype(loc, /turf/))
 		location = loc
 	else
@@ -1106,9 +1110,9 @@ steam.start() -- spawns the effect
 		var/range = 0
 		// Clamp all values to MAX_EXPLOSION_RANGE
 		range = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
-		devastation = round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
-		heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
-		light = min(7, range) // clamps to 7 light range for grenades
+		devastation = !isnull(dev_override) ? dev_override : round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
+		heavy = !isnull(heavy_override) ? heavy_override : round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
+		light = !isnull(light_override) ? light_override : min(7, range) // clamps to 7 light range for grenades
 		flash = range * 1.5
 		for(var/mob/M in viewers(8, location))
 			to_chat(M, "<span class='warning'>The solution violently explodes.</span>")

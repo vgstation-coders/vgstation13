@@ -24,6 +24,8 @@
 	w_type = RECYK_MISC
 	var/up = 1
 	eyeprot = 0
+	var/visionworsen = 5
+	nearsighted_modifier = 0
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	body_parts_covered = HEAD
 	actions_types = list(/datum/action/item_action/toggle_helmet)
@@ -43,6 +45,7 @@
 			src.up = !src.up
 			src.body_parts_covered = FACE
 			eyeprot = 3
+			nearsighted_modifier = visionworsen
 			icon_state = "welding"
 			to_chat(usr, "You flip the [src] down to protect your eyes.")
 		else
@@ -50,6 +53,7 @@
 			src.body_parts_covered = HEAD
 			icon_state = "weldingup"
 			eyeprot = 0
+			nearsighted_modifier = 0
 			to_chat(usr, "You push the [src] up out of your face.")
 		usr.update_inv_head()	//so our mob-overlays update
 		usr.update_inv_wear_mask()
@@ -120,7 +124,7 @@
 	flags = HIDEHEADHAIR
 	body_parts_covered = EARS|HEAD
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/ushanka/attack_self(mob/user as mob)
 	var/initial_icon_state = initial(icon_state)
@@ -140,7 +144,7 @@
 	desc = "Davai, tovarish. Let us catch the capitalist greyshirt, and show him why it is that we proudly wear red!"
 	icon_state = "ushankared"
 	item_state = "ushankared"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	armor = list(melee = 30, bullet = 15, laser = 25, energy = 10, bomb = 20, bio = 0, rad = 0)
 
 /obj/item/clothing/head/ushanka/hos
@@ -149,6 +153,7 @@
 	icon_state = "ushankablack"
 	item_state = "ushankablack"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
+	species_fit = list(VOX_SHAPED)
 
 /*
  * Pumpkin head

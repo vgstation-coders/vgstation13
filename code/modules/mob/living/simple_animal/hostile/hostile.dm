@@ -35,15 +35,18 @@
 	var/list/target_rules = list()
 
 	var/can_ventcrawl = FALSE // If the mob can ventcrawl
+	var/mob/living/simple_animal/hostile/asteroid/hivelord/hivelord = null
 
 /mob/living/simple_animal/hostile/New()
 	..()
 	initialize_rules()
 
 /mob/living/simple_animal/hostile/Destroy()
-	for(var/datum/fuzzy_ruling/D in target_rules)
-		qdel(D)
-	target_rules = null
+	QDEL_LIST_NULL(target_rules)
+	if(hivelord)
+		if(src in hivelord.broods)
+			hivelord.broods.Remove(src)
+		hivelord = null
 	..()
 
 /mob/living/simple_animal/hostile/proc/initialize_rules()
@@ -269,6 +272,7 @@
 				AttackingTarget()
 			if(canmove && space_check())
 				if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
+					before_retreat()
 					walk_away(src,target,retreat_distance,move_to_delay)
 				else
 					Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
@@ -350,6 +354,10 @@
 /mob/living/simple_animal/hostile/death(var/gibbed = FALSE)
 	LoseAggro()
 	walk(src, 0)
+	if(hivelord)
+		if(src in hivelord.broods)
+			hivelord.broods.Remove(src)
+		hivelord = null
 	..(gibbed)
 
 /mob/living/simple_animal/hostile/inherit_mind(mob/living/simple_animal/from)
@@ -503,6 +511,9 @@
 		return 1
 	else
 		return 0
+
+//What to do immediately after deciding to retreat but before the walk action starts
+/mob/living/simple_animal/hostile/proc/before_retreat()
 
 //Let players use mobs' ranged attacks
 /mob/living/simple_animal/hostile/Stat()
