@@ -23,6 +23,8 @@ var/init_lights = list()
 	..("L:[lighting_update_lights.len] queued")
 
 /datum/subsystem/lighting/Initialize(timeofday)
+	// Lighting stuff
+	//initialise_lights()
 	for(var/atom/movable/light/L in init_lights)
 		if(!L.gcDestroyed)
 			L.cast_light()
@@ -48,3 +50,9 @@ var/init_lights = list()
 /datum/subsystem/lighting/Recover()
 	initialized = SSlighting.initialized
 	..()
+
+/proc/initialise_lights()
+	to_chat(world, "<span class='userdanger'>Lights initialised...</span>")
+	world.log << "Lights initialised..."
+	if (!lighting_engine)
+		lighting_engine = new lighting_system_used

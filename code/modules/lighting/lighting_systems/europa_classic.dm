@@ -1,7 +1,8 @@
+// Still WIP for now...
+
 /datum/lighting_system/europa_classic
 	name = "Europa Classic"
 	desc = "A dynamic lighting system featuring soft shadows, special effects and bright colours. It aims to be reasonably bright and exude an atmosphere of a well-maintained station."
-
 	enabled = 1
 
 /datum/lighting_system/europa_classic/choose_light_range_icon(var/two_bordering_walls, var/light_range, var/num)

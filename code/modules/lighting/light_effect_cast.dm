@@ -686,12 +686,78 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		return check_wall_occlusion(get_step(src, EAST)) && check_wall_occlusion(get_step(src, WEST))
 
 /proc/try_get_light_range_icon(two_bordering_walls, light_range, num)
-	if (lighting_engine)
-		lighting_engine.choose_light_range_icon(two_bordering_walls, light_range, num)
+	/*
+	//if (lighting_engine)
+	//	lighting_engine.choose_light_range_icon(two_bordering_walls, light_range, num)
+	//else
+	//	world.log << "Auto-init of the lighting engine datum..."
+	//	lighting_engine = new lighting_system_used
+	//	lighting_engine.choose_light_range_icon(two_bordering_walls, light_range, num)
+	*/
+	var/shadowicon
+	if (!two_bordering_walls && (num == FRONT_SHADOW))
+		switch(light_range)
+			if(2)
+				shadowicon = 'icons/lighting/light_range_2_shadows2_soft.dmi'
+			if(3)
+				shadowicon = 'icons/lighting/light_range_3_shadows2_soft.dmi'
+			if(4)
+				shadowicon = 'icons/lighting/light_range_4_shadows2_soft.dmi'
+			if(5)
+				shadowicon = 'icons/lighting/light_range_5_shadows2_soft.dmi'
+			if(6)
+				shadowicon = 'icons/lighting/light_range_6_shadows2_soft.dmi'
+			if(7)
+				shadowicon = 'icons/lighting/light_range_7_shadows2_soft.dmi'
+			if(8)
+				shadowicon = 'icons/lighting/light_range_8_shadows2_soft.dmi'
+			if(9)
+				shadowicon = 'icons/lighting/light_range_9_shadows2_soft.dmi'
+
 	else
-		world.log << "Auto-init of the lighting engine datum..."
-		lighting_engine = new lighting_system_used
-		lighting_engine.choose_light_range_icon(two_bordering_walls, light_range, num)
+		switch(light_range)
+			if(2)
+				if(num == CORNER_SHADOW)
+					shadowicon = 'icons/lighting/light_range_2_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_2_shadows2.dmi'
+			if(3)
+				if(num == CORNER_SHADOW)
+					shadowicon = 'icons/lighting/light_range_3_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_3_shadows2.dmi'
+			if(4)
+				if(num == CORNER_SHADOW)
+					shadowicon = 'icons/lighting/light_range_4_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_4_shadows2.dmi'
+			if(5)
+				if(num == CORNER_SHADOW)
+					shadowicon = 'icons/lighting/light_range_5_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_5_shadows2.dmi'
+			if(6)
+				if(num == CORNER_SHADOW)
+					shadowicon = 'icons/lighting/light_range_6_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_6_shadows2.dmi'
+			if(7)
+				if(num == CORNER_SHADOW)
+					shadowicon = 'icons/lighting/light_range_7_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_7_shadows2.dmi'
+			if(8)
+				if(num == CORNER_SHADOW)
+					shadowicon = 'icons/lighting/light_range_8_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_8_shadows2.dmi'
+			if(9)
+				if(num == CORNER_SHADOW)
+					shadowicon = 'icons/lighting/light_range_9_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_9_shadows2.dmi'
+	return shadowicon
+
 
 #undef MAX_LIGHT_RANGE
 #undef BASE_PIXEL_OFFSET
