@@ -273,7 +273,7 @@ var/list/all_doors = list()
 	for (var/obj/O in src.loc)
 		if (O.blocks_doors())
 			return 0
-	if(arcane_linked_door && arcane_linked_door.density)
+	if(arcanetampered && arcane_linked_door && arcane_linked_door.density)
 		spawn(1)
 			arcane_linked_door.open()
 	if(!operating)
@@ -282,7 +282,7 @@ var/list/all_doors = list()
 	if(makes_noise)
 		playsound(src, soundeffect, soundpitch, 1)
 
-	if(!arcane_linked_door)
+	if(!arcanetampered || !arcane_linked_door)
 		set_opacity(0)
 	door_animate("opening")
 	if (animation_delay_predensity_opening)
@@ -319,7 +319,7 @@ var/list/all_doors = list()
 		if (O.blocks_doors())
 			return 0
 
-	if(arcane_linked_door && !arcane_linked_door.density)
+	if(arcanetampered && arcane_linked_door && !arcane_linked_door.density)
 		spawn(1)
 			arcane_linked_door.close()
 
@@ -426,7 +426,7 @@ var/list/all_doors = list()
 /obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
 	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird)) //Which is not 100% correct for things like windoors but it's close enough.
 		open()
-	if(arcane_linked_door && !density && istype(AM,/atom/movable))
+	if(arcanetampered && arcane_linked_door && !density && istype(AM,/atom/movable))
 		var/atom/movable/A = AM
 		var/turf/T = get_turf(arcane_linked_door)
 		if(T && T.Cross())
