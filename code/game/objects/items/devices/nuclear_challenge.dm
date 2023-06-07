@@ -1,6 +1,3 @@
-#define CHALLENGE_TC_PER_OP 60
-
-
 /obj/item/device/nuclear_challenge
 	name = "Syndicate Communications Device"
 	icon = 'icons/obj/radio.dmi'
@@ -39,7 +36,7 @@
 		to_chat(user, "You've attracted the attention of powerful forces within the syndicate. \
 			A bonus bundle of telecrystals has been granted to your team. Great things await you if you complete the mission.")
 		var/datum/faction/syndicate/nuke_op = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
-		var/obj/item/stack/telecrystal/R = new(get_turf(usr), CHALLENGE_TC_PER_OP * nuke_op.members.len)
+		var/obj/item/stack/telecrystal/R = new(get_turf(usr), 200)
 		usr.put_in_hands(R)
 
 	qdel(src)
@@ -54,5 +51,3 @@
 		to_chat(user, "Your Comrades have already gone to the station! You cannot request reinforcements now.")
 		return FALSE
 	return TRUE
-
-#undef CHALLENGE_TC_PER_OP
