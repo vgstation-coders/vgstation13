@@ -175,6 +175,9 @@
 		else //Otherwise bad luck!!
 			to_chat(user, "<span class='warning'>It's too dirty!</span>")
 			return 1
+	else if(src.operating)
+		to_chat(user, "<span class='warning'>The microwave is currently on, you'll have to try again later.</span>")
+		return 1
 
 	if(..())
 		return 1
