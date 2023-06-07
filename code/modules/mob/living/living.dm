@@ -146,6 +146,12 @@
 	// Actually apply damage
 	apply_damage(damage, B.damage_type, B.def_zone)
 
+	// Emitter attack logging. Only when source of emitter beam is /mob/living and there's a ckey in either
+	if (B.sources.len >= 1 && (isliving(B.sources[1])))
+		var/mob/living/assailant = B.sources[1]
+		if (assailant.ckey || src.ckey)
+			log_attack("<font color='red'>[assailant.name][assailant.ckey ? "([assailant.ckey])" : "(no key)"] attacked [src.name][src.ckey ? "([src.ckey])" : "(no key)"] with [B.name]</font>")
+
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
 
