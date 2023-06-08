@@ -48,11 +48,11 @@
 		)
 
 
-/spell/targeted/bound_object/is_valid_target(var/obj/target)
+/spell/targeted/bound_object/is_valid_target(obj/target, mob/user, options, bypass_range = 0)
 	if(!istype(target))
 		return 0
 	var/datum/zLevel/L = get_z_level(target)
-	if(L.teleJammed && get_dist(target,holder) >= range)
+	if(L.teleJammed && get_dist(target,holder) >= range && !bypass_range)
 		return 0
 	if(target.anchored && !allow_anchored)
 		return 0

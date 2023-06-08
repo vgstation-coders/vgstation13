@@ -244,7 +244,7 @@
 		H.UpdateDamageIcon()
 		H.updatehealth()
 
-/spell/targeted/eat/is_valid_target(var/target)
+/spell/targeted/eat/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(!(spell_flags & INCLUDEUSER) && target == usr)
 		return 0
 	if(get_dist(usr, target) > range)

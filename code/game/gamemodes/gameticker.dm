@@ -210,6 +210,8 @@ var/datum/controller/gameticker/ticker
 					data_core.manifest_inject(H)
 		CHECK_TICK
 
+	var/list/clowns = list()
+	var/already_an_ai = FALSE
 	//Transfer characters to players
 	for(var/i = 1, i <= new_characters.len, i++)
 		var/mob/M = new_characters[new_characters[i]]
@@ -220,6 +222,10 @@ var/datum/controller/gameticker/ticker
 			job_master.PostJobSetup(H)
 		//minds are linked to accounts... And accounts are linked to jobs.
 		var/rank = M.mind.assigned_role
+		if(rank == "Clown")
+			clowns += M
+		if(rank == "AI" || isAI(M))
+			already_an_ai = TRUE
 		var/datum/job/job = job_master.GetJob(rank)
 		if(job)
 			job.equip(M, job.priority) // Outfit datum.
@@ -229,6 +235,11 @@ var/datum/controller/gameticker/ticker
 	//delete the new_player mob for those who readied
 	for(var/mob/np in new_players_ready)
 		qdel(np)
+
+	if(!already_an_ai && clowns.len >= 2 && prob(1))
+		var/mob/living/carbon/human/H = pick(clowns)
+		if(istype(H))
+			H.make_fake_ai()
 
 	if(ape_mode == APE_MODE_EVERYONE)	//this likely doesn't work properly, why does it only apply to humans?
 		for(var/mob/living/carbon/human/player in player_list)
@@ -266,6 +277,74 @@ var/datum/controller/gameticker/ticker
 	wageSetup()
 	post_roundstart()
 	return 1
+
+/mob/living/carbon/human/proc/make_fake_ai()
+	var/obj/effect/landmark/start/S = null
+	for(var/obj/effect/landmark/start/S2 in landmarks_list)
+		if(S2.name == "AI")
+			S = S2
+			break
+	if(!S)
+		message_admins("[formatJumpTo(key_name(src))] tried to become a fake AI but there was no AI spawn point to do it with!")
+		return
+	var/turf/T = get_turf(S)
+	ASSERT(T)
+	forceMove(T)
+	mind.assigned_role = "AI"
+	var/obj/structure/curtain/open/clownai/cc = new(T)
+	cc.name = src.name
+	qdel(head)
+	head = null
+	var/obj/item/clothing/head/cardborg/cb = new(T)
+	if(iswizard(src))
+		cb.wizard_garb = TRUE
+	equip_to_slot_or_drop(cb, slot_head)
+	var/obj/item/weapon/card/id/ID = null
+	var/obj/item/I = get_item_by_slot(slot_wear_id)
+	if(istype(I,/obj/item/weapon/card/id))
+		ID = I
+	else if(istype(I,/obj/item/device/pda))
+		var/obj/item/device/pda/P = I
+		ID = P.id
+	if(!ID)
+		ID = new(T)
+		ID.registered_name = src.real_name
+		equip_to_slot_or_drop(ID, slot_wear_id)
+	ID.assignment = "AI"
+	ID.UpdateName()
+	var/obj/item/device/radio/headset/H = get_item_by_slot(slot_ears)
+	if(!H)
+		H = new(T)
+		equip_to_slot_or_drop(H, slot_ears)
+	if(!iswizard(src)) // make it less unfair i guess
+		var/obj/item/device/encryptionkey/ai/EK
+		if(!H.keyslot1)
+			H.keyslot1 = new /obj/item/device/encryptionkey/ai(H)
+			EK = H.keyslot1
+		else
+			if(H.keyslot2)
+				EK = new /obj/item/device/encryptionkey/ai(T)
+			else
+				H.keyslot2 = new /obj/item/device/encryptionkey/ai(H)
+				EK = H.keyslot2
+		EK.translate_binary = TRUE // helps too
+		H.recalculateChannels()
+	var/turf_found = FALSE
+	for(var/dir in cardinal)
+		var/turf/T2 = get_step(src,dir)
+		if(T2.Cross(src)) // something that this user can pass through gets the security console
+			turf_found = TRUE
+			var/obj/structure/curtain/open/clownai/floor/F = new(T2)
+			F.closed_state = T2.icon_state // floor look consistency
+			var/obj/machinery/computer/security/SC = new(T2)
+			SC.density = 0 // makes exposing them a bit easier
+			break
+	if(!turf_found)
+		message_admins("[formatJumpTo(key_name(src))] tried to spawn a security cameras console nearby while becoming a fake AI but there was no room for one!")
+	to_chat(src,"<b>You [!iswizard(src) ? "have been assigned to be" : "are now"] the station's \"AI\"!</b>")
+	to_chat(src,"<b>You can open doors through the security cameras console in front of you by clicking on them. The curtains near you will also disguise you as the AI core itself. Alt-click the one on you to change the core appearance.</b>")
+	if(!iswizard(src))
+		to_chat(src,"<b>Since you are imitating a station AI, you are now more important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
 /datum/controller/gameticker
 	//station_explosion used to be a variable for every mob's hud. Which was a waste!

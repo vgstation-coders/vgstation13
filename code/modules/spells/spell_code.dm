@@ -154,7 +154,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/choose_targets(mob/user = usr) //depends on subtype - see targeted.dm, aoe_turf.dm, dumbfire.dm, or code in general folder
 	return
 
-/spell/proc/is_valid_target(var/target, mob/user, options)
+/spell/proc/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
+	if(bypass_range && istype(target, /mob/living))
+		return TRUE
 	if(options)
 		return (target in options)
 	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
@@ -251,15 +253,15 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(holder)
 		user_dir = holder.dir
 
-/spell/proc/channeled_spell(atom/atom)
+/spell/proc/channeled_spell(atom/atom, bypassrange = 0)
 	var/list/target = list(atom)
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
 	if(spell_flags & NO_TURNING)
 		holder.dir = user_dir
 		holder.update_dir()
-	if(cast_check(1, holder) && is_valid_target(atom, user))
-		target = before_cast(target, user) //applies any overlays and effects
+	if(cast_check(1, holder) && is_valid_target(atom, user, bypass_range = bypassrange))
+		target = before_cast(target, user, bypassrange) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
 			return
 		invocation(user, target)
@@ -323,12 +325,12 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /////CASTING WRAPPERS//////
 ///////////////////////////
 
-/spell/proc/before_cast(list/targets, user)
+/spell/proc/before_cast(list/targets, user, bypass_range = 0)
 	var/list/valid_targets = list()
 	var/list/options = view_or_range(range,user,selection_type)
 	for(var/atom/target in targets)
 		// Check range again (fixes long-range EI NATH)
-		if(!is_valid_target(target, user, options))
+		if(!is_valid_target(target, user, options, bypass_range))
 			continue
 		valid_targets += target
 

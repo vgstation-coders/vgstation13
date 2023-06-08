@@ -233,12 +233,7 @@ var/list/ai_list = list()
 			else
 				to_chat(usr, "You must write a name.")
 
-/mob/living/silicon/ai/verb/pick_icon()
-	set category = "AI Commands"
-	set name = "Set AI Core Display"
-	if(stat || aiRestorePowerRoutine)
-		return
-	var/static/list/possible_icon_states = list(
+var/static/list/ai_icon_states = list(
 		"Alien" = "ai-alien",
 		"Angel" = "ai-angel",
 		"Angry" = "ai-angryface",
@@ -298,10 +293,16 @@ var/list/ai_list = list()
 		"Xerxes" = "ai-xerxes",
 		"Yes Man" = "yes-man",
 	)
-	var/selected = input("Select an icon!", "AI", null, null) as null|anything in possible_icon_states
+
+/mob/living/silicon/ai/verb/pick_icon()
+	set category = "AI Commands"
+	set name = "Set AI Core Display"
+	if(stat || aiRestorePowerRoutine)
+		return
+	var/selected = input("Select an icon!", "AI", null, null) as null|anything in ai_icon_states
 	if(!selected)
 		return
-	var/chosen_state = possible_icon_states[selected]
+	var/chosen_state = ai_icon_states[selected]
 	ASSERT(chosen_state)
 	chosen_core_icon_state = chosen_state
 	update_icon()

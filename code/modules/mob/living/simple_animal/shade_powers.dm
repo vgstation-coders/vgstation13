@@ -180,7 +180,7 @@
 
 	return my_targets
 
-/spell/soulblade/blade_spin/before_cast(var/list/targets, var/user)
+/spell/soulblade/blade_spin/before_cast(list/targets, user, bypass_range = 0)
 	return targets
 
 /spell/soulblade/blade_spin/cast(var/list/targets, var/mob/user)
@@ -233,7 +233,7 @@
 		return null
 	return list(get_step(get_turf(SB),SB.dir))
 
-/spell/soulblade/blade_perforate/before_cast(var/list/targets, var/user)
+/spell/soulblade/blade_perforate/before_cast(list/targets, user, bypass_range = 0)
 	return targets
 
 /spell/soulblade/blade_perforate/cast(var/list/targets, var/mob/user)
@@ -309,7 +309,7 @@
 		to_chat(user,"<span class='notice'>Your wielder's wounds are already all closed up.</span>")
 		return null
 
-/spell/soulblade/blade_mend/before_cast(var/list/targets, var/user)
+/spell/soulblade/blade_mend/before_cast(list/targets, user, bypass_range = 0)
 	return targets
 
 /spell/soulblade/blade_mend/cast(var/list/targets, var/mob/user)
@@ -361,7 +361,7 @@
 		return null
 	return list(M)
 
-/spell/soulblade/blade_boil/before_cast(var/list/targets, var/user)
+/spell/soulblade/blade_boil/before_cast(list/targets, user, bypass_range = 0)
 	return targets
 
 /spell/soulblade/blade_boil/cast(var/list/targets, var/mob/user)

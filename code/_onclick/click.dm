@@ -165,6 +165,17 @@
 			else
 				//Clicked on a non-adjacent atom that is not in view
 				RemoteClickOn(A, params, held_item, client.eye)
+		else if(mind && mind.assigned_role == "AI") // clown AI stuff
+			if(spell_channeling)
+				spell_channeling.channeled_spell(A, bypassrange = TRUE)
+			else if(istype(A,/obj/machinery/door/airlock))
+				var/obj/machinery/door/airlock/D = A
+				if(D.density)
+					D.Topic("aiEnable=7", list("aiEnable"="7"), 1)
+				else
+					D.Topic("aiDisable=7", list("aiDisable"="7"), 1)
+			else
+				RangedClickOn(A, params, held_item)
 		else
 			RangedClickOn(A, params, held_item)
 

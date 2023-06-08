@@ -22,7 +22,7 @@
 /spell/targeted/civilwarconvert/cast_check(skipcharge = 0,mob/user = usr)
 	return ..() && find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, null, user.mind)
 
-/spell/targeted/civilwarconvert/is_valid_target(var/target, var/mob/user, var/list/options)
+/spell/targeted/civilwarconvert/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(..())
 		var/mob/living/carbon/human/H = target
 		if(!istype(H))
