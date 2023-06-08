@@ -360,7 +360,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/sweets/New()
 	..()
-	switch(3)
+	switch(rand(3))
 		if(0)
 			name = "NanoFresh"
 			desc = "An explosion of freshness in each candy!"
@@ -381,7 +381,6 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 			desc = "Graphic Design is my passion!"
 			icon_state = "mintboxgraphicdesign"
 			items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade = 50)
-
 
 /obj/item/weapon/storage/pill_bottle/lollipops
 	name = "bag of lollipops"
