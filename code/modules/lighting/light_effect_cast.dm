@@ -344,6 +344,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	//and add it to the lights overlays
 	temp_appearance_shadows += I
 
+
 /atom/movable/light/shadow/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	return
 
@@ -458,6 +459,10 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	I.layer = HIGHEST_LIGHTING_LAYER
+
+	// This is to avoid multiple masking of wall turfs from multiple light sources
+	target_turf.lit = 1
+
 	temp_appearance += I
 
 /atom/movable/light/proc/update_appearance()
@@ -508,8 +513,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		temp_appearance += black_turf
 
 
-// Smooth out shadows and then blacken out the wall glow
-/atom/movable/light/shadow/post_processing()
+/atom/movable/light/shadow/proc/consolidate_shadows()
 	// Fetch the image processed so far
 	var/image/shadow_overlay/image_result = new()
 	var/last_pixel_x_im = -50000
@@ -527,10 +531,16 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		last_pixel_x_im = image_component.pixel_x
 		last_pixel_y_im = image_component.pixel_y
 
+// Smooth out shadows and then blacken out the wall glow
+/atom/movable/light/shadow/post_processing()
+	consolidate_shadows()
+
+	/*
 	if (image_result.temp_appearance.len)
 		image_result.overlays = image_result.temp_appearance
 		image_result.filters += filter(type = "blur", size = BLUR_SIZE)
 		temp_appearance += image_result
+	*/
 
 	// -- eliminating the underglow
 	for (var/turf/T in affected_shadow_walls)

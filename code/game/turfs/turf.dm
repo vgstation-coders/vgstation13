@@ -73,6 +73,8 @@
 
 	var/mute_time = 0
 
+	var/lit = 0
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)

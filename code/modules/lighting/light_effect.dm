@@ -1,5 +1,5 @@
 #define LIGHT_CPU_THRESHOLD 80
-#define TURF_SHADOW_FRACTION 0.75
+#define TURF_SHADOW_FRACTION 1
 
 /atom/movable/light
 	name = ""
