@@ -391,22 +391,28 @@ var/list/all_doors = list()
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "breakdoor", sleeptime = 10)
 		qdel(src)
 
-/obj/machinery/door/arcane_act(mob/user)
+/obj/machinery/door/arcane_act(mob/user, var/recursive = FALSE)
 	..()
-	if(!(flow_flags & ON_BORDER))
+	if(!(flow_flags & ON_BORDER) && all_doors.len > 1)
 		while(!arcane_linked_door || arcane_linked_door == src || arcane_linked_door.flow_flags & ON_BORDER || arcane_linked_door.z == map.zCentcomm) // no windoors or centcomm pls
 			arcane_linked_door = pick(all_doors)
 		arcane_linked_door.arcanetampered = arcanetampered
 		arcane_linked_door.arcane_linked_door = src
+		if(user)
+			user.arcane_tampered_atoms.Add(arcane_linked_door)
+		if(recursive)
+			for(var/atom/A in arcane_linked_door.contents)
+				A.arcane_act(user,TRUE)
 		return "D'R ST'K!"
 
 /obj/machinery/door/bless()
 	..()
 	if(arcane_linked_door)
-		arcane_linked_door.bless()
-		arcane_linked_door = null
-		if(!density)
-			set_opacity(0)
+		arcane_linked_door.arcane_linked_door = null
+		arcane_linked_door.arcanetampered = FALSE
+	arcane_linked_door = null
+	if(!density)
+		set_opacity(0)
 
 /obj/machinery/door/Destroy()
 	update_nearby_tiles()
