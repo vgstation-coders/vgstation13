@@ -562,8 +562,12 @@
 		return  //Hit the wrong key...again.
 
 	var/mob/living/carbon/human/hobo = new(pick(hobostart))
+	
+	var/list/species_choices = list("Human", "Vox", "Insectoid", "Grey", "Skrell", "Unathi", "Diona", "Mushroom")
+	var/chosen_species = input(src, "Choose a species", "Species") in species_choices
+	hobo.set_species(chosen_species)
+	
 	hobo.key = src.key
-	hobo.set_species(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))
 	hobo.generate_name()
 	var/datum/outfit/special/with_id/hobo/hobo_outfit = new
 	hobo_outfit.equip(hobo)
