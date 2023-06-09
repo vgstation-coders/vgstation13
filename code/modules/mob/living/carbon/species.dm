@@ -356,7 +356,7 @@ var/global/list/playable_species = list("Human")
 	heat_level_2 = 420 //Default 400
 	heat_level_3 = 1200 //Default 1000
 
-	flags = WHITELISTED | NO_PAIN
+	flags = NO_PAIN
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
 
 	blood_color = PALE_BLOOD
