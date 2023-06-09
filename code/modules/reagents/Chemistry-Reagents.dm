@@ -1032,14 +1032,12 @@
 	var/fatgokaboom = TRUE
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM //about as nutritious as sugar
 	sport = SPORTINESS_SUGAR //a small performance boost from being COOL AND FRESH
+	adj_temp = -5 //that minty freshness my dude, chill out
 
 /datum/reagent/minttoxin/on_mob_life(var/mob/living/M, var/alien)
 
 	if(..())
 		return 1
-	
-	if(M.bodytemperature > 310)
-		M.bodytemperature = max(310, M.bodytemperature - (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 	if(prob(5))
 		to_chat(M, "<span class='notice'>[pick("You feel minty fresh!","If freshness could kill you'd be a serial killer!","You feel the strange urge to share this minty freshness with others!","You have a sudden craving to drink ice cold water.","Ahh, so refreshing!")]</span>")
