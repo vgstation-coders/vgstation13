@@ -4118,5 +4118,27 @@
 		var/list/allowed_reagents = chemical_reagents_list - blocked_chems
 		holder.add_reagent(pick(allowed_reagents),created_volume)
 
+/datum/chemical_reaction/minttoxin
+	name = "Mint Toxin"
+	id = MINTTOXIN
+	result = MINTTOXIN
+	required_reagents = list(MINTESSENCE = 1)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/oofowmyteeth
+	name = "tooth hurtee"
+	id = oofowmyteeth
+	result = ESSENCEOFDENTALPAIN
+	required_reagents = list(MINTS = 1, ICE = 1)
+	result_amount = 4
+	
+/datum/chemical_reaction/iamgoingtodiemyteethareexplodingwhatthefuck
+	name = "tooth explodee"
+	id = iamgoingtodiemyteethareexplodingwhatthefuck
+	result = ESSENCEOFDENTALDESTRUCTION
+	required_reagents = list(ESSENCEOFDENTALPAIN = 1, COFFEE = 1) //have you ever gotten thermal shock on your teeth, boy it hurts, imagine what would happen to spess teeth
+	result_amount = 1
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
