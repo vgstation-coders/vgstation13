@@ -3283,6 +3283,31 @@
 	desc = "Made with love with the finest maintenance gunk I could find, trust me. I promise there's only trace amounts of bleach."
 	icon_state = "homemademint"
 	
+/obj/item/weapon/reagent_containers/food/snacks/snackmint/New()
+	..()
+	reagents.add_reagent(MINTESSENCE, 2)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/snackmint/
+	name = "mint candy"
+	base_crumb_chance = 0
+	
+/obj/item/weapon/reagent_containers/food/snacks/snackmint/nano
+	desc = "It's not just a mint!"
+	icon_state = "nanomint"
+
+/obj/item/weapon/reagent_containers/food/snacks/snackmint/syndie
+	desc = "Made with care, love, and the blood of Nanotrasen executives kept in eternal torment."
+	icon_state = "syndiemint"
+	
+/obj/item/weapon/reagent_containers/food/snacks/snackmint/discount
+	desc = "Yeah, I wouldn't eat these if I were yo- Wait, you're still recording?"
+	icon_state = "discountmint"
+	
+/obj/item/weapon/reagent_containers/food/snacks/snackmint/homemade
+	desc = "Made with love with the finest maintenance gunk I could find, trust me. I promise there's only trace amounts of bleach."
+	icon_state = "homemademint"
+
 /obj/item/weapon/reagent_containers/food/snacks/mushroomsoup
 	name = "chanterelle soup"
 	desc = "A delicious and hearty mushroom soup."
