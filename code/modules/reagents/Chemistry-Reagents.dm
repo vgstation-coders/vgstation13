@@ -1054,7 +1054,7 @@
 				if(J.amount = 0)
 					return
 				else
-					M.custom_pain("[pick("AHHH YOUR TEETH HURT!","You didn't know you had a cavity. You do now.","DAMN YOUR TEETH HURT",5)
+					M.custom_pain(pick("AHHH YOUR TEETH HURT!","You didn't know you had a cavity. You do now.","DAMN YOUR TEETH HURT"),5)
 					M.add_reagent(SACID,1) //just a smidgeon
 					chillcounter = 30 //60 seconds
 	
