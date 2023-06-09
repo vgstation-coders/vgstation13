@@ -1023,19 +1023,36 @@
 /datum/reagent/minttoxin
 	name = "Mint Toxin"
 	id = MINTTOXIN
-	description = "Useful for dealing with undesirable customers."
+	description = "Useful for dealing with undesirable customers. The refined version of Mint Extract."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	density = 0.898
 	specheatcap = 3.58
+	custom_metabolism = 0.01 //so it lasts 10x as long as regular minttox
+	var/fatgokaboom = TRUE
+	nutriment_factor = 2.5 * REAGENTS_METABOLISM //about as nutritious as sugar
+	sport = SPORTINESS_SUGAR //a small performance boost from being COOL AND FRESH
 
 /datum/reagent/minttoxin/on_mob_life(var/mob/living/M, var/alien)
 
 	if(..())
 		return 1
+	
+	if(M.bodytemperature > 310)
+		M.bodytemperature = max(310, M.bodytemperature - (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
-	if(M_FAT in M.mutations)
+	if(prob(5))
+		to_chat(H, "<span class='notice'>[pick("You feel minty fresh!","If freshness could kill you'd be a serial killer!","You feel the strange urge to share this minty freshness with others!","You have a sudden craving to drink ice cold water.","Ahh, so refreshing!")]</span>")
+
+	if(fatgokaboom && M_FAT in M.mutations)
 		M.gib()
+
+/datum/reagent/minttoxin/extract
+	name = "Mint Extract"
+	id = MINTEXTRACT
+	description = "The minty freshness in liquid form!"
+	custom_metabolism = 0.1 //toxin lasts 10x as long
+	fatgokaboom = FALSE
 
 /datum/reagent/slimetoxin
 	name = "Mutation Toxin"
