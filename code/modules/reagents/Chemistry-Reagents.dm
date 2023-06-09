@@ -1070,22 +1070,24 @@
 	if(ishuman(M))
 	var/mob/living/carbon/human/H = M
 		if(prob(5))
-			M.custom_pain("[pick("AHHH YOUR TEETH HURT!","You didn't know you had a cavity. You do now.","!",5)
-			M.add_reagent(SACID,1) //just a smidgeon
-			if(TEETHBGONE & prob(10))
-				var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in M.butchering_drops
-					if(J.amount = 0)
-						return
-					else
-						J.amount = 0
-						M.custom_pain("Your teeth crack and tremble before breaking all of a sudden! THE PAIN!", 100) //you dun fucked up lad
-						M.reagents.del_reagent(ESSENCEOFDENTALDESTRUCTION)
+			var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in M.butchering_drops
+			if(J.amount = 0)
+				return
+			else
+				M.custom_pain("[pick("AHHH YOUR TEETH HURT!","You didn't know you had a cavity. You do now.","!",5)
+				M.add_reagent(SACID,1) //just a smidgeon
+				if(TEETHBGONE & prob(30))
+					J.amount = 0
+					M.custom_pain("Your teeth crack and tremble before breaking all of a sudden! THE PAIN!", 100) //you dun fucked up lad
+					M.add_reagent(SACID,10)
+					M.reagents.del_reagent(ESSENCEOFDENTALDESTRUCTION)
 
-/datum/reagent/essenceofdentaldestruction
+/datum/reagent/essenceofdentalpain/essenceofdentaldestruction
 	name = "Essence of Dental Destruction"
 	id = ESSENCEOFDENTALDESTRUCTION
 	description = "You done fucked up, ya dingus."
 	teethbgone = TRUE
+	custom_metabolism = 0.2
 
 /datum/reagent/slimetoxin
 	name = "Mutation Toxin"
