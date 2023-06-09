@@ -1518,6 +1518,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/pill_bottle/lollipops = 5,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 100,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
+		/obj/item/weapon/storage/pill_bottle/mint/nano = 5
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks = 4,
@@ -1538,6 +1539,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
 		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
 		/obj/item/weapon/storage/pill_bottle/lollipops = 10,
+		/obj/item/weapon/storage/pill_bottle/mint/nano = 30,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 1,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 100,
 		)
@@ -3079,6 +3081,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/condiment/discount = 2,
+		/obj/item/weapon/storage/pill_bottle/mint/discount = 3
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/pill/antitox = 10
