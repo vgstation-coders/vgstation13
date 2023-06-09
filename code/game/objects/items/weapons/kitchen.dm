@@ -166,6 +166,8 @@
 				user.visible_message("<span class='notice'>[user] feeds [M] a delicious spoonful of [loaded_food]!</span>")
 				feed_to(user, M)
 				return
+	else
+		return ..()
 
 /obj/item/weapon/kitchen/utensil/spoon/proc/bend(mob/user)
 	visible_message(message = "<span class='warning'>Whoa, [user] looks at [src] and it bends like clay!</span>")
