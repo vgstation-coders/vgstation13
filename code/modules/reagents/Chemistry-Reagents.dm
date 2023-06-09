@@ -1050,7 +1050,7 @@
 /datum/reagent/minttoxin/extract
 	name = "Mint Extract"
 	id = MINTEXTRACT
-	description = "The minty freshness in liquid form!"
+	description = "Minty freshness in liquid form!"
 	custom_metabolism = 0.1 //toxin lasts 10x as long
 	fatgokaboom = FALSE
 
@@ -1082,7 +1082,7 @@
 						M.reagents.del_reagent(ESSENCEOFDENTALDESTRUCTION)
 
 /datum/reagent/essenceofdentaldestruction
-	name = "Essence of Dental Destruction
+	name = "Essence of Dental Destruction"
 	id = ESSENCEOFDENTALDESTRUCTION
 	description = "You done fucked up, ya dingus."
 	teethbgone = TRUE
