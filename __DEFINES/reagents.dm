@@ -469,8 +469,6 @@
 #define DSYRUP			"dsyrup"
 #define GRUE_BILE		"grue_bile"
 #define PINKLADY		"pinklady"
-#define ESSENCEOFDENTALPAIN			"essenceofdentalpain"
-#define ESSENCEOFDENTALDESTRUCTION	"essenceofdentaldestruction"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
