@@ -1033,7 +1033,8 @@
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM //about as nutritious as sugar
 	sport = SPORTINESS_SUGAR //a small performance boost from being COOL AND FRESH
 	adj_temp = -5 //that minty freshness my dude, chill out
-	
+	var/chillcounter = 0
+
 /datum/reagent/minttoxin/on_mob_life(var/mob/living/M, var/alien)
 
 	if(..())
@@ -1055,10 +1056,21 @@
 				else
 					M.custom_pain("[pick("AHHH YOUR TEETH HURT!","You didn't know you had a cavity. You do now.","DAMN YOUR TEETH HURT",5)
 					M.add_reagent(SACID,1) //just a smidgeon
-					if(M.has_reagent(HOTDRINKS & prob(30))
-						J.amount = 0
-						M.custom_pain("Your teeth crack and tremble before breaking all of a sudden! THE PAIN!", 100) //you dun fucked up lad
-						M.add_reagent(SACID,10)
+					chillcounter = 30 //60 seconds
+	
+	if(chillcounter > 0) //if you don't proc the tick again, you can safely drink a hot drink after a minute
+		chillcounter--
+
+	if((chillcounter > 0) & M.has_reagent(HOTDRINKS) & prob(30))
+		var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in M.butchering_drops
+		if(J.amount = 0)
+			return
+		else
+			J.amount = 0
+			M.custom_pain("Your teeth crack and tremble before breaking all of a sudden! THE PAIN!", 100) //you dun fucked up lad
+			playsound(M, 'sound/effects/toothshatter.ogg', 50, 1)
+			M.audible_scream()
+			M.add_reagent(SACID,10)
 		
 /datum/reagent/minttoxin/extract
 	name = "Mint Extract"
