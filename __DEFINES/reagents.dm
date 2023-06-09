@@ -32,6 +32,7 @@
 #define POTASSIUM_HYDROXIDE 			"potassium_hydroxide"
 #define CHEFSPECIAL 			"chefspecial"
 #define MINTTOXIN 			"minttoxin"
+#define MINTESSENCE				"mintessence"
 #define MUTATIONTOXIN 			"mutationtoxin"
 #define AMUTATIONTOXIN 			"amutationtoxin"
 #define STOXIN 			"stoxin"
@@ -468,6 +469,8 @@
 #define DSYRUP			"dsyrup"
 #define GRUE_BILE		"grue_bile"
 #define PINKLADY		"pinklady"
+#define ESSENCEOFDENTALPAIN			"essenceofdentalpain"
+#define ESSENCEOFDENTALDESTRUCTION	"essenceofdentaldestruction"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -561,6 +564,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define ALLNANITES list(NANITES, AUTISTNANITES)
 #define SUGARS list(SUGAR, CORNSYRUP)
 #define GUNKS list(CHEMICAL_WASTE, TOXICWASTE, VOMIT, TOXIN, SOLANINE, RADIUM, MUTAGEN, UNTABLE_MUTAGEN, SPIDERS)
+#define MINTS list(MINTTOXIN, MINTESSENCE)
 
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"
