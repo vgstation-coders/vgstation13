@@ -1033,7 +1033,7 @@
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM //about as nutritious as sugar
 	sport = SPORTINESS_SUGAR //a small performance boost from being COOL AND FRESH
 	adj_temp = -5 //that minty freshness my dude, chill out
-
+	
 /datum/reagent/minttoxin/on_mob_life(var/mob/living/M, var/alien)
 
 	if(..())
@@ -1045,47 +1045,27 @@
 	if(fatgokaboom && M_FAT in M.mutations)
 		M.gib()
 
+	if(M.has_reagent(COLDDRINKS))
+		if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+			if(prob(10))
+				var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in M.butchering_drops
+				if(J.amount = 0)
+					return
+				else
+					M.custom_pain("[pick("AHHH YOUR TEETH HURT!","You didn't know you had a cavity. You do now.","DAMN YOUR TEETH HURT",5)
+					M.add_reagent(SACID,1) //just a smidgeon
+					if(M.has_reagent(HOTDRINKS & prob(30))
+						J.amount = 0
+						M.custom_pain("Your teeth crack and tremble before breaking all of a sudden! THE PAIN!", 100) //you dun fucked up lad
+						M.add_reagent(SACID,10)
+		
 /datum/reagent/minttoxin/extract
 	name = "Mint Extract"
 	id = MINTEXTRACT
 	description = "Minty freshness in liquid form!"
 	custom_metabolism = 0.1 //toxin lasts 10x as long
 	fatgokaboom = FALSE
-
-/datum/reagent/essenceofdentalpain
-	name = "Essence of Dental Pain"
-	id = ESSENCEOFDENTALPAIN
-	description = "Apparently the pain of freezing your teeth didn't come from the cold, but from an ancient curse upon intelligent life."
-	custom_metabolism = 0.05
-	reagent_state = REAGENT_STATE_LIQUID
-	color = "#13BC5E" //rgb: 19, 188, 94
-	overdose_am = REAGENTS_OVERDOSE
-	density = 1.245
-	specheatcap = 0.25
-	var/teethbgone = FALSE
-/datum/reagent/essenceofdentalpain/on_mob_life(var/mob/living/M)
-	..()
-	if(ishuman(M))
-	var/mob/living/carbon/human/H = M
-		if(prob(5))
-			var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in M.butchering_drops
-			if(J.amount = 0)
-				return
-			else
-				M.custom_pain("[pick("AHHH YOUR TEETH HURT!","You didn't know you had a cavity. You do now.","!",5)
-				M.add_reagent(SACID,1) //just a smidgeon
-				if(TEETHBGONE & prob(30))
-					J.amount = 0
-					M.custom_pain("Your teeth crack and tremble before breaking all of a sudden! THE PAIN!", 100) //you dun fucked up lad
-					M.add_reagent(SACID,10)
-					M.reagents.del_reagent(ESSENCEOFDENTALDESTRUCTION)
-
-/datum/reagent/essenceofdentalpain/essenceofdentaldestruction
-	name = "Essence of Dental Destruction"
-	id = ESSENCEOFDENTALDESTRUCTION
-	description = "You done fucked up, ya dingus."
-	teethbgone = TRUE
-	custom_metabolism = 0.2
 
 /datum/reagent/slimetoxin
 	name = "Mutation Toxin"
