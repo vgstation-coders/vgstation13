@@ -1023,7 +1023,7 @@
 /datum/reagent/minttoxin
 	name = "Mint Toxin"
 	id = MINTTOXIN
-	description = "Useful for dealing with undesirable customers. The refined version of Mint Extract."
+	description = "Useful for dealing with undesirable customers. The undiluted version of Mint Extract."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	density = 0.898
@@ -1051,8 +1051,8 @@
 		
 	if(ishuman(M))
 	var/mob/living/carbon/human/H = M
-		if(M.has_reagent(COLDDRINKS) & prob(10))
-			var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in M.butchering_drops
+		if(H.has_reagent(COLDDRINKS) & prob(10))
+			var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in H.butchering_drops
 			if(J.amount = 0)
 				return
 			else
@@ -1062,8 +1062,8 @@
 
 		if(chillcounter > 0)
 			chillcounter--
-			if(M.has_reagent(HOTDRINKS) & prob(30))
-				var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in M.butchering_drops
+			if(H.has_reagent(HOTDRINKS) & prob(30))
+				var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in H.butchering_drops
 				if(J.amount = 0)
 					return
 				else
@@ -1073,9 +1073,9 @@
 					H.audible_scream()
 					H.add_reagent(SACID,10)
 
-/datum/reagent/minttoxin/extract
-	name = "Mint Extract"
-	id = MINTEXTRACT
+/datum/reagent/minttoxin/essence
+	name = "Mint Essence"
+	id = MINTESSENCE
 	description = "Minty freshness in liquid form!"
 	custom_metabolism = 0.1 //toxin lasts 10x as long
 	fatgokaboom = FALSE
