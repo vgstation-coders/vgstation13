@@ -975,6 +975,14 @@ var/list/uplink_items = list()
 	discounted_cost = 2
 	jobs_with_discount = list("Chef")
 
+/datum/uplink_item/jobspecific/service/boxofmints
+	name = "Box of Mints"
+	desc = "Fifty of the highest quality mint candies this side of the galaxy. Recalled by all producers soon after their immediately lethal efects on fat people were discovered. Harmless to fit people." //It was this or just making a lame 50u bottle of mint toxin, and that's no fun.
+	item = /obj/item/weapon/storage/pill_bottle/syndiemints
+	cost = 5
+	discounted_cost = 3
+	jobs_with_discount = list("Chef")
+
 /datum/uplink_item/jobspecific/service/meatcleaver
 	name = "Meat Cleaver"
 	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died. It also stuns when thrown."
