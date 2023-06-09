@@ -383,7 +383,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	..()
 
 /obj/item/weapon/storage/pill_bottle/mint/
-	name = "You shouldn't be seeing this Mints!
+	name = "You shouldn't be seeing this Mints!"
 	desc = "The lastest hip mint sensation in you shouldn't be seeing this!, tell your nearest poopmin(t)."
 	icon = 'icons/obj/candymachine.dmi'
 	storage_slots = 50
