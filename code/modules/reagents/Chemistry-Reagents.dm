@@ -1032,7 +1032,6 @@
 	var/fatgokaboom = TRUE
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM //about as nutritious as sugar
 	sport = SPORTINESS_SUGAR //a small performance boost from being COOL AND FRESH
-	adj_temp = -5 //that minty freshness my dude, chill out
 	var/chillcounter = 0
 
 /datum/reagent/minttoxin/on_mob_life(var/mob/living/M, var/alien)
@@ -1043,15 +1042,15 @@
 	if(prob(5))
 		to_chat(M, "<span class='notice'>[pick("You feel minty fresh!","If freshness could kill you'd be a serial killer!","You feel the strange urge to share this minty freshness with others!","You have a sudden craving to drink ice cold water.","Ahh, so refreshing!")]</span>")
 
-	if(M.bodytemperature > 310)
-		M.bodytemperature = max(310, M.bodytemperature + (-5 * TEMPERATURE_DAMAGE_COEFFICIENT)) //copypasted from the cold drinks check so I don't have to change minttox internally and maybe most certainly break shit in the process
+	if(M.bodytemperature > 310) //copypasted from the cold drinks check so I don't have to change minttox internally and maybe most certainly break shit in the process
+		M.bodytemperature = max(310, M.bodytemperature + (-5 * TEMPERATURE_DAMAGE_COEFFICIENT)) /that minty freshness my dude, chill out
 
 	if(fatgokaboom && M_FAT in M.mutations)
 		M.gib()
 		
 	if(ishuman(M))
 	var/mob/living/carbon/human/H = M
-		if(H.has_reagent(COLDDRINKS) & prob(10))
+		if(holder.has_reagent(COLDDRINKS) & prob(10))
 			var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in H.butchering_drops
 			if(J.amount = 0)
 				return
@@ -1062,7 +1061,7 @@
 
 		if(chillcounter > 0)
 			chillcounter--
-			if(H.has_reagent(HOTDRINKS) & prob(30))
+			if(holder.has_reagent(HOTDRINKS) & prob(30))
 				var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in H.butchering_drops
 				if(J.amount = 0)
 					return
