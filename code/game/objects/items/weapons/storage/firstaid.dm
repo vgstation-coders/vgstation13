@@ -382,6 +382,30 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 			items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade = 50)
 	..()
 
+/obj/item/weapon/storage/pill_bottle/mint/
+	name = "You shouldn't be seeing this Mints!
+	desc = "The lastest hip mint sensation in you shouldn't be seeing this!, tell your nearest poopmin(t)."
+	icon = 'icons/obj/candymachine.dmi'
+	storage_slots = 50
+
+/obj/item/weapon/storage/pill_bottle/mint/discount
+	name = "Discount Dan's Minty Delight"
+	desc = "Toxin 'Free'!"
+	icon_state = "mintboxgeneric"
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/discount/safe = 50)
+	
+/obj/item/weapon/storage/pill_bottle/mint/nano
+	name = "NanoFresh"
+	desc = "An explosion of freshness in each candy!"
+	icon_state = "mintboxnanotrasen"
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/nano/safe = 50)
+
+/obj/item/weapon/storage/pill_bottle/mint/homemade
+	name = "Uncle Ian's homemade mints"
+	desc = "Graphic Design is my passion!"
+	icon_state = "mintboxgraphicdesign"
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade/safe = 50)
+
 /obj/item/weapon/storage/pill_bottle/lollipops
 	name = "bag of lollipops"
 	desc = "Ha, sucker!"
