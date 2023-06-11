@@ -317,7 +317,7 @@ var/list/tgui_religion_data
 		subject.verbs |= /mob/proc/renounce_faith
 	if(!default)
 		to_chat(subject, "<span class='good'>You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].</span>")
-		if (!preacher)
+		if (!preacher && subject.mind.assigned_role != "Chaplain")
 			var/msg = "\The [key_name(subject)] has been converted to [name] without a preacher."
 			message_admins(msg)
 		else
