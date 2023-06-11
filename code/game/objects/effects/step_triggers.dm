@@ -53,6 +53,9 @@
 		var/mob/M = AM
 		if(immobilize)
 			M.canmove = 0
+		if(!M.special_delayer.blocked()) //Surely you won't be ventcrawling/resisting AND falling out of the shuttle... right?
+			playsound(src, 'sound/misc/fyoo.ogg', 75, gas_modified = 0)
+			M.delayNextSpecial(30)
 
 	affecting.Add(AM)
 	while(AM && !stopthrow)
