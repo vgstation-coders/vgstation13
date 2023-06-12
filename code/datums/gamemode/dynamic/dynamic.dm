@@ -707,7 +707,7 @@ var/stacking_limit = 90
 			if (forced_latejoin_rule.choose_candidates())
 				picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
-	else if (latespawn_interaction(newPlayer))
+	else if (persistent_rule_interaction(newPlayer))
 		return
 	else if (!latejoin_injection_cooldown && injection_attempt())
 		var/list/drafted_rules = list()
@@ -887,3 +887,9 @@ var/stacking_limit = 90
 /datum/gamemode/dynamic/proc/update_stillborn_rulesets()
 	for (var/datum/dynamic_ruleset/ruleset in executed_rules)
 		ruleset.stillborn = IsRoundAboutToEnd()
+
+/datum/gamemode/dynamic/proc/persistent_rule_interaction(var/mob/living/newPlayer)
+	for (var/datum/dynamic_ruleset/ruleset in executed_rules)
+		if (ruleset.latespawn_interaction(newPlayer))
+			return TRUE
+	return FALSE
