@@ -27,8 +27,7 @@ var/datum/subsystem/map/SSmap
 	else
 		log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")
 
-	for(var/i = 0, i < max_secret_rooms, i++)
-		make_mining_asteroid_secret()
+	make_mining_asteroid_secrets() // loops 3 times
 
 	//hobo shack generation, one shack will spawn, 1/3 chance of two shacks
 	generate_hoboshack()
