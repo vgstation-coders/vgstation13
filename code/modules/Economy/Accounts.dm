@@ -421,7 +421,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 
 	src.attack_hand(usr)
 
-/obj/machinery/account_database/proc/charge_to_account(var/attempt_account_number, var/source_name, var/purpose, var/terminal_id, var/amount)
+/obj/machinery/account_database/proc/charge_to_account(var/attempt_account_number, var/source_name, var/purpose, var/terminal_id, var/amount, var/target_name)
 	if(!activated || !attempt_account_number)
 		return 0
 	for(var/datum/money_account/D in all_money_accounts)
@@ -429,7 +429,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 			D.money += amount
 
 			//create a transaction log entry
-			new /datum/transaction(D, purpose, "[abs(amount)]", terminal_id, source_name)
+			new /datum/transaction(D, purpose, "[abs(amount)]", terminal_id, source_name, source_name = target_name)
 
 			return 1
 
