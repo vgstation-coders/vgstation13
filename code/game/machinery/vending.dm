@@ -322,8 +322,8 @@ var/global/num_vending_terminals = 1
 	for (var/datum/data/vending_product/D in voucher_records)
 		D.amount = D.original_amount
 	for (var/datum/data/vending_product/D in holiday_records)
-		D.amount = D.original_amount	
-		
+		D.amount = D.original_amount
+
 	new /obj/item/stack/sheet/cardboard(P.loc, 4)
 	qdel(P)
 	if(user.machine==src)
@@ -2681,6 +2681,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/syndie_football_helmet = 5,
 		/obj/item/clothing/suit/syndie_football = 5,
 		/obj/item/toy/gun = 3,
+		/obj/item/weapon/reagent_containers/spray/creepspray = 2,
 		/obj/item/weapon/glue/temp_glue = 1
 		)
 	premium = list(
