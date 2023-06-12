@@ -2869,6 +2869,7 @@
 #include "maps\lampreystation\lamprey.dm"
 #include "maps\packedstation\telecomms.dm"
 #include "maps\randomvaults\dance_revolution.dm"
+#include "maps\randomvaults\keycard_vault.dm"
 #include "maps\randomvaults\mothership_lab.dm"
 #include "maps\randomvaults\objects.dm"
 #include "maps\randomvaults\sokoban.dm"

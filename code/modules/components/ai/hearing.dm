@@ -65,6 +65,7 @@
 	var/list/priceleftmessages = list("<PRICE> credits left to pay.")
 	var/list/ordermake_emotes = list("begins processing an order...")
 	var/baseprice = 0
+	var/profits = 0
 	var/currentprice
 	var/inbag = FALSE
 	var/list/items2deliver = list()
@@ -149,6 +150,7 @@
 				for(var/obj/O in bills)
 					qdel(O)
 				currentprice -= amount
+				profits += amount
 				if(currentprice <= 0)
 					if(currentprice < 0)
 						dispense_cash(abs(currentprice),get_step(M,M.dir))
