@@ -146,6 +146,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	var/date = ""
 	var/time = ""
 	var/source_terminal = ""
+	var/source_name = ""
 
 /datum/transaction/New(var/datum/money_account/account=null, var/purpose="", var/amount = 0, var/source_terminal="", var/target_name="", var/date="", var/time = "", var/send2PDAs = TRUE, var/source_name="")
 	// Default to account name if not specified
