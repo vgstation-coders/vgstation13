@@ -354,6 +354,7 @@ var/list/admin_verbs_mod = list(
 		admin_verbs_debug,
 		admin_verbs_possess,
 		admin_verbs_permissions,
+		admin_verbs_polling,
 		/client/proc/stealth,
 		admin_verbs_rejuv,
 		admin_verbs_sounds,
