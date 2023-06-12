@@ -147,9 +147,11 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	var/time = ""
 	var/source_terminal = ""
 
-/datum/transaction/New(var/datum/money_account/account=null, var/purpose="", var/amount = 0, var/source_terminal="", var/target_name="", var/date="", var/time = "", var/send2PDAs = TRUE)
+/datum/transaction/New(var/datum/money_account/account=null, var/purpose="", var/amount = 0, var/source_terminal="", var/target_name="", var/date="", var/time = "", var/send2PDAs = TRUE, var/source_name="")
 	// Default to account name if not specified
 	src.target_name = target_name == "" && account ? account.owner_name : target_name
+	// Default to source terminal if not specified
+	src.source_name = source_name == "" ? source_terminal : source_name
 	src.purpose = purpose
 	src.amount = amount
 	// Get current date and time if not specified
