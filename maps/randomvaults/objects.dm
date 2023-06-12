@@ -1114,6 +1114,7 @@
 	desc = "A console that shows a list of all coordinates of mysterious structures found in this sector of space."
 	icon_state = "comm_serv"
 	light_color = LIGHT_COLOR_GREEN
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/machinery/computer/allvaults/attack_hand(mob/user)
 	add_fingerprint(user)
