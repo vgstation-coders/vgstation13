@@ -94,9 +94,8 @@
 		candidates -= M
 	return (assigned.len > 0)
 
-/datum/dynamic_ruleset/proc/process()
-	//write here your rule execution code, everything about faction/role spawning/populating.
-	return
+/datum/dynamic_ruleset/proc/latespawn_interaction(var/mob/living/newPlayer)//persistent rulesets will attempt to hire latejoiners when applicable
+	return FALSE
 
 /datum/dynamic_ruleset/proc/execute()
 	//write here your rule execution code, everything about faction/role spawning/populating.

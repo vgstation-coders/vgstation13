@@ -303,7 +303,7 @@ var/stacking_limit = 90
 					if (istype(rule, /datum/dynamic_ruleset/roundstart/delayed/))
 						message_admins("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
 						log_admin("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
-						return pick_delay(rule)
+						pick_delay(rule)
 
 					if (rule.execute())//this should never fail since ready() returned 1
 						rule.stillborn = IsRoundAboutToEnd()
@@ -312,7 +312,6 @@ var/stacking_limit = 90
 							current_rules += rule
 						for(var/mob/M in rule.assigned)
 							candidates -= M
-						return 1
 					else
 						message_admins("DYNAMIC MODE: ....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
 						log_admin("DYNAMIC MODE: ....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
@@ -566,9 +565,6 @@ var/stacking_limit = 90
 	if (latejoin_injection_cooldown)
 		latejoin_injection_cooldown--
 
-	for (var/datum/dynamic_ruleset/rule in current_rules)
-		rule.process()
-
 	if (midround_injection_cooldown)
 		midround_injection_cooldown--
 	else
@@ -711,7 +707,8 @@ var/stacking_limit = 90
 			if (forced_latejoin_rule.choose_candidates())
 				picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
-
+	else if (persistent_rule_interaction(newPlayer))
+		return
 	else if (!latejoin_injection_cooldown && injection_attempt())
 		var/list/drafted_rules = list()
 		for (var/datum/dynamic_ruleset/latejoin/rule in latejoin_rules)
@@ -888,5 +885,9 @@ var/stacking_limit = 90
 	message_admins("The rule was accepted.")
 
 /datum/gamemode/dynamic/proc/update_stillborn_rulesets()
+	for (var/datum/dynamic_ruleset/ruleset in executed_rules)
+		ruleset.stillborn = IsRoundAboutToEnd()
+
+/datum/gamemode/dynamic/proc/persistent_rule_interaction(var/mob/living/newPlayer)
 	for (var/datum/dynamic_ruleset/ruleset in executed_rules)
 		ruleset.stillborn = IsRoundAboutToEnd()

@@ -250,30 +250,10 @@
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
-	persistent = 1
 	flags = HIGHLANDER_RULESET
 //	var/wizard_cd = 210 //7 minutes
 	var/total_wizards = 4
 
-/*
-/datum/dynamic_ruleset/roundstart/cwc/process()
-	..()
-	if (wizard_cd)
-		wizard_cd--
-	else
-		wizard_cd = initial(wizard_cd)
-		var/sent_wizards = 1 + count_by_type(mode.executed_rules,/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages)
-		if(sent_wizards>=total_wizards)
-			return
-		var/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/RM = new()
-		if(sent_wizards % 2) //An odd number of wizards have been sent
-			RM.my_fac = /datum/faction/wizard/civilwar/pfw
-		else
-			RM.my_fac = /datum/faction/wizard/civilwar/wpf
-		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [initial(RM.my_fac.name)].")
-		RM.cost = 0
-		mode.picking_specific_rule(RM,TRUE) //forced
-*/
 
 /datum/dynamic_ruleset/roundstart/cwc/choose_candidates()
 	for(var/wizards_number = 1 to total_wizards)
@@ -777,3 +757,135 @@ Assign your candidates in choose_candidates() instead.
 		mime.AssignToRole(M2.mind,1)
 		mime.Greet(GREET_ROUNDSTART)
 	return 1
+
+
+//////////////////////////////////////////////
+//                                          //
+//             ANTAG MADNESS                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/antag_madness
+	name = "Antag Madness"
+	role_category = /datum/role/nanotrasen_official
+	role_category_override = HEAD
+	protected_from_jobs = list()
+	restricted_from_jobs = list()
+	cost = 0
+	requirements = list(101,101,101,101,101,101,101,101,101,101) // Adminbus only
+	high_population_requirement = 101
+	var/list/nanotrasen_staff = list("Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
+	persistent = TRUE//latejoiners will either be heads of staff or traitors (unless traitor is deactivated/antagbanned)
+
+/datum/dynamic_ruleset/roundstart/antag_madness/trim_candidates()//All the heads of staff get the role, the rest of the players will get trimmed by the other rulesets
+	for(var/mob/P in candidates)
+		if (P.mind.assigned_role && (P.mind.assigned_role in nanotrasen_staff))
+			assigned.Add(P)
+			candidates.Remove(P)
+
+/datum/dynamic_ruleset/roundstart/antag_madness/choose_candidates()
+	message_admins("DYNAMIC MODE: starting [name] with [assigned.len] heads of staff out of [candidates.len] players.")
+	log_admin("DYNAMIC MODE:  starting [name] with [assigned.len] heads of staff out of [candidates.len] players.")
+	return TRUE
+
+/datum/dynamic_ruleset/roundstart/antag_madness/ready(var/forced = 0)
+	return TRUE
+
+/datum/dynamic_ruleset/roundstart/antag_madness/execute()
+	//first we initialize the nanotrasen faction, even if there are no heads currently there
+	var/datum/faction/nanotrasen/nanotrasen = find_active_faction_by_type(/datum/faction/nanotrasen)
+	if (!nanotrasen)
+		nanotrasen = ticker.mode.CreateFaction(/datum/faction/nanotrasen, null, 1)
+
+	//next we throw every head currently there in it
+	for(var/mob/M in assigned)
+		var/datum/role/nanotrasen_official/head = new
+		head.name = M.mind.assigned_role
+		head.AssignToRole(M.mind,1)
+		nanotrasen.HandleRecruitedRole(head)
+		head.Greet(GREET_ROUNDSTART)
+
+	//and now we manipulate Dynamic to force a bunch of other rulesets. It just works...
+	var/list/the_madness = list(
+		"Malfunctioning AI",
+		"Blob Conglomerate",
+		"Blood Cult",
+		"Nuclear Emergency",
+		"Wizard",
+		"Revolution",
+		"Vampires",
+		"Changelings",
+		"Syndicate Traitors",
+		)//The order matters. As a rule of thumb, rarer rulesets should have their chance come first, while more common ones will fill the spots
+
+	if (assigned.len < 5)
+		the_madness -= "Revolution"//No revs unless there's at least 5 roundstart heads, because that'd be overkill
+
+	for (var/madness_ruleset in the_madness)
+		for (var/datum/dynamic_ruleset/roundstart/rule in mode.roundstart_rules)
+			if (madness_ruleset == rule.name)
+				rule.candidates = candidates.Copy()
+				rule.trim_candidates()
+				if (rule.ready(TRUE))
+					rule.calledBy = "antag madness"
+					rule.required_candidates = 1//because we're funny
+					if (!rule.choose_candidates())
+						stack_trace("rule [rule] failed to choose candidates despite ready() returning 1.")
+
+					if (rule.assigned.len)
+						message_admins("ANTAG MADNESS: <font size='3'>[rule.name]</font> OK!")
+						log_admin("ANTAG MADNESS: <font size='3'>[rule.name]</font> OK!")
+						mode.threat_log += "[worldtime2text()]: Roundstart [rule.name] forced by antag madness"
+
+						if (istype(rule, /datum/dynamic_ruleset/roundstart/delayed/))
+							message_admins("ANTAG MADNESS: with a delay of [rule:delay/10] seconds.")
+							log_admin("ANTAG MADNESS: with a delay of [rule:delay/10] seconds.")
+							mode.pick_delay(rule)
+
+						if (rule.execute())
+							rule.stillborn = IsRoundAboutToEnd()
+							mode.executed_rules += rule
+							if (rule.persistent)
+								mode.current_rules += rule
+							for(var/mob/M in rule.assigned)
+								candidates -= M
+					else
+						message_admins("ANTAG MADNESS: <font size='3'>[rule.name]</font> FAILED!")
+						log_admin("ANTAG MADNESS: <font size='3'>[rule.name]</font> FAILED!")
+				else
+					message_admins("ANTAG MADNESS: <font size='3'>[rule.name]</font> FAILED!")
+					log_admin("ANTAG MADNESS: <font size='3'>[rule.name]</font> FAILED!")
+
+	spawn(20 MINUTES)//ERT calling is automated after 20 minutes. Any further developments will have to be manually enacted by the badmin who forced this terrible ruleset in the first place. have fun!
+		nanotrasen.delta = TRUE
+		var/datum/striketeam/ert/response_team = new()
+		response_team.trigger_strike(null,"Nanotrasen officials have been misled to a dummy Space Station filled with antagonistic forces. You must find, protect, and retrieve the various Heads of Staff and Internal Affair Agents aboard the station. Anyone else is a potential threat that must be dealt with extreme prejudice.")
+	return 1
+
+/datum/dynamic_ruleset/roundstart/antag_madness/latespawn_interaction(var/mob/living/newPlayer)
+	var/datum/faction/nanotrasen/nanotrasen = find_active_faction_by_type(/datum/faction/nanotrasen)
+	if (!nanotrasen)
+		nanotrasen = mode.CreateFaction(/datum/faction/nanotrasen, null, 1)
+	if (newPlayer.mind.assigned_role && (newPlayer.mind.assigned_role in nanotrasen_staff))//latejoining as a head? better start running
+		var/datum/role/nanotrasen_official/head = new
+		head.name = newPlayer.mind.assigned_role
+		head.AssignToRole(newPlayer.mind,1)
+		nanotrasen.HandleRecruitedRole(head)
+		head.Greet(GREET_LATEJOIN)
+		return TRUE
+	else
+		for (var/datum/dynamic_ruleset/latejoin/rule in mode.latejoin_rules)//otherwise, you may become a traitor
+			if (rule.name == "Syndicate Infiltrator")
+				rule.candidates = list(newPlayer)
+				rule.protected_from_jobs = list()
+				rule.restricted_from_jobs = list("Mobile MMI")
+				rule.trim_candidates()//if you have it enabled/aren't traitorbanned
+				for (var/mob/M in rule.candidates)
+					var/datum/role/traitor/newTraitor = new
+					newTraitor.AssignToRole(M.mind,1)
+					if (nanotrasen.delta)
+						newTraitor.Greet(GREET_LATEJOINMADNESS)
+					else
+						newTraitor.Greet(GREET_LATEJOIN)
+					return TRUE
+	return FALSE
