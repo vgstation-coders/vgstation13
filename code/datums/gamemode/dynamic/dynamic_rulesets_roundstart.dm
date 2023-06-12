@@ -582,6 +582,8 @@ Assign your candidates in choose_candidates() instead.
 				blob_looks_player["AME_new"] = 64
 			if("Chaplain")
 				blob_looks_player["skelleton"] = 64
+		if (calledBy == "antag madness")//one core is plenty on antag madness
+			break
 	return 1
 
 //////////////////////////////////////////////
