@@ -829,9 +829,12 @@ Assign your candidates in choose_candidates() instead.
 				if (rule.ready(TRUE))
 					rule.calledBy = "antag madness"
 					rule.required_candidates = 1//because we're funny
-					if (!rule.choose_candidates())
-						stack_trace("rule [rule] failed to choose candidates despite ready() returning 1.")
-
+					if (madness_ruleset == "Syndicate Traitors")//no traitor limits
+						for (var/mob/M in candidates)
+							rule.assigned += M
+							rule.candidates -= M
+					else
+						rule.choose_candidates()
 					if (rule.assigned.len)
 						message_admins("ANTAG MADNESS: <font size='3'>[rule.name]</font> OK!")
 						log_admin("ANTAG MADNESS: <font size='3'>[rule.name]</font> OK!")
