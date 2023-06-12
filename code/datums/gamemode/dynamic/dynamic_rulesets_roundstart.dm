@@ -830,6 +830,8 @@ Assign your candidates in choose_candidates() instead.
 					rule.calledBy = "antag madness"
 					rule.required_candidates = 1//because we're funny
 					if (madness_ruleset == "Syndicate Traitors")//no traitor limits
+						rule.protected_from_jobs = list()
+						rule.restricted_from_jobs = list("Mobile MMI")
 						for (var/mob/M in candidates)
 							rule.assigned += M
 							rule.candidates -= M
