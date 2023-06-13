@@ -40,3 +40,6 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are the [name].</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+
+/datum/role/nanotrasen_official/ForgeObjectives()
+	AppendObjective(/datum/objective/survive)
