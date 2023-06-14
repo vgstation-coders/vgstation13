@@ -1496,11 +1496,12 @@ var/obj/blend_test = null
 	if(alert("You are about to edit the MotD, which is displayed to anyone who enters the lobby. All changes persist across rounds. Continue?", "Warning", "Yes", "Cancel") == "Cancel")
 		return
 
-	var/oldmotd = return_file_text(file("config/motd.txt"))
+	var/oldmotd = return_file_text("config/motd.txt")
 	var/newmotd = input(usr, "These changes will be persistent across shifts!", "Edit MotD", "[oldmotd]") as message|null
 	if(!newmotd)
 		return
-	text2file(newmotd, file("config/motd.txt"))
+	text2file(newmotd, "config/motd.txt")
+	join_motd = newmotd	//Sets the current round's motd
 	log_admin("[key_name(usr)] has edited the message of the day. The new text is as follows: [newmotd].")
 	feedback_add_details("admin_verb", "Edit MotD")
 	message_admins("[key_name(usr)] has edited the message of the day. Check the game log for the full text.")
