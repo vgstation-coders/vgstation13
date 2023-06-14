@@ -61,10 +61,6 @@
 	else
 		. = ..()
 
-/mob/living/simple_animal/cat/Runtime/New()
-	if(prob(1))
-		espify()
-
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"
 
