@@ -1485,3 +1485,22 @@ var/obj/blend_test = null
 		message_admins("<span class='adminnotice'>icon.Blend() spamming ended.</span>")
 		feedback_add_details("admin_verb","Finish blend spamming")
 		log_admin("[key_name(src)] finished blend spamming.")
+
+/client/proc/edit_motd()
+	set category = "Server"
+	set name = "Edit Server MotD"
+	set desc = "Appears to players upon lobby entry."
+
+	if(!check_rights(R_MAXPERMISSION))
+		return
+	if(alert("You are about to edit the MotD, which is displayed to anyone who enters the lobby. All changes persist across rounds. Continue?", "Warning", "Yes", "Cancel") == "Cancel")
+		return
+
+	var/oldmotd = return_file_text(file("config/motd.txt"))
+	var/newmotd = input(usr, "These changes will be persistent across shifts!", "Edit MotD", "[oldmotd]") as message|null
+	if(!newmotd)
+		return
+	text2file(newmotd, file("config/motd.txt"))
+	log_admin("[key_name(usr)] has edited the message of the day. The new text is as follows: [newmotd].")
+	feedback_add_details("admin_verb", "Edit MotD")
+	message_admins("[key_name(usr)] has edited the message of the day. Check the game log for the full text.")
