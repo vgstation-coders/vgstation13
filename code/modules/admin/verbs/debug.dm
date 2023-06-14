@@ -1488,10 +1488,10 @@ var/obj/blend_test = null
 
 /client/proc/edit_motd()
 	set category = "Server"
-	set name = "Edit Server MotD"
+	set name = "Edit MotD"
 	set desc = "Appears to players upon lobby entry."
 
-	if(!check_rights(R_MAXPERMISSION))
+	if(!check_rights(R_PERMISSIONS))
 		return
 	if(alert("You are about to edit the MotD, which is displayed to anyone who enters the lobby. All changes persist across rounds. Continue?", "Warning", "Yes", "Cancel") == "Cancel")
 		return
