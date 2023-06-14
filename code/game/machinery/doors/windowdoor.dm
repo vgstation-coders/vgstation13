@@ -94,8 +94,8 @@
 					if(istype(vehicle, /obj/structure/bed/chair/vehicle/firebird))
 						vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 					open()
-					sleep(sleeptime)
-					close()
+					spawn(sleeptime)
+						close()
 				else if(!operating)
 					denied()
 		return
@@ -105,8 +105,8 @@
 		return
 	if(density && allowed(AM))
 		open()
-		sleep(sleeptime)
-		close()
+		spawn(sleeptime)
+			close()
 
 /obj/machinery/door/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(pass_flags_self))
