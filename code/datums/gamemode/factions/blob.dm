@@ -43,6 +43,8 @@
 // -- Victory procs --
 
 /datum/faction/blob_conglomerate/check_win()
+	if (antag_madness)
+		return 0
 	if (!declared)//No blobs have been spawned yet
 		return 0
 	var/ded = TRUE

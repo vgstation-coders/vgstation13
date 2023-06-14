@@ -99,6 +99,8 @@
 #define ALL_REVS_DEAD 2
 
 /datum/faction/revolution/check_win()
+	if (antag_madness)
+		return FALSE
 	var/gameactivetime = world.time - ticker.gamestart_time*10 //gamestart_time is expressed in seconds, not deciseconds
 	if(gameactivetime < 5 MINUTES)
 		if(!(gameactivetime % 60))

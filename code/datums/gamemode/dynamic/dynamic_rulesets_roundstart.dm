@@ -794,6 +794,7 @@ Assign your candidates in choose_candidates() instead.
 	return TRUE
 
 /datum/dynamic_ruleset/roundstart/antag_madness/execute()
+	antag_madness = TRUE
 	//first we initialize the nanotrasen faction, even if there are no heads currently there
 	var/datum/faction/nanotrasen/nanotrasen = find_active_faction_by_type(/datum/faction/nanotrasen)
 	if (!nanotrasen)
@@ -862,6 +863,11 @@ Assign your candidates in choose_candidates() instead.
 				else
 					message_admins("ANTAG MADNESS: <font size='3'>[rule.name]</font> FAILED!")
 					log_admin("ANTAG MADNESS: <font size='3'>[rule.name]</font> FAILED!")
+
+	spawn(10)
+		message_admins("<span class='danger'>Antag Madness is now underway. In this very chaotic mode, admins are encouraged to proactively interfere with the round to keep things interesting, and help it reach a conclusion if necessary. Blobs and Rev may no longer cause the round to suddenly end, Malf and Nuke Ops still can if they destroy the station. If things get stale after 30 minutes and there are lots of dead players, consider bringing the round to a conclusion by either forcing a shuttle call, sending either the deathsquad or elite syndies to destroy the station, or trigger a supermatter cascade (or combination of those).</span>")
+		log_admin("<span class='danger'>Antag Madness is now underway. In this very chaotic mode, admins are encouraged to proactively interfere with the round to keep things interesting, and help it reach a conclusion if necessary. Blobs and Rev may no longer cause the round to suddenly end, Malf and Nuke Ops still can if they destroy the station. If things get stale after 30 minutes and there are lots of dead players, consider bringing the round to a conclusion by either forcing a shuttle call, sending either the deathsquad or elite syndies to destroy the station, or trigger a supermatter cascade (or combination of those).</span>")
+
 
 	spawn(20 MINUTES)//ERT calling is automated after 20 minutes. Any further developments will have to be manually enacted by the badmin who forced this terrible ruleset in the first place. have fun!
 		nanotrasen.delta = TRUE
