@@ -1497,8 +1497,8 @@ var/obj/blend_test = null
 		return
 
 	var/oldmotd = return_file_text("config/motd.txt")
-		message_admins("[key_name(usr)] has begun editing the message of the day. An archive of what the MotD was beforehand has been printed to the server logs in case a mistake was made.")
-		log_admin("[key_name(usr)] has begun editing the message of the day. An archive of the old MotD is as follows: [oldmotd]")
+	message_admins("[key_name(usr)] has begun editing the message of the day. An archive of what the MotD was beforehand has been printed to the server logs in case a mistake was made.")
+	log_admin("[key_name(usr)] has begun editing the message of the day. An archive of the old MotD is as follows: [oldmotd]")
 
 	var/newmotd = input(usr, "These changes will be persistent across shifts!", "Edit MotD", "[oldmotd]") as message|null
 	if(!newmotd)
