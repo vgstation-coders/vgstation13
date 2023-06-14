@@ -1500,6 +1500,7 @@ var/obj/blend_test = null
 	var/newmotd = input(usr, "These changes will be persistent across shifts!", "Edit MotD", "[oldmotd]") as message|null
 	if(!newmotd)
 		return
+	fdel("config/motd.txt")
 	text2file(newmotd, "config/motd.txt")
 	join_motd = newmotd	//Sets the current round's motd
 	log_admin("[key_name(usr)] has edited the message of the day. The new text is as follows: [newmotd].")
