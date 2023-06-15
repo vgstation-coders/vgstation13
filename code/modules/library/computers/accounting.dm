@@ -50,13 +50,16 @@
 	data["nextquery"] = "[nextmin] - [nextsub]"
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "accounting.tmpl", src.name, 800, 700)
+		ui = new(user, src, ui_key, "accounting.tmpl", src.name, 600, 500)
 		ui.set_initial_data(data)
 		ui.open()
 
 /obj/machinery/computer/accounting/Topic(href, href_list)
 	if(..())
 		return 1
+	if(!allowed(usr))
+		to_chat(usr, "<span class='warning'>You do not have accounting clearance.</span>")
+		return
 	if(href_list["reg"])
 		if(!in_range(src, usr))
 			return 1
@@ -101,14 +104,14 @@
 		return
 	var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(loc)
 	P.name = "accounting report for [worldtime2text()]"
-	P.info = "[entryinfo]" + "Total savings: $[savings]<BR>Prepared in part by: [english_list(contributors)]<BR>"
+	P.info = "[entryinfo]" + "Total savings: $[savings]<BR>Prepared in part by: [english_list(contributors)]<BR>This document is to be verified by Internal Affairs and faxed to Central Command.<BR>"
 	var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
 	stampoverlay.icon_state = "paper_stamp-cent"
 	if(!P.stamped)
 		P.stamped = new
 	P.stamped += /obj/item/weapon/stamp
 	P.overlays += stampoverlay
-	P.stamps += "<HR><i>It has a Central Command magnetic accounting stamp.</i>"
+	P.stamps += "<HR><i>It has a Central Command accounting stamp: MQAC[round(savings/50)]TRM</i>"
 	playsound(loc, "sound/effects/fax.ogg", 50, 1)
 	station_bonus += round(savings/10)
 	savings = 0

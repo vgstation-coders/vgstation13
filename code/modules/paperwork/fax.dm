@@ -131,6 +131,22 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 					to_chat(usr, "<span class='danger'>\The [src] displays a 404 error: Central Command not found.</span>")
 					return
 				if(dpt == "Central Command")
+					var/locate_acc = findtext(tofax.stamps,"MQAC")
+					if(locate_acc)
+						var/reward = copytext(tofax.stamps,locate_acc+4,findtext(tofax.stamps,"TRM"))
+						if(!text2num(reward))
+							message_admins("DEBUG: An accounting fax stamp had an irregular reward amount ([reward]) and could not be parsed.")
+							return
+						visible_message("<span class='warning'>The fax machine destroys the original [tofax] per infosec protocol!</span>")
+						qdel(tofax)
+						tofax = null
+						flick("faxreceive",src)
+						playsound(loc, "sound/effects/fax.ogg", 50, 1)
+						var/obj/item/weapon/storage/wallet/nt/wally = new()
+						dispense_cash(text2num(reward),wally)
+						spawn(2 SECONDS)
+							wally.forceMove(loc)
+							log_game("[usr]/([usr.ckey]) received [reward] cash as an automated fax response.")
 					Centcomm_fax(tofax, tofax.name, usr, dpt)
 				else
 					if(findtext(tofax.stamps,"magnetic"))
