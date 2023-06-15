@@ -2916,5 +2916,6 @@
 #include "maps\RandomZLevels\stationCollision.dm"
 #include "maps\RandomZLevels\tomb.dm"
 #include "maps\RandomZLevels\wildwest.dm"
+#include "maps\RandomZLevels\wildwest_props.dm"
 #include "maps\wheelstation\areas.dm"
 // END_INCLUDE

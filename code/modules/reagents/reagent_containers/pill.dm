@@ -515,6 +515,14 @@
 	..()
 	reagents.add_reagent(ARITHRAZINE, 10)
 
+/obj/item/weapon/reagent_containers/pill/lithotorcrazine
+	name = "lithotorcrazine pill"
+	desc = "Shields the body against radiation buildup, but does not cure it. Lasts around 5 minutes."
+	icon_state = "pill38"
+
+/obj/item/weapon/reagent_containers/pill/lithotorcrazine/New()
+	..()
+	reagents.add_reagent(LITHOTORCRAZINE, 30)
 
 /obj/item/weapon/reagent_containers/pill/nanofloxacin
 	name = "nanofloxacin pill"

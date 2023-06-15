@@ -14,7 +14,11 @@
 		SHC = (for(components of recipe) total_SHC *= component SHC)
 
 
-*///NO DON'T DO THAT, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S. IF YOU GET SOMETHING ABOVE 10 LET ALONE IN THE HUNDREDS YOU'RE PROBABLY DOING SOMETHING VERY WRONG
+	NO DON'T DO THAT, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S. IF YOU GET SOMETHING ABOVE 10 LET ALONE IN THE HUNDREDS YOU'RE PROBABLY DOING SOMETHING VERY WRONG
+
+	It is very common to use REAGENTS_METABOLISM or REM used in this file. Both are the same value, 0.5
+
+*/
 
 /datum/reagent
 	var/name = "Reagent"
@@ -6128,6 +6132,19 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#D9C0E7" //rgb: 217, 192, 231
 	custom_metabolism = 0.1
+
+//Anticoagulent. Great for helping the body fight off viruses but makes vulnerable to pain, bleeding, and brute damage.
+/datum/reagent/antipathogenic/feverfew
+	name = "Feverfew"
+	id = FEVERFEW
+	description = "Feverfew is a natural anticoagulant useful in fending off viruses, but it leaves one vulnerable to pain and bleeding."
+	color = "#b5651d"
+	pain_resistance = -25
+	data = list ("threshold" = 80)
+
+/datum/reagent/feverfew/on_mob_life(var/mob/living/M)
+	if(istype(M))
+		M.adjustBruteLoss(3 * REM) //1.5 per tick
 
 /datum/reagent/caffeine
 	name = "Caffeine"
