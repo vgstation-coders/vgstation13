@@ -83,7 +83,7 @@
 		AppendObjective(/datum/objective/hijack)
 
 /datum/role/changeling/proc/changelingRegen()
-	if(antag && antag.current && antag.current.stat == DEAD)
+	if((antag && antag.current && antag.current.stat == DEAD) || isnull(antag.current))
 		return
 	var/changes = FALSE
 	var/changeby = chem_charges
