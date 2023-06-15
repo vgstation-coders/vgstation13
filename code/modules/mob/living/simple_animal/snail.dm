@@ -76,7 +76,9 @@ var/max_snails = 40
 		return
 	return ..()
 
-/mob/living/simple_animal/snail/Crossed(mob/living/M as mob)
+/mob/living/simple_animal/snail/Crossed(mob/living/O)
+	if(!istype(O))
+		return
 	if(M.a_intent == I_HURT && prob(30))
 		adjustBruteLoss(4) // Owie
 	if (!in_shell && !isDead())
