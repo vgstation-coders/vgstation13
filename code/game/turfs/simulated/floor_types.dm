@@ -141,7 +141,7 @@
 			secured = !secured
 			C.playtoolsound(src, 80)
 			update_icon()
-			
+
 /turf/simulated/floor/engine/proc/explode_layers(var/layers = 1)
 	if(secured)		//plasteel tile, screwed in
 		secured = FALSE
@@ -163,11 +163,11 @@
 	var/turf/simulated/floor/F = src
 	F.make_plating()
 	layers -= 1
-	
+
 	//normal plating
 	if(!layers)
 		return
-		
+
 	var/severity = 2
 	if(layers > 1)
 		severity = 1
@@ -276,6 +276,7 @@
 
 /turf/simulated/floor/plating/deck
 	name = "deck"
+	icon_state = "deck"
 	icon_plating = "deck"
 	desc = "Children love to play on this deck."
 
