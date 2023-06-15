@@ -83,7 +83,7 @@
 		AppendObjective(/datum/objective/hijack)
 
 /datum/role/changeling/proc/changelingRegen()
-	if((antag && antag.current && antag.current.stat == DEAD) || isnull(antag.current))
+	if(antag && antag.current && antag.current.stat == DEAD)
 		return
 	var/changes = FALSE
 	var/changeby = chem_charges
@@ -106,7 +106,8 @@
 	return chosen_dna
 
 /datum/role/changeling/process()
-	changelingRegen()
+	if(antag.current)
+		changelingRegen()
 	..()
 
 // READ: Don't use the apostrophe in name or desc. Causes script errors.
