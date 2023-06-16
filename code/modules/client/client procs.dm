@@ -145,7 +145,7 @@
 
 	if(byond_version < MIN_CLIENT_VERSION)		//Out of date client.
 		message_admins("[key]/[ckey] has connected with an out of date client! Their version: [byond_version]. They will be kicked shortly.")
-		alert(src,"Your BYOND client is out of date. Please make sure you have have at least version [world.byond_version] installed. Check for a beta update if necessary.", "Update Yo'Self", "OK")
+		alert(src,"Your BYOND client is out of date. Please make sure you have have at least version [MIN_CLIENT_VERSION] installed. Check for a beta update if necessary.", "Update Yo'Self", "OK")
 		spawn(5 SECONDS)
 			del(src)
 
