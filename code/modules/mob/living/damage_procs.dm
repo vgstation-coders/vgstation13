@@ -54,8 +54,8 @@
 
 
 /mob/living/proc/critlog(curH,prevH)
-	if (istype(loc, /obj/machinery/cloning/clonepod))
-		return FALSE // Mob probably just spawned
+	if (istype(loc, /obj/machinery/cloning/clonepod) || iscorpse)
+		return FALSE // Mob probably just spawned or is a corpse that we don't care to track
 	return TRUE
 
 /mob/living/carbon/critlog(curH,prevH)
