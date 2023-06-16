@@ -69,8 +69,8 @@
 			playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 			return 1
 		solve_query(sol)
-		if(!(usr in contributors))
-			contributors += usr
+		if(!(usr.name in contributors))
+			contributors += usr.name
 	nanomanager.update_uis(src)
 	return 1
 
@@ -112,7 +112,7 @@
 	P.stamped += /obj/item/weapon/stamp
 	P.overlays += stampoverlay
 	P.stamps += "<HR><i>It has a Central Command accounting stamp: MQAC[round(savings/50)]TRM</i>"
-	playsound(loc, "sound/effects/fax.ogg", 50, 1)
+	playsound(loc, "sound/effects/dotmatrixprinter.ogg", 40, 1)
 	station_bonus += round(savings/10)
 	savings = 0
 	oldgood = -1
