@@ -821,6 +821,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 			//Throw organs around
 			var/randomdir = pick(cardinal)
 			step(organ, randomdir)
+			
+		if(istype(src, /datum/organ/external/head))
+			owner.update_hair(1)
 
 		owner.update_body(1)
 		owner.handle_organs(1)
