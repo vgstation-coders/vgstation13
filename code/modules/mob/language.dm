@@ -21,8 +21,8 @@
 		var/speaker_verb_override = speaker.get_spoken_verb(msg)
 		if (speaker_verb_override)
 			return speaker_verb_override
-	if(locate(/obj/item/clothing/head/cardborg) in speaker.get_equipped_items())
-		silicon = 1
+		if(locate(/obj/item/clothing/head/cardborg) in speaker.get_equipped_items())
+			silicon = 1
 	switch(mode)
 		if(SPEECH_MODE_WHISPER)
 			return "[whisper_verb]"
