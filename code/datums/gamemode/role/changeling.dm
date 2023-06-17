@@ -106,7 +106,8 @@
 	return chosen_dna
 
 /datum/role/changeling/process()
-	changelingRegen()
+	if(antag.current)
+		changelingRegen()
 	..()
 
 // READ: Don't use the apostrophe in name or desc. Causes script errors.
