@@ -206,6 +206,7 @@ var/global/global_cricket_population = 0
 	icon_state = "dishwasher"
 	pass_flags = PASSTABLE
 	anchored = FALSE
+	density = TRUE
 	var/effective_range = 7
 	var/active = FALSE
 
@@ -221,7 +222,8 @@ var/global/global_cricket_population = 0
 	if(I.is_wrench(user))
 		wrenchAnchor(user,I, 4 SECONDS)
 	else if(istype(I, /obj/item/trash/plate) || istype(I, /obj/effect/decal/cleanable/broken_plate))
-		handle(I)
+		if(user.drop_item(I,loc))
+			handle(I)
 	else
 		..()
 
@@ -237,23 +239,18 @@ var/global/global_cricket_population = 0
 /obj/structure/dishwasher/process()
 	if(!active)
 		return
-	var/pulled = FALSE
 	for(var/obj/effect/decal/cleanable/broken_plate/BP in view(effective_range, src))
-		if(BP.loc == loc)
-			handle(BP)
-			continue
-		pull(BP)
-		pulled = TRUE
+		if(BP.loc != loc)
+			playsound(BP.loc, 'sound/effects/vacuum.ogg', 25, 1)
+			playsound(loc, 'sound/effects/vacuum.ogg', 25, 1)
+		handle(BP)
 	for(var/obj/item/trash/plate/P in view(effective_range,src))
 		if(P.clean)
 			continue
-		if(P.loc == loc)
-			handle(P)
-			continue
-		pull(P)
-		pulled = TRUE
-	if(pulled)
-		playsound(src, 'sound/effects/vacuum.ogg', 25, 1)
+		if(P.loc != loc)
+			playsound(P.loc, 'sound/effects/vacuum.ogg', 25, 1)
+			playsound(loc, 'sound/effects/vacuum.ogg', 25, 1)
+		handle(P)
 
 /obj/structure/dishwasher/PreImpact(atom/movable/mover, speed)
 	if(istype(mover,/obj/item) && mover.throwing)
@@ -265,15 +262,14 @@ var/global/global_cricket_population = 0
 	else
 		return FALSE
 
-/obj/structure/dishwasher/proc/pull(atom/movable/AM)
-	AM.forceMove(loc)
-
 /obj/structure/dishwasher/proc/handle(obj/O)
 	var/obj/item/trash/plate/potential_stack = pref_stack(O)
 	var/obj/item/trash/plate/P
 	if(istype(O, /obj/item/trash/plate))
 		P = O
+		vacuum_anim(O)
 	else if(istype(O, /obj/effect/decal/cleanable/broken_plate))
+		vacuum_anim(O)
 		qdel(O)
 		P = new(src)
 	else
@@ -284,8 +280,25 @@ var/global/global_cricket_population = 0
 		P.forceMove(potential_stack)
 		potential_stack.plates += P
 		potential_stack.update_icon()
+		spawn(5)
+			playsound(loc, 'sound/effects/refill.ogg', 25, 1)
 	else
+		P.alpha = 0
+		spawn(5)//so we don't see the same plate appear twice
+			P.alpha = 255
+			playsound(loc, 'sound/effects/refill.ogg', 25, 1)
 		P.forceMove(loc)
+
+/obj/structure/dishwasher/proc/vacuum_anim(var/obj/O)
+	var/offset_x = (O.x - x) * 32
+	var/offset_y = (O.y - y) * 32
+	var/atom/movable/overlay/animation = anim(target = src,a_icon = 'icons/effects/effects.dmi',a_icon_state = "shieldsparkles",sleeptime = 15, lay = PROJECTILE_LAYER, offX = offset_x, offY = offset_y, col = "#C1FFFA", alph = 200, plane = EFFECTS_PLANE)
+	var/image/I = image('icons/effects/effects.dmi',"")
+	I.appearance = O.appearance
+	animation.overlays += I
+	animate(animation, pixel_x = 0, pixel_y = 0, time = 5, easing = SINE_EASING|EASE_OUT)
+	spawn(5)
+		qdel(animation)
 
 /obj/structure/dishwasher/proc/pref_stack(obj/to_stack)
 	for(var/obj/item/trash/plate/P in loc)
