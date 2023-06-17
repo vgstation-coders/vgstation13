@@ -290,8 +290,8 @@ var/global/global_cricket_population = 0
 		P.forceMove(loc)
 
 /obj/structure/dishwasher/proc/vacuum_anim(var/obj/O)
-	var/offset_x = (O.x - x) * 32
-	var/offset_y = (O.y - y) * 32
+	var/offset_x = ((O.x - x) * 32) + O.pixel_x
+	var/offset_y = ((O.y - y) * 32) + O.pixel_y
 	var/atom/movable/overlay/animation = anim(target = src,a_icon = 'icons/effects/effects.dmi',a_icon_state = "shieldsparkles",sleeptime = 15, lay = PROJECTILE_LAYER, offX = offset_x, offY = offset_y, col = "#C1FFFA", alph = 200, plane = EFFECTS_PLANE)
 	var/image/I = image('icons/effects/effects.dmi',"")
 	I.appearance = O.appearance
