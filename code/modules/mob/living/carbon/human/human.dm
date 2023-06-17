@@ -3,7 +3,7 @@
 	name = "unknown"
 	real_name = "unknown"
 	voice_name = "unknown"
-	var/fartCooldown = 20 SECONDS
+	var/fartCooldown = 20 SECONDS	//To finally be able to make the clown fart 
 	icon = 'icons/mob/human.dmi'
 	icon_state = "body_m_s"
 	can_butcher = 1
