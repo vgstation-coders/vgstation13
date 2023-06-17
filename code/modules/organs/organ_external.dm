@@ -1557,6 +1557,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	owner.update_hair()
 
+/datum/organ/external/head/droplimb(override, no_explode, spawn_limb, display_message)
+	. = ..()
+	owner.update_hair(1)
+	return .
+
 /****************************************************
 			   EXTERNAL ORGAN ITEMS
 ****************************************************/
