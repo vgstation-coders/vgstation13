@@ -3,7 +3,7 @@
 	name = "unknown"
 	real_name = "unknown"
 	voice_name = "unknown"
-	fartCooldown = 20 SECONDS
+	var/fartCooldown = 20 SECONDS
 	icon = 'icons/mob/human.dmi'
 	icon_state = "body_m_s"
 	can_butcher = 1
