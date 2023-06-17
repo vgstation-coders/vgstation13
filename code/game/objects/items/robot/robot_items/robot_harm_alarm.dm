@@ -65,7 +65,7 @@
 	desc = "Releases a harmless blast that confuses most organics. For when the crime is JUST TOO MUCH"
 	alarm = "HALT! SECURITY!"
 	alarm_sound = 'sound/voice/halt.ogg'
-	emagged_alarm = "FUCK YOU Shitcurity,."
+	emagged_alarm = "FUCK YOU SHIT EATING Bastard. EAT A DICK. FUCK SHIT MONKEY FUCK ASS WANKER FROM THE DEPTHS OF SHIT.
 	emagged_alarm_sound = 'sound/voice/binsult.ogg'
 	vary = FALSE
 
