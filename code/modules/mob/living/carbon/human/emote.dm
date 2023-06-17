@@ -144,7 +144,7 @@
 			H.visible_message("<span class = 'warning'><b>[H]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>","<span class = 'warning'>You hear a [pick("tremendous","gigantic","colossal")] fart.</span>")
 			playsound(location, 'sound/effects/superfart.ogg', 50, 0)
 			for(var/mob/living/V in oviewers(aoe_range, get_turf(H)))
-				if(!airborne_can_reach(location,get_turf(V),aoe_range))
+				if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? fartCooldown : fartCooldown  * 2))
 					continue
 				shake_camera(V,10,5)
 				if (V == H)
