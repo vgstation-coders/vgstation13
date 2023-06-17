@@ -207,6 +207,7 @@ var/global/global_cricket_population = 0
 	pass_flags = PASSTABLE
 	anchored = FALSE
 	density = TRUE
+	layer = OPEN_DOOR_LAYER//so plates always appear properly above them
 	var/effective_range = 7
 	var/active = FALSE
 
@@ -234,6 +235,11 @@ var/global/global_cricket_population = 0
 		to_chat(user,"<span class='warning'>\The [src] needs to be anchored first!<span>")
 		return
 	active = !active
+	playsound(loc,'sound/misc/click.ogg',30,0,-1)
+	if (active)
+		icon_state = "dishwasher_on"
+	else
+		icon_state = "dishwasher"
 	to_chat(user,"<span class='notice'>You toggle \the [src] [active ? "on" : "off"].</span>")
 
 /obj/structure/dishwasher/process()
