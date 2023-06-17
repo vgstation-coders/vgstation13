@@ -279,8 +279,8 @@ var/global/global_cricket_population = 0
 	if(potential_stack)
 		P.forceMove(potential_stack)
 		potential_stack.plates += P
-		potential_stack.update_icon()
 		spawn(5)
+			potential_stack.update_icon()
 			playsound(loc, 'sound/effects/refill.ogg', 25, 1)
 	else
 		P.alpha = 0
