@@ -1049,7 +1049,7 @@
 		M.gib()
 		
 	if(ishuman(M))
-	var/mob/living/carbon/human/H = M
+		var/mob/living/carbon/human/H = M
 		if(holder.has_reagent(COLDDRINKS) & prob(10))
 			var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in H.butchering_drops
 			if(J.amount = 0)
