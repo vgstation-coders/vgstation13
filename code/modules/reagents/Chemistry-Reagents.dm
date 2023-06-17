@@ -1052,25 +1052,25 @@
 		var/mob/living/carbon/human/H = M
 		if(holder.has_reagent(COLDDRINKS) & prob(10))
 			var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in H.butchering_drops
-			if(J.amount = 0)
+			if(J.amount == 0)
 				return
 			else
 				H.custom_pain(pick("AHHH YOUR TEETH HURT!","You didn't know you had a cavity. You do now.","DAMN YOUR TEETH HURT"),5)
-				H.add_reagent(SACID,1) //just a smidgeon
+				holder.reagents.add_reagent(SACID,1) //just a smidgeon
 				chillcounter = 30 //60 seconds
 
 		if(chillcounter > 0)
 			chillcounter--
 			if(holder.has_reagent(HOTDRINKS) & prob(30))
 				var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in H.butchering_drops
-				if(J.amount = 0)
+				if(J.amount == 0)
 					return
 				else
 					J.amount = 0
 					H.custom_pain("Your teeth crack and tremble before breaking all of a sudden! THE PAIN!", 100) //you dun fucked up lad
 					playsound(M, 'sound/effects/toothshatter.ogg', 50, 1)
 					H.audible_scream()
-					H.add_reagent(SACID,10)
+					holder.reagents.add_reagent(SACID,10)
 
 /datum/reagent/minttoxin/essence
 	name = "Mint Essence"
