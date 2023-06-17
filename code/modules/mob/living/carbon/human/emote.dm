@@ -144,7 +144,7 @@
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
 
-	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? 20 SECONDS : 40 SECONDS))
+	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? fartCooldown : fartCooldown  * 2))
 		if(H.stat != UNCONSCIOUS)
 			message = "strains, and nothing happens."
 			emote_type = EMOTE_VISIBLE
