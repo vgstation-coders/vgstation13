@@ -1056,7 +1056,7 @@
 				return
 			else
 				H.custom_pain(pick("AHHH YOUR TEETH HURT!","You didn't know you had a cavity. You do now.","DAMN YOUR TEETH HURT"),5)
-				holder.reagents.add_reagent(SACID,1) //just a smidgeon
+				holder.add_reagent(SACID,1) //just a smidgeon
 				chillcounter = 30 //60 seconds
 
 		if(chillcounter > 0)
@@ -1070,7 +1070,7 @@
 					H.custom_pain("Your teeth crack and tremble before breaking all of a sudden! THE PAIN!", 100) //you dun fucked up lad
 					playsound(M, 'sound/effects/toothshatter.ogg', 50, 1)
 					H.audible_scream()
-					holder.reagents.add_reagent(SACID,10)
+					holder.add_reagent(SACID,10)
 
 /datum/reagent/minttoxin/essence
 	name = "Mint Essence"
