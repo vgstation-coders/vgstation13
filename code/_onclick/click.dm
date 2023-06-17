@@ -3,7 +3,9 @@
 	~Sayu
 */
 
-//A workaround for a BYOND bug (or at least weird behavior). It's classified.
+//BYOND has a quirk (maybe bug?) where, if you initiate a clickdrag with one mouse button, any clicks with another button during the drag hit the object being dragged.
+//This allowed you to, for example, start a middle-click drag on someone and then have an aimbot that allows you to effortlessly hit them in melee or ranged combat as long as you held MMB.
+//This code discards clicks performed during a drag to prevent this.
 /client/Click(object, location, control, params)
 	var/list/p = params2list(params)
 	if(p["drag"])
