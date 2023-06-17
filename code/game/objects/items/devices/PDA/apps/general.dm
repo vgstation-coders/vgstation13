@@ -142,7 +142,7 @@ var/global/list/currentevents3 = list("Border patrol around Space America has ti
 	"Renowned mime scientist Free Shrugs has discovered a new element today. He has named it '  ', he also says that it has the properties of '   '.",
 	"Archaeologists have discovered god's final message to his creation today. The message reads, 'bawk'.",
 	"Scientists have discovered a new type of elementary particle today. Our sources say it has a bad atitude, and enjoys the color blue.",
-	"Today, a man was discovered to be living with a 20 year old ghost in his house. When the ghost was questioned who killed him, he responded 'A FAGGOT!'. More at four.",
+	"Today, a man was discovered to be living with a 20 year old ghost in his house. When the ghost was questioned who killed him, he responded 'A Tarjan!'. More at four.",
 	"Scientists report that ghosts do in fact exist, however, they are huge assholes.",
 	"Supermatter researchers today have reported that the substance is highly volatile and could possibly rip apart the universe in large quantities. Discount Dan has been reported as ordering over 1000 pounds of supermatter shards.",
 	"Scientists working at the BPRF have discovered a pocket universe comprised fully of dead clown souls today. 40 scientists are being treated for madness."

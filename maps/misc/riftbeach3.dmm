@@ -123,7 +123,7 @@
 /area/beach)
 "L" = (
 /mob/living/simple_animal/crab{
-	desc = "ARE YOU READY FOR THAT SLEEPOVER NIGGER? FUCK YEAH YOU ARE!";
+	desc = "ARE YOU READY FOR THAT SLEEPOVER? FUCK YEAH YOU ARE!";
 	icon_living = "Nicholson";
 	icon_state = "Nicholson";
 	name = "Crab Nicholson"
