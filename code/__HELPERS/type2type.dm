@@ -105,6 +105,27 @@
 		else
 	return
 
+/proc/dir2text_short(direction)
+	switch(direction)
+		if(NORTH)
+			return "N"
+		if(SOUTH)
+			return "S"
+		if(EAST)
+			return "E"
+		if(WEST)
+			return "W"
+		if(NORTHEAST)
+			return "NE"
+		if(SOUTHEAST)
+			return "SE"
+		if(NORTHWEST)
+			return "NW"
+		if(SOUTHWEST)
+			return "SW"
+		else
+	return
+
 //Turns text into proper directions
 /proc/text2dir(direction)
 	switch(uppertext(direction))
@@ -126,6 +147,29 @@
 			return SOUTHWEST
 		else
 	return
+
+// A copy of text2dir, extended to accept one and two letter
+//  directions, and to clearly return 0 otherwise.
+/proc/text2dir_extended(direction)
+	switch(uppertext(direction))
+		if("NORTH", "N")
+			return NORTH
+		if("SOUTH", "S")
+			return SOUTH
+		if("EAST", "E")
+			return EAST
+		if("WEST", "W")
+			return WEST
+		if("NORTHEAST", "NE")
+			return NORTHEAST
+		if("NORTHWEST", "NW")
+			return NORTHWEST
+		if("SOUTHEAST", "SE")
+			return SOUTHEAST
+		if("SOUTHWEST", "SW")
+			return SOUTHWEST
+		else
+	return 0
 
 //Converts an angle (degrees) into an ss13 direction
 /proc/angle2dir(var/degree)
@@ -305,3 +349,17 @@
 			else
 				return /datum
 	return text2path(copytext(string_type, 1, last_slash))
+
+/proc/iconstate2framedir()
+	switch(icon_state)
+		if("N-S","NE-SW","N-SW","N-SE","N-SW-SE","N-SE-SW","N-S-pass")
+			return NORTH
+		if("S-NE","S-NW","S-NE-NW","S-NW-NE")
+			return SOUTH
+		if("E-W","NW-SE","E-NW","E-SW","E-NW-SW","E-SW-NW","E-W-pass")
+			return EAST
+		if("W-SE","W-NE","W-SE-NE","W-NE-SE")
+			return WEST
+		if("closed","open","closing","opening")
+			return dir
+	return 0
