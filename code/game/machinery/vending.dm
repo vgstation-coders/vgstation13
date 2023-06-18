@@ -4108,7 +4108,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 
 
 /obj/machinery/vending/art
-	name = "\improper Le Mecene des Arts"  //Mécène
+	name = "\improper Le Patron des Arts"  //Mécène won't render
 	desc = "A vendor for art supplies. Pas sans mon béret !"
 	product_slogans = list(
 		"Il est temps pour vous de jeter des perles devant ces porcs incultes.",
