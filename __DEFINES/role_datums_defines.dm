@@ -22,6 +22,8 @@
 #define SPIDERCLAN "spider clan"
 #define XENOMORPH_HIVE "alien hivemind"
 #define JUSTICE_DEPARTMENT "justice department"
+#define NANOTRASEN "Nanotrasen"
+
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -83,10 +85,14 @@
 #define TAG_MIME "tag mime"
 #define JUDGE "judge"
 #define GRUE "grue"
+#define NANOTRASENOFFICIAL "nanotrasen official"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
 #define GREET_LATEJOIN		"latejoin"
+#define GREET_LATEJOIN_ERT_COMING		"latejoinertcoming"
+#define GREET_LATEJOIN_ERT_NOT_COMING		"latejoinertnotcoming"
+#define GREET_LATEJOINMADNESS		"latejoinmadness"
 #define GREET_ADMINTOGGLE	"admintoggle"
 #define GREET_CUSTOM		"custom"
 #define GREET_MIDROUND		"midround"

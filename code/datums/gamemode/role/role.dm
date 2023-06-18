@@ -595,29 +595,11 @@
 
 //________________________________________________
 
-/datum/role/death_commando
-	name = DEATHSQUADIE
-	id = DEATHSQUADIE
-	special_role = DEATHSQUADIE
-	logo_state = "death-logo"
-
-//________________________________________________
-
 /datum/role/syndicate_elite_commando
 	name = SYNDIESQUADIE
 	id = SYNDIESQUADIE
 	special_role = SYNDIESQUADIE
 	logo_state = "elite-logo"
-
-//________________________________________________
-
-
-/datum/role/emergency_responder
-	name = RESPONDER
-	id = RESPONDER
-	special_role = RESPONDER
-	logo_state = "ERT_empty-logo"
-	is_antag = FALSE
 
 //________________________________________________
 
