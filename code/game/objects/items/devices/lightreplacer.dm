@@ -77,7 +77,7 @@ This used to be handled by attackby() on the light fixture itself (lol), but tha
 	if(!proximity_flag)
 		return 0
 	var/turf/gather_loc = isturf(target) ? target : target.loc
-	if(!gather_loc)
+	if(!gather_loc || !isturf(gather_loc))
 		return 0
 	var/obj/machinery/light/lightfixture = locate() in gather_loc.contents
 	var/obj/item/weapon/light/best_light = get_best_light(lightfixture)
@@ -321,7 +321,7 @@ This used to be handled by attackby() on the light fixture itself (lol), but tha
 		"\proper You pick up \the [L] using \the [src].")
 			return 1
 		else
-			to_chat(usr, "<span class='warning'>The [src] has no supply container!</span>")
+			to_chat(usr, "<span class='warning'>\The [src] has no supply container!</span>")
 			return 0
 	else if(L.status == LIGHT_BROKEN || L.status == LIGHT_BURNED)
 		if(waste && waste.can_be_inserted(L, TRUE))
