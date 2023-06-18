@@ -7,6 +7,7 @@
 	icon_state = "computer"
 	anchored = 1
 	density = 1
+	req_access = list(access_library) //This access requirement is currently only used for the delete button showing
 	var/arcanecheckout = 0
 	//var/screenstate = 0 // 0 - Main Menu, 1 - Inventory, 2 - Checked Out, 3 - Check Out a Book
 	var/buffer_book
@@ -132,8 +133,8 @@
 
 				for(var/datum/cachedbook/CB in get_page(page_num))
 					var/author = CB.author
-					var/controls =  "<A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
-					if(user.check_rights(R_ADMIN))
+					var/controls =  "<A href='?src=\ref[src];preview=[CB]'>\[Preview\]</A> <A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
+					if(isAdminGhost(user) || allowed(user))
 						controls +=  " <A style='color:red' href='?src=\ref[src];del=[CB.id]'>\[Delete\]</A>"
 						author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(CB.ckey)]'>[ckey(CB.ckey)])</A>)"
 					dat += {"<tr>
@@ -265,23 +266,11 @@
 
 		screenstate = 4
 	if(href_list["del"])
-		if(!usr.check_rights(R_ADMIN))
-			to_chat(usr, "You aren't an admin, piss off.")
-			return
-		var/datum/cachedbook/target = getBookByID(href_list["del"]) // Sanitized in getBookByID
-		var/ans = alert(usr, "Are you sure you wish to delete \"[target.title]\", by [target.author]? This cannot be undone.", "Library System", "Yes", "No")
-		if(ans=="Yes")
-			var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE id=:id", list("id" = "[target.id]"))
-			var/response = query.Execute()
-			if(!response)
-				to_chat(usr, query.ErrorMsg())
-				qdel(query)
-				return
-			log_admin("LIBRARY: [usr.name]/[usr.key] has deleted \"[target.title]\", by [target.author] ([target.ckey])!")
-			message_admins("[key_name_admin(usr)] has deleted \"[target.title]\", by [target.author] ([target.ckey])!")
-			src.updateUsrDialog()
-			qdel(query)
-			return
+		if(!isAdminGhost(usr)) //old: !usr.check_rights(R_ADMIN)
+			to_chat(usr, "<span class='notice'>Your deletion request has been transmitted to Central Command.</span>")
+			request_delete_book(getBookByID(href_list["del"]),usr)
+		else
+			delete_book(getBookByID(href_list["del"]), usr)
 
 	if(href_list["delbyckey"])
 		if(!usr.check_rights(R_ADMIN))
@@ -474,9 +463,45 @@
 				bibledelay = 0
 			make_external_book(newbook)
 
-	src.add_fingerprint(usr)
+	if(href_list["preview"])
+		var/datum/cachedbook/PVB = href_list["preview"]
+		if(!istype(PVB) || PVB.programmatic)
+			return
+		var/list/_http = world.Export("http://ss13.moe/index.php/book?id=[PVB.id]")
+		if(!_http || !_http["CONTENT"])
+			return
+		var/http = file2text(_http["CONTENT"])
+		if(!http)
+			return
+		usr << browse("<TT><I>[PVB.title] by [PVB.author].</I></TT> <BR>" + "[http]", "window=[PVB.title];size=600x800")
+
+	add_fingerprint(usr)
+	updateUsrDialog()
+
+/obj/machinery/computer/library/checkout/proc/delete_book(var/datum/cachedbook/B, mob/user)
+	if(!istype(B) || !user)
+		return
+	if(!user.check_rights(R_ADMIN))
+		return
+	var/ans = alert(user, "Are you sure you wish to delete \"[B.title]\", by [B.author]? This cannot be undone.", "Library System", "Yes", "No")
+	if(ans!="Yes")
+		return
+	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE id=:id", list("id" = "[B.id]"))
+	var/response = query.Execute()
+	if(!response)
+		to_chat(user, query.ErrorMsg())
+		qdel(query)
+		return
+	log_admin("LIBRARY: [user.name]/[user.key] has deleted \"[B.title]\", by [B.author] ([B.ckey])!")
+	message_admins("[key_name_admin(user)] has deleted \"[B.title]\", by [B.author] ([B.ckey])!")
 	src.updateUsrDialog()
-	return
+	qdel(query)
+
+/obj/machinery/computer/library/checkout/proc/request_delete_book(var/datum/cachedbook/B, mob/requester)
+	log_admin("LIBRARY: [requester.name]/[requester.key] requested [B.title] be deleted permanently.")
+	var/raw = "LIBRARY: Request to permanently delete [B] from the library database. <A href='?src=\ref[src];preview=[B]'>\[Preview\]</A> <A style='color:red' href='?src=\ref[src];del=[B.id]'>\[Delete\]</A>"
+	var/formal = "<span class='notice'><b>  LIBRARY: [key_name(requester, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[requester]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[requester]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[requester]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[requester]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<a href='?_src_=holder;role_panel=\ref[requester]'>RP</a>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[requester]'>BSA</A>) (<A HREF='?_src_=holder;CentcommReply=\ref[requester]'>RPLY</A>):</b> [raw]</span>"
+	send_prayer_to_admins(formal, raw, 'sound/effects/msn.ogg', "Centcomm", key_name(requester), get_turf(requester))
 
 /*
  * Library Scanner
@@ -486,7 +511,8 @@
 	if(!newbook || !newbook.id)
 		return
 	var/obj/item/weapon/book/B = new newbook.path(src.loc)
-
+	B.icon_state = "book[rand(1,9)]"
+	B.item_state = B.icon_state
 	if (!newbook.programmatic)
 		var/list/_http = world.Export("http://ss13.moe/index.php/book?id=[newbook.id]")
 		if(!_http || !_http["CONTENT"])
@@ -498,6 +524,5 @@
 		B.title = newbook.title
 		B.author = newbook.author
 		B.dat = http
-		B.icon_state = "book[rand(1,9)]"
-		B.item_state = B.icon_state
+
 	src.visible_message("[src]'s printer hums as it produces a completely bound book. How did it do that?")
