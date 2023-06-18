@@ -70,7 +70,7 @@
 preattack() handles two things here (aside from its normal function of allowing an attack to go through on 0, blocking it on 1):
 - Handle replacing the light fixture on the tile that's clicked. Will return with 1 if successful. This is intentional so it does one thing per click! (either replace light or pick up broken lights)
 - Handle picking up broken lights on the clicked tile. As with replacing lights, this also returns 1 if successful.
-This used to be handled by attackby() on the light fixture itself (lol), but that has been removed with this implementation.
+This used to be handled by attackby() on the light fixtures and bulbs themselves (lol), but that has been removed with this implementation.
 */
 
 /obj/item/device/lightreplacer/preattack(atom/target, mob/user, proximity_flag, click_parameters)
