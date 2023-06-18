@@ -350,7 +350,7 @@
 				return /datum
 	return text2path(copytext(string_type, 1, last_slash))
 
-/proc/iconstate2framedir()
+/atom/proc/iconstate2framedir()
 	switch(icon_state)
 		if("N-S","NE-SW","N-SW","N-SE","N-SW-SE","N-SE-SW","N-S-pass")
 			return NORTH
