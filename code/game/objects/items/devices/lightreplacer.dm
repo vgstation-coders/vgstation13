@@ -317,7 +317,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 				lsource.remove_from_storage(L, supply)
 			else
 				supply.handle_item_insertion(L, TRUE)
-				usr.visible_message("[usr] picks up the broken [L] using \the [src].", \
+				usr.visible_message("\proper[usr] picks up the broken [L] using \the [src].", \
 		"\proper You pick up \the [L] using \the [src].")
 			return 1
 		else
@@ -330,7 +330,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 				lsource.remove_from_storage(L, waste)
 			else
 				waste.handle_item_insertion(L, TRUE)
-				usr.visible_message("[usr] picks up the broken [L] using \the [src].", \
+				usr.visible_message("\proper[usr] picks up the broken [L] using \the [src].", \
 		"\proper You pick up the broken [L.name] using \the [src].")
 			return 1
 		else
