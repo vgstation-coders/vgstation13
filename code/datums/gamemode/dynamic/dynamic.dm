@@ -301,8 +301,9 @@ var/stacking_limit = 90
 					threat_log += "[worldtime2text()]: Roundstart [rule.name] forced"
 
 					if (istype(rule, /datum/dynamic_ruleset/roundstart/delayed/))
-						message_admins("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
-						log_admin("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
+						var/datum/dynamic_ruleset/roundstart/delayed/delayed_ruleset = rule
+						message_admins("DYNAMIC MODE: with a delay of [delayed_ruleset.delay/10] seconds.")
+						log_admin("DYNAMIC MODE: with a delay of [delayed_ruleset.delay/10] seconds.")
 						pick_delay(rule)
 
 					if (rule.execute())//this should never fail since ready() returned 1
@@ -441,8 +442,9 @@ var/stacking_limit = 90
 // returns: 0 or 1 depending on success. (failure meaning something runtimed mid-code.)
 /datum/gamemode/dynamic/proc/executing_roundstart_rule(var/datum/dynamic_ruleset/the_rule)
 	if (istype(the_rule, /datum/dynamic_ruleset/roundstart/delayed/))
-		message_admins("DYNAMIC MODE: Delayed ruleset, with a delay of [the_rule:delay/10] seconds.")
-		log_admin("DYNAMIC MODE: Delayed ruleset, with a delay of [the_rule:delay/10] seconds.")
+		var/datum/dynamic_ruleset/roundstart/delayed/delayed_ruleset = the_rule
+		message_admins("DYNAMIC MODE: Delayed ruleset, with a delay of [delayed_ruleset.delay/10] seconds.")
+		log_admin("DYNAMIC MODE: Delayed ruleset, with a delay of [delayed_ruleset.delay/10] seconds.")
 		threat_log += "[worldtime2text()]: Roundstart [the_rule.name] spent [the_rule.cost]"
 		return pick_delay(the_rule)
 

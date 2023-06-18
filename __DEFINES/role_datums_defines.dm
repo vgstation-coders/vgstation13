@@ -90,6 +90,8 @@
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
 #define GREET_LATEJOIN		"latejoin"
+#define GREET_LATEJOIN_ERT_COMING		"latejoinertcoming"
+#define GREET_LATEJOIN_ERT_NOT_COMING		"latejoinertnotcoming"
 #define GREET_LATEJOINMADNESS		"latejoinmadness"
 #define GREET_ADMINTOGGLE	"admintoggle"
 #define GREET_CUSTOM		"custom"

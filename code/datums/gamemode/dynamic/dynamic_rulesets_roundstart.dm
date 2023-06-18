@@ -846,8 +846,9 @@ Assign your candidates in choose_candidates() instead.
 						mode.threat_log += "[worldtime2text()]: Roundstart [rule.name] forced by antag madness"
 
 						if (istype(rule, /datum/dynamic_ruleset/roundstart/delayed/))
-							message_admins("ANTAG MADNESS: with a delay of [rule:delay/10] seconds.")
-							log_admin("ANTAG MADNESS: with a delay of [rule:delay/10] seconds.")
+							var/datum/dynamic_ruleset/roundstart/delayed/delayed_ruleset = rule
+							message_admins("ANTAG MADNESS: with a delay of [delayed_ruleset.delay/10] seconds.")
+							log_admin("ANTAG MADNESS: with a delay of [delayed_ruleset.delay/10] seconds.")
 							mode.pick_delay(rule)
 
 						if (rule.execute())
@@ -884,7 +885,13 @@ Assign your candidates in choose_candidates() instead.
 		head.name = newPlayer.mind.assigned_role
 		head.AssignToRole(newPlayer.mind,1)
 		nanotrasen.HandleRecruitedRole(head)
-		head.Greet(GREET_LATEJOIN)
+		switch(nanotrasen.delta)
+			if (0)
+				head.Greet(GREET_LATEJOIN)
+			if (1)
+				head.Greet(GREET_LATEJOIN_ERT_COMING)
+			if (2)
+				head.Greet(GREET_LATEJOIN_ERT_NOT_COMING)
 		return TRUE
 	else
 		for (var/datum/dynamic_ruleset/latejoin/rule in mode.latejoin_rules)//otherwise, you may become a traitor
