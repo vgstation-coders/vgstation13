@@ -382,9 +382,9 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 			items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade = 50)
 	..()
 
-/obj/item/weapon/storage/pill_bottle/mint/
+/obj/item/weapon/storage/pill_bottle/mint
 	name = "You shouldn't be seeing this Mints!"
-	desc = "The lastest hip mint sensation in you shouldn't be seeing this!, tell your nearest poopmin(t)."
+	desc = "The lastest hip mint sensation in you shouldn't be seeing this! Tell your nearest poopmin(t)."
 	icon = 'icons/obj/candymachine.dmi'
 	storage_slots = 50
 
