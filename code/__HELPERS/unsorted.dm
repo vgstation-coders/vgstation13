@@ -293,7 +293,7 @@
 		if(M.client || istype(M, /mob/living/captive_brain)) //Ignore the mob if it has a client or is a "captive brain" (borer nonsense)
 			continue
 		sorted_output.Add(M)
-		
+
 	return sorted_output
 
 // Finds ALL mobs on turfs in line of sight. Similar to "in dview", but catches mobs that are not on a turf (e.g. inside a locker or such).
@@ -1515,7 +1515,6 @@ Game Mode config tags:
 				continue
 			taken_freqs.Add(chosen_freq)
 			freqs[i] = chosen_freq
-			world.log << "Radio frequency [i] is now [chosen_freq]"
 			freq_found = TRUE
 
 	freqtospan = list(
@@ -1653,7 +1652,7 @@ Game Mode config tags:
 				if(draw_red)
 					T.color = "red"
 					sleep(5)
-		
+
 		y = epicenter.y + c_dist - 1
 		x = epicenter.x + c_dist
 		for(y in y to epicenter.y-c_dist step -1)
