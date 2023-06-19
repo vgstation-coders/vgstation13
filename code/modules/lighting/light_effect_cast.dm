@@ -5,12 +5,16 @@
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
 #define BLUR_SIZE 2 // integer, please
 
+#define FADEOUT_STEP		2
+
 // Shadows over light_range 9 haven't been done yet.
-#define MAX_LIGHT_RANGE 9
+#define MAX_LIGHT_RANGE 10
 
 #define NO_POST_PROCESSING 	0
 #define WALL_SHADOWS_ONLY  	1
 #define ALL_SHADOWS	 		2
+
+#define DIRECT_ILLUM_ANGLE 20
 
 var/light_power_multiplier = 5
 var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
@@ -75,7 +79,7 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 			animate(src, alpha = 180, time = 5, loop = -1, easing = CIRCULAR_EASING)
 			animate(alpha = 255, time = 5, loop = -1, easing = CIRCULAR_EASING)
 
-	for (var/thing in view(min(world.view, light_range), src))
+	for (var/thing in view(min(world.view, distance_to_wall_illum), src))
 		if (ismob(thing))
 			var/mob/M = thing
 			M.check_dark_vision()
@@ -83,7 +87,7 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 			var/turf/T = thing
 			T.lumcount = -1
 			affecting_turfs += T
-			if (get_dist(T, location) <= distance_to_wall_illum && CHECK_OCCLUSION(T))
+			if (get_dist(T, location) <= distance_to_wall_illum && CHECK_OCCLUSION(T) && is_valid_projection(T))
 				affected_shadow_walls += T
 
 	if(!isturf(loc))
@@ -92,6 +96,8 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 		affecting_turfs.Cut()
 		return
 
+/atom/movable/light/proc/is_valid_projection(var/turf/T)
+	return TRUE
 
 /atom/movable/light/smooth/cast_light_init()
 	. = ..()
@@ -263,15 +269,26 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		xy_swap = 1
 
 	// Softer shadows if two bordering walls for now
-	var/two_bordering_walls = 0
+	var/block_east = FALSE
+	var/block_west = FALSE
 	if (num == FRONT_SHADOW)
+		// Technically North-South...
 		if (xy_swap)
-			two_bordering_walls = check_wall_occlusion(get_step(target_turf, NORTH)) && check_wall_occlusion(get_step(target_turf, SOUTH))
+			block_east = check_wall_occlusion(get_step(target_turf, NORTH))
+			block_west = check_wall_occlusion(get_step(target_turf, SOUTH))
 		else
-			two_bordering_walls = check_wall_occlusion(get_step(target_turf, EAST)) && check_wall_occlusion(get_step(target_turf, WEST))
+			block_east = check_wall_occlusion(get_step(target_turf, EAST))
+			block_west = check_wall_occlusion(get_step(target_turf, WEST))
+
+	if (block_east)
+		var/obj/item/weapon/paper/P = new(target_turf)
+		P.name = "est block"
+	if (block_west)
+		var/obj/item/weapon/paper/P = new(target_turf)
+		P.name = "west block"
 
 	var/shadowoffset = WORLD_ICON_SIZE/2 + (WORLD_ICON_SIZE*light_range)
-
+	var/dual_block = block_east && block_west
 	//TODO: rewrite this comment:
 	//using scale to flip the shadow template if needed
 	//horizontal (x) flip is easy, we just check if the offset is negative
@@ -291,13 +308,23 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	// Using BYOND's render_target magick here
 
 	var/image/I = new()
-	var/shadow_image_identifier = "shadow[num]_[light_range]_[x_flip]_[y_flip]_[xy_swap]_[abs(y_offset)]_[abs(x_offset)]_[two_bordering_walls]"
+	var/shadow_image_identifier = "shadow[num]_[light_range]_[x_flip]_[y_flip]_[xy_swap]_[abs(y_offset)]_[abs(x_offset)]_[block_east]_[block_west]"
+
+	var/obj/item/weapon/paper/nano/N = new(target_turf)
+	N.napme = "[light_range]_[abs(y_offset)]_[abs(x_offset)]"
 
 	// We've done this before...
 	if (shadow_image_identifier in pre_rendered_shadows)
 		I.render_source = shadow_image_identifier
 	// Or not!
 	else
+
+		// We only draw east-blocked shadows
+		if (block_west && !dual_block)
+			switch (num)
+				if (FRONT_SHADOW)
+					M.Scale(-1,1)
+
 		M.Scale(x_flip, y_flip)
 		//here we do the actual rotate if needed
 		if(xy_swap)
@@ -305,7 +332,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
 		// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
 		// The downside is, of course, that you need to cover all the cases in your switch.
-		var/icon/shadowicon = try_get_light_range_icon(two_bordering_walls, light_range, num)
+		var/icon/shadowicon = try_get_light_range_icon(block_east, block_west, light_range, num)
 		I = image(shadowicon)
 
 		//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
@@ -313,7 +340,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
 		else
 			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
-		//apply the transform matrix
+
 		I.transform = M
 		I.layer = LIGHTING_LAYER
 		I.render_target = shadow_image_identifier
@@ -344,7 +371,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	//and add it to the lights overlays
 	temp_appearance_shadows += I
 
-
 /atom/movable/light/shadow/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	return
 
@@ -354,42 +380,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 /atom/movable/light/proc/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	var/targ_dir = get_dir(target_turf, src)
 
-	// 05/09: commented out for now, but worth exploring.
-	// This is a rather complicated block which is here for aesthetics.
-	// The goal is to get an angle of approach from the light that is as close to what the player sees as possible.
-	// We call this the "attack angle".
-	// To this end, angles which do not come from the same "room" as the light (ie, which are not in view) are excluded.
-	// Angles coming from walls are excluded as well.
-	// We then go by incremental steps away from the angle (-45, +45, +90, -90) until we do a full circle.
-	// This process allows us to find the closest direction the light might be hitting from.
-	// You may convince yourself of the working of this code with this snippet:
-	/*
-	var/dir_0 = 1
-	for (var/i = 1 to 8)
-    	world.log << dir_0
-    	var/angle = ((-1)**i)*i*45
-    	dir_0 = turn(dir_0, angle)
-	*/
-	// Where you will see the dir_0 go through the entire wind rose as expected.
-	// We need two attack angles : one cardinal and one intercardinal, for reasons that will become clear later on.
 
 	var/turf/turf_light_angle = get_step(target_turf, targ_dir)
-	/*
-	var/list/closest_attack_angles = list()
-	*/
 	if (CHECK_OCCLUSION(turf_light_angle) || !(turf_light_angle in affecting_turfs))
-		/*
-		var/direction = targ_dir
-		for (var/i = 1 to alldirs.len)
-			var/turf/new_source = get_step(target_turf, direction)
-			var/occluded = CHECK_OCCLUSION(new_source)
-			if (!occluded && (new_source in affecting_turfs))
-				closest_attack_angles += direction
-				if (closest_attack_angles.len == 2)
-					break
-			var/i_th_angle = ((-1)**i)*i*45 // -45, (-45+90)=+45, (+45-135)=-90, etc. With each step we go a little bit further away from the target direction.
-			direction = turn(direction, i_th_angle)
-		*/
 		affected_shadow_walls -= src
 		return
 
@@ -410,58 +403,22 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		img.layer = ROID_TURF_LIGHT_LAYER
 		temp_appearance += img
 
-	var/image/black_turf = new()
-
-	if ("black_turf_prerender" in pre_rendered_shadows)
-		black_turf.render_target = "black_turf_prerender"
-	else
-		black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-		black_turf.icon_state = "black"
-		black_turf.render_source = "black_turf_prerender"
-		pre_rendered_shadows += "black_turf_prerender"
-
-
-	black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
-	black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
-	black_turf.layer = HIGHEST_LIGHTING_LAYER
-	temp_appearance += black_turf
-
-	var/blocking_dirs = 0
-	for(var/d in cardinal)
-		var/turf/T = get_step(target_turf, d)
-		if(CHECK_OCCLUSION(T) && (T in affected_shadow_walls))
-			blocking_dirs |= d
-
-	// Blending works best if the line formed by the wall and its two blocking neighbours is perpendical to the attack angle of the light.
-	// Basically that means that a corner must be attacked from an intercardinal, and a straight wall must be attacked from a cardinal.
-	// Since byond's directions algebra is shit, the best way to handle this is by cheating and selecting the easiest case (N|S or E|W) and using else.
-		/*
-	if (closest_attack_angles.len)
-
-		if ((blocking_dirs == (NORTH|SOUTH)) || (blocking_dirs == (EAST|WEST)))
-			targ_dir = pick(closest_attack_angles & cardinal)
-		else
-			targ_dir = pick(closest_attack_angles & diagonal)
-		*/
-	// The "edge" of the light, with images consisting of directional sprites from wall_lighting.dmi "pushed" in the correct direction.
-	var/turf_shadow_image_identifier = "turf_shadow_[targ_dir]_[blocking_dirs]_[light_power]"
+	var/turf_shadow_image_identifier = "white_turf"
 	var/image/I = new()
 
 	if (turf_shadow_image_identifier in pre_rendered_shadows)
 		I.render_source = turf_shadow_image_identifier
 	else
 		I = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-		I.icon_state = "[blocking_dirs]-[targ_dir]"
+		I.icon_state = "white"
 		I.render_target = turf_shadow_image_identifier
 		pre_rendered_shadows += turf_shadow_image_identifier
-
-	I.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
+	var/intensity = min(255,max(0,round(light_power*light_power_multiplier*25)))
+	var/fadeout = max(get_dist(src, target_turf)/FADEOUT_STEP, 1)
+	I.alpha =  round(intensity/fadeout)
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	I.layer = HIGHEST_LIGHTING_LAYER
-
-	// This is to avoid multiple masking of wall turfs from multiple light sources
-	target_turf.lit = 1
 
 	temp_appearance += I
 
@@ -483,7 +440,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 		image_result.overlays = image_result.temp_appearance
 		// Apply a filter
-		image_result.filters += filter(type = "blur", size = BLUR_SIZE)
+		image_result.filters = filter(type = "blur", size = BLUR_SIZE)
 		temp_appearance += image_result
 	else
 		temp_appearance += temp_appearance_shadows
@@ -491,9 +448,12 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	if (light_range < 3)
 		return
 
+
 	// And then blacken out what's unvisible
 	// -- eliminating the underglow
+
 	for (var/turf/T in affected_shadow_walls)
+
 		var/image/black_turf = new()
 
 		if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
@@ -502,7 +462,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
 			black_turf.icon_state = "black"
 			black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
-		pre_rendered_shadows += "postprocess_black_turf_prerender"
+			pre_rendered_shadows += "postprocess_black_turf_prerender"
 
 		black_turf.icon_state = "black"
 		var/x_offset = T.x - x
@@ -512,41 +472,19 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		black_turf.layer = ANTI_GLOW_PASS_LAYER
 		temp_appearance += black_turf
 
-
-/atom/movable/light/shadow/proc/consolidate_shadows()
-	// Fetch the image processed so far
-	var/image/shadow_overlay/image_result = new()
-	var/last_pixel_x_im = -50000
-	var/last_pixel_y_im = -50000
-	for (var/image/image_component in temp_appearance)
-		// The next image is not connected (ie, further than 32 pixels away) from the last current image? Means we are in a new group.
-		if ( abs(image_component.pixel_x - last_pixel_x_im) + abs(image_component.pixel_y - last_pixel_y_im) > WORLD_ICON_SIZE && image_result.temp_appearance.len)
-			image_result.overlays = image_result.temp_appearance
-			image_result.filters += filter(type = "blur", size = BLUR_SIZE)
-			temp_appearance += image_result
-			image_result = new()
-
-		temp_appearance -= image_component
-		image_result.temp_appearance += image_component
-		last_pixel_x_im = image_component.pixel_x
-		last_pixel_y_im = image_component.pixel_y
-
 // Smooth out shadows and then blacken out the wall glow
 /atom/movable/light/shadow/post_processing()
-	consolidate_shadows()
-
-	/*
-	if (image_result.temp_appearance.len)
-		image_result.overlays = image_result.temp_appearance
-		image_result.filters += filter(type = "blur", size = BLUR_SIZE)
-		temp_appearance += image_result
-	*/
+	//consolidate_shadows()
+	overlays = temp_appearance
+	filters = filter(type = "blur", size = BLUR_SIZE)
 
 	// -- eliminating the underglow
 	for (var/turf/T in affected_shadow_walls)
 		for (var/dir in cardinal)
+
 			var/turf/neighbour = get_step(T, dir)
 			if (neighbour && !CHECK_OCCLUSION(neighbour))
+
 				var/image/black_turf = new()
 
 				if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
@@ -695,79 +633,33 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	else
 		return check_wall_occlusion(get_step(src, EAST)) && check_wall_occlusion(get_step(src, WEST))
 
-/proc/try_get_light_range_icon(two_bordering_walls, light_range, num)
-	/*
-	//if (lighting_engine)
-	//	lighting_engine.choose_light_range_icon(two_bordering_walls, light_range, num)
-	//else
-	//	world.log << "Auto-init of the lighting engine datum..."
-	//	lighting_engine = new lighting_system_used
-	//	lighting_engine.choose_light_range_icon(two_bordering_walls, light_range, num)
-	*/
-	var/shadowicon
-	if (!two_bordering_walls && (num == FRONT_SHADOW))
-		switch(light_range)
-			if(2)
-				shadowicon = 'icons/lighting/light_range_2_shadows2_soft.dmi'
-			if(3)
-				shadowicon = 'icons/lighting/light_range_3_shadows2_soft.dmi'
-			if(4)
-				shadowicon = 'icons/lighting/light_range_4_shadows2_soft.dmi'
-			if(5)
-				shadowicon = 'icons/lighting/light_range_5_shadows2_soft.dmi'
-			if(6)
-				shadowicon = 'icons/lighting/light_range_6_shadows2_soft.dmi'
-			if(7)
-				shadowicon = 'icons/lighting/light_range_7_shadows2_soft.dmi'
-			if(8)
-				shadowicon = 'icons/lighting/light_range_8_shadows2_soft.dmi'
-			if(9)
-				shadowicon = 'icons/lighting/light_range_9_shadows2_soft.dmi'
+/atom/movable/light/proc/simulate_wall_illum()
+	var/distance_to_wall_illum = get_wall_view()
+	for (var/thing in view(min(world.view, distance_to_wall_illum), src))
+		if (isturf(thing))
+			var/turf/T = thing
+			T.lumcount = -1
+			affecting_turfs += T
+			if (get_dist(T, get_turf(src)) <= distance_to_wall_illum && CHECK_OCCLUSION(T) && is_valid_projection(T))
+				var/intensity = min(255,max(0,round(light_power*light_power_multiplier*25)))
+				var/fadeout = max(get_dist(src, T)/FADEOUT_STEP, 1)
+				var/x = round(intensity/fadeout)
+				var/obj/item/weapon/paper/P = new(T)
+				P.name = "[x]"
 
-	else
-		switch(light_range)
-			if(2)
-				if(num == CORNER_SHADOW)
-					shadowicon = 'icons/lighting/light_range_2_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_2_shadows2.dmi'
-			if(3)
-				if(num == CORNER_SHADOW)
-					shadowicon = 'icons/lighting/light_range_3_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_3_shadows2.dmi'
-			if(4)
-				if(num == CORNER_SHADOW)
-					shadowicon = 'icons/lighting/light_range_4_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_4_shadows2.dmi'
-			if(5)
-				if(num == CORNER_SHADOW)
-					shadowicon = 'icons/lighting/light_range_5_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_5_shadows2.dmi'
-			if(6)
-				if(num == CORNER_SHADOW)
-					shadowicon = 'icons/lighting/light_range_6_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_6_shadows2.dmi'
-			if(7)
-				if(num == CORNER_SHADOW)
-					shadowicon = 'icons/lighting/light_range_7_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_7_shadows2.dmi'
-			if(8)
-				if(num == CORNER_SHADOW)
-					shadowicon = 'icons/lighting/light_range_8_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_8_shadows2.dmi'
-			if(9)
-				if(num == CORNER_SHADOW)
-					shadowicon = 'icons/lighting/light_range_9_shadows1.dmi'
-				else
-					shadowicon = 'icons/lighting/light_range_9_shadows2.dmi'
-	return shadowicon
-
+/turf/proc/check_sum_lighting()
+	var/i = 0
+	for (var/atom/movable/light/shadow/S in range(src, 7))
+		i++
+		var/dist = S.get_wall_view()
+		S.holder.name = "[S.holder.name] #[i]"
+		if (get_dist(get_turf(S), src) <= dist && S.is_valid_projection(src))
+			var/intensity = min(255,max(0,round(S.light_power*light_power_multiplier*25)))
+			var/fadeout = max(get_dist(src, S)/FADEOUT_STEP, 1)
+			var/x = round(intensity/fadeout)
+			var/obj/item/weapon/paper/P = new(src)
+			var/active = (usr in viewers(S))
+			P.name = "([S.x],[S.y];[S.holder.name]):[x] [active? "YES":"NO"]"
 
 #undef MAX_LIGHT_RANGE
 #undef BASE_PIXEL_OFFSET
@@ -777,6 +669,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 #undef CORNER_OFFSET_MULTIPLIER_SIZE
 #undef BLUR_SIZE
 
+#undef FADEOUT_STEP
+#undef DIRECT_ILLUM_ANGLE
 
 #undef NO_POST_PROCESSING
 #undef WALL_SHADOWS_ONLY

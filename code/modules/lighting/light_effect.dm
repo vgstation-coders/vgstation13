@@ -155,7 +155,7 @@
 	return light_range
 
 /atom/movable/light/shadow/get_wall_view()
-	return round(TURF_SHADOW_FRACTION*light_range)
+	return light_range
 
 // -- Does a basic cheap raycast from the light to the turf.
 // Return true if it can see it.
