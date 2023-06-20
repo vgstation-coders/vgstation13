@@ -76,7 +76,7 @@
 		animation.master = target
 		flick(flick_anim, animation)
 
-	spawn(max(sleeptime, 15))
+	spawn(max(sleeptime, 5))
 		qdel(animation)
 
 	return animation
