@@ -67,6 +67,7 @@
 	setup(user)
 
 /obj/machinery/atmospherics/trinary/pressure_valve/proc/setup(mob/user)
+
 	var/dat = {"
 				<head>
 					<title>[name] control</title>
@@ -86,16 +87,14 @@
 						<b>Constant value:</b> [constant_threshold] [mode2unit[mode]] | <a href='?src=\ref[src];set_constant=1'>Change</a><br>
 
 						<b>Control source</b>:<br>
-						&nbsp;- <a href='?src=\ref[src];set_control=[CVALVE_INPUT_LEFT]'>[control_input == CVALVE_INPUT_LEFT ? "<b>LEFT</b>" : "Left"]</a><br>
-						&nbsp;- <a href='?src=\ref[src];set_control=[CVALVE_INPUT_CENTER]'>[control_input == CVALVE_INPUT_CENTER ? "<b>CENTER</b>" : "Center"]</a><br>
-						&nbsp;- <a href='?src=\ref[src];set_control=[CVALVE_INPUT_RIGHT]'>[control_input == CVALVE_INPUT_RIGHT ? "<b>RIGHT</b>" : "Right"]</a><br>
+						&nbsp;- <a href='?src=\ref[src];set_control=[CVALVE_INPUT_LEFT]'>[control_input == CVALVE_INPUT_LEFT ? "<b>[uppertext(dir2text(opposite_dirs[src.dir]))]</b>" : "[capitalize(dir2text(opposite_dirs[src.dir]))]"]</a><br>
+						&nbsp;- <a href='?src=\ref[src];set_control=[CVALVE_INPUT_CENTER]'>[control_input == CVALVE_INPUT_CENTER ? "<b>[uppertext(dir2text(counterclockwise_perpendicular_dirs[src.dir]))]</b>" : "[capitalize(dir2text(counterclockwise_perpendicular_dirs[src.dir]))]"]</a><br>
+						&nbsp;- <a href='?src=\ref[src];set_control=[CVALVE_INPUT_RIGHT]'>[control_input == CVALVE_INPUT_RIGHT ? "<b>[uppertext(dir2text(src.dir))]</b>" : "[capitalize(dir2text(src.dir))]"]</a><br>
 
 						<b>Threshold source</b>:<br>
-						&nbsp;- <a href='?src=\ref[src];set_threshold=[CVALVE_THRESHOLD_LEFT]'>[threshold_source == CVALVE_THRESHOLD_LEFT ? "<b>LEFT</b>" : "Left"]</a><br>
+						&nbsp;- <a href='?src=\ref[src];set_threshold=[CVALVE_THRESHOLD_LEFT]'>[threshold_source == CVALVE_THRESHOLD_LEFT ? "<b>[uppertext(dir2text(opposite_dirs[src.dir]))]</b>" : "[capitalize(dir2text(opposite_dirs[src.dir]))]"]</a><br>
 						&nbsp;- <a href='?src=\ref[src];set_threshold=[CVALVE_THRESHOLD_CONSTANT]'>[threshold_source == CVALVE_THRESHOLD_CONSTANT ? "<b>CONSTANT</b>" : "Constant"]</a><br>
-						&nbsp;- <a href='?src=\ref[src];set_threshold=[CVALVE_THRESHOLD_RIGHT]'>[threshold_source == CVALVE_THRESHOLD_RIGHT ? "<b>RIGHT</b>" : "Right"]</a><br>
-
-						<br><i>Note: Left/Right pipe position is relative to the Center pipe's position</i>
+						&nbsp;- <a href='?src=\ref[src];set_threshold=[CVALVE_THRESHOLD_RIGHT]'>[threshold_source == CVALVE_THRESHOLD_RIGHT ? "<b>[uppertext(dir2text(src.dir))]</b>" : "[capitalize(dir2text(src.dir))]"]</a><br>
 					</tt>
 				</body>
 			"}
@@ -353,12 +352,4 @@
 	switch(signal.data["command"])
 		if("enable")
 			enabled = signal.data["enable"]
-			update_icon()
-
-		if("mode")
-			open_on_above_threshold = signal.data["above"]
-			mode = signal.data["mode"]
-			control_input = signal.data["control"]
-			threshold_source = signal.data["threshold"]
-			constant_threshold = signal.data["constant"]
 			update_icon()
