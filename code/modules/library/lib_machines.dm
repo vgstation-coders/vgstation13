@@ -219,7 +219,7 @@ var/global/datum/research/research_archive_datum
 
 /obj/machinery/researcharchive
 	name = "research archive"
-	desc = "A high-powered data archive device that takes technology disks and persistently backs them up to Central Comamnd servers for future shifts. Usually takes two disks per technology."
+	desc = "A high-powered data archive device that takes technology disks and persistently backs them up to specialized servers for the upcoming shift. Usually takes two disks per technology."
 	icon = 'icons/obj/library.dmi'
 	icon_state = "binder"
 	anchored = TRUE
