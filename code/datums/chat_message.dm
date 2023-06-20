@@ -155,7 +155,7 @@ var/runechat_icon = null
 			combined_height += msg.approx_lines
 			var/sched_remaining = msg.scheduled_destruction - world.time
 			if (sched_remaining > CHAT_MESSAGE_SPAWN_TIME)
-				var/remaining_time = (sched_remaining) * (CHAT_MESSAGE_EXP_DECAY ** idx++) * (CHAT_MESSAGE_HEIGHT_DECAY ** combined_height)
+				var/remaining_time = max(0, (sched_remaining) * (CHAT_MESSAGE_EXP_DECAY ** idx++) * (CHAT_MESSAGE_HEIGHT_DECAY ** combined_height))
 				msg.scheduled_destruction = world.time + remaining_time
 				spawn(remaining_time)
 					msg.end_of_life()
