@@ -266,6 +266,9 @@
 
 		screenstate = 4
 	if(href_list["del"])
+		if(!allowed(usr))
+			to_chat(usr,"<span class='warning'>You do not have access to make deletion requests.</span>")
+			return
 		if(!isAdminGhost(usr)) //old: !usr.check_rights(R_ADMIN)
 			to_chat(usr, "<span class='notice'>Your deletion request has been transmitted to Central Command.</span>")
 			request_delete_book(getBookByID(href_list["del"]),usr)
