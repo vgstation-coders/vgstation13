@@ -10,7 +10,7 @@
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
-    var/fartCooldown = 20 SECONDS
+	var/fartCooldown = 20 SECONDS
 
 /mob/living/carbon/human/dummy
 	real_name = "Test Dummy"
