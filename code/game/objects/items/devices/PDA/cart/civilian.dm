@@ -25,8 +25,7 @@
     if (!cl)
         menu += "ERROR: Unable to determine current location."
     else
-        menu += "Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]],[cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>"
-        menu += "<br><A href='byond://?src=\ref[src];choice=49'>(Refresh Coordinates)</a><br>"
+        menu += "Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]], [cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>"
         menu += "<h4>Located Mops:</h4>"
         var/ldat
         for (var/obj/item/weapon/mop/M in mop_list)
@@ -34,8 +33,8 @@
             if(ml)
                 if (ml.z != cl.z)
                     continue
-                var/direction = get_dir(src, M)
-                ldat += "Mop - <b>\[[ml.x-WORLD_X_OFFSET[ml.z]],[ml.y-WORLD_Y_OFFSET[ml.z]] ([uppertext(dir2text(direction))])\]</b> - [M.reagents.total_volume ? "Wet" : "Dry"]<br>"
+                var/direction = get_dir(cl, M)
+                ldat += "Mop - <b>\[[ml.x-WORLD_X_OFFSET[ml.z]], [ml.y-WORLD_Y_OFFSET[ml.z]] ([uppertext(dir2text_short(direction))])\]</b> - [M.reagents.total_volume ? "Wet" : "Dry"]<br>"
         if (!ldat)
             menu += "None"
         else
@@ -47,8 +46,8 @@
             if(bl)
                 if (bl.z != cl.z)
                     continue
-                var/direction = get_dir(src, B)
-                ldat += "Bucket - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b> - Water level: [B.reagents.total_volume]/100<br>"
+                var/direction = get_dir(cl, B)
+                ldat += "Bucket - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b> - Water level: [B.reagents.total_volume]/100<br>"
         if (!ldat)
             menu += "None"
         else
@@ -60,8 +59,8 @@
             if(bl)
                 if (bl.z != cl.z)
                     continue
-                var/direction = get_dir(src, B)
-                ldat += "Cleanbot - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b> - [B.on ? "Online" : "Offline"]<br>"
+                var/direction = get_dir(cl, B)
+                ldat += "Cleanbot - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b> - [B.on ? "Online" : "Offline"]<br>"
         if (!ldat)
             menu += "None"
         else
@@ -73,8 +72,8 @@
             if(bl)
                 if (bl.z != cl.z)
                     continue
-                var/direction = get_dir(src, J)
-                ldat += "Jani-Cart - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b> - [J.upgraded ? "Upgraded" : "Unupgraded"]<br>"
+                var/direction = get_dir(cl, J)
+                ldat += "Jani-Cart - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b> - [J.upgraded ? "Upgraded" : "Unupgraded"]<br>"
         if (!ldat)
             menu += "None"
         else
@@ -85,8 +84,8 @@
             if(bl)
                 if (bl.z != cl.z)
                     continue
-                var/direction = get_dir(src, K)
-                ldat += "Keys - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b><br>"
+                var/direction = get_dir(cl, K)
+                ldat += "Keys - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b><br>"
         if (!ldat)
             menu += "None"
         else
