@@ -2858,6 +2858,7 @@
 #include "code\ZAS\XGM.dm"
 #include "code\ZAS\XGM_gases.dm"
 #include "code\ZAS\Zone.dm"
+#include "code\~secrets\~secrets.dm"
 #include "goon\code\datums\browserOutput.dm"
 #include "goon\code\obj\machinery\bot\chefbot.dm"
 #include "interface\interface.dm"
