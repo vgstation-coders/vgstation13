@@ -95,7 +95,8 @@
 
 /obj/item/weapon/melee/energy/sword/New()
 	..()
-	_color = pick("red","blue","green","purple")
+	if(!_color)
+		_color = pick("red","blue","green","purple")
 	if(!active_state)
 		active_state = base_state + _color
 	update_icon()

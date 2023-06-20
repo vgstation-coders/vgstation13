@@ -301,9 +301,10 @@ var/stacking_limit = 90
 					threat_log += "[worldtime2text()]: Roundstart [rule.name] forced"
 
 					if (istype(rule, /datum/dynamic_ruleset/roundstart/delayed/))
-						message_admins("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
-						log_admin("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
-						return pick_delay(rule)
+						var/datum/dynamic_ruleset/roundstart/delayed/delayed_ruleset = rule
+						message_admins("DYNAMIC MODE: with a delay of [delayed_ruleset.delay/10] seconds.")
+						log_admin("DYNAMIC MODE: with a delay of [delayed_ruleset.delay/10] seconds.")
+						pick_delay(rule)
 
 					if (rule.execute())//this should never fail since ready() returned 1
 						rule.stillborn = IsRoundAboutToEnd()
@@ -312,7 +313,6 @@ var/stacking_limit = 90
 							current_rules += rule
 						for(var/mob/M in rule.assigned)
 							candidates -= M
-						return 1
 					else
 						message_admins("DYNAMIC MODE: ....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
 						log_admin("DYNAMIC MODE: ....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
@@ -442,8 +442,9 @@ var/stacking_limit = 90
 // returns: 0 or 1 depending on success. (failure meaning something runtimed mid-code.)
 /datum/gamemode/dynamic/proc/executing_roundstart_rule(var/datum/dynamic_ruleset/the_rule)
 	if (istype(the_rule, /datum/dynamic_ruleset/roundstart/delayed/))
-		message_admins("DYNAMIC MODE: Delayed ruleset, with a delay of [the_rule:delay/10] seconds.")
-		log_admin("DYNAMIC MODE: Delayed ruleset, with a delay of [the_rule:delay/10] seconds.")
+		var/datum/dynamic_ruleset/roundstart/delayed/delayed_ruleset = the_rule
+		message_admins("DYNAMIC MODE: Delayed ruleset, with a delay of [delayed_ruleset.delay/10] seconds.")
+		log_admin("DYNAMIC MODE: Delayed ruleset, with a delay of [delayed_ruleset.delay/10] seconds.")
 		threat_log += "[worldtime2text()]: Roundstart [the_rule.name] spent [the_rule.cost]"
 		return pick_delay(the_rule)
 
@@ -565,9 +566,6 @@ var/stacking_limit = 90
 
 	if (latejoin_injection_cooldown)
 		latejoin_injection_cooldown--
-
-	for (var/datum/dynamic_ruleset/rule in current_rules)
-		rule.process()
 
 	if (midround_injection_cooldown)
 		midround_injection_cooldown--
@@ -711,7 +709,8 @@ var/stacking_limit = 90
 			if (forced_latejoin_rule.choose_candidates())
 				picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
-
+	else if (persistent_rule_interaction(newPlayer))
+		return
 	else if (!latejoin_injection_cooldown && injection_attempt())
 		var/list/drafted_rules = list()
 		for (var/datum/dynamic_ruleset/latejoin/rule in latejoin_rules)
@@ -890,3 +889,9 @@ var/stacking_limit = 90
 /datum/gamemode/dynamic/proc/update_stillborn_rulesets()
 	for (var/datum/dynamic_ruleset/ruleset in executed_rules)
 		ruleset.stillborn = IsRoundAboutToEnd()
+
+/datum/gamemode/dynamic/proc/persistent_rule_interaction(var/mob/living/newPlayer)
+	for (var/datum/dynamic_ruleset/ruleset in executed_rules)
+		if (ruleset.latespawn_interaction(newPlayer))
+			return TRUE
+	return FALSE

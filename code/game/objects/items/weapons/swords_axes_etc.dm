@@ -203,12 +203,12 @@
 //Most of the other special functions are handled in their own files.
 
 /obj/item/weapon/melee/energy/sword/green/New()
-	..()
 	_color = "green"
+	..()
 
 /obj/item/weapon/melee/energy/sword/red/New()
-	..()
 	_color = "red"
+	..()
 
 /*
  * Energy Axe

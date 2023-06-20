@@ -71,6 +71,7 @@ var/list/holopads = list()
 				if(!AI.client)
 					continue
 				to_chat(AI, "<span class='big info'>Your presence is requested at <a href='?src=\ref[AI];jumptoholopad=\ref[src]'>\the [area]</a>.</span>")
+				AI << 'sound/machines/twobeep.ogg'
 		else
 			to_chat(user, "<span class='notice'>A request for AI presence was already sent recently.</span>")
 
