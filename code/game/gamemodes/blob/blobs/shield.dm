@@ -30,12 +30,7 @@
 
 	health += 10
 	return 1
-/*
-/obj/effect/blob/shield/Pulse(var/pulse = 0, var/origin_dir = 0)
-	..()
-	if(blob_looks[looks] == 64)
-		anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "strongpulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 51)
-*/
+
 /obj/effect/blob/shield/update_icon(var/spawnend = 0)
 	if(icon_size == 64)
 		spawn(1)
