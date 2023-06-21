@@ -259,7 +259,7 @@ var/list/blob_overminds = list()
 			return
 		user.delayNextAttack(8)
 		user.do_attack_animation(src, user)
-		user.visible_message("<span class='danger'>\The [user] [user.attacktext] \the [src].</span>")
+		user.visible_message("<span class='danger'>\The [user] [user.attack_text] \the [src].</span>")
 		health -= (user.get_unarmed_damage(src)/brute_resist)
 		playsound(src, 'sound/effects/attackblob.ogg', 50, 1)
 		update_health()
