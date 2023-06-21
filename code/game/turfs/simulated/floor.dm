@@ -322,26 +322,27 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/proc/burn_tile()
 	if(istype(src,/turf/simulated/floor/engine))
-		return
+		return//Reinforced floors don't burn
 	if(istype(src,/turf/unsimulated/floor/asteroid))
 		return//Asteroid tiles don't burn
-	if(is_metal_floor())
-		src.icon_state = "damaged[pick(1,2,3,4,5)]"
+	if(istype(src,/turf/simulated/floor/shuttle))
+		if(!(locate(/obj/effect/decal/cleanable/soot) in src))
+			new /obj/effect/decal/cleanable/soot(src)
 		burnt = 1
 	else if(is_metal_floor())
-		src.icon_state = "floorscorched[pick(1,2)]"
+		icon_state = "damaged[pick(1,2,3,4,5)]"
 		burnt = 1
 	else if(is_plating())
-		src.icon_state = "panelscorched"
+		icon_state = "panelscorched"
 		burnt = 1
 	else if(is_wood_floor())
-		src.icon_state = "wood-broken"
+		icon_state = "wood-broken"
 		burnt = 1
 	else if((is_carpet_floor()) || (is_arcade_floor()))
-		src.icon_state = "carpet-broken"
+		icon_state = "carpet-broken"
 		burnt = 1
 	else if(is_grass_floor())
-		src.icon_state = "sand[pick("1","2","3")]"
+		icon_state = "sand[pick("1","2","3")]"
 		burnt = 1
 	else if(is_mineral_floor())
 		burnt = 1
