@@ -403,7 +403,6 @@ var/list/all_doors = list()
 /obj/machinery/door/bless()
 	..()
 	if(arcane_linked_door)
-		arcane_linked_door.bless()
 		arcane_linked_door = null
 		if(!density)
 			set_opacity(0)
