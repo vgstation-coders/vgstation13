@@ -419,10 +419,14 @@
 	var/selected = plist[c]
 
 	if(aicamera.aipictures.len)
+		if(alert("Would you like to attach photo to this message?", "Add Photo Attachment?", "Yes", "No") == "No")
+			message_app.create_message(src, selected)
+			aiPDA.photo = null
+			return
 		var/list/nametemp = list()
 		for(var/datum/picture/t in aicamera.aipictures)
 			nametemp += t.fields["name"]
-		var/find = input("Select image") in nametemp
+		var/find = input("Select image") as null|anything in nametemp
 		for(var/datum/picture/q in aicamera.aipictures)
 			if(q.fields["name"] == find)
 				aiPDA.photo = new /obj/item/weapon/photo(aiPDA)
