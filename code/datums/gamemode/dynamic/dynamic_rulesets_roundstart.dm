@@ -876,9 +876,9 @@ Assign your candidates in choose_candidates() instead.
 		var/datum/striketeam/ert/response_team = new()
 		response_team.trigger_strike(null,"Nanotrasen officials have been misled to a dummy Space Station filled with antagonistic forces. You must find, protect, and retrieve the various Heads of Staff and Internal Affair Agents aboard the station. Anyone else is a potential threat that must be dealt with extreme prejudice.")
 		for(var/mob/living/player in player_list)
-			if (!M.client)
+			if (!player.client)
 				continue
-			if (M.stat == DEAD)
+			if (player.stat == DEAD)
 				continue
 			if (isMoMMI(player))
 				continue
