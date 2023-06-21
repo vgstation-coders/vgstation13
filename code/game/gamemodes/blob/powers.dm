@@ -122,6 +122,10 @@
 	if(!T)
 		return
 
+	if(antag_madness)
+		to_chat(src, "<span class='danger'>Something is amiss, maybe some genetic defect, but regardless you find yourself unable to create a new blob core. You'll have to endure on your own.</span>")
+		return
+
 	var/obj/effect/blob/B = (locate(/obj/effect/blob) in T)
 
 	if(!B)//We are on a blob

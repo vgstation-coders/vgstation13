@@ -97,6 +97,8 @@
 #define GREET_CUSTOM		"custom"
 #define GREET_MIDROUND		"midround"
 #define GREET_MASTER		"master"
+#define GREET_RIGHTANDWRONG	"rightandwrong"
+#define GREET_MADNESSSURVIVOR		"madnesssurvivor"
 
 #define GREET_AUTOTATOR		"autotator"
 #define GREET_SYNDBEACON	"syndbeacon"

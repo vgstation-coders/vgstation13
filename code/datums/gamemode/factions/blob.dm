@@ -87,8 +87,12 @@
 	AnnounceObjectives()
 	start = new()
 	start.count()
-	prelude_announcement = world.time + rand(WAIT_TIME_PHASE1,2*WAIT_TIME_PHASE1)
-	outbreak_announcement = world.time + rand(WAIT_TIME_PHASE2,2*WAIT_TIME_PHASE2)
+	if (antag_madness)
+		prelude_announcement = world.time + 10 MINUTES
+		outbreak_announcement = world.time + 15 MINUTES
+	else
+		prelude_announcement = world.time + rand(WAIT_TIME_PHASE1,2*WAIT_TIME_PHASE1)
+		outbreak_announcement = world.time + rand(WAIT_TIME_PHASE2,2*WAIT_TIME_PHASE2)
 
 /datum/faction/blob_conglomerate/proc/CountFloors()
 	var/floor_count = 0

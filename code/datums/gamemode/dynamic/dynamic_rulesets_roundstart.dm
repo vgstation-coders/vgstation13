@@ -776,8 +776,9 @@ Assign your candidates in choose_candidates() instead.
 	cost = 0
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // Adminbus only
 	high_population_requirement = 101
-	var/list/nanotrasen_staff = list("Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
 	persistent = TRUE//latejoiners will either be heads of staff or traitors (unless traitor is deactivated/antagbanned)
+	var/list/nanotrasen_staff = list("Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
+	var/escalation_delay = 18 MINUTES
 
 /datum/dynamic_ruleset/roundstart/antag_madness/trim_candidates()//All the heads of staff get the role, the rest of the players will get trimmed by the other rulesets
 	for(var/mob/P in candidates)
@@ -794,7 +795,7 @@ Assign your candidates in choose_candidates() instead.
 	return TRUE
 
 /datum/dynamic_ruleset/roundstart/antag_madness/execute()
-	antag_madness = TRUE
+	antag_madness = 1
 	//first we initialize the nanotrasen faction, even if there are no heads currently there
 	var/datum/faction/nanotrasen/nanotrasen = find_active_faction_by_type(/datum/faction/nanotrasen)
 	if (!nanotrasen)
@@ -866,14 +867,28 @@ Assign your candidates in choose_candidates() instead.
 					log_admin("ANTAG MADNESS: <font size='3'>[rule.name]</font> FAILED!")
 
 	spawn(10)
-		message_admins("<span class='danger'>Antag Madness is now underway. In this very chaotic mode, admins are encouraged to proactively interfere with the round to keep things interesting, and help it reach a conclusion if necessary. Blobs and Rev may no longer cause the round to suddenly end, Malf and Nuke Ops still can if they destroy the station. If things get stale after 30 minutes and there are lots of dead players, consider bringing the round to a conclusion by either forcing a shuttle call, sending either the deathsquad or elite syndies to destroy the station, or trigger a supermatter cascade (or combination of those).</span>")
-		log_admin("<span class='danger'>Antag Madness is now underway. In this very chaotic mode, admins are encouraged to proactively interfere with the round to keep things interesting, and help it reach a conclusion if necessary. Blobs and Rev may no longer cause the round to suddenly end, Malf and Nuke Ops still can if they destroy the station. If things get stale after 30 minutes and there are lots of dead players, consider bringing the round to a conclusion by either forcing a shuttle call, sending either the deathsquad or elite syndies to destroy the station, or trigger a supermatter cascade (or combination of those).</span>")
+		message_admins("<span class='danger'>Antag Madness is now underway. In this very chaotic mode, admins are encouraged to proactively interfere with the round to keep things interesting, and help it reach a conclusion if necessary. Rev may no longer cause the round to suddenly end if all heads are dead, Malf, Blob and Nuke Ops still can if they destroy the station. If things get stale after 30 minutes and there are lots of dead players, consider bringing the round to a conclusion by either forcing a shuttle call, sending either the deathsquad or elite syndies to destroy the station, or trigger a supermatter cascade (or combination of those).</span>")
+		log_admin("<span class='danger'>Antag Madness is now underway. In this very chaotic mode, admins are encouraged to proactively interfere with the round to keep things interesting, and help it reach a conclusion if necessary. Rev may no longer cause the round to suddenly end if all heads are dead, Malf, Blob and Nuke Ops still can if they destroy the station. If things get stale after 30 minutes and there are lots of dead players, consider bringing the round to a conclusion by either forcing a shuttle call, sending either the deathsquad or elite syndies to destroy the station, or trigger a supermatter cascade (or combination of those).</span>")
 
 
-	spawn(20 MINUTES)//ERT calling is automated after 20 minutes. Any further developments will have to be manually enacted by the badmin who forced this terrible ruleset in the first place. have fun!
-		nanotrasen.delta = TRUE
+	spawn(escalation_delay)//ERT calling is automated after 18 minutes. Any further developments will have to be manually enacted by the badmin who forced this terrible ruleset in the first place. have fun!
+		antag_madness = 2
 		var/datum/striketeam/ert/response_team = new()
 		response_team.trigger_strike(null,"Nanotrasen officials have been misled to a dummy Space Station filled with antagonistic forces. You must find, protect, and retrieve the various Heads of Staff and Internal Affair Agents aboard the station. Anyone else is a potential threat that must be dealt with extreme prejudice.")
+		for(var/mob/living/player in player_list)
+			if (!M.client)
+				continue
+			if (M.stat == DEAD)
+				continue
+			if (isMoMMI(player))
+				continue
+			if (!isanyantag(player))
+				var/datum/role/survivor/R = new
+				R.AssignToRole(player.mind,1)
+				R.Greet(GREET_MADNESSSURVIVOR)
+				R.OnPostSetup()
+				R.ForgeObjectives()
+				R.AnnounceObjectives()
 	return 1
 
 /datum/dynamic_ruleset/roundstart/antag_madness/latespawn_interaction(var/mob/living/newPlayer)
@@ -908,4 +923,14 @@ Assign your candidates in choose_candidates() instead.
 					else
 						newTraitor.Greet(GREET_LATEJOIN)
 					return TRUE
+	//tator disabled? tator banned? whatever you'll be a survivor if the round has gone on long enough
+	if (antag_madness >= 2)
+		var/datum/role/survivor/R = new
+		R.AssignToRole(newPlayer.mind,1)
+		R.Greet(GREET_MADNESSSURVIVOR)
+		R.OnPostSetup()
+		R.ForgeObjectives()
+		R.AnnounceObjectives()
+		return TRUE
+
 	return FALSE
