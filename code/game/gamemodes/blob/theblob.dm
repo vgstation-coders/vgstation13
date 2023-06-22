@@ -334,11 +334,9 @@ var/list/blob_looks_player = list(//Options available to players
 
 
 /obj/effect/blob/proc/VisiblePulse(var/pulse = 0)
-	var/pulse_strength = 0.3 / max(1,pulse/3)
-	animate(src)
-	color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0)
-	animate(src, color = list(1+pulse_strength,0,0,0,0,1+pulse_strength,0,0,0,0,1+pulse_strength,0,0,0,0,1,0,0,0,0), time = 4, easing = BOUNCE_EASING|EASE_IN)
-	animate(color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 4, easing = ELASTIC_EASING)
+	var/pulse_strength = 0.5 / max(1,pulse/2)
+	animate(src, color = list(1+pulse_strength,0,0,0,0,1+pulse_strength,0,0,0,0,1+pulse_strength,0,0,0,0,1,0,0,0,0), time = 4, easing = SINE_EASING|EASE_OUT)
+	animate(color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 4, easing = SINE_EASING)
 
 /obj/effect/blob/proc/run_action()
 	return 0
