@@ -28,7 +28,7 @@
 
 /proc/get_coordinates_string(var/atom/A)
 	var/turf/T = get_turf(A)
-	return A.loc ? "[T.x],[T.y],[T.z]" : "nullspace"
+	return T ? "[T.x],[T.y],[T.z]" : "nullspace"
 
 
 /proc/in_range(atom/source, mob/user)
