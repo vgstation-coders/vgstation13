@@ -38,9 +38,9 @@
 
 /obj/effect/blob/node/update_looks(var/right_now = 0)
 	..()
-	var/icon/I = icon(icon,icon_state)
+	var/icon/I = new(icon)
 	light_color = I.GetPixel(1,1,"node_color")
-	set_light(1, 0.5, light_color)
+	set_light(1, 3, light_color)
 
 /obj/effect/blob/node/Life()
 	if(timestopped)
