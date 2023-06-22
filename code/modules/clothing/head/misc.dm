@@ -251,6 +251,7 @@
 	icon_state = "sith"
 	item_state = "sith"
 	species_fit = list(INSECT_SHAPED)
+	body_parts_covered = HIDEHAIR|HIDEBEARDHAIR
 	wizard_garb = 1 //Allows lightning to be used
 
 //stylish bs12 hats
