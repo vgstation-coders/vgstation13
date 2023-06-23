@@ -302,7 +302,7 @@ var/list/factions_with_hud_icons = list()
 					sec_change = FALSE
 			if (sec_change)
 				set_security_level("blue")//We drop the sec level to blue, but only if no other faction wants it any higher
-			ticker.StopThematic()
+				ticker.StopThematic()
 		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert and play endgame music.
 			last_security_level_change = SEC_LEVEL_RED
 			var/sec_change = TRUE
