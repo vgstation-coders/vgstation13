@@ -90,9 +90,6 @@ var/list/one_way_windows
 	examine_health(user)
 
 /obj/structure/window/AltClick(mob/user)
-	if(isfullwindow(src)) //We want these to be alt-clickable as it's very useful for building and they can't be rotated anyway
-		..()
-		return
 	if(user.incapacitated() || !Adjacent(user))
 		return
 	rotate()
