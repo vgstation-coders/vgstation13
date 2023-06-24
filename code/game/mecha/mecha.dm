@@ -1373,6 +1373,17 @@
 			continue
 		O.forceMove(loc) //Somehow got inside, drop it.
 
+/obj/mecha/Exited(var/atom/movable/O) // Used for teleportation from within the sleeper.
+	if (O == occupant)
+		occupant << browse(null, "window=exosuit")
+		remove_mech_spells()
+		if(occupant.client)
+			occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
+		occupant = null
+		icon_state = initial_icon+"-open"
+		for (var/datum/faction/F in factions_with_hud_icons)
+			F.update_hud_icons()
+
 /obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
 	if(!occupant)
 		return
