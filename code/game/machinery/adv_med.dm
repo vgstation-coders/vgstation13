@@ -176,7 +176,7 @@
 		set_light(light_range_on, light_power_on)
 	return
 
-/obj/machinery/bodyscanner/Exited(var/atom/movable/O) // Used for teleportation from within the sleeper.
+/obj/machinery/bodyscanner/Exited(var/atom/movable/O) // Used for teleportation from within the scanner.
 	if (O == occupant)
 		occupant = null
 		update_icon()

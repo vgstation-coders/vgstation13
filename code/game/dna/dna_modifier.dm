@@ -321,7 +321,7 @@
 
 #define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
 
-/obj/machinery/dna_scannernew/Exited(var/atom/movable/O) // Used for teleportation from within the sleeper.
+/obj/machinery/dna_scannernew/Exited(var/atom/movable/O) // Used for teleportation from within the scanner.
 	if (O == occupant)
 		occupant = null
 		icon_state = "scanner_0"

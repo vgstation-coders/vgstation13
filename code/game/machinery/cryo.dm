@@ -499,7 +499,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	//expel_gas.temperature = T20C // Lets expel hot gas and see if that helps people not die as they are removed
 	//loc.assume_air(expel_gas)
 
-/obj/machinery/atmospherics/unary/cryo_cell/Exited(var/atom/movable/O) // Used for teleportation from within the sleeper.
+/obj/machinery/atmospherics/unary/cryo_cell/Exited(var/atom/movable/O) // Used for teleportation from within the tube.
 	if (O == occupant)
 		occupant.reset_view()
 		occupant.clear_alert(SCREEN_ALARM_CRYO)

@@ -247,7 +247,7 @@
 	capacitor_stored = min(capacitor_stored + (20 * transfer_rate_coeff), capacitor_max)
 	return 1
 
-/obj/machinery/recharge_station/Exited(var/atom/movable/O) // Used for teleportation from within the sleeper.
+/obj/machinery/recharge_station/Exited(var/atom/movable/O) // Used for teleportation from within the recharge station.
 	if (O == occupant)
 		occupant = null
 		build_icon()

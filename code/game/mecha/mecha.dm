@@ -1373,7 +1373,7 @@
 			continue
 		O.forceMove(loc) //Somehow got inside, drop it.
 
-/obj/mecha/Exited(var/atom/movable/O) // Used for teleportation from within the sleeper.
+/obj/mecha/Exited(var/atom/movable/O) // Used for teleportation from within the mecha.
 	if (O == occupant)
 		occupant << browse(null, "window=exosuit")
 		remove_mech_spells()
