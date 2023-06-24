@@ -1050,7 +1050,7 @@
 		
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(holder.has_reagent(COLDDRINKS) & prob(10))
+		if(holder.has_reagent(COLDDRINKS) & prob(25))
 			var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in H.butchering_drops
 			if(J.amount == 0)
 				return
@@ -1068,9 +1068,10 @@
 				else
 					J.amount = 0
 					H.custom_pain("Your teeth crack and tremble before breaking all of a sudden! THE PAIN!", 100) //you dun fucked up lad
-					playsound(M, 'sound/effects/toothshatter.ogg', 50, 1)
+					H.pain_level = BASE_CARBON_PAIN_RESIST + 25 //pain threshold + 25, so you go into shock from pain
+					playsound(H, 'sound/effects/toothshatter.ogg', 50, 1)
 					H.audible_scream()
-					holder.add_reagent(SACID,10)
+					H.adjustBruteLoss(50) //imagine all your teeth violently exploding, shrapnel and shit
 
 /datum/reagent/minttoxin/essence
 	name = "Mint Essence"
