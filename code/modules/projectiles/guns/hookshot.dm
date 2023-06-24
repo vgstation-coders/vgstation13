@@ -372,10 +372,6 @@
 	if(..())
 		var/obj/effect/overlay/chain/CA = extremity_A
 		var/obj/effect/overlay/chain/CB = extremity_B
-		if ((CA.z != z) || (CB.z != z))
-			chain_datum.snap = 1
-			chain_datum.Delete_Chain()
-			return
 		if(istype(CA))
 			CA.follow(src,T)
 			CA.update_overlays(src)
