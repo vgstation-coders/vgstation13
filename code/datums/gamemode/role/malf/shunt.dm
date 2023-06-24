@@ -137,12 +137,8 @@
 		error = dist_y/2 - dist_x
 
 	target_angle = round(Get_Angle(starting,target))
-
-	if( !("[icon_state]_angle[target_angle]" in bullet_master) )//totally hijacking [deity's] own [jaunt code] in case that wasn't already obvious.
-		var/icon/I = new(icon,icon_state)
-		I.Turn(target_angle+45)
-		bullet_master["[icon_state]_angle[target_angle]"] = I
-	icon = bullet_master["[icon_state]_angle[target_angle]"]
+	var/transform_matrix = turn(matrix(),target_angle+45)
+	transform = transform_matrix
 
 /obj/effect/malf_jaunt/proc/update_pixel()
 	if(src && starting && target)

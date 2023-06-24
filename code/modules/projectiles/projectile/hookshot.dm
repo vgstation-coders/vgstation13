@@ -7,12 +7,12 @@
 	var/length = 1
 	kill_count = 15
 	grillepasschance = 0
-	var/obj/effect/overlay/hookchain/last_link = null
 	var/failure_message = "With a CLANG noise, the chain mysteriously snaps and rewinds back into the hookshot."
 	var/icon_name = "hookshot"
 	var/chain_datum_path = /datum/chain
 	var/chain_overlay_path = /obj/effect/overlay/chain
 	var/can_tether = TRUE
+	var/matrix/projectile_matrix
 
 /obj/item/projectile/hookshot/process_step()
 	var/sleeptime = 1
@@ -49,26 +49,18 @@
 			HC.forceMove(loc)
 			HC.pixel_x = pixel_x
 			HC.pixel_y = pixel_y
-			if(last_link)
-				last_link.icon = bullet_master["[icon_name]_chain_angle[target_angle]"]
-			last_link = HC
 			length++
 
 			if(length < hookshot.maxlength)
-				if(!("[icon_name]_chain_angle[target_angle]" in bullet_master))
-					var/icon/I = new('icons/obj/projectiles_experimental.dmi',"[icon_name]_chain")
-					I.Turn(target_angle+45)
-					bullet_master["[icon_name]_chain_angle[target_angle]"] = I
-					var/icon/J = new('icons/obj/projectiles_experimental.dmi',"[icon_name]_pixel")
-					J.Turn(target_angle+45)
-					bullet_master["[icon_name]_head_angle[target_angle]"] = J
-				HC.icon = bullet_master["[icon_name]_head_angle[target_angle]"]
+				if (!projectile_matrix)
+					projectile_matrix = turn(matrix(),target_angle+45)
+				HC.transform = projectile_matrix
+				HC.icon_state = "[icon_name]_chain"
 			else
-				if(!("[icon_name]_head_angle[target_angle]" in bullet_master))
-					var/icon/I = new('icons/obj/projectiles_experimental.dmi',"[icon_name]_pixel")
-					I.Turn(target_angle+45)
-					bullet_master["[icon_name]_head_angle[target_angle]"] = I
-				HC.icon = bullet_master["[icon_name]_head_angle[target_angle]"]
+				if (!projectile_matrix)
+					projectile_matrix = turn(matrix(),target_angle+45)
+				HC.transform = projectile_matrix
+				HC.icon_state = "[icon_name]_pixel"
 				spawn()
 					hookshot.rewind_chain()
 				bullet_die()
