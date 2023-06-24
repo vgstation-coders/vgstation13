@@ -10,7 +10,7 @@ var/global/global_playlists = list()
 		return
 	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "idm", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "vidya", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
-		log_debug("Updating playlist ([playlist_id]) from [url]...")
+		log_debug("Begin updating playlist: [playlist_id]...")
 
 		//  Media Server 2 requires a secret key in order to tell the jukebox
 		// where the music files are. It's set in config with MEDIA_SECRET_KEY
