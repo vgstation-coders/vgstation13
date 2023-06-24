@@ -76,7 +76,7 @@
 		/obj/item/weapon/pickaxe/drill/diamond = 500,
 		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube = 150,
 		/obj/item/weapon/storage/box/large/mystery_material = 150,
-
+		/obj/item/weapon/storage/pill_bottle/mint/homemade = 30
 	)
 
 	var/list/uncommonStock = list(
