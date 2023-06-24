@@ -359,6 +359,10 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint = 50)
 
 /obj/item/weapon/storage/pill_bottle/syndiemints/New()
+
+	overlays -= colour_overlay //no pill bottle overlay
+	colour_overlay = null
+
 	switch(rand(3))
 		if(0)
 			name = "NanoFresh"
