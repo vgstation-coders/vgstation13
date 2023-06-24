@@ -243,8 +243,11 @@
 		sleep(20)
 
 /datum/chain/proc/Check_Integrity()
+	var/turf/T = get_turf(hookshot)
 	for(var/i = 1; i<= links.len ;i++)
 		var/obj/effect/overlay/chain/C = links["[i]"]
+		if (C.z != T.z)//if the atom we're pulling got send to another Z level (or more likely moved inside another atom, such as a human moved inside a cryotube)
+			return 0
 		if(!C.rewinding && ((get_dist(C,C.extremity_A) > 1) || (get_dist(C,C.extremity_B) > 1)))
 			return 0
 	return 1
