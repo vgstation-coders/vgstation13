@@ -1050,7 +1050,7 @@
 		
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(holder.has_reagent(COLDDRINKS) & prob(25))
+		if(holder.has_any_reagents(COLDDRINKS) & prob(25))
 			var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in H.butchering_drops
 			if(J.amount == 0)
 				return
@@ -1061,7 +1061,7 @@
 
 		if(chillcounter > 0)
 			chillcounter--
-			if(holder.has_reagent(HOTDRINKS) & prob(30))
+			if(holder.has_any_reagents(HOTDRINKS) & prob(30))
 				var/datum/butchering_product/teeth/J = locate(/datum/butchering_product/teeth) in H.butchering_drops
 				if(J.amount == 0)
 					return
