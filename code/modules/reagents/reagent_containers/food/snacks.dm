@@ -3268,12 +3268,16 @@
 	desc = "It is only wafer thin."
 	icon_state = "mint"
 	base_crumb_chance = 0
-
+	var/safeforfat = FALSE
 /obj/item/weapon/reagent_containers/food/snacks/mint/New()
 	..()
-	reagents.add_reagent(MINTTOXIN, 1)
+	if(!safeforfat)
+		reagents.add_reagent(MINTTOXIN, 1)
+	else
+		reagents.add_reagent(MINTESSENCE, 2)
 	bitesize = 1
 
+//the syndie version for muh tators
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint
 	name = "mint candy"
 
@@ -3292,6 +3296,19 @@
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade
 	desc = "Made with love with the finest maintenance gunk I could find, trust me. I promise there's only trace amounts of bleach."
 	icon_state = "homemademint"
+
+//The candy version for the vendors
+/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/nano/safe
+	safeforfat = TRUE
+	
+/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/syndie/safe
+	safeforfat = TRUE
+	
+/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/discount/safe
+	safeforfat = TRUE
+	
+/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade/safe
+	safeforfat = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/mushroomsoup
 	name = "chanterelle soup"
