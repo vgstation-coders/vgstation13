@@ -193,7 +193,7 @@
 		if(clonemind.current.stat != DEAD)	//mind is associated with a non-dead body
 			return FALSE
 	if(clonemind.active) //somebody is using that mind
-		if( ckey(clonemind.key)!=R.ckey )
+		if(ckey(clonemind.key)!=R.ckey )
 			return FALSE
 	else
 		for(var/mob/G in player_list)
@@ -201,6 +201,10 @@
 				if(isobserver(G))
 					if(G:can_reenter_corpse)
 						break
+					if((!G.mind.current) && G.mind.body_archive) //If the mind's body was destroyed and that mind has a body archive
+						var/datum/dna2/record/D = G.mind.body_archive.data["dna_records"] //Retrieve the DNA records from the mind's body archive
+						if((D.id == R.id) || D.ckey == R.ckey) //If the MD5 hash of the mind's real_name matches the record's real_name (stored as the id variable), or if the ckeys match
+							break //Proceed with cloning. This set of checks is to allow cloning players with completely destroyed bodies, that nevertheless had cloning data stored
 					else
 						return FALSE
 				else if(G)
