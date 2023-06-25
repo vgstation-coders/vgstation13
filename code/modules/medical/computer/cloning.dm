@@ -393,6 +393,13 @@
 	if((isnull(subject)) || (!ishuman(subject) && !istype(subject, /mob/living/slime_pile)) || (!subject.dna) || (ismanifested(subject)))
 		scantemp = "Error: Unable to locate valid genetic data." //Something went very wrong here
 		return
+	if(istype(subject, /mob/living/slime_pile))
+		var/mob/living/slime_pile/P = subject
+		if(P.slime_person.has_brain())
+			subject = P.slime_person
+		else
+			scantemp = "Unable to locate genetic base within the slime puddle. Micro-MRI scans indicate its brain is missing."
+			return
 	if(!subject.has_brain())
 		scantemp = "Error: No signs of intelligence detected." //Self explainatory
 		return
