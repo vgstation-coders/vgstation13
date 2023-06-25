@@ -4332,7 +4332,8 @@
 						if(H.mind || H.client)
 							if(!(H.status_flags & BUDDHAMODE))
 								H.status_flags ^= BUDDHAMODE
-								to_chat(H, "<span class='notice'>An incredible sense of tranquility overtakes you. You have let go of your worldly desires.</span>")
+								if(H.client)
+									to_chat(H, "<span class='notice'>An incredible sense of tranquility overtakes you. You have let go of your worldly desires.</span>")
 				else
 					if(alert("This will disable buddha mode for everyone. Are you sure?", "Warning", "Yes", "Cancel") == "Cancel")
 						return
@@ -4343,7 +4344,8 @@
 						if((H.mind || H.client) || (H.attack_log.len)) //attack_log included in case someone got beheaded and the mob lost its client/mind (to unset the flag for corpses, basically)
 							if(H.status_flags & BUDDHAMODE)
 								H.status_flags ^= BUDDHAMODE
-								to_chat(H, "<span class='warning'>The tranquility that once filled your soul has vanished. You are once again a slave to your worldly desires.</span>")
+								if(H.client)
+									to_chat(H, "<span class='warning'>The tranquility that once filled your soul has vanished. You are once again a slave to your worldly desires.</span>")
 
 			if("vermin_infestation")
 				var/list/locations = list(
