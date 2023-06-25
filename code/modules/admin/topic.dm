@@ -4338,7 +4338,7 @@
 						return
 					buddha_mode_everyone = !buddha_mode_everyone
 					log_admin("[key_name(usr)] has DISABLED buddha mode for everyone!")
-					message_admins("[key_name(usr)] has DISABLED budda mode for everyone!")
+					message_admins("[key_name(usr)] has DISABLED buddha mode for everyone!")
 					for(var/mob/living/carbon/human/H in mob_list)
 						if((H.mind || H.client) || (H.attack_log.len)) //attack_log included in case someone got beheaded and the mob lost its client/mind (to unset the flag for corpses, basically)
 							if(H.status_flags & BUDDHAMODE)
