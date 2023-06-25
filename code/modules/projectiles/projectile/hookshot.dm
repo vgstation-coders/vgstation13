@@ -5,8 +5,8 @@
 	damage = 0
 	nodamage = 1
 	var/length = 1
-	kill_count = 15
 	grillepasschance = 0
+	var/obj/effect/overlay/hookchain/last_link = null
 	var/failure_message = "With a CLANG noise, the chain mysteriously snaps and rewinds back into the hookshot."
 	var/icon_name = "hookshot"
 	var/chain_datum_path = /datum/chain
@@ -16,16 +16,7 @@
 
 /obj/item/projectile/hookshot/process_step()
 	var/sleeptime = 1
-	if(src.loc)
-		if(kill_count < 1)
-			var/obj/item/weapon/gun/hookshot/hookshot = shot_from
-			if(src.z != firer.z)
-				hookshot.cancel_chain()
-				bullet_die()
-
-			spawn()
-				hookshot.rewind_chain()
-			bullet_die()
+	if(loc)
 		drop_item()
 		if(dist_x > dist_y)
 			sleeptime = bresenham_step(dist_x,dist_y,dx,dy)
@@ -51,18 +42,20 @@
 			HC.pixel_y = pixel_y
 			length++
 
-			if(length < hookshot.maxlength)
-				if (!projectile_matrix)
-					projectile_matrix = turn(matrix(),target_angle+45)
-				HC.transform = projectile_matrix
-				HC.icon_state = "[icon_name]_chain"
-			else
-				if (!projectile_matrix)
-					projectile_matrix = turn(matrix(),target_angle+45)
-				HC.transform = projectile_matrix
+			if (last_link)
+				last_link.icon_state = "[icon_name]_chain"
+			last_link = HC
+
+			if (!projectile_matrix)
+				projectile_matrix = turn(matrix(),target_angle+45)
+			HC.transform = projectile_matrix
+			HC.icon_state = "hookshot_new"//blank icon_state since at this point the projectile itself is the head
+
+			if(length >= hookshot.maxlength)
 				HC.icon_state = "[icon_name]_pixel"
 				spawn()
-					hookshot.rewind_chain()
+					if (!hookshot.clockwerk)
+						hookshot.rewind_chain()
 				bullet_die()
 
 		sleep(sleeptime)
