@@ -108,42 +108,255 @@
 	flags = NO_PACIFICATION
 
 //////////////////////////////
-// WALLS (An invulnerable wall subtype, and two icon-swapped riveted walls, applied to appropriate areas to prevent escaping the vault to the Centcomm Z-level, or tunneling into boss rooms)
+// WALLS (Invulnerable ayy-themed walls, applied to appropriate areas to prevent escaping the vault to the Centcomm Z-level, or tunneling into boss rooms)
 //////////////////////////////
 
-/turf/simulated/wall/invulnerable/r_wall/mothership
-	name = "super-reinforced wall"
-	desc = "Someone spent a lot of time and money on this bullet-proof, bomb-proof wall."
-	icon_state = "r_wall"
-	walltype = "rwall"
-
-/turf/simulated/wall/invulnerable/r_wall/mothership/canSmoothWith() // SMOOTH DAT WALL (For the mothership lab vault)
-	var/static/list/smoothables = list(/turf/simulated/wall/invulnerable/r_wall/mothership, /turf/unsimulated/wall/r_wall)
-	return smoothables
-
-/turf/unsimulated/wall/r_wall
-	name = "riveted reinforced wall"
-	desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."
-	icon = 'icons/turf/walls.dmi'
-	icon_state = "r_wall"
+/turf/unsimulated/wall/ayy
+	name = "alien alloy wall"
+	desc = "A solid wall of an unknown alloy. It's oddly warm to the touch, and seems to pulse rhymically."
+	icon_state = "alloy"
 	explosion_block = 9999
-	walltype = "rwall"
+	walltype = "alloy"
 
-/turf/unsimulated/wall/r_wall/canSmoothWith() // SMOOTH DAT WALL
-	var/static/list/smoothables = list(/turf/unsimulated/wall/r_wall, /turf/simulated/wall/invulnerable/r_wall)
+/turf/unsimulated/wall/ayy/canSmoothWith() // SMOOTH DAT WALL
+	var/static/list/smoothables = list(/turf/unsimulated/wall/ayy)
 	return smoothables
 
 /turf/unsimulated/wall/r_rock
 	name = "riveted porous rock"
 	desc = "Asteroid rock reinforced by a wall with massive rivets embedded in the struts."
 	icon = 'icons/turf/walls.dmi'
-	icon_state = "rock_rf0"
+	icon_state = "rock_rf"
 	explosion_block = 9999
 	walltype = "rock_rf"
 
 /turf/unsimulated/wall/r_rock/canSmoothWith() // SMOOTH DAT WALL
 	var/static/list/smoothables = list(/turf/unsimulated/wall/r_rock)
 	return smoothables
+
+//////////////////////////////
+// FLOORS (Some ayy-themed floors)
+//////////////////////////////
+
+/turf/unsimulated/floor/ayy
+	name = "alien plating"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "alien_tile1"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/ayy2
+	name = "alien plating"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "alien_tile2"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/ayy_maint
+	name = "worn alien plating"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "alien_tile_worn"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/ayy_fancy
+	name = "ornate alien plating"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "alien_tile_fancy"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/grey_sand
+	name = "chalky soil"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "xeno_rock_tile_1"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/grey_sand/New()
+	..()
+	if(prob(33))
+		icon_state = "xeno_rock_tile_[rand(1,12)]"
+
+//////////////////////////////
+// DECORATIVE FLORA (Some nice things to go in the facility's petting zoo and plant decorations)
+//////////////////////////////
+
+/obj/structure/flora/xeno_flora
+	name = "oork reed"
+	icon = 'icons/obj/flora/ausflora.dmi'
+	icon_state = "xeno_plant_1"
+	anchored = 1
+	shovelaway = TRUE
+
+/obj/structure/flora/xeno_flora/blue
+	name = "bvvak blossoms"
+	icon = 'icons/obj/flora/ausflora.dmi'
+	icon_state = "xeno_plant_2"
+
+/obj/structure/acid_puddle // What in the goddamn...
+	name = "sizzling puddle"
+	icon = 'icons/obj/acidcloset.dmi'
+	icon_state = "acid_puddle"
+	desc = "Watch your step..."
+	anchored = 1
+
+/obj/structure/acid_puddle/splashable()
+	return FALSE
+
+/obj/structure/acid_puddle/Crossed(AM)
+	if(isliving(AM) && isturf(src.loc))
+
+		var/mob/living/L = AM
+
+		if(L.on_foot()) //Flying mobs won't suffer the consequences of stepping in the acid, nor will lying mobs (we're assuming they're being smart and crawling around the pool)
+			if(ishuman(L))
+				var/mob/living/carbon/human/H = L
+				if(H.m_intent == "run") // Running over the puddle has a 60% chance of stepping in it, to nasty results
+					if(prob(60))
+						to_chat(H, "<span class='warning'>You step in [src]!</span>")
+						var /obj/item/clothing/shoes/melting_shoes = H.shoes
+						playsound(src, 'sound/effects/grue_burn.ogg', 50, 1) // Audio feedback is always good, so a player knows something just happened.
+
+						if(melting_shoes && !(melting_shoes.dissolvable() == PACID)) // Are our shoes acid proof? Lucky us!
+							to_chat(H, "<span class='warning'>Your footwear sizzles on contact, but remains intact.</span>")
+
+						if(melting_shoes && (melting_shoes.dissolvable() == PACID)) // If not, they melt away. Still not the worst thing that can happen.
+							to_chat(H, "<span class='warning'>Your footwear sizzles on contact, and dissolves!</span>")
+							H.drop_from_inventory(melting_shoes)
+							qdel(melting_shoes)
+							new/obj/effect/decal/cleanable/molten_item(H.loc)
+
+						if(!melting_shoes && isgrey(H)) // Are we a grey? We don't have any trouble with acid, even barefoot.
+							to_chat(H, "<span class='warning'>You feel a slight tingling as you step in [src], but it quickly subsides.</span>")
+
+						if(!melting_shoes && !isgrey(H)) // Otherwise we just lost a foot. How unfortunate.
+							var/datum/organ/external/foot_organ = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
+							to_chat(H, "<span class='danger'>You feel a horrific pain as you step in [src], and your foot melts away!</span>")
+							H.audible_scream()
+							foot_organ.droplimb(1, 0, 0)
+
+						else
+							return
+					else
+						to_chat(H, "<span class='warning'>You stumble over [src], barely avoiding stepping in it!</span>") // Fair warning to be careful, if you were spared.
+
+				else // Walking is safe
+					to_chat(H, "<span class='notice'>You step carefully over [src].</span>")
+					return
+
+//////////////////////////////
+// FURNITURE AND LOCKERS (Ayys need nice places to sit, lie down, and store their gear)
+//////////////////////////////
+
+/obj/structure/bed/chair/comfy/ayy1
+	icon_state = "ayychair1"
+	name = "GDR chair"
+	desc = "A plain chair manufactured by greys for other greys. Average comfort, but much better than a stool."
+
+/obj/structure/bed/chair/comfy/ayy2
+	icon_state = "ayychair2"
+	name = "GDR premium chair"
+	desc = "A premium chair manufactured by greys for more important greys. Surprisingly comfortable, good lumbar support."
+
+/obj/structure/bed/ayy1
+	name = "GDR standard bed"
+	desc = "Manufactured efficiently from basic alloys and sythetic threads. Quality may vary. "
+	icon_state = "ayybed1"
+
+/obj/structure/bed/ayy2
+	name = "GDR premium bed"
+	desc = "Significantly more comfortable than a standard issue bed. A luxury befitting a high-ranking researcher or administrator."
+	icon_state = "ayybed2"
+	sheet_type = /obj/item/stack/sheet/plasteel
+	sheet_amt = 2
+
+/obj/structure/closet/crate/ayy
+	name = "GDR crate"
+	desc = "A common storage crate, mass produced by grey laborers."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayycrate1"
+	density = 1
+	icon_opened = "ayycrate1open"
+	icon_closed = "ayycrate1"
+
+/obj/structure/closet/crate/ayy2
+	name = "MDF crate"
+	desc = "A rugged storage crate, for transporting mothership military supplies."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayycrate2"
+	density = 1
+	icon_opened = "ayycrate2open"
+	icon_closed = "ayycrate2"
+
+/obj/structure/closet/crate/ayy3
+	name = "GDR industrial crate"
+	desc = "A sturdy storage crate, for transporting tools, electronics, and building materials."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayycrate3"
+	density = 1
+	icon_opened = "ayycrate3open"
+	icon_closed = "ayycrate3"
+
+/obj/structure/closet/crate/secure/ayy_mdf
+	name = "MDF secure crate"
+	desc = "A durable card-locked crate, for shipping disintegrators or other volatile ordnance."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayysecurecrate"
+	density = 1
+	icon_opened = "ayysecurecrateopen"
+	icon_closed = "ayysecurecrate"
+
+/obj/structure/closet/ayy
+	name = "GDR locker"
+	desc = "A common storage unit, mass produced by grey laborers."
+	icon_state = "ayy1_closed"
+	icon_closed = "ayy1_closed"
+	icon_opened = "ayy1_open"
+
+/obj/structure/closet/ayy2
+	name = "MDF locker"
+	desc = "A rugged storage unit, for transporting mothership military supplies."
+	icon_state = "ayy2_closed"
+	icon_closed = "ayy2_closed"
+	icon_opened = "ayy2_open"
+
+/obj/structure/closet/ayy3
+	name = "Laborer locker"
+	desc = "A basic storage unit, for holding a grey laborer's spare uniforms and personal items."
+	icon_state = "ayy3_closed"
+	icon_closed = "ayy3_closed"
+	icon_opened = "ayy3_open"
+
+/obj/structure/closet/secure_closet/ayy
+	name = "GDR secure locker"
+	desc = "A mothership issued card-locked storage unit, perfect for storing a researcher's favorite labcoats."
+	icon_state = "ayysecure1"
+	icon_closed = "ayysecure"
+	icon_locked = "ayysecure1"
+	icon_opened = "ayysecureopen"
+	icon_broken = "ayysecurebroken"
+	icon_off = "ayysecureoff"
+
+/obj/structure/closet/secure_closet/ayy2
+	name = "MDF secure locker"
+	desc = "A rugged card-locked storage unit, for transporting mothership military supplies."
+	icon_state = "ayymdfsecure1"
+	icon_closed = "ayymdfsecure"
+	icon_locked = "ayymdfsecure1"
+	icon_opened = "ayymdfsecureopen"
+	icon_broken = "ayymdfsecurebroken"
+	icon_off = "ayymdfsecureoff"
+
+/obj/structure/closet/secure_closet/ayy_leader
+	name = "Administrator's secure locker"
+	desc = "A sleek card-locked storage unit, for keeping the personal effects of the best and brightest secure."
+	icon_state = "leadersecure1"
+	icon_closed = "leadersecure"
+	icon_locked = "leadersecure1"
+	icon_opened = "leadersecureopen"
+	icon_broken = "leadersecurebroken"
+	icon_off = "leadersecureoff"
 
 //////////////////////////////
 // NARRATION

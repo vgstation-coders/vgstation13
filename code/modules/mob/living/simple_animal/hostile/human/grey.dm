@@ -632,7 +632,54 @@
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/space/Process_Spacemove(var/check_drift = 0) // They can follow enemies into space, and won't just drift off
 	return 1
 
-///////////////////////////////////////////////////////////////////GREY TROOPER///////////
+///////////////////////////////////////////////////////////////////GREY TROOPERS///////////
+//Spaceworthy ayy soldier with a baton. Quite mobile for an enemy in a hardsuit and has slightly less cooldown on the baton stun than a regular pacifier
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/melee
+	name = "MDF Trooper"
+	desc = "A thin alien humanoid. This one is wearing an armored rigsuit and armed with an alien stun baton."
+
+	icon_state = "greytrooper_melee"
+	icon_living = "greytrooper_melee"
+
+	maxHealth = 150 // Slightly more health than a standard trooper
+	health = 150
+	melee_damage_lower = 10
+	melee_damage_upper = 20 // Decent melee damage, but the stun is the real danger
+	move_to_delay = 1.8 // This is what he trained for! To fill the unforgiving minute with sixty seconds of distance sprinting
+
+	items_to_drop = list(/obj/item/weapon/melee/stunprobe)
+
+	attacktext = "beats"
+	attack_sound = 'sound/weapons/genhit1.ogg'
+
+	speak = list("Sweeping sector, be prepared for EVA.","Praise the mothership, and all hail the Chairman.","Air supply capacity check is green.","Terminate all unauthorized personnel and unidentified xenofauna.","Stun probe charged and ready.")
+	speak_chance = 1
+
+	var/last_shockattack = 0
+	var/const/shockattack_cooldown = 15 SECONDS // Some cooldown variables to remove the chance of getting stunlocked by a single one of these guys
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/melee/proc/shockAttack(mob/living/carbon/human/target) // It's not a great idea to fight these guys in CQC if you don't have some kind of stun resistance
+	var/damage = rand(5, 10)
+	target.electrocute_act(damage, src, incapacitation_duration = 6 SECONDS, def_zone = LIMB_CHEST) // 6 seconds is pretty rough, twice as long as a carp stun
+	if(iscarbon(target))
+		var/mob/living/L = target
+		L.apply_effect(6, STUTTER)
+	return
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/melee/AttackingTarget() // Won't keep stunning a downed player, so they should have a chance to run when they get up
+	var/mob/living/carbon/human/H = target
+	if((last_shockattack + shockattack_cooldown < world.time) && !H.lying && ishuman(H))
+		shockAttack(H)
+		H.visible_message("<span class='danger'>[src] shocks [H] with their stun probe!</span>")
+		playsound(src, 'sound/weapons/electriczap.ogg', 50, 1)
+		last_shockattack = world.time
+	else
+		..()
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/melee/Aggro()
+	..()
+	say(pick("Hostile sighted, my sector.","Report, target marked for pacification.","Pacifying target.","For the mothership!","Target acquired. Pacify with extreme prejudice."), all_languages[LANGUAGE_GREY])
+
 //Less tanky than the heavy soldier, but spaceworthy. A little more clever than a regular soldier with its tactics, will back off and shoot from further away if his health gets low
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged
 	name = "MDF Trooper"
