@@ -137,7 +137,7 @@
 "je" = (/turf/unsimulated/wall/ayy,/area/vault/mothership_lab/hobo)
 "jh" = (/obj/structure/curtain/open/bed,/obj/structure/bed/ayy1,/turf/unsimulated/floor,/area/vault/mothership_lab/habitation)
 "jr" = (/obj/machinery/door/mineral/iron,/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/unsimulated/floor/asteroid/air{icon_state = "asteroidplating"},/area/vault/mothership_lab/hobo)
-"jt" = (/obj/structure/reagent_dispensers/sacid,/obj/item/weapon/reagent_containers/glass/bucket,/turf/unsimulated/floor/ayy_maint,/area/vault/mothership_lab/habitation)
+"jt" = (/obj/structure/reagent_dispensers/sacid,/obj/item/weapon/reagent_containers/glass/bucket,/obj/item/weapon/reagent_containers/glass/bucket,/turf/unsimulated/floor/ayy_maint,/area/vault/mothership_lab/habitation)
 "jv" = (/obj/effect/spider/stickyweb,/obj/item/ammo_storage/magazine/mc9mm,/turf/unsimulated/floor/asteroid/air,/area/vault/mothership_lab/cave)
 "jz" = (/obj/machinery/light/small,/turf/unsimulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/hobo)
 "jA" = (/obj/machinery/door/airlock/engineering{name = "Auxillary Laborer Dormitory"; req_access_txt = "161"; req_one_access_txt = "161"},/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
@@ -310,6 +310,7 @@
 "uS" = (/obj/effect/decal/cleanable/blood{basecolor = "#CFAAAA"; blood_color = "#CFAAAA"; icon_state = "floor2"},/obj/effect/landmark/corpse/grey/worker,/turf/unsimulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/habitation)
 "uW" = (/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/food/snacks/curry/xeno,/obj/item/weapon/reagent_containers/food/snacks/curry/xeno,/obj/item/weapon/reagent_containers/food/snacks/curry/xeno,/obj/item/weapon/kitchen/utensil/fork/teflon,/turf/unsimulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/habitation)
 "uX" = (/obj/structure/bed/chair/wood/normal{dir = 8},/turf/unsimulated/floor/asteroid/air{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
+"va" = (/obj/structure/reagent_dispensers/watertank,/obj/item/weapon/reagent_containers/glass/bucket,/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
 "vd" = (/obj/machinery/acidshower{dir = 4},/obj/machinery/door/window/plasma{name = "Shower"},/turf/unsimulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/administration)
 "vf" = (/obj/item/weapon/kitchen/utensil/spoon,/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/breacher{dir = 4},/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/habitation)
 "vh" = (/obj/machinery/door/poddoor/shutters{dir = 2; id_tag = "lab_toolstorage"; name = "Laborer Office Shutters"},/obj/structure/table/reinforced,/obj/structure/window/reinforced{dir = 1; pixel_y = 1},/obj/item/weapon/paper_bin/yellow,/obj/item/weapon/pen,/turf/unsimulated/floor,/area/vault/mothership_lab/habitation)
@@ -520,7 +521,7 @@
 "JP" = (/mob/living/carbon/monkey/grey{faction = "mothership"; name = "Tak"},/obj/item/weapon/bedsheet/red,/obj/structure/bed/ayy1,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/habitation)
 "Kl" = (/obj/effect/spider/stickyweb,/turf/unsimulated/floor/asteroid/air,/area/vault/mothership_lab/cave)
 "Kp" = (/obj/structure/reagent_dispensers/sacid,/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
-"Kt" = (/obj/effect/decal/cleanable/blood/gibs{basecolor = "#2299FC"; blood_color = "#2299FC"; fleshcolor = "#808D11"; icon_state = "gibmid3"},/obj/item/weapon/gun/energy/laser/retro,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/habitation)
+"Kt" = (/obj/effect/decal/cleanable/blood/gibs{basecolor = "#2299FC"; fleshcolor = "#808D11"; icon_state = "gibmid3"; color = "#2299FC"},/obj/item/weapon/gun/energy/laser/retro,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/habitation)
 "Kw" = (/obj/structure/flora/rock,/turf/unsimulated/floor/grey_sand,/area/vault/mothership_lab/habitation)
 "Kz" = (/obj/machinery/light/he{dir = 4},/obj/machinery/door_control{id_tag = "lab_toolstorage"; name = "Laborer Office Shutters"; pixel_x = 25; req_access_txt = "161"; req_one_access_txt = "161"},/obj/machinery/vending/engivend{req_access = null; req_access_txt = "161"; req_one_access_txt = "161"},/turf/unsimulated/floor,/area/vault/mothership_lab/habitation)
 "KD" = (/obj/structure/window/full/reinforced,/obj/structure/grille/broken,/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
@@ -554,7 +555,7 @@
 "MQ" = (/obj/structure/sign/securearea{desc = "A warning sign. It reads 'Secure GDR facility. Trespassers will be disintegrated.'"; name = "AUTHORIZED PERSONNEL ONLY"},/turf/unsimulated/wall/ayy,/area/vault/mothership_lab/administration)
 "MS" = (/obj/effect/spider/stickyweb,/obj/effect/decal/cleanable/dirt,/obj/effect/spider/cocoon,/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
 "Nc" = (/obj/structure/table/reinforced,/turf/unsimulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/administration)
-"Nj" = (/obj/item/weapon/reagent_containers/glass/bucket,/obj/structure/reagent_dispensers/watertank,/turf/unsimulated/floor/grey_sand,/area/vault/mothership_lab/habitation)
+"Nj" = (/obj/structure/acid_puddle,/turf/unsimulated/floor/grey_sand,/area/vault/mothership_lab/habitation)
 "Nn" = (/obj/structure/window/reinforced{dir = 4},/obj/item/toy/balloon/decoy,/obj/item/weapon/grenade/smokebomb,/obj/structure/closet/crate/ayy,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/habitation)
 "Nz" = (/obj/structure/closet/crate/freezer,/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped,/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped,/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped,/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped,/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped,/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,/obj/item/weapon/reagent_containers/food/condiment/zammild,/obj/item/weapon/reagent_containers/food/condiment/zammild,/obj/item/weapon/reagent_containers/food/condiment/zamspices,/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin,/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat,/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat,/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat,/obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/wrapped,/obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/wrapped,/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,/turf/unsimulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/habitation)
 "NE" = (/obj/structure/closet/firecloset,/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
@@ -755,7 +756,7 @@ ibibgNpqpqpqpqpqsjHPHPHPYLDCUIwdpqpqpqpqVyXbVyuhWLXbXbExWLuhuhuhBxuhuhSolLSouhuh
 ibibgNpqsSqVGjpqCRHPoMHPYLGwRIpqpqJzmFpqXbXbXbuhuhuhxJuhuhuhgdgdXbXbXbXbXbXbXRcuHvXbXbXbXbKDXbVylsuhXbVyuhcIuhuhBxuhuhuhubekhMqIqIVVVVNFqImzyYekubibibib
 ibibgNpqOjHcHcqYbuHPHPHPoMHPOrpqJoUIUIpqvJVyfCuhImmTExmfKpuhdKXbXbVyXbXbVyXbVyXbXbXbVyXbXbRLXbXbfCuhrgNSuhuhuhXbXbXbmfHyubekbCGBbCekekekbCGBbCekubibibib
 ibibgNpqIiJiwIpqxRbupqhNpqHPHPxbUInjjDpqPnXbVyBxXbXbVyXbXbBxXbXbXbXbXbXbXbXbXbXbXbeFVyXbXbRXXbXbXbBxVyZQfEayNJVyVyXbXbVymzmzqIvYqIfjfdfdULsNmzekubibibib
-ibibgNpqpqpqpqpqqlvBddHcfAvBoXpqpqpqpqpqZQZQhnuhEhaLXbvCnnuhototdAXbVyXbXbVyPyZmdQvKlOdAotuhtgHyftuhXbfCuhCHXbXbXbXbMJXbubeksCqImzjWsNqIqIqImzmzekubibib
+ibibgNpqpqpqpqpqqlvBddHcfAvBoXpqpqpqpqpqZQZQhnuhEhaLXbvCnnuhototdAvaVyXbXbVyPyZmdQvKlOdAotuhtgHyftuhXbfCuhCHXbXbXbXbMJXbubeksCqImzjWsNqIqIqImzmzekubibib
 ibibibgNgNNQfoMQpqpqUUkYUUpqpqMQGiNQgNuhgxuhuhAwAwThgoAwAwAwAwAwAwHQHQNXtfNXAwAwAwAwAwAwAwAwyuAwAwAwAwAwAwAwAwFwAwAwxmAwAwekekekekekekekqIqIpeqIPrekubib
 ibibibibgNpqgjsvfAbngjgjgjbnddYlgjpqgNuhoJSmuhjhAZEcEcDLjhAwPREUWboxScjtTccZAwWFQPcFgCdhAwgnCGrpUKLwYmbEAwCGCGtsAHoZPArsAwAwAwAwAwAwAwAwekqIqIqImzekubib
 ibgNgNgNgNpqEmsvfAgjgjgjgjgjddYlEmpqgNuhZcLnuhAwxKBkximQAwAwRlCITcTcTcTcyvdmAwZVvvGfYThhAwQwqPqGmxuSfpmdDMEjPOcXnpFIFIBVAwqKSHpbLoSHJPAwekmzmzqImzekubib
