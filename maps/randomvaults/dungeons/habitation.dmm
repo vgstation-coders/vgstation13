@@ -662,7 +662,7 @@
 "UL" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/cobweb,/turf/unsimulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "UM" = (/obj/structure/table/flipped{dir = 8},/turf/unsimulated/floor,/area/vault/mothership_lab/habitation)
 "UQ" = (/obj/item/clothing/under/grey/grey_worker,/obj/item/clothing/shoes/jackboots/mothership,/obj/item/weapon/storage/backpack/satchel_eng,/obj/structure/closet/ayy3{anchored = 1},/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/obj/structure/window/reinforced{dir = 4},/turf/unsimulated/floor,/area/vault/mothership_lab/habitation)
-"UU" = (/obj/structure/girder/reinforced,/obj/structure/window/full/reinforced/plasma,/turf/unsimulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/administration)
+"UU" = (/obj/structure/girder/reinforced,/obj/structure/window/full/reinforced/plasma,/turf/unsimulated/floor,/area/vault/mothership_lab/administration)
 "Va" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/space_heater/campfire,/obj/structure/reagent_dispensers/cauldron,/turf/unsimulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "Vg" = (/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/obj/structure/acidsink{dir = 1; pixel_y = -18},/turf/unsimulated/floor/grey_sand,/area/vault/mothership_lab/habitation)
 "Vk" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small/broken{dir = 1},/turf/unsimulated/floor/airless,/area/vault/mothership_lab/cave)

@@ -254,7 +254,7 @@
 "vM" = (/obj/structure/rack,/obj/item/weapon/storage/bag/zam_food/zam_menu1,/obj/item/weapon/storage/bag/zam_food/zam_menu1,/obj/item/weapon/storage/bag/zam_food/zam_menu1,/obj/item/weapon/storage/bag/zam_food/zam_menu2,/obj/item/weapon/storage/bag/zam_food/zam_menu2,/obj/item/weapon/storage/bag/zam_food/zam_menu3,/obj/item/weapon/storage/bag/zam_food/zam_menu3,/obj/item/weapon/storage/bag/zam_food/zam_menu3,/obj/item/weapon/storage/bag/zam_food/zam_menu3,/obj/item/weapon/shard,/turf/unsimulated/floor,/area/vault/mothership_lab/maintenance)
 "vQ" = (/obj/machinery/light/he{dir = 8},/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/research)
 "vU" = (/obj/machinery/light/he/burned{dir = 8},/obj/structure/bed/chair/comfy/ayy1,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/research)
-"vV" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/unsimulated/floor,/area/vault/mothership_lab/research)
+"vV" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/research)
 "vW" = (/obj/item/weapon/rack_parts,/obj/item/clothing/glasses/welding,/obj/item/clothing/glasses/welding,/obj/item/clothing/glasses/welding,/obj/item/clothing/glasses/welding,/obj/item/clothing/glasses/welding/superior,/obj/item/clothing/glasses/welding/superior,/obj/item/weapon/shard,/turf/unsimulated/floor,/area/vault/mothership_lab/maintenance)
 "we" = (/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,/turf/unsimulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/research)
 "wl" = (/obj/structure/vendomatpack/zamsnax,/obj/structure/vendomatpack/zamsnax,/turf/unsimulated/floor,/area/vault/mothership_lab/maintenance)
@@ -299,7 +299,7 @@
 "Af" = (/obj/machinery/vending/zamsnax,/turf/unsimulated/floor,/area/vault/mothership_lab/maintenance)
 "Ak" = (/obj/structure/table,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/research)
 "As" = (/mob/living/simple_animal/hostile/humanoid/grey/soldier/regular{dir = 8},/turf/unsimulated/floor/ayy_fancy,/area/vault/mothership_lab/research)
-"At" = (/obj/structure/window/full/reinforced,/obj/structure/grille,/turf/unsimulated/floor,/area/vault/mothership_lab/research)
+"At" = (/obj/structure/window/full/reinforced,/obj/structure/grille,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/research)
 "AA" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/closet/crate/freezer/surgery,/obj/item/organ/internal/eyes/adv_1,/turf/unsimulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/research)
 "AX" = (/obj/machinery/door_control{id_tag = "checkpointshutters3"; name = "Checkpoint Shutters"; pixel_x = 25; pixel_y = -25; req_access_txt = "162"; req_one_access_txt = "162"},/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/research)
 "Br" = (/turf/unsimulated/wall/ayy,/area/vault/mothership_lab/maintenance)
@@ -510,7 +510,6 @@
 "Un" = (/turf/unsimulated/floor,/area/vault/mothership_lab/maintenance)
 "Ut" = (/obj/structure/table/reinforced,/obj/item/weapon/paper_bin/green,/obj/item/weapon/pen,/obj/structure/window/reinforced{dir = 1; pixel_y = 1},/turf/unsimulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/research)
 "Uv" = (/obj/structure/filingcabinet,/turf/unsimulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/research)
-"Uw" = (/obj/structure/girder/reinforced,/obj/structure/window/full/reinforced/plasma,/turf/unsimulated/floor{icon_state = "dark vault full"},/area/vault/mothership_lab/research)
 "Ux" = (/obj/structure/window/reinforced{dir = 8},/obj/machinery/light/he{dir = 1},/obj/structure/closet/crate/ayy2,/turf/unsimulated/floor/ayy_fancy,/area/vault/mothership_lab/research)
 "UA" = (/obj/structure/rack,/obj/item/tool/wrench,/obj/item/tool/wrench,/obj/item/tool/wrench,/obj/item/tool/wrench/socket,/obj/item/tool/wrench/socket,/obj/structure/window/reinforced,/turf/unsimulated/floor,/area/vault/mothership_lab/maintenance)
 "UI" = (/obj/machinery/light/he/broken,/obj/structure/door_assembly/door_assembly_vault,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/research)
@@ -543,7 +542,7 @@
 "WV" = (/obj/machinery/door/airlock/security{name = "MDF Checkpoint"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/research)
 "WW" = (/obj/structure/table/reinforced,/obj/item/weapon/soap,/obj/item/weapon/reagent_containers/spray/cleaner,/turf/unsimulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/research)
 "WZ" = (/obj/structure/window/barricade/full,/obj/effect/mine/stun,/turf/unsimulated/floor/ayy_fancy,/area/vault/mothership_lab/research)
-"Xc" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/table/reinforced,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/armory)
+"Xc" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/table/reinforced,/obj/item/weapon/card/id/mothership_soldier,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/armory)
 "Xf" = (/obj/structure/rack,/obj/item/weapon/storage/pill_bottle/zambiscuits,/obj/item/weapon/storage/pill_bottle/zambiscuits,/obj/item/weapon/storage/pill_bottle/zambiscuits,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor,/area/vault/mothership_lab/maintenance)
 "Xj" = (/turf/unsimulated/floor/ayy_fancy,/area/vault/mothership_lab/research)
 "Xk" = (/obj/structure/sign/biohazard,/turf/unsimulated/wall/ayy,/area/vault/mothership_lab/research)
@@ -591,9 +590,9 @@ eWeWeWeWrVrVYQYQZnZnZnZnZnZnZnYQrVrVrVrVrVrVrVrVrVrVrVYQYQYQYQYQYQYQYQYQYQYQYQYQ
 eWeWeWeWrVYQZnZnZngGnLlJfMclZnYQrVrVrVrVrVrVrVrVrVrVYQZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnYQrVrVrVrVrVeWeWeWeW
 eWeWeWeWrVYQZnJFxTIDIDIDIDikZnYQYQYQYQYQYQYQYQYQYQYQYQZnaiGaGaaTZnIDdIIDmvIDmvIDdIIDvqfhgNRFkrZnPJGaGacnZnYQrVrVrVrVrVrVeWeWeW
 eWeWeWeWrVYQZnoSZnZnwDZniNZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnRaGaUkZnZnIDXjhdXjIDXjIDXjIDIDigbaXjFOZnPJGaGacnZnYQYQYQYQYQYQrVrVeWeW
-eWeWeWrVrVYQZnCjZnrIIDfTIDIDLsbrCcUwIDIDIDZnfgJFlEsVVIZnZnpMZnZnXyIDdAIDdAIDdAIDdAIDIDigvnlgCIZnPJGaGacnZnZnZnZnZnZnZnYQrVeWeW
+eWeWeWrVrVYQZnCjZnrIIDfTIDIDLsbrCcfFIDIDIDZnfgJFlEsVVIZnZnpMZnZnXyIDdAIDdAIDdAIDdAIDIDigvnlgCIZnPJGaGacnZnZnZnZnZnZnZnYQrVeWeW
 eWeWeWrVrVYQZnHRZncTkDYKXNIDIDIDIDxTXjpoXjesIDIDIDIDIDIDIDIDSLZncSDJXjIDXjIDXjIDXjhdIDIDjMICQFZnjRGaGarLZnKIZnKIZnKIZnYQrVrVeW
-eWeWrVrVYQYQrYfnrYZOggntIDIDhBWlicUwIDXjEBZnIDIDIDIDIDIDIDIDIDzHIDIDIDIDIDIDIDIDIDIDIDIDIDIDEBZnNtZnZnZnZnzLZnzLZnzLZnYQrVrVeW
+eWeWrVrVYQYQrYfnrYZOggntIDIDhBWlicfFIDXjEBZnIDIDIDIDIDIDIDIDIDzHIDIDIDIDIDIDIDIDIDIDIDIDIDIDEBZnNtZnZnZnZnzLZnzLZnzLZnYQrVrVeW
 eWrVrVYQDGDGDGDGDGDGDGDGDGDGDGDGDGDGRApeRAZnhvxHOjkNOjqcOjhrOjZnuCgCXjWvXjIDXjlsXjIDIDIDIDIDIDwFGanQnQnQGaGaGaGaGarLZnYQrVrVeW
 eWrVYQDGDGauPECCbDVjDGmuWPDGWeQzTbDGRAXjdjZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnZnPFPFPFggIDIDZnRvmKmKmKNqGaGaGaGaGaZnYQrVrVeW
 eWrVYQDGJKhWhWhWhWnkDGCuhWcZhWBYiKDGHzXjIDZnXPDblhJFukMsqpZneotfMADoeoZnrGzbOekeZnZnZnZnZnzHZnZnZnZnZnZnZnZnZnZnZnZnZnYQrVrVeW
