@@ -95,7 +95,7 @@
 	name = "spoon"
 	desc = "SPOON!"
 	icon_state = "spoon"
-	force = 3
+	force = 4
 	attack_verb = list("attacks", "pokes", "hits")
 	melt_temperature = MELTPOINT_STEEL
 	var/bendable = TRUE
