@@ -107,7 +107,7 @@
 "gL" = (/obj/structure/reagent_dispensers/silicate,/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
 "gN" = (/turf/simulated/wall/r_rock/porous,/area/vault/mothership_lab/asteroid)
 "gV" = (/turf/simulated/wall/r_rock/porous,/area/vault/mothership_lab/cave)
-"gZ" = (/obj/effect/decal/cleanable/blood/drip{basecolor = VOX_BLOOD; blood_color = VOX_BLOOD},/obj/structure/table,/obj/item/weapon/paper,/obj/item/weapon/storage/fancy/crayons,/obj/item/weapon/pen,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/habitation)
+"gZ" = (/obj/effect/decal/cleanable/blood/drip{basecolor = "#2299FC"; blood_color = "#2299FC"},/obj/structure/table,/obj/item/weapon/paper,/obj/item/weapon/storage/fancy/crayons,/obj/item/weapon/pen,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/habitation)
 "hb" = (/obj/machinery/door/airlock{name = "Barracks Lavatory"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/unsimulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/administration)
 "hg" = (/obj/effect/decal/cleanable/blood{basecolor = "#CFAAAA"; blood_color = "#CFAAAA"; icon_state = "floor5"},/obj/item/clothing/head/helmet/mothership_visor,/turf/unsimulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/habitation)
 "hh" = (/obj/machinery/newscaster{pixel_x = 30},/obj/machinery/light/he/broken{dir = 4},/obj/machinery/vending/groans,/turf/unsimulated/floor/ayy_fancy,/area/vault/mothership_lab/habitation)
@@ -168,7 +168,7 @@
 "lr" = (/obj/machinery/vending/hydronutrients,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/asteroid/air{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
 "ls" = (/obj/structure/vendomatpack/zamsnax,/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
 "lt" = (/obj/structure/shuttle/diag_wall/black{dir = 4},/turf/unsimulated/floor/asteroid,/area/vault/mothership_lab/habitation)
-"lu" = (/obj/effect/decal/cleanable/blood/drip{basecolor = VOX_BLOOD; blood_color = VOX_BLOOD},/turf/unsimulated/floor/ayy_fancy,/area/vault/mothership_lab/habitation)
+"lu" = (/obj/structure/reagent_dispensers/watertank,/obj/item/weapon/reagent_containers/glass/bucket,/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
 "lx" = (/obj/structure/window/barricade{dir = 8},/turf/unsimulated/floor/ayy_fancy,/area/vault/mothership_lab/habitation)
 "lC" = (/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/assassin/smg{dir = 8},/turf/unsimulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
 "lH" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small/broken{dir = 4},/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
@@ -176,7 +176,6 @@
 "lO" = (/obj/structure/rack,/obj/item/clothing/head/helmet/space/nasavoid,/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
 "lT" = (/obj/effect/spider/stickyweb,/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider,/turf/unsimulated/floor/asteroid/air,/area/vault/mothership_lab/cave)
 "lV" = (/obj/machinery/door/mineral/sandstone,/obj/structure/window/barricade/full/block,/turf/unsimulated/floor/asteroid/air,/area/vault/mothership_lab/raidtunnel_lower)
-"lW" = (/obj/structure/reagent_dispensers/watertank,/obj/item/weapon/reagent_containers/glass/bucket,/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
 "lY" = (/obj/structure/curtain/open/shower,/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
 "ma" = (/obj/machinery/door/airlock{name = "Toilet"},/turf/unsimulated/floor{icon_state = "showroomfloor"},/area/vault/mothership_lab/administration)
 "md" = (/obj/structure/table/flipped{dir = 4},/turf/unsimulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/habitation)
@@ -292,7 +291,7 @@
 "ts" = (/obj/effect/decal/cleanable/blood{basecolor = "#CFAAAA"; blood_color = "#CFAAAA"},/obj/effect/landmark/corpse/grey/soldier_sentry,/obj/item/weapon/gun/energy/smalldisintegrator,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/habitation)
 "tv" = (/obj/machinery/deployable/barrier{anchored = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/unsimulated/floor/ayy_fancy,/area/vault/mothership_lab/habitation)
 "tx" = (/obj/machinery/door/airlock{name = "Toilet"},/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
-"ty" = (/obj/machinery/light/he/burned{dir = 8},/obj/effect/decal/cleanable/blood/drip{basecolor = VOX_BLOOD; blood_color = VOX_BLOOD},/obj/item/weapon/barricade_kit,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/habitation)
+"ty" = (/obj/machinery/light/he/burned{dir = 8},/obj/effect/decal/cleanable/blood/drip{basecolor = "#2299FC"; blood_color = "#2299FC"},/obj/item/weapon/barricade_kit,/turf/unsimulated/floor/ayy,/area/vault/mothership_lab/habitation)
 "tF" = (/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,/obj/item/weapon/reagent_containers/glass/rag,/obj/machinery/door/poddoor/shutters{dir = 2; id_tag = "lab_bar"; name = "Bar Shutters"},/turf/unsimulated/floor{icon_state = "freezerfloor"},/area/vault/mothership_lab/habitation)
 "tI" = (/obj/effect/decal/cleanable/dirt,/obj/structure/acidtoilet,/obj/machinery/light/small/broken{dir = 1},/turf/unsimulated/floor,/area/vault/mothership_lab/cave)
 "tM" = (/obj/structure/bed/chair/wood/normal{dir = 4},/turf/unsimulated/floor/asteroid/air{icon_state = "asteroidfloor"},/area/vault/mothership_lab/hobo)
@@ -756,7 +755,7 @@ ibibgNpqpqpqpqpqsjHPHPHPYLDCUIwdpqpqpqpqVyXbVyuhWLXbXbExWLuhuhuhBxuhuhSolLSouhuh
 ibibgNpqsSqVGjpqCRHPoMHPYLGwRIpqpqJzmFpqXbXbXbuhuhuhxJuhuhuhgdgdXbXbXbXbXbXbXRcuHvXbXbXbXbKDXbVylsuhXbVyuhcIuhuhBxuhuhuhubekhMqIqIVVVVNFqImzyYekubibibib
 ibibgNpqOjHcHcqYbuHPHPHPoMHPOrpqJoUIUIpqvJVyfCuhImmTExmfKpuhdKXbXbVyXbXbVyXbVyXbXbXbVyXbXbRLXbXbfCuhrgNSuhuhuhXbXbXbmfHyubekbCGBbCekekekbCGBbCekubibibib
 ibibgNpqIiJiwIpqxRbupqhNpqHPHPxbUInjjDpqPnXbVyBxXbXbVyXbXbBxXbXbXbXbXbXbXbXbXbXbXbeFVyXbXbRXXbXbXbBxVyZQfEayNJVyVyXbXbVymzmzqIvYqIfjfdfdULsNmzekubibibib
-ibibgNpqpqpqpqpqqlvBddHcfAvBoXpqpqpqpqpqZQZQhnuhEhaLXbvCnnuhototdAlWVyXbXbVyPyZmdQvKlOdAotuhtgHyftuhXbfCuhCHXbXbXbXbMJXbubeksCqImzjWsNqIqIqImzmzekubibib
+ibibgNpqpqpqpqpqqlvBddHcfAvBoXpqpqpqpqpqZQZQhnuhEhaLXbvCnnuhototdAluVyXbXbVyPyZmdQvKlOdAotuhtgHyftuhXbfCuhCHXbXbXbXbMJXbubeksCqImzjWsNqIqIqImzmzekubibib
 ibibibgNgNNQfoMQpqpqUUkYUUpqpqMQGiNQgNuhgxuhuhAwAwThgoAwAwAwAwAwAwHQHQNXtfNXAwAwAwAwAwAwAwAwyuAwAwAwAwAwAwAwAwFwAwAwxmAwAwekekekekekekekqIqIpeqIPrekubib
 ibibibibgNpqgjsvfAbngjgjgjbnddYlgjpqgNuhoJSmuhjhAZEcEcDLjhAwPREUWboxScjtTccZAwWFQPcFgCdhAwgnCGrpUKLwYmbEAwCGCGtsAHoZPArsAwAwAwAwAwAwAwAwekqIqIqImzekubib
 ibgNgNgNgNpqEmsvfAgjgjgjgjgjddYlEmpqgNuhZcLnuhAwxKBkximQAwAwRlCITcTcTcTcyvdmAwZVvvGfYThhAwQwqPqGmxuSfpmdDMEjPOcXnpFIFIBVAwqKSHpbLoSHJPAwekmzmzqImzekubib
@@ -768,7 +767,7 @@ gNjezQvUzQzQzQzQzQzDzQzQzQAwoigAZlAwgNuhXcuuanjhEczvEcEcjhAwNjdfAwsmsmAwEfYkAwja
 gNjezQUgmwaDaSdgzQUgiymyzQAwAHPeAHAwQGAwAwAwAwAwAwVqVqAwxkAwFGFGNXQXyFNXFGFGAwAwAwAwAwAwAwaKINAwkqAwcfcfAwcctvYsqXSpCGCGzAcozAcozAcoCGYMZaAwekqImzekubib
 gNjezQATIBSxSxVQSSkiSxnyzQAwCGcXCGjQCGxcCGCzCGCGHklxcXBlxPCzMnKtzlcXCfVICzjQTBbDjQCzzlmpqHwvCGFzcXCzwaCGJxHzTJOfAwCGkSCGCGCGkSAabMCGCGEXAwltekqIsNekubib
 gNjezQQpfafyRtpxzQFVkRxrzQAwFcxzXzcXbDcXcXeScXcXcXSgbDcXcXCfcXcXcXjZZncXcXXzgmiRKMehcXwYcXgBcXcXcXehcXcXcXcXcXbDAwrQGxSOAwrQGxAwSOGxrQAwltekfdqIfdekubib
-gNjezQqQUgkRaOaazQzFRtxrzQAwJxCGCzCzcXLBueCGjMluVqtXPQqPpssfzZcXCGCGCGPJCGHzqpcXiRaFAzVqrvCGIzcXokCzCzHzSICzCGOoAwCGCGNnMOCGCGRFcLCGCGAwekfdmzqIekubibib
+gNjezQqQUgkRaOaazQzFRtxrzQAwJxCGCzCzcXLBueCGjMeSVqtXPQqPpssfzZcXCGCGCGPJCGHzqpcXiRaFAzVqrvCGIzcXokCzCzHzSICzCGOoAwCGCGNnMOCGCGRFcLCGCGAwekfdmzqIekubibib
 gNjezQTVUgtMGcuXzQBRMdEWzQAwFmAwAwAwLdAwAwAwAwVqAwAwAwloBWvhAwwkAwoVFSAwaKaKAwKGiRAwcfcHcfcfAwEycXAwACACAwAwAwAwAwLhqishOagCuFfzvLqizyAwekqIqIekubibibBJ
 gNjezQzQwDzQzQzQzQzQzQzQzQAwVFmIiUmIYsZkAwazQlmUmUdLAwDDPmZeTgdnDZPmKzAwWTqwCTIVIVYfqSgCWTiFgCuPuPEzmxjOAwekekekAwAwAwAwAwAwAwAwAwAwAwAwqImzekubibibibBJ
 gNjemDegTuHAiAXomDlrsZPWzQAwcjkJCGmpqPQCAwAwAwmUewAwAwTYzYmZEcEcWYEcdrAwfxCGCGCGCGJxCyCGmpCGCGJpiEuWmxQvAwekbPrFekekevmzsNqIqImzmzqIqIqImzekubibibibBJBJ
