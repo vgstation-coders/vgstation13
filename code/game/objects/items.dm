@@ -1208,11 +1208,11 @@ var/global/objects_thrown_when_explode = FALSE
 		return FALSE
 
 	//if we haven't made our blood_overlay already
-	if(!blood_overlays[type])
-		generate_blood_overlay()
+	if(!blood_overlays["[type][icon_state]"])
+		set_blood_overlay()
 
 	if(!blood_overlay)
-		blood_overlay = blood_overlays[type]
+		blood_overlay = blood_overlays["[type][icon_state]"]
 	else
 		overlays.Remove(blood_overlay)
 
@@ -1245,11 +1245,11 @@ var/global/objects_thrown_when_explode = FALSE
 		return FALSE
 
 	//if we haven't made our blood_overlay already
-	if(!blood_overlays[type])
-		generate_blood_overlay()
+	if(!blood_overlays["[type][icon_state]"])
+		set_blood_overlay()
 
 	if(!blood_overlay)
-		blood_overlay = blood_overlays[type]
+		blood_overlay = blood_overlays["[type][icon_state]"]
 	else
 		overlays.Remove(blood_overlay)
 
@@ -1279,8 +1279,8 @@ var/global/objects_thrown_when_explode = FALSE
 
 
 var/global/list/image/blood_overlays = list()
-/obj/item/proc/generate_blood_overlay()
-	if(blood_overlays[type])
+/obj/item/proc/set_blood_overlay() /* If your item needs to update its blood overlay when its icon_state changes, use this one. update_blood_overlay is simply a helper proc for this one. */
+	if(update_blood_overlay())
 		return
 
 	var/icon/I = new /icon(icon, icon_state)
@@ -1289,17 +1289,26 @@ var/global/list/image/blood_overlays = list()
 
 	var/image/img = image(I)
 	img.name = "blood_overlay"
-	blood_overlays[type] = img
+	blood_overlays["[type][icon_state]"] = img
+	update_blood_overlay()
+
+/obj/item/proc/update_blood_overlay() /* See comment on set_blood_overlay() - this shouldn't be used outside of that proc! */
+	if(blood_overlays["[type][icon_state]"] && blood_overlay)
+		overlays -= blood_overlay
+		blood_overlay = blood_overlays["[type][icon_state]"]
+		blood_overlay.color = blood_color
+		overlays += blood_overlay
+		return 1
 
 /obj/item/apply_luminol()
 	if(!..())
 		return FALSE
-	if(!blood_overlays[type]) //Blood overlay generation if it lacks one.
-		generate_blood_overlay()
+	if(!blood_overlays["[type][icon_state]"]) //Blood overlay generation if it lacks one.
+		set_blood_overlay()
 	if(blood_overlay)
 		overlays.Remove(blood_overlay)
 	else
-		blood_overlay = blood_overlays[type]
+		blood_overlay = blood_overlays["[type][icon_state]"]
 	var/image/luminol_overlay = blood_overlay
 	luminol_overlay.color = LIGHT_COLOR_CYAN
 	overlays += luminol_overlay

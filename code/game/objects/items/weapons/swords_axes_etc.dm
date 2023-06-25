@@ -131,6 +131,10 @@
 		w_class = initial(w_class)
 		force = initial(force) //not so robust now
 		attack_verb = list("hits", "punches")
+	for(var/I in src.overlays)
+		var/image/P = I
+		if(P.name == "blood_overlay")
+			set_blood_overlay()
 	playsound(src, 'sound/weapons/empty.ogg', 50, 1)
 	add_fingerprint(user)
 
