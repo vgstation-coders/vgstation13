@@ -1279,7 +1279,7 @@ var/global/objects_thrown_when_explode = FALSE
 
 
 var/global/list/image/blood_overlays = list()
-/obj/item/proc/set_blood_overlay() /* If your item needs to update its blood overlay when its icon_state changes, use this one. update_blood_overlay is simply a helper proc for this one. */
+/obj/item/proc/set_blood_overlay() /* If your item needs to update its blood overlay when its icon_state changes, use this one. update_blood_overlay() is simply a helper proc for this one. */
 	if(update_blood_overlay())
 		return
 
