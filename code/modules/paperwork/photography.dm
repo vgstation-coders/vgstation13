@@ -683,14 +683,13 @@
 		viewpichelper(src)
 
 /obj/item/device/camera/afterattack(atom/target, mob/user, flag)
-	if(!on || !pictures_left || (!isturf(target) && !isturf(target.loc)))
+	if(!on || pictures_left<=0 || (!isturf(target) && !isturf(target.loc)))
 		return
-
+	pictures_left--
 	captureimage(target, user, flag)
 
 	playsound(loc, "polaroid", 75, 1, -3)
 
-	pictures_left--
 	to_chat(user, "<span class='notice'>[pictures_left] photos left.</span>")
 	icon_state = icon_off
 	on = FALSE
