@@ -576,6 +576,7 @@
 	name = "donk pocket"
 	desc = "You wanna put a bangin-Oh nevermind."
 	icon_state = "donkcustom"
+	trash = null
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/kebab
 	name = "kebab"
