@@ -1068,7 +1068,8 @@
 				else
 					J.amount = 0
 					H.custom_pain("Your teeth crack and tremble before breaking all of a sudden! THE PAIN!", 100) //you dun fucked up lad
-					H.pain_level = BASE_CARBON_PAIN_RESIST + 25 //pain threshold + 25, so you go into shock from pain
+					H.visible_message("<span class='warning'>[H]'s teeth start cracking and suddenly explode! That must hurt.</span>")
+					H.pain_level = 2 * BASE_CARBON_PAIN_RESIST //so you go into shock from pain
 					playsound(H, 'sound/effects/toothshatter.ogg', 50, 1)
 					H.audible_scream()
 					H.adjustBruteLoss(50) //imagine all your teeth violently exploding, shrapnel and shit
