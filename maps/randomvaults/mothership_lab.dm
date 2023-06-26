@@ -145,26 +145,35 @@
 	temperature = T20C
 	plane = PLATING_PLANE
 
-/turf/unsimulated/floor/ayy2
+/turf/unsimulated/floor/ayy/Entered(atom/A, atom/OL) // Ayy alloy tiles play walking sound effects!
+	..()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/L = A
+		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
+
+	if(istype(A,/mob/living/carbon))
+		var/mob/living/carbon/M = A
+		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
+
+/turf/unsimulated/floor/ayy/tech
 	name = "alien plating"
-	icon = 'icons/turf/floors.dmi'
 	icon_state = "alien_tile2"
-	temperature = T20C
-	plane = PLATING_PLANE
 
-/turf/unsimulated/floor/ayy_maint
+/turf/unsimulated/floor/ayy/maint
 	name = "worn alien plating"
-	icon = 'icons/turf/floors.dmi'
 	icon_state = "alien_tile_worn"
-	temperature = T20C
-	plane = PLATING_PLANE
 
-/turf/unsimulated/floor/ayy_fancy
+/turf/unsimulated/floor/ayy/fancy
 	name = "ornate alien plating"
-	icon = 'icons/turf/floors.dmi'
 	icon_state = "alien_tile_fancy"
-	temperature = T20C
-	plane = PLATING_PLANE
 
 /turf/unsimulated/floor/grey_sand
 	name = "chalky soil"
