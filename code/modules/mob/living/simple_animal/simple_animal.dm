@@ -549,7 +549,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return
 	if(supernatural && isholyweapon(O))
 		purge = 3
-	playsound(loc, O.hitsound, 50, 1, -1)
+	if(O.hitsound)
+		playsound(loc, O.hitsound, 50, 1, -1)
 	..()
 
 
