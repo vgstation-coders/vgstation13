@@ -3270,6 +3270,7 @@
 //the syndie version for muh tators
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint
 	name = "mint candy"
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/nano
 	desc = "It's not just a mint!"
