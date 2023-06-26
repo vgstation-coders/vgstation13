@@ -187,6 +187,24 @@
 	if(prob(33))
 		icon_state = "xeno_rock_tile_[rand(1,12)]"
 
+/turf/unsimulated/floor/grey_sand/Entered(atom/A, atom/OL) // Ayy dirt tiles play walking sound effects!
+	..()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/L = A
+		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/sand_walk1.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/sand_walk2.ogg', 50, 0)
+
+	if(istype(A,/mob/living/carbon))
+		var/mob/living/carbon/M = A
+		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/sand_walk1.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/sand_walk2.ogg', 50, 0)
+
 //////////////////////////////
 // DECORATIVE FLORA (Some nice things to go in the facility's petting zoo and plant decorations)
 //////////////////////////////
