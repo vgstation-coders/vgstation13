@@ -161,6 +161,8 @@
 			return FALSE
 		if(istype(target.loc, /obj/effect/dummy))
 			return FALSE
+		if(ispulsedemon(M))
+			return FALSE
 
 	if(!near_camera(target))
 		return FALSE
