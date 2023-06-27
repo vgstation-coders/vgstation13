@@ -1383,6 +1383,7 @@
 		icon_state = initial_icon+"-open"
 		for (var/datum/faction/F in factions_with_hud_icons)
 			F.update_hud_icons()
+	..()
 
 /obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
 	if(!occupant)

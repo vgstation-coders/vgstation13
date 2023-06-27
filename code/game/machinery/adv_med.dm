@@ -180,6 +180,7 @@
 	if (O == occupant)
 		occupant = null
 		update_icon()
+	..()
 
 /obj/machinery/bodyscanner/proc/go_out(var/exit = loc, var/mob/ejector)
 	if(!occupant)

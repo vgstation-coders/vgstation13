@@ -506,6 +506,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		occupant = null
 		update_icon()
 		nanomanager.update_uis(src)
+	..()
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit, var/ejector)
 	if(!occupant || ejecting)

@@ -251,6 +251,7 @@
 	if (O == occupant)
 		occupant = null
 		build_icon()
+	..()
 
 /obj/machinery/recharge_station/proc/go_out(var/turf/T)
 	if(!T)
