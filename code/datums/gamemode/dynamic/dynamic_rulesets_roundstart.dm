@@ -569,8 +569,8 @@ Assign your candidates in choose_candidates() instead.
 	if (!blob_fac)
 		blob_fac = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
 	var/blob_number = 1 + round(mode.roundstart_pop_ready/25) // + 1 Blob per 25 pop. ready.
-	for (var/i = 1 to min(blob_number, candidates.len))
-		var/mob/M = pick(candidates)
+	for (var/i = 1 to min(blob_number, assigned.len))
+		var/mob/M = pick(assigned)
 		blob_fac.HandleNewMind(M.mind)
 		var/datum/role/blob = M.mind.GetRole(BLOBOVERMIND)
 		blob.Greet(GREET_ROUNDSTART)
