@@ -83,6 +83,10 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Fixed some roundstart Blob ruleset initialization issue that could lead to the blob getting extra antag roles if multiple roundstart rulesets fire together.</li>
 				<li class="bugfix">Fixed some animations (such as the cult teleport animations) ending about a second earlier than they should.</li>
 				<li class="bugfix">Parallax wraparound has finally been fixed, you will no longer leave stars behind forever if you keep moving in one direction in space.</li>
+				<li class="bugfix">Fixed hookshots and their chains not being visible in many cases.</li>
+				<li class="bugfix">Fixed hookshots having a much shorter range when firing in diagonals.</li>
+				<li class="bugfix">Fixed hookshots failing to properly reel you in if the hook hits something at the longest range possible.</li>
+				<li class="bugfix">Fixed a sanity issue that occurred when mobs exit a Cryo Tube, Body Scanner, DNA Scanner, Mecha, or Cyborg Recharging Station through teleportation or getting pulled by a hookshot chain, and that would either allow other players to teleport them back to it, or just prevent the object from being used by other players.</li>
 			</ul>
 			<h3 class="author">DorainGrey updated:</h3>
 			<ul class="changes bgimages16">
