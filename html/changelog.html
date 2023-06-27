@@ -87,6 +87,14 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Fixed hookshots having a much shorter range when firing in diagonals.</li>
 				<li class="bugfix">Fixed hookshots failing to properly reel you in if the hook hits something at the longest range possible.</li>
 				<li class="bugfix">Fixed a sanity issue that occurred when mobs exit a Cryo Tube, Body Scanner, DNA Scanner, Mecha, or Cyborg Recharging Station through teleportation or getting pulled by a hookshot chain, and that would either allow other players to teleport them back to it, or just prevent the object from being used by other players.</li>
+				<li class="rscadd">ANTAG MADNESS: Players that have no roles when the clock hits the automated ERT call now become Survivors. Latejoiners that don&#39;t have Traitor enabled get that role as well.</li>
+				<li class="tweak">ANTAG MADNESS: Changed some of the messages sent to latejoin traitors to have them better notice that this isn&#39;t a regular antag roll.</li>
+				<li class="tweak">ANTAG MADNESS: Attempting to call the ERT early will now always result in a failure (note that it won&#39;t prevent the automated ERT call to occur after 20 minutes).</li>
+				<li class="tweak">ANTAG MADNESS: Reduced the ERT call delay from 20 to 18 minutes (so the ERT may actually arrive at the Station after 20 minutes)</li>
+				<li class="tweak">ANTAG MADNESS: During that mode, the Blob-related biohazard announcement will now trigger much later, but the Blob will also be unable to spawn any additional Blob Cores.</li>
+				<li class="bugfix">ANTAG MADNESS: Fixed Nanotrasen Officials not getting their Survive objective unless they latejoined.</li>
+				<li class="tweak">If a faction&#39;s defeat is supposed to reduce the security level and call the shuttle, it will only do so if no other faction also has the shuttle under lockdown or warrants a higher security level.</li>
+				<li class="imageadd">Added a new logo and Greeting message for Survivors that aren&#39;t created by Wizards summoning guns.</li>
 			</ul>
 			<h3 class="author">DorainGrey updated:</h3>
 			<ul class="changes bgimages16">
