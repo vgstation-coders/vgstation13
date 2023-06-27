@@ -3125,6 +3125,15 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
+"Ag" = (
+/obj/structure/bed/chair/comfy/ayy1{
+	dir = 8
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/ayy,
+/area/vault/mothership_lab/habitation)
 "Aw" = (
 /turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/habitation)
@@ -8289,7 +8298,7 @@ CG
 cX
 Iz
 Aw
-gC
+Ag
 CG
 gC
 gC

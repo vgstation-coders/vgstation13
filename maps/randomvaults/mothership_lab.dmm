@@ -60,7 +60,7 @@
 	icon_state = "warning-asteroid";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "aR" = (
 /obj/structure/acidsink{
@@ -133,9 +133,9 @@
 	},
 /area/vault/mothership_lab/control_room)
 "cn" = (
-/obj/structure/bed/chair/comfy/ayy1,
-/turf/unsimulated/floor/ayy/maint,
-/area/vault/mothership_lab/control_room)
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/lab_asteroid,
+/area/vault/mothership_lab/raidtunnel_upper)
 "ct" = (
 /obj/structure/inflatable/door,
 /turf/unsimulated/floor/asteroid,
@@ -312,7 +312,7 @@
 	icon_state = "warning-asteroid";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "gj" = (
 /obj/machinery/door/airlock{
@@ -329,7 +329,7 @@
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/entrance)
 "gw" = (
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "gy" = (
 /obj/item/clothing/under/grey/grey_scout,
@@ -529,7 +529,7 @@
 	icon_state = "warning-asteroid";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "jD" = (
 /turf/unsimulated/floor/asteroid/air{
@@ -590,7 +590,7 @@
 	tag = "icon-warning (NORTH)"
 	},
 /obj/structure/hanging_lantern,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "kr" = (
 /obj/effect/decal/cleanable/dirt,
@@ -884,7 +884,7 @@
 	icon_state = "warning-asteroid";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "nG" = (
 /obj/structure/bed/roller,
@@ -918,7 +918,7 @@
 /obj/structure/hanging_lantern{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "nW" = (
 /obj/item/device/flashlight/flare/ever_bright,
@@ -1076,6 +1076,7 @@
 	},
 /obj/item/stack/sheet/metal/bigstack,
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/railing,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/control_room)
 "qP" = (
@@ -1213,6 +1214,7 @@
 /obj/structure/rack{
 	dir = 1
 	},
+/obj/structure/railing,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/control_room)
 "sX" = (
@@ -1492,7 +1494,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 4
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/entrance)
 "xB" = (
 /obj/effect/landmark{
@@ -1590,7 +1592,7 @@
 /area/vault/mothership_lab/entrance)
 "yj" = (
 /obj/structure/shuttle/diag_wall/black,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/entrance)
 "yk" = (
 /obj/machinery/acidshower{
@@ -1607,7 +1609,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/entrance)
 "yq" = (
 /obj/effect/decal/warning_stripes{
@@ -2009,10 +2011,6 @@
 	},
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/control_room)
-"Ev" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/lab_asteroid,
-/area/vault/mothership_lab/raidtunnel_upper)
 "Ey" = (
 /obj/machinery/deployable/barrier{
 	anchored = 1;
@@ -2077,7 +2075,7 @@
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "FU" = (
 /obj/machinery/vending/assist,
@@ -2427,7 +2425,7 @@
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "MD" = (
 /turf/unsimulated/mineral,
@@ -2864,7 +2862,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/entrance)
 "TY" = (
 /obj/machinery/door/airlock/external{
@@ -3081,6 +3079,12 @@
 /obj/structure/bed/chair/comfy/ayy1,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
+"XC" = (
+/obj/structure/bed/chair/comfy/ayy1{
+	dir = 8
+	},
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/mothership_lab/control_room)
 "XO" = (
 /obj/structure/shuttle/diag_wall/black,
 /turf/unsimulated/floor/asteroid,
@@ -4084,7 +4088,7 @@ oo
 oo
 oo
 KD
-cn
+QR
 bi
 oo
 YF
@@ -4178,7 +4182,7 @@ fz
 QR
 QR
 QR
-QR
+XC
 UM
 oo
 YF
@@ -4803,7 +4807,7 @@ GL
 MD
 Qz
 gb
-Ev
+cn
 zu
 Qz
 MD
@@ -4992,7 +4996,7 @@ MD
 Qz
 id
 MQ
-Ev
+cn
 Qz
 MD
 "}
@@ -5038,7 +5042,7 @@ GL
 MD
 Qz
 bq
-Ev
+cn
 MQ
 Qz
 MD
@@ -5132,7 +5136,7 @@ Au
 MD
 Qz
 MQ
-Ev
+cn
 Qz
 MD
 MD
@@ -5273,7 +5277,7 @@ MD
 Qz
 Qz
 Vz
-Ev
+cn
 Qz
 MD
 MD
@@ -5415,7 +5419,7 @@ Qz
 aJ
 MQ
 MQ
-Ev
+cn
 Qz
 MD
 "}
@@ -5461,7 +5465,7 @@ MD
 Qz
 SY
 Dl
-Ev
+cn
 Rv
 Qz
 MD
@@ -5744,7 +5748,7 @@ Qz
 Wl
 MQ
 MQ
-Ev
+cn
 Qz
 MD
 "}
@@ -5883,8 +5887,8 @@ GL
 MD
 MD
 HM
-Ev
-Ev
+cn
+cn
 MQ
 HM
 MD
@@ -5930,7 +5934,7 @@ GL
 MD
 MD
 HM
-Ev
+cn
 HL
 za
 HM
