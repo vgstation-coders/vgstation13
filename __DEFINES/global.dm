@@ -396,4 +396,4 @@ var/list/machinery_rating_cache = list() // list of type path -> number
 var/runescape_pvp = FALSE
 var/runescape_skull_display = FALSE
 
-var/antag_madness = FALSE
+var/antag_madness = ANTAG_MADNESS_OFF

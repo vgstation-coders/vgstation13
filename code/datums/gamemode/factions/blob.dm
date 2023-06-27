@@ -87,7 +87,7 @@
 	AnnounceObjectives()
 	start = new()
 	start.count()
-	if (antag_madness)
+	if (antag_madness == ANTAG_MADNESS_EARLY)
 		prelude_announcement = world.time + 10 MINUTES
 		outbreak_announcement = world.time + 15 MINUTES
 	else

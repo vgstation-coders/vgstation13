@@ -795,7 +795,7 @@ Assign your candidates in choose_candidates() instead.
 	return TRUE
 
 /datum/dynamic_ruleset/roundstart/antag_madness/execute()
-	antag_madness = 1
+	antag_madness = ANTAG_MADNESS_EARLY
 	//first we initialize the nanotrasen faction, even if there are no heads currently there
 	var/datum/faction/nanotrasen/nanotrasen = find_active_faction_by_type(/datum/faction/nanotrasen)
 	if (!nanotrasen)
@@ -872,7 +872,7 @@ Assign your candidates in choose_candidates() instead.
 
 
 	spawn(escalation_delay)//ERT calling is automated after 18 minutes. Any further developments will have to be manually enacted by the badmin who forced this terrible ruleset in the first place. have fun!
-		antag_madness = 2
+		antag_madness = ANTAG_MADNESS_LATE
 		var/datum/striketeam/ert/response_team = new()
 		response_team.trigger_strike(null,"Nanotrasen officials have been misled to a dummy Space Station filled with antagonistic forces. You must find, protect, and retrieve the various Heads of Staff and Internal Affair Agents aboard the station. Anyone else is a potential threat that must be dealt with extreme prejudice.")
 		for(var/mob/living/player in player_list)
@@ -924,7 +924,7 @@ Assign your candidates in choose_candidates() instead.
 						newTraitor.Greet(GREET_LATEJOIN)
 					return TRUE
 	//tator disabled? tator banned? whatever you'll be a survivor if the round has gone on long enough
-	if (antag_madness >= 2)
+	if (antag_madness == ANTAG_MADNESS_LATE)
 		var/datum/role/survivor/R = new
 		R.AssignToRole(newPlayer.mind,1)
 		R.Greet(GREET_MADNESSSURVIVOR)

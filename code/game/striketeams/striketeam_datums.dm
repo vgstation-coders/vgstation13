@@ -79,7 +79,7 @@ var/list/sent_strike_teams = list()
 	var/icon/team_logo = icon('icons/logos.dmi', logo)
 	var/fake = FALSE//Antag Madness
 
-	if ((antag_madness != 1) || (striketeam_name != TEAM_ERT))//if we're early during Antag Madness, ERT attempts will "fake" their search for players
+	if ((antag_madness != ANTAG_MADNESS_EARLY) || (striketeam_name != TEAM_ERT))//if we're early during Antag Madness, ERT attempts will "fake" their search for players
 		for(var/mob/dead/observer/O in dead_mob_list)
 			if(!O.client || jobban_isbanned(O, ROLE_STRIKE) || O.client.is_afk())
 				continue
