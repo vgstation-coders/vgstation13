@@ -469,6 +469,7 @@
 #define DSYRUP			"dsyrup"
 #define GRUE_BILE		"grue_bile"
 #define PINKLADY		"pinklady"
+#define FAKE_CREEP		"fake_creep"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

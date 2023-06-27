@@ -10189,3 +10189,19 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	specheatcap = 0.45
 	density = 7.874
 	var/mute_duration = 300 //30 seconds
+
+/datum/reagent/fake_creep // Used to spread xenomorph creep. Why? Well, why not?
+	name = "Dan's Grape Drank"
+	id = FAKE_CREEP
+	description = "Discount Dan's award-winning grape drink. Limited production run! Now with added peanuts!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#6F2DA8" // 111, 45, 168
+
+/datum/reagent/fake_creep/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	if(volume >= 1)
+		if(!locate(/obj/effect/alien/weeds) in T)
+			new /obj/effect/alien/weeds(T)
