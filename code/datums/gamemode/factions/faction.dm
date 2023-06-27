@@ -49,6 +49,9 @@ var/list/factions_with_hud_icons = list()
 	var/list/voice_per_admin = list()
 	var/admin_voice_say = "says"
 
+	var/emergency_shuttle_lockdown = null //if a string is set, commms console won't be able to call the shuttle, with that string given as explaination.
+	var/last_security_level_change = SEC_LEVEL_GREEN //the last sec level set by that faction. If the security level should change, it will only do so if no other faction has a higher one
+
 	var/minor_victory = FALSE
 
 	// This datum represents all data that is exported to the statistics file at the end of the round.
@@ -289,18 +292,30 @@ var/list/factions_with_hud_icons = list()
 	switch(value)
 		if(FACTION_DEFEATED) //Faction was close to victory, but then lost. Send shuttle and end theme.
 			sleep(5 SECONDS)
-			emergency_shuttle.shutdown = 0
-			emergency_shuttle.online = 1
+			emergency_shuttle_lockdown = null
+			call_shuttle_proc(null, "The [name] has been defeated. An emergency shuttle has been dispatched")//will only actually occur if nothing else prevents the shuttle call
 			OnPostDefeat()
-			set_security_level("blue")
-			ticker.StopThematic()
+			last_security_level_change = SEC_LEVEL_BLUE
+			var/sec_change = TRUE
+			for(var/datum/faction/F in ticker.mode.factions)
+				if (F.last_security_level_change > SEC_LEVEL_BLUE)
+					sec_change = FALSE
+			if (sec_change)
+				set_security_level("blue")//We drop the sec level to blue, but only if no other faction wants it any higher
+				ticker.StopThematic()
 		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert and play endgame music.
-			if(playlist)
-				ticker.StartThematic(playlist)
-			else
-				ticker.StartThematic("endgame")
-			sleep(2 SECONDS)
-			set_security_level("red")
+			last_security_level_change = SEC_LEVEL_RED
+			var/sec_change = TRUE
+			for(var/datum/faction/F in ticker.mode.factions)
+				if (F.last_security_level_change == SEC_LEVEL_DELTA)
+					sec_change = FALSE
+			if (sec_change)
+				if(playlist)
+					ticker.StartThematic(playlist)
+				else
+					ticker.StartThematic("endgame")
+				sleep(2 SECONDS)
+				set_security_level("red")//We raise the sec level to red, unless some malf AI has it set to delta already
 
 /datum/faction/proc/OnPostDefeat()
 	if(emergency_shuttle.location || emergency_shuttle.direction) //If traveling or docked somewhere other than idle at command, don't call.
