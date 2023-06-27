@@ -742,6 +742,16 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."
 	..()
 
+/datum/command_alert/nuclear_operatives_war
+	name = "Nuclear Operatives"
+	alert_title = "Imminent Assault"
+	theme = "nukesquad"
+	alertlevel = "red"
+
+/datum/command_alert/nuclear_operatives_war/announce()
+	message = "Syndicate Communications Intercepted: Hostile Syndicate Operatives are preparing to assault [station_name()] ETA 10 minutes. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration. "
+	..()
+
 /datum/command_alert/blizzard_end
 	alert_title = "Blizzard Status"
 	message = "Automated meteorological warning alert: the blizzard has been confirmed to be no longer active. Thank you for your cooperation with standard safety procedures."

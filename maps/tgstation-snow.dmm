@@ -98157,7 +98157,7 @@
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "qII" = (
-/obj/machinery/teleport/hub,
+/obj/machinery/teleport/hub/syndicate,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},

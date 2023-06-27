@@ -1,6 +1,3 @@
-#define SYNDICATE_SHUTTLE_TRANSIT_DELAY 240
-#define SYNDICATE_SHUTTLE_COOLDOWN 200
-
 var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area/shuttle/nuclearops)
 
 /datum/shuttle/syndicate
@@ -17,6 +14,7 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 
 	stable = 1 //Don't stun everyone and don't throw anything when moving
 	can_rotate = 0 //Sleepers, body scanners and multi-tile airlocks aren't rotated properly
+
 
 	req_access = list(access_syndicate)
 
@@ -46,6 +44,7 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 		updateMarker.z = current_port.z
 		updateMarker.offset_y = -5
 
+
 /obj/machinery/computer/shuttle_control/syndicate
 	icon_state = "syndishuttle"
 
@@ -70,6 +69,32 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 	newMarker.offset_y = -25
 
 	holomap_markers[HOLOMAP_MARKER_SYNDISHUTTLE] = newMarker
+
+
+/obj/machinery/computer/shuttle_control/syndicate/try_move(mob/user)
+	if(!shuttle)
+		if(user)
+			to_chat(user, "<span class='warning'>No shuttle detected.</span>")
+		return
+
+	if(!selected_port && shuttle.docking_ports.len >= 2)
+		selected_port = pick(shuttle.docking_ports - shuttle.current_port)
+
+	if(war_declared && (world.time / 10 < war_declared_time + CHALLENGE_SYNDIE_SHUTTLE_DELAY))
+		to_chat(usr, "Shuttle Cannot leave due to bluespace inteference.")
+		return FALSE
+
+	//Send a message to the shuttle to move
+	syndicate_shuttle.travel_to(selected_port, src, user)
+	can_war_be_declared = FALSE
+	selected_port = null
+	updateUsrDialog()
+
+/obj/machinery/computer/shuttle_control/syndicate/emp_act(severity)
+	return
+
+/obj/machinery/computer/shuttle_control/syndicate/kick_act(mob/user)
+	return
 
 //code/game/objects/structures/docking_port.dm
 
