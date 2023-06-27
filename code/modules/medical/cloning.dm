@@ -246,7 +246,7 @@
 	if(H.dna.species != "Human")
 		H.set_species(H.dna.species, TRUE)
 
-	H.adjustCloneLoss(150) //new damage var so you can't eject a clone early then stab them to abuse the current damage system --NeoFite
+	isslimeperson(H) ? H.adjustToxLoss(150) : H.adjustCloneLoss(150)
 	H.adjustBrainLoss(upgraded ? 0 : (heal_level + 50 + rand(10, 30))) // The rand(10, 30) will come out as extra brain damage
 	H.Paralyse(4)
 	H.stat = H.status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS //There was a bug which allowed you to talk for a few seconds after being cloned, because your stat wasn't updated until next Life() tick. This is a fix for this!
@@ -310,7 +310,7 @@
 			occupant.Paralyse(4)
 
 			 //Slowly get that clone healed and finished.
-			occupant.adjustCloneLoss(-1*time_coeff) //Very slow, new parts = much faster
+			isslimeperson(occupant) ? occupant.adjustToxLoss(-1*time_coeff) : occupant.adjustCloneLoss(-1*time_coeff) //Very slow, new parts = much faster
 
 			//Premature clones may have brain damage.
 			occupant.adjustBrainLoss(-1*time_coeff) //Ditto above
