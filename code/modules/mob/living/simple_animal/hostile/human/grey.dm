@@ -958,7 +958,7 @@
 			M.throw_at(target_turf,100,telekinesis_throw_speed)
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Shoot()
-		if(last_psychicattack + psychicattack_cooldown < world.time)
+	if(last_psychicattack + psychicattack_cooldown < world.time)
 		var/list/victims = list()
 		for(var/mob/living/carbon/human/H in view(src, psychic_range))
 			victims.Add(H)
@@ -967,33 +967,55 @@
 			return
 		switch(rand(0,4))
 			if(0) //Brain damage, confusion, and dizziness
-				to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
-				H.adjustBrainLoss(20)
-				H.eye_blurry = max(H.eye_blurry, 10)
-				H.confused += 10
-				H.dizziness += 10
-				if(prob(25))
-					H.audible_scream()
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
+					H.adjustBrainLoss(20)
+					H.eye_blurry = max(H.eye_blurry, 10)
+					H.confused += 10
+					H.dizziness += 10
+					last_psychicattack = world.time
+					if(prob(25))
+						H.audible_scream()
 			if(1) //A knockdown, with some dizziness
-				to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
-				H.emote("me", 1, "collapses!")
-				H.Knockdown(4)
-				H.confused += 6
-				H.dizziness += 6
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
+					H.emote("me", 1, "collapses!")
+					H.Knockdown(4)
+					H.confused += 6
+					H.dizziness += 6
+					last_psychicattack = world.time
 			if(2) //Naptime
-				to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
-				H.drowsyness += 6
-				spawn(2 SECONDS)
-					H.sleeping += 5
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
+					H.drowsyness += 6
+					last_psychicattack = world.time
+					spawn(2 SECONDS)
+						H.sleeping += 5
 			if(3) //Serious hallucinations and jittering
-				to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
-				H.hallucination += 75
-				H.Jitter(30)
-				H.stuttering += 30
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
+					H.hallucination += 75
+					H.Jitter(30)
+					H.stuttering += 30
+					last_psychicattack = world.time
 			if(4) //Brief period of pacification
-				to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
-				H.reagents.add_reagent(CHILLWAX, 1)
-	last_psychicattack = world.time
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
+					H.reagents.add_reagent(CHILLWAX, 1)
+					last_psychicattack = world.time
+
+	if(!last_psychicattack + psychicattack_cooldown < world.time) // If not done cooling down from the previous psychic attack, just shoot a laser beem
+		..()
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/bullet_act(var/obj/item/projectile/P) // Lasers have a 50% chance to reflect off the armor, which matches up if the player takes it and puts it on
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
