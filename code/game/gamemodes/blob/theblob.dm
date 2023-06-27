@@ -303,6 +303,7 @@ var/list/blob_looks_player = list(//Options available to players
 	time_since_last_pulse = world.time
 
 	//set background = 1
+	VisiblePulse(pulse)
 
 	for(var/mob/M in loc)
 		M.blob_act(0,src)
@@ -330,8 +331,12 @@ var/list/blob_looks_player = list(//Options available to players
 		spawn(2)
 			B.Pulse((pulse+1),get_dir(src.loc,T),source)
 		return
-	return
 
+
+/obj/effect/blob/proc/VisiblePulse(var/pulse = 0)
+	var/pulse_strength = 0.5 / max(1,pulse/2)
+	animate(src, color = list(1+pulse_strength,0,0,0,0,1+pulse_strength,0,0,0,0,1+pulse_strength,0,0,0,0,1,0,0,0,0), time = 4, easing = SINE_EASING|EASE_OUT)
+	animate(color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 4, easing = SINE_EASING)
 
 /obj/effect/blob/proc/run_action()
 	return 0
@@ -429,12 +434,7 @@ var/list/blob_looks_player = list(//Options available to players
 
 /obj/effect/blob/normal/Delete()
 	..()
-/*	// Sadly having hundreds of blobs create overlays every few seconds is proving quite laggy
-/obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
-	..()
-	if(icon_size == 64)
-		anim(target = loc, a_icon = icon, flick_anim = "pulse", sleeptime = 15, direction = dir, lay = 12, offX = -16, offY = -16, alph = 51)
-*/
+
 /obj/effect/blob/normal/update_icon(var/spawnend = 0)
 	if(icon_size == 64)
 		spawn(1)
