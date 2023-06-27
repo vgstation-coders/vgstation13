@@ -215,7 +215,7 @@
 /turf/unsimulated/floor/lab_asteroid/New()
 	..()
 	if(prob(20))
-		icon_state = "asteroid_[rand(0,12)]"
+		icon_state = "asteroid[rand(0,12)]"
 
 /turf/unsimulated/floor/lab_asteroid/Entered(atom/A, atom/OL) // Ayy dirt tiles play walking sound effects!
 	..()

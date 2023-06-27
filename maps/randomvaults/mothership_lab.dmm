@@ -41,7 +41,7 @@
 "aJ" = (
 /obj/structure/bed/roller,
 /obj/item/weapon/reagent_containers/blood/empty,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "aK" = (
 /obj/machinery/door/poddoor{
@@ -105,7 +105,7 @@
 	basecolor = "#CFAAAA";
 	blood_color = "#CFAAAA"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "bv" = (
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/heavy,
@@ -172,7 +172,7 @@
 "ep" = (
 /obj/machinery/iv_drip,
 /obj/item/weapon/reagent_containers/blood/empty,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "et" = (
 /obj/structure/window/reinforced/plasma{
@@ -290,7 +290,7 @@
 	basecolor = "#CFAAAA";
 	blood_color = "#CFAAAA"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "gd" = (
 /obj/effect/decal/cleanable/dirt,
@@ -420,7 +420,7 @@
 /area/vault/mothership_lab/entrance)
 "id" = (
 /obj/structure/bed/chair/folding,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "ik" = (
 /obj/machinery/door/window/brigdoor{
@@ -595,7 +595,7 @@
 "kr" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/door/mineral/sandstone,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "ks" = (
 /obj/structure/table,
@@ -719,7 +719,7 @@
 "mh" = (
 /obj/item/device/flashlight/flare/ever_bright,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "mj" = (
 /obj/machinery/deployable/barrier{
@@ -823,14 +823,14 @@
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
 /obj/item/weapon/storage/box/autoinjectors,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "nd" = (
 /obj/effect/decal/cleanable/blood/drip{
 	basecolor = "#CFAAAA";
 	blood_color = "#CFAAAA"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "nj" = (
 /obj/machinery/camera{
@@ -894,7 +894,7 @@
 	blood_color = "#2299FC";
 	icon_state = "floor2"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "nK" = (
 /obj/effect/decal/warning_stripes{
@@ -922,7 +922,7 @@
 /area/vault/mothership_lab/asteroid)
 "nW" = (
 /obj/item/device/flashlight/flare/ever_bright,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "ol" = (
 /obj/machinery/camera{
@@ -974,7 +974,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/handcuffs,
 /obj/item/weapon/implanter,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "pn" = (
 /obj/item/weapon/storage/backpack/satchel_sec,
@@ -1188,7 +1188,7 @@
 "sn" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/cage,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "sE" = (
 /obj/structure/dispenser/oxygen,
@@ -1518,7 +1518,7 @@
 	name = "Raider Chest"
 	},
 /obj/item/weapon/reagent_containers/food/drinks/bottle/rum,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "xJ" = (
 /obj/machinery/door/airlock/security{
@@ -1537,7 +1537,7 @@
 "xS" = (
 /obj/effect/decal/cleanable/dirt,
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "xT" = (
 /obj/structure/table/reinforced,
@@ -1649,7 +1649,7 @@
 	blood_color = "#CFAAAA";
 	icon_state = "floor6"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "yQ" = (
 /obj/structure/grille,
@@ -1678,7 +1678,7 @@
 /obj/item/weapon/pickaxe/drill,
 /obj/item/clothing/glasses/scanner/meson,
 /obj/item/weapon/c4,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "zf" = (
 /obj/machinery/camera{
@@ -1711,7 +1711,7 @@
 /area)
 "zu" = (
 /obj/structure/cage,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "zw" = (
 /obj/machinery/computer/crew,
@@ -1938,7 +1938,7 @@
 /area/vault/mothership_lab/entrance)
 "Di" = (
 /obj/structure/closet/emcloset/vox,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Dl" = (
 /obj/effect/decal/cleanable/blood/drip{
@@ -1948,7 +1948,7 @@
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Do" = (
 /obj/machinery/door/airlock/silver{
@@ -1968,7 +1968,7 @@
 /obj/structure/table/woodentable,
 /obj/item/weapon/reagent_containers/syringe/broken,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "DY" = (
 /mob/living/simple_animal/hostile/mothership_hoverdisc,
@@ -2009,6 +2009,10 @@
 	},
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/control_room)
+"Ev" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/lab_asteroid,
+/area/vault/mothership_lab/raidtunnel_upper)
 "Ey" = (
 /obj/machinery/deployable/barrier{
 	anchored = 1;
@@ -2212,7 +2216,7 @@
 	basecolor = "#2299FC";
 	blood_color = "#2299FC"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "HM" = (
 /turf/unsimulated/wall/r_rock,
@@ -2294,7 +2298,7 @@
 	blood_color = "#CFAAAA";
 	icon_state = "floor2"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "JT" = (
 /obj/structure/table/flipped,
@@ -2376,7 +2380,7 @@
 /obj/structure/window/barricade/full/block,
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/door/mineral/sandstone,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Ls" = (
 /obj/structure/table/reinforced,
@@ -2429,7 +2433,7 @@
 /turf/unsimulated/mineral,
 /area/vault/mothership_lab/asteroid)
 "MQ" = (
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Nd" = (
 /obj/machinery/computer/fluff/medical,
@@ -2673,7 +2677,7 @@
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Qw" = (
 /obj/structure/window/reinforced{
@@ -2733,7 +2737,7 @@
 	},
 /obj/item/ammo_storage/box/b380auto,
 /obj/item/ammo_storage/box/b380auto,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Rz" = (
 /obj/structure/hanging_lantern{
@@ -2827,7 +2831,7 @@
 	basecolor = "#2299FC";
 	blood_color = "#2299FC"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Tj" = (
 /obj/effect/decal/cleanable/dirt,
@@ -2835,13 +2839,13 @@
 /area/vault/mothership_lab/entrance)
 "Tl" = (
 /obj/structure/bed/roller,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Tp" = (
 /obj/machinery/iv_drip,
 /obj/item/weapon/reagent_containers/blood/empty,
 /obj/item/weapon/reagent_containers/blood/empty,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Ts" = (
 /obj/structure/shuttle/diag_wall/black{
@@ -2995,7 +2999,7 @@
 "Wl" = (
 /obj/structure/bed/roller,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Wq" = (
 /obj/item/clothing/under/grey/grey_scout,
@@ -3147,12 +3151,12 @@
 /obj/item/stack/medical/splint/ghetto,
 /obj/item/bodybag,
 /obj/item/weapon/storage/firstaid/regular,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Yh" = (
 /obj/structure/window/barricade/full/block,
 /obj/machinery/door/mineral/sandstone,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Yi" = (
 /obj/structure/rack,
@@ -3169,7 +3173,7 @@
 	id = "voxtunnel";
 	name = "Raider Tunnel"
 	},
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "Yo" = (
 /obj/effect/decal/cleanable/dirt,
@@ -3208,7 +3212,7 @@
 "YS" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "YT" = (
 /obj/machinery/light/small{
@@ -4799,7 +4803,7 @@ GL
 MD
 Qz
 gb
-mu
+Ev
 zu
 Qz
 MD
@@ -4988,7 +4992,7 @@ MD
 Qz
 id
 MQ
-mu
+Ev
 Qz
 MD
 "}
@@ -5034,7 +5038,7 @@ GL
 MD
 Qz
 bq
-mu
+Ev
 MQ
 Qz
 MD
@@ -5128,7 +5132,7 @@ Au
 MD
 Qz
 MQ
-mu
+Ev
 Qz
 MD
 MD
@@ -5269,7 +5273,7 @@ MD
 Qz
 Qz
 Vz
-mu
+Ev
 Qz
 MD
 MD
@@ -5411,7 +5415,7 @@ Qz
 aJ
 MQ
 MQ
-mu
+Ev
 Qz
 MD
 "}
@@ -5457,7 +5461,7 @@ MD
 Qz
 SY
 Dl
-mu
+Ev
 Rv
 Qz
 MD
@@ -5740,7 +5744,7 @@ Qz
 Wl
 MQ
 MQ
-mu
+Ev
 Qz
 MD
 "}
@@ -5879,8 +5883,8 @@ GL
 MD
 MD
 HM
-mu
-mu
+Ev
+Ev
 MQ
 HM
 MD
@@ -5926,7 +5930,7 @@ GL
 MD
 MD
 HM
-mu
+Ev
 HL
 za
 HM
