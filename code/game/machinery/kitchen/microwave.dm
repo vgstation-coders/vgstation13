@@ -109,7 +109,7 @@
 		if (istype(AM,/obj/item/stack))
 			var/obj/item/stack/ST = AM
 			if(ST.amount > 1)
-				new ST.type (src)
+				new ST.type (src,amount=1)
 				ST.use(1)
 				if(CAN_AUTOMAKE_SOMETHING)
 					cook()
@@ -201,7 +201,7 @@
 		if (istype(O,/obj/item/stack))
 			var/obj/item/stack/ST = O
 			if(ST.amount > 1)
-				new ST.type (src)
+				new ST.type (src,amount=1)
 				ST.use(1)
 				user.visible_message( \
 					"<span class='notice'>[user] adds one of [O] to [src].</span>", \
@@ -489,6 +489,7 @@
 		return
 	for (var/obj/O in contents)
 		O.forceMove(src.loc)
+		O.update_icon()
 	if (src.reagents.total_volume)
 		src.dirty++
 		if(reagent_disposal)
