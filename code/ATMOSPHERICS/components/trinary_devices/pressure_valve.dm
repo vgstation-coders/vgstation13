@@ -169,17 +169,23 @@
 	var/input = 0
 	var/threshold = 0
 	switch(control_input)
-		if (CVALVE_INPUT_LEFT) input = get_valve_mode_gas_value(pipe_flags & IS_MIRROR ? air3 : air1)
-		if (CVALVE_INPUT_CENTER) input = get_valve_mode_gas_value(air2)
-		if (CVALVE_INPUT_RIGHT) input = get_valve_mode_gas_value(pipe_flags & IS_MIRROR ? air1 : air3)
+		if (CVALVE_INPUT_LEFT)
+			input = get_valve_mode_gas_value(pipe_flags & IS_MIRROR ? air3 : air1)
+		if (CVALVE_INPUT_CENTER)
+			input = get_valve_mode_gas_value(air2)
+		if (CVALVE_INPUT_RIGHT)
+			input = get_valve_mode_gas_value(pipe_flags & IS_MIRROR ? air1 : air3)
 		else
 			control_input = CVALVE_INPUT_CENTER
 			input = get_valve_mode_gas_value(air2)
 
 	switch(threshold_source)
-		if (CVALVE_THRESHOLD_LEFT) threshold = get_valve_mode_gas_value(pipe_flags & IS_MIRROR ? air3 : air1)
-		if (CVALVE_THRESHOLD_CONSTANT) threshold = constant_threshold
-		if (CVALVE_THRESHOLD_RIGHT) threshold = get_valve_mode_gas_value(pipe_flags & IS_MIRROR ? air1 : air3)
+		if (CVALVE_THRESHOLD_LEFT)
+			threshold = get_valve_mode_gas_value(pipe_flags & IS_MIRROR ? air3 : air1)
+		if (CVALVE_THRESHOLD_CONSTANT)
+			threshold = constant_threshold
+		if (CVALVE_THRESHOLD_RIGHT)
+			threshold = get_valve_mode_gas_value(pipe_flags & IS_MIRROR ? air1 : air3)
 		else
 			threshold_source = CVALVE_INPUT_CENTER
 			threshold = constant_threshold
@@ -191,8 +197,10 @@
 
 /obj/machinery/atmospherics/trinary/pressure_valve/proc/get_valve_mode_gas_value(datum/gas_mixture/air)
 	switch(mode)
-		if (CVALVE_MODE_PRESSURE) return air.pressure
-		if (CVALVE_MODE_TEMPERATURE) return air.temperature
+		if (CVALVE_MODE_PRESSURE)
+			return air.pressure
+		if (CVALVE_MODE_TEMPERATURE)
+			return air.temperature
 		else
 			mode = CVALVE_MODE_PRESSURE
 			return air.pressure
