@@ -540,7 +540,7 @@
 			if (prob(50))
 				var/drink_icon = pick('icons/mob/in-hand/left/drinkingglass.dmi', 'icons/mob/in-hand/left/drinkingglass.dmi')
 				var/drink_icon_state = pick("coffee", "cafe_latte", "beer", "alebottle", "gargleblasterglass", "energy_drink", "sangria", "gintonicglass")
-				clothes_s.Blend(new /icon(drink_icon, drink_icon_state), ICON_UNDERLAY)
+				clothes_s.Blend(new /icon(drink_icon, drink_icon_state), ICON_OVERLAY)
 
 	if(disabilities & NEARSIGHTED)
 		preview_icon.Blend(new /icon('icons/mob/eyes.dmi', "glasses"), ICON_OVERLAY)
