@@ -137,14 +137,15 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 		var/accumulated_offset_x = bgobj.base_offset_x - round(offsetx * bgobj.parallax_speed * C.prefs.parallax_speed)
 		var/accumulated_offset_y = bgobj.base_offset_y - round(offsety * bgobj.parallax_speed * C.prefs.parallax_speed)
 
-		if(accumulated_offset_x > PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE)
+		//This part makes the Parallax wrap around
+		while(accumulated_offset_x > PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE)
 			accumulated_offset_x -= PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH //3x3 grid, 15 tiles * 64 icon_size * 3 grid size
-		if(accumulated_offset_x < -(PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*2))
+		while(accumulated_offset_x < -(PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*2))
 			accumulated_offset_x += PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
 
-		if(accumulated_offset_y > PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE)
+		while(accumulated_offset_y > PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE)
 			accumulated_offset_y -= PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
-		if(accumulated_offset_y < -(PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*2))
+		while(accumulated_offset_y < -(PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*2))
 			accumulated_offset_y += PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
 
 		bgobj.screen_loc = "CENTER:[accumulated_offset_x],CENTER:[accumulated_offset_y]"
