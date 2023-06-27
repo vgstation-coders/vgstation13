@@ -1945,10 +1945,6 @@
 	icon_state = "showroomfloor"
 	},
 /area/vault/mothership_lab/research)
-"sy" = (
-/obj/structure/door_assembly/door_assembly_sec,
-/turf/unsimulated/floor/ayy,
-/area/vault/mothership_lab/research)
 "sA" = (
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced{
@@ -2133,6 +2129,7 @@
 /obj/machinery/light/he/broken{
 	dir = 1
 	},
+/obj/structure/door_assembly/door_assembly_sec,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "vn" = (
@@ -4375,7 +4372,7 @@
 	req_access_txt = "161";
 	req_one_access_txt = "161"
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "SD" = (
 /obj/structure/ladder{
@@ -6283,7 +6280,7 @@ CL
 aC
 fz
 Zn
-sy
+ID
 ID
 ID
 Zn
