@@ -265,7 +265,8 @@ var/list/pinpointerpinpointer_list = list()
 
 /obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
 	..()
-	to_chat(user, "<span class='notice'>[src] can select a target again in [altFormatTimeDuration(nextuse-world.time)].</span>") 
+	var/timeuntil = altFormatTimeDuration(max(0, nextuse-world.time))
+	to_chat(user, "<span class='notice'>[src] [timeuntil ? "can select a target again in [timeuntil]." : "is ready to select a new target!"]</span>") 
 	
 
 /obj/item/weapon/pinpointer/pdapinpointer/attack_self()
