@@ -1029,6 +1029,12 @@
 	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
+"pU" = (
+/obj/structure/shuttle/diag_wall/black{
+	dir = 1
+	},
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/mothership_lab/control_room)
 "qa" = (
 /obj/structure/table,
 /obj/structure/bedsheetbin,
@@ -1170,8 +1176,14 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "sc" = (
-/obj/effect/narration/mothership_lab/ayyboss,
-/turf/unsimulated/floor/ayy/maint,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/machinery/turret/mothership_lab/mkII,
+/turf/unsimulated/floor,
 /area/vault/mothership_lab/control_room)
 "sn" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1397,6 +1409,12 @@
 	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
+"vC" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/mothership_lab/control_room)
 "vD" = (
 /obj/effect/mine,
 /turf/unsimulated/floor/asteroid/plating,
@@ -1714,13 +1732,10 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "zz" = (
-/obj/machinery/door/airlock/highsecurity{
-	locked = 1;
-	name = "Control Room Access";
-	req_access_txt = "164";
-	req_one_access_txt = "164"
+/obj/effect/narration/mothership_lab/ayyboss,
+/turf/unsimulated/floor{
+	icon_state = "stage_stairs"
 	},
-/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/control_room)
 "zU" = (
 /obj/structure/window/reinforced{
@@ -1981,6 +1996,19 @@
 	icon_state = "asteroidwarning"
 	},
 /area/vault/mothership_lab/asteroid)
+"Er" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/machinery/turret/mothership_lab/mkII,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/turf/unsimulated/floor,
+/area/vault/mothership_lab/control_room)
 "Ey" = (
 /obj/machinery/deployable/barrier{
 	anchored = 1;
@@ -2166,6 +2194,12 @@
 	dir = 4;
 	icon_state = "stage_stairs"
 	},
+/area/vault/mothership_lab/control_room)
+"Hx" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/control_room)
 "HC" = (
 /obj/effect/decal/cleanable/dirt,
@@ -2585,12 +2619,13 @@
 	},
 /area/vault/mothership_lab/control_room)
 "Pz" = (
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
+/obj/structure/sign/securearea{
+	desc = "A warning sign. It reads 'Secure GDR facility. Trespassers will be disintegrated.'";
+	name = "AUTHORIZED PERSONNEL ONLY"
 	},
-/turf/unsimulated/floor/ayy,
+/obj/structure/window/full/reinforced/plasma,
+/obj/structure/grille,
+/turf/unsimulated/floor,
 /area/vault/mothership_lab/control_room)
 "PB" = (
 /mob/living/simple_animal/hostile/humanoid/grey/leader,
@@ -2754,12 +2789,8 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "Sb" = (
-/obj/structure/girder/reinforced,
 /obj/structure/window/full/reinforced/plasma,
-/obj/structure/sign/securearea{
-	desc = "A warning sign. It reads 'Secure GDR facility. Trespassers will be disintegrated.'";
-	name = "AUTHORIZED PERSONNEL ONLY"
-	},
+/obj/structure/grille,
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/control_room)
 "Sd" = (
@@ -2812,6 +2843,12 @@
 /obj/item/weapon/reagent_containers/blood/empty,
 /turf/unsimulated/floor/asteroid/air,
 /area/vault/mothership_lab/raidtunnel_upper)
+"Ts" = (
+/obj/structure/shuttle/diag_wall/black{
+	dir = 8
+	},
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/mothership_lab/control_room)
 "TA" = (
 /obj/structure/window/reinforced/plasma,
 /obj/structure/table/reinforced,
@@ -2896,12 +2933,16 @@
 	},
 /area/vault/mothership_lab/entrance)
 "Vw" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign. It reads 'Secure GDR facility. Trespassers will be disintegrated.'";
-	name = "AUTHORIZED PERSONNEL ONLY"
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
 	},
-/obj/structure/girder/reinforced,
-/obj/structure/window/full/reinforced/plasma,
+/obj/machinery/turret/mothership_lab/mkII,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 8
+	},
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/control_room)
 "Vz" = (
@@ -2973,13 +3014,17 @@
 /area/vault/mothership_lab/entrance)
 "Ww" = (
 /obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
 	},
-/obj/machinery/turret/mothership_lab/mkII,
-/obj/machinery/light/he{
-	dir = 1
+/obj/machinery/door/airlock/highsecurity{
+	locked = 1;
+	name = "Control Room Access";
+	req_access_txt = "164";
+	req_one_access_txt = "164"
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/control_room)
 "WI" = (
 /obj/structure/ladder{
@@ -3564,7 +3609,7 @@ oo
 oo
 oo
 oo
-oo
+iH
 QR
 eN
 oo
@@ -3607,10 +3652,10 @@ qP
 PH
 SX
 oo
-Ww
+KD
 QR
-QR
-mT
+pU
+oo
 oo
 qN
 bR
@@ -3654,10 +3699,10 @@ Hb
 vw
 Gd
 oo
+sc
 QR
 QR
-QR
-QR
+mT
 oo
 oo
 Ak
@@ -3700,8 +3745,8 @@ KS
 mj
 oo
 oo
-oo
-iH
+KD
+QR
 QR
 QR
 QR
@@ -3747,13 +3792,13 @@ QR
 lX
 UQ
 oo
-Vw
-oo
-Ww
+Er
 QR
 QR
-iu
+QR
+vC
 Pz
+PH
 PH
 PH
 oo
@@ -3794,13 +3839,13 @@ QR
 QR
 QR
 yq
-PJ
 zz
-sc
+QR
 QR
 QR
 iu
-Pz
+Ww
+PH
 PH
 rG
 oo
@@ -3842,12 +3887,12 @@ lX
 UQ
 oo
 Vw
-oo
-Ww
 QR
 QR
-iu
+QR
+Hx
 Pz
+PH
 PH
 PH
 oo
@@ -3888,8 +3933,8 @@ KS
 mj
 oo
 oo
-oo
-KD
+iH
+QR
 QR
 QR
 QR
@@ -3936,10 +3981,10 @@ bR
 Ge
 mJ
 oo
+sc
 QR
 QR
-QR
-QR
+mT
 oo
 oo
 VY
@@ -3983,10 +4028,10 @@ rf
 PH
 SX
 oo
-Ww
+iH
 QR
-QR
-mT
+Ts
+oo
 oo
 sR
 Hb
@@ -4034,7 +4079,7 @@ oo
 oo
 oo
 oo
-oo
+KD
 cn
 bi
 oo

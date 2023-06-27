@@ -5468,7 +5468,9 @@
 "Va" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/space_heater/campfire,
-/obj/structure/reagent_dispensers/cauldron,
+/obj/structure/reagent_dispensers/cauldron{
+	anchored = 1
+	},
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
 "Vg" = (
