@@ -767,6 +767,8 @@ Assign your candidates in choose_candidates() instead.
 //                                          //
 //////////////////////////////////////////////
 
+var/antag_madness = ANTAG_MADNESS_OFF
+
 /datum/dynamic_ruleset/roundstart/antag_madness
 	name = "Antag Madness"
 	role_category = /datum/role/nanotrasen_official
