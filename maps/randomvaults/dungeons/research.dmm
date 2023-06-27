@@ -2159,8 +2159,8 @@
 	},
 /obj/structure/bed/roller,
 /obj/effect/decal/cleanable/blood{
-	basecolor = #2299FC;
-	blood_color = #2299FC;
+	basecolor = "#2299FC";
+	blood_color = "#2299FC";
 	icon_state = "floor2"
 	},
 /obj/effect/landmark/corpse/vox/spaceraider_assassin,
