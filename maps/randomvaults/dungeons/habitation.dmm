@@ -609,7 +609,7 @@
 	req_access_txt = "161";
 	req_one_access_txt = "161"
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "fi" = (
 /obj/effect/decal/cleanable/dirt,
@@ -705,7 +705,7 @@
 	req_access_txt = "161";
 	req_one_access_txt = "161"
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "fM" = (
 /obj/structure/rack,
@@ -723,7 +723,7 @@
 	req_one_access_txt = "161";
 	locked = 1
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "fY" = (
 /obj/machinery/vending/building{
@@ -958,7 +958,7 @@
 	locked = 1
 	},
 /obj/structure/window/barricade/full/block,
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "hX" = (
 /obj/machinery/light/small/broken{
@@ -2931,6 +2931,7 @@
 	req_one_access_txt = "160"
 	},
 /obj/structure/window/barricade/full/block,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/habitation)
 "yz" = (
 /obj/effect/decal/cleanable/blood{
@@ -2952,9 +2953,6 @@
 	},
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/cave)
-"yF" = (
-/obj/structure/window/barricade/full/block,
-/area/vault/mothership_lab/habitation)
 "yJ" = (
 /obj/effect/decal/cleanable/blood/gibs{
 	basecolor = "#2299FC";
@@ -6034,7 +6032,7 @@
 	req_one_access_txt = "161";
 	locked = 1
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "ZB" = (
 /obj/effect/decal/warning_stripes{
@@ -7469,7 +7467,7 @@ uh
 uh
 uh
 uh
-Bx
+ll
 uh
 Aw
 Aw
@@ -8134,7 +8132,7 @@ dh
 hh
 dp
 xk
-yF
+VR
 yw
 Aw
 Aw
@@ -8409,7 +8407,7 @@ uh
 uh
 uh
 uh
-Bx
+ll
 uh
 Aw
 Lw
