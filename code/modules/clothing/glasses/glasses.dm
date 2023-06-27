@@ -16,6 +16,7 @@
 	var/see_in_dark = 0
 	var/seedarkness = TRUE
 	var/prescription = 0
+	var/prescription_type = null
 	min_harm_label = 12
 	harm_label_examine = list("<span class='info'>A label is covering one lens, but doesn't reach the other.</span>","<span class='warning'>A label covers the lenses!</span>")
 	species_restricted = list("exclude","Muton")
@@ -97,8 +98,9 @@ BLIND     // can't see anything
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/hud/health/prescription
-	name = "prescription health scanner HUD"
-	desc = "A Health Scanner HUD with prescription lenses."
+	name = "health scanner glasses"
+	desc = "A Health Scanner HUD fitted with prescription lenses."
+	icon_state = "healthglasses"
 	prescription = 1
 	nearsighted_modifier = -3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
@@ -123,6 +125,7 @@ var/list/science_goggles_wearers = list()
 	origin_tech = Tc_MATERIALS + "=1"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	actions_types = list(/datum/action/item_action/toggle_goggles)
+	prescription_type = /obj/item/clothing/glasses/science/prescription
 
 	glasses_fit = TRUE
 	var/on = FALSE
@@ -295,6 +298,7 @@ var/list/science_goggles_wearers = list()
 	darkness_view = -1
 	eyeprot = 1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	prescription_type = /obj/item/clothing/glasses/sunglasses/prescription
 
 /obj/item/clothing/glasses/sunglasses/equipped(mob/M, slot)
 	if (M.self_vision)
@@ -456,6 +460,7 @@ var/list/science_goggles_wearers = list()
 	icon_state = "sunhud"
 	var/obj/item/clothing/glasses/hud/security/hud = null
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	prescription_type = /obj/item/clothing/glasses/sunglasses/sechud/prescription
 
 /obj/item/clothing/glasses/sunglasses/sechud/New()
 	..()
