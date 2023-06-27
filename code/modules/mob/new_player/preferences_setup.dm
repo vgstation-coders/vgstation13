@@ -538,7 +538,7 @@
 			clothes_s = new /icon(uniform_dmi, "vacationer_[rand(1,3)]_s")
 			clothes_s.Blend(new /icon(feet_dmi, "vacationer"), ICON_UNDERLAY)
 			if (prob(50))
-				var/drink_icon = pick('icons/mob/in-hand/left/drinkingglass.dmi', 'icons/mob/in-hand/left/drinkingglass.dmi')
+				var/drink_icon = pick('icons/mob/in-hand/right/drinkingglass.dmi', 'icons/mob/in-hand/left/drinkingglass.dmi')
 				var/drink_icon_state = pick("coffee", "cafe_latte", "beer", "alebottle", "gargleblasterglass", "energy_drink", "sangria", "gintonicglass")
 				clothes_s.Blend(new /icon(drink_icon, drink_icon_state), ICON_OVERLAY)
 
