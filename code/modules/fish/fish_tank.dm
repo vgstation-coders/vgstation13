@@ -804,7 +804,7 @@
 	if(check_tank())
 		for(var/fish in attached_tank.fish_list)
 			if(fish == "electric eel")
-				power += ARBITRARILY_LARGE_NUMBER * multiplier //10000
+				power += 10000 * multiplier //10000
 		add_avail(power)
 		return
 	for(var/mob/living/carbon/human/H in loc)
