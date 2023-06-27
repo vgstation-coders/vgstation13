@@ -2934,6 +2934,7 @@
 	req_one_access_txt = "160"
 	},
 /obj/structure/window/barricade/full/block,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/habitation)
 "yz" = (
 /obj/effect/decal/cleanable/blood{
@@ -2955,9 +2956,6 @@
 	},
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/cave)
-"yF" = (
-/obj/structure/window/barricade/full/block,
-/area/vault/mothership_lab/habitation)
 "yJ" = (
 /obj/effect/decal/cleanable/blood/gibs{
 	basecolor = "#2299FC";
@@ -8140,7 +8138,7 @@ dh
 hh
 dp
 xk
-yF
+VR
 yw
 Aw
 Aw
