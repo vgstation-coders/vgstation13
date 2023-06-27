@@ -1348,11 +1348,8 @@ var/list/has_died_as_golem = list()
 
 	var/all_switch = TRUE
 	for(var/mob/living/T in telepathic_target)
-		if(istype(T) && can_mind_interact(T.mind))
-			to_chat(T,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: \"[message]\"</span>")
-		else
-			to_chat(M,"<span class='notice'>[T] cannot sense your telepathy.</span>")
-			continue
+		if(istype(T) && M.can_mind_interact(T))
+			to_chat(T,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
 		if(all_switch)
 			all_switch = FALSE
 			if(T != M)

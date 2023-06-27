@@ -49,7 +49,7 @@ var/ELVISBLOCK = 0
 
 // Powers
 var/SOBERBLOCK = 0
-var/JAMSIGNALSBLOCK = 0
+var/PSYRESISTBLOCK = 0
 var/STRONGBLOCK = 0
 //var/SHADOWBLOCK = 0
 var/FARSIGHTBLOCK = 0
@@ -159,7 +159,7 @@ var/LACTOSEBLOCK = 0
 
 	// Powers
 	SOBERBLOCK     = getAssignedBlock("SOBER",      numsToAssign, DNA_HARD_BOUNDS, good=1)
-	JAMSIGNALSBLOCK = getAssignedBlock("JAMSIGNALS",  numsToAssign, DNA_HARD_BOUNDS, good=1)
+	PSYRESISTBLOCK = getAssignedBlock("PSYRESIST",  numsToAssign, DNA_HARD_BOUNDS, good=1)
 	//SHADOWBLOCK  = getAssignedBlock("SHADOW",     numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	FARSIGHTBLOCK  = getAssignedBlock("FARSIGHT",   numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	CHAMELEONBLOCK = getAssignedBlock("CHAMELEON",  numsToAssign, DNA_HARDER_BOUNDS, good=1)

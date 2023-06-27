@@ -820,31 +820,32 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Shoot()
 	var/mob/living/carbon/human/H = target
-	if(can_mind_interact(H.mind)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+	if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 		return
-	switch(rand(0,4))
-		if(0) //Minor brain damage
-			to_chat(H, "<span class='userdanger'>You get a blindingly painful headache.</span>")
-			H.adjustBrainLoss(10)
-			H.eye_blurry = max(H.eye_blurry, 5)
-		if(1) //Brief knockdown
-			to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
-			H.emote("me", 1, "collapses!")
-			H.Knockdown(2)
-		if(2) //Target gets put to sleep for a few seconds
-			to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
-			H.drowsyness += 4
-			spawn(2 SECONDS)
-				H.sleeping += 3
-		if(3) //Minor hallucinations and jittering
-			to_chat(H, "<span class='userdanger'>Your mind feels less stable, and you feel nervous.</span>")
-			H.hallucination += 60 // For some reason it has to be this high at least or seemingly nothing happens
-			H.Jitter(20)
-			H.stuttering += 20
-		if(4) //Ranged disarm
-			to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
-			H.drop_item()
-	return 1
+	else
+		switch(rand(0,4))
+			if(0) //Minor brain damage
+				to_chat(H, "<span class='userdanger'>You get a blindingly painful headache.</span>")
+				H.adjustBrainLoss(10)
+				H.eye_blurry = max(H.eye_blurry, 5)
+			if(1) //Brief knockdown
+				to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
+				H.emote("me", 1, "collapses!")
+				H.Knockdown(2)
+			if(2) //Target gets put to sleep for a few seconds
+				to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
+				H.drowsyness += 4
+				spawn(2 SECONDS)
+					H.sleeping += 3
+			if(3) //Minor hallucinations and jittering
+				to_chat(H, "<span class='userdanger'>Your mind feels less stable, and you feel nervous.</span>")
+				H.hallucination += 60 // For some reason it has to be this high at least or seemingly nothing happens
+				H.Jitter(20)
+				H.stuttering += 20
+			if(4) //Ranged disarm
+				to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
+				H.drop_item()
+		return 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Aggro()
 	..()
@@ -957,20 +958,14 @@
 			M.throw_at(target_turf,100,telekinesis_throw_speed)
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Shoot()
-	// If not done cooling down from the previous psychic attack, just shoot a laser beem
-	if(last_psychicattack + psychicattack_cooldown > world.time)
-		..()
-		return
-	var/list/victims = list()
-	for(var/mob/living/carbon/human/H in view(src, psychic_range))
-		victims.Add(H)
-	if(!victims.len)
-		return
-	var/shot_choice = rand(0,4)
-	for(var/mob/living/carbon/human/H in victims)
-		if(!can_mind_interact(H.mind))
-			continue
-		switch(shot_choice)
+		if(last_psychicattack + psychicattack_cooldown < world.time)
+		var/list/victims = list()
+		for(var/mob/living/carbon/human/H in view(src, psychic_range))
+			victims.Add(H)
+
+		if(!victims.len)
+			return
+		switch(rand(0,4))
 			if(0) //Brain damage, confusion, and dizziness
 				to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
 				H.adjustBrainLoss(20)
