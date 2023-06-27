@@ -39,7 +39,7 @@
 	living_mob_list -= src
 	dead_mob_list += src
 	stat_collection.add_death_stat(src)
-	if (runescape_skull_display && ticker)//we died, begone skull
+	if(runescape_skull_display && ticker)//we died, begone skull
 		if ("\ref[src]" in ticker.runescape_skulls)
 			var/datum/runescape_skull_data/the_data = ticker.runescape_skulls["\ref[src]"]
 			ticker.runescape_skulls -= "\ref[src]"
@@ -55,6 +55,11 @@
 			spell_master.on_holder_death(src)
 	if(transmogged_from)
 		transmog_death()
+	if(client || mind)
+		for(var/mob/M in get_deadchat_hearers())
+			var/rendered = "\proper<a href='?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a><span class='game deadsay'> \The <span class='name'>[src]</span> has died at \the <span class='name'>[get_area(src)]</span>.</span>"
+			to_chat(M, rendered)
+			log_game("[key_name(src)] has died at [get_area(src)]. Coordinates: ([get_coordinates_string(src)])")
 
 /mob/proc/transmog_death()
 	var/obj/transmog_body_container/C = transmogged_from
