@@ -207,6 +207,11 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	updateUsrDialog()
 
 /obj/machinery/faxmachine/attackby(obj/item/O as obj, mob/user as mob)
+	if(O.is_wrench(user))
+		O.playtoolsound(loc, 50)
+		anchored = !anchored
+		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
+		return
 	if(stat & NOPOWER)
 		to_chat(user, "<span class = 'warning'>\The [src] has no power.</span>")
 		return
@@ -227,16 +232,11 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 			to_chat(user, "<span class='notice'>There is already something in \the [src].</span>")
 
 	else if(istype(O, /obj/item/weapon/card/id))
-
 		var/obj/item/weapon/card/id/idcard = O
 		if(!scan)
 			if(usr.drop_item(idcard, src))
 				scan = idcard
 
-	else if(O.is_wrench(user))
-		O.playtoolsound(loc, 50)
-		anchored = !anchored
-		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
 	return
 
 /obj/machinery/faxmachine/kick_act()
