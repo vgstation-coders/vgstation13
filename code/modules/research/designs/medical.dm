@@ -107,7 +107,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 50, MAT_GLASS = 50)
 	category = "Medical"
-	build_path = /obj/item/clothing/glasses/hud/health
+	build_path = /obj/item/clothing/glasses/hud/health/prescription
 
 /datum/design/chemmask
 	name = "Chemical Mask"
