@@ -1747,10 +1747,8 @@
 	},
 /area/vault/mothership_lab/research)
 "qs" = (
-/obj/machinery/door/airlock/medical{
-	name = "Researcher Dormitory";
-	req_access_txt = "163";
-	req_one_access_txt = "163"
+/obj/structure/table/flipped{
+	dir = 8
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
@@ -1961,10 +1959,11 @@
 	},
 /area/vault/mothership_lab/research)
 "sK" = (
-/obj/machinery/door/airlock/glass_medical{
+/obj/machinery/door/airlock/medical{
 	name = "Research and Development";
 	req_access_txt = "163";
-	req_one_access_txt = "163"
+	req_one_access_txt = "163";
+	locked = 1
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
@@ -2392,6 +2391,15 @@
 	name = "Lab Administration";
 	req_access_txt = "164";
 	req_one_access_txt = "164"
+	},
+/turf/unsimulated/floor/ayy,
+/area/vault/mothership_lab/research)
+"ye" = (
+/obj/machinery/door/airlock/medical{
+	name = "Researcher Common Room";
+	req_access_txt = "163";
+	req_one_access_txt = "163";
+	locked = 1
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
@@ -3271,8 +3279,9 @@
 /area/vault/mothership_lab/armory)
 "Ir" = (
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka,
 /obj/machinery/light/he,
+/obj/item/weapon/card/id/mothership_researcher,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "Is" = (
@@ -4167,7 +4176,6 @@
 "Qt" = (
 /obj/structure/curtain/open/bed,
 /obj/structure/bed/ayy2,
-/obj/item/weapon/card/id/mothership_researcher,
 /turf/unsimulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -6035,7 +6043,7 @@ Xj
 ID
 Zn
 PG
-yi
+vQ
 ID
 Zn
 dJ
@@ -6314,7 +6322,7 @@ pG
 ID
 ID
 ID
-ID
+af
 sK
 Xj
 As
@@ -6411,7 +6419,7 @@ ID
 gg
 Zn
 Zn
-bj
+ye
 Zn
 Zn
 Oj
@@ -6458,7 +6466,7 @@ lc
 ze
 Zn
 Ka
-ID
+qs
 Yr
 Zn
 kN
@@ -6924,14 +6932,14 @@ Ga
 Zn
 TL
 YB
-qs
+bj
 ID
 ID
 ID
 ID
 ID
 ID
-qs
+bj
 ID
 ID
 ID
