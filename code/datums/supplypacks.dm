@@ -2891,8 +2891,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/art
 	name = "Art Supply stack of packs"
-	contains = list(/obj/structure/vendomatpack/art,
-					/obj/structure/vendomatpack/art)
+	contains = list(/obj/machinery/vending/art,
+					/obj/machinery/vending/art)
 	cost = 20
 	containertype = /obj/structure/stackopacks
 	containername = "\improper Le Patron des Arts stack of packs"
