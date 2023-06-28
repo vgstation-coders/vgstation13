@@ -420,6 +420,7 @@
 /area/vault/mothership_lab/hobo)
 "dh" = (
 /obj/machinery/vending/games,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/habitation)
 "dk" = (
 /obj/structure/largecrate/polyp,
@@ -442,6 +443,7 @@
 /area/vault/mothership_lab/habitation)
 "dp" = (
 /obj/machinery/vending/zamsnax,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/habitation)
 "dr" = (
 /obj/machinery/vending/tool{
@@ -870,6 +872,7 @@
 	dir = 4
 	},
 /obj/machinery/vending/groans,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/habitation)
 "hi" = (
 /obj/structure/ladder{
@@ -4453,7 +4456,11 @@
 /obj/item/weapon/storage/toolbox/mechanical,
 /obj/item/weapon/storage/toolbox/electrical,
 /obj/item/weapon/switchtool/swiss_army_knife,
-/turf/unsimulated/floor/ayy/maint,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/cave)
 "LY" = (
 /obj/effect/decal/cleanable/dirt,
@@ -5274,7 +5281,11 @@
 /obj/item/weapon/tank/jetpack/oxygen,
 /obj/item/device/multitool,
 /obj/item/clothing/glasses/scanner/meson,
-/turf/unsimulated/floor/ayy/maint,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/cave)
 "To" = (
 /obj/effect/decal/cleanable/dirt,
