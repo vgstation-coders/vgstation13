@@ -32,7 +32,6 @@ var/datum/subsystem/more_init/SSmore_init
 	else
 		//holomaps_initialized = 1 //Assume holominimaps were prerendered, the worst thing that happens if they're missing is that the minimap consoles don't show a minimap - NO IT'S NOT YOU DUMBFUCK, THOSE VARS EXIST FOR A REASON
 		log_startup_progress("Not generating holominimaps - SKIP_HOLOMINIMAP_GENERATION found in config/config.txt")
-	..()
 
 	if(config.media_base_url)
 		watch = start_watch()
