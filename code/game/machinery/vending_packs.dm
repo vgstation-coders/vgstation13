@@ -322,3 +322,8 @@
 	desc = "You could return it to cargo or just flatten it. The label looks like it was partially cut off."
 	targetvendomat = /obj/machinery/vending/meat
 	icon_state = "meat"
+
+/obj/structure/vendomatpack/artsupply
+	name = "\improper Le Patron des Arts recharge pack"
+	targetvendomat = /obj/machinery/vending/art
+	icon_state = "circus"
