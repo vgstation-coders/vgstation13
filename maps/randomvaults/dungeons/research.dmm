@@ -1549,10 +1549,9 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/research)
 "oS" = (
-/turf/simulated/floor{
+/turf/unsimulated/floor{
 	dir = 1;
-	icon_state = "stage_stairs";
-	tag = "icon-stage_stairs (NORTH)"
+	icon_state = "stage_stairs"
 	},
 /area/vault/mothership_lab/research)
 "oT" = (
