@@ -300,9 +300,7 @@
 /turf/simulated/floor,
 /area/tcommsat/computer)
 "aP" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = "0"
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomsat)
 "aQ" = (
@@ -506,8 +504,7 @@
 	dir = 4
 	},
 /mob/living/simple_animal/hostile/humanoid/russian/ranged{
-	dir = 4;
-	icon_state = "russianranged"
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/tcommsat/computer)
@@ -525,8 +522,7 @@
 	dir = 8
 	},
 /mob/living/simple_animal/hostile/humanoid/russian/ranged{
-	dir = 8;
-	icon_state = "russianranged"
+	dir = 8
 	},
 /turf/simulated/floor,
 /area/tcommsat/computer)
@@ -535,8 +531,7 @@
 	dir = 1
 	},
 /mob/living/simple_animal/hostile/humanoid/russian/ranged{
-	dir = 1;
-	icon_state = "russianranged"
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/tcommsat/computer)
@@ -799,7 +794,6 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -814,7 +808,6 @@
 	on = 1
 	},
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -830,10 +823,9 @@
 	},
 /obj/machinery/computer/general_air_control/large_tank_control{
 	name = "Coldroom Monitoring";
-	sensors = list("satellite_coldroom" = "Server Room")
+	sensors = list("satellite_coldroom"="Server Room")
 	},
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -843,7 +835,6 @@
 /area/tcommsat/computer)
 "bX" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -887,7 +878,6 @@
 	req_access = list(61)
 	},
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -1152,7 +1142,6 @@
 /area/turret_protected/goonroom)
 "cx" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "loading_area";
 	tag = "icon-loading_area"
 	},
@@ -1194,7 +1183,6 @@
 /area/turret_protected/goonroom)
 "cB" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
@@ -1209,7 +1197,6 @@
 "cC" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -1223,7 +1210,6 @@
 /area/turret_protected/goonroom)
 "cD" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -1246,7 +1232,6 @@
 	output = 63
 	},
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -1380,7 +1365,6 @@
 	req_access = list(61)
 	},
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "loading_area";
 	tag = "icon-loading_area"
 	},
@@ -1444,7 +1428,6 @@
 "cS" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 1;
-	external_pressure_bound = 101.325;
 	on = 1
 	},
 /turf/simulated/floor,
@@ -1455,14 +1438,6 @@
 /obj/item/bluespace_crystal/artificial,
 /obj/item/bluespace_crystal/artificial,
 /turf/simulated/floor,
-/area/turret_protected/tcomsat)
-"cU" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = "0"
-	},
-/turf/simulated/floor{
-	icon_state = "dark vault full"
-	},
 /area/turret_protected/tcomsat)
 "cV" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,
@@ -1759,9 +1734,7 @@
 /turf/simulated/floor,
 /area/turret_protected/tcomsat)
 "dx" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = "0"
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/effect/landmark/corpse/russian,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -2218,7 +2191,6 @@
 "ej" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 1;
-	external_pressure_bound = 101.325;
 	on = 1
 	},
 /mob/living/simple_animal/hostile/humanoid/russian,
@@ -2284,9 +2256,7 @@
 /turf/simulated/floor,
 /area/turret_protected/tcomfoyer)
 "eq" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = "0"
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
 /area/turret_protected/tcomfoyer)
 "er" = (
@@ -2304,7 +2274,6 @@
 "et" = (
 /obj/machinery/light/small,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
@@ -2327,9 +2296,7 @@
 /turf/simulated/wall/r_wall,
 /area/tcommsat/entrance)
 "ew" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = "0"
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/wall/r_wall,
 /area/turret_protected/tcomfoyer)
 "ex" = (
@@ -2504,9 +2471,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = "0"
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eN" = (
@@ -2545,9 +2510,7 @@
 /area/tcommsat/entrance)
 "eQ" = (
 /obj/structure/sign/securearea,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = "0"
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/wall/r_wall,
 /area/tcommsat/entrance)
 "eR" = (
@@ -2567,9 +2530,7 @@
 /turf/simulated/wall/r_wall,
 /area/tcommsat/entrance)
 "eT" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = "0"
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/effect/decal/warning_stripes{
 	dir = 9;
 	icon_state = "warning";
@@ -2605,9 +2566,7 @@
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eW" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	req_access_txt = "0"
-	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning_corner";
@@ -2750,7 +2709,6 @@
 /area/tcommsat/entrance)
 "fo" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -4964,14 +4922,14 @@ bQ
 co
 cy
 bs
-cU
+bQ
 bQ
 bQ
 dx
 bQ
 bQ
-cU
-cU
+bQ
+bQ
 co
 bT
 ao
@@ -6388,12 +6346,12 @@ cn
 cn
 cZ
 dl
-cU
-cU
-cU
-cU
-cU
-cU
+bQ
+bQ
+bQ
+bQ
+bQ
+bQ
 en
 bT
 ao

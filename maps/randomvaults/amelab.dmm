@@ -569,7 +569,6 @@
 /area/vault/amelab)
 "yK" = (
 /obj/structure/extinguisher_cabinet{
-	dir = 2;
 	pixel_y = 30
 	},
 /obj/machinery/light{

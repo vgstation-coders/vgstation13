@@ -495,7 +495,6 @@
 "bp" = (
 /obj/machinery/door/window/brigdoor{
 	base_state = "left";
-	dir = 4;
 	req_access = null
 	},
 /turf/simulated/floor/shuttle/vox{
@@ -884,7 +883,7 @@
 /area/shuttle/vox/station)
 "cd" = (
 /obj/machinery/light/small{
-	dir = 4;
+	dir = 4
 	},
 /obj/item/clothing/mask/breath,
 /obj/item/stack/medical/bruise_pack/bandaid,

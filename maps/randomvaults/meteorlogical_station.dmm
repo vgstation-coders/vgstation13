@@ -94,20 +94,14 @@
 	pixel_x = -8
 	},
 /obj/item/device/assembly/signaler{
-	pixel_x = -4;
-	pixel_y = 0
+	pixel_x = -4
 	},
 /obj/item/device/assembly/prox_sensor{
-	pixel_x = 0;
 	pixel_y = 6
 	},
+/obj/item/device/assembly/signaler,
 /obj/item/device/assembly/signaler{
-	pixel_x = 0;
-	pixel_y = 0
-	},
-/obj/item/device/assembly/signaler{
-	pixel_x = 4;
-	pixel_y = 0
+	pixel_x = 4
 	},
 /obj/item/stack/cable_coil,
 /turf/simulated/floor/shuttle/brig,

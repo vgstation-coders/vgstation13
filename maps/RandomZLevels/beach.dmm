@@ -62,8 +62,6 @@
 /area/awaymission/beach)
 "t" = (
 /obj/structure/closet/gmcloset{
-	icon_closed = "black";
-	icon_state = "black";
 	name = "formal wardrobe"
 	},
 /turf/unsimulated/floor{
