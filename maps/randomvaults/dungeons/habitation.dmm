@@ -978,7 +978,7 @@
 "hZ" = (
 /obj/effect/spider/stickyweb,
 /obj/effect/spider/cocoon,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/cave)
 "ia" = (
 /obj/effect/spider/stickyweb,
@@ -1100,7 +1100,7 @@
 "jv" = (
 /obj/effect/spider/stickyweb,
 /obj/item/ammo_storage/magazine/mc9mm,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/cave)
 "jz" = (
 /obj/machinery/light/small,
@@ -1401,7 +1401,7 @@
 "lT" = (
 /obj/effect/spider/stickyweb,
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/cave)
 "lV" = (
 /obj/machinery/door/mineral/sandstone,
@@ -2773,7 +2773,7 @@
 /obj/effect/decal/remains/human,
 /obj/item/clothing/under/syndicate/tacticool,
 /obj/item/clothing/suit/space/rig/syndi,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/cave)
 "wY" = (
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/deadeye{
@@ -3248,7 +3248,7 @@
 "BN" = (
 /obj/effect/spider/stickyweb,
 /obj/item/weapon/gun/projectile/pistol,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/cave)
 "BP" = (
 /obj/structure/bed/chair/office/dark{
@@ -3314,7 +3314,7 @@
 "Ct" = (
 /obj/effect/spider/stickyweb,
 /obj/item/weapon/storage/fancy/cigarettes/redsuits,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/cave)
 "Cv" = (
 /obj/item/clothing/glasses/scanner/night,
@@ -4295,7 +4295,7 @@
 /area/vault/mothership_lab/cave)
 "Kl" = (
 /obj/effect/spider/stickyweb,
-/turf/unsimulated/floor/asteroid/air,
+/turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/cave)
 "Kp" = (
 /obj/structure/reagent_dispensers/sacid,
