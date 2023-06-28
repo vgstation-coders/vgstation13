@@ -1,5 +1,3 @@
-//________________________________________________
-
 /datum/faction/revolution
 	name = "Revolutionaries"
 	ID = REVOLUTION
@@ -15,6 +13,9 @@
 	default_admin_voice = "Union Boss"
 	admin_voice_style = "secradio"
 	var/discovered = 0
+
+/datum/faction/revolution/New()
+	register_event(/event/late_arrival, src, src::OnLateArrival())
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
 	if(M.assigned_role in command_positions)
@@ -166,21 +167,15 @@
 			if (istype(dynamic_mode))
 				dynamic_mode.update_stillborn_rulesets()
 
-// Called on arrivals and emergency shuttle departure.
-/hook_handler/revs
-
-/hook_handler/revs/proc/OnArrival(var/list/args)
+/datum/faction/revolution/proc/OnLateArrival(mob/living/carbon/human/character, rank)
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
 	if (!istype(R))
 		return FALSE
-	ASSERT(args["character"])
-	ASSERT(args["rank"])
-	var/mob/living/L = args["character"]
-	if (args["rank"] in command_positions)
+	var/mob/living/L = character
+	if (rank in command_positions)
 		var/datum/objective/target/assassinate/orexile/A = new(auto_target = FALSE)
 		if(A.set_target(L.mind))
 			R.AppendObjective(A, TRUE) // We will have more than one kill objective
-
 
 /datum/faction/revolution/proc/end(var/result)
 	. = TRUE

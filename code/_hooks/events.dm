@@ -79,6 +79,12 @@
 // mob/user: The living mob that's logging in.
 /event/living_login
 
+// Called by new_player.dm when a character latejoins
+// Arguments:
+// mob/living/carbon/human/character: The character that has arrived on the station.
+// rank: The character's job. Should be something like "Chemist", NOT the job datum.
+/event/late_arrival
+
 // Called whenever a mob takes damage.
 // Truthy return values will prevent the damage.
 // Arguments:
