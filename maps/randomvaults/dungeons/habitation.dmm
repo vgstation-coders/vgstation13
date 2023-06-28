@@ -2300,6 +2300,7 @@
 	},
 /obj/structure/bed/ayy2,
 /obj/item/weapon/bedsheet/captain,
+/obj/item/weapon/card/id/mothership_leader,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "sU" = (
@@ -3846,7 +3847,6 @@
 	req_one_access_txt = "164";
 	anchored = 1
 	},
-/obj/item/weapon/card/id/mothership_leader,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "Gs" = (
@@ -4705,10 +4705,10 @@
 /area/vault/mothership_lab/habitation)
 "Oj" = (
 /obj/structure/table/reinforced,
-/obj/item/device/flashlight/lamp/slime,
 /obj/machinery/recharger{
 	pixel_x = -30
 	},
+/obj/item/device/flashlight/lamp/slime,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "Oo" = (
