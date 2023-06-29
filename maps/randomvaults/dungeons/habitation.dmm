@@ -5608,10 +5608,6 @@
 	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
-"WZ" = (
-/obj/effect/decal/cleanable/blood,
-/turf/unsimulated/floor/ayy,
-/area/vault/mothership_lab/habitation)
 "Xb" = (
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/cave)
@@ -7937,7 +7933,7 @@ Vy
 Vy
 lO
 Aw
-WZ
+Cy
 xc
 Ws
 rA
