@@ -7,9 +7,7 @@
 /obj/structure/acidtoilet{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "an" = (
 /obj/structure/table/reinforced,
@@ -18,9 +16,7 @@
 	dir = 1;
 	pixel_y = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "ar" = (
 /obj/item/clothing/shoes/jackboots/mothership,
@@ -39,9 +35,7 @@
 /obj/effect/decal/warning_stripes/siding{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "at" = (
 /obj/item/clothing/under/grey/grey_soldier,
@@ -85,7 +79,7 @@
 "aI" = (
 /obj/structure/table/reinforced,
 /obj/machinery/computer/med_data/laptop,
-/turf/unsimulated/floor/ayy,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "aL" = (
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic{
@@ -139,18 +133,14 @@
 	dir = 8;
 	name = "Shower"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "aW" = (
 /obj/structure/window/reinforced,
 /obj/structure/bed/chair/shuttle/gamer{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "aZ" = (
 /obj/effect/decal/warning_stripes{
@@ -191,9 +181,7 @@
 /obj/item/tool/bonesetter/bone_mender,
 /obj/item/tool/retractor/manager,
 /obj/item/tool/scalpel/laser,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "bp" = (
 /obj/structure/bed/chair/comfy/teal{
@@ -263,9 +251,7 @@
 /mob/living/carbon/monkey/unathi{
 	faction = "mothership"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "cd" = (
 /obj/effect/decal/cleanable/blood{
@@ -287,9 +273,7 @@
 	dir = 8
 	},
 /obj/structure/curtain/open/shower/left,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "cD" = (
 /obj/structure/rack,
@@ -382,9 +366,7 @@
 /obj/machinery/acidshower{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "do" = (
 /obj/structure/table/reinforced,
@@ -402,9 +384,7 @@
 /area/vault/mothership_lab/maintenance)
 "ds" = (
 /obj/machinery/dna_scannernew,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "dt" = (
 /obj/effect/decal/cleanable/blood{
@@ -421,9 +401,7 @@
 /obj/machinery/recharger/defibcharger/wallcharger{
 	pixel_x = 34
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "dw" = (
 /obj/structure/closet/crate/freezer/surgery,
@@ -434,9 +412,7 @@
 /obj/item/organ/internal/kidneys/filter,
 /obj/item/organ/internal/appendix,
 /obj/item/organ/internal/kidneys,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "dA" = (
 /obj/structure/stacklifter,
@@ -455,9 +431,7 @@
 	name = "Doctor Ayycula";
 	on = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "dE" = (
 /obj/machinery/turret/mothership_lab/mkII{
@@ -538,9 +512,7 @@
 /obj/machinery/door/window{
 	name = "Shower"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "ej" = (
 /obj/machinery/light/small{
@@ -562,9 +534,7 @@
 /area/vault/mothership_lab/research)
 "eo" = (
 /obj/machinery/chem_dispenser,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "es" = (
 /obj/machinery/door/airlock/security{
@@ -598,9 +568,7 @@
 	blood_color = "#CFAAAA"
 	},
 /obj/effect/landmark/corpse/grey/worker,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
 "eE" = (
 /obj/structure/flora/rock/pile,
@@ -643,7 +611,7 @@
 	id = "labladder_3";
 	name = "Administration Deck Access"
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/research)
 "fz" = (
 /obj/machinery/computer/security{
@@ -683,9 +651,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "fT" = (
 /obj/structure/table/reinforced,
@@ -718,9 +684,7 @@
 "gc" = (
 /obj/structure/window/reinforced,
 /obj/machinery/computer/scan_consolenew,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "gg" = (
 /obj/machinery/light/he,
@@ -729,9 +693,7 @@
 "gl" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/reagent_containers/spray/chemsprayer,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "go" = (
 /obj/structure/table/reinforced,
@@ -742,9 +704,7 @@
 /obj/item/device/assembly/prox_sensor,
 /obj/item/device/assembly/prox_sensor,
 /obj/machinery/cell_charger,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "gC" = (
 /obj/machinery/camera{
@@ -768,9 +728,7 @@
 /obj/machinery/light/small/broken{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "gG" = (
 /obj/machinery/light/he{
@@ -814,7 +772,7 @@
 /obj/item/clothing/glasses/hud/health,
 /obj/item/clothing/glasses/hud/health,
 /obj/item/clothing/glasses/hud/health,
-/turf/unsimulated/floor/ayy,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "hq" = (
 /obj/item/clothing/shoes/jackboots/mothership,
@@ -861,9 +819,7 @@
 /obj/item/weapon/storage/firstaid/adv,
 /obj/item/weapon/storage/firstaid/regular,
 /obj/item/weapon/storage/firstaid/regular,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/samplestorage)
 "hx" = (
 /turf/unsimulated/floor/ayy/maint,
@@ -935,9 +891,7 @@
 /mob/living/carbon/monkey/unathi{
 	faction = "mothership"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "ic" = (
 /obj/structure/bed/chair/comfy/ayy1{
@@ -1016,9 +970,7 @@
 	name = "Researcher's locker";
 	anchored = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "jh" = (
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/assassin,
@@ -1049,9 +1001,7 @@
 /obj/effect/decal/warning_stripes/siding{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "js" = (
 /obj/structure/grille,
@@ -1071,9 +1021,7 @@
 /obj/structure/table/reinforced,
 /obj/item/weapon/paper_bin/white,
 /obj/item/weapon/pen/multi,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "jC" = (
 /turf/unsimulated/floor{
@@ -1103,9 +1051,7 @@
 /obj/machinery/light/he{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "jU" = (
 /obj/machinery/light/small/broken{
@@ -1119,9 +1065,7 @@
 /obj/item/weapon/reagent_containers/pill/ryetalyn,
 /obj/item/weapon/reagent_containers/pill/ryetalyn,
 /obj/item/weapon/reagent_containers/pill/ryetalyn,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "kr" = (
 /obj/effect/decal/warning_stripes/siding{
@@ -1134,9 +1078,7 @@
 	basecolor = "#CFAAAA";
 	blood_color = "#CFAAAA"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
 "kB" = (
 /obj/structure/curtain/open/bed,
@@ -1144,9 +1086,7 @@
 /obj/effect/decal/warning_stripes/siding{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "kD" = (
 /obj/structure/bed/chair/comfy/ayy2{
@@ -1190,9 +1130,7 @@
 	},
 /area/vault/mothership_lab/research)
 "kY" = (
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
 "lc" = (
 /obj/effect/decal/warning_stripes{
@@ -1200,9 +1138,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "lg" = (
 /obj/effect/decal/warning_stripes/siding,
@@ -1273,16 +1209,12 @@
 /obj/item/weapon/storage/pill_bottle/greygoo,
 /obj/item/weapon/storage/pill_bottle/greygoo,
 /obj/item/weapon/storage/pill_bottle/greygoo,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/samplestorage)
 "ml" = (
 /obj/machinery/suit_modifier,
 /obj/structure/window/reinforced,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "mm" = (
 /obj/machinery/vending/building{
@@ -1308,9 +1240,7 @@
 /obj/structure/mirror{
 	pixel_x = -28
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
 "ms" = (
 /obj/item/stack/sheet/plasteel,
@@ -1344,9 +1274,7 @@
 	dir = 1;
 	pixel_y = -18
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "mS" = (
 /obj/item/ammo_storage/box/b380auto,
@@ -1373,9 +1301,7 @@
 /obj/item/weapon/storage/lockbox/diskettebox/open/research,
 /obj/item/clothing/glasses/science,
 /obj/item/device/reagent_scanner/adv,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "mZ" = (
 /obj/structure/closet/l3closet/virology,
@@ -1430,9 +1356,7 @@
 /obj/machinery/light/he/broken{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "ny" = (
 /obj/machinery/light/he/broken{
@@ -1446,9 +1370,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/samplestorage)
 "nH" = (
 /obj/machinery/light/small/broken{
@@ -1467,9 +1389,7 @@
 /obj/structure/mirror{
 	pixel_y = 33
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "nT" = (
 /obj/item/weapon/storage/firstaid/regular,
@@ -1478,9 +1398,7 @@
 "nX" = (
 /obj/machinery/computer/operating,
 /obj/structure/window/reinforced,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "ol" = (
 /obj/item/clothing/shoes/jackboots/mothership,
@@ -1519,9 +1437,7 @@
 /area/vault/mothership_lab/maintenance)
 "os" = (
 /obj/machinery/door/window/plasma/secure,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/samplestorage)
 "ox" = (
 /obj/structure/table/reinforced,
@@ -1564,9 +1480,7 @@
 	},
 /obj/item/weapon/paper_bin/green,
 /obj/item/weapon/pen,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "oV" = (
 /obj/structure/sign/biohazard,
@@ -1588,9 +1502,7 @@
 /obj/structure/bed/chair/shuttle/gamer{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "pe" = (
 /obj/machinery/deployable/barrier{
@@ -1650,9 +1562,7 @@
 /obj/structure/closet/walllocker/defiblocker{
 	pixel_x = 32
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "pB" = (
 /obj/structure/table/reinforced,
@@ -1661,18 +1571,14 @@
 	name = "Surgery Cleaner"
 	},
 /obj/item/clothing/gloves/latex,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "pG" = (
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced,
 /obj/item/weapon/paper_bin/green,
 /obj/item/weapon/pen,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "pM" = (
 /obj/machinery/door/airlock{
@@ -1680,9 +1586,7 @@
 	req_access_txt = "162";
 	req_one_access_txt = "162"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "pN" = (
 /obj/structure/window/barricade/full,
@@ -1742,9 +1646,7 @@
 	name = "R&D North";
 	network = list("MOTHERSHIPLAB")
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "qs" = (
 /obj/structure/table/flipped{
@@ -1752,6 +1654,12 @@
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
+"qv" = (
+/obj/machinery/door/airlock{
+	name = "Toilet"
+	},
+/turf/unsimulated/floor/lab_sterile,
+/area/vault/mothership_lab/maintenance)
 "qI" = (
 /obj/structure/rack,
 /obj/effect/decal/warning_stripes{
@@ -1790,9 +1698,7 @@
 /obj/effect/decal/warning_stripes/siding{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "ri" = (
 /obj/machinery/light/he/broken{
@@ -1864,9 +1770,7 @@
 /area/vault/mothership_lab/maintenance)
 "rG" = (
 /obj/machinery/computer/scan_consolenew,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "rI" = (
 /obj/structure/table/reinforced,
@@ -1881,9 +1785,7 @@
 /obj/machinery/light/he{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "rP" = (
 /obj/structure/bed/chair/comfy/ayy1{
@@ -1932,15 +1834,11 @@
 /obj/item/tool/bonesetter/bone_mender,
 /obj/item/tool/retractor/manager,
 /obj/item/tool/scalpel/laser,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "sr" = (
 /obj/structure/acidtoilet,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "sA" = (
 /obj/structure/table/reinforced,
@@ -1949,9 +1847,7 @@
 	},
 /obj/item/weapon/paper_bin/green,
 /obj/item/weapon/pen,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "sF" = (
 /turf/unsimulated/floor{
@@ -1994,9 +1890,7 @@
 /obj/item/weapon/reagent_containers/pill/bicaridine,
 /obj/item/weapon/reagent_containers/pill/bicaridine,
 /obj/item/weapon/reagent_containers/pill/bicaridine,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "th" = (
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/regular,
@@ -2090,6 +1984,14 @@
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
+"uM" = (
+/obj/machinery/door/airlock/silver{
+	name = "Lab Lavatory";
+	req_access_txt = "163";
+	req_one_access_txt = "163"
+	},
+/turf/unsimulated/floor/lab_sterile,
+/area/vault/mothership_lab/research)
 "uY" = (
 /obj/effect/decal/cleanable/blood/gibs{
 	basecolor = "#CFAAAA";
@@ -2119,9 +2021,7 @@
 	basecolor = "#CFAAAA";
 	blood_color = "#CFAAAA"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
 "vm" = (
 /obj/machinery/light/he/broken{
@@ -2147,9 +2047,7 @@
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
 "vy" = (
 /obj/machinery/smartfridge/bloodbank/filled,
@@ -2159,9 +2057,7 @@
 /obj/structure/closet/walllocker/defiblocker{
 	pixel_x = -32
 	},
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "vC" = (
 /mob/living/simple_animal/hostile/necro/zombie/greysoldier{
@@ -2218,9 +2114,7 @@
 /area/vault/mothership_lab/maintenance)
 "we" = (
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "wl" = (
 /obj/structure/vendomatpack/zamsnax,
@@ -2233,9 +2127,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "wz" = (
 /obj/structure/acidsink{
@@ -2268,9 +2160,7 @@
 	req_access_txt = "162";
 	req_one_access_txt = "162"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "wG" = (
 /mob/living/simple_animal/hostile/necro/zombie/turned{
@@ -2290,9 +2180,7 @@
 /obj/item/weapon/cell/hyper,
 /obj/item/weapon/cell/hyper,
 /obj/item/clothing/glasses/welding,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "wP" = (
 /turf/unsimulated/floor/ayy,
@@ -2312,9 +2200,7 @@
 /obj/effect/decal/warning_stripes/siding{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "xh" = (
 /obj/machinery/door/poddoor{
@@ -2353,9 +2239,7 @@
 /obj/structure/bed/chair/shuttle/gamer{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "xz" = (
 /obj/structure/rack,
@@ -2421,9 +2305,7 @@
 /area/vault/mothership_lab/research)
 "ys" = (
 /obj/machinery/r_n_d/fabricator/circuit_imprinter,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "yt" = (
 /obj/machinery/vending/medical{
@@ -2501,9 +2383,7 @@
 /obj/machinery/light/he{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "zc" = (
 /obj/structure/table/reinforced,
@@ -2513,9 +2393,7 @@
 /obj/machinery/light/he/broken{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "ze" = (
 /obj/structure/window/reinforced{
@@ -2526,9 +2404,7 @@
 /obj/item/rig_module/rad_shield,
 /obj/item/rig_module/muscle_tissue,
 /obj/structure/window/reinforced,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "zk" = (
 /turf/unsimulated/floor/ayy/maint,
@@ -2547,9 +2423,7 @@
 /obj/item/stack/sheet/metal/bigstack,
 /obj/item/stack/sheet/glass/glass/bigstack,
 /obj/item/stack/sheet/plasteel/bigstack,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "zs" = (
 /obj/structure/window/reinforced{
@@ -2559,9 +2433,7 @@
 /obj/structure/closet/walllocker/defiblocker{
 	pixel_x = 32
 	},
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "zy" = (
 /obj/structure/table/reinforced,
@@ -2570,9 +2442,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "zA" = (
 /obj/structure/window/reinforced{
@@ -2588,9 +2458,7 @@
 /obj/item/tool/bonesetter/bone_mender,
 /obj/item/tool/scalpel/laser/tier2,
 /obj/item/tool/retractor/manager,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "zH" = (
 /obj/machinery/door/airlock{
@@ -2604,9 +2472,7 @@
 /obj/machinery/door/airlock{
 	name = "Toilet"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "zQ" = (
 /obj/machinery/optable,
@@ -2616,9 +2482,7 @@
 /obj/machinery/light/he/broken{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "zT" = (
 /obj/item/weapon/shard,
@@ -2626,15 +2490,11 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Ae" = (
 /obj/structure/window/reinforced,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Af" = (
 /obj/machinery/vending/zamsnax,
@@ -2662,9 +2522,7 @@
 /obj/structure/window/reinforced,
 /obj/structure/closet/crate/freezer/surgery,
 /obj/item/organ/internal/eyes/adv_1,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "AX" = (
 /obj/machinery/door_control{
@@ -2702,9 +2560,7 @@
 "BJ" = (
 /obj/machinery/r_n_d/destructive_analyzer,
 /obj/structure/window/reinforced,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "BO" = (
 /obj/machinery/camera{
@@ -2746,7 +2602,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/research)
 "Cu" = (
 /obj/machinery/light/he{
@@ -2812,24 +2668,19 @@
 	icon_state = "loading_area";
 	tag = "icon-loading_area (EAST)"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "De" = (
 /obj/structure/window/reinforced/plasma{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/samplestorage)
 "Dg" = (
 /obj/machinery/door/airlock/medical{
 	name = "Sample Storage Interior";
 	req_access_txt = "163";
-	req_one_access_txt = "163";
-	locked = 1
+	req_one_access_txt = "163"
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/samplestorage)
@@ -2867,9 +2718,7 @@
 /obj/item/weapon/reagent_containers/pill/tramadol,
 /obj/item/weapon/reagent_containers/pill/tramadol,
 /obj/item/weapon/reagent_containers/pill/tramadol,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "DE" = (
 /obj/structure/rack,
@@ -2960,9 +2809,7 @@
 /obj/machinery/bunsen_burner,
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large,
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Ey" = (
 /obj/structure/sign/poster{
@@ -2976,9 +2823,7 @@
 	fleshcolor = "#B5B5B5";
 	icon_state = "gibdown1"
 	},
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "EA" = (
 /obj/structure/closet/crate/freezer{
@@ -3018,18 +2863,14 @@
 	pixel_y = 16
 	},
 /obj/structure/curtain/open/shower,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "EU" = (
 /obj/machinery/constructable_frame/machine_frame,
 /obj/machinery/light/he{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Fc" = (
 /mob/living/simple_animal/hostile/necro/zombie/crimson,
@@ -3080,9 +2921,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "Ga" = (
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Gi" = (
 /obj/structure/bed/ayy1,
@@ -3159,9 +2998,7 @@
 	name = "Researcher's locker";
 	anchored = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Hd" = (
 /obj/machinery/door/airlock/silver{
@@ -3199,9 +3036,7 @@
 	name = "Researcher's locker";
 	anchored = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Hs" = (
 /obj/item/clothing/shoes/jackboots/mothership,
@@ -3239,7 +3074,7 @@
 /obj/machinery/light/he{
 	dir = 4
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/research)
 "HS" = (
 /obj/structure/grille/broken,
@@ -3312,9 +3147,7 @@
 	name = "Genetics Research South";
 	network = list("MOTHERSHIPLAB")
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "IO" = (
 /obj/machinery/deployable/barrier{
@@ -3394,9 +3227,7 @@
 "JT" = (
 /obj/structure/filingcabinet,
 /obj/item/weapon/card/id/mothership_researcher,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "JV" = (
 /obj/structure/rack,
@@ -3445,9 +3276,7 @@
 /obj/item/weapon/storage/box/beakers,
 /obj/machinery/bunsen_burner,
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Ky" = (
 /obj/machinery/acidshower{
@@ -3460,9 +3289,7 @@
 	icon_state = "floor5"
 	},
 /obj/item/weapon/gun/energy/lasmusket,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
 "Kz" = (
 /obj/structure/reagent_dispensers/fueltank,
@@ -3473,9 +3300,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "KP" = (
 /obj/item/clothing/shoes/jackboots/mothership,
@@ -3489,9 +3314,7 @@
 	name = "Researcher's locker";
 	anchored = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "KQ" = (
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/assassin,
@@ -3511,9 +3334,7 @@
 /obj/structure/bed/chair/shuttle/gamer{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Lc" = (
 /obj/machinery/acidshower{
@@ -3526,9 +3347,7 @@
 	icon_state = "floor5"
 	},
 /obj/effect/landmark/corpse/grey/worker,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
 "Lj" = (
 /obj/structure/rack,
@@ -3555,9 +3374,7 @@
 	desc = "Someone has crossed out the Space from Space Cleaner and written in Surgery. 'Do not remove under punishment of death!!!' is scrawled on the back.";
 	name = "Surgery Cleaner"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Lp" = (
 /obj/machinery/camera{
@@ -3583,9 +3400,7 @@
 /obj/structure/mirror{
 	pixel_x = 28
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "LB" = (
 /obj/item/clothing/under/grey/grey_researcher,
@@ -3602,9 +3417,7 @@
 /obj/effect/decal/warning_stripes/siding{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "LC" = (
 /obj/structure/closet/emcloset,
@@ -3615,9 +3428,7 @@
 /obj/machinery/acidshower{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
 "LR" = (
 /obj/machinery/light/he{
@@ -3658,9 +3469,7 @@
 /area/vault/mothership_lab/research)
 "Ms" = (
 /obj/machinery/r_n_d/fabricator/protolathe,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Mt" = (
 /obj/structure/rack,
@@ -3689,9 +3498,7 @@
 	},
 /obj/item/weapon/storage/pill_bottle/kelotane,
 /obj/item/weapon/storage/pill_bottle/antitox,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "MC" = (
 /obj/effect/decal/warning_stripes{
@@ -3699,9 +3506,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (EAST)"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "MI" = (
 /obj/machinery/camera{
@@ -3731,9 +3536,7 @@
 /area/vault/mothership_lab/research)
 "MT" = (
 /obj/structure/curtain/medical,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "MU" = (
 /obj/structure/table/reinforced,
@@ -3742,9 +3545,7 @@
 	},
 /obj/item/weapon/paper_bin/green,
 /obj/item/weapon/pen/multi,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "MZ" = (
 /obj/structure/closet/secure_closet/guncabinet{
@@ -3773,15 +3574,11 @@
 "Nl" = (
 /obj/structure/bed/chair/shuttle/gamer,
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/chemist,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Nq" = (
 /obj/machinery/light/he,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Nt" = (
 /obj/machinery/door/airlock{
@@ -3789,18 +3586,14 @@
 	req_access_txt = "162";
 	req_one_access_txt = "162"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Nv" = (
 /obj/structure/acidsink{
 	dir = 1;
 	pixel_y = -18
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
 "Nx" = (
 /obj/structure/closet/secure_closet/engineering_electrical{
@@ -3827,9 +3620,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "NE" = (
 /obj/structure/closet/secure_closet/engineering_electrical{
@@ -3863,9 +3654,7 @@
 /obj/machinery/light/he{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Oe" = (
 /obj/item/weapon/storage/lockbox/diskettebox/open/cloning{
@@ -3891,9 +3680,7 @@
 /obj/item/weapon/dnainjector/nofail/farsightmut,
 /obj/item/weapon/dnainjector/nofail/farsightmut,
 /obj/item/weapon/dnainjector/nofail/insulation,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Oi" = (
 /obj/structure/bed/chair/shuttle/gamer{
@@ -3902,9 +3689,7 @@
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Oj" = (
 /obj/structure/bed/ayy1,
@@ -4043,9 +3828,7 @@
 	dir = 4
 	},
 /obj/structure/curtain/open/shower/right,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "PO" = (
 /obj/effect/decal/cleanable/blood{
@@ -4063,9 +3846,7 @@
 	},
 /obj/item/weapon/storage/box/beakers,
 /obj/structure/window/reinforced,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "PS" = (
 /obj/item/weapon/table_parts,
@@ -4176,9 +3957,7 @@
 "Qt" = (
 /obj/structure/curtain/open/bed,
 /obj/structure/bed/ayy2,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Qy" = (
 /obj/structure/bed/chair/comfy/teal{
@@ -4225,15 +4004,11 @@
 /obj/structure/mirror{
 	pixel_x = -28
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Rd" = (
 /obj/machinery/smartfridge/chemistry,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Re" = (
 /obj/machinery/light/he/broken{
@@ -4261,9 +4036,7 @@
 /obj/machinery/light/he{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Rx" = (
 /obj/structure/table/flipped{
@@ -4338,9 +4111,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Ss" = (
 /obj/machinery/deployable/barrier{
@@ -4400,9 +4171,7 @@
 	name = "Researcher's locker";
 	anchored = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "SL" = (
 /obj/structure/table,
@@ -4518,9 +4287,7 @@
 /obj/item/weapon/storage/pill_bottle/nanobot,
 /obj/item/weapon/storage/pill_bottle/nanobot,
 /obj/item/weapon/storage/pill_bottle/nanobot,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/samplestorage)
 "TL" = (
 /obj/machinery/light/he{
@@ -4538,9 +4305,7 @@
 	name = "Researcher's locker";
 	anchored = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "TY" = (
 /obj/machinery/light/he{
@@ -4563,9 +4328,7 @@
 /obj/item/organ/internal/heart,
 /obj/item/organ/internal/liver,
 /obj/item/organ/internal/liver,
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Ui" = (
 /obj/structure/table/reinforced,
@@ -4576,9 +4339,7 @@
 /obj/item/clothing/gloves/latex,
 /obj/item/clothing/gloves/latex,
 /obj/item/clothing/glasses/science,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Uk" = (
 /obj/structure/table/reinforced,
@@ -4588,9 +4349,7 @@
 	dir = 4;
 	on = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Ul" = (
 /obj/effect/decal/cleanable/blood{
@@ -4612,15 +4371,11 @@
 	dir = 1;
 	pixel_y = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Uv" = (
 /obj/structure/filingcabinet,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Ux" = (
 /obj/structure/window/reinforced{
@@ -4649,9 +4404,7 @@
 /area/vault/mothership_lab/research)
 "UJ" = (
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "UW" = (
 /obj/item/weapon/grenade/spawnergrenade/mothershipdrone,
@@ -4708,9 +4461,7 @@
 /obj/machinery/light/small/broken{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "VI" = (
 /obj/structure/bed/chair/comfy/ayy1{
@@ -4741,7 +4492,7 @@
 /obj/structure/table/reinforced,
 /obj/item/weapon/storage/fancy/vials,
 /obj/item/weapon/reagent_containers/dropper,
-/turf/unsimulated/floor/ayy,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "VP" = (
 /turf/unsimulated/floor/grey_sand,
@@ -4800,9 +4551,7 @@
 	dir = 4;
 	pixel_x = -11
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Wu" = (
 /obj/machinery/light/he,
@@ -4826,9 +4575,7 @@
 /obj/structure/table/reinforced,
 /obj/item/weapon/paper_bin/green,
 /obj/item/weapon/pen,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "WB" = (
 /obj/structure/window/reinforced{
@@ -4882,9 +4629,7 @@
 /obj/structure/table/reinforced,
 /obj/item/weapon/soap,
 /obj/item/weapon/reagent_containers/spray/cleaner,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "WZ" = (
 /obj/structure/window/barricade/full,
@@ -4931,9 +4676,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Xy" = (
 /obj/item/clothing/under/shorts/red,
@@ -4960,9 +4703,7 @@
 /obj/machinery/acidshower{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "XN" = (
 /obj/structure/bed/chair/comfy/ayy1{
@@ -4974,9 +4715,7 @@
 /obj/machinery/r_n_d/fabricator/mech{
 	output_dir = 2
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "XR" = (
 /obj/structure/rack,
@@ -5029,9 +4768,7 @@
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/breacher{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
 "Yw" = (
 /obj/structure/rack,
@@ -5116,7 +4853,7 @@
 /obj/structure/table/reinforced,
 /obj/item/weapon/paper_bin/white,
 /obj/item/weapon/pen/multi,
-/turf/unsimulated/floor/ayy,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "Zn" = (
 /turf/unsimulated/wall/ayy,
@@ -5202,9 +4939,7 @@
 "ZW" = (
 /obj/structure/curtain/open/bed,
 /obj/structure/bed/ayy1,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "ZY" = (
 /obj/structure/bed/chair/shuttle/gamer{
@@ -5213,9 +4948,7 @@
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/laser{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 
 (1,1,1) = {"
@@ -7025,7 +6758,7 @@ hY
 Ga
 Zn
 Zn
-Hd
+uM
 Zn
 vV
 vV
@@ -7223,7 +6956,7 @@ Br
 Br
 Br
 vt
-rE
+qv
 Re
 mq
 Br

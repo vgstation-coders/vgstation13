@@ -36,6 +36,10 @@
 	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/asteroid)
+"aI" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/lab_underplating,
+/area/vault/mothership_lab/entrance)
 "aJ" = (
 /obj/structure/bed/roller,
 /obj/item/weapon/reagent_containers/blood/empty,
@@ -68,9 +72,7 @@
 /obj/structure/mirror{
 	pixel_x = -28
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "aT" = (
 /obj/machinery/camera{
@@ -159,7 +161,7 @@
 /obj/structure/closet/walllocker/emerglocker{
 	pixel_x = 30
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/asteroid)
 "dD" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -183,9 +185,7 @@
 /area/vault/mothership_lab/control_room)
 "ez" = (
 /obj/structure/curtain/open/shower,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "eI" = (
 /obj/structure/fence/door,
@@ -256,7 +256,7 @@
 	},
 /area/vault/mothership_lab/entrance)
 "fz" = (
-/turf/unsimulated/floor{
+/turf/unsimulated/floor/lab_underplating{
 	icon_state = "panelscorched"
 	},
 /area/vault/mothership_lab/control_room)
@@ -275,9 +275,7 @@
 	dir = 1;
 	invisibility = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "gb" = (
 /obj/structure/cage/autoclose/cover,
@@ -292,9 +290,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/remains/human,
 /obj/item/clothing/glasses/scanner/night,
-/turf/unsimulated/floor{
-	icon_state = "panelscorched"
-	},
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
 "gg" = (
 /obj/structure/rack{
@@ -316,9 +312,7 @@
 	req_access_txt = "162";
 	req_one_access_txt = "162"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "gn" = (
 /obj/effect/decal/cleanable/dirt,
@@ -398,9 +392,7 @@
 /obj/machinery/acidshower{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "hU" = (
 /obj/structure/ore_box,
@@ -464,9 +456,7 @@
 	dir = 4;
 	pixel_x = -11
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "iH" = (
 /obj/structure/shuttle/diag_wall/black,
@@ -528,7 +518,7 @@
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "jD" = (
-/turf/unsimulated/floor{
+/turf/unsimulated/floor/lab_underplating{
 	icon_state = "panelscorched"
 	},
 /area/vault/mothership_lab/asteroid)
@@ -561,7 +551,7 @@
 /turf/unsimulated/floor/asteroid,
 /area/vault/mothership_lab/control_room)
 "jW" = (
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/control_room)
 "kb" = (
 /obj/machinery/camera{
@@ -577,7 +567,7 @@
 "kq" = (
 /obj/docking_port/destination/brokeufo/lab{
 	base_turf_override = 1;
-	base_turf_type = /turf/simulated/floor/plating;
+	base_turf_type = /turf/unsimulated/floor/lab_underplating;
 	refill_area = /area/vault/mothership_lab/asteroid
 	},
 /obj/effect/decal/warning_stripes{
@@ -621,7 +611,7 @@
 	req_access_txt = "160";
 	req_one_access_txt = "160"
 	},
-/turf/unsimulated/floor/ayy/maint,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
 "kV" = (
 /obj/structure/shuttle/diag_wall/black{
@@ -674,9 +664,7 @@
 /obj/structure/mirror{
 	pixel_y = 33
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "ly" = (
 /obj/effect/mine,
@@ -902,9 +890,7 @@
 /obj/structure/acidtoilet{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "nU" = (
 /obj/effect/decal/warning_stripes{
@@ -945,7 +931,7 @@
 	req_access_txt = "160";
 	req_one_access_txt = "160"
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
 "pe" = (
 /obj/structure/window/reinforced/plasma{
@@ -1091,9 +1077,7 @@
 /obj/machinery/door/airlock{
 	name = "Toilet"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "qZ" = (
 /obj/structure/catwalk/invulnerable,
@@ -1189,7 +1173,7 @@
 /area/vault/mothership_lab/raidtunnel_upper)
 "sE" = (
 /obj/structure/dispenser/oxygen,
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/asteroid)
 "sK" = (
 /obj/structure/fence/door/secure/from_east{
@@ -1236,9 +1220,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "th" = (
 /obj/structure/table/reinforced,
@@ -1294,9 +1276,7 @@
 /obj/machinery/acidshower{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "un" = (
 /turf/unsimulated/floor{
@@ -1580,9 +1560,7 @@
 	dir = 8;
 	pixel_x = 10
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "yj" = (
 /obj/structure/shuttle/diag_wall/black,
@@ -1595,9 +1573,7 @@
 /obj/machinery/door/window{
 	name = "Shower"
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "yn" = (
 /obj/structure/shuttle/diag_wall/black{
@@ -1703,6 +1679,11 @@
 	},
 /obj/structure/closet/crate/ayy2,
 /turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/entrance)
+"zk" = (
+/turf/unsimulated/floor/lab_underplating{
+	icon_state = "platingdmg1"
+	},
 /area/vault/mothership_lab/entrance)
 "zr" = (
 /turf/space,
@@ -1936,6 +1917,11 @@
 /obj/structure/closet/emcloset/vox,
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
+"Dk" = (
+/turf/unsimulated/floor/lab_underplating{
+	icon_state = "platingdmg3"
+	},
+/area/vault/mothership_lab/entrance)
 "Dl" = (
 /obj/effect/decal/cleanable/blood/drip{
 	basecolor = "#2299FC";
@@ -1992,6 +1978,9 @@
 	icon_state = "asteroidwarning"
 	},
 /area/vault/mothership_lab/asteroid)
+"Ei" = (
+/turf/unsimulated/floor/lab_underplating,
+/area/vault/mothership_lab/entrance)
 "Er" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
@@ -2042,14 +2031,10 @@
 	dir = 4;
 	on = 1
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "Ff" = (
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "Ft" = (
 /obj/structure/hanging_lantern{
@@ -2269,7 +2254,7 @@
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
 "Jr" = (
 /obj/structure/window/reinforced/plasma{
@@ -2296,7 +2281,7 @@
 /area/vault/mothership_lab/entrance)
 "JU" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor{
+/turf/unsimulated/floor/lab_underplating{
 	icon_state = "platingdmg1"
 	},
 /area/vault/mothership_lab/entrance)
@@ -2434,9 +2419,7 @@
 /obj/machinery/light/he{
 	dir = 4
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "Nf" = (
 /obj/structure/sign/securearea{
@@ -2463,9 +2446,7 @@
 /obj/item/weapon/soap,
 /obj/item/weapon/reagent_containers/spray/cleaner,
 /obj/machinery/light/he,
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "Nq" = (
 /obj/structure/shuttle/diag_wall/black{
@@ -2485,7 +2466,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
 "Oc" = (
 /obj/structure/rack,
@@ -2542,7 +2523,7 @@
 	pixel_y = -30
 	},
 /obj/structure/airshield,
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
 "Ox" = (
 /obj/effect/decal/cleanable/blood/oil{
@@ -2564,7 +2545,7 @@
 "OJ" = (
 /obj/structure/window/full/reinforced,
 /obj/structure/grille,
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
 "OK" = (
 /obj/structure/table/reinforced,
@@ -2606,7 +2587,7 @@
 /obj/machinery/atmospherics/unary/tank/air{
 	dir = 4
 	},
-/turf/unsimulated/floor{
+/turf/unsimulated/floor/lab_underplating{
 	icon_state = "panelscorched"
 	},
 /area/vault/mothership_lab/control_room)
@@ -2627,9 +2608,7 @@
 /obj/structure/acidtoilet{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "PH" = (
 /turf/unsimulated/floor/ayy,
@@ -2689,7 +2668,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "QI" = (
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/asteroid)
 "QR" = (
 /turf/unsimulated/floor/ayy/maint,
@@ -2731,7 +2710,7 @@
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
 "RB" = (
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier{
@@ -2758,9 +2737,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "showroomfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/entrance)
 "RT" = (
 /obj/structure/bed/chair/comfy/ayy1,
@@ -2949,7 +2926,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
 "VP" = (
 /obj/structure/ladder{
@@ -3172,7 +3149,7 @@
 "Yo" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/remains/human/noskull,
-/turf/unsimulated/floor,
+/turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
 "Yv" = (
 /obj/effect/decal/warning_stripes{
@@ -3259,6 +3236,11 @@
 "Zy" = (
 /turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/asteroid)
+"ZI" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/unsimulated/floor/lab_underplating,
+/area/vault/mothership_lab/entrance)
 "ZL" = (
 /obj/machinery/door/airlock/security{
 	name = "Explorer Barracks";
@@ -4246,22 +4228,22 @@ Rj
 sa
 BB
 IX
-VT
-VT
-gn
-gn
-VT
+Ei
+Ei
+aI
+aI
+Ei
 JU
-gn
-VT
-VT
-BG
-gn
-VT
-VT
-gn
-VT
-gn
+aI
+Ei
+Ei
+aI
+aI
+Ei
+Ei
+aI
+Ei
+aI
 gd
 BB
 wj
@@ -4292,7 +4274,7 @@ Rj
 Rj
 HZ
 BB
-un
+zk
 BB
 BB
 BB
@@ -4386,7 +4368,7 @@ Rj
 Rj
 Rj
 Lv
-gn
+aI
 ZL
 gw
 gw
@@ -4480,7 +4462,7 @@ Rj
 Rj
 HZ
 BB
-gn
+aI
 BB
 gw
 jA
@@ -4527,7 +4509,7 @@ Rj
 Rj
 nl
 BB
-VT
+zk
 BB
 aM
 QI
@@ -4574,7 +4556,7 @@ QF
 Rj
 HZ
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -4621,7 +4603,7 @@ BB
 gj
 BB
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -4668,7 +4650,7 @@ aR
 Ff
 Nk
 BB
-BG
+aI
 BB
 aM
 QI
@@ -4715,7 +4697,7 @@ Ff
 Ff
 Ff
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -4762,7 +4744,7 @@ BB
 BB
 qU
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -4809,7 +4791,7 @@ Ff
 BB
 tf
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -4856,7 +4838,7 @@ hN
 BB
 BB
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -4903,7 +4885,7 @@ BB
 BB
 yk
 BB
-gn
+aI
 BB
 nU
 QI
@@ -4950,7 +4932,7 @@ nL
 Ff
 Ff
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -4997,7 +4979,7 @@ Ff
 xY
 EU
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -5044,7 +5026,7 @@ gj
 BB
 BB
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -5091,7 +5073,7 @@ Rj
 Rj
 Cz
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -5138,7 +5120,7 @@ Rj
 Rj
 UH
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -5185,7 +5167,7 @@ aT
 Rj
 ks
 BB
-gn
+aI
 BB
 aM
 QI
@@ -5232,7 +5214,7 @@ Rj
 Rj
 ab
 BB
-gn
+aI
 BB
 aM
 QI
@@ -5279,7 +5261,7 @@ BB
 xJ
 BB
 BB
-VT
+Ei
 BB
 aM
 QI
@@ -5326,7 +5308,7 @@ di
 Rj
 jq
 BB
-VT
+Ei
 BB
 gw
 nB
@@ -5373,7 +5355,7 @@ Rj
 Rj
 Xy
 BB
-tN
+Dk
 BB
 yj
 gw
@@ -5420,7 +5402,7 @@ Rj
 Rj
 Iv
 BB
-gn
+aI
 BB
 BB
 BB
@@ -5467,7 +5449,7 @@ BB
 eR
 BB
 BB
-VT
+Ei
 BB
 ll
 dD
@@ -5514,7 +5496,7 @@ mA
 uK
 fm
 BB
-VT
+Ei
 BB
 vt
 un
@@ -5561,7 +5543,7 @@ Rj
 uK
 Rg
 BB
-yQ
+ZI
 BB
 hr
 fG
@@ -5608,7 +5590,7 @@ Rj
 uK
 uK
 vz
-VT
+Ei
 BX
 fG
 XZ
@@ -5655,7 +5637,7 @@ Rj
 uK
 rp
 BB
-yQ
+ZI
 BB
 BB
 BB
@@ -5703,18 +5685,18 @@ uK
 kV
 BB
 Rz
-VT
-BG
-gn
-VT
-VT
-gn
-tN
+Ei
+aI
+aI
+Ei
+Ei
+aI
+Dk
 Yo
-VT
-VT
-un
-gn
+Ei
+Ei
+zk
+aI
 BB
 BB
 BB
@@ -6263,7 +6245,7 @@ MD
 MD
 YF
 BB
-VT
+Ei
 BB
 YF
 YF

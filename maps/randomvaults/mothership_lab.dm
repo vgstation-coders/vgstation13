@@ -135,7 +135,7 @@
 	return smoothables
 
 //////////////////////////////
-// FLOORS (Some ayy-themed floors)
+// FLOORS (Some ayy-themed floors, with walking sound effects!)
 //////////////////////////////
 
 /turf/unsimulated/floor/ayy
@@ -217,7 +217,7 @@
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
 
-/turf/unsimulated/floor/lab_asteroid/Entered(atom/A, atom/OL) // Ayy dirt tiles play walking sound effects!
+/turf/unsimulated/floor/lab_asteroid/Entered(atom/A, atom/OL) // These play walking sound effects!
 	..()
 	if(istype(A,/mob/living/simple_animal))
 		var/mob/living/simple_animal/L = A
@@ -234,6 +234,56 @@
 				playsound(src, 'sound/effects/sand_walk1.ogg', 50, 0)
 			else
 				playsound(src, 'sound/effects/sand_walk2.ogg', 50, 0)
+
+/turf/unsimulated/floor/lab_underplating
+	name = "plating"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "Floor3"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/lab_underplating/Entered(atom/A, atom/OL) // These play walking sound effects!
+	..()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/L = A
+		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
+
+	if(istype(A,/mob/living/carbon))
+		var/mob/living/carbon/M = A
+		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
+
+/turf/unsimulated/floor/lab_sterile
+	name = "lab tile floor"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "freezerfloor"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/lab_sterile/Entered(atom/A, atom/OL) // These play walking sound effects!
+	..()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/L = A
+		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/tile_walk1.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/tile_walk2.ogg', 50, 0)
+
+	if(istype(A,/mob/living/carbon))
+		var/mob/living/carbon/M = A
+		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/tile_walk1.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/tile_walk2.ogg', 50, 0)
 
 //////////////////////////////
 // DECORATIVE FLORA (Some nice things to go in the facility's petting zoo and plant decorations)
