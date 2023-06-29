@@ -14,9 +14,6 @@
 	admin_voice_style = "secradio"
 	var/discovered = 0
 
-/datum/faction/revolution/New()
-	register_event(/event/late_arrival, src, src::OnLateArrival())
-
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
 	if(M.assigned_role in command_positions)
 		return ADD_REVOLUTIONARY_FAIL_IS_COMMAND
@@ -167,15 +164,14 @@
 			if (istype(dynamic_mode))
 				dynamic_mode.update_stillborn_rulesets()
 
-/datum/faction/revolution/proc/OnLateArrival(mob/living/carbon/human/character, rank)
+/datum/faction/revolution/OnLateArrival(mob/living/carbon/human/character, rank)
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
-	if (!istype(R))
+	if(!istype(R))
 		return FALSE
-	var/mob/living/L = character
-	if (rank in command_positions)
+	if(rank in command_positions)
 		var/datum/objective/target/assassinate/orexile/A = new(auto_target = FALSE)
-		if(A.set_target(L.mind))
-			R.AppendObjective(A, TRUE) // We will have more than one kill objective
+		if(A.set_target(character.mind))
+			R.AppendObjective(A, TRUE)
 
 /datum/faction/revolution/proc/end(var/result)
 	. = TRUE

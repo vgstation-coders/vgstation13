@@ -23,6 +23,7 @@
 #define XENOMORPH_HIVE "alien hivemind"
 #define JUSTICE_DEPARTMENT "justice department"
 #define NANOTRASEN "Nanotrasen"
+#define THE_APES "The Apes"
 
 //-------
 #define HIVEMIND "changeling hivemind"
