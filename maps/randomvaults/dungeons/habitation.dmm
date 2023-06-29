@@ -1,7 +1,7 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "aa" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless,
+/turf/unsimulated/floor,
 /area/vault/mothership_lab/hobo)
 "ai" = (
 /obj/structure/window/barricade/full/block,
@@ -939,15 +939,6 @@
 /obj/structure/window/barricade/full/block,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
-"hW" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 5
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor{
-	icon_state = "platingdmg1"
-	},
-/area/vault/mothership_lab/hobo)
 "hX" = (
 /obj/machinery/light/small/broken{
 	dir = 8
@@ -1020,6 +1011,12 @@
 /obj/item/weapon/kitchen/utensil/fork/teflon,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
+"iM" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5
+	},
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/mothership_lab/hobo)
 "iR" = (
 /obj/structure/window/barricade/full,
 /turf/unsimulated/floor/ayy/fancy,
@@ -1075,7 +1072,7 @@
 	req_access_txt = "160";
 	req_one_access_txt = "160"
 	},
-/turf/unsimulated/floor/airless,
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "jt" = (
 /obj/structure/reagent_dispensers/sacid,
@@ -1186,7 +1183,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
 /obj/effect/decal/cleanable/generic,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/airless,
+/turf/unsimulated/floor,
 /area/vault/mothership_lab/hobo)
 "kq" = (
 /obj/machinery/door/airlock/glass{
@@ -3135,7 +3132,10 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
 	},
-/turf/unsimulated/floor/ayy/maint,
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor{
+	icon_state = "platingdmg1"
+	},
 /area/vault/mothership_lab/hobo)
 "AZ" = (
 /obj/effect/decal/cleanable/blood{
@@ -3361,6 +3361,9 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/mothership_lab/habitation)
+"Db" = (
+/turf/unsimulated/mineral,
+/area/vault/mothership_lab/hobo)
 "De" = (
 /obj/item/weapon/reagent_containers/food/snacks/bacon,
 /obj/item/weapon/reagent_containers/food/snacks/bacon,
@@ -5195,9 +5198,6 @@
 	},
 /turf/unsimulated/floor/asteroid,
 /area/vault/mothership_lab/habitation)
-"Tf" = (
-/turf/unsimulated/mineral,
-/area/vault/mothership_lab/hobo)
 "Tg" = (
 /obj/item/weapon/barricade_kit,
 /turf/unsimulated/floor,
@@ -5242,7 +5242,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
 	},
-/turf/unsimulated/floor/airless,
+/turf/unsimulated/floor,
 /area/vault/mothership_lab/hobo)
 "Tw" = (
 /obj/structure/bed/chair/folding,
@@ -6110,7 +6110,7 @@ ib
 ib
 ib
 ib
-Tf
+Db
 mD
 mD
 mD
@@ -6172,7 +6172,7 @@ zQ
 je
 zQ
 mD
-Tf
+Db
 ib
 BJ
 "}
@@ -6210,7 +6210,7 @@ Qq
 Ug
 vU
 Ug
-hW
+AT
 Qp
 qQ
 TV
@@ -6263,7 +6263,7 @@ Ug
 Ug
 wD
 Tu
-AT
+iM
 ne
 zQ
 mD
