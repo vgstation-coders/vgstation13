@@ -1,9 +1,7 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "aa" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/airless,
 /area/vault/mothership_lab/hobo)
 "ai" = (
 /obj/structure/window/barricade/full/block,
@@ -70,9 +68,6 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "aD" = (
-/obj/structure/closet/secure_closet/freezer{
-	anchored = 1
-	},
 /obj/item/weapon/reagent_containers/food/drinks/flour,
 /obj/item/weapon/reagent_containers/food/drinks/flour,
 /obj/item/weapon/reagent_containers/food/drinks/flour,
@@ -83,9 +78,10 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
+/obj/structure/closet/secure_closet/ayy{
+	anchored = 1
 	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "aF" = (
 /obj/machinery/deployable/barrier{
@@ -123,23 +119,17 @@
 	},
 /area/vault/mothership_lab/administration)
 "aO" = (
-/obj/structure/bed/chair/wood/normal,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/obj/structure/bed/chair/comfy/ayy1,
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "aS" = (
 /obj/machinery/vending/dinnerware,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "aW" = (
 /obj/machinery/portable_atmospherics/hydroponics/soil,
 /obj/item/seeds/pitcher,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "bb" = (
 /obj/machinery/space_heater,
@@ -258,9 +248,7 @@
 /area/vault/mothership_lab/habitation)
 "cr" = (
 /obj/machinery/portable_atmospherics/hydroponics/soil,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "cu" = (
 /obj/effect/decal/cleanable/dirt,
@@ -349,9 +337,7 @@
 	amount = 30
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "cV" = (
 /obj/structure/table,
@@ -410,13 +396,11 @@
 /turf/unsimulated/floor/grey_sand,
 /area/vault/mothership_lab/habitation)
 "dg" = (
-/obj/structure/table/woodentable,
 /obj/machinery/microwave{
 	pixel_y = 6
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/structure/table,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "dh" = (
 /obj/machinery/vending/games,
@@ -517,16 +501,12 @@
 /obj/item/seeds/tomatoseed,
 /obj/item/seeds/wheatseed,
 /obj/item/seeds/wheatseed,
-/obj/structure/closet/crate/chest{
-	name = "seed chest"
-	},
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
 	on = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/structure/closet/crate/ayy,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "eh" = (
 /obj/structure/table/flipped{
@@ -598,9 +578,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "fd" = (
 /obj/structure/ore_box,
@@ -673,9 +651,7 @@
 	name = "Asteroid Access"
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "fz" = (
 /obj/structure/window/reinforced{
@@ -913,9 +889,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "hD" = (
 /obj/effect/decal/cleanable/dirt,
@@ -965,15 +939,22 @@
 /obj/structure/window/barricade/full/block,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
+"hW" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 5
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor{
+	icon_state = "platingdmg1"
+	},
+/area/vault/mothership_lab/hobo)
 "hX" = (
 /obj/machinery/light/small/broken{
 	dir = 8
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/portable_atmospherics/hydroponics/soil,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "hZ" = (
 /obj/effect/spider/stickyweb,
@@ -1000,21 +981,23 @@
 /obj/item/stack/sheet/metal/bigstack,
 /obj/item/stack/rods,
 /obj/item/stack/sheet/wood/bigstack,
-/obj/item/weapon/cell/empty,
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light/small{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
+/obj/structure/window/reinforced{
+	dir = 1
 	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/item/weapon/cell/empty,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "iA" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/processor,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "iC" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1083,13 +1066,16 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/habitation)
 "jr" = (
-/obj/machinery/door/mineral/iron,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/door/airlock/silver{
+	name = "Mining Storage";
+	req_access_txt = "160";
+	req_one_access_txt = "160"
 	},
+/turf/unsimulated/floor/airless,
 /area/vault/mothership_lab/hobo)
 "jt" = (
 /obj/structure/reagent_dispensers/sacid,
@@ -1194,16 +1180,13 @@
 /obj/item/weapon/circuitboard/airlock,
 /obj/item/weapon/circuitboard/airlock,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "ki" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
 /obj/effect/decal/cleanable/generic,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless,
 /area/vault/mothership_lab/hobo)
 "kq" = (
 /obj/machinery/door/airlock/glass{
@@ -1262,9 +1245,7 @@
 	dir = 1;
 	on = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "kQ" = (
 /obj/machinery/camera{
@@ -1277,9 +1258,7 @@
 /area/vault/mothership_lab/habitation)
 "kR" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "kS" = (
 /obj/effect/decal/cleanable/blood/drip{
@@ -1350,9 +1329,7 @@
 "lr" = (
 /obj/machinery/vending/hydronutrients,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "ls" = (
 /obj/structure/vendomatpack/zamsnax,
@@ -1466,9 +1443,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/fries,
 /obj/item/weapon/reagent_containers/food/snacks/fries,
 /obj/item/weapon/reagent_containers/food/snacks/fries,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "mx" = (
 /turf/unsimulated/floor{
@@ -1476,7 +1451,6 @@
 	},
 /area/vault/mothership_lab/habitation)
 "my" = (
-/obj/structure/closet/cabinet,
 /obj/effect/decal/cleanable/cobweb2,
 /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,
 /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,
@@ -1487,17 +1461,23 @@
 /obj/item/weapon/reagent_containers/food/drinks/beer,
 /obj/item/weapon/reagent_containers/food/drinks/beer,
 /obj/item/weapon/storage/box/drinkingglasses,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
+/obj/structure/closet/ayy{
+	anchored = 1
 	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "mz" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
 "mD" = (
-/obj/effect/glowshroom/single,
-/turf/simulated/wall/mineral/wood,
+/turf/simulated/wall/r_rock/porous,
 /area/vault/mothership_lab/hobo)
 "mF" = (
 /obj/machinery/light/small{
@@ -1567,9 +1547,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/portable_atmospherics/hydroponics/soil,
 /obj/item/weapon/reagent_containers/glass/bottle/eznutrient,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "ni" = (
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic,
@@ -1604,9 +1582,7 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "nn" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1650,13 +1626,11 @@
 	dir = 8;
 	on = 1
 	},
-/obj/structure/bed,
 /obj/effect/landmark/hobostart,
 /obj/item/weapon/card/id/mothership,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/structure/bed/ayy1,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "nE" = (
 /obj/machinery/light/small/broken{
@@ -1913,9 +1887,7 @@
 	dir = 1;
 	on = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "pC" = (
 /obj/structure/bed/chair/comfy/ayy1{
@@ -1927,9 +1899,7 @@
 /obj/machinery/atmospherics/unary/tank/air{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "pO" = (
 /obj/machinery/light/he/burned{
@@ -2052,9 +2022,8 @@
 /area/vault/mothership_lab/habitation)
 "qQ" = (
 /obj/structure/forge,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "qS" = (
 /obj/item/weapon/table_parts,
@@ -2317,9 +2286,7 @@
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "tb" = (
 /obj/effect/decal/cleanable/dirt,
@@ -2328,7 +2295,6 @@
 /area/vault/mothership_lab/cave)
 "td" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/closet/crate,
 /obj/item/weapon/stock_parts/manipulator,
 /obj/item/weapon/stock_parts/manipulator,
 /obj/item/weapon/stock_parts/matter_bin,
@@ -2340,9 +2306,8 @@
 /obj/item/weapon/stock_parts/console_screen,
 /obj/item/weapon/stock_parts/console_screen,
 /obj/item/weapon/stock_parts/micro_laser,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/structure/closet/crate/ayy,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "tf" = (
 /obj/machinery/door/airlock/engineering{
@@ -2413,12 +2378,10 @@
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/cave)
 "tM" = (
-/obj/structure/bed/chair/wood/normal{
+/obj/structure/bed/chair/comfy/ayy1{
 	dir = 4
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "tO" = (
 /turf/unsimulated/floor{
@@ -2519,12 +2482,10 @@
 	},
 /area/vault/mothership_lab/habitation)
 "uX" = (
-/obj/structure/bed/chair/wood/normal{
+/obj/structure/bed/chair/comfy/ayy1{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "vd" = (
 /obj/machinery/acidshower{
@@ -2634,10 +2595,12 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
 	},
-/obj/machinery/door/mineral/iron,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
+/obj/machinery/door/airlock/silver{
+	name = "Mining APC Access";
+	req_access_txt = "160";
+	req_one_access_txt = "160"
 	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "vY" = (
 /obj/effect/decal/cleanable/blood/drip{
@@ -2702,13 +2665,15 @@
 	},
 /area/vault/mothership_lab/administration)
 "wD" = (
-/obj/machinery/door/mineral/iron,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
+/obj/machinery/door/airlock/silver{
+	name = "Mining Storage";
+	req_access_txt = "160";
+	req_one_access_txt = "160"
 	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "wE" = (
 /obj/structure/catwalk/invulnerable,
@@ -2837,12 +2802,10 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "xr" = (
-/obj/structure/bed,
 /obj/effect/landmark/hobostart,
 /obj/item/weapon/card/id/mothership,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/structure/bed/ayy1,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "xu" = (
 /obj/machinery/light/small{
@@ -3072,21 +3035,27 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
 	},
-/obj/machinery/door/mineral/iron,
+/obj/machinery/door/airlock/silver{
+	name = "Mining Lavatory";
+	req_access_txt = "160";
+	req_one_access_txt = "160"
+	},
 /turf/unsimulated/floor{
 	icon_state = "showroomfloor"
 	},
 /area/vault/mothership_lab/hobo)
 "zF" = (
-/obj/structure/table/woodentable,
 /obj/structure/bedsheetbin,
 /obj/item/weapon/storage/wallet/random,
 /obj/item/weapon/storage/wallet/random,
 /obj/item/weapon/storage/wallet/random,
 /obj/item/weapon/storage/wallet/random,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/structure/table,
+/obj/item/device/flashlight/lantern/on,
+/obj/item/device/flashlight/lantern/on,
+/obj/item/device/flashlight/lantern/on,
+/obj/item/device/flashlight/lantern/on,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "zG" = (
 /turf/unsimulated/floor{
@@ -3100,7 +3069,8 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "zQ" = (
-/turf/simulated/wall/mineral/wood,
+/obj/effect/glowshroom/single,
+/turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/hobo)
 "zY" = (
 /obj/effect/decal/warning_stripes{
@@ -3165,9 +3135,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "AZ" = (
 /obj/effect/decal/cleanable/blood{
@@ -3262,8 +3230,8 @@
 /obj/abstract/map/spawner/safe/medical,
 /obj/abstract/map/spawner/safe/food,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor{
+	icon_state = "panelscorched"
 	},
 /area/vault/mothership_lab/hobo)
 "BV" = (
@@ -3308,9 +3276,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "Ct" = (
 /obj/effect/spider/stickyweb,
@@ -3622,12 +3588,10 @@
 /area/vault/mothership_lab/habitation)
 "EW" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/bed,
 /obj/effect/landmark/hobostart,
 /obj/item/weapon/card/id/mothership,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/structure/bed/ayy1,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "EX" = (
 /obj/structure/shuttle/diag_wall/black{
@@ -3736,9 +3700,7 @@
 	dir = 1;
 	on = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "FP" = (
 /turf/unsimulated/floor{
@@ -3763,16 +3725,14 @@
 /area/vault/mothership_lab/habitation)
 "FV" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/table/woodentable,
 /obj/item/stack/medical/splint/ghetto,
 /obj/item/stack/medical/splint/ghetto,
 /obj/item/weapon/storage/firstaid/regular,
 /obj/machinery/light/small{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/structure/table,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "FX" = (
 /obj/effect/decal/cleanable/dirt,
@@ -3805,14 +3765,12 @@
 	},
 /area/vault/mothership_lab/raidtunnel_lower)
 "Gc" = (
-/obj/structure/table/woodentable,
 /obj/item/weapon/reagent_containers/food/drinks/beer,
 /obj/item/weapon/reagent_containers/food/drinks/beer,
 /obj/item/weapon/reagent_containers/food/drinks/beer,
 /obj/item/toy/cards,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/structure/table,
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "Gf" = (
 /obj/structure/table/glass,
@@ -3953,8 +3911,9 @@
 	pixel_y = -24
 	},
 /obj/item/weapon/cell/potato,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor{
+	icon_state = "platingdmg1"
 	},
 /area/vault/mothership_lab/hobo)
 "Hp" = (
@@ -4000,11 +3959,9 @@
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
-/obj/structure/table/woodentable,
 /obj/machinery/reagentgrinder,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/structure/table,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "HC" = (
 /obj/structure/table/reinforced,
@@ -4131,9 +4088,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "II" = (
 /obj/item/clothing/shoes/jackboots/mothership,
@@ -4252,9 +4207,7 @@
 "JB" = (
 /obj/machinery/portable_atmospherics/hydroponics/soil,
 /obj/item/seeds/glowshroom,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "JH" = (
 /obj/structure/table/reinforced,
@@ -4341,9 +4294,7 @@
 "KF" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/chem_master/condimaster,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "KG" = (
 /obj/effect/decal/cleanable/blood{
@@ -4472,16 +4423,12 @@
 	dir = 4
 	},
 /obj/machinery/portable_atmospherics/canister/nitrogen,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "Md" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light/small,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "Mk" = (
 /obj/machinery/light/he/broken{
@@ -4857,9 +4804,7 @@
 /obj/item/weapon/circuitboard/biogenerator,
 /obj/item/weapon/reagent_containers/glass/beaker/large,
 /obj/machinery/constructable_frame/machine_frame,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "Qb" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -4884,9 +4829,7 @@
 	},
 /obj/item/anvil,
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "Qq" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -4895,9 +4838,7 @@
 	},
 /obj/effect/decal/cleanable/cobweb,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "Qv" = (
 /obj/machinery/vending/dinnerware,
@@ -5052,9 +4993,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
 "Rt" = (
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "Ru" = (
 /obj/effect/landmark/corpse/grey/worker,
@@ -5190,9 +5129,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "SA" = (
 /obj/structure/table,
@@ -5242,10 +5179,8 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/machinery/door/mineral/iron,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/obj/structure/curtain/closed,
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "SX" = (
 /obj/structure/cage,
@@ -5260,6 +5195,9 @@
 	},
 /turf/unsimulated/floor/asteroid,
 /area/vault/mothership_lab/habitation)
+"Tf" = (
+/turf/unsimulated/mineral,
+/area/vault/mothership_lab/hobo)
 "Tg" = (
 /obj/item/weapon/barricade_kit,
 /turf/unsimulated/floor,
@@ -5297,18 +5235,14 @@
 	dir = 4;
 	pixel_x = 11
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "Tu" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/airless,
 /area/vault/mothership_lab/hobo)
 "Tw" = (
 /obj/structure/bed/chair/folding,
@@ -5347,16 +5281,15 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "TV" = (
-/obj/structure/table/woodentable,
 /obj/item/weapon/storage/toolbox/mechanical,
 /obj/item/stack/cable_coil,
 /obj/item/stack/cable_coil,
 /obj/item/stack/cable_coil,
 /obj/item/device/crank_charger,
 /obj/item/inflatable/shelter,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "TY" = (
 /obj/structure/filingcabinet,
@@ -5367,9 +5300,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "Uq" = (
 /obj/effect/decal/warning_stripes{
@@ -5613,9 +5544,8 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "VR" = (
 /obj/structure/window/barricade/full/block,
@@ -5826,9 +5756,7 @@
 /obj/item/weapon/pickaxe/shovel/spade,
 /obj/item/weapon/storage/bag/plants,
 /obj/item/weapon/storage/bag/plants,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "Xq" = (
 /obj/structure/acidtoilet{
@@ -5939,9 +5867,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "YE" = (
 /obj/effect/decal/cleanable/dirt,
@@ -6137,20 +6063,20 @@ ib
 ib
 ib
 ib
-gN
-gN
-gN
-gN
-gN
-gN
-gN
-gN
-gN
-gN
-gN
-gN
-gN
-gN
+ib
+ib
+ib
+ib
+ib
+ib
+ib
+ib
+ib
+ib
+ib
+ib
+ib
+ib
 ib
 ib
 BJ
@@ -6183,23 +6109,23 @@ ib
 ib
 ib
 ib
-gN
-je
-je
-je
-je
-je
-je
-je
-je
-je
-je
-je
-je
-je
-je
-gN
-gN
+ib
+Tf
+mD
+mD
+mD
+mD
+mD
+mD
+mD
+mD
+mD
+mD
+mD
+mD
+mD
+ib
+ib
 ib
 BJ
 "}
@@ -6230,24 +6156,24 @@ gN
 gN
 ib
 ib
-gN
-je
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-mD
-zQ
+ib
 mD
 je
 je
-gN
+je
+je
+je
+je
+je
+je
+je
+je
+zQ
+je
+zQ
+mD
+Tf
+ib
 BJ
 "}
 (4,1,1) = {"
@@ -6277,24 +6203,24 @@ pq
 pq
 gN
 ib
-gN
+ib
+mD
 je
-zQ
 Qq
 Ug
 vU
 Ug
-AT
+hW
 Qp
 qQ
 TV
-zQ
+je
 eg
 hX
-zQ
-zQ
 je
-gN
+je
+mD
+ib
 ib
 "}
 (5,1,1) = {"
@@ -6325,11 +6251,11 @@ pq
 gN
 gN
 gN
+mD
 je
-zQ
 Mb
 kR
-zQ
+je
 mw
 IB
 fa
@@ -6339,9 +6265,9 @@ wD
 Tu
 AT
 ne
+zQ
 mD
-je
-gN
+ib
 ib
 "}
 (6,1,1) = {"
@@ -6373,22 +6299,22 @@ NQ
 pq
 pq
 pq
-zQ
+je
 nk
 kO
-zQ
+je
 aD
 Sx
 fy
 kR
 tM
-zQ
+je
 HA
 Sx
 aW
-zQ
 je
-gN
+mD
+ib
 ib
 "}
 (7,1,1) = {"
@@ -6420,22 +6346,22 @@ fo
 kH
 Em
 pq
-zQ
+je
 kc
 Ho
-zQ
+je
 aS
 Sx
 Rt
 aO
 Gc
-zQ
+je
 iA
 hz
 cr
+zQ
 mD
-je
-gN
+ib
 ib
 "}
 (8,1,1) = {"
@@ -6467,22 +6393,22 @@ MQ
 sv
 sv
 pq
-zQ
+je
 pG
 cU
-zQ
+je
 dg
 VQ
 px
 aa
 uX
-zQ
+je
 Xo
 Cl
 JB
-zQ
 je
-gN
+mD
+ib
 ib
 "}
 (9,1,1) = {"
@@ -6514,22 +6440,22 @@ pq
 fA
 fA
 pq
-zQ
-zQ
-zQ
-zQ
-zQ
+je
+je
+je
+je
+je
 SS
-zQ
-zQ
-zQ
-zQ
-mD
-jr
-zQ
+je
 zQ
 je
-gN
+je
+zQ
+jr
+je
+je
+mD
+ib
 ib
 "}
 (10,1,1) = {"
@@ -6561,7 +6487,7 @@ pq
 bn
 gj
 pq
-zQ
+je
 GO
 CV
 zD
@@ -6570,13 +6496,13 @@ ki
 FV
 zF
 BR
-zQ
+je
 lr
 Sx
 td
-zQ
 je
-gN
+mD
+ib
 ib
 "}
 (11,1,1) = {"
@@ -6608,7 +6534,7 @@ UU
 gj
 gj
 pq
-zQ
+je
 cB
 jz
 zQ
@@ -6617,13 +6543,13 @@ Sx
 kR
 Rt
 Md
-zQ
+je
 sZ
 YD
 FM
+zQ
 mD
-je
-gN
+ib
 ib
 "}
 (12,1,1) = {"
@@ -6655,22 +6581,22 @@ kY
 gj
 gj
 pq
-zQ
-zQ
+je
+je
 iC
-zQ
+je
 my
 ny
 xr
 xr
 EW
-zQ
+je
 PW
 Tp
 KF
-zQ
 je
-gN
+mD
+ib
 ib
 "}
 (13,1,1) = {"
@@ -6702,22 +6628,22 @@ UU
 gj
 gj
 pq
-je
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
 mD
-zQ
-zQ
 je
-gN
+je
+je
+je
+je
+je
+je
+je
+je
+je
+je
+je
+je
+mD
+ib
 ib
 "}
 (14,1,1) = {"
@@ -6763,8 +6689,8 @@ Aw
 Aw
 Aw
 Aw
-je
-gN
+mD
+ib
 ib
 "}
 (15,1,1) = {"

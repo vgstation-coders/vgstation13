@@ -34,9 +34,7 @@
 	req_access_txt = "160";
 	req_one_access_txt = "160"
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/asteroid)
 "aJ" = (
 /obj/structure/bed/roller,
@@ -161,9 +159,7 @@
 /obj/structure/closet/walllocker/emerglocker{
 	pixel_x = 30
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor,
 /area/vault/mothership_lab/asteroid)
 "dD" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
@@ -532,8 +528,8 @@
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/asteroid)
 "jD" = (
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
+/turf/unsimulated/floor{
+	icon_state = "panelscorched"
 	},
 /area/vault/mothership_lab/asteroid)
 "jE" = (
@@ -793,20 +789,20 @@
 /obj/item/device/flashlight,
 /obj/item/device/flashlight,
 /obj/item/device/flashlight,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
 	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/asteroid)
 "mR" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/door/airlock/hatch{
-	name = "Mining Outpost";
+/obj/machinery/door/airlock/silver{
+	name = "Mining Access";
 	req_access_txt = "160";
 	req_one_access_txt = "160"
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/asteroid)
 "mT" = (
 /obj/effect/decal/warning_stripes{
@@ -1193,9 +1189,7 @@
 /area/vault/mothership_lab/raidtunnel_upper)
 "sE" = (
 /obj/structure/dispenser/oxygen,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor,
 /area/vault/mothership_lab/asteroid)
 "sK" = (
 /obj/structure/fence/door/secure/from_east{
@@ -1668,9 +1662,11 @@
 /obj/item/clothing/head/welding,
 /obj/item/clothing/head/welding,
 /obj/item/clothing/head/welding,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
 	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/asteroid)
 "za" = (
 /obj/structure/closet/crate,
@@ -1851,9 +1847,7 @@
 	name = "Mining Outpost Access"
 	},
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/asteroid)
 "AZ" = (
 /obj/structure/window/reinforced{
@@ -2205,9 +2199,7 @@
 /area/vault/mothership_lab/control_room)
 "HC" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/asteroid)
 "HL" = (
 /obj/effect/decal/cleanable/blood/drip{
@@ -2346,9 +2338,7 @@
 /obj/structure/hanging_lantern{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/asteroid)
 "KS" = (
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier,
@@ -3264,15 +3254,10 @@
 	req_access_txt = "160";
 	req_one_access_txt = "160"
 	},
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidplating"
-	},
+/turf/unsimulated/floor,
 /area/vault/mothership_lab/asteroid)
 "Zy" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/air{
-	icon_state = "asteroidfloor"
-	},
+/turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/asteroid)
 "ZL" = (
 /obj/machinery/door/airlock/security{
@@ -3296,7 +3281,7 @@
 	icon_state = "space";
 	name = "EXTERNAL AIRLOCK"
 	},
-/turf/simulated/wall,
+/turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/asteroid)
 "ZW" = (
 /obj/machinery/camera{
@@ -3482,10 +3467,10 @@ oo
 oo
 YF
 MD
-MD
-mv
-MD
-MD
+YF
+YF
+YF
+YF
 MD
 MD
 MD
@@ -3528,12 +3513,12 @@ hU
 Px
 oo
 YF
-MD
-Au
-Au
-Au
-Au
-MD
+YF
+Zy
+Zy
+Zy
+Zy
+YF
 FO
 FO
 GL
@@ -3575,12 +3560,12 @@ qT
 QR
 oo
 YF
-MD
-Au
+YF
+Zy
 jD
 AT
-Au
-MD
+Zy
+YF
 MD
 GL
 GL
@@ -3622,12 +3607,12 @@ QR
 eN
 oo
 YF
-MD
-Au
+YF
+Zy
 KL
 mQ
-Au
-MD
+Zy
+YF
 MD
 GL
 GL
@@ -3669,12 +3654,12 @@ qN
 bR
 oo
 YF
-MD
-Au
+YF
 Zy
+HC
 yU
-Au
-MD
+Zy
+YF
 Xo
 GL
 GL
@@ -3717,11 +3702,11 @@ Ak
 oo
 oo
 YF
-Au
+Zy
 mR
-Au
+Zy
 ZR
-Au
+Zy
 Xo
 GL
 GL
@@ -3764,11 +3749,11 @@ PH
 Gf
 oo
 YF
-Au
+Zy
 HC
-Au
+Zy
 sE
-Au
+Zy
 yA
 GL
 GL
@@ -3811,7 +3796,7 @@ PH
 PH
 oo
 YF
-Au
+Zy
 HC
 an
 dC
@@ -3858,11 +3843,11 @@ PH
 rG
 oo
 YF
-Au
-Au
-Au
-Au
-Au
+Zy
+Zy
+Zy
+Zy
+Zy
 yA
 GL
 GL
@@ -3905,9 +3890,9 @@ PH
 PH
 oo
 YF
-MD
-MD
-MD
+YF
+YF
+YF
 YF
 nq
 GL
