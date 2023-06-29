@@ -3099,13 +3099,6 @@
 	icon_state = "alienvault"
 	},
 /area/awaymission/spacebattle/secret)
-"rK" = (
-/obj/effect/landmark{
-	name = "awaystart"
-	},
-/obj/mecha/working/ripley/mk2/firefighter,
-/turf/simulated/floor,
-/area/awaymission/spacebattle/cruiser)
 
 (1,1,1) = {"
 aa
@@ -25581,7 +25574,7 @@ ce
 ce
 ce
 ce
-rK
+cQ
 cQ
 cQ
 dm
@@ -28414,7 +28407,7 @@ cC
 ce
 dr
 dO
-cM
+dO
 cM
 cM
 cM

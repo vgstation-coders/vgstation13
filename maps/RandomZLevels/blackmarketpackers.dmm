@@ -615,8 +615,8 @@
 "cu" = (
 /obj/structure/closet/crate/freezer,
 /obj/item/weapon/reagent_containers/food/snacks/meat,
-/obj/item/organ/internal/appendix,
 /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice,
+/obj/item/organ/internal/appendix,
 /turf/simulated/floor/plating{
 	icon_state = "warnplate"
 	},
@@ -849,6 +849,12 @@
 	tag = "icon-carpet15-7 (EAST)"
 	},
 /area/awaymission/BMPship3)
+"cZ" = (
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/awaymission/BMPship2)
 "da" = (
 /turf/simulated/floor,
 /area/awaymission/BMPship2)
@@ -968,12 +974,8 @@
 /area/awaymission/BMPship3)
 "dv" = (
 /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice,
-/turf/simulated/floor{
-	dir = 4;
-	icon_state = "carpet15-15";
-	tag = "icon-carpet15-15 (EAST)"
-	},
-/area/awaymission/BMPship3)
+/turf/simulated/floor,
+/area/awaymission/BMPship2)
 "dw" = (
 /obj/machinery/door/unpowered/shuttle,
 /turf/simulated/floor{
@@ -1852,12 +1854,6 @@
 	icon_state = "warning"
 	},
 /area/awaymission/BMPship1)
-"fu" = (
-/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice,
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/awaymission/BMPship2)
 "fv" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 1
@@ -2085,6 +2081,16 @@
 	},
 /turf/simulated/floor{
 	icon_state = "bar"
+	},
+/area/awaymission/BMPship1)
+"fT" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
 	},
 /area/awaymission/BMPship1)
 "fU" = (
@@ -2391,16 +2397,6 @@
 	d1 = 1;
 	d2 = 4;
 	icon_state = "1-4"
-	},
-/turf/simulated/floor{
-	icon_state = "showroomfloor"
-	},
-/area/awaymission/BMPship1)
-"gK" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
@@ -9449,7 +9445,7 @@ eh
 eh
 eh
 eh
-dv
+eh
 eh
 ip
 gB
@@ -10482,7 +10478,7 @@ aq
 bR
 hr
 cE
-cK
+cZ
 cK
 cK
 eo
@@ -10873,7 +10869,7 @@ bS
 hr
 cH
 da
-da
+dv
 dQ
 dV
 es
@@ -12823,7 +12819,7 @@ bX
 ha
 cQ
 df
-fu
+cK
 dV
 es
 eK
@@ -13609,7 +13605,7 @@ di
 di
 fm
 di
-gK
+fT
 fm
 di
 di
@@ -13872,7 +13868,7 @@ fF
 fF
 fo
 gv
-gK
+fT
 di
 hg
 dp
@@ -14002,7 +13998,7 @@ fp
 fV
 gh
 gw
-gK
+fT
 di
 ha
 dp
@@ -14132,7 +14128,7 @@ fp
 fp
 fp
 gw
-gK
+fT
 di
 ha
 hs
