@@ -1500,6 +1500,9 @@
 /obj/structure/bed/chair/comfy/ayy2{
 	dir = 4
 	},
+/obj/machinery/light/he{
+	dir = 8
+	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "mZ" = (
@@ -3732,6 +3735,9 @@
 	},
 /obj/item/weapon/lighter/zippo,
 /obj/item/weapon/storage/fancy/cigarettes/goldencarp,
+/obj/machinery/light/small{
+	dir = 1
+	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "Gs" = (
@@ -4087,7 +4093,6 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "Ji" = (
-/obj/machinery/light/small,
 /obj/structure/table/reinforced,
 /obj/item/device/flashlight/lamp/slime,
 /turf/unsimulated/floor/ayy/fancy,
