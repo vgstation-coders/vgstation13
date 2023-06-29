@@ -126,12 +126,34 @@
 	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/entrance)
+"bM" = (
+/obj/structure/rack,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/item/weapon/storage/box/lights/mixed,
+/obj/item/weapon/storage/box/lights/mixed,
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/asteroid)
 "bR" = (
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "stage_stairs"
 	},
 /area/vault/mothership_lab/control_room)
+"cc" = (
+/obj/structure/ore_box,
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid,
+/area/vault/mothership_lab/asteroid)
 "cn" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/lab_asteroid,
@@ -161,12 +183,19 @@
 /obj/structure/closet/walllocker/emerglocker{
 	pixel_x = 30
 	},
+/obj/machinery/light/small{
+	dir = 8
+	},
 /turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/asteroid)
 "dD" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/entrance)
+"dH" = (
+/obj/structure/shuttle/diag_wall/black,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mothership_lab/asteroid)
 "ep" = (
 /obj/machinery/iv_drip,
 /obj/item/weapon/reagent_containers/blood/empty,
@@ -767,8 +796,6 @@
 "mQ" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/rack,
-/obj/item/stack/sheet/wood/bigstack,
-/obj/item/stack/sheet/wood/bigstack,
 /obj/item/clothing/gloves/fyellow,
 /obj/item/clothing/gloves/fyellow,
 /obj/item/clothing/gloves/fyellow,
@@ -780,6 +807,9 @@
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 8
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
 	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/asteroid)
@@ -1172,8 +1202,19 @@
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_upper)
 "sE" = (
+/obj/effect/decal/cleanable/dirt,
 /obj/structure/dispenser/oxygen,
-/turf/unsimulated/floor/lab_underplating,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/asteroid)
 "sK" = (
 /obj/structure/fence/door/secure/from_east{
@@ -1476,6 +1517,12 @@
 	},
 /turf/space,
 /area)
+"xE" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/mothership_lab/asteroid)
 "xG" = (
 /obj/item/weapon/reagent_containers/food/condiment/gravy,
 /obj/item/weapon/reagent_containers/food/condiment/gravy,
@@ -1641,6 +1688,9 @@
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 4
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
 	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/asteroid)
@@ -2186,6 +2236,20 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/asteroid)
+"HD" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/asteroid)
 "HL" = (
 /obj/effect/decal/cleanable/blood/drip{
 	basecolor = "#2299FC";
@@ -2320,9 +2384,6 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/control_room)
 "KL" = (
-/obj/structure/hanging_lantern{
-	dir = 1
-	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/asteroid)
 "KS" = (
@@ -2525,6 +2586,12 @@
 /obj/structure/airshield,
 /turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
+"Ow" = (
+/obj/structure/shuttle/diag_wall/black{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid,
+/area/vault/mothership_lab/asteroid)
 "Ox" = (
 /obj/effect/decal/cleanable/blood/oil{
 	icon_state = "floor5"
@@ -3448,7 +3515,7 @@ oo
 oo
 oo
 YF
-MD
+YF
 YF
 YF
 YF
@@ -3495,7 +3562,7 @@ hU
 Px
 oo
 YF
-YF
+Zy
 Zy
 Zy
 Zy
@@ -3542,8 +3609,8 @@ qT
 QR
 oo
 YF
-YF
 Zy
+sE
 jD
 AT
 Zy
@@ -3589,13 +3656,13 @@ QR
 eN
 oo
 YF
-YF
 Zy
+bM
 KL
 mQ
 Zy
 YF
-MD
+cc
 GL
 GL
 GL
@@ -3636,13 +3703,13 @@ qN
 bR
 oo
 YF
-YF
 Zy
+HD
 HC
 yU
 Zy
-YF
 Xo
+GL
 GL
 GL
 GL
@@ -3683,13 +3750,13 @@ oo
 Ak
 oo
 oo
-YF
+Zy
 Zy
 mR
 Zy
-ZR
 Zy
-Xo
+GL
+GL
 GL
 GL
 GL
@@ -3734,9 +3801,9 @@ YF
 Zy
 HC
 Zy
-sE
-Zy
-yA
+ZR
+dH
+GL
 GL
 GL
 GL
@@ -3826,11 +3893,11 @@ rG
 oo
 YF
 Zy
+xE
 Zy
 Zy
-Zy
-Zy
-yA
+Ow
+GL
 GL
 GL
 GL
@@ -3872,9 +3939,9 @@ PH
 PH
 oo
 YF
-YF
-YF
-YF
+Zy
+Zy
+Zy
 YF
 nq
 GL
@@ -3919,9 +3986,9 @@ PH
 Gf
 oo
 YF
-MD
-MD
-MD
+YF
+YF
+YF
 YF
 rE
 GL
@@ -3971,7 +4038,7 @@ mv
 mv
 MD
 YF
-GL
+yA
 GL
 GL
 GL

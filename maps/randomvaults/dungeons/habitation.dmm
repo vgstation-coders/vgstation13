@@ -964,6 +964,9 @@
 	dir = 8
 	},
 /obj/item/weapon/cell/empty,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "iA" = (
@@ -2979,8 +2982,6 @@
 /obj/item/weapon/storage/wallet/random,
 /obj/item/weapon/storage/wallet/random,
 /obj/structure/table,
-/obj/item/device/flashlight/lantern/on,
-/obj/item/device/flashlight/lantern/on,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "zG" = (
@@ -4141,12 +4142,19 @@
 /area/vault/mothership_lab/hobo)
 "JH" = (
 /obj/structure/table/reinforced,
-/obj/item/weapon/storage/belt,
-/obj/item/weapon/storage/belt,
 /obj/machinery/cell_charger,
-/obj/item/weapon/tank/jetpack/carbondioxide,
-/obj/item/clothing/head/welding,
-/obj/item/clothing/head/welding,
+/obj/item/weapon/tank/jetpack/oxygen,
+/obj/item/weapon/tank/jetpack/oxygen,
+/obj/item/weapon/tank/jetpack/oxygen,
+/obj/item/weapon/tank/jetpack/oxygen,
+/obj/item/weapon/storage/belt/utility/complete,
+/obj/item/weapon/storage/belt/utility/complete,
+/obj/item/weapon/storage/belt/utility/complete,
+/obj/item/weapon/storage/belt/utility/complete,
+/obj/item/clothing/glasses/welding,
+/obj/item/clothing/glasses/welding,
+/obj/item/clothing/glasses/welding,
+/obj/item/clothing/glasses/welding,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "JI" = (
