@@ -1391,7 +1391,7 @@
 
 	if(on)
 		var/image/acid = image('icons/obj/acidcloset.dmi', src, "acid", BELOW_OBJ_LAYER, dir)
-		acid.plane = ABOVE_HUMAN_PLANE
+		acid.plane = relative_plane(ABOVE_HUMAN_PLANE)
 		overlays += acid
 		if(acidtemp == "cold") //No vapor if the acid is cold
 			return

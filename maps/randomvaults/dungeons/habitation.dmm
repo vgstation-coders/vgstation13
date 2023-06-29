@@ -269,8 +269,11 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/hobo)
 "cF" = (
-/turf/unsimulated/floor/lab_underplating{
-	icon_state = "platingdmg1"
+/obj/structure/table/glass,
+/obj/item/toy/cards,
+/turf/simulated/floor/light{
+	icon_state = "light_on-p";
+	tag = "icon-light_on-p"
 	},
 /area/vault/mothership_lab/habitation)
 "cH" = (
@@ -2019,9 +2022,10 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "ro" = (
-/obj/machinery/media/jukebox/bar,
-/turf/unsimulated/floor/ayy/fancy,
-/area/vault/mothership_lab/administration)
+/turf/unsimulated/floor/lab_underplating{
+	icon_state = "platingdmg1"
+	},
+/area/vault/mothership_lab/habitation)
 "rp" = (
 /obj/item/weapon/shard,
 /obj/structure/window/barricade{
@@ -3790,6 +3794,30 @@
 	},
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/hobo)
+"GT" = (
+/obj/structure/rack,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/machinery/door/window/plasma/secure{
+	req_access_txt = "164";
+	req_one_access_txt = "164";
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/turf/unsimulated/floor{
+	icon_state = "engine";
+	name = "reinforced floor"
+	},
+/area/vault/mothership_lab/administration)
 "GU" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/table/reinforced,
@@ -4448,6 +4476,12 @@
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
+"Nw" = (
+/obj/machinery/door/airlock{
+	name = "Toilet"
+	},
+/turf/unsimulated/floor/lab_sterile,
+/area/vault/mothership_lab/cave)
 "Nz" = (
 /obj/structure/closet/crate/freezer,
 /obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,
@@ -4551,7 +4585,9 @@
 /area/vault/mothership_lab/habitation)
 "Oj" = (
 /obj/structure/table/glass,
-/obj/item/toy/cards,
+/obj/machinery/light/he/broken{
+	dir = 8
+	},
 /turf/simulated/floor/light{
 	icon_state = "light_on-p";
 	tag = "icon-light_on-p"
@@ -4577,17 +4613,14 @@
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/administration)
-"Os" = (
-/obj/effect/decal/cleanable/blood,
-/turf/unsimulated/floor/ayy,
-/area/vault/mothership_lab/habitation)
 "OB" = (
 /obj/structure/bed/ayy1,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "OZ" = (
-/turf/unsimulated/floor/lab_underplating,
-/area/vault/mothership_lab/habitation)
+/obj/machinery/media/jukebox/bar,
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/administration)
 "Pc" = (
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced/plasma,
@@ -5055,7 +5088,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/curtain/closed,
+/obj/structure/curtain/open/bed,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "SX" = (
@@ -5236,28 +5269,16 @@
 	},
 /area/vault/mothership_lab/habitation)
 "UI" = (
-/obj/structure/rack,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
+/obj/structure/table/reinforced,
+/obj/item/weapon/paper_bin/black,
+/obj/item/weapon/pen/fountain,
+/obj/structure/painting/random{
+	pixel_x = -32
 	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
+/obj/machinery/computer/security/telescreen/entertainment{
+	pixel_y = 29
 	},
-/obj/machinery/door/window/plasma/secure{
-	req_access_txt = "164";
-	req_one_access_txt = "164";
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/turf/unsimulated/floor{
-	icon_state = "engine";
-	name = "reinforced floor"
-	},
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "UK" = (
 /obj/machinery/door_control{
@@ -5564,17 +5585,8 @@
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
 "WT" = (
-/obj/structure/table/reinforced,
-/obj/item/weapon/paper_bin/black,
-/obj/item/weapon/pen/fountain,
-/obj/structure/painting/random{
-	pixel_x = -32
-	},
-/obj/machinery/computer/security/telescreen/entertainment{
-	pixel_y = 29
-	},
-/turf/unsimulated/floor/ayy/fancy,
-/area/vault/mothership_lab/administration)
+/turf/unsimulated/floor/lab_underplating,
+/area/vault/mothership_lab/habitation)
 "WY" = (
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -5584,14 +5596,8 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
 "WZ" = (
-/obj/structure/table/glass,
-/obj/machinery/light/he/broken{
-	dir = 8
-	},
-/turf/simulated/floor/light{
-	icon_state = "light_on-p";
-	tag = "icon-light_on-p"
-	},
+/obj/effect/decal/cleanable/blood,
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "Xb" = (
 /turf/unsimulated/floor,
@@ -5649,12 +5655,6 @@
 	},
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/administration)
-"Xv" = (
-/obj/machinery/door/airlock{
-	name = "Toilet"
-	},
-/turf/unsimulated/floor/lab_sterile,
-/area/vault/mothership_lab/cave)
 "Xz" = (
 /obj/item/stack/sheet/wood,
 /turf/unsimulated/floor/ayy/fancy,
@@ -6086,9 +6086,9 @@ pq
 pq
 pq
 pq
-WT
-mU
 UI
+mU
+GT
 pq
 gN
 ib
@@ -6315,7 +6315,7 @@ gN
 gN
 pq
 oj
-ro
+OZ
 vk
 HP
 bu
@@ -7280,7 +7280,7 @@ ps
 BW
 Pm
 zY
-cF
+ro
 DK
 yz
 Aw
@@ -7327,7 +7327,7 @@ sf
 vh
 Ze
 mZ
-OZ
+WT
 bp
 PP
 Aw
@@ -7373,10 +7373,10 @@ cX
 zZ
 Aw
 Tg
-OZ
-OZ
-OZ
-OZ
+WT
+WT
+WT
+WT
 Aw
 gN
 ib
@@ -7420,10 +7420,10 @@ cX
 cX
 wk
 dn
-OZ
+WT
 wb
 fY
-OZ
+WT
 Aw
 gN
 ib
@@ -7492,7 +7492,7 @@ ZQ
 xm
 uh
 tI
-Xv
+Nw
 Xb
 WJ
 uh
@@ -7832,7 +7832,7 @@ dQ
 Aw
 QP
 vv
-Oj
+cF
 zB
 CG
 CG
@@ -7924,7 +7924,7 @@ Vy
 Vy
 lO
 Aw
-Os
+WZ
 xc
 Ws
 rA
@@ -8067,7 +8067,7 @@ uh
 Aw
 gn
 Qw
-WZ
+Oj
 cQ
 qP
 CG
