@@ -261,7 +261,7 @@
 				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
 
 /turf/unsimulated/floor/lab_sterile
-	name = "lab tile floor"
+	name = "sterile tile floor"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "freezerfloor"
 	temperature = T20C
