@@ -2730,14 +2730,6 @@
 	},
 /turf/simulated/floor,
 /area/awaymission/BMPship1)
-"hQ" = (
-/obj/mecha/working/ripley/mk2/firefighter,
-/turf/simulated/floor{
-	dir = 4;
-	icon_state = "carpet15-7";
-	tag = "icon-carpet15-7 (EAST)"
-	},
-/area/awaymission/BMPship3)
 "hR" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -9974,7 +9966,7 @@ cY
 dt
 dN
 el
-hQ
+cX
 ds
 fy
 ds
