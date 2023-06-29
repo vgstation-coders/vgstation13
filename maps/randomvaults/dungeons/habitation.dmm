@@ -1077,9 +1077,7 @@
 	req_access_txt = "161";
 	req_one_access_txt = "161"
 	},
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/cave)
 "jD" = (
 /obj/structure/closet/crate/freezer,
@@ -3127,9 +3125,7 @@
 	req_access_txt = "161";
 	req_one_access_txt = "161"
 	},
-/turf/unsimulated/floor{
-	icon_state = "freezerfloor"
-	},
+/turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/cave)
 "Bz" = (
 /obj/structure/ladder{

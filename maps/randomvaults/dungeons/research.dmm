@@ -37,6 +37,13 @@
 	},
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
+"as" = (
+/obj/effect/decal/cleanable/blood/drip{
+	basecolor = "#2299FC";
+	blood_color = "#2299FC"
+	},
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/research)
 "at" = (
 /obj/item/clothing/under/grey/grey_soldier,
 /obj/structure/window/reinforced{
@@ -64,7 +71,6 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/armory)
 "aC" = (
-/obj/structure/table/reinforced,
 /obj/machinery/vending/wallmed1{
 	pixel_x = 28
 	},
@@ -73,6 +79,10 @@
 "aE" = (
 /mob/living/simple_animal/hostile/necro/zombie/greysoldier{
 	dir = 8
+	},
+/obj/effect/decal/cleanable/blood{
+	basecolor = "#CFAAAA";
+	blood_color = "#CFAAAA"
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
@@ -750,8 +760,12 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "hd" = (
-/mob/living/simple_animal/hostile/retaliate/gym_rat/mothership,
-/turf/unsimulated/floor/ayy,
+/obj/effect/decal/cleanable/blood{
+	basecolor = "#CFAAAA";
+	blood_color = "#CFAAAA";
+	icon_state = "floor6"
+	},
+/turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/research)
 "hi" = (
 /obj/effect/decal/warning_stripes{
@@ -1498,6 +1512,14 @@
 	icon_state = "bcircuit"
 	},
 /area/vault/mothership_lab/research)
+"oZ" = (
+/obj/structure/weightlifter,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/mob/living/simple_animal/hostile/retaliate/gym_rat/mothership,
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/research)
 "pa" = (
 /obj/structure/bed/chair/shuttle/gamer{
 	dir = 1
@@ -1818,6 +1840,11 @@
 	blood_color = "#CFAAAA"
 	},
 /obj/item/weapon/card/id/mothership_soldier,
+/obj/effect/decal/cleanable/blood{
+	basecolor = "#CFAAAA";
+	blood_color = "#CFAAAA";
+	icon_state = "floor5"
+	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "sk" = (
@@ -1901,6 +1928,17 @@
 	network = list("MOTHERSHIPLAB")
 	},
 /turf/unsimulated/floor/ayy,
+/area/vault/mothership_lab/research)
+"tQ" = (
+/obj/structure/weightlifter,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "tS" = (
 /obj/structure/table/flipped,
@@ -2027,7 +2065,6 @@
 /obj/machinery/light/he/broken{
 	dir = 1
 	},
-/obj/structure/door_assembly/door_assembly_sec,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "vn" = (
@@ -3741,7 +3778,7 @@
 /mob/living/simple_animal/hostile/necro/zombie/rotting{
 	dir = 8
 	},
-/turf/unsimulated/floor/ayy,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "Pe" = (
 /obj/item/weapon/rack_parts,
@@ -3850,7 +3887,7 @@
 /area/vault/mothership_lab/research)
 "PS" = (
 /obj/item/weapon/table_parts,
-/turf/unsimulated/floor/ayy,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "PU" = (
 /obj/item/weapon/spacecash/c1000,
@@ -4176,6 +4213,10 @@
 "SL" = (
 /obj/structure/table,
 /obj/structure/bedsheetbin,
+/turf/unsimulated/floor/ayy,
+/area/vault/mothership_lab/research)
+"SO" = (
+/obj/structure/door_assembly/door_assembly_sec,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "SS" = (
@@ -4763,6 +4804,14 @@
 	},
 /obj/structure/flora/rock,
 /turf/unsimulated/floor/grey_sand,
+/area/vault/mothership_lab/research)
+"Ys" = (
+/obj/structure/stacklifter,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/mob/living/simple_animal/hostile/retaliate/gym_rat/roid_rat,
+/turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "Yt" = (
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/breacher{
@@ -5880,7 +5929,7 @@ ID
 WD
 Zn
 ID
-ID
+Xj
 UI
 Zn
 Xk
@@ -5971,10 +6020,10 @@ hq
 Ph
 uK
 Pz
-ID
-mw
-ID
-yX
+fz
+Zn
+SO
+as
 ID
 Zn
 Gi
@@ -6018,10 +6067,10 @@ oM
 BI
 CL
 aC
-fz
-Zn
 ID
-ID
+mw
+Xj
+Xj
 ID
 Zn
 Gi
@@ -6068,7 +6117,7 @@ Zn
 Zn
 Zn
 vm
-yX
+as
 RA
 Zn
 Gi
@@ -6158,10 +6207,10 @@ Zn
 Oj
 sa
 ID
-ID
+JO
 ID
 sF
-ID
+Xj
 OY
 RE
 Zn
@@ -6251,7 +6300,7 @@ gg
 Zn
 Oj
 ID
-ID
+JO
 Fc
 SZ
 Zn
@@ -6440,7 +6489,7 @@ Zn
 Oj
 ID
 ST
-Zn
+hd
 Zn
 Zn
 ET
@@ -6602,7 +6651,7 @@ rV
 YQ
 Zn
 ID
-hd
+ID
 ID
 ID
 ID
@@ -6648,7 +6697,7 @@ rV
 rV
 YQ
 Zn
-mv
+oZ
 Xj
 dA
 Xj
@@ -6744,7 +6793,7 @@ YQ
 Zn
 mv
 Xj
-dA
+Ys
 Xj
 ID
 Xj
@@ -6836,7 +6885,7 @@ rV
 rV
 YQ
 Zn
-dI
+tQ
 Xj
 dA
 Xj
@@ -6886,7 +6935,7 @@ Zn
 ID
 ID
 ID
-hd
+ID
 ID
 ID
 PF
