@@ -56,7 +56,7 @@
 			src.visible_message("<span class='notice'>[user] injects the syringe's solution into [src]... and \she transforms!</span>",\
 			"<span class='notice'>You inject the syringe's solution into [src]... and \she transforms!</span>")
 			playsound(W, 'sound/effects/bubbles.ogg', 80, 1)
-			W.reagents.remove_reagents(METHYLIN, total_amount)
+			W.reagents.remove_all(total_amount)
 			espify()
 		
 	else
