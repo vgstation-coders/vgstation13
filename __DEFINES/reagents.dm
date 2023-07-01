@@ -388,6 +388,8 @@
 #define DRY_RAMEN		"dry_ramen"
 #define HOT_RAMEN		"hot_ramen"
 #define HELL_RAMEN		"hell_ramen"
+#define COLD_RAMEN		"cold_ramen"
+#define FROST_RAMEN		"frost_ramen"
 #define CLOTTING_AGENT	"clotting_agent"
 #define BIOFOAM			"biofoam"
 #define SOY_LATTE		"soy_latte"
