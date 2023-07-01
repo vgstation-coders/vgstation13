@@ -5738,7 +5738,7 @@ var/procizine_tolerance = 0
 	description = "This is what you rub all over yourself to freeze yourself to a popsicle."
 	color = "#2222D4" //rgb: 178, 34, 34
 
-/datum/reagent/flour/nova_flour/on_mob_life(var/mob/living/M)
+/datum/reagent/flour/moon_flour/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	M.bodytemperature -= 3 * TEMPERATURE_DAMAGE_COEFFICIENT
