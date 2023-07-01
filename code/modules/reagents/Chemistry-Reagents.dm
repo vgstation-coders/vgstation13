@@ -5621,32 +5621,14 @@ var/procizine_tolerance = 0
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.33
 	specheatcap = 4.18
-	var/timer = 0
-
-/datum/reagent/hot_ramen/New()
-	..()
-	processing_objects += src
-
-/datum/reagent/hot_ramen/Destroy()
-	processing_objects -= src
-	..()
 
 /datum/reagent/hot_ramen/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
 
-	timer = 0 //hot ramen keeps being hot if eaten
-
 	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
 		M.bodytemperature = min(310, M.bodytemperature + (10 * TEMPERATURE_DAMAGE_COEFFICIENT))
-
-/datum/reagent/hot_ramen/process()
-	timer += 1 //cools down after 200 ticks
-	if(timer > 200 && holder)
-		var/ramenUnits = holder.reagents.get_reagent_amount(HOT_RAMEN)
-		holder.remove_reagent(HOT_RAMEN, ramenUnits)
-		holder.add_reagent(COLD_RAMEN, ramenUnits)
 
 /datum/reagent/hell_ramen
 	name = "Hell Ramen"
