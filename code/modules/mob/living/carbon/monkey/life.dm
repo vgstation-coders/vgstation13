@@ -486,7 +486,7 @@
 	else
 		adjustFireLoss(5.0*discomfort)*/
 
-/mob/living/carbon/human/proc/get_body_temperature_damage(var/temperature)
+/mob/living/carbon/monkey/proc/get_body_temperature_damage(var/temperature)
 	var/datum/species/species = all_species[greaterform]
 	if (temperature < species.cold_level_3)
 		return COLD_DAMAGE_LEVEL_3
