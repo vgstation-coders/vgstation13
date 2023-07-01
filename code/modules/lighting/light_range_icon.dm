@@ -1,6 +1,6 @@
 // -- Light icon selection.
 
-/proc/try_get_light_range_icon(block_east, block_west, light_range, num)
+/proc/try_get_light_range_icon(block_1, block_2, light_range, num)
 	/*
 	//if (lighting_engine)
 	//	lighting_engine.choose_light_range_icon(two_bordering_walls, light_range, num)
@@ -12,7 +12,7 @@
 	var/shadowicon
 	switch (num)
 		if(FRONT_SHADOW)
-			if (!(block_east || block_west))
+			if (!(block_1 || block_2))
 				switch(light_range)
 					if(2)
 						shadowicon = 'icons/lighting/shadow2/light_range_2_shadows2_soft.dmi'
@@ -31,7 +31,7 @@
 					if(9)
 						shadowicon = 'icons/lighting/shadow2/light_range_9_shadows2_soft.dmi'
 
-			else if (block_east && block_west)
+			else if (block_1 && block_2)
 				switch(light_range)
 					if(2)
 						shadowicon = 'icons/lighting/shadow2/light_range_2_shadows2.dmi'
@@ -68,7 +68,7 @@
 					if(9)
 						shadowicon = 'icons/lighting/shadow2/light_range_9_shadows2_halfsoft.dmi'
 		if (CORNER_SHADOW)
-			if (!(block_east || block_west))
+			if (!(block_1 || block_2))
 				switch(light_range)
 					if(2)
 						shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_soft.dmi'
@@ -87,7 +87,7 @@
 					if(9)
 						shadowicon = 'icons/lighting/shadow1/light_range_9_shadows1_soft.dmi'
 
-			else if (block_east && block_west)
+			else if (block_1 && block_2)
 				switch(light_range)
 					if(2)
 						shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1.dmi'
@@ -108,43 +108,20 @@
 			else
 				switch(light_range)
 					if(2)
-						if (block_east)
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softsouth.dmi'
-						else
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softnorth.dmi'
+						shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_halfsoft.dmi'
 					if(3)
-						if (block_east)
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softsouth.dmi'
-						else
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softnorth.dmi'
+						shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_halfsoft.dmi'
 					if(4)
-						if (block_east)
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softsouth.dmi'
-						else
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softnorth.dmi'
+						shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_halfsoft.dmi'
 					if(5)
-						if (block_east)
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softsouth.dmi'
-						else
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softnorth.dmi'
+						shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_halfsoft.dmi'
 					if(6)
-						if (block_east)
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softsouth.dmi'
-						else
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softnorth.dmi'
+						shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_halfsoft.dmi'
 					if(7)
-						if (block_east)
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softsouth.dmi'
-						else
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softnorth.dmi'
+						shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_halfsoft.dmi'
 					if(8)
-						if (block_east)
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softsouth.dmi'
-						else
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softnorth.dmi'
+						shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_halfsoft.dmi'
 					if(9)
-						if (block_east)
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softsouth.dmi'
-						else
-							shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_softnorth.dmi'
+						shadowicon = 'icons/lighting/shadow1/light_range_2_shadows1_halfsoft.dmi'
+
 	return shadowicon

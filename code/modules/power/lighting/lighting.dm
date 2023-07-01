@@ -640,7 +640,7 @@ var/list/light_source_images = list()
 	desc = "An efficient light used to reduce strain on the station's power grid."
 	base_state = "hetube"
 	starting_materials = list(MAT_GLASS = 300, MAT_IRON = 60)
-	brightness_range = 8
+	brightness_range = 9
 	brightness_power = 4
 	brightness_color = LIGHT_COLOR_HALOGEN
 	cost = 2

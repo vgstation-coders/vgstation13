@@ -268,27 +268,14 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	if(abs(x_offset) > abs(y_offset))
 		xy_swap = 1
 
-	// Softer shadows if two bordering walls for now
-	var/block_east = FALSE
-	var/block_west = FALSE
-	if (num == FRONT_SHADOW)
-		// Technically North-South...
-		if (xy_swap)
-			block_east = check_wall_occlusion(get_step(target_turf, NORTH))
-			block_west = check_wall_occlusion(get_step(target_turf, SOUTH))
-		else
-			block_east = check_wall_occlusion(get_step(target_turf, EAST))
-			block_west = check_wall_occlusion(get_step(target_turf, WEST))
+	// Softer shadows for the side of the wall that's not occluded
 
-	if (block_east)
-		var/obj/item/weapon/paper/P = new(target_turf)
-		P.name = "est block"
-	if (block_west)
-		var/obj/item/weapon/paper/P = new(target_turf)
-		P.name = "west block"
+	var/block_1 = FALSE // West for FRONT_SHADOW, north for CORNER_SHADOW
+	var/block_2 = FALSE // East for both
 
-	var/shadowoffset = WORLD_ICON_SIZE/2 + (WORLD_ICON_SIZE*light_range)
-	var/dual_block = block_east && block_west
+	var/b1_dir = "NORTH"
+	var/b2_dir = "EAST"
+
 	//TODO: rewrite this comment:
 	//using scale to flip the shadow template if needed
 	//horizontal (x) flip is easy, we just check if the offset is negative
@@ -303,27 +290,89 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		x_flip = x_offset < 0 ? -1 : 1
 		y_flip = y_offset < 0 ? -1 : 1
 
+	// Operation order => xy flip => xy_swap.
+	// Those are not commutative, and as such we have a total of 8 cases:
+	// xy_swap or not (2) and then (x_flip, y_flip, xy_flip, no_flip)
+
+	if (num == FRONT_SHADOW)
+		// Technically North-South...
+		if (xy_swap)
+			block_1 = check_wall_occlusion(get_step(target_turf, NORTH))
+			block_2 = check_wall_occlusion(get_step(target_turf, SOUTH))
+			b1_dir = "NORTH"
+			b2_dir = "SOUTH"
+		else
+			block_1 = check_wall_occlusion(get_step(target_turf, WEST))
+			block_2 = check_wall_occlusion(get_step(target_turf, EAST))
+			b1_dir = "WEST"
+			b2_dir = "EAST"
+	else
+		if (xy_swap)
+			if (x_flip && y_flip) // NE -> SW -> WN (EN ?)
+				block_1 = check_wall_occlusion(get_step(target_turf, EAST))
+				block_2 = check_wall_occlusion(get_step(target_turf, NORTH))
+				b1_dir = "EAST"
+				b2_dir = "NORTH"
+			else if (y_flip) // NE -> SE -> WS
+				block_1 = check_wall_occlusion(get_step(target_turf, WEST))
+				block_2 = check_wall_occlusion(get_step(target_turf, SOUTH))
+				b1_dir = "WEST"
+				b2_dir = "SOUTH"
+			else if (x_flip) // NE -> NW -> EN
+				block_1 = check_wall_occlusion(get_step(target_turf, EAST))
+				block_2 = check_wall_occlusion(get_step(target_turf, NORTH))
+				b1_dir = "EAST"
+				b2_dir = "NORTH"
+			else // NE -> NE -> ES
+				block_1 = check_wall_occlusion(get_step(target_turf, EAST))
+				block_2 = check_wall_occlusion(get_step(target_turf, SOUTH))
+				b1_dir = "EAST"
+				b2_dir = "SOUTH"
+		else
+			if (x_flip && y_flip) // NE -> SW
+				block_1 = check_wall_occlusion(get_step(target_turf, SOUTH))
+				block_2 = check_wall_occlusion(get_step(target_turf, WEST))
+				b1_dir = "SOUTH"
+				b2_dir = "WEST"
+			else if (y_flip) // NE -> SE
+				block_1 = check_wall_occlusion(get_step(target_turf, SOUTH))
+				block_2 = check_wall_occlusion(get_step(target_turf, EAST))
+				b1_dir = "SOUTH"
+				b2_dir = "EAST"
+			else if (x_flip) // NE -> NW
+				block_1 = check_wall_occlusion(get_step(target_turf, NORTH))
+				block_2 = check_wall_occlusion(get_step(target_turf, WEST))
+				b1_dir = "NORTH"
+				b2_dir = "WEST"
+			else // NE -> NE
+				block_1 = check_wall_occlusion(get_step(target_turf, NORTH))
+				block_2 = check_wall_occlusion(get_step(target_turf, EAST))
+				b1_dir = "NORTH"
+				b2_dir = "EAST"
+
+	target_turf.name = "[initial(target_turf.name)] [b1_dir]-[b2_dir]"
+
+	if (block_1)
+		var/obj/item/weapon/paper/P = new(target_turf)
+		P.name = "block1"
+
+	if (block_2)
+		var/obj/item/weapon/paper/nano/P = new(target_turf)
+		P.name = "block2"
+
+	var/shadowoffset = WORLD_ICON_SIZE/2 + (WORLD_ICON_SIZE*light_range)
+
 	var/matrix/M = matrix()
 
 	// Using BYOND's render_target magick here
 
 	var/image/I = new()
-	var/shadow_image_identifier = "shadow[num]_[light_range]_[x_flip]_[y_flip]_[xy_swap]_[abs(y_offset)]_[abs(x_offset)]_[block_east]_[block_west]"
-
-	var/obj/item/weapon/paper/nano/N = new(target_turf)
-	N.napme = "[light_range]_[abs(y_offset)]_[abs(x_offset)]"
-
+	var/shadow_image_identifier = "shadow[num]_[light_range]_[x_flip]_[y_flip]_[xy_swap]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]"
 	// We've done this before...
 	if (shadow_image_identifier in pre_rendered_shadows)
 		I.render_source = shadow_image_identifier
 	// Or not!
 	else
-
-		// We only draw east-blocked shadows
-		if (block_west && !dual_block)
-			switch (num)
-				if (FRONT_SHADOW)
-					M.Scale(-1,1)
 
 		M.Scale(x_flip, y_flip)
 		//here we do the actual rotate if needed
@@ -332,7 +381,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
 		// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
 		// The downside is, of course, that you need to cover all the cases in your switch.
-		var/icon/shadowicon = try_get_light_range_icon(block_east, block_west, light_range, num)
+		var/icon/shadowicon = try_get_light_range_icon(block_1, block_2, light_range, num)
 		I = image(shadowicon)
 
 		//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
