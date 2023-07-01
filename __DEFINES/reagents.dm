@@ -179,6 +179,7 @@
 #define ENZYME 			"enzyme"
 #define FLOUR 			"flour"
 #define NOVAFLOUR		"novaflour"
+#define MOONFLOUR		"moonflour"
 #define RICE 			"rice"
 #define CHERRYJELLY 			"cherryjelly"
 #define HONEY			"honey"
