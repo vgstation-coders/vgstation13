@@ -1,4 +1,23 @@
 
+/*
+	* Syndicate Traitors
+	* Syndicate Challengers
+	* Changelings
+	* Vampires
+	* Wizard
+	* Civil War of Casters
+	* Blood Cult
+	* Nuclear Emergency
+	* Malfunctioning AI
+	* Blob Conglomerate
+	* Extended
+	* Revolution
+	* The Grinch
+	* Tag mode
+	* Antag Madness
+*/
+
+
 //////////////////////////////////////////////
 //                                          //
 //           SYNDICATE TRAITORS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

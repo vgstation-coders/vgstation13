@@ -1,3 +1,15 @@
+
+/*
+	* Syndicate Infiltrator
+	* Ragin' Mages
+	* Space Ninja Attack
+	* Pulse Demon Infiltration
+	* Grue Infestation
+	* Provocateur
+	* Time Agent Anomaly
+	* Changelings
+*/
+
 //////////////////////////////////////////////
 //                                          //
 //            LATEJOIN RULESETS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

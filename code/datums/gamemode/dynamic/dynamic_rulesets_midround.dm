@@ -1,3 +1,26 @@
+
+/*
+	* Syndicate Sleeper Agent
+	* Malfunctioning AI
+	* Ragin' Mages
+	* Nuclear Assault
+	* Blob Overmind Storm
+	* Revolutionary Squad
+	* Space Ninja Attack
+	* Soul Rambler Migration
+	* Time Agent Anomaly
+	* The Grinch
+	* Loose Catbeast
+	* Vox Heist
+	* Plague Mice Invasion
+	* Spider Infestation
+	* Alien Infestation
+	* Pulse Demon Infiltration
+	* Grue Infestation
+	* Prisoner
+	* Judge
+*/
+
 //////////////////////////////////////////////
 //                                          //
 //            MIDROUND RULESETS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
