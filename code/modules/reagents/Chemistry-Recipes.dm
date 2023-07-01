@@ -2506,6 +2506,22 @@
 	result_amount = 3
 	required_temp = 100+T0C
 
+/datum/chemical_reaction/cold_ramen //I originally wanted the hot ramen to decay into cold ramen on its own, but I can't jury rig it enough for it to work
+	name = "Cold Ramen"
+	id = COLD_RAMEN
+	result = COLD_RAMEN
+	required_reagents = list(HOT_RAMEN = 1)
+	is_cold_recipe = 1
+	result_amount = 1
+	required_temp = T0C
+
+/datum/chemical_reaction/cold_ramenalt
+	name = "Cold Ramen"
+	id = COLD_RAMEN
+	result = COLD_RAMEN
+	required_reagents = list(HOT_RAMEN = 3, ICE = 1) //absolutely heretical
+	result_amount = 3
+
 /datum/chemical_reaction/hell_ramen
 	name = "Hell Ramen"
 	id = HELL_RAMEN
