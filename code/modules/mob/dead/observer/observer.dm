@@ -346,25 +346,21 @@ Works together with spawning an observer, noted above.
 /mob/dead/proc/assess_antagHUD(list/target_list, mob/dead/observer/U)
 	for(var/mob/living/target in target_list)
 		if(target.mind)
-			var/image/I
 			U.client.images -= target.hud_list[SPECIALROLE_HUD]
-			switch(target.mind.antag_roles.len)
-				if(0)
-					I = null
-				if(1)
-					for(var/R in target.mind.antag_roles)
-						var/datum/role/role = target.mind.antag_roles[R]
-						I = image('icons/role_HUD_icons.dmi', target, role.logo_state)
-				else
-					I = image('icons/role_HUD_icons.dmi', target, "multi-logo")
-			if(I)
-				I.pixel_x = 20 * PIXEL_MULTIPLIER
-				I.pixel_y = 20 * PIXEL_MULTIPLIER
-				I.plane = ANTAG_HUD_PLANE
-				target.hud_list[SPECIALROLE_HUD] = I
-				U.client.images += I
-			else
-				target.hud_list[SPECIALROLE_HUD] = null
+			var/icon/I_base = new
+
+			for(var/R in target.mind.antag_roles)
+				var/datum/role/role = target.mind.antag_roles[R]
+				I_base.Insert('icons/role_HUD_icons.dmi',role.logo_state, delay = 10/target.mind.antag_roles.len)
+
+			var/image/I = image(I_base)
+			I.loc = target
+			I.appearance_flags |= RESET_COLOR|RESET_ALPHA
+			I.pixel_x = 20 * PIXEL_MULTIPLIER
+			I.pixel_y = 20 * PIXEL_MULTIPLIER
+			I.plane = ANTAG_HUD_PLANE
+			target.hud_list[SPECIALROLE_HUD] = I
+			U.client.images += I
 
 		if(issilicon(target))//If the silicon mob has no law datum, no inherent laws, or a law zero, add them to the hud.
 			var/mob/living/silicon/silicon_target = target
