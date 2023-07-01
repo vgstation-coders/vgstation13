@@ -2195,6 +2195,11 @@
 		return FALSE
 	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || grabbed_by.len || locked_to || client.move_delayer.blocked())
 		return FALSE
+	if(istype(target, /turf/simulated/floor/engine/bolted))
+		adjustBruteLoss(5)
+		delayNextMove(crawldelay)
+		to_chat(src, "<span class='warning'>You injure yourself trying to crawl onto the bolted floor!</span>")
+		return FALSE
 	var/crawldelay = 0.2 SECONDS
 	if (crawlcounter >= max_crawls_before_fatigue)
 		if (prob(10))

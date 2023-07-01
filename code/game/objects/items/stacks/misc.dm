@@ -189,3 +189,30 @@ var/list/datum/stack_recipe/chain_recipes = list (
 /obj/item/stack/rcd_ammo/attackby(var/obj/O, mob/user)
 	if(is_type_in_list(O, list(/obj/item/device/rcd/matter/engineering,  /obj/item/device/rcd/matter/rsf)) || (istype(O, /obj/item/device/material_synth) && !istype(O, /obj/item/device/material_synth/robot)))
 		return O.attackby(src, user)
+
+/obj/item/stack/bolts
+	name = "plasteel bolts"
+	singular name = "bag of plasteel bolts"
+	desc = "Plasteel bolts are used in the anchoring of structures, though they can also be applied to reinforced flooring to make it difficult to crawl across."
+	icon_state = "bagofbolts"
+	flags = FPRINT
+	siemens_coefficient = 1
+	w_class = W_CLASS_SMALL
+	force = 3
+	throwforce = 9
+	throw_speed = 5
+	throw_range = 20
+	starting_materials = list(MAT_IRON = 1875, MAT_PLASMA = 1875)
+	max_amount = 12
+	attack_verb = list("bolts")
+	w_type=RECYK_METAL
+	melt_temperature = MELTPOINT_PLASMA
+
+/obj/item/stack/bolts/attackby(var/obj/O, mob/user)
+	if(istype(O, /obj/item/stack/cable_coil))
+		var/obj/item/stack/cable_coil/C = O
+		C.use(1)
+		use(1)
+		new /obj/item/clothing/head/franken_bolt(get_turf(src))
+	else
+		..()

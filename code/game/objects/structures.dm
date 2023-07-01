@@ -1,11 +1,29 @@
 /obj/structure
 	icon = 'icons/obj/structures.dmi'
 	penetration_dampening = 5
+	var/hasbolts = FALSE
+
+/obj/structure/examine(mob/user)
+	..()
+	if(hasbolts)
+		to_chat(user,"<span class='info'>This one is bolted into place.</span>")
 
 /obj/structure/blob_act(var/destroy = 0)
 	..()
 	if(destroy || (prob(50)))
 		qdel(src)
+
+/obj/structure/attackby(obj/item/I, mob/user)
+	if(!anchored && istype(I, /obj/item/stack/bolts))
+		hasbolts = TRUE
+		anchored = TRUE
+		to_chat(user, "<span class='notice'>You bolt \the [src] into place.</span>")
+	else if(hasbolts && iswrench(I))
+		hasbolts = FALSE
+		anchored = FALSE
+		to_chat(user, "<span class='notice'>You remove the bolts from \the [src].</span>")
+	else
+		..()
 
 /obj/structure/ex_act(severity)
 	switch(severity)
