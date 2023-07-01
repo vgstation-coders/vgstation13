@@ -3824,6 +3824,18 @@
 	reagents.add_reagent(NOVAFLOUR, 1)
 	bitesize = 3
 
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/moon
+	name = "moon bread"
+	desc = "Cold as ice. Colder even."
+	icon_state = "moonbread"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice/moon
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/moon/New()
+	..()
+	reagents.add_reagent(FROST_RAMEN, 3)
+	reagents.add_reagent(MOONFLOUR, 1)
+	bitesize = 3
+
 /obj/item/weapon/reagent_containers/food/snacks/breadslice
 	name = "bread slice"
 	desc = "A slice of home."
