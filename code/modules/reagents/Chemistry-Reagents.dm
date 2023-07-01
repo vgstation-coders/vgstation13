@@ -5644,7 +5644,7 @@ var/procizine_tolerance = 0
 /datum/reagent/hot_ramen/process()
 	timer += 1 //cools down after 200 ticks
 	if(timer > 200 && holder)
-		var/ramenUnits = H.reagents.get_reagent_amount(HOT_RAMEN)
+		var/ramenUnits = holder.reagents.get_reagent_amount(HOT_RAMEN)
 		holder.remove_reagent(HOT_RAMEN, ramenUnits)
 		holder.add_reagent(COLD_RAMEN, ramenUnits)
 
