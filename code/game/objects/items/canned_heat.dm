@@ -33,7 +33,17 @@
 		qdel(src)
 
 /obj/item/canned_heat/proc/heat_up(var/mob/user)
-	if (istype(user.loc, /obj/structure/inflatable/shelter))
+	if (istype(user.loc, /obj/machinery/atmospherics/pipe))
+		var/obj/machinery/atmospherics/pipe/P = user.loc
+		var/datum/gas_mixture/air = P.parent.air
+		air.temperature += heat
+		for(var/mob/M in player_list)//most of the time it's gonna be faster to loop through the player list, than through the contents of all turfs in the zone
+			if (istype(M.loc, /obj/machinery/atmospherics/pipe))
+				var/obj/machinery/atmospherics/pipe/P_other = M.loc
+				if (P.parent == P_other.parent)
+					M.playsound_local(P_other.loc,'sound/items/canned_heat.ogg', 30, 0, null, FALLOFF_SOUNDS, 0)
+					to_chat(M, "<span class='warning'>You feel canned heat in your heels tonight!</span>")
+	else if (istype(user.loc, /obj/structure/inflatable/shelter))
 		var/obj/structure/inflatable/shelter/S = user.loc
 		var/datum/gas_mixture/air = S.cabin_air
 		air.temperature += heat
@@ -61,5 +71,5 @@
 			if (isturf(M.loc))
 				var/turf/U = M.loc
 				if (U in target_zone.contents)
-					M.playsound_local(T,'sound/items/canned_heat.ogg', 30, 0, null, FALLOFF_SOUNDS, 0)
+					M.playsound_local(U,'sound/items/canned_heat.ogg', 30, 0, null, FALLOFF_SOUNDS, 0)
 					to_chat(M, "<span class='warning'>You feel canned heat in your heels tonight!</span>")
