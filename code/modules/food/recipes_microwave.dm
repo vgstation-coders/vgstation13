@@ -1484,7 +1484,7 @@
 /datum/recipe/primordialsoup
 	reagents = list(WATER = 10)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
+		/obj/item/weapon/grown/novaflower/moonflower,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato
@@ -1906,15 +1906,15 @@
 
 /datum/recipe/salad/midnightsnack
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
+		/obj/item/weapon/grown/novaflower/moonflower,
+		/obj/item/weapon/grown/novaflower/moonflower,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/glowberries
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/midnightsnack
 
 /datum/recipe/salad/starrynight
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
+		/obj/item/weapon/grown/novaflower/moonflower,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
