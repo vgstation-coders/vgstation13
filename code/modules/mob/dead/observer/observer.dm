@@ -344,14 +344,20 @@ Works together with spawning an observer, noted above.
 			C.images += holder
 
 /mob/dead/proc/assess_antagHUD(list/target_list, mob/dead/observer/U)
+	to_chat(world, "assess_antagHUD")
 	for(var/mob/living/target in target_list)
+		to_chat(world, "assessing")
 		if(target.mind)
+			to_chat(world, "mind")
 			U.client.images -= target.hud_list[SPECIALROLE_HUD]
 			var/icon/I_base = new
 
+			var/F = 1
 			for(var/R in target.mind.antag_roles)
 				var/datum/role/role = target.mind.antag_roles[R]
-				I_base.Insert('icons/role_HUD_icons.dmi',role.logo_state, delay = 10/target.mind.antag_roles.len)
+				var/icon/J = icon('icons/role_HUD_icons.dmi',role.logo_state)
+				I_base.Insert(J,null,frame = F, delay = 10/target.mind.antag_roles.len)
+				F++
 
 			var/image/I = image(I_base)
 			I.loc = target
