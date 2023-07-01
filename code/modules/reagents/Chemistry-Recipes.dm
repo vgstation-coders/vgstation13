@@ -2513,6 +2513,13 @@
 	required_reagents = list(CAPSAICIN = 1, HOT_RAMEN = 6)
 	result_amount = 6
 
+/datum/chemical_reaction/frost_ramen
+	name = "Frost Ramen"
+	id = FROST_RAMEN
+	result = FROST_RAMEN
+	required_reagents = list(FROSTOIL = 1, COLD_RAMEN = 6)
+	result_amount = 6
+
 /datum/chemical_reaction/ice
 	name = "Ice"
 	id = ICE
