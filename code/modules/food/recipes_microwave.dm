@@ -534,6 +534,10 @@
 	reagents = list(NOVAFLOUR = 15)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
 
+/datum/recipe/moon_bread
+	reagents = list(MOONFLOUR = 15)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/moon
+
 /datum/recipe/syntibread
 	reagents = list(FLOUR = 15)
 	items = list(
