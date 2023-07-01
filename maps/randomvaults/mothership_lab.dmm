@@ -210,6 +210,7 @@
 	dir = 1
 	},
 /obj/item/weapon/handcuffs,
+/obj/item/weapon/storage/box/lights/he,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "ez" = (
@@ -704,13 +705,6 @@
 	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/entrance)
-"lE" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign. It reads 'Secure GDR facility. Trespassers will be disintegrated.'";
-	name = "AUTHORIZED PERSONNEL ONLY"
-	},
-/turf/unsimulated/wall/ayy,
-/area/vault/mothership_lab/control_room)
 "lX" = (
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier,
 /obj/item/device/flashlight/flare/ever_bright,
@@ -1943,7 +1937,6 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 8
 	},
-/obj/item/weapon/storage/box/lights/he,
 /obj/item/weapon/gun/energy/smalldisintegrator,
 /obj/item/device/gps/secure/command,
 /obj/structure/window/reinforced/plasma{
@@ -1955,6 +1948,13 @@
 	req_one_access_txt = "164"
 	},
 /turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/control_room)
+"Cx" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign. It reads 'Secure GDR facility. Trespassers will be disintegrated.'";
+	name = "AUTHORIZED PERSONNEL ONLY"
+	},
+/turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/control_room)
 "Cz" = (
 /obj/machinery/vending/zamsnax,
@@ -3756,7 +3756,7 @@ QR
 QR
 mT
 oo
-lE
+Cx
 Ak
 oo
 oo
@@ -3843,7 +3843,7 @@ QR
 QR
 lX
 UQ
-lE
+Cx
 Er
 QR
 QR
@@ -3937,7 +3937,7 @@ QR
 QR
 lX
 UQ
-lE
+Cx
 Vw
 QR
 QR
@@ -4038,7 +4038,7 @@ QR
 QR
 mT
 oo
-lE
+Cx
 VY
 oo
 oo
