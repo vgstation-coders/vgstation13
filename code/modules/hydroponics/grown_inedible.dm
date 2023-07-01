@@ -181,7 +181,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 1)
 	reagents.add_reagent(FROSTOIL, round(potency, 1))
-	reagents.add_reagents(MOONSHINE, round(potency/2,1))
+	reagents.add_reagent(MOONSHINE, round(potency/2,1))
 
 /obj/item/weapon/grown/nettle // -- Skie
 	plantname = "nettle"
