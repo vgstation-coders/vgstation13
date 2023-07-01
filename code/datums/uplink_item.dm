@@ -890,8 +890,8 @@ var/list/uplink_items = list()
 	name = "Canned Heat"
 	desc = "A can that when opened agitates the air molecules in the surrounding atmosphere to raise its temperature by 1000 Kelvin. Use in a large area and several numbers for maximum impact."
 	item = /obj/item/canned_heat
-	cost = 6
-	discounted_cost = 3
+	cost = 12
+	discounted_cost = 6
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/engineering/dev_analyser
