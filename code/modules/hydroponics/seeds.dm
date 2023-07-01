@@ -1039,16 +1039,16 @@
 	seed_name = "moonflower"
 	display_name = "moonflowers"
 	plant_dmi = 'icons/obj/hydroponics/moonflower.dmi'
-	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower)
+	products = list(/obj/item/weapon/grown/novaflower/moonflower)
 	mutants = null
-	chems = list(NUTRIMENT = list(1), MOONSHINE = list(1,5))
+	chems = list(NUTRIMENT = list(1), MOONSHINE = list(1,5), FROSTOIL = list(1,5))
 
 	lifespan = 25
 	maturation = 6
 	growth_stages = 3
 	potency = 30
 	biolum = 1
-	biolum_colour = "#B5ABDD"
+	biolum_colour = "#9599FF"
 
 	large = 0
 
