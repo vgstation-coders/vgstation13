@@ -199,6 +199,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/nanotrasen_relation = "Neutral"
 	var/bank_security = 1			//for bank accounts, 0-2, no-pin,pin,pin&card
 	var/wage_ratio = 50
+	var/tip_of_the_day = TRUE
 
 
 	// 0 = character settings, 1 = game preferences
@@ -415,6 +416,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=antag_objectives'><b>[(antag_objectives) ? "Standard" : "Freeform"]</b></a><br>
 	<b>Say bubbles:</b>
 	<a href='?_src_=prefs;preference=typing_indicator'><b>[(typing_indicator) ? "Active" : "Inactive"]</b></a><br>
+	<b>Tip of the day:</b>
+	<a href='?_src_=prefs;preference=tip_of_the_day'><b>[(tip_of_the_day) ? "Active" : "Inactive"]</b></a><br>
   </div>
   <div id="rightDiv" style="width:50%;height:100%;float:right;">
 	<b>Randomized Character Slot:</b>
@@ -1357,6 +1360,9 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 
 				if("typing_indicator")
 					typing_indicator = !typing_indicator
+
+				if("tip_of_the_day")
+					tip_of_the_day = !tip_of_the_day
 
 				if("tgui_fancy")
 					tgui_fancy = !tgui_fancy

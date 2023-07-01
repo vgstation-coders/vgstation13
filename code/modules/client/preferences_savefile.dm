@@ -63,6 +63,7 @@
 	ambience_volume	=	text2num(preference_list_client["ambience_volume"])
 	headset_sound	= 	text2num(preference_list_client["headset_sound"])
 	credits_volume	=	text2num(preference_list_client["credits_volume"])
+	tip_of_the_day	= 	text2num(preference_list_client["tip_of_the_day"])
 	credits 		=	preference_list_client["credits"]
 	jingle	 		=	preference_list_client["jingle"]
 	window_flashing  =	text2num(preference_list_client["window_flashing"])
@@ -135,15 +136,15 @@
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, headset_sound, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map, no_goonchat_for_obj, tgui_fancy, show_warning_next_time, last_warned_message, warning_admin, fps) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
-			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, headset_sound, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map, no_goonchat_for_obj, tgui_fancy, show_warning_next_time, last_warned_message, warning_admin, fps)
+			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, headset_sound, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map, no_goonchat_for_obj, tgui_fancy, show_warning_next_time, last_warned_message, warning_admin, tip_of_the_day, fps) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
+			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, headset_sound, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map, no_goonchat_for_obj, tgui_fancy, show_warning_next_time, last_warned_message, warning_admin, tip_of_the_day, fps)
 			if(!q.Execute(db))
 				message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 		else
-			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=?, pulltoggle=?, credits=?, jingle=?, hear_voicesound=?, hear_instruments=?, ambience_volume=?, headset_sound=?, credits_volume=?, window_flashing=?, antag_objectives=? , typing_indicator=? , mob_chat_on_map=? , max_chat_length=?, obj_chat_on_map=?, no_goonchat_for_obj=?, tgui_fancy=?, show_warning_next_time=?, last_warned_message=?, warning_admin=?, fps=? WHERE ckey = ?",\
-			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, headset_sound, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map,no_goonchat_for_obj, tgui_fancy, show_warning_next_time, last_warned_message, warning_admin, fps, ckey)
+			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=?, pulltoggle=?, credits=?, jingle=?, hear_voicesound=?, hear_instruments=?, ambience_volume=?, headset_sound=?, credits_volume=?, window_flashing=?, antag_objectives=? , typing_indicator=? , mob_chat_on_map=? , max_chat_length=?, obj_chat_on_map=?, no_goonchat_for_obj=?, tgui_fancy=?, show_warning_next_time=?, last_warned_message=?, warning_admin=?, tip_of_the_day=?, fps=? WHERE ckey = ?",\
+			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, headset_sound, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map,no_goonchat_for_obj, tgui_fancy, show_warning_next_time, last_warned_message, warning_admin, tip_of_the_day, fps, ckey)
 			if(!q.Execute(db))
 				message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
@@ -209,6 +210,7 @@ SELECT
     players.nanotrasen_relation,
     players.bank_security,
     players.wage_ratio,
+	players.tip_of_the_day,
     jobs.player_ckey,
     jobs.player_slot,
     jobs.alternate_option,
@@ -438,17 +440,17 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name, random_name,    gender, age, species, language, flavor_text, med_record, sec_record, gen_record, player_alt_titles, disabilities, nanotrasen_relation, bank_security, wage_ratio, random_body)\
-			                    VALUES (?,          ?,          ?,        ?,         ?,              ?,      ?,   ?,       ?,        ?,           ?,          ?,          ?,          ?,                 ?,            ?,                   ?,             ?,          ?)",
-			                            ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles,         disabilities, nanotrasen_relation, bank_security, wage_ratio, be_random_body)
+			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name, random_name,    gender, age, species, language, flavor_text, med_record, sec_record, gen_record, player_alt_titles, disabilities, nanotrasen_relation, bank_security, wage_ratio, random_body, tip_of_the_day)\
+			                    VALUES (?,          ?,          ?,        ?,         ?,              ?,      ?,   ?,       ?,        ?,           ?,          ?,          ?,          ?,                 ?,            ?,                   ?,             ?,          ?,			?)",
+			                            ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles,         disabilities, nanotrasen_relation, bank_security, wage_ratio, be_random_body, tip_of_the_day)
 			if(!q.Execute(db))
 				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Character")
 		else
-			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,  gender=?,age=?,species=?,language=?,flavor_text=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=?,bank_security=?,wage_ratio=?,random_body=?   WHERE player_ckey = ? AND player_slot = ?",\
-									  metadata,   real_name,  be_random_name, gender,  age,  species,  language,  flavor_text,  med_record,  sec_record,  gen_record,  altTitles,          disabilities,  nanotrasen_relation,  bank_security,  wage_ratio,  be_random_body,       ckey,               slot)
+			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,  gender=?,age=?,species=?,language=?,flavor_text=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=?,bank_security=?,wage_ratio=?,random_body=?, tip_of_the_day=?   WHERE player_ckey = ? AND player_slot = ?",\
+									  metadata,   real_name,  be_random_name, gender,  age,  species,  language,  flavor_text,  med_record,  sec_record,  gen_record,  altTitles,          disabilities,  nanotrasen_relation,  bank_security,  wage_ratio,  be_random_body,	tip_of_the_day,       ckey,               slot)
 			if(!q.Execute(db))
 				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")

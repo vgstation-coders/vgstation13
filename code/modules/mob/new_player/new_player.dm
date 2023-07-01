@@ -278,6 +278,13 @@
 		to_chat(src, "<span class='notice'>Thank you for voting!</span>")
 		client.ivoted = TRUE
 
+	if (href_list["refresh_tip"])
+		var/previous_tip = href_list["current_tip"]
+		var/list/tip_list = subtypesof(/datum/tip_of_the_day)
+		tip_list -= previous_tip
+		var/tip_picked = pickweight(tip_list)
+		show_tip(tip_picked)
+
 /mob/new_player/proc/IsJobAvailable(rank)
 	var/datum/job/job = job_master.GetJob(rank)
 	if(!job)

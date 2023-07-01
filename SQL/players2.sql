@@ -123,6 +123,7 @@ CREATE TABLE client (
     ambience_volume INTEGER,
     credits_volume INTEGER,
     headset_sound INTEGER,
+	tip_of_the_day INTEGER,
     antag_objectives INTEGER,
 	typing_indicator INTEGER,
 	mob_chat_on_map INTEGER,
