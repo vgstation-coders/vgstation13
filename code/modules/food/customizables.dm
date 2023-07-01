@@ -19,6 +19,10 @@
 	if(!handle_customizable_addition(I, user, params, /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova))
 		return ..()
 
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/moon/attackby(obj/item/I, mob/user, params)
+	if(!handle_customizable_addition(I, user, params, /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/moon))
+		return ..()
+
 /obj/item/weapon/reagent_containers/food/snacks/bun/attackby(obj/item/I, mob/user, params)
 	if(!handle_customizable_addition(I, user, params, /obj/item/weapon/reagent_containers/food/snacks/customizable/burger))
 		return ..()
@@ -470,11 +474,19 @@
 	icon_state = "c_sandwich_nova"
 	plate_icon = "novacustom"
 
-
 /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova/New(loc,ingredient)
 	. = ..()
 	reagents.add_reagent(HELL_RAMEN, 0.6)
 	reagents.add_reagent(NOVAFLOUR, 0.2)
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/moon
+	icon_state = "c_sandwich_moon"
+	plate_icon = "mooncustom"
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/moon/New(loc,ingredient)
+	. = ..()
+	reagents.add_reagent(FROST_RAMEN, 0.6)
+	reagents.add_reagent(MOONFLOUR, 0.2)
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/attackby(obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/breadslice) && !addTop)
