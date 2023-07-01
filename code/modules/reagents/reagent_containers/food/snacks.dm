@@ -3848,6 +3848,11 @@
 	icon_state = "novabreadslice"
 	plate_icon = "novacustom"
 
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/moon
+	name = "moon bread slice"
+	desc = "A slice of Moon."
+	icon_state = "moonbreadslice"
+	plate_icon = "mooncustom"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
 	name = "cream cheese bread"
