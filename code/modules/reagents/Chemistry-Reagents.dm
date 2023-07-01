@@ -5055,7 +5055,6 @@ var/procizine_tolerance = 0
 			if(prob(9))
 				H.vomit()
 
-
 /datum/reagent/blackcolor
 	name = "Black Food Coloring"
 	id = BLACKCOLOR
@@ -5622,14 +5621,32 @@ var/procizine_tolerance = 0
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.33
 	specheatcap = 4.18
+	var/timer = 0
+
+/datum/reagent/hot_ramen/New()
+	..()
+	processing_objects += src
+
+/datum/reagent/hot_ramen/Destroy()
+	processing_objects -= src
+	..()
 
 /datum/reagent/hot_ramen/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
 
+	timer = 0 //hot ramen keeps being hot if eaten
+
 	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
 		M.bodytemperature = min(310, M.bodytemperature + (10 * TEMPERATURE_DAMAGE_COEFFICIENT))
+
+/datum/reagent/hot_ramen/process()
+	timer += 1 //cools down after 200 ticks
+	if(timer > 200 && holder)
+		var/ramenUnits = H.reagents.get_reagent_amount(HOT_RAMEN)
+		holder.remove_reagent(HOT_RAMEN, ramenUnits)
+		holder.add_reagent(COLD_RAMEN, ramenUnits)
 
 /datum/reagent/hell_ramen
 	name = "Hell Ramen"
@@ -5647,6 +5664,41 @@ var/procizine_tolerance = 0
 		return 1
 
 	M.bodytemperature += 10 * TEMPERATURE_DAMAGE_COEFFICIENT
+
+/datum/reagent/cold_ramen
+	name = "Cold Ramen"
+	id = COLD_RAMEN
+	description = "The tragic outcome of leaving hot ramen unfinished, but in the grand scheme of things, isn't all ramen cold?"
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	color = "#302000" //rgb: 48, 32, 0
+	density = 1.33
+	specheatcap = 4.18
+
+/datum/reagent/cold_ramen/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(4))
+		to_chat(M, "<span class='notice'>[pick("You are reminded of your school years, where cold ramen was a staple.","You long for a hot cup of ramen.")]</span>")
+
+/datum/reagent/frost_ramen
+	name = "Frost Ramen"
+	id = FROST_RAMEN
+	description = "Cold as ice ramen, the noodles are frozen."
+	reagent_state = REAGENT_STATE_SOLID
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	color = "#302000" //rgb: 48, 32, 0
+	density = 1.42
+	specheatcap = 14.59
+
+/datum/reagent/hell_ramen/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.bodytemperature -= 10 * TEMPERATURE_DAMAGE_COEFFICIENT
 
 /datum/reagent/flour
 	name = "Flour"
@@ -5679,6 +5731,17 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 	M.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT
+
+/datum/reagent/flour/moon_flour
+	name = "Moon Flour"
+	id = MOONFLOUR
+	description = "This is what you rub all over yourself to freeze yourself to a popsicle."
+	color = "#2222D4" //rgb: 178, 34, 34
+
+/datum/reagent/flour/nova_flour/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.bodytemperature -= 3 * TEMPERATURE_DAMAGE_COEFFICIENT
 
 /datum/reagent/pancake_mix
 	name = "Pancake Mix"
