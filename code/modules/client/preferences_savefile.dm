@@ -106,6 +106,7 @@
 	ambience_volume = sanitize_integer(ambience_volume, 0, 100, initial(ambience_volume))
 	headset_sound = sanitize_integer(headset_sound, 0, 2, initial(headset_sound))
 	credits_volume  = sanitize_integer(credits_volume, 0, 100, initial(credits_volume))
+	tip_of_the_day	= 	sanitize_integer(tip_of_the_day, 0, 1, initial(tip_of_the_day))
 	window_flashing = sanitize_integer(window_flashing, 0, 1, initial(window_flashing))
 	antag_objectives =  sanitize_integer(antag_objectives, 0, 1, initial(antag_objectives))
 	typing_indicator 	 =  sanitize_integer(typing_indicator, 0, 1, initial(typing_indicator))
