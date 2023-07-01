@@ -69,6 +69,7 @@ var/global/list/juice_items = list (
 		/obj/item/weapon/reagent_containers/food = list(),
 		/obj/item/ice_crystal                = list(ICE = 10),
 		/obj/item/weapon/grown/novaflower    = list(NOVAFLOUR = 10),
+		/obj/item/weapon/grown/novaflower/moonflower    = list(MOONFLOUR = 10),
 	)
 
 
