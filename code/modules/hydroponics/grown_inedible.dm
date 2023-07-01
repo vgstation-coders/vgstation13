@@ -137,7 +137,7 @@
 	throw_range = 3
 	attack_verb = list("sears", "heats", "whacks", "steams")
 	fragrance = INCENSE_NOVAFLOWERS
-	var/HOTORCOLD = 1 //hot
+	var/hotorcold = 1 //hot
 	var/tampermessage = "heated by the warmth of"
 	var/burnverb = "burns"
 
@@ -155,7 +155,7 @@
 		return
 	if(istype(M, /mob/living))
 		to_chat(M, "<span class='warning'>You are [tampermessage] the of the [name]!</span>")
-		M.bodytemperature += (HOTORCOLD * potency)/2 * TEMPERATURE_DAMAGE_COEFFICIENT
+		M.bodytemperature += (hotorcold * potency)/2 * TEMPERATURE_DAMAGE_COEFFICIENT
 
 /obj/item/weapon/grown/novaflower/pickup(mob/living/carbon/human/user as mob)
 	if(!user.gloves || arcanetampered)
@@ -173,7 +173,7 @@
 	icon = 'icons/obj/hydroponics/moonflower.dmi'
 	attack_verb = list("chills", "freezes", "whacks")
 	fragrance = INCENSE_MOONFLOWERS
-	HOTORCOLD = -1 //cold
+	hotorcold = -1 //cold
 	tampermessage = "chilled by the frost on"
 	burnverb = "freezes"
 
