@@ -137,6 +137,9 @@
 	throw_range = 3
 	attack_verb = list("sears", "heats", "whacks", "steams")
 	fragrance = INCENSE_NOVAFLOWERS
+	var/HOTORCOLD = 1 //hot
+	var/tampermessage = "heated by the warmth of"
+	var/burnverb = "burns"
 
 /obj/item/weapon/grown/novaflower/New(atom/loc, custom_plantname)
 	..()
@@ -151,16 +154,34 @@
 	if(!..())
 		return
 	if(istype(M, /mob/living))
-		to_chat(M, "<span class='warning'>You are heated by the warmth of the of the [name]!</span>")
-		M.bodytemperature += potency/2 * TEMPERATURE_DAMAGE_COEFFICIENT
+		to_chat(M, "<span class='warning'>You are [tampermessage] the of the [name]!</span>")
+		M.bodytemperature += (HOTORCOLD * potency)/2 * TEMPERATURE_DAMAGE_COEFFICIENT
+
 /obj/item/weapon/grown/novaflower/pickup(mob/living/carbon/human/user as mob)
 	if(!user.gloves || arcanetampered)
-		to_chat(user, "<span class='warning'>The [name] burns your bare hand!</span>")
+		to_chat(user, "<span class='warning'>The [name] [burnverb] your bare hand!</span>")
 		user.adjustFireLoss(rand(1,5))
 
 /obj/item/weapon/grown/novaflower/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS)
+
+/obj/item/weapon/grown/novaflower/moonflower
+	plantname = "moonflowers"
+	name = "moonflower"
+	desc = "These beautiful flowers have a sharp humid scent, like winter snow."
+	icon = 'icons/obj/hydroponics/moonflower.dmi'
+	attack_verb = list("chills", "freezes", "whacks")
+	fragrance = INCENSE_MOONFLOWERS
+	HOTORCOLD = -1 //cold
+	tampermessage = "chilled by the frost on"
+	burnverb = "freezes"
+
+/obj/item/weapon/grown/novaflower/moonflower/New(atom/loc, custom_plantname)
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(FROSTOIL, round(potency, 1))
+	reagents.add_reagents(MOONSHINE, round(potency/2,1))
 
 /obj/item/weapon/grown/nettle // -- Skie
 	plantname = "nettle"
