@@ -310,13 +310,14 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	plantname = "harebells"
 	fragrance = INCENSE_HAREBELLS
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
-	name = "moonflower"
-	desc = "Store in a location at least 50 yards away from werewolves."
-	potency = 25
-	filling_color = "#E6E6FA"
-	plantname = "moonflowers"
-	fragrance = INCENSE_MOONFLOWERS
+// Commented out cause we have moonflowers as a weapon now
+// /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
+//	name = "moonflower"
+//	desc = "Store in a location at least 50 yards away from werewolves."
+//	potency = 25
+//	filling_color = "#E6E6FA"
+//	plantname = "moonflowers"
+//	fragrance = INCENSE_MOONFLOWERS
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato
 	name = "potato"
