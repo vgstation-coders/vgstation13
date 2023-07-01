@@ -206,10 +206,10 @@
 	dir = 4
 	},
 /obj/structure/table/reinforced,
-/obj/item/device/flashlight/lamp/slime,
 /obj/structure/window/reinforced/plasma{
 	dir = 1
 	},
+/obj/item/weapon/handcuffs,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "ez" = (
@@ -679,7 +679,6 @@
 	dir = 8
 	},
 /obj/machinery/recharger,
-/obj/item/weapon/gun/energy/smalldisintegrator,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "lo" = (
@@ -705,16 +704,6 @@
 	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/entrance)
-"lE" = (
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/table/reinforced,
-/obj/item/weapon/paper_bin/blue,
-/obj/item/weapon/pen,
-/obj/item/device/flashlight/flare/ever_bright,
-/turf/unsimulated/floor/ayy/fancy,
-/area/vault/mothership_lab/control_room)
 "lX" = (
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier,
 /turf/unsimulated/floor/ayy/maint,
@@ -790,6 +779,10 @@
 	req_access_txt = "162";
 	req_one_access_txt = "162";
 	name = "MDF heavy disintegrator crate"
+	},
+/obj/machinery/door/window/plasma/secure{
+	req_access_txt = "162";
+	req_one_access_txt = "162"
 	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
@@ -1409,6 +1402,11 @@
 	req_one_access_txt = "162";
 	name = "MDF armor locker"
 	},
+/obj/machinery/door/window/plasma/secure{
+	req_access_txt = "162";
+	req_one_access_txt = "162";
+	dir = 8
+	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "vz" = (
@@ -1755,9 +1753,7 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 8
 	},
-/obj/item/weapon/cell/ultra,
-/obj/item/weapon/cell/ultra,
-/obj/item/device/flashlight/flare/ever_bright,
+/obj/item/weapon/storage/box/PDAs,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "zz" = (
@@ -1939,12 +1935,17 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 8
 	},
-/turf/unsimulated/floor/ayy/fancy,
-/area/vault/mothership_lab/control_room)
-"Cx" = (
-/obj/structure/table/reinforced,
 /obj/item/weapon/storage/box/lights/he,
+/obj/item/weapon/gun/energy/smalldisintegrator,
 /obj/item/device/gps/secure/command,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/machinery/door/window/plasma/secure{
+	dir = 2;
+	req_access_txt = "164";
+	req_one_access_txt = "164"
+	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "Cz" = (
@@ -2130,6 +2131,11 @@
 	req_one_access_txt = "162";
 	name = "MDF grenade crate"
 	},
+/obj/machinery/door/window/plasma/secure{
+	req_access_txt = "162";
+	req_one_access_txt = "162";
+	dir = 8
+	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "Ge" = (
@@ -2152,6 +2158,10 @@
 	req_access_txt = "162";
 	req_one_access_txt = "162";
 	name = "MDF ions crate"
+	},
+/obj/machinery/door/window/plasma/secure{
+	req_access_txt = "162";
+	req_one_access_txt = "162"
 	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
@@ -2326,7 +2336,7 @@
 	},
 /obj/structure/table/reinforced,
 /obj/item/weapon/gun/energy/smalldisintegrator,
-/turf/unsimulated/floor/ayy/fancy,
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/control_room)
 "JB" = (
 /obj/structure/cage/autoclose/cover,
@@ -2614,13 +2624,6 @@
 /obj/structure/grille,
 /turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
-"OK" = (
-/obj/structure/table/reinforced,
-/obj/item/stack/sheet/mineral/diamond{
-	amount = 25
-	},
-/turf/unsimulated/floor/ayy/fancy,
-/area/vault/mothership_lab/control_room)
 "Pc" = (
 /obj/structure/ore_box,
 /turf/unsimulated/floor/ayy/maint,
@@ -2663,9 +2666,7 @@
 	desc = "A warning sign. It reads 'Secure GDR facility. Trespassers will be disintegrated.'";
 	name = "AUTHORIZED PERSONNEL ONLY"
 	},
-/obj/structure/window/full/reinforced/plasma,
-/obj/structure/grille,
-/turf/unsimulated/floor,
+/turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/control_room)
 "PB" = (
 /mob/living/simple_animal/hostile/humanoid/grey/leader,
@@ -2822,6 +2823,19 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 4
 	},
+/obj/item/stack/sheet/mineral/diamond{
+	amount = 25
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/item/weapon/cell/ultra,
+/obj/item/weapon/cell/ultra,
+/obj/machinery/door/window/plasma/secure{
+	dir = 2;
+	req_access_txt = "164";
+	req_one_access_txt = "164"
+	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "Sb" = (
@@ -2852,10 +2866,6 @@
 /obj/item/weapon/storage/toolbox/mechanical,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/entrance)
-"SX" = (
-/obj/structure/window/reinforced/plasma,
-/turf/unsimulated/floor/ayy/fancy,
-/area/vault/mothership_lab/control_room)
 "SY" = (
 /obj/structure/bed/roller,
 /obj/effect/landmark/corpse/vox,
@@ -3268,7 +3278,6 @@
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced/plasma,
 /obj/item/weapon/melee/stunprobe,
-/obj/item/weapon/storage/box/PDAs,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "Zh" = (
@@ -3692,7 +3701,7 @@ qP
 qP
 qP
 PH
-SX
+PH
 oo
 KD
 QR
@@ -3730,7 +3739,7 @@ mv
 YF
 oo
 ln
-Cx
+PH
 PH
 PH
 Yv
@@ -3746,7 +3755,7 @@ QR
 QR
 mT
 oo
-oo
+Pz
 Ak
 oo
 oo
@@ -3833,13 +3842,13 @@ QR
 QR
 lX
 UQ
-oo
+Pz
 Er
 QR
 QR
 QR
 vC
-Pz
+Sb
 PH
 PH
 PH
@@ -3927,13 +3936,13 @@ QR
 QR
 lX
 UQ
-oo
+Pz
 Vw
 QR
 QR
 QR
 Hx
-Pz
+Sb
 PH
 PH
 PH
@@ -4012,7 +4021,7 @@ MD
 YF
 oo
 th
-OK
+PH
 PH
 PH
 Yv
@@ -4028,7 +4037,7 @@ QR
 QR
 mT
 oo
-oo
+Pz
 VY
 oo
 oo
@@ -4068,7 +4077,7 @@ rf
 rf
 rf
 PH
-SX
+PH
 oo
 iH
 QR
@@ -4208,7 +4217,7 @@ zw
 pe
 Aw
 Nd
-lE
+pe
 Pd
 oo
 Ic
