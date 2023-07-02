@@ -9,6 +9,10 @@
 	force = 10
 	var/requires_mouth = FALSE
 
+	/* These two variables allow an admin to make an instrument dispense reagents in a certain range whenever an instrument is played. */
+	var/datum/reagent/bard_reagent_id = null
+	var/bard_reagent_amount = 0.3
+
 /obj/item/device/instrument/New()
 	..()
 	song = new(instrumentId, src)
@@ -46,9 +50,26 @@
 	user.set_machine(src)
 	song.ui_interact(user,ui_key,ui,force_open)
 
-/obj/item/device/instrument/proc/OnPlayed(mob/user,mob/M)
-	return
-
+/obj/item/device/instrument/proc/OnPlayed(mob/user, mob/M)
+	var/is_valid_id
+	if(!bard_reagent_id)
+		return
+	if(!user || !M)
+		return
+	if(chemical_reagents_list[bard_reagent_id]) /* Check against global list of reagents to see if the ID is already valid */
+		if(!istype(bard_reagent_id)) /* In case someone sets the variable to an existing reagents datum... for some reason... */
+			is_valid_id = 1
+	/* Cleaning up admin inputs before playing the sound */
+	if(!is_valid_id && (istext(bard_reagent_id) || ispath(bard_reagent_id)))
+		if(!ispath(bard_reagent_id))
+			bard_reagent_id = text2path(bard_reagent_id)
+		bard_reagent_id = reagent_type2id(bard_reagent_id)
+	/* Sending reagent to affected player */
+	if(user != M && M.reagents && !M.reagents.has_reagent(bard_reagent_id, 1))
+		if(!M.reagents.add_reagent(bard_reagent_id, bard_reagent_amount)) /* Try to add the reagent, and give an error if it doesn't work. */
+			log_debug("Error: Instrument ([src]), held by [ismob(loc) ? "[loc]" : "null"], called OnPlayed() with an invalid bard_reagent_id ([bard_reagent_id]). Please ensure you're using a reagent ID (ex. CHILLWAX) or reagent typepath (ex. /datum/reagent/honey/chillwax).")
+			message_admins("Error: Instrument ([src]), held by [ismob(loc) ? "[loc]" : "null"], called OnPlayed() with an invalid bard_reagent_id ([bard_reagent_id]). Please ensure you're using a reagent ID (ex. CHILLWAX) or reagent typepath (ex. /datum/reagent/honey/chillwax).")
+	
 /obj/item/device/instrument/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] begins trying to play Faerie's Aire and Death Waltz with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	playsound(loc, 'sound/effects/applause.ogg', 50, 1, -1)

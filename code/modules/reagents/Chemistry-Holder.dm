@@ -622,7 +622,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(!amount)
 		return 0
 	if(!isnum(amount))
-		return 1
+		return 0
 	update_total()
 	if(total_volume + amount > maximum_volume)
 		amount = (maximum_volume - total_volume) //Doesnt fit in. Make it disappear. Shouldn't happen. Will happen.
@@ -648,7 +648,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					R.data = data //just in case someone adds a new reagent with a data var
 
 			handle_reactions()
-			return 0
+			return 1
 
 	var/datum/reagent/D = chemical_reagents_list[reagent]
 	if(D)
@@ -681,13 +681,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		update_total()
 		my_atom.on_reagent_change()
 		handle_reactions()
-		return 0
+		return 1
+
 	else
 		warning("[my_atom] attempted to add a reagent called '[reagent]' which doesn't exist. ([usr])")
 
 	handle_reactions()
 
-	return 1
+	return 0
 
 /datum/reagents/proc/remove_reagent(var/reagent, var/amount, var/safety)//Added a safety check for the trans_id_to
 

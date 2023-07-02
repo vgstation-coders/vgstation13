@@ -363,3 +363,14 @@
 		if("closed","open","closing","opening")
 			return dir
 	return 0
+
+/* Converts a reagent typepath or reagent datum (ex. /datum/reagent/chillwax) into its reagent ID (ex. "chillwax") */
+/proc/reagent_type2id(var/datum/reagent/type)
+	if(!type)
+		return
+	if(istext(type))
+		type = text2path(type)
+	if(type && (istype(type) || ispath(type, /datum/reagent)))
+		type = initial(type.id)
+		. = type
+	return

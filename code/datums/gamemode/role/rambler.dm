@@ -53,6 +53,7 @@
 	desc = "Similar to other woodwinds, though it can be played only by a true rambler of souls."
 	slot_flags = SLOT_BACK
 	requires_mouth = FALSE //Playing a shakashuri doth art in the mindbrain's heart, anyway
+	bard_reagent_id = CHILLWAX
 
 /obj/item/device/instrument/recorder/shakashuri/attack_self(mob/user)
 	if(!isrambler(user))
@@ -60,10 +61,6 @@
 		return
 	else
 		..()
-
-/obj/item/device/instrument/recorder/shakashuri/OnPlayed(mob/user,mob/M)
-	if(user!=M && M.reagents && !M.reagents.has_reagent(CHILLWAX,1))
-		M.reagents.add_reagent(CHILLWAX,0.3)
 
 /obj/item/weapon/reagent_containers/food/snacks/quiche/frittata/New()
 	..()
