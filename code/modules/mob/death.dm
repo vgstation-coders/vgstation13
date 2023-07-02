@@ -57,7 +57,8 @@
 		transmog_death()
 	if(client || mind)
 		for(var/mob/M in get_deadchat_hearers())
-			var/rendered = "\proper<a href='?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a><span class='game deadsay'> \The <span class='name'>[src]</span> has died at \the <span class='name'>[get_area(src)]</span>.</span>"
+			var/mobname = src.mind ? "[src.mind.real_name]" : "[src]"
+			var/rendered = "\proper<a href='?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a><span class='game deadsay'> \The <span class='name'>[mobname]</span> has died at \the <span class='name'>[get_area(src)]</span>.</span>"
 			to_chat(M, rendered)
 			log_game("[key_name(src)] has died at [get_area(src)]. Coordinates: ([get_coordinates_string(src)])")
 
