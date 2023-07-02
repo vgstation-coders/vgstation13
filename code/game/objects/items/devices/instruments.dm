@@ -51,11 +51,11 @@
 	song.ui_interact(user,ui_key,ui,force_open)
 
 /obj/item/device/instrument/proc/OnPlayed(mob/user, mob/M)
-	var/is_valid_id
 	if(!bard_reagent_id)
 		return
 	if(!user || !M)
 		return
+	var/is_valid_id
 	if(chemical_reagents_list[bard_reagent_id]) /* Check against global list of reagents to see if the ID is already valid */
 		if(!istype(bard_reagent_id)) /* In case someone sets the variable to an existing reagents datum... for some reason... */
 			is_valid_id = 1
