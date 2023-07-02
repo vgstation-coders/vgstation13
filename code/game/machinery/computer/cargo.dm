@@ -360,7 +360,7 @@ For vending packs, see vending_packs.dm*/
 		return 1
 	//Calling the shuttle
 	else if(href_list["send"])
-		if(!map.linked_to_centcomm)
+		if(!map.linked_to_centcomm && !war_declared)
 			to_chat(usr, "<span class='warning'>You aren't able to establish contact with central command, so the shuttle won't move.</span>")
 		else if(!SSsupply_shuttle.can_move())
 			to_chat(usr, "<span class='warning'>For safety reasons the automated supply shuttle cannot transport sapient organisms, classified nuclear weaponry or homing beacons.</span>")
