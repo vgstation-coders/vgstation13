@@ -481,7 +481,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 //////////////
 
 /obj/item/clothing/mask/cigarette/bidi
-	name = "Bidi"
+	name = "\improper Bidi"
 	desc = "An acrid, loosely-rolled tobacco leaf, stuffed with herbs and spices and bound with twine."
 	icon_state = "bidi"
 	overlay_on = "bidilit"
@@ -490,7 +490,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	burn_on_end = TRUE
 
 /obj/item/clothing/mask/cigarette/goldencarp
-	name = "Golden Carp cigarette"
+	name = "\improper Golden Carp cigarette"
 	desc = "A cigarette made from light, fine paper, with a thin gold band above the filter."
 	icon_state = "goldencarp"
 	overlay_on = "goldencarplit"
@@ -498,7 +498,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/goldencarpbutt
 
 /obj/item/clothing/mask/cigarette/starlight
-	name = "Starlight cigarette"
+	name = "\improper Starlight cigarette"
 	desc = "A nicely-rolled smoke. Above the filter are a red and yellow band."
 	icon_state = "starlight"
 	overlay_on = "starlightlit"
@@ -506,7 +506,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/starlightbutt
 
 /obj/item/clothing/mask/cigarette/lucky
-	name = "Lucky Strike cigarette"
+	name = "\improper Lucky Strike cigarette"
 	desc = "Plain and unfiltered, just how great-great-grandad used to like them."
 	icon_state = "lucky"
 	overlay_on = "luckylit"
@@ -514,7 +514,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/luckybutt
 
 /obj/item/clothing/mask/cigarette/redsuit
-	name = "Redsuit cigarette"
+	name = "\improper Redsuit cigarette"
 	desc = "Slim and refined. A mild smoke for a serious smoker."
 	icon_state = "redsuit"
 	overlay_on = "redsuitlit"
@@ -522,7 +522,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/redsuitbutt
 
 /obj/item/clothing/mask/cigarette/ntstandard
-	name = "NT Standard cigarette"
+	name = "\improper NT Standard cigarette"
 	desc = "Matte grey with a blue band. Corporate loyalty with every puff."
 	icon_state = "ntstandard"
 	overlay_on = "ntstandardlit"
@@ -530,7 +530,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/ntstandardbutt
 
 /obj/item/clothing/mask/cigarette/spaceport
-	name = "Spaceport cigarette"
+	name = "\improper Spaceport cigarette"
 	desc = "The dull gold band wrapped around this cig does nothing to hide its cheap origins."
 	icon_state = "spaceport"
 	overlay_on = "spaceportlit"
@@ -566,7 +566,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 ////////////
 
 /obj/item/clothing/mask/cigarette/cigar
-	name = "Premium Cigar"
+	name = "\improper Premium Cigar"
 	desc = "A large roll of tobacco and... well, you're not quite sure. This thing's huge!"
 	icon_state = "cigar"
 	overlay_on = "cigarlit"
@@ -578,14 +578,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/cohiba
-	name = "Cohiba Robusto Cigar"
+	name = "\improper Cohiba Robusto Cigar"
 	desc = "There's little more you could want from a cigar."
 	icon_state = "cigar2"
 	overlay_on = "cigar2lit"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/havana
-	name = "Premium Havanian Cigar"
+	name = "\improper Premium Havanian Cigar"
 	desc = "A cigar fit for only the best for the best."
 	icon_state = "cigar2"
 	overlay_on = "cigar2lit"
