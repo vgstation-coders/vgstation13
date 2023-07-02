@@ -217,8 +217,6 @@
 #include "code\ATMOSPHERICS\pipe\pipe_dispenser.dm"
 #include "code\ATMOSPHERICS\pipe\pipe_planner.dm"
 #include "code\controllers\configuration.dm"
-#include "code\controllers\hooks-defs.dm"
-#include "code\controllers\hooks.dm"
 #include "code\controllers\shuttle_controller.dm"
 #include "code\controllers\verbs.dm"
 #include "code\controllers\mc\admin.dm"

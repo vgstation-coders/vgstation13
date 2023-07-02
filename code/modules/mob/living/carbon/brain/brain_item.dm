@@ -39,7 +39,6 @@
 		H.mind.transfer_to(brainmob)
 
 	to_chat(brainmob, "<span class='notice'>You feel slightly disoriented. That's normal when you're just a brain.</span>")
-	callHook("debrain", list(brainmob))
 
 /obj/item/organ/internal/brain/examine(mob/user)
 	..()

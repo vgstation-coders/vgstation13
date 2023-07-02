@@ -84,6 +84,10 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 	if(lightfixture && lightfixture.current_bulb && is_light_better(best_light, lightfixture.current_bulb))
 		. = ReplaceLight(lightfixture, usr)
 		return .
+	else if(lightfixture && !lightfixture.current_bulb)
+		. = ReplaceLight(lightfixture, usr)
+		if(.)
+			return .
 	else
 		for(var/obj/O in gather_loc.contents)
 			. = insert_if_possible(O)
@@ -443,6 +447,8 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 	if(!istype(supply))
 		return 0
 	var/best_light
+	if(!target.fitting) //no idea how this happens
+		target.fitting = initial(target.fitting)
 	switch(target.fitting)
 		if("bulb")
 			best_light = ((locate(/obj/item/weapon/light/bulb/smart) in supply) || (locate(/obj/item/weapon/light/bulb/he) in supply) || (locate(/obj/item/weapon/light/bulb) in supply))
