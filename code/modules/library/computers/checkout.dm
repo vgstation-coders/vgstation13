@@ -181,7 +181,7 @@
 			if(!emagged)
 				forbidden |= /obj/item/weapon/book/manual/nuclear
 
-			var/manualcount = 1
+			var/manualcount = 0
 			var/obj/item/weapon/book/manual/M = null
 
 			for(var/manual_type in typesof(/obj/item/weapon/book/manual))
