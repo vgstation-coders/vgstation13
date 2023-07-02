@@ -16,9 +16,9 @@ var/list/ai_list = list()
 	name = "AI"
 	icon = 'icons/mob/AI.dmi'
 	icon_state = "ai"
-	anchored = TRUE // -- TLE
+	anchored = TRUE
 	density = TRUE
-	status_flags = CANSTUN|CANPARALYSE|CANPUSH
+	status_flags = CANSTUN | CANPARALYSE | CANPUSH
 	force_compose = TRUE
 	size = SIZE_BIG
 
@@ -180,6 +180,9 @@ var/list/ai_list = list()
 		anchored = !anchored
 		to_chat(src, "You are now <b>[anchored ? "" : "un"]anchored</b>.")
 	busy = FALSE
+
+/mob/living/silicon/ai/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	return (!density || !height || air_group)
 
 /mob/living/silicon/ai/verb/toggle_holopadoverlays()
 	set category = "AI Commands"
