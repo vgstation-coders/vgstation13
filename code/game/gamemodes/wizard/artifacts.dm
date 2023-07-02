@@ -6,6 +6,7 @@
 	var/one_use = FALSE
 	var/list/spawned_items = list()
 	var/price = Sp_BASE_PRICE
+	var/exclusivity = null
 
 /datum/spellbook_artifact/proc/purchased(mob/living/user)
 	to_chat(user, "<span class='info'>You have purchased [name].</span>")
@@ -183,6 +184,7 @@
 	name = "Summon Guns"
 	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!"
 	abbreviation = "SG"
+	exclusivity = "Summon Gunk"
 
 /datum/spellbook_artifact/summon_guns/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, blades, or artifacts
@@ -200,6 +202,7 @@
 	name = "Summon Magic"
 	desc = "Share the power of magic with the crew and turn them against each other. Or just empower them against you."
 	abbreviation = "SM"
+	exclusivity = "Summon Gunk"
 
 /datum/spellbook_artifact/summon_magic/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, blades, or artifacts
@@ -216,6 +219,7 @@
 	name = "Summon Swords"
 	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
 	abbreviation = "SS"
+	exclusivity = "Summon Gunk"
 
 /datum/spellbook_artifact/summon_swords/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, blades, or artifacts
@@ -233,6 +237,7 @@
 	desc = "Share the secrets of the ancient world and bring peace to the station. Or chaos."
 	abbreviation = "SA"
 	price = Sp_BASE_PRICE*2
+	exclusivity = "Summon Gunk"
 
 /datum/spellbook_artifact/summon_artifacts/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, blades, or artifacts
@@ -249,6 +254,7 @@
 	name = "Summon Potions"
 	desc = "Launch a market crash or start the next potion depression. Either way there will be glass breaking and potions selling."
 	abbreviation = "SP"
+	exclusivity = "Summon Gunk"
 
 /datum/spellbook_artifact/summon_potions/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, or blades
