@@ -34,7 +34,6 @@
 	qdel(src)
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
-	death(1)
 	monkeyizing = 1
 	canmove = 0
 	icon = null
@@ -54,6 +53,8 @@
 		new /obj/effect/decal/remains/human(loc)
 	if(drop_everything)
 		drop_all()
+	spawn(-1) /* Allow all death handlers, stat collection, etc. to finish before proceeding */
+		death(1)
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()

@@ -958,7 +958,7 @@ var/global/list/playable_species = list("Human")
 
 var/list/has_died_as_golem = list()
 
-/datum/species/golem/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
+/datum/species/golem/handle_death(var/mob/living/carbon/human/H, gibbed) //Handles any species-specific death events (such as dionaea nymph spawns).
 	if(!isgolem(H))
 		return
 	var/datum/mind/golemmind = H.mind
@@ -983,7 +983,7 @@ var/list/has_died_as_golem = list()
 	return 0
 
 /datum/species/golem/gib(mob/living/carbon/human/H)
-	handle_death()
+	..()
 
 /mob/living/adamantine_dust //serves as the corpse of adamantine golems
 	name = "adamantine dust"
