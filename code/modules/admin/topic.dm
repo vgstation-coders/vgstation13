@@ -1855,18 +1855,6 @@
 		dynamic_curve_width = new_width
 		dynamic_mode_options(usr)
 
-	else if(href_list["force_extended"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		if(master_mode != "Dynamic Mode")
-			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-
-		dynamic_forced_extended = !dynamic_forced_extended
-		log_admin("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
-		message_admins("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
-		dynamic_mode_options(usr)
-
 	else if(href_list["toggle_rulesets"])
 		if(!check_rights(R_ADMIN))
 			return

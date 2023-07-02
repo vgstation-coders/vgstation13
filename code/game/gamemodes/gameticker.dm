@@ -743,12 +743,16 @@ var/datum/controller/gameticker/ticker
 	tag_mode.name = "Tag mode"
 	tag_mode.calledBy = "[key_name(user)]"
 	forced_roundstart_ruleset += tag_mode
-	dynamic_forced_extended = TRUE
+	admin_disable_rulesets = TRUE
+	log_admin("Dynamic rulesets are disabled in Tag Mode.")
+	message_admins("Dynamic rulesets are disabled in Tag Mode.")
 
 /datum/controller/gameticker/proc/cancel_tag_mode(var/mob/user)
 	tag_mode_enabled = FALSE
 	to_chat(world, "<h1>Tag mode has been cancelled.<h1>")
-	dynamic_forced_extended = FALSE
+	admin_disable_rulesets = FALSE
+	log_admin("Dynamic rulesets have been re-enabled.")
+	message_admins("Dynamic rulesets have been re-enabled.")
 	forced_roundstart_ruleset = list()
 
 /world/proc/has_round_started()

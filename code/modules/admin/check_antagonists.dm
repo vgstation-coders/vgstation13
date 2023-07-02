@@ -33,11 +33,11 @@
 		for (var/previous_round in dynamic_mode.previously_executed_rules)
 			switch(previous_round)
 				if ("one_round_ago")
-					dat += "<h4><b>Last Round:</b></h4>"
+					dat += "<h4><b>Last Round (Intensity:[dynamic_mode.intensity_previous[previous_round]]):</b></h4>"
 				if ("two_rounds_ago")
-					dat += "<h4><b>Two Rounds ago:</b></h4>"
+					dat += "<h4><b>Two Rounds ago (Intensity:[dynamic_mode.intensity_previous[previous_round]]):</b></h4>"
 				if ("three_rounds_ago")
-					dat += "<h4><b>Three Rounds ago:</b></h4>"
+					dat += "<h4><b>Three Rounds ago (Intensity:[dynamic_mode.intensity_previous[previous_round]]):</b></h4>"
 			for(var/previous_ruleset in dynamic_mode.previously_executed_rules[previous_round])
 				var/datum/dynamic_ruleset/DR = previous_ruleset
 				dat += "- [initial(DR.name)] <br/>"

@@ -205,6 +205,11 @@
 	high_population_requirement = 10
 	flags = TRAITOR_RULESET
 
+	// -- Dynamic Plus --
+	min_pop_required = 10
+	weight_category = "Traitor"
+	expected_intensity = 5
+
 /datum/dynamic_ruleset/midround/autotraitor/trim_candidates()
 	..()
 	for(var/mob/living/player in living_players)
@@ -271,6 +276,11 @@
 	high_population_requirement = 65
 	flags = HIGHLANDER_RULESET
 
+	// -- Dynamic Plus --
+	min_pop_required = 15
+	weight_category = "Malf"
+	expected_intensity = 30
+
 /datum/dynamic_ruleset/midround/malf/trim_candidates()
 	..()
 	candidates = candidates[CURRENT_LIVING_PLAYERS]
@@ -320,6 +330,11 @@
 	logo = "raginmages-logo"
 	repeatable = TRUE
 
+	// -- Dynamic Plus --
+	min_pop_required = 25
+	weight_category = "Wizard"
+	expected_intensity = 30
+
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced=0)
 	if(locate(/datum/dynamic_ruleset/roundstart/cwc) in mode.executed_rules)
 		message_admins("Rejected Ragin' Mages as there was a Civil War.")
@@ -359,6 +374,11 @@
 	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
 	logo = "nuke-logo"
 	flags = HIGHLANDER_RULESET
+
+	// -- Dynamic Plus --
+	min_pop_required = 20
+	weight_category = "Nuke"
+	expected_intensity = 80
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
 	if (forced)
@@ -420,6 +440,11 @@
 
 	makeBody = FALSE
 
+	// -- Dynamic Plus --
+	min_pop_required = 20
+	weight_category = "Blob"
+	expected_intensity = 60
+
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/ready(var/forced=0)
 	max_candidates = max(1, round(living_players.len/25))
 	return ..()
@@ -461,6 +486,11 @@
 
 	var/required_heads = 3
 
+	// -- Dynamic Plus --
+	min_pop_required = 20
+	weight_category = "Revolution"
+	expected_intensity = 50
+
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad/ready(var/forced = 0)
 	if(forced)
 		required_heads = 1
@@ -495,6 +525,11 @@
 	high_population_requirement = 20
 	logo = "ninja-logo"
 	repeatable = TRUE
+
+	// -- Dynamic Plus --
+	min_pop_required = 15
+	weight_category = "Ninja"
+	expected_intensity = 20
 
 /datum/dynamic_ruleset/midround/from_ghosts/ninja/ready(var/forced=0)
 	var/player_count = mode.living_players.len
@@ -535,6 +570,11 @@
 	repeatable = FALSE //Listen, this psyche is not big enough for two metaphysical seekers.
 	flags = MINOR_RULESET
 
+	// -- Dynamic Plus --
+	min_pop_required = 5
+	weight_category = "Rambler"
+	expected_intensity = 2
+
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/ready(var/forced=0)
 	if(!mode.executed_rules)
 		return FALSE
@@ -567,6 +607,11 @@
 	cost = 10
 	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
 	logo = "time-logo"
+
+	// -- Dynamic Plus --
+	min_pop_required = 10
+	weight_category = "Time"
+	expected_intensity = 3
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
 	var/player_count = mode.living_players.len
@@ -606,6 +651,11 @@
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
 	flags = MINOR_RULESET
+
+	// -- Dynamic Plus --
+	min_pop_required = 0
+	weight_category = "Special"//Admin-only
+	expected_intensity = 70
 
 /datum/dynamic_ruleset/midround/from_ghosts/grinch/ready(var/forced=0)
 	if(grinchstart.len == 0)
@@ -647,6 +697,11 @@
 	logo = "catbeast-logo"
 	flags = MINOR_RULESET
 
+	// -- Dynamic Plus --
+	min_pop_required = 5
+	weight_category = "Catbeast"
+	expected_intensity = 10
+
 /datum/dynamic_ruleset/midround/from_ghosts/catbeast/ready(var/forced=0)
 	if(mode.midround_threat>50) //We're threatening enough!
 		message_admins("Rejected catbeast ruleset, [mode.midround_threat] threat was over 50.")
@@ -675,6 +730,11 @@
 	high_population_requirement = 35
 	var/vox_cap = list(2,2,3,3,4,5,5,5,5,5)
 	logo = "vox-logo"
+
+	// -- Dynamic Plus --
+	min_pop_required = 15
+	weight_category = "Vox"
+	expected_intensity = 40
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/ready(var/forced = 0)
 	var/indice_pop = min(10,round(living_players.len/5)+1)
@@ -729,6 +789,11 @@
 	my_fac = /datum/faction/plague_mice
 	logo = "plague-logo"
 
+	// -- Dynamic Plus --
+	min_pop_required = 5
+	weight_category = "Plague"
+	expected_intensity = 10
+
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice/generate_ruleset_body(var/mob/applicant)
 	var/datum/faction/plague_mice/active_fac = find_active_faction_by_type(my_fac)
 	var/mob/living/simple_animal/mouse/plague/new_mouse = new (active_fac.invasion)
@@ -760,6 +825,11 @@
 	flags = MINOR_RULESET
 	my_fac = /datum/faction/spider_infestation
 	logo = "spider-logo"
+
+	// -- Dynamic Plus --
+	min_pop_required = 15
+	weight_category = "Spider"
+	expected_intensity = 30
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/spider_infestation/generate_ruleset_body(var/mob/applicant)
 	var/datum/faction/spider_infestation/active_fac = find_active_faction_by_type(my_fac)
@@ -794,6 +864,11 @@
 	logo = "xeno-logo"
 	my_fac = /datum/faction/xenomorph
 	var/list/vents = list()
+
+	// -- Dynamic Plus --
+	min_pop_required = 20
+	weight_category = "Alien"
+	expected_intensity = 60
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/ready()
 	..()
@@ -841,6 +916,11 @@
 	logo = "pulsedemon-logo"
 	var/list/cables_to_spawn_at = list()
 
+	// -- Dynamic Plus --
+	min_pop_required = 8
+	weight_category = "Pulse"
+	expected_intensity = 15
+
 /datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/ready(var/forced = 0)
 	for(var/datum/powernet/PN in powernets)
 		for(var/obj/structure/cable/C in PN.cables)
@@ -880,6 +960,11 @@
 	logo = "grue-logo"
 	repeatable = TRUE
 	var/list/grue_spawn_spots=list()
+
+	// -- Dynamic Plus --
+	min_pop_required = 15
+	weight_category = "Grue"
+	expected_intensity = 25
 
 /datum/dynamic_ruleset/midround/from_ghosts/grue/ready(var/forced = 0)
 	grue_spawn_spots=list()
@@ -935,6 +1020,11 @@
 	high_population_requirement = 10
 	flags = MINOR_RULESET
 	makeBody = FALSE
+
+	// -- Dynamic Plus --
+	min_pop_required = 5
+	weight_category = "Prisoner"
+	expected_intensity = 2
 
 /datum/dynamic_ruleset/midround/from_ghosts/prisoner/setup_role(var/datum/role/new_role)
 	new_role.OnPostSetup()
@@ -1053,3 +1143,8 @@
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	logo = "gun-logo"
 	repeatable = TRUE
+
+	// -- Dynamic Plus --
+	min_pop_required = 0
+	weight_category = "Special"//Admin only
+	expected_intensity = 0

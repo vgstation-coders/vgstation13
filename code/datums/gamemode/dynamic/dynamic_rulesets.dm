@@ -1,5 +1,5 @@
 /datum/dynamic_ruleset
-	var/name = ""//For admin logging, and round end scoreboard
+	var/name = ""//For admin logging, and round end scoreboard.
 	var/persistent = 0//if set to 1, the rule won't be discarded after being executed, and /gamemode/dynamic will call process() every MC tick
 	var/repeatable = 0//if set to 1, dynamic mode will be able to draft this ruleset again later on. (doesn't apply for roundstart rules)
 	var/midround = 1//if set to 1, is a midround rule
@@ -41,6 +41,12 @@
 	var/datum/gamemode/dynamic/mode = null
 
 	var/role_category_override = null // If a role is to be considered another for the purpose of bannig.
+
+	// -- Dynamic Plus --
+	var/dynamic_weight = 0		//Each round that passes without firing, the ruleset's weight increases linearly, allowing rarer rulesets with complicated requirements to fire more often when they meet those
+	var/min_pop_required = 0	//The ruleset needs pop to be above this number to fire
+	var/weight_category = null	//Allows multiple rulesets to share the same weight (like Wizard and CWC, or a Roundstart Ruleset with its Midround/Latejoin variants)
+	var/expected_intensity = 0	//Essentially the ruleset's threat level. If the previous round was too intense, the effective weight will be decreased, and vice versa
 
 /datum/dynamic_ruleset/New()
 	..()
@@ -103,8 +109,8 @@
 
 /datum/dynamic_ruleset/proc/ready(var/forced = 0)	//Here you can perform any additional checks you want. (such as checking the map, the amount of certain jobs, etc)
 	if (admin_disable_rulesets && !forced)
-		message_admins("Dynamic Mode: [name] was prevented from firing by admins.")
-		log_admin("Dynamic Mode: [name] was prevented from firing by admins.")
+		message_admins("Dynamic Mode: [name] was prevented from firing because rulesets are disabled.")
+		log_admin("Dynamic Mode: [name] was prevented from firing because rulesets are disabled.")
 		return FALSE
 	if (required_candidates > candidates.len)		//IMPORTANT: If ready() returns 1, that means execute() should never fail!
 		return FALSE

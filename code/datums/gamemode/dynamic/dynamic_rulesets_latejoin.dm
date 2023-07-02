@@ -65,6 +65,11 @@
 	repeatable = TRUE
 	flags = TRAITOR_RULESET
 
+	// -- Dynamic Plus --
+	min_pop_required = 3
+	weight_category = "Traitor"
+	expected_intensity = 5
+
 /datum/dynamic_ruleset/latejoin/infiltrator/execute()
 	var/mob/M = pick(assigned)
 	var/datum/role/traitor/newTraitor = new
@@ -93,6 +98,11 @@
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
 	repeatable = TRUE
+
+	// -- Dynamic Plus --
+	min_pop_required = 15
+	weight_category = "Wizard"
+	expected_intensity = 20
 
 /datum/dynamic_ruleset/latejoin/raginmages/execute()
 	var/mob/M = pick(assigned)
@@ -130,6 +140,11 @@
 
 	repeatable = TRUE
 
+	// -- Dynamic Plus --
+	min_pop_required = 15
+	weight_category = "Ninja"
+	expected_intensity = 20
+
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(assigned)
 	if(!latejoinprompt(M))
@@ -165,6 +180,11 @@
 
 	repeatable = TRUE
 	var/list/cables_to_spawn_at = list()
+
+	// -- Dynamic Plus --
+	min_pop_required = 8
+	weight_category = "Pulse"
+	expected_intensity = 15
 
 /datum/dynamic_ruleset/latejoin/pulse_demon/ready(var/forced = 0)
 	for(var/datum/powernet/PN in powernets)
@@ -213,6 +233,11 @@
 	logo = "grue-logo"
 	repeatable = TRUE
 	var/list/grue_spawn_spots=list()
+
+	// -- Dynamic Plus --
+	min_pop_required = 15
+	weight_category = "Grue"
+	expected_intensity = 25
 
 /datum/dynamic_ruleset/latejoin/grue/ready(var/forced = 0)
 	grue_spawn_spots=list()
@@ -275,6 +300,11 @@
 	high_population_requirement = 50
 	flags = HIGHLANDER_RULESET
 
+	// -- Dynamic Plus --
+	min_pop_required = 20
+	weight_category = "Revolution"
+	expected_intensity = 50
+
 /datum/dynamic_ruleset/latejoin/provocateur/ready(var/forced=FALSE)
 	if (forced)
 		required_heads = 1
@@ -314,6 +344,11 @@
 	cost = 10
 	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
 	logo = "time-logo"
+
+	// -- Dynamic Plus --
+	min_pop_required = 10
+	weight_category = "Time"
+	expected_intensity = 3
 
 /datum/dynamic_ruleset/latejoin/time_agent/ready(var/forced=0)
 	var/player_count = mode.living_players.len
@@ -356,6 +391,11 @@
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
 	repeatable = FALSE
+
+	// -- Dynamic Plus --
+	min_pop_required = 10
+	weight_category = "Changeling"
+	expected_intensity = 5
 
 /datum/dynamic_ruleset/latejoin/changeling/execute()
 	var/mob/M = pick(assigned)

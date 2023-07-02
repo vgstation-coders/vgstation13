@@ -198,6 +198,8 @@
 				to_chat(aiPlayer, "Laws Updated: [law]")
 			..() //Set thematic
 		if (FACTION_DEFEATED) //Cleanup time
+			if (stage <= 1)//Blob lost before even reaching the first Defcon
+				DynamicIntensity(-10,"WizardDiedEarly")
 			command_alert(/datum/command_alert/biohazard_station_unlock)
 			send_intercept(FACTION_DEFEATED)
 			emergency_shuttle_lockdown = null
