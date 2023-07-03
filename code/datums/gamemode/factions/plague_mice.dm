@@ -27,9 +27,13 @@
 	. = ..()
 	if (!plague)
 		SetupDisease()
-
 	var/mob/living/simple_animal/mouse/plague/M = R.antag.current
 	M.infect_disease2(plague,1, "Plague Mice")
+
+	/* With the disease set-up, store the detials of the disease in the mouse's memory */
+	var/datum/mind/mouse_mind = R.antag
+	mouse_mind.store_memory(plague.get_info(TRUE), forced = 1)
+	mouse_mind.store_memory("<hr>")
 
 /datum/faction/plague_mice/OnPostSetup()
 	if (!plague || !invasion)
