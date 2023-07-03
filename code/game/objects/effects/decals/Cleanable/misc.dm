@@ -482,3 +482,12 @@ var/list/salts_particle_emitters = list(
 	icon_state = "holysalt"
 	anchored = 1
 	act_delay = 20 SECONDS
+
+/obj/effect/decal/cleanable/purpledrank
+	name = "weeds?"
+	desc = "Someone spilled some purple drank here."
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	icon = 'icons/mob/alien.dmi'
+	icon_state = "weeds"
