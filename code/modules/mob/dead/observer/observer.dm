@@ -20,6 +20,7 @@ var/creating_arena = FALSE
 	invisibility = INVISIBILITY_OBSERVER
 	universal_understand = 1
 	universal_speak = 1
+	appearance_flags = KEEP_TOGETHER
 	//languages = ALL
 	plane = GHOST_PLANE // Not to be confused with an actual ghost plane full of angry spirits.
 	layer = GHOST_LAYER
