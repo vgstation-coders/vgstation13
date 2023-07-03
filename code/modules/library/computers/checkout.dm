@@ -134,9 +134,10 @@
 				for(var/datum/cachedbook/CB in get_page(page_num))
 					var/author = CB.author
 					var/controls =  "<A href='?src=\ref[src];preview=[CB]'>\[Preview\]</A> <A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
-					if(isAdminGhost(user) || allowed(user))
-						controls +=  " <A style='color:red' href='?src=\ref[src];del=[CB.id]'>\[Delete\]</A>"
+					if(isAdminGhost(user))
 						author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(CB.ckey)]'>[ckey(CB.ckey)])</A>)"
+					if(allowed(user))
+						controls +=  " <A style='color:red' href='?src=\ref[src];del=[CB.id]'>\[Delete\]</A>"
 					dat += {"<tr>
 						<td>[author]</td>
 						<td>[CB.title]</td>
