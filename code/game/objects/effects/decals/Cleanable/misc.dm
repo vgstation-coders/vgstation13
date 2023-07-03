@@ -485,7 +485,7 @@ var/list/salts_particle_emitters = list(
 
 /obj/effect/decal/cleanable/purpledrank
 	name = "weeds?"
-	desc = "Someone spilled some purple drank here."
+	desc = "Someone spilled some grape juice? here."
 	gender = PLURAL
 	density = 0
 	anchored = 1
