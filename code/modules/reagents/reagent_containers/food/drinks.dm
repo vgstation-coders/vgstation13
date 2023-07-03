@@ -720,7 +720,7 @@
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/proc/pop_open(var/mob/user)
-	to_chat(user, "[tabself] of \the [src] with a satisfying pop.")
+	to_chat(user, "[tabself] \the [src] with a satisfying pop.")
 	flags |= OPENCONTAINER
 	src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
 	playsound(user, pick(open_sounds), 50, 1)
