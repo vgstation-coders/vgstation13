@@ -6,6 +6,7 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 	icon_state = "rustysecurecrate"
 	icon_opened = "rustysecurecrateopen"
 	icon_closed = "rustysecurecrate"
+	req_access = list(access_salvage_captain)
 	var/code = null
 	var/lastattempt = null
 	var/attempts = 3
