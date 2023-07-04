@@ -192,13 +192,13 @@ var/list/infected_cleanables = list()
 		var/obj/item/clothing/shoes/S = perp.shoes
 		S.track_blood = max(0, amount, S.track_blood)                //Adding blood to shoes
 
-		if(!blood_overlays[S.type]) //If there isn't a precreated blood overlay make one
-			S.generate_blood_overlay()
+		if(!blood_overlays["[S.type][S.icon_state]"]) //If there isn't a precreated blood overlay make one
+			S.set_blood_overlay()
 
 		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
 			S.overlays.Remove(S.blood_overlay)
 		else
-			S.blood_overlay = blood_overlays[S.type]
+			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
 
 		S.blood_overlay.color = basecolor
 		S.overlays += S.blood_overlay

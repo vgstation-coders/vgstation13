@@ -4320,6 +4320,33 @@
 						hardcore_mode = 0
 						to_chat(world, "<h5><span class='danger'>Hardcore mode has been disabled</span></h5>")
 						to_chat(world, "<span class='info'>Starvation will no longer kill player-controlled characters.</span>")
+
+			if("buddha_mode_everyone")
+				if(!buddha_mode_everyone)
+					if(alert("This will prevent every carbon mob from ever entering crit / dying. Are you sure?", "Warning", "Yes", "Cancel") == "Cancel")
+						return
+					buddha_mode_everyone = !buddha_mode_everyone
+					log_admin("[key_name(usr)] has ENABLED buddha mode for everyone!")
+					message_admins("[key_name(usr)] has ENABLED buddha mode for everyone!")
+					for(var/mob/living/carbon/human/H in mob_list)
+						if(H.mind || H.client)
+							if(!(H.status_flags & BUDDHAMODE))
+								H.status_flags ^= BUDDHAMODE
+								if(H.client)
+									to_chat(H, "<span class='notice'>An incredible sense of tranquility overtakes you. You have let go of your worldly desires.</span>")
+				else
+					if(alert("This will disable buddha mode for everyone. Are you sure?", "Warning", "Yes", "Cancel") == "Cancel")
+						return
+					buddha_mode_everyone = !buddha_mode_everyone
+					log_admin("[key_name(usr)] has DISABLED buddha mode for everyone!")
+					message_admins("[key_name(usr)] has DISABLED buddha mode for everyone!")
+					for(var/mob/living/carbon/human/H in mob_list)
+						if((H.mind || H.client) || (H.attack_log.len)) //attack_log included in case someone got beheaded and the mob lost its client/mind (to unset the flag for corpses, basically)
+							if(H.status_flags & BUDDHAMODE)
+								H.status_flags ^= BUDDHAMODE
+								if(H.client)
+									to_chat(H, "<span class='warning'>The tranquility that once filled your soul has vanished. You are once again a slave to your worldly desires.</span>")
+
 			if("vermin_infestation")
 				var/list/locations = list(
 					"RANDOM" = null,

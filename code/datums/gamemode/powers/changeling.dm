@@ -226,6 +226,7 @@
 		return
 	var/mob/living/carbon/human/C = R.antag.current
 	to_chat(C, "<span class='notice'>We distort our form to prevent AI-tracking.</span>")
+	C.digitalcamo = 1
 
 /datum/power/changeling/rapidregeneration
 	name = "Rapid Regeneration"

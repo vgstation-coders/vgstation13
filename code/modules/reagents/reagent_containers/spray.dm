@@ -181,6 +181,16 @@
 	..()
 	reagents.add_reagent(INSECTICIDE, 250)
 
+//Fake Xeno Creep Sprayer
+/obj/item/weapon/reagent_containers/spray/creepspray
+	name = "Creep Spray"
+	desc = "Filled with a mysterious purple liquid."
+	volume = 250
+
+/obj/item/weapon/reagent_containers/spray/creepspray/New()
+	..()
+	reagents.add_reagent(FAKE_CREEP, 250)
+
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer
 	name = "chem sprayer"

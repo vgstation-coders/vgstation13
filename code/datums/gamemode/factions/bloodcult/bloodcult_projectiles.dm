@@ -64,9 +64,6 @@
 		blade.dir = get_dir(starting,target)
 	shadow_matrix = turn(matrix(),target_angle+45)
 	transform = shadow_matrix
-	//var/matrix/base_matrix = turn(matrix(),target_angle)
-	//var/image/I = image('icons/obj/cult_64x64.dmi',"[icon_state]_spin")
-	//I.transform = base_matrix
 	if (shade)
 		icon_state = "soulbullet_spin"
 		plane = HUD_PLANE
@@ -75,13 +72,6 @@
 		icon_state = "soulbullet-empty_spin"
 	spawn(5)
 		leave_shadows = 0
-		/*
-		if( !("[icon_state]_angle[target_angle]" in bullet_master) )
-			var/image/I = new('icons/obj/cult_64x64.dmi',"[icon_state]")
-			//I.transform = base_matrix
-			bullet_master["[icon_state]_angle[target_angle]"] = I
-		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
-		*/
 		if (shade)
 			icon_state = "soulbullet"
 		else

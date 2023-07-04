@@ -343,6 +343,40 @@
 		com.one_time_use = 0
 		com.locked = null
 
+/obj/machinery/teleport/hub/syndicate
+	name = "teleporter horizon generator"
+	desc = "This generates the portal through which you step through to teleport elsewhere."
+	icon_state = "tele0"
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/telehub/syndicate,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+		/obj/item/weapon/stock_parts/capacitor/adv/super,
+		/obj/item/weapon/stock_parts/capacitor/adv/super,
+		/obj/item/weapon/stock_parts/capacitor/adv/super,
+		/obj/item/weapon/stock_parts/subspace/ansible,
+		/obj/item/weapon/stock_parts/subspace/ansible,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/subspace/treatment,
+		/obj/item/weapon/stock_parts/subspace/crystal,
+		/obj/item/weapon/stock_parts/subspace/crystal,
+		/obj/item/weapon/stock_parts/subspace/transmitter,
+		/obj/item/weapon/stock_parts/subspace/transmitter,
+		/obj/item/weapon/stock_parts/subspace/transmitter,
+		/obj/item/weapon/stock_parts/subspace/transmitter
+	)
+/obj/machinery/teleport/hub/syndicate/get_target_lock()
+	if(war_declared && (world.time / 10 < war_declared_time + CHALLENGE_SYNDIE_SHUTTLE_DELAY))
+		to_chat(usr, "Bluespace Inteference blocking teleportation please wait.")
+		return FALSE
+	return ..()
+
+/obj/machinery/teleport/hub/syndicate/after_teleport()
+	..()
+	can_war_be_declared = FALSE
+
+
 /obj/machinery/teleport/station
 	name = "teleporter controller"
 	desc = "This co-ordinates nearby teleporter horizon generators."

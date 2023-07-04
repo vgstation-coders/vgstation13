@@ -31,7 +31,7 @@
 
 		if (!(isrole(R.id, H)))
 			R.AssignToRole(H.mind)
-			R.Greet()
+			R.Greet(GREET_RIGHTANDWRONG)
 			R.OnPostSetup()
 			R.ForgeObjectives()
 			R.AnnounceObjectives()

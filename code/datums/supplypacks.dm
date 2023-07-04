@@ -2888,3 +2888,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "\improper Meat Fridge stack of packs"
 	group = "Vending Machine packs"
+
+/datum/supply_packs/art
+	name = "Art Supply stack of packs"
+	contains = list(/obj/machinery/vending/art,
+					/obj/machinery/vending/art)
+	cost = 20
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Le Patron des Arts stack of packs"
+	group = "Vending Machine packs"

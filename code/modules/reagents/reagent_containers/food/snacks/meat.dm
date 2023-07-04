@@ -232,6 +232,10 @@
 	desc = "A chunk of meat from an above-average sized cockroach."
 	icon_state = "bigroachmeat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big/isopod
+	name = "Isopod meat"
+	desc = "A chunk of meat from an isopod."
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)

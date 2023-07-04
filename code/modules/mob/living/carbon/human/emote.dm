@@ -181,7 +181,7 @@
 
 	// Process toxic farts first.
 	if(M_TOXIC_FARTS in H.mutations)
-		playsound(src, 'sound/effects/superfart.ogg', 50, -1)
+		playsound(location, 'sound/effects/superfart.ogg', 50, -1)
 		has_farted = TRUE
 		if(wearing_suit)
 			if(!wearing_mask)

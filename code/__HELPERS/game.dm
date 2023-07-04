@@ -26,6 +26,11 @@
 		return null
 	return format_text ? format_text(A.name) : A.name
 
+/proc/get_coordinates_string(var/atom/A)
+	var/turf/T = get_turf(A)
+	return T ? "[T.x],[T.y],[T.z]" : "nullspace"
+
+
 /proc/in_range(atom/source, mob/user)
 	if(source.Adjacent(user))
 		return 1

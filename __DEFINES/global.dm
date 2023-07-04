@@ -274,6 +274,10 @@ var/datum/stat_collector/stat_collection = new
 //When enabled, starvation kills
 var/global/hardcore_mode = 0
 
+//Mass Buddha Mode
+//When enabled, all current mobs and all new carbon mobs will be in buddha mode (no crit/death)
+var/global/buddha_mode_everyone = 0
+
 //Global list of all unsimulated mineral turfs for xenoarch
 var/global/list/mineral_turfs = list()
 var/global/list/static_list = list('sound/effects/static/static1.ogg','sound/effects/static/static2.ogg','sound/effects/static/static3.ogg','sound/effects/static/static4.ogg','sound/effects/static/static5.ogg',)
@@ -364,6 +368,11 @@ var/list/corrupt_mobs = list(
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
 
+// Whether Nuclear Operatives have declared war on station.
+var/war_declared = FALSE
+var/war_declared_time = 0
+var/can_war_be_declared = TRUE
+
 //Malf AI global variables
 var/malf_radio_blackout = FALSE
 var/malf_rcd_disable = FALSE
@@ -395,5 +404,3 @@ var/list/machinery_rating_cache = list() // list of type path -> number
 
 var/runescape_pvp = FALSE
 var/runescape_skull_display = FALSE
-
-var/antag_madness = FALSE

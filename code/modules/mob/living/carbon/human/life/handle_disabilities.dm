@@ -2,7 +2,7 @@
 /mob/living/carbon/human/proc/handle_disabilities()
 	if(stat == DEAD)
 		return
-	if(disabilities & ELECTROSENSE && !dna.GetSEState(JAMSIGNALSBLOCK))
+	if(disabilities & ELECTROSENSE)
 		var/affect_chance = 30
 		var/affected = FALSE
 		if(head && istype(head,/obj/item/clothing/head/tinfoil))

@@ -87,8 +87,12 @@
 	AnnounceObjectives()
 	start = new()
 	start.count()
-	prelude_announcement = world.time + rand(WAIT_TIME_PHASE1,2*WAIT_TIME_PHASE1)
-	outbreak_announcement = world.time + rand(WAIT_TIME_PHASE2,2*WAIT_TIME_PHASE2)
+	if (antag_madness == ANTAG_MADNESS_EARLY)
+		prelude_announcement = world.time + 10 MINUTES
+		outbreak_announcement = world.time + 15 MINUTES
+	else
+		prelude_announcement = world.time + rand(WAIT_TIME_PHASE1,2*WAIT_TIME_PHASE1)
+		outbreak_announcement = world.time + rand(WAIT_TIME_PHASE2,2*WAIT_TIME_PHASE2)
 
 /datum/faction/blob_conglomerate/proc/CountFloors()
 	var/floor_count = 0
@@ -141,13 +145,19 @@
 				to_chat(aiPlayer, "Laws Updated: [law]")
 			research_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
 			mining_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
-			emergency_shuttle.shutdown = TRUE //Quarantine
+			emergency_shuttle_lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
 			stage = FACTION_ACTIVE
 
 		// Different levels of defcons to help the crew.
 
 		if (BLOB_DEFCON_3) // 20% blob count: code red
-			set_security_level("red")
+			last_security_level_change = SEC_LEVEL_RED
+			var/sec_change = TRUE
+			for(var/datum/faction/F in ticker.mode.factions)
+				if (F.last_security_level_change == SEC_LEVEL_DELTA)
+					sec_change = FALSE
+			if (sec_change)
+				set_security_level("red")//We raise the sec level to red, unless some malf AI has it set to delta already
 			command_alert(/datum/command_alert/blob_defcon_3)
 			stage = BLOB_DEFCON_3
 
@@ -190,7 +200,7 @@
 		if (FACTION_DEFEATED) //Cleanup time
 			command_alert(/datum/command_alert/biohazard_station_unlock)
 			send_intercept(FACTION_DEFEATED)
-			emergency_shuttle.shutdown = FALSE
+			emergency_shuttle_lockdown = null
 			research_shuttle.lockdown = null
 			mining_shuttle.lockdown = null
 			declared = FALSE

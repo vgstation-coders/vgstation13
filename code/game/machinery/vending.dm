@@ -322,8 +322,8 @@ var/global/num_vending_terminals = 1
 	for (var/datum/data/vending_product/D in voucher_records)
 		D.amount = D.original_amount
 	for (var/datum/data/vending_product/D in holiday_records)
-		D.amount = D.original_amount	
-		
+		D.amount = D.original_amount
+
 	new /obj/item/stack/sheet/cardboard(P.loc, 4)
 	qdel(P)
 	if(user.machine==src)
@@ -2684,6 +2684,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/syndie_football_helmet = 5,
 		/obj/item/clothing/suit/syndie_football = 5,
 		/obj/item/toy/gun = 3,
+		/obj/item/weapon/reagent_containers/spray/creepspray = 2,
 		/obj/item/weapon/glue/temp_glue = 1
 		)
 	premium = list(
@@ -4111,3 +4112,61 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 	new hiddenmouse(get_turf(src))
 
 
+/obj/machinery/vending/art
+	name = "\improper Le Patron des Arts"  //Mécène won't render
+	desc = "A vendor for art supplies. Pas sans mon béret !"
+	product_slogans = list(
+		"Il est temps pour vous de jeter des perles devant ces porcs incultes.",
+		"Oui, j'ai capitulé. Vous pouvez aussi acheter des crayons maintenant.",
+		"Il y a la peinture sur toile, et puis il y a l'art véritable. Pouvez-vous voir la différence ?"
+	)
+	product_ads = list(
+		"This is not a cigarette vendor."
+	)
+	icon_state = "art"
+	products = list (
+		/obj/item/weapon/storage/toolbox/paint = 2,
+		/obj/item/weapon/storage/fancy/crayons = 2,
+		/obj/item/weapon/pen/multi = 3,
+		/obj/item/weapon/painting_brush = 2,
+		/obj/item/weapon/palette = 2,
+		/obj/structure/painting/custom = 3,
+		/obj/structure/painting/custom/landscape = 3,
+		/obj/structure/painting/custom/portrait = 3,
+		/obj/structure/painting/custom/large = 3,
+		/obj/structure/easel = 2,
+		/obj/structure/block/wood = 2,
+		/obj/item/weapon/chisel = 2
+		)
+
+	contraband = list(
+		/obj/item/stack/sheet/wood/bigstack = 3,
+		/obj/item/clothing/mask/cigarette/pipe = 2
+		)
+
+	premium = list(
+		/obj/item/weapon/reagent_containers/glass/jar = 2
+		)
+
+	prices = list(
+		/obj/item/weapon/storage/toolbox/paint = 40,
+		/obj/item/weapon/storage/fancy/crayons = 10,
+		/obj/item/weapon/pen/multi = 20,
+		/obj/item/weapon/painting_brush = 10,
+		/obj/item/weapon/palette = 10,
+		/obj/structure/painting/custom = 10,
+		/obj/structure/painting/custom/landscape = 10,
+		/obj/structure/painting/custom/portrait = 10,
+		/obj/structure/painting/custom/large = 10,
+		/obj/structure/easel = 20,
+		/obj/structure/block/wood = 40,
+		/obj/item/weapon/chisel = 10,
+		/obj/item/stack/sheet/wood/bigstack = 20,
+		/obj/item/clothing/mask/cigarette/pipe = 40
+		)
+	slogan_languages = list(LANGUAGE_HUMAN)
+
+/obj/machinery/vending/art/examine(mob/user)
+	..()
+	if(stat & BROKEN)
+		to_chat(user, "<span class='warning'>It's no longer art!</span>")

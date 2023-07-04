@@ -193,7 +193,7 @@
 		if(clonemind.current.stat != DEAD)	//mind is associated with a non-dead body
 			return FALSE
 	if(clonemind.active) //somebody is using that mind
-		if( ckey(clonemind.key)!=R.ckey )
+		if(ckey(clonemind.key)!=R.ckey )
 			return FALSE
 	else
 		for(var/mob/G in player_list)
@@ -201,6 +201,10 @@
 				if(isobserver(G))
 					if(G:can_reenter_corpse)
 						break
+					if((!G.mind.current) && G.mind.body_archive) //If the mind's body was destroyed and that mind has a body archive
+						var/datum/dna2/record/D = G.mind.body_archive.data["dna_records"] //Retrieve the DNA records from the mind's body archive
+						if((D.id == R.id) || D.ckey == R.ckey) //If the MD5 hash of the mind's real_name matches the record's real_name (stored as the id variable), or if the ckeys match
+							break //Proceed with cloning. This set of checks is to allow cloning players with completely destroyed bodies, that nevertheless had cloning data stored
 					else
 						return FALSE
 				else if(G)
@@ -242,7 +246,7 @@
 	if(H.dna.species != "Human")
 		H.set_species(H.dna.species, TRUE)
 
-	H.adjustCloneLoss(150) //new damage var so you can't eject a clone early then stab them to abuse the current damage system --NeoFite
+	isslimeperson(H) ? H.adjustToxLoss(150) : H.adjustCloneLoss(150)
 	H.adjustBrainLoss(upgraded ? 0 : (heal_level + 50 + rand(10, 30))) // The rand(10, 30) will come out as extra brain damage
 	H.Paralyse(4)
 	H.stat = H.status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS //There was a bug which allowed you to talk for a few seconds after being cloned, because your stat wasn't updated until next Life() tick. This is a fix for this!
@@ -306,7 +310,7 @@
 			occupant.Paralyse(4)
 
 			 //Slowly get that clone healed and finished.
-			occupant.adjustCloneLoss(-1*time_coeff) //Very slow, new parts = much faster
+			isslimeperson(occupant) ? occupant.adjustToxLoss(-1*time_coeff) : occupant.adjustCloneLoss(-1*time_coeff) //Very slow, new parts = much faster
 
 			//Premature clones may have brain damage.
 			occupant.adjustBrainLoss(-1*time_coeff) //Ditto above
