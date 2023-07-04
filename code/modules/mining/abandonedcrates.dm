@@ -20,6 +20,8 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 
 /obj/structure/closet/crate/secure/loot/attack_hand(mob/user as mob)
 	if(locked)
+		if (src.allowed(usr))
+			return ..()
 		to_chat(user, "<span class='notice'>The crate is locked with a Deca-code lock.</span>")
 		var/input = input(usr, "Enter digit from [min] to [max].", "Deca-Code Lock", "") as num
 		if(in_range(src, user))
