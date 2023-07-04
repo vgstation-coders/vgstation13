@@ -821,7 +821,7 @@
 	name = "Nuka Cola"
 	desc = "Cool, refreshing, Nuka Cola."
 	icon_state = "nuka"
-	tabself = "You pull back the cap of"
+	tabself = "You pull back the cap on"
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka/New()
 	..()
