@@ -376,7 +376,10 @@ var/list/station_holomaps = list()
 	else
 		cursor.pixel_x = (T.x-6)*PIXEL_MULTIPLIER
 		cursor.pixel_y = (T.y-6)*PIXEL_MULTIPLIER
-	legend = image('icons/effects/64x64.dmi', "legend")
+	if (map.snow_theme)
+		legend = image('icons/effects/64x64.dmi', "legend_taxi")
+	else
+		legend = image('icons/effects/64x64.dmi', "legend")
 	legend.pixel_x = 3*WORLD_ICON_SIZE
 	legend.pixel_y = 3*WORLD_ICON_SIZE
 	station_map.overlays |= cursor
