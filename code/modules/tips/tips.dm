@@ -88,6 +88,24 @@
 	category = "General"
 	weight = 3
 
+/datum/pomf_tip/antag_objectives
+	title = "Solo objectives"
+	desc = "If you lack inspiration or prefer to have a defined set of challenges, you can opt to have defined antagonist objectives by selecting the option in character setup."
+	category = "General"
+	weight = 3
+
+/datum/pomf_tip/runechat
+	title = "Runechat"
+	desc = "In your options tab, 'runechat' refers to animations of the text said by players being displayed over their heads as they are talking."
+	category = "General"
+	weight = 3
+
+/datum/pomf_tip/attack_anims
+	title = "Attack animations"
+	desc = "Confusing about who's hitting who? You can toggle attack animations in your preferences."
+	category = "General"
+	weight = 3
+
 // -- Command
 
 /datum/pomf_tip/chain_of_command
