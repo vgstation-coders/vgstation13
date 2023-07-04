@@ -283,3 +283,38 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 2000)
 	build_path = /obj/item/weapon/circuitboard/shield_cap
+
+/datum/design/collider
+	req_tech = list(Tc_ENGINEERING = 2, Tc_POWERSTORAGE = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+
+/datum/design/collider/pipe
+	name = "Circuit Board (Particle pipe)"
+	id = "collider_pipe"
+	build_path = /obj/item/weapon/circuitboard/particle_collider/pipe
+	
+/datum/design/collider/merger
+	name = "Circuit Board (Particle merger)"
+	id = "collider_merger"
+	build_path = /obj/item/weapon/circuitboard/particle_collider/merger
+
+/datum/design/collider/filter
+	name = "Circuit Board (Particle filter)"
+	id = "collider_filter"
+	build_path = /obj/item/weapon/circuitboard/particle_collider/filter
+
+/datum/design/collider/emitter
+	name = "Circuit Board (Particle emitter)"
+	id = "collider_emitter"
+	build_path = /obj/item/weapon/circuitboard/particle_collider/emitter
+
+/datum/design/collider/bottler
+	name = "Circuit Board (Particle bottler)"
+	id = "collider_bottler"
+	build_path = /obj/item/weapon/circuitboard/particle_collider/bottler
+
+datum/design/collider/collider
+	name = "Circuit Board (Hadron collider)"
+	id = "collider_collider"
+	build_path = /obj/item/weapon/circuitboard/particle_collider/collider
