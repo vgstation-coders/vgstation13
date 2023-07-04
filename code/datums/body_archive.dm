@@ -10,7 +10,7 @@ var/list/body_archives = list()
 	var/key
 	var/rank
 
-	var/datum/mind/mind//keeping a pointer to the source mind for tracking purposes
+	var/datum/mind/mind	//keeping a pointer to the source mind for tracking purposes
 
 	// just an empty list where you can store extra data, such as human DNA records
 	var/list/data = list()
