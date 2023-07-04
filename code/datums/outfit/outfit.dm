@@ -322,9 +322,11 @@
 		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
 		W.buckle_mob(H,H)
 
-	if (H.glasses)
-		var/obj/item/clothing/glasses/G = H.glasses
-		G.prescription = 1
+	if ((H.disabilities & NEARSIGHTED) && H.glasses && !H.glasses.prescription && H.glasses.prescription_type)
+		var/obj/item/clothing/glasses/prescription = new H.glasses.prescription_type(H)
+		H.u_equip(H.glasses,1)
+		qdel(H.glasses)
+		H.equip_to_slot_or_drop(prescription, slot_glasses)
 
 	return 1
 
