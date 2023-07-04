@@ -96,6 +96,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 	var/lights_always_start_on = FALSE
 
+	var/destroy_after_marker = FALSE	//The area is deleted after its holomap marker is created. Useful for shuttle docking zones that need to remain area-free.
+
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
@@ -446,6 +448,7 @@ var/global/list/adminbusteleportlocs = list()
 	//Snaxi
 	holomap_marker = "taxi"
 	holomap_filter = HOLOMAP_FILTER_TAXI
+	destroy_after_marker = TRUE
 
 /area/shuttle/snaxi_platform2
 	name = "\improper Orbital Platform Dock 1"
@@ -454,6 +457,7 @@ var/global/list/adminbusteleportlocs = list()
 	//Snaxi
 	holomap_marker = "taxi"
 	holomap_filter = HOLOMAP_FILTER_TAXI
+	destroy_after_marker = TRUE
 
 /area/shuttle/snaxi_platform3
 	name = "\improper Orbital Platform Dock 1"
@@ -462,6 +466,7 @@ var/global/list/adminbusteleportlocs = list()
 	//Snaxi
 	holomap_marker = "taxi"
 	holomap_filter = HOLOMAP_FILTER_TAXI
+	destroy_after_marker = TRUE
 
 //------------------------------------------------------
 

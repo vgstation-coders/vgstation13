@@ -88,6 +88,12 @@
 					newMarker.y = T.y
 					newMarker.z = ZLevel
 					holomap_markers[newMarker.id+"_\ref[A]"] = newMarker
+			if (A.destroy_after_marker)
+				var/area/fill_area
+				for(var/turf/T in A)
+					if(!fill_area)
+						fill_area = get_base_area(T.z)
+					T.set_area(fill_area)
 
 
 /proc/generateHoloMinimap(var/zLevel=1)
