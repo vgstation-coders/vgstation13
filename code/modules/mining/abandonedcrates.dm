@@ -29,6 +29,7 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 			if (input == code)
 				to_chat(user, "<span class='notice'>The crate unlocks!</span>")
 				locked = 0
+				update_icon()
 			else if (input == null || input > max || input < min)
 				to_chat(user, "<span class='notice'>You leave the crate alone.</span>")
 			else
