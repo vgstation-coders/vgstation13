@@ -1573,6 +1573,7 @@
 	opacity = 0
 	},
 /obj/item/weapon/pen,
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "xW" = (
 /obj/machinery/computer/security{
@@ -1999,6 +2000,9 @@
 	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
+"Dp" = (
+/turf/unsimulated/wall/r_rock,
+/area/vault/mothership_lab/asteroid)
 "DG" = (
 /obj/structure/reagent_dispensers/fueltank,
 /turf/unsimulated/floor/ayy/maint,
@@ -2306,6 +2310,7 @@
 	name = "Checkpoint Blast Doors";
 	opacity = 0
 	},
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "Iq" = (
 /obj/structure/reagent_dispensers/sacid,
@@ -2445,9 +2450,7 @@
 	opacity = 0
 	},
 /obj/item/weapon/pen,
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "Lv" = (
 /obj/machinery/door/airlock/security{
@@ -2975,9 +2978,7 @@
 	name = "Checkpoint Blast Doors";
 	opacity = 0
 	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "Vw" = (
 /obj/effect/decal/warning_stripes{
@@ -6414,12 +6415,12 @@ MD
 MD
 MD
 MD
-YF
+Dp
 QT
 Os
 BB
-YF
-YF
+Dp
+Dp
 MD
 MD
 MD
@@ -6461,12 +6462,12 @@ YF
 YF
 YF
 YF
-YF
+Dp
 Ml
 AQ
 Nq
 Xo
-YF
+Dp
 MD
 MD
 MD
@@ -6508,14 +6509,14 @@ BB
 BB
 BB
 BB
-YF
+Dp
 GL
 eQ
 GL
 GL
-YF
-MD
-MD
+Dp
+Dp
+Dp
 MD
 MD
 MD
@@ -6563,9 +6564,9 @@ GL
 Au
 Nf
 Au
-YF
-YF
-YF
+Dp
+Dp
+Dp
 MD
 MD
 MD
@@ -6578,7 +6579,7 @@ MD
 MD
 MD
 MD
-YF
+Dp
 Au
 Wf
 sK
@@ -6613,24 +6614,24 @@ GL
 GL
 ly
 GL
-YF
-YF
-YF
-YF
-YF
+Dp
+Dp
+Dp
+Dp
+Dp
 Au
 Nf
 Au
-YF
-YF
-YF
-YF
+Dp
+Dp
+Dp
+Dp
 GL
 GL
 GL
 eQ
 GL
-YF
+Dp
 MD
 MD
 MD
@@ -6677,7 +6678,7 @@ eQ
 eQ
 vD
 GL
-YF
+Dp
 MD
 MD
 mv
@@ -6724,7 +6725,7 @@ vD
 GL
 GL
 ly
-YF
+Dp
 MD
 MD
 MD
@@ -6769,8 +6770,8 @@ ly
 GL
 GL
 GL
-YF
-YF
+Dp
+Dp
 MD
 MD
 MD
@@ -6790,15 +6791,15 @@ YF
 YF
 YF
 YF
-YF
-YF
-YF
-YF
-YF
-YF
-MD
-MD
-YF
+Dp
+Dp
+Dp
+Dp
+Dp
+Dp
+Dp
+Dp
+Dp
 GL
 GL
 ly
@@ -6809,13 +6810,13 @@ GL
 GL
 rZ
 sX
-YF
-YF
-YF
-YF
-YF
-YF
-YF
+Dp
+Dp
+Dp
+Dp
+Dp
+Dp
+Dp
 MD
 MD
 MD
@@ -6846,16 +6847,16 @@ MD
 MD
 MD
 MD
-YF
-YF
-YF
-YF
-YF
-YF
-YF
-YF
-YF
-YF
+Dp
+Dp
+Dp
+Dp
+Dp
+Dp
+Dp
+Dp
+Dp
+Dp
 MD
 MD
 MD
