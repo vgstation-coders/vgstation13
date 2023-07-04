@@ -1942,6 +1942,37 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_engine_minor)
 	group = "Engineering"
 
+/datum/supply_packs/particle_collider_pipes
+	name = "Particle collider pipe circuits"
+	contains = list(/obj/item/weapon/circuitboard/particle_collider/pipe,
+					/obj/item/weapon/circuitboard/particle_collider/pipe,
+					/obj/item/weapon/circuitboard/particle_collider/pipe,
+					/obj/item/weapon/circuitboard/particle_collider/pipe,
+					/obj/item/weapon/circuitboard/particle_collider/pipe,
+					/obj/item/weapon/circuitboard/particle_collider/pipe,
+					/obj/item/weapon/circuitboard/particle_collider/pipe,
+					/obj/item/weapon/circuitboard/particle_collider/pipe,
+					/obj/item/weapon/circuitboard/particle_collider/pipe,
+					/obj/item/weapon/circuitboard/particle_collider/pipe)
+	cost = 15
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "Particle collider pipe circuits"
+	one_access = list(access_engine_minor, access_science)
+	group = "Engineering"
+	
+/datum/supply_packs/particle_collider_machines
+	name = "Particle collider machine circuits"
+	contains = list(/obj/item/weapon/circuitboard/particle_collider/merger,
+					/obj/item/weapon/circuitboard/particle_collider/filter,
+					/obj/item/weapon/circuitboard/particle_collider/emitter,
+					/obj/item/weapon/circuitboard/particle_collider/emitter,
+					/obj/item/weapon/circuitboard/particle_collider/bottler,
+					/obj/item/weapon/circuitboard/particle_collider/collider)
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "Particle collider machine circuits"
+	one_access = list(access_engine_minor, access_science)
+	group = "Engineering"
 
 //////CARGO//////
 
