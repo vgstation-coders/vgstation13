@@ -275,7 +275,7 @@
 	},
 /area/vault/spacepond/wine_cellar)
 "I" = (
-/obj/item/clothing/mask/gas/death_commando,
+/obj/item/clothing/mask/gas/grim_reaper/death_commando,
 /obj/effect/decal/cleanable/blood/drip,
 /obj/effect/decal/cleanable/blood/splatter,
 /obj/effect/decal/cleanable/cobweb2,

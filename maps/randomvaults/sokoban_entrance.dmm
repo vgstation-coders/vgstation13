@@ -16,8 +16,7 @@
 /area/vault/sokoban)
 "ad" = (
 /obj/structure/shuttle/engine/propulsion{
-	dir = 1;
-	icon_state = "propulsion"
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -73,8 +72,7 @@
 /area/vault/sokoban)
 "aj" = (
 /obj/machinery/conveyor/auto{
-	dir = 6;
-	icon_state = "conveyor0"
+	dir = 6
 	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
@@ -82,8 +80,7 @@
 /area/vault/sokoban)
 "ak" = (
 /obj/machinery/conveyor/auto{
-	dir = 4;
-	icon_state = "conveyor0"
+	dir = 4
 	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
@@ -91,8 +88,7 @@
 /area/vault/sokoban)
 "al" = (
 /obj/machinery/conveyor/auto{
-	dir = 4;
-	icon_state = "conveyor0"
+	dir = 4
 	},
 /obj/effect/landmark/sokoban_jail,
 /turf/simulated/floor/shuttle{
@@ -101,8 +97,7 @@
 /area/vault/sokoban)
 "am" = (
 /obj/machinery/conveyor/auto{
-	dir = 10;
-	icon_state = "conveyor0"
+	dir = 10
 	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
@@ -110,8 +105,7 @@
 /area/vault/sokoban)
 "an" = (
 /obj/machinery/conveyor/auto{
-	dir = 5;
-	icon_state = "conveyor0"
+	dir = 5
 	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
@@ -119,8 +113,7 @@
 /area/vault/sokoban)
 "ao" = (
 /obj/machinery/conveyor/auto{
-	dir = 8;
-	icon_state = "conveyor0"
+	dir = 8
 	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
@@ -128,8 +121,7 @@
 /area/vault/sokoban)
 "ap" = (
 /obj/machinery/conveyor/auto{
-	dir = 9;
-	icon_state = "conveyor0"
+	dir = 9
 	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4"
@@ -167,8 +159,7 @@
 /area/vault/sokoban)
 "at" = (
 /obj/structure/shuttle/engine/propulsion{
-	dir = 1;
-	icon_state = "propulsion"
+	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
@@ -180,8 +171,7 @@
 /area/vault/sokoban)
 "au" = (
 /obj/structure/shuttle/engine/heater{
-	dir = 1;
-	icon_state = "heater"
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -191,8 +181,7 @@
 /area/vault/sokoban)
 "av" = (
 /obj/structure/shuttle/engine/heater{
-	dir = 1;
-	icon_state = "heater"
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -218,8 +207,7 @@
 /area/vault/sokoban)
 "az" = (
 /obj/machinery/light{
-	dir = 8;
-	icon_state = "ltube1"
+	dir = 8
 	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
@@ -227,8 +215,7 @@
 /area/vault/sokoban)
 "aA" = (
 /obj/machinery/light{
-	dir = 4;
-	icon_state = "ltube1"
+	dir = 4
 	},
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
@@ -278,15 +265,13 @@
 /area/vault/sokoban)
 "aI" = (
 /obj/machinery/light{
-	dir = 8;
-	icon_state = "ltube1"
+	dir = 8
 	},
 /turf/simulated/floor/shuttle,
 /area/vault/sokoban)
 "aJ" = (
 /obj/machinery/light{
-	dir = 8;
-	icon_state = "ltube1"
+	dir = 8
 	},
 /obj/item/stack/package_wrap,
 /turf/simulated/floor/shuttle,
@@ -326,8 +311,7 @@
 /area/vault/sokoban)
 "aP" = (
 /obj/machinery/light{
-	dir = 4;
-	icon_state = "ltube1"
+	dir = 4
 	},
 /obj/structure/largecrate/skele_stand,
 /turf/simulated/floor/shuttle,
@@ -366,8 +350,7 @@
 /area/vault/sokoban)
 "aW" = (
 /obj/machinery/light{
-	dir = 4;
-	icon_state = "ltube1"
+	dir = 4
 	},
 /obj/structure/largecrate/cat,
 /turf/simulated/floor/shuttle,

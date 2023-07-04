@@ -211,7 +211,6 @@
 	starting_volume = 3200
 	},
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -284,7 +283,6 @@
 	dir = 1
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
@@ -455,8 +453,7 @@
 /area/shuttle/lightship/start)
 "bN" = (
 /obj/machinery/light{
-	dir = 8;
-	icon_state = "ltube1"
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -547,7 +544,6 @@
 	},
 /obj/machinery/space_heater,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
@@ -651,16 +647,13 @@
 	},
 /obj/structure/table/glass,
 /obj/item/weapon/storage/firstaid/toxin{
-	pixel_x = 7;
-	pixel_y = 0
+	pixel_x = 7
 	},
 /obj/item/weapon/storage/firstaid/o2{
-	pixel_x = 3;
-	pixel_y = 0
+	pixel_x = 3
 	},
 /obj/item/weapon/storage/firstaid/regular{
-	pixel_x = -3;
-	pixel_y = 0
+	pixel_x = -3
 	},
 /obj/item/weapon/storage/firstaid/fire{
 	pixel_x = -7
@@ -773,8 +766,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_y = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -919,8 +911,7 @@
 	dir = 1
 	},
 /obj/machinery/r_n_d/fabricator/mech{
-	req_access = list();
-	req_one_access = null
+	req_access = list()
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -1005,7 +996,6 @@
 	icon_state = "1-2"
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
@@ -1042,7 +1032,6 @@
 	dir = 4
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitegreen"
 	},
 /area/shuttle/lightship/start)
@@ -1051,7 +1040,6 @@
 	dir = 8
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitegreen"
 	},
 /area/shuttle/lightship/start)
@@ -1180,8 +1168,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_y = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -1203,9 +1190,7 @@
 /obj/item/ammo_casing/rocket_rpg/nikita{
 	pixel_y = 10
 	},
-/obj/item/ammo_casing/rocket_rpg/nikita{
-	pixel_y = 0
-	},
+/obj/item/ammo_casing/rocket_rpg/nikita,
 /obj/item/ammo_casing/rocket_rpg/nikita{
 	pixel_y = 5
 	},
@@ -1297,9 +1282,7 @@
 /obj/item/ammo_casing/rocket_rpg/nikita{
 	pixel_y = 10
 	},
-/obj/item/ammo_casing/rocket_rpg/nikita{
-	pixel_y = 0
-	},
+/obj/item/ammo_casing/rocket_rpg/nikita,
 /obj/item/ammo_casing/rocket_rpg/nikita{
 	pixel_y = 5
 	},
@@ -1435,13 +1418,11 @@
 	},
 /obj/structure/cable,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
 "fB" = (
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
@@ -1456,7 +1437,6 @@
 	pixel_x = 10
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
@@ -1498,7 +1478,6 @@
 /area/shuttle/lightship/start)
 "fG" = (
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitered"
 	},
 /area/shuttle/lightship/start)
@@ -1515,7 +1494,6 @@
 /obj/structure/table/reinforced,
 /obj/abstract/map/spawner/security/misc,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitered"
 	},
 /area/shuttle/lightship/start)
@@ -1636,7 +1614,6 @@
 	pixel_y = -30
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitered"
 	},
 /area/shuttle/lightship/start)
@@ -2022,7 +1999,6 @@
 	pixel_y = 18
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitegreen"
 	},
 /area/shuttle/lightship/start)
