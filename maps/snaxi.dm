@@ -32,8 +32,8 @@
 	/datum/map_element/dungeon/holodeck
 	)
 
-	holomap_offset_x = list(96,0,0,96,0,0,0,)
-	holomap_offset_y = list(96,0,0,96,0,0,0,)
+	holomap_offset_x = list(216,0,0,96,0,0,0,)
+	holomap_offset_y = list(216,0,0,96,0,0,0,)
 
 	center_x = 150
 	center_y = 150

@@ -139,6 +139,11 @@
 							if (map.snow_theme)//a few snowflake checks (pun intended) to keep some of snaxi's secrets a bit harder to find.
 								if ((istype(tile, /turf/unsimulated/floor/snow/permafrost) && istype(aera, /area/surface/mine)) ||(istype(tile, /turf/unsimulated/floor/snow/cave) && istype(aera, /area/surface/outer/ne)))
 									override = TRUE
+								else if (istype(aera, /area/mine/explored) && !istype(tile, /turf/unsimulated/floor/airless))
+									if (prob(80))
+										override = TRUE
+								else if (istype(aera, /area/derelict/secret))
+									override = TRUE
 							var/exception = FALSE
 							if (istype(tile, get_base_turf(zLevel)) && istype(aera, /area/mine/unexplored))//we could avoid such exceptions if this area wasn't ever painted over space.
 								exception = TRUE
@@ -271,7 +276,7 @@
 
 	for(var/marker in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[marker]
-		if(holomarker.z == StationZLevel && holomarker.filter & HOLOMAP_FILTER_STATIONMAP)
+		if((holomarker.z == StationZLevel) && ((holomarker.filter & HOLOMAP_FILTER_STATIONMAP) || (map.snow_theme && (holomarker.filter & HOLOMAP_FILTER_TAXI))))
 			if(map.holomap_offset_x.len >= StationZLevel)
 				big_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[StationZLevel]	, holomarker.y-8+map.holomap_offset_y[StationZLevel])
 			else

@@ -302,12 +302,20 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Security Shuttle"
 	icon_state = "shuttlered"
 
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+
 /area/shuttle/mining
 	name = "\improper Mining Shuttle"
 	music = "music/escape.ogg"
 
 /area/shuttle/mining/station
 	icon_state = "shuttle2"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
 
 /area/shuttle/mining/outpost
 	icon_state = "shuttle"
@@ -423,6 +431,10 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/shuttle/research/station
 	icon_state = "shuttle2"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
 
 /area/shuttle/research/outpost
 	icon_state = "shuttle"

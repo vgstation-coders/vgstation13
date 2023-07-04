@@ -1594,6 +1594,7 @@ var/proccalls = 1
 #define HOLOMAP_FILTER_STATIONMAP				32
 #define HOLOMAP_FILTER_STATIONMAP_STRATEGIC		64//features markers over the captain's office, the armory, the SMES
 #define HOLOMAP_FILTER_CULT						128//bloodstone locators
+#define HOLOMAP_FILTER_TAXI						256//shuttles with have their original location displayed on station maps
 
 #define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
 #define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"
