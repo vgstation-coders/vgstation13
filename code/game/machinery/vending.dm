@@ -2370,6 +2370,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/kitchen/utensil/knife/large/butch = 2,
 		)
 	premium = list(
+		/obj/item/weapon/kitchen/utensil/spork = 10,
 		/obj/item/weapon/reagent_containers/dropper/baster = 1)
 
 	pack = /obj/structure/vendomatpack/dinnerware
