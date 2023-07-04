@@ -129,7 +129,13 @@
 								override = TRUE
 								break
 						if (override)
+							if (istype(aera, /area/surface/blizzard))
+								if(map.holomap_offset_x.len >= zLevel)
+									canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+								else
+									canvas.DrawBox(HOLOMAP_PATH, i, r)
 							continue
+
 						if((tile.holomap_draw_override != HOLOMAP_DRAW_EMPTY) && (aera.holomap_draw_override != HOLOMAP_DRAW_EMPTY))
 							override = FALSE
 							for(var/obstacle in full_obstacles)
@@ -137,7 +143,13 @@
 									override = TRUE
 									break
 							if (map.snow_theme)//a few snowflake checks (pun intended) to keep some of snaxi's secrets a bit harder to find.
-								if ((istype(tile, /turf/unsimulated/floor/snow/permafrost) && istype(aera, /area/surface/mine)) ||(istype(tile, /turf/unsimulated/floor/snow/cave) && istype(aera, /area/surface/outer/ne)))
+								if (istype(aera, /area/surface/blizzard))
+									if(map.holomap_offset_x.len >= zLevel)
+										canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+									else
+										canvas.DrawBox(HOLOMAP_PATH, i, r)
+									continue
+								else if ((istype(tile, /turf/unsimulated/floor/snow/permafrost) && istype(aera, /area/surface/mine)) ||(istype(tile, /turf/unsimulated/floor/snow/cave) && istype(aera, /area/surface/outer/ne)))
 									override = TRUE
 								else if (istype(aera, /area/mine/explored) && !istype(tile, /turf/unsimulated/floor/airless))
 									if (prob(80))
@@ -163,6 +175,12 @@
 										canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 									else
 										canvas.DrawBox(HOLOMAP_PATH, i, r)
+						else if (map.snow_theme && (zLevel==map.zMainStation) && istype(aera, /area/vault))
+							if(map.holomap_offset_x.len >= zLevel)
+								canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+							else
+								canvas.DrawBox(HOLOMAP_PATH, i, r)
+
 
 	holoMiniMaps[zLevel] = canvas
 

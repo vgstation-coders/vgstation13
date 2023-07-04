@@ -436,6 +436,35 @@ var/global/list/adminbusteleportlocs = list()
 	holomap_marker = "taxi"
 	holomap_filter = HOLOMAP_FILTER_TAXI
 
+
+//------------------------------------------------------These are only used to place the holomap markers
+
+/area/shuttle/snaxi_platform1
+	name = "\improper Orbital Platform Dock 1"
+	icon_state = "shuttlered"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+
+/area/shuttle/snaxi_platform2
+	name = "\improper Orbital Platform Dock 1"
+	icon_state = "shuttlered"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+
+/area/shuttle/snaxi_platform3
+	name = "\improper Orbital Platform Dock 1"
+	icon_state = "shuttlered"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+
+//------------------------------------------------------
+
 /area/shuttle/research/outpost
 	icon_state = "shuttle"
 
@@ -1930,6 +1959,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "The Blizzard"
 	icon_state = "sno"
 	construction_zone = FALSE
+	holomap_draw_override = HOLOMAP_DRAW_PATH
 
 /area/surface/icecore
 	name = "\improper Frozen Core"

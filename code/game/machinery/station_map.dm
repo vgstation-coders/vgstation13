@@ -88,6 +88,7 @@ var/list/station_holomaps = list()
 		return
 
 	holomap_datum.initialize_holomap(T)
+
 	if (forced_zLevel)
 		holomap_datum.station_map.overlays -= holomap_datum.cursor
 
@@ -198,7 +199,9 @@ var/list/station_holomaps = list()
 			else
 				holomap_datum.cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
 				holomap_datum.cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
-			holomap_datum.station_map.overlays |= holomap_datum.cursor
+
+			if (!forced_zLevel)
+				holomap_datum.station_map.overlays |= holomap_datum.cursor
 			holomap_datum.station_map.overlays |= holomap_datum.legend
 
 	switch(dir)
