@@ -943,6 +943,9 @@
 "oo" = (
 /turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/control_room)
+"oD" = (
+/turf/unsimulated/wall/r_rock,
+/area/vault/mothership_lab/asteroid)
 "oM" = (
 /obj/structure/window/reinforced/plasma{
 	dir = 1
@@ -1573,6 +1576,7 @@
 	opacity = 0
 	},
 /obj/item/weapon/pen,
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "xW" = (
 /obj/machinery/computer/security{
@@ -2306,6 +2310,7 @@
 	name = "Checkpoint Blast Doors";
 	opacity = 0
 	},
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "Iq" = (
 /obj/structure/reagent_dispensers/sacid,
@@ -2445,9 +2450,7 @@
 	opacity = 0
 	},
 /obj/item/weapon/pen,
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "Lv" = (
 /obj/machinery/door/airlock/security{
@@ -2505,7 +2508,7 @@
 	desc = "A warning sign. It reads 'Secure area, minefield ahead. Trespassers will be terminated.'";
 	name = "WARNING: MINEFIELD"
 	},
-/turf/simulated/wall,
+/turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/asteroid)
 "Nj" = (
 /obj/machinery/vending/medical{
@@ -2975,9 +2978,7 @@
 	name = "Checkpoint Blast Doors";
 	opacity = 0
 	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
 "Vw" = (
 /obj/effect/decal/warning_stripes{
@@ -6414,12 +6415,12 @@ MD
 MD
 MD
 MD
-YF
+oD
 QT
 Os
 BB
-YF
-YF
+oD
+oD
 MD
 MD
 MD
@@ -6461,12 +6462,12 @@ YF
 YF
 YF
 YF
-YF
+oD
 Ml
 AQ
 Nq
 Xo
-YF
+oD
 MD
 MD
 MD
@@ -6485,11 +6486,11 @@ BB
 YF
 MD
 MD
-Au
+Zy
 GL
 eQ
 GL
-Au
+Zy
 MD
 MD
 MD
@@ -6508,12 +6509,12 @@ BB
 BB
 BB
 BB
-YF
+oD
 GL
 eQ
 GL
 GL
-YF
+oD
 MD
 MD
 MD
@@ -6560,12 +6561,12 @@ yA
 eQ
 eQ
 GL
-Au
+Zy
 Nf
-Au
-YF
-YF
-YF
+Zy
+oD
+oD
+oD
 MD
 MD
 MD
@@ -6578,12 +6579,12 @@ MD
 MD
 MD
 MD
-YF
-Au
+oD
+Zy
 Wf
 sK
 Wf
-Au
+Zy
 MD
 MD
 MD
@@ -6613,24 +6614,24 @@ GL
 GL
 ly
 GL
-YF
-YF
-YF
-YF
-YF
-Au
+oD
+oD
+oD
+oD
+oD
+Zy
 Nf
-Au
-YF
-YF
-YF
-YF
+Zy
+oD
+oD
+oD
+oD
 GL
 GL
 GL
 eQ
 GL
-YF
+oD
 MD
 MD
 MD
@@ -6677,7 +6678,7 @@ eQ
 eQ
 vD
 GL
-YF
+oD
 MD
 MD
 mv
@@ -6724,7 +6725,7 @@ vD
 GL
 GL
 ly
-YF
+oD
 MD
 MD
 MD
@@ -6748,9 +6749,9 @@ GL
 Xd
 my
 jH
-Au
+Zy
 Nf
-Au
+Zy
 GL
 ly
 eQ
@@ -6769,8 +6770,8 @@ ly
 GL
 GL
 GL
-YF
-YF
+oD
+oD
 MD
 MD
 MD
@@ -6790,15 +6791,15 @@ YF
 YF
 YF
 YF
-YF
-YF
-YF
-YF
-YF
-YF
+oD
+oD
+oD
+oD
+oD
+oD
 MD
 MD
-YF
+oD
 GL
 GL
 ly
@@ -6809,13 +6810,13 @@ GL
 GL
 rZ
 sX
-YF
-YF
-YF
-YF
-YF
-YF
-YF
+oD
+oD
+oD
+oD
+oD
+oD
+oD
 MD
 MD
 MD
@@ -6846,16 +6847,16 @@ MD
 MD
 MD
 MD
-YF
-YF
-YF
-YF
-YF
-YF
-YF
-YF
-YF
-YF
+oD
+oD
+oD
+oD
+oD
+oD
+oD
+oD
+oD
+oD
 MD
 MD
 MD

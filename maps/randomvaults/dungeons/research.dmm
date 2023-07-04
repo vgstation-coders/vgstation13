@@ -2789,9 +2789,7 @@
 	},
 /obj/item/weapon/paper_bin/red,
 /obj/item/weapon/pen,
-/turf/unsimulated/floor{
-	icon_state = "dark vault full"
-	},
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "Ef" = (
 /obj/effect/decal/cleanable/blood{
@@ -4291,9 +4289,7 @@
 	name = "Checkpoint Blast Doors";
 	opacity = 0
 	},
-/turf/unsimulated/floor{
-	icon_state = "dark vault full"
-	},
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "Tn" = (
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/heavy,
