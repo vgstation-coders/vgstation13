@@ -65,7 +65,16 @@
 	if(iscluwnebanned(src))
 		output = "<div align='center'><p><a href='byond://?src=\ref[src];cluwnebanned=1'>cluwne</a></p></div>"
 
-	var/datum/browser/popup = new(src, "playersetup", "<div align='center'>New Player Options</div>", 210, 250)
+	if (client?.prefs.tip_of_the_day)
+		var/list/tips_weights = list()
+		for (var/tip in subtypesof(/datum/pomf_tip))
+			var/datum/pomf_tip/T = tip
+			tips_weights[T] = initial(T.weight)
+
+		var/datum/pomf_tip/tip_picked = pickweight(tips_weights)
+		output += show_tip(tip_picked)
+
+	var/datum/browser/popup = new(src, "playersetup", "<div align='center'>New Player Options</div>", client?.prefs.tip_of_the_day ? 240 : 210, client?.prefs.tip_of_the_day ? 400 : 250)
 	popup.set_content(output)
 	popup.set_window_options("focus=0;can_close=0;can_minimize=1;can_maximize=0;can_resize=1;titlebar=1;")
 	popup.open()
@@ -279,11 +288,7 @@
 		client.ivoted = TRUE
 
 	if (href_list["refresh_tip"])
-		var/previous_tip = href_list["current_tip"]
-		var/list/tip_list = subtypesof(/datum/tip_of_the_day)
-		tip_list -= previous_tip
-		var/tip_picked = pickweight(tip_list)
-		show_tip(tip_picked)
+		new_player_panel_proc() // hacky as heck!
 
 /mob/new_player/proc/IsJobAvailable(rank)
 	var/datum/job/job = job_master.GetJob(rank)

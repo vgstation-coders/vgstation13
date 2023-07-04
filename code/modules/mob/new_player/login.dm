@@ -18,8 +18,6 @@
 	change_sight(adding = SEE_TURFS)
 	player_list |= src
 
-	show_tip_of_the_day()
-
 /*
 	var/list/watch_locations = list()
 	for(var/obj/effect/landmark/landmark in landmarks_list)
