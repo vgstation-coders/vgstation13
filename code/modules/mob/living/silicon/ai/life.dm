@@ -158,6 +158,8 @@
 		handle_regular_hud_updates()
 	if(life_handle_health())
 		return
+	if(stunned > 0)
+		stunned -= 1
 
 	if(ai_flags & COREFORTIFY)
 		brute_damage_modifier = 0.33
