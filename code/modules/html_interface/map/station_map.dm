@@ -89,7 +89,7 @@
 					newMarker.z = ZLevel
 					holomap_markers[newMarker.id+"_\ref[A]"] = newMarker
 			if (A.destroy_after_marker)
-				spawn(10)
+				spawn(10)//necessary to give some margin for the marker to be created before removing that temp area.
 					var/area/fill_area
 					for(var/turf/T in A)
 						if(!fill_area)
