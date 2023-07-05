@@ -5675,7 +5675,7 @@ var/procizine_tolerance = 0
 	density = 1.42
 	specheatcap = 14.59
 
-/datum/reagent/hell_ramen/on_mob_life(var/mob/living/M)
+/datum/reagent/frost_ramen/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
