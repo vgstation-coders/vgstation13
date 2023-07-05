@@ -21,7 +21,7 @@
 		/datum/zLevel/space{
 			name = "spacePirateShip" ;
 			},
-		/datum/zLevel/mining,
+		/datum/zLevel/krakenroid,
 		)
 	enabled_jobs = list(/datum/job/trader)
 

@@ -116,7 +116,9 @@
 		/obj/structure/fence/door,
 		)
 
-	if (map.snow_theme)//we got a lot of turfs to check, so let's only check for those if we really need it
+	var/datum/zLevel/Z = map.zLevels[zLevel]
+
+	if (istype(Z, /datum/zLevel/snowsurface))//we got a lot of turfs to check, so let's only check for those if we really need it
 		full_emptiness += /obj/glacier
 		full_obstacles += /obj/structure/flora/tree
 
@@ -149,7 +151,7 @@
 								if (locate(obstacle) in tile)
 									override = TRUE
 									break
-							if (map.snow_theme)//a few snowflake checks (pun intended) to keep some of snaxi's secrets a bit harder to find.
+							if (istype(Z, /datum/zLevel/snowsurface))//a few snowflake checks (pun intended) to keep some of snaxi's secrets a bit harder to find.
 								if (istype(aera, /area/surface/blizzard))
 									if(map.holomap_offset_x.len >= zLevel)
 										canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
@@ -158,11 +160,13 @@
 									continue
 								else if ((istype(tile, /turf/unsimulated/floor/snow/permafrost) && istype(aera, /area/surface/mine)) ||(istype(tile, /turf/unsimulated/floor/snow/cave) && istype(aera, /area/surface/outer/ne)))
 									override = TRUE
-								else if (istype(aera, /area/mine/explored) && !istype(tile, /turf/unsimulated/floor/airless))
-									if (prob(80)) //blurring the shape of Snaxi's Kraken asteroid so it's a bit more subtle.
-										override = TRUE
+
 								else if (istype(aera, /area/derelict/secret))
 									override = TRUE
+							if (istype(Z, /datum/zLevel/krakenroid))
+								if (istype(aera, /area/mine/explored) && !istype(tile, /turf/unsimulated/floor/airless))
+									if (prob(80)) //blurring the shape of Snaxi's Kraken asteroid so it's a bit more subtle.
+										override = TRUE
 							var/exception = FALSE
 							if (istype(tile, get_base_turf(zLevel)) && istype(aera, /area/mine/unexplored))//we could avoid such exceptions if this area wasn't ever painted over space.
 								exception = TRUE
@@ -182,7 +186,7 @@
 										canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 									else
 										canvas.DrawBox(HOLOMAP_PATH, i, r)
-						else if (map.snow_theme && (zLevel==map.zMainStation) && istype(aera, /area/vault))
+						else if (istype(Z, /datum/zLevel/snowsurface) && istype(aera, /area/vault))
 							if(map.holomap_offset_x.len >= zLevel)
 								canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 							else

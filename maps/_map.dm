@@ -222,8 +222,10 @@ var/global/list/accessable_z_levels = list()
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/mining
-
 	name = "mining"
+
+/datum/zLevel/krakenroid
+	name = "krakenroid"
 
 //for snowmap
 /datum/zLevel/snowsurface
