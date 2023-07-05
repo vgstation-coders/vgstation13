@@ -201,6 +201,9 @@ var/global/list/accessable_z_levels = list()
 				T.set_area(base_area)
 				T.ChangeTurf(base_turf)
 
+/datum/zLevel/proc/blur_holomap(var/area/aera, var/turf/truf)
+	return FALSE
+
 ////////////////////////////////
 
 /datum/zLevel/station
@@ -226,6 +229,12 @@ var/global/list/accessable_z_levels = list()
 
 /datum/zLevel/krakenroid
 	name = "krakenroid"
+
+/datum/zLevel/krakenroid/blur_holomap(var/area/aera, var/turf/truf)
+	if (istype(aera, /area/mine/explored) && !istype(truf, /turf/unsimulated/floor/airless))
+		if (prob(80)) //blurring the shape of Snaxi's Kraken asteroid so it's a bit more subtle.
+			return TRUE
+	return FALSE
 
 //for snowmap
 /datum/zLevel/snowsurface

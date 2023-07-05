@@ -98,6 +98,7 @@
 
 
 /proc/generateHoloMinimap(var/zLevel=1)
+
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 
 	//These atoms will keep their tile empty on holomaps
@@ -163,10 +164,8 @@
 
 								else if (istype(aera, /area/derelict/secret))
 									override = TRUE
-							if (istype(Z, /datum/zLevel/krakenroid))
-								if (istype(aera, /area/mine/explored) && !istype(tile, /turf/unsimulated/floor/airless))
-									if (prob(80)) //blurring the shape of Snaxi's Kraken asteroid so it's a bit more subtle.
-										override = TRUE
+							if (Z.blur_holomap(aera,tile))
+								override = TRUE
 							var/exception = FALSE
 							if (istype(tile, get_base_turf(zLevel)) && istype(aera, /area/mine/unexplored))//we could avoid such exceptions if this area wasn't ever painted over space.
 								exception = TRUE
@@ -263,7 +262,7 @@
 							canvas.DrawBox(areaToPaint.holomap_color, min(i+map.holomap_offset_x[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 						else
 							canvas.DrawBox(areaToPaint.holomap_color, i, r)
-					else if (tile.holomap_draw_override == HOLOMAP_DRAW_HALLWAY)
+					else if ((tile.holomap_draw_override == HOLOMAP_DRAW_HALLWAY) && !istype(areaToPaint, /area/surface/blizzard))
 						if(map.holomap_offset_x.len >= StationZLevel)
 							canvas.DrawBox(HOLOMAP_AREACOLOR_HALLWAYS, min(i+map.holomap_offset_x[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 						else
