@@ -159,7 +159,7 @@
 								else if ((istype(tile, /turf/unsimulated/floor/snow/permafrost) && istype(aera, /area/surface/mine)) ||(istype(tile, /turf/unsimulated/floor/snow/cave) && istype(aera, /area/surface/outer/ne)))
 									override = TRUE
 								else if (istype(aera, /area/mine/explored) && !istype(tile, /turf/unsimulated/floor/airless))
-									if (prob(80))
+									if (prob(80)) //blurring the shape of Snaxi's Kraken asteroid so it's a bit more subtle.
 										override = TRUE
 								else if (istype(aera, /area/derelict/secret))
 									override = TRUE
