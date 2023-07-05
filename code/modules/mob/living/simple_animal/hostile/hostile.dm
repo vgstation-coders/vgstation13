@@ -530,3 +530,8 @@
 
 /mob/living/simple_animal/hostile/get_armor_modifier(mob/living/target)
 	return armor_modifier
+
+/mob/living/simple_animal/hostile/friend_list_transfer(var/mob/living/simple_animal/hostile/new_animal)
+	//add contents of friends to our new type
+	new_animal.friends += friends
+	return
