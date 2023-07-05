@@ -5679,8 +5679,15 @@ var/procizine_tolerance = 0
 
 	if(..())
 		return 1
-
-	M.bodytemperature -= 10 * TEMPERATURE_DAMAGE_COEFFICIENT
+	switch(tick) //starts like frost oil, ends like opposite hell ramen
+		if(1 to 10)
+			M.bodytemperature = max(M.bodytemperature-0.3 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
+		if(11 to 15)
+			M.bodytemperature = max(M.bodytemperature-0.6 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
+		if(16 to 20)
+			M.bodytemperature = max(M.bodytemperature-0.9 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
+		if(21 to INFINITY)
+			M.bodytemperature -= 10 * TEMPERATURE_DAMAGE_COEFFICIENT
 
 /datum/reagent/flour
 	name = "Flour"
