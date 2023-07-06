@@ -60,8 +60,8 @@
 	message_admins("[wave_name], containing [wave_size] objects up to [meteor_l_size] size and incoming from the [wave_l_dir], will strike in [meteor_delay/10] seconds.")
 
 	//Send to all Bhangmeters
-	for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
-		if(bhangmeter && !bhangmeter.stat)
+	for(var/obj/machinery/computer/bhangmeter/bhangmeter in bhangmeters)
+		if(!bhangmeter.stat && bhangmeter.z == map.zMainStation)
 			bhangmeter.say("Detected: [wave_name], containing [wave_size] objects up to [meteor_l_size] size and incoming from the [wave_l_dir], will strike in [meteor_delay/10] seconds.")
 
 /proc/spawn_meteor(var/chosen_dir, var/meteorpath = null, var/offset_origin = 0, var/offset_dest = 0)

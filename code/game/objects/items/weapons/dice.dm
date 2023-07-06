@@ -367,22 +367,16 @@
 		triggered = 1
 		visible_message("<span class='notice'>You hear a quiet click.</span>")
 		spawn(40)
-			var/cap = 0
-			var/uncapped = result
 			if(result > 19) //Roll a nat 20
 				result = 24
 				sleep(40)
 			else
-				cap = 1
 				if(result > 14)
 					sleep(20)
 
 			var/turf/epicenter = get_turf(src)
-			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, cap, whodunnit = user)
-			if(cap)
-				for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
-					if(bhangmeter)
-						bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
+			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, 0, whodunnit = user)
+
 	return result
 
 

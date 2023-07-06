@@ -1616,6 +1616,7 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"
 #define HOLOMAP_EXTRA_CULTMAP					"cultmap"
 #define HOLOMAP_EXTRA_BHANGMAP					"bhangmap"
+#define HOLOMAP_EXTRA_BHANGBASEMAP				"bhangbasemap"
 
 #define HOLOMAP_MARKER_SMES				"smes"
 #define HOLOMAP_MARKER_DISK				"diskspawn"
