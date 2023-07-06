@@ -785,9 +785,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	return new_animal
 
-/mob/living/simple_animal/proc/friend_list_transfer(var/mob/living/simple_animal/new_animal)
-	return
-
 /mob/living/simple_animal/proc/inherit_mind(mob/living/simple_animal/from)
 	src.faction = from.faction
 
