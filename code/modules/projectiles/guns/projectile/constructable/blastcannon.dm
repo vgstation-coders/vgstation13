@@ -172,10 +172,6 @@
 				message_admins(log_str, 0, 1)
 				log_game(log_str)
 
-			for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
-				if(bhangmeter)
-					bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
-
 		else
 			user.visible_message("<span class='danger'>[user] opens \the [bomb] on \his [src.name]!</span>","<span class='danger'>You open \the [bomb] on your [src.name]!</span>")
 			user.visible_message("\The [bomb] on [user]'s [src.name] hisses pitifully.","\The [bomb] on your [src.name] hisses pitifully.")

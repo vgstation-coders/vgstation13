@@ -36,7 +36,14 @@
 	canvas.Blend(map_base,ICON_OVERLAY)
 	extraMiniMaps |= HOLOMAP_EXTRA_CULTMAP
 	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
-	//-------------Cult Map end---------
+	//-------------Bhangmap--------
+	for (var/z = 1 to world.maxz)
+		var/icon/canvas = icon('icons/480x480.dmi', "bhangmap")
+		var/icon/map_base = icon(holoMiniMaps[z])
+		map_base.Blend("#FFBD00",ICON_MULTIPLY)
+		canvas.Blend(map_base,ICON_OVERLAY)
+		extraMiniMaps["[HOLOMAP_EXTRA_BHANGMAP]_[z]"] = canvas
+	//----------------------------------
 
 	//Station Holomaps display the map of the Z-Level they were built on.
 	generateStationMinimap(map.zMainStation)

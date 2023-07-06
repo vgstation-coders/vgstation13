@@ -160,10 +160,10 @@ var/list/station_holomaps = list()
 				holomap_datum.station_map.overlays += holomap_datum.workplaceMarker
 
 /obj/machinery/station_map/attack_paw(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/station_map/attack_animal(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/station_map/attack_ghost(var/mob/user)
 	if(!can_spook())
