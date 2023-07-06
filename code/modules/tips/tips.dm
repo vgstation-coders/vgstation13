@@ -106,6 +106,13 @@
 	category = "General"
 	weight = 3
 
+// -- Wholesomefully contributed by xeroxemnas
+/datum/pomf_tip/trans_rights
+	title = "Trans rights!"
+	desc = "Trans rights are human rights. Trans lefts are also human lefts."
+	category = "General"
+	weight = 1
+
 // -- Command
 
 /datum/pomf_tip/chain_of_command
