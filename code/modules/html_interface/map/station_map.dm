@@ -76,7 +76,7 @@
 				newMarker.y = nukedisk.y
 				newMarker.z = nukedisk.z
 				holomap_markers[HOLOMAP_MARKER_DISK] = newMarker
-	//generating area markers
+		//generating area markers
 		for(var/area/A in areas)
 			if(A.holomap_marker)
 				var/turf/T = A.getAreaCenter(ZLevel)
@@ -95,7 +95,28 @@
 						if(!fill_area)
 							fill_area = get_base_area(T.z)
 						T.set_area(fill_area)
-
+		//workplace markers
+		var/list/landmarks = list()
+		for (var/obj/effect/landmark/start/landmark in landmarks_list)
+			if (!("[landmark.name]_[landmark.z]" in landmarks))
+				landmarks["[landmark.name]_[landmark.z]"] = list(landmark)
+			else
+				landmarks["[landmark.name]_[landmark.z]"] += landmark
+		for (var/landmark_id in landmarks)
+			var/datum/holomap_marker/newMarker = new()
+			newMarker.id = landmark_id
+			var/total_x = 0
+			var/total_y = 0
+			var/list/landmark_starts = landmarks[landmark_id]
+			if (!landmark_starts.len)
+				continue
+			for (var/obj/effect/landmark/start in landmark_starts)
+				total_x += start.x
+				total_y += start.y
+				newMarker.z = start.z
+			newMarker.x = round(total_x/landmark_starts.len)
+			newMarker.y = round(total_y/landmark_starts.len)
+			holomap_markers[newMarker.id] = newMarker
 
 /proc/generateHoloMinimap(var/zLevel=1)
 
