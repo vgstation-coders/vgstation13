@@ -131,7 +131,7 @@
 				newMarker.y = round(total_y/landmark_starts.len)
 				workplace_markers[newMarker.id] = list(newMarker)
 			else
-				holomap_markers[landmark_id] = list()
+				workplace_markers[landmark_id] = list()
 				for (var/obj/effect/landmark/start in landmark_starts)
 					var/datum/holomap_marker/newMarker = new()
 					newMarker.id = landmark_id
