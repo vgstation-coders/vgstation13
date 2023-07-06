@@ -103,20 +103,42 @@
 			else
 				landmarks["[landmark.name]_[landmark.z]"] += landmark
 		for (var/landmark_id in landmarks)
-			var/datum/holomap_marker/newMarker = new()
-			newMarker.id = landmark_id
 			var/total_x = 0
 			var/total_y = 0
+			var/first_x = 0
+			var/first_y = 0
+			var/only_one = TRUE//we try to generate just one marker that averages the spawn locations
 			var/list/landmark_starts = landmarks[landmark_id]
 			if (!landmark_starts.len)
 				continue
 			for (var/obj/effect/landmark/start in landmark_starts)
-				total_x += start.x
-				total_y += start.y
-				newMarker.z = start.z
-			newMarker.x = round(total_x/landmark_starts.len)
-			newMarker.y = round(total_y/landmark_starts.len)
-			holomap_markers[newMarker.id] = newMarker
+				if (!first_x)
+					first_x = start.x
+					first_y = start.y
+				var/diff = abs(first_x - start.x) + abs(first_y - start.y)
+				if(diff > 50)
+					only_one = FALSE//but if some of them are too far appart, we'll list them all.
+					break
+
+			if (only_one)
+				var/datum/holomap_marker/newMarker = new()
+				newMarker.id = landmark_id
+				for (var/obj/effect/landmark/start in landmark_starts)
+					total_x += start.x
+					total_y += start.y
+					newMarker.z = start.z
+				newMarker.x = round(total_x/landmark_starts.len)
+				newMarker.y = round(total_y/landmark_starts.len)
+				workplace_markers[newMarker.id] = list(newMarker)
+			else
+				holomap_markers[landmark_id] = list()
+				for (var/obj/effect/landmark/start in landmark_starts)
+					var/datum/holomap_marker/newMarker = new()
+					newMarker.id = landmark_id
+					newMarker.x = start.x
+					newMarker.y = start.y
+					newMarker.z = start.z
+					workplace_markers[newMarker.id] += newMarker
 
 /proc/generateHoloMinimap(var/zLevel=1)
 

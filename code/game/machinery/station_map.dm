@@ -132,7 +132,7 @@ var/list/station_holomaps = list()
 				var/get_rank = H.get_assignment(null,null,TRUE)
 				if (!get_rank)
 					return
-				if ("[get_rank]_[original_zLevel]" in holomap_markers)
+				if ("[get_rank]_[original_zLevel]" in workplace_markers)
 					button_workplace = new (user.hud_used.holomap_obj,user,src,"Find Workplace",'icons/effects/64x32.dmi',"workplace",l="CENTER+3,CENTER-4")
 					button_workplace.name = "Launch"
 					button_workplace.alpha = 0
@@ -148,7 +148,7 @@ var/list/station_holomaps = list()
 			if (ishuman(i_user))
 				var/mob/living/carbon/human/H = i_user
 				var/get_rank = H.get_assignment(null,null,TRUE)
-				var/datum/holomap_marker/workplaceMarker = holomap_markers["[get_rank]_[original_zLevel]"]
+				var/datum/holomap_marker/workplaceMarker = pick(workplace_markers["[get_rank]_[original_zLevel]"])
 				holomap_datum.workplaceMarker = new('icons/holomap_markers_32x32.dmi',src,"workplace")
 				if(map.holomap_offset_x.len >= workplaceMarker.z)
 					holomap_datum.workplaceMarker.pixel_x = workplaceMarker.x - 6 + map.holomap_offset_x[workplaceMarker.z]
