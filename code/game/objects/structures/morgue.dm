@@ -222,6 +222,9 @@
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
+	if (!(ishuman(user) || ismartian(user) || ismonkey(user)) && !isrobot(user))
+		return
+
 	O.forceMove(src.loc)
 	if (user != O)
 		visible_message("<span class='warning'>[user] stuffs [O] into [src]!</span>")
