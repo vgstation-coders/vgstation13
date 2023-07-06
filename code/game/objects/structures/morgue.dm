@@ -222,7 +222,7 @@
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
-	if (!(ishuman(user) || ismartian(user) || ismonkey(user)) && !isrobot(user))
+	if (!iscarbon(user) && !isrobot(user))
 		return
 
 	O.forceMove(src.loc)
