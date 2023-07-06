@@ -443,6 +443,9 @@
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
+	if (!iscarbon(user) && !isrobot(user))
+		return
+
 	O.forceMove(src.loc)
 	if (user != O)
 		for(var/mob/B in viewers(user, 3))
