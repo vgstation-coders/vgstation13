@@ -149,9 +149,13 @@ var/list/station_holomaps = list()
 				var/mob/living/carbon/human/H = i_user
 				var/get_rank = H.get_assignment(null,null,TRUE)
 				var/datum/holomap_marker/workplaceMarker = holomap_markers["[get_rank]_[original_zLevel]"]
-				holomap_datum.workplaceMarker = new(src)
-				holomap_datum.workplaceMarker.pixel_x = workplaceMarker.x - 6
-				holomap_datum.workplaceMarker.pixel_y = workplaceMarker.y - 4
+				holomap_datum.workplaceMarker = new('icons/holomap_markers_32x32.dmi',src,"workplace")
+				if(map.holomap_offset_x.len >= workplaceMarker.z)
+					holomap_datum.workplaceMarker.pixel_x = workplaceMarker.x - 6 + map.holomap_offset_x[workplaceMarker.z]
+					holomap_datum.workplaceMarker.pixel_y = workplaceMarker.y - 4 + map.holomap_offset_y[workplaceMarker.z]
+				else
+					holomap_datum.workplaceMarker.pixel_x = workplaceMarker.x - 6
+					holomap_datum.workplaceMarker.pixel_y = workplaceMarker.y - 4
 				i_user.playsound_local(src, 'sound/effects/ping_warning.ogg', 25, 0, 0, 0, 0)
 				holomap_datum.station_map.overlays += holomap_datum.workplaceMarker
 
@@ -397,11 +401,7 @@ var/list/station_holomaps = list()
 	var/image/station_map
 	var/image/cursor
 	var/image/legend
-	var/obj/effect/overlay/workplaceMarker/workplaceMarker
-
-/obj/effect/overlay/workplaceMarker
-	icon = 'icons/holomap_markers_32x32.dmi'
-	icon_state = "workplace"
+	var/image/workplaceMarker
 
 /datum/station_holomap/proc/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null)
 	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
