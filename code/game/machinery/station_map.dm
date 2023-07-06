@@ -401,7 +401,7 @@ var/list/station_holomaps = list()
 
 /obj/effect/overlay/workplaceMarker
 	icon = 'icons/holomap_markers_32x32.dmi'
-	icon_state = "workplace_flick"
+	icon_state = "workplace"
 
 /datum/station_holomap/proc/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null)
 	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
