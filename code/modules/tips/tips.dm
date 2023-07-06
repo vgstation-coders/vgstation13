@@ -12,18 +12,6 @@
 	category = "Admins"
 	weight = 3
 
-/datum/pomf_tip/multikeying
-	title = "Multikeying"
-	desc = "Multikeying - using multiple accounts to play in the same round - is strictly forbidden."
-	category = "Admins"
-	weight = 3
-
-/datum/pomf_tip/be_honest
-	title = "Be honest in ahelps"
-	desc = "Lying to bwoink man is bad for your employment record. Be honest, you'll probably be fine."
-	category = "Admins"
-	weight = 3
-
 /datum/pomf_tip/antag_seeds
 	title = "Antag seeds"
 	desc = "There is no such thing as an antag seed. Stop asking."
@@ -211,9 +199,23 @@
 
 // -- Clown and mime
 
-
 /datum/pomf_tip/gimmick_repeating
 	title = "Ugh! It's my gimmick!"
 	desc = "Gimmicks are fun as long as they're novel, but lose their shine quickly over time. Always try to innovate and switch up your tactics, especially as clown or mime"
 	category = "Clown and mimes"
 	weight = 3
+
+// --- REMOVED ---
+
+
+/datum/pomf_tip/multikeying
+	title = "Multikeying"
+	desc = "Multikeying - using multiple accounts to play in the same round - is strictly forbidden."
+	category = "Admins"
+	weight = 0
+
+/datum/pomf_tip/be_honest
+	title = "Be honest in ahelps"
+	desc = "Lying to bwoink man is bad for your employment record. Be honest, you'll probably be fine."
+	category = "Admins"
+	weight = 0
