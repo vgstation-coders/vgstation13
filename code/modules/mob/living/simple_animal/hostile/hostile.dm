@@ -366,13 +366,12 @@
 	var/mob/living/simple_animal/hostile/H = from
 	if(istype(H))
 		for (var/datum/weakref/ref in H.friends)
-			var/not_a_friend_yet = TRUE
+			var/already_friend = FALSE
 			var/mob/M = ref.get()
-			for (var/datum/weakref/reff in H.friends)
+			for (var/datum/weakref/reff in friends)
 				if (M == reff.get())
-					not_a_friend_yet = FALSE
-					break
-			if (not_a_friend_yet)
+					already_friend = TRUE
+			if (!already_friend)
 				friends += makeweakref(M)
 
 /mob/living/simple_animal/hostile/proc/OpenFire(var/atom/ttarget)
@@ -530,8 +529,3 @@
 
 /mob/living/simple_animal/hostile/get_armor_modifier(mob/living/target)
 	return armor_modifier
-
-/mob/living/simple_animal/hostile/friend_list_transfer(var/mob/living/simple_animal/hostile/new_animal)
-	//add contents of friends to our new type
-	new_animal.friends += friends
-	return

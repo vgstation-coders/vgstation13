@@ -780,9 +780,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		new_animal.colour = colour
 		new_animal.update_icon()
 
-	//used by hostile mobs when growing up to transfer their list of friends.
-	friend_list_transfer(new_animal)
-
 	forceMove(get_turf(src))
 	qdel(src)
 
