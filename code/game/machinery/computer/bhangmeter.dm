@@ -88,14 +88,12 @@ var/list/sensed_explosions = list()
 				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
 				if (!("\ref[user]" in watcher_buttons))
-					watcher_buttons["\ref[user]"] = new /obj/abstract/screen/interface(user.hud_used.holomap_obj,user,src,"Database",'icons/effects/64x32.dmi',"database",l="CENTER,CENTER-4")
+					watcher_buttons["\ref[user]"] = new /obj/abstract/screen/interface(user.hud_used.holomap_obj,user,src,"Database",'icons/effects/64x32.dmi',"database",l="CENTER-0.5,CENTER-4")
 				var/obj/abstract/screen/interface/button_database = watcher_buttons["\ref[user]"]
 				button_database.name = "Database"
 				button_database.alpha = 0
 				animate(button_database, alpha = 255, time = 5, easing = LINEAR_EASING)
 				user.client.screen += watcher_buttons["\ref[user]"]
-
-				//to_chat(user, "<span class='notice'>Get detailed info: <a href ='?src=\ref[src];database=1'>\[BHANGMETER DATABASE\]</a></span>")
 
 /obj/machinery/computer/bhangmeter/attack_paw(var/mob/user)
 	attack_hand(user)
@@ -106,17 +104,12 @@ var/list/sensed_explosions = list()
 /obj/machinery/computer/bhangmeter/attack_ghost(var/mob/user)
 	attack_hand(user)
 
-/obj/machinery/computer/bhangmeter/Topic(href, href_list)
-	..()
-	if(usr.incapacitated())
-		return
-	if(!Adjacent(usr))
-		to_chat(usr, "<span class='warning'>You are too far from \the [src].</span>")
-		return
-	if(href_list["database"])
-		var/datum/browser/popup = new(usr, "\ref[src]", name, 600, 300, src)
-		popup.set_content(bhangmeterPanel())
-		popup.open()
+/obj/machinery/computer/bhangmeter/interface_act(var/mob/i_user,var/action)
+	switch(action)
+		if("Database")
+			var/datum/browser/popup = new(i_user, "\ref[src]", name, 600, 300, src)
+			popup.set_content(bhangmeterPanel())
+			popup.open()
 
 /obj/machinery/computer/bhangmeter/proc/bhangmeterPanel()
 	if (!original_zLevel)
