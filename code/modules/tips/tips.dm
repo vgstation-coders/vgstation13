@@ -94,10 +94,9 @@
 	category = "General"
 	weight = 3
 
-// -- Wholesomefully contributed by xeroxemnas
-/datum/pomf_tip/trans_rights
-	title = "Trans rights!"
-	desc = "Trans rights are human rights. Trans lefts are also human lefts."
+/datum/pomf_tip/vox_rights
+	title = "Vox rights!"
+	desc = "Vox rights are NOT human rights. Make sure to consult with the silicons and command staff before doing anything you'll regret when playing one!"
 	category = "General"
 	weight = 1
 
