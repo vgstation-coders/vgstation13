@@ -173,7 +173,7 @@
 	icon = 'icons/obj/hydroponics/moonflower.dmi'
 	attack_verb = list("chills", "freezes", "whacks")
 	fragrance = INCENSE_MOONFLOWERS
-	hotorcold = -1 //cold
+	hotorcold = -0.1 //cold and scaledown by 10
 	tampermessage = "chilled by the frost on"
 	burnverb = "freezes"
 
