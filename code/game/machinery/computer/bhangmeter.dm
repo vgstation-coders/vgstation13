@@ -46,6 +46,7 @@ var/list/sensed_explosions = list()
 	stopWatching()
 	holomap_datum = null
 	..()
+
 /obj/machinery/computer/bhangmeter/initialize()
 	var/turf/T
 	if (forced_zLevel)
@@ -60,7 +61,17 @@ var/list/sensed_explosions = list()
 	holomap_datum.initialize_holomap(T)
 
 /obj/machinery/computer/bhangmeter/process()
-	return PROCESS_KILL
+	. = ..()
+	if (.)
+		for (var/mob/M in watching_mobs)
+			M.client.images -= watcher_maps["\ref[M]"]
+			qdel(watcher_maps["\ref[M]"])
+			watcher_maps["\ref[M]"] = image(holomap_datum.get_bhangmap())
+			var/image/I = watcher_maps["\ref[M]"]
+			I.loc = M.hud_used.holomap_obj
+			M.client.images |= watcher_maps["\ref[M]"]
+	else
+		stopWatching()
 
 /obj/machinery/computer/bhangmeter/say_quote(text)
 	return "coldly states, [text]"
