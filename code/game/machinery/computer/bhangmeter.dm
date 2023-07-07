@@ -88,7 +88,7 @@ var/list/sensed_explosions = list()
 				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
 				if (!("\ref[user]" in watcher_buttons))
-					watcher_buttons["\ref[user]"] = new /obj/abstract/screen/interface/button_database(user.hud_used.holomap_obj,user,src,"Database",'icons/effects/64x32.dmi',"database",l="CENTER,CENTER-4")
+					watcher_buttons["\ref[user]"] = new /obj/abstract/screen/interface(user.hud_used.holomap_obj,user,src,"Database",'icons/effects/64x32.dmi',"database",l="CENTER,CENTER-4")
 				var/obj/abstract/screen/interface/button_database = watcher_buttons["\ref[user]"]
 				button_database.name = "Database"
 				button_database.alpha = 0
