@@ -19,13 +19,17 @@ var/list/sensed_explosions = list()
 	var/mob/watching_mob = null
 	var/list/watching_mobs = list()
 	var/list/watcher_maps = list()
+	var/list/watcher_buttons = list()
 
-	var/original_zLevel = 1	//zLevel on which the station map was initialized.
+	var/original_zLevel = 1	//zLevel on which the machine was initialized.
 	var/forced_zLevel = 0	//can be set by mappers to override the Station Map's zLevel
-	var/bogus = 0			//set to 1 when you initialize the station map on a zLevel that doesn't have its own icon formatted for use by station holomaps.
-							//currently, the only supported zLevels are the Station, the Asteroid, and the Derelict.
+							//only zLevels to have an actual map displayed are the Station, the Asteroid, and the Derelict.
 
 	var/datum/station_holomap/bhang/holomap_datum
+
+	var/announcement_cooldown = 5 SECONDS
+	var/last_announcement = 0
+	var/datum/sensed_explosion/last_announced_explosion
 
 /obj/machinery/computer/bhangmeter/New()
 	..()
@@ -64,7 +68,10 @@ var/list/sensed_explosions = list()
 /obj/machinery/computer/bhangmeter/attack_hand(var/mob/user)
 	if(isliving(user) && anchored && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 		if( (holoMiniMaps.len < user.loc.z) || (holoMiniMaps[user.loc.z] == null ))
-			to_chat(user, "<span class='notice'>It doesn't seem to be working.</span>")
+			to_chat(user, "<span class='notice'>The holomap doesn't seem to be working.</span>")
+			var/datum/browser/popup = new(user, "\ref[src]", name, 600, 300, src)
+			popup.set_content(bhangmeterPanel())
+			popup.open()
 			return
 		if(user in watching_mobs)
 			stopWatching(user)
@@ -79,7 +86,16 @@ var/list/sensed_explosions = list()
 				user.client.images |= watcher_maps["\ref[user]"]
 				user.register_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
-				to_chat(user, "<span class='notice'>Get detailed info: <a href ='?src=\ref[src];database=1'>\[BHANGMETER DATABASE\]</a></span>")
+
+				if (!("\ref[user]" in watcher_buttons))
+					watcher_buttons["\ref[user]"] = new (user.hud_used.holomap_obj,user,src,"Database",'icons/effects/64x32.dmi',"database",l="CENTER,CENTER-4")
+				var/obj/abstract/screen/interface/button_database = watcher_buttons["\ref[user]"]
+				button_database.name = "Database"
+				button_database.alpha = 0
+				animate(button_database, alpha = 255, time = 5, easing = LINEAR_EASING)
+				user.client.screen += watcher_buttons["\ref[user]"]
+
+				//to_chat(user, "<span class='notice'>Get detailed info: <a href ='?src=\ref[src];database=1'>\[BHANGMETER DATABASE\]</a></span>")
 
 /obj/machinery/computer/bhangmeter/attack_paw(var/mob/user)
 	attack_hand(user)
@@ -131,17 +147,20 @@ var/list/sensed_explosions = list()
 		<th style="width:0.3%">Temp. Disp.</th>
 		</tr>
 		"}
+	var/sensed_list = ""
 	for (var/datum/sensed_explosion/SE in sensed_explosions["z[z]"])
-		dat += {"<tr>
+		var/SE_dat = {"<tr>
 				<td style="text-align:center">[SE.time]</td>
 				<td style="text-align:center">[SE.area.name]</td>
 				<td style="text-align:center">([SE.x],[SE.y],[SE.z])</td>
 				"}
 		if (SE.cap)
-			dat += {"<td style="text-align:center">[round(SE.cap*0.25)] / [round(SE.cap*0.5)] / [round(SE.cap)]</td>"}
+			SE_dat += {"<td style="text-align:center"><b>[round(SE.cap*0.25)] / [round(SE.cap*0.5)] / [round(SE.cap)]</b></td>"}
 		else
-			dat += {"<td style="text-align:center">[SE.dev] / [SE.heavy] / [SE.light]</td>"}
+			SE_dat += {"<td style="text-align:center">[SE.dev] / [SE.heavy] / [SE.light]</td>"}
 		dat += {"<td style="text-align:center">[SE.delay] sec</td></tr>"}
+		sensed_list = SE_dat + sensed_list
+	dat += sensed_list
 	return dat
 
 /obj/machinery/computer/bhangmeter/proc/checkPosition()
@@ -156,8 +175,10 @@ var/list/sensed_explosions = list()
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
 					qdel(watcher_maps["\ref[M]"])
+					M.client.screen -= watcher_buttons["\ref[M]"]
 				M.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
+				animate(watcher_buttons["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
 	else
@@ -167,8 +188,10 @@ var/list/sensed_explosions = list()
 					user.client.images -= watcher_maps["\ref[user]"]
 					qdel(watcher_maps["\ref[user]"])
 					watcher_maps -= "\ref[user]"
+					user.client.screen -= watcher_buttons["\ref[user]"]
 			user.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
+			animate(watcher_buttons["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user
 
@@ -177,6 +200,13 @@ var/list/sensed_explosions = list()
 		return
 	if (SE.z != z)
 		return
+	if (!last_announced_explosion || (world.time < (last_announcement + announcement_cooldown)))
+		var/new_score = SE.dev * 4 + SE.heavy * 2 + SE.light
+		var/old_score = last_announced_explosion.dev * 4 + last_announced_explosion.heavy * 2 + last_announced_explosion.light
+		if (old_score >= new_score)
+			return//We add a delay between announcements, unless the new explosion is larger than the last one.
+	last_announcement = world.time
+	last_announced_explosion = SE
 	if (SE.cap)
 		say("Explosive disturbance detected - Epicenter at: [SE.area.name] ([SE.x-WORLD_X_OFFSET[SE.z]],[SE.y-WORLD_Y_OFFSET[SE.z]], [SE.z]). \[Theoretical Results\] Epicenter radius: [round(SE.cap*0.25)]. Outer radius: [round(SE.cap*0.5)]. Shockwave radius: [round(SE.cap)]. Temporal displacement of tachyons: [SE.delay] second\s.")
 	else
@@ -187,7 +217,7 @@ var/list/sensed_explosions = list()
 
 /datum/station_holomap/bhang
 
-/datum/station_holomap/bhang/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null, var/cursor_icon = "bloodstone-here")
+/datum/station_holomap/bhang/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null, var/cursor_icon = null)
 	z = T.z
 	station_map = image(extraMiniMaps["[HOLOMAP_EXTRA_BHANGBASEMAP]_[z]"])
 
@@ -261,37 +291,22 @@ var/list/sensed_explosions = list()
 	if (!T)
 		return
 	var/icon/bhangmap = extraMiniMaps["[HOLOMAP_EXTRA_BHANGMAP]_[T.z]"]
-	var/previous_color = bhangmap.GetPixel(T.x,T.y,null)
-	var/previous_intensity = 4
-	switch(previous_color)
-		if (BHANGMAP_COLOR_DEVASTATION)
-			previous_intensity = 1
-		if (BHANGMAP_COLOR_HEAVY)
-			previous_intensity = 2
-		if (BHANGMAP_COLOR_LIGHT)
-			previous_intensity = 3
 
-	var/draw_on_mainmap = TRUE
-	if (previous_intensity <= severity)
-		draw_on_mainmap = FALSE
-
-	var/new_color = BHANGMAP_COLOR_DEVASTATION
+	var/color = BHANGMAP_COLOR_DEVASTATION
 	switch(severity)
 		if (1)
-			new_color = BHANGMAP_COLOR_DEVASTATION
+			color = BHANGMAP_COLOR_DEVASTATION
 		if (2)
-			new_color = BHANGMAP_COLOR_HEAVY
+			color = BHANGMAP_COLOR_HEAVY
 		if (3)
-			new_color = BHANGMAP_COLOR_LIGHT
+			color = BHANGMAP_COLOR_LIGHT
 
 	if(map.holomap_offset_x.len >= z)
-		explosion_icon.DrawBox(new_color, min(T.x+map.holomap_offset_x[z],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(T.y+map.holomap_offset_y[z],((2 * world.view + 1)*WORLD_ICON_SIZE)))
-		if (draw_on_mainmap)
-			bhangmap.DrawBox(new_color, min(T.x+map.holomap_offset_x[z],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(T.y+map.holomap_offset_y[z],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+		explosion_icon.DrawBox(color, min(T.x+map.holomap_offset_x[z],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(T.y+map.holomap_offset_y[z],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+		bhangmap.DrawBox(color, min(T.x+map.holomap_offset_x[z],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(T.y+map.holomap_offset_y[z],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 	else
-		explosion_icon.DrawBox(new_color, T.x, T.y)
-		if (draw_on_mainmap)
-			bhangmap.DrawBox(new_color, T.x, T.y)
+		explosion_icon.DrawBox(color, T.x, T.y)
+		bhangmap.DrawBox(color, T.x, T.y)
 
 #undef BHANGMAP_COLOR_DEVASTATION
 #undef BHANGMAP_COLOR_HEAVY

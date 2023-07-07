@@ -59,6 +59,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/dmgestkey			= null
 	var/explosions			= 0 //How many explosions happened total
 	var/largeexplosions		= 0 // >1 devastation range
+	var/largest_TTV			= 0 //The largest Tank Transfer Valve explosion this round
 	var/deadpets			= 0 //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
 	var/buttbotfarts		= 0 //Messages mimicked by buttbots.
 	var/turfssingulod		= 0 //Amount of turfs eaten by singularities.
@@ -186,6 +187,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Number of Times Someone was Slipped: </B> [score.slips]<BR>"
 	if(score.explosions > 0)
 		dat += "<B>Number of Explosions This Shift:</B> [score.explosions]<BR>"
+	if(score.largest_TTV > 0)
+		dat += "<B>Largest Tank Transfer Valve Explosion:</B> [round(score.largest_TTV*0.25)] / [round(score.largest_TTV*0.5)] / [round(score.largest_TTV)][(score.largest_TTV >= MAX_EXPLOSION_RANGE) ? " (That's a maxcap right there. Not bad!)" : ""]<BR>"
 	if(score.arenafights > 0)
 		dat += "<B>Number of Arena Rounds:</B> [score.arenafights]<BR>"
 	if(score.totaltransfer > 0)

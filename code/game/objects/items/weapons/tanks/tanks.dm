@@ -258,6 +258,7 @@
 		air_contents.react()
 		pressure = air_contents.return_pressure()
 		var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
+		score.largest_TTV = max(score.largest_TTV, range)
 		if(range > MAX_EXPLOSION_RANGE)
 			cap = range
 		range = min(range, MAX_EXPLOSION_RANGE)		// was 8 - - - Changed to a configurable define -- TLE
