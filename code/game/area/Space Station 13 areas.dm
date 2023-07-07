@@ -2836,13 +2836,32 @@ var/list/the_station_areas = list (
 /area/maintenance/engine
 	name = "Engine"
 
+var/list/shack_names = list("abandoned","deserted","forsaken","stranded","isolated")
+
 /area/shack
-	name = "abandoned shack"
+	name = "shack"
 	requires_power = 0
 	icon_state = "firingrange"
 	dynamic_lighting = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_FULL
+
+/area/shack/spawned_by_map_element(datum/map_element/ME, list/objects)//So each shack is its own area. Copied from /area/vault/automap.
+	var/area/shack/new_area = new src.type
+
+	for(var/turf/T in src.contents)
+		new_area.contents.Add(T)
+
+		T.change_area(src, new_area)
+		for(var/atom/allthings in T.contents)
+			allthings.change_area(src, new_area)
+
+	new_area.tag = "[new_area.type]/\ref[ME]"
+
+	var/pick_name = pick(shack_names)
+	shack_names -= pick_name
+	new_area.name = "[pick_name] shack"//having a different name for every shack so they are separate entries in the Jump to Area list
+	ghostteleportlocs[new_area.name] = new_area
 
 // BEGIN Horizon
 /area/hallway/primary/foreport
