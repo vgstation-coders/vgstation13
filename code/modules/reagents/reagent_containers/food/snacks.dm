@@ -4930,7 +4930,20 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(CAPSAICIN, 1)
-	bitesize = 1
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nova
+	name = "Spicy Chips"
+	desc = "Little disks of heat, like a bag full of tiny suns!"
+	icon_state = "nova_chips"
+	item_state = "nova_chips"
+	trash = null
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nova/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NOVAFLOUR, 1)
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/zamitos
 	name = "Zamitos: Original Flavor"

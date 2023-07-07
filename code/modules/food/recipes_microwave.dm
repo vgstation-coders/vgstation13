@@ -2044,6 +2044,13 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/spicy
+	
+/datum/recipe/novachips
+	reagents = list (SODIUMCHLORIDE = 2, NOVAFLOUR = 2)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nova
 
 /datum/recipe/tortillachips
 	reagents = list (FLOUR = 20, CORNOIL = 10, SODIUMCHLORIDE = 10)
