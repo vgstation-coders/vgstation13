@@ -3301,13 +3301,13 @@
 //The candy version for the vendors
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/nano/safe
 	safeforfat = TRUE
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/syndie/safe
 	safeforfat = TRUE
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/discount/safe
 	safeforfat = TRUE
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade/safe
 	safeforfat = TRUE
 
@@ -3948,6 +3948,7 @@
 	name = "cracker"
 	desc = "It's a salted cracker."
 	icon_state = "cracker"
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/cracker/New()
 	..()
