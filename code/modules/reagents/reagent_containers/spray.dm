@@ -183,8 +183,8 @@
 
 //Fake Xeno Creep Sprayer
 /obj/item/weapon/reagent_containers/spray/creepspray
-	name = "Creep Spray"
-	desc = "Filled with a mysterious purple liquid."
+	name = "Alien Weed Spray"
+	desc = "You're unsure if this is meant to cull or create weeds. The Discount Dan logo is haphazardly slapped on top of a faded yellow 'W' and gray 'Y'"
 	volume = 250
 
 /obj/item/weapon/reagent_containers/spray/creepspray/New()
