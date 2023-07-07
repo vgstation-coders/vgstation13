@@ -200,12 +200,25 @@
 
 /datum/pomf_tip/gimmick_repeating
 	title = "Ugh! It's my gimmick!"
-	desc = "Gimmicks are fun as long as they're novel, but lose their shine quickly over time. Always try to innovate and switch up your tactics, especially as clown or mime"
+	desc = "Gimmicks are fun as long as they're novel, but lose their shine quickly over time. Always try to innovate and switch up your tactics, especially as clown or mime."
 	category = "Clown and mimes"
 	weight = 3
 
-// --- REMOVED ---
+// -- Medical
 
+/datum/pomf_tip/viruses
+	title = "Viruses"
+	desc = "Low strength viruses can be cured with spacecilin, but for stronger ones, you will need to use the virology machines."
+	category = "Medical"
+	weight = 3
+
+/datum/pomf_tip/surgery
+	title = "Surgery"
+	desc = "Patients undergoing surgery may wince and shake in pain if not properly anaesthetised."
+	category = "Medical"
+	weight = 3
+
+// --- REMOVED ---
 
 /datum/pomf_tip/multikeying
 	title = "Multikeying"
