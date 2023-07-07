@@ -3950,6 +3950,7 @@
 	name = "cracker"
 	desc = "It's a salted cracker."
 	icon_state = "cracker"
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/cracker/New()
 	..()
