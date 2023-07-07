@@ -4933,7 +4933,7 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nova
-	name = "Spicy Chips"
+	name = "Nova Chips"
 	desc = "Little disks of heat, like a bag full of tiny suns!"
 	icon_state = "nova_chips"
 	item_state = "nova_chips"
