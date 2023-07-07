@@ -4918,6 +4918,19 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
+	
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/spicy
+	name = "Spicy Chips"
+	desc = "Don't get the dust in your eyes!"
+	icon_state = "spicy_chips"
+	item_state = "spicy_chips"
+	trash = null
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/spicy/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(CAPSAICIN, 1)
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/zamitos
 	name = "Zamitos: Original Flavor"
