@@ -1044,7 +1044,7 @@
 	name = "bagel"
 	desc = "You can almost imagine the center is a black hole."
 	icon_state = "bagel"
-	food_flags = FOOD_ANIMAL
+	food_flags = FOOD_ANIMAL | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/bagel/New()
 	..()
@@ -1234,7 +1234,7 @@
 	name = "\improper Donk-pocket"
 	desc = "The food of choice for the seasoned traitor."
 	icon_state = "donkpocket"
-	food_flags = FOOD_MEAT
+	food_flags = FOOD_MEAT | FOOD_DIPPABLE
 
 	var/warm = 0
 
@@ -1574,7 +1574,7 @@
 	name = "muffin"
 	desc = "A delicious and spongy little cake."
 	icon_state = "muffin"
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/muffin/New()
 	..()
@@ -1723,7 +1723,7 @@
 	desc = "Mmm, waffles!"
 	icon_state = "waffles"
 	trash = /obj/item/trash/waffles
-	food_flags = FOOD_ANIMAL
+	food_flags = FOOD_ANIMAL | FOOD_DIPPABLE
 /obj/item/weapon/reagent_containers/food/snacks/waffles/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
@@ -2025,6 +2025,7 @@
 	icon_state = "space_twinkie"
 	desc = "Guaranteed to survive longer than you will."
 	valid_utensils = 0
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/spacetwinkie/New()
 	..()
@@ -2854,7 +2855,7 @@
 	desc = "Waffles from Roffle. Co."
 	icon_state = "rofflewaffles"
 	trash = /obj/item/trash/waffles
-	food_flags = FOOD_ANIMAL //eggs
+	food_flags = FOOD_ANIMAL | FOOD_DIPPABLE //eggs, can be dipped
 
 /obj/item/weapon/reagent_containers/food/snacks/rofflewaffles/New()
 	..()
@@ -3105,6 +3106,7 @@
 	name = "poppy pretzel"
 	desc = "A large, soft, all-twisted-up pretzel full of POP!"
 	icon_state = "poppypretzel"
+	food_flags = FOOD_DIPPABLE
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel/New()
@@ -3301,13 +3303,13 @@
 //The candy version for the vendors
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/nano/safe
 	safeforfat = TRUE
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/syndie/safe
 	safeforfat = TRUE
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/discount/safe
 	safeforfat = TRUE
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade/safe
 	safeforfat = TRUE
 
@@ -5724,6 +5726,7 @@
 	desc = "For the kingdom, the power, and the glory are yours, now and forever."
 	bitesize = 5
 	base_crumb_chance = 0
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/eucharist/New()
 	..()
@@ -5756,6 +5759,7 @@
 	name = "IJzerkoekje"
 	desc = "Bevat geen ijzer."
 	icon_state = "ijzerkoekje"
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje/New()
 	..()
@@ -6439,7 +6443,7 @@
 	name = "croissant"
 	desc = "True French cuisine."
 	icon_state = "croissant"
-	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+	food_flags = FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	base_crumb_chance = 40 // Croissants are literal crumb-making machines
 
 /obj/item/weapon/reagent_containers/food/snacks/croissant/New()
@@ -7110,7 +7114,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	name = "brownie"
 	desc = "A brownie that may or may not get you sky high."
 	icon_state = "ambrosia_brownie"
-	food_flags = FOOD_SWEET | FOOD_ANIMAL
+	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_r
 	name = "butter fingers"
@@ -7566,7 +7570,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "While on the station, the chef gives you a sweetroll. Delighted, you take it into maintenance to enjoy, only to be intercepted by a gang of three assistants your age."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "sweetroll"
-	food_flags = FOOD_ANIMAL | FOOD_SWEET | FOOD_LACTOSE
+	food_flags = FOOD_ANIMAL | FOOD_SWEET | FOOD_LACTOSE | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/sweetroll/New()
 	..()
