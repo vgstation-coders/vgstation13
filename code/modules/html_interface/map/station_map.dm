@@ -161,6 +161,7 @@
 					workplace_markers[newMarker.id] += newMarker
 
 /proc/generateHoloMinimap(var/zLevel=1)
+	set background=1
 
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 
