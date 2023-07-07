@@ -190,12 +190,12 @@ var/list/sensed_explosions = list()
 
 			watching_mobs -= user
 
-/obj/machinery/computer/bhangmeter/proc/announce(var/datum/sensed_explosion/SE)
+/obj/machinery/computer/bhangmeter/proc/announce_explosion(var/datum/sensed_explosion/SE)
 	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
-	if (SE.z != z)
+	if (SE.z != original_zLevel)
 		return
-	if (!last_announced_explosion || (world.time < (last_announcement + announcement_cooldown)))
+	if (last_announced_explosion && (world.time < (last_announcement + announcement_cooldown)))
 		var/new_score = SE.dev * 4 + SE.heavy * 2 + SE.light
 		var/old_score = last_announced_explosion.dev * 4 + last_announced_explosion.heavy * 2 + last_announced_explosion.light
 		if (old_score >= new_score)
@@ -206,6 +206,15 @@ var/list/sensed_explosions = list()
 		say("Explosive disturbance detected - Epicenter at: [SE.area.name] ([SE.x-WORLD_X_OFFSET[SE.z]],[SE.y-WORLD_Y_OFFSET[SE.z]], [SE.z]). \[Theoretical Results\] Epicenter radius: [round(SE.cap*0.25)]. Outer radius: [round(SE.cap*0.5)]. Shockwave radius: [round(SE.cap)]. Temporal displacement of tachyons: [SE.delay] second\s.")
 	else
 		say("Explosive disturbance detected - Epicenter at: [SE.area.name] ([SE.x-WORLD_X_OFFSET[SE.z]],[SE.y-WORLD_Y_OFFSET[SE.z]], [SE.z]). Epicenter radius: [SE.dev]. Outer radius: [SE.heavy]. Shockwave radius: [SE.light]. Temporal displacement of tachyons: [SE.delay] second\s.")
+
+
+/obj/machinery/computer/bhangmeter/proc/announce_meteors(var/datum/meteor_warning/MW)
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
+		return
+	if (original_zLevel != map.zMainStation)
+		return
+
+	say("[MW.name], containing [MW.num] objects up to [MW.size] size and incoming from the [MW.dir], will strike in [MW.delay/10] seconds.")
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,6 +235,8 @@ var/list/sensed_explosions = list()
 			var/image/explosion = image(SE.explosion_icon)
 			explosion.alpha = SE.alpha
 			base_map.overlays += explosion
+	for (var/datum/meteor_warning/MW in meteor_warnings)
+		base_map.overlays += MW.display
 	return base_map
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,7 +286,7 @@ var/list/sensed_explosions = list()
 
 	if ((dev > -1) || (heavy > -1) || (light > 2))//we only announce notable explosions
 		for(var/obj/machinery/computer/bhangmeter/bhangmeter in bhangmeters)
-			bhangmeter.announce(src)
+			bhangmeter.announce_explosion(src)
 
 	spawn()
 		while(alpha > 0)
