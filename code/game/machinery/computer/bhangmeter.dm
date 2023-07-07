@@ -119,7 +119,9 @@ var/list/sensed_explosions = list()
 		popup.open()
 
 /obj/machinery/computer/bhangmeter/proc/bhangmeterPanel()
-	var/datum/zLevel/thisZ = map.zLevels[z]
+	if (!original_zLevel)
+		original_zLevel = z
+	var/datum/zLevel/thisZ = map.zLevels[original_zLevel]
 	var/dat = {"<html>
 		<head>
 		<style>
@@ -289,6 +291,8 @@ var/list/sensed_explosions = list()
 
 /datum/sensed_explosion/proc/paint(var/turf/T,var/severity)
 	if (!T)
+		return
+	if (!holomaps_initialized)
 		return
 	var/icon/bhangmap = extraMiniMaps["[HOLOMAP_EXTRA_BHANGMAP]_[T.z]"]
 
