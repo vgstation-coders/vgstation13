@@ -64,12 +64,13 @@ var/list/sensed_explosions = list()
 	. = ..()
 	if (.)
 		for (var/mob/M in watching_mobs)
-			M.client.images -= watcher_maps["\ref[M]"]
-			qdel(watcher_maps["\ref[M]"])
-			watcher_maps["\ref[M]"] = image(holomap_datum.get_bhangmap())
-			var/image/I = watcher_maps["\ref[M]"]
-			I.loc = M.hud_used.holomap_obj
-			M.client.images |= watcher_maps["\ref[M]"]
+			if (M.client)
+				M.client.images -= watcher_maps["\ref[M]"]
+				qdel(watcher_maps["\ref[M]"])
+				watcher_maps["\ref[M]"] = image(holomap_datum.get_bhangmap())
+				var/image/I = watcher_maps["\ref[M]"]
+				I.loc = M.hud_used.holomap_obj
+				M.client.images |= watcher_maps["\ref[M]"]
 	else
 		stopWatching()
 
@@ -98,12 +99,13 @@ var/list/sensed_explosions = list()
 				user.register_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
-				if (!("\ref[user]" in watcher_buttons))
+				if (!("\ref[user]" in watcher_buttons) || !watcher_buttons["\ref[user]"])
 					watcher_buttons["\ref[user]"] = new /obj/abstract/screen/interface(user.hud_used.holomap_obj,user,src,"Database",'icons/effects/64x32.dmi',"database",l="CENTER-0.5,CENTER-4")
 				var/obj/abstract/screen/interface/button_database = watcher_buttons["\ref[user]"]
 				button_database.name = "Database"
 				button_database.alpha = 0
 				button_database.invisibility = 0//dunno why after ghosting out and back in it goes to 101 so this'll do in the meantime.
+				button_database.loc = user.hud_used.holomap_obj//dunno why after ghosting out and back in it goes to null so this'll do in the meantime.
 				animate(button_database, alpha = 255, time = 5, easing = LINEAR_EASING)
 				user.client.screen += watcher_buttons["\ref[user]"]
 
