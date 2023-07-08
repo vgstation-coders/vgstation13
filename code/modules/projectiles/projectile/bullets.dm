@@ -640,25 +640,7 @@
 	explosion_effect(starting, heavy_damage_range, medium_damage_range, light_damage_range)
 
 /obj/item/projectile/bullet/blastwave/to_bump(var/atom/A)
-	forceMove(get_step(loc,dir))
-
-/obj/item/projectile/bullet/blastwave/bullet_die()
-	//the bullet moved all the way, now to explode dem turfs
-	spawn()
-		for (var/turf/T in heavy_turfs)
-			blast_turf(T,1)
-			sleep(0.2)
-		for (var/turf/T in medium_turfs)
-			blast_turf(T,2)
-			sleep(0.2)
-		for (var/turf/T in light_turfs)
-			blast_turf(T,3)
-			sleep(0.2)
-
-		time_spent = stop_watch(time_spent)
-		if (explosion_datum)
-			explosion_datum.ready(time_spent)
-	..()
+	forceMove(get_step(loc,dir))//The projectile passes freely through everything. The actual explosion dampening is calculated later.
 
 /obj/item/projectile/bullet/blastwave/process_step()
 	..()
@@ -687,6 +669,21 @@
 				medium_turfs += U
 			else if (dist <= light_damage_range)
 				light_turfs += U
+
+/obj/item/projectile/bullet/blastwave/bullet_die()
+	//the bullet moved all the way, now to explode dem turfs
+	spawn()
+		for (var/turf/T in heavy_turfs)
+			blast_turf(T,1)
+		for (var/turf/T in medium_turfs)
+			blast_turf(T,2)
+		for (var/turf/T in light_turfs)
+			blast_turf(T,3)
+
+		time_spent = stop_watch(time_spent)
+		if (explosion_datum)
+			explosion_datum.ready(time_spent)
+	..()
 
 /obj/item/projectile/bullet/blastwave/proc/blast_turf(var/turf/T,var/severity)
 	explosion_datum.paint(T,severity)
