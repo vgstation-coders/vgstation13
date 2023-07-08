@@ -18,12 +18,14 @@
 	conventional_firearm = 0
 	silenced = 1
 	var/obj/item/device/transfer_valve/bomb = null
+	var/obj/item/toy/bomb/toybomb = null
 	var/datum/gas_mixture/bomb_air_contents_1 = null
 	var/datum/gas_mixture/bomb_air_contents_2 = null
 	var/ignorecap = 0
 	var/overcap = 0
 	var/bomb_appearance = null
 	var/widening_rate = 5
+
 
 /obj/item/weapon/gun/projectile/blastcannon/Destroy()
 	if(bomb)
@@ -34,13 +36,20 @@
 	..()
 
 /obj/item/weapon/gun/projectile/blastcannon/attack_self(mob/user as mob)
-	if(!bomb)
-		return
-	else
+	if(bomb)
 		bomb.forceMove(user.loc)
 		user.put_in_hands(bomb)
 		to_chat(user, "You detach \the [bomb] from \the [src].")
 		bomb = null
+		bomb_appearance = null
+		name = "pipe gun"
+		desc = "A pipe welded onto a gun stock. You're not sure how you could even use this."
+		w_class = W_CLASS_MEDIUM
+	else if (toybomb)
+		toybomb.forceMove(user.loc)
+		user.put_in_hands(toybomb)
+		to_chat(user, "You detach \the [toybomb] from \the [src].")
+		toybomb = null
 		bomb_appearance = null
 		name = "pipe gun"
 		desc = "A pipe welded onto a gun stock. You're not sure how you could even use this."
@@ -58,7 +67,7 @@
 /obj/item/weapon/gun/projectile/blastcannon/update_icon()
 	overlays.len = 0
 	item_state = "blastcannon_empty"
-	if(!bomb || !bomb_appearance)
+	if(!bomb_appearance)
 		if(iscarbon(loc))
 			var/mob/living/carbon/M = loc
 			M.update_inv_hands()
@@ -83,6 +92,9 @@
 		if(bomb)
 			to_chat(user, "<span class='warning'>There's already a [bomb.name] attached to \the [src]!</span>")
 			return
+		if(toybomb)
+			to_chat(user, "<span class='warning'>There's already a [toybomb.name] attached to \the [src]!</span>")
+			return
 		var/obj/item/device/transfer_valve/T = W
 		if(!T.tank_one || !T.tank_two)
 			to_chat(user, "<span class='warning'>Nothing's going to happen if there[!T.tank_one && !T.tank_two ? " aren't any tanks" : "'s only one tank"] attached to \the [W]!</span>")
@@ -97,7 +109,30 @@
 		name = "blast cannon"
 		desc = "A weapon of devastating force, the explosive power from the tank transfer valve is funneled straight out of its barrel."
 		w_class = W_CLASS_LARGE
+	if (istype(W, /obj/item/toy/bomb))
+		if(bomb)
+			to_chat(user, "<span class='warning'>There's already a [bomb.name] attached to \the [src]!</span>")
+			return
+		if(toybomb)
+			to_chat(user, "<span class='warning'>There's already a [toybomb.name] attached to \the [src]!</span>")
+			return
+		bomb_appearance = W.appearance
+		if(!user.drop_item(W, src))
+			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+			bomb_appearance = null
+			return 1
+		toybomb = W
+		user.visible_message("[user] attaches \the [W] to \the [src].","You attach \the [W] to \the [src]. It fits there perfectly.")
+		name = "blast cannon"
+		desc = "A weapon of devastating force, the explosive power from the tank transfer valve is funneled straight out of its barrel."
+		w_class = W_CLASS_LARGE
+
 	update_icon()
+
+/obj/item/weapon/gun/projectile/blastcannon/examine(var/mob/user)
+	..()
+	if(Adjacent(user))
+		to_chat(user, "<span class='warning'>Upon closer inspection, that valve and the tanks mounted on it appear to be made of...cheap plastic?</span>")
 
 /obj/item/weapon/gun/projectile/blastcannon/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if (istype(A, /obj/item/weapon/storage/backpack ))
@@ -149,6 +184,7 @@
 			bomb_air_contents_2.react()
 			pressure = bomb_air_contents_2.return_pressure()
 			var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
+			score.largest_TTV = max(score.largest_TTV, range)
 			if(!ignorecap)
 				overcap = range
 				range = min(range, MAX_EXPLOSION_RANGE)
