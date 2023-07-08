@@ -220,7 +220,7 @@
 	spawn(delay)
 		if (bitmap_height > 26 || bitmap_width > 26)
 			interface.height = 700
-			inteface.width = 960
+			interface.width = 960
 		interface.show(user)
 		interface.callJavaScript("initCanvas", list(paint_init_inputs,canvas_init_inputs), user)
 
