@@ -20,7 +20,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/slurpmode = 0 //1 = from obj to container. 0 = from obj to buffer.
 	var/slurp_types = list(/obj/structure/reagent_dispensers, /obj/item/weapon/reagent_containers/glass/bucket,
 		/obj/item/weapon/reagent_containers/glass/jar, /obj/structure/mopbucket) //types of objects we can slurp from when adjacent
-	var/condi = 0
+	var/condi = 0 //is this the condimaster?
 	var/windowtype = "chem_master" //For the browser windows
 	var/useramount = 30 // Last used amount
 	var/last_pill_amt = 10
@@ -187,7 +187,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		return 1
 
 /obj/machinery/chem_master/Topic(href, href_list)
-
 	if(..())
 		return 1
 
@@ -446,49 +445,76 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			return 1
 
 		else if (href_list["createbottle"] || href_list["createbottle_multiple"])
+			var/count = 1
 			if(reagents.total_volume == 0)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Buffer is empty!</span>")
 				return
+			var/amount_per_bottle = reagents.total_volume > 0 ? reagents.total_volume/count : 0
+			amount_per_bottle = min(amount_per_bottle,max_bottle_size)
+			
 			if(!condi)
-				var/count = 1
 				if(href_list["createbottle_multiple"])
 					count = isgoodnumber(input("Select the number of bottles to make.", "Amount:", last_bottle_amt) as num)
 				count = clamp(count, 1, 4)
 				last_bottle_amt = count
 
-				var/amount_per_bottle = reagents.total_volume > 0 ? reagents.total_volume/count : 0
-				amount_per_bottle = min(amount_per_bottle,max_bottle_size)
+			var/name = stripped_input(usr,"Name:", "Name your bottle!","[reagents.get_master_reagent_name()] ([amount_per_bottle] units)")
+			if(!name)
+				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
+				return
 
-				var/name = stripped_input(usr,"Name:", "Name your bottle!","[reagents.get_master_reagent_name()] ([amount_per_bottle] units)")
-				if(!name)
-					to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
-					return
+			while(count--)
+				if(amount_per_bottle == 0 || reagents.total_volume == 0)
+					break
 
-				while(count--)
-					if(amount_per_bottle == 0 || reagents.total_volume == 0)
-						break
+				var/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/P = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/(src.loc,max_bottle_size)
+				P.name = "[name] bottle"
+				P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
+				P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
+				//P.icon_state = "bottle"+bottlesprite
+				reagents.trans_to(P,amount_per_bottle)
+			src.updateUsrDialog()
+			return 1
 
-					var/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/P = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/(src.loc,max_bottle_size)
-					P.name = "[name] bottle"
-					P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
-					P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
-					//P.icon_state = "bottle"+bottlesprite
-					reagents.trans_to(P,amount_per_bottle)
-				src.updateUsrDialog()
-				return 1
-			else
-				var/obj/item/weapon/reagent_containers/food/condiment/P = new/obj/item/weapon/reagent_containers/food/condiment(src.loc)
-				reagents.trans_to(P, 50)
-				src.updateUsrDialog()
-				return 1
+		else if (href_list["createpacket"] || href_list["createpacket_multiple"])
+			var/count = 1
+			if(reagents.total_volume == 0)
+				to_chat(usr, "<span class='warning'>[bicon(src)] Buffer is empty!</span>")
+				return
+			if(href_list["createpacket_multiple"])
+				count = isgoodnumber(input("Select the number of packets to make.", "Amount:", 10) as num)
+			count = clamp(count, 1, 10)
+			
+			var/name = stripped_input(usr,"Name:", "Name your packet!","[reagents.get_master_reagent_name()] (5 units)")
+			if(!name)
+				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
+				return
+			while(count--)
+				if(reagents.total_volume < 5)
+					break
+
+				var/obj/item/weapon/reagent_containers/food/condiment/small/P = new/obj/item/weapon/reagent_containers/food/condiment/small/(src.loc,5)
+				P.name = "[name] packet"
+				P.desc = "A small condiment packet."
+				P.icon_state = "packet_"
+				P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
+				P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
+				reagents.trans_to(P,5)
+			src.updateUsrDialog()
+			return 1
+		else
+			return 1
 
 /obj/machinery/chem_master/proc/detach()
 	if(container)
+		if(mode)
+			reagents.trans_to(container, reagents.total_volume)
+		else
+			reagents.clear_reagents()
 		container.forceMove(src.loc)
 		container.pixel_x = 0 //We fucked with the beaker for overlays, so reset that
-		container.pixel_y = 0 //We fucked with the beaker for overlays, so reset that
+		container.pixel_y = 0 //
 		container = null
-		reagents.clear_reagents()
 		update_icon()
 		updateUsrDialog()
 
@@ -675,7 +701,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			dat += "Buffer is empty.<BR>"
 
 		if(condi)
-			dat += "<A href='?src=\ref[src];createbottle=1'>Create bottle (50 units max)</A>"
+			dat += {"<A href='?src=\ref[src];createbottle=1'>Create bottle ([max_bottle_size] units max)</A><BR>
+					<A href='?src=\ref[src];createpacket=1'>Create packet (5 units max)</A><BR>
+					<A href='?src=\ref[src];createpacket_multiple=1'>Create multiple packets (5 units max each; 10 max)</A><BR>"}
 		else
 			//
 			// PILL ICONS
