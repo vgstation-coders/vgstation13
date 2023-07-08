@@ -169,11 +169,13 @@
 	var/datum/gas_mixture/temp_first = new (tank_one.air_contents)
 	var/datum/gas_mixture/temp_second = new (tank_two.air_contents)
 
+	temp_first.volume += temp_second.volume
+
 	temp_first.merge(temp_second)
 
 	temp_first.react()
 
-	var/pressure = temp_first.return_pressure()/2
+	var/pressure = temp_first.return_pressure()
 
 	if(pressure <= TANK_FRAGMENT_PRESSURE)
 		return 0
@@ -182,7 +184,7 @@
 	temp_first.react()
 	temp_first.react()
 
-	pressure = temp_first.return_pressure()/2
+	pressure = temp_first.return_pressure()
 
 	var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 	var/dev = round(range*0.25)

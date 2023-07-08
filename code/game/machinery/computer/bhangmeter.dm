@@ -99,13 +99,10 @@ var/list/sensed_explosions = list()
 				user.register_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
-				if (!("\ref[user]" in watcher_buttons) || !watcher_buttons["\ref[user]"])
-					watcher_buttons["\ref[user]"] = new /obj/abstract/screen/interface(user.hud_used.holomap_obj,user,src,"Database",'icons/effects/64x32.dmi',"database",l="CENTER-0.5,CENTER-4")
+				watcher_buttons["\ref[user]"] = new /obj/abstract/screen/interface(user.hud_used.holomap_obj,user,src,"Database",'icons/effects/64x32.dmi',"database",l="CENTER-0.5,CENTER-4")
 				var/obj/abstract/screen/interface/button_database = watcher_buttons["\ref[user]"]
 				button_database.name = "Database"
 				button_database.alpha = 0
-				button_database.invisibility = 0//dunno why after ghosting out and back in it goes to 101 so this'll do in the meantime.
-				button_database.loc = user.hud_used.holomap_obj//dunno why after ghosting out and back in it goes to null so this'll do in the meantime.
 				animate(button_database, alpha = 255, time = 5, easing = LINEAR_EASING)
 				user.client.screen += watcher_buttons["\ref[user]"]
 
@@ -187,7 +184,8 @@ var/list/sensed_explosions = list()
 					M.client.screen -= watcher_buttons["\ref[M]"]
 				M.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
-				animate(watcher_buttons["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
+				if (watcher_buttons["\ref[M]"])
+					animate(watcher_buttons["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
 	else
@@ -200,7 +198,8 @@ var/list/sensed_explosions = list()
 					user.client.screen -= watcher_buttons["\ref[user]"]
 			user.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
-			animate(watcher_buttons["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
+			if (watcher_buttons["\ref[user]"])
+				animate(watcher_buttons["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user
 
@@ -249,8 +248,9 @@ var/list/sensed_explosions = list()
 			var/image/explosion = image(SE.explosion_icon)
 			explosion.alpha = SE.alpha
 			base_map.overlays += explosion
-	for (var/datum/meteor_warning/MW in meteor_warnings)
-		base_map.overlays += MW.display
+	if (z == map.zMainStation)
+		for (var/datum/meteor_warning/MW in meteor_warnings)
+			base_map.overlays += MW.display
 	return base_map
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
