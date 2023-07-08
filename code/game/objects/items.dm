@@ -1427,7 +1427,7 @@ var/global/list/image/blood_overlays = list()
 					animate(src, pixel_y = original_pixel_y, time = 5, easing = ELASTIC_EASING)
 					break
 				sleep(5)
-		throw_at(T, kick_power, 1)
+	throw_at(T, kick_power, 1)
 	Crossed(H) //So you can't kick shards while naked without suffering
 
 /obj/item/animationBolt(var/mob/firer)
