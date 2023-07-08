@@ -15,6 +15,7 @@
 	pass_flags = PASSTABLE
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK
 
+	library_section_names = list("14x14", "24x24", "24x14", "14x24")
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,

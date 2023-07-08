@@ -52,18 +52,6 @@
 	var/category
 	var/title
 
-/datum/library_query/proc/toSQL()
-	var/list/where = list()
-	if(author || title || category)
-		if(author)
-			where.Add("author LIKE '%[author]%'")
-		if(category)
-			where.Add("category = '[category]'")
-		if(title)
-			where.Add("title LIKE '%[title]%'")
-		return " WHERE "+jointext(where," AND ")
-	return ""
-
 // So we can have catalogs of books that are programmatic, and ones that aren't.
 /datum/library_catalog
 	var/list/cached_books = list()
@@ -93,7 +81,7 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM [library_table] WHERE id=:id", list("id" = sqlid))
+	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM `[library_table]` WHERE id=:id", list("id" = sqlid))
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
@@ -106,7 +94,7 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, author, title, content, category, description, ckey FROM [library_table] WHERE id=:id", list("id" = sqlid))
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, author, title, content, category, description, ckey FROM `[library_table]` WHERE id=:id", list("id" = sqlid))
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
@@ -131,8 +119,6 @@
 	return null
 
 var/global/datum/library_catalog/library_catalog = new()
-
-var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", "Reference", "Religion")
 
 /** Scanner **/
 /obj/machinery/libraryscanner

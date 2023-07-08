@@ -309,7 +309,7 @@
 		var/tckey = ckey(href_list["delbyckey"])
 		var/ans = alert(usr,"Are you sure you wish to delete all books by [tckey]? This cannot be undone.", "Library System", "Yes", "No")
 		if(ans=="Yes")
-			var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM [library_table] WHERE ckey=:tckey", list("tckey" = tckey))
+			var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM `[library_table]` WHERE ckey=:tckey", list("tckey" = tckey))
 			var/datum/DBQuery/response = query.Execute()
 			if(!response)
 				to_chat(usr, query.ErrorMsg())
@@ -528,7 +528,7 @@
 	var/ans = alert(user, "Are you sure you wish to delete \"[B.title]\", by [B.author]? This cannot be undone.", "c System", "Yes", "No")
 	if(ans!="Yes")
 		return
-	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM [library_table] WHERE id=:id", list("id" = "[B.id]"))
+	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM `[library_table]` WHERE id=:id", list("library_table" = library_table, "id" = "[B.id]"))
 	var/response = query.Execute()
 	if(!response)
 		to_chat(user, query.ErrorMsg())
