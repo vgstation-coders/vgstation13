@@ -773,7 +773,7 @@
 	desc = "Charming holiday sugar cookies, just like Mom used to make."
 	icon = 'icons/obj/food_seasonal.dmi'
 	base_crumb_chance = 5
-	food_flags = FOOD_SWEET
+	food_flags = FOOD_SWEET | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday/New()
 	..()
@@ -833,6 +833,7 @@
 	desc = "A holiday treat made with sugar and love."
 	icon = 'icons/obj/food_seasonal.dmi'
 	icon_state = "gingerbread"
+	food_flags = FOOD_DIPPABLE
 	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man/New()
@@ -2300,6 +2301,7 @@
 	name = "Fortune cookie"
 	desc = "A true prophecy in each cookie!"
 	icon_state = "fortune_cookie"
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/fortunecookie/New()
 	..()
@@ -2885,7 +2887,7 @@
 	name = "Jellied Toast"
 	desc = "A slice of bread covered with delicious jam."
 	icon_state = "jellytoast"
-	food_flags = FOOD_SWEET
+	food_flags = FOOD_SWEET | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/jelliedtoast/New()
 	..()
@@ -2908,6 +2910,7 @@
 	name = "avocado toast"
 	desc = "Salted avocado on a slice of toast. For the authentic experience, make sure you pay an exorbitant price for it."
 	icon_state = "avocadotoast"
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadotoast/New()
 	..()
@@ -3329,6 +3332,7 @@
 	name = "plump helmet biscuit"
 	desc = "This is a finely-prepared plump helmet biscuit. The ingredients are exceptionally minced plump helmet, and well-minced dwarven wheat flour."
 	icon_state = "phelmbiscuit"
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/plumphelmetbiscuit/New()
 	..()
@@ -3438,7 +3442,7 @@
 	desc = "A slice of delicious meatbread."
 	icon_state = "meatbreadslice"
 	bitesize = 2
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -4
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/xenomeatbread
@@ -3461,7 +3465,7 @@
 	desc = "A slice of delicious meatbread. Extra Heretical."
 	icon_state = "xenobreadslice"
 	bitesize = 2
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -4
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/spidermeatbread
@@ -3484,7 +3488,7 @@
 	desc = "A slice of meatloaf made from an animal that most likely still wants you dead."
 	icon_state = "xenobreadslice"
 	bitesize = 2
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread/synth
@@ -3507,7 +3511,7 @@
 	desc = "A slice of synthetic meatbread."
 	icon_state = "meatbreadslice"
 	bitesize = 2
-	food_flags = FOOD_MEAT
+	food_flags = FOOD_MEAT | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bananabread
 	name = "banana-nut bread"
@@ -3530,7 +3534,7 @@
 	desc = "A slice of delicious banana bread."
 	icon_state = "bananabreadslice"
 	bitesize = 2
-	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+	food_flags = FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/tofubread
 	name = "tofubread"
@@ -3553,6 +3557,7 @@
 	icon_state = "tofubreadslice"
 	bitesize = 2
 	plate_offset_y = -5
+	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/carrotcake
 	name = "carrot cake"
@@ -3842,12 +3847,14 @@
 	desc = "A slice of home."
 	icon_state = "breadslice"
 	bitesize = 2
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
 	name = "nova bread slice"
 	desc = "A slice of Sol."
 	icon_state = "novabreadslice"
 	plate_icon = "novacustom"
+	food_flags = FOOD_DIPPABLE
 
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
@@ -3870,7 +3877,7 @@
 	desc = "A slice of yum!"
 	icon_state = "creamcheesebreadslice"
 	bitesize = 2
-	food_flags = FOOD_LACTOSE
+	food_flags = FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
@@ -5163,6 +5170,7 @@
 	desc = "A slice of pumpkin bread."
 	icon_state = "pumpkinbreadslice"
 	bitesize = 2
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/corndog
 	name = "Corndog"
@@ -5866,6 +5874,7 @@
 	desc = "A biscuit: exactly what a Vox merchant or thief needs to start their day. (What's the difference?)"
 	icon_state = "voxbiscuit"
 	bitesize = 3
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/risenshiny/New()
 	..()
@@ -7159,7 +7168,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	name = "buttered toast"
 	desc = "Toasted bread with butter on it."
 	icon_state = "butteredtoast"
-	food_flags = FOOD_ANIMAL
+	food_flags = FOOD_ANIMAL | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/butteredtoast/New()
 	..()
@@ -7378,6 +7387,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "paitoast"
 	trash = 0
 	desc = "A slice of bread. Browned onto it is the image of a familiar friend."
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/New()
 	..()
@@ -7584,6 +7594,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "This is a finely-prepared plump helmet biscuit. Aside from the usual ingredients of minced plump helmet and well-minced dwarven wheat flour, this particular serving includes a chemical that sticks whoever eats it to the floor, much like magboots."
 	icon_state = "phelmbiscuit"
 	bitesize = 1
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit/New()
 	..()
@@ -7774,7 +7785,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	name = "Zam Biscuit"
 	desc = "A sweet biscuit with an exquisite blend of chocolate and acid flavors. The recipe is a mothership secret."
 	icon_state = "zambiscuit"
-	food_flags = FOOD_SWEET
+	food_flags = FOOD_SWEET | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit/New()
 	..()
@@ -7789,7 +7800,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	name = "Zam Buttery Biscuit"
 	desc = "Butter and acid blend together to make a divine biscuit flavor. Administrator Zam's favorite!"
 	icon_state = "zambiscuit_buttery"
-	food_flags = FOOD_ANIMAL | FOOD_SWEET
+	food_flags = FOOD_ANIMAL | FOOD_SWEET | FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter/New()
 	..()
@@ -7804,6 +7815,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	name = "Zam Radical Biscuit"
 	desc = "This Zam biscuit is oddly warm to the touch and glows faintly. It's probably not safe for consumption..." // Despite the warning, I'm sure someone will eat it.
 	icon_state = "zambiscuit_radical"
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical/New()
 	..()
@@ -8267,7 +8279,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "Ahh, the smell of the maintenance hallways in bread form."
 	icon_state = "gunkbreadslice"
 	bitesize = 2
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -4
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/gunkpie
