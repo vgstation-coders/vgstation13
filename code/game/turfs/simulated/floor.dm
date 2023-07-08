@@ -259,10 +259,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 /turf/simulated/floor/proc/render_advanced_graffiti(var/mob/user)
 	if (!advanced_graffiti)
 		return FALSE
-	message_admins("Rendering graffiti :)")
 	overlays -= advanced_graffiti_overlay
 	advanced_graffiti_overlay = advanced_graffiti.render_on(icon(icon, icon_state))
-	advanced_graffiti_overlay.SwapColor("#ffffffff", "#ffffff00")
+	advanced_graffiti_overlay.SwapColor("#aaaaaaff", "#ffffff00")
 	overlays += advanced_graffiti_overlay
 
 /turf/simulated/floor/Topic(href, href_list)

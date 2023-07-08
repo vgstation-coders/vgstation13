@@ -187,7 +187,10 @@
 	src.interface = new/datum/html_interface/nanotrasen(src, "Canvas", 600, 600, head)
 
 	// Setup contents
-	interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas.tmpl"))
+	if (bitmap_height < 32)
+		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas.tmpl"))
+	else
+		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas_tile.tmpl"))
 
 /datum/custom_painting/proc/interact(mob/user, datum/painting_utensil/p)
 	if(jobban_isbanned(user, "artist"))

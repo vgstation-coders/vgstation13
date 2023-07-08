@@ -188,7 +188,7 @@ var/global/list/all_graffitis = list(
 				var/turf/simulated/the_turf = target
 				var/datum/painting_utensil/p = new(user, src)
 				if (!the_turf.advanced_graffiti)
-					var/datum/custom_painting/advanced_graffiti = new(the_turf, 32, 32, base_color = "#ffffff")
+					var/datum/custom_painting/advanced_graffiti = new(the_turf, 32, 32, base_color = "#aaaaaa")
 					the_turf.advanced_graffiti = advanced_graffiti
 				the_turf.advanced_graffiti.interact(user, p)
 
