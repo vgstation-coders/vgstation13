@@ -125,6 +125,13 @@
 				new dirttype(tile)
 			else
 				tile.clean_blood()
+
+				if (istype(tile, /turf/simulated/floor))
+					var/turf/simulated/floor/F = tile
+					F.overlays -= F.advanced_graffiti_overlay
+					F.advanced_graffiti_overlay = null
+					qdel(F.advanced_graffiti)
+
 				for(var/atom/A in tile)
 					if(istype(A, /obj/effect))
 						if(iscleanaway(A))

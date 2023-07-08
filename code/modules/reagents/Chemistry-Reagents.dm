@@ -1047,7 +1047,7 @@
 
 	if(fatgokaboom && M_FAT in M.mutations)
 		M.gib()
-		
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(holder.has_any_reagents(COLDDRINKS) & prob(25))
@@ -2470,6 +2470,13 @@
 		return 1
 
 	if(volume >= 1)
+
+		if (istype(T, /turf/simulated/floor))
+			var/turf/simulated/floor/F = T
+			F.overlays -= F.advanced_graffiti_overlay
+			F.advanced_graffiti_overlay = null
+			qdel(F.advanced_graffiti)
+
 		T.clean_blood()
 
 		for(var/mob/living/carbon/slime/M in T)

@@ -131,6 +131,11 @@
 
 /datum/custom_painting/Destroy()
 	..()
+
+	if (istype(parent, /turf/simulated))
+		var/turf/simulated/S = parent
+		S.advanced_graffiti = null
+
 	parent = null
 
 	QDEL_NULL(interface)
@@ -213,6 +218,9 @@
 	delay += send_asset(user.client, "canvas.css")
 	delay += send_asset(user.client, "checkerboard.png")
 	spawn(delay)
+		if (bitmap_height > 26 || bitmap_width > 26)
+			interface.height = 700
+			inteface.width = 960
 		interface.show(user)
 		interface.callJavaScript("initCanvas", list(paint_init_inputs,canvas_init_inputs), user)
 
@@ -247,6 +255,12 @@
 		title = copytext(sanitize(url_decode(href_list["title"])), 1, MAX_NAME_LEN)
 		description = copytext(sanitize(url_decode(href_list["description"])), 1, MAX_MESSAGE_LEN)
 		contributing_artists += usr.ckey
+
+		// Should I be using COMSIG or events for this ? :thinking:
+		if (istype(parent, /turf/simulated/floor))
+			var/turf/simulated/floor/F = parent
+			F.render_advanced_graffiti(src, usr)
+
 		return TRUE
 
 /datum/custom_painting/proc/render_on(icon/ico, offset_x = src.offset_x, offset_y = src.offset_y)

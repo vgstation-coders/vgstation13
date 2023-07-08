@@ -73,6 +73,8 @@
 
 	var/mute_time = 0
 
+	var/datum/custom_painting/advanced_graffiti
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
