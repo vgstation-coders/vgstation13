@@ -98,36 +98,45 @@
 	w_type=RECYK_MISC
 
 /obj/item/trash/popcorn/hoppers
-	name = "hoppers"
+	name = "hoppers  bag"
 	icon_state = "hoppers"
 
 /obj/item/trash/sosjerky
-	name = "\improper Scaredy's Private Reserve Beef Jerky"
+	name = "\improper Scaredy's Private Reserve Beef Jerky bag"
 	icon_state = "sosjerky"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
 
 /obj/item/trash/syndi_cakes
-	name = "\improper Syndi cakes"
+	name = "\improper Syndi cakes box"
 	icon_state = "syndi_cakes"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
 
 /obj/item/trash/discountchocolate
-	name = "\improper Discount Dan's Chocolate Bar"
+	name = "\improper Discount Dan's Chocolate Bar wrapper"
 	icon_state = "danbar"
 
 /obj/item/trash/donitos
-	name = "Donitos"
+	name = "Donitos bag"
 	icon_state = "donitos"
 
 /obj/item/trash/donitos_coolranch
-	name = "Donitos Cool Ranch"
+	name = "Donitos Cool Ranch bag"
 	icon_state = "donitos_coolranch"
 
 /obj/item/trash/danitos
-	name = "\improper Danitos"
+	name = "\improper Danitos bag"
 	icon_state = "danitos"
+	
+/obj/item/trash/danitos
+	name = "\improper Dangles can"
+	icon_state = "dangles"
+	autoignition_temperature = AUTOIGNITION_PLASTIC
+	fire_fuel = 0
+	
+/obj/item/trash/danitos/New()
+	playsound(loc, 'sound/items/poster_ripped.ogg', 50, 1)
 
 /obj/item/trash/waffles
 	name = "waffles"
@@ -311,6 +320,11 @@ var/list/crushed_cans_cache = list()
 	name = "malt vinegar packet"
 	desc = "A used vinegar packet."
 	icon_state	= "vinegar_small"
+	
+/obj/item/trash/hotsauce_packet
+	name = "hotsauce packet"
+	desc = "A used hotsauce packet."
+	icon_state	= "hotsauce_small"
 
 /obj/item/trash/zamitos_o
 	name = "Zamitos: Original Flavor"
