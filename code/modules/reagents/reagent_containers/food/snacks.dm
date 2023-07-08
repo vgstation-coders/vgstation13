@@ -5952,6 +5952,7 @@
 	desc = "Banned in Space Transylvania."
 	icon_state = "garlicbread"
 	bitesize = 3
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/garlicbread/New()
 	..()
