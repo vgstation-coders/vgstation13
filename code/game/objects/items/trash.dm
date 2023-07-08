@@ -61,44 +61,44 @@
 	return
 
 /obj/item/trash/bustanuts
-	name = "\improper Busta-Nuts"
+	name = "\improper Busta-Nuts box"
 	icon_state = "busta_nut"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
 
 /obj/item/trash/oldempirebar
-	name = "Old Empire Bar"
+	name = "\improper Old Empire Bar wrapper"
 	icon_state = "old_empire_bar"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
 
 /obj/item/trash/raisins
-	name = "4no raisins"
+	name = "\improper 4no raisins box"
 	icon_state= "4no_raisins"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
 
 /obj/item/trash/candy
-	name = "candy"
+	name = "candy wrapper"
 	icon_state= "candy"
 
 /obj/item/trash/cheesie
-	name = "\improper Cheesie honkers"
+	name = "\improper Cheesie honkers bag"
 	icon_state = "cheesie_honkers"
 
 /obj/item/trash/chips
-	name = "chips"
+	name = "chips bag"
 	icon_state = "chips"
 
 
 /obj/item/trash/popcorn
-	name = "popcorn"
+	name = "popcorn box"
 	icon_state = "popcorn"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
 
 /obj/item/trash/popcorn/hoppers
-	name = "hoppers  bag"
+	name = "hoppers box"
 	icon_state = "hoppers"
 
 /obj/item/trash/sosjerky
@@ -118,11 +118,11 @@
 	icon_state = "danbar"
 
 /obj/item/trash/donitos
-	name = "Donitos bag"
+	name = "\improper Donitos bag"
 	icon_state = "donitos"
 
 /obj/item/trash/donitos_coolranch
-	name = "Donitos Cool Ranch bag"
+	name = "\improper Donitos Cool Ranch bag"
 	icon_state = "donitos_coolranch"
 
 /obj/item/trash/danitos
@@ -139,7 +139,7 @@
 	playsound(loc, 'sound/items/poster_ripped.ogg', 50, 1)
 
 /obj/item/trash/waffles
-	name = "waffles"
+	name = "waffle tray"
 	icon_state = "waffles"
 
 /obj/item/trash/pietin

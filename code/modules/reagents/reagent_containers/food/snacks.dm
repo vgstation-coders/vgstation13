@@ -4984,7 +4984,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/spicy/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
-	reagents.add_reagent(CAPSAICIN, 5)
+	reagents.add_reagent(CAPSAICIN, 7)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nova
@@ -4998,7 +4998,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(NOVAFLOUR, 4)
-	reagents.add_reagent(HELLRAMEN, 2)
+	reagents.add_reagent(HELL_RAMEN, 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/zamitos
