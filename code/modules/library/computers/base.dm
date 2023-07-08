@@ -7,6 +7,7 @@
 	var/num_pages = 0
 	var/num_results = 0
 	var/datum/library_query/query = new()
+	var/library_table = "library"
 	computer_flags = NO_ONOFF_ANIMS
 	pass_flags = PASSTABLE
 	icon = 'icons/obj/library.dmi'
@@ -43,7 +44,7 @@
 			if(query.category == "Fiction")
 				searchquery += " AND category NOT LIKE '%Non-Fiction%'"
 			where = 1
-	var/sql = "SELECT id, author, title, category, ckey FROM library [searchquery] LIMIT [page_num * LIBRARY_BOOKS_PER_PAGE], [LIBRARY_BOOKS_PER_PAGE]"
+	var/sql = "SELECT id, author, title, content, category, description, ckey FROM [library_table] [searchquery] LIMIT [page_num * LIBRARY_BOOKS_PER_PAGE], [LIBRARY_BOOKS_PER_PAGE]"
 
 	//if(query)
 		//sql += " [query.toSQL()]"
@@ -63,15 +64,18 @@
 			"id"      =_query.item[1],
 			"author"  =_query.item[2],
 			"title"   =_query.item[3],
-			"category"=_query.item[4],
-			"ckey"    =_query.item[5]
+			"content"   =_query.item[4],
+			"category"=_query.item[5],
+			"description" = _query.item[6],
+			"ckey"    =_query.item[7]
 		))
 		results += CB
+		message_admins("DATABASE LOADING [CB.author]")
 	qdel(_query)
 	return results
 
 /obj/machinery/computer/library/proc/get_num_results()
-	var/sql = "SELECT COUNT(*) FROM library"
+	var/sql = "SELECT COUNT(*) FROM [library_table]"
 	//if(query)
 		//sql += query.toSQL()
 
@@ -102,8 +106,8 @@
 	pagelist += "</div>"
 	return pagelist
 
-/obj/machinery/computer/library/proc/getBookByID(var/id as text)
-	return library_catalog.getBookByID(id)
+/obj/machinery/computer/library/proc/getItemByID(var/id, var/library_table)
+	return library_catalog.getItemByID(id, library_table)
 
 /obj/machinery/computer/library/cultify()
 	new /obj/structure/cult_legacy/tome(loc)
