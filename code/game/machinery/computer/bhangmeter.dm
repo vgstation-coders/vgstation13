@@ -161,7 +161,7 @@ var/list/sensed_explosions = list()
 				<td style="text-align:center">([SE.x],[SE.y],[SE.z])</td>
 				"}
 		if (SE.cap)
-			SE_dat += {"<td style="text-align:center"><b>[round(SE.cap*0.25)] / [round(SE.cap*0.5)] / [round(SE.cap)]</b></td>"}
+			SE_dat += {"<td style="text-align:center"><b>!![round(SE.cap*0.25)]  /  [round(SE.cap*0.5)]  /  [round(SE.cap)]!!</b></td>"}
 		else
 			SE_dat += {"<td style="text-align:center">[SE.dev] / [SE.heavy] / [SE.light]</td>"}
 		SE_dat += {"<td style="text-align:center">[SE.delay] sec</td></tr>"}
