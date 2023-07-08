@@ -4974,16 +4974,16 @@
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
 	
-/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/spicy
-	name = "Spicy Chips"
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot
+	name = "Hot Chips"
 	desc = "Don't get the dust in your eyes!"
-	icon_state = "spicy_chips"
-	item_state = "spicy_chips"
+	icon_state = "hot_chips"
+	item_state = "hot_chips"
 	trash = null
 
-/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/spicy/New()
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(CAPSAICIN, 7)
 	bitesize = 2
 

@@ -2037,13 +2037,13 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno
 	
-/datum/recipe/spicychips
+/datum/recipe/hotchips
 	reagents = list (SODIUMCHLORIDE = 2)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/spicy
+	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot
 	
 /datum/recipe/novachips
 	reagents = list (SODIUMCHLORIDE = 2, NOVAFLOUR = 2)
