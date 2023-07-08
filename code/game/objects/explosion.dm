@@ -28,7 +28,7 @@
 
 var/explosion_shake_message_cooldown = 0
 
-/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist)
+/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist, var/true_range)
 	var/explosion_time = world.time
 
 	spawn()
@@ -59,7 +59,7 @@ var/explosion_shake_message_cooldown = 0
 		var/z0 = epicenter.z
 
 
-		var/datum/sensed_explosion/explosion_datum = explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist)
+		var/datum/sensed_explosion/explosion_datum = explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist,true_range)
 
 		var/took = stop_watch(watch)
 
