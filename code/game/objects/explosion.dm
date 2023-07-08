@@ -49,6 +49,9 @@ var/explosion_shake_message_cooldown = 0
 		if(adminlog)
 			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([formatJumpTo(epicenter,"JMP")]) [whodunnit ? " caused by [whodunnit] [whodunnit.ckey ? "([whodunnit.ckey])" : "(no key)"] ([formatJumpTo(whodunnit,"JMP")])" : ""]")
 			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] [whodunnit ? " caused by [whodunnit] [whodunnit.ckey ? "([whodunnit.ckey])" : "(no key)"]" : ""]")
+			if (true_range)
+				message_admins("If uncapped, its size would have been ([round(true_range*0.25)], [round(true_range*0.5)], [round(true_range)])")
+				log_game("If uncapped, its size would have been ([round(true_range*0.25)], [round(true_range*0.5)], [round(true_range)])")
 
 		//Pause the lighting updates for a bit.
 		var/postponeCycles = max(round(devastation_range/8),1)
@@ -230,3 +233,18 @@ var/explosion_shake_message_cooldown = 0
 			continue
 
 		.[T] = current_exp_block
+
+/proc/CalculateExplosionSingleBlock(var/turf/T)
+	var/current_exp_block = T.density ? T.explosion_block : 0
+	for (var/obj/machinery/door/D in T)
+		if(D.density && D.explosion_block)
+			current_exp_block += D.explosion_block
+			continue
+	for (var/obj/effect/forcefield/F in T)
+		current_exp_block += F.explosion_block
+		continue
+	for (var/obj/effect/energy_field/E in T)
+		current_exp_block += E.explosion_block
+		continue
+
+	return current_exp_block

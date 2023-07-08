@@ -616,54 +616,84 @@
 	var/heavy_damage_range = 0
 	var/medium_damage_range = 0
 	var/light_damage_range = 0
-	fire_sound = 'sound/effects/Explosion1.ogg'
-
-/obj/item/projectile/bullet/blastwave/New()
-	..()
-	var/sound = rand(1,6)
-	switch(sound)
-		if(1)
-			fire_sound = 'sound/effects/Explosion1.ogg'
-		if(2)
-			fire_sound = 'sound/effects/Explosion2.ogg'
-		if(3)
-			fire_sound = 'sound/effects/Explosion3.ogg'
-		if(4)
-			fire_sound = 'sound/effects/Explosion4.ogg'
-		if(5)
-			fire_sound = 'sound/effects/Explosion5.ogg'
-		if(6)
-			fire_sound = 'sound/effects/Explosion6.ogg'
+	var/true_range = 0
+	fire_sound = null//no need, we'll call explosion_effect() instead
+	var/list/affected_turfs = list()
+	var/list/cached_ex_act = list()
+	var/list/heavy_turfs = list()
+	var/list/medium_turfs = list()
+	var/list/light_turfs = list()
+	var/widening_rate = 5
+	var/distance_traveled = 0
+	var/radius = 0
+	projectile_speed = 0//we try to quickly and immediately scan all the turfs, then add some delay when it comes to actually loop through them
+	var/datum/sensed_explosion/explosion_datum
+	var/time_spent = 0
 
 /obj/item/projectile/bullet/blastwave/OnFired()
 	..()
 	if(!heavy_damage_range || !medium_damage_range || !light_damage_range)
 		bullet_die()
 		return
+	explosion_datum = new(starting.x, starting.y, starting.z, heavy_damage_range, medium_damage_range, light_damage_range, true_range)
+	time_spent = start_watch()
+	explosion_effect(starting, heavy_damage_range, medium_damage_range, light_damage_range)
+
+/obj/item/projectile/bullet/blastwave/to_bump(var/atom/A)
+	forceMove(get_step(loc,dir))
+
+/obj/item/projectile/bullet/blastwave/bullet_die()
+	//the bullet moved all the way, now to explode dem turfs
+	spawn()
+		for (var/turf/T in heavy_turfs)
+			blast_turf(T,1)
+			sleep(0.2)
+		for (var/turf/T in medium_turfs)
+			blast_turf(T,2)
+			sleep(0.2)
+		for (var/turf/T in light_turfs)
+			blast_turf(T,3)
+			sleep(0.2)
+
+		time_spent = stop_watch(time_spent)
+		if (explosion_datum)
+			explosion_datum.ready(time_spent)
+	..()
 
 /obj/item/projectile/bullet/blastwave/process_step()
 	..()
-	var/turf/T = get_turf(src)
-	if(light_damage_range)
-		if(medium_damage_range)
-			if(heavy_damage_range)
-				for(var/atom/movable/A in T.contents)
-					if(!istype(A, /obj/item/organ/external/head))
-						A.ex_act(1)
-				T.ex_act(1)
-				heavy_damage_range -= 1
-			else
-				for(var/atom/movable/A in T.contents)
-					A.ex_act(2)
-				T.ex_act(2)
-				medium_damage_range -= 1
-		else
-			for(var/atom/movable/A in T.contents)
-				A.ex_act(3)
-			T.ex_act(3)
-			light_damage_range -= 1
-	else
+	distance_traveled++
+
+	if (distance_traveled > light_damage_range)
 		bullet_die()
+		return
+
+	radius = round(distance_traveled/widening_rate)
+
+	var/turf/T = loc
+	for (var/turf/U in range(radius,T))
+		if (!(U in affected_turfs))
+			affected_turfs |= U
+
+			var/turf/Trajectory = U
+			var/dist = cheap_pythag(U.x - starting.x, U.y - starting.y)
+			while(Trajectory != starting)
+				Trajectory = get_step_towards(Trajectory,starting)
+				dist += CalculateExplosionSingleBlock(Trajectory)
+
+			if (dist <= heavy_damage_range)
+				heavy_turfs += U
+			else if (dist <= medium_damage_range)
+				medium_turfs += U
+			else if (dist <= light_damage_range)
+				light_turfs += U
+
+/obj/item/projectile/bullet/blastwave/proc/blast_turf(var/turf/T,var/severity)
+	explosion_datum.paint(T,severity)
+	for(var/atom/movable/A in T.contents)
+		if(!istype(A, /obj/item/organ/external/head))
+			A.ex_act(severity)
+	T.ex_act(severity)
 
 /obj/item/projectile/bullet/blastwave/ex_act()
 	return
