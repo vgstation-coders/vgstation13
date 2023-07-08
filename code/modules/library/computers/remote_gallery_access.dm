@@ -42,7 +42,7 @@
 		</ul>"}
 		var/pagelist = get_pagelist()
 
-		dat += {"<h2>Search Settings</h2><br />
+		dat += {"<h3>Search Settings</h3><br />
 			<A href='?src=\ref[src];settitle=1'>Filter by Title: [query.title]</A><br />
 			<A href='?src=\ref[src];setcategory=1'>Filter by Category: [query.category]</A><br />
 			<A href='?src=\ref[src];setauthor=1'>Filter by Author: [query.author]</A><br />
@@ -56,7 +56,7 @@
 						<td>Painting</td>
 						<td>Description</td>
 						<td>Controls</td>
-					</tr>" [length(get_page(page_num))]"}
+					</tr>"}
 
 		for(var/datum/cachedbook/C in get_page(page_num))
 			var/author = C.author
