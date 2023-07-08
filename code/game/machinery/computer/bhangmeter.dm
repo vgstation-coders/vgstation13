@@ -103,6 +103,7 @@ var/list/sensed_explosions = list()
 				var/obj/abstract/screen/interface/button_database = watcher_buttons["\ref[user]"]
 				button_database.name = "Database"
 				button_database.alpha = 0
+				button_database.invisibility = 0//dunno why after ghosting out and back in it goes to 101 so this'll do in the meantime.
 				animate(button_database, alpha = 255, time = 5, easing = LINEAR_EASING)
 				user.client.screen += watcher_buttons["\ref[user]"]
 

@@ -66,47 +66,38 @@ var/list/meteor_warnings = list()
 			if(4)
 				icon = "meteoraaaaa"
 	var/image/A = image('icons/holomap_markers_32x32.dmi',null, icon)
+	A.overlays += "[dir]"
 	var/image/B = image('icons/holomap_markers_32x32.dmi',null, icon)
+	B.overlays += "[dir]"
 	var/image/C = image('icons/holomap_markers_32x32.dmi',null, icon)
+	C.overlays += "[dir]"
 	switch(dir)
 		if (NORTH)
-			A.dir = NORTH
 			A.pixel_x = 192
 			A.pixel_y = 416
-			B.dir = NORTH
 			B.pixel_x = 224
 			B.pixel_y = 384
-			C.dir = NORTH
 			C.pixel_x = 256
 			C.pixel_y = 416
 		if (SOUTH)
-			A.dir = SOUTH
 			A.pixel_x = 192
 			A.pixel_y = 32
-			B.dir = SOUTH
 			B.pixel_x = 224
 			B.pixel_y = 64
-			C.dir = SOUTH
 			C.pixel_x = 256
 			C.pixel_y = 32
 		if (WEST)
-			A.dir = WEST
 			A.pixel_x = 32
 			A.pixel_y = 192
-			B.dir = WEST
 			B.pixel_x = 64
 			B.pixel_y = 224
-			C.dir = WEST
 			C.pixel_x = 32
 			C.pixel_y = 256
 		if (EAST)
-			A.dir = EAST
 			A.pixel_x = 416
 			A.pixel_y = 192
-			B.dir = EAST
 			B.pixel_x = 384
 			B.pixel_y = 224
-			C.dir = EAST
 			C.pixel_x = 416
 			C.pixel_y = 256
 	display.overlays += A
