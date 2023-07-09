@@ -233,8 +233,6 @@
 				H.throw_at(get_edge_target_turf(H, H.dir), 5, 5)
 			if(is_unconscious)
 				H.gib()
-
-
 		else
 			to_chat(H, "<span class = 'notice'>You were interrupted and couldn't fart! Rude!</span>")
 			return
