@@ -770,6 +770,16 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
     user.overlays -= unusual_overlay
     return ..()
 
+/obj/item/clothing/head/yamalka
+	name = "Yamalka"
+	desc = "A brimless hat made of cloth, worn by men within Orthdox Jewish communities as part of religious custom."
+	flags = FPRINT
+	icon_state = "yamalka_blue"
+
+/obj/item/clothing/head/yamalka/New()
+	icon_state = "yamalka_[pick("blue","white","black","yellow")]"
+
+
 // American "football"
 
 /obj/item/clothing/head/nt_football_helmet
