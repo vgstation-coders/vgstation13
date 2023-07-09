@@ -126,7 +126,7 @@
 
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
-	..()
+	. = ..()
 	M.special_role = "Cultist"
 
 /datum/faction/bloodcult/OnPostSetup()
