@@ -421,7 +421,7 @@
 			to_chat(user, "<span class='info'>\The [src] was bitten multiple times!</span>")
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/is_compatible_utensil(var/obj/item/W,var/mob/user)
-	if(!istype(W, /obj/item/weapon/kitchen/utensil/fork) && !istype(W, /obj/item/weapon/kitchen/utensil/spoon))
+	if(!istype(W, /obj/item/weapon/kitchen/utensil/fork) && !istype(W, /obj/item/weapon/kitchen/utensil/spoon) && !istype(W, /obj/item/weapon/kitchen/utensil/spork))
 		return 0
 
 	if (valid_utensils == 0) // Snacks in packets such as chips and candy bars mainly
@@ -447,6 +447,16 @@
 		else if (valid_utensils & UTENSILE_FORK)
 			to_chat(user, "<span class='warning'>You need a fork to eat that properly.</span>")
 			return 1
+
+	if (istype(W, /obj/item/weapon/kitchen/utensil/spork))
+		var/obj/item/weapon/kitchen/utensil/spork/spork = W
+		if (valid_utensils & UTENSILE_SPOON)
+			spork.liquid_content = TRUE
+			return 2
+
+		else if (valid_utensils & UTENSILE_FORK)
+			spork.liquid_content = FALSE
+			return 2
 
 
 /obj/item/weapon/reagent_containers/food/snacks/attackby(obj/item/weapon/W, mob/user)
@@ -3270,6 +3280,7 @@
 //the syndie version for muh tators
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint
 	name = "mint candy"
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/nano
 	desc = "It's not just a mint!"
@@ -3278,11 +3289,11 @@
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/syndie
 	desc = "Made with care, love, and the blood of Nanotrasen executives kept in eternal torment."
 	icon_state = "syndiemint"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/discount
 	desc = "Yeah, I wouldn't eat these if I were yo- Wait, you're still recording?"
 	icon_state = "discountmint"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade
 	desc = "Made with love with the finest maintenance gunk I could find, trust me. I promise there's only trace amounts of bleach."
 	icon_state = "homemademint"

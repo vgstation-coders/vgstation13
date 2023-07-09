@@ -134,9 +134,10 @@
 				for(var/datum/cachedbook/CB in get_page(page_num))
 					var/author = CB.author
 					var/controls =  "<A href='?src=\ref[src];preview=[CB]'>\[Preview\]</A> <A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
+					if(isAdminGhost(user))
+						author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(CB.ckey)]'>[ckey(CB.ckey)])</A>)"
 					if(isAdminGhost(user) || allowed(user))
 						controls +=  " <A style='color:red' href='?src=\ref[src];del=[CB.id]'>\[Delete\]</A>"
-						author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(CB.ckey)]'>[ckey(CB.ckey)])</A>)"
 					dat += {"<tr>
 						<td>[author]</td>
 						<td>[CB.title]</td>
@@ -181,7 +182,7 @@
 			if(!emagged)
 				forbidden |= /obj/item/weapon/book/manual/nuclear
 
-			var/manualcount = 1
+			var/manualcount = 0
 			var/obj/item/weapon/book/manual/M = null
 
 			for(var/manual_type in typesof(/obj/item/weapon/book/manual))

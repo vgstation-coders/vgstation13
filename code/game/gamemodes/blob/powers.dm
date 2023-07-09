@@ -144,6 +144,7 @@
 
 	if(antag_madness != ANTAG_MADNESS_OFF)
 		to_chat(src, "<span class='danger'>Something is amiss, maybe some genetic defect, but regardless you find yourself unable to create a new blob core. You'll have to endure on your own.</span>")
+		add_points(cost)
 		return
 
 	B.change_to(/obj/effect/blob/core, src, TRUE)

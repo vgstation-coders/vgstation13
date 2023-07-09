@@ -35,8 +35,9 @@
 	if(user)
 		to_chat(user, "You've attracted the attention of powerful forces within the syndicate. \
 			A bonus bundle of telecrystals has been granted to your team. Great things await you if you complete the mission.")
-		var/obj/item/stack/telecrystal/R = new(get_turf(usr), 200)
+		var/obj/item/stack/telecrystal/R = new(get_turf(usr), 120)
 		usr.put_in_hands(R)
+		ticker.StartThematic("nukesquad")
 
 	qdel(src)
 

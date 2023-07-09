@@ -229,10 +229,6 @@
 	new_character.dna.ready_dna(new_character)
 	new_character.key = G_found.key
 
-	// Create a brand new mind for the dude
-	new_character.mind = new
-	new_character.mind.current = new_character
-
 	return new_character
 
 /datum/admins/proc/create_syndicate_death_commando(obj/spawn_location, syndicate_leader_selected = 0)

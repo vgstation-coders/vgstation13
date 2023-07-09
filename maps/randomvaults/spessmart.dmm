@@ -371,8 +371,7 @@
 	},
 /obj/structure/sign/securearea{
 	name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS";
-	pixel_x = 32;
-	pixel_y = 0
+	pixel_x = 32
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -654,7 +653,6 @@
 /obj/structure/rack,
 /obj/abstract/map/spawner/supermarket/clothing,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
@@ -681,8 +679,7 @@
 	},
 /obj/structure/sign/securearea{
 	name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS";
-	pixel_x = 32;
-	pixel_y = 0
+	pixel_x = 32
 	},
 /mob/living/simple_animal/robot/food_samples{
 	dir = 8
@@ -730,7 +727,6 @@
 	},
 /obj/machinery/light/small,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -744,7 +740,6 @@
 /area/vault/supermarket/shop)
 "bG" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -775,7 +770,6 @@
 /area/vault/supermarket/shop)
 "bI" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
@@ -785,7 +779,6 @@
 /area/vault/supermarket/shop)
 "bJ" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -796,7 +789,6 @@
 "bK" = (
 /obj/structure/table/reinforced,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -918,8 +910,7 @@
 	},
 /obj/structure/sign/securearea{
 	name = "DO NOT CROSS THE WARNING STRIPES WITH UNPAID ITEMS";
-	pixel_x = -32;
-	pixel_y = 0
+	pixel_x = -32
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -963,17 +954,13 @@
 /area/vault/supermarket/restricted)
 "ch" = (
 /obj/structure/disposalpipe/segment{
-	dir = 4;
-	pixel_x = 0;
-	pixel_y = 0
+	dir = 4
 	},
 /turf/simulated/floor/plating/airless,
 /area/vault/supermarket/restricted)
 "ci" = (
 /obj/structure/disposalpipe/segment{
-	dir = 4;
-	pixel_x = 0;
-	pixel_y = 0
+	dir = 4
 	},
 /obj/machinery/door/airlock/vault{
 	desc = "Feed three times a day.";
@@ -984,9 +971,7 @@
 /area/vault/supermarket/restricted)
 "cj" = (
 /obj/structure/disposalpipe/segment{
-	dir = 4;
-	pixel_x = 0;
-	pixel_y = 0
+	dir = 4
 	},
 /obj/item/tool/crowbar,
 /turf/simulated/floor/plating/airless,
@@ -1010,9 +995,7 @@
 /area/vault/supermarket/shop)
 "cm" = (
 /obj/structure/disposalpipe/segment{
-	dir = 4;
-	pixel_x = 0;
-	pixel_y = 0
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -1115,7 +1098,6 @@
 /area/vault/supermarket/restricted)
 "cy" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -1130,14 +1112,11 @@
 "cz" = (
 /obj/machinery/light,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
 /obj/structure/disposalpipe/segment{
-	dir = 4;
-	pixel_x = 0;
-	pixel_y = 0
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -1145,14 +1124,11 @@
 /area/vault/supermarket/shop)
 "cA" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
 /obj/structure/disposalpipe/segment{
-	dir = 4;
-	pixel_x = 0;
-	pixel_y = 0
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -1165,7 +1141,6 @@
 	tag = "icon-warning_corner (WEST)"
 	},
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
@@ -1178,7 +1153,6 @@
 /area/vault/supermarket/shop)
 "cC" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -1204,9 +1178,7 @@
 /obj/item/device/robotanalyzer,
 /obj/item/stack/nanopaste,
 /obj/structure/disposalpipe/segment{
-	dir = 4;
-	pixel_x = 0;
-	pixel_y = 0
+	dir = 4
 	},
 /turf/simulated/floor/plating/airless,
 /area/vault/supermarket/restricted)
@@ -1488,7 +1460,6 @@
 /area/vault/supermarket/shop)
 "dk" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -1500,7 +1471,6 @@
 /area/vault/supermarket/shop)
 "dl" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -1748,9 +1718,7 @@
 /area/vault/supermarket/entrance)
 "dX" = (
 /obj/structure/disposalpipe/segment{
-	dir = 4;
-	pixel_x = 0;
-	pixel_y = 0
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/vault/supermarket/entrance)
@@ -1769,8 +1737,7 @@
 /area/vault/supermarket/entrance)
 "ea" = (
 /obj/machinery/newscaster{
-	pixel_x = 32;
-	pixel_y = 0
+	pixel_x = 32
 	},
 /turf/simulated/floor{
 	icon_state = "bar"
@@ -1898,7 +1865,6 @@
 	},
 /obj/machinery/door/poddoor/shutters/preopen{
 	desc = "Nothing to worry about, unless your intentions are vile.";
-	dir = 4;
 	name = "Emergency Shutters"
 	},
 /turf/simulated/floor{
@@ -1956,8 +1922,7 @@
 /area/vault/supermarket/entrance)
 "ey" = (
 /obj/structure/mirror{
-	pixel_x = -32;
-	pixel_y = 0
+	pixel_x = -32
 	},
 /obj/structure/sink{
 	dir = 8;

@@ -534,18 +534,7 @@
 		if (!L.loc)
 			to_chat(usr,"<span class='warning'>Mob is in nullspace!</span>")
 			return
-		var/client/C = usr.client
-		if(!isobserver(usr) && isliving(usr))
-			var/mob/living/U = usr
-			U.ghost()
-		sleep(2)
-		if(!isobserver(C.mob))
-			return
-		var/mob/dead/observer/O = C.mob
-		if(O.locked_to)
-			O.manual_stop_follow(O.locked_to)
-		if(C)
-			C.jumptomob(L)
+		SendAdminGhostTo(null,L)
 
 	else if(href_list["diseasepanel_infecteditems"])
 		if(!check_rights(R_ADMIN))
@@ -567,17 +556,7 @@
 		if (!I.loc)
 			to_chat(usr,"<span class='warning'>Item is in nullspace!</span>")
 			return
-		var/client/C = usr.client
-		if(!isobserver(usr) && isliving(usr))
-			var/mob/living/L = usr
-			L.ghost()
-		sleep(2)
-		if(!isobserver(C.mob))
-			return
-		var/mob/dead/observer/O = C.mob
-		if(O.locked_to)
-			O.manual_stop_follow(O.locked_to)
-		O.forceMove(get_turf(I))
+		SendAdminGhostTo(get_turf(I),null)
 
 	else if(href_list["diseasepanel_dishes"])
 		if(!check_rights(R_ADMIN))
@@ -600,17 +579,7 @@
 		if (!dish.loc)
 			to_chat(usr,"<span class='warning'>Dish is in nullspace!</span>")
 			return
-		var/client/C = usr.client
-		if(!isobserver(usr) && isliving(usr))
-			var/mob/living/L = usr
-			L.ghost()
-		sleep(2)
-		if(!isobserver(C.mob))
-			return
-		var/mob/dead/observer/O = C.mob
-		if(O.locked_to)
-			O.manual_stop_follow(O.locked_to)
-		O.forceMove(get_turf(dish))
+		SendAdminGhostTo(get_turf(dish),null)
 
 	else if(href_list["artifactpanel_jumpto"])
 		if(!check_rights(R_ADMIN))
@@ -618,33 +587,57 @@
 
 		var/turf/T = locate(href_list["artifactpanel_jumpto"])
 
-		var/client/C = usr.client
-		if(!isobserver(usr) && isliving(usr))
-			var/mob/living/L = usr
-			L.ghost()
-		sleep(2)
-		if(!isobserver(C.mob))
-			return
-		var/mob/dead/observer/O = C.mob
-		if(O.locked_to)
-			O.manual_stop_follow(O.locked_to)
-		O.forceMove(T)
+		SendAdminGhostTo(T,null)
 
-	else if(href_list["bodyarchivepanel_spawncopy"])
+	else if(href_list["bodyarchivepanel_focus"])
 		if(!check_rights(R_ADMIN))
 			return
 
-		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_spawncopy"])
+		var/mob/M
+		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_focus"])
+		if (archive.mind)
+			if (archive.mind.current)
+				M = archive.mind.current
+			else
+				to_chat(usr, "This archive's mind somehow has no current mob.")
+				return
+		else
+			to_chat(usr, "This archive somehow lost the pointer to its mind.")
+			return
 
-		archive.spawn_copy(get_turf(usr))
+		if (!M)
+			return
 
-	else if(href_list["bodyarchivepanel_spawntransfer"])
+		SendAdminGhostTo(null,M)
+
+	else if(href_list["bodyarchivepanel_spawnnaked"])
 		if(!check_rights(R_ADMIN))
 			return
 
-		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_spawntransfer"])
+		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_spawnnaked"])
 
-		archive.spawn_transfer(get_turf(usr))
+		archive.spawn_naked(get_turf(usr))
+
+	else if(href_list["bodyarchivepanel_spawnclothed"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_spawnclothed"])
+
+		archive.spawn_clothed(get_turf(usr))
+
+	else if(href_list["bodyarchivepanel_transfer"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_transfer"])
+
+		var/mob/M = archive.transfer(get_turf(usr))
+		if (M)
+			to_chat(usr, "Mind of [archive.name] sent inside \the [M].")
+		else
+			to_chat(usr, "Stand above the mindless mob into which you want to transfer this mind.")
+			//beware of trying to assign two minds to the same body.
 
 	else if(href_list["climate_timeleft"])
 		if(!check_rights(R_ADMIN))
@@ -2628,19 +2621,7 @@
 
 		var/mob/M = locate(href_list["adminplayerobservejump"])
 
-		var/client/C = usr.client
-		if(!isobserver(usr) && isliving(usr))
-			var/mob/living/L = usr
-			L.ghost()
-		sleep(2)
-		if(!isobserver(usr))
-			return
-		var/mob/dead/observer/O = usr
-		if(O.locked_to)
-			O.manual_stop_follow(O.locked_to)
-		if(C)
-			C.jumptomob(M)
-			O.manual_follow(M)
+		SendAdminGhostTo(null,M)
 
 	else if(href_list["emergency_shuttle_panel"])
 		emergency_shuttle_panel()
@@ -5955,6 +5936,23 @@
 			return
 		else
 			toggle_tag_mode(usr)
+
+/datum/admins/proc/SendAdminGhostTo(var/turf/T,var/mob/M)
+	var/client/C = usr.client
+	if(!isobserver(usr) && isliving(usr))
+		var/mob/living/L = usr
+		L.ghost()
+	sleep(2)
+	if(!isobserver(C.mob))
+		return
+	var/mob/dead/observer/O = C.mob
+	if(O.locked_to)
+		O.manual_stop_follow(O.locked_to)
+	if (T)
+		O.forceMove(T)
+	else if (M)
+		C.jumptomob(M)
+		O.manual_follow(M)
 
 /datum/admins/proc/updateRelWindow()
 	var/text = list()

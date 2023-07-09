@@ -471,7 +471,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_TOXIC_FARTS   201		// Duh
 #define M_STRONG        202		// (Nothing)
 #define M_SOBER         203		// Increased alcohol metabolism
-#define M_JAMSIGNALS	204		// Block EMFs
+#define M_PSY_RESIST	204		// Block remoteview
 #define M_SUPER_FART    205		// Duh
 #define M_SMILE         206		// :)
 #define M_ELVIS         207		// You ain't nothin' but a hound dog.
@@ -1594,6 +1594,7 @@ var/proccalls = 1
 #define HOLOMAP_FILTER_STATIONMAP				32
 #define HOLOMAP_FILTER_STATIONMAP_STRATEGIC		64//features markers over the captain's office, the armory, the SMES
 #define HOLOMAP_FILTER_CULT						128//bloodstone locators
+#define HOLOMAP_FILTER_TAXI						256//shuttles with have their original location displayed on station maps
 
 #define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
 #define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"

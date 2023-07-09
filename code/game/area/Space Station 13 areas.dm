@@ -96,6 +96,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 	var/lights_always_start_on = FALSE
 
+	var/destroy_after_marker = FALSE	//The area is deleted after its holomap marker is created. Useful for shuttle docking zones that need to remain area-free.
+
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
@@ -302,12 +304,20 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Security Shuttle"
 	icon_state = "shuttlered"
 
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+
 /area/shuttle/mining
 	name = "\improper Mining Shuttle"
 	music = "music/escape.ogg"
 
 /area/shuttle/mining/station
 	icon_state = "shuttle2"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
 
 /area/shuttle/mining/outpost
 	icon_state = "shuttle"
@@ -423,6 +433,42 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/shuttle/research/station
 	icon_state = "shuttle2"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+
+
+//------------------------------------------------------These are only used to place the holomap markers
+
+/area/shuttle/snaxi_platform1
+	name = "\improper Orbital Platform Dock 1"
+	icon_state = "shuttlered"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+	destroy_after_marker = TRUE
+
+/area/shuttle/snaxi_platform2
+	name = "\improper Orbital Platform Dock 1"
+	icon_state = "shuttlered"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+	destroy_after_marker = TRUE
+
+/area/shuttle/snaxi_platform3
+	name = "\improper Orbital Platform Dock 1"
+	icon_state = "shuttlered"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+	destroy_after_marker = TRUE
+
+//------------------------------------------------------
 
 /area/shuttle/research/outpost
 	icon_state = "shuttle"
@@ -1918,6 +1964,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "The Blizzard"
 	icon_state = "sno"
 	construction_zone = FALSE
+	holomap_draw_override = HOLOMAP_DRAW_PATH
 
 /area/surface/icecore
 	name = "\improper Frozen Core"
