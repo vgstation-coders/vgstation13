@@ -14,6 +14,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 	var/lit = 0
 	var/on_icon = ""
 	var/image/overlay
+	var/should_update = FALSE
 
 	light_color = "#6496FA"
 
@@ -60,6 +61,20 @@ var/list/obj/machinery/holosign/holosigns = list()
 	on_icon = "surgery"
 	id_tag = "surgery"
 
+/obj/machinery/holosign/surgery/process()
+	var/area/this_area = get_area(src)
+	for(var/obj/machinery/optable/OT in optable_list)
+		var/area/optable_area = get_area(OT)
+		if(optable_area != this_area)
+			continue
+		if(OT.victim)
+			toggle(TRUE)
+			should_update = FALSE
+			return PROCESS_KILL
+	toggle(FALSE)
+	should_update = FALSE
+	return PROCESS_KILL
+
 /obj/machinery/holosign/virology
 	name = "virology holosign"
 	desc = "Small wall-mounted holographic projector. This one reads BIOHAZARD."
@@ -72,7 +87,6 @@ var/list/obj/machinery/holosign/holosigns = list()
 	desc = "Small wall-mounted holographic projector. This one reads MORGUE."
 	on_icon = "morgue"
 	id_tag = "morgue"
-	var/should_update = FALSE
 
 /obj/machinery/holosign/morgue/process()
 	var/area/this_area = get_area(src)

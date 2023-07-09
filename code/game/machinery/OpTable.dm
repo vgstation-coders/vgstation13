@@ -12,17 +12,23 @@
 	var/strapped = 0.0
 	throwpass = 1 //so Adjacent passes.
 	var/rating = 1 //Use this for upgrades some day
+	var/playedflatline = FALSE
 	pass_flags_self = PASSTABLE
 	var/obj/machinery/computer/operating/computer = null
 
 /obj/machinery/optable/New()
 	..()
+	optable_list += src
 	for(dir in list(NORTH,EAST,SOUTH,WEST))
 		computer = locate(/obj/machinery/computer/operating, get_step(src, dir))
 		if (computer)
 			break
 //	spawn(100) //Wont the MC just call this process() before and at the 10 second mark anyway?
 //		process()
+
+/obj/machinery/optable/Destroy()
+	optable_list -= src
+	..()
 
 /obj/machinery/optable/ex_act(severity)
 
@@ -99,16 +105,33 @@
 			if (victim.lying)
 				if (victim.pulse)
 					icon_state = "table2-active"
+					if(computer)
+						playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
 				else
 					icon_state = "table2-idle"
+					if(computer && !playedflatline)
+						playsound(computer.loc, 'sound/machines/Flatline.ogg', 50)
+						playedflatline = TRUE
 
 				return 1
 
 		victim.reset_view()
 		victim = null
+		update()
 
 	icon_state = "table2-idle"
 	return 0
+
+/obj/machinery/optable/proc/update()
+	var/area/this_area = get_area(src)
+	for(var/obj/machinery/holosign/surgery/sign in holosigns)
+		var/area/sign_area = get_area(sign)
+		if(this_area != sign_area)
+			continue
+		if(sign.should_update)
+			continue
+		sign.should_update = TRUE
+		processing_objects += sign
 
 /obj/machinery/optable/process()
 	check_victim()
@@ -140,6 +163,8 @@
 		victim = C
 		C.resting = 1 //This probably shouldn't be using this variable
 		C.update_canmove() //but for as long as it does we're adding sanity to it
+		if(computer && C.pulse)
+			playedflatline = FALSE
 
 	if (C == user)
 		user.visible_message("[user] climbs on the operating table.","You climb on the operating table.")
@@ -147,6 +172,8 @@
 		visible_message("<span class='warning'>[C] has been laid on the operating table by [user].</span>")
 
 	add_fingerprint(user)
+
+	update()
 
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
 	if(W.is_wrench(user))
