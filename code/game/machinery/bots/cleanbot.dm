@@ -219,11 +219,12 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	visible_message("<span class='warning'>[src] begins to clean up the [target_turf].</span>")
 	cleaning = 1
 
-	if (istype(target_turf, /turf/simulated/floor))
-		var/turf/simulated/floor/F = target_turf
-		F.overlays -= F.advanced_graffiti_overlay
-		F.advanced_graffiti_overlay = null
-		qdel(F.advanced_graffiti)
+	if (istype(target_turf, /turf/simulated))
+		var/turf/simulated/F = target_turf
+		if (F.advanced_graffiti)
+			F.overlays -= F.advanced_graffiti_overlay
+			F.advanced_graffiti_overlay = null
+			qdel(F.advanced_graffiti)
 
 	for(var/obj/effect/decal/cleanable/C in target_turf)
 		if(!(is_type_in_list(C,blacklisted_targets)))

@@ -42,7 +42,6 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	var/attack_sound = 'sound/items/bikehorn.ogg'
 	var/obj/item/stack/tile/floor_tile
 	var/image/floor_overlay
-	var/icon/advanced_graffiti_overlay
 
 	melt_temperature = 1643.15 // Melting point of steel
 
@@ -255,14 +254,6 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		if (advanced_graffiti)
 			var/datum/painting_utensil/p = new(user, W)
 			advanced_graffiti.interact(user, p)
-
-/turf/simulated/floor/proc/render_advanced_graffiti(var/mob/user)
-	if (!advanced_graffiti)
-		return FALSE
-	overlays -= advanced_graffiti_overlay
-	advanced_graffiti_overlay = advanced_graffiti.render_on(icon(icon, icon_state))
-	advanced_graffiti_overlay.SwapColor("#aaaaaaff", "#ffffff00")
-	overlays += advanced_graffiti_overlay
 
 /turf/simulated/floor/Topic(href, href_list)
 	if (..())

@@ -2471,11 +2471,10 @@
 
 	if(volume >= 1)
 
-		if (istype(T, /turf/simulated/floor))
-			var/turf/simulated/floor/F = T
-			F.overlays -= F.advanced_graffiti_overlay
-			F.advanced_graffiti_overlay = null
-			qdel(F.advanced_graffiti)
+		if (T.advanced_graffiti)
+			T.overlays -= T.advanced_graffiti_overlay
+			T.advanced_graffiti_overlay = null
+			qdel(T.advanced_graffiti)
 
 		T.clean_blood()
 

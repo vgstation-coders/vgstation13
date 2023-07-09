@@ -126,11 +126,12 @@
 			else
 				tile.clean_blood()
 
-				if (istype(tile, /turf/simulated/floor))
-					var/turf/simulated/floor/F = tile
-					F.overlays -= F.advanced_graffiti_overlay
-					F.advanced_graffiti_overlay = null
-					qdel(F.advanced_graffiti)
+				if (istype(tile, /turf/simulated))
+					var/turf/simulated/F = tile
+					if (F.advanced_graffiti)
+						F.overlays -= F.advanced_graffiti_overlay
+						F.advanced_graffiti_overlay = null
+						qdel(F.advanced_graffiti)
 
 				for(var/atom/A in tile)
 					if(istype(A, /obj/effect))
