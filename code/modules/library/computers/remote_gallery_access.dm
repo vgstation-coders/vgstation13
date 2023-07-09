@@ -4,8 +4,8 @@
  */
 /obj/machinery/computer/library/checkout/remote_gallery
 	name = "Remote gallery Computer"
-	icon = 'icons/obj/library.dmi'
-	icon_state = "computer"
+	icon = 'icons/obj/computer.dmi'
+	icon_state = "artcomp"
 	anchored = 1
 	density = 1
 	req_access = list(access_library) //This access requirement is currently only used for the delete button showing
