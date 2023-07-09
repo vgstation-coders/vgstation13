@@ -1,5 +1,42 @@
 <input id="bitmap" type="hidden" value=""/>
 
+<div id = "secret class" class="hidden">
+
+			<div>
+				<label class="itemLabel">Title: </label><br/>
+				<input
+					id="title"
+					type="text"
+					maxlength="52"
+					onkeyup="sanitizeLength('title', 'titleLengthMeter');"
+				/>
+				<div id="titleLengthMeter">(0/52)</div>
+			</div><br>
+
+			<div>
+				<label class="itemLabel">Author: </label><br/>
+				<input
+					id="author"
+					type="text"
+					maxlength="52"
+					onkeyup="sanitizeLength('author', 'authorLengthMeter');"
+				/>
+				<div id="authorLengthMeter">(0/52)</div>
+			</div><br>
+
+			<div>
+				<label class="itemLabel">Description: </label><br/>
+				<textarea
+					id="description"
+					rows="5"
+					maxlength="1024"
+					onkeyup="sanitizeLength('description', 'descriptionLengthMeter');"
+				></textarea>
+				<div id="descriptionLengthMeter">(0/1024)</div>
+			</div><br>
+
+</div>
+
 <!-- Main Content -->
 <div class="mainPanel">
 	<!-- Control column -->

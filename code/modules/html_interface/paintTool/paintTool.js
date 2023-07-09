@@ -462,6 +462,8 @@ function lineDraw(x1, y1, x2, y2, rgb, a) {
  * Draws the bitmap's contents on screen, scaled up for visibility
  */
 function display_bitmap() {
+	ctx.clearRect(0, 0, width*scaleX, height*scaleY);
+
 	//Go through our pixel data and draw scaled up squares with the corresponding color
 	for (var x = 0; x < width; x++) {
 		for(var y = 0; y < height; y++) {
@@ -469,13 +471,17 @@ function display_bitmap() {
 			var pixel = (y * width + x);
 
 			//Grab the pixel's color
-			ctx.fillStyle = bitmap[pixel];
+			var color = hexToRgba(bitmap[pixel]);
+			var alpha = color.a/255.0;
+			ctx.globalAlpha = alpha;
+			color.a = 255;
+			ctx.fillStyle = rgbaToHex(color);
 
 			//Draw a square, scaled up as needed
 			ctx.fillRect(x*scaleX, y*scaleY, scaleX, scaleY);
 		}
 	}
-	
+
 	if (grid_enabled) {
 		ctx.beginPath();
 		ctx.lineWidth = 1;

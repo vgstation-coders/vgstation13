@@ -190,7 +190,7 @@
 	if (bitmap_height < 32)
 		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas.tmpl"))
 	else
-		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas_tile.tmpl"))
+		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas.tmpl"))
 
 /datum/custom_painting/proc/interact(mob/user, datum/painting_utensil/p)
 	if(jobban_isbanned(user, "artist"))

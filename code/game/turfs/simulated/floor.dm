@@ -255,7 +255,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			var/datum/painting_utensil/p = new(user, W)
 			advanced_graffiti.interact(user, p)
 
-/turf/simulated/floor/Topic(href, href_list)
+/turf/simulated/Topic(href, href_list)
 	if (..())
 		return
 	// Let /datum/custom_painting handle Topic(). If succesful, update appearance
