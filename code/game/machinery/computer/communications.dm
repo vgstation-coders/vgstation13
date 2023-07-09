@@ -256,6 +256,9 @@ var/list/shuttle_log = list()
 				return
 			if(issilicon(usr))
 				return
+			if (istype(usr, /mob/living/simple_animal/hostile/pulse_demon))
+				to_chat(usr, "<span class='warning'>This machinery resists your hijacking attempt!</span>")
+				return FALSE
 			if(authenticated || isAdminGhost(usr))
 				var/response = alert("Are you sure you wish to recall the shuttle?", "Confirm", "Yes", "No")
 				if(response == "Yes")
@@ -408,12 +411,6 @@ var/list/shuttle_log = list()
 
 /obj/machinery/computer/communications/attack_paw(var/mob/user as mob)
 	return src.attack_hand(user)
-
-/obj/machinery/computer/communications/attack_ai(var/mob/user)
-	if (istype(user, /mob/living/simple_animal/hostile/pulse_demon))
-		to_chat(user, "<span class='warning'>This machinery resists your hijacking attempt!</span>")
-		return FALSE
-	return ..()
 
 /obj/machinery/computer/communications/attack_hand(var/mob/user as mob)
 	if(..(user))
