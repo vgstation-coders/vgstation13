@@ -182,7 +182,9 @@
 	obj_overlays[FACEMASK_LAYER]	= new /obj/abstract/Overlays/facemask_layer
 	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
 	obj_overlays[HANDCUFF_LAYER]	= new /obj/abstract/Overlays/handcuff_layer
+	obj_overlays[MUTUALCUFF_LAYER]	= new /obj/abstract/Overlays/mutualcuff_layer
 	obj_overlays[LEGCUFF_LAYER]		= new /obj/abstract/Overlays/legcuff_layer
+	
 	//obj_overlays[HAND_LAYER]		= new /obj/abstract/Overlays/hand_layer
 	obj_overlays[TAIL_LAYER]		= new /obj/abstract/Overlays/tail_layer
 	obj_overlays[TARGETED_LAYER]	= new /obj/abstract/Overlays/targeted_layer

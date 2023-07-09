@@ -1302,15 +1302,15 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/update_inv_mutual_handcuffed(var/update_icons = TRUE)
 	if(monkeyizing)
 		return
-	overlays -= obj_overlays[HANDCUFF_LAYER]
+	overlays -= obj_overlays[MUTUALCUFF_LAYER]
 	if (mutual_handcuffs && mutual_handcuffs.is_visible())
 		stop_pulling()	//TODO: should be handled elsewhere
-		var/obj/abstract/Overlays/O = obj_overlays[HANDCUFF_LAYER]
+		var/obj/abstract/Overlays/O = obj_overlays[MUTUALCUFF_LAYER]
 		O.icon = 'icons/obj/cuffs.dmi'
 		O.icon_state = "singlecuff1"//TODO: procedurally generated single-cuffs
 		O.pixel_x = species.inventory_offsets["[slot_handcuffed]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_handcuffed]"]["pixel_y"] * PIXEL_MULTIPLIER
-		obj_to_plane_overlay(O,HANDCUFF_LAYER)
+		obj_to_plane_overlay(O,MUTUALCUFF_LAYER)
 
 	if(update_icons)
 		update_icons()
