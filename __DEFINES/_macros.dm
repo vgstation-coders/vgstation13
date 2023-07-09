@@ -406,6 +406,8 @@
 
 #define SNOW_THEME (map.snow_theme || Holiday == XMAS || Holiday == XMAS_EVE)
 
+#define SOCIALISM_WON (map.nameShort == "castle" || Holiday == LABOR_DAY)
+
 #define get_conductivity(A) (A ? A.siemens_coefficient : 1)
 
 //Swaps the contents of the variables A and B. The if(TRUE) is there simply to restrict the scope of _.
