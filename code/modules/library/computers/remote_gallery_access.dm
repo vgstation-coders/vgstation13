@@ -109,5 +109,5 @@
 	var/obj/item/mounted/frame/painting/custom/C = new(get_turf(src))
 	C.name = "[newbook.title] by [newbook.author]"
 	C.desc = newbook.description
-	C.painting_data = json2painting(newbook.content, newbook.title, newbook.author, newbook.description)
+	C.set_painting_data(json2painting(newbook.content, newbook.title, newbook.author, newbook.description))
 	return C
