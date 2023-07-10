@@ -374,6 +374,9 @@ function initCanvas(paintInitData, canvasInitData) {
 			'<div class="paletteColor" onclick="setColor(\'' + palette[color] + '\');" style="background-image:' +  generateColorPaletteBackgroundStyle(palette[color]) + '; background-image:' +  generateColorPaletteBackgroundStyle(palette[color], true) + '"></div>\n';
 	}
 	setColor(palette[0]);
+
+	//no errors initializing canvas stuff thus far, hide the error message
+	document.getElementById("canvas-error").style.display = "none";
 }
 
 //--------------------------------

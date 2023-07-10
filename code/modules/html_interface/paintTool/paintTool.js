@@ -267,7 +267,7 @@ function colorOverlayBlend(c1, c2, alpha) {
 function colorRybBlend(c1, c2, alpha) {
 	var c1Ryb = rgbToRyb(c1);
 	var c2Ryb = rgbToRyb(c2);
-	var resultRyb = {r:0, y:0, b:0, a:c2Ryb.a};
+	var resultRyb = {r:0, y:0, b:0, a:Math.min(255.0, c1Ryb.a*alpha + c2Ryb.a)};
 
 	alpha *= c1Ryb.a / 255.0;
 

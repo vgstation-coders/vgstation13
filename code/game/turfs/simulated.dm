@@ -17,7 +17,7 @@
 		return FALSE
 	overlays -= advanced_graffiti_overlay
 	advanced_graffiti_overlay = advanced_graffiti.render_on(icon(icon, icon_state))
-	advanced_graffiti_overlay.SwapColor("#aaaaaaff", "#ffffff00")
+	//advanced_graffiti_overlay.SwapColor("#aaaaaaff", "#ffffff00")
 	overlays += advanced_graffiti_overlay
 
 /turf/simulated/New()
