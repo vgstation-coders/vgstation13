@@ -12,7 +12,6 @@
 	var/strapped = 0.0
 	throwpass = 1 //so Adjacent passes.
 	var/rating = 1 //Use this for upgrades some day
-	var/playedflatline = FALSE
 	pass_flags_self = PASSTABLE
 	var/obj/machinery/computer/operating/computer = null
 
@@ -99,23 +98,28 @@
 	take_victim(L, user)
 	return
 
+/obj/machinery/optable/proc/beat(mob/user)
+	if(computer && user == victim && victim.loc == src.loc && victim.lying && victim.stat != DEAD)
+		playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
+
+/obj/machinery/optable/proc/flatline(mob/user, body_destroyed)
+	if(computer && user == victim && victim.loc == src.loc && victim.lying)
+		playsound(computer.loc, 'sound/machines/Flatline.ogg', 50)
+
 /obj/machinery/optable/proc/check_victim()
 	if (victim)
 		if (victim.loc == src.loc)
 			if (victim.lying)
 				if (victim.pulse)
 					icon_state = "table2-active"
-					if(computer)
-						playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
 				else
 					icon_state = "table2-idle"
-					if(computer && !playedflatline)
-						playsound(computer.loc, 'sound/machines/Flatline.ogg', 50)
-						playedflatline = TRUE
 
 				return 1
 
 		victim.reset_view()
+		victim.unregister_event(/event/heartbeat, src, src::beat())
+		victim.unregister_event(/event/death, src, src::flatline())
 		victim = null
 		update()
 
@@ -163,8 +167,8 @@
 		victim = C
 		C.resting = 1 //This probably shouldn't be using this variable
 		C.update_canmove() //but for as long as it does we're adding sanity to it
-		if(computer && C.pulse)
-			playedflatline = FALSE
+		C.register_event(/event/heartbeat, src, src::beat())
+		C.register_event(/event/death, src, src::flatline())
 
 	if (C == user)
 		user.visible_message("[user] climbs on the operating table.","You climb on the operating table.")
