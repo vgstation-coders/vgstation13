@@ -18,16 +18,24 @@
 /obj/machinery/optable/New()
 	..()
 	optable_list += src
-	for(dir in list(NORTH,EAST,SOUTH,WEST))
-		computer = locate(/obj/machinery/computer/operating, get_step(src, dir))
-		if (computer)
-			break
+	updatemodules()
 //	spawn(100) //Wont the MC just call this process() before and at the 10 second mark anyway?
 //		process()
 
 /obj/machinery/optable/Destroy()
 	optable_list -= src
 	..()
+
+/obj/machinery/optable/proc/updatemodules()
+	computer = find_computer()
+	if(computer && !computer.optable)
+		computer.optable = src
+
+/obj/machinery/optable/proc/find_computer()
+	for(dir in cardinal)
+		. = locate(/obj/machinery/computer/operating) in get_step(src, dir)
+		if (.)
+			break
 
 /obj/machinery/optable/ex_act(severity)
 
@@ -99,22 +107,24 @@
 	return
 
 /obj/machinery/optable/proc/beat(mob/user)
-	if(computer && user == victim && victim.loc == src.loc && victim.lying && victim.stat != DEAD)
-		playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
+	if(user == victim && victim.loc == src.loc && victim.lying && victim.stat != DEAD)
+		if(computer)
+			playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
+			computer.icon_state = "operating-living"
+		icon_state = "table2-active"
 
 /obj/machinery/optable/proc/flatline(mob/user, body_destroyed)
-	if(computer && user == victim && victim.loc == src.loc && victim.lying)
-		playsound(computer.loc, 'sound/machines/Flatline.ogg', 50)
+	if(user == victim && victim.loc == src.loc && victim.lying)
+		if(computer)
+			playsound(computer.loc, 'sound/machines/Flatline.ogg', 50)
+			computer.icon_state = "operating-dead"
+		icon_state = "table2-idle"
 
 /obj/machinery/optable/proc/check_victim()
+	updatemodules()
 	if (victim)
 		if (victim.loc == src.loc)
 			if (victim.lying)
-				if (victim.pulse)
-					icon_state = "table2-active"
-				else
-					icon_state = "table2-idle"
-
 				return 1
 
 		victim.reset_view()
@@ -123,6 +133,8 @@
 		victim = null
 		update()
 
+	if(computer)
+		computer.icon_state = "operating"
 	icon_state = "table2-idle"
 	return 0
 

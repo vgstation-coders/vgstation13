@@ -458,9 +458,9 @@
 			. = 2
 
 /mob/living/carbon/proc/pulse_loop()
-	while(TRUE)
+	while(pulse != PULSE_NONE)
 		var/pulsespeed = get_pulsespeed()
-		if(pulsespeed)
+		if(pulsespeed && !timestopped)
 			INVOKE_EVENT(src, /event/heartbeat, "user" = src)
 		sleep(max(1,pulsespeed))
 
