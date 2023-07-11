@@ -12,6 +12,23 @@
 	if(zMove(DOWN))
 		to_chat(src, "<span class='notice'>You move down.</span>")
 
+/mob/verb/lookup()
+	set name = "Look Up"
+	set category = "IC"
+
+	if(HasAbove(src.z))
+		var/turf/T = GetAbove(src)
+		if(client.eye == T)
+			reset_view()
+			to_chat(src, "<span class='notice'>You stop looking up.</span>")
+		else if(T && isvisiblespace(T))
+			reset_view(GetAbove(src))
+			to_chat(src, "<span class='notice'>You look upwards.</span>")
+		else
+			to_chat(src, "<span class='warning'>You see nothing but the ceiling.</span>")
+	else
+		to_chat(src, "<span class='warning'>You don't feel like doing that.</span>")
+
 /mob/proc/zMove(direction)
 	//if(eyeobj) This probably belongs in AIMove
 	//	return eyeobj.zMove(direction)
@@ -109,7 +126,7 @@
 
 	if(Process_Spacemove())
 		return 1
-	
+
 	if(flying)
 		return 1
 
@@ -134,13 +151,13 @@
 
 	if(flying)
 		return 1
-	
+
 	if(module) // Finally, jetpacks allow it
 		for(var/obj/item/weapon/tank/jetpack/J in module.modules)
 			if(J && istype(J, /obj/item/weapon/tank/jetpack))
 				if(J.allow_thrust(0.01, src))
 					return 1
-	
+
 /* Same as above, hull scaling discussion pending
 
 	for(var/turf/simulated/T in trange(1,src)) //Robots get "magboots"
