@@ -218,7 +218,6 @@ var/list/uplink_items = list()
 	item = /obj/effect/spawner/newbomb/timer
 	cost = 25
 	refundable = TRUE
-	num_in_stock = 3
 
 /datum/uplink_item/nukeprice/robot
 	name = "Syndicate-modified Combat Robot Teleporter"
