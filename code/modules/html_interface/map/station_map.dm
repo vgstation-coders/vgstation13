@@ -88,9 +88,17 @@
 					newMarker.y = T.y
 					newMarker.z = ZLevel
 					holomap_markers[newMarker.id+"_\ref[A]"] = newMarker
+			if (A.destroy_after_marker)
+				spawn(10)//necessary to give some margin for the marker to be created before removing that temp area.
+					var/area/fill_area
+					for(var/turf/T in A)
+						if(!fill_area)
+							fill_area = get_base_area(T.z)
+						T.set_area(fill_area)
 
 
 /proc/generateHoloMinimap(var/zLevel=1)
+
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 
 	//These atoms will keep their tile empty on holomaps
@@ -109,7 +117,9 @@
 		/obj/structure/fence/door,
 		)
 
-	if (map.snow_theme)//we got a lot of turfs to check, so let's only check for those if we really need it
+	var/datum/zLevel/Z = map.zLevels[zLevel]
+
+	if (istype(Z, /datum/zLevel/snowsurface))//we got a lot of turfs to check, so let's only check for those if we really need it
 		full_emptiness += /obj/glacier
 		full_obstacles += /obj/structure/flora/tree
 
@@ -129,16 +139,33 @@
 								override = TRUE
 								break
 						if (override)
+							if (istype(aera, /area/surface/blizzard))
+								if(map.holomap_offset_x.len >= zLevel)
+									canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+								else
+									canvas.DrawBox(HOLOMAP_PATH, i, r)
 							continue
+
 						if((tile.holomap_draw_override != HOLOMAP_DRAW_EMPTY) && (aera.holomap_draw_override != HOLOMAP_DRAW_EMPTY))
 							override = FALSE
 							for(var/obstacle in full_obstacles)
 								if (locate(obstacle) in tile)
 									override = TRUE
 									break
-							if (map.snow_theme)//a few snowflake checks (pun intended) to keep some of snaxi's secrets a bit harder to find.
-								if ((istype(tile, /turf/unsimulated/floor/snow/permafrost) && istype(aera, /area/surface/mine)) ||(istype(tile, /turf/unsimulated/floor/snow/cave) && istype(aera, /area/surface/outer/ne)))
+							if (istype(Z, /datum/zLevel/snowsurface))//a few snowflake checks (pun intended) to keep some of snaxi's secrets a bit harder to find.
+								if (istype(aera, /area/surface/blizzard))
+									if(map.holomap_offset_x.len >= zLevel)
+										canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+									else
+										canvas.DrawBox(HOLOMAP_PATH, i, r)
+									continue
+								else if ((istype(tile, /turf/unsimulated/floor/snow/permafrost) && istype(aera, /area/surface/mine)) ||(istype(tile, /turf/unsimulated/floor/snow/cave) && istype(aera, /area/surface/outer/ne)))
 									override = TRUE
+
+								else if (istype(aera, /area/derelict/secret))
+									override = TRUE
+							if (Z.blur_holomap(aera,tile))
+								override = TRUE
 							var/exception = FALSE
 							if (istype(tile, get_base_turf(zLevel)) && istype(aera, /area/mine/unexplored))//we could avoid such exceptions if this area wasn't ever painted over space.
 								exception = TRUE
@@ -158,6 +185,12 @@
 										canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 									else
 										canvas.DrawBox(HOLOMAP_PATH, i, r)
+						else if (istype(Z, /datum/zLevel/snowsurface) && istype(aera, /area/vault))
+							if(map.holomap_offset_x.len >= zLevel)
+								canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+							else
+								canvas.DrawBox(HOLOMAP_PATH, i, r)
+
 
 	holoMiniMaps[zLevel] = canvas
 
@@ -229,7 +262,7 @@
 							canvas.DrawBox(areaToPaint.holomap_color, min(i+map.holomap_offset_x[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 						else
 							canvas.DrawBox(areaToPaint.holomap_color, i, r)
-					else if (tile.holomap_draw_override == HOLOMAP_DRAW_HALLWAY)
+					else if ((tile.holomap_draw_override == HOLOMAP_DRAW_HALLWAY) && !istype(areaToPaint, /area/surface/blizzard))
 						if(map.holomap_offset_x.len >= StationZLevel)
 							canvas.DrawBox(HOLOMAP_AREACOLOR_HALLWAYS, min(i+map.holomap_offset_x[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 						else
@@ -271,7 +304,7 @@
 
 	for(var/marker in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[marker]
-		if(holomarker.z == StationZLevel && holomarker.filter & HOLOMAP_FILTER_STATIONMAP)
+		if((holomarker.z == StationZLevel) && ((holomarker.filter & HOLOMAP_FILTER_STATIONMAP) || (map.snow_theme && (holomarker.filter & HOLOMAP_FILTER_TAXI))))
 			if(map.holomap_offset_x.len >= StationZLevel)
 				big_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[StationZLevel]	, holomarker.y-8+map.holomap_offset_y[StationZLevel])
 			else
