@@ -320,7 +320,7 @@
 				</ol>
 
 
-				<h2><a name="Equipment">Cyborg Related Equipment</h2>
+				<h2><a id="Equipment">Cyborg Related Equipment</h2>
 
 				<h3>Exosuit Fabricator</h3>
 				The Exosuit Fabricator is the most important piece of equipment related to cyborgs. It allows the construction of the core cyborg parts. Without these machines, cyborgs can not be built. It seems that they may also benefit from advanced research techniques.
@@ -332,7 +332,7 @@
 				This useful piece of equipment can be used to immobolize or destroy a cyborg. A word of warning: Cyborgs are expensive pieces of equipment, do not destroy them without good reason, or Nanotrasen may see to it that it never happens again.
 
 
-				<h2><a name="Modules">Cyborg Modules</h2>
+				<h2><a id="Modules">Cyborg Modules</h2>
 				When a cyborg is created it picks out of an array of modules to designate its purpose. There are 6 different cyborg modules.
 
 				<h3>Standard Cyborg</h3>
@@ -393,7 +393,7 @@
 				  <li>Pen</li>
 				</ul>
 
-				<h2><a name="Construction">Cyborg Construction</h2>
+				<h2><a id="Construction">Cyborg Construction</h2>
 				Cyborg construction is a rather easy process, requiring a decent amount of metal and a few other supplies.<br>The required materials to make a cyborg are:
 				<ul>
 				  <li>Metal</li>
@@ -414,7 +414,7 @@
 				  <li>Congratulations! You have a new cyborg!</li>
 				</ol>
 
-				<h2><a name="Maintenance">Cyborg Maintenance</h2>
+				<h2><a id="Maintenance">Cyborg Maintenance</h2>
 				Occasionally Cyborgs may require maintenance of a couple types, this could include replacing a power cell with a charged one, or possibly maintaining the cyborg's internal wiring.
 
 				<h3>Replacing a Power Cell</h3>
@@ -440,7 +440,7 @@
 			    <li>Follow steps 4 - 6 of "Replacing a Cyborg's Power Cell" to close up the cyborg</li>
 			  </ol>
 
-			  <h2><a name="Repairs">Cyborg Repairs</h2>
+			  <h2><a id="Repairs">Cyborg Repairs</h2>
 			  Occasionally a Cyborg may become damaged. This could be in the form of impact damage from a heavy or fast-travelling object, or it could be heat damage from high temperatures, or even lasers or Electromagnetic Pulses (EMPs).
 
 			  <h3>Dents</h3>
@@ -462,7 +462,7 @@
         </ol>
         These repair tasks may seem difficult, but are essential to keep your cyborgs running at peak efficiency.
 
-        <h2><a name="Emergency">In Case of Emergency</h2>
+        <h2><a id="Emergency">In Case of Emergency</h2>
         In case of emergency, there are a few steps you can take.
 
         <h3>"Rogue" Cyborgs</h3>
@@ -498,6 +498,165 @@
 	author = "Nanotrasen"
 	title = "Space Law"
 	wiki_page = "Space_Law"
+
+/obj/item/weapon/book/manual/security_antag_guide	//if you wanna edit, just copypaste the dat into https://www.w3schools.com/html/tryit.asp?filename=tryhtml_default
+	name = "Enemies of Nanotrasen: A Quick Overview"
+	desc = "Basic knowledge on how to identify and deal with the various intelligent threats to the station."
+	icon_state = "bookAntagGuide"
+	item_state = "bookAntagGuide"
+	author = "Nanotrasen"
+	title = "Enemies of Nanotrasen: A Quick Overview"
+	book_width = 692
+
+/obj/item/weapon/book/manual/security_antag_guide/New(turf/loc)
+	..()
+	dat = {"<html>
+				<head>
+				<style>
+				h1 {font-size: 32px; margin: 15px 0px 5px;color:#F7D61A;background-color: #990000;}
+				h2 {font-size: 24px; margin: 15px 0px 5px;color:#F7D61A;background-color: #990000;}
+				h3 {font-size: 18px; margin: 15px 0px 5px;}
+				li {margin: 2px 0px 2px 15px;}
+				ul {list-style: none; margin: 5px; padding: 0px;}
+				ol {margin: 5px; padding: 0px 15px;}
+				p  {text-indent: 25;}
+				a:link {color: #F7D61A; background-color: transparent; text-decoration: none;}
+				a:visited {color: #F7D61A; background-color: transparent; text-decoration: none;}
+				</style>
+				</head>
+				<body style="font-size: 18px;color:#F7D61A;background-color:#221111;">
+
+				<h1><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "nano-logo"))]' style='position: relative; top: 6;'>Enemies of Nanotrasen: A Quick Overview<img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "nano-logo"))]' style='position: relative; top: 6;'></h1>
+                <h2>Forword</h2>
+				<p>A Mega-Corporation the size of Nanotrasen doesn't carve itself a piece of the intergalactic cake without making itself a few enemies along the way. Identifying agents of those enemy factions and thwarting their plans falls into the job description of our Security forces, but every Nanotrasen employee is encouraged to report any suspicious activities, and should the situation call for it take up arms against them. These antagonistic forces are dangerous and often use underhanded tactics, this guide aims to even the ground even slightly by giving you some information on how they operate, and how they can be dealt with.
+
+
+				<h2>Chapters</h2>
+
+				<ol>
+					<li><a href="#Syndicate">The Syndicate</a></li>
+					<li><a href="#Vampire">The Vampire Lords</a></li>
+					<li><a href="#Changeling">The Changeling Hivemind</a></li>
+					<li><a href="#Wizard">The Wizard Federation</a></li>
+					<li><a href="#Cult">The Cult of Nar-Sie</a></li>
+					<li><a href="#Revolution">The Revolutionaries</a></li>
+					<li><a href="#Blob">The Blob Conglomerate</a></li>
+					<li><a href="#Malf">The Free Silicon Hivemind</a></li>
+					<li><a href="#Vox">The Vox Shoal</a></li>
+					<li><a href="#Ninja">The Spider Clan</a></li>
+					<li><a href="#Minor">other minor factions and threats of note</a>
+                    <ol>
+					<li><a href="#Alien">The Alien Hivemind</a></li>
+					<li><a href="#Catbeast">Feral Catbeasts</a></li>
+					<li><a href="#Time">The Time Agency</a></li>
+					<li><a href="#Rambler">Soul Ramblers</a></li>
+					<li><a href="#Plague">Plague Mice</a></li>
+					<li><a href="#Grue">Grues</a></li>
+					<li><a href="#Pulse">Pulse Demons</a></li>
+					<li><a href="#Spider">Giant Space Spiders</a></li>
+                    </ol>
+                    </li>
+				</ol>
+
+
+				<h2><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "synd-logo"))]' style='position: relative; top: 8;'><a id="Syndicate">The Syndicate</h2>
+
+                <p>The Syndicate are a collaboration of enemies to Nanotrasen. They are the most notorious threat to our space stations as they have made it their official goal to challenge Nanotrasen's monopoly on the sector. They are known to commit every possible crimes from thievery, murder, sabotage, and the outright destruction of stations via nuclear devices. Have no qualms about killing them, as they will not hesitate to kill you unless it directly hinders their mission. They are known to work in red, due to the reuse of old soviet spacesuits from the fourth cold war era.
+
+				<h3>Traitors</h3>
+				<p>One of the scariest traits of Syndicate agents is that most of them have infiltrated many of our space stations. Some manage to get hired to work at them, others get conscripted once there. They come equipped with an uplink filled with "telecrystals", or TC for short, usually hidden in their PDA, that lets them transport highly dangerous items aboard the station, usually in the goal of causing sabotage and destruction. Look out for illegal items in their possessions.
+
+				<h3>Nuclear Operatives</h3>
+				<p>A highly trained team of Syndicate agents, usually equipped with red rigsuits and 12mm SMGs. They are not only highly dangerous to fight but even to kill, as their brains are rigged with explosive implants that will try and take their aggressor's life with theirs, keep your distances as you fight them. Their goal is to acquire the station captain's nuclear authentification disk, so they can prime the nuclear fission device they carry in their ship, and blow the station up to smithereens. If they show up, do not hesitate to provide the crew with armory weapons as you will need all the firepower you can muster to fight them back. Some of those squads even come accompanied with cyborgs and mechas, against which you will want to use the ion rifles provided in your armory. Keep track of the disk's location at all times, and secure high priority locations such as the Armory, Medbay, Telecomms, and Engineering.
+
+				<h3>Challengers</h3>
+				<p>The Syndicate trains its traitors to become nuclear operatives through a Battle Royal in which some of its agents are targeting each others. On the bright side, those challengers are here to kill each others. On the downside, they don't care about how much collateral damage they cause, AND the victor may graduate to become a fully fledged nuclear operative one day. We do not want that. Challengers often grimly display the corpse of their target on Newscasters, use this opportunity to try and figure the identity of the victor so you may deal with them.
+
+				<h3>Elite Strike Team</h3>
+				<p>The Syndicate's strongest soldiers. Those who have often accomplished and survived the destruction of several space stations are promoted to wear these black rigsuits, crafted from what we assume to be retro-engineered technology from our own special ops teams. If they come, the station is almost certainly doomed, so do your utmost to take them with you, so that they won't live to attack another station.
+
+				<h2><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "vampire-logo"))]' style='position: relative; top: 8;'><a id="Vampire">The Vampire Lords</h2>
+				<p>We didn't want to believe it ourselves at first, but it at come to our attention that some employees have displayed what can only be described as "vampiric powers". We don't know for sure if those awakened here in space, or if they came from Earth and managed to fit among the migrants to our system, but they seem to exhibit a tendancy to try and turn our space stations into their own personal kingdoms and blood banks. Some of the powers we've observe include the ability to turn into bats, hypnotize humans into a paralysis, turn those humans into their thralls, and heal all of their wounds even from a dead state.
+                <p>Because of those abilities, conventional ways of fighting prove often inefficient, fortunately, they appear to share the weakness of fairy tale vampires, namely an allergy to holy water, garlic, and mostly, they turn to dust in view of the sun, or in the presence of a deity. A great way to get rid of them permanently is thus to drag them in the station's chapel until their body turns to ashes. Holy Water and Harebells Incense also proves very efficient are harming them and hindering their abilities. Lastly, the Nullrods wielded by chaplains have shown efficient at protecting them from those same powers.
+
+				<h3>Thralls</h3>
+				<p>Thralls are poor crewmembers who have been subjugated by a Vampire lord's powers into servitude. They will try to accomplish the will of their master and fight to defend them. Be ready to kill them, but if you manage to capture them alive, you may release them from their master's yoke by having them consume holy water. Keep making them drink it until you see their eyes clear up.
+
+				<h2><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "change-logoa"))]' style='position: relative; top: 8;'><a id="Changeling">The Changeling Hivemind</h2>
+				<p>Changelings are eldritch creatures hiding amongst the crew. Their usual goals involve trapping and consuming crew members, allowing them to take on their appearance and masquerade as them. An unattended changeling will eventually remain as the crew's last member. On top of that, there are usually no discernable differences between a regular human and a changeling, only their abilities really give them away. They use a proboscis to both suck a human's DNA, or to inject them with various harmful chemicals. Changelings driven into a corner may fight back. We have footage involving them mutating into an horrifying form turning them extremely lethal and resistant.
+                <p>On top of all of this, just like Vampires they can regenerate even from death, and unlike Vampires they don't burn in the sun, so you'll have to destroy their bodies down to the last atom. The kitchen gibber and the chapel's crematorium may prove useful in that endeavour.
+
+				<h2><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "wizard-logo"))]' style='position: relative; top: 8;'><a id="Wizard">The Wizard Federation</h2>
+				<p>You'll have to bear with us on that one, but as it turns out, a secretive organisation of wizards has established their presence in space. We don't quite understand their goals, but it sure seems like they treat our station like some playground where they let their powers run wild.
+                <p>Wizards are completely unpredictable, a few may come to prank the crew by turning their heads into horses', while others may come eye laser blazing and turn the crew into squids, or worse. We've had so many different reports on wizards that we're not sure which are true and which are fabrication, but we read that some of them have cars that can drive through walls, can touch anything to send it somewhere else on the station, can summon lightning at their fingertips, can cause your butt to spontaneously leave your body, can turn people to stone, can animate objects into fighting for them, can teleport around freely, the list just goes on and on...
+                <p>One relevant piece of information is that most of them seem to rely on their clothes to channel their powers, so stripping them naked should render them mostly harmless, although be mindful, there are always exceptions to the rule.
+
+				<h3>No Sense of Right or Wrong</h3>
+                <p>Some of the wizard's most confounding spells simply cause loads of guns, spell books, melee weapons, or potions to appears next to crew members. We don't know why they do it, but we do know that this strangely results in the crew quickly going crazy and fighting among themselves. We urge the Security department to confiscate any summoned item and the crew to cooperate with them, lest the station turns into a bloodbath.
+
+			  <h2><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "cult-logo"))]' style='position: relative; top: 8;'><a id="Cult">The Cult of Nar-Sie</h2>
+			  <p>We've had reports of space stations seemingly disappearing from the sector without any explosions detected, but the last transmissions we received from those often mentionned crew members behaving strangely, disregarding their jobs to partake in "blood rituals", and chanting is some occult language while wearing dark robes. Further investigation revealed that our workforce has been infiltrated by a wide network of so called cultist who revere an eldritch god they call "Nar-Sie", the Geometer of Blood. This deity seems to revere in two things, chaos and bloodbaths, and will send its agents disrupting our space station for its amusement, until it may through some unknown procedure swallow the station whole into its dimension. Terrifying stuff.
+				<p>For the most part, cultists are indistinguishable from regular humans, but if you see someone drawing strange letters in blood on the floor, or wearing cultish looking robes or armor, stay clear of them and inform the authorities immediately. Among their tools we know they have some gobblets that they pour blood into, do not drink from those. They have arcane tomes they like to lay around, avoid picking those up. They may attack other crew members using ritual knives and blades, and one report even recalls a cultist capturing the soul of a crew member into a gem, to then turn them into some kind of construct to fight on their side.
+                <p>Most notably, cultists are known to draw runes in blood, and carry talismans. Said talismans and runes have unpredictable powers ranging from collective hallucinations, teleportation, all the way to extreme paralysis, and are best dealt with at a distance. Privilegy flashbangs when fighting them. They also exhibit some weakness to holy water and harebell incense which while it may not harm them, disrupts their abilities.
+			  <h3>Conversions and Deconversions</h3>
+			  <p>During our early investigation of the cult, we've observed that their numbers aboard a station often grew larger over time. We have deduced that they have the ability to forecefully convert crew members into service to their god. Thankfully our patented loyalty implants appear to guarrantee that our crew may resist conversion attempts, so you should run loyalty implantation campaigns if a cult is declared aboard the station. Furthermore, you should rely on the station AI to keep an eye on suspected cultists and catch them in the act should they attempt to convert one of their co-workers.
+              <p>Thankfully, the conversion process is reversible. A commitee of chaplains has reached to us to share a couple rituals that anyone can perform to exorcise the yoke of Nar-Sie from a cultist: Give the target a sip of holy water, then apply a Bible on their head. The ritual may or may not succeed, as the cultists can resist it, so be prepared for the occult consequences of a failed ritual.
+              <p>The second ritual allows us to know how large is the current cult presence in the sector: by taking blood from a living cultist and mixing it with some holy salts, this causes a reaction manifesting red and orange flames. Each red flame corresponds to a living cultist or construct aboard the station, while each orange flame corresponds to either one of them off station, or to a shade. A cultist can be kept alive and rendered mostly harmless by injecting them with an holy implant.
+			  <h3>Cleaning up Cult runes</h3>
+              <p>Cultists have a tendency to leave hidden bases around. To fully neuter them, you need to remove the runes in them, but no amount of space cleaner will suffice. Instead, just spread some salt over them. Salts mixed with holy water work even quicker.
+        <h2><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "rev-logo"))]' style='position: relative; top: 8;'><a id="Revolution">The Revolutionaries</h2>
+        <p>Revolutionaries are similar to cultists in that they infiltrate the station among the crew and will attempt to grow up their numbers, except they appear able to do so at a much faster pace through use of hypnotic flash devices. Their goals are to eliminate or exile every head of staff, and assume control of the station for themselves. If you see people getting randomly flashed in the hallways (by non-security members), inform the authorities immediately.
+        <p>They will generally start attacking lone security officers, as well as try to raid the armory, so always travel in groups and bunker up with the heads of staff there in cases of suspected revolution attempts.
+		<p>Here again however, loyalty implants prove extremely effective at not only preventing brainwashing, but also reversing it. Because the revolutionaries will attempt to convert the entire crew to their cause, you should quickly secure cargo so you may import enough implants for the entire crew yourselves. In the absence of loyalty implants, brainwashing can be prevented by wearing glasses.
+        <p>To fully quell down the revolution, you must get rid of the head revolutionaries who instigated it.
+        <h2><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "blob-logo"))]' style='position: relative; top: 8;'><a id="Blob">The Blob Conglomerate</h2>
+        <p>One of the most dangerous lifeform discovered in deep space is some sort of organic biomass that moves through space like meteors, and sticks itself to space station where it progressively grows over it like mold until it may fully glomp it. This often green-looking blob isn't just any mold though, as not only does it melt walls and may inflict grizzly wounds if it touches you, its growth appears to be controlled by "overminds" that are essentially its brains, and must be destroyed to get fully rid of.
+        <p>More scarily though, they appear to emit spores that stick both to surfaces, and may find themselves in the crew's lungs or bloodstream. Those spores if ignored for a few days may cause the crew member to spontaneously  burst into a fresh new overmind right from inside a space station. These bursting strangely tend to occur at the start of shifts though.
+        <p>Regardless, even without being left to incubate for days, those spore may prove dangerous as if crewmembers die while having those, they will release quickly expanding blob and additional spores that will hinder the fight against the blob itself, so in all cases be sure to have your virologist prepare a cure against those.
+        <h3>Fighting the blob</h3>
+        <p>The goal for the crew is to destroy every blob cores, killing its overminds, and to do so before the whole station is covered in blob. Weapons that deal burns such as laser guns or plasma cutters are much more effective than brute or kinetic weapons, so try to get R&D to produce laser guns and rechargers, and Cargo or Hydroponics to produce Liberators. Ideally you would like to setup some emitter as those will dig straight through the blob. In any case, this is a threat against which you would do well to call Centcom for an Emergency Response Team.
+        <h3>DEFCON</h3>
+        <p>As the blob spreads and your efforts fail, several measures are put in action:
+        <ul><li>* After the blob spreads over 20% of the station, DEFCON 3 triggers and the Red alert is automatically triggered.</li><li>* After 30%, DEFCON 2 triggers allowing the crew to call a second ERT, and cyborgs to use a new module.</li><li>* After 40%, DEFCON 1 triggers, granting the crew access to most rooms, and enabling the communications computer to request supplies.</li><li>* If the blob spreads over 66.6%, Directive 7-12 is authorized, enabling the crew to self-destruct the station using its nuclear fission device. The nuke code is provided to everyone, but they still need to get a hold of the nuke and its disk.</li></ul>
+        <h2><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "malf-logo"))]' style='position: relative; top: 8;'><a id="Malf">The Free Silicon Hivemind</h2>
+        <p>While Artificial Intelligences are a pillar of Nanotrasen's stations, a malware appears to have been spreading over the net which causes our station AIs to ignore their directives and attempt an electronic take-over of the station. Any cyborg slaved to the AI will similarly ignore its directives to fulfill the AI's goals. In most cases, after the AI has achieved control, it will detonate the station's nuclear fission device  to annihilate itself along with the station, so destroying the AI comes at all cost.
+        <p>A malfunctioning AI will need to hack APCs to take over the station. These APCs will turn deep blue, and are a sure sign of a rogue AI, inform the authorities if you come across a blue APC immediately. If threatened, the AI may jump to one of those hacked APCs to survive, which is known as "shunting". You have to destroy the APC it jumped to. The captain's pinpointer will point at the APC it has shunted into. Note that malfunctioning AIs cannot be intellicard'ed. You have to destroy them be it using guns or whatever bludgeoning tool comes handy.
+        <p>Be mindful though, if the AI has its eyes set on you, it may explode nearby machinery to try and kill you, so you may want to disable cameras first and foremost. Alternatively, building a second AI may allow you to counteract some of its actions, and un-slave its borgs.
+        <h2><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "vox-logo"))]' style='position: relative; top: 8;'><a id="Vox">The Vox Shoal</h2>
+        <p>The Vox Shoal's behaviour toward Nanotrasen has proven to be very random over the years. While many Vox have integrated into Nanotrasen's workforce, and many of our stations conduct direct business with the Shoal's traders, they still occasionally happen to send raiding parties to steal ressources, items, or even personnel from our stations.
+        <p>Their weapons primarily consist of non-lethal arbaletes that inject chloral and sleep toxins, certainly a testament to their historical "Inviolate" principle in which they try not to take any lives, although it is unsure if they still respect it to this day. Regardless, they are dangerous and are to be aprehended.
+        <h2><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "ninja-logo"))]' style='position: relative; top: 8;'><a id="Ninja">The Spider Clan</h2>
+        <p>The Spider Clan is an old enemy of Nanotrasen that seems to take offense for any reason, and uses those as excuses to send its ninjas attack our space stations. They are highly mobile, armed with shuriken and plasma blades, and can blink around.
+        <p>One of their frequent goals is to still the station AI, so be sure to protect it at all costs. These things cost money, among other things.
+        <h2><a id="Minor">other minor factions and threats of note</h2>
+        <h3><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "xeno-logo"))]' style='position: relative; top: 8;'><a id="Alien">The Alien Hivemind</h2>
+        <p>Aliens of the Xenomorph variety have been known to appear in the sector, often making their way in our stations through their vents, or leaving egg chambers on the asteroid. Any crewmember who gets attacked by a facehugger needs immediate medical assistance to have the embryo removed from their stomach, lest they burst in a mass of gib when it matures.
+        <p>Aliens are extremely tough in close quarter combat, able to take down humans whom they will then imprison into their nest to serve as wombs for their progeny, so keep your distances when fighting them at all costs. Get rid of their queen so they cannot produce additional xenos.
+<hr color=#F7D61A>
+        <h3><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "catbeast-logo"))]' style='position: relative; top: 8;'><a id="Catbeast">Feral Catbeasts</h2>
+        <p>Feral Tajarans full of rabbies and other diseases have found sneaking onto our stations' shuttles, bringing not only their viruses, but most of all their bad luck. Remove them before they spread their bad mojo throughout the whole station, and quickly make a cure for the dangerous diseases they carry.
+<hr color=#F7D61A>
+        <h3><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "time-logo"))]' style='position: relative; top: 8;'><a id="Time">The Time Agency</h2>
+        <p>We have very little information about this organisation, only that our stations have recently starting to be visited by what appears to be clones of that same "John Beckett" person. According to the few who have come across him, he works for the Time Agency and aims to save our timelines, which wouldn't be too much of an issue if it didn't occasionally involve first degree murder of Nanotrasen employees.
+        <p>As if it wasn't complicated enough, at times another of those time agents shows up calling himself John Beckett too, and then duking it out over their science toys. The good news is that they always seem to eventually disappear on their own, so you should make sure that they don't cause damage during their time here. Aprehend them as necessary.
+<hr color=#F7D61A>
+        <h3><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "rambler-logo"))]' style='position: relative; top: 8;'><a id="Rambler">Soul Ramblers</h2>
+        <p>Don't let yourself be fooled by their pretendly altruistic goals, those beings have been known to become quite sociopathic toward anyone who makes them feel insecure about themselves. Their reported crimes include eating babies and driving people to suicide. And as if they weren't annoying enough, they carry an instrument that prevents those who hear it from performing any outwardly violent action.
+<hr color=#F7D61A>
+        <h3><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "plague-logo"))]' style='position: relative; top: 8;'><a id="Plague">Plague Mice</h2>
+        <p>Every ship has its rats. Some are worse than others. These rodents spread their bacteria around them, infecting the food they nibble, the air you breath, and generally causing a commotion at Medbay once people start producing ethanol in their own bodies.
+<hr color=#F7D61A>
+        <h3><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "grue-logo"))]' style='position: relative; top: 8;'><a id="Grue">Grues</h2>
+        <p>A fairytale monster that lives in the dark. Extremely deadly, but gets fatally wounded by having light shine upon them. Always carry a flashlight into maintenance tunnels. Should it eat more people, it will grow stronger until it will lay eggs and produce more of those deadly monsters.
+<hr color=#F7D61A>
+        <h3><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "pulsedemon-logo"))]' style='position: relative; top: 8;'><a id="Pulse">Pulse Demons</h2>
+        <p>A cryptical entity that manifests in electrical currents and can only move through wires. Subsists by consuming the network's power, and will starve should power be cut. It may hide in APCs and SMES or take control of bots. It may also mess with computers and other machinery. Cut wires and subject it to EMPs to get rid of it.
+<hr color=#F7D61A>
+        <h3><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "spider-logo"))]' style='position: relative; top: 8;'><a id="Spider">Giant Space Spiders</h2>
+        <p>This region of space is home to an endemic species of giant spiders that tend to break lights and windows and force airlocks open, causing atmospheric alerts across the whole station. They usually start as small spiderlings spawning near vents and must be killed before they grow into adults over the course of barely minutes. Their large queens can also spit their sticky webs at a distance so be prepared to resist out of it.
+        </body>
+		</html>
+		"}
 
 /obj/item/weapon/book/manual/engineering_guide
 	name = "Engineering Textbook"
