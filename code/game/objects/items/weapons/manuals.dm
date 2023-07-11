@@ -527,7 +527,7 @@
 				<body style="font-size: 18px;color:#F7D61A;background-color:#221111;">
 
 				<h1><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "nano-logo"))]' style='position: relative; top: 6;'>Enemies of Nanotrasen: A Quick Overview<img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "nano-logo"))]' style='position: relative; top: 6;'></h1>
-                <h2>Forword</h2>
+                <h2>Foreword</h2>
 				<p>A Mega-Corporation the size of Nanotrasen doesn't carve itself a piece of the intergalactic cake without making itself a few enemies along the way. Identifying agents of those enemy factions and thwarting their plans falls into the job description of our Security forces, but every Nanotrasen employee is encouraged to report any suspicious activities, and should the situation call for it, take up arms against them. These antagonistic forces are dangerous and often use underhanded tactics, this guide aims to even the ground even slightly by giving you some information on how they operate, and how they can be dealt with.
 
 
