@@ -190,7 +190,7 @@
 	if (bitmap_height < 32)
 		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas.tmpl"))
 	else
-		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas.tmpl"))
+		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas_tile.tmpl"))
 
 /datum/custom_painting/proc/interact(mob/user, datum/painting_utensil/p)
 	if(jobban_isbanned(user, "artist"))
@@ -222,7 +222,7 @@
 	delay += send_asset(user.client, "checkerboard.png")
 	spawn(delay)
 		if (bitmap_height > 26 || bitmap_width > 26)
-			interface.height = 960
+			interface.height = 800
 			interface.width = 960
 		interface.show(user)
 		interface.callJavaScript("initCanvas", list(paint_init_inputs,canvas_init_inputs), user)
