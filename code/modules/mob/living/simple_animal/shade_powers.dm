@@ -158,6 +158,10 @@
 			continue
 		if (istype(A,/atom/movable/lighting_overlay))
 			continue
+		if (istype(A,/obj/machinery/door))
+			var/obj/machinery/door/D = A
+			if (!D.density)
+				continue
 		if (ismob(A))
 			var/mob/M = A
 			if (!iscultist(M))

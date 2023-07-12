@@ -688,7 +688,7 @@ var/list/arcane_tomes = list()
 	mech_flags = MECH_SCAN_FAIL
 	var/mob/living/simple_animal/shade/shade = null
 	var/blood = 0
-	var/passivebloodregen = 0//increments every Life() proc of the Shade inside, and increases blood by 1 once it reaches the current blood count/5
+	var/passivebloodregen = 0//increments every Life() proc of the Shade inside, and increases blood by 1 once it reaches the current blood count/3
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
 	health = 60
