@@ -625,6 +625,9 @@ var/list/arcane_tomes = list()
 			SB.fingerprints = fingerprints.Copy()
 		spawn(1)
 			user.put_in_active_hand(SB)
+			if (iscultist(user))
+				linked_cultist = user
+				to_chat(SB.shade, "<spawn class='notice'>You have made contact with [user]. As long as you remain within 5 tiles of them, you can move by yourself without losing blood, and regenerate blood passively at a faster rate.</span>")
 		var/obj/item/soulstone/gem/sgem = I
 		if (sgem.shade)
 			var/mob/living/simple_animal/shade/shadeMob = sgem.shade
@@ -780,17 +783,13 @@ var/list/arcane_tomes = list()
 				health = min(maxHealth,health+10)
 		if ("Remove Gem")
 			if (!areYouWorthy(user) && shade && ((iscultist(shade) && !iscultist(user)) || (shade.master != user)))
-				to_chat(user, "<span class='warning'>You try to grip \the [src]'s gem and pull it out!</span>")
-				if (do_after(user,src,30))
-					shade.say("Dedo ol'btoh!")
-					user.take_overall_damage(25,25)
-					if (iscarbon(user))
-						user.bodytemperature += 60
-					playsound(user.loc, 'sound/effects/bloodboil.ogg', 50, 0, -1)
-					to_chat(user, "<span class='danger'>You manage to pluck the gem out of \the [src], but a surge of the blade's occult energies makes your blood boil!</span>")
-				else
-					return
-			remove_gem()
+				shade.say("Dedo ol'btoh!")
+				user.take_overall_damage(25,25)
+				if (iscarbon(user))
+					user.bodytemperature += 60
+				playsound(user.loc, 'sound/effects/bloodboil.ogg', 50, 0, -1)
+				to_chat(user, "<span class='danger'>You manage to pluck the gem out of \the [src], but a surge of the blade's occult energies makes your blood boil!</span>")
+			remove_gem(user)
 
 /obj/item/weapon/melee/soulblade/proc/remove_gem(var/mob/user)
 	var/turf/T = get_turf(user)

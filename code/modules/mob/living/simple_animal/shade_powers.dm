@@ -355,20 +355,18 @@
 			hud_state = "soulblade_harm"
 		else
 			hud_state = "soulblade_calm"
-		if (connected_button)
-			connected_button.icon_state = hud_state
 
 /spell/soulblade/blade_harm/perform(var/mob/living/simple_animal/shade/user = usr, skipcharge = 0, list/target_override)
 	if (istype(user))
 		if (user.blade_harm)
 			user.blade_harm = FALSE
 			hud_state = "soulblade_calm"
-			to_chat(user, "<span class='notice'>You now harm and make dizzy miscreants trying to wield you.</span>")
+			to_chat(user, "<span class='notice'>You now allow anyone to wield you.</span>")
 		else
 			user.blade_harm = TRUE
 			hud_state = "soulblade_harm"
-			to_chat(user, "<span class='notice'>You now allow anyone to wield you.</span>")
-		connected_button.icon_state = hud_state
+			to_chat(user, "<span class='notice'>You now harm and make dizzy miscreants trying to wield you.</span>")
+		connected_button.overlays.len = 0
 		var/obj/item/weapon/melee/soulblade/SB = user.loc
 		if (istype(SB))
 			var/mob/M = SB.loc//bloke holding the blade
