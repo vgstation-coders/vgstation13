@@ -685,7 +685,7 @@ var/list/arcane_tomes = list()
 	mech_flags = MECH_SCAN_FAIL
 	var/mob/living/simple_animal/shade/shade = null
 	var/blood = 0
-	var/maxregenblood = 8//the maximum amount of blood you can regen by waiting around.
+	var/passivebloodregen = 0//increments every Life() proc of the Shade inside, and increases blood by 1 once it reaches the current blood count/2
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
 	health = 40
@@ -723,7 +723,7 @@ var/list/arcane_tomes = list()
 	if (shade)
 		if (iscultist(user) && (linked_cultist != user))
 			linked_cultist = user
-			to_chat(shade, "<spawn class='notice'>You have made contact with [user]. As long as you remain within 5 tiles of them, you can move by yourself without losing blood, and regenerate blood slowly passively.</span>")
+			to_chat(shade, "<spawn class='notice'>You have made contact with [user]. As long as you remain within 5 tiles of them, you can move by yourself without losing blood, and regenerate blood passively at a faster rate.</span>")
 	..()
 
 /obj/item/weapon/melee/soulblade/salt_act()
@@ -731,7 +731,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/melee/soulblade/examine(var/mob/user)
 	..()
-	if (iscultist(user))
+	if (areYouWorthy(user))
 		to_chat(user, "<span class='info'>blade blood: [blood]%</span>")
 		to_chat(user, "<span class='info'>blade health: [round((health/maxHealth)*100)]%</span>")
 
@@ -757,13 +757,13 @@ var/list/arcane_tomes = list()
 		capture_datum.suicide(user, user, src)
 		qdel(capture_datum)
 
-/obj/item/weapon/melee/soulblade/attack_self(var/mob/user)
+/obj/item/weapon/melee/soulblade/attack_self(var/mob/living/user)
 	var/choices = list(
 		list("Give Blood", "radial_giveblood", "Transfer some of your blood to \the [src] to repair it and refuel its blood level, or you could just slash someone."),
 		list("Remove Gem", "radial_removegem", "Remove the soul gem from the blade."),
 		)
 
-	if (!iscultist(user))
+	if (!areYouWorthy(user))
 		choices = list(
 			list("Remove Gem", "radial_removegem", "Remove the soul gem from \the [src]."),
 			)
@@ -776,32 +776,45 @@ var/list/arcane_tomes = list()
 		if ("Give Blood")
 			var/data = use_available_blood(user, 10)
 			if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
-				blood = min(maxblood,blood+20)//reminder that the blade cannot give blood back to their wielder, so this should prevent some exploits
+				blood = min(maxblood,blood+35)//reminder that the blade cannot give blood back to their wielder, so this should prevent some exploits
 				health = min(maxHealth,health+10)
 		if ("Remove Gem")
-			var/turf/T = get_turf(user)
-			playsound(T, 'sound/items/Deconstruct.ogg', 50, 0, -3)
-			user.drop_item(src,T)
-			var/obj/item/weapon/melee/cultblade/CB = new (T)
-			var/obj/item/soulstone/gem/SG = new (T)
-			if (fingerprints)
-				CB.fingerprints = fingerprints.Copy()
-			user.put_in_active_hand(CB)
-			user.put_in_inactive_hand(SG)
-			if (shade)
-				shade.forceMove(SG)
-				SG.shade = shade
-				shade.remove_blade_powers()
-				SG.icon_state = "soulstone2"
-				SG.item_state = "shard-soulstone2"
-				SG.name = "Soul Gem: [shade.real_name]"
-				shade = null
-			loc = null//so we won't drop a broken blade and shard
-			qdel(src)
+			if (!areYouWorthy(user) && shade && iscultist(shade) && !iscultist(user))
+				to_chat(user, "<span class='warning'>You try to grip \the [src]'s gem and pull it out!</span>")
+				if (do_after(user,src,30))
+					shade.say("Dedo ol'btoh!")
+					user.take_overall_damage(25,25)
+					if (iscarbon(user))
+						user.bodytemperature += 60
+					playsound(user.loc, 'sound/effects/bloodboil.ogg', 50, 0, -1)
+					to_chat(user, "<span class='danger'>You manage to pluck the gem out of \the [src], but a surge of the blade's occult energies makes your blood boil!</span>")
+				else
+					return
+			remove_gem()
 
+/obj/item/weapon/melee/soulblade/proc/remove_gem(var/mob/user)
+	var/turf/T = get_turf(user)
+	playsound(T, 'sound/items/Deconstruct.ogg', 50, 0, -3)
+	user.drop_item(src,T)
+	var/obj/item/weapon/melee/cultblade/CB = new (T)
+	var/obj/item/soulstone/gem/SG = new (T)
+	if (fingerprints)
+		CB.fingerprints = fingerprints.Copy()
+	user.put_in_active_hand(CB)
+	user.put_in_inactive_hand(SG)
+	if (shade)
+		shade.forceMove(SG)
+		SG.shade = shade
+		shade.remove_blade_powers()
+		SG.icon_state = "soulstone2"
+		SG.item_state = "shard-soulstone2"
+		SG.name = "Soul Gem: [shade.real_name]"
+		shade = null
+	loc = null//so we won't drop a broken blade and shard
+	qdel(src)
 
 /obj/item/weapon/melee/soulblade/attack(var/mob/living/target, var/mob/living/carbon/human/user)
-	if(!iscultist(user))
+	if(!areYouWorthy(user))
 		user.Paralyse(5)
 		to_chat(user, "<span class='warning'>An unexplicable force powerfully repels \the [src] from \the [target]!</span>")
 		var/datum/organ/external/affecting = user.get_active_hand_organ()
@@ -865,11 +878,11 @@ var/list/arcane_tomes = list()
 			var/mob/living/carbon/C = M
 			if (C.stat != DEAD)
 				if (C.take_blood(null,10))
-					blood = min(100,blood+10)
+					blood = min(100,blood+20)
 					to_chat(user, "<span class='warning'>You steal some of their blood!</span>")
 			else
 				if (C.take_blood(null,5))//same cost as spin, basically negates the cost, but doesn't let you farm corpses. It lets you make a mess out of them however.
-					blood = min(100,blood+5)
+					blood = min(100,blood+10)
 					to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
 			update_icon()
 			if (shade)
@@ -877,10 +890,10 @@ var/list/arcane_tomes = list()
 		else if (M.isBloodedAnimal())
 			var/mob/living/simple_animal/SA = M
 			if (SA.stat != DEAD)
-				blood = min(100,blood+10)
+				blood = min(100,blood+20)
 				to_chat(user, "<span class='warning'>You steal some of their blood!</span>")
 			else
-				blood = min(100,blood+5)
+				blood = min(100,blood+10)
 				to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
 			update_icon()
 			if (shade)
@@ -891,10 +904,25 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/melee/soulblade/pickup(var/mob/living/user)
 	..()
-	if(!iscultist(user))
+	if(!areYouWorthy(user))
 		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up \the [src]. It would be wise to rid yourself of this, quickly.</span>")
 		user.Dizzy(120)
+	else
+		user.AdjustDizzy(-120)
 	update_icon()
+
+/obj/item/weapon/melee/soulblade/proc/areYouWorthy(var/mob/living/user)
+	if (iscultist(user))
+		return TRUE
+	else if (!shade)
+		return FALSE
+	else if (user == shade)
+		return TRUE
+	else if (user == shade.master)
+		return TRUE
+	else if (shade.blade_harm)
+		return FALSE
+	return TRUE
 
 /obj/item/weapon/melee/soulblade/dropped(var/mob/user)
 	..()
@@ -1022,14 +1050,16 @@ var/list/arcane_tomes = list()
 		user.update_inv_hands()
 		to_chat(target, "Your soul has been captured by the soul blade, its arcane energies are reknitting your ethereal form, healing you.")
 		to_chat(user, "<span class='notice'><b>Capture successful!</b>: </span>[target.real_name]'s has been captured and stored within the gem on your blade.")
+		target.master = user
 
 		//Is our user a cultist? Then you're a cultist too now!
 		if (iscultist(user) && !iscultist(target))
+			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+			if (cult && !cult.CanConvert())
+				to_chat(user, "<span class='danger'>The cult has too many members already. But this shade will obey you nonetheless.</span>")
+				return
 			var/datum/role/cultist/newCultist = new
 			newCultist.AssignToRole(target.mind,1)
-			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-			if (!cult)
-				cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 			cult.HandleRecruitedRole(newCultist)
 			newCultist.OnPostSetup()
 			newCultist.Greet(GREET_SOULSTONE)

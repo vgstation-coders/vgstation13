@@ -124,7 +124,8 @@
 				if(!iscultist(target))
 					var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 					if (cult && !cult.CanConvert())
-						to_chat(user, "<span class='danger'>The cult has too many members already.</span>")
+						to_chat(user, "<span class='danger'>The cult has too many members already. But this shade will obey you nonetheless.</span>")
+						target.master = user
 						return
 
 					var/datum/role/cultist/newCultist = new
@@ -138,9 +139,13 @@
 			else
 				if (iscultist(target))
 					var/datum/role/cultist = iscultist(target)
-					to_chat(target, "<span class='userdanger'>Your new master is NOT a cultist, you are henceforth disconnected from the rest of the cult. You are to follow your new master's commands and help them in their goal.</span>")
+					to_chat(target, "<span class='userdanger'>Your new master is NOT a cultist, you are henceforth disconnected from the rest of the cult.</span>")
 					cultist.Drop()
 					target.add_language(LANGUAGE_CULT)//re-adding cult languages, as all shades can speak it
+
+				if (target.master != user)
+					to_chat(target, "<span class='userdanger'>You are to follow your new master [user.real_name]'s commands and help them in their goal.</span>")
+					target.master = user
 
 /obj/item/soulstone/proc/eject_shade(var/mob/user)
 	if (!shade)
@@ -149,7 +154,10 @@
 	shade.forceMove(get_turf(src))
 	shade.status_flags &= ~GODMODE
 	if(user)
-		to_chat(shade, "<b>You have been released from your prison, but you are still bound to [user.name]'s will. Help them suceed in their goals at all costs.</b>")
+		if (shade.master == user)
+			to_chat(shade, "<b>You have been released from your prison, but you are still bound to [shade.master.real_name]'s will. Help them suceed in their goals at all costs.</b>")
+		else
+			to_chat(shade, "<b>You have been released from your prison by [shade.master.real_name] and are now bound to their will. Help them suceed in their goals at all costs.</b>")
 	shade.canmove = 1
 	shade.cancel_camera()
 	shade = null
@@ -467,8 +475,9 @@
 		sblade.update_icon()
 	user.update_inv_hands()
 	if (!suicide)
-		to_chat(shadeMob, "<span class='notice'>Your soul has been captured! You are now bound to [user.name]'s will, help them succeed in their goals at all costs.</span>")
+		to_chat(shadeMob, "<span class='notice'>Your soul has been captured! You are now bound to [user.real_name]'s will, help them succeed in their goals at all costs.</span>")
 		to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within \the [receptacle].</span>")
+		shadeMob.master = user
 	else
 		to_chat(shadeMob, "<span class='notice'>You have ripped your own soul from your body and now reside within \the [receptacle]. What's the next step of your master plan?</span>")
 
