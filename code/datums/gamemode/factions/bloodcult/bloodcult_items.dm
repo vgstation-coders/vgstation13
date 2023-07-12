@@ -626,7 +626,7 @@ var/list/arcane_tomes = list()
 		spawn(1)
 			user.put_in_active_hand(SB)
 			if (iscultist(user))
-				linked_cultist = user
+				SB.linked_cultist = user
 				to_chat(SB.shade, "<spawn class='notice'>You have made contact with [user]. As long as you remain within 5 tiles of them, you can move by yourself without losing blood, and regenerate blood passively at a faster rate.</span>")
 		var/obj/item/soulstone/gem/sgem = I
 		if (sgem.shade)
@@ -688,7 +688,7 @@ var/list/arcane_tomes = list()
 	mech_flags = MECH_SCAN_FAIL
 	var/mob/living/simple_animal/shade/shade = null
 	var/blood = 0
-	var/passivebloodregen = 0//increments every Life() proc of the Shade inside, and increases blood by 1 once it reaches the current blood count/2
+	var/passivebloodregen = 0//increments every Life() proc of the Shade inside, and increases blood by 1 once it reaches the current blood count/5
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
 	health = 60
@@ -948,7 +948,7 @@ var/list/arcane_tomes = list()
 	if (istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/C = loc
 		C.update_inv_hands()
-		if (iscultist(C))
+		if (areYouWorthy(C))
 			var/image/I = image('icons/mob/hud.dmi', src, "consthealth[10*round((blood/maxblood)*10)]")
 			I.pixel_x = 16
 			I.pixel_y = 16

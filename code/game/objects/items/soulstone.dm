@@ -157,7 +157,7 @@
 		if (shade.master == user)
 			to_chat(shade, "<b>You have been released from your prison, but you are still bound to [shade.master.real_name]'s will. Help them suceed in their goals at all costs.</b>")
 		else
-			to_chat(shade, "<b>You have been released from your prison by [shade.master.real_name] and are now bound to their will. Help them suceed in their goals at all costs.</b>")
+			to_chat(shade, "<b>You have been released from your prison by [user.real_name] and are now bound to their will. Help them suceed in their goals at all costs.</b>")
 	shade.canmove = 1
 	shade.cancel_camera()
 	shade = null

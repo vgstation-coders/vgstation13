@@ -104,7 +104,7 @@
 				SB.blood = min(SB.maxblood,SB.blood+3)//fast blood regen when held by a cultist (stacks with the one below for an effective +5)
 		if (SB.linked_cultist && (get_dist(get_turf(SB.linked_cultist),get_turf(src)) <= 5))
 			SB.blood = min(SB.maxblood,SB.blood+2)//slow blood regen when near your linked cultist
-		if (SB.passivebloodregen < (SB.blood/2))
+		if (SB.passivebloodregen < (SB.blood/5))
 			SB.passivebloodregen++
 		else if (SB.blood < SB.maxblood)
 			SB.passivebloodregen = 0
