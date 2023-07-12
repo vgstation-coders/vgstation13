@@ -688,8 +688,8 @@ var/list/arcane_tomes = list()
 	var/passivebloodregen = 0//increments every Life() proc of the Shade inside, and increases blood by 1 once it reaches the current blood count/2
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
-	health = 40
-	maxHealth = 40
+	health = 60
+	maxHealth = 60
 	var/reflector = FALSE
 	var/mob/living/linked_cultist = null
 
@@ -779,7 +779,7 @@ var/list/arcane_tomes = list()
 				blood = min(maxblood,blood+35)//reminder that the blade cannot give blood back to their wielder, so this should prevent some exploits
 				health = min(maxHealth,health+10)
 		if ("Remove Gem")
-			if (!areYouWorthy(user) && shade && iscultist(shade) && !iscultist(user))
+			if (!areYouWorthy(user) && shade && ((iscultist(shade) && !iscultist(user)) || (shade.master != user)))
 				to_chat(user, "<span class='warning'>You try to grip \the [src]'s gem and pull it out!</span>")
 				if (do_after(user,src,30))
 					shade.say("Dedo ol'btoh!")
