@@ -10204,5 +10204,5 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 
 	if(volume >= 1)
-		if(!locate(/obj/effect/alien/weeds) in T)
-			new /obj/effect/alien/weeds(T)
+		if(!locate(/obj/effect/decal/cleanable/purpledrank) in T)
+			new /obj/effect/decal/cleanable/purpledrank(T)
