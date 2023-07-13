@@ -886,6 +886,14 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
+/datum/uplink_item/jobspecific/engineering/canned_heat
+	name = "Canned Heat"
+	desc = "A can that when opened agitates the air molecules in the surrounding atmosphere to raise its temperature by 1000 Kelvin. Use in a large area and several numbers for maximum impact."
+	item = /obj/item/canned_heat
+	cost = 12
+	discounted_cost = 6
+	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
+
 /datum/uplink_item/jobspecific/engineering/dev_analyser
 	name = "Modified Device Analyzer"
 	desc = "A device analyzer with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment for further duplication using the station's Mechanic equipment."
