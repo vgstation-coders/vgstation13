@@ -740,6 +740,17 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/vinegar/New()
 	..()
 	reagents.add_reagent(VINEGAR, 5)
+	
+/obj/item/weapon/reagent_containers/food/condiment/small/hotsauce
+	name = "hotsauce packet"
+	desc = "For those who can't handle the real heat."
+	icon_state = "hotsauce_small"
+	condiment_overlay = "hotsauce"
+	trash_type = /obj/item/trash/hotsauce_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/hotsauce/New()
+	..()
+	reagents.add_reagent(CAPSAICIN, 5)
 
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspices
 	name = "Zam Spices Packet"
