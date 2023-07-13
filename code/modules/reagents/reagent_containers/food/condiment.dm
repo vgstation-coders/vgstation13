@@ -690,51 +690,42 @@
 		item_state = null
 		overlays.len = 0
 		switch(reagents.get_master_reagent_id())
-
 			if(KETCHUP)
 				name = KETCHUP
 				desc = "You feel more American already."
-				icon_state += KETCHUP
 				condiment_overlay = KETCHUP
 			if(MAYO)
 				name = "mayonnaise packet"
 				desc = "Still not an instrument."
-				icon_state += MAYO
 				condiment_overlay = MAYO				
 			if(CAPSAICIN)
 				name = "hotsauce packet"
 				desc = "For those who can't handle the real heat."
-				icon_state += "hotsauce"
 				condiment_overlay = "hotsauce"
 			if(SOYSAUCE)
 				name = "soy sauce"
 				desc = "Tasty soy sauce in a convenient tiny packet."
-				icon_state += SOYSAUCE
 				condiment_overlay = SOYSAUCE
 			if(VINEGAR)
 				name = "malt vinegar packet"
 				desc = "Perfect for smaller portions of fish and chips."
-				icon_state += "vinegar"
 				condiment_overlay = VINEGAR
 			if(DISCOUNT)
 				name = "Discount Dan's Special Sauce"
 				desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
-				icon_state += "discount_sauce"
 				condiment_overlay = DISCOUNT 
 			if(ZAMSPICES)
 				name = "Zam Spice packet"
 				desc = "A tiny packet of mothership spices."
-				icon_state += ZAMSPICES
 				condiment_overlay = ZAMSPICES
 			if(ZAMMILD)
 				name = "Zam's Mild Sauce packet"
 				desc = "More portable than the bottle, just as tasty."
-				icon_state += ZAMMILD
 				condiment_overlay = ZAMMILD
 			if(ZAMSPICYTOXIN)
 				name = "Zam's Spicy Sauce packet"
 				desc = "More portable than the bottle, just as spicy."
-				icon_state += ZAMSPICYTOXIN
+				
 				condiment_overlay = ZAMSPICYTOXIN
 			else
 				if(!name) //these should probably just be deltas
@@ -746,6 +737,7 @@
 				condiment_overlay = MAYO
 				overlay_colored = TRUE
 				update_icon(custom=TRUE)
+		icon_state = "[initial(icon_state)]" + condiment_overlay
 	else
 		if(is_empty() && trash_type)
 			var/obj/item/trash/trash = new trash_type(get_turf(src))
@@ -775,7 +767,6 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/ketchup
 	name = "ketchup packet"
 	desc = "You feel more American already."
-	icon_state = "packet_ketchup"
 	condiment_overlay = KETCHUP
 	trash_type = /obj/item/trash/ketchup_packet
 
@@ -786,7 +777,6 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/mayo
 	name = "mayonnaise packet"
 	desc = "Still not an instrument."
-	icon_state = "packet_mayo"
 	condiment_overlay = MAYO
 	trash_type = /obj/item/trash/mayo_packet
 
@@ -797,7 +787,6 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/soysauce
 	name = "soy sauce packet"
 	desc = "Tasty soy sauce in a convenient tiny packet."
-	icon_state = "packet_soysauce"
 	condiment_overlay = SOYSAUCE
 	trash_type = /obj/item/trash/soysauce_packet
 
@@ -808,7 +797,6 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/vinegar
 	name = "malt vinegar packet"
 	desc = "Perfect for smaller portions of fish and chips."
-	icon_state = "packet_vinegar"
 	condiment_overlay = VINEGAR
 	trash_type = /obj/item/trash/vinegar_packet
 
@@ -819,7 +807,6 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/hotsauce
 	name = "hotsauce packet"
 	desc = "For those who can't handle the real heat."
-	icon_state = "hotsauce_small"
 	condiment_overlay = "hotsauce"
 	trash_type = /obj/item/trash/hotsauce_packet
 
@@ -830,7 +817,6 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspices
 	name = "Zam Spices Packet"
 	desc = "A tiny packet of mothership spices."
-	icon_state = "packet_zamspices"
 	condiment_overlay = ZAMSPICES
 	trash_type = /obj/item/trash/zamspices_packet
 
@@ -841,7 +827,6 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/zammild
 	name = "Zam's Mild Sauce Packet"
 	desc = "More portable than the bottle, just as tasty."
-	icon_state = "packet_zammild"
 	condiment_overlay = ZAMMILD
 	trash_type = /obj/item/trash/zammild_packet
 
@@ -852,7 +837,6 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
 	name = "Zam's Spicy Sauce Packet"
 	desc = "More portable than the bottle, just as spicy."
-	icon_state = "packet_zamspicytoxin"
 	condiment_overlay = ZAMSPICYTOXIN
 	trash_type = /obj/item/trash/zamspicytoxin_packet
 
@@ -863,7 +847,6 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/discount
 	name = "Discount Dan's Special Sauce"
 	desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
-	icon_state = "packet_discount_sauce"
 	condiment_overlay = DISCOUNT
 	trash_type = /obj/item/trash/discount_packet
 
