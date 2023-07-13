@@ -2138,6 +2138,64 @@
 	reagents.add_reagent(TOXICWASTE, 8)
 	reagents.add_reagent(BUSTANUT, 2) //YOU FEELIN HARDCORE BRAH?
 	bitesize = 2
+	
+/obj/item/weapon/reagent_containers/food/snacks/dangles
+	name = "Dangles"
+	desc = "Once you pop, you'll wish you stopped."
+	icon_state = "dangles"
+	trash = /obj/item/trash/danitos
+	filling_color = "#FF9933"
+	base_crumb_chance = 30
+
+/obj/item/weapon/reagent_containers/food/snacks/dangles/attack_self(var/mob/user)
+	if(!is_open_container())
+		return pop_open(user)
+	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/dangles/proc/pop_open(var/mob/user)
+	to_chat(user, "You pop the top off \the [src].")
+	flags |= OPENCONTAINER
+	playsound(user, 'sound/effects/opening_snack_tube.ogg', 50, 1)
+	overlays.len = 0
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/snacks/dangles/New()
+	..()
+	overlays += image(icon = icon, icon_state = "dangles_lid")
+	switch(pick(1,2,3,4))
+		if(1)
+			name = "Dangles: Arguably A Potato Flavor"
+			icon_state += "_red"
+			reagents.add_reagent(ENZYME, 5)
+			reagents.add_reagent(KETCHUP, 5) //tomatos are actually closely related to potatos
+			reagents.add_reagent(ICE, 5, reagtemp = T0C) //frozen potato juice
+			reagents.add_reagent(POTATO, 5, reagtemp = T0C)
+
+		if(2)
+			name = "Dangles: Cheddar Craving Concussion Flavor"
+			icon_state += "_blue"
+			reagents.add_reagent(MANNITOL, 5)
+			reagents.add_reagent(OFFCOLORCHEESE, 5)
+			reagents.add_reagent(ICE, 10, reagtemp = T0C) //brainfreeze
+		if(3)
+			name = "Dangles: Iodine & Industrial Vinegar Flavor"
+			icon_state += "_green"
+			reagents.add_reagent(TOXICWASTE, 5)
+			reagents.add_reagent(STERILIZINE, 5)
+			reagents.add_reagent(ETHANOL, 5)
+			reagents.add_reagent(SACID, 5) //acetic acid but we don't have that
+		if(4)
+			name = "Dangles: South of the Border Jalepeno Flavor"
+			icon_state += "_purple"
+			reagents.add_reagent(HORSEMEAT, 5)
+			reagents.add_reagent(BEFF, 5)
+			reagents.add_reagent(CAPSAICIN, 5)
+			reagents.add_reagent(CONDENSEDCAPSAICIN, 5)
+	reagents.add_reagent(DISCOUNT, 10)
+	reagents.add_reagent(SODIUMCHLORIDE, 5)
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 4
+
 
 /obj/item/weapon/reagent_containers/food/snacks/discountburrito
 	name = "Discount Dan's Burritos"
@@ -4917,6 +4975,33 @@
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 2
+	
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot
+	name = "Hot Chips"
+	desc = "Don't get the dust in your eyes!"
+	icon_state = "hot_chips"
+	item_state = "hot_chips"
+	trash = null
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(CAPSAICIN, 7)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nova
+	name = "Nova Chips"
+	desc = "Little disks of heat, like a bag full of tiny suns!"
+	icon_state = "nova_chips"
+	item_state = "nova_chips"
+	trash = null
+
+/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nova/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NOVAFLOUR, 4)
+	reagents.add_reagent(HELL_RAMEN, 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/zamitos
