@@ -2169,7 +2169,7 @@
 			reagents.add_reagent(ENZYME, 5)
 			reagents.add_reagent(KETCHUP, 5) //tomatos are actually closely related to potatos
 			reagents.add_reagent(ICE, 5, reagtemp = T0C) //frozen potato juice
-			reagents.add_reagent(POTATO, 5 reagtemp = T0C)
+			reagents.add_reagent(POTATO, 5, reagtemp = T0C)
 		if(2)
 			name = "Dangles: Cheddar Craving Concussion Flavor"
 			icon_state += "_blue"
