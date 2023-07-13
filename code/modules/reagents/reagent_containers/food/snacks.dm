@@ -2166,8 +2166,10 @@
 		if(1)
 			name = "Dangles: Arguably A Potato Flavor"
 			icon_state += "_red"
-			reagents.add_reagent(REFRIEDBEANS, 15)
-			reagents.add_reagent(POTATO, 5)
+			reagents.add_reagent(ENZYME, 5)
+			reagents.add_reagent(KETCHUP, 5) //tomatos are actually closely related to potatos
+			reagents.add_reagent(ICE, 5, reagtemp = T0C) //frozen potato juice
+			reagents.add_reagent(POTATO, 5 reagtemp = T0C)
 		if(2)
 			name = "Dangles: Cheddar Craving Concussion Flavor"
 			icon_state += "_blue"
@@ -2178,9 +2180,9 @@
 			name = "Dangles: Iodine & Industrial Vinegar Flavor"
 			icon_state += "_green"
 			reagents.add_reagent(TOXICWASTE, 5)
-			reagents.add_reagent(IRRADIATEDBEANS, 5)
-			reagents.add_reagent(GREENRAMEN, 5)
-			reagents.add_reagent(GLOWINGRAMEN, 5)
+			reagents.add_reagent(STERILIZINE, 5)
+			reagents.add_reagent(ETHANOL, 5)
+			reagents.add_reagent(SACID, 5) //acetic acid but we don't have that
 		if(4)
 			name = "Dangles: South of the Border Jalepeno Flavor"
 			icon_state += "_purple"
