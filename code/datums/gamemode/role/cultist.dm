@@ -79,6 +79,12 @@
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 
+/datum/role/cultist/loggedOutHow()
+	for (var/mob/living/simple_animal/astral_projection/AP in astral_projections)
+		if (AP.key == antag.key)
+			return {"<a href='?_src_=holder;adminplayeropts=\ref[AP]'>astral projecting</a>"}
+	return "logged out"
+
 /datum/role/cultist/process()
 	..()
 	if (holywarning_cooldown > 0)
@@ -87,7 +93,7 @@
 		FindMentor()
 
 
-// 2022 - Commenting out some part of the greeting message and spacing it out a bit. 
+// 2022 - Commenting out some part of the greeting message and spacing it out a bit.
 //  Getting converted floods the chat with a lot of unncessary information
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
@@ -136,7 +142,7 @@
 	to_chat(antag.current, "<br>")
 	spawn(1)
 		if (faction)
-			/* 
+			/*
 			var/datum/objective_holder/OH = faction.objective_holder
 			if (OH.objectives.len > 0)
 				var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.

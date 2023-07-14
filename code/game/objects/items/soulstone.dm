@@ -369,12 +369,12 @@
 	if (suicide)
 		receptacle.forceMove(get_turf(target))
 
-	var/mob/living/carbon/human/body = null
+	var/mob/living/carbon/body = null
 	var/datum/mind/mind = null
 
-	if(istype(target,/mob/living/carbon/human))
+	if(istype(target,/mob/living/carbon))
 		body = target
-	else if(istype(add_target,/mob/living/carbon/human))
+	else if(istype(add_target,/mob/living/carbon))
 		body = add_target
 
 	var/true_name = "Unknown"
@@ -398,20 +398,25 @@
 		body.invisibility = 101
 
 		var/datum/organ/external/head_organ = body.get_organ(LIMB_HEAD)
-		if(head_organ.status & ORGAN_DESTROYED)
+		if(head_organ && head_organ.status & ORGAN_DESTROYED)
 			if (!gem)
 				new /obj/effect/decal/remains/human/noskull(T)
 			anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 26)
 		else
 			if (!gem)
-				new /obj/effect/decal/remains/human(T)
+				if (ishuman(body))
+					new /obj/effect/decal/remains/human(T)
+				else if (isalien(body))
+					new /obj/effect/decal/remains/xeno(T)
 			if(body.lying)
 				anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2", sleeptime = 26)
 			else
 				anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 26)
 
-		if(!gem && body.decapitated?.get() == target)//just making sure we're dealing with the right head
-			new /obj/item/weapon/skull(get_turf(target))
+		if(!gem && ishuman(body))
+			var/mob/living/carbon/human/H = body
+			if (H.decapitated?.get() == target)//just making sure we're dealing with the right head
+				new /obj/item/weapon/skull(get_turf(target))
 
 	target.invisibility = 101 //It's not possible to interact with the body normally now, but we don't want to delete it just yet
 
@@ -441,9 +446,10 @@
 			qdel(add_target)
 		return
 
-	message_admins("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
-	log_admin("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
-	add_logs(user, body, "captured [body.name]'s soul", object=receptacle)
+	if (body)
+		message_admins("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
+		log_admin("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
+		add_logs(user, body, "captured [body.name]'s soul", object=receptacle)
 
 	//Creating a shade inside the stone and putting the victim in control
 	var/mob/living/simple_animal/shade/shadeMob
