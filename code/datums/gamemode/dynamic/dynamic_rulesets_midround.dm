@@ -580,6 +580,7 @@
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	cost = 10
+	logo = "grinch-logo"
 	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
 	high_population_requirement = 10
 	flags = MINOR_RULESET
