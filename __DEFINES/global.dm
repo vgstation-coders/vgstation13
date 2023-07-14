@@ -179,13 +179,13 @@ var/datum/nanomanager/nanomanager = new()
 
 var/sqladdress = "localhost"
 var/sqlport = 3306
-var/sqldb = "tgstation"
+var/sqldb = "feedback"
 var/sqllogin = "root"
 var/sqlpass = ""
 
 	// Feedback gathering sql connection
 
-var/sqlfdbkdb = "test"
+var/sqlfdbkdb = "feedback"
 var/sqlfdbklogin = "root"
 var/sqlfdbkpass = ""
 

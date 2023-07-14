@@ -117,6 +117,8 @@
 	var/description = ""
 	var/contributing_artists = list()
 
+	var/copy = 0
+
 /datum/custom_painting/New(parent, bitmap_width, bitmap_height, offset_x=0, offset_y=0, base_color=src.base_color)
 	src.parent = parent
 	src.bitmap_width = bitmap_width
@@ -125,7 +127,6 @@
 	src.offset_y = offset_y
 	src.base_color = base_color
 	mp_handler = new /datum/href_multipart_handler(parent)
-
 	blank_contents()
 	setup_UI()
 
@@ -280,6 +281,31 @@
 		ico.DrawBox(bitmap[pixel + 1], x, y)
 
 	return ico
+
+// -- export/import stuff
+// -- don't we have a serializer for this? :thinking:
+
+/proc/painting2json(var/datum/custom_painting/painting)
+	var/list/L = list(
+		painting.bitmap_width,
+		painting.bitmap_height,
+		painting.offset_x,
+		painting.offset_y,
+		painting.base_color,
+		painting.bitmap
+	)
+	return json_encode(L)
+
+/proc/json2painting(var/json_data, var/title, var/author, var/description)
+	var/list/L = json_decode(json_data)
+	var/datum/custom_painting/painting = new(null, L[1], L[2], L[3], L[4], L[5]) // no parents
+	var/list/bitmap_to_copy = L[6]
+	painting.bitmap = bitmap_to_copy.Copy()
+	painting.title = title
+	painting.author = author
+	painting.description = description
+	painting.copy = 1
+	return painting
 
 #undef PENCIL_STRENGTH_MAX
 #undef PENCIL_STRENGTH_MIN
