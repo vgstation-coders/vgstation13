@@ -37,6 +37,7 @@
 		var/obj/machinery/atmospherics/pipe/P = user.loc
 		var/datum/gas_mixture/air = P.parent.air
 		air.temperature += heat
+		air.update_values()
 		for(var/mob/M in player_list)//most of the time it's gonna be faster to loop through the player list, than through the contents of all turfs in the zone
 			if (istype(M.loc, /obj/machinery/atmospherics/pipe))
 				var/obj/machinery/atmospherics/pipe/P_other = M.loc
