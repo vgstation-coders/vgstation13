@@ -8,7 +8,7 @@
 	admin_voice_style = "danger"
 
 	// -- Our bag
-	var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = null
+	var/obj/item/weapon/storage/backpack/santabag/grinch/our_bag = null
 
 /datum/role/grinch/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()

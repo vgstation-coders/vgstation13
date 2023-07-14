@@ -33,7 +33,7 @@
 	icon_state = "giftbag0"
 	item_state = "giftbag0"
 	w_class = W_CLASS_LARGE
-	storage_slots = 7
+	storage_slots = 0
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 400 // can store a ton of shit!
 	flags = MECH_SCAN_FAIL
@@ -68,6 +68,11 @@
 
 	icon_state = "[bagtype][bagfill]"
 	item_state = icon_state
+
+	if (ismob(loc))
+		var/mob/M = loc
+		M.update_inv_hands()
+		M.update_inv_back()
 
 /obj/item/weapon/storage/backpack/cultify()
 	new /obj/item/weapon/storage/backpack/cultpack(loc)
