@@ -133,8 +133,8 @@
 	icon_state = "batlinggun"
 	item_state = "batlinggun0"
 	gatlingbullet = /obj/item/projectile/bullet/baton
-	max_shells = 50
-	current_shells = 50
+	max_shells = 100
+	current_shells = 100
 	rounds_per_burst = 5
 	casing_type = /obj/item/ammo_casing_gatling/batling
 	var/list/rigged_shells = list()
@@ -156,7 +156,7 @@
 				..()
 				return
 			to_chat(user, "<span class='notice'>You load \the [thebaton] into \the [src].</span>")
-			current_shells = min(current_shells+10,max_shells)  //Yup, 5 batons for max ammo.
+			current_shells = min(current_shells+20,max_shells)  //Yup, 5 batons for max ammo.
 			if(thebaton.bcell.rigged)
 				rigged_shells.Add(current_shells) //this one's gonna be a blast
 			qdel(W)
