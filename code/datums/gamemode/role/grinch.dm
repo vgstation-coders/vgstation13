@@ -2,7 +2,7 @@
 	name = GRINCH
 	id = GRINCH
 	required_pref = GRINCH
-	logo_state = "synd-logo"
+	logo_state = "grinch-logo"
 	disallow_job = TRUE
 	default_admin_voice = "Santa Claus"
 	admin_voice_style = "danger"
