@@ -78,33 +78,39 @@ var/list/sensed_explosions = list()
 	return "coldly states, [text]"
 
 /obj/machinery/computer/bhangmeter/attack_hand(var/mob/user)
-	if(isliving(user) && anchored && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)))
-		if( (holoMiniMaps.len < user.loc.z) || (holoMiniMaps[user.loc.z] == null ))
-			to_chat(user, "<span class='notice'>The holomap doesn't seem to be working.</span>")
-			var/datum/browser/popup = new(user, "\ref[src]", name, 600, 300, src)
-			popup.set_content(bhangmeterPanel())
-			popup.open()
-			return
-		if(user in watching_mobs)
-			stopWatching(user)
-		else
-			if(user.hud_used && user.hud_used.holomap_obj)
-				watcher_maps["\ref[user]"] = image(holomap_datum.get_bhangmap())
-				var/image/I = watcher_maps["\ref[user]"]
-				I.loc = user.hud_used.holomap_obj
-				I.alpha = 0
-				animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
-				watching_mobs |= user
-				user.client.images |= watcher_maps["\ref[user]"]
-				user.register_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
-				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
+	. = ..()
 
-				watcher_buttons["\ref[user]"] = new /obj/abstract/screen/interface(user.hud_used.holomap_obj,user,src,"Database",'icons/effects/64x32.dmi',"database",l="CENTER-0.5,CENTER-4")
-				var/obj/abstract/screen/interface/button_database = watcher_buttons["\ref[user]"]
-				button_database.name = "Database"
-				button_database.alpha = 0
-				animate(button_database, alpha = 255, time = 5, easing = LINEAR_EASING)
-				user.client.screen += watcher_buttons["\ref[user]"]
+	if (.)
+		return
+
+	if( (holoMiniMaps.len < user.loc.z) || (holoMiniMaps[user.loc.z] == null ))
+		to_chat(user, "<span class='notice'>The holomap doesn't seem to be working.</span>")
+		var/datum/browser/popup = new(user, "\ref[src]", name, 600, 300, src)
+		popup.set_content(bhangmeterPanel())
+		popup.open()
+		return
+
+	if(user in watching_mobs)
+		stopWatching(user)
+		return
+
+	if(user.hud_used && user.hud_used.holomap_obj)
+		watcher_maps["\ref[user]"] = image(holomap_datum.get_bhangmap())
+		var/image/I = watcher_maps["\ref[user]"]
+		I.loc = user.hud_used.holomap_obj
+		I.alpha = 0
+		animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
+		watching_mobs |= user
+		user.client.images |= watcher_maps["\ref[user]"]
+		user.register_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
+		to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
+
+		watcher_buttons["\ref[user]"] = new /obj/abstract/screen/interface(user.hud_used.holomap_obj,user,src,"Database",'icons/effects/64x32.dmi',"database",l="CENTER-0.5,CENTER-4")
+		var/obj/abstract/screen/interface/button_database = watcher_buttons["\ref[user]"]
+		button_database.name = "Database"
+		button_database.alpha = 0
+		animate(button_database, alpha = 255, time = 5, easing = LINEAR_EASING)
+		user.client.screen += watcher_buttons["\ref[user]"]
 
 /obj/machinery/computer/bhangmeter/attack_paw(var/mob/user)
 	attack_hand(user)
@@ -116,11 +122,10 @@ var/list/sensed_explosions = list()
 	attack_hand(user)
 
 /obj/machinery/computer/bhangmeter/interface_act(var/mob/i_user,var/action)
-	switch(action)
-		if("Database")
-			var/datum/browser/popup = new(i_user, "\ref[src]", name, 600, 300, src)
-			popup.set_content(bhangmeterPanel())
-			popup.open()
+	if(action == "Database")
+		var/datum/browser/popup = new(i_user, "\ref[src]", name, 600, 300, src)
+		popup.set_content(bhangmeterPanel())
+		popup.open()
 
 /obj/machinery/computer/bhangmeter/proc/bhangmeterPanel()
 	if (!original_zLevel)
