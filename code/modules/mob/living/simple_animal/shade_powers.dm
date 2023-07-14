@@ -135,12 +135,14 @@
 		return
 	..()
 
-/spell/soulblade/blade_spin/choose_targets(var/mob/user = usr)
+/spell/soulblade/blade_spin/choose_targets(var/mob/living/simple_animal/shade/user = usr)
+	if (!istype(user))
+		return
 	var/obj/item/weapon/melee/soulblade/SB = user.loc
 	if (!isturf(SB.loc) && !istype(SB.loc,/obj/item/projectile))
 		if (ismob(SB.loc))
 			var/mob/M = SB.loc
-			if (!iscultist(M))
+			if (!SB.areYouWorthy(M))
 				M.drop_item(SB)
 				to_chat(M,"<span class='danger'>\The [SB] suddenly spins out of your grab.</span>")
 			else
@@ -164,7 +166,13 @@
 				continue
 		if (ismob(A))
 			var/mob/M = A
-			if (!iscultist(M))
+			if (iscultist(M))
+				to_chat(user, "<span class='warning'>\The occult energies emitted by [M] feel much like your own, and you instinctively find yourself unable to harm them.</span>")
+				to_chat(M, "<span class='warning'>\The [SB] swings near you but deftly avoids touching you.</span>")
+			else if (M == user.master)
+				to_chat(user, "<span class='warning'>You instinctively avoid harming your master.</span>")
+				to_chat(M, "<span class='warning'>\The [SB] swings near you but deftly avoids touching you.</span>")
+			else
 				my_targets += M
 		else
 			//BREAK EVERYTHING
@@ -175,7 +183,13 @@
 			continue
 		if (ismob(A))
 			var/mob/M = A
-			if (!iscultist(M))
+			if (iscultist(M))
+				to_chat(user, "<span class='warning'>\The occult energies emitted by [M] feel much like your own, and you instinctively find yourself unable to harm them.</span>")
+				to_chat(M, "<span class='warning'>\The [SB] swings near you but deftly avoids touching you.</span>")
+			else if (M == user.master)
+				to_chat(user, "<span class='warning'>You instinctively avoid harming your master.</span>")
+				to_chat(M, "<span class='warning'>\The [SB] swings near you but deftly avoids touching you.</span>")
+			else
 				my_targets += M
 		else
 			//BREAK EVERYTHING

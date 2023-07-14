@@ -781,6 +781,7 @@ var/list/arcane_tomes = list()
 			if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
 				blood = min(maxblood,blood+35)//reminder that the blade cannot give blood back to their wielder, so this should prevent some exploits
 				health = min(maxHealth,health+10)
+				update_icon()
 		if ("Remove Gem")
 			if (!areYouWorthy(user) && shade && ((iscultist(shade) && !iscultist(user)) || (shade.master != user)))
 				shade.say("Dedo ol'btoh!")
@@ -789,28 +790,25 @@ var/list/arcane_tomes = list()
 					user.bodytemperature += 60
 				playsound(user.loc, 'sound/effects/bloodboil.ogg', 50, 0, -1)
 				to_chat(user, "<span class='danger'>You manage to pluck the gem out of \the [src], but a surge of the blade's occult energies makes your blood boil!</span>")
-			remove_gem(user)
-
-/obj/item/weapon/melee/soulblade/proc/remove_gem(var/mob/user)
-	var/turf/T = get_turf(user)
-	playsound(T, 'sound/items/Deconstruct.ogg', 50, 0, -3)
-	user.drop_item(src,T)
-	var/obj/item/weapon/melee/cultblade/CB = new (T)
-	var/obj/item/soulstone/gem/SG = new (T)
-	if (fingerprints)
-		CB.fingerprints = fingerprints.Copy()
-	user.put_in_active_hand(CB)
-	user.put_in_inactive_hand(SG)
-	if (shade)
-		shade.forceMove(SG)
-		SG.shade = shade
-		shade.remove_blade_powers()
-		SG.icon_state = "soulstone2"
-		SG.item_state = "shard-soulstone2"
-		SG.name = "Soul Gem: [shade.real_name]"
-		shade = null
-	loc = null//so we won't drop a broken blade and shard
-	qdel(src)
+			var/turf/T = get_turf(user)
+			playsound(T, 'sound/items/Deconstruct.ogg', 50, 0, -3)
+			user.drop_item(src,T)
+			var/obj/item/weapon/melee/cultblade/CB = new (T)
+			var/obj/item/soulstone/gem/SG = new (T)
+			if (fingerprints)
+				CB.fingerprints = fingerprints.Copy()
+			user.put_in_active_hand(CB)
+			user.put_in_inactive_hand(SG)
+			if (shade)
+				shade.forceMove(SG)
+				SG.shade = shade
+				shade.remove_blade_powers()
+				SG.icon_state = "soulstone2"
+				SG.item_state = "shard-soulstone2"
+				SG.name = "Soul Gem: [shade.real_name]"
+				shade = null
+			loc = null//so we won't drop a broken blade and shard
+			qdel(src)
 
 /obj/item/weapon/melee/soulblade/attack(var/mob/living/target, var/mob/living/carbon/human/user)
 	if(!areYouWorthy(user))
