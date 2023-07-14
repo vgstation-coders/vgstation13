@@ -755,7 +755,6 @@
 		var/image/packetcolor = image('icons/obj/food_condiment.dmi', src, "packet_overlay")
 		packetcolor.icon += mix_color_from_reagents(reagents.reagent_list)
 		packetcolor.alpha = mix_alpha_from_reagents(reagents.reagent_list)
-		to_chat(world, "[packetcolor.alpha], [mix_alpha_from_reagents(reagents.reagent_list)]")
 		overlays += packetcolor
 
 	if(!is_open_container())

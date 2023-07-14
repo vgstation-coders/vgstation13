@@ -438,6 +438,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 						P.forceMove(loaded_pill_bottle)
 				if(count == 0) //only do this ONCE
 					logged_message += "[P.reagents.get_reagent_ids(1)]. Icon: [pillIcon2Name[text2num(pillsprite)]]"
+				
+				count--
 
 			investigation_log(I_CHEMS, logged_message)
 
@@ -468,7 +470,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			else
 				bottletype = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable(loc,max_bottle_size)
 			while(count>=0)
-				if(amount_per_bottle == 0 || reagents.total_volume == 0)
+				if(amount_per_bottle <= 0 || reagents.total_volume <= 0)
 					break
 			
 				bottletype.name = "[name] bottle"
@@ -476,6 +478,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				bottletype.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
 				//bottletype.icon_state = "bottle"+bottlesprite
 				reagents.trans_to(bottletype,amount_per_bottle)
+				count--
 			src.updateUsrDialog()
 			return 1
 
@@ -493,16 +496,16 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 				return
 			while(count>=0)
-				if(reagents.total_volume < 5)
+				if(reagents.total_volume <= 0)
 					break
-
 				var/obj/item/weapon/reagent_containers/food/condiment/small/P = new/obj/item/weapon/reagent_containers/food/condiment/small(loc,5)
 				P.name = "[name] packet"
 				P.desc = "A small condiment packet."
 				P.icon_state = "packet_"
 				P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
 				P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
-				reagents.trans_to(P,5)
+				reagents.trans_to(P,min(5,reagents.total_volume))
+				count--
 			src.updateUsrDialog()
 			return 1
 		else
