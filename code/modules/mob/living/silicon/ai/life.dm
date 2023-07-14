@@ -38,7 +38,7 @@
 	if(client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
-		see_invisible = SEE_INVISIBLE_LEVEL_TWO
+		see_invisible = SEE_INVISIBLE_LEVEL_ONE
 
 	var/area/home = get_area(src)
 	if(home && home.powered(EQUIP))
