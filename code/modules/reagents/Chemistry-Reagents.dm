@@ -1047,7 +1047,7 @@
 
 	if(fatgokaboom && M_FAT in M.mutations)
 		M.gib()
-		
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(holder.has_any_reagents(COLDDRINKS) & prob(25))
@@ -2470,6 +2470,12 @@
 		return 1
 
 	if(volume >= 1)
+
+		if (T.advanced_graffiti)
+			T.overlays -= T.advanced_graffiti_overlay
+			T.advanced_graffiti_overlay = null
+			qdel(T.advanced_graffiti)
+
 		T.clean_blood()
 
 		for(var/mob/living/carbon/slime/M in T)
@@ -10204,5 +10210,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 
 	if(volume >= 1)
+		if(!locate(/obj/effect/alien/weeds) in T)
+			new /obj/effect/alien/weeds(T)
 		if(!locate(/obj/effect/decal/cleanable/purpledrank) in T)
 			new /obj/effect/decal/cleanable/purpledrank(T)

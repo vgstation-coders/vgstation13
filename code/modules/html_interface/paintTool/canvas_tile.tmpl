@@ -1,33 +1,7 @@
 <input id="bitmap" type="hidden" value=""/>
 
-<!-- Main Content -->
-<div class="mainPanel">
-	<!-- Control column -->
-	<div id="controlColumn" class="controlColumn">
-		<!-- Navigavtion -->
-		<div class="navigationBar">
-			<a
-				id="infoPanelButton"
-				class="button linkOn"
-				onclick="panelSelect('infoPanel');"
-			>Info</a><a
-				id="exportPanelButton"
-				class="button"
-				onclick="panelSelect('exportPanel');"
-			>Import</a><a
-				id="templatePanelButton"
-				class="button"
-				onclick="panelSelect('templatePanel');"
-			>Template</a>
-		</div>
-		<hr class="line">
+<div id = "secret class" class="hidden">
 
-		<!-- Info panel -->
-		<div id="infoPanel" class="">
-			<div class="item">
-				<label class="itemLabelNarrow">Size: </label>
-				<span id="canvas_width">??</span>x<span id="canvas_height">??</span>
-			</div><br>
 			<div>
 				<label class="itemLabel">Title: </label><br/>
 				<input
@@ -59,6 +33,37 @@
 					onkeyup="sanitizeLength('description', 'descriptionLengthMeter');"
 				></textarea>
 				<div id="descriptionLengthMeter">(0/1024)</div>
+			</div><br>
+
+</div>
+
+<!-- Main Content -->
+<div class="mainPanel">
+	<!-- Control column -->
+	<div id="controlColumn" class="controlColumn">
+		<!-- Navigavtion -->
+		<div class="navigationBar">
+			<a
+				id="infoPanelButton"
+				class="button linkOn"
+				onclick="panelSelect('infoPanel');"
+			>Info</a><a
+				id="exportPanelButton"
+				class="button"
+				onclick="panelSelect('exportPanel');"
+			>Import</a><a
+				id="templatePanelButton"
+				class="button"
+				onclick="panelSelect('templatePanel');"
+			>Template</a>
+		</div>
+		<hr class="line">
+
+		<!-- Info panel -->
+		<div id="infoPanel" class="">
+			<div class="item">
+				<label class="itemLabelNarrow">Size: </label>
+				<span id="canvas_width">??</span>x<span id="canvas_height">??</span>
 			</div><br>
 			<a class="button" onclick="submitData();">Save changes</a>
 		</div>
