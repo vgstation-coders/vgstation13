@@ -33,6 +33,8 @@ var/list/station_holomaps = list()
 
 	var/datum/station_holomap/holomap_datum
 
+	var/obj/abstract/screen/interface/button_workplace = null
+
 /obj/machinery/station_map/New()
 	..()
 	holomap_datum = new()
@@ -125,6 +127,38 @@ var/list/station_holomaps = list()
 			else
 				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
+			if (ishuman(user))
+				var/mob/living/carbon/human/H = user
+				var/get_rank = H.get_assignment(null,null,TRUE)
+				if (!get_rank)
+					return
+				if ("[get_rank]_[original_zLevel]" in workplace_markers)
+					button_workplace = new (user.hud_used.holomap_obj,user,src,"Find Workplace",'icons/effects/64x32.dmi',"workplace",l="CENTER+3,CENTER-4")
+					button_workplace.name = "Launch"
+					button_workplace.alpha = 0
+					animate(button_workplace, alpha = 255, time = 5, easing = LINEAR_EASING)
+					user.client.screen += button_workplace
+
+/obj/machinery/station_map/interface_act(var/mob/i_user,var/action)
+	switch(action)
+		if("Find Workplace")
+			holomap_datum.station_map.overlays -= holomap_datum.workplaceMarker
+			QDEL_NULL(holomap_datum.workplaceMarker)
+			i_user.playsound_local(src, 'sound/misc/click.ogg', 50, 0, 0, 0, 0)
+			if (ishuman(i_user))
+				var/mob/living/carbon/human/H = i_user
+				var/get_rank = H.get_assignment(null,null,TRUE)
+				var/datum/holomap_marker/workplaceMarker = pick(workplace_markers["[get_rank]_[original_zLevel]"])
+				holomap_datum.workplaceMarker = new('icons/holomap_markers_32x32.dmi',src,"workplace")
+				if(map.holomap_offset_x.len >= workplaceMarker.z)
+					holomap_datum.workplaceMarker.pixel_x = workplaceMarker.x - 6 + map.holomap_offset_x[workplaceMarker.z]
+					holomap_datum.workplaceMarker.pixel_y = workplaceMarker.y - 4 + map.holomap_offset_y[workplaceMarker.z]
+				else
+					holomap_datum.workplaceMarker.pixel_x = workplaceMarker.x - 6
+					holomap_datum.workplaceMarker.pixel_y = workplaceMarker.y - 4
+				i_user.playsound_local(src, 'sound/effects/ping_warning.ogg', 25, 0, 0, 0, 0)
+				holomap_datum.station_map.overlays += holomap_datum.workplaceMarker
+
 /obj/machinery/station_map/attack_paw(var/mob/user)
 	src.attack_hand(user)
 
@@ -153,11 +187,15 @@ var/list/station_holomaps = list()
 /obj/machinery/station_map/proc/stopWatching()
 	if(watching_mob)
 		if(watching_mob.client)
+			watching_mob.client.screen -= button_workplace
 			var/mob/M = watching_mob
 			spawn(5)//we give it time to fade out
 				M.client.images -= holomap_datum.station_map
 		watching_mob.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 	watching_mob = null
+	QDEL_NULL(button_workplace)
+	holomap_datum.station_map.overlays -= holomap_datum.workplaceMarker
+	QDEL_NULL(holomap_datum.workplaceMarker)
 	animate(holomap_datum.station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
 
 /obj/machinery/station_map/power_change()
@@ -363,6 +401,7 @@ var/list/station_holomaps = list()
 	var/image/station_map
 	var/image/cursor
 	var/image/legend
+	var/image/workplaceMarker
 
 /datum/station_holomap/proc/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null)
 	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
