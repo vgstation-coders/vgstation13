@@ -432,43 +432,6 @@ var/list/astral_projections = list()
 		overlay_fullscreen("astralborder", /obj/abstract/screen/fullscreen/astral_border)
 		update_fullscreen_alpha("astralborder", 255, 5)
 
-/*
-	//astral projections can identify cultists
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (!cult)
-		return
-
-	for(var/datum/role/cultist in cult.members)
-		if(cultist.antag && cultist.antag.current)
-			var/imageloc = cultist.antag.current
-			if(istype(cultist.antag.current.loc,/obj/mecha))
-				imageloc = cultist.antag.current.loc
-			var/hud_icon = cultist.logo_state
-			var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
-			I.pixel_x = 20 * PIXEL_MULTIPLIER
-			I.pixel_y = 20 * PIXEL_MULTIPLIER
-			I.plane = ANTAG_HUD_PLANE
-			client.images += I
-			if (cultist.antag.current.client)
-				cultist.antag.current.client.images += hudicon
-
-	//astral projections can identify each other
-	for (var/mob/living/simple_animal/astral_projection/other_projection in astral_projections)
-		if (other_projection == src)
-			continue
-		if (!other_projection.anchor)
-			continue
-		var/datum/role/cultist = iscultist(other_projection.anchor)
-		if (!cultist)
-			continue
-		var/image/I = image('icons/role_HUD_icons.dmi', loc = other_projection, icon_state = cultist.logo_state)
-		I.pixel_x = 20 * PIXEL_MULTIPLIER
-		I.pixel_y = 20 * PIXEL_MULTIPLIER
-		I.plane = ANTAG_HUD_PLANE
-		I.alpha = 128
-		client.images += I
-*/
-
 /mob/living/simple_animal/astral_projection/proc/destroy_projection()
 	if (projection_destroyed)
 		return
