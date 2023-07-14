@@ -87,7 +87,7 @@
 	..()
 
 /datum/rune_spell/proc/invoke(var/mob/user, var/text="", var/whisper=0)
-	if(user.checkTattoo(TATTOO_SILENT))
+	if(user.checkTattoo(TATTOO_SILENT) || (spell_holder.icon_state == "temp"))
 		return
 	if(!whisper)
 		user.say(text,"C")
@@ -103,7 +103,7 @@
 			R.cast_word(R.word1.english)
 			R.cast_word(R.word2.english)
 			R.cast_word(R.word3.english)
-		if((rune_flags & RUNE_STAND) && (activator.loc != spell_holder.loc))
+		if((rune_flags & RUNE_STAND) && (get_turf(activator) != get_turf(spell_holder)))
 			abort(RITUALABORT_STAND)
 		else
 			invoke(activator,invocation)

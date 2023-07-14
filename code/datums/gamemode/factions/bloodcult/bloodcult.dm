@@ -11,6 +11,7 @@
 	desc = "A group of shady blood-obsessed individuals whose souls are devoted to Nar-Sie, the Geometer of Blood.\
 	From his teachings, they were granted the ability to perform blood magic rituals allowing them to grow their ranks and cause chaos.\
 	Nar-Sie's goal is to toy with the crew, before tearing open a breach through reality so he can pull the station into his realm and feast on the crew's blood."
+	initroletype = /datum/role/cultist
 	roletype = /datum/role/cultist
 	logo_state = "cult-logo"
 	hud_icons = list("cult-apprentice-logo", "cult-logo", "cult-master-logo", "shade-blade")
@@ -104,7 +105,7 @@
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
-	
+
 	dat += "<br>"
 	dat += "<a href='?src=\ref[src];unlockRitual=1'>\[Unlock Ritual\]</A><br>"
 	dat += "<br>"
@@ -122,10 +123,10 @@
 		var/datum/bloodcult_ritual/R = input(usr,"Select a ritual to unlock.", "Unlock", null) as null|anything in locked_rituals
 		if(R)
 			R.Unlock(TRUE)
-			
+
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
-	..()
+	. = ..()
 	M.special_role = "Cultist"
 
 /datum/faction/bloodcult/OnPostSetup()

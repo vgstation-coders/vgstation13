@@ -51,8 +51,9 @@
 	var/role_req
 	var/role_name
 	if(F)
-		role_req = initial(F.required_pref)
-		role_name = initial(F.name)
+		var/datum/role/Rtype = initial(F.roletype)
+		role_req = initial(Rtype.required_pref)
+		role_name = initial(Rtype.name)
 	else if(R)
 		role_req = initial(R.required_pref)
 		role_name = initial(R.name)
@@ -76,6 +77,7 @@
 			var/datum/mind/M = H.mind
 			if(FF.HandleNewMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
+				FF.HandleRecruitedRole(RR)
 				RR.OnPostSetup()
 				RR.Greet(GREET_LATEJOIN)
 				message_admins("[key_name(H)] has been recruited as leader of [FF.name] via create antagonist verb.")
@@ -91,16 +93,16 @@
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
-			message_admins("polling if [key_name(H)] wants to become a member of [FF.name]")
 			if(FF.HandleRecruitedMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
+				FF.HandleRecruitedRole(RR)
 				RR.OnPostSetup()
 				RR.Greet(GREET_LATEJOIN)
 				message_admins("[key_name(H)] has been recruited as recruit of [FF.name] via create antagonist verb.")
 				recruit_count++
 
-		FF.OnPostSetup()
 		FF.forgeObjectives()
+		FF.OnPostSetup()
 
 		return recruit_count
 
