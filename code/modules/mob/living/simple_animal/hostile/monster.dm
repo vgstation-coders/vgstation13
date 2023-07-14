@@ -117,7 +117,7 @@
 	desc = "What was once the suit of a plasmaman, filled with roiling nanobots."
 	icon_state = "plasma_cyber_horror"
 
-/mob/living/simple_animal/hostile/monster/cyber_horror/Insectoid
+/mob/living/simple_animal/hostile/monster/cyber_horror/insectoid
 	name = "insectoid cyber horror"
 	desc = "What was once a chittering insectoid, now part of a new hive."
 	icon_state = "insectoid_cyber_horror"
