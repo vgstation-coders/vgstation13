@@ -451,26 +451,22 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(reagents.total_volume <= 0)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Buffer is empty!</span>")
 				return
-			var/amount_per_bottle = reagents.total_volume > 0 ? reagents.total_volume/count : 0
-			to_chat(world, "¥¥ href -- am: [amount_per_bottle] - to: [reagents.total_volume]")
-			amount_per_bottle = min(amount_per_bottle,max_bottle_size)
-			
 			if(!condi)
 				if(href_list["createbottle_multiple"])
 					count = isgoodnumber(input("Select the number of bottles to make.", "Amount:", last_bottle_amt) as num)
 				count = clamp(count, 0, 4)
 				last_bottle_amt = count
 
+			var/amount_per_bottle = reagents.total_volume > 0 ? reagents.total_volume/count : 0
+			amount_per_bottle = min(amount_per_bottle,max_bottle_size)
+
 			var/name = stripped_input(usr,"Name:", "Name your bottle!","[reagents.get_master_reagent_name()] ([amount_per_bottle] units)")
 			if(!name)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 				return
 			while(count>0)
-				to_chat(world, "count during this cycle: [count]")
 				count--
-				to_chat(world, "×× bottle -- am: [amount_per_bottle] - to: [reagents.total_volume]")
 				if(amount_per_bottle <= 0 || reagents.total_volume <= 0)
-					to_chat(world, "break")
 					break
 				var/obj/item/weapon/reagent_containers/bottletype
 				if(condi)
@@ -495,7 +491,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				count = isgoodnumber(input("Select the number of packets to make.", "Amount:", 10) as num)
 			count = clamp(count, 1, 10)
 			
-			var/name = stripped_input(usr,"Name:", "Name your packet!","[reagents.get_master_reagent_name()] (5 units)")
+			var/amount_per_packet = reagents.total_volume > 0 ? reagents.total_volume/count : 0
+			amount_per_packet = min(amount_per_packet,5)
+			
+			var/name = stripped_input(usr,"Name:", "Name your packet!","[reagents.get_master_reagent_name()] ([amount_per_packet] units)")
 			if(!name)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 				return
@@ -509,7 +508,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				P.icon_state = "packet_"
 				P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
 				P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
-				reagents.trans_to(P,min(5,reagents.total_volume))
+				reagents.trans_to(P,min(amount_per_packet,reagents.total_volume))
 			src.updateUsrDialog()
 			return 1
 		else
