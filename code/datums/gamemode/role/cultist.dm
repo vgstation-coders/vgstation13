@@ -254,7 +254,7 @@
 	if (potential_mentor)
 		mentor = potential_mentor
 		potential_mentor.acolytes |= src
-		to_chat(antag.current, "<span class='sinister'>You are now in a mentorship under <span class='danger'>[mentor.name], the [mentor.antag.assigned_role=="MODE" ? (mentor.antag.special_role) : (mentor.antag.assigned_role)]</span>. Seek their help to learn the ways of our cult.</span>")
+		to_chat(antag.current, "<span class='sinister'>You are now in a mentorship under <span class='danger'>[mentor.antag.name], the [mentor.antag.assigned_role=="MODE" ? (mentor.antag.special_role) : (mentor.antag.assigned_role)]</span>. Seek their help to learn the ways of our cult.</span>")
 		to_chat(mentor.antag.current, "<span class='sinister'>You are now mentoring <span class='danger'>[antag.name], the [antag.assigned_role=="MODE" ? (antag.special_role) : (antag.assigned_role)]</span>. </span>")
 		message_admins("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")
 		log_admin("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")

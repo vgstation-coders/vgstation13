@@ -90,7 +90,14 @@
 					animate(layer = 1, time = 0.1 + HUDICON_BLINKDURATION*(factions_with_icons - 1 - offset))
 				if (AP.client)
 					AP.client.images += I
-				R_target.antag.current.client.images += AP.hudicon
+				if (R_target.antag.current.client)
+					R_target.antag.current.client.images += AP.hudicon
+		for(var/mob/living/simple_animal/astral_projection/PA in astral_projections)
+			if (AP.client)
+				AP.client.images += PA.hudicon
+			if ((AP != PA) && PA.client)
+				PA.client.images += AP.hudicon
+
 #undef HUDICON_BLINKDURATION
 
 
