@@ -451,7 +451,7 @@ var/global/objects_thrown_when_explode = FALSE
 	if(user.incapacitated() || (!ishigherbeing(user) && !isrobot(user)))
 		return
 	if(Adjacent(user) || is_holder_of(user, src))
-		if(!istype(user, /mob/living/carbon/slime) && !istype(user, /mob/living/simple_animal))
+		if(!istype(user, /mob/living/carbon/slime) && (istype(user, /mob/living/simple_animal/hostile/gremlin/grinch) || !istype(user, /mob/living/simple_animal)))
 			if(istype(over_object,/obj/abstract/screen/inventory)) //We're being dragged into the user's UI...
 				var/obj/abstract/screen/inventory/OI = over_object
 
@@ -1588,7 +1588,7 @@ var/global/list/image/blood_overlays = list()
 				return
 	if(!istype(over_object, /obj/abstract/screen/inventory))
 		return ..()
-	if(!ishuman(usr) && !ismonkey(usr))
+	if(!ishuman(usr) && !ismonkey(usr) && !isgrinch(usr))
 		return ..()
 	if(!usr.is_wearing_item(src) || !canremove)
 		return ..()

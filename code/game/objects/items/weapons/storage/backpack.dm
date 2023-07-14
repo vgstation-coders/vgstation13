@@ -31,7 +31,7 @@
 	name = "Santa's Gift Bag"
 	desc = "Space Santa uses this to deliver toys to all the nice children in space in Christmas! Wow, it's pretty big!"
 	icon_state = "giftbag0"
-	item_state = "giftbag"
+	item_state = "giftbag0"
 	w_class = W_CLASS_LARGE
 	storage_slots = 7
 	fits_max_w_class = W_CLASS_LARGE
@@ -48,6 +48,26 @@
 				gift = /obj/item/weapon/winter_gift/special
 			new gift(src)
 	. = ..()
+
+/obj/item/weapon/storage/backpack/santabag/refresh_all()
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/backpack/santabag/pickup()
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/backpack/santabag/update_icon()
+	var/bagtype = "giftbag"
+	var/bagfill = 0
+
+	if (istype(loc, /mob/living/simple_animal/hostile/gremlin/grinch))
+		bagtype = "grinchbag"
+
+	bagfill = min(2,round(contents.len/10))
+
+	icon_state = "[bagtype][bagfill]"
+	item_state = icon_state
 
 /obj/item/weapon/storage/backpack/cultify()
 	new /obj/item/weapon/storage/backpack/cultpack(loc)

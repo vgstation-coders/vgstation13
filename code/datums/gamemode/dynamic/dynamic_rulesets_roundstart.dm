@@ -709,10 +709,15 @@ Assign your candidates in choose_candidates() instead.
 
 
 /datum/dynamic_ruleset/roundstart/grinch/execute()
-	var/mob/M = pick(assigned)
-	var/datum/role/grinch/G = new
-	G.AssignToRole(M.mind,1)
-	G.Greet(GREET_ROUNDSTART)
+	var/mob/new_player/M = pick(assigned)
+	if (M)
+		var/datum/role/grinch/newGrinch = new
+		var/mob/living/simple_animal/hostile/gremlin/grinch/G = new (pick(grinchstart))
+		G.key = M.client.ckey
+		qdel(M)
+		newGrinch.AssignToRole(G.mind,1)
+		newGrinch.Greet(GREET_ROUNDSTART)
+		G << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)// MAD JAMS cant last forever yo
 	return 1
 
 //////////////////////////////////////////////

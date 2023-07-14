@@ -10,11 +10,14 @@
 	// -- Our bag
 	var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = null
 
+/datum/role/grinch/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
+	..()
+	wikiroute = role_wiki[GRINCH]
+
 // -- Transforms us into the devlish Grinch
 /datum/role/grinch/OnPostSetup(var/laterole = FALSE)
 	. = ..()
-	var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = new(antag.current)
-	src.our_bag = our_bag
+	our_bag = new(antag.current)
 	antag.current.equip_to_slot(our_bag, slot_back)
 
 // -- Clearing references in case of deletion.
@@ -27,7 +30,7 @@
 		return
 
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are the Grinch!</span><span class='warning'>You are here to ruin Christmas!</span>")
+	to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are the Grinch!</span> <span class='warning'>You are here to ruin Christmas by stealing as many things into your bag as possible! You can crawl through vents and mess with electronic panels and computers, but your pitiful punches don't deal any damage.</span>")
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki)</span>")
 
 /datum/role/grinch/ForgeObjectives()

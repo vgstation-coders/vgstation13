@@ -34,6 +34,12 @@
 	. = ..()
 	obj_overlays[BACK_LAYER]		= new /obj/abstract/Overlays/back_layer
 
+/mob/living/simple_animal/hostile/gremlin/grinch/Login()
+	..()
+	if (client)
+		for (var/obj/item/I in contents)
+			client.screen |= I//fixes items disappearing from your inventory if you disconnect/reconnect
+
 /mob/living/simple_animal/hostile/gremlin/grinch/u_equip(obj/item/W, dropped = 1)
 	var/success = 0
 
@@ -78,6 +84,20 @@
 	W.forceMove(src)
 	if(client)
 		client.screen |= W
+
+/mob/living/simple_animal/hostile/gremlin/grinch/generate_markov_chain() //replaces some words by HATE or CHRISTMAS, inspired by buttbottify()
+	var/list/split_phrase = splittext(..()," ")
+	var/list/prepared_words = split_phrase.Copy()
+	var/i = rand(round(split_phrase.len / 10),round(split_phrase.len / 2))
+	for(,i > 0,i--)
+		if (!prepared_words.len)
+			break
+		var/word = pick(prepared_words)
+		prepared_words -= word
+		var/index = split_phrase.Find(word)
+
+		split_phrase[index] = pick("HATE", "CHRISTMAS")
+	return jointext(split_phrase," ")
 
 // Return the item currently in the slot ID
 /mob/living/simple_animal/hostile/gremlin/grinch/get_item_by_slot(slot_id)
@@ -184,17 +204,17 @@
 	..()
 	if (healths)
 		switch(health)
-			if(100 to INFINITY)
+			if(125 to INFINITY)
 				healths.icon_state = "health0"
-			if(80 to 100)
+			if(100 to 125)
 				healths.icon_state = "health1"
-			if(60 to 80)
+			if(75 to 100)
 				healths.icon_state = "health2"
-			if(40 to 60)
+			if(50 to 75)
 				healths.icon_state = "health3"
-			if(20 to 40)
+			if(25 to 50)
 				healths.icon_state = "health4"
-			if(0 to 20)
+			if(0 to 25)
 				healths.icon_state = "health5"
 			else
 				healths.icon_state = "health6"
@@ -224,8 +244,8 @@
 /obj/item/weapon/storage/backpack/holding/grinch
 	name = "Grinch's bag"
 	desc = "He's coming to steal your presents."
-	item_state = "grinchbag"
-	icon_state = "grinchbag"
+	item_state = "grinchbag0"
+	icon_state = "grinchbag0"
 	origin_tech = null
 
 /obj/item/weapon/storage/backpack/holding/grinch/mob_can_equip(var/mob/M, slot, disable_warning = 0, automatic = 0)
@@ -238,3 +258,23 @@
 	if(recursive_list.len)
 		return
 	return ..()
+
+/obj/item/weapon/storage/backpack/holding/grinch/refresh_all()
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/backpack/holding/grinch/pickup()
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/backpack/holding/grinch/update_icon()
+	var/bagtype = "giftbag"
+	var/bagfill = 0
+
+	if (istype(loc, /mob/living/simple_animal/hostile/gremlin/grinch))
+		bagtype = "grinchbag"
+
+	bagfill = min(2,round(contents.len/10))
+
+	icon_state = "[bagtype][bagfill]"
+	item_state = icon_state
