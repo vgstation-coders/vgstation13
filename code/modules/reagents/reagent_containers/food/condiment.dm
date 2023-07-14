@@ -118,6 +118,11 @@
 		else
 			to_chat(user, "<span class='warning'>You have to open the lid at least a bit more to spill condiments on \the [target].</span>")
 
+/obj/item/weapon/reagent_containers/food/condiment/New(loc,altvol)
+	if(altvol)
+		volume = altvol
+	..(loc)
+
 /obj/item/weapon/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
 
 	if(reagents.reagent_list.len > 0)
@@ -728,7 +733,7 @@
 				
 				condiment_overlay = ZAMSPICYTOXIN
 			else
-				if(!name) //these should probably just be deltas
+				if(!name) //these should probably just be ternaries
 					name = "misc condiment packet"
 				if (!desc)
 					desc = "A varied condiment packet."
