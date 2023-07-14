@@ -734,7 +734,6 @@
 					desc = "A varied condiment packet."
 				if(!has_icon(icon, "packet_"))
 					icon_state = "packet_misc"
-				condiment_overlay = MAYO
 				overlay_colored = TRUE
 				update_icon(custom=TRUE)
 		icon_state = "[initial(icon_state)]" + condiment_overlay
@@ -756,6 +755,7 @@
 		var/image/packetcolor = image('icons/obj/food_condiment.dmi', src, "packet_overlay")
 		packetcolor.icon += mix_color_from_reagents(reagents.reagent_list)
 		packetcolor.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		to_chat(world, "[packetcolor.alpha], [mix_alpha_from_reagents(reagents.reagent_list)]")
 		overlays += packetcolor
 
 	if(!is_open_container())

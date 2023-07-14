@@ -462,17 +462,20 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(!name)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 				return
-
+			var/obj/item/weapon/reagent_containers/bottletype
+			if(condi)
+				bottletype = new/obj/item/weapon/reagent_containers/food/condiment(loc,max_bottle_size)
+			else
+				bottletype = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable(loc,max_bottle_size)
 			while(count>=0)
 				if(amount_per_bottle == 0 || reagents.total_volume == 0)
 					break
-
-				var/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/P = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable(loc,max_bottle_size)
-				P.name = "[name] bottle"
-				P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
-				P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
-				//P.icon_state = "bottle"+bottlesprite
-				reagents.trans_to(P,amount_per_bottle)
+			
+				bottletype.name = "[name] bottle"
+				bottletype.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
+				bottletype.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
+				//bottletype.icon_state = "bottle"+bottlesprite
+				reagents.trans_to(bottletype,amount_per_bottle)
 			src.updateUsrDialog()
 			return 1
 
