@@ -697,6 +697,8 @@
 	flags = FPRINT //Starts sealed until you pull the tab! Lacks OPENCONTAINER for this purpose
 	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
+	var/tabself = "You pull back the tab of"
+
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/update_icon()
 	overlays.len = 0
@@ -718,7 +720,7 @@
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/proc/pop_open(var/mob/user)
-	to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
+	to_chat(user, "[tabself] \the [src] with a satisfying pop.")
 	flags |= OPENCONTAINER
 	src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
 	playsound(user, pick(open_sounds), 50, 1)
@@ -819,6 +821,8 @@
 	name = "Nuka Cola"
 	desc = "Cool, refreshing, Nuka Cola."
 	icon_state = "nuka"
+	tabself = "You pop the cap off"
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka/New()
 	..()
 	reagents.add_reagent(NUKA_COLA, 30)

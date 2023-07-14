@@ -1,6 +1,12 @@
 /area/mining_bar
 	name = "Armok's Bar and Grill"
 	icon_state = "bar"
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+
+/area/mining_surprise
+	name = "mining surprise"
+	icon_state = "mine"
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 /mob/living/simple_animal/robot/NPC
 	flags = HEAR_ALWAYS | PROXMOVE //For hearer events

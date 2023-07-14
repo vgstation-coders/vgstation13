@@ -716,9 +716,9 @@ var/list/uplink_items = list()
 	name = "Batling gun"
 	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
 	item = /obj/item/weapon/gun/gatling/batling
-	cost = 18
-	discounted_cost = 12
-	jobs_with_discount = list("Warden", "Head of Security")
+	cost = 16
+	discounted_cost = 10
+	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
 
 /datum/uplink_item/jobspecific/command_security/remoteexplosive
 	name = "Remote Explosive Implants"
@@ -884,6 +884,14 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndie_kit/flaregun
 	cost = 6
 	discounted_cost = 4
+	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/engineering/canned_heat
+	name = "Canned Heat"
+	desc = "A can that when opened agitates the air molecules in the surrounding atmosphere to raise its temperature by 1000 Kelvin. Use in a large area and several numbers for maximum impact."
+	item = /obj/item/canned_heat
+	cost = 12
+	discounted_cost = 6
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/engineering/dev_analyser

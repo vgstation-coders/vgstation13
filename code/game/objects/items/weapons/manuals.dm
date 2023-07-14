@@ -923,7 +923,8 @@ var/virology_encyclopedia = ""
 
 /obj/item/weapon/book/manual/snow
 	name = "\improper Snow Survival Guide"
-	icon_state ="triangulate"
+	icon_state ="snow"
+	item_state ="snow"
 	author = "The Abominable Snowman"
 	title = "Snow Survival Guide"
 	wiki_page = "Guide_to_Snow_Map"

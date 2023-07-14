@@ -4098,7 +4098,7 @@
 	var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in holder.reagent_list
 	for(var/turf/T in view(get_turf(holder.my_atom)))
 		T.mute_time = world.time + B.mute_duration
-	
+
 /datum/chemical_reaction/random
 	name = "Random chemical"
 	id = "random"
@@ -4106,6 +4106,13 @@
 	required_reagents = list(NOTHING = 10, PHAZON = 10)
 	required_catalysts = list(MUTAGEN = 10, ENZYME = 10)
 	result_amount = 1
+
+/datum/chemical_reaction/fake_creep // Xenomorph weeds aka creep.
+	name = "Dan's Purple Drank"
+	id = FAKE_CREEP
+	result = FAKE_CREEP
+	required_reagents = list(MUTAGEN = 1, PLASMA = 1, DISCOUNT = 1)
+	result_amount = 3
 
 /datum/chemical_reaction/random/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()

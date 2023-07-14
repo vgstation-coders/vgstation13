@@ -1262,11 +1262,12 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define BACK_LAYER				17		//Back should be above head so that headgear doesn't hides backpack when facing north
 #define ID_LAYER				18		//IDs should be visible above suits and backpacks
 #define HANDCUFF_LAYER			19
-#define LEGCUFF_LAYER			20
-#define HAND_LAYER				21
-#define TAIL_LAYER				22		//bs12 specific. this hack is probably gonna come back to haunt me
-#define TARGETED_LAYER			23		//BS12: Layer for the target overlay from weapon targeting system
-#define TOTAL_LAYERS			23
+#define MUTUALCUFF_LAYER		20
+#define LEGCUFF_LAYER			21
+#define HAND_LAYER				22
+#define TAIL_LAYER				23		//bs12 specific. this hack is probably gonna come back to haunt me
+#define TARGETED_LAYER			24		//BS12: Layer for the target overlay from weapon targeting system
+#define TOTAL_LAYERS			24
 //////////////////////////////////
 
 //Snake stuff so leaderboard can see it too
@@ -1594,6 +1595,7 @@ var/proccalls = 1
 #define HOLOMAP_FILTER_STATIONMAP				32
 #define HOLOMAP_FILTER_STATIONMAP_STRATEGIC		64//features markers over the captain's office, the armory, the SMES
 #define HOLOMAP_FILTER_CULT						128//bloodstone locators
+#define HOLOMAP_FILTER_TAXI						256//shuttles with have their original location displayed on station maps
 
 #define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
 #define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"

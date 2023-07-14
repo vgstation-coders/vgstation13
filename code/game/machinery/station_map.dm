@@ -27,6 +27,7 @@ var/list/station_holomaps = list()
 	var/image/panel = null
 
 	var/original_zLevel = 1	//zLevel on which the station map was initialized.
+	var/forced_zLevel = 0	//can be set by mappers to override the Station Map's zLevel
 	var/bogus = 0			//set to 1 when you initialize the station map on a zLevel that doesn't have its own icon formatted for use by station holomaps.
 							//currently, the only supported zLevels are the Station, the Asteroid, and the Derelict.
 
@@ -35,7 +36,10 @@ var/list/station_holomaps = list()
 /obj/machinery/station_map/New()
 	..()
 	holomap_datum = new()
-	original_zLevel = loc.z
+	if (forced_zLevel)
+		original_zLevel = forced_zLevel
+	else
+		original_zLevel = loc.z
 	station_holomaps += src
 	flow_flags |= ON_BORDER
 	component_parts = 0
@@ -69,8 +73,14 @@ var/list/station_holomaps = list()
 
 /obj/machinery/station_map/initialize()
 	bogus = 0
-	var/turf/T = get_turf(src)
-	original_zLevel = T.z
+	var/turf/T
+	if (forced_zLevel)
+		var/turf/U = get_turf(src)
+		T = locate(U.x,U.y,forced_zLevel)
+		original_zLevel = forced_zLevel
+	else
+		T = get_turf(src)
+		original_zLevel = T.z
 	if(!((HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]") in extraMiniMaps))
 		bogus = 1
 		holomap_datum.initialize_holomap_bogus()
@@ -78,6 +88,9 @@ var/list/station_holomaps = list()
 		return
 
 	holomap_datum.initialize_holomap(T)
+
+	if (forced_zLevel)
+		holomap_datum.station_map.overlays -= holomap_datum.cursor
 
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[original_zLevel]"])
 	small_station_map.plane = ABOVE_LIGHTING_PLANE
@@ -186,7 +199,9 @@ var/list/station_holomaps = list()
 			else
 				holomap_datum.cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
 				holomap_datum.cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
-			holomap_datum.station_map.overlays |= holomap_datum.cursor
+
+			if (!forced_zLevel)
+				holomap_datum.station_map.overlays |= holomap_datum.cursor
 			holomap_datum.station_map.overlays |= holomap_datum.legend
 
 	switch(dir)
@@ -361,7 +376,10 @@ var/list/station_holomaps = list()
 	else
 		cursor.pixel_x = (T.x-6)*PIXEL_MULTIPLIER
 		cursor.pixel_y = (T.y-6)*PIXEL_MULTIPLIER
-	legend = image('icons/effects/64x64.dmi', "legend")
+	if (map.snow_theme)
+		legend = image('icons/effects/64x64.dmi', "legend_taxi")
+	else
+		legend = image('icons/effects/64x64.dmi', "legend")
 	legend.pixel_x = 3*WORLD_ICON_SIZE
 	legend.pixel_y = 3*WORLD_ICON_SIZE
 	station_map.overlays |= cursor

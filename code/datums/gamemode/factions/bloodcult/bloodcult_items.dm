@@ -1596,6 +1596,13 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/reagent_containers/food/drinks/cult/salt_act()
 	acid_melt()
 
+/obj/item/weapon/reagent_containers/food/drinks/cult/bloodfilled
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/bloodfilled/New()
+	..()
+	reagents.add_reagent(BLOOD, 50)
+
+
 ///////////////////////////////////////CULT CUFFS////////////////////////////////////////////////
 /obj/item/weapon/handcuffs/cult
 	name = "ghastly bindings"

@@ -585,17 +585,17 @@
 	dir = 1
 	},
 /turf/unsimulated/floor/asteroid,
-/area/mine/explored)
+/area/mining_surprise)
 "bV" = (
 /obj/structure/sign/double/barsign/mining,
 /turf/simulated/wall/invulnerable/r_wall,
 /area/mining_bar)
 "bW" = (
 /turf/unsimulated/floor/asteroid,
-/area/mine/explored)
+/area/mining_surprise)
 "bX" = (
 /turf/unsimulated/mineral/random,
-/area/mine/explored)
+/area/mining_surprise)
 "bY" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
@@ -613,9 +613,6 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating,
 /area/mining_bar)
-"ca" = (
-/turf/simulated/wall/mineral/wood,
-/area/mine/explored)
 "cb" = (
 /obj/machinery/door/airlock/external,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -633,7 +630,7 @@
 	dir = 1
 	},
 /turf/unsimulated/floor/asteroid,
-/area/mine/explored)
+/area/mining_surprise)
 "mx" = (
 /obj/structure/table,
 /obj/item/weapon/storage/toolbox/robotics,
@@ -663,7 +660,7 @@
 	on = 1
 	},
 /turf/simulated/floor/plating,
-/area/mine/explored)
+/area/mining_bar)
 "Da" = (
 /obj/structure/window/reinforced/plasma,
 /obj/structure/window/reinforced/plasma{
@@ -696,11 +693,11 @@
 "Rq" = (
 /obj/machinery/door/airlock/external,
 /turf/simulated/floor/plating,
-/area/mine/explored)
+/area/mining_bar)
 "TO" = (
 /obj/effect/glowshroom,
 /turf/unsimulated/floor/asteroid,
-/area/mine/explored)
+/area/mining_surprise)
 
 (1,1,1) = {"
 bX
@@ -893,8 +890,8 @@ aZ
 bS
 bY
 ab
-ca
-ca
+ab
+ab
 gX
 bW
 bW
