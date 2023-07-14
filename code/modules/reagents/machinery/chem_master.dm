@@ -421,7 +421,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 			var/logged_message = " - [key_name(usr)] has made [count] pill[count > 1 ? "s, each" : ""] named '[name]' and containing "
 
-			while(count--)
+			while(count>=0)
 				if(amount_per_pill == 0 || reagents.total_volume == 0)
 					break
 
@@ -463,11 +463,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 				return
 
-			while(count--)
+			while(count>=0)
 				if(amount_per_bottle == 0 || reagents.total_volume == 0)
 					break
 
-				var/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/P = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/(src.loc,max_bottle_size)
+				var/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/P = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable(loc,max_bottle_size)
 				P.name = "[name] bottle"
 				P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
 				P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
@@ -489,11 +489,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(!name)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 				return
-			while(count--)
+			while(count>=0)
 				if(reagents.total_volume < 5)
 					break
 
-				var/obj/item/weapon/reagent_containers/food/condiment/small/P = new/obj/item/weapon/reagent_containers/food/condiment/small/(src.loc,5)
+				var/obj/item/weapon/reagent_containers/food/condiment/small/P = new/obj/item/weapon/reagent_containers/food/condiment/small(loc,5)
 				P.name = "[name] packet"
 				P.desc = "A small condiment packet."
 				P.icon_state = "packet_"
@@ -513,7 +513,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			reagents.clear_reagents()
 		container.forceMove(src.loc)
 		container.pixel_x = 0 //We fucked with the beaker for overlays, so reset that
-		container.pixel_y = 0 //
+		container.pixel_y = 0
 		container = null
 		update_icon()
 		updateUsrDialog()
