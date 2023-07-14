@@ -1,10 +1,10 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /turf/unsimulated/mineral/random,
-/area/asteroid)
+/area/mining_surprise)
 "c" = (
 /turf/simulated/wall/r_wall,
-/area/asteroid)
+/area/mining_surprise)
 "d" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
@@ -12,30 +12,30 @@
 	dir = 1;
 	icon_state = "damaged4"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "e" = (
 /obj/effect/alien/weeds/node,
 /obj/effect/alien/egg,
 /turf/simulated/floor{
 	icon_state = "damaged1"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "f" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "g" = (
 /obj/structure/window/reinforced{
 	dir = 1
 	},
 /obj/effect/alien/weeds/node,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "h" = (
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "i" = (
 /obj/structure/window/reinforced{
 	dir = 1
@@ -45,7 +45,7 @@
 /turf/simulated/floor{
 	icon_state = "damaged5"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "j" = (
 /obj/effect/gibspawner/xeno,
 /obj/effect/alien/weeds,
@@ -54,54 +54,54 @@
 	dir = 1;
 	icon_state = "damaged5"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "k" = (
 /obj/effect/gibspawner/xeno,
 /obj/machinery/door/mineral/resin,
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "l" = (
 /obj/effect/alien/weeds/node,
 /turf/simulated/floor,
-/area/asteroid)
+/area/mining_surprise)
 "n" = (
 /obj/structure/sign/biohazard,
 /turf/simulated/wall/r_wall,
-/area/asteroid)
+/area/mining_surprise)
 "o" = (
 /obj/machinery/door/mineral/resin,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "p" = (
 /obj/structure/sign/russian/caution,
 /turf/simulated/wall/r_wall,
-/area/asteroid)
+/area/mining_surprise)
 "q" = (
 /obj/item/weapon/table_parts/reinforced,
 /obj/effect/alien/resin/membrane,
 /obj/effect/alien/weeds,
 /turf/simulated/floor,
-/area/asteroid)
+/area/mining_surprise)
 "r" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
 /turf/simulated/floor,
-/area/asteroid)
+/area/mining_surprise)
 "s" = (
 /obj/structure/door_assembly{
 	name = "Research Station IX"
 	},
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "u" = (
 /obj/effect/alien/weeds,
 /obj/item/clothing/mask/facehugger,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "v" = (
 /obj/structure/grille/broken,
 /obj/item/weapon/shard,
@@ -121,41 +121,41 @@
 	icon_state = "platingdmg1";
 	tag = "icon-platingdmg1"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "z" = (
 /obj/item/weapon/storage/toolbox/syndicate,
 /obj/structure/rack,
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "B" = (
 /obj/structure/girder,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1";
 	tag = "icon-platingdmg1"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "C" = (
 /obj/effect/alien/weeds,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "E" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg3"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "F" = (
 /obj/structure/girder,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "G" = (
 /obj/effect/alien/resin/wall,
 /turf/simulated/floor/plating{
 	icon_state = "panelscorched"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "H" = (
 /obj/structure/window/reinforced{
 	dir = 1
@@ -164,13 +164,13 @@
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg2"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "J" = (
 /obj/item/weapon/table_parts/reinforced,
 /obj/effect/alien/resin/membrane,
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "K" = (
 /obj/structure/grille/broken,
 /obj/item/stack/rods,
@@ -185,18 +185,18 @@
 	},
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "L" = (
 /obj/structure/girder,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "M" = (
 /obj/effect/alien/weeds,
 /obj/item/clothing/mask/facehugger,
 /turf/simulated/floor,
-/area/asteroid)
+/area/mining_surprise)
 "O" = (
 /obj/structure/grille/broken,
 /obj/item/weapon/shard,
@@ -212,7 +212,7 @@
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg3"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "Q" = (
 /obj/item/weapon/shard,
 /obj/item/stack/rods,
@@ -222,22 +222,22 @@
 	dir = 1;
 	icon_state = "damaged4"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "R" = (
 /obj/structure/bed/nest,
 /obj/effect/gibspawner/human,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "S" = (
 /obj/effect/gibspawner/xeno,
 /obj/effect/alien/weeds,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "T" = (
 /obj/effect/alien/weeds,
 /obj/effect/decal/mecha_wreckage/ripley,
 /turf/simulated/floor,
-/area/asteroid)
+/area/mining_surprise)
 "U" = (
 /obj/effect/alien/weeds,
 /obj/item/stack/sheet/animalhide/xeno{
@@ -246,30 +246,30 @@
 /obj/structure/rack,
 /obj/item/xenos_claw,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "V" = (
 /obj/structure/closet/emcloset,
 /obj/effect/alien/weeds,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "W" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "X" = (
 /obj/effect/alien/weeds,
 /obj/effect/alien/egg,
 /turf/simulated/floor{
 	icon_state = "damaged3"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "Z" = (
 /obj/structure/sign/securearea,
 /turf/simulated/wall/r_wall,
-/area/asteroid)
+/area/mining_surprise)
 
 (1,1,1) = {"
 a
