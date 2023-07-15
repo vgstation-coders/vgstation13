@@ -2333,6 +2333,7 @@
 #include "code\modules\projectiles\guns\energy\tag.dm"
 #include "code\modules\projectiles\guns\energy\temperature.dm"
 #include "code\modules\projectiles\guns\energy\tesla.dm"
+#include "code\modules\projectiles\guns\energy\minigun.dm"
 #include "code\modules\projectiles\guns\projectile\automatic.dm"
 #include "code\modules\projectiles\guns\projectile\banannon.dm"
 #include "code\modules\projectiles\guns\projectile\bow.dm"
