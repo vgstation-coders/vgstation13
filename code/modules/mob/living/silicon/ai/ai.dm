@@ -31,7 +31,7 @@ var/list/ai_list = list()
 	var/lawcheck[1]
 	var/ioncheck[1]
 	var/icon/holo_icon//Default is assigned when AI is created.
-	var/holocolor = rgb(125,180,225) //default is blue
+	var/holocolor = rgb(60,180,225) //default is blue
 	var/obj/item/device/pda/ai/aiPDA = null
 	var/obj/item/device/multitool/aiMulti = null
 	var/obj/item/device/station_map/station_holomap = null
@@ -297,16 +297,6 @@ var/static/list/ai_icon_states = list(
 		"Yes Man" = "yes-man",
 	)
 	
-var/static/list/ai_holo_colors = list(
-	"Blue"= rgb(60,180,225),
-	"Red"= rgb(255,60,60),
-	"Green"= rgb(125,255,60),
-	"Pink"= rgb(255,125,255),
-	"Yellow"= rgb(255,255,125),
-	"Orange"= rgb(255,180,60),
-	"Cyan"= rgb(60,255,255),
-	)
-
 /mob/living/silicon/ai/verb/pick_icon()
 	set category = "AI Commands"
 	set name = "Set AI Core Display"
@@ -325,8 +315,8 @@ var/static/list/ai_holo_colors = list(
 	set name = "Set AI hologram color"
 	if(stat || aiRestorePowerRoutine)
 		return
-	var/chosen_holocolor = input(usr, "Please select the hologram color.", "holocolor") as null|anything in ai_holo_colors
-	holocolor = ai_holo_colors[chosen_holocolor]
+	var/chosen_holocolor = input(usr, "Please select the hologram color.", "holocolor") as color
+	holocolor = chosen_holocolor
 
 // displays the malf_ai information if the AI is the malf
 /mob/living/silicon/ai/show_malf_ai()

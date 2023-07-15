@@ -274,7 +274,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 /obj/effect/overlay/hologram/New()
 	..()
-	set_light(2, 0)
+	set_light(2)
 
 /obj/effect/overlay/holoray
 	name = "holoray"
@@ -287,9 +287,6 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	pixel_x = -32
 	pixel_y = -32
 	alpha = 100
-
-/obj/effect/overlay/holoray/New()
-	..()
 
 /obj/machinery/hologram
 	anchored = 1
