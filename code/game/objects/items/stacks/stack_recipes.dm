@@ -15,6 +15,7 @@
 	var/z_up_required = 0
 	var/z_down_required = 0
 	var/list/other_reqs = list()
+	var/grey_result // Results of crafting when done by a Grey
 
 /datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), z_up_required = 0, z_down_required = 0)
 	src.title = title
@@ -29,6 +30,7 @@
 	src.other_reqs = other_reqs
 	src.z_up_required = z_up_required
 	src.z_down_required = z_down_required
+	src.grey_result = grey_result
 
 /datum/stack_recipe/proc/can_build_here(var/mob/usr, var/turf/T)
 	if(one_per_turf && locate(result_type) in T)
@@ -95,7 +97,10 @@
 		SS.update_materials()
 	else
 		for(var/i = 1 to (max_res_amount>1 ? res_amount*multiplier : 1))
-			O = new result_type(usr.loc)
+			if(isgrey(usr))
+				O = new grey_result(usr.loc)
+				else
+					O = new result_type(usr.loc)
 
 	O.change_dir(usr.dir)
 	if(start_unanchored)
@@ -275,7 +280,8 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe_list("chairs and beds",list(
 		new/datum/stack_recipe/chair("dark office chair",  /obj/structure/bed/chair/office/dark,  1, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("light office chair", /obj/structure/bed/chair/office/light, 1, one_per_turf = 1, on_floor = 1),
-		new/datum/stack_recipe/chair("beige comfy chair",  /obj/structure/bed/chair/comfy/beige,  1, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe/chair("beige comfy chair",  /obj/structure/bed/chair/comfy/beige,  1, one_per_turf = 1, on_floor = 1, grey_result = /obj/structure/bed/chair/comfy/ayy1
+),
 		new/datum/stack_recipe/chair("black comfy chair",  /obj/structure/bed/chair/comfy/black,  1, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("brown comfy chair",  /obj/structure/bed/chair/comfy/brown,  1, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("lime comfy chair",   /obj/structure/bed/chair/comfy/lime,   1, one_per_turf = 1, on_floor = 1),
@@ -285,7 +291,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("bar stool",          /obj/item/weapon/stool/bar                                              ),
 		new/datum/stack_recipe/chair("chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("folding chair",      /obj/structure/bed/chair/folding,         one_per_turf = 1, on_floor = 1),
-		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1, grey result = /obj/structure/bed/ayy1),
 		new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
 		)),
 	new/datum/stack_recipe_list("couch parts", list(
@@ -328,8 +334,8 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("table parts", /obj/item/weapon/table_parts,                           2                                ),
 	new/datum/stack_recipe("rack parts",  /obj/item/weapon/rack_parts,                                                             ),
 	new/datum/stack_recipe("filing cabinet", /obj/structure/filingcabinet/filingcabinet,						  2, one_per_turf = 1, time = 15   ),
-	new/datum/stack_recipe("closet",      /obj/structure/closet/basic,                            2, one_per_turf = 1, time = 15   ),
-	new/datum/stack_recipe("metal crate", /obj/structure/closet/crate/basic,                      2, one_per_turf = 1, time = 15   ),
+	new/datum/stack_recipe("closet",      /obj/structure/closet/basic,                            2, one_per_turf = 1, time = 15, grey_result = /obj/structure/closet/ayy),
+	new/datum/stack_recipe("metal crate", /obj/structure/closet/crate/basic,                      2, one_per_turf = 1, time = 15, grey_result = /obj/structure/closet/crate/ayy),
 	null,
 	new/datum/stack_recipe_list("airlock assemblies", list(
 		new/datum/stack_recipe("standard airlock assembly",      /obj/structure/door_assembly,                            4, time = 50, one_per_turf = 1, on_floor = 1),
