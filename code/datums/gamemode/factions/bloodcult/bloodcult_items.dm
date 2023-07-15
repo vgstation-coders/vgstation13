@@ -1779,6 +1779,10 @@ var/list/arcane_tomes = list()
 			user.put_in_hands(remaining)
 			remaining = null
 
+		var/obj/item/plasma_tank = null
+		if(isplasmaman(user))
+			plasma_tank = user.get_item_by_slot(slot_s_store)
+
 		for(var/obj/item/I in user)
 			if (is_type_in_list(I, discarded_types))
 				user.u_equip(I)
@@ -1814,6 +1818,8 @@ var/list/arcane_tomes = list()
 				else
 					user.equip_to_slot_or_drop(stored_slot,nslot)
 			stored_gear.Remove(slot)
+		if (plasma_tank)
+			user.equip_to_slot_or_drop(plasma_tank,slot_s_store)
 		qdel(src)
 
 /obj/item/weapon/blood_tesseract/cultify()
