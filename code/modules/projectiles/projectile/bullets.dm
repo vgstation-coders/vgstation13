@@ -461,6 +461,12 @@
 	icon_state = "hornetgun"
 	projectile_speed = 0.5
 	bee_type = /mob/living/simple_animal/bee/hornetgun
+	
+/obj/item/projectile/bullet/beegun/ss_viscerator
+	name = "viscerator"
+	icon_state = "ss_visceratorgun"
+	projectile_speed = 0.75
+	bee_type = /mob/living/simple_animal/hostile/viscerator/syndiesquad
 
 /obj/item/projectile/bullet/beegun/OnFired()
 	..()
