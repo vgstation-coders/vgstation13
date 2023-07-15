@@ -1157,6 +1157,7 @@ var/list/arcane_tomes = list()
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	mech_flags = MECH_SCAN_FAIL
 	actions_types = list(/datum/action/item_action/toggle_anon)
 	var/anon_mode = FALSE
@@ -1276,8 +1277,12 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 25, rad = 0)
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
-	clothing_flags = ONESIZEFITSALL
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	mech_flags = MECH_SCAN_FAIL
+
+	//plasmaman stuff
+	var/next_extinguish=0
+	var/extinguish_cooldown=10 SECONDS
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
 	return 50
@@ -1287,6 +1292,22 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/suit/cultrobes/salt_act()
 	acid_melt()
+
+//plasmaman stuff
+/obj/item/clothing/suit/cultrobes/Extinguish(var/mob/living/carbon/human/H)
+	if(next_extinguish > world.time)
+		return
+
+	next_extinguish = world.time + extinguish_cooldown
+	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
+	H.ExtinguishMob()
+
+//plasmaman stuff
+/obj/item/clothing/suit/cultrobes/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+	if(H.bodytemperature < T0C+37)
+		H.bodytemperature = min(H.bodytemperature+5,T0C+37)
+	else
+		H.bodytemperature = max(H.bodytemperature-5,T0C+37)
 
 ///////////////////////////////////////CULT BACKPACK (TROPHY RACK)////////////////////////////////////////////////
 
@@ -1376,22 +1397,9 @@ var/list/arcane_tomes = list()
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	mech_flags = MECH_SCAN_FAIL
 
+	//plasmaman stuff
 	var/next_extinguish=0
 	var/extinguish_cooldown=10 SECONDS
-
-/obj/item/clothing/suit/space/cult/proc/Extinguish(var/mob/living/carbon/human/H)
-	if(next_extinguish > world.time)
-		return
-
-	next_extinguish = world.time + extinguish_cooldown
-	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
-	H.ExtinguishMob()
-
-/obj/item/clothing/suit/space/cult/proc/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
-	if(H.bodytemperature < T0C+37)
-		H.bodytemperature = min(H.bodytemperature+5,T0C+37)
-	else
-		H.bodytemperature = max(H.bodytemperature-5,T0C+37)
 
 /obj/item/clothing/suit/space/cult/get_cult_power()
 	return 60
@@ -1402,42 +1410,22 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/suit/space/cult/salt_act()
 	acid_melt()
 
-///////////////////////////////////////PLASMAMAN SUIT & HOOD////////////////////////////////////////////////
+//plasmaman stuff
+/obj/item/clothing/suit/space/cult/Extinguish(var/mob/living/carbon/human/H)
+	if(next_extinguish > world.time)
+		return
 
-/obj/item/clothing/suit/space/plasmaman/cultist
-	name = "plasmaman cultist suit"
-	icon_state = "plasmaman_cult"
-	item_state = "plasmaman_cult"
-	desc = "A bulky black suit with protruding red spikes. It looks like it would fit a plasmaman."
-	slowdown = NO_SLOWDOWN
-	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 100, rad = 0)
-	mech_flags = MECH_SCAN_FAIL
+	next_extinguish = world.time + extinguish_cooldown
+	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
+	H.ExtinguishMob()
 
-/obj/item/clothing/suit/space/plasmaman/cultist/get_cult_power()
-	return 50
+//plasmaman stuff
+/obj/item/clothing/suit/space/cult/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+	if(H.bodytemperature < T0C+37)
+		H.bodytemperature = min(H.bodytemperature+5,T0C+37)
+	else
+		H.bodytemperature = max(H.bodytemperature-5,T0C+37)
 
-/obj/item/clothing/suit/space/plasmaman/cultist/cultify()
-	return
-
-/obj/item/clothing/suit/space/plasmaman/cultist/salt_act()
-	acid_melt()
-
-/obj/item/clothing/head/helmet/space/plasmaman/cultist
-	name = "plasmaman cultist hood"
-	icon_state = "plasmamanCult_helmet0"
-	base_state = "plasmamanCult_helmet"
-	desc = "A containment hood designed by the followers of Nar-Sie. It glows menacingly with unearthly flames."
-	armor = list(melee = 30, bullet = 10, laser = 10,energy = 5, bomb = 10, bio = 100, rad = 0)
-	mech_flags = MECH_SCAN_FAIL
-
-/obj/item/clothing/head/helmet/space/plasmaman/cultist/get_cult_power()
-	return 20
-
-/obj/item/clothing/head/helmet/space/plasmaman/cultist/cultify()
-	return
-
-/obj/item/clothing/head/helmet/space/plasmaman/cultist/salt_act()
-	acid_melt()
 
 ///////////////////////////////////////I'LL HAVE TO DEAL WITH THIS STUFF LATER////////////////////////////////////////////////
 
@@ -1483,6 +1471,42 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
 
+///////////////////////////////////////OLD PLASMAMAN ARMOR (can be obtained from vox traders)///////////////////////////////////
+
+/obj/item/clothing/suit/space/plasmaman/cultist
+	name = "plasmaman cultist armor"
+	icon_state = "plasmaman_cult"
+	item_state = "plasmaman_cult"
+	desc = "A bulky suit of armour, menacing with red energy. It looks like it would fit a plasmaman."
+	slowdown = NO_SLOWDOWN
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 30)
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/clothing/suit/space/plasmaman/cultist/get_cult_power()
+	return 60
+
+/obj/item/clothing/suit/space/plasmaman/cultist/cultify()
+	return
+
+/obj/item/clothing/suit/space/plasmaman/cultist/salt_act()
+	acid_melt()
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist
+	name = "plasmaman cultist helmet"
+	icon_state = "plasmamanCult_helmet0"
+	base_state = "plasmamanCult_helmet"
+	desc = "A containment suit designed by the followers of Nar-Sie. It glows menacingly with unearthly flames."
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 30)
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist/get_cult_power()
+	return 30
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist/cultify()
+	return
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////DEBUG ITEMS////////////////////////////////////////////////
 //Pamphlet: turns you into a cultist

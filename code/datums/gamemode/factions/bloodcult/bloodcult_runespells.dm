@@ -2029,19 +2029,19 @@ var/list/seer_rituals = list()
 		user_slot.forceMove(BT)
 
 	if(isplasmaman(target))
-		target.equip_to_slot_or_drop(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(target), slot_head)
-		target.equip_to_slot_or_drop(new /obj/item/clothing/suit/space/plasmaman/cultist(target), slot_wear_suit)
+		//target.equip_to_slot_or_drop(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(target), slot_head)
+		//target.equip_to_slot_or_drop(new /obj/item/clothing/suit/space/plasmaman/cultist(target), slot_wear_suit)
 		if (num2text(slot_s_store) in BT.stored_gear)
 			var/obj/item/I = BT.stored_gear[num2text(slot_s_store)]
 			BT.stored_gear -= num2text(slot_s_store)
 			I.forceMove(target)
 			target.equip_to_slot_or_drop(I, slot_s_store)
+
+	target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(target), slot_head)
+	if (ismonkey(target))
+		target.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes(target), slot_w_uniform)
 	else
-		target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(target), slot_head)
-		if (ismonkey(target))
-			target.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes(target), slot_w_uniform)
-		else
-			target.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes(target), slot_wear_suit)
+		target.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes(target), slot_wear_suit)
 
 	if (!ismonkey(target))
 		target.equip_to_slot_or_drop(new /obj/item/clothing/shoes/cult(target), slot_shoes)
