@@ -192,3 +192,5 @@
 
 /obj/item/weapon/melee/defibrillator/restock()
 	charges = initial(charges)
+
+/obj/item/weapon/melee/defibrillator/ghetto_defibrillator

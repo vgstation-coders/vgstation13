@@ -151,6 +151,25 @@
 			new/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie(get_turf(src),W)
 			qdel(W)
 			qdel(src)
+	if (istype(W, /obj/item/stack/cable_coil))
+		var/obj/item/I = new /obj/item/trash/wired_pietin_assembly(get_turf(src))
+		qdel(W)
+		qdel(src)
+		user.put_in_hands(I)
+
+/obj/item/trash/wired_pietin_assembly
+	name = "wired pie tin assembly"
+	icon_state = "pietin_assembly"
+	autoignition_temperature = 0
+	siemens_coefficient = 2
+	melt_temperature = MELTPOINT_SILICON
+
+/obj/item/trash/wired_pietin_assembly/attackby(obj/item/W, mob/user)
+	if (istype(W, /obj/item/trash/pietin))
+		var/obj/item/I = new /obj/item/weapon/melee/defibrillator/ghetto_defibrillator
+		qdel(W)
+		qdel(src)
+		user.put_in_hands(I)
 
 /obj/item/trash/snack_bowl
 	name = "snack bowl"
