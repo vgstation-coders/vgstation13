@@ -121,11 +121,18 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 /obj/machinery/hologram/holopad/proc/create_holo(mob/living/silicon/ai/A, turf/T = loc)
 	ray = new(T)
 	holo = new(T)//Spawn a blank effect at the location.
-	holo.icon = A.holo_icon
 	// hologram.mouse_opacity = 0 Why would we not want to click on it
 	holo.name = "[A.name] (Hologram)"//If someone decides to right click.
-	set_light(2)			//pad lighting
+	set_light(1, 0, A.holocolor)			//pad lighting
 	icon_state = "holopad1"
+	
+	var/icon/flat_icon = A.holo_icon
+	flat_icon.ColorTone(A.holocolor)
+	to_chat(world,"using as color [A.holocolor]")
+	var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
+	flat_icon.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
+	holo.icon = flat_icon
+	
 	A.current = src
 	master = A//AI is the master.
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
