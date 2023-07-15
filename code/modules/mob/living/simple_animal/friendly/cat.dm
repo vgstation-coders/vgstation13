@@ -49,13 +49,14 @@
 	is_pet = TRUE
 
 /mob/living/simple_animal/cat/Runtime/on_reagent_change()
-	var/m_amount = reagents.get_reagent_amount(METHYLIN)
-	if(m_amount >= 4) /* We want 5 units, but we're accounting for metabolism ticks here. */
-		reagents.remove_reagent_by_type(METHYLIN, m_amount)
-		playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
-		for(var/mob/M in view())
-			to_chat(M, "<span class='notice'>\The [src]'s fur vibrates and shimmers as a mind-enhancing solution flows through \his... and \she transforms!</span>") /* BYOND doesn't have an equivalent macro for "her"... */
-		espify()
+	if(src.icon_living != "original")
+		var/m_amount = reagents.get_reagent_amount(METHYLIN)
+		if(m_amount >= 4) /* We want 5 units, but we're accounting for metabolism ticks here. */
+			reagents.remove_reagent_by_type(METHYLIN, m_amount)
+			playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
+			for(var/mob/M in view())
+				to_chat(M, "<span class='notice'>\The [src]'s fur vibrates and shimmers as a mind-enhancing solution flows through \his... and \she transforms!</span>") /* BYOND doesn't have an equivalent macro for "her"... */
+			espify()
 
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"
