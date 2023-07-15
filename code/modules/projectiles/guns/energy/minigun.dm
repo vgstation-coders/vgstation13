@@ -9,9 +9,10 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 
 	projectile_type = "/obj/item/projectile/beam/weaklaser"
+
 	fire_sound = 'sound/weapons/gatling_energy.ogg'
 	empty_sound = 'sound/weapons/gatling_empty.ogg'
-	var/end_sound = 'sound/weapons/gatling_energy_end.ogg'
+	var/end_sound = 'sound/weapons/gatling_energy_end.ogg' // Plays at the end of a burst
 	reload_sound = 'sound/weapons/gatling_reload.ogg'
 	unload_sound = 'sound/weapons/gatling_unload.ogg'
 
@@ -25,6 +26,7 @@
 
 	origin_tech = Tc_COMBAT + "=6;" + Tc_POWERSTORAGE + "=5" + Tc_MATERIALS + "=5"
 
+	cell_type = "/obj/item/weapon/cell/high"
 	charge_cost = 500
 	var/beams_per_burst = 5
 	fire_delay = 1
