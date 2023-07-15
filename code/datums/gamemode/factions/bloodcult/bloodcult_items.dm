@@ -1739,6 +1739,8 @@ var/list/arcane_tomes = list()
 		/obj/item/clothing/shoes/cult,
 		/obj/item/clothing/suit/cultrobes,
 		/obj/item/clothing/gloves/black/cult,
+		/obj/item/clothing/suit/space/plasmaman/cultist,
+		/obj/item/clothing/head/helmet/space/plasmaman/cultist,
 		)
 
 	var/list/stored_gear = list()
@@ -1750,7 +1752,7 @@ var/list/arcane_tomes = list()
 		var/turf/T = get_turf(src)
 		for(var/slot in stored_gear)
 			var/obj/item/I = stored_gear[slot]
-			stored_gear.Remove(I)
+			stored_gear -= slot
 			I.forceMove(T)
 	if (remaining)
 		QDEL_NULL(remaining)

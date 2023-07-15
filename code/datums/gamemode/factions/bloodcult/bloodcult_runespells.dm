@@ -2031,6 +2031,11 @@ var/list/seer_rituals = list()
 	if(isplasmaman(target))
 		target.equip_to_slot_or_drop(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(target), slot_head)
 		target.equip_to_slot_or_drop(new /obj/item/clothing/suit/space/plasmaman/cultist(target), slot_wear_suit)
+		if (num2text(slot_s_store) in BT.stored_gear)
+			var/obj/item/I = BT.stored_gear[num2text(slot_s_store)]
+			BT.stored_gear -= num2text(slot_s_store)
+			I.forceMove(target)
+			target.equip_to_slot_or_drop(I, slot_s_store)
 	else
 		target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(target), slot_head)
 		if (ismonkey(target))
