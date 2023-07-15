@@ -27,8 +27,8 @@
 	origin_tech = Tc_COMBAT + "=6;" + Tc_POWERSTORAGE + "=5" + Tc_MATERIALS + "=5"
 
 	cell_type = "/obj/item/weapon/cell/high"
-	charge_cost = 500
-	var/beams_per_burst = 5
+	charge_cost = 100
+	var/beams_per_burst = 10
 	fire_delay = 1
 	delay_user = 2
 
