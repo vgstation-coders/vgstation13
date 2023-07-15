@@ -36,7 +36,24 @@
 	canvas.Blend(map_base,ICON_OVERLAY)
 	extraMiniMaps |= HOLOMAP_EXTRA_CULTMAP
 	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
-	//-------------Cult Map end---------
+	//-------------Bhangmap--------
+	var/list/allowed_bhang_zlevels = list(
+		map.zMainStation,
+		map.zAsteroid,
+		map.zDerelict
+		)
+	for (var/z = 1 to world.maxz)
+		var/icon/blank = icon('icons/480x480.dmi', "blank")
+		extraMiniMaps["[HOLOMAP_EXTRA_BHANGMAP]_[z]"] = blank
+
+		var/icon/bhangcanvas = icon('icons/480x480.dmi', "bhangmap")
+		if (z in allowed_bhang_zlevels)
+			var/icon/bhangmap_base = icon(holoMiniMaps[z])
+			bhangmap_base.Blend("#FFBD00",ICON_MULTIPLY)
+			bhangcanvas.Blend(bhangmap_base,ICON_OVERLAY)
+		extraMiniMaps["[HOLOMAP_EXTRA_BHANGBASEMAP]_[z]"] = bhangcanvas
+		sensed_explosions["z[z]"] = list()
+	//----------------------------------
 
 	//Station Holomaps display the map of the Z-Level they were built on.
 	generateStationMinimap(map.zMainStation)
@@ -50,6 +67,9 @@
 
 	for (var/obj/machinery/station_map/S in station_holomaps)
 		S.initialize()
+
+	for (var/obj/machinery/computer/bhangmeter/B in bhangmeters)
+		B.initialize()
 
 	for (var/obj/structure/deathsquad_gravpult/G in station_holomaps)
 		G.initialize_holomaps()
@@ -141,6 +161,7 @@
 					workplace_markers[newMarker.id] += newMarker
 
 /proc/generateHoloMinimap(var/zLevel=1)
+	set background=1
 
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 

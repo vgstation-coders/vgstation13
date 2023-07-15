@@ -160,10 +160,10 @@ var/list/station_holomaps = list()
 				holomap_datum.station_map.overlays += holomap_datum.workplaceMarker
 
 /obj/machinery/station_map/attack_paw(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/station_map/attack_animal(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/station_map/attack_ghost(var/mob/user)
 	if(!can_spook())
@@ -402,6 +402,7 @@ var/list/station_holomaps = list()
 	var/image/cursor
 	var/image/legend
 	var/image/workplaceMarker
+	var/z
 
 /datum/station_holomap/proc/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null)
 	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
@@ -450,7 +451,7 @@ var/list/station_holomaps = list()
 		initialize()
 
 /obj/machinery/station_map/strategic/initialize()
-	holomap_datum.initialize_holomap()
+	holomap_datum.initialize_holomap(get_turf(src))
 
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])
 	small_station_map.plane = ABOVE_LIGHTING_PLANE
