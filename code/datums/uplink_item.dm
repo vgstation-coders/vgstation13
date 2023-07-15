@@ -289,6 +289,7 @@ var/list/uplink_items = list()
 	desc = "A rapid-firing multiple-barrel laser. Spare energy cells not included."
 	item = /obj/item/weapon/gun/energy/gatling
 	cost = 16
+	available_for_nuke_ops = FALSE
 
 // STEALTHY WEAPONS
 // Any Syndicate item with applying lethal force to people without being easily detected (Ex: Syndicate Soap, Parapen, E-Bow)
