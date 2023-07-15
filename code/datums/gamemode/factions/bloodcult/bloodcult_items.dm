@@ -1156,7 +1156,7 @@ var/list/arcane_tomes = list()
 	body_parts_visible_override = FACE
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	mech_flags = MECH_SCAN_FAIL
 	actions_types = list(/datum/action/item_action/toggle_anon)
@@ -1205,6 +1205,14 @@ var/list/arcane_tomes = list()
 	hides_identity = HIDES_IDENTITY_DEFAULT
 	anon_mode = FALSE
 
+//plasmaman stuff
+/obj/item/clothing/head/culthood/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	. = ..()
+	if (.)
+		if(isplasmaman(M))
+			body_parts_covered = FULL_HEAD|HIDEHAIR
+		else
+			body_parts_covered = EARS|HEAD|HIDEHAIR
 
 /obj/item/clothing/head/culthood/get_cult_power()
 	return 20
@@ -1276,7 +1284,7 @@ var/list/arcane_tomes = list()
 	allowed = list(/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract,/obj/item/weapon/tank)
 	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 25, rad = 0)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	mech_flags = MECH_SCAN_FAIL
 
@@ -1292,6 +1300,15 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/suit/cultrobes/salt_act()
 	acid_melt()
+
+//plasmaman stuff
+/obj/item/clothing/suit/cultrobes/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	. = ..()
+	if (.)
+		if(isplasmaman(M))
+			body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+		else
+			body_parts_covered = ARMS|LEGS|FULL_TORSO
 
 //plasmaman stuff
 /obj/item/clothing/suit/cultrobes/Extinguish(var/mob/living/carbon/human/H)
@@ -1363,7 +1380,7 @@ var/list/arcane_tomes = list()
 	item_state = "culthelmet"
 	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	mech_flags = MECH_SCAN_FAIL
@@ -1392,7 +1409,7 @@ var/list/arcane_tomes = list()
 	slowdown = HARDSUIT_SLOWDOWN_MED
 	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	mech_flags = MECH_SCAN_FAIL
