@@ -78,6 +78,15 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixed AIs being able to see at a higher invisibility level than their intended one.</li>
 				<li class="rscadd">Station Holomaps now feature a button on their interface that you can click to find your workplace. The button only actually appears if you actually have your workplace on the displayed Z Level, and are wearing identification featuring a valid rank.</li>
+				<li class="rscadd">The Bhangmeter now functions like a Station Holomap. Touching it displays a map of the station over which are displayed the areas affected by explosions. Recent explosions appear bright and opaque, then slowly fade away over 5 minutes until they remain at half transparency. Incoming meteor/object waves and the direction they come from are also indicated.</li>
+				<li class="rscadd">You can access the new Bhangmeter panel featuring a table of all recorded explosions by clicking the Database interface button visible on the holomap. Explosions are recorded from most recent to oldest, and per Z level, so if you want to see the Asteroid&#39;s explosions, you&#39;ll need to use a Bhangmeter on the Asteroid Z level.</li>
+				<li class="rscadd">Explosions caused by the Pipe Gun (aka Blast Canon) now spread in a cone shape. Just like with regular explosions, each affected tile now checks for things that could dampen the explosion between them and the epicenter.</li>
+				<li class="rscadd">The round-end scoreboard now gives the round&#39;s largest TTV explosion, with an extra mention if it reached maxcap.</li>
+				<li class="imageadd">Added additional in-hand sprites for TTV depending on which tanks are on them.</li>
+				<li class="imageadd">Improved the Pipe Gun (aka Blast Cannon)&#39;s in-hand sprite, and added a variation for when it has a TTV equipped on it.</li>
+				<li class="imageadd">The Bhangmeter has a new sprite, finally differentiating it from the Detective&#39;s Forensic computer.</li>
+				<li class="bugfix">When the bhangmeter announces information, it does so by &#34;coldly stating&#34; which it hasn&#39;t done since at least 2016.</li>
+				<li class="rscdel">As they were mostly broken and unused, and extended greatly the duration of roundstart initialization, NanoUI minimap generation has been disabled. The only feature that still uses them is the Central Atmospherics Computer which will now display its markers over empty space when you display its Tracking Map. In return, we&#39;ve shaved off 10-20 seconds of roundstart init.</li>
 			</ul>
 			<h3 class="author">nervere updated:</h3>
 			<ul class="changes bgimages16">
