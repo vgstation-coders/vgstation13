@@ -317,7 +317,6 @@ var/static/list/ai_holo_colors = list(
 		return
 	var/chosen_state = ai_icon_states[selected]
 	ASSERT(chosen_state)
-	chosen_state.ChangeOpacity(0.9)
 	chosen_core_icon_state = chosen_state
 	update_icon()
 
@@ -328,7 +327,6 @@ var/static/list/ai_holo_colors = list(
 		return
 	var/chosen_holocolor = input(usr, "Please select the hologram color.", "holocolor") as null|anything in ai_holo_colors
 	holocolor = ai_holo_colors[chosen_holocolor]
-	to_chat(world,"set color to [holocolor]")
 
 // displays the malf_ai information if the AI is the malf
 /mob/living/silicon/ai/show_malf_ai()

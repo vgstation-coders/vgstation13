@@ -83,7 +83,7 @@ var/list/holopads = list()
 	This may change in the future but for now will suffice.*/
 	user.cameraFollow = null // Stops tracking
 
-	if(master==user && holo)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
+	if(master && (master==user) && holo)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
 		clear_holo()
 	else if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
 		user.eyeobj.forceMove(get_turf(src))
@@ -123,15 +123,17 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	holo = new(T)//Spawn a blank effect at the location.
 	// hologram.mouse_opacity = 0 Why would we not want to click on it
 	holo.name = "[A.name] (Hologram)"//If someone decides to right click.
-	set_light(1, 0, A.holocolor)			//pad lighting
+	set_light(2, 0, A.holocolor)			//pad lighting
 	icon_state = "holopad1"
-	
-	var/icon/flat_icon = A.holo_icon
-	flat_icon.ColorTone(A.holocolor)
-	to_chat(world,"using as color [A.holocolor]")
+	var/icon/colored_holo = A.holo_icon
+	colored_holo.ColorTone(A.holocolor)
 	var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
-	flat_icon.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
-	holo.icon = flat_icon
+	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
+	holo.icon = colored_holo
+	
+	var/icon/colored_ray = getFlatIcon(ray)
+	colored_ray.ColorTone(A.holocolor)
+	ray.icon = colored_ray
 	
 	A.current = src
 	master = A//AI is the master.
@@ -268,10 +270,11 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	layer = FLY_LAYER//Above all the other objects/mobs. Or the vast majority of them.
 	plane = ABOVE_HUMAN_PLANE
 	anchored = 1//So space wind cannot drag it.
+	alpha = 200
 
 /obj/effect/overlay/hologram/New()
 	..()
-	set_light(2)
+	set_light(2, 0)
 
 /obj/effect/overlay/holoray
 	name = "holoray"
@@ -284,6 +287,9 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	pixel_x = -32
 	pixel_y = -32
 	alpha = 100
+
+/obj/effect/overlay/holoray/New()
+	..()
 
 /obj/machinery/hologram
 	anchored = 1
