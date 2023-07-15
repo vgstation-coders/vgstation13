@@ -97,7 +97,7 @@
 		SS.update_materials()
 	else
 		for(var/i = 1 to (max_res_amount>1 ? res_amount*multiplier : 1))
-			if(isgrey(usr))
+			if(isgrey(usr) && grey_result <> null)
 				O = new grey_result(usr.loc)
 			else
 				O = new result_type(usr.loc)
@@ -280,8 +280,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe_list("chairs and beds",list(
 		new/datum/stack_recipe/chair("dark office chair",  /obj/structure/bed/chair/office/dark,  1, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("light office chair", /obj/structure/bed/chair/office/light, 1, one_per_turf = 1, on_floor = 1),
-		new/datum/stack_recipe/chair("beige comfy chair",  /obj/structure/bed/chair/comfy/beige,  1, one_per_turf = 1, on_floor = 1, grey_result = /obj/structure/bed/chair/comfy/ayy1
-),
+		new/datum/stack_recipe/chair("beige comfy chair",  /obj/structure/bed/chair/comfy/beige,  1, one_per_turf = 1, on_floor = 1, grey_result = /obj/structure/bed/chair/comfy/ayy1),
 		new/datum/stack_recipe/chair("black comfy chair",  /obj/structure/bed/chair/comfy/black,  1, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("brown comfy chair",  /obj/structure/bed/chair/comfy/brown,  1, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("lime comfy chair",   /obj/structure/bed/chair/comfy/lime,   1, one_per_turf = 1, on_floor = 1),
@@ -291,7 +290,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("bar stool",          /obj/item/weapon/stool/bar                                              ),
 		new/datum/stack_recipe/chair("chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("folding chair",      /obj/structure/bed/chair/folding,         one_per_turf = 1, on_floor = 1),
-		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1, grey result = /obj/structure/bed/ayy1),
+		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1, grey_result = /obj/structure/bed/ayy1),
 		new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
 		)),
 	new/datum/stack_recipe_list("couch parts", list(
