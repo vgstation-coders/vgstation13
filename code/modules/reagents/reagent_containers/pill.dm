@@ -275,16 +275,16 @@
 	reagents.add_reagent(SYNAPTIZINE, 1)
 	reagents.add_reagent(HYPERZINE, 10)
 
-/obj/item/weapon/reagent_containers/pill/skeet
-	name = "Skeet pill"
-	desc = "Straight from the mothership drug labs; a party pill designed for ravers and addicts alike!"
+/obj/item/weapon/reagent_containers/pill/speedcrank
+	name = "Speedcrank pill"
+	desc = "Be up a hello!"
 	icon_state = "pill37" //darkblue tablet
 
-/obj/item/weapon/reagent_containers/pill/skeet/New()
+/obj/item/weapon/reagent_containers/pill/speedcrank/New()
 	..()
-	reagents.add_reagent(STOXIN, 1)
-	reagents.add_reagent(CRYPTOBIOLIN, 3)
-	reagents.add_reagent(HYPERZINE, 1)
+	reagents.add_reagent(VALERENIC_ACID, 1)
+	reagents.add_reagent(PHYSOSTIGMINE, 3)
+	reagents.add_reagent(COCAINE, 1)
 
 /obj/item/weapon/reagent_containers/pill/hyperzine
 	name = "Hyperzine pill"
