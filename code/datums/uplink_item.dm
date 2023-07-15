@@ -200,12 +200,6 @@ var/list/uplink_items = list()
 	item = /obj/structure/closet/crate/secure/weapon/experimental/gatling
 	cost = 40
 
-/datum/uplink_item/nukeprice/gatling_laser
-	name = "Gatling Laser"
-	desc = "A rapid-firing multiple-barrel laser. Spare energy cells not included."
-	item = /obj/item/weapon/gun/energy/gatling
-	cost = 40
-
 /datum/uplink_item/nukeprice/nikita
 	name = "Nikita RC Missile Launcher"
 	desc = "A remote-controlled missile launcher, trades in raw explosive power for extreme steering precision, allowing it to make perfect turns around corners or turn around at will, or simply accelerate normally. Comes with four spare RC rockets."
@@ -286,7 +280,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/dangerous/gatling_laser
 	name = "Gatling Laser"
-	desc = "A rapid-firing multiple-barrel laser. Spare energy cells not included."
+	desc = "A massive rapid-firing multiple-barrel laser. Can be reloaded quickly by swapping its internal cell. Spares not included."
 	item = /obj/item/weapon/gun/energy/gatling
 	cost = 16
 	available_for_nuke_ops = FALSE
