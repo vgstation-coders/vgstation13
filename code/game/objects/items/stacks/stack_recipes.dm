@@ -99,8 +99,8 @@
 		for(var/i = 1 to (max_res_amount>1 ? res_amount*multiplier : 1))
 			if(isgrey(usr))
 				O = new grey_result(usr.loc)
-				else
-					O = new result_type(usr.loc)
+			else
+				O = new result_type(usr.loc)
 
 	O.change_dir(usr.dir)
 	if(start_unanchored)
