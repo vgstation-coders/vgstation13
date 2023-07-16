@@ -450,7 +450,7 @@
 	var/angery = 1
 
 /obj/item/projectile/bullet/beegun/chillbug
-	name = "hornet"
+	name = "chillbug"
 	icon_state = "chillgun"
 	projectile_speed = 0.5
 	bee_type = /mob/living/simple_animal/bee/chillgun
@@ -470,8 +470,9 @@
 
 /obj/item/projectile/bullet/beegun/OnFired()
 	..()
-	playsound(starting, 'sound/effects/bees.ogg', 75, 1)
-
+	if(isbee(bee_type)	)
+		playsound(starting, 'sound/effects/bees.ogg', 75, 1)
+	
 /obj/item/projectile/bullet/beegun/to_bump(atom/A as mob|obj|turf|area)
 	if (!A)
 		return 0
@@ -491,13 +492,15 @@
 		admin_warn(M)
 		BEE.forceMove(M.loc)
 		BEE.target = M
-		BEE.target_turf = M.loc
+		if(isbee(BEE))
+			BEE.target_turf = M.loc
 		BEE.AttackTarget(TRUE)//let's sting them once
-		if (angery)
+		if (isbee(BEE) && BEE.bee_species.angery)
 			BEE.MoveToTarget()//then let's immediately start running after them
 		else
 			BEE.target = null
-			BEE.target_turf = null
+			if(isbee(BEE))
+				BEE.target_turf = null
 
 	bullet_die()
 

@@ -25,7 +25,7 @@
 		// Classic alternate setup with a twist. Laser Rifle as a primary, but ion carbine as a backup and extra EMP nades for those ENERGY needs. Zap-zap the borgs
 		"Energy" = list(
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/prescription,
-			slot_belt_str = /obj/item/weapon/gun/energy/laser,
+			slot_belt_str = /obj/item/weapon/gun/energy/laser/rifle/syndie,
 			slot_in_backpack_str = list(
 				/obj/item/weapon/gun/energy/ionrifle/ioncarbine = 1,
 				/obj/item/weapon/grenade/empgrenade = 2,
