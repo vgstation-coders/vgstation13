@@ -1,5 +1,5 @@
 /obj/item/clothing/glasses/hud
-	name = "HUD"
+	name = "\improper HUD"
 	desc = "A heads-up display that provides important info in (almost) real time."
 	flags = 0 //doesn't protect eyes because it's a monocle, duh
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_BIOTECH + "=2"
@@ -15,7 +15,7 @@
 
 
 /obj/item/clothing/glasses/hud/health
-	name = "Health Scanner HUD"
+	name = "health scanner HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status."
 	icon_state = "healthhud"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
@@ -27,7 +27,7 @@
 
 
 /obj/item/clothing/glasses/hud/health/cmo
-	name = "Advanced Health Scanner HUD"
+	name = "advanced health scanner HUD"
 	nearsighted_modifier = -3
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status as well as reveals pathogens in sight. The tinted glass protects the wearer from bright flashes of light."
 	icon_state = "cmohud"
@@ -110,12 +110,12 @@
 
 
 /obj/item/clothing/glasses/hud/security
-	name = "Security HUD"
+	name = "security HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
 	icon_state = "securityhud"
 
 /obj/item/clothing/glasses/hud/security/jensenshades
-	name = "Augmented shades"
+	name = "augmented shades"
 	desc = "Polarized bioneural eyewear, designed to augment your vision."
 	icon_state = "jensenshades"
 	item_state = "jensenshades"

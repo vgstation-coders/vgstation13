@@ -230,7 +230,7 @@ var/list/science_goggles_wearers = list()
 	return //Can't exactly blind someone by covering one eye.
 
 /obj/item/clothing/glasses/regular
-	name = "Prescription Glasses"
+	name = "prescription glasses"
 	desc = "Made by Nerd. Co."
 	icon_state = "glasses"
 	item_state = "glasses"
@@ -249,7 +249,7 @@ var/list/science_goggles_wearers = list()
 	return SPECIAL_ATTACK_FAILED
 
 /obj/item/clothing/glasses/regular/hipster
-	name = "Prescription Glasses"
+	name = "prescription glasses"
 	desc = "Made by Uncool. Co."
 	icon_state = "hipster_glasses"
 	item_state = "hipster_glasses"
@@ -278,15 +278,15 @@ var/list/science_goggles_wearers = list()
 	return
 
 /obj/item/clothing/glasses/gglasses
-	name = "Green Glasses"
+	name = "green glasses"
 	desc = "Forest green glasses, like the kind you'd wear when hatching a nasty scheme."
 	icon_state = "gglasses"
 	item_state = "gglasses"
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses
-	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
 	name = "sunglasses"
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
 	icon_state = "sun"
 	item_state = "sunglasses"
 	origin_tech = Tc_COMBAT + "=2"
@@ -365,8 +365,8 @@ var/list/science_goggles_wearers = list()
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/virussunglasses
-	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
 	name = "sunglasses"
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
 	icon_state = "sun"
 	item_state = "sunglasses"
 	origin_tech = Tc_COMBAT + "=2"
@@ -449,7 +449,7 @@ var/list/science_goggles_wearers = list()
 	min_harm_label = 15
 
 /obj/item/clothing/glasses/sunglasses/sechud
-	name = "HUDSunglasses"
+	name = "\improper HUDSunglasses"
 	desc = "Sunglasses with a HUD."
 	icon_state = "sunhud"
 	var/obj/item/clothing/glasses/hud/security/hud = null
@@ -481,8 +481,8 @@ var/list/science_goggles_wearers = list()
 			qdel(hud)
 
 /obj/item/clothing/glasses/sunglasses/sechud/syndishades
-	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
 	name = "sunglasses"
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
 	icon_state = "sun"
 	item_state = "sunglasses"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
@@ -538,7 +538,7 @@ var/list/science_goggles_wearers = list()
 	THERMAL GLASSES
 */
 /obj/item/clothing/glasses/thermal
-	name = "Optical Thermal Scanner"
+	name = "optical thermal scanner"
 	desc = "Thermals in the shape of glasses."
 	icon_state = "thermal"
 	item_state = "glasses"
@@ -573,7 +573,7 @@ var/list/science_goggles_wearers = list()
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/thermal/monocle
-	name = "Thermonocle"
+	name = "thermonocle"
 	desc = "A monocle thermal."
 	icon_state = "thermoncle"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
@@ -594,7 +594,7 @@ var/list/science_goggles_wearers = list()
 		invisa_view = 0
 
 /obj/item/clothing/glasses/thermal/eyepatch
-	name = "Optical Thermal Eyepatch"
+	name = "optical thermal eyepatch"
 	desc = "An eyepatch with built-in thermal optics."
 	icon_state = "eyepatch0"
 	item_state = "eyepatch0"
@@ -613,14 +613,14 @@ var/list/science_goggles_wearers = list()
 		invisa_view = 0
 
 /obj/item/clothing/glasses/thermal/jensen
-	name = "Optical Thermal Implants"
+	name = "optical thermal implants"
 	desc = "A set of implantable lenses designed to augment your vision."
 	icon_state = "thermalimplants"
 	item_state = "syringe_kit"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/simonglasses
-	name = "Simon's Glasses"
+	name = "Simon's glasses"
 	desc = "Just who the hell do you think I am?"
 	icon_state = "simonglasses"
 	item_state = "simonglasses"
@@ -628,7 +628,7 @@ var/list/science_goggles_wearers = list()
 	cover_hair = 1
 
 /obj/item/clothing/glasses/kaminaglasses
-	name = "Kamina's Glasses"
+	name = "Kamina's glasses"
 	desc = "I'm going to tell you something important now, so you better dig the wax out of those huge ears of yours and listen! The reputation of Team Gurren echoes far and wide. When they talk about its badass leader - the man of indomitable spirit and masculinity - they're talking about me! The mighty Kamina!"
 	icon_state = "kaminaglasses"
 	item_state = "kaminaglasses"
