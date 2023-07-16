@@ -352,6 +352,9 @@ var/list/global/id_cards = list()
 		"Guy Incognito",
 		"Hugh Zasking",
 		"Ivan Gottasecret"
+		"Stan Batton"
+		"Zeke Ureety"
+		"Urist Macdonald"
 	)
 
 /obj/item/weapon/card/id/nt_disguise/attack_self(mob/user)
