@@ -79,5 +79,5 @@
 				break
 			sleep(0.5)
 			var/newturf = pick(possible_turfs)
-			..(newturf, user, params, reflex, struggle, FALSE, i == 1)
+			..(newturf, user, params, reflex, struggle)
 		playsound(src, end_sound, 100, 1)
