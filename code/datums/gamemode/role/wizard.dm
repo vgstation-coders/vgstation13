@@ -14,16 +14,6 @@
 	var/list/artifacts_bought = list()
 	var/list/potions_bought = list()
 
-	var/time_of_join = 0
-	var/time_of_death = 0
-
-
-
-	if(!istype(get_area(user), /area/wizard_station))
-		to_chat(user, "<span class='notice'>No refunds once you leave your den.</span>")
-		return
-
-
 /datum/role/wizard/ForgeObjectives()
 	if(!antag.current.client.prefs.antag_objectives)
 		AppendObjective(/datum/objective/freeform/wizard)
@@ -42,21 +32,6 @@
 		else
 			AppendObjective(/datum/objective/hijack)
 	return
-
-
-/datum/role/wizard/process()
-	var/mob/M = antag.current
-	if (!M)
-		return
-	if (!time_of_join)
-		if(!istype(get_area(user), /area/wizard_station))
-			time_of_join = world.time
-
-	if (M.stat == DEAD)
-		if (!time_of_death)
-			time_of_death = world.time
-			if (!time_of_join || ((time_of_death - time_of_join) < 300 SECONDS))
-				DynamicIntensity(-10,"WizardDiedEarly")
 
 /datum/role/wizard/OnPostSetup()
 	. = ..()

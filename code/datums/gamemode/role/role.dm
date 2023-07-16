@@ -564,8 +564,6 @@
 	var/datum/gamemode/dynamic/D = ticker.mode
 	if(!istype(D))
 		return //It's not dynamic!
-	if (D.dynamicplus)
-		return //Not using threat today!
 	threat_generated += amount
 	if(D.midround_threat >= D.midround_threat_level)
 		D.create_midround_threat(amount)
@@ -579,8 +577,6 @@
 	var/datum/gamemode/dynamic/D = ticker.mode
 	if(!istype(D))
 		return
-	if (D.dynamicplus)
-		return //Not using threat today!
 	D.spend_midround_threat(amount)
 	D.threat_log += "[worldtime2text()]: [name] has decreased the threat amount by [amount]."
 

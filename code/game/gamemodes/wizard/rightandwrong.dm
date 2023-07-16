@@ -3,8 +3,6 @@
 	message_admins("[key_name_admin(usr, 1)] summoned [summon_type]!")
 	log_game("[key_name(usr)] summoned [summon_type]!")
 
-	DynamicIntensity(15,"RightAndWrong")
-
 	var/datum/role/survivor_type
 
 	switch (summon_type)

@@ -45,13 +45,6 @@
 		/area/security
 	)
 
-/datum/objective/escape_prisoner/ShuttleDocked(var/state)
-	if (state == 2)
-		if (IsFulfilled())
-			DynamicIntensity(10,"PrisonerEscaped")
-		else
-			DynamicIntensity(-10,"PrisonerKept")
-
 /datum/objective/escape_prisoner/IsFulfilled()
 	if (..())
 		return TRUE
@@ -71,7 +64,7 @@
 
 	if(istype(owner.current, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = owner.current
-		if(H.restrained())
+		if(H.restrained()) 
 			return FALSE
 	else if (istype(owner.current, /mob/living/carbon))
 		var/mob/living/carbon/C = owner.current
