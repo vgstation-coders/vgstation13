@@ -1979,8 +1979,15 @@ var/list/seer_rituals = list()
 	if (istype(R))
 		R.one_pulse()
 
+
 	var/list/potential_targets = list()
 	var/turf/TU = get_turf(spell_holder)
+
+	var/snow = FALSE
+	var/datum/zLevel/Z = map.zLevels[TU.z]
+	if (istype(Z, /datum/zLevel/snowsurface))
+		snow = TRUE
+
 	for(var/mob/living/carbon/C in TU)
 		potential_targets += C
 	if(potential_targets.len == 0)
@@ -2028,11 +2035,18 @@ var/list/seer_rituals = list()
 		target.u_equip(user_slot)
 		user_slot.forceMove(BT)
 
-	target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(target), slot_head)
-	if (ismonkey(target))
-		target.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes(target), slot_w_uniform)
+	if(snow)
+		target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood/snow(target), slot_head)
+		if (ismonkey(target))
+			target.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes/snow(target), slot_w_uniform)
+		else
+			target.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes/snow(target), slot_wear_suit)
 	else
-		target.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes(target), slot_wear_suit)
+		target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(target), slot_head)
+		if (ismonkey(target))
+			target.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes(target), slot_w_uniform)
+		else
+			target.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes(target), slot_wear_suit)
 
 	if(isplasmaman(target))
 		if (num2text(slot_s_store) in BT.stored_gear)

@@ -1162,6 +1162,11 @@ var/list/arcane_tomes = list()
 	actions_types = list(/datum/action/item_action/toggle_anon)
 	var/anon_mode = FALSE
 
+/obj/item/clothing/head/culthood/snow
+	name = "cult winter hood"
+	desc = "A warm hood worn by the followers of Nar-Sie."
+	icon_state = "culthood_snow"
+
 /obj/item/clothing/head/culthood/NoiseDampening()	// those hoods cover the ears
 	return TRUE
 
@@ -1182,13 +1187,13 @@ var/list/arcane_tomes = list()
 			return
 
 	if(!anon_mode)
-		icon_state = "culthood_anon"
+		icon_state = initial(icon_state) + "_anon"
 		body_parts_covered = FULL_HEAD|HIDEHAIR
 		body_parts_visible_override = 0
 		hides_identity = HIDES_IDENTITY_ALWAYS
 		to_chat(user, "<span class='notice'>The hood's textile reacts with your soul and produces a shadow over your face that will hide your identity.</span>")
 	else
-		icon_state = "culthood"
+		icon_state = initial(icon_state)
 		body_parts_covered = EARS|HEAD|HIDEHAIR
 		body_parts_visible_override = FACE
 		hides_identity = HIDES_IDENTITY_DEFAULT
@@ -1199,7 +1204,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/head/culthood/unequipped(mob/user, var/from_slot = null)
 	..()
-	icon_state = "culthood"
+	icon_state = initial(icon_state)
 	body_parts_covered = EARS|HEAD|HIDEHAIR
 	body_parts_visible_override = FACE
 	hides_identity = HIDES_IDENTITY_DEFAULT
@@ -1286,6 +1291,7 @@ var/list/arcane_tomes = list()
 	allowed = list(/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract,/obj/item/weapon/tank)
 	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 25, rad = 0)
 	siemens_coefficient = 0
+	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	mech_flags = MECH_SCAN_FAIL
@@ -1293,6 +1299,12 @@ var/list/arcane_tomes = list()
 	//plasmaman stuff
 	var/next_extinguish=0
 	var/extinguish_cooldown=10 SECONDS
+
+/obj/item/clothing/suit/cultrobes/snow
+	name = "cult winter robes"
+	desc = "A set of warm armored robes worn by the followers of Nar-Sie."
+	icon_state = "cultrobes_snow"
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
 	return 50
