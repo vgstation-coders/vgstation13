@@ -38,22 +38,16 @@
 	if (prob(50))
 		fire_sound = 'sound/weapons/gatling_energy_alt.ogg'
 		end_sound = 'sound/weapons/gatling_energy_alt_end.ogg'
-	if (cell_type)
-		power_supply = new cell_type(src)
-	else
-		power_supply = new(src)
-
-	power_supply.give(power_supply.maxcharge)
 
 /obj/item/weapon/gun/energy/gatling/update_wield(mob/user)
 	item_state = "[base_icon_state][wielded ? 1 : 0]"
-	if(wielded)
+	if (wielded)
 		slowdown = MINIGUN_SLOWDOWN_WIELDED
 	else
 		slowdown = MINIGUN_SLOWDOWN_NONWIELDED
 
 /obj/item/weapon/gun/energy/gatling/attack_self(mob/user)
-	if(wielded)
+	if (wielded)
 		unwield(user)
 	else
 		wield(user)
@@ -77,10 +71,10 @@
 		return click_empty()
 
 	var/list/turf/possible_turfs = list()
-	for(var/turf/T in orange(target, 1))
+	for (var/turf/T in orange(target, 1))
 		possible_turfs += T
 	spawn()
-		for(var/i = 1; i <= beams_per_burst; i++)
+		for (var/i = 1; i <= beams_per_burst; i++)
 			if (power_supply.charge < charge_cost)
 				break
 			sleep(0.5)
