@@ -324,6 +324,8 @@ var/list/station_holomaps = list()
 	if(user.hud_used && user.hud_used.holomap_obj)
 		watching_mob = user
 		var/turf/T = get_turf(user)
+		if (isAI)
+			T = get_turf(watching_mob.client.eye)
 		bogus = 0
 		if(!((HOLOMAP_EXTRA_STATIONMAP+"_[T.z]") in extraMiniMaps))
 			bogus = 1
@@ -345,12 +347,14 @@ var/list/station_holomaps = list()
 		else
 			to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
-/obj/item/device/station_map/proc/update_holomap()
+/obj/item/device/station_map/proc/update_holomap(var/isAI = FALSE)
 	if (!watching_mob || !watching_mob.client || !watching_mob.hud_used)
 		return
 	watching_mob.client.images -= holomap_datum.station_map
 	holomap_datum.station_map.overlays.len = 0
 	var/turf/T = get_turf(src)
+	if (isAI)
+		T = get_turf(watching_mob.client.eye)
 	if (lastZ != T.z)
 		lastZ = T.z
 		bogus = 0
