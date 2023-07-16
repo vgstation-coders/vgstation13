@@ -388,9 +388,6 @@ Assign your candidates in choose_candidates() instead.
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
 
-	// -- Dynamic Plus --
-	lol
-
 /datum/dynamic_ruleset/roundstart/cult_legacy/execute()
 	//if ready() did its job, candidates should have 4 or more members in it
 	var/datum/faction/cult/narsie/legacy = find_active_faction_by_type(/datum/faction/cult/narsie)
