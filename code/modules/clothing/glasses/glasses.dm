@@ -15,7 +15,6 @@
 	var/see_invisible = 0
 	var/see_in_dark = 0
 	var/seedarkness = TRUE
-	var/prescription = 0
 	var/prescription_type = null
 	min_harm_label = 12
 	harm_label_examine = list("<span class='info'>A label is covering one lens, but doesn't reach the other.</span>","<span class='warning'>A label covers the lenses!</span>")
@@ -63,7 +62,7 @@ BLIND     // can't see anything
 
 	if(stored_glasses)
 		to_chat(H, "<span class='info'>You place \the [src] on over \the [stored_glasses].</span>")
-		prescription = stored_glasses.prescription
+		nearsighted_modifier = stored_glasses.nearsighted_modifier
 	return CAN_EQUIP
 
 
@@ -84,15 +83,15 @@ BLIND     // can't see anything
 		if (istype(M))
 			if(stored_glasses)
 				if(!M.equip_to_slot_if_possible(stored_glasses, slot_glasses))
+					to_chat(M, "<span class='warning'>\The [stored_glasses] that were stored inside \the [src] drop on the floor.</span>")
 					stored_glasses.forceMove(get_turf(src))
 				stored_glasses = null
-		prescription = initial(prescription)
+		nearsighted_modifier = initial(nearsighted_modifier)
 		M.handle_regular_hud_updates()
 
 /obj/item/clothing/glasses/scanner/meson/prescription
 	name = "prescription mesons"
 	desc = "Optical Meson Scanner with prescription lenses."
-	prescription = 1
 	nearsighted_modifier = -3
 	eyeprot = -1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
@@ -101,14 +100,12 @@ BLIND     // can't see anything
 	name = "health scanner glasses"
 	desc = "A Health Scanner HUD fitted with prescription lenses."
 	icon_state = "healthglasses"
-	prescription = 1
 	nearsighted_modifier = -3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses/sechud/prescription
 	name = "prescription security HUD"
 	desc = "A Security HUD with prescription lenses."
-	prescription = 1
 	nearsighted_modifier = -3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
@@ -132,7 +129,6 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/science/prescription
 	name = "prescription science goggles"
-	prescription = 1
 	nearsighted_modifier = -3
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
@@ -238,7 +234,6 @@ var/list/science_goggles_wearers = list()
 	desc = "Made by Nerd. Co."
 	icon_state = "glasses"
 	item_state = "glasses"
-	prescription = 1
 	nearsighted_modifier = -3
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	w_class = W_CLASS_TINY
@@ -443,7 +438,6 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/sunglasses/prescription
 	name = "prescription sunglasses"
-	prescription = 1
 	nearsighted_modifier = -3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
@@ -646,7 +640,6 @@ var/list/science_goggles_wearers = list()
 	desc = "Only nerds wear glasses."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "contact"
-	prescription = 1
 	nearsighted_modifier = -3
 	body_parts_covered = null
 
@@ -655,7 +648,6 @@ var/list/science_goggles_wearers = list()
 	desc = "Protects your eyes from bright flashes of light."
 	icon_state = "polarized_contact"
 	darkness_view = -1
-	prescription = 1
 	nearsighted_modifier = -3
 	eyeprot = 1
 

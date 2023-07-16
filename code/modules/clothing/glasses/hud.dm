@@ -28,7 +28,6 @@
 
 /obj/item/clothing/glasses/hud/health/cmo
 	name = "Advanced Health Scanner HUD"
-	prescription = 1
 	nearsighted_modifier = -3
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status as well as reveals pathogens in sight. The tinted glass protects the wearer from bright flashes of light."
 	icon_state = "cmohud"
@@ -144,7 +143,8 @@
 	prescription_type = /obj/item/clothing/glasses/hud/diagnostic/prescription
 
 /obj/item/clothing/glasses/hud/diagnostic/prescription
-	prescription = TRUE
+	name = "prescription diagnostic HUD"
+	nearsighted_modifier = -3
 
 /obj/item/clothing/glasses/hud/diagnostic/process_hud(var/mob/M)
 	if(harm_labeled < min_harm_label)
