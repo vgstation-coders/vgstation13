@@ -385,6 +385,7 @@ var/list/science_goggles_wearers = list()
 	item_state = "welding-g"
 	origin_tech = Tc_ENGINEERING + "=1;" + Tc_MATERIALS + "=2"
 	actions_types = list(/datum/action/item_action/toggle_goggles)
+	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 3000)
 	var/up = 0
 	eyeprot = 3
 	var/visionworsen = 5
