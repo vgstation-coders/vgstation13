@@ -42,8 +42,7 @@
 
 	var/role_category_override = null // If a role is to be considered another for the purpose of bannig.
 
-	var/dynamic_weight = 0		//Each round that passes without firing, the ruleset's weight increases linearly, allowing rarer rulesets with complicated requirements to fire more often when they meet those
-	var/weight_category = null	//Allows multiple rulesets to share the same weight (like Wizard and CWC, or a Roundstart Ruleset with its Midround/Latejoin variants)
+	var/weight_category = null	//Allows multiple rulesets to share the same dynamic weight (like Wizard and CWC, or a Roundstart Ruleset with its Midround/Latejoin variants)
 
 /datum/dynamic_ruleset/New()
 	..()

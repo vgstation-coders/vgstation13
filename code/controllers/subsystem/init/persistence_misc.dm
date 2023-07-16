@@ -206,8 +206,11 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 	data = list()
 
-	for(var/category in dynamic_mode.ruleset_category_weights)
+	for (var/category in dynamic_mode.ruleset_category_weights)
 		data[category] = dynamic_mode.ruleset_category_weights[category]
+
+	for (var/datum/dynamic_ruleset/DR in dynamic_mode.executed_rules)
+		data[DR.weight_category] = 0
 
 	write_file(data)
 
