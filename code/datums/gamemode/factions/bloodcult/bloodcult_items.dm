@@ -1211,8 +1211,10 @@ var/list/arcane_tomes = list()
 	if (.)
 		if(isplasmaman(M))
 			body_parts_covered = FULL_HEAD|HIDEHAIR
+			body_parts_visible_override = 0
 		else
 			body_parts_covered = EARS|HEAD|HIDEHAIR
+			body_parts_visible_override = FACE
 
 /obj/item/clothing/head/culthood/get_cult_power()
 	return 20
