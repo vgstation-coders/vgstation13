@@ -68,13 +68,9 @@ var/stacking_limit = 90
 	var/classic_secret = 0
 	var/high_pop_limit = 45
 
-	// -- Dynamic Plus --
-	var/dynamicplus = FALSE
 	var/list/ruleset_category_weights = list()
-	var/list/intensity_previous = list()
-	var/intensity_prediction = 0
-	var/intensity_actual = 0
-	var/list/intensity_modifiers = list()
+	var/dynamic_weight_increment = 1
+
 
 /datum/gamemode/dynamic/AdminPanelEntry()
 	var/dat = list()
@@ -189,49 +185,10 @@ var/stacking_limit = 90
 		if(player.mind && player.ready)
 			roundstart_pop_ready++
 			candidates.Add(player)
+
 	message_admins("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
 	log_admin("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
 
-	if (dynamicplus)
-		return dynamic_plus_start()
-	else
-		return dynamic_original_start()
-
-/datum/gamemode/dynamic/proc/dynamic_plus_start()
-	message_admins("DYNAMIC MODE: Dynamic+ is Enabled")
-	log_admin("DYNAMIC MODE: Dynamic+ is Enabled")
-
-	if (admin_disable_rulesets)
-		message_admins("Rulesets are currently disabled.")
-
-	var/previous_intensity = intensity_previous["one_round_ago"]
-
-	//adjusting the weight for every ruleset
-	for (var/datum/dynamic_ruleset/roundstart_rule in roundstart_rules)
-		roundstart_rule.dynamic_weight = ruleset_category_weights[roundstart_rule.weight_category]
-		if (roundstart_rule.min_pop_required > roundstart_pop_ready)
-			//if the required pop is just a bit over the ready pop, we keep a chance for it to get picked, but we halve its weight for each missing player
-			if (roundstart_rule.min_pop_required > 1.5*roundstart_pop_ready)
-				roundstart_rule.dynamic_weight = 0
-			else
-				var/missingpop = roundstart_rule.min_pop_required - roundstart_pop_ready
-				for (var/i = 1 to missingpop)
-					roundstart_rule.dynamic_weight /= 2
-
-
-
-
-	var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
-	latejoin_injection_cooldown = round(clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
-
-	var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
-	midround_injection_cooldown = round(clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
-
-	return 1
-
-/datum/gamemode/dynamic/proc/dynamic_original_start()
-	message_admins("DYNAMIC MODE: Dynamic+ is Disabled")
-	log_admin("DYNAMIC MODE: Dynamic+ is Disabled")
 	distribution_mode = dynamic_chosen_mode
 	message_admins("Distribution mode is : [dynamic_chosen_mode].")
 	curve_centre_of_round = dynamic_curve_centre
@@ -293,17 +250,6 @@ var/stacking_limit = 90
 					previous_rulesets += entry_path
 			previously_executed_rules[entries] = previous_rulesets
 
-	//Recapping the intensity of the previous round
-	intensity_previous = list(
-		"one_round_ago" = 0,
-		"two_rounds_ago" = 0,
-		"three_rounds_ago" = 0
-	)
-	data = SSpersistence_misc.read_data(/datum/persistence_task/previous_dynamic_intensity)
-	if(length(data))
-		for (var/entry in data)
-			intensity_previous[entry] = data[entry]
-
 	//Recapping the weight of the various rulesets according to their categories
 	ruleset_category_weights = list()
 	data = SSpersistence_misc.read_data(/datum/persistence_task/dynamic_ruleset_weights)
@@ -318,16 +264,10 @@ var/stacking_limit = 90
 			ruleset_category_weights[entry] = data[entry]
 
 	for (var/entry in ruleset_category_weights)//finally we increment all entries in the list by 1
-		ruleset_category_weights[entry] = ruleset_category_weights[entry] + 1
-
-/datum/gamemode/dynamic/proc/get_intensity()
-	intensity_actual = intensity_prediction
-	for (var/entry in intensity_modifiers)
-		intensity_actual += intensity_modifiers[entry]
-	return intensity_actual
+		ruleset_category_weights[entry] = ruleset_category_weights[entry] + dynamic_weight_increment
 
 /datum/gamemode/dynamic/Setup()
-	if (!dynamicplus && (roundstart_pop_ready >= high_pop_limit))
+	if (roundstart_pop_ready >= high_pop_limit)
 		message_admins("DYNAMIC MODE: Mode: High Population Override is in effect! ([roundstart_pop_ready]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
 		log_admin("DYNAMIC MODE: High Population Override is in effect! ([roundstart_pop_ready]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
 	if (roundstart_pop_ready <= 0)
@@ -967,12 +907,3 @@ var/stacking_limit = 90
 		if (ruleset.latespawn_interaction(newPlayer))
 			return TRUE
 	return FALSE
-
-/proc/DynamicIntensity(var/value,var/category)
-	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
-	if (!istype(dynamic_mode))
-		return
-	if (category in dynamic_mode.intensity_modifiers)
-		dynamic_mode.intensity_modifiers[category] += value
-	else
-		dynamic_mode.intensity_modifiers[category] = value

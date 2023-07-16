@@ -211,29 +211,6 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 	write_file(data)
 
-/datum/persistence_task/previous_dynamic_intensity
-	execute = TRUE
-	name = "Previous dynamic intensity"
-	file_path = "data/persistence/dynamic_ruleset_weights.json"
-
-/datum/persistence_task/previous_dynamic_intensity/on_init()
-	data = read_file()
-
-/datum/persistence_task/previous_dynamic_intensity/on_shutdown()
-	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
-	if (!istype(dynamic_mode))
-		return
-
-	data = list(
-		"one_round_ago" = list(),
-		"two_rounds_ago" = dynamic_mode.previously_executed_rules["one_round_ago"],
-		"three_rounds_ago" = dynamic_mode.previously_executed_rules["two_rounds_ago"]
-	)
-
-	data["one_round_ago"] = dynamic_mode.get_intensity()
-
-	write_file(data)
-
 // This task has a unit test on code/modules/unit_tests/highscores.dm
 /datum/persistence_task/highscores
 	execute = TRUE

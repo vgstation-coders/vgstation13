@@ -42,11 +42,8 @@
 
 	var/role_category_override = null // If a role is to be considered another for the purpose of bannig.
 
-	// -- Dynamic Plus --
 	var/dynamic_weight = 0		//Each round that passes without firing, the ruleset's weight increases linearly, allowing rarer rulesets with complicated requirements to fire more often when they meet those
-	var/min_pop_required = 0	//The ruleset needs pop to be above this number to fire
 	var/weight_category = null	//Allows multiple rulesets to share the same weight (like Wizard and CWC, or a Roundstart Ruleset with its Midround/Latejoin variants)
-	var/expected_intensity = 0	//Essentially the ruleset's threat level. If the previous round was too intense, the effective weight will be decreased, and vice versa
 
 /datum/dynamic_ruleset/New()
 	..()
@@ -165,6 +162,9 @@
 			break
 
 	result = previous_rounds_odds_reduction(result)
+
+	if (weight_category in mode.ruleset_category_weights)
+		result *= mode.ruleset_category_weights[weight_category]
 
 	if (mode.highlander_rulesets_favoured && (flags & HIGHLANDER_RULESET))
 		result *= ADDITIONAL_RULESET_WEIGHT

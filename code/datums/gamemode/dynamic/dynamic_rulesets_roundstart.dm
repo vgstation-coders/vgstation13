@@ -32,16 +32,12 @@
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Traitor"
 	cost = 10
 	var/traitor_threshold = 3
 	var/additional_cost = 5
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	high_population_requirement = 10
-
-	// -- Dynamic Plus --
-	min_pop_required = 3
-	weight_category = "Traitor"
-	expected_intensity = 5	//each traitor spawned raises the actual intensity by 1
 
 /datum/dynamic_ruleset/roundstart/traitor/choose_candidates()
 	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
@@ -62,7 +58,6 @@
 		var/datum/role/traitor/newTraitor = new
 		newTraitor.AssignToRole(M.mind,1)
 		newTraitor.Greet(GREET_ROUNDSTART)
-		DynamicIntensity(3,"NewTraitor")
 		// Above 3 traitors, we start to cost a bit more.
 	return 1
 
@@ -84,16 +79,12 @@
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 3
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Traitor"
 	cost = 15
 	var/traitor_threshold = 4
 	var/additional_cost = 5
 	requirements = list(101,101,101,101,10,10,10,10,10,10)
 	high_population_requirement = 15
-
-	// -- Dynamic Plus --
-	min_pop_required = 8
-	weight_category = "Traitor"
-	expected_intensity = 5	//each traitor spawned raises the actual intensity by 1
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
 /datum/dynamic_ruleset/roundstart/challengers/choose_candidates()
@@ -122,7 +113,6 @@
 		double_agents += newTraitor
 		newTraitor.AssignToRole(M.mind,1)
 		newTraitor.Greet(GREET_ROUNDSTART)
-		DynamicIntensity(3,"NewTraitor")
 
 	if (double_agents.len > 1)
 		for (var/i = 1 to (double_agents.len - 1))
@@ -156,14 +146,10 @@
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Changeling"
 	cost = 18
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
-
-	// -- Dynamic Plus --
-	min_pop_required = 10
-	weight_category = "Changeling"
-	expected_intensity = 5
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
 /datum/dynamic_ruleset/roundstart/changeling/choose_candidates()
@@ -204,15 +190,11 @@
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Vampire"
 	cost = 15
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
 	var/vampire_threshold = 2
-
-	// -- Dynamic Plus --
-	min_pop_required = 15
-	weight_category = "Vampire"
-	expected_intensity = 15
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
 /datum/dynamic_ruleset/roundstart/vampire/choose_candidates()
@@ -252,15 +234,11 @@
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT/2
+	weight_category = "Wizard"
 	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
 	var/list/roundstart_wizards = list()
-
-	// -- Dynamic Plus --
-	min_pop_required = 15
-	weight_category = "Wizard"
-	expected_intensity = 20
 
 /datum/dynamic_ruleset/roundstart/wizard/execute()
 	var/mob/new_player/M = pick(assigned)
@@ -293,17 +271,13 @@
 	required_pop = list(25,25,20,20,20,20,15,15,15,5)
 	required_candidates = 4
 	weight = BASE_RULESET_WEIGHT/2
+	weight_category = "Wizard"
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
 	flags = HIGHLANDER_RULESET
 //	var/wizard_cd = 210 //7 minutes
 	var/total_wizards = 4
-
-	// -- Dynamic Plus --
-	min_pop_required = 25
-	weight_category = "Wizard"
-	expected_intensity = 60
 
 
 /datum/dynamic_ruleset/roundstart/cwc/choose_candidates()
@@ -351,17 +325,13 @@
 	required_candidates = 4
 	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Cult"
 	cost = 30
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
 	//Readd this once proper round ending rituals are added
 	//flags = HIGHLANDER_RULESET
-
-	// -- Dynamic Plus --
-	min_pop_required = 15
-	weight_category = "Cult"
-	expected_intensity = 15
 
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
@@ -456,16 +426,12 @@ Assign your candidates in choose_candidates() instead.
 	required_candidates = 5 //This value is useless, see operative_cap
 	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Nuke"
 	cost = 30
 	requirements = list(90, 80, 60, 30, 20, 10, 10, 10, 10, 10)
 	high_population_requirement = 40
 	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
 	flags = HIGHLANDER_RULESET
-
-	// -- Dynamic Plus --
-	min_pop_required = 20
-	weight_category = "Nuke"
-	expected_intensity = 80
 
 /datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
 	var/indice_pop = min(10, round(mode.roundstart_pop_ready/5) + 1)
@@ -538,15 +504,11 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Malf"
 	cost = 40
 	requirements = list(90,80,70,60,50,40,40,30,30,20)
 	high_population_requirement = 60
 	flags = HIGHLANDER_RULESET
-
-	// -- Dynamic Plus --
-	min_pop_required = 15
-	weight_category = "Malf"
-	expected_intensity = 30
 
 // NB : `M` will never be empty as `ready` made sure we have at least one candidate with malf AI on.
 // This candidate will become an AI upon roundstart, eventually replacing other AIs candidates who do not have the preference.
@@ -627,16 +589,12 @@ Assign your candidates in choose_candidates() instead.
 	required_enemies = list(4,4,4,4,4,4,4,3,2,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Blob"
 	weekday_rule_boost = list("Tue")
 	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
 	flags = HIGHLANDER_RULESET
-
-	// -- Dynamic Plus --
-	min_pop_required = 20
-	weight_category = "Blob"
-	expected_intensity = 70
 
 /datum/dynamic_ruleset/roundstart/blob/execute()
 	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
@@ -673,15 +631,12 @@ Assign your candidates in choose_candidates() instead.
 	enemy_jobs = list()
 	required_pop = list(30,30,30,30,30,30,30,30,30,30)
 	required_candidates = 0
-	weight = 0.5*BASE_RULESET_WEIGHT
+	weight = BASE_RULESET_WEIGHT * 0.5
+	weight_category = "Extended"
 	cost = 0
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 101
 
-	// -- Dynamic Plus --
-	min_pop_required = 0
-	weight_category = "Extended"
-	expected_intensity = 0
 
 // 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance.
 /datum/dynamic_ruleset/roundstart/extended/ready(var/forced=0)
@@ -713,17 +668,13 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 3
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Revolution"
 	cost = 40
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
 	high_population_requirement = 50
 	delay = 5 MINUTES
 	var/required_heads = 3
 	flags = HIGHLANDER_RULESET
-
-	// -- Dynamic Plus --
-	min_pop_required = 20
-	weight_category = "Revolution"
-	expected_intensity = 60
 
 /datum/dynamic_ruleset/roundstart/delayed/revs/ready(var/forced = 0)
 	if (forced)
@@ -776,15 +727,11 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Special"//Admin only
 	cost = 10
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
 	high_population_requirement = 10
 	flags = MINOR_RULESET
-
-	// -- Dynamic Plus --
-	min_pop_required = 0
-	weight_category = "Special"//Admin only
-	expected_intensity = 70
 
 /datum/dynamic_ruleset/roundstart/grinch/ready(var/forced=0)
 	if(grinchstart.len == 0)
@@ -820,15 +767,11 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Special"//Admin only
 	cost = 10
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
 	high_population_requirement = 101
 	flags = MINOR_RULESET
-
-	// -- Dynamic Plus --
-	min_pop_required = 0
-	weight_category = "Special"//Admin only
-	expected_intensity = 100
 
 /datum/dynamic_ruleset/roundstart/tag_mode/execute()
 
@@ -872,16 +815,12 @@ var/antag_madness = ANTAG_MADNESS_OFF
 	protected_from_jobs = list()
 	restricted_from_jobs = list()
 	cost = 0
+	weight_category = "Special"//Admin only
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // Adminbus only
 	high_population_requirement = 101
 	persistent = TRUE//latejoiners will either be heads of staff or traitors (unless traitor is deactivated/antagbanned)
 	var/list/nanotrasen_staff = list("Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
 	var/escalation_delay = 18 MINUTES
-
-	// -- Dynamic Plus --
-	min_pop_required = 0
-	weight_category = "Special"//Admin only
-	expected_intensity = 666
 
 /datum/dynamic_ruleset/roundstart/antag_madness/trim_candidates()//All the heads of staff get the role, the rest of the players will get trimmed by the other rulesets
 	for(var/mob/P in candidates)
