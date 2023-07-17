@@ -194,7 +194,8 @@ var/list/station_holomaps = list()
 			watching_mob.client.screen -= button_workplace
 			var/mob/M = watching_mob
 			spawn(5)//we give it time to fade out
-				M.client.images -= holomap_datum.station_map
+				if (watching_mob != M)//in case they immediately start watching it again
+					M.client.images -= holomap_datum.station_map
 		watching_mob.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 	watching_mob = null
 	QDEL_NULL(button_workplace)
