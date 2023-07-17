@@ -322,7 +322,7 @@
 		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
 		W.buckle_mob(H,H)
 
-	if ((H.disabilities & NEARSIGHTED) && H.glasses && !H.glasses.prescription && H.glasses.prescription_type)
+	if ((H.disabilities & NEARSIGHTED) && H.glasses && (H.glasses.nearsighted_modifier >= 0) && H.glasses.prescription_type)
 		var/obj/item/clothing/glasses/prescription = new H.glasses.prescription_type(H)
 		var/obj/prev_glasses = H.glasses
 		H.u_equip(H.glasses,1)
