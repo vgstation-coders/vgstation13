@@ -1006,6 +1006,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.destspawn = 0
 	src.wounds.len = 0
 
+/datum/organ/external/proc/peggify_all()
+	peggify()
 	for (var/datum/organ/external/T in children)
 		if(T)
 			T.peggify()
