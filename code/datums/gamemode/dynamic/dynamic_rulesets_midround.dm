@@ -613,6 +613,7 @@
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Special"
 	cost = 10
+	logo = "grinch-logo"
 	requirements = list(40,20,10,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 	flags = MINOR_RULESET
@@ -627,7 +628,7 @@
 	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
 	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
-	return accepted
+	return (accepted || forced)
 
 
 /datum/dynamic_ruleset/midround/from_ghosts/grinch/generate_ruleset_body(var/mob/applicant)
