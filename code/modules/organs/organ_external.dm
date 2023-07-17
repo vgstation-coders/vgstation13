@@ -1010,7 +1010,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	peggify()
 	for (var/datum/organ/external/T in children)
 		if(T)
-			T.peggify()
+			T.peggify_all()
 
 
 /datum/organ/external/proc/fleshify()

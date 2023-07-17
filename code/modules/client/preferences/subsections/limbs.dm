@@ -27,7 +27,7 @@
 		"Peg leg" = peg_limb_data,
 	)
 	var/static/list/foot_configurable_states = list(
-		"Peg foot" = peg_limb_data,
+		"Wooden prosthesis" = peg_limb_data,
 	)
 	var/static/list/arm_configurable_states = list(
 		"Wooden prosthesis" = peg_limb_data,
