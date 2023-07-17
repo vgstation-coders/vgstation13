@@ -30,7 +30,7 @@
 		return
 
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are the Grinch!</span> <span class='warning'>You are here to ruin Christmas by stealing as many things into your bag as possible! You can crawl through vents and mess with electronic panels and computers, but your pitiful punches don't deal any damage.</span>")
+	to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are the Grinch!</span> <span class='warning'>You are here to ruin Christmas! Your bag can hold a ludicrous amount of items. You can crawl through vents and mess with electronic panels and computers, but your pitiful punches don't deal any damage.</span>")
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki)</span>")
 
 /datum/role/grinch/ForgeObjectives()
