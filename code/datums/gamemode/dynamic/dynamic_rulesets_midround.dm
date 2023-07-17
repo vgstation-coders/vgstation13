@@ -1,3 +1,26 @@
+
+/*
+	* Syndicate Sleeper Agent
+	* Malfunctioning AI
+	* Ragin' Mages
+	* Nuclear Assault
+	* Blob Overmind Storm
+	* Revolutionary Squad
+	* Space Ninja Attack
+	* Soul Rambler Migration
+	* Time Agent Anomaly
+	* The Grinch
+	* Loose Catbeast
+	* Vox Heist
+	* Plague Mice Invasion
+	* Spider Infestation
+	* Alien Infestation
+	* Pulse Demon Infiltration
+	* Grue Infestation
+	* Prisoner
+	* Judge
+*/
+
 //////////////////////////////////////////////
 //                                          //
 //            MIDROUND RULESETS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,6 +199,7 @@
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Traitor"
 	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 	repeatable = TRUE
@@ -243,6 +267,7 @@
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Malf"
 	cost = 35
 	requirements = list(90,80,70,60,50,40,40,30,30,20)
 	high_population_requirement = 65
@@ -291,6 +316,7 @@
 	required_pop = list(20,20,15,15,15,15,15,10,10,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT/2
+	weight_category = "Wizard"
 	cost = 25
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 50
@@ -330,6 +356,7 @@
 	required_candidates = 5 // Placeholder, see op. cap
 	max_candidates = 5
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Nuke"
 	cost = 35
 	requirements = list(90, 90, 80, 40, 40, 40, 30, 20, 20, 10)
 	high_population_requirement = 60
@@ -388,6 +415,7 @@
 	required_enemies = list(4,4,4,4,4,4,4,3,2,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Blob"
 	weekday_rule_boost = list("Tue")
 	cost = 45
 	requirements = list(90,90,80,40,40,40,30,20,20,10)
@@ -429,6 +457,7 @@
 	required_pop = list(25,25,25,25,25,20,15,15,10,10)
 	required_candidates = 3
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Revolution"
 	cost = 30
 	requirements = list(90, 90, 90, 90, 40, 40, 30, 20, 10, 10)
 	high_population_requirement = 50
@@ -467,6 +496,7 @@
 	required_pop = list(15,15,15,15,15,10,10,10,5,5)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Ninja"
 	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
@@ -505,6 +535,7 @@
 	required_pop = list(0,0,10,10,15,15,20,20,20,25)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Rambler"
 	timeslot_rule_boost = list(SLEEPTIME)
 	cost = 5
 	requirements = list(5,5,15,15,25,25,55,55,55,75)
@@ -541,6 +572,7 @@
 	role_category = /datum/role/time_agent
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT * 0.4
+	weight_category = "Time"
 	cost = 10
 	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
 	logo = "time-logo"
@@ -579,8 +611,9 @@
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Special"
 	cost = 10
-	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
+	requirements = list(40,20,10,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 	flags = MINOR_RULESET
 
@@ -618,6 +651,7 @@
 	role_category = /datum/role/catbeast
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Catbeast"
 	cost = 0
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 0
@@ -647,6 +681,7 @@
 	required_pop = list(20,20,20,15,15,15,15,15,10,10)
 	required_candidates = 5
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Vox"
 	cost = 25
 	requirements = list(50,50,50,30,30,30,30,20,10,10)
 	high_population_requirement = 35
@@ -699,6 +734,7 @@
 	required_candidates = 1
 	max_candidates = 5
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Plague"
 	cost = 25
 	requirements = list(90,70,50,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -731,6 +767,7 @@
 	required_candidates = 1
 	max_candidates = 12 // max amount of spiderlings spawned by a spider infestation random event
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Spider"
 	cost = 25
 	requirements = list(90,80,60,40,30,20,10,10,10,10)
 	high_population_requirement = 50
@@ -764,7 +801,8 @@
 	required_pop = list(25,20,20,15,15,15,10,10,10,10)
 	required_candidates = 1
 	max_candidates = 3
-	weight = 1
+	weight = BASE_RULESET_WEIGHT
+	weight_category = "Alien"
 	cost = 30
 	requirements = list(90,90,70,60,50,40,20,10,10,10)
 	high_population_requirement = 35
@@ -812,6 +850,7 @@
 	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Pulse"
 	cost = 20
 	requirements = list(70,40,20,20,20,20,15,15,5,5)
 	high_population_requirement = 10
@@ -851,6 +890,7 @@
 	enemy_jobs = list()
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Grue"
 	cost = 20
 	requirements = list(70,60,50,40,30,20,10,10,10,10)
 	high_population_requirement = 10
@@ -906,7 +946,8 @@
 	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
 	required_pop = list(25,20,20,20,15,15,10,10,0,0)
 	required_candidates = 1
-	weight = 1
+	weight = BASE_RULESET_WEIGHT
+	weight_category = "Prisoner"
 	cost = 0
 	requirements = list(70,40,20,20,20,20,15,15,5,5)
 	high_population_requirement = 10
@@ -1026,6 +1067,7 @@
 	required_candidates = 1
 	max_candidates = 5
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Special"//Admin only
 	cost = 20
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	logo = "gun-logo"
