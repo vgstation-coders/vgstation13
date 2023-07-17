@@ -71,7 +71,7 @@
 				host.adjust_fire_stacks(0.5)
 				host.IgniteMob()
 	else
-		var/obj/item/clothing/suit/space/plasmaman/PS=host.wear_suit
+		var/obj/item/clothing/suit/PS=host.wear_suit
 		if(istype(PS))
 			if(host.fire_stacks > 0)
 				PS.Extinguish(host)
