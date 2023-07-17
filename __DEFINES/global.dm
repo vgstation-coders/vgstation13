@@ -296,6 +296,7 @@ var/list/centcommMiniMaps = list()
 var/list/extraMiniMaps = list()
 
 var/list/holomap_markers = list()
+var/list/workplace_markers = list()
 
 var/holomaps_initialized = 0
 
@@ -367,11 +368,6 @@ var/list/corrupt_mobs = list(
 
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
-
-// Whether Nuclear Operatives have declared war on station.
-var/war_declared = FALSE
-var/war_declared_time = 0
-var/can_war_be_declared = TRUE
 
 //Malf AI global variables
 var/malf_radio_blackout = FALSE

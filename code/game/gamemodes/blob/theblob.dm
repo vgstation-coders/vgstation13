@@ -332,6 +332,8 @@ var/list/blob_overminds = list()
 			icon = 'icons/mob/blob/blob_AME_64x64.dmi'
 		if("skelleton")
 			icon = 'icons/mob/blob/blob_skelleton_64x64.dmi'
+		if("secblob")
+			icon = 'icons/mob/blob/blob_sec.dmi'
 		//<----------------------------------------------------------------------------DEAR SPRITERS, THIS IS WHERE YOU ADD YOUR NEW BLOB DMIs
 		/*EXAMPLES
 		if("fleshy")
@@ -349,6 +351,7 @@ var/list/blob_looks_admin = list(//Options available to admins
 	"AME" = 32,
 	"AME_new" = 64,
 	"skelleton" = 64,
+	"secblob" = 32,
 	)
 
 var/list/blob_looks_player = list(//Options available to players

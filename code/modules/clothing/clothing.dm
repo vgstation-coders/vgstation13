@@ -637,6 +637,12 @@ var/global/maxStackDepth = 10
 /obj/item/clothing/suit/proc/vine_protected()
 	return FALSE
 
+/obj/item/clothing/suit/proc/Extinguish(var/mob/living/carbon/human/H)
+	return
+
+/obj/item/clothing/suit/proc/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+	return
+
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
 //      Meaning the the suit is defined directly after the corresponding helmet. Just like below!

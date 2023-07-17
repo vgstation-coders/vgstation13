@@ -87955,9 +87955,6 @@
 /area/shuttle/arrival/station)
 "nfA" = (
 /obj/structure/closet/wardrobe/xenos,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "nge" = (
@@ -88020,7 +88017,7 @@
 	},
 /area/shuttle/trade/start)
 "nhh" = (
-/obj/structure/closet/wardrobe/grey,
+/obj/structure/closet/wardrobe/pjs,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "nhj" = (
@@ -98157,7 +98154,7 @@
 /turf/unsimulated/floor/snow/asphalt,
 /area/surface/snow)
 "qII" = (
-/obj/machinery/teleport/hub/syndicate,
+/obj/machinery/teleport/hub,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},

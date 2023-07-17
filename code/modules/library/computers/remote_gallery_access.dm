@@ -103,7 +103,6 @@
 	return scanner.cached_painting
 
 /obj/machinery/computer/library/checkout/remote_gallery/make_external_book(var/datum/cachedbook/newbook)
-	message_admins("printing [newbook.title]...")
 	if(!newbook)
 		return
 	var/obj/item/mounted/frame/painting/custom/C = new(get_turf(src))

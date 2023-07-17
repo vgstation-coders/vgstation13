@@ -126,6 +126,14 @@
 	icon_state = "hornetgun"
 	item_state = "hornetgun0"
 	gatlingbullet = /obj/item/projectile/bullet/beegun/hornet
+	
+	
+/obj/item/weapon/gun/gatling/beegun/ss_visceratorgun
+	name = "viscerator gun"
+	desc = "THE HAAAAAAACKS!"
+	icon_state = "ss_visceratorgun"
+	item_state = "ss_visceratorgun0"	
+	gatlingbullet = /obj/item/projectile/bullet/beegun/ss_viscerator
 
 /obj/item/weapon/gun/gatling/batling
 	name = "batling gun"
