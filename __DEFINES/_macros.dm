@@ -104,6 +104,8 @@
 
 #define isclowngoblin(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne/goblin)
 
+#define isbee(A) istype(A, /mob/living/simple_animal/bee)
+
 #define isAI(A) istype(A, /mob/living/silicon/ai)
 
 #define isAIEye(A) istype(A, /mob/camera/aiEye)
