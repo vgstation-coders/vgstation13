@@ -105,9 +105,13 @@ var/list/station_holomaps = list()
 	update_icon()
 
 /obj/machinery/station_map/attack_hand(var/mob/user)
-	if(watching_mob && (watching_mob != user))
-		to_chat(user, "<span class='warning'>Someone else is currently watching the holomap.</span>")
-		return
+	if(watching_mob)
+		if(watching_mob != user)
+			to_chat(user, "<span class='warning'>Someone else is currently watching the holomap.</span>")
+			return
+		else
+			stopWatching()
+			return
 
 	if(user.loc != loc)
 		to_chat(user, "<span class='warning'>You need to stand in front of \the [src].</span>")
@@ -134,7 +138,7 @@ var/list/station_holomaps = list()
 					return
 				if ("[get_rank]_[original_zLevel]" in workplace_markers)
 					button_workplace = new (user.hud_used.holomap_obj,user,src,"Find Workplace",'icons/effects/64x32.dmi',"workplace",l="CENTER+3,CENTER-4")
-					button_workplace.name = "Launch"
+					button_workplace.name = "Find Workplace"
 					button_workplace.alpha = 0
 					animate(button_workplace, alpha = 255, time = 5, easing = LINEAR_EASING)
 					user.client.screen += button_workplace
