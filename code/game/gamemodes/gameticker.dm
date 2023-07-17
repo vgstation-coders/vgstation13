@@ -206,8 +206,6 @@ var/datum/controller/gameticker/ticker
 				EquipCustomItems(H)
 				H.update_icons()
 				new_characters[key] = H
-				if(H.mind.assigned_role != "Trader")
-					data_core.manifest_inject(H)
 		CHECK_TICK
 
 	var/list/clowns = list()
@@ -255,6 +253,11 @@ var/datum/controller/gameticker/ticker
 		else
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
+
+	var/list/no_records = list("MODE","Mobile MMI","Trader","AI")
+	for(var/mob/living/carbon/human/player in player_list)
+		if(!(player.mind.assigned_role in no_records))
+			data_core.manifest_inject(player)
 
 	mode.PostSetup() //provides antag objectives
 	gamestart_time = world.time / 10
