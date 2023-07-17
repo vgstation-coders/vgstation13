@@ -88,6 +88,7 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Fixed some glasses that were meant to have corrective lenses not actually having them (prescription diagnostic HUD and hydroHUD).</li>
 				<li class="tweak">Touching a Station Holomap that you are currently already watching now makes you stop watching it.</li>
 				<li class="bugfix">This makes it so that you won&#39;t get extra non-removable Workplace Finder buttons on your screen.</li>
+				<li class="experiment">Dynamic rulesets now have their weight increase linearly round after round until they get to proc, upon which it gets reset to 1 (at round end). This experiment should allow rarer rulesets with complicated pre-requirements to be more likely to fire when they finally meet those, while rulesets that have just fired will have dramatically reduced chances to fire again on the next round(s) (unless they are the only valid ruleset for a given threat and pop configuration of course)</li>
 			</ul>
 			<h3 class="author">Eneocho updated:</h3>
 			<ul class="changes bgimages16">
