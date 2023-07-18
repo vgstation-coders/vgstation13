@@ -23,6 +23,7 @@
 	slowdown = MINIGUN_SLOWDOWN_NONWIELDED
 
 	detachable_cell = TRUE
+	chargeable = FALSE // Does not fit in a recharger, it's just too huge!
 
 	origin_tech = Tc_COMBAT + "=6;" + Tc_POWERSTORAGE + "=5" + Tc_MATERIALS + "=5"
 
@@ -38,6 +39,12 @@
 	if (prob(50))
 		fire_sound = 'sound/weapons/gatling_energy_alt.ogg'
 		end_sound = 'sound/weapons/gatling_energy_alt_end.ogg'
+
+/obj/item/weapon/gun/energy/gatling/rusty
+	desc = "An ancient gatling laser. The battery compartment is rusted shut."
+
+	detachable_cell = FALSE
+	projectile_type = "/obj/item/projectile/beam/weakerlaser"
 
 /obj/item/weapon/gun/energy/gatling/update_wield(mob/user)
 	item_state = "[base_icon_state][wielded ? 1 : 0]"
