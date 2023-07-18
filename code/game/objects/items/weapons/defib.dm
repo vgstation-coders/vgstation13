@@ -146,39 +146,39 @@
 		to_chat(user, "<span class='notice'>You shock [target] with the [defib_tool].</span>")
 		var/datum/organ/internal/heart/heart = target.get_heart()
 		if(!heart)
-			defibMessageFail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Subject requires a heart.</span>")
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Subject requires a heart.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 		var/datum/organ/external/head/head = target.get_organ(LIMB_HEAD)
 		if(!head || head.status & ORGAN_DESTROYED)
-			defibMessageFail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Severe cranial damage detected.</span>")
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Severe cranial damage detected.</span>")
 			return
 		if((M_HUSK in target.mutations) && (M_NOCLONE in target.mutations))
-			defibMessageFail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Irremediable genetic damage detected.</span>")
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Irremediable genetic damage detected.</span>")
 			return
 		if(!target.has_brain())
-			defibMessageFail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. No central nervous system detected.</span>")
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. No central nervous system detected.</span>")
 			return
 		if(target.mind && target.mind.suiciding)
-			defibMessageFail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Unrecoverable nerve trauma detected.</span>") // They suicided so they fried their brain. Space Magic.
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Unrecoverable nerve trauma detected.</span>") // They suicided so they fried their brain. Space Magic.
 			return
 		if(istype(target.wear_suit,/obj/item/clothing/suit/armor) && (target.wear_suit.body_parts_covered & UPPER_TORSO) && prob(95)) //75 ? Let's stay realistic here
-			defibMessageFail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 		if(istype(target.w_uniform,/obj/item/clothing/under) && (target.w_uniform.body_parts_covered & UPPER_TORSO) && prob(50))
-			defibMessageFail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 		if(target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
-			defibMessageFail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. [target.ghost_reenter_alert("Someone has tried to defibrillate your body. Return to it if you want to be resurrected!") ? "Vital signs are too weak, please try again in five seconds" : "No brainwaves detected"].</span>")
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. [target.ghost_reenter_alert("Someone has tried to defibrillate your body. Return to it if you want to be resurrected!") ? "Vital signs are too weak, please try again in five seconds" : "No brainwaves detected"].</span>")
 			return
 		target.apply_damage(-target.getOxyLoss(),OXY)
 		target.updatehealth()
 		target.visible_message("<span class='danger'>[target]'s body convulses a bit.</span>")
 		if(target.health > config.health_threshold_dead)
 			target.timeofdeath = 0
-			defibMessageSuccess(target, "<span class='notice'>[src] beeps: Defibrillation successful.</span>")
+			defib_message_success(target, "<span class='notice'>[src] beeps: Defibrillation successful.</span>")
 
 			target.resurrect()
 
@@ -193,18 +193,18 @@
 			has_been_shade.Remove(target.mind)
 			to_chat(target, "<span class='notice'>You suddenly feel a spark and your consciousness returns, dragging you back to the mortal plane.</span>")
 		else
-			defibMessageFail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
 		return
 	// Cancelled the timer early? Required by improvised defib to know if it has to lower its charge.
 	return FALSE
 
 
-/obj/item/weapon/melee/defibrillator/proc/defibMessageFail(mob/living/carbon/human/target, var/message)
+/obj/item/weapon/melee/defibrillator/proc/defib_message_fail(mob/living/carbon/human/target, var/message)
 	if (defib_message_fail_override)
 		message = defib_message_fail_override
 	target.visible_message(message)
 
-/obj/item/weapon/melee/defibrillator/proc/defibMessageSuccess(mob/living/carbon/human/target, var/message)
+/obj/item/weapon/melee/defibrillator/proc/defib_message_success(mob/living/carbon/human/target, var/message)
 	if (defib_message_success_override)
 		message = defib_message_success_override
 	target.visible_message(message)
@@ -212,29 +212,45 @@
 /obj/item/weapon/melee/defibrillator/restock()
 	charges = initial(charges)
 
+//**************************************************************
+// Improvised Defibrillator (Ghetto Defibrillator)
+//**************************************************************
+
 /obj/item/weapon/melee/defibrillator/improvised
 	name = "improvised defibrillator"
 	desc = "Used to restore fibrillating patients. Or kill them."
 
 	icon = 'icons/obj/weapons.dmi'
-	icon_state = "defib_full"
+	icon_state = "defib_impro"
+	item_state = "defib_impro"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
-	item_state = "defib"
 
 	defib_tool = "pie tins"
-	defib_message_success_override = "<span class='notice'>You can hear shallow breathing!</span>"
+	defib_message_success_override = "<span class='notice'>You can feel a steady heartbeat.</span>"
 	defib_message_fail_override = "<span class='notice'>Nothing seems to happen.</span>"
 
 	var/obj/item/weapon/cell/power_supply = null
 	var/charge_cost = 2500
 	var/defibrillating = FALSE	// Flag used by the defib-spam check. Let's not shock a corpse for hundreds of burn damage.
 
-	defib_delay = 50
+	defib_delay = 90
+
+/obj/item/weapon/melee/defibrillator/improvised/New()
+	verbs -= /obj/item/weapon/melee/defibrillator/improvised/verb/remove_cell
 
 /obj/item/weapon/melee/defibrillator/improvised/examine(var/mob/user)
 	. = ..()
 	if (power_supply && power_supply.maxcharge != 0)
 		to_chat(user, "<span class='info'>The cell's power meter reads [(power_supply.charge / power_supply.maxcharge) * 100]%.</span>")
+
+/obj/item/weapon/melee/defibrillator/improvised/update_icon()
+	icon_state = "defib_impro"
+	if (power_supply)
+		verbs += /obj/item/weapon/melee/defibrillator/improvised/verb/remove_cell
+		icon_state += "_ready"
+	else
+		verbs -= /obj/item/weapon/melee/defibrillator/improvised/verb/remove_cell
+
 
 /obj/item/weapon/melee/defibrillator/improvised/attackby(obj/item/I, mob/user)
 	if (istype(I, /obj/item/weapon/cell))
@@ -267,26 +283,20 @@
 	var/mob/living/carbon/human/user = loc
 
 	if (!power_supply)
-		return ..()
+		return
 
 	to_chat(user, "<span class='warning'>You start pulling on the wires around the cell!</span>")
+
 	if (do_after(user, src, 30))
-		if (prob(50) && lower_charge())
+		if (prob(50) && electrocute_mob(user, power_supply, src))
 			to_chat(user, "<span class='warning'>You touch an exposed piece of wire!</span>")
-			playsound(src,'sound/items/defib.ogg',50,1)
-			user.Knockdown(3)
-			user.Stun(3)
-			var/mob/living/carbon/human/H = user
-			if (ishuman(user))
-				H.apply_damage(5, BURN)
-			update_icon()
-		else
-			lower_charge()
-			to_chat(user, "<span class='notice'>You remove the cell.</span>")
-			power_supply.forceMove(src.loc)
-			user.put_in_hands(power_supply)
-			src.power_supply = null
-			src.update_icon()
+			return
+
+		to_chat(user, "<span class='notice'>You remove the cell.</span>")
+		power_supply.forceMove(src.loc)
+		user.put_in_hands(power_supply)
+		src.power_supply = null
+		src.update_icon()
 
 /obj/item/weapon/melee/defibrillator/improvised/proc/lower_charge()
 	if (!power_supply || power_supply.charge < charge_cost)
@@ -298,19 +308,19 @@
 	return power_supply && power_supply.charge >= charge_cost
 
 /obj/item/weapon/melee/defibrillator/improvised/attack_self(mob/user)
-	// These can't be "turned on"
-	return
+	return remove_cell()
 
 /obj/item/weapon/melee/defibrillator/improvised/attack(mob/M, mob/user)
 	if (defibrillating)
 		return
 	if (!ishuman(M))
 		to_chat(user, "<span class='warning'>You can't defibrillate [M]. You don't even know where to put the [defib_tool]!</span>")
+		return
 	else if (!power_supply)
 		to_chat(user, "<span class='warning'>There's no cell in the [src].</span>")
 		return
 	else if (!enough_charge())
-		to_chat(user, "<span class='warning'>[src] is out of power.</span>")
+		to_chat(user, "<span class='warning'>The [src] fizzles weakly.</span>")
 		return
 	else
 		spark(src, 5)
@@ -323,6 +333,6 @@
 
 			var/mob/living/carbon/human/target = M
 			if(ishuman(target))
-				target.apply_damage(10, BURN)
+				target.apply_damage(5, BURN)
 		defibrillating = FALSE
 	return

@@ -85,6 +85,7 @@
 			return
 		if(istype(G, /obj/item/weapon/melee/defibrillator/improvised))
 			to_chat(user, "<span class='warning'>\The [G] won't fit.</span>")
+			return
 
 		var/obj/item/weapon/melee/defibrillator/D = G
 		if(D.ready)
