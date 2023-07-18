@@ -46,7 +46,7 @@
 		INVOKE_EVENT(src, /event/death, "user" = src, "body_destroyed" = gibbed)
 		living_mob_list -= src
 		dead_mob_list += src
-		stat_collection.add_death_stat(src)
+		stat_collection.add_death_stat(src,place_of_death)
 		if(runescape_skull_display && ticker)//we died, begone skull
 			if ("\ref[src]" in ticker.runescape_skulls)
 				var/datum/runescape_skull_data/the_data = ticker.runescape_skulls["\ref[src]"]
