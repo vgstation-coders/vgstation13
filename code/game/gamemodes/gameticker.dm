@@ -206,8 +206,6 @@ var/datum/controller/gameticker/ticker
 				EquipCustomItems(H)
 				H.update_icons()
 				new_characters[key] = H
-				if(H.mind.assigned_role != "Trader")
-					data_core.manifest_inject(H)
 		CHECK_TICK
 
 	var/list/clowns = list()
@@ -255,6 +253,11 @@ var/datum/controller/gameticker/ticker
 		else
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
+
+	var/list/no_records = list("MODE","Mobile MMI","Trader","AI")
+	for(var/mob/living/carbon/human/player in player_list)
+		if(!(player.mind.assigned_role in no_records))
+			data_core.manifest_inject(player)
 
 	mode.PostSetup() //provides antag objectives
 	gamestart_time = world.time / 10
@@ -743,12 +746,16 @@ var/datum/controller/gameticker/ticker
 	tag_mode.name = "Tag mode"
 	tag_mode.calledBy = "[key_name(user)]"
 	forced_roundstart_ruleset += tag_mode
-	dynamic_forced_extended = TRUE
+	admin_disable_rulesets = TRUE
+	log_admin("Dynamic rulesets are disabled in Tag Mode.")
+	message_admins("Dynamic rulesets are disabled in Tag Mode.")
 
 /datum/controller/gameticker/proc/cancel_tag_mode(var/mob/user)
 	tag_mode_enabled = FALSE
 	to_chat(world, "<h1>Tag mode has been cancelled.<h1>")
-	dynamic_forced_extended = FALSE
+	admin_disable_rulesets = FALSE
+	log_admin("Dynamic rulesets have been re-enabled.")
+	message_admins("Dynamic rulesets have been re-enabled.")
 	forced_roundstart_ruleset = list()
 
 /world/proc/has_round_started()

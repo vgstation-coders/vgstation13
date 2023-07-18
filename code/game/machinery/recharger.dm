@@ -113,6 +113,11 @@
 		if (istype(G, /obj/item/weapon/gun/energy/lasmusket))
 			to_chat(user, "<span class='notice'>The makeshift gun lacks a recharge port.</span>")
 			return 1
+		if (istype(G, /obj/item/weapon/gun/energy))
+			var/obj/item/weapon/gun/energy/gun = G
+			if (!gun.chargeable)
+				to_chat(user, "<span class='notice'>\The [gun]'s recharge port does not fit.</span>")
+				return 1
 
 		if(!user.drop_item(G, src))
 			user << "<span class='warning'>You can't let go of \the [G]!</span>"

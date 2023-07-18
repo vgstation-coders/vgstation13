@@ -1,5 +1,5 @@
 /datum/dynamic_ruleset
-	var/name = ""//For admin logging, and round end scoreboard
+	var/name = ""//For admin logging, and round end scoreboard.
 	var/persistent = 0//if set to 1, the rule won't be discarded after being executed, and /gamemode/dynamic will call process() every MC tick
 	var/repeatable = 0//if set to 1, dynamic mode will be able to draft this ruleset again later on. (doesn't apply for roundstart rules)
 	var/midround = 1//if set to 1, is a midround rule
@@ -41,6 +41,8 @@
 	var/datum/gamemode/dynamic/mode = null
 
 	var/role_category_override = null // If a role is to be considered another for the purpose of bannig.
+
+	var/weight_category = null	//Allows multiple rulesets to share the same dynamic weight (like Wizard and CWC, or a Roundstart Ruleset with its Midround/Latejoin variants)
 
 /datum/dynamic_ruleset/New()
 	..()
@@ -103,8 +105,8 @@
 
 /datum/dynamic_ruleset/proc/ready(var/forced = 0)	//Here you can perform any additional checks you want. (such as checking the map, the amount of certain jobs, etc)
 	if (admin_disable_rulesets && !forced)
-		message_admins("Dynamic Mode: [name] was prevented from firing by admins.")
-		log_admin("Dynamic Mode: [name] was prevented from firing by admins.")
+		message_admins("Dynamic Mode: [name] was prevented from firing because rulesets are disabled.")
+		log_admin("Dynamic Mode: [name] was prevented from firing because rulesets are disabled.")
 		return FALSE
 	if (required_candidates > candidates.len)		//IMPORTANT: If ready() returns 1, that means execute() should never fail!
 		return FALSE
@@ -159,6 +161,9 @@
 			break
 
 	result = previous_rounds_odds_reduction(result)
+
+	if (weight_category in mode.ruleset_category_weights)
+		result *= mode.ruleset_category_weights[weight_category]
 
 	if (mode.highlander_rulesets_favoured && (flags & HIGHLANDER_RULESET))
 		result *= ADDITIONAL_RULESET_WEIGHT

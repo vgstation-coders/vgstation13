@@ -256,6 +256,7 @@
 		/obj/item/clothing/accessory/holster/handgun/wornout,
 		/obj/item/weapon/gun/projectile/detective,
 		/obj/item/weapon/storage/box/large/detectivegear,
+		/obj/item/weapon/storage/box/nt_disguise_kit,
 	)
 
 /obj/structure/closet/secure_closet/detective/update_icon()

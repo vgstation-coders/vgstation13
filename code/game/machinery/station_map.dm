@@ -105,9 +105,13 @@ var/list/station_holomaps = list()
 	update_icon()
 
 /obj/machinery/station_map/attack_hand(var/mob/user)
-	if(watching_mob && (watching_mob != user))
-		to_chat(user, "<span class='warning'>Someone else is currently watching the holomap.</span>")
-		return
+	if(watching_mob)
+		if(watching_mob != user)
+			to_chat(user, "<span class='warning'>Someone else is currently watching the holomap.</span>")
+			return
+		else
+			stopWatching()
+			return
 
 	if(user.loc != loc)
 		to_chat(user, "<span class='warning'>You need to stand in front of \the [src].</span>")
@@ -134,7 +138,7 @@ var/list/station_holomaps = list()
 					return
 				if ("[get_rank]_[original_zLevel]" in workplace_markers)
 					button_workplace = new (user.hud_used.holomap_obj,user,src,"Find Workplace",'icons/effects/64x32.dmi',"workplace",l="CENTER+3,CENTER-4")
-					button_workplace.name = "Launch"
+					button_workplace.name = "Find Workplace"
 					button_workplace.alpha = 0
 					animate(button_workplace, alpha = 255, time = 5, easing = LINEAR_EASING)
 					user.client.screen += button_workplace
@@ -190,7 +194,8 @@ var/list/station_holomaps = list()
 			watching_mob.client.screen -= button_workplace
 			var/mob/M = watching_mob
 			spawn(5)//we give it time to fade out
-				M.client.images -= holomap_datum.station_map
+				if (watching_mob != M)//in case they immediately start watching it again
+					M.client.images -= holomap_datum.station_map
 		watching_mob.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 	watching_mob = null
 	QDEL_NULL(button_workplace)
@@ -324,6 +329,8 @@ var/list/station_holomaps = list()
 	if(user.hud_used && user.hud_used.holomap_obj)
 		watching_mob = user
 		var/turf/T = get_turf(user)
+		if (isAI)
+			T = get_turf(watching_mob.client.eye)
 		bogus = 0
 		if(!((HOLOMAP_EXTRA_STATIONMAP+"_[T.z]") in extraMiniMaps))
 			bogus = 1
@@ -345,12 +352,14 @@ var/list/station_holomaps = list()
 		else
 			to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
-/obj/item/device/station_map/proc/update_holomap()
+/obj/item/device/station_map/proc/update_holomap(var/isAI = FALSE)
 	if (!watching_mob || !watching_mob.client || !watching_mob.hud_used)
 		return
 	watching_mob.client.images -= holomap_datum.station_map
 	holomap_datum.station_map.overlays.len = 0
 	var/turf/T = get_turf(src)
+	if (isAI)
+		T = get_turf(watching_mob.client.eye)
 	if (lastZ != T.z)
 		lastZ = T.z
 		bogus = 0

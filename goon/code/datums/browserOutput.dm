@@ -344,10 +344,6 @@ For the main html chat area
 		if(istype(M, /mob/new_player))
 			continue
 
-		var/datum/role/vampire/V = isvampire(M)
-		if(V && V.deadchat)
-			hearers += M
-			continue
 		else if(M.client.prefs.toggles & CHAT_DEAD)
 			if(M.client.holder && M.client.holder.rights & R_ADMIN) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
 				hearers += M

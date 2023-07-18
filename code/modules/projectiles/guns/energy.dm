@@ -9,6 +9,7 @@
 
 	var/obj/item/weapon/cell/power_supply //What type of power cell this uses
 	var/charge_cost = 100 //How much energy is needed to fire.
+	var/chargeable = TRUE //If the gun fits in a recharger
 	var/cell_type = "/obj/item/weapon/cell"
 	var/detachable_cell = FALSE
 	var/projectile_type = "/obj/item/projectile/beam/practice"
