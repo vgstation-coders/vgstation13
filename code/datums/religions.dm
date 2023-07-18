@@ -495,7 +495,7 @@ var/list/all_bible_styles = list(
 	bookstyle = "Torah"
 
 /datum/religion/judaism/equip_chaplain(var/mob/living/carbon/human/H)
-	H.equip_or_collect(new /obj/item/clothing/head/yamalka, slot_head)
+	H.equip_or_collect(new /obj/item/clothing/head/kippah/kippah_random, slot_head)
 
 /datum/religion/hinduism
 	name = "Hinduism"

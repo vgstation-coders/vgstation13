@@ -770,15 +770,25 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
     user.overlays -= unusual_overlay
     return ..()
 
-/obj/item/clothing/head/yamalka
-	name = "Yamalka"
+/obj/item/clothing/head/kippah
+	name = "kippah"
 	desc = "A brimless hat made of cloth, worn by men within Orthdox Jewish communities as part of religious custom."
 	flags = FPRINT
-	icon_state = "yamalka_blue"
+	icon_state = "kippah_black"
 
-/obj/item/clothing/head/yamalka/New()
-	icon_state = "yamalka_[pick("blue","white","black","yellow")]"
+/obj/item/clothing/head/kippah/kippah_random
 
+/obj/item/clothing/head/kippah/kippah_random/New()
+	icon_state = "kippah_[pick("blue","white","goldblack","black","yellow")]"
+
+/obj/item/clothing/head/kippah/kippah_blue
+	icon_state = "kippah_blue"
+/obj/item/clothing/head/kippah/kippah_white
+	icon_state = "kippah_white"
+/obj/item/clothing/head/kippah/kippah_goldblack
+	icon_state = "kippah_goldblack"
+/obj/item/clothing/head/kippah/kippah_yellow
+	icon_state = "kippah_yellow"
 
 // American "football"
 
