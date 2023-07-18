@@ -204,7 +204,7 @@ var/list/uplink_items = list()
 	name = "Gatling Laser"
 	desc = "A massive rapid-firing multiple-barrel laser. Can be reloaded quickly by swapping its internal cell. Spares not included."
 	item = /obj/item/weapon/gun/energy/gatling
-	cost = 40
+	cost = 60
 
 /datum/uplink_item/nukeprice/nikita
 	name = "Nikita RC Missile Launcher"
