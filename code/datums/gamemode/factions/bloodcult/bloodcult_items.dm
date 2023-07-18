@@ -1156,10 +1156,16 @@ var/list/arcane_tomes = list()
 	body_parts_visible_override = FACE
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	mech_flags = MECH_SCAN_FAIL
 	actions_types = list(/datum/action/item_action/toggle_anon)
 	var/anon_mode = FALSE
+
+/obj/item/clothing/head/culthood/snow
+	name = "cult winter hood"
+	desc = "A warm hood worn by the followers of Nar-Sie."
+	icon_state = "culthood_snow"
 
 /obj/item/clothing/head/culthood/NoiseDampening()	// those hoods cover the ears
 	return TRUE
@@ -1181,13 +1187,13 @@ var/list/arcane_tomes = list()
 			return
 
 	if(!anon_mode)
-		icon_state = "culthood_anon"
+		icon_state = initial(icon_state) + "_anon"
 		body_parts_covered = FULL_HEAD|HIDEHAIR
 		body_parts_visible_override = 0
 		hides_identity = HIDES_IDENTITY_ALWAYS
 		to_chat(user, "<span class='notice'>The hood's textile reacts with your soul and produces a shadow over your face that will hide your identity.</span>")
 	else
-		icon_state = "culthood"
+		icon_state = initial(icon_state)
 		body_parts_covered = EARS|HEAD|HIDEHAIR
 		body_parts_visible_override = FACE
 		hides_identity = HIDES_IDENTITY_DEFAULT
@@ -1198,12 +1204,22 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/head/culthood/unequipped(mob/user, var/from_slot = null)
 	..()
-	icon_state = "culthood"
+	icon_state = initial(icon_state)
 	body_parts_covered = EARS|HEAD|HIDEHAIR
 	body_parts_visible_override = FACE
 	hides_identity = HIDES_IDENTITY_DEFAULT
 	anon_mode = FALSE
 
+//plasmaman stuff
+/obj/item/clothing/head/culthood/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	. = ..()
+	if (.)
+		if(isplasmaman(M))
+			body_parts_covered = FULL_HEAD|HIDEHAIR
+			body_parts_visible_override = 0
+		else
+			body_parts_covered = EARS|HEAD|HIDEHAIR
+			body_parts_visible_override = FACE
 
 /obj/item/clothing/head/culthood/get_cult_power()
 	return 20
@@ -1272,12 +1288,23 @@ var/list/arcane_tomes = list()
 	icon_state = "cultrobes"
 	item_state = "cultrobes"
 	flags = FPRINT
-	allowed = list(/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract)
+	allowed = list(/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract,/obj/item/weapon/tank)
 	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 25, rad = 0)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
-	clothing_flags = ONESIZEFITSALL
+	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	mech_flags = MECH_SCAN_FAIL
+
+	//plasmaman stuff
+	var/next_extinguish=0
+	var/extinguish_cooldown=10 SECONDS
+
+/obj/item/clothing/suit/cultrobes/snow
+	name = "cult winter robes"
+	desc = "A set of warm armored robes worn by the followers of Nar-Sie."
+	icon_state = "cultrobes_snow"
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
 	return 50
@@ -1287,6 +1314,31 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/suit/cultrobes/salt_act()
 	acid_melt()
+
+//plasmaman stuff
+/obj/item/clothing/suit/cultrobes/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	. = ..()
+	if (.)
+		if(isplasmaman(M))
+			body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+		else
+			body_parts_covered = ARMS|LEGS|FULL_TORSO
+
+//plasmaman stuff
+/obj/item/clothing/suit/cultrobes/Extinguish(var/mob/living/carbon/human/H)
+	if(next_extinguish > world.time)
+		return
+
+	next_extinguish = world.time + extinguish_cooldown
+	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
+	H.ExtinguishMob()
+
+//plasmaman stuff
+/obj/item/clothing/suit/cultrobes/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+	if(H.bodytemperature < T0C+37)
+		H.bodytemperature = min(H.bodytemperature+5,T0C+37)
+	else
+		H.bodytemperature = max(H.bodytemperature-5,T0C+37)
 
 ///////////////////////////////////////CULT BACKPACK (TROPHY RACK)////////////////////////////////////////////////
 
@@ -1342,7 +1394,7 @@ var/list/arcane_tomes = list()
 	item_state = "culthelmet"
 	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	mech_flags = MECH_SCAN_FAIL
@@ -1371,10 +1423,14 @@ var/list/arcane_tomes = list()
 	slowdown = HARDSUIT_SLOWDOWN_MED
 	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	mech_flags = MECH_SCAN_FAIL
+
+	//plasmaman stuff
+	var/next_extinguish=0
+	var/extinguish_cooldown=10 SECONDS
 
 /obj/item/clothing/suit/space/cult/get_cult_power()
 	return 60
@@ -1384,6 +1440,23 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/suit/space/cult/salt_act()
 	acid_melt()
+
+//plasmaman stuff
+/obj/item/clothing/suit/space/cult/Extinguish(var/mob/living/carbon/human/H)
+	if(next_extinguish > world.time)
+		return
+
+	next_extinguish = world.time + extinguish_cooldown
+	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
+	H.ExtinguishMob()
+
+//plasmaman stuff
+/obj/item/clothing/suit/space/cult/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+	if(H.bodytemperature < T0C+37)
+		H.bodytemperature = min(H.bodytemperature+5,T0C+37)
+	else
+		H.bodytemperature = max(H.bodytemperature-5,T0C+37)
+
 
 ///////////////////////////////////////I'LL HAVE TO DEAL WITH THIS STUFF LATER////////////////////////////////////////////////
 
@@ -1429,6 +1502,42 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
 
+///////////////////////////////////////OLD PLASMAMAN ARMOR (can be obtained from vox traders)///////////////////////////////////
+
+/obj/item/clothing/suit/space/plasmaman/cultist
+	name = "plasmaman cultist armor"
+	icon_state = "plasmaman_cult"
+	item_state = "plasmaman_cult"
+	desc = "A bulky suit of armour, menacing with red energy. It looks like it would fit a plasmaman."
+	slowdown = NO_SLOWDOWN
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 30)
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/clothing/suit/space/plasmaman/cultist/get_cult_power()
+	return 60
+
+/obj/item/clothing/suit/space/plasmaman/cultist/cultify()
+	return
+
+/obj/item/clothing/suit/space/plasmaman/cultist/salt_act()
+	acid_melt()
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist
+	name = "plasmaman cultist helmet"
+	icon_state = "plasmamanCult_helmet0"
+	base_state = "plasmamanCult_helmet"
+	desc = "A containment suit designed by the followers of Nar-Sie. It glows menacingly with unearthly flames."
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 30)
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist/get_cult_power()
+	return 30
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist/cultify()
+	return
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////DEBUG ITEMS////////////////////////////////////////////////
 //Pamphlet: turns you into a cultist
@@ -1596,6 +1705,13 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/reagent_containers/food/drinks/cult/salt_act()
 	acid_melt()
 
+/obj/item/weapon/reagent_containers/food/drinks/cult/bloodfilled
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/bloodfilled/New()
+	..()
+	reagents.add_reagent(BLOOD, 50)
+
+
 ///////////////////////////////////////CULT CUFFS////////////////////////////////////////////////
 /obj/item/weapon/handcuffs/cult
 	name = "ghastly bindings"
@@ -1678,6 +1794,8 @@ var/list/arcane_tomes = list()
 		/obj/item/clothing/shoes/cult,
 		/obj/item/clothing/suit/cultrobes,
 		/obj/item/clothing/gloves/black/cult,
+		/obj/item/clothing/suit/space/plasmaman/cultist,
+		/obj/item/clothing/head/helmet/space/plasmaman/cultist,
 		)
 
 	var/list/stored_gear = list()
@@ -1689,7 +1807,7 @@ var/list/arcane_tomes = list()
 		var/turf/T = get_turf(src)
 		for(var/slot in stored_gear)
 			var/obj/item/I = stored_gear[slot]
-			stored_gear.Remove(I)
+			stored_gear -= slot
 			I.forceMove(T)
 	if (remaining)
 		QDEL_NULL(remaining)
@@ -1715,6 +1833,10 @@ var/list/arcane_tomes = list()
 			remaining.forceMove(get_turf(user))
 			user.put_in_hands(remaining)
 			remaining = null
+
+		var/obj/item/plasma_tank = null
+		if(isplasmaman(user))
+			plasma_tank = user.get_item_by_slot(slot_s_store)
 
 		for(var/obj/item/I in user)
 			if (is_type_in_list(I, discarded_types))
@@ -1751,6 +1873,8 @@ var/list/arcane_tomes = list()
 				else
 					user.equip_to_slot_or_drop(stored_slot,nslot)
 			stored_gear.Remove(slot)
+		if (plasma_tank)
+			user.equip_to_slot_or_drop(plasma_tank,slot_s_store)
 		qdel(src)
 
 /obj/item/weapon/blood_tesseract/cultify()

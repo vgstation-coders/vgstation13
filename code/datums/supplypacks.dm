@@ -394,7 +394,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/randomised/contraband
 	num_contained = 5
 	contains = list(/obj/item/weapon/storage/pill_bottle/zoom,
-					/obj/item/weapon/storage/pill_bottle/skeet,
+					/obj/item/weapon/storage/pill_bottle/speedcrank,
 					/obj/item/weapon/storage/pill_bottle/happy,
 					/obj/item/weapon/reagent_containers/glass/bottle/pcp,
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/absinthe,
@@ -773,7 +773,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/tank/emergency_oxygen/engi,
 					/obj/item/clothing/mask/breath)
 	cost = 200
-	containertype = /obj/structure/closet/crate/basic
+	containertype = /obj/structure/closet/crate/ayy
 	containername = "grey Space-Ex crate"
 	group = "Clothing"
 
@@ -798,8 +798,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/shoes/jackboots/mothership,
 					/obj/item/clothing/shoes/jackboots/mothership)
 	cost = 50
-	containertype = /obj/structure/closet/crate/ayybin
-	containername = "mothership uniform bin"
+	containertype = /obj/structure/closet/ayy
+	containername = "mothership uniform locker"
 	group = "Clothing"
 	contraband = 1
 
@@ -1064,7 +1064,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/energy/smalldisintegrator,
 					/obj/item/weapon/gun/energy/smalldisintegrator)
 	cost = 60
-	containertype = /obj/structure/closet/crate/secure/ayyweapon
+	containertype = /obj/structure/closet/crate/secure/ayy_mdf
 	containername = "MDF standard weapons crate"
 	one_access = list(access_armory, access_mothership_military)
 	group = "Security"
@@ -1120,8 +1120,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/helmet/mothership,
 					/obj/item/clothing/head/helmet/mothership)
 	cost = 40
-	containertype = /obj/structure/closet/crate/secure/ayybin
-	containername = "MDF standard armor bin"
+	containertype = /obj/structure/closet/secure_closet/ayy2
+	containername = "MDF standard armor locker"
 	one_access = list(access_security, access_mothership_military)
 	group = "Security"
 	contraband = 1

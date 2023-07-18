@@ -36,7 +36,24 @@
 	canvas.Blend(map_base,ICON_OVERLAY)
 	extraMiniMaps |= HOLOMAP_EXTRA_CULTMAP
 	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
-	//-------------Cult Map end---------
+	//-------------Bhangmap--------
+	var/list/allowed_bhang_zlevels = list(
+		map.zMainStation,
+		map.zAsteroid,
+		map.zDerelict
+		)
+	for (var/z = 1 to world.maxz)
+		var/icon/blank = icon('icons/480x480.dmi', "blank")
+		extraMiniMaps["[HOLOMAP_EXTRA_BHANGMAP]_[z]"] = blank
+
+		var/icon/bhangcanvas = icon('icons/480x480.dmi', "bhangmap")
+		if (z in allowed_bhang_zlevels)
+			var/icon/bhangmap_base = icon(holoMiniMaps[z])
+			bhangmap_base.Blend("#FFBD00",ICON_MULTIPLY)
+			bhangcanvas.Blend(bhangmap_base,ICON_OVERLAY)
+		extraMiniMaps["[HOLOMAP_EXTRA_BHANGBASEMAP]_[z]"] = bhangcanvas
+		sensed_explosions["z[z]"] = list()
+	//----------------------------------
 
 	//Station Holomaps display the map of the Z-Level they were built on.
 	generateStationMinimap(map.zMainStation)
@@ -50,6 +67,9 @@
 
 	for (var/obj/machinery/station_map/S in station_holomaps)
 		S.initialize()
+
+	for (var/obj/machinery/computer/bhangmeter/B in bhangmeters)
+		B.initialize()
 
 	for (var/obj/structure/deathsquad_gravpult/G in station_holomaps)
 		G.initialize_holomaps()
@@ -76,7 +96,7 @@
 				newMarker.y = nukedisk.y
 				newMarker.z = nukedisk.z
 				holomap_markers[HOLOMAP_MARKER_DISK] = newMarker
-	//generating area markers
+		//generating area markers
 		for(var/area/A in areas)
 			if(A.holomap_marker)
 				var/turf/T = A.getAreaCenter(ZLevel)
@@ -95,9 +115,53 @@
 						if(!fill_area)
 							fill_area = get_base_area(T.z)
 						T.set_area(fill_area)
+		//workplace markers
+		var/list/landmarks = list()
+		for (var/obj/effect/landmark/start/landmark in landmarks_list)
+			if (!("[landmark.name]_[landmark.z]" in landmarks))
+				landmarks["[landmark.name]_[landmark.z]"] = list(landmark)
+			else
+				landmarks["[landmark.name]_[landmark.z]"] += landmark
+		for (var/landmark_id in landmarks)
+			var/total_x = 0
+			var/total_y = 0
+			var/first_x = 0
+			var/first_y = 0
+			var/only_one = TRUE//we try to generate just one marker that averages the spawn locations
+			var/list/landmark_starts = landmarks[landmark_id]
+			if (!landmark_starts.len)
+				continue
+			for (var/obj/effect/landmark/start in landmark_starts)
+				if (!first_x)
+					first_x = start.x
+					first_y = start.y
+				var/diff = abs(first_x - start.x) + abs(first_y - start.y)
+				if(diff > 50)
+					only_one = FALSE//but if some of them are too far appart, we'll list them all.
+					break
 
+			if (only_one)
+				var/datum/holomap_marker/newMarker = new()
+				newMarker.id = landmark_id
+				for (var/obj/effect/landmark/start in landmark_starts)
+					total_x += start.x
+					total_y += start.y
+					newMarker.z = start.z
+				newMarker.x = round(total_x/landmark_starts.len)
+				newMarker.y = round(total_y/landmark_starts.len)
+				workplace_markers[newMarker.id] = list(newMarker)
+			else
+				workplace_markers[landmark_id] = list()
+				for (var/obj/effect/landmark/start in landmark_starts)
+					var/datum/holomap_marker/newMarker = new()
+					newMarker.id = landmark_id
+					newMarker.x = start.x
+					newMarker.y = start.y
+					newMarker.z = start.z
+					workplace_markers[newMarker.id] += newMarker
 
 /proc/generateHoloMinimap(var/zLevel=1)
+	set background=1
 
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 

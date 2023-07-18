@@ -83,7 +83,7 @@ var/list/holopads = list()
 	This may change in the future but for now will suffice.*/
 	user.cameraFollow = null // Stops tracking
 
-	if(master==user && holo)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
+	if(master && (master==user) && holo)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
 		clear_holo()
 	else if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
 		user.eyeobj.forceMove(get_turf(src))
@@ -121,11 +121,20 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 /obj/machinery/hologram/holopad/proc/create_holo(mob/living/silicon/ai/A, turf/T = loc)
 	ray = new(T)
 	holo = new(T)//Spawn a blank effect at the location.
-	holo.icon = A.holo_icon
 	// hologram.mouse_opacity = 0 Why would we not want to click on it
 	holo.name = "[A.name] (Hologram)"//If someone decides to right click.
-	set_light(2)			//pad lighting
+	set_light(2, 0, A.holocolor)			//pad lighting
 	icon_state = "holopad1"
+	var/icon/colored_holo = A.holo_icon
+	colored_holo.ColorTone(A.holocolor)
+	var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
+	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
+	holo.icon = colored_holo
+	
+	var/icon/colored_ray = getFlatIcon(ray)
+	colored_ray.ColorTone(A.holocolor)
+	ray.icon = colored_ray
+	
 	A.current = src
 	master = A//AI is the master.
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
@@ -261,6 +270,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	layer = FLY_LAYER//Above all the other objects/mobs. Or the vast majority of them.
 	plane = ABOVE_HUMAN_PLANE
 	anchored = 1//So space wind cannot drag it.
+	alpha = 200
 
 /obj/effect/overlay/hologram/New()
 	..()

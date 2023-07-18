@@ -1,4 +1,23 @@
 
+/*
+	* Syndicate Traitors
+	* Syndicate Challengers
+	* Changelings
+	* Vampires
+	* Wizard
+	* Civil War of Casters
+	* Blood Cult
+	* Nuclear Emergency
+	* Malfunctioning AI
+	* Blob Conglomerate
+	* Extended
+	* Revolution
+	* The Grinch
+	* Tag mode
+	* Antag Madness
+*/
+
+
 //////////////////////////////////////////////
 //                                          //
 //           SYNDICATE TRAITORS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -13,6 +32,7 @@
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Traitor"
 	cost = 10
 	var/traitor_threshold = 3
 	var/additional_cost = 5
@@ -59,6 +79,7 @@
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 3
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Traitor"
 	cost = 15
 	var/traitor_threshold = 4
 	var/additional_cost = 5
@@ -125,6 +146,7 @@
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Changeling"
 	cost = 18
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
@@ -168,6 +190,7 @@
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Vampire"
 	cost = 15
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
@@ -211,6 +234,7 @@
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT/2
+	weight_category = "Wizard"
 	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -247,6 +271,7 @@
 	required_pop = list(25,25,20,20,20,20,15,15,15,5)
 	required_candidates = 4
 	weight = BASE_RULESET_WEIGHT/2
+	weight_category = "Wizard"
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -300,6 +325,7 @@
 	required_candidates = 4
 	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Cult"
 	cost = 30
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
@@ -397,6 +423,7 @@ Assign your candidates in choose_candidates() instead.
 	required_candidates = 5 //This value is useless, see operative_cap
 	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Nuke"
 	cost = 30
 	requirements = list(90, 80, 60, 30, 20, 10, 10, 10, 10, 10)
 	high_population_requirement = 40
@@ -474,6 +501,7 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Malf"
 	cost = 40
 	requirements = list(90,80,70,60,50,40,40,30,30,20)
 	high_population_requirement = 60
@@ -558,6 +586,7 @@ Assign your candidates in choose_candidates() instead.
 	required_enemies = list(4,4,4,4,4,4,4,3,2,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Blob"
 	weekday_rule_boost = list("Tue")
 	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
@@ -599,10 +628,12 @@ Assign your candidates in choose_candidates() instead.
 	enemy_jobs = list()
 	required_pop = list(30,30,30,30,30,30,30,30,30,30)
 	required_candidates = 0
-	weight = 0.5*BASE_RULESET_WEIGHT
+	weight = BASE_RULESET_WEIGHT * 0.5
+	weight_category = "Extended"
 	cost = 0
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 101
+
 
 // 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance.
 /datum/dynamic_ruleset/roundstart/extended/ready(var/forced=0)
@@ -615,7 +646,9 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/extended/execute()
 	message_admins("Starting a round of extended.")
 	log_admin("Starting a round of extended.")
-	mode.forced_extended = TRUE
+	admin_disable_rulesets = TRUE
+	log_admin("Dynamic rulesets are disabled in Extended.")
+	message_admins("Dynamic rulesets are disabled in Extended.")
 	return TRUE
 
 //////////////////////////////////////////////
@@ -632,6 +665,7 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 3
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Revolution"
 	cost = 40
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
 	high_population_requirement = 50
@@ -690,6 +724,7 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Special"//Admin only
 	cost = 10
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
 	high_population_requirement = 10
@@ -705,14 +740,19 @@ Assign your candidates in choose_candidates() instead.
 	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
 	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
-	return accepted
+	return (accepted || forced)
 
 
 /datum/dynamic_ruleset/roundstart/grinch/execute()
-	var/mob/M = pick(assigned)
-	var/datum/role/grinch/G = new
-	G.AssignToRole(M.mind,1)
-	G.Greet(GREET_ROUNDSTART)
+	var/mob/new_player/M = pick(assigned)
+	if (M)
+		var/datum/role/grinch/newGrinch = new
+		var/mob/living/simple_animal/hostile/gremlin/grinch/G = new (pick(grinchstart))
+		G.key = M.client.ckey
+		qdel(M)
+		newGrinch.AssignToRole(G.mind,1)
+		newGrinch.Greet(GREET_ROUNDSTART)
+		G << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)// MAD JAMS cant last forever yo
 	return 1
 
 //////////////////////////////////////////////
@@ -729,6 +769,7 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Special"//Admin only
 	cost = 10
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
 	high_population_requirement = 101
@@ -776,6 +817,7 @@ var/antag_madness = ANTAG_MADNESS_OFF
 	protected_from_jobs = list()
 	restricted_from_jobs = list()
 	cost = 0
+	weight_category = "Special"//Admin only
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // Adminbus only
 	high_population_requirement = 101
 	persistent = TRUE//latejoiners will either be heads of staff or traitors (unless traitor is deactivated/antagbanned)

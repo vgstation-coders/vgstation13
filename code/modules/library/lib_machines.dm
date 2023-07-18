@@ -27,6 +27,7 @@
 	var/id
 	var/title
 	var/author
+	var/description
 	var/ckey // ADDED 24/2/2015 - N3X
 	var/category
 	var/content
@@ -40,6 +41,7 @@
 	title = row["title"]
 	category = row["category"]
 	ckey = row["ckey"]
+	description = row["description"]
 	if("content" in row)
 		content = row["content"]
 	programmatic=0
@@ -49,18 +51,6 @@
 	var/author
 	var/category
 	var/title
-
-/datum/library_query/proc/toSQL()
-	var/list/where = list()
-	if(author || title || category)
-		if(author)
-			where.Add("author LIKE '%[author]%'")
-		if(category)
-			where.Add("category = '[category]'")
-		if(title)
-			where.Add("title LIKE '%[title]%'")
-		return " WHERE "+jointext(where," AND ")
-	return ""
 
 // So we can have catalogs of books that are programmatic, and ones that aren't.
 /datum/library_catalog
@@ -81,7 +71,7 @@
 		cached_books["[CB.id]"]=CB
 
 
-/datum/library_catalog/proc/rmBookByID(var/mob/user, var/id as text)
+/datum/library_catalog/proc/rmBookByID(var/mob/user, var/id, var/library_table)
 	if("[id]" in cached_books)
 		var/datum/cachedbook/CB = cached_books["[id]"]
 		if(CB.programmatic)
@@ -91,46 +81,44 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE id=:id", list("id" = sqlid))
+	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM `[library_table]` WHERE id=:id", list("id" = sqlid))
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
 	qdel(query)
 
-/datum/library_catalog/proc/getBookByID(var/id as text)
+/datum/library_catalog/proc/getItemByID(var/id, var/library_table)
 	if("[id]" in cached_books)
 		return cached_books["[id]"]
 
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE id=:id", list("id" = sqlid))
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, author, title, content, category, description, ckey FROM `[library_table]` WHERE id=:id", list("id" = sqlid))
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
 		qdel(query)
 		return
 
-	var/list/results=list()
 	while(query.NextRow())
 		var/datum/cachedbook/CB = new()
 		CB.LoadFromRow(list(
 			"id"      =query.item[1],
 			"author"  =query.item[2],
 			"title"   =query.item[3],
-			"category"=query.item[4],
-			"ckey"    =query.item[5]
+			"content" = query.item[4],
+			"category"=query.item[5],
+			"description" =query.item[6],
+			"ckey"    =query.item[7]
 		))
-		results += CB
 		cached_books["[id]"]=CB
 		qdel(query)
 		return CB
 	qdel(query)
-	return results
+	return null
 
 var/global/datum/library_catalog/library_catalog = new()
-
-var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", "Reference", "Religion")
 
 /** Scanner **/
 /obj/machinery/libraryscanner
@@ -140,11 +128,14 @@ var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", 
 	anchored = 1
 	density = 1
 	var/obj/item/weapon/book/cache		// Last scanned book
+	var/obj/item/mounted/frame/painting/custom/cached_painting // Last scanned painting
 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/libraryscanner/attackby(var/obj/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/book))
+		user.drop_item(O, src)
+	if(istype(O, /obj/item/mounted/frame/painting/custom))
 		user.drop_item(O, src)
 	else
 		return ..()
@@ -155,12 +146,12 @@ var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", 
 		return
 	usr.set_machine(src)
 	var/dat = "<HEAD><TITLE>Scanner Control Interface</TITLE></HEAD><BODY>\n" // <META HTTP-EQUIV='Refresh' CONTENT='10'>
-	if(cache)
+	if(cache || cached_painting)
 		dat += "<FONT color=#005500>Data stored in memory.</FONT><BR>"
 	else
 		dat += "No data stored in memory.<BR>"
 	dat += "<A href='?src=\ref[src];scan=1'>\[Scan\]</A>"
-	if(cache)
+	if(cache || cached_painting)
 		dat += "       <A href='?src=\ref[src];clear=1'>\[Clear Memory\]</A><BR><BR><A href='?src=\ref[src];eject=1'>\[Remove Book\]</A>"
 	else
 		dat += "<BR>"
@@ -177,15 +168,20 @@ var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", 
 		for(var/obj/item/weapon/book/B in contents)
 			cache = B
 			break
+		for (var/obj/item/mounted/frame/painting/custom/C in contents)
+			cached_painting = C
+			break
 	if(href_list["clear"])
 		cache = null
+		cached_painting = null
 	if(href_list["eject"])
 		for(var/obj/item/weapon/book/B in contents)
 			B.forceMove(src.loc)
+		for (var/obj/item/mounted/frame/painting/custom/C in contents)
+			C.forceMove(src.loc)
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
 	return
-
 
 /*
  * Book binder

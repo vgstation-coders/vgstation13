@@ -33,8 +33,6 @@
 	. = ..()
 	if(W == src)
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
-	if(istype(W, /obj/item/weapon/storage/backpack/holding/grinch))
-		return
 	var/list/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
 	if(recursive_list.len) // Placing a bag of holding into another will singuloose when stored inside other objects too, such as when on your back or on a diona's back and stuffed in
 		singulocreate(recursive_list, user)

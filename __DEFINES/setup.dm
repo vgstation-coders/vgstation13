@@ -1262,11 +1262,12 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define BACK_LAYER				17		//Back should be above head so that headgear doesn't hides backpack when facing north
 #define ID_LAYER				18		//IDs should be visible above suits and backpacks
 #define HANDCUFF_LAYER			19
-#define LEGCUFF_LAYER			20
-#define HAND_LAYER				21
-#define TAIL_LAYER				22		//bs12 specific. this hack is probably gonna come back to haunt me
-#define TARGETED_LAYER			23		//BS12: Layer for the target overlay from weapon targeting system
-#define TOTAL_LAYERS			23
+#define MUTUALCUFF_LAYER		20
+#define LEGCUFF_LAYER			21
+#define HAND_LAYER				22
+#define TAIL_LAYER				23		//bs12 specific. this hack is probably gonna come back to haunt me
+#define TARGETED_LAYER			24		//BS12: Layer for the target overlay from weapon targeting system
+#define TOTAL_LAYERS			24
 //////////////////////////////////
 
 //Snake stuff so leaderboard can see it too
@@ -1614,6 +1615,8 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"
 #define HOLOMAP_EXTRA_CULTMAP					"cultmap"
+#define HOLOMAP_EXTRA_BHANGMAP					"bhangmap"
+#define HOLOMAP_EXTRA_BHANGBASEMAP				"bhangbasemap"
 
 #define HOLOMAP_MARKER_SMES				"smes"
 #define HOLOMAP_MARKER_DISK				"diskspawn"

@@ -161,7 +161,6 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/Test_ZAS_Connection
 	src.verbs += /client/proc/SDQL2_query
 	src.verbs += /client/proc/check_sim_unsim
-	src.verbs += /proc/generateMiniMaps
 	src.verbs += /client/proc/maprender
 	//src.verbs += /client/proc/cmd_admin_rejuvenate
 	src.verbs += /client/proc/start_line_profiling

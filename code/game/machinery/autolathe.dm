@@ -140,6 +140,7 @@
 		new /obj/item/device/rcd/rpd(),\
 		new /obj/item/device/radio/electropack(), \
 		new /obj/item/tool/weldingtool/largetank/empty(), \
+		new /obj/item/clothing/glasses/welding(), \
 		new /obj/item/weapon/handcuffs(), \
 		new /obj/item/ammo_storage/box/a357(), \
 		new /obj/item/ammo_casing/shotgun(), \

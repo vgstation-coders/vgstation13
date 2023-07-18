@@ -18,42 +18,35 @@
 			if("1")
 				message_admins("[key_name(usr)] has attempted to spawn [count] traitors.")
 				var/success = makeAntag(/datum/role/traitor, null, count, FROM_PLAYERS)
-				message_admins("[success] number of traitors made.")
-				to_chat(usr, "<span class='notice'>[success] number of traitors made.</span>")
+				message_admins("[success] traitors made.")
 			if("2")
 				message_admins("[key_name(usr)] has attempted to spawn [count] changelings.")
 				var/success = makeAntag(/datum/role/changeling, null, count, FROM_PLAYERS)
-				message_admins("[success] number of changelings made.")
-				to_chat(usr, "<span class='notice'>[success] number of changelings made.</span>")
+				message_admins("[success] changelings made.")
 			if("3")
 				message_admins("[key_name(usr)] has attempted to spawn [count] revolutionaries.")
 				var/success = makeAntag(null, /datum/faction/revolution, count, FROM_PLAYERS)
-				message_admins("[success] number of revolutionaries made.")
-				to_chat(usr, "<span class='notice'>[success] number of revolutionaries made.</span>")
+				message_admins("[success] revolutionaries made.")
 			if("4")
 				message_admins("[key_name(usr)] has attempted to spawn [count] cultists.")
 				var/success = makeAntag(null, /datum/faction/bloodcult, count , FROM_PLAYERS)
-				message_admins("[success] number of cultists made.")
-				to_chat(usr, "<span class='notice'>[success] number of cultists made..</span>")
+				message_admins("[success] cultists made.")
 			if("5")
 				message_admins("[key_name(usr)] has attempted to spawn [count] malfunctioning AI.")
 				var/success = makeAntag(null, /datum/faction/malf, count, FROM_PLAYERS)
-				message_admins("[success] number of angry computer screens made.")
-				to_chat(usr, "<span class='notice'>[success] number of malf AIs made.</span>")
+				message_admins("[success] angry computer screens made.")
 			if("6")
 				message_admins("[key_name(usr)] has attempted to spawn [count] wizards.")
 				var/success = makeAntag(null, /datum/faction/wizard, count, FROM_GHOSTS)
-				message_admins("[success] number of wizards made.")
-				to_chat(usr, "<span class='notice'>[success] number of wizards made.</span>")
+				message_admins("[success] wizards made.")
 			if("7")
 				message_admins("[key_name(usr)] has attempted to spawn [count] vampires.")
 				var/success = makeAntag(/datum/role/vampire, null, count, FROM_PLAYERS)
-				message_admins("[success] number of vampires made.")
-				to_chat(usr, "<span class='notice'>[success] number of vampires made.</span>")
+				message_admins("[success] vampires made.")
 			if("8")
 				message_admins("[key_name(usr)] has spawned aliens.")
 				if(!src.makeAliens())
-					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")
+					message_admins("Unfortunately, there were no candidates available.")
 
 	if("announce_laws" in href_list)
 		var/mob/living/silicon/S = locate(href_list["mob"])
@@ -1862,18 +1855,6 @@
 		dynamic_curve_width = new_width
 		dynamic_mode_options(usr)
 
-	else if(href_list["force_extended"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		if(master_mode != "Dynamic Mode")
-			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-
-		dynamic_forced_extended = !dynamic_forced_extended
-		log_admin("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
-		message_admins("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
-		dynamic_mode_options(usr)
-
 	else if(href_list["toggle_rulesets"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -2222,17 +2203,22 @@
 
 		pack.name = "[M.real_name]'s belongings"
 
+		var/might_need_glasses = FALSE
 		for(var/obj/item/I in M)
 			if(istype(I,/obj/item/clothing/glasses))
 				var/obj/item/clothing/glasses/G = I
-				if(G.prescription)
-					continue
+				if(G.nearsighted_modifier != 0)
+					might_need_glasses = TRUE
 			M.u_equip(I,1)
 			if(I)
 				I.forceMove(M.loc)
 				I.reset_plane_and_layer()
 				//I.dropped(M)
 				I.forceMove(pack)
+
+		if (might_need_glasses && ishuman(M))
+			var/mob/living/carbon/human/H = M
+			H.equip_to_slot_or_del(new /obj/item/clothing/glasses/regular(H), slot_glasses)
 
 		var/obj/item/weapon/card/id/thunderdome/ident = null
 

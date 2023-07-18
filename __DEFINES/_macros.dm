@@ -104,6 +104,8 @@
 
 #define isclowngoblin(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne/goblin)
 
+#define isbee(A) istype(A, /mob/living/simple_animal/bee)
+
 #define isAI(A) istype(A, /mob/living/silicon/ai)
 
 #define isAIEye(A) istype(A, /mob/camera/aiEye)
@@ -405,6 +407,8 @@
 #define is_area_in_map(A) (A.x)
 
 #define SNOW_THEME (map.snow_theme || Holiday == XMAS || Holiday == XMAS_EVE)
+
+#define SOCIALISM_WON (map.nameShort == "castle" || Holiday == LABOR_DAY)
 
 #define get_conductivity(A) (A ? A.siemens_coefficient : 1)
 

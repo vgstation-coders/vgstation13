@@ -340,6 +340,10 @@ var/list/forbidden_varedit_object_types = list(
 		to_chat(usr, "Editing this variable is forbidden. Edit bound_width or bound_height instead.")
 		return FALSE
 
+	if(tocheck == "library_table") // prevent SQL injections
+		to_chat(usr, "No.")
+		return FALSE
+
 	if(tocheck in lockedvars)
 		if(!check_rights(R_DEBUG))
 			return FALSE
