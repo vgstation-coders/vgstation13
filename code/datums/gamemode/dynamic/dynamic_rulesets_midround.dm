@@ -544,11 +544,11 @@
 	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/ready(var/forced=0)
-	if(!mode.executed_rules)
+	if(mode.executed_rules.len <= 0)
 		return FALSE
 		//We have nothing to investigate!
-	if(living_players.len)
-		weight = clamp(300/(living_players.len^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
+	if(living_players.len > 0)
+		weight = clamp(300/(living_players.len * living_players.len),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
 	//We don't cotton to freaks in highpop
 	return ..()
 
