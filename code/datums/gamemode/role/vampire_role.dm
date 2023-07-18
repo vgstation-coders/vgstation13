@@ -15,8 +15,6 @@
 
 	var/iscloaking = FALSE
 	var/silentbite = FALSE
-	var/deadchat_timer = 0
-	var/deadchat = FALSE
 	var/nullified = 0
 	var/smitecounter = 0
 
@@ -273,7 +271,6 @@
 	handle_cloak(H)
 	handle_menace(H)
 	handle_smite(H)
-	handle_deadspeak(H)
 	if(istype(H.loc, /turf/space))
 		H.check_sun()
 	if(istype(H.loc, /obj/structure/closet/coffin))
@@ -340,19 +337,6 @@
 		C.Jitter(20)
 		C.Dizzy(20)
 		to_chat(C, "<span class='sinister'>Your heart is filled with dread, and you shake uncontrollably.</span>")
-
-/datum/role/vampire/proc/handle_deadspeak(var/mob/living/carbon/human/H)
-	if(deadchat)
-		return
-	if(H.stat == DEAD)
-		return
-	if((locate(/datum/power/vampire/charisma) in current_powers) && world.time > deadchat_timer)
-		deadchat = TRUE
-		//have deadchat for 30 seconds every five minutes
-		spawn(rand(200, 400))
-			if(H.stat != DEAD)
-				deadchat_timer = world.time + 1800 + rand(300, 1200)
-				deadchat = FALSE
 
 /datum/role/vampire/proc/handle_smite(var/mob/living/carbon/human/H)
 	var/smitetemp = 0

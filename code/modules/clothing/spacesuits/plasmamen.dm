@@ -20,7 +20,7 @@
 	var/next_extinguish=0
 	var/extinguish_cooldown=10 SECONDS
 
-/obj/item/clothing/suit/space/plasmaman/proc/Extinguish(var/mob/living/carbon/human/H)
+/obj/item/clothing/suit/space/plasmaman/Extinguish(var/mob/living/carbon/human/H)
 	if(next_extinguish > world.time)
 		return
 
@@ -28,7 +28,7 @@
 	to_chat(H, "<span class='warning'>Your suit automatically extinguishes the fire.</span>")
 	H.ExtinguishMob()
 
-/obj/item/clothing/suit/space/plasmaman/proc/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+/obj/item/clothing/suit/space/plasmaman/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
 	if(H.bodytemperature < T0C+37)
 		H.bodytemperature = min(H.bodytemperature+5,T0C+37)
 	else
@@ -406,23 +406,6 @@
 	if(get_dist(user,src) <= 1)
 		to_chat(user, "<span class='info'>This helmet has a built-in camera. It's [camera ? "" : "in"]active.</span>")
 
-
-//CULT
-
-/obj/item/clothing/suit/space/plasmaman/cultist
-	name = "plasmaman cultist armor"
-	icon_state = "plasmaman_cult"
-	item_state = "plasmaman_cult"
-	desc = "A bulky suit of armour, menacing with red energy. It looks like it would fit a plasmaman."
-	slowdown = 1
-	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
-
-/obj/item/clothing/head/helmet/space/plasmaman/cultist
-	name = "plasmaman cultist helmet"
-	icon_state = "plasmamanCult_helmet0"
-	base_state = "plasmamanCult_helmet"
-	desc = "A containment suit designed by the followers of Nar-Sie. It glows menacingly with unearthly flames."
-	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 
 //Sith
 
