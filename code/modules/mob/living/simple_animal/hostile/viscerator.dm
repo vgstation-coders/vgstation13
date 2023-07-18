@@ -44,7 +44,7 @@
 /mob/living/simple_animal/hostile/viscerator/CanAttack(var/atom/the_target)
 	if(ismob(the_target))
 		var/mob/mob_target = the_target
-		if((isnukeop(mob_target) && faction == "syndicate") || (iswizard(mob_target) && faction == "wizard"))
+		if((iselitesyndie(mob_target) && faction == "syndiesquad") || (isnukeop(mob_target) && faction == "syndicate") || (iswizard(mob_target) && faction == "wizard"))
 			return 0
 	return ..(the_target)
 
@@ -60,9 +60,14 @@
 
 
 /mob/living/simple_animal/hostile/viscerator/proc/handle_faction(var/mob/user)
-	if(!user || isnukeop(user) || iswizard(user)) //wizard and nook ops already properly match faction
+	if(!user || iselitesyndie(user) || isnukeop(user) || iswizard(user)) //wizard and nook ops already properly match faction
 		return
 	faction = "\ref[user]"
+
+/mob/living/simple_animal/hostile/viscerator/syndiesquad
+	faction = "syndiesquad"
+	icon_state = "viscerator_black"
+	icon_living = "viscerator_black"
 
 /mob/living/simple_animal/hostile/viscerator/flying_skull
 	name = "flying skull"

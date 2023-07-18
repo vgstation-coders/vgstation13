@@ -97,6 +97,7 @@
 		/obj/item/clothing/shoes/sandal = 3,
 		/obj/item/clothing/under/rags = 2,
 		/obj/item/clothing/under/shorts/black,
+		/obj/item/clothing/under/vox/vox_casual = 3,
 	)
 
 
@@ -166,7 +167,7 @@
 
 
 /obj/structure/closet/wardrobe/pjs
-	name = "Pajama wardrobe"
+	name = "pajama wardrobe"
 	icon_state = "white"
 	icon_closed = "white"
 
