@@ -2,7 +2,7 @@
 	name = "Plasmaman"
 	icobase = 'icons/mob/human_races/r_plasmaman_sb.dmi'
 	deform = 'icons/mob/human_races/r_plasmaman_pb.dmi'  // TODO: Need deform.
-	known_languages = list(LANGUAGE_HUMAN)
+	known_languages = list(LANGUAGE_HUMAN, LANGUAGE_CLATTER)
 	attack_verb = "punches"
 
 	flags = WHITELISTED | PLAYABLE | PLASMA_IMMUNE
