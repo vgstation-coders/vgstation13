@@ -43,9 +43,11 @@
 	d.time_of_death = M.timeofdeath
 
 	var/turf/spot = get_turf(M)
-	d.death_x = spot.x
-	d.death_y = spot.y
-	d.death_z = spot.z
+
+	if (spot)
+		d.death_x = spot.x
+		d.death_y = spot.y
+		d.death_z = spot.z
 
 	d.mob_typepath = M.type
 	d.mind_name = M.name
