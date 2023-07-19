@@ -21,7 +21,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 			continue
 		task = new task_type()
 		task.on_init()
-		tasks[task.type] = task
+		tasks["[task.type]"] = task
 	..()
 
 /datum/subsystem/persistence_misc/Shutdown()
@@ -177,6 +177,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/latest_dynamic_rulesets/on_shutdown()
 	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 	if (!istype(dynamic_mode))
+		stack_trace("we shut down the persistence - Misc subsystem and ticker.mode is not Dynamic.")
 		return
 	data = list(
 		"one_round_ago" = list(),
@@ -202,6 +203,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/dynamic_ruleset_weights/on_shutdown()
 	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 	if (!istype(dynamic_mode))
+		stack_trace("we shut down the persistence - Misc subsystem and ticker.mode is not Dynamic.")
 		return
 
 	data = list()
