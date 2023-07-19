@@ -44,3 +44,6 @@
 #define CATBEASTBLACK 2
 
 #define CONFUSED_MAGIC 1
+
+#define SLIME_BABY 1
+#define SLIME_ADULT 2

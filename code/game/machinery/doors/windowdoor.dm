@@ -215,7 +215,7 @@
 		..()
 
 /obj/machinery/door/window/attack_paw(mob/living/user)
-	if(istype(user, /mob/living/carbon/alien/humanoid) || istype(user, /mob/living/carbon/slime/adult))
+	if(istype(user, /mob/living/carbon/alien/humanoid) || isslimeadult(user))
 		if(operating)
 			return
 		user.delayNextAttack(8)
