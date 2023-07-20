@@ -66,6 +66,41 @@
 	if (cultist_cap > 1) //The first call occurs in OnPostSetup()
 		UpdateCap()
 
+#define HUDICON_BLINKDURATION 10
+/datum/faction/bloodcult/update_hud_icons(var/offset = 0,var/factions_with_icons = 0)
+	..()
+	for(var/mob/living/simple_animal/astral_projection/AP in astral_projections)
+		for(var/datum/role/R_target in members)
+			if(R_target.antag && R_target.antag.current)
+				var/imageloc = R_target.antag.current
+				if(istype(R_target.antag.current.loc,/obj/mecha))
+					imageloc = R_target.antag.current.loc
+				var/hud_icon = R_target.logo_state//the icon is based on the member's role
+				if (!(R_target.logo_state in hud_icons))
+					hud_icon = hud_icons[1]//if the faction doesn't recognize the role, it'll just give it a default one.
+				var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
+				I.pixel_x = 20 * PIXEL_MULTIPLIER
+				I.pixel_y = 20 * PIXEL_MULTIPLIER
+				I.plane = ANTAG_HUD_PLANE
+				I.appearance_flags |= RESET_COLOR|RESET_ALPHA
+				if (factions_with_icons > 1)
+					animate(I, layer = 1, time = 0.1 + offset * HUDICON_BLINKDURATION, loop = -1)
+					animate(layer = 0, time = 0.1)
+					animate(layer = 0, time = HUDICON_BLINKDURATION)
+					animate(layer = 1, time = 0.1)
+					animate(layer = 1, time = 0.1 + HUDICON_BLINKDURATION*(factions_with_icons - 1 - offset))
+				if (AP.client)
+					AP.client.images += I
+				if (R_target.antag.current.client)
+					R_target.antag.current.client.images += AP.hudicon
+		for(var/mob/living/simple_animal/astral_projection/PA in astral_projections)
+			if (AP.client)
+				AP.client.images += PA.hudicon
+			if ((AP != PA) && PA.client)
+				PA.client.images += AP.hudicon
+
+#undef HUDICON_BLINKDURATION
+
 
 /datum/faction/bloodcult/proc/UpdateCap()
 	var/living_players = 0
