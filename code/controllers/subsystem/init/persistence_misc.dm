@@ -21,7 +21,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 			continue
 		task = new task_type()
 		task.on_init()
-		tasks[task.type] = task
+		tasks["[task.type]"] = task
 	..()
 
 /datum/subsystem/persistence_misc/Shutdown()
@@ -122,22 +122,23 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 /datum/persistence_task/forwards_fulfilled/on_init()
 	data = read_file()
-	var/list/previous_forwards_formatted = data["fulfilled_forwards"]
-	for(var/list/formatted_vars in previous_forwards_formatted)
-		var/ourtype = null
-		if(formatted_vars["type"])
-			ourtype = text2path(formatted_vars["type"])
-		var/ourname = null
-		if(formatted_vars["sender"])
-			ourname = formatted_vars["sender"]
-		var/ourstation = null
-		if(formatted_vars["station"])
-			ourstation = formatted_vars["station"]
-		var/oursubtype = null
-		if(formatted_vars["subtype"])
-			oursubtype = text2path(formatted_vars["subtype"])
-		if(ispath(ourtype,/datum/cargo_forwarding))
-			SSsupply_shuttle.previous_forwards += new ourtype(ourname, ourstation, oursubtype, TRUE)
+	if ("fulfilled_forwards" in data)
+		var/list/previous_forwards_formatted = data["fulfilled_forwards"]
+		for(var/list/formatted_vars in previous_forwards_formatted)
+			var/ourtype = null
+			if(formatted_vars["type"])
+				ourtype = text2path(formatted_vars["type"])
+			var/ourname = null
+			if(formatted_vars["sender"])
+				ourname = formatted_vars["sender"]
+			var/ourstation = null
+			if(formatted_vars["station"])
+				ourstation = formatted_vars["station"]
+			var/oursubtype = null
+			if(formatted_vars["subtype"])
+				oursubtype = text2path(formatted_vars["subtype"])
+			if(ispath(ourtype,/datum/cargo_forwarding))
+				SSsupply_shuttle.previous_forwards += new ourtype(ourname, ourstation, oursubtype, TRUE)
 
 /datum/persistence_task/forwards_fulfilled/on_shutdown()
 	var/list/all_forwards = SSsupply_shuttle.previous_forwards.Copy() + SSsupply_shuttle.fulfilled_forwards.Copy()
@@ -177,6 +178,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/latest_dynamic_rulesets/on_shutdown()
 	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 	if (!istype(dynamic_mode))
+		stack_trace("we shut down the persistence - Misc subsystem and ticker.mode is not Dynamic.")
 		return
 	data = list(
 		"one_round_ago" = list(),
@@ -202,6 +204,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/dynamic_ruleset_weights/on_shutdown()
 	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 	if (!istype(dynamic_mode))
+		stack_trace("we shut down the persistence - Misc subsystem and ticker.mode is not Dynamic.")
 		return
 
 	data = list()
