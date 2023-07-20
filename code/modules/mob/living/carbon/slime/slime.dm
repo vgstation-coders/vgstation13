@@ -552,6 +552,9 @@
 	else 		//only option left is two uses
 		icon_state = "[icon_state_backup]_2"
 
+/obj/item/slime_extract/examine(mob/user)
+	..()
+	to_chat(user, "<span class='notice'>\The [name] has [Uses] left.</span>")
 
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
