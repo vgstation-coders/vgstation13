@@ -135,10 +135,11 @@ var/list/body_archives = list()
 
 	for(var/name in internal_organ_data)
 		var/datum/organ/internal/I = internal_organs_by_name[name]
-		if(I.robotic == 1)
-			organ_data[name] = "assisted"
-		else if(I.robotic == 2)
-			organ_data[name] = "mechanical"
+		if (I)
+			if(I.robotic == 1)
+				organ_data[name] = "assisted"
+			else if(I.robotic == 2)
+				organ_data[name] = "mechanical"
 
 	archive.data["organ_data"] = organ_data
 

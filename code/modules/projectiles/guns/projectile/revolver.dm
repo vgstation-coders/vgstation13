@@ -244,6 +244,10 @@
 	..()
 
 /obj/item/weapon/gun/projectile/russian/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+	if(!getAmmo()) /* Check to ensure that russian revolvers that start empty don't runtime. */
+		user.visible_message("<span class='warning'>*click*</span>")
+		playsound(user, 'sound/weapons/empty.ogg', 100, 1)
+		return
 	var/obj/item/ammo_casing/AC = loaded[1]
 	if(!AC || !AC.BB)
 		user.visible_message("<span class='warning'>*click*</span>")
