@@ -79,6 +79,10 @@
 /datum/mind/New(var/key)
 	src.key = key
 
+/datum/mind/Destroy()
+	stack_trace("A mind ([key],[name]) was destroyed and that's terrible, find where it occured and prevent that.")
+	..()
+
 /datum/mind/proc/transfer_to(mob/new_character)
 	if (!current)
 		transfer_to_without_current(new_character)

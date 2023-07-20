@@ -73,6 +73,55 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2023.07.20</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Soul Rambler will no longer consider ERT or NT Officials as the dangerous killer.</li>
+				<li class="bugfix">Fixed the Admin&#39;s Check Antagonists panel having blank entries when mobs had their bodies destroyed. The panel now also indicates if a player isn&#39;t in their body due to astral journeying.</li>
+				<li class="bugfix">Fixed an error that occurred when using a soul stone on a non-human carbon type mob and borked the soulstoning process.</li>
+				<li class="bugfix">Astral Projections now have a half-transparent cult icon visible to fellow cultists.</li>
+				<li class="bugfix">Fixed non-cultist Soul Blades being unable to slash at anything and stunning themselves in the process.</li>
+				<li class="rscadd">Shade mobs now track their current &#34;master&#34;. Non-cultist masters who manage to capture a shade in a soul gem and slot it in a cult blade will be able to wield the soul blade without issues.</li>
+				<li class="rscadd">The Soulblade &#34;Blood Boil&#34; spell has been replaced with a toggle that lets Soul Blades choose to allow non-cultists/non-master players to wield them. Players that are permitted to wield the blade will be able to see its blood gauge when in their inventory.</li>
+				<li class="rscadd">Non-cultists, just like cultists, may now also feed their soul blade 10u of their blood to quickly charge a third of its blood gauge.</li>
+				<li class="rscadd">Non-cultists/Non-masters who try to remove the gem from a Soul Blade (that has a shade in it) without being allowed to do so now receive a single &#34;blood boil&#34; attack upon completion.</li>
+				<li class="tweak">Increased Soul Blade HP. Back at MoMMI level.</li>
+				<li class="tweak">Increased the rate at which Soul Blades get their blood back from various sources, except their passive blood regen which is no longer capped, but increases slower and slower.</li>
+				<li class="bugfix">Fixed players dying from getting their body destroyed having their place of death in deadchat/logs being missing.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Fixed the rambler&#39;s significant crystal. You can now use it in hand once again to complete your investigate objective.</li>
+			</ul>
+			<h3 class="author">RealestEstate updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="imageadd">Adds stormtrooper in-hand icons.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The richest trader is now shown on the end of round scoreboard.</li>
+				<li class="rscadd">There is now a top 5 monthly leaderboard of richest traders.</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Wooden prosthesises for feet are now selectable round start, and can be added with standard surgery</li>
+				<li class="bugfix">Attaching a peg leg no longer spawns an invisible peg foot</li>
+				<li class="bugfix">Damaged robo/peg limbs no longer give you a pain overlay or keep it stuck on the screen</li>
+				<li class="bugfix">Turning your entire body into a peg body no longer blows you apart</li>
+				<li class="bugfix">You can now remove child organ peggified limbs</li>
+				<li class="bugfix">Malfunctioning robolimbs no longer leave behind a permanent malfunctioning flag when removed</li>
+				<li class="bugfix">You can no longer suture wounds on peg limbs.</li>
+			</ul>
+			<h3 class="author">nervere updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Fixed Snaxi&#39;s kitchen shutters button being hidden.</li>
+				<li class="rscadd">Kicking the telecomms control console has a chance to eject the id inside, if there is one.</li>
+			</ul>
+			<h2 class="date">2023.07.19</h2>
+			<h3 class="author">RealestEstate updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="imageadd">The tile painter now has a unique sprite.</li>
+			</ul>
 			<h2 class="date">2023.07.18</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -82,6 +131,15 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Fixed Santa&#39;s Bag being able to carry way less items than it was supposed to. The Grinch&#39;s bag is now a sub-type of santa&#39;s bag.</li>
 				<li class="imageadd">The Grinch now has its own logo for the scoreboard.</li>
 				<li class="imageadd">The Grinch bag now looks like the wizard&#39;s Santa bag. Both bags now also visually grow larger as you fit more items in them, and both bags now have in-hand icons.</li>
+				<li class="bugfix">Latejoin Time Agent Anomaly now appears properly in the scoreboard and gets properly logged.</li>
+			</ul>
+			<h3 class="author">RealestEstate updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds kippahs. Rabbis start with one of five different colored kippahs, and the chapel vend dispences 5 more.</li>
+			</ul>
+			<h3 class="author">sushi-vomit updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">lets buttbots butt as much as they want without exploding</li>
 			</ul>
 			<h2 class="date">2023.07.17</h2>
 			<h3 class="author">DeityLink updated:</h3>
@@ -2168,38 +2226,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<ul class="changes bgimages16">
 				<li class="rscadd">Malf AIs that successfully take over the station get a button on their UI that allows them to detonate the nuclear bomb, like before.</li>
 				<li class="bugfix">Operatives can now be nonhumans again.</li>
-			</ul>
-			<h2 class="date">2022.08.21</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Materials bag, a bag that stores metal sheets, glass panes, diamond, plasma, wood, plastic, metal rods, broken glass and leather. Can be printed on the biogenerator and is not available roundstart.</li>
-				<li class="rscadd">Inflatables Dispensers can hold shelters. Borg dispensers start without shelters but can also hold them.</li>
-			</ul>
-			<h3 class="author">Optimism333 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Patches a mothership lab vault tile that was exposed to space</li>
-				<li class="tweak">The ayy leader mob can now spacewalk properly, and not just drift</li>
-			</ul>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Weeds should finally scale properly</li>
-			</ul>
-			<h3 class="author">ebakai updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Exosuit drills and hydraulic clamps now make sounds when being used</li>
-			</ul>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Astral Journey ghosts now have better dark-vision and won&#39;t move diagonally while tangible anymore.</li>
-			</ul>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed a new rare NanoUI bug caused by fixing a rare NanoUI bug. Report all UI bugs, please... please!</li>
-			</ul>
-			<h2 class="date">2022.08.19</h2>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes radio frequencies</li>
 			</ul>
 		</div>
 		<!--

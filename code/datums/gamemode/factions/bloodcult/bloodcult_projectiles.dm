@@ -92,17 +92,19 @@
 	if (shade)
 		if (ismob(A))
 			var/mob/M = A
-			if (!iscultist(M))
+			if (!iscultist(M) && (M != shade.master))
 				A.attackby(blade,shade)
-			else if (!M.get_active_hand())//cultists can catch the blade on the fly
+			else if (!M.get_active_hand())//cultists and the blade's master can catch the blade on the fly
 				blade.forceMove(loc)
 				blade.attack_hand(M)
+				to_chat(M, "<span class='warning'>Your hand moves by itself and catches \the [blade] out of the air.</span>")
 				blade = null
 				qdel(src)
-			else if (!M.get_inactive_hand())//cultists can catch the blade on the fly
+			else if (!M.get_inactive_hand())
 				blade.forceMove(loc)
 				M.swap_hand() // guarrantees
 				blade.attack_hand(M)
+				to_chat(M, "<span class='warning'>Your hand moves by itself and catches \the [blade] out of the air.</span>")
 				M.swap_hand()
 				blade = null
 				qdel(src)
@@ -111,8 +113,22 @@
 	else
 		if (ismob(A))
 			var/mob/M = A
-			if (!iscultist(M))
+			if (!iscultist(M) && (M != shade.master))
 				A.hitby(blade)
+			else if (!M.get_active_hand())//cultists and the blade's master can catch the blade on the fly
+				blade.forceMove(loc)
+				blade.attack_hand(M)
+				to_chat(M, "<span class='warning'>Your hand moves by itself and catches \the [blade] out of the air.</span>")
+				blade = null
+				qdel(src)
+			else if (!M.get_inactive_hand())
+				blade.forceMove(loc)
+				M.swap_hand()
+				blade.attack_hand(M)
+				to_chat(M, "<span class='warning'>Your hand moves by itself and catches \the [blade] out of the air.</span>")
+				M.swap_hand()
+				blade = null
+				qdel(src)
 		else
 			A.hitby(blade)
 	if(isliving(A))
@@ -185,7 +201,7 @@
 //////////////////////////////
 
 /obj/item/projectile/bloodslash
-	name = "soul blade"
+	name = "blood slash"
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "bloodslash"
 	damage = 15

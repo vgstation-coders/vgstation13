@@ -779,6 +779,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.status &= ~ORGAN_BLEEDING
 		src.status &= ~ORGAN_SPLINTED
 		src.status &= ~ORGAN_DEAD
+		src.status &= ~ORGAN_MALFUNCTIONING
 
 		//No limb, no damage
 		brute_dam = 0
@@ -983,6 +984,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status &= ~ORGAN_ATTACHABLE
 	src.status &= ~ORGAN_DESTROYED
 	src.status &= ~ORGAN_PEG
+	src.status &= ~ORGAN_MALFUNCTIONING
 	src.status |= ORGAN_ROBOT
 	src.species = null
 	src.destspawn = 0
@@ -998,25 +1000,17 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status &= ~ORGAN_ATTACHABLE
 	src.status &= ~ORGAN_DESTROYED
 	src.status &= ~ORGAN_ROBOT
+	src.status &= ~ORGAN_MALFUNCTIONING
 	src.status |= ORGAN_PEG
 	src.species = null
+	src.destspawn = 0
 	src.wounds.len = 0
 
+/datum/organ/external/proc/peggify_all()
+	peggify()
 	for (var/datum/organ/external/T in children)
 		if(T)
-			if(body_part == ARM_LEFT || body_part == ARM_RIGHT || body_part == LEG_RIGHT || body_part == LEG_LEFT)
-				T.peggify()
-				src.destspawn = 0
-			else
-				T.droplimb(1, 1)
-				T.status &= ~ORGAN_BROKEN
-				T.status &= ~ORGAN_BLEEDING
-				T.status &= ~ORGAN_CUT_AWAY
-				T.status &= ~ORGAN_SPLINTED
-				T.status &= ~ORGAN_ATTACHABLE
-				T.status &= ~ORGAN_DESTROYED
-				T.status &= ~ORGAN_ROBOT
-				T.wounds.len = 0
+			T.peggify_all()
 
 
 /datum/organ/external/proc/fleshify()
@@ -1028,6 +1022,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status &= ~ORGAN_DESTROYED
 	src.status &= ~ORGAN_PEG
 	src.status &= ~ORGAN_ROBOT
+	src.status &= ~ORGAN_MALFUNCTIONING
 	src.destspawn = 0
 
 /datum/organ/external/proc/attach(obj/item/I)
