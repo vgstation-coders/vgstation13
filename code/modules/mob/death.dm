@@ -34,6 +34,7 @@
 
 
 /mob/proc/death(gibbed)
+	var/turf/place_of_death = get_turf(src)
 	spawn()
 		if(is_dying)
 			var/deathstring = "[src] at ([get_coordinates_string(src)]) had death() called (with var/gibbed = [gibbed]) while already dying!"
@@ -45,7 +46,7 @@
 		INVOKE_EVENT(src, /event/death, "user" = src, "body_destroyed" = gibbed)
 		living_mob_list -= src
 		dead_mob_list += src
-		stat_collection.add_death_stat(src)
+		stat_collection.add_death_stat(src,place_of_death)
 		if(runescape_skull_display && ticker)//we died, begone skull
 			if ("\ref[src]" in ticker.runescape_skulls)
 				var/datum/runescape_skull_data/the_data = ticker.runescape_skulls["\ref[src]"]
@@ -66,9 +67,9 @@
 			var/mindname = (src.mind && src.mind.name) ? "[src.mind.name]" : "[real_name]"
 			var/died_as = (mindname == real_name) ? "" : " (died as [real_name])"
 			for(var/mob/M in get_deadchat_hearers())
-				var/rendered = "\proper<a href='?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a><span class='game deadsay'> \The <span class='name'>[mindname][died_as]</span> has died at \the <span class='name'>[get_area(src)]</span>.</span>"
+				var/rendered = "\proper<a href='?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a><span class='game deadsay'> \The <span class='name'>[mindname][died_as]</span> has died at \the <span class='name'>[get_area(place_of_death)]</span>.</span>"
 				to_chat(M, rendered)
-			log_game("[key_name(src)] has died at [get_area(src)]. Coordinates: ([get_coordinates_string(src)])")
+			log_game("[key_name(src)] has died at [get_area(place_of_death)]. Coordinates: ([get_coordinates_string(src)])")
 		is_dying = FALSE
 
 /mob/proc/transmog_death()
