@@ -345,6 +345,7 @@
 	newagent.AssignToRole(M.mind,1)
 	agency.HandleRecruitedRole(newagent)
 	newagent.Greet(GREET_DEFAULT)
+	return 1
 
 //////////////////////////////////////////////
 //                                          //

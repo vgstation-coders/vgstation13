@@ -90,6 +90,8 @@
 // This generic proc works for a solo candidate.
 // returns: 0 or 1 depending on success. (failure meaning something runtimed mid-code.)
 /datum/dynamic_ruleset/proc/choose_candidates()
+	if (candidates.len <= 0)
+		return FALSE
 	var/mob/M = pick(candidates)
 	if (istype(M))
 		assigned += M

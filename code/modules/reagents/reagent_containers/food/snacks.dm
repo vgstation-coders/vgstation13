@@ -537,6 +537,8 @@
 	if (food_flags & FOOD_DIPPABLE)
 		if (target.is_open_container() && user.Adjacent(target))
 			var/obj/item/weapon/reagent_containers/container = target
+			if(!istype(container))
+				return
 			if (dip && dip.total_volume)
 				to_chat(user, "<span class='warning'>\The [src] is already dipped in [dip.get_master_reagent_name()]. Take a bite before you can dip it further.</span>")
 				return
