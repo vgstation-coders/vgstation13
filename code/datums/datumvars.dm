@@ -398,12 +398,19 @@ function loadPage(list) {
 		var/list/L = value
 		html += "[prefix]/list ([L.len])"
 
-		if (L.len > 0 && !(name == "underlays" || name == "overlays" || name == "vars" || L.len > 500))
+		var/typeid = copytext(ref(L), 4, -7) //There are several internal "lists" that do not behave like regular lists. Like all internal types, they are distinguishable by the beginnings of their refs.
+		// f - Normal lists, and also locs for some reason, but it's fine.
+		//1c - contents
+		//2d - vars
+		//34 - overlays
+		//35 - underlays
+
+		if (L.len > 0 && !(typeid == "2d" || typeid == "34" || typeid == "35" || L.len > 500))
 			// not sure if this is completely right...
 			html += "<ul>"
 			var/index = 1
 			for (var/entry in L)
-				if(!(name == "contents" || name == "locs") && !isnum(entry) && !isnull(L[entry]))
+				if(!(typeid == "1c") && !isnum(entry) && !isnull(L[entry]))
 					html += "<li>[index]. " + debug_variable(entry, L[entry], level + 1)
 				else
 					html += "<li>[index]. " + debug_variable(null, entry, level + 1)
