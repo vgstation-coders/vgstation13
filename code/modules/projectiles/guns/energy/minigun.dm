@@ -23,7 +23,7 @@
 	slowdown = MINIGUN_SLOWDOWN_NONWIELDED
 
 	detachable_cell = TRUE
-	chargeable = FALSE // Does not fit in a recharger, it's just too huge!
+	rechargeable = FALSE // Does not fit in a recharger, it's just too huge!
 
 	origin_tech = Tc_COMBAT + "=6;" + Tc_POWERSTORAGE + "=5" + Tc_MATERIALS + "=5"
 
