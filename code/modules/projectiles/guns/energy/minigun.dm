@@ -77,11 +77,13 @@
 	if (!power_supply || power_supply.charge < charge_cost)
 		return click_empty()
 
+	..()
+
 	var/list/turf/possible_turfs = list()
 	for (var/turf/T in orange(target, 1))
 		possible_turfs += T
 	spawn()
-		for (var/i = 1; i <= beams_per_burst; i++)
+		for (var/i = 1; i < beams_per_burst; i++)
 			if (power_supply.charge < charge_cost)
 				break
 			sleep(0.5)
