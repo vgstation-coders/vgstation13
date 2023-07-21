@@ -47,8 +47,8 @@
 	if(ticker.achievements.len)
 		completions += "<br>[achievement_declare_completion()]"
 
-	score.money_leaderboard = SSpersistence_misc.tasks[/datum/persistence_task/highscores]
-	score.shoal_leaderboard = SSpersistence_misc.tasks[/datum/persistence_task/highscores/trader]
+	score.money_leaderboard = SSpersistence_misc.tasks["/datum/persistence_task/highscores"]
+	score.shoal_leaderboard = SSpersistence_misc.tasks["/datum/persistence_task/highscores/trader"]
 	var/list/rich_escapes = list()
 	var/list/rich_shoals = list()
 
