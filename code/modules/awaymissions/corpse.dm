@@ -1312,7 +1312,8 @@
 
 	var/mob/M = .
 	if(M.gender == FEMALE)
-		corpseuniform += existing_typesof(/obj/item/clothing/under/dress)
+		for(var/Y in existing_typesof(/obj/item/clothing/under/dress))
+			corpseuniform += Y
 
 	if(prob(50))
 		corpsemask = null
