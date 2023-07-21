@@ -27,16 +27,16 @@
 			return profit
 
 /obj/item/toy/lotto_ticket/supermatter_surprise/scratch(var/input_prize_multiplier, var/mob/user)
-    var/profit = 0
+	var/profit = 0
 	var/attempt = 0
-    var/luck = user?.luck()
-    while(!profit && attempt < 10000)
-        for(var/prize = 1 to problist.len)
-            var/thisprob = problist[prize]
-            //Take luck into account.
-            if(user ? user.lucky_prob(thisprob, luckfactor = 1/12000, maxskew = 49.9, ourluck = luck) : prob(thisprob))
-                profit = prizelist[prize] * input_prize_multiplier
-                return profit
+	var/luck = user?.luck()
+	while(!profit && attempt < 10000)
+		for(var/prize = 1 to problist.len)
+			var/thisprob = problist[prize]
+			//Take luck into account.
+			if(user ? user.lucky_prob(thisprob, luckfactor = 1/12000, maxskew = 49.9, ourluck = luck) : prob(thisprob))
+				profit = prizelist[prize] * input_prize_multiplier
+				return profit
 		attempt++
 	return prizelist[prizelist.len] * input_prize_multiplier
 
