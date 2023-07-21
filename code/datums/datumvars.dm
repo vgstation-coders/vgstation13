@@ -349,6 +349,8 @@ function loadPage(list) {
 /client/proc/debug_variable(name, value, level, var/datum/DA = null)
 	var/html = ""
 
+	var/prefix = name ? "[name] = " : ""
+
 	if(DA)
 		if(name == "appearance")
 			html += {"
@@ -362,55 +364,55 @@ function loadPage(list) {
 			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>S</a>) "}
 
 	if (isnull(value))
-		html += "[name] = <span class='value'>null</span>"
+		html += "[prefix]<span class='value'>null</span>"
 
 	else if (istext(value))
-		html += "[name] = <span class='value'>\"[html_encode(value)]\"</span>"
+		html += "[prefix]<span class='value'>\"[html_encode(value)]\"</span>"
 
 	else if (isicon(value))
 		#ifdef VARSICON
-		html += "[name] = /icon (<span class='value'>[value]</span>) [bicon(value)]"
+		html += "[prefix]/icon (<span class='value'>[value]</span>) [bicon(value)]"
 		#else
-		html += "[name] = /icon (<span class='value'>[value]</span>)"
+		html += "[prefix]/icon (<span class='value'>[value]</span>)"
 		#endif
 
 	else if(istype(value, /image))
 		#ifdef VARSICON
-		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>) [bicon(value)]"
+		html += "[prefix]<a href='?_src_=vars;Vars=\ref[value]'>/image (<span class='value'>[value]</span>) \ref[value] [bicon(value)]</a>"
 		#else
-		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>)"
+		html += "[prefix]<a href='?_src_=vars;Vars=\ref[value]'>/image (<span class='value'>[value]</span>) \ref[value]</a>"
 		#endif
 
 	else if (isfile(value))
-		html += "[name] = <span class='value'>'[value]'</span>"
+		html += "[prefix]<span class='value'>'[value]'</span>"
 
 	else if (istype(value, /datum))
 		var/datum/D = value
-		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = [D.type]"
+		html += "[prefix]<a href='?_src_=vars;Vars=\ref[value]'>[D.type] (<span class='value'>[D]</span>) \ref[value]</a>"
 
 	else if (istype(value, /client))
 		var/client/C = value
-		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = [C] [C.type]"
-//
-	else if (istype(value, /list))
+		html += "[prefix]<a href='?_src_=vars;Vars=\ref[value]'>[C.type] (<span class='value'>[C]</span>) \ref[value]</a>"
+
+	else if (islist(value))
 		var/list/L = value
-		html += "[name] = /list ([L.len])"
+		html += "[prefix]/list ([L.len])"
 
 		if (L.len > 0 && !(name == "underlays" || name == "overlays" || name == "vars" || L.len > 500))
 			// not sure if this is completely right...
 			html += "<ul>"
 			var/index = 1
 			for (var/entry in L)
-				if(istext(entry))
-					html += "<li>"+debug_variable(entry, L[entry], level + 1)
+				if(!(name == "contents" || name == "locs") && !isnull(L[entry]))
+					html += "<li>[index]. " + debug_variable(entry, L[entry], level + 1)
 				else
-					html += "<li>"+debug_variable(index, L[index], level + 1)
+					html += "<li>[index]. " + debug_variable(null, entry, level + 1)
 				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a></li>"
 				index++
 			html += "</ul>"
 
 	else
-		html += "[name] = <span class='value'>[value]</span>"
+		html += "[prefix]<span class='value'>[value]</span>"
 		/*
 		// Bitfield stuff
 		if(round(value)==value) // Require integers.
@@ -435,20 +437,11 @@ function loadPage(list) {
 	if(!istype(L))
 		return
 
-	var/html = "<h1>List Viewer</h1><i>Length: [L.len]</i>"
+	var/html = "<h1>List Viewer</h1>"
 
 	if(L.len)
-		html += "<hr><ul>"
-		var/index = 1
-		for (var/entry in L)
-			if(istext(entry))
-				html += "<li>"+debug_variable(entry, L[entry], 0)
-				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[L[entry]]'>(Delete)</a></li>"
-			else
-				html += "<li>"+debug_variable(index, L[index], 0)
-				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[L[index]]'>(Delete)</a></li>"
-			index++
-		html += "</ul>"
+		html += "<hr>"
+		html += debug_variable(null, L)
 
 	usr << browse(html, "window=listedit\ref[L];size=475x650")
 
