@@ -9,9 +9,10 @@
 
 	var/obj/item/weapon/cell/power_supply //What type of power cell this uses
 	var/charge_cost = 100 //How much energy is needed to fire.
-	var/chargeable = TRUE //If the gun fits in a recharger
+	var/rechargeable = TRUE //If the gun fits in a recharger.
+	var/non_rechargeable_reason = "<span class='notice'>The gun lacks a recharge port.</span>" //Default message when attempting to recharge an non-rechargeable gun.
 	var/cell_type = "/obj/item/weapon/cell"
-	var/detachable_cell = FALSE
+	var/detachable_cell = FALSE //If the cell can be swapped or not. Leave false if in doubt, will break balance.
 	var/projectile_type = "/obj/item/projectile/beam/practice"
 	var/modifystate
 	var/charge_states = 1 //if the gun changes icon states depending on charge, this is 1. Uses a var so it can be changed easily
