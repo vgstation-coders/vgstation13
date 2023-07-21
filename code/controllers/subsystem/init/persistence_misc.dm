@@ -31,7 +31,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	..()
 
 /datum/subsystem/persistence_misc/proc/read_data(var/path)
-	var/datum/persistence_task/task_to_read = tasks[path]
+	var/datum/persistence_task/task_to_read = tasks["[path]"]
 	if (!task_to_read)
 		return null
 	return task_to_read.data

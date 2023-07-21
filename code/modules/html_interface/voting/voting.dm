@@ -96,7 +96,7 @@ var/global/datum/controller/vote/vote = new()
 		// Calculate how much time is remaining by comparing current time, to time of vote start,
 		// plus vote duration
 		if (choices.len)
-			time_remaining = round((started_time + 600 - world.time)/10) 
+			time_remaining = round((started_time + 600 - world.time)/10)
 		else
 			time_remaining = round((started_time + config.vote_period - world.time)/10)
 
@@ -174,7 +174,7 @@ var/global/datum/controller/vote/vote = new()
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
-		
+
 /datum/controller/vote/proc/majority()
 	var/text
 	var/feedbackanswer
@@ -207,7 +207,7 @@ var/global/datum/controller/vote/vote = new()
 	return text
 
 /datum/controller/vote/proc/persistent()
-	var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
+	var/datum/persistence_task/vote/task = SSpersistence_misc.tasks["/datum/persistence_task/vote"]
 	task.insert_counts(tally)
 	task.on_shutdown()
 	return majority()
@@ -251,7 +251,7 @@ var/global/datum/controller/vote/vote = new()
 				//logging
 				watchdog.map_path = map_paths[winner]
 				log_game("Players voted and chose.... [watchdog.map_path]!")
-				
+
 	if(restart)
 		to_chat(world, "World restarting due to vote...")
 		feedback_set_details("end_error","restart vote")
@@ -388,7 +388,7 @@ var/global/datum/controller/vote/vote = new()
 		choices = shuffle(choices)
 		//initialize tally
 		if(config.toggle_vote_method == PERSISTENT && mode == "map")
-			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks[/datum/persistence_task/vote]
+			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks["/datum/persistence_task/vote"]
 			for(var/i = 1; i <= choices.len; i++)
 				if(isnull(task.data[choices[i]]))
 					tally += choices[i]
@@ -572,7 +572,7 @@ var/global/datum/controller/vote/vote = new()
 				config.toggle_vote_method = config.toggle_vote_method % 4 + 1
 			else
 				to_chat(user, "<span class='notice'> You can't do that!")
-		//If not calling a vote, submit a vote		
+		//If not calling a vote, submit a vote
 		else
 			submit_vote(user, round(text2num(href_list["vote"])))
 	update()
