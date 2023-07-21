@@ -403,7 +403,7 @@ function loadPage(list) {
 			html += "<ul>"
 			var/index = 1
 			for (var/entry in L)
-				if(!(name == "contents" || name == "locs") && !isnull(L[entry]))
+				if(!(name == "contents" || name == "locs") && !isnum(entry) && !isnull(L[entry]))
 					html += "<li>[index]. " + debug_variable(entry, L[entry], level + 1)
 				else
 					html += "<li>[index]. " + debug_variable(null, entry, level + 1)
