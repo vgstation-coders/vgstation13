@@ -12,7 +12,7 @@
 	var/corpsegender = G_MALE
 	var/list/possible_names
 
-	var/corpseuniform = null //Set this to an object path to have the slot filled with said object on the corpse.
+	var/list/corpseuniform = null //Set this to an object path to have the slot filled with said object on the corpse.
 	var/corpsesuit = null
 	var/corpseshoes = null
 	var/corpsegloves = null
@@ -1302,8 +1302,8 @@
 	corpsehelmet = list(/obj/item/clothing/head/ushanka, /obj/item/clothing/head/squatter_hat) //heh
 
 /obj/effect/landmark/corpse/civilian/New()
-	corpseuniform += existing_typesof(/obj/item/clothing/under/color)
-	corpsehelmet += existing_typesof(/obj/item/clothing/head/soft)
+	corpseuniform = existing_typesof(/obj/item/clothing/under/color)
+	corpsehelmet = existing_typesof(/obj/item/clothing/head/soft)
 
 	return ..()
 
@@ -1312,8 +1312,7 @@
 
 	var/mob/M = .
 	if(M.gender == FEMALE)
-		for(var/Y in existing_typesof(/obj/item/clothing/under/dress))
-			corpseuniform += Y
+		corpseuniform += existing_typesof(/obj/item/clothing/under/dress)
 
 	if(prob(50))
 		corpsemask = null
