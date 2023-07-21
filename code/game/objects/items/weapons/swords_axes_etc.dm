@@ -326,8 +326,9 @@
 
 /obj/item/weapon/damocles/throw_impact(atom/hit_atom, speed, mob/user)
 	..()
-	explosion(get_turf(src), 0, 2, 3, whodunnit = user)
-	qdel(src)
+	if(!ismob(loc)) /* So long as someone didn't catch it, it'll explode. */
+		explosion(get_turf(src), 0, 2, 3, whodunnit = user)
+		qdel(src)
 
 /obj/item/weapon/caber
 	name = "Ullapool Caber"
