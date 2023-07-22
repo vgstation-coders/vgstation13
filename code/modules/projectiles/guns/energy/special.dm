@@ -78,6 +78,8 @@
 	slot_flags = SLOT_BACK
 	w_class = W_CLASS_LARGE
 	charge_cost = 200
+	rechargeable = FALSE
+	non_rechargeable_reason = "<span class='notice'>The recharger rejects the magical apparatus.</span>"
 	projectile_type = "/obj/item/projectile/change"
 	origin_tech = null
 	clumsy_check = 0
