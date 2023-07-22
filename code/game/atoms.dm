@@ -892,8 +892,10 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
-	var/turf/curloc = get_turf(src)
 	var/turf/targloc = get_turf(target)
+	if(!spread)
+		return target
+	var/turf/curloc = get_turf(src)
 	var/list/turf/shot_spread = list()
 	for(var/turf/T in trange(min(spread, max(0, get_dist(curloc, targloc)-1)), targloc))
 		if(chassis)
