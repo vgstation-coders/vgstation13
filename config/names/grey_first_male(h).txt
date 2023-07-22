@@ -10,6 +10,7 @@ David
 Dean
 Diego
 Dmitri
+Elvis
 Fernando
 Ford
 Frank
@@ -27,6 +28,8 @@ Juan
 Jim
 Kim
 Luis
+Norm
+Nort
 Pablo
 Pedro
 Tom
