@@ -311,12 +311,11 @@ var/list/headset_modes = list(
 			/* We use a raw string (@"...") to avoid escaping all of the backslashes used in the pattern, as well as for readability.		*/
 			/* The first pattern is meant to help find "AI" all on its own, WITHOUT including "AI" when surrounded by letters, i.e. (rain) 	*/
 			/* It's also necessary to ensure "AI" is found when surrounded by, say, quotation marks in rendered_message, which is HTML.		*/
-			var/regex/pattern = regex(@"(?<!\l)AI(?!\l)|\Aai\Z|\Aai(?=\s)|(?<=\s)ai(?=\s)", "gi")
+			var/static/regex/pattern = regex(@"(?<!\l)AI(?!\l)|\Aai\Z|\Aai(?=\s)|(?<=\s)ai(?=\s)", "gi")
 			if(pattern.Find(speech.message) || findtext(speech.message, ai.real_name))
 				ai << 'sound/machines/twobeep.ogg'
 				rendered_message = pattern.Replace(rendered_message, "<i style='color: blue;'>AI</i>")
 				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
-			qdel(pattern)
 
 	// Runechat messages
 	if (ismob(speech.speaker) && client?.prefs.mob_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
