@@ -652,6 +652,25 @@ var/global/list/playable_species = list("Human")
 					You are particularly allergic to water, which acts like acid to you, but the inverse is so for acid, so you're fun at parties.<br>\
 					You're not as good at swinging a toolbox or throwing a punch as a baseline human, but you make up for this by bullying them from afar by talking directly into peoples minds."
 
+/datum/species/grey/makeName(var/gender,var/mob/living/carbon/human/H=null) // Grey names are hard to pin down. Some have surnames, some lack surnames. And due to their long period of contact with humanity, a few have more humanized names
+	if(prob(90)) // More alien sounding name
+		switch(rand(0,1))
+			if(0) // No surname. Maybe we're a clone who has forgotten it, or we don't care
+				if(gender==FEMALE)
+					return capitalize(pick(grey_first_female))
+				else
+					return capitalize(pick(grey_first_male))
+			if(1) // Surname present. Maybe we held on to one for sentimental reasons, or wanted to feel more important
+				if(gender==FEMALE)
+					return capitalize(pick(grey_first_female)) + " " + capitalize(pick(grey_last))
+				else
+					return capitalize(pick(grey_first_male)) + " " + capitalize(pick(grey_last))
+	else // More humanized name
+		if(gender==FEMALE)
+			return capitalize(pick(grey_first_female_h)) + " " + capitalize(pick(grey_last_h))
+		else
+			return capitalize(pick(grey_first_male_h)) + " " + capitalize(pick(grey_last_h))
+
 /datum/species/grey/handle_post_spawn(var/mob/living/carbon/human/H)
 	if(myhuman != H)
 		return
