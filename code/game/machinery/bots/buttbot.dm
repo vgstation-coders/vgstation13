@@ -20,16 +20,7 @@ Here it is: Buttbot.
 	maxHealth = 25
 	var/buttchance = 80 //Like an 80% chance of it working. It's just a butt with an arm in it.
 	var/sincelastfart = 0
-	var/det_chance
 	flags = HEAR
-
-/obj/machinery/bot/buttbot/New()
-	..()
-	if(isnull(det_chance))
-		det_chance = rand(1,3)
-
-/obj/machinery/bot/buttbot/everbutt
-	det_chance = 0
 
 /obj/machinery/bot/buttbot/attack_hand(mob/living/user as mob)
 	. = ..()
@@ -47,15 +38,12 @@ Here it is: Buttbot.
 		return
 	for(var/mob/O in hearers(src, null))
 		O.show_message("<b>[src]</b> beeps, '[message]'")
+	return
 
 /obj/machinery/bot/buttbot/proc/fart()
 	if(can_fart())
 		playsound(src, 'sound/misc/fart.ogg', 50, 1)
 		sincelastfart = world.timeofday
-		if(prob(det_chance))
-			explode()
-			return
-		det_chance*=2
 
 /obj/machinery/bot/buttbot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	set waitfor = 0 //Buttbots speaking should be queued after the original speech completes
@@ -80,7 +68,6 @@ Here it is: Buttbot.
 	spark(src)
 
 	new /obj/effect/decal/cleanable/blood/oil(src.loc)
-	explosion(0,0,0)
 	qdel(src)
 
 

@@ -47,8 +47,8 @@
 				E = organ_name
 			else
 				E = get_organ(organ_name)
-			if(!E || (E.status & ORGAN_DESTROYED))
-				. += 4*multiplier
+			if(!E || (E.status & ORGAN_DESTROYED) || (E.status & ORGAN_PEG))
+				. += 2*multiplier
 			if(E.status & ORGAN_SPLINTED)
 				if(!find_held_item_by_type(/obj/item/weapon/cane))
 					. += 0.5*multiplier

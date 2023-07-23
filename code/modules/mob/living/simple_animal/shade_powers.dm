@@ -30,7 +30,7 @@
 	add_spell(new /spell/soulblade/blade_spin, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/soulblade/blade_perforate, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/soulblade/blade_mend, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	add_spell(new /spell/soulblade/blade_boil, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	add_spell(new /spell/soulblade/blade_harm, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 	var/datum/role/cultist/C = iscultist(src)
 	if (C)
@@ -135,12 +135,14 @@
 		return
 	..()
 
-/spell/soulblade/blade_spin/choose_targets(var/mob/user = usr)
+/spell/soulblade/blade_spin/choose_targets(var/mob/living/simple_animal/shade/user = usr)
+	if (!istype(user))
+		return
 	var/obj/item/weapon/melee/soulblade/SB = user.loc
 	if (!isturf(SB.loc) && !istype(SB.loc,/obj/item/projectile))
 		if (ismob(SB.loc))
 			var/mob/M = SB.loc
-			if (!iscultist(M))
+			if (!SB.areYouWorthy(M))
 				M.drop_item(SB)
 				to_chat(M,"<span class='danger'>\The [SB] suddenly spins out of your grab.</span>")
 			else
@@ -158,9 +160,19 @@
 			continue
 		if (istype(A,/atom/movable/lighting_overlay))
 			continue
+		if (istype(A,/obj/machinery/door))
+			var/obj/machinery/door/D = A
+			if (!D.density)
+				continue
 		if (ismob(A))
 			var/mob/M = A
-			if (!iscultist(M))
+			if (iscultist(M))
+				to_chat(user, "<span class='warning'>\The occult energies emitted by [M] feel much like your own, and you instinctively find yourself unable to harm them.</span>")
+				to_chat(M, "<span class='warning'>\The [SB] swings near you but deftly avoids touching you.</span>")
+			else if (M == user.master)
+				to_chat(user, "<span class='warning'>You instinctively avoid harming your master.</span>")
+				to_chat(M, "<span class='warning'>\The [SB] swings near you but deftly avoids touching you.</span>")
+			else
 				my_targets += M
 		else
 			//BREAK EVERYTHING
@@ -171,7 +183,13 @@
 			continue
 		if (ismob(A))
 			var/mob/M = A
-			if (!iscultist(M))
+			if (iscultist(M))
+				to_chat(user, "<span class='warning'>\The occult energies emitted by [M] feel much like your own, and you instinctively find yourself unable to harm them.</span>")
+				to_chat(M, "<span class='warning'>\The [SB] swings near you but deftly avoids touching you.</span>")
+			else if (M == user.master)
+				to_chat(user, "<span class='warning'>You instinctively avoid harming your master.</span>")
+				to_chat(M, "<span class='warning'>\The [SB] swings near you but deftly avoids touching you.</span>")
+			else
 				my_targets += M
 		else
 			//BREAK EVERYTHING
@@ -328,15 +346,15 @@
 
 
 //////////////////////////////
-//                          //Click dat button if a guy you don't like is holding you (aka: a sec officer or a greyshit)
-//        BLADE BOIL        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                          //Doesn't actually damage as much as the original cult spell, unless you manage to use it more than once, in which case they're dumb
-//////////////////////////////But if you get some idiot to grab you and use it twice, you'll get back to full blood, and they'll be most likely dead.
+//                          //
+//    TOGGLE BLADE HARM     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                          //
+//////////////////////////////
 
-/spell/soulblade/blade_boil
-	name = "Blood Boil"
-	desc = "(FREE) Punish your wielder by using a taboo ritual that drains their blood and burns their flesh."//a much lesser version of the original ritual
-	hud_state = "soulblade_boil"
+/spell/soulblade/blade_harm
+	name = "Toggle Harm to Non-Masters"
+	desc = "(FREE) Change whether you allow people who aren't either cultists or the person that soulstone'd you to wield you."
+	hud_state = "soulblade_harm"
 
 	invocation_type = SpI_NONE
 	charge_type = Sp_RECHARGE
@@ -348,30 +366,32 @@
 
 	cast_delay = 0
 
-	blood_cost = 10
-
-/spell/soulblade/blade_boil/choose_targets(var/mob/user = usr)
-	var/obj/item/weapon/melee/soulblade/SB = user.loc
-	if (!ismob(SB.loc))
-		to_chat(user,"<span class='notice'>You need someone to hold you first.<//span>")
-		return null
-	var/mob/M = SB.loc
-	if (iscultist(M))
-		to_chat(user,"<span class='notice'>The cultists of Nar-Sie are immune to this ritual.<//span>")
-		return null
-	return list(M)
-
-/spell/soulblade/blade_boil/before_cast(list/targets, user, bypass_range = 0)
-	return targets
-
-/spell/soulblade/blade_boil/cast(var/list/targets, var/mob/user)
+/spell/soulblade/blade_harm/set_holder(var/mob/living/simple_animal/shade/new_holder)
 	..()
-	var/mob/living/wielder = pick(targets)
-	wielder.take_overall_damage(25,25)
-	playsound(wielder.loc, 'sound/effects/bloodboil.ogg', 50, 0, -1)
-	to_chat(wielder, "<span class='danger'>Your blood boils!</span>")
-	user.say("Dedo ol'btoh! Yu'gular faras desdae. Havas mithum javara. Umathar uf'kal thenar!")//both blood boil and blood drain's old invocations
-	if (iscarbon(wielder))
-		var/mob/living/carbon/C = wielder
-		C.take_blood(null,50)
-		to_chat(user, "<span class='warning'>You steal a good amount of their blood, that'll show them.</span>")
+	if(istype(new_holder))
+		if (new_holder.blade_harm)
+			hud_state = "soulblade_harm"
+		else
+			hud_state = "soulblade_calm"
+
+/spell/soulblade/blade_harm/perform(var/mob/living/simple_animal/shade/user = usr, skipcharge = 0, list/target_override)
+	if (istype(user))
+		if (user.blade_harm)
+			user.blade_harm = FALSE
+			hud_state = "soulblade_calm"
+			to_chat(user, "<span class='notice'>You now allow anyone to wield you.</span>")
+		else
+			user.blade_harm = TRUE
+			hud_state = "soulblade_harm"
+			to_chat(user, "<span class='notice'>You now harm and make dizzy miscreants trying to wield you.</span>")
+		connected_button.overlays.len = 0
+		var/obj/item/weapon/melee/soulblade/SB = user.loc
+		if (istype(SB))
+			var/mob/M = SB.loc//bloke holding the blade
+			if (istype(M) && !iscultist(M) && (user.master != M))
+				if (user.blade_harm)
+					M.Dizzy(120)
+					to_chat(M, "<span class='warning'>You feel a chill as \the [SB]'s murderous intents suddenly turn against you.</span>")
+				else
+					M.AdjustDizzy(-120)
+					to_chat(M, "<span class='notice'>\The energies emanated by the [SB] subside a little, allowing you to wield it.</span>")

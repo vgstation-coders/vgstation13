@@ -171,10 +171,10 @@
 ////////////////////////////////////////////
 
 //Returns a list of damaged organs
-/mob/living/carbon/human/proc/get_damaged_organs(var/brute, var/burn)
+/mob/living/carbon/human/proc/get_damaged_organs(var/brute, var/burn, var/ignore_inorganic = FALSE)
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
-		if((brute && O.brute_dam) || (burn && O.burn_dam))
+		if(((brute && O.brute_dam) || (burn && O.burn_dam)) && !(ignore_inorganic && !O.is_organic()))
 			parts += O
 	return parts
 
@@ -194,7 +194,7 @@
 //It automatically updates damage overlays if necesary
 //It automatically updates health status
 /mob/living/carbon/human/heal_organ_damage(var/brute, var/burn)
-	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn)
+	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn,TRUE)
 	if(!parts.len)
 		return
 	var/datum/organ/external/picked = pick(parts)
@@ -224,7 +224,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 
 //Heal MANY external organs, in random order
 /mob/living/carbon/human/heal_overall_damage(var/brute, var/burn)
-	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn)
+	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn,TRUE)
 	var/datum/organ/internal/heart/hivelord/H = get_heart()
 	if(istype(H)) // hivelord hearts just heal better
 		brute *= 2

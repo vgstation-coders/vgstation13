@@ -704,7 +704,7 @@
 					message_admins("<span class='notice'>[key_name(usr)] edited the hub description.</span>")
 					log_admin("[key_name(usr)] edited the hub description from [old_desc] to [temp_desc]")
 
-		var/datum/persistence_task/task = SSpersistence_misc.tasks[/datum/persistence_task/hub_settings]
+		var/datum/persistence_task/task = SSpersistence_misc.tasks["/datum/persistence_task/hub_settings"]
 		task.on_shutdown()
 		world.update_status()
 		HubPanel()
@@ -1855,18 +1855,6 @@
 		dynamic_curve_width = new_width
 		dynamic_mode_options(usr)
 
-	else if(href_list["force_extended"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		if(master_mode != "Dynamic Mode")
-			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-
-		dynamic_forced_extended = !dynamic_forced_extended
-		log_admin("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
-		message_admins("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
-		dynamic_mode_options(usr)
-
 	else if(href_list["toggle_rulesets"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -2215,17 +2203,22 @@
 
 		pack.name = "[M.real_name]'s belongings"
 
+		var/might_need_glasses = FALSE
 		for(var/obj/item/I in M)
 			if(istype(I,/obj/item/clothing/glasses))
 				var/obj/item/clothing/glasses/G = I
-				if(G.prescription)
-					continue
+				if(G.nearsighted_modifier != 0)
+					might_need_glasses = TRUE
 			M.u_equip(I,1)
 			if(I)
 				I.forceMove(M.loc)
 				I.reset_plane_and_layer()
 				//I.dropped(M)
 				I.forceMove(pack)
+
+		if (might_need_glasses && ishuman(M))
+			var/mob/living/carbon/human/H = M
+			H.equip_to_slot_or_del(new /obj/item/clothing/glasses/regular(H), slot_glasses)
 
 		var/obj/item/weapon/card/id/thunderdome/ident = null
 
