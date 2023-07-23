@@ -2,6 +2,7 @@ Abeks
 Adrakka
 Aphox
 Axlonna
+Baala
 Barada
 Bu'kleppa
 Byphox
@@ -14,8 +15,12 @@ Geequi
 Glitapka
 Huaqklep
 Hu'kleppa
+Innoqua
 Imidaa
+Jakkma
 Jueqklata
+Jurobu
+Kaizxma
 Keemqui
 Klaatu
 Ku'kleppa
@@ -32,8 +37,11 @@ Neemqui
 Nikto
 Nuakka
 Orneemqui
+Sechxma
 Symniqua
 Su'kleppa
+Tajeemqui
+Takqua
 Tamu
 Teemqui
 Toklaka

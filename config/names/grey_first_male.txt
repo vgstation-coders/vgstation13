@@ -16,6 +16,7 @@ Da'zok
 Du'klepp
 Dyphox
 Gatepp
+Geotuox
 Glitap
 Gort
 Hikklep
@@ -24,7 +25,9 @@ Iaatu
 Imdrax
 Im'klepp
 Ivok
+Jeqlorm
 Jueqklet
+Juroklep
 Klaatu
 Klarap
 Klerp
@@ -33,6 +36,8 @@ Kypto
 Latlu
 Llaxor
 Lu'klepp
+Luxalg
+Luxzar
 Neelix
 Nikto
 Qorb
@@ -46,7 +51,10 @@ Tu'zok
 Udrak
 Uphox
 Uxor
+Ugklep
 U'zok
+Vopquorm
+Vulzon
 Xaatu
 Xavvox
 Yaxor
