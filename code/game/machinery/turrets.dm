@@ -141,17 +141,18 @@
 
 /obj/machinery/turret/proc/get_new_target()
 	var/list/new_targets = new
+	var/list/found_atoms = view(7, src)
 	var/new_target
-	for(var/mob/M in view(7, src))
+	for(var/mob/M in found_atoms)
 		if(check_target(M))
 			new_targets += M
-	for(var/obj/mecha/ME in view(7, src))
+	for(var/obj/mecha/ME in found_atoms)
 		if(check_target(ME))
 			new_targets += ME
-	for(var/obj/structure/bed/chair/vehicle/V in view(7, src))
+	for(var/obj/structure/bed/chair/vehicle/V in found_atoms)
 		if(check_target(V))
 			new_targets += V
-	for(var/obj/effect/blob/B in view(7, src))
+	for(var/obj/effect/blob/B in found_atoms)
 		new_targets += B
 	if(new_targets.len)
 		new_target = pick(new_targets)
