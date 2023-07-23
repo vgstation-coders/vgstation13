@@ -32,9 +32,11 @@ Crisps
 Cuba
 Dakota
 Disneyworld
+Doctor
 Dollywood
 Eclair
 Ephesus
+Esquire
 Fez
 Ford
 Georgia
@@ -64,6 +66,7 @@ Moscow
 Mozzarella
 Neodelhi
 Nevada
+Pancakes
 Palermo
 Papakha
 Paris
@@ -98,6 +101,7 @@ Ushanka
 Vanuatu
 Vodka
 Volkswagon
+Waffles
 Whiskey
 Zacatecas
 Zanzibar
