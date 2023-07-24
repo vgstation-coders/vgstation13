@@ -151,8 +151,8 @@ var/global/list/organ_damage_overlays = list(
 				update_mutations()
 				check_mutations = 0
 			if (M_CHECK_JOB)
-				var/datum/job/job = job_master.GetJob(job)
-				job.post_init(src)
+				var/datum/job/J = job_master.GetJob(job)
+				J.post_init(src)
 				check_mutations = 0
 		//Updates the number of stored chemicals for powers
 		//handle_changeling()
