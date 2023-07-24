@@ -149,7 +149,7 @@
 	var/list/new_targets = new
 	var/new_target
 
-	for(var/atom/movable/A in view(7, src)
+	for(var/atom/movable/A in view(7, src))
 		if(is_type_in_list(A, types_to_search))
 			if(check_target(A))
 				new_targets += A
