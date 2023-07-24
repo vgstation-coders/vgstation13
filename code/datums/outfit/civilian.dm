@@ -121,9 +121,6 @@
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.check_mutations = M_CHECK_JOB
 
-/datum/job/bartender/post_init(var/mob/living/carbon/human/H)
-	genemutcheck(H, SOBERBLOCK)
-
 /datum/outfit/bartender/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser] = SURVIVAL_BOX

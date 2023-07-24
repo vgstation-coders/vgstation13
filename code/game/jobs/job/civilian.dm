@@ -12,6 +12,9 @@
 	outfit_datum = /datum/outfit/bartender
 	additional_information = "You can juggle most bottles and empty glasses by picking them up while on GRAB intent, so long as you remain unusually sober."
 
+/datum/job/bartender/post_init(var/mob/living/carbon/human/H)
+	genemutcheck(H, SOBERBLOCK)
+
 /datum/job/chef
 	title = "Chef"
 	faction = "Station"

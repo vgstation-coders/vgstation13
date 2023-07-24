@@ -271,11 +271,6 @@
 		H.dna.SetSEState(NOIRBLOCK,1)
 	H.check_mutations = M_CHECK_JOB
 
-/datum/job/detective/post_init(var/mob/living/carbon/human/H)
-	genemutcheck(H, SOBERBLOCK)
-	if (H.mind.role_alt_title == "Gumshoe" || H.mind.role_alt_title == "Private Eye")
-		genemutcheck(H, NOIRBLOCK)
-
 /datum/outfit/detective/post_equip_priority(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
 	var/obj/item/weapon/reagent_containers/food/drinks/flask/detflask/bonusflask = new /obj/item/weapon/reagent_containers/food/drinks/flask/detflask(H.back)
