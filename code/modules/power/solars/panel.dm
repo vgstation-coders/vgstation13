@@ -9,7 +9,7 @@
 	var/adir = SOUTH
 	var/ndir = SOUTH
 	var/turn_angle = 0
-	var/glass_quality_factor = 1 //Rglass is average. Glass is shite. Tinted glass is "Are you even trying ?" tier if anyone ever makes a sheet version
+	var/glass_quality_factor = 1 //Rglass is average. Glass is shite. Tinted glass is "Are you even trying?" tier if anyone ever makes a sheet version
 	var/tracker = 0
 	var/obj/machinery/power/solar/control/control
 	var/obj/machinery/power/solar_assembly/solar_assembly

@@ -4067,7 +4067,7 @@
 						log_admin("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
 						return
 					if("Malfunction") //BLOW EVERYTHING
-						var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert ?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
+						var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
 						if(salertchoice == "Yes")
 							command_alert(/datum/command_alert/malf_announce)
 						to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
@@ -4101,7 +4101,7 @@
 			if("fakebooms") //Michael Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
-				var/amount = input("How many fake explosions do you want ?", "Fake Explosions", 1) as num
+				var/amount = input("How many fake explosions do you want?", "Fake Explosions", 1) as num
 				if(amount < 1) //No negative or null explosion amounts here math genius
 					to_chat(usr, "<span class='warning'>Invalid input range (null or negative)</span>")
 					return
@@ -5823,7 +5823,7 @@
 
 				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as null|anything in moblist
 
-				if (alert("Do you want to make \the [preacher] the leader of [R.name] ?", "Activating a religion", "Yes", "No") != "Yes")
+				if (alert("Do you want to make \the [preacher] the leader of [R.name]?", "Activating a religion", "Yes", "No") != "Yes")
 					return FALSE
 
 				if (!preacher)
