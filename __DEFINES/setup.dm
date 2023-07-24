@@ -418,7 +418,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 // MUTATIONS
 ///////////////////////////////////////
 
-
+#define M_CHECK_ALL		1
+#define M_CHECK_JOB		2
 
 // Generic mutations:
 #define	M_TK			1

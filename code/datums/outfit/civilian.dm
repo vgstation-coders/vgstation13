@@ -119,6 +119,9 @@
 	..()
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	H.dna.SetSEState(SOBERBLOCK,1)
+	H.check_mutations = M_CHECK_JOB
+
+/datum/job/bartender/post_init(var/mob/living/carbon/human/H)
 	genemutcheck(H, SOBERBLOCK)
 
 /datum/outfit/bartender/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
@@ -581,7 +584,7 @@
 			/obj/item/weapon/palette = null,
 		)
 	)
-	
+
 
 	pda_type = /obj/item/device/pda/librarian
 	pda_slot = slot_belt

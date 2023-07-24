@@ -157,7 +157,7 @@ var/list/body_archives = list()
 	H.dna.species = R.dna.species
 	if(H.dna.species != "Human")
 		H.set_species(H.dna.species, TRUE)
-	H.check_mutations = TRUE
+	H.check_mutations = M_CHECK_ALL
 	H.updatehealth()
 	if (our_mind)
 		has_been_shade -= our_mind

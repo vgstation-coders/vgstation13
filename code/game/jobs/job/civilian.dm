@@ -10,6 +10,7 @@
 	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_weapons)
 	minimal_access = list(access_bar,access_weapons)
 	outfit_datum = /datum/outfit/bartender
+	additional_information = "You can juggle most bottles and empty glasses by picking them up while on GRAB intent, so long as you remain unusually sober."
 
 /datum/job/chef
 	title = "Chef"
