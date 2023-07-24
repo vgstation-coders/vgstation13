@@ -80,7 +80,12 @@
 		H.adjustHalLoss(50)
 		H.vessel.trans_to(reagents,reagents.maximum_volume)
 	if (can_flip && (M_SOBER in user.mutations) && (user.a_intent == I_GRAB))
-		bottleflip(user)
+		if (flipping && (M_CLUMSY in user.mutations) && prob(20))
+			to_chat(user, "<span class='warning'>Your clumsy fingers fail to catch back \the [src].</span>")
+			user.drop_item(src, user.loc, 1)
+			throw_impact(user.loc,1,user)
+		else
+			bottleflip(user)
 
 /obj/item/weapon/reagent_containers/food/drinks/dropped(var/mob/user)
 	..()
@@ -147,8 +152,13 @@
 			QDEL_NULL(flipping)
 			last_flipping = world.time
 			item_state = initial(item_state)
-			user.update_inv_hands()
-			playsound(loc,'sound/effects/slap2.ogg', 10, 1, -2)
+			if ((M_CLUMSY in user.mutations) && prob(20))
+				to_chat(user, "<span class='warning'>Your clumsy fingers fail to catch back \the [src].</span>")
+				user.drop_item(src, user.loc, 1)
+				throw_impact(user.loc,1,user)
+			else
+				user.update_inv_hands()
+				playsound(loc,'sound/effects/slap2.ogg', 10, 1, -2)
 
 /obj/item/weapon/reagent_containers/food/drinks/attack(mob/living/M as mob, mob/user as mob, def_zone)
 	var/datum/reagents/R = src.reagents
@@ -2000,6 +2010,7 @@
 	molotov = 1
 	isGlass = 1
 	icon_state = "vodkabottle" //not strictly necessary for the "abstract" molotov type that the molotov-making-process copies variables from, but is used for pre-spawned molotovs
+	can_flip = TRUE
 
 /obj/item/weapon/reagent_containers/food/drinks/molotov/New()
 	..()
