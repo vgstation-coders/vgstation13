@@ -130,6 +130,10 @@
 			var/new_jumpsuit_icon_state = ""
 			var/new_jumpsuit_item_state = ""
 			var/new_jumpsuit_name = ""
+			var/new_suit_icon = ""
+			var/new_suit_icon_state = ""
+			var/new_suit_item_state = ""
+			var/new_suit_name = ""
 			var/new_glove_icon = ""
 			var/new_glove_icon_state = ""
 			var/new_glove_item_state = ""
@@ -155,6 +159,16 @@
 					QDEL_NULL(J)
 					break
 				QDEL_NULL(J)
+			for(var/T in typesof(/obj/item/clothing/suit))
+				var/obj/item/clothing/suit/O = new T
+				if(color == O._color)
+					new_suit_icon = O.icon //Fixes a bug where assistant suits (which have their own icon file) would make invisible suits
+					new_suit_icon_state = O.icon_state
+					new_suit_item_state = O.item_state
+					new_suit_name = O.name
+					QDEL_NULL(O)
+					break
+				QDEL_NULL(O)
 			for(var/T in typesof(/obj/item/clothing/gloves))
 				var/obj/item/clothing/gloves/G = new T
 				if(color == G._color)
@@ -207,6 +221,14 @@
 					J._color = color
 					J.name = new_jumpsuit_name
 					J.desc = new_desc
+			if(new_suit_icon_state && new_suit_name)
+				for(var/obj/item/clothing/suit/O in contents)
+					O.icon = new_suit_icon
+					O.item_state = new_suit_item_state
+					O.icon_state = new_suit_icon_state
+					O._color = color
+					O.name = new_suit_name
+					O.desc = new_desc
 			if(new_glove_icon_state && new_glove_name)
 				for(var/obj/item/clothing/gloves/G in contents)
 					G.icon = new_glove_icon
