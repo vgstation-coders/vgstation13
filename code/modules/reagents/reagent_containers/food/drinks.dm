@@ -88,7 +88,7 @@
 		QDEL_NULL(flipping)
 		last_flipping = world.time
 		item_state = initial(item_state)
-		playsound(loc,'sound/effects/slap2.ogg', 10, 1, -2)
+		playsound(loc,'sound/effects/slap2.ogg', 5, 1, -2)
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/bottleflip(var/mob/user)
 	playsound(loc,'sound/effects/woosh.ogg', 10, 1, -2)
