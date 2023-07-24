@@ -237,6 +237,7 @@
 	item_state = "suitjacket_blue_open"
 	blood_overlay_type = "coat"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	_color = "blue"
 
 /obj/item/clothing/suit/storage/lawyer/purpjacket
 	name = "Purple Suit Jacket"
@@ -245,6 +246,7 @@
 	item_state = "suitjacket_purp"
 	blood_overlay_type = "coat"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	_color = "purple"
 
 //Bridge Officer
 /obj/item/clothing/suit/storage/lawyer/bridgeofficer
@@ -263,6 +265,7 @@
 	item_state = "ia_jacket"
 	blood_overlay_type = "coat"
 	species_fit = list(INSECT_SHAPED)
+	_color = "black"
 
 /obj/item/clothing/suit/storage/internalaffairs/verb/toggle()
 	set name = "Toggle Coat Buttons"
