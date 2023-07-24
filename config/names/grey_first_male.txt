@@ -38,6 +38,7 @@ Llaxor
 Lu'klepp
 Luxalg
 Luxzar
+Ma'at
 Neelix
 Nikto
 Qorb

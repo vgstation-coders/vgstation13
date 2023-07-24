@@ -7,6 +7,7 @@ Anna
 Antonia
 Anya
 Audrey
+Brunhilda
 Celine
 Charlotte
 Claire
@@ -16,6 +17,8 @@ Elise
 Elizabeth
 Emily
 Emma
+Felicity
+Genevieve
 Guadalupe
 Grace
 Harper
