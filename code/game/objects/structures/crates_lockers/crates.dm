@@ -459,20 +459,21 @@
 	src.setDensity(TRUE)
 	return 1
 
-/obj/structure/closet/crate/insert(var/atom/movable/AM, var/include_mobs = 0)
+/obj/structure/closet/crate/insert(var/atom/movable/AM)
 
 	if(contents.len >= storage_capacity)
 		return -1
 
-	if(include_mobs && isliving(AM))
-		var/mob/living/L = AM
-		if(L.locked_to)
+	if(ishuman(AM))
+		var/mob/living/carbon/human/H = AM
+		if(!istype(H) || H.locked_to)
 			return 0
+		if(!(H.resting || H.stat)) /* We only want mobs that are human and are resting/dying to be able to get inside. */
+			return 0
+
 	else if(isobj(AM))
 		if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
 			return 0
-	else
-		return 0
 
 	if(istype(AM, /obj/structure/bed)) //This is only necessary because of rollerbeds and swivel chairs.
 		var/obj/structure/bed/B = AM

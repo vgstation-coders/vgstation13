@@ -1229,6 +1229,10 @@ Thanks.
 	if(client.move_delayer.blocked())
 		return
 
+	if(istype(loc, /obj/structure/closet/crate))
+		to_chat(src, "<span class='warning'>There isn't enough room to get up. Open the [loc.name] first!</span>")
+		return
+
 	rest_action()
 
 /mob/living/proc/rest_action()
