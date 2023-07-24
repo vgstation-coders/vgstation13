@@ -4117,11 +4117,11 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 
 /obj/machinery/vending/art
 	name = "\improper Le Patron des Arts"  //Mécène won't render
-	desc = "A vendor for art supplies. Pas sans mon béret!"
+	desc = "A vendor for art supplies. Pas sans mon béret !"
 	product_slogans = list(
 		"Il est temps pour vous de jeter des perles devant ces porcs incultes.",
 		"Oui, j'ai capitulé. Vous pouvez aussi acheter des crayons maintenant.",
-		"Il y a la peinture sur toile, et puis il y a l'art véritable. Pouvez-vous voir la différence?"
+		"Il y a la peinture sur toile, et puis il y a l'art véritable. Pouvez-vous voir la différence ?"
 	)
 	product_ads = list(
 		"This is not a cigarette vendor."
