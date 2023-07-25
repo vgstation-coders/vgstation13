@@ -1014,15 +1014,9 @@ its easier to just keep the beam vertical.
 			else if (blood_DNA[this_blood_DNA])
 				stains[blood_DNA[this_blood_DNA]]++
 		if (stains.len)
-			var/this_max = 0
-			while (!isnull(this_max))
-				this_max = associative_max(stains)
-				if (this_max)
-					for (var/thisstain in stains)
-						if (stains[thisstain] == this_max)
-							stains[thisstain] = null
-							. += "[. ? "and-" : ""][thisstain]-"
-							break
+			for (var/thisstain in stains)
+				. += "[. ? "and-" : ""][thisstain]-"
 			. += "stained"
-		if (colored_text && blood_color)
-			. = "<span style='color: [blood_color]'>[.]</span>"
+			if (colored_text && blood_color)
+				. = "<span style='color: [blood_color]'>[.]</span>"
+
