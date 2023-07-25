@@ -7,6 +7,7 @@
 	basecolor = ALIEN_BLOOD
 
 	fake_DNA = "xeno blood splatters"
+	stain_name = "xeno blood"
 
 /obj/effect/decal/cleanable/blood/gibs/xeno
 	name = "xeno gibs"
@@ -16,6 +17,7 @@
 	basecolor = ALIEN_BLOOD
 
 	fake_DNA = "xeno gibs splatters"
+	stain_name = "xeno blood"
 
 /obj/effect/decal/cleanable/blood/gibs/xeno/update_icon()
 	color = "#FFFFFF"

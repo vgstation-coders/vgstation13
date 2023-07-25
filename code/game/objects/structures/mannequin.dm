@@ -293,7 +293,7 @@
 
 	for(var/obj/item/I in held_items)
 		if(I.blood_DNA && I.blood_DNA.len)
-			msg += "<span class='warning'>It's holding [bicon(I)] [I.gender==PLURAL?"some":"a"] blood-stained [I.name] in its [get_index_limb_name(is_holding_item(I))]!</span>\n"
+			msg += "<span class='warning'>It's holding [bicon(I)] [I.gender==PLURAL?"some":"a"] [I.get_stain_text()] [I.name] in its [get_index_limb_name(is_holding_item(I))]!</span>\n"
 		else
 			msg += "It's holding [bicon(I)] \a [I] in its [get_index_limb_name(is_holding_item(I))].\n"
 
@@ -321,7 +321,7 @@
 					slot_examine = " on its ears"
 
 			if(clothToExamine.blood_DNA && clothToExamine.blood_DNA.len)
-				msg += "<span class='warning'>It's wearing [bicon(clothToExamine)] [clothToExamine.gender==PLURAL?"some":"a"] blood-stained [clothToExamine][slot_examine]![clothToExamine.description_accessories()]</span>\n"
+				msg += "<span class='warning'>It's wearing [bicon(clothToExamine)] [clothToExamine.gender==PLURAL?"some":"a"] [clothToExamine.get_stain_text()] [clothToExamine][slot_examine]![clothToExamine.description_accessories()]</span>\n"
 			else
 				msg += "It's wearing [bicon(clothToExamine)] \a [clothToExamine][slot_examine].[clothToExamine.description_accessories()] \n"
 

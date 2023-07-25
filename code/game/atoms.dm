@@ -448,7 +448,7 @@ its easier to just keep the beam vertical.
 			f_name = "some "
 		else
 			f_name = "a "
-		f_name += "<span class='danger'>blood-stained</span> [name]!"
+		f_name += "<span class='danger'>[get_stain_text()]</span> [name]!"
 
 	if(show_name)
 		to_chat(user, "[show_icon ? bicon(src) : ""] That's [f_name]" + size)
@@ -1002,3 +1002,27 @@ its easier to just keep the beam vertical.
 **/
 /atom/proc/attempt_heating(atom/A, mob/user)
 	return
+
+/atom/proc/get_stain_text(var/colored_text = TRUE) //"blood-and-vomit-stained"
+	if (blood_DNA?.len)
+		var/stains[0]
+		for (var/this_blood_DNA in blood_DNA)
+			if (findtextEx("A+A-B+B-AB+AB-O+O-", blood_DNA[this_blood_DNA]))
+				stains["blood"]++
+			else if (blood_DNA[this_blood_DNA] == "N/A")
+				stains["blood"]++ //call everything unspecified "blood" just in case
+			else if (blood_DNA[this_blood_DNA])
+				stains[blood_DNA[this_blood_DNA]]++
+		if (stains.len)
+			var/this_max = 0
+			while (!isnull(this_max))
+				this_max = associative_max(stains)
+				if (this_max)
+					for (var/thisstain in stains)
+						if (stains[thisstain] == this_max)
+							stains[thisstain] = null
+							. += "[. ? "and-" : ""][thisstain]-"
+							break
+			. += "stained"
+		if (colored_text && blood_color)
+			. = "<span style='color: [blood_color]'>[.]</span>"
