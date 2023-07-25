@@ -766,7 +766,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 		/obj/item/clothing/suit/space/grey,
 		/obj/item/clothing/head/helmet/space/grey,
 	)
-	var/worker = list(/obj/item/clothing/suit/space/rig/grey)
+	var/worker = list(/obj/item/clothing/suit/space/rig/grey/worker)
 	var/researcher = list(/obj/item/clothing/suit/space/rig/grey/researcher)
 	var/soldier = list(/obj/item/clothing/suit/space/rig/grey/soldier)
 	contains = list(/obj/item/weapon/tank/oxygen/red,
