@@ -443,12 +443,9 @@ its easier to just keep the beam vertical.
 /atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
-	if(src.blood_DNA && src.blood_DNA.len)
-		if(gender == PLURAL)
-			f_name = "some "
-		else
-			f_name = "a "
-		f_name += "<span class='danger'>[get_stain_text()]</span> [name]!"
+	if(blood_DNA && blood_DNA.len)
+		var/stain_text = get_stain_text(FALSE)
+		f_name = "[get_indefinite_article(stain_text, gender)] <span class='danger'>[get_stain_text()]</span> [name]!"
 
 	if(show_name)
 		to_chat(user, "[show_icon ? bicon(src) : ""] That's [f_name]" + size)
@@ -1003,7 +1000,7 @@ its easier to just keep the beam vertical.
 /atom/proc/attempt_heating(atom/A, mob/user)
 	return
 
-/atom/proc/get_stain_text(var/colored_text = TRUE) //"blood-and-vomit-stained"
+/atom/proc/get_stain_text(colored_text = TRUE) //"blood-and-vomit-stained"
 	if (blood_DNA?.len)
 		var/stains[0]
 		for (var/this_blood_DNA in blood_DNA)
@@ -1018,5 +1015,14 @@ its easier to just keep the beam vertical.
 				. += "[. ? "and-" : ""][thisstain]-"
 			. += "stained"
 			if (colored_text && blood_color)
-				. = "<span style='color: [ColorVClamp(blood_color, 55, 200)]'>[.]</span>"
+				. = "<span style='color: [get_stain_text_color()]'>[.]</span>"
 
+/atom/proc/get_stain_text_color()
+	return ColorVClamp(blood_color, 55, 200)
+
+/atom/proc/a_stained(colored_text = TRUE)
+	var/stain_text = get_stain_text(FALSE)
+	var/indef_art = get_indefinite_article(stain_text, gender)
+	if (colored_text && blood_color)
+		stain_text = "<span style='color: [get_stain_text_color()]'>[stain_text]</span>"
+	return indef_art + " " + stain_text
