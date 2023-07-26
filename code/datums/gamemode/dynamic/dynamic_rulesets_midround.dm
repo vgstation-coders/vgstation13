@@ -225,6 +225,8 @@
 			living_players -= player//we don't autotator people with roles already
 
 /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0)
+	if (forced)
+		return ..()
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
@@ -324,6 +326,8 @@
 	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced=0)
+	if (forced)
+		return ..()
 	if(locate(/datum/dynamic_ruleset/roundstart/cwc) in mode.executed_rules)
 		message_admins("Rejected Ragin' Mages as there was a Civil War.")
 		return 0 //This is elegantly skipped by specific ruleset.
@@ -367,9 +371,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
 	if (forced)
 		required_candidates = 1
-	return ..()
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
+		return ..()
 	if(locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
 		return 0 //Unavailable if nuke ops were already sent at roundstart
 	var/indice_pop = min(10,round(living_players.len/5) + 1)
@@ -470,6 +472,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad/ready(var/forced = 0)
 	if(forced)
 		required_heads = 1
+		return ..()
 	if (find_active_faction_by_type(/datum/faction/revolution))
 		return FALSE //Never send 2 rev types
 	if(!..())
@@ -504,6 +507,8 @@
 	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/ninja/ready(var/forced=0)
+	if (forced)
+		return ..()
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
@@ -544,6 +549,8 @@
 	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/ready(var/forced=0)
+	if (forced)
+		return ..()
 	if(mode.executed_rules.len <= 0)
 		return FALSE
 		//We have nothing to investigate!
@@ -578,6 +585,8 @@
 	logo = "time-logo"
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
+	if (forced)
+		return ..()
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
