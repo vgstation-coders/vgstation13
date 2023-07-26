@@ -6,3 +6,6 @@
 #define COLOR_WHITEMODE_BACKGROUND "none"
 #define COLOR_WHITEMODE_INFOBACKGROUND "#FFFFFF"
 #define COLOR_WHITEMODE_TEXT "#000000"
+
+#define DYNAMIC_TEXT_COLOR_V_MIN 60 //Dynamically-colored text such as that of blood-stains will have its HSV V brightness value clamped between these.
+#define DYNAMIC_TEXT_COLOR_V_MAX 200
