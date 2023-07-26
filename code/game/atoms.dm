@@ -1018,5 +1018,5 @@ its easier to just keep the beam vertical.
 				. += "[. ? "and-" : ""][thisstain]-"
 			. += "stained"
 			if (colored_text && blood_color)
-				. = "<span style='color: [blood_color]'>[.]</span>"
+				. = "<span style='color: [ColorVClamp(blood_color, 55, 200)]'>[.]</span>"
 
