@@ -111,6 +111,8 @@
 		log_admin("Dynamic Mode: [name] was prevented from firing because rulesets are disabled.")
 		return FALSE
 	if (required_candidates > candidates.len)		//IMPORTANT: If ready() returns 1, that means execute() should never fail!
+		log_admin("Cannot accept [name] ruleset, lack of eligible players.")
+		message_admins("Cannot accept [name] ruleset, lack of eligible players.")
 		return FALSE
 	return TRUE
 
