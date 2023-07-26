@@ -472,6 +472,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad/ready(var/forced = 0)
 	if(forced)
 		required_heads = 1
+		required_candidates = 1
 		return ..()
 	if (find_active_faction_by_type(/datum/faction/revolution))
 		return FALSE //Never send 2 rev types
@@ -669,6 +670,8 @@
 	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/catbeast/ready(var/forced=0)
+	if (forced)
+		return ..()
 	if(mode.midround_threat>50) //We're threatening enough!
 		message_admins("Rejected catbeast ruleset, [mode.midround_threat] threat was over 50.")
 		return FALSE
@@ -703,6 +706,7 @@
 	required_candidates = vox_cap[indice_pop]
 	if (forced)
 		required_candidates = 1
+		return ..()
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	. = ..()
@@ -821,7 +825,6 @@
 	var/list/vents = list()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/ready()
-	..()
 	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
 		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
 			if(temp_vent.network.normal_members.len > 50)	//Stops Aliens getting stuck in small networks. See: Security, Virology
@@ -829,9 +832,11 @@
 
 
 	if (vents.len == 0)
+		log_admin("A suitable vent couldn't be found for alien larva. That's bad.")
 		message_admins("A suitable vent couldn't be found for alien larva. That's bad.")
-		return
-	return 1
+		return FALSE
+
+	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/generate_ruleset_body(var/mob/applicant)
 	var/obj/vent = pick(vents)
