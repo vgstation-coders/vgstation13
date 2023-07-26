@@ -219,8 +219,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.clear_reagents()
 	if(user)
 		if(user.Adjacent(target))
-			user.visible_message("<span class='warning'>\The [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""] has been splashed with something by [user]!</span>",
-								"<span class='notice'>You splash [amount > 0 ? "some of " : ""]the solution onto \the [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""].</span>")
+			user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
+			                     "<span class='notice'>You splash the solution onto \the [target].</span>")
 
 //Define this wrapper as well to allow for proc overrides eg. for frying pan
 /obj/item/weapon/reagent_containers/proc/container_splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user = null)
