@@ -1795,15 +1795,15 @@
 				var/mob/living/carbon/human/H = M
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 				if(head_organ)
-					if(head_organ.take_damage(0, min(15, volume *2)))
+					if(head_organ.take_damage(min(25, volume * 2), 0))
 						H.UpdateDamageIcon(1)
 					head_organ.disfigure("burn")
 					H.audible_scream()
 			else
-				M.take_organ_damage(0, min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+				M.take_organ_damage(min(15, volume * 2), 0) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 	else
 		if(M.dissolvable() == PACID)
-			M.take_organ_damage(0, min(15, volume * 2))
+			M.take_organ_damage(min(15, volume * 2), 0)
 
 /datum/reagent/sacid/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -1873,7 +1873,7 @@
 
 			if(H.dissolvable() == PACID)
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-				if(head_organ.take_damage(0, min(15, volume * 4)))
+				if(head_organ.take_damage(min(15, volume * 4), 0))
 					H.UpdateDamageIcon(1)
 				H.audible_scream()
 
@@ -1890,18 +1890,18 @@
 				return
 
 			if(MK.dissolvable() == PACID)
-				MK.take_organ_damage(0, min(15, volume * 4)) //Same deal as sulphuric acid
+				MK.take_organ_damage(min(15, volume * 4), 0) //Same deal as sulphuric acid
 	else
 		if(M.dissolvable() == PACID) //I think someone doesn't know what this does
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-				if(head_organ.take_damage(0, min(15, volume * 4)))
+				if(head_organ.take_damage(min(15, volume * 4), 0))
 					H.UpdateDamageIcon(1)
 				H.audible_scream()
 				head_organ.disfigure("burn")
 			else
-				M.take_organ_damage(0, min(15, volume * 4))
+				M.take_organ_damage(min(15, volume * 4), 0)
 
 /datum/reagent/pacid/reaction_obj(var/obj/O, var/volume)
 	if(..())
