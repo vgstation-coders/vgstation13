@@ -105,7 +105,7 @@
 		else
 			msg += "[t_He] [t_has] [bicon(gloves)] \a [gloves] on [t_his] hands. [format_examine(gloves, "Examine")][gloves.description_accessories()]\n"
 	else if(blood_DNA && blood_DNA.len && !(slot_gloves in obscured))
-		msg += "<span class='warning'>[t_He] [t_has] [get_stain_text()] hands!</span>\n"
+		msg += "<span class='warning'>[t_He] [t_has] <span style='color: [get_stain_text_color(bloody_hands_data["blood_colour"])]'>[get_stain_name(bloody_hands_data["blood_type"])]-stained</span> hands!</span>\n"
 
 	//handcuffed?
 	if((handcuffed && handcuffed.is_visible()) || (mutual_handcuffs && mutual_handcuffs.is_visible()))

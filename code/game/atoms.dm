@@ -1004,12 +1004,8 @@ its easier to just keep the beam vertical.
 	if (blood_DNA?.len)
 		var/stains[0]
 		for (var/this_blood_DNA in blood_DNA)
-			if (findtextEx("A+A-B+B-AB+AB-O+O-", blood_DNA[this_blood_DNA]))
-				stains["blood"]++
-			else if (blood_DNA[this_blood_DNA] == "N/A")
-				stains["blood"]++ //call everything unspecified "blood" just in case
-			else if (blood_DNA[this_blood_DNA])
-				stains[blood_DNA[this_blood_DNA]]++
+			if (this_blood_DNA)
+				stains[get_stain_name(blood_DNA[this_blood_DNA])]++
 		if (stains.len)
 			for (var/thisstain in stains)
 				. += "[. ? "and-" : ""][thisstain]-"
@@ -1017,8 +1013,16 @@ its easier to just keep the beam vertical.
 			if (colored_text && blood_color)
 				. = "<span style='color: [get_stain_text_color()]'>[.]</span>"
 
-/atom/proc/get_stain_text_color()
-	return ColorVClamp(blood_color, 55, 200)
+/atom/proc/get_stain_name(var/stain_type) //"AB+" -> "blood", "oil" -> "oil"
+	if (findtextEx("A+A-B+B-AB+AB-O+O-", stain_type))
+		return "blood"
+	else if (stain_type == "N/A")
+		return "blood" //call everything unspecified "blood" just in case
+	else
+		return stain_type
+
+/atom/proc/get_stain_text_color(var/stain_color)
+	return ColorVClamp(stain_color ? stain_color : blood_color, DYNAMIC_TEXT_COLOR_V_MIN, DYNAMIC_TEXT_COLOR_V_MAX)
 
 /atom/proc/a_stained(colored_text = TRUE)
 	var/stain_text = get_stain_text(FALSE)
