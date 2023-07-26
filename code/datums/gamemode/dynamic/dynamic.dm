@@ -562,8 +562,8 @@ var/stacking_limit = 90
 					current_rules += new_rule
 				return 1
 		else if (forced)
-			message_admins("DYNAMIC MODE: The ruleset couldn't be executed due to lack of eligible players.")
-			log_admin("DYNAMIC MODE: The ruleset couldn't be executed due to lack of eligible players.")
+			message_admins("DYNAMIC MODE: The ruleset couldn't be executed for the above reason.")	//reason provided in the ruleset's ready()
+			log_admin("DYNAMIC MODE: The ruleset couldn't be executed for the above reason.")		//generally limited to cases where the antag lacks a necessary spawn point
 	return 0
 
 /datum/gamemode/dynamic/process()

@@ -473,7 +473,6 @@
 	if(forced)
 		required_heads = 1
 		required_candidates = 1
-		return ..()
 	if (find_active_faction_by_type(/datum/faction/revolution))
 		return FALSE //Never send 2 rev types
 	if(!..())
@@ -484,7 +483,11 @@
 			continue
 		if(player.mind.assigned_role in command_positions)
 			head_check++
-	return (head_check >= required_heads)
+	if (head_check < required_heads)
+		log_admin("Cannot accept Revolutionary Squad ruleset, not enough heads of staff.")
+		message_admins("Cannot accept Revolutionary Squad ruleset, not enough heads of staff.")
+		return FALSE
+	return TRUE
 
 
 //////////////////////////////////////////////
