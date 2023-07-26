@@ -445,7 +445,7 @@ its easier to just keep the beam vertical.
 	var/f_name = "\a [src]."
 	if(blood_DNA && blood_DNA.len)
 		var/stain_text = get_stain_text(FALSE)
-		f_name = "[get_indefinite_article(stain_text, gender)] <span class='danger'>[get_stain_text()]</span> [name]!"
+		f_name = "[get_indefinite_article(stain_text, gender)] <span class='danger'><span style='color: [get_stain_text_color()]'>[stain_text]</span></span> [name]!"
 
 	if(show_name)
 		to_chat(user, "[show_icon ? bicon(src) : ""] That's [f_name]" + size)
