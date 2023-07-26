@@ -1301,7 +1301,6 @@
 #include "code\game\shuttles\brokeufo.dm"
 #include "code\game\shuttles\cargo.dm"
 #include "code\game\shuttles\emergency.dm"
-#include "code\game\shuttles\island.dm"
 #include "code\game\shuttles\lightship.dm"
 #include "code\game\shuttles\mining.dm"
 #include "code\game\shuttles\misc.dm"
