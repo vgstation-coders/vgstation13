@@ -70,6 +70,8 @@ function SetMusic(url, time, volume) {
 	</script>"}
 
 /proc/stop_all_media()
+	log_startup_progress("Stopping all playing media...")
+	log_debug("Stopping all playing media...")
 	for(var/mob/M in mob_list)
 		if(M && M.client)
 			M.stop_all_music()
@@ -82,14 +84,6 @@ function SetMusic(url, time, volume) {
 	C.media = new /datum/media_manager(args["mob"])
 	C.media.open()
 	C.media.update_music()
-
-/hook_handler/soundmanager/proc/OnReboot(var/list/args)
-	//testing("Received OnReboot.")
-	log_startup_progress("Stopping all playing media...")
-	// Stop all music.
-	stop_all_media()
-	//  SHITTY HACK TO AVOID RACE CONDITION WITH SERVER REBOOT.
-	sleep(10)
 
 // Update when moving between areas.
 /hook_handler/soundmanager/proc/OnMobAreaChange(var/list/args)

@@ -1022,8 +1022,6 @@ var/global/floorIsLava = 0
 		if(blackbox)
 			blackbox.save_all_data_to_sql()
 
-		CallHook("Reboot",list())
-
 		if (watchdog.waiting)
 			to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>")
 			watchdog.signal_ready()
@@ -1257,8 +1255,6 @@ var/global/floorIsLava = 0
 
 	if(blackbox)
 		blackbox.save_all_data_to_sql()
-
-	CallHook("Reboot",list())
 
 	if (watchdog.waiting)
 		to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>")
