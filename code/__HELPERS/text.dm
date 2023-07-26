@@ -795,7 +795,6 @@ var/quote = ascii2text(34)
 	return input + fromspace
 
 /proc/get_indefinite_article(input, gender = NEUTER)
-	//appends "some ", "a ", or "an " to the input
 	if (!input)
 		return
 	if (gender == PLURAL)
