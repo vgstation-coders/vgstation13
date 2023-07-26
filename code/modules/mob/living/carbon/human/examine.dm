@@ -104,7 +104,7 @@
 			msg += "<span class='warning'>[t_He] [t_has] [bicon(gloves)] [gloves.gender==PLURAL?"some":"a"] blood-stained [gloves.name] on [t_his] hands! [format_examine(gloves, "Examine")][gloves.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_has] [bicon(gloves)] \a [gloves] on [t_his] hands. [format_examine(gloves, "Examine")][gloves.description_accessories()]\n"
-	else if(bloody_hands && !(slot_gloves in obscured))
+	else if(bloody_hands && bloody_hands_data.len && !(slot_gloves in obscured))
 		msg += "<span class='warning'>[t_He] [t_has] blood-stained hands!</span>\n"
 
 	//handcuffed?
