@@ -39,15 +39,7 @@
 
 
 
-/mob/living/carbon/human/proc/equip_survivor(var/R)
-	var/summon_type
-	if(istype(R,/datum/role))
-		var/datum/role/surv = R
-		summon_type = surv.type
-	else if(ispath(R))
-		summon_type = R
-	else
-		return
+/mob/living/carbon/human/proc/equip_survivor(var/summon_type)
 	switch (summon_type)
 		if (/datum/role/survivor/crusader)
 			return equip_swords(R)
