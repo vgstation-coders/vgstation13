@@ -22,15 +22,15 @@
 		if(H.stat == DEAD || !(H.client) || iswizard(H))
 			continue
 
-		H.equip_survivor(survivor_type)
-
 		if (prob(65))
+			H.equip_survivor(survivor_type)
 			continue
 
 		var/datum/role/R = survivor_type
 
 		if (!(isrole(initial(R.id), H)))
 			R = new survivor_type()
+			H.equip_survivor(R)
 			R.AssignToRole(H.mind)
 			R.Greet(GREET_RIGHTANDWRONG)
 			R.OnPostSetup()
@@ -39,7 +39,15 @@
 
 
 
-/mob/living/carbon/human/proc/equip_survivor(var/summon_type)
+/mob/living/carbon/human/proc/equip_survivor(var/R)
+	var/summon_type
+	if(istype(R,/datum/role))
+		var/datum/role/surv = R
+		summon_type = surv.type
+	else if(ispath(R))
+		summon_type = R
+	else
+		return
 	switch (summon_type)
 		if (/datum/role/survivor/crusader)
 			return equip_swords(R)
