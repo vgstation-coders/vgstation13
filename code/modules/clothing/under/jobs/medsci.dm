@@ -186,7 +186,7 @@
 
 /obj/item/clothing/under/rank/medical/blue
 	name = "medical scrubs"
-	desc = "They're made of a special fiber that provides minor protection against biohazards. These in are baby blue."
+	desc = "They're made of a special fiber that provides minor protection against biohazards. These are in baby blue."
 	icon_state = "scrubsblue"
 	gender = PLURAL
 	_color = "scrubsblue"
