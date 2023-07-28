@@ -339,4 +339,4 @@
 	icon_state = "metrocop_helmet"
 	item_state = "helmet"
 	species_fit = list(INSECT_SHAPED)
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = FULL_HEAD|MASKHEADHAIR

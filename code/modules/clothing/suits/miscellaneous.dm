@@ -386,7 +386,7 @@ var/list/tag_suits_list = list()
 	desc = "Robes not meant to be worn by man."
 	icon_state = "hastur"
 	item_state = "hastur"
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
 
 /obj/item/clothing/suit/cassock
 	name = "Cassock"
