@@ -191,6 +191,7 @@ var/global/list/all_graffitis = list(
 					var/datum/custom_painting/advanced_graffiti = new(the_turf, 32, 32, base_color = "#00000000")
 					the_turf.advanced_graffiti = advanced_graffiti
 				the_turf.advanced_graffiti.interact(user, p)
+				return
 
 		if(!user.Adjacent(target))
 			return
