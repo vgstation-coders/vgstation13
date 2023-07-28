@@ -5270,7 +5270,7 @@
 	},
 /obj/item/clothing/shoes/magboots,
 /obj/item/weapon/tank/oxygen/red,
-/obj/item/clothing/suit/space/rig/grey,
+/obj/item/clothing/suit/space/rig/grey/worker,
 /obj/item/clothing/mask/breath,
 /turf/unsimulated/floor{
 	icon_state = "engine";
