@@ -499,6 +499,7 @@
 	var/enhanced = 0 //has it been enhanced before?
 	var/primarytype = /mob/living/carbon/slime
 	var/list/reactive_reagents = list() //easier lookup for reaction checks in grenades
+	var/icon_state_backup	//backup icon_state_name to switch between multiple use sprites
 
 /obj/item/slime_extract/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/slimesteroid2))
@@ -508,6 +509,7 @@
 		to_chat(user, "You apply the enhancer to \the [src]. It now has triple the amount of uses.")
 		Uses = 3
 		enhanced = 1
+		update_icon()
 		qdel(O)
 
 	//slime res
@@ -527,6 +529,7 @@
 	if(target.slime_act(primarytype,user))
 		if (Uses > 0)
 			Uses -= 1
+			update_icon()
 		if (Uses == 0)
 			qdel(src)
 
@@ -535,6 +538,23 @@
 	var/datum/reagents/R = new/datum/reagents(100)
 	reagents = R
 	R.my_atom = src
+	icon_state_backup = icon_state
+	if (Uses > 1)
+		update_icon()
+
+
+/obj/item/slime_extract/update_icon()
+	..()
+	if (Uses == 1||Uses<0) //return if 1 or less uses
+		icon_state = icon_state_backup
+	else if (Uses == 3||Uses>2) //if 3 or more uses use the triple icon
+		icon_state = "[icon_state_backup]_3"
+	else 		//only option left is two uses
+		icon_state = "[icon_state_backup]_2"
+
+/obj/item/slime_extract/examine(mob/user)
+	..()
+	to_chat(user, "<span class='notice'>\The [name] has [Uses] left.</span>")
 
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
