@@ -443,12 +443,9 @@ its easier to just keep the beam vertical.
 /atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
-	if(src.blood_DNA && src.blood_DNA.len)
-		if(gender == PLURAL)
-			f_name = "some "
-		else
-			f_name = "a "
-		f_name += "<span class='danger'>blood-stained</span> [name]!"
+	if(blood_DNA && blood_DNA.len)
+		var/stain_text = get_stain_text(FALSE)
+		f_name = "[get_indefinite_article(stain_text, gender)] <span class='danger'><span style='color: [get_stain_text_color()]'>[stain_text]</span></span> [name]!"
 
 	if(show_name)
 		to_chat(user, "[show_icon ? bicon(src) : ""] That's [f_name]" + size)
@@ -1004,3 +1001,34 @@ its easier to just keep the beam vertical.
 **/
 /atom/proc/attempt_heating(atom/A, mob/user)
 	return
+
+/atom/proc/get_stain_text(colored_text = TRUE) //"blood-and-vomit-stained"
+	if (blood_DNA?.len)
+		var/stains[0]
+		for (var/this_blood_DNA in blood_DNA)
+			if (this_blood_DNA)
+				stains[get_stain_name(blood_DNA[this_blood_DNA])]++
+		if (stains.len)
+			for (var/thisstain in stains)
+				. += "[. ? "and-" : ""][thisstain]-"
+			. += "stained"
+			if (colored_text && blood_color)
+				. = "<span style='color: [get_stain_text_color()]'>[.]</span>"
+
+/atom/proc/get_stain_name(var/stain_type) //"AB+" -> "blood", "oil" -> "oil"
+	if (findtextEx("A+A-B+B-AB+AB-O+O-", stain_type))
+		return "blood"
+	else if (stain_type == "N/A")
+		return "blood" //call everything unspecified "blood" just in case
+	else
+		return stain_type
+
+/atom/proc/get_stain_text_color(var/stain_color)
+	return ColorVClamp(stain_color ? stain_color : blood_color, DYNAMIC_TEXT_COLOR_V_MIN, DYNAMIC_TEXT_COLOR_V_MAX)
+
+/atom/proc/a_stained(colored_text = TRUE)
+	var/stain_text = get_stain_text(FALSE)
+	var/indef_art = get_indefinite_article(stain_text, gender)
+	if (colored_text && blood_color)
+		stain_text = "<span style='color: [get_stain_text_color()]'>[stain_text]</span>"
+	return indef_art + " " + stain_text

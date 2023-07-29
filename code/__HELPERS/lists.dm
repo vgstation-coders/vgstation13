@@ -500,3 +500,10 @@
 	else
 		used_key_list[input_key] = 1
 	return input_key
+
+//returns the maximum value of an associative list, assuming the values are numbers.
+/proc/associative_max(list/L)
+    var/max
+    for(var/a in L)
+        if(max == null || L[a] > max) max = L[a]
+    return max
