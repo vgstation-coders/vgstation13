@@ -10,9 +10,9 @@
 	var/list/restricted_from_jobs = list()//if set, rule will deny candidates from those jobs
 	var/list/exclusive_to_jobs = list()//if set, rule will only accept candidates from those jobs
 	var/list/job_priority = list() //May be used by progressive_job_search for prioritizing some jobs for a role. Order matters.
-	var/list/enemy_jobs = list()//if set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
-	var/list/required_pop = list(10,10,0,0,0,0,0,0,0,0)//if enemy_jobs was set, this is the amount of population required for the ruleset to fire. enemy jobs count double
-	var/required_enemies = list(0,0,0,0,0,0,0,0,0,0)		//If set, the ruleset requires this many enemy jobs to be filled in order to fire (per threat level)
+	var/list/enemy_jobs = list()//if required_enemies is set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
+	var/list/required_pop = list(10,10,0,0,0,0,0,0,0,0)//this is the amount of population required for the ruleset to fire (per threat level in slices of 0-9, 10-11, etc..). if enemy_jobs was set, those players count double
+	var/required_enemies = list(0,0,0,0,0,0,0,0,0,0)		//If set, the ruleset requires this many enemy jobs to be filled in order to fire (per threat level in slices of 0-9, 10-19, etc..)
 	var/required_candidates = 0//the rule needs this many candidates (post-trimming) to be executed (example: Cult need 4 players at round start)
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
 	var/list/weekday_rule_boost = list()
