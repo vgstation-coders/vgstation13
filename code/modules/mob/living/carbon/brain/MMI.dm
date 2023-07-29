@@ -241,9 +241,12 @@
 	brainmob.dna = new()
 	brainmob.dna.ResetUI()
 	brainmob.dna.ResetSE()
+	if(P.be_random_name)
+		P.real_name = random_name(P.gender, P.species)
 	brainmob.name = P.real_name
 	brainmob.real_name = P.real_name
 	brainmob.container = src
+
 	name = "Man-Machine Interface: [brainmob.real_name]"
 	icon_state = "mmi_full"
 	locked = 1
