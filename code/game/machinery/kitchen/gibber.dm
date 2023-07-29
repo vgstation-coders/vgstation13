@@ -8,7 +8,7 @@
 	anchored = 1
 	var/operating = 0 //Is it on?
 	var/dirty = 0 // Does it need cleaning?
-	var/gibtime = 40 // Time from starting until meat appears
+	var/gibtime = 20 // Time from starting until meat appears
 	var/mob/living/occupant // Mob who has been put inside
 	var/opened = 0.0
 	var/auto = FALSE
@@ -209,6 +209,9 @@
 		visible_message("<span class='warning'>You hear a loud metallic grinding sound.</span>", \
 			drugged_message = "<span class='warning'>You faintly hear a guitar solo.</span>")
 		return
+	if(auto) /* We don't want people just walking out of the autogibber. */
+		occupant.Stun(gibtime + 10)
+	var/robogib = issilicon(occupant)
 	use_power(1000)
 	visible_message("<span class='warning'>You hear a loud squelchy grinding sound.</span>", \
 		drugged_message = "<span class='warning'>You hear a band performance.</span>")
@@ -234,7 +237,7 @@
 		else if(ispath(occupant.meat_type, /obj/item/weapon/reagent_containers))
 			newmeat = new occupant.meat_type(src, occupant)
 			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
-		else if(issilicon(occupant))
+		else if(robogib)
 			if(unused_components.len)
 				var/part_chosen = pick(unused_components)
 				unused_components -= part_chosen
@@ -262,7 +265,7 @@
 		else if(ishuman(occupant))
 			var/mob/living/carbon/human/H = occupant
 			newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,src,H.species.flesh_color,H.species.blood_color,H.virus2,H.dna)
-		else if(issilicon(occupant))
+		else if(robogib)
 			newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs/robot,src,ROBOT_OIL,ROBOT_OIL,occupant.virus2,occupant.dna)
 		else
 			newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,src,DEFAULT_FLESH,DEFAULT_BLOOD,occupant.virus2,occupant.dna)
@@ -278,11 +281,6 @@
 		src.occupant.LAssailant = user
 		occupant.assaulted_by(user)
 
-	src.occupant.death(1)
-	src.occupant.ghostize(0)
-
-	QDEL_NULL(src.occupant)
-
 	spawn(src.gibtime)//finally we throw both the meat and gibs in front of the gibber.
 		playsound(src, 'sound/effects/gib2.ogg', 50, 1)
 		operating = 0
@@ -295,8 +293,21 @@
 			gib.anchored = FALSE
 			gib.forceMove(src.loc)
 			gib.throw_at(Tx,i,1)//will cover hit humans in blood
+		if(robogib && isrobot(occupant)) /* Handle throwing the MMI out of the robot. (cyborg/mommi only) */
+			var/mob/living/silicon/robot/R = occupant
+			if(R.mmi)
+				var/land_at = locate(src.x - rand(1,3), src.y, src.z)
+				R.mmi.forceMove(src.loc)
+				R.mmi.throw_at(land_at, 3, 1)
+				R.mmi = null
+
 		src.operating = 0
 		update_icon()
+
+		src.occupant.death(1)
+		src.occupant.ghostize(0)
+		spawn(10)
+			QDEL_NULL(src.occupant)
 
 //auto-gibs anything that bumps into it
 /obj/machinery/gibber/autogibber
