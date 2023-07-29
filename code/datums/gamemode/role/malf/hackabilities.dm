@@ -134,7 +134,7 @@
 	S.name = "[A.name] APC Copy"
 	S.add_spell(new /spell/aoe_turf/corereturn, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 
-	var/datum/faction/malf/malf_faction = find_active_faction_by_member(S.mind.GetRole(MALF), S.mind)
+	var/datum/faction/malf/malf_faction = find_active_faction_by_member(A.mind.GetRole(MALF), A.mind)
 	if(malf_faction && malf_faction.stage >= FACTION_ENDGAME) /* If the shunting, malfunctioning AI is currently taking over the station... */
 		for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 			point.target = machine /* ...then override all pinpointer targets to point at the APC in which the AI is shunted. */
@@ -303,7 +303,7 @@
 	if(!fakename)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return
-	var/fakeid = copytext(sanitize(input(A, "Please enter an ID for the message .", "Occupation?", "Assistant") as text|null), 1, MAX_NAME_LEN)
+	var/fakeid = copytext(sanitize(input(A, "Please enter an ID for the message.", "Occupation?", "Assistant") as text|null), 1, MAX_NAME_LEN)
 	if(!fakeid)
 		to_chat(A, "<span class='warning'>Message cancelled.</span>")
 		return

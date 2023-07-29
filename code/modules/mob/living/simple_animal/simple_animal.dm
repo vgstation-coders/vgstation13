@@ -528,7 +528,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/damage = rand(1, 3)
 
-	if(istype(M,/mob/living/carbon/slime/adult))
+	if(M.slime_lifestage == SLIME_ADULT)
 		damage = rand(20, 40)
 	else
 		damage = rand(5, 35)

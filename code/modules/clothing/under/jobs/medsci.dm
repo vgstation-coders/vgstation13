@@ -186,16 +186,18 @@
 
 /obj/item/clothing/under/rank/medical/blue
 	name = "medical scrubs"
-	desc = "It's made of a special fiber that provides minor protection against biohazards. This one is in baby blue."
+	desc = "They're made of a special fiber that provides minor protection against biohazards. These are in baby blue."
 	icon_state = "scrubsblue"
+	gender = PLURAL
 	_color = "scrubsblue"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/medical/green
 	name = "medical scrubs"
-	desc = "It's made of a special fiber that provides minor protection against biohazards. This one is in dark green."
+	desc = "They're made of a special fiber that provides minor protection against biohazards. These are in dark green."
 	icon_state = "scrubsgreen"
+	gender = PLURAL
 	_color = "scrubsgreen"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
@@ -203,8 +205,9 @@
 
 /obj/item/clothing/under/rank/medical/purple
 	name = "medical scrubs"
-	desc = "It's made of a special fiber that provides minor protection against biohazards. This one is in deep purple."
+	desc = "They're made of a special fiber that provides minor protection against biohazards. These are in deep purple."
 	icon_state = "scrubspurple"
+	gender = PLURAL
 	_color = "scrubspurple"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)

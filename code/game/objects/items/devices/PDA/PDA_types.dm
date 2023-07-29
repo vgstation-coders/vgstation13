@@ -287,6 +287,13 @@
 	default_cartridge = /obj/item/weapon/cartridge/robotics
 	icon_state = "pda-robot"
 
+/obj/item/device/pda/roboticist/New()
+	starting_apps += /datum/pda_app/ringer
+	..()
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_rnd
+
 /obj/item/device/pda/librarian
 	name = "Librarian PDA"
 	icon_state = "pda-libb"

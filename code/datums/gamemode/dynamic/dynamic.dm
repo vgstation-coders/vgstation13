@@ -241,8 +241,6 @@ var/stacking_limit = 90
 	if(length(data))
 		for (var/entries in data)
 			var/previous_rulesets_text = data[entries]
-			if(!length(previous_rulesets_text))
-				return
 			var/list/previous_rulesets = list()
 			for(var/entry in previous_rulesets_text)
 				var/entry_path = text2path(entry)
@@ -564,8 +562,8 @@ var/stacking_limit = 90
 					current_rules += new_rule
 				return 1
 		else if (forced)
-			message_admins("DYNAMIC MODE: The ruleset couldn't be executed due to lack of eligible players.")
-			log_admin("DYNAMIC MODE: The ruleset couldn't be executed due to lack of eligible players.")
+			message_admins("DYNAMIC MODE: The ruleset couldn't be executed for the above reason.")	//reason provided in the ruleset's ready()
+			log_admin("DYNAMIC MODE: The ruleset couldn't be executed for the above reason.")		//generally limited to cases where the antag lacks a necessary spawn point
 	return 0
 
 /datum/gamemode/dynamic/process()
@@ -900,7 +898,8 @@ var/stacking_limit = 90
 
 /datum/gamemode/dynamic/proc/update_stillborn_rulesets()
 	for (var/datum/dynamic_ruleset/ruleset in executed_rules)
-		ruleset.stillborn = IsRoundAboutToEnd()
+		if (ruleset.stillborn)
+			ruleset.stillborn = IsRoundAboutToEnd()
 
 /datum/gamemode/dynamic/proc/persistent_rule_interaction(var/mob/living/newPlayer)
 	for (var/datum/dynamic_ruleset/ruleset in executed_rules)

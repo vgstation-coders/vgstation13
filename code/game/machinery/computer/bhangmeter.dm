@@ -186,11 +186,10 @@ var/list/sensed_explosions = list()
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
 					qdel(watcher_maps["\ref[M]"])
-					M.client.screen -= watcher_buttons["\ref[M]"]
+				M.client.screen -= watcher_buttons["\ref[M]"]
+				qdel(watcher_buttons["\ref[M]"])
 				M.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
-				if (watcher_buttons["\ref[M]"])
-					animate(watcher_buttons["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
 	else
@@ -200,11 +199,10 @@ var/list/sensed_explosions = list()
 					user.client.images -= watcher_maps["\ref[user]"]
 					qdel(watcher_maps["\ref[user]"])
 					watcher_maps -= "\ref[user]"
-					user.client.screen -= watcher_buttons["\ref[user]"]
+			user.client.screen -= watcher_buttons["\ref[user]"]
+			qdel(watcher_buttons["\ref[user]"])
 			user.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
-			if (watcher_buttons["\ref[user]"])
-				animate(watcher_buttons["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user
 

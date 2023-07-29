@@ -307,9 +307,14 @@ var/list/headset_modes = list(
 	if(isAI(src) && speech.frequency && !findtextEx(speech.job,"AI") && (speech.name != name))
 		var/mob/living/silicon/ai/ai = src
 		if(ai.mentions_on)
-			if(findtextEx(speech.message, "AI") || findtext(speech.message, ai.real_name))
+			/* Find "AI", "AI...", or "... AI ...", case-insensitive. Global flag set so regex.Replace() hits all matches. 					*/
+			/* We use a raw string (@"...") to avoid escaping all of the backslashes used in the pattern, as well as for readability.		*/
+			/* The first pattern is meant to help find "AI" all on its own, WITHOUT including "AI" when surrounded by letters, i.e. (rain) 	*/
+			/* It's also necessary to ensure "AI" is found when surrounded by, say, quotation marks in rendered_message, which is HTML.		*/
+			var/static/regex/pattern = regex(@"(?<!\l)AI(?!\l)|\Aai\Z|\Aai(?=\s)|(?<=\s)ai(?=\s)", "gi")
+			if(pattern.Find(speech.message) || findtext(speech.message, ai.real_name))
 				ai << 'sound/machines/twobeep.ogg'
-				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")
+				rendered_message = pattern.Replace(rendered_message, "<i style='color: blue;'>AI</i>")
 				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
 
 	// Runechat messages

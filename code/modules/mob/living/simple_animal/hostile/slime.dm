@@ -73,24 +73,11 @@
 	..()
 
 /mob/living/simple_animal/hostile/slime/proc/calm()
-	var/calmed_type = /mob/living/carbon/slime
+	var/is_adult = istype(src, /mob/living/simple_animal/hostile/slime/adult)
+	var/calmed_type = is_adult ? /mob/living/carbon/slime/adult : /mob/living/carbon/slime
 	if(colour != "grey")
-		var/path_end = replacetext(colour, " ", "")
-		calmed_type = text2path("/mob/living/carbon/slime/" + path_end)
-
-	var/mob/living/carbon/slime/calmed = new calmed_type(loc)
-	for(var/datum/weakref/ref in friends)
-		var/mob/M = ref.get()
-		if (istype(M))
-			calmed.Friends = M
-
-	qdel(src)
-
-/mob/living/simple_animal/hostile/slime/adult/calm()
-	var/calmed_type = /mob/living/carbon/slime/adult
-	if(colour != "grey")
-		var/path_end = replacetext(colour, " ", "")
-		calmed_type = text2path("/mob/living/carbon/slime/adult/" + path_end)
+		var/path_color = replacetext(colour, " ", "")
+		calmed_type = text2path("/mob/living/carbon/slime/" + path_color + (is_adult ? "/adult" : ""))
 
 	var/mob/living/carbon/slime/calmed = new calmed_type(loc)
 	for(var/datum/weakref/ref in friends)

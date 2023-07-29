@@ -17,8 +17,11 @@
 	var/current_path = null
 	var/counter = 1
 
+	can_flip = TRUE
+
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
+	can_flip = FALSE
 	overlays.Cut()
 	flammable = 0
 	if(!molotov)
@@ -68,6 +71,7 @@
 		item_state = "glass_empty"
 		name = "drinking glass"
 		desc = "Your standard drinking glass."
+		can_flip = TRUE
 
 	if(iscarbon(loc))
 		var/mob/living/carbon/M = loc
