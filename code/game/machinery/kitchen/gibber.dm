@@ -8,7 +8,7 @@
 	anchored = 1
 	var/operating = 0 //Is it on?
 	var/dirty = 0 // Does it need cleaning?
-	var/gibtime = 20 // Time from starting until meat appears
+	var/gibtime = 40 // Time from starting until meat appears
 	var/mob/living/occupant // Mob who has been put inside
 	var/opened = 0.0
 	var/auto = FALSE
@@ -314,6 +314,7 @@
 	name = "autogibber"
 	desc = "Keep far, far away."
 	icon_state = "autogibber"
+	gibtime = 20
 	auto = TRUE
 
 /obj/machinery/gibber/autogibber/New()
