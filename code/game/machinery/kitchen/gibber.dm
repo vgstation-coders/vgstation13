@@ -138,13 +138,10 @@
 		update_icon()
 
 /obj/machinery/gibber/MouseDropTo(mob/target, mob/user)
-	if(target != user && !issilicon(target) || !istype(user, /mob/living/carbon/human) || user.incapacitated() || get_dist(user, src) > 1)
-		return 		/* We only want silicons and the people dragging themselves into the gibber to get this far. */
+	if(target != user || !istype(user, /mob/living/carbon/human) || user.incapacitated() || get_dist(user, src) > 1)
+		return
 	if(!anchored)
 		to_chat(user, "<span class='warning'>[src] must be anchored first!</span>")
-		return
-	if(target.anchored)
-		to_chat(user, "<span class='warning'>\The [target] must be anchored first!</span>")
 		return
 	if(src.occupant)
 		to_chat(user, "<span class='warning'>[src] is full! Empty it first.</span>")
@@ -154,30 +151,22 @@
 		return
 
 	src.add_fingerprint(user)
-	if(target == user)
-		user.visible_message("<span class='warning'>[user] starts climbing into \the [src].</span>", \
-			"<span class='warning'>You start climbing into \the [src].</span>", \
-			drugged_message = "<span class='warning'>[user] starts dancing like a ballerina!</span>")
-	else 
-		user.visible_message("<span class='warning'>[user] starts shoving \the [target] into the [src]!</span>", \
-			"<span class='warning'>You start shoving \the [target] into \the [src]!</span>", \
-			drugged_message = "<span class='warning'>[user] starts doing the tango with \the [target]!</span>")
-	var/drag_delay = issilicon(target) ? 120 : 30
-	if(do_after(user, src, drag_delay) && user && !occupant && !isnull(src.loc))
-		if(target == user)
-			user.visible_message("<span class='warning'>[user] climbs into \the [src]</span>", \
-				"<span class='warning'>You climb into \the [src].</span>", \
-				drugged_message = "<span class='warning'>\The [src] consumes [user]!</span>")
-		else
-			user.visible_message("<span class='warning'>[user] has crammed \the [target] into \the [src]</span>", \
-				"<span class='warning'>You cram \the [target] into \the [src].</span>", \
-				drugged_message = "<span class='warning'>\The [src] consumes \the [target]!</span>")
 
-		if(target.client)
-			target.client.perspective = EYE_PERSPECTIVE
-			target.client.eye = src
-		target.forceMove(src)
-		src.occupant = target
+	user.visible_message("<span class='warning'>[user] starts climbing into the [src].</span>", \
+		"<span class='warning'>You start climbing into the [src].</span>", \
+		drugged_message = "<span class='warning'>[user] starts dancing like a ballerina!</span>")
+
+	if(do_after(user, src, 30) && user && !occupant && !isnull(src.loc))
+
+		user.visible_message("<span class='warning'>[user] climbs into the [src]</span>", \
+			"<span class='warning'>You climb into the [src].</span>", \
+			drugged_message = "<span class='warning'>[src] consumes [user]!</span>")
+
+		if(user.client)
+			user.client.perspective = EYE_PERSPECTIVE
+			user.client.eye = src
+		user.forceMove(src)
+		src.occupant = user
 		update_icon()
 
 /obj/machinery/gibber/verb/eject()
