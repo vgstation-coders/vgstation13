@@ -306,8 +306,7 @@
 
 		src.occupant.death(1)
 		src.occupant.ghostize(0)
-		spawn(10)
-			QDEL_NULL(src.occupant)
+		QDEL_NULL(src.occupant)
 
 //auto-gibs anything that bumps into it
 /obj/machinery/gibber/autogibber
