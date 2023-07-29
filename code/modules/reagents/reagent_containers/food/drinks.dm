@@ -243,7 +243,7 @@
 		//The reagents in the bottle splash all over the target, thanks for the idea Nodrak
 		if(src.reagents)
 			for(var/mob/O in viewers(user, null))
-				O.show_message(text("<span class='bnotice'>The contents of \the [smashtext][src] splashes all over [M][ishuman(M) ? "'s [parse_zone(affecting)]" : ""]!</span>"), 1)
+				O.show_message(text("<span class='bnotice'>The contents of \the [smashtext][src] splashes all over [M]!</span>"), 1)
 			src.reagents.reaction(M, TOUCH, zone_sels = list(user.zone_sel.selecting))
 
 		//Finally, smash the bottle. This kills (del) the bottle.
