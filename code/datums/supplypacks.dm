@@ -762,23 +762,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/grey_supply
 	name = "Grey Space-Ex"
-	var/list/basic = list(
-		/obj/item/clothing/suit/space/grey,
-		/obj/item/clothing/head/helmet/space/grey,
-	)
-	var/worker = list(/obj/item/clothing/suit/space/rig/grey/worker)
-	var/researcher = list(/obj/item/clothing/suit/space/rig/grey/researcher)
-	var/soldier = list(/obj/item/clothing/suit/space/rig/grey/soldier)
-	contains = list(/obj/item/weapon/tank/oxygen/red,
+	contains = list(/obj/item/clothing/suit/space/grey,
+					/obj/item/clothing/head/helmet/space/grey,
+					/obj/item/weapon/tank/oxygen/red,
 					/obj/item/weapon/tank/emergency_oxygen/engi,
 					/obj/item/clothing/mask/breath)
-	cost = 200
+	cost = 175
 	containertype = /obj/structure/closet/crate/ayy
 	containername = "grey Space-Ex crate"
 	group = "Clothing"
-
-/datum/supply_packs/grey_supply/New()
-	selection_from = list(basic, worker, researcher, soldier)
 
 /datum/supply_packs/grey_uniform
 	name = "Mothership uniforms"
@@ -801,7 +793,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/ayy
 	containername = "mothership uniform locker"
 	group = "Clothing"
-	contraband = 1
 
 /datum/supply_packs/grey_uniform/New()
 	selection_from = list(laborer, scientist, explorer, soldier)
@@ -2388,6 +2379,27 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "hardsuit frame crate"
 	group = "Science"
 
+/datum/supply_packs/grey_rigkits
+	name = "Grey Rig Parts"
+	contains = list(/obj/item/device/rigparts/ayy_worker,
+					/obj/item/device/rigparts/ayy_researcher)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/ayy_general
+	one_access = list(access_robotics, access_mothership_research)
+	containername = "GDR rig parts crate"
+	group = "Science"
+	contraband = 1
+
+/datum/supply_packs/grey_rigkits2
+	name = "MDF Rig Parts"
+	contains = list(/obj/item/device/rigparts/ayy_soldier,
+					/obj/item/device/rigparts/ayy_soldier)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/ayy_mdf
+	one_access = list(access_robotics, access_mothership_military)
+	containername = "MDF rig parts crate"
+	group = "Science"
+	hidden = 1
 
 //////HYDROPONICS//////
 

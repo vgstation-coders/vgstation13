@@ -149,3 +149,18 @@
 /obj/item/device/rigparts/arch
 	name = "Archaeology hardsuit parts kit"
 	result = /obj/item/clothing/suit/space/rig/arch
+
+/obj/item/device/rigparts/ayy_worker
+	name = "GDR Laborer rig parts kit"
+	icon_state = "ayymodkit_worker_1"
+	result = /obj/item/clothing/suit/space/rig/grey/worker
+
+/obj/item/device/rigparts/ayy_researcher
+	name = "GDR Researcher rig parts kit"
+	icon_state = "ayymodkit_researcher_1"
+	result = /obj/item/clothing/suit/space/rig/grey/researcher
+
+/obj/item/device/rigparts/ayy_soldier
+	name = "GDR Soldier rig parts kit"
+	icon_state = "ayymodkit_soldier_1"
+	result = /obj/item/clothing/suit/space/rig/grey/soldier
