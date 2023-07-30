@@ -343,15 +343,19 @@
 		if(kicker.loc == loc)
 			kick_dir = kicker.dir
 		var/turf/T = get_edge_target_turf(loc, kick_dir)
-		var/kick_power = max((kicker.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
+		var/kick_power = get_kick_power(kicker)
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
-		if(kick_power < 6)
+		if(kick_power < 1)
 			kick_power = 0
 			thispropel = null
 		if(try_break(thispropel))
 			recoil_damage = 0 //Don't take recoil damage if the item broke.
 		else if(kick_power && !anchored)
-			throw_at(T, kick_power, 1)
+			if (isitem(src))
+				kicked_item_arc_animation(kick_power)
+				throw_at(T, kick_power, 1)
+			else
+				throw_at(T, kick_power, 1)
 		if(recoil_damage) //Recoil damage to the foot.
 			kicker.foot_impact(src, recoil_damage, ourfoot = foot_organ)
 		Crossed(kicker)

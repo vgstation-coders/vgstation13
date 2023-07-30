@@ -1404,7 +1404,7 @@ var/global/list/image/blood_overlays = list()
 
 	var/turf/T = get_edge_target_turf(loc, kick_dir)
 
-	var/kick_power = max((H.get_strength() * 10 - round(get_total_scaled_w_class(3) / 7)), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^3, and can't be reduced below 1.
+	var/kick_power = get_kick_power(H)
 
 	//Attempt to damage the item if it's breakable here.
 	var/glanced = TRUE
@@ -1420,18 +1420,25 @@ var/global/list/image/blood_overlays = list()
 		broken = try_break(propelparams = thispropel)
 
 	if(kick_power >= 1 && !broken) //Fly in an arc!
-		spawn()
-			var/original_pixel_y = pixel_y
-			animate(src, pixel_y = original_pixel_y + WORLD_ICON_SIZE, time = 5, easing = QUAD_EASING | EASE_OUT)
-			spawn(5)
-				animate(src, pixel_y = original_pixel_y, time = 5, easing = QUAD_EASING | EASE_IN)
-			while(loc)
-				if(!throwing)
-					animate(src, pixel_y = original_pixel_y, time = 5, easing = BOUNCE_EASING)
-					break
-				sleep(5)
+		kicked_item_arc_animation(kick_power)
 		throw_at(T, kick_power, 1)
 	Crossed(H) //So you can't kick shards while naked without suffering
+
+/obj/proc/get_kick_power(mob/living/carbon/human/kicker)
+	return max((kicker.get_strength() * 10 - round(get_total_scaled_w_class(3) / 7)), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^3, and can't be reduced below 1.
+
+/obj/proc/kicked_item_arc_animation(distance = 5)
+	spawn()
+		var/original_pixel_y = pixel_y
+		var/time_to_zenith = min(distance, 5)
+		animate(src, pixel_y = original_pixel_y + (round(WORLD_ICON_SIZE * time_to_zenith / 5)), time = time_to_zenith, easing = QUAD_EASING | EASE_OUT)
+		spawn(time_to_zenith)
+			animate(src, pixel_y = original_pixel_y, time = time_to_zenith, easing = QUAD_EASING | EASE_IN)
+		while(loc)
+			if(!throwing)
+				animate(src, pixel_y = original_pixel_y, time = time_to_zenith, easing = BOUNCE_EASING)
+				break
+			sleep(5)
 
 /obj/item/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
