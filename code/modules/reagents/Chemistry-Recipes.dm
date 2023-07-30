@@ -652,9 +652,11 @@
 	id = "occult_blood_test"
 	required_reagents = list(HOLYSALTS = 5)
 	required_catalysts = list(BLOOD = 5)
+	result = SODIUMCHLORIDE
+	result_amount = 5
 	quiet = TRUE
 
-/datum/chemical_reaction/cultcheck/on_reaction(var/datum/reagents/holder, var/created_volume)
+/datum/chemical_reaction/occult_blood_test/on_reaction(var/datum/reagents/holder, var/created_volume)
 	for(var/datum/reagent/blood/B in holder.reagent_list)
 		var/turf/T = get_turf(holder.my_atom)
 		if ("occult" in B.data)
