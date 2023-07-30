@@ -124,11 +124,21 @@
 	desc = "A pressure suit for high ranking officials in the Grey Democratic Republic. It provides much better protection than a standard soldier suit."
 	icon_state = "rig_grey_leader"
 	item_state = "rig_grey_leader"
+	species_fit = list(GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 	armor = list(melee = 60, bullet = 30, laser = 70, energy = 25, bomb = 50, bio = 100, rad = 50)
 	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/weapon/gun/energy/heavydisintegrator, /obj/item/weapon/gun/energy/advdisintegrator)
 	cell_type = /obj/item/weapon/cell/super
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey/leader
 	clothing_flags = PLASMAGUARD
+
+/obj/item/clothing/suit/space/rig/grey/leader/equipped(mob/living/carbon/human/H, equipped_slot)
+	if(equipped_slot == slot_wear_suit)
+		if(isgrey(H))
+			to_chat(H,"<span class='notice'>The [src] forms a perfect seal around your body. You hear it hum as it adjusts its components.</span>")
+		else
+			to_chat(H,"<span class='warning'>The [src] is barely able to form a seal around your body and flashes a warning: Overweight user detected!</span>") // If a human equips it, it will complain a bit. Doesn't affect the stats, however
+	..()
 
 /obj/item/clothing/suit/space/rig/grey/leader/dissolvable() // A grey leader's suit melted by acid? I imagine maybe it happened once and they vowed to never let it happen again
 	return FALSE
@@ -139,6 +149,8 @@
 	icon_state = "rig0-grey_leader_dome"
 	item_state = "rig0-grey_leader_dome"
 	_color = "grey_leader_dome"
+	species_fit = list(GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 	armor = list(melee = 60, bullet = 30, laser = 70, energy = 25, bomb = 50, bio = 100, rad = 50)
 	clothing_flags = PLASMAGUARD
 

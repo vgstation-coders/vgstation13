@@ -2380,7 +2380,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Science"
 
 /datum/supply_packs/grey_rigkits
-	name = "Grey Rig Parts"
+	name = "GDR rig parts"
 	contains = list(/obj/item/device/rigparts/ayy_worker,
 					/obj/item/device/rigparts/ayy_researcher)
 	cost = 200
@@ -2391,7 +2391,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contraband = 1
 
 /datum/supply_packs/grey_rigkits2
-	name = "MDF Rig Parts"
+	name = "MDF rig parts"
 	contains = list(/obj/item/device/rigparts/ayy_soldier,
 					/obj/item/device/rigparts/ayy_soldier)
 	cost = 200
