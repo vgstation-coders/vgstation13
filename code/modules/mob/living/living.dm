@@ -1228,6 +1228,10 @@ Thanks.
 
 	if(client.move_delayer.blocked())
 		return
+	if(resting) /* If you're somehow already standing up while inside a crate (shouldn't happen), you can still rest. */
+		if(istype(loc, /obj/structure/closet/crate))
+			to_chat(src, "<span class='warning'>There isn't enough room to get up. Open the [loc.name] first!</span>")
+			return
 
 	rest_action()
 
