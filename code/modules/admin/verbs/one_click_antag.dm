@@ -288,7 +288,7 @@
 
 	/*
 	spawn()
-		var/chosen_loadout = input(new_vox, "The raid is about to begin. What kind of operations would you like to specialize into ?") in list("Raider", "Engineer", "Saboteur", "Medic")
+		var/chosen_loadout = input(new_vox, "The raid is about to begin. What kind of operations would you like to specialize into?") in list("Raider", "Engineer", "Saboteur", "Medic")
 		v.chosen_spec = chosen_loadout
 		v.equip_special_items(new_vox)
 	*/

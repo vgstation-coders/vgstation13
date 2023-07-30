@@ -294,7 +294,11 @@
 	for(var/mob/player in mode.living_players)
 		if (player.mind.assigned_role in command_positions)
 			head_check++
-	return (head_check >= required_heads)
+	if (head_check < required_heads)
+		log_admin("Cannot accept Provocateur ruleset, not enough heads of staff.")
+		message_admins("Cannot accept Provocateur ruleset, not enough heads of staff.")
+		return FALSE
+	return TRUE
 
 /datum/dynamic_ruleset/latejoin/provocateur/execute()
 	var/mob/M = pick(assigned)
@@ -326,6 +330,8 @@
 
 
 /datum/dynamic_ruleset/latejoin/time_agent/ready(var/forced=0)
+	if (forced)
+		return ..()
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1

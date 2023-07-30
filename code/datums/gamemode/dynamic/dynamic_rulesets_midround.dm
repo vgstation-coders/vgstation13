@@ -225,6 +225,8 @@
 			living_players -= player//we don't autotator people with roles already
 
 /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0)
+	if (forced)
+		return ..()
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
@@ -324,6 +326,8 @@
 	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced=0)
+	if (forced)
+		return ..()
 	if(locate(/datum/dynamic_ruleset/roundstart/cwc) in mode.executed_rules)
 		message_admins("Rejected Ragin' Mages as there was a Civil War.")
 		return 0 //This is elegantly skipped by specific ruleset.
@@ -367,9 +371,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
 	if (forced)
 		required_candidates = 1
-	return ..()
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
+		return ..()
 	if(locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
 		return 0 //Unavailable if nuke ops were already sent at roundstart
 	var/indice_pop = min(10,round(living_players.len/5) + 1)
@@ -470,6 +472,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad/ready(var/forced = 0)
 	if(forced)
 		required_heads = 1
+		required_candidates = 1
 	if (find_active_faction_by_type(/datum/faction/revolution))
 		return FALSE //Never send 2 rev types
 	if(!..())
@@ -480,7 +483,11 @@
 			continue
 		if(player.mind.assigned_role in command_positions)
 			head_check++
-	return (head_check >= required_heads)
+	if (head_check < required_heads)
+		log_admin("Cannot accept Revolutionary Squad ruleset, not enough heads of staff.")
+		message_admins("Cannot accept Revolutionary Squad ruleset, not enough heads of staff.")
+		return FALSE
+	return TRUE
 
 
 //////////////////////////////////////////////
@@ -504,6 +511,8 @@
 	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/ninja/ready(var/forced=0)
+	if (forced)
+		return ..()
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
@@ -544,11 +553,13 @@
 	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/ready(var/forced=0)
-	if(!mode.executed_rules)
+	if (forced)
+		return ..()
+	if(mode.executed_rules.len <= 0)
 		return FALSE
 		//We have nothing to investigate!
-	if(living_players.len)
-		weight = clamp(300/(living_players.len^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
+	if(living_players.len > 0)
+		weight = clamp(300/(living_players.len * living_players.len),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
 	//We don't cotton to freaks in highpop
 	return ..()
 
@@ -578,6 +589,8 @@
 	logo = "time-logo"
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
+	if (forced)
+		return ..()
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
@@ -660,6 +673,8 @@
 	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/catbeast/ready(var/forced=0)
+	if (forced)
+		return ..()
 	if(mode.midround_threat>50) //We're threatening enough!
 		message_admins("Rejected catbeast ruleset, [mode.midround_threat] threat was over 50.")
 		return FALSE
@@ -694,6 +709,7 @@
 	required_candidates = vox_cap[indice_pop]
 	if (forced)
 		required_candidates = 1
+		return ..()
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	. = ..()
@@ -812,7 +828,6 @@
 	var/list/vents = list()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/ready()
-	..()
 	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
 		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
 			if(temp_vent.network.normal_members.len > 50)	//Stops Aliens getting stuck in small networks. See: Security, Virology
@@ -820,9 +835,11 @@
 
 
 	if (vents.len == 0)
+		log_admin("A suitable vent couldn't be found for alien larva. That's bad.")
 		message_admins("A suitable vent couldn't be found for alien larva. That's bad.")
-		return
-	return 1
+		return FALSE
+
+	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/generate_ruleset_body(var/mob/applicant)
 	var/obj/vent = pick(vents)

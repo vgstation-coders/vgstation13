@@ -26,10 +26,11 @@
 			H.equip_survivor(survivor_type)
 			continue
 
-		var/datum/role/R = new survivor_type()
-		H.equip_survivor(R)
+		var/datum/role/R = survivor_type
 
-		if (!(isrole(R.id, H)))
+		if (!(isrole(initial(R.id), H)))
+			R = new survivor_type()
+			H.equip_survivor(R)
 			R.AssignToRole(H.mind)
 			R.Greet(GREET_RIGHTANDWRONG)
 			R.OnPostSetup()

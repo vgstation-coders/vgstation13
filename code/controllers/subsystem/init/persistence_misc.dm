@@ -21,7 +21,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 			continue
 		task = new task_type()
 		task.on_init()
-		tasks[task.type] = task
+		tasks["[task.type]"] = task
 	..()
 
 /datum/subsystem/persistence_misc/Shutdown()
@@ -31,7 +31,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	..()
 
 /datum/subsystem/persistence_misc/proc/read_data(var/path)
-	var/datum/persistence_task/task_to_read = tasks[path]
+	var/datum/persistence_task/task_to_read = tasks["[path]"]
 	if (!task_to_read)
 		return null
 	return task_to_read.data
@@ -122,22 +122,23 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 /datum/persistence_task/forwards_fulfilled/on_init()
 	data = read_file()
-	var/list/previous_forwards_formatted = data["fulfilled_forwards"]
-	for(var/list/formatted_vars in previous_forwards_formatted)
-		var/ourtype = null
-		if(formatted_vars["type"])
-			ourtype = text2path(formatted_vars["type"])
-		var/ourname = null
-		if(formatted_vars["sender"])
-			ourname = formatted_vars["sender"]
-		var/ourstation = null
-		if(formatted_vars["station"])
-			ourstation = formatted_vars["station"]
-		var/oursubtype = null
-		if(formatted_vars["subtype"])
-			oursubtype = text2path(formatted_vars["subtype"])
-		if(ispath(ourtype,/datum/cargo_forwarding))
-			SSsupply_shuttle.previous_forwards += new ourtype(ourname, ourstation, oursubtype, TRUE)
+	if ("fulfilled_forwards" in data)
+		var/list/previous_forwards_formatted = data["fulfilled_forwards"]
+		for(var/list/formatted_vars in previous_forwards_formatted)
+			var/ourtype = null
+			if(formatted_vars["type"])
+				ourtype = text2path(formatted_vars["type"])
+			var/ourname = null
+			if(formatted_vars["sender"])
+				ourname = formatted_vars["sender"]
+			var/ourstation = null
+			if(formatted_vars["station"])
+				ourstation = formatted_vars["station"]
+			var/oursubtype = null
+			if(formatted_vars["subtype"])
+				oursubtype = text2path(formatted_vars["subtype"])
+			if(ispath(ourtype,/datum/cargo_forwarding))
+				SSsupply_shuttle.previous_forwards += new ourtype(ourname, ourstation, oursubtype, TRUE)
 
 /datum/persistence_task/forwards_fulfilled/on_shutdown()
 	var/list/all_forwards = SSsupply_shuttle.previous_forwards.Copy() + SSsupply_shuttle.fulfilled_forwards.Copy()
@@ -177,6 +178,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/latest_dynamic_rulesets/on_shutdown()
 	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 	if (!istype(dynamic_mode))
+		stack_trace("we shut down the persistence - Misc subsystem and ticker.mode is not Dynamic.")
 		return
 	data = list(
 		"one_round_ago" = list(),
@@ -202,6 +204,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/dynamic_ruleset_weights/on_shutdown()
 	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 	if (!istype(dynamic_mode))
+		stack_trace("we shut down the persistence - Misc subsystem and ticker.mode is not Dynamic.")
 		return
 
 	data = list()
@@ -261,6 +264,21 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/highscores/proc/clear_records()
 	data = list()
 	fdel(file(file_path))
+
+/datum/persistence_task/highscores/trader
+	execute = TRUE
+	name = "Trader shoal highscores"
+	file_path = "data/persistence/trader_highscores.json"
+
+/datum/persistence_task/highscores/trader/announce_new_highest_record(var/datum/record/money/record)
+	var/name = "Richest shoal haul ever"
+	var/desc = "You broke the record of the richest shoal haul! $[record.cash] chips accumulated."
+	give_award(record.ckey, /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
+
+/datum/persistence_task/highscores/trader/announce_new_record(var/datum/record/money/record)
+	var/name = "Good rich shoal haul"
+	var/desc = "You made it to the top 5! You accumulated $[record.cash]."
+	give_award(record.ckey, /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
 
 //stores map votes for code/modules/html_interface/voting/voting.dm
 /datum/persistence_task/vote

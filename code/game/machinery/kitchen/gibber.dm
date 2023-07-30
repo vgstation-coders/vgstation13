@@ -11,6 +11,7 @@
 	var/gibtime = 40 // Time from starting until meat appears
 	var/mob/living/occupant // Mob who has been put inside
 	var/opened = 0.0
+	var/auto = FALSE
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 20
 	active_power_usage = 500
@@ -102,6 +103,9 @@
 		return
 	else
 		src.startgibbing(user)
+
+/obj/machinery/gibber/attack_ai(mob/user as mob)
+	return
 
 // OLD /obj/machinery/gibber/attackby(obj/item/weapon/grab/G as obj, mob/user as mob)
 /obj/machinery/gibber/proc/handleGrab(obj/item/weapon/grab/G as obj, mob/user as mob)
@@ -205,6 +209,9 @@
 		visible_message("<span class='warning'>You hear a loud metallic grinding sound.</span>", \
 			drugged_message = "<span class='warning'>You faintly hear a guitar solo.</span>")
 		return
+	if(auto) /* We don't want people just walking out of the autogibber. */
+		occupant.Stun(gibtime + 10)
+	var/robogib = issilicon(occupant)
 	use_power(1000)
 	visible_message("<span class='warning'>You hear a loud squelchy grinding sound.</span>", \
 		drugged_message = "<span class='warning'>You hear a band performance.</span>")
@@ -221,6 +228,7 @@
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 	var/obj/effect/decal/cleanable/blood/gibs/allgibs[totalslabs]
 	playsound(src, 'sound/machines/blender.ogg', 50, 1)
+	var/list/unused_components = direct_subtypesof(/obj/item/robot_parts/robot_component)
 	for (var/i=1 to totalslabs)
 		//first we spawn the meat
 		var/obj/item/weapon/newmeat
@@ -229,8 +237,15 @@
 		else if(ispath(occupant.meat_type, /obj/item/weapon/reagent_containers))
 			newmeat = new occupant.meat_type(src, occupant)
 			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
+		else if(robogib)
+			if(unused_components.len)
+				var/part_chosen = pick(unused_components)
+				unused_components -= part_chosen
+				newmeat = new part_chosen
+			else
+				log_debug("Error: No unused components left in \the [src]'s gib loop for the following silicon: [occupant.real_name]!")
 		else
-			newmeat = new occupant.meat_type()
+			newmeat = new occupant.meat_type
 
 		if(src.occupant.reagents)
 			src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
@@ -245,16 +260,18 @@
 
 		//then we spawn the gib splatter
 		var/obj/effect/decal/cleanable/blood/gibs/newgib
-		if (isalien(occupant)||istype(occupant, /mob/living/simple_animal/hostile/alien))//alien get their own custom gibs
+		if(isalien(occupant)||istype(occupant, /mob/living/simple_animal/hostile/alien))//alien get their own custom gibs
 			newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs/xeno,src,ALIEN_FLESH,ALIEN_BLOOD,occupant.virus2,null)
-		else if (ishuman(occupant))
+		else if(ishuman(occupant))
 			var/mob/living/carbon/human/H = occupant
 			newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,src,H.species.flesh_color,H.species.blood_color,H.virus2,H.dna)
+		else if(robogib)
+			newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs/robot,src,ROBOT_OIL,ROBOT_OIL,occupant.virus2,occupant.dna)
 		else
 			newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,src,DEFAULT_FLESH,DEFAULT_BLOOD,occupant.virus2,occupant.dna)
 		allgibs[i] = newgib
 
-	src.occupant.attack_log += "\[[time_stamp()]\] Was gibbed by <B>[key_name(user)]</B>" //One shall not simply gib a mob unnoticed!
+	src.occupant.attack_log += "\[[time_stamp()]\] Was [auto ? "auto-" : ""]gibbed by <B>[key_name(user)]</B>" //One shall not simply gib a mob unnoticed!
 	user.attack_log += "\[[time_stamp()]\] Gibbed <B>[key_name(src.occupant)]</B>"
 	log_attack("<B>[key_name(user)]</B> gibbed <B>[key_name(src.occupant)]</B>")
 
@@ -263,11 +280,6 @@
 	else
 		src.occupant.LAssailant = user
 		occupant.assaulted_by(user)
-
-	src.occupant.death(1)
-	src.occupant.ghostize(0)
-
-	QDEL_NULL(src.occupant)
 
 	spawn(src.gibtime)//finally we throw both the meat and gibs in front of the gibber.
 		playsound(src, 'sound/effects/gib2.ogg', 50, 1)
@@ -281,16 +293,28 @@
 			gib.anchored = FALSE
 			gib.forceMove(src.loc)
 			gib.throw_at(Tx,i,1)//will cover hit humans in blood
+		if(robogib && isrobot(occupant)) /* Handle throwing the MMI out of the robot. (cyborg/mommi only) */
+			var/mob/living/silicon/robot/R = occupant
+			if(R.mmi)
+				var/land_at = locate(src.x - rand(1,3), src.y, src.z)
+				R.mmi.forceMove(src.loc)
+				R.mmi.throw_at(land_at, 3, 1)
+				R.mmi = null
+
 		src.operating = 0
 		update_icon()
 
-
+		src.occupant.death(1)
+		src.occupant.ghostize(0)
+		QDEL_NULL(src.occupant)
 
 //auto-gibs anything that bumps into it
 /obj/machinery/gibber/autogibber
 	name = "autogibber"
 	desc = "Keep far, far away."
 	icon_state = "autogibber"
+	gibtime = 20
+	auto = TRUE
 
 /obj/machinery/gibber/autogibber/New()
 	..()
@@ -311,73 +335,12 @@
 		M.visible_message("<span class='warning'>[M] is forcefully sucked into \the [src]!</span>", \
 			drugged_message = "<span class='warning'>[M] suddenly vanishes! How did \he do that?</span>")
 		M.forceMove(src)
-		startautogibbing(M)
+		startgibbing(M)
 
-/obj/machinery/gibber/autogibber/proc/startautogibbing(mob/living/victim as mob)
-	if(!victim)
-		visible_message("<span class='warning'>You hear a loud metallic grinding sound.</span>", \
-			drugged_message = "<span class='warning'>You faintly hear a guitar solo.</span>")
-		return
-	use_power(1000)
-	visible_message("<span class='warning'>You hear a loud squelchy grinding sound.</span>", \
-		drugged_message = "<span class='warning'>You hear a band performance.</span>")
-	var/sourcenutriment = victim.nutrition / 15
-	var/sourcetotalreagents
-	if(victim.reagents)
-		sourcetotalreagents = victim.reagents.total_volume
-
-	var/totalslabs = victim.size
-
-	var/obj/item/weapon/reagent_containers/food/snacks/allmeat[totalslabs]
-	for (var/i=1 to totalslabs)
-		var/obj/item/weapon/reagent_containers/food/snacks/newmeat = null
-		if(victim.arcanetampered || src.arcanetampered)
-			newmeat = new /obj/item/weapon/reagent_containers/food/snacks/tofu(src)
-		else if(istype(victim, /mob/living/carbon/human))
-			newmeat = new victim.meat_type(src, victim)
-		else
-			newmeat = victim.drop_meat(src)
-
-		if(newmeat==null)
-			return
-
-		if (newmeat.reagents)//don't want to try and transfer reagents to bones, diamonds, and other non-meat meats
-			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
-
-			if(victim.reagents)
-				victim.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from them
-
-		allmeat[i] = newmeat
-
-	victim.attack_log += "\[[time_stamp()]\] Was auto-gibbed by <B>[src]</B>" //One shall not simply gib a mob unnoticed!
-	log_attack("<B>[src]</B> auto-gibbed <B>[key_name(victim)]</B>")
-	victim.death(1)
-	if(victim.client && (ishuman(victim) || ismonkey(victim) || isalien(victim)))
-		var/obj/item/organ/internal/brain/B = new(src.loc)
-		B.transfer_identity(victim)
-		var/turf/Tx = locate(src.x - 2, src.y, src.z)
-		B.forceMove(src.loc)
-		B.throw_at(Tx,2,1)
-	else
-		victim.ghostize(0)
-	playsound(src, 'sound/effects/gib2.ogg', 50, 1)
-	for (var/i=1 to totalslabs)
-		var/obj/item/meatslab = allmeat[i]
-		var/turf/Tx = locate(src.x - i, src.y, src.z)
-		meatslab.forceMove(src.loc)
-		meatslab.throw_at(Tx,i,1)
-		var/obj/effect/decal/cleanable/blood/gibs/newgib
-		if (!Tx.density)
-			if (isalien(victim)||istype(occupant, /mob/living/simple_animal/hostile/alien))//alien get their own custom gibs
-				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs/xeno,get_turf(src),ALIEN_FLESH,ALIEN_BLOOD,victim.virus2,null)
-			else if (ishuman(victim))
-				var/mob/living/carbon/human/H = victim
-				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,get_turf(src),H.species.flesh_color,H.species.blood_color,H.virus2,H.dna)
-			else
-				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,get_turf(src),DEFAULT_FLESH,DEFAULT_BLOOD,victim.virus2,victim.dna)
-			newgib.anchored = FALSE
-			newgib.throw_at(Tx,2,1)//will cover hit humans in blood
-	qdel(victim)
+/obj/machinery/gibber/autogibber/startgibbing(mob/living/victim as mob)
+	if(victim)
+		occupant = victim
+		..()
 
 /obj/machinery/gibber/npc_tamper_act(mob/living/L)
 	attack_hand(L)

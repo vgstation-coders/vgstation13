@@ -443,12 +443,9 @@ its easier to just keep the beam vertical.
 /atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
-	if(src.blood_DNA && src.blood_DNA.len)
-		if(gender == PLURAL)
-			f_name = "some "
-		else
-			f_name = "a "
-		f_name += "<span class='danger'>blood-stained</span> [name]!"
+	if(blood_DNA && blood_DNA.len)
+		var/stain_text = get_stain_text(FALSE)
+		f_name = "[get_indefinite_article(stain_text, gender)] <span class='danger'><span style='color: [get_stain_text_color()]'>[stain_text]</span></span> [name]!"
 
 	if(show_name)
 		to_chat(user, "[show_icon ? bicon(src) : ""] That's [f_name]" + size)
@@ -716,14 +713,13 @@ its easier to just keep the beam vertical.
 /atom/proc/clear_luminol(var/atom/A)
 	return had_blood
 
-
 //returns 1 if made bloody, returns 0 otherwise
 /atom/proc/add_blood(var/mob/living/carbon/human/M)
 	.=TRUE
 	if(!M)//if the blood is of non-human source
 		if(!blood_DNA || !istype(blood_DNA, /list))
 			blood_DNA = list()
-		blood_color = DEFAULT_BLOOD
+		blood_color = blood_DNA.len ? BlendRGB(blood_color, DEFAULT_BLOOD, 0.5) : DEFAULT_BLOOD //mix new color into existing blood_color if applicable
 		had_blood = TRUE
 		return TRUE
 	if (!( istype(M, /mob/living/carbon/human) ))
@@ -732,13 +728,14 @@ its easier to just keep the beam vertical.
 		M.dna = new /datum/dna(null)
 		M.dna.real_name = M.real_name
 	M.check_dna_integrity()
-	if (!( src.flags & FPRINT))
+	if (!(flags & FPRINT))
 		return FALSE
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
-	blood_color = DEFAULT_BLOOD
 	if (M.species)
-		blood_color = M.species.blood_color
+		blood_color = blood_DNA.len ? BlendRGB(blood_color, M.species.blood_color, 0.5) : M.species.blood_color
+	else
+		blood_color = blood_DNA.len ? BlendRGB(blood_color, DEFAULT_BLOOD, 0.5) : DEFAULT_BLOOD
 	return TRUE
 
 //this proc exists specifically for cases where the mob that originated the blood (aka the "donor") might not exist anymore, leading to bugs galore
@@ -752,8 +749,7 @@ its easier to just keep the beam vertical.
 	if(!istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
 
-	blood_color = blood_data["blood_colour"]
-
+	blood_color = blood_DNA.len ? BlendRGB(blood_color, blood_data["blood_colour"], 0.5) : blood_data["blood_colour"] //mix new color into existing blood_color if applicable
 	return TRUE
 
 /atom/proc/add_vomit_floor(mob/living/carbon/M, toxvomit = 0, active = 0, steal_reagents_from_mob = 1)
@@ -892,8 +888,10 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
-	var/turf/curloc = get_turf(src)
 	var/turf/targloc = get_turf(target)
+	if(!spread)
+		return target
+	var/turf/curloc = get_turf(src)
 	var/list/turf/shot_spread = list()
 	for(var/turf/T in trange(min(spread, max(0, get_dist(curloc, targloc)-1)), targloc))
 		if(chassis)
@@ -1002,3 +1000,34 @@ its easier to just keep the beam vertical.
 **/
 /atom/proc/attempt_heating(atom/A, mob/user)
 	return
+
+/atom/proc/get_stain_text(colored_text = TRUE) //"blood-and-vomit-stained"
+	if (blood_DNA?.len)
+		var/stains[0]
+		for (var/this_blood_DNA in blood_DNA)
+			if (this_blood_DNA)
+				stains[get_stain_name(blood_DNA[this_blood_DNA])]++
+		if (stains.len)
+			for (var/thisstain in stains)
+				. += "[. ? "and-" : ""][thisstain]-"
+			. += "stained"
+			if (colored_text && blood_color)
+				. = "<span style='color: [get_stain_text_color()]'>[.]</span>"
+
+/atom/proc/get_stain_name(var/stain_type) //"AB+" -> "blood", "oil" -> "oil"
+	if (findtextEx("A+A-B+B-AB+AB-O+O-", stain_type))
+		return "blood"
+	else if (stain_type == "N/A")
+		return "blood" //call everything unspecified "blood" just in case
+	else
+		return stain_type
+
+/atom/proc/get_stain_text_color(var/stain_color)
+	return ColorVClamp(stain_color ? stain_color : blood_color, DYNAMIC_TEXT_COLOR_V_MIN, DYNAMIC_TEXT_COLOR_V_MAX)
+
+/atom/proc/a_stained(colored_text = TRUE)
+	var/stain_text = get_stain_text(FALSE)
+	var/indef_art = get_indefinite_article(stain_text, gender)
+	if (colored_text && blood_color)
+		stain_text = "<span style='color: [get_stain_text_color()]'>[stain_text]</span>"
+	return indef_art + " " + stain_text

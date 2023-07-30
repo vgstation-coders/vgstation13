@@ -1238,7 +1238,8 @@
 	/obj/item/weapon/gun/mahoguny,
 	/obj/item/weapon/gun/stickybomb,
 	/obj/item/weapon/gun/siren,
-	/obj/item/weapon/gun/portalgun
+	/obj/item/weapon/gun/portalgun,
+	/obj/item/weapon/gun/energy/gatling/rusty
 )
 
 /obj/abstract/map/spawner/safe/clothing

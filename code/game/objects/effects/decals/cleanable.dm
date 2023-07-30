@@ -26,6 +26,7 @@ var/list/infected_cleanables = list()
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	var/persistent_type_replacement //If defined, the persistent item generated from this will be of this type rather than our own.
 	var/fake_DNA = "random splatters"//for DNA-less splatters
+	var/stain_name //a stained item will be described as "<stain_name>-stained" if stain_name isn't null. eg. stain_name = "vomit" -> "vomit-stained"
 
 /obj/effect/decal/cleanable/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
 	if(age)
@@ -93,7 +94,7 @@ var/list/infected_cleanables = list()
 /obj/effect/decal/cleanable/proc/fixDNA()
 	if (!istype(blood_DNA, /list))
 		blood_DNA = list()
-	blood_DNA[fake_DNA] = "N/A"
+	blood_DNA[fake_DNA] = stain_name ? stain_name : "N/A"
 
 /obj/effect/decal/cleanable/throw_impact(atom/hit_atom)
 	if (isliving(hit_atom) && blood_DNA?.len)
@@ -200,12 +201,14 @@ var/list/infected_cleanables = list()
 		else
 			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
 
-		S.blood_overlay.color = basecolor
-		S.overlays += S.blood_overlay
-		S.blood_color=basecolor
-
 		if(!S.blood_DNA)
 			S.blood_DNA = list()
+
+		var/newcolor = (S.blood_color && S.blood_DNA.len) ? BlendRGB(S.blood_color, basecolor, 0.5) : basecolor
+		S.blood_overlay.color = newcolor
+		S.overlays += S.blood_overlay
+		S.blood_color = newcolor
+
 		if(blood_DNA)
 			S.blood_DNA |= blood_DNA.Copy()
 		perp.update_inv_shoes(1)
@@ -214,11 +217,13 @@ var/list/infected_cleanables = list()
 		perp.track_blood = max(amount, 0, perp.track_blood)                                //Or feet
 		if(!perp.feet_blood_DNA)
 			perp.feet_blood_DNA = list()
+
 		if(!istype(blood_DNA, /list))
 			blood_DNA = list()
 		else
 			perp.feet_blood_DNA |= blood_DNA.Copy()
-		perp.feet_blood_color=basecolor
+
+		perp.feet_blood_color = (perp.feet_blood_color && perp.feet_blood_DNA.len) ? BlendRGB(perp.feet_blood_color, basecolor, 0.5) : basecolor
 
 	amount--
 

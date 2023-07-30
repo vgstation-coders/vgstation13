@@ -726,7 +726,7 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/tinted
 
 	name = "tinted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall?"
 	icon_state = "twindow0"
 	base_state = "twindow"
 	opacity = 1
@@ -735,7 +735,7 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/tinted/frosted
 
 	name = "frosted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall?"
 	icon_state = "rwindow0"
 	base_state = "rwindow"
 	health = 30
