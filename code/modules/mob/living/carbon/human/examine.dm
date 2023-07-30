@@ -147,7 +147,7 @@
 		if(ears.blood_DNA && ears.blood_DNA.len)
 			msg += "<span class='warning'>[t_He] [t_has] [bicon(ears)] [ears.a_stained()] [ears.name] on [t_his] ears! [format_examine(ears, "Examine")][ears.description_accessories()]</span>\n"
 		else
-			msg += "[t_He] [t_has] [bicon(ears)] \a [ears.name] on [t_his] ears. [format_examine(ears, "Examine")][ears.description_accessories()]\n"
+			msg += "[t_He] [t_has] [bicon(ears)] \a [ears] on [t_his] ears. [format_examine(ears, "Examine")][ears.description_accessories()]\n"
 
 	//ID
 	if(wear_id)
