@@ -201,12 +201,14 @@ var/list/infected_cleanables = list()
 		else
 			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
 
-		S.blood_overlay.color = basecolor
-		S.overlays += S.blood_overlay
-		S.blood_color=basecolor
-
 		if(!S.blood_DNA)
 			S.blood_DNA = list()
+
+		var/newcolor = (S.blood_color && S.blood_DNA.len) ? BlendRGB(S.blood_color, basecolor, 0.5) : basecolor
+		S.blood_overlay.color = newcolor
+		S.overlays += S.blood_overlay
+		S.blood_color = newcolor
+
 		if(blood_DNA)
 			S.blood_DNA |= blood_DNA.Copy()
 		perp.update_inv_shoes(1)
@@ -215,11 +217,13 @@ var/list/infected_cleanables = list()
 		perp.track_blood = max(amount, 0, perp.track_blood)                                //Or feet
 		if(!perp.feet_blood_DNA)
 			perp.feet_blood_DNA = list()
+
 		if(!istype(blood_DNA, /list))
 			blood_DNA = list()
 		else
 			perp.feet_blood_DNA |= blood_DNA.Copy()
-		perp.feet_blood_color=basecolor
+
+		perp.feet_blood_color = (perp.feet_blood_color && perp.feet_blood_DNA.len) ? BlendRGB(perp.feet_blood_color, basecolor, 0.5) : basecolor
 
 	amount--
 
