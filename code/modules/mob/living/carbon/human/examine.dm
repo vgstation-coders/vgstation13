@@ -86,7 +86,7 @@
 	//back
 	if(back && back.is_visible())
 		if(back.blood_DNA && back.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_has] [bicon(back)] [back.a_stained()] [back] on [t_his] back! [format_examine(back, "Examine")][back.description_accessories()]</span>\n"
+			msg += "<span class='warning'>[t_He] [t_has] [bicon(back)] [back.a_stained()] [back.name] on [t_his] back! [format_examine(back, "Examine")][back.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_has] [bicon(back)] \a [back] on [t_his] back. [format_examine(back, "Examine")][back.description_accessories()]\n"
 
@@ -138,13 +138,16 @@
 	//eyes
 	if(glasses && !(slot_glasses in obscured) && glasses.is_visible())
 		if(glasses.blood_DNA && glasses.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_has] [bicon(glasses)] [glasses.a_stained()] [glasses] covering [t_his] eyes! [format_examine(glasses, "Examine")][glasses.description_accessories()]</span>\n"
+			msg += "<span class='warning'>[t_He] [t_has] [bicon(glasses)] [glasses.a_stained()] [glasses.name] covering [t_his] eyes! [format_examine(glasses, "Examine")][glasses.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_has] [bicon(glasses)] \a [glasses] covering [t_his] eyes. [format_examine(glasses, "Examine")][glasses.description_accessories()]\n"
 
 	//ears
 	if(ears && !(slot_ears in obscured) && ears.is_visible())
-		msg += "[t_He] [t_has] [bicon(ears)] \a [ears] on [t_his] ears. [format_examine(ears, "Examine")][ears.description_accessories()]\n"
+		if(ears.blood_DNA && ears.blood_DNA.len)
+			msg += "<span class='warning'>[t_He] [t_has] [bicon(ears)] [ears.a_stained()] [ears.name] on [t_his] ears! [format_examine(ears, "Examine")][ears.description_accessories()]</span>\n"
+		else
+			msg += "[t_He] [t_has] [bicon(ears)] \a [ears.name] on [t_his] ears. [format_examine(ears, "Examine")][ears.description_accessories()]\n"
 
 	//ID
 	if(wear_id)
