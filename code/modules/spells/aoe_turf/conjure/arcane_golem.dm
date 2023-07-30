@@ -33,7 +33,7 @@
 /spell/aoe_turf/conjure/arcane_golem/cast(list/targets, mob/user)
 	//Link the golem to its master
 	newVars = list("master_spell" = src)
-	user.register_event(/event/spellcast, src, src::copy_spellcast())
+	user.register_event(/event/spellcast, src, nameof(src::copy_spellcast()))
 
 	check_golems()
 

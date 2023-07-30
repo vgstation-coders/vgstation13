@@ -1,11 +1,11 @@
 /datum/component/ai/crowd_attack
 
 /datum/component/ai/crowd_attack/initialize()
-	parent.register_event(/event/attackby, src, src::on_attackby())
+	parent.register_event(/event/attackby, src, nameof(src::on_attackby()))
 	return TRUE
 
 /datum/component/ai/crowd_attack/Destroy()
-	parent.unregister_event(/event/attackby, src, src::on_attackby())
+	parent.unregister_event(/event/attackby, src, nameof(src::on_attackby()))
 	..()
 
 /datum/component/ai/crowd_attack/proc/on_attackby(mob/attacker, obj/item/item)

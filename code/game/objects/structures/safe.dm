@@ -109,7 +109,7 @@ FLOOR SAFES
 				open = FALSE
 		return
 
-	recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe", custom_check = new /callback(src, src::radial_check(), user), recursive = TRUE))
+	recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe", custom_check = new /callback(src, nameof(src::radial_check()), user), recursive = TRUE))
 
 
 /obj/structure/safe/proc/recursive_dial(var/mob/user, var/datum/radial_menu/radial)
@@ -201,7 +201,7 @@ FLOOR SAFES
 		user.drop_item(I, T)
 	else
 		if(istype(I, /obj/item/clothing/accessory/stethoscope))
-			recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe", custom_check = new /callback(src, src::radial_check(), user), recursive = TRUE))
+			recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe", custom_check = new /callback(src, nameof(src::radial_check()), user), recursive = TRUE))
 
 /obj/structure/safe/blob_act()
 	return

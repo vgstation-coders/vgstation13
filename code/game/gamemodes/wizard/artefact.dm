@@ -118,11 +118,11 @@
 		user.update_inv_hands()
 		if(wielded)
 			user.visible_message("<span class='danger'>\The [user] throws \the [src] over \himself and disappears!</span>","<span class='notice'>You throw \the [src] over yourself and disappear.</span>")
-			user.register_event(/event/moved, src, src::mob_moved())
+			user.register_event(/event/moved, src, nameof(src::mob_moved()))
 			user.make_invisible(CLOAKINGCLOAK, 0, TRUE, 1, INVISIBILITY_LEVEL_TWO)
 		else
 			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
-			user.unregister_event(/event/moved, src, src::mob_moved())
+			user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 			user.make_visible(CLOAKINGCLOAK)
 
 /obj/item/weapon/glow_orb
@@ -214,8 +214,8 @@
 
 /obj/item/phylactery/Destroy()
 	if(bound_soul)
-		bound_soul.unregister_event(/event/death, src, src::revive_soul())
-		bound_soul.unregister_event(/event/z_transition, src, src::z_block())
+		bound_soul.unregister_event(/event/death, src, nameof(src::revive_soul()))
+		bound_soul.unregister_event(/event/z_transition, src, nameof(src::z_block()))
 		to_chat(bound_soul, "<span class = 'warning'><b>You feel your form begin to unwind!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS))
 			bound_soul.dust()
@@ -279,23 +279,23 @@
 
 /obj/item/phylactery/proc/unbind()
 	if(bound_soul)
-		bound_soul.unregister_event(/event/z_transition, src, src::z_block())
-		bound_soul.unregister_event(/event/death, src, src::revive_soul())
+		bound_soul.unregister_event(/event/z_transition, src, nameof(src::z_block()))
+		bound_soul.unregister_event(/event/death, src, nameof(src::revive_soul()))
 	bound_soul = null
 	update_icon()
 
 /obj/item/phylactery/proc/bind(var/mob/to_bind)
-	to_bind.register_event(/event/death, src, src::revive_soul())
-	to_bind.register_event(/event/z_transition, src, src::z_block())
+	to_bind.register_event(/event/death, src, nameof(src::revive_soul()))
+	to_bind.register_event(/event/z_transition, src, nameof(src::z_block()))
 	bound_soul = to_bind
 
 /obj/item/phylactery/proc/unbind_mind()
 	if(bound_mind)
-		bound_mind.unregister_event(/event/after_mind_transfer, src, src::follow_mind())
+		bound_mind.unregister_event(/event/after_mind_transfer, src, nameof(src::follow_mind()))
 	bound_mind = null
 
 /obj/item/phylactery/proc/bind_mind(var/datum/mind/to_bind)
-	to_bind.register_event(/event/after_mind_transfer, src, src::follow_mind())
+	to_bind.register_event(/event/after_mind_transfer, src, nameof(src::follow_mind()))
 	bound_mind = to_bind
 
 /obj/item/phylactery/proc/follow_mind(datum/mind/mind)

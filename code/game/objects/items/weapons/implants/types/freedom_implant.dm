@@ -26,12 +26,12 @@
 				source.u_equip(jacket, TRUE)
 
 /obj/item/weapon/implant/freedom/implanted(mob/implanter)
-	imp_in.register_event(/event/emote, src, src::trigger())
+	imp_in.register_event(/event/emote, src, nameof(src::trigger()))
 	imp_in.mind.store_memory("Freedom implant can be activated by using the [activation_emote] emote, <B>say *[activation_emote]</B> to attempt to activate.", 0, 0)
 	to_chat(imp_in, "The implanted freedom implant can be activated by using the [activation_emote] emote, <B>say *[activation_emote]</B> to attempt to activate.")
 
 /obj/item/weapon/implant/freedom/handle_removal(mob/remover)
-	imp_in?.unregister_event(/event/emote, src, src::trigger())
+	imp_in?.unregister_event(/event/emote, src, nameof(src::trigger()))
 	makeunusable(75)
 
 /obj/item/weapon/implant/freedom/get_data()

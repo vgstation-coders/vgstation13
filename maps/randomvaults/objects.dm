@@ -1056,13 +1056,13 @@
 	AT.id_tag = "vaultkitchen"
 	AT.enter_signal = /event/comp_ai_cmd_retaliate
 	AT.typefilter = /mob/living/carbon/human
-	register_event(/event/comp_ai_cmd_retaliate, src, src::Retaliate())
+	register_event(/event/comp_ai_cmd_retaliate, src, nameof(src::Retaliate()))
 	add_component(/datum/component/ai/conversation)
 	var/datum/component/ai/area_territorial/say/fastfood/intruder/AT2 = add_component(/datum/component/ai/area_territorial/say/fastfood/intruder)
 	AT2.SetArea(locate(/area/vault/fastfood/kitchen))
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/Destroy()
-	unregister_event(/event/comp_ai_cmd_retaliate, src, src::Retaliate())
+	unregister_event(/event/comp_ai_cmd_retaliate, src, nameof(src::Retaliate()))
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/death(var/gibbed = FALSE)

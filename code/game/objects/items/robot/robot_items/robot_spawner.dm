@@ -51,9 +51,9 @@
 		recruiter.role = role
 		recruiter.jobban_roles = jobban_roles
 
-	recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
-	recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
-	recruiter.recruited = new /callback(src, src::recruiter_recruited())
+	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
+	recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
+	recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 	recruiter.request_player()
 
 /obj/item/weapon/robot_spawner/proc/recruiter_recruiting(mob/dead/observer/player, controls)
