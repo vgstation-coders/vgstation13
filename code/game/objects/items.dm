@@ -1425,7 +1425,7 @@ var/global/list/image/blood_overlays = list()
 	Crossed(H) //So you can't kick shards while naked without suffering
 
 /obj/proc/get_kick_power(mob/living/carbon/human/kicker)
-	return max((kicker.get_strength() * 10 - round(get_total_scaled_w_class(3) / 7)), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^3, and can't be reduced below 1.
+	return max((kicker.get_strength() * 10 - round(get_total_scaled_w_class(3) / 7)), 1) //The range of the kick is affected by the strength of the kicker, depending on the kicker's genes, and the total weight of the object and its contents.
 
 /obj/proc/kicked_item_arc_animation(distance = 5)
 	spawn()
