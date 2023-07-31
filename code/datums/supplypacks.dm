@@ -765,7 +765,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/space/grey,
 					/obj/item/clothing/head/helmet/space/grey,
 					/obj/item/weapon/tank/oxygen/red,
-					/obj/item/weapon/tank/emergency_oxygen/engi,
 					/obj/item/clothing/mask/breath)
 	cost = 175
 	containertype = /obj/structure/closet/crate/ayy
