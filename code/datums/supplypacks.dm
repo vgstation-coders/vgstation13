@@ -2392,14 +2392,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/grey_rigkits2
 	name = "MDF rig parts"
-	contains = list(/obj/item/device/rigparts/ayy_soldier,
-					/obj/item/device/rigparts/ayy_soldier)
+	contains = list(/obj/item/device/rigparts/ayy_soldier)
 	cost = 200
 	containertype = /obj/structure/closet/crate/secure/ayy_mdf
-	one_access = list(access_robotics, access_mothership_military)
+	one_access = list(access_robotics, access_armory, access_mothership_military)
 	containername = "MDF rig parts crate"
 	group = "Science"
-	hidden = 1
+	contraband = 1
 
 //////HYDROPONICS//////
 
