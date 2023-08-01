@@ -168,10 +168,10 @@
 
 	if(bullet_marks)
 		peeper = user
-		peeper.client.perspective = EYE_PERSPECTIVE
-		peeper.client.eye = src
+		peeper.reset_view(src)
 		peeper.visible_message("<span class='notice'>[peeper] leans in and looks through \the [src].</span>", \
 		"<span class='notice'>You lean in and look through \the [src].</span>")
+		register_event(/event/moved, peeper, /turf/simulated/wall/proc/reset_view)
 		src.add_fingerprint(peeper)
 		return ..()
 
@@ -181,11 +181,10 @@
 	src.add_fingerprint(user)
 	return ..()
 
-/turf/simulated/wall/proc/reset_view()
-	if(!peeper)
-		return
-	peeper.client.eye = peeper.client.mob
-	peeper.client.perspective = MOB_PERSPECTIVE
+/turf/simulated/wall/proc/reset_view(atom/movable/mover)
+	if(peeper)
+		peeper.reset_view()
+		unregister_event(/event/moved, peeper, /turf/simulated/wall/proc/reset_view)
 
 /turf/simulated/wall/proc/attack_rotting(mob/user as mob)
 	if(istype(src, /turf/simulated/wall/r_wall)) //I wish I didn't have to do typechecks
