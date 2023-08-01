@@ -351,11 +351,7 @@
 		if(try_break(thispropel))
 			recoil_damage = 0 //Don't take recoil damage if the item broke.
 		else if(kick_power && !anchored)
-			if (isitem(src))
-				kicked_item_arc_animation(kick_power)
-				throw_at(T, kick_power, 1)
-			else
-				throw_at(T, kick_power, 1)
+			throw_at(T, kick_power, 1)
 		if(recoil_damage) //Recoil damage to the foot.
 			kicker.foot_impact(src, recoil_damage, ourfoot = foot_organ)
 		Crossed(kicker)
