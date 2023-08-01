@@ -44,3 +44,37 @@ default behaviour is:
 /mob/living/proc/isDeadorDying()	//returns 1 if dead or in crit
 	if(stat == DEAD || health <= config.health_threshold_crit)
 		return TRUE
+
+/mob/living/proc/mob_thermal_mass()
+	//This can be fleshed out if it's used in more places. For now it's only used in calculating burn damage from reagents splashing a mob, and re-divided out, so having this be a constant works alright.
+	return 2.98 * 70000 //specfic heat of 2.98 J / (g * degrees K), assume body mass of 70kg
+
+/mob/living/proc/get_safe_temperature_excursion(the_temp)
+	//Returns how many degrees K a temperature is outside of the safe range the mob can tolerate. returns 0 if within the safe range. can be negative for cold.
+	return 0
+
+/mob/living/simple_animal/get_safe_temperature_excursion(the_temp)
+	if (the_temp > maxbodytemp)
+		return the_temp - maxbodytemp
+	else if (the_temp < minbodytemp)
+		return the_temp - minbodytemp
+	return 0
+
+/mob/living/carbon/monkey/get_safe_temperature_excursion(the_temp)
+	if (the_temp > BODYTEMP_HEAT_DAMAGE_LIMIT)
+		return the_temp - BODYTEMP_HEAT_DAMAGE_LIMIT
+	else if (the_temp < BODYTEMP_COLD_DAMAGE_LIMIT)
+		return the_temp - BODYTEMP_COLD_DAMAGE_LIMIT
+	return 0
+
+/mob/living/carbon/human/get_safe_temperature_excursion(the_temp)
+	if (species)
+		if (the_temp > species.heat_level_1)
+			return the_temp - species.heat_level_1
+		else if (the_temp < species.cold_level_1)
+			return the_temp - species.cold_level_1
+	else if (the_temp > BODYTEMP_HEAT_DAMAGE_LIMIT)
+		return the_temp - BODYTEMP_HEAT_DAMAGE_LIMIT
+	else if (the_temp < BODYTEMP_COLD_DAMAGE_LIMIT)
+		return the_temp - BODYTEMP_COLD_DAMAGE_LIMIT
+	return 0
