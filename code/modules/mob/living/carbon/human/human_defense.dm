@@ -97,7 +97,6 @@ emp_act
 		organnum++
 	return (thermal_prot/max(organnum, 1))
 
-//todo: move this:
 /mob/living/carbon/human/proc/checkthermalprot(var/datum/organ/external/def_zone)
 	var/thermal_pass = 1 //1 means no protection, 0 means total protection
 	for(var/ci in get_clothing_items())

@@ -267,7 +267,14 @@
 					"<span class='[spanclass]'>[dropper] [splashverb][target ? "" : " out"] [src]'s contents [target ? " onto [target == dropper ? get_reflexive_pronoun(dropper.gender) : target]" : ""][spanclass == "warning" ? "!" : "."]</span>", \
 					"<span class='[spanclass]'>You [shift_verb_tense(splashverb)][target ? "" : " out"] [src]'s contents [target ? " onto [target == dropper ? "yourself" : target]" : ""].</span>")
 	else
-		visible_message("<span class='warning'>[src]'s contents [shift_verb_tense(splashverb)] out[target ? " onto [target]" : ""]!</span>")
+		var/mob/living/carbon/on_head_someone = is_on_someones_head()
+		if (on_head_someone)
+			spanclass = "notice"
+			on_head_someone.visible_message( \
+					"<span class='[spanclass]'>[src]'s contents spill out onto [on_head_someone][spanclass == "warning" ? "!" : "."]</span>", \
+					"<span class='[spanclass]'>[src]'s contents spill out onto you[spanclass == "warning" ? "!" : "."]</span>")
+		else
+			visible_message("<span class='warning'>[src]'s contents [shift_verb_tense(splashverb)] out[target ? " onto [target]" : ""]!</span>")
 
 	cook_abort() //sanity
 	update_icon()
@@ -452,7 +459,7 @@
 		var/prev_heat_conductivity = heat_conductivity
 		heat_conductivity = 1
 		pour_on_self(user)
-		open_container_override = initial(open_container_override)
+		open_container_override = FALSE
 		heat_conductivity = prev_heat_conductivity
 
 /obj/item/weapon/reagent_containers/pan/proc/pour_on_self(mob/user)

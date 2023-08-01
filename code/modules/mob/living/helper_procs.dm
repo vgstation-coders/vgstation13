@@ -46,8 +46,11 @@ default behaviour is:
 		return TRUE
 
 /mob/living/proc/mob_thermal_mass()
-	//This can be fleshed out if it's used in more places. For now it's only used in calculating burn damage from reagents splashing a mob, and re-divided out, so having this be a constant works alright.
+	//This can be fleshed out if it's used in more places. For now it's only used in calculating burn damage from reagents splashing a mob, so having this be a constant works alright.
 	return 2.98 * 70000 //specfic heat of 2.98 J / (g * degrees K), assume body mass of 70kg
+
+/mob/living/proc/get_burn_damage_from_thermal_transfer(thermal_energy_transferred, what_temp)
+	return round(abs((TEMPERATURE_DAMAGE_COEFFICIENT / 1111111) * thermal_energy_transferred * get_safe_temperature_excursion(what_temp)))
 
 /mob/living/proc/get_safe_temperature_excursion(the_temp)
 	//Returns how many degrees K a temperature is outside of the safe range the mob can tolerate. returns 0 if within the safe range. can be negative for cold.

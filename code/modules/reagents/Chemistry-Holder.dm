@@ -583,7 +583,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 /datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/amount_override = 0, var/list/zone_sels = ALL_LIMBS)
 	if (isliving(A))
-		handle_reagents_mob_thermal_interaction(A, zone_sels)
+		handle_reagents_mob_thermal_interaction(A, method, zone_sels, amount_override)
 	for (var/datum/reagent/R in reagent_list)
 		var/amount_splashed = amount_override ? amount_override : (R.volume + volume_modifier)
 		if (ismob(A))
@@ -600,7 +600,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	if (ismob(A))
 		if (isliving(A))
-			handle_reagents_mob_thermal_interaction(A)
+			handle_reagents_mob_thermal_interaction(A, TOUCH, TARGET_EYES)
 		for(var/datum/reagent/R in reagent_list)
 			R.reaction_dropper_mob(A)
 
@@ -608,90 +608,57 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		for(var/datum/reagent/R in reagent_list)
 			R.reaction_dropper_obj(A, R.volume+volume_modifier)
 
-/datum/reagents/proc/handle_reagents_mob_thermal_interaction(mob/living/L, list/zone_sels = ALL_LIMBS) //todo: handle limb stuff and also dropper considerations incl. messaging
+#define SCALD_PAINFUL 15
+#define SCALD_AGONIZING 30
+
+/datum/reagents/proc/handle_reagents_mob_thermal_interaction(mob/living/L, method, list/zone_sels = ALL_LIMBS, volume_used)
 	if (!isliving(L))
 		return
-	//burn the mob if appropriate:
+
+	var/ignore_thermal_prot = FALSE
+	if (method == INGEST) //Eating or drinking burns the mouth (head) regardless of targeting and isn't blocked by head thermal protection.
+		zone_sels = TARGET_MOUTH
+		ignore_thermal_prot = TRUE
 	var/reagents_thermal_mass = get_thermal_mass()
+	if (volume_used)
+		reagents_thermal_mass *= (volume_used / total_volume)
 	var/mob_thermal_mass = L.mob_thermal_mass()
 	if (!total_volume)
 		return
-	var/new_temp = get_equalized_temperature(L.bodytemperature, mob_thermal_mass, chem_temp, reagents_thermal_mass) //todo: add more checks?
+	var/new_temp = get_equalized_temperature(L.bodytemperature, mob_thermal_mass, chem_temp, reagents_thermal_mass)
 	var/thermal_energy_transferred_to_mob = (new_temp - L.bodytemperature) * mob_thermal_mass
 	var/burn_dmg = L.get_burn_damage_from_thermal_transfer(thermal_energy_transferred_to_mob, chem_temp)
-	message_admins("burn_dmg: [burn_dmg]")
-	message_admins("zone_sels:")
-	for (var/zone_sel in zone_sels)
-		message_admins("[zone_sel]")
-	message_admins("DEBUG: thermal_energy_transferred_to_mob: [thermal_energy_transferred_to_mob] | zone_sels: [zone_sels]")
 	var/datum/organ/external/which_organ
-	if (ishuman(L))
+	if (ishuman(L)) //Although monkeys can wear clothes, only humans have explicit organs that can be covered by specific worn items, so for now only humans get protection here. If this is expanded to include things like monkeys wearing clothes and getting non-organ-specific thermal protection, this could be changed to use type inheritance.
 		var/mob/living/carbon/human/H = L
 		which_organ = H.get_organ(pick(zone_sels))
-		message_admins("DEBUG: burn damage reduced from [burn_dmg] to [round(burn_dmg *H.getthermalprot(which_organ))] with protection factor of [H.getthermalprot(which_organ)]")
-		burn_dmg = round(burn_dmg * H.getthermalprot(which_organ))
-	else if (iscarbon(L))
-		var/mob/living/carbon/C = L
-		message_admins("//todo: some burn resistance for monkeys wearing armor")
-
-	message_admins("which_organ [which_organ], ")
-
+		if (!ignore_thermal_prot)
+			burn_dmg = round(burn_dmg * H.getthermalprot(which_organ))
 	if (burn_dmg)
-		if(ishuman(L)) //Although monkeys can wear clothes, only humans have explicit organs that can be covered by specific worn items, so for now only humans get protection here. If monkeys are given organs or clothing-based heat protection, this could be changed to use type inheritance.
+		if(ishuman(L))
 			var/mob/living/carbon/human/H = L
 			var/post_mod_predicted_dmg = burn_dmg * L.burn_damage_modifier
 			var/custom_pain_msg
-			if (post_mod_predicted_dmg >= 30)
+			if (post_mod_predicted_dmg >= SCALD_AGONIZING)
 				var/first = pick("A searing", "A roaring", "A blazing", "An exquisite")
 				var/list/second_list = list("torrent", "sea", "wall", "inferno", "river")
 				if (first != "A roaring")
 					second_list += "roar" //don't say "roaring roar"
 				custom_pain_msg = "[first] [pick(second_list)] of agony [pick("envelops", "cascades through", "courses through", "rushes into", "consumes", "fills")] [which_organ ? "your " + which_organ.display_name : "you"]!"
-			else if (post_mod_predicted_dmg >= 15)
-				var/second = pick("rush", "wave", "lance", "spike") //todo: don't say lance twice
+			else if (post_mod_predicted_dmg >= SCALD_PAINFUL)
+				var/second = pick("rush", "wave", "lance", "spike")
 				var/list/third_list = list("shoots through", "stabs through", "washes through")
 				if (second != "lance")
-					third_list += "lances through"
+					third_list += "lances through" //don't say "lance lances"
 				custom_pain_msg = "[pick("A burning", "A searing", "A boiling")] [second] of pain [pick(third_list)] [which_organ ? "your " + which_organ.display_name : "you"]!"
 			else
 				custom_pain_msg = "Pain sears [which_organ ? " your " + which_organ.display_name : ""]!"
-			H.custom_pain(custom_pain_msg, FALSE, TRUE) //scream //todo: re-add check here for larger text
+			H.custom_pain(custom_pain_msg, post_mod_predicted_dmg >= SCALD_AGONIZING, post_mod_predicted_dmg >= SCALD_PAINFUL)
 		L.apply_effect(burn_dmg * 5, AGONY) //pain
-		L.apply_damage(burn_dmg, BURN, which_organ) //todo: scale, messages, burn body parts, freeze considerations, etc.
-	L.bodytemperature = new_temp
-	chem_temp = new_temp
+		L.apply_damage(burn_dmg, BURN, which_organ)
 
-//todo: consistency for splashing and hitting the same spot when thrown
-//todo: use temperature damage coefficient?
-//todo: messages about scalding face etc
-//todo: ingest: should only do face or guts? also should only do a single gulp not the whole volume
-//todo: add message for where hit/splashed?
-//todo: yell being only for a certain threshold?
-//todo: check throwing
-//todo: scale damage properly
-//todo: face melts away message occurs after the splash?
-//todo: deep fryer not updating sprite properly until next empty check
-//todo: make into thermal proection proc to easier for monkeys
-//todo: revisit text
-//todo: fix pan equip feeding the reagents to you (also want splash sound though?)
-//todo: fix pain scaling so room temp doesn't hurt people? or //todo: add check for the exsiting body temp diff (from mob body particularities living)
-//todo: fix pain message affecting chest when it burned head?
-//todo: fix it saying "onto youname" when its on you.
-
-//todo: later
-//todo: sfx
-//todo: still splashing when missing? or not (currently does still splash)
-//todo: thermal protection for monkeys etc.
-//todo: spilling onto yourself when you slip (random slot)
-//todo: add salt spiller curse?
-//todo: dynamically obtain this
-//todo: use defines
-//todo: move this
-
-
-//todo: move this
-/mob/living/proc/get_burn_damage_from_thermal_transfer(thermal_energy_transferred, what_temp) //todo: revisit
-	return (TEMPERATURE_DAMAGE_COEFFICIENT / 1111111) * thermal_energy_transferred * get_safe_temperature_excursion(what_temp)
+#undef SCALD_PAINFUL
+#undef SCALD_AGONIZING
 
 /datum/reagents/proc/get_equalized_temperature(temperature_A, thermalmass_A, temperature_B, thermalmass_B)
 	//Gets the equalized temperature of two thermal masses
