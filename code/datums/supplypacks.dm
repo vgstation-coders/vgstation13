@@ -1116,6 +1116,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 	contraband = 1
 
+/datum/supply_packs/grey_rigkits2
+	name = "MDF rig parts"
+	contains = list(/obj/item/device/rigparts/ayy_soldier)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/ayy_mdf
+	one_access = list(access_armory, access_mothership_military)
+	containername = "MDF rig parts crate"
+	group = "Security"
+	contraband = 1
+
 /datum/supply_packs/riot
 	name = "Riot gear"
 	contains = list(/obj/item/weapon/melee/baton/loaded,
@@ -2386,16 +2396,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/ayy_general
 	one_access = list(access_robotics, access_mothership_research)
 	containername = "GDR rig parts crate"
-	group = "Science"
-	contraband = 1
-
-/datum/supply_packs/grey_rigkits2
-	name = "MDF rig parts"
-	contains = list(/obj/item/device/rigparts/ayy_soldier)
-	cost = 200
-	containertype = /obj/structure/closet/crate/secure/ayy_mdf
-	one_access = list(access_robotics, access_armory, access_mothership_military)
-	containername = "MDF rig parts crate"
 	group = "Science"
 	contraband = 1
 
