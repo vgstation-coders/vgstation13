@@ -226,7 +226,7 @@
 		return
 	var/mob/living/carbon/human/C = R.antag.current
 	to_chat(C, "<span class='notice'>We distort our form to prevent AI-tracking.</span>")
-	INVOKE_EVENT(C, /event/cameranet_changed, "target" = C)
+	INVOKE_EVENT(C, /event/cameranet_changed, "mover" = C)
 	C.digitalcamo = 1
 
 /datum/power/changeling/rapidregeneration

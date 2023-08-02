@@ -23,13 +23,13 @@
 
 /datum/dna/gene/basic/jamsignals/activate(var/mob/M, var/connected, var/flags)
 	..()
-	INVOKE_EVENT(M, /event/cameranet_changed, "target" = M)
+	INVOKE_EVENT(M, /event/cameranet_changed, "mover" = M)
 	return 1
 
 /datum/dna/gene/basic/jamsignals/deactivate(var/mob/M, var/connected, var/flags)
 	if(!..())
 		return 0
-	INVOKE_EVENT(M, /event/cameranet_changed, "target" = M)
+	INVOKE_EVENT(M, /event/cameranet_changed, "mover" = M)
 	return 1
 
 /////////////////////////

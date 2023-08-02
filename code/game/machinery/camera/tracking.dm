@@ -205,7 +205,7 @@
 
 /datum/locking_category/ai_eye
 
-/mob/living/silicon/ai/proc/on_camera_change()
+/mob/living/silicon/ai/proc/on_camera_change(mover, location, oldloc)
 	if(eyeobj && currently_tracking)
 		var/cantrack = can_track_atom(currently_tracking)
 		if(!eyeobj.locked_to && cantrack)
