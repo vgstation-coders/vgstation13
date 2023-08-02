@@ -1546,7 +1546,7 @@ var/list/confusion_victims = list()
 
 	sleep(duration-5)
 
-	if (time_of_last_confusion != time_key)//only the last applied corrution gets to end it
+	if (time_of_last_confusion != time_key)//only the last applied confusion gets to end it
 		return
 
 	victim.update_fullscreen_alpha("blindborder", 0, 5)
