@@ -1501,7 +1501,9 @@ var/list/confusion_victims = list()
 	if (!time_of_last_confusion)
 		start_confusion(T,hallucinated_turfs)
 		return
-
+	if (victim.mind)
+		message_admins("BLOODCULT: [key_name(victim)] had the effects of Confusion refreshed back to [duration/10] seconds.")
+		log_admin("BLOODCULT: [key_name(victim)] had the effects of Confusion refreshed by back to [duration/10] seconds.")
 	var/time_key = world.time
 	time_of_last_confusion = time_key
 	victim.update_fullscreen_alpha("blindblack", 255, 5)
@@ -1511,6 +1513,9 @@ var/list/confusion_victims = list()
 /datum/confusion_manager/proc/start_confusion(var/turf/T,var/list/hallucinated_turfs)
 	var/time_key = world.time
 	time_of_last_confusion = time_key
+	if (victim.mind)
+		message_admins("BLOODCULT: [key_name(victim)] is now under the effects of Confusion for [duration/10] seconds.")
+		log_admin("BLOODCULT: [key_name(victim)] is now under the effects of Confusion for [duration/10] seconds.")
 	to_chat(victim, "<span class='danger'>Your vision goes dark, panic and paranoia take their toll on your mind.</span>")
 	victim.overlay_fullscreen("blindborder", /obj/abstract/screen/fullscreen/confusion_border)//victims DO still get blinded for a second
 	victim.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)//which will allow us to subtly reveal the surprise
@@ -1556,6 +1561,9 @@ var/list/confusion_victims = list()
 	anim(target = victim, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind_remove", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	if (victim.client)
 		victim.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
+	if (victim.mind)
+		message_admins("BLOODCULT: [key_name(victim)] is no longer under the effects of Confusion.")
+		log_admin("BLOODCULT: [key_name(victim)] is no longer under the effects of Confusion.")
 	sleep(15)
 	victim.clear_fullscreen("blindwhite", animate = 0)
 	qdel(src)
