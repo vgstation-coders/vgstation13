@@ -2231,22 +2231,6 @@ Use this proc preferably at the end of an equipment loadout
 	if (target.isDead())
 		to_chat(src, "You cannot sense the target mind anymore, that's not good...")
 		return null
-	for(var/obj/item/I in target.get_equipped_items())
-		if(I.blocks_tracking && !target.is_wearing_item(I,slot_wear_id))
-			return null
-	if(target.is_holding_item(/obj/item/device/megaphone/madscientist))
-		return null
-	var/obj/item/ourID = target.get_item_by_slot(slot_wear_id)
-	if(ourID)
-		ourID = ourID.GetID()
-		if(ourID.blocks_tracking)
-			return null
-	if(istruevampire(target))
-		return null
-	var/datum/role/changeling/C = target.mind.GetRole(CHANGELING)
-	if(istype(C))
-		if(locate(/datum/power/changeling/DigitalCamouflage) in C.current_powers)
-			return null
 	if(target_turf.z != our_turf.z) //Not on the same zlevel as us
 		to_chat(src, "The target mind is too faint, they must be quite far from you...")
 		return null
