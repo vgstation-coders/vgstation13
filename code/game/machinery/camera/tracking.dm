@@ -197,10 +197,10 @@
 	eyeobj.forceMove(get_turf(currently_tracking))
 	currently_tracking.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 
-	currently_tracking.register_event(/event/entered,src,.proc/on_camera_change)
-	currently_tracking.register_event(/event/equipped,src,.proc/on_camera_change)
-	currently_tracking.register_event(/event/unequipped,src,.proc/on_camera_change)
-	currently_tracking.register_event(/event/cameranet_changed,src,.proc/on_camera_change)
+	currently_tracking.register_event(/event/entered,src,src::on_camera_change())
+	currently_tracking.register_event(/event/equipped,src,src::on_camera_change())
+	currently_tracking.register_event(/event/unequipped,src,src::on_camera_change())
+	currently_tracking.register_event(/event/cameranet_changed,src,src::on_camera_change())
 	to_chat(src, "Now tracking [currently_tracking.name] on camera.")
 
 /datum/locking_category/ai_eye
@@ -218,10 +218,10 @@
 /mob/living/silicon/ai/proc/stop_ai_tracking()
 	if(currently_tracking)
 		to_chat(src, "No longer tracking [currently_tracking.name] on camera.")
-		currently_tracking.unregister_event(/event/entered,src,.proc/on_camera_change)
-		currently_tracking.unregister_event(/event/equipped,src,.proc/on_camera_change)
-		currently_tracking.unregister_event(/event/unequipped,src,.proc/on_camera_change)
-		currently_tracking.unregister_event(/event/cameranet_changed,src,.proc/on_camera_change)
+		currently_tracking.unregister_event(/event/entered,src,src::on_camera_change())
+		currently_tracking.unregister_event(/event/equipped,src,src::on_camera_change())
+		currently_tracking.unregister_event(/event/unequipped,src,src::on_camera_change())
+		currently_tracking.unregister_event(/event/cameranet_changed,src,src::on_camera_change())
 		if(eyeobj?.locked_to == currently_tracking)
 			currently_tracking.unlock_from()
 		currently_tracking = null
