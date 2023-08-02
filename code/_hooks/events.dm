@@ -262,6 +262,7 @@
 // atom/movable/exiter: the movable exiting the area
 /event/area_exited
 
+// Called by miscellaneous functions not covered by entered, equipped and unequipped events for cameranet updates
 /event/cameranet_changed
 
 // Note: the following are used by datum/component/ai subtypes to give instructions to each other.
