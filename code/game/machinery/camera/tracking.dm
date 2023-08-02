@@ -162,18 +162,16 @@
 		var/mob/target_mob = target
 		if(target_mob.digitalcamo)
 			return FALSE
-	if(ishuman(target))
-		var/mob/living/carbon/human/target_human = target
-		if(target_human.wear_id && istype(target_human.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
-			return FALSE
-		if(target_human.is_wearing_item(/obj/item/clothing/mask/gas/voice))
-			return FALSE
-		if(target_human.is_wearing_item(/obj/item/clothing/gloves/ninja))
-			return FALSE
-		if(target_human.is_wearing_item(/obj/item/clothing/head/tinfoil))
-			return FALSE
-		if(target_human.is_holding_item(/obj/item/device/megaphone/madscientist))
-			return FALSE
+		for(var/obj/item/I in target_mob.get_equipped_items())
+			if(I.blocks_tracking && !target_mob.is_wearing_item(I,slot_wear_id))
+				return null
+			if(target_mob.is_holding_item(/obj/item/device/megaphone/madscientist))
+				return null
+			var/obj/item/ourID = target_mob.get_item_by_slot(slot_wear_id)
+			if(ourID)
+				ourID = ourID.GetID()
+				if(ourID.blocks_tracking)
+					return null
 
 	if(isalien(target))
 		return FALSE
