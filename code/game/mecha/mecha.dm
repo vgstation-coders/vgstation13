@@ -1373,6 +1373,18 @@
 			continue
 		O.forceMove(loc) //Somehow got inside, drop it.
 
+/obj/mecha/Exited(var/atom/movable/O) // Used for teleportation from within the mecha.
+	if (O == occupant)
+		occupant << browse(null, "window=exosuit")
+		remove_mech_spells()
+		if(occupant.client)
+			occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
+		occupant = null
+		icon_state = initial_icon+"-open"
+		for (var/datum/faction/F in factions_with_hud_icons)
+			F.update_hud_icons()
+	..()
+
 /obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
 	if(!occupant)
 		return
@@ -1397,24 +1409,27 @@
 		return
 
 	var/obj/structure/deathsquad_gravpult/G = locate() in get_turf(src)
-	if(mob_container.forceMove(exit))//ejecting mob container
+	if(mob_container)
 		log_message("[mob_container] moved out.")
 		occupant.reset_view()
 		empty_bad_contents()
 		occupant << browse(null, "window=exosuit")
 		remove_mech_spells()
-		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
-			var/obj/item/device/mmi/mmi = mob_container
-			if(mmi.brainmob)
-				occupant.forceMove(mmi)
-				mech_parts.Remove(mmi)
-			occupant.canmove = FALSE
-			mmi.mecha = null
-			verbs += /obj/mecha/verb/eject
 
 		//change the cursor
 		if(occupant && occupant.client)
 			occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
+
+		mob_container.forceMove(exit)
+
+		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
+			var/obj/item/device/mmi/mmi = mob_container
+			if(mmi.brainmob)
+				mmi.brainmob.forceMove(mmi)
+				mmi.brainmob.canmove = FALSE
+				mech_parts.Remove(mmi)
+			mmi.mecha = null
+			verbs += /obj/mecha/verb/eject
 
 		occupant = null
 		icon_state = initial_icon+"-open"

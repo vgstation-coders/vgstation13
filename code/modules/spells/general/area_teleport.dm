@@ -25,7 +25,7 @@
 
 	hud_state = "wiz_tele"
 
-/spell/area_teleport/before_cast(list/targets, user)
+/spell/area_teleport/before_cast(list/targets, user, bypass_range = 0)
 	return targets
 
 /spell/area_teleport/choose_targets()

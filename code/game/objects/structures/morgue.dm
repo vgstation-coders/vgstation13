@@ -144,20 +144,22 @@
 	qdel(connected)
 
 /obj/structure/morgue/attackby(obj/item/P, mob/user)
-	if(iscrowbar(P)&&!contents.len)
+	if(iscrowbar(P))
 		user.visible_message("<span class='notice'>\The [user] begins dismantling \the [src].</span>", "<span class='notice'>You begin dismantling \the [src].</span>")
-		if(do_after(user, src,50))
+		if(do_after(user, src, 50))
 			user.visible_message("<span class='notice'>\The [user] dismantles \the [src].</span>", "<span class='notice'>You dismantle \the [src].</span>")
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			new /obj/structure/closet/body_bag(src.loc)
-			new /obj/item/stack/sheet/metal(src.loc,5)
+			new /obj/item/stack/sheet/metal(src.loc, 5)
+			for (var/atom/movable/content in contents)
+				content.forceMove(src.loc)
 			qdel(src)
 	if(P.is_wrench(user))
 		P.playtoolsound(src, 50)
-		if(dir==4)
-			dir=8
+		if(dir == 4)
+			dir = 8
 		else
-			dir=4
+			dir = 4
 	if (istype(P, /obj/item/weapon/pen))
 		set_tiny_label(user, " - '", "'", maxlength=32)
 	src.add_fingerprint(user)
@@ -222,6 +224,9 @@
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
+	if (!iscarbon(user) && !isrobot(user))
+		return
+
 	O.forceMove(src.loc)
 	if (user != O)
 		visible_message("<span class='warning'>[user] stuffs [O] into [src]!</span>")
@@ -440,6 +445,9 @@
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
+	if (!iscarbon(user) && !isrobot(user))
+		return
+
 	O.forceMove(src.loc)
 	if (user != O)
 		for(var/mob/B in viewers(user, 3))

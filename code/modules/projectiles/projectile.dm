@@ -9,7 +9,6 @@
 #define SET "set"
 */
 
-var/list/bullet_master = list()
 var/list/impact_master = list()
 
 /obj/item/projectile

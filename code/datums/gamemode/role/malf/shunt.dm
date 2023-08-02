@@ -37,6 +37,8 @@
 
 	var/landing = 0
 
+	var/failsafe = 100
+
 
 /obj/effect/malf_jaunt/New(var/turf/loc, var/mob/living/silicon/ai/user, var/atom/destination, var/corereturn = FALSE)
 	..()
@@ -58,6 +60,7 @@
 	bump_target_check()
 	if (!src||!loc)
 		return
+	failsafe = abs(starting.x - target.x) + abs(starting.y - target.y)
 	init_angle()
 
 	ma = new(src)
@@ -137,12 +140,8 @@
 		error = dist_y/2 - dist_x
 
 	target_angle = round(Get_Angle(starting,target))
-
-	if( !("[icon_state]_angle[target_angle]" in bullet_master) )//totally hijacking [deity's] own [jaunt code] in case that wasn't already obvious.
-		var/icon/I = new(icon,icon_state)
-		I.Turn(target_angle+45)
-		bullet_master["[icon_state]_angle[target_angle]"] = I
-	icon = bullet_master["[icon_state]_angle[target_angle]"]
+	var/transform_matrix = turn(matrix(),target_angle+45)
+	transform = transform_matrix
 
 /obj/effect/malf_jaunt/proc/update_pixel()
 	if(src && starting && target)
@@ -183,14 +182,16 @@
 		if(!step)
 			qdel(src)
 		src.Move(step)
+		failsafe--
 		error += distA
 		bump_target_check()
-		return 0//so that bullets going in diagonals don't move twice slower
+		return 0//so that we don't move twice slower in diagonals
 	else
 		var/atom/step = get_step(src, dA)
 		if(!step)
 			qdel(src)
 		src.Move(step)
+		failsafe--
 		error -= distB
 		dir = dA
 		if(error < 0)
@@ -220,7 +221,7 @@
 		process_step()
 
 /obj/effect/malf_jaunt/proc/bump_target_check()
-	if (loc == target)
+	if (loc == target || failsafe <= 0)
 		playsound(loc, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
 		rider.flags &= ~INVULNERABLE
 		rider.client.images -= ma

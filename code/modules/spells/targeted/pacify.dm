@@ -47,7 +47,7 @@
 		if(Sp_RANGE)
 			return "Increases the area of the spell's impact."
 
-/spell/targeted/pacify/is_valid_target(var/atom/target)
+/spell/targeted/pacify/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(!istype(target))
 		return 0
 	return (isturf(target))

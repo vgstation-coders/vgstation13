@@ -4,7 +4,7 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "d" = (
 /obj/item/trash/bowl,
 /obj/item/trash/soda_cans{
@@ -12,12 +12,12 @@
 	pixel_y = 9
 	},
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "e" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/device/measuring_tape,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "h" = (
 /obj/structure/fence/door,
 /obj/effect/decal/cleanable/dirt,
@@ -25,32 +25,32 @@
 	icon_state = "engineering_door"
 	},
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "l" = (
 /obj/structure/table,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/pickaxe/plasmacutter,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "q" = (
 /obj/structure/table,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/storage/box/excavation,
 /obj/item/weapon/pickaxe/excavationdrill,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "r" = (
 /obj/structure/bed/chair/folding{
 	dir = 8
 	},
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "v" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid{
 	color = "#a37552"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "w" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/stack/sheet/bone{
@@ -60,32 +60,32 @@
 /turf/unsimulated/floor/asteroid{
 	color = "#a37552"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "y" = (
 /obj/machinery/floodlight,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "A" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/fossil/bone,
 /turf/unsimulated/floor/asteroid{
 	color = "#a37552"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "B" = (
 /obj/structure/table,
 /obj/item/device/flashlight/lantern,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "E" = (
 /obj/structure/bed/chair/folding,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "F" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/liquidfood,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "G" = (
 /obj/structure/closet/crate,
 /obj/item/weapon/pickaxe,
@@ -93,15 +93,15 @@
 /obj/item/clothing/gloves/latex,
 /obj/item/clothing/glasses/science,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "H" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "I" = (
 /obj/structure/largecrate,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "K" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/stack/sheet/bone,
@@ -112,60 +112,60 @@
 /turf/unsimulated/floor/asteroid{
 	color = "#a37552"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "L" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/bed/chair/folding{
 	dir = 8
 	},
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "M" = (
 /obj/structure/bed/chair/folding{
 	dir = 4
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "P" = (
 /obj/item/weapon/pickaxe/shovel,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "Q" = (
 /obj/structure/fence{
 	dir = 4
 	},
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "S" = (
 /turf/unsimulated/mineral,
-/area/asteroid)
+/area/mining_surprise)
 "T" = (
 /obj/structure/bed/chair/folding{
 	dir = 1
 	},
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "V" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/remains/human,
 /turf/unsimulated/floor/asteroid{
 	color = "#a37552"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "W" = (
 /obj/structure/anomaly_container,
 /obj/machinery/artifact,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "X" = (
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "Y" = (
 /obj/effect/decal/cleanable/campfire,
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "Z" = (
 /obj/structure/table,
 /obj/item/device/depth_scanner,
@@ -174,7 +174,7 @@
 	pixel_y = 8
 	},
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 
 (1,1,1) = {"
 S

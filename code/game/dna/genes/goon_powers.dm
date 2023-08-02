@@ -11,17 +11,15 @@
 /datum/dna/gene/basic/sober/New()
 	block = SOBERBLOCK
 
-//WAS: /datum/bioEffect/psychic_resist
-/datum/dna/gene/basic/jamsignals
-	name = "Signal Jam"
-	desc = "Creates an invisible shield around your body, protecting you from harmful electromagnetic radiation."
-	activation_messages = list("Your body and mind feel shielded.")
-	deactivation_messages = list("You feel oddly exposed.")
+/datum/dna/gene/basic/psychic_resist
+	name = "Psy-Resist"
+	desc = "Boosts efficiency in sectors of the brain commonly associated with meta-mental energies."
+	activation_messages = list("Your mind feels closed.")
 
-	mutation = M_JAMSIGNALS
+	mutation = M_PSY_RESIST
 
-/datum/dna/gene/basic/jamsignals/New()
-	block = JAMSIGNALSBLOCK
+/datum/dna/gene/basic/psychic_resist/New()
+	block = PSYRESISTBLOCK
 
 /datum/dna/gene/basic/jamsignals/activate(var/mob/M, var/connected, var/flags)
 	..()
@@ -255,7 +253,7 @@
 		H.UpdateDamageIcon()
 		H.updatehealth()
 
-/spell/targeted/eat/is_valid_target(var/target)
+/spell/targeted/eat/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(!(spell_flags & INCLUDEUSER) && target == usr)
 		return 0
 	if(get_dist(usr, target) > range)
@@ -625,7 +623,7 @@
 		to_chat(user, "<span class='warning'>This can only be used on carbon beings.</span>")
 		return 1
 
-	if (!can_mind_interact(M.mind))
+	if (M_PSY_RESIST in M.mutations)
 		to_chat(user, "<span class='warning'>You can't see into [M.name]'s mind at all!</span>")
 		return 1
 

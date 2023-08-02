@@ -131,7 +131,7 @@
 		dorfpod.scan_body(src)
 	if(ticker && ticker.mode)
 		sql_report_death(src)
-	species.handle_death(src)
+	species.handle_death(src, gibbed)
 	if(become_zombie)
 		spawn(20 SECONDS)
 			if(!gcDestroyed)

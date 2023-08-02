@@ -527,12 +527,20 @@
 
 		preview_icon.Blend(new /icon('icons/mob/previewbg.dmi',preview_background), ICON_UNDERLAY)
 
-	// Observers get tourist outfit.
+	// Observers get a tourist or vacationer outfit.
 	else
-		clothes_s = new /icon(uniform_dmi, "tourist_s")
-		clothes_s.Blend(new /icon(feet_dmi, "black"), ICON_UNDERLAY)
-		clothes_s.Blend(new /icon('icons/mob/clothing_accessories.dmi', "wristwatch"), ICON_UNDERLAY)
-		clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
+		if (prob(100/3) || fat == "_fat") //Currently no fat sprites for vacationer outfits.
+			clothes_s = new /icon(uniform_dmi, "tourist_s")
+			clothes_s.Blend(new /icon(feet_dmi, "black"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/clothing_accessories.dmi', "wristwatch"), ICON_UNDERLAY)
+			clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
+		else
+			clothes_s = new /icon(uniform_dmi, "vacationer_[rand(1,3)]_s")
+			clothes_s.Blend(new /icon(feet_dmi, "vacationer"), ICON_UNDERLAY)
+			if (prob(50))
+				var/drink_icon = pick('icons/mob/in-hand/right/drinkingglass.dmi', 'icons/mob/in-hand/left/drinkingglass.dmi')
+				var/drink_icon_state = pick("coffee", "cafe_latte", "beer", "alebottle", "gargleblasterglass", "energy_drink", "sangria", "gintonicglass")
+				clothes_s.Blend(new /icon(drink_icon, drink_icon_state), ICON_OVERLAY)
 
 	if(disabilities & NEARSIGHTED)
 		preview_icon.Blend(new /icon('icons/mob/eyes.dmi', "glasses"), ICON_OVERLAY)

@@ -541,13 +541,13 @@ var/global/list/disposalpipeID2State = list(
 	pipe_type	= PIPE_BINARY
 
 /datum/rcd_schematic/pipe/mpvalve
-	name		= "Manual Pressure Valve"
+	name		= "Manual Conditional Valve"
 
 	pipe_id		= PIPE_MPVALVE
 	pipe_type	= PIPE_TRINARY
 
 /datum/rcd_schematic/pipe/dpvalve
-	name		= "Digital Pressure Valve"
+	name		= "Digital Conditional Valve"
 
 	pipe_id		= PIPE_DPVALVE
 	pipe_type	= PIPE_TRINARY

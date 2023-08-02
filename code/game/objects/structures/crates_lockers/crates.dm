@@ -164,23 +164,6 @@
 /obj/structure/closet/crate/bin/wrenchable()
     return TRUE
 
-/obj/structure/closet/crate/ayybin
-	desc = "A large bin."
-	name = "Mothership Large bin"
-	icon = 'icons/obj/storage/storage.dmi'
-	icon_state = "ayybin"
-	density = 1
-	icon_opened = "ayybinopen"
-	icon_closed = "ayybin"
-
-/obj/structure/closet/crate/ayybin/attackby(var/obj/item/weapon/W, var/mob/user)
-    if(W.is_wrench(user) && wrenchable())
-        return wrenchAnchor(user, W)
-    ..()
-
-/obj/structure/closet/crate/ayybin/wrenchable()
-    return TRUE
-
 /obj/structure/closet/crate/radiation
 	desc = "A crate with a radiation sign on it."
 	name = "Radioactive gear crate"
@@ -198,15 +181,6 @@
 	density = 1
 	icon_opened = "weaponcrateopen"
 	icon_closed = "weaponcrate"
-
-/obj/structure/closet/crate/secure/ayyweapon
-	desc = "A secure mothership weapons crate."
-	name = "Mothership Weapons crate"
-	icon = 'icons/obj/storage/storage.dmi'
-	icon_state = "ayyweaponcrate"
-	density = 1
-	icon_opened = "ayyweaponcrateopen"
-	icon_closed = "ayyweaponcrate"
 
 /obj/structure/closet/crate/secure/plasma
 	desc = "A secure plasma crate."
@@ -253,25 +227,6 @@
     ..()
 
 /obj/structure/closet/crate/secure/bin/wrenchable()
-    return TRUE
-
-/obj/structure/closet/crate/secure/ayybin
-	desc = "A secure bin."
-	name = "Mothership Secure bin"
-	icon_state = "ayybinsecure"
-	icon_opened = "ayybinsecureopen"
-	icon_closed = "ayybinsecure"
-	redlight = "largebinr"
-	greenlight = "largebing"
-	sparks = "largebinsparks"
-	emag = "largebinemag"
-
-/obj/structure/closet/crate/secure/ayybin/attackby(var/obj/item/weapon/W, var/mob/user)
-    if(W.is_wrench(user) && wrenchable())
-        return wrenchAnchor(user, W)
-    ..()
-
-/obj/structure/closet/crate/secure/ayybin/wrenchable()
     return TRUE
 
 /obj/structure/closet/crate/secure/large
@@ -504,20 +459,21 @@
 	src.setDensity(TRUE)
 	return 1
 
-/obj/structure/closet/crate/insert(var/atom/movable/AM, var/include_mobs = 0)
+/obj/structure/closet/crate/insert(var/atom/movable/AM)
 
 	if(contents.len >= storage_capacity)
 		return -1
 
-	if(include_mobs && isliving(AM))
-		var/mob/living/L = AM
-		if(L.locked_to)
+	if(ishuman(AM))
+		var/mob/living/carbon/human/H = AM
+		if(!istype(H) || H.locked_to)
 			return 0
+		if(!(H.resting || H.stat)) /* We only want mobs that are human and are resting/dying to be able to get inside. */
+			return 0
+
 	else if(isobj(AM))
 		if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
 			return 0
-	else
-		return 0
 
 	if(istype(AM, /obj/structure/bed)) //This is only necessary because of rollerbeds and swivel chairs.
 		var/obj/structure/bed/B = AM

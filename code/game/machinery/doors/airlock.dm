@@ -794,7 +794,7 @@ About the new airlock wires panel:
 			usr.unset_machine()
 			return
 
-	if(isAdminGhost(usr) || (is_type_in_list(usr, remote_control_access) && src.canAIControl() && operating != -1))
+	if(isAdminGhost(usr) || ((is_type_in_list(usr, remote_control_access) || (usr.mind && usr.mind.assigned_role == "AI")) && src.canAIControl() && operating != -1))
 		//AI
 		//aiDisable - 1 idscan, 2 disrupt main power, 3 disrupt backup power, 4 drop door bolts, 5 un-electrify door, 7 close door, 8 door safties, 9 door speed
 		//aiEnable - 1 idscan, 4 raise door bolts, 5 electrify door for 30 seconds, 6 electrify door indefinitely, 7 open door,  8 door safties, 9 door speed
@@ -1176,7 +1176,10 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/item/toggleitem, mob/user)
 	if(!operating)
 		panel_open = !panel_open
-		toggleitem.playtoolsound(src, 50, TRUE, -6)
+		if (toggleitem)
+			toggleitem.playtoolsound(src, 50, TRUE, -6)
+		else
+			playsound(loc, pick(list('sound/items/Screwdriver.ogg', 'sound/items/Screwdriver2.ogg')), 50, TRUE, TRUE)//grinch
 		to_chat(user, "<span class='notice'>You [panel_open?"open":"close"] the panel.</span>")
 		update_icon()
 		return 1

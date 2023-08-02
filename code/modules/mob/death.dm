@@ -34,27 +34,43 @@
 
 
 /mob/proc/death(gibbed)
-	timeofdeath = world.time
-	INVOKE_EVENT(src, /event/death, "user" = src, "body_destroyed" = gibbed)
-	living_mob_list -= src
-	dead_mob_list += src
-	stat_collection.add_death_stat(src)
-	if (runescape_skull_display && ticker)//we died, begone skull
-		if ("\ref[src]" in ticker.runescape_skulls)
-			var/datum/runescape_skull_data/the_data = ticker.runescape_skulls["\ref[src]"]
-			ticker.runescape_skulls -= "\ref[src]"
-			qdel(the_data)
-	if(client)
-		client.color = initial(client.color)
-	for(var/obj/item/I in src)
-		I.OnMobDeath(src)
-	for(var/atom/A in arcane_tampered_atoms)
-		A.bless()
-	if(spell_masters && spell_masters.len)
-		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
-			spell_master.on_holder_death(src)
-	if(transmogged_from)
-		transmog_death()
+	var/turf/place_of_death = get_turf(src)
+	spawn()
+		if(is_dying)
+			var/deathstring = "[src] at ([get_coordinates_string(src)]) had death() called (with var/gibbed = [gibbed]) while already dying!"
+			log_debug(deathstring)
+			message_admins(deathstring)
+			return
+		is_dying = TRUE
+		timeofdeath = world.time
+		INVOKE_EVENT(src, /event/death, "user" = src, "body_destroyed" = gibbed)
+		living_mob_list -= src
+		dead_mob_list += src
+		stat_collection.add_death_stat(src,place_of_death)
+		if(runescape_skull_display && ticker)//we died, begone skull
+			if ("\ref[src]" in ticker.runescape_skulls)
+				var/datum/runescape_skull_data/the_data = ticker.runescape_skulls["\ref[src]"]
+				ticker.runescape_skulls -= "\ref[src]"
+				qdel(the_data)
+		if(client)
+			client.color = initial(client.color)
+		for(var/obj/item/I in src)
+			I.OnMobDeath(src)
+		for(var/atom/A in arcane_tampered_atoms)
+			A.bless()
+		if(spell_masters && spell_masters.len)
+			for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
+				spell_master.on_holder_death(src)
+		if(transmogged_from)
+			transmog_death()
+		if(client || mind)
+			var/mindname = (src.mind && src.mind.name) ? "[src.mind.name]" : "[real_name]"
+			var/died_as = (mindname == real_name) ? "" : " (died as [real_name])"
+			for(var/mob/M in get_deadchat_hearers())
+				var/rendered = "\proper<a href='?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a><span class='game deadsay'> \The <span class='name'>[mindname][died_as]</span> has died at \the <span class='name'>[get_area(place_of_death)]</span>.</span>"
+				to_chat(M, rendered)
+			log_game("[key_name(src)] has died at [get_area(place_of_death)]. Coordinates: ([get_coordinates_string(src)])")
+		is_dying = FALSE
 
 /mob/proc/transmog_death()
 	var/obj/transmog_body_container/C = transmogged_from

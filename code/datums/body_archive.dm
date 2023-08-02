@@ -10,6 +10,8 @@ var/list/body_archives = list()
 	var/key
 	var/rank
 
+	var/datum/mind/mind	//keeping a pointer to the source mind for tracking purposes
+
 	// just an empty list where you can store extra data, such as human DNA records
 	var/list/data = list()
 
@@ -20,23 +22,34 @@ var/list/body_archives = list()
 	..()
 	body_archives += src
 	mob_type = source.type
+	mind = source.mind
 	name = source.mind.name
 	key = source.mind.key
 	rank = source.mind.assigned_role
 	log_debug("[key_name(source)] has has had their body ([mob_type]) archived.")
 	source.archive_body(src)
 
-/datum/body_archive/proc/spawn_copy(var/turf/T)//admin toy
+//Admin toys
+/datum/body_archive/proc/spawn_naked(var/turf/T)
 	var/mob/temp_mob = new mob_type(T)
-	var/spawn_naked = ishuman(temp_mob) && alert("Keep current job equipment again or not?", "Body Resetting", "Keep Outfit", "Spawn Naked") == "Keep Outfit"
-	temp_mob.actually_reset_body(src, FALSE, spawn_naked, null, null)
+	temp_mob.actually_reset_body(src, FALSE, FALSE, null, null)
+	T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = EFFECTS_PLANE)
 	qdel(temp_mob)
 
-/datum/body_archive/proc/spawn_transfer(var/turf/T)//admin toy
+/datum/body_archive/proc/spawn_clothed(var/turf/T)
 	var/mob/temp_mob = new mob_type(T)
-	var/spawn_naked = ishuman(temp_mob) && alert("Let them get their current job equipment again or not?", "Body Resetting", "Keep Outfit", "Spawn Naked") == "Keep Outfit"
-	temp_mob.actually_reset_body(src, FALSE, spawn_naked, null, get_mind_by_key(src.key))
+	temp_mob.actually_reset_body(src, FALSE, TRUE, null, null)
+	T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = EFFECTS_PLANE)
 	qdel(temp_mob)
+
+/datum/body_archive/proc/transfer(var/turf/T)
+	var/mob/living/L = locate(/mob/living/) in T
+	if (!L)
+		return null
+	mind.transfer_to(L)
+	to_chat(L, "<span class='notice'>You blinked and are now seeing the world through a fresh new pair of eyes.</span>")
+	L.playsound_local(T, 'sound/effects/inception.ogg',75,0,0,0,0)
+	return L
 
 ////////////////////////////////////////////////////////////////////
 //																  //
@@ -46,7 +59,7 @@ var/list/body_archives = list()
 
 /mob/proc/archive_body(var/datum/body_archive/archive)
 
-/mob/proc/reset_body(var/datum/body_archive/archive,var/keep_clothes = FALSE, var/spawn_naked = TRUE)
+/mob/proc/reset_body(var/datum/body_archive/archive,var/keep_inventory = FALSE, var/job_outfit = FALSE)
 	if (!archive)
 		if (mind && mind.body_archive)
 			archive = mind.body_archive
@@ -56,10 +69,10 @@ var/list/body_archives = list()
 	var/mob/new_mob
 
 	if (type == archive.mob_type)
-		new_mob = actually_reset_body(archive, keep_clothes, spawn_naked, src, mind)
+		new_mob = actually_reset_body(archive, keep_inventory, job_outfit, src, mind)
 	else
 		var/mob/temp_mob = new archive.mob_type(loc)
-		new_mob = temp_mob.actually_reset_body(archive, keep_clothes, spawn_naked, src, mind)
+		new_mob = temp_mob.actually_reset_body(archive, keep_inventory, job_outfit, src, mind)
 		qdel(temp_mob)
 
 	drop_all()
@@ -67,7 +80,7 @@ var/list/body_archives = list()
 	return new_mob
 
 // With this proc we're guarranted that the mob_type in the archive is the same as src
-/mob/proc/actually_reset_body(var/datum/body_archive/archive,var/keep_clothes = FALSE, var/spawn_naked = TRUE, var/mob/old_mob, var/datum/mind/our_mind)
+/mob/proc/actually_reset_body(var/datum/body_archive/archive,var/keep_inventory = FALSE, var/job_outfit = FALSE, var/mob/old_mob, var/datum/mind/our_mind)
 	var/mob/new_mob = new archive.mob_type(loc)
 	if (our_mind)
 		our_mind.transfer_to(new_mob)
@@ -102,9 +115,35 @@ var/list/body_archives = list()
 	archive.data["dna_records"] = R
 	archive.data["underwear"] = underwear
 
-	//I gave a shot at preserving limb status (destroyed, peg, mechanized) then decided I was too tired and it's too much trouble, so TODO for anyone with the determination
+	var/list/limb_data = list(
+		LIMB_LEFT_ARM,LIMB_RIGHT_ARM,
+		LIMB_LEFT_LEG,LIMB_RIGHT_LEG,
+		LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,
+		LIMB_LEFT_HAND,LIMB_RIGHT_HAND,
+		)
+	var/list/internal_organ_data = list("heart", "eyes", "lungs", "kidneys", "liver")
+	var/list/organ_data = list()
 
-/mob/living/carbon/human/actually_reset_body(var/datum/body_archive/archive, var/keep_clothes = FALSE, var/spawn_naked = TRUE, var/mob/old_mob, var/datum/mind/our_mind)
+	for(var/name in limb_data)
+		var/datum/organ/external/O = organs_by_name[name]
+		if (O.status & ORGAN_DESTROYED)
+			organ_data[name] = "amputated"
+		else if (O.status & ORGAN_ROBOT)
+			organ_data[name] = "cyborg"
+		else if (O.status & ORGAN_PEG)
+			organ_data[name] = "peg"
+
+	for(var/name in internal_organ_data)
+		var/datum/organ/internal/I = internal_organs_by_name[name]
+		if (I)
+			if(I.robotic == 1)
+				organ_data[name] = "assisted"
+			else if(I.robotic == 2)
+				organ_data[name] = "mechanical"
+
+	archive.data["organ_data"] = organ_data
+
+/mob/living/carbon/human/actually_reset_body(var/datum/body_archive/archive, var/keep_inventory = FALSE, var/job_outfit = FALSE, var/mob/old_mob, var/datum/mind/our_mind)
 
 	//Creating our new body
 	var/datum/dna2/record/R = archive.data["dna_records"]
@@ -118,7 +157,7 @@ var/list/body_archives = list()
 	H.dna.species = R.dna.species
 	if(H.dna.species != "Human")
 		H.set_species(H.dna.species, TRUE)
-	H.check_mutations = TRUE
+	H.check_mutations = M_CHECK_ALL
 	H.updatehealth()
 	if (our_mind)
 		has_been_shade -= our_mind
@@ -154,7 +193,7 @@ var/list/body_archives = list()
 	domutcheck(H)
 
 	//Optionally transferring items
-	if (ishuman(old_mob) && keep_clothes)
+	if (ishuman(old_mob) && keep_inventory)
 		//taking care of those items separately so they don't fall on the floor
 		var/obj/item/transfered_uniform = old_mob.get_item_by_slot(slot_w_uniform)
 		var/obj/item/transfered_suit = old_mob.get_item_by_slot(slot_wear_suit)
@@ -193,8 +232,36 @@ var/list/body_archives = list()
 			if (transfered_held_item)
 				old_mob.drop_item(transfered_held_item,loc,TRUE)
 				H.put_in_hands(transfered_held_item)
-	else if(!spawn_naked)
-		var/datum/job/J = GetJob(archive.rank)
+
+	if ("organ_data" in archive.data)
+		var/list/organ_data = archive.data["organ_data"]
+		//reproducing the way limb preferences are applied in /datum/preferences/proc/copy_to()
+		for(var/name in organ_data)
+			var/datum/organ/external/O = H.organs_by_name[name]
+			var/datum/organ/internal/I = H.internal_organs_by_name[name]
+			var/status = organ_data[name]
+
+			if(status == "amputated")
+				O.status &= ~ORGAN_ROBOT
+				O.status &= ~ORGAN_PEG
+				O.amputated = 1
+				O.status |= ORGAN_DESTROYED
+				O.destspawn = 1
+			else if(status == "cyborg")
+				O.status &= ~ORGAN_PEG
+				O.status |= ORGAN_ROBOT
+			else if(status == "peg")
+				O.status &= ~ORGAN_ROBOT
+				O.status |= ORGAN_PEG
+			else if(status == "assisted")
+				I?.mechassist()
+			else if(status == "mechanical")
+				I?.mechanize()
+			else
+				continue
+
+	if (job_outfit)
+		var/datum/job/J = job_master.GetJob(archive.rank)
 		if(J)
 			J.equip(H, J.priority)
 		H.job = archive.rank

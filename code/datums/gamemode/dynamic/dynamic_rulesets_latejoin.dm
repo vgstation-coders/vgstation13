@@ -1,3 +1,15 @@
+
+/*
+	* Syndicate Infiltrator
+	* Ragin' Mages
+	* Space Ninja Attack
+	* Pulse Demon Infiltration
+	* Grue Infestation
+	* Provocateur
+	* Time Agent Anomaly
+	* Changelings
+*/
+
 //////////////////////////////////////////////
 //                                          //
 //            LATEJOIN RULESETS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,11 +59,13 @@
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Traitor"
 	cost = 5
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 	repeatable = TRUE
 	flags = TRAITOR_RULESET
+
 
 /datum/dynamic_ruleset/latejoin/infiltrator/execute()
 	var/mob/M = pick(assigned)
@@ -77,6 +91,7 @@
 	required_pop = list(15,15,10,10,10,10,10,0,0,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT/2
+	weight_category = "Wizard"
 	cost = 20
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -111,6 +126,7 @@
 	required_pop = list(15,15,10,10,10,10,10,0,0,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Ninja"
 	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
@@ -146,6 +162,7 @@
 	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Pulse"
 	cost = 25
 	requirements = list(70,40,20,20,20,20,15,15,5,5)
 	high_population_requirement = 10
@@ -153,6 +170,7 @@
 
 	repeatable = TRUE
 	var/list/cables_to_spawn_at = list()
+
 
 /datum/dynamic_ruleset/latejoin/pulse_demon/ready(var/forced = 0)
 	for(var/datum/powernet/PN in powernets)
@@ -195,6 +213,7 @@
 	enemy_jobs = list()
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Grue"
 	cost = 20
 	requirements = list(70,60,50,40,30,20,10,10,10,10)
 	high_population_requirement = 10
@@ -257,6 +276,7 @@
 	required_pop = list(20,20,15,15,15,15,15,0,0,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Revolution"
 	cost = 20
 	var/required_heads = 3
 	requirements = list(101,101,70,40,30,20,20,20,20,20)
@@ -274,7 +294,11 @@
 	for(var/mob/player in mode.living_players)
 		if (player.mind.assigned_role in command_positions)
 			head_check++
-	return (head_check >= required_heads)
+	if (head_check < required_heads)
+		log_admin("Cannot accept Provocateur ruleset, not enough heads of staff.")
+		message_admins("Cannot accept Provocateur ruleset, not enough heads of staff.")
+		return FALSE
+	return TRUE
 
 /datum/dynamic_ruleset/latejoin/provocateur/execute()
 	var/mob/M = pick(assigned)
@@ -302,8 +326,12 @@
 	cost = 10
 	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
 	logo = "time-logo"
+	weight_category = "Time"
+
 
 /datum/dynamic_ruleset/latejoin/time_agent/ready(var/forced=0)
+	if (forced)
+		return ..()
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
@@ -323,6 +351,7 @@
 	newagent.AssignToRole(M.mind,1)
 	agency.HandleRecruitedRole(newagent)
 	newagent.Greet(GREET_DEFAULT)
+	return 1
 
 //////////////////////////////////////////////
 //                                          //
@@ -340,6 +369,7 @@
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Changeling"
 	cost = 20
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30

@@ -72,8 +72,13 @@
 		user.reset_view(0)
 		return
 
-	for(var/mob/living/target in targets)
-		if (can_mind_interact(target.mind))
+	for(var/T in targets)
+		var/mob/living/target
+		if (isliving(T))
+			target = T
+		if (istype (T, /datum/mind))
+			target = user.can_mind_interact(T)
+		if(target)
 			user.remoteview_target = target
 			user.reset_view(target)
 			break
@@ -150,17 +155,19 @@
 		M.telepathic_target.len = 0
 
 	var/all_switch = TRUE
-	for(var/mob/living/T in targets)
-		if(!istype(T) && !can_mind_interact(T.mind))
-			to_chat(M,"<span class='notice'>[T] cannot sense your telepathy.</span>")
+	for(var/T in targets)
+		var/mob/living/target
+		if (isliving(T))
+			target = T
+		if (istype (T, /datum/mind))
+			target = user.can_mind_interact(T)
+		if(!T || !istype(target) || tinfoil_check(target) || !user.can_mind_interact(target))
+			user.show_message("<span class='notice'>You are unable to use telepathy with [target].</span>")
 			continue
-		if(istype(M))
-			M.telepathic_target += T
+		else if(istype(M))
+			M.telepathic_target += target
 			continue
-		if(T == user) //Talking to ourselves
-			to_chat(user,"<span class='notice'>Projected to self: \"[message]\"</span>")
-			return
-		if(M_TELEPATHY in T.mutations)
+		if(M_TELEPATHY in target.mutations)
 			to_chat(T, "<span class='notice'>You hear [user.real_name]'s voice:</span><span class='bold'> \"[message]\"</span>")
 		else
 			to_chat(T,"<span class='notice'>You hear a voice inside your head:</span><span class='bold'> \"[message]\"</span>")

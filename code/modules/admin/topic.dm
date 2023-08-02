@@ -18,42 +18,35 @@
 			if("1")
 				message_admins("[key_name(usr)] has attempted to spawn [count] traitors.")
 				var/success = makeAntag(/datum/role/traitor, null, count, FROM_PLAYERS)
-				message_admins("[success] number of traitors made.")
-				to_chat(usr, "<span class='notice'>[success] number of traitors made.</span>")
+				message_admins("[success] traitors made.")
 			if("2")
 				message_admins("[key_name(usr)] has attempted to spawn [count] changelings.")
 				var/success = makeAntag(/datum/role/changeling, null, count, FROM_PLAYERS)
-				message_admins("[success] number of changelings made.")
-				to_chat(usr, "<span class='notice'>[success] number of changelings made.</span>")
+				message_admins("[success] changelings made.")
 			if("3")
 				message_admins("[key_name(usr)] has attempted to spawn [count] revolutionaries.")
 				var/success = makeAntag(null, /datum/faction/revolution, count, FROM_PLAYERS)
-				message_admins("[success] number of revolutionaries made.")
-				to_chat(usr, "<span class='notice'>[success] number of revolutionaries made.</span>")
+				message_admins("[success] revolutionaries made.")
 			if("4")
 				message_admins("[key_name(usr)] has attempted to spawn [count] cultists.")
 				var/success = makeAntag(null, /datum/faction/bloodcult, count , FROM_PLAYERS)
-				message_admins("[success] number of cultists made.")
-				to_chat(usr, "<span class='notice'>[success] number of cultists made..</span>")
+				message_admins("[success] cultists made.")
 			if("5")
 				message_admins("[key_name(usr)] has attempted to spawn [count] malfunctioning AI.")
 				var/success = makeAntag(null, /datum/faction/malf, count, FROM_PLAYERS)
-				message_admins("[success] number of angry computer screens made.")
-				to_chat(usr, "<span class='notice'>[success] number of malf AIs made.</span>")
+				message_admins("[success] angry computer screens made.")
 			if("6")
 				message_admins("[key_name(usr)] has attempted to spawn [count] wizards.")
 				var/success = makeAntag(null, /datum/faction/wizard, count, FROM_GHOSTS)
-				message_admins("[success] number of wizards made.")
-				to_chat(usr, "<span class='notice'>[success] number of wizards made.</span>")
+				message_admins("[success] wizards made.")
 			if("7")
 				message_admins("[key_name(usr)] has attempted to spawn [count] vampires.")
 				var/success = makeAntag(/datum/role/vampire, null, count, FROM_PLAYERS)
-				message_admins("[success] number of vampires made.")
-				to_chat(usr, "<span class='notice'>[success] number of vampires made.</span>")
+				message_admins("[success] vampires made.")
 			if("8")
 				message_admins("[key_name(usr)] has spawned aliens.")
 				if(!src.makeAliens())
-					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")
+					message_admins("Unfortunately, there were no candidates available.")
 
 	if("announce_laws" in href_list)
 		var/mob/living/silicon/S = locate(href_list["mob"])
@@ -534,18 +527,7 @@
 		if (!L.loc)
 			to_chat(usr,"<span class='warning'>Mob is in nullspace!</span>")
 			return
-		var/client/C = usr.client
-		if(!isobserver(usr) && isliving(usr))
-			var/mob/living/U = usr
-			U.ghost()
-		sleep(2)
-		if(!isobserver(C.mob))
-			return
-		var/mob/dead/observer/O = C.mob
-		if(O.locked_to)
-			O.manual_stop_follow(O.locked_to)
-		if(C)
-			C.jumptomob(L)
+		SendAdminGhostTo(null,L)
 
 	else if(href_list["diseasepanel_infecteditems"])
 		if(!check_rights(R_ADMIN))
@@ -567,17 +549,7 @@
 		if (!I.loc)
 			to_chat(usr,"<span class='warning'>Item is in nullspace!</span>")
 			return
-		var/client/C = usr.client
-		if(!isobserver(usr) && isliving(usr))
-			var/mob/living/L = usr
-			L.ghost()
-		sleep(2)
-		if(!isobserver(C.mob))
-			return
-		var/mob/dead/observer/O = C.mob
-		if(O.locked_to)
-			O.manual_stop_follow(O.locked_to)
-		O.forceMove(get_turf(I))
+		SendAdminGhostTo(get_turf(I),null)
 
 	else if(href_list["diseasepanel_dishes"])
 		if(!check_rights(R_ADMIN))
@@ -600,17 +572,7 @@
 		if (!dish.loc)
 			to_chat(usr,"<span class='warning'>Dish is in nullspace!</span>")
 			return
-		var/client/C = usr.client
-		if(!isobserver(usr) && isliving(usr))
-			var/mob/living/L = usr
-			L.ghost()
-		sleep(2)
-		if(!isobserver(C.mob))
-			return
-		var/mob/dead/observer/O = C.mob
-		if(O.locked_to)
-			O.manual_stop_follow(O.locked_to)
-		O.forceMove(get_turf(dish))
+		SendAdminGhostTo(get_turf(dish),null)
 
 	else if(href_list["artifactpanel_jumpto"])
 		if(!check_rights(R_ADMIN))
@@ -618,33 +580,57 @@
 
 		var/turf/T = locate(href_list["artifactpanel_jumpto"])
 
-		var/client/C = usr.client
-		if(!isobserver(usr) && isliving(usr))
-			var/mob/living/L = usr
-			L.ghost()
-		sleep(2)
-		if(!isobserver(C.mob))
-			return
-		var/mob/dead/observer/O = C.mob
-		if(O.locked_to)
-			O.manual_stop_follow(O.locked_to)
-		O.forceMove(T)
+		SendAdminGhostTo(T,null)
 
-	else if(href_list["bodyarchivepanel_spawncopy"])
+	else if(href_list["bodyarchivepanel_focus"])
 		if(!check_rights(R_ADMIN))
 			return
 
-		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_spawncopy"])
+		var/mob/M
+		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_focus"])
+		if (archive.mind)
+			if (archive.mind.current)
+				M = archive.mind.current
+			else
+				to_chat(usr, "This archive's mind somehow has no current mob.")
+				return
+		else
+			to_chat(usr, "This archive somehow lost the pointer to its mind.")
+			return
 
-		archive.spawn_copy(get_turf(usr))
+		if (!M)
+			return
 
-	else if(href_list["bodyarchivepanel_spawntransfer"])
+		SendAdminGhostTo(null,M)
+
+	else if(href_list["bodyarchivepanel_spawnnaked"])
 		if(!check_rights(R_ADMIN))
 			return
 
-		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_spawntransfer"])
+		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_spawnnaked"])
 
-		archive.spawn_transfer(get_turf(usr))
+		archive.spawn_naked(get_turf(usr))
+
+	else if(href_list["bodyarchivepanel_spawnclothed"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_spawnclothed"])
+
+		archive.spawn_clothed(get_turf(usr))
+
+	else if(href_list["bodyarchivepanel_transfer"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_transfer"])
+
+		var/mob/M = archive.transfer(get_turf(usr))
+		if (M)
+			to_chat(usr, "Mind of [archive.name] sent inside \the [M].")
+		else
+			to_chat(usr, "Stand above the mindless mob into which you want to transfer this mind.")
+			//beware of trying to assign two minds to the same body.
 
 	else if(href_list["climate_timeleft"])
 		if(!check_rights(R_ADMIN))
@@ -718,7 +704,7 @@
 					message_admins("<span class='notice'>[key_name(usr)] edited the hub description.</span>")
 					log_admin("[key_name(usr)] edited the hub description from [old_desc] to [temp_desc]")
 
-		var/datum/persistence_task/task = SSpersistence_misc.tasks[/datum/persistence_task/hub_settings]
+		var/datum/persistence_task/task = SSpersistence_misc.tasks["/datum/persistence_task/hub_settings"]
 		task.on_shutdown()
 		world.update_status()
 		HubPanel()
@@ -1869,18 +1855,6 @@
 		dynamic_curve_width = new_width
 		dynamic_mode_options(usr)
 
-	else if(href_list["force_extended"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		if(master_mode != "Dynamic Mode")
-			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-
-		dynamic_forced_extended = !dynamic_forced_extended
-		log_admin("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
-		message_admins("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
-		dynamic_mode_options(usr)
-
 	else if(href_list["toggle_rulesets"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -2229,17 +2203,22 @@
 
 		pack.name = "[M.real_name]'s belongings"
 
+		var/might_need_glasses = FALSE
 		for(var/obj/item/I in M)
 			if(istype(I,/obj/item/clothing/glasses))
 				var/obj/item/clothing/glasses/G = I
-				if(G.prescription)
-					continue
+				if(G.nearsighted_modifier != 0)
+					might_need_glasses = TRUE
 			M.u_equip(I,1)
 			if(I)
 				I.forceMove(M.loc)
 				I.reset_plane_and_layer()
 				//I.dropped(M)
 				I.forceMove(pack)
+
+		if (might_need_glasses && ishuman(M))
+			var/mob/living/carbon/human/H = M
+			H.equip_to_slot_or_del(new /obj/item/clothing/glasses/regular(H), slot_glasses)
 
 		var/obj/item/weapon/card/id/thunderdome/ident = null
 
@@ -2628,19 +2607,7 @@
 
 		var/mob/M = locate(href_list["adminplayerobservejump"])
 
-		var/client/C = usr.client
-		if(!isobserver(usr) && isliving(usr))
-			var/mob/living/L = usr
-			L.ghost()
-		sleep(2)
-		if(!isobserver(usr))
-			return
-		var/mob/dead/observer/O = usr
-		if(O.locked_to)
-			O.manual_stop_follow(O.locked_to)
-		if(C)
-			C.jumptomob(M)
-			O.manual_follow(M)
+		SendAdminGhostTo(null,M)
 
 	else if(href_list["emergency_shuttle_panel"])
 		emergency_shuttle_panel()
@@ -4100,7 +4067,7 @@
 						log_admin("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
 						return
 					if("Malfunction") //BLOW EVERYTHING
-						var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert ?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
+						var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
 						if(salertchoice == "Yes")
 							command_alert(/datum/command_alert/malf_announce)
 						to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
@@ -4134,7 +4101,7 @@
 			if("fakebooms") //Michael Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
-				var/amount = input("How many fake explosions do you want ?", "Fake Explosions", 1) as num
+				var/amount = input("How many fake explosions do you want?", "Fake Explosions", 1) as num
 				if(amount < 1) //No negative or null explosion amounts here math genius
 					to_chat(usr, "<span class='warning'>Invalid input range (null or negative)</span>")
 					return
@@ -4320,6 +4287,33 @@
 						hardcore_mode = 0
 						to_chat(world, "<h5><span class='danger'>Hardcore mode has been disabled</span></h5>")
 						to_chat(world, "<span class='info'>Starvation will no longer kill player-controlled characters.</span>")
+
+			if("buddha_mode_everyone")
+				if(!buddha_mode_everyone)
+					if(alert("This will prevent every carbon mob from ever entering crit / dying. Are you sure?", "Warning", "Yes", "Cancel") == "Cancel")
+						return
+					buddha_mode_everyone = !buddha_mode_everyone
+					log_admin("[key_name(usr)] has ENABLED buddha mode for everyone!")
+					message_admins("[key_name(usr)] has ENABLED buddha mode for everyone!")
+					for(var/mob/living/carbon/human/H in mob_list)
+						if(H.mind || H.client)
+							if(!(H.status_flags & BUDDHAMODE))
+								H.status_flags ^= BUDDHAMODE
+								if(H.client)
+									to_chat(H, "<span class='notice'>An incredible sense of tranquility overtakes you. You have let go of your worldly desires.</span>")
+				else
+					if(alert("This will disable buddha mode for everyone. Are you sure?", "Warning", "Yes", "Cancel") == "Cancel")
+						return
+					buddha_mode_everyone = !buddha_mode_everyone
+					log_admin("[key_name(usr)] has DISABLED buddha mode for everyone!")
+					message_admins("[key_name(usr)] has DISABLED buddha mode for everyone!")
+					for(var/mob/living/carbon/human/H in mob_list)
+						if((H.mind || H.client) || (H.attack_log.len)) //attack_log included in case someone got beheaded and the mob lost its client/mind (to unset the flag for corpses, basically)
+							if(H.status_flags & BUDDHAMODE)
+								H.status_flags ^= BUDDHAMODE
+								if(H.client)
+									to_chat(H, "<span class='warning'>The tranquility that once filled your soul has vanished. You are once again a slave to your worldly desires.</span>")
+
 			if("vermin_infestation")
 				var/list/locations = list(
 					"RANDOM" = null,
@@ -5829,7 +5823,7 @@
 
 				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as null|anything in moblist
 
-				if (alert("Do you want to make \the [preacher] the leader of [R.name] ?", "Activating a religion", "Yes", "No") != "Yes")
+				if (alert("Do you want to make \the [preacher] the leader of [R.name]?", "Activating a religion", "Yes", "No") != "Yes")
 					return FALSE
 
 				if (!preacher)
@@ -5928,6 +5922,23 @@
 			return
 		else
 			toggle_tag_mode(usr)
+
+/datum/admins/proc/SendAdminGhostTo(var/turf/T,var/mob/M)
+	var/client/C = usr.client
+	if(!isobserver(usr) && isliving(usr))
+		var/mob/living/L = usr
+		L.ghost()
+	sleep(2)
+	if(!isobserver(C.mob))
+		return
+	var/mob/dead/observer/O = C.mob
+	if(O.locked_to)
+		O.manual_stop_follow(O.locked_to)
+	if (T)
+		O.forceMove(T)
+	else if (M)
+		C.jumptomob(M)
+		O.manual_follow(M)
 
 /datum/admins/proc/updateRelWindow()
 	var/text = list()

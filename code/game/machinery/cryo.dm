@@ -475,8 +475,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(!occupant)
 		return
 	if(!ejecting)
-		occupant.bodytemperature += 20*(air_contents.temperature - occupant.bodytemperature)*current_heat_capacity/(current_heat_capacity + air_contents.heat_capacity())
-		occupant.bodytemperature = max(occupant.bodytemperature, air_contents.temperature) // this is so ugly i'm sorry for doing it i'll fix it later i promise
+		occupant.bodytemperature += (air_contents.temperature - occupant.bodytemperature) * (1 - current_heat_capacity / (current_heat_capacity + air_contents.heat_capacity()))
 	else
 		occupant.bodytemperature = mix(occupant.bodytemperature, T0C + 37, 0.6)
 
@@ -499,6 +498,15 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	// Just have the gas disappear to nowhere.
 	//expel_gas.temperature = T20C // Lets expel hot gas and see if that helps people not die as they are removed
 	//loc.assume_air(expel_gas)
+
+/obj/machinery/atmospherics/unary/cryo_cell/Exited(var/atom/movable/O) // Used for teleportation from within the tube.
+	if (O == occupant)
+		occupant.reset_view()
+		occupant.clear_alert(SCREEN_ALARM_CRYO)
+		occupant = null
+		update_icon()
+		nanomanager.update_uis(src)
+	..()
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit, var/ejector)
 	if(!occupant || ejecting)

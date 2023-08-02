@@ -166,6 +166,18 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/airflow_hit(atom/A)
 	return
 
+/mob/living/simple_animal/Topic(href, href_list) //not so simple anymore are we
+	..()
+	if(href_list["hands"])
+		if(usr.incapacitated() || !Adjacent(usr) || (isanimal(usr) && !isgrinch(usr)))
+			return
+		handle_strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
+
+	else if(href_list["item"])
+		if(usr.incapacitated() || !Adjacent(usr) || (isanimal(usr) && !isgrinch(usr)))
+			return
+		handle_strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
+
 // For changing wander behavior
 /mob/living/simple_animal/proc/wander_move(var/turf/dest)
 	if(space_check())
@@ -516,7 +528,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/damage = rand(1, 3)
 
-	if(istype(M,/mob/living/carbon/slime/adult))
+	if(M.slime_lifestage == SLIME_ADULT)
 		damage = rand(20, 40)
 	else
 		damage = rand(5, 35)
@@ -549,7 +561,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return
 	if(supernatural && isholyweapon(O))
 		purge = 3
-	playsound(loc, O.hitsound, 50, 1, -1)
+	if(O.hitsound)
+		playsound(loc, O.hitsound, 50, 1, -1)
 	..()
 
 

@@ -1,3 +1,7 @@
+#define FLIPPING_DURATION	7
+#define FLIPPING_ROTATION	360
+#define FLIPPING_INCREMENT	FLIPPING_ROTATION / 8
+
 ////////////////////////////////////////////////////////////////////////////////
 /// Drinks.
 ////////////////////////////////////////////////////////////////////////////////
@@ -27,6 +31,11 @@
 	var/flammin = 0
 	var/flammin_color = null
 	var/base_icon_state = "glassbottle"
+
+	//bottle flipping
+	var/can_flip = FALSE
+	var/last_flipping = 0
+	var/atom/movable/overlay/flipping = null
 
 /obj/item/weapon/reagent_containers/food/drinks/on_reagent_change()
 	if(gulp_size < 5)
@@ -62,7 +71,7 @@
 	..()
 	cant_drop = 0
 
-/obj/item/weapon/reagent_containers/food/drinks/pickup(mob/user as mob)
+/obj/item/weapon/reagent_containers/food/drinks/pickup(var/mob/user)
 	..()
 	if(ishuman(user) && arcanetampered) // wizards turn it into SCP-198
 		var/mob/living/carbon/human/H = user
@@ -70,6 +79,86 @@
 		H.audible_scream()
 		H.adjustHalLoss(50)
 		H.vessel.trans_to(reagents,reagents.maximum_volume)
+	if (can_flip && (M_SOBER in user.mutations) && (user.a_intent == I_GRAB))
+		if (flipping && (M_CLUMSY in user.mutations) && prob(20))
+			to_chat(user, "<span class='warning'>Your clumsy fingers fail to catch back \the [src].</span>")
+			user.drop_item(src, user.loc, 1)
+			throw_impact(user.loc,1,user)
+		else
+			bottleflip(user)
+
+/obj/item/weapon/reagent_containers/food/drinks/dropped(var/mob/user)
+	..()
+	if(flipping)
+		QDEL_NULL(flipping)
+		last_flipping = world.time
+		item_state = initial(item_state)
+		playsound(loc,'sound/effects/slap2.ogg', 5, 1, -2)
+
+/obj/item/weapon/reagent_containers/food/drinks/proc/bottleflip(var/mob/user)
+	playsound(loc,'sound/effects/woosh.ogg', 10, 1, -2)
+	last_flipping = world.time
+	var/this_flipping = last_flipping
+	item_state = "invisible"
+	user.update_inv_hands()
+	if (flipping)
+		qdel(flipping)
+	var/pixOffX = 0
+	var/list/offsets = user.get_item_offset_by_index(user.active_hand)
+	var/pixOffY = offsets["y"]
+	var/fliplay = user.layer + 1
+	var/rotate = 1
+	var/anim_icon_state = initial(item_state)
+	if (!anim_icon_state)
+		anim_icon_state = initial(icon_state)
+	switch (user.get_direction_by_index(user.active_hand))
+		if ("right_hand")
+			switch(user.dir)
+				if (NORTH)
+					pixOffX = 3
+					fliplay = user.layer - 1
+					rotate = -1
+				if (SOUTH)
+					pixOffX = -4
+				if (WEST)
+					pixOffX = -7
+				if (EAST)
+					pixOffX = 2
+					rotate = -1
+		if ("left_hand")
+			switch(user.dir)
+				if (NORTH)
+					pixOffX = -4
+					fliplay = user.layer - 1
+				if (SOUTH)
+					pixOffX = 3
+					rotate = -1
+				if (WEST)
+					pixOffX = -2
+				if (EAST)
+					pixOffX = 7
+					rotate = -1
+	flipping = anim(target = user, a_icon = 'icons/obj/bottleflip.dmi', a_icon_state = anim_icon_state, sleeptime = FLIPPING_DURATION, offX = pixOffX, lay = fliplay, offY = pixOffY)
+	animate(flipping, pixel_y = pixOffY + 12, transform = turn(matrix(), rotate*FLIPPING_INCREMENT), time = FLIPPING_DURATION/8, easing = LINEAR_EASING)
+	animate(pixel_y = pixOffY + 18, transform = turn(matrix(), rotate*2*FLIPPING_INCREMENT), time = FLIPPING_DURATION/8, easing = LINEAR_EASING)
+	animate(pixel_y = pixOffY + 21, transform = turn(matrix(), rotate*3*FLIPPING_INCREMENT), time = FLIPPING_DURATION/8, easing = LINEAR_EASING)
+	animate(pixel_y = pixOffY + 24, transform = turn(matrix(), rotate*4*FLIPPING_INCREMENT), time = FLIPPING_DURATION/8, easing = LINEAR_EASING)
+	animate(pixel_y = pixOffY + 21, transform = turn(matrix(), rotate*5*FLIPPING_INCREMENT), time = FLIPPING_DURATION/8, easing = LINEAR_EASING)
+	animate(pixel_y = pixOffY + 18, transform = turn(matrix(), rotate*6*FLIPPING_INCREMENT), time = FLIPPING_DURATION/8, easing = LINEAR_EASING)
+	animate(pixel_y = pixOffY + 12, transform = turn(matrix(), rotate*7*FLIPPING_INCREMENT), time = FLIPPING_DURATION/8, easing = LINEAR_EASING)
+	animate(pixel_y = pixOffY + 0, transform = turn(matrix(), rotate*8*FLIPPING_INCREMENT), time = FLIPPING_DURATION/8, easing = LINEAR_EASING)
+	spawn (FLIPPING_DURATION)
+		if ((loc == user) && (this_flipping == last_flipping))//only the last flipping action will reset the bottle's vars
+			QDEL_NULL(flipping)
+			last_flipping = world.time
+			item_state = initial(item_state)
+			if ((M_CLUMSY in user.mutations) && prob(20))
+				to_chat(user, "<span class='warning'>Your clumsy fingers fail to catch back \the [src].</span>")
+				user.drop_item(src, user.loc, 1)
+				throw_impact(user.loc,1,user)
+			else
+				user.update_inv_hands()
+				playsound(loc,'sound/effects/slap2.ogg', 10, 1, -2)
 
 /obj/item/weapon/reagent_containers/food/drinks/attack(mob/living/M as mob, mob/user as mob, def_zone)
 	var/datum/reagents/R = src.reagents
@@ -154,7 +243,7 @@
 		//The reagents in the bottle splash all over the target, thanks for the idea Nodrak
 		if(src.reagents)
 			for(var/mob/O in viewers(user, null))
-				O.show_message(text("<span class='bnotice'>The contents of \the [smashtext][src] splashes all over [M][ishuman(M) ? "'s [parse_zone(affecting)]" : ""]!</span>"), 1)
+				O.show_message(text("<span class='bnotice'>The contents of \the [smashtext][src] splashes all over [M]!</span>"), 1)
 			src.reagents.reaction(M, TOUCH, zone_sels = list(user.zone_sel.selecting))
 
 		//Finally, smash the bottle. This kills (del) the bottle.
@@ -281,10 +370,6 @@
 	flags = FPRINT  | OPENCONTAINER
 	siemens_coefficient = 1
 
-/obj/item/weapon/reagent_containers/food/drinks/golden_cup/tournament_26_06_2011
-	desc = "A golden cup. It will be presented to a winner of tournament 26 June, and name of the winner will be engraved on it."
-
-
 ///////////////////////////////////////////////Drinks
 //Notes by Darem: Drinks are simply containers that start preloaded. Unlike condiments, the contents can be ingested directly
 //	rather then having to add it to something else first. They should only contain liquids. They have a default container size of 50.
@@ -296,6 +381,7 @@
 	icon = 'icons/obj/food_condiment.dmi'
 	icon_state = "milk"
 	vending_cat = "dairy products"
+	can_flip = TRUE
 /obj/item/weapon/reagent_containers/food/drinks/milk/New()
 	..()
 	reagents.add_reagent(MILK, 50)
@@ -319,6 +405,7 @@
 	icon = 'icons/obj/food_condiment.dmi'
 	icon_state = "soymilk"
 	vending_cat = "dairy products"//it's not a dairy product but oh come on who cares
+	can_flip = TRUE
 /obj/item/weapon/reagent_containers/food/drinks/soymilk/New()
 	..()
 	reagents.add_reagent(SOYMILK, 50)
@@ -673,6 +760,8 @@
 	vending_cat = "fermented"
 	molotov = -1 //can become a molotov
 	isGlass = 1
+	can_flip = TRUE
+
 /obj/item/weapon/reagent_containers/food/drinks/beer/New()
 	..()
 	reagents.add_reagent(BEER, 30)
@@ -686,6 +775,8 @@
 	vending_cat = "fermented"
 	molotov = -1 //can become a molotov
 	isGlass = 1
+	can_flip = TRUE
+
 /obj/item/weapon/reagent_containers/food/drinks/ale/New()
 	..()
 	reagents.add_reagent(ALE, 30)
@@ -697,6 +788,8 @@
 	flags = FPRINT //Starts sealed until you pull the tab! Lacks OPENCONTAINER for this purpose
 	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
+	var/tabself = "You pull back the tab of"
+
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/update_icon()
 	overlays.len = 0
@@ -718,7 +811,7 @@
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/proc/pop_open(var/mob/user)
-	to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
+	to_chat(user, "[tabself] \the [src] with a satisfying pop.")
 	flags |= OPENCONTAINER
 	src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
 	playsound(user, pick(open_sounds), 50, 1)
@@ -819,6 +912,8 @@
 	name = "Nuka Cola"
 	desc = "Cool, refreshing, Nuka Cola."
 	icon_state = "nuka"
+	tabself = "You pop the cap off"
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka/New()
 	..()
 	reagents.add_reagent(NUKA_COLA, 30)
@@ -1200,6 +1295,7 @@
 	amount_per_transfer_from_this = 10
 	volume = 100
 	flags = FPRINT  | OPENCONTAINER | NOREACT | SILENTCONTAINER
+	can_flip = TRUE
 	var/shaking = FALSE
 	var/obj/item/weapon/reagent_containers/food/drinks/shaker/reaction/reaction = null
 
@@ -1218,6 +1314,11 @@
 		to_chat(user, "<span class='warning'>You won't shake an empty shaker now, will you?</span>")
 		return
 	if (!shaking)
+		if(flipping)
+			QDEL_NULL(flipping)
+			last_flipping = world.time
+			item_state = initial(item_state)
+			playsound(loc,'sound/effects/slap2.ogg', 10, 1, -2)
 		shaking = TRUE
 		var/adjective = pick("furiously","passionately","with vigor","with determination","like a devil","with care and love","like there is no tomorrow")
 		user.visible_message("<span class='notice'>\The [user] shakes \the [src] [adjective]!</span>","<span class='notice'>You shake \the [src] [adjective]!</span>")
@@ -1310,6 +1411,7 @@
 	icon_state = "flask"
 	origin_tech = Tc_MATERIALS + "=1"
 	volume = 60
+	can_flip = TRUE
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/detflask
 	name = "\improper Detective's flask"
@@ -1459,6 +1561,7 @@
 	bottleheight = 31
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
+	can_flip = TRUE
 
 //Keeping this here for now, I'll ask if I should keep it here.
 /obj/item/weapon/broken_bottle
@@ -1907,6 +2010,7 @@
 	molotov = 1
 	isGlass = 1
 	icon_state = "vodkabottle" //not strictly necessary for the "abstract" molotov type that the molotov-making-process copies variables from, but is used for pre-spawned molotovs
+	can_flip = TRUE
 
 /obj/item/weapon/reagent_containers/food/drinks/molotov/New()
 	..()
@@ -2034,3 +2138,7 @@
 			forceMove(over_location, glide_size_override = DELAY2GLIDESIZE(0.4 SECONDS))
 			return
 	return ..()
+
+#undef FLIPPING_DURATION
+#undef FLIPPING_ROTATION
+#undef FLIPPING_INCREMENT

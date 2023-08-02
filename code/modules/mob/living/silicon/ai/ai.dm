@@ -31,6 +31,7 @@ var/list/ai_list = list()
 	var/lawcheck[1]
 	var/ioncheck[1]
 	var/icon/holo_icon//Default is assigned when AI is created.
+	var/holocolor = rgb(60,180,225) //default is blue
 	var/obj/item/device/pda/ai/aiPDA = null
 	var/obj/item/device/multitool/aiMulti = null
 	var/obj/item/device/station_map/station_holomap = null
@@ -233,12 +234,7 @@ var/list/ai_list = list()
 			else
 				to_chat(usr, "You must write a name.")
 
-/mob/living/silicon/ai/verb/pick_icon()
-	set category = "AI Commands"
-	set name = "Set AI Core Display"
-	if(stat || aiRestorePowerRoutine)
-		return
-	var/static/list/possible_icon_states = list(
+var/static/list/ai_icon_states = list(
 		"Alien" = "ai-alien",
 		"Angel" = "ai-angel",
 		"Angry" = "ai-angryface",
@@ -280,9 +276,11 @@ var/list/ai_list = list()
 		"Patriot" = "ai-patriot",
 		"Pirate" = "ai-pirate",
 		"President" = "ai-pres",
+		"Rainbow" = "ai-clown",
 		"Ravensdale" = "ai-ravensdale",
 		"Red October" = "ai-soviet",
 		"Red" = "ai-malf",
+		"Override" = "ai-malf-shodan",
 		"Robert House" = "ai-president",
 		"Royal" = "ai-royal",
 		"Searif" = "ai-searif",
@@ -298,13 +296,27 @@ var/list/ai_list = list()
 		"Xerxes" = "ai-xerxes",
 		"Yes Man" = "yes-man",
 	)
-	var/selected = input("Select an icon!", "AI", null, null) as null|anything in possible_icon_states
+	
+/mob/living/silicon/ai/verb/pick_icon()
+	set category = "AI Commands"
+	set name = "Set AI Core Display"
+	if(stat || aiRestorePowerRoutine)
+		return
+	var/selected = input("Select an icon!", "AI", null, null) as null|anything in ai_icon_states
 	if(!selected)
 		return
-	var/chosen_state = possible_icon_states[selected]
+	var/chosen_state = ai_icon_states[selected]
 	ASSERT(chosen_state)
 	chosen_core_icon_state = chosen_state
 	update_icon()
+
+/mob/living/silicon/ai/verb/pick_hologram_color()
+	set category = "AI Commands"
+	set name = "Set AI hologram color"
+	if(stat || aiRestorePowerRoutine)
+		return
+	var/chosen_holocolor = input(usr, "Please select the hologram color.", "holocolor") as color
+	holocolor = chosen_holocolor
 
 // displays the malf_ai information if the AI is the malf
 /mob/living/silicon/ai/show_malf_ai()

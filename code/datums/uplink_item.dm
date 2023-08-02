@@ -200,6 +200,12 @@ var/list/uplink_items = list()
 	item = /obj/structure/closet/crate/secure/weapon/experimental/gatling
 	cost = 40
 
+/datum/uplink_item/nukeprice/gatling_laser
+	name = "Gatling Laser"
+	desc = "A massive rapid-firing multiple-barrel laser. Can be reloaded quickly by swapping its internal cell. Spares not included."
+	item = /obj/item/weapon/gun/energy/gatling
+	cost = 60
+
 /datum/uplink_item/nukeprice/nikita
 	name = "Nikita RC Missile Launcher"
 	desc = "A remote-controlled missile launcher, trades in raw explosive power for extreme steering precision, allowing it to make perfect turns around corners or turn around at will, or simply accelerate normally. Comes with four spare RC rockets."
@@ -715,9 +721,9 @@ var/list/uplink_items = list()
 	name = "Batling gun"
 	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
 	item = /obj/item/weapon/gun/gatling/batling
-	cost = 18
-	discounted_cost = 12
-	jobs_with_discount = list("Warden", "Head of Security")
+	cost = 16
+	discounted_cost = 10
+	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
 
 /datum/uplink_item/jobspecific/command_security/remoteexplosive
 	name = "Remote Explosive Implants"
@@ -885,6 +891,14 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
+/datum/uplink_item/jobspecific/engineering/canned_heat
+	name = "Canned Heat"
+	desc = "A can that when opened agitates the air molecules in the surrounding atmosphere to raise its temperature by 1000 Kelvin. Use in a large area and several numbers for maximum impact."
+	item = /obj/item/canned_heat
+	cost = 12
+	discounted_cost = 6
+	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
+
 /datum/uplink_item/jobspecific/engineering/dev_analyser
 	name = "Modified Device Analyzer"
 	desc = "A device analyzer with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment for further duplication using the station's Mechanic equipment."
@@ -973,6 +987,14 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/reagent_containers/food/condiment/syndisauce
 	cost = 8
 	discounted_cost = 2
+	jobs_with_discount = list("Chef")
+
+/datum/uplink_item/jobspecific/service/boxofmints
+	name = "Box of Mints"
+	desc = "Fifty of the highest quality mint candies this side of the galaxy. Recalled by all producers soon after their immediately lethal efects on fat people were discovered. Harmless to fit people." //It was this or just making a lame 50u bottle of mint toxin, and that's no fun.
+	item = /obj/item/weapon/storage/pill_bottle/syndiemints
+	cost = 5
+	discounted_cost = 3
 	jobs_with_discount = list("Chef")
 
 /datum/uplink_item/jobspecific/service/meatcleaver

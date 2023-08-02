@@ -426,6 +426,7 @@
 	if (O == occupant)
 		occupant = null
 		update_icon()
+	..()
 
 /obj/machinery/sleeper/proc/go_out(var/exit = loc, var/mob/ejector)
 	var/mob/old_occupant = occupant

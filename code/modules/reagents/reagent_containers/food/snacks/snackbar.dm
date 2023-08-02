@@ -4,6 +4,7 @@
 	icon_state = "snackbar"
 	bitesize = 5
 	volume = 10
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/snackbar/on_reagent_change()
 	if(!reagents.total_volume)  //This should only happen if a chemical reaction removes the reagents from the bar

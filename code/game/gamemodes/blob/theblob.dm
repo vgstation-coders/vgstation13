@@ -156,7 +156,6 @@ var/list/blob_overminds = list()
 /obj/effect/blob/process()
 	handle_beams()
 	Life()
-	return
 
 /obj/effect/blob/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	..()
@@ -171,7 +170,6 @@ var/list/blob_overminds = list()
 	health -= ((damage/brute_resist) - (severity * 5))
 	update_health()
 	update_icon()
-	return
 
 /obj/effect/blob/bullet_act(var/obj/item/projectile/Proj, var/def_zone, var/damage_override = null)
 	. = ..()
@@ -184,7 +182,6 @@ var/list/blob_overminds = list()
 
 	update_health()
 	update_icon()
-	return
 
 /obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/living/user)
 	user.do_attack_animation(src, W)
@@ -203,7 +200,82 @@ var/list/blob_overminds = list()
 	health -= damage
 	update_health()
 	update_icon()
-	return
+
+/obj/effect/blob/bullet_act(var/obj/item/projectile/Proj, var/def_zone, var/damage_override = null)
+	. = ..()
+	var/damage = isnull(damage_override) ? Proj.damage : damage_override
+	switch(Proj.damage_type)
+		if(BRUTE)
+			health -= (damage/brute_resist)
+		if(BURN)
+			health -= (damage/fire_resist)
+
+	update_health()
+	update_icon()
+
+/obj/effect/blob/hitby(var/atom/movable/AM,var/speed = 5)
+	if(isitem(AM))
+		var/obj/item/I = AM
+		var/damage = I.throwforce*speed/5
+		switch(I.damtype)
+			if(BRUTE)
+				health -= (damage/brute_resist)
+				playsound(src, 'sound/effects/attackblob.ogg', 50, 1)
+			if(BURN)
+				health -= (damage/fire_resist)
+				playsound(src, 'sound/effects/blobweld.ogg', 100, 1)
+		update_health()
+		update_icon()
+
+/obj/effect/blob/attack_animal(var/mob/living/simple_animal/user)
+	user.delayNextAttack(8)
+	user.do_attack_animation(src, user)
+	user.visible_message("<span class='danger'>\The [user] [user.attacktext] \the [src].</span>")
+	switch(user.melee_damage_type)
+		if (BRUTE)
+			health -= (user.get_unarmed_damage(src)/brute_resist)
+			playsound(src, 'sound/effects/attackblob.ogg', 50, 1)
+		if (BURN)
+			health -= (user.get_unarmed_damage(src)/fire_resist)
+			playsound(src, 'sound/effects/blobweld.ogg', 100, 1)
+	update_health()
+	update_icon()
+
+/obj/effect/blob/attack_hand(var/mob/living/carbon/human/user)
+	if (user.a_intent == I_HURT)
+		user.delayNextAttack(8)
+		user.do_attack_animation(src, user)
+		var/datum/species/S = user.get_organ_species(user.get_active_hand_organ())
+		user.visible_message("<span class='danger'>\The [user] [S.attack_verb] \the [src].</span>")
+		health -= (user.get_unarmed_damage(src)/brute_resist)
+		playsound(src, 'sound/effects/attackblob.ogg', 50, 1)
+		update_health()
+		update_icon()
+
+/obj/effect/blob/attack_paw(var/mob/living/carbon/monkey/user)
+	if (user.a_intent == I_HURT)
+		if(user.wear_mask?.is_muzzle)
+			to_chat(user, "<span class='notice'>You can't do this with \the [user.wear_mask] on!</span>")
+			return
+		user.delayNextAttack(8)
+		user.do_attack_animation(src, user)
+		user.visible_message("<span class='danger'>\The [user] [user.attack_text] \the [src].</span>")
+		health -= (user.get_unarmed_damage(src)/brute_resist)
+		playsound(src, 'sound/effects/attackblob.ogg', 50, 1)
+		update_health()
+		update_icon()
+
+/obj/effect/blob/attack_alien(var/mob/living/carbon/alien/humanoid/user)
+	if(istype(user, /mob/living/carbon/alien/larva))
+		return
+	user.delayNextAttack(8)
+	user.do_attack_animation(src, user)
+	var/alienverb = pick(list("slam", "rip", "claw"))
+	user.visible_message("<span class='warning'>[user] [alienverb]s \the [src].</span>")
+	health -= (rand(15,30)/brute_resist)
+	playsound(src, 'sound/effects/attackblob.ogg', 50, 1)
+	update_health()
+	update_icon()
 
 /obj/effect/blob/update_icon(var/spawnend = 0)
 	if(icon_size == 64)
@@ -260,6 +332,8 @@ var/list/blob_overminds = list()
 			icon = 'icons/mob/blob/blob_AME_64x64.dmi'
 		if("skelleton")
 			icon = 'icons/mob/blob/blob_skelleton_64x64.dmi'
+		if("secblob")
+			icon = 'icons/mob/blob/blob_sec.dmi'
 		//<----------------------------------------------------------------------------DEAR SPRITERS, THIS IS WHERE YOU ADD YOUR NEW BLOB DMIs
 		/*EXAMPLES
 		if("fleshy")
@@ -277,6 +351,7 @@ var/list/blob_looks_admin = list(//Options available to admins
 	"AME" = 32,
 	"AME_new" = 64,
 	"skelleton" = 64,
+	"secblob" = 32,
 	)
 
 var/list/blob_looks_player = list(//Options available to players
@@ -303,6 +378,7 @@ var/list/blob_looks_player = list(//Options available to players
 	time_since_last_pulse = world.time
 
 	//set background = 1
+	VisiblePulse(pulse)
 
 	for(var/mob/M in loc)
 		M.blob_act(0,src)
@@ -330,8 +406,12 @@ var/list/blob_looks_player = list(//Options available to players
 		spawn(2)
 			B.Pulse((pulse+1),get_dir(src.loc,T),source)
 		return
-	return
 
+
+/obj/effect/blob/proc/VisiblePulse(var/pulse = 0)
+	var/pulse_strength = 0.5 / max(1,pulse/2)
+	animate(src, color = list(1+pulse_strength,0,0,0,0,1+pulse_strength,0,0,0,0,1+pulse_strength,0,0,0,0,1,0,0,0,0), time = 4, easing = SINE_EASING|EASE_OUT)
+	animate(color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 4, easing = SINE_EASING)
 
 /obj/effect/blob/proc/run_action()
 	return 0
@@ -429,12 +509,7 @@ var/list/blob_looks_player = list(//Options available to players
 
 /obj/effect/blob/normal/Delete()
 	..()
-/*	// Sadly having hundreds of blobs create overlays every few seconds is proving quite laggy
-/obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
-	..()
-	if(icon_size == 64)
-		anim(target = loc, a_icon = icon, flick_anim = "pulse", sleeptime = 15, direction = dir, lay = 12, offX = -16, offY = -16, alph = 51)
-*/
+
 /obj/effect/blob/normal/update_icon(var/spawnend = 0)
 	if(icon_size == 64)
 		spawn(1)

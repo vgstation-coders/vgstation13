@@ -1,6 +1,6 @@
 #define ACT_REPLACE      /datum/speech_filter_action/replace
 #define ACT_PICK_REPLACE /datum/speech_filter_action/pick_replace
-#define GENERIC_INSULT_WORDS "\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|faggot|security|shitcurity)"
+#define GENERIC_INSULT_WORDS "\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|security|shitcurity)"
 
 /datum/speech_filter
 	// REGEX OH BOY
@@ -233,8 +233,6 @@
 	addWordReplacement("beer","water with ice")
 	addWordReplacement("drink","water")
 	addWordReplacement("\\b(feminist|feminazi|SJW|social justice warrior)","empowered woman")
-	addWordReplacement("nigger","african american")
-	addWordReplacement("faggot","effeminate male")
 	addPickReplacement("fag", list("fig", "friend"))
 	addWordReplacement("tranny","felinid")
 	addWordReplacement("trannies","felinids")

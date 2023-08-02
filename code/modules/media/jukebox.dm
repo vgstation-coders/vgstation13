@@ -6,11 +6,12 @@
 
 var/global/global_playlists = list()
 /proc/load_juke_playlists()
+	set waitfor = 0//tentative fix so the proc stops hanging if it takes too long
 	if(!config.media_base_url)
 		return
 	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "idm", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "vidya", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
-		//testing("Updating playlist from [url]...")
+		log_debug("Begin updating playlist: [playlist_id]...")
 
 		//  Media Server 2 requires a secret key in order to tell the jukebox
 		// where the music files are. It's set in config with MEDIA_SECRET_KEY
@@ -23,15 +24,21 @@ var/global/global_playlists = list()
 		var/response = world.Export(url)
 		var/list/playlist=list()
 		if(response)
+			log_debug("Received response from media server for [playlist_id], with a length of [length(response)]")
 			var/json = file2text(response["CONTENT"])
 			if("/>" in json)
 				continue
 			var/songdata = json_decode(json)
+			log_debug("Successfully decoded media server's response for [playlist_id]")
 			for(var/list/record in songdata)
 				playlist += new /datum/song_info(record)
+			log_debug("Successfully added song data to playlist for [playlist_id]")
 			if(playlist.len==0)
 				continue
 			global_playlists["[playlist_id]"] = playlist.Copy()
+			log_debug("Finished adding [playlist_id] to global playlists")
+		else
+			log_debug("Received no response from media server for [playlist_id]")
 
 /obj/machinery/media/jukebox/proc/retrieve_playlist(var/playlistid = playlist_id)
 	if(!config.media_base_url)

@@ -512,12 +512,13 @@
 
 	power += 200
 
-	for(var/mob/living/l in range(10,src)) //Some poor sod got eaten, go ahead and irradiate people nearby.
-		if(l == A) //It's the guy that just died.
+	for(var/mob/living/L in range(10,src)) //Some poor sod got eaten, go ahead and irradiate people nearby.
+		if(L == A) //It's the guy that just died.
 			continue
-		var/rads = 75 * sqrt( 1 / (get_dist(l, src) + 1) )
-		if(l.apply_radiation(rads, RAD_EXTERNAL))
-			visible_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find yourself covered in fresh radiation burns.</span>", "<span class=\"warning\">The unearthly ringing subsides and you notice you have fresh radiation burns.</span>", range = 1)
+		var/rads = 75 * sqrt( 1 / (get_dist(L, src) + 1) )
+		if(L.apply_radiation(rads, RAD_EXTERNAL))
+			if(L.client)
+				to_chat(L, "<span class='warning'>As \the [src] slowly stops resonating, you find yourself covered in fresh radiation burns.</span>")
 
 /obj/machinery/power/supermatter/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] suicidally slams \himself head first into the [src], inducing a resonance... \his body begins to glow and catch aflame before flashing into ash, never to be seen again.</span>")

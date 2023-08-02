@@ -12,6 +12,7 @@
 	projectile_type = /obj/item/projectile/beam/veryweaklaser
 	conventional_firearm = 0
 	charge_cost = 0
+	rechargeable = FALSE
 	siemens_coefficient = 1
 	var/obj/item/weapon/lens_assembly/loadedassembly = null //The lens assembly
 	var/lens_secure = 0

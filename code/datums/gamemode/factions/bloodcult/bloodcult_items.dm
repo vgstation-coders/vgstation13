@@ -625,6 +625,9 @@ var/list/arcane_tomes = list()
 			SB.fingerprints = fingerprints.Copy()
 		spawn(1)
 			user.put_in_active_hand(SB)
+			if (iscultist(user))
+				SB.linked_cultist = user
+				to_chat(SB.shade, "<spawn class='notice'>You have made contact with [user]. As long as you remain within 5 tiles of them, you can move by yourself without losing blood, and regenerate blood passively at a faster rate.</span>")
 		var/obj/item/soulstone/gem/sgem = I
 		if (sgem.shade)
 			var/mob/living/simple_animal/shade/shadeMob = sgem.shade
@@ -685,11 +688,11 @@ var/list/arcane_tomes = list()
 	mech_flags = MECH_SCAN_FAIL
 	var/mob/living/simple_animal/shade/shade = null
 	var/blood = 0
-	var/maxregenblood = 8//the maximum amount of blood you can regen by waiting around.
+	var/passivebloodregen = 0//increments every Life() proc of the Shade inside, and increases blood by 1 once it reaches the current blood count/3
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
-	health = 40
-	maxHealth = 40
+	health = 60
+	maxHealth = 60
 	var/reflector = FALSE
 	var/mob/living/linked_cultist = null
 
@@ -723,7 +726,7 @@ var/list/arcane_tomes = list()
 	if (shade)
 		if (iscultist(user) && (linked_cultist != user))
 			linked_cultist = user
-			to_chat(shade, "<spawn class='notice'>You have made contact with [user]. As long as you remain within 5 tiles of them, you can move by yourself without losing blood, and regenerate blood slowly passively.</span>")
+			to_chat(shade, "<spawn class='notice'>You have made contact with [user]. As long as you remain within 5 tiles of them, you can move by yourself without losing blood, and regenerate blood passively at a faster rate.</span>")
 	..()
 
 /obj/item/weapon/melee/soulblade/salt_act()
@@ -731,7 +734,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/melee/soulblade/examine(var/mob/user)
 	..()
-	if (iscultist(user))
+	if (areYouWorthy(user))
 		to_chat(user, "<span class='info'>blade blood: [blood]%</span>")
 		to_chat(user, "<span class='info'>blade health: [round((health/maxHealth)*100)]%</span>")
 
@@ -757,13 +760,13 @@ var/list/arcane_tomes = list()
 		capture_datum.suicide(user, user, src)
 		qdel(capture_datum)
 
-/obj/item/weapon/melee/soulblade/attack_self(var/mob/user)
+/obj/item/weapon/melee/soulblade/attack_self(var/mob/living/user)
 	var/choices = list(
 		list("Give Blood", "radial_giveblood", "Transfer some of your blood to \the [src] to repair it and refuel its blood level, or you could just slash someone."),
 		list("Remove Gem", "radial_removegem", "Remove the soul gem from the blade."),
 		)
 
-	if (!iscultist(user))
+	if (!areYouWorthy(user))
 		choices = list(
 			list("Remove Gem", "radial_removegem", "Remove the soul gem from \the [src]."),
 			)
@@ -776,9 +779,17 @@ var/list/arcane_tomes = list()
 		if ("Give Blood")
 			var/data = use_available_blood(user, 10)
 			if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
-				blood = min(maxblood,blood+20)//reminder that the blade cannot give blood back to their wielder, so this should prevent some exploits
+				blood = min(maxblood,blood+35)//reminder that the blade cannot give blood back to their wielder, so this should prevent some exploits
 				health = min(maxHealth,health+10)
+				update_icon()
 		if ("Remove Gem")
+			if (!areYouWorthy(user) && shade && ((iscultist(shade) && !iscultist(user)) || (shade.master != user)))
+				shade.say("Dedo ol'btoh!")
+				user.take_overall_damage(25,25)
+				if (iscarbon(user))
+					user.bodytemperature += 60
+				playsound(user.loc, 'sound/effects/bloodboil.ogg', 50, 0, -1)
+				to_chat(user, "<span class='danger'>You manage to pluck the gem out of \the [src], but a surge of the blade's occult energies makes your blood boil!</span>")
 			var/turf/T = get_turf(user)
 			playsound(T, 'sound/items/Deconstruct.ogg', 50, 0, -3)
 			user.drop_item(src,T)
@@ -799,9 +810,8 @@ var/list/arcane_tomes = list()
 			loc = null//so we won't drop a broken blade and shard
 			qdel(src)
 
-
 /obj/item/weapon/melee/soulblade/attack(var/mob/living/target, var/mob/living/carbon/human/user)
-	if(!iscultist(user))
+	if(!areYouWorthy(user))
 		user.Paralyse(5)
 		to_chat(user, "<span class='warning'>An unexplicable force powerfully repels \the [src] from \the [target]!</span>")
 		var/datum/organ/external/affecting = user.get_active_hand_organ()
@@ -865,11 +875,11 @@ var/list/arcane_tomes = list()
 			var/mob/living/carbon/C = M
 			if (C.stat != DEAD)
 				if (C.take_blood(null,10))
-					blood = min(100,blood+10)
+					blood = min(100,blood+20)
 					to_chat(user, "<span class='warning'>You steal some of their blood!</span>")
 			else
 				if (C.take_blood(null,5))//same cost as spin, basically negates the cost, but doesn't let you farm corpses. It lets you make a mess out of them however.
-					blood = min(100,blood+5)
+					blood = min(100,blood+10)
 					to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
 			update_icon()
 			if (shade)
@@ -877,10 +887,10 @@ var/list/arcane_tomes = list()
 		else if (M.isBloodedAnimal())
 			var/mob/living/simple_animal/SA = M
 			if (SA.stat != DEAD)
-				blood = min(100,blood+10)
+				blood = min(100,blood+20)
 				to_chat(user, "<span class='warning'>You steal some of their blood!</span>")
 			else
-				blood = min(100,blood+5)
+				blood = min(100,blood+10)
 				to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
 			update_icon()
 			if (shade)
@@ -891,10 +901,25 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/melee/soulblade/pickup(var/mob/living/user)
 	..()
-	if(!iscultist(user))
+	if(!areYouWorthy(user))
 		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up \the [src]. It would be wise to rid yourself of this, quickly.</span>")
 		user.Dizzy(120)
+	else
+		user.AdjustDizzy(-120)
 	update_icon()
+
+/obj/item/weapon/melee/soulblade/proc/areYouWorthy(var/mob/living/user)
+	if (iscultist(user))
+		return TRUE
+	else if (!shade)
+		return FALSE
+	else if (user == shade)
+		return TRUE
+	else if (user == shade.master)
+		return TRUE
+	else if (shade.blade_harm)
+		return FALSE
+	return TRUE
 
 /obj/item/weapon/melee/soulblade/dropped(var/mob/user)
 	..()
@@ -921,7 +946,7 @@ var/list/arcane_tomes = list()
 	if (istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/C = loc
 		C.update_inv_hands()
-		if (iscultist(C))
+		if (areYouWorthy(C))
 			var/image/I = image('icons/mob/hud.dmi', src, "consthealth[10*round((blood/maxblood)*10)]")
 			I.pixel_x = 16
 			I.pixel_y = 16
@@ -1022,14 +1047,16 @@ var/list/arcane_tomes = list()
 		user.update_inv_hands()
 		to_chat(target, "Your soul has been captured by the soul blade, its arcane energies are reknitting your ethereal form, healing you.")
 		to_chat(user, "<span class='notice'><b>Capture successful!</b>: </span>[target.real_name]'s has been captured and stored within the gem on your blade.")
+		target.master = user
 
 		//Is our user a cultist? Then you're a cultist too now!
 		if (iscultist(user) && !iscultist(target))
+			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+			if (cult && !cult.CanConvert())
+				to_chat(user, "<span class='danger'>The cult has too many members already. But this shade will obey you nonetheless.</span>")
+				return
 			var/datum/role/cultist/newCultist = new
 			newCultist.AssignToRole(target.mind,1)
-			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-			if (!cult)
-				cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 			cult.HandleRecruitedRole(newCultist)
 			newCultist.OnPostSetup()
 			newCultist.Greet(GREET_SOULSTONE)
@@ -1156,10 +1183,16 @@ var/list/arcane_tomes = list()
 	body_parts_visible_override = FACE
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	mech_flags = MECH_SCAN_FAIL
 	actions_types = list(/datum/action/item_action/toggle_anon)
 	var/anon_mode = FALSE
+
+/obj/item/clothing/head/culthood/snow
+	name = "cult winter hood"
+	desc = "A warm hood worn by the followers of Nar-Sie."
+	icon_state = "culthood_snow"
 
 /obj/item/clothing/head/culthood/NoiseDampening()	// those hoods cover the ears
 	return TRUE
@@ -1181,13 +1214,13 @@ var/list/arcane_tomes = list()
 			return
 
 	if(!anon_mode)
-		icon_state = "culthood_anon"
+		icon_state = initial(icon_state) + "_anon"
 		body_parts_covered = FULL_HEAD|HIDEHAIR
 		body_parts_visible_override = 0
 		hides_identity = HIDES_IDENTITY_ALWAYS
 		to_chat(user, "<span class='notice'>The hood's textile reacts with your soul and produces a shadow over your face that will hide your identity.</span>")
 	else
-		icon_state = "culthood"
+		icon_state = initial(icon_state)
 		body_parts_covered = EARS|HEAD|HIDEHAIR
 		body_parts_visible_override = FACE
 		hides_identity = HIDES_IDENTITY_DEFAULT
@@ -1198,12 +1231,22 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/head/culthood/unequipped(mob/user, var/from_slot = null)
 	..()
-	icon_state = "culthood"
+	icon_state = initial(icon_state)
 	body_parts_covered = EARS|HEAD|HIDEHAIR
 	body_parts_visible_override = FACE
 	hides_identity = HIDES_IDENTITY_DEFAULT
 	anon_mode = FALSE
 
+//plasmaman stuff
+/obj/item/clothing/head/culthood/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	. = ..()
+	if (.)
+		if(isplasmaman(M))
+			body_parts_covered = FULL_HEAD|HIDEHAIR
+			body_parts_visible_override = 0
+		else
+			body_parts_covered = EARS|HEAD|HIDEHAIR
+			body_parts_visible_override = FACE
 
 /obj/item/clothing/head/culthood/get_cult_power()
 	return 20
@@ -1272,12 +1315,23 @@ var/list/arcane_tomes = list()
 	icon_state = "cultrobes"
 	item_state = "cultrobes"
 	flags = FPRINT
-	allowed = list(/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract)
+	allowed = list(/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract,/obj/item/weapon/tank)
 	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 25, rad = 0)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
-	clothing_flags = ONESIZEFITSALL
+	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	mech_flags = MECH_SCAN_FAIL
+
+	//plasmaman stuff
+	var/next_extinguish=0
+	var/extinguish_cooldown=10 SECONDS
+
+/obj/item/clothing/suit/cultrobes/snow
+	name = "cult winter robes"
+	desc = "A set of warm armored robes worn by the followers of Nar-Sie."
+	icon_state = "cultrobes_snow"
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
 	return 50
@@ -1287,6 +1341,31 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/suit/cultrobes/salt_act()
 	acid_melt()
+
+//plasmaman stuff
+/obj/item/clothing/suit/cultrobes/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	. = ..()
+	if (.)
+		if(isplasmaman(M))
+			body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+		else
+			body_parts_covered = ARMS|LEGS|FULL_TORSO
+
+//plasmaman stuff
+/obj/item/clothing/suit/cultrobes/Extinguish(var/mob/living/carbon/human/H)
+	if(next_extinguish > world.time)
+		return
+
+	next_extinguish = world.time + extinguish_cooldown
+	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
+	H.ExtinguishMob()
+
+//plasmaman stuff
+/obj/item/clothing/suit/cultrobes/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+	if(H.bodytemperature < T0C+37)
+		H.bodytemperature = min(H.bodytemperature+5,T0C+37)
+	else
+		H.bodytemperature = max(H.bodytemperature-5,T0C+37)
 
 ///////////////////////////////////////CULT BACKPACK (TROPHY RACK)////////////////////////////////////////////////
 
@@ -1342,7 +1421,7 @@ var/list/arcane_tomes = list()
 	item_state = "culthelmet"
 	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	mech_flags = MECH_SCAN_FAIL
@@ -1371,10 +1450,14 @@ var/list/arcane_tomes = list()
 	slowdown = HARDSUIT_SLOWDOWN_MED
 	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	mech_flags = MECH_SCAN_FAIL
+
+	//plasmaman stuff
+	var/next_extinguish=0
+	var/extinguish_cooldown=10 SECONDS
 
 /obj/item/clothing/suit/space/cult/get_cult_power()
 	return 60
@@ -1384,6 +1467,23 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/suit/space/cult/salt_act()
 	acid_melt()
+
+//plasmaman stuff
+/obj/item/clothing/suit/space/cult/Extinguish(var/mob/living/carbon/human/H)
+	if(next_extinguish > world.time)
+		return
+
+	next_extinguish = world.time + extinguish_cooldown
+	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
+	H.ExtinguishMob()
+
+//plasmaman stuff
+/obj/item/clothing/suit/space/cult/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+	if(H.bodytemperature < T0C+37)
+		H.bodytemperature = min(H.bodytemperature+5,T0C+37)
+	else
+		H.bodytemperature = max(H.bodytemperature-5,T0C+37)
+
 
 ///////////////////////////////////////I'LL HAVE TO DEAL WITH THIS STUFF LATER////////////////////////////////////////////////
 
@@ -1429,6 +1529,42 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
 
+///////////////////////////////////////OLD PLASMAMAN ARMOR (can be obtained from vox traders)///////////////////////////////////
+
+/obj/item/clothing/suit/space/plasmaman/cultist
+	name = "plasmaman cultist armor"
+	icon_state = "plasmaman_cult"
+	item_state = "plasmaman_cult"
+	desc = "A bulky suit of armour, menacing with red energy. It looks like it would fit a plasmaman."
+	slowdown = NO_SLOWDOWN
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 30)
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/clothing/suit/space/plasmaman/cultist/get_cult_power()
+	return 60
+
+/obj/item/clothing/suit/space/plasmaman/cultist/cultify()
+	return
+
+/obj/item/clothing/suit/space/plasmaman/cultist/salt_act()
+	acid_melt()
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist
+	name = "plasmaman cultist helmet"
+	icon_state = "plasmamanCult_helmet0"
+	base_state = "plasmamanCult_helmet"
+	desc = "A containment suit designed by the followers of Nar-Sie. It glows menacingly with unearthly flames."
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 30)
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist/get_cult_power()
+	return 30
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist/cultify()
+	return
+
+/obj/item/clothing/head/helmet/space/plasmaman/cultist/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////DEBUG ITEMS////////////////////////////////////////////////
 //Pamphlet: turns you into a cultist
@@ -1596,6 +1732,13 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/reagent_containers/food/drinks/cult/salt_act()
 	acid_melt()
 
+/obj/item/weapon/reagent_containers/food/drinks/cult/bloodfilled
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/bloodfilled/New()
+	..()
+	reagents.add_reagent(BLOOD, 50)
+
+
 ///////////////////////////////////////CULT CUFFS////////////////////////////////////////////////
 /obj/item/weapon/handcuffs/cult
 	name = "ghastly bindings"
@@ -1678,6 +1821,8 @@ var/list/arcane_tomes = list()
 		/obj/item/clothing/shoes/cult,
 		/obj/item/clothing/suit/cultrobes,
 		/obj/item/clothing/gloves/black/cult,
+		/obj/item/clothing/suit/space/plasmaman/cultist,
+		/obj/item/clothing/head/helmet/space/plasmaman/cultist,
 		)
 
 	var/list/stored_gear = list()
@@ -1689,7 +1834,7 @@ var/list/arcane_tomes = list()
 		var/turf/T = get_turf(src)
 		for(var/slot in stored_gear)
 			var/obj/item/I = stored_gear[slot]
-			stored_gear.Remove(I)
+			stored_gear -= slot
 			I.forceMove(T)
 	if (remaining)
 		QDEL_NULL(remaining)
@@ -1715,6 +1860,10 @@ var/list/arcane_tomes = list()
 			remaining.forceMove(get_turf(user))
 			user.put_in_hands(remaining)
 			remaining = null
+
+		var/obj/item/plasma_tank = null
+		if(isplasmaman(user))
+			plasma_tank = user.get_item_by_slot(slot_s_store)
 
 		for(var/obj/item/I in user)
 			if (is_type_in_list(I, discarded_types))
@@ -1751,6 +1900,8 @@ var/list/arcane_tomes = list()
 				else
 					user.equip_to_slot_or_drop(stored_slot,nslot)
 			stored_gear.Remove(slot)
+		if (plasma_tank)
+			user.equip_to_slot_or_drop(plasma_tank,slot_s_store)
 		qdel(src)
 
 /obj/item/weapon/blood_tesseract/cultify()

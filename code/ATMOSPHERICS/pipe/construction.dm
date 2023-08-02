@@ -289,8 +289,8 @@ var/global/list/nlist = list( \
 	"h/e pipe cap", \
 	"up pipe", \
 	"down pipe", \
-	"manual pressure valve", \
-	"digital pressure valve", \
+	"manual conditional valve", \
+	"digital conditional valve", \
 )
 /obj/item/pipe/proc/update()
 
