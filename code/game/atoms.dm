@@ -1034,7 +1034,7 @@ its easier to just keep the beam vertical.
 
 /atom/proc/handle_thermal_dissipation()
 	//Exchange heat between reagents and the surrounding air.
-	//For now this thermal radiation, not convective heat exchange with the surrounding air.
+	//For now this is thermal radiation, not convective heat exchange with the surrounding air.
 	if (!src || !reagents || !reagents.total_volume || !reagents.total_thermal_mass)
 		return
 	else
