@@ -242,7 +242,7 @@
 
 /obj/item/binoculars/update_wield(mob/user)
 	if(wielded)
-		user.register_event(/event/moved, src, src::mob_moved())
+		user.register_event(/event/moved, src, nameof(src::mob_moved()))
 		user.visible_message("\The [user] holds \the [src] up to \his eyes.","You hold \the [src] up to your eyes.")
 		item_state = "binoculars_wielded"
 		user.regenerate_icons()
@@ -251,7 +251,7 @@
 			var/client/C = user.client
 			C.changeView(C.view + 7)
 	else
-		user.unregister_event(/event/moved, src, src::mob_moved())
+		user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 		user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
 		item_state = "binoculars"
 		user.regenerate_icons()
