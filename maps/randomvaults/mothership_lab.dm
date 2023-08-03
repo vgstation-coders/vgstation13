@@ -405,6 +405,15 @@
 	icon_opened = "ayycrate3open"
 	icon_closed = "ayycrate3"
 
+/obj/structure/closet/crate/secure/ayy_general
+	name = "GDR secure crate"
+	desc = "A common card-locked crate, for shipping mothership goods."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayysecurecrate2"
+	density = 1
+	icon_opened = "ayysecurecrate2open"
+	icon_closed = "ayysecurecrate2"
+
 /obj/structure/closet/crate/secure/ayy_mdf
 	name = "MDF secure crate"
 	desc = "A durable card-locked crate, for shipping disintegrators or other volatile ordnance."
