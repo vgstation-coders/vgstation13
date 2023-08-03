@@ -1050,7 +1050,9 @@ its easier to just keep the beam vertical.
 				return
 
 			//We treat the reagents like a spherical black body.
-			var/energy_to_radiate_from_reagents_to_air = THERMAL_DISSIPATION_SCALING_FACTOR * SS_WAIT_THERM_DISS * STEFAN_BOLTZMANN_CONSTANT * (36 * PI) ** (1/3) * (CC_PER_U / 1000) ** (2/3) * reagents.total_volume ** (2/3) * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4)
+
+			var/constant_factor = THERMAL_DISSIPATION_SCALING_FACTOR * (SS_WAIT_THERM_DISS / (1 SECONDS)) * STEFAN_BOLTZMANN_CONSTANT * (36 * PI) ** (1/3) * (CC_PER_U / 1000) ** (2/3) * reagents.total_volume ** (2/3)
+			var/energy_to_radiate_from_reagents_to_air = constant_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4)
 
 			//Here we reduce thermal transfer to account for insulation of the container.
 			//We iterate though each loc until the loc is the turf containing the_air_here, to account for things like nested containers, each time multiplying energy_to_radiate_from_reagents_to_air by a factor than can range between [0 and 1], representing heat insulation.
@@ -1071,12 +1073,36 @@ its easier to just keep the beam vertical.
 					message_admins("Something went wrong with [src]'s handle_heat_dissipation() at iteration #[i] at [this_potentially_insulative_layer].")
 					break //Avoid infinite loops.
 
-			var/energy_actually_added_to_air
-			if (istype(the_air_here, /datum/gas_mixture/unsimulated)) //Space, the snowy outdoors, etc.
-				energy_actually_added_to_air = energy_to_radiate_from_reagents_to_air
+			var/is_the_air_here_simulated = !istype(the_air_here, /datum/gas_mixture/unsimulated)
+
+			var/reagents_thermal_mass_reciprocal = (1 / reagents.total_thermal_mass)
+
+			//If the reagents temperature would change by more than 10% in a single tick, we do a more granular calculation to avoid overshooting.
+
+			var/abs_chem_temp_change_ratio = abs(energy_to_radiate_from_reagents_to_air * reagents_thermal_mass_reciprocal / reagents.chem_temp)
+
+			if (abs_chem_temp_change_ratio > 0.1)
+				var/tR = reagents.chem_temp
+				var/tA = the_air_here.temperature
+				var/slices = ceil(10 * abs_chem_temp_change_ratio)
+				var/slices_recip = 1 / slices
+				for (var/this_slice in 1 to slices)
+					var/this_slice_energy = constant_factor * slices_recip * (tR ** 4 - tA ** 4)
+					radiate_reagents_heat_to_air(this_slice_energy, the_air_here, reagents_thermal_mass_reciprocal, is_the_air_here_simulated)
+					tR = reagents.chem_temp
+					tA = the_air_here.temperature
 			else
-				energy_actually_added_to_air = the_air_here.add_thermal_energy(energy_to_radiate_from_reagents_to_air)
-			reagents.chem_temp -= energy_actually_added_to_air / reagents.total_thermal_mass
+				radiate_reagents_heat_to_air(energy_to_radiate_from_reagents_to_air, the_air_here, reagents_thermal_mass_reciprocal, is_the_air_here_simulated)
+
+			reagents.handle_reactions()
+
+/atom/proc/radiate_reagents_heat_to_air(energy_amount, datum/gas_mixture/G, reagents_thermal_mass_reciprocal, air_is_simulated = TRUE)
+	var/energy_actually_added_to_air
+	if (air_is_simulated)
+		energy_actually_added_to_air = G.add_thermal_energy(energy_amount)
+	else //Space, the snowy outdoors, etc.
+		energy_actually_added_to_air = energy_amount
+	reagents.chem_temp -= energy_actually_added_to_air * reagents_thermal_mass_reciprocal
 
 /atom/proc/heat_dissipation_updates()
 	if (src in thermal_dissipation_atoms)
