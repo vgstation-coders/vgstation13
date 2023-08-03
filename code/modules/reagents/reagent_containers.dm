@@ -78,11 +78,15 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(!possible_transfer_amounts)
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
 
+	//Reagent contains can exchange heat with the surrounding air.
+	thermal_dissipation_atoms += src
+
 /obj/item/weapon/reagent_containers/Destroy()
 	if(istype(loc, /obj/machinery/iv_drip))
 		var/obj/machinery/iv_drip/holder = loc
 		holder.remove_container()
- . = ..()
+	thermal_dissipation_atoms -= src
+	. = ..()
 
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
 	return
@@ -398,3 +402,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	//We have to check for a /mob/virtualhearer/one_time here, and kill it ourselves. This is fairly bad OOP.
 	if(virtualhearer && istype(virtualhearer, /mob/virtualhearer/one_time))
 		removeHear()
+
+/obj/item/weapon/reagent_containers/on_reagent_change()
+	. = ..()
+	heat_dissipation_updates() //Every reagent_containers that should be added to the heat dissipation subsystem should call this on_reagent_change(). If you add something that breaks the supercall chain, be sure to call this.

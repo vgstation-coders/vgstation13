@@ -1031,3 +1031,59 @@ its easier to just keep the beam vertical.
 	if (colored_text && blood_color)
 		stain_text = "<span style='color: [get_stain_text_color()]'>[stain_text]</span>"
 	return indef_art + " " + stain_text
+
+/atom/proc/handle_thermal_dissipation()
+	//Exchange heat between reagents and the surrounding air.
+	//For now this thermal radiation, not convective heat exchange with the surrounding air.
+	if (!src || !reagents || !reagents.total_volume || !reagents.total_thermal_mass)
+		return
+	else
+		var/turf/T = get_turf(src)
+		if (T)
+
+			var/datum/gas_mixture/the_air_here = T.return_air()
+
+			if (!the_air_here)
+				return
+
+			if (abs(reagents.chem_temp - the_air_here.temperature) < MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
+				return
+
+			//We treat the reagents like a spherical black body.
+			var/energy_to_radiate_from_reagents_to_air = THERMAL_DISSIPATION_SCALING_FACTOR * SS_WAIT_THERM_DISS * STEFAN_BOLTZMANN_CONSTANT * (36 * PI) ** (1/3) * (CC_PER_U / 1000) ** (2/3) * reagents.total_volume ** (2/3) * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4)
+
+			//Here we reduce thermal transfer to account for insulation of the container.
+			//We iterate though each loc until the loc is the turf containing the_air_here, to account for things like nested containers, each time multiplying energy_to_radiate_from_reagents_to_air by a factor than can range between [0 and 1], representing heat insulation.
+
+			var/atom/this_potentially_insulative_layer = src
+			var/i = 0
+			while (i >= 0) //Backwards on purpose to keep looping until we break.
+				energy_to_radiate_from_reagents_to_air *= this_potentially_insulative_layer.get_heat_conductivity()
+				i++
+				if (isturf(this_potentially_insulative_layer) || isarea(this_potentially_insulative_layer))
+					break
+				else if (i <= ARBITRARILY_LARGE_NUMBER)
+					if (isatom(this_potentially_insulative_layer.loc))
+						this_potentially_insulative_layer = this_potentially_insulative_layer.loc
+					else
+						break
+				else
+					message_admins("Something went wrong with [src]'s handle_heat_dissipation() at iteration #[i] at [this_potentially_insulative_layer].")
+					break //Avoid infinite loops.
+
+			var/energy_actually_added_to_air
+			if (istype(the_air_here, /datum/gas_mixture/unsimulated)) //Space, the snowy outdoors, etc.
+				energy_actually_added_to_air = energy_to_radiate_from_reagents_to_air
+			else
+				energy_actually_added_to_air = the_air_here.add_thermal_energy(energy_to_radiate_from_reagents_to_air)
+			reagents.chem_temp -= energy_actually_added_to_air / reagents.total_thermal_mass
+
+/atom/proc/heat_dissipation_updates()
+	if (src in thermal_dissipation_atoms)
+		if (!reagents.total_volume)
+			thermal_dissipation_atoms -= src
+	else if (reagents.total_volume)
+		thermal_dissipation_atoms += src
+
+/atom/proc/get_heat_conductivity()
+	return 1

@@ -18,6 +18,7 @@ var/const/INGEST = 2
 	var/last_ckey_transferred_to_this = ""	//The ckey of the last player who transferred reagents into this reagent datum.
 	var/chem_temp = T20C
 	var/obscured = FALSE
+	var/total_thermal_mass = 0
 
 /datum/reagents/New(maximum=100)
 	maximum_volume = maximum
@@ -569,6 +570,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			amount_cache += list(R.id = R.volume)
 		if(R.flags & CHEMFLAG_OBSCURING)
 			obscured = TRUE
+	total_thermal_mass = get_thermal_mass()
 	return 0
 
 /datum/reagents/proc/clear_reagents()
@@ -942,7 +944,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(received_temperature == chem_temp || !total_volume || !reagent_list.len)
 		return
 	var/energy = power_transfer
-	var/temp_change = (energy / (get_thermal_mass()))
+	var/temp_change = (energy / (total_thermal_mass))
 	if(power_transfer > 0)
 		chem_temp = min(chem_temp + temp_change, received_temperature)
 	else

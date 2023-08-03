@@ -48,6 +48,7 @@
 #define SPACE_HEAT_TRANSFER_COEFFICIENT 0.2 //a hack to partly simulate radiative heat
 #define OPEN_HEAT_TRANSFER_COEFFICIENT 0.4
 #define WINDOW_HEAT_TRANSFER_COEFFICIENT 0.1 //a hack for now
+#define THERMAL_DISSIPATION_SCALING_FACTOR (1/20)
 
 // Fire Damage
 #define CARBON_LIFEFORM_FIRE_RESISTANCE (200+T0C)

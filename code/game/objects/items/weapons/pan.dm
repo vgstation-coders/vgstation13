@@ -62,6 +62,7 @@
 	return result
 
 /obj/item/weapon/reagent_containers/pan/on_reagent_change()
+	..()
 	cook_reboot()
 	update_icon()
 
