@@ -1,20 +1,20 @@
 /datum/design/xcomsquaddiearmor
 	name = "Squaddie Armor"
-	desc = "A set of armor good against ballistics and laser weaponry.."
+	desc = "An old armor design from a shadow organization. It offers respectable protection against ballistics."
 	id = "xcomsquaddiearmor"
-	req_tech = list(Tc_MATERIALS = 3)
+	req_tech = list(Tc_COMBAT = 4, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
+	materials = list(MAT_IRON = 8000, MAT_GLASS = 2000, MAT_PLASMA = 1000)
 	category = "Armor"
 	build_path = /obj/item/clothing/suit/armor/xcomsquaddie
 
 /datum/design/xcomoriginalarmor
-	name = "Original Armor"
-	desc = "A set of armor good against ballistics and laser weaponry.."
+	name = "Personal Armor"
+	desc = "An old armor design from a shadow organization. It offers respectable protection against laser and energy weaponry."
 	id = "xcomoriginalarmor"
-	req_tech = list(Tc_MATERIALS = 3)
+	req_tech = list(Tc_COMBAT = 4, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
+	materials = list(MAT_IRON = 8000, MAT_GLASS = 2000, MAT_URANIUM = 1000)
 	category = "Armor"
 	build_path = /obj/item/clothing/suit/armor/xcomarmor
 
