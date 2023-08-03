@@ -440,17 +440,17 @@
 		update_icon()
 		to_chat(user, "<span class = 'warning'>You hear \the [src] tick!</span>")
 
-		user.unregister_event(/event/irradiate, src, src::check_rads())
+		user.unregister_event(/event/irradiate, src, nameof(src::check_rads()))
 
 /obj/item/clothing/accessory/rad_patch/on_attached(obj/item/clothing/C)
 	..()
 	if(ismob(C.loc) && !triggered)
 		var/mob/user = C.loc
-		user.register_event(/event/irradiate, src, src::check_rads())
+		user.register_event(/event/irradiate, src, nameof(src::check_rads()))
 
 /obj/item/clothing/accessory/rad_patch/on_removed(mob/user)
 	..()
-	user?.unregister_event(/event/irradiate, src, src::check_rads())
+	user?.unregister_event(/event/irradiate, src, nameof(src::check_rads()))
 
 /obj/item/clothing/accessory/rad_patch/examine(mob/user)
 	..(user)

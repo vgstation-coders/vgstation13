@@ -84,11 +84,11 @@
 		recruiter.jobban_roles = list(ROLE_POSIBRAIN)
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
-	recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
+	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 	// Role set to No or Never
-	recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
+	recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-	recruiter.recruited = new /callback(src, src::recruiter_recruited())
+	recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 	recruiter.request_player()
 
 /obj/item/device/hologram_projector/proc/recruiter_recruiting(mob/dead/observer/player, controls)

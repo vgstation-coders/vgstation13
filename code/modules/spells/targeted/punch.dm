@@ -60,8 +60,8 @@
 					return
 			present_target = target
 //Use two events because each does something the other cannot do, even if they are mostly similar.
-			target.register_event(/event/to_bump, src, src::handle_bump())
-			target.register_event(/event/throw_impact, src, src::handle_throw_impact())
+			target.register_event(/event/to_bump, src, nameof(src::handle_bump()))
+			target.register_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
 			L.do_attack_animation(target, L, I)
 			target.take_organ_damage(L.get_unarmed_damage(target) * 5) //A PUNCH THAT SHALL PIERCE PROTECTIONS
 			target.throw_at(get_edge_target_turf(L, L.dir), INFINITY, 1)
@@ -76,8 +76,8 @@
 					sleep(1)
 				target.transform = turn(target.transform, -turns)
 				target.Knockdown(2)
-				target.unregister_event(/event/to_bump, src, src::handle_bump()) //Just in case
-				target.unregister_event(/event/throw_impact, src, src::handle_throw_impact())
+				target.unregister_event(/event/to_bump, src, nameof(src::handle_bump())) //Just in case
+				target.unregister_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
 
 		for(var/obj/mecha/M in targets) //Target is a mecha
 			if(L.is_pacified(1, M))
@@ -88,14 +88,14 @@
 			M.ex_act(1)
 
 /spell/targeted/punch/proc/handle_bump(atom/movable/bumper, atom/bumped)
-	present_target.unregister_event(/event/to_bump, src, src::handle_bump())
-	present_target.unregister_event(/event/throw_impact, src, src::handle_throw_impact())
+	present_target.unregister_event(/event/to_bump, src, nameof(src::handle_bump()))
+	present_target.unregister_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
 	var/mob/living/L = holder
 	explode_on_impact(bumped, present_target, L)
 
 /spell/targeted/punch/proc/handle_throw_impact(atom/hit_atom, speed, mob/living/user)
-	present_target.unregister_event(/event/to_bump, src, src::handle_bump())
-	present_target.unregister_event(/event/throw_impact, src, src::handle_throw_impact())
+	present_target.unregister_event(/event/to_bump, src, nameof(src::handle_bump()))
+	present_target.unregister_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
 	var/mob/living/L = holder
 	explode_on_impact(hit_atom, present_target, L)
 

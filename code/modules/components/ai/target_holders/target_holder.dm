@@ -1,9 +1,9 @@
 /datum/component/ai/target_holder
 
 /datum/component/ai/target_holder/initialize()
-	parent.register_event(/event/comp_ai_cmd_add_target, src, src::cmd_add_target())
-	parent.register_event(/event/comp_ai_cmd_remove_target, src, src::cmd_remove_target())
-	parent.register_event(/event/comp_ai_cmd_get_best_target, src, src::cmd_get_best_target())
+	parent.register_event(/event/comp_ai_cmd_add_target, src, nameof(src::cmd_add_target()))
+	parent.register_event(/event/comp_ai_cmd_remove_target, src, nameof(src::cmd_remove_target()))
+	parent.register_event(/event/comp_ai_cmd_get_best_target, src, nameof(src::cmd_get_best_target()))
 	return TRUE
 
 /datum/component/ai/target_holder/proc/cmd_add_target(var/atom/A)

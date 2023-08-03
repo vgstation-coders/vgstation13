@@ -581,11 +581,11 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/pedometer/pickup(mob/user)
 	..()
-	user.register_event(/event/moved, src, src::mob_moved())
+	user.register_event(/event/moved, src, nameof(src::mob_moved()))
 
 /obj/item/pedometer/dropped(mob/user)
 	..()
-	user.unregister_event(/event/moved, src, src::mob_moved())
+	user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 
 /obj/item/pedometer/proc/mob_moved(atom/movable/mover)
 	var/turf/T = get_turf(src)

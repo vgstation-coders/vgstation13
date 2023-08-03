@@ -34,7 +34,7 @@
 	power_machines |= src
 
 	// Used for updating turf power_connection lists when moved.
-	parent.register_event(/event/moved, src, src::parent_moved())
+	parent.register_event(/event/moved, src, nameof(src::parent_moved()))
 	addToTurf()
 
 /datum/power_connection/Destroy()
@@ -43,7 +43,7 @@
 
 	// Remember to tell our turf that we're gone.
 	removeFromTurf()
-	parent.unregister_event(/event/moved, src, src::parent_moved())
+	parent.unregister_event(/event/moved, src, nameof(src::parent_moved()))
 	..()
 
 // CALLBACK from /event/moved.

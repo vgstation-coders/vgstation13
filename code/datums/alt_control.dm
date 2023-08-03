@@ -8,7 +8,7 @@
 /datum/control/New(var/mob/new_controller, var/atom/new_controlled)
 	..()
 	controller = new_controller
-	controller.register_event(/event/damaged, src, src::user_damaged())
+	controller.register_event(/event/damaged, src, nameof(src::user_damaged()))
 	controlled = new_controlled
 
 /datum/control/Destroy()
