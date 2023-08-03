@@ -350,7 +350,7 @@ emp_act
 	apply_damage(damage, BRUTE, ourfoot)
 	return TRUE
 
-/mob/living/carbon/human/proc/bloody_hands(var/mob/living/source, var/amount = 2)
+/mob/living/carbon/human/proc/bloody_hands(var/mob/living/source, var/amount = 3)
 	if (ishuman(source))
 		var/mob/living/carbon/human/H = source
 		if (H.species.anatomy_flags & NO_BLOOD)
@@ -368,11 +368,11 @@ emp_act
 			G.bloody_hands_data = source.get_blood_data()
 	else
 		add_blood(source)
-		bloody_hands = amount
+		bloody_hands += amount
 		bloody_hands_data = source.get_blood_data()
 	update_inv_gloves()		//updates on-mob overlays for bloody hands and/or bloody gloves
 
-/mob/living/carbon/human/proc/bloody_body(var/mob/living/source,var/update = 0)
+/mob/living/carbon/human/proc/bloody_body(var/mob/living/source, var/update = 0)
 	if (ishuman(source))
 		var/mob/living/carbon/human/H = source
 		if (H.species.anatomy_flags & NO_BLOOD)
@@ -393,7 +393,7 @@ emp_act
 //The two procs bellow are for when getting bloodied with blood that doesn't come straight from a mob, but from a beaker or something else
 //Since the original donor might not exist anymore
 
-/mob/living/carbon/human/proc/bloody_hands_from_data(var/list/blood_data,var/amount = 2,var/source)
+/mob/living/carbon/human/proc/bloody_hands_from_data(var/list/blood_data, var/amount = 3, var/source)
 	//we're getting splashed with blood, so let's check for viruses
 	var/block = check_contact_sterility(HANDS)
 	var/bleeding = check_bodypart_bleeding(HANDS)
@@ -407,11 +407,11 @@ emp_act
 			G.bloody_hands_data = copy_blood_data(blood_data)
 	else
 		add_blood_from_data(blood_data)
-		bloody_hands = amount
+		bloody_hands += amount
 		bloody_hands_data = copy_blood_data(blood_data)
 	update_inv_gloves()		//updates on-mob overlays for bloody hands and/or bloody gloves
 
-/mob/living/carbon/human/proc/bloody_body_from_data(var/list/blood_data,var/update = 0,var/source)
+/mob/living/carbon/human/proc/bloody_body_from_data(var/list/blood_data, var/update = 0, var/source)
 	//we're getting splashed with blood, so let's check for viruses
 	var/block = check_contact_sterility(FULL_TORSO)
 	var/bleeding = check_bodypart_bleeding(FULL_TORSO)

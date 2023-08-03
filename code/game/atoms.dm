@@ -443,7 +443,7 @@ its easier to just keep the beam vertical.
 /atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
-	if(blood_DNA && blood_DNA.len)
+	if(is_blood_stained())
 		var/stain_text = get_stain_text(FALSE)
 		f_name = "[get_indefinite_article(stain_text, gender)] <span class='danger'><span style='color: [get_stain_text_color()]'>[stain_text]</span></span> [name]!"
 
@@ -1006,7 +1006,9 @@ its easier to just keep the beam vertical.
 		var/stains[0]
 		for (var/this_blood_DNA in blood_DNA)
 			if (this_blood_DNA)
-				stains[get_stain_name(blood_DNA[this_blood_DNA])]++
+				var/stain_name = get_stain_name(blood_DNA[this_blood_DNA])
+				if (stain_name)
+					stains[stain_name]++
 		if (stains.len)
 			for (var/thisstain in stains)
 				. += "[. ? "and-" : ""][thisstain]-"
@@ -1018,7 +1020,7 @@ its easier to just keep the beam vertical.
 	if (findtextEx("A+A-B+B-AB+AB-O+O-", stain_type))
 		return "blood"
 	else if (stain_type == "N/A")
-		return "blood" //call everything unspecified "blood" just in case
+		return
 	else
 		return stain_type
 
@@ -1113,3 +1115,8 @@ its easier to just keep the beam vertical.
 
 /atom/proc/get_heat_conductivity()
 	return 1
+
+/atom/proc/is_blood_stained()
+	if (blood_color && blood_DNA && blood_DNA.len)
+		return TRUE
+	return FALSE

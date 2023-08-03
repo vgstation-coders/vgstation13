@@ -71,7 +71,7 @@
 	desc = "A blue neck scarf."
 	icon_state = "blue_scarf"
 	item_state = "blue_scarf"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 
 
 /obj/item/clothing/mask/scarf/red
@@ -79,7 +79,7 @@
 	desc = "A red neck scarf."
 	icon_state = "red_scarf"
 	item_state = "red_scarf"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 
 
 /obj/item/clothing/mask/scarf/green
@@ -87,7 +87,7 @@
 	desc = "A green and red line patterned scarf."
 	icon_state = "green_scarf"
 	item_state = "green_scarf"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/mask/balaclava
 	name = "balaclava"
@@ -110,7 +110,7 @@
 	desc = "Somehow, it makes you act and look way more polite than usual."
 	icon_state = "nr_mask"
 	item_state = "nr_mask"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 	body_parts_covered = FACE
 	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
 

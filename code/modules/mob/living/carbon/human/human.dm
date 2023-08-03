@@ -218,8 +218,8 @@
 
 	update_mutantrace()
 
-	register_event(/event/equipped, src, src::update_name())
-	register_event(/event/unequipped, src, src::update_name())
+	register_event(/event/equipped, src, nameof(src::update_name()))
+	register_event(/event/unequipped, src, nameof(src::update_name()))
 
 /mob/living/carbon/human/proc/update_name()
 	name = get_visible_name()

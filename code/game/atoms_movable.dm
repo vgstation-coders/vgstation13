@@ -736,7 +736,7 @@
 		AM.lock_atom(src, /datum/locking_category/overlay)
 	if (istype(master, /atom/movable))
 		var/atom/movable/AM = master
-		AM.register_event(/event/destroyed, src, src::qdel_self())
+		AM.register_event(/event/destroyed, src, nameof(src::qdel_self()))
 	verbs.len = 0
 
 /atom/movable/overlay/proc/qdel_self(datum/thing)
@@ -746,7 +746,7 @@
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
 		AM.unlock_atom(src)
-		AM.unregister_event(/event/destroyed, src, src::qdel_self())
+		AM.unregister_event(/event/destroyed, src, nameof(src::qdel_self()))
 	master = null
 	return ..()
 

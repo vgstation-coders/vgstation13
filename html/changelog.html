@@ -73,6 +73,43 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2023.08.03</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug that caused random events that required engineering roles to never fire.</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Confusion runes code has been refactored in a way that should no longer lead to the effects persisting forever and such.</li>
+			</ul>
+			<h3 class="author">Hinaichigo updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Blood-stained headsets are described as such in human examine descriptions.</li>
+				<li class="bugfix">Fixed issues with phantom blood appearing on certain things like surgically removed heads and dead bees.</li>
+			</ul>
+			<h3 class="author">Optimism333 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added ayy rig kit shipments at cargo: 200 credits per 2 kits (frames must also be purchased and some assembly required)</li>
+				<li class="tweak">The grey space-ex crate no longer contains ayy rigs and is a bit cheaper 200 -&gt; 175</li>
+				<li class="tweak">The defensive stats on the ayy rigs have been slightly buffed</li>
+				<li class="tweak">Mothership uniforms are no longer contraband</li>
+				<li class="rscadd">Makes grayy-fitting sprites for the green, red, and blue scarves</li>
+				<li class="rscadd">Makes an grayy-fitting sprite for the Neorussian mask</li>
+				<li class="tweak">Facehuggers have an grayy-fitting sprite, and also actually use their insectoid-fitting sprite now</li>
+				<li class="bugfix">Fixes a grayy cigarette sprite height inconsistency</li>
+			</ul>
+			<h2 class="date">2023.08.02</h2>
+			<h3 class="author">nervere updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">SNAXI: Added a biogenerator to xenobotany. Deleted duplicate seed extractor. Botany now has access to a hand labeler.</li>
+				<li class="bugfix">SNAXI: All atmospherics machines are now properly linked. The AME&#39;s room&#39;s wiring has been corrected. Fixed broken scrubber in genetics.</li>
+				<li class="rscadd">SNAXI: Added a 50u sulphuric acid beaker to RnD, Robotics now has access to a welding fuel tank, Robotics now has cyborg rechargers.</li>
+				<li class="rscadd">SNAXI: Additional newscasters and hot drinks machines have been dotted around the map.</li>
+				<li class="rscadd">SNAXI: Security has been outfitted with more supplies in the locker room, namely holobadges and a body bag kit.</li>
+				<li class="rscadd">SNAXI: Reworked cargo: There is now an input belt to the shuttle. Output belt is much longer and better, and now has a way to send stuff through disposals.</li>
+				<li class="bugfix">SNAXI: Fixed existing docking locations for the vox raider skipjack, added new docking locations for the vox raider skipjack.</li>
+				<li class="tweak">The vox skipjack shuttle can now rotate.</li>
+			</ul>
 			<h2 class="date">2023.07.30</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -86,6 +123,8 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">Hinaichigo updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Bloodstains mixed from multiple species have mixed colors.</li>
+				<li class="tweak">Bloody hands will stay more persistently bloody until washed.</li>
+				<li class="bugfix">Fixed bloody hands not appearing in humanoid examine description.</li>
 			</ul>
 			<h3 class="author">Optimism333 updated:</h3>
 			<ul class="changes bgimages16">
@@ -2139,50 +2178,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">nervere updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Telepathy messages will now appear in bold.</li>
-			</ul>
-			<h2 class="date">2022.09.07</h2>
-			<h3 class="author">Optimism333 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Polyps can be milked without spilling the liquid on them every time you click on them with the bucket</li>
-				<li class="bugfix">Cleaned up the code for the coin trading polyp subtype, and removed the duplicated milking interaction</li>
-				<li class="rscadd">Polyps have some visible emotes</li>
-				<li class="rscadd">Polyp gelatin now has a condiment bottle sprite and condiment overlay</li>
-			</ul>
-			<h2 class="date">2022.09.05</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The wooden planks crate now costs 8 more credits but carries twice as much wood (50 planks).</li>
-				<li class="rscdel">Removes one of the darkness toggles.</li>
-			</ul>
-			<h3 class="author">Optimism333 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">MDF Heavy Armor purchased from an uplink no longer includes a gear belt, instead it comes with a uniform and boots</li>
-				<li class="rscadd">The MDF Gear Belt has been moved into its own entry, contains better gear, and costs 5 TC undiscounted, 4 discounted</li>
-			</ul>
-			<h3 class="author">ValkyrieSkies updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds machine frame and chem dispenser parts to RnD on Meta</li>
-				<li class="rscadd">Adds hardsuit modification machine to Robotics on Meta</li>
-				<li class="rscadd">Adds lightswitch to Meta bridge proper.</li>
-				<li class="tweak">Changes Meta RnD Entry Fireclosets to contain Firesuits, adds a mirror</li>
-				<li class="tweak">Converted Meta Cloning-Genetics maint tunnel to just be an actual corridor</li>
-				<li class="tweak">Fixed some shit piping in Meta Bridge.</li>
-			</ul>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Roundstart done a little differently: players are now transferred into their mobs after they&#39;re ready to go, rather than during the whole loading process</li>
-				<li class="bugfix">Certain antags are not spawned as crew then teleported to their antag spawn</li>
-				<li class="bugfix">Admin log message should appear for silicons roundstart</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added a new wizard spell: Punch.</li>
-				<li class="rscadd">The Fist spell now requires less quickening upgrades to reach the minimum cooldown.</li>
-				<li class="rscadd">Grues can now click a tile to smash the light on that tile.</li>
-			</ul>
-			<h3 class="author">pedr69 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">grey slime cargo crates</li>
 			</ul>
 		</div>
 		<!--

@@ -267,7 +267,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		for(var/atom/movable/AM in (src.contents + E.contents))
 
 			if(!is_type_in_list(AM, protected_objects)) continue
-			AM.register_event(/event/destroyed, src, src::item_destroyed())
+			AM.register_event(/event/destroyed, src, nameof(src::item_destroyed()))
 
 /area/vault/supermarket/shop/Exited(atom/movable/AM, atom/newloc)
 	..()
