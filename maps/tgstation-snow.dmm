@@ -52735,7 +52735,6 @@
 /area/centcom/holding)
 "dvd" = (
 /turf/space,
-/turf/space,
 /area)
 "dve" = (
 /obj/structure/punching_bag/clown,
