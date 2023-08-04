@@ -1075,24 +1075,28 @@ its easier to just keep the beam vertical.
 					message_admins("Something went wrong with [src]'s handle_heat_dissipation() at iteration #[i] at [this_potentially_insulative_layer].")
 					break //Avoid infinite loops.
 
-			var/is_the_air_here_simulated = !istype(the_air_here, /datum/gas_mixture/unsimulated)
+			var/is_the_air_here_simulated = config.reagents_heat_air && !istype(the_air_here, /datum/gas_mixture/unsimulated)
 
 			var/reagents_thermal_mass_reciprocal = (1 / reagents.total_thermal_mass)
 
-			//If the reagents temperature would change by more than 10% in a single tick, we do a more granular calculation to avoid overshooting.
+			//If the reagents temperature would change by more than a certain percentage in a single tick, we do a more granular calculation to avoid overshooting.
 
 			var/abs_chem_temp_change_ratio = abs(energy_to_radiate_from_reagents_to_air * reagents_thermal_mass_reciprocal / reagents.chem_temp)
 
-			if (abs_chem_temp_change_ratio > 0.1)
+			if (abs_chem_temp_change_ratio > MAX_PER_TICK_REAGENTS_THERM_DISS_TEMP_CHANGE_RATIO)
 				var/tR = reagents.chem_temp
 				var/tA = the_air_here.temperature
-				var/slices = ceil(10 * abs_chem_temp_change_ratio)
+				var/slices = ceil((1 / MAX_PER_TICK_REAGENTS_THERM_DISS_TEMP_CHANGE_RATIO) * abs_chem_temp_change_ratio)
 				var/slices_recip = 1 / slices
-				for (var/this_slice in 1 to slices)
+				var/this_slice = 1
+				while(this_slice <= slices)
+					if (this_slice > MAX_PER_TICK_REAGENTS_THERM_DISS_SLICES) //Exit early.
+						break
 					var/this_slice_energy = constant_factor * slices_recip * (tR ** 4 - tA ** 4)
 					radiate_reagents_heat_to_air(this_slice_energy, the_air_here, reagents_thermal_mass_reciprocal, is_the_air_here_simulated)
 					tR = reagents.chem_temp
 					tA = the_air_here.temperature
+					this_slice++
 			else
 				radiate_reagents_heat_to_air(energy_to_radiate_from_reagents_to_air, the_air_here, reagents_thermal_mass_reciprocal, is_the_air_here_simulated)
 
@@ -1105,6 +1109,9 @@ its easier to just keep the beam vertical.
 	else //Space, the snowy outdoors, etc.
 		energy_actually_added_to_air = energy_amount
 	reagents.chem_temp -= energy_actually_added_to_air * reagents_thermal_mass_reciprocal
+	if (reagents.chem_temp < 0)
+		reagents.chem_temp = 0
+		message_admins("[src]'s radiate_reagents_heat_to_air() tried to set its temperature below 0 K.")
 
 /atom/proc/heat_dissipation_updates()
 	if (src in thermal_dissipation_atoms)

@@ -49,6 +49,8 @@
 #define OPEN_HEAT_TRANSFER_COEFFICIENT 0.4
 #define WINDOW_HEAT_TRANSFER_COEFFICIENT 0.1 //a hack for now
 #define THERMAL_DISSIPATION_SCALING_FACTOR (1/2)
+#define MAX_PER_TICK_REAGENTS_THERM_DISS_TEMP_CHANGE_RATIO 0.1 //How much reagents can change temperature in a single tick of thermal dissipation before the calculation has to be broken up to a more grandual scale. 0.1 would be a temperature change of 10%
+#define MAX_PER_TICK_REAGENTS_THERM_DISS_SLICES 10000 //How many slices the thermal dissipation calculation can be divided into per tick before the calculation exits early.
 
 // Fire Damage
 #define CARBON_LIFEFORM_FIRE_RESISTANCE (200+T0C)
