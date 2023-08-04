@@ -1048,6 +1048,9 @@ its easier to just keep the beam vertical.
 			if (!the_air_here)
 				return
 
+			if (reagents.chem_temp < TCMB)
+				reagents.chem_temp = TCMB
+
 			if (abs(reagents.chem_temp - the_air_here.temperature) < MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
 				return
 
