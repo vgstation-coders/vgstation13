@@ -1109,9 +1109,9 @@ its easier to just keep the beam vertical.
 	else //Space, the snowy outdoors, etc.
 		energy_actually_added_to_air = energy_amount
 	reagents.chem_temp -= energy_actually_added_to_air * reagents_thermal_mass_reciprocal
-	if (reagents.chem_temp < 0)
-		reagents.chem_temp = 0
-		message_admins("[src]'s radiate_reagents_heat_to_air() tried to set its temperature below 0 K.")
+	if (reagents.chem_temp < TCMB)
+		reagents.chem_temp = TCMB
+		message_admins("[src]'s radiate_reagents_heat_to_air() tried to set its temperature below [TCMB] K.")
 
 /atom/proc/heat_dissipation_updates()
 	if (src in thermal_dissipation_atoms)
