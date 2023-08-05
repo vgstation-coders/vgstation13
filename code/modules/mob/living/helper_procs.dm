@@ -45,12 +45,8 @@ default behaviour is:
 	if(stat == DEAD || health <= config.health_threshold_crit)
 		return TRUE
 
-/mob/living/proc/mob_thermal_mass()
-	//This can be fleshed out (literally) if it's used in more places. For now it's only used in calculating burn damage from reagents splashing a mob, so having this be a constant works alright.
-	return 2.98 * 70000 //specfic heat of 2.98 J / (g * degrees K), assume body mass of 70kg
-
-/mob/living/proc/get_burn_damage_from_thermal_transfer(thermal_energy_transferred, what_temp)
-	return round(abs(TEMPERATURE_DAMAGE_COEFFICIENT * SPLASH_SCALD_DAMAGE_COEFFICIENT * (thermal_energy_transferred ** (1/11) * get_safe_temperature_excursion(what_temp) ** (1/11))))
+/mob/living/proc/get_splash_burn_damage(splash_vol, splash_temp)
+	return round(TEMPERATURE_DAMAGE_COEFFICIENT * SPLASH_SCALD_DAMAGE_COEFFICIENT * abs(splash_vol ** (1/3) * log(get_safe_temperature_excursion(splash_temp) + 1)))
 
 /mob/living/proc/get_safe_temperature_excursion(the_temp)
 	//Returns how many degrees K a temperature is outside of the safe range the mob can tolerate. returns 0 if within the safe range. can be negative for cold.

@@ -612,22 +612,15 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 #define SCALD_AGONIZING 30
 
 /datum/reagents/proc/handle_reagents_mob_thermal_interaction(mob/living/L, method, list/zone_sels = ALL_LIMBS, volume_used)
+	if (!total_volume)
+		return
 	if (!isliving(L))
 		return
-
 	var/ignore_thermal_prot = FALSE
 	if (method == INGEST) //Eating or drinking burns the mouth (head) regardless of targeting and isn't blocked by head thermal protection.
 		zone_sels = TARGET_MOUTH
 		ignore_thermal_prot = TRUE
-	var/reagents_thermal_mass = get_thermal_mass()
-	if (volume_used)
-		reagents_thermal_mass *= (volume_used / total_volume)
-	var/mob_thermal_mass = L.mob_thermal_mass()
-	if (!total_volume)
-		return
-	var/new_temp = get_equalized_temperature(L.bodytemperature, mob_thermal_mass, chem_temp, reagents_thermal_mass)
-	var/thermal_energy_transferred_to_mob = (new_temp - L.bodytemperature) * mob_thermal_mass
-	var/burn_dmg = L.get_burn_damage_from_thermal_transfer(thermal_energy_transferred_to_mob, chem_temp)
+	var/burn_dmg = L.get_splash_burn_damage(volume_used ? volume_used : total_volume, chem_temp)
 	var/datum/organ/external/which_organ
 	if (ishuman(L)) //Although monkeys can wear clothes, only humans have explicit organs that can be covered by specific worn items, so for now only humans get protection here. If this is expanded to include things like monkeys wearing clothes and getting non-organ-specific thermal protection, this could be changed to use type inheritance.
 		var/mob/living/carbon/human/H = L
