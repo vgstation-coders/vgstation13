@@ -752,11 +752,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /**************************************
  *  RETURNS A BOOL NOW, USE get_reagent IF YOU NEED TO GET ONE.
  **************************************/
-/datum/reagents/proc/has_reagent(var/reagent, var/amount = -1)
+/datum/reagents/proc/has_reagent(var/reagent, var/amount = 0)
 	// N3X: Caching shit.
 	// Only cache if not using get (since we only track bools)
 	var/amount_in_cache = amount_cache[reagent]
-	return amount_in_cache ? amount_in_cache >= max(0, amount) : 0
+	return amount_in_cache ? amount_in_cache >= amount : 0
 
 
 /datum/reagents/proc/has_only_any(list/good_reagents)
