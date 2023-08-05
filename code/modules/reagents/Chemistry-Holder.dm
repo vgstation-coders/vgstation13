@@ -404,9 +404,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	var/reaction_occured = 0
 	do
+		reaction_occured = 0
 		for(var/datum/reagent/R in reagent_list) // Usually a small list
-			for(var/datum/chemical_reaction/C in chemical_reactions_list[R.id]) // Was a big list but now it should be smaller since we filtered it with our reagent id
+			for(var/reaction in chemical_reactions_list[R.id]) // Was a big list but now it should be smaller since we filtered it with our reagent id
+				if(!reaction)
+					continue
 
+				var/datum/chemical_reaction/C = reaction
 				var/reaction_result = handle_reaction(C)
 				if(reaction_result)
 					if(reaction_result == NON_DISCRETE_REACTION)
@@ -754,6 +758,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	var/amount_in_cache = amount_cache[reagent]
 	return amount_in_cache ? amount_in_cache >= max(0, amount) : 0
 
+
 /datum/reagents/proc/has_only_any(list/good_reagents)
     var/found_any_good_reagent = FALSE
     for(var/reagent in amount_cache)
@@ -811,7 +816,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return 0
 
 /datum/reagents/proc/get_reagent_amount(var/reagent)
-	return amount_cache[reagent]
+	return amount_cache[reagent] + 0 //Convert null to 0.
 
 /datum/reagents/proc/get_reagents()
 	var/res = ""
