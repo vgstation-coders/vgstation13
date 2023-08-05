@@ -528,7 +528,7 @@
 
 				<h1><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "nano-logo"))]' style='position: relative; top: 6;'>Enemies of Nanotrasen: A Quick Overview<img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "nano-logo"))]' style='position: relative; top: 6;'></h1>
                 <h2>Foreword</h2>
-				<p>Over the decades since Nanotrasen has begun establishing its presence in space, multiple hostile groups and other belligerent entities have manifested recurrent attempts at disrupting our operations. Identifying agents of those enemy factions and thwarting their plans falls into the job description of our Security forces, but every Nanotrasen employee is encouraged to report any suspicious activities, and should the situation call for it, take action against them. These antagonistic forces are dangerous and often use underhanded tactics, this guide aims to even the ground even slightly by giving you some information on how they operate, and how they can be dealt with.
+				<p>Over the years since Nanotrasen secured its position as an interstellar megacorporation, various hostile groups and belligerent entities have made repeated attempts to disrupt our operations. The threat levels from these forces vary, but all of them pose a threat to our productivity and safety. Every Nanotrasen employee has a professional responsibility to identify agents of these hostile organizations. This guide contains information known about these foes, and aims to provide employees with a reference to identify their activities. A well-informed workforce ready to react to these insurgents is crucial to ensuring Nanotrasen’s continued success. Every employee can make a difference!
 
 
 				<h2>Chapters</h2>
