@@ -28,7 +28,7 @@
 		floor_overlay.plane = GLASSTILE_PLANE
 		floor_overlays[glass_state] = floor_overlay
 	overlays += floor_overlays[glass_state]
-	set_light(0.5, 0.5, "#ffffff")
+	set_light(1, 0.5, "#ffffff")
 	update_icon()
 
 /turf/simulated/floor/glass/update_icon()
