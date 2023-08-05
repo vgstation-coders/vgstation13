@@ -21,12 +21,12 @@
 /datum/dna/gene/basic/psychic_resist/New()
 	block = PSYRESISTBLOCK
 
-/datum/dna/gene/basic/jamsignals/activate(var/mob/M, var/connected, var/flags)
+/datum/dna/gene/basic/psychic_resist/activate(var/mob/M, var/connected, var/flags)
 	..()
 	INVOKE_EVENT(M, /event/cameranet_changed, "mover" = M)
 	return 1
 
-/datum/dna/gene/basic/jamsignals/deactivate(var/mob/M, var/connected, var/flags)
+/datum/dna/gene/basic/psychic_resist/deactivate(var/mob/M, var/connected, var/flags)
 	if(!..())
 		return 0
 	INVOKE_EVENT(M, /event/cameranet_changed, "mover" = M)
