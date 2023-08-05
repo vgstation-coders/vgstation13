@@ -162,16 +162,13 @@
 		var/mob/target_mob = target
 		if(target_mob.digitalcamo)
 			return FALSE
-		for(var/obj/item/I in target_mob.get_equipped_items())
-			if(I.blocks_tracking && !target_mob.is_wearing_item(I,slot_wear_id))
-				return null
-			if(target_mob.is_holding_item(/obj/item/device/megaphone/madscientist))
-				return null
-			var/obj/item/ourID = target_mob.get_item_by_slot(slot_wear_id)
-			if(ourID)
-				ourID = ourID.GetID()
-				if(ourID.blocks_tracking)
-					return null
+		for(var/obj/item/I in target_mob.get_all_slots())
+			if(I.blocks_tracking)
+				return FALSE
+			if(target_mob.is_wearing_item(I,slot_wear_id))
+				var/obj/item/ourID = I.GetID()
+				if(ourID && ourID.blocks_tracking)
+					return FALSE
 
 	if(isalien(target))
 		return FALSE

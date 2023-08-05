@@ -36,6 +36,7 @@
 	desc = "An ominous-sounding megaphone with a built-in radio transmitter and voice scrambler. Use in hand to fiddle with the controls."
 	var/frequency = 0
 	mask_voice = TRUE
+	blocks_tracking = TRUE
 	flags = FPRINT | HEAR
 
 var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
