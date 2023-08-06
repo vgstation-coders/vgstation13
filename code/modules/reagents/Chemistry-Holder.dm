@@ -422,6 +422,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return 0
 
 /datum/reagents/proc/handle_reaction(var/datum/chemical_reaction/C, var/requirement_override = FALSE, var/multiplier_override = 1)
+
+	if((C.required_temp && (C.is_cold_recipe ? (chem_temp > C.required_temp) : (chem_temp < C.required_temp))) && !requirement_override)
+		return NO_REACTION
+
 	var/total_required_reagents = C.required_reagents.len
 	var/total_matching_reagents = 0
 	var/total_required_catalysts = C.required_catalysts.len
@@ -429,9 +433,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	var/matching_container = 0
 	var/required_conditions = 0
 	var/list/multipliers = new/list()
-	var/required_temp = C.required_temp
-	var/is_cold_recipe = C.is_cold_recipe
-	var/meets_temp_requirement = 0
 	var/quiet = C.quiet
 
 	if(C.react_discretely || requirement_override)
@@ -468,10 +469,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(C.required_condition_check(src))
 		required_conditions = 1
 
-	if(required_temp == 0 || (is_cold_recipe && chem_temp <= required_temp) || (!is_cold_recipe && chem_temp >= required_temp))
-		meets_temp_requirement = 1
-
-	if((total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && required_conditions && meets_temp_requirement) || requirement_override)
+	if((total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && required_conditions) || requirement_override)
 		var/multiplier = min(multipliers) * multiplier_override
 		var/preserved_data = null
 		for(var/B in C.required_reagents)
