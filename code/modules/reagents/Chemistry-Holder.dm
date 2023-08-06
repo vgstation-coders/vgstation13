@@ -402,23 +402,25 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(my_atom.flags & NOREACT)
 		return //Yup, no reactions here. No siree.
 
-	var/reaction_occured = 0
+	var/any_reactions
+	var/reaction_occured
 	do
 		reaction_occured = 0
-		for(var/datum/reagent/R in reagent_list) // Usually a small list
-			for(var/reaction in chemical_reactions_list[R.id]) // Was a big list but now it should be smaller since we filtered it with our reagent id
-				if(!reaction)
-					continue
-
-				var/datum/chemical_reaction/C = reaction
-				var/reaction_result = handle_reaction(C)
-				if(reaction_result)
-					if(reaction_result == NON_DISCRETE_REACTION)
-						reaction_occured = 1
-					break
-
+		for(var/R in amount_cache) // Usually a small list
+			for(var/datum/chemical_reaction/C in chemical_reactions_list[R]) // Was a big list but now it should be smaller since we filtered it with our reagent id
+				if(C)
+					switch(handle_reaction(C))
+						if(DISCRETE_REACTION)
+							any_reactions = 1
+							break
+						if(NON_DISCRETE_REACTION)
+							any_reactions = 1
+							reaction_occured = 1
+							break
 	while(reaction_occured)
-	update_total()
+
+	if(any_reactions)
+		update_total()
 	return 0
 
 /datum/reagents/proc/handle_reaction(var/datum/chemical_reaction/C, var/requirement_override = FALSE, var/multiplier_override = 1)
