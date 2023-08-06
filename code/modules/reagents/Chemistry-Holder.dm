@@ -435,15 +435,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if (total_required_catalysts)
 			return NO_REACTION
 
-	var/total_required_reagents = C.required_reagents.len
-	var/total_matching_reagents = 0
-	var/matching_container = 0
-	var/required_conditions = 0
+		if(C.required_container && !istype(my_atom, C.required_container))
+			return NO_REACTION
+
+		if(!C.required_condition_check(src))
+			return NO_REACTION
+
 	var/list/multipliers = new/list()
 
 	if(C.react_discretely || requirement_override)
 		multipliers += 1 //Only once
 
+	var/total_required_reagents = C.required_reagents.len
 	var/req_reag_amt
 	for(var/B in C.required_reagents)
 		req_reag_amt = C.required_reagents[B]
@@ -452,26 +455,16 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			for(var/D in L)
 				if(amount_cache[D] < req_reag_amt)
 					continue
-				total_matching_reagents++
+				total_required_reagents--
 				multipliers += round(amount_cache[D] / req_reag_amt)
 				break
 		else
 			if(amount_cache[B] < req_reag_amt)
 				break
-			total_matching_reagents++
+			total_required_reagents--
 			multipliers += round(amount_cache[B] / req_reag_amt)
 
-	if(!C.required_container)
-		matching_container = 1
-
-	else
-		if(istype(my_atom, C.required_container))
-			matching_container = 1
-
-	if(C.required_condition_check(src))
-		required_conditions = 1
-
-	if((total_matching_reagents == total_required_reagents && matching_container && required_conditions) || requirement_override)
+	if(!total_required_reagents || requirement_override)
 		var/multiplier = min(multipliers) * multiplier_override
 		var/preserved_data = null
 		for(var/B in C.required_reagents)
