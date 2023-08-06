@@ -449,7 +449,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				multipliers += round(amount_cache[D] / req_reag_amt)
 				break
 		else
-			if(amount_cache[B] < C.required_reagents[B])
+			if(amount_cache[B] < req_reag_amt)
 				break
 			total_matching_reagents++
 			multipliers += round(amount_cache[B] / req_reag_amt)
