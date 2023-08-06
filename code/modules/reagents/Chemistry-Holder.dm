@@ -441,18 +441,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if(islist(B))
 			var/list/L = B
 			for(var/D in L)
-				if(!has_reagent(D, C.required_reagents[B]))
+				if(amount_cache[D] < C.required_reagents[B])
 					continue
 				total_matching_reagents++
 				multipliers += round(get_reagent_amount(D) / C.required_reagents[B])
 				break
 		else
-			if(!has_reagent(B, C.required_reagents[B]))
+			if(amount_cache[B] < C.required_reagents[B])
 				break
 			total_matching_reagents++
 			multipliers += round(get_reagent_amount(B) / C.required_reagents[B])
 	for(var/B in C.required_catalysts)
-		if(!has_reagent(B, C.required_catalysts[B]))
+		if(amount_cache[B] < C.required_catalysts[B])
 			break
 		total_matching_catalysts++
 
@@ -476,7 +476,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			if(islist(B))
 				var/list/L = B
 				for(var/D in L)
-					if(has_reagent(D, C.required_reagents[B]))
+					if(amount_cache[D] >= C.required_reagents[B])
 						if(!preserved_data)
 							preserved_data = get_data(D)
 						remove_reagent(D, (multiplier * C.required_reagents[B]), safety = 1)
@@ -757,7 +757,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	// Only cache if not using get (since we only track bools)
 	var/amount_in_cache = amount_cache[reagent]
 	return amount_in_cache ? amount_in_cache >= amount : 0
-
 
 /datum/reagents/proc/has_only_any(list/good_reagents)
     var/found_any_good_reagent = FALSE
