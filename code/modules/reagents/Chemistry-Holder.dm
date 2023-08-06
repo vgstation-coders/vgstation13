@@ -423,17 +423,23 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 /datum/reagents/proc/handle_reaction(var/datum/chemical_reaction/C, var/requirement_override = FALSE, var/multiplier_override = 1)
 
-	if((C.required_temp && (C.is_cold_recipe ? (chem_temp > C.required_temp) : (chem_temp < C.required_temp))) && !requirement_override)
-		return NO_REACTION
+	if(!requirement_override)
+
+		if((C.required_temp && (C.is_cold_recipe ? (chem_temp > C.required_temp) : (chem_temp < C.required_temp))))
+			return NO_REACTION
+
+		var/total_required_catalysts = C.required_catalysts.len
+		for(var/B in C.required_catalysts)
+			if(amount_cache[B] >= C.required_catalysts[B])
+				total_required_catalysts--
+		if (total_required_catalysts)
+			return NO_REACTION
 
 	var/total_required_reagents = C.required_reagents.len
 	var/total_matching_reagents = 0
-	var/total_required_catalysts = C.required_catalysts.len
-	var/total_matching_catalysts= 0
 	var/matching_container = 0
 	var/required_conditions = 0
 	var/list/multipliers = new/list()
-	var/quiet = C.quiet
 
 	if(C.react_discretely || requirement_override)
 		multipliers += 1 //Only once
@@ -454,10 +460,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				break
 			total_matching_reagents++
 			multipliers += round(amount_cache[B] / req_reag_amt)
-	for(var/B in C.required_catalysts)
-		if(amount_cache[B] < C.required_catalysts[B])
-			break
-		total_matching_catalysts++
 
 	if(!C.required_container)
 		matching_container = 1
@@ -469,7 +471,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(C.required_condition_check(src))
 		required_conditions = 1
 
-	if((total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && required_conditions) || requirement_override)
+	if((total_matching_reagents == total_required_reagents && matching_container && required_conditions) || requirement_override)
 		var/multiplier = min(multipliers) * multiplier_override
 		var/preserved_data = null
 		for(var/B in C.required_reagents)
@@ -501,6 +503,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			for(var/S in C.secondary_results)
 				add_reagent(S, C.result_amount * C.secondary_results[S] * multiplier, reagtemp = chem_temp)
 
+		var/quiet = C.quiet
 		if	(istype(my_atom, /obj/item/weapon/grenade/chem_grenade) && !quiet)
 			my_atom.visible_message("<span class='caution'>[bicon(my_atom)] Something comes out of \the [my_atom].</span>")
 			//Logging inside chem_grenade.dm, prime()
