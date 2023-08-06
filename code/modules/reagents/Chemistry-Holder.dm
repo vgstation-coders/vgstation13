@@ -437,20 +437,22 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(C.react_discretely || requirement_override)
 		multipliers += 1 //Only once
 
+	var/req_reag_amt
 	for(var/B in C.required_reagents)
+		req_reag_amt = C.required_reagents[B]
 		if(islist(B))
 			var/list/L = B
 			for(var/D in L)
-				if(amount_cache[D] < C.required_reagents[B])
+				if(amount_cache[D] < req_reag_amt)
 					continue
 				total_matching_reagents++
-				multipliers += round(get_reagent_amount(D) / C.required_reagents[B])
+				multipliers += round(amount_cache[D] / req_reag_amt)
 				break
 		else
 			if(amount_cache[B] < C.required_reagents[B])
 				break
 			total_matching_reagents++
-			multipliers += round(get_reagent_amount(B) / C.required_reagents[B])
+			multipliers += round(amount_cache[B] / req_reag_amt)
 	for(var/B in C.required_catalysts)
 		if(amount_cache[B] < C.required_catalysts[B])
 			break
@@ -473,18 +475,19 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/multiplier = min(multipliers) * multiplier_override
 		var/preserved_data = null
 		for(var/B in C.required_reagents)
+			req_reag_amt = C.required_reagents[B]
 			if(islist(B))
 				var/list/L = B
 				for(var/D in L)
-					if(amount_cache[D] >= C.required_reagents[B])
+					if(amount_cache[D] >= req_reag_amt)
 						if(!preserved_data)
 							preserved_data = get_data(D)
-						remove_reagent(D, (multiplier * C.required_reagents[B]), safety = 1)
+						remove_reagent(D, (multiplier * req_reag_amt), safety = 1)
 						break
 			else
 				if(!preserved_data)
 					preserved_data = get_data(B)
-				remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
+				remove_reagent(B, (multiplier * req_reag_amt), safety = 1)
 
 		chem_temp += C.reaction_temp_change
 
