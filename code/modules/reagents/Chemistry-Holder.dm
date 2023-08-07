@@ -498,20 +498,20 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			for(var/S in C.secondary_results)
 				add_reagent(S, C.result_amount * C.secondary_results[S] * multiplier, reagtemp = chem_temp)
 
-		var/quiet = C.quiet
-		if	(istype(my_atom, /obj/item/weapon/grenade/chem_grenade) && !quiet)
-			my_atom.visible_message("<span class='caution'>[bicon(my_atom)] Something comes out of \the [my_atom].</span>")
-			//Logging inside chem_grenade.dm, prime()
-		else if	(istype(my_atom, /mob/living/carbon/human) && !quiet)
-			my_atom.visible_message("<span class='notice'>[my_atom] shudders a little.</span>","<span class='notice'>You shudder a little.</span>")
-			//Since the are no fingerprints to be had here, we'll trust the attack logs to log this
-		else
-			if(!quiet)
-				my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
+		if(C.quiet)
 			C.log_reaction(src, created_volume)
-
-		if(!quiet && !(my_atom.flags & SILENTCONTAINER))
-			playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
+		else
+			if(istype(my_atom, /mob/living/carbon/human))
+				my_atom.visible_message("<span class='notice'>[my_atom] shudders a little.</span>","<span class='notice'>You shudder a little.</span>")
+				//Since the are no fingerprints to be had here, we'll trust the attack logs to log this
+			else if(istype(my_atom, /obj/item/weapon/grenade/chem_grenade))
+				my_atom.visible_message("<span class='caution'>[bicon(my_atom)] Something comes out of \the [my_atom].</span>")
+				//Logging inside chem_grenade.dm, prime()
+			else
+				my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
+				C.log_reaction(src, created_volume)
+			if(!(my_atom.flags & SILENTCONTAINER))
+				playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
 
 		C.on_reaction(src, created_volume)
 		if(C.react_discretely)
