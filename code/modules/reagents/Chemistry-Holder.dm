@@ -407,16 +407,15 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	do
 		reaction_occured = 0
 		for(var/R in amount_cache) // Usually a small list
-			for(var/datum/chemical_reaction/C in chemical_reactions_list[R]) // Was a big list but now it should be smaller since we filtered it with our reagent id
-				if(C)
-					switch(handle_reaction(C))
-						if(DISCRETE_REACTION)
-							any_reactions = 1
-							break
-						if(NON_DISCRETE_REACTION)
-							any_reactions = 1
-							reaction_occured = 1
-							break
+			for(var/datum/chemical_reaction/C as anything in chemical_reactions_list[R]) // Was a big list but now it should be smaller since we filtered it with our reagent id
+				switch(handle_reaction(C))
+					if(DISCRETE_REACTION)
+						any_reactions = 1
+						break
+					if(NON_DISCRETE_REACTION)
+						any_reactions = 1
+						reaction_occured = 1
+						break
 	while(reaction_occured)
 
 	if(any_reactions)
