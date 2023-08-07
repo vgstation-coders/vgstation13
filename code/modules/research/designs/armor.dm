@@ -4,7 +4,7 @@
 	id = "xcomsquaddiearmor"
 	req_tech = list(Tc_COMBAT = 4, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 5000, MAT_GLASS = 1250, MAT_PLASMA = 750)
+	materials = list(MAT_IRON = 5000, MAT_GLASS = 1250, MAT_PLASTIC = 750)
 	category = "Armor"
 	build_path = /obj/item/clothing/suit/armor/xcomsquaddie
 
@@ -14,7 +14,7 @@
 	id = "xcomoriginalarmor"
 	req_tech = list(Tc_COMBAT = 4, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 5000, MAT_GLASS = 1250, MAT_URANIUM = 750)
+	materials = list(MAT_IRON = 5000, MAT_GLASS = 1250, MAT_PLASMA = 750)
 	category = "Armor"
 	build_path = /obj/item/clothing/suit/armor/xcomarmor
 
