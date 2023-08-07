@@ -434,7 +434,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		for(var/B in C.required_catalysts)
 			if(amount_cache[B] >= C.required_catalysts[B])
 				total_required_catalysts--
-		if (total_required_catalysts)
+		if(total_required_catalysts)
 			return NO_REACTION
 
 		if(C.required_container && !istype(my_atom, C.required_container))
