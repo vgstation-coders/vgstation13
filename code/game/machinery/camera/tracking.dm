@@ -164,11 +164,7 @@
 			return FALSE
 		for(var/obj/item/I in target_mob.get_all_slots())
 			if(I.blocks_tracking)
-				if(istype(I,/obj/item/clothing))
-					if(target_mob.is_wearing_item(I,I.blocks_tracking))
-						return FALSE
-				else
-					return FALSE
+				return FALSE
 			if(target_mob.is_wearing_item(I,slot_wear_id))
 				var/obj/item/ourID = I.GetID()
 				if(ourID && ourID.blocks_tracking)

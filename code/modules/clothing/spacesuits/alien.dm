@@ -720,7 +720,7 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	body_parts_covered = FULL_HEAD|IGNORE_INV
 	species_restricted = list("Martian")
-	blocks_tracking = slot_head
+	blocks_tracking = TRUE
 	var/obj/item/weapon/tank/tank
 
 /obj/item/clothing/head/helmet/space/martian/attackby(obj/item/W,mob/user)
