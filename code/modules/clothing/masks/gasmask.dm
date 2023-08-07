@@ -104,7 +104,7 @@
 	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger,)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED,INSECT_SHAPED)
 	permeability_coefficient = 0.90
-	blocks_tracking = TRUE
+	blocks_tracking = slot_wear_mask
 	var/static/list/clothing_choices
 
 /obj/item/clothing/mask/gas/voice/New()

@@ -87,7 +87,7 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
-	var/blocks_tracking = FALSE //Blocks mind and AI tracking
+	var/blocks_tracking = FALSE //Blocks mind and AI tracking, can also specify a slot number from the defines to only block in this slot for types of /obj/item/clothing
 
 /obj/item/New()
 	..()

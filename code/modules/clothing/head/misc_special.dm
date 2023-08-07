@@ -267,7 +267,7 @@
 	item_state = "paper"
 	siemens_coefficient = 2
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
-	blocks_tracking = TRUE
+	blocks_tracking = slot_head
 
 /obj/item/clothing/head/celtic
 	name = "\improper Celtic crown"
