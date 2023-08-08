@@ -53,7 +53,7 @@
 #define THERM_DISS_SCALING_FACTOR (1/2) //Per tick thermally dissipated energy is scaled by this much.
 #define THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO 0.1 //How much reagents can change temperature in a single tick of thermal dissipation before the calculation has to be broken up to a more granular scale. 0.1 would be a temperature change of 10%
 #define THERM_DISS_MAX_PER_TICK_SLICES 100 //How many slices the thermal dissipation calculation can be divided into per tick before the calculation exits early.
-#define THERM_DISS_MAX_SAFE_TEMP 1000000000 //At temperatures beyond this limit, themral dissipation switches to a simpler calculation to avoid blowing out any values.
+#define THERM_DISS_MAX_SAFE_TEMP 1000000000 //At temperatures beyond this limit, thermal dissipation switches to a simpler calculation to avoid blowing out any values.
 
 // Fire Damage
 #define CARBON_LIFEFORM_FIRE_RESISTANCE (200+T0C)

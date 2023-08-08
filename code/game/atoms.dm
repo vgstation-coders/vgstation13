@@ -1054,9 +1054,7 @@ its easier to just keep the beam vertical.
 			if (abs(reagents.chem_temp - the_air_here.temperature) < MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
 				return
 
-			var/is_the_air_here_simulated = config.reagents_heat_air && !istype(the_air_here, /datum/gas_mixture/unsimulated)
-
-			//We treat the reagents like a spherical body with an emissivity of THERM_DISS_SCALING_FACTOR.
+			//We treat the reagents like a spherical gray body with an emissivity of THERM_DISS_SCALING_FACTOR.
 
 			var/emission_factor = THERM_DISS_SCALING_FACTOR * (SS_WAIT_THERM_DISS / (1 SECONDS)) * STEFAN_BOLTZMANN_CONSTANT * (36 * PI) ** (1/3) * (CC_PER_U / 1000) ** (2/3) * reagents.total_volume ** (2/3)
 
@@ -1080,6 +1078,8 @@ its easier to just keep the beam vertical.
 					break //Avoid infinite loops.
 
 			if (emission_factor)
+
+				var/is_the_air_here_simulated = config.reagents_heat_air && !istype(the_air_here, /datum/gas_mixture/unsimulated)
 
 				if (max(reagents.chem_temp, the_air_here.temperature) <= THERM_DISS_MAX_SAFE_TEMP)
 
