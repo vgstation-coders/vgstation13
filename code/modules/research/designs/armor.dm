@@ -2,7 +2,7 @@
 	name = "Squaddie Armor"
 	desc = "An old armor design from a shadow organization. It offers respectable protection against ballistics."
 	id = "xcomsquaddiearmor"
-	req_tech = list(Tc_COMBAT = 4, Tc_MATERIALS = 4)
+	req_tech = list(Tc_COMBAT = 3, Tc_MATERIALS = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1250, MAT_PLASTIC = 750)
 	category = "Armor"
@@ -12,7 +12,7 @@
 	name = "Personal Armor"
 	desc = "An old armor design from a shadow organization. It offers respectable protection against laser and energy weaponry."
 	id = "xcomoriginalarmor"
-	req_tech = list(Tc_COMBAT = 4, Tc_MATERIALS = 4)
+	req_tech = list(Tc_COMBAT = 3, Tc_MATERIALS = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1250, MAT_PLASMA = 750)
 	category = "Armor"
