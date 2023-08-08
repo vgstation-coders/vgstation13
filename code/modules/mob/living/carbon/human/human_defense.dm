@@ -82,6 +82,35 @@ emp_act
 		organnum++
 	return (armorval/max(organnum, 1))
 
+/mob/living/carbon/human/proc/getthermalprot(var/def_zone)
+	if(def_zone)
+		if(isorgan(def_zone))
+			return checkthermalprot(def_zone)
+		var/datum/organ/external/affecting = get_organ(ran_zone(def_zone))
+		return checkthermalprot(affecting)
+		//If a specific bodypart is targetted, check how that bodypart is protected and return the value.
+
+	//If you don't specify a bodypart, it checks ALL your bodyparts for protection, and averages out the values
+	var/thermal_prot = 0
+	var/organnum = 0
+	for(var/datum/organ/external/organ in organs)
+		thermal_prot += checkthermalprot(organ, type)
+		organnum++
+	return (thermal_prot/max(organnum, 1))
+
+/mob/living/carbon/human/proc/checkthermalprot(var/datum/organ/external/def_zone)
+	var/thermal_pass = 1 //1 means no protection, 0 means total protection
+	for(var/ci in get_clothing_items())
+		if(isitem(ci))
+			var/obj/item/C = ci
+			if(C.body_parts_covered & def_zone.body_part)
+				thermal_pass *= C.heat_conductivity
+			if(istype(C, /obj/item/clothing))
+				var/obj/item/clothing/CC = C
+				for(var/obj/item/clothing/accessory/A in CC.accessories)
+					if(A.body_parts_covered & def_zone.body_part)
+						thermal_pass *= A.heat_conductivity
+	return thermal_pass
 
 /mob/living/carbon/human/proc/get_siemens_coefficient_organ(var/datum/organ/external/def_zone)
 	if(!def_zone)
