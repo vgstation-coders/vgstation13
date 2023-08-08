@@ -9226,6 +9226,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Opium"
 	id = OPIUM
 	description = "Opium is an exceptional natural analgesic."
+	pain_resistance = 80
 	color = "#AE9260" //rgb: 174, 146, 96
 
 /datum/reagent/bicaridine/opium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
