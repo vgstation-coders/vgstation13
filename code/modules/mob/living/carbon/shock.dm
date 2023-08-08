@@ -53,4 +53,6 @@
 		return TRUE
 	if(reagents.has_reagent(OXYCODONE))
 		return TRUE
+	if(reagents.has_reagent(OPIUM))
+		return TRUE
 	return FALSE
