@@ -402,86 +402,89 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(my_atom.flags & NOREACT)
 		return //Yup, no reactions here. No siree.
 
-	var/any_reactions
-	var/reaction_occured
+	var/reaction_occured = 0
 	do
 		reaction_occured = 0
-		for(var/R in amount_cache) // Usually a small list
-			for(var/datum/chemical_reaction/C as anything in chemical_reactions_list[R]) // Was a big list but now it should be smaller since we filtered it with our reagent id
-				switch(handle_reaction(C))
-					if(DISCRETE_REACTION)
-						any_reactions = 1
-						break
-					if(NON_DISCRETE_REACTION)
-						any_reactions = 1
-						reaction_occured = 1
-						break
-	while(reaction_occured)
+		for(var/datum/reagent/R in reagent_list) // Usually a small list
+			for(var/reaction in chemical_reactions_list[R.id]) // Was a big list but now it should be smaller since we filtered it with our reagent id
+				if(!reaction)
+					continue
 
-	if(any_reactions)
-		update_total()
+				var/datum/chemical_reaction/C = reaction
+				var/reaction_result = handle_reaction(C)
+				if(reaction_result)
+					if(reaction_result == NON_DISCRETE_REACTION)
+						reaction_occured = 1
+					break
+
+	while(reaction_occured)
+	update_total()
 	return 0
 
 /datum/reagents/proc/handle_reaction(var/datum/chemical_reaction/C, var/requirement_override = FALSE, var/multiplier_override = 1)
-
-	if(!requirement_override)
-
-		if((C.required_temp && (C.is_cold_recipe ? (chem_temp > C.required_temp) : (chem_temp < C.required_temp))))
-			return NO_REACTION
-
-		var/total_required_catalysts = C.required_catalysts.len
-		for(var/B in C.required_catalysts)
-			if(amount_cache[B] >= C.required_catalysts[B])
-				total_required_catalysts--
-		if(total_required_catalysts)
-			return NO_REACTION
-
-		if(C.required_container && !istype(my_atom, C.required_container))
-			return NO_REACTION
-
-		if(!C.required_condition_check(src))
-			return NO_REACTION
-
+	var/total_required_reagents = C.required_reagents.len
+	var/total_matching_reagents = 0
+	var/total_required_catalysts = C.required_catalysts.len
+	var/total_matching_catalysts= 0
+	var/matching_container = 0
+	var/required_conditions = 0
 	var/list/multipliers = new/list()
+	var/required_temp = C.required_temp
+	var/is_cold_recipe = C.is_cold_recipe
+	var/meets_temp_requirement = 0
+	var/quiet = C.quiet
 
 	if(C.react_discretely || requirement_override)
 		multipliers += 1 //Only once
 
-	var/total_required_reagents = C.required_reagents.len
-	var/req_reag_amt
 	for(var/B in C.required_reagents)
-		req_reag_amt = C.required_reagents[B]
 		if(islist(B))
 			var/list/L = B
 			for(var/D in L)
-				if(amount_cache[D] < req_reag_amt)
+				if(!has_reagent(D, C.required_reagents[B]))
 					continue
-				total_required_reagents--
-				multipliers += round(amount_cache[D] / req_reag_amt)
+				total_matching_reagents++
+				multipliers += round(get_reagent_amount(D) / C.required_reagents[B])
 				break
 		else
-			if(amount_cache[B] < req_reag_amt)
+			if(!has_reagent(B, C.required_reagents[B]))
 				break
-			total_required_reagents--
-			multipliers += round(amount_cache[B] / req_reag_amt)
+			total_matching_reagents++
+			multipliers += round(get_reagent_amount(B) / C.required_reagents[B])
+	for(var/B in C.required_catalysts)
+		if(!has_reagent(B, C.required_catalysts[B]))
+			break
+		total_matching_catalysts++
 
-	if(!total_required_reagents || requirement_override)
+	if(!C.required_container)
+		matching_container = 1
+
+	else
+		if(istype(my_atom, C.required_container))
+			matching_container = 1
+
+	if(C.required_condition_check(src))
+		required_conditions = 1
+
+	if(required_temp == 0 || (is_cold_recipe && chem_temp <= required_temp) || (!is_cold_recipe && chem_temp >= required_temp))
+		meets_temp_requirement = 1
+
+	if((total_matching_reagents == total_required_reagents && total_matching_catalysts == total_required_catalysts && matching_container && required_conditions && meets_temp_requirement) || requirement_override)
 		var/multiplier = min(multipliers) * multiplier_override
 		var/preserved_data = null
 		for(var/B in C.required_reagents)
-			req_reag_amt = C.required_reagents[B]
 			if(islist(B))
 				var/list/L = B
 				for(var/D in L)
-					if(amount_cache[D] >= req_reag_amt)
+					if(has_reagent(D, C.required_reagents[B]))
 						if(!preserved_data)
 							preserved_data = get_data(D)
-						remove_reagent(D, (multiplier * req_reag_amt), safety = 1)
+						remove_reagent(D, (multiplier * C.required_reagents[B]), safety = 1)
 						break
 			else
 				if(!preserved_data)
 					preserved_data = get_data(B)
-				remove_reagent(B, (multiplier * req_reag_amt), safety = 1)
+				remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
 
 		chem_temp += C.reaction_temp_change
 
@@ -497,20 +500,19 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			for(var/S in C.secondary_results)
 				add_reagent(S, C.result_amount * C.secondary_results[S] * multiplier, reagtemp = chem_temp)
 
-		if(C.quiet)
-			C.log_reaction(src, created_volume)
+		if	(istype(my_atom, /obj/item/weapon/grenade/chem_grenade) && !quiet)
+			my_atom.visible_message("<span class='caution'>[bicon(my_atom)] Something comes out of \the [my_atom].</span>")
+			//Logging inside chem_grenade.dm, prime()
+		else if	(istype(my_atom, /mob/living/carbon/human) && !quiet)
+			my_atom.visible_message("<span class='notice'>[my_atom] shudders a little.</span>","<span class='notice'>You shudder a little.</span>")
+			//Since the are no fingerprints to be had here, we'll trust the attack logs to log this
 		else
-			if(istype(my_atom, /mob/living/carbon/human))
-				my_atom.visible_message("<span class='notice'>[my_atom] shudders a little.</span>","<span class='notice'>You shudder a little.</span>")
-				//Since the are no fingerprints to be had here, we'll trust the attack logs to log this
-			else if(istype(my_atom, /obj/item/weapon/grenade/chem_grenade))
-				my_atom.visible_message("<span class='caution'>[bicon(my_atom)] Something comes out of \the [my_atom].</span>")
-				//Logging inside chem_grenade.dm, prime()
-			else
+			if(!quiet)
 				my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
-				C.log_reaction(src, created_volume)
-			if(!(my_atom.flags & SILENTCONTAINER))
-				playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
+			C.log_reaction(src, created_volume)
+
+		if(!quiet && !(my_atom.flags & SILENTCONTAINER))
+			playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
 
 		C.on_reaction(src, created_volume)
 		if(C.react_discretely)
@@ -750,11 +752,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /**************************************
  *  RETURNS A BOOL NOW, USE get_reagent IF YOU NEED TO GET ONE.
  **************************************/
-/datum/reagents/proc/has_reagent(var/reagent, var/amount = 0)
+/datum/reagents/proc/has_reagent(var/reagent, var/amount = -1)
 	// N3X: Caching shit.
 	// Only cache if not using get (since we only track bools)
-	var/amount_in_cache = amount_cache[reagent]
-	return amount_in_cache ? amount_in_cache >= amount : 0
+	if(reagent in amount_cache)
+		return amount_cache[reagent] >= max(0,amount)
+	return 0
 
 /datum/reagents/proc/has_only_any(list/good_reagents)
     var/found_any_good_reagent = FALSE
@@ -813,7 +816,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return 0
 
 /datum/reagents/proc/get_reagent_amount(var/reagent)
-	return amount_cache[reagent] + 0 //Convert null to 0.
+	for(var/A in reagent_list)
+		var/datum/reagent/R = A
+		if (R.id == reagent)
+			return R.volume
+
+	return 0
 
 /datum/reagents/proc/get_reagents()
 	var/res = ""
