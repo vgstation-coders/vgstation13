@@ -18,6 +18,16 @@
 	category = "Armor"
 	build_path = /obj/item/clothing/suit/armor/xcomarmor
 
+/datum/design/xcomoriginalarmor_helmet
+	name = "Personal Armor Helmet"
+	desc = "An old armored balaclava design from a shadow organization. It offers respectable protection against laser and energy weaponry."
+	id = "xcomoriginalarmor_helmet"
+	req_tech = list(Tc_COMBAT = 3, Tc_MATERIALS = 3)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 1750, MAT_GLASS = 500)
+	category = "Armor"
+	build_path = /obj/item/clothing/head/helmet/xcom
+
 /*
 /datum/design/security_hud
 	name = "Security HUD"
