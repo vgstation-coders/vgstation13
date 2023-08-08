@@ -3,6 +3,7 @@
 var/const/TOUCH = 1
 var/const/INGEST = 2
 
+#define NO_REACTION_UNMET_TEMP_COND -1
 #define NO_REACTION 0
 #define NON_DISCRETE_REACTION 1
 #define DISCRETE_REACTION 2
@@ -19,6 +20,7 @@ var/const/INGEST = 2
 	var/chem_temp = T20C
 	var/obscured = FALSE
 	var/total_thermal_mass = 0
+	var/skip_flags = 0 //Flags for skipping certain calculations where unnecessary. See __DEFINES/reagents.dm.
 
 /datum/reagents/New(maximum=100)
 	maximum_volume = maximum
@@ -423,12 +425,40 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		update_total()
 	return 0
 
+/datum/reagents/proc/handle_reactions_heating() //Same as handle_reactions() except with checks to avoid rechecking all of the reactions when it's already been determined that there are no reactions that could occur with these reagents with temperature change alone.
+	if (skip_flags & SKIP_RXN_CHECK_ON_HEATING)
+		return
+	if(!my_atom)
+		return //sanity check
+	if(my_atom.flags & NOREACT)
+		return //Yup, no reactions here. No siree.
+
+	var/any_reactions
+	var/reaction_occured
+	skip_flags |= SKIP_RXN_CHECK_ON_HEATING
+	do
+		reaction_occured = 0
+		for(var/R in amount_cache) // Usually a small list
+			for(var/datum/chemical_reaction/C as anything in chemical_reactions_list[R]) // Was a big list but now it should be smaller since we filtered it with our reagent id
+				switch(handle_reaction(C))
+					if(DISCRETE_REACTION)
+						any_reactions = 1
+						break
+					if(NON_DISCRETE_REACTION)
+						any_reactions = 1
+						reaction_occured = 1
+						break
+					if(NO_REACTION_UNMET_TEMP_COND)
+						skip_flags &= !SKIP_RXN_CHECK_ON_HEATING
+	while(reaction_occured)
+
+	if(any_reactions)
+		update_total()
+	return 0
+
 /datum/reagents/proc/handle_reaction(var/datum/chemical_reaction/C, var/requirement_override = FALSE, var/multiplier_override = 1)
 
 	if(!requirement_override)
-
-		if((C.required_temp && (C.is_cold_recipe ? (chem_temp > C.required_temp) : (chem_temp < C.required_temp))))
-			return NO_REACTION
 
 		var/total_required_catalysts = C.required_catalysts.len
 		for(var/B in C.required_catalysts)
@@ -467,6 +497,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			multipliers += round(amount_cache[B] / req_reag_amt)
 
 	if(!total_required_reagents || requirement_override)
+
+		if((C.required_temp && (C.is_cold_recipe ? (chem_temp > C.required_temp) : (chem_temp < C.required_temp))) && !requirement_override) //If everything other than the temperature conditions are met.
+			return NO_REACTION_UNMET_TEMP_COND
+
 		var/multiplier = min(multipliers) * multiplier_override
 		var/preserved_data = null
 		for(var/B in C.required_reagents)
@@ -941,7 +975,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		chem_temp = min(chem_temp + temp_change, received_temperature)
 	else
 		chem_temp = max(chem_temp + temp_change, received_temperature, 0)
-	handle_reactions()
+	handle_reactions_heating()
 
 /datum/reagents/proc/get_examine(var/mob/user, var/vis_override, var/blood_type)
 	if(obscured && !vis_override)
@@ -1043,6 +1077,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	return add_reagent(reagent_id, total_amount_converted)
 
+#undef NO_REACTION_UNMET_TEMP_COND
 #undef NO_REACTION
 #undef NON_DISCRETE_REACTION
 #undef DISCRETE_REACTION
