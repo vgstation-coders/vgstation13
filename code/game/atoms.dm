@@ -1061,10 +1061,9 @@ its easier to just keep the beam vertical.
 				//We treat the reagents like a spherical black body.
 
 				var/emission_factor = THERM_DISS_SCALING_FACTOR * (SS_WAIT_THERM_DISS / (1 SECONDS)) * STEFAN_BOLTZMANN_CONSTANT * (36 * PI) ** (1/3) * (CC_PER_U / 1000) ** (2/3) * reagents.total_volume ** (2/3)
-				var/energy_to_radiate_from_reagents_to_air = emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4)
 
 				//Here we reduce thermal transfer to account for insulation of the container.
-				//We iterate though each loc until the loc is the turf containing the_air_here, to account for things like nested containers, each time multiplying energy_to_radiate_from_reagents_to_air by a factor than can range between [0 and 1], representing heat insulation.
+				//We iterate though each loc until the loc is the turf containing the_air_here, to account for things like nested containers, each time multiplying emission_factor by a factor than can range between [0 and 1], representing heat insulation.
 
 				var/atom/this_potentially_insulative_layer = src
 				var/i = 0
@@ -1086,6 +1085,7 @@ its easier to just keep the beam vertical.
 
 				//If the reagents temperature would change by more than a certain percentage in a single tick, we do a more granular calculation to avoid overshooting.
 
+				var/energy_to_radiate_from_reagents_to_air = emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4)
 				var/abs_chem_temp_change_ratio = abs(energy_to_radiate_from_reagents_to_air * reagents_thermal_mass_reciprocal / reagents.chem_temp)
 
 				if (abs_chem_temp_change_ratio > THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO)
@@ -1094,7 +1094,7 @@ its easier to just keep the beam vertical.
 					for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
 						radiate_reagents_heat_to_air(emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4), the_air_here, reagents_thermal_mass_reciprocal, is_the_air_here_simulated)
 				else
-					radiate_reagents_heat_to_air(emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4), the_air_here, reagents_thermal_mass_reciprocal, is_the_air_here_simulated)
+					radiate_reagents_heat_to_air(energy_to_radiate_from_reagents_to_air, the_air_here, reagents_thermal_mass_reciprocal, is_the_air_here_simulated)
 
 			else //At extreme temperatures, we simply equalize the temperatures to avoid blowing out any values.
 				var/air_thermal_mass = the_air_here.heat_capacity()
