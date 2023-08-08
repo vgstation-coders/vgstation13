@@ -347,12 +347,12 @@ var/global/objects_thrown_when_explode = FALSE
 		var/mob/living/carbon/human/H = examiner
 		temperature_delta *= (H.gloves ? H.gloves.heat_conductivity : 1)
 	var/safetemp_excursion = examiner.get_safe_temperature_excursion(examiner.bodytemperature + temperature_delta)
-	if (!examiner.feels_pain() || examiner.has_painkillers()) //todo: reorder?
+	if (!examiner.feels_pain() || examiner.has_painkillers())
 		safetemp_excursion = 0
 	else if(safetemp_excursion > 0)
 		safetemp_excursion = min(ceil(safetemp_excursion / HEAT_LEVEL_SPAN), 3)
 	else if (safetemp_excursion < 0)
-		safetemp_excursion = max(round(safetemp_excursion / HEAT_LEVEL_SPAN), -3)  //todo: tune these
+		safetemp_excursion = max(round(safetemp_excursion / HEAT_LEVEL_SPAN), -3)
 	switch (safetemp_excursion)
 		if (0)
 			if (temperature_delta >= HEAT_LEVEL_SPAN)
