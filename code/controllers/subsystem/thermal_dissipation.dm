@@ -7,7 +7,9 @@ var/list/thermal_dissipation_atoms = list()
 	flags         = SS_KEEP_TIMING
 	priority      = SS_PRIORITY_THERM_DISS
 	display_order = SS_DISPLAY_THERM_DISS
+
 	var/list/currentrun
+	var/atom/A //The atom currently being processed by the subsystem.
 
 /datum/subsystem/thermal_dissipation/New()
 	NEW_SS_GLOBAL(SStd)
@@ -27,7 +29,7 @@ var/list/thermal_dissipation_atoms = list()
 		currentrun = thermal_dissipation_atoms.Copy()
 
 	while (currentrun.len)
-		var/atom/A = currentrun[currentrun.len]
+		A = currentrun[currentrun.len]
 		currentrun.len--
 
 		if (!A || A.gcDestroyed || A.timestopped)

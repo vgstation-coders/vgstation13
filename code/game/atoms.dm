@@ -1094,15 +1094,21 @@ its easier to just keep the beam vertical.
 						var/air_thermal_mass = the_air_here.heat_capacity()
 						var/slices = ceil((1 / THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO) * abs_chem_temp_change_ratio)
 						emission_factor /= slices
-						for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
-							radiate_reagents_heat_to_air(emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4), the_air_here, reagents_thermal_mass_reciprocal, air_thermal_mass, is_the_air_here_simulated)
+//						for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+//							radiate_reagents_heat_to_air(emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4), the_air_here, reagents_thermal_mass_reciprocal, air_thermal_mass, is_the_air_here_simulated)
+						if (is_the_air_here_simulated)
+							for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+								radiate_reagents_heat_to_simulated_air(emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4), the_air_here, reagents_thermal_mass_reciprocal, air_thermal_mass)
+						else
+							for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+								reagents.chem_temp -= emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4) * reagents_thermal_mass_reciprocal
 
 					else
 						radiate_reagents_heat_to_air(energy_to_radiate_from_reagents_to_air, the_air_here, reagents_thermal_mass_reciprocal, the_air_here.heat_capacity(), is_the_air_here_simulated)
 
 				else //At extreme temperatures, we simply equalize the temperatures to avoid blowing out any values.
 					var/air_thermal_mass = the_air_here.heat_capacity()
-					reagents.chem_temp = (reagents.total_thermal_mass * reagents.chem_temp) + (air_thermal_mass * the_air_here.temperature) / (reagents.total_thermal_mass + air_thermal_mass)
+					reagents.chem_temp = (reagents.total_thermal_mass * reagents.chem_temp + air_thermal_mass * the_air_here.temperature) / (reagents.total_thermal_mass + air_thermal_mass)
 					if (is_the_air_here_simulated)
 						the_air_here.temperature = max(TCMB, reagents.chem_temp)
 
@@ -1116,6 +1122,13 @@ its easier to just keep the beam vertical.
 	if (reagents.chem_temp < TCMB)
 		reagents.chem_temp = TCMB
 		message_admins("[src]'s radiate_reagents_heat_to_air() tried to set its reagents temperature below [TCMB] K.")
+
+//Same as radiate_reagents_heat_to_air() except assuming the air is simulated to avoid rechecking.
+/atom/proc/radiate_reagents_heat_to_simulated_air(energy_amount, datum/gas_mixture/G, reagents_thermal_mass_reciprocal, air_thermal_mass)
+	reagents.chem_temp -= G.add_thermal_energy_hc_known(energy_amount, TCMB, air_thermal_mass) * reagents_thermal_mass_reciprocal
+	if (reagents.chem_temp < TCMB)
+		reagents.chem_temp = TCMB
+		message_admins("[src]'s radiate_reagents_heat_to_simulated_air() tried to set its reagents temperature below [TCMB] K.")
 
 /atom/proc/heat_dissipation_updates()
 	if (src in thermal_dissipation_atoms)
