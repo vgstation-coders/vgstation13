@@ -216,7 +216,7 @@
 "O" = (
 /obj/structure/safe/floor{
 	name = "secret satellite stash";
-	desc = "A huge chunk of metal with a dial embedded in it. Fine print on the dial reads \"Scarborough Arms - 2 tumbler safe, guaranteed thermite resistant, explosion resistant, and assistant resistant.\". <b>This one has the absolsute motherlode of syndicate treasure!</b>"
+	desc = "A huge chunk of metal with a dial embedded in it. Fine print on the dial reads \"Gorlex Arms - 2 tumbler safe, guaranteed thermite resistant, explosion resistant, and Nanotrasen resistant. Contains roughly 160 telecrystals worth of syndicate equipment.\""
 	},
 /obj/item/toy/syndicateballoon,
 /obj/item/toy/syndicateballoon,
@@ -225,6 +225,8 @@
 /obj/item/toy/syndicateballoon,
 /obj/item/toy/syndicateballoon,
 /obj/item/toy/syndicateballoon,
+/obj/item/toy/syndicateballoon,
+/obj/abstract/map/spawner/safe/syndicate,
 /turf/simulated/floor/engine/plated,
 /area/vault/advanced_pocketsat)
 "P" = (

@@ -86,3 +86,15 @@
 /obj/machinery/computer/arcade/syndicate/New()
 	. = ..()
 	emag_act()
+
+/obj/abstract/map/spawner/safe/syndicate
+	name = "syndicate balloon"
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "syndballoon"
+	chance = 1
+	to_spawn = list(
+		/obj/item/weapon/gun/gatling,
+		/obj/item/weapon/gun/energy/gatling,
+		/obj/item/weapon/gun/projectile/rocketlauncher/nikita,
+		/obj/item/weapon/gun/projectile/hecate
+		)
