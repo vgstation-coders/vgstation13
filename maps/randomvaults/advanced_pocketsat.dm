@@ -91,7 +91,7 @@
 /obj/structure/safe/floor/advanced_pocketsat/New()
 	..()
 	for(var/i in 1 to 8)
-		if(i == 8 && prob(1))
+		if(i == 7 && prob(1))
 			var/to_spawn = pick(list(
 				/obj/item/weapon/gun/gatling,
 				/obj/item/weapon/gun/energy/gatling,
@@ -100,5 +100,6 @@
 				/obj/item/weapon/gun/projectile/hecate,
 				))
 			new to_spawn(src)
+			return
 		else
 			new /obj/item/toy/syndicateballoon(src)
