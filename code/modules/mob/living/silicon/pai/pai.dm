@@ -77,6 +77,8 @@
 		"Inaprovaline" = INAPROVALINE,
 		"Coffee" = COFFEE,
 		"Tea" = TEA,
+		"Cola" = COLA
+		"Beer" = BEER
 		"Salt" = SODIUMCHLORIDE,
 		"Smoke" = PAISMOKE,
 	)
