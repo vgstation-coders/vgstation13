@@ -90,16 +90,15 @@
 
 /obj/structure/safe/floor/advanced_pocketsat/New()
 	..()
-	for(var/i in 1 to 7)
-		new /obj/item/toy/syndicateballoon(src)
-	if(prob(1))
-		var/to_spawn = pick(list(
-			/obj/item/weapon/gun/gatling,
-			/obj/item/weapon/gun/energy/gatling,
-			/obj/effect/spawner/newbomb/timer,
-			/obj/item/weapon/gun/projectile/rocketlauncher/nikita,
-			/obj/item/weapon/gun/projectile/hecate,
-			))
-		new to_spawn(src)
-	else
-		new /obj/item/toy/syndicateballoon(src)
+	for(var/i in 1 to 8)
+		if(i == 8 && prob(1))
+			var/to_spawn = pick(list(
+				/obj/item/weapon/gun/gatling,
+				/obj/item/weapon/gun/energy/gatling,
+				/obj/effect/spawner/newbomb/timer,
+				/obj/item/weapon/gun/projectile/rocketlauncher/nikita,
+				/obj/item/weapon/gun/projectile/hecate,
+				))
+			new to_spawn(src)
+		else
+			new /obj/item/toy/syndicateballoon(src)
