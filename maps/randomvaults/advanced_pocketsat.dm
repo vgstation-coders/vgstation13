@@ -52,6 +52,11 @@
 	if(locate(/obj/item/toy/syndicateballoon) in user.held_items)
 		grant_access()
 		return TRUE
+	var/obj/item/ID = user.get_item_by_slot(slot_wear_id)
+	ID = ID.GetID()
+	if(istype(ID),/obj/item/weapon/card/id/syndicate)
+		grant_access()
+		return TRUE
 	return FALSE
 
 /obj/machinery/door/airlock/external/adv_pocketsat_entrance/proc/say_phrase()
