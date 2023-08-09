@@ -29,6 +29,7 @@
 	var/wrapped = 0 //Is the food wrapped (preventing one from eating until unwrapped)
 	var/dried_type = null //What can we dry the food into
 	var/deepfried = 0 //Is the food deep-fried ?
+	var/harmfultocorgis = 0 //Is it harmful for corgis to eat?
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
 	var/list/random_filling_colors = list()
 	var/plate_offset_y = 0
@@ -565,20 +566,36 @@
 /obj/item/weapon/reagent_containers/food/snacks/attack_animal(mob/M)
 	if(isanimal(M))
 		if(iscorgi(M)) //Feeding food to a corgi
+			var/mob/living/simple_animal/corgi/C = M
 			M.delayNextAttack(10)
 			if(bitecount >= ANIMALBITECOUNT) //This really, really shouldn't be hardcoded like this, but sure I guess
 				M.visible_message("[M] [pick("burps from enjoyment", "yaps for more", "woofs twice", "looks at the area where \the [src] was")].", "<span class='notice'>You swallow up the last of \the [src].")
 				playsound(src.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
-				var/mob/living/simple_animal/corgi/C = M
-				if(C.health <= C.maxHealth + 5)
-					C.health += 5
+				for(var/datum/reagent/R in reagents.reagent_list)
+					R.reaction_animal(M)
+				if(!harmfultocorgis)
+					if(C.health <= C.maxHealth + 5)
+						C.health += 5
+					else
+						C.health = C.maxHealth
 				else
-					C.health = C.maxHealth
+					C.health -= 5
 				qdel(src)
 			else
 				M.visible_message("[M] takes a bite of \the [src].", "<span class='notice'>You take a bite of \the [src].</span>")
 				playsound(src.loc,'sound/items/eatfood.ogg', rand(10, 50), 1)
+				for(var/datum/reagent/R in reagents.reagent_list)
+					R.reaction_animal(M)
 				bitecount++
+				if(harmfultocorgis)
+					C.health -= 5
+					if(prob(10))
+						if(istype(M.loc, /turf/simulated))
+							var/turf/simulated/T = M.loc
+							T.add_vomit_floor(M, 1, 0, 1)
+						M.Stun(5)
+						M.visible_message("<span class='warning'>[M] throws up!</span>","<span class='danger'>You throw up!</span>")
+						playsound(M.loc, 'sound/effects/splat.ogg', 50, 1)
 		else if(ismouse(M)) //Mouse eating shit
 			M.delayNextAttack(10)
 			var/mob/living/simple_animal/mouse/N = M
@@ -2142,7 +2159,7 @@
 	reagents.add_reagent(TOXICWASTE, 8)
 	reagents.add_reagent(BUSTANUT, 2) //YOU FEELIN HARDCORE BRAH?
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/dangles
 	name = "Dangles"
 	desc = "Once you pop, you'll wish you stopped."
@@ -4988,7 +5005,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot
 	name = "Hot Chips"
 	desc = "Don't get the dust in your eyes!"

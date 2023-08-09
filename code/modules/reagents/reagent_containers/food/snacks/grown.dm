@@ -344,6 +344,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "Nutritious!"
 	filling_color = "#A332AD"
 	plantname = "grapes"
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes
 	name = "bunch of green grapes"
@@ -351,6 +352,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 25
 	filling_color = "#A6FFA3"
 	plantname = "greengrapes"
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/peanut
 	name = "peanut"
@@ -1013,6 +1015,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	icon = 'icons/obj/hydroponics/avocado.dmi'
 	filling_color = "#EAE791"
 	plantname = "avocado"
+	harmfultocorgis = TRUE
 	var/cant_eat_msg = "'s skin is much too tough to chew."
 	var/cut = FALSE
 
