@@ -83,14 +83,23 @@
 	. = ..()
 	emag_act()
 
-/obj/abstract/map/spawner/safe/syndicate
-	name = "syndicate balloon"
-	icon = 'icons/obj/weapons.dmi'
-	icon_state = "syndballoon"
-	chance = 1
-	to_spawn = list(
-		/obj/item/weapon/gun/gatling,
-		/obj/item/weapon/gun/energy/gatling,
-		/obj/item/weapon/gun/projectile/rocketlauncher/nikita,
-		/obj/item/weapon/gun/projectile/hecate
-		)
+/obj/structure/safe/floor/advanced_pocketsat
+	name = "secret satellite stash"
+	desc = "A huge chunk of metal with a dial embedded in it. Fine print on the dial reads \"Gorlex Arms - 2 tumbler safe, guaranteed thermite resistant, explosion resistant, and Nanotrasen resistant. Contains roughly 160 telecrystals worth of syndicate equipment.\""
+	color = "#ff0000"
+
+/obj/structure/safe/floor/advanced_pocketsat/New()
+	..()
+	for(var/i in 1 to 7)
+		new /obj/item/toy/syndicateballoon(src)
+	if(prob(1))
+		var/to_spawn = pick(list(
+			/obj/item/weapon/gun/gatling,
+			/obj/item/weapon/gun/energy/gatling,
+			/obj/effect/spawner/newbomb/timer,
+			/obj/item/weapon/gun/projectile/rocketlauncher/nikita,
+			/obj/item/weapon/gun/projectile/hecate,
+			))
+		new to_spawn(src)
+	else
+		new /obj/item/toy/syndicateballoon(src)

@@ -49,7 +49,6 @@
 /area/vault/advanced_pocketsat)
 "i" = (
 /obj/structure/flora/pottedplant/random,
-/obj/abstract/map/spawner/maint,
 /turf/simulated/floor/engine/plated{
 	icon_state = "dark"
 	},
@@ -214,19 +213,7 @@
 /turf/simulated/floor/engine/plated,
 /area/vault/advanced_pocketsat)
 "O" = (
-/obj/structure/safe/floor{
-	name = "secret satellite stash";
-	desc = "A huge chunk of metal with a dial embedded in it. Fine print on the dial reads \"Gorlex Arms - 2 tumbler safe, guaranteed thermite resistant, explosion resistant, and Nanotrasen resistant. Contains roughly 160 telecrystals worth of syndicate equipment.\""
-	},
-/obj/item/toy/syndicateballoon,
-/obj/item/toy/syndicateballoon,
-/obj/item/toy/syndicateballoon,
-/obj/item/toy/syndicateballoon,
-/obj/item/toy/syndicateballoon,
-/obj/item/toy/syndicateballoon,
-/obj/item/toy/syndicateballoon,
-/obj/item/toy/syndicateballoon,
-/obj/abstract/map/spawner/safe/syndicate,
+/obj/structure/safe/floor/advanced_pocketsat,
 /turf/simulated/floor/engine/plated,
 /area/vault/advanced_pocketsat)
 "P" = (
