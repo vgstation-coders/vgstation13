@@ -16,16 +16,7 @@
 
 /obj/machinery/door/airlock/external/adv_pocketsat_entrance/New()
 	..()
-	var/static/list/potential_codewords = list("love","hate","anger","peace","pride","sympathy","bravery","loyalty","honesty","integrity","compassion",
-										"charity","success","courage","deceit","skill","beauty","brilliance","pain","misery","beliefs","dreams",
-										"justice","truth","faith","liberty","knowledge","thought","information","culture","trust","dedication",
-										"progress","education","hospitality","leisure","trouble","friendships", "relaxation",
-										"vodka and tonic","gin fizz","bahama mama","manhattan","black Russian","whiskey soda","long island tea",
-										"margarita","Irish coffee"," manly dwarf","Irish cream","doctor's delight","Beepsky Smash","tequila sunrise",
-										"brave bull","gargle blaster","bloody mary","whiskey cola","white Russian","vodka martini","martini",
-										"Cuba libre","kahlua","vodka","wine","moonshine")
-	for(var/i in 1 to 3)
-		codewords += list(pick_n_take(potential_codewords))
+	codewords = generate_code_phrase()
 	update_icon()
 
 /obj/machinery/door/airlock/external/adv_pocketsat_entrance/hitby(atom/movable/AM)
@@ -54,7 +45,7 @@
 		return TRUE
 	var/obj/item/ID = user.get_item_by_slot(slot_wear_id)
 	ID = ID.GetID()
-	if(istype(ID),/obj/item/weapon/card/id/syndicate)
+	if(istype(ID,/obj/item/weapon/card/id/syndicate))
 		grant_access()
 		return TRUE
 	return FALSE
