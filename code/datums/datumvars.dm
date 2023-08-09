@@ -41,7 +41,7 @@
 
 		#ifdef VARSICON
 		if (A.icon)
-			body += "<li>"+debug_variable("icon", new/icon(A.icon, A.icon_state, A.dir), 0)+"<\li>"
+			body += "<li>"+debug_variable("icon", new/icon(A.icon, A.icon_state, A.dir))+"<\li>"
 		#endif
 
 	var/sprite
@@ -184,7 +184,7 @@
 	names = sortList(names)
 
 	for (var/V in names)
-		body += "<li>"+debug_variable(V, D.vars[V], 0, D)+"</li>"
+		body += "<li>"+debug_variable(V, D.vars[V], list(D.vars), D)+"</li>"
 
 	body += "</ul>"
 	body = jointext(body,"")
@@ -346,7 +346,7 @@ function loadPage(list) {
 
 	usr << browse(html, "window=variables\ref[D];size=475x650")
 
-/client/proc/debug_variable(name, value, level, var/datum/DA = null)
+/client/proc/debug_variable(name, value, list/searched, var/datum/DA = null)
 	var/html = ""
 
 	var/prefix = name ? "[name] = " : ""
@@ -398,22 +398,23 @@ function loadPage(list) {
 		var/list/L = value
 		html += "[prefix]/list ([L.len])"
 
-		var/typeid = copytext(ref(L), 4, -7) //There are several internal "lists" that do not behave like regular lists. Like all internal types, they are distinguishable by the beginnings of their refs.
-		// f - Normal lists, and also locs for some reason, but it's fine.
-		//1c - contents
-		//2d - vars
-		//34 - overlays
-		//35 - underlays
-
-		if (L.len > 0 && !(typeid == "2d" || typeid == "34" || typeid == "35" || L.len > 500))
+		if (L.len > 0 && L.len <= 500 && !(L in searched))
 			// not sure if this is completely right...
 			html += "<ul>"
 			var/index = 1
 			for (var/entry in L)
-				if(!(typeid == "1c") && !isnum(entry) && !isnull(L[entry]))
-					html += "<li>[index]. " + debug_variable(entry, L[entry], level + 1)
+				var/assoc
+				if(!isnum(entry))
+					try //Certain wacky builtin lists will runtime on attempted associative access
+						assoc = L[entry]
+					catch
+						//Do nothing
+
+				if(!isnull(assoc))
+					html += "<li>[index]. " + debug_variable(entry, assoc, searched + list(L))
 				else
-					html += "<li>[index]. " + debug_variable(null, entry, level + 1)
+					html += "<li>[index]. " + debug_variable(null, entry, searched + list(L))
+
 				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a></li>"
 				index++
 			html += "</ul>"
