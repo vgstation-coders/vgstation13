@@ -32,10 +32,27 @@ var/list/thermal_dissipation_atoms = list()
 		A = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!A || A.gcDestroyed || A.timestopped)
-			continue
-
-		A.handle_thermal_dissipation()
+		if (config.thermal_dissipation && A && !A.gcDestroyed && !A.timestopped)
+			A.handle_thermal_dissipation()
 
 		if (MC_TICK_CHECK)
 			return
+
+/client/proc/configThermDiss()
+	set name = "Thermal Config"
+	set category = "Debug"
+
+	. = alert("Thermal dissipation:", , "Full", "Reagents Only", "Off")
+	switch (.)
+		if ("Full")
+			config.thermal_dissipation = TRUE
+			config.reagents_heat_air = TRUE
+		if ("Reagents Only")
+			config.thermal_dissipation = TRUE
+			config.reagents_heat_air = FALSE
+		if ("Off")
+			config.thermal_dissipation = FALSE
+			config.reagents_heat_air = FALSE
+
+	log_admin("[key_name(usr)] set thermal dissipation to [.].")
+	message_admins("[key_name(usr)] set thermal dissipation to [.].")

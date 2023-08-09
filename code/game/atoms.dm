@@ -1112,7 +1112,9 @@ its easier to just keep the beam vertical.
 					if (is_the_air_here_simulated)
 						the_air_here.temperature = max(TCMB, reagents.chem_temp)
 
-				reagents.handle_reactions_heating()
+				if(reagents.skip_flags & SKIP_RXN_CHECK_ON_HEATING)
+					return
+				reagents.handle_reactions()
 
 /atom/proc/radiate_reagents_heat_to_air(energy_amount, datum/gas_mixture/G, reagents_thermal_mass_reciprocal, air_thermal_mass, air_is_simulated = TRUE)
 	if (air_is_simulated)

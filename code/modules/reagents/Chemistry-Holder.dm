@@ -407,40 +407,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	var/any_reactions
 	var/reaction_occured
+	skip_flags = ALL
 	do
 		reaction_occured = 0
 		for(var/R in amount_cache) // Usually a small list
 			for(var/datum/chemical_reaction/C as anything in chemical_reactions_list[R]) // Was a big list but now it should be smaller since we filtered it with our reagent id
 				switch(handle_reaction(C))
-					if(DISCRETE_REACTION)
-						any_reactions = 1
-						break
-					if(NON_DISCRETE_REACTION)
-						any_reactions = 1
-						reaction_occured = 1
-						break
-	while(reaction_occured)
-
-	if(any_reactions)
-		update_total()
-	return 0
-
-/datum/reagents/proc/handle_reactions_heating() //Same as handle_reactions() except with checks to avoid rechecking all of the reactions when it's already been determined that there are no reactions that could occur with these reagents with temperature change alone.
-	if (skip_flags & SKIP_RXN_CHECK_ON_HEATING)
-		return
-	if(!my_atom)
-		return //sanity check
-	if(my_atom.flags & NOREACT)
-		return //Yup, no reactions here. No siree.
-
-	var/any_reactions
-	var/reaction_occured
-	skip_flags |= SKIP_RXN_CHECK_ON_HEATING
-	do
-		reaction_occured = 0
-		for(var/R in amount_cache) // Usually a small list
-			for(var/datum/chemical_reaction/C as anything in chemical_reactions_list[R]) // Was a big list but now it should be smaller since we filtered it with our reagent id
-				switch(handle_reaction(C))
+					if(NO_REACTION)
+						continue
 					if(DISCRETE_REACTION)
 						any_reactions = 1
 						break
@@ -975,7 +949,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		chem_temp = min(chem_temp + temp_change, received_temperature)
 	else
 		chem_temp = max(chem_temp + temp_change, received_temperature, 0)
-	handle_reactions_heating()
+	if(skip_flags & SKIP_RXN_CHECK_ON_HEATING)
+		return
+	handle_reactions()
 
 /datum/reagents/proc/get_examine(var/mob/user, var/vis_override, var/blood_type)
 	if(obscured && !vis_override)
