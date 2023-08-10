@@ -285,7 +285,8 @@ Class Procs:
 		power_area = get_area(src)
 		if(power_area && powered(chan, null, power_area)) //no point in trying if we don't have power
 			power_area.use_power(amount, chan)
-		return 0
+		else
+			return 0
 
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag
