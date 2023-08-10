@@ -168,6 +168,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		for(var/datum/data/record/t in data_core.locked)//Look in data core locked.
 			if(t.fields["name"] == user.name)
 				colored_holo = getHologramIcon(t.fields["image"])
+				break
 	if(!colored_holo)
 		CRASH("Somehow could not find an icon for the AI or person on [src]")
 	colored_holo.ColorTone(holocolor)
@@ -190,6 +191,12 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			if(ol.loc == src)
 				ol.icon_state = "holopad1"
 				break
+
+	if(source)
+		source.scanray = new(T)
+		var/icon/colored_ray = getFlatIcon(source.scanray)
+		colored_ray.ColorTone(holocolor)
+		source.scanray.icon = colored_ray
 
 	return 1
 
@@ -254,6 +261,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		spawn(5)
 			qdel(H)//Get rid of hologram.
 	if(source)
+		QDEL_NULL(source.scanray)
 		source.target = null
 		source = null
 	return 1
@@ -350,6 +358,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	active_power_usage = 100
 	var/obj/effect/overlay/hologram/holo 	//The projection itself. If there is one, the instrument is on, off otherwise.
 	var/obj/effect/overlay/holoray/ray		//The link between the projection and the projector.
+	var/obj/effect/overlay/holoray/scanray	//For scanning someone to project.
 	var/advancedholo = FALSE				//are we projecting an advanced hologram? (malf AI)
 
 /obj/machinery/hologram/power_change()
