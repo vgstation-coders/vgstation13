@@ -96,7 +96,7 @@
 	var/static/list/trinkets_gadget = list(/obj/item/device/radio, /obj/item/device/radio/headset, /obj/item/device/pda, /obj/item/device/t_scanner, /obj/item/device/t_scanner/advanced, /obj/item/device/healthanalyzer, /obj/item/device/gps, /obj/item/device/lightreplacer, /obj/item/device/flash, /obj/item/device/flash/synthetic, /obj/item/device/analyzer, /obj/item/device/antibody_scanner, /obj/item/device/camera, /obj/item/device/robotanalyzer, /obj/item/device/taperecorder, /obj/item/device/reagent_scanner/adv, /obj/item/device/megaphone, /obj/item/device/device_analyser, /obj/item/device/flashlight, /obj/item/device/multitool, /obj/item/device/hailer, /obj/item/weapon/hand_tele, /obj/item/weapon/pinpointer, /obj/item/weapon/cell/crap, /obj/item/weapon/barcodescanner, /obj/item/weapon/autopsy_scanner, /obj/item/beacon, /obj/item/device/debugger, /obj/item/device/mining_scanner, /obj/item/device/detective_scanner, /obj/item/device/instrument/instrument_synth, /obj/item/device/geiger_counter)
 	var/static/list/trinkets_widget = list(/obj/item/tool/wirecutters, /obj/item/tool/wirecutters/clippers, /obj/item/weapon/switchtool, /obj/item/weapon/switchtool/engineering, /obj/item/weapon/switchtool/surgery, /obj/item/weapon/switchtool/switchblade, /obj/item/tool/solder, /obj/item/tool/scalpel, /obj/item/tool/screwdriver, /obj/item/weapon/pen, /obj/item/weapon/razor, /obj/item/weapon/minihoe, /obj/item/weapon/match/strike_anywhere, /obj/item/weapon/lipstick, /obj/item/weapon/lighter/random, /obj/item/weapon/lighter/zippo, /obj/item/weapon/hair_dye, /obj/item/weapon/hand_labeler, /obj/item/weapon/handcuffs, /obj/item/tool/FixOVein, /obj/item/weapon/legcuffs, /obj/item/weapon/legcuffs/bolas, /obj/item/weapon/paper, /obj/item/taperoll/atmos, /obj/item/airbag, /obj/item/weapon/chisel, /obj/item/weapon/bananapeel, /obj/item/weapon/thermometer)+existing_typesof(/obj/item/key)-list(/obj/item/key, /obj/item/key/lightcycle)
 	var/static/list/trinkets_bauble = list(/obj/item/weapon/vectorreceiver, /obj/item/weapon/virusdish, /obj/item/weapon/shard, /obj/item/weapon/shard/plasma, /obj/item/weapon/ribbon, /obj/item/weapon/pai_cable, /obj/item/weapon/gavelblock, /obj/item/weapon/dart_cartridge, /obj/item/stack/chains, /obj/item/stack/teeth, /obj/item/stack/teeth/gold, /obj/item/gun_part/silencer, /obj/item/ice_crystal, /obj/item/claypot, /obj/item/cross_guard, /obj/item/sword_handle, /obj/item/weapon/dice/d00, /obj/item/weapon/dice/d10, /obj/item/weapon/dice/d12, /obj/item/weapon/dice/d2, /obj/item/weapon/dice/d20, /obj/item/weapon/dice/d4, /obj/item/weapon/dice/d8, /obj/item/weapon/dice/loaded/d20)+existing_typesof(/obj/item/stack/ore)+existing_typesof(/obj/item/ornament)-list(/obj/item/stack/ore)
-	var/list/categories = list("Coin", "Card", "Toy", "Accessory", "Gadget", "Widget", "Bauble")
+	var/list/categories = list("Coin", "Card", "Toy", "Accessory", "Gadget", "Grenade", "Widget", "Bauble", "Bullet")
 	var/item_choice = null
 	var/duration = 300
 	var/cat_choice = input("Select a kind of 'trinket'.") in categories | null
@@ -108,15 +108,15 @@
 		if("Card")
 			item_choice = pick(trinkets_card)
 			duration = 200
-//		if("Grenade")
-//			item_choice = pick(trinkets_grenade)
-//			duration = 100
+		if("Grenade")
+			item_choice = pick(trinkets_grenade)
+			duration = 100
 		if("Toy")
 			item_choice = pick(trinkets_toy)
 			duration = 600
-//		if("Bullet")
-//			item_choice = pick(trinkets_bullet)
-//			duration = 200
+		if("Bullet")
+			item_choice = pick(trinkets_bullet)
+			duration = 200
 		if("Accessory")
 			item_choice = pick(trinkets_accessory)
 			duration = 1800
