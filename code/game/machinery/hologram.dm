@@ -186,6 +186,9 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
 	holo.set_glide_size(DELAY2GLIDESIZE(1))
 	move_hologram()
+	if(!istype(eye)) // to stop unforeseen consequences with these colliding and overriding the hologram bumps
+		register_event(/event/face, master, nameof(src::move_hologram()))
+		register_event(/event/moved, master, nameof(src::move_hologram()))
 	if(istype(AI) && AI.holopadoverlays.len)
 		for(var/image/ol in AI.holopadoverlays)
 			if(ol.loc == src)
@@ -194,7 +197,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 	if(source)
 		source.scanray = new(T)
-		var/icon/colored_ray = getFlatIcon(source.scanray)
+		colored_ray = getFlatIcon(source.scanray)
 		colored_ray.ColorTone(holocolor)
 		source.scanray.icon = colored_ray
 
@@ -247,11 +250,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 	icon_state = "holopad0"
 	use_power = MACHINE_POWER_USE_IDLE//Passive power usage.
-	advancedholo = FALSE
 	if(master)
+		if(!advancedholo && !isAIEye(master))
+			unregister_event(/event/face, master, nameof(src::move_hologram()))
+			unregister_event(/event/moved, master, nameof(src::move_hologram()))
 		if(istype(AI) && AI.current == src)
 			AI.current = null
 		master = null //Null the master, since no-one is using it now.
+	advancedholo = FALSE
 	QDEL_NULL(ray)
 	if(holo)
 		var/obj/effect/overlay/hologram/H = holo
@@ -293,37 +299,50 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 /obj/machinery/hologram/holopad/proc/move_hologram(var/forced = 0 )
 	if(holo)
-		if (get_dist(master, src) <= holo_range || advancedholo)
+		if (get_dist(master, src) <= holo_range || (source && get_dist(master, source) <= holo_range) || advancedholo)
 			holo.set_glide_size(DELAY2GLIDESIZE(1))
 			if(isAIEye(master))
 				master.set_glide_size(DELAY2GLIDESIZE(1))
-			var/turf/T = holo.loc
-			var/turf/dest = get_turf(master)
-			step_to(holo, master) // So it turns.
+			var/turf/dest = loc
+			if(source)
+				holo.dir = master.dir
+				var/x_offset = master.x - source.x
+				var/y_offset = master.y - source.y
+				dest = locate(src.x + x_offset, src.y + y_offset, src.z)
+				if(source.scanray)
+					project_ray(master,source.scanray)
+			else
+				dest = get_turf(master)
+				step_to(holo, master) // So it turns.
+			var/turf/old = holo.loc
 			holo.forceMove(dest)
 			if(ray)
-				var/disty = holo.y - ray.y
-				var/distx = holo.x - ray.x
-				var/newangle
-				if(!disty)
-					if(distx >= 0)
-						newangle = 90
-					else
-						newangle = 270
-				else
-					newangle = arctan(distx/disty)
-					if(disty < 0)
-						newangle += 180
-					else if(distx < 0)
-						newangle += 360
-				var/matrix/M = matrix()
-				if (get_dist(T,dest) <= 1)
-					animate(ray, transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle),time = 1)
-				else
-					ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+				project_ray(holo,ray,old)
 		else
 			clear_holo()
 	return 1
+
+/obj/machinery/hologram/holopad/proc/project_ray(var/obj/effect/overlay/target,var/obj/effect/overlay/targetray,var/turf/oldLoc)
+	var/disty = target.y - targetray.y
+	var/distx = target.x - targetray.x
+	var/newangle
+	if(!disty)
+		if(distx >= 0)
+			newangle = 90
+		else
+			newangle = 270
+	else
+		newangle = arctan(distx/disty)
+		if(disty < 0)
+			newangle += 180
+		else if(distx < 0)
+			newangle += 360
+	var/matrix/M = matrix()
+	var/turf/T = target.loc
+	if (get_dist(oldLoc,T) <= 1)
+		animate(targetray, transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle),time = 1)
+	else
+		targetray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
 
 /*
  * Hologram
