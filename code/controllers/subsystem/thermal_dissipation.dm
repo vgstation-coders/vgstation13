@@ -9,12 +9,12 @@ var/list/thermal_dissipation_reagents = list()
 	display_order = SS_DISPLAY_THERM_DISS
 
 	var/list/currentrun
+	var/currentrun_index
 
 	//Keep all of these here to avoid having to redeclare them for every datum/reagents on every tick.
 	var/datum/reagents/R
 	var/datum/gas_mixture/the_air
 	var/atom/A
-	var/turf/T
 	var/emission_factor
 	var/atom/this_potentially_insulative_layer
 	var/i
@@ -45,20 +45,18 @@ var/list/thermal_dissipation_reagents = list()
 	if (!resumed)
 
 		currentrun = thermal_dissipation_reagents.Copy()
+		currentrun_index = currentrun.len
 
-	while (currentrun.len)
-		R = currentrun[currentrun.len]
-		currentrun.len--
+	while (currentrun_index)
+		R = currentrun[currentrun_index]
+		currentrun_index--
 
 		if (config.thermal_dissipation)
-			if (R)
-				A = R.my_atom
-				if (A && !A.gcDestroyed && !A.timestopped)
-					T = get_turf(A)
-					if (T)
-						the_air = T.return_air()
-						if (the_air)
-							handle_thermal_dissipation()
+			A = R?.my_atom
+			if (A && !A.gcDestroyed && !A.timestopped)
+				the_air = (get_turf(A))?.return_air()
+				if (the_air)
+					handle_thermal_dissipation()
 
 		if (MC_TICK_CHECK)
 			return
