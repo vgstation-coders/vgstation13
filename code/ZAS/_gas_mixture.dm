@@ -154,9 +154,8 @@
 	if(thermal_energy < 0)
 		if(temperature <= min_temp)
 			return 0
-		var/thermal_energy_limit = -(temperature - min_temp) * heat_capacity	//ensure temperature does not go below min_temp
-		thermal_energy = max(thermal_energy, thermal_energy_limit)	//thermal_energy and thermal_energy_limit are negative here.
-	temperature += thermal_energy/heat_capacity
+		thermal_energy = max(thermal_energy, (min_temp - temperature) * heat_capacity) //ensure temperature does not go below min_temp thermal_energy is negative here.
+	temperature += thermal_energy / heat_capacity
 	return thermal_energy
 
 
@@ -209,8 +208,7 @@
 /datum/gas_mixture/proc/update_values()
 	total_moles = 0
 	for(var/g in gas)
-		var/moles = gas[g]
-		if(moles)
+		if(gas[g])
 			total_moles += gas[g]
 		else
 			gas -= g

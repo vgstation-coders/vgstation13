@@ -11,7 +11,9 @@ var/list/machines = list()
 	display_order = SS_DISPLAY_MACHINERY
 
 	var/list/currentrun
+	var/currentrun_index
 
+	var/obj/machinery/M //Machine currently being processed.
 
 /datum/subsystem/machinery/New()
 	NEW_SS_GLOBAL(SSmachinery)
@@ -32,10 +34,11 @@ var/list/machines = list()
 /datum/subsystem/machinery/fire(resumed = FALSE)
 	if (!resumed)
 		currentrun = get_currenrun()
+		currentrun_index = currentrun.len
 
-	while (currentrun.len)
-		var/obj/machinery/M = currentrun[currentrun.len]
-		currentrun.len--
+	while (currentrun_index)
+		M = currentrun[currentrun_index]
+		currentrun_index--
 
 		if (!M || M.gcDestroyed || M.timestopped)
 			continue
