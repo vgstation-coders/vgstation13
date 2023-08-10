@@ -1034,110 +1034,12 @@ its easier to just keep the beam vertical.
 		stain_text = "<span style='color: [get_stain_text_color()]'>[stain_text]</span>"
 	return indef_art + " " + stain_text
 
-/atom/proc/handle_thermal_dissipation()
-	//Exchange heat between reagents and the surrounding air.
-	//Although the heat is exchanged directly between reagents and air, for now this is based on thermal radiation, not convection per se.
-	if (!src || !reagents || !reagents.total_volume || !reagents.total_thermal_mass)
-		return
-	else
-		var/turf/T = get_turf(src)
-		if (T)
-
-			var/datum/gas_mixture/the_air_here = T.return_air()
-
-			if (!the_air_here)
-				return
-
-			if (reagents.chem_temp < TCMB)
-				reagents.chem_temp = TCMB
-
-			if (abs(reagents.chem_temp - the_air_here.temperature) < MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
-				return
-
-			//We treat the reagents like a spherical gray body with an emissivity of THERM_DISS_SCALING_FACTOR.
-
-			var/emission_factor = THERM_DISS_SCALING_FACTOR * (SS_WAIT_THERM_DISS / (1 SECONDS)) * STEFAN_BOLTZMANN_CONSTANT * (36 * PI) ** (1/3) * (CC_PER_U / 1000) ** (2/3) * reagents.total_volume ** (2/3)
-
-			//Here we reduce thermal transfer to account for insulation of the container.
-			//We iterate though each loc until the loc is the turf containing the_air_here, to account for things like nested containers, each time multiplying emission_factor by a factor than can range between [0 and 1], representing heat insulation.
-
-			var/atom/this_potentially_insulative_layer = src
-			var/i = 0
-			while (emission_factor)
-				emission_factor *= this_potentially_insulative_layer.get_heat_conductivity()
-				if (isturf(this_potentially_insulative_layer) || isarea(this_potentially_insulative_layer))
-					break
-				else if (i <= ARBITRARILY_LARGE_NUMBER)
-					if (isatom(this_potentially_insulative_layer.loc))
-						this_potentially_insulative_layer = this_potentially_insulative_layer.loc
-						i++
-					else
-						break
-				else
-					message_admins("Something went wrong with [src]'s handle_heat_dissipation() at iteration #[i] at [this_potentially_insulative_layer].")
-					break //Avoid infinite loops.
-
-			if (emission_factor)
-
-				var/is_the_air_here_simulated = config.reagents_heat_air && !istype(the_air_here, /datum/gas_mixture/unsimulated)
-
-				if (max(reagents.chem_temp, the_air_here.temperature) <= THERM_DISS_MAX_SAFE_TEMP)
-
-					var/reagents_thermal_mass_reciprocal = (1 / reagents.total_thermal_mass)
-
-					//If the reagents temperature would change by more than a certain percentage in a single tick, we do a more granular calculation to avoid overshooting.
-
-					var/energy_to_radiate_from_reagents_to_air = emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4)
-					var/abs_chem_temp_change_ratio = abs(energy_to_radiate_from_reagents_to_air * reagents_thermal_mass_reciprocal / reagents.chem_temp)
-
-					if (abs_chem_temp_change_ratio > THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO)
-						var/air_thermal_mass = the_air_here.heat_capacity()
-						var/slices = ceil((1 / THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO) * abs_chem_temp_change_ratio)
-						emission_factor /= slices
-//						for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
-//							radiate_reagents_heat_to_air(emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4), the_air_here, reagents_thermal_mass_reciprocal, air_thermal_mass, is_the_air_here_simulated)
-						if (is_the_air_here_simulated)
-							for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
-								radiate_reagents_heat_to_simulated_air(emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4), the_air_here, reagents_thermal_mass_reciprocal, air_thermal_mass)
-						else
-							for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
-								reagents.chem_temp -= emission_factor * (reagents.chem_temp ** 4 - the_air_here.temperature ** 4) * reagents_thermal_mass_reciprocal
-
-					else
-						radiate_reagents_heat_to_air(energy_to_radiate_from_reagents_to_air, the_air_here, reagents_thermal_mass_reciprocal, the_air_here.heat_capacity(), is_the_air_here_simulated)
-
-				else //At extreme temperatures, we simply equalize the temperatures to avoid blowing out any values.
-					var/air_thermal_mass = the_air_here.heat_capacity()
-					reagents.chem_temp = (reagents.total_thermal_mass * reagents.chem_temp + air_thermal_mass * the_air_here.temperature) / (reagents.total_thermal_mass + air_thermal_mass)
-					if (is_the_air_here_simulated)
-						the_air_here.temperature = max(TCMB, reagents.chem_temp)
-
-				if(reagents.skip_flags & SKIP_RXN_CHECK_ON_HEATING)
-					return
-				reagents.handle_reactions()
-
-/atom/proc/radiate_reagents_heat_to_air(energy_amount, datum/gas_mixture/G, reagents_thermal_mass_reciprocal, air_thermal_mass, air_is_simulated = TRUE)
-	if (air_is_simulated)
-		reagents.chem_temp -= G.add_thermal_energy_hc_known(energy_amount, TCMB, air_thermal_mass) * reagents_thermal_mass_reciprocal
-	else //Space, the snowy outdoors, etc.
-		reagents.chem_temp -= energy_amount * reagents_thermal_mass_reciprocal
-	if (reagents.chem_temp < TCMB)
-		reagents.chem_temp = TCMB
-		message_admins("[src]'s radiate_reagents_heat_to_air() tried to set its reagents temperature below [TCMB] K.")
-
-//Same as radiate_reagents_heat_to_air() except assuming the air is simulated to avoid rechecking.
-/atom/proc/radiate_reagents_heat_to_simulated_air(energy_amount, datum/gas_mixture/G, reagents_thermal_mass_reciprocal, air_thermal_mass)
-	reagents.chem_temp -= G.add_thermal_energy_hc_known(energy_amount, TCMB, air_thermal_mass) * reagents_thermal_mass_reciprocal
-	if (reagents.chem_temp < TCMB)
-		reagents.chem_temp = TCMB
-		message_admins("[src]'s radiate_reagents_heat_to_simulated_air() tried to set its reagents temperature below [TCMB] K.")
-
 /atom/proc/heat_dissipation_updates()
-	if (src in thermal_dissipation_atoms)
+	if (reagents in thermal_dissipation_reagents)
 		if (!reagents.total_volume)
-			thermal_dissipation_atoms -= src
+			thermal_dissipation_reagents -= reagents
 	else if (reagents.total_volume)
-		thermal_dissipation_atoms += src
+		thermal_dissipation_reagents += reagents
 
 /atom/proc/get_heat_conductivity()
 	return 1

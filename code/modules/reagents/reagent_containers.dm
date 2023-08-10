@@ -82,7 +82,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(istype(loc, /obj/machinery/iv_drip))
 		var/obj/machinery/iv_drip/holder = loc
 		holder.remove_container()
-	thermal_dissipation_atoms -= src
+	thermal_dissipation_reagents -= reagents
 	. = ..()
 
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
