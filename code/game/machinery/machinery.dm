@@ -329,7 +329,7 @@ Class Procs:
 	if((machine_flags & FIXED2WORK) && !anchored)
 		return FALSE
 
-	if	(this_area)
+	if(this_area)
 		return this_area.powered(chan)
 	else
 		power_area = get_area(src)
