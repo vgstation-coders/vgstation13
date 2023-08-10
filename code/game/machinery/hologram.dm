@@ -23,10 +23,12 @@ Possible to do for anyone motivated enough:
 var/list/holopads = list()
 
 /obj/machinery/hologram/holopad
-	name = "\improper AI holopad"
+	name = "holopad"
 	desc = "It's a floor-mounted device for projecting holographic images. It is activated remotely."
 	icon_state = "holopad0"
-	var/mob/living/silicon/ai/master  //Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
+	var/mob/living/master  //Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
+	var/obj/machinery/hologram/holopad/target //Which holopad are projections sent to if used by a person?
+	var/obj/machinery/hologram/holopad/source //Source of above
 	var/last_request = 0 //to prevent request spam. ~Carn
 	var/holo_range = 6 // Change to change how far the AI can move away from the holopad before deactivating.
 	var/holopad_mode = 0	//0 = RANGE BASED, 1 = AREA BASED
@@ -44,6 +46,9 @@ var/list/holopads = list()
 /obj/machinery/hologram/holopad/New()
 	..()
 	holopads += src
+	var/area/A = get_area(src)
+	if(A)
+		name = "[A] holopad"
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/holopad,
 		/obj/item/weapon/stock_parts/console_screen,
@@ -62,18 +67,43 @@ var/list/holopads = list()
 /obj/machinery/hologram/holopad/attack_hand(var/mob/living/carbon/human/user) //Carn: Hologram requests.
 	if(!istype(user))
 		return
-	if(alert(user,"Would you like to request an AI's presence?",,"Yes","No") == "Yes")
-		if(last_request + 200 < world.time) //don't spam the AI with requests you jerk!
-			last_request = world.time
-			to_chat(user, "<span class='notice'>You request an AI's presence.</span>")
-			var/area/area = get_area(src)
-			for(var/mob/living/silicon/ai/AI in living_mob_list)
-				if(!AI.client)
+	if(target)
+		to_chat(user, "<span class='notice'>You stop transmitting to [target].</span>")
+		target.clear_holo()
+		return
+	switch(alert(user,"Would you like to request an AI's presence or transmit to another holopad?","Holopad functions","Request AI presence","Transmit to other","Cancel"))
+		if("Request AI presence")
+			if(last_request + 200 < world.time) //don't spam the AI with requests you jerk!
+				last_request = world.time
+				to_chat(user, "<span class='notice'>You request an AI's presence.</span>")
+				var/area/area = get_area(src)
+				for(var/mob/living/silicon/ai/AI in living_mob_list)
+					if(!AI.client)
+						continue
+					to_chat(AI, "<span class='big info'>Your presence is requested at <a href='?src=\ref[AI];jumptoholopad=\ref[src]'>\the [area]</a>.</span>")
+					AI << 'sound/machines/twobeep.ogg'
+			else
+				to_chat(user, "<span class='notice'>A request for AI presence was already sent recently.</span>")
+		if("Transmit to other")
+			var/list/other_holopads = list()
+			for(var/obj/machinery/hologram/holopad/H in holopads)
+				if(H == src)
 					continue
-				to_chat(AI, "<span class='big info'>Your presence is requested at <a href='?src=\ref[AI];jumptoholopad=\ref[src]'>\the [area]</a>.</span>")
-				AI << 'sound/machines/twobeep.ogg'
-		else
-			to_chat(user, "<span class='notice'>A request for AI presence was already sent recently.</span>")
+				if(H.stat & (FORCEDISABLE|NOPOWER))
+					continue
+				other_holopads += H
+			if(other_holopads.len)
+				target = input("Select a holopad to transmit to") as null|anything in other_holopads
+				if(target)
+					if(target.holo)
+						to_chat(user, "<span class='warning'>This holopad is in use.</span>")
+					else
+						target.source = src
+						target.activate_holo(user)
+			else
+				to_chat(user, "<span class='warning'>No other AI holopads were found to transmit to!</span>")
+
+
 
 /obj/machinery/hologram/holopad/attack_ai(mob/living/silicon/ai/user)
 	if (!istype(user))
@@ -88,11 +118,11 @@ var/list/holopads = list()
 	else if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
 		user.eyeobj.forceMove(get_turf(src))
 	else if (!holo)//If there is no hologram, possibly make one.
-		activate_holo(user)
+		activate_holo(user.eyeobj)
 	return
 
-/obj/machinery/hologram/holopad/proc/activate_holo(mob/living/silicon/ai/user)
-	if(!(stat & (FORCEDISABLE|NOPOWER)) && user.eyeobj.loc == loc)//If the projector has power and client eye is on it.
+/obj/machinery/hologram/holopad/proc/activate_holo(mob/user)
+	if(!(stat & (FORCEDISABLE|NOPOWER)) && user.loc == loc)//If the projector has power and mob is on it.
 		if(!holo)//If there is not already a hologram.
 			create_holo(user)//Create one.
 			src.visible_message("A holographic image of [user] flicks to life right before your eyes!")
@@ -110,38 +140,53 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			rendered_message = speech.render_message()
 		rendered_message = "<i><span class='[speech.render_wrapper_classes()]'>Holopad received, <span class='message'>[rendered_message]</span></span></i>"
 		master.show_message(rendered_message, 2)
+		if(target)
+			target.say(rendered_message)
 
 /obj/machinery/hologram/holopad/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 	if(!master)
 		return
-	if(master.eyeobj.high_res && cameranet.checkCameraVis(A)) //visible message is already being picked up by the cameras, avoids duplicate messages
-		return
+	if(isAIEye(master))
+		var/mob/camera/aiEye/eye = master
+		if(eye.high_res && cameranet.checkCameraVis(A)) //visible message is already being picked up by the cameras, avoids duplicate messages
+			return
 	master.show_message( message, 1, blind_message, 2) //otherwise it's being picked up by the holopad itself
 
-/obj/machinery/hologram/holopad/proc/create_holo(mob/living/silicon/ai/A, turf/T = loc)
+/obj/machinery/hologram/holopad/proc/create_holo(mob/user, turf/T = loc)
+	var/mob/camera/aiEye/eye = user
+	var/mob/living/silicon/ai/AI = istype(eye) ? eye.ai : user
 	ray = new(T)
 	holo = new(T)//Spawn a blank effect at the location.
 	// hologram.mouse_opacity = 0 Why would we not want to click on it
-	holo.name = "[A.name] (Hologram)"//If someone decides to right click.
-	set_light(2, 0, A.holocolor)			//pad lighting
+	holo.name = "[user.name] (Hologram)"//If someone decides to right click.
+	var/holocolor = istype(AI) ? AI.holocolor : "#0099ff"
+
+	set_light(2, 0, holocolor)			//pad lighting
 	icon_state = "holopad1"
-	var/icon/colored_holo = A.holo_icon
-	colored_holo.ColorTone(A.holocolor)
+	var/icon/colored_holo = istype(AI) ? AI.holo_icon : null
+	if(!istype(AI))
+		for(var/datum/data/record/t in data_core.locked)//Look in data core locked.
+			if(t.fields["name"] == user.name)
+				colored_holo = getHologramIcon(t.fields["image"])
+	if(!colored_holo)
+		CRASH("Somehow could not find an icon for the AI or person on [src]")
+	colored_holo.ColorTone(holocolor)
 	var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
 	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
 	holo.icon = colored_holo
-	
+
 	var/icon/colored_ray = getFlatIcon(ray)
-	colored_ray.ColorTone(A.holocolor)
+	colored_ray.ColorTone(holocolor)
 	ray.icon = colored_ray
-	
-	A.current = src
-	master = A//AI is the master.
+
+	if(istype(AI))
+		AI.current = src
+	master = user
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
 	holo.set_glide_size(DELAY2GLIDESIZE(1))
 	move_hologram()
-	if(A && A.holopadoverlays.len)
-		for(var/image/ol in A.holopadoverlays)
+	if(istype(AI) && AI.holopadoverlays.len)
+		for(var/image/ol in AI.holopadoverlays)
 			if(ol.loc == src)
 				ol.icon_state = "holopad1"
 				break
@@ -184,8 +229,10 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	return newlist
 
 /obj/machinery/hologram/holopad/proc/clear_holo()
-	if(master && master.holopadoverlays.len)
-		for(var/image/ol in master.holopadoverlays)
+	var/mob/camera/aiEye/eye = master
+	var/mob/living/silicon/ai/AI = istype(eye) ? eye.ai : master
+	if(istype(AI) && AI.holopadoverlays.len)
+		for(var/image/ol in AI.holopadoverlays)
 			if(ol.loc == src)
 				ol.icon_state = "holopad0"
 				break
@@ -195,8 +242,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	use_power = MACHINE_POWER_USE_IDLE//Passive power usage.
 	advancedholo = FALSE
 	if(master)
-		if(master.current == src)
-			master.current = null
+		if(istype(AI) && AI.current == src)
+			AI.current = null
 		master = null //Null the master, since no-one is using it now.
 	QDEL_NULL(ray)
 	if(holo)
@@ -206,6 +253,9 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		animate(H, alpha = 0, time = 5)
 		spawn(5)
 			qdel(H)//Get rid of hologram.
+	if(source)
+		source.target = null
+		source = null
 	return 1
 
 /obj/machinery/hologram/holopad/emp_act()
@@ -214,16 +264,20 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 /obj/machinery/hologram/holopad/process()
 	if(holo)//If there is a hologram.
-		if(master && !master.stat && master.client && master.eyeobj)//If there is an AI attached, it's not incapacitated, it has a client, and the client eye is centered on the projector.
+		if(master && !master.stat && master.client)//If there is an AI attached, it's not incapacitated, it has a client, and the client eye is centered on the projector.
+			if(isAIEye(master))
+				var/mob/camera/aiEye/eye = master
+				if(!eye.ai || !eye.ai.stat)
+					return 0
 			if(!(stat & (FORCEDISABLE|NOPOWER)))//If the  machine has power.
 				var/turf/T = get_turf(holo)
 				if(T.obscured)
 					clear_holo()
-				if((holopad_mode == 0 && (get_dist(master.eyeobj, src) <= holo_range)) || advancedholo)
+				if((holopad_mode == 0 && (get_dist(master, src) <= holo_range)) || advancedholo)
 					return 1
 				else if (holopad_mode == 1)
 					var/area/holo_area = get_area(src)
-					var/area/eye_area = get_area(master.eyeobj)
+					var/area/eye_area = get_area(master)
 					if(eye_area == holo_area || advancedholo)
 						return 1
 		clear_holo()//If not, we want to get rid of the hologram.
@@ -231,12 +285,13 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 /obj/machinery/hologram/holopad/proc/move_hologram(var/forced = 0 )
 	if(holo)
-		if (get_dist(master.eyeobj, src) <= holo_range || advancedholo)
+		if (get_dist(master, src) <= holo_range || advancedholo)
 			holo.set_glide_size(DELAY2GLIDESIZE(1))
-			master.eyeobj.set_glide_size(DELAY2GLIDESIZE(1))
+			if(isAIEye(master))
+				master.set_glide_size(DELAY2GLIDESIZE(1))
 			var/turf/T = holo.loc
-			var/turf/dest = get_turf(master.eyeobj)
-			step_to(holo, master.eyeobj) // So it turns.
+			var/turf/dest = get_turf(master)
+			step_to(holo, master) // So it turns.
 			holo.forceMove(dest)
 			if(ray)
 				var/disty = holo.y - ray.y
