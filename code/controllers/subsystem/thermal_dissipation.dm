@@ -50,7 +50,7 @@ var/list/thermal_dissipation_reagents = list()
 		if (currentrun_index)
 			currentrun.len = currentrun_index
 			for(c in 1 to currentrun_index)
-			currentrun[c] = thermal_dissipation_reagents[c]
+				currentrun[c] = thermal_dissipation_reagents[c]
 
 	while (currentrun_index)
 		R = currentrun[currentrun_index]
