@@ -2518,6 +2518,7 @@
 				H.update_inv_by_slot(C.slot_flags)
 
 		M.clean_blood()
+		M.color = ""
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2551,6 +2552,8 @@
 	if(..())
 		return 1
 
+	M.color = ""
+
 	switch(tick)
 		if(1 to 10)
 			M.adjustBruteLoss(3 * REM) //soft tissue damage
@@ -2573,6 +2576,8 @@
 
 	if(..())
 		return 1
+
+	M.color = ""
 
 	if(method == TOUCH && ((TARGET_EYES in zone_sels) || (LIMB_HEAD in zone_sels)))
 		if(ishuman(M))
@@ -9163,6 +9168,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())
 		return 1
+	H.color = "#12A7C9"
 	return
 
 /datum/reagent/roach_shell
