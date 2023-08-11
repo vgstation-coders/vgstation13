@@ -26,7 +26,7 @@ var/list/holopads = list()
 	name = "holopad"
 	desc = "It's a floor-mounted device for projecting holographic images. It is activated remotely."
 	icon_state = "holopad0"
-	var/mob/living/master  //Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
+	var/mob/master  //Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
 	var/obj/machinery/hologram/holopad/target //Which holopad are projections sent to if used by a person?
 	var/obj/machinery/hologram/holopad/source //Source of above
 	var/last_request = 0 //to prevent request spam. ~Carn
@@ -99,7 +99,10 @@ var/list/holopads = list()
 						to_chat(user, "<span class='warning'>This holopad is in use.</span>")
 					else
 						target.source = src
-						target.activate_holo(user)
+						if(!target.activate_holo(user))
+							target.source = null
+							target = null
+
 			else
 				to_chat(user, "<span class='warning'>No other AI holopads were found to transmit to!</span>")
 
@@ -122,15 +125,15 @@ var/list/holopads = list()
 	return
 
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/user)
-	if(!(stat & (FORCEDISABLE|NOPOWER)) && user.loc == loc)//If the projector has power and mob is on it.
+	if(!(stat & (FORCEDISABLE|NOPOWER)) && (!isAIEye(user) || user.loc == loc))//If the projector has power and AI eye is on it. (if applicable)
 		if(!holo)//If there is not already a hologram.
 			create_holo(user)//Create one.
 			src.visible_message("A holographic image of [user] flicks to life right before your eyes!")
-		else
-			to_chat(user, "<span class='warning'>ERROR: </span>Image feed in progress.")
+			return 1
+		to_chat(user, "<span class='warning'>ERROR: </span>Image feed in progress.")
 	else
 		to_chat(user, "<span class='warning'>ERROR: </span>Unable to project hologram.")
-	return
+	return 0
 
 /*This is the proc for special two-way communication between AI and holopad/people talking near holopad.
 For the other part of the code, check silicon say.dm. Particularly robot talk.*/
@@ -169,8 +172,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			if(t.fields["name"] == user.name)
 				colored_holo = getHologramIcon(t.fields["image"])
 				break
-	if(!colored_holo)
-		CRASH("Somehow could not find an icon for the AI or person on [src]")
+		if(!colored_holo)//If not in there, make one from scratch
+			var/icon/I = icon('icons/effects/32x32.dmi', "blank")
+			colored_holo = icon(I, "")
+			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = SOUTH, ignore_spawn_items = TRUE),  "", dir = SOUTH)
+			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = NORTH, ignore_spawn_items = TRUE),  "", dir = NORTH)
+			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = EAST, ignore_spawn_items = TRUE),  "", dir = EAST)
+			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = WEST, ignore_spawn_items = TRUE),  "", dir = WEST)
+			colored_holo.Crop(1,1,32,32)
 	colored_holo.ColorTone(holocolor)
 	var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
 	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
@@ -281,7 +290,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		if(master && !master.stat && master.client)//If there is an AI attached, it's not incapacitated, it has a client, and the client eye is centered on the projector.
 			if(isAIEye(master))
 				var/mob/camera/aiEye/eye = master
-				if(!eye.ai || !eye.ai.stat)
+				if(!eye.ai || eye.ai.stat)
 					return 0
 			if(!(stat & (FORCEDISABLE|NOPOWER)))//If the  machine has power.
 				var/turf/T = get_turf(holo)
