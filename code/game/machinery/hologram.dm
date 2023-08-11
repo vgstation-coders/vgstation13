@@ -48,7 +48,7 @@ var/list/holopads = list()
 	holopads += src
 	var/area/A = get_area(src)
 	if(A)
-		name = "[A.name] holopad"
+		name = "\improper [A.name] holopad"
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/holopad,
 		/obj/item/weapon/stock_parts/console_screen,
@@ -56,6 +56,13 @@ var/list/holopads = list()
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/micro_laser
 	)
+
+/obj/machinery/hologram/holopad/examine(mob/user)
+	..()
+	if(source)
+		to_chat(user, "<span class='notice'>It's currently transmitting from [source].</span>")
+	if(target)
+		to_chat(user, "<span class='notice'>It's currently transmitting to [target].</span>")
 
 /obj/machinery/hologram/holopad/Destroy()
 	holopads -= src
@@ -143,8 +150,6 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			rendered_message = speech.render_message()
 		rendered_message = "<i><span class='[speech.render_wrapper_classes()]'>Holopad received, <span class='message'>[rendered_message]</span></span></i>"
 		master.show_message(rendered_message, 2)
-		if(target)
-			target.say(rendered_message)
 
 /obj/machinery/hologram/holopad/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 	if(!master)
