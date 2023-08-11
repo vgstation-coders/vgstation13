@@ -281,12 +281,15 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 /obj/machinery/hologram/holopad/process()
 	if(holo)//If there is a hologram.
-		if(master && !master.stat && master.client)//If there is an AI attached, it's not incapacitated, it has a client, and the client eye is centered on the projector.
+		if(master)//If there is a master attached
 			if(isAIEye(master))
 				var/mob/camera/aiEye/eye = master
-				if(!eye.ai || eye.ai.stat)
+				if(!eye.ai || eye.ai.stat || !eye.ai.client)//If there is no AI eye or client for the AI or AI is incapacitated
 					clear_holo()
 					return 1
+			else if (master.stat || !master.client) //If anything else doesn't have a client or is incapacitated
+				clear_holo()
+				return 1
 			if(!(stat & (FORCEDISABLE|NOPOWER)))//If the  machine has power.
 				var/turf/T = get_turf(holo)
 				if(isAIEye(master) && T.obscured)
