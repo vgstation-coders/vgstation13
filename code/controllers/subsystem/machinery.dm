@@ -40,9 +40,10 @@ var/list/machines = list()
 		currentrun = get_currenrun()
 
 	var/obj/machinery/M
-	while (currentrun_index)
-		M = currentrun[currentrun_index]
-		currentrun_index--
+	var/c = currentrun_index
+	while (c)
+		M = currentrun[c]
+		c--
 
 		if (!M || M.gcDestroyed || M.timestopped)
 			continue
@@ -56,4 +57,6 @@ var/list/machines = list()
 			M.auto_use_power()
 
 		if (MC_TICK_CHECK)
-			return
+			break
+
+	currentrun_index = c
