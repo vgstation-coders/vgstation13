@@ -158,7 +158,7 @@
 	temperature += thermal_energy / heat_capacity
 	return thermal_energy
 
-//Same as add_thermal_energy except with heat capacity as an arg.
+//Same as add_thermal_energy() except with heat capacity as an arg.
 /datum/gas_mixture/proc/add_thermal_energy_hc_known(var/thermal_energy, var/min_temp = TCMB, var/heat_capacity = MINIMUM_HEAT_CAPACITY)
 	if(total_moles == 0)
 		return 0

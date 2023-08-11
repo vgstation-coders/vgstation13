@@ -28,9 +28,11 @@ var/list/thermal_dissipation_reagents = list()
 	var/Tr
 	var/which_is_hotter
 	var/this_slice
+	var/c
 
 /datum/subsystem/thermal_dissipation/New()
 	NEW_SS_GLOBAL(SStd)
+	currentrun = list()
 
 /datum/subsystem/thermal_dissipation/stat_entry(var/msg)
 	if (msg)
@@ -44,8 +46,11 @@ var/list/thermal_dissipation_reagents = list()
 
 	if (!resumed)
 
-		currentrun = thermal_dissipation_reagents.Copy()
-		currentrun_index = currentrun.len
+		currentrun_index = thermal_dissipation_reagents.len
+		if (currentrun_index)
+			currentrun.len = currentrun_index
+			for(c in 1 to currentrun_index)
+			currentrun[c] = thermal_dissipation_reagents[c]
 
 	while (currentrun_index)
 		R = currentrun[currentrun_index]
