@@ -14,10 +14,11 @@ var/list/machines = list()
 	var/currentrun_index
 
 	var/obj/machinery/M //Machine currently being processed.
+	var/c
 
 /datum/subsystem/machinery/New()
 	NEW_SS_GLOBAL(SSmachinery)
-
+	currentrun = list()
 
 /datum/subsystem/machinery/stat_entry(var/msg)
 	if (msg)
@@ -28,13 +29,18 @@ var/list/machines = list()
 
 // This is to allow the near identical fast machinery process to use it.
 /datum/subsystem/machinery/proc/get_currenrun()
-	return machines.Copy()
+	currentrun_index = machines.len
+	currentrun.len = currentrun_index
+	if (currentrun_index)
+		for(c in 1 to currentrun_index)
+		currentrun[c] = machines[c]
+
+	return currentrun
 
 
 /datum/subsystem/machinery/fire(resumed = FALSE)
 	if (!resumed)
 		currentrun = get_currenrun()
-		currentrun_index = currentrun.len
 
 	while (currentrun_index)
 		M = currentrun[currentrun_index]
