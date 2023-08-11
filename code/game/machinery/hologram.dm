@@ -190,7 +190,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
 	holo.set_glide_size(DELAY2GLIDESIZE(1))
 	if(source)
-		source.scanray = new(T)
+		source.scanray = new(source.loc)
 		colored_ray = getFlatIcon(source.scanray)
 		colored_ray.ColorTone(holocolor)
 		source.scanray.icon = colored_ray
