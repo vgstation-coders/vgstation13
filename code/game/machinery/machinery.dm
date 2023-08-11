@@ -161,8 +161,6 @@ Class Procs:
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
 	var/id_tag = null // Identify the machine
 
-	var/area/power_area //The area the machine is drawing power from.
-
 /obj/machinery/cultify()
 	var/list/random_structure = list(
 		/obj/structure/cult_legacy/talisman,
@@ -282,7 +280,7 @@ Class Procs:
 			connected_cell.use(amount*0.75)
 	else
 
-		power_area = get_area(src)
+		var/area/power_area = get_area(src)
 		if(power_area && powered(chan, null, power_area)) //no point in trying if we don't have power
 			power_area.use_power(amount, chan)
 		else
@@ -332,7 +330,7 @@ Class Procs:
 	if(this_area)
 		return this_area.powered(chan)
 	else
-		power_area = get_area(src)
+		var/area/power_area = get_area(src)
 		return power_area ? power_area.powered(chan) : FALSE
 
 

@@ -208,8 +208,9 @@
 /datum/gas_mixture/proc/update_values()
 	total_moles = 0
 	for(var/g in gas)
-		if(gas[g])
-			total_moles += gas[g]
+		var/moles = gas[g]
+		if(moles)
+			total_moles += moles
 		else
 			gas -= g
 

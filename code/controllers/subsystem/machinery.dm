@@ -13,9 +13,6 @@ var/list/machines = list()
 	var/list/currentrun
 	var/currentrun_index
 
-	var/obj/machinery/M //Machine currently being processed.
-	var/c
-
 /datum/subsystem/machinery/New()
 	NEW_SS_GLOBAL(SSmachinery)
 	currentrun = list()
@@ -32,8 +29,8 @@ var/list/machines = list()
 	currentrun_index = machines.len
 	currentrun.len = currentrun_index
 	if (currentrun_index)
-		for(c in 1 to currentrun_index)
-		currentrun[c] = machines[c]
+		for(var/c in 1 to currentrun_index)
+			currentrun[c] = machines[c]
 
 	return currentrun
 
@@ -42,6 +39,7 @@ var/list/machines = list()
 	if (!resumed)
 		currentrun = get_currenrun()
 
+	var/obj/machinery/M
 	while (currentrun_index)
 		M = currentrun[currentrun_index]
 		currentrun_index--
