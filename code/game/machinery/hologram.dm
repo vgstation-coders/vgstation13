@@ -48,7 +48,7 @@ var/list/holopads = list()
 	holopads += src
 	var/area/A = get_area(src)
 	if(A)
-		name = "[A] holopad"
+		name = "[A.name] holopad"
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/holopad,
 		/obj/item/weapon/stock_parts/console_screen,
@@ -168,18 +168,13 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	icon_state = "holopad1"
 	var/icon/colored_holo = istype(AI) ? AI.holo_icon : null
 	if(!istype(AI))
-		for(var/datum/data/record/t in data_core.locked)//Look in data core locked.
-			if(t.fields["name"] == user.name)
-				colored_holo = getHologramIcon(t.fields["image"])
-				break
-		if(!colored_holo)//If not in there, make one from scratch
-			var/icon/I = icon('icons/effects/32x32.dmi', "blank")
-			colored_holo = icon(I, "")
-			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = SOUTH, ignore_spawn_items = TRUE),  "", dir = SOUTH)
-			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = NORTH, ignore_spawn_items = TRUE),  "", dir = NORTH)
-			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = EAST, ignore_spawn_items = TRUE),  "", dir = EAST)
-			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = WEST, ignore_spawn_items = TRUE),  "", dir = WEST)
-			colored_holo.Crop(1,1,32,32)
+		var/icon/I = icon('icons/effects/32x32.dmi', "blank")
+		colored_holo = icon(I, "")
+		colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = SOUTH, ignore_spawn_items = TRUE),  "", dir = SOUTH)
+		colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = NORTH, ignore_spawn_items = TRUE),  "", dir = NORTH)
+		colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = EAST, ignore_spawn_items = TRUE),  "", dir = EAST)
+		colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = WEST, ignore_spawn_items = TRUE),  "", dir = WEST)
+		colored_holo.Crop(1,1,32,32)
 	colored_holo.ColorTone(holocolor)
 	var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
 	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
@@ -194,21 +189,20 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	master = user
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
 	holo.set_glide_size(DELAY2GLIDESIZE(1))
-	move_hologram()
-	if(!istype(eye)) // to stop unforeseen consequences with these colliding and overriding the hologram bumps
-		register_event(/event/face, master, nameof(src::move_hologram()))
-		register_event(/event/moved, master, nameof(src::move_hologram()))
-	if(istype(AI) && AI.holopadoverlays.len)
-		for(var/image/ol in AI.holopadoverlays)
-			if(ol.loc == src)
-				ol.icon_state = "holopad1"
-				break
-
 	if(source)
 		source.scanray = new(T)
 		colored_ray = getFlatIcon(source.scanray)
 		colored_ray.ColorTone(holocolor)
 		source.scanray.icon = colored_ray
+	if(!istype(eye)) // to stop unforeseen consequences with these colliding and overriding the hologram bumps
+		master.register_event(/event/face, src, nameof(src::move_hologram()))
+		master.register_event(/event/moved, src, nameof(src::move_hologram()))
+	move_hologram()
+	if(istype(AI) && AI.holopadoverlays.len)
+		for(var/image/ol in AI.holopadoverlays)
+			if(ol.loc == src)
+				ol.icon_state = "holopad1"
+				break
 
 	return 1
 
@@ -261,8 +255,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	use_power = MACHINE_POWER_USE_IDLE//Passive power usage.
 	if(master)
 		if(!advancedholo && !isAIEye(master))
-			unregister_event(/event/face, master, nameof(src::move_hologram()))
-			unregister_event(/event/moved, master, nameof(src::move_hologram()))
+			master.unregister_event(/event/face, src, nameof(src::move_hologram()))
+			master.unregister_event(/event/moved, src, nameof(src::move_hologram()))
 		if(istype(AI) && AI.current == src)
 			AI.current = null
 		master = null //Null the master, since no-one is using it now.
@@ -291,12 +285,13 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			if(isAIEye(master))
 				var/mob/camera/aiEye/eye = master
 				if(!eye.ai || eye.ai.stat)
-					return 0
+					clear_holo()
+					return 1
 			if(!(stat & (FORCEDISABLE|NOPOWER)))//If the  machine has power.
 				var/turf/T = get_turf(holo)
-				if(T.obscured)
+				if(isAIEye(master) && T.obscured)
 					clear_holo()
-				if((holopad_mode == 0 && (get_dist(master, src) <= holo_range)) || advancedholo)
+				if(holopad_mode == 0 && is_in_projection_range())
 					return 1
 				else if (holopad_mode == 1)
 					var/area/holo_area = get_area(src)
@@ -306,9 +301,12 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		clear_holo()//If not, we want to get rid of the hologram.
 	return 1
 
-/obj/machinery/hologram/holopad/proc/move_hologram(var/forced = 0 )
+/obj/machinery/hologram/holopad/proc/is_in_projection_range()
+	return (isAIEye(master) && get_dist(master, src) <= holo_range) || (source && !isAIEye(master) && get_dist(master, source) <= holo_range) || advancedholo
+
+/obj/machinery/hologram/holopad/proc/move_hologram(var/forced = 0,var/atom/movable/mover)
 	if(holo)
-		if (get_dist(master, src) <= holo_range || (source && get_dist(master, source) <= holo_range) || advancedholo)
+		if (is_in_projection_range())
 			holo.set_glide_size(DELAY2GLIDESIZE(1))
 			if(isAIEye(master))
 				master.set_glide_size(DELAY2GLIDESIZE(1))
@@ -319,7 +317,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 				var/y_offset = master.y - source.y
 				dest = locate(src.x + x_offset, src.y + y_offset, src.z)
 				if(source.scanray)
-					project_ray(master,source.scanray)
+					source.project_ray(master,source.scanray)
 			else
 				dest = get_turf(master)
 				step_to(holo, master) // So it turns.
@@ -331,7 +329,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			clear_holo()
 	return 1
 
-/obj/machinery/hologram/holopad/proc/project_ray(var/obj/effect/overlay/target,var/obj/effect/overlay/targetray,var/turf/oldLoc)
+/obj/machinery/hologram/holopad/proc/project_ray(var/atom/movable/target,var/obj/effect/overlay/targetray,var/turf/oldLoc)
 	var/disty = target.y - targetray.y
 	var/distx = target.x - targetray.x
 	var/newangle
