@@ -35,17 +35,16 @@ var/list/thermal_dissipation_reagents = list()
 			for(var/i in 1 to c)
 				currentrun[i] = thermal_dissipation_reagents[i]
 
-	var/config_on = config.thermal_dissipation
-	var/datum/reagents/R
-	while (c)
-		R = currentrun[c]
-		c--
+	if(config.thermal_dissipation)
+		var/datum/reagents/R
+		while (c)
+			R = currentrun[c]
+			c--
 
-		if (config_on)
 			R?.handle_thermal_dissipation()
 
-		if (MC_TICK_CHECK)
-			break
+			if (MC_TICK_CHECK)
+				break
 
 	currentrun_index = c
 
