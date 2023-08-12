@@ -36,19 +36,20 @@ var/list/thermal_dissipation_reagents = list()
 				currentrun[i] = thermal_dissipation_reagents[i]
 
 	if(config.thermal_dissipation)
+		var/simulate_air = config.reagents_heat_air
 		var/datum/reagents/R
 		while (c)
 			R = currentrun[c]
 			c--
 
-			R?.handle_thermal_dissipation()
+			R?.handle_thermal_dissipation(simulate_air)
 
 			if (MC_TICK_CHECK)
 				break
 
 	currentrun_index = c
 
-/datum/reagents/proc/handle_thermal_dissipation()
+/datum/reagents/proc/handle_thermal_dissipation(simulate_air)
 	//Exchange heat between reagents and the surrounding air.
 	//Although the heat is exchanged directly between reagents and air, for now this is based on thermal radiation, not convection per se.
 
@@ -65,7 +66,7 @@ var/list/thermal_dissipation_reagents = list()
 	if (!the_air)
 		return
 
-	if (chem_temp < TCMB)
+	if (!(chem_temp >= TCMB)) //Do it this way to catch NaNs.
 		chem_temp = TCMB
 
 	if (abs(chem_temp - the_air.temperature) < MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
@@ -96,7 +97,7 @@ var/list/thermal_dissipation_reagents = list()
 
 	if (emission_factor)
 
-		var/is_the_air_simulated = config.reagents_heat_air && !istype(the_air, /datum/gas_mixture/unsimulated)
+		var/is_the_air_simulated = simulate_air && !istype(the_air, /datum/gas_mixture/unsimulated)
 		var/air_thermal_mass = the_air.heat_capacity()
 
 		if (max(chem_temp, the_air.temperature) <= THERM_DISS_MAX_SAFE_TEMP)
