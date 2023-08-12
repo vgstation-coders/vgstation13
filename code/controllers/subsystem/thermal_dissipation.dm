@@ -124,40 +124,46 @@ var/list/thermal_dissipation_reagents = list()
 			var/Tr
 			if (is_the_air_simulated)
 
-				for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
-					this_slice_energy = emission_factor * (chem_temp ** 4 - the_air.temperature ** 4)
-					Tr = chem_temp - this_slice_energy / total_thermal_mass
-					//If the discrete nature of the calculation would cause the reagents temperature to go past the equalization temperature, we equalize the temperatures.
-					switch (which_is_hotter)
-						if (REAGENTS_HOTTER)
-							if (Tr < Te)
+				switch (which_is_hotter)
+					if (REAGENTS_HOTTER)
+						for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+							this_slice_energy = emission_factor * (chem_temp ** 4 - the_air.temperature ** 4)
+							Tr = chem_temp - this_slice_energy * reagents_thermal_mass_reciprocal
+							//If the discrete nature of the calculation would cause the reagents temperature to go past the equalization temperature, we equalize the temperatures.
+							if (!(Tr > Te))
 								chem_temp = Te
 								the_air.temperature = Te
 								break
-						if (AIR_HOTTER)
-							if (Tr > Te)
+							chem_temp -= the_air.add_thermal_energy_hc_known(this_slice_energy, TCMB, air_thermal_mass) * reagents_thermal_mass_reciprocal
+					if (AIR_HOTTER)
+						for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+							this_slice_energy = emission_factor * (chem_temp ** 4 - the_air.temperature ** 4)
+							Tr = chem_temp - this_slice_energy * reagents_thermal_mass_reciprocal
+							if (!(Tr < Te))
 								chem_temp = Te
 								the_air.temperature = Te
 								break
-					chem_temp -= the_air.add_thermal_energy_hc_known(this_slice_energy, TCMB, air_thermal_mass) * reagents_thermal_mass_reciprocal
-
+							chem_temp -= the_air.add_thermal_energy_hc_known(this_slice_energy, TCMB, air_thermal_mass) * reagents_thermal_mass_reciprocal
 			else
-				for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
-					this_slice_energy = emission_factor * (chem_temp ** 4 - the_air.temperature ** 4)
-					Tr = chem_temp - this_slice_energy / total_thermal_mass
-					//If the discrete nature of the calculation would cause the reagents temperature to go past the equalization temperature, we equalize the temperatures.
-					switch (which_is_hotter)
-						if (REAGENTS_HOTTER)
-							if (Tr < Te)
+				switch (which_is_hotter)
+					if (REAGENTS_HOTTER)
+						for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+							this_slice_energy = emission_factor * (chem_temp ** 4 - the_air.temperature ** 4)
+							Tr = chem_temp - this_slice_energy * reagents_thermal_mass_reciprocal
+							if (!(Tr > Te))
 								chem_temp = Te
 								the_air.temperature = Te
 								break
-						if (AIR_HOTTER)
-							if (Tr > Te)
+							chem_temp = Tr
+					if (AIR_HOTTER)
+						for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+							this_slice_energy = emission_factor * (chem_temp ** 4 - the_air.temperature ** 4)
+							Tr = chem_temp - this_slice_energy * reagents_thermal_mass_reciprocal
+							if (!(Tr < Te))
 								chem_temp = Te
 								the_air.temperature = Te
 								break
-					chem_temp -= this_slice_energy * reagents_thermal_mass_reciprocal
+							chem_temp = Tr
 
 			#undef REAGENTS_HOTTER
 			#undef AIR_HOTTER
