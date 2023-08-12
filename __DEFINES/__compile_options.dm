@@ -63,8 +63,3 @@
 #define SHOW_CHANGELOG_ON_NEW_PLAYER_LOGIN !DEVELOPER_MODE
 
 #define AUXTOOLS_DEBUGGER DEVELOPER_MODE
-
-//OpenDream
-#ifdef OPENDREAM
-#pragma SoftReservedKeyword warning //Prevents types ending in "/operator" from erroring in OpenDream.
-#endif
