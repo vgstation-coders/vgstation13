@@ -85,6 +85,8 @@
 	bumped = 1
 
 	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	if(!hookshot) /* Can happen with supply cyborg hookshots as they're de-selected/put in inventory/etc. */
+		return
 	spawn()
 		if(!can_tether)
 			..(A)
