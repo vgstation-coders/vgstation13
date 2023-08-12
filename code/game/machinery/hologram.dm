@@ -102,16 +102,13 @@ var/list/holopads = list()
 			if(other_holopads.len)
 				target = input("Select a holopad to transmit to") as null|anything in other_holopads
 				if(target)
-					if(target.holo)
-						to_chat(user, "<span class='warning'>This holopad is in use.</span>")
-					else
-						target.source = src
-						if(!target.activate_holo(user))
-							target.source = null
-							target = null
+					target.source = src
+					if(!target.activate_holo(user))
+						target.source = null
+						target = null
 
 			else
-				to_chat(user, "<span class='warning'>No other AI holopads were found to transmit to!</span>")
+				to_chat(user, "<span class='warning'>ERROR: </span>No other AI holopads were found to transmit to.")
 
 
 
@@ -145,11 +142,17 @@ var/list/holopads = list()
 /*This is the proc for special two-way communication between AI and holopad/people talking near holopad.
 For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 /obj/machinery/hologram/holopad/Hear(var/datum/speech/speech, var/rendered_message="")
-	if(speech.speaker && holo && master && !speech.frequency && speech.speaker != master)//Master is mostly a safety in case lag hits or something. Radio_freq so AIs dont hear holopad stuff through radios.
-		if(!master.say_understands(speech.speaker, speech.language)) //previously if(!master.languages & speaker.languages)//The AI will be able to understand most mobs talking through the holopad.
-			rendered_message = speech.render_message()
-		rendered_message = "<i><span class='[speech.render_wrapper_classes()]'>Holopad received, <span class='message'>[rendered_message]</span></span></i>"
-		master.show_message(rendered_message, 2)
+	if(speech.speaker && !speech.frequency)//Radio_freq so AIs dont hear holopad stuff through radios.
+		if(holo && master && speech.speaker != master)//Master is mostly a safety in case lag hits or something.
+			if(!master.say_understands(speech.speaker, speech.language)) //previously if(!master.languages & speaker.languages)//The AI will be able to understand most mobs talking through the holopad.
+				rendered_message = speech.render_message()
+			rendered_message = "<i><span class='[speech.render_wrapper_classes()]'>Holopad received, <span class='message'>[rendered_message]</span></span></i>"
+			if(isAIEye(master))
+				master.show_message(rendered_message, 2)
+			else if(source)
+				source.visible_message(rendered_message)
+		if(target && target.master && target.holo && speech.speaker == target.master)
+			target.holo.say(speech.message)
 
 /obj/machinery/hologram/holopad/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 	if(!master)
@@ -158,7 +161,9 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		var/mob/camera/aiEye/eye = master
 		if(eye.high_res && cameranet.checkCameraVis(A)) //visible message is already being picked up by the cameras, avoids duplicate messages
 			return
-	master.show_message( message, 1, blind_message, 2) //otherwise it's being picked up by the holopad itself
+		master.show_message( message, 1, blind_message, 2) //otherwise it's being picked up by the holopad itself
+	else if(target && target.holo && target.master && A == target.master)
+		target.holo.visible_message(message, blind_message, drugged_message, blind_drugged_message)
 
 /obj/machinery/hologram/holopad/proc/create_holo(mob/user, turf/T = loc)
 	var/mob/camera/aiEye/eye = user
