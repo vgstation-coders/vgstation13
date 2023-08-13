@@ -330,9 +330,7 @@ Class Procs:
 	if(this_area)
 		return this_area.powered(chan)
 	else
-		var/area/power_area = get_area(src)
-		return power_area ? power_area.powered(chan) : FALSE
-
+		return (get_area(src))?.powered(chan)
 
 /obj/machinery/proc/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	if("set_id" in href_list)
