@@ -571,6 +571,32 @@
 // AYY MILITARY CLOTHES
 //////////////////////////////
 
+//Ayy lmao gas mask
+/obj/item/clothing/mask/gas/mothership
+	name = "GDR half mask"
+	desc = "A close-fitting half mask that can be connected to an air supply. Acid resistant, water soluble."
+	icon_state = "ayy_mask"
+	item_state = "ayy_mask"
+	siemens_coefficient = 0.7
+	species_fit = list(GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED)
+	body_parts_visible_override = EYES
+	can_flip = 0
+	canstage = 0
+
+/obj/item/clothing/mask/gas/mothership/dissolvable()
+	return WATER
+
+//Superior ayy lmao gas mask
+/obj/item/clothing/mask/gas/mothership/advanced
+	name = "GDR Half Mask MKII"
+	desc = "A close-fitting half mask that can be connected to an air supply. This one is rated for both acid and water exposure."
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 75, rad = 0)
+	sterility = 100
+
+/obj/item/clothing/mask/gas/mothership/advanced/dissolvable()
+	return FALSE
+
 //Ayy lmao helmets
 /obj/item/clothing/head/helmet/mothership
 	name = "MDF Helmet"
@@ -583,6 +609,18 @@
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0) // Identical to default sec helmet, but a lot more stylish!
 
 /obj/item/clothing/head/helmet/mothership/dissolvable()
+	return WATER
+
+/obj/item/clothing/head/helmet/mothership_explorer
+	name = "Explorer Helmet"
+	icon_state = "explorer_helmet"
+	item_state = "explorer_helmet"
+	desc = "A segmented helmet of alien alloy, perfect for protecting an explorer's cranium from hostile fauna."
+	species_fit = list(GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
+	armor = list(melee = 50, bullet = 30, laser = 30, energy = 10, bomb = 30, bio = 0, rad = 0) // Identical to default sec helmet, but a lot more stylish!
+
+/obj/item/clothing/head/helmet/mothership_explorer/dissolvable()
 	return WATER
 
 /obj/item/clothing/head/helmet/mothership_visor
@@ -610,7 +648,7 @@
 /obj/item/clothing/head/helmet/mothership_visor_heavy/dissolvable()
 	return FALSE
 
-//Ayy lmao armor vest
+//Ayy lmao armor vests
 /obj/item/clothing/suit/armor/mothership
 	name = "MDF Armor"
 	desc = "An armored vest perfectly fitted for the thinnest of abdomens. Praise the mothership."
@@ -623,6 +661,13 @@
 
 /obj/item/clothing/suit/armor/mothership/dissolvable()
 	return WATER
+
+/obj/item/clothing/suit/armor/mothership/explorer
+	name = "Explorer Chestplate"
+	desc = "A segmented armored vest of alien alloy, favored by mothership explorers."
+	icon_state = "explorer_chestplate"
+	item_state = "explorer_chestplate"
+	armor = list(melee = 50, bullet = 30, laser = 30, energy = 10, bomb = 30, bio = 0, rad = 0)
 
 //Ayy lmao heavy armor
 /obj/item/clothing/suit/armor/mothership_heavy
@@ -667,7 +712,7 @@
 		"/obj/item/weapon/storage/fancy/cigarettes",
 		"/obj/item/weapon/lighter",
 		"/obj/item/clothing/glasses",
-		"/obj/item/clothing/mask/gas",
+		"/obj/item/clothing/mask/gas/mothership",
 		"/obj/item/weapon/tank/emergency_oxygen",
 		)
 
@@ -684,7 +729,7 @@
 	new /obj/item/weapon/reagent_containers/food/snacks/zambiscuit(src)
 	new /obj/item/weapon/storage/fancy/cigarettes/redsuits(src)
 	new /obj/item/weapon/lighter/zippo(src)
-	new /obj/item/clothing/mask/gas(src)
+	new /obj/item/clothing/mask/gas/mothership(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 
 //////////////////////////////

@@ -50,6 +50,7 @@
 	dir = 8
 	},
 /obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "au" = (
@@ -485,6 +486,16 @@
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
+"dN" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/item/clothing/shoes/jackboots/mothership,
+/obj/item/clothing/under/grey/grey_soldier,
+/obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/research)
 "dS" = (
 /obj/item/weapon/book/manual/engineering_construction,
 /obj/structure/closet/ayy3,
@@ -496,6 +507,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (EAST)"
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/maintenance)
 "dV" = (
@@ -984,6 +996,7 @@
 	name = "Researcher's locker";
 	anchored = 1
 	},
+/obj/item/dictionary/vox,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "jh" = (
@@ -2086,6 +2099,14 @@
 	},
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
+"vu" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/research)
 "vy" = (
 /obj/machinery/smartfridge/bloodbank/filled,
 /obj/structure/window/reinforced{
@@ -2294,6 +2315,7 @@
 /obj/machinery/light/he,
 /obj/item/weapon/storage/belt/mothership,
 /obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "xI" = (
@@ -2361,6 +2383,10 @@
 	icon_state = "bcircuit"
 	},
 /area/vault/mothership_lab/research)
+"yw" = (
+/obj/structure/window/barricade/full,
+/turf/unsimulated/floor,
+/area/vault/mothership_lab/maintenance)
 "yD" = (
 /obj/effect/decal/cleanable/blood{
 	basecolor = "#CFAAAA";
@@ -2383,6 +2409,7 @@
 /obj/machinery/light/he,
 /obj/item/weapon/storage/belt/mothership,
 /obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "yV" = (
@@ -2733,7 +2760,6 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/item/clothing/mask/gas,
 /obj/structure/window/reinforced/plasma{
 	dir = 8
 	},
@@ -2745,6 +2771,7 @@
 	req_access_txt = "162";
 	req_one_access_txt = "162"
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor{
 	icon_state = "engine";
 	name = "reinforced floor"
@@ -2891,6 +2918,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/maintenance)
 "ET" = (
@@ -3033,6 +3061,7 @@
 	name = "Researcher's locker";
 	anchored = 1
 	},
+/obj/item/dictionary/insect,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Hd" = (
@@ -3963,6 +3992,7 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 4
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/armory)
 "Qk" = (
@@ -4265,6 +4295,7 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 1
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/armory)
 "Tc" = (
@@ -4413,6 +4444,7 @@
 /area/vault/mothership_lab/research)
 "Uv" = (
 /obj/structure/filingcabinet,
+/obj/item/dictionary/mouse,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Ux" = (
@@ -4423,6 +4455,7 @@
 	dir = 1
 	},
 /obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "UA" = (
@@ -4461,31 +4494,6 @@
 	},
 /obj/structure/window/reinforced/plasma,
 /turf/unsimulated/floor/ayy/fancy,
-/area/vault/mothership_lab/armory)
-"Vj" = (
-/obj/structure/rack,
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/item/weapon/tank/oxygen/red,
-/obj/item/clothing/shoes/magboots,
-/obj/item/clothing/suit/space/rig/grey/soldier,
-/obj/item/clothing/mask/gas,
-/obj/machinery/door/window/plasma/secure{
-	dir = 2;
-	req_access_txt = "162";
-	req_one_access_txt = "162"
-	},
-/turf/unsimulated/floor{
-	icon_state = "engine";
-	name = "reinforced floor"
-	},
 /area/vault/mothership_lab/armory)
 "VB" = (
 /obj/structure/grille,
@@ -4874,7 +4882,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "YJ" = (
-/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader,
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader/named,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "YK" = (
@@ -5432,7 +5440,7 @@ rI
 cT
 ZO
 DG
-Vj
+bD
 nk
 hW
 Jk
@@ -6249,11 +6257,11 @@ Ka
 qs
 Yr
 Zn
-kN
+vu
 ID
 ID
 ID
-qc
+dN
 Zn
 ID
 Ul
@@ -6277,7 +6285,7 @@ Zn
 Zn
 ID
 ID
-qc
+dN
 Zn
 Ms
 xv
@@ -7130,7 +7138,7 @@ ID
 ID
 ID
 ID
-kN
+vu
 Br
 xI
 zk
@@ -7286,7 +7294,7 @@ fW
 dt
 LM
 eC
-Br
+yw
 kY
 Qk
 zk
