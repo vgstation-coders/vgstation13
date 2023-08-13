@@ -27,13 +27,7 @@ var/list/machines = list()
 // This is to allow the near identical fast machinery process to use it.
 /datum/subsystem/machinery/proc/get_currenrun()
 	currentrun_index = machines.len
-	currentrun.len = currentrun_index
-	if (currentrun_index)
-		for(var/c in 1 to currentrun_index)
-			currentrun[c] = machines[c]
-
-	return currentrun
-
+	return machines.Copy()
 
 /datum/subsystem/machinery/fire(resumed = FALSE)
 	if (!resumed)
