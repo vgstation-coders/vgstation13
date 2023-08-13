@@ -23,8 +23,6 @@ var/list/machines = list()
 
 	..("M:[global.machines.len]")
 
-
-// This is to allow the near identical fast machinery process to use it.
 /datum/subsystem/machinery/proc/get_currenrun()
 	currentrun_index = machines.len
 	return machines.Copy()
