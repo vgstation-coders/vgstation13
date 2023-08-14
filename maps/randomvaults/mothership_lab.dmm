@@ -2495,7 +2495,8 @@
 /obj/machinery/door/airlock/security{
 	name = "Explorer Barracks";
 	req_access_txt = "162";
-	req_one_access_txt = "162"
+	req_one_access_txt = "162";
+	locked = 1
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
