@@ -528,7 +528,7 @@
 			<body>
 			<center><img src="https://ss13.moe/wiki/images/e/ec/Mothership_logo.png"> <h1>GDR-43X: Space Polyp Care Instructions</h1></center>
 			Caring for space polyps is a crucial task to maintain mothership food production. The following simple instructions have been written for you by an experienced Head Laborer. Adhere to them or risk consequences to life, limb, and continuation of cloning cycles.<BR><BR>
-			<b>Gelatin Harvesting</b>: Polyps secrete gelatin naturally that helps insulate them from vacuum. After some time has passed, collect excess gelatin from the tendrils below the bell using a bucket. Place a lid on the bucket first, or product will be wasted.<BR>
+			<b>Gelatin Harvesting</b>: Polyps secrete gelatin naturally that helps insulate them from vacuum. After some time has passed, collect excess gelatin from the tendrils below the bell using a bucket.<BR>
 			<b>Slaughtering</b>: Pull the polyp you are slaughtering away from its herd to a private room. Use a disintegrator in 40 watt range or a similar substitute. Make it quick.<BR>
 			<b>Injuries</b>: If one of your polyps is injured and remains so at the end of your shift, you will be held accountable. To quickly fix minor injuries, feed the polyp fresh meat. Polyps have a rapid metabolism, and proteins assist with natural healing processes.<BR>
 			<b>Calming</b>: If you abuse a polyp, or it is attacked, it will become defensive and sting any nearby lifeforms. A defensive polyp will not recognize you as its herder. Feed the agitated polyp fresh meat to calm it. If an entire herd has become agitated, isolate and call for assistance from mothership soldiers.<BR><BR>
@@ -618,7 +618,7 @@
 	desc = "A segmented helmet of alien alloy, perfect for protecting an explorer's cranium from hostile fauna."
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
-	armor = list(melee = 50, bullet = 30, laser = 30, energy = 10, bomb = 30, bio = 0, rad = 0) // Identical to default sec helmet, but a lot more stylish!
+	armor = list(melee = 50, bullet = 40, laser = 20, energy = 5, bomb = 35, bio = 0, rad = 0) // Identical to default sec helmet, but a lot more stylish!
 
 /obj/item/clothing/head/helmet/mothership_explorer/dissolvable()
 	return WATER
@@ -667,7 +667,7 @@
 	desc = "A segmented armored vest of alien alloy, favored by mothership explorers."
 	icon_state = "explorer_chestplate"
 	item_state = "explorer_chestplate"
-	armor = list(melee = 50, bullet = 30, laser = 30, energy = 10, bomb = 30, bio = 0, rad = 0)
+	armor = list(melee = 50, bullet = 40, laser = 20, energy = 5, bomb = 35, bio = 0, rad = 0)
 
 //Ayy lmao heavy armor
 /obj/item/clothing/suit/armor/mothership_heavy
