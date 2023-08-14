@@ -123,7 +123,7 @@
 	speed = 3
 
 	ranged = 1
-	projectiletype = /obj/item/projectile/beam/immolationray/upgraded // A unique beam that deals more damage than a regular immolation ray
+	projectiletype = /obj/item/projectile/beam/immolationray/upgraded // A unique beam that deals more damage than a regular immolation ray and can destroy walls
 	projectilesound = 'sound/weapons/ray1.ogg'
 	retreat_distance = 8 // It will attempt to linger at a distance just outside of a player's typical field of view, firing shots while deflecting return fire off its armor
 	minimum_distance = 8
@@ -138,12 +138,15 @@
 	var/last_ufosound = 0
 	var/const/ufosound_cooldown = 30 SECONDS // After making a sound effect, needs to wait thirty seconds before having a chance to make one again. Prevents spam
 
-/mob/living/simple_animal/hostile/mothership_hoverdisc/Life() // Will occasionally play a spoopy ufo sound
+/mob/living/simple_animal/hostile/mothership_hoverdisc/Life()
 	..()
-	if((last_ufosound + ufosound_cooldown < world.time) && prob(5))
+	if((last_ufosound + ufosound_cooldown < world.time) && prob(5)) // Will occasionally play a spoopy ufo sound
 		visible_message("<span class='notice'>The [src] emits a rhythmic hum.</span>")
 		playsound(src, 'sound/effects/ufo_appear.ogg', 50, 0)
 		last_ufosound = world.time
+	if(health < (maxHealth/2)) // We've taken a lot of damage, let's get up close and personal
+		retreat_distance = 2
+		minimum_distance = 2
 
 /mob/living/simple_animal/hostile/mothership_hoverdisc/death(var/gibbed = FALSE)
 	..(TRUE)
