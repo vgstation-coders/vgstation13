@@ -2759,7 +2759,7 @@
 	dir = 8
 	},
 /obj/item/weapon/card/id/mothership_soldier,
-/obj/structure/closet/crate/ayy2,
+/obj/structure/closet/crate/ayy,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "Qz" = (

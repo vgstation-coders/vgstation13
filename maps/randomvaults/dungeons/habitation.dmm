@@ -28,6 +28,14 @@
 	},
 /turf/unsimulated/floor/grey_sand,
 /area/vault/mothership_lab/administration)
+"ap" = (
+/obj/structure/table,
+/obj/item/weapon/paper,
+/obj/item/weapon/storage/fancy/crayons,
+/obj/item/weapon/pen,
+/obj/item/dictionary/grey,
+/turf/unsimulated/floor/ayy,
+/area/vault/mothership_lab/habitation)
 "au" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/boulder,
@@ -3702,6 +3710,8 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
+/obj/item/dictionary/martian,
+/obj/item/dictionary/human,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "Gs" = (
@@ -4070,14 +4080,6 @@
 /area/vault/mothership_lab/administration)
 "Jp" = (
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic,
-/turf/unsimulated/floor/ayy,
-/area/vault/mothership_lab/habitation)
-"Js" = (
-/obj/structure/table,
-/obj/item/weapon/paper,
-/obj/item/weapon/storage/fancy/crayons,
-/obj/item/weapon/pen,
-/obj/item/dictionary/grey,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "Ju" = (
@@ -5267,7 +5269,6 @@
 /obj/machinery/computer/security/telescreen/entertainment{
 	pixel_y = 29
 	},
-/obj/item/dictionary/human,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "UK" = (
@@ -8902,7 +8903,7 @@ pb
 Lf
 xk
 da
-Js
+ap
 cX
 co
 Aa
@@ -8998,7 +8999,7 @@ NH
 CG
 co
 cX
-Js
+ap
 CG
 Gx
 CG
