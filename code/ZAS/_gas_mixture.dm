@@ -158,18 +158,6 @@
 	temperature += thermal_energy / heat_capacity
 	return thermal_energy
 
-//Same as add_thermal_energy() except with heat capacity as an arg.
-/datum/gas_mixture/proc/add_thermal_energy_hc_known(var/thermal_energy, var/min_temp = TCMB, var/heat_capacity = MINIMUM_HEAT_CAPACITY)
-	if(total_moles == 0)
-		return 0
-
-	if(thermal_energy < 0)
-		if(temperature <= min_temp)
-			return 0
-		thermal_energy = max(thermal_energy, (min_temp - temperature) * heat_capacity) //ensure temperature does not go below min_temp. thermal_energy is negative here.
-	temperature += thermal_energy / heat_capacity
-	return thermal_energy
-
 //Returns the thermal energy change required to get to a new temperature
 /datum/gas_mixture/proc/get_thermal_energy_change(var/new_temperature)
 	return heat_capacity() * (max(new_temperature, 0) - temperature)
