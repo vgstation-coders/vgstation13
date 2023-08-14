@@ -1464,6 +1464,6 @@
 		/obj/item/clothing/head/helmet/dredd,
 		/obj/item/clothing/mask/gas/swat,
 		/obj/item/weapon/storage/belt/security,
-		/obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+		/obj/item/clothing/suit/armor/dredd,
 		/obj/item/weapon/gun/lawgiver,
 	)

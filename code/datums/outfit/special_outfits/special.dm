@@ -117,7 +117,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/dredd,
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/swat,
 			slot_belt_str = /obj/item/weapon/storage/belt/security,
-			slot_wear_suit_str = /obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+			slot_wear_suit_str = /obj/item/clothing/suit/armor/dredd,
 			slot_s_store_str = /obj/item/weapon/gun/lawgiver,
 		),
 	)

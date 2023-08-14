@@ -1390,6 +1390,7 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
 	var/datum/organ/external/kickingfoot = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
+	playsound(loc, "punch", 30, 1, -1)
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
 		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")
 		if(prob(70))
@@ -1403,7 +1404,7 @@ var/global/list/image/blood_overlays = list()
 
 	var/turf/T = get_edge_target_turf(loc, kick_dir)
 
-	var/kick_power = max((H.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
+	var/kick_power = get_kick_power(H)
 
 	//Attempt to damage the item if it's breakable here.
 	var/glanced = TRUE
@@ -1418,17 +1419,26 @@ var/global/list/image/blood_overlays = list()
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
 		broken = try_break(propelparams = thispropel)
 
-	if(kick_power >= 6 && !broken) //Fly in an arc!
-		spawn()
-			var/original_pixel_y = pixel_y
-			animate(src, pixel_y = original_pixel_y + WORLD_ICON_SIZE, time = 10, easing = CUBIC_EASING)
-			while(loc)
-				if(!throwing)
-					animate(src, pixel_y = original_pixel_y, time = 5, easing = ELASTIC_EASING)
-					break
-				sleep(5)
+	if(kick_power >= 1 && !broken) //Fly in an arc!
+		kicked_item_arc_animation(kick_power)
 		throw_at(T, kick_power, 1)
 	Crossed(H) //So you can't kick shards while naked without suffering
+
+/obj/proc/get_kick_power(mob/living/carbon/human/kicker)
+	return max((kicker.get_strength() * 10 - round(get_total_scaled_w_class(3) / 7)), 1) //The range of the kick is affected by the strength of the kicker, depending on the kicker's genes, and the total weight of the object and its contents.
+
+/obj/proc/kicked_item_arc_animation(distance = 5)
+	spawn()
+		var/original_pixel_y = pixel_y
+		var/time_to_zenith = min(distance, 5)
+		animate(src, pixel_y = original_pixel_y + (round(WORLD_ICON_SIZE * time_to_zenith / 5)), time = time_to_zenith, easing = QUAD_EASING | EASE_OUT)
+		spawn(time_to_zenith)
+			animate(src, pixel_y = original_pixel_y, time = time_to_zenith, easing = QUAD_EASING | EASE_IN)
+		while(loc)
+			if(!throwing)
+				animate(src, pixel_y = original_pixel_y, time = time_to_zenith, easing = BOUNCE_EASING)
+				break
+			sleep(5)
 
 /obj/item/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)

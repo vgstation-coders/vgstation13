@@ -605,7 +605,7 @@
 	body_parts_covered = FULL_HEAD
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
-	armor = list(melee = 65, bullet = 30, laser = 65, energy = 15, bomb = 40, bio = 0, rad = 0)
+	armor = list(melee = 75, bullet = 30, laser = 65, energy = 15, bomb = 50, bio = 0, rad = 0)
 
 /obj/item/clothing/head/helmet/mothership_visor_heavy/dissolvable()
 	return FALSE
@@ -627,14 +627,14 @@
 //Ayy lmao heavy armor
 /obj/item/clothing/suit/armor/mothership_heavy
 	name = "MDF Heavy Armor"
-	desc = "An alternative to the common MDF vest, fitted with additional and thicker armor plates. It offers better protection and coverage at the cost of mobility."
+	desc = "An alternative to the common MDF vest, fitted with additional and thicker armor plates. It offers better protection and coverage at the cost of some mobility."
 	icon_state = "mdf_armor_heavy"
 	item_state = "mdf_armor_heavy"
-	slowdown = HARDSUIT_SLOWDOWN_HIGH // It's called heavy armor for a reason, after all
+	slowdown = HARDSUIT_SLOWDOWN_LOW // It's called heavy armor for a reason, after all
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|IGNORE_INV
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
-	armor = list(melee = 65, bullet = 30, laser = 65, energy = 15, bomb = 40, bio = 0, rad = 0) // Slightly better stats, but nothing too crazy
+	armor = list(melee = 75, bullet = 30, laser = 65, energy = 15, bomb = 50, bio = 0, rad = 0) // Notably better stats than the vest
 	siemens_coefficient = 0.5
 
 /obj/item/clothing/suit/armor/mothership_heavy/dissolvable()
