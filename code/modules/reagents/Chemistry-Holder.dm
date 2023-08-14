@@ -948,7 +948,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(power_transfer > 0)
 		chem_temp = min(chem_temp + temp_change, received_temperature)
 	else
-		chem_temp = max(chem_temp + temp_change, received_temperature, 0)
+		chem_temp = max(chem_temp + temp_change, received_temperature, TCMB)
 	if(skip_flags & SKIP_RXN_CHECK_ON_HEATING)
 		return
 	handle_reactions()
