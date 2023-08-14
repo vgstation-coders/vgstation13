@@ -1047,9 +1047,9 @@
 	minimum_distance = 8
 	ranged = 1
 
-/mob/living/simple_animal/hostile/humanoid/grey/leader/Life() // Can heal allies or drain health from them to heal himself. A good tactic could be to focus shooting at him so he eventually drains all the soldiers around him of all their health
+/mob/living/simple_animal/hostile/humanoid/grey/leader/Life()
 	..()
-	if(last_psychicrejuvenate + psychicrejuvenate_cooldown < world.time)
+	if(last_psychicrejuvenate + psychicrejuvenate_cooldown < world.time) // Can heal allies slightly
 		for(var/mob/living/simple_animal/hostile/humanoid/grey/soldier/S in view(src, psychic_range))
 			if(S.health < (S.maxHealth/2))
 				visible_message("<span class = 'warning'>\The [src] fixes an intense gaze on the wounded [S], and they suddenly appear to be slightly revitalized!</span>")
@@ -1061,7 +1061,7 @@
 			if(target && S.target != target)
 				S.GiveTarget(target)
 
-	if(last_psychicdrain + psychicdrain_cooldown < world.time)
+	if(last_psychicdrain + psychicdrain_cooldown < world.time) // Or drain health from them to heal himself
 		for(var/mob/living/simple_animal/hostile/humanoid/grey/soldier/S in view(src, psychic_range))
 			if(health < (maxHealth/2))
 				visible_message("<span class = 'warning'>\The [src] fixes an intense gaze on [S], and they writhe in agony. \The [src] appears to have been rejuvenated by the exchange, however.</span>")
@@ -1073,6 +1073,14 @@
 
 			if(target && S.target != target)
 				S.GiveTarget(target)
+
+	if(health >= (maxHealth/3)) // Decently high health? Stay far back
+		retreat_distance = 8
+		minimum_distance = 8
+
+	if(health < (maxHealth/3)) // Health getting really low? Lower than it should be with our psychic drain ability? Fuck it, we're getting aggressive
+		retreat_distance = 2
+		minimum_distance = 2
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/AttackingTarget() // Fling the people trying to beat him up awaaaaaay
 	..()
