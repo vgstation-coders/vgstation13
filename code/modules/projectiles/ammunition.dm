@@ -164,7 +164,7 @@
 		if (PW.loaded.len + PW.refuse.len >= PW.max_shells)
 			break
 		if (!(PW.caliber && PW.caliber[loading.caliber]))
-			break;
+			break
 		if (!do_after(usr, target, reload_delay, 5))
 			return fumbleLoad(bullets_from, target)
 
