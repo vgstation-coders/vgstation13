@@ -664,7 +664,7 @@
 
 /obj/item/clothing/suit/armor/mothership/explorer
 	name = "Explorer Chestplate"
-	desc = "A segmented armored vest of alien alloy, favored by mothership explorers."
+	desc = "A segmented armored vest of alien alloy, favored by mothership explorers. Protects the vitals from blunt force and ballistic weapons."
 	icon_state = "explorer_chestplate"
 	item_state = "explorer_chestplate"
 	armor = list(melee = 50, bullet = 40, laser = 20, energy = 5, bomb = 35, bio = 0, rad = 0)
