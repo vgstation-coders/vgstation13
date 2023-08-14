@@ -239,6 +239,8 @@
 	attacktext = "stabs"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 
+	see_in_dark = 5 // Can see a little better in the dark
+
 	corpse = /obj/effect/landmark/corpse/vox/spaceraider_assassin
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/laser/retro, /obj/item/weapon/kitchen/utensil/knife/tactical)

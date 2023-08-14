@@ -56,6 +56,15 @@
 	var/last_suxameth = 0
 	var/const/suxameth_cooldown = 20 SECONDS
 
+/mob/living/simple_animal/hostile/humanoid/greynurse/Life() // If we've got a paralytic shot ready, run in. If not, stay further back
+	..()
+	if(last_suxameth + suxameth_cooldown < world.time)
+		retreat_distance = 2
+		minimum_distance = 1
+	if(last_suxameth + suxameth_cooldown > world.time)
+		retreat_distance = 3
+		minimum_distance = 3
+
 /mob/living/simple_animal/hostile/humanoid/greynurse/Aggro()
 	..()
 	say(pick("Visitation hours for the greylings are over. Your breach of protocol will see you disintegrated.","You are making the greylings nervous, and you are not authorized to be here. The penalty is immediate disintegration."), all_languages[LANGUAGE_GREY])
@@ -64,6 +73,7 @@
 	var/mob/living/carbon/human/H = target
 	if((last_suxameth + suxameth_cooldown < world.time) && ishuman(H))
 		visible_message("<b><span class='warning'>[src] injects [H] with a paralytic autoinjector!</span>")
+		say(pick("This will help you relax.","Now count backwards from ten."), all_languages[LANGUAGE_GREY])
 		playsound(src, 'sound/items/hypospray.ogg', 50, 1)
 		H.reagents.add_reagent(SUX, 10)
 		last_suxameth = world.time

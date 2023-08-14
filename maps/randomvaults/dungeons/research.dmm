@@ -96,6 +96,9 @@
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic{
 	dir = 8
 	},
+/obj/structure/bed/chair/comfy/ayy1{
+	dir = 8
+	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "aN" = (
@@ -2067,12 +2070,14 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "vj" = (
-/obj/structure/curtain/open/shower,
 /obj/effect/decal/cleanable/blood/drip{
 	basecolor = "#CFAAAA";
 	blood_color = "#CFAAAA"
 	},
-/turf/unsimulated/floor/lab_sterile,
+/obj/item/device/flashlight/flare/ever_bright,
+/turf/unsimulated/floor{
+	icon_state = "panelscorched"
+	},
 /area/vault/mothership_lab/maintenance)
 "vm" = (
 /obj/machinery/light/he/broken{
@@ -2178,6 +2183,12 @@
 /obj/structure/vendomatpack/zamsnax,
 /obj/structure/vendomatpack/zamsnax,
 /turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/maintenance)
+"wp" = (
+/obj/structure/bed/chair/comfy/ayy1{
+	dir = 4
+	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "wt" = (
 /obj/effect/decal/warning_stripes{
@@ -2384,8 +2395,15 @@
 	},
 /area/vault/mothership_lab/research)
 "yw" = (
-/obj/structure/window/barricade/full,
+/obj/structure/girder,
 /turf/unsimulated/floor,
+/area/vault/mothership_lab/maintenance)
+"yA" = (
+/obj/structure/girder,
+/obj/structure/window/barricade/full/block,
+/turf/unsimulated/floor{
+	icon_state = "platingdmg1"
+	},
 /area/vault/mothership_lab/maintenance)
 "yD" = (
 /obj/effect/decal/cleanable/blood{
@@ -3493,7 +3511,9 @@
 /obj/machinery/acidshower{
 	dir = 8
 	},
-/turf/unsimulated/floor/lab_sterile,
+/turf/unsimulated/floor{
+	icon_state = "panelscorched"
+	},
 /area/vault/mothership_lab/maintenance)
 "LR" = (
 /obj/machinery/light/he{
@@ -3573,6 +3593,12 @@
 	},
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
+"MG" = (
+/obj/item/device/flashlight/flare/ever_bright,
+/turf/unsimulated/floor{
+	icon_state = "panelscorched"
+	},
+/area/vault/mothership_lab/maintenance)
 "MI" = (
 /obj/machinery/camera{
 	dir = 1;
@@ -5971,7 +5997,7 @@ ID
 ID
 ID
 Zn
-ID
+Is
 Xj
 MI
 Zn
@@ -6771,7 +6797,7 @@ Zn
 JF
 ID
 ID
-Is
+ID
 ID
 fg
 Zn
@@ -7103,7 +7129,7 @@ Mt
 HO
 zk
 xz
-Br
+yA
 ZA
 rE
 kY
@@ -7480,7 +7506,7 @@ zk
 tS
 pN
 zk
-qd
+MG
 zk
 Hh
 fW
@@ -7618,7 +7644,7 @@ NE
 Br
 tT
 Ib
-zk
+wp
 Br
 Gu
 YG
