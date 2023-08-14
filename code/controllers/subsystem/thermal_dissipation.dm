@@ -29,9 +29,8 @@ var/list/thermal_dissipation_reagents = list()
 		currentrun_index = thermal_dissipation_reagents.len
 		currentrun = thermal_dissipation_reagents.Copy()
 
-	//todo: move this?
 	var/c = currentrun_index
-	message_admins("[currentrun.len] | [currentrun_index] | [c]")
+
 	if(config.thermal_dissipation)
 		var/simulate_air = config.reagents_heat_air
 		var/datum/reagents/R
