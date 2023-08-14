@@ -67,6 +67,7 @@
 	var/list/stored_ammo = list()
 	var/ammo_type = "/obj/item/ammo_casing/a357"
 	var/reloading = FALSE // Flag to stop multi-box loading
+	var/reload_delay = 5 // Delay for do_after() call of reloading
 	var/reload_sound = 'sound/weapons/magazine_load_click.ogg'
 	var/fumble_sound = 'sound/weapons/casing_drop.ogg'
 	var/exact = 1 //whether or not the item only takes ammo_type, or also subtypes. Set to 1 to only take the specified ammo
@@ -163,17 +164,20 @@
 		if (PW.loaded.len + PW.refuse.len >= PW.max_shells)
 			break
 		if (!(PW.caliber && PW.caliber[loading.caliber]))
-			break
-		if (!do_after(usr, target, 5, 5))
+			break;
+		if (!do_after(usr, target, reload_delay, 5))
 			return fumbleLoad(bullets_from, target)
 
 		bullets_from.stored_ammo -= loading
 		PW.loaded += loading
 		loading.forceMove(PW)
 		bullets_loaded++
-		playsound(usr, reload_sound, 100, 1)
 		bullets_from.update_icon()
 		target.update_icon()
+
+		if (reload_delay == 0 && i > 1)	// When reload delay is 0 (speedloaders by default), play the reload sound on first iteration only
+			continue
+		playsound(usr, reload_sound, 100, 1)
 
 	bullets_from.reloading = FALSE
 	return bullets_loaded
