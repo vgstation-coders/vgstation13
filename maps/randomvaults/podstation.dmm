@@ -823,7 +823,8 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/miner/air{
-	desc = "Gasses mined from the gas giant below (above?) flow out through this massive vent."
+	desc = "Gasses mined from the gas giant below (above?) flow out through this massive vent.";
+	on = 1
 	},
 /turf/simulated/floor/engine{
 	name = "vacuum floor";
@@ -1605,6 +1606,11 @@
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "air"
+	},
+/obj/machinery/door_control{
+	pixel_y = 25;
+	name = "Gas Miner Control";
+	id_tag = "podstation_air"
 	},
 /turf/simulated/floor/plating,
 /area/vault/podstation)
