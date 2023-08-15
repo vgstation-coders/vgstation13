@@ -714,13 +714,6 @@
 /obj/item/weapon/storage/backpack/satchel,
 /turf/simulated/floor/dark,
 /area/vault/podstation)
-"mh" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/obj/machinery/portable_atmospherics/canister/oxygen,
-/turf/unsimulated/floor/asteroid/underground/airless,
-/area/vault/podstation)
 "mj" = (
 /obj/machinery/processor,
 /obj/item/trash/fries_cone,
@@ -1607,11 +1600,6 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "air"
 	},
-/obj/machinery/door_control{
-	pixel_y = 25;
-	name = "Gas Miner Control";
-	id_tag = "podstation_air"
-	},
 /turf/simulated/floor/plating,
 /area/vault/podstation)
 "IZ" = (
@@ -1752,6 +1740,12 @@
 "Np" = (
 /obj/structure/fence,
 /turf/unsimulated/floor/asteroid,
+/area/vault/podstation)
+"NA" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/asteroid/underground/airless,
 /area/vault/podstation)
 "NF" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1988,6 +1982,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
+/obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/unsimulated/floor/asteroid/underground/airless,
 /area/vault/podstation)
 "Sn" = (
@@ -3736,7 +3731,7 @@ Zy
 hw
 Zy
 Zy
-Si
+NA
 YT
 Zy
 Lv
@@ -3784,7 +3779,7 @@ oZ
 cd
 Zy
 Zy
-Si
+NA
 Zy
 Zy
 Uk
@@ -3871,7 +3866,7 @@ bX
 hQ
 YT
 Zy
-mh
+Si
 Zy
 Zy
 Dz
@@ -3922,7 +3917,7 @@ Zy
 DR
 YT
 Zy
-Si
+NA
 aO
 Zy
 Db
