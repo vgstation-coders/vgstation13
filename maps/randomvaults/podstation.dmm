@@ -714,6 +714,13 @@
 /obj/item/weapon/storage/backpack/satchel,
 /turf/simulated/floor/dark,
 /area/vault/podstation)
+"mh" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation)
 "mj" = (
 /obj/machinery/processor,
 /obj/item/trash/fries_cone,
@@ -809,12 +816,14 @@
 /turf/simulated/floor,
 /area/vault/podstation)
 "ol" = (
-/obj/machinery/atmospherics/miner/oxygen,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
 /obj/machinery/light/small{
 	dir = 4
+	},
+/obj/machinery/atmospherics/miner/air{
+	desc = "Gasses mined from the gas giant below (above?) flow out through this massive vent."
 	},
 /turf/simulated/floor/engine{
 	name = "vacuum floor";
@@ -1107,7 +1116,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/atmospherics/unary/vent_pump/high_volume{
 	canSpawnMice = 0;
-	dir = 8;
+	dir = 1;
 	external_pressure_bound = 0;
 	frequency = 1443;
 	icon_state = "in";
@@ -1760,11 +1769,12 @@
 	},
 /area/vault/podstation)
 "Ov" = (
-/obj/machinery/atmospherics/unary/portables_connector,
 /obj/machinery/light/small{
 	dir = 8
 	},
-/obj/machinery/portable_atmospherics/canister/oxygen,
+/obj/machinery/atmospherics/unary/tank/air{
+	starting_volume = 3200
+	},
 /turf/simulated/floor/plating,
 /area/vault/podstation)
 "OX" = (
@@ -3855,7 +3865,7 @@ bX
 hQ
 YT
 Zy
-Si
+mh
 Zy
 Zy
 Dz
