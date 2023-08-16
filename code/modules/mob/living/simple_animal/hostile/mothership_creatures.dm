@@ -145,8 +145,8 @@
 		playsound(src, 'sound/effects/ufo_appear.ogg', 50, 0)
 		last_ufosound = world.time
 	if(health >= (maxHealth/2)) // We've got a good bit of health, let's stay back and snipe
-		retreat_distance = 2
-		minimum_distance = 2
+		retreat_distance = 8
+		minimum_distance = 8
 	if(health < (maxHealth/2)) // We've taken a lot of damage, let's get up close and personal
 		retreat_distance = 2
 		minimum_distance = 2
