@@ -144,6 +144,9 @@
 		visible_message("<span class='notice'>The [src] emits a rhythmic hum.</span>")
 		playsound(src, 'sound/effects/ufo_appear.ogg', 50, 0)
 		last_ufosound = world.time
+	if(health >= (maxHealth/2)) // We've got a good bit of health, let's stay back and snipe
+		retreat_distance = 2
+		minimum_distance = 2
 	if(health < (maxHealth/2)) // We've taken a lot of damage, let's get up close and personal
 		retreat_distance = 2
 		minimum_distance = 2
