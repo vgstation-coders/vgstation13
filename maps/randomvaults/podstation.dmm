@@ -2099,11 +2099,6 @@
 	},
 /turf/unsimulated/floor/asteroid/underground/airless,
 /area/vault/podstation/exterior)
-"UL" = (
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
-/area)
 "UN" = (
 /obj/structure/window/barricade/full/block,
 /obj/machinery/door/poddoor/shutters/preopen{
@@ -2114,9 +2109,6 @@
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/podstation/interior)
-"UO" = (
-/turf/unsimulated/floor/asteroid,
-/area)
 "Vb" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -2684,7 +2676,7 @@ Kk
 Kk
 Yx
 ES
-DW
+VS
 pU
 pU
 pU
@@ -2729,8 +2721,8 @@ vM
 af
 wi
 Yx
-UL
-DW
+Yx
+VS
 pU
 pU
 "}
@@ -2775,7 +2767,7 @@ bB
 QW
 Nl
 eZ
-UO
+ES
 pU
 pU
 "}
@@ -2820,7 +2812,7 @@ Kk
 Kk
 Kk
 zr
-UO
+ES
 pU
 pU
 "}
@@ -2865,7 +2857,7 @@ cJ
 pL
 Kk
 Yx
-UO
+ES
 pU
 pU
 "}
@@ -2910,7 +2902,7 @@ Xr
 FJ
 Kk
 Yx
-UO
+ES
 pU
 pU
 "}
@@ -2955,7 +2947,7 @@ Xr
 Wu
 Kk
 Yx
-UO
+ES
 pU
 pU
 "}
@@ -3000,7 +2992,7 @@ Kk
 Kk
 Kk
 Yx
-UO
+ES
 pU
 pU
 "}
@@ -3045,7 +3037,7 @@ iv
 Kk
 aM
 Yx
-UO
+ES
 pU
 pU
 "}
@@ -3090,7 +3082,7 @@ sK
 Kk
 Yx
 ES
-UO
+ES
 pU
 pU
 "}
@@ -3135,7 +3127,7 @@ CD
 Kk
 Yx
 ES
-DW
+VS
 pU
 pU
 "}
@@ -3180,7 +3172,7 @@ px
 Kk
 Yx
 ES
-DW
+VS
 pU
 pU
 "}
