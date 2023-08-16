@@ -492,6 +492,7 @@
 /obj/structure/table/reinforced,
 /obj/item/tool/bonesetter,
 /obj/item/tool/bonegel,
+/obj/item/tool/FixOVein,
 /turf/simulated/floor{
 	icon_state = "white";
 	tag = "icon-white"
@@ -568,6 +569,7 @@
 	},
 /obj/item/weapon/storage/firstaid,
 /obj/item/weapon/storage/box/masks,
+/obj/item/tool/cautery,
 /turf/simulated/floor{
 	icon_state = "white";
 	tag = "icon-white"
