@@ -823,6 +823,13 @@
 	icon_state = "dark"
 	},
 /area/shuttle/brokeufo/start)
+"YX" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/acidsink{
+	pixel_y = 28
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
 "Zo" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/storage/fancy/flares,
@@ -1078,7 +1085,7 @@ aa
 (13,1,1) = {"
 aa
 aZ
-bf
+YX
 as
 bg
 as
