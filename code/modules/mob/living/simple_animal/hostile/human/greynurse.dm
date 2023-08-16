@@ -206,7 +206,7 @@
 				H.reagents.add_reagent(NEUROTOXIN, 25)
 
 	if(!H.lying && !H.locked_to) // Normal attack, chance of brief stun
-		if(ishuman(H) && prob(25))
+		if(ishuman(H) && prob(20))
 			visible_message("<span class='danger'>[src]'s vicious assault knocks [H] down!</span>")
 			H.Knockdown(3)
 			H.Stun(3)
@@ -281,7 +281,7 @@
 			spark(src)
 
 /mob/living/simple_animal/hostile/humanoid/nurseunit/death(var/gibbed = FALSE)
-	visible_message("The <b>[src]</b> blows apart into chunks of flesh and circuitry!")
+	visible_message("<span class='warning'>The <b>[src]</b> blows apart into chunks of flesh and circuitry!")
 	playsound(src, 'sound/effects/flesh_squelch.ogg', 50, 1)
 	new /obj/effect/gibspawner/genericmothership(src.loc)
 	new /obj/effect/gibspawner/robot(src.loc)
@@ -295,9 +295,27 @@
 			W.shatter()
 			breakthrough = 1
 
-		else if(istype(obstacle, /obj/machinery/deployable/barrier))
-			var/obj/machinery/deployable/barrier/B = obstacle
-			B.explode()
+		else if(istype(obstacle, /obj/machinery/)) // The Nurse can smash most machines apart while charging, but it will then also need to smash the machine frame with a second charge
+			var/obj/machinery/M = obstacle
+			if(istype(M, /obj/machinery/door/airlock))
+				var/obj/machinery/door/airlock/A = obstacle
+				A.bashed_in(src)
+				breakthrough = 1
+			if(istype(M, /obj/machinery/constructable_frame/machine_frame))
+				var/obj/machinery/constructable_frame/machine_frame/F = obstacle
+				visible_message("<span class='warning'>The [src] smashes \the [F] apart!")
+				drop_stack(/obj/item/stack/sheet/metal, get_turf(F), 5)
+				qdel(F)
+				breakthrough = 1
+			else
+				MachineCrash(M)
+				src.throwing = 0
+				src.crashing = null
+
+		else if(istype(obstacle, /obj/structure/filingcabinet))
+			var/obj/structure/filingcabinet/F = obstacle
+			new /obj/item/stack/sheet/metal(loc, 2)
+			qdel(F)
 			breakthrough = 1
 
 		else if(istype(obstacle, /obj/structure/grille/))
@@ -373,6 +391,23 @@
 		step(obstacle,src.dir)
 	else
 		obstacle.Bumped(src)
+
+/mob/living/simple_animal/hostile/humanoid/nurseunit/proc/MachineCrash(var/obj/machinery/M) // Borrowed from gourmonger code, necessary step for allowing the mob to shatter machinery
+	for(var/mob/living/L in M.contents)
+		L.forceMove(M.loc)
+
+	if(M.machine_flags & CROWDESTROY)
+		visible_message("<span class='warning'>The [src] smashes \the [M] apart!")
+		M.dropFrame()
+		M.spillContents()
+		qdel(M)
+
+	if(M.wrenchable())
+		M.state = 0
+		M.anchored = FALSE
+		M.power_change()
+
+	M.ex_act(1)
 
 /mob/living/simple_animal/hostile/humanoid/nurseunit/GetAccess()
 	return list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
