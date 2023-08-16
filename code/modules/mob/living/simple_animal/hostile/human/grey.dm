@@ -1034,7 +1034,7 @@
 	var/telekinesis_throw_speed = 3
 	var/telekinesis_throw_range = 10
 
-	items_to_drop = list(/obj/item/weapon/gun/energy/advdisintegrator, /obj/item/weapon/card/id/mothership_leader, /obj/item/clothing/under/grey/grey_leader, /obj/item/clothing/mask/gas/mothership/advanced, /obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior)
+	items_to_drop = list(/obj/item/weapon/gun/energy/advdisintegrator, /obj/item/weapon/card/id/mothership_leader, /obj/item/clothing/under/grey/grey_leader, /obj/item/clothing/mask/gas/mothership/advanced, /obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior, /obj/item/clothing/suit/space/rig/grey/leader)
 
 	speak = list("These imbeciles... it's all so tiresome.","The latest clone batch has been less than impressive.","I will not tolerate further failure.","The mothership and the Chairman are counting on us, cowardice and incompetence are unacceptable.","Do I have to tell you cretins how to do everything?","To think the Chairman assigned me to this backwater sector... what a waste of my talents.")
 	speak_chance = 5
