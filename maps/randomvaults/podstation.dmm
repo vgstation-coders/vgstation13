@@ -223,6 +223,9 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee,
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee,
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee,
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup,
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup,
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -259,7 +262,9 @@
 /area/vault/podstation/interior)
 "dU" = (
 /obj/structure/fence/door,
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/podstation/exterior)
 "ev" = (
 /mob/living/simple_animal/hostile/bigroach,
@@ -900,6 +905,22 @@
 	},
 /turf/simulated/floor,
 /area/vault/podstation/interior)
+"pL" = (
+/obj/structure/closet/crate/freezer,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/sundae,
+/obj/item/weapon/reagent_containers/food/snacks/sundae,
+/obj/item/weapon/reagent_containers/food/snacks/sundae,
+/obj/item/weapon/reagent_containers/food/snacks/sundae,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation/interior)
 "pU" = (
 /turf/space,
 /area)
@@ -1010,7 +1031,9 @@
 /obj/structure/fence/corner{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/podstation/exterior)
 "rF" = (
 /mob/living/simple_animal/cockroach,
@@ -1174,7 +1197,9 @@
 "wh" = (
 /obj/item/trash/tray,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/podstation/exterior)
 "wi" = (
 /obj/machinery/camera{
@@ -1435,13 +1460,17 @@
 	},
 /turf/unsimulated/floor/asteroid/underground/airless,
 /area/vault/podstation/exterior)
+"DW" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
 "Ee" = (
 /obj/machinery/light/small,
 /turf/space,
 /area/vault/podstation/exterior)
 "En" = (
 /obj/structure/reagent_dispensers/cauldron/barrel{
-	name = "Dan's Sauce Barrel"
+	name = "Discount Dan's Sauce Barrel"
 	},
 /obj/effect/decal/cleanable/greenglow,
 /turf/unsimulated/floor/airless{
@@ -1562,7 +1591,9 @@
 /obj/structure/fence/corner{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/podstation/exterior)
 "HV" = (
 /obj/structure/fence/door/opened,
@@ -1667,6 +1698,8 @@
 /obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato,
 /obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato,
 /obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato,
+/obj/item/weapon/reagent_containers/food/snacks/chilaquiles,
+/obj/item/weapon/reagent_containers/food/snacks/chilaquiles,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -1755,7 +1788,9 @@
 /area/vault/podstation/exterior)
 "Np" = (
 /obj/structure/fence,
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/podstation/exterior)
 "NA" = (
 /obj/effect/decal/warning_stripes{
@@ -1987,9 +2022,8 @@
 /obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
 /obj/item/weapon/reagent_containers/food/snacks/corndog,
 /obj/item/weapon/reagent_containers/food/snacks/corndog,
-/obj/item/weapon/reagent_containers/food/snacks/bagel,
-/obj/item/weapon/reagent_containers/food/snacks/bagel,
-/obj/item/weapon/reagent_containers/food/snacks/bagel,
+/obj/item/weapon/reagent_containers/food/snacks/margheritaslice,
+/obj/item/weapon/reagent_containers/food/snacks/margheritaslice,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2065,6 +2099,11 @@
 	},
 /turf/unsimulated/floor/asteroid/underground/airless,
 /area/vault/podstation/exterior)
+"UL" = (
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area)
 "UN" = (
 /obj/structure/window/barricade/full/block,
 /obj/machinery/door/poddoor/shutters/preopen{
@@ -2075,6 +2114,9 @@
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/podstation/interior)
+"UO" = (
+/turf/unsimulated/floor/asteroid,
+/area)
 "Vb" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -2088,7 +2130,9 @@
 /obj/structure/fence/corner{
 	dir = 10
 	},
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/podstation/exterior)
 "VP" = (
 /turf/unsimulated/floor/airless{
@@ -2110,13 +2154,17 @@
 /obj/structure/fence{
 	dir = 4
 	},
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/podstation/exterior)
 "VW" = (
 /obj/structure/fence/corner{
 	dir = 5
 	},
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/podstation/exterior)
 "VX" = (
 /obj/machinery/camera{
@@ -2132,7 +2180,9 @@
 "VY" = (
 /obj/item/trash/cigbutt,
 /obj/item/weapon/storage/bag/trash,
-/turf/unsimulated/floor/asteroid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/podstation/exterior)
 "Wu" = (
 /obj/machinery/cryopod,
@@ -2238,16 +2288,7 @@
 	},
 /area/vault/podstation/interior)
 "XB" = (
-/obj/item/weapon/reagent_containers/food/snacks/sundae,
-/obj/item/weapon/reagent_containers/food/snacks/sundae,
-/obj/item/weapon/reagent_containers/food/snacks/sundae,
 /obj/structure/closet/crate/freezer,
-/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
-/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
-/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
-/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
-/obj/item/weapon/reagent_containers/food/snacks/candiedapple,
-/obj/item/weapon/reagent_containers/food/snacks/candiedapple,
 /obj/item/weapon/reagent_containers/food/snacks/cinnamonroll,
 /obj/item/weapon/reagent_containers/food/snacks/cinnamonroll,
 /obj/item/weapon/reagent_containers/food/snacks/chococherrycakeslice,
@@ -2255,6 +2296,15 @@
 /obj/item/weapon/reagent_containers/food/snacks/chococherrycakeslice,
 /obj/item/weapon/reagent_containers/food/snacks/muffin/berry,
 /obj/item/weapon/reagent_containers/food/snacks/muffin/berry,
+/obj/item/weapon/reagent_containers/food/snacks/poppypretzel,
+/obj/item/weapon/reagent_containers/food/snacks/poppypretzel,
+/obj/item/weapon/reagent_containers/food/snacks/poppypretzel,
+/obj/item/weapon/reagent_containers/food/snacks/bagel,
+/obj/item/weapon/reagent_containers/food/snacks/bagel,
+/obj/item/weapon/reagent_containers/food/snacks/bagel,
+/obj/item/weapon/reagent_containers/food/snacks/bagel,
+/obj/item/weapon/reagent_containers/food/snacks/croissant,
+/obj/item/weapon/reagent_containers/food/snacks/croissant,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -2405,7 +2455,7 @@ ES
 HJ
 Np
 VJ
-VS
+ES
 VS
 aI
 pU
@@ -2444,14 +2494,14 @@ ES
 ES
 ES
 ES
-pU
+DW
 ES
 Yx
 HV
 Yx
 VU
 ES
-VS
+ES
 VS
 pU
 pU
@@ -2497,7 +2547,7 @@ Yx
 VW
 Np
 rx
-VS
+ES
 pU
 pU
 pU
@@ -2633,8 +2683,8 @@ XS
 Kk
 Kk
 Yx
-VS
-pU
+ES
+DW
 pU
 pU
 pU
@@ -2679,8 +2729,8 @@ vM
 af
 wi
 Yx
-pU
-pU
+UL
+DW
 pU
 pU
 "}
@@ -2724,8 +2774,8 @@ ol
 bB
 QW
 Nl
-VS
-pU
+eZ
+UO
 pU
 pU
 "}
@@ -2768,9 +2818,9 @@ Kk
 Kk
 Kk
 Kk
+Kk
 zr
-VS
-pU
+UO
 pU
 pU
 "}
@@ -2812,10 +2862,10 @@ RX
 Zo
 ai
 cJ
+pL
 Kk
 Yx
-ES
-pU
+UO
 pU
 pU
 "}
@@ -2856,11 +2906,11 @@ Kg
 yE
 Xr
 Xr
+Xr
 FJ
 Kk
 Yx
-ES
-pU
+UO
 pU
 pU
 "}
@@ -2901,11 +2951,11 @@ Kv
 Sc
 XB
 Qx
+Xr
 Wu
 Kk
 Yx
-ES
-pU
+UO
 pU
 pU
 "}
@@ -2948,9 +2998,9 @@ Kk
 Kk
 Kk
 Kk
+Kk
 Yx
-ES
-pU
+UO
 pU
 pU
 "}
@@ -2994,8 +3044,8 @@ hD
 iv
 Kk
 aM
-ES
-pU
+Yx
+UO
 pU
 pU
 "}
@@ -3040,7 +3090,7 @@ sK
 Kk
 Yx
 ES
-pU
+UO
 pU
 pU
 "}
@@ -3085,7 +3135,7 @@ CD
 Kk
 Yx
 ES
-pU
+DW
 pU
 pU
 "}
@@ -3130,7 +3180,7 @@ px
 Kk
 Yx
 ES
-pU
+DW
 pU
 pU
 "}
