@@ -342,7 +342,7 @@ var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/proc/held_examine_temperature_message(mob/living/examiner)
 	#define HEAT_LEVEL_SPAN 20
-	var/temperature_delta = (reagents.chem_temp - examiner.bodytemperature) * heat_conductivity
+	var/temperature_delta = (reagents.chem_temp - examiner.bodytemperature) * heat_conductivity ** (1/3) Cubed root to skew it towards being perceptible.
 	if (ishuman(examiner))
 		var/mob/living/carbon/human/H = examiner
 		temperature_delta *= (H.gloves ? H.gloves.heat_conductivity : 1)
