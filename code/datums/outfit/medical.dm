@@ -319,11 +319,13 @@
 
 	race_items_to_collect = list(
 		/datum/species/vox/ = list(
-			/obj/item/clothing/suit/storage/paramedic,
+			"Paramedic" = list(/obj/item/clothing/suit/storage/paramedic),
+			"Brig Medic" = list(/obj/item/clothing/suit/armor/vest/security/medic),
 			/obj/item/clothing/head/soft/paramedic,
 		),
 		/datum/species/plasmaman/ = list(
-			/obj/item/clothing/suit/storage/paramedic,
+			"Paramedic" = list(/obj/item/clothing/suit/storage/paramedic),
+			"Brig Medic" = list(/obj/item/clothing/suit/armor/vest/security/medic),
 			/obj/item/clothing/head/soft/paramedic,
 		)
 	)

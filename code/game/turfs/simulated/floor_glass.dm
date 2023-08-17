@@ -5,10 +5,7 @@
 	// Oldspace for people who don't have parallax.
 	icon = 'icons/turf/space.dmi'
 	icon_state = "0"
-
-	plane = SPACE_BACKGROUND_PLANE
-	dynamic_lighting = 0
-	luminosity = 1
+	plane = TURF_PLANE
 	intact = 0 // make pipes appear above space
 
 	var/health=80 // 2x that of an rwindow
@@ -29,9 +26,9 @@
 	if(!floor_overlays[glass_state])
 		var/image/floor_overlay = image('icons/turf/overlays.dmi', glass_state)
 		floor_overlay.plane = GLASSTILE_PLANE
-		floor_overlay.layer = TURF_LAYER
 		floor_overlays[glass_state] = floor_overlay
 	overlays += floor_overlays[glass_state]
+	set_light(1, 0.5, "#ffffff")
 	update_icon()
 
 /turf/simulated/floor/glass/update_icon()
@@ -45,9 +42,8 @@
 	var/damage_fraction = clamp(round((max_health - current_health) / max_health * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
 	var/icon_state = "[cracked_base][damage_fraction]"
 	if(!damage_overlays[icon_state])
-		var/image/_damage_overlay = image('icons/obj/structures.dmi', icon_state)
+		var/image/_damage_overlay = image('icons/obj/structures/window.dmi', icon_state)
 		_damage_overlay.plane = GLASSTILE_PLANE
-		_damage_overlay.layer = TURF_LAYER
 		damage_overlays[icon_state] = _damage_overlay
 	var/damage_overlay = damage_overlays[icon_state]
 	if(current_damage_overlay == damage_overlay)

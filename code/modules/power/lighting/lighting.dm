@@ -8,8 +8,8 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "tube-construct-stage1"
 	anchored = 1
-	plane = OBJ_PLANE
-	layer = ABOVE_DOOR_LAYER
+	plane = ABOVE_HUMAN_PLANE
+	layer = LIGHT_FIXTURE_LAYER
 	var/stage = 1
 	var/fixture_type = "tube"
 	var/sheets_refunded = 2

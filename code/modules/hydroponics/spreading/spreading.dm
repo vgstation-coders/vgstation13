@@ -50,12 +50,12 @@
 /obj/effect/plantsegment/proc/before_moving()
 	for(var/direc in cardinal)
 		var/turf/T = get_step(src, direc)
-		T.unregister_event(/event/density_change, src, src::proxDensityChange())
+		T.unregister_event(/event/density_change, src, nameof(src::proxDensityChange()))
 
 /obj/effect/plantsegment/proc/after_moving()
 	for(var/direc in cardinal)
 		var/turf/T = get_step(src, direc)
-		T.register_event(/event/density_change, src, src::proxDensityChange())
+		T.register_event(/event/density_change, src, nameof(src::proxDensityChange()))
 
 /obj/effect/plantsegment/New(var/newloc, var/datum/seed/newseed, var/turf/newepicenter, var/start_fully_mature = 0)
 	..()

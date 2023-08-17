@@ -101,9 +101,9 @@
 	if(user)
 		if(active)
 			trigger(user)
-			user.register_event(/event/moved, src, src::holder_moved())
+			user.register_event(/event/moved, src, nameof(src::holder_moved()))
 			return
-		user.unregister_event(/event/moved, src, src::holder_moved())
+		user.unregister_event(/event/moved, src, nameof(src::holder_moved()))
 
 /obj/item/weapon/rcl/attack_self(mob/user as mob)
 	active = !active

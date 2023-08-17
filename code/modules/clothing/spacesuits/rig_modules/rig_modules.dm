@@ -246,7 +246,7 @@
 	rig.armor["rad"] = 100
 
 	say_to_wearer("[src] enabled.")
-	rig.wearer.register_event(/event/irradiate, src, src::absorb_rads())
+	rig.wearer.register_event(/event/irradiate, src, nameof(src::absorb_rads()))
 	..()
 
 /obj/item/rig_module/rad_shield/deactivate()
@@ -261,7 +261,7 @@
 		say_to_wearer("[src] disabled. Please cleanse it by sterilizing the suit in a suit storage unit.")
 	else
 		say_to_wearer("[src] disabled.")
-	rig.wearer?.unregister_event(/event/irradiate, src, src::absorb_rads())
+	rig.wearer?.unregister_event(/event/irradiate, src, nameof(src::absorb_rads()))
 	..()
 
 /obj/item/rig_module/rad_shield/suit_storage_act()
@@ -270,7 +270,7 @@
 
 /obj/item/rig_module/rad_shield/proc/absorb_rads(mob/living/carbon/human/user, rads)
 	if(rig?.wearer != user) //Well lad.
-		user.unregister_event(/event/irradiate, src, src::absorb_rads())
+		user.unregister_event(/event/irradiate, src, nameof(src::absorb_rads()))
 		return
 
 	if(rig.H)

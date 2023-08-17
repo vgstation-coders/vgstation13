@@ -1014,7 +1014,7 @@
 /obj/effect/landmark/corpse/dredd
 	name = "Judge Dredd"
 	corpseuniform = /obj/item/clothing/under/darkred
-	corpsesuit = /obj/item/clothing/suit/armor/xcomsquaddie/dredd
+	corpsesuit = /obj/item/clothing/suit/armor/dredd
 	corpseglasses = /obj/item/clothing/glasses/hud/security
 	corpsemask = /obj/item/clothing/mask/gas/swat
 	corpsehelmet = /obj/item/clothing/head/helmet/dredd

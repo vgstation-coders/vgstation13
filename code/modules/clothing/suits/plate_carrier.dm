@@ -26,12 +26,12 @@
 /obj/item/clothing/suit/armor/plate_carrier/equipped(var/mob/user, var/slot)
 	..()
 	if(slot == slot_wear_suit)
-		user.register_event(/event/damaged, src, src::handle_user_damage())
+		user.register_event(/event/damaged, src, nameof(src::handle_user_damage()))
 
 
 /obj/item/clothing/suit/armor/plate_carrier/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_wear_suit)
-		user.unregister_event(/event/damaged, src, src::handle_user_damage())
+		user.unregister_event(/event/damaged, src, nameof(src::handle_user_damage()))
 	..()
 
 /obj/item/clothing/suit/armor/plate_carrier/attack_self(mob/user)

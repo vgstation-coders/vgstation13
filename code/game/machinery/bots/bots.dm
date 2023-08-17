@@ -209,7 +209,7 @@
 		if(target)
 			if (waiting_for_path)
 				return 1
-			calc_path(target, new /callback(src, src::get_path()))
+			calc_path(target, new /callback(src, nameof(src::get_path())))
 			if (path && length(path))
 				process_path()
 			return 1
@@ -249,7 +249,7 @@
 	if(frustration > 5)
 		summoned = FALSE // Let's not try again.
 		if (target && !target.gcDestroyed)
-			calc_path(target, new /callback(src, src::get_path()), next)
+			calc_path(target, new /callback(src, nameof(src::get_path())), next)
 		else
 			target = null
 			path = list()
@@ -330,7 +330,7 @@
 
 	if(patrol_target)
 		waiting_for_patrol = TRUE
-		calc_patrol_path(patrol_target, new /callback(src, src::get_patrol_path()))
+		calc_patrol_path(patrol_target, new /callback(src, nameof(src::get_patrol_path())))
 // This proc send out a singal to every beacon listening to the "beacon_freq" variable.
 // The signal says, "i'm a bot looking for a beacon to patrol to."
 // Every beacon with the flag "patrol" responds by trasmitting its location.
@@ -393,7 +393,7 @@
 			return TRUE
 	if(frustration > 5)
 		if (target && !target.gcDestroyed)
-			calc_path(target, new /callback(src, src::get_path()), next)
+			calc_path(target, new /callback(src, nameof(src::get_path())), next)
 		else
 			target = null
 			patrol_path = list()
