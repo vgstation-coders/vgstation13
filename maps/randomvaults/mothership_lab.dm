@@ -618,7 +618,7 @@
 	desc = "A segmented helmet of alien alloy, perfect for protecting an explorer's cranium from hostile fauna."
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
-	armor = list(melee = 50, bullet = 40, laser = 20, energy = 5, bomb = 35, bio = 0, rad = 0) // Identical to default sec helmet, but a lot more stylish!
+	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 30, bio = 0, rad = 0)
 
 /obj/item/clothing/head/helmet/mothership_explorer/dissolvable()
 	return WATER
@@ -667,7 +667,7 @@
 	desc = "A segmented armored vest of alien alloy, favored by mothership explorers. Protects the vitals from blunt force and ballistic weapons."
 	icon_state = "explorer_chestplate"
 	item_state = "explorer_chestplate"
-	armor = list(melee = 50, bullet = 40, laser = 20, energy = 5, bomb = 35, bio = 0, rad = 0)
+	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 30, bio = 0, rad = 0)
 
 //Ayy lmao heavy armor
 /obj/item/clothing/suit/armor/mothership_heavy
