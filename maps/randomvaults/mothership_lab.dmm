@@ -2026,7 +2026,8 @@
 /obj/machinery/door/airlock/silver{
 	name = "Lab Entry Deck";
 	req_access_txt = "160";
-	req_one_access_txt = "160"
+	req_one_access_txt = "160";
+	locked = 1
 	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
