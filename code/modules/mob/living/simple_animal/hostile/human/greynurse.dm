@@ -176,7 +176,7 @@
 	if(H.lying && !H.locked_to) // Grapple attack
 		spawn(2 SECONDS) // Nurse waits a moment before grabbing a prone victim, so the transition doesn't look so abrupt
 			if(H.lying && !H.locked_to)
-				H.visible_message("<b><span class='warning'>[src] grabs [H] by the neck with its claws, and raises its injector-tipped limbs!</span>")
+				visible_message("<b><span class='warning'>[src] grabs [H] by the neck with its claws, and raises its injector-tipped limbs!</span>")
 				say("[pick("Please hold still for your termination.", "I promise this won't hurt a bit.", "Neutralization in progress.")]")
 				lock_atom(H, /datum/locking_category/nurseunit_latch)
 
