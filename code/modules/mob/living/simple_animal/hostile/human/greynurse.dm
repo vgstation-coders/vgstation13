@@ -7,15 +7,15 @@
 	icon_state = "grey_nurse"
 	icon_living = "grey_nurse"
 	see_in_dark = 12 // superior ayy darkvision
-	maxHealth = 150
-	health = 150
+	maxHealth = 200
+	health = 200
 
 	vision_range = 12
 	aggro_vision_range = 12
 	idle_vision_range = 12 // Can see a bit further due to being a "special" mob
 
-	melee_damage_lower = 15
-	melee_damage_upper = 25
+	melee_damage_lower = 20
+	melee_damage_upper = 30
 
 	attacktext = "bashes"
 	attack_sound = 'sound/weapons/smash.ogg'
@@ -56,14 +56,22 @@
 	var/last_suxameth = 0
 	var/const/suxameth_cooldown = 20 SECONDS
 
-/mob/living/simple_animal/hostile/humanoid/greynurse/Life() // If we've got a paralytic shot ready, run in. If not, stay further back
+	var/melee_throw_chance = 65 // Values for flinging a target away with a melee attack
+	var/melee_throw_speed = 2
+	var/melee_throw_range = 4
+
+/mob/living/simple_animal/hostile/humanoid/greynurse/Life() // If we've got a paralytic shot ready, run in. If not, stay further back. Sprite will also update to show if she has a paralytic injector ready or not
 	..()
 	if(last_suxameth + suxameth_cooldown < world.time)
+		icon_state = "grey_nurse"
+		icon_living = "grey_nurse"
 		retreat_distance = 2
 		minimum_distance = 1
 	if(last_suxameth + suxameth_cooldown > world.time)
-		retreat_distance = 3
-		minimum_distance = 3
+		icon_state = "grey_nurse1"
+		icon_living = "grey_nurse1"
+		retreat_distance = 2
+		minimum_distance = 2
 
 /mob/living/simple_animal/hostile/humanoid/greynurse/Aggro()
 	..()
@@ -77,7 +85,19 @@
 		playsound(src, 'sound/items/hypospray.ogg', 50, 1)
 		H.reagents.add_reagent(SUX, 10)
 		last_suxameth = world.time
-	else
+	else if((last_suxameth + suxameth_cooldown > world.time) && istype(target, /mob/living))
+		var/mob/living/M = target
+		if(melee_throw_range && prob(melee_throw_chance))
+			visible_message("<span class='danger'>The force of the blow sends [M] flying!</span>")
+			if(ishuman(M))
+				M.Knockdown(2)
+			var/turf/T = get_turf(src)
+			var/turf/target_turf
+			if(istype(T, /turf/space)) // if ended in space, then range is unlimited
+				target_turf = get_edge_target_turf(T, dir)
+			else
+				target_turf = get_ranged_target_turf(T, dir, melee_throw_range)
+			M.throw_at(target_turf,100,melee_throw_speed)
 		..()
 
 /mob/living/simple_animal/hostile/humanoid/greynurse/emp_act(severity) // Vulnerable to emps due to the truth beneath
@@ -118,8 +138,8 @@
 	icon_living = "grey_nurseunit"
 	see_in_dark = 12 // superior ayy darkvision
 	move_to_delay = 1.8 // She faster now. Can just about keep pace with someone in a hardsuit
-	maxHealth = 300
-	health = 300
+	maxHealth = 350
+	health = 350
 
 	vision_range = 12
 	aggro_vision_range = 12
