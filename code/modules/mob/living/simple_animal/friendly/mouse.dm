@@ -20,6 +20,7 @@
 	speak_emote = list("squeeks","squeeks","squiks")
 	emote_hear = list("squeeks","squeaks","squiks")
 	emote_see = list("runs in a circle", "shakes", "scritches at something")
+	emote_sound = list('sound/effects/mousesqueek.ogg')
 	pass_flags = PASSTABLE
 	flags = HEAR_ALWAYS | PROXMOVE
 	speak_chance = 1
@@ -71,7 +72,7 @@
 	..()
 	standard_damage_overlay_updates()
 	if(!stat && prob(speak_chance))
-		playsound(src, 'sound/effects/mousesqueek.ogg', 100, 1)
+		playsound(src, "[pick(emote_sound)]", 100, 1)
 
 	if(!ckey && stat == CONSCIOUS && prob(0.5) && !(status_flags & BUDDHAMODE))
 		stat = UNCONSCIOUS
@@ -357,7 +358,7 @@
 		if (M.on_foot())
 			if(!stat)
 				to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
-				playsound(src, 'sound/effects/mousesqueek.ogg', 100, 1)
+				playsound(src, "[pick(emote_sound)]", 100, 1)
 			if (can_be_infected())
 				var/block = 0
 				var/bleeding = 0
