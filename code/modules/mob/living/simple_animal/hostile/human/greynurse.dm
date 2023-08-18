@@ -293,11 +293,11 @@
 
 	switch (severity)
 		if (1)
-			adjustBruteLoss(50)
+			adjustBruteLoss(70)
 			spark(src)
 
 		if (2)
-			adjustBruteLoss(30)
+			adjustBruteLoss(50)
 			spark(src)
 
 /mob/living/simple_animal/hostile/humanoid/nurseunit/death(var/gibbed = FALSE)
