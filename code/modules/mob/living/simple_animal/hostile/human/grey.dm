@@ -1157,7 +1157,7 @@
 					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 						continue
 					to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
-					H.reagents.add_reagent(CHILLWAX, 1)
+					H.reagents.add_reagent(CHILLWAX, 5)
 					playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
 					last_psychicattack = world.time
 
