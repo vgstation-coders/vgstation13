@@ -226,7 +226,7 @@
 				H.reagents.add_reagent(NEUROTOXIN, 25)
 
 	if(!H.lying && !H.locked_to) // Normal attack, chance of brief stun
-		if(ishuman(H) && prob(20))
+		if(ishuman(H) && prob(25))
 			visible_message("<span class='danger'>[src]'s vicious assault knocks [H] down!</span>")
 			H.Knockdown(3)
 			H.Stun(3)
