@@ -3106,8 +3106,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 3,
 		/obj/item/weapon/reagent_containers/pill/antitox = 10,
 		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 1,
-		/obj/item/weapon/reagent_containers/food/condiment/discount = 25
-		/obj/item/weapon/storage/lunchbox/discount/pre_filled = 30
+		/obj/item/weapon/reagent_containers/food/condiment/discount = 25,
+		/obj/item/weapon/storage/lunchbox/discount/pre_filled = 30,
 		)
 
 	pack = /obj/structure/vendomatpack/discount
