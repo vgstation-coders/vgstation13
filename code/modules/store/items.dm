@@ -301,7 +301,7 @@
 	name = "Prepackaged Zam Lunch"
 	desc = "A lunchbox with an entree, side, sweet, condiment, and drink. Courtesy of Zam!"
 	typepath = /obj/item/weapon/storage/lunchbox/zam/pre_filled
-	cost = 60
+	cost = 70
 	category = "ZAM!"
 
 /////////////////////////////

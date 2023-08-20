@@ -2372,7 +2372,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/kitchen/utensil/spoon = 2,
 		/obj/item/weapon/kitchen/utensil/knife = 2,
 		/obj/item/weapon/kitchen/rollingpin = 2,
-		/obj/item/weapon/storage/lunchbox/nt/syndie = 2,
 		/obj/item/weapon/kitchen/utensil/knife/large/butch = 2,
 		)
 	premium = list(
@@ -3090,7 +3089,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/condiment/discount = 2,
-		/obj/item/weapon/storage/lunchbox/discount/pre_filled = 4,
+		/obj/item/weapon/storage/lunchbox/discount/pre_filled = 2,
 		/obj/item/weapon/storage/pill_bottle/mint/discount = 3
 		)
 	contraband = list(
@@ -3767,6 +3766,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin = 10,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 20,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 40,
+		/obj/item/weapon/storage/lunchbox/zam/pre_filled = 60,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky = 4,
