@@ -666,15 +666,17 @@
 
 	var/max_steps = distance_traveled + radius + 1
 
+	var/turf/relative_epicenter = locate(override_starting_X,override_starting_Y,z)
+
 	var/turf/T = loc
 	for (var/turf/U in range(radius,T))
 		if (!(U in affected_turfs))
 			affected_turfs |= U
 			var/steps = 0
 			var/turf/Trajectory = U
-			var/dist = cheap_pythag(U.x - starting.x, U.y - starting.y)
+			var/dist = cheap_pythag(U.x - override_starting_X, U.y - override_starting_Y)
 			while((Trajectory != starting) && (steps <= max_steps))
-				Trajectory = get_step_towards(Trajectory,starting)
+				Trajectory = get_step_towards(Trajectory,relative_epicenter)
 				dist += CalculateExplosionSingleBlock(Trajectory)
 				steps++//failsafe in case of fuckery such as the projectile finding itself on a different Z level
 			if (dist <= heavy_damage_range)
@@ -683,6 +685,10 @@
 				medium_turfs += U
 			else if (dist <= light_damage_range)
 				light_turfs += U
+
+/obj/item/projectile/bullet/blastwave/teleport_act()
+	override_starting_X = clamp(override_starting_X,1,world.maxx)
+	override_starting_Y = clamp(override_starting_Y,1,world.maxy)
 
 /obj/item/projectile/bullet/blastwave/bullet_die()
 	//the bullet moved all the way, now to explode dem turfs
