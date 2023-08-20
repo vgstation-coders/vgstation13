@@ -1518,10 +1518,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/pill_bottle/lollipops = 5,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 100,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
-		/obj/item/weapon/storage/pill_bottle/mint/nano = 5
-		)
-	premium = list(
-		/obj/item/weapon/storage/lunchbox/nt/getmore/pre_filled = 2,
+		/obj/item/weapon/storage/pill_bottle/mint/nano = 5,
+		/obj/item/weapon/storage/lunchbox/nt/getmore = 4,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks = 4,
@@ -1545,7 +1543,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/pill_bottle/mint/nano = 30,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 1,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 100,
-		/obj/item/weapon/storage/lunchbox/nt/getmore/pre_filled = 50,
+		/obj/item/weapon/storage/lunchbox/nt/getmore = 15,
 		)
 	vouched = list(
 		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating = 2
