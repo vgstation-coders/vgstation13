@@ -51,6 +51,13 @@
 	cost = 75
 	category = "Food"
 
+/datum/storeitem/lunchbox
+	name = "Prepackaged NT Lunch"
+	desc = "A lunchbox with an entree, side, sweet, condiment, and drink. Courtesy of Nanotrasen."
+	typepath = /obj/item/weapon/storage/lunchbox/nt/pre_filled
+	cost = 60
+	category = "Food"
+
 /datum/storeitem/diy_soda
 	name = "Dr. Pecker's DIY Soda"
 	desc = "A fun and tasty chemical experiment for the curious child! Vials and beakers included."
@@ -288,6 +295,13 @@
 	desc = "This imitation of human steak has received good marks from test subjects."
 	typepath = /obj/item/weapon/storage/bag/zam_food/zam_menu1
 	cost = 75
+	category = "ZAM!"
+
+/datum/storeitem/zamlunchbox
+	name = "Prepackaged Zam Lunch"
+	desc = "A lunchbox with an entree, side, sweet, condiment, and drink. Courtesy of Zam!"
+	typepath = /obj/item/weapon/storage/lunchbox/zam/pre_filled
+	cost = 60
 	category = "ZAM!"
 
 /////////////////////////////
