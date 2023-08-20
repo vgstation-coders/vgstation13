@@ -3083,7 +3083,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/dangles = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 6,
-		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 12
+		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 12,
 		/obj/item/weapon/storage/lunchbox/discount = 6,
 		)
 	premium = list(
