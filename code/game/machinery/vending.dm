@@ -3764,7 +3764,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin = 10,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 20,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 40,
-		/obj/item/weapon/storage/lunchbox/zam/pre_filled = 60,
+		/obj/item/weapon/storage/lunchbox/zam/pre_filled = 50,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky = 4,
