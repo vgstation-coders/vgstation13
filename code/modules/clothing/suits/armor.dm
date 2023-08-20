@@ -232,7 +232,7 @@
 	icon_state = "xcomarmor2"
 	item_state = "xcomarmor2"
 	species_fit = list(INSECT_SHAPED)
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|IGNORE_INV
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 35, bio = 0, rad = 0)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	siemens_coefficient = 0.5
