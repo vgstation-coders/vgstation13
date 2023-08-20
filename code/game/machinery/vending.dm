@@ -1519,7 +1519,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 100,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
 		/obj/item/weapon/storage/pill_bottle/mint/nano = 5,
-		/obj/item/weapon/storage/lunchbox/nt/getmore = 4,
+		/obj/item/weapon/storage/lunchbox/nt/getmore = 6,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks = 4,
@@ -1543,7 +1543,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/pill_bottle/mint/nano = 30,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 1,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 100,
-		/obj/item/weapon/storage/lunchbox/nt/getmore = 15,
+		/obj/item/weapon/storage/lunchbox/nt/getmore = 10,
 		)
 	vouched = list(
 		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating = 2
@@ -3084,6 +3084,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 6,
 		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 12
+		/obj/item/weapon/storage/lunchbox/discount = 6,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/condiment/discount = 2,
@@ -3105,6 +3106,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/pill/antitox = 10,
 		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 1,
 		/obj/item/weapon/reagent_containers/food/condiment/discount = 25,
+		/obj/item/weapon/storage/lunchbox/discount = 5,
 		/obj/item/weapon/storage/lunchbox/discount/pre_filled = 30,
 		)
 
@@ -3743,6 +3745,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 4,
+		/obj/item/weapon/storage/lunchbox/zam = 6,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin = 6,
@@ -3764,6 +3767,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin = 10,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 20,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 40,
+		/obj/item/weapon/storage/lunchbox/zam = 10,
 		/obj/item/weapon/storage/lunchbox/zam/pre_filled = 50,
 		)
 	premium = list(
