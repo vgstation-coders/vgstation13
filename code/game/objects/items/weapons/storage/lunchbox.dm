@@ -227,6 +227,11 @@
 	throwforce = 3
 	starting_materials = list(MAT_IRON = 3750) // Exactly one sheet of metal
 	w_type = RECYK_METAL
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil","/obj/item/voucher")
+
+	allow_quick_gather = TRUE
+	allow_quick_empty = TRUE
+	use_to_pickup = TRUE
 
 	var/has_lunch = FALSE
 
