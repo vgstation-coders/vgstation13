@@ -461,7 +461,7 @@
 	icon_state = "hornetgun"
 	projectile_speed = 0.5
 	bee_type = /mob/living/simple_animal/bee/hornetgun
-	
+
 /obj/item/projectile/bullet/beegun/ss_viscerator
 	name = "viscerator"
 	icon_state = "ss_visceratorgun"
@@ -472,7 +472,7 @@
 	..()
 	if(isbee(bee_type)	)
 		playsound(starting, 'sound/effects/bees.ogg', 75, 1)
-	
+
 /obj/item/projectile/bullet/beegun/to_bump(atom/A as mob|obj|turf|area)
 	if (!A)
 		return 0
@@ -653,6 +653,9 @@
 
 /obj/item/projectile/bullet/blastwave/process_step()
 	..()
+	if (!loc)
+		return
+
 	distance_traveled++
 
 	if (distance_traveled > light_damage_range)
@@ -661,17 +664,19 @@
 
 	radius = round(distance_traveled/widening_rate)
 
+	var/max_steps = distance_traveled + radius + 1
+
 	var/turf/T = loc
 	for (var/turf/U in range(radius,T))
 		if (!(U in affected_turfs))
 			affected_turfs |= U
-
+			var/steps = 0
 			var/turf/Trajectory = U
 			var/dist = cheap_pythag(U.x - starting.x, U.y - starting.y)
-			while(Trajectory != starting)
+			while((Trajectory != starting) && (steps <= max_steps))
 				Trajectory = get_step_towards(Trajectory,starting)
 				dist += CalculateExplosionSingleBlock(Trajectory)
-
+				steps++//failsafe in case of fuckery such as the projectile finding itself on a different Z level
 			if (dist <= heavy_damage_range)
 				heavy_turfs += U
 			else if (dist <= medium_damage_range)
