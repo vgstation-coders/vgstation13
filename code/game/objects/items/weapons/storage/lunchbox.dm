@@ -51,7 +51,6 @@
 	var/sweet = pick(list(/obj/item/weapon/reagent_containers/food/snacks/donut,
 								/obj/item/weapon/reagent_containers/food/snacks/donut/jelly,
 								/obj/item/weapon/reagent_containers/food/snacks/candiedapple,
-								/obj/item/weapon/reagent_containers/food/snacks/appletart,
 								/obj/item/weapon/reagent_containers/food/snacks/applecakeslice,
 								/obj/item/weapon/reagent_containers/food/snacks/carrotcakeslice,
 								/obj/item/weapon/reagent_containers/food/snacks/cheesecakeslice,
@@ -95,6 +94,94 @@
 	new condiment(src)
 
 	new /obj/item/weapon/kitchen/utensil/spork/plastic(src)
+
+// -----------------------------
+//          LUNCH FOOD LISTS (SYNDICATE)
+// -----------------------------
+/obj/item/weapon/storage/lunchbox/syndie/proc/pickfood_syndie()
+	var/entree_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/toastedsandwich,
+                                /obj/item/weapon/reagent_containers/food/snacks/notasandwich,
+								/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger,
+								/obj/item/weapon/reagent_containers/food/snacks/cubancarp,
+								/obj/item/weapon/reagent_containers/food/snacks/turkeyslice,
+								/obj/item/weapon/reagent_containers/food/snacks/bulgogi,
+                                /obj/item/weapon/reagent_containers/food/snacks/spesslaw,
+								/obj/item/weapon/reagent_containers/food/snacks/lasagna,
+								/obj/item/weapon/reagent_containers/food/snacks/dionaroast,
+								/obj/item/weapon/reagent_containers/food/snacks/salmonavocado,
+								/obj/item/weapon/reagent_containers/food/snacks/aesirsalad,
+								/obj/item/weapon/reagent_containers/food/snacks/validsalad,
+								/obj/item/weapon/reagent_containers/food/snacks/chickensalad))
+
+	new entree_syndie(src)
+
+	var/snack_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet,
+                                /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear,
+								/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno,
+								/obj/item/weapon/reagent_containers/food/snacks/donkpocket,
+								/obj/item/weapon/reagent_containers/food/snacks/meatbreadslice,
+								/obj/item/weapon/reagent_containers/food/snacks/creamcheesebreadslice,
+								/obj/item/weapon/reagent_containers/food/snacks/twobread,
+                                /obj/item/weapon/reagent_containers/food/snacks/hotchili,
+								/obj/item/weapon/reagent_containers/food/snacks/meatballsoup,
+								/obj/item/weapon/reagent_containers/food/snacks/vegetablesoup,
+								/obj/item/weapon/reagent_containers/food/snacks/tomatosoup,
+								/obj/item/weapon/reagent_containers/food/snacks/mushroomsoup,
+								/obj/item/weapon/reagent_containers/food/snacks/catfishgumbo,
+								/obj/item/weapon/reagent_containers/food/snacks/beetsoup,
+                                /obj/item/weapon/reagent_containers/food/snacks/pie/plump_pie,
+								/obj/item/weapon/reagent_containers/food/snacks/fishfingers,
+								/obj/item/weapon/reagent_containers/food/snacks/fruitsalad,
+								/obj/item/weapon/reagent_containers/food/snacks/herbsalad,
+								/obj/item/weapon/reagent_containers/food/snacks/potatosalad))
+
+	new snack_syndie(src)
+
+	var/sweet_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/cinnamonroll,
+								/obj/item/weapon/reagent_containers/food/snacks/jectie,
+								/obj/item/weapon/reagent_containers/food/snacks/flan,
+								/obj/item/weapon/reagent_containers/food/snacks/honeyflan,
+								/obj/item/weapon/reagent_containers/food/snacks/syndicake,
+								/obj/item/weapon/reagent_containers/food/snacks/appletart,
+								/obj/item/weapon/reagent_containers/food/snacks/eclair,
+								/obj/item/weapon/reagent_containers/food/snacks/sweetroll,
+								/obj/item/weapon/reagent_containers/food/snacks/cookiebowl,
+								/obj/item/weapon/reagent_containers/food/snacks/sliceable/chococherrycake,
+								/obj/item/weapon/reagent_containers/food/snacks/pie/cherrypie,
+								/obj/item/weapon/reagent_containers/food/snacks/pie/applepie,
+								/obj/item/weapon/reagent_containers/food/snacks/pie,
+								/obj/item/weapon/reagent_containers/food/snacks/muffin/berry,
+								/obj/item/weapon/reagent_containers/food/snacks/sugarcookie,
+								/obj/item/weapon/reagent_containers/food/snacks/caramelcookie,
+								/obj/item/weapon/reagent_containers/food/snacks/cookie,
+								/obj/item/weapon/reagent_containers/food/snacks/cookie/holiday))
+
+	new sweet_syndie(src)
+
+	var/drink_syndie = pick(list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka,
+                                /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum,
+                                /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
+                                /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola,
+                                /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee,
+								/obj/item/weapon/reagent_containers/food/drinks/plastic/water,
+								/obj/item/weapon/reagent_containers/food/drinks/thermos/full))
+
+	new drink_syndie(src)
+
+	var/condiment_syndie = pick(list(/obj/item/weapon/reagent_containers/food/condiment/hotsauce,
+									/obj/item/weapon/reagent_containers/food/condiment/coldsauce,
+									/obj/item/weapon/reagent_containers/food/condiment/ketchup,
+									/obj/item/weapon/reagent_containers/food/condiment/mustard,
+									/obj/item/weapon/reagent_containers/food/condiment/relish,
+									/obj/item/weapon/reagent_containers/food/condiment/honey,
+									/obj/item/weapon/reagent_containers/food/condiment/saltshaker,
+									/obj/item/weapon/reagent_containers/food/condiment/peppermill,
+									/obj/item/weapon/reagent_containers/food/condiment/vinegar,
+									/obj/item/weapon/reagent_containers/food/condiment/soysauce))
+
+	new condiment_syndie(src)
+
+	new /obj/item/weapon/kitchen/utensil/spork(src)
 
 // -----------------------------
 //          LUNCH FOOD LISTS (DISCOUNT)
@@ -251,7 +338,7 @@
 	has_lunch = TRUE
 
 // Syndicate themed lunchbox
-/obj/item/weapon/storage/lunchbox/nt/syndie
+/obj/item/weapon/storage/lunchbox/syndie
 	name = "Syndicate lunchbox"
 	desc = "A little metal lunchbox. This one is bright red and looks suspiciously robust."
 	icon_state = "lunchbox_syndie"
@@ -259,8 +346,13 @@
 	force = 10
 	throwforce = 6
 
-/obj/item/weapon/storage/lunchbox/nt/syndie/pre_filled
+/obj/item/weapon/storage/lunchbox/syndie/pre_filled
 	has_lunch = TRUE
+
+/obj/item/weapon/storage/lunchbox/syndie/New()
+	..()
+	if(has_lunch == TRUE)
+		pickfood_syndie()
 
 // Getmore themed lunchbox
 /obj/item/weapon/storage/lunchbox/nt/getmore

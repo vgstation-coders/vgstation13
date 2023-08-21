@@ -690,6 +690,12 @@ var/list/uplink_items = list()
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return I
 
+/datum/uplink_item/badass/syndie_lunch
+	name = "Syndicate Lunch"
+	desc = "A cyborg unit at HQ has packed you a lunch, ready to be delivered. You can't sabotage Nanotrasen on an empty stomach."
+	item = /obj/item/weapon/storage/lunchbox/syndie/pre_filled
+	cost = 1
+
 /datum/uplink_item/jobspecific/command_security
 	category = "Security Specials"
 
