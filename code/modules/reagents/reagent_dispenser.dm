@@ -632,7 +632,10 @@
 		icon_state = "flamingmetalbarrel"
 		set_light(3,4,LIGHT_COLOR_FIRE)
 	else
-		icon_state = "metalbarrel"
+		if(is_cooktop) //only metal barrels are cooktops
+			icon_state = "metalbarrel"
+		else
+			icon_state = "woodenbarrel"
 		set_light(0,0,LIGHT_COLOR_FIRE)
 	render_cookvessel()
 
