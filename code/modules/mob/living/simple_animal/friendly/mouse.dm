@@ -89,8 +89,11 @@
 			emote("me", EMOTE_AUDIBLE, "snuffles")
 
 	if(nutrition >= MOUSETFAT)
-		visible_message("<span class = 'warning'>\The [src] explodes!</span>")
-		gib()
+		if(!maxHealth == 35) //Only mouser rats have 35 max health. Technically there's a very small chance a regular rat gets adminbussed to 35max health, but the code has sanity checks so the transmog death doesn't runtime
+			visible_message("<span class = 'warning'>\The [src] explodes!</span>")
+			gib()
+		else
+			transmog_death()
 		return
 
 	if(nutrition >= MOUSEFAT && is_fat == 0)
