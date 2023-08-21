@@ -312,10 +312,10 @@
 	icon_state = "lunchbox_plain"
 	item_state = "toolbox_grey"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
-	storage_slots = 6; //the number of food items it can carry.
+	storage_slots = 7; //the number of food items it can carry.
 	fits_max_w_class = 2
-	max_combined_w_class = 18
-	w_class = W_CLASS_SMALL
+	max_combined_w_class = 14
+	w_class = W_CLASS_MEDIUM
 	siemens_coefficient = 1
 	force = 5
 	hitsound = list('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg')
