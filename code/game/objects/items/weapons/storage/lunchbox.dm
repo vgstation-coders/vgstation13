@@ -165,13 +165,15 @@
 	new sweet_syndie(src)
 
 	var/drink_syndie = pick(list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka,
-                                /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum,
+								/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white,
+								/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red,
 								/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy,
                                 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
                                 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola,
                                 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee,
 								/obj/item/weapon/reagent_containers/food/drinks/plastic/water,
-								/obj/item/weapon/reagent_containers/food/drinks/thermos/full))
+								/obj/item/weapon/reagent_containers/food/drinks/thermos/full,
+								/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow))
 
 	new drink_syndie(src)
 
