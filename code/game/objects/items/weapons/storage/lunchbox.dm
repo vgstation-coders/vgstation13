@@ -101,8 +101,10 @@
 /obj/item/weapon/storage/lunchbox/syndie/proc/pickfood_syndie()
 	var/entree_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/toastedsandwich,
                                 /obj/item/weapon/reagent_containers/food/snacks/notasandwich,
+								/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
 								/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger,
 								/obj/item/weapon/reagent_containers/food/snacks/cubancarp,
+								/obj/item/weapon/reagent_containers/food/snacks/fishandchips,
 								/obj/item/weapon/reagent_containers/food/snacks/turkeyslice,
 								/obj/item/weapon/reagent_containers/food/snacks/bulgogi,
                                 /obj/item/weapon/reagent_containers/food/snacks/spesslaw,
@@ -111,7 +113,8 @@
 								/obj/item/weapon/reagent_containers/food/snacks/salmonavocado,
 								/obj/item/weapon/reagent_containers/food/snacks/aesirsalad,
 								/obj/item/weapon/reagent_containers/food/snacks/validsalad,
-								/obj/item/weapon/reagent_containers/food/snacks/chickensalad))
+								/obj/item/weapon/reagent_containers/food/snacks/chickensalad,
+								/obj/item/weapon/reagent_containers/food/snacks/monkeykabob))
 
 	new entree_syndie(src)
 
@@ -133,7 +136,10 @@
 								/obj/item/weapon/reagent_containers/food/snacks/fishfingers,
 								/obj/item/weapon/reagent_containers/food/snacks/fruitsalad,
 								/obj/item/weapon/reagent_containers/food/snacks/herbsalad,
-								/obj/item/weapon/reagent_containers/food/snacks/potatosalad))
+								/obj/item/weapon/reagent_containers/food/snacks/potatosalad,
+								/obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato,
+								/obj/item/weapon/reagent_containers/food/snacks/baguette,
+								/obj/item/weapon/reagent_containers/food/snacks/crab_sticks))
 
 	new snack_syndie(src)
 
@@ -146,7 +152,7 @@
 								/obj/item/weapon/reagent_containers/food/snacks/eclair,
 								/obj/item/weapon/reagent_containers/food/snacks/sweetroll,
 								/obj/item/weapon/reagent_containers/food/snacks/cookiebowl,
-								/obj/item/weapon/reagent_containers/food/snacks/sliceable/chococherrycake,
+								/obj/item/weapon/reagent_containers/food/snacks/chococherrycakeslice,
 								/obj/item/weapon/reagent_containers/food/snacks/pie/cherrypie,
 								/obj/item/weapon/reagent_containers/food/snacks/pie/applepie,
 								/obj/item/weapon/reagent_containers/food/snacks/pie,
@@ -160,6 +166,7 @@
 
 	var/drink_syndie = pick(list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka,
                                 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum,
+								/obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy,
                                 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
                                 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola,
                                 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee,
