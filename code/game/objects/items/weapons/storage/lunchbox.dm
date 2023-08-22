@@ -64,7 +64,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/fortunecookie,
 								/obj/item/weapon/reagent_containers/food/snacks/sugarcookie,
 								/obj/item/weapon/reagent_containers/food/snacks/caramelcookie,
-								/obj/item/weapon/reagent_containers/food/snacks/bananabreadslice))
+								/obj/item/weapon/reagent_containers/food/snacks/bananabreadslice,
+								/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
+								/obj/item/weapon/reagent_containers/food/snacks/ricepudding))
 
 	new sweet(src)
 
@@ -103,24 +105,35 @@
                                 /obj/item/weapon/reagent_containers/food/snacks/notasandwich,
 								/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
 								/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger,
+								/obj/item/weapon/reagent_containers/food/snacks/bearburger,
+								/obj/item/weapon/reagent_containers/food/snacks/avocadoburger,
+                               	/obj/item/weapon/reagent_containers/food/snacks/fishburger,
+								/obj/item/weapon/reagent_containers/food/snacks/chickenburger,
+								/obj/item/weapon/reagent_containers/food/snacks/veggieburger,
 								/obj/item/weapon/reagent_containers/food/snacks/cubancarp,
 								/obj/item/weapon/reagent_containers/food/snacks/fishandchips,
 								/obj/item/weapon/reagent_containers/food/snacks/turkeyslice,
-								/obj/item/weapon/reagent_containers/food/snacks/bulgogi,
+								/obj/item/weapon/reagent_containers/food/snacks/pie/meatpie,
                                 /obj/item/weapon/reagent_containers/food/snacks/spesslaw,
 								/obj/item/weapon/reagent_containers/food/snacks/lasagna,
+								/obj/item/weapon/reagent_containers/food/snacks/threebeanburrito,
+								/obj/item/weapon/reagent_containers/food/snacks/enchiladas,
+								/obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme,
 								/obj/item/weapon/reagent_containers/food/snacks/dionaroast,
 								/obj/item/weapon/reagent_containers/food/snacks/salmonavocado,
 								/obj/item/weapon/reagent_containers/food/snacks/aesirsalad,
 								/obj/item/weapon/reagent_containers/food/snacks/validsalad,
 								/obj/item/weapon/reagent_containers/food/snacks/chickensalad,
-								/obj/item/weapon/reagent_containers/food/snacks/monkeykabob))
+								/obj/item/weapon/reagent_containers/food/snacks/monkeykabob,
+								/obj/item/weapon/reagent_containers/food/snacks/curry,
+								/obj/item/weapon/reagent_containers/food/snacks/curry/vindaloo,
+								/obj/item/weapon/reagent_containers/food/snacks/curry/crab,
+								/obj/item/weapon/reagent_containers/food/snacks/curry/lemon))
 
 	new entree_syndie(src)
 
 	var/snack_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet,
                                 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear,
-								/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno,
 								/obj/item/weapon/reagent_containers/food/snacks/donkpocket,
 								/obj/item/weapon/reagent_containers/food/snacks/meatbreadslice,
 								/obj/item/weapon/reagent_containers/food/snacks/creamcheesebreadslice,
@@ -139,7 +152,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/potatosalad,
 								/obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato,
 								/obj/item/weapon/reagent_containers/food/snacks/baguette,
-								/obj/item/weapon/reagent_containers/food/snacks/crab_sticks))
+								/obj/item/weapon/reagent_containers/food/snacks/crab_sticks,
+								/obj/item/weapon/reagent_containers/food/snacks/eggplantparm,
+								/obj/item/weapon/reagent_containers/food/snacks/risotto))
 
 	new snack_syndie(src)
 
@@ -153,14 +168,17 @@
 								/obj/item/weapon/reagent_containers/food/snacks/sweetroll,
 								/obj/item/weapon/reagent_containers/food/snacks/cookiebowl,
 								/obj/item/weapon/reagent_containers/food/snacks/chococherrycakeslice,
+								/obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie,
 								/obj/item/weapon/reagent_containers/food/snacks/pie/cherrypie,
 								/obj/item/weapon/reagent_containers/food/snacks/pie/applepie,
 								/obj/item/weapon/reagent_containers/food/snacks/pie,
+								/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
 								/obj/item/weapon/reagent_containers/food/snacks/muffin/berry,
 								/obj/item/weapon/reagent_containers/food/snacks/sugarcookie,
 								/obj/item/weapon/reagent_containers/food/snacks/caramelcookie,
 								/obj/item/weapon/reagent_containers/food/snacks/cookie,
-								/obj/item/weapon/reagent_containers/food/snacks/cookie/holiday))
+								/obj/item/weapon/reagent_containers/food/snacks/cookie/holiday,
+								/obj/item/weapon/reagent_containers/food/snacks/ricepudding))
 
 	new sweet_syndie(src)
 
@@ -242,13 +260,18 @@
 								/obj/item/weapon/reagent_containers/food/snacks/greygreens,
 								/obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher,
 								/obj/item/weapon/reagent_containers/food/snacks/nymphsperil,
-								/obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice))
+								/obj/item/weapon/reagent_containers/food/snacks/dionaroast,
+								/obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice,
+								/obj/item/weapon/reagent_containers/food/snacks/spidermeatbreadslice,
+								/obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie,
+								/obj/item/weapon/reagent_containers/food/snacks/spidereggsham))
 
 	new entree_zam(src)
 
 	var/snack_zam = pick(list(/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped,
                                 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped,
-								/obj/item/weapon/reagent_containers/food/snacks/zamitos))
+								/obj/item/weapon/reagent_containers/food/snacks/zamitos,
+								/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno))
 
 	new snack_zam(src)
 
@@ -295,7 +318,12 @@
 
 	new snack_trader(src)
 
-	new /obj/item/weapon/reagent_containers/food/snacks/candiedwoodapple(src)
+	var/sweet_trader = pick(list(/obj/item/weapon/reagent_containers/food/snacks/candiedwoodapple,
+								/obj/item/weapon/reagent_containers/food/snacks/fortunecookie,
+								/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped))
+
+	new sweet_trader_trader(src)
+
 	new /obj/item/weapon/reagent_containers/food/drinks/thermos/full(src)
 	new /obj/item/weapon/reagent_containers/food/condiment/gravy(src)
 	new /obj/item/weapon/kitchen/utensil/spork(src)
