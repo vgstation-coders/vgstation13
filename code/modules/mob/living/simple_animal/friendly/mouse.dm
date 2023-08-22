@@ -48,6 +48,7 @@
 	var/splat = 0
 	var/infectable = 0
 	var/nutrition_loss_mod = 1
+	var/ismouservictim = FALSE
 
 /mob/living/simple_animal/mouse/New()
 	..()
@@ -89,7 +90,7 @@
 			emote("me", EMOTE_AUDIBLE, "snuffles")
 
 	if(nutrition >= MOUSETFAT)
-		if(!maxHealth == 35) //Only mouser rats have 35 max health. Technically there's a very small chance a regular rat gets adminbussed to 35max health, but the code has sanity checks so the transmog death doesn't runtime
+		if(!ismouservictim)
 			visible_message("<span class = 'warning'>\The [src] explodes!</span>")
 			gib()
 		else
@@ -548,6 +549,7 @@
 /mob/living/simple_animal/mouse/transmog
 	maxHealth = 35
 	health = 35
+	ismouservictim = TRUE
 
 /mob/living/simple_animal/mouse/transmog/transmog_death()
 	if(!transmogged_from)
