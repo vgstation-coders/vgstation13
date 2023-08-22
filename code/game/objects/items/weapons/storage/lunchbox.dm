@@ -322,7 +322,7 @@
 								/obj/item/weapon/reagent_containers/food/snacks/fortunecookie,
 								/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped))
 
-	new sweet_trader_trader(src)
+	new sweet_trader(src)
 
 	new /obj/item/weapon/reagent_containers/food/drinks/thermos/full(src)
 	new /obj/item/weapon/reagent_containers/food/condiment/gravy(src)
