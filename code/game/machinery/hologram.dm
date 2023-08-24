@@ -32,6 +32,7 @@ var/list/holopads = list()
 	var/last_request = 0 //to prevent request spam. ~Carn
 	var/holo_range = 6 // Change to change how far the AI can move away from the holopad before deactivating.
 	var/holopad_mode = 0	//0 = RANGE BASED, 1 = AREA BASED
+	var/user_holocolor = "#0099ff" //Color for holopad talkers
 	flags = HEAR
 	plane = ABOVE_TURF_PLANE
 	layer = ABOVE_TILE_LAYER
@@ -110,8 +111,6 @@ var/list/holopads = list()
 			else
 				to_chat(user, "<span class='warning'>ERROR: </span>No other AI holopads were found to transmit to.")
 
-
-
 /obj/machinery/hologram/holopad/attack_ai(mob/living/silicon/ai/user)
 	if (!istype(user))
 		return
@@ -127,6 +126,10 @@ var/list/holopads = list()
 	else if (!holo)//If there is no hologram, possibly make one.
 		activate_holo(user.eyeobj)
 	return
+
+/obj/machinery/hologram/holopad/AltClick(var/mob/living/carbon/human/user)
+	if(istype(user) && !user.stat && user.Adjacent(src))
+		user_holocolor = input(user, "Please select the user hologram colour.", "Hologram colour") as color
 
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/user)
 	if(!(stat & (FORCEDISABLE|NOPOWER)) && (!isAIEye(user) || user.loc == loc))//If the projector has power and AI eye is on it. (if applicable)
@@ -172,7 +175,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	holo = new(T)//Spawn a blank effect at the location.
 	// hologram.mouse_opacity = 0 Why would we not want to click on it
 	holo.name = "[user.name] (Hologram)"//If someone decides to right click.
-	var/holocolor = istype(AI) ? AI.holocolor : "#0099ff"
+	var/holocolor = istype(AI) ? AI.holocolor : user_holocolor
 
 	set_light(2, 0, holocolor)			//pad lighting
 	icon_state = "holopad1"
