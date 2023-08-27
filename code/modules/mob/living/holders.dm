@@ -48,8 +48,9 @@
 
 /obj/item/weapon/holder/dropped()
 	..()
-	if(istype(loc,/turf) || !(contents.len))
-		qdel(src)
+	spawn(1) // im a cheater
+		if(istype(loc,/turf) || !(contents.len))
+			qdel(src)
 
 /obj/item/weapon/holder/relaymove(mob/M, direction)
 	qdel(src) //This calls Destroy(), and frees the mob
