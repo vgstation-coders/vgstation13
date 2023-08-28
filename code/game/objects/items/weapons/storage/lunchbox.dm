@@ -134,7 +134,7 @@
 
 	var/snack_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet,
                                 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear,
-								/obj/item/weapon/reagent_containers/food/snacks/donkpocket,
+								/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating,
 								/obj/item/weapon/reagent_containers/food/snacks/meatbreadslice,
 								/obj/item/weapon/reagent_containers/food/snacks/creamcheesebreadslice,
 								/obj/item/weapon/reagent_containers/food/snacks/twobread,
