@@ -359,7 +359,7 @@
 	desc = "A little cardboard lunchbox. This one has the Discount Dan logo printed on the side. It looks very flimsy, and has a musty smell even when empty."
 	icon_state = "lunchbox_discount"
 	item_state = "toolbox_purple"
-	force = 2
+	force = 1
 	hitsound = 'sound/weapons/tap.ogg'
 	attack_verb = list("taps", "smacks")
 	throwforce = 1
@@ -383,7 +383,7 @@
 	desc = "A little plastic lunchbox. This one has no decorations or logos."
 	icon_state = "lunchbox_plastic"
 	item_state = "toolbox_white"
-	force = 3
+	force = 2
 	hitsound = 'sound/weapons/tap.ogg'
 	attack_verb = list("taps", "smacks")
 	throwforce = 2
