@@ -588,7 +588,7 @@
 // Trader lunchbox
 /obj/item/weapon/storage/lunchbox/metal/trader
 	name = "worn lunchbox"
-	desc = "A well-used metal lunchbox. Whatever decorations or logos it might have had have long faded away."
+	desc = "A well-used metal lunchbox. Whatever decorations or logos it might have had have long since faded away."
 	icon_state = "lunchbox_trader"
 	item_state = "toolbox_brown"
 
