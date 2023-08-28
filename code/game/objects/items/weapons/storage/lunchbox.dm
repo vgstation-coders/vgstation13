@@ -332,7 +332,7 @@
 //          LUNCHBOXES
 // -----------------------------
 
-// Generic lunchbox: Can be built from a metal sheet
+// Generic lunchbox
 /obj/item/weapon/storage/lunchbox
 	name = "lunchbox"
 	icon = 'icons/obj/kitchen.dmi'
@@ -408,7 +408,7 @@
 // Getmore themed lunchbox
 /obj/item/weapon/storage/lunchbox/plastic/nt/getmore
 	name = "Getmore lunchbox"
-	desc = "A little metal lunchbox. This one has the Getmore Chocolate Corp logo printed on the side."
+	desc = "A little plastic lunchbox. This one has the Getmore Chocolate Corp logo printed on the side."
 	icon_state = "lunchbox_getmore"
 	item_state = "toolbox_blue"
 
