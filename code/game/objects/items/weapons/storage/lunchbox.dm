@@ -1,7 +1,7 @@
 // -----------------------------
 //          LUNCH FOOD LISTS (GENERAL)
 // -----------------------------
-/obj/item/weapon/storage/lunchbox/nt/proc/pickfood()
+/obj/item/weapon/storage/lunchbox/plastic/nt/proc/pickfood()
 	var/entree = pick(list(/obj/item/weapon/reagent_containers/food/snacks/sandwich,
 								/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
 								/obj/item/weapon/reagent_containers/food/snacks/jellysandwich,
@@ -100,7 +100,7 @@
 // -----------------------------
 //          LUNCH FOOD LISTS (SYNDICATE)
 // -----------------------------
-/obj/item/weapon/storage/lunchbox/syndie/proc/pickfood_syndie()
+/obj/item/weapon/storage/lunchbox/metal/syndie/proc/pickfood_syndie()
 	var/entree_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/toastedsandwich,
                                 /obj/item/weapon/reagent_containers/food/snacks/notasandwich,
 								/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
@@ -250,7 +250,7 @@
 // -----------------------------
 //          LUNCH FOOD LISTS (ZAM)
 // -----------------------------
-/obj/item/weapon/storage/lunchbox/zam/proc/pickfood_zam()
+/obj/item/weapon/storage/lunchbox/metal/zam/proc/pickfood_zam()
 	var/entree_zam = pick(list(/obj/item/weapon/reagent_containers/food/snacks/polypburger,
 								/obj/item/weapon/reagent_containers/food/snacks/xenoburger,
 								/obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/wrapped,
@@ -299,7 +299,7 @@
 // -----------------------------
 //          LUNCH FOOD LISTS (TRADER)
 // -----------------------------
-/obj/item/weapon/storage/lunchbox/trader/proc/pickfood_trader()
+/obj/item/weapon/storage/lunchbox/metal/trader/proc/pickfood_trader()
 	var/entree_trader = pick(list(/obj/item/weapon/reagent_containers/food/snacks/hoboburger,
 								/obj/item/weapon/reagent_containers/food/snacks/bacon,
 								/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
@@ -335,22 +335,12 @@
 // Generic lunchbox: Can be built from a metal sheet
 /obj/item/weapon/storage/lunchbox
 	name = "lunchbox"
-	desc = "A little metal lunchbox. This one has no decorations or logos."
 	icon = 'icons/obj/kitchen.dmi'
-	icon_state = "lunchbox_plain"
-	item_state = "toolbox_grey"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
 	storage_slots = 7; //the number of food items it can carry.
 	fits_max_w_class = 2
 	max_combined_w_class = 14
 	w_class = W_CLASS_MEDIUM
-	siemens_coefficient = 1
-	force = 5
-	hitsound = list('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg')
-	attack_verb = list("batters", "bashes")
-	throwforce = 3
-	starting_materials = list(MAT_IRON = 3750) // Exactly one sheet of metal
-	w_type = RECYK_METAL
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil","/obj/item/voucher")
 
 	allow_quick_gather = TRUE
@@ -359,47 +349,9 @@
 
 	var/has_lunch = FALSE
 
-// Nanotrasen themed lunchbox (sprite from Bay)
-/obj/item/weapon/storage/lunchbox/nt
-	name = "Nanotrasen lunchbox"
-	desc = "A little metal lunchbox. This one has the Nanotrasen logo printed on the side."
-	icon_state = "lunchbox_nt"
-	item_state = "toolbox_lightblue"
-
-/obj/item/weapon/storage/lunchbox/nt/New()
-	..()
-	if(has_lunch == TRUE)
-		pickfood()
-
-/obj/item/weapon/storage/lunchbox/nt/pre_filled
-	has_lunch = TRUE
-
-// Syndicate themed lunchbox
-/obj/item/weapon/storage/lunchbox/syndie
-	name = "Syndicate lunchbox"
-	desc = "A little metal lunchbox. This one is bright red and looks suspiciously robust."
-	icon_state = "lunchbox_syndie"
-	item_state = "toolbox_red"
-	force = 10
-	throwforce = 6
-
-/obj/item/weapon/storage/lunchbox/syndie/pre_filled
-	has_lunch = TRUE
-
-/obj/item/weapon/storage/lunchbox/syndie/New()
-	..()
-	if(has_lunch == TRUE)
-		pickfood_syndie()
-
-// Getmore themed lunchbox
-/obj/item/weapon/storage/lunchbox/nt/getmore
-	name = "Getmore lunchbox"
-	desc = "A little metal lunchbox. This one has the Getmore Chocolate Corp logo printed on the side."
-	icon_state = "lunchbox_getmore"
-	item_state = "toolbox_blue"
-
-/obj/item/weapon/storage/lunchbox/nt/getmore/pre_filled
-	has_lunch = TRUE
+// -----------------------------
+//          CARDBOARD LUNCHBOXES
+// -----------------------------
 
 // Discount Dan themed lunchbox
 /obj/item/weapon/storage/lunchbox/discount
@@ -422,33 +374,228 @@
 	if(has_lunch == TRUE)
 		pickfood_discount()
 
-/obj/item/weapon/storage/lunchbox/zam
+// -----------------------------
+//          PLASTIC LUNCHBOXES (From plain to subtypes)
+// -----------------------------
+
+// Plain lunchbox: Can be built from a plastic sheet
+/obj/item/weapon/storage/lunchbox/plastic
+	desc = "A little plastic lunchbox. This one has no decorations or logos."
+	icon_state = "lunchbox_plastic"
+	item_state = "toolbox_white"
+	force = 3
+	hitsound = 'sound/weapons/tap.ogg'
+	attack_verb = list("taps", "smacks")
+	throwforce = 2
+	starting_materials = list(MAT_PLASTIC = 3750) // Exactly one sheet of plastic
+	w_type = RECYK_PLASTIC
+
+// Nanotrasen themed lunchbox (sprite from Bay)
+/obj/item/weapon/storage/lunchbox/plastic/nt
+	name = "Nanotrasen lunchbox"
+	desc = "A little plastic lunchbox. This one has the Nanotrasen logo printed on the side."
+	icon_state = "lunchbox_nt"
+	item_state = "toolbox_lightblue"
+
+/obj/item/weapon/storage/lunchbox/plastic/nt/New()
+	..()
+	if(has_lunch == TRUE)
+		pickfood()
+
+/obj/item/weapon/storage/lunchbox/plastic/nt/pre_filled
+	has_lunch = TRUE
+
+// Getmore themed lunchbox
+/obj/item/weapon/storage/lunchbox/plastic/nt/getmore
+	name = "Getmore lunchbox"
+	desc = "A little metal lunchbox. This one has the Getmore Chocolate Corp logo printed on the side."
+	icon_state = "lunchbox_getmore"
+	item_state = "toolbox_blue"
+
+/obj/item/weapon/storage/lunchbox/plastic/nt/getmore/pre_filled
+	has_lunch = TRUE
+
+// Randomized collectable lunchboxes
+/obj/item/weapon/storage/lunchbox/plastic/nt/random
+	name = "Collectible lunchbox"
+	desc = "A plastic lunchbox with a unique design!"
+	icon_state = "lunchbox_random"
+
+/obj/item/weapon/storage/lunchbox/plastic/nt/random/New()
+	..()
+	if(has_lunch == TRUE)
+		pickfood()
+	switch(rand(1,14))
+		if(1)
+			name = "Ian lunchbox"
+			desc = "A little plastic lunchbox. This one has a portrait of Ian on the side."
+			icon_state = "lunchbox_ian"
+			item_state = "toolbox_orange"
+		if(2)
+			name = "Shard lunchbox"
+			desc = "A little plastic lunchbox. This one has a supermatter shard on the side, and a red line across a hand reaching out to touch it."
+			icon_state = "lunchbox_shard"
+			item_state = "toolbox_lightblue2"
+		if(2)
+			name = "AI lunchbox"
+			desc = "A little plastic lunchbox. This one has a design on the side depicting a station's AI."
+			icon_state = "lunchbox_ai"
+			item_state = "toolbox_grey"
+		if(3)
+			name = "Beepsky lunchbox"
+			desc = "A little plastic lunchbox. This one has a picture of Beepsky on the side, and bright red letters spelling out 'LAW'."
+			icon_state = "lunchbox_beepksky"
+			item_state = "toolbox_red"
+		if(4)
+			name = "Carp lunchbox"
+			desc = "A little plastic lunchbox. This one has a picture of a space carp on the side."
+			icon_state = "lunchbox_carp"
+			item_state = "toolbox_purple"
+		if(5)
+			name = "Carp lunchbox"
+			desc = "A little plastic lunchbox. This one has a picture of a space carp on the side."
+			icon_state = "lunchbox_carp"
+			item_state = "toolbox_purple"
+		if(6)
+			name = "MoMMI lunchbox"
+			desc = "A little plastic lunchbox. This one has a design depicting a MoMMI on the side."
+			icon_state = "lunchbox_mommi"
+			item_state = "toolbox_grey"
+		if(7)
+			name = "Durand lunchbox"
+			desc = "A little plastic lunchbox. This one has a scene of a Durand swinging its fist depicted on the side."
+			icon_state = "lunchbox_durand"
+			item_state = "toolbox_orange"
+		if(7)
+			name = "Glubb lunchbox"
+			desc = "A little plastic lunchbox. This one depicts a hand wearing an insulated glove on the side, with electrical currents deflecting off it."
+			icon_state = "lunchbox_glubb"
+			item_state = "toolbox_yellow"
+		if(8)
+			name = "Medbay lunchbox"
+			desc = "A little plastic lunchbox. This one has a first aid cross and a picture of a cryo tube decorating the side."
+			icon_state = "lunchbox_medbay"
+			item_state = "toolbox_lightblue2"
+		if(9)
+			name = "Goliath lunchbox"
+			desc = "A little plastic lunchbox. This one has a portrait of a goliath's many eyes decorating the side."
+			icon_state = "lunchbox_goliath"
+			item_state = "toolbox_brown"
+		if(10)
+			name = "Plasmaman lunchbox"
+			desc = "A little plastic lunchbox. This one depicts a plasmaman's face on the side."
+			icon_state = "lunchbox_plasmaman"
+			item_state = "toolbox_grey"
+		if(11)
+			name = "Cuban lunchbox"
+			desc = "A little plastic lunchbox. This one depicts a hat over a set of sunglasses on the side, with water in the background."
+			icon_state = "lunchbox_cuban"
+			item_state = "toolbox_yellow"
+		if(12)
+			name = "Jannie lunchbox"
+			desc = "A little plastic lunchbox. This one has a picture of a wet floor sign and a pair of galoshes decorating the side."
+			icon_state = "lunchbox_jannie"
+			item_state = "toolbox_grey"
+		if(13)
+			name = "Jannie lunchbox"
+			desc = "A little plastic lunchbox. This one has a picture of a wet floor sign and a pair of galoshes decorating the side."
+			icon_state = "lunchbox_jannie"
+			item_state = "toolbox_grey"
+		if(14)
+			name = "Pinup lunchbox"
+			desc = "A little plastic lunchbox. This one has a picture of Amy decorating the side, the nymphomaniac urban legend of Nanotrasen space stations."
+			icon_state = "lunchbox_pinup"
+			item_state = "toolbox_lightblue"
+
+/obj/item/weapon/storage/lunchbox/plastic/nt/random/pre_filled
+	has_lunch = TRUE
+
+// Honky lunchbox!
+/obj/item/weapon/storage/lunchbox/plastic/clown
+	name = "Clown lunchbox"
+	desc = "A little plastic lunchbox. This one has a clown mask design decorating the side."
+	icon_state = "lunchbox_clown"
+	item_state = "toolbox_red2"
+	attack_verb = list("HONKS")
+	hitsound = 'sound/items/bikehorn.ogg'
+
+/obj/item/weapon/storage/lunchbox/plastic/clown/Crossed(atom/movable/O) // Can very briefly slip people
+	if(..())
+		return 1
+	if(iscarbon(O))
+		var/mob/living/carbon/C = O
+		C.Slip(2, 2, slipped_on = src)
+
+// ...
+/obj/item/weapon/storage/lunchbox/plastic/mime
+	name = "Mime lunchbox"
+	desc = "A little plastic lunchbox. This one has a mime mask design decorating the side."
+	icon_state = "lunchbox_mime"
+	item_state = "toolbox_black"
+	hitsound = null // ...
+
+// -----------------------------
+//          METAL LUNCHBOXES (From plain to subtypes)
+// -----------------------------
+
+// Plain lunchbox: Can be built from a metal sheet
+/obj/item/weapon/storage/lunchbox/metal
+	desc = "A little metal lunchbox. This one has no decorations or logos."
+	icon_state = "lunchbox_metal"
+	item_state = "toolbox_grey"
+	force = 5
+	hitsound = list('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg')
+	attack_verb = list("batters", "bashes")
+	throwforce = 3
+	starting_materials = list(MAT_IRON = 3750) // Exactly one sheet of metal
+	w_type = RECYK_METAL
+
+// Syndicate themed lunchbox
+/obj/item/weapon/storage/lunchbox/metal/syndie
+	name = "Syndicate lunchbox"
+	desc = "A little metal lunchbox. This one is bright red and looks suspiciously robust."
+	icon_state = "lunchbox_syndie"
+	item_state = "toolbox_red"
+	force = 10
+	throwforce = 6
+
+/obj/item/weapon/storage/lunchbox/metal/syndie/pre_filled
+	has_lunch = TRUE
+
+/obj/item/weapon/storage/lunchbox/metal/syndie/New()
+	..()
+	if(has_lunch == TRUE)
+		pickfood_syndie()
+
+// Zam themed lunchbox
+/obj/item/weapon/storage/lunchbox/metal/zam
 	name = "Zam lunchbox"
 	desc = "A little metal lunchbox. This one has the Zam mascot printed on the side."
 	icon_state = "lunchbox_zam"
 	item_state = "toolbox_lightgrey"
 
-/obj/item/weapon/storage/lunchbox/zam/dissolvable()
+/obj/item/weapon/storage/lunchbox/metal/zam/dissolvable()
 	return FALSE
 
-/obj/item/weapon/storage/lunchbox/zam/New()
+/obj/item/weapon/storage/lunchbox/metal/zam/New()
 	..()
 	if(has_lunch == TRUE)
 		pickfood_zam()
 
-/obj/item/weapon/storage/lunchbox/zam/pre_filled
+/obj/item/weapon/storage/lunchbox/metal/zam/pre_filled
 	has_lunch = TRUE
 
-/obj/item/weapon/storage/lunchbox/trader
+// Trader lunchbox
+/obj/item/weapon/storage/lunchbox/metal/trader
 	name = "worn lunchbox"
 	desc = "A well-used metal lunchbox. Whatever decorations or logos it might have had have long faded away."
 	icon_state = "lunchbox_trader"
 	item_state = "toolbox_brown"
 
-/obj/item/weapon/storage/lunchbox/trader/New()
+/obj/item/weapon/storage/lunchbox/metal/trader/New()
 	..()
 	if(has_lunch == TRUE)
 		pickfood_trader()
 
-/obj/item/weapon/storage/lunchbox/trader/pre_filled
+/obj/item/weapon/storage/lunchbox/metal/trader/pre_filled
 	has_lunch = TRUE

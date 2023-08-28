@@ -693,7 +693,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/badass/syndie_lunch
 	name = "Syndicate Lunch"
 	desc = "A service cyborg unit at HQ has packed you a lunch, ready to be delivered. You can't sabotage Nanotrasen on an empty stomach."
-	item = /obj/item/weapon/storage/lunchbox/syndie/pre_filled
+	item = /obj/item/weapon/storage/lunchbox/metal/syndie/pre_filled
 	cost = 1
 
 /datum/uplink_item/jobspecific/command_security

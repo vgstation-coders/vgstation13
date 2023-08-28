@@ -54,8 +54,15 @@
 /datum/storeitem/lunchbox
 	name = "Prepackaged NT Lunch"
 	desc = "A lunchbox with an entree, side, sweet, condiment, and drink. Courtesy of Nanotrasen."
-	typepath = /obj/item/weapon/storage/lunchbox/nt/pre_filled
+	typepath = /obj/item/weapon/storage/lunchbox/plastic/nt/pre_filled
 	cost = 60
+	category = "Food"
+
+/datum/storeitem/lunchbox_collectible
+	name = "Collectible Lunchbox"
+	desc = "A lunchbox with unique exterior art! Collect them all! Lunch is not included."
+	typepath = /obj/item/weapon/storage/lunchbox/plastic/nt/random
+	cost = 10
 	category = "Food"
 
 /datum/storeitem/diy_soda
@@ -300,7 +307,7 @@
 /datum/storeitem/zamlunchbox
 	name = "Prepackaged Zam Lunch"
 	desc = "A lunchbox with an entree, side, sweet, condiment, and drink. Courtesy of Zam!"
-	typepath = /obj/item/weapon/storage/lunchbox/zam/pre_filled
+	typepath = /obj/item/weapon/storage/lunchbox/metal/zam/pre_filled
 	cost = 70
 	category = "ZAM!"
 
