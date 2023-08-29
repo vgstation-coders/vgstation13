@@ -436,21 +436,16 @@
 			desc = "A little plastic lunchbox. This one has a supermatter shard on the side, and a red line across a hand reaching out to touch it."
 			icon_state = "lunchbox_shard"
 			item_state = "toolbox_lightblue2"
-		if(2)
+		if(3)
 			name = "AI lunchbox"
 			desc = "A little plastic lunchbox. This one has a design on the side depicting a station's AI."
 			icon_state = "lunchbox_ai"
 			item_state = "toolbox_grey"
-		if(3)
+		if(4)
 			name = "Beepsky lunchbox"
 			desc = "A little plastic lunchbox. This one has a picture of Beepsky on the side, and bright red letters spelling out 'LAW'."
 			icon_state = "lunchbox_beepksky"
 			item_state = "toolbox_red"
-		if(4)
-			name = "Carp lunchbox"
-			desc = "A little plastic lunchbox. This one has a picture of a space carp on the side."
-			icon_state = "lunchbox_carp"
-			item_state = "toolbox_purple"
 		if(5)
 			name = "Carp lunchbox"
 			desc = "A little plastic lunchbox. This one has a picture of a space carp on the side."
@@ -466,36 +461,31 @@
 			desc = "A little plastic lunchbox. This one has a scene of a Durand swinging its fist depicted on the side."
 			icon_state = "lunchbox_durand"
 			item_state = "toolbox_orange"
-		if(7)
+		if(8)
 			name = "Glubb lunchbox"
 			desc = "A little plastic lunchbox. This one depicts a hand wearing an insulated glove on the side, with electrical currents deflecting off it."
 			icon_state = "lunchbox_glubb"
 			item_state = "toolbox_yellow"
-		if(8)
+		if(9)
 			name = "Medbay lunchbox"
 			desc = "A little plastic lunchbox. This one has a first aid cross and a picture of a cryo tube decorating the side."
 			icon_state = "lunchbox_medbay"
 			item_state = "toolbox_lightblue2"
-		if(9)
+		if(10)
 			name = "Goliath lunchbox"
 			desc = "A little plastic lunchbox. This one has a portrait of a goliath's many eyes decorating the side."
 			icon_state = "lunchbox_goliath"
 			item_state = "toolbox_brown"
-		if(10)
+		if(11)
 			name = "Plasmaman lunchbox"
 			desc = "A little plastic lunchbox. This one depicts a plasmaman's face on the side."
 			icon_state = "lunchbox_plasmaman"
 			item_state = "toolbox_grey"
-		if(11)
+		if(12)
 			name = "Cuban lunchbox"
 			desc = "A little plastic lunchbox. This one depicts a hat over a set of sunglasses on the side, with water in the background."
 			icon_state = "lunchbox_cuban"
 			item_state = "toolbox_yellow"
-		if(12)
-			name = "Jannie lunchbox"
-			desc = "A little plastic lunchbox. This one has a picture of a wet floor sign and a pair of galoshes decorating the side."
-			icon_state = "lunchbox_jannie"
-			item_state = "toolbox_grey"
 		if(13)
 			name = "Jannie lunchbox"
 			desc = "A little plastic lunchbox. This one has a picture of a wet floor sign and a pair of galoshes decorating the side."
