@@ -319,8 +319,8 @@
 	desc = "Oh, no. Not again."
 	icon = 'icons/obj/plants.dmi'
 	icon_state = "plant-26"
-	layer = FLY_LAYER
 	plane = ABOVE_HUMAN_PLANE
+	layer = POTTED_PLANT_LAYER
 
 /obj/structure/flora/pottedplant/Destroy()
 	for(var/I in contents)

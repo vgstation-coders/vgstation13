@@ -48,6 +48,8 @@
 	var/mob/pointer_caller
 	var/mob/master //Obtained randomly when petting him. Can be overriden.
 
+	var/growl_sound = 'sound/voice/corgigrowl.ogg' // Sound played when hurt
+
 	held_items = list()
 	var/time_between_directed_steps = 6
 
@@ -107,7 +109,7 @@
 						corg_her = "his"
 					if(movement_target)
 						step_towards(src,movement_target,1)
-						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
+						playsound(loc, "[pick(emote_sound)]", 80, 1)
 						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
 							emote("me", 1, "barks at [movement_target], as if begging it to go into [corg_her] mouth.")
 							corgi_status = BEGIN_FOOD_HUNTING
@@ -549,7 +551,7 @@
 					master = M
 					to_chat(M, "[src] seems closer to you now. At least until somebody else gives \him attention, anyway.")
 			if(I_HURT)
-				playsound(loc, 'sound/voice/corgigrowl.ogg', 80, 1)
+				playsound(loc, growl_sound, 80, 1)
 				emote("me", EMOTE_AUDIBLE, "growls.")
 
 //Sasha isn't even a corgi you dummy!

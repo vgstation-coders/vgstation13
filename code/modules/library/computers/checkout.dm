@@ -197,7 +197,7 @@
 					<TT>Category: </TT><A href='?src=\ref[src];uploadcategory=1'>[upload_category]</A><BR>
 					<A href='?src=\ref[src];upload=1'>\[Upload\]</A><BR>"}
 			dat += "<A href='?src=\ref[src];switchscreen=[MAIN_MENU]'>(Return to main menu)</A><BR>"
-		if(PRINT_NEW_BOOK)
+		if(PRINT_MANUAL)
 			dat += "<H3>Print a Manual</H3>"
 			dat += "<table>"
 
@@ -208,14 +208,12 @@
 			if(!emagged)
 				forbidden |= /obj/item/weapon/book/manual/nuclear
 
-			var/manualcount = 0
 			var/obj/item/weapon/book/manual/M = null
 
 			for(var/manual_type in typesof(/obj/item/weapon/book/manual))
 				if (!(manual_type in forbidden))
 					M = manual_type
-					dat += "<tr><td><A href='?src=\ref[src];manual=[manualcount]'>[initial(M.title)]</A></td></tr>"
-				manualcount++
+					dat += "<tr><td><A href='?src=\ref[src];manual=[initial(M.id)]'>[initial(M.title)]</A></td></tr>"
 			dat += "</table>"
 			dat += "<BR><A href='?src=\ref[src];switchscreen=[MAIN_MENU]'>(Return to main menu)</A><BR>"
 
@@ -482,18 +480,16 @@
 	if(href_list["manual"])
 		if(!href_list["manual"])
 			return
-		var/bookid = href_list["manual"]
+		var/manual_id = text2num(href_list["manual"])
+		var/the_manual_type
+		for (var/manual_type in typesof(/obj/item/weapon/book/manual))
+			var/obj/item/weapon/book/manual/M = manual_type
+			if (initial(M.id) == manual_id)
+				the_manual_type = manual_type
+				break
 
-		if(!SSdbcore.IsConnected())
-			alert("Connection to Archive has been severed. Aborting.")
-			return
-
-		var/datum/cachedbook/newbook = getItemByID("[bookid]", library_table)
-		if(!newbook)
-			alert("No book found")
-			return
-		if((newbook.forbidden == 2 && !emagged) || newbook.forbidden == 1)
-			alert("This book is forbidden and cannot be printed.")
+		if (!the_manual_type)
+			visible_message("<b>[src]</b>'s monitor flashes, \"The manual requested cannot be found in the database. Please contact an administrator.\"")
 			return
 
 		if(bibledelay)
@@ -503,7 +499,7 @@
 			bibledelay = 1
 			spawn(60)
 				bibledelay = 0
-			make_external_book(newbook)
+			new the_manual_type(get_turf(src))
 
 	if(href_list["preview"])
 		var/datum/cachedbook/PVB = href_list["preview"]

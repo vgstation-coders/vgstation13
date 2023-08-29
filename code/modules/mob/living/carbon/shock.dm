@@ -46,11 +46,9 @@
 /mob/living/carbon/proc/handle_shock() //Currently only used for humans
 	update_pain_level()
 
-/mob/living/carbon/proc/has_painkillers()
-	if(reagents.has_reagent(PARACETAMOL))
-		return TRUE
-	if(reagents.has_reagent(TRAMADOL))
-		return TRUE
-	if(reagents.has_reagent(OXYCODONE))
-		return TRUE
-	return FALSE
+/mob/living/proc/total_painkillers()
+	for(var/datum/reagent/R in reagents.reagent_list)
+		. += R.pain_resistance
+
+/mob/living/proc/has_painkillers()
+	return total_painkillers() > 0 

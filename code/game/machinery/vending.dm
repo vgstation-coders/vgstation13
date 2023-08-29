@@ -1518,7 +1518,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/pill_bottle/lollipops = 5,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 100,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
-		/obj/item/weapon/storage/pill_bottle/mint/nano = 5
+		/obj/item/weapon/storage/pill_bottle/mint/nano = 5,
+		/obj/item/weapon/storage/lunchbox/plastic/nt/getmore = 6,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks = 4,
@@ -1542,6 +1543,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/pill_bottle/mint/nano = 30,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 1,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 100,
+		/obj/item/weapon/storage/lunchbox/plastic/nt/getmore = 10,
 		)
 	vouched = list(
 		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating = 2
@@ -2361,6 +2363,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/condiment/peppermill = 5,
 		/obj/item/weapon/reagent_containers/food/condiment/saltshaker	= 5,
 		/obj/item/weapon/reagent_containers/food/condiment/vinegar = 5,
+		/obj/item/weapon/storage/lunchbox/plastic/nt = 10,
 		/obj/item/weapon/storage/bag/food = 5
 		)
 	contraband = list(
@@ -2674,6 +2677,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/red_suit = 3,
 		/obj/item/clothing/head/nt_football_helmet = 5,
 		/obj/item/clothing/suit/nt_football = 5,
+		/obj/item/weapon/storage/lunchbox/plastic/clown = 2,
+		/obj/item/weapon/storage/lunchbox/plastic/mime = 2,
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/weapon/storage/box/smartbox/clothing_box/clownpsyche = AUTO_DROBE_DEFAULT_STOCK,
@@ -3080,10 +3085,12 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/dangles = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 6,
-		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 12
+		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 12,
+		/obj/item/weapon/storage/lunchbox/discount = 6,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/condiment/discount = 2,
+		/obj/item/weapon/storage/lunchbox/discount/pre_filled = 2,
 		/obj/item/weapon/storage/pill_bottle/mint/discount = 3
 		)
 	contraband = list(
@@ -3100,7 +3107,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 3,
 		/obj/item/weapon/reagent_containers/pill/antitox = 10,
 		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 1,
-		/obj/item/weapon/reagent_containers/food/condiment/discount = 25
+		/obj/item/weapon/reagent_containers/food/condiment/discount = 25,
+		/obj/item/weapon/storage/lunchbox/discount = 5,
+		/obj/item/weapon/storage/lunchbox/discount/pre_filled = 30,
 		)
 
 	pack = /obj/structure/vendomatpack/discount
@@ -3247,7 +3256,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/stamp/trader = 3,
 		/obj/item/crackerbox = 1,
 		/obj/item/device/dses = 1,
-		/obj/item/weapon/storage/box/biscuit = 2,
+		/obj/item/weapon/storage/lunchbox/metal/trader/pre_filled = 3,
 		/obj/item/talonprosthetic = 3,
 		/obj/machinery/vending/sale/trader = 1,
 		/obj/item/weapon/storage/toolbox/paint = 1,
@@ -3738,6 +3747,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 4,
+		/obj/item/weapon/storage/lunchbox/metal/zam = 6,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin = 6,
@@ -3759,11 +3769,14 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin = 10,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 20,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 40,
+		/obj/item/weapon/storage/lunchbox/metal/zam = 10,
+		/obj/item/weapon/storage/lunchbox/metal/zam/pre_filled = 50,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky = 4,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza = 2,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter = 2,
+		/obj/item/weapon/storage/lunchbox/metal/zam/pre_filled = 2,
 		)
 
 	pack = /obj/structure/vendomatpack/zamsnax
