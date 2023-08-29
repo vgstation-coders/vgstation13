@@ -244,7 +244,7 @@
 		list("Examine", "radial_examine")
 	)
 
-	var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, src::radial_check(), user))
+	var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, nameof(src::radial_check()), user))
 	if(!radial_check(user))
 		return
 

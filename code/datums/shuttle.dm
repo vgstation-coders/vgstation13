@@ -99,7 +99,7 @@
 			linked_area = starting_area
 			warning("Unable to find area [starting_area] in world - [src.type] ([src.name]) won't be able to function properly.")
 
-	if(istype(linked_area) && linked_area.contents.len) //Only add the shuttle to the list if its area exists and it has something in it
+	if(istype(linked_area)) //Only add the shuttle to the list if its area exists and it has something in it
 		shuttles |= src
 	if(password)
 		password = rand(10000,99999)

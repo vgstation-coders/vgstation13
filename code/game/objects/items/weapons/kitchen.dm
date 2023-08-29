@@ -293,6 +293,14 @@
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
 
+/obj/item/weapon/kitchen/utensil/spork/plastic/teflon
+	name = "teflon spork"
+	desc = "Tlork!"
+	icon_state = "tspork"
+
+/obj/item/weapon/kitchen/utensil/spork/plastic/teflon/dissolvable()
+	return FALSE
+
 /*
  * Forks
  */

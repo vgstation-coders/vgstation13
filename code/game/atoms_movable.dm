@@ -587,6 +587,11 @@
 		M.dash_dir = dir
 		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
 
+	if(istype(src,/mob/living/simple_animal/hostile/humanoid/nurseunit))
+		var/mob/living/simple_animal/hostile/humanoid/nurseunit/M = src
+		M.dash_dir = dir
+		src.throwing = 2
+
 	var/afterimage = 0
 	if(istype(src,/mob/living/simple_animal/construct/armoured/perfect))
 		var/mob/living/simple_animal/construct/armoured/perfect/M = src
@@ -736,7 +741,7 @@
 		AM.lock_atom(src, /datum/locking_category/overlay)
 	if (istype(master, /atom/movable))
 		var/atom/movable/AM = master
-		AM.register_event(/event/destroyed, src, src::qdel_self())
+		AM.register_event(/event/destroyed, src, nameof(src::qdel_self()))
 	verbs.len = 0
 
 /atom/movable/overlay/proc/qdel_self(datum/thing)
@@ -746,7 +751,7 @@
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
 		AM.unlock_atom(src)
-		AM.unregister_event(/event/destroyed, src, src::qdel_self())
+		AM.unregister_event(/event/destroyed, src, nameof(src::qdel_self()))
 	master = null
 	return ..()
 

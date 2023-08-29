@@ -530,14 +530,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 /obj/machinery/chem_master/proc/detach()
 	if(container)
-		if(mode)
-			reagents.trans_to(container, reagents.total_volume)
-		else
-			reagents.clear_reagents()
 		container.forceMove(src.loc)
 		container.pixel_x = 0 //We fucked with the beaker for overlays, so reset that
 		container.pixel_y = 0
 		container = null
+		reagents.clear_reagents()
 		update_icon()
 		updateUsrDialog()
 

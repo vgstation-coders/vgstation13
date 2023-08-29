@@ -68,7 +68,7 @@
 				list("Take plasma tank", "radial_ptank[platanks.len ? "" : "empty"]"),
 			)
 
-			var/task = show_radial_menu(user,loc,choices,custom_check = new /callback(src, src::radial_check(), user),starting_angle=90,ending_angle=450)
+			var/task = show_radial_menu(user,loc,choices,custom_check = new /callback(src, nameof(src::radial_check()), user),starting_angle=90,ending_angle=450)
 			if(!radial_check(user))
 				return
 

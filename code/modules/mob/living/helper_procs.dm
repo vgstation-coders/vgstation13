@@ -77,3 +77,4 @@ default behaviour is:
 	else if (the_temp < BODYTEMP_COLD_DAMAGE_LIMIT)
 		return the_temp - BODYTEMP_COLD_DAMAGE_LIMIT
 	return 0
+  

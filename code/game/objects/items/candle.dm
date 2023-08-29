@@ -10,7 +10,7 @@
 	light_color = LIGHT_COLOR_FIRE
 	autoignition_temperature = AUTOIGNITION_FABRIC //idk the wick lmao
 
-	var/wax = 200
+	var/wax = 900
 	var/lit = 0
 	var/flavor_text
 	var/trashtype = /obj/item/trash/candle
