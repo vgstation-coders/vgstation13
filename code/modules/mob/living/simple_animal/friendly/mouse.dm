@@ -90,8 +90,7 @@
 			emote("me", EMOTE_AUDIBLE, "snuffles")
 
 	if(nutrition >= MOUSETFAT)
-		visible_message("<span class = 'warning'>\The [src] explodes!</span>")
-		gib()
+		mouse_overeat()
 		return
 
 	if(nutrition >= MOUSEFAT && is_fat == 0)
@@ -399,6 +398,10 @@
 		M.splat()
 		return PROJECTILE_COLLISION_DEFAULT
 
+/mob/living/simple_animal/mouse/proc/mouse_overeat()
+	visible_message("<span class = 'warning'>\The [src] explodes!</span>")
+	gib()
+
 /*
  * Common mouse types
  */
@@ -546,6 +549,9 @@
 /mob/living/simple_animal/mouse/transmog
 	maxHealth = 35
 	health = 35
+
+/mob/living/simple_animal/mouse/transmog/mouse_overeat()
+	transmog_death()
 
 /mob/living/simple_animal/mouse/transmog/transmog_death()
 	if(!transmogged_from)
