@@ -8634,6 +8634,26 @@ var/procizine_tolerance = 0
 	glass_name = "\improper festive eggnog"
 	glass_desc = "Eggnog, complete with booze and a dusting of cinnamon for that winter warmth."
 
+/datum/reagent/ethanol/drink/mimosa
+	name = "Mimosa"
+	id = MIMOSA
+	description = "Champagne and orange juice."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFCA24" //rgb: 255, 202, 36
+	glass_icon_state = "mimosa"
+	glass_name = "\improper mimosa"
+	glass_desc = "Tangy and light. Perfect for brunch."
+
+/datum/reagent/ethanol/drink/lemondrop
+	name = "Lemon Drop"
+	id = LEMONDROP
+	description = "Vodka, lemon juice, and triple sec."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFF353" //rgb: 255, 243, 83
+	glass_icon_state = "lemondrop"
+	glass_name = "\improper lemon drop"
+	glass_desc = "A strong and sour drink, served with a sugar coated rim."
+
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar
 	name = "Vinegar"
