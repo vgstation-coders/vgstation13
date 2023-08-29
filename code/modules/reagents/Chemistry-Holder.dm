@@ -580,29 +580,76 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return 0
 
 /datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/amount_override = 0, var/list/zone_sels = ALL_LIMBS)
-	for(var/datum/reagent/R in reagent_list)
-		var/amount_splashed = (R.volume+volume_modifier)
-		if (amount_override)
-			amount_splashed = amount_override
-		if(ismob(A) && R)
-			if(isanimal(A) && R)
+	if (isliving(A))
+		handle_reagents_mob_thermal_interaction(A, method, zone_sels, amount_override)
+	for (var/datum/reagent/R in reagent_list)
+		var/amount_splashed = amount_override ? amount_override : (R.volume + volume_modifier)
+		if (ismob(A))
+			if (isanimal(A))
 				R.reaction_animal(A, method, amount_splashed)
 			else
 				R.reaction_mob(A, method, amount_splashed, zone_sels)
-		if(isturf(A) && R)
+		else if (isturf(A))
 			R.reaction_turf(A, amount_splashed)
-		if(istype(A, /obj) && R)
+		else if (istype(A, /obj))
 			R.reaction_obj(A, amount_splashed)
 
 /datum/reagents/proc/reaction_dropper(var/atom/A, var/volume_modifier=0)
 
-	if(ismob(A))
+	if (ismob(A))
+		if (isliving(A))
+			handle_reagents_mob_thermal_interaction(A, TOUCH, TARGET_EYES)
 		for(var/datum/reagent/R in reagent_list)
 			R.reaction_dropper_mob(A)
 
-	if(istype(A, /obj))
+	else if(istype(A, /obj))
 		for(var/datum/reagent/R in reagent_list)
 			R.reaction_dropper_obj(A, R.volume+volume_modifier)
+
+#define SCALD_PAINFUL 15
+#define SCALD_AGONIZING 30
+
+/datum/reagents/proc/handle_reagents_mob_thermal_interaction(mob/living/L, method, list/zone_sels = ALL_LIMBS, volume_used)
+	if (!total_volume)
+		return
+	if (!isliving(L))
+		return
+	var/ignore_thermal_prot = FALSE
+	if (method == INGEST) //Eating or drinking burns the mouth (head) regardless of targeting and isn't blocked by head thermal protection.
+		zone_sels = TARGET_MOUTH
+		ignore_thermal_prot = TRUE
+	var/burn_dmg = L.get_splash_burn_damage(volume_used ? volume_used : total_volume, chem_temp)
+	var/datum/organ/external/which_organ
+	if (ishuman(L)) //Although monkeys can wear clothes, only humans have explicit organs that can be covered by specific worn items, so for now only humans get protection here. If this is expanded to include things like monkeys wearing clothes and getting non-organ-specific thermal protection, this could be changed to use type inheritance.
+		var/mob/living/carbon/human/H = L
+		which_organ = H.get_organ(pick(zone_sels))
+		if (!ignore_thermal_prot)
+			burn_dmg = round(burn_dmg * H.getthermalprot(which_organ))
+	if (burn_dmg)
+		if(ishuman(L))
+			var/mob/living/carbon/human/H = L
+			var/post_mod_predicted_dmg = burn_dmg * L.burn_damage_modifier
+			var/custom_pain_msg
+			if (post_mod_predicted_dmg >= SCALD_AGONIZING)
+				var/first = pick("A searing", "A roaring", "A blazing", "An exquisite")
+				var/list/second_list = list("torrent", "sea", "wall", "inferno", "river")
+				if (first != "A roaring")
+					second_list += "roar" //don't say "roaring roar"
+				custom_pain_msg = "[first] [pick(second_list)] of agony [pick("envelops", "cascades through", "courses through", "rushes into", "consumes", "fills")] [which_organ ? "your " + which_organ.display_name : "you"]!"
+			else if (post_mod_predicted_dmg >= SCALD_PAINFUL)
+				var/second = pick("rush", "wave", "lance", "spike")
+				var/list/third_list = list("shoots through", "stabs through", "washes through")
+				if (second != "lance")
+					third_list += "lances through" //don't say "lance lances"
+				custom_pain_msg = "[pick("A burning", "A searing", "A boiling")] [second] of pain [pick(third_list)] [which_organ ? "your " + which_organ.display_name : "you"]!"
+			else
+				custom_pain_msg = "Pain sears [which_organ ? " your " + which_organ.display_name : ""]!"
+			H.custom_pain(custom_pain_msg, post_mod_predicted_dmg >= SCALD_AGONIZING, post_mod_predicted_dmg >= SCALD_PAINFUL)
+		L.apply_effect(burn_dmg * 5, AGONY) //pain
+		L.apply_damage(burn_dmg, BURN, which_organ)
+
+#undef SCALD_PAINFUL
+#undef SCALD_AGONIZING
 
 /datum/reagents/proc/get_equalized_temperature(temperature_A, thermalmass_A, temperature_B, thermalmass_B)
 	//Gets the equalized temperature of two thermal masses
