@@ -66,7 +66,7 @@
 	if(!player)
 		checkSplit(FALSE)
 		polling_ghosts = FALSE
-		qdel(recruiter)
+		QDEL_NULL(recruiter)
 		return
 	polling_ghosts = FALSE
 	var/turf/this_turf = get_turf(owner.current.loc)
@@ -101,4 +101,4 @@
 	update_faction_icons()
 
 	feedback_add_details("changeling_powers","SP")
-	qdel(recruiter)
+	QDEL_NULL(recruiter)
