@@ -3037,9 +3037,7 @@
 /obj/structure/table/flipped{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "floor"
-	},
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "AC" = (
 /obj/structure/window/barricade/full/block,
