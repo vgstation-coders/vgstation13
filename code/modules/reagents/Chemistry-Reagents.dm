@@ -4282,7 +4282,7 @@ var/procizine_tolerance = 0
 			for(var/datum/wound/internal_bleeding/W in E.wounds)
 				W.heal_damage(0.8, TRUE)
 				holder.remove_reagent(MEDNANOBOTS, 0.25)
-		for(var/datum/organ/internal/I in H.organs)
+		for(var/datum/organ/internal/I in H.internal_organs)
 			if(I.damage)
 				I.damage = max(0, I.damage - 5) //Heals a whooping 5 organ damage.
 				holder.remove_reagent(MEDNANOBOTS, 0.10) //Less so it doesn't vanish the nanobot supply
