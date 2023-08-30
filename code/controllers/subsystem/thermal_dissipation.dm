@@ -33,12 +33,10 @@ var/list/thermal_dissipation_reagents = list()
 
 	if(config.thermal_dissipation)
 		var/simulate_air = config.reagents_heat_air
-		var/datum/reagents/R
 		while (c)
-			R = currentrun[c]
-			c--
 
-			R?.handle_thermal_dissipation(simulate_air)
+			currentrun[c]?.handle_thermal_dissipation(simulate_air)
+			c--
 
 			if (MC_TICK_CHECK)
 				break
