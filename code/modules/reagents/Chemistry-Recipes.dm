@@ -3015,6 +3015,20 @@
 	required_reagents = list(GIN = 3, CHERRYJELLY = 1)
 	result_amount = 4
 
+/datum/chemical_reaction/mimosa
+	name = "Mimosa"
+	id = MIMOSA
+	result = MIMOSA
+	required_reagents = list(CHAMPAGNE = 1, ORANGEJUICE = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/lemondrop
+	name = "Lemon Drop"
+	id = LEMONDROP
+	result = LEMONDROP
+	required_reagents = list(LEMONJUICE = 1, TRIPLESEC = 1, VODKA = 1)
+	result_amount = 3
+
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
 /datum/chemical_reaction/sbiten

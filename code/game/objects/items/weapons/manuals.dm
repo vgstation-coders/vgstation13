@@ -5,6 +5,7 @@
 	icon = 'icons/obj/library.dmi'
 	due_date = 0 // Game time in 1/10th seconds
 	unique = 1   // 0 - Normal book, 1 - Should not be treated as normal book, unable to be copied, unable to be modified
+	var/id = 0
 
 /obj/item/weapon/book/manual/engineering_construction
 	name = "Station Repairs and Construction"
@@ -13,6 +14,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Station Repairs and Construction"
 	wiki_page = "Guide_to_Construction"
+	id = 1
 
 /obj/item/weapon/book/manual/engineering_particle_accelerator
 	name = "Particle Accelerator User's Guide"
@@ -20,6 +22,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Particle Accelerator User's Guide"
 //big pile of shit below.
+	id = 2
 
 	dat = {"<html>
 				<head>
@@ -63,6 +66,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Hacking"
 	wiki_page = "Hacking"
+	id = 3
 
 /obj/item/weapon/book/manual/engineering_singularity_safety
 	name = "Singularity Safety in Special Circumstances"
@@ -70,7 +74,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Singularity Safety in Special Circumstances"
 //big pile of shit below.
-
+	id = 4
 	dat = {"<html>
 				<head>
 				<style>
@@ -118,6 +122,7 @@
 	item_state = "book5"
 	author = "Farmer John"
 	title = "Growing Dionae and YOU! A book on growing your new best friends!"
+	id = 5
 	dat = {"<html>
 				<head>
 				<style>
@@ -152,6 +157,7 @@
 	author = "Medical Journal, volume 3"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Cloning techniques of the 26th century"
 	wiki_page = "Guide_to_Cloning"
+	id = 6
 
 /obj/item/weapon/book/manual/chemistry_manual
 	name = "Chemistry 101"
@@ -160,13 +166,14 @@
 	author = "SpaceChem Inc."
 	title = "Chemistry 101"
 	wiki_page = "Guide_to_Chemistry"
-
+	id = 7
 
 /obj/item/weapon/book/manual/ripley_build_and_repair
 	name = "APLU \"Ripley\" Construction and Operation Manual"
 	icon_state ="book"
 	author = "Weyland-Yutani Corp"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "APLU \"Ripley\" Construction and Operation Manual"
+	id = 8
 //big pile of shit below.
 
 	/*dat = {"<html>
@@ -243,6 +250,7 @@
 	icon_state = "rdbook"
 	author = "Dr. L. Ight"
 	title = "Research and Development 101"
+	id = 9
 	dat = {"<html>
 				<head>
 				<style>
@@ -293,6 +301,7 @@
 	icon_state = "borgbook"
 	author = "XISC"
 	title = "Cyborgs for Dummies"
+	id = 10
 	dat = {"<html>
 				<head>
 				<style>
@@ -498,6 +507,7 @@
 	author = "Nanotrasen"
 	title = "Space Law"
 	wiki_page = "Space_Law"
+	id = 11
 
 /obj/item/weapon/book/manual/security_antag_guide	//if you wanna edit, just copypaste the dat into https://www.w3schools.com/html/tryit.asp?filename=tryhtml_default
 	name = "Enemies of Nanotrasen: A Quick Overview"
@@ -506,6 +516,7 @@
 	item_state = "bookAntagGuide"
 	author = "Nanotrasen"
 	title = "Enemies of Nanotrasen: A Quick Overview"
+	id = 12
 	book_width = 692
 
 /obj/item/weapon/book/manual/security_antag_guide/New(turf/loc)
@@ -672,6 +683,7 @@
 	author = "Engineering Encyclopedia"
 	title = "Engineering Textbook"
 	wiki_page = "Guide_to_Engineering"
+	id = 13
 
 /obj/item/weapon/book/manual/rust
 	name = "R-UST User Manual"
@@ -679,6 +691,7 @@
 	author = "NanoTrasen"
 	title = "R-UST User Manual"
 	wiki_page = "R-UST"
+	id = 14
 
 /obj/item/weapon/book/manual/chef_recipes
 	name = "Chef Recipes"
@@ -687,6 +700,7 @@
 	author = "Lord Frenrir Cageth"
 	title = "Chef Recipes"
 	wiki_page = "Guide_to_Food_and_Drinks"
+	id = 15
 
 /obj/item/weapon/book/manual/barman_recipes
 	name = "Barman Recipes"
@@ -695,6 +709,7 @@
 	author = "Sir John Rose"
 	title = "Barman Recipes"
 	wiki_page = "Barman_recipes"
+	id = 16
 
 /obj/item/weapon/book/manual/detective
 	name = "The Film Noir: proper Procedures for Investigations"
@@ -703,6 +718,7 @@
 	author = "Nanotrasen"
 	title = "The Film Noir: proper Procedures for Investigations"
 	wiki_page = "Guide_to_Forensics"
+	id = 17
 
 /obj/item/weapon/book/manual/nuclear
 	name = "Fission Mailed: Nuclear Sabotage 101"
@@ -712,6 +728,7 @@
 	title = "Fission Mailed: Nuclear Sabotage 101"
 	wiki_page = "Nuclear_Agent"
 	forbidden = 2 // Only available to emagged terminals.
+	id = 18
 
 /obj/item/weapon/book/manual/ship_building
 	name = "Dummies guide to Interstellar Flight"
@@ -719,12 +736,14 @@
 	icon_state = "bookDummy"
 	author = "David Alcubierre"
 	wiki_page = "Ship_Building"
+	id = 19
 
 /obj/item/weapon/book/manual/mailing_guide
 	name = "Guide to disposal mailing system"
 	icon_state ="book"     // a proper icon would be nice
 	author = "Ulyanovsk Logistics Division"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Guide to disposal mailing system"
+	id = 20
 	dat = {"<html>
 				<head>
 				<style>
@@ -987,6 +1006,7 @@ var/virology_encyclopedia = ""
 	author = "Frederick Chapman Montagnier"
 	title = "Symptom Encyclopedia"
 	dat = ""
+	id = 21
 	book_width = 819
 	book_height = 516
 
@@ -1094,6 +1114,7 @@ var/virology_encyclopedia = ""
 	item_state ="snow"
 	author = "The Abominable Snowman"
 	title = "Snow Survival Guide"
+	id = 22
 	wiki_page = "Guide_to_Snow_Map"
 	desc = "A guide to surviving on the surface of a snow planet. It even comes with a magnesium strip to ignite for emergency heating when applied to snow!</span>"
 

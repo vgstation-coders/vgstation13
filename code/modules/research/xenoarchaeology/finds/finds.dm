@@ -1099,6 +1099,15 @@
 	else
 		return new /obj/item/pocketwatch
 
+/datum/find/mirror
+	find_ID = ARCHAEO_MIRROR
+	anomaly_factor = 4
+	apply_material_decorations = FALSE
+	responsive_reagent = MERCURY
+
+/datum/find/mirror/spawn_item()
+	return new /obj/item/weapon/pocket_mirror/arcane
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Strange rocks
 

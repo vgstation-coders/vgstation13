@@ -564,8 +564,8 @@
 	icon_state = "metalbarrel"
 	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of metal."
 	layer = TABLE_LAYER
-	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
-	var/list/exiting = list() // Manages people leaving the barrel
+	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND | OPENCONTAINER // If I end up being coherent enough to make it holdable in-hand
+	var/list/exiting = list() // Manages people leaving the barrel //Turns out the flags here overwrote the new OPENCONTAINER flag so the barrels were fucked
 	health = 50
 	var/burning = FALSE
 	is_cooktop = TRUE
@@ -632,7 +632,10 @@
 		icon_state = "flamingmetalbarrel"
 		set_light(3,4,LIGHT_COLOR_FIRE)
 	else
-		icon_state = "metalbarrel"
+		if(is_cooktop) //only metal barrels are cooktops
+			icon_state = "metalbarrel"
+		else
+			icon_state = "woodenbarrel"
 		set_light(0,0,LIGHT_COLOR_FIRE)
 	render_cookvessel()
 

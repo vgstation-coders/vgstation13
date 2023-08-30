@@ -332,11 +332,46 @@ var/global/objects_thrown_when_explode = FALSE
 	..(user, size, show_name)
 	if(price && price > 0)
 		to_chat(user, "You read '[price] space bucks' on the tag.")
-	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
-		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
+	if(user.is_holding_item(src))
+		if(reagents?.total_volume && isliving(user))
+			held_examine_temperature_message(user)
+		if(cant_drop != FALSE) //Item can't be dropped, and is either in left or right hand!
+			to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
 	if(daemon && daemon.flags & DAEMON_EXAMINE)
 		daemon.examine(user)
 
+/obj/item/proc/held_examine_temperature_message(mob/living/examiner)
+	#define HEAT_LEVEL_SPAN 20
+	var/temperature_delta = (reagents.chem_temp - examiner.bodytemperature) * heat_conductivity ** (1/3) //Cubed root to skew it towards being perceptible.
+	if (ishuman(examiner))
+		var/mob/living/carbon/human/H = examiner
+		temperature_delta *= (H.gloves ? H.gloves.heat_conductivity ** (1/3) : 1)
+	var/safetemp_excursion = examiner.get_safe_temperature_excursion(examiner.bodytemperature + temperature_delta)
+	if (!examiner.feels_pain() || examiner.has_painkillers())
+		safetemp_excursion = 0
+	else if(safetemp_excursion > 0)
+		safetemp_excursion = min(ceil(safetemp_excursion / HEAT_LEVEL_SPAN), 3)
+	else if (safetemp_excursion < 0)
+		safetemp_excursion = max(round(safetemp_excursion / HEAT_LEVEL_SPAN), -3)
+	switch (safetemp_excursion)
+		if (0)
+			if (temperature_delta >= HEAT_LEVEL_SPAN)
+				to_chat(examiner, "<span class='notice'>It feels warm.</span>")
+			else if(abs(temperature_delta) >= HEAT_LEVEL_SPAN)
+				to_chat(examiner, "<span class='notice'>It feels cool.</span>")
+		if (1)
+			to_chat(examiner, "<span class='warning'>It feels very hot.</span>")
+		if (-1)
+			to_chat(examiner, "<span class='warning'>It feels very cold.</span>")
+		if (2)
+			to_chat(examiner, "<span class='warning'>It feels searing hot.</span>")
+		if (-2)
+			to_chat(examiner, "<span class='warning'>It feels freezing cold.</span>")
+		if (3)
+			to_chat(examiner, "<span class='warning'>It feels blisteringly hot.</span>")
+		if (-3)
+			to_chat(examiner, "<span class='warning'>It feels piercingly cold.</span>")
+	#undef HEAT_LEVEL_SPAN
 
 /obj/item/attack_ai(mob/user as mob)
 	..()

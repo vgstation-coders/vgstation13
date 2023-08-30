@@ -4282,7 +4282,7 @@ var/procizine_tolerance = 0
 			for(var/datum/wound/internal_bleeding/W in E.wounds)
 				W.heal_damage(0.8, TRUE)
 				holder.remove_reagent(MEDNANOBOTS, 0.25)
-		for(var/datum/organ/internal/I in H.organs)
+		for(var/datum/organ/internal/I in H.internal_organs)
 			if(I.damage)
 				I.damage = max(0, I.damage - 5) //Heals a whooping 5 organ damage.
 				holder.remove_reagent(MEDNANOBOTS, 0.10) //Less so it doesn't vanish the nanobot supply
@@ -8634,6 +8634,26 @@ var/procizine_tolerance = 0
 	glass_name = "\improper festive eggnog"
 	glass_desc = "Eggnog, complete with booze and a dusting of cinnamon for that winter warmth."
 
+/datum/reagent/ethanol/drink/mimosa
+	name = "Mimosa"
+	id = MIMOSA
+	description = "Champagne and orange juice."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFCA24" //rgb: 255, 202, 36
+	glass_icon_state = "mimosa"
+	glass_name = "\improper mimosa"
+	glass_desc = "Tangy and light. Perfect for brunch."
+
+/datum/reagent/ethanol/drink/lemondrop
+	name = "Lemon Drop"
+	id = LEMONDROP
+	description = "Vodka, lemon juice, and triple sec."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFF353" //rgb: 255, 243, 83
+	glass_icon_state = "lemondrop"
+	glass_name = "\improper lemon drop"
+	glass_desc = "A strong and sour drink, served with a sugar coated rim."
+
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar
 	name = "Vinegar"
@@ -9882,7 +9902,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	if(!spookvision && tick >= 30 && volume >= 1) //ghostsight after 1m and having more than 1u inside
+	if(!spookvision && tick >= 5 && volume >= 1) //ghostsight after 10s and having more than 1u inside
 		spookvision = TRUE
 		to_chat(M, "<span class='notice'>You start seeing through the veil!</span>")
 		M.see_invisible = SEE_INVISIBLE_OBSERVER

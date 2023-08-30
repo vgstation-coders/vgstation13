@@ -28,6 +28,14 @@
 	},
 /turf/unsimulated/floor/grey_sand,
 /area/vault/mothership_lab/administration)
+"ap" = (
+/obj/structure/table,
+/obj/item/weapon/paper,
+/obj/item/weapon/storage/fancy/crayons,
+/obj/item/weapon/pen,
+/obj/item/dictionary/grey,
+/turf/unsimulated/floor/ayy,
+/area/vault/mothership_lab/habitation)
 "au" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/boulder,
@@ -136,6 +144,12 @@
 	icon_state = "platingdmg1"
 	},
 /area/vault/mothership_lab/cave)
+"bl" = (
+/obj/machinery/light/he/burned{
+	dir = 8
+	},
+/turf/unsimulated/floor/ayy,
+/area/vault/mothership_lab/habitation)
 "bn" = (
 /obj/machinery/light/small{
 	dir = 1
@@ -1020,7 +1034,7 @@
 /obj/item/clothing/shoes/magboots,
 /obj/item/weapon/tank/oxygen/red,
 /obj/item/clothing/suit/space/rig/grey/researcher,
-/obj/item/clothing/mask/breath,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor{
 	icon_state = "engine";
 	name = "reinforced floor"
@@ -1456,25 +1470,6 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/ayy/fancy,
-/area/vault/mothership_lab/habitation)
-"mI" = (
-/obj/structure/rack,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/machinery/door/window/brigdoor{
-	dir = 2
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/unsimulated/floor{
-	icon_state = "engine";
-	name = "reinforced floor"
-	},
 /area/vault/mothership_lab/habitation)
 "mQ" = (
 /obj/machinery/light/he/broken{
@@ -1938,6 +1933,7 @@
 	dir = 1;
 	pixel_y = 1
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/cave)
 "qG" = (
@@ -2294,9 +2290,6 @@
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/cave)
 "ty" = (
-/obj/machinery/light/he/burned{
-	dir = 8
-	},
 /obj/effect/decal/cleanable/blood/drip{
 	basecolor = "#2299FC";
 	blood_color = "#2299FC"
@@ -2679,6 +2672,7 @@
 	dir = 8
 	},
 /obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "wW" = (
@@ -3043,9 +3037,7 @@
 /obj/structure/table/flipped{
 	dir = 8
 	},
-/turf/unsimulated/floor{
-	icon_state = "floor"
-	},
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "AC" = (
 /obj/structure/window/barricade/full/block,
@@ -3413,25 +3405,6 @@
 /obj/machinery/light/small,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/administration)
-"Ep" = (
-/obj/structure/rack,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/machinery/door/window/brigdoor{
-	dir = 1
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/unsimulated/floor{
-	icon_state = "engine";
-	name = "reinforced floor"
-	},
-/area/vault/mothership_lab/habitation)
 "Ev" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/unary/tank/air{
@@ -3465,6 +3438,7 @@
 "ED" = (
 /obj/item/weapon/rack_parts,
 /obj/effect/spider/stickyweb,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "EE" = (
@@ -3734,6 +3708,8 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
+/obj/item/dictionary/martian,
+/obj/item/dictionary/human,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/administration)
 "Gs" = (
@@ -4041,6 +4017,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/habitation)
 "IK" = (
@@ -4826,6 +4803,9 @@
 /area/vault/mothership_lab/habitation)
 "QD" = (
 /obj/machinery/vending/zamsnax,
+/obj/machinery/light/he/burned{
+	dir = 8
+	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "QF" = (
@@ -4993,7 +4973,7 @@
 /obj/structure/table/reinforced,
 /obj/machinery/chem_dispenser/soda_dispenser,
 /turf/unsimulated/floor/lab_sterile,
-/area/vault/mothership_lab/asteroid)
+/area/vault/mothership_lab/administration)
 "Sg" = (
 /obj/effect/decal/cleanable/blood{
 	basecolor = "#2299FC";
@@ -5092,7 +5072,7 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/lab_sterile,
-/area/vault/mothership_lab/asteroid)
+/area/vault/mothership_lab/administration)
 "SS" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -5271,7 +5251,7 @@
 /obj/item/clothing/shoes/magboots,
 /obj/item/weapon/tank/oxygen/red,
 /obj/item/clothing/suit/space/rig/grey/worker,
-/obj/item/clothing/mask/breath,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor{
 	icon_state = "engine";
 	name = "reinforced floor"
@@ -5434,13 +5414,13 @@
 /obj/item/clothing/shoes/magboots,
 /obj/item/weapon/tank/oxygen/red,
 /obj/item/clothing/suit/space/rig/grey/researcher,
-/obj/item/clothing/mask/breath,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor{
 	icon_state = "engine";
 	name = "reinforced floor"
@@ -6672,7 +6652,7 @@ cX
 xz
 CG
 Aw
-mI
+iU
 kJ
 CG
 UF
@@ -6766,10 +6746,10 @@ jQ
 cX
 Cz
 Aw
-mI
+iU
 mp
 zP
-Ep
+UF
 Aw
 gN
 ib
@@ -6793,8 +6773,8 @@ MK
 SA
 pC
 pq
-uh
-uh
+pq
+pq
 pq
 mF
 kC
@@ -8642,7 +8622,7 @@ QD
 ty
 lx
 Sp
-CG
+bl
 rQ
 CG
 Lh
@@ -8921,7 +8901,7 @@ pb
 Lf
 xk
 da
-co
+ap
 cX
 co
 Aa
@@ -9017,7 +8997,7 @@ NH
 CG
 co
 cX
-co
+ap
 CG
 Gx
 CG

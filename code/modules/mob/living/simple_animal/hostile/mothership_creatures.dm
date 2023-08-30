@@ -83,6 +83,8 @@
 	maxHealth = 200 // Pretty decent HP, but the armor is the real problem
 	health = 200
 	melee_damage_type = BURN
+	response_harm   = "harmlessly punches"
+	harm_intent_damage = 0
 	melee_damage_lower = 55 // Fighting it in melee is ballsy, to say the least
 	melee_damage_upper = 55
 	attacktext = "fires point-blank at"
@@ -121,15 +123,33 @@
 	speed = 3
 
 	ranged = 1
-	projectiletype = /obj/item/projectile/beam/immolationray/upgraded // A unique beam that deals more damage than a regular immolation ray
+	projectiletype = /obj/item/projectile/beam/immolationray/upgraded // A unique beam that deals more damage than a regular immolation ray and can destroy walls
 	projectilesound = 'sound/weapons/ray1.ogg'
 	retreat_distance = 8 // It will attempt to linger at a distance just outside of a player's typical field of view, firing shots while deflecting return fire off its armor
 	minimum_distance = 8
 	ranged_cooldown = 4 // Some cooldown to balance the serious punch it packs
 	ranged_cooldown_cap = 4
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can open doors. Coincidentally this also seems to allow the mob to shoot through them (if they're glass airlocks)? It's weird
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can open doors and smash walls. Coincidentally this also seems to allow the mob to shoot through them (if they're glass airlocks)? It's weird
 	stat_attack = UNCONSCIOUS // DISINTEGRATION PROTOCOLS ACTIVE
+
+	var/damageblock = 15 // Most common melee weapons will do nothing against its thick armor
+
+	var/last_ufosound = 0
+	var/const/ufosound_cooldown = 30 SECONDS // After making a sound effect, needs to wait thirty seconds before having a chance to make one again. Prevents spam
+
+/mob/living/simple_animal/hostile/mothership_hoverdisc/Life()
+	..()
+	if((last_ufosound + ufosound_cooldown < world.time) && prob(5)) // Will occasionally play a spoopy ufo sound
+		visible_message("<span class='notice'>The [src] emits a rhythmic hum.</span>")
+		playsound(src, 'sound/effects/ufo_appear.ogg', 50, 0)
+		last_ufosound = world.time
+	if(health >= (maxHealth/2)) // We've got a good bit of health, let's stay back and snipe
+		retreat_distance = 8
+		minimum_distance = 8
+	if(health < (maxHealth/2)) // We've taken a lot of damage, let's get up close and personal
+		retreat_distance = 2
+		minimum_distance = 2
 
 /mob/living/simple_animal/hostile/mothership_hoverdisc/death(var/gibbed = FALSE)
 	..(TRUE)
@@ -145,35 +165,56 @@
 	switch (severity)
 		if (1)
 			adjustBruteLoss(70)
+			spark(src)
 
 		if (2)
 			adjustBruteLoss(50)
+			spark(src)
 
-/mob/living/simple_animal/hostile/mothership_hoverdisc/attackby(var/obj/item/W as obj, var/mob/user as mob) // Melee weapon force has to be quite high to be effective
-	if(W.force >= 20)
-		var/damage = W.force
-		if (W.damtype == HALLOSS)
-			damage = 0
-		health -= damage
-		visible_message("<span class='danger'>[user] damages the [src] with \the [W]! </span>")
-		playsound(src, 'sound/effects/sparks1.ogg', 25)
+/mob/living/simple_animal/hostile/mothership_hoverdisc/proc/discblock(var/damage, var/atom/A) // Hoverdiscs have thick armor, and are unaffected by low force melee weapons
+	if (!damage || damage <= damageblock)
+		if (A)
+			visible_message("<span class='danger'>\The [A] glances harmlessly off of the [src]'s armor plating! </span>")
+			anim(target = src, a_icon = 'icons/effects/64x64.dmi', flick_anim = "juggernaut_armor", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2 + 4, plane = ABOVE_LIGHTING_PLANE) // Copied from juggernauts so players get visual feedback when their attacks aren't doing damage
+			playsound(src, 'sound/items/metal_impact.ogg', 25)
+		return TRUE
+	return FALSE
+
+/mob/living/simple_animal/hostile/mothership_hoverdisc/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(discblock(O.force, O))
+		user.delayNextAttack(8)
 	else
-		visible_message("<span class='danger'>\The [W] glances harmlessly off of the [src]'s armor plating! </span>")
-		playsound(src, 'sound/items/metal_impact.ogg', 25)
+		..()
+
+/mob/living/simple_animal/hostile/mothership_hoverdisc/thrown_defense(var/obj/O)
+	if(discblock(O.throwforce,O))
+		return FALSE
+	return TRUE
+
+/mob/living/simple_animal/hostile/mothership_hoverdisc/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, sharp, edge, var/used_weapon = null, ignore_events = 0)
+	if (discblock(damage))
+		return 0
+	return ..()
 
 /mob/living/simple_animal/hostile/mothership_hoverdisc/bullet_act(var/obj/item/projectile/P) // Tough nut. Energy weapons are almost completely ineffective, and ballistics do reduced damage. Ions are your best friend here
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
 		if(prob(35))
 			src.health -= P.damage
+			spark(src)
 		else
 			visible_message("<span class='danger'>The [P.name] dissipates harmlessly on the [src]'s armor plating!</span>") // Lasers that fail to get through "dissipate" and do no damage
+			anim(target = src, a_icon = 'icons/effects/64x64.dmi', flick_anim = "juggernaut_armor", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2 + 4, plane = ABOVE_LIGHTING_PLANE)
+			playsound(src, 'sound/items/metal_impact.ogg', 25)
 		return PROJECTILE_COLLISION_DEFAULT
 	if(istype(P, /obj/item/projectile/bullet))
 		if(prob(35))
 			src.health -= P.damage
+			spark(src)
 		else
-			visible_message("<span class='danger'>The [P.name] glances off the [src]'s armor plating, failing to penetrate!</span>") // Bullets that fail to get through "deflect" and do reduced damage
-			src.health -= P.damage/5
+			visible_message("<span class='danger'>The [P.name] glances off the [src]'s armor plating, failing to penetrate!</span>") // Bullets that fail to get through "deflect" and do greatly reduced damage
+			anim(target = src, a_icon = 'icons/effects/64x64.dmi', flick_anim = "juggernaut_armor", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2 + 4, plane = ABOVE_LIGHTING_PLANE)
+			playsound(src, 'sound/effects/bullet_ricocchet.ogg', 25, 0)
+			src.health -= P.damage/10
 		return PROJECTILE_COLLISION_DEFAULT
 	return (..(P))
 

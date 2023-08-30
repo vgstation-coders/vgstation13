@@ -11,6 +11,7 @@
 // END_PREFERENCES
 // BEGIN_INCLUDE
 #include "__DEFINES\__compile_options.dm"
+#include "__DEFINES\__opendream.dm"
 #include "__DEFINES\__spaceman_dmm.dm"
 #include "__DEFINES\_macros.dm"
 #include "__DEFINES\accessories.dm"
@@ -1168,6 +1169,7 @@
 #include "code\game\objects\items\weapons\storage\fancy.dm"
 #include "code\game\objects\items\weapons\storage\firstaid.dm"
 #include "code\game\objects\items\weapons\storage\lockbox.dm"
+#include "code\game\objects\items\weapons\storage\lunchbox.dm"
 #include "code\game\objects\items\weapons\storage\RPED.dm"
 #include "code\game\objects\items\weapons\storage\secure.dm"
 #include "code\game\objects\items\weapons\storage\storage.dm"

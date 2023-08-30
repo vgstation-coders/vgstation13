@@ -92,7 +92,7 @@
 	if(world.time - last_ring_time >= ring_delay)
 		last_ring_time = world.time
 		flick("[icon_state]-push", src)
-		playsound(src, 'sound/machines/ding2.ogg', 50, 1)
+		playsound(src, hitsound, 50, 1)
 		return 1
 	return 0
 
