@@ -160,9 +160,25 @@
 
 
 /obj/item/clothing/under/lawyer
-	desc = "Slick threads."
 	name = "Lawyer suit"
+	desc = "Slick threads."
 	clothing_flags = ONESIZEFITSALL
+	var/list/lawyersounds = list(
+		MALE = list("objection!" = 'sound/voice/masc_objection.ogg',
+					"holdit!" = 'sound/voice/masc_holdit.ogg',
+					"takethat!" = 'sound/voice/masc_takethat.ogg'),
+		FEMALE = list("objection!" = 'sound/voice/fem_objection.ogg',
+					"holdit!" = 'sound/voice/fem_holdit.ogg',
+					"takethat!" = 'sound/voice/fem_takethat.ogg')
+		)
+
+/obj/item/clothing/under/lawyer/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	..()
+	if((L.gender in lawyersounds) && lawyersounds[L.gender])
+		var/message= replacetext(lowertext(speech.message), " ", "")
+		if((message in lawyersounds[L.gender]) && lawyersounds[L.gender][message])
+			playsound(L.loc,lawyersounds[L.gender][message],50)
+			L.emote("points dramatically!")
 
 /obj/item/clothing/under/lawyer/black
 	icon_state = "lawyer_black"
