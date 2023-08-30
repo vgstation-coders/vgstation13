@@ -424,16 +424,15 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			//Bring the pills to ambient temperature, due to contact with the pilling machinery.
 			var/datum/gas_mixture/A = return_air()
 			if (A)
-				if(abs(reagents.chem_temp - A.temperature) < MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
-					return
-				var/new_temp
-				if (istype(A, /datum/gas_mixture/unsimulated))
-					new_temp = A.temperature
-				else
-					new_temp = reagents.get_equalized_temperature(reagents.chem_temp, reagents.get_thermal_mass(), A.temperature, A.heat_capacity())
-					A.temperature = new_temp
-				reagents.chem_temp = new_temp
-				reagents.handle_reactions()
+				if(abs(reagents.chem_temp - A.temperature) >= MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
+					var/new_temp
+					if (istype(A, /datum/gas_mixture/unsimulated))
+						new_temp = A.temperature
+					else
+						new_temp = reagents.get_equalized_temperature(reagents.chem_temp, reagents.get_thermal_mass(), A.temperature, A.heat_capacity())
+						A.temperature = new_temp
+					reagents.chem_temp = new_temp
+					reagents.handle_reactions()
 
 			while(count>0)
 				count--
