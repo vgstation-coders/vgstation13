@@ -2150,7 +2150,7 @@
 	reagents.add_reagent(TOXICWASTE, 8)
 	reagents.add_reagent(BUSTANUT, 2) //YOU FEELIN HARDCORE BRAH?
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/dangles
 	name = "Dangles"
 	desc = "Once you pop, you'll wish you stopped."
@@ -3513,6 +3513,12 @@
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -4
 
+/obj/item/weapon/reagent_containers/food/snacks/meatbreadslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 6) // Somehow has no reagents inside? Add some nutriment
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/xenomeatbread
 	name = "xenomeatbread loaf"
 	desc = "The culinary base of every self-respecting eloquen/tg/entleman. Extra Heretical."
@@ -3536,6 +3542,12 @@
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -4
 
+/obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 6) // Somehow has no reagents inside? Add some nutriment
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/spidermeatbread
 	name = "spider meat loaf"
 	desc = "Reassuringly green meatloaf made from spider meat."
@@ -3558,6 +3570,12 @@
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -5
+
+/obj/item/weapon/reagent_containers/food/snacks/spidermeatbreadslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 6) // Somehow has no reagents inside? Add some nutriment
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread/synth
 	name = "synthmeatbread loaf"
@@ -3604,6 +3622,13 @@
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 
+/obj/item/weapon/reagent_containers/food/snacks/bananabreadslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(BANANA, 4)
+			reagents.add_reagent(NUTRIMENT, 4) // Somehow has no reagents inside? Add some nutriment and nanner juice
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/tofubread
 	name = "tofubread"
 	icon_state = "Like meatbread but for vegetarians. Not guaranteed to give superpowers."
@@ -3626,6 +3651,12 @@
 	bitesize = 2
 	plate_offset_y = -5
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
+
+/obj/item/weapon/reagent_containers/food/snacks/tofubreadslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 6) // Somehow has no reagents inside? Add some nutriment
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/carrotcake
 	name = "carrot cake"
@@ -3651,6 +3682,13 @@
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
 
+/obj/item/weapon/reagent_containers/food/snacks/carrotcakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 5)
+			reagents.add_reagent(IMIDAZOLINE, 2)// Somehow has no reagents inside? Add some nutriment and eye juice
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/braincake
 	name = "brain cake"
 	desc = "A squishy cake-thing."
@@ -3674,6 +3712,13 @@
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE //meat, milk, eggs
 
+/obj/item/weapon/reagent_containers/food/snacks/braincakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 5)
+			reagents.add_reagent(ALKYSINE, 2)// Somehow has no reagents inside? Add some nutriment and brain juice
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesecake
 	name = "cheese cake"
 	desc = "DANGEROUSLY cheesy."
@@ -3695,6 +3740,12 @@
 	icon_state = "cheesecake_slice"
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/cheesecakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 5) // Somehow has no reagents inside? Add some nutriment
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/plaincake
 	name = "vanilla cake"
@@ -3745,6 +3796,12 @@
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
 
+/obj/item/weapon/reagent_containers/food/snacks/orangecakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 4) // Somehow has no reagents inside? Add some nutriment
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/limecake
 	name = "lime cake"
 	desc = "A cake with added lime."
@@ -3766,6 +3823,12 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
+
+/obj/item/weapon/reagent_containers/food/snacks/limecakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 4) // Somehow has no reagents inside? Add some nutriment
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/lemoncake
 	name = "lemon cake"
@@ -3789,6 +3852,12 @@
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
 
+/obj/item/weapon/reagent_containers/food/snacks/lemoncakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 4) // Somehow has no reagents inside? Add some nutriment
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/chocolatecake
 	name = "chocolate cake"
 	desc = "A cake with added chocolate."
@@ -3810,6 +3879,12 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatecakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 4) // Somehow has no reagents inside? Add some nutriment
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
 	name = "caramel cake"
@@ -3833,6 +3908,13 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
+
+/obj/item/weapon/reagent_containers/food/snacks/caramelcakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 3)
+			reagents.add_reagent(CARAMEL, 1) // Somehow has no reagents inside? Add some nutriment and caramel
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
 	name = "cheese wheel"
@@ -3860,6 +3942,12 @@
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
 
+/obj/item/weapon/reagent_containers/food/snacks/cheesewedge/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 4) // Somehow has no reagents inside? Add some nutriment
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/birthdaycake
 	name = "Birthday Cake"
 	desc = "Happy Birthday..."
@@ -3883,6 +3971,13 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_icon = "bluecustom"
+
+/obj/item/weapon/reagent_containers/food/snacks/birthdaycakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 4)
+			reagents.add_reagent(SPRINKLES, 2) // Somehow has no reagents inside? Add some nutriment and sprinkles
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
 	name = "bread"
@@ -3917,13 +4012,18 @@
 	bitesize = 2
 	food_flags = FOOD_DIPPABLE
 
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 1) // Somehow has no reagents inside? Add some nutriment
+
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
 	name = "nova bread slice"
 	desc = "A slice of Sol."
 	icon_state = "novabreadslice"
 	plate_icon = "novacustom"
 	food_flags = FOOD_DIPPABLE
-
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
 	name = "cream cheese bread"
@@ -3948,12 +4048,24 @@
 	food_flags = FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -5
 
+/obj/item/weapon/reagent_containers/food/snacks/creamcheesebreadslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 4) // Somehow has no reagents inside? Add some nutriment
+
 /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
 	name = "watermelon slice"
 	desc = "A slice of watery goodness."
 	icon_state = "watermelonslice"
 	bitesize = 2
 	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/watermelonslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 2) // Somehow has no reagents inside? Add some nutriment
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/applecake
 	name = "apple cake"
@@ -3977,6 +4089,12 @@
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
 
+/obj/item/weapon/reagent_containers/food/snacks/applecakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 3) // Somehow has no reagents inside? Add some nutriment
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinpie //You can't throw this pie
 	name = "pumpkin pie"
 	desc = "A delicious treat for the autumn months."
@@ -3999,6 +4117,12 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 
+/obj/item/weapon/reagent_containers/food/snacks/pumpkinpieslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 3) // Somehow has no reagents inside? Add some nutriment
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cloverpie
 	name = "clover cream pie"
 	desc = "A creamy, sweet dessert with herbal notes that recall open fields and verdant pastures."
@@ -4020,6 +4144,12 @@
 	icon_state = "cloverpieslice"
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/cloverpieslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 3) // Somehow has no reagents inside? Add some nutriment
 
 /obj/item/weapon/reagent_containers/food/snacks/cracker
 	name = "cracker"
@@ -4061,6 +4191,13 @@
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 
+/obj/item/weapon/reagent_containers/food/snacks/margheritaslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 6)
+			reagents.add_reagent(TOMATOJUICE, 1)// Somehow has no reagents inside? Add some nutriment and tomato juice
+
 /obj/item/weapon/reagent_containers/food/snacks/margheritaslice/rocket
 	name = "Margherita slice"
 	desc = "A slice of the most cheesy pizza in galaxy. Seems covered in gunpowder."
@@ -4094,6 +4231,13 @@
 	icon_state = "meatpizzaslice"
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/meatpizzaslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 8)
+			reagents.add_reagent(TOMATOJUICE, 1)// Somehow has no reagents inside? Add some nutriment and tomato juice
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza/synth
 	name = "Synthmeatpizza"
@@ -4134,6 +4278,12 @@
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 
+/obj/item/weapon/reagent_containers/food/snacks/mushroompizzaslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 6) // Somehow has no reagents inside? Add some nutriment
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/vegetablepizza
 	name = "Vegetable pizza"
 	desc = "No one of Tomatos Sapiens was harmed during the making of this pizza."
@@ -4155,6 +4305,14 @@
 	icon_state = "vegetablepizzaslice"
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/vegetablepizzaslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 5)
+			reagents.add_reagent(TOMATOJUICE, 1)
+			reagents.add_reagent(IMIDAZOLINE, 2) // Somehow has no reagents inside? Add some nutriment, tomato juice, and eye juice
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/blingpizza
 	name = "Blingpizza"
@@ -4178,6 +4336,17 @@
 	desc = "A slice of filthy rich blingpizza. How did you afford it?"
 	icon_state = "blingpizzaslice"
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/blingpizzaslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 8)
+			reagents.add_reagent(HELL_RAMEN, 0.5)
+			reagents.add_reagent(GOLD, 0.5)
+			reagents.add_reagent(SILVER, 0.5)
+			reagents.add_reagent(DIAMONDDUST, 0.5)
+			reagents.add_reagent(TRICORDRAZINE, 2) // Somehow has no reagents inside? Add some reagents
 
 /obj/item/pizzabox
 	name = "pizza box"
@@ -4729,6 +4898,14 @@
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -2
 
+/obj/item/weapon/reagent_containers/food/snacks/bucheslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 4)
+			reagents.add_reagent(SUGAR, 2)
+			reagents.add_reagent(COCO, 1) // Somehow has no reagents inside? Add some reagents
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/turkey
 	name = "turkey"
 	desc = "Tastes like chicken."
@@ -4757,6 +4934,14 @@
 	food_flags = FOOD_MEAT
 	plate_offset_y = -1
 	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/turkeyslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 10)
+			reagents.add_reagent(BLACKPEPPER, 1)
+			reagents.add_reagent(SODIUMCHLORIDE, 1) // Somehow has no reagents inside? Add some reagents
 
 //////////////////CHICKEN//////////////////
 
@@ -4996,7 +5181,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot
 	name = "Hot Chips"
 	desc = "Don't get the dust in your eyes!"
@@ -5205,6 +5390,12 @@
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
 
+/obj/item/weapon/reagent_containers/food/snacks/chococherrycakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 4) // Somehow has no reagents inside? Add some nutriment
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
 	name = "fruitcake"
 	desc = "A hefty fruitcake that could double as a hammer in a pinch."
@@ -5229,6 +5420,12 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
+
+/obj/item/weapon/reagent_containers/food/snacks/fruitcakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 4) // Somehow has no reagents inside? Add some nutriment
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake/christmascake
 	name = "\improper Christmas cake"
@@ -5266,6 +5463,12 @@
 	icon_state = "pumpkinbreadslice"
 	bitesize = 2
 	food_flags = FOOD_DIPPABLE
+
+/obj/item/weapon/reagent_containers/food/snacks/pumpkinbreadslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 3) // Somehow has no reagents inside? Add some nutriment
 
 /obj/item/weapon/reagent_containers/food/snacks/corndog
 	name = "Corndog"
@@ -7387,6 +7590,9 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/suppermattershard/New()
 	..()
 	set_light(1.4,1.4,"#FFFF00")
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 12) // Somehow has no reagents inside? Add some nutriment
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter
 	name = "exciting suppermatter"
@@ -8378,6 +8584,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -4
 
+/obj/item/weapon/reagent_containers/food/snacks/gunkbreadslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 6)
+			reagents.add_reagent(ROACHSHELL, 1)
+			reagents.add_reagent(CHEMICAL_WASTE, 1) // Somehow has no reagents inside? Add some nutriment and gunk
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/gunkpie
 	name = "gunk pie"
 	desc = "Surprisingly free of toxins!"
@@ -8418,6 +8632,13 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
+
+/obj/item/weapon/reagent_containers/food/snacks/gunkcakeslice/New()
+	..()
+	spawn(5) // So that this isn't applied at the same time as the food slicing proc above that adds nutriment
+		if(is_empty()) // If there is nutriment or another chem, this will be skipped
+			reagents.add_reagent(NUTRIMENT, 5)
+			reagents.add_reagent(ROACHSHELL, 2) // Somehow has no reagents inside? Add some nutriment and gunk
 
 /obj/item/weapon/reagent_containers/food/snacks/roachesonstick
 	name = "Roaches on a stick"

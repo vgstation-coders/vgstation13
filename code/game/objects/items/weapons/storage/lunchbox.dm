@@ -4,7 +4,7 @@
 /obj/item/weapon/storage/lunchbox/plastic/nt/proc/pickfood()
 	var/entree = pick(list(/obj/item/weapon/reagent_containers/food/snacks/sandwich,
 								/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
-								/obj/item/weapon/reagent_containers/food/snacks/jellysandwich,
+								/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry,
 								/obj/item/weapon/reagent_containers/food/snacks/pbj,
                                 /obj/item/weapon/reagent_containers/food/snacks/meatbreadslice,
 								/obj/item/weapon/reagent_containers/food/snacks/monkeyburger,
@@ -48,7 +48,7 @@
 
 	new snack(src)
 
-	var/sweet = pick(list(/obj/item/weapon/reagent_containers/food/snacks/donut,
+	var/sweet = pick(list(/obj/item/weapon/reagent_containers/food/snacks/donut/normal,
 								/obj/item/weapon/reagent_containers/food/snacks/donut/jelly,
 								/obj/item/weapon/reagent_containers/food/snacks/candiedapple,
 								/obj/item/weapon/reagent_containers/food/snacks/applecakeslice,
