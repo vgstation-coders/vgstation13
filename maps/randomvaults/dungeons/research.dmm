@@ -4037,10 +4037,10 @@
 /area/vault/mothership_lab/maintenance)
 "Qq" = (
 /obj/structure/rack,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
@@ -4718,9 +4718,9 @@
 /area/vault/mothership_lab/armory)
 "Xf" = (
 /obj/structure/rack,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
 /obj/structure/window/reinforced{
 	dir = 1
 	},

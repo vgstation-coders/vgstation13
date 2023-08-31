@@ -279,7 +279,7 @@
 /datum/storeitem/zambiscuits
 	name = "Zam Biscuits"
 	desc = "All biscuits are fresh from mothership labs."
-	typepath = /obj/item/weapon/storage/pill_bottle/zambiscuits
+	typepath = /obj/item/weapon/zambiscuit_package
 	cost = 40
 	category = "ZAM!"
 
