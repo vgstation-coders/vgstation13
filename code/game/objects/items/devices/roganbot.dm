@@ -269,7 +269,10 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 /obj/item/device/roganbot/killbot/proc/on_kill(mob/killer,mob/victim)
 	var/specialsoundplayed = FALSE
 	killcount++
-	if(istype(get_area(victim),/area/shuttle/arrival))
+	if(!firstblood)
+		playsound(killer.loc,'sound/effects/2003M/first_blood.wav',100)
+		specialsoundplayed = TRUE
+	if(!specialsoundplayed && istype(get_area(victim),/area/shuttle/arrival))
 		playsound(killer.loc,'sound/effects/2003M/Spawn_Killer.wav',100)
 		specialsoundplayed = TRUE
 	if(!specialsoundplayed && killer.mind && killer.mind.antag_roles.len)

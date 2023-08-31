@@ -52,8 +52,8 @@ var/globa/firstblood = FALSE
 			for(var/mob/living/L in living_mob_list)
 				if(findtext(lastmsg,L.ckey))
 					INVOKE_EVENT(src, /event/killed, "killer" = L, "victim" = src)
+					firstblood = TRUE
 					break
-		firstblood = TRUE
 		stat_collection.add_death_stat(src,place_of_death)
 		if(runescape_skull_display && ticker)//we died, begone skull
 			if ("\ref[src]" in ticker.runescape_skulls)
