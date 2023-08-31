@@ -332,7 +332,7 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 			playsound(loc,'sound/effects/2003M/4_minutes_remain.wav',100)
 		if(SHUTTLELEAVETIME)
 			playsound(loc,'sound/effects/2003M/3_minutes_remain.wav',100)
-		if(SHUTTLETRANSITPERIOD)
+		if(SHUTTLEGRACEPERIOD)
 			playsound(loc,'sound/effects/2003M/2_minutes_remain.wav',100)
 		if(60)
 			playsound(loc,'sound/effects/2003M/1_minute_remains.wav',100)

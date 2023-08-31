@@ -32,7 +32,7 @@
 
 	qdel(src)
 
-var/globa/firstblood = FALSE
+var/global/firstblood = FALSE
 
 /mob/proc/death(gibbed)
 	var/turf/place_of_death = get_turf(src)
