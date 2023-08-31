@@ -341,7 +341,6 @@
 	fits_max_w_class = 2
 	max_combined_w_class = 14
 	w_class = W_CLASS_MEDIUM
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil","/obj/item/voucher")
 
 	allow_quick_gather = TRUE
 	allow_quick_empty = TRUE
@@ -425,7 +424,7 @@
 	..()
 	if(has_lunch == TRUE)
 		pickfood()
-	switch(rand(1,14))
+	switch(rand(1,18))
 		if(1)
 			name = "Ian lunchbox"
 			desc = "A little plastic lunchbox. This one has a portrait of Ian on the side."
@@ -496,6 +495,26 @@
 			desc = "A little plastic lunchbox. This one has a picture of Amy decorating the side, the nymphomaniac urban legend of Nanotrasen space stations."
 			icon_state = "lunchbox_pinup"
 			item_state = "toolbox_lightblue"
+		if(15)
+			name = "Ablative lunchbox"
+			desc = "A little plastic lunchbox. This one is has a decorative design similar to an ablative vest on the side."
+			icon_state = "lunchbox_ablative"
+			item_state = "toolbox_lightblue2"
+		if(16)
+			name = "Nuclear lunchbox"
+			desc = "A little plastic lunchbox. This one has a design on the side that looks similar to a nuclear fission device."
+			icon_state = "lunchbox_nuke"
+			item_state = "toolbox_brown"
+		if(17)
+			name = "ERT lunchbox"
+			desc = "A little plastic lunchbox. This one has a scene decorating the side that depicts four ERT members striking action poses."
+			icon_state = "lunchbox_ert"
+			item_state = "toolbox_lightblue"
+		if(18)
+			name = "Shuttle lunchbox"
+			desc = "A little plastic lunchbox. This one is decorated to look like a little escape shuttle."
+			icon_state = "lunchbox_shuttle"
+			item_state = "toolbox_lightblue2"
 
 /obj/item/weapon/storage/lunchbox/plastic/nt/random/pre_filled
 	has_lunch = TRUE
