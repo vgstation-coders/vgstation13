@@ -32,6 +32,7 @@
 
 	qdel(src)
 
+var/globa/firstblood = FALSE
 
 /mob/proc/death(gibbed)
 	var/turf/place_of_death = get_turf(src)
@@ -46,6 +47,13 @@
 		INVOKE_EVENT(src, /event/death, "user" = src, "body_destroyed" = gibbed)
 		living_mob_list -= src
 		dead_mob_list += src
+		if(attack_log.len)
+			var/lastmsg = attack_log[attack_log.len]
+			for(var/mob/living/L in living_mob_list)
+				if(findtext(lastmsg,L.ckey))
+					INVOKE_EVENT(src, /event/killed, "killer" = L, "victim" = src)
+					break
+		firstblood = TRUE
 		stat_collection.add_death_stat(src,place_of_death)
 		if(runescape_skull_display && ticker)//we died, begone skull
 			if ("\ref[src]" in ticker.runescape_skulls)

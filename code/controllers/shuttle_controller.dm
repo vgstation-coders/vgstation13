@@ -104,6 +104,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	if(online)
 		var/timeleft = round((endtime - world.time)/10 ,1)
 		if(direction >= 0)
+			INVOKE_EVENT(/event/shuttletimer, "time" = timeleft)
 			return timeleft
 		else
 			return SHUTTLEARRIVETIME-timeleft

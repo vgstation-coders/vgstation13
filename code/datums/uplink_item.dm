@@ -656,6 +656,12 @@ var/list/uplink_items = list()
  	item = /obj/item/clothing/suit/raincoat
  	cost = 1
 
+/datum/uplink_item/badass/killbot
+ 	name = "KILLbot"
+ 	desc = "A phrase spouting device perfectly suited for the loud spree killer's ego."
+ 	item = /obj/item/device/roganbot/killbot
+ 	cost = 1
+
 /datum/uplink_item/badass/experimental_gear
 	name = "Syndicate Experimental Gear Bundle"
 	desc = "A box that contains a randomly-selected experimental Syndicate gear, an unique state-of-the-art object. Satisfaction not guaranteed."

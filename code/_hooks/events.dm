@@ -262,6 +262,15 @@
 // atom/movable/exiter: the movable exiting the area
 /event/area_exited
 
+// Arguments:
+// mob/killer: the person who killed
+// mob/victim: the person who got killed
+/event/killed
+
+// Arguments:
+// time: shuttle timer
+/event/shuttletimer
+
 // Note: the following are used by datum/component/ai subtypes to give instructions to each other.
 // AI components are expected to INVOKE_EVENT these to send commands to other components
 // on the same datum without having to hold references to them.
