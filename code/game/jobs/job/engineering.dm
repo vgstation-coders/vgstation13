@@ -26,8 +26,8 @@
 	supervisors = "the chief engineer"
 	wage_payout = 65
 	selection_color = "#fff5cc"
-	access = list(access_eva, access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
-	minimal_access = list(access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction)
+	access = list(access_eva, access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics,access_tcomsat)
+	minimal_access = list(access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction,access_tcomsat)
 	alt_titles = list("Maintenance Technician","Engine Technician","Electrician")
 	outfit_datum = /datum/outfit/engineer
 
@@ -39,8 +39,8 @@
 	supervisors = "the chief engineer"
 	wage_payout = 65
 	selection_color = "#fff5cc"
-	access = list(access_eva, access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
-	minimal_access = list(access_atmospherics, access_maint_tunnels, access_emergency_storage, access_construction, access_engine_minor, access_external_airlocks)
+	access = list(access_eva, access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics,access_tcomsat)
+	minimal_access = list(access_atmospherics, access_maint_tunnels, access_emergency_storage, access_construction, access_engine_minor, access_external_airlocks,access_tcomsat)
 	outfit_datum = /datum/outfit/atmos
 
 /datum/job/mechanic
