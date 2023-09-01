@@ -135,7 +135,7 @@
 	autoignition_temperature = AUTOIGNITION_PLASTIC
 	fire_fuel = 0
 	
-/obj/item/trash/dangles/New()
+/obj/item/trash/dangles/New() 
 	playsound(loc, 'sound/items/poster_ripped.ogg', 50, 1)
 
 /obj/item/trash/waffles
