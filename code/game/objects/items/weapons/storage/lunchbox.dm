@@ -28,7 +28,10 @@
 								/obj/item/weapon/reagent_containers/food/snacks/potatosalad,
 								/obj/item/weapon/reagent_containers/food/snacks/herbsalad))
 
-	new entree(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/E = new entree(src)
+	if(E.is_empty())
+		E.reagents.add_reagent(NUTRIMENT, 6)
+		return
 
 	var/snack = pick(list(/obj/item/weapon/reagent_containers/food/snacks/fries/cone,
                                 /obj/item/weapon/reagent_containers/food/snacks/sosjerky,
@@ -46,7 +49,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot,
 								/obj/item/weapon/reagent_containers/food/snacks/fruitsalad))
 
-	new snack(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/S = new snack(src)
+	if(S.is_empty())
+		S.reagents.add_reagent(NUTRIMENT, 3)
 
 	var/sweet = pick(list(/obj/item/weapon/reagent_containers/food/snacks/donut/normal,
 								/obj/item/weapon/reagent_containers/food/snacks/donut/jelly,
@@ -68,7 +73,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
 								/obj/item/weapon/reagent_containers/food/snacks/ricepudding))
 
-	new sweet(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/D = new sweet(src)
+	if(D.is_empty())
+		D.reagents.add_reagent(NUTRIMENT, 3)
 
 	var/drink = pick(list(/obj/item/weapon/reagent_containers/food/drinks/coffee,
                                 /obj/item/weapon/reagent_containers/food/drinks/latte,
@@ -130,7 +137,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/curry/crab,
 								/obj/item/weapon/reagent_containers/food/snacks/curry/lemon))
 
-	new entree_syndie(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/E = new entree_syndie(src)
+	if(E.is_empty())
+		E.reagents.add_reagent(NUTRIMENT, 9)
 
 	var/snack_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet,
                                 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear,
@@ -156,7 +165,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/eggplantparm,
 								/obj/item/weapon/reagent_containers/food/snacks/risotto))
 
-	new snack_syndie(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/S = new snack_syndie(src)
+	if(S.is_empty())
+		S.reagents.add_reagent(NUTRIMENT, 5)
 
 	var/sweet_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/cinnamonroll,
 								/obj/item/weapon/reagent_containers/food/snacks/jectie,
@@ -180,7 +191,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/cookie/holiday,
 								/obj/item/weapon/reagent_containers/food/snacks/ricepudding))
 
-	new sweet_syndie(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/D = new sweet_syndie(src)
+	if(D.is_empty())
+		D.reagents.add_reagent(NUTRIMENT, 5)
 
 	var/drink_syndie = pick(list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka,
 								/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white,
@@ -266,7 +279,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie,
 								/obj/item/weapon/reagent_containers/food/snacks/spidereggsham))
 
-	new entree_zam(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/E = new entree_zam(src)
+	if(E.is_empty())
+		E.reagents.add_reagent(NUTRIMENT, 6)
 
 	var/snack_zam = pick(list(/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped,
                                 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped,
