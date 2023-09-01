@@ -129,7 +129,7 @@
 	name = "\improper Danitos bag"
 	icon_state = "danitos"
 	
-/obj/item/trash/danitos
+/obj/item/trash/dangles
 	name = "\improper Dangles can"
 	icon_state = "dangles"
 	autoignition_temperature = AUTOIGNITION_PLASTIC
