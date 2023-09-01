@@ -129,13 +129,13 @@
 	name = "\improper Danitos bag"
 	icon_state = "danitos"
 	
-/obj/item/trash/danitos
+/obj/item/trash/dangles
 	name = "\improper Dangles can"
 	icon_state = "dangles"
 	autoignition_temperature = AUTOIGNITION_PLASTIC
 	fire_fuel = 0
 	
-/obj/item/trash/danitos/New()
+/obj/item/trash/dangles/New()
 	playsound(loc, 'sound/items/poster_ripped.ogg', 50, 1)
 
 /obj/item/trash/waffles
