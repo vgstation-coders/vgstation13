@@ -236,6 +236,12 @@
 
 	return 1
 
+/obj/item/device/rcd/MouseDropFrom(obj/over_object,src_location,over_location,src_control,over_control,params)
+	if(isturf(over_location))
+		afterattack(over_location,usr)
+		return
+	return ..()
+
 /obj/item/device/rcd/proc/do_spark()
 	if (sparky && next_spark < world.time)
 		spark(src, 5, FALSE)
