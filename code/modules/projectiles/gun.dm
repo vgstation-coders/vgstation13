@@ -132,7 +132,7 @@
 			playsound(user, in_chamber.fire_sound, fire_volume/A.volume_mult, 1)
 		if(A.volume_mult <= 1)
 			user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
-			"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
+			"<span class='warning'>You [fire_action] [src][reflex ? " by reflex":""]!</span>", \
 			"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 	else
 		if(fire_sound)

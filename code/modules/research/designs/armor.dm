@@ -1,22 +1,32 @@
 /datum/design/xcomsquaddiearmor
 	name = "Squaddie Armor"
-	desc = "A set of armor good against ballistics and laser weaponry.."
+	desc = "An old armor design from a shadow organization. It offers respectable protection against ballistics."
 	id = "xcomsquaddiearmor"
-	req_tech = list(Tc_MATERIALS = 3)
+	req_tech = list(Tc_COMBAT = 3, Tc_MATERIALS = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
+	materials = list(MAT_IRON = 5000, MAT_GLASS = 1250, MAT_PLASTIC = 750)
 	category = "Armor"
 	build_path = /obj/item/clothing/suit/armor/xcomsquaddie
 
 /datum/design/xcomoriginalarmor
-	name = "Original Armor"
-	desc = "A set of armor good against ballistics and laser weaponry.."
+	name = "Personal Armor"
+	desc = "An old armor design from a shadow organization. It offers respectable protection against laser and energy weaponry."
 	id = "xcomoriginalarmor"
-	req_tech = list(Tc_MATERIALS = 3)
+	req_tech = list(Tc_COMBAT = 3, Tc_MATERIALS = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
+	materials = list(MAT_IRON = 5000, MAT_GLASS = 1250, MAT_PLASMA = 750)
 	category = "Armor"
 	build_path = /obj/item/clothing/suit/armor/xcomarmor
+
+/datum/design/xcomoriginalarmor_helmet
+	name = "Personal Armor Helmet"
+	desc = "An old armored balaclava design from a shadow organization. It offers respectable protection against laser and energy weaponry."
+	id = "xcomoriginalarmor_helmet"
+	req_tech = list(Tc_COMBAT = 3, Tc_MATERIALS = 3)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 1750, MAT_GLASS = 500)
+	category = "Armor"
+	build_path = /obj/item/clothing/head/helmet/xcom
 
 /*
 /datum/design/security_hud

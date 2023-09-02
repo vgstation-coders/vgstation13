@@ -353,6 +353,7 @@
 	H.add_spell(new/spell/targeted/create_trinket)
 	H.add_spell(new/spell/targeted/cool_object)
 	H.add_spell(new/spell/targeted/warm_object)
+	H.add_spell(new/spell/targeted/color_change)
 
 /datum/spellbook_artifact/blindingspeed
 	name = "Boots of Blinding Speed"

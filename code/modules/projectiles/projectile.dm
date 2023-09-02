@@ -857,3 +857,6 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/apply_projectile_color_shift(var/proj_color_shift)
 	return
+
+/obj/item/projectile/proc/teleport_act()
+	return

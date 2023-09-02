@@ -607,6 +607,14 @@
 
 	reset_vars_after_duration(resettable_vars, duration)
 
+/obj/item/weapon/reagent_containers/food/snacks/spook()
+	if(reagents.has_reagent(ECTOPLASM))
+		visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
+		playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
+		bitecount++
+		reagents.remove_any(bitesize)
+		if(!reagents.total_volume)
+			qdel(src)
 
 ////////////////////////////////////////////////////////////////////////////////
 /// FOOD END
