@@ -530,6 +530,19 @@
 			icon_state = "lunchbox_shuttle"
 			item_state = "toolbox_lightblue2"
 
+/obj/item/weapon/storage/lunchbox/plastic/nt/random/bullet_act(var/obj/item/projectile/P) // Ablative lunchboxes protect lunch from lasers!
+	if(icon_state == "lunchbox_ablative")
+		if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
+			visible_message("<span class='danger'>The [P.name] gets reflected by the [src]!</span>")
+
+			if(!istype(P, /obj/item/projectile/beam)) //beam has its own rebound-call-logic
+				P.reflected = 1
+				P.rebound(src)
+
+			return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
+
+	return (..(P))
+
 /obj/item/weapon/storage/lunchbox/plastic/nt/random/pre_filled
 	has_lunch = TRUE
 
