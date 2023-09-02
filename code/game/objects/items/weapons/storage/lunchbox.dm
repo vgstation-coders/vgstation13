@@ -31,7 +31,6 @@
 	var/obj/item/weapon/reagent_containers/food/snacks/E = new entree(src)
 	if(E.is_empty())
 		E.reagents.add_reagent(NUTRIMENT, 6)
-		return
 
 	var/snack = pick(list(/obj/item/weapon/reagent_containers/food/snacks/fries/cone,
                                 /obj/item/weapon/reagent_containers/food/snacks/sosjerky,
